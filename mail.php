@@ -1,5 +1,5 @@
 <?php
-// $Id: mail.php,v 1.4 2006/01/18 16:00:35 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");
@@ -8,7 +8,7 @@
 	include_once("Mail/mime.php");
 	// $data=$_POST;
 	$referer=getenv("HTTP_REFERER");
-	if (preg_match("/menu.pl/",$referer) || preg_match("/mail.php/",$referer)) {
+	if (preg_match("/.+\.pl/",$referer) || preg_match("/mail.php/",$referer)) {
 		$referer="";
 		$btn="<a href='mail.php'><input type=\"button\" name=\"return\" value=\"neu\"></a>";
 	} else { // Rückkehr zur Ausgangsseite

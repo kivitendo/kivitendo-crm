@@ -1,0 +1,69 @@
+Lx-Office CRM 1.2.0  
+
+!!! Bitte nicht ohne ausgiebige Tests auf Produktivserver einsetzten !!!
+
+
+Installtion Lx-Office CRM
+-------------------------
+
+Dieses Installationsscript erzeugt die notwendigen Verzeichnisse und Tabellen
+für die CRM und erweitert einige Tabellen der ERP. Die
+Funktionstüchtigkeit der ERP wird dadurch nicht beeinträchtigt.
+
+Achten Sie darauf, dass Sie über TCP Zugriff auf die PostgreSQL
+haben (pg_hba.conf, postgresql.conf), was aber erledigt ist, wenn die ERP läuft.
+
+Vorrausetzungen:
+	Lx-Office ERP 2.1.x
+	PHP >= 4.2x
+	PEAR::DB
+	PEAR::Contact_Vcard_Build
+	PEAR::Contact_Vcard_Parse
+	PEAR::Mail_Mime
+	fpdf + fpdi (http://www.fpdf.de/downloads/)
+	php-gd,php-imap
+	jpgraph
+
+z.B. debian:
+apt-get install libapache2-mod-php4 php4-gd php4-imap php4-pear php4-pgsql  php-fpdf 
+
+PHP5: Es müssen noch Probleme mit jpgraph gelöst werden
+
+evtl. php.ini anpassen:
+include_path = ".:/usr/share/php:/usr/share/fpdf:/usr/share/jpgraph"
+extension=gd.so
+.
+.
+
+
+Das TAR-File entpacken, dabei an HFS halten.
+z.B. RPM-Systeme
+	cd /srv/; tar xzf lx-office-crm-{version}.tgz
+z.B. Debian
+	cd /usr/lib/; tar xzf lx-office-crm-{version}.tgz
+
+Crm in die ERP verlinken:
+z.B. RPM-Systeme
+	cd /srv/lx-office-erp; ln -s ../lx-office-crm crm
+z.B. Debian
+	cd /usr/lib/lx-office-erp; ln -s ../lx-office-crm crm
+
+ERP-Menu erweitern:
+	cd lx-office-erp
+	mv menu.ini menu.ini.crm
+	cat crm/update/menu120.ini menu.ini.crm > menu.ini
+
+Menuicon kopieren
+	cd lx-office-erp
+	cp crm/image/CRM.png image/
+
+
+Eigentümer der Datei auf Webserver setzen
+z.B.:
+	chown -R www-data: crm/
+
+Im Browser die ERP aufrufen und anmelden
+	 -http://localhost/lx-office-erp/login.pl
+
+Melden Sie sich nun an LxO-ERP an und wählen Sie einen CRM-Menüeintrag aus.
+Die Datenbankinstallation wird nun durchgeführt.

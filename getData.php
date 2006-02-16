@@ -1,0 +1,102 @@
+<?
+// $Id: getData.php,v 1.3 2005/11/02 10:37:52 hli Exp $
+	require_once("inc/stdLib.php");
+	include("inc/crmLib.php");
+?>
+<html>
+<head><title></title>
+<link REL="stylesheet" HREF="css/main.css" TYPE="text/css" TITLE="Lx-System stylesheet">
+
+<?	
+if ($_POST["ok"]) {
+	include("inc/FirmaLib.php");
+	include("inc/LieferLib.php");
+	include("inc/persLib.php");
+	include("inc/UserLib.php");
+	
+	$msg="Leider nichts gefunden!";
+	$viele="Zu viele Treffer. Bitte einschr&auml;nken.";
+	$found=false;
+	$suchwort=mkSuchwort($_POST["swort"]);
+	$anzahl=0;
+	$db->debug=0;
+
+	$rsE=getAllUser($suchwort);
+	if (chkAnzahl($rsE,$anzahl)) {
+		$rsV=getAllVendor($suchwort);	
+		if (chkAnzahl($rsV,$anzahl)) {
+			$rsC=getAllCustomer($suchwort);
+			if (chkAnzahl($rsC,$anzahl)) {
+				$rsK=getAllPerson($suchwort);
+				if (!chkAnzahl($rsK,$anzahl)) {
+					$msg=$viele;
+				}
+			} else {
+				$msg=$viele;
+			}
+		} else {
+			$msg=$viele;
+		}
+	} else {
+			$msg=$viele;
+	}
+?>
+<script language="JavaScript">
+<!--
+	function showD (src,id) {
+		Frame=eval("parent.main_window");
+		if      (src=="C") {	uri="firma1.php?id=" + id }
+		else if (src=="V") {	uri="liefer1.php?id=" + id; }
+		else if (src=="E") {	uri="user1.php?id=" + id; }
+		else if (src=="K") {	uri="kontakt.php?id=" + id; }
+		Frame.location.href=uri;
+	}
+//-->
+</script>
+</head>
+<body>
+<p class="listtop">Suchergebnis</p>
+<?
+	if ($anzahl>0) {
+		echo "<table class=\"liste\">\n";
+		echo "<tr class='bgcol3'><th>KD-Nr</th><th class=\"liste\">Name</th><th class=\"liste\">Anschrift</th><th class=\"liste\">Telefon</th><th></th></tr>\n";
+		$i=0;
+		if ($rsC) foreach($rsC as $row) {
+			echo "<tr onMouseover=\"this.bgColor='#FF0000';\" onMouseout=\"this.bgColor='".$bgcol[($i%2+1)]."';\" bgcolor='".$bgcol[($i%2+1)]."' onClick='showD(\"C\",".$row["id"].");'>".
+				"<td class=\"liste\">".$row["customernumber"]."</td><td class=\"liste\">".$row["name"]."</td>".
+				"<td class=\"liste\">".$row["city"].(($row["street"])?",":"").$row["street"]."</td><td class=\"liste\">".$row["phone"]."</td><td class=\"liste\">K</td></tr>\n";
+			$i++;
+		}
+		if ($rsV) foreach($rsV as $row) {
+			echo "<tr onMouseover=\"this.bgColor='#FF0000';\" onMouseout=\"this.bgColor='".$bgcol[($i%2+1)]."';\" bgcolor='".$bgcol[($i%2+1)]."' onClick='showD(\"V\",".$row["id"].");'>".
+				"<td class=\"liste\">".$row["vendornumber"]."</td><td class=\"liste\">".$row["name"]."</td>".
+				"<td class=\"liste\">".$row["city"].(($row["street"])?",":"").$row["street"]."</td><td class=\"liste\">".$row["phone"]."</td><td class=\"liste\">L</td></tr>\n";
+			$i++;
+		}
+		if ($rsK) foreach($rsK as $row) {
+			echo "<tr onMouseover=\"this.bgColor='#FF0000';\" onMouseout=\"this.bgColor='".$bgcol[($i%2+1)]."';\" bgcolor='".$bgcol[($i%2+1)]."' onClick='showD(\"K\",".$row["cp_id"].");'>".
+				"<td class=\"liste\">".$row["cp_id"]."</td><td class=\"liste\">".$row["cp_name"]."</td>".
+				"<td class=\"liste\">".$row["addr2"].(($row["addr1"])?",":"").$row["addr1"]."</td><td class=\"liste\">".$row["cp_phone1"]."</td><td class=\"liste\">P</td></tr>\n";
+			$i++;
+		}
+		if ($rsE) foreach($rsE as $row) {
+			echo "<tr onMouseover=\"this.bgColor='#FF0000';\" onMouseout=\"this.bgColor='".$bgcol[($i%2+1)]."';\" bgcolor='".$bgcol[($i%2+1)]."' onClick='showD(\"E\",".$row["id"].");'>".
+				"<td class=\"liste\">".$row["id"]."</td><td class=\"liste\">".$row["name"]."</td>".
+				"<td class=\"liste\">".$row["addr2"].(($row["addr1"])?",":"").$row["addr1"]."</td><td class=\"liste\">".$row["workphone"]."</td><td class=\"liste\">U</td></tr>\n";
+			$i++;
+		}
+		echo "</table>\n";
+        } else {
+		echo $msg;
+	};
+	echo "<br>";
+} ?>
+<p class="listtop">Schnellsuche Kunde/Lieferant/Kontakte</p>
+	<form name="suche" action="getData.php" method="post">
+	<input type="hidden" name="login" value="<?= $_GET["login"] ?>">
+	<input type="hidden" name="password" value="<?= $_GET["password"] ?>">
+	<input type="text" name="swort" size="20">
+	<input type="submit" name="ok" value="suchen"><br>
+      	<span class="liste">Suchbegriff</span>
+	</form>
+

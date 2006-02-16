@@ -1,0 +1,100 @@
+body 		{ font-family: Verdana, Arial, Helvetica, sans-serif;
+		  font-size: 12px;
+		  background-image: url("fade.png"); background-repeat:repeat-x;
+		  background-color: white; color: black;
+		  border-collapse:collapse; }
+
+A         	{ text-decoration: none; color: black;font-size: 12px;font-family: Verdana, Arial, Helvetica, sans-serif;}
+A:link		{ color: black;  }
+A:visited	{ color: black;  }
+A:hover		{ color:#8c1919;}
+A:active	{ text-decoration: underline; }
+
+table		{ border-collapse:collapse; border-width: 0px; padding: 0px; margin: 2px; border-spacing:0px; }
+td		{ vertical-align:top; text-align:left;margin:0px;padding:0px; }
+
+table.liste	{ border-collapse:collapse; border-width: 0px; border-style:solid; border-color:black;padding: 2px; margin: 2px; border-spacing:0px; }
+td.liste	{ height:1.8em;  border-width:0px; border-style:solid; text-align:left; font-size: 1.2em;vertical-align:middle;margin:0px;padding:3px;}
+
+table.reiter	{ width:60%; table-layout:fixed;}
+td.reiter	{ height:21px;  border-width:thin; border-style:solid; text-align:center; font-size: 12px;vertical-align:middle;}
+td.sel		{ border-color:#333333;}
+td.desel	{ border-color:#888888; }
+td.reiter:hover	{ background-color: #cccccc; }
+A.reiterA      	{ color: #888888; font-size: 12px;}
+
+table.karte	{ background-image: url('px_3.gif'); width:99%;}
+td.karte	{ height:430px; }
+
+table.stamm	{ border-width:1px; border-style:solid; border-color:black; padding:0px; margin:0px; width:100%; }
+td.stamm	{ margin:0px;padding:2px; }
+td.smal		{ font-size:11px;padding:2px; }
+td.norm		{ font-size:12px;padding:2px; }
+th.smal		{ font-size:11px;padding:2px; }
+tr.topbot	{ border-width:1px 0px 1px 0px; border-style:solid; border-color:black;}
+
+td.dot 		{ border-width:1px 1px 1px 1px; border-style:solid; border-color:#666666;}
+
+td.ce		{ text-align:center;}
+td.le		{ text-align:left;}
+td.re		{ text-align:right;}
+
+.smal		{ font-size:12px; }
+.vsmal		{ font-size:10px; }
+.norm		{ font-size:12px; }
+.bold		{ font-weight:bold;}
+
+.liste		{ font-size:10px;  padding:0px; margin:0px; }
+.gr 		{ background-color:#bbbbbb; vertical-align:bottom;}
+.lg 		{ background-color:#dddddd; vertical-align:bottom;}
+.ft		{ background-color:#ffd5d5; vertical-align:bottom;}
+.we		{ background-color:#ffffff; vertical-align:bottom;}
+.Big		{ font-size:12px; font-weight:bold;font-family:courier;}
+
+.bgcol1 	{ background-color:#ddddff; }
+.bgcol2 	{ background-color:#ddffdd; }
+.bgcol3 	{ background-color:#eeeeee; }
+.bgcol4 	{ background-color:#ffdddd; }
+.caption 	{ font-size:9px;color:blue; }
+
+textarea  	{ font-size: 12px; font-family:Verdana,Arial,Helvetica,sans-serif;}
+.wikil          { color:#5555ff; font-weight:bold; font-size:12px; }
+.wikin          { color:#555555; font-weight:bold; font-size:12px; }
+.wikiw          { color:#55ff55; font-weight:bold; font-size:12px; }
+
+.listtop {
+        background-color: rgb(236,233,216);
+        text-align:left;
+        padding:5px;
+        font-size: 10pt;
+        color: black;
+        font-weight: bolder;
+        border-style:dashed;
+        border-width:thin;
+}
+.listelement {
+         background-image: url("fade2.png");
+        background-repeat:repeat-x;
+        border-style:dashed;
+        border-width:thin;
+}
+                                                                                                                 
+.listelement2 {
+        background-image: url("fade2.png");
+        background-repeat:repeat-x;
+        border-style:dashed;
+        border-width:thin;
+}
+                                                                                                                 
+.listheading {
+        font-size: 9pt;
+        padding:3px;
+        background-color:
+        rgb(236,233,216);
+        color: black;
+        font-weight: bolder;
+        text-align:left;
+        background-image: url("fade.png");
+        border-style:dotted;
+        border-width:thin;
+}

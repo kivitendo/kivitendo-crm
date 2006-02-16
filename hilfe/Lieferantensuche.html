@@ -1,0 +1,34 @@
+<html>
+	<head>
+		<title>Lx-Office CRM Lieferantensuche</title>
+		<link rel="stylesheet" type="text/css" href="../css/main.css">
+	</head>
+<body>
+<h2>Lieferantensuche</h2>
+<hr>
+[<a name='Schnellsuche' class='wikin'>Schnellsuche</a>]<br>
+<br>
+An dem oberen Rand werden f&uuml;r eine Schnellsuche die Anfangsbuchstaben der Lieferanten angeboten. Mit einem Klick auf den gew&uuml;nschten Buchstaben wird die Suche nach den passenden Eintr&auml;gen in der Datenbank gestartet. Es werden bei der Buchstabensuche die Rechnungsadressen durchsucht. Unter der Buchstabensuche wird die komplette Suchmaske angeboten. <br>
+<br>
+[<a name='Komplette Suchmaske' class='wikin'>Komplette Suchmaske</a>]<br>
+<br>
+F&uuml;llen Sie die gew&uuml;nschten Suchfelder aus. Es kann auch mit Jockerzeichen gesucht werden, d.h. man kann "_"f&uuml;r genau ein Zeichen und "%" f&uuml;r beliebige Zeichen einsetzen. Jedes Suchfeld wird automatisch um "%" erweitert. In der Checkbox "unscharf suchen" kann durch entfernen dieses Hakens das Gesuchte mit der exakten Endung gefunden werden. Die Suche ist nicht Case-Sensitiv, das hei&szlig;t es wird nicht zwischen Gro&szlig; und Kleinschreibung unterschieden.<br>
+<br>
+<pre> Rechnungsadresse1 "e%a" = alles was in der Rechnungsadresse1 mit E beginnt und noch
+ ein a enth&auml;lt.
+</pre><br>
+<pre> Rechnungsadresse2 "%gmbh" = alles was in der Rechnungsadresse2 ein GmbH im Namen enth&auml;lt.
+</pre><br>
+Mehrere ausgef&uuml;llte Felder werden in der Abfrage als <strong>und</strong> -Bewertung gewertet:<br>
+<br>
+<pre> Rechnungsadresse1 "_ie" Postleitzahl "60" = alles was an der 2ten Stelle der Rechnungs-
+ adresse1 ein i hat und an der 3ten Stelle ein e <strong>und</strong> eine Postleitzahl mit der Nummer 60.
+</pre><br>
+Wird in der Checkbox der Haken f&uuml;r "auch in abweichender Lieferadresse suchen" aktiviert, passiert dieses.<br>
+<br>
+Bei keinem gefundenen Eintrag erscheint die Ausgabe "Leider nichts gefunden" in der Maske. Bei einem Eintrag wird in die [<a class='wikil' href='DetailansichtLieferantendaten.html'>Detailansicht</a>] gesprungen, bei mehreren Treffern kommt man in die Maske [<a class='wikil' href='ErgebnisLieferantensuche.html'>Ergebnis Lieferantensuche</a>].<br>
+
+<hr>
+Seiten die hierher zeigen [<a class='wikiw' href='ErgebnisLieferantensuche.html'>ErgebnisLieferantensuche</a>] [<a class='wikiw' href='AnwenderDokumentationLx-Office.html'>AnwenderDokumentationLx-Office</a>] 
+</body>
+</html>

@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<title>Lx-Office CRM Dokumentvorlagen</title>
+		<link rel="stylesheet" type="text/css" href="../css/main.css">
+	</head>
+<body>
+<h2>Dokumentvorlagen</h2>
+<hr>
+In der Maske "Dokumentvorlagen" ist der Reiter mit der <strong>grauen Schrift''' der '''aktive</strong>.<br>
+<br>
+[<a name='Dokumente' class='wikin'>Dokumente</a>]<br>
+<br>
+Dokumente können sowohl OOo- als auch RTF-Dokumente sein.Unter dem Reiter "Dokumente" werden alle eingestellte Vorlagen aufgelistet, diese können f&uuml;r eine &Auml;nderung ausgew&auml;hlt werden. Die ausgew&auml;hlte Vorlage erscheint dann im Reiter "neue Vorlage".<br>
+<br>
+[<a name='neue Vorlage' class='wikin'>neue Vorlage</a>]<br>
+<br>
+Unter dem Reiter "neue Vorlage" steht eine Editiermaske f&uuml;r vorhandene und neue Vorlagen zur Verf&uuml;gung.<br>
+<br>
+Im ersten Feld wird eine eindeutige "Bezeichnung" eingegeben. Im zweiten Feld eine "Beschreibung" der Vorlage. Mit dem dritten Eingabefeld kann eine lokale Vorlagendatei f&uuml;r den Upload ausgew&auml;hlt. Als letztes wird der Vorlagentyp ausgew&auml;hlt. Mit "sichern" wird die Vorlage gespeichert. Diese Vorlagen enthalten neben einem festen Text Platzhalter in der Art: %NAME%, also eine Bezeichnung aus Gro&szlig;buchstaben, eingeschlossen von Prozentzeichen.<br>
+<br>
+[<a name='Felder' class='wikin'>Felder</a>]<br>
+<br>
+Unter dem nun sichtbaren und aktiven dritten Reiter "Felder", werden die einzelnen Variablen definiert.<br>
+<br>
+Jeder Platzhalter in der Vorlage referenziert mit einem Feld in der Eingabemaske. Diese Felder werden je nach Bezeichnung mit Werten aus der Datenbank gef&uuml;llt, können aber &uuml;berschrieben werden. Vorgesehene db-Felder sind: <br>
+<br>
+<pre> anrede, anredepers, title, name, name2, kontakt, namepers,
+ strasse, strassepers, plz, plzpers, ort, ortpers, datum, zeit
+</pre><br>
+<br>
+Die beiden letzten Feldbezeichner sind aktuelles Datum und Zeit. Im ersten Feld wird eine Bezeichnung f&uuml;r eine Eingabemaske definiert zB. Name, danach folgt der Variablenname zB. <strong>namepers</strong>. Wird ein Variablenname eingegeben, der mit db-Feldern &uuml;bereinstimmt, werden entsprechende Variablen aus der Datenbank vorbelegt. Als n&auml;chstes wird die Feldl&auml;nge eingegeben. Danach die erlaubten Zeichen. Ein Punkt "." steht dabei f&uuml;r ein beliebiges Zeichen. [0-9] erlaubt nur die Eingabe von Zahlen, [a-zA-Z] die Buchstaben a-Z (Die letzten beiden Angaben werden zur Zeit noch nicht abgepr&uuml;ft). <br>
+<br>
+Jetzt folgt die Position in der Eingabemaske. Zum Schlu&szlig; kann noch eine Beschreibung zu dem Feld eingegeben werden. "ok" sichert die Eingabe. Mit "del" kann ein Feld wieder entfernt werden.<br>
+<br>
+== Die Platzhalter f&uuml;r das OOo- oder RTF-Dokument==<br>
+<br>
+Die Platzhalter die in die Vorlage geschrieben werden m&uuml;ssen sind:<br>
+<br>
+<pre> F&uuml;r Firmendaten:
+ %ANREDE% (Firma) %NAME% (Firmenname) %NAME2% (Zusatzbezeichnung) %STRASSE%
+ %PLZ% %ORT% %KONTAKT% (Name der Kontaktperson in der Firma)
+</pre><br>
+<pre> F&uuml;r Personendaten:
+ %ANREDEPERS% (Anrede f. Person) %TITLE% (Titel) %NAMEPERS% (Name der Kontaktperson)
+ STRASSEPERS% (Stra&szlig;e der Person) %PLZPERS% (PLZ der Person) %ORTPERS% (Wohnort der Person)
+</pre><br>
+<pre> F&uuml;r aktuelle Daten(Server):
+ %DATUM% % ZEIT%
+</pre><br>
+Die Vorlage ist wie der Brief zu schreiben. Anstatt der Postleitzahl ist %PLZ% oder statt des Namens der Firma %NAME% zuschreiben. Diese Platzhalter werden dann mit den Datenbankdaten ausgef&uuml;llt.<br>
+<br>
+<br>
+zurr&uuml;ck zu [<a class='wikil' href='AnwenderDokumentationLx-Office.html'>AnwenderDokumentationLx-Office</a>]<br>
+
+<hr>
+Seiten die hierher zeigen [<a class='wikiw' href='DetailansichtPersonendaten.html'>DetailansichtPersonendaten</a>] [<a class='wikiw' href='DetailansichtLieferantendaten.html'>DetailansichtLieferantendaten</a>] [<a class='wikiw' href='DetailansichtKundendaten.html'>DetailansichtKundendaten</a>] 
+</body>
+</html>

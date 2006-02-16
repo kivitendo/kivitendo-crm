@@ -1,0 +1,20 @@
+<?
+// Übersetzungen für die Firmenmasken in Englisch
+$langfirma	= array(
+	"Leider keine Kontakte gefunden" => "Sorry, no Contact found",
+	"Kundendaten"	=> "Customer",
+	"Kontakte"	=> "Contact",
+	"Umsätze"	=> "Transactions",
+	"Dokumente"	=> "Documents",
+	"Lieferadresse"	=> "Shipto",
+	"neu laden"	=> "refresh",
+	"Bearbeiten"	=> "Edit",
+	"Kontakt eingeben"	=> "new Contact",
+	"Kontakt aus Liste"	=> "Contact from List",
+	"Tel"		=> "Phone",
+	"Fax"		=> "Fax",
+	"Mob"		=> "Mobile"
+);
+$arrayTmpl=array_keys($langfirma);
+$arrayShow=array_values($langfirma);
+?>

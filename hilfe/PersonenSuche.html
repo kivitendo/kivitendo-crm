@@ -1,0 +1,34 @@
+<html>
+	<head>
+		<title>Lx-Office CRM PersonenSuche</title>
+		<link rel="stylesheet" type="text/css" href="../css/main.css">
+	</head>
+<body>
+<h2>PersonenSuche</h2>
+<hr>
+[<a name='Schnellsuche' class='wikin'>Schnellsuche</a>]<br>
+<br>
+An dem oberen Rand werden f&uuml;r eine Schnellsuche die Anfangsbuchstaben der Personen angeboten. Mit einem Klick auf den gew&uuml;nschten Buchstaben wird die Suche nach den passenden Eintr&auml;gen in der Datenbank gestartet. Es werden bei der Buchstabensuche die Anfangsbuchstaben der Vornamen in der Maske [<a class='wikil' href='ErgebnisPersonensuche.html'>"Ergebnis Personensuche"</a>] angezeigt. Unter der Buchstabensuche wird die komplette Suchmaske angeboten.<br>
+<br>
+[<a name='Komplette Suchmaske' class='wikin'>Komplette Suchmaske</a>]<br>
+<br>
+Voreingestellt bei der "Personensuche" ist die Kennzeichnung, neben der Checkbox "Herr" und "Frau", die Checkbox die als leer ein Joker ist. Wird nun zum Beispiel nur "Frau" makiert und auf "suchen" geklickt, werden alle weiblichen Personen als Liste mit Email und Firma (wenn vorhanden) angezeigt.Falls bei der Eingabe der Person/en das Geschlecht vergessen wurde anzugeben, kann die Person auch nicht mit der Markierung "Herr" oder "Frau" gefunden werden da sie diesem Merkmal nicht zugeordnet ist. In diesem Fall hilft nur der Joker, d.h. nach allem suchen und manuell die richtige Person aus allen herrausfinden.<br>
+<br>
+F&uuml;llen Sie die gew&uuml;nschten Suchfelder aus. Es kann auch mit Jockerzeichen gesucht werden, d.h. man kann "_"f&uuml;r genau ein Zeichen und "%" f&uuml;r beliebige Zeichen einsetzen. Jedes Suchfeld wird automatisch um "%" erweitert. In der Checkbox "unscharf suchen" kann durch entfernen dieses Hakens das Gesuchte mit der exakten Endung gefunden werden. Die Suche ist nicht Case-Sensitiv, das hei&szlig;t es wird nicht zwischen Gro&szlig; und Kleinschreibung unterschieden.<br>
+<br>
+<pre> Vorname "__a" = alles was in dem Vornamen ein a an dritter Stelle enth&auml;lt.
+</pre><br>
+<pre> Nachname "%mann" = alles was in dem Nachnamen ein mann im Namen enth&auml;lt.
+</pre><br>
+Mehrere ausgef&uuml;llte Felder werden in der Abfrage als <strong>und</strong> -Bewertung gewertet:<br>
+<br>
+<pre> Titel "Dr" und Ort "M&uuml;nchen" = alle Doktoren aus dem Raum M&uuml;nchen.
+</pre><br>
+<br>
+Bei keinem gefundenen Eintrag erscheint die Ausgabe "Leider nichts gefunden" in der Maske. Bei einem Eintrag wird in die [<a class='wikil' href='DetailansichtPersonendaten.html'>"Detailansicht"</a>] gesprungen. Einzelpersonen haben keine eigene Informationsanzeige sondern werden in einer Abh&auml;ngigkeit zum Eingabefeld "Kundeninformation" weitergeleitet.<br>
+Bei mehreren Treffern kommt man in die Maske [<a class='wikil' href='ErgebnisPersonensuche.html'>"Ergebnis Personensuche"</a>].<br>
+
+<hr>
+Seiten die hierher zeigen [<a class='wikiw' href='ErgebnisPersonensuche.html'>ErgebnisPersonensuche</a>] [<a class='wikiw' href='DetailansichtKundendaten.html'>DetailansichtKundendaten</a>] [<a class='wikiw' href='DetailansichtLieferantendaten.html'>DetailansichtLieferantendaten</a>] [<a class='wikiw' href='AnwenderDokumentationLx-Office.html'>AnwenderDokumentationLx-Office</a>] 
+</body>
+</html>

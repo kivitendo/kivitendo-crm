@@ -27,35 +27,37 @@
 		$pdf->Open(); 
 		unset($tmp);
 		if ($SX<>1 or $SY<>1)	$pdf->AddPage();
-		$sql="select * from tempcsvdata where sessid = '".session_id()."' order by id";
+		$sql="select * from tempcsvdata where sessid = '".session_id()."' order by sessid";
 		$daten=$db->getAll($sql);
-		$felder=array_shift($daten);
-		$felder=split(";",$felder["csvdaten"]);
-		foreach ($daten as $row) {
-			$data=split(";",$row["csvdaten"]);
-			unset($tmp);
-			foreach ($label["Text"] as $row) {
-				preg_match_all("/%([A-Z0-9_]+)%/U",$row["zeile"],$ph, PREG_PATTERN_ORDER);
-				if ($ph) {
-					$ph=array_slice($ph,1);
-					if ($ph[0]) { foreach ($ph as $x) {
-						foreach ($x as $u) {
-							$p=array_search($u,$felder);
-							if ($p!==false) {
-								$y=$data[$p];
-								$row["zeile"]=str_replace("%".$u."%",$y,$row["zeile"]);
-							} else {
-								$row["zeile"]=str_replace("%".$u."%","",$row["zeile"]);
+		if ($daten) {
+			$felder=array_shift($daten);
+			$felder=split(";",$felder["csvdaten"]);
+			foreach ($daten as $row) {
+				$data=split(";",$row["csvdaten"]);
+				unset($tmp);
+				foreach ($label["Text"] as $row) {
+					preg_match_all("/%([A-Z0-9_]+)%/U",$row["zeile"],$ph, PREG_PATTERN_ORDER);
+					if ($ph) {
+						$ph=array_slice($ph,1);
+						if ($ph[0]) { foreach ($ph as $x) {
+							foreach ($x as $u) {
+								$p=array_search($u,$felder);
+								if ($p!==false) {
+									$y=$data[$p];
+									$row["zeile"]=str_replace("%".$u."%",$y,$row["zeile"]);
+								} else {
+									$row["zeile"]=str_replace("%".$u."%","",$row["zeile"]);
+								}
 							}
-						}
-					}};
+						}};
+					};
+					$text=$row["zeile"];
+					$tmp[]=array("text"=>$text,"font"=>$row["font"]);
 				};
-				$text=$row["zeile"];
-				$tmp[]=array("text"=>$text,"font"=>$row["font"]);
-			};
-			$pdf->Add_PDF_Label2($tmp);
+				$pdf->Add_PDF_Label2($tmp);
+			}
+			$pdf->Output();
 		}
-		$pdf->Output();
 	}
 ?>
 <html>

@@ -1,5 +1,5 @@
 <?
-// $Id: showAdr.php 4 2006-01-28 16:11:22Z root $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/FirmaLib.php");
 	include("inc/LieferLib.php");
@@ -157,6 +157,7 @@
 		};
 		$pdf->Add_PDF_Label2($tmp);
 		$pdf->Output();
+		exit;
 	}
 ?>
 <html>

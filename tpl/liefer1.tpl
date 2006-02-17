@@ -1,4 +1,4 @@
-<!-- $Id: liefer1.tpl,v 1.3 2005/11/02 10:38:58 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -17,7 +17,12 @@
 		function notes() {
                                 F1=open("showNote.php?lid={FID}","Notes","width=400, height=400, left=100, top=50, scrollbars=yes");
                 }
-								
+		function ks() {
+			sw=document.ksearch.suchwort.value;
+			if (sw != "") 
+				F1=open("suchKontakt.php?suchwort="+sw+"&Q=V&id={FID}","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
+			return false;
+		}
 	//-->
 	</script>
 <body>
@@ -41,7 +46,6 @@
 
 <table class="karte"><tr><td class="karte">
 <!-- Beginn Code ------------------------------------------->
-<form name="liefer1" action="{action}" method="post">
 <table><tr><td width="380px">
 	<table class="stamm" height="410px">
 		<tr class="topbot"><td class="stamm" title="Lieferantentyp & Unser Rabatt">{lityp} {rabatt}</td>
@@ -80,7 +84,11 @@
 		<tr height="14px" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showItem({IID});">
 			<td class="smal" width="100px">{Datum} {Zeit}</td><td class="smal" width="40px">{Nr}</td><td class="smal">{Betreff}</td><td class="smal">{Name}</td></tr>
 <!-- END Liste -->
-		<tr height="*"><td class="smal" colspan="4" style="vertical-align:bottom;">	<a href="liefer1.php?id={FID}&start={PREV}">&lt;</a> <a href="liefer1.php?id={FID}&start={PAGER}" class="bold">refresh</a> <a href="liefer1.php?id={FID}&start={NEXT}">&gt;</a></td></tr>
+		<tr height="*">
+			<td colspan="2" style="vertical-align:bottom;">	<a href="firma1.php?id={FID}&start={PREV}">&lt;</a> <a href="liefer1.php?id={FID}&start={PAGER}" class="bold">neu laden</a> <a href="liefer1.php?id={FID}&start={NEXT}">&gt;</a></td>
+			<td style="vertical-align:bottom;"><form name="ksearch" onSubmit="return ks();"><input type="text" name="suchwort" size="20"></td>
+			<td style="vertical-align:bottom;"><input type="submit" name="ok" value="suchen"></form></td>
+		</tr>
 	</table>
 </td></tr></table>
 [<a href="liefern3.php?id={FID}&edit=1" class="bold">Edit</a>]

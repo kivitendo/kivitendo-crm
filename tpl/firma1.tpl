@@ -1,4 +1,4 @@
-<!-- $Id: firma1.tpl,v 1.5 2005/12/03 09:46:56 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title>Firma Stamm</title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -19,7 +19,13 @@
                 }
 		function vcard(){
 			document.location.href="vcardexp.php?fid={FID}";
-		}						
+		}
+		function ks() {
+			sw=document.ksearch.suchwort.value;
+			if (sw != "") 
+				F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
+			return false;
+		}
 	//-->
 	</script>
 <body>
@@ -85,7 +91,11 @@
 		<tr height="14px" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showItem({IID});">
 			<td class="smal" width="100px">{Datum} {Zeit}</td><td class="smal" width="60px">{Nr}</td><td class="smal le">{Betreff}</td><td class="smal le">{Name}</td></tr>
 <!-- END Liste -->
-		<tr height="*"><td colspan="4" style="vertical-align:bottom;">	<a href="firma1.php?id={FID}&start={PREV}">&lt;</a> <a href="firma1.php?id={FID}&start={PAGER}" class="bold">neu laden</a> <a href="firma1.php?id={FID}&start={NEXT}">&gt;</a></td></tr>
+		<tr height="*">
+			<td colspan="2" style="vertical-align:bottom;">	<a href="firma1.php?id={FID}&start={PREV}">&lt;</a> <a href="firma1.php?id={FID}&start={PAGER}" class="bold">neu laden</a> <a href="firma1.php?id={FID}&start={NEXT}">&gt;</a></td>
+			<td style="vertical-align:bottom;"><form name="ksearch" onSubmit="return ks();"><input type="text" name="suchwort" size="20"></td>
+			<td style="vertical-align:bottom;"><input type="submit" name="ok" value="suchen"></form></td>
+		</tr>
 	</table>
 </td></tr></table>
 <a href="firmen3.php?id={FID}&edit=1" class="bold">Bearbeiten</a>

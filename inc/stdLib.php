@@ -1,6 +1,6 @@
 <?
 session_start();
-$version='$Id: stdLib.php,v 1.8 2006/01/05 09:58:24 hli Exp $';
+$version='$Id$';
 
 require_once "DB.php";
 require_once "inc/conf.php";
@@ -607,5 +607,21 @@ function mondaykw($kw,$jahr) {
 	return $mondaykw;
 
 }
+function clearCSVData() {
+global $db;
+	return $db->query("delete from tempcsvdata where sessid = '".session_id()."'");
+}
+function insertCSVData($data) {
+global $db;
+	$tmpstr="";
+	foreach ($data as $row) {
+		$tmpstr.=$row.";";
+	};
+	$sql="insert into tempcsvdata (sessid,csvdatum,csvdaten) values (";
+	$sql.="'".session_id()."','".date("Y-m-d H:i")."','".substr($tmpstr,0,-1)."')";
+	$rc=$db->query($sql);
+	return $rc;
+}
+
 require_once "inc/login".$_SESSION["ok"].".php";
 ?>

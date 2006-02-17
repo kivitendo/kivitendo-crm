@@ -1,4 +1,4 @@
-<!-- $Id: firma3.tpl,v 1.5 2005/11/02 11:35:45 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -6,7 +6,7 @@
 	<!--
 	function showM (month) {
 		Frame=eval("parent.main_window");
-		uri="firma3.php?monat=" + month + "&fid=" + {FID};
+		uri="firma3.php?jahr={JAHR}&monat=" + month + "&fid=" + {FID};
 		Frame.location.href=uri;
 	}
 	//-->
@@ -38,7 +38,7 @@
 	<tr title="Firmenanschrift"><td class="smal bold">{Plz} {Ort}</td><td></td></tr>
 </table>
 <br>
-Nettoums&auml;tze der letzten 12 Monate
+Nettoums&auml;tze &uuml;ber 12 Monate [<a href='firma3.php?fid={FID}&jahr={JAHRZ}'>Fr&uuml;her</a>] [<a href='firma3.php?fid={FID}&jahr={JAHRV}'>{JAHRVTXT}</a>]
 <table><tr><td width="160px">
 	<table>
 	<tr><th class="smal" width="10%">Monat</th><th class="smal"></th><th class="smal">Umsatz</th><th class="smal">Angebot</td><td width="10%"></td></tr>

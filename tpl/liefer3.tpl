@@ -1,4 +1,4 @@
-<!-- $Id: liefer3.tpl,v 1.3 2005/11/02 10:38:58 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -6,7 +6,7 @@
 	<!--
 	function showM (month) {
 		Frame=eval("parent.main_window");
-		uri="liefer3.php?monat=" + month + "&fid=" + {FID};
+		uri="liefer3.php?jahr={JAHR}&monat=" + month + "&fid=" + {FID};
 		Frame.location.href=uri;
 	}
 	//-->
@@ -39,7 +39,7 @@
 	<tr title="Lieferantenanschrift"><td class="smal bold">{Plz} {Ort}</td><td></td></tr>
 </table>
 <br>
-Ums&auml;tze der letzten 12 Monate
+Ums&auml;tze &uuml;ber 12 Monate [<a href='liefer3.php?fid={FID}&jahr={JAHRZ}'>Fr&uuml;her</a>] [<a href='liefer3.php?fid={FID}&jahr={JAHRV}'>{JAHRVTXT}</a>]
 <table><tr><td><table width="160px">
 	<tr><th class="smal" width="10%">Monat</th><th></th><th class="smal">Umsatz</th><td width="10%"></td></tr>
 <!-- BEGIN Liste -->

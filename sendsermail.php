@@ -4,7 +4,12 @@ require_once("inc/crmLib.php");
 include_once("Mail.php");
 include_once("Mail/mime.php");
 
-$offset=($_GET["offset"])?$_GET["offset"]:0;
+function replace_var($body) {
+	
+	return $body;
+}
+
+$offset=($_GET["offset"])?$_GET["offset"]:1;
 $mime = new Mail_Mime("\n");
 $mail =& Mail::factory("mail");
 			
@@ -12,25 +17,47 @@ require("tmp/".session_id().".data");
 
 if ($logmail) $f=fopen("tmp/maillog.txt","a");
 
-$mime->setTXTBody($bodytxt);
 if ($_GET["datei"]) {
 	$mime->addAttachment("tmp/".session_id(), $type,$dateiname, true );
 }
-$body = $mime->get(array("text_encoding"=>"quoted-printable"));
 $hdr = $mime->headers($headers);
+
+$sql="select * from tempcsvdata where sessid = '".session_id()."' limit 1";
+$data=$db->getAll($sql);
+$felder=split(";",$data[0]["csvdaten"]);
+$pemail=array_search("EMAIL",$felder);
+$pkont=array_search("KONTAKT",$felder);
 
 $sql="select * from tempcsvdata where sessid = '".session_id()."' offset ".$offset." limit ".$limit;
 $data=$db->getAll($sql);
 if ($data) {
 	foreach ($data as $row) {
+		$text=$bodytxt;
 		$to="";
-		$tmp=split(",",$row["csvdaten"]);
-		if ($tmp[9]<>"") {
-			$to=$tmp[9]." <".$tmp[8].">";
+		$tmp=split(";",$row["csvdaten"]);
+		if ($tmp[$pkont]<>"" and $tmp[$pemail]<>"") {
+			$to=$tmp[$pkont]." <".$tmp[$pemail].">";
 		} else {
-			$to=$tmp[8];
+			$to=$tmp[$pemail];
 		}
 		if ($to<>"") {
+			preg_match_all("/%([A-Z0-9_]+)%/U",$text,$ph, PREG_PATTERN_ORDER);
+			if ($ph) {
+				$ph=array_slice($ph,1);
+				if ($ph[0]) { foreach ($ph as $x) {
+					foreach ($x as $u) {
+						$p=array_search($u,$felder);
+						if ($p!==false) {
+							$y=$tmp[$p];
+							$text=str_replace("%".$u."%",$y,$text);
+						} else {
+							$text=str_replace("%".$u."%","",$text);
+						}
+					}
+				}};
+			};
+			$mime->setTXTBody($text);
+			$body = $mime->get(array("text_encoding"=>"quoted-printable"));
 			$rc=$mail->send($to, $hdr, $body);
 			if ($rc) {
 				$data["CRMUSER"]=$_SESSION["loginCRM"];

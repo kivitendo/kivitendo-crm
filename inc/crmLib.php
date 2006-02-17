@@ -1,5 +1,5 @@
 <?
-// $Id: crmLib.php,v 1.7 2006/01/18 16:01:51 hli Exp $
+// $Id$
 
 /****************************************************
 * mkSuchwort
@@ -1119,22 +1119,23 @@ function chkMailAdr ($mailadr) {
 * out: rechng = array
 * Rechnungsdaten je Monat
 *****************************************************/
-function getReJahr($fid,$liefer=false) {
+function getReJahr($fid,$jahr,$liefer=false) {
 global $db;
-	$lastYear=date("Y-m-d",mktime(0, 0, 0, date("m"), date("d"), date("Y")-1));
+	$lastYearV=date("Y-m-d",mktime(0, 0, 0, date("m")+1, 1, $jahr-1));
+	$lastYearB=date("Y-m-d",mktime(0, 0, 0, date("m"), 31, $jahr));
 	if ($liefer) {
-		$sql="select * from ap where vendor_id=$fid and transdate >= '$lastYear' order by transdate desc";
+		$sql="select * from ap where vendor_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' order by transdate desc";
 		$rs2=array();
 	} else {
-		$sql="select * from oe where customer_id=$fid and transdate >= '$lastYear' and closed = 'f' and quotation = 'f' order by transdate desc";
+		$sql="select * from oe where customer_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' and closed = 'f' and quotation = 'f' order by transdate desc";
 		$rs2=$db->getAll($sql);
-		$sql="select * from ar where customer_id=$fid and transdate >= '$lastYear' order by transdate desc";
+		$sql="select * from ar where customer_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' order by transdate desc";
 	};
 	$rs1=$db->getAll($sql);
 	$rs=array_merge($rs1,$rs2);
 	$rechng=array();
 	for ($i=11; $i>=0; $i--) {
-		$dat=date("Ym",mktime(0, 0, 0, date("m")-$i, 1 , date("Y")));
+		$dat=date("Ym",mktime(0, 0, 0, date("m")-$i, 1 , $jahr));
 		$rechng[$dat]=array("summe"=>0,"count"=>0,"curr"=>"Eur");
 	}
 	$rechng["Jahr  "]=array("summe"=>0,"count"=>0,"curr"=>"Eur");
@@ -1154,10 +1155,11 @@ global $db;
 * out: rechng = array
 * Angebotsdaten je Monat
 *****************************************************/
-function getAngebJahr($fid) {
+function getAngebJahr($fid,$jahr) {
 global $db;
-	$lastYear=date("Y-m-d",mktime(0, 0, 0, date("m"), date("d"), date("Y")-1));
-	$sql="select * from oe where customer_id=$fid and transdate >= '$lastYear' and quotation = 't' order by transdate desc";
+	$lastYearV=date("Y-m-d",mktime(0, 0, 0, date("m"), 1, $jahr-1));
+	$lastYearB=date("Y-m-d",mktime(0, 0, 0, date("m")+1, -1, $jahr));
+	$sql="select * from oe where customer_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' and quotation = 't' order by transdate desc";
 	$rs=$db->getAll($sql);
 	$rechng=array();
 	for ($i=11; $i>=0; $i--) {

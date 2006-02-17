@@ -1,4 +1,4 @@
-<!-- $Id: firmen1L.tpl,v 1.3 2005/11/02 10:38:58 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -10,6 +10,9 @@
 			uri="firma1.php?id=" + id;
 			Frame.location.href=uri;
 		}
+	}
+	function chngSerial(site) {
+		etikett.document.location.href = site + ".php";
 	}
 	//-->
 	</script>
@@ -27,7 +30,12 @@
 </table>
 {report}
 </td><td class="smal">
-	<iframe src="etiketten.php" name="etikett" width="240" height="380" scrolling="yes"> marginheight="0" marginwidth="0" align="left">
+<form>
+	<input type="button" name="etikett" value="Etiketten" onClick="chngSerial('etiketten');">&nbsp;
+	<a href="sermail.php"><input type="button" name="email" value="Serienmail"></a>&nbsp;
+	<input type="button" name="brief" value="Serienbrief" onClick="chngSerial('serdoc');">
+	<br>
+	<iframe src="etiketten.php" name="etikett" width="300" height="380" scrolling="yes"> marginheight="0" marginwidth="0" align="left">
 		<p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>
 	</iframe>
 </td></tr>

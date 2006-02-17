@@ -1,14 +1,15 @@
 <?
-// $Id: getData.php,v 1.3 2005/11/02 10:37:52 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
 ?>
 <html>
 <head><title></title>
 <link REL="stylesheet" HREF="css/main.css" TYPE="text/css" TITLE="Lx-System stylesheet">
-
+</head>
+<body onLoad="document.suche.swort.focus()";>
 <?	
-if ($_POST["ok"]) {
+if ($_POST["adress"]) {
 	include("inc/FirmaLib.php");
 	include("inc/LieferLib.php");
 	include("inc/persLib.php");
@@ -53,8 +54,6 @@ if ($_POST["ok"]) {
 	}
 //-->
 </script>
-</head>
-<body>
 <p class="listtop">Suchergebnis</p>
 <?
 	if ($anzahl>0) {
@@ -90,13 +89,22 @@ if ($_POST["ok"]) {
 		echo $msg;
 	};
 	echo "<br>";
-} ?>
-<p class="listtop">Schnellsuche Kunde/Lieferant/Kontakte</p>
+} else if ($_POST["kontakt"]){
+?>
+<script langusage="JavaScript">
+	sw="<?= $_POST["swort"]; ?>";
+	if (sw != "") 
+		F1=open("suchKontakt.php?suchwort="+sw+"&Q=S","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
+</script>			
+
+<? }?>
+<p class="listtop">Schnellsuche Kunde/Lieferant/Kontakte und Kontaktverlauf</p>
 	<form name="suche" action="getData.php" method="post">
 	<input type="hidden" name="login" value="<?= $_GET["login"] ?>">
 	<input type="hidden" name="password" value="<?= $_GET["password"] ?>">
-	<input type="text" name="swort" size="20">
-	<input type="submit" name="ok" value="suchen"><br>
+	<input type="text" name="swort" size="20"> suche 
+	<input type="submit" name="adress" value="Adresse"> 
+	<input type="submit" name="kontakt" value="Kontaktverlauf"> <br>
       	<span class="liste">Suchbegriff</span>
 	</form>
 

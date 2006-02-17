@@ -1,5 +1,5 @@
 <?php
-// $Id: firmen1.php,v 1.4 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/FirmaLib.php");
@@ -32,14 +32,15 @@
 			$t->set_file(array("fa1" => "firmen1L.tpl"));
 			$t->set_block("fa1","Liste","Block");
 			$i=0;
-			$fn=fopen("tmp/suche_".$_SESSION["loginCRM"].".csv","w");
-			fputs($fn,"'ANREDE','NAME','DEPARTMENT_1','LAND','PLZ','ORT','STRASSE','TEL','MAIL'\n");
+			clearCSVData();
+			insertCSVData(array("ANREDE","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","KONTAKT","ID"));
 			if ($daten) foreach ($daten as $zeile) {
-				fputs($fn,sprintf("'Firma','%s','%s','%s','%s','%s','%s','%s','%s'\n",
-								$zeile["name"],$zeile["department_1"],
-								$zeile["country"],$zeile["zipcode"],$zeile["city"],
-								$zeile["street"],
-								$zeile["phone"],$zeile["email"] ));
+				insertCSVData(array("Firma",$zeile["name"],$zeile["department_1"],
+						$zeile["country"],$zeile["zipcode"],$zeile["city"],$zeile["street"],
+						$zeile["phone"],$zeile["fax"],$zeile["email"],$zeile["contact"],$zeile["id"],
+						$zeile["customernumber"],$zeile["ustid"],$zeile["taxnumber"],
+						$zeile["account_number"],$zeile["bank_code"],$zeile["bank"],
+						$zeile["language"],$zeile["business_id"]));	
 				$t->set_var(array(
 				ID => $zeile["id"],
 				LineCol => $bgcol[($i%2+1)],
@@ -52,7 +53,6 @@
 				$t->parse("Block","Liste",true);
 				$i++;
 			}
-			fclose($fn);
 		} else {
 			$msg="Leider nichts gefunden.";
 			vartpl ($t,$_POST,$msg,"","",1);

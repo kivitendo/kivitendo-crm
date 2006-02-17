@@ -1,5 +1,5 @@
 <?
-// $Id: personen1.php,v 1.6 2005/12/01 08:12:48 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/persLib.php");
@@ -23,25 +23,21 @@
 		} if (count($daten)==1 && $daten<>false && !$_POST["FID1"]) {
 			header ("location:kontakt.php?id=".$daten[0]["cp_id"]);
 		} else if (count($daten)>=1) {
-			$fn=fopen("tmp/suche_".$_SESSION["loginCRM"].".csv","w");
 			$t->set_file(array("pers1" => "personen1L.tpl"));
 			$t->set_block("pers1","Liste","Block");
 			$i=0;
 			$bgcol[1]="#ddddff";
 			$bgcol[2]="#ddffdd";
-			fputs($fn,"'ANREDEPERS','TITLE','NNAME','VNAME','NAMEPERS','PLZPERS','ORTPERS','STRASSEPERS','NAME','TELPERS','MAILPERS'\n");
 			if ($_POST["FID1"]) { 
 				$dest=($_POST["Quelle"]=="F")?"firma":"liefer"; 
 				$snd="<input type='submit' name='insk' value='zuordnen'><br><a href='".$dest."2.php?fid=".$_POST["FID1"]."'>zur&uuml;ck</a>";  //<input type='checkbox' value='".$zeile["cp_id"]."'>alle
                         } else { $snd=""; $dest=""; };
+			clearCSVData();
+            		insertCSVData(array("ANREDE","TITEL","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","FIRMA","ID"));
 			if ($daten) foreach ($daten as $zeile) {
-				fputs($fn,sprintf("'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s'\n",
-								$zeile["cp_greeting"],$zeile["cp_title"],
-								$zeile["cp_name"],$zeile["cp_givenname"],
-								$zeile["cp_name"].", ".$zeile["cp_givenname"],
-								$zeile["cp_zipcode"],$zeile["cp_city"],
-								$zeile["cp_street"],$zeile["name"],
-								$zeile["cp_phone1"],$zeile["cp_email"] ));
+				insertCSVData(array($zeile["cp_greeting"],$zeile["cp_title"],$zeile["cp_name"],$zeile["cp_givenname"],
+							$zeile["cp_country"],$zeile["cp_zipcode"],$zeile["cp_city"],$zeile["cp_street"],
+							$zeile["cp_phone"],$zeile["cp_fax"],$zeile["cp_email"],$zeile["name"],$zeile["cp_id"]));
 				if ($_POST["FID1"]) {
 					$insk="<input type='checkbox' name='kontid[]' value='".$zeile["cp_id"]."'>"; 
 				} else { 
@@ -63,7 +59,6 @@
 				$t->parse("Block","Liste",true);
 				$i++;
 			}
-			fclose($fn);
 			$t->set_var(array(
 				snd => $snd,
 				FID => $_POST["FID1"],

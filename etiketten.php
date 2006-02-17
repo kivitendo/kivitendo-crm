@@ -1,5 +1,5 @@
 <?
-// $Id: etiketten.php 4 2006-01-28 16:11:22Z root $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
 	include("inc/UserLib.php");	
@@ -7,15 +7,14 @@
 	$ALabels=getLableNames();
 	if (!$_POST["format"] || empty($_POST["format"])) {
 		$_POST["format"]=$usr["etikett"];
-	} else {
-		$tmp=split("=",$_POST["src"]);
-		$_GET[$tmp[0]]=$tmp[1];
 	}
-	$form=$_POST["format"]; 
+	if (!$_POST["format"]) {
+		$form=$ALabels[0]["id"];
+	} else {
+		$form=$_POST["format"]; 
+	}
 	$label=getOneLable($form);
 	if ($_POST["print"]) {
-		$platzhalter=array("ANREDE"=>"anredeF","NAME"=>"name1F","NAME2"=>"name2F","STRASSE"=>"strasseF","PLZ"=>"plzF","ORT"=>"ortF","KONTAKT"=>"name1P",
-							"ANREDEPERS"=>"anredeP","TITLE"=>"title","NAMEPERS"=>"name1P","STRASSEPERS"=>"strasseP","PLZPERS"=>"plzP","ORTPERS"=>"ortP","LAND"=>"landF");
 		$lableformat=array("paper-size"=>$label["papersize"],'name'=>$label["name"], 'metric'=>$label["metric"], 
 							'marginLeft'=>$label["marginleft"], 'marginTop'=>$label["margintop"], 
 							'NX'=>$label["nx"], 'NY'=>$label["ny"], 'SpaceX'=>$label["spacex"], 'SpaceY'=>$label["spacey"],
@@ -28,10 +27,12 @@
 		$pdf->Open(); 
 		unset($tmp);
 		if ($SX<>1 or $SY<>1)	$pdf->AddPage();
-		$fn=fopen("tmp/suche_".$_SESSION["loginCRM"].".csv","r");
-		$header=fgetcsv($fn,1000,",","'");
-		$data=fgetcsv($fn,1000,",","'");
-		while (!feof($fn)) {
+		$sql="select * from tempcsvdata where sessid = '".session_id()."' order by id";
+		$daten=$db->getAll($sql);
+		$felder=array_shift($daten);
+		$felder=split(";",$felder["csvdaten"]);
+		foreach ($daten as $row) {
+			$data=split(";",$row["csvdaten"]);
 			unset($tmp);
 			foreach ($label["Text"] as $row) {
 				preg_match_all("/%([A-Z0-9_]+)%/U",$row["zeile"],$ph, PREG_PATTERN_ORDER);
@@ -39,8 +40,8 @@
 					$ph=array_slice($ph,1);
 					if ($ph[0]) { foreach ($ph as $x) {
 						foreach ($x as $u) {
-							$p=array_search($u,$header);
-							if ($p) {
+							$p=array_search($u,$felder);
+							if ($p!==false) {
 								$y=$data[$p];
 								$row["zeile"]=str_replace("%".$u."%",$y,$row["zeile"]);
 							} else {
@@ -53,9 +54,7 @@
 				$tmp[]=array("text"=>$text,"font"=>$row["font"]);
 			};
 			$pdf->Add_PDF_Label2($tmp);
-			$data=fgetcsv($fn,1000,",","'");
 		}
-		
 		$pdf->Output();
 	}
 ?>

@@ -31,7 +31,7 @@
 		$t->set_file(array("fa1" => "liefer3a.tpl"));
 		$IMG="";
 	} else {
-		$re=getReJahr($_GET["fid"],true);
+		$re=getReJahr($_GET["fid"],$jahr,true);
 		$an=array();
 		$t->set_file(array("fa1" => "liefer3.tpl"));
 		$IMG=getLastYearPlot($re,$an,$ll);

@@ -13,7 +13,6 @@
 		$sql="select calldate,cause,id,caller_id,bezug from telcall where ( UPPER(cause) like '%$sw%' or UPPER(c_long) like '%$sw%') ";
 		$sql.="and (caller_id in (select cp_id from contacts where cp_cv_id=$id) or caller_id=$id)";
 	}
-echo $sql;
 	$rs=$db->getAll($sql." order by bezug,calldate desc");
 	$used= Array();
 ?>

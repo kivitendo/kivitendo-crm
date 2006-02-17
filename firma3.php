@@ -1,5 +1,5 @@
 <?
-// $Id: firma3.php,v 1.4 2005/11/02 11:33:06 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
 	include("inc/template.inc");
@@ -17,14 +17,23 @@
 	$name=$fa["name"];
 	$plz=$fa["zipcode"];
 	$ort=$fa["city"];
+	$jahr=$_GET["jahr"];
+	if (empty($jahr)) $jahr=date("Y"); 
+	if ($jahr==date("Y"))  {
+		$JahrV="";
+	} else {
+		$link3.="&jahr=$jahr";
+		$JahrV=$jahr+1;
+	}
+	$JahrZ=$jahr-1;
 	if ($_GET["monat"]) {
 		$m=substr($_GET["monat"],3,4)."-".substr($_GET["monat"],0,2);
 		$reM=getReMonat($fid,$m);
 		$t->set_file(array("fa1" => "firma3a.tpl"));
 		$IMG="";
 	} else {
-		$re=getReJahr($fid);
-		$an=getAngebJahr($fid);
+		$re=getReJahr($fid,$jahr);
+		$an=getAngebJahr($fid,$jahr);
 		$t->set_file(array("fa1" => "firma3.tpl"));
 		$IMG=getLastYearPlot($re,$an,$ll);
 		$monat="";
@@ -41,6 +50,10 @@
 			Plz => $plz,
 			Ort => $ort,
 			IMG	=> $IMG,
+			JAHR => $jahr,
+			JAHRV => $JahrV,
+			JAHRZ => $JahrZ,
+			JAHRVTXT => ($JahrV>0)?"Sp&auml;ter":"",
 			Monat => $monat
 			));
 	if ($re) {

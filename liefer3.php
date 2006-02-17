@@ -1,5 +1,5 @@
 <?
-// $Id: liefer3.php,v 1.4 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");
@@ -16,6 +16,15 @@
 	$name=$fa["name"];
 	$plz=$fa["zipcode"];
 	$ort=$fa["city"];
+	$jahr=$_GET["jahr"];
+	if (empty($jahr)) $jahr=date("Y"); 
+	if ($jahr==date("Y"))  {
+		$JahrV="";
+	} else {
+		$link3.="&jahr=$jahr";
+		$JahrV=$jahr+1;
+	}
+	$JahrZ=$jahr-1;	
 	if ($_GET["monat"]) {
 		$m=substr($_GET["monat"],3,4)."-".substr($_GET["monat"],0,2);
 		$reM=getReMonat($_GET["fid"],$m,true);
@@ -40,6 +49,10 @@
 			Plz => $plz,
 			Ort => $ort,
 			IMG	=> $IMG,
+			JAHR => $jahr,
+			JAHRV => $JahrV,
+			JAHRZ => $JahrZ,
+			JAHRVTXT => ($JahrV>0)?"Sp&auml;ter":"",
 			Monat => $monat
 			));
 	if ($re) {

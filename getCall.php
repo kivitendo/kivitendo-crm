@@ -153,7 +153,7 @@
 		if ($calls) foreach($calls as $zeile) {
 			$t->set_var(array(
 				LineCol => ($zeile["bezug"]==0)?$bgcol[4]:$bgcol[($i%2+1)],
-				Type	=> $typcol[$zeile["kontakt"]],
+				Type	=> $typcol[strtoupper($zeile["kontakt"])],
 				Datum	=>	db2date($zeile["calldate"]).substr($zeile["calldate"],10,6),
 				Betreff	=>	$zeile["cause"],
 				Kontakt	=>	$zeile["kontakt"],
@@ -188,7 +188,7 @@
 		PID => $pid,
 		Bezug => ($id===0)?"0":$id,
 		R1 => ($daten["Kontakt"]=="T")?" checked":"",
-		R2 => ($daten["Kontakt"]=="M")?" checked":"",
+		R2 => ($daten["Kontakt"]=="M" or $daten["Kontakt"]=="m")?" checked":"",
 		R3 => ($daten["Kontakt"]=="S")?" checked":"",
 		R4 => ($daten["Kontakt"]=="P")?" checked":"",
 		R5 => ($daten["Kontakt"]=="D")?" checked":"",

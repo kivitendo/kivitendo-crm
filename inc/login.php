@@ -1,5 +1,5 @@
 <?
-// $Id: login.php,v 1.1 2006/01/05 09:57:09 hli Exp $
+// $Id$
 while( list($key,$val) = each($_SESSION) ) {
 	unset($_SESSION[$key]);
 };
@@ -14,7 +14,7 @@ if ($_POST["erpname"]) {
 			foreach($configfile as $row) {
 				$tmp=trim($row);
 				if (ereg("ERPNAME",$tmp)) {
-					fputs($f,'$ERPNAME="'.$_POST["erpname"].'";\n');
+					fputs($f,'$ERPNAME="'.$_POST["erpname"]."\"\n");
 					$name=true;
 				} else {
 					if (ereg("\?>",$tmp) && !$name) fputs($f,'$ERPNAME="'.$_POST["erpname"].'";'."\n");
@@ -37,7 +37,7 @@ if (!$_GET["login"]) {
 	if ($tmp) {
 		if (chkVer()) {
 			$db=$_SESSION["db"];
-			$_SESSION["ok"]="ok";
+			$_SESSION["loginok"]="ok";
 		} else {
 			echo "db-Version nicht ok";
 			exit;

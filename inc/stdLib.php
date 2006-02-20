@@ -623,5 +623,5 @@ global $db;
 	return $rc;
 }
 
-require_once "inc/login".$_SESSION["ok"].".php";
+require_once "inc/login".$_SESSION["loginok"].".php";
 ?>

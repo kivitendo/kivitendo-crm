@@ -1,4 +1,4 @@
-<!-- $Id: personen3.tpl,v 1.4 2005/11/02 11:35:45 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -71,8 +71,8 @@
 	</tr>
 	<tr>
 		<td class="smal"><input type="text" name="cp_phone1" size="25" maxlength="75" value="{Tel1}" tabindex="12"><br>Telefon</td>
-		<td class="smal"><input type="text" name="cp_phone2" size="23" maxlength="75" value="{Tel2}" tabindex="13"><br>Mobiletelefon</td>
-		<td class="smal"><input type="text" name="cp_gebdatum" size="10" maxlength="10" value="{GDate}" tabindex="24"><br>Geburstdatum</td>
+		<td class="smal"><input type="text" name="cp_phone2" size="23" maxlength="75" value="{Tel2}" tabindex="13"><br>Mobiltelefon</td>
+		<td class="smal"><input type="text" name="cp_gebdatum" size="10" maxlength="10" value="{GDate}" tabindex="24"><br>Geburtsdatum</td>
 	</tr>
 	<tr>
 		<td class="smal" colspan="2"><input type="text" name="cp_fax"" size="25" maxlength="75" value="{Fax}" tabindex="14"><br>Fax</td>

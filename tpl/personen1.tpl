@@ -1,4 +1,4 @@
-<!-- $Id: personen1.tpl,v 1.4 2005/11/02 11:35:45 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -87,7 +87,7 @@
 	</tr>
 	<tr>
 		<td class="smal"><input type="text" name="cp_stichwort1" size="25" maxlength="50" value="{SW1}" tabindex="18"><br>Stichwort</td>
-		<td class="smal"><input type="text" name="cp_gebdatum" size="12" maxlength="10" value="{GDate}" tabindex="22"><br>Geburstdatum</td>
+		<td class="smal"><input type="text" name="cp_gebdatum" size="12" maxlength="10" value="{GDate}" tabindex="22"><br>Geburtsdatum</td>
 		<td class="smal" rowspan="2">
 			<input type="checkbox" name="fuzzy" value="%" checked>Unscharf suchen<br>
 			{Btn1}<br><br>{Btn3}<br><br><input type="submit" name="suche" value="suchen"><br><br><input type="submit" name="reset" value="clear">

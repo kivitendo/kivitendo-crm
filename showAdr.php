@@ -83,6 +83,7 @@
 		$name1F=$data ["name"];
 		$name2F=$data ["name2"];
 		$department_1F=$data["department_1"];
+		$name1P=$data ["contact"];
 		$strasseF=$data ["street"];
 		$landF=$data ["country"];
 		$plzF=$data["zipcode"];
@@ -95,6 +96,7 @@
 		$name1F=$data ["name"];
 		$name2F=$data ["name2"];
 		$department_1F=$data["department_1"];
+		$name1P=$data ["contact"];
 		$strasseF=$data ["street"];
 		$landF=$data ["country"];
 		$plzF=$data["zipcode"];
@@ -108,6 +110,7 @@
 			$name1F=$data ["shiptoname"];
 			$name2F=$data ["shiptoname2"];
 			$department_1F=$data["shiptodepartment_1"];
+			$name1P=$data ["shiptocontact"];
 			$strasseF=$data ["shiptostreet"];
 			$landF=$data ["shiptocountry"];
 			$plzF=$data["zipcode"];
@@ -118,6 +121,7 @@
 			$anredeF="Firma";
 			$name1F=$data ["name"];
 			$department_1F=$data["department_1"];
+			$name1P=$data ["contact"];
 			$name2F=$data ["name2"];
 			$strasseF=$data ["street"];
 			$landF=$data ["country"];
@@ -127,8 +131,11 @@
 	}
 	$label=getOneLable($etikett);
 	if ($_POST["print"]) {
-		$platzhalter=array("ANREDE"=>"anredeF","NAME"=>"name1F","DEPARTMENT_1"=>"department_1F","NAME2"=>"name2F","STRASSE"=>"strasseF","PLZ"=>"plzF","ORT"=>"ortF","KONTAKT"=>"name1P",
-							"ANREDEPERS"=>"anredeP","TITLE"=>"title","NAMEPERS"=>"name1P","STRASSEPERS"=>"strasseP","PLZPERS"=>"plzP","ORTPERS"=>"ortP","LAND"=>"landF");
+		$platzhalter=array("ANREDE"=>"anredeF","NAME"=>"name1F","DEPARTMENT_1"=>"department_1F",
+				   "NAME2"=>"name2F","STRASSE"=>"strasseF","PLZ"=>"plzF","ORT"=>"ortF",
+				   "KONTAKT"=>"name1P",
+				   "ANREDEPERS"=>"anredeP","TITLE"=>"title","NAMEPERS"=>"name1P",
+				   "STRASSEPERS"=>"strasseP","PLZPERS"=>"plzP","ORTPERS"=>"ortP","LAND"=>"landF");
 		$lableformat=array("paper-size"=>$label["papersize"],'name'=>$label["name"], 'metric'=>$label["metric"], 
 							'marginLeft'=>$label["marginleft"], 'marginTop'=>$label["margintop"], 
 							'NX'=>$label["nx"], 'NY'=>$label["ny"], 'SpaceX'=>$label["spacex"], 'SpaceY'=>$label["spacey"],
@@ -169,6 +176,7 @@ Anschrift<br><hr>
 	<?= $anredeF ?><br>
 	<?= $name1F ?><br>
 	<?=  ($name2F)?$name2F."<br>":"" ?>
+	<?=  ($name1P)?$name1P."<br>":"" ?>
 	<?=  $strasseF ?><br><br>
 	<?= ($landF<>"")?$landF." - ":"" ?>
 	<?= $plzF ?> <?= $ortF ?><br>

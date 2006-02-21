@@ -38,25 +38,36 @@
 				foreach ($label["Text"] as $row) {
 					preg_match_all("/%([A-Z0-9_]+)%/U",$row["zeile"],$ph, PREG_PATTERN_ORDER);
 					if ($ph) {
+						$first=true;
+						$oder=strpos($row["zeile"],"|");
 						$ph=array_slice($ph,1);
 						if ($ph[0]) { foreach ($ph as $x) {
 							foreach ($x as $u) {
 								$p=array_search($u,$felder);
-								if ($p!==false) {
+								if ($p!==false and $first) {
 									$y=$data[$p];
 									$row["zeile"]=str_replace("%".$u."%",$y,$row["zeile"]);
+									if ($oder>0) $first=false;
 								} else {
 									$row["zeile"]=str_replace("%".$u."%","",$row["zeile"]);
 								}
 							}
 						}};
 					};
-					$text=$row["zeile"];
-					$tmp[]=array("text"=>$text,"font"=>$row["font"]);
+					if ($oder>0) $row["zeile"]=str_replace("|","",$row["zeile"]);
+					if ($row["zeile"]<>"!") {
+						if ($row["zeile"][0]=="!") {
+							$text=substr($row["zeile"],1);
+						} else {
+							$text=$row["zeile"];
+						}
+						$tmp[]=array("text"=>$text,"font"=>$row["font"]);
+					}
 				};
 				$pdf->Add_PDF_Label2($tmp);
 			}
 			$pdf->Output();
+			exit;
 		}
 	}
 ?>

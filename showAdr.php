@@ -131,7 +131,7 @@
 	}
 	$label=getOneLable($etikett);
 	if ($_POST["print"]) {
-		$platzhalter=array("ANREDE"=>"anredeF","NAME"=>"name1F","DEPARTMENT_1"=>"department_1F",
+		$platzhalter=array("ANREDE"=>"anredeF","NAME1"=>"name1F","DEPARTMENT"=>"department_1F",
 				   "NAME2"=>"name2F","STRASSE"=>"strasseF","PLZ"=>"plzF","ORT"=>"ortF",
 				   "KONTAKT"=>"name1P",
 				   "ANREDEPERS"=>"anredeP","TITLE"=>"title","NAMEPERS"=>"name1P",
@@ -151,16 +151,31 @@
 		foreach ($label["Text"] as $row) {
 			preg_match_all("/%([A-Z0-9_]+)%/U",$row["zeile"],$ph, PREG_PATTERN_ORDER);
 			if ($ph) {
+				$first=true;
+				$oder=strpos($row["zeile"],"|");
 				$ph=array_slice($ph,1);
 				if ($ph[0]) { foreach ($ph as $x) {
 					foreach ($x as $u) {
 						$y=$platzhalter[$u];
-						$row["zeile"]=str_replace("%".$u."%",${$y},$row["zeile"]);
+						if (${$y} <>"" and $first) {
+							$row["zeile"]=str_replace("%".$u."%",${$y},$row["zeile"]);	
+							if ($oder>0) $first=false;
+						} else {
+							$row["zeile"]=str_replace("%".$u."%","",$row["zeile"]);
+						}
 					}
-				}}
+				}
 			};
-			$text=$row["zeile"];
-			$tmp[]=array("text"=>$text,"font"=>$row["font"]);
+			if ($oder>0) $row["zeile"]=str_replace("|","",$row["zeile"]);
+			if ($row["zeile"]<>"!") {
+				if ($row["zeile"][0]=="!") {
+							$text=substr($row["zeile"],1);
+						} else {
+							$text=$row["zeile"];
+						}
+						$tmp[]=array("text"=>$text,"font"=>$row["font"]);
+					}
+			}
 		};
 		$pdf->Add_PDF_Label2($tmp);
 		$pdf->Output();

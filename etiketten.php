@@ -17,7 +17,8 @@
 	if ($_POST["print"]) {
 		$lableformat=array("paper-size"=>$label["papersize"],'name'=>$label["name"], 'metric'=>$label["metric"], 
 							'marginLeft'=>$label["marginleft"], 'marginTop'=>$label["margintop"], 
-							'NX'=>$label["nx"], 'NY'=>$label["ny"], 'SpaceX'=>$label["spacex"], 'SpaceY'=>$label["spacey"],
+							'NX'=>$label["nx"], 'NY'=>$label["ny"], 'SpaceX'=>$label["spacex"], 
+							'SpaceY'=>$label["spacey"],
 							'width'=>$label["width"], 'height'=>$label["height"], 'font-size'=>6);
 		require_once('inc/PDF_Label.php');
 		$tmp=split(":",$_POST["xy"]);
@@ -44,8 +45,8 @@
 						if ($ph[0]) { foreach ($ph as $x) {
 							foreach ($x as $u) {
 								$p=array_search($u,$felder);
-								if ($p!==false and $first) {
-									$y=$data[$p];
+								if ($p!==false) { $y=$data[$p]; } else { $y=""; }
+								if ($y<>"" and $first) {
 									$row["zeile"]=str_replace("%".$u."%",$y,$row["zeile"]);
 									if ($oder>0) $first=false;
 								} else {

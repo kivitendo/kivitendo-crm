@@ -1,4 +1,4 @@
--- $Id: $
+-- $Id$
 CREATE TABLE telcall (
 	id integer DEFAULT nextval('id'::text) NOT NULL,
 	cause text,
@@ -144,7 +144,8 @@ INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1),
 INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1), 8, 'Lx-Office, Überholspur 1, 12345 Woanders');
 INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1), 6, '');
 INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1), 10, '%ANREDE%');
-INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1), 10, '%NAME%');
+INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1), 10, '%NAME1% %NAME2%');
+INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1), 10, '!%KONTAKT%|%DEPARTMENT%');
 INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1), 10, '%STRASSE%');
 INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1), 8, '');
 INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1), 10,'%PLZ% %ORT%');

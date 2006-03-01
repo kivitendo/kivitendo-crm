@@ -1,5 +1,5 @@
 <?
-// $Id: firmen3.php,v 1.3 2005/11/02 10:37:52 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/FirmaLib.php");
@@ -21,8 +21,10 @@
 		if ($rc[0]>0) {
 			$msg="Daten gesichert.";
 			$_POST=getFirmaStamm($rc[0],false);
-			$x=preg_match("°(jpg|jpeg|gif|png)\$°i",$_FILES["Datei"]["name"],$regs);
-			$_POST["grafik"]=$regs[1];
+			if ($_FILES["Datei"]["name"]) {
+				$x=preg_match("°(jpg|jpeg|gif|png)\$°i",$_FILES["Datei"]["name"],$regs);
+				$_POST["grafik"]=$regs[1];
+			}
 		} else {
 			$msg="Fehler beim Sichern ( ".$rc[1]." )";
 		};

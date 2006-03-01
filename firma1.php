@@ -1,5 +1,5 @@
 <?
-// $Id: firma1.php,v 1.4 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/FirmaLib.php");
@@ -20,6 +20,13 @@
 		$internet=(preg_match("°://°",$fa["homepage"]))?$fa["homepage"]:"http://".$fa["homepage"];
 	};
 	mkPager($items,$pager,$start,$next,$prev);
+	if ($fa["discount"]) {
+		$rab=($fa["discount"]*100)."%";
+	} else if($fa["typrabatt"]) {
+		$rab=($fa["typrabatt"]*100)."%";
+	} else {
+		$rab="";
+	}
 	$t->set_var(array(
 			FID	=> $id,
 			INID	=> db2date(substr($fa["itime"],0,10)),
@@ -34,10 +41,18 @@
 			Ort	=> $fa["city"],
 			Telefon	=> $fa["phone"],
 			Fax	=> $fa["fax"],
+			Fcontact=> $fa["contact"],
 			eMail	=> $fa["email"],
+			branche => $fa["branche"],
+			sw => $fa["sw"],
+			notiz =>  $fa["notes"],
+			bank => $fa["bank"],
+			blz => $fa["bank_code"],
+			konto => $fa["account_number"],
 			Internet	=> $internet,
-			USTID	=> $fa["taxnumber"],
-			rabatt	=> ($fa["discount"])?($fa["discount"]*100)."%":"",
+			USTID	=> $fa["ustid"],
+			Taxnumber	=> $fa["taxnumber"],
+			rabatt	=> $rab,
 			terms	=> $fa["terms"],
 			kreditlim	=> sprintf("%0.2f",$fa["creditlimit"]),
 			op	=> sprintf("%0.2f",$fa["op"]),

@@ -1,5 +1,5 @@
 <?
-// $Id: firma2.php,v 1.4 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");
@@ -66,6 +66,7 @@
 			StreetC => $co["cp_street"],
 			Telefon => $co["cp_phone1"],
 			Mobile => $co["cp_phone2"],
+			Fax => $co["cp_fax"],
 			eMail => $co["cp_email"],
 			www	=> $internet,
 			Abteilung	=> $co["cp_abteilung"],
@@ -131,6 +132,7 @@
 				Fdepartment_2 => $fa["department_2"],
 				Plz => $fa["zipcode"],
 				Ort => $fa["city"],
+				KDNR => $fa["customernumber"],
 				Street => $fa["street"],
 				FID => $fid
 				));

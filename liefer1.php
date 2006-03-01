@@ -1,5 +1,5 @@
 <?php
-// $Id: liefer1.php,v 1.4 2005/11/02 10:37:52 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/LieferLib.php");
@@ -17,40 +17,56 @@
 	if ($li["homepage"]<>"") {
 		$internet=(preg_match("°://°",$li["homepage"]))?$li["homepage"]:"http://".$li["homepage"];
 	};
-	mkPager($items,$pager,$start,$next,$prev);
+	mkPager($items,$pager,$start,$next,$prev); 
+	if ($li["discount"]) {
+		$rab=($li["discount"]*100)."%";
+	} else if($li["typrabatt"]) {
+		$rab=($li["typrabatt"]*100)."%";
+	} else {
+		$rab="";
+	}
 	$t->set_var(array(
-			LInr	=> $li["vendornumber"],
-			KDnr	=> $li["v_customer_id"],
-			INID	=> db2date(substr($li["itime"],0,10)),
-			lityp   => $fa["lityp"],
-			Lname	=> $li["name"],
-			Ldepartment_1 => $li["department_1"],
-			Ldepartment_2 => $li["department_2"],
-			Strasse	=> $li["street"],
-			Land	=> $li["country"],
-			Plz	=> $li["zipcode"],
-			Ort	=> $li["city"],
-			Telefon	=> $li["phone"],
-			Fax	=> $li["fax"],
-			eMail	=> $li["email"],
-			Internet => $internet,
-			FID	=> $_GET["id"],
-			USTID	=> $li["taxnumber"],
-			rabatt	=> ($fa["discount"])?($li["discount"]*100)."%":"",
-			Sname	=> $li["shiptoname"],
-			Sdepartment_1 => $li["shiptodepartment_1"],
-			Sdepartment_2 => $li["shiptodepartment_2"],
-			SStrasse => $li["shiptostreet"],
-			SLand	=> $li["shiptocountry"],
-			SPlz	=> $li["shiptozipcode"],
-			SOrt	=> $li["shiptocity"],
-			STelefon => $li["shiptophone"],
-			SFax	=> $li["shiptofax"],
-			SeMail	=> $li["shiptoemail"],
-			IMG	=> $Image,
-			PAGER	=> $pager,
-			NEXT	=> $next,
-			PREV	=> $prev	
+			LInr		=> $li["vendornumber"],
+			KDnr		=> $li["v_customer_id"],
+			INID		=> db2date(substr($li["itime"],0,10)),
+			lityp   	=> $li["lityp"],
+			Lname		=> $li["name"],
+			Ldepartment_1 	=> $li["department_1"],
+			Ldepartment_2 	=> $li["department_2"],
+			Strasse		=> $li["street"],
+			Land		=> $li["country"],
+			Plz		=> $li["zipcode"],
+			Ort		=> $li["city"],
+			Telefon		=> $li["phone"],
+			Fax		=> $li["fax"],
+			eMail		=> $li["email"],
+			branche 	=> $li["branche"],
+			sw	 	=> $li["sw"],
+			Internet	=> $internet,
+			FID		=> $_GET["id"],
+			notes		=> $li["notes"],
+			ustid 		=> $li["ustid"],
+			taxnumber 	=> $li["taxnumber"],
+			bank		=> $li["bank"],
+			bank_code	=> $li["bank_code"],
+			account_number	=> $li["account_number"],
+			terms		=> $li["terms"],
+			kreditlim	=> sprintf("%0.2f",$li["creditlimit"]),	
+			rabatt		=> $rab,
+			Sname		=> $li["shiptoname"],
+			Sdepartment_1 	=> $li["shiptodepartment_1"],
+			Sdepartment_2 	=> $li["shiptodepartment_2"],
+			SStrasse 	=> $li["shiptostreet"],
+			SLand		=> $li["shiptocountry"],
+			SPlz		=> $li["shiptozipcode"],
+			SOrt		=> $li["shiptocity"],
+			STelefon	=> $li["shiptophone"],
+			SFax		=> $li["shiptofax"],
+			SeMail		=> $li["shiptoemail"],
+			IMG		=> $Image,
+			PAGER		=> $pager,
+			NEXT		=> $next,
+			PREV		=> $prev	
 			));
 		$t->set_block("Li1","Liste","Block");
 		$i=0;

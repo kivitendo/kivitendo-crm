@@ -1,5 +1,5 @@
 <?
-// $Id: liefern3.php,v 1.3 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/LieferLib.php");
@@ -20,8 +20,10 @@
 		if (ereg("^[0-9]+$",$rc)) {
 			$msg="Daten gesichert.";
 			$_POST=getLieferStamm($rc,false);
-			$x=preg_match("°(jpg|jpeg|gif|png)\$°i",$_FILES["Datei"]["name"],$regs);
-			$_POST["grafik"]=$regs[1];
+			if ($_FILES["Datei"]["name"]) {
+				$x=preg_match("°(jpg|jpeg|gif|png)\$°i",$_FILES["Datei"]["name"],$regs);
+				$_POST["grafik"]=$regs[1];
+			}
 		} else {
 			$msg="Fehler beim Sichern ( $rc )";
 		};

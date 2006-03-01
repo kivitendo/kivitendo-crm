@@ -1,4 +1,4 @@
-<!-- $Id: liefer3a.tpl,v 1.3 2005/11/02 10:38:59 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -14,41 +14,48 @@
 	</script>
 <body>
 <p class="listtop">Detailansicht</p>
-<table class="reiter">
-	<tr>
-		<td class="reiter desel">
-			<a href="{Link1}" >Kundendaten</a>
-		</td>
-		<td class="reiter desel">
-			<a href="{Link2}" >Kontakte</a>
-		</td>
-		<td class="reiter sel">
-			<a href="{Link3}" class="reiterA">Ums&auml;tze</a>
-		</td>
-		<td class="reiter desel">
-			<a href="{Link4}">Dokumente</a>
-		</td>
-	</tr>
-</table>
+<div style="position:absolute; top:33px; left:8px;  width:770px;">
+	<ul id="tabmenue">
+	<li><a href="{Link1}">Lieferantendaten</a><li>
+	<li><a href="{Link2}">Kontakte</a></li>
+	<li><a href="{Link3}" id="aktuell">Ums&auml;tze</a></li>
+	<li><a href="{Link4}">Dokumente</a></li>
+	</ul>
+</div>
 
-<table class="karte"><tr><td class="karte">
+<span style="position:absolute; left:10px; top:67px; width:95%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
-<form name="firma3" action="{action}" method="post">
-<table class="stamm" style="width:280px">
-	<tr title="Lieferantenanschrift"><td class="smal bold">{Name}</td>
-			<td class="smal re bold" title="Lieferantennummer">{LInr}</td></tr>
-	<tr title="Lieferantenanschrift"><td class="smal bold">{Plz} {Ort}</td><td></td></tr>
-</table>
-<br>
+<div style="position:absolute; left:0px; top:0px; width:450px; border:1px solid black" class="fett">
+	{Name} &nbsp; {KDNR}<br />
+	{Plz} {Ort}
+</div>
+<div style="position:absolute; left:1px; top:45px; width:450px;text-align:center;" class="normal">
 Ums&auml;tze/Angebote von Monat {Monat}
-<table class="liste"><tr><td width="160px"><table>
-	<tr><th class="smal" width="10%">Datum</th><th class="smal">Nummer</th><th class="smal">Netto</th><th class="smal">Brutto</th><th class="smal" width="10%"></th></tr>
+<table width="400px">
+	<tr>
+		<th class="smal" width="10%">Datum</th>
+		<th class="smal">Nummer</th>
+		<th class="smal">Netto</th>
+		<th class="smal">Brutto</th>
+		<th class="smal" width="10%"></th>
+		<th class="smal">Art</th>
+		<th class="smal">OP</th>
+	</tr>
 <!-- BEGIN Liste -->
 	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showP('V{RNid}','{RNr}');">
-		<td class="smal" width="10%">{Datum}</td><td class="smal">{RNr}</td><td class="smal re">{RSumme}</td><td class="smal re">{RBrutto}</td><td class="smal" width="10%">{Curr}</td>
+		<td class="smal">{Datum}</td>
+		<td class="smal">&nbsp;{RNr}&nbsp;</td>
+		<td class="smal re">{RSumme}&nbsp;&nbsp;</td>
+		<td class="smal re">{RBrutto}&nbsp;</td>
+		<td class="smal">{Curr}</td>
+		<td class="smal">&nbsp;{Typ}</td>
+		<td class="smal">&nbsp;{offen}</td>
 	</tr>
 <!-- END Liste -->
+	<tr><td class="smal" colspan="6"><b>R</b>echnung, <b>A</b>nfrage, <b>L</b>ieferung/Auftrag</td></tr>
+</table>
+</div>
 <!-- Hier endet die Karte ------------------------------------------->
-</td></tr></table>
+</span>
 </body>
 </html>

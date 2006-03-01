@@ -1,4 +1,4 @@
-<!-- $Id: liefer2L.tpl,v 1.3 2005/11/02 10:38:58 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -12,40 +12,34 @@
 	//-->
 	</script>
 <body>
-<p class="listtop">Detailansicht</p>
-<table class="reiter">
-	<tr>
-		<td class="reiter desel">
-			<a href="{Link1}" >Lieferantendaten</a>
-		</td>
-		<td class="reiter sel">
-			<a href="{Link2}" class="reiterA">Kontakte</a>
-		</td>
-		<td class="reiter desel">
-			<a href="{Link3}" >Ums&auml;tze</a>
-		</td>
-		<td class="reiter desel">
-			<a href="{Link4}">Dokumente</a>
-		</td>
-	</tr>
-</table>
+<p class="listtop">Lieferantenkontakte</p>
+<div style="position:absolute; top:33px; left:8px;  width:770px;">
+	<ul id="tabmenue">
+	<li><a href="{Link1}">Kundendaten</a><li>
+	<li><a href="{Link2}" id="aktuell">Kontakte</a></li>
+	<li><a href="{Link3}">Ums&auml;tze</a></li>
+	<li><a href="{Link4}">Dokumente</a></li>
+	<span title="Wichtige MItteilung">{Cmsg}</span>
+	</ul>
+</div>
 
-<table class="karte"><tr><td class="karte">
+<span style="position:absolute; left:10px; top:67px; width:95%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
-<form name="liefer2" action="{action}" method="post">
-<table class="stamm">
-	<tr title="Lieferantenanschrift"><td class="smal bold">{Name}</td>
-			<td class="smal re bold" title="Lieferantennummer">{LInr}</td></tr>
-	<tr title="Lieferantenanschrift"><td class="smal bold">{Plz} {Ort}</td><td></td></tr>
-</table>
-<br>
+<div style="position:absolute; left:1px; width:450px; height:40px; text-align:left; border: 1px solid black;" class="fett">
+		{Lname} &nbsp; &nbsp; {LInr}<br />
+		{Plz} {Ort}<br />
+</div>
+<div style="position:absolute; left:1px; top:50px; width:100%; text-align:left; border: 0px solid black;" class="normal">
+Kontakt [<a href="personen3.php?fid={FID}&Quelle=L" class="bold">neu eingeben</a>] - [<a href="personen1.php?fid={FID}&Quelle=L" class="bold">aus Bestand zuf&uuml;gen</a>] - oder ausw&auml;hlen:
+<br />
 <table class="liste">
 <!-- BEGIN Liste -->
-	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showK({KID});">
-		<td class="smal">{Nname}, {Vname}</td><td class="smal">{Anrede} {Titel}</td><td class="smal">{Tel}</td><td class="smal">{eMail}</td></tr>
+	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showK({KID});" colspan="0">
+		<td class="norm"> {Nname}, {Vname}</td><td class="norm">{Anrede} {Titel}</td><td class="norm">{Tel}</td><td class="norm">{eMail}</td></tr>
 <!-- END Liste -->
 </table>
+</div>
 <!-- Hier endet die Karte ------------------------------------------->
-</td></tr></table>
+</span>
 </body>
 </html>

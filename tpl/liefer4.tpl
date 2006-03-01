@@ -1,4 +1,4 @@
-<!-- $Id: liefer4.tpl,v 1.4 2005/12/01 08:14:26 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -20,62 +20,59 @@
 	</script>
 <body>
 <p class="listtop">Detailansicht</p>
-<table class="reiter">
-	<tr>
-                <td class="reiter desel">
-                        <a href="{Link1}" >Lieferantendaten</a>
-                </td>
-                <td class="reiter desel">
-                        <a href="{Link2}">Kontakte</a>
-                </td>
-                <td class="reiter desel">
-                        <a href="{Link3}" >Ums&auml;tze</a>
-                </td>
-                <td class="reiter sel">
-                        <a href="{Link4}" class="reiterA">Dokumente</a>
-                </td>
-        </tr>
+<div style="position:absolute; top:33px; left:8px;  width:770px;">
+	<ul id="tabmenue">
+	<li><a href="{Link1}">Lieferantendaten</a><li>
+	<li><a href="{Link2}">Kontakte</a></li>
+	<li><a href="{Link3}">Ums&auml;tze</a></li>
+	<li><a href="{Link4}" id="aktuell">Dokumente</a></li>
+	</ul>
+</div>
 
-</table>
-
-<table class="karte"><tr><td class="karte">
+<span style="position:absolute; left:10px; top:67px; width:98%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <form name="liefer4" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="pid" value="{PID}">
 <input type="hidden" name="fid" value="{FID}">
-<table width="760"><tr>
-<td width="290">
-	<table class="stamm">
-		<tr title="Lieferantenanschrift"><td class="smal bold">{Name}</td>
-			<td class="smal re bold" title="Lieferantennummer">{LInr}</td></tr>
-		<tr title="Lieferantenanschrift"><td class="smal bold">{Plz} {Ort}</td><td></td></tr>
-		<tr><td class="smal bold">{Firma}</td><td></td></tr>
-	</table>
-</td><td class="smal"> 
-	<input type="file" name="Datei" size="40"><br>
-	Ein neues Dokument speichern<br>
-	<input type="text" name="caption" size="40"> <input type="submit" name="sichern" value="sichern"><br>
-	Beschreibung
-</td></tr>
-<tr><td class="smal">
-Erzeugen aus Dokumentvorlage
-	<table class="liste">
+<span style="float:left; width:40%; height:410px; text-align:center; padding:2px; border: 1px solid black;">
+	<div style="float:left; width:100%; height:50px; text-align:left; border-bottom: 1px solid black;" class="fett">
+		{Name} &nbsp; &nbsp; {LInr}<br />
+		{Plz} {Ort}<br />
+	</div>
+	<div style="float:left; width:100%; height:50px; text-align:left; border-bottom: 0px solid black;" class="normal">
+	<table class="liste" width="300">
+	<tr><td class="norm" width="260">Neues Dokument aus Vorlage:</td><td>&nbsp;</td></tr>
 <!-- BEGIN Liste -->
-		<tr  class="smal" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showD({ID});">
-			<td>{Bezeichnung}</td><td>{Appl}</td>
-		</tr>
+	<tr  class="smal" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showD({ID});">
+		<td class="smal">{Bezeichnung}</td><td>{Appl}</td>
+	</tr>
 <!-- END Liste -->
 	</table>
-</td><td class="smal">
-	gespeicherte Dokumente<br>
-	<select name="dateien" size="16" style="width:450px" onClick="openfile()">
+	<br><br>
+	<table>
+	<tr><td class="norm" width="320">Wartungsvertr&auml;ge:</td></tr>
+<!-- BEGIN Vertrag -->
+	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showV({cid});">
+		<td class="smal">{vertrag}</td>
+	</tr>
+<!-- END Vertrag -->
+	</table>
+	</div>
+</span>
+<span style="float:left;  height:410px; text-align:left; border: 1px solid black; padding:2px; border-left:0px;">
+	<input type="file" name="Datei" size="30"><br />
+	Ein neues Dokument speichern<br />
+	<input type="text" name="caption" size="30"> <input type="submit" name="sichern" value="sichern"><br />
+	Beschreibung<br /><br />
+	gespeicherte Dokumente:<br>
+	<select name="dateien" size="16" style="width:440px" onClick="openfile()">
 <!-- BEGIN Liste2 -->
-		<option value="{val}">{key}
+	<option value="{val}">{key}
 <!-- END Liste2 -->
 	</select>
-<!--br><input type="button" value="&ouml;ffnen" onClick="openfile()"> <input type="button" value="l&ouml;schen"-->
-</td></tr></table>
+</span>
+	
 <!-- Hier endet die Karte ------------------------------------------->
-</td></tr></table>
+</span>
 </body>
 </html>

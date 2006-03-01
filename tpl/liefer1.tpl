@@ -23,77 +23,111 @@
 				F1=open("suchKontakt.php?suchwort="+sw+"&Q=V&id={FID}","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
 			return false;
 		}
+		var last = 'lie';
+		function submenu(id) {
+			document.getElementById(last).style.visibility='hidden';
+			last=id;
+			document.getElementById(id).style.visibility='visible';
+		}
 	//-->
 	</script>
 <body>
 <p class="listtop">Detailansicht</p>
-<table class="reiter">
-	<tr>
-		<td class="reiter sel">
-			<a href="liefer1.php?id={FID}" class="reiterA">Lieferantendaten</a>
-		</td>
-		<td class="reiter desel">
-			<a href="liefer2.php?fid={FID}" >Kontakte</a>
-		</td>
-		<td class="reiter desel">
-			<a href="liefer3.php?fid={FID}" >Ums&auml;tze</a>
-		</td>
-		<td class="reiter desel">
-			<a href="liefer4.php?fid={FID}">Dokumente</a>
-		</td>
-	</tr>
-</table>
+<div style="position:absolute; top:33px; left:8px;  width:770px;">
+	<ul id="tabmenue">
+	<li><a href="liefer1.php?id={FID}" id="aktuell">Lieferantendaten</a></li>
+	<li><a href="liefer2.php?fid={FID}">Kontakte</a></li>
+	<li><a href="liefer3.php?fid={FID}">Ums&auml;tze</a></li>
+	<li><a href="liefer4.php?fid={FID}">Dokumente</a></li>
+	<span title="Wichtige Mitteilung">{Cmsg}&nbsp;</span>
+	</ul>
+</div>
 
-<table class="karte"><tr><td class="karte">
-<!-- Beginn Code ------------------------------------------->
-<table><tr><td width="380px">
-	<table class="stamm" height="410px">
-		<tr class="topbot"><td class="stamm" title="Lieferantentyp & Unser Rabatt">{lityp} {rabatt}</td>
-					<td class="stamm re">[<a href="javascript:notes()">Notiz</a>]</td></tr>
-		<tr><td class="stamm">{Lname}</td>
-					<td class="stamm re" rowspan="3" title="Firmenlogo">{IMG}</td></tr>
-		<tr><td class="stamm">{Ldepartment_1}</td></tr>
-		<tr><td class="stamm">{Strasse}</td></tr>
-		<tr><td class="stamm">{Land}-{Plz} {Ort}</td>
-					<td class="stamm re" rowspan="2" title="Briefanschrift & Etikett"><a href="#" onCLick="anschr(1);"><img src="image/brief.gif" border="0"></a></td></tr>
-		<tr><td class="stamm">&nbsp;</td></tr>
-		<tr><td class="stamm">Tel: {Telefon}</td>
-					<td class="stamm re" title="Erstellungsdatum">{INID}</td></tr>
-		<tr><td class="stamm">Fax: {Fax}</td>
-					<td class="stamm re" title="Lieferantennummer">{LInr}</td>
-		<tr><td class="stamm">Steuer-Nr.: {USTID}</td>
-					<td class="stamm re" title="Unsere Kundennummer">{KDnr}</td></tr>
-		<tr><td class="stamm" colspan="2"><a href="mail.php?TO={eMail}&KontaktTO=V{FID}">{eMail}</a></td></tr>
-		<tr><td class="stamm" colspan="2"><a href="{Internet}" target="_blank">{Internet}</a></td></tr>
+<span style="position:absolute; left:10px; top:67px; width:95%;">
+<!-- Beginn Code --------------------------------------------- -->
+<span style="float:left; width:49%; height:410px; text-align:center; border: 1px solid black;">
+	<div style="float:left; width:72%; height:165px; text-align:left; border-bottom: 0px solid black; padding:2px;" class="gross">
+		{Lname}<br />
+		{Ldepartment_1}<br />
+		{Strasse}<br />
+		<span class="mini">&nbsp;<br /></span>
+		{Land}-{Plz} {Ort}<br />	
+		{Lcontact_1}<br />
+		Tel: {Telefon}<br />
+		Fax: {Fax}<br />	
+	</div>
+	<div style="float:left; width:25%; height:165px; text-align:right; border-bottom: 0px solid black; padding:2px;" class="gross">
+		{LInr}<br />
+		{IMG}<br /><br />
+	</div>
+	<div style="float:both; width=100%; height:215px; text-align:left; border-bottom: 1px solid black;" class="gross">
+		<a href="mail.php?TO={eMail}&KontaktTO=C{FID}">&nbsp;{eMail}</a><br />
+		<a href="{Internet}" target="_blank">&nbsp;{Internet}</a>
 
-		<tr class="topbot"><td class="stamm" height="*" style="vertical-align:middle;" colspan="2">{Cmsg}</td></tr>
-
-		<tr><td class="smal"><b>Lieferadresse</b></td>	<td></td></tr>
-		<tr><td class="smal">{Sname}</td>
-					<td  class="smal re"rowspan="2"><a href="#" onCLick="anschr(2);" title="Briefanschrift & Etikett"><img src="image/brief.gif" border="0"></a></td></tr>
-		<tr><td class="smal">{Sdepartment_1}</td></tr>
-		<tr><td class="smal">{SStrasse}</td>		<td></td></tr>
-		<tr><td class="smal">{SLand}-{SPlz} {SOrt}</td>	<td></td></tr>
-		<tr><td class="smal">Tel: {STelefon}</td>	<td></td></tr>
-		<tr><td class="smal">Fax: {SFax}</td>		<td></td></tr>
-		<tr><td class="smal" colspan="2"><a href="mail.php?TO={SeMail}&KontaktTO=V{FID}">{SeMail}</a></td></tr>
-	</table>
-</td><td width="420px">
-	<table class="stamm" height="410px">
+		<ul id="submenue">
+			<li><a href="#" onClick="submenu('lie')">Lieferadresse</a></li>
+			<li><a href="#" onClick="submenu('not')">Notizen</a></li>
+			<li><a href="#" onClick="submenu('inf')">sont.Infos</a></li>
+			<li><a href="liefern3.php?id={FID}&edit=1">Bearbeiten</a></li>
+		</ul>
+	</div>
+	<span id="lie" style="visibility:visibile; position:absolute; text-align:left;width:48%; left:5px; top:245px;" >
+		<div class="smal" >
+		<br />
+		{Sname} &nbsp;&nbsp;<a href="#" onCLick="anschr(2);"><img src="image/brief.gif" alt="Etikett drucken" border="0" /></a><br />
+		{Sdepartment_1}<br />
+		{SStrasse}<br />
+		<span class="mini">&nbsp;<br /></span>
+		{SLand}-{SPlz} {SOrt}<br />
+		<span class="mini">&nbsp;<br /></span>
+		Tel: {STelefon}<br />
+		Fax: {SFax}<br />
+		<a href="mail.php?TO={SeMail}&KontaktTO=C{FID}">{SeMail}</a>
+		</div>
+	</span>
+	<span id="not" style="visibility:hidden;position:absolute;  text-align:left;width:48%; left:5px; top:245px;">
+		<div class="smal" >
+		<br />
+		Branche: <span class="value">{branche}</span><br />
+		Stichworte: <span class="value">{sw}</span><br />
+		Bemerkungen: <span class="value">{notes}</span> <br />	
+		</div>
+	</span>	
+	<span id="inf" style="visibility:hidden;position:absolute; text-align:left;width:48%; left:5px; top:245px;">
+		<div class="smal" >
+		Lieferantentyp: <span class="value">{lityp}</span> &nbsp;&nbsp;&nbsp; Erstellt: <span class="value">{INID}</span><br /><br />
+		Rabatt: <span class="value">{rabatt}</span> &nbsp;&nbsp;&nbsp; Unsere Kd-Nr: <span class="value">{KDnr}</span><br /><br />
+		Steuer-Nr.: <span class="value">{taxnumber}</span> &nbsp;&nbsp;&nbsp; UStId: <span class="value">{ustid}</span><br /><br />
+		Kreditlimit: <span class="value">{kreditlim}</span> &nbsp;&nbsp;&nbsp;OP: <span class="value">{op}</span> &nbsp;&nbsp;&nbsp;
+		Zahlungsziel: <span class="value">{terms}</span> Tage <br /><br />
+		Bankname: <span class="value">{bank}</span><br />
+		Blz: <span class="value">{bank_code}</span> &nbsp;&nbsp;&nbsp; Konto: <span class="value">{account_number}</span>
+		</div>
+	</span>
+</span>	
+<span style="float:left; width:50%; height:410px; text-align:left; border: 1px solid black; border-left:0px;">
+<table width="99%" summary="Kontaktverlauf">
 <!-- BEGIN Liste -->
-		<tr height="14px" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showItem({IID});">
-			<td class="smal" width="100px">{Datum} {Zeit}</td><td class="smal" width="40px">{Nr}</td><td class="smal">{Betreff}</td><td class="smal">{Name}</td></tr>
+	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showItem({IID});">
+		<td class="smal" width="100" height="14px">{Datum} {Zeit}</td>
+		<td class="smal" width="60">{Nr}</td>
+		<td class="smal le">{Betreff}</td>
+		<td class="smal le">{Name}</td>
+	</tr>
 <!-- END Liste -->
-		<tr height="*">
-			<td colspan="2" style="vertical-align:bottom;">	<a href="firma1.php?id={FID}&start={PREV}">&lt;</a> <a href="liefer1.php?id={FID}&start={PAGER}" class="bold">neu laden</a> <a href="liefer1.php?id={FID}&start={NEXT}">&gt;</a></td>
-			<td style="vertical-align:bottom;"><form name="ksearch" onSubmit="return ks();"><input type="text" name="suchwort" size="20"></td>
-			<td style="vertical-align:bottom;"><input type="submit" name="ok" value="suchen"></form></td>
-		</tr>
-	</table>
-</td></tr></table>
-[<a href="liefern3.php?id={FID}&edit=1" class="bold">Edit</a>]
+</table>
+	<span style="position:absolute; bottom:10px;  text-align:left; border:0px solid black">
+		<form name="ksearch" onSubmit="return ks();"> &nbsp; 
+		<a href="liefer1.php?id={FID}&start={PREV}">&lt;</a> 
+			<a href="liefer1.php?id={FID}&start={PAGER}" class="bold">neu laden</a> 
+		<a href="liefer1.php?id={FID}&start={NEXT}">&gt; &nbsp;</a>
+			<input type="text" name="suchwort" size="20">
+			<input type="submit" name="ok" value="suchen">
+		</form>
+	</span>
+</span>
 <!-- End Code ------------------------------------------->
-</td></tr></table>
+</span>
 </body>
 </html>
 

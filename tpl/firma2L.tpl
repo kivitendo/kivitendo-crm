@@ -1,4 +1,4 @@
-<!-- $Id: firma2L.tpl,v 1.4 2005/11/02 10:38:58 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -12,41 +12,34 @@
 	//-->
 	</script>
 <body>
-<p class="listtop">Detailansicht</p>
-<table class="reiter">
-	<tr>
-		<td class="reiter desel">
-			<a href="firma1.php?id={FID}" >Kundendaten</a>
-		</td>
-		<td class="reiter sel">
-			<a href="firma2.php?fid={FID}" class="reiterA">Kontakte</a>
-		</td>
-		<td class="reiter desel">
-			<a href="firma3.php?fid={FID}" >Ums&auml;tze</a>
-		</td>
-		<td class="reiter desel">
-			<a href="firma4.php?fid={FID}">Dokumente</a>
-		</td>
-	</tr>
-</table>
+<p class="listtop">Kundenkontakte</p>
+<div style="position:absolute; top:33px; left:8px;  width:770px;">
+	<ul id="tabmenue">
+	<li><a href="{Link1}">Kundendaten</a><li>
+	<li><a href="{Link2}" id="aktuell">Kontakte</a></li>
+	<li><a href="{Link3}">Ums&auml;tze</a></li>
+	<li><a href="{Link4}">Dokumente</a></li>
+	<span title="Wichtige MItteilung">{Cmsg}</span>
+	</ul>
+</div>
 
-<table class="karte"><tr><td class="karte">
+<span style="position:absolute; left:10px; top:67px; width:95%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
-<form name="firma2" action="{action}" method="post">
-<table class="stamm" style="width:230px">
-	<tr title="Firmenanschrift"><td class="smal bold">{Fname1}</td><td class="smal bold" title="Kundenummer">{KDNR}</td></tr>
-	<tr title="Firmenanschrift"><td class="smal bold">{Fdepartment_1}</td><td></td></tr>
-	<tr title="Firmenanschrift"><td class="smal bold">{Plz} {Ort}</td><td></td></tr>
-</table>
-[<a href="personen3.php?fid={FID}&Quelle=F" class="bold">Kontakt eingeben</a>] - [<a href="personen1.php?fid={FID}&Quelle=F" class="bold">Kontakt aus Liste</a>]
-<br><br>
+<div style="position:absolute; left:1px; width:450px; height:40px; text-align:left; border: 1px solid black;" class="fett">
+		{Fname1} &nbsp; &nbsp; {KDNR}<br />
+		{Plz} {Ort}<br />
+</div>
+<div style="position:absolute; left:1px; top:50px; width:100%; text-align:left; border: 0px solid black;" class="normal">
+Kontakt [<a href="personen3.php?fid={FID}&Quelle=F" class="bold">neu eingeben</a>] - [<a href="personen1.php?fid={FID}&Quelle=F" class="bold">aus Bestand zuf&uuml;gen</a>] - oder ausw&auml;hlen:
+<br />
 <table class="liste">
 <!-- BEGIN Liste -->
 	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showK({KID});" colspan="0">
-		<td class="smal"> {Nname}, {Vname}</td><td class="smal">{Anrede} {Titel}</td><td class="smal">{Tel}</td><td class="smal">{eMail}</td></tr>
+		<td class="norm"> {Nname}, {Vname}</td><td class="norm">{Anrede} {Titel}</td><td class="norm">{Tel}</td><td class="norm">{eMail}</td></tr>
 <!-- END Liste -->
 </table>
+</div>
 <!-- Hier endet die Karte ------------------------------------------->
-</td></tr></table>
+</span>
 </body>
 </html>

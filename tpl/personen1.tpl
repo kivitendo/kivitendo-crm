@@ -3,11 +3,15 @@
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 <body>
-
-
-<table width="99%" border="0"><tr><td class="norm">
-<!-- Beginn Code ------------------------------------------->
 <p class="listtop">Personensuche</p>
+
+<form name="formular" enctype='multipart/form-data' action="{action}" method="post">
+<input type="hidden" name="FID1" value="{FID1}">
+<input type="hidden" name="Quelle" value="{Quelle}">
+<input type="hidden" name="employee" value="{employee}">
+
+<span style="float:left; top:47px; border: 0px solid black;">
+<!-- Beginn Code ------------------------------------------->
 <p class="listheading">| 
 <a href="{action}?first=A" class="bold">A</a> |
 <a href="{action}?first=B" class="bold">B</a> |
@@ -35,72 +39,79 @@
 <a href="{action}?first=X" class="bold">X</a> |
 <a href="{action}?first=Y" class="bold">Y</a> |
 <a href="{action}?first=Z" class="bold">Z</a> |</p>
-
-<form name="formular" enctype='multipart/form-data' action="{action}" method="post">
-<input type="hidden" name="FID1" value="{FID1}">
-<input type="hidden" name="Quelle" value="{Quelle}">
-<input type="hidden" name="employee" value="{employee}">
-<table cellpadding="2" border="0">
-	<tr>
-		<td class="smal"><input type="radio" name="greeting" value="H" {cpsel1}>Herr <input type="radio" name="greeting" value="F" {cpsel2}>Frau    
-			<input type="radio" name="greeting" value="O" {cpsel3}><input type="text" name="cp_greeting" size="10" maxlength="75" value="{Anrede}" tabindex="1"><br>Anrede</td>
-		<td class="smal" colspan="2"><input type="text" name="cp_title" size="30" maxlength="75" value="{Titel}" tabindex="2"><br>Titel</td>
-		<td class="smal"><input type="text" name="cp_abteilg" size="20" maxlength="25" value="{Abteilg}" tabindex="15"><br>Abteilung</td>
-	</tr>
-	<tr>
-		<td class="smal"><input type="text" name="cp_givenname" size="25" maxlength="75" value="{Vname}" tabindex="3"><br>Vorname</td>
-		<td class="smal" colspan="2"><input type="text" name="cp_name" size="30" maxlength="75" value="{Nname}" tabindex="4"><br>Nachname</td>
-		<td class="smal"><input type="text" name="cp_position" size="20" maxlength="25" value="{Position}" tabindex="16"><br>Position</td>
-	</tr>
-
-	<tr>
-		<td class="smal" colspan="2"><input type="text" name="cp_street" size="42" maxlength="75" value="{Strasse}" tabindex="5"><br>Strasse</td>
-		<td class="smal">&nbsp;</td>
-		<td class="smal"><b>{Msg}</b>&nbsp;</td>
-	</tr>
-	<tr>
-		<td class="smal" colspan="3">
-			<select name="cp_country" tabindex="20">
-<!-- BEGIN LandListe -->
-				<option value="{LandID}" {Lsel}>{Land}</option>
-<!-- END LandListe -->
-			</select>
-			<input type="text" name="cp_zipcode" size="6" maxlength="10" value="{Plz}" tabindex="6">
-			<input type="text" name="cp_city" size="30" maxlength="75" value="{Ort}" tabindex="7">
-			<br>Land &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Postleitzahl Ort</td>
-		<td class="smal" rowspan="4">
+	<div class="zeile">
+		<span class="label">Anrede</span>
+		<span class="leftfeld">
+			<input type="radio" name="greeting" value="H" {cpsel1}>Herr 
+			<input type="radio" name="greeting" value="F" {cpsel2}>Frau    
+			<input type="radio" name="greeting" value="O" {cpsel3}>
+				<input type="text" name="cp_greeting" size="7" maxlength="75" value="{cp_greeting}" tabindex="1">
+		</span>
+		<span class="label">Abteilung</span>
+		<span class="leftfeld"><input type="text" name="cp_abteilung" size="20" maxlength="25" value="{cp_abteilung}" tabindex="12"></span>
+	</div>
+	<div class="zeile">
+		<span class="label">Titel</span>
+		<span class="leftfeld"><input type="text" name="cp_title" size="27" maxlength="75" value="{cp_title}" tabindex="2"></span>
+		<span class="label">Position</span>
+		<span class="leftfeld"><input type="text" name="cp_position" size="20" maxlength="25" value="{cp_position}" tabindex="13"></span>
+	</div>
+	<div class="zeile">
+		<span class="label">Vorname</span>
+		<span class="leftfeld"><input type="text" name="cp_givenname" size="27" maxlength="75" value="{cp_givenname}" tabindex="3"></span>
+		<span class="label">Stichwort</span>
+		<span class="leftfeld"><input type="text" name="cp_stichwort1" size="25" maxlength="50" value="{cp_stichwort1}" tabindex="14"></span>
+	</div>
+	<div class="zeile">
+		<span class="label">Nachname</span>
+		<span class="leftfeld"><input type="text" name="cp_name" size="27" maxlength="75" value="{cp_name}" tabindex="4"></span>
+		<span class="label">Bemerkung</span>
+		<span class="leftfeld"><input type="text" name="cp_notes" size="25" maxlength="50" value="{cp_notes}" tabindex="15"></span>
+	</div>
+	<div class="zeile">
+		<span class="label">Strasse</span>
+		<span class="leftfeld"><input type="text" name="cp_street" size="27" maxlength="75" value="{cp_street}" tabindex="5"></span>
+		<span class="label">Geb.-Datum</span>
+		<span class="leftfeld"><input type="text" name="cp_gebdatum" size="12" maxlength="10" value="{cp_gebdatum}" tabindex="16"> TT.MM.JJJJ</span>
+	</div>
+	<div class="zeile">
+		<span class="label">Land / Plz</span>
+		<span class="leftfeld">
+			<input type="text" name="cp_country" size="2" maxlength="3" value="{cp_country}" tabindex="6">
+			<input type="text" name="cp_zipcode" size="7" maxlength="7" value="{cp_zipcode}" tabindex="7">
+		</span>
+	</div>
+	<div class="zeile">
+		<span class="label">Ort</span>
+		<span class="leftfeld"><input type="text" name="cp_city" size="27" maxlength="75" value="{cp_city}" tabindex="8"></span>
+		<span class="label">Fax</span>
+		<span class="leftfeld"><input type="text" name="cp_fax" size="27" maxlength="75" value="{cp_fax}" tabindex="17"></span>
+	</div>
+	<div class="zeile">
+		<span class="label">Telefon</span>
+		<span class="leftfeld"><input type="text" name="cp_phone1" size="27" maxlength="75" value="{cp_phone1}" tabindex="9"></span>
+		<span class="label">eMail</span>
+		<span class="leftfeld"><input type="text" name="cp_email" size="27" maxlength="75" value="{cp_email}" tabindex="18"></span>
+	</div>
+	<div class="zeile">
+		<span class="label">Mobiltelefon</span>
+		<span class="leftfeld"><input type="text" name="cp_phone2" size="27" maxlength="75" value="{cp_phone2}" tabindex="10"></span>
+		<span class="label">www</span>
+		<span class="leftfeld"><input type="text" name="cp_homepage" size="27" maxlength="25" value="{cp_homepage}" tabindex="19"></span>
+	</div>
+	<div class="zeile">
+		<input type="checkbox" name="fuzzy" value="%" checked>Unscharf suchen&nbsp;&nbsp;<b>{Msg}</b>  <br>
+		{Btn1} {Btn3} <input type="submit" name="suche" value="suchen"> <input type="submit" name="reset" value="clear">
+	</div>
+</span>
+<span style="float:left;   top:47px; border: 0px solid black;">
+	<br><br><br><br>
 <!-- BEGIN sonder -->
-				<input type="checkbox" name="cp_sonder[]" value="{sonder_id}">{sonder_name}<br>
+	<input type="checkbox" name="cp_sonder[]" value="{sonder_id}">{sonder_name}<br>
 <!-- END sonder -->			
-		</td>
-	</tr>
-	<tr>
-		<td class="smal"><input type="text" name="cp_phone1" size="25" maxlength="75" value="{Tel1}" tabindex="8"><br>Telefon</td>
-		<td class="smal"><input type="text" name="cp_fax" size="25"  maxlength="75"value="{Fax}" tabindex="10"><br>Fax</td>
-		<td class="smal" rowspan="5">&nbsp;</td>
-	</tr>
-	<tr>
-		<td class="smal" colspan="2"><input type="text" name="cp_email" size="40" maxlength="125" value="{eMail}" tabindex="11"><br>eMail</td>
-	</tr>
-	<tr>
-		<td class="smal" colspan="2"><input type="text" name="cp_homepage" size="40" maxlength="125" value="{Homepage}" tabindex="12"><br>Homepage</td>
-	</tr>
-	<tr>
-		<td class="smal"><input type="text" name="cp_stichwort1" size="25" maxlength="50" value="{SW1}" tabindex="18"><br>Stichwort</td>
-		<td class="smal"><input type="text" name="cp_gebdatum" size="12" maxlength="10" value="{GDate}" tabindex="22"><br>Geburtsdatum</td>
-		<td class="smal" rowspan="2">
-			<input type="checkbox" name="fuzzy" value="%" checked>Unscharf suchen<br>
-			{Btn1}<br><br>{Btn3}<br><br><input type="submit" name="suche" value="suchen"><br><br><input type="submit" name="reset" value="clear">
-		</td>
-	</tr>
-	<tr>
-		<td class="smal" colspan="2"><textarea name="cp_notes" cols="66" rows="2" tabindex="17">{Notiz}</textarea><br>Bemerkungen</td>
-	</tr>
-</table>
 </form>
-
-			<!-- End Code ------------------------------------------->
-</td></tr></table>
+<!-- End Code ------------------------------------------->
+</span>
 </body>
 </html>
 

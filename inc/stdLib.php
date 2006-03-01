@@ -323,6 +323,18 @@ function chkAnzahl(&$data,&$anzahl) {
 }
 
 /****************************************************
+* getBusiness
+* out: array
+* Kundentype holen
+*****************************************************/
+function getBusiness() {
+global $db;
+	$sql="select * from business order by description";
+	$rs=$db->getAll($sql);
+	$leer=array(array("id"=>"","discription"=>""));
+	return array_merge($leer,$rs);
+}
+/****************************************************
 * mkTelNummer
 * in: id = int, tab = char, tels = array
 * out: rs = int

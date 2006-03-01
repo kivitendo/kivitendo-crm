@@ -56,6 +56,7 @@
 			terms	=> $fa["terms"],
 			kreditlim	=> sprintf("%0.2f",$fa["creditlimit"]),
 			op	=> sprintf("%0.2f",$fa["op"]),
+			oa	=> sprintf("%0.2f",$fa["oa"]),
 			preisgrp	=> $fa["pricegroup"],
 			Sname1	=> $fa["shiptoname"],
 			Sdepartment_1	=> $fa["shiptodepartment_1"],

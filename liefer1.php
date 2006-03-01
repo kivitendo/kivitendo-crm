@@ -42,6 +42,7 @@
 			eMail		=> $li["email"],
 			branche 	=> $li["branche"],
 			sw	 	=> $li["sw"],
+			op	 	=> sprintf("%0.2f",$li["op"]),
 			Internet	=> $internet,
 			FID		=> $_GET["id"],
 			notes		=> $li["notes"],

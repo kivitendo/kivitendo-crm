@@ -1,5 +1,5 @@
 <?
-// $Id: firma4a.php,v 1.4 2005/11/02 10:37:52 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");
@@ -38,26 +38,10 @@
 		$doc->clean();
 		$knopf="Dokument erstellt: <a href='./dokumente/".$_SESSION["mansel"]."/".$data["CID"]."/".$pre.$docdata["document"]["file"]."'>&lt;shift&gt;+&lt;klick&gt;</a>";
 	}
-	if (!empty($fid)) {
-		$fa=getFirmaStamm($fid);
-		$name=$fa["name"];
-		$plz=$fa["zipcode"];
-		$ort=$fa["city"];
-		$strasse=$fa["street"];
-		if (!empty($pid)){
-			$co=getKontaktStamm($pid);
-			$department_1=$co["cp_givenname"]." ".$co["cp_name"];
-			$art="Firma/Kontakt";
-		} else {
-			$department_1=$fa["department_1"];
-			$art="Firmendokumente";
-		}
-		$link1="firma1.php?id=$fid";
-		$link2="firma2.php?fid=$fid";
-		$link3="firma3.php?fid=$fid";
-		$link4="firma4.php?fid=$fid";
-	} else {
+
+	if (empty($fid)) {
 		$co=getKontaktStamm($pid);
+		$anrede=$co["cp_greeting"].($co["title"])?$co["title"]:"";
 		$name=$co["cp_givenname"]." ".$co["cp_name"];
 		$department_1="";
 		$plz=$co["cp_zipcode"];
@@ -68,6 +52,26 @@
 		$link2="firma2.php?id=$pid";
 		$link3="#";
 		$link4="firma4.php?pid=$pid";
+	} else {
+		$fa=getFirmaStamm($fid);
+		$anrede="Firma";
+		$name=$fa["name"];
+		$plz=$fa["zipcode"];
+		$ort=$fa["city"];
+		$strasse=$fa["street"];
+		if (!empty($pid)){
+			$co=getKontaktStamm($pid);
+			//$anrede=$co["cp_greeting"].($co["title"])?$co["title"]:"";
+			$department_1=$co["cp_givenname"]." ".$co["cp_name"];
+			$art="Firma/Kontakt";
+		} else {
+			$department_1=$fa["department_1"];
+			$art="Firmendokumente";
+		}
+		$link1="firma1.php?id=$fid";
+		$link2="firma2.php?fid=$fid";
+		$link3="firma3.php?fid=$fid";
+		$link4="firma4.php?fid=$fid";
 	}
 	$document=getDocVorlage($did);
 	$t = new Template($base);

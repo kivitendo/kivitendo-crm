@@ -113,8 +113,8 @@
 		Kundentyp: <span class="value">{kdtyp}</span> <br />
 		Rabatt: <span class="value">{rabatt}</span> &nbsp;&nbsp;&nbsp; Preisgruppe: <span class="value">{preisgrp}</span><br /><br />
 		Steuer-Nr.: <span class="value">{Taxnumber}</span> &nbsp;&nbsp;&nbsp; UStId: <span class="value">{USTID}</span><br /><br />
-		Zahlungsziel: <span class="value">{terms}</span> Tage <br />
-		Kreditlimit: <span class="value">{kreditlim}</span> &nbsp;&nbsp;&nbsp;OP: <span class="value">{op}</span><br /><br />
+		Zahlungsziel: <span class="value">{terms}</span> Tage &nbsp;&nbsp;&nbsp;Kreditlimit: <span class="value">{kreditlim}</span><br />
+		Offene Posten: <span class="value">{op}</span> &nbsp;&nbsp;&nbsp;offene Auftr&auml;ge: <span class="value">{oa}</span><br /><br />
 		Bankname: <span class="value">{bank}</span><br />
 		Blz: <span class="value">{blz}</span> &nbsp;&nbsp;&nbsp; Konto: <span class="value">{konto}</span>
 		</div>

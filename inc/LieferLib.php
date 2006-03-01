@@ -1,5 +1,5 @@
 <?
-// $Id: LieferLib.php,v 1.5 2005/11/02 11:33:20 hli Exp $
+// $Id$
 
 /****************************************************
 * getAllVendor
@@ -33,7 +33,7 @@ global $db;
 *****************************************************/
 function getLieferStamm($id,$ws=true) {
 global $db;
-	$sql="select C.*,E.login,B.description as lityp,B.discount from vendor C ";
+	$sql="select C.*,E.login,B.description as lityp,B.discount as typrabatt from vendor C ";
 	$sql.="left join employee E on C.employee=E.id left join business B on B.id=C.business_id ";
 	$sql.="where C.id=$id";
 	$rs=$db->getAll($sql);
@@ -179,9 +179,11 @@ global $db;
 			department_2 => array(0,0,1,"Abteilung",75),
 			country => array(0,0,8,"Land",3),
 			vendornumber => array(0,0,0,"Lieferantennummer",20),
-			v_customer_id => array(0,0,0,"Lieferantennummer",20),
+			v_customer_id => array(0,0,0,"Kundennummer",20),
 			taxnumber => array(0,0,0,"Steuernummer",0),
 			sw => array(0,0,1,"Stichwort",50), 
+			business_id => array(0,0,6,"Lieferantentyp",0), 
+			contact => array(0,0,1,"Kontakt",50), 
 			owener => array(0,0,6,"CRM-User",0),grafik => array(0,0,9,"Grafik",4),
 			shiptoname => array(1,0,1,"Liefername",75),
 			shiptostreet => array(1,0,1,"Lieferstrasse",75),
@@ -241,8 +243,8 @@ global $db;
 				$hoehe=ceil($imagesize[1]/$imagesize[0]*120);
 				$breite=120;
 			} else {
-				$breite=ceil($imagesize[0]/$imagesize[1]*50);
-				$hoehe=50;
+				$breite=ceil($imagesize[0]/$imagesize[1]*80);
+				$hoehe=80;
 			}
 			$image1 = imagecreatetruecolor($breite,$hoehe);
 			$tue="\$image=imagecreatefrom".$typ[$imagesize[2]]."('$dest');";
@@ -352,8 +354,20 @@ global $db;
 		return false;
 	} 
 }
-
+/****************************************************
+* getBusiness
+* out: array
+* Kundentype holen
+*****************************************************/
+function getBusiness() {
+global $db;
+	$sql="select * from business order by description";
+	$rs=$db->getAll($sql);
+	$leer=array(array("id"=>"","discription"=>""));
+	return array_merge($leer,$rs);
+}
 function leertplL (&$t,$tpl,$msg="") {
+		$typ=getBusiness();
 		$t->set_file(array("li1" => "liefern".$tpl.".tpl"));
 		$t->set_var(array(
 			Btn1 => "",
@@ -370,6 +384,7 @@ function leertplL (&$t,$tpl,$msg="") {
 			city	=> "",
 			phone	=> "",
 			fax		=> "",
+			notes   => "",
 			email	=> "",
 			homepage => "",
 			ustid	=> "",
@@ -379,6 +394,15 @@ function leertplL (&$t,$tpl,$msg="") {
 			init	=> $_SESSION["employee"],
 			employee	=> $_SESSION["loginCRM"]
 			));
+			$t->set_block("li1","TypListe","BlockT");
+			if ($typ) foreach ($typ as $row) {
+				$t->set_var(array(
+					Bid => $row["id"],
+					Bsel => ($row["id"]==$daten["business_id"])?"selected":"",
+					Btype => $row["description"],
+				));
+				$t->parse("BlockT","TypListe",true);
+			}
 			$t->set_block("li1","OwenerListe","Block");
 				$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>"Alle");
 				$first[]=array("grpid"=>$_SESSION["loginCRM"],"rechte"=>"w","grpname"=>"Pers&ouml;nlich");
@@ -404,6 +428,7 @@ function leertplL (&$t,$tpl,$msg="") {
 				}
 }
 function vartplL (&$t,$daten,$msg,$btn1,$btn2,$tpl) {
+		$typ=getBusiness();
 		if ($daten["grafik"]) {
 			$Image="<img src='dokumente/".$_SESSION["mansel"]."/".$daten["id"]."/logo.".$daten["grafik"]."' ".$daten["size"].">";
 		}
@@ -415,6 +440,7 @@ function vartplL (&$t,$daten,$msg,$btn1,$btn2,$tpl) {
 				action	=> "liefern".$tpl.".php",
 				ID 	=> $daten["id"],
 				sw 	=> $daten["sw"],
+				contact	=> $daten["contact"],
 				name 	=> $daten["name"],
 				department_1 	=> $daten["department_1"],
 				department_2 	=> $daten["department_2"],
@@ -424,9 +450,16 @@ function vartplL (&$t,$daten,$msg,$btn1,$btn2,$tpl) {
 				city 	=> $daten["city"],
 				phone 	=> $daten["phone"],
 				fax 	=> $daten["fax"],
+				branche	=> $daten["branche"],
 				email 	=> $daten["email"],
 				homepage => $daten["homepage"],
-				ustid 	=> $daten["taxnumber"],
+				ustid 	=> $daten["ustid"],
+				taxnumber 	=> $daten["taxnumber"],
+				bank	=> $daten["bank"],
+				bank_code	=> $daten["bank_code"],
+				account_number	=> $daten["account_number"],
+				terms	=> $daten["terms"],
+				kreditlim	=> $daten["creditlimit"],	
 				vendornumber	=> $daten["vendornumber"],
 				v_customer_id	=> $daten["v_customer_id"],
 				shiptoname	=> $daten["shiptoname"],
@@ -446,6 +479,15 @@ function vartplL (&$t,$daten,$msg,$btn1,$btn2,$tpl) {
 				init	=> ($daten["owener"])?$daten["owener"]:"ERP",
 				employee	=> $daten["employee"]
 		));
+		$t->set_block("li1","TypListe","BlockT");
+		if ($typ) foreach ($typ as $row) {
+			$t->set_var(array(
+				Bid => $row["id"],
+				Bsel => ($row["id"]==$daten["business_id"])?"selected":"",
+				Btype => $row["description"],
+			));
+			$t->parse("BlockT","TypListe",true);
+		}
 		if ($daten["owener"]==$_SESSION["loginCRM"]) {
 			$t->set_block("li1","OwenerListe","Block");
 			$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>"Alle");

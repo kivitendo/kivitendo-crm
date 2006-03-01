@@ -1,5 +1,5 @@
 <?
-// $Id: persLib.php,v 1.5 2005/11/02 11:34:09 hli Exp $
+// $Id$
 
 /****************************************************
 * getKontaktStamm
@@ -117,7 +117,7 @@ global $db;
 			if ($keys[$i]=="cp_gebdatum") {$d=split("\.",$suchwort); $suchwort=$d[2]."-".$d[1]."-".$d[0]; };
 			$where0.="and $case1".$keys[$i]."$case2 like '".$suchwort."$fuzzy' ";
 			if ($keys[$i]=="cp_phone1") $where0.="and cp_phone2 like '".$suchwort."$fuzzy' ";
-			if ($keys[$i]=="cp_stichwort1") $where0.="and $case1 cp_stichwort2 $case2 like '".$suchwort."$fuzzy' ";
+			//if ($keys[$i]=="cp_stichwort1") $where0.="and $case1 cp_stichwort2 $case2 like '".$suchwort."$fuzzy' ";
 		}
 	}
 	$x=0;
@@ -149,7 +149,6 @@ global $db;
 			}
 
 		};
-		
 	return $daten_neu;
 }
 
@@ -167,16 +166,16 @@ global $db;
 	}
 	$daten["cp_sonder"]=$tmp;
 	// Array zu jedem Formularfed: Tabelle (0=contact,1=cust/vend),  require(0=nein,1=ja), Regel
-	$dbfld=array("cp_name" => array(0,1,1,"Name",75),"cp_givenname" => array(0,1,1,"Vorname",75),"cp_greeting" => array(0,0,1,"Anrede",75),
-			"cp_title" => array(0,0,1,"Titel",75),"cp_street" => array(0,0,1,"Strasse",75),"cp_zipcode" => array(0,0,2,"Plz",10),
-			"cp_city" => array(0,0,1,"Ort",75),"cp_country" => array(0,0,8,"Land",3), "cp_sonder" => array(0,0,10,"SonderFlag",0),
-			"cp_phone1" => array(0,0,3,"Telefon",30),"cp_phone2" => array(0,0,3,"Mobile",30),"cp_fax" => array(0,0,3,"Fax",30),
+	$dbfld=array(	"cp_name" => array(0,1,1,"Name",75),	"cp_givenname" => array(0,1,1,"Vorname",75),	"cp_greeting" => array(0,0,1,"Anrede",75),
+			"cp_title" => array(0,0,1,"Titel",75),	"cp_street" => array(0,0,1,"Strasse",75),	"cp_zipcode" => array(0,0,2,"Plz",10),
+			"cp_city" => array(0,0,1,"Ort",75),	"cp_country" => array(0,0,8,"Land",3), 		"cp_sonder" => array(0,0,10,"SonderFlag",0),
+			"cp_phone1" => array(0,0,3,"Telefon",30),"cp_phone2" => array(0,0,3,"Mobile",30),	"cp_fax" => array(0,0,3,"Fax",30),
 			"cp_homepage" =>array(0,0,4,"Homepage",0),"cp_email" => array(0,0,5,"eMail",0),
 			"cp_notes" => array(0,0,1,"Bemerkungen",0),"cp_stichwort1" => array(0,0,1,"Stichworte",50),
 			"cp_gebdatum" => array(0,0,7,"Geb-Datum",0),"cp_beziehung" => array(0,0,6,"Beziehung",0),
 			"cp_abteilung" => array(0,0,1,"Abteilung",25),"cp_position" => array(0,0,1,"Position",25),
-			"cp_cv_id" => array(0,0,6,"FID",0),"name" => array(1,0,1,"Firma",75),"cp_owener" => array(0,0,6,"CRM-User",0),
-			"cp_grafik" => array(0,0,9,"Grafik",4),);				
+			"cp_cv_id" => array(0,0,6,"FID",0),	"name" => array(1,0,1,"Firma",75),		
+			"cp_owener" => array(0,0,6,"CRM-User",0),"cp_grafik" => array(0,0,9,"Grafik",4),);				
 	if (!empty($datei["bild"]["name"])) {  		// eine Datei wird mitgeliefert
 			$typ=array(1=>"gif",2=>"jpeg",3=>"png",4=>false);
 			$imagesize=getimagesize($datei["bild"]['tmp_name'],&$info);
@@ -203,7 +202,7 @@ global $db;
 			if ($dbfld[$keys[$i]][0]==1) {
 				continue;
 			} else {
-				if (!chkFld($tmpval,$dbfld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) {  $fehler=$dbfld[$keys[$i]][3]; $i=$anzahl+1;}
+				if (!chkFld($tmpval,$dbfld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) {  $fehler=$dbfld[$keys[$i]][3]; $fehler=$keys[$i]; $i=$anzahl+1;}
 				if ($keys[$i]=="cp_phone1"||$keys[$i]=="cp_phone2"||$keys[$i]=="cp_fax") $tels[]=$tmpval;
 				$query0.=$keys[$i]."="; 
 				if (in_array($dbfld[$keys[$i]][2],array(0,1,3,4,5,7,8,9))) {
@@ -298,7 +297,7 @@ function leertplP (&$t,$fid,$msg,$tab,$suche=false,$Quelle="") {
 global $laender,$cp_sonder;
 		$t->set_file(array("pers1" => "personen".$tab.".tpl"));
 		$t->set_var(array(
-			Fld	=> "cp_greeting",
+			Fld	=> "cp_title",
 			JS      => "goFld();",
 			color	=> "white",
 			BgC	=> 0,
@@ -307,55 +306,41 @@ global $laender,$cp_sonder;
 			Msg 	=> $msg,
 			action  => "personen".$tab.".php",
 			PID 	=> "",
-			cpsel1  => "",
+			cpsel1  => "checked",
 			cpsel2  => "",
-			cpsel3  => "checked",
-			Anrede	=> "",
-			Titel 	=> "",
-			Vname 	=> "",
-			Nname 	=> "",
-			Strasse => "",
-			Plz 	=> "",
-			Ort 	=> "",
-			Tel1 	=> "",
-			Tel2 	=> "",
-			Fax 	=> "",
-			eMail 	=> "",
-			Homepage => "",
-			GDate	=> "",
-			Bez	=> "",
-			Abteilg	=> "",
-			Position => "",
+			cpsel3  => "",
+			cp_greeting	=> "",
+			cp_title 	=> "",
+			cp_givenname 	=> "",
+			cp_name 	=> "",
+			cp_street 	=> "",
+			cp_country	=> "",
+			cp_zipcode 	=> "",
+			cp_city 	=> "",
+			cp_phone1 	=> "",
+			cp_phone2 	=> "",
+			cp_fax 		=> "",
+			cp_email 	=> "",
+			cp_homepage 	=> "",
+			cp_gebdatum	=> "",
+			cp_beziehung	=> "",
+			cp_abteilung	=> "",
+			cp_position 	=> "",
 			Firma 	=> "",
 			FID 	=> ($suche)?$fid:"",
 			FID1 	=> $fid,
-			SW1	=> "",
+			cp_stichwort1	=> "",
+			cp_notes 	=> "",
 			sond1	=> "",
 			sond2	=> "",
 			sond3	=> "",
 			sond4	=> "",
-			Notiz 	=> "",
 			Quelle  => $Quelle,
 			IMG	=> "",
 			IMG_	=> "",
 			employee => $_SESSION["loginCRM"],
 			init    => $_SESSION["employee"]
 			));
-			$t->set_block("pers1","LandListe","Block1");
-			$selectLand="de";
-			if ($laender) while (list($lid,$land) = each($laender)) {
-				if ($lid==$selectLand) {
-					$sel="selected";
-				} else {
-					$sel="";
-				}
-				$t->set_var(array(
-					LandID => $lid,
-					Lsel => $sel,
-					Land => $land,
-				));
-				$t->parse("Block1","LandListe",true);
-			}
 			$t->set_block("pers1","OwenerListe","Block2");
 			$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>"Alle");
 			$first[]=array("grpid"=>$daten["OwenID"],"rechte"=>"w","grpname"=>"Pers&ouml;nlich");
@@ -391,10 +376,10 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
 		}
 		$t->set_file(array("pers1" => "personen".$tab.".tpl"));
 		$t->set_var(array(
-			Fld		=> $fld,
+			Fld	=> $fld,
 			JS      => "goFld();",
 			color	=> $bgcol,
-			BgC		=>  $fid,
+			BgC	=>  $fid,
 			Btn1 	=> $btn1,
 			Btn3 	=> $btn3,
 			Msg 	=> $msg,
@@ -403,48 +388,34 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
 			cpsel1  => ($daten["cp_greeting"]=="Herr")?"checked":"",
 			cpsel2  => ($daten["cp_greeting"]=="Frau")?"checked":"",
 			cpsel3  => ($daten["cp_greeting"]<>"Herr" && $daten["cp_greeting"]<>"Frau")?"checked":"",
-			Anrede	=> ($daten["cp_greeting"]!="Herr" && $daten["cp_greeting"]!="Frau")?$daten["cp_greeting"]:"",
-			Titel 	=> $daten["cp_title"],
-			Vname 	=> $daten["cp_givenname"],
-			Nname 	=> $daten["cp_name"],
-			Strasse => $daten["cp_street"],
-			Plz 	=> $daten["cp_zipcode"],
-			Ort 	=> $daten["cp_city"],
-			Tel1 	=> $daten["cp_phone1"],
-			Tel2 	=> $daten["cp_phone2"],
-			Fax 	=> $daten["cp_fax"],
-			eMail 	=> $daten["cp_email"],
-			Homepage => $daten["cp_homepage"],
-			GDate	=> ($daten["cp_gebdatum"])?db2date($daten["cp_gebdatum"]):"",
-			Bez	=> $daten["cp_beziehung"],
-			Abteilg	=> $daten["cp_abteilung"],
-			Position => $daten["cp_position"],
+			cp_greeting	=> ($daten["cp_greeting"]!="Herr" && $daten["cp_greeting"]!="Frau")?$daten["cp_greeting"]:"",
+			cp_title 	=> $daten["cp_title"],
+			cp_givenname 	=> $daten["cp_givenname"],
+			cp_name 	=> $daten["cp_name"],
+			cp_street 	=> $daten["cp_street"],
+			cp_country	=> $daten["cp_country"],
+			cp_zipcode 	=> $daten["cp_zipcode"],
+			cp_city 	=> $daten["cp_city"],
+			cp_phone1 	=> $daten["cp_phone1"],
+			cp_phone2 	=> $daten["cp_phone2"],
+			cp_fax 		=> $daten["cp_fax"],
+			cp_email 	=> $daten["cp_email"],
+			cp_homepage 	=> $daten["cp_homepage"],
+			cp_gebdatum	=> ($daten["cp_gebdatum"])?db2date($daten["cp_gebdatum"]):"",
+			cp_beziehung	=> $daten["cp_beziehung"],
+			cp_abteilung	=> $daten["cp_abteilung"],
+			cp_position 	=> $daten["cp_position"],
 			Firma 	=> $daten["Firma"],
 			FID 	=> $daten["cp_cv_id"],
 			FID1 	=> $fid,
-			SW1	=> $daten["cp_stichwort1"],
-			Notiz 	=> $daten["cp_notes"],
+			cp_stichwort1	=> $daten["cp_stichwort1"],
+			cp_notes 	=> $daten["cp_notes"],
 			Quelle  => $daten["Quelle"],
 			IMG	=> $Image,
 			IMG_	=> $daten["cp_grafik"],
 			init    => ($daten["cp_employee"])?$daten["cp_employee"]:"ERP",
 			employee => $_SESSION["loginCRM"]
 			));
-			$t->set_block("pers1","LandListe","Block1");
-			$selectLand=trim($daten["cp_country"]);
-			while (list($lid,$land) = each($laender)) {
-				if ($lid==$selectLand) {
-					$sel="selected";
-				} else {
-					$sel="";
-				}
-				$t->set_var(array(
-					LandID => $lid,
-					Lsel => $sel,
-					Land => $land,
-				));
-				$t->parse("Block1","LandListe",true);
-			}
 			$t->set_block("pers1","OwenerListe","Block2");
 			if ($daten["cp_employee"]==$_SESSION["loginCRM"]) {
 				$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>"Alle");

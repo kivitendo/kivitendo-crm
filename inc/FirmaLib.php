@@ -1,5 +1,5 @@
 <?
-// $Id: FirmaLib.php,v 1.8 2006/01/18 16:01:25 hli Exp $
+// $Id$
 
 /****************************************************
 * getAllCustomer
@@ -38,7 +38,7 @@ global $db;
 	$sql.="O.customer_id=$id and A.customer_id=$id and A.amount<>A.paid and O.quotation='f'";
 	$rs=$db->getAll($sql);
 	$op=$rs[0]["summe"];
-	$sql="select C.*,E.login,B.description as kdtyp,B.discount,P.pricegroup from customer C ";
+	$sql="select C.*,E.login,B.description as kdtyp,B.discount as typrabatt,P.pricegroup from customer C ";
 	$sql.="left join employee E on C.employee=E.id left join business B on B.id=C.business_id ";
 	$sql.="left join pricegroup P on P.id=C.klass ";
 	$sql.="where C.id=$id";
@@ -122,7 +122,9 @@ function suchstr($muster) {
 			homepage =>array(0,1),email => array(0,1),notes => array(0,1),
 			department_1 => array(0,1),department_2 => array(0,1),
 			country => array(0,1),typ => array(0,0),sw => array(0,1),
-			language => array(0,0), business_id => array(0,0));
+			language => array(0,0), business_id => array(0,0),
+			ustid => array(0,1), taxnumber => array(0,0), 
+			bank => array(0,1), bank_code => array(0,0), account_number => array(0,0));
 	$dbfld2=array(name => "shiptoname", street=>"shiptostreet",ziptocode=>"shiptozipcode",
 			city=>"shiptocity",phone=>"shiptophone",fax=>"shiptofax",
 			email=>"shiptoemail",department_1=>"shiptodepartment_1",
@@ -209,9 +211,13 @@ global $db;
 			city => array(0,1,1,"Ort",75),		phone => array(0,0,3,"Telefon",30),
 			fax => array(0,0,3,"Fax",30),		homepage =>array(0,0,4,"Homepage",0),
 			email => array(0,0,5,"eMail",0),	notes => array(0,0,0,"Bemerkungen",0),
+			contact => array(0,0,1,"Kontakt",75),	ustid => array(0,0,0,"UStId",0),
 			department_1 => array(0,0,1,"Zusatzname",75),
 			department_2 => array(0,0,1,"Abteilung",75),
 			sw => array(0,0,1,"Stichwort",50),	taxnumber => array(0,0,0,"Steuernummer",0),
+			bank => array(0,0,1,"Bankname",50),
+			bank_code => array(0,0,6,"Bankleitzahl",15),
+			account_number => array(0,0,6,"Kontonummer",15),
 			branche => array(0,0,1,"Branche",25),	business_id => array(0,0,6,"Kundentyp",0),
 			owener => array(0,0,6,"CRM-User",0),	grafik => array(0,0,9,"Grafik",4),
 			shiptoname => array(1,0,1,"Liefername",75), 
@@ -282,8 +288,8 @@ global $db;
 				$hoehe=ceil($imagesize[1]/$imagesize[0]*120);
 				$breite=120;
 			} else {
-				$breite=ceil($imagesize[0]/$imagesize[1]*50);
-				$hoehe=50;
+				$breite=ceil($imagesize[0]/$imagesize[1]*80);
+				$hoehe=80;
 			}
 			$image1 = imagecreatetruecolor($breite,$hoehe);
 			$tue="\$image=imagecreatefrom".$typ[$imagesize[2]]."('$dest');";
@@ -480,7 +486,12 @@ function leertpl (&$t,$tpl,$msg="") {
 			sw	=> "",
 			branche	=> "",
 			ustid	=> "",
+			taxnumber => "",
+			contact => "",
 			notes	=> "",
+			bank	=> "",
+			bank_code	=> "",
+			account_number	=> "",
 			terms	=> "",
 			kreditlim	=> "",
 			op	=> "",
@@ -541,14 +552,14 @@ function vartpl (&$t,$daten,$msg,$btn1,$btn2,$tpl) {
 		$t->set_var(array(
 				Btn1	=> $btn1,
 				Btn2	=> $btn2,
-				Msg	=>	$msg,
+				Msg	=> $msg,
 				action	=> "firmen".$tpl.".php",
 				ID	=> $daten["id"],
 				KDNR	=> $daten["customernumber"],
 				name 	=> $daten["name"],
 				department_1	=> $daten["department_1"],
 				department_2	=> $daten["department_2"],
-				street	=>$daten["street"],
+				street	=> $daten["street"],
 				country	=> $daten["country"],
 				zipcode	=> $daten["zipcode"],
 				city	=> $daten["city"],
@@ -558,8 +569,13 @@ function vartpl (&$t,$daten,$msg,$btn1,$btn2,$tpl) {
 				homepage => $daten["homepage"],
 				sw	=> $daten["sw"],
 				branche	=> $daten["branche"],
-				ustid	=> $daten["taxnumber"],
+				ustid	=> $daten["ustid"],
+				taxnumber => $daten["taxnumber"],
+				contact	=> $daten["contact"],
 				notes	=> $daten["notes"],
+				bank	=> $daten["bank"],
+				bank_code	=> $daten["bank_code"],
+				account_number	=> $daten["account_number"],
 				terms	=> $daten["terms"],
 				kreditlim	=> $daten["creditlimit"],
 				op	=> $daten["op"],

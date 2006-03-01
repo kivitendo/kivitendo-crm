@@ -34,10 +34,12 @@ global $db;
 *****************************************************/
 function getFirmaStamm($id,$ws=true) {
 global $db;
-	$sql="select sum(O.amount) + sum(A.amount) as summe from oe O, ar A where ";
-	$sql.="O.customer_id=$id and A.customer_id=$id and A.amount<>A.paid and O.quotation='f'";
+	$sql="select sum(amount) from oe where customer_id=$id and quotation='f' and closed = 'f'";
 	$rs=$db->getAll($sql);
-	$op=$rs[0]["summe"];
+	$oa=$rs[0]["sum"];
+	$sql="select sum(amount) from ar where customer_id=$id and amount<>paid";
+	$rs=$db->getAll($sql);
+	$op=$rs[0]["sum"];
 	$sql="select C.*,E.login,B.description as kdtyp,B.discount as typrabatt,P.pricegroup from customer C ";
 	$sql.="left join employee E on C.employee=E.id left join business B on B.id=C.business_id ";
 	$sql.="left join pricegroup P on P.id=C.klass ";
@@ -92,6 +94,7 @@ global $db;
 		$daten=array_merge($row,$row2);
 	}
 	$daten["op"]=$op;
+	$daten["oa"]=$oa;
 	return $daten;
 };
 
@@ -387,21 +390,6 @@ function saveNeuFirmaStamm($daten) {
 	$rs=saveFirmaStamm($daten,true);
 	return $rs;
 }
-
-/****************************************************
-* getBusiness
-* out: array
-* Kundentype holen
-*****************************************************/
-function getBusiness() {
-global $db;
-	$sql="select * from business order by description";
-	$rs=$db->getAll($sql);
-	$leer=array(array("id"=>"","discription"=>""));
-	return array_merge($leer,$rs);
-}
-
-
 
 /****************************************************
 * doReportC

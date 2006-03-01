@@ -33,6 +33,9 @@ global $db;
 *****************************************************/
 function getLieferStamm($id,$ws=true) {
 global $db;
+	$sql="select sum(amount) as summe from ap where vendor_id=$id and amount<>paid";
+	$rs=$db->getAll($sql);
+	$op=$rs[0]["summe"];
 	$sql="select C.*,E.login,B.description as lityp,B.discount as typrabatt from vendor C ";
 	$sql.="left join employee E on C.employee=E.id left join business B on B.id=C.business_id ";
 	$sql.="where C.id=$id";
@@ -85,6 +88,7 @@ global $db;
 		}
 		$daten=array_merge($row,$row2);
 	}
+	$daten["op"]=$op;
 	return $daten;
 };
 
@@ -354,18 +358,7 @@ global $db;
 		return false;
 	} 
 }
-/****************************************************
-* getBusiness
-* out: array
-* Kundentype holen
-*****************************************************/
-function getBusiness() {
-global $db;
-	$sql="select * from business order by description";
-	$rs=$db->getAll($sql);
-	$leer=array(array("id"=>"","discription"=>""));
-	return array_merge($leer,$rs);
-}
+
 function leertplL (&$t,$tpl,$msg="") {
 		$typ=getBusiness();
 		$t->set_file(array("li1" => "liefern".$tpl.".tpl"));

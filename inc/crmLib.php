@@ -1674,49 +1674,182 @@ function getLableNames() {
 		return $rs;
 	}
 function mknewLable($id=0) {
-		global $db;
-		$newID=uniqid (rand());
-		$sql="insert into labels (name) values ('$newID')";
-		$rc=$db->query($sql);
-		if ($rc) {
-			$sql="select id from labels where name = '$newID'";
-			$rs=$db->getAll($sql);
-			if ($rs) {
-				$id=$rs[0]["id"];
-			} else {
-				$id=false;
-			}
+	global $db;
+	$newID=uniqid (rand());
+	$sql="insert into labels (name) values ('$newID')";
+	$rc=$db->query($sql);
+	if ($rc) {
+		$sql="select id from labels where name = '$newID'";
+		$rs=$db->getAll($sql);
+		if ($rs) {
+			$id=$rs[0]["id"];
 		} else {
 			$id=false;
 		}
-	return $id;
+	} else {
+		$id=false;
 	}
-	function insLable($data) {
-		$data["id"]=mknewLable();
-		$data["name"]=$data["custname"];
-		$data["cust"]="C";
-		return updLable($data);
+return $id;
+}
+function insLable($data) {
+	$data["id"]=mknewLable();
+	$data["name"]=$data["custname"];
+	$data["cust"]="C";
+	return updLable($data);
+}
+function updLable($data) {
+	global $db;
+	$data["fontsize"]="10";
+	$felder=array("name","cust","papersize","metric","marginleft","margintop","nx","ny","spacex","spacey","width","height","fontsize");
+	$tmp="update labels set ";
+	foreach ($felder as $feld) {
+		$tmp.=$feld."='".$data[$feld]."',";
 	}
-	function updLable($data) {
-		global $db;
-		$data["fontsize"]="10";
-		$felder=array("name","cust","papersize","metric","marginleft","margintop","nx","ny","spacex","spacey","width","height","fontsize");
-		$tmp="update labels set ";
-		foreach ($felder as $feld) {
-			$tmp.=$feld."='".$data[$feld]."',";
+	$sql=substr($tmp,0,-1)." where id=".$data["id"];
+	if ($data["cust"]=="C") {
+		$rc=$db->query($sql);
+		$i=0;
+		$db->query("delete from labeltxt where lid=".$data["id"]);
+		foreach($data["Text"] as $row) {
+			$sql=sprintf("insert into labeltxt (lid,font,zeile) values (%d,%d,'%s')",$data["id"],$data["Schrift"][$i],$row);
+			$db->query($sql);
+			$i++;
 		}
-		$sql=substr($tmp,0,-1)." where id=".$data["id"];
-		if ($data["cust"]=="C") {
-			$rc=$db->query($sql);
-			$i=0;
-			$db->query("delete from labeltxt where lid=".$data["id"]);
-			foreach($data["Text"] as $row) {
-				$sql=sprintf("insert into labeltxt (lid,font,zeile) values (%d,%d,'%s')",$data["id"],$data["Schrift"][$i],$row);
-				$db->query($sql);
-				$i++;
+	} else {
+		return false;
+	}
+}
+
+function getWCategorie() {
+global $db;
+	$sql="select * from wissencategorie order by hauptgruppe,name";
+	$rs=$db->getAll($sql);
+	$data=array();
+	if ($rs) { 
+		foreach ($rs as $row) {
+			$data[$row["hauptgruppe"]][]=array("name"=>$row["name"],"id"=>$row["id"]);
+			//$data[$row["hauptgruppe"]][]=array("grptxt"=>$row["name"],"grpnr"=>$row["id"]);
+		}
+		return $data;
+	} else {
+		return false;
+	}
+}
+function insWCategorie($data) {
+global $db;
+	$tmp = split(",",$data["m"]);
+	$newID=uniqid (rand());
+	$sql="insert into wissencategorie (name) values ('$newID')";
+	$rc=$db->query($sql);
+	$sql="select * from wissencategorie where name='$newID'";
+	$rs=$db->getAll($sql);
+	if(!$rs) {
+		return false;
+	} else {
+		$sql="update wissencategorie set name='".$data["catname"]."',hauptgruppe='".$tmp[0]."' where id = ".$rs[0]["id"];
+		$rc=$db->query($sql);
+		return ($rc)?$rs[0]["id"]:false;
+	}
+}
+function getOneWCategorie($id) {
+global $db;
+	$sql="select * from  wissencategorie where id = $id";
+	$rs=$db->getAll($sql);
+	return $rs[0];
+}
+function getWContent($id) {
+global $db;
+	$sql="select O.*,A.name,E.login from wissencontent O left join wissencategorie A on A.id=O.categorie ";
+	$sql.="left join employee E on O.employee=E.id where categorie = $id order by initdate desc limit 1";
+	$rs=$db->getAll($sql);
+	if ($rs) {
+		return $rs[0];
+	} else {
+		return false;
+	}
+}
+function insWContent($data) {
+global $db;
+	$tmp = split(",",$data["m"]);
+	$sql="insert into wissencontent (initdate,content,employee,version,categorie) values ";
+	$sql.="(now(),'".trim($data["content"])."',".$_SESSION["loginCRM"].",".($data["version"]+1).",".$tmp[0].")";
+	$rc=$db->query($sql);
+	return $rc;
+}
+function getWHistory($id) {
+global $db;
+	$sql="select W.*,E.login from  wissencontent W left join employee E on W.employee=E.id where categorie = $id order by initdate";
+	$rs=$db->getAll($sql);
+	return $rs;
+}
+function diff($text1,$text2) {
+//Geschrieben von TBT am 28-11-2002 um 16:20
+	$text1=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace(' ','°','\\1')",$text1);
+	$text2=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace(' ','°','\\1')",$text2);
+	$array1 = explode(" ", str_replace(array("   ","    ","  ", "\r", "\n"), array(" "," "," ", "", ""), $text1));
+	$array2 = explode(" ", str_replace(array("   ","    ","  ", "\r", "\n"), array(" "," "," ", "", ""), $text2));
+	$max1 = count($array1);
+	$max2 = count($array2);
+//print_r($array1);
+	$start1 = $start2 = 0;
+	$jump1 = $jump2 = 0;
+	while($start1 < $max1 && $start2 < $max2){
+		$pos11 = $pos12 = $start1;
+		$pos21 = $pos22 = $start2;
+		$diff2 = 0; 
+		// schaukel 1. Array hoch
+		while($pos11 < $max1 && $array1[$pos11] != $array2[$pos21]){
+			++$pos11;
+		}
+		// Ende des 1 Arrays erreicht ?
+		if($pos11 == $max1){
+			$start2++;
+			continue;
+		} 
+		// Gegenschaukel wenn übersprunge Wörter
+		if(($diff1 = $pos11 - $pos21) > 1){
+			while($pos22 < $max2 && $array1[$pos12] != $array2[$pos22]){
+				++$pos22;
 			}
-		} else {
-			return false;
+			$diff2 = $pos22 - $pos12 + $jump2;
+		} 
+		// Ende des 2 Arrays erreicht ?
+		if($pos22 == $max2){
+			$start1++;
+			continue;
 		}
-	}
+		$diff1 += $jump1; 
+		// Auswertung der Schaukel
+		if($diff1 >= $diff2 && $diff2){
+			unset($array1[$pos12], $array2[$pos22]);
+			$start1 = $pos12 + 1;
+			$start2 = $pos22 + 1;
+			$jump2 = $diff2;
+		}else{
+			unset($array1[$pos11], $array2[$pos21]);
+			$start1 = $pos11 + 1;
+			$start2 = $pos21 + 1;
+			$jump1 = $diff1;
+		}
+}
+$safe1 = explode(" ", str_replace(array("   ","    ","  ", "\r", "\n"), array(" "," "," ", "", ""), $text1));
+reset($array1);
+while(list($key1,) = each($array1)){
+    if (preg_match("/<\/?([ou]l|li|img|input)/i",$safe1[$key1])) {
+	    $safe1[$key1] = "[_" . $safe1[$key1] . "_]";
+    } else {
+	    $safe1[$key1] = "<span class='diff1'>" . $safe1[$key1] . "</span>";
+    }
+}
+$safe2 = explode(" ", str_replace(array("   ","    ","  ", "\r", "\n"), array(" "," "," ", "", ""), $text2));
+reset($array2);
+while(list($key2,) = each($array2)){
+    $safe2[$key2] = "<span class='diff2'>" . $safe2[$key2] . "</span>";
+}
+$text1=implode(" ", $safe1);
+$text2=implode(" ", $safe2);
+$text1=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace('°',' ','\\1')",$text1);
+$text2=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace('°',' ','\\1')",$text2);
+return array($text1,$text2);
+}
 ?>

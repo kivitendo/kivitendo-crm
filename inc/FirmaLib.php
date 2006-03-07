@@ -40,9 +40,9 @@ global $db;
 	$sql="select sum(amount) from ar where customer_id=$id and amount<>paid";
 	$rs=$db->getAll($sql);
 	$op=$rs[0]["sum"];
-	$sql="select C.*,E.login,B.description as kdtyp,B.discount as typrabatt,P.pricegroup from customer C ";
+	$sql="select C.*,E.login,B.description as kdtyp,B.discount as typrabatt,P.pricegroup,L.lead as leadname from customer C ";
 	$sql.="left join employee E on C.employee=E.id left join business B on B.id=C.business_id ";
-	$sql.="left join pricegroup P on P.id=C.klass ";
+	$sql.="left join pricegroup P on P.id=C.klass left join leads L on C.lead=L.id ";
 	$sql.="where C.id=$id";
 	$rs=$db->getAll($sql);  // Rechnungsanschrift
 	if(!$rs) {
@@ -126,7 +126,7 @@ function suchstr($muster) {
 			department_1 => array(0,1),department_2 => array(0,1),
 			country => array(0,1),typ => array(0,0),sw => array(0,1),
 			language => array(0,0), business_id => array(0,0),
-			ustid => array(0,1), taxnumber => array(0,0), 
+			ustid => array(0,1), taxnumber => array(0,0), lead => array(0,0),
 			bank => array(0,1), bank_code => array(0,0), account_number => array(0,0));
 	$dbfld2=array(name => "shiptoname", street=>"shiptostreet",ziptocode=>"shiptozipcode",
 			city=>"shiptocity",phone=>"shiptophone",fax=>"shiptofax",
@@ -223,6 +223,7 @@ global $db;
 			account_number => array(0,0,6,"Kontonummer",15),
 			branche => array(0,0,1,"Branche",25),	business_id => array(0,0,6,"Kundentyp",0),
 			owener => array(0,0,6,"CRM-User",0),	grafik => array(0,0,9,"Grafik",4),
+			lead => array(0,0,6,"Leadquelle",0),
 			shiptoname => array(1,0,1,"Liefername",75), 
 			shiptostreet => array(1,0,1,"Lieferstrasse",75),
 			shiptocountry => array(1,0,8,"Lieferland",3),
@@ -452,6 +453,7 @@ global $db;
 
 function leertpl (&$t,$tpl,$msg="") {
 		$typ=getBusiness();
+		$lead=getLeads();
 		$t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
 		$t->set_var(array(
 			Btn1 => "",
@@ -506,36 +508,46 @@ function leertpl (&$t,$tpl,$msg="") {
 			$t->set_var(array(
 				Bid => $row["id"],
 				Bsel => ($row["id"]==$daten["business_id"])?"selected":"",
-				Btype => $row["description"],
+				Btype => $row["description"]
 			));
 			$t->parse("BlockT","TypListe",true);
 		}
-			$t->set_block("fa1","OwenerListe","Block");
-				$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>"Alle");
-				$first[]=array("grpid"=>$_SESSION["loginCRM"],"rechte"=>"w","grpname"=>"Pers&ouml;nlich");
-				$tmp=getGruppen();
-				if ($mtp) { $user=array_merge($first,getGruppen()); }
-				else { $user=$first; };
-				$selectOwen=1;
-				if ($user) foreach($user as $zeile) {
-					if ($zeile["grpid"]==$selectOwen) {
-						$sel="selected";
-					} else {
-						$sel="";
-					}
-					$t->set_var(array(
-						grpid => $zeile["grpid"],
-						Gsel => $sel,
-						Gname => $zeile["grpname"],
-					));
-					$t->parse("Block","OwenerListe",true);
-				}
+		$t->set_block("fa1","LeadListe","BlockL");
+		if ($lead) foreach ($lead as $row) {
+			$t->set_var(array(
+				Lid => $row["id"],
+				Lsel => ($row["id"]==$daten["lead"])?"selected":"",
+				Lead => $row["lead"]
+			));
+			$t->parse("BlockL","LeadListe",true);
+		}
+		$t->set_block("fa1","OwenerListe","Block");
+		$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>"Alle");
+		$first[]=array("grpid"=>$_SESSION["loginCRM"],"rechte"=>"w","grpname"=>"Pers&ouml;nlich");
+		$tmp=getGruppen();
+		if ($mtp) { $user=array_merge($first,getGruppen()); }
+		else { $user=$first; };
+		$selectOwen=1;
+		if ($user) foreach($user as $zeile) {
+			if ($zeile["grpid"]==$selectOwen) {
+				$sel="selected";
+			} else {
+				$sel="";
+			}
+			$t->set_var(array(
+				grpid => $zeile["grpid"],
+				Gsel => $sel,
+				Gname => $zeile["grpname"],
+			));
+			$t->parse("Block","OwenerListe",true);
+		}
 } // leertpl
 function vartpl (&$t,$daten,$msg,$btn1,$btn2,$tpl) {
 		if ($daten["grafik"]) {
 			$Image="<img src='dokumente/".$_SESSION["mansel"]."/".$daten["id"]."/logo.".$daten["grafik"]."' ".$daten["size"].">";
 		}
 		$typ=getBusiness();
+		$lead=getLeads();
 		$t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
 		$t->set_var(array(
 				Btn1	=> $btn1,
@@ -597,6 +609,15 @@ function vartpl (&$t,$daten,$msg,$btn1,$btn2,$tpl) {
 				Btype => $row["description"],
 			));
 			$t->parse("BlockT","TypListe",true);
+		}
+		$t->set_block("fa1","LeadListe","BlockL");
+		if ($lead) foreach ($lead as $row) {
+			$t->set_var(array(
+				Lid => $row["id"],
+				Lsel => ($row["id"]==$daten["lead"])?"selected":"",
+				Lead => $row["lead"],
+			));
+			$t->parse("BlockL","LeadListe",true);
 		}
 		if ($daten["employee"]==$_SESSION["loginCRM"]) {
 			$t->set_block("fa1","OwenerListe","Block");

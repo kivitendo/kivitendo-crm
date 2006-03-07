@@ -321,7 +321,19 @@ function chkAnzahl(&$data,&$anzahl) {
 		return true;
 	}
 }
-
+/****************************************************
+* getLeads
+* out: array
+* Leadsquellen holen
+*****************************************************/
+function getLeads() {
+global $db;
+	$sql="select * from leads order by lead";
+	$rs=$db->getAll($sql);
+	$tmp[]=array("id"=>"","lead"=>"unbekannt");
+	$rs=array_merge($tmp,$rs);
+	return $rs;
+}
 /****************************************************
 * getBusiness
 * out: array
@@ -331,7 +343,7 @@ function getBusiness() {
 global $db;
 	$sql="select * from business order by description";
 	$rs=$db->getAll($sql);
-	$leer=array(array("id"=>"","discription"=>""));
+	$leer=array(array("id"=>"","description"=>"----------"));
 	return array_merge($leer,$rs);
 }
 /****************************************************

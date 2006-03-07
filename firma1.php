@@ -33,6 +33,7 @@
 			Fname1	=> $fa["name"],
 			KDNR	=> $fa["customernumber"],
 			kdtyp   => $fa["kdtyp"],
+			lead	=> $fa["leadname"],
 			Fdepartment_1	=> $fa["department_1"],
 			Fdepartment_2	=> $fa["department_2"],
 			Strasse => $fa["street"],

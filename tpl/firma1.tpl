@@ -110,7 +110,7 @@
 
 	<span id="inf" style="visibility:hidden;position:absolute; text-align:left;width:48%; left:5px; top:245px;">
 		<div class="smal" >
-		Kundentyp: <span class="value">{kdtyp}</span> <br />
+		Kundentyp: <span class="value">{kdtyp}</span> &nbsp;&nbsp;&nbsp; Leadquelle:<span class="value">{lead}</span> <br />
 		Rabatt: <span class="value">{rabatt}</span> &nbsp;&nbsp;&nbsp; Preisgruppe: <span class="value">{preisgrp}</span><br /><br />
 		Steuer-Nr.: <span class="value">{Taxnumber}</span> &nbsp;&nbsp;&nbsp; UStId: <span class="value">{USTID}</span><br /><br />
 		Zahlungsziel: <span class="value">{terms}</span> Tage &nbsp;&nbsp;&nbsp;Kreditlimit: <span class="value">{kreditlim}</span><br />

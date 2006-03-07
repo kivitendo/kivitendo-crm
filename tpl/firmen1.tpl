@@ -109,6 +109,16 @@
 		</span>
 	</div>
 	<div class="zeile">
+		<span class="label">Leadquelle</span>
+		<span class="leftfeld">
+			<select name="lead" tabindex="11">
+<!-- BEGIN LeadListe -->	
+				<option value="{Lid}" {Lsel}>{Lead}</option>
+<!-- END LeadListe -->				
+			</select>
+		</span>
+	</div>
+	<div class="zeile">
 			<b>{Msg}</b><br>
 			<input type="checkbox" name="shipto" value="1" tabindex="20">auch in abweichender Lieferanschrift suchen<br>
 			<input type="checkbox" name="fuzzy" value="%" checked tabindex="21">Unscharf suchen<br>

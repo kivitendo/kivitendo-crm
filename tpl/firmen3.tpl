@@ -141,9 +141,19 @@
 		<span class="smalfeld"><input type="text" name="account_number" size="22" maxlength="15" value="{account_number}" tabindex="29"></span>
 	</div>
 	<div class="zeile">
+		<span class="label">Leadquelle</span>
+		<span class="smalfeld">
+			<select name="lead" tabindex="30">
+<!-- BEGIN LeadListe -->
+				<option value="{Lid}" {Lsel}>{Lead}</option>
+<!-- END LeadListe -->
+			</select>
+		</span>
+	</div>
+	<div class="zeile">
 		<span class="label">Kundentyp</span>
 		<span class="smalfeld">
-			<select name="business_id" tabindex="30">
+			<select name="business_id" tabindex="31">
 <!-- BEGIN TypListe -->
 				<option value="{Bid}" {Bsel}>{Btype}</option>
 <!-- END TypListe -->
@@ -157,7 +167,7 @@
 	<div class="zeile">
 		<span style="text-align:center;">
 			<center>
-			<input type="file" name="Datei" size="14" maxlength="125" accept="Image/*" tabindex="31">
+			<input type="file" name="Datei" size="14" maxlength="125" accept="Image/*" tabindex="32">
 			</center>
 		</span>
 	</div>
@@ -165,7 +175,7 @@
 	<div>
 		<span class="label">Berechtig.</span>
 		<span class="smalfeld">
-			<select name="owener" tabindex="32">
+			<select name="owener" tabindex="33">
 <!-- BEGIN OwenerListe -->
 				<option value="{grpid}" {Gsel}>{Gname}</option>
 <!-- END OwenerListe -->
@@ -177,9 +187,9 @@
 <span style="position:absolute; left:1px; top:270px; width:475px; text-align:center; border: 0px solid red;">
 		Bemerkungen<br>
 		<textarea name="notes" cols="70" rows="3" tabindex="21">{notes}</textarea>
-			<input type="submit" name="saveneu" value="sichern neu" tabindex="33"> &nbsp;
-			<input type="submit" name="reset" value="clear" tabindex="34"> &nbsp;
-			<input type="button" name="" value="VCard" onClick="vcard()" tabindex="35"> &nbsp;
+			<input type="submit" name="saveneu" value="sichern neu" tabindex="34"> &nbsp;
+			<input type="submit" name="reset" value="clear" tabindex="35"> &nbsp;
+			<input type="button" name="" value="VCard" onClick="vcard()" tabindex="36"> &nbsp;
 			{Btn2} &nbsp;{Btn1} 
 </span>
 

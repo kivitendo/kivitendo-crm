@@ -10,6 +10,8 @@ A:visited	{ color: black;  }
 A:hover		{ color:#8c1919;}
 A:active	{ text-decoration: underline; }
 
+A.reiterA      	{ color: #888888; font-size: 12px;}
+
 table		{ border-collapse:collapse; border-width: 0px; padding: 0px; margin: 2px; border-spacing:0px; }
 td		{ vertical-align:top; text-align:left;margin:0px;padding:0px; }
 
@@ -17,12 +19,10 @@ table.liste	{ border-collapse:collapse; border-width: 0px; border-style:solid; b
 td.liste	{ height:1.8em;  border-width:0px; border-style:solid; text-align:left; font-size: 1.2em;vertical-align:middle;margin:0px;padding:3px;}
 
 table.reiter	{ width:60%; table-layout:fixed;}
-td.reiter	{ height:21px;  border-width:thin; border-style:solid; text-align:center; font-size: 12px;vertical-align:middle;}
+td.reiter	{ border-width:thin;height:21px; border-style:solid; text-align:center; font-size: 12px;vertical-align:middle; width:25%;}
 td.sel		{ border-color:#333333;}
 td.desel	{ border-color:#888888; }
 td.reiter:hover	{ background-color: #cccccc; }
-A.reiterA      	{ color: #888888; font-size: 12px;}
-
 table.karte	{ background-image: url('px_3.gif'); width:99%;}
 td.karte	{ height:430px; }
 
@@ -32,16 +32,46 @@ td.smal		{ font-size:11px;padding:2px; }
 td.norm		{ font-size:12px;padding:2px; }
 th.smal		{ font-size:11px;padding:2px; }
 tr.topbot	{ border-width:1px 0px 1px 0px; border-style:solid; border-color:black;}
-
 td.dot 		{ border-width:1px 1px 1px 1px; border-style:solid; border-color:#666666;}
-
 td.ce		{ text-align:center;}
 td.le		{ text-align:left;}
 td.re		{ text-align:right;}
+#tabmenue {
+  padding: 3px;
+}
+#tabmenue li {
+  display: inline; 
+}
+#tabmenue li a {
+  padding: 3px 1em;
+  margin-left: 3px;
+  text-decoration: none; 
+  border: 1px solid black;
+}
+#tabmenue li a#aktuell {
+  padding-bottom: 4px; color: #888888; 
+  border-bottom: 0px solid #222;
+}
+#tabmenue a:hover { background-color: #cccccc; }
+
+#submenue {
+  padding: 0px;
+}
+#submenue li {
+  display: inline; 
+}
+#submenue li a {
+  padding: 2px ;
+  border: 1px solid black;
+  margin-top: 0px;
+  margin-left: 2px;
+  border: 1px solid black;
+  border-top: 0px;
+  text-decoration: none; 
+}
+#submenue a:hover { background-color: #cccccc; }
 
 .smal		{ font-size:12px; }
-.vsmal		{ font-size:10px; }
-.norm		{ font-size:12px; }
 .bold		{ font-weight:bold;}
 
 .liste		{ font-size:10px;  padding:0px; margin:0px; }
@@ -49,7 +79,6 @@ td.re		{ text-align:right;}
 .lg 		{ background-color:#dddddd; vertical-align:bottom;}
 .ft		{ background-color:#ffd5d5; vertical-align:bottom;}
 .we		{ background-color:#ffffff; vertical-align:bottom;}
-.Big		{ font-size:12px; font-weight:bold;font-family:courier;}
 
 .bgcol1 	{ background-color:#ddddff; }
 .bgcol2 	{ background-color:#ddffdd; }
@@ -79,13 +108,6 @@ textarea  	{ font-size: 12px; font-family:Verdana,Arial,Helvetica,sans-serif;}
         border-width:thin;
 }
                                                                                                                  
-.listelement2 {
-        background-image: url("fade2.png");
-        background-repeat:repeat-x;
-        border-style:dashed;
-        border-width:thin;
-}
-                                                                                                                 
 .listheading {
         font-size: 9pt;
         padding:3px;
@@ -97,4 +119,79 @@ textarea  	{ font-size: 12px; font-family:Verdana,Arial,Helvetica,sans-serif;}
         background-image: url("fade.png");
         border-style:dotted;
         border-width:thin;
+}
+.normal {
+        font-size: 1.1em;
+	font-weight: normal;
+}
+.gross {
+        font-size: 1.3em;
+}
+.mini { 
+        font-size: .6em;
+}
+.klein { 
+        font-size: .9em;
+}
+.fett { 
+        font-weight: bold;
+}
+.value {
+	border: 0px solid #999999;
+	background-color: #ffffff;
+}
+.value:before {
+	content:"[ ";	
+}
+.value:after {
+	content:" ]";
+}
+input:focus {
+	background-color:yellow;
+}
+.zeile {  clear: both;
+  padding: 2px 0px;
+}
+.label {
+  float: left;
+  width: 80px;
+  text-align: right;
+  padding-top: 3px;
+  padding-right: 5px;
+}
+
+.smalfeld{
+  padding-left: 2px;
+  float: right;
+  width: 180px;
+  text-align: left;
+}
+.feld {
+  float: right;
+  width: 205px;
+  text-align: left;
+}
+.leftfeld {
+  background-color=red;
+  float: left;
+  width: 205px;
+  text-align: left;
+}
+.diff1:before {
+	content:"[";	
+}
+.diff1:after {
+	content:"]";
+}
+.diff1 {
+	color: green;
+}
+.diff2:before {
+	content:"[ ";	
+}
+.diff2:after {
+	content:" ]";
+}
+.diff2 {
+	color: red;
 }

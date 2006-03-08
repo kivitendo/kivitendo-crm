@@ -50,7 +50,7 @@
 <span style="position:absolute; left:10px; top:67px; width:95%;">
 <!-- Beginn Code --------------------------------------------- -->
 <span style="float:left; width:49%; height:410px; text-align:center; border: 1px solid black;">
-	<div style="float:left; width:72%; height:165px; text-align:left; border-bottom: 0px solid black; padding:2px;" class="gross">
+	<div style="float:left; width:64%; height:165px; text-align:left; border-bottom: 0px solid black; padding:2px;" class="gross">
 		{Fname1}<br />
 		{Fdepartment_1}<br />
 		{Strasse}<br />
@@ -60,7 +60,7 @@
 		Tel: {Telefon}<br />
 		Fax: {Fax}<br />	
 	</div>
-	<div style="float:left; width:25%; height:165px; text-align:right; border-bottom: 0px solid black; padding:2px;" class="gross">
+	<div style="float:left; width:33%; height:165px; text-align:right; border-bottom: 0px solid black; padding:2px;" class="gross">
 		{KDNR}<br />
 		{IMG}<br /><br />
 		<a href="#" onCLick="anschr(1);" title="Briefanschrift &amp; Etikett"><img src="image/brief.gif" alt="Etikett drucken" border="0" /></a><br />
@@ -79,7 +79,7 @@
 		<ul id="submenue">
 			<li><a href="#" onClick="submenu('lie')">Lieferadresse</a></li>
 			<li><a href="#" onClick="submenu('not')">Notizen</a></li>
-			<li><a href="#" onClick="submenu('inf')">sont.Infos</a></li>
+			<li><a href="#" onClick="submenu('inf')">sonst.Infos</a></li>
 			<li><a href="firmen3.php?id={FID}&edit=1">Bearbeiten</a></li>
 		</ul>
 	</div>

@@ -12,6 +12,7 @@
 <input type="hidden" name="employee" value="{employee}">
 <input type="hidden" name="grafik" value="{grafik}">
 {Msg}		
+<span style="float:left; width:485px;  text-align:left; border: 0px solid black;">
 <span style="float:left; width:295px; height:250px; text-align:left; border: 0px solid black;">
 	<div class="zeile">
 		<span class="label"></span>
@@ -92,6 +93,15 @@
 		<span class="smalfeld"><input type="text" name="shiptocontact" size="22" maxlength="75" value="{shiptocontact}" tabindex="20"></span>
 	</div>
 </span>
+<span style="float:both;  text-align:left; border: 0px solid black;">
+		Bemerkungen<br>
+		<textarea name="notes" cols="70" rows="3" tabindex="21">{notes}</textarea>
+			<input type="submit" name="saveneu" value="sichern neu" tabindex="33"> &nbsp;
+			<input type="submit" name="reset" value="clear" tabindex="34"> &nbsp;
+			<input type="button" name="" value="VCard" onClick="vcard()" tabindex="35"> &nbsp;
+			{Btn2} &nbsp;{Btn1} 
+</span>
+</span>
 <span style="float:left; width:270px; height:350px; text-align:left; border: 0px solid black;">
 	<div class="zeile">
 		<span class="label"></span>
@@ -163,14 +173,7 @@
 	</div>
 
 </span>
-<span style="position:absolute; left:1px; top:270px; width:475px; text-align:center; border: 0px solid red;">
-		Bemerkungen<br>
-		<textarea name="notes" cols="70" rows="3" tabindex="21">{notes}</textarea>
-			<input type="submit" name="saveneu" value="sichern neu" tabindex="33"> &nbsp;
-			<input type="submit" name="reset" value="clear" tabindex="34"> &nbsp;
-			<input type="button" name="" value="VCard" onClick="vcard()" tabindex="35"> &nbsp;
-			{Btn2} &nbsp;{Btn1} 
-</span>
+
 </form>
 <!-- End Code ------------------------------------------->
 </span>

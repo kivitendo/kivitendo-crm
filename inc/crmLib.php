@@ -1746,6 +1746,9 @@ global $db;
 	if(!$rs) {
 		return false;
 	} else {
+		if ($tmp[0]=='') {
+           		$tmp[0]=0;
+         	}
 		$sql="update wissencategorie set name='".$data["catname"]."',hauptgruppe='".$tmp[0]."' where id = ".$rs[0]["id"];
 		$rc=$db->query($sql);
 		return ($rc)?$rs[0]["id"]:false;

@@ -11,6 +11,11 @@
 		insFaKont($_POST);
 		$fid=$_POST["fid"];
 	}
+	if ($_GET["ldap"]) {
+		include("inc/ldapLib.php");
+		$rc=Ldap_add_Customer($fid);
+		echo "!$rc!";
+	}
 	if ($id) {
 		$co=getKontaktStamm($id);
 		if (empty($co["cp_cv_id"])) {
@@ -54,6 +59,7 @@
 			Link2 => $link2,
 			Link3 => $link3,
 			Link4 => $link4,
+			none => "visible",
 			ep => $ep,
 			Edit => "Bearbeiten",
 			Anrede => $co["cp_greeting"],
@@ -159,6 +165,7 @@
 				Link2 => $link2,
 				Link3 => $link3,
 				Link4 => $link4,
+				none => "hidden",
 				KDNR	=> $fa["customernumber"],
 				Fname1 => $fa["name"],
 				Fdepartment_1 => $fa["department_1"],

@@ -1,5 +1,5 @@
 <?
-// $Id: liefer2.php,v 1.4 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");
@@ -39,6 +39,7 @@
 			Link2 => $link2,
 			Link3 => $link3,
 			Link4 => $link4,
+			none => "visible",
 			Edit => "Edit",
 			Anrede => $co["cp_greeting"],
 			Titel => $co["cp_title"],
@@ -142,6 +143,7 @@
 				Link2 => $link2,
 				Link3 => $link3,
 				Link4 => $link4,
+				none => "hidden",
 				LInr => $fa["vendornumber"],
 				Lname => $fa["name"],
 				Ldepartment_1 => $fa["department_1"],

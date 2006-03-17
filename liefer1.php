@@ -25,6 +25,7 @@
 	} else {
 		$rab="";
 	}
+	$views=array(""=> "lie",1=>"lie",2=>"not",3=>"inf");
 	$t->set_var(array(
 			LInr		=> $li["vendornumber"],
 			KDnr		=> $li["v_customer_id"],
@@ -67,7 +68,8 @@
 			IMG		=> $Image,
 			PAGER		=> $pager,
 			NEXT		=> $next,
-			PREV		=> $prev	
+			PREV		=> $prev,
+			kdview => $views[$_SESSION["kdview"]],	
 			));
 		$t->set_block("Li1","Liste","Block");
 		$i=0;

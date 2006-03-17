@@ -27,6 +27,7 @@
 	} else {
 		$rab="";
 	}
+	$views=array(""=> "lie",1=>"lie",2=>"not",3=>"inf");
 	$t->set_var(array(
 			FID	=> $id,
 			INID	=> db2date(substr($fa["itime"],0,10)),
@@ -75,7 +76,11 @@
 			NEXT	=> $next,
 			PREV	=> $prev,
 			login	=> $_SESSION["employee"],
-			password	=> $_SESSION["password"]
+			password	=> $_SESSION["password"],
+			leadsrc => $fa["leadsrc"],
+			erstellt => db2date($fa["itime"]),
+			modify => db2date($fa["mtime"]),
+			kdview => $views[$_SESSION["kdview"]],
 			));
 		$t->set_block("fa1","Liste","Block");
 		$i=0;

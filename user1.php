@@ -1,5 +1,5 @@
 <?php
-// $Id: user1.php,v 1.6 2005/12/22 13:35:53 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");
@@ -27,7 +27,6 @@
 		$tbeg.="<option value=$z".(($i==$z)?" selected":"").">$z";
 		$tend.="<option value=$z".(($j==$z)?" selected":"").">$z";
 	}
-	
 	$t->set_var(array(
 			Login => $fa["Login"],
 			Name => $fa["Name"],
@@ -47,6 +46,7 @@
 			Postf2 => $fa["Postf2"],
 			Interv => $fa["Interv"],
 			Pre => $fa["Pre"],
+			kdview.$fa["kdview"] => "selected",
 			Abteilung => $fa["Abteilung"],
 			Position => $fa["Position"],
 			termbegin => $tbeg,

@@ -1,11 +1,12 @@
 <?
-// $Id: suchFa.php,v 1.4 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/FirmaLib.php");
 	include("inc/LieferLib.php");
 	include("inc/persLib.php");
 
 	$pers=$_GET["pers"];
+	$op=$_GET["op"];
 ?>
 <html>
 	<script language="JavaScript">
@@ -17,6 +18,8 @@
 			opener.document.formular.name.value=txt;
 <? if ($pers==1) { ?>
 			opener.document.formular.cp_cv_id.value=val;
+<? } else if ($op) { ?>
+			opener.document.formular.fid.value=val.substr(1,val.length);
 <? } else {?>
 			opener.document.formular.cp_cv_id.value=val.substr(1,val.length);
 <? } ?>

@@ -4,7 +4,7 @@
 	include("inc/template.inc");
 	include("inc/crmLib.php");
 	if ($_POST["newcat"]) {
-		$catinput="<input type='text' size='20' name='catname'> <input type='submit' name='savecat' value='ok'><br>";
+		$catinput="<input type='text' size='20' name='catname'> <input type='image' src='image/save_kl.png' title='sichern' name='savecat' value='ok'><br>";
 	} else if ($_POST["savecat"]) {
 		$rc=insWCategorie($_POST);
 	}
@@ -23,10 +23,10 @@
 			$datum=substr($content["initdate"],8,2).".".substr($content["initdate"],5,2).".".substr($content["initdate"],0,4);
 			$datum.=" ".substr($content["initdate"],11,2).":".substr($content["initdate"],14,2);
 			$hl="Versionsnummer: ".$content["version"]." vom $datum Benutzer: ".$content["login"];
-			$button="<input type='submit' name='edit' value='Edit'>";
+			$button="<input type='image' src='image/edit_kl.png' title='Editieren' name='edit' value='Edit'>";
 		} else {
 			$hl="Bitte einen Beitrag w&auml;hlen";
-			$button="<input type='submit' name='neu' value='Neuer Beitrag'>";
+			$button="<input type='image' src='image/neu.png' title='Neuer Beitrag'  name='neu' value='Neuer Beitrag'>";
 		}
 
 	} else if ($_POST["history"]){
@@ -39,7 +39,7 @@
 			$content["version"]=$cnt;
 		}
 		if ($rs) {
-			$button="<input type='submit' name='reload' value='Normal'>";
+			$button="<input type='image' src='image/cancel_kl.png' title='Normale Ansicht' name='reload' value='Normal'>";
 			for ($i=0; $i<$cnt; $i++) {
 				$datum=substr($rs[$i]["initdate"],8,2).".".substr($rs[$i]["initdate"],5,2).".".substr($rs[$i]["initdate"],0,4);
 				$datum.=" ".substr($rs[$i]["initdate"],11,2).":".substr($rs[$i]["initdate"],14,2);
@@ -58,24 +58,24 @@
 			$datum=substr($content["initdate"],8,2).".".substr($content["initdate"],5,2).".".substr($content["initdate"],0,4);
 			$datum.=" ".substr($content["initdate"],11,2).":".substr($content["initdate"],14,2);
 			$hl="Versionsnummer: ".$content["version"]." vom $datum Benutzer: ".$content["login"];
-			$button="<input type='submit' name='edit' value='Edit'>";
+			$button="<input type='image' src='image/edit_kl.png' title='Editieren' name='edit' value='Edit'>";
 		} else {
 			$hl="Bitte einen Beitrag w&auml;hlen";
-			$button="<input type='submit' name='neu' value='Neuer Beitrag'>";
+			$button="<input type='image' src='image/neu.png' title='Neuer Beitrag'  name='neu' value='Neuer Beitrag'>";
 		}
 		if ($_POST["edit"]) {
 			$datum=substr($content["initdate"],8,2).".".substr($content["initdate"],5,2).".".substr($content["initdate"],0,4);
 			$datum.=" ".substr($content["initdate"],11,2).":".substr($content["initdate"],14,2);
 			$hl="letzte Versionsnummer: ".$content["version"]." vom $datum Benutzer: ".$content["login"];
-			$button="<input type='submit' name='savecontent' value='Save'>";
-			$button.=" <input type='submit' name='abbruch' value='Abbruch'>";
+			$button="<input type='image' src='image/save_kl.png' tilte='Sichern' name='savecontent' value='Save'>";
+			$button.=" <input type='image' src='image/cancel_kl.png' title='Abbruch' name='abbruch' value='Abbruch'>";
 			$pre="<textarea id='elm1' name='content' cols='75' rows='18'>";
 			$post="</textarea>";
 		}
 		if ($_POST["neu"]) {
 			$hl="Neuer Beitrag. Versionsnummer: 1 am ".date("d.m.Y")." Benutzer: ".$_SESSION["loginCRM"];
-			$button="<input type='submit' name='savecontent' value='Save'>";
-			$button.=" <input type='submit' name='abbruch' value='Abbruch'>";
+			$button="<input type='image' src='image/save_kl.png' tilte='Sichern' name='savecontent' value='Save'>";
+			$button.=" <input type='image' src='image/cancel_kl.png' title='Abbruch' name='abbruch' value='Abbruch'>";
 			$pre="<textarea id='elm1' name='content' cols='75' rows='18'>";
 			$post="</textarea>";
 		}
@@ -126,7 +126,7 @@ function Thread($HauptGrp,$t,$m,&$tpl)    {
 		pre => $pre,
 		post =>  $post,
 		button1 => $button,
-		button2 => ($content["version"]>1)?"<input type='submit' name='history' value='History'>":"",
+		button2 => ($content["version"]>1)?"<input type='image' src='image/history_kl.png' title='History' name='history' value='History'>":"",
 		catinput => $catinput,
 		tiny => $tiny
 		));

@@ -16,4 +16,20 @@ version integer,
 categorie integer
 );
 ALTER TABLE customer ADD COLUMN lead integer;
-
+ALTER TABLE customer ADD COLUMN leadsrc character varying(15);
+CREATE TABLE opportunity(
+id integer DEFAULT nextval('id'::text) NOT NULL,
+fid integer,
+title character varying(100),
+betrag numeric (15,5),
+zieldatum date,
+chance integer,
+status integer,
+notiz text,
+itime timestamp DEFAULT now(),
+mtime timestamp,
+iemployee integer,
+memployee integer
+);
+ALTER TABLE employee ADD COLUMN kdview integer DEFAULT 1;
+UPDATE employee SET kdview = 1;

@@ -1,5 +1,5 @@
 <?
-// $Id: UserLib.php,v 1.3 2005/09/16 11:59:28 hli Exp $
+// $Id$
 
 /****************************************************
 * chkTable
@@ -37,7 +37,7 @@ global $db;
 	$sql.="msrv='".$val["Msrv"]."', postf='".$val["Postf"]."', kennw='".$val["Kennw"]."', countrycode='".$val["countrycode"]."', postf2='";
 	$sql.=$val["Postf2"]."', interv='".$val["Interv"]."', pre='".$val["Pre"]."', abteilung='".$val["Abteilung"]."',";
 	$sql.="position='".$val["Position"]."', vertreter=$vertreter,mailsign='".$val["MailSign"]."',email='".$val["eMail"];
-	$sql.="',termbegin=".$val["termbegin"].",termend=".$val["termend"]." where id=".$val["UID"];
+	$sql.="',termbegin=".$val["termbegin"].",termend=".$val["termend"].",kdview=".$val["kdview"]." where id=".$val["UID"];
 	$rc=$db->query($sql);
 	if ($val["Tel1"]) mkTelNummer($val["UID"],"E",array($val["Tel1"]));
 }
@@ -103,6 +103,7 @@ global $db;
 		$daten["countrycode"]=$rs[0]["countrycode"];
 		$daten["termbegin"]=$rs[0]["termbegin"];
 		$daten["termend"]=$rs[0]["termend"];
+		$daten["kdview"]=$rs[0]["kdview"];
 		return $daten;
 	}
 }

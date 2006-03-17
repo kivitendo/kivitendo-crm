@@ -129,8 +129,8 @@ global $ERPNAME;
         if ($hits[1]) {
 		$dbpasswd=uudecode($hits[1]);
 	} else {
-        $dbpasswd="";
-    };
+        	$dbpasswd="";
+	};
 	preg_match("/dbuser => '(.+)'/",$tmp,$hits);
 	$dbuser=$hits[1];
 	preg_match("/dbhost => '(.+)'/",$tmp,$hits);
@@ -146,9 +146,6 @@ global $ERPNAME;
 	$_SESSION["db"]=new myDB($_SESSION["dns"]);
    	$_SESSION["employee"]=$_GET["login"];
    	$_SESSION["password"]=$_GET["password"];
-	$_SESSION["Pre"]=$tmp["pre"];
-	$_SESSION["loginCRM"]=$tmp["id"];
-	$_SESSION["lang"]=$tmp["countrycode"]; //"de";
 	$_SESSION["mansel"]=$dbname;
 	$_SESSION["dbname"]=$dbname;
 	$_SESSION["dbhost"]=$dbhost;
@@ -162,11 +159,12 @@ global $ERPNAME;
 	} else {
 		if ($rs) {
 			$tmp=$rs[0];
-		    $_SESSION["termbegin"]=($tmp["termbegin"])?$tmp["termbegin"]:8;
-		    $_SESSION["termend"]=($tmp["termend"])?$tmp["termend"]:19;
+			$_SESSION["termbegin"]=($tmp["termbegin"])?$tmp["termbegin"]:8;
+			$_SESSION["termend"]=($tmp["termend"])?$tmp["termend"]:19;
 			$_SESSION["Pre"]=$tmp["pre"];
 			$_SESSION["loginCRM"]=$tmp["id"];
 			$_SESSION["lang"]=$tmp["countrycode"]; //"de";
+			$_SESSION["kdview"]=$tmp["kdview"];
 			return true;
 		} else {
 			return false;

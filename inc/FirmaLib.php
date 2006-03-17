@@ -126,7 +126,7 @@ function suchstr($muster) {
 			department_1 => array(0,1),department_2 => array(0,1),
 			country => array(0,1),typ => array(0,0),sw => array(0,1),
 			language => array(0,0), business_id => array(0,0),
-			ustid => array(0,1), taxnumber => array(0,0), lead => array(0,0),
+			ustid => array(0,1), taxnumber => array(0,0), lead => array(0,0),leadsrc => array(0,1),
 			bank => array(0,1), bank_code => array(0,0), account_number => array(0,0));
 	$dbfld2=array(name => "shiptoname", street=>"shiptostreet",ziptocode=>"shiptozipcode",
 			city=>"shiptocity",phone=>"shiptophone",fax=>"shiptofax",
@@ -191,7 +191,16 @@ global $db;
 	}
 	return $daten;
 }
-
+function getName($id) {
+global $db;
+	$sql="select name from customer where id = $id";
+	$rs=$db->getAll($sql);
+	if ($rs) {
+		return $rs[0]["name"];
+	} else {
+		return false;
+	}
+}
 /****************************************************
 * saveFirmaStamm
 * in: daten = array
@@ -223,7 +232,7 @@ global $db;
 			account_number => array(0,0,6,"Kontonummer",15),
 			branche => array(0,0,1,"Branche",25),	business_id => array(0,0,6,"Kundentyp",0),
 			owener => array(0,0,6,"CRM-User",0),	grafik => array(0,0,9,"Grafik",4),
-			lead => array(0,0,6,"Leadquelle",0),
+			lead => array(0,0,6,"Leadquelle",0),	leadsrc => array(0,0,1,"Leadquelle",15),
 			shiptoname => array(1,0,1,"Liefername",75), 
 			shiptostreet => array(1,0,1,"Lieferstrasse",75),
 			shiptocountry => array(1,0,8,"Lieferland",3),
@@ -478,6 +487,7 @@ function leertpl (&$t,$tpl,$msg="") {
 			ustid	=> "",
 			taxnumber => "",
 			contact => "",
+			leadsrc => "",
 			notes	=> "",
 			bank	=> "",
 			bank_code	=> "",
@@ -572,6 +582,7 @@ function vartpl (&$t,$daten,$msg,$btn1,$btn2,$tpl) {
 				ustid	=> $daten["ustid"],
 				taxnumber => $daten["taxnumber"],
 				contact	=> $daten["contact"],
+				leadsrc => $daten["leadsrc"],
 				notes	=> $daten["notes"],
 				bank	=> $daten["bank"],
 				bank_code	=> $daten["bank_code"],

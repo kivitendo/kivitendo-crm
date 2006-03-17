@@ -511,7 +511,7 @@ global $db;
 		$data["Change"]=$rs[0]["changedate"];
 		$data["Finish"]=($rs[0]["finishdate"]<>"")?db2date(substr($rs[0]["finishdate"],0,12)):"";
 		$data["Cause"]=$rs[0]["cause"];
-		$data["LangTxt"]=stripslashes(ereg_replace("<br />","\n",$rs[0]["descript"]));
+		$data["LangTxt"]=stripslashes(ereg_replace("<br />","",$rs[0]["descript"]));
 		$data["Datei"]=$rs[0]["document"];
 		$data["DName"]=$name;
 		$data["DPath"]=$path;
@@ -1854,5 +1854,56 @@ $text2=implode(" ", $safe2);
 $text1=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace('°',' ','\\1')",$text1);
 $text2=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace('°',' ','\\1')",$text2);
 return array($text1,$text2);
+}
+function getOneOpportunity($id) {
+global $db;
+	$sql="select O.*,C.name as firma from  opportunity O left join customer C on O.fid=C.id where O.id = $id";
+	$rs=$db->getAll($sql);
+	return $rs[0];
+}
+function getOpportunity($fid) {
+global $db;
+	$sql="select O.*,C.name as firma from  opportunity O left join customer C on O.fid=C.id where fid = $fid";
+	$rs=$db->getAll($sql);
+	return $rs;
+}
+function suchOpportunity($data) {
+global $db;
+	if ($data) while (list($key,$val)=each($data)) {
+		if (in_array($key,array("title","notiz","zieldatum")) and $val) { $val=str_replace("*","%",$val); $where.="and $key like '$val%' "; }
+		else if (in_array($key,array("fid","status","chance")) and $val) { $where.="and $key = $val "; };
+	}
+	$sql="select O.*,C.name as firma from  opportunity O left join customer C on O.fid=C.id where ".substr($where,3);
+	$rs=$db->getAll($sql);
+	return $rs;
+}
+function saveOpportunity($data) {
+global $db;
+	if ($data["fid"] and $data["title"] and $data["betrag"] and $data["status"] and $data["chance"] and $data["zieldatum"]) {
+	$data["betrag"]=str_replace(",",".",$data["betrag"]);
+	if (!$data["id"]) {
+		$newID=uniqid (rand());
+		$sql="insert into opportunity (title) values ('$newID')";
+		$rc=$db->query($sql);
+		$sql="select * from opportunity where title='$newID'";
+		$rs=$db->getAll($sql);
+		if(!$rs) {
+			return false;
+		} else {
+			$data["id"]=$rs[0]["id"];
+		}
+	}
+	$datum=date2db($data["zieldatum"]);
+		$tmp="update opportunity set fid=%d,title='%s',zieldatum='%s', betrag=%s, chance=%d, status=%d, notiz='%s', mtime='%s',memployee=%d where id=%d";
+		$sql=sprintf($tmp,$data["fid"],$data["title"],$datum,$data["betrag"],$data["chance"],$data["status"],$data["notiz"],date("Y-m-d H:i:s"),$_SESSION["loginCRM"],$data["id"]);
+		$rc=$db->query($sql);
+		if ($rc) {
+			return $data["id"];
+		} else {
+			return false;
+		}
+	} else { 
+		return false;
+	}
 }
 ?>

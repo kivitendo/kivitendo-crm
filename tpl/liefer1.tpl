@@ -31,7 +31,7 @@
 		}
 	//-->
 	</script>
-<body>
+<body onLoad="submenu('{kdview}');">
 <p class="listtop">Detailansicht</p>
 <div style="position:absolute; top:33px; left:8px;  width:770px;">
 	<ul id="tabmenue">
@@ -74,7 +74,7 @@
 	<span id="lie" style="visibility:visibile; position:absolute; text-align:left;width:48%; left:5px; top:245px;" >
 		<div class="smal" >
 		<br />
-		{Sname} &nbsp;&nbsp;<a href="#" onCLick="anschr(2);"><img src="image/brief.gif" alt="Etikett drucken" border="0" /></a><br />
+		{Sname} &nbsp;&nbsp;<a href="#" onCLick="anschr(2);"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a><br />
 		{Sdepartment_1}<br />
 		{SStrasse}<br />
 		<span class="mini">&nbsp;<br /></span>
@@ -118,11 +118,11 @@
 </table>
 	<span style="position:absolute; bottom:10px;  text-align:left; border:0px solid black">
 		<form name="ksearch" onSubmit="return ks();"> &nbsp; 
-		<a href="liefer1.php?id={FID}&start={PREV}">&lt;</a> 
-			<a href="liefer1.php?id={FID}&start={PAGER}" class="bold">neu laden</a> 
-		<a href="liefer1.php?id={FID}&start={NEXT}">&gt; &nbsp;</a>
-			<input type="text" name="suchwort" size="20">
-			<input type="submit" name="ok" value="suchen">
+		<a href="liefer1.php?id={FID}&start={PREV}"><img src="image/leftarrow.png" align="middle" border="0" title="zur&uuml;ck"></a> 
+		<a href="liefer1.php?id={FID}&start={PAGER}" class="bold"><img src="image/reload.png" align="middle" border="0" title="reload"></a></a> 
+		<a href="liefer1.php?id={FID}&start={NEXT}"><img src="image/rightarrow.png" align="middle" border="0" title="mehr">&nbsp;
+		<input type="text" name="suchwort" size="20">
+		<input type="image" src="image/suchen_kl.png" name="ok" value="suchen" align="middle" border="0">
 		</form>
 	</span>
 </span>

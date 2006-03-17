@@ -28,6 +28,7 @@
 	{Name} &nbsp; {KDNR}<br />
 	{Plz} {Ort}
 </div>
+<span style="position:absolute; left:470px; top:7px;">[<a href="opportunity.php?fid={FID}">Auftragschancen</a>]</span>
 <div style="position:absolute; left:1px; top:45px; width:99%;text-align:center;" class="normal">
 	Nettoums&auml;tze &uuml;ber 12 Monate 
 	[<a href='firma3.php?fid={FID}&jahr={JAHRZ}'>Fr&uuml;her</a>] [<a href='firma3.php?fid={FID}&jahr={JAHRV}'>{JAHRVTXT}</a>]

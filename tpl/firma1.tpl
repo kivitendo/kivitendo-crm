@@ -35,7 +35,7 @@
 	//-->
 	</script>
 	</head>
-<body>
+<body onLoad="submenu('{kdview}');">
 <p class="listtop">Detailansicht</p>
 <div style="position:absolute; top:33px; left:8px;  width:770px;">
 	<ul id="tabmenue">
@@ -63,14 +63,15 @@
 	<div style="float:left; width:33%; height:165px; text-align:right; border-bottom: 0px solid black; padding:2px;" class="gross">
 		{KDNR}<br />
 		{IMG}<br /><br />
-		<a href="#" onCLick="anschr(1);" title="Briefanschrift &amp; Etikett"><img src="image/brief.gif" alt="Etikett drucken" border="0" /></a><br />
 			<form action="../oe.pl" method="post">
 	  		<input type="hidden" name="path" value="bin/mozilla">
 			<input type="hidden" name="login" value="{login}">
 			<input type="hidden" name="action" value="add">
 			<input type="hidden" name="type" value="sales_order">
 			<input type="hidden" name="password" value="{password}">
-	  		<input type="hidden" name="customer_id" value="{FID}"><input type="submit" value="Auftrag" title="neuen Auftrag eingeben"></form>
+	  		<input type="hidden" name="customer_id" value="{FID}"><input type="image" src="image/auftrag.png" value="Auftrag" title="neuen Auftrag eingeben">&nbsp;
+			<a href="#" onCLick="anschr(1);" title="Briefanschrift &amp; Etikett"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a></form>
+
 	</div>
 	<div style="float:both; width=100%; height:215px; text-align:left; border-bottom: 1px solid black;" class="gross">
 		<a href="mail.php?TO={eMail}&KontaktTO=C{FID}">&nbsp;{eMail}</a><br />
@@ -87,7 +88,7 @@
 	<span id="lie" style="visibility:visibile; position:absolute; text-align:left;width:48%; left:5px; top:245px;" >
 		<div class="smal" >
 		<br />
-		{Sname1} &nbsp;&nbsp;<a href="#" onCLick="anschr(2);"><img src="image/brief.gif" alt="Etikett drucken" border="0" /></a><br />
+		{Sname1} &nbsp;&nbsp;<a href="#" onCLick="anschr(2);"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a><br />
 		{Sdepartment_1}<br />
 		{SStrasse}<br />
 		<span class="mini">&nbsp;<br /></span>
@@ -110,8 +111,9 @@
 
 	<span id="inf" style="visibility:hidden;position:absolute; text-align:left;width:48%; left:5px; top:245px;">
 		<div class="smal" >
-		Kundentyp: <span class="value">{kdtyp}</span> &nbsp;&nbsp;&nbsp; Leadquelle:<span class="value">{lead}</span> <br />
+		Kundentyp: <span class="value">{kdtyp}</span> &nbsp;&nbsp;&nbsp; Leadquelle:<span class="value">{lead} {leadsrc}</span><br />
 		Rabatt: <span class="value">{rabatt}</span> &nbsp;&nbsp;&nbsp; Preisgruppe: <span class="value">{preisgrp}</span><br /><br />
+		Erstelldatum: <span class="value">{erstellt}</span> &nbsp;&nbsp;&nbsp; Ge&auml;ndert:<span class="value">{modify}</span <br />
 		Steuer-Nr.: <span class="value">{Taxnumber}</span> &nbsp;&nbsp;&nbsp; UStId: <span class="value">{USTID}</span><br /><br />
 		Zahlungsziel: <span class="value">{terms}</span> Tage &nbsp;&nbsp;&nbsp;Kreditlimit: <span class="value">{kreditlim}</span><br />
 		Offene Posten: <span class="value">{op}</span> &nbsp;&nbsp;&nbsp;offene Auftr&auml;ge: <span class="value">{oa}</span><br /><br />
@@ -133,12 +135,12 @@
 <!-- END Liste -->
 </table>
 	<span style="position:absolute; bottom:10px;  text-align:left; border:0px solid black">
-		<form name="ksearch" onSubmit="return ks();"> &nbsp; 
-		<a href="firma1.php?id={FID}&start={PREV}">&lt;</a> 
-			<a href="firma1.php?id={FID}&start={PAGER}" class="bold">neu laden</a> 
-		<a href="firma1.php?id={FID}&start={NEXT}">&gt; &nbsp;</a>
-			<input type="text" name="suchwort" size="20">
-			<input type="submit" name="ok" value="suchen">
+		<form name="ksearch" onSubmit="return ks();"> &nbsp;
+		<a href="firma1.php?id={FID}&start={PREV}"><img src="image/leftarrow.png" align="middle" border="0" title="zur&uuml;ck"></a> 
+		<a href="firma1.php?id={FID}&start={PAGER}" class="bold"><img src="image/reload.png" align="middle" border="0" title="reload"></a></a> 
+		<a href="firma1.php?id={FID}&start={NEXT}"><img src="image/rightarrow.png" align="middle" border="0" title="mehr">&nbsp;
+		<input type="text" name="suchwort" size="20">
+		<input type="image" src="image/suchen_kl.png" name="ok" value="suchen" align="middle" border="0"> 
 		</form>
 	</span>
 </span>

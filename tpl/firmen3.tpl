@@ -107,10 +107,10 @@
 <span style="float:both;  text-align:left; border: 0px solid black;">
 		Bemerkungen<br>
 		<textarea name="notes" cols="70" rows="3" tabindex="21">{notes}</textarea><br />
-			<input type="submit" name="saveneu" value="sichern neu" tabindex="34"> &nbsp;
-			<input type="submit" name="reset" value="clear" tabindex="35"> &nbsp;
-			<input type="button" name="" value="VCard" onClick="vcard()" tabindex="36"> &nbsp;
-			{Btn2} &nbsp;{Btn1} 
+			{Btn1} &nbsp;{Btn2} &nbsp; 
+			<input type="submit" name="saveneu" value="sichern neu" tabindex="37"> &nbsp;
+			<input type="submit" name="reset" value="clear" tabindex="38"> &nbsp;
+			<input type="button" name="" value="VCard" onClick="vcard()" tabindex="39">
 </span>
 </span>
 <span style="float:left; width:270px; height:350px; text-align:left; border: 0px solid black;">
@@ -153,17 +153,18 @@
 	<div class="zeile">
 		<span class="label">Leadquelle</span>
 		<span class="smalfeld">
-			<select name="lead" tabindex="30">
+			<select name="lead" tabindex="30" style="width:110px;">
 <!-- BEGIN LeadListe -->
 				<option value="{Lid}" {Lsel}>{Lead}</option>
 <!-- END LeadListe -->
 			</select>
+			<input type="text" name="leadsrc" size="5" maxlength="15" value="{leadsrc}" tabindex="30">
 		</span>
 	</div>
 	<div class="zeile">
 		<span class="label">Kundentyp</span>
 		<span class="smalfeld">
-			<select name="business_id" tabindex="31">
+			<select name="business_id" tabindex="32">
 <!-- BEGIN TypListe -->
 				<option value="{Bid}" {Bsel}>{Btype}</option>
 <!-- END TypListe -->
@@ -177,7 +178,7 @@
 	<div class="zeile">
 		<span style="text-align:center;">
 			<center>
-			<input type="file" name="Datei" size="14" maxlength="125" accept="Image/*" tabindex="32">
+			<input type="file" name="Datei" size="14" maxlength="125" accept="Image/*" tabindex="33">
 			</center>
 		</span>
 	</div>
@@ -185,7 +186,7 @@
 	<div>
 		<span class="label">Berechtig.</span>
 		<span class="smalfeld">
-			<select name="owener" tabindex="33">
+			<select name="owener" tabindex="34">
 <!-- BEGIN OwenerListe -->
 				<option value="{grpid}" {Gsel}>{Gname}</option>
 <!-- END OwenerListe -->

@@ -111,11 +111,12 @@
 	<div class="zeile">
 		<span class="label">Leadquelle</span>
 		<span class="leftfeld">
-			<select name="lead" tabindex="11">
+			<select name="lead" tabindex="11" style="width:110px;">
 <!-- BEGIN LeadListe -->	
 				<option value="{Lid}" {Lsel}>{Lead}</option>
 <!-- END LeadListe -->				
 			</select>
+			<input type="text" name="leadsrc" size="5" value="{leadsrc}">
 		</span>
 	</div>
 	<div class="zeile">

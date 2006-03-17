@@ -43,14 +43,14 @@
 		<span class="mini">&nbsp;<br /></span>
 		{LandC}{PlzC} {OrtC}<br />
 		<span class="mini">&nbsp;<br /></span>
-		<img src="image/telefon.gif"> {Telefon}<br />
-		&nbsp;<img src="image/mobile.gif"> {Mobile}<br />
-		<img src="image/fax.gif"> {Fax}<br />
+		<img src="image/telefon.gif" style="visibility:{none};"> {Telefon}<br />
+		&nbsp;<img src="image/mobile.gif" style="visibility:{none};"> {Mobile}<br />
+		<img src="image/fax.gif" style="visibility:{none};"> {Fax}<br />
 		<a href="mail.php?TO={eMail}&KontaktTO=K{PID}">{eMail}</a><br />
 		<a href="{www}" target="_blank">{www}</a><br /><br />
 	</div>
 	<div style="float:left; width:30%; height:210px; text-align:right; border-bottom: 1px solid black;" class="gross">
-		{PID} &nbsp; <a href="#" onCLick="anschr();"><img src="image/brief.gif" border="0"></a><br />
+		{PID} &nbsp; <a href="#" onCLick="anschr();"><img src="image/brief.png" border="0" style="visibility:{none};"></a><br />
 		{IMG}</br >
 		{GebDat}</br />
 		{Position}<br />
@@ -77,13 +77,13 @@
 <!-- END Liste -->
 </table>
 	<!--span style="float:left;  text-align:left; border:0px solid black"-->	
-	<span style="position:absolute; bottom:10px;">
+	<span style="position:absolute; bottom:10px; visibility:{none};">
 		<form name="ksearch" onSubmit="return ks();"> &nbsp; 
-		<a href="firma2.php?id={PID}&start={PREV}">&lt;</a> 
-			<a href="firma2.php?id={PID}&start={PAGER}" class="bold">neu laden</a> 
-		<a href="firma2.php?id={PID}&start={NEXT}">&gt; &nbsp;
+		<a href="liefer2.php?id={PID}&start={PREV}"><img src="image/leftarrow.png" align="middle" border="0" title="zur&uuml;ck"></a> 
+		<a href="liefer2.php?id={PID}&start={PAGER}" class="bold"><img src="image/reload.png" align="middle" border="0" title="reload"></a></a> 
+		<a href="liefer2.php?id={PID}&start={NEXT}"><img src="image/rightarrow.png" align="middle" border="0" title="mehr">&nbsp;
 		<input type="text" name="suchwort" size="20">
-			<input type="submit" name="ok" value="suchen">
+		<input type="image" src="image/suchen_kl.png" name="ok" value="suchen" align="middle" border="0">
 		</form>
 	</span>
 </span>

@@ -18,13 +18,13 @@
 	 	<br />
 		{catinput}
 		Eine neue Kategorie unter &quot;<b>{catname}</b>&quot;
-		<input type="submit" name="newcat" value="erstellen">
+		<input type="image" src="image/neu.png" name="newcat" title="Neue Kategorie erstellen" value="erstellen">
 	</div>
 	<div style="float:left; width:*; text-align:left; border: 0px solid blue; padding-left: 10px;" >
 		{headline}<br />
 		<hr />
 		{pre}{content}{post}<br />
-		{button1} {button2}
+		{button1} &nbsp; {button2}
 		</form>
 	</div>
 <!-- Hier endet die Karte ------------------------------------------->

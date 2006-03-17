@@ -1,4 +1,4 @@
-<!-- $Id: user1.tpl,v 1.4 2005/11/02 10:38:58 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title>User Stamm</title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -62,6 +62,13 @@
 		<td class="norm">gesch&auml;ftl.</td><td><input type="text" name="Tel2" value="{Tel2}" maxlength="30"></td></tr>
 	<tr><td class="norm">Bemerkung</td><td><textarea name="Bemerkung" cols="37" rows="3">{Bemerkung}</textarea></td>
 		<td class="norm">Mail-<br>unterschrift</td><td><textarea name="MailSign" cols="37" rows="3">{MailSign}</textarea></td></tr>
+	<tr><td class="norm">Kd-Ansicht</td><td>
+		<select name="kdview">
+		<option value="1"{kdview1}>Lieferanschrift
+		<option value="2"{kdview2}>Bemerkungen
+		<option value="3"{kdview3}>sonst.Infos
+		</select>
+	</td><td></td>
 	<tr><td class="norm">Regel</td><td>{Regel}</td>
 		<td>&nbsp;</td><td>{GRUPPE}</td></tr>
 	<tr><td class="norm">Mailserver</td><td><input type="text" name="Msrv" value="{Msrv}" maxlength="40"></td>

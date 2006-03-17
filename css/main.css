@@ -43,6 +43,8 @@ td.re		{ text-align:right;}
   display: inline; 
 }
 #tabmenue li a {
+  -moz-border-radius-topleft: 10px;
+  -moz-border-radius-topright: 10px;
   padding: 3px 1em;
   margin-left: 3px;
   text-decoration: none; 
@@ -61,6 +63,8 @@ td.re		{ text-align:right;}
   display: inline; 
 }
 #submenue li a {
+  -moz-border-radius-bottomleft: 10px;
+  -moz-border-radius-bottomright: 10px;
   padding: 2px ;
   border: 1px solid black;
   margin-top: 0px;
@@ -159,7 +163,6 @@ input:focus {
   padding-top: 3px;
   padding-right: 5px;
 }
-
 .smalfeld{
   padding-left: 2px;
   float: right;
@@ -171,8 +174,11 @@ input:focus {
   width: 205px;
   text-align: left;
 }
+.pad {
+  padding-top: 3px;
+  padding-left: 2px;
+}
 .leftfeld {
-  background-color=red;
   float: left;
   width: 205px;
   text-align: left;
@@ -195,3 +201,4 @@ input:focus {
 .diff2 {
 	color: red;
 }
+

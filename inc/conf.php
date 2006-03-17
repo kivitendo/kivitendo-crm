@@ -18,4 +18,5 @@ $cp_sonder=array(1 => "News", 2 => "Test 1");
 $showErr = true;
 $logmail = true;
 $tinymce = true;
+$jcalendar = true;
 $ERPNAME="lx-office-erp";?>

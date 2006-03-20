@@ -33,3 +33,9 @@ memployee integer
 );
 ALTER TABLE employee ADD COLUMN kdview integer DEFAULT 1;
 UPDATE employee SET kdview = 1;
+create table postit (
+id integer DEFAULT nextval('id'::text) NOT NULL,
+cause character varying(100),
+notes text,
+employee integer,
+date timestamp without time zone NOT NULL);

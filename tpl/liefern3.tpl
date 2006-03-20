@@ -2,7 +2,7 @@
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
-<body>
+<body onLoad="document.neueintrag.name.focus();">
 
 <p class="listtop"> Lieferanten eingeben/editieren</p>
 <span style="position:absolute; left:10px; top:47px; width:99%;">

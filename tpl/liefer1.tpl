@@ -56,14 +56,16 @@
 		Tel: {Telefon}<br />
 		Fax: {Fax}<br />	
 	</div>
-	<div style="float:left; width:33%; height:165px; text-align:right; border-bottom: 0px solid black; padding:2px;" class="gross">
+	<div style="float:left; width:33%; height:165px; text-align:right; border: 0px solid black; padding:2px;" class="gross">
 		{LInr}<br />
 		{IMG}<br /><br />
 	</div>
 	<div style="float:both; width=100%; height:215px; text-align:left; border-bottom: 1px solid black;" class="gross">
-		<a href="mail.php?TO={eMail}&KontaktTO=C{FID}">&nbsp;{eMail}</a><br />
-		<a href="{Internet}" target="_blank">&nbsp;{Internet}</a>
+		<a href="mail.php?TO={eMail}&KontaktTO=C{FID}">{eMail}</a><br />
+		<a href="{Internet}" target="_blank">{Internet}</a><br />
 
+	</div>
+	<div style="position:absolute; width=100%; height:17px; text-align:left; border-bottom: 0px solid black;left:5px; top:200px;" class="gross">
 		<ul id="submenue">
 			<li><a href="#" onClick="submenu('lie')">Lieferadresse</a></li>
 			<li><a href="#" onClick="submenu('not')">Notizen</a></li>
@@ -119,8 +121,8 @@
 	<span style="position:absolute; bottom:10px;  text-align:left; border:0px solid black">
 		<form name="ksearch" onSubmit="return ks();"> &nbsp; 
 		<a href="liefer1.php?id={FID}&start={PREV}"><img src="image/leftarrow.png" align="middle" border="0" title="zur&uuml;ck"></a> 
-		<a href="liefer1.php?id={FID}&start={PAGER}" class="bold"><img src="image/reload.png" align="middle" border="0" title="reload"></a></a> 
-		<a href="liefer1.php?id={FID}&start={NEXT}"><img src="image/rightarrow.png" align="middle" border="0" title="mehr">&nbsp;
+		<a href="liefer1.php?id={FID}&start={PAGER}" class="bold"><img src="image/reload.png" align="middle" border="0" title="reload"></a> 
+		<a href="liefer1.php?id={FID}&start={NEXT}"><img src="image/rightarrow.png" align="middle" border="0" title="mehr"></a>&nbsp;
 		<input type="text" name="suchwort" size="20">
 		<input type="image" src="image/suchen_kl.png" name="ok" value="suchen" align="middle" border="0">
 		</form>

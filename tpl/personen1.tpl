@@ -2,7 +2,7 @@
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
-<body>
+<body onLoad="document.formular.cp_greeting.focus();">
 <p class="listtop">Personensuche</p>
 
 <form name="formular" enctype='multipart/form-data' action="{action}" method="post">

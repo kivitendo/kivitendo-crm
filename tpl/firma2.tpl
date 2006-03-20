@@ -63,7 +63,8 @@
 	</div><br>
 	<div style="position:absolute; bottom:8px; width:49%; " class="normal">
 	<!--div style="float:none; width:100%; height:15px; text-align:center; border: 0px solid black;" class="normal"-->
-		[<a href="javascript:vcard()">VCard</a>] [<a href="personen3.php?id={PID}&edit=1&Quelle=F">{Edit}</a>]
+		<span style="visibility:{none};">[<a href="javascript:vcard()">VCard</a>]  
+		[<a href="personen3.php?id={PID}&edit=1&Quelle=F">{Edit}</a>]</span> 
 		[<a href="firma2.php?fid={PID}&ldap=1&Quelle=F">LDAP</a>]
 		<b>Kontakt:</b> [<a href="personen3.php?fid={FID}&Quelle=F">eingeben</a>] [<a href="personen1.php?fid={FID}&Quelle=F">aus Liste</a>]
 	</div>
@@ -81,12 +82,12 @@
 </table>
 	<!--span style="float:left;  text-align:left; border:0px solid black"-->	
 	<span style="position:absolute; bottom:10px; visibility:{none};">
-		<form name="ksearch" onSubmit="return ks();"> &nbsp; 
+		<form name="ksearch"> &nbsp; 
 		<a href="firma2.php?id={PID}&start={PREV}"><img src="image/leftarrow.png" align="middle" border="0" title="zur&uuml;ck"></a> 
-		<a href="firma2.php?id={PID}&start={PAGER}" class="bold"><img src="image/reload.png" align="middle" border="0" title="reload"></a></a> 
-		<a href="firma2.php?id={PID}&start={NEXT}"><img src="image/rightarrow.png" align="middle" border="0" title="mehr">&nbsp;
+		<a href="firma2.php?id={PID}&start={PAGER}" class="bold"><img src="image/reload.png" align="middle" border="0" title="reload"></a> 
+		<a href="firma2.php?id={PID}&start={NEXT}"><img src="image/rightarrow.png" align="middle" border="0" title="mehr"></a>&nbsp;
 		<input type="text" name="suchwort" size="20">
-		<input type="image" src="image/suchen_kl.png" name="ok" value="suchen" align="middle" border="0"> 
+		<input type="submit" src="image/suchen_kl.png" name="ok" value="suchen" align="middle" border="0"> 
 		</form>
 	</span>
 </span>

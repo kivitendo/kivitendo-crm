@@ -77,6 +77,8 @@
 		<a href="mail.php?TO={eMail}&KontaktTO=C{FID}">&nbsp;{eMail}</a><br />
 		<a href="{Internet}" target="_blank">&nbsp;{Internet}</a>
 
+	</div>
+	<div style="position:absolute; width=100%; height:17px; text-align:left; border-bottom: 0px solid black;left:5px; top:200px;" class="gross">
 		<ul id="submenue">
 			<li><a href="#" onClick="submenu('lie')">Lieferadresse</a></li>
 			<li><a href="#" onClick="submenu('not')">Notizen</a></li>
@@ -137,8 +139,8 @@
 	<span style="position:absolute; bottom:10px;  text-align:left; border:0px solid black">
 		<form name="ksearch" onSubmit="return ks();"> &nbsp;
 		<a href="firma1.php?id={FID}&start={PREV}"><img src="image/leftarrow.png" align="middle" border="0" title="zur&uuml;ck"></a> 
-		<a href="firma1.php?id={FID}&start={PAGER}" class="bold"><img src="image/reload.png" align="middle" border="0" title="reload"></a></a> 
-		<a href="firma1.php?id={FID}&start={NEXT}"><img src="image/rightarrow.png" align="middle" border="0" title="mehr">&nbsp;
+		<a href="firma1.php?id={FID}&start={PAGER}" class="bold"><img src="image/reload.png" align="middle" border="0" title="reload"></a> 
+		<a href="firma1.php?id={FID}&start={NEXT}"><img src="image/rightarrow.png" align="middle" border="0" title="mehr"></a>&nbsp;
 		<input type="text" name="suchwort" size="20">
 		<input type="image" src="image/suchen_kl.png" name="ok" value="suchen" align="middle" border="0"> 
 		</form>

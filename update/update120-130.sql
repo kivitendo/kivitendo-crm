@@ -31,7 +31,8 @@ mtime timestamp,
 iemployee integer,
 memployee integer
 );
-ALTER TABLE employee ADD COLUMN kdview integer DEFAULT 1;
+ALTER TABLE employee ADD COLUMN kdview integer;
+ALTER TABLE employee alter COLUMN kdview SET DEFAULT 1;
 UPDATE employee SET kdview = 1;
 create table postit (
 id integer DEFAULT nextval('id'::text) NOT NULL,

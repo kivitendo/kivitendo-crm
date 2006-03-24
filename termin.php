@@ -1,5 +1,5 @@
 <?php
-// $Id: termin.php,v 1.4 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");
@@ -53,6 +53,7 @@
 	if (!$Tag) $Tag=date("d");
 	if (!$Monat)$Monat=date("m");
 	if (!$Jahr) $Jahr=date("Y");
+	if (!$data["vondat"]) $data["vondat"]="$Tag.$Monat.$Jahr";
 	$t = new Template($base);
 	$t->set_file(array("term" => "termin.tpl"));
 	$t->set_block("term","User","Block");

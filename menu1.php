@@ -1,5 +1,5 @@
 <? 
-// $Id: menu1.php,v 1.5 2006/01/05 09:56:01 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	if ($_SESSION["loginCRM"])  {
 		function getVersion() {
@@ -24,8 +24,8 @@
 &quot;Lx-Office CRM&quot; ist ein Teilprodukt aus dem Lx-Office Paket.<br>
 
 die Software unterliegt der <a href="hilfe/artistic.html" target="_blank">Artistic License</a><br><br>
-Verwendete Datenbank: [<?= $_SESSION["dbname"] ?>] Version: [<?= $v ?>]  auf Server [<?= $_SESSION["dbhost"] ?>]<br>
-Benutzer: [<?= $_SESSION["employee"] ?>:<?= $_SESSION["loginCRM"] ?>] [<?= session_id() ?>]
+Verwendete Datenbank: [<?= $_SESSION["dbname"] ?>] Version<a href="info.php">:</a> [<?= $v ?>]  auf Server [<?= $_SESSION["dbhost"] ?>]<br>
+Benutzer<a href="showsess.php">:</a> [<?= $_SESSION["employee"] ?>:<?= $_SESSION["loginCRM"] ?>] [<?= session_id() ?>]
 <br><br><br>
 &gt;<a href="hilfe/index.html">Online-Hilfe</a>&lt;<br>
 </center>

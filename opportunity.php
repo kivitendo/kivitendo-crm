@@ -96,7 +96,8 @@
 		msg => $msg,
 		jcal0 => ($jcalendar)?$jscal:"",
 		jcal2 => ($jcalendar)?$jscal1:"",
-		jcal1 => ($jcalendar)?"<input type='image' src='image/date.png' title='Zieldatum suchen' name='zieldatum' align='middle' id='trigger1' value='?'>":""
+		//jcal1 => ($jcalendar)?"<input type='image' src='image/date.png' title='Zieldatum suchen' name='zieldatum' align='middle' id='trigger1' value='?'>":""
+		jcal1 => ($jcalendar)?"<a href='#' id='trigger1' name='zieldatum' title='Zieldatum suchen' onClick='false'><img src='image/date.png' border='0' align='middle'></a>":""
 	));
 	$t->pparse("out",array("op"));
 ?>

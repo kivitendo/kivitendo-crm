@@ -1,4 +1,4 @@
-<!-- $Id:  $ -->
+<!-- $Id$ -->
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -100,8 +100,9 @@
 	<div class="zeile">
 		<span class="label"></span>
 		<span class="leftfeld" style="width:350px; display:{none};" id="ok">
+			<input type="image" src="image/suchen_kl.png" alt='Suchen' title='Suchen' name="suchen" value="suchen" style="visibility:{search};"> &nbsp;
 			<input type='image' src='image/save_kl.png' alt='Sichern' title='Sichern' name='save' value='neu' style="visibility:{save};"> &nbsp; 
-			<input type="image" src="image/suchen_kl.png" alt='Suchen' title='Suchen' name="suchen" value="suchen" style="visibility:{search};"> {msg}
+			{msg}
 		</span>
 	</div>
 

@@ -37,8 +37,10 @@
 <center>Gefundene - Eintr&auml;ge:<br><br>
 <form name="firmen">
 <select name="Alle" >
+	<option value=''>Einzelperson</option>
 <?
 	$name=strtoupper($_GET["name"]);
+	if ($name=="EINZELPERSON") $name="";
 	$datenC=getAllCustomer(array(1,$name));
 	$datenL=getAllVendor(array(1,$name));
 	if ($pers) {

@@ -1,5 +1,5 @@
 <?php
-// $Id: termlist.php,v 1.4 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");
@@ -89,6 +89,7 @@
 		$ft=feiertage($year);
 		$ftk=array_keys($ft);
 		$x=mondaykw($kw,$year);
+		$tag=date("d.m.Y",$x);
 		$startday=date("d",$x);
 		$data=getTermin($startday,date("m",$x),$year,"W");
 		$termdate=array();
@@ -159,6 +160,7 @@
 		if ($kw<strftime("%V",mktime(0,0,0,12,31,$year))) { $kw2=$kw+1; $year2=$year; }
 		else { $year2=$year+1; $kw=1; }
 		$t->set_var(array(
+					tag => $tag,
 					kw => $kw,
 					kw1 => $kw1,
 					kw2 => $kw2,

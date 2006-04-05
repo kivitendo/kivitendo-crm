@@ -14,6 +14,7 @@
 		$data["tid"]=$_GET["holen"]; $data["grund"]=$term["cause"];$data["lang"]=$term["c_cause"];
 		$data["wdhlg"]=$term["repeat"];$data["ft"]=$term["ft"];
 		$data["vondat"]=db2date($term["starttag"]);$data["bisdat"]=db2date($term["stoptag"]);
+		$DATUM=$data["vondat"];
 		$data["von"]=$term["startzeit"];$data["bis"]=$term["stopzeit"];
 		$user=getTerminUser($_GET["holen"]);
 		if ($user) foreach ($user as $row) {
@@ -22,11 +23,11 @@
 	}
 	if ($_POST["sichern"]) {
 		if (!$_POST["ok"]) {
-			$rs=checkTermin($_POST["vondat"],$_POST["bisdat"],$_POST["von"],$_POST["bis"]);
+			$rs=checkTermin($_POST["vondat"],$_POST["bisdat"],$_POST["von"],$_POST["bis"],($_POST["tid"]>0)?$_POST["tid"]:0);
+			$DATUM=$_POST["vondat"];
 			if (count($rs)>0) {
 				$rc=true;
 				$ts="K"; 
-				print_r($rs);
 				foreach ($rs as $t) {
 					$ts.=$t["id"].",";
 				}
@@ -37,6 +38,7 @@
 		} else { $rc=false; };
 		if (!$rc) {
 			$rc=saveTermin($_POST);
+			$DATUM=$_POST["vondat"];
 		} else {
 			$ok="<input type='checkbox' name='ok' value='1'>Konflikte, trozdem eintragen<br>";
 			$data["vondat"]=$_POST["vondat"];$data["von"]=$_POST["von"];
@@ -44,6 +46,7 @@
 			$data["grund"]=$_POST["grund"];$data["lang"]=$_POST["lang"];
 			$data["ft"]=$_POST["ft"];$data["wdhlg"]=$_POST["wdhlg"];
 			$data["user"]=$_POST["user"]; $data["tid"]=$_POST["tid"];
+			$DATUM=$_POST["vondat"];
 		};
 	}
 	$mit=getAllUser(array(0=>true,1=>"%"));
@@ -61,7 +64,7 @@
 		if ($zeile["id"]==$loginCRM) $name=$zeile["name"];
 		$t->set_var(array(
 			USRID	=>	"E".$zeile["id"],
-			USRNAME	=>	$zeile["name"]
+			USRNAME	=>	($zeile["name"])?$zeile["name"]:$zeile["login"]
 		));
 		$t->parse("Block","User",true);
 	}
@@ -80,7 +83,7 @@
 		foreach($selusr as $row) {
 			$t->set_var(array(
 				UID => $row["id"],
-				UNAME => $row["name"]
+				UNAME => ($row["name"])?$row["name"]:$row["login"]
 			));
 			$t->parse("BlockU","Selusr",true);
 		}
@@ -164,7 +167,8 @@
 		GRUND => $data["grund"],
 		LANG => $data["lang"],
 		FT => ($data["ft"])?" checked":"",
-		ANSICHT => $ANSICHT
+		ANSICHT => $ANSICHT,
+		DATUM => $DATUM
 	));
 	$t->pparse("out",array("term"));
 ?>

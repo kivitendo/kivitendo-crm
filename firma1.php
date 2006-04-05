@@ -70,6 +70,7 @@
 			STelefon => $fa["shiptophone"],
 			SFax	=> $fa["shiptofax"],
 			SeMail	=> $fa["shiptoemail"],
+			Scontact=> $fa["shiptocontact"],
 			Cmsg	=> $cmsg,
 			IMG	=> $Image,
 			PAGER	=> $pager,

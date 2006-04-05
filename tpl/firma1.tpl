@@ -56,7 +56,7 @@
 		{Strasse}<br />
 		<span class="mini">&nbsp;<br /></span>
 		{Land}-{Plz} {Ort}<br />	
-		{Fcontact_1}<br />
+		{Fcontact}<br />
 		Tel: {Telefon}<br />
 		Fax: {Fax}<br />	
 	</div>
@@ -96,6 +96,7 @@
 		<span class="mini">&nbsp;<br /></span>
 		{SLand}-{SPlz} {SOrt}<br />
 		<span class="mini">&nbsp;<br /></span>
+		{Scontact}<br />
 		Tel: {STelefon}<br />
 		Fax: {SFax}<br />
 		<a href="mail.php?TO={SeMail}&KontaktTO=C{FID}">{SeMail}</a>

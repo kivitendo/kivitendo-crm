@@ -1280,7 +1280,7 @@ global $db;
 		else if (substr($row,0,1)=="P") {$cont.=substr($row,1).",";};
 	}
 	if ($grp)  $sql[]="select 'G'||grpid as id,grpname as name from gruppenname where  grpid in (".substr($grp,0,-1).")";
-	if ($empl) $sql[]="select 'E'||id as id,name from employee where  id in (".substr($empl,0,-1).")";
+	if ($empl) $sql[]="select 'E'||id as id,name,login from employee where  id in (".substr($empl,0,-1).")";
 	if ($ven)  $sql[]="select 'V'||id as id,name from vendor where  id in (".substr($ven,0,-1).")";
 	if ($cust) $sql[]="select 'C'||id as id,name from customer where  id in (".substr($cust,0,-1).")";
 	if ($cont) $sql[]="select 'P'||cp_id as id,cp_name as name from contacts where cp_id in (".substr($cont,0,-1).")";
@@ -1382,7 +1382,7 @@ global $db;
 		}
 	}
 }
-function checkTermin($start,$stop,$von,$bis) {
+function checkTermin($start,$stop,$von,$bis,$TID=0) {
 global $db;
 	list($startT,$startM,$startJ)=split("\.",$start);
 	list($stopT,$stopM,$stopJ)=split("\.",$stop);
@@ -1390,8 +1390,9 @@ global $db;
 	if ($grp) $rechte.=" M.member in $grp";
 	$start=date2db($start).$von; $stop=date2db($stop).$bis;
 	$sql="select distinct id from termine D left join terminmember M on M.termin=D.id  where ";
-	$sql.="(starttag||startzeit between '$start' and '$stop' ) or ";
-	$sql.="(stoptag||stopzeit between '$start' and '$stop')";
+	$sql.="((starttag||startzeit between '$start' and '$stop' ) or ";
+	$sql.="(stoptag||stopzeit between '$start' and '$stop'))";
+	if ($TID>0) $sql.=" and id<>$TID";
 	$sql.=" and ($rechte)";
 	$rs=$db->getAll($sql);
 	return $rs;
@@ -1871,7 +1872,14 @@ function suchOpportunity($data) {
 global $db;
 	if ($data) while (list($key,$val)=each($data)) {
 		if (in_array($key,array("title","notiz","zieldatum")) and $val) { $val=str_replace("*","%",$val); $where.="and $key like '$val%' "; }
-		else if (in_array($key,array("fid","status","chance")) and $val) { $where.="and $key = $val "; };
+		else if (in_array($key,array("status","chance")) and $val) { $where.="and $key = $val "; };
+	}
+	if ($data["fid"]  and $data["name"]) { 
+		$where.="and (fid in (select id from customer where lower(name) like '%".strtolower($data["name"])."%') or fid = ".$data["fid"].")";
+	} else if ($data["fid"]) { 
+		$where.="and fid = ".$data["fid"]; 
+	} else if ($data["name"]) {
+		$where.="and fid in (select id from customer where lower(name) like '%".strtolower($data["name"])."%')";
 	}
 	$sql="select O.*,C.name as firma from  opportunity O left join customer C on O.fid=C.id where ".substr($where,3);
 	$rs=$db->getAll($sql);

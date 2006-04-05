@@ -4,6 +4,9 @@
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 	<script language="JavaScript">
 	<!--
+	function showlist(was) {
+			self.location.href="termlist.php?ansicht="+was+"&datum={tag}"; //month="+mo+"&year="+ja+"&day="+tg;
+	}
 	function tag(tg) {
 		self.location.href="termlist.php?ansicht=T&datum="+tg;
 	}
@@ -21,7 +24,8 @@
 	</script>
 <body >
 <CENTER>
-<input type="button" value="<--" onClick="womin()"> KW {kw} <input type="button" value="-->" onClick="woplu()">
+<input type="button" value="<--" onClick="womin()"> KW {kw} <input type="button" value="-->" onClick="woplu()"> <input type="button" value="Monat" onClick="showlist('M')">
+
 <br><br>
 <table style="width:350px" bgcolor="#ffffff">
 <!-- BEGIN Woche -->

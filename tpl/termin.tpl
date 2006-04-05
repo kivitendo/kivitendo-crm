@@ -15,21 +15,21 @@
 			f=open("suchName.php?name="+document.termedit.suchname.value,"Name","width=400,height=200,left=200,top=100");
 		}
 		function subusr() {
-			nr=document.termedit.elements[22].selectedIndex;
-			document.termedit.elements[22].options[nr]=null
+			nr=document.getElementById("istusr").selectedIndex;
+			document.getElementById("istusr").options[nr]=null
 		}
 		function addusr() {
 			nr=document.termedit.teiln.selectedIndex;
 			val=document.termedit.teiln.options[nr].value;
 			txt=document.termedit.teiln.options[nr].text;
 			NeuerEintrag = new Option(txt,val,false,true);
- 			document.termedit.elements[22].options[document.termedit.elements[22].length] = NeuerEintrag;
+ 			document.getElementById("istusr").options[document.getElementById("istusr").length] = NeuerEintrag;
 		}
 		function selall() {
-			len=document.termedit.elements[22].length;
-			document.termedit.elements[22].multiple=true;
+			len=document.getElementById("istusr").length;
+			document.getElementById("istusr").multiple=true;
 			for (i=0; i<len; i++) {
-				document.termedit.elements[22].options[i].selected=true;
+				document.getElementById("istusr").options[i].selected=true;
 			}
 		}
 		function kal(fld) {
@@ -64,7 +64,65 @@
 <input type="hidden" name="uid" value="{uid}">
 <tr>
 	<td width="*" >
-		<select name="Tag" style="width:44px">
+
+		{OK}
+		<!--input type="button" value="Zeige" onClick="showlist('T')"><hr-->
+		<table>
+			<tr><td class="norm">von:</td><td class="norm"><input type="text" name="vondat" size="9" maxlength="10" value="{VONDAT}">
+<input type='image' src='image/date.png' title='Vondatum' align='middle' value='K' onClick="kal('vondat')" >
+<!--input type="button" value="K" onClick="kal('vondat')"-->
+					<select name="von">
+<!-- BEGIN Time1 -->
+						<option value="{tval1}"{tsel1}>{tkey1}</option>
+						<option value="{tval2}"{tsel2}>{tkey2}</option>
+<!-- END Time1 -->
+					</select>
+					<select name="wdhlg">
+<!-- BEGIN repeat -->
+						<option value="{RPTK}"{RPTS}>{RPTV}</option>
+<!-- END repeat -->
+					</select>
+				</td></tr>
+			<tr><td class="norm">bis:</td><td class="norm"><input type="text" name="bisdat" size="9" maxlength="10" value="{BISDAT}">
+<input type='image' src='image/date.png' title='Bisdatum' align='middle' value='K' onClick="kal('bisdat')" >
+<!--input type="button" value="K" onClick="kal('bisdat')"-->
+					<select name="bis">
+<!-- BEGIN Time2 -->
+						<option value="{tval1}"{tsel1}>{tkey1}</option>
+						<option value="{tval2}"{tsel2}>{tkey2}</option>
+<!-- END Time2 -->
+					</select>
+					nur Arbeitstage<input type="checkbox" name="ft" value="1" {FT}>
+				</td></tr>
+			<tr><td class="norm" colspan="2"><input type="text" name="grund" size="37" maxlength="75" value="{GRUND}">
+						 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <a href="termin.php"><input type="reset" name="clear" value="clear"></a>
+						<br>Grund</td></tr>
+			<tr><td class="norm" colspan="2"><textarea name="lang" cols="40" rows="3">{LANG}</textarea>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" name="sichern" value="sichern">	
+						<br>Bemerkungen</td></tr>
+			<tr><td class="norm" colspan="2">
+					<input type="text" name="suchname" size="20" maxlength="25" value=""><input type="button" value="suche Teilnehmer" onClick="suchName()">
+					<br>
+					<table><tr>
+					<td class="norm"><select name="user[]" id="istusr" size="5">
+<!-- BEGIN Selusr -->
+						<option value="{UID}">{UNAME}</option>
+<!-- END Selusr -->
+					</select><br><span class="norm">Teilnehmer</span></td>
+					<td class="norm"><input type="button" value="&lt;--" onClick="addusr()"><br><br><input type="button" value="--&gt;" onClick="subusr()"></td>
+					<td class="norm"><select name="teiln" id="kannusr" size="5">
+<!-- BEGIN User -->
+						<option value="{USRID}">{USRNAME}</option>
+<!-- END User -->
+					</select><br><span class="norm">CRM-User</span></td>
+					</tr></table>
+			</td></tr>
+		</table>
+	</td>
+	<td width="20px"></td>
+	<td width="*" class="norm ce">
+				<select name="Tag" style="width:44px">
 <!-- BEGIN Tage -->
 			<option value="{TV}"{TS}>{TK}</option>
 <!-- END Tage -->
@@ -79,63 +137,10 @@
 			<option value="{JV}"{JS}>{JK}</option>
 <!-- END Jahre -->
 		</select>
-		<input type="button" value="Tag" onClick="showlist('T')">
-		<input type="button" value="Woche" onClick="showlist('W')">
-		<input type="button" value="Monat" onClick="showlist('M')"><hr>
-		{OK}
-		<!--input type="button" value="Zeige" onClick="showlist('T')"><hr-->
-		<table>
-			<tr><td class="norm">von:</td><td class="norm"><input type="text" name="vondat" size="8" maxlength="10" value="{VONDAT}"><input type="button" value="K" onClick="kal('vondat')">
-					<select name="von">
-<!-- BEGIN Time1 -->
-						<option value="{tval1}"{tsel1}>{tkey1}</option>
-						<option value="{tval2}"{tsel2}>{tkey2}</option>
-<!-- END Time1 -->
-					</select>
-					<select name="wdhlg">
-<!-- BEGIN repeat -->
-						<option value="{RPTK}"{RPTS}>{RPTV}</option>
-<!-- END repeat -->
-					</select>
-				</td></tr>
-			<tr><td class="norm">bis:</td><td class="norm"><input type="text" name="bisdat" size="8" maxlength="10" value="{BISDAT}"><input type="button" value="K" onClick="kal('bisdat')">
-					<select name="bis">
-<!-- BEGIN Time2 -->
-						<option value="{tval1}"{tsel1}>{tkey1}</option>
-						<option value="{tval2}"{tsel2}>{tkey2}</option>
-<!-- END Time2 -->
-					</select>
-					nur Arbeitstage<input type="checkbox" name="ft" value="1" {FT}>
-				</td></tr>
-			<tr><td class="norm" colspan="2"><input type="text" name="grund" size="35" maxlength="75" value="{GRUND}">
-						 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <a href="termin.php"><input type="reset" name="clear" value="clear"></a>
-						<br>Grund</td></tr>
-			<tr><td class="norm" colspan="2"><textarea name="lang" cols="40" rows="3">{LANG}</textarea>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" name="sichern" value="sichern">	
-						<br>Bemerkungen</td></tr>
-			<tr><td class="norm" colspan="2">
-					<input type="text" name="suchname" size="20" maxlength="25" value=""><input type="button" value="suche Teilnehmer" onClick="suchName()">
-					<br>
-					<table><tr>
-					<td class="norm"><select name="user[]" size="5">
-<!-- BEGIN Selusr -->
-						<option value="{UID}">{UNAME}</option>
-<!-- END Selusr -->
-					</select><br><span class="norm">Teilnehmer</span></td>
-					<td class="norm"><input type="button" value="&lt;--" onClick="addusr()"><br><br><input type="button" value="--&gt;" onClick="subusr()"></td>
-					<td class="norm"><select name="teiln" size="5">
-<!-- BEGIN User -->
-						<option value="{USRID}">{USRNAME}</option>
-<!-- END User -->
-					</select><br><span class="norm">CRM-User</span></td>
-					</tr></table>
-			</td></tr>
-		</table>
-	</td>
-	<td width="20px"></td>
-	<td width="*" class="norm ce">
-		<iframe src="termlist.php?ansicht={ANSICHT}" name="Termine" width="370" height="380" marginheight="0" marginwidth="0" align="left">
+		<input type="button" value="Zeigen" onClick="showlist('T')">
+		<!--input type="button" value="Woche" onClick="showlist('W')">
+		<input type="button" value="Monat" onClick="showlist('M')"-->
+		<iframe src="termlist.php?ansicht={ANSICHT}&datum={DATUM}" name="Termine" width="370" height="380" marginheight="0" marginwidth="0" align="left">
 		<p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>
 		</iframe>
 	</td>

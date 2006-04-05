@@ -5,7 +5,10 @@
 
 	<script language="JavaScript">
 	<!--
-		function tamin() {
+	function showlist(was) {
+			self.location.href="termlist.php?ansicht="+was+"&datum={tag}"; //month="+mo+"&year="+ja+"&day="+tg;
+	}
+	function tamin() {
 			self.location.href="termlist.php?ansicht=T&datum={dat1}";
 	}
 	function taplu() {
@@ -25,7 +28,9 @@
 	</script>
 <body >
 <center>
+<input type="button" value="Woche" onClick="showlist('W')">
 <input type="button" value="<--" onClick="tamin()"> {tag} <input type="button" value="-->" onClick="taplu()">
+<input type="button" value="Monat" onClick="showlist('M')">
 <table style="width:350px" bgcolor="#ffffff">
 <!-- BEGIN Stunden -->
 	<tr><td class="smal {col} re" width="60px" onClick="fill('{zeit}');">{zeit}</td><td class="smal">{text}</td></tr><!--td onClick="zeige({tid})">{text}</td></tr-->

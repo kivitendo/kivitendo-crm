@@ -1,5 +1,5 @@
 <?
-// $Id: suchName.php,v 1.3 2005/11/02 10:37:52 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/FirmaLib.php");
 	include("inc/LieferLib.php");
@@ -14,7 +14,7 @@
 			val=document.firmen.Alle.options[nr].value;
 			txt=document.firmen.Alle.options[nr].text;
 			NeuerEintrag = new Option(txt,val,false,true);
-			opener.document.termedit.elements[22].options[opener.document.termedit.elements[22].length] = NeuerEintrag;
+			opener.document.getElementById("istusr").options[opener.document.getElementById("istusr").length] = NeuerEintrag;
 		}
 	//-->
 	</script>

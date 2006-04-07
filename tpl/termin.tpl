@@ -105,17 +105,19 @@
 					<input type="text" name="suchname" size="20" maxlength="25" value=""><input type="button" value="suche Teilnehmer" onClick="suchName()">
 					<br>
 					<table><tr>
-					<td class="norm"><select name="user[]" id="istusr" size="5">
-<!-- BEGIN Selusr -->
-						<option value="{UID}">{UNAME}</option>
-<!-- END Selusr -->
-					</select><br><span class="norm">Teilnehmer</span></td>
-					<td class="norm"><input type="button" value="&lt;--" onClick="addusr()"><br><br><input type="button" value="--&gt;" onClick="subusr()"></td>
 					<td class="norm"><select name="teiln" id="kannusr" size="5">
 <!-- BEGIN User -->
 						<option value="{USRID}">{USRNAME}</option>
 <!-- END User -->
 					</select><br><span class="norm">CRM-User</span></td>
+					<td class="norm"><input type="button" value="&lt;--" onClick="subusr()" title="entfernen"><br>
+							<br><input type="button" value="--&gt;" onClick="addusr()" title="dazunehmen"></td>
+					<td class="norm"><select name="user[]" id="istusr" size="5">
+<!-- BEGIN Selusr -->
+						<option value="{UID}">{UNAME}</option>
+<!-- END Selusr -->
+					</select><br><span class="norm">Teilnehmer</span></td>
+
 					</tr></table>
 			</td></tr>
 		</table>

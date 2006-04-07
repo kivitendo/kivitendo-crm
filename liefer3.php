@@ -3,7 +3,7 @@
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");
-	include("inc/grafik.php");
+	include("inc/grafik$jpg.php");
 	include("inc/LieferLib.php");
 	$t = new Template($base);
 	$fa=getLieferStamm($_GET["fid"]);

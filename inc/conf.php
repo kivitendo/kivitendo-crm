@@ -19,4 +19,5 @@ $showErr = true;
 $logmail = true;
 $tinymce = true;
 $jcalendar = true;
+$jpg=true;
 $ERPNAME="lx-office-erp";?>

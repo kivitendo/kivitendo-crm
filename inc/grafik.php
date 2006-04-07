@@ -1,10 +1,7 @@
 <?
-// $Id: grafik.php,v 1.2 2005/09/16 11:59:28 hli Exp $
-unset($GLOBALS['php_errormsg']);
-include ("jpgraph.php");
-include ("jpgraph_line.php");
-include ("jpgraph_bar.php");
-include ("jpgraph_log.php");
+// $Id$
+require_once 'Image/Graph.php';
+require_once 'Image/Canvas.php'; 
 
 /****************************************************
 * getLastYearPlot
@@ -13,98 +10,109 @@ include ("jpgraph_log.php");
 * Rechnungsdaten grafis aufbereiten
 *****************************************************/
 function  getLastYearPlot($re,$an,$art=false) {
+	$Canvas =& Image_Canvas::factory('png', array('width'=>500, 'height'=>280)); 
+	$Graph =& Image_Graph::factory('graph', $Canvas); 
+	$Font =& $Graph->addNew('font', 'Verdana');
+	$Font->setSize(8);
+	$Graph->setFont($Font);
+	if ($art) { $log="_log"; } else { $log=""; };
+	$Graph->add(
+	   Image_Graph::vertical(
+        	    $Plotarea = Image_Graph::factory('plotarea',array('axis',"axis$log")),
+	            $Legend = Image_Graph::factory('legend'),
+        	    90
+	    )
+	);
+	$Legend->setPlotarea($Plotarea);
+	$Legend->setShowMarker(true);
 
+	$gut =& Image_Graph::factory('dataset'); 
+	$sum =& Image_Graph::factory('dataset'); 
+	$avg =& Image_Graph::factory('dataset'); 
+	$agb =& Image_Graph::factory('dataset'); 
+	$gut->addPoint(0,1);
+	$sum->addPoint(0,1);
+	$avg->addPoint(0,1);
+	$agb->addPoint(0,0);
 	$employee=$_SESSION["employee"];
 	$keys=array_keys($re);
-	$sum=array(); $avg=array(); $monate=array(); $gut=array();
-	if ($re) foreach($re as $month) {
-		if ($month["summe"]<0) {
-			$gut[]=$month["summe"]*-1;
+	$maxY=0;
+	if ($re) for($xx=0; $xx<12; $xx++) { 
+		$k=substr($keys[$xx],4,2);
+		if ($re[$keys[$xx]]["summe"]<0) {
+			$gut->addPoint($xx+1, $re[$keys[$xx]]["summe"]*-1); 
+			$sum->addPoint($xx+1, 1); 
+			$avg->addPoint($xx+1, 1);
 		} else {
-			$sum[]=$month["summe"];
-			if ($month["count"]>0) {
-				$avg[]=$month["summe"]/$month["count"];
-			} else {
-				$avg[]=0;
+			if ($re[$keys[$xx]]["summe"]>0) { $sum->addPoint($xx+1,$re[$keys[$xx]]["summe"]);
+			} else {  $sum->addPoint($xx+1, 1); }
+			$gut->addPoint($xx+1, 0); 
+			if ($re[$keys[$xx]]["count"]>0) {
+				$avg->addPoint($xx+1,($re[$keys[$xx]]["summe"]/$re[$keys[$xx]]["count"]) );
+			} else {	
+				$avg->addPoint($xx+1, 1);
 			}
 		};
+		if ($maxY<$re[$keys[$xx]]["summe"]) $maxY=$re[$keys[$xx]]["summe"];
 	}
+	$xx=0;
 	if ($an) foreach($an as $month) {
-		$sumA[]=$month["summe"];
+		if ($xx<12) {
+			$agb->addPoint($xx+1,$month["summe"]);
+			if ($maxY<$month["summe"])$maxY=$month["summe"];
+		}
+		$xx++;
 	}
+	$gut->addPoint(13,1);
+	$sum->addPoint(13,1);
+	$avg->addPoint(13,1);
+	$agb->addPoint(13,0);
+	$monate[]="";
 	if ($keys) foreach ($keys as $m) {
-		$monate[]=substr($m,4,2);
+		$monate[]=substr($m,2,2)."/".substr($m,4,2);
 	}
 	$monate=array_splice($monate,0,-1);
-	$sum=array_splice ($sum,0,-1);
-	if (!empty($sumA)) {
-		$sumA=array_splice ($sumA,0,-1);
-	} else {
-		$sumA[]=0;
-	}
-	$avg=array_splice ($avg,0,-1);
-	$graph = new Graph(500,280);
-	if ($art) {$art="textlin";}
-	else {$art="textlog";};
-	$graph->SetScale($art);
-	$graph->img->SetMargin(70,20,25,70);
+	$monate[]=" ";
+	$Datasets = array($sum,$avg,$gut);
 
-	$sumplot = new BarPlot($sum);		// Graph Umsatz
-	$sumplot->SetColor("darkgreen");
-	$sumplot->SetWidth(1.0);
-	$sumplot->SetAlign("center");
-	//$sumplot->SetCenter(true);
-	//$sumplot->mark->SetType(MARK_CIRCLE);
-	$sumplot->SetLegend("Gesamtumsatz");
-	$graph->Add($sumplot);
+	$Plot =& $Plotarea->addNew('bar', array(&$Datasets));
 
-	$avgplot = new BarPlot($avg);		// Graph durchn. Umsatz
-	$avgplot->SetColor("darkred");
-	$avgplot->SetFillColor("red");
-	$avgplot->SetWidth(0.5);
-	$avgplot->SetAlign("center");
-	//$avgplot->SetStyle("dashed");
-	//$avgplot->SetCenter(true);
-	$avgplot->SetLegend("duchschnitt");
-	$graph->Add($avgplot);
+	$Plot->setTitle("Gesamtumsatz","SUM");
+	$Plot->setTitle("Durchsnitt","AVG");
 
-	if (empty($gut)) $gut[]=0;
-	$gutplot = new BarPlot($gut);		// Graph Umsatz
-	$gutplot->SetColor("darkgreen");
-	$gutplot->SetFillColor("green");
-	$gutplot->SetWidth(0.2);
-	$gutplot->SetAlign("center");
-	//$sumplot->SetCenter(true);
-	//$sumplot->mark->SetType(MARK_CIRCLE);
-	$gutplot->SetLegend("Gutschrift");
-	$graph->Add($gutplot);
+	$FillArray =& Image_Graph::factory('Image_Graph_Fill_Array');
+	$FillArray->addColor('blue@0.7');
+	$FillArray->addColor('green@0.7');
+	$FillArray->addColor('yellow@0.7');
+	$Plot->setFillStyle($FillArray); 
 
-
-	$angbplot = new LinePlot($sumA);		// Graph Angebote
-	$angbplot->SetColor("darkblue");
-	//$angbplot->SetStyle("dashed");
-	$angbplot->SetCenter(true);
-	$angbplot->mark->SetType(MARK_FILLEDCIRCLE);
-	$angbplot->mark->SetWidth(4);
-	$angbplot->mark->SetFillColor("yellow");
-	//$angbplot->mark->SetType(MARK_CIRCLE);
-
-	$angbplot->SetLegend("Angbote");
-	$graph->Add($angbplot);
-
-	$graph->yaxis->title->SetFont(FONTART,FONTSTYLE);
-	$graph->xaxis->title->SetFont(FONTART,FONTSTYLE);
-	$graph->yaxis->SetFont(FONTART,FONTSTYLE);
-	$graph->xaxis->SetFont(FONTART,FONTSTYLE);
-	$graph->xaxis->title->Set("Monate");
-	$graph->yaxis->title->Set("Euro");
-	$graph->yaxis->SetTitleMargin(50);
-	$graph->xaxis->SetTickLabels($monate);
-	$graph->legend->Pos(0.03,0.90,"left","center");
+	$Plot3 =& $Plotarea->addNew('line', array(&$agb));
+	$Plot3->setLineColor('gray@0.0');
+	$Marker =& Image_Graph::factory('Image_Graph_Marker_Circle');
+	$Plot3->setMarker($Marker);
+	$Marker->setFillColor('red@0.7'); 
+	$Plot3->setTitle("Angebote"); 
+	$AxisY =& $Plotarea->getAxis(IMAGE_GRAPH_AXIS_Y);
+	if ($art) $AxisY->setLabelInterval(array(5, 10, 20, 30, 50, 100, 200, 300, 500, 1000, 2000, 3000, 5000, 10000, 20000, 30000, 50000)); 
+	$AxisY->forceMaximum($maxY+50); 
+	$AxisX =& $Plotarea->getAxis(IMAGE_GRAPH_AXIS_X); 
+	$AxisX->setDataPreprocessor(Image_Graph::factory('Image_Graph_DataPreprocessor_Array', array($monate)));
+	$AxisX->setLabelInterval(1); 
+	$GridY =& $Plotarea->addNew('line_grid', null, IMAGE_GRAPH_AXIS_Y);
+	$GridY->setLineColor('gray@0.4'); 
+	$Graph->setLineColor('red'); 
+	$fill =& Image_Graph::factory('gradient', array(IMAGE_GRAPH_GRAD_VERTICAL, '#fffc9e', 'lightblue@0.3'));
+	$Graph->setBackgroundColor($fill); 
+	$Graph->setBorderColor('black');
+	$Graph->showShadow(); 
+	$Fillbg =& Image_Graph::factory('Image_Graph_Fill_Image', '/var/www/crm/image/umsatz.jpg');
+	$Plotarea->setFillStyle($Fillbg); 
 
 	$IMG="./tmp/$employee".time().".png";
 	@exec("rm ./tmp/$employee*.png");
-	$graph->Stroke($IMG);
+	$Graph->done( 
+	    array('filename' => $IMG) 
+	);
 	return $IMG;
 }
 ?>

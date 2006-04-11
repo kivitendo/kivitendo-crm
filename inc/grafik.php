@@ -78,7 +78,7 @@ function  getLastYearPlot($re,$an,$art=false) {
 	$Plot =& $Plotarea->addNew('bar', array(&$Datasets));
 
 	$Plot->setTitle("Gesamtumsatz","SUM");
-	$Plot->setTitle("Durchsnitt","AVG");
+	$Plot->setTitle("Durchschnitt","AVG");
 
 	$FillArray =& Image_Graph::factory('Image_Graph_Fill_Array');
 	$FillArray->addColor('blue@0.7');

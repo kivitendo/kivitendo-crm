@@ -1,4 +1,4 @@
-<!-- $Id: user4.tpl,v 1.3 2005/11/02 10:38:58 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title>User Stamm</title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -44,30 +44,20 @@
 		<input type="submit" name="holen" value="holen"><br>
 	<br><br>
 		<input type="hidden" name="cp_cv_id" value="{FID}">
-		<input type="hidden" name="ID" value="{ID}">
-		<input type="text" name="message" size="60" maxlength="60" value="{MSG}" maxlength="60"><br>
-		Neue Mitteilung<br><br>
-		Priorit&auml;t <input type="radio" name="prio" value="1" {R1}>1
-		<input type="radio" name="prio" value="2" {R2}>2
-		<input type="radio" name="prio" value="3" {R3}>3
+	<table>	
+	<tr><td>Priotit&auml;t </td><td> Mitteilung</td></tr>
+	<tr><td><input type="radio" name="prio" value="3" {R3}> 3 <input type="hidden" name="mid3" value="{mid3}"></td>
+		<td><input type="text" name="message3" size="60" maxlength="60" value="{MSG3}" maxlength="60"></td>
+	</tr>
+	<tr><td><input type="radio" name="prio" value="2" {R2}> 2 <input type="hidden" name="mid2" value="{mid2}"></td>
+		<td><input type="text" name="message2" size="60" maxlength="60" value="{MSG2}" maxlength="60"></td>
+	</tr>
+	<tr><td><input type="radio" name="prio" value="1" {R1}> 1 <input type="hidden" name="mid1" value="{mid1}"></td>
+		<td><input type="text" name="message1" size="60" maxlength="60" value="{MSG1}" maxlength="60"></td>
+	</tr>
+	</table>
 		<input type="submit" name="sichern" value="sichern"> <input type="submit" name="reset" value="reset"><br><br>
 </div>		
-	<table style="width:80%"><tr>
-		<td width="45%" class="norm ce">
-			eingestellte Mitteilungen:<br>
-			<select name="messages" size="5" style="width:500px">
-<!-- BEGIN Selectbox -->
-				<option value="{MID}">{MSGTXT}</option>
-<!-- END Selectbox -->
-			</select>
-		</td>
-		<td align="center">
-			<br>
-			<input type="submit" name="edit" value="bearbeiten">
-			<input type="submit" name="delete" value="entfernen"></td>
-	</tr>
-
-	</table>
 	</form>
 
 <!-- End Code ----------------------------------------------->

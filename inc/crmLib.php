@@ -1598,12 +1598,12 @@ function feiertage($jahr) {
 
 function getCustMsg($id,$all=false) {
 global $db;
-	if ($all>1) { $where="id=$all"; }
+	if (!$all) { $where="fid=$id and akt='t'"; }
 	else {
 		if ($id) {$where="fid=$id"; }
 		else { return false; }
 	}
-	$sql="select * from custmsg where $where order by prio,id";
+	$sql="select * from custmsg where $where ";
 	$rs=$db->getAll($sql);
 		if(!$rs) {
 			return false;
@@ -1629,30 +1629,16 @@ global $db;
 
 function saveCustMsg($data) {
 global $db;
-	if (!$data["cp_cv_id"] or !$data["message"]) return false;
-	if (!$data["ID"]) {
-		$newID=uniqid (rand());
-		$sql="insert into custmsg (msg) values ('$newID')";
-		$rc=$db->query($sql);
-		$sql="select * from custmsg where msg='$newID'";
-		$rs=$db->getAll($sql);
-		if(!$rs) {
-			return false;
-		} else {
-			$data["ID"]=$rs[0]["id"];
+	if (!$data["cp_cv_id"]) return false;
+	$sql="delete from custmsg where fid=".$data["cp_cv_id"];
+	$rc=$db->query($sql);
+	if ($rc) for($i=1; $i<=3; $i++) {
+		if ($data["message$i"]) { 
+			$sql="insert into custmsg (msg,prio,fid,uid,akt) values (";
+			$sql.="'".$data["message$i"]."',$i,".$data["cp_cv_id"].",".$_SESSION["loginCRM"].",".(($data["prio"]==$i)?"'t'":"'f'").")";
+			$rc=$db->query($sql);
 		}
 	}
-	$sql="update custmsg set msg='".$data["message"]."', prio=".$data["prio"].",fid=".$data["cp_cv_id"].",uid=".$_SESSION["loginCRM"]." where id=".$data["ID"];
-	$rc=$db->query($sql);
-}
-function delCustMsg($id) {
-global $db;
-	$rc=false;
-	if (id) {
-		$sql="delete from custmsg where id=$id";
-		$rc=$db->query($sql);
-	}
-	return $rc;
 }
 
 function getOneLable($format) {

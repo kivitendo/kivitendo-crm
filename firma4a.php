@@ -43,7 +43,6 @@
 		$co=getKontaktStamm($pid);
 		$anrede=$co["cp_greeting"].($co["title"])?$co["title"]:"";
 		$name=$co["cp_givenname"]." ".$co["cp_name"];
-		$department_1="";
 		$plz=$co["cp_zipcode"];
 		$ort=$co["cp_city"];
 		$strasse=$co["cp_street"];
@@ -56,16 +55,19 @@
 		$fa=getFirmaStamm($fid);
 		$anrede="Firma";
 		$name=$fa["name"];
+		$abteilung=$fa["department_1"];
+		$kontakt=$fa["contact"];
 		$plz=$fa["zipcode"];
 		$ort=$fa["city"];
 		$strasse=$fa["street"];
 		if (!empty($pid)){
 			$co=getKontaktStamm($pid);
-			//$anrede=$co["cp_greeting"].($co["title"])?$co["title"]:"";
-			$department_1=$co["cp_givenname"]." ".$co["cp_name"];
+			$anredepers=$co["cp_greeting"];
+			$anredepers.=($co["cp_title"])?" ".$co["cp_title"]:"";
+			$namepers=$co["cp_givenname"]." ".$co["cp_name"];
+			$plzpers=$co["cp_zipcode"]; $ortpers=$co["cp_city"]; $strassepers=$co["cp_street"];
 			$art="Firma/Kontakt";
 		} else {
-			$department_1=$fa["department_1"];
 			$art="Firmendokumente";
 		}
 		$link1="firma1.php?id=$fid";
@@ -96,7 +98,7 @@
 	$t->set_block("doc","Liste","Block");
 	$i=0;
 	if ($document["felder"]) foreach($document["felder"] as $zeile) {
-		$value=$zeile["platzhalter"];
+		$value=strtolower($zeile["platzhalter"]);
 		if ($zeile["laenge"]>60) {
 			$rows=floor($zeile["laenge"]/60)+1;
 			$input="<textarea cols=60 rows=$rows name='".$zeile["platzhalter"]."'>".${$value}."</textarea>";

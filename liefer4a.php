@@ -1,5 +1,5 @@
 <?
-// $Id: liefer4a.php,v 1.4 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");
@@ -40,16 +40,21 @@
 	}
 	if (!empty($fid)) {
 		$fa=getLieferStamm($fid);
+		$anrede="Firma"
 		$name=$fa["name"];
+		$abteilung=$fa["department_1"];
+		$kontakt=$fa["contact"];
 		$plz=$fa["zipcode"];
 		$ort=$fa["city"];
 		$strasse=$fa["street"];
 		if (!empty($pid)){
 			$co=getKontaktStamm($pid);
-			$department_1=$co["cp_givenname"]." ".$co["cp_name"];
+			$anredepers=$co["cp_greeting"];
+			$anredepers.=($co["cp_title"])?" ".$co["cp_title"]:"";
+			$namepers=$co["cp_givenname"]." ".$co["cp_name"];
+			$plzpers=$co["cp_zipcode"]; $ortpers=$co["cp_city"]; $strassepers=$co["cp_street"];
 			$art="Firma/Kontakt";
 		} else {
-			$department_1=$fa["department_1"];
 			$art="Firmendokumente";
 		}
 		$link1="liefer1.php?id=$fid";

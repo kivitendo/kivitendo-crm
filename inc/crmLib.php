@@ -1697,7 +1697,7 @@ function updLable($data) {
 		$rc=$db->query($sql);
 		$i=0;
 		$db->query("delete from labeltxt where lid=".$data["id"]);
-		foreach($data["Text"] as $row) {
+		if($data["Text"]) foreach($data["Text"] as $row) {
 			$sql=sprintf("insert into labeltxt (lid,font,zeile) values (%d,%d,'%s')",$data["id"],$data["Schrift"][$i],$row);
 			$db->query($sql);
 			$i++;
@@ -1705,6 +1705,7 @@ function updLable($data) {
 	} else {
 		return false;
 	}
+	return $data["id"];
 }
 
 function getWCategorie() {

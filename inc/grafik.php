@@ -12,7 +12,8 @@ require_once 'Image/Canvas.php';
 function  getLastYearPlot($re,$an,$art=false) {
 	$Canvas =& Image_Canvas::factory('png', array('width'=>500, 'height'=>280)); 
 	$Graph =& Image_Graph::factory('graph', $Canvas); 
-	$Font =& $Graph->addNew('font', 'Verdana');
+	//$Font =& $Graph->addNew('font', 'Verdana');
+	$Font =& $Graph->addNew('font', 'FreeSans');
 	$Font->setSize(8);
 	$Graph->setFont($Font);
 	if ($art) { $log="_log"; } else { $log=""; };
@@ -76,10 +77,10 @@ function  getLastYearPlot($re,$an,$art=false) {
 	$Datasets = array($sum,$avg,$gut);
 
 	$Plot =& $Plotarea->addNew('bar', array(&$Datasets));
-
-	$Plot->setTitle("Gesamtumsatz","SUM");
-	$Plot->setTitle("Durchschnitt","AVG");
-
+	$Datasets[0]->setName("Gesamtumsatz");
+	$Datasets[1]->setName("Durchschnitt");
+	$Datasets[2]->setName("Gutschrift");
+	
 	$FillArray =& Image_Graph::factory('Image_Graph_Fill_Array');
 	$FillArray->addColor('blue@0.7');
 	$FillArray->addColor('green@0.7');
@@ -105,7 +106,7 @@ function  getLastYearPlot($re,$an,$art=false) {
 	$Graph->setBackgroundColor($fill); 
 	$Graph->setBorderColor('black');
 	$Graph->showShadow(); 
-	$Fillbg =& Image_Graph::factory('Image_Graph_Fill_Image', '/var/www/crm/image/umsatz.jpg');
+	$Fillbg =& Image_Graph::factory('Image_Graph_Fill_Image', 'image/umsatz.jpg');
 	$Plotarea->setFillStyle($Fillbg); 
 
 	$IMG="./tmp/$employee".time().".png";

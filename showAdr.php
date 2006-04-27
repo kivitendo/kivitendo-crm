@@ -113,7 +113,7 @@
 			$name1P=$data ["shiptocontact"];
 			$strasseF=$data ["shiptostreet"];
 			$landF=$data ["shiptocountry"];
-			$plzF=$data["zipcode"];
+			$plzF=$data["shiptozipcode"];
 			$ortF=$data["shiptocity"];
 		} else {
 			$data=getFirmaStamm($_GET["sid"]);

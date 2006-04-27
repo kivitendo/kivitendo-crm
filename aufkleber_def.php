@@ -1,8 +1,7 @@
-<?// $Id: aufkleber_def.php 4 2006-01-28 16:11:22Z root $
+<?// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
 	
-	$ALabels=getLableNames();
 	if ($_POST["hole"]) {
 		unset($_POST["Text"]);
 		$label=getOneLable($_POST["format"]);
@@ -33,9 +32,13 @@
 			}
 		}
 	} else if ($_POST["ok"] || $_POST["csave"]) {
-		if ($_POST["ok"]) { updLable($_POST); $id=$_POST["id"]; }
-		else { $id=insLable($_POST); };
-		$format=$_POST["format"]; 
+		if ($_POST["ok"]) { 
+			updLable($_POST); $id=$_POST["id"]; 
+			$format=$_POST["format"]; 
+		} else { 
+			$id=insLable($_POST); 
+			$format=$id; 
+		};
 		$margintop=$_POST["margintop"]; 
 		$marginleft=$_POST["marginleft"]; 
 		$spacex=$_POST["spacex"];;
@@ -76,8 +79,9 @@
 		$pdf->Output();
 		$Textzeilen=count($_POST["Text"]);
 	}
+	$ALabels=getLableNames();
 	
-	//if (!$Textzeilen || $Textzeilen===0) $Textzeilen=floor($_POST["height"]/(($_POST["metric"]=="mm")?5:0.197));
+	if (!$Textzeilen || $Textzeilen===0) $Textzeilen=floor($_POST["height"]/(($_POST["metric"]=="mm")?5:0.197));
 	if ($_POST["more"]) {
 		$Textzeilen=count($_POST["Text"]);
 		$Textzeilen++;
@@ -103,6 +107,9 @@
 		$spacey=$_POST["spacey"]; 
 		$nx=$_POST["nx"]; 
 		$ny=$_POST["ny"]; 
+		$id=$_POST["id"]; 
+		$name=$_POST["name"]; 
+		$cust=$_POST["cust"]; 
 		$width=$_POST["width"]; 
 		$height=$_POST["height"]; 
 		$Ssel="S".$nx;	$Zsel="Z".$ny;$Psel="P".$papersize; $tmp=$metric;
@@ -211,6 +218,7 @@
 	<tr><td class="listtop">gespeicherte Labels</td></tr>
 	<tr><td class="ce">
 			<select name="format">
+				<option></option>
 <?
 	foreach ($ALabels as $data) {
 		echo "\t\t\t\t<option value='".$data["id"]."'";

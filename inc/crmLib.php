@@ -45,7 +45,7 @@ global $db;
 * out: rs = array(Felder der db)
 * hole alle Anrufe einer Person oder einer Firma
 *****************************************************/
-function getAllTelCall($id,$firma,$start=0) {
+function getAllTelCall($id,$firma,$start=0,$lim=19) {
 global $db;
 	if (!$start) $start=0;
 	if ($firma) {	// dann hole alle Kontakte der Firma
@@ -57,7 +57,7 @@ global $db;
 		$sql="select id,caller_id,kontakt,cause,calldate,cp_name from ";
 		$sql.="telcall left join contacts on caller_id=cp_id where bezug=0 and caller_id=$id";
 	}
-	$rs=$db->getAll($sql." order by calldate desc offset $start limit 23");
+	$rs=$db->getAll($sql." order by calldate desc offset $start ".(($lim>0)?"limit $lim":""));
 	if(!$rs) {
 		$rs=false;
 	}
@@ -79,7 +79,7 @@ global $db;
 	$sql.="left join customer C on C.id=caller_id ";
 	$sql.="left join vendor V on V.id=caller_id ";	
 	$sql.="where telcall.employee=$id and kontakt = '$art'";
-	$rs=$db->getAll($sql." order by calldate desc offset $start limit 23");
+	$rs=$db->getAll($sql." order by calldate desc offset $start limit 19");
 	if(!$rs) {
 		$rs=false;
 	}
@@ -89,18 +89,18 @@ global $db;
 function mkPager(&$items,&$pager,&$start,&$next,&$prev) {
 	if ($items) {
 		$pager=$start;
-		if (count($items)==23) {
-			$next=$start+23;
-			$prev=($start>23)?($start-23):0;
+		if (count($items)==19) {
+			$next=$start+19;
+			$prev=($start>19)?($start-19):0;
 		} else {
 			$next=$start;
-			$prev=($start>23)?($start-23):0;
+			$prev=($start>19)?($start-19):0;
 		}
 	} else if ($start>0) {
-		$pager=($start>23)?($start-23):0;
+		$pager=($start>19)?($start-19):0;
 		$item[]=array(id => "",calldate => "", caller_id => $employee, cause => "Keine weiteren Eintr&auml;ge" );
 		$next=$start;
-		$prev=($pager>23)?($pager-23):0;
+		$prev=($pager>19)?($pager-19):0;
 	} else {
 		$pager=0;
 		$next=0;

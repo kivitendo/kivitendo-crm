@@ -159,7 +159,7 @@ global $ERPNAME;
 	} else {
 		if ($rs) {
 			$tmp=$rs[0];
-			$_SESSION["termbegin"]=($tmp["termbegin"])?$tmp["termbegin"]:8;
+			$_SESSION["termbegin"]=(($tmp["termbegin"]>=0)?$tmp["termbegin"]:8);
 			$_SESSION["termend"]=($tmp["termend"])?$tmp["termend"]:19;
 			$_SESSION["Pre"]=$tmp["pre"];
 			$_SESSION["loginCRM"]=$tmp["id"];

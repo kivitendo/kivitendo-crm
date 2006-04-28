@@ -47,9 +47,9 @@
 	</ul>
 </div>
 
-<span style="position:absolute; left:10px; top:67px; width:95%;">
+<span style="position:absolute; left:10px; top:67px; width:99%;">
 <!-- Beginn Code --------------------------------------------- -->
-<span style="float:left; width:49%; height:410px; text-align:center; border: 1px solid black;">
+<span style="float:left; width:53%; height:430px; text-align:center; border: 1px solid black;">
 	<div style="float:left; width:64%; height:165px; text-align:left; border-bottom: 0px solid black; padding:2px;" class="gross">
 		{Fname1}<br />
 		{Fdepartment_1}<br />
@@ -114,7 +114,7 @@
 
 	<span id="inf" style="visibility:hidden;position:absolute; text-align:left;width:48%; left:5px; top:245px;">
 		<div class="smal" >
-		Kundentyp: <span class="value">{kdtyp}</span> &nbsp;&nbsp;&nbsp; Leadquelle:<span class="value">{lead} {leadsrc}</span><br />
+		Kundentyp: <span class="value">{kdtyp}</span> &nbsp;&nbsp;&nbsp; Quelle:<span class="value">{lead} {leadsrc}</span><br />
 		Rabatt: <span class="value">{rabatt}</span> &nbsp;&nbsp;&nbsp; Preisgruppe: <span class="value">{preisgrp}</span><br /><br />
 		Erstelldatum: <span class="value">{erstellt}</span> &nbsp;&nbsp;&nbsp; Ge&auml;ndert:<span class="value">{modify}</span <br />
 		Steuer-Nr.: <span class="value">{Taxnumber}</span> &nbsp;&nbsp;&nbsp; UStId: <span class="value">{USTID}</span><br /><br />
@@ -126,12 +126,12 @@
 	</span>
 </span>
 
-<span style="float:left; width:50%; height:410px; text-align:left; border: 1px solid black; border-left:0px;">
+<span style="float:left; width:46%; height:430px; text-align:left; border: 1px solid black; border-left:0px;">
 <table width="99%" summary="Kontaktverlauf">
 <!-- BEGIN Liste -->
 	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showItem({IID});">
-		<td class="smal" width="100" height="14px">{Datum} {Zeit}</td>
-		<td class="smal" width="60">{Nr}</td>
+		<td class="smal" width="105" height="14px">{Datum} {Zeit}</td>
+		<td class="smal" width="45">{Nr}</td>
 		<td class="smal le">{Betreff}</td>
 		<td class="smal le">{Name}</td>
 	</tr>

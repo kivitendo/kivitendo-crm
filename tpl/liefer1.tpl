@@ -43,9 +43,9 @@
 	</ul>
 </div>
 
-<span style="position:absolute; left:10px; top:67px; width:95%;">
+<span style="position:absolute; left:10px; top:67px; width:99%;">
 <!-- Beginn Code --------------------------------------------- -->
-<span style="float:left; width:49%; height:410px; text-align:center; border: 1px solid black;">
+<span style="float:left; width:53%; height:430px; text-align:center; border: 1px solid black;">
 	<div style="float:left; width:64%; height:165px; text-align:left; border-bottom: 0px solid black; padding:2px;" class="gross">
 		{Lname}<br />
 		{Ldepartment_1}<br />
@@ -107,7 +107,7 @@
 		</div>
 	</span>
 </span>	
-<span style="float:left; width:50%; height:410px; text-align:left; border: 1px solid black; border-left:0px;">
+<span style="float:left; width:46%; height:430px; text-align:left; border: 1px solid black; border-left:0px;">
 <table width="99%" summary="Kontaktverlauf">
 <!-- BEGIN Liste -->
 	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showItem({IID});">

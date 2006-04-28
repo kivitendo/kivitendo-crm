@@ -4,6 +4,12 @@
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 	<script language="JavaScript">
 	<!--
+	function chkfld() {
+<!-- BEGIN RegEx -->
+		if (! document.firma4.{fld}.value.match(/^{regul}*$/)) { alert("{fld}"); return false; };
+<!-- END RegEx -->
+		return true;
+	}
 	//-->
 	</script>
 <body>
@@ -20,7 +26,7 @@
 
 <span style="position:absolute; left:10px; top:67px; width:98%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
-<form name="firma4" action="firma4a.php" method="post">
+<form name="firma4" action="firma4a.php" method="post" onsubmit="return chkfld();">
 <input type="hidden" name="docid" value="{DOCID}">
 <input type="hidden" name="fid" value="{FID}">
 <input type="hidden" name="pid" value="{PID}">

@@ -44,6 +44,8 @@
 		$spacex=$_POST["spacex"];;
 		$spacey=$_POST["spacey"]; 
 		$nx=$_POST["nx"]; 
+		$cust=$_POST["cust"]; 
+		$name=$_POST["name"]; 
 		$ny=$_POST["ny"]; 
 		$width=$_POST["width"]; 
 		$height=$_POST["height"]; 

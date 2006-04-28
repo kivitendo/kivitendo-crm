@@ -28,7 +28,7 @@
 		$pdf->Open(); 
 		unset($tmp);
 		if ($SX<>1 or $SY<>1)	$pdf->AddPage();
-		$sql="select * from tempcsvdata where sessid = '".session_id()."' order by sessid";
+		$sql="select * from tempcsvdata where sessid = '".session_id()."' order by sessid desc";
 		$daten=$db->getAll($sql);
 		if ($daten) {
 			$felder=array_shift($daten);

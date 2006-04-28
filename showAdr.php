@@ -49,7 +49,7 @@
 		$anrede="Firma";
 		if ($data) {
 			$name=$data ["shiptoname"];
-			$department=$data["shiptodepartment_1"];
+			$name2=$data["shiptodepartment_1"];
 			$kontakt=$data ["shiptocontact"];
 			$strasse=$data ["shiptostreet"];
 			$land=$data ["shiptocountry"];
@@ -62,7 +62,7 @@
 			$data=getFirmaStamm($_GET["sid"]);
 			if ($data["name"]=="") $data=getLieferStamm($_GET["sid"]);
 			$name=$data ["name"];
-			$department=$data["department_1"];
+			$name2=$data["department_1"];
 			$kontakt=$data ["contact"];
 			$strasse=$data ["street"];
 			$land=$data ["country"];
@@ -87,7 +87,7 @@
 		$anrede="Firma";
 		$name=$data ["name"];
 		$name1=$name;
-		$department=$data["department_1"];
+		$name2=$data["department_1"];
 		$kontakt=$data ["contact"];
 		$strasse=$data ["street"];
 		$land=$data ["country"];
@@ -101,7 +101,7 @@
 	$label=getOneLable($etikett);
 	if ($_POST["print"]) {
 		$platzhalter=array("ANREDE"=>"anrede","TITEL"=>"title","TEXT"=>"freitext",
-				   "NAME"=>"name","NAME1"=>"name1","NAME2"=>"name2","DEPARTMENT"=>"department",
+				   "NAME"=>"name","NAME1"=>"name1","NAME2"=>"name2",
 				   "STRASSE"=>"strasse","PLZ"=>"plz","ORT"=>"ort","LAND"=>"land",
 				   "KONTAKT"=>"kontakt","FIRMA"=>"firma","ID"=>"id","KDNR"=>"kdnr",
 				   "EMAIL"=>"email","TEL"=>"telefon","FAX"=>"fax");
@@ -162,7 +162,7 @@ Anschrift<br><hr>
 	<?=  ($firma)?"Firma ".$firma."<br><br>":"" ?>
 	<?= $anrede ?> <?= $title ?><br>
 	<?= $name ?><br>
-	<?=  ($department)?$department."<br>":"" ?>
+	<?=  ($name2)?$name2."<br>":"" ?>
 	<?=  ($kontakt)?$kontakt."<br>":"" ?>
 	<?=  $strasse ?><br><br>
 	<?= ($land<>"")?$land." - ":"" ?>

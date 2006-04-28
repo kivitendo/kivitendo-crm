@@ -22,7 +22,8 @@
 			$t->set_block("li1","Liste","Block");
 			$i=0;
 			clearCSVData();
-			insertCSVData(array("ANREDE","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","KONTAKT","ID"));
+			insertCSVData(array("ANREDE","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","KONTAKT","ID",
+						"KDNR","USTID","STEUERNR","KTONR","BANK","BLZ","LANG","KDTYP"));
 			if ($daten) foreach ($daten as $zeile) {
 				insertCSVData(array("Firma",$zeile["name"],$zeile["department_1"],
 							$zeile["country"],$zeile["zipcode"],$zeile["city"],$zeile["street"],

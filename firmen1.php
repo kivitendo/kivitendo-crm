@@ -40,7 +40,7 @@
 						$zeile["country"],$zeile["zipcode"],$zeile["city"],$zeile["street"],
 						$zeile["phone"],$zeile["fax"],$zeile["email"],$zeile["contact"],$zeile["id"],
 						$zeile["customernumber"],$zeile["ustid"],$zeile["taxnumber"],
-						$zeile["account_number"],$zeile["bank_code"],$zeile["bank"],
+						$zeile["account_number"],$zeile["bank"],$zeile["bank_code"],
 						$zeile["language"],$zeile["business_id"]));	
 				$t->set_var(array(
 				ID => $zeile["id"],

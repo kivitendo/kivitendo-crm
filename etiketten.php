@@ -5,6 +5,7 @@
 	include("inc/UserLib.php");	
 	$usr=getUserStamm($_SESSION["loginCRM"]);
 	$ALabels=getLableNames();
+	$freitext=$_POST["freitext"];
 	if (!$_POST["format"] || empty($_POST["format"])) {
 		$_POST["format"]=$usr["etikett"];
 	}
@@ -33,8 +34,10 @@
 		if ($daten) {
 			$felder=array_shift($daten);
 			$felder=split(";",$felder["csvdaten"]);
+			$felder[]="TEXT";
 			foreach ($daten as $row) {
 				$data=split(";",$row["csvdaten"]);
+				$data[]=$_POST["text"];
 				unset($tmp);
 				foreach ($label["Text"] as $row) {
 					preg_match_all("/%([A-Z0-9_]+)%/U",$row["zeile"],$ph, PREG_PATTERN_ORDER);
@@ -84,7 +87,11 @@
 <?	foreach ($ALabels as $data) { ?>
 		<option value='<?= $data["id"]?>'<?= ($data["id"]==$_POST["format"])?" selected":"" ?>><?= $data["name"] ?>
 <?	} ?>
-	</select>&nbsp;<input type='submit' name='chfrm' value='wechseln'><br><br>
+	</select>&nbsp;<input type='submit' name='chfrm' value='wechseln'><br>
+	<hr>
+	Feier Text<br>
+	&nbsp;<input type="text" name="text" size="25" value="<?= $freitext ?>">
+	<hr>
 	&nbsp;Bitte Startposition ausw&auml;hlen.<br>
 	&nbsp;Es wird Spaltenweise verarbeitet.<br>
 <?

@@ -7,6 +7,7 @@
 	include("inc/crmLib.php");
 	include("inc/UserLib.php");
 	$ALabels=getLableNames();
+	$freitext=$_POST["freitext"];
 	if (!$_POST["format"] || empty($_POST["format"])) {
 		$usr=getUserStamm($_SESSION["loginCRM"]);
 		$etikett=($usr["etikett"])?$usr["etikett"]:$ALabels[0]["id"];
@@ -19,123 +20,91 @@
 	if ($_GET["pid"]) {
 		$dest="pid=".$_GET["pid"];
 		$data=getKontaktStamm($_GET["pid"]);
+		$id=$_GET["pid"];
 		if ($_GET["ep"]==1) {	// Einzelpersona
 			$dest.="=ep=1";
-			$anredeF=$data["cp_greeting"]." ".$data["cp_titel"];
-			$anredeP=$data["cp_greeting"]." ";
-			if ($data["cp_titel"]) $anredeP.=$data["cp_titel"]." ";
-			$name1F=$data["cp_givenname"]." ".$data["cp_name"];
-			$name1P=$name1F;
-			$strasseF=$data["cp_street"];
-			$strasseP=$strasseF;
-			$landF=$data["cp_country"];
-			$landP=$landF;
-			$plzF=$data["cp_zipcode"];
-			$ortF=$data["cp_city"];
-			$ortP=$ortF;
-			$plzP=$plzP;
-			$title=$data["cp_title"];
+			$firma="";
 		} else {
 			$data2=getFirmaStamm($data["cp_cv_id"]);
 			if (!$data2) $data2=getLieferStamm($data["cp_cv_id"]);
-			$anredeF="Firma";
-			$anredeP=$data["cp_greeting"]." ";
-			if ($data["cp_titel"]) $anredeP.=$data["cp_titel"]." ";
-			$name1P=$data["cp_givenname"]." ".$data["cp_name"];
-			$name1F=$data2["name"];
-			$name2F=$anredeP.$name1P;
-			$strasseF=$data2["street"];
-			$strasseP=$data["cp_street"];
-			$landF=$data2["country"];
-			$landP=$data["cp_country"];
-			$plzF=$data2["zipcode"];
-			$ortF=$data2["city"];
-			$plzP=$data["cp_zipcode"];
-			$ortP=$data["cp_city"];
-			$title=$data["cp_title"];
+			$firma=$data2["name"];
 		}
-	}
-	if ($_GET["PID"]) {
-		$dest="PID=".$_GET["PID"];
-		$data=getKontaktStamm($_GET["PID"]);
-		$data2=getLieferStamm($data["cp_cv_id"]);
-		$anredeF="Firma";
-		$anredeP=$data["cp_greeting"]." ";
-		if ($data["cp_titel"]) $anredeP.=$data["cp_titel"]." ";
-		$name1P=$data["cp_givenname"]." ".$data["cp_name"];
-		$name1F=$data2["name"];
-		$name2F=$anredeP.$name1P;
-		$strasseF=$data2["street"];
-		$strasseP=$data["cp_street"];
-		$landF=$data2["country"];
-		$landP=$data["cp_country"];
-		$plzF=$data2["zipcode"];
-		$ortF=$data2["city"];
-		$plzP=$data["cp_zipcode"];
-		$ortP=$data["cp_city"];
+		$anrede=$data["cp_greeting"];
 		$title=$data["cp_title"];
-	}
-
-	if ($_GET["fid"]) {
-		$dest="fid=".$_GET["fid"];
-		$data=getFirmaStamm($_GET["fid"]);
-		$anredeF="Firma";
-		$name1F=$data ["name"];
-		$name2F=$data ["name2"];
-		$department_1F=$data["department_1"];
-		$name1P=$data ["contact"];
-		$strasseF=$data ["street"];
-		$landF=$data ["country"];
-		$plzF=$data["zipcode"];
-		$ortF=$data["city"];
-	}
-	if ($_GET["lid"]) {
-		$dest="lid=".$_GET["lid"];
-		$data=getLieferStamm($_GET["lid"]);
-		$anredeF="Firma";
-		$name1F=$data ["name"];
-		$name2F=$data ["name2"];
-		$department_1F=$data["department_1"];
-		$name1P=$data ["contact"];
-		$strasseF=$data ["street"];
-		$landF=$data ["country"];
-		$plzF=$data["zipcode"];
-		$ortF=$data["city"];
-	}
-	if ($_GET["sid"]) {
+		$name=$data["cp_givenname"]." ".$data["cp_name"];
+		$name1=$data["cp_name"];
+		$name2=$data["cp_givenname"];
+		$strasse=$data["cp_street"];
+		$land=$data["cp_country"];
+		$plz=$data["cp_zipcode"];
+		$ort=$data["cp_city"];
+		$telefon=$data["cp_phone1"];
+		$fax=$data["cp_fax"];
+		$email=$data["cp_email"];
+		$kontakt="";
+	} else if ($_GET["sid"]) {
+		$id=$_GET["sid"];
 		$dest="sid=".$_GET["sid"];
 		$data=getShipStamm($_GET["sid"]);
+		$anrede="Firma";
 		if ($data) {
-			$anredeF="Firma";
-			$name1F=$data ["shiptoname"];
-			$name2F=$data ["shiptoname2"];
-			$department_1F=$data["shiptodepartment_1"];
-			$name1P=$data ["shiptocontact"];
-			$strasseF=$data ["shiptostreet"];
-			$landF=$data ["shiptocountry"];
-			$plzF=$data["shiptozipcode"];
-			$ortF=$data["shiptocity"];
+			$name=$data ["shiptoname"];
+			$department=$data["shiptodepartment_1"];
+			$kontakt=$data ["shiptocontact"];
+			$strasse=$data ["shiptostreet"];
+			$land=$data ["shiptocountry"];
+			$plz=$data["shiptozipcode"];
+			$ort=$data["shiptocity"];
+			$telefon=$data["shiptophone"];
+			$fax=$data["shiptofax"];
+			$email=$data["shiptoemail"];
 		} else {
 			$data=getFirmaStamm($_GET["sid"]);
 			if ($data["name"]=="") $data=getLieferStamm($_GET["sid"]);
-			$anredeF="Firma";
-			$name1F=$data ["name"];
-			$department_1F=$data["department_1"];
-			$name1P=$data ["contact"];
-			$name2F=$data ["name2"];
-			$strasseF=$data ["street"];
-			$landF=$data ["country"];
-			$plzF=$data["zipcode"];
-			$ortF=$data["city"];
+			$name=$data ["name"];
+			$department=$data["department_1"];
+			$kontakt=$data ["contact"];
+			$strasse=$data ["street"];
+			$land=$data ["country"];
+			$plz=$data["zipcode"];
+			$ort=$data["city"];
+			$telefon=$data["phone"];
+			$fax=$data["fax"];
+			$email=$data["email"];
+			$kdnr=$data["customernumber"];
 		}
+		$name1=$name;
+	} else {
+		if ($_GET["fid"]) {
+			$id=$_GET["fid"];
+			$dest="fid=".$_GET["fid"];
+			$data=getFirmaStamm($_GET["fid"]);
+		} else if ($_GET["lid"]) {
+			$id=$_GET["lid"];
+			$dest="lid=".$_GET["lid"];
+			$data=getLieferStamm($_GET["lid"]);
+		}
+		$anrede="Firma";
+		$name=$data ["name"];
+		$name1=$name;
+		$department=$data["department_1"];
+		$kontakt=$data ["contact"];
+		$strasse=$data ["street"];
+		$land=$data ["country"];
+		$plz=$data["zipcode"];
+		$ort=$data["city"];
+		$telefon=$data["phone"];
+		$fax=$data["fax"];
+		$email=$data["email"];
+		$kdnr=$data["customernumber"];
 	}
 	$label=getOneLable($etikett);
 	if ($_POST["print"]) {
-		$platzhalter=array("ANREDE"=>"anredeF","NAME1"=>"name1F","DEPARTMENT"=>"department_1F",
-				   "NAME2"=>"name2F","STRASSE"=>"strasseF","PLZ"=>"plzF","ORT"=>"ortF",
-				   "KONTAKT"=>"name1P",
-				   "ANREDEPERS"=>"anredeP","TITLE"=>"title","NAMEPERS"=>"name1P",
-				   "STRASSEPERS"=>"strasseP","PLZPERS"=>"plzP","ORTPERS"=>"ortP","LAND"=>"landF");
+		$platzhalter=array("ANREDE"=>"anrede","TITEL"=>"title","TEXT"=>"freitext",
+				   "NAME"=>"name","NAME1"=>"name1","NAME2"=>"name2","DEPARTMENT"=>"department",
+				   "STRASSE"=>"strasse","PLZ"=>"plz","ORT"=>"ort","LAND"=>"land",
+				   "KONTAKT"=>"kontakt","FIRMA"=>"firma","ID"=>"id","KDNR"=>"kdnr",
+				   "EMAIL"=>"email","TEL"=>"telefon","FAX"=>"fax");
 		$lableformat=array("paper-size"=>$label["papersize"],'name'=>$label["name"], 'metric'=>$label["metric"], 
 							'marginLeft'=>$label["marginleft"], 'marginTop'=>$label["margintop"], 
 							'NX'=>$label["nx"], 'NY'=>$label["ny"], 'SpaceX'=>$label["spacex"], 'SpaceY'=>$label["spacey"],
@@ -186,30 +155,25 @@
 <head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 <body>
+<form name='form' method='post' action='showAdr.php'>
+<input type="hidden" name="src" value="<?= $dest ?>">
 <p class="norm">
 Anschrift<br><hr>
-	<?= $anredeF ?><br>
-	<?= $name1F ?><br>
-	<?=  ($name2F)?$name2F."<br>":"" ?>
-	<?=  ($name1P)?$name1P."<br>":"" ?>
-	<?=  $strasseF ?><br><br>
-	<?= ($landF<>"")?$landF." - ":"" ?>
-	<?= $plzF ?> <?= $ortF ?><br>
-<?	if ($_GET["pid"] || $_GET["PID"]) { ?>
-		<hr><br>
-		<?= $anredeP ?> <?= $title ?><br>
-		<?= $name1P ?><br>
-		<?= $strasseP ?><br><br>
-		<?= ($landP<>"")?$landP." - ":"" ?>
-		<?= $plzP ?> <?= $ortP ?><br>
-<?	} ?>
+	<?=  ($firma)?"Firma ".$firma."<br><br>":"" ?>
+	<?= $anrede ?> <?= $title ?><br>
+	<?= $name ?><br>
+	<?=  ($department)?$department."<br>":"" ?>
+	<?=  ($kontakt)?$kontakt."<br>":"" ?>
+	<?=  $strasse ?><br><br>
+	<?= ($land<>"")?$land." - ":"" ?>
+	<?= $plz ?> <?= $ort ?><br>
 </p>
+	<hr>
+	<input type="text" name="freitext" size="25" value="<?= $freitext ?>">
 	<hr>
 	<table>
 		<tr><td>Etikett&nbsp;</td>
 			<td>
-				<form name='form' method='post' action='showAdr.php'>
-				<input type="hidden" name="src" value="<?= $dest ?>">
 				<select name='format' >
 <?	foreach ($ALabels as $data) { ?>
 					<option value='<?= $data["id"]?>'<?= ($data["id"]==$etikett)?" selected":"" ?>><?= $data["name"] ?>

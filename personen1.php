@@ -37,7 +37,7 @@
 			if ($daten) foreach ($daten as $zeile) {
 				insertCSVData(array($zeile["cp_greeting"],$zeile["cp_title"],$zeile["cp_name"],$zeile["cp_givenname"],
 							$zeile["cp_country"],$zeile["cp_zipcode"],$zeile["cp_city"],$zeile["cp_street"],
-							$zeile["cp_phone"],$zeile["cp_fax"],$zeile["cp_email"],$zeile["name"],$zeile["cp_id"]));
+							$zeile["cp_phone1"],$zeile["cp_fax"],$zeile["cp_email"],$zeile["name"],$zeile["cp_id"]));
 				if ($_POST["FID1"]) {
 					$insk="<input type='checkbox' name='kontid[]' value='".$zeile["cp_id"]."'>"; 
 				} else { 

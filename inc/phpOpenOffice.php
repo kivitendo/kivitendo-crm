@@ -164,22 +164,18 @@ class phpOpenOffice
 	{
 		global $archiveFiles;
 
-
 		// Has file been extracted ?
-		if($this->tmpDirName == "")
-		{
+		if($this->tmpDirName == "") {
 			$this->handleError("No document loaded. Use loadDocument function first.", E_USER_ERROR);
 		}
 
 		// Is dir still there
-		if(!is_dir(POO_TMP_PATH."/".$this->tmpDirName))
-		{
+		if(!is_dir(POO_TMP_PATH."/".$this->tmpDirName)) {
 			$this->handleError("Directory not found: ".$this->tmpDirName, E_USER_ERROR);
 		}
 
 		// Overwrite parsed documents
-		foreach (array_keys($this->parserFiles) as $file)
-		{
+		foreach (array_keys($this->parserFiles) as $file) {
 			$fp = fopen($this->parserFiles[$file], "w+");
 			fputs($fp, $this->parsedDocuments[$file]);
 			fclose($fp);
@@ -197,23 +193,12 @@ class phpOpenOffice
 		{
 			$file = $archiveFiles[$i];
 
-			/*if( $file == "mimetype" || $file == "meta.xml" || substr( $file, 0, 9) == "Pictures/" )
-			{
-				$v_list = $archive->add(POO_TMP_PATH."/".$this->tmpDirName."/".$file, PCLZIP_OPT_REMOVE_PATH, POO_TMP_PATH."/".$this->tmpDirName."/", PCLZIP_OPT_NO_COMPRESSION);
-			}
-			else
-			{
-				$v_list = $archive->add(POO_TMP_PATH."/".$this->tmpDirName."/".$file, PCLZIP_OPT_REMOVE_PATH, POO_TMP_PATH."/".$this->tmpDirName."/");
-			}
-			*/
-
 			// zip.lib dirty hack
 			$fp = fopen(POO_TMP_PATH."/".$this->tmpDirName."/".$file, "r");
-			$content = fread($fp, filesize(POO_TMP_PATH."/".$this->tmpDirName."/".$file));
+			$content = @fread($fp, filesize(POO_TMP_PATH."/".$this->tmpDirName."/".$file));
 			fclose($fp);
 			$zip->addFile($content, $file);
 		}
-
 
 		// Finally write file to disk => zip.lib dirty hack
 		$fp = fopen($filename, "w+");

@@ -4,10 +4,16 @@
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 	<script language="JavaScript">
 	<!--
+	function chkfld() {
+<!-- BEGIN RegEx -->
+		if (! document.liefer4.{fld}.value.match(/^{regul}*$/)) { alert("{fld}"); return false; };
+<!-- END RegEx -->
+		return true;
+	}
 	//-->
 	</script>
 <body>
-<p class="listtop">Detailansicht</p>
+<p class="listtop">Dokumenterstellung</p>
 <div style="position:absolute; top:33px; left:8px;  width:770px;">
 	<ul id="tabmenue">
 	<li><a href="{Link1}">Lieferantendaten</a><li>
@@ -19,7 +25,7 @@
 
 <span style="position:absolute; left:10px; top:67px; width:98%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
-<form name="liefer4" action="liefer4a.php" method="post">
+<form name="liefer4" action="liefer4a.php" method="post" onsubmit="return chkfld();">
 <input type="hidden" name="docid" value="{DOCID}">
 <input type="hidden" name="fid" value="{FID}">
 <input type="hidden" name="pid" value="{PID}">

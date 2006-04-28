@@ -41,8 +41,10 @@
 
 	if (empty($fid)) {
 		$co=getKontaktStamm($pid);
-		$anrede=$co["cp_greeting"].($co["title"])?$co["title"]:"";
-		$name=$co["cp_givenname"]." ".$co["cp_name"];
+		$anrede=$co["cp_greeting"]." ".$co["cp_title"];
+		$name2=$co["cp_givenname"];
+		$name1=$co["cp_name"];
+		$name=$name2." ".$name1;
 		$plz=$co["cp_zipcode"];
 		$ort=$co["cp_city"];
 		$strasse=$co["cp_street"];
@@ -55,7 +57,8 @@
 		$fa=getFirmaStamm($fid);
 		$anrede="Firma";
 		$name=$fa["name"];
-		$abteilung=$fa["department_1"];
+		$name1=$name;
+		$name2=$fa["department_1"];
 		$kontakt=$fa["contact"];
 		$plz=$fa["zipcode"];
 		$ort=$fa["city"];
@@ -96,8 +99,10 @@
 			Knopf => $knopf
 			));
 	$t->set_block("doc","Liste","Block");
+	$t->set_block("doc","RegEx","Block2");
 	$i=0;
-	if ($document["felder"]) foreach($document["felder"] as $zeile) {
+	if ($document["felder"]) {
+	 foreach($document["felder"] as $zeile) {
 		$value=strtolower($zeile["platzhalter"]);
 		if ($zeile["laenge"]>60) {
 			$rows=floor($zeile["laenge"]/60)+1;
@@ -109,8 +114,14 @@
 			EINGABE => $input,
 			Feldname => $zeile["feldname"]
 		));
-		$i++;
 		$t->parse("Block","Liste",true);
+		$t->set_var(array(
+			fld => $zeile["platzhalter"],
+			regul => $zeile["zeichen"]
+		));
+		$t->parse("Block2","RegEx",true);
+		$i++;
+	 }
 	}
 	$t->Lpparse("out",array("doc"),$_SESSION["lang"],"firma");
 ?>

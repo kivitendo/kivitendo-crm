@@ -36,13 +36,14 @@
 		$doc->prepsave($pre.substr($docdata["document"]["file"],0,-4));
 		insFormDoc($data,$pre.$docdata["document"]["file"]);
 		$doc->clean();
-		$knopf="Dokument erstellt: <a href='./".$_SESSION["mansel"]."/".$data["CID"]."/".$pre.$docdata["document"]["file"]."'>&lt;shift&gt;+&lt;klick&gt;</a>";
+		$knopf="Dokument erstellt: <a href='./dokumente/".$_SESSION["mansel"]."/".$data["CID"]."/".$pre.$docdata["document"]["file"]."'>&lt;shift&gt;+&lt;klick&gt;</a>";
 	}
 	if (!empty($fid)) {
 		$fa=getLieferStamm($fid);
-		$anrede="Firma"
+		$anrede="Firma";
 		$name=$fa["name"];
-		$abteilung=$fa["department_1"];
+		$name1=$name;
+		$name2=$fa["department_1"];
 		$kontakt=$fa["contact"];
 		$plz=$fa["zipcode"];
 		$ort=$fa["city"];
@@ -83,8 +84,10 @@
 			Knopf => $knopf
 			));
 	$t->set_block("doc","Liste","Block");
+	$t->set_block("doc","RegEx","Block2");
 	$i=0;
-	if ($doc["felder"]) foreach($doc["felder"] as $zeile) {
+	if ($doc["felder"]) 
+	  foreach($doc["felder"] as $zeile) {
 		$value=$zeile["platzhalter"];
 		if ($zeile["laenge"]>60) {
 			$rows=floor($zeile["laenge"]/60)+1;
@@ -96,8 +99,13 @@
 			EINGABE => $input,
 			Feldname => $zeile["feldname"]
 		));
-		$i++;
 		$t->parse("Block","Liste",true);
+		$t->set_var(array(
+			fld => $zeile["platzhalter"],
+			regul => $zeile["zeichen"]
+		));
+		$t->parse("Block2","RegEx",true);
+		$i++;
 	}
 	$t->pparse("out",array("doc"));
 

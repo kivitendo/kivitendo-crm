@@ -65,7 +65,7 @@ function getNumber($nr) {
 }
 function getBekannt($nr) {
 	global $db;
-	$sql="select * from maschine where  parts_id=$nr";
+	$sql="select * from maschine where  parts_id=$nr";
 	$rs=$db->getAll($sql);
 	if(!$rs) {
 		$rs=false;

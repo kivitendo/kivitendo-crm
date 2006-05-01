@@ -1,5 +1,5 @@
 <?
-// $Id: vertrag3.php,v 1.4 2005/11/02 11:33:06 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");
@@ -20,65 +20,47 @@
 		$template="vertragS.tpl";	
 		$t->set_file(array("vert" => $template));
 		$t->set_block("vert","Liste","Block1");
-		$m=$data[0]["mid"]; $mid="($m) ".$data[0]["artnr"]; 
-		$a=$data[0]["aid"]; $sum=0; $zsum=0; $gt=0; $sernr=$data[0]["serialnumber"];
-		$mid="[<a href=\"maschine1.php?sernr=".$sernr."\">$m</a>] ";
-		$masch=$data[0]["partnumber"]." #$sernr";
+		//$m=$data[0]["mid"]; 
+		$first=true;
+		$m=false;
 		if($data) foreach($data as $zeile) {
 			if ($zeile["mid"]<>$m) { 
+				if (!$first) {
+					$t->set_var(array(
+						MID		=> "", 	RID		=> "", 	BETRAG	=> "", 
+						SUMME	=> sprintf("%0.2f",$zsum)
+					));
+					$t->parse("Block1","Liste",true);
+					$gt+=$zsum;
+					$zsum=0;
+				}
+				$first=false;
 				$t->set_var(array(
-					MID		=> $mid,
-					masch		=> $masch,
-					RID		=> "[<a href=\"repauftrag.php?hole={$a}\">{$a}</a>]",
-					BETRAG	=> sprintf("%0.2f",$zsum),
+					MID	=> "[<a href=\"maschine1.php?sernr=".$zeile["serialnumber"]."\">".$zeile["partnumber"]." #".$zeile["serialnumber"]."</a>] ",
+					RID	=> "[<a href=\"repauftrag.php?hole=".$zeile["aid"]."\">".$zeile["aid"]."</a>]",
+					BETRAG	=> sprintf("%0.2f",$zeile["summe"]),
 					SUMME	=> ""
 				));
-				$sum+=$zsum;
 				$t->parse("Block1","Liste",true);
-				$zsum=$zeile["summe"];
-				$a=$zeile["aid"];
+				$zsum+=$zeile["summe"];
 				$m=$zeile["mid"];
-				$mid="[<a href=\"maschine1.php?sernr=".$sernr."\">$m</a>] ".$data[0]["partnumber"]." #$sernr";
-				$sernr=$zeile["serialnumber"];
+			} else  {
 				$t->set_var(array(
-					MID		=> "", 	RID		=> "", 	BETRAG	=> "", masch => "",
-					SUMME	=> sprintf("%0.2f",$sum)
-				));
-				$t->parse("Block1","Liste",true);
-				$gt+=$sum;
-				$sum=0;
-			} else 	if ($zeile["aid"]<>$a) {
-				$t->set_var(array(
-					MID		=> $mid,
-					masch		=> $masch,
-					RID		=> "[<a href=\"repauftrag.php?hole={$a}\">{$a}</a>]",
-					BETRAG	=> sprintf("%0.2f",$zsum),
+					MID	=> "",
+					RID	=> "[<a href=\"repauftrag.php?hole=".$zeile["aid"]."\">".$zeile["aid"]."</a>]",
+					BETRAG	=> sprintf("%0.2f",$zeile["summe"]),
 					SUMME	=> ""
 				));
-				$sum+=$zsum;
 				$t->parse("Block1","Liste",true);
-				$zsum=$zeile["summe"];
-				$a=$zeile["aid"];
-				$mid="";
-			} else { 
 				$zsum+=$zeile["summe"];
 			}
-		}	
+		}
 		$t->set_var(array(
-					MID		=> $mid,
-					masch		=> $masch,
-					RID		=> "[<a href=\"repauftrag.php?hole={$a}\">{$a}</a>]",
-					BETRAG	=> sprintf("%0.2f",$zsum),
-					SUMME	=> ""
-				));
-				$sum+=$zsum;
-				$t->parse("Block1","Liste",true);
-		$t->set_var(array(
-			MID		=> "",	RID		=> "",	BETRAG	=> "", masch => "",
-			SUMME	=> sprintf("%0.2f",$sum)
+			MID		=> "", 	RID		=> "", 	BETRAG	=> "", 
+			SUMME	=> sprintf("%0.2f",$zsum)
 		));
 		$t->parse("Block1","Liste",true);
-		$gt+=$sum;
+		$gt+=$zsum;
 		$diff=$einnahme-$gt;
 		$diff=($diff>0)?"&Uuml;berschuss ".sprintf("%0.2f",$diff):"Mehrkosten ".sprintf("%0.2f",$diff*-1);
 		$t->set_var(array(
@@ -86,6 +68,7 @@
 			jahr => $jahr,
 			VertragNr => $vertrag["contractnumber"],
 			FID => $vertrag["customer_id"],
+			KDNR => $vertrag["customernumber"],
 			Firma => $vertrag["name"],
 			betrag => sprintf("%0.2f",$vertrag["betrag"]),		
 			anfangdatum => db2date($vertrag["anfangdatum"]),
@@ -121,6 +104,7 @@
 		vorlage => $vertrag["template"],
 		Notiz => $vertrag["bemerkung"],
 		FID => $vertrag["customer_id"],
+		KDNR => $vertrag["customernumber"],
 		Firma => $vertrag["name"],
 		betrag => sprintf("%0.2f",$vertrag["betrag"]),		
 		anfangdatum => db2date($vertrag["anfangdatum"]),

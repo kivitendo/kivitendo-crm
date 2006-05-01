@@ -1,4 +1,4 @@
-<!-- $Id: vertrag3e.tpl,v 1.4 2005/11/02 11:35:45 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -35,8 +35,8 @@ Vertrag: {VertragNr}
 				<option value="{Vertrag}" {Vsel}>{Vertrag}</option>
 <!-- END Vorlage -->
 			</select> 
-			<input type="checkbox" name="new" value="1">
-			{vorlage}
+			<input type="checkbox" name="new" value="1">&auml;ndern 
+			({vorlage})
 			<!--a href="{vorlage_old}">{vorlage}</a-->
 			<br>Vertragsvorlage<br><br>
 		</td>
@@ -46,24 +46,24 @@ Vertrag: {VertragNr}
 	</tr>
 	<tr>
 		<td class="norm" width="40%"><input type="text" name="name" size="30" maxlength="75" value="{Firma}" onFocus="blur()"> <b>
-			<a href="firma1.php?id={FID}">[{FID}]</a> </b><br>Firma<br><br></td>
+			<a href="firma1.php?id={FID}">[{KDNR}]</a> </b><br>Firma<br><br></td>
 		<td class="norm" width="60%"><input type="hidden" name="contractnumber" value="{VertragNr}"><input type="hidden" name="cp_cv_id" value="{FID}">
 			<input type="text" name="anfangdatum" size="10" maxlength="10" value="{anfangdatum}" tabindex="6">&nbsp; <input type="text" name="endedatum" size="10" maxlength="10" value="{endedatum}" tabindex="6"><br>
 			<b>Vertragsdatum von &nbsp; bis</b></td>
 	</tr>
 	<tr>
-		<td class="norm"><input type="text" name="masch" size="30" value="" tabindex="6"> <input type="button" name="ma" value="suchen" onClick="suchMa();"  tabindex="7"><br>Maschine<br><br></td>
+		<td class="norm"><input type="text" name="masch" size="30" value="" tabindex="6"> <input type="button" name="ma" value="suchen" onClick="suchMa();"  tabindex="7"><br>ArtNr. Maschine<br><br></td>
 		<td class="norm"><input type="text" name="betrag" size="10" maxlength="10" value="{betrag}" tabindex="6">&euro;<br>Betrag </td>
 	</tr>
 	<tr>
-		<td class="norm"><input type="hidden" name="maschinen[0][0]" value=""><input type="text" name="maschinen[0][1]" size="30" maxlength="15" value="" tabindex="8"><br>neue Maschine<br><br></td>
-		<td class="norm"><input type="text" name="maschinen[0][2]" size="30" maxlength="75" value="" tabindex="9"> l&ouml;schen<br>Standort</td>		
+		<td class="norm"><input type="hidden" name="maschinen[0][0]" value=""><input type="text" name="maschinen[0][1]" size="30" maxlength="35" value="" tabindex="8"><br>neue Maschine<br><br></td>
+		<td class="norm"><input type="text" name="maschinen[0][2]" size="30" maxlength="75" value="" tabindex="9"> (l&ouml;schen)<br>Standort</td>		
 	</tr>	
 <!-- BEGIN Maschinen -->		
 	<tr>
 		<td class="norm"><input type="hidden" name="maschinen[{I}][0]" value="{MID}"><input type="text" name="maschinen[{I}][1]" size="30" maxlength="15" value="{Maschine}" tabindex="8"><br>Maschine</td>
 		<td class="norm"><input type="text" name="maschinen[{I}][2]" size="30" maxlength="125" value="{Standort}" tabindex="9">
-			<input type="checkbox" name="maschinen[{I}][3]" value="1"> <a href="maschine1.php?sernr={SerNr}">[mehr]</a><br>Standort</td>		
+			(<input type="checkbox" name="maschinen[{I}][3]" value="1">) <a href="maschine1.php?sernr={SerNr}">[mehr]</a><br>Standort</td>		
 	</tr>
 <!-- END Maschinen -->
 	<tr>
@@ -73,7 +73,7 @@ Vertrag: {VertragNr}
 			<input type="button" name="prt" value=" WV drucken" onCLick="drucke({VertragNr})"><br>Jahr
 		</td>
 		<td class="norm"><br>
-			<input type="submit" name="ok" value="sichern">
+			<input type="submit" name="ok" value="WV sichern">
 		</td>
 	</tr>
 

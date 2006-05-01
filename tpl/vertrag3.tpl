@@ -1,4 +1,4 @@
-<!-- $Id: vertrag3.tpl,v 1.3 2005/11/02 10:38:58 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -22,17 +22,15 @@
 <!-- Beginn Code ------------------------------------------->
 <p class="listtop">Wartungsvertr&auml;ge eingeben/editieren</p>
 <form name="formular" enctype='multipart/form-data' action="{action}" method="post">
-<input type="hidden" name="blind" value="">
 <table>
 	
 	<tr>
 		<td class="norm" width="40%">
-			<input type="hidden" name="blind" value="">
 			<select name="vorlage"  tabindex="1" style='width:300px;z-index: 1;'>
 <!-- BEGIN Vorlage -->
 				<option value="{Vertrag}" {Vsel}>{Vertrag}</option>
 <!-- END Vorlage -->
-			</select> <input type="hidden" name="blind" value="">
+			</select>
 			<br>Vertragsvorlage<br><br>
 		</td>
 		<td class="norm" width="60%"></td>
@@ -47,12 +45,12 @@
 			<b>Vertragsdatum von &nbsp; bis</b></td>
 	</tr>
 	<tr>
-		<td class="norm"><input type="text" name="masch" size="30" maxlength="15" value="" tabindex="6"> <input type="button" name="ma" value="suchen" onClick="suchMa();"  tabindex="7"><br>Maschine<br><br></td>
+		<td class="norm"><input type="text" name="masch" size="30" maxlength="15" value="" tabindex="6"> <input type="button" name="ma" value="suchen" onClick="suchMa();"  tabindex="7"><br>ArtNr. Maschine<br><br></td>
 		<td class="norm"><input type="text" name="betrag" size="10" maxlength="12" value="{betrag}" align="right" tabindex="6">&euro;<br>Betrag </td>
 	</tr>	
 	<tr>
 		<td class="norm"><input type="hidden" name="maschinen[0][0]" value=""><input type="text" name="maschinen[0][1]" size="30" value="" tabindex="8"><br>neue Maschine<br><br></td>
-		<td class="norm"><input type="text" name="maschinen[0][2]" size="30" value="" tabindex="9"> l&ouml;schen<br>Standort</td>		
+		<td class="norm"><input type="text" name="maschinen[0][2]" size="30" value="" tabindex="9"><br>Standort</td>		
 	</tr>	
 <!-- BEGIN Maschinen -->		
 	<tr>
@@ -66,7 +64,7 @@
 			<input type="button" name="prt" value="drucken" onCLick="drucke({VertragNr})">
 		</td>
 		<td class="norm">
-			<input type="submit" name="ok" value="sichern">
+			<input type="submit" name="ok" value="WV sichern">
 		</td>
 	</tr>
 

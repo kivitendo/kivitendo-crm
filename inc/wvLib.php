@@ -10,7 +10,7 @@ function getWVorlagen() {
 	$dh = opendir("./vorlage");
 	$vorlagen=array();
 	while (false !== ($filename = readdir($dh))) {
-		if (!is_dir($filename) and substr($filename,0,2)=="wv") { $vorlagen[]=substr($filename,2); };
+		if (!is_dir($filename) and ereg("wv.+\.pdf",$filename) ) { $vorlagen[]=substr($filename,2); };
 	}
 	return $vorlagen;
 }
@@ -236,7 +236,7 @@ function suchVertrag($vid) {
 }
 function getVertrag($vid) {
 	global $db;
-	$sql="select C.*,K.name from contract C left join customer K on K.id=C.customer_id where C.cid=$vid";
+	$sql="select C.*,K.name,K.customernumber from contract C left join customer K on K.id=C.customer_id where C.cid=$vid";
 	$rs=$db->getAll($sql);
 	return $rs[0];		
 }

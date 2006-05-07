@@ -1,5 +1,5 @@
 <?
-// $Id: maschine1.php,v 1.3 2005/11/02 10:37:52 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/wvLib.php");	
@@ -12,7 +12,7 @@
 		} else if ($_GET["sernr"]) {
 			$data=getSernumber($_GET["sernr"]);
 		} else {
-			$data=getArtnumber($_POST["partnumber"]);
+			$data=getArtnumber($_POST["partnumber"]."%");
 		}
 		if (count($data)>1) {
 			$t->set_file(array("vert" => "maschinenL.tpl"));		
@@ -81,13 +81,14 @@
 				preg_match("/^([0-9]+)\|(.+)/",$zeile["beschreibung"],$treffer);
 				$art="<a href='repauftrag.php?hole=".$treffer[1]."'>RepAuftr</a>";
 				$beschr=$treffer[2];
-		} else if ($zeile["art"]=="contsub") {
+		} else if ($zeile["art"]=="contsub" or $zeile["art"]=="contadd") {
 			$beschr=$zeile["beschreibung"];
 			$vid=suchVertrag($beschr);
-			$art="<a href='vertrag3.php?vid=".$vid[0]["cid"]."'>contsub</a>";
+			$art="<a href='vertrag3.php?vid=".$vid[0]["cid"]."'>".$zeile["art"]."</a>";
 		} else {
+				if ($zeile["art"]=="neu") $maschzusatz=$zeile["beschreibung"];
 				$art=$zeile["art"];
-				$beschr=$zeile["beschreibung"];
+				$beschr=substr($zeile["beschreibung"],0,40);
 		};
 		$t->set_var(array(
 			date   =>	db2date($zeile["datum"]),
@@ -96,6 +97,9 @@
 		));
 		$t->parse("Block1","History",true);
 	}	
+	$t->set_var(array(
+		maschzusatz => $maschzusatz
+	));
 	$t->pparse("out",array("masch"));
 
 ?>

@@ -1,5 +1,5 @@
 <?
-// $Id: prtRAuftrag.php,v 1.3 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/FirmaLib.php");	
 	include("inc/wvLib.php");
@@ -23,9 +23,10 @@
 	$pdf->Text(24.0,66.0,$firma["street"]);
 	$pdf->Text(24.0,74.0,$firma["zipcode"]." ".$firma["city"]);
 	$pdf->Text(24.0,82.0,$firma["phone"]);	
+	$pdf->Text(138.0,43.8,$_GET["aid"]);
 	$pdf->SetFont('Helvetica','',12);
-	$pdf->Text(138.0,64.7,$_GET["aid"]);
-	$pdf->Text(138.0,71.8,$firma["id"]);
+	$pdf->Text(138.0,64.7,$masch["contractnumber"]);
+	$pdf->Text(138.0,71.8,$firma["customernumber"]);
 	$pdf->Text(138.0,77.7,date("d.m.Y"));		
 	$pdf->Text(50.0,100.0,$masch["description"]);
 	$pdf->Text(50.0,107.0,$masch["serialnumber"]);

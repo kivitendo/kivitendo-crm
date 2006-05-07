@@ -36,7 +36,7 @@
 				}
 				$first=false;
 				$t->set_var(array(
-					MID	=> "[<a href=\"maschine1.php?sernr=".$zeile["serialnumber"]."\">".$zeile["partnumber"]." #".$zeile["serialnumber"]."</a>] ",
+					MID	=> "[<a href=\"maschine1.php?sernr=".$zeile["serialnumber"]."\">".$zeile["artnr"]." #".$zeile["serialnumber"]."</a>] ",
 					RID	=> "[<a href=\"repauftrag.php?hole=".$zeile["aid"]."\">".$zeile["aid"]."</a>]",
 					BETRAG	=> sprintf("%0.2f",$zeile["summe"]),
 					SUMME	=> ""

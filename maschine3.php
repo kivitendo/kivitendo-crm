@@ -1,5 +1,5 @@
 <?
-// $Id: maschine3.php,v 1.3 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/wvLib.php");	
@@ -11,7 +11,7 @@
 		$pid=$data["parts_id"];
 	}		
 	if ($_POST["search"]) {
-		$data=getArtikel($_POST["partnumber"]);
+		$data=getArtikel($_POST["partnumber"]."%");
 		if (count($data)>1) {
 			$t->set_file(array("vert" => "maschinenL.tpl"));		
 			$t->set_block("vert","Sernumber","Block1");

@@ -1,5 +1,5 @@
 <?
-// $Id: rechng.php,v 1.4 2005/11/02 11:33:06 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
 	include("inc/FirmaLib.php");

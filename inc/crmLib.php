@@ -1124,8 +1124,9 @@ global $db;
 	$lastYearV=date("Y-m-d",mktime(0, 0, 0, date("m")+1, 1, $jahr-1));
 	$lastYearB=date("Y-m-d",mktime(0, 0, 0, date("m"), 31, $jahr));
 	if ($liefer) {
+		$sql="select * from oe where vendor_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' and closed = 'f' and quotation = 'f' order by transdate desc";
+		$rs2=$db->getAll($sql);
 		$sql="select * from ap where vendor_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' order by transdate desc";
-		$rs2=array();
 	} else {
 		$sql="select * from oe where customer_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' and closed = 'f' and quotation = 'f' order by transdate desc";
 		$rs2=$db->getAll($sql);
@@ -1139,6 +1140,7 @@ global $db;
 		$rechng[$dat]=array("summe"=>0,"count"=>0,"curr"=>"Eur");
 	}
 	$rechng["Jahr  "]=array("summe"=>0,"count"=>0,"curr"=>"Eur");
+	// unterschiedliche Währungen sind noch nicht berücksichtigt. Summe stimmt aber.
 	if ($rs) foreach ($rs as $re){
 		$m=substr($re["transdate"],0,4).substr($re["transdate"],5,2);
 		$rechng[$m]["summe"]+=$re["netamount"];
@@ -1155,11 +1157,15 @@ global $db;
 * out: rechng = array
 * Angebotsdaten je Monat
 *****************************************************/
-function getAngebJahr($fid,$jahr) {
+function getAngebJahr($fid,$jahr,$liefer=false) {
 global $db;
 	$lastYearV=date("Y-m-d",mktime(0, 0, 0, date("m"), 1, $jahr-1));
 	$lastYearB=date("Y-m-d",mktime(0, 0, 0, date("m")+1, -1, $jahr));
-	$sql="select * from oe where customer_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' and quotation = 't' order by transdate desc";
+	if ($liefer) {
+		$sql="select * from oe where vendor_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' and quotation = 't' order by transdate desc";
+	} else {
+		$sql="select * from oe where customer_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' and quotation = 't' order by transdate desc";
+	}
 	$rs=$db->getAll($sql);
 	$rechng=array();
 	for ($i=11; $i>=0; $i--) {
@@ -1189,12 +1195,12 @@ function getReMonat($fid,$monat,$liefer=false){
 global $db;
 	if ($liefer) {
 		$sql1="select * from ap where vendor_id=$fid and transdate like '$monat%' order by transdate desc";
-		$rs2=array();
+		$sql2="select * from oe where vendor_id=$fid and transdate like '$monat%' and closed = 'f' order by transdate desc";
 	} else {
 		$sql1="select * from ar where customer_id=$fid and transdate like '$monat%' order by transdate desc";
 		$sql2="select * from oe where customer_id=$fid and transdate like '$monat%' and closed = 'f' order by transdate desc";
-		$rs2=$db->getAll($sql2);
 	};
+	$rs2=$db->getAll($sql2);
 	$rs1=$db->getAll($sql1);
 	$rs=array_merge($rs1,$rs2);
 	usort($rs,"cmp");

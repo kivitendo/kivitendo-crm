@@ -42,7 +42,7 @@ Ums&auml;tze/Angebote von Monat {Monat}
 		<th class="smal">OP</th>
 	</tr>
 <!-- BEGIN Liste -->
-	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showP('V{RNid}','{RNr}');">
+	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showP('{Type}{RNid}','{RNr}');">
 		<td class="smal">{Datum}</td>
 		<td class="smal">&nbsp;{RNr}&nbsp;</td>
 		<td class="smal re">{RSumme}&nbsp;&nbsp;</td>

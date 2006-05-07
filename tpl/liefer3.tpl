@@ -36,7 +36,7 @@
 			<tr>
 				<th class="smal" width="10%">Monat</th>
 				<th class="smal"></th><th class="smal">Umsatz</th>
-				<th class="smal">Angebot</td><td width="10%"></td>
+				<th class="smal">Anfrage</td><td width="10%"></td>
 			</tr>
 <!-- BEGIN Liste -->
 			<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showM('{Month}');">

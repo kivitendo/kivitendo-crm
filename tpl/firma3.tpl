@@ -25,7 +25,7 @@
 <span style="position:absolute; left:10px; top:67px; width:99%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <div style="position:absolute; left:0px; top:0px; width:450px; border:1px solid black" class="fett">
-	{Name} &nbsp; {KDNR}<br />
+	{Name} &nbsp; {customernumber}<br />
 	{Plz} {Ort}
 </div>
 <span style="position:absolute; left:470px; top:7px;">[<a href="opportunity.php?fid={FID}">Auftragschancen</a>]</span>

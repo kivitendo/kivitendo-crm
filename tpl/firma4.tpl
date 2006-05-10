@@ -43,7 +43,7 @@
 <input type="hidden" name="fid" value="{FID}">
 <span style="float:left; width:43%; height:410px; text-align:center; padding:2px; border: 1px solid black;">
 	<div style="float:left; width:100%; height:50px; text-align:left; border-bottom: 1px solid black;" class="fett">
-		{Name} &nbsp; &nbsp; {KDNR}<br />
+		{Name} &nbsp; &nbsp; {customernumber}<br />
 		{Plz} {Ort}<br />
 	</div>
 	<div style="float:left; width:100%; height:50px; text-align:left; border-bottom: 0px solid black;" class="normal">

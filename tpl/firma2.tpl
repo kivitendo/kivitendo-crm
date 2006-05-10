@@ -34,7 +34,7 @@
 <!-- Beginn Code ------------------------------------------->
 <div style="float:left; width:53%; height:430px; text-align:center; border: 1px solid black;">
 	<div style="float:left; width:100%; height:50px; text-align:left; border-bottom: 1px solid black;" class="fett">
-		{Fname1} &nbsp; &nbsp; {KDNR}<br />
+		{Fname1} &nbsp; &nbsp; {customernumber}<br />
 		{Fdepartment_1}<br /> 
 		{Plz} {Ort}<br />
 	</div>

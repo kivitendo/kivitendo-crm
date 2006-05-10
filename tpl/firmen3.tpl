@@ -17,11 +17,11 @@
 <span style="position:absolute; left:10px; top:47px; width:99%;">
 <!-- Beginn Code ------------------------------------------->
 <form name="neueintrag" enctype='multipart/form-data' action="{action}" method="post">
-<input type="hidden" name="id" value="{ID}">
-<input type="hidden" name="customernumber" value="{KDNR}">
+<input type="hidden" name="id" value="{id}">
+<input type="hidden" name="customernumber" value="{customernumber}">
 <input type="hidden" name="employee" value="{employee}">
 <input type="hidden" name="grafik" value="{grafik}">
-{Msg}		
+{Msg}
 <span style="float:left; width:485px;  text-align:left; border: 0px solid black;">
 <span style="float:left; width:295px; height:250px; text-align:left; border: 0px solid black;">
 	<div class="zeile">

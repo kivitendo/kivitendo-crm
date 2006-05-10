@@ -2,6 +2,11 @@
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+	<script language="JavaScript" type="text/javascript">
+  		function report() {
+  			f1=open("report.php?tab=vendor","Report","width=600; height=500; left=100; top=100");
+  		}
+	</script>
 <body onLoad="document.erwsuche.name.focus();">
 
 <form name="erwsuche" enctype='multipart/form-data' action="{action}" method="post">

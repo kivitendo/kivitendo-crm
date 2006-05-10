@@ -26,7 +26,7 @@
 <span style="position:absolute; left:10px; top:67px; width:95%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <div style="position:absolute; left:0px; top:0px; width:450px; border:1px solid black" class="fett">
-	{Name} &nbsp; {KDNR}<br />
+	{Name} &nbsp; {customernumber}<br />
 	{Plz} {Ort}
 </div>
 <div style="position:absolute; left:1px; top:45px; width:450px;text-align:center;" class="normal">

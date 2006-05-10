@@ -61,7 +61,7 @@
 		Fax: {Fax}<br />	
 	</div>
 	<div style="float:left; width:33%; height:165px; text-align:right; border-bottom: 0px solid black; padding:2px;" class="gross">
-		{KDNR}<br />
+		{customernumber}<br />
 		{IMG}<br /><br />
 			<form action="../oe.pl" method="post">
 	  		<input type="hidden" name="path" value="bin/mozilla">

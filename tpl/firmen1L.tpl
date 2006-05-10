@@ -34,6 +34,7 @@
 	<input type="button" name="etikett" value="Etiketten" onClick="chngSerial('etiketten');">&nbsp;
 	<a href="sermail.php"><input type="button" name="email" value="Serienmail"></a>&nbsp;
 	<input type="button" name="brief" value="Serienbrief" onClick="chngSerial('serdoc');">
+</form>
 	<br>
 	<iframe src="etiketten.php" name="etikett" width="300" height="380" scrolling="yes"> marginheight="0" marginwidth="0" align="left">
 		<p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>

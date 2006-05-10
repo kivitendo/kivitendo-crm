@@ -31,7 +31,7 @@
 <input type="hidden" name="fid" value="{FID}">
 <input type="hidden" name="pid" value="{PID}">
 <div style="position:absolute; left:1px; width:450px; height:50px; text-align:left; border: 1px solid black;" class="fett">
-		{Name} &nbsp; &nbsp; {KDNR}<br />
+		{Name} &nbsp; &nbsp; {customernumber}<br />
 		{Plz} {Ort}<br />
 		{Art}
 </div>

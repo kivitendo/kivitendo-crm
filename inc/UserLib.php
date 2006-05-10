@@ -1,25 +1,6 @@
 <?
 // $Id$
 
-/****************************************************
-* chkTable
-* in: fid = int
-* out: file = string
-* ist das ein Kunde oder Lieferant
-*****************************************************/
-function chkTable($fid){
-global $db;
-	$file="firma2.php";
-	$sql="select count(*) from customer where id=$fid";
-	$row=$db->getAll($sql);
-	if ($row[0]["count"]<1) {
-		$sql="select count(*) from vendor where id=$fid";
-		$row=$db->getAll($sql);
-		if ($row[0]["count"]==1) $file="liefer2.php";
-	}
-	return $file;
-};
-
 
 /****************************************************
 * saveUserStamm

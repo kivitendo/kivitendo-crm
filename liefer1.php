@@ -74,7 +74,8 @@
 			PAGER		=> $pager,
 			NEXT		=> $next,
 			PREV		=> $prev,
-			kdview => $views[$_SESSION["kdview"]],	
+			kdview => $views[$_SESSION["kdview"]],
+			verstecke => ($li["obsolete"]=="t")?"visible":"hidden",
 			));
 		$t->set_block("Li1","Liste","Block");
 		$i=0;

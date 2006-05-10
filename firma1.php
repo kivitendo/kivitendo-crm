@@ -87,6 +87,8 @@
 			erstellt => db2date($fa["itime"]),
 			modify => db2date($fa["mtime"]),
 			kdview => $views[$_SESSION["kdview"]],
+			zeige => ($fa["obsolete"]=="f")?"visible":"hidden",
+			verstecke => ($fa["obsolete"]=="t")?"visible":"hidden",
 			));
 		$t->set_block("fa1","Liste","Block");
 		$i=0;

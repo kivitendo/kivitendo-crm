@@ -120,7 +120,7 @@ function uudecode($encode) {
 * prüft ob name und kennwort in db sind und liefer die UserID
 *****************************************************/
 function anmelden($name) {
-global $ERPNAME;
+global $ERPNAME,$showErr;
 	ini_set("gc_maxlifetime","3600");
 	$tmp = @file_get_contents("../".$ERPNAME."/users/".$_GET["login"].".conf");
 	preg_match("/dbname => '(.+)'/",$tmp,$hits);
@@ -151,7 +151,7 @@ global $ERPNAME;
 	$_SESSION["dbhost"]=$dbhost;
 	$_SESSION["dbuser"]=$dbuser;
 	$_SESSION["dbpasswd"]=$dbpasswd;		
-	$_SESSION["db"]->showErr = true;
+	$_SESSION["db"]->showErr = $showErr;
 	$sql="select * from employee where login='$name'";
 	$rs=$_SESSION["db"]->getAll($sql);
 	if(!$rs) {

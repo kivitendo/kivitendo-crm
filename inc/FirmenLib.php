@@ -1,13 +1,14 @@
 <?
-// $Id$
+// $Id: FirmenLib.php $
 
 /****************************************************
-* getAllCustomer
+* getAllFirmen
 * in: sw = array(Art,suchwort)
+* in: tab = string
 * out: rs = array(Felder der db)
 * hole alle Kunden
 *****************************************************/
-function getAllCustomer($sw,$Pre=true) {
+function getAllFirmen($sw,$Pre=true,$tab='C') {
 global $db;
 	if ($Pre) $Pre=$_SESSION["Pre"];
 	$rechte=berechtigung();
@@ -18,7 +19,13 @@ global $db;
 		$where.="upper(department_1) like '$Pre".$sw[1]."%' or ";
 		$where.="upper(department_2) like '$Pre".$sw[1]."%'"; 
 	}
-	$sql="select *,'C' as tab from customer where ($where) and $rechte";
+	if ($tab=="C") {
+		$sql="select *,'C' as tab from customer where ($where) and $rechte";
+	} else if ($tab=="V") {
+		$sql="select *,'V' as tab from vendor where ($where) and $rechte";
+	} else {
+		return false;
+	}
 	$rs=$db->getAll($sql);
 	if(!$rs) {
 		$rs=false;
@@ -32,18 +39,30 @@ global $db;
 * out: daten = array
 * Stammdaten einer Firma holen
 *****************************************************/
-function getFirmaStamm($id,$ws=true) {
+function getFirmenStamm($id,$ws=true,$tab='C') {
 global $db;
-	$sql="select sum(amount) from oe where customer_id=$id and quotation='f' and closed = 'f'";
-	$rs=$db->getAll($sql);
-	$oa=$rs[0]["sum"];
-	$sql="select sum(amount) from ar where customer_id=$id and amount<>paid";
-	$rs=$db->getAll($sql);
-	$op=$rs[0]["sum"];
-	$sql="select C.*,E.login,B.description as kdtyp,B.discount as typrabatt,P.pricegroup,L.lead as leadname from customer C ";
-	$sql.="left join employee E on C.employee=E.id left join business B on B.id=C.business_id ";
-	$sql.="left join pricegroup P on P.id=C.klass left join leads L on C.lead=L.id ";
-	$sql.="where C.id=$id";
+	if ($tab=="C") {
+		$sql="select sum(amount) from oe where customer_id=$id and quotation='f' and closed = 'f'";
+		$rs=$db->getAll($sql);
+		$oa=$rs[0]["sum"];
+		$sql="select sum(amount) from ar where customer_id=$id and amount<>paid";
+		$rs=$db->getAll($sql);
+		$op=$rs[0]["sum"];
+		$sql="select C.*,E.login,B.description as kdtyp,B.discount as typrabatt,P.pricegroup,L.lead as leadname from customer C ";
+		$sql.="left join employee E on C.employee=E.id left join business B on B.id=C.business_id ";
+		$sql.="left join pricegroup P on P.id=C.klass left join leads L on C.lead=L.id ";
+		$sql.="where C.id=$id";
+	} else if ($tab=="V") {
+		$sql="select sum(amount) as summe from ap where vendor_id=$id and amount<>paid";
+	        $rs=$db->getAll($sql);
+        	$op=$rs[0]["summe"];
+		$os=false;
+		$sql="select C.*,E.login,B.description as lityp,B.discount as typrabatt from vendor C ";
+	        $sql.="left join employee E on C.employee=E.id left join business B on B.id=C.business_id ";
+        	$sql.="where C.id=$id";
+	} else {
+		return false;
+	}
 	$rs=$db->getAll($sql);  // Rechnungsanschrift
 	if(!$rs) {
 		return false;
@@ -118,7 +137,9 @@ global $db;
 * out: daten = array
 * Suchstring über customer,shipto zusamensetzen
 *****************************************************/
-function suchstr($muster) {
+function suchstr($muster,$typ="C") {
+	$kenz=array("C" => "K","V" => "L");
+	$tab=array("C" => "customer","V" => "vendor");
 	// Array zu jedem Formularfed: Tabelle (0=cust,1=ship), TabName, toUpper
 	$dbfld=array(name => array(0,1),street => array(0,1),zipcode => array(0,0),
 			city => array(0,1),phone => array(0,0),fax => array(0,0),
@@ -127,7 +148,9 @@ function suchstr($muster) {
 			country => array(0,1),typ => array(0,0),sw => array(0,1),
 			language => array(0,0), business_id => array(0,0),
 			ustid => array(0,1), taxnumber => array(0,0), lead => array(0,0),leadsrc => array(0,1),
-			bank => array(0,1), bank_code => array(0,0), account_number => array(0,0));
+			bank => array(0,1), bank_code => array(0,0), account_number => array(0,0),
+			vendornumber => array(0,1),v_customer_id => array(0,0),
+			kundennummer => array(0,0),customernumber => array(0,1));
 	$dbfld2=array(name => "shiptoname", street=>"shiptostreet",ziptocode=>"shiptozipcode",
 			city=>"shiptocity",phone=>"shiptophone",fax=>"shiptofax",
 			email=>"shiptoemail",department_1=>"shiptodepartment_1",
@@ -149,13 +172,13 @@ function suchstr($muster) {
 				$suchwort=trim($muster[$keys[$i]]);
 			}
 			$suchwort=strtr($suchwort,"*?","%_");
-			$tmp1.="and $case1 K.".$keys[$i]." $case2 like '".$suchwort."$fuzzy' ";
+			$tmp1.="and $case1 ".$kenz[$typ].".".$keys[$i]." $case2 like '".$suchwort."$fuzzy' ";
 			if ($tbl1 && $dbfld2[$keys[$i]]) 
 				$tmp2.="and $case1 S.".$dbfld2[$keys[$i]]." $case2 like '".$suchwort."$fuzzy' ";
 		}
 	}
 	if ($tbl1) {
-		$tabs="customer K left join shipto S on K.id=S.trans_id";
+		$tabs=$tab[$typ]." ".$kenz[$typ]." left join shipto S on ".$kenz[$typ].".id=S.trans_id";
 		if ($tmp1) $where="(".substr($tmp1,3). ") or ( ";
 		if ($tmp2) { 
 			$where.=substr($tmp2,3).")"; 
@@ -163,7 +186,7 @@ function suchstr($muster) {
 			$where.=" 1)"; 
 		}
 	} else {
-		$tabs="customer K";
+		$tabs=$tab[$typ]." ".$kenz[$typ];
 		if ($tmp1) $where=substr($tmp1,3);
 	}
 	return array("where"=>$where,"tabs"=>$tabs); 
@@ -175,10 +198,10 @@ function suchstr($muster) {
 * out: daten = array
 * KundenDaten suchen
 *****************************************************/
-function suchFirma($muster) {
+function suchFirma($muster,$tab="C") {
 global $db;
 	$rechte=berechtigung();
-	$tmp=suchstr($muster);
+	$tmp=suchstr($muster,$tab);
 	$where=$tmp["where"]; $tabs=$tmp["tabs"];
 	if ($where<>"") {
 		$sql="select * from $tabs where ($where) and $rechte";
@@ -191,9 +214,10 @@ global $db;
 	}
 	return $daten;
 }
-function getName($id) {
+function getName($id,$typ="C") {
 global $db;
-	$sql="select name from customer where id = $id";
+	$tab=array("C" => "customer","V" => "vendor");
+	$sql="select name from ".$tab[$typ]." where id = $id";
 	$rs=$db->getAll($sql);
 	if ($rs) {
 		return $rs[0]["name"];
@@ -207,32 +231,36 @@ global $db;
 * out: rc = int
 * KundenDaten sichern ( update )
 *****************************************************/
-function saveFirmaStamm($daten,$datei,$neu=false) {
+function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
 global $db;
+	$kenz=array("C" => "K","V" => "L");
+	$tab=array("C" => "customer","V" => "vendor");
 	if (!empty($datei["Datei"]["name"])) {  		// eine Datei wird mitgeliefert
-			$typ=array(1=>"gif",2=>"jpeg",3=>"png",4=>false);
+			$pictyp=array(1=>"gif",2=>"jpeg",3=>"png",4=>false);
 			$imagesize=getimagesize($datei["Datei"]['tmp_name'],&$info);
 			if ($imagesize[2]>0 && $imagesize[2]<4) {
 				$bildok=chkdir($_SESSION["mansel"]."/".$daten["id"]);
-				$daten["grafik"]=$typ[$imagesize[2]];
+				$daten["grafik"]=$pictyp[$imagesize[2]];
 			}
 	};
-	// Array zu jedem Formularfed: Tabelle (0=cust,1=ship), TabName, require(0=nein,1=ja), Regel
-	$dbfld=array(name => array(0,1,1,"Name",75),street => array(0,1,1,"Strasse",75),
-			country => array(0,0,8,"Land",3),	zipcode => array(0,1,2,"Plz",10),
-			city => array(0,1,1,"Ort",75),		phone => array(0,0,3,"Telefon",30),
-			fax => array(0,0,3,"Fax",30),		homepage =>array(0,0,4,"Homepage",0),
-			email => array(0,0,5,"eMail",0),	notes => array(0,0,0,"Bemerkungen",0),
-			contact => array(0,0,1,"Kontakt",75),	ustid => array(0,0,0,"UStId",0),
-			department_1 => array(0,0,1,"Zusatzname",75),
-			department_2 => array(0,0,1,"Abteilung",75),
-			sw => array(0,0,1,"Stichwort",50),	taxnumber => array(0,0,0,"Steuernummer",0),
-			bank => array(0,0,1,"Bankname",50),
-			bank_code => array(0,0,6,"Bankleitzahl",15),
+	// Array zu jedem Formularfed: Tabelle (0=customer/vendor,1=shipto), require(0=nein,1=ja), Spaltenbezeichnung, Regel
+	$dbfld=array(	name => array(0,1,1,"Name",75),			
+			department_1 => array(0,0,1,"Zusatzname",75),	department_2 => array(0,0,1,"Abteilung",75),
+			country => array(0,0,8,"Land",3),		zipcode => array(0,1,2,"Plz",10),
+			city => array(0,1,1,"Ort",75),			street => array(0,1,1,"Strasse",75),
+			fax => array(0,0,3,"Fax",30),			phone => array(0,0,3,"Telefon",30),
+			email => array(0,0,5,"eMail",0),		homepage =>array(0,0,4,"Homepage",0),
+			contact => array(0,0,1,"Kontakt",75),		
+			//vendornumber => array(0,0,0,"Lieferantennummer",20),
+			//customernumber => array(0,0,0,"Kundennummer",20),
+                        v_customer_id => array(0,0,0,"Kundennummer",20),
+			sw => array(0,0,1,"Stichwort",50),		notes => array(0,0,0,"Bemerkungen",0),
+			ustid => array(0,0,0,"UStId",0),		taxnumber => array(0,0,0,"Steuernummer",0),
+			bank => array(0,0,1,"Bankname",50),		bank_code => array(0,0,6,"Bankleitzahl",15),
 			account_number => array(0,0,6,"Kontonummer",15),
-			branche => array(0,0,1,"Branche",25),	business_id => array(0,0,6,"Kundentyp",0),
-			owener => array(0,0,6,"CRM-User",0),	grafik => array(0,0,9,"Grafik",4),
-			lead => array(0,0,6,"Leadquelle",0),	leadsrc => array(0,0,1,"Leadquelle",15),
+			branche => array(0,0,1,"Branche",25),		business_id => array(0,0,6,"Kundentyp",0),
+			owener => array(0,0,6,"CRM-User",0),		grafik => array(0,0,9,"Grafik",4),
+			lead => array(0,0,6,"Leadquelle",0),		leadsrc => array(0,0,1,"Leadquelle",15),
 			shiptoname => array(1,0,1,"Liefername",75), 
 			shiptostreet => array(1,0,1,"Lieferstrasse",75),
 			shiptocountry => array(1,0,8,"Lieferland",3),
@@ -260,9 +288,9 @@ global $db;
 					$fehler=$dbfld[$keys[$i]][3]; 
 					$i=$anzahl; 
 				} else {
-					if (in_array($dbfld[$keys[$i]][2],array(0,1,2,3,4,5,7,8,9))) {
+					if (in_array($dbfld[$keys[$i]][2],array(0,1,2,3,4,5,7,8,9))) { //Daten == Zeichenkette
 						$query1.=$keys[$i]."='".$tmpval."',";
-					} else {
+					} else {							//Daten == Zahl
 						$query1.=$keys[$i]."=".$tmpval.",";
 					}
 					if ($keys[$i]=="Ltel"||$keys[$i]=="Lfax") $tels2[]=$tmpval;
@@ -283,19 +311,23 @@ global $db;
 		}
 	}
 	if ($fehler=="ok") {
-		if ($daten["customernumber"]) {
+		if ($daten["customernumber"]||$daten["vendornumber"]) {
 			$query0=substr($query0,0,-1);
 		} else {
-			$query0=$query0."customernumber='".newcustnr()."' ";
+			if ($typ=="C") {
+				$query0=$query0."customernumber='".newnr($tab[$typ])."' ";
+			} else {
+				$query0=$query0."vendornumber='".newnr($tab[$typ])."' ";
+			}
 		}
 		$query1=substr($query1,0,-1)." ";
-		$sql0="update customer set $query0 where id=$fid";
+		$sql0="update ".$tab[$typ]." set $query0 where id=$fid";
 		mkTelNummer($fid,"C",$tels1);
 		if ($bildok) {
-			$typ=array(1=>"gif",2=>"jpeg",3=>"png",4=>false);
+			$pictyp=array(1=>"gif",2=>"jpeg",3=>"png",4=>false);
 			$dir="./dokumente/".$_SESSION["mansel"]."/".$fid;
 			$imagesize=getimagesize($datei["Datei"]['tmp_name'],&$info);
-			$dest=$dir."/logo.".$typ[$imagesize[2]];
+			$dest=$dir."/logo.".$pictyp[$imagesize[2]];
 			move_uploaded_file($datei["Datei"]["tmp_name"],"$dest");
 			if (($imagesize[1]/$imagesize[0]) > 2.4) {
 				$hoehe=ceil($imagesize[1]/$imagesize[0]*120);
@@ -305,10 +337,10 @@ global $db;
 				$hoehe=80;
 			}
 			$image1 = imagecreatetruecolor($breite,$hoehe);
-			$tue="\$image=imagecreatefrom".$typ[$imagesize[2]]."('$dest');";
+			$tue="\$image=imagecreatefrom".$pictyp[$imagesize[2]]."('$dest');";
 			eval($tue);
 			imagecopyresized($image1, $image, 0,0, 0,0,$breite,$hoehe,$imagesize[0],$imagesize[1]);
-			$tue="image".$typ[$imagesize[2]]."(\$image1,'$dest');";
+			$tue="image".$pictyp[$imagesize[2]]."(\$image1,'$dest');";
 			eval($tue);
 		}	
 		$rc1=true;
@@ -336,7 +368,7 @@ global $db;
 		return array($rc,$fehler);
 	} else {
 		if ($daten["saveneu"]){
-			$sql="delete from customer where id=".$daten["id"];
+			$sql="delete from ".$tab[$typ]." where id=".$daten["id"];
 			$rc0=$db->query($sql); 
 		};
 		return array(-1,$fehler);
@@ -348,34 +380,35 @@ global $db;
 * out: id = string
 * eine Kundennummer erzeugen 
 *****************************************************/
-function newcustnr() {
+function newnr($typ) {
 global $db;
 	$rc=$db->query("BEGIN");
-	$rs=$db->getAll("select customernumber from defaults");
-	preg_match("/([^0-9]*)([0-9]+)/",$rs[0]["customernumber"],$t);
+	$rs=$db->getAll("select ".$typ."number from defaults");
+	preg_match("/([^0-9]*)([0-9]+)/",$rs[0][$typ."number"],$t);
 	if (count($t)==3) { $y=$t[2]+1; $pre=$t[1]; }
 	else { $y=$t[1]+1; $pre=""; };
 	$newnr=$pre.$y;
-	$rc=$db->query("update defaults set customernumber='$newnr'");
+	$rc=$db->query("update defaults set ".$typ."number='$newnr'");
 	if ($rc) { $db->query("COMMIT"); }
 	else { $db->query("ROLLBACK"); $newnr=""; };
 	return $newnr;
 }
 
 /****************************************************
-* mknewCustomer
+* mknewFirma
 * in: id = int
 * out: id = int
 * Kundensatz erzeugen ( insert )
 *****************************************************/
-function mknewCustomer($id) {
+function mknewFirma($id,$typ) {
 global $db;
+	$tab=array("C" => "customer","V" => "vendor");
 	$newID=uniqid (rand());
 	if (!$id) {$uid='null';} else {$uid=$id;};
-	$sql="insert into customer (name,employee) values ('$newID',$uid)";
+	$sql="insert into ".$tab[$typ]." (name,employee) values ('$newID',$uid)";
 	$rc=$db->query($sql);
 	if ($rc) {
-		$sql="select id from customer where name = '$newID'";
+		$sql="select id from ".$tab[$typ]." where name = '$newID'";
 		$rs=$db->getAll($sql);
 		if ($rs) {
 			$id=$rs[0]["id"];
@@ -395,9 +428,9 @@ return $id;
 * out: rc = int
 * KundenDaten sichern ( insert )
 *****************************************************/
-function saveNeuFirmaStamm($daten) {
-	$daten["id"]=mknewCustomer($_SESSION["loginCRM"]);
-	$rs=saveFirmaStamm($daten,true);
+function saveNeuFirmaStamm($daten,$files,$typ="C") {
+	$daten["id"]=mknewFirma($_SESSION["loginCRM"],$typ);
+	$rs=saveFirmaStamm($daten,$files,$typ);
 	return $rs;
 }
 
@@ -408,36 +441,38 @@ function saveNeuFirmaStamm($daten) {
 * Einen Report über Kunden,abweichende Lieferanschrift
 * und Kontakte erzeugen
 *****************************************************/
-function doReportC($data) {
+function doReport($data,$typ="C") {
 global $db;
+	$kenz=array("C" => "K","V" => "L");
+	$tab=array("C" => "customer","V" => "vendor");
 	$loginCRM=$_SESSION["loginCRM"];
 	$felder=substr($data,0,-1);
-	$grp=getGrp($loginCRM);
-	$tmp=suchstr($data);
+	$tmp=suchstr($data,$typ);
 	$where=$tmp["where"]; $tabs=$tmp["tabs"]; 
 	$felder=substr($data["felder"],0,-1);
+	if ($typ=="C") {
+		$rechte="(".berechtigung("K.").")";
+	} else {
+		$rechte="true";
+	}
 	if (!ereg("P.",$felder)) {
-		$rechte="(K.owener=$loginCRM or K.owener is null) ";
-		if ($grp) $rechte.=" or K.owener in $grp";
 		$where=($where=="")?"":"and $where";
 		if (eregi("shipto",$tabs) or ereg("S.",$felder)) {
-			$sql="select $felder from customer K left join shipto S ";
-			$sql.="on S.trans_id=K.id where ($rechte) $where order by K.name";
+			$sql="select $felder from ".$tab[$typ]." ".$kenz[$typ]." left join shipto S ";
+			$sql.="on S.trans_id=".$kenz[$typ].".id where $rechte $where order by ".$kenz[$typ].".name";
 		} else {
-			$sql="select $felder from customer K where ($rechte) $where order by K.name";
+			$sql="select $felder from ".$tab[$typ]." ".$kenz[$typ]." where $rechte $where order by ".$kenz[$typ].".name";
 		}
 	} else {
-		$rechte="((K.owener=$loginCRM or K.owener is null) and ";
-		$rechte.="(P.cp_owener=$loginCRM or P.cp_owener is null))";
-		if ($grp) $rechte.=" or ((K.owener in $grp) and (P.cp_owener in $grp))";
+		$rechte.=(($rechte)?" and (":"(").berechtigung("P.cp_").")";
 		$where=($where=="")?"":"and $where";
 		if (eregi("shipto",$tabs) or ereg("S.",$felder)) {
-			$sql="select $felder from  customer K left join shipto S ";
-			$sql.="on S.trans_id=K.id left join contacts P on K.id=P.cp_cv_id ";
-			$sql.="where ($rechte) $where order by K.name,P.cp_name";
+			$sql="select $felder from ".$tab[$typ]." ".$kenz[$typ]." left join shipto S ";
+			$sql.="on S.trans_id=".$kenz[$typ].".id left join contacts P on ".$kenz[$typ].".id=P.cp_cv_id ";
+			$sql.="where $rechte $where order by ".$kenz[$typ].".name,P.cp_name";
 		} else {
-			$sql="select $felder from  customer K left join contacts P ";
-			$sql.="on K.id=P.cp_cv_id where ($rechte) $where order by K.name,P.cp_name";
+			$sql="select $felder from  ".$tab[$typ]." ".$kenz[$typ]." left join contacts P ";
+			$sql.="on ".$kenz[$typ].".id=P.cp_cv_id where $rechte $where order by ".$kenz[$typ].".name,P.cp_name";
 		}
 	}
 	$rc=$db->getAll($sql);
@@ -460,17 +495,17 @@ global $db;
 	} 
 }
 
-function leertpl (&$t,$tpl,$msg="") {
-		$typ=getBusiness();
+function leertpl (&$t,$tpl,$typ,$msg="") {
+		$tab=array("C" => "firmen","V" => "liefern");
+		$kdtyp=getBusiness();
 		$lead=getLeads();
-		$t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
+		$t->set_file(array("fa1" => $tab[$typ].$tpl.".tpl"));
 		$t->set_var(array(
 			Btn1 => "",
 			Btn2 => "",
 			Msg =>	$msg,
-			action => "firmen".$tpl.".php",
-			ID 	=> "",
-			KDNR	=> "",
+			action => $tab[$typ].$tpl.".php",
+			id 	=> "",
 			name 	=> "",
 			department_1	=> "",
 			department_2	=> "",
@@ -484,6 +519,9 @@ function leertpl (&$t,$tpl,$msg="") {
 			homepage => "",
 			sw	=> "",
 			branche	=> "",
+			vendornumber    => "",
+			customernumber  => "",
+                        v_customer_id   => "",
 			ustid	=> "",
 			taxnumber => "",
 			contact => "",
@@ -492,9 +530,9 @@ function leertpl (&$t,$tpl,$msg="") {
 			bank	=> "",
 			bank_code	=> "",
 			account_number	=> "",
-			terms	=> "",
+			terms		=> "",
 			kreditlim	=> "",
-			op	=> "",
+			op		=> "",
 			preisgrp	=> "",
 			shiptoname		=> "",
 			shiptodepartment_1	=> "",
@@ -514,7 +552,7 @@ function leertpl (&$t,$tpl,$msg="") {
 			init	=> $_SESSION["employee"]
 			));
 		$t->set_block("fa1","TypListe","BlockT");
-		if ($typ) foreach ($typ as $row) {
+		if ($kdtyp) foreach ($kdtyp as $row) {
 			$t->set_var(array(
 				Bid => $row["id"],
 				Bsel => ($row["id"]==$daten["business_id"])?"selected":"",
@@ -552,20 +590,22 @@ function leertpl (&$t,$tpl,$msg="") {
 			$t->parse("Block","OwenerListe",true);
 		}
 } // leertpl
-function vartpl (&$t,$daten,$msg,$btn1,$btn2,$tpl) {
+function vartpl (&$t,$daten,$typ,$msg,$btn1,$btn2,$tpl) {
+		$tab=array("C" => "firmen","V" => "liefern");
 		if ($daten["grafik"]) {
 			$Image="<img src='dokumente/".$_SESSION["mansel"]."/".$daten["id"]."/logo.".$daten["grafik"]."' ".$daten["size"].">";
 		}
-		$typ=getBusiness();
-		$lead=getLeads();
-		$t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
+		$kdtyp=getBusiness();
+		$t->set_file(array("fa1" => $tab[$typ].$tpl.".tpl"));
 		$t->set_var(array(
 				Btn1	=> $btn1,
 				Btn2	=> $btn2,
 				Msg	=> $msg,
-				action	=> "firmen".$tpl.".php",
-				ID	=> $daten["id"],
-				KDNR	=> $daten["customernumber"],
+				action	=> $tab[$typ].$tpl.".php",
+				id	=> $daten["id"],
+				customernumer	=> $daten["customernumber"],
+				vendornumer	=> $daten["vendornumber"],
+				v_customer_id   => $daten["v_customer_id"],
 				name 	=> $daten["name"],
 				department_1	=> $daten["department_1"],
 				department_2	=> $daten["department_2"],
@@ -587,9 +627,9 @@ function vartpl (&$t,$daten,$msg,$btn1,$btn2,$tpl) {
 				bank	=> $daten["bank"],
 				bank_code	=> $daten["bank_code"],
 				account_number	=> $daten["account_number"],
-				terms	=> $daten["terms"],
+				terms		=> $daten["terms"],
 				kreditlim	=> $daten["creditlimit"],
-				op	=> $daten["op"],
+				op		=> $daten["op"],
 				preisgrp	=> $daten["preisgroup"],
 				shiptoname	=> $daten["shiptoname"],
 				shiptodepartment_1	=> $daten["shiptodepartment_1"],
@@ -613,7 +653,7 @@ function vartpl (&$t,$daten,$msg,$btn1,$btn2,$tpl) {
 				password	=> $_SESSION{"password"}
 		));
 		$t->set_block("fa1","TypListe","BlockT");
-		if ($typ) foreach ($typ as $row) {
+		if ($kdtyp) foreach ($kdtyp as $row) {
 			$t->set_var(array(
 				Bid => $row["id"],
 				Bsel => ($row["id"]==$daten["business_id"])?"selected":"",
@@ -621,41 +661,44 @@ function vartpl (&$t,$daten,$msg,$btn1,$btn2,$tpl) {
 			));
 			$t->parse("BlockT","TypListe",true);
 		}
-		$t->set_block("fa1","LeadListe","BlockL");
-		if ($lead) foreach ($lead as $row) {
-			$t->set_var(array(
-				Lid => $row["id"],
-				Lsel => ($row["id"]==$daten["lead"])?"selected":"",
-				Lead => $row["lead"],
-			));
-			$t->parse("BlockL","LeadListe",true);
+		if ($typ=="C") {
+			$lead=getLeads();
+			$t->set_block("fa1","LeadListe","BlockL");
+			if ($lead) foreach ($lead as $row) {
+				$t->set_var(array(
+					Lid => $row["id"],
+					Lsel => ($row["id"]==$daten["lead"])?"selected":"",
+					Lead => $row["lead"],
+				));
+				$t->parse("BlockL","LeadListe",true);
+			}
 		}
 		if ($daten["employee"]==$_SESSION["loginCRM"]) {
-			$t->set_block("fa1","OwenerListe","Block");
-			$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>"Alle");
-			$first[]=array("grpid"=>$_SESSION["loginCRM"],"rechte"=>"w","grpname"=>"Pers&ouml;nlich");
-			$user=array_merge($first,getGruppen());
-			$selectOwen=$daten["owener"];
-			if ($user) foreach($user as $zeile) {
-				if ($zeile["grpid"]==$selectOwen) {
-					$sel="selected";
-				} else {
-					$sel="";
+				$t->set_block("fa1","OwenerListe","Block");
+				$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>"Alle");
+				$first[]=array("grpid"=>$_SESSION["loginCRM"],"rechte"=>"w","grpname"=>"Pers&ouml;nlich");
+				$user=array_merge($first,getGruppen());
+				$selectOwen=$daten["owener"];
+				if ($user) foreach($user as $zeile) {
+					if ($zeile["grpid"]==$selectOwen) {
+						$sel="selected";
+					} else {
+						$sel="";
+					}
+					$t->set_var(array(
+						grpid => $zeile["grpid"],
+						Gsel => $sel,
+						Gname => $zeile["grpname"],
+					));
+					$t->parse("Block","OwenerListe",true);
 				}
+			} else {
 				$t->set_var(array(
-					grpid => $zeile["grpid"],
-					Gsel => $sel,
-					Gname => $zeile["grpname"],
+					grpid => $daten["owener"],
+					Gsel => "selected",
+					Gname => ($daten["owener"])?getOneGrp($daten["owener"]):"&ouml;ffentlich",
 				));
 				$t->parse("Block","OwenerListe",true);
-			}
-		} else {
-			$t->set_var(array(
-				grpid => $daten["owener"],
-				Gsel => "selected",
-				Gname => ($daten["owener"])?getOneGrp($daten["owener"]):"&ouml;ffentlich",
-			));
-			$t->parse("Block","OwenerListe",true);
 		}
 } // vartpl
 

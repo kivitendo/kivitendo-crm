@@ -157,6 +157,7 @@ global $db;
 function suchstr($muster,$typ="C") {
 	$kenz=array("C" => "K","V" => "L");
 	$tab=array("C" => "customer","V" => "vendor");
+	
 	// Array zu jedem Formularfed: Tabelle (0=cust,1=ship), TabName, toUpper
 	$dbfld=array(name => array(0,1),street => array(0,1),zipcode => array(0,0),
 			city => array(0,1),phone => array(0,0),fax => array(0,0),
@@ -193,6 +194,12 @@ function suchstr($muster,$typ="C") {
 			if ($tbl1 && $dbfld2[$keys[$i]]) 
 				$tmp2.="and $case1 S.".$dbfld2[$keys[$i]]." $case2 like '".$suchwort."$fuzzy' ";
 		}
+	}
+	if ($muster["sonder"]) {
+		foreach ($muster["sonder"] as $row) {
+			$x+=$row;
+		}
+		$tmp1.="and (".$kenz[$typ].".sonder & $x) = $x";
 	}
 	if ($tbl1) {
 		$tabs=$tab[$typ]." ".$kenz[$typ]." left join shipto S on ".$kenz[$typ].".id=S.trans_id";
@@ -252,6 +259,11 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
 global $db;
 	$kenz=array("C" => "K","V" => "L");
 	$tab=array("C" => "customer","V" => "vendor");
+	$tmp=0;
+	if ($daten["sonder"]) foreach ($daten["sonder"] as $data) {
+		$tmp+=$data;
+	}
+	$daten["sonder"]=$tmp;
 	if (!empty($datei["Datei"]["name"])) {  		// eine Datei wird mitgeliefert
 			$pictyp=array(1=>"gif",2=>"jpeg",3=>"png",4=>false);
 			$imagesize=getimagesize($datei["Datei"]['tmp_name'],&$info);
@@ -278,6 +290,7 @@ global $db;
 			branche => array(0,0,1,"Branche",25),		business_id => array(0,0,6,"Kundentyp",0),
 			owener => array(0,0,6,"CRM-User",0),		grafik => array(0,0,9,"Grafik",4),
 			lead => array(0,0,6,"Leadquelle",0),		leadsrc => array(0,0,1,"Leadquelle",15),
+			sonder => array(0,0,10,"SonderFlag",0),
 			shiptoname => array(1,0,1,"Liefername",75), 
 			shiptostreet => array(1,0,1,"Lieferstrasse",75),
 			shiptocountry => array(1,0,8,"Lieferland",3),
@@ -327,6 +340,7 @@ global $db;
 			}
 		}
 	}
+	
 	if ($fehler=="ok") {
 		if ($daten["customernumber"]||$daten["vendornumber"]) {
 			$query0=substr($query0,0,-1);
@@ -513,6 +527,7 @@ global $db;
 }
 
 function leertpl (&$t,$tpl,$typ,$msg="") {
+global $cp_sonder;
 		$tab=array("C" => "firmen","V" => "liefern");
 		$kdtyp=getBusiness();
 		$lead=getLeads();
@@ -577,6 +592,14 @@ function leertpl (&$t,$tpl,$typ,$msg="") {
 			));
 			$t->parse("BlockT","TypListe",true);
 		}
+		$t->set_block("fa1","sonder","BlockS");
+			if ($cp_sonder) while (list($key,$val) = each($cp_sonder)) {
+				$t->set_var(array(
+					sonder_id => $key,
+					sonder_name => $val
+				));
+				$t->parse("BlockS","sonder",true);
+			}
 		$t->set_block("fa1","LeadListe","BlockL");
 		if ($lead) foreach ($lead as $row) {
 			$t->set_var(array(
@@ -608,6 +631,7 @@ function leertpl (&$t,$tpl,$typ,$msg="") {
 		}
 } // leertpl
 function vartpl (&$t,$daten,$typ,$msg,$btn1,$btn2,$tpl) {
+global $cp_sonder;
 		$tab=array("C" => "firmen","V" => "liefern");
 		if ($daten["grafik"]) {
 			$Image="<img src='dokumente/".$_SESSION["mansel"]."/".$daten["id"]."/logo.".$daten["grafik"]."' ".$daten["size"].">";
@@ -690,6 +714,15 @@ function vartpl (&$t,$daten,$typ,$msg,$btn1,$btn2,$tpl) {
 				$t->parse("BlockL","LeadListe",true);
 			}
 		}
+		$t->set_block("fa1","sonder","BlockS");
+			if ($cp_sonder) while (list($key,$val) = each($cp_sonder)) {
+				$t->set_var(array(
+					sonder_sel => ($daten["sonder"] & $key)?"checked":"",
+					sonder_id => $key,
+					sonder_name => $val
+				));
+				$t->parse("BlockS","sonder",true);
+			}
 		if ($daten["employee"]==$_SESSION["loginCRM"]) {
 				$t->set_block("fa1","OwenerListe","Block");
 				$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>"Alle");

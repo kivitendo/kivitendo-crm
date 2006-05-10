@@ -105,6 +105,13 @@
 	</div>
 </span>
 <span style="float:both;  text-align:left; border: 0px solid black;">
+	<div class="zeile">
+		<span >
+<!-- BEGIN sonder -->
+	<input type="checkbox" name="sonder[]" value="{sonder_id}" {sonder_sel}>{sonder_name} 
+<!-- END sonder -->	
+		</span>
+	</div>
 		Bemerkungen<br>
 		<textarea name="notes" cols="70" rows="3" tabindex="21">{notes}</textarea><br />
 			{Btn1} &nbsp;{Btn2} &nbsp; 

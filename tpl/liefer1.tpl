@@ -70,6 +70,7 @@
 			<li><a href="#" onClick="submenu('lie')">Lieferadresse</a></li>
 			<li><a href="#" onClick="submenu('not')">Notizen</a></li>
 			<li><a href="#" onClick="submenu('inf')">sonst.Infos</a></li>
+			<li><a href="vcardexp.php?lid={FID}">VCard</a></li>
 			<li><a href="liefern3.php?id={FID}&edit=1">Bearbeiten</a></li>
 		</ul>
 	</div>
@@ -89,7 +90,7 @@
 	</span>
 	<span id="not" style="visibility:hidden;position:absolute;  text-align:left;width:48%; left:5px; top:245px;">
 		<div class="smal" >
-		<br />
+		Checkbox: <span class="value">{sonder}</span><br />
 		Branche: <span class="value">{branche}</span><br />
 		Stichworte: <span class="value">{sw}</span><br />
 		Bemerkungen: <span class="value">{notes}</span> <br />	

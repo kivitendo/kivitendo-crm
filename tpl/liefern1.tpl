@@ -113,6 +113,12 @@
 		</span>
 	</div>
 	<div class="zeile">
+		<span class="label">SonderFlag</span>
+<!-- BEGIN sonder -->
+	<input type="checkbox" name="sonder[]" value="{sonder_id}">{sonder_name} 
+<!-- END sonder -->	
+	</div>
+	<div class="zeile">
 			<b>{Msg}</b><br>
 			<input type="checkbox" name="shipto" value="1" tabindex="23">auch in abweichender Lieferanschrift suchen<br>
 			<input type="checkbox" name="fuzzy" value="%" checked tabindex="24">Unscharf suchen<br>

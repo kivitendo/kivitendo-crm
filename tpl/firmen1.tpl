@@ -12,7 +12,7 @@
 <form name="erwsuche" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="felder" value="">
 <p class="listtop">Firmen-/Kundensuche</p>
-<span style="position:absolute; left:10px; top:47px; border: 0px solid black;width:99%;">
+<span style="position:absolute; left:10px; top:47px; border: 0px solid black;">
 <!-- Beginn Code ------------------------------------------->
 <p class="listheading">| 
 <a href="{action}?first=A" class="bold">A</a> |
@@ -118,6 +118,12 @@
 			</select>
 			<input type="text" name="leadsrc" size="5" value="{leadsrc}">
 		</span>
+	</div>
+	<div class="zeile">
+		<span class="label">SonderFlag</span>
+<!-- BEGIN sonder -->
+	<input type="checkbox" name="sonder[]" value="{sonder_id}">{sonder_name} 
+<!-- END sonder -->	
 	</div>
 	<div class="zeile">
 			<b>{Msg}</b><br>

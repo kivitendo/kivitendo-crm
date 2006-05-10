@@ -40,3 +40,9 @@ cause character varying(100),
 notes text,
 employee integer,
 date timestamp without time zone NOT NULL);
+ALTER TABLE customer ADD COLUMN sonder int;
+ALTER TABLE vendor ADD COLUMN sonder int;
+CREATE TABLE tempcsvdata (
+uid  integer,
+csvdatum  timestamp without time zone,
+csvdaten text);

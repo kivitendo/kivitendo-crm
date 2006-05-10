@@ -33,9 +33,11 @@
 Kontakt [<a href="personen3.php?fid={FID}&Quelle=F" class="bold">neu eingeben</a>] - [<a href="personen1.php?fid={FID}&Quelle=F" class="bold">aus Bestand zuf&uuml;gen</a>] - oder ausw&auml;hlen:
 <br />
 <table class="liste">
+	<tr colspan="0">
+		<th class="norm">Name</th><th class="norm">Anrede</th><th class="norm">Telefon</th><th class="norm">Fax</th><th class="norm">eMail</th></tr>
 <!-- BEGIN Liste -->
 	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showK({KID});" colspan="0">
-		<td class="norm"> {Nname}, {Vname}</td><td class="norm">{Anrede} {Titel}</td><td class="norm">{Tel}</td><td class="norm">{eMail}</td></tr>
+		<td class="norm"> {Nname}, {Vname}</td><td class="norm">{Anrede} {Titel}</td><td class="norm">{Tel}</td><td class="norm">{Fax}</td><td class="norm">{eMail}</td></tr>
 <!-- END Liste -->
 </table>
 </div>

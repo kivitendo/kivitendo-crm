@@ -59,7 +59,7 @@ class myDB extends DB {
 			$this->dbFehler("Connect $dns",$this->db->getMessage()); 
 			die ($this->db->getMessage());
 		}
-		if ($this->log) $this->writeLog("Connect ".$this->db->getDebugInfo());
+		if ($this->log) $this->writeLog("Connect: ok ");
 		$this->stime=time();
 		return $this->db;
 	}

@@ -52,6 +52,10 @@
 		if ($co["cp_homepage"]<>"") {
 			$internet=(preg_match("°://°",$co["cp_homepage"]))?$co["cp_homepage"]:"http://".$co["cp_homepage"];
 		};
+		$sonder="";
+		if ($cp_sonder) while (list($key,$val) = each($cp_sonder)) {
+			$sonder.=($co["cp_sonder"] & $key)?"($val) ":"";
+		}
 		$t = new Template($base);
 		$t->set_file(array("co1" => "firma2.tpl"));
 		$t->set_var(array(
@@ -79,6 +83,7 @@
 			Position	=> $co["cp_position"],
 			GDate => db2date($co["cp_gebdatum"]),
 			Notiz => $co["cp_notes"],
+			Sonder => $sonder,
 			Fname1 => $fa["name"],
 			Fdepartment_1 => $fa["department_1"],
 			Fdepartment_2 => $fa["department_2"],
@@ -87,7 +92,7 @@
 			Street => $fa["street"],
 			PID => $id,
 			FID => $co["cp_cv_id"],
-			KDNR	=> $fa["customernumber"],
+			customernumber	=> $fa["customernumber"],
 			IMG		=> $Image
 			));
 			$t->set_block("co1","Liste","Block");
@@ -138,7 +143,7 @@
 				Fdepartment_2 => $fa["department_2"],
 				Plz => $fa["zipcode"],
 				Ort => $fa["city"],
-				KDNR => $fa["customernumber"],
+				customernumber => $fa["customernumber"],
 				Street => $fa["street"],
 				FID => $fid
 				));
@@ -153,6 +158,7 @@
 					Anrede => $col["cp_greeting"],
 					Titel => $col["cp_titel"],
 					Tel => $col["cp_phone1"],
+					Fax => $col["cp_fax"],
 					eMail => $col["cp_email"]
 					));
 				$t->parse("Block","Liste",true);
@@ -166,7 +172,7 @@
 				Link3 => $link3,
 				Link4 => $link4,
 				none => "hidden",
-				KDNR	=> $fa["customernumber"],
+				customernumber	=> $fa["customernumber"],
 				Fname1 => $fa["name"],
 				Fdepartment_1 => $fa["department_1"],
 				Fdepartment_2 => $fa["department_2"],
@@ -188,6 +194,7 @@
 				GDate => "",
 				PID => "",
 				Notiz => "",
+				Sonder => "",
 				Telefon => "",
 				Mobile => "",
 				eMail => "",

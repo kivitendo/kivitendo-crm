@@ -27,12 +27,16 @@
 	} else {
 		$rab="";
 	}
+	$sonder="";
+	if ($cp_sonder) while (list($key,$val) = each($cp_sonder)) {
+		$sonder.=($fa["sonder"] & $key)?"$val ":"";
+	}
 	$views=array(""=> "lie",1=>"lie",2=>"not",3=>"inf");
 	$t->set_var(array(
 			FID	=> $id,
 			INID	=> db2date(substr($fa["itime"],0,10)),
 			Fname1	=> $fa["name"],
-			KDNR	=> $fa["customernumber"],
+			customernumber	=> $fa["customernumber"],
 			kdtyp   => $fa["kdtyp"],
 			lead	=> $fa["leadname"],
 			Fdepartment_1	=> $fa["department_1"],
@@ -47,6 +51,7 @@
 			eMail	=> $fa["email"],
 			branche => $fa["branche"],
 			sw => $fa["sw"],
+			sonder	=> $sonder,
 			notiz =>  $fa["notes"],
 			bank => $fa["bank"],
 			blz => $fa["bank_code"],

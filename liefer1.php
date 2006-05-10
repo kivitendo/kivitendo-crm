@@ -25,6 +25,10 @@
 	} else {
 		$rab="";
 	}
+	$sonder="";
+	if ($cp_sonder) while (list($key,$val) = each($cp_sonder)) {
+		$sonder.=($li["sonder"] & $key)?"$val ":"";
+	}
 	$views=array(""=> "lie",1=>"lie",2=>"not",3=>"inf");
 	$t->set_var(array(
 			LInr		=> $li["vendornumber"],
@@ -46,6 +50,7 @@
 			op	 	=> sprintf("%0.2f",$li["op"]),
 			Internet	=> $internet,
 			FID		=> $_GET["id"],
+			sonder		=> $sonder,
 			notes		=> $li["notes"],
 			ustid 		=> $li["ustid"],
 			taxnumber 	=> $li["taxnumber"],

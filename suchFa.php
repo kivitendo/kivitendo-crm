@@ -1,8 +1,7 @@
 <?
 // $Id$
 	require_once("inc/stdLib.php");
-	include("inc/FirmaLib.php");
-	include("inc/LieferLib.php");
+	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
 
 	$pers=$_GET["pers"];
@@ -41,8 +40,8 @@
 <?
 	$name=strtoupper($_GET["name"]);
 	if ($name=="EINZELPERSON") $name="";
-	$datenC=getAllCustomer(array(1,$name));
-	$datenL=getAllVendor(array(1,$name));
+	$datenC=getAllFirmen(array(1,$name),true,"C");
+	$datenL=getAllFirmen(array(1,$name),true,"V");
 	if ($pers) {
 		$datenP=getAllPerson(array(1,$name));
 		if ($datenP) foreach ($datenP as $zeile) {

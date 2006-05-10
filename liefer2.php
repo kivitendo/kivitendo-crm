@@ -4,7 +4,7 @@
 	include("inc/template.inc");
 	include("inc/crmLib.php");
 	include("inc/persLib.php");
-	include("inc/LieferLib.php");
+	include("inc/FirmenLib.php");
 	if ($_POST["insk"]) {
 		insFaKont($_POST);
 		$fid=$_POST["fid"];
@@ -23,7 +23,7 @@
 			$link3="#";
 			$link4="liefer4.php?pid=".$_GET["id"];
 		} else {
-			$fa=getLieferStamm($co["cp_cv_id"]);
+			$fa=getFirmenStamm($_GET["id"],true,"V");
 			$link1="liefer1.php?id=".$co["cp_cv_id"];
 			$link2="liefer2.php?fid=".$co["cp_cv_id"];
 			$link3="liefer3.php?fid=".$co["cp_cv_id"];
@@ -103,7 +103,7 @@
 		$link2="liefer2.php?fid=".$fid;
 		$link3="liefer3.php?fid=".$fid;
 		$link4="liefer4.php?fid=".$fid;
-		$fa=getLieferStamm($fid);
+		$fa=getFirmenStamm($fid["id"],true,"V");
 		if (count($co)>1) {
 			$t->set_file(array("co1" => "liefer2L.tpl"));
 			$t->set_var(array(

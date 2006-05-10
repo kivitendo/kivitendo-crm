@@ -2,34 +2,35 @@
 // $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
-	include("inc/LieferLib.php");
+	include("inc/FirmenLib.php");
 	include("inc/UserLib.php");
 	$t = new Template($base);
+	$t->set_file(array("fa1" => "liefern3.tpl"));
 	if ($_POST["saveneu"]) {
-		$rc=saveNeuLieferStamm($_POST,$_FILES);
-		if ($rc>0) { header("location:liefern3.php?id=$rc&edit=1");}
-		else { $msg="Fehler beim Sichern (".$rc.")"; };
+		$rc=saveNeuFirmaStamm($_POST,$_FILES,"V");
+		if ($rc[0]>0) { header("location:liefern3.php?id=".$rc[0]."&edit=1");}
+		else { $msg="Fehler beim Sichern (".$rc[1].")"; };
 		$btn1="";$btn2="";$_POST["id"]="";
-		vartplL ($t,$_POST,$msg,$btn1,$btn2,3);
+		vartpl ($t,$_POST,"V",$msg,$btn1,$btn2,3);
 	} else if ($_POST["save"]) {
 		if ($_POST["id"]) {
-			$rc=saveLieferStamm($_POST,$_FILES);
+			$rc=saveFirmaStamm($_POST,$_FILES,"V");
 		} else {
-			$rc="Kein Bestandslieferant";
+			$rc[0]=-1; $rc[1]="Kein Bestandskunde";
 		}
-		if (ereg("^[0-9]+$",$rc)) {
+		if ($rc[0]>0) {
 			$msg="Daten gesichert.";
-			$_POST=getLieferStamm($rc,false);
+			$_POST=getFirmenStamm($rc[0],false,"V");
 			if ($_FILES["Datei"]["name"]) {
 				$x=preg_match("°(jpg|jpeg|gif|png)\$°i",$_FILES["Datei"]["name"],$regs);
 				$_POST["grafik"]=$regs[1];
 			}
 		} else {
-			$msg="Fehler beim Sichern ( $rc )";
+			$msg="Fehler beim Sichern ( ".$rc[1]." )";
 		};
 		$btn1="<input type='submit' name='save' value='sichern'>";
 		$btn2="<input type='submit' name='show' value='zur Anzeige'>";
-		vartplL ($t,$_POST,$msg,$btn1,$btn2,3);
+		vartpl ($t,$_POST,"V",$msg,$btn1,$btn2,3);
 	} else if ($_POST["show"]) {
 		header("location:liefer1.php?id=".$_POST["id"]);
 	} else if ($_POST["edit"] || $_GET["edit"]) {
@@ -38,14 +39,14 @@
 		} else {
 			$id=$_GET["id"];
 		}
-		$daten=getLieferStamm($id,false);
+		$daten=getFirmenStamm($id,false,"V");
 		$msg="Edit: <b>$id</b>";
 		$btn1="<input type='submit' name='save' value='sichern'>";
 		$btn2="<input type='submit' name='show' value='zur Anzeige'>";
-		vartplL ($t,$daten,$msg,$btn1,$btn2,3);
+		vartpl ($t,$daten,"V",$msg,$btn1,$btn2,3);
 	} else {
-		$t->set_file(array("li1" => "liefern3.tpl"));
-		leertplL ($t,3,"Neuer Lieferant");
+		$t->set_file(array("fa1" => "liefern3.tpl"));
+		leertpl ($t,3,"V","Neuer Lieferant");
 	}
-	$t->pparse("out",array("li1"));
+	$t->pparse("out",array("fa1"));
 ?>

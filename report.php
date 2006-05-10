@@ -1,16 +1,23 @@
 <?
-// $Id: report.php,v 1.4 2005/12/01 08:12:48 hli Exp $
+// $Id$
 require_once("inc/stdLib.php");
 if ($_GET["tab"]=="customer") {
 	$tabellen=array("customer"=>array("Kunden","K"),
 			"shipto"=>array("Abweichend","S"),
 			"contacts"=>array("Personen","P"));
 	$noshow=array("itime","mtime");
+} else if ($_GET["tab"]=="vendor") {
+	$tabellen=array("vendor"=>array("Lieferant","L"),
+			"shipto"=>array("Abweichend","S"),
+			"contacts"=>array("Personen","P"));
+	$noshow=array("itime","mtime");
+}
+if ($_GET["tab"]) {
 	foreach($tabellen as $key=>$val) {
 		$sql="SELECT a.attname FROM pg_attribute a, pg_class c WHERE ";
 		$sql.="c.relname = '$key' AND a.attnum > 0 AND a.attrelid = c.oid ORDER BY a.attnum";
 		$rs=$db->getAll($sql);
-		if ($rs) {
+		if ($rs) { 
 			foreach ($rs as $row) {
 				if (!in_array($row["attname"],$noshow))
 					$felder[$key][]=$row["attname"];

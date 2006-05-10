@@ -1,8 +1,8 @@
 <?
-// $Id: repauftrag.php,v 1.3 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
-	include("inc/FirmaLib.php");	
+	include("inc/FirmenLib.php");	
 	include("inc/wvLib.php");	
 	$mid=($_GET["mid"])?$_GET["mid"]:$_POST["mid"];
 	if ($_POST["ok"]) {
@@ -23,7 +23,7 @@
 	}
 	$masch=getAllMaschine($mid);
 	$kdnr=($rep["kdnr"])?$rep["kdnr"]:$masch["customer_id"];
-	$firma=getFirmaStamm($kdnr);
+	$firma=getFirmenStamm($kdnr);
 	$hist=getHistory($mid);
 	
 	$t = new Template($base);

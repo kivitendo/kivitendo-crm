@@ -2,9 +2,9 @@
 // $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
-	include("inc/LieferLib.php");
+	include("inc/FirmenLib.php");
 	include("inc/crmLib.php");
-	$li=getLieferStamm($_GET["id"]);
+	$li=getFirmenStamm($_GET["id"],true,"V");
 	$start=($_GET["start"])?($_GET["start"]):0;
 	$items=getAllTelCall($_GET["id"],true,$start);
 	$t = new Template($base);

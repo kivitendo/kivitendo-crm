@@ -1,10 +1,10 @@
 <?
-// $Id: firma4.php,v 1.3 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/persLib.php");
 	include("inc/crmLib.php");
-	include("inc/FirmaLib.php");
+	include("inc/FirmenLib.php");
 	include("inc/wvLib.php");
 	$fid=($_GET["fid"])?$_GET["fid"]:$_POST["fid"];
 	$pid=($_GET["pid"])?$_GET["pid"]:$_POST["pid"];
@@ -13,7 +13,7 @@
 		saveDokument($_FILES,$_POST["caption"],date("Y-m-d"),$id,$_SESSION["loginCRM"]);
 	}
 	if (!empty($fid)) {
-		$fa=getFirmaStamm($fid);
+		$fa=getFirmenStamm($fid);
 		if (!empty($pid)){
 			$id=$pid;
 			$co=getKontaktStamm($pid);

@@ -1,12 +1,12 @@
 <?
-// $Id: prtWVertragOOo.php,v 1.3 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
-	include("inc/FirmaLib.php");	
+	include("inc/FirmenLib.php");	
 	include("inc/wvLib.php");
 	$rep=suchVertrag($_GET["aid"]);
 	$rep=$rep[0];
 	$masch=getVertragMaschinen($rep["contractnumber"]);
-	$firma=getFirmaStamm($masch["customer_id"]);
+	$firma=getFirmenStamm($masch["customer_id"]);
 	print_r($firma);
 	include('inc/phpOpenOffice.php');
 	$doc = new phpOpenOffice();

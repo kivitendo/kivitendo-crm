@@ -1,8 +1,8 @@
 <?
-// $Id: vcardexp.php,v 1.1 2005/12/03 09:46:30 hli Exp $
+// $Id$
 	require_once 'Contact_Vcard_Build.php';
 	require_once("inc/stdLib.php");
-	include("inc/FirmaLib.php");
+	include("inc/FirmenLib.php");
 	// instantiate a builder object (defaults to version 3.0)
 	$vcard = new Contact_Vcard_Build();
 	if ($_GET["pid"]) {
@@ -36,7 +36,7 @@
 		}
 		if ($data["cp_position"]) $vcard->setTitle($data["cp_position"]);
 		if ($data["cp_cv_id"] && $data["tabelle"]=="C") {
-			$fa=getFirmaStamm($data["cp_cv_id"]);
+			$fa=getFirmenStamm($data["cp_cv_id"]);
 			$vcard->addAddress('', '', $fa["street"], $fa["city"], '', $fa["zipcode"], $fa["country"]);
 			$vcard->addParam('TYPE', 'WORK');
 			if ($data["cp_abteilung"]) {
@@ -46,13 +46,13 @@
 			}
 
 		} else if ($data["cp_cv_id"] && $data["tabelle"]=="V") {
-			$fa=getLieferStamm($data["cp_cv_id"]);
+			$fa=getFirmenStamm($data["cp_cv_id"],true,"V");
 			$vcard->addAddress('', '', $fa["street"], $fa["city"], '', $fa["zipcode"], $fa["country"]);
 			$vcard->addParam('TYPE', 'WORK');
 			$vcard->addOrganization($fa["name"]);
 		}
 	} else if ($_GET["fid"]) {
-		$data=getFirmaStamm($_GET["fid"]);
+		$data=getFirmenStamm($_GET["fid"]);
 		$vcard->setFormattedName($data["name"]);
 		if ($data["department_1"]) { 
 			$vcard->setName($data["name"],$data["department_1"],"","","");	
@@ -79,7 +79,7 @@
 		}
 		if ($data["notes"]) $vcard->setNote($data["notes"]);
 	} else if ($_GET["lid"]) {
-		$data=getLieferStamm($_GET["lid"]);
+		$data=getFirmenStamm($_GET["lid"],true,"V");
 		$vcard->setFormattedName($data["name"]);
 		$vcard->setName($data["name"],"",$data["department_1"],"","");	
 		$vcard->addAddress('', '', $data["street"], $data["city"], '', $data["zipcode"], $data["country"]);

@@ -31,8 +31,8 @@
 			exit;
 		} else if (count($data)==0 || !$data){
 			if ($_POST["fid"]) {
-				include("inc/FirmaLib.php");
-				$data["name"]=getName($_POST["fid"]);
+				include("inc/FirmenLib.php");
+				$data["name"]=getName($_POST["fid"],"C");
 			};
 			$msg="Nichts gefunden!";
 			$daten["fid"]=$_POST["fid"];

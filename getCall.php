@@ -2,8 +2,7 @@
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");
-	include("inc/FirmaLib.php");
-	include("inc/LieferLib.php");
+	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
 	include("inc/UserLib.php");
 	$fid=($_POST["fid"])?$_POST["fid"]:$_GET["fid"];
@@ -81,12 +80,12 @@
 		}
 	}
 	switch ($Q) {
-		case "C" :  $fa=getFirmaStamm($fid);
+		case "C" :  $fa=getFirmenStamm($fid,true,"C");
 					$daten["Firma"]=$fa["name"];
 					$daten["Plz"]=$fa["zipcode"];
 					$daten["Ort"]=$fa["city"];
 					break;
-		case "V" :  $fa=getLieferStamm($fid);
+		case "V" :  $fa=getFirmenStamm($fid,true,"V");
 					$daten["Firma"]=$fa["name"];
 					$daten["Plz"]=$fa["zipcode"];
 					$daten["Ort"]=$fa["city"];

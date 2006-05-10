@@ -2,10 +2,10 @@
 // $Id$
 	require("inc/stdLib.php");
 	include("inc/template.inc");
-	include("inc/FirmaLib.php");
+	include("inc/FirmenLib.php");
 	include("inc/crmLib.php");
 	$id=$_GET["id"];
-	$fa=getFirmaStamm($id);
+	$fa=getFirmenStamm($id);
 	$start=($_GET["start"])?($_GET["start"]):0;
 	$items=getAllTelCall($_GET["id"],true,$start);
 	$cmsg=getCustMsg($id);

@@ -1,10 +1,10 @@
 <?
-// $Id: liefer4.php,v 1.3 2005/11/02 10:37:52 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/persLib.php");
 	include("inc/crmLib.php");
-	include("inc/LieferLib.php");
+	include("inc/FirmenLib.php");
 	$fid=($_GET["fid"])?$_GET["fid"]:$_POST["fid"];
 	$pid=($_GET["pid"])?$_GET["pid"]:$_POST["pid"];
 	if ($_POST["sichern"]) {
@@ -12,7 +12,7 @@
 		saveDokument($_FILES,$_POST["caption"],date("Y-m-d"),$id,$_SESSION["loginCRM"]);
 	}
 	if (!empty($fid)) {
-		$fa=getLieferStamm($fid);
+		$fa=getFirmenStamm($fid,true,"V");
 		if (!empty($pid)){
 			$co=getKontaktStamm($pid);
 			$name=$co["cp_givenname"]." ".$co["cp_name"];

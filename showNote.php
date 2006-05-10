@@ -1,12 +1,12 @@
 <?
-// $Id: showNote.php,v 1.3 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	if ($_GET["fid"]) {
-		include("inc/FirmaLib.php");
-		$data=getFirmaStamm($_GET["fid"]);
+		include("inc/FirmenLib.php");
+		$data=getFirmenStamm($_GET["fid"],true,"C");
 	} else if ($_GET["lid"]) {
-		include("inc/LieferLib.php");
-		$data=getLieferStamm($_GET["lid"]);
+		include("inc/FirmenLib.php");
+		$data=getFirmenStamm($_GET["lid"],true,"V");
 	} else if ($_GET["pid"]) {
 		include("inc/persLib.php");
 		$data=getKontaktStamm($_GET["pid"]);

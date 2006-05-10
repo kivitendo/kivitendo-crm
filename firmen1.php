@@ -2,15 +2,15 @@
 // $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
-	include("inc/FirmaLib.php");
+	include("inc/FirmenLib.php");
 	include("inc/UserLib.php");
 	$bgcol[1]="#ddddff";
 	$bgcol[2]="#ddffdd";
 	$t = new Template($base);
 	if ($_POST["reset"]) {
-		leertpl($t,1,"");
+		leertpl($t,1,"C","");
 	} else if ($_POST["felder"]) {
-		$rc=doReportC($_POST);
+		$rc=doReport($_POST,"C");
 		$t->set_file(array("fa1" => "firmen1L.tpl"));
 		if ($rc) { 
 			$tmp="<div style='width:300px'>[<a href='tmp/report_".$_SESSION["loginCRM"].".csv'>Report</a>]</div>";
@@ -22,9 +22,9 @@
 		));
 	} else if ($_POST["suche"]=="suchen" || $_GET["first"]) {
 		if ($_GET["first"]) {
-			$daten=getAllCustomer(array(1,$_GET["first"]),false);
+			$daten=getAllFirmen(array(1,$_GET["first"]),false,"C");
 		} else {
-			$daten=suchFirma($_POST);
+			$daten=suchFirma($_POST,"C");
 		};
 		if (count($daten)==1 && $daten<>false) {
 			header ("location:firma1.php?id=".$daten[0]["id"]);
@@ -56,10 +56,10 @@
 			}
 		} else {
 			$msg="Leider nichts gefunden.";
-			vartpl ($t,$_POST,$msg,"","",1);
+			vartpl ($t,$_POST,"C",$msg,"","",1);
 		}
 	} else {
-		leertpl ($t,1);
+		leertpl ($t,1,"C");
 	}
 	$t->pparse("out",array("fa1"));
 ?>

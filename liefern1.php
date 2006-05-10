@@ -2,24 +2,35 @@
 // $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
-	include("inc/LieferLib.php");
+	include("inc/FirmenLib.php");
 	include("inc/UserLib.php");
 	$bgcol[1]="#ddddff";
 	$bgcol[2]="#ddffdd";
 	$t = new Template($base);
 	if ($_POST["reset"]) {
-		leertplL($t,1,"");
+		leertpl($t,1,"V","");
+	} else if ($_POST["felder"]) {
+		$rc=doReport($_POST,"V");
+		$t->set_file(array("fa1" => "liefern1L.tpl"));
+		if ($rc) { 
+			$tmp="<div style='width:300px'>[<a href='tmp/report_".$_SESSION["loginCRM"].".csv'>Report</a>]</div>";
+		} else {
+			$tmp="Keine Treffer";
+		}
+		$t->set_var(array( 
+				report => $tmp
+		));
 	} else	if ($_POST["suche"]=="suchen" || $_GET["first"]) {
 		if ($_GET["first"]) {
-			$daten=getAllVendor(array(1,$_GET["first"]),false);
+			$daten=getAllFirmen(array(1,$_GET["first"]),false,"V");
 		} else {
-			$daten=suchLieferer($_POST);
+			$daten=suchFirma($_POST,"V");
 		};
 		if (count($daten)==1 && $daten<>false) {
 			header ("location:liefer1.php?id=".$daten[0]["id"]);
 		} else if (count($daten)>1) {
-			$t->set_file(array("li1" => "liefern1L.tpl"));
-			$t->set_block("li1","Liste","Block");
+			$t->set_file(array("fa1" => "liefern1L.tpl"));
+			$t->set_block("fa1","Liste","Block");
 			$i=0;
 			clearCSVData();
 			insertCSVData(array("ANREDE","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","KONTAKT","ID",
@@ -45,11 +56,11 @@
 			}
 		} else {
 			$msg="Leider nichts gefunden.";
-			leertplL ($t,1,$msg);
-			vartplL ($t,$_POST,$msg,"","",1);
+			leertpl ($t,1,"V",$msg);
+			vartpl ($t,$_POST,"V",$msg,"","",1);
 		}
 	} else {
-		leertplL ($t,1);
+		leertpl ($t,1,"V");
 	}
-	$t->pparse("out",array("li1"));
+	$t->pparse("out",array("fa1"));
 ?>

@@ -10,8 +10,7 @@
 <body onLoad="document.suche.swort.focus()";>
 <?	
 if ($_POST["adress"]) {
-	include("inc/FirmaLib.php");
-	include("inc/LieferLib.php");
+	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
 	include("inc/UserLib.php");
 	
@@ -24,9 +23,9 @@ if ($_POST["adress"]) {
 
 	$rsE=getAllUser($suchwort);
 	if (chkAnzahl($rsE,$anzahl)) {
-		$rsV=getAllVendor($suchwort);	
+		$rsV=getAllFirmen($suchwort,true,"V");	
 		if (chkAnzahl($rsV,$anzahl)) {
-			$rsC=getAllCustomer($suchwort);
+			$rsC=getAllFirmen($suchwort,true,"C");
 			if (chkAnzahl($rsC,$anzahl)) {
 				$rsK=getAllPerson($suchwort);
 				if (!chkAnzahl($rsK,$anzahl)) {

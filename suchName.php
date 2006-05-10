@@ -1,8 +1,7 @@
 <?
 // $Id$
 	require_once("inc/stdLib.php");
-	include("inc/FirmaLib.php");
-	include("inc/LieferLib.php");
+	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
 
 ?>
@@ -24,7 +23,7 @@
 <select name="Alle" >
 <?
 	$name=strtoupper($_GET["name"]);
-	$daten=array_merge(getAllPerson(array(1,$name)),getAllCustomer(array(1,$name)),getAllVendor(array(1,$name)));
+	$daten=array_merge(getAllPerson(array(1,$name)),getAllFirmen(array(1,$name),true,"C"),getAllFirmen(array(1,$name),true,"V"));
 	if ($daten) foreach ($daten as $zeile) {
 		echo "\t<option value='".$zeile["tab"].$zeile["id"]."'>".$zeile["name"]."</option>\n";
 	}

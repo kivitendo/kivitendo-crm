@@ -2,7 +2,7 @@
 // $Id$
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
-	include("inc/FirmaLib.php");
+	include("inc/FirmenLib.php");
 	$nr=$_GET["nr"];
 	$id=$_GET["id"];
 	$tmp=getRechParts(substr($id,1),substr($id,0,1));

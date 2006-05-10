@@ -1,8 +1,7 @@
 <?
 // $Id$
 	require_once("inc/stdLib.php");
-	include("inc/FirmaLib.php");
-	include("inc/LieferLib.php");
+	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
 	include("inc/crmLib.php");
 	include("inc/UserLib.php");
@@ -21,12 +20,12 @@
 		$dest="pid=".$_GET["pid"];
 		$data=getKontaktStamm($_GET["pid"]);
 		$id=$_GET["pid"];
-		if ($_GET["ep"]==1) {	// Einzelpersona
+		if ($_GET["ep"]==1) {	// Einzelperson
 			$dest.="=ep=1";
 			$firma="";
 		} else {
-			$data2=getFirmaStamm($data["cp_cv_id"]);
-			if (!$data2) $data2=getLieferStamm($data["cp_cv_id"]);
+			$data2=getFirmenStamm($data["cp_cv_id"],true,"C");
+			if (!$data2) $data2=getFirmenStamm($data["cp_cv_id"],true,"V");
 			$firma=$data2["name"];
 		}
 		$anrede=$data["cp_greeting"];
@@ -59,8 +58,8 @@
 			$fax=$data["shiptofax"];
 			$email=$data["shiptoemail"];
 		} else {
-			$data=getFirmaStamm($_GET["sid"]);
-			if ($data["name"]=="") $data=getLieferStamm($_GET["sid"]);
+			$data=getFirmenStamm($_GET["sid"],true,"C");
+			if ($data["name"]=="") $data=getFirmenStamm($_GET["sid"],true,"V");
 			$name=$data ["name"];
 			$name2=$data["department_1"];
 			$kontakt=$data ["contact"];
@@ -78,11 +77,11 @@
 		if ($_GET["fid"]) {
 			$id=$_GET["fid"];
 			$dest="fid=".$_GET["fid"];
-			$data=getFirmaStamm($_GET["fid"]);
+			$data=getFirmenStamm($_GET["fid"],true,"C");
 		} else if ($_GET["lid"]) {
 			$id=$_GET["lid"];
 			$dest="lid=".$_GET["lid"];
-			$data=getLieferStamm($_GET["lid"]);
+			$data=getFirmenStamm($_GET["lid"],true,"V");
 		}
 		$anrede="Firma";
 		$name=$data ["name"];

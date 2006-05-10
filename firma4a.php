@@ -4,7 +4,7 @@
 	include("inc/template.inc");
 	include("inc/crmLib.php");
 	include("inc/persLib.php");
-	include("inc/FirmaLib.php");
+	include("inc/FirmenLib.php");
 	$pid=($_GET["pid"])?$_GET["pid"]:$_POST["pid"];
 	$fid=($_GET["fid"])?$_GET["fid"]:$_POST["fid"];
 	$did=($_GET["did"])?$_GET["did"]:$_POST["did"];
@@ -54,7 +54,7 @@
 		$link3="#";
 		$link4="firma4.php?pid=$pid";
 	} else {
-		$fa=getFirmaStamm($fid);
+		$fa=getFirmenStamm($fid);
 		$anrede="Firma";
 		$name=$fa["name"];
 		$name1=$name;

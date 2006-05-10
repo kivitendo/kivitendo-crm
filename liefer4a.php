@@ -4,7 +4,7 @@
 	include("inc/template.inc");
 	include("inc/crmLib.php");
 	include("inc/persLib.php");
-	include("inc/LieferLib.php");
+	include("inc/FirmenLib.php");
 	$pid=($_GET["pid"])?$_GET["pid"]:$_POST["pid"];
 	$fid=($_GET["fid"])?$_GET["fid"]:$_POST["fid"];
 	$did=($_GET["did"])?$_GET["did"]:$_POST["did"];
@@ -39,7 +39,7 @@
 		$knopf="Dokument erstellt: <a href='./dokumente/".$_SESSION["mansel"]."/".$data["CID"]."/".$pre.$docdata["document"]["file"]."'>&lt;shift&gt;+&lt;klick&gt;</a>";
 	}
 	if (!empty($fid)) {
-		$fa=getLieferStamm($fid);
+		$fa=getFirmenStamm($fid,true,"V");
 		$anrede="Firma";
 		$name=$fa["name"];
 		$name1=$name;

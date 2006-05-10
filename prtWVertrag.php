@@ -1,12 +1,12 @@
 <?
-// $Id: prtWVertrag.php,v 1.3 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
-	include("inc/FirmaLib.php");	
+	include("inc/FirmenLib.php");	
 	include("inc/wvLib.php");
 	$rep=suchVertrag($_GET["aid"]);
 	$rep=$rep[0];
 	$masch=getVertragMaschinen($rep["contractnumber"]);
-	$firma=getFirmaStamm($rep["customer_id"]);
+	$firma=getFirmenStamm($rep["customer_id"]);
 	
 	define("FPDF_FONTPATH","../font/");
 	require("fpdi.php");

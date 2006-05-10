@@ -3,7 +3,7 @@
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");
-	include("inc/FirmaLib.php");
+	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
 	$fid=$_GET["fid"];
 	$id=$_GET["id"];
@@ -124,7 +124,7 @@
 		$link2="firma2.php?fid=".$fid;
 		$link3="firma3.php?fid=".$fid;
 		$link4="firma4.php?fid=".$fid;
-		$fa=getFirmaStamm($fid);
+		$fa=getFirmenStamm($fid);
 		$t = new Template($base);
 		if (count($co)>1) {
 			$t->set_file(array("co1" => "firma2L.tpl"));

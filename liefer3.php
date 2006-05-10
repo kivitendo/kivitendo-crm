@@ -4,9 +4,9 @@
 	include("inc/template.inc");
 	include("inc/crmLib.php");
 	include("inc/grafik$jpg.php");
-	include("inc/LieferLib.php");
+	include("inc/FirmenLib.php");
 	$t = new Template($base);
-	$fa=getLieferStamm($_GET["fid"]);
+	$fa=getFirmenStamm($_GET["fid"],true,"V");
 	if ($_GET["linlog"]) { $linlog="&linlog=0"; $ll=true; }
 	else {$linlog="&linlog=1"; $ll=false; }
 	$link1="liefer1.php?id=".$_GET["fid"];

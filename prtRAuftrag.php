@@ -1,11 +1,11 @@
 <?
 // $Id$
 	require_once("inc/stdLib.php");
-	include("inc/FirmaLib.php");	
+	include("inc/FirmenLib.php");	
 	include("inc/wvLib.php");
 	$rep=getRAuftrag($_GET["aid"]);
 	$masch=getAllMaschine($rep["mid"]);
-	$firma=getFirmaStamm($masch["customer_id"]);
+	$firma=getFirmenStamm($masch["customer_id"]);
 	$hist=getHistory($rep["mid"]);	
 	$material=getAllMat($_GET["aid"],$rep["mid"]);
 	if ($material) foreach ($material as $zeile) {

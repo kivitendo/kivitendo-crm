@@ -2,6 +2,23 @@
 // $Id: FirmenLib.php $
 
 /****************************************************
+* getShipStamm
+* in: id = int
+* out: rs = array(Felder der db)
+* hole die abweichenden Lieferdaten
+*****************************************************/
+function getShipStamm($id) {
+global $db;
+	$sql="select * from shipto where trans_id=$id";
+	$rs2=$db->getAll($sql);
+	if(!$rs2) {
+		return false;
+	} else {
+		return $rs2[0];
+	}
+}
+
+/****************************************************
 * getAllFirmen
 * in: sw = array(Art,suchwort)
 * in: tab = string

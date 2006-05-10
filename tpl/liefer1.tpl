@@ -59,6 +59,9 @@
 	<div style="float:left; width:33%; height:165px; text-align:right; border: 0px solid black; padding:2px;" class="gross">
 		{LInr}<br />
 		{IMG}<br /><br />
+		<img src="image/kreuzchen.gif" title="Gesperrter Lieferant"style="visibility:{verstecke};" >&nbsp;
+		<a href="#" onCLick="anschr(1);" title="Briefanschrift &amp; Etikett"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a>
+		<br />
 	</div>
 	<div style="float:both; width=100%; height:215px; text-align:left; border-bottom: 1px solid black;" class="gross">
 		<a href="mail.php?TO={eMail}&KontaktTO=C{FID}">{eMail}</a><br />

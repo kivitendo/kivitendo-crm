@@ -69,7 +69,10 @@
 			<input type="hidden" name="action" value="add">
 			<input type="hidden" name="type" value="sales_order">
 			<input type="hidden" name="password" value="{password}">
-	  		<input type="hidden" name="customer_id" value="{FID}"><input type="image" src="image/auftrag.png" value="Auftrag" title="neuen Auftrag eingeben">&nbsp;
+	  		<input type="hidden" name="customer_id" value="{FID}">
+			<input type="image" src="image/auftrag.png" value="Auftrag" title="neuen Auftrag eingeben" style="visibility:{zeige};">
+			<img src="image/kreuzchen.gif" title="Gesperrter Kunde"style="visibility:{verstecke};" >
+			&nbsp;
 			<a href="#" onCLick="anschr(1);" title="Briefanschrift &amp; Etikett"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a></form>
 
 	</div>

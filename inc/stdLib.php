@@ -143,7 +143,7 @@ global $ERPNAME,$showErr;
 	};
 	chkdir($dbname);
 	$_SESSION["dns"]=$dns;
-	$_SESSION["db"]=new myDB($_SESSION["dns"]);
+	$_SESSION["db"]=new myDB($_SESSION["dns"],$showErr);
    	$_SESSION["employee"]=$_GET["login"];
    	$_SESSION["password"]=$_GET["password"];
 	$_SESSION["mansel"]=$dbname;
@@ -151,7 +151,6 @@ global $ERPNAME,$showErr;
 	$_SESSION["dbhost"]=$dbhost;
 	$_SESSION["dbuser"]=$dbuser;
 	$_SESSION["dbpasswd"]=$dbpasswd;		
-	$_SESSION["db"]->showErr = $showErr;
 	$sql="select * from employee where login='$name'";
 	$rs=$_SESSION["db"]->getAll($sql);
 	if(!$rs) {

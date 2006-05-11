@@ -15,9 +15,10 @@ define("FONTART","2");
 define("FONTSTYLE","1");
 //Zahl ist Bit-stelle 1 = 1, 2 = 2, 3 = 4, 4 = 8...
 $cp_sonder=array(1 => "News", 2 => "Test 1");
-$showErr = true;
+$showErr = false;
 $logmail = true;
 $tinymce = true;
 $jcalendar = true;
-$jpg=true;
+$listLimit = 200;
+$jpg=false;
 $ERPNAME="lx-office-erp";?>

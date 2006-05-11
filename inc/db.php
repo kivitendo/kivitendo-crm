@@ -51,8 +51,9 @@ class myDB extends DB {
 		fclose($this->lfh);
 	}
 	
-	function myDB($dns) {
+	function myDB($dns,$showErr=false) {
 		$dns="pgsql://".$dns;
+		$this->showErr=$showErr;
 		$this->db=DB::connect($dns);
 		if (!$this->db || DB::isError($this->db)) {
 			if ($this->log) $this->writeLog("Connect $dns");

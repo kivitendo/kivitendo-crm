@@ -1,5 +1,5 @@
 <?
-// $Id: loginok.php,v 1.1 2006/01/05 09:57:09 hli Exp $
+// $Id$
 if (!$_SESSION["dns"] || 
     !$_SESSION["db"] ||
     ($_GET["login"] && $_SESSION["employee"]<>$_GET["login"]) ) {
@@ -20,7 +20,7 @@ if (!$_SESSION["dns"] ||
 		header("location: ups.html");
     	}
 } else {
-	$db=new myDB($_SESSION["dns"]); 
+	$db=new myDB($_SESSION["dns"],$showErr); 
 	$_SESSION["db"]=$db;
 	$_SESSION["ok"]="ok";
 }

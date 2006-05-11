@@ -1,5 +1,5 @@
 <?php
-// $Id: wvl1.php,v 1.3 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");
@@ -61,6 +61,9 @@
 	}
 	$t = new Template($base);
 	$t->set_file(array("wvl" => $templ));
+	     if ($data["kontakttab"]=="P") { $stammlink="kontakt.php?id=".$data["kontaktid"]; }
+	else if ($data["kontakttab"]=="C") { $stammlink="firma1.php?id=".$data["kontaktid"]; }
+	else if ($data["kontakttab"]=="V") { $stammlink="liefer1.php?id=".$data["kontaktid"]; };
 	$t->set_var(array(
 			Msg		=> $msg,
 			Cause => $data["Cause"],
@@ -83,6 +86,7 @@
 			WVLID => $data["id"],
 			Finish => $data["Finish"],
 			JS => $js,
+			stammlink => $stammlink,
 			Mail => $_GET["mail"]
 			));
 	if ($templ=="wvl2.tpl") {

@@ -25,6 +25,7 @@
 <input type="hidden" name="WVLID" value="{WVLID}">
 <input type="hidden" name="DateiID" value="{Datei}">
 <input type="hidden" name="cp_cv_id" value="{cpcvid}">
+<input type="hidden" name="cp_cv_id_old" value="{cpcvid}">
 <tr>
 	<td class="smal">
 	<select name="CRMUSER" tabindex="1">
@@ -33,8 +34,8 @@
 <!-- END Selectbox -->
 	</select>
 	<input type="text" name="name" size="14" maxlength="75"  value="{Fname}" tabindex="2"> <input type="button" name="dst" value=" ? " onClick="suchDst();" tabindex="99">
-	<br>CRM-User &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Zugewiesen an
-	</td><td class="smal""><input type="text" name="Finish" size="11" maxlength="10" value="{Finish}" tabindex="3">
+	<br>CRM-User &nbsp; &nbsp; &nbsp;Zugewiesen an &nbsp;[<a href="{stammlink}" name="addresse">Adresse</a>]
+	</td><td class="smal"><input type="text" name="Finish" size="11" maxlength="10" value="{Finish}" tabindex="3">
 							<br>Zu Erledigen bis</td>
 	<td rowspan="6">
 		<iframe src="wvll.php" name="wvll" width="359" height="410" marginheight="0" marginwidth="0" align="left">

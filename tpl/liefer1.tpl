@@ -63,12 +63,12 @@
 		<a href="#" onCLick="anschr(1);" title="Briefanschrift &amp; Etikett"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a>
 		<br />
 	</div>
-	<div style="float:both; width=100%; height:215px; text-align:left; border-bottom: 1px solid black;" class="gross">
+	<div style="float:both; width:100%; height:215px; text-align:left; border-bottom: 1px solid black;" class="gross">
 		<a href="mail.php?TO={eMail}&KontaktTO=C{FID}">{eMail}</a><br />
 		<a href="{Internet}" target="_blank">{Internet}</a><br />
 
 	</div>
-	<div style="position:absolute; width=100%; height:17px; text-align:left; border-bottom: 0px solid black;left:5px; top:200px;" class="gross">
+	<div style="position:absolute; width:100%; height:17px; text-align:left; border-bottom: 0px solid black;left:5px; top:200px;" class="gross">
 		<ul id="submenue">
 			<li><a href="#" onClick="submenu('lie')">Lieferadresse</a></li>
 			<li><a href="#" onClick="submenu('not')">Notizen</a></li>
@@ -77,7 +77,7 @@
 			<li><a href="liefern3.php?id={FID}&edit=1">Bearbeiten</a></li>
 		</ul>
 	</div>
-	<span id="lie" style="visibility:visibile; position:absolute; text-align:left;width:48%; left:5px; top:245px;" >
+	<span id="lie" style="visibility:visible; position:absolute; text-align:left;width:48%; left:5px; top:245px;" >
 		<div class="smal" >
 		<br />
 		{Sname} &nbsp;&nbsp;<a href="#" onCLick="anschr(2);"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a><br />

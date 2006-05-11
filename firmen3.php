@@ -21,10 +21,6 @@
 		if ($rc[0]>0) {
 			$msg="Daten gesichert.";
 			$_POST=getFirmenStamm($rc[0],false,"C");
-			if ($_FILES["Datei"]["name"]) {
-				$x=preg_match("°(jpg|jpeg|gif|png)\$°i",$_FILES["Datei"]["name"],$regs);
-				$_POST["grafik"]=$regs[1];
-			}
 		} else {
 			$msg="Fehler beim Sichern ( ".$rc[1]." )";
 		};

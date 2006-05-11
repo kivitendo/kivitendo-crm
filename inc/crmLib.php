@@ -559,7 +559,7 @@ global $db;
 	if(!$rs) {
 		$rs=false;
 	} else {$rs=$data["WVLID"];};
-	if ($data["cp_cv_id"]) {  // es wurd eine Zuweisung an einen Kunden gemacht
+	if ($data["cp_cv_id"]<>$data["cp_cv_id_old"]) {  // es wurd eine Zuweisung an einen Kunden gemacht
 		//$id=moveWvl($data["WVLID"],$data["cp_cv_id"]);
 		$id=kontaktWvl($data["WVLID"],$data["cp_cv_id"]);
 		if ($id) {$rs=$id;} else {$rs=false;}
@@ -711,21 +711,25 @@ global $db;
 	$sql="select * from wiedervorlage where id=$id";
 	$rs=$db->getAll($sql);
 	$nun=date("Y-m-d H:i:00");
-	$tab=substr($fid,0,1);
+	$tab="'".substr($fid,0,1)."'";
 	$fid=substr($fid,1);
 	if(!$rs) {
 		$ok=-1;
 	} else if ($rs[0]["kontaktid"]>0 and $fid<>$rs[0]["kontaktid"]){
 		// bisherigen Kontakteintrag ungültig markieren
-		$sql="update telcall set cause='gecancelt' where id=".$rs[0]["tellid"];
+		$sql="update telcall set cause=cause||' storniert' where id=".$rs[0]["tellid"];
 		$rc=$db->query($sql);
 		// neuen Eintraag generieren
-		$tid=mknewTelCall();
-		$sql="update telcall set cause='".$rs[0]["cause"]."',caller_id=$fid,calldate='$nun',c_long='".$rs[0]["descript"]."',employee=".$rs[0]["employee"].",kontakt='".$rs[0]["kontakt"]."',bezug=0,dokument=".$rs[0]["document"]." where id=$tid";
-		$rc=$db->query($sql);
-		if(!$rc) { $ok=-1; } else { $ok=$tid; };
-		// wvl updaten
-		$sql="update wiedervorlage set kontaktid=$fid,kontakttab='$tab',tellid=$tid where id=$id";
+		if ($fid>0) {
+			$tid=mknewTelCall();
+			$sql="update telcall set cause='".$rs[0]["cause"]."',caller_id=$fid,calldate='$nun',c_long='".$rs[0]["descript"]."',employee=".$rs[0]["employee"].",kontakt='".$rs[0]["kontakt"]."',bezug=0,dokument=".$rs[0]["document"]." where id=$tid";
+			$rc=$db->query($sql);
+			if(!$rc) { $ok=-1; } else { $ok=$tid; };
+			// wvl updaten
+		} else {
+			$fid="null"; $tab="null"; $tid="null";
+		}
+		$sql="update wiedervorlage set kontaktid=$fid,kontakttab=$tab,tellid=$tid where id=$id";
 		$rc=$db->query($sql);
 	//} else if ($rs[0]["kontaktid"]>0) {
 	} else if ($rs[0]["kontaktid"]>0 and $fid==$rs[0]["kontaktid"]) {
@@ -738,7 +742,7 @@ global $db;
 			$ok=-1;
 		} else {
 			$ok=$tid;
-			$sql="update wiedervorlage set kontaktid=$fid,kontakttab='$tab',tellid=$tid where id=$id";
+			$sql="update wiedervorlage set kontaktid=$fid,kontakttab=$tab,tellid=$tid where id=$id";
 			$rc=$db->query($sql);
 		}
 	}

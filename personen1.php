@@ -58,6 +58,12 @@
 				));
 				$t->parse("Block","Liste",true);
 				$i++;
+				if ($i>=$listLimit) {
+					$t->set_var(array(
+						report => "$listLimit von ".count($daten)." Treffern",
+					));
+					break;
+				}
 			}
 			$t->set_var(array(
 				snd => $snd,

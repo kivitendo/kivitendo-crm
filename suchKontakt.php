@@ -3,7 +3,7 @@
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
 	$sw=strtoupper($_GET["suchwort"]);
-	
+	$sw=strtr($sw,"*?","%_");
 	if ($_GET["Q"]=="S") {
 		$sql="select calldate,cause,t.id,caller_id,bezug,V.name as lname,C.name as kname,P.cp_name as pname ";
 		$sql.="from telcall t left join customer C on C.id=caller_id left join vendor V on V.id=caller_id ";
@@ -44,6 +44,10 @@
 			echo "<td>".db2date($row["calldate"])."&nbsp;</td><td> ".$cause."</td><td>";
 			echo "$name</td></tr>\n";
 			$i++;
+			if ($i>=$listLimit) {
+				echo "$listLimit von ".count($rs)." Treffern";
+				break;
+			}
 		}
 		echo "</table>\n";
 	} else {

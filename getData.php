@@ -30,7 +30,9 @@ if ($_POST["adress"]) {
 				$rsK=getAllPerson($suchwort);
 				if (!chkAnzahl($rsK,$anzahl)) {
 					$msg=$viele;
-				}
+				} else {
+					if ($anzahl===0) $msg="Keine Treffer";
+				} 
 			} else {
 				$msg=$viele;
 			}

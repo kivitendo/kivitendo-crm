@@ -631,7 +631,7 @@ function mondaykw($kw,$jahr) {
 }
 function clearCSVData() {
 global $db;
-	return $db->query("delete from tempcsvdata where sessid = '".session_id()."'");
+	return $db->query("delete from tempcsvdata where uid = '".$_SESSION["loginCRM"]."'");
 }
 function insertCSVData($data) {
 global $db;
@@ -639,8 +639,8 @@ global $db;
 	foreach ($data as $row) {
 		$tmpstr.=$row.";";
 	};
-	$sql="insert into tempcsvdata (sessid,csvdatum,csvdaten) values (";
-	$sql.="'".session_id()."','".date("Y-m-d H:i")."','".substr($tmpstr,0,-1)."')";
+	$sql="insert into tempcsvdata (uid,csvdaten) values (";
+	$sql.="'".$_SESSION["loginCRM"]."','".substr($tmpstr,0,-1)."')";
 	$rc=$db->query($sql);
 	return $rc;
 }

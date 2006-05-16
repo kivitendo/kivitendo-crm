@@ -22,13 +22,13 @@ if ($_GET["datei"]) {
 }
 $hdr = $mime->headers($headers);
 
-$sql="select * from tempcsvdata where sessid = '".session_id()."' limit 1";
+$sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' limit 1";
 $data=$db->getAll($sql);
 $felder=split(";",$data[0]["csvdaten"]);
 $pemail=array_search("EMAIL",$felder);
 $pkont=array_search("KONTAKT",$felder);
 
-$sql="select * from tempcsvdata where sessid = '".session_id()."' offset ".$offset." limit ".$limit;
+$sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' offset ".$offset." limit ".$limit;
 $data=$db->getAll($sql);
 if ($data) {
 	foreach ($data as $row) {

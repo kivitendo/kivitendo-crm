@@ -97,6 +97,27 @@ class phpOpenOffice
 		$list = $archive->extract(PCLZIP_OPT_PATH, POO_TMP_PATH, PCLZIP_OPT_ADD_PATH, $this->tmpDirName);
 	}
 
+	function findtags($key,$string) {
+		$pos=strpos($string,$key);
+		if (!$pos) return false;	
+		$max=strlen($string);
+		$i=$pos+strlen($key);
+		$after="";
+		while ($string[$i]<>"<" and $i<$max) { $after.=$string[$i]; $i++; } 
+		$von=$i;
+		while ($string[$i]<>">" and $i<$max) { $i++; } 
+		$len=$i-$von;
+		$end=substr($string,$von,$len);
+		$i=$pos+1;
+		while ($string[$i]<>">" and $i>0) { $i--; } 
+		$len=$pos-$i-1;
+		$before=substr($string,$i+1,$len);
+		$bis=$i;
+		while ($string[$i]<>"<" and $i>0) { $i--; } 
+		$len=$bis-$i;
+		$start=substr($string,$i,$len);
+		return array("open"=>"$start>","close"=>"$end>","before"=>$before,"after"=>$after);
+	}
 
 	// Put variables into extracted content file
 	function parse($variables)
@@ -131,6 +152,7 @@ class phpOpenOffice
 		$parsedDocuments = array();
 		foreach (array_keys($this->parserFiles) as $file)
 		{
+		//$file="content.xml";
 			$fp = fopen($this->parserFiles[$file], "r");
 			$this->parsedDocuments[$file] = fread($fp, filesize($this->parserFiles[$file]));
 			fclose($fp);
@@ -138,7 +160,27 @@ class phpOpenOffice
 			foreach(array_keys($variables) as $key)
 			{
 				$value = $this->xmlencode( $variables[$key] );
-				$this->parsedDocuments[$file] = str_replace(POO_VAR_PREFIX.$key.POO_VAR_SUFFIX, $value, $this->parsedDocuments[$file]);
+				if (!strpos($value,"\n")) {
+					$this->parsedDocuments[$file] = str_replace(POO_VAR_PREFIX.$key.POO_VAR_SUFFIX, $value, $this->parsedDocuments[$file]);
+				} else {
+					$tmp=split("\n",$value);
+					$first=true;
+					$ersetze="";
+					$tags=$this->findtags(POO_VAR_PREFIX.$key.POO_VAR_SUFFIX,$this->parsedDocuments[$file]);
+					$max=count($tmp);
+					if($tags["after"]) $max--;
+					for($ii=0; $ii<$max; $ii++) {
+						if($first) {
+							$ersetze.=$tags["open"].$tags["before"].$tmp[$ii].$tags["close"];
+							$first=false;
+						} else {
+							$ersetze.=$tags["open"].$tmp[$ii].$tags["close"];
+						}
+					}
+					if($tags["after"]) $ersetze.=$tags["open"].$tmp[$max].$tags["after"].$tags["close"];
+					$suche=$tags["open"].$tags["before"].POO_VAR_PREFIX.$key.POO_VAR_SUFFIX.$tags["after"].$tags["close"];
+					$this->parsedDocuments[$file] = str_replace($suche, $ersetze, $this->parsedDocuments[$file]);
+				}
 			}
 		}
 	}
@@ -261,7 +303,7 @@ class phpOpenOffice
 		echo $content;
 
 		// Delete temp file
-		//unlink($this->downloadFile);
+		unlink($this->downloadFile);
 	}
 
 

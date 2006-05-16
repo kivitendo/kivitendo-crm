@@ -24,7 +24,7 @@
 	</script>
 <body >
 <CENTER>
-<input type="button" value="<--" onClick="womin()"> KW {kw} <input type="button" value="-->" onClick="woplu()"> <input type="button" value="Monat" onClick="showlist('M')">
+<input type="button" value="<--" onClick="womin()"> [<a href="prtwkal.php?kw={kw}&year={year}">KW {kw}</a>] <input type="button" value="-->" onClick="woplu()"> <input type="button" value="Monat" onClick="showlist('M')"> 
 
 <br><br>
 <table style="width:350px" bgcolor="#ffffff">

@@ -29,7 +29,7 @@
 		$pdf->Open(); 
 		unset($tmp);
 		if ($SX<>1 or $SY<>1)	$pdf->AddPage();
-		$sql="select * from tempcsvdata where sessid = '".session_id()."' order by sessid desc";
+		$sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."'";
 		$daten=$db->getAll($sql);
 		if ($daten) {
 			$felder=array_shift($daten);
@@ -89,7 +89,7 @@
 <?	} ?>
 	</select>&nbsp;<input type='submit' name='chfrm' value='wechseln'><br>
 	<hr>
-	Feier Text<br>
+	Freier Text<br>
 	&nbsp;<input type="text" name="text" size="25" value="<?= $freitext ?>">
 	<hr>
 	&nbsp;Bitte Startposition ausw&auml;hlen.<br>

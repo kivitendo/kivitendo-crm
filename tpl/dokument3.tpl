@@ -1,4 +1,4 @@
-<!-- $Id: dokument3.tpl,v 1.3 2005/11/02 10:38:58 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -32,7 +32,7 @@
 <!-- Hier beginnt die Karte  ------------------------------------------->
 {vorlage}<br>
 
-<table style="width:550px">
+<table style="width:610px">
 <!-- BEGIN Liste -->
 	<tr>
 		<form name="update" action="dokument3.php" method="post">

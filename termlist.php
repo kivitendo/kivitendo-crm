@@ -96,11 +96,16 @@
 		for ($i=0; $i<7; $i++) {
 			if ($ft[$x+$i*86400]) {$termdate[$i][]=array("id"=>0,"txt"=>$ft[$x+$i*86400],"ft"=>1);};
 		}
+		$kalterm=array("datum"=>"","txt"=>"");
+		$kaldrk=array("Mo"=>$kalterm,"Di"=>$kalterm,"Mi"=>$kalterm,"Do"=>$kalterm,"Fr"=>$kalterm,"Sa"=>$kalterm,"So"=>$kalterm);
+		$drkwt=array("Mo","Di","Mi","Do","Fr","Sa","So");
 		$lastt=0; $lastd=0;// Mehrfachtermine wegen Gruppe/n und UID
 		if ($data) foreach($data as $row) {
 			if ($row["termin"]<>$lastt || $lastd<>$row["tag"]) {
 				$w=date("w",mktime(0,0,0,$row["monat"],$row["tag"],$row["jahr"]))-1;
 				$termdate[$w][]=array("txt"=>$row["startzeit"]." ".$row["cause"],"id"=>$row["termin"],"ft"=>($i==5||$i==6)?1:0);
+				$kaldrk[$drkwt[$w]]["txt"].=$row["startzeit"]." ".$row["cause"]."\n";
+				$kaldrk[$drkwt[$w]]["datum"]=$row["tag"].".".$row["monat"];
 				$lastt=$row["termin"];
 				$lastd=$row["tag"];
 			} else { $lastt=0;}
@@ -164,6 +169,7 @@
 					kw => $kw,
 					kw1 => $kw1,
 					kw2 => $kw2,
+					year => $year,
 					year1 => $year1,
 					year2 => $year2
 				));

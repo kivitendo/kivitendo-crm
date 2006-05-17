@@ -105,7 +105,8 @@ CREATE TABLE custmsg (
 	fid integer,
 	prio integer DEFAULT 3,
 	msg char varying(60),
-	uid integer);
+	uid integer,
+	akt boolean);
 	
 CREATE TABLE crm (
 	id integer DEFAULT nextval('id'::text) NOT NULL,
@@ -238,7 +239,6 @@ employee integer,
 date timestamp without time zone NOT NULL);
 CREATE TABLE tempcsvdata (
 uid  integer,
-csvdatum  timestamp without time zone,
 csvdaten text);
 
 ALTER TABLE customer ADD COLUMN owener int4;

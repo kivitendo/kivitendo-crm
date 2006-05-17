@@ -40,7 +40,8 @@
 <a href="{action}?first=W" class="bold">W</a> |
 <a href="{action}?first=X" class="bold">X</a> |
 <a href="{action}?first=Y" class="bold">Y</a> |
-<a href="{action}?first=Z" class="bold">Z</a> |</p>
+<a href="{action}?first=Z" class="bold">Z</a> |
+<a href="{action}?first=~" class="bold">*</a> |</p>
 	<div class="zeile">
 		<span class="label">Firmenname</span>
 		<span class="leftfeld"><input type="text" name="name" size="27" maxlength="75" value="{name}" tabindex="1"></span>

@@ -29,7 +29,7 @@
 <body >
 <center>
 <input type="button" value="Woche" onClick="showlist('W')">
-<input type="button" value="<--" onClick="tamin()"> {tag} <input type="button" value="-->" onClick="taplu()">
+<input type="button" value="<--" onClick="tamin()"> [<a href="prttkal.php?day={day}&month={month}&year={year}">{tag}</a>] <input type="button" value="-->" onClick="taplu()">
 <input type="button" value="Monat" onClick="showlist('M')">
 <table style="width:350px" bgcolor="#ffffff">
 <!-- BEGIN Stunden -->

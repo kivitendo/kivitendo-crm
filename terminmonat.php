@@ -39,7 +39,7 @@
 	</script>
 <body onLoad="self.focus()">
 <center>
-<input type="button" value="<--" onClick="monmin()"> <?= $month."/".$year ?> <input type="button" value="-->" onClick="monplu()">
+<input type="button" value="<--" onClick="monmin()"> [<a href="prtmkal.php?month=<?= $month ?>&year=<?= $year ?>"><?= $month."/".$year ?></a>] <input type="button" value="-->" onClick="monplu()">
 <br><br>
 <table style="width:335px">
 	<tr><th width="30px"class="gr">Kw</th><th width="49px" class="gr">Mo</th><th width="49px" class="gr">Di</th><th width="49px" class="gr">Mi</th><th width="49px" class="gr">Do</th><th width="49px" class="gr">Fr</th><th width="30px" class="gr">Sa</th><th width="30px" class="gr">So</th></tr>

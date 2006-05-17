@@ -105,69 +105,65 @@ global $db;
 function suchPerson($muster) {
 global $db;
 	$rechte=berechtigung("cp_");
-	// Array zu jedem Formularfed: Tabelle (0=contact,1=cust/vend), TabName, toUpper
-    $dbfld=array("cp_name" => 1,"cp_givenname" => 1,"cp_greeting" => 1,"cp_title" => 1,
-				"cp_street" => 1,"cp_zipcode" => 0,"cp_city" => 1,"cp_country" => 0,
-				"cp_phone1" => 0,"cp_phone2" => 0,"cp_fax" => 0,
-				"cp_homepage" => 1,"cp_email" => 1,
-				"cp_notes" => 1,"cp_stichwort1" => 1,
-				"cp_gebdatum" => 0,"cp_beziehung" => 1,
-				"cp_abteilung" => 1,"cp_position" => 1,
-				"cp_cv_id" => 0,"cp_owener" => 0);
-	$keys=array_keys($muster);
-	$dbf=array_keys($dbfld);
-	$anzahl=count($keys);
-	$where0="";
-	$daten=false;
-	$tbl0=false;
-	$fuzzy=$muster["fuzzy"];
-	if ($muster["greeting"]=="H") { $muster["cp_greeting"]="Herr"; }
-	else if ($muster["greeting"]=="F") { $muster["cp_greeting"]="Frau"; };
-	for ($i=0; $i<$anzahl; $i++) {
-		if (in_array($keys[$i],$dbf) && $muster[$keys[$i]]) {
-			if ($dbfld[$keys[$i]]==1)  {
-				$case1="upper("; $case2=")";
-				$suchwort=strtoupper(trim($muster[$keys[$i]]));
-			} else {
-				$case1=""; $case2="";
-				$suchwort=trim($muster[$keys[$i]]);
+	if ($muster["cp_greeting"]=="~") {
+		$where0=" and upper(cp_name) ~ '^\[^A-Z\].*$'  ";
+	} else {
+		// Array zu jedem Formularfed: Tabelle (0=contact,1=cust/vend), TabName, toUpper
+	    	$dbfld=array("cp_name" => 1,"cp_givenname" => 1,"cp_greeting" => 1,"cp_title" => 1,
+					"cp_street" => 1,"cp_zipcode" => 0,"cp_city" => 1,"cp_country" => 0,
+					"cp_phone1" => 0,"cp_phone2" => 0,"cp_fax" => 0,
+					"cp_homepage" => 1,"cp_email" => 1,
+					"cp_notes" => 1,"cp_stichwort1" => 1,
+					"cp_gebdatum" => 0,"cp_beziehung" => 1,
+					"cp_abteilung" => 1,"cp_position" => 1,
+					"cp_cv_id" => 0,"cp_owener" => 0);
+		$keys=array_keys($muster);
+		$dbf=array_keys($dbfld);
+		$anzahl=count($keys);
+		$where0="";
+		$daten=false;
+		$tbl0=false;
+		$fuzzy=$muster["fuzzy"];
+		if ($muster["greeting"]=="H") { $muster["cp_greeting"]="Herr"; }
+		else if ($muster["greeting"]=="F") { $muster["cp_greeting"]="Frau"; };
+		for ($i=0; $i<$anzahl; $i++) {
+			if (in_array($keys[$i],$dbf) && $muster[$keys[$i]]) {
+				if ($dbfld[$keys[$i]]==1)  {
+					$case1="upper("; $case2=")";
+					$suchwort=strtoupper(trim($muster[$keys[$i]]));
+				} else {
+					$case1=""; $case2="";
+					$suchwort=trim($muster[$keys[$i]]);
+				}
+				$suchwort=strtr($suchwort,"*?","%_");
+				if ($keys[$i]=="cp_gebdatum") {$d=split("\.",$suchwort); $suchwort=$d[2]."-".$d[1]."-".$d[0]; };
+				$where0.="and $case1".$keys[$i]."$case2 like '".$suchwort."$fuzzy' ";
+				if ($keys[$i]=="cp_phone1") $where0.="and cp_phone2 like '".$suchwort."$fuzzy' ";
 			}
-			$suchwort=strtr($suchwort,"*?","%_");
-			if ($keys[$i]=="cp_gebdatum") {$d=split("\.",$suchwort); $suchwort=$d[2]."-".$d[1]."-".$d[0]; };
-			$where0.="and $case1".$keys[$i]."$case2 like '".$suchwort."$fuzzy' ";
-			if ($keys[$i]=="cp_phone1") $where0.="and cp_phone2 like '".$suchwort."$fuzzy' ";
-			//if ($keys[$i]=="cp_stichwort1") $where0.="and $case1 cp_stichwort2 $case2 like '".$suchwort."$fuzzy' ";
+		}
+		$x=0;
+		if ($muster["cp_sonder"]) {
+			foreach ($muster["cp_sonder"] as $row) {
+				$x+=$row;
+			}
+			$where0.="and (cp_sonder & $x) = $x ";
 		}
 	}
-	$x=0;
-	if ($muster["cp_sonder"]) {
-		foreach ($muster["cp_sonder"] as $row) {
-			$x+=$row;
+	if ($where0<>"") $where=substr($where0,0,-1);
+	$sql0="select *,1 as tbl from contacts,customer where cp_cv_id=id  and $rechte $where order by cp_name";
+	$rs0=$db->getAll($sql0);
+	$sql0="select *,2 as tbl from contacts,vendor where cp_cv_id=id $where  and $rechte order by cp_name";
+	$rs1=$db->getAll($sql0);
+	$sql0="select *,3 as tbl from contacts where $rechte ".$where." order by cp_name";
+	$rs2=$db->getAll($sql0);
+	$daten=array_merge($rs0,$rs1,$rs2);
+	$key=array();
+	foreach ($daten as $satz) {
+		if (!in_array($satz["cp_id"],$key)) {
+			$key[]=$satz["cp_id"];
+			$daten_neu[]=$satz;
 		}
-		$where0.="and (cp_sonder & $x) = $x ";
-	}
-	
-	
-		if ($where0<>"") $where=substr($where0,0,-1);
-		$sql0="select *,1 as tbl from contacts,customer where cp_cv_id=id  and $rechte $where order by cp_name";
-		//echo $sql0."<br>";
-		$rs0=$db->getAll($sql0);
-		$sql0="select *,2 as tbl from contacts,vendor where cp_cv_id=id $where  and $rechte order by cp_name";
-		//echo $sql0."<br>";
-		$rs1=$db->getAll($sql0);
-		$sql0="select *,3 as tbl from contacts where $rechte ".$where." order by cp_name";
-		//echo $sql0."<br>";
-		$rs2=$db->getAll($sql0);
-		$daten=array_merge($rs0,$rs1,$rs2);
-
-		$key=array();
-		foreach ($daten as $satz) {
-			if (!in_array($satz["cp_id"],$key)) {
-				$key[]=$satz["cp_id"];
-				$daten_neu[]=$satz;
-			}
-
-		};
+	};
 	return $daten_neu;
 }
 

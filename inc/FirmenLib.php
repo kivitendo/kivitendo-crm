@@ -32,9 +32,15 @@ global $db;
 	if (!$sw[0]) {
 		 $where="phone like '$Pre".$sw[1]."%' "; 
 	} else { 
-		$where="upper(name) like '$Pre".$sw[1]."%' or ";
-		$where.="upper(department_1) like '$Pre".$sw[1]."%' or ";
-		$where.="upper(department_2) like '$Pre".$sw[1]."%'"; 
+		if ($sw[1]=="~") { 
+			$where="upper(name) ~ '^\[^A-Z\].*$' or ";
+			$where.="upper(department_1) ~ '^\[^A-Z\].*$' or ";
+			$where.="upper(department_2) ~ '^\[^A-Z\].*$' "; 
+		} else  {
+			$where="upper(name) like '$Pre".$sw[1]."%' or ";
+			$where.="upper(department_1) like '$Pre".$sw[1]."%' or ";
+			$where.="upper(department_2) like '$Pre".$sw[1]."%'"; 
+		}
 	}
 	if ($tab=="C") {
 		$sql="select *,'C' as tab from customer where ($where) and $rechte";

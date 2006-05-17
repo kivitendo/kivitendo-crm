@@ -31,6 +31,7 @@ mtime timestamp,
 iemployee integer,
 memployee integer
 );
+ALTER TABLE custmsg ADD COLUMN akt boolean;
 ALTER TABLE employee ADD COLUMN kdview integer;
 ALTER TABLE employee alter COLUMN kdview SET DEFAULT 1;
 UPDATE employee SET kdview = 1;
@@ -42,7 +43,7 @@ employee integer,
 date timestamp without time zone NOT NULL);
 ALTER TABLE customer ADD COLUMN sonder int;
 ALTER TABLE vendor ADD COLUMN sonder int;
+DROP TABLE tempcsvdata;
 CREATE TABLE tempcsvdata (
 uid  integer,
-csvdatum  timestamp without time zone,
 csvdaten text);

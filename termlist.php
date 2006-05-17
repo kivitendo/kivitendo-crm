@@ -64,7 +64,10 @@
 		$t->set_var(array(
 			tag => $day.".".$month.".".$year,
 			dat1 => $t1,
-			dat2 => $t2
+			dat2 => $t2,
+			day => $day,
+			month => $month,
+			year => $year
 		));
 	} else if (substr($ansicht,0,1)=="K") {	
 		$data=getTerminList(substr($ansicht,1,-1));

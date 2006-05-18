@@ -74,6 +74,7 @@
 			<li><a href="#" onClick="submenu('not')">Notizen</a></li>
 			<li><a href="#" onClick="submenu('inf')">sonst.Infos</a></li>
 			<li><a href="vcardexp.php?lid={FID}">VCard</a></li>
+			<li><a href="karte.php?lid={FID}">Kartei</a></li>
 			<li><a href="liefern3.php?id={FID}&edit=1">Bearbeiten</a></li>
 		</ul>
 	</div>

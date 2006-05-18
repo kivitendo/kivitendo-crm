@@ -160,6 +160,8 @@ class phpOpenOffice
 			foreach(array_keys($variables) as $key)
 			{
 				$value = $this->xmlencode( $variables[$key] );
+				$this->parsedDocuments[$file] = str_replace(POO_VAR_PREFIX.$key.POO_VAR_SUFFIX, $value, $this->parsedDocuments[$file]);
+				/*
 				if (!strpos($value,"\n")) {
 					$this->parsedDocuments[$file] = str_replace(POO_VAR_PREFIX.$key.POO_VAR_SUFFIX, $value, $this->parsedDocuments[$file]);
 				} else {
@@ -181,6 +183,7 @@ class phpOpenOffice
 					$suche=$tags["open"].$tags["before"].POO_VAR_PREFIX.$key.POO_VAR_SUFFIX.$tags["after"].$tags["close"];
 					$this->parsedDocuments[$file] = str_replace($suche, $ersetze, $this->parsedDocuments[$file]);
 				}
+				*/
 			}
 		}
 	}
@@ -196,6 +199,8 @@ class phpOpenOffice
 		$xml = str_replace("<", "&lt;", $xml);
 		$xml = str_replace("'", "&apos;", $xml);
 		$xml = str_replace("\"", "&quot;", $xml);
+		$xml = str_replace("\n", "<text:line-break/>", $xml);
+		$xml = str_replace("\r", "", $xml);
 
 		$xml = utf8_encode($xml);
 		return $xml;

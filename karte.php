@@ -19,7 +19,11 @@
 	$fa["itime"]= db2date($fa["itime"]);
 	$fa["mtime"]= db2date($fa["mtime"]);
 	$doc = new phpOpenOffice();
-	$doc->loadDocument("vorlage/firmenkartei.odt");
+	if (file_exists("vorlage/firmenkartei.sxw") {
+		$doc->loadDocument("vorlage/firmenkartei.sxw");
+	} else {
+		$doc->loadDocument("vorlage/firmenkartei.odt");
+	}
 	$doc->parse($fa);
 	$doc->download("");
 	$doc->clean();

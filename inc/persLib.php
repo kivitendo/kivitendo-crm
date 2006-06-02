@@ -105,7 +105,7 @@ global $db;
 function suchPerson($muster) {
 global $db;
 	$rechte=berechtigung("cp_");
-	if ($muster["cp_greeting"]=="~") {
+	if ($muster["cp_name"]=="~") {
 		$where0=" and upper(cp_name) ~ '^\[^A-Z\].*$'  ";
 	} else {
 		// Array zu jedem Formularfed: Tabelle (0=contact,1=cust/vend), TabName, toUpper

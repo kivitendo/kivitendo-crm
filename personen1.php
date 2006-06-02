@@ -12,7 +12,6 @@
 	
 	if ($_GET["first"]) {
 		$_POST["cp_name"]=$_GET["first"];
-		$_POST["cp_greeting"]="~";
 		$_POST["fuzzy"]="%";
 	}
 	if ($_POST["suche"]=="suchen" || $_GET["first"]) {

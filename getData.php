@@ -75,7 +75,7 @@ if ($_POST["adress"]) {
 		}
 		if ($rsK) foreach($rsK as $row) {
 			echo "<tr onMouseover=\"this.bgColor='#FF0000';\" onMouseout=\"this.bgColor='".$bgcol[($i%2+1)]."';\" bgcolor='".$bgcol[($i%2+1)]."' onClick='showD(\"K\",".$row["cp_id"].");'>".
-				"<td class=\"liste\">".$row["cp_id"]."</td><td class=\"liste\">".$row["cp_name"]."</td>".
+				"<td class=\"liste\">".$row["cp_id"]."</td><td class=\"liste\">".$row["cp_name"].", ".$row["cp_givenname"]."</td>".
 				"<td class=\"liste\">".$row["addr2"].(($row["addr1"])?",":"").$row["addr1"]."</td><td class=\"liste\">".$row["cp_phone1"]."</td><td class=\"liste\">P</td></tr>\n";
 			$i++;
 		}

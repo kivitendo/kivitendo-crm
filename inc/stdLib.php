@@ -127,7 +127,7 @@ global $ERPNAME,$showErr;
 	$dbname=$hits[1];
 	preg_match("/dbpasswd => '(.+)'/",$tmp,$hits);
         if ($hits[1]) {
-		$dbpasswd=uudecode($hits[1]);
+		$dbpasswd=uudecode(stripslashes($hits[1]));
 	} else {
         	$dbpasswd="";
 	};

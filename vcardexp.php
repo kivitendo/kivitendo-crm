@@ -11,7 +11,8 @@
 		// set a formatted name
 		$vcard->setFormattedName($data["cp_givenname"]." ".$data["cp_name"]);
 		// set the structured name parts
-		$vcard->setName($data["cp_name"],$data["cp_givenname"],"",$data["cp_title"],"");	
+		$prefix=($data["cp_greeting"])?$data["cp_greeting"]." ".$data["cp_title"]:$data["cp_title"];
+		$vcard->setName($data["cp_name"],$data["cp_givenname"],"",$prefix,"");	
 		// add a work email.  note that we add the value
 		// first and the param after -- Contact_Vcard_Build
 		// is smart enough to add the param in the correct place.

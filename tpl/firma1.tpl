@@ -48,7 +48,7 @@
 </div>
 
 <span style="position:absolute; left:10px; top:67px; width:99%;">
-<!-- Beginn Code --------------------------------------------- -->
+<!-- Begin Code --------------------------------------------- -->
 <span style="float:left; width:53%; height:430px; text-align:center; border: 1px solid black;">
 	<div style="float:left; width:64%; height:165px; text-align:left; border-bottom: 0px solid black; padding:2px;" class="gross">
 		{Fname1}<br />
@@ -71,6 +71,9 @@
 			<input type="hidden" name="password" value="{password}">
 	  		<input type="hidden" name="customer_id" value="{FID}">
 			<input type="image" src="image/auftrag.png" value="Auftrag" title="neuen Auftrag eingeben" style="visibility:{zeige};">
+			<input type="hidden" name="type" value="sales_quotation">
+			<input type="image" src="image/angebot.png" value="Angebot" title="neues Angebot erstellen" style="visibility:{zeige};">
+
 			<img src="image/kreuzchen.gif" title="Gesperrter Kunde"style="visibility:{verstecke};" >
 			&nbsp;
 			<a href="#" onCLick="anschr(1);" title="Briefanschrift &amp; Etikett"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a></form>

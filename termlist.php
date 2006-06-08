@@ -48,14 +48,14 @@
 		for ($i=$_SESSION["termbegin"]; $i<=$_SESSION["termend"]; $i++) {
 			$t->set_var(array(
 				col => "gr",
-				zeit => $i.":00",
+				zeit => sprintf("%02d:00",$i),
 				text => $termdata["$i:00"],
 				tid => $termid["$i:00"],
 			));
 			$t->parse("Block","Stunden",true);
 			$t->set_var(array(
 				col => "we",
-				zeit => $i.":30",
+				zeit => sprintf("%02d:30",$i),
 				text => $termdata["$i:30"],
 				tid => $termid["$i:30"],
 			));

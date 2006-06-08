@@ -201,45 +201,52 @@ CREATE TABLE maschine (
 	counter BIGINT);
 
 CREATE TABLE wissencategorie(
-id integer DEFAULT nextval('id'::text) NOT NULL,
-name character varying(60),
-hauptgruppe integer
+	id integer DEFAULT nextval('id'::text) NOT NULL,
+	name character varying(60),
+	hauptgruppe integer
 );
+
 CREATE TABLE leads(
-id integer DEFAULT nextval('id'::text) NOT NULL,
-lead character varying(50)
+	id integer DEFAULT nextval('id'::text) NOT NULL,
+	lead character varying(50)
 );
+
 CREATE TABLE wissencontent(
-id integer DEFAULT nextval('id'::text) NOT NULL,
-initdate timestamp without time zone NOT NULL,
-content text,
-employee integer,
-version integer,
-categorie integer
+	id integer DEFAULT nextval('id'::text) NOT NULL,
+	initdate timestamp without time zone NOT NULL,
+	content text,
+	employee integer,
+	version integer,
+	categorie integer
 );
-	CREATE TABLE opportunity(
-id integer DEFAULT nextval('id'::text) NOT NULL,
-fid integer,
-title character varying(100),
-betrag numeric (15,5),
-zieldatum date,
-chance integer,
-status integer,
-notiz text,
-itime timestamp DEFAULT now(),
-mtime timestamp,
-iemployee integer,
-memployee integer
+
+CREATE TABLE opportunity(
+	id integer DEFAULT nextval('id'::text) NOT NULL,
+	fid integer,
+	title character varying(100),
+	betrag numeric (15,5),
+	zieldatum date,
+	chance integer,
+	status integer,
+	notiz text,
+	itime timestamp DEFAULT now(),
+	mtime timestamp,
+	iemployee integer,
+	memployee integer
 );
+
 CREATE TABLE postit (
-id integer DEFAULT nextval('id'::text) NOT NULL,
-cause character varying(100),
-notes text,
-employee integer,
-date timestamp without time zone NOT NULL);
+	id integer DEFAULT nextval('id'::text) NOT NULL,
+	cause character varying(100),
+	notes text,
+	employee integer,
+	date timestamp without time zone NOT NULL
+);
+
 CREATE TABLE tempcsvdata (
-uid  integer,
-csvdaten text);
+	uid  integer,
+	csvdaten text
+);
 
 ALTER TABLE customer ADD COLUMN owener int4;
 ALTER TABLE customer ADD COLUMN employee int4;
@@ -250,7 +257,6 @@ ALTER TABLE customer ADD COLUMN typ int4;
 ALTER TABLE customer ADD COLUMN sonder int;
 ALTER TABLE customer ADD COLUMN lead integer;
 ALTER TABLE customer ADD COLUMN leadsrc character varying(15);
-
 ALTER TABLE vendor ADD COLUMN owener int4;
 ALTER TABLE vendor ADD COLUMN employee int4;
 ALTER TABLE vendor ADD COLUMN kundennummer character varying(20);
@@ -259,7 +265,6 @@ ALTER TABLE vendor ADD COLUMN branche character varying(25);
 ALTER TABLE vendor ADD COLUMN grafik character varying(5);
 ALTER TABLE vendor ADD COLUMN typ int4;
 ALTER TABLE vendor ADD COLUMN sonder int;
-
 ALTER TABLE shipto ADD COLUMN shiptoowener int4;
 ALTER TABLE shipto ADD COLUMN shiptoemployee int4;
 ALTER TABLE employee ADD COLUMN pwd char varying(12);
@@ -282,8 +287,6 @@ ALTER TABLE employee ADD COLUMN termbegin integer;
 ALTER TABLE employee ADD COLUMN termend integer;
 ALTER TABLE employee ADD COLUMN kdview integer;
 ALTER TABLE employee alter COLUMN kdview SET DEFAULT 1;
-UPDATE employee SET kdview = 1;
-
 ALTER TABLE contacts ADD COLUMN cp_street character varying(75);
 ALTER TABLE contacts ADD COLUMN cp_zipcode character varying(10);
 ALTER TABLE contacts ADD COLUMN cp_city character varying(75);
@@ -302,10 +305,14 @@ ALTER TABLE contacts ADD COLUMN cp_employee integer;
 ALTER TABLE contacts ADD COLUMN cp_grafik char varying(5);
 ALTER TABLE contacts ADD COLUMN cp_country char varying(3);
 ALTER TABLE defaults ADD COLUMN contnumber text;
+
 UPDATE employee SET countrycode='de';
 UPDATE employee set etikett=(select id from labels limit 1);
 UPDATE defaults SET contnumber=1000;
-insert into crm (uid,datum,version) values (0,now(),'1.2.0');
+UPDATE employee SET kdview = 1;
+
+INSERT INTO crm (uid,datum,version) VALUES (0,now(),'1.3.0');
+
 CREATE INDEX td_termin_key ON termdate USING btree (termid);
 CREATE INDEX td_jahr_key ON termdate USING btree (jahr);
 CREATE INDEX td_monat_key ON termdate USING btree (monat);

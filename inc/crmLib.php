@@ -1863,7 +1863,7 @@ global $db;
 	} else if ($data["name"]) {
 		$where.="and fid in (select id from customer where lower(name) like '%".strtolower($data["name"])."%')";
 	}
-	$sql="select O.*,C.name as firma from  opportunity O left join customer C on O.fid=C.id where ".substr($where,3);
+	$sql="select O.*,C.name as firma from  opportunity O left join customer C on O.fid=C.id where ".substr($where,3)." order by chance desc,betrag desc";
 	$rs=$db->getAll($sql);
 	return $rs;
 }

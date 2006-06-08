@@ -1,4 +1,4 @@
-Lx-Office CRM 1.2.0  
+Lx-Office CRM 1.3.0  
 
 !!! Bitte nicht ohne ausgiebige Tests auf Produktivserver einsetzten !!!
 
@@ -19,15 +19,28 @@ Vorrausetzungen:
 	PEAR::DB
 	PEAR::Contact_Vcard_Build
 	PEAR::Contact_Vcard_Parse
-	PEAR::Mail_Mime
+	PEAR::Mail_Mime oder php-mail-mime
+	PEAR::Image_Canvas
+	PEAR::Image_Graph
 	fpdf + fpdi (http://www.fpdf.de/downloads/)
 	php-gd,php-imap
 	jpgraph
 
 z.B. debian:
-apt-get install libapache2-mod-php4 php4-gd php4-imap php4-pear php4-pgsql  php-fpdf 
+apt-get install libapache2-mod-php4 php4-gd php4-imap php-mail-mime php4-pear php4-pgsql  php-fpdf 
+
+Achtung! Das PEAR-Paket Image_Graph und Image_Canvas sind noch nicht "stable". Daher mit :
+
+	pear install -f Image_Graph
+	pear install -f Image_Canvas
+
+installieren.  Ein weiteres Paket ist dafür Vorraussetzung:
+	PEAR::Image_Color  
+
 
 PHP5: Es müssen noch Probleme mit jpgraph gelöst werden
+
+jpgraph muß nicht mehr verwendet werden. Alternativ wird PEAR::Image_Graph verwendet.
 
 evtl. php.ini anpassen:
 include_path = ".:/usr/share/php:/usr/share/fpdf:/usr/share/jpgraph"
@@ -51,7 +64,7 @@ z.B. Debian
 ERP-Menu erweitern:
 	cd lx-office-erp
 	mv menu.ini menu.ini.crm
-	cat crm/update/menu120.ini menu.ini.crm > menu.ini
+	cat crm/update/menu130.ini menu.ini.crm > menu.ini
 
 Menuicon kopieren
 	cd lx-office-erp
@@ -59,8 +72,10 @@ Menuicon kopieren
 
 
 Eigentümer der Datei auf Webserver setzen
-z.B.:
+z.B. Debian:
 	chown -R www-data: crm/
+Andere:
+	apache, apache2, httpd, www-run
 
 Im Browser die ERP aufrufen und anmelden
 	 -http://localhost/lx-office-erp/login.pl

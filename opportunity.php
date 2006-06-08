@@ -24,8 +24,18 @@
 			$t->set_file(array("op" => "opportunityL.tpl"));
 			$t->set_block("op","Liste","Block");
 			foreach ($data as $row) {
-				$t->set_var(array(id => $row["id"], name => $row["firma"], title => $row["title"]));
+				$t->set_var(array(
+					LineCol	=> $bgcol[($i%2+1)],
+					id => $row["id"], 
+					name => $row["firma"], 
+					title => $row["title"],
+					chance => $row["chance"]*10, 
+					betrag => sprintf("%0.2f",$row["betrag"]), 
+					status => $row["status"],
+					datum => db2date($row["zieldatum"]),
+				));
 				$t->parse("Block","Liste",true);
+				$i++;
 			}
 			$t->pparse("out",array("op"));
 			exit;

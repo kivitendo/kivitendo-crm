@@ -7,8 +7,8 @@
 <h2>AnwenderDokumentationLx-Office</h2>
 <hr>
 [<a name='Anfang und Anmelden' class='wikin'>Anfang und Anmelden</a>]<br>
-<pre> 
-</pre>Der Aufruf der CRM erfolgt durch die Eingabe von: http://localhost/lx-office-erp/login.pl in den Browser.<br>
+<br>
+Die CRM hat keine eigene Anmeldung. Es wird der gleiche Benutzer wie f&uuml;r die ERP verwendet. Der Aufruf der CRM erfolgt also durch die Eingabe von: http://localhost/lx-office-erp/login.pl in den Browser.<br>
 <br>
 Dann ist die Eingabemaske mit dem Benutzernamen und dem Passwort einzugeben, durch das Klicken auf den Button "Anmeldung" kommt man in die &Uuml;bersicht.<br>
 <br>
@@ -17,15 +17,15 @@ Die &Uuml;bersicht nach der Anmeldung<br>
 Unter dem Men&uuml; "Programm" kann man im Fenster "Benutzereinstellungen f&uuml;r ... " den Skin der ERP und CRM in dem Punkt "Men&uuml;setup" zwischen "new" und "old" w&auml;hlen. Dies ist Men&uuml;setup=old.<br>
 <br>
 <br>
-<br>
 Hier sollten bei der Erstanmeldung im Men&uuml; "Programm", "Benutzereinstellungen" die entsprechenden Felder ausgef&uuml;llt, die Datums.- und Zahlenformate eingestellt werden und mit dem Button "Speichern" das ganze sichern.<br>
 <br>
 [<a name='Schnellsuche' class='wikin'>Schnellsuche</a>]<br>
 <br>
-Ganz oben in der Men&uuml;leiste befindet sich ein Eingabefenster. Geben Sie hier einen Namen oder eine Telefonnummer ganz oder nur zu einem Teil ein, dann dr&uuml;cken Sie "Enter" oder klicken auf "suchen". Das Ergenis wird nun im Hauptfenster angezeigt. Die Schnellsuche kann mit Jokern arbeiten. Dabei gilt "?" und "_" f&uuml;r ein beliebiges Zeichen, "*" und "%" f&uuml;r beliebige Zeichenfolgen. Jede Suche wird automatisch um "%" erg&auml;nzt.<br>
+Die Schnellsuche bietet ein Eingabefenster an. Um eine Adresse zu suchen, geben Sie hier einen Namen oder eine Telefonnummer ganz oder nur zu einem Teil ein, dann dr&uuml;cken Sie "Enter" oder klicken auf "Adresse". Das Ergenis wird nun im Hauptfenster angezeigt. Die Schnellsuche kann mit Jokern arbeiten. Dabei gilt "?" und "_" f&uuml;r ein beliebiges Zeichen, "*" und "%" f&uuml;r beliebige Zeichenfolgen. Jede Suche wird automatisch um "%" erg&auml;nzt.<br>
 <br>
 Ein vorangehendes Jokerzeichen kann f&uuml;r jeden Benutzer fest eingestellt werden unter dem Men&uuml;punkt "CRM", "Benutzer", im Feld "PreSearch".<br>
 <br>
+Wollen Sie hingegen einen Beitrag in einem Kontaktverlauf suchen, klicken Sie auf den Knopf "Kontaktverlauf". Die Ergebnisse werden in einem Popup-Fenster dargestellt.<br>
 <br>
 [<a name='Kunden' class='wikin'>Kunden</a>]<br>
 <br>
@@ -59,15 +59,17 @@ Mit einem Klick auf "Maschinen" kommt man in die Suchmaske [<a class='wikil' hre
 <br>
 [<a name='Termine' class='wikin'>Termine</a>]<br>
 <br>
-Das Hauptfenster "Termine" ist in 3 Bereiche eingeteilt.<br>
+Das Hauptfenster "Termine" ist in 2 Bereiche eingeteilt.<br>
 <br>
-Im ersten Bereich sind 3 Pulldownmen&uuml;s mit den Datumsanzeigen f&uuml;r den Tag, den Monat, das Jahr und 3 Buttons f&uuml;r "Tag", "Woche", "Monat" zusehen. Dazu gehört der Bereich des Kalenders (rechts) der entsprechend der Buttons in eine Tages-, Wochen oder Monatsansicht umschaltet. Man kann mit den Pulldownmen&uuml;s z.B. sofort das Jahr und den Monat festlegen und sich &uuml;ber den Button "Woche" die entsprechende Wochenansicht (in Abh&auml;ngigkeit vom Tag) anzeigen lassen.<br>
+Der erste, linke, Bereich dient zum Eintragen von Terminen. Klickt man auf den KalenderButton  in der ersten Zeile neben dem leeren Feld popt der entsprechende Monat des &uuml;berhalb eingestellten Monats und Jahres auf. Durch klicken auf einen Tag wird dieser eingetragen. -Oder durch direktes eingeben des Datums. Nun sollte man daneben noch die Uhrzeit und evtl. Wiederholungen eingeben.<br>
 <br>
+Der eingetragene Grund erscheint dann im Kalender und in der Verlaufsanzeige mit den Teilnehmern. <br>
+Darunter haben Sie die M&aoum;glichkeit, Teilnehmer zu einem Termin zuzuordnen. Ausgew&auml;hlte Teilnehmer stehen in der rechten Auswahlbox. In der linken Auswahlbox befinden siche alle Benutzer von Lx-Office. Wollen Sie einen Kunden oder Lieferanten zu einem Termin zuordnen, geben Sie einen Suchbegriff neben den Knopf "suche Teilnehmer" ein und klicken Sie auf den Knopf. Treffer werden in einem Popup-Fenster dargestellt.<br>
 <br>
+&Uuml;ber den Button sichern wird der Termin gespeichert. Evtuelle &Uuml;berschneidungen angezeigt und gegebenfalls trotzdem "sichern".<br>
 <br>
-Der Bereich zum Eintragen von Terminen ist unterhalb bzw. links von den Kalederfunktionen. Klickt man auf den Button "K" in der ersten Zeile neben dem leeren Feld popt der entsprechende Monat des &uuml;berhalb eingestellten Monats und Jahres auf. Durch klicken auf einen Tag wird dieser eingetragen. -Oder durch direktes eingeben des Datums. Nun sollte man daneben noch die Uhrzeit und evtl. Wiederholungen eingeben.<br>
+Im zweiten Bereich, rechts, sind 3 Pulldownmen&uuml;s mit den Datumsanzeigen f&uuml;r den Tag, den Monat, das Jahr und dem Button f&uuml;r "Zeigen" zusehen. Dazu gehört der Bereich des Kalenders (darunter) der dann eine Tagesansicht darstellt. Die Ansichten lassen sich auf Wochen- oder Monatsansicht umschalten und entsprechend zur&uuml;ck. <br>
 <br>
-Der eingetragene Grund erscheint dann im Kalender und in der Verlaufsanzeige mit den Teilnehmern. &Uuml;ber den Button sichern wird der Termin gespeichert. Evtuelle &Uuml;berschneidungen angezeigt und gegebenfalls trotzdem "sichern".<br>
 <br>
 [<a name='Wiedervorlage' class='wikin'>Wiedervorlage</a>]<br>
 <br>
@@ -98,6 +100,28 @@ In diese Maske kommt man &uuml;ber das Men&uuml; "eMail" oder einem Maillink bei
 In die Felder "An:" und "CC:" kann/können die Adresse/n direkt eingegeben werden. Die Mailadressen können auch &uuml;ber den  Button "suchen" , oder alle die die Buchstaben in dem Feld in der Mailadresse enthalten, angezeigt und &uuml;bernommen werden. Man kann auch Jockerzeichen, "_" f&uuml;r genau <strong>ein</strong> Zeichen und "%" f&uuml;r eine beliebige Zeichenfolge, mehrfach im Suchbegriff verwenden. Dabei ist die Reihenfolge zu beachten: Bei i%e mu&szlig; nicht das gleiche Ergebnis wie bei e%i erscheinen.<br>
 <br>
 Mit dem Versenden wird die Mail einem Kontakt zugeordnet, wenn es ihn gibt. Sie erscheint als neuer "Threat" in dem Verlauf des Kontaktes.<br>
+<br>
+[<a name='Wissens-DB' class='wikin'>Wissens-DB</a>]<br>
+<br>
+Hier k&ouml;nnen Sie Informationen unter Kategorien hinterlegen. Die Kategorien k&ouml;nnen beliebig tief geschachtelt werden.<br>
+Um eine neue Kategorie anzulegen, w&auml;hlen Sie zun&auml;chst die Oberkategorie. Anfangs ist das "\", die Root. Klicken Sie auf das Eingabesymbol. Es &ouml;ffnet sich ein Eingabefeld. Tragen Sie hier einen Begriff ein und klicken Sie auf das gr&uuml;ne H&auml;ckchen um zu speichern.<br>
+Rechst neben den Kategorien, werden die Informationen zumr gew&auml;hlten Kategortie ausgegeben. In der ersten Zeile stehen einige Statusinformatuionen zum Dokument, wenn bereits etwas gespeichert wurde.<br>
+Um die Informationen zu bearbeiten oder neu einzugeben, klicken Sie auf das Eingabesymbol. Ein grosses Eingabe feld &ouml;ffnet sich. Um den Text zu formatiern, k&ouml;nnen Sie HTML-Tags benutzen. Ist TinyMce installiert, bekommen Sie komfortable Editierfunktionen angeboten. Das gr&uuml;ne H&auml;ckchen speichert die Eingaben.
+<br>
+<br>
+[<a name='Notizen' class='wikin'>Notizen</a>]<br>
+<br>
+Hier haben Sie die M&ouml;glichkeit kurze Notizen zu speichern. Geben Sie dazu zun&auml;chst einen pr&auml;gnante Schlagzeile ein und dann im Feld darunter den eigentlichen Text. Gespeichert werden die Notizen mit dem Knopf "sichern".<br>
+Die Schlagzeilen der gespeicherten Notizen werden Chronologisch dar&uuml;ber aufgelistet. Ein klick auf die Schlagzeile &aouml;ffnet die Notiz im Eingabefenster.<br>
+Der Knopf "Pop Up" öffnet das Notizen-Fenster in einem neuen Fenster, damit es immer sichtbar ist.<br>
+<br>
+<br>
+[<a name='Auftragschance' class='wikin'>Auftragschance</a>]<br>
+<br>
+Hier bewerten Sie die Chance auf einen Auftrag mit einem Kunden. Suchen Sie zun&auml;chst den Kunden, indem Sie einen Teilbegriff eingeben und auf die Lupe klicken. In Schlagzeile geben Sie einen kurzen, pr&auml;gnanten Text ein. F&uuml;llen Sie noch den Betrag, das Zieldatum, die aktuelle Chance in Prozent und den Status aus. Als letztes beschreiben Sie den Auftrag genauer. Das gr&uuml;ne H&auml;ckchen speichert die Einagben.<br>
+Um eine Auftragschance zu suchen, geben Sie in den Felder entsprechende Suchbegriffe ein und klicken Sie auf die Lupe am unteren Rand. Danach klicken Sie einfach auf einen der Treffer. Um eine Zeilen zu &auml;ndern, klicken Sie einfach in das weisse Feld der entsprechenden Zeile.<br>
+Auftragschancen k&ouml;nnen auch bei den Firmenstammdaten unter dem Reiter "Umsatz" gesucht werden.<br>
+<br>
 <br>
 [<a name='Dokumentenvorlage' class='wikin'>Dokumentenvorlage</a>]<br>
 <br>

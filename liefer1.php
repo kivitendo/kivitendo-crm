@@ -87,13 +87,15 @@
 			$item=$itemN;
 		}
 		if ($item) foreach($item as $col){
+			if ($col["new"]) { $cause="<b>".$col["cause"]."</b>"; }
+			else { $cause=$col["cause"]; }
 			$t->set_var(array(
 				IID => $col["id"],
 				LineCol	=> $bgcol[($i%2+1)],
 				Datum	=> db2date(substr($col["calldate"],0,10)),
 				Zeit	=> substr($col["calldate"],11,5),
 				Name	=> $col["cp_name"],
-				Betreff	=> $col["cause"],
+				Betreff	=> $cause,
 				Nr	=> $col["id"]
 				));
 			$t->parse("Block","Liste",true);

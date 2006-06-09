@@ -117,7 +117,7 @@
 <!-- BEGIN Liste -->
 	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showItem({IID});">
 		<td class="smal" width="100" height="14px">{Datum} {Zeit}</td>
-		<td class="smal" width="60">{Nr}</td>
+		<td class="smal" style="width:38;text-align:right;">{Nr}&nbsp;</td>
 		<td class="smal le">{Betreff}</td>
 		<td class="smal le">{Name}</td>
 	</tr>

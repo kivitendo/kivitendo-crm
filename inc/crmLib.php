@@ -45,6 +45,21 @@ global $db;
 	$rs=$db->getAll($sql." order by calldate desc offset $start ".(($lim>0)?"limit $lim":""));
 	if(!$rs) {
 		$rs=false;
+	} else {
+		$sql="select telcall.* from telcall left join contacts on caller_id=cp_id where  ";
+		$sql.="(caller_id in (select cp_id from contacts where cp_cv_id=$id) or caller_id=$id) ";
+		$sql.="order by calldate desc limit 1";
+		$rs2=$db->getAll($sql);
+		if ($rs2[0]["bezug"]==0) { $new=$rs2[0]["id"]; }
+		else { $new=$rs2[0]["bezug"]; };
+		$i=0;
+		foreach ($rs as $row) {
+			if ($row["id"]==$new) {
+				$rs[$i]["new"]=1;
+				break;
+			}
+			$i++;
+		}
 	}
 	return $rs;
 }
@@ -67,6 +82,21 @@ global $db;
 	$rs=$db->getAll($sql." order by calldate desc offset $start limit 19");
 	if(!$rs) {
 		$rs=false;
+	} else {
+		$sql="select telcall.* from telcall left join contacts on caller_id=cp_id where  ";
+		$sql.="(caller_id in (select cp_id from contacts where cp_cv_id=$id) or caller_id=$id) ";
+		$sql.="order by calldate desc limit 1";
+		$rs2=$db->getAll($sql);
+		if ($rs2[0]["bezug"]==0) { $new=$rs2[0]["id"]; }
+		else { $new=$rs2[0]["bezug"]; };
+		$i=0;
+		foreach ($rs as $row) {
+			if ($row["id"]==$new) {
+				$rs[$i]["new"]=1;
+				break;
+			}
+			$i++;
+		}
 	}
 	return $rs;
 }

@@ -5,19 +5,15 @@ class myDB extends DB {
  var $rc = false;
  var $showErr = false; // Browserausgabe
  var $debug = false; // 1 = SQL-Ausgabe, 2 = zusätzlich Ergebnis
- var $log = false;  // Alle Abfragen mitloggen
+ var $log = true;  // Alle Abfragen mitloggen
  var $errfile = "tmp/lxcrm.err";
  var $logfile = "tmp/lxcrm.log";
  var $efh = false;
  var $lfh = false;
- var $stime = false;
- var $ltime = 1000;
  
- 	function valid() {
- 		return ((time - $this->stime)<1000)?true:false;
- 	}
 	function dbFehler($sql,$err) {
-		$this->efh=fopen($this->errfile,"a");
+		if (!$this->efh)
+			$this->efh=fopen($this->errfile,"a");
 		fputs($this->efh,date("Y-m-d H:i:s ->"));
 		fputs($this->efh,$sql."\n");
 		fputs($this->efh,$err."\n");
@@ -29,30 +25,37 @@ class myDB extends DB {
 	}
 
 	function showDebug($sql) {
-		echo $sql."<br><pre>";
+		echo $sql."<br>";
 		if ($this->debug==2) {
+			echo "<pre>";
 			print_r($this->rc);
 			echo "</pre>";
 		};
 	}
 
 	function writeLog($txt) {
-		if (!$this->lfh) $this->lfh=fopen($this->logfile,"a");
+		if (!$this->lfh)
+			$this->lfh=fopen($this->logfile,"a");
 		fputs($this->lfh,date("Y-m-d H:i:s ->"));
 		fputs($this->lfh,$txt."\n");
 		fputs($this->lfh,print_r($this->rc,true));
 		fputs($this->lfh,"\n");
 	}
 
-	function closeErr() {
+	function closeErrfile() {
 		fclose($this->efh);
 	}
-	function closeLog() {
+	function closeLogfile() {
 		fclose($this->lfh);
 	}
 	
-	function myDB($dns,$showErr=false) {
-		$dns="pgsql://".$dns;
+	function myDB($host,$user,$pwd,$db,$showErr=false) {
+		if ($pwd>"") {
+			$passwd=":".$this->uudecode($pwd);
+		} else {
+			$passwd="";
+		}
+		$dns="pgsql://$user$passwd@$host/$db";
 		$this->showErr=$showErr;
 		$this->db=DB::connect($dns);
 		if (!$this->db || DB::isError($this->db)) {
@@ -61,12 +64,10 @@ class myDB extends DB {
 			die ($this->db->getMessage());
 		}
 		if ($this->log) $this->writeLog("Connect: ok ");
-		$this->stime=time();
 		return $this->db;
 	}
 
 	function query($sql) {
-		$this->stime=time();
 		$this->rc=@$this->db->query($sql);
 		if ($this->debug) $this->showDebug($sql);
 		if ($this->log) $this->writeLog($sql);
@@ -90,7 +91,6 @@ class myDB extends DB {
 	}
 
 	function getAll($sql) {
-		$this->stime=time();
 		$this->rc=$this->db->getAll($sql,DB_FETCHMODE_ASSOC);
 		if ($this->debug) $this->showDebug($sql);
 		if ($this->log) $this->writeLog($sql);
@@ -102,5 +102,24 @@ class myDB extends DB {
 		}
 	}
 
+	/****************************************************
+	* uudecode
+	* in: string
+	* out: string
+	* dekodiert Perl-UU-kodierte Passwort-Strings
+	* http://de3.php.net/base64_decode (bug #171)
+	*****************************************************/
+	function uudecode($encode) {
+		$encode=stripslashes($encode);
+		$b64chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+		$encode = preg_replace("/^./m","",$encode);
+		$encode = preg_replace("/\n/m","",$encode);
+		for($i=0; $i<strlen($encode); $i++) {
+			if ($encode[$i] == '') $encode[$i] = ' ';
+			$encode[$i] = $b64chars[ord($encode[$i])-32];
+		}
+		while(strlen($encode) % 4) $encode .= "=";
+		return base64_decode($encode);
+	}
 }
 ?>

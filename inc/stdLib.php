@@ -6,80 +6,6 @@ require_once "DB.php";
 require_once "inc/conf.php";
 require_once "db.php";
 
-/****************************************************
-* decode_password
-* in: string
-* out: string
-* dekodiert Perl-UU-kodierte Passwort-Strings
-* sd@b-comp.de (bug #171)
-*****************************************************/
-function decode_password($string) { 
-  $offset = 0;
-  $register = 0;
-  $result = '';
-
-  if (strlen($string) == 0) return ''; 
-
-  if ((ord($string{0}) & 0xf0) != 0x20) {
-    print "password decoding error!\n";
-    return null;
-  }
-  // oder doch vielleicht auf Perl zurückgreifen:
-  //if (ord($string{0}) & 0xf0) != 0x20) return exec("echo print  pack 'u', ".$string." | /usr/bin/perl -") ;
-  $length = ord($string{0}) & 0xf;
-  for ($index = 0; $index < strlen($string); $index) {
-    $x = (int)(ord($string{$index + 1}) - 32);
-    switch ($offset) {
-    case 0:
-      $register = $x << 2;
-      $offset = 6;
-      break;
-    case 2:
-      $y = $register | $x;
-      $result .= chr($y);
-      $offset = 0;
-      break;
-    case 4:
-      $y = $register | ($x >> 2);
-      $result .= chr($y);
-      $register = ($x << 6) & 0xff;
-      $offset = 2;
-      break;
-    case 6:
-      $y = $register | ($x >> 4);
-      $result .= chr($y);
-      $register = ($x << 4) & 0xff;
-      $offset = 4;
-    }
-    if (strlen($result) == $length) break;
-  }
-  return $result;
-}
-
-/****************************************************
-* uudecode
-* in: string
-* out: string
-* dekodiert Perl-UU-kodierte Passwort-Strings
-* http://de3.php.net/base64_decode (bug #171)
-*****************************************************/
-function uudecode($encode) {
-  $b64chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
-  $encode = preg_replace("/^./m","",$encode);
-  $encode = preg_replace("/\n/m","",$encode);
-  for($i=0; $i<strlen($encode); $i++) {
-    if ($encode[$i] == '')
-      $encode[$i] = ' ';
-    $encode[$i] = $b64chars[ord($encode[$i])-32];
-  }
-   
-  while(strlen($encode) % 4)
-    $encode .= "=";
-
-  return base64_decode($encode);
-}
-
 
 /****************************************************
 * db2date
@@ -126,24 +52,13 @@ global $ERPNAME,$showErr;
 	preg_match("/dbname => '(.+)'/",$tmp,$hits);
 	$dbname=$hits[1];
 	preg_match("/dbpasswd => '(.+)'/",$tmp,$hits);
-        if ($hits[1]) {
-		$dbpasswd=uudecode(stripslashes($hits[1]));
-	} else {
-        	$dbpasswd="";
-	};
+	$dbpasswd=$hits[1];
 	preg_match("/dbuser => '(.+)'/",$tmp,$hits);
 	$dbuser=$hits[1];
 	preg_match("/dbhost => '(.+)'/",$tmp,$hits);
 	$dbhost=$hits[1];
 	if (!$dbhost) $dbhost="localhost";
-	if ($dbpasswd) {
-        	$dns=$dbuser.":".$dbpasswd."@".$dbhost."/".$dbname;
-	} else {
-        	$dns=$dbuser."@".$dbhost."/".$dbname;
-	};
 	chkdir($dbname);
-	$_SESSION["dns"]=$dns;
-	$_SESSION["db"]=new myDB($_SESSION["dns"],$showErr);
    	$_SESSION["employee"]=$_GET["login"];
    	$_SESSION["password"]=$_GET["password"];
 	$_SESSION["mansel"]=$dbname;
@@ -151,6 +66,7 @@ global $ERPNAME,$showErr;
 	$_SESSION["dbhost"]=$dbhost;
 	$_SESSION["dbuser"]=$dbuser;
 	$_SESSION["dbpasswd"]=$dbpasswd;		
+	$_SESSION["db"]=new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$showErr);
 	$sql="select * from employee where login='$name'";
 	$rs=$_SESSION["db"]->getAll($sql);
 	if(!$rs) {

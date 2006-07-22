@@ -43,9 +43,9 @@ global $db;
 		}
 	}
 	if ($tab=="C") {
-		$sql="select *,'C' as tab from customer where ($where) and $rechte";
+		$sql="select *,'C' as tab from customer where ($where) and $rechte order by name";
 	} else if ($tab=="V") {
-		$sql="select *,'V' as tab from vendor where ($where) and $rechte";
+		$sql="select *,'V' as tab from vendor where ($where) and $rechte order by name";
 	} else {
 		return false;
 	}
@@ -174,7 +174,8 @@ function suchstr($muster,$typ="C") {
 			ustid => array(0,1), taxnumber => array(0,0), lead => array(0,0),leadsrc => array(0,1),
 			bank => array(0,1), bank_code => array(0,0), account_number => array(0,0),
 			vendornumber => array(0,1),v_customer_id => array(0,0),
-			kundennummer => array(0,0),customernumber => array(0,1));
+			kundennummer => array(0,0),customernumber => array(0,1),
+			employee => array(0,0));
 	$dbfld2=array(name => "shiptoname", street=>"shiptostreet",ziptocode=>"shiptozipcode",
 			city=>"shiptocity",phone=>"shiptophone",fax=>"shiptofax",
 			email=>"shiptoemail",department_1=>"shiptodepartment_1",
@@ -586,6 +587,7 @@ global $cp_sonder;
 			T1		=> " checked",
 			T2		=> "",
 			T3		=> "",
+			employee => $_SESSION["loginCRM"],
 			Radio   => "&nbsp;alle<input type='radio' name='Typ' value='' checked>",
 			init	=> $_SESSION["employee"]
 			));
@@ -697,6 +699,7 @@ global $cp_sonder;
 				T3	=> ($daten["typ"]=="3")?"checked":"",
 				init	=> ($daten["employee"])?$daten["employee"]:"ERP",
 				login	=> $_SESSION{"login"},
+				employee => $_SESSION["loginCRM"],
 				password	=> $_SESSION{"password"}
 		));
 		$t->set_block("fa1","TypListe","BlockT");

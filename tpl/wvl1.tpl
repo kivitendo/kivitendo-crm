@@ -14,6 +14,7 @@
 		}
 	//-->
 	</script>
+	{jcal0}
 <body onLoad="doInit();" >
 <!--table width="103%" class="karte" border="0"><tr><td class="karte"-->
 <!-- Beginn Code ------------------------------------------->
@@ -33,9 +34,9 @@
 		<option value="{UID}"{Sel}>{Login}</option>
 <!-- END Selectbox -->
 	</select>
-	<input type="text" name="name" size="14" maxlength="75"  value="{Fname}" tabindex="2"> <input type="button" name="dst" value=" ? " onClick="suchDst();" tabindex="99">
+	<input type="text" name="name" size="14" maxlength="75"  value="{Fname}"tabindex="2"> <input type="button" name="dst" value=" ? " onClick="suchDst();" tabindex="99">
 	<br>CRM-User &nbsp; &nbsp; &nbsp;Zugewiesen an &nbsp;[<a href="{stammlink}" name="addresse">Adresse</a>]
-	</td><td class="smal"><input type="text" name="Finish" size="11" maxlength="10" value="{Finish}" tabindex="3">
+	</td><td class="smal"><input type="text" name="Finish" id="Finish" size="11" maxlength="10" value="{Finish}" tabindex="3">{jcal1}
 							<br>Zu Erledigen bis</td>
 	<td rowspan="6">
 		<iframe src="wvll.php" name="wvll" width="359" height="410" marginheight="0" marginwidth="0" align="left">
@@ -77,6 +78,11 @@
 </td></tr></table>
 <!-- End Code ------------------------------------------->
 <!--/td></tr></table-->
+<script type='text/javascript'><!--
+Calendar.setup( {
+inputField : 'Finish',ifFormat :'%d.%m.%Y',align : 'BL', button : 'trigger1'} );
+//-->
+</script>
 </body>
 </html>
 

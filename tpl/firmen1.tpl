@@ -119,6 +119,9 @@
 			</select>
 			<input type="text" name="leadsrc" size="5" value="{leadsrc}">
 		</span>
+		<span class="label">Kunden-Nr</span>
+		<span class="leftfeld"><input type="text" name="customernumber" size="27" maxlength="15" value="{customernumber}" tabindex="20"></span>
+
 	</div>
 	<div class="zeile">
 		<span class="label">SonderFlag</span>
@@ -130,8 +133,9 @@
 			<b>{Msg}</b><br>
 			<input type="checkbox" name="shipto" value="1" tabindex="20">auch in abweichender Lieferanschrift suchen<br>
 			<input type="checkbox" name="fuzzy" value="%" checked tabindex="21">Unscharf suchen<br>
-			<input type="submit" name="suche" value="suchen" tabindex="22">&nbsp;
-			<input type="submit" name="reset" value="clear" tabindex="23"> &nbsp;<input type="button" name="rep" value="Report" onClick="report()" tabindex="23">
+			<input type="checkbox" name="employee" value="{employee}" tabindex="22">nur selber angelegte<br>
+			<input type="submit" name="suche" value="suchen" tabindex="23">&nbsp;
+			<input type="submit" name="reset" value="clear" tabindex="24"> &nbsp;<input type="button" name="rep" value="Report" onClick="report()" tabindex="23">
 	</div>
 </form>
 <!-- End Code ------------------------------------------->

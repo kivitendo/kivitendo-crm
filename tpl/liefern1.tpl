@@ -94,6 +94,8 @@
 	<div class="zeile">
 		<span class="label">Unsere KdNr</span>
 		<span class="leftfeld"><input type="text" name="kundennummer" size="27" maxlength="125" value="{kundennummer}" tabindex="10"></span>
+		<span class="label">Lieferant-Nr</span>
+		<span class="leftfeld"><input type="text" name="vendornumber" size="27" maxlength="15" value="{vendornumber}" tabindex="20"></span>
 	</div>
 	<div class="zeile">
 		<span class="label">Typ</span>
@@ -123,6 +125,7 @@
 			<b>{Msg}</b><br>
 			<input type="checkbox" name="shipto" value="1" tabindex="23">auch in abweichender Lieferanschrift suchen<br>
 			<input type="checkbox" name="fuzzy" value="%" checked tabindex="24">Unscharf suchen<br>
+			<input type="checkbox" name="employee" value="{employee}" tabindex="22">nur selber angelegte<br>
 			<input type="submit" name="suche" value="suchen" tabindex="25">&nbsp;
 			<input type="submit" name="reset" value="clear" tabindex="26"> &nbsp;<input type="button" name="rep" value="Report" onClick="report()" tabindex="23">
 	</div>

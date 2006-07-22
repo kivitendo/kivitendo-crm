@@ -4,6 +4,11 @@
 	include("inc/template.inc");
 	include("inc/crmLib.php");
 	include("inc/UserLib.php");
+	$jscal ="<style type='text/css'>@import url(../../$ERPNAME/js/jscalendar/calendar-win2k-1.css);</style>\n";
+	$jscal.="<script type='text/javascript' src='../../$ERPNAME/js/jscalendar/calendar.js'></script>\n";
+        $jscal.="<script type='text/javascript' src='../../$ERPNAME/js/jscalendar/lang/calendar-de.js'></script>\n";
+        $jscal.="<script type='text/javascript' src='../../$ERPNAME/js/jscalendar/calendar-setup.js'></script>\n";
+
 	$data["id"]=0;
 	$templ="wvl1.tpl";
 	$js="";
@@ -85,6 +90,8 @@
 			CID => $_SESSION["loginCRM"],
 			WVLID => $data["id"],
 			Finish => $data["Finish"],
+			jcal0 => ($jcalendar)?$jscal:"",
+			jcal1 => ($jcalendar)?"<a href='#' id='trigger1' name='Finish' title='Zieldatum' onClick='false'><img src='image/date.png' border='0' align='middle'></a>":"",
 			JS => $js,
 			stammlink => $stammlink,
 			Mail => $_GET["mail"]

@@ -7,12 +7,14 @@
 	include("inc/UserLib.php");
 	$fid=($_POST["fid"])?$_POST["fid"]:$_GET["fid"];
 	$pid=($_POST["pid"])?$_POST["pid"]:$_GET["pid"];
-	$id=($_POST["id"])?$_POST["id"]:$_GET["id"];
-	$Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
 	$INIT=($_POST["INIT"])?$_POST["INIT"]:$_GET["INIT"];
-	if (empty($INIT)) $INIT=$id;
+	if (empty($INIT)) $INIT=0;
+	$Bezug=($_POST["Bezug"])?$_POST["Bezug"]:$_GET["Bezug"];
+	if (empty($Bezug)) $Bezug=0;
+	$Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
 	$select=$_SESSION["loginCRM"];
 	$selectC=(strlen($Q)==1)?$fid:$pid;
+	if ($INIT>0) {	$daten=getCall($INIT);	}
 	$daten["Datum"]=date("d.m.Y");
 	$daten["Zeit"]=date("H:i");
 	$daten["Kontakt"]="T";
@@ -25,60 +27,53 @@
 	$daten["Q"]=$Q;
 	$daten["CID"]=($pid>0)?$pid:$fid;
 	$daten["Kunde"]=0;
-	$daten["Anzeige"]=0;
-	
+	$daten["Anzeige"]=0;                       	
+
 	if ($_POST["verschiebe"]) {
-		$rc=mvTelcall($_POST["TID"],$_POST["Anzeige"],$_POST["CID"]);
+		$rc=mvTelcall($_POST["TID"],$_POST["id"],$_POST["CID"]);
 		$daten["Betreff"]=$_POST["Betreff"];
-		if ($_POST["Bezug"]==$_POST["Anzeige"]) {
-			$id=$_POST["TID"];
+		if ($_POST["Bezug"]==$_POST["id"]) {
+			$daten["id"]=$_POST["TID"];
+			$Bezug=$_POST["TID"];
 		} else {
-			$id=$_POST["Bezug"];
+			$daten["id"]=$_POST["Bezug"];
 		}											// verschiebe
+	} else 	if ($_POST["delete"]) {
+		$rc=saveTelCall($_POST["id"],$_SESSION["loginCRM"],"D");
+		$rc=delTelCall($_POST["id"]);
+		if ($_POST["bezug"]==0) $Bezug=0;
 	} else 	if ($_GET["hole"]) {
-		$data=getCall($_GET["hole"]);
-		$daten["Datum"]=$data["Datum"];
-		$daten["Zeit"]=$data["Zeit"];
-		$daten["Betreff"]=$data["Betreff"];
-		$daten["Kontakt"]=$data["Kontakt"];
-		$daten["LangTxt"]=$data["LangTxt"];
-		$daten["Files"]=$data["Files"];
-		$daten["Anzeige"]=$_GET["hole"];
-		$select=$data["employee"];
-		$daten["CID"]=$data["CID"];
+		$daten=getCall($_GET["hole"]);
+		$Bezug=($daten["Bezug"]==0)?$daten["ID"]:$daten["Bezug"];
+		$select=$daten["employee"];
 		$daten["Datei"]="";
-		$daten["ODatei"]=$data["Datei"];
-		$daten["Kunde"]=$data["Kunde"];
-		$daten["DCaption"]=$data["DCaption"];
-		$id=($data["Bezug"]<>0)?$data["Bezug"]:$_GET["hole"];
-		$co=getKontaktStamm($data["CID"]);
-		if ($co["cp_id"]){
+		$daten["ODatei"]=$daten["Datei"];
+		$co=getKontaktStamm($daten["CID"]);
+		if ($co["cp_id"]) {
 			$pid=$co["cp_id"];
 			$fid=$co["cp_cv_id"];
 		} else {
-			$fid=$data["CID"];		// Einzelperson o. Firma allgem.
+			$fid=$daten["CID"];		// Einzelperson o. Firma allgem.
 		}
-		$selectC=$data["CID"];						// if ($_GET["hole"])
+		$selectC=$daten["CID"];						// if ($_GET["hole"])
+	} else if ($_POST["update"]) {
+		$rc=saveTelCall($_POST["id"],$_SESSION["loginCRM"],"U");
+		$rc=updCall($_POST,$_FILES);
+		if ($rc) {
+			$daten["Betreff"]=$_POST["cause"];
+		} else {	
+			$daten=$_POST;
+		}											// if ($rc)
 	} else if ($_POST["sichern"]) {
+		unset($_POST["id"]);
 		$rc=insCall($_POST,$_FILES);
 		if ($rc) {
 			$daten["Betreff"]=$_POST["cause"];
-			if ($_POST["Bezug"]=="0") {
-				$id=$rc;
-			} else {
-				$id=$_POST["Bezug"];
-			}
+			if ($Bezug==0) $Bezug=$rc;
 		} else {	
 			$daten=$_POST;
-			$id=$_POST["Bezug"];
 		}											// if ($rc)
-													// end sichern
-	} else {										// default
-		if ($INIT>0) {
-			$data=getCall($INIT);
-			$daten["Betreff"]=$data["Betreff"];
-		}
-	}
+	} 										//  end sichern
 	switch ($Q) {
 		case "C" :  $fa=getFirmenStamm($fid,true,"C");
 					$daten["Firma"]=$fa["name"];
@@ -138,7 +133,7 @@
 	}
 	if ($thread) foreach($thread as $zeile) {
 		$t->set_var(array(
-			Sel => ($id==$zeile["id"])?" selected":"",
+			Sel => ($daten["id"]==$zeile["id"])?" selected":"",
 			TID	=>	$zeile["id"],
 		));
 		$t->parse("Block4","Selectbox3",true);
@@ -147,8 +142,8 @@
 	$i=0;
 	$t->set_block("cont","Liste","Block");
 	$zeile="";
-	if ($id<>0) {
-		$calls=getAllCauseCall($id);
+	if ($Bezug<>0) {
+		$calls=getAllCauseCall($Bezug);
 		if ($calls) foreach($calls as $zeile) {
 			$t->set_var(array(
 				LineCol => ($zeile["bezug"]==0)?$bgcol[4]:$bgcol[($i%2+1)],
@@ -169,12 +164,14 @@
 		$cid=$daten["CID"];
 	}
 	$cause=(empty($daten["Betreff"]))?$zeile["cause"]:$daten["Betreff"];
+	$deletes=getCntCallHist($Bezug,true);
 	$t->set_var(array(
-		INIT => $INIT,
+		EDIT => ($CallEdit and $_GET["hole"])?"visible":"hidden",
+		DELETE => ($CallDel and $_GET["hole"])?"visible":"hidden",
+		HISTORY => ($daten["history"]>0)?"visible":"hidden",
+		HDEL => ($deletes>0)?"visible":"hidden",
 		Person => $Person,
-		Anzeige => $daten["Anzeige"],
 		NBetreff => addslashes($cause),
-		//NBetreff => $daten["Betreff"],
 		Q => $Q,
 		Firma => $daten["Firma"],
 		Plz => $daten["Plz"],
@@ -185,18 +182,19 @@
 		CID => $cid,
 		FID => $fid,
 		PID => $pid,
-		Bezug => ($id===0)?"0":$id,
+		bezug => $daten["Bezug"],
+		Bezug => ($Bezug)?$Bezug:0,
 		R1 => ($daten["Kontakt"]=="T")?" checked":"",
 		R2 => ($daten["Kontakt"]=="M" or $daten["Kontakt"]=="m")?" checked":"",
 		R3 => ($daten["Kontakt"]=="S")?" checked":"",
 		R4 => ($daten["Kontakt"]=="P")?" checked":"",
 		R5 => ($daten["Kontakt"]=="D")?" checked":"",
 		R6 => ($daten["Kontakt"]=="X")?" checked":"",
-		Start => $id*-1,
+		Start => $telcall*-1,
 		Datei => $daten["Datei"],
 		ODatei => (empty($daten["ODatei"]))?"":("<a href='dokumente/".$_SESSION["mansel"]."/".$daten["Kunde"]."/".$daten["ODatei"]."' target='_blank'>".$daten["ODatei"]."</a>"),
 		Dcaption => $daten["DCaption"],
-		ID => $id
+		ID => $daten["ID"],
 	));
 	//------------------------------------------- Dateianhänge
  	if ($daten["Files"]){

@@ -101,6 +101,34 @@ global $db;
 	return $rs;
 }
 
+function delTelCall($id) {
+global $db;
+	$rs=$db->getAll("select * from telcall where id=$id");
+	if ($rs[0]["bezug"]==0) {
+		$sql="delete from telcall where bezug=$id";
+		$rs=$db->query($sql);
+	}
+	$sql="delete from telcall where id=$id";
+	$rc=$db->query($sql);
+}
+
+/****************************************************
+* saveAllTelCall
+* in: id = int
+* out: rs = array(Felder der db)
+* sichert einen geänderten TelCall-Eintrag
+*****************************************************/
+function saveTelCall($id,$empl,$grund) {
+global $db;
+	$sql="select id,cause,caller_id,calldate,c_long,employee,kontakt,bezug,dokument from telcall where id = %d";
+	$rs=$db->getAll(sprintf($sql,$id));
+	$tmp=$rs[0];
+	$sql="insert into telcallhistory (orgid,cause,caller_id,calldate,c_long,employee,kontakt,bezug,dokument,chgid,grund,datum)";
+	$sql.=" values (%d,'%s',%d,'%s','%s',%d,'%s',%d,%d,%d,'%s','%s')";
+	$rs=$db->query(sprintf($sql,$tmp["id"],$tmp["cause"],$tmp["caller_id"],$tmp["calldate"],$tmp["c_long"],$tmp["employee"],$tmp["kontakt"],$tmp["bezug"],$tmp["dokument"],$empl,$grund,date("Y-m-d H:i:s")));
+	return $rs;
+}
+
 function mkPager(&$items,&$pager,&$start,&$next,&$prev) {
 	if ($items) {
 		$pager=$start;
@@ -124,20 +152,25 @@ function mkPager(&$items,&$pager,&$start,&$next,&$prev) {
 }
 function mvTelcall($TID,$Anzeige,$CID) {
 global $db;
-	$call=getCall($Anzeige);
+	$call=getCall($Anzeige,$_SESSION["loginCRM"],"U");
 	$caller="";
 	if ($call["CID"]!=$CID) {
+		saveTextCall($Anzeige);
 		if ($call["bezug"]==0) {
 			$sql="update telcall set caller_id=$CID where id=$Anzeige";
 		} else {
 			$sql="update telcall set bezug=0, caller_id=$CID where id=$Anzeige";
 		}
-	} else if ($TID<>$Anzeige) {
+	} 
+	if ($TID<>$Anzeige) {
 		if ($call["bezug"]==0) {
 			$sql="update telcall set bezug=$TID where id=$Anzeige or Bezug=$Anzeige";
+			$sqlH="update telcallhistory set orgid=$TID where orgid=$Anzeige or Bezug=$Anzeige";
 		} else {
 			$sql="update telcall set bezug=$TID where id=$Anzeige";
+			$sqlH="update telcallhistory set orgid=$TID where orgid=$Anzeige";
 		}
+		$rc=$db->query($sqlH);
 	} else {
 		return false;
 	}
@@ -253,7 +286,36 @@ global $db;
 	}
 	return $id;
 }
-
+/****************************************************
+* updCall
+* in: data = array(Formularfelder) datei = übergebene Datei
+* out: id = des Calls
+* einen geänderten Anruf speichern
+*****************************************************/
+function updCall($data,$datei=false) {
+global $db;
+	$data['Datum']=date2db($data['Datum']);
+	$did=($data["datei"])?$data["datei"]:"Null";
+	$datum=$data['Datum']." ".$data['Zeit'].":00";  // Postgres timestamp
+	if ($datei["Datei"]["name"][0]<>"") {
+		$dat["Datei"]["name"]=$datei["Datei"]["name"][0];
+		$dat["Datei"]["tmp_name"]=$datei["Datei"]["tmp_name"][0];
+		$dat["Datei"]["type"]=$datei["Datei"]["type"][0];
+		$dat["Datei"]["size"]=$datei["Datei"]["size"][0];
+		$text=($data["DCaption"])?$data["DCaption"]:$data["cause"];
+		$dateiID=saveDokument($dat,$text,$datum,$data["CID"],$data["CRMUSER"]);
+		$did=documenttotc($id,$dateiID);
+		$did=1;
+	}
+	$c_cause=addslashes($data["c_cause"]);
+	$c_cause=nl2br($c_cause);
+	$sql="update telcall set cause='".$data["cause"]."',c_long='$c_cause',caller_id='".$data["CID"]."',calldate='$datum',kontakt='".$data["Kontakt"]."',dokument=$did,bezug='".$data["bezug"]."',employee='".$data["CRMUSER"]."' where id=".$data["id"];
+	$rs=$db->query($sql);
+	if(!$rs) {
+		$id=false;
+	}
+	return $id;
+}
 
 /****************************************************
 * mknewTelCall
@@ -459,10 +521,32 @@ global $db;
 			$daten["DCaption"]="";
 			$daten["Kunde"]="";
 		}
+		$daten["ID"]=$id;
+		$daten["history"]=getCntCallHist($id);
 	}
 	return $daten;
 }
+function getCntCallHist($id,$bezug=false) {
+global $db;
+	if ($bezug) {
+		$sql="select count(*) as cnt from telcallhistory where bezug=$id and grund='D'";
+	} else  {
+		$sql="select count(*) as cnt from telcallhistory where orgid=$id";
+	}
+	$rs=$db->getAll($sql);
+	return $rs[0]["cnt"];
+}
 
+function getCallHistory($id,$bezug=false) {
+global $db;
+	if ($bezug) {
+		$sql="select * from telcallhistory where bezug=$id order by datum desc";
+	} else  {
+		$sql="select * from telcallhistory where orgid=$id order by datum desc";
+	}
+	$rs=$db->getAll($sql);
+	return $rs;
+}
 /****************************************************
 * getWvl
 * in: crmuser = int

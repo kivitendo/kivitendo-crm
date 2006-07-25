@@ -1,5 +1,5 @@
 <?php
-// $Id: userMail.php,v 1.2 2006/01/18 16:00:58 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");
@@ -15,7 +15,7 @@
 		<script language="JavaScript">
 	<!--
 		function showItem(Q,id) {
-			F1=open("getCall.php?id="+id+Q,"Caller","width=610, height=600, left=100, top=50, scrollbars=yes");
+			F1=open("getCall.php?hole="+id+Q,"Caller","width=610, height=600, left=100, top=50, scrollbars=yes");
 		}
 	//-->
 	</script>

@@ -3,23 +3,36 @@ $log=fopen("tmp/upd120130.log","a");
 fputs($log,date("d.m.Y H:i:s")."\n");
 echo "Update auf Version $VERSION<br>";
 echo "Vorraussetzungen pr&uuml;fen:<br>";
-$chk=array("DB","fpdf","fpdi","Mail","Mail/mime","Image/Canvas","Image/Graph","jpgraph");
-$ok=true;
-	foreach($chk as $file) {
-		echo "$file: ";
-		if (@include("$file.php")) {
-			echo "ok<br>";
-			fputs($log,"$file: ok\n");
-		} else {
-			$ok=false;
-			echo "false<br>";
-			fputs($log,"$file: false\n");
-		}
-	}
-	if (!$ok) {
-		echo "Einige Vorraussetzungen sind nicht erf&uuml;llt.<br>&Uuml;berpr&uuml;fen Sie die die Variable 'include_path' in der 'php.ini'.<br>";
-		echo "Andernfalls installieren Sie die noch fehlenden Programme<br>";
-	}
+        $path=ini_get("include_path");
+        fputs($log,"Suchpfad: $path\n");
+        $pfade=split(":",$path);
+        $chk=array("DB","fpdf","fpdi","Mail","Mail/mime","Image/Canvas","Image/Graph","jpgraph");
+        $ok=true;
+        foreach($chk as $file) {
+                echo "$file: ";
+                $ook=false;
+                fputs($log,"$file: ");
+                foreach($pfade as $path) {
+                        if (is_readable($path."/".$file.".php")) {
+                                $ook=true;
+                                break;
+                        }
+                }
+                if ($ook) {
+                        echo "ok<br>";
+                        fputs($log,"ok\n");
+                } else {
+                        $ok=false;
+                        echo "false<br>";
+                        fputs($log,"false\n");
+                }
+        }
+        if (!$ok) {
+                echo "Einige Vorraussetzungen sind nicht erf&uuml;llt.<br>&Uuml;berpr&uuml;fen Sie die die Variable 'include_path' in der 'php.ini'.<br>";
+                echo "Andernfalls installieren Sie die noch fehlenden Programme<br>";
+        }
+        fputs($log,"\n");
+
 echo "Konfigurationsdatei erweitern/&auml;ndern ";
 	if (is_writable("inc/conf.php")) {
 		require("inc/conf.php");

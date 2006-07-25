@@ -3,26 +3,39 @@ $log=fopen("tmp/upd120130.log","a");
 fputs($log,date("d.m.Y H:i:s")."\n");
 echo "Update auf Version $VERSION<br>";
 echo "Vorraussetzungen pr&uuml;fen:<br>";
+	$path=ini_get("include_path");
+	fputs($log,"Suchpfad: $path\n");
+	$pfade=split(":",$path);
 	$chk=array("DB","fpdf","fpdi","Mail","Mail/mime","Image/Canvas","Image/Graph","jpgraph");
 	$ok=true;
 	foreach($chk as $file) {
 		echo "$file: ";
-		if (@include("$file.php")) {
+		$ook=false;
+		fputs($log,"$file: ");
+		foreach($pfade as $path) {
+			if (is_readable($path."/".$file.".php")) {
+				$ook=true;
+				break;
+			}
+		}
+		if ($ook) {
 			echo "ok<br>";
-			fputs($log,"$file: ok\n");
+			fputs($log,"ok\n");
 		} else {
 			$ok=false;
 			echo "false<br>";
-			fputs($log,"$file: false\n");
+			fputs($log,"false\n");
 		}
 	}
 	if (!$ok) {
 		echo "Einige Vorraussetzungen sind nicht erf&uuml;llt.<br>&Uuml;berpr&uuml;fen Sie die die Variable 'include_path' in der 'php.ini'.<br>";
 		echo "Andernfalls installieren Sie die noch fehlenden Programme<br>";
 	}
+	fputs($log,"\n");
 echo "Konfigurationsdatei erweitern ";
 	if (is_writable("inc/conf.php")) {
 		require("inc/conf.php");
+		copy("inc/conf.php","tmp/conf.php120");
 		$configfile=file("inc/conf.php");
 		$f=fopen("inc/conf.php","w");
 		foreach($configfile as $row) {
@@ -96,6 +109,7 @@ echo "Datenbankinstanz ".$_SESSION["dbname"]." erweitern : ";
 echo "Menue erweitern<br>";
 	if (is_writable("../$ERPNAME/menu.ini")) {
 		$menufile=file("../$ERPNAME/menu.ini");
+		copy("../$ERPNAME/menu.ini","tmp/menu.ini120");
 		$f=fopen("../$ERPNAME/menu.ini","w");
 		foreach($menufile as $row) {
 			$tmp=trim($row);

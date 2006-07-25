@@ -9,6 +9,21 @@ CREATE TABLE telcall (
 	kontakt character(1),
 	bezug integer,
 	dokument integer);
+
+CREATE TABLE telcallhistory (
+	id integer DEFAULT nextval('id'::text) NOT NULL,
+	orgid integer,
+	cause text,
+	caller_id integer NOT NULL,
+	calldate timestamp without time zone NOT NULL,
+	c_long text,
+	employee integer,
+	kontakt character(1),
+	bezug integer,
+	dokument integer,
+	chgid integer,
+	grund char(1),
+	datum timestamp without time zone NOT NULL);
 	
 CREATE TABLE documents (
 	filename text,

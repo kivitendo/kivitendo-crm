@@ -5,7 +5,7 @@
 	<script language="JavaScript" type="text/javascript">
 	<!--
 		function showItem(id) {
-			F1=open("getCall.php?Q=C&fid={FID}&id="+id,"Caller","width=610, height=600, left=100, top=50, scrollbars=yes");
+			F1=open("getCall.php?Q=C&fid={FID}&Bezug="+id,"Caller","width=610, height=600, left=100, top=50, scrollbars=yes");
 		}
 		function anschr(A) {
 			if (A==1) {
@@ -137,7 +137,7 @@
 <span style="float:left; width:46%; height:430px; text-align:left; border: 1px solid black; border-left:0px;">
 <table width="99%" summary="Kontaktverlauf">
 <!-- BEGIN Liste -->
-	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showItem({IID});">
+	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showItem({Nr});">
 		<td class="smal" width="105" height="14px">{Datum} {Zeit}</td>
 		<td class="smal" style="width:38;text-align:right;">{Nr}&nbsp;</td>
 		<td class="smal le"> {Betreff}</td>

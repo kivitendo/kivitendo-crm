@@ -1,4 +1,4 @@
-<!-- $Id: getCall.tpl,v 1.3 2005/11/02 10:38:58 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title>LX - CRM</title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -12,6 +12,13 @@
 				uri="getCall.php?hole=" + id + "&INIT={INIT}&Q={Q}";
 				location.href=uri;
 			}
+		}
+		function historyCall() {
+			id=document.call.id.value;
+			f1=open("callHistory.php?id="+id,"history","width=580,height=480,left=250,top=100,scroppbars=yes");
+		}
+		function histDelCall() {
+			f1=open("callHistory.php?id={Bezug}&del=1","history","width=580,height=480,left=250,top=100,scroppbars=yes");
 		}
 	//-->
 	</script>
@@ -45,15 +52,14 @@
 </table>
 <br>
 <input type="hidden" name="Bezug" value="{Bezug}">
-<input type="hidden" name="Anzeige" value="{Anzeige}">
+<input type="hidden" name="bezug" value="{bezug}">
 <input type="hidden" name="fid" value="{FID}">
 <input type="hidden" name="pid" value="{PID}">
 <input type="hidden" name="id" value="{ID}">
 <input type="hidden" name="Q" value="{Q}">
-<input type="hidden" name="INIT" value="{INIT}">
 <input type="hidden" name="datei" value="{ODatei}">
 <input type="text" name="cause" value="{NBetreff}" size="43" maxlength="125"> &nbsp; <input type="text" name="Datum" value="{NDatum}" size="11" maxlength="10"> 
-<input type="text" name="Zeit" value="{NZeit}" size="6" maxlength="5"> &nbsp; <input type="submit" name="reset" value="reset">
+<input type="text" name="Zeit" value="{NZeit}" size="6" maxlength="5"> &nbsp; 
 <!--input type="reset" value="reset" onClick="javascript:location.href='getCall.php?fid={FID}&id={ID}'"--><br>
 <span class="smal">Betreff</span><br>
 <textarea name="c_cause" cols="76" rows="12" wrap="physical">{LangTxt}</textarea><br>
@@ -68,16 +74,25 @@
 	</td></tr>
 <tr><td><input type="text" name="DCaption" value="{DCaption}" size="46" maxlength="125"><br>
 <span class="smal">Datei Beschreibung</span></td></tr>
-</table>
-<span class="smal">
+<tr><td colspan="2">
+<span class="smal">Kontaktart: 
 <input type="radio" name="Kontakt" value="T" {R1}>Telefon	&nbsp;
 <input type="radio" name="Kontakt" value="M" {R2}>eMail &nbsp;
 <input type="radio" name="Kontakt" value="S" {R3}>Fax/Brief &nbsp;
 <input type="radio" name="Kontakt" value="P" {R4}>Pers&ouml;nlich
 <input type="radio" name="Kontakt" value="D" {R5}>Datei &nbsp;
-<input type="radio" name="Kontakt" value="X" {R6}>Termin &nbsp; <input type="submit" name="sichern" value="neuer Eintrag"><br>
-Kontaktart</span><br>
+<input type="radio" name="Kontakt" value="X" {R6}>Termin &nbsp; 
+</span></td></tr>
+<tr><td style="text-align:right" colspan="2">
+	<input type="button" name="history" value="H" style="visibility:{HDEL}" onClick="histDelCall();"> 
+	<input type="button" name="history" value="history" style="visibility:{HISTORY}" onClick="historyCall();"> 
+	<input type="submit" name="delete" value="delete" style="visibility:{DELETE}"> 
+	<input type="submit" name="update" value="sichern" style="visibility:{EDIT}"> 
+	<input type="submit" name="reset" value="reset"> 
+	<input type="submit" name="sichern" value="sichern neu">
+</td></tr>
 </form>
+</table>
 <table class="liste" width="100%">
 <!-- BEGIN Liste -->
 	<tr  class="smal" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showCall({IID});">

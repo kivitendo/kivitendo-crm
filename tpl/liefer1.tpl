@@ -5,7 +5,7 @@
 	<script language="JavaScript">
 	<!--
 		function showItem(id) {
-			F1=open("getCall.php?Q=V&&fid={FID}&id="+id,"Caller","width=610, height=600, left=100, top=50, scrollbars=yes");
+			F1=open("getCall.php?Q=V&&fid={FID}&Bezug="+id,"Caller","width=610, height=600, left=100, top=50, scrollbars=yes");
 		}
 		function anschr(A) {
 			if (A==1) {

@@ -57,7 +57,7 @@
 			Abteilung	=> $co["cp_abteilg"],
 			Position	=> $co["cp_position"],
 			GebDat	=> db2date($co["cp_gebdatum"]),
-			Notiz	=> $co["cp_notes"],
+			Notiz	=> ereg_replace("\n","<br>",$co["cp_notes"]),
 			FaID => $co["cp_cv_id"],
 			LInr => $fa["vendornumber"],
 			Lname => $fa["name"],

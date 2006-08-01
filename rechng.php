@@ -34,7 +34,7 @@
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <table>
 <tr class='smal'><td colspan="3"/td><?= $NAME."<br>".$STRASSE."<br>".$ORT ?>
-	<td colspan="2" style="vertical-align:top"><?= $header." vom ".db2date($tmp[1]["transdate"]) ?></td></tr>
+	<td colspan="3" style="vertical-align:top"><?= $header." vom ".db2date($tmp[1]["transdate"]) ?></td></tr>
 
 <tr class='smal'><td>Menge</td><td>Einh.</td><td>Artikel</td><td>VKpreis</td><td>Einzelpreis</td><td>Summe</td></tr>
 <?

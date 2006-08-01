@@ -1,5 +1,5 @@
 <?
-// $Id: vertrag1.php,v 1.3 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/wvLib.php");
 	if ($_POST["ok"]) {
@@ -26,16 +26,9 @@
 		}
 		echo $msg;
 ?>
-
-<form name="formular" enctype='multipart/form-data' action="vertrag1.php" method="post" onSubmit="return sichern();">
-
-
+<form name="formular" enctype='multipart/form-data' action="vertrag1.php" method="post">
 <input type="text" name="vid" size="20" value="" tabindex="1"> &nbsp; 
 <input type="submit" name="ok" value="suchen"><br>Vertragsnummer
-
-
-
 </form>
-
 </body>
 </html>

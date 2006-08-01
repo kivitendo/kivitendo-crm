@@ -1,5 +1,5 @@
 <?
-// $Id: suchMa.php,v 1.3 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/wvLib.php");
 
@@ -12,8 +12,8 @@
 			nr=document.firmen.Alle.selectedIndex;
 			val=document.firmen.Alle.options[nr].value;
 			txt=document.firmen.Alle.options[nr].text;
- 			opener.document.formular.elements[14].value = txt;
- 			opener.document.formular.elements[13].value = val; 			
+ 			opener.document.getElementById("neuname").value = txt;
+ 			opener.document.getElementById("neuid").value = val; 			
 		}
 	//-->
 	</script>

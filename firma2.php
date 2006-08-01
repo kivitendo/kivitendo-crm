@@ -82,7 +82,7 @@
 			Abteilung	=> $co["cp_abteilung"],
 			Position	=> $co["cp_position"],
 			GDate => db2date($co["cp_gebdatum"]),
-			Notiz => $co["cp_notes"],
+			Notiz => ereg_replace("\n","<br>",$co["cp_notes"]),
 			Sonder => $sonder,
 			Fname1 => $fa["name"],
 			Fdepartment_1 => $fa["department_1"],

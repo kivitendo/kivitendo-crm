@@ -8,13 +8,13 @@
 <html>
 	<script language="JavaScript">
 	<!--
-		function auswahl() {
-			nr=document.firmen.Alle.selectedIndex;
-			val=document.firmen.Alle.options[nr].value;
-			txt=document.firmen.Alle.options[nr].text;
-			NeuerEintrag = new Option(txt,val,false,true);
-			opener.document.getElementById("istusr").options[opener.document.getElementById("istusr").length] = NeuerEintrag;
-		}
+	function auswahl() {
+		nr=document.firmen.Alle.selectedIndex;
+		val=document.firmen.Alle.options[nr].value;
+		txt=document.firmen.Alle.options[nr].text;
+		NeuerEintrag = new Option(txt,val,false,true);
+		opener.document.getElementById("istusr").options[opener.document.getElementById("istusr").length] = NeuerEintrag;
+	}
 	//-->
 	</script>
 <body onLoad="self.focus()">

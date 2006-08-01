@@ -5,7 +5,7 @@ class myDB extends DB {
  var $rc = false;
  var $showErr = false; // Browserausgabe
  var $debug = false; // 1 = SQL-Ausgabe, 2 = zusätzlich Ergebnis
- var $log = true;  // Alle Abfragen mitloggen
+ var $log = false;  // Alle Abfragen mitloggen
  var $errfile = "tmp/lxcrm.err";
  var $logfile = "tmp/lxcrm.log";
  var $efh = false;

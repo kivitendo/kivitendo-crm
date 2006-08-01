@@ -131,7 +131,7 @@
 	</div>
 	<div class="zeile">
 			<b>{Msg}</b><br>
-			<input type="checkbox" name="shipto" value="1" tabindex="20">auch in abweichender Lieferanschrift suchen<br>
+			<input type="checkbox" name="shipto" value="1" checked tabindex="20">auch in abweichender Lieferanschrift suchen<br>
 			<input type="checkbox" name="fuzzy" value="%" checked tabindex="21">Unscharf suchen<br>
 			<input type="checkbox" name="employee" value="{employee}" tabindex="22">nur selber angelegte<br>
 			<input type="submit" name="suche" value="suchen" tabindex="23">&nbsp;

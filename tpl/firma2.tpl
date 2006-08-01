@@ -58,7 +58,7 @@
 		{Position}<br />
 		{Abteilung}<br />
 	</div>
-	<div style="float:none; width:100%; height:385px; text-align:center; border-bottom: 1px solid black;" class="normal">
+	<div style="float:none; width:100%; height:385px; text-align:left; border-bottom: 1px solid black;" class="normal">
 		{Sonder}<br>
 		<span class="klein">{Notiz}</span>
 	</div><br>

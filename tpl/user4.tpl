@@ -55,6 +55,9 @@
 	<tr><td><input type="radio" name="prio" value="1" {R1}> 1 <input type="hidden" name="mid1" value="{mid1}"></td>
 		<td><input type="text" name="message1" size="60" maxlength="60" value="{MSG1}" maxlength="60"></td>
 	</tr>
+	<tr><td><input type="radio" name="prio" value="0" {R0}>  </td>
+		<td>Keine Mitteilungen ausgeben.</td>
+	</tr>
 	</table>
 		<input type="submit" name="sichern" value="sichern"> <input type="submit" name="reset" value="reset"><br><br>
 </div>		

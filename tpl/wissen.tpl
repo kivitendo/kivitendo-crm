@@ -20,7 +20,7 @@
 		Eine neue Kategorie unter &quot;<b>{catname}</b>&quot;
 		<input type="image" src="image/neu.png" name="newcat" title="Neue Kategorie erstellen" value="erstellen">
 	</div>
-	<div style="float:left; width:*; text-align:left; border: 0px solid blue; padding-left: 10px;" >
+	<div style="float:left; width:65%; text-align:left; border: 0px solid blue; padding-left: 10px;" >
 		{headline}<br />
 		<hr />
 		{pre}{content}{post}<br />

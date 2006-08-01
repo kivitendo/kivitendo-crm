@@ -49,7 +49,7 @@
 		<td class="norm"><input type="text" name="betrag" size="10" maxlength="12" value="{betrag}" align="right" tabindex="6">&euro;<br>Betrag </td>
 	</tr>	
 	<tr>
-		<td class="norm"><input type="hidden" name="maschinen[0][0]" value=""><input type="text" name="maschinen[0][1]" size="30" value="" tabindex="8"><br>neue Maschine<br><br></td>
+		<td class="norm"><input id="neuid" type="hidden" name="maschinen[0][0]" value=""><input id="neuname" type="text" name="maschinen[0][1]" size="30" value="" tabindex="8"><br>neue Maschine<br><br></td>
 		<td class="norm"><input type="text" name="maschinen[0][2]" size="30" value="" tabindex="9"><br>Standort</td>		
 	</tr>	
 <!-- BEGIN Maschinen -->		

@@ -89,7 +89,7 @@ CREATE TABLE grpusr (
 	
 CREATE TABLE termine (
 	id integer DEFAULT nextval('id'::text) NOT NULL,
-	cause character varying(25),
+	cause character varying(45),
 	c_cause text,
 	start timestamp without time zone,
 	stop timestamp without time zone,
@@ -266,7 +266,7 @@ CREATE TABLE tempcsvdata (
 ALTER TABLE customer ADD COLUMN owener int4;
 ALTER TABLE customer ADD COLUMN employee int4;
 ALTER TABLE customer ADD COLUMN sw character varying(50);
-ALTER TABLE customer ADD COLUMN branche character varying(25);
+ALTER TABLE customer ADD COLUMN branche character varying(45);
 ALTER TABLE customer ADD COLUMN grafik character varying(4);
 ALTER TABLE customer ADD COLUMN typ int4;
 ALTER TABLE customer ADD COLUMN sonder int;
@@ -276,7 +276,7 @@ ALTER TABLE vendor ADD COLUMN owener int4;
 ALTER TABLE vendor ADD COLUMN employee int4;
 ALTER TABLE vendor ADD COLUMN kundennummer character varying(20);
 ALTER TABLE vendor ADD COLUMN sw character varying(50);
-ALTER TABLE vendor ADD COLUMN branche character varying(25);
+ALTER TABLE vendor ADD COLUMN branche character varying(45);
 ALTER TABLE vendor ADD COLUMN grafik character varying(5);
 ALTER TABLE vendor ADD COLUMN typ int4;
 ALTER TABLE vendor ADD COLUMN sonder int;
@@ -311,8 +311,8 @@ ALTER TABLE contacts ADD COLUMN cp_notes text;
 ALTER TABLE contacts ADD COLUMN cp_beziehung integer;
 ALTER TABLE contacts ADD COLUMN cp_firma integer;
 ALTER TABLE contacts ADD COLUMN cp_sonder integer;
-ALTER TABLE contacts ADD COLUMN cp_abteilung character varying(25);
-ALTER TABLE contacts ADD COLUMN cp_position character varying(25);
+ALTER TABLE contacts ADD COLUMN cp_abteilung character varying(45);
+ALTER TABLE contacts ADD COLUMN cp_position character varying(45);
 ALTER TABLE contacts ADD COLUMN cp_stichwort1 character varying(50);
 ALTER TABLE contacts ADD COLUMN cp_gebdatum character varying(10);
 ALTER TABLE contacts ADD COLUMN cp_owener integer;

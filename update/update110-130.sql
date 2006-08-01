@@ -122,6 +122,10 @@ ALTER TABLE employee ADD COLUMN kdview integer;
 ALTER TABLE employee alter COLUMN kdview SET DEFAULT 1;
 ALTER TABLE customer ADD COLUMN sonder int;
 ALTER TABLE vendor ADD COLUMN sonder int;
+ALTER TABLE termine RENAME COLUMN cause TO tmp;
+ALTER TABLE termine ADD COLUMN cause character varying(45);
+UPDATE termine SET cause=tmp;
+ALTER TABLE termine DROP COLUMN tmp; 
 
 CREATE INDEX mid_key ON contmasch USING btree (mid);
 

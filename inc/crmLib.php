@@ -1672,27 +1672,27 @@ function feiertage($jahr) {
 	$advent=advent($jahr);
     // Feste Feiertage
     $holiday[mktime(0, 0, 0, 1,   1, $jahr)]= 'G,Neujahr';
-    $holiday[mktime(0, 0, 0, 1,   6, $jahr)]= 'R,Heilige 3 K&ouml;nige';
+    $holiday[mktime(0, 0, 0, 1,   6, $jahr)]= 'R,Heilige 3 K&ouml;nige BW,BY,ST';
     $holiday[mktime(0, 0, 0, 5,   1, $jahr)]= 'G,Tag der Arbeit';
-    $holiday[mktime(0, 0, 0, 8,  15, $jahr)]= 'F,Maria Himmelfahrt';
+    $holiday[mktime(0, 0, 0, 8,  15, $jahr)]= 'R,Maria Himmelfahrt BY,SL';
     $holiday[mktime(0, 0, 0, 10,  3, $jahr)]= 'G,Tag der deutschen Einheit';
-    $holiday[mktime(0, 0, 0, 10, 31, $jahr)]= 'R,Reformationstag';
-    $holiday[mktime(0, 0, 0, 11,  1, $jahr)]= 'R,Allerheiligen';
+    $holiday[mktime(0, 0, 0, 10, 31, $jahr)]= 'R,Reformationstag BB,MV,SN,ST,TH';
+    $holiday[mktime(0, 0, 0, 11,  1, $jahr)]= 'R,Allerheiligen BW,BY,NW,RP,SL';
     $holiday[mktime(0, 0, 0, 12, 24, $jahr)]= 'F,Heiligabend';
     $holiday[mktime(0, 0, 0, 12, 25, $jahr)]= 'G,1. Weihnachtsfeiertag';
     $holiday[mktime(0, 0, 0, 12, 26, $jahr)]= 'G,2. Weihnachtsfeiertag';
     $holiday[mktime(0, 0, 0, 12, 31, $jahr)]= 'F,Sylvester';
 
     // Bewegliche Feiertage, von Ostern abhängig
-    $holiday[$easter - $CAL_SEC_DAY * 48]= 'F,Rosenmontag';
-    $holiday[$easter - $CAL_SEC_DAY * 46]= 'F,Aschermittwoch';
+    $holiday[$easter - $CAL_SEC_DAY * 48]= 'R,Rosenmontag';
+    $holiday[$easter - $CAL_SEC_DAY * 46]= 'R,Aschermittwoch';
     $holiday[$easter - $CAL_SEC_DAY *  2]= 'G,Karfreitag';
     $holiday[$easter]=                     'F,Ostersonntag';
     $holiday[$easter + $CAL_SEC_DAY *  1]= 'G,Ostermontag';
     $holiday[$easter + $CAL_SEC_DAY * 39]= 'G,Himmelfahrt';
     $holiday[$easter + $CAL_SEC_DAY * 49]= 'F,Pfingstsonntag';
     $holiday[$easter + $CAL_SEC_DAY * 50]= 'G,Pfingstmontag';
-    $holiday[$easter + $CAL_SEC_DAY * 60]= 'R,Fronleichnam';
+    $holiday[$easter + $CAL_SEC_DAY * 60]= 'R,Fronleichnam BW,BY,HE,NW,RP,SL';
 
     // Bewegliche Feiertage, vom ersten Advent abhängig
     $holiday[$advent]=                      'F,1. Advent';
@@ -1700,7 +1700,7 @@ function feiertage($jahr) {
     $holiday[$advent + $CAL_SEC_DAY * 14]=  'F,3. Advent';
     $holiday[$advent + $CAL_SEC_DAY * 21]=  'F,4. Advent';
     $holiday[$advent - $CAL_SEC_DAY * 35]=  'F,Volkstrauertag';
-    $holiday[$advent - $CAL_SEC_DAY * 32]=  'R,Bu&szlig;- und Bettag';
+    $holiday[$advent - $CAL_SEC_DAY * 32]=  'R,Bu&szlig;- und Bettag SN';
     $holiday[$advent - $CAL_SEC_DAY * 28]=  'F,Totensonntag';
     return $holiday;
 }

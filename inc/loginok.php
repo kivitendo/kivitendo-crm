@@ -1,14 +1,16 @@
 <?
 // $Id$
-if (!$_SESSION["dns"] || 
-    !$_SESSION["db"] ||
-    ($_GET["login"] && $_SESSION["employee"]<>$_GET["login"]) ) {
-	if ($_SESSION["employee"] && !$_GET["login"]) $_GET["login"]=$_SESSION["employee"];
-	if ($_GET["login"]) {
+if ($_GET["login"]) {
+	$login=$_GET["login"];
+}  
+if (!$_SESSION["db"] ||
+    ($login && $_SESSION["employee"]<>$login) ) {
+	if ($_SESSION["employee"] && !$login) $login=$_SESSION["employee"];
+	if ($login) {
 		while( list($key,$val) = each($_SESSION) ) {
 			unset($_SESSION[$key]);
 		}
-		if (!is_file("../$ERPNAME/users/".$_GET["login"].".conf")) header("location: login.php");
+		if (!is_file("../$ERPNAME/users/".$login.".conf")) header("location: login.php");
 		$tmp=anmelden($_GET["login"]);
 		$db=$_SESSION["db"];
 		$_SESSION["db"]=$db;

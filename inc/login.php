@@ -28,12 +28,16 @@ if ($_POST["erpname"]) {
 		}
 	}
 }
+if ($_GET["login"]||$_POST["login"]) {
+	$login=($_GET["login"])?$_GET["login"]:$_POST["login"];
+}
 
-$usrfile="../$ERPNAME/users/".$_GET["login"].".conf";
-if (!$_GET["login"]) {
+$usrfile="../$ERPNAME/users/$login.conf";
+
+if (!$login) {
 	header("location: ups.html");
 } else if (is_file($usrfile)) {
-	$tmp=anmelden(($_GET["login"])?$_GET["login"]:$_POST["login"]);
+	$tmp=anmelden($login);
 	if ($tmp) {
 		if (chkVer()) {
 			$db=$_SESSION["db"];

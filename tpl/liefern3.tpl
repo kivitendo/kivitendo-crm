@@ -34,8 +34,14 @@
 	<div class="zeile">
 		<span class="label">Land / Plz</span>
 		<span class="feld">
-			<input type="text" name="country" size="2" maxlength="75" value="{country}" tabindex="4"> / 
-			<input type="text" name="zipcode" size="5" maxlength="10" value="{zipcode}" tabindex="5">
+			<input type="text" name="country" size="2" maxlength="75" value="{country}" tabindex="4">/
+			<input type="text" name="zipcode" size="4" maxlength="10" value="{zipcode}" tabindex="5">
+			<select name="bland" tabindex="6" style="width:100px;">
+				<option value=""></option>
+<!-- BEGIN buland -->
+				<option value="{BUVAL}" {BUSEL}>{BUTXT}</option>
+<!-- END buland -->
+			</select>
 		</span>
 	</div>
 	<div class="zeile">
@@ -75,7 +81,13 @@
 	<div class="zeile">
 		<span class="smalfeld">
 			<input type="text" name="shiptocountry" size="1" value="{shiptocountry}" tabindex="14"> / 
-			<input type="text" name="shiptozipcode" size="5" maxlength="10" value="{shiptozipcode}" tabindex="15">
+			<input type="text" name="shiptozipcode" size="4" maxlength="10" value="{shiptozipcode}" tabindex="15">
+			<select name="shiptobland" tabindex="6" style="width:80px;">
+				<option value=""></option>
+<!-- BEGIN buland2 -->
+				<option value="{SBUVAL}" {SBUSEL}>{SBUTXT}</option>
+<!-- END buland2 -->
+			</select>
 		</span>
 	</div>
 	<div class="zeile">

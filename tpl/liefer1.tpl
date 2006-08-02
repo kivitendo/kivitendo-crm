@@ -52,6 +52,7 @@
 		{Strasse}<br />
 		<span class="mini">&nbsp;<br /></span>
 		{Land}-{Plz} {Ort}<br />	
+		{Bundesland}<br />
 		{Lcontact_1}<br />
 		Tel: {Telefon}<br />
 		Fax: {Fax}<br />	
@@ -86,6 +87,7 @@
 		{SStrasse}<br />
 		<span class="mini">&nbsp;<br /></span>
 		{SLand}-{SPlz} {SOrt}<br />
+		{SBundesland}</br />
 		<span class="mini">&nbsp;<br /></span>
 		Tel: {STelefon}<br />
 		Fax: {SFax}<br />

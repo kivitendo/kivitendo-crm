@@ -55,7 +55,8 @@
 		{Fdepartment_1}<br />
 		{Strasse}<br />
 		<span class="mini">&nbsp;<br /></span>
-		{Land}-{Plz} {Ort}<br />	
+		{Land}-{Plz} {Ort}<br />
+		{Bundesland}<br />	
 		{Fcontact}<br />
 		Tel: {Telefon}<br />
 		Fax: {Fax}<br />	
@@ -103,6 +104,7 @@
 		{SStrasse}<br />
 		<span class="mini">&nbsp;<br /></span>
 		{SLand}-{SPlz} {SOrt}<br />
+		{SBundesland}<br />
 		<span class="mini">&nbsp;<br /></span>
 		{Scontact}<br />
 		Tel: {STelefon}<br />

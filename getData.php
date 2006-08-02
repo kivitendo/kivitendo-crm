@@ -101,8 +101,6 @@ if ($_POST["adress"]) {
 <? }?>
 <p class="listtop">Schnellsuche Kunde/Lieferant/Kontakte und Kontaktverlauf</p>
 	<form name="suche" action="getData.php" method="post">
-	<input type="hidden" name="login" value="<?= $_GET["login"] ?>">
-	<input type="hidden" name="password" value="<?= $_GET["password"] ?>">
 	<input type="text" name="swort" size="20"> suche 
 	<input type="submit" name="adress" value="Adresse"> 
 	<input type="submit" name="kontakt" value="Kontaktverlauf"> <br>

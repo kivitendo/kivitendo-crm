@@ -1,5 +1,5 @@
 <? 
-// $Id: schnellsuche.php,v 1.3 2005/11/02 10:37:52 hli Exp $
+// $Id$
    require_once("inc/stdLib.php");
    include("inc/crmLib.php");
 ?>
@@ -15,8 +15,6 @@
   <tr>
       <td>
 	<form name="suche" action="getData.php" method="post">
-	<input type="hidden" name="login" value="<?= $_GET["login"] ?>">
-	<input type="hidden" name="password" value="<?= $_GET["password"] ?>">
 	<input type="text" name="swort" size="20">
 	<input type="submit" name="ok" value="suchen">
 	</form>

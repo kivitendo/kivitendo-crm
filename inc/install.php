@@ -3,9 +3,9 @@ if (ob_get_level() == 0) ob_start();
 echo "<br>Installation der Datenbankinstanz: ".$_SESSION["dbname"]."<br>";
 ob_flush();
 flush();
-$f=fopen("update/install120.sql","r");
+$f=fopen("update/installcrmi.sql","r");
 if (!$f) { 
-	echo "Kann Datei install120.sql nicht &ouml;ffnen.";
+	echo "Kann Datei installcrmi.sql nicht &ouml;ffnen.";
 	exit();
 }
 $zeile=trim(fgets($f,1000));

@@ -66,7 +66,7 @@ CREATE TABLE bundesland (
 	id integer DEFAULT nextval('id'::text) NOT NULL,
 	country character (3),
 	bundesland character varying(50)
-)
+);
 INSERT INTO bundesland (country,bundesland) VALUES ('D','Baden-W&uuml;ttemberg');
 INSERT INTO bundesland (country,bundesland) VALUES ('D','Bayern');
 INSERT INTO bundesland (country,bundesland) VALUES ('D','Berlin');

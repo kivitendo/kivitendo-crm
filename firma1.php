@@ -40,7 +40,7 @@
 			kdtyp   => $fa["kdtyp"],
 			lead	=> $fa["leadname"],
 			Fdepartment_1	=> $fa["department_1"],
-			Fdepartment_2	=> $fa["department_2"],
+			Fdepartment_2	=> ($fa["department_2"])?$fa["department_2"]."<br />":"",
 			Strasse => $fa["street"],
 			Land	=> $fa["country"],
 			Bundesland	=> $fa["bundesland"],

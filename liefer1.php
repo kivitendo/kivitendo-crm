@@ -37,7 +37,7 @@
 			lityp   	=> $li["lityp"],
 			Lname		=> $li["name"],
 			Ldepartment_1 	=> $li["department_1"],
-			Ldepartment_2 	=> $li["department_2"],
+			Ldepartment_2	=> ($li["department_2"])?$li["department_2"]."<br />":"",
 			Strasse		=> $li["street"],
 			Land		=> $li["country"],
 			Bundesland	=> $li["bundesland"],

@@ -722,7 +722,7 @@ global $cp_sonder;
 				init	=> ($daten["employee"])?$daten["employee"]:"ERP",
 				login	=> $_SESSION{"login"},
 				employee => $_SESSION["loginCRM"],
-				password	=> $_SESSION{"password"}
+				password	=> $_SESSION["password"]
 		));
 		$t->set_block("fa1","TypListe","BlockT");
 		if ($kdtyp) foreach ($kdtyp as $row) {

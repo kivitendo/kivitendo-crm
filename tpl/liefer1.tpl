@@ -46,30 +46,31 @@
 <span style="position:absolute; left:10px; top:67px; width:99%;">
 <!-- Beginn Code --------------------------------------------- -->
 <span style="float:left; width:53%; height:430px; text-align:center; border: 1px solid black;">
-	<div style="float:left; width:64%; height:165px; text-align:left; border-bottom: 0px solid black; padding:2px;" class="gross">
+	<div style="float:left; width:64%; height:175px; text-align:left; border-bottom: 0px solid black; padding:2px;" class="gross">
 		{Lname}<br />
 		{Ldepartment_1}<br />
+		{Ldepartment_2}
 		{Strasse}<br />
 		<span class="mini">&nbsp;<br /></span>
 		{Land}-{Plz} {Ort}<br />	
-		{Bundesland}<br />
+		<span class="smal">{Bundesland}<br />	</span>
 		{Lcontact_1}<br />
 		Tel: {Telefon}<br />
 		Fax: {Fax}<br />	
 	</div>
-	<div style="float:left; width:33%; height:165px; text-align:right; border: 0px solid black; padding:2px;" class="gross">
+	<div style="float:left; width:33%; height:175px; text-align:right; border: 0px solid black; padding:2px;" class="gross">
 		{LInr}<br />
 		{IMG}<br /><br />
 		<img src="image/kreuzchen.gif" title="Gesperrter Lieferant"style="visibility:{verstecke};" >&nbsp;
 		<a href="#" onCLick="anschr(1);" title="Briefanschrift &amp; Etikett"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a>
 		<br />
 	</div>
-	<div style="float:both; width:100%; height:215px; text-align:left; border-bottom: 1px solid black;" class="gross">
+	<div style="float:both; width:100%; height:225px; text-align:left; border-bottom: 1px solid black;" class="gross">
 		<a href="mail.php?TO={eMail}&KontaktTO=C{FID}">{eMail}</a><br />
 		<a href="{Internet}" target="_blank">{Internet}</a><br />
 
 	</div>
-	<div style="position:absolute; width:100%; height:17px; text-align:left; border-bottom: 0px solid black;left:5px; top:200px;" class="gross">
+	<div style="position:absolute; width:100%; height:17px; text-align:left; border-bottom: 0px solid black;left:5px; top:210px;" class="gross">
 		<ul id="submenue">
 			<li><a href="#" onClick="submenu('lie')">Lieferadresse</a></li>
 			<li><a href="#" onClick="submenu('not')">Notizen</a></li>
@@ -83,7 +84,7 @@
 		<div class="smal" >
 		<br />
 		{Sname} &nbsp;&nbsp;<a href="#" onCLick="anschr(2);"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a><br />
-		{Sdepartment_1}<br />
+		{Sdepartment_1} &nbsp; &nbsp; {Sdepartment_2}<br />
 		{SStrasse}<br />
 		<span class="mini">&nbsp;<br /></span>
 		{SLand}-{SPlz} {SOrt}<br />
@@ -94,7 +95,7 @@
 		<a href="mail.php?TO={SeMail}&KontaktTO=C{FID}">{SeMail}</a>
 		</div>
 	</span>
-	<span id="not" style="visibility:hidden;position:absolute;  text-align:left;width:48%; left:5px; top:245px;">
+	<span id="not" style="visibility:hidden;position:absolute;  text-align:left;width:48%; left:5px; top:250px;">
 		<div class="smal" >
 		Checkbox: <span class="value">{sonder}</span><br />
 		Branche: <span class="value">{branche}</span><br />
@@ -102,7 +103,7 @@
 		Bemerkungen: <span class="value">{notes}</span> <br />	
 		</div>
 	</span>	
-	<span id="inf" style="visibility:hidden;position:absolute; text-align:left;width:48%; left:5px; top:245px;">
+	<span id="inf" style="visibility:hidden;position:absolute; text-align:left;width:48%; left:5px; top:250px;">
 		<div class="smal" >
 		Lieferantentyp: <span class="value">{lityp}</span> &nbsp;&nbsp;&nbsp; Erstellt: <span class="value">{INID}</span><br /><br />
 		Rabatt: <span class="value">{rabatt}</span> &nbsp;&nbsp;&nbsp; Unsere Kd-Nr: <span class="value">{KDnr}</span><br /><br />

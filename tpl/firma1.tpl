@@ -50,18 +50,19 @@
 <span style="position:absolute; left:10px; top:67px; width:99%;">
 <!-- Begin Code --------------------------------------------- -->
 <span style="float:left; width:53%; height:430px; text-align:center; border: 1px solid black;">
-	<div style="float:left; width:64%; height:165px; text-align:left; border-bottom: 0px solid black; padding:2px;" class="gross">
+	<div style="float:left; width:64%; height:175px; text-align:left; border-bottom: 0px solid black; padding:2px;" class="gross">
 		{Fname1}<br />
 		{Fdepartment_1}<br />
+		{Fdepartment_2}
 		{Strasse}<br />
 		<span class="mini">&nbsp;<br /></span>
 		{Land}-{Plz} {Ort}<br />
-		{Bundesland}<br />	
+		<span class="smal">{Bundesland}<br /></span>
 		{Fcontact}<br />
 		Tel: {Telefon}<br />
 		Fax: {Fax}<br />	
 	</div>
-	<div style="float:left; width:33%; height:165px; text-align:right; border-bottom: 0px solid black; padding:2px;" class="gross">
+	<div style="float:left; width:33%; height:175px; text-align:right; border-bottom: 0px solid black; padding:2px;" class="gross">
 		{customernumber}<br />
 		{IMG}<br /><br />
 			<form action="../oe.pl" method="post">
@@ -80,12 +81,12 @@
 			<a href="#" onCLick="anschr(1);" title="Briefanschrift &amp; Etikett"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a></form>
 
 	</div>
-	<div style="float:both; width:100%; height:215px; text-align:left; border-bottom: 1px solid black;" class="gross">
+	<div style="float:both; width:100%; height:225px; text-align:left; border-bottom: 1px solid black;" class="gross">
 		<a href="mail.php?TO={eMail}&KontaktTO=C{FID}">&nbsp;{eMail}</a><br />
 		<a href="{Internet}" target="_blank">&nbsp;{Internet}</a>
 
 	</div>
-	<div style="position:absolute; width:100%; height:17px; text-align:left; border-bottom: 0px solid black;left:5px; top:200px;" class="gross">
+	<div style="position:absolute; width:100%; height:17px; text-align:left; border-bottom: 0px solid black;left:5px; top:210px;" class="gross">
 		<ul id="submenue">
 			<li><a href="#" onClick="submenu('lie')">Lieferadresse</a></li>
 			<li><a href="#" onClick="submenu('not')">Notizen</a></li>
@@ -100,7 +101,7 @@
 		<div class="smal" >
 		<br />
 		{Sname1} &nbsp;&nbsp;<a href="#" onCLick="anschr(2);"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a><br />
-		{Sdepartment_1}<br />
+		{Sdepartment_1} &nbsp; &nbsp; {Sdepartment_2}<br />
 		{SStrasse}<br />
 		<span class="mini">&nbsp;<br /></span>
 		{SLand}-{SPlz} {SOrt}<br />
@@ -113,7 +114,7 @@
 		</div>
 	</span>
 
-	<span id="not" style="visibility:hidden;position:absolute;  text-align:left;width:48%; left:5px; top:245px;">
+	<span id="not" style="visibility:hidden;position:absolute;  text-align:left;width:48%; left:5px; top:250px;">
 		<div class="smal" >
 		Checkbox: <span class="value">{sonder}</span><br />
 		Branche: <span class="value">{branche}</span><br />
@@ -122,7 +123,7 @@
 		</div>
 	</span>	
 
-	<span id="inf" style="visibility:hidden;position:absolute; text-align:left;width:48%; left:5px; top:245px;">
+	<span id="inf" style="visibility:hidden;position:absolute; text-align:left;width:48%; left:5px; top:250px;">
 		<div class="smal" >
 		Kundentyp: <span class="value">{kdtyp}</span> &nbsp;&nbsp;&nbsp; Quelle:<span class="value">{lead} {leadsrc}</span><br />
 		Rabatt: <span class="value">{rabatt}</span> &nbsp;&nbsp;&nbsp; Preisgruppe: <span class="value">{preisgrp}</span><br /><br />

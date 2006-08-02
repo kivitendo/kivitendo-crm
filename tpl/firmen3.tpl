@@ -23,7 +23,7 @@
 <input type="hidden" name="grafik" value="{grafik}">
 {Msg}
 <span style="float:left; width:485px;  text-align:left; border: 0px solid black;">
-<span style="float:left; width:295px; height:250px; text-align:left; border: 0px solid black;">
+<span style="float:left; width:295px; height:265px; text-align:left; border: 0px solid black;">
 	<div class="zeile">
 		<span class="label"></span>
 		<span class="feld" style="font-wight:bold; text-align:center;">Rechnungsadresse</span>
@@ -33,8 +33,12 @@
 		<span class="feld"><input type="text" name="name" size="25" maxlength="75" value="{name}" tabindex="1"</span>
 	</div>
 	<div class="zeile">
-		<span class="label">Abteilung</span>
+		<span class="label">Abteilung 1</span>
 		<span class="feld"><input type="text" name="department_1" size="25" maxlength="75" value="{department_1}" tabindex="2"></span>
+	</div>
+	<div class="zeile">
+		<span class="label">Abteilung 2</span>
+		<span class="feld"><input type="text" name="department_2" size="25" maxlength="75" value="{department_2}" tabindex="2"></span>
 	</div>
 	<div class="zeile">
 		<span class="label">Strasse</span>
@@ -75,7 +79,7 @@
 	</div>
 
 </span>
-<span style="float:right; width:185px; height:250px; text-align:left; border: 0px solid black;">
+<span style="float:right; width:185px; height:265px; text-align:left; border: 0px solid black;">
 	<div class="zeile">
 		<span class="feld" style="font-wight:bold; text-align:center;">Lieferadresse</span>
 	</div>
@@ -84,6 +88,9 @@
 	</div>
 	<div class="zeile">
 		<span class="smalfeld"><input type="text" name="shiptodepartment_1" size="22" maxlength="75" value="{shiptodepartment_1}" tabindex="12"></span>
+	</div>
+	<div class="zeile">
+		<span class="smalfeld"><input type="text" name="shiptodepartment_2" size="22" maxlength="75" value="{shiptodepartment_2}" tabindex="12"></span>
 	</div>
 	<div class="zeile">
 		<span class="smalfeld"><input type="text" name="shiptostreet" size="22" maxlength="75" value="{shiptostreet}" tabindex="13"></span>

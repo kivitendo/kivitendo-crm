@@ -9,7 +9,7 @@
 *****************************************************/
 function getShipStamm($id) {
 global $db;
-	$sql="select * from shipto where trans_id=$id";
+	$sql="select S.*,BL.bundesland as shiptobundesland from shipto S left join bundesland BL on S.shiptobland=BL.id where S.trans_id=$id";
 	$rs2=$db->getAll($sql);
 	if(!$rs2) {
 		return false;
@@ -71,8 +71,9 @@ global $db;
 		$sql="select sum(amount) from ar where customer_id=$id and amount<>paid";
 		$rs=$db->getAll($sql);
 		$op=$rs[0]["sum"];
-		$sql="select C.*,E.login,B.description as kdtyp,B.discount as typrabatt,P.pricegroup,L.lead as leadname from customer C ";
+		$sql="select C.*,E.login,B.description as kdtyp,B.discount as typrabatt,P.pricegroup,L.lead as leadname,BL.bundesland from customer C ";
 		$sql.="left join employee E on C.employee=E.id left join business B on B.id=C.business_id ";
+		$sql.="left join bundesland BL on BL.id=C.bland ";
 		$sql.="left join pricegroup P on P.id=C.klass left join leads L on C.lead=L.id ";
 		$sql.="where C.id=$id";
 	} else if ($tab=="V") {
@@ -80,8 +81,9 @@ global $db;
 	        $rs=$db->getAll($sql);
         	$op=$rs[0]["summe"];
 		$os=false;
-		$sql="select C.*,E.login,B.description as lityp,B.discount as typrabatt from vendor C ";
+		$sql="select C.*,E.login,B.description as lityp,B.discount as typrabatt,BL.bundesland from vendor C ";
 	        $sql.="left join employee E on C.employee=E.id left join business B on B.id=C.business_id ";
+		$sql.="left join bundesland BL on BL.id=C.bland ";
         	$sql.="where C.id=$id";
 	} else {
 		return false;
@@ -96,8 +98,7 @@ global $db;
 			$size=@getimagesize(trim($image));
 			$row["size"]=$size[3];
 		}
-		$sql="select * from shipto where trans_id=$id";
-		$rs2=$db->getAll($sql);  // abweichende Lieferanschrift
+		$rs2=getShipStamm($id);
 		if (!$rs2) {  // es ist keine abweichende Anschrift da
 			if ($ws) {	// soll dann aber mit Re-Anschrift gefüllt werden
 				$row2=Array(
@@ -108,6 +109,7 @@ global $db;
 					shiptozipcode => $row["zipcode"],
 					shiptocity => $row["city"],
 					shiptocountry => $row["country"],
+					shiptobundesland => $row["bundesland"],
 					shiptocontact => "",
 					shiptophone => $row["phone"],
 					shiptofax => $row["fax"],
@@ -123,6 +125,7 @@ global $db;
 					shiptozipcode => "",
 					shiptocity => "",
 					shiptocountry => "",
+					shiptobundesland => "",
 					shiptocontact => "",
 					shiptophone => "",
 					shiptofax => "",
@@ -131,7 +134,7 @@ global $db;
 				);
 			}
 		} else {
-			$row2 = $rs2[0];
+			$row2 = $rs2;
 		}
 		$daten=array_merge($row,$row2);
 	}
@@ -297,9 +300,11 @@ global $db;
 			branche => array(0,0,1,"Branche",25),		business_id => array(0,0,6,"Kundentyp",0),
 			owener => array(0,0,6,"CRM-User",0),		grafik => array(0,0,9,"Grafik",4),
 			lead => array(0,0,6,"Leadquelle",0),		leadsrc => array(0,0,1,"Leadquelle",15),
+			bland => array(0,0,6,"Bundesland",0),
 			sonder => array(0,0,10,"SonderFlag",0),
 			shiptoname => array(1,0,1,"Liefername",75), 
 			shiptostreet => array(1,0,1,"Lieferstrasse",75),
+			shiptobland => array(1,0,6,"Liefer-Bundesland",0),
 			shiptocountry => array(1,0,8,"Lieferland",3),
 			shiptozipcode => array(1,0,2,"Liefer-Plz",10),
 			shiptocity => array(1,0,1,"Lieferort",75),
@@ -537,6 +542,7 @@ function leertpl (&$t,$tpl,$typ,$msg="") {
 global $cp_sonder;
 		$tab=array("C" => "firmen","V" => "liefern");
 		$kdtyp=getBusiness();
+		$bundesland=getBundesland(false);
 		$lead=getLeads();
 		$t->set_file(array("fa1" => $tab[$typ].$tpl.".tpl"));
 		$t->set_var(array(
@@ -608,6 +614,22 @@ global $cp_sonder;
 				));
 				$t->parse("BlockS","sonder",true);
 			}
+		$t->set_block("fa1","buland","BlockB");
+		$t->set_block("fa1","buland2","BlockBS");
+		if ($bundesland) foreach ($bundesland as $bland) {
+			$t->set_var(array(
+				BUVAL => $bland["id"],
+				BUTXT => $bland["bundesland"],
+				BUSEL => ""	
+			));
+			$t->parse("BlockB","buland",true);
+			$t->set_var(array(
+				SBUVAL => $bland["id"],
+				SBUTXT => $bland["bundesland"],
+				SBUSEL => ""	
+			));
+			$t->parse("BlockBS","buland2",true);
+		}
 		$t->set_block("fa1","LeadListe","BlockL");
 		if ($lead) foreach ($lead as $row) {
 			$t->set_var(array(
@@ -732,6 +754,26 @@ global $cp_sonder;
 				));
 				$t->parse("BlockS","sonder",true);
 			}
+		$bundesland=getBundesland(strtoupper($daten["country"]));
+		$t->set_block("fa1","buland","BlockB");
+		if ($bundesland) foreach ($bundesland as $bland) {
+			$t->set_var(array(
+				BUVAL => $bland["id"],
+				BUTXT => $bland["bundesland"],
+				BUSEL => ($bland["id"]==$daten["bland"])?"selected":""
+			));
+			$t->parse("BlockB","buland",true);
+		}
+		$bundesland=getBundesland(strtoupper($daten["shiptocountry"]));
+		$t->set_block("fa1","buland2","BlockBS");
+		if ($bundesland) foreach ($bundesland as $bland) {
+			$t->set_var(array(
+				SBUVAL => $bland["id"],
+				SBUTXT => $bland["bundesland"],
+				SBUSEL => ($bland["id"]==$daten["shiptobland"])?"selected":""
+			));
+			$t->parse("BlockBS","buland2",true);
+		}
 		if ($daten["employee"]==$_SESSION["loginCRM"]) {
 				$t->set_block("fa1","OwenerListe","Block");
 				$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>"Alle");

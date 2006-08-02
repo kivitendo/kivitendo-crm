@@ -261,6 +261,21 @@ global $db;
 	return array_merge($leer,$rs);
 }
 /****************************************************
+* getBundesland
+* out: array
+* Bundesländer holen
+*****************************************************/
+function getBundesland($land) {
+global $db;
+	if ($land) {
+		$sql="select * from bundesland where country = '$land' order by country,bundesland";
+	} else {
+		$sql="select * from bundesland order by country,bundesland";
+	}
+	$rs=$db->getAll($sql);
+	return $rs;
+}
+/****************************************************
 * mkTelNummer
 * in: id = int, tab = char, tels = array
 * out: rs = int

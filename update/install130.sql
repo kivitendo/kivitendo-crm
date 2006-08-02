@@ -234,7 +234,6 @@ CREATE TABLE wissencontent(
 	version integer,
 	categorie integer
 );
-
 CREATE TABLE opportunity(
 	id integer DEFAULT nextval('id'::text) NOT NULL,
 	fid integer,
@@ -263,6 +262,67 @@ CREATE TABLE tempcsvdata (
 	csvdaten text
 );
 
+CREATE TABLE bundesland (
+	id integer DEFAULT nextval('id'::text) NOT NULL,
+	country character (3),
+	bundesland character varying(50)
+)
+
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Baden-W&uuml;ttemberg');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Bayern');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Berlin');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Brandenburg');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Bremen');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Hamburg');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Hessen');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Mecklenburg-Vorpommern');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Niedersachsen');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Nordrhein-Westfalen');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Rheinland-Pfalz');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Saarland');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Sachsen');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Sachen-Anhalt');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Schleswig-Holstein');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Th&uuml;ingen');
+
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Aargau');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Appenzell Ausserrhoden');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Appenzell Innerrhoden');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Basel-Landschaft');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Basel-Stadt');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Bern');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Freiburg');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Genf');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Glarus');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Graub&uuml;nden');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Jura');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Luzern');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Neuenburg');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Nidwalden');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Obwalden');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Schaffhausen');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Schwyz');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Solothurn');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','St. Gallen');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Tessin');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Thurgau');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Uri');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Waadt');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Wallis');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Zug');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Z&uuml;rich');
+
+INSERT INTO bundesland (country,bundesland) VALUES ('A','Burgenland');
+INSERT INTO bundesland (country,bundesland) VALUES ('A','K&auml;rnten');
+INSERT INTO bundesland (country,bundesland) VALUES ('A','Nieder&ouml;sterreich');
+INSERT INTO bundesland (country,bundesland) VALUES ('A','Ober&ouml;sterreich');
+INSERT INTO bundesland (country,bundesland) VALUES ('A','Salzburg');
+INSERT INTO bundesland (country,bundesland) VALUES ('A','Steiermark');
+INSERT INTO bundesland (country,bundesland) VALUES ('A','Tirol');
+INSERT INTO bundesland (country,bundesland) VALUES ('A','Vorarlberg');
+INSERT INTO bundesland (country,bundesland) VALUES ('A','Wien');
+
+
 ALTER TABLE customer ADD COLUMN owener int4;
 ALTER TABLE customer ADD COLUMN employee int4;
 ALTER TABLE customer ADD COLUMN sw character varying(50);
@@ -271,7 +331,8 @@ ALTER TABLE customer ADD COLUMN grafik character varying(4);
 ALTER TABLE customer ADD COLUMN typ int4;
 ALTER TABLE customer ADD COLUMN sonder int;
 ALTER TABLE customer ADD COLUMN lead integer;
-ALTER TABLE customer ADD COLUMN leadsrc character varying(15);
+ALTER TABLE customer ADD COLUMN leadsrc character varying(25);
+ALTER TABLE customer ADD COLUMN bland int4;
 ALTER TABLE vendor ADD COLUMN owener int4;
 ALTER TABLE vendor ADD COLUMN employee int4;
 ALTER TABLE vendor ADD COLUMN kundennummer character varying(20);
@@ -280,8 +341,10 @@ ALTER TABLE vendor ADD COLUMN branche character varying(45);
 ALTER TABLE vendor ADD COLUMN grafik character varying(5);
 ALTER TABLE vendor ADD COLUMN typ int4;
 ALTER TABLE vendor ADD COLUMN sonder int;
+ALTER TABLE vendor ADD COLUMN bland int4;
 ALTER TABLE shipto ADD COLUMN shiptoowener int4;
 ALTER TABLE shipto ADD COLUMN shiptoemployee int4;
+ALTER TABLE shipto ADD COLUMN shiptobland int4;
 ALTER TABLE employee ADD COLUMN pwd char varying(12);
 ALTER TABLE employee ADD COLUMN msrv character varying(40);
 ALTER TABLE employee ADD COLUMN postf character varying(25);

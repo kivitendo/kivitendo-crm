@@ -62,13 +62,78 @@ CREATE TABLE postit (
 	date timestamp without time zone NOT NULL
 );
 
+CREATE TABLE bundesland (
+	id integer DEFAULT nextval('id'::text) NOT NULL,
+	country character (3),
+	bundesland character varying(50)
+)
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Baden-W&uuml;ttemberg');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Bayern');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Berlin');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Brandenburg');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Bremen');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Hamburg');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Hessen');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Mecklenburg-Vorpommern');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Niedersachsen');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Nordrhein-Westfalen');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Rheinland-Pfalz');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Saarland');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Sachsen');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Sachen-Anhalt');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Schleswig-Holstein');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Th&uuml;ingen');
+
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Aargau');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Appenzell Ausserrhoden');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Appenzell Innerrhoden');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Basel-Landschaft');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Basel-Stadt');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Bern');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Freiburg');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Genf');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Glarus');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Graub&uuml;nden');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Jura');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Luzern');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Neuenburg');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Nidwalden');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Obwalden');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Schaffhausen');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Schwyz');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Solothurn');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','St. Gallen');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Tessin');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Thurgau');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Uri');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Waadt');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Wallis');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Zug');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Z&uuml;rich');
+
+INSERT INTO bundesland (country,bundesland) VALUES ('A','Burgenland');
+INSERT INTO bundesland (country,bundesland) VALUES ('A','K&auml;rnten');
+INSERT INTO bundesland (country,bundesland) VALUES ('A','Nieder&ouml;sterreich');
+INSERT INTO bundesland (country,bundesland) VALUES ('A','Ober&ouml;sterreich');
+INSERT INTO bundesland (country,bundesland) VALUES ('A','Salzburg');
+INSERT INTO bundesland (country,bundesland) VALUES ('A','Steiermark');
+INSERT INTO bundesland (country,bundesland) VALUES ('A','Tirol');
+INSERT INTO bundesland (country,bundesland) VALUES ('A','Vorarlberg');
+INSERT INTO bundesland (country,bundesland) VALUES ('A','Wien');
+
+
+
+
 ALTER TABLE customer ADD COLUMN lead integer;
-ALTER TABLE customer ADD COLUMN leadsrc character varying(15);
+ALTER TABLE customer ADD COLUMN leadsrc character varying(25);
+ALTER TABLE customer ADD COLUMN bland int4;
 ALTER TABLE custmsg ADD COLUMN akt boolean;
 ALTER TABLE employee ADD COLUMN kdview integer;
 ALTER TABLE employee alter COLUMN kdview SET DEFAULT 1;
 ALTER TABLE customer ADD COLUMN sonder int;
 ALTER TABLE vendor ADD COLUMN sonder int;
+ALTER TABLE vendor ADD COLUMN bland int4;
+ALTER TABLE shipto ADD COLUMN shiptobland int4;
 ALTER TABLE termine RENAME COLUMN cause TO tmp;
 ALTER TABLE termine ADD COLUMN cause character varying(45);
 UPDATE termine SET cause=tmp;

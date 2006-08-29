@@ -27,7 +27,7 @@
 <input type="hidden" name="cp_cv_id" value="{cpcvid}">
 <input type="hidden" name="DCaption" value="{DCaption}">
 <tr>
-	<td class="smal">
+	<td class="smal" width="350px">
 	<select name="CRMUSER" tabindex="1">
 <!-- BEGIN Selectbox -->
 		<option value="{UID}"{Sel}>{Login}</option>
@@ -35,7 +35,7 @@
 	</select>
 	<input type="text" name="name" size="18" maxlength="75"  value="{Fname}"   tabindex="1"> <input type="button" name="dst" value=" ? " onClick="suchDst();">
 	<br>CRM-User &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Zugewiesen an
-	</td><td class="smal">
+	</td><td class="smal" width="120px">
 	<input type="text" name="Finish" size="10" maxlength="10" value="{Finish}" tabindex="3"><br>Zu Erledigen bis
 	</td>
 	<td rowspan="5">

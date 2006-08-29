@@ -39,8 +39,8 @@
 <p class="listtop">Detailansicht</p>
 <div style="position:absolute; top:33px; left:8px;  width:770px;">
 	<ul id="tabmenue">
-	<li><a href="firma1.php?id={FID}" id="aktuell">Kundendaten</a></li>
-	<li><a href="firma2.php?fid={FID}">Kontakte</a></li>
+	<li><a href="firma1.php?id={FID}" id="aktuell">Stammdaten</a></li>
+	<li><a href="firma2.php?fid={FID}">Ansprechpartner</a></li>
 	<li><a href="firma3.php?fid={FID}">Ums&auml;tze</a></li>
 	<li><a href="firma4.php?fid={FID}">Dokumente</a></li>
 	<span title="Wichtige Mitteilung">{Cmsg}&nbsp;</span>
@@ -100,8 +100,8 @@
 	<span id="lie" style="visibility:visible; position:absolute; text-align:left;width:48%; left:5px; top:245px;" >
 		<div class="smal" >
 		<br />
-		{Sname1} &nbsp;&nbsp;<a href="#" onCLick="anschr(2);"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a><br />
-		{Sdepartment_1} &nbsp; &nbsp; {Sdepartment_2}<br />
+		{Sname1} &nbsp;&nbsp;<a href="#" onCLick="anschr(2);"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a>&nbsp; &nbsp; zus&auml;tzliche Anschriften: {Scnt}<br />
+		{Sdepartment_1} &nbsp; &nbsp; {Sdepartment_2} <br />
 		{SStrasse}<br />
 		<span class="mini">&nbsp;<br /></span>
 		{SLand}-{SPlz} {SOrt}<br />

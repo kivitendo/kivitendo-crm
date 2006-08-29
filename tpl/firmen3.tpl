@@ -30,7 +30,7 @@
 	</div>
 	<div class="zeile">
 		<span class="label">Firmenname</span>
-		<span class="feld"><input type="text" name="name" size="25" maxlength="75" value="{name}" tabindex="1"</span>
+		<span class="feld"><input type="text" name="name" size="25" maxlength="75" value="{name}" tabindex="1"></span>
 	</div>
 	<div class="zeile">
 		<span class="label">Abteilung 1</span>

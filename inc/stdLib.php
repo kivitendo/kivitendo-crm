@@ -80,6 +80,9 @@ global $ERPNAME,$showErr;
 			$_SESSION["loginCRM"]=$tmp["id"];
 			$_SESSION["lang"]=$tmp["countrycode"]; //"de";
 			$_SESSION["kdview"]=$tmp["kdview"];
+			$sql="select * from defaults";
+			$rs=$_SESSION["db"]->getAll($sql);
+			$_SESSION["ERPver"]=$rs[0]["version"];
 			return true;
 		} else {
 			return false;

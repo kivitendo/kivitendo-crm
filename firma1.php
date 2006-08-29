@@ -78,6 +78,7 @@
 			SFax	=> $fa["shiptofax"],
 			SeMail	=> $fa["shiptoemail"],
 			Scontact=> $fa["shiptocontact"],
+			Scnt 	=> $fa["shiptocnt"],
 			Cmsg	=> $cmsg,
 			IMG	=> $Image,
 			PAGER	=> $pager,

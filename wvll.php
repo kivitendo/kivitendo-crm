@@ -1,5 +1,5 @@
 <?
-// $Id: wvll.php,v 1.3 2005/11/02 10:37:52 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");

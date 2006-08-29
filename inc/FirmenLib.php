@@ -9,7 +9,11 @@
 *****************************************************/
 function getShipStamm($id) {
 global $db;
-	$sql="select S.*,BL.bundesland as shiptobundesland from shipto S left join bundesland BL on S.shiptobland=BL.id where S.trans_id=$id";
+	if ($_SESSION["ERPver"]>="2.2.0.10") {
+		$sql="select S.*,BL.bundesland as shiptobundesland from shipto S left join bundesland BL on S.shiptobland=BL.id where S.module='CT' and S.trans_id=$id";
+	} else {
+		$sql="select S.*,BL.bundesland as shiptobundesland from shipto S left join bundesland BL on S.shiptobland=BL.id where S.trans_id=$id";
+	}
 	$rs2=$db->getAll($sql);
 	if(!$rs2) {
 		return false;
@@ -99,6 +103,8 @@ global $db;
 			$row["size"]=$size[3];
 		}
 		$rs2=getShipStamm($id);
+		$rs3=getAllShipto($id);
+		$shipcnt=(count($rs3));
 		if (!$rs2) {  // es ist keine abweichende Anschrift da
 			if ($ws) {	// soll dann aber mit Re-Anschrift gefüllt werden
 				$row2=Array(
@@ -138,6 +144,7 @@ global $db;
 		}
 		$daten=array_merge($row,$row2);
 	}
+	$daten["shiptocnt"]=($shipcnt>0)?$shipcnt-1:0;
 	$daten["op"]=$op;
 	$daten["oa"]=$oa;
 	return $daten;
@@ -152,7 +159,17 @@ global $db;
 *****************************************************/
 function getAllShipto($id) {
 global $db;
-	$sql="select A.id,S.* from shipto S left join  ar A on S.trans_id=A.id where A.customer_id=$id or S.trans_id=$id";
+	$sql="select distinct shiptoname,shiptodepartment_1,shiptodepartment_2,shiptostreet,shiptozipcode,";
+	$sql.="shiptocity,shiptocountry,shiptocontact,shiptophone,shiptofax,shiptoemail from shipto where ";
+	if ($_SESSION["ERPver"]>="2.2.0.10") {
+		//$sql="select (module<>'CT') as vkdoc,* from shipto where trans_id=$id";
+		$sql.="trans_id=$id";
+	} else {
+		//$sql="select (A.id>0 or O.id>0) as vkdoc,S.*,O.id as oid,A.id as aid from shipto S ";
+		//$sql.="left join  ar A on S.trans_id=A.id left join  oe O on S.trans_id=O.id  ";
+		//$sql.=" where A.customer_id=$id or O.customer_id=$id or S.trans_id=$id";
+		$sql.="A.customer_id=$id or O.customer_id=$id or S.trans_id=$id";
+	}
 	$rs=$db->getAll($sql);  
 	return $rs;
 }
@@ -178,7 +195,7 @@ function suchstr($muster,$typ="C") {
 			bank => array(0,1), bank_code => array(0,0), account_number => array(0,0),
 			vendornumber => array(0,1),v_customer_id => array(0,0),
 			kundennummer => array(0,0),customernumber => array(0,1),
-			employee => array(0,0));
+			employee => array(0,0), branche => array(0,1));
 	$dbfld2=array(name => "shiptoname", street=>"shiptostreet",ziptocode=>"shiptozipcode",
 			city=>"shiptocity",phone=>"shiptophone",fax=>"shiptofax",
 			email=>"shiptoemail",department_1=>"shiptodepartment_1",
@@ -213,12 +230,10 @@ function suchstr($muster,$typ="C") {
 	}
 	if ($tbl1) {
 		$tabs=$tab[$typ]." ".$kenz[$typ]." left join shipto S on ".$kenz[$typ].".id=S.trans_id";
-		if ($tmp1) $where="(".substr($tmp1,3). ") or ( ";
+		if ($tmp1) $where="(".substr($tmp1,3). ") ";
 		if ($tmp2) { 
-			$where.=substr($tmp2,3).")"; 
-		} else { 
-			$where.=" 1)"; 
-		}
+			$where.="or (".substr($tmp2,3).")"; 
+		} 
 	} else {
 		$tabs=$tab[$typ]." ".$kenz[$typ];
 		if ($tmp1) $where=substr($tmp1,3);
@@ -372,13 +387,13 @@ global $db;
 			$imagesize=getimagesize($datei["Datei"]['tmp_name'],&$info);
 			$dest=$dir."/logo.".$pictyp[$imagesize[2]];
 			move_uploaded_file($datei["Datei"]["tmp_name"],"$dest");
-			if (($imagesize[1]/$imagesize[0]) > 2.4) {
-				$hoehe=ceil($imagesize[1]/$imagesize[0]*120);
-				$breite=120;
+			if ($imagesize[1]>$imagesize[0]) {
+				$faktor=ceil($imagesize[1]/80);
 			} else {
-				$breite=ceil($imagesize[0]/$imagesize[1]*80);
-				$hoehe=80;
+				$faktor=ceil($imagesize[0]/120);
 			}
+			$breite=floor($imagesize[0]/$faktor);
+			$hoehe=floor($imagesize[1]/$faktor);
 			$image1 = imagecreatetruecolor($breite,$hoehe);
 			$tue="\$image=imagecreatefrom".$pictyp[$imagesize[2]]."('$dest');";
 			eval($tue);
@@ -388,20 +403,34 @@ global $db;
 		}	
 		$rc1=true;
 		if ($ala) {
-			$sql1q="select count(*) from shipto where trans_id=$fid"; //gibt es schon eine Lieferanschrift
+			if ($_SESSION["ERPver"]>="2.2.0.10") { //gibt es schon eine Lieferanschrift
+				$sql1q="select count(*) from shipto where trans_id=$fid and module='CT'";
+			} else {
+				$sql1q="select count(*) from shipto  where trans_id=$fid";
+			}
 			$x=$db->getAll($sql1q);
 			if ($x[0]["count"]==0) {
-				$sql1a="insert into shipto (trans_id) values ($fid)";
+				if ($_SESSION["ERPver"]>="2.2.0.10") {
+					$sql1a="insert into shipto (trans_id,module) values ($fid,'CT')";
+				} else {
+					$sql1a="insert into shipto (trans_id) values ($fid)";
+				}
 				$rc1=$db->query($sql1a);
 			}
 			$sql1="update shipto set $query1 where trans_id=$fid";
 			$rc1=$db->query($sql1);
 			mkTelNummer($fid,"S",$tels2);
 		} else {
-			$sql1q="select count(*) from shipto where trans_id=$fid"; //gibt es schon eine Lieferanschrift
+			if ($_SESSION["ERPver"]>="2.2.0.10") { //gibt es schon eine Lieferanschrift
+				$sql1q="select count(*) from shipto where trans_id=$fid and module='CT'";
+				$delshipto=" and module='CT'";
+			} else {
+				$sql1q="select count(*) from shipto where trans_id=$fid";
+				$delshipto="";
+			}
 			$x=$db->getAll($sql1q);
 			if ($x[0]["count"]>0) {
-				$sql="delete from shipto where trans_id=$fid";
+				$sql="delete from shipto where trans_id=$fid $delshipto";
 				$rc=$db->query($sql);
 			}
 		}
@@ -502,7 +531,11 @@ global $db;
 		$where=($where=="")?"":"and $where";
 		if (eregi("shipto",$tabs) or ereg("S.",$felder)) {
 			$sql="select $felder from ".$tab[$typ]." ".$kenz[$typ]." left join shipto S ";
-			$sql.="on S.trans_id=".$kenz[$typ].".id where $rechte $where order by ".$kenz[$typ].".name";
+			if ($_SESSION["ERPver"]>="2.2.0.10") {
+				$sql.="on S.trans_id=".$kenz[$typ].".id where S.module='CT' and $rechte $where order by ".$kenz[$typ].".name";
+			} else {
+				$sql.="on S.trans_id=".$kenz[$typ].".id where $rechte $where order by ".$kenz[$typ].".name";
+			}
 		} else {
 			$sql="select $felder from ".$tab[$typ]." ".$kenz[$typ]." where $rechte $where order by ".$kenz[$typ].".name";
 		}
@@ -512,7 +545,11 @@ global $db;
 		if (eregi("shipto",$tabs) or ereg("S.",$felder)) {
 			$sql="select $felder from ".$tab[$typ]." ".$kenz[$typ]." left join shipto S ";
 			$sql.="on S.trans_id=".$kenz[$typ].".id left join contacts P on ".$kenz[$typ].".id=P.cp_cv_id ";
-			$sql.="where $rechte $where order by ".$kenz[$typ].".name,P.cp_name";
+			if ($_SESSION["ERPver"]>="2.2.0.10") {
+				$sql.="where S.module='CT' and $rechte $where order by ".$kenz[$typ].".name,P.cp_name";
+			} else {
+				$sql.="where $rechte $where order by ".$kenz[$typ].".name,P.cp_name";
+			}
 		} else {
 			$sql="select $felder from  ".$tab[$typ]." ".$kenz[$typ]." left join contacts P ";
 			$sql.="on ".$kenz[$typ].".id=P.cp_cv_id where $rechte $where order by ".$kenz[$typ].".name,P.cp_name";
@@ -643,18 +680,12 @@ global $cp_sonder;
 		$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>"Alle");
 		$first[]=array("grpid"=>$_SESSION["loginCRM"],"rechte"=>"w","grpname"=>"Pers&ouml;nlich");
 		$tmp=getGruppen();
-		if ($mtp) { $user=array_merge($first,getGruppen()); }
+		if ($tmp) { $user=array_merge($first,$tmp); }
 		else { $user=$first; };
-		$selectOwen=1;
 		if ($user) foreach($user as $zeile) {
-			if ($zeile["grpid"]==$selectOwen) {
-				$sel="selected";
-			} else {
-				$sel="";
-			}
 			$t->set_var(array(
 				grpid => $zeile["grpid"],
-				Gsel => $sel,
+				Gsel => "",
 				Gname => $zeile["grpname"],
 			));
 			$t->parse("Block","OwenerListe",true);
@@ -778,7 +809,12 @@ global $cp_sonder;
 				$t->set_block("fa1","OwenerListe","Block");
 				$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>"Alle");
 				$first[]=array("grpid"=>$_SESSION["loginCRM"],"rechte"=>"w","grpname"=>"Pers&ouml;nlich");
-				$user=array_merge($first,getGruppen());
+				$grps=getGruppen();
+                                if ($grps) {
+                                        $user=array_merge($first,getGruppen());
+                                } else {
+                                        $user=$first;
+                                }
 				$selectOwen=$daten["owener"];
 				if ($user) foreach($user as $zeile) {
 					if ($zeile["grpid"]==$selectOwen) {

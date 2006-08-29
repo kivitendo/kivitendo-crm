@@ -23,11 +23,12 @@ Vorrausetzungen:
 	PEAR::Image_Canvas
 	PEAR::Image_Graph
 	fpdf + fpdi (http://www.fpdf.de/downloads/)
+	ttf-freefont
 	php-gd,php-imap
 	jpgraph
 
 z.B. debian:
-apt-get install libapache2-mod-php4 php4-gd php4-imap php-mail-mime php4-pear php4-pgsql  php-fpdf 
+apt-get install libapache2-mod-php4 php4-gd php4-imap php-mail-mime php4-pear php4-pgsql  php-fpdf php-mail-mime imagemagick
 
 Achtung! Das PEAR-Paket Image_Graph und Image_Canvas sind noch nicht "stable". Daher mit :
 
@@ -48,6 +49,11 @@ extension=gd.so
 .
 .
 
+Font für fpdf installieren (Debian):
+cd /usr/share/php/Image/Canvas/Fonts
+cp /usr/share/fonts/truetype/freefont/FreeSans.ttf .
+echo FreeSans,FreeSans.ttf >> fontmap.txt 
+ 
 
 Das TAR-File entpacken, dabei an HFS halten.
 z.B. RPM-Systeme

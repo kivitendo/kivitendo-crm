@@ -69,7 +69,7 @@
 		<!--input type="button" value="Zeige" onClick="showlist('T')"><hr-->
 		<table>
 			<tr><td class="norm">von:</td><td class="norm"><input type="text" name="vondat" size="9" maxlength="10" value="{VONDAT}">
-<input type='image' src='image/date.png' title='Vondatum' align='middle' value='K' onClick="kal('vondat')" >
+<a href="#" title='Vondatum' onClick="kal('vondat')" ><img src='image/date.png' align='middle' border="0"></a>
 <!--input type="button" value="K" onClick="kal('vondat')"-->
 					<select name="von">
 <!-- BEGIN Time1 -->
@@ -84,7 +84,7 @@
 					</select>
 				</td></tr>
 			<tr><td class="norm">bis:</td><td class="norm"><input type="text" name="bisdat" size="9" maxlength="10" value="{BISDAT}">
-<input type='image' src='image/date.png' title='Bisdatum' align='middle' value='K' onClick="kal('bisdat')" >
+<a href="#" title='Bisdatum' onClick="kal('bisdat')" ><img src='image/date.png' align='middle' border="0"></a>
 <!--input type="button" value="K" onClick="kal('bisdat')"-->
 					<select name="bis">
 <!-- BEGIN Time2 -->

@@ -31,9 +31,10 @@
 		function submenu(id) {
 			document.getElementById(last).style.visibility='hidden';
 			document.getElementById(id).style.visibility='visible';
+			men='sub' + id; 
+			document.getElementById('sub'+id).className="selected";
+			document.getElementById('sub'+last).className="subshadetabs";
 			last=id;
-			men='sub' + id; alert(men);
-			document.getElementById(men).class="selected";
 		}
 	//-->
 	</script>
@@ -89,11 +90,10 @@
 
 	</div>
 	<div style="position:absolute; width:100%; height:17px; text-align:left; border-bottom: 0px solid black;left:5px; top:225px;" class="gross">
-		<!--ul id="submenue"-->
 		<ul id="submenu" class="subshadetabs">
-			<li id="sublie" class=""><a href="#" onClick="submenu('lie')">Lieferadresse</a></li>
-			<li id="subnot" class=""><a href="#" onClick="submenu('not')">Notizen</a></li>
-			<li id="subinf" class=""><a href="#" onClick="submenu('inf')">sonst.Infos</a></li>
+			<li id="sublie"><a href="#" onClick="submenu('lie')">Lieferadresse</a></li>
+			<li id="subnot"><a href="#" onClick="submenu('not')">Notizen</a></li>
+			<li id="subinf"><a href="#" onClick="submenu('inf')">sonst.Infos</a></li>
 			<li><a href="vcardexp.php?fid={FID}">VCard</a></li>
 			<li><a href="karte.php?fid={FID}">Kartei</a></li>
 			<li><a href="firmen3.php?id={FID}&edit=1">Bearbeiten</a></li>

@@ -27,8 +27,10 @@
 		var last = 'lie';
 		function submenu(id) {
 			document.getElementById(last).style.visibility='hidden';
-			last=id;
 			document.getElementById(id).style.visibility='visible';
+			document.getElementById('sub'+id).className="selected";
+			document.getElementById('sub'+last).className="subshadetabs";
+			last=id;
 		}
 	//-->
 	</script>

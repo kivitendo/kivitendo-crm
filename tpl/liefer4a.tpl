@@ -2,6 +2,7 @@
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+	<link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
 	<script language="JavaScript">
 	<!--
 	function chkfld() {
@@ -14,12 +15,12 @@
 	</script>
 <body>
 <p class="listtop">Dokumenterstellung</p>
-<div style="position:absolute; top:33px; left:8px;  width:770px;">
-	<ul id="tabmenue">
+<div style="position:absolute; top:44px; left:10px;  width:770px;">
+	<ul id="maintab" class="shadetabs">
 	<li><a href="{Link1}">Lieferantendaten</a><li>
-	<li><a href="{Link2}">Kontakte</a></li>
+	<li><a href="{Link2}">Ansprechpartner</a></li>
 	<li><a href="{Link3}">Ums&auml;tze</a></li>
-	<li><a href="{Link4}" id="aktuell">Dokumente</a></li>
+	<li class="selected"><a href="{Link4}" id="aktuell">Dokumente</a></li>
 	</ul>
 </div>
 
@@ -29,7 +30,7 @@
 <input type="hidden" name="docid" value="{DOCID}">
 <input type="hidden" name="fid" value="{FID}">
 <input type="hidden" name="pid" value="{PID}">
-<div style="position:absolute; left:1px; width:450px; height:50px; text-align:left; border: 1px solid black;" class="fett">
+<div style="position:absolute; left:1px; width:500px; height:50px; text-align:left; border: 1px solid black;" class="fett">
 		{Name} &nbsp; &nbsp; {KDNR}<br />
 		{Plz} {Ort}<br />
 		{Art}

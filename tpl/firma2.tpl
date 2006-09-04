@@ -2,6 +2,7 @@
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+	<link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
 	<script language="JavaScript">
 	<!--
 		function showItem(id) {
@@ -20,10 +21,10 @@
 	</script>
 <body>
 <p class="listtop">Detailansicht</p>
-<div style="position:absolute; top:33px; left:8px;  width:770px;">
-	<ul id="tabmenue">
+<div style="position:absolute; top:44px; left:10px;  width:770px;">
+	<ul id="maintab" class="shadetabs">
 	<li><a href="{Link1}">Kundendaten</a><li>
-	<li><a href="{Link2}" id="aktuell">Kontakte</a></li>
+	<li class="selected"><a href="{Link2}" id="aktuell">Ansprechpartner</a></li>
 	<li><a href="{Link3}">Ums&auml;tze</a></li>
 	<li><a href="{Link4}">Dokumente</a></li>
 	<span title="Wichtige MItteilung">{Cmsg}</span>

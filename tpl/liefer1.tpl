@@ -2,6 +2,7 @@
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+	<link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
 	<script language="JavaScript">
 	<!--
 		function showItem(id) {
@@ -33,10 +34,10 @@
 	</script>
 <body onLoad="submenu('{kdview}');">
 <p class="listtop">Detailansicht</p>
-<div style="position:absolute; top:33px; left:8px;  width:770px;">
-	<ul id="tabmenue">
-	<li><a href="liefer1.php?id={FID}" id="aktuell">Lieferantendaten</a></li>
-	<li><a href="liefer2.php?fid={FID}">Kontakte</a></li>
+<div style="position:absolute; top:44px; left:10px;  width:770px;">
+	<ul id="maintab" class="shadetabs">
+	<li class="selected"><a href="liefer1.php?id={FID}" id="aktuell">Lieferantendaten</a></li>
+	<li><a href="liefer2.php?fid={FID}">Ansprechpartner</a></li>
 	<li><a href="liefer3.php?fid={FID}">Ums&auml;tze</a></li>
 	<li><a href="liefer4.php?fid={FID}">Dokumente</a></li>
 	<span title="Wichtige Mitteilung">{Cmsg}&nbsp;</span>
@@ -70,8 +71,8 @@
 		<a href="{Internet}" target="_blank">{Internet}</a><br />
 
 	</div>
-	<div style="position:absolute; width:100%; height:17px; text-align:left; border-bottom: 0px solid black;left:5px; top:210px;" class="gross">
-		<ul id="submenue">
+	<div style="position:absolute; width:100%; height:17px; text-align:left; border-bottom: 0px solid black;left:5px; top:225px;" class="gross">
+		<ul id="submenu" class="subshadetabs">
 			<li><a href="#" onClick="submenu('lie')">Lieferadresse</a></li>
 			<li><a href="#" onClick="submenu('not')">Notizen</a></li>
 			<li><a href="#" onClick="submenu('inf')">sonst.Infos</a></li>

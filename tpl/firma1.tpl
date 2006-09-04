@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head><title>Firma Stamm</title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+	<link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
 	<script language="JavaScript" type="text/javascript">
 	<!--
 		function showItem(id) {
@@ -29,21 +30,22 @@
 		var last = 'lie';
 		function submenu(id) {
 			document.getElementById(last).style.visibility='hidden';
-			last=id;
 			document.getElementById(id).style.visibility='visible';
+			last=id;
+			men='sub' + id; alert(men);
+			document.getElementById(men).class="selected";
 		}
 	//-->
 	</script>
 	</head>
 <body onLoad="submenu('{kdview}');">
-<p class="listtop">Detailansicht</p>
-<div style="position:absolute; top:33px; left:8px;  width:770px;">
-	<ul id="tabmenue">
-	<li><a href="firma1.php?id={FID}" id="aktuell">Stammdaten</a></li>
+<p class="listtop">Detailansicht <span title="Wichtige Mitteilung">{Cmsg}&nbsp;</span></p>
+<div style="position:absolute; top:44px; left:10px;  width:770px;">
+	<ul id="maintab" class="shadetabs">
+	<li class="selected"><a href="firma1.php?id={FID}" id="aktuell">Stammdaten</a></li>
 	<li><a href="firma2.php?fid={FID}">Ansprechpartner</a></li>
 	<li><a href="firma3.php?fid={FID}">Ums&auml;tze</a></li>
 	<li><a href="firma4.php?fid={FID}">Dokumente</a></li>
-	<span title="Wichtige Mitteilung">{Cmsg}&nbsp;</span>
 	</ul>
 </div>
 
@@ -86,11 +88,12 @@
 		<a href="{Internet}" target="_blank">&nbsp;{Internet}</a>
 
 	</div>
-	<div style="position:absolute; width:100%; height:17px; text-align:left; border-bottom: 0px solid black;left:5px; top:210px;" class="gross">
-		<ul id="submenue">
-			<li><a href="#" onClick="submenu('lie')">Lieferadresse</a></li>
-			<li><a href="#" onClick="submenu('not')">Notizen</a></li>
-			<li><a href="#" onClick="submenu('inf')">sonst.Infos</a></li>
+	<div style="position:absolute; width:100%; height:17px; text-align:left; border-bottom: 0px solid black;left:5px; top:225px;" class="gross">
+		<!--ul id="submenue"-->
+		<ul id="submenu" class="subshadetabs">
+			<li id="sublie" class=""><a href="#" onClick="submenu('lie')">Lieferadresse</a></li>
+			<li id="subnot" class=""><a href="#" onClick="submenu('not')">Notizen</a></li>
+			<li id="subinf" class=""><a href="#" onClick="submenu('inf')">sonst.Infos</a></li>
 			<li><a href="vcardexp.php?fid={FID}">VCard</a></li>
 			<li><a href="karte.php?fid={FID}">Kartei</a></li>
 			<li><a href="firmen3.php?id={FID}&edit=1">Bearbeiten</a></li>

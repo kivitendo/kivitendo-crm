@@ -17,8 +17,9 @@
 		{menu}
 	 	<br />
 		{catinput}
-		Eine neue Kategorie unter &quot;<b>{catname}</b>&quot;
-		<input type="image" src="image/neu.png" name="newcat" title="Neue Kategorie erstellen" value="erstellen">
+		<span> Eine neue Kategorie erstellen <br>unter &quot;<b>{catname}</b>&quot;</span>
+		<input type="image" src="image/neu.png" name="newcat" title="Neue Kategorie erstellen" value="erstellen" align="middle">
+		<input type="image" src="image/edit_kl.png" name="editcat" title="Kategorie bearbeiten" value="bearbeiten" align="middle">
 	</div>
 	<div style="float:left; width:65%; text-align:left; border: 0px solid blue; padding-left: 10px;" >
 		{headline}<br />

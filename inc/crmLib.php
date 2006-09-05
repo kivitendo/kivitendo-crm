@@ -1182,19 +1182,25 @@ global $db;
 * hole alle eMails
 *****************************************************/
 function getAllMails($suche) {
-global $db,$Pre;
-	$sql1="select name,'E' as src,id,email from employee where upper(email) like '$Pre".strtoupper($suche)."%' and email <> ''";
-	$rs1=$db->getAll($sql1);
-	$sql2="select name,'C' as src,id,email from customer where upper(email) like '$Pre".strtoupper($suche)."%' and email <> ''";
-	$rs2=$db->getAll($sql2);
-	$sql3="select cp_name as name,'K' as src,cp_id as id,cp_email as email from contacts where upper(cp_email) like '$Pre".strtoupper($suche)."%' and cp_email <> ''";
-	$rs3=$db->getAll($sql3);
-	$sql4="select shiptoname as name,'S' as src,trans_id as id,shiptoemail as email from shipto where upper(shiptoemail) like '$Pre".strtoupper($suche)."%' and shiptoemail <> ''";
-	$rs4=$db->getAll($sql4);
-	$sql5="select name,'V' as src,id,email from vendor where upper(email) like '$Pre".strtoupper($suche)."%' and email <> ''";
-	$rs5=$db->getAll($sql5);
-	$rs=array_merge($rs1,$rs2,$rs3,$rs4,$rs5);
+global $db,$Pre;        
+	$sql1="select name,'E' as src,id,email from employee where upper(email) like '$Pre".strtoupper($suche)."%' and email <> '' order by email";
+        $rs1=$db->getAll($sql1);
+        $sql2="select name,'C' as src,id,email from customer where upper(email) like '$Pre".strtoupper($suche)."%' and email <> '' order by email";
+        $rs2=$db->getAll($sql2);
+        $sql3="select cp_name as name,'K' as src,cp_id as id,cp_email as email from contacts where upper(cp_email) like '$Pre".strtoupper($suche)."%' and cp_email <> '' order by cp_email";
+        $rs3=$db->getAll($sql3);
+        $sql4="select shiptoname as name,'S' as src,trans_id as id,shiptoemail as email from shipto where upper(shiptoemail) like '$Pre".strtoupper($suche)."%' and shiptoemail <> ''  order by shiptoemail";
+        $rs4=$db->getAll($sql4);
+        $sql5="select name,'V' as src,id,email from vendor where upper(email) like '$Pre".strtoupper($suche)."%' and email <> '' order by email";
+        $rs5=$db->getAll($sql5);
+        $rs=array_merge($rs2,$rs3,$rs5,$rs4,$rs1);
+	usort($rs,"eMailSort");
 	return $rs;
+}
+/* Sortierfunktion für eMail-Adressen */
+function eMailSort($a,$b) {
+    if ($a["name"] == $b["name"]) return 0;
+    return ($a["name"] < $b["name"]) ? -1 : 1;
 }
 
 function chkMailAdr ($mailadr) {

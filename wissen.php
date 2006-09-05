@@ -16,18 +16,13 @@
 		$catinput.="<input type='image' src='image/save_kl.png' title='sichern' name='savecat' value='ok'><br>";
 	} else if ($_POST["savecat"]) {
 		$rc=insWCategorie($_POST);
-	} else if ($_POST["editcat"]) {
+	} else if ($_POST["editcat"] && $tmp[0]<>"" ) {
 		$catname=getOneWCategorie($tmp[0]);
 		$catinput="<input type='hidden' name='cid' value='".$tmp[0]."'>";
 		$catinput.="<input type='hidden' name='hg' value='".$catname["hauptgruppe"]."'>";
 		$catinput.="<input type='text' size='20' name='catname' value='".$catname["name"]."'>";
 		$catinput.="<input type='checkbox' name='kdhelp' value='1' ".(($catname["kdhelp"]=="t")?"checked":"")."> ";
 		$catinput.="<input type='image' src='image/save_kl.png' title='sichern' name='savecat' value='ok'><br>";
-	}
-	if ($_POST["newcat"]) {
-		$catinput="<input type='text' size='20' name='catname'> <input type='image' src='image/save_kl.png' title='sichern' name='savecat' value='ok'><br>";
-	} else if ($_POST["savecat"]) {
-		$rc=insWCategorie($_POST);
 	}
 	$data=getWCategorie();
 	$tpl = new Template($base);

@@ -16,7 +16,8 @@ CREATE TABLE telcallhistory (
 CREATE TABLE wissencategorie(
 	id integer DEFAULT nextval('id'::text) NOT NULL,
 	name character varying(60),
-	hauptgruppe integer
+	hauptgruppe integer,
+        kdhelp boolean
 );
 
 CREATE TABLE leads(

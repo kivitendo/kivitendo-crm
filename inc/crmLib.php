@@ -1817,15 +1817,34 @@ function updLable($data) {
 	return $data["id"];
 }
 
-function getWCategorie() {
+function getWPath($id) {
 global $db;
-	$sql="select * from wissencategorie order by hauptgruppe,name";
+	$sql="select * from wissencategorie where id = $id";
+	$rs=$db->getAll($sql);
+	if ($rs) {
+		$pfad=$rs[0]["id"];
+		if ($rs[0]["hauptgruppe"]==0) return $pfad;
+	}
+	while ($rs and $rs[0]["hauptgruppe"]>0) {
+		$sql="select * from wissencategorie where id = ".$rs[0]["hauptgruppe"];
+		$rs=$db->getAll($sql);
+		if ($rs) $pfad.=",".$rs[0]["id"];
+	}
+	return $pfad;
+}
+function getWCategorie($kdhelp=false) {
+global $db;
+	if ($kdhelp) { $kdhelp="where kdhelp is true";
+		$sql="select * from wissencategorie where kdhelp is true order by name";
+	} else {
+		$sql="select * from wissencategorie order by hauptgruppe,name";
+	}
 	$rs=$db->getAll($sql);
 	$data=array();
 	if ($rs) { 
+		if ($kdhelp) return $rs;
 		foreach ($rs as $row) {
 			$data[$row["hauptgruppe"]][]=array("name"=>$row["name"],"id"=>$row["id"]);
-			//$data[$row["hauptgruppe"]][]=array("grptxt"=>$row["name"],"grpnr"=>$row["id"]);
 		}
 		return $data;
 	} else {
@@ -1835,21 +1854,29 @@ global $db;
 function insWCategorie($data) {
 global $db;
 	$tmp = split(",",$data["m"]);
-	$newID=uniqid (rand());
-	$sql="insert into wissencategorie (name) values ('$newID')";
-	$rc=$db->query($sql);
-	$sql="select * from wissencategorie where name='$newID'";
-	$rs=$db->getAll($sql);
-	if(!$rs) {
-		return false;
-	} else {
-		if ($tmp[0]=='') {
-           		$tmp[0]=0;
-         	}
-		$sql="update wissencategorie set name='".$data["catname"]."',hauptgruppe='".$tmp[0]."' where id = ".$rs[0]["id"];
+	if (!$data["cid"]) {
+		$newID=uniqid (rand());
+		$sql="insert into wissencategorie (name,kdhelp) values ('$newID','".(($data["kdhelp"]==1)?'true':'false')."')";
 		$rc=$db->query($sql);
-		return ($rc)?$rs[0]["id"]:false;
+		$sql="select * from wissencategorie where name='$newID'";
+		$rs=$db->getAll($sql);
+		if(!$rs) {
+			return false;
+		} else {
+			$id=$rs[0]["id"];
+		}
+	} else {
+		$id=$data["cid"];
 	}
+	if ($tmp[0]=='') {
+        	$tmp[0]=0;
+        } else if (count($tmp)==1) {
+        	$tmp[0]=0;
+	}
+	$name=htmlentities($data["catname"]);
+	$sql="update wissencategorie set name='".$name."',hauptgruppe='".$data["hg"]."',kdhelp=".(($data["kdhelp"]==1)?'true':'false')." where id = ".$id;
+	$rc=$db->query($sql);
+	return ($rc)?$rs[0]["id"]:false;
 }
 function getOneWCategorie($id) {
 global $db;

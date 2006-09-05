@@ -36,19 +36,31 @@
 			document.getElementById('sub'+last).className="subshadetabs";
 			last=id;
 		}
+		function KdHelp() {
+			id=document.kdhelp.kdhelp.options[document.kdhelp.kdhelp.selectedIndex].value;
+			f1=open("wissen.php?kdhelp=1&m="+id,"Wissen","width=750, height=600, left=50, top=50, scrollbars=yes");
+			document.kdhelp.kdhelp.selectedIndex=0;
+		}
 	//-->
 	</script>
 	</head>
 <body onLoad="submenu('{kdview}');">
 <p class="listtop">Detailansicht <span title="Wichtige Mitteilung">{Cmsg}&nbsp;</span></p>
-<div style="position:absolute; top:44px; left:10px;  width:770px;">
+<form name="kdhelp">
+<div style="position:absolute; top:40px; left:10px;  width:770px;">
 	<ul id="maintab" class="shadetabs">
 	<li class="selected"><a href="firma1.php?id={FID}" id="aktuell">Stammdaten</a></li>
 	<li><a href="firma2.php?fid={FID}">Ansprechpartner</a></li>
 	<li><a href="firma3.php?fid={FID}">Ums&auml;tze</a></li>
 	<li><a href="firma4.php?fid={FID}">Dokumente</a></li>
+	<li><select style="visible:{chelp}" name="kdhelp" onChange="KdHelp()">
+<!-- BEGIN kdhelp -->
+		<option value="{cid}">{cname}</option>
+<!-- END kdhelp -->
+	</select>
 	</ul>
 </div>
+</form>
 
 <span style="position:absolute; left:10px; top:67px; width:99%;">
 <!-- Begin Code --------------------------------------------- -->

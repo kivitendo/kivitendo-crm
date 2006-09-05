@@ -32,17 +32,26 @@
 			document.getElementById('sub'+last).className="subshadetabs";
 			last=id;
 		}
+		function KdHelp() {
+			id=document.kdhelp.kdhelp.options[document.kdhelp.kdhelp.selectedIndex].value;
+			f1=open("wissen.php?kdhelp=1&m="+id,"Wissen","width=750, height=600, left=50, top=50, scrollbars=yes");
+			document.kdhelp.kdhelp.selectedIndex=0;
+		}
 	//-->
 	</script>
 <body onLoad="submenu('{kdview}');">
-<p class="listtop">Detailansicht</p>
-<div style="position:absolute; top:44px; left:10px;  width:770px;">
+<p class="listtop">Detailansicht <span title="Wichtige Mitteilung">{Cmsg}&nbsp;</span></p>
+<div style="position:absolute; top:40px; left:10px;  width:770px;">
 	<ul id="maintab" class="shadetabs">
 	<li class="selected"><a href="liefer1.php?id={FID}" id="aktuell">Lieferantendaten</a></li>
 	<li><a href="liefer2.php?fid={FID}">Ansprechpartner</a></li>
 	<li><a href="liefer3.php?fid={FID}">Ums&auml;tze</a></li>
 	<li><a href="liefer4.php?fid={FID}">Dokumente</a></li>
-	<span title="Wichtige Mitteilung">{Cmsg}&nbsp;</span>
+	<li><select style="visibility:{chelp}" name="kdhelp" onChange="KdHelp()">
+<!-- BEGIN kdhelp -->
+		<option value="{cid}">{cname}</option>
+<!-- END kdhelp -->
+	</select>
 	</ul>
 </div>
 
@@ -75,9 +84,9 @@
 	</div>
 	<div style="position:absolute; width:100%; height:17px; text-align:left; border-bottom: 0px solid black;left:5px; top:225px;" class="gross">
 		<ul id="submenu" class="subshadetabs">
-			<li><a href="#" onClick="submenu('lie')">Lieferadresse</a></li>
-			<li><a href="#" onClick="submenu('not')">Notizen</a></li>
-			<li><a href="#" onClick="submenu('inf')">sonst.Infos</a></li>
+			<li id="sublie"><a href="#" onClick="submenu('lie')">Lieferadresse</a></li>
+			<li id="subnot"><a href="#" onClick="submenu('not')">Notizen</a></li>
+			<li id="subinf"><a href="#" onClick="submenu('inf')">sonst.Infos</a></li>
 			<li><a href="vcardexp.php?lid={FID}">VCard</a></li>
 			<li><a href="karte.php?lid={FID}">Kartei</a></li>
 			<li><a href="liefern3.php?id={FID}&edit=1">Bearbeiten</a></li>

@@ -220,7 +220,7 @@ global $db;
 				if (!chkFld($tmpval,$dbfld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) {  $fehler=$dbfld[$keys[$i]][3]; $fehler=$keys[$i]; $i=$anzahl+1;}
 				if ($keys[$i]=="cp_phone1"||$keys[$i]=="cp_phone2"||$keys[$i]=="cp_fax") $tels[]=$tmpval;
 				$query0.=$keys[$i]."="; 
-				if (in_array($dbfld[$keys[$i]][2],array(0,1,3,4,5,7,8,9))) {
+				if (in_array($dbfld[$keys[$i]][2],array(0,1,2,3,4,5,7,8,9))) {
 						$query0.="'".$tmpval."',";
 				} else {
 						$query0.=$tmpval.",";

@@ -127,7 +127,11 @@
 	$t->set_block("cont","Selectbox3","Block4");
 	if ($Q<>"XX")	{
 		$thread=getAllTelCall(($pid)?$pid:$fid,($Q=="C" || $Q=="V"),0,-1); // Liste Verschieben
-		$thread=array_merge(array("id"=>"0"),$thread);
+		if ($thread) {
+			$thread=array_merge(array("id"=>"0"),$thread);
+		} else {
+			$thread=array(array("id"=>"0"),array("id"=>"$id"));
+		}
 	} else {
 		$thread=array(array("id"=>"0"),array("id"=>"$id"));
 	}

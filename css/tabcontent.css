@@ -3,7 +3,8 @@ padding: 3px 0;
 margin-left: 0;
 margin-top: 2px;
 margin-bottom: 0;
-font: bold 12px Verdana;
+font-weight:bold;
+font-size:12px;
 list-style-type: none;
 text-align: left; /*set to left, center, or right to align the menu as desired*/
 }
@@ -58,7 +59,8 @@ padding: 2px 0;
 margin-left: 0;
 margin-top: 1px;
 margin-bottom: 0;
-font: bold 10px Verdana;
+font-weight:500;
+font-size:smaller;
 list-style-type: none;
 text-align: left; /*set to left, center, or right to align the menu as desired*/
 }

@@ -4,6 +4,7 @@
 	include("inc/template.inc");
 	include("inc/FirmenLib.php");
 	include("inc/crmLib.php");
+	$kdhelp=getWCategorie(true);
 	$li=getFirmenStamm($_GET["id"],true,"V");
 	$start=($_GET["start"])?($_GET["start"]):0;
 	$items=getAllTelCall($_GET["id"],true,$start);
@@ -78,6 +79,7 @@
 			PREV		=> $prev,
 			kdview => $views[$_SESSION["kdview"]],
 			verstecke => ($li["obsolete"]=="t")?"visible":"hidden",
+			chelp => ($kdhelp)?"visible":"hidden"
 			));
 		$t->set_block("Li1","Liste","Block");
 		$i=0;
@@ -103,5 +105,17 @@
 			$t->parse("Block","Liste",true);
 			$i++;
 		}
+	if ($kdhelp) { 
+		$t->set_block("Li1","kdhelp","Block1");
+		$tmp[]=array("id"=>-1,"name"=>"Online Kundenhilfe");
+		$kdhelp=array_merge($tmp,$kdhelp); 
+		foreach($kdhelp as $col) {
+			$t->set_var(array(
+				cid => $col["id"],
+				cname => $col["name"]
+			));	
+			$t->parse("Block1","kdhelp",true);
+		};
+	}
 	$t->pparse("out",array("Li1"));
 ?>

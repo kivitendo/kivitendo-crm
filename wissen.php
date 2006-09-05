@@ -3,6 +3,27 @@
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");
+	$m = ($_POST["m"])?$_POST["m"]:$_GET["m"];
+	if ($_GET["kdhelp"]) {
+		$tmp=getWPath($m);
+		$m.=",".$tmp;
+	}
+	$tmp = split(",",$m);
+	if (!$tmp[0]) $tmp[0]=0;
+	if ($_POST["newcat"]) {
+		$catinput="<input type='text' size='20' name='catname'><input type='checkbox' name='kdhelp' value='1'> ";
+		$catinput.="<input type='hidden' name='hg' value='".$tmp[0]."'>";
+		$catinput.="<input type='image' src='image/save_kl.png' title='sichern' name='savecat' value='ok'><br>";
+	} else if ($_POST["savecat"]) {
+		$rc=insWCategorie($_POST);
+	} else if ($_POST["editcat"]) {
+		$catname=getOneWCategorie($tmp[0]);
+		$catinput="<input type='hidden' name='cid' value='".$tmp[0]."'>";
+		$catinput.="<input type='hidden' name='hg' value='".$catname["hauptgruppe"]."'>";
+		$catinput.="<input type='text' size='20' name='catname' value='".$catname["name"]."'>";
+		$catinput.="<input type='checkbox' name='kdhelp' value='1' ".(($catname["kdhelp"]=="t")?"checked":"")."> ";
+		$catinput.="<input type='image' src='image/save_kl.png' title='sichern' name='savecat' value='ok'><br>";
+	}
 	if ($_POST["newcat"]) {
 		$catinput="<input type='text' size='20' name='catname'> <input type='image' src='image/save_kl.png' title='sichern' name='savecat' value='ok'><br>";
 	} else if ($_POST["savecat"]) {
@@ -10,9 +31,6 @@
 	}
 	$data=getWCategorie();
 	$tpl = new Template($base);
-	$m = ($_POST["m"])?$_POST["m"]:$_GET["m"];
-	$tmp = split(",",$m);
-	if (!$tmp[0]) $tmp[0]=0;
 	$pre=""; $post="";
 	$button="";
 	if ($_POST["savecontent"]) {
@@ -91,16 +109,19 @@ function Thread($HauptGrp,$t,$m,&$tpl)    {
 		if ($show) $menu.="<ul>\n";
 		$t++;
 		while($thread[$HauptGrp]=array_shift($result)) {
-		if ($show) if ($HauptGrp==0) {
-			$menu.= "<li><a href='wissen.php?m=".$thread[$HauptGrp]["id"]."'>";
-		} else {
-			$menu.= "<li><a href='wissen.php?m=".$thread[$HauptGrp]["id"].",$m'>";
+			if ($show) { 
+				if ($HauptGrp==0) {
+					$menu.= "<li><a href='wissen.php?m=".$thread[$HauptGrp]["id"]."'>";
+				} else {
+					$menu.= "<li><a href='wissen.php?m=".$thread[$HauptGrp]["id"].",$m'>";
+				}
+				$kdh=($thread[$HauptGrp]["kdhelp"]=='t')?" +":"";
+				$menu.=$thread[$HauptGrp]["name"]."</a>$kdh</li>\n"; 
+			};
+			$y=Thread($thread[$HauptGrp]["id"],$t,$m,$tpl);
 		}
-		if ($show) $menu.=$thread[$HauptGrp]["name"]."</a><br></li>\n";
-		$y=Thread($thread[$HauptGrp]["id"],$t,$m,$tpl);
-	}
-	if ($show) $menu.="</ul>\n";
-	$t--;
+		if ($show) $menu.="</ul>\n";
+		$t--;
 	} else { $x=1; };
 	return $x;
 }

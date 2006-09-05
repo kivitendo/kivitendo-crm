@@ -4,6 +4,7 @@
 	include("inc/template.inc");
 	include("inc/FirmenLib.php");
 	include("inc/crmLib.php");
+	$kdhelp=getWCategorie(true);
 	$id=$_GET["id"];
 	$fa=getFirmenStamm($id);
 	$start=($_GET["start"])?($_GET["start"]):0;
@@ -92,31 +93,43 @@
 			kdview => $views[$_SESSION["kdview"]],
 			zeige => ($fa["obsolete"]=="f")?"visible":"hidden",
 			verstecke => ($fa["obsolete"]=="t")?"visible":"hidden",
-			));
-		$t->set_block("fa1","Liste","Block");
-		$i=0;
-		$nun=date("Y-m-d H:i");
-		$itemN[]=array(id => 0,calldate => $nun, caller_id => $employee, cause => "Neuer Eintrag" );
-		if ($items) {
-			$item=array_merge($itemN,$items);
-		} else {
-			$item=$itemN;
-		}
-		if ($item) foreach($item as $col){
-			if ($col["new"]) { $cause="<b>".$col["cause"]."</b>"; }
-			else { $cause=$col["cause"]; }
+			chelp => ($kdhelp)?"visible":"hidden"
+	));
+	$t->set_block("fa1","Liste","Block");
+	$i=0;
+	$nun=date("Y-m-d H:i");
+	$itemN[]=array(id => 0,calldate => $nun, caller_id => $employee, cause => "Neuer Eintrag" );
+	if ($items) {
+		$item=array_merge($itemN,$items);
+	} else {
+		$item=$itemN;
+	}
+	if ($item) foreach($item as $col){
+		if ($col["new"]) { $cause="<b>".$col["cause"]."</b>"; }
+		else { $cause=$col["cause"]; }
+		$t->set_var(array(
+			Nr	=> $col["id"],
+			LineCol	=> $bgcol[($i%2+1)],
+			Datum	=> db2date(substr($col["calldate"],0,10)),
+			Zeit	=> substr($col["calldate"],11,5),
+			Name	=> $col["cp_name"],
+			Betreff	=> $cause,
+		));
+		$t->parse("Block","Liste",true);
+		$i++;
+	}
+	if ($kdhelp) { 
+		$t->set_block("fa1","kdhelp","Block1");
+		$tmp[]=array("id"=>-1,"name"=>"Online Kundenhilfe");
+		$kdhelp=array_merge($tmp,$kdhelp); 
+		foreach($kdhelp as $col) {
 			$t->set_var(array(
-				Nr	=> $col["id"],
-				LineCol	=> $bgcol[($i%2+1)],
-				Datum	=> db2date(substr($col["calldate"],0,10)),
-				Zeit	=> substr($col["calldate"],11,5),
-				Name	=> $col["cp_name"],
-				Betreff	=> $cause,
-				));
-			$t->parse("Block","Liste",true);
-			$i++;
-		}
-	//$t->pparse("out",array("fa1"));
+				cid => $col["id"],
+				cname => $col["name"]
+			));	
+			$t->parse("Block1","kdhelp",true);
+		};
+	}
 	$t->Lpparse("out",array("fa1"),$_SESSION["lang"],"firma");
 	
 ?>

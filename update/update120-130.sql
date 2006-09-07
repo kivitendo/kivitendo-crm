@@ -1,5 +1,7 @@
+CREATE SEQUENCE "id" start 1 increment 1 maxvalue 9223372036854775807 minvalue 1 cache 1;
+
 CREATE TABLE telcallhistory (
-	id integer DEFAULT nextval('id'::text) NOT NULL,
+	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	orgid integer,
 	cause text,
 	caller_id integer NOT NULL,
@@ -14,7 +16,7 @@ CREATE TABLE telcallhistory (
         datum timestamp without time zone NOT NULL);
 
 CREATE TABLE wissencategorie(
-	id integer DEFAULT nextval('id'::text) NOT NULL,
+	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	name character varying(60),
 	hauptgruppe integer,
         kdhelp boolean
@@ -26,7 +28,7 @@ CREATE TABLE leads(
 );
 
 CREATE TABLE wissencontent(
-	id integer DEFAULT nextval('id'::text) NOT NULL,
+	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	initdate timestamp without time zone NOT NULL,
 	content text,
 	employee integer,
@@ -41,7 +43,7 @@ CREATE TABLE tempcsvdata (
 );
 
 CREATE TABLE opportunity(
-	id integer DEFAULT nextval('id'::text) NOT NULL,
+	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	fid integer,
 	title character varying(100),
 	betrag numeric (15,5),
@@ -54,9 +56,23 @@ CREATE TABLE opportunity(
 	iemployee integer,
 	memployee integer
 );
+CREATE TABLE opport_status (
+        id integer DEFAULT nextval('crmid'::text) NOT NULL,
+	statusname character varying(50),
+        sort integer
+);
+
+INSERT INTO  opport_status (statusname,sort) VALUES ('Neu',1);
+INSERT INTO  opport_status (statusname,sort) VALUES ('Wert-Angebot',2);
+INSERT INTO  opport_status (statusname,sort) VALUES ('Entscheidungsfindung',3);
+INSERT INTO  opport_status (statusname,sort) VALUES ('bedarf Analyse',4);
+INSERT INTO  opport_status (statusname,sort) VALUES ('Gewonnen',5);
+INSERT INTO  opport_status (statusname,sort) VALUES ('Aufgeschoben',6);
+INSERT INTO  opport_status (statusname,sort) VALUES ('wieder offen',7);
+INSERT INTO  opport_status (statusname,sort) VALUES ('Verloren',8);
 
 CREATE TABLE postit (
-	id integer DEFAULT nextval('id'::text) NOT NULL,
+	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	cause character varying(100),
 	notes text,
 	employee integer,
@@ -64,7 +80,7 @@ CREATE TABLE postit (
 );
 
 CREATE TABLE bundesland (
-	id integer DEFAULT nextval('id'::text) NOT NULL,
+	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	country character (3),
 	bundesland character varying(50)
 );

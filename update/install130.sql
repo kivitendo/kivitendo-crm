@@ -1,6 +1,8 @@
 -- $Id: install130.sql $
+CREATE SEQUENCE "crmid" start 1 increment 1 maxvalue 9223372036854775807 minvalue 1 cache 1;
+
 CREATE TABLE telcall (
-	id integer DEFAULT nextval('id'::text) NOT NULL,
+	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	cause text,
 	caller_id integer NOT NULL,
 	calldate timestamp without time zone NOT NULL,
@@ -11,7 +13,7 @@ CREATE TABLE telcall (
 	dokument integer);
 
 CREATE TABLE telcallhistory (
-	id integer DEFAULT nextval('id'::text) NOT NULL,
+	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	orgid integer,
 	cause text,
 	caller_id integer NOT NULL,
@@ -35,7 +37,7 @@ CREATE TABLE documents (
 	kunde integer);
 	
 CREATE TABLE wiedervorlage (
-	id integer DEFAULT nextval('id'::text) NOT NULL,
+	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	initdate timestamp without time zone NOT NULL,
 	changedate timestamp without time zone,
 	finishdate timestamp without time zone,
@@ -51,7 +53,7 @@ CREATE TABLE wiedervorlage (
 	tellid integer);
 	
 CREATE TABLE documenttotc (
-	id integer DEFAULT nextval('id'::text),
+	id integer DEFAULT nextval('crmid'::text),
 	telcall integer,
 	documents integer);
 	
@@ -61,14 +63,14 @@ CREATE TABLE telnr (
 	nummer character varying(20));
 	
 CREATE TABLE docvorlage (
-	docid integer DEFAULT nextval('id'::text) NOT NULL,
+	docid integer DEFAULT nextval('crmid'::text) NOT NULL,
 	vorlage character varying(60),
 	beschreibung character varying(255),
 	file character varying(40),
 	applikation character(1));
 	
 CREATE TABLE docfelder (
-	fid integer DEFAULT nextval('id'::text) NOT NULL,
+	fid integer DEFAULT nextval('crmid'::text) NOT NULL,
 	docid   integer,
 	feldname    character varying(20),
 	platzhalter character varying(20),
@@ -78,17 +80,17 @@ CREATE TABLE docfelder (
 	position    integer);
 	
 CREATE TABLE gruppenname (
-	grpid  integer DEFAULT nextval('id'::text) NOT NULL,
+	grpid  integer DEFAULT nextval('crmid'::text) NOT NULL,
 	grpname  character varying(40),
 	rechte       char(1) DEFAULT 'w');
 	
 CREATE TABLE grpusr (
-	gid  integer DEFAULT nextval('id'::text) NOT NULL,
+	gid  integer DEFAULT nextval('crmid'::text) NOT NULL,
 	grpid integer,
 	usrid integer);
 	
 CREATE TABLE termine (
-	id integer DEFAULT nextval('id'::text) NOT NULL,
+	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	cause character varying(45),
 	c_cause text,
 	start timestamp without time zone,
@@ -107,7 +109,7 @@ CREATE TABLE terminmember (
 	tabelle char(1));
 	
 CREATE TABLE termdate (
-	id integer DEFAULT nextval('id'::text) NOT NULL,
+	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	termid integer,
 	datum integer,
 	jahr integer,
@@ -116,7 +118,7 @@ CREATE TABLE termdate (
 	monat character(2));
 
 CREATE TABLE custmsg (
-	id integer DEFAULT nextval('id'::text) NOT NULL,
+	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	fid integer,
 	prio integer DEFAULT 3,
 	msg char varying(60),
@@ -124,13 +126,13 @@ CREATE TABLE custmsg (
 	akt boolean);
 	
 CREATE TABLE crm (
-	id integer DEFAULT nextval('id'::text) NOT NULL,
+	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	uid integer,
 	datum timestamp without time zone,
 	version char(5));
 	
 CREATE TABLE labels (
-	id integer DEFAULT nextval('id'::text),
+	id integer DEFAULT nextval('crmid'::text),
 	name char varying(32),
 	cust char(1),
 	papersize char varying(10),
@@ -151,7 +153,7 @@ VALUES ('Firma', 'C', 'A4', 'mm', 2, 2, 2, 3, 4, 2, 66, 38, 10, NULL);
 
 
 CREATE TABLE labeltxt (
-	id integer DEFAULT nextval('id'::text),
+	id integer DEFAULT nextval('crmid'::text),
 	lid integer,
 	font integer,
 	zeile text);
@@ -198,7 +200,7 @@ CREATE TABLE  maschmat (
 	menge numeric(10,3));
 	
 CREATE TABLE contract (
-	cid integer DEFAULT nextval('id'::text),
+	cid integer DEFAULT nextval('crmid'::text),
 	contractnumber text,
 	template text,
 	bemerkung text,
@@ -208,7 +210,7 @@ CREATE TABLE contract (
 	endedatum date);
 	
 CREATE TABLE maschine (
-	id integer DEFAULT nextval('id'::text),
+	id integer DEFAULT nextval('crmid'::text),
 	parts_id integer,
 	serialnumber text,
 	standort text,
@@ -216,7 +218,7 @@ CREATE TABLE maschine (
 	counter BIGINT);
 
 CREATE TABLE wissencategorie(
-	id integer DEFAULT nextval('id'::text) NOT NULL,
+	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	name character varying(60),
 	hauptgruppe integer,
 	kdhelp boolean
@@ -228,7 +230,7 @@ CREATE TABLE leads(
 );
 
 CREATE TABLE wissencontent(
-	id integer DEFAULT nextval('id'::text) NOT NULL,
+	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	initdate timestamp without time zone NOT NULL,
 	content text,
 	employee integer,
@@ -236,7 +238,7 @@ CREATE TABLE wissencontent(
 	categorie integer
 );
 CREATE TABLE opportunity(
-	id integer DEFAULT nextval('id'::text) NOT NULL,
+	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	fid integer,
 	title character varying(100),
 	betrag numeric (15,5),
@@ -249,9 +251,23 @@ CREATE TABLE opportunity(
 	iemployee integer,
 	memployee integer
 );
+CREATE TABLE opport_status (
+        id integer DEFAULT nextval('crmid'::text) NOT NULL,
+	statusname character varying(50),
+	sort integer
+);
+
+INSERT INTO  opport_status (statusname,sort) VALUES ('Neu',1);
+INSERT INTO  opport_status (statusname,sort) VALUES ('Wert-Angebot',2);
+INSERT INTO  opport_status (statusname,sort) VALUES ('Entscheidungsfindung',3);
+INSERT INTO  opport_status (statusname,sort) VALUES ('bedarf Analyse',4);
+INSERT INTO  opport_status (statusname,sort) VALUES ('Gewonnen',5);
+INSERT INTO  opport_status (statusname,sort) VALUES ('Aufgeschoben',6);
+INSERT INTO  opport_status (statusname,sort) VALUES ('wieder offen',7);
+INSERT INTO  opport_status (statusname,sort) VALUES ('Verloren',8);
 
 CREATE TABLE postit (
-	id integer DEFAULT nextval('id'::text) NOT NULL,
+	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	cause character varying(100),
 	notes text,
 	employee integer,
@@ -264,7 +280,7 @@ CREATE TABLE tempcsvdata (
 );
 
 CREATE TABLE bundesland (
-	id integer DEFAULT nextval('id'::text) NOT NULL,
+	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	country character (3),
 	bundesland character varying(50)
 );

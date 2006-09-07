@@ -77,14 +77,9 @@
 		<span class="label">Status</span>
 		<span class="leftfeld"><select name="status" onChange="sichern()">
 			<option value="" {ssel}>---</option>
-			<option value="1" {ssel1}>Neu</option>
-			<option value="2" {ssel2}>Wert-Angebot</option>
-			<option value="3" {ssel3}>Entscheidungsfindung</option>
-			<option value="4" {ssel4}>bedarf Analyse</option>
-			<option value="5" {ssel5}>Gewonnen</option>
-			<option value="6" {ssel6}>Aufgeschoben</option>
-			<option value="7" {ssel7}>wieder offen</option>
-			<option value="8" {ssel8}>Verloren</option>
+<!-- BEGIN status -->
+			<option value="{sval}" {ssel}>{sname}</option>
+<!-- END status -->
 			</select>
 		</span>
 	</div>

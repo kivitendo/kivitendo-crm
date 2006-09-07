@@ -16,6 +16,7 @@
 		$_POST["fid"]=$fid;
 		$_POST["suchen"]=1;
 	}
+	$oppstat=getOpportunityStatus();
 	if ($_POST["suchen"]) {
 		$data=suchOpportunity($_POST);
 		$none="block";
@@ -87,6 +88,15 @@
 		$block="none";
 	}
 	$t->set_file(array("op" => "opportunityS.tpl"));
+	$t->set_block("op","status","BlockS");
+	if ($oppstat) foreach ($oppstat as $row) {
+		$t->set_var(array(
+			ssel => ($row["id"]==$daten["status"])?"selected":"",
+			sval => $row["id"],
+			sname => $row["statusname"]
+		));
+		$t->parse("BlockS","status",true);
+	}
 	$t->set_var(array(
 		id => $daten["id"],
 		fid => $daten["fid"],

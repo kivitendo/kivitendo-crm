@@ -53,7 +53,7 @@
 	<li><a href="firma2.php?fid={FID}">Ansprechpartner</a></li>
 	<li><a href="firma3.php?fid={FID}">Ums&auml;tze</a></li>
 	<li><a href="firma4.php?fid={FID}">Dokumente</a></li>
-	<li><select style="visible:{chelp}" name="kdhelp" onChange="KdHelp()">
+	<li><select style="visibility:{chelp}" name="kdhelp" onChange="KdHelp()">
 <!-- BEGIN kdhelp -->
 		<option value="{cid}">{cname}</option>
 <!-- END kdhelp -->

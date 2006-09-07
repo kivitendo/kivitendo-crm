@@ -1,6 +1,12 @@
 <?
-$log=fopen("tmp/upd120130.log","a");
+if (!is_writable("tmp/upd120130.log")) {
+	$log=fopen("tmp/upd120130.log","a");
+} else {
+	$log=fopen("/tmp/upd120130.log","a");
+	echo "Logfile in /tmp<br> Schreibrechte im CRM-Verzeichnis pr&uuml;fen<br>";
+}
 fputs($log,date("d.m.Y H:i:s")."\n");
+fputs($log,"120->130\n");
 echo "Update auf Version $VERSION<br>";
 echo "Vorraussetzungen pr&uuml;fen:<br>";
 	$path=ini_get("include_path");

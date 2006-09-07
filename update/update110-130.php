@@ -1,6 +1,12 @@
 <?
-$log=fopen("tmp/upd120130.log","a");
+if (!is_writable("tmp/upd110130.log")) {
+	$log=fopen("tmp/upd110130.log","a");
+} else {
+	$log=fopen("/tmp/upd110130.log","a");
+	echo "Logfile in /tmp<br> Schreibrechte im CRM-Verzeichnis pr&uuml;fen<br>";
+}
 fputs($log,date("d.m.Y H:i:s")."\n");
+fputs($log,"110->130\n");
 echo "Update auf Version $VERSION<br>";
 echo "Vorraussetzungen pr&uuml;fen:<br>";
         $path=ini_get("include_path");
@@ -79,7 +85,7 @@ echo "Datenbankinstanz ".$_SESSION["dbname"]." erweitern : ";
 	$f=fopen($updatefile,"r");
 	if (!$f) { 
 		echo "<br>Kann Datei $updatefile nicht &ouml;ffnen.<br>Abbruch!";
-		echo "<br>Kann Datei $updatefile nicht &ouml;ffnen.<br>Abbruch!";
+		fputs($log,"Kann Datei $updatefile nicht &ouml;ffnen.Abbruch!\n");
 		fclose($log);
 		exit();
 	}
@@ -95,8 +101,11 @@ echo "Datenbankinstanz ".$_SESSION["dbname"]." erweitern : ";
 		} else {
 			$query.=$zeile;
 			$rc=$db->query(substr($query,0,-1));
-			if ($rc) { $ok++; echo "."; fputs($log,"."); }
-			else { $fehl++; echo "!"; fputs($log,"!");};
+			if ($rc) { $ok++; echo ".";  }
+			else { 
+				$fehl++; echo "!"; 
+				fputs($log,print_r($rc,true)."\n");
+			};
 			ob_flush();
 			flush();
 			$query="";
@@ -174,7 +183,6 @@ echo "Menue erweitern<br>";
                 echo "[CRM--Maschinen------erfassen]<br>");
                 echo "module=crm/maschine3.php<br>");
 		echo "<br>";
-		exit();
 	};
 fclose($log);
 ?>

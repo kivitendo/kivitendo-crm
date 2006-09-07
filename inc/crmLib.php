@@ -1985,6 +1985,12 @@ $text1=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace('°',' ','\\1')",$t
 $text2=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace('°',' ','\\1')",$text2);
 return array($text1,$text2);
 }
+function getOpportunityStatus() {
+global $db;
+	$sql="select * from opport_status order by sort";
+	$rs=$db->getAll($sql);
+	return $rs;
+}
 function getOneOpportunity($id) {
 global $db;
 	$sql="select O.*,C.name as firma from  opportunity O left join customer C on O.fid=C.id where O.id = $id";

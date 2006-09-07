@@ -5,21 +5,19 @@ class myDB extends DB {
  var $rc = false;
  var $showErr = false; // Browserausgabe
  var $debug = false; // 1 = SQL-Ausgabe, 2 = zusätzlich Ergebnis
- var $log = false;  // Alle Abfragen mitloggen
+ var $log = true;  // Alle Abfragen mitloggen
  var $errfile = "tmp/lxcrm.err";
  var $logfile = "tmp/lxcrm.log";
- var $efh = false;
  var $lfh = false;
  
 	function dbFehler($sql,$err) {
-		if (!$this->efh)
-			$this->efh=fopen($this->errfile,"a");
-		fputs($this->efh,date("Y-m-d H:i:s ->"));
-		fputs($this->efh,$sql."\n");
-		fputs($this->efh,$err."\n");
-		fputs($this->efh,print_r($this->rc,true));
-		fputs($this->efh,"\n");
-		fclose($this->efh);
+		$efh=fopen($this->errfile,"a");
+		fputs($efh,date("Y-m-d H:i:s ->"));
+		fputs($efh,$sql."\n");
+		fputs($efh,$err."\n");
+		fputs($efh,print_r($this->rc,true));
+		fputs($efh,"\n");
+		fclose($efh);
 		if ($this->showErr)
 			echo "</td></tr></table><font color='red'>$sql : $err</font><br>";
 	}
@@ -34,7 +32,7 @@ class myDB extends DB {
 	}
 
 	function writeLog($txt) {
-		if (!$this->lfh)
+		if ($this->lfh===false)
 			$this->lfh=fopen($this->logfile,"a");
 		fputs($this->lfh,date("Y-m-d H:i:s ->"));
 		fputs($this->lfh,$txt."\n");
@@ -42,9 +40,6 @@ class myDB extends DB {
 		fputs($this->lfh,"\n");
 	}
 
-	function closeErrfile() {
-		fclose($this->efh);
-	}
 	function closeLogfile() {
 		fclose($this->lfh);
 	}

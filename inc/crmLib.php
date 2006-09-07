@@ -1848,7 +1848,7 @@ global $db;
 	$rs=$db->getAll($sql);
 	$data=array();
 	if ($rs) { 
-		if ($kdhelp) return $rs;
+		if ($kdhelp) if (count($rs)>0) { return $rs;} else { return false; };
 		foreach ($rs as $row) {
 			$data[$row["hauptgruppe"]][]=array("name"=>$row["name"],"id"=>$row["id"]);
 		}

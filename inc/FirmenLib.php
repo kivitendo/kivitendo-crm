@@ -160,15 +160,15 @@ global $db;
 function getAllShipto($id) {
 global $db;
 	$sql="select distinct shiptoname,shiptodepartment_1,shiptodepartment_2,shiptostreet,shiptozipcode,";
-	$sql.="shiptocity,shiptocountry,shiptocontact,shiptophone,shiptofax,shiptoemail from shipto where ";
+	$sql.="shiptocity,shiptocountry,shiptocontact,shiptophone,shiptofax,shiptoemail from shipto ";
 	if ($_SESSION["ERPver"]>="2.2.0.10") {
 		//$sql="select (module<>'CT') as vkdoc,* from shipto where trans_id=$id";
-		$sql.="trans_id=$id";
+		$sql.=" where trans_id=$id";
 	} else {
 		//$sql="select (A.id>0 or O.id>0) as vkdoc,S.*,O.id as oid,A.id as aid from shipto S ";
-		//$sql.="left join  ar A on S.trans_id=A.id left join  oe O on S.trans_id=O.id  ";
-		//$sql.=" where A.customer_id=$id or O.customer_id=$id or S.trans_id=$id";
-		$sql.="A.customer_id=$id or O.customer_id=$id or S.trans_id=$id";
+		$sql.=" S left join  ar A on S.trans_id=A.id left join  oe O on S.trans_id=O.id  ";
+		$sql.=" where A.customer_id=$id or O.customer_id=$id or S.trans_id=$id";
+		//$sql.="A.customer_id=$id or O.customer_id=$id or S.trans_id=$id";
 	}
 	$rs=$db->getAll($sql);  
 	return $rs;

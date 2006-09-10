@@ -63,7 +63,7 @@
 	<div style="position:absolute; bottom:8px; width:49%; " class="normal">
 	<!--div style="float:none; width:100%; height:15px; text-align:center; border: 0px solid black;" class="normal"-->
 		<span style="visibility:{none};">[<a href="javascript:vcard()">VCard</a>] [<a href="personen3.php?id={PID}&edit=1&Quelle=L">{Edit}</a>]</span>
-		<b>Kontakt:</b> [<a href="personen3.php?fid={FID}&Quelle=F">eingeben</a>] [<a href="personen1.php?fid={FID}&Quelle=F">aus Liste</a>]
+		<b>Kontakt:</b> [<a href="personen3.php?fid={FID}&Quelle=L">eingeben</a>] [<a href="personen1.php?fid={FID}&Quelle=F">aus Liste</a>]
 	</div>
 </div>
 <span style="float:left; width:46%; height:430px; text-align:left; border: 1px solid black; border-left:0px;">

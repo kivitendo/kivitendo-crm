@@ -1,5 +1,5 @@
 <?
-// $Id: personen3.php,v 1.3 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/laender.php");
@@ -60,7 +60,7 @@
 		vartplP ($t,$daten,$msg,$btn1,$btn2,$btn3,"cp_givenname","white",0,3);
 	} else {
 		$msg="Neue Person";
-		leertplP($t,$_GET["fid"],$msg,3,true);
+		leertplP($t,$_GET["fid"],$msg,3,true,$_GET["Quelle"]);
 	}
 	$t->pparse("out",array("pers1"));
 

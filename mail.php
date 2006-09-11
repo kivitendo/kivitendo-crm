@@ -35,9 +35,10 @@
 			$mail =& Mail::factory("mail");
 			$user=getUserStamm($_SESSION["loginCRM"]);
 			$abs=$user["Name"]." <".$user["eMail"].">";
-			$headers=array( "Reply-To"	=> $abs,
-					"From"		=> $abs,
+			$headers=array( 
 					"Return-Path"	=> $abs,
+					"Reply-To"	=> $abs,
+					"From"		=> $abs,
 					"X-Mailer"	=> "PHP/".phpversion(),
 					"Subject"	=> $_POST["Subject"]);
 

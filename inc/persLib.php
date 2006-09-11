@@ -310,6 +310,7 @@ return $id;
 
 function leertplP (&$t,$fid,$msg,$tab,$suche=false,$Quelle="") {
 global $laender,$cp_sonder;
+		if ($fid && $Quelle) $fa="Bekannt";
 		$t->set_file(array("pers1" => "personen".$tab.".tpl"));
 		$t->set_var(array(
 			Fld	=> "cp_title",
@@ -341,7 +342,7 @@ global $laender,$cp_sonder;
 			cp_beziehung	=> "",
 			cp_abteilung	=> "",
 			cp_position 	=> "",
-			Firma 	=> "",
+			Firma 	=> "$fa",
 			FID 	=> ($suche)?$fid:"",
 			FID1 	=> $fid,
 			cp_stichwort1	=> "",

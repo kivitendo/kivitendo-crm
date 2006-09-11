@@ -16,7 +16,7 @@
 <p class="listtop">Lieferantenkontakte</p>
 <div style="position:absolute; top:44px; left:10px;  width:770px;">
 	<ul id="maintab" class="shadetabs">
-	<li><a href="{Link1}">Kundendaten</a><li>
+	<li><a href="{Link1}">Lieferantendaten</a><li>
 	<li class="selected"><a href="{Link2}" id="aktuell">Ansprechpartner</a></li>
 	<li><a href="{Link3}">Ums&auml;tze</a></li>
 	<li><a href="{Link4}">Dokumente</a></li>

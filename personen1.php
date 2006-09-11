@@ -9,7 +9,8 @@
 	$bgcol[1]="#ddddff";
 	$bgcol[2]="#ddffdd";
 	$t = new Template($base);
-	
+	$Quelle=($_POST["Quelle"])?$_POST["Quelle"]:$_GET["Quelle"];	
+	if (!$Quelle) $Quelle="F";
 	if ($_GET["first"]) {
 		$_POST["cp_name"]=$_GET["first"];
 		$_POST["fuzzy"]="%";
@@ -29,7 +30,7 @@
 			$bgcol[1]="#ddddff";
 			$bgcol[2]="#ddffdd";
 			if ($_POST["FID1"]) { 
-				$dest=($_POST["Quelle"]=="F")?"firma":"liefer"; 
+				$dest=($Quelle=="F")?"firma":"liefer"; 
 				$snd="<input type='submit' name='insk' value='zuordnen'><br><a href='".$dest."2.php?fid=".$_POST["FID1"]."'>zur&uuml;ck</a>";  //<input type='checkbox' value='".$zeile["cp_id"]."'>alle
                         } else { $snd=""; $dest=""; };
 			clearCSVData();
@@ -54,7 +55,8 @@
 					Firma => $zeile["name"],
 					TBL => $zeile["tbl"],
 					insk => $insk,
-					DEST => $dest
+					DEST => $dest,
+					QUELLE => $Quelle
 				));
 				$t->parse("Block","Liste",true);
 				$i++;
@@ -76,7 +78,7 @@
 			vartplP($t,$_POST,$msg,$btn1,$btn1,$btn1,"Anrede","white",$_POST["FID1"],1);
 		}
 	} else {
-		leertplP($t,$_GET["fid"],"",1,false,$_GET["Quelle"]);
+		leertplP($t,$_GET["fid"],"",1,false,$Quelle);
 	}
 	$t->pparse("out",array("pers1"));
 ?>

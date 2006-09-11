@@ -7,8 +7,8 @@
 	include("inc/FirmenLib.php");
 	if ($_POST["insk"]) {
 		insFaKont($_POST);
-		$fid=$_POST["fid"];
 	}
+	$fid=($_POST["fid"])?$_POST["fid"]:$_GET["fid"];
 	if ($_GET["id"]) {
 		$co=getKontaktStamm($_GET["id"]);
 		if (empty($co["cp_cv_id"])) {
@@ -22,11 +22,13 @@
 			$link2="#";
 			$link3="#";
 			$link4="liefer4.php?pid=".$_GET["id"];
+			$fid=false;
 		} else {
-			$fa=getFirmenStamm($_GET["id"],true,"V");
-			$link1="liefer1.php?id=".$co["cp_cv_id"];
-			$link2="liefer2.php?fid=".$co["cp_cv_id"];
-			$link3="liefer3.php?fid=".$co["cp_cv_id"];
+			$fid=$co["cp_cv_id"];
+			$fa=getFirmenStamm($fid,true,"V");
+			$link1="liefer1.php?id=".$fid;
+			$link2="liefer2.php?fid=".$fid;
+			$link3="liefer3.php?fid=".$fid;
 			$link4="liefer4.php?pid=".$_GET["id"]."&fid=".$co["cp_cv_id"];
 		}
 		if ($co["cp_homepage"]<>"") {
@@ -58,7 +60,6 @@
 			Position	=> $co["cp_position"],
 			GebDat	=> db2date($co["cp_gebdatum"]),
 			Notiz	=> ereg_replace("\n","<br>",$co["cp_notes"]),
-			FaID => $co["cp_cv_id"],
 			LInr => $fa["vendornumber"],
 			Lname => $fa["name"],
 			Ldepartment_1 => $fa["department_1"],
@@ -67,7 +68,7 @@
 			Ort => $fa["city"],
 			Street => $fa["street"],
 			PID => $_GET["id"],
-			FID => $co["cp_cv_id"]
+			FID => $fid
 			));
 			$t->set_block("co1","Liste","Block");
 			$i=0;
@@ -96,8 +97,6 @@
 			}
 		$t->pparse("out",array("co1"));
 	} else {
-		if ($_GET["fid"]) $fid=$_GET["fid"];
-		if ($_POST["fid"]) $fid=$_POST["fid"];
 		$co=getAllKontakt($fid);
 		if (count($co)==1 && $co[0]["cp_id"]>1) { header("location: liefer2.php?id=".$co[0]["cp_id"]);};
 		$t = new Template($base);
@@ -105,7 +104,7 @@
 		$link2="liefer2.php?fid=".$fid;
 		$link3="liefer3.php?fid=".$fid;
 		$link4="liefer4.php?fid=".$fid;
-		$fa=getFirmenStamm($fid["id"],true,"V");
+		$fa=getFirmenStamm($fid,true,"V");
 		if (count($co)>1) {
 			$t->set_file(array("co1" => "liefer2L.tpl"));
 			$t->set_var(array(
@@ -153,7 +152,6 @@
 				Plz => $fa["zipcode"],
 				Ort => $fa["city"],
 				Street => $fa["street"],
-				FID => $fid,
 				Edit => "",
 				Anrede => "Leider keine Kontakte gefunden",
 				Abteilung => "",

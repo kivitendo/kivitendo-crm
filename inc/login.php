@@ -14,12 +14,11 @@ if ($_POST["erpname"]) {
 			foreach($configfile as $row) {
 				$tmp=trim($row);
 				if (ereg("ERPNAME",$tmp)) {
-					fputs($f,'$ERPNAME="'.$_POST["erpname"]."\"\n");
+					fputs($f,'$ERPNAME="'.$_POST["erpname"]."\";\n");
 					$name=true;
 				} else {
 					if (ereg("\?>",$tmp) && !$name) fputs($f,'$ERPNAME="'.$_POST["erpname"].'";'."\n");
 					fputs($f,$tmp."\n");
-					$ERPNAME=$_POST["erpname"];
 				}
 			}
 			fclose($f);
@@ -27,6 +26,7 @@ if ($_POST["erpname"]) {
 			echo "inc/conf.php ist nicht beschreibbar";
 		}
 	}
+	$ERPNAME=$_POST["erpname"];
 }
 if ($_GET["login"]||$_POST["login"]) {
 	$login=($_GET["login"])?$_GET["login"]:$_POST["login"];

@@ -360,7 +360,7 @@ ALTER TABLE vendor ADD COLUMN bland int4;
 ALTER TABLE shipto ADD COLUMN shiptoowener int4;
 ALTER TABLE shipto ADD COLUMN shiptoemployee int4;
 ALTER TABLE shipto ADD COLUMN shiptobland int4;
-ALTER TABLE employee ADD COLUMN pwd char varying(12);
+--ALTER TABLE employee ADD COLUMN pwd char varying(12);
 ALTER TABLE employee ADD COLUMN msrv character varying(40);
 ALTER TABLE employee ADD COLUMN postf character varying(25);
 ALTER TABLE employee ADD COLUMN kennw character varying(10);

@@ -15,15 +15,18 @@
 	$MailSign=ereg_replace("\r","",$MailSign);
 
 	if ($_POST) {
-		$Subject = $_POST["Subject"];
-		$BodyText = $_POST["BodaText"];
+		$Subject=preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["Subject"]);
+		$BodyText=preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["BodyText"]);
+		//$Subject = $_POST["Subject"];
+		//$BodyText = $_POST["BodaText"];
 		$okC=true;
 		if ($_POST["CC"]<>"") { 
-			$rc=chkMailAdr($_POST["CC"]); 
+			$CC=preg_replace( "/[^a-z0-9 !?:;,.\/_\-=+@#$&\*\(\)]/im", "", $_POST["CC"]);
+			$rc=chkMailAdr($CC); 
 			if($rc<>"ok") { 
 				$okC=false; $msg.=" CC:".$rc; 
 			} else {
-				insertCSVData(array("CC",$_POST["CC"],"","","","","","",$_POST["CC"],""));
+				insertCSVData(array("CC",$_POST["CC"],"","","","","","",$CC,""));
 			}
 		};
 		if ($okC) {
@@ -43,11 +46,11 @@
 			fputs($f,"\$headers['From']='$abs';\n");	
 			fputs($f,"\$headers['Return-Path']='$abs';\n");	
 			fputs($f,"\$headers['X-Mailer']='PHP/".phpversion()."';\n");
-			$subject=$_POST["Subject"];
-			fputs($f,"\$headers['Subject']='$subject';\n");
-			fputs($f,"\$subject='$subject';\n");
-			$bodytxt=strip_tags($_POST["BodyText"]);
-			fputs($f,"\$bodytxt='$bodytxt';\n");
+			//$subject=$_POST["Subject"];
+			fputs($f,"\$headers['Subject']='$Subject';\n");
+			fputs($f,"\$subject='$Subject';\n");
+			//$bodytxt=strip_tags($_POST["BodyText"]);
+			fputs($f,"\$bodytxt='$BodyText';\n");
 			fputs($f,"\$dateiname='$dateiname';\n");
 			fputs($f,"\$type='$type';\n");
 			fputs($f,"\$limit='$limit';\n");

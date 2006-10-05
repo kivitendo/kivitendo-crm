@@ -40,6 +40,7 @@ if ($data) {
 		} else {
 			$to=$tmp[$pemail];
 		}
+		$to=preg_replace( "/[^a-z0-9 !?:;,.\/_\-=+@#$&\*\(\)]/im", "", $to);
 		if ($to<>"") {
 			preg_match_all("/%([A-Z0-9_]+)%/U",$text,$ph, PREG_PATTERN_ORDER);
 			if ($ph) {

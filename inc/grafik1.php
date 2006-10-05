@@ -1,5 +1,5 @@
 <?
-// $Id: grafik.php 880 2006-02-16 19:51:59Z hlindemann $
+// $Id: grafik.php 2006-09-21 11:13:59Z hlindemann $
 unset($GLOBALS['php_errormsg']);
 include ("jpgraph.php");
 include ("jpgraph_line.php");
@@ -106,8 +106,9 @@ function  getLastYearPlot($re,$an,$art=false) {
 	$graph->xaxis->SetTickLabels($monate);
 	$graph->legend->Pos(0.03,0.90,"left","center");
 
-	$IMG="./tmp/$employee".time().".png";
-	@exec("rm ./tmp/$employee*.png");
+	$IMG="./tmp/".$employee.".png";
+	@exec("rm ./tmp/$employee.png");
+
 	$graph->Stroke($IMG);
 	return $IMG;
 }

@@ -1,4 +1,4 @@
-CREATE SEQUENCE "id" start 1 increment 1 maxvalue 9223372036854775807 minvalue 1 cache 1;
+CREATE SEQUENCE "crmid" start 1 increment 1 maxvalue 9223372036854775807 minvalue 1 cache 1;
 
 CREATE TABLE telcallhistory (
 	id integer DEFAULT nextval('crmid'::text) NOT NULL,

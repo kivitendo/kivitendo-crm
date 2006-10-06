@@ -100,6 +100,12 @@ echo "Datenbankinstanz ".$_SESSION["dbname"]." erweitern : ";
 			$query.=$zeile;
 		} else {
 			$query.=$zeile;
+                        if (eregi("INSERT.*INTO.*crm",$query)) {
+                                $query_=substr($query,0,strpos($query,"(0,"));
+                                $query_.="(".$_SESSION["loginCRM"].",";
+                                $query_.=substr($query,strpos($query,"(0,")+3);
+                                $query=$query_;
+                        }
 			$rc=$db->query(substr($query,0,-1));
 			if ($rc) { $ok++; echo ".";  }
 			else { 
@@ -152,6 +158,8 @@ echo "Menue erweitern<br>";
 				fputs($f,"\n");
 				fputs($f,"[CRM--Maschinen------erfassen]\n");
 				fputs($f,"module=crm/maschine3.php\n");              
+			} else if (ereg("crm/menu1.php",$tmp)) {
+				fputs($f,"module=crm/hilfe.php\n");
 			} else {
 				fputs($f,$tmp."\n");
 			}

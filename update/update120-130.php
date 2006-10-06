@@ -92,6 +92,12 @@ echo "Datenbankinstanz ".$_SESSION["dbname"]." erweitern : ";
 			$query.=$zeile;
 		} else {
 			$query.=$zeile;
+			if (eregi("INSERT.*INTO.*crm",$query)) {
+                                $query_=substr($query,0,strpos($query,"(0,"));
+                                $query_.="(".$_SESSION["loginCRM"].",";
+                                $query_.=substr($query,strpos($query,"(0,")+3);
+				$query=$query_;
+                        }
 			$rc=$db->query(substr($query,0,-1));
 			if ($rc) { $ok++; echo "."; fputs($log,"."); }
 			else { $fehl++; echo "!"; fputs($log,"!");};
@@ -130,6 +136,11 @@ echo "Menue erweitern<br>";
 				fputs($f,"\n");
 				fputs($f,"[CRM--Notizen]\n");
 				fputs($f,"module=crm/postit.php\n");
+				fputs($f,"\n");
+				fputs($f,"[CRM--Status]\n");
+				fputs($f,"module=crm/status.php\n");  
+			} else if (ereg("crm/menu1.php",$tmp)) {
+				fputs($f,"module=crm/hilfe.php\n");
 			} else {
 				fputs($f,$tmp."\n");
 			}
@@ -150,6 +161,13 @@ echo "Menue erweitern<br>";
 		echo "[CRM--Notizen]<br>";
 		echo "module=crm/postit.php<br>";
 		echo "<br>";
+		echo "[CRM--Status]<br>";
+		echo "module=crm/status.php<br>";
+		echo "<br>";
+		echo "&Auml;ndern:<br>";
+		echo "module=crm/menu1.php in module=crm/hilfe.php<br>";
+		
 	};
+echo "Die Men&uuml;struktur hat sich bei Neuinstallationen ge&auml;ndert. Wenn Sie die neue Struktur auch verwenden wollen, m&uuml;ssen Sie die 'menu.ini' manuell anpassen. Entfernen Sie daraus allen CRM-Eintr&auml;ge und f&uuml;gen Sie die 'menu130.ini'  ein.";
 fclose($log);
 ?>

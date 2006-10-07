@@ -158,6 +158,9 @@ echo "Menue erweitern<br>";
 				fputs($f,"\n");
 				fputs($f,"[CRM--Maschinen------erfassen]\n");
 				fputs($f,"module=crm/maschine3.php\n");              
+				fputs($f,"\n");
+				fputs($f,"[CRM--Status]\n");
+				fputs($f,"module=crm/status.php\n");              
 			} else if (ereg("crm/menu1.php",$tmp)) {
 				fputs($f,"module=crm/hilfe.php\n");
 			} else {
@@ -191,6 +194,12 @@ echo "Menue erweitern<br>";
                 echo "[CRM--Maschinen------erfassen]<br>");
                 echo "module=crm/maschine3.php<br>");
 		echo "<br>";
+		echo "[CRM--Status]<br>";
+		echo "module=crm/status.php<br>";
+		echo "<br>";
+		echo "&Auml;ndern:<br>";
+		echo "module=crm/menu1.php in module=crm/hilfe.php<br>";
 	};
+echo "Die Men&uuml;struktur hat sich bei Neuinstallationen ge&auml;ndert. Wenn Sie die neue Struktur auch verwenden wollen, m&uuml;ssen Sie die 'menu.ini' manuell anpassen. Entfernen Sie daraus allen CRM-Eintr&auml;ge und f&uuml;gen Sie die 'menu130.ini'  ein.";
 fclose($log);
 ?>

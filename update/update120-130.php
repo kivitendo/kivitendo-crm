@@ -166,8 +166,8 @@ echo "Menue erweitern<br>";
 		echo "<br>";
 		echo "&Auml;ndern:<br>";
 		echo "module=crm/menu1.php in module=crm/hilfe.php<br>";
+		echo "Die Men&uuml;struktur hat sich bei Neuinstallationen ge&auml;ndert. Wenn Sie die neue Struktur auch verwenden wollen, m&uuml;ssen Sie die 'menu.ini' manuell anpassen. Entfernen Sie daraus allen CRM-Eintr&auml;ge und f&uuml;gen Sie die 'menu130.ini'  ein.";
 		
 	};
-echo "Die Men&uuml;struktur hat sich bei Neuinstallationen ge&auml;ndert. Wenn Sie die neue Struktur auch verwenden wollen, m&uuml;ssen Sie die 'menu.ini' manuell anpassen. Entfernen Sie daraus allen CRM-Eintr&auml;ge und f&uuml;gen Sie die 'menu130.ini'  ein.";
 fclose($log);
 ?>

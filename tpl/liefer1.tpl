@@ -42,6 +42,7 @@
 <body onLoad="submenu('{kdview}');">
 <p class="listtop">Detailansicht <span title="Wichtige Mitteilung">{Cmsg}&nbsp;</span></p>
 <div style="position:absolute; top:40px; left:10px;  width:770px;">
+<form name="kdhelp">
 	<ul id="maintab" class="shadetabs">
 	<li class="selected"><a href="liefer1.php?id={FID}" id="aktuell">Lieferantendaten</a></li>
 	<li><a href="liefer2.php?fid={FID}">Ansprechpartner</a></li>

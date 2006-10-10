@@ -8,23 +8,22 @@
 <hr>
 =[<a name='Schnellsuche' class='wikin'>Schnellsuche</a>]=<br>
 <br>
-An dem oberen Rand werden f&uuml;r eine Schnellsuche die Anfangsbuchstaben der Firmen bzw. Kunden angeboten. Mit einem Klick auf den gew&uuml;nschten Buchstaben wird die Suche nach den passenden Eintr&auml;gen in der Datenbank gestartet. Es werden bei der Buchstabensuche die Rechnungsadresse1 und Rechnungsadresse2 durchsucht. Unter der Buchstabensuche wird die komplette Suchmaske angeboten.<br>
+An dem oberen Rand werden f&uuml;r eine Schnellsuche die Anfangsbuchstaben der Firmen bzw. Kunden angeboten. Mit einem Klick auf den gew&uuml;nschten Buchstaben wird die Suche nach den passenden Eintr&auml;gen in der Datenbank gestartet. Ein Klick auf den Stern startet eine Suche nach Kunden die nicht mit einem Buchstaben beginnen. Es werden bei der Buchstabensuche die Rechnungsadresse1 und Rechnungsadresse2 durchsucht. Unter der Buchstabensuche wird die komplette Suchmaske angeboten.<br>
 <br>
 =[<a name='Komplette Suchmaske' class='wikin'>Komplette Suchmaske</a>]=<br>
 <br>
 F&uuml;llen Sie die gew&uuml;nschten Suchfelder aus. Es kann auch mit Jockerzeichen gesucht werden, d.h. man kann "_"f&uuml;r genau ein Zeichen und "%" f&uuml;r beliebige Zeichen einsetzen. Jedes Suchfeld wird automatisch um "%" erweitert. In der Checkbox "unscharf suchen" kann durch entfernen dieses Hakens das Gesuchte mit der exakten Endung gefunden werden. Die Suche ist nicht Case-Sensitiv, das hei&szlig;t es wird nicht zwischen Gro&szlig; und Kleinschreibung unterschieden.<br>
 <br>
-<pre> Rechnungsadresse1 "a%a" = alles was in der Rechnungsadresse1 mit A beginnt und noch
- mindestens ein a enth&auml;lt.
+<pre> Firmenname "a%a" = alle Firmen die mit A beginnt und noch  mindestens ein a enth&auml;lt.
 </pre><br>
-<pre> Rechnungsadresse2 "%gbr" = alles was in der Rechnungsadresse2 ein GbR im Namen enth&auml;lt.
+<pre> Abteilung "%gbr" = alles was in der Abteilung ein GbR im Namen enth&auml;lt.
 </pre><br>
 Mehrere ausgef&uuml;llte Felder werden in der Abfrage als <strong>und</strong> -Bewertung gewertet:<br>
 <br>
-<pre> Rechnungsadresse1 "__ab" Postleitzahl "85" = alles was an der 3ten Stelle der Rechnungs-
- adresse1 ein a hat und an der 4ten Stelle ein b <strong>und</strong> eine Postleitzahl mit der Nummer 85.
+<pre> Firmenname "__ab" Postleitzahl "85" = alles was an der 3ten Stelle des Firmennames ein a hat und an der 4ten Stelle ein b 
+<strong>und</strong> eine Postleitzahl mit der Nummer 85.
 </pre><br>
-Wird in der Checkbox der Haken f&uuml;r "auch in abweichender Lieferadresse suchen" aktiviert, passiert dieses.<br>
+Wird in der Checkbox der Haken f&uuml;r "auch in abweichender Lieferadresse suchen" deaktiviert, wird nur in der Hauptanschrift gesucht.<br>
 <br>
 Bei keinem gefundenen Eintrag erscheint die Ausgabe "Leider nichts gefunden" in der Maske. Bei einem Eintrag wird in die [<a class='wikil' href='DetailansichtKundendaten.html'>Detailansicht</a>] gesprungen, bei mehreren Treffern kommt man in die Maske [<a class='wikil' href='ErgebnisKundensuche.html'>Ergebnis Firmen-/Kundensuche</a>].<br>
 <br>

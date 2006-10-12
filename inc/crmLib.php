@@ -1499,18 +1499,25 @@ global $db;
 }
 function checkTermin($start,$stop,$von,$bis,$TID=0) {
 global $db;
-	list($startT,$startM,$startJ)=split("\.",$start);
-	list($stopT,$stopM,$stopJ)=split("\.",$stop);
 	$grp=getGrp($_SESSION["loginCRM"],true);
-	if ($grp) $rechte.=" M.member in $grp";
-	$start=date2db($start).$von; $stop=date2db($stop).$bis;
+	$start=date2db($start);
+	$stop=date2db($stop);
+	if ($stop<$start) $stop=$start;
+	$start.=$von;
+	$stop.=$bis;
 	$sql="select distinct id from termine D left join terminmember M on M.termin=D.id  where ";
 	$sql.="((starttag||startzeit between '$start' and '$stop' ) or ";
 	$sql.="(stoptag||stopzeit between '$start' and '$stop'))";
 	if ($TID>0) $sql.=" and id<>$TID";
-	$sql.=" and ($rechte)";
-	$rs=$db->getAll($sql);
-	return $rs;
+	if ($grp) $sql.="and (M.member in $grp)";
+	//folgendes tut irgendwie nicht
+	//$rs=$db->getAll($sql);
+	//dann erst einmal so
+	$rs=$db->query($sql);
+	while ($row = $rs->fetchRow(DB_FETCHMODE_ASSOC)) {
+		$ids[]=array("id"=>$row["id"]);
+	}
+	return $ids;
 }
 
 function getTerminList($id) {

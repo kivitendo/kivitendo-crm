@@ -360,7 +360,9 @@ global $laender,$cp_sonder;
 			$t->set_block("pers1","OwenerListe","Block2");
 			$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>"Alle");
 			$first[]=array("grpid"=>$daten["OwenID"],"rechte"=>"w","grpname"=>"Pers&ouml;nlich");
-			$user=array_merge($first,getGruppen());
+			$tmp=getGruppen();
+	                if ($tmp) { $user=array_merge($first,$tmp); }
+        	        else { $user=$first; };
 			$selectOwen=1;
 			if ($user) foreach($user as $zeile) {
 				if ($zeile["grpid"]==$selectOwen) {

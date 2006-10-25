@@ -44,18 +44,26 @@ class myDB extends DB {
 		fclose($this->lfh);
 	}
 	
-	function myDB($host,$user,$pwd,$db,$showErr=false) {
+	function myDB($host,$user,$pwd,$db,$port,$showErr=false) {
 		if ($pwd>"") {
 			$passwd=":".$this->uudecode($pwd);
 		} else {
 			$passwd="";
 		}
-		$dns="pgsql://$user$passwd@$host/$db";
+		//$dns="pgsql://$user$passwd@$host/$db";
+		$dsn = array(
+                    'phptype'  => 'pgsql',
+                    'username' => $user,
+                    'password' => $passwd,
+                    'hostspec' => $host,
+                    'database' => $db,
+                    'port'     => $port
+                );
 		$this->showErr=$showErr;
-		$this->db=DB::connect($dns);
+		$this->db=DB::connect($dsn);
 		if (!$this->db || DB::isError($this->db)) {
-			if ($this->log) $this->writeLog("Connect $dns");
-			$this->dbFehler("Connect $dns",$this->db->getMessage()); 
+			if ($this->log) $this->writeLog("Connect $dsn");
+			$this->dbFehler("Connect ".print_r($dsn,true),$this->db->getMessage()); 
 			die ($this->db->getMessage());
 		}
 		if ($this->log) $this->writeLog("Connect: ok ");
@@ -94,6 +102,14 @@ class myDB extends DB {
 			return false;
 		} else {
 			return $this->rc;
+		}
+	}
+
+	function saveData($txt) {
+		if (get_magic_quotes_gpc()) { 	
+			return $txt;
+		} else {
+			return DB::quoteSmart($string); 
 		}
 	}
 

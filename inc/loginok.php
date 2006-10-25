@@ -22,7 +22,7 @@ if (!$_SESSION["db"] ||
 		header("location: ups.html");
     	}
 } else {
-	$db=new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$showErr);
+	$db=new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"],$showErr);
 	$_SESSION["db"]=$db;
 	$_SESSION["loginok"]="ok";
 }

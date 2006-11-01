@@ -8,7 +8,7 @@
 	function showP (id,nr) {
 		if (id!='') {
 			Frame=eval("parent.main_window");
-			f1=open("rechng.php?id="+id+"&nr="+nr,"rechng","width=600,height=420,left=10,top=10,scrollbars=yes");
+			f1=open("rechng.php?id="+id+"&nr="+nr,"rechng","width=700,height=420,left=10,top=10,scrollbars=yes");
 		}
 	}
 	//-->
@@ -35,25 +35,26 @@ Ums&auml;tze/Angebote von Monat {Monat}
 	<table width="400px">
 		<tr>
 			<th class="smal" width="10%">Datum</th>
+			<th class="smal">Art</th>
 			<th class="smal">Nummer</th>
 			<th class="smal">Netto</th>
 			<th class="smal">Brutto</th>
 			<th class="smal" width="10%"></th>
-			<th class="smal">Art</th>
-			<th class="smal">OP</th>
+			<th class="smal">Staus</th>
 		</tr>
 <!-- BEGIN Liste -->
 		<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showP('{Typ}{RNid}','{RNr}');">
 			<td class="smal">{Datum}</td>
+			<td class="smal">&nbsp;{Typ}</td>
 			<td class="smal">&nbsp;{RNr}&nbsp;</td>
 			<td class="smal re">{RSumme}&nbsp;&nbsp;</td>
 			<td class="smal re">{RBrutto}&nbsp;</td>
 			<td class="smal">{Curr}</td>
-			<td class="smal">&nbsp;{Typ}</td>
 			<td class="smal">&nbsp;{offen}</td>
 		</tr>
 <!-- END Liste -->
 		<tr><td class="smal" colspan="6"><b>R</b>echnung, <b>A</b>ngebot, <b>L</b>ieferung/Auftrag</td></tr>
+		<tr><td class="smal" colspan="6"><b>o</b>ffen, <b>c</b>losed, <b>+</b>bezahlt, <b>-</b>unbezahlt</td></tr>
 	</table>
 </div>	
 <!-- Hier endet die Karte ------------------------------------------->

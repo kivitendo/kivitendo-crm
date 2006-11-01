@@ -1307,7 +1307,8 @@ global $db;
 		$sql2="select * from oe where vendor_id=$fid and transdate like '$monat%' and closed = 'f' order by transdate desc";
 	} else {
 		$sql1="select * from ar where customer_id=$fid and transdate like '$monat%' order by transdate desc";
-		$sql2="select * from oe where customer_id=$fid and transdate like '$monat%' and closed = 'f' order by transdate desc";
+		//$sql2="select * from oe where customer_id=$fid and transdate like '$monat%' and closed = 'f' order by transdate desc";
+		$sql2="select * from oe where customer_id=$fid and transdate like '$monat%' order by transdate desc";
 	};
 	$rs2=$db->getAll($sql2);
 	$rs1=$db->getAll($sql1);
@@ -1340,13 +1341,13 @@ global $db;
 	if ($tab=="R" || $tab=="V") {
 		$sql="select *,I.sellprice as endprice,I.fxsellprice as orgprice,I.discount,I.description as artikel from invoice I left join parts P on P.id=I.parts_id where trans_id=$id";
 		if ($tab=="V") {
-			$sql1="select amount as brutto, netamount as netto,transdate, intnotes, notes from ap where id=$id";
+			$sql1="select amount as brutto, netamount as netto,transdate, intnotes, notes,quonumber,ordnumber from ap where id=$id";
 		} else {
-			$sql1="select amount as brutto, netamount as netto,transdate, intnotes, notes from ar where id=$id";
+			$sql1="select amount as brutto, netamount as netto,transdate, intnotes, notes,quonumber,ordnumber from ar where id=$id";
 		}
 	} else {
 		$sql="select *,O.sellprice as endprice,O.sellprice as orgprice,O.discount,O.description as artikel from orderitems O left join parts P on P.id=O.parts_id where trans_id=$id";
-		$sql1="select amount as brutto, netamount as netto,transdate, intnotes, notes, quotation from oe where id=$id";
+		$sql1="select amount as brutto, netamount as netto,transdate, intnotes, notes, quotation,quonumber from oe where id=$id";
 	}
 	$rs=$db->getAll($sql);
 	if(!$rs) {

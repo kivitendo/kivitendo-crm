@@ -61,7 +61,8 @@
 			if ($anz>0) {
 				for ($o=0; $o<$anz; $o++) {
 					if ($_FILES["Datei"]["name"][$o]<>"") {
-						move_uploaded_file($_FILES["Datei"]["tmp_name"][$o],"tmp/".$_FILES["Datei"]["name"][$o]);
+						//move_uploaded_file($_FILES["Datei"]["tmp_name"][$o],"tmp/".$_FILES["Datei"]["name"][$o]);
+						copy($_FILES["Datei"]["tmp_name"][$o],"tmp/".$_FILES["Datei"]["name"][$o]);
 						$mime->addAttachment("tmp/".$_FILES["Datei"]["name"][$o] , $_FILES["Datei"]["type"][$o]);
 						unlink ("tmp/".$_FILES["Datei"]["name"][$o]);
 						$anh=true;
@@ -81,8 +82,6 @@
 				}
 			}
 			if ($rc) {
-				$TO=""; $CC=""; $msg="Mail versendet";
-				$Subject=""; $BodyText="";
 				if (!$anh) { $_FILES=false; };
 				$data["CRMUSER"]=$_SESSION["loginCRM"];
 				$data["cause"]=$Subject;
@@ -109,9 +108,11 @@
 				}
 				if (!$stamm) {
 					$data["CID"]=$_SESSION["loginCRM"];		// Dann halt beim Absender in den Thread eintragen
-					$data["cause"]=$data["cause"]."|".$_POST["TO"];
+					$data["cause"]=$Subject."|".$_POST["TO"];
 					insCall($data,$_FILES);
 				}
+				$TO=""; $CC=""; $msg="Mail versendet";
+				$Subject=""; $BodyText="";
 				if ($_POST["QUELLE"]) header("Location: ".$_POST["QUELLE"]);
 			} else {
 				$msg="Fehler beim Versenden ".PEAR_Error::getMessage ();

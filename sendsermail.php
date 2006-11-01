@@ -1,46 +1,48 @@
 <?
+//mb_internal_encoding("UTF-8");
 require_once("inc/stdLib.php");
 require_once("inc/crmLib.php");
 include_once("Mail.php");
 include_once("Mail/mime.php");
 
-function replace_var($body) {
-	
-	return $body;
-}
-
 $offset=($_GET["offset"])?$_GET["offset"]:1;
 $mime = new Mail_Mime("\n");
 $mail =& Mail::factory("mail");
 			
-require("tmp/".session_id().".data");
+
+$headers=$_SESSION["headers"];
+$subject=$_SESSION["subject"];
+$bodytxt=$_SESSION["bodytxt"];
+$limit=$_SESSION["limit"];
 
 if ($logmail) $f=fopen("tmp/maillog.txt","a");
 
-if ($_GET["datei"]) {
-	$mime->addAttachment("tmp/".session_id(), $type,$dateiname, true );
+if ($dateiname) {
+	$ftmp=fopen("tmp/".$_SESSION["loginCRM"].".file","rb");
+	$filedata=fread($ftmp,filesize("tmp/".$_SESSION["loginCRM"].".file"));
+	fclose($ftmp);
+	$mime->addAttachment($filedata, $_SESSION["type"],$_SESSION["dateiname"], false );
 }
-$hdr = $mime->headers($headers);
 
 $sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' limit 1";
 $data=$db->getAll($sql);
 $felder=split(";",$data[0]["csvdaten"]);
 $pemail=array_search("EMAIL",$felder);
 $pkont=array_search("KONTAKT",$felder);
-
 $sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' offset ".$offset." limit ".$limit;
 $data=$db->getAll($sql);
 if ($data) {
+	$bodytxt=strip_tags($bodytxt);
 	foreach ($data as $row) {
-		$text=$bodytxt;
 		$to="";
 		$tmp=split(";",$row["csvdaten"]);
+		$text=$bodytxt;
+		if ($tmp[$pemail]=="") continue;
 		if ($tmp[$pkont]<>"" and $tmp[$pemail]<>"") {
 			$to=$tmp[$pkont]." <".$tmp[$pemail].">";
 		} else {
 			$to=$tmp[$pemail];
 		}
-		$to=preg_replace( "/[^a-z0-9 !?:;,.\/_\-=+@#$&\*\(\)]/im", "", $to);
 		if ($to<>"") {
 			preg_match_all("/%([A-Z0-9_]+)%/U",$text,$ph, PREG_PATTERN_ORDER);
 			if ($ph) {
@@ -58,7 +60,10 @@ if ($data) {
 				}};
 			};
 			$mime->setTXTBody($text);
-			$body = $mime->get(array("text_encoding"=>"quoted-printable"));
+			//$body = $mime->get(array("text_encoding"=>"quoted-printable"));
+			//$body = $mime->get(array("text_charset"=>"utf-8"));
+			$body = $mime->get();
+			$hdr = $mime->headers($headers);
 			$rc=$mail->send($to, $hdr, $body);
 			if ($rc) {
 				$data["CRMUSER"]=$_SESSION["loginCRM"];

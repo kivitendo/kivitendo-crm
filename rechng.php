@@ -13,15 +13,20 @@
 	$reP=$tmp[0];
 	if (substr($id,0,1)=="R") {
 		$header="Rechnung Nr: ".$nr;
+		$header2=($tmp[1]["quonumber"])?"Angebots Nr: ".$tmp[1]["quonumber"]:"";
+		$header3=($tmp[1]["ordnumber"])?"Auftrags Nr: ".$tmp[1]["ordnumber"]:"";
 		$mul=1;
 	} else if (substr($id,0,1)=="V") {
 		$header="Rechnung Nr: ".$nr;
+		$header2=($tmp[1]["quonumber"])?"Angebots Nr: ".$tmp[1]["quonumber"]:"";
+		$header3=($tmp[1]["ordnumber"])?"Auftrags Nr: ".$tmp[1]["ordnumber"]:"";
 		$mul=-1;
 	} else {
 		if ($tmp[1]["quotation"]=="t") {
 			$header="Angebots Nr: ".$nr;
 		} else {
 			$header="Auftrags Nr: ".$nr;
+			$header2=($tmp[1]["quonumber"])?"Angebots Nr: ".$tmp[1]["quonumber"]:"";
 		}
 		$mul=1;
 	}
@@ -33,8 +38,8 @@
 <table width="100%" class="karte"><tr><td class="karte">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <table>
-<tr class='smal'><td colspan="3"/td><?= $NAME."<br>".$STRASSE."<br>".$ORT ?>
-	<td colspan="3" style="vertical-align:top"><?= $header." vom ".db2date($tmp[1]["transdate"]) ?></td></tr>
+<tr class='smal'><td colspan="3"><?= $NAME."<br>".$STRASSE."<br>".$ORT ?></td>
+	<td colspan="3" style="vertical-align:top" nowrap><?= $header." vom ".db2date($tmp[1]["transdate"]) ?><br><?= $header2 ?><br><?= $header3 ?></td></tr>
 
 <tr class='smal'><td>Menge</td><td>Einh.</td><td>Artikel</td><td>VKpreis</td><td>Einzelpreis</td><td>Summe</td></tr>
 <?

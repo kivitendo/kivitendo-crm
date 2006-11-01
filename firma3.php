@@ -88,11 +88,12 @@
 				if ($col["quotation"]=="f") {
 					$typ="L";
 					$renr=$col["ordnumber"];
-					$offen="+";
+					$offen=($col["closes"]=="t")?"c":"o";
+					//$offen="+";
 				} else {
 					$typ="A";
 					$renr=$col["quonumber"];
-					$offen="";
+					$offen=($col["closes"]=="t")?"c":"o";
 				}
 			}
 			$t->set_var(array(

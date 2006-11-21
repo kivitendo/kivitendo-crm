@@ -111,11 +111,29 @@
 	}
 	//------------------------------------------- Firma/Kontakte
 	$t->set_block("cont","Selectbox2","Block3");
-	if ($fid) $contact=getAllKontakt($fid);
-	if ($fid) $first[]=array("cp_id"=>$fid,"cp_name"=>"Firma","cp_givenname"=>"allgemein");
-	if ($pid) $first[]=array("cp_id"=>$pid,"cp_name"=>$co["cp_name"],"cp_givenname"=>$co["cp_givenname"]);
-	$contact=array_merge($first,$contact);
-	if ($contact) foreach($contact as $zeile) {
+	if ($fid) {
+		$contact=getAllKontakt($fid);
+		$first[]=array("cp_id"=>$fid,"cp_name"=>"Firma","cp_givenname"=>"allgemein");
+		if ($contact) {
+			$contact=array_merge($first,$contact);
+		} else {
+	                $contact=$first;
+        	}
+	} else {
+		if ($co["cp_cv_id"]) {
+			$first[]=array("cp_id"=>$fid,"cp_name"=>"Firma","cp_givenname"=>"allgemein");
+			$contact=getAllKontakt($co["cp_cv_id"]);
+			if ($contact) {
+				$contact=array_merge($first,$contact);
+			} else {
+				$first[]=array("cp_id"=>$pid,"cp_name"=>$co["cp_name"],"cp_givenname"=>$co["cp_givenname"]);
+		                $contact=$first;
+        		}
+		} else {
+			$contact[]=array("cp_id"=>$pid,"cp_name"=>$co["cp_name"],"cp_givenname"=>$co["cp_givenname"]);
+		}
+	}
+	foreach($contact as $zeile) {
 		$t->set_var(array(
 			Sel => ($selectC==$zeile["cp_id"])?" selected":"",
 			CID	=>	$zeile["cp_id"],

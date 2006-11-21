@@ -155,12 +155,13 @@ global $db;
 	$call=getCall($Anzeige,$_SESSION["loginCRM"],"U");
 	$caller="";
 	if ($call["CID"]!=$CID) {
-		saveTextCall($Anzeige);
+		//saveTextCall($Anzeige);
 		if ($call["bezug"]==0) {
 			$sql="update telcall set caller_id=$CID where id=$Anzeige";
 		} else {
 			$sql="update telcall set bezug=0, caller_id=$CID where id=$Anzeige";
 		}
+		$rc=$db->query($sql);
 	} 
 	if ($TID<>$Anzeige) {
 		if ($call["bezug"]==0) {

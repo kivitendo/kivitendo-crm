@@ -6,7 +6,7 @@
 	$nr=$_GET["nr"];
 	$id=$_GET["id"];
 	$tmp=getRechParts(substr($id,1),substr($id,0,1));
-	$adr=getRechAdr(substr($id,1),substr($id,0,1));
+	$adr=getRechAdr(substr($id,1),substr($id,0,1),$tmp[0]["shipto_id"]);
 	if ($adr["shiptoname"]) { $NAME=$adr["shiptoname"]; } else { $NAME=$adr["name"]; }
 	if ($adr["shiptostreet"]) { $STRASSE=$adr["shiptostreet"]; } else { $STRASSE=$adr["street"]; };
 	if ($adr["shiptocity"]) { $ORT=$adr["shiptozipcode"]." ".$adr["shiptocity"]; } else { $ORT=$adr["zipcode"]." ".$adr["city"]; };		
@@ -37,10 +37,13 @@
 <body>
 <table width="100%" class="karte"><tr><td class="karte">
 <!-- Hier beginnt die Karte  ------------------------------------------->
+<table width="100%">
+<tr class='smal'><td>Rechnung Anschrift</td><td>Lieferanschrift</td><td></td></tr>
+<tr class='smal'><td><?= $adr["name"]."<br>".$adr["street"]."<br>".$adr["zipcode"]." ".$adr["city"] ?></td>
+	<td><?= $NAME."<br>".$STRASSE."<br>".$ORT ?></td
+	<td style="vertical-align:top" nowrap><?= $header." vom ".db2date($tmp[1]["transdate"]) ?><br><?= $header2 ?><br><?= $header3 ?></td></tr>
+</table>
 <table>
-<tr class='smal'><td colspan="3"><?= $NAME."<br>".$STRASSE."<br>".$ORT ?></td>
-	<td colspan="3" style="vertical-align:top" nowrap><?= $header." vom ".db2date($tmp[1]["transdate"]) ?><br><?= $header2 ?><br><?= $header3 ?></td></tr>
-
 <tr class='smal'><td>Menge</td><td>Einh.</td><td>Artikel</td><td>VKpreis</td><td>Einzelpreis</td><td>Summe</td></tr>
 <?
 $i=0;

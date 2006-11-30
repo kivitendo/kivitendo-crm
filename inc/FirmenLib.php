@@ -10,9 +10,9 @@
 function getShipStamm($id) {
 global $db;
 	if ($_SESSION["ERPver"]>="2.2.0.10") {
-		$sql="select S.*,BL.bundesland as shiptobundesland from shipto S left join bundesland BL on S.shiptobland=BL.id where S.module='CT' and S.trans_id=$id";
+		$sql="select S.*,BL.bundesland as shiptobundesland from shipto S left join bundesland BL on S.shiptobland=BL.id where S.module='CT' and S.trans_id=$id order by shipto_id limit 1";
 	} else {
-		$sql="select S.*,BL.bundesland as shiptobundesland from shipto S left join bundesland BL on S.shiptobland=BL.id where S.trans_id=$id";
+		$sql="select S.*,BL.bundesland as shiptobundesland from shipto S left join bundesland BL on S.shiptobland=BL.id where S.trans_id=$id limit 1";
 	}
 	$rs2=$db->getAll($sql);
 	if(!$rs2) {
@@ -103,7 +103,7 @@ global $db;
 			$row["size"]=$size[3];
 		}
 		$rs2=getShipStamm($id);
-		$rs3=getAllShipto($id);
+		$rs3=getAllShipto($id,$tab);
 		$shipcnt=(count($rs3));
 		if (!$rs2) {  // es ist keine abweichende Anschrift da
 			if ($ws) {	// soll dann aber mit Re-Anschrift gefüllt werden
@@ -157,7 +157,7 @@ global $db;
 * out: daten = array
 * Alle abweichende Anschriften einer Firma holen
 *****************************************************/
-function getAllShipto($id) {
+function getAllShipto($id,$tab="C") {
 global $db;
 	$sql="select distinct shiptoname,shiptodepartment_1,shiptodepartment_2,shiptostreet,shiptozipcode,";
 	$sql.="shiptocity,shiptocountry,shiptocontact,shiptophone,shiptofax,shiptoemail from shipto ";
@@ -166,9 +166,14 @@ global $db;
 		$sql.=" where trans_id=$id";
 	} else {
 		//$sql="select (A.id>0 or O.id>0) as vkdoc,S.*,O.id as oid,A.id as aid from shipto S ";
-		$sql.=" S left join  ar A on S.trans_id=A.id left join  oe O on S.trans_id=O.id  ";
-		$sql.=" where A.customer_id=$id or O.customer_id=$id or S.trans_id=$id";
 		//$sql.="A.customer_id=$id or O.customer_id=$id or S.trans_id=$id";
+		if ($tab=="C") {
+			$sql.=" S left join  ar A on S.trans_id=A.id left join  oe O on S.trans_id=O.id  ";
+			$sql.=" where A.customer_id=$id or O.customer_id=$id or S.trans_id=$id";
+		} else {
+			$sql.=" S left join  ap A on S.trans_id=A.id left join  oe O on S.trans_id=O.id  ";
+			$sql.=" where A.vendor_id=$id or O.vendor_id=$id or S.trans_id=$id";
+		}
 	}
 	$rs=$db->getAll($sql);  
 	return $rs;

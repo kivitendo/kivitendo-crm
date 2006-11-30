@@ -1373,11 +1373,35 @@ global $db;
 function getRechAdr($id,$tab) {
 global $db;
 	if ($tab=="R") {
-		$sql="select C.*,S.* from ar A left join shipto S on S.trans_id=A.id, customer C where A.id=$id and C.id=A.customer_id";
+		$rs=$db->getAll("select shipto_id from ar where id=$id");
+		if ($rs[0]["shipto_id"]>0) {
+			$sql="select C.*,S.* from ar A left join shipto S on S.shipto_id=A.shipto_id, customer C where A.id=$id and C.id=A.customer_id";
+		} else {
+			$sql="select C.*,S.* from ar A left join shipto S on S.trans_id=A.id, customer C where A.id=$id and C.id=A.customer_id";
+			if ($_SESSION["ERPver"]>="2.2.0.10") {
+				$sql.=" and S.module='AR'";
+			} 
+		}
 	} elseif ($tab=="V") {
-		$sql="select V.*,S.* from ap A left join shipto S on S.trans_id=A.id, vendor V where A.id=$id and V.id=A.vendor_id";
+		$rs=$db->getAll("select shipto_id from ar where id=$id");
+		if ($rs[0]["shipto_id"]>0) {
+			$sql="select V.*,S.* from ar A left join shipto S on S.shipto_id=A.shipto_id, vendor V where A.id=$id and V.id=A.vendor_id";
+		} else {
+			$sql="select V.*,S.* from ap A left join shipto S on S.trans_id=A.id, vendor V where A.id=$id and V.id=A.vendor_id";
+			if ($_SESSION["ERPver"]>="2.2.0.10") {
+				$sql.=" and S.module='AP'";
+			} 
+		}
 	} else {
-		$sql="select C.*,S.* from oe O left join shipto S on S.trans_id=O.id, customer C where O.id=$id and C.id=O.customer_id";
+		$rs=$db->getAll("select shipto_id from oe where id=$id");
+		if ($rs[0]["shipto_id"]>0) {
+			$sql="select C.*,S.* from oe O left join shipto S on S.shipto_id=O.shipto_id, customer C where O.id=$id and C.id=O.customer_id";
+		} else {
+			$sql="select C.*,S.* from oe O left join shipto S on S.trans_id=O.id, customer C where O.id=$id and C.id=O.customer_id";
+			if ($_SESSION["ERPver"]>="2.2.0.10") {
+				$sql.=" and S.module='OE'";
+			} 
+		}
 	}
 	$rs=$db->getAll($sql);
 	if($rs) {
@@ -1859,7 +1883,7 @@ global $db;
 	if ($rs) { 
 		if ($kdhelp) if (count($rs)>0) { return $rs;} else { return false; };
 		foreach ($rs as $row) {
-			$data[$row["hauptgruppe"]][]=array("name"=>$row["name"],"id"=>$row["id"]);
+			$data[$row["hauptgruppe"]][]=array("name"=>$row["name"],"id"=>$row["id"],"kdhelp"=>$row["kdhelp"]);
 		}
 		return $data;
 	} else {

@@ -120,7 +120,8 @@ global $db;
 					shiptophone => $row["phone"],
 					shiptofax => $row["fax"],
 					shiptoemail => $row["email"],
-					shiptocountry => $row["country"]
+					shiptocountry => $row["country"],
+					shipto_id => -1
 				);
 			} else {  // leeres Array bilden
 				$row2=Array(
@@ -136,7 +137,8 @@ global $db;
 					shiptophone => "",
 					shiptofax => "",
 					shiptoemail => "",
-					shiptocountrycountry => ""
+					shiptocountrycountry => "",
+					shipto_id => ""
 				);
 			}
 		} else {
@@ -421,11 +423,19 @@ global $db;
 					$sql1a="insert into shipto (trans_id) values ($fid)";
 				}
 				$rc1=$db->query($sql1a);
+				$sql1="update shipto set $query1 where trans_id=$fid";
+				$rc1=$db->query($sql1);
+			} else {
+				if ($_SESSION["ERPver"]>="2.2.0.10") {
+					$sql1="update shipto set $query1 where shipto_id=".$daten["shipto_id"];
+					$rc1=$db->query($sql1);
+				} else {
+					$sql1="update shipto set $query1 where trans_id=$fid";
+					$rc1=$db->query($sql1);
+				}
 			}
-			$sql1="update shipto set $query1 where trans_id=$fid";
-			$rc1=$db->query($sql1);
 			mkTelNummer($fid,"S",$tels2);
-		} else {
+		} /*else {
 			if ($_SESSION["ERPver"]>="2.2.0.10") { //gibt es schon eine Lieferanschrift
 				$sql1q="select count(*) from shipto where trans_id=$fid and module='CT'";
 				$delshipto=" and module='CT'";
@@ -438,7 +448,7 @@ global $db;
 				$sql="delete from shipto where trans_id=$fid $delshipto";
 				$rc=$db->query($sql);
 			}
-		}
+		}*/
 		$rc0=$db->query($sql0);
 		if ($rc0 and $rc1) { $rc=$fid; }
 		else { $rc=-1; $fehler="unbekannt"; };
@@ -738,6 +748,7 @@ global $cp_sonder;
 				kreditlim	=> $daten["creditlimit"],
 				op		=> $daten["op"],
 				preisgrp	=> $daten["preisgroup"],
+				shipto_id	=> $daten["shipto_id"],
 				shiptoname	=> $daten["shiptoname"],
 				shiptodepartment_1	=> $daten["shiptodepartment_1"],
 				shiptodepartment_2	=> $daten["shiptodepartment_2"],

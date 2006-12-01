@@ -1372,42 +1372,56 @@ global $db;
 *****************************************************/
 function getRechAdr($id,$tab) {
 global $db;
-	if ($tab=="R") {
-		$rs=$db->getAll("select shipto_id from ar where id=$id");
-		if ($rs[0]["shipto_id"]>0) {
-			$sql="select C.*,S.* from ar A left join shipto S on S.shipto_id=A.shipto_id, customer C where A.id=$id and C.id=A.customer_id";
+	if ($tab=="R" || $tab=="V") {
+		if ($tab=="R") { $tab="ar"; $firma="customer"; } else { $tab="ap"; $firma="vendor"; };
+		if ($_SESSION["ERPver"]>="2.2.0.10") {
+			$rs=$db->getAll("select shipto_id from $tab where id=$id");
+			if ($rs[0]["shipto_id"]>0) {
+				$sql="select F.*,S.* from $tab A left join shipto S on S.shipto_id=A.shipto_id, $firma F where ";
+				$sql.="A.id=$id and F.id=A.".$firma."_id";
+			} else {
+				$rs=$db->getAll("select * from shipto where trans_id=$id and module='".strtoupper($tab)."'");
+				if ($rs[0]["shipto_id"]>0) {
+					$sql="select F.*,S.* from $tab A left join shipto S on S.trans_id=A.id, $firma F where ";
+					$sql.="A.id=$id and F.id=A.".$firma."_id and S.module='".strtoupper($tab)."'";
+				} else {
+					$sql="select F.* from $tab A left join $firma F on F.id=A.".$firma."_id where A.id=$id";
+				}
+			}
+			$rs=$db->getAll($sql);
+			if($rs) { return $rs[0]; } else { return false;	};
 		} else {
-			$sql="select C.*,S.* from ar A left join shipto S on S.trans_id=A.id, customer C where A.id=$id and C.id=A.customer_id";
-			if ($_SESSION["ERPver"]>="2.2.0.10") {
-				$sql.=" and S.module='AR'";
-			} 
-		}
-	} elseif ($tab=="V") {
-		$rs=$db->getAll("select shipto_id from ar where id=$id");
-		if ($rs[0]["shipto_id"]>0) {
-			$sql="select V.*,S.* from ar A left join shipto S on S.shipto_id=A.shipto_id, vendor V where A.id=$id and V.id=A.vendor_id";
-		} else {
-			$sql="select V.*,S.* from ap A left join shipto S on S.trans_id=A.id, vendor V where A.id=$id and V.id=A.vendor_id";
-			if ($_SESSION["ERPver"]>="2.2.0.10") {
-				$sql.=" and S.module='AP'";
-			} 
+			$sql="select * from $firma F left join shipto S on F.id=S.trans_id left join $tab A on A.".$firma."_id=F.id where A.id=$id";
+			$rs=$db->getAll($sql);
+			if ($rs[0]["id"]>0) {
+				return $rs[0];
+			} else {
+				$rs=$db->getAll("select * from $firma F left join $tab A on A.".$firma."_id=F.id where A.id=$id");
+				if($rs) { return $rs[0]; } else { return false;	};
+			}
 		}
 	} else {
-		$rs=$db->getAll("select shipto_id from oe where id=$id");
-		if ($rs[0]["shipto_id"]>0) {
-			$sql="select C.*,S.* from oe O left join shipto S on S.shipto_id=O.shipto_id, customer C where O.id=$id and C.id=O.customer_id";
+		if ($_SESSION["ERPver"]>="2.2.0.10") {	
+			$firma="customer";
+			$rs=$db->getAll("select shipto_id from oe where id=$id");
+			if ($rs[0]["shipto_id"]>0) {
+				$sql="select F.*,S.* from oe O left join shipto S on S.shipto_id=O.shipto_id, $firma F where ";
+				$sql.="O.id=$id and C.id=O.".$firma."_id";
+			} else {
+				$rs=$db->getAll("select * from shipto where trans_id=$id and module='OE'");
+				if ($rs[0]["shipto_id"]>0) {
+					$sql="select F.*,S.* from oe O left join shipto S on S.trans_id=O.id, $firma F where ";
+					$sql.="O.id=$id and F.id=O.".$firma."_id and S.module='OE'";
+				} else {
+					$sql="select F.* from oe O left join $firma F on F.id=O.".$firma."_id where O.id=$id";
+				}
+			}
+			$rs=$db->getAll($sql);
+			if($rs) { return $rs[0]; } else { return false;	};
 		} else {
-			$sql="select C.*,S.* from oe O left join shipto S on S.trans_id=O.id, customer C where O.id=$id and C.id=O.customer_id";
-			if ($_SESSION["ERPver"]>="2.2.0.10") {
-				$sql.=" and S.module='OE'";
-			} 
+			$rs=$db->getAll("select * from $firma F left join $tab O on O.".$firma."_id=F.id where O.id=$id");
+			if($rs) { return $rs[0]; } else { return false;	};
 		}
-	}
-	$rs=$db->getAll($sql);
-	if($rs) {
-		return $rs[0];
-	} else {
-		return false;
 	}
 }
 

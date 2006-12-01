@@ -46,11 +46,11 @@ class myDB extends DB {
 	
 	function myDB($host,$user,$pwd,$db,$port,$showErr=false) {
 		if ($pwd>"") {
-			$passwd=":".$this->uudecode($pwd);
+			$passwd=$this->uudecode($pwd);
 		} else {
 			$passwd="";
 		}
-		//$dns="pgsql://$user$passwd@$host/$db";
+		//$dns="pgsql://$user$passwd@$host:$port/$db";
 		$dsn = array(
                     'phptype'  => 'pgsql',
                     'username' => $user,
@@ -62,7 +62,7 @@ class myDB extends DB {
 		$this->showErr=$showErr;
 		$this->db=DB::connect($dsn);
 		if (!$this->db || DB::isError($this->db)) {
-			if ($this->log) $this->writeLog("Connect $dsn");
+			if ($this->log) $this->writeLog("Connect $dns");
 			$this->dbFehler("Connect ".print_r($dsn,true),$this->db->getMessage()); 
 			die ($this->db->getMessage());
 		}

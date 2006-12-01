@@ -31,6 +31,12 @@
 			$link3="liefer3.php?fid=".$fid;
 			$link4="liefer4.php?pid=".$_GET["id"]."&fid=".$co["cp_cv_id"];
 		}
+		if (trim($co["cp_grafik"])<>"") {
+                        $Image="<img src='dokumente/".$_SESSION["mansel"]."/".$_GET["id"]."/kopf.".$co["cp_grafik"]."' ".$co["size"].">";
+                } else {
+                        $Image="";
+                }
+
 		if ($co["cp_homepage"]<>"") {
 			$internet=(preg_match("°://°",$co["cp_homepage"]))?$co["cp_homepage"]:"http://".$co["cp_homepage"];
 		};
@@ -58,7 +64,7 @@
 			www	=> $internet,
 			Abteilung	=> $co["cp_abteilg"],
 			Position	=> $co["cp_position"],
-			GebDat	=> db2date($co["cp_gebdatum"]),
+			GDate 	=> db2date($co["cp_gebdatum"]),
 			Notiz	=> ereg_replace("\n","<br>",$co["cp_notes"]),
 			LInr => $fa["vendornumber"],
 			Lname => $fa["name"],
@@ -68,7 +74,8 @@
 			Ort => $fa["city"],
 			Street => $fa["street"],
 			PID => $_GET["id"],
-			FID => $fid
+			FID => $fid,
+			IMG => $Image
 			));
 			$t->set_block("co1","Liste","Block");
 			$i=0;
@@ -163,7 +170,7 @@
 				PlzC => "",
 				OrtC => "",
 				StreetC => "",
-				GebDat => "",
+				GDate => "",
 				PID => "",
 				Notiz => "",
 				Telefon => "",
@@ -171,7 +178,8 @@
 				eMail => "",
 				Fax => "",
 				www => "",
-				FID => $fid
+				FID => $fid,
+				IMG => ""
 			));
 		}
 		$t->pparse("out",array("co1"));

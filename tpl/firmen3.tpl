@@ -18,6 +18,7 @@
 <!-- Beginn Code ------------------------------------------->
 <form name="neueintrag" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="id" value="{id}">
+<input type="hidden" name="shipto_id" value="{shipto_id}">
 <input type="hidden" name="customernumber" value="{customernumber}">
 <input type="hidden" name="employee" value="{employee}">
 <input type="hidden" name="grafik" value="{grafik}">

@@ -35,21 +35,21 @@ Ums&auml;tze/Angebote von Monat {Monat}
 	<table width="400px">
 		<tr>
 			<th class="smal" width="10%">Datum</th>
-			<th class="smal">Art</th>
 			<th class="smal">Nummer</th>
 			<th class="smal">Netto</th>
 			<th class="smal">Brutto</th>
 			<th class="smal" width="10%"></th>
-			<th class="smal">Staus</th>
+			<th class="smal">Art</th>
+			<th class="smal">OP</th>
 		</tr>
 <!-- BEGIN Liste -->
 		<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showP('{Typ}{RNid}','{RNr}');">
 			<td class="smal">{Datum}</td>
-			<td class="smal">&nbsp;{Typ}</td>
 			<td class="smal">&nbsp;{RNr}&nbsp;</td>
 			<td class="smal re">{RSumme}&nbsp;&nbsp;</td>
 			<td class="smal re">{RBrutto}&nbsp;</td>
 			<td class="smal">{Curr}</td>
+			<td class="smal">&nbsp;{Typ}</td>
 			<td class="smal">&nbsp;{offen}</td>
 		</tr>
 <!-- END Liste -->

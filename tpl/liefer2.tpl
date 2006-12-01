@@ -6,15 +6,17 @@
 	<script language="JavaScript">
 	<!--
 		function showItem(id) {
-			F1=open("getCall.php?Q=VC&pid={PID}&Bezug="+id,"Caller","width=610, height=600, left=100, top=50, scrollbars=yes");
+			F1=open("getCall.php?Q=VC&pid={PID}&Bezug="+id,"Caller","width=670, height=600, left=100, top=50, scrollbars=yes");
 		}
 		function anschr() {
-			F1=open("showAdr.php?PID={PID}","Adresse","width=340, height=400, left=100, top=50, scrollbars=yes");
+			F1=open("showAdr.php?PID={PID}","Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
 		}
 		function notes() {
 			F1=open("showNote.php?pid={PID}","Notes","width=400, height=400, left=100, top=50, scrollbars=yes");
                 }
-
+		function vcard(){
+			document.location.href="vcardexp.php?pid={PID}";
+		}	
 	//-->
 	</script>
 <body>
@@ -53,7 +55,7 @@
 	<div style="float:left; width:30%; height:210px; text-align:right; border-bottom: 1px solid black;" class="gross">
 		{PID} &nbsp; <a href="#" onCLick="anschr();"><img src="image/brief.png" border="0" style="visibility:{none};"></a><br />
 		{IMG}</br >
-		{GebDat}</br />
+		{GDate}</br />
 		{Position}<br />
 		{Abteilung}<br />
 	</div>
@@ -69,7 +71,7 @@
 <span style="float:left; width:46%; height:430px; text-align:left; border: 1px solid black; border-left:0px;">
 <table width="99%">
 <!-- BEGIN Liste -->
-	<tr  class="smal" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showItem({IID});">
+	<tr  height="14px" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showItem({IID});">
 		<td class="smal" width="105">{Datum} {Zeit}</td>
 		<td class="smal" style="width:38;text-align:right;">{Nr}&nbsp;</td>
 		<td class="smal le">{Betreff}</td>
@@ -79,12 +81,12 @@
 </table>
 	<!--span style="float:left;  text-align:left; border:0px solid black"-->	
 	<span style="position:absolute; bottom:10px; visibility:{none};">
-		<form name="ksearch" onSubmit="return ks();"> &nbsp; 
+		<form name="ksearch"> &nbsp; 
 		<a href="liefer2.php?id={PID}&start={PREV}"><img src="image/leftarrow.png" align="middle" border="0" title="zur&uuml;ck"></a> 
 		<a href="liefer2.php?id={PID}&start={PAGER}" class="bold"><img src="image/reload.png" align="middle" border="0" title="reload"></a> 
 		<a href="liefer2.php?id={PID}&start={NEXT}"><img src="image/rightarrow.png" align="middle" border="0" title="mehr"></a>&nbsp;
 		<input type="text" name="suchwort" size="20">
-		<input type="image" src="image/suchen_kl.png" name="ok" value="suchen" align="middle" border="0">
+		<input type="submit" src="image/suchen_kl.png" name="ok" value="suchen" align="middle" border="0">
 		</form>
 	</span>
 </span>

@@ -41,7 +41,7 @@
 <tr class='smal'><td>Rechnung Anschrift</td><td>Lieferanschrift</td><td></td></tr>
 <tr class='smal'><td><?= $adr["name"]."<br>".$adr["street"]."<br>".$adr["zipcode"]." ".$adr["city"] ?></td>
 	<td><?= $NAME."<br>".$STRASSE."<br>".$ORT ?></td
-	<td style="vertical-align:top" nowrap><?= $header." vom ".db2date($tmp[1]["transdate"]) ?><br><?= $header2 ?><br><?= $header3 ?></td></tr>
+	<td style="vertical-align:top; text-align:right;" nowrap><?= $header." vom ".db2date($tmp[1]["transdate"]) ?><br><?= $header2 ?><br><?= $header3 ?></td></tr>
 </table>
 <table>
 <tr class='smal'><td>Menge</td><td>Einh.</td><td>Artikel</td><td>VKpreis</td><td>Einzelpreis</td><td>Summe</td></tr>

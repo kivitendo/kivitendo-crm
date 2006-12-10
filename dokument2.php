@@ -1,5 +1,5 @@
 <?
-// $Id: dokument2.php,v 1.3 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	$did=($_GET["did"])?$_GET["did"]:$_POST["did"];
@@ -31,6 +31,7 @@
 			file =>	$docdata["document"]["file"],
 			sel1 =>	($docdata["document"]["applikation"]=="O")?"checked":"",
 			sel2 =>	($docdata["document"]["applikation"]=="R")?"checked":"",
+			sel3 => ($docdata["document"]["applikation"]=="B")?"checked":"",
 			did => $did
 		));
 	$t->pparse("out",array("doc"));

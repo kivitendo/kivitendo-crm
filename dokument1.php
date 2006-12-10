@@ -1,5 +1,5 @@
 <?
-// $Id: dokument1.php,v 1.3 2005/11/02 10:37:51 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/persLib.php");
@@ -20,11 +20,25 @@
 	$i=0;
 	if (!$user) $user[0]=array(docid=>0,vorlage=>"Keine Vorlagen eingestellt",applikation=>"O");
 	if ($user) foreach($user as $zeile) {
+		switch ($zeile["applikation"]) {
+			case "O": 
+				$format = "OOo";
+				break;
+			case "R": 
+				$format = "RTF";
+				break;
+			case "B": 
+				$format = "BIN";
+				break;
+			default: 
+				$format = "n/a";
+				break;
+		}
 		$t->set_var(array(
 			LineCol	=> $bgcol[($i%2+1)],
 			did =>	$zeile["docid"],
 			Bezeichnung =>	$zeile["vorlage"],
-			Appl	=>	($zeile["applikation"]=="O")?"OOo":"RTF",
+			Appl	=>	$format,
 		));
 		$i++;
 		$t->parse("Block","Liste",true);

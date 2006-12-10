@@ -66,11 +66,22 @@
 	$i=0;
 	if (!$user) $user[0]=array(docid=>0,vorlage=>"Keine Vorlagen eingestellt",applikation=>"O");
 	if ($user) foreach($user as $zeile) {
+		switch ($zeile['applikation']) {
+                        case "O":
+                                $format = "OOo";
+                                break;
+                        case "R":
+                                $format = "RTF";
+                                break;
+                        case "B":
+                                $format = "BIN";
+                                break;
+                }
 		$t->set_var(array(
 			LineCol	=> $bgcol[($i%2+1)],
 			ID =>	$zeile["docid"],
 			Bezeichnung =>	$zeile["vorlage"],
-			Appl	=>	($zeile["applikation"]=="O")?"OOo":"RTF",
+			Appl	=>	$format,
 		));
 		$i++;
 		$t->parse("Block","Liste",true);

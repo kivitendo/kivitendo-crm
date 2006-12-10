@@ -16,9 +16,15 @@
 		if ($docdata["document"]["applikation"]=="O") {
 			include('inc/phpOpenOffice.php');
 			$doc = new phpOpenOffice();
+			$fname=substr($docdata["document"]["file"],0,-4);
 		} else if ($docdata["document"]["applikation"]=="R") {
 			include('inc/phpRtf.php');
 			$doc = new phpRTF();
+			$fname=substr($docdata["document"]["file"],0,-4);
+		} else if ($docdata["document"]["applikation"]=="B") {
+			require('inc/phpBIN.php');
+			$doc = new phpBIN();
+			$fname=$docdata["document"]["file"];
 		}
 		$doc->loadDocument("vorlage/".$docdata["document"]["file"]);
 		$vars= array();
@@ -33,7 +39,7 @@
 		$data["CRMUSER"]=$_SESSION["loginCRM"];
 		//$doc->download(date("YmdHi").substr($docdata["document"]["file"],0,-4));
 		$pre=date("YmdHi");
-		$doc->prepsave($pre.substr($docdata["document"]["file"],0,-4));
+		$doc->prepsave($pre.$fname);
 		insFormDoc($data,$pre.$docdata["document"]["file"]);
 		$doc->clean();
 		$knopf="Dokument erstellt: <a href='./dokumente/".$_SESSION["mansel"]."/".$data["CID"]."/".$pre.$docdata["document"]["file"]."'>&lt;shift&gt;+&lt;klick&gt;</a>";

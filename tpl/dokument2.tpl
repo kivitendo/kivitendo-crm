@@ -1,4 +1,4 @@
-<!-- $Id: dokument2.tpl,v 1.3 2005/11/02 10:38:58 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -44,7 +44,8 @@
 <input type="file" name="file" size="30"><br>Vorlage<br><br>
 Dokumententyp
 <input type="radio" name="applikation" value="O" {sel1}>OOo
-<input type="radio" name="applikation" value="R" {sel2}>RTF<br><br>
+<input type="radio" name="applikation" value="R" {sel2}>RTF
+<input type="radio" name="applikation" value="B" {sel3}>Bin&auml;rfile<br><br>
 <input type="submit" name="ok" value="sichern"> <input type="submit" name="del" value="l&ouml;schen">
 </td></tr></table>
 <!-- Hier endet die Karte ------------------------------------------->

@@ -224,11 +224,6 @@ CREATE TABLE wissencategorie(
 	kdhelp boolean
 );
 
-CREATE TABLE leads(
-	id integer DEFAULT nextval('id'::text) NOT NULL,
-	lead character varying(50)
-);
-
 CREATE TABLE wissencontent(
 	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	initdate timestamp without time zone NOT NULL,

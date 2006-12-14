@@ -69,6 +69,14 @@ echo "Konfigurationsdatei erweitern ";
 	};
 
 echo "Datenbankinstanz ".$_SESSION["dbname"]." erweitern : ";
+	$sql="select last_value from id";
+	$rs=$db->getAll($sql);
+	if ($rs) $lastID=$rs[0]["last_value"]+1;
+	fputs($log,"Sequence ID: $lastID\n";
+	$sql="CREATE SEQUENCE 'crmid' start $lastID increment 1 maxvalue 9223372036854775807 minvalue 1 cache 1";
+	$rc=$db->query($sql);
+	if ($rc) { echo "Sequence crmid erzeugt<br>"; fputs($log,"Sequence crmid erzeugt\n";}
+	else { echo "Fehler. Kann Sequence crmid nicht erzeugen."; fputs($log,"Sequence crmid mit $lastID nicht erzeugt\n"; exit(); };
 	$updatefile="update/update".$rc[0]["version"]."-$VERSION";
 	$updatefile=ereg_replace("\.","",$updatefile).".sql";
 	if (ob_get_level() == 0) ob_start();

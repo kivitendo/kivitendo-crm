@@ -1,4 +1,4 @@
-CREATE SEQUENCE "crmid" start 1 increment 1 maxvalue 9223372036854775807 minvalue 1 cache 1;
+--CREATE SEQUENCE "crmid" start 1 increment 1 maxvalue 9223372036854775807 minvalue 1 cache 1;
 
 CREATE TABLE telcallhistory (
 	id integer DEFAULT nextval('crmid'::text) NOT NULL,
@@ -20,11 +20,6 @@ CREATE TABLE wissencategorie(
 	name character varying(60),
 	hauptgruppe integer,
         kdhelp boolean
-);
-
-CREATE TABLE leads(
-	id integer DEFAULT nextval('id'::text) NOT NULL,
-	lead character varying(50)
 );
 
 CREATE TABLE wissencontent(
@@ -138,9 +133,6 @@ INSERT INTO bundesland (country,bundesland) VALUES ('A','Tirol');
 INSERT INTO bundesland (country,bundesland) VALUES ('A','Vorarlberg');
 INSERT INTO bundesland (country,bundesland) VALUES ('A','Wien');
 
-
-
-
 ALTER TABLE customer ADD COLUMN lead integer;
 ALTER TABLE customer ADD COLUMN leadsrc character varying(25);
 ALTER TABLE customer ADD COLUMN bland int4;
@@ -157,5 +149,22 @@ UPDATE termine SET cause=tmp;
 ALTER TABLE termine DROP COLUMN tmp;
 
 UPDATE employee SET kdview = 1;
+
+ALTER TABLE telcall ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
+ALTER TABLE wiedervorlage ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
+ALTER TABLE documenttotc  ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
+ALTER TABLE termine ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
+ALTER TABLE termdate ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
+ALTER TABLE custmsg ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
+ALTER TABLE crm ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
+ALTER TABLE labels ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
+ALTER TABLE labeltxt ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
+ALTER TABLE maschine ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
+ALTER TABLE documents ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
+ALTER TABLE contract ALTER COLUMN cid SET DEFAULT nextval('crmid'::text)
+ALTER TABLE docvorlage ALTER COLUMN docid SET DEFAULT nextval('crmid'::text)
+ALTER TABLE docfelder ALTER COLUMN fid SET DEFAULT nextval('crmid'::text)
+ALTER TABLE gruppenname ALTER COLUMN grpid SET DEFAULT nextval('crmid'::text)
+ALTER TABLE grpusr ALTER COLUMN gid SET DEFAULT nextval('crmid'::text)
 
 INSERT INTO crm (uid,datum,version) VALUES (0,now(),'1.3.0');

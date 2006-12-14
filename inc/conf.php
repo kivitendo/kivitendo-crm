@@ -15,18 +15,24 @@ define("FONTART","2");
 define("FONTSTYLE","1");
 //Zahl ist Bit-stelle 1 = 1, 2 = 2, 3 = 4, 4 = 8...
 $cp_sonder=array(1 => "News", 2 => "Test 1");
-$showErr=false;
 $logmail=true;
-$tinymce=false;
 $jcalendar=true;
 $listLimit=200;
 $jpg=false;
 $showErr=false;
-$logmail=true;
-$tinymce=false;
-$jcalendar=true;
-$listLimit=200;
 $CallEdit = true;
 $CallDel = true;
+//Verschiedene Map-Anbieter können hier eingestellt werden
+//Leerzeichenersatz
+$planspace="-";
+//URL
+$stadtplan="http://www.goyellow.de/map/%TOZIPCODE%-%TOCITY%/%TOSTREET%";
+//viamichelin
+//$planspace="+";
+//$stadtplan="http://www.viamichelin.de/viamichelin/deu/dyn/controller/mapPerformPage?strAddress=%TOSTREET%&strCP=%TOZIPCODE%&strLocation=%TOCITY%";
+//Google
+//$planspace="+";
+//$stadtplan="http://maps.google.de/maps?f=q&hl=de&q=%TOSTREET%,%TOZIPCODE%+%TOCITY%";
+//echter name des ERP-Verzeichnis
 $ERPNAME="lx-office-erp"
 ?>

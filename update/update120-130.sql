@@ -150,21 +150,21 @@ ALTER TABLE termine DROP COLUMN tmp;
 
 UPDATE employee SET kdview = 1;
 
-ALTER TABLE telcall ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
-ALTER TABLE wiedervorlage ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
-ALTER TABLE documenttotc  ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
-ALTER TABLE termine ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
-ALTER TABLE termdate ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
-ALTER TABLE custmsg ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
-ALTER TABLE crm ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
-ALTER TABLE labels ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
-ALTER TABLE labeltxt ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
-ALTER TABLE maschine ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
-ALTER TABLE documents ALTER COLUMN id SET DEFAULT nextval('crmid'::text)
-ALTER TABLE contract ALTER COLUMN cid SET DEFAULT nextval('crmid'::text)
-ALTER TABLE docvorlage ALTER COLUMN docid SET DEFAULT nextval('crmid'::text)
-ALTER TABLE docfelder ALTER COLUMN fid SET DEFAULT nextval('crmid'::text)
-ALTER TABLE gruppenname ALTER COLUMN grpid SET DEFAULT nextval('crmid'::text)
-ALTER TABLE grpusr ALTER COLUMN gid SET DEFAULT nextval('crmid'::text)
+ALTER TABLE telcall ALTER COLUMN id SET DEFAULT nextval('crmid'::text);
+ALTER TABLE wiedervorlage ALTER COLUMN id SET DEFAULT nextval('crmid'::text);
+ALTER TABLE documenttotc  ALTER COLUMN id SET DEFAULT nextval('crmid'::text);
+ALTER TABLE termine ALTER COLUMN id SET DEFAULT nextval('crmid'::text);
+ALTER TABLE termdate ALTER COLUMN id SET DEFAULT nextval('crmid'::text);
+ALTER TABLE custmsg ALTER COLUMN id SET DEFAULT nextval('crmid'::text);
+ALTER TABLE crm ALTER COLUMN id SET DEFAULT nextval('crmid'::text);
+ALTER TABLE labels ALTER COLUMN id SET DEFAULT nextval('crmid'::text);
+ALTER TABLE labeltxt ALTER COLUMN id SET DEFAULT nextval('crmid'::text);
+ALTER TABLE maschine ALTER COLUMN id SET DEFAULT nextval('crmid'::text);
+ALTER TABLE documents ALTER COLUMN id SET DEFAULT nextval('crmid'::text);
+ALTER TABLE contract ALTER COLUMN cid SET DEFAULT nextval('crmid'::text);
+ALTER TABLE docvorlage ALTER COLUMN docid SET DEFAULT nextval('crmid'::text);
+ALTER TABLE docfelder ALTER COLUMN fid SET DEFAULT nextval('crmid'::text);
+ALTER TABLE gruppenname ALTER COLUMN grpid SET DEFAULT nextval('crmid'::text);
+ALTER TABLE grpusr ALTER COLUMN gid SET DEFAULT nextval('crmid'::text);
 
 INSERT INTO crm (uid,datum,version) VALUES (0,now(),'1.3.0');

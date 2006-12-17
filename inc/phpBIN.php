@@ -52,68 +52,33 @@
 	}
 
         /*
-            finds a single marker and saves start- and endpositions in member variable
-        */
-
-        function findMarker ($_marker) {
-            $marker = $this->START_DELIMETER.$_marker;
-            // startposition of marker
-            $start_pos =  strpos ($this->content, $marker);
-            // endposition of marker
-            $end_pos = strpos($this->content, $this->END_DELIMETER, $start_pos);
-            $length = $end_pos - $start_pos + strlen($this->END_DELIMETER);
-
-            if ($start_pos && $end_pos) {
-
-                $this->markers[$_marker] = array(
-                        "start" => $start_pos,
-                        "end" => $end_pos,
-                        "length" => $length,
-                        "original" => substr($this->content, $start_pos, $length)
-                );
-                return true;
-            } else return false;
-        }
-
-
-        /*
             Replace Markers
         */
         function assign ($_marker, $_marker_content) {
-            if ($this->findMarker($_marker)) {
-                $content_length = strlen($_marker_content);
-
-                switch ($diff = $content_length - $this->markers[$_marker]['length']) {
-                    case ($diff < 0):
-                        // Marker > Content
-                        for ($i=0; $i < abs($diff); $i++) $empty .= $this->SPACE;
-                        $content = $_marker_content.$empty;
-                        break;
-                    case ($diff > 0):
-                        // Content > Marker
-                        $content = substr($_marker_content, 0, $this->markers[$_marker]['length']);
-                        break;
-                    default:
-                        $content = $_marker_content;
-                        break;
-                }
-
-                if (strlen($content) != $this->markers[$_marker]['length'])
-                    die("assign: Markerlength differs from marker content.");
-
-                $this->markers[$_marker]['content'] = $content;
-
+	    $suche="/".$this->START_DELIMETER.$_marker."[ ]+?".$this->END_DELIMETER."/i";
+	    preg_match($suche,$this->content,$gefunden);
+	    if ($gefunden) {
+		$length=strlen($gefunden[0]);
+		$this->markers[$_marker]["length"]=$length;
+		$this->markers[$_marker]["original"]=$suche;
+		if (strlen($_marker_content)>$length) {
+		        $content=substr($_marker_content,0,$length);
+		} else if (strlen($_marker_content)<$length) {
+			$content=$_marker_content;
+		        while (strlen($content) < $length) {
+	                	$content.=" ";
+			}
+	        } else {
+			$content=$_marker_content;
+		}
+		$this->markers[$_marker]['content'] = $content;
             } else return false;
-        }
+	}
 
         function replaceMarkers() {
             $count = 0;
             foreach ($this->markers as $marker => $replace) {
-                if (strlen($replace['original']) != $replace['length']) {
-                    die("replaceMarkers: Markerlength differs from marker content.");
-                }
-
-                $new_content = str_replace($replace['original'], $replace['content'], $this->content);
+		$new_content = preg_replace($replace['original'], $replace['content'], $this->content);
                 $this->content = $new_content;
                 $count++;
             }
@@ -170,7 +135,6 @@
 
 #    $xls = new xlsTemplate("test.xls");
 #    $xls->assign("NAME", "Timo");
-#    $xls->assign("ADRESSE1", "Dieses ist eine lange Adresse");
 #    $xls->replaceMarkers();
 #    $xls->sendFile();
 

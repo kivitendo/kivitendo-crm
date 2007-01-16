@@ -2096,4 +2096,35 @@ global $db;
 		return false;
 	}
 }
+function saveMailVorlage($data) {
+global $db;
+	if ($data["MID"]) {
+		$sql="update mailvorlage set cause='%s', c_long='%s' where id = %d";
+		$rc=$db->query(sprintf($sql,$data["Subject"],$data["BodyText"],$data["MID"]));
+	} else {
+		$sql="insert into mailvorlage (cause,c_long,employee) values ('%s','%s',%d)";
+		$rc=$db->query(sprintf($sql,$data["Subject"],$data["BodyText"],$_SESSION["loginCRM"]));
+	}
+	return $rc;
+}
+function getMailVorlage() {
+global $db;
+	$sql="select * from mailvorlage order by cause";
+	$rs=$db->getAll($sql);
+	if(!$rs) {
+		return false;
+	} else {
+		return $rs;
+	}
+}
+function getOneMailVorlage($MID) {
+global $db;
+	$sql="select * from mailvorlage where id = $MID";
+	$rs=$db->getAll($sql);
+	if(!$rs) {
+		return false;
+	} else {
+		return $rs[0];
+	}
+}
 ?>

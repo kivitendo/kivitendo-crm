@@ -22,17 +22,7 @@ $jpg=false;
 $showErr=false;
 $CallEdit = true;
 $CallDel = true;
-//Verschiedene Map-Anbieter können hier eingestellt werden
-//Leerzeichenersatz
 $planspace="-";
-//URL
 $stadtplan="http://www.goyellow.de/map/%TOZIPCODE%-%TOCITY%/%TOSTREET%";
-//viamichelin
-//$planspace="+";
-//$stadtplan="http://www.viamichelin.de/viamichelin/deu/dyn/controller/mapPerformPage?strAddress=%TOSTREET%&strCP=%TOZIPCODE%&strLocation=%TOCITY%";
-//Google
-//$planspace="+";
-//$stadtplan="http://maps.google.de/maps?f=q&hl=de&q=%TOSTREET%,%TOZIPCODE%+%TOCITY%";
-//echter name des ERP-Verzeichnis
-$ERPNAME="lx-office-erp"
+$ERPNAME="unstable"
 ?>

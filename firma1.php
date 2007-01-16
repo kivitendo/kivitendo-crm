@@ -32,6 +32,7 @@
 	if ($cp_sonder) while (list($key,$val) = each($cp_sonder)) {
 		$sonder.=($fa["sonder"] & $key)?"$val ":"";
 	}
+	$karte=str_replace(array("%TOSTREET%","%TOZIPCODE%","%TOCITY%"),array(strtr($fa["street"]," ",$planspace),$fa["zipcode"],$fa["city"]),$stadtplan);
 	$views=array(""=> "lie",1=>"lie",2=>"not",3=>"inf");
 	$t->set_var(array(
 			FID	=> $id,
@@ -85,6 +86,8 @@
 			PAGER	=> $pager,
 			NEXT	=> $next,
 			PREV	=> $prev,
+			KARTE	=> $karte,
+			zeigeplan => ($karte)?"visible":"hidden",
 			login	=> $_SESSION["employee"],
 			password	=> $_SESSION["password"],
 			leadsrc => $fa["leadsrc"],

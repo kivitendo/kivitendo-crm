@@ -8,6 +8,7 @@
 	include("inc/UserLib.php");
 	$ansicht=$_GET["ansicht"];
 	$datum=$_GET["datum"];
+	if ($datum=="") $datum=date("d.m.Y");
 	if (!$ansicht) $ansicht="T";
 	$t = new Template($base);
 	if ($ansicht=="T") {
@@ -86,14 +87,24 @@
 		}
 	} else if ($ansicht=="W") {
 		$kw=$_GET["kw"];
-		$year=$_GET["year"];
-		if (!$kw) {
+		if ($_GET["year"]>0) {
+			$year=$_GET["year"];
+		} else {
+			$year=substr($datum,6,4);
+		}
+		if (empty($kw) || $kw==0 || $kw=="") {
 			list($day,$month,$year)=split("\.",$datum);
 			$kw=date("W",mktime(0,0,0,$month,$day,$year));
 		}
+		$firstmonday = firstkw($year);
 		$ft=feiertage($year);
 		$ftk=array_keys($ft);
 		$x=mondaykw($kw,$year);
+		$kw=date("W",$x); 
+		$kw1=date("W",$x-604800);
+		$kw2=date("W",$x+604800);
+		$year1=date("Y",$x-604800);
+		$year2=date("Y",$x+604800);
 		$tag=date("d.m.Y",$x);
 		$startday=date("d",$x);
 		$data=getTermin($startday,date("m",$x),$year,"W");
@@ -165,18 +176,14 @@
 			}
 			$x+=60*60*24;
 		}
-		if ($kw>1) { $kw1=$kw-1; $year1=$year; }
-		else { $year1=$year-1; $kw1=strftime("%V",mktime(0,0,0,12,31,$year1));};
-		if ($kw<strftime("%V",mktime(0,0,0,12,31,$year))) { $kw2=$kw+1; $year2=$year; }
-		else { $year2=$year+1; $kw=1; }
 		$t->set_var(array(
 					tag => $tag,
 					kw => $kw,
 					kw1 => $kw1,
 					kw2 => $kw2,
-					year => $year,
 					year1 => $year1,
-					year2 => $year2
+					year2 => $year2,
+					year => $year,
 				));
 	} else if ($ansicht=="M") {
 		require ("terminmonat.php");

@@ -94,6 +94,8 @@
 			<img src="image/kreuzchen.gif" title="Gesperrter Kunde"style="visibility:{verstecke};" >
 			&nbsp;
 			<a href="#" onCLick="anschr(1);" title="Briefanschrift &amp; Etikett"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a></form>
+			&nbsp;
+			<span style="visibility:{zeigeplan};"><a href="{KARTE}" target="_blank"><img src="image/karte.gif" title="Ortsplan" border="0"></a></span>
 
 	</div>
 	<div style="float:both; width:100%; height:225px; text-align:left; border-bottom: 1px solid black;" class="gross">

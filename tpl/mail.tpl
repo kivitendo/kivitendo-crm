@@ -41,6 +41,12 @@
      				textEl.selectionEnd=0;
 			}
 		}
+		function getVorlage() {
+			x=document.mailform.vorlage.selectedIndex
+			if (x>0) {
+				document.location.href="mail.php?KontaktTo={KontaktTO}&MID="+document.mailform.vorlage.options[x].value;
+			}
+		}
 	//-->
 	</script>
 <body onLoad="doInit();" >
@@ -54,6 +60,7 @@
 <INPUT TYPE="hidden" name="QUELLE" value="{QUELLE}">
 <INPUT TYPE="hidden" name="KontaktTO" value="{KontaktTO}">
 <INPUT TYPE="hidden" name="KontaktCC" value="{KontaktCC}">
+<INPUT TYPE="hidden" name="MID" value="{vorlage}">
 <tr>
 	<td class="smal re" width="60px"></td>
 	<td class="smal re" width="*x"></td>
@@ -62,10 +69,20 @@
 <tr>
 	<td class="smal re">An:</td>
 	<td class="smal"><input type="text" name="TO" value="{TO}" size="65" maxlength="125" tabindex="1"> <input type="button" name="sto" value="suchen" onClick="suchMail('TO');"></td>
-	<td rowspan="7" class="le" style="vertical-align:middle;"><input type="submit" name="ok" value="senden"><br><br>{btn}</td>
+	<td rowspan="7" class="le" style="vertical-align:middle;"><input type="submit" name="ok" value="senden"><br><br>{btn}
+							<br><br><input type="submit" name="save" value="Vorlage
+sichern"></td>
 </tr><tr>
 	<td class="smal re">CC:</td>
 	<td class="smal"><input type="text" name="CC" value="{CC}" size="65" maxlength="125" tabindex="2"> <input type="button" name="scc" value="suchen" onClick="suchMail('CC');"></td>
+</tr><tr>
+	<td class="smal re">Vorlage:</td>
+	<td class="smal"><select name="vorlage" tabindex="3" style="width:480px;" onChange="getVorlage();">
+		<option value=""></option>
+<!-- BEGIN Betreff -->
+		<option value="{MID}">{CAUSE}</option>
+<!-- END Betreff -->
+	</select></td>
 </tr><tr>
 	<td class="smal re">Betreff:</td>
 	<td class="smal"><input type="text" name="Subject" value="{Subject}" size="67" maxlength="125" tabindex="3"></td>

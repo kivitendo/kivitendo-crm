@@ -33,6 +33,15 @@
 		$sonder.=($fa["sonder"] & $key)?"$val ":"";
 	}
 	$karte=str_replace(array("%TOSTREET%","%TOZIPCODE%","%TOCITY%"),array(strtr($fa["street"]," ",$planspace),$fa["zipcode"],$fa["city"]),$stadtplan);
+	if (preg_match("/%FROM/",$karte)) {
+		include "inc/UserLib.php";
+		$user=getUserStamm($_SESSION["loginCRM"]);
+		if ($user["Strasse"]<>"" and $user["Ort"]<>"" and $user["Plz"]) {
+			$karte=str_replace(array("%FROMSTREET%","%FROMZIPCODE%","%FROMCITY%"),array(strtr($user["Strasse"]," ",$planspace),$user["Plz"],$user["Ort"]),$karte);
+		} else {
+			$karte="";
+		};
+	}
 	$views=array(""=> "lie",1=>"lie",2=>"not",3=>"inf");
 	$t->set_var(array(
 			FID	=> $id,

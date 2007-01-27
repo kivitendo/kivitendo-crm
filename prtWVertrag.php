@@ -31,6 +31,11 @@
 	$pdf->SetY(237);
 	$pdf->SetX(20);
 	$pdf->MultiCell(0,6,$bem,0);
+	for ($j=2; $j<=$seiten; $j++) {
+		$hdl=@$pdf->ImportPage($j);
+		$pdf->addPage();
+	        $pdf->useTemplate($hdl);
+	}
 	$pdf->SetFont('Helvetica','',12);	
 	$i=300; $p=1;
 	foreach ($masch as $row) {

@@ -322,7 +322,7 @@ global $db;
 			branche => array(0,0,1,"Branche",25),		business_id => array(0,0,6,"Kundentyp",0),
 			owener => array(0,0,6,"CRM-User",0),		grafik => array(0,0,9,"Grafik",4),
 			lead => array(0,0,6,"Leadquelle",0),		leadsrc => array(0,0,1,"Leadquelle",15),
-			bland => array(0,0,6,"Bundesland",0),
+			bland => array(0,0,6,"Bundesland",0),		taxzone_id => array(0,1,6,"Steuerzone",0),
 			sonder => array(0,0,10,"SonderFlag",0),
 			shiptoname => array(1,0,1,"Liefername",75), 
 			shiptostreet => array(1,0,1,"Lieferstrasse",75),
@@ -647,7 +647,8 @@ global $cp_sonder;
 			T3		=> "",
 			employee => $_SESSION["loginCRM"],
 			Radio   => "&nbsp;alle<input type='radio' name='Typ' value='' checked>",
-			init	=> $_SESSION["employee"]
+			init	=> $_SESSION["employee"],
+			txid0 => "selected"
 			));
 		$t->set_block("fa1","TypListe","BlockT");
 		if ($kdtyp) foreach ($kdtyp as $row) {
@@ -769,7 +770,8 @@ global $cp_sonder;
 				init	=> ($daten["employee"])?$daten["employee"]:"ERP",
 				login	=> $_SESSION{"login"},
 				employee => $_SESSION["loginCRM"],
-				password	=> $_SESSION["password"]
+				password	=> $_SESSION["password"],
+				txid.$daten["taxzone_id"] => "selected"
 		));
 		$t->set_block("fa1","TypListe","BlockT");
 		if ($kdtyp) foreach ($kdtyp as $row) {

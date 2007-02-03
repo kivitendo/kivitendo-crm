@@ -145,7 +145,8 @@
 		Kundentyp: <span class="value">{kdtyp}</span> &nbsp;&nbsp;&nbsp; Quelle:<span class="value">{lead} {leadsrc}</span><br />
 		Rabatt: <span class="value">{rabatt}</span> &nbsp;&nbsp;&nbsp; Preisgruppe: <span class="value">{preisgrp}</span><br /><br />
 		Erstelldatum: <span class="value">{erstellt}</span> &nbsp;&nbsp;&nbsp; Ge&auml;ndert:<span class="value">{modify}</span <br />
-		Steuer-Nr.: <span class="value">{Taxnumber}</span> &nbsp;&nbsp;&nbsp; UStId: <span class="value">{USTID}</span><br /><br />
+		Steuer-Nr.: <span class="value">{Taxnumber}</span> &nbsp;&nbsp;&nbsp; UStId: <span class="value">{USTID}</span><br />
+		Steuerzone: <span class="value">{Steuerzone}</span><br /><br />
 		Zahlungsziel: <span class="value">{terms}</span> Tage &nbsp;&nbsp;&nbsp;Kreditlimit: <span class="value">{kreditlim}</span><br />
 		Offene Posten: <span class="value">{op}</span> &nbsp;&nbsp;&nbsp;offene Auftr&auml;ge: <span class="value">{oa}</span><br /><br />
 		Bankname: <span class="value">{bank}</span><br />

@@ -6,26 +6,56 @@
 	include("inc/UserLib.php");
 	include_once("Mail.php");
 	include_once("Mail/mime.php");
-	// $data=$_POST;
+	if ($AJAX==true) require("mailcommon.php");
 	$referer=getenv("HTTP_REFERER");
-	if (preg_match("/.+\.pl/",$referer) || preg_match("/mail.php/",$referer)) {
-		$referer="";
+	if (preg_match("/mail.php/",$referer)) {
+		$referer=$_POST["QUELLE"];
+		$TO=$_POST["TO"];
+		$KontaktTO=$_POST["KontaktTO"];
+		if (preg_match("/mail.php/",$referer)) {
+			$btn="<a href='mail.php'><input type=\"button\" name=\"return\" value=\"neu\"></a>";
+		} else {
+			$btn="<a href=\"$referer\"><input type=\"button\" name=\"return\" value=\"zur&uuml;ck\"></a>";
+		}
+	} else if (preg_match("/.+\.pl/",$referer)) { //Kommt vom Menue
+		$referer="mail.php";
 		$btn="<a href='mail.php'><input type=\"button\" name=\"return\" value=\"neu\"></a>";
 	} else { // Rückkehr zur Ausgangsseite
 		$btn="<a href=\"$referer\"><input type=\"button\" name=\"return\" value=\"zur&uuml;ck\"></a>";
 		$TO=$_GET["TO"];
 		$KontaktTO=$_GET["KontaktTO"];
 	}
-	if (!$_POST["ok"]) {	
-		$user=getUserStamm($_SESSION["loginCRM"]);
-		$MailSign=ereg_replace("\r","",$user["MailSign"]);
-		$BodyText=" \n".$MailSign;
-		$MailSign=ereg_replace("\n","<br>",$user["MailSign"]);
-		$MailSign=ereg_replace("\r","",$MailSign);
-	}
-	if ($_POST["save"]) {
+	if ($_POST["aktion"]=="tplsave") {
 		$rc=saveMailVorlage($_POST);
-	} else if ($_POST) {
+	} else 	if ($_POST["MID"]) {
+		$KontaktTO=$_POST["KontaktTO"];
+		$data=getOneMailVorlage($_POST["MID"]);
+		$Subject=$data["cause"];
+		$BodyText=$data["c_long"];
+		if (substr($KontaktTO,0,1)=="K") {
+			include("inc/persLib.php");
+			$empf=getKontaktStamm(substr($KontaktTO,1));
+			$TO=$empf["cp_email"];
+		} else if ($KontaktTO) {
+			include("inc/FirmenLib.php");
+			$empf=getFirmenStamm(substr($KontaktTO,1),true,substr($KontaktTO,0,1));
+			$TO=$empf["email"];
+		}
+		if ($KontaktTO) {
+			preg_match_all("/%([A-Z0-9_]+)%/iU",$BodyText,$ph, PREG_PATTERN_ORDER);
+			$ph=array_slice($ph,1);
+			if ($ph[0]) {
+				$anrede=false;
+				foreach ($ph[0] as $x) {
+					$y=$empf[strtolower($x)];
+					if ($x=="cp_greeting") $anrede=$y;
+					$BodyText=preg_replace("/%".$x."%/i",$y,$BodyText);
+				}
+				if ($anrede=="Herr") { $BodyText=preg_replace("/%cp_anrede%/","r",$BodyText); }
+				else if ($anrede) { $BodyText=preg_replace("/%cp_anrede%/","",$BodyText); }
+			}
+		}
+	} else if ($_POST["aktion"]=="sendmail") {
 		$okT=true; $okC=true; $msg="";
 		if ($_POST["TO"]) { 
 			$TO=preg_replace( "/[^a-z0-9 !?:;,.\/_\-=+@#$&\*\(\)]/im", "", $_POST["TO"]);
@@ -55,7 +85,13 @@
       				$to=array();
       				foreach ($tmp as $row) { $to[]=trim($row); }
       			}
-			if ($TO && $CC) $headers["Cc"]=$CC;
+			if ($TO && $CC) {
+				if ($_POST["bcc"]) {
+					$headers["Bcc"] = $CC;
+				} else {
+					$headers["Cc"]=$CC;
+				};
+			};
 			$BodyText=preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["BodyText"]);
 			$mime->setTXTBody(strip_tags($BodyText));
 			$anz=($_FILES["Datei"]["name"][0]<>"")?count($_FILES["Datei"]["name"]):0;
@@ -125,34 +161,14 @@
 			$Subject=preg_replace( "/(content-type:|bcc:|cc:|to:|from:|\n|\r|%0D)/im", "", $_POST["Subject"]);
 			$BodyText=preg_replace( "/(content-type:|bcc:|cc:|to:|from:|\n|\r|%0D)/im", "", $_POST["BodyText"]);	
 		}
+	} else {	
+		$user=getUserStamm($_SESSION["loginCRM"]);
+		$MailSign=ereg_replace("\r","",$user["MailSign"]);
+		$BodyText=" \n".$MailSign;
+		$MailSign=ereg_replace("\n","<br>",$user["MailSign"]);
+		$MailSign=ereg_replace("\r","",$MailSign);
 	}
-	if ($_GET["MID"]) {
-		$KontaktTO=$_GET["KontaktTo"];
-		$data=getOneMailVorlage($_GET["MID"]);
-		$Subject=$data["cause"];
-		$BodyText=$data["c_long"];
-		if (substr($KontaktTO,0,1)=="K") {
-			include("inc/persLib.php");
-			$empf=getKontaktStamm(substr($KontaktTO,1));
-			$TO=$empf["cp_email"];
-			$pr="cp_";
-		} else if ($KontaktTO) {
-			include("inc/FirmenLib.php");
-			$empf=getFirmenStamm(substr($KontaktTO,1),true,substr($KontaktTO,0,1));
-			$TO=$empf["email"];
-		}
-		if ($KontaktTO) {
-			preg_match_all("/%([A-Z0-9_]+)%/iU",$BodyText,$ph, PREG_PATTERN_ORDER);
-			$ph=array_slice($ph,1);
-			if ($ph[0]) {
-				foreach ($ph[0] as $x) {
-					//$y=$empf[$pr.strtolower($x)];
-					$y=$empf[strtolower($x)];
-					$BodyText=preg_replace("/%".$x."%/i",$y,$BodyText);
-				}
-			}
-		}
-	}
+
 	$t = new Template($base);
 	$t->set_file(array("mail" => "mail.tpl"));
 	$t->set_block("mail","Betreff","Block");
@@ -166,18 +182,20 @@
                 $t->parse("Block","Betreff",true);
 	}
 	$t->set_var(array(
-			Msg		=> $msg,
-			btn		=> $btn,
+			AJAXON	=> ($AJAX==true)?'true':'false',
+			AJAXJS	=> ($AJAX==true)?$xajax->printJavascript('./xajax/'):"",
+			Msg	=> $msg,
+			btn	=> $btn,
 			Subject => $Subject,
 			BodyText => $BodyText,
-			CC => $CC,
-			TO => $TO,
-			Sign => $MailSign,
+			CC 	=> $CC,
+			TO 	=> $TO,
+			Sign 	=> $MailSign,
 			KontaktCC => $_POST["KontaktCC"],
 			KontaktTO => $KontaktTO,
-			QUELLE => $referer,
-			JS => "",
-			vorlage => $_GET["MID"]
+			QUELLE 	=> $referer,
+			JS 	=> "",
+			vorlage => ($_GET["MID"])?$_GET["MID"]:$_POST["MID"]
 			));
 	$t->pparse("out",array("mail"));
 ?>

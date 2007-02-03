@@ -23,6 +23,7 @@ $jpg=false;
 $showErr=false;
 $CallEdit = true;
 $CallDel = true;
+$AJAX=true;
 //Verschiedene Map-Anbieter können hier eingestellt werden
 //Leerzeichenersatz
 //GoYellow

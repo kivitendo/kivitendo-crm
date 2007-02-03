@@ -2104,6 +2104,9 @@ global $db;
 	} else {
 		$sql="insert into mailvorlage (cause,c_long,employee) values ('%s','%s',%d)";
 		$rc=$db->query(sprintf($sql,$data["Subject"],$data["BodyText"],$_SESSION["loginCRM"]));
+		$sql="select id from mailvorlage where cause='".$data["Subject"]."' and c_long='".$_SESSION["loginCRM"]."' and employee=".$_SESSION["loginCRM"];
+		$rs=$db->getAll($sql);
+		if ($rs[0]["id"]>0) return $rs[0]["id"];
 	}
 	return $rc;
 }
@@ -2126,5 +2129,11 @@ global $db;
 	} else {
 		return $rs[0];
 	}
+}
+function deleteMailVorlage($id) {
+global $db;
+	$sql="delete from mailvorlage where id = $id";
+	$rc=$db->query($sql);
+	return $rc;
 }
 ?>

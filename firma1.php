@@ -43,6 +43,7 @@
 		};
 	}
 	$views=array(""=> "lie",1=>"lie",2=>"not",3=>"inf");
+	$taxzone=array("Inland","EU mit UStId","EU ohne UStId","Ausland");
 	$t->set_var(array(
 			FID	=> $id,
 			INID	=> db2date(substr($fa["itime"],0,10)),
@@ -70,6 +71,7 @@
 			konto => $fa["account_number"],
 			Internet	=> $internet,
 			USTID	=> $fa["ustid"],
+			Steuerzone => $taxzone[$fa["taxzone_id"]],
 			Taxnumber	=> $fa["taxnumber"],
 			rabatt	=> $rab,
 			terms	=> $fa["terms"],

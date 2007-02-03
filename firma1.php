@@ -71,7 +71,7 @@
 			konto => $fa["account_number"],
 			Internet	=> $internet,
 			USTID	=> $fa["ustid"],
-			Steuerzone => $taxzone[$fa["taxzone_id"]],
+			Steuerzone => ($fa["taxzone_id"])?$taxzone[$fa["taxzone_id"]]:$taxzone[0],
 			Taxnumber	=> $fa["taxnumber"],
 			rabatt	=> $rab,
 			terms	=> $fa["terms"],

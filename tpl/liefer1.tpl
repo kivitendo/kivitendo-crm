@@ -120,7 +120,8 @@
 		<div class="smal" >
 		Lieferantentyp: <span class="value">{lityp}</span> &nbsp;&nbsp;&nbsp; Erstellt: <span class="value">{INID}</span><br /><br />
 		Rabatt: <span class="value">{rabatt}</span> &nbsp;&nbsp;&nbsp; Unsere Kd-Nr: <span class="value">{KDnr}</span><br /><br />
-		Steuer-Nr.: <span class="value">{taxnumber}</span> &nbsp;&nbsp;&nbsp; UStId: <span class="value">{ustid}</span><br /><br />
+		Steuer-Nr.: <span class="value">{taxnumber}</span> &nbsp;&nbsp;&nbsp; UStId: <span class="value">{ustid}</span><br />
+		Steuerzone: <span class="value">{Steuerzone}</span><br /><br />
 		Kreditlimit: <span class="value">{kreditlim}</span> &nbsp;&nbsp;&nbsp;OP: <span class="value">{op}</span> &nbsp;&nbsp;&nbsp;
 		Zahlungsziel: <span class="value">{terms}</span> Tage <br /><br />
 		Bankname: <span class="value">{bank}</span><br />

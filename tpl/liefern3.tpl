@@ -124,10 +124,10 @@
 	</div>
 		Bemerkungen<br>
 		<textarea name="notes" cols="70" rows="3" tabindex="21">{notes}</textarea>
+			{Btn1} &nbsp;{Btn2} 
 			<input type="submit" name="saveneu" value="sichern neu" tabindex="33"> &nbsp;
 			<input type="submit" name="reset" value="clear" tabindex="34"> &nbsp;
 			<input type="button" name="" value="VCard" onClick="vcard()" tabindex="35"> &nbsp;
-			{Btn2} &nbsp;{Btn1} 
 </span>
 </span>
 <span style="float:left; width:270px; height:350px; text-align:left; border: 0px solid black;">
@@ -199,7 +199,17 @@
 			</select> &nbsp; {init}
 		</span>
 	</div>
-
+	<div>
+		<span class="label">Steuerzone</span>
+		<span class="smalfeld">
+			<select name="taxzone_id" tabindex="35">
+				<option value="0" {txid0}>Inland
+				<option value="1" {txid1}>EU mit UStID
+				<option value="2" {txid2}>EU ohne UStID
+				<option value="3" {txid3}>Ausland
+			</select> 
+		</span>
+	</div>
 </span>
 
 </form>

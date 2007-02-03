@@ -31,6 +31,7 @@
 		$sonder.=($li["sonder"] & $key)?"$val ":"";
 	}
 	$views=array(""=> "lie",1=>"lie",2=>"not",3=>"inf");
+	$taxzone=array("Inland","EU mit UStId","EU ohne UStId","Ausland");
 	$t->set_var(array(
 			LInr		=> $li["vendornumber"],
 			KDnr		=> $li["v_customer_id"],
@@ -55,6 +56,7 @@
 			sonder		=> $sonder,
 			notes		=> $li["notes"],
 			ustid 		=> $li["ustid"],
+			Steuerzone 	=> ($li["taxzone_id"])?$taxzone[$li["taxzone_id"]]:$taxzone[0],
 			taxnumber 	=> $li["taxnumber"],
 			bank		=> $li["bank"],
 			bank_code	=> $li["bank_code"],

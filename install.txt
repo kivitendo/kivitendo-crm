@@ -1,7 +1,5 @@
 Lx-Office CRM 1.3.0  
 
-!!! Bitte nicht ohne ausgiebige Tests auf Produktivserver einsetzten !!!
-
 
 Installtion Lx-Office CRM
 -------------------------
@@ -20,12 +18,14 @@ Vorrausetzungen:
 	PEAR::Contact_Vcard_Build
 	PEAR::Contact_Vcard_Parse
 	PEAR::Mail_Mime oder php-mail-mime
-	PEAR::Image_Canvas
-	PEAR::Image_Graph
+		jpgraph
+	oder
+		PEAR::Image_Canvas
+		PEAR::Image_Graph
 	fpdf + fpdi (http://www.fpdf.de/downloads/)
 	ttf-freefont
 	php-gd,php-imap
-	jpgraph
+	xajax (http://www.xajaxproject.org/)
 
 z.B. debian:
 apt-get install libapache2-mod-php4 php4-gd php4-imap php-mail-mime php4-pear php4-pgsql  php-fpdf php-mail-mime imagemagick
@@ -39,6 +39,14 @@ installieren.  Ein weiteres Paket ist dafür Vorraussetzung:
 	PEAR::Image_Color  
 
 jpgraph muß nicht mehr verwendet werden. Alternativ wird PEAR::Image_Graph verwendet.
+
+AJAX:
+Nach und nach werden einige Masken mit Ajax bedient. Die eMail-Maske ist die erste.
+Einige Funktionen können wahlweise mit oder ohne Ajax bedient werden. Bis Version 1.4.0 wird 
+evtl. nur noch  Ajax unterstützt.
+Die Unterstützung muß in der conf.php mit $AJAX=true; eingeschaltet werden.
+Das Paket xajax muß im CRM-Verzeichnis im Unterverzeichnis "xajax" installiert werden
+oder per Link eingebunden werden.
 
 
 Wird mit einem Alias für das LxO-Verzeichnis benutzt und soll in einigen Masken der 

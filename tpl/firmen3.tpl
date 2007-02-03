@@ -220,6 +220,17 @@
 			</select> &nbsp; {init}
 		</span>
 	</div>
+	<div>
+		<span class="label">Steuerzone</span>
+		<span class="smalfeld">
+			<select name="taxzone_id" tabindex="35">
+				<option value="0" {txid0}>Inland
+				<option value="1" {txid1}>EU mit UStID
+				<option value="2" {txid2}>EU ohne UStID
+				<option value="3" {txid3}>Ausland
+			</select> 
+		</span>
+	</div>
 
 </span>
 

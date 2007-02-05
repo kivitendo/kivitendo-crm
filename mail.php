@@ -6,7 +6,7 @@
 	include("inc/UserLib.php");
 	include_once("Mail.php");
 	include_once("Mail/mime.php");
-	if ($AJAX==true) require("mailcommon.php");
+	require("mailcommon.php");
 	$referer=getenv("HTTP_REFERER");
 	if (preg_match("/mail.php/",$referer)) {
 		$referer=$_POST["QUELLE"];
@@ -182,8 +182,7 @@
                 $t->parse("Block","Betreff",true);
 	}
 	$t->set_var(array(
-			AJAXON	=> ($AJAX==true)?'true':'false',
-			AJAXJS	=> ($AJAX==true)?$xajax->printJavascript('./xajax/'):"",
+			AJAXJS	=> $xajax->printJavascript('./xajax/'),
 			Msg	=> $msg,
 			btn	=> $btn,
 			Subject => $Subject,

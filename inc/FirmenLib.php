@@ -9,11 +9,7 @@
 *****************************************************/
 function getShipStamm($id) {
 global $db;
-	if ($_SESSION["ERPver"]>="2.2.0.10") {
-		$sql="select S.*,BL.bundesland as shiptobundesland from shipto S left join bundesland BL on S.shiptobland=BL.id where S.module='CT' and S.trans_id=$id order by shipto_id limit 1";
-	} else {
-		$sql="select S.*,BL.bundesland as shiptobundesland from shipto S left join bundesland BL on S.shiptobland=BL.id where S.trans_id=$id limit 1";
-	}
+	$sql="select S.*,BL.bundesland as shiptobundesland from shipto S left join bundesland BL on S.shiptobland=BL.id where S.shipto_id=$id ";
 	$rs2=$db->getAll($sql);
 	if(!$rs2) {
 		return false;
@@ -72,7 +68,7 @@ global $db;
 		$sql="select sum(amount) from oe where customer_id=$id and quotation='f' and closed = 'f'";
 		$rs=$db->getAll($sql);
 		$oa=$rs[0]["sum"];
-		$sql="select sum(amount) from ar where customer_id=$id and amount<>paid";
+		$sql="select sum(amount) fro>m ar where customer_id=$id and amount<>paid";
 		$rs=$db->getAll($sql);
 		$op=$rs[0]["sum"];
 		$sql="select C.*,E.login,B.description as kdtyp,B.discount as typrabatt,P.pricegroup,L.lead as leadname,BL.bundesland from customer C ";
@@ -99,18 +95,32 @@ global $db;
 		$row=$rs[0];
 		if ($row["grafik"]) {
 			$image="./dokumente/".$_SESSION["mansel"]."/$id/logo.".$row["grafik"];
-			$size=@getimagesize(trim($image));
-			$row["size"]=$size[3];
+			if (file_exists($image)) {
+				$size=@getimagesize(trim($image));
+				$row["size"]=$size[3];
+				if ($size[1]>$size[0]) {
+					$faktor=ceil($size[1]/70);
+				} else {
+					$faktor=ceil($size[0]/120);
+				}
+				$breite=floor($size[0]/$faktor);
+				$hoehe=floor($size[1]/$faktor);
+				$row["icon"]="width=\"$breite\" height=\"$hoehe\"";
+			}
 		}
-		$rs2=getShipStamm($id);
 		$rs3=getAllShipto($id,$tab);
 		$shipcnt=(count($rs3));
-		if (!$rs2) {  // es ist keine abweichende Anschrift da
+		$shipids=array();
+		if ($shipcnt>0) for ($sc=0; $sc<$shipcnt; $sc++) {
+			$shipids[]=$rs3[$sc]["shipto_id"];
+		};
+		$shipids=implode(",",$shipids);
+		if (!$rs3[0]) {  // es ist keine abweichende Anschrift da
 			if ($ws) {	// soll dann aber mit Re-Anschrift gefüllt werden
 				$row2=Array(
 					shiptoname => $row["name"],
 					shiptodepartment_1 => $row["department_1"],
-					shiptodepartment_2 => $row["department_2"],
+					ship>todepartment_2 => $row["department_2"],
 					shiptostreet => $row["street"],
 					shiptozipcode => $row["zipcode"],
 					shiptocity => $row["city"],
@@ -142,11 +152,12 @@ global $db;
 				);
 			}
 		} else {
-			$row2 = $rs2;
+			$row2 = $rs3[0];
 		}
 		$daten=array_merge($row,$row2);
 	}
-	$daten["shiptocnt"]=($shipcnt>0)?$shipcnt-1:0;
+	$daten["shiptocnt"]=($shipcnt>0)?$shipcnt:0;
+	$daten["shiptoids"]=$shipids;
 	$daten["op"]=$op;
 	$daten["oa"]=$oa;
 	return $daten;
@@ -161,22 +172,11 @@ global $db;
 *****************************************************/
 function getAllShipto($id,$tab="C") {
 global $db;
-	$sql="select distinct shiptoname,shiptodepartment_1,shiptodepartment_2,shiptostreet,shiptozipcode,";
-	$sql.="shiptocity,shiptocountry,shiptocontact,shiptophone,shiptofax,shiptoemail from shipto ";
-	if ($_SESSION["ERPver"]>="2.2.0.10") {
-		//$sql="select (module<>'CT') as vkdoc,* from shipto where trans_id=$id";
-		$sql.=" where trans_id=$id";
-	} else {
-		//$sql="select (A.id>0 or O.id>0) as vkdoc,S.*,O.id as oid,A.id as aid from shipto S ";
-		//$sql.="A.customer_id=$id or O.customer_id=$id or S.trans_id=$id";
-		if ($tab=="C") {
-			$sql.=" S left join  ar A on S.trans_id=A.id left join  oe O on S.trans_id=O.id  ";
-			$sql.=" where A.customer_id=$id or O.customer_id=$id or S.trans_id=$id";
-		} else {
-			$sql.=" S left join  ap A on S.trans_id=A.id left join  oe O on S.trans_id=O.id  ";
-			$sql.=" where A.vendor_id=$id or O.vendor_id=$id or S.trans_id=$id";
-		}
-	}
+	//$sql="select distinct shiptoname,shiptodepartment_1,shiptodepartment_2,shiptostreet,shiptozipcode,";
+	//$sql.="shiptocity,shiptocountry,shiptocontact,shiptophone,shiptofax,shiptoemail,shipto_id from shipto ";
+	//$sql="select (module<>'CT') as vkdoc,* from shipto where trans_id=$id";
+	$sql="select s.*,b.bundesland as shiptobundesland from shipto s left join bundesland b on s.shiptobland=b.id ";
+	$sql.=" where trans_id=$id and module='CT' order by itime";
 	$rs=$db->getAll($sql);  
 	return $rs;
 }
@@ -305,13 +305,13 @@ global $db;
 			}
 	};
 	// Array zu jedem Formularfed: Tabelle (0=customer/vendor,1=shipto), require(0=nein,1=ja), Spaltenbezeichnung, Regel
-	$dbfld=array(	name => array(0,1,1,"Name",75),			
+	$dbfld=array(	name => array(0,1,1,"Name",75),			greeting => array(0,0,1,"Anrede",75),
 			department_1 => array(0,0,1,"Zusatzname",75),	department_2 => array(0,0,1,"Abteilung",75),
 			country => array(0,0,8,"Land",3),		zipcode => array(0,1,2,"Plz",10),
 			city => array(0,1,1,"Ort",75),			street => array(0,1,1,"Strasse",75),
 			fax => array(0,0,3,"Fax",30),			phone => array(0,0,3,"Telefon",30),
 			email => array(0,0,5,"eMail",0),		homepage =>array(0,0,4,"Homepage",0),
-			contact => array(0,0,1,"Kontakt",75),		
+			contact => array(0,0,1,"Kontakt",75),		v_customer_id => array(0,0,1,"Kundennummer",50),
 			//vendornumber => array(0,0,0,"Lieferantennummer",20),
 			//customernumber => array(0,0,0,"Kundennummer",20),
                         v_customer_id => array(0,0,0,"Kundennummer",20),
@@ -342,6 +342,8 @@ global $db;
 	$fid=$daten["id"];
 	$fehler="ok";
 	$ala=false;
+	if ($daten["greeting_"]<>"") $daten["greeting"]=$daten["greeting_"];
+	if ($daten["branche_"]<>"") $daten["branche"]=$daten["branche_"];
 	$tels1=array();$tels2=array();
 	for ($i=0; $i<$anzahl; $i++) {
 		if (in_array($keys[$i],$dbf)) {
@@ -395,9 +397,9 @@ global $db;
 			$dest=$dir."/logo.".$pictyp[$imagesize[2]];
 			move_uploaded_file($datei["Datei"]["tmp_name"],"$dest");
 			if ($imagesize[1]>$imagesize[0]) {
-				$faktor=ceil($imagesize[1]/80);
+				$faktor=ceil($imagesize[1]/360);
 			} else {
-				$faktor=ceil($imagesize[0]/120);
+				$faktor=ceil($imagesize[0]/480);
 			}
 			$breite=floor($imagesize[0]/$faktor);
 			$hoehe=floor($imagesize[1]/$faktor);
@@ -410,45 +412,18 @@ global $db;
 		}	
 		$rc1=true;
 		if ($ala) {
-			if ($_SESSION["ERPver"]>="2.2.0.10") { //gibt es schon eine Lieferanschrift
-				$sql1q="select count(*) from shipto where trans_id=$fid and module='CT'";
-			} else {
-				$sql1q="select count(*) from shipto  where trans_id=$fid";
-			}
-			$x=$db->getAll($sql1q);
-			if ($x[0]["count"]==0) {
-				if ($_SESSION["ERPver"]>="2.2.0.10") {
-					$sql1a="insert into shipto (trans_id,module) values ($fid,'CT')";
-				} else {
-					$sql1a="insert into shipto (trans_id) values ($fid)";
-				}
-				$rc1=$db->query($sql1a);
-				$sql1="update shipto set $query1 where trans_id=$fid";
+			if ($daten["shipto_id"]>0) {
+				$sql1="update shipto set $query1 where shipto_id=".$daten["shipto_id"];
 				$rc1=$db->query($sql1);
 			} else {
-				if ($_SESSION["ERPver"]>="2.2.0.10") {
-					$sql1="update shipto set $query1 where shipto_id=".$daten["shipto_id"];
-					$rc1=$db->query($sql1);
-				} else {
-					$sql1="update shipto set $query1 where trans_id=$fid";
+				$sid=newShipto($fid);
+				if ($sid) {
+					$sql1="update shipto set $query1 where shipto_id=".$sid;
 					$rc1=$db->query($sql1);
 				}
-			}
-			mkTelNummer($fid,"S",$tels2);
-		} /*else {
-			if ($_SESSION["ERPver"]>="2.2.0.10") { //gibt es schon eine Lieferanschrift
-				$sql1q="select count(*) from shipto where trans_id=$fid and module='CT'";
-				$delshipto=" and module='CT'";
-			} else {
-				$sql1q="select count(*) from shipto where trans_id=$fid";
-				$delshipto="";
-			}
-			$x=$db->getAll($sql1q);
-			if ($x[0]["count"]>0) {
-				$sql="delete from shipto where trans_id=$fid $delshipto";
-				$rc=$db->query($sql);
-			}
-		}*/
+			};
+			if ($rc1) mkTelNummer($fid,"S",$tels2);
+		}
 		$rc0=$db->query($sql0);
 		if ($rc0 and $rc1) { $rc=$fid; }
 		else { $rc=-1; $fehler="unbekannt"; };
@@ -460,6 +435,23 @@ global $db;
 		};
 		return array(-1,$fehler);
 	};
+}
+
+function newShipto($fid) {
+global $db;
+	$rc=$db->query("BEGIN");
+	$newID=uniqid (rand());
+	$sql="insert into shipto (trans_id,shiptoname,module) values ($fid,'$newID','CT')";
+	$rc=$db->query($sql);
+	$sql="select shipto_id from shipto where shiptoname='$newID'";
+	$rs=$db->getAll($sql);
+	if ($rs[0]["shipto_id"]) { 
+		$db->query("COMMIT");
+		return $rs[0]["shipto_id"];
+	} else {
+		$db->query("ROLLBACK");
+		return false;
+	}
 }
 
 /****************************************************
@@ -546,11 +538,7 @@ global $db;
 		$where=($where=="")?"":"and $where";
 		if (eregi("shipto",$tabs) or ereg("S.",$felder)) {
 			$sql="select $felder from ".$tab[$typ]." ".$kenz[$typ]." left join shipto S ";
-			if ($_SESSION["ERPver"]>="2.2.0.10") {
-				$sql.="on S.trans_id=".$kenz[$typ].".id where S.module='CT' and $rechte $where order by ".$kenz[$typ].".name";
-			} else {
-				$sql.="on S.trans_id=".$kenz[$typ].".id where $rechte $where order by ".$kenz[$typ].".name";
-			}
+			$sql.="on S.trans_id=".$kenz[$typ].".id where S.module='CT' and $rechte $where order by ".$kenz[$typ].".name";
 		} else {
 			$sql="select $felder from ".$tab[$typ]." ".$kenz[$typ]." where $rechte $where order by ".$kenz[$typ].".name";
 		}
@@ -560,11 +548,7 @@ global $db;
 		if (eregi("shipto",$tabs) or ereg("S.",$felder)) {
 			$sql="select $felder from ".$tab[$typ]." ".$kenz[$typ]." left join shipto S ";
 			$sql.="on S.trans_id=".$kenz[$typ].".id left join contacts P on ".$kenz[$typ].".id=P.cp_cv_id ";
-			if ($_SESSION["ERPver"]>="2.2.0.10") {
-				$sql.="where S.module='CT' and $rechte $where order by ".$kenz[$typ].".name,P.cp_name";
-			} else {
-				$sql.="where $rechte $where order by ".$kenz[$typ].".name,P.cp_name";
-			}
+			$sql.="where S.module='CT' and $rechte $where order by ".$kenz[$typ].".name,P.cp_name";
 		} else {
 			$sql="select $felder from  ".$tab[$typ]." ".$kenz[$typ]." left join contacts P ";
 			$sql.="on ".$kenz[$typ].".id=P.cp_cv_id where $rechte $where order by ".$kenz[$typ].".name,P.cp_name";
@@ -586,18 +570,30 @@ global $db;
 	} else {
 		fputs($f,"Keine Treffer.\n");
 		fclose($f);
-		return false;
+	  	return false;
 	} 
 }
-
+function getAnreden() {
+global $db;
+	$sql="select distinct (greeting) from customer";
+	$rs=$db->getAll($sql);
+	return $rs;
+}
+function getBranchen() {
+global $db;
+	$sql="select distinct (branche) from customer";
+	$rs=$db->getAll($sql);
+	return $rs;
+}
 function leertpl (&$t,$tpl,$typ,$msg="") {
-global $cp_sonder;
+global $cp_sonder,$xajax;
 		$tab=array("C" => "firmen","V" => "liefern");
 		$kdtyp=getBusiness();
 		$bundesland=getBundesland(false);
 		$lead=getLeads();
 		$t->set_file(array("fa1" => $tab[$typ].$tpl.".tpl"));
 		$t->set_var(array(
+			AJAXJS	=> $xajax->printJavascript('./xajax/'),
 			Btn1 => "",
 			Btn2 => "",
 			Msg =>	$msg,
@@ -615,7 +611,7 @@ global $cp_sonder;
 			email	=> "",
 			homepage => "",
 			sw	=> "",
-			branche	=> "",
+			branche_	=> "",
 			vendornumber    => "",
 			customernumber  => "",
                         v_customer_id   => "",
@@ -659,6 +655,18 @@ global $cp_sonder;
 			));
 			$t->parse("BlockT","TypListe",true);
 		}
+		if ($typ=="C") {
+                        $lead=getLeads();
+                        $t->set_block("fa1","LeadListe","BlockL");
+                        if ($lead) foreach ($lead as $row) {
+                                $t->set_var(array(
+                                        Lid => $row["id"],
+                                        Lsel => ($row["id"]==$daten["lead"])?"selected":"",
+                                        Lead => $row["lead"],
+                                ));
+                                $t->parse("BlockL","LeadListe",true);
+                        }
+                }
 		$t->set_block("fa1","sonder","BlockS");
 			if ($cp_sonder) while (list($key,$val) = each($cp_sonder)) {
 				$t->set_var(array(
@@ -667,22 +675,53 @@ global $cp_sonder;
 				));
 				$t->parse("BlockS","sonder",true);
 			}
-		$t->set_block("fa1","buland","BlockB");
-		$t->set_block("fa1","buland2","BlockBS");
-		if ($bundesland) foreach ($bundesland as $bland) {
+		$anreden=getAnreden();
+		$t->set_block("fa1","anreden","BlockA");
+		if ($anreden) foreach ($anreden as $anrede) {
 			$t->set_var(array(
-				BUVAL => $bland["id"],
-				BUTXT => $bland["bundesland"],
-				BUSEL => ""	
+				ANREDE	=> $anrede["greeting"],
+				ASEL	=> ($anrede["greeting"]==$daten["greeting"])?"selected":"",
 			));
-			$t->parse("BlockB","buland",true);
-			$t->set_var(array(
-				SBUVAL => $bland["id"],
-				SBUTXT => $bland["bundesland"],
-				SBUSEL => ""	
-			));
-			$t->parse("BlockBS","buland2",true);
+			$t->parse("BlockA","anreden",true);
 		}
+		$branchen=getBranchen();
+		$t->set_block("fa1","branchen","BlockR");
+		if ($branchen) foreach ($branchen as $branche) {
+			$t->set_var(array(
+				BRANCHE	=> $anrede["branche"],
+				BSEL	=> ($anrede["branche"]==$daten["branche"])?"selected":"",
+			));
+			$t->parse("BlockR","anchen",true);
+		}
+		$shiptos=getAllShipto($daten["id"],$tpl);
+                $t->set_block("fa1","shiptos","BlockST");
+                if ($shiptos) foreach ($shiptos as $ship) {
+                        $t->set_var(array(
+                                SHIPTO  => $ship["shiptoname"]." ".$ship["shiptodepartment_1"],
+                                SHIPID  => $ship["shipto_id"],
+                        ));
+                        $t->parse("BlockST","shiptos",true);
+                }
+		$bundesland=getBundesland(strtoupper($daten["country"]));
+		$t->set_block("fa1","buland","BlockB");
+                if ($bundesland) foreach ($bundesland as $bland) {
+                        $t->set_var(array(
+                                BUVAL => $bland["id"],
+                                BUTXT => $bland["bundesland"],
+                                BUSEL => ($bland["id"]==$daten["bland"])?"selected":""
+                        ));
+                        $t->parse("BlockB","buland",true);
+                }
+                $bundesland=getBundesland(strtoupper($daten["shiptocountry"]));
+                $t->set_block("fa1","buland2","BlockBS");
+                if ($bundesland) foreach ($bundesland as $bland) {
+                        $t->set_var(array(
+                                SBUVAL => $bland["id"],
+                                SBUTXT => $bland["bundesland"],
+                                SBUSEL => ($bland["id"]==$daten["shiptobland"])?"selected":""
+                        ));
+                        $t->parse("BlockBS","buland2",true);
+                }
 		$t->set_block("fa1","LeadListe","BlockL");
 		if ($lead) foreach ($lead as $row) {
 			$t->set_var(array(
@@ -708,14 +747,15 @@ global $cp_sonder;
 		}
 } // leertpl
 function vartpl (&$t,$daten,$typ,$msg,$btn1,$btn2,$tpl) {
-global $cp_sonder;
+global $cp_sonder,$xajax;
 		$tab=array("C" => "firmen","V" => "liefern");
 		if ($daten["grafik"]) {
-			$Image="<img src='dokumente/".$_SESSION["mansel"]."/".$daten["id"]."/logo.".$daten["grafik"]."' ".$daten["size"].">";
+			$Image="<img src='dokumente/".$_SESSION["mansel"]."/".$daten["id"]."/logo.".$daten["grafik"]."' ".$daten["icon"].">";
 		}
 		$kdtyp=getBusiness();
 		$t->set_file(array("fa1" => $tab[$typ].$tpl.".tpl"));
 		$t->set_var(array(
+				AJAXJS	=> $xajax->printJavascript('./xajax/'),
 				Btn1	=> $btn1,
 				Btn2	=> $btn2,
 				Msg	=> $msg,
@@ -725,6 +765,7 @@ global $cp_sonder;
                                 vendornumber    => $daten["vendornumber"],
 				v_customer_id   => $daten["v_customer_id"],
 				name 	=> $daten["name"],
+				greeting_ 	=> $daten["greeting_"],
 				department_1	=> $daten["department_1"],
 				department_2	=> $daten["department_2"],
 				street	=> $daten["street"],
@@ -736,7 +777,7 @@ global $cp_sonder;
 				email	=> $daten["email"],
 				homepage => $daten["homepage"],
 				sw	=> $daten["sw"],
-				branche	=> $daten["branche"],
+				branche_	=> $daten["branche_"],
 				ustid	=> $daten["ustid"],
 				taxnumber => $daten["taxnumber"],
 				contact	=> $daten["contact"],
@@ -749,7 +790,7 @@ global $cp_sonder;
 				kreditlim	=> $daten["creditlimit"],
 				op		=> $daten["op"],
 				preisgrp	=> $daten["preisgroup"],
-				shipto_id	=> $daten["shipto_id"],
+			/*	shipto_id	=> $daten["shipto_id"],
 				shiptoname	=> $daten["shiptoname"],
 				shiptodepartment_1	=> $daten["shiptodepartment_1"],
 				shiptodepartment_2	=> $daten["shiptodepartment_2"],
@@ -760,7 +801,7 @@ global $cp_sonder;
 				shiptophone	=> $daten["shiptophone"],
 				shiptofax	=> $daten["shiptofax"],
 				shiptoemail	=> $daten["shiptoemail"],
-				shiptocontact	=> $daten["shiptocontact"],
+				shiptocontact	=> $daten["shiptocontact"], */
 				IMG		=> $Image,
 				grafik	=> $daten["grafik"],
 				Radio 	=> "",
@@ -803,6 +844,33 @@ global $cp_sonder;
 				));
 				$t->parse("BlockS","sonder",true);
 			}
+		$anreden=getAnreden();
+		$t->set_block("fa1","anreden","BlockA");
+		if ($anreden) foreach ($anreden as $anrede) {
+			$t->set_var(array(
+				ANREDE	=> $anrede["greeting"],
+				ASEL	=> ($anrede["greeting"]==$daten["greeting"])?"selected":"",
+			));
+			$t->parse("BlockA","anreden",true);
+		}
+		$branchen=getBranchen();
+		$t->set_block("fa1","branchen","BlockR");
+		if ($branchen) foreach ($branchen as $branche) {
+			$t->set_var(array(
+				BRANCHE	=> $branche["branche"],
+				BSEL	=> ($branche["branche"]==$daten["branche"])?"selected":"",
+			));
+			$t->parse("BlockR","branchen",true);
+		}
+		$shiptos=getAllShipto($daten["id"],$tpl);
+		$t->set_block("fa1","shiptos","BlockST");
+		if ($shiptos) foreach ($shiptos as $ship) {
+			$t->set_var(array(
+				SHIPTO	=> $ship["shiptoname"]." ".$ship["shiptodepartment_1"],
+				SHIPID  => $ship["shipto_id"],
+			));
+			$t->parse("BlockST","shiptos",true);
+		}
 		$bundesland=getBundesland(strtoupper($daten["country"]));
 		$t->set_block("fa1","buland","BlockB");
 		if ($bundesland) foreach ($bundesland as $bland) {

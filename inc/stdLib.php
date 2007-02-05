@@ -1,9 +1,11 @@
 <?
 session_start();
 $version='$Id$';
+$inclpa=ini_get('include_path');
+ini_set('include_path',$inclpa.":../:./crmajax:./inc:../inc");
 
 require_once "DB.php";
-require_once "inc/conf.php";
+require_once "conf.php";
 require_once "db.php";
 
 
@@ -103,12 +105,11 @@ global $VERSION;
 	if (!$rc || $rc[0]["version"]=="" || $rc[0]["version"]==false) {
 		echo "CRM-Tabellen sind nicht (vollst&auml;ndig) installiert"; 
 		flush(); 
-		require("inc/install.php");
+		require("install.php");
 		exit;
 	} else if($rc[0]["version"]<>$VERSION) {
 		echo "Istversion: ".$rc[0]["version"]." Sollversion: ".$VERSION."<br>";
-		require("inc/update.php");
-		//require("inc/update.php$von=".$rc[0]["version"]."&auf=$VERSION");
+		require("update.php");
 		exit;
 	} else {
 		return true;
@@ -194,7 +195,7 @@ function chkFld(&$val,$empty,$rule,$len) {
 		case 5 : $ok=ereg("^([A-Za-z_0-9]+)([A-Za-z_0-9\.\-]+)([A-Za-z_0-9]*)\@([a-zA-Z0-9][a-zA-Z0-9._-]*\\.)*[a-zA-Z0-9][a-zA-Z0-9._-]*\\.[a-zA-Z]{2,5}$".$leer,$val); //eMail
 			 if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
 			 break;
-		case 6 : if ($empty===0 && $val=='') { $ok=true; $val="null"; }
+		case 6 : if ($empty===0 && empty($val)) { $ok=true; $val="null"; }
 				 else {$ok=ereg("^[0-9]+$",$val); } // Ganzzahlen
 				break;
 		case 7 : if ($empty===0 && empty($val)) { $ok=true; $val="0000-00-00";} // Datum
@@ -582,5 +583,5 @@ global $db;
 	return $rc;
 }
 
-require_once "inc/login".$_SESSION["loginok"].".php";
+require_once "login".$_SESSION["loginok"].".php";
 ?>

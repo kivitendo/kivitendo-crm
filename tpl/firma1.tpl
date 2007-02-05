@@ -3,6 +3,7 @@
 	<head><title>Firma Stamm</title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 	<link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+	{AJAXJS}
 	<script language="JavaScript" type="text/javascript">
 	<!--
 		function showItem(id) {
@@ -41,6 +42,25 @@
 			f1=open("wissen.php?kdhelp=1&m="+id,"Wissen","width=750, height=600, left=50, top=50, scrollbars=yes");
 			document.kdhelp.kdhelp.selectedIndex=0;
 		}
+		var shiptoids = new Array({Sids});
+		var sil = shiptoids.length;
+		var sid = 0;
+		function nextshipto(dir) {
+			if (dir=="-") {
+				if (sid>0) {
+					sid--;
+				} else {
+					sid = (sil - 1);
+				}
+			} else {
+				if (sid < sil - 1) { 
+					sid++;
+				} else {
+					sid=0; 
+				}
+			}
+			xajax_showShipadress(shiptoids[sid],"C");
+		}
 	//-->
 	</script>
 	</head>
@@ -64,7 +84,7 @@
 
 <span style="position:absolute; left:10px; top:67px; width:99%;">
 <!-- Begin Code --------------------------------------------- -->
-<span style="float:left; width:53%; height:430px; text-align:center; border: 1px solid black;">
+<span style="float:left; width:53%; height:450px; text-align:center; border: 1px solid black;">
 	<div style="float:left; width:64%; height:175px; text-align:left; border-bottom: 0px solid black; padding:2px;" class="gross">
 		{Fname1}<br />
 		{Fdepartment_1}<br />
@@ -117,17 +137,19 @@
 	<span id="lie" style="visibility:visible; position:absolute; text-align:left;width:48%; left:5px; top:245px;" >
 		<div class="smal" >
 		<br />
-		{Sname1} &nbsp;&nbsp;<a href="#" onCLick="anschr(2);"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a>&nbsp; &nbsp; zus&auml;tzliche Anschriften: {Scnt}<br />
-		{Sdepartment_1} &nbsp; &nbsp; {Sdepartment_2} <br />
-		{SStrasse}<br />
+		<span id="shiptoname">{Sname1}</span> &nbsp;&nbsp;<a href="#" onCLick="anschr(2);"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a>&nbsp; &nbsp; 
+		Anzahl Anschriften:{Scnt} <a href="javascript:nextshipto('-');"><img src="image/leftarrow.png" border="0"></a> 
+		<span id="SID">{Sshipto_id}</span> <a href="javascript:nextshipto('+');"><img src="image/rightarrow.png" border="0"></a><br />
+		<span id="shiptodepartment_1">{Sdepartment_1}</span> &nbsp; &nbsp; <span id="shiptodepartment_2">{Sdepartment_2}</span> <br />
+		<span id="shiptostreet">{SStrasse}</span><br />
 		<span class="mini">&nbsp;<br /></span>
-		{SLand}-{SPlz} {SOrt}<br />
-		{SBundesland}<br />
+		<span id="shiptocountry">{SLand}</span>-<span id="SPlz">{SPlz}</span> <span id="shiptoSOrt">{SOrt}</span><br />
+		<span id="shiptobland">{SBundesland}</span><br />
 		<span class="mini">&nbsp;<br /></span>
-		{Scontact}<br />
-		Tel: {STelefon}<br />
-		Fax: {SFax}<br />
-		<a href="mail.php?TO={SeMail}&KontaktTO=C{FID}">{SeMail}</a>
+		<span id="shiptocontact">{Scontact}</span><br />
+		Tel: <span id="shiptophone">{STelefon}</span><br />
+		Fax: <span id="shiptofax">{SFax}</span><br />
+		<span id="shiptoemail"><a href="mail.php?TO={SeMail}&KontaktTO=C{FID}">{SeMail}</a></span>
 		</div>
 	</span>
 
@@ -155,7 +177,7 @@
 	</span>
 </span>
 
-<span style="float:left; width:46%; height:430px; text-align:left; border: 1px solid black; border-left:0px;">
+<span style="float:left; width:46%; height:450px; text-align:left; border: 1px solid black; border-left:0px;">
 <table width="99%" summary="Kontaktverlauf">
 <!-- BEGIN Liste -->
 	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showItem({Nr});">

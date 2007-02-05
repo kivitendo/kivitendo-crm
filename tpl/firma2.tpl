@@ -33,7 +33,7 @@
 
 <span style="position:absolute; left:10px; top:67px; width:99%;">
 <!-- Beginn Code ------------------------------------------->
-<div style="float:left; width:53%; height:430px; text-align:center; border: 1px solid black;">
+<div style="float:left; width:53%; height:450px; text-align:center; border: 1px solid black;">
 	<div style="float:left; width:100%; height:50px; text-align:left; border-bottom: 1px solid black;" class="fett">
 		{Fname1} &nbsp; &nbsp; {customernumber}<br />
 		{Fdepartment_1}<br /> 
@@ -67,11 +67,11 @@
 	<!--div style="float:none; width:100%; height:15px; text-align:center; border: 0px solid black;" class="normal"-->
 		<span style="visibility:{none};">[<a href="javascript:vcard()">VCard</a>]  
 		[<a href="personen3.php?id={PID}&edit=1&Quelle=F">{Edit}</a>]</span> 
-		[<a href="firma2.php?fid={PID}&ldap=1&Quelle=F">LDAP</a>]
+		<!--[<a href="firma2.php?fid={PID}&ldap=1&Quelle=F">LDAP</a>]-->
 		<b>Kontakt:</b> [<a href="personen3.php?fid={FID}&Quelle=F">eingeben</a>] [<a href="personen1.php?fid={FID}&Quelle=F">aus Liste</a>]
 	</div>
 </div>
-<span style="float:left; width:46%; height:430px; text-align:left; border: 1px solid black; border-left:0px;">
+<span style="float:left; width:46%; height:450px; text-align:left; border: 1px solid black; border-left:0px;">
 <table width="99%">
 <!-- BEGIN Liste -->
 	<tr height="14px" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showItem({IID});">

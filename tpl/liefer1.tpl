@@ -58,7 +58,7 @@
 
 <span style="position:absolute; left:10px; top:67px; width:99%;">
 <!-- Beginn Code --------------------------------------------- -->
-<span style="float:left; width:53%; height:430px; text-align:center; border: 1px solid black;">
+<span style="float:left; width:53%; height:450px; text-align:center; border: 1px solid black;">
 	<div style="float:left; width:64%; height:175px; text-align:left; border-bottom: 0px solid black; padding:2px;" class="gross">
 		{Lname}<br />
 		{Ldepartment_1}<br />
@@ -79,7 +79,7 @@
 		<br />
 	</div>
 	<div style="float:both; width:100%; height:225px; text-align:left; border-bottom: 1px solid black;" class="gross">
-		<a href="mail.php?TO={eMail}&KontaktTO=C{FID}">{eMail}</a><br />
+		<a href="mail.php?TO={eMail}&KontaktTO=V{FID}">{eMail}</a><br />
 		<a href="{Internet}" target="_blank">{Internet}</a><br />
 
 	</div>
@@ -129,7 +129,7 @@
 		</div>
 	</span>
 </span>	
-<span style="float:left; width:46%; height:430px; text-align:left; border: 1px solid black; border-left:0px;">
+<span style="float:left; width:46%; height:450px; text-align:left; border: 1px solid black; border-left:0px;">
 <table width="99%" summary="Kontaktverlauf">
 <!-- BEGIN Liste -->
 	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showItem({IID});">

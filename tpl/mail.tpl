@@ -46,34 +46,22 @@
 			x=document.mailform.vorlage.selectedIndex
 			if (x>0) {
 				y=document.mailform.vorlage.options[x].value;
-				if (true=={AJAXON}) {
-					xajax_getMailTpl(y,'{KontaktTO}');
-				} else {
-					document.mailform.MID.value=y;
-					document.mailform.submit();
-				}
+				xajax_getMailTpl(y,'{KontaktTO}');
 			} else {
 				document.mailform.reset();
 			}
 		}
 		function saveTpl() {
-			if (true=={AJAXON}) {
-				x=document.mailform.vorlage.selectedIndex;
-				sub=document.mailform.Subject.value;
-				mid=document.mailform.vorlage.options[x].value;
-				txt=document.mailform.BodyText.value
-				xajax_saveMailTpl(sub,txt,mid);
-			} else {
-				document.mailform.aktion.value="tplsave";
-				document.mailform.submit();
-			}
+			x=document.mailform.vorlage.selectedIndex;
+			sub=document.mailform.Subject.value;
+			mid=document.mailform.vorlage.options[x].value;
+			txt=document.mailform.BodyText.value
+			xajax_saveMailTpl(sub,txt,mid);
 		}
 		function delTpl() {
 			x=document.mailform.vorlage.selectedIndex
-			if (x>0 && true=={AJAXON}) {
-				x=document.mailform.vorlage.selectedIndex;
-				xajax_delMailTpl(x);
-			}
+			x=document.mailform.vorlage.selectedIndex;
+			xajax_delMailTpl(x);
 		}
 	//-->
 	</script>

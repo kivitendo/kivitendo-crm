@@ -41,10 +41,7 @@ installieren.  Ein weiteres Paket ist dafür Vorraussetzung:
 jpgraph muß nicht mehr verwendet werden. Alternativ wird PEAR::Image_Graph verwendet.
 
 AJAX:
-Nach und nach werden einige Masken mit Ajax bedient. Die eMail-Maske ist die erste.
-Einige Funktionen können wahlweise mit oder ohne Ajax bedient werden. Bis Version 1.4.0 wird 
-evtl. nur noch  Ajax unterstützt.
-Die Unterstützung muß in der conf.php mit $AJAX=true; eingeschaltet werden.
+Nach und nach werden einige Masken mit Ajax bedient. 
 Das Paket xajax muß im CRM-Verzeichnis im Unterverzeichnis "xajax" installiert werden
 oder per Link eingebunden werden.
 

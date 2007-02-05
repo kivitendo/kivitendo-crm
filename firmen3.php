@@ -4,6 +4,7 @@
 	include("inc/template.inc");
 	include("inc/FirmenLib.php");
 	include("inc/UserLib.php");
+	require("firmacommon.php");
 	$t = new Template($base);
 	$t->set_file(array("fa1" => "firmen3.tpl"));
 	if ($_POST["saveneu"]) {

@@ -4,6 +4,7 @@
 	include("inc/template.inc");
 	include("inc/FirmenLib.php");
 	include("inc/crmLib.php");
+        require("firmacommon.php");
 	$kdhelp=getWCategorie(true);
 	$id=$_GET["id"];
 	$fa=getFirmenStamm($id);
@@ -13,7 +14,8 @@
 	$t = new Template($base);
 	$t->set_file(array("fa1" => "firma1.tpl"));
 	if ($fa["grafik"]) {
-		$Image="<img src='dokumente/".$_SESSION["mansel"]."/".$_GET["id"]."/logo.".$fa["grafik"]."' ".$fa["size"].">";
+		$Image="<a href='dokumente/".$_SESSION["mansel"]."/".$_GET["id"]."/logo.".$fa["grafik"]."' target='_blank'>";
+		$Image.="<img src='dokumente/".$_SESSION["mansel"]."/".$_GET["id"]."/logo.".$fa["grafik"]."' ".$fa["icon"]." border='0'></a>";
 	} else {
 		$Image="";
 	};
@@ -45,6 +47,7 @@
 	$views=array(""=> "lie",1=>"lie",2=>"not",3=>"inf");
 	$taxzone=array("Inland","EU mit UStId","EU ohne UStId","Ausland");
 	$t->set_var(array(
+			AJAXJS  => $xajax->printJavascript('./xajax/'),
 			FID	=> $id,
 			INID	=> db2date(substr($fa["itime"],0,10)),
 			Fname1	=> $fa["name"],
@@ -79,6 +82,7 @@
 			op	=> sprintf("%0.2f",$fa["op"]),
 			oa	=> sprintf("%0.2f",$fa["oa"]),
 			preisgrp	=> $fa["pricegroup"],
+			Sshipto_id	=> $fa["shipto_id"],
 			Sname1	=> $fa["shiptoname"],
 			Sdepartment_1	=> $fa["shiptodepartment_1"],
 			Sdepartment_2	=> $fa["shiptodepartment_2"],
@@ -92,6 +96,7 @@
 			SeMail	=> $fa["shiptoemail"],
 			Scontact=> $fa["shiptocontact"],
 			Scnt 	=> $fa["shiptocnt"],
+			Sids	=> $fa["shiptoids"],
 			Cmsg	=> $cmsg,
 			IMG	=> $Image,
 			PAGER	=> $pager,
@@ -100,7 +105,7 @@
 			KARTE	=> $karte,
 			zeigeplan => ($karte)?"visible":"hidden",
 			login	=> $_SESSION["employee"],
-			password	=> $_SESSION["password"],
+			password => $_SESSION["password"],
 			leadsrc => $fa["leadsrc"],
 			erstellt => db2date($fa["itime"]),
 			modify => db2date($fa["mtime"]),

@@ -156,6 +156,9 @@ input:focus {
 .zeile {  clear: both;
   padding: 2px 0px;
 }
+.zeile2 {  clear: both;
+  padding: 2px 90px;
+}
 .label {
   float: left;
   width: 80px;

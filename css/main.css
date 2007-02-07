@@ -36,6 +36,11 @@ td.dot 		{ border-width:1px 1px 1px 1px; border-style:solid; border-color:#66666
 td.ce		{ text-align:center;}
 td.le		{ text-align:left;}
 td.re		{ text-align:right;}
+table.calls	{ font-size:1em;padding:2px; }
+tr.calls1	{ height:1.3em; background-color:#ddddff; }
+tr.calls0	{ height:1.3em; background-color:#ddffdd; }
+tr.calls1:hover  { background-color:#FF0000; }
+tr.calls0:hover  { background-color:#FF0000; }
 #tabmenue {
   padding: 3px;
 }
@@ -161,7 +166,7 @@ input:focus {
 }
 .label {
   float: left;
-  width: 80px;
+  width: 90px;
   text-align: right;
   padding-top: 3px;
   padding-right: 5px;
@@ -175,6 +180,11 @@ input:focus {
 .feld {
   float: right;
   width: 205px;
+  text-align: left;
+}
+.feldxx {
+  float: left;
+  width: 230px;
   text-align: left;
 }
 .pad {

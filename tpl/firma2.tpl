@@ -68,39 +68,41 @@
 
 <span style="position:absolute; left:10px; top:67px; width:99%;">
 <!-- Beginn Code ------------------------------------------->
-<div style="float:left; width:53%; height:450px; text-align:center; border: 1px solid black;">
+<div style="float:left; width:53%; height:450px; text-align:center;  border: 1px solid black;">
 	<div style="float:left; width:100%; height:55px; text-align:left; border-bottom: 1px solid black;" class="fett">
 		<form name="contact">
 		<input type="hidden" name="cp_id" id="cp_id" value="{PID}">
-		{Fname1} &nbsp; &nbsp; {customernumber} &nbsp; &nbsp;
+		&nbsp;{Fname1} &nbsp; &nbsp; {customernumber} &nbsp; &nbsp;
 		<select name="liste" id="liste" style="visibility:{moreC}; width:150px;" onChange="showContact();">
 		{kontakte}</select><br />
-		{Fdepartment_1}<br /> 
-		{Plz} {Ort}</form><br />
+		&nbsp;{Fdepartment_1}<br /> 
+		&nbsp;{Plz} {Ort}</form><br />
 	</div>
 	<div style="float:left; width:70%; height:210px; text-align:left; border-bottom: 1px solid black;" class="gross">
-		<span id="cp_greeting">{Anrede}</span> <span id="cp_title">{Titel}</span><br />
-		<span id="cp_givenname">{Vname}</span> <span id="cp_name">{Nname}</span><br />
-		<span id="cp_street">{StreetC}</span><br />
+		&nbsp;<span id="cp_greeting"></span> <span id="cp_title"></span><br />
+		&nbsp;<span id="cp_givenname"></span> <span id="cp_name"></span><br />
+		&nbsp;<span id="cp_street"></span><br />
 		<span class="mini">&nbsp;<br /></span>
-		<span id="cp_country">{LandC}</span><span id="cp_zipcode">{PlzC}</span> <span id="cp_city">{OrtC}</span><br />
+		&nbsp;<span id="cp_country"></span><span id="cp_zipcode"></span> <span id="cp_city"></span><br />
 		<span class="mini">&nbsp;<br /></span>
-		<img src="image/telefon.gif" style="visibility:{none};"> <span id="cp_phone1">{Telefon}</span><br />
-		&nbsp;<img src="image/mobile.gif" style="visibility:{none};"> <span id="cp_phone2">{Mobile}</span><br />
-		<img src="image/fax.gif" style="visibility:{none};"> <span id="cp_fax">{Fax}</span><br />
-		<span id="cp_email"><a href="mail.php?TO={eMail}&KontaktTO=K{PID}">{eMail}</a></span><br />
-		<span id="cp_homepage"><a href="{www}" target="_blank">{www}</a></span><br /><br />
+		<img src="image/telefon.gif" style="visibility:{none};"> <span id="cp_phone1"></span> <span id="cp_phone2"></span><br />
+		&nbsp;<img src="image/mobile.gif" style="visibility:{none};"> <span id="cp_mobile1"></span> <span id="cp_mobile2"></span><br />
+		<img src="image/fax.gif" style="visibility:{none};"> <span id="cp_fax"></span><br />
+		&nbsp;<span id="cp_email"></span><br />
+		&nbsp;<span id="cp_homepage"></span><br /><br />
 	</div>
 	<div style="float:left; width:30%; height:210px; text-align:right; border-bottom: 1px solid black;" class="gross">
 		<a href="#" onCLick="anschr();"><img src="image/brief.png" border="0" style="visibility:{none};"></a><br />
-		<span id="cp_grafik">{IMG}</span></br >
-		<span id="cp_birthday">{GDate}</span></br />
-		<span id="cp_position">{Position}</span><br />
-		<span id="cp_abteilung">{Abteilung}</span><br />
+		<span id="cp_grafik"></span></br >
+		<span id="cp_birthday"></span></br />
+		<span id="cp_position"></span><br />
+		<span id="cp_abteilung"></span><br />
 	</div>
-	<div style="float:none; width:100%; height:385px; text-align:left; border-bottom: 1px solid black;" class="normal">
-		<span id="cp_sonder">{Sonder}</span><br>
-		<span id="cp_notes" class="klein">{Notiz}</span>
+	<div style="float:none; width:100%; height:400px; text-align:left; border-bottom: 1px solid black;" class="normal">
+		&nbsp;<span id="cp_sonder"></span><br>
+		&nbsp;<span id="cp_notes" class="klein"></span><br>
+		<hr>
+		&nbsp;<span id="cp_privatphone"></span> <span id="cp_privatemail"></span><br />
 	</div><br>
 	<div style="position:absolute; bottom:8px; width:49%; " class="normal">
 	<!--div style="float:none; width:100%; he)ight:15px; text-align:center; border: 0px solid black;" class="normal"-->

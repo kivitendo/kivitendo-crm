@@ -32,7 +32,7 @@ function mkSuchwort($suchwort) {
 *****************************************************/
 function getAllTelCall($id,$firma,$start=0,$lim=19) {
 global $db;
-	if (!$start) $start=0;
+	if (!$start || $start<0) $start=0;
 	if ($firma) {	// dann hole alle Kontakte der Firma
 		$sql="select id,caller_id,kontakt,cause,calldate,cp_name from ";
 		$sql.="telcall left join contacts on caller_id=cp_id where bezug=0 ";
@@ -46,6 +46,11 @@ global $db;
 	if(!$rs) {
 		$rs=false;
 	} else {
+		if ($start>0 && count($rs)==0) { //Mit dem Offset keine Eiträge gefunden, also die vorherigen Einträge lesen
+			$start=($start>$lim)?($start-$lim):0;
+			$rs=$db->getAll($sql." order by calldate desc offset $start ".(($lim>0)?"limit $lim":""));
+		}
+		//Neuesten Eintrag ermitteln
 		$sql="select telcall.* from telcall left join contacts on caller_id=cp_id where  ";
 		$sql.="(caller_id in (select cp_id from contacts where cp_cv_id=$id) or caller_id=$id) ";
 		$sql.="order by calldate desc limit 1";
@@ -63,7 +68,20 @@ global $db;
 	}
 	return $rs;
 }
-
+function getAllTelCallMax($id,$firma) {
+global $db;
+	if ($firma) {	// dann hole alle Kontakte der Firma
+		$sql="select id,caller_id,kontakt,cause,calldate,cp_name from ";
+		$sql.="telcall left join contacts on caller_id=cp_id where bezug=0 ";
+		$sql.="and (caller_id in (select cp_id from contacts where cp_cv_id=$id) or caller_id=$id)";
+ 	} else {  // hole nur die einer Person
+		$where="and caller_id=$id and caller_id=cp_id";
+		$sql="select id,caller_id,kontakt,cause,calldate,cp_name from ";
+		$sql.="telcall left join contacts on caller_id=cp_id where bezug=0 and caller_id=$id";
+	}
+	$rs=$db->getAll($sql);
+	return count($rs);
+}
 /****************************************************
 * getAllTelCallUser
 * in: id = int, firma = boolean

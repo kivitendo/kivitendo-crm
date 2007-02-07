@@ -35,5 +35,7 @@
 	$xajax->registerFunction("Buland");
 	$xajax->registerFunction("getShipto");
 	$xajax->registerFunction("showShipadress");
+	$xajax->registerFunction("showContactadress");
+        $xajax->registerFunction("showCalls");
 
 ?>

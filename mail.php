@@ -21,9 +21,10 @@
 		$referer="mail.php";
 		$btn="<a href='mail.php'><input type=\"button\" name=\"return\" value=\"neu\"></a>";
 	} else { // Rückkehr zur Ausgangsseite
-		$btn="<a href=\"$referer\"><input type=\"button\" name=\"return\" value=\"zur&uuml;ck\"></a>";
 		$TO=$_GET["TO"];
 		$KontaktTO=$_GET["KontaktTO"];
+		if (substr($KontaktTO,0,1)=="P") $referer.="&id=".substr($KontaktTO,1);
+		$btn="<a href=\"$referer\"><input type=\"button\" name=\"return\" value=\"zur&uuml;ck\"></a>";
 	}
 	if ($_POST["aktion"]=="tplsave") {
 		$rc=saveMailVorlage($_POST);

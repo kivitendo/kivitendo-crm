@@ -84,7 +84,11 @@
 			}
 			$data["cp_sonder"]=$sonder;
 		}
-		$nocodec = array("cp_email","cp_homepage","cp_zipcode","cp_birthday","cp_grafik");
+		if ($data["cp_phone2"]) $data["cp_phone2"]="(".$data["cp_phone2"].")";
+		if ($data["cp_privatphone"]) $data["cp_privatphone"]="Privat: ".$data["cp_privatphone"];
+		if ($data["cp_mobile2"]) $data["cp_mobile2"]="(".$data["cp_mobile2"].")";
+		if ($data["cp_privatemail"]) $data["cp_privatemail"]="Privat: <a href='mail.php?TO=".$data["cp_privatemail"]."&KontaktTO=P".$data["cp_id"]."'>".$data["cp_privatemail"]."</a>";;
+		$nocodec = array("cp_email","cp_homepage","cp_zipcode","cp_birthday","cp_grafik","cp_privatemail");
 		$objResponse = new xajaxResponse();
 		foreach ($data as $key=>$val) {
 			if (in_array($key,$nocodec)) {
@@ -93,7 +97,6 @@
                 		$objResponse->addAssign($key,            "innerHTML", htmlentities($val));
 			}
 		}
-
 		$objResponse->addAssign("cp_id", 	"value", $data["cp_id"]);
                 return $objResponse;	
 	}

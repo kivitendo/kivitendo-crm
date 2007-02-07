@@ -16,8 +16,10 @@ require_once "db.php";
 * wandelt ein db-Datum in ein "normales" Datum um
 *****************************************************/
  function db2date($datum) {
-     $D=split("-",$datum);
-     $datum=sprintf ("%02d.%02d.%04d",$D[2],$D[1],$D[0]);
+     if (strpos($datum,"-")) {
+     	$D=split("-",$datum);
+     	$datum=sprintf ("%02d.%02d.%04d",$D[2],$D[1],$D[0]);
+     }
      return $datum;
   }
 

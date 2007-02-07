@@ -28,7 +28,7 @@ global $db;
 * !! noch in eine andere Lib auslagern
 * !! da auch von Lieferant und Person gebraucht wird
 *****************************************************/
-function getKontaktStamm($id) {
+function getKontaktStamm($id,$pfad="") {
 global $db;
 	$sql="select C.*,E.login from contacts C left join employee E on C.cp_employee=E.id where C.cp_id=$id";
 	$rs=$db->getAll($sql);
@@ -54,6 +54,21 @@ global $db;
 			}
 		}
 		$daten=$rs[0];
+		if ($daten["cp_grafik"]) {
+			$image="$pfad./dokumente/".$_SESSION["mansel"]."/$id/kopf.".$daten["cp_grafik"];
+			if (file_exists($image)) {
+				$size=@getimagesize(trim($image));
+				$daten["size"]=$size[3];
+				if ($size[1]>$size[0]) {
+					$faktor=ceil($size[1]/70);
+				} else {
+					$faktor=ceil($size[0]/120);
+				}
+				$breite=floor($size[0]/$faktor);
+				$hoehe=floor($size[1]/$faktor);
+				$daten["icon"]="width=\"$breite\" height=\"$hoehe\"";
+			}
+		}
 		$daten["Firma"] = $firma;
 		$daten["Department_1"]=$rs1[0]["department_1"];
 		$daten["tabelle"] = $tab;
@@ -184,13 +199,17 @@ global $db;
 	$dbfld=array(	"cp_name" => array(0,1,1,"Name",75),	"cp_givenname" => array(0,1,1,"Vorname",75),	"cp_greeting" => array(0,0,1,"Anrede",75),
 			"cp_title" => array(0,0,1,"Titel",75),	"cp_street" => array(0,0,1,"Strasse",75),	"cp_zipcode" => array(0,0,2,"Plz",10),
 			"cp_city" => array(0,0,1,"Ort",75),	"cp_country" => array(0,0,8,"Land",3), 		"cp_sonder" => array(0,0,10,"SonderFlag",0),
-			"cp_phone1" => array(0,0,3,"Telefon",30),"cp_phone2" => array(0,0,3,"Mobile",30),	"cp_fax" => array(0,0,3,"Fax",30),
-			"cp_homepage" =>array(0,0,4,"Homepage",0),"cp_email" => array(0,0,5,"eMail",0),
-			"cp_notes" => array(0,0,1,"Bemerkungen",0),"cp_stichwort1" => array(0,0,1,"Stichworte",50),
-			"cp_gebdatum" => array(0,0,7,"Geb-Datum",0),"cp_beziehung" => array(0,0,6,"Beziehung",0),
-			"cp_abteilung" => array(0,0,1,"Abteilung",25),"cp_position" => array(0,0,1,"Position",25),
-			"cp_cv_id" => array(0,0,6,"FID",0),	"name" => array(1,0,1,"Firma",75),		
-			"cp_owener" => array(0,0,6,"CRM-User",0),"cp_grafik" => array(0,0,9,"Grafik",4),);				
+			"cp_phone1" => array(0,0,3,"Telefon 1",30),	   "cp_phone2" => array(0,0,3,"Telefon 2",30),	
+			"cp_mobile1" => array(0,0,3,"Mobiletelefon 1",30), "cp_mobile2" => array(0,0,3,"Mobiletelefon 2",30),	
+			"cp_homepage" =>array(0,0,4,"Homepage",0),	   "cp_fax" => array(0,0,3,"Fax",30),
+			"cp_email" => array(0,0,5,"eMail",0), 		   "cp_privatemail" => array(0,0,5,"Private eMail",0),
+			"cp_notes" => array(0,0,1,"Bemerkungen",0),	   "cp_stichwort1" => array(0,0,1,"Stichworte",50),
+			"cp_salutation" => array(0,0,1,"Briefanrede",125),
+			"cp_privatphone" => array(0,0,3,"Privattelefon 1",30),
+			"cp_birthday" => array(0,0,7,"Geb-Datum",0),"cp_beziehung" => array(0,0,6,"Beziehung",0),
+			"cp_abteilung" => array(0,0,1,"Abteilung",25),	   "cp_position" => array(0,0,1,"Position",25),
+			"cp_cv_id" => array(0,0,6,"FID",0),		   "name" => array(1,0,1,"Firma",75),		
+			"cp_owener" => array(0,0,6,"CRM-User",0),	   "cp_grafik" => array(0,0,9,"Grafik",4),);				
 	if (!empty($datei["bild"]["name"])) {  		// eine Datei wird mitgeliefert
 			$typ=array(1=>"gif",2=>"jpeg",3=>"png",4=>false);
 			$imagesize=getimagesize($datei["bild"]['tmp_name'],&$info);
@@ -202,6 +221,8 @@ global $db;
 	} else {
 		$daten["cp_grafik"]=$daten["IMG_"];
 	}
+	if ($daten["cp_greeting_"]) $daten["cp_greeting"]=$daten["cp_greeting_"];
+	if ($daten["cp_salutation_"]) $daten["cp_salutation"]=$daten["cp_salutation_"];
 	$keys=array_keys($daten);
 	$dbf=array_keys($dbfld);
 	$fid=$daten["fid"];
@@ -209,8 +230,6 @@ global $db;
 	$pid=$daten["PID"];
 	$fehler=-1;
 	$tels=array();
-	if ($daten["greeting"]=="H") { $daten["cp_greeting"]="Herr"; }
-	else if ($daten["greeting"]=="F") { $daten["cp_greeting"]="Frau"; };	
 	for ($i=0; $i<$anzahl; $i++) {
 		if (in_array($keys[$i],$dbf)) {
 			$tmpval=trim($daten[$keys[$i]]);
@@ -237,11 +256,11 @@ global $db;
 			$ok=chkdir($dir);
 			move_uploaded_file($datei["bild"]["tmp_name"],"$dest");
 			if (($imagesize[1] < $imagesize[0]) ) {
-				$hoehe=ceil($imagesize[1]/$imagesize[0]*200);
-				$breite=200;
+				$hoehe=ceil($imagesize[1]/$imagesize[0]*480);
+				$breite=480;
 			} else {
-				$breite=ceil($imagesize[0]/$imagesize[1]*100);
-				$hoehe=100;
+				$breite=ceil($imagesize[0]/$imagesize[1]*360);
+				$hoehe=360;
 			}
 			if ($typ[$imagesize[2]]=="gif") {
 				$image1 = imagecreate($breite,$hoehe);
@@ -249,12 +268,10 @@ global $db;
 				$image1 = imagecreatetruecolor($breite,$hoehe);
 			}
 			$tue="\$image=imagecreatefrom".$typ[$imagesize[2]]."('$dest');";
-			//echo "!$tue!<br>";
 			eval($tue);
 			imagecopyresized($image1, $image, 0,0, 0,0,$breite,$hoehe,$imagesize[0],$imagesize[1]);
 			//echo "!imagecopyresized(".$image1.",".$image.",0,0,0,0,".$breite.",".$hoehe.",".$imagesize[0].",".$imagesize[1].")!";
 			$tue="image".$typ[$imagesize[2]]."(\$image1,'$dest');";
-			//echo "!$tue!<br>";
 			eval($tue);
 		}
 		mkTelNummer($pid,"P",$tels);
@@ -307,7 +324,18 @@ global $db;
 	}
 return $id;
 }
-
+function getCpAnreden() {
+global $db;
+	$sql="select distinct (cp_greeting) from contacts";
+	$rs=$db->getAll($sql);
+	return $rs;
+}
+function getCpBriefAnreden() {
+global $db;
+	$sql="select distinct (cp_salutation) from contacts";
+	$rs=$db->getAll($sql);
+	return $rs;
+}
 function leertplP (&$t,$fid,$msg,$tab,$suche=false,$Quelle="") {
 global $laender,$cp_sonder;
 		if ($fid && $Quelle) $fa="Bekannt";
@@ -325,7 +353,8 @@ global $laender,$cp_sonder;
 			cpsel1  => "checked",
 			cpsel2  => "",
 			cpsel3  => "",
-			cp_greeting	=> "",
+			cp_greeting_	=> "",
+			cp_salutation_  => "",
 			cp_title 	=> "",
 			cp_givenname 	=> "",
 			cp_name 	=> "",
@@ -376,6 +405,24 @@ global $laender,$cp_sonder;
 					Gname => $zeile["grpname"],
 				));
 				$t->parse("Block2","OwenerListe",true);
+			}		
+			$anreden=getCpAnreden();
+			$t->set_block("pers1","anreden","BlockA");
+			if ($anreden) foreach ($anreden as $anrede) {
+				$t->set_var(array(
+					ANREDE	=> $anrede["cp_greeting"],
+					ASEL	=> ($anrede["cp_greeting"]==$daten["cp_greeting"])?"selected":"",
+				));
+				$t->parse("BlockA","anreden",true);
+			}
+			$anreden=getCpBriefAnreden();
+			$t->set_block("pers1","briefanred","BlockB");
+			if ($anreden) foreach ($anreden as $anrede) {
+				$t->set_var(array(
+					BRIEFAN	=> $anrede["cp_salutation"],
+					BSEL	=> ($anrede["cp_salutation"]==$daten["cp_salutation"])?"selected":"",
+				));
+				$t->parse("BlockB","briefanred",true);
 			}
 			$t->set_block("pers1","sonder","Block3");
 			if ($cp_sonder) while (list($key,$val) = each($cp_sonder)) {
@@ -390,7 +437,7 @@ global $laender,$cp_sonder;
 function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
 	global $laender,$cp_sonder;
 		if (trim($daten["cp_grafik"])<>"") {
-			$Image="<img src='dokumente/".$_SESSION["mansel"]."/".$daten["cp_id"]."/kopf.".$daten["cp_grafik"]."' ".$daten["size"].">";
+			$Image="<img src='dokumente/".$_SESSION["mansel"]."/".$daten["cp_id"]."/kopf.".$daten["cp_grafik"]."' ".$daten["icon"].">";
 		}
 		$t->set_file(array("pers1" => "personen".$tab.".tpl"));
 		$t->set_var(array(
@@ -403,13 +450,14 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
 			Msg 	=> $msg,
 			action	=> "personen".$tab.".php",
 			PID 	=> $daten["cp_id"],
-			cpsel1  => ($daten["cp_greeting"]=="Herr")?"checked":"",
-			cpsel2  => ($daten["cp_greeting"]=="Frau")?"checked":"",
-			cpsel3  => ($daten["cp_greeting"]<>"Herr" && $daten["cp_greeting"]<>"Frau")?"checked":"",
-			cp_greeting	=> ($daten["cp_greeting"]!="Herr" && $daten["cp_greeting"]!="Frau")?$daten["cp_greeting"]:"",
+			//cpsel1  => ($daten["cp_greeting"]=="Herr")?"checked":"",
+			//cpsel2  => ($daten["cp_greeting"]=="Frau")?"checked":"",
+			//cpsel3  => ($daten["cp_greeting"]<>"Herr" && $daten["cp_greeting"]<>"Frau")?"checked":"",
+			cp_greeting_	=> $daten["cp_greeting_"], //($daten["cp_greeting"]!="Herr" && $daten["cp_greeting"]!="Frau")?$daten["cp_greeting"]:"",
 			cp_title 	=> $daten["cp_title"],
 			cp_givenname 	=> $daten["cp_givenname"],
 			cp_name 	=> $daten["cp_name"],
+			cp_salutation_	=> $daten["cp_salutation_"],
 			cp_street 	=> $daten["cp_street"],
 			cp_country	=> $daten["cp_country"],
 			cp_zipcode 	=> $daten["cp_zipcode"],
@@ -419,7 +467,7 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
 			cp_fax 		=> $daten["cp_fax"],
 			cp_email 	=> $daten["cp_email"],
 			cp_homepage 	=> $daten["cp_homepage"],
-			cp_gebdatum	=> ($daten["cp_gebdatum"])?db2date($daten["cp_gebdatum"]):"",
+			cp_birthday	=> ($daten["cp_birthday"])?db2date($daten["cp_birthday"]):"",
 			cp_beziehung	=> $daten["cp_beziehung"],
 			cp_abteilung	=> $daten["cp_abteilung"],
 			cp_position 	=> $daten["cp_position"],
@@ -463,7 +511,25 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
 				));
 				$t->parse("Block2","OwenerListe",true);
 			}
+			$anreden=getCpAnreden();
+			$t->set_block("pers1","anreden","BlockA");
+			if ($anreden) foreach ($anreden as $anrede) {
+				$t->set_var(array(
+					ANREDE	=> $anrede["cp_greeting"],
+					ASEL	=> ($anrede["cp_greeting"]==$daten["cp_greeting"])?"selected":"",
+				));
+				$t->parse("BlockA","anreden",true);
+			}
 			$t->set_block("pers1","sonder","Block3");
+			$anreden=getCpBriefAnreden();
+			$t->set_block("pers1","briefanred","BlockB");
+			if ($anreden) foreach ($anreden as $anrede) {
+				$t->set_var(array(
+					BRIEFAN	=> $anrede["cp_salutation"],
+					BSEL	=> ($anrede["cp_salutation"]==$daten["cp_salutation"])?"selected":"",
+				));
+				$t->parse("BlockB","briefanred",true);
+			}
 			if ($cp_sonder) while (list($key,$val) = each($cp_sonder)) {
 				$t->set_var(array(
 					sonder_sel => ($daten["cp_sonder"] & $key)?"checked":"",

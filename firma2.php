@@ -100,31 +100,5 @@
 			Edit => "Bearbeiten",
 			none => ($ep=="" && $init=="")?"hidden":"visible",
 	));
-	/*
-	$t->set_block("co1","Liste","Block");
-	$i=0;
-	$nun=date("Y-m-d h:i");
-	$itemN[]=array(id => 0,calldate => $nun, caller_id => $employee, cause => "Neuer Eintrag" );
-	$items=getAllTelCall($id,false);
-	if ($items) {
-		$item=array_merge($itemN,$items);
-	} else {
-		$item=$itemN;
-	}
-	if ($item) foreach($item as $col){
-			if ($col["new"]) { $cause="<b>".$col["cause"]."</b>"; }
-			else { $cause=$col["cause"]; }
-			$t->set_var(array(
-				IID => $col["id"],
-				LineCol	=> $bgcol[($i%2+1)],
-				Datum	=> db2date(substr($col["calldate"],0,10)),
-				Zeit	=> substr($col["calldate"],11,5),
-				Name	=> $col["cp_name"],
-				Betreff	=> $cause,
-				Nr	=> $col["id"]
-			));
-			$t->parse("Block","Liste",true);
-			$i++;
-	}*/
 	$t->Lpparse("out",array("co1"),$_SESSION["lang"],"firma");
 ?>

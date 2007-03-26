@@ -1,4 +1,4 @@
-<!-- $Id: personen2L.tpl,v 1.2 2005/09/16 12:01:12 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -7,11 +7,7 @@
 	function showK (id,tbl) {
 		{no}
 		Frame=eval("parent.main_window");
-		if (tbl==1) {
-			uri="firma2.php?id=" + id;
-		} else {
-			uri="liefer2.php?id=" + id;
-		}
+		uri="firma2.php?Q="+tbl+"&id=" + id;
 		Frame.location.href=uri;
 	}
 	//-->

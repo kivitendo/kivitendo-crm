@@ -3,6 +3,7 @@
 	require_once 'Contact_Vcard_Build.php';
 	require_once("inc/stdLib.php");
 	include("inc/FirmenLib.php");
+	$Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
 	// instantiate a builder object (defaults to version 3.0)
 	$vcard = new Contact_Vcard_Build();
 	if ($_GET["pid"]) {
@@ -53,7 +54,7 @@
 			$vcard->addOrganization($fa["name"]);
 		}
 	} else if ($_GET["fid"]) {
-		$data=getFirmenStamm($_GET["fid"]);
+		$data=getFirmenStamm($_GET["fid"],true,$Q);
 		$vcard->setFormattedName($data["name"]);
 		if ($data["department_1"]) { 
 			$vcard->setName($data["name"],$data["department_1"],"","","");	
@@ -64,28 +65,6 @@
 		$vcard->addParam('TYPE', 'WORK');
 		$vcard->addOrganization($data["name"]);
 		$vcard->addOrganization($data["department_1"]);
-		if ($data["email"]) { 
-			$vcard->addEmail($data["email"]);
-			$vcard->addParam('TYPE', 'WORK');
-			$vcard->addParam('TYPE', 'PREF');
-		}
-		if ($data["phone"]) {
-			$vcard->addTelephone($data["phone"]);
-			$vcard->addParam('TYPE', 'WORK');
-			$vcard->addParam('TYPE', 'PREF');
-		}
-		if ($data["fax"]) {
-			$vcard->addTelephone($data["fax"]);
-			$vcard->addParam('TYPE', 'FAX');
-		}
-		if ($data["notes"]) $vcard->setNote($data["notes"]);
-	} else if ($_GET["lid"]) {
-		$data=getFirmenStamm($_GET["lid"],true,"V");
-		$vcard->setFormattedName($data["name"]);
-		$vcard->setName($data["name"],"",$data["department_1"],"","");	
-		$vcard->addAddress('', '', $data["street"], $data["city"], '', $data["zipcode"], $data["country"]);
-		$vcard->addParam('TYPE', 'WORK');
-		$vcard->addOrganization($data["name"]);
 		if ($data["email"]) { 
 			$vcard->addEmail($data["email"]);
 			$vcard->addParam('TYPE', 'WORK');

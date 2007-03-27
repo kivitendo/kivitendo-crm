@@ -1,4 +1,5 @@
 <?
+require_once "DB.php";
 class myDB extends DB {
 
  var $db = false;

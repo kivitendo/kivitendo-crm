@@ -37,5 +37,12 @@
 	$xajax->registerFunction("showShipadress");
 	$xajax->registerFunction("showContactadress");
         $xajax->registerFunction("showCalls");
+        $xajax->registerFunction("showDir");
+        $xajax->registerFunction("newDir");
+        $xajax->registerFunction("moveFile");
+        $xajax->registerFunction("delFile");
+        $xajax->registerFunction("showFile");
+        $xajax->registerFunction("getDocVorlage_");
+        $xajax->registerFunction("saveAttribut");
 
 ?>

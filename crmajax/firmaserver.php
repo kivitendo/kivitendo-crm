@@ -3,6 +3,7 @@
 	include("FirmenLib.php");
 	include("persLib.php");
 	include("crmLib.php");
+	include("documents.php");
 	function getShipto($id) {
 		$data=getShipStamm($id);
 		$objResponse = new xajaxResponse();
@@ -69,8 +70,9 @@
 		else if (preg_match("/ISO-8859-1/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-1"; }
 		else { $charset="ISO-8859-1"; };
 		if ($data["cp_grafik"]) {
-			$img="<img src='dokumente/".$_SESSION["mansel"]."/".$data["cp_id"]."/kopf.".$data["cp_grafik"]."' ".$data["icon"]." border='0'>";
-			$data["cp_grafik"]="<a href='dokumente/".$_SESSION["mansel"]."/".$data["cp_id"]."/kopf.".$data["cp_grafik"]."' target='_blank'>$img</a>";
+			$root="dokumente/".$_SESSION["mansel"]."/".$data["tabelle"].$data["number"]."/".$data["cp_id"];
+			$img="<img src='$root/kopf.".$data["cp_grafik"]."' ".$data["icon"]." border='0'>";
+			$data["cp_grafik"]="<a href='$root/kopf.".$data["cp_grafik"]."' target='_blank'>$img</a>";
 		};
 		$data["cp_email"]="<a href='mail.php?TO=".$data["cp_email"]."&KontaktTO=P".$data["cp_id"]."'>".$data["cp_email"]."</a>";
 		$data["cp_homepage"]="<a href='".$data["cp_homepage"]."' target='_blank'>".$data["cp_homepage"]."</a>";
@@ -129,6 +131,212 @@
 			$max=getAllTelCallMax($id,$firma);
 			$objResponse->addScript("max = $max;");
 		}
+                return $objResponse;	
+	}
+	function showDir($id,$directory) {
+		$directory = trim( rtrim( $directory, " /\\" ) );
+		chkdir($directory,".");
+		if ( is_dir("../dokumente/".$_SESSION["mansel"]."/".$directory)) {
+		    $dir_object = dir( "../dokumente/".$_SESSION["mansel"]."/".$directory );
+		    // Gibt neues Verzeichnis aus
+			$inhalt="<ul>";
+			$dir="<li onClick='dateibaum(\"$id\",\"%s\")'>%s";
+			$datei="<li onClick='showFile(\"$id\",\"%s\")'>%s";
+			clearstatcache();
+	        	while ( false !== ( $entry = $dir_object->read() ) ) {
+		            // '.' interessiert nicht
+		            if ( $entry !== '.' ) { 
+				if ($entry === '..' ) {
+						if ($directory=="/" || $directory=="") { 
+							continue;
+						} else { 
+							$tmp=substr($directory,0,strrpos($directory,"/"));
+							$inhalt.=sprintf($dir,$tmp,"[ .. ]");
+						}
+		                } else if (is_dir("../dokumente/".$_SESSION["mansel"]."/".$directory."/".$entry)) {
+						$inhalt.=sprintf($dir,$directory."/".$entry,"[ $entry ]");
+				} else {
+					$inhalt.=sprintf($datei,$entry,"$entry");
+				}
+		            }
+	        	}
+			$inhalt.="</ul>";
+		        $dir_object->close();
+	    }
+		$objResponse = new xajaxResponse();
+		$objResponse->addAssign("fb$id", 	"innerHTML", $inhalt);
+		$objResponse->addAssign("path", 	"innerHTML", ($directory)?$directory:"/");
+                return $objResponse;	
+
+	}
+	function showFile($pfad,$file) {
+		if (substr($pfad,-1)=="/") $pfad=substr($pfad,0,-1);
+		clearstatcache();
+		$zeit=date("d.m.Y H:i:s",filemtime("../dokumente/".$_SESSION["mansel"]."/$pfad/$file"));
+		$size=filesize("../dokumente/".$_SESSION["mansel"]."/$pfad/$file");
+		$ext=strtoupper(substr($file,strrpos($file,".")+1));
+		$pic="file.gif";
+		     if ($ext=="PDF") { $type="PDF-File"; $pic="pdf.png"; }
+		else if (in_array($ext,array("ODT","ODF","SXW","STW","WPD","DOC","TXT","RTF","LWP","WPS"))) { $type="Textdokument"; $pic="text.png";}
+		else if (in_array($ext,array("ODS","SXC","STC","VOR","XLS","CSV","123"))) { $type="Tabellendokument"; $pic="calc.png"; }
+		else if (in_array($ext,array("ODP","SXI","SDP","POT","PPS"))) { $type="Pr&auml;sentation"; $pic="praesent.png";}
+		else if (in_array($ext,array("ODG","SXD","SDA","SVG","SDD","DXF"))) { $type="Zeichnungen"; $pic="zeichng.png";}
+		else if (in_array($ext,array("HTM","HTML","STW","SSI","OTH"))) { $type="Webseiten"; $pic="web.png"; }
+		else if (in_array($ext,array("DBF","ODB"))) { $type="Datenbank"; $pic="db.png";}
+		else if (in_array($ext,array("PS", "EPS"))) { $type="Postscript"; $pic="ps.png";}
+		else if (in_array($ext,array("GZ", "TGZ","BZ","ZIP","TBZ"))) { $type="Komprimiert"; $pic="zip.png"; }
+		else if (in_array($ext,array("MP3","OGG","WAV"))) { $type="Audiodatei"; $pic="sound.png";}
+		else if (in_array($ext,array("BMP","GIF","JPG","JPEG","PNG","TIF","PGM","PPM","PCX","PSD","TIFF"))) { $type="Grafik-Datei"; $pic="grafik.png";}
+		else if (in_array($ext,array("WMF","MOV","AVI","VOB","MPG","MPEG","WMV","RM"))) { $type="Video-Datei"; $pic="video.png";}
+		else if ($ext=="XML") { $type="XML-Datei"; $pic="xml.png";}
+		else if (in_array($ext,array("SH","BAT"))) { $type="Shell-Script"; $pic="exe.png";}
+		else { $type="Unbekannt"; $pic="foo.png"; };
+		$info ="<br>$pfad/<b>$file</b><br><br>";
+		$info.="Dateityp: <img src='image/icon/$pic'> $type<br>";
+		$info.="Dateigr&ouml;sse: $size<br>Dateizeit: $zeit<br>";
+		$dbfile=new document();
+		$rs=$dbfile->searchDocument($file,$pfad);
+		$id=0;
+		if ($rs) {
+			$rs=$dbfile->getDokument($rs);
+			$info.="<br>Kommentar&auml;nderung: ".db2date($rs["datum"])." ".$rs["zeit"]."<br>";
+			$info.="Kommentar: ".nl2br($rs["descript"])."<br>";
+			$id=$rs["id"];
+		}
+		$objResponse = new xajaxResponse();
+		$objResponse->addAssign("docname",	"value", $file);
+		$objResponse->addAssign("docoldname",	"value", $file);
+		$objResponse->addAssign("docpfad",	"value", $pfad);
+		$objResponse->addAssign("docid",	"value", $id);
+		$objResponse->addAssign("docdescript",	"value", $rs["descript"]);
+		$objResponse->addAssign("fbright", 	"innerHTML", $info);
+		$objResponse->addAssign("subdownload",	"innerHTML",
+				"<a href='#' onClick='download(\"dokumente/".$_SESSION["mansel"]."$pfad/$file\")'>download</a>");
+		$objResponse->addAssign("subdelete",	"innerHTML",
+				"<a href='#' onClick='deletefile(\"dokumente/".$_SESSION["mansel"]."$pfad/$file\",$id)'>l&ouml;schen</a>");
+		$objResponse->addAssign("submove",	"innerHTML",
+				"<a href='#' onClick='movefile(\"dokumente/".$_SESSION["mansel"]."$pfad/$file\",$id)'>verschieben</a>");
+		$objResponse->addAssign("subedit",	"innerHTML",
+				"<a href='#' onClick='editattribut($id)'>Attribute bearbeiten</a>");
+                return $objResponse;	
+	}
+	function moveFile($file,$pfadleft) {
+		$oldpath=substr($file,0,strrpos($file,"/"));
+		$file=substr($file,strrpos($file,"/"));
+		if ($oldpath<>$pfadleft) {
+			$pre="../dokumente/".$_SESSION["mansel"];
+			rename("../".$oldpath.$file,$pre.$pfadleft.$file);	
+			$dbfile=new document();
+			$rs=$dbfile->searchDocument($file,$oldpath);
+			if ($rs) {
+				$rc=$dbfile->getDokument($rs["id"]);
+				$dbfile->setDocData("pfad",$pfadleft);
+				$rc=$dbfile->saveDocument();
+			}
+		}
+		if ($file[0]=="/") $file=substr($file,1);
+		$objResponse = new xajaxResponse();
+		$objResponse->addScript("dateibaum('left','$pfadleft')");
+		$objResponse->addScript("showFile('left','$file')");
+                return $objResponse;	
+	};
+	function saveAttribut($name,$oldname,$pfad,$komment,$id=0) {
+		$dbfile=new document();
+		if ($id>0) {
+			$rc=$dbfile->getDokument($id);
+		} else {
+			$dbfile->setDocData("pfad",$pfad);
+		};
+		if ($oldname<>$name) {
+			$path="../dokumente/".$_SESSION["mansel"]."$pfad/";
+			$dbfile->setDocData("name",$name);
+			rename($path.$oldname,$path.$name);
+			$oldname=$name;
+		} else {
+			$dbfile->setDocData("name",$oldname);
+		}
+		$dbfile->setDocData("descript",$komment);
+		$rc=$dbfile->saveDocument();
+		$objResponse = new xajaxResponse();
+		if ($rc) {
+			//$objResponse->addScript("dateibaum('left','$pfad');showFile('left','$name');editattribut();");
+			$objResponse->addScript("dateibaum('left','$pfad')");
+			$objResponse->addScript("showFile('left','$oldname')");
+			$objResponse->addScript("editattribut()");
+		} else {
+			$objResponse->addScript("alert('Fehler beim Sichern')");
+		}
+                return $objResponse;	
+	}
+	function newDir($id,$pfad,$newdir) {
+		chdir("../dokumente/".$_SESSION["mansel"]."/$pfad");
+		mkdir($newdir);
+		return new xajaxResponse();
+	}
+	function delFile($id=0,$pfad="",$file="") {
+		$dbfile=new document();
+		if ($id>0) {
+			$dbfile->getDokument($id);
+		} else {
+			$dbfile->setDocData("name",$file);
+			$dbfile->setDocData("pfad",$pfad);
+		}
+		$dbfile->deleteDocument(".");
+		$objResponse = new xajaxResponse();
+		return $objResponse;
+	}
+	function getDocVorlage_($did,$fid=0,$pid=0,$tab="C") {
+		$inhalt="<div id='iframe2'>";
+        $inhalt.="        <iframe id='newdoc' width='100%' height='100%' name='newdoc' src='firma4a.php?did=$did&fid=$fid&tab=$tab&pid=$pid' frameborder='0'></iframe>";
+	    $inhalt.="</div>";
+		$objResponse = new xajaxResponse();
+		$objResponse->addAssign("fbright", 	"innerHTML", $inhalt);
+        return $objResponse;
+	}
+	function getDocVorlage__($did,$fid=0,$pid=0,$tab="C") {
+		$document=getDOCvorlage($did);
+		if ($pid>0) {
+			$co=getKontaktStamm($pid);
+			$anredepers=$co["cp_greeting"];
+			$anredepers.=($co["cp_title"])?" ".$co["cp_title"]:"";
+			$namepers=$co["cp_givenname"]." ".$co["cp_name"];
+			$plzpers=$co["cp_zipcode"]; 
+			$ortpers=$co["cp_city"]; 
+			$strassepers=$co["cp_street"];
+			if (!$co["cp_cv_id"]) $art="Einzelperson";
+		};
+		if ($fid>0) {
+			$fa=getFirmenStamm($fid,$tab);
+			$anrede="Firma";
+			$name=$fa["name"];
+			$name1=$name;
+			$name2=$fa["department_1"];
+			$kontakt=$fa["contact"];
+			$plz=$fa["zipcode"];
+			$ort=$fa["city"];
+			$strasse=$fa["street"];
+			if ($pid>0) { $art="Firma/Kontakt"; } else { $art="Firmendokumente"; };
+		};
+		$datum=date("d.m.Y");
+		$zeit=date("H:i");
+		$input="<iframe width='100%'><html><body><form name='' action='' method='post'><table>\n";
+		if ($document["felder"]) {
+		 	foreach($document["felder"] as $zeile) {
+				$value=strtolower($zeile["platzhalter"]);
+				$input.="<tr><td>".$zeile["feldname"]."</td><td>";
+				if ($zeile["laenge"]>60) {
+					$rows=floor($zeile["laenge"]/60)+1;
+					$input.="<textarea cols=60 rows=$rows name='".$zeile["platzhalter"]."'>".${$value}."</textarea>";
+				} else {
+					$input.="<input type='text' name='".$zeile["platzhalter"]."' size='".$zeile["laenge"]."' value='".${$value}."'>";
+				}
+				$input.="</td></tr>\n";
+				$i++;
+	 		}
+		};
+		$input.="</table><input type='submit' name='send' value='erzeugen'></form></body></html>";
+		$objResponse = new xajaxResponse();
+		$objResponse->addAssign("fbright", 	"innerHTML", $input);
                 return $objResponse;	
 	}
 	require("firmacommon.php");

@@ -3,16 +3,20 @@
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 	<link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+	{AJAXJS}
 	<script language="JavaScript">
 	<!--
-	function showD (id) {
+	function showD () {
+		sel=document.getElementById("vorlage").selectedIndex;
+		id=document.getElementById("vorlage").options[sel].value;
 		if (id>0) {
-			Frame=eval("parent.main_window");
-			uri="firma4a.php?did=" + id + "&fid={FID}&pid={PID}";
-			Frame.location.href=uri;
+			if ("{PID}"=="") { pid=0; } else { pid="{PID}"; };
+			xajax_getDocVorlage_(id,{FID},pid,"{Q}");
 		}
 	}
-	function showV (nr) {
+	function showV () {
+		sel=document.getElementById("wv").selectedIndex;
+		nr=document.getElementById("wv").options[sel].value;
 		if (nr>0) {
 			Frame=eval("parent.main_window");
 			uri="vertrag3.php?vid=" + nr;
@@ -24,10 +28,113 @@
 		filename=document.firma4.dateien.options[sel].value;
 		open("dokumente/"+filename,"File");
 	}
+	function mkDir() {
+		seite=document.getElementById("seite").value;
+		name=document.getElementById("subdir").value;
+		newDir();
+		xajax_newDir(seite,pfadleft,name);
+		xajax_showDir(seite,pfadleft);
+	}
+	var downloadfile = "";
+	function download(file) {
+		downloadfile=open("download.php?file="+file,"Download","width=250px,height=200px,top=50px,menubar=no,status=no,toolbar=no,dependent=yes");
+		window.setTimeout("downloadfile.close()", 30000);
+	}
+	var onA = false;
+	function editattribut() {
+                if (onA) {
+                        onA = false;
+                        document.getElementById("attribut").style.visibility = "hidden";
+                } else {
+                        onA = true;
+                        document.getElementById("attribut").style.visibility = "visible";
+		}
+	}
+	function saveAttribut() {
+		name=document.getElementById("docname").value;
+		oldname=document.getElementById("docoldname").value;
+		pfad=document.getElementById("docpfad").value;
+		komment=document.getElementById("docdescript").value;
+		id=	document.getElementById("docid").value;
+		xajax_saveAttribut(name,oldname,pfad,komment,id);
+	}
+	var onL = false;
+	function deletefile() {
+		if (onL) {
+                        onL = false;
+                        document.getElementById("fileDel").style.visibility = "hidden";
+                } else {
+                        onL = true;
+                        document.getElementById("fileDel").style.visibility = "visible";
+		}
+	}
+	function movefile(file) {
+		xajax_moveFile(file,pfadleft);
+	}
+	function filedelete() {
+		id=	document.getElementById("docid").value;
+		name=	document.getElementById("docname").value;
+		pfad=	document.getElementById("docpfad").value;
+		if (!id) id=0;
+		xajax_delFile(id,name,pfad);
+		dateibaum('left',pfadleft)
+		dateibaum('right',pfadright);
+		deletefile();
+	}
+	var onD = false;
+        function newDir(seite) {
+                if (onD) {
+                        onD = false;
+                        document.getElementById("fixiert").style.visibility = "hidden";
+                } else {
+                        onD = true;
+			document.getElementById("seite").value=seite;
+                        document.getElementById("fixiert").style.visibility = "visible";
+                        document.getElementById("subdir").focus();
+                }
+        }
+	var onF = false;
+        function newFile(seite) {
+                if (onF) {
+                        onF = false;
+                        document.getElementById("uploadfr").style.visibility = "hidden";
+                } else {
+                        onF = true;
+			document.getElementById("seite").value=seite;
+                        document.getElementById("uploadfr").style.visibility = "visible";
+                        frames["frupload"].document.getElementById("upldpath").value=pfadleft;
+                        frames["frupload"].document.getElementById("caption").focus();
+                }
+        }
+	var pfadleft = "";
+	var pfadright = "";
+	function showFile(seite,file) {
+		if(seite=="left") { 
+			xajax_showFile(pfadleft,file); 
+		} else { 
+			xajax_showFile(pfadright,file); 
+		};
+		document.getElementById("subdelete").style.visibility="visible";
+		document.getElementById("subdownload").style.visibility="visible";
+		document.getElementById("subedit").style.visibility="visible";
+		document.getElementById("submove").style.visibility="visible";
+	}
+	function dateibaum(seite,start) {
+		if(seite=="left") { pfadleft=start; }
+		else { 
+			pfadright=start; 
+			document.getElementById("subdelete").style.visibility="hidden";
+			document.getElementById("subdownload").style.visibility="hidden";
+			document.getElementById("subedit").style.visibility="hidden";
+			document.getElementById("submove").style.visibility="hidden";
+		};
+		xajax_showDir(seite,start);
+		setTimeout("dateibaum('left',pfadleft)",100000) // 100sec
+	}
 	//-->
 	</script>
-<body>
-<p class="listtop">Detailansicht</p>
+<body onLoad="dateibaum('left','/{Q}{customernumber}/{PID}');">
+<p class="listtop">Detailansicht {FAART}</p>
 <div style="position:absolute; top:44px; left:10px;  width:770px;">
 	<ul id="maintab" class="shadetabs">
 	<li><a href="{Link1}">Kundendaten</a><li>
@@ -37,48 +144,100 @@
 	</ul>
 </div>
 
-<span style="position:absolute; left:10px; top:67px; width:99%;">
+<span style="position:absolute; left:10px; top:67px; width:99%; height:90%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <form name="firma4" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="pid" value="{PID}">
 <input type="hidden" name="fid" value="{FID}">
-<span style="float:left; width:43%; height:410px; text-align:center; padding:2px; border: 1px solid black;">
+<input type="hidden" name="Q" value="{Q}">
+<span style="float:left; width:40%; height:90%; text-align:center; padding:2px; border: 1px solid black; border-bottom: 0px;">
 	<div style="float:left; width:100%; height:50px; text-align:left; border-bottom: 1px solid black;" class="fett">
-		{Name} &nbsp; &nbsp; {customernumber}<br />
-		{Plz} {Ort}<br />
-	</div>
-	<div style="float:left; width:100%; height:50px; text-align:left; border-bottom: 0px solid black;" class="normal">
-	<table class="liste" width="300">
-	<tr><td class="norm" width="260">Neues Dokument aus Vorlage:</td><td>&nbsp;</td></tr>
-<!-- BEGIN Liste -->
-	<tr  class="smal" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showD({ID});">
-		<td class="smal">{Bezeichnung}</td><td>{Appl}</td>
-	</tr>
-<!-- END Liste -->
-	</table>
-	<br><br>
 	<table>
-	<tr><td class="norm" width="320">Wartungsvertr&auml;ge:</td></tr>
-<!-- BEGIN Vertrag -->
-	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showV({cid});">
-		<td class="smal">{vertrag}</td>
-	</tr>
-<!-- END Vertrag -->
+	<tr><td>{Name}</td><td></td></tr>
+	<tr><td>{customernumber}</td><td> {PID}</td></tr>
 	</table>
 	</div>
+	<div style="float:left; width:100%; text-align:left; border-bottom: 0px solid black;" class="normal">
+	<ul id="submenu" class="subshadetabs">
+		<li id="subnewfile"><a href="#" onClick="newFile('left')">Dokument hochladen</a></li>
+		<li id="subnewfolder"><a href="#" onClick="newDir('left')">neues Verzeichnis</a></li>
+		<li id="subrefresh"><a href="#" onClick="dateibaum('left',pfadleft)">neu Einlesen</a></li>
+	</ul>
+	<br>
+	Aktueller Pfad: <span id="path"></span>
+	<span id="fbleft"></span>
+	</div>
 </span>
-<span style="float:left;  height:410px; text-align:left; border: 1px solid black; padding:2px; border-left:0px;">
-	<input type="file" name="Datei" size="30"><br />
-	Ein neues Dokument speichern<br />
-	<input type="text" name="caption" size="30"> <input type="submit" name="sichern" value="sichern"><br />
-	Beschreibung<br /><br />
-	gespeicherte Dokumente:<br>
-	<select name="dateien" size="16" style="width:445px" onClick="openfile()">
-<!-- BEGIN Liste2 -->
-	<option value="{val}">{key}
-<!-- END Liste2 -->
-	</select>
+
+<span style="float:left; width:58%; height:90%; text-align:left; border: 1px solid black; border-bottom: 0px; padding:2px; border-left:0px;">
+	<div style="float:left; width:100%; height:50px; text-align:left; border-bottom: 1px solid black;" class="fett">
+	<table>
+	<tr><td>Dokumentvorlagen:</td><td>
+	<select name="vorlage" id="vorlage" onChange="showD();" style="width:150px;">
+		<option value=""></option>
+<!-- BEGIN Liste -->
+		<option value="{ID}">{Bezeichnung}</option>
+<!-- END Liste -->
+	</select></td></tr>
+	<tr><td>Wartungsvertr&auml;ge:</td><td>
+	<select name="wv" id="wv" onChange="showV();" style="width:150px;">
+		<option value=""></option> 
+<!-- BEGIN Vertrag -->
+		<option value="{cid}">{vertrag}</option>
+<!-- END Vertrag -->
+	</select></td></tr>
+	</table>
+	</div>
+	<div style="float:left; width:100%;  text-align:left; border-bottom: 0px solid black;" class="normal">
+	<ul id="submenu2" class="subshadetabs">
+		<li id="subfilebrowser"><a href="#" onClick="dateibaum('right',pfadleft)">Filebrowser</a></li>
+		<li id="subdownload" style="visibility:hidden;"><a href="#" >download</a></li>
+		<li id="subdelete" style="visibility:hidden;"><a href="#" >l&ouml;schen</a></li>
+		<li id="submove" style="visibility:hidden;"><a href="#" >verschieben</a></li>
+		<li id="subedit" style="visibility:hidden;"><a href="#" >Attribute bearbeiten</a></li>
+	</ul><br>
+	    <span id="fbright"></span>
+	</div>
 </span>
+<div id="fixiert" style="visibility:hidden; position:absolute; left:5em; width:25em; height:6em; z-index:1; top:10em; 
+	text-align:center; border:3px solid black; background-image: url('css/fade.png');  "  >
+	<table width="99%" class="smal lg">
+	<tr style="border-bottom:1px solid black;"><td>Ein neues Verzeichnis anlegen</td><td align="right"><a href="javascript:newDir()">(X)</a></td></tr>
+	</table>
+	<br>
+	<input type="hidden" name="seite" id="seite">
+	<input type="text" name="subdir" id="subdir" size="20"> <input type="button" name="sdok" value="anlegen" onClick="mkDir();">
+</div>
+<div id="uploadfr" style="visibility:hidden; position:absolute; left:4em; z-index:1; top:10em; height:18em; border:3px solid black; "  >
+                <iframe id="frupload" name="frupload" src="upload.php?fid={FID}&pid={PID}" frameborder="0" width="100%" height="100%"></iframe>
+</div>
+<div id="attribut" style="visibility:hidden; position:absolute; left:5em; z-index:1; top:10em; width:25em; 
+	text-align:center; border:3px solid black; background-image: url('css/fade.png');"  >
+	<table width="99%" class="smal lg">
+	<tr style="border-bottom:1px solid black;"><td>Attribute bearbeiten</td><td align="right"><a href="javascript:editattribut()">(X)</a></td></tr>
+	</table>
+	<input type="hidden" name="docid" id="docid" value="">
+	<input type="hidden" name="docoldname" id="docoldname" value="">
+	<input type="hidden" name="docpfad" id="docpfad" value="">
+	<center>
+	<table >
+	<tr><td><textarea name="docdescript" id="docdescript" cols="40" rows="4"></textarea></td></tr>
+	<tr><td class="smal">Kommentar</td></tr>
+	<tr><td><input type="text" name="docname" id="docname" size="34" value=""></td></tr>
+	<tr><td class="smal">Dateiname</td></tr>
+	<tr><td class="re"><input type="button" name="saveAtr" value="sichern" onClick="saveAttribut();"></td></tr>
+	</table>
+	</center>
+</div>
+<div id="fileDel" style="visibility:hidden; position:absolute; left:4em; z-index:1; top:10em; height:18em; width:25em; border:3px solid black; 
+	text-align:center;  background-image: url('css/fade.png');"  >
+	<table width="99%" class="smal lg">
+	<tr style="border-bottom:1px solid black;"><td>Eine Datei l&ouml;schen</td><td align="right"><a href="javascript:deletefile()">(X)</a></td></tr>
+	</table>
+	<h4 id="delfilename"></h4>
+	<a href="javascript:filedelete();"><img src="image/eraser.png" border="0">Wirklich l&ouml;schen.</a><br \><br \>
+	<a href="javascript:deletefile();"><img src="image/fileclose.png" border="0">Nee - lieber nicht</a>
+</div>
 	
 <!-- Hier endet die Karte ------------------------------------------->
 </span>

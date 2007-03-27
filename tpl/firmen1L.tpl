@@ -7,7 +7,7 @@
 	function showK (id) {
 		if (id) {
 			Frame=eval("parent.main_window");
-			uri="firma1.php?id=" + id;
+			uri="firma1.php?Q={Q}&id=" + id;
 			Frame.location.href=uri;
 		}
 	}
@@ -18,7 +18,7 @@
 	</script>
 <body>
 
-<p class="listtop">Ergebnis Firmen-/Kundensuche</p>
+<p class="listtop">Ergebnis Firmensuche {FAART}</p>
 <table><tr><td valign="top">
 <!-- Beginn Code ------------------------------------------->
 

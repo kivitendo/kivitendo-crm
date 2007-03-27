@@ -12,27 +12,28 @@
 		}
 		function anschr() {
 			pid=document.contact.cp_id.value;
-			F1=open("showAdr.php?pid="+pid+"{ep}","Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
+			F1=open("showAdr.php?Q={Q}&pid="+pid+"{ep}","Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
 		}
 		function notes() {
 			pid=document.contact.cp_id.value;
-                        F1=open("showNote.php?pid="+pid,"Notes","width=400, height=400, left=100, top=50, scrollbars=yes");
+                        F1=open("showNote.php?Q={Q}&pid="+pid,"Notes","width=400, height=400, left=100, top=50, scrollbars=yes");
                 }
 		function vcard(){
 			pid=document.contact.cp_id.value;
-			document.location.href="vcardexp.php?pid="+pid;
+			document.location.href="vcardexp.php?Q={Q}&pid="+pid;
 		}		
-		function cedit(e){				
-			pid=document.contact.cp_id.value;
-			parent.main_window.location.href="personen3.php?id="+pid+"&edit="+e+"&Quelle=F";
+		function cedit(ed){				
+			pid=false;
+			if (ed)	pid=document.contact.cp_id.value;
+			parent.main_window.location.href="personen3.php?id="+pid+"&edit="+ed+"&Quelle={Q}&fid={FID}";
 		}
 		function sellist(){				
 			pid=document.contact.cp_id.value;
-			parent.main_window.location.href="personen1.php?id="+pid+"&Quelle=F";
+			parent.main_window.location.href="personen1.php?fid={FID}&Quelle={Q}";
 		}
 		function doclink(){				
 			pid=document.contact.cp_id.value;
-			parent.main_window.location.href="firma4.php?fid={FID}&id="+pid;
+			parent.main_window.location.href="firma4.php?Q={Q}&fid={FID}&pid="+pid;
 		}
 		var start = 0;
 		var max = 0;
@@ -46,16 +47,20 @@
 				else { start=max-19; }; }
 			xajax_showCalls(y,start);
 		}
+		function showOne(id) {
+            xajax_showContactadress(id);
+			xajax_showCalls(id,0);
+		}
 		function showContact() {
 			x=document.contact.liste.selectedIndex;
 			y=document.contact.liste.options[x].value;
-                        xajax_showContactadress(y);
+            xajax_showContactadress(y);
 			xajax_showCalls(y,0);
 		}
 	//-->
 	</script>
 <body onLoad="{INIT}">
-<p class="listtop">Detailansicht</p>
+<p class="listtop">Detailansicht {FAART}</p>
 <div style="position:absolute; top:44px; left:10px;  width:770px;">
 	<ul id="maintab" class="shadetabs">
 	<li><a href="{Link1}">Kundendaten</a><li>
@@ -72,7 +77,8 @@
 	<div style="float:left; width:100%; height:55px; text-align:left; border-bottom: 1px solid black;" class="fett">
 		<form name="contact">
 		<input type="hidden" name="cp_id" id="cp_id" value="{PID}">
-		&nbsp;{Fname1} &nbsp; &nbsp; {customernumber} &nbsp; &nbsp;
+		<input type="hidden" name="Q" value="{Q}">
+		&nbsp;{Fname1} &nbsp; &nbsp; KdNr.: {customernumber} &nbsp; &nbsp;
 		<select name="liste" id="liste" style="visibility:{moreC}; width:150px;" onChange="showContact();">
 		{kontakte}</select><br />
 		&nbsp;{Fdepartment_1}<br /> 
@@ -122,6 +128,7 @@
 		<img src="image/reload.png" align="middle" border="0" title="reload" onClick="showCall(0);"> 
 		<img src="image/rightarrow.png" align="middle" border="0" title="mehr" onClick="showCall(1);">&nbsp;
 		<input type="text" name="suchwort" size="20">
+		<input type="hidden" name="Q" value="{Q}">
 		<input type="submit" src="image/suchen_kl.png" name="ok" value="suchen" align="middle" border="0"> 
 		</form>
 	</span>

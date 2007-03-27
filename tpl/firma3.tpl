@@ -7,13 +7,13 @@
 	<!--
 	function showM (month) {
 		Frame=eval("parent.main_window");
-		uri="firma3.php?jahr={JAHR}&monat=" + month + "&fid=" + {FID};
+		uri="firma3.php?Q={Q}&jahr={JAHR}&monat=" + month + "&fid=" + {FID};
 		Frame.location.href=uri;
 	}
 	//-->
 	</script>
 <body>
-<p class="listtop">Detailansicht</p>
+<p class="listtop">Detailansicht {FAART}</p>
 <div style="position:absolute; top:44px; left:10px;  width:770px;">
 	<ul id="maintab" class="shadetabs">
 	<li><a href="{Link1}">Kundendaten</a><li>

@@ -14,7 +14,7 @@
 	//-->
 	</script>
 <body>
-<p class="listtop">Detailansicht</p>
+<p class="listtop">Detailansicht {FAART}</p>
 <div style="position:absolute; top:44px; left:10px;  width:770px;">
 	<ul id="maintab" class="shadetabs">
 	<li><a href="{Link1}">Kundendaten</a><li>

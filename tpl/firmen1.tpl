@@ -11,37 +11,38 @@
 
 <form name="erwsuche" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="felder" value="">
-<p class="listtop">Firmen-/Kundensuche</p>
+<input type="hidden" name="Q" value="{Q}">
+<p class="listtop">Firmensuche {FAART}</p>
 <span style="position:absolute; left:10px; top:47px; border: 0px solid black;">
 <!-- Beginn Code ------------------------------------------->
 <p class="listheading">| 
-<a href="{action}?first=A" class="bold">A</a> |
-<a href="{action}?first=B" class="bold">B</a> |
-<a href="{action}?first=C" class="bold">C</a> |
-<a href="{action}?first=D" class="bold">D</a> |
-<a href="{action}?first=E" class="bold">E</a> |
-<a href="{action}?first=F" class="bold">F</a> |
-<a href="{action}?first=G" class="bold">G</a> |
-<a href="{action}?first=H" class="bold">H</a> |
-<a href="{action}?first=I" class="bold">I</a> |
-<a href="{action}?first=J" class="bold">J</a> |
-<a href="{action}?first=K" class="bold">K</a> |
-<a href="{action}?first=L" class="bold">L</a> |
-<a href="{action}?first=M" class="bold">M</a> |
-<a href="{action}?first=N" class="bold">N</a> |
-<a href="{action}?first=O" class="bold">O</a> |
-<a href="{action}?first=P" class="bold">P</a> |
-<a href="{action}?first=Q" class="bold">Q</a> |
-<a href="{action}?first=R" class="bold">R</a> |
-<a href="{action}?first=S" class="bold">S</a> |
-<a href="{action}?first=T" class="bold">T</a> |
-<a href="{action}?first=U" class="bold">U</a> |
-<a href="{action}?first=V" class="bold">V</a> |
-<a href="{action}?first=W" class="bold">W</a> |
-<a href="{action}?first=X" class="bold">X</a> |
-<a href="{action}?first=Y" class="bold">Y</a> |
-<a href="{action}?first=Z" class="bold">Z</a> |
-<a href="{action}?first=~" class="bold">*</a> |</p>
+<a href="{action}&first=A" class="bold">A</a> |
+<a href="{action}&first=B" class="bold">B</a> |
+<a href="{action}&first=C" class="bold">C</a> |
+<a href="{action}&first=D" class="bold">D</a> |
+<a href="{action}&first=E" class="bold">E</a> |
+<a href="{action}&first=F" class="bold">F</a> |
+<a href="{action}&first=G" class="bold">G</a> |
+<a href="{action}&first=H" class="bold">H</a> |
+<a href="{action}&first=I" class="bold">I</a> |
+<a href="{action}&first=J" class="bold">J</a> |
+<a href="{action}&first=K" class="bold">K</a> |
+<a href="{action}&first=L" class="bold">L</a> |
+<a href="{action}&first=M" class="bold">M</a> |
+<a href="{action}&first=N" class="bold">N</a> |
+<a href="{action}&first=O" class="bold">O</a> |
+<a href="{action}&first=P" class="bold">P</a> |
+<a href="{action}&first=Q" class="bold">Q</a> |
+<a href="{action}&first=R" class="bold">R</a> |
+<a href="{action}&first=S" class="bold">S</a> |
+<a href="{action}&first=T" class="bold">T</a> |
+<a href="{action}&first=U" class="bold">U</a> |
+<a href="{action}&first=V" class="bold">V</a> |
+<a href="{action}&first=W" class="bold">W</a> |
+<a href="{action}&first=X" class="bold">X</a> |
+<a href="{action}&first=Y" class="bold">Y</a> |
+<a href="{action}&first=Z" class="bold">Z</a> |
+<a href="{action}&first=~" class="bold">*</a> |</p>
 	<div class="zeile">
 		<span class="label">Firmenname</span>
 		<span class="leftfeld"><input type="text" name="name" size="27" maxlength="75" value="{name}" tabindex="1"></span>

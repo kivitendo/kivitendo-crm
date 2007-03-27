@@ -49,12 +49,13 @@
 <input type="hidden" name="Quelle" value="{Quelle}">
 <input type="hidden" name="employee" value="{employee}">
 <input type="hidden" name="IMG_" value="{IMG_}">
+<input type="hidden" name="nummer" value="{nummer}">
 <span id="tab1" style="visibility:visible; position:absolute; text-align:left;width:90%; left:6px; top:6em; border:1px solid black;">
 	<div class="zeile2">
-		<span class="label">Anrede</span>
-		<span class="feldxx">
-				<input type="text" name="cp_greeting_" size="7" value="{cp_greeting_}" tabindex="1">
-				<select name="cp_greeting" tabindex="2">
+		<span class="label2">Anrede</span>
+		<span class="feld">
+				<input type="text" name="cp_greeting_" size="8" value="{cp_greeting_}" tabindex="1">
+				<select name="cp_greeting" tabindex="2" style="width:116px;">
 					<option value="">
 <!-- BEGIN anreden -->
 					<option value="{ANREDE}" {ASEL}>{ANREDE}
@@ -62,63 +63,63 @@
 				</select>
 		</span>
 		<span class="label">Telefon 1</span>
-		<span class="feldxx"><input type="text" name="cp_phone1" size="25" maxlength="75" value="{cp_phone1}" tabindex="12"></span>
+		<span class="feld"><input type="text" name="cp_phone1" size="25" maxlength="75" value="{cp_phone1}" tabindex="12"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label">Briefanrede</span>
-		<span class="feldxx"><select name="cp_salutation" tabindex="3" style="width:200px;">
+		<span class="label2">Briefanrede</span>
+		<span class="feld"><select name="cp_salutation" tabindex="3" style="width:199px;">
 					<option value="">
 <!-- BEGIN briefanred -->
 					<option value="{BRIEFAN}" {BSEL}>{BRIEFAN}
 <!-- END briefanred -->
 				</select></span>
 		<span class="label">2</span>
-		<span class="feldxx"><input type="text" name="cp_phone2" size="25" maxlength="75" value="{cp_phone2}" tabindex="12"></span>
+		<span class="feld"><input type="text" name="cp_phone2" size="25" maxlength="75" value="{cp_phone2}" tabindex="12"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label"></span>
-		<span class="feldxx"><input type="text" name="cp_salutation_" size="25" maxlength="125" value="{cp_salutation_}" tabindex="5"></span>
+		<span class="label2"></span>
+		<span class="feld"><input type="text" name="cp_salutation_" size="25" maxlength="125" value="{cp_salutation_}" tabindex="5"></span>
 		<span class="label">Mobiltelefon 1</span>
-		<span class="feldxx"><input type="text" name="cp_mobile1" size="25" maxlength="75" value="{cp_mobile1}" tabindex="13"></span>
+		<span class="feld"><input type="text" name="cp_mobile1" size="25" maxlength="75" value="{cp_mobile1}" tabindex="13"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label">Titel</span>
-		<span class="feldxx"><input type="text" name="cp_title" size="25" maxlength="75" value="{cp_title}" tabindex="5"></span>
+		<span class="label2">Titel</span>
+		<span class="feld"><input type="text" name="cp_title" size="25" maxlength="75" value="{cp_title}" tabindex="5"></span>
 		<span class="label">2</span>
-		<span class="feldxx"><input type="text" name="cp_mobile2" size="25" maxlength="75" value="{cp_mobile2}" tabindex="13"></span>
+		<span class="feld"><input type="text" name="cp_mobile2" size="25" maxlength="75" value="{cp_mobile2}" tabindex="13"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label">Vorname</span>
-		<span class="feldxx"><input type="text" name="cp_givenname" size="25" maxlength="75" value="{cp_givenname}" tabindex="6"></span>
+		<span class="label2">Vorname</span>
+		<span class="feld"><input type="text" name="cp_givenname" size="25" maxlength="75" value="{cp_givenname}" tabindex="6"></span>
 		<span class="label">Fax</span>
-		<span class="feldxx"><input type="text" name="cp_fax" size="25" maxlength="75" value="{cp_fax}" tabindex="14"></span>
+		<span class="feld"><input type="text" name="cp_fax" size="25" maxlength="75" value="{cp_fax}" tabindex="14"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label">Nachname</span>
-		<span class="feldxx"><input type="text" name="cp_name" size="25" maxlength="75" value="{cp_name}" tabindex="7"></span>
+		<span class="label2">Nachname</span>
+		<span class="feld"><input type="text" name="cp_name" size="25" maxlength="75" value="{cp_name}" tabindex="7"></span>
 		<span class="label">Privat</span>
-		<span class="feldxx"><input type="text" name="cp_privatphone" size="25" maxlength="75" value="{cp_privatphone}" tabindex="12"></span>
+		<span class="feld"><input type="text" name="cp_privatphone" size="25" maxlength="75" value="{cp_privatphone}" tabindex="12"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label">Strasse</span>
-		<span class="feldxx"><input type="text" name="cp_street" size="25" maxlength="75" value="{cp_street}" tabindex="8"></span>
+		<span class="label2">Strasse</span>
+		<span class="feld"><input type="text" name="cp_street" size="25" maxlength="75" value="{cp_street}" tabindex="8"></span>
 		<span class="label">Privat eMail </span>
-		<span class="feldxx"><input type="text" name="cp_privatemail" size="25" maxlength="125" value="{cp_privatemail}" tabindex="15"></span>
+		<span class="feld"><input type="text" name="cp_privatemail" size="25" maxlength="125" value="{cp_privatemail}" tabindex="15"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label">Land / Plz</span>
-		<span class="feldxx"><input type="text" name="cp_country" size="2" maxlength="3" value="{cp_country}" tabindex="9"> / 
+		<span class="label2">Land / Plz</span>
+		<span class="feld"><input type="text" name="cp_country" size="2" maxlength="3" value="{cp_country}" tabindex="9"> / 
 				  <input type="text" name="cp_zipcode" size="5" maxlength="10" value="{cp_zipcode}" tabindex="10"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label">Ort</span>
-		<span class="feldxx"><input type="text" name="cp_city" size="25" maxlength="75" value="{cp_city}" tabindex="11"></span>
+		<span class="label2">Ort</span>
+		<span class="feld"><input type="text" name="cp_city" size="25" maxlength="75" value="{cp_city}" tabindex="11"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label">Homepage</span>
-		<span class="feldxx"><input type="text" name="cp_homepage" size="25" maxlength="125" value="{cp_homepage}" tabindex="16"></span>
+		<span class="label2">Homepage</span>
+		<span class="feld"><input type="text" name="cp_homepage" size="25" maxlength="125" value="{cp_homepage}" tabindex="16"></span>
 		<span class="label">eMail </span>
-		<span class="feldxx"><input type="text" name="cp_email" size="25" maxlength="125" value="{cp_email}" tabindex="15"></span>
+		<span class="feld"><input type="text" name="cp_email" size="25" maxlength="125" value="{cp_email}" tabindex="15"></span>
 	</div>
 	<br><br>
 </span>
@@ -126,35 +127,39 @@
 <!--span style="float:left; width:290px; height:330px; text-align:left; border: 0px solid black;"-->
 	<div class="zeile2">
 		<span class="label">Firma</span>
-		<span class="feldxx"><input type="text" name="name" size="25" maxlength="75" value="{Firma}" tabindex="18"></span>
-		<span class="feldxx"><input type="button" name="fa" value="suchen" onClick="suchFa();"  tabindex="19"></span>
+		<span class="feld"><input type="text" name="name" size="25" maxlength="75" value="{Firma}" tabindex="18"><input type="button" name="fa" value="suchen" onClick="suchFa();"  tabindex="19"></span>
 	</div>
 	<div class="zeile2">
 		<span class="label">Abteilung</span>
-		<span class="feldxx"><input type="text" name="cp_abteilung" size="25" maxlength="30" value="{cp_abteilung}" tabindex="20"></span>
+		<span class="feld"><input type="text" name="cp_abteilung" size="25" maxlength="30" value="{cp_abteilung}" tabindex="20"></span>
 		<span class="label">Beziehung</span>
-		<span class="feldxx"><input type="text" name="cp_beziehung" size="10" maxlength="10" value="{cp_beziehung}" tabindex="24"></span>
+		<span class="feld"><input type="text" name="cp_beziehung" size="10" maxlength="10" value="{cp_beziehung}" tabindex="24"></span>
 	</div>
 	<div class="zeile2">
 		<span class="label">Position</span>
-		<span class="feldxx"><input type="text" name="cp_position" size="25" maxlength="25" value="{cp_position}" tabindex="21"></span>
+		<span class="feld"><input type="text" name="cp_position" size="25" maxlength="25" value="{cp_position}" tabindex="21"></span>
 	</div>
 	<div class="zeile2">
 		<span class="label">Stichworte</span>
-		<span class="feldxx"><input type="text" name="cp_stichwort1" size="25" maxlength="50" value="{cp_stichwort1}" tabindex="22"></span>
+		<span class="feld"><input type="text" name="cp_stichwort1" size="25" maxlength="50" value="{cp_stichwort1}" tabindex="22"></span>
 	</div>
 	<div class="zeile2">
 		<span class="label">Geb.-Datum</span>
-		<span class="feldxx"><input type="text" name="cp_birthday" size="10" maxlength="10" value="{cp_birthday}" tabindex="17"> TT.MM.JJJJ</span>
+		<span class="feld"><input type="text" name="cp_birthday" size="10" maxlength="10" value="{cp_birthday}" tabindex="17"> TT.MM.JJJJ</span>
 	</div>
 	<div class="zeile2">
 		<span class="label">Bild</span>
-		<span class="feldxx"><input type="file" name="bild" size="10" maxlength="75" tabindex="23"></span>
+		<span class="feld"><input type="file" name="bild" size="10" maxlength="75" tabindex="23"></span>
 		<span class="label"> </span>
-		<span class="feldxx">{IMG}{IMG_}</span>
+		<span class="feld"></span>
 	</div>
 	<div class="zeile2" style="align:center;">
-		<textarea name="cp_notes" cols="42" rows="3" tabindex="25">{cp_notes}</textarea><br>Bemerkungen
+		Bemerkungen<br>
+		<span class="feldxx"><textarea name="cp_notes" cols="50" rows="3" tabindex="25">{cp_notes}</textarea></span>
+		<span class="feld">{IMG}{IMG_}</span>
+	</div>
+	<div class="zeile2" style="align:center;">
+		<br>
 	</div>
 	<br>
 </span>

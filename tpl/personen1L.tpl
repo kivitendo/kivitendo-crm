@@ -4,7 +4,13 @@
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 	<script language="JavaScript">
 	<!--
-	function showK (id) {
+	function showK (id,tbl) {
+		{no}
+		Frame=eval("parent.main_window");
+		uri="firma2.php?Q="+tbl+"&id=" + id;
+		Frame.location.href=uri;
+	}
+	function showK__ (id) {
 		{no}
 		Frame=eval("parent.main_window");
 		uri="kontakt.php?id=" + id;
@@ -23,7 +29,7 @@
 <input type="hidden" name="fid" value="{FID}">
 <table><tr><td class="smal">
 <!-- BEGIN Liste -->
-	<tr class="smal" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showK({PID});">
+	<tr class="smal" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showK({PID},'{TBL}');">
 		<td>{Name}</td><td>&nbsp;{Plz} {Ort}</td><td>&nbsp;{Telefon}</td><td>&nbsp;{eMail}</td><td>&nbsp;{Firma}</td><td>&nbsp;{insk}</td></tr>
 <!-- END Liste -->	
 	<tr><td class="smal re" colspan="6">{snd}</td></tr>

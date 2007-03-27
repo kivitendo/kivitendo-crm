@@ -51,7 +51,7 @@
 	</script>
 <body onLoad="submenu('tab1'); document.neueintrag.name.focus();">
 
-<p class="listtop"> Firma/Kunde eingeben/editieren</p>
+<p class="listtop"> {FAART} eingeben/editieren</p>
 
 <!--span style="position:absolute; left:10px; top:47px; width:99%;"-->
 <!-- Beginn Code ------------------------------------------->
@@ -285,6 +285,17 @@
 		</span>
 	</div>
 
+	<div class="zeile2">
+		<span class="label">Verk&auml;ufer</span>
+		<span class="feldxx">
+			<select name="salesman_id" tabindex="14">
+				<option value=""></option>
+<!-- BEGIN SalesmanListe -->
+				<option value="{salesmanid}" {Ssel}>{Salesman}</option>
+<!-- END SalesmanListe -->
+			</select>
+		</span>
+	</div>
 	<div class="zeile2">
 		<span class="label">Berechtig.</span>
 		<span class="feldxx">

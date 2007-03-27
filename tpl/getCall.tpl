@@ -56,6 +56,7 @@
 <input type="hidden" name="fid" value="{FID}">
 <input type="hidden" name="pid" value="{PID}">
 <input type="hidden" name="id" value="{ID}">
+<input type="hidden" name="nummer" value="{nummer}">
 <input type="hidden" name="Q" value="{Q}">
 <input type="hidden" name="datei" value="{ODatei}">
 <input type="text" name="cause" value="{NBetreff}" size="43" maxlength="125"> &nbsp; <input type="text" name="Datum" value="{NDatum}" size="11" maxlength="10"> 

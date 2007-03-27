@@ -4,7 +4,6 @@ $version='$Id$';
 $inclpa=ini_get('include_path');
 ini_set('include_path',$inclpa.":../:./crmajax:./inc:../inc");
 
-require_once "DB.php";
 require_once "conf.php";
 require_once "db.php";
 
@@ -125,11 +124,19 @@ global $VERSION;
 * out: boolean
 * prüft, ob Verzeichnis besteht und legt es bei Bedarf an
 *****************************************************/
-function chkdir($dir) {
-	if (file_exists("dokumente/".$dir)) {	
+function chkdir($dir,$p="") {
+	if (file_exists("$p./dokumente/".$_SESSION["mansel"]."/".$dir)) {	
 		return true;
 	} else {
-		$ok=mkdir("dokumente/".$dir);
+		$dirs=split("/",$dir);
+		$tmp=$_SESSION["mansel"]."/";
+		foreach ($dirs as $dir) {
+			if (!file_exists("$p./dokumente/$tmp".$dir)) {
+				$ok=mkdir("$p./dokumente/$tmp".$dir);
+				if (!$ok) return false;
+			};
+			$tmp.=$dir."/";
+		};
 		return $ok;
 	}
 }

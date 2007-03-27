@@ -81,7 +81,7 @@ global $db;
 	        $rs=$db->getAll($sql);
         	$op=$rs[0]["summe"];
 		$os=false;
-		$sql="select C.*,E.login,B.description as lityp,B.discount as typrabatt,BL.bundesland from vendor C ";
+		$sql="select C.*,E.login,B.description as kdtyp,B.discount as typrabatt,BL.bundesland from vendor C ";
 	        $sql.="left join employee E on C.employee=E.id left join business B on B.id=C.business_id ";
 		$sql.="left join bundesland BL on BL.id=C.bland ";
         	$sql.="where C.id=$id";
@@ -93,8 +93,11 @@ global $db;
 		return false;
 	} else {
 		$row=$rs[0];
+		if ($tab=="C") { $nummer=$row["customernumber"]; }
+		else { $nummer=$row["vendornumber"]; };
 		if ($row["grafik"]) {
-			$image="./dokumente/".$_SESSION["mansel"]."/$id/logo.".$row["grafik"];
+			$DIR=$tab.$nummer;
+			$image="./dokumente/".$_SESSION["mansel"]."/$DIR/logo.".$row["grafik"];
 			if (file_exists($image)) {
 				$size=@getimagesize(trim($image));
 				$row["size"]=$size[3];
@@ -111,12 +114,16 @@ global $db;
 		$rs3=getAllShipto($id,$tab);
 		$shipcnt=(count($rs3));
 		$shipids=array();
-		if ($shipcnt>0) for ($sc=0; $sc<$shipcnt; $sc++) {
-			$shipids[]=$rs3[$sc]["shipto_id"];
-		};
-		$shipids=implode(",",$shipids);
+		if ($shipcnt>0) {
+			for ($sc=0; $sc<$shipcnt; $sc++) {
+				$shipids[]="'".$rs3[$sc]["shipto_id"]."'";				
+			}
+			$shipids=implode(",",$shipids);
+		} else {
+			$shipids="";
+		}
 		if (!$rs3[0]) {  // es ist keine abweichende Anschrift da
-			if ($ws) {	// soll dann aber mit Re-Anschrift gefüllt werden
+			if ($ws) {	// soll dann aber mit Re-Anschrift gefï¿½llt werden
 				$row2=Array(
 					shiptoname => $row["name"],
 					shiptodepartment_1 => $row["department_1"],
@@ -160,6 +167,7 @@ global $db;
 	$daten["shiptoids"]=$shipids;
 	$daten["op"]=$op;
 	$daten["oa"]=$oa;
+	$daten["nummer"]=$nummer;
 	return $daten;
 };
 
@@ -185,7 +193,7 @@ global $db;
 * suchstr
 * in: muster = string
 * out: daten = array
-* Suchstring über customer,shipto zusamensetzen
+* Suchstring ï¿½ber customer,shipto zusamensetzen
 *****************************************************/
 function suchstr($muster,$typ="C") {
 	$kenz=array("C" => "K","V" => "L");
@@ -258,7 +266,8 @@ function suchFirma($muster,$tab="C") {
 global $db;
 	$rechte=berechtigung();
 	$tmp=suchstr($muster,$tab);
-	$where=$tmp["where"]; $tabs=$tmp["tabs"];
+	$where=$tmp["where"]; 
+	$tabs=$tmp["tabs"];
 	if ($where<>"") {
 		$sql="select * from $tabs where ($where) and $rechte";
 		$rs=$db->getAll($sql);
@@ -297,11 +306,12 @@ global $db;
 	}
 	$daten["sonder"]=$tmp;
 	if (!empty($datei["Datei"]["name"])) {  		// eine Datei wird mitgeliefert
-			$pictyp=array(1=>"gif",2=>"jpeg",3=>"png",4=>false);
-			$imagesize=getimagesize($datei["Datei"]['tmp_name'],&$info);
-			if ($imagesize[2]>0 && $imagesize[2]<4) {
-				$bildok=chkdir($_SESSION["mansel"]."/".$daten["id"]);
-				$daten["grafik"]=$pictyp[$imagesize[2]];
+			$pictyp=array("gif","jpeg","png","jpg");
+			$ext=substr($datei["Datei"]["name"],strrpos($datei["Datei"]["name"],".")+1);
+			if (in_array($ext,$pictyp)) {
+				$daten["grafik"]=$ext;
+				$datei["Datei"]['name']="logo.$ext";
+				$bildok=true;
 			}
 	};
 	// Array zu jedem Formularfed: Tabelle (0=customer/vendor,1=shipto), require(0=nein,1=ja), Spaltenbezeichnung, Regel
@@ -313,8 +323,8 @@ global $db;
 			email => array(0,0,5,"eMail",0),		homepage =>array(0,0,4,"Homepage",0),
 			contact => array(0,0,1,"Kontakt",75),		v_customer_id => array(0,0,1,"Kundennummer",50),
 			//vendornumber => array(0,0,0,"Lieferantennummer",20),
-			//customernumber => array(0,0,0,"Kundennummer",20),
-                        v_customer_id => array(0,0,0,"Kundennummer",20),
+			//customernumber => array(0,0,0,"Kundennummer",20),	
+                        v_customer_id => array(0,0,0,"Kundennummer",20),	
 			sw => array(0,0,1,"Stichwort",50),		notes => array(0,0,0,"Bemerkungen",0),
 			ustid => array(0,0,0,"UStId",0),		taxnumber => array(0,0,0,"Steuernummer",0),
 			bank => array(0,0,1,"Bankname",50),		bank_code => array(0,0,6,"Bankleitzahl",15),
@@ -323,7 +333,7 @@ global $db;
 			owener => array(0,0,6,"CRM-User",0),		grafik => array(0,0,9,"Grafik",4),
 			lead => array(0,0,6,"Leadquelle",0),		leadsrc => array(0,0,1,"Leadquelle",15),
 			bland => array(0,0,6,"Bundesland",0),		taxzone_id => array(0,1,6,"Steuerzone",0),
-			sonder => array(0,0,10,"SonderFlag",0),
+			sonder => array(0,0,10,"SonderFlag",0),		salesman_id => array(0,0,6,"Vertriebler",0),
 			shiptoname => array(1,0,1,"Liefername",75), 
 			shiptostreet => array(1,0,1,"Lieferstrasse",75),
 			shiptobland => array(1,0,6,"Liefer-Bundesland",0),
@@ -348,7 +358,7 @@ global $db;
 	for ($i=0; $i<$anzahl; $i++) {
 		if (in_array($keys[$i],$dbf)) {
 			$tmpval=trim($daten[$keys[$i]]);
-			if ($dbfld[$keys[$i]][0]==1) {  // select für Lieferanschrift bilden
+			if ($dbfld[$keys[$i]][0]==1) {  // select fï¿½r Lieferanschrift bilden
 				if ($tmpval) $ala=true;
 				if (!chkFld($tmpval,$dbfld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) { 
 					$fehler=$dbfld[$keys[$i]][3]; 
@@ -361,7 +371,7 @@ global $db;
 					}
 					if ($keys[$i]=="Ltel"||$keys[$i]=="Lfax") $tels2[]=$tmpval;
 				}
-			} else {			// select für Rechnungsanschrift bilden
+			} else {			// select fï¿½r Rechnungsanschrift bilden
 				if (!chkFld($tmpval,$dbfld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) { 
 					$fehler=$dbfld[$keys[$i]][3]; 
 					$i=$anzahl; 
@@ -378,37 +388,30 @@ global $db;
 	}
 	
 	if ($fehler=="ok") {
-		if ($daten["customernumber"]||$daten["vendornumber"]) {
+		if ($daten["customernumber"]) {
 			$query0=substr($query0,0,-1);
+			$DIR="C".$daten["customernumber"];
+		} else if ($daten["vendornumber"]) {
+			$query0=substr($query0,0,-1);
+			$DIR="V".$daten["vendornumber"];
 		} else {
+			$tmpnr=newnr($tab[$typ]);
 			if ($typ=="C") {
-				$query0=$query0."customernumber='".newnr($tab[$typ])."' ";
+				$DIR="C".$tmpnr;
+				$query0=$query0."customernumber='$tmpnr' ";
 			} else {
-				$query0=$query0."vendornumber='".newnr($tab[$typ])."' ";
+				$DIR="V".$tmpnr;
+				$query0=$query0."vendornumber='$tmpnr' ";
 			}
 		}
 		$query1=substr($query1,0,-1)." ";
 		$sql0="update ".$tab[$typ]." set $query0 where id=$fid";
 		mkTelNummer($fid,"C",$tels1);
 		if ($bildok) {
-			$pictyp=array(1=>"gif",2=>"jpeg",3=>"png",4=>false);
-			$dir="./dokumente/".$_SESSION["mansel"]."/".$fid;
-			$imagesize=getimagesize($datei["Datei"]['tmp_name'],&$info);
-			$dest=$dir."/logo.".$pictyp[$imagesize[2]];
-			move_uploaded_file($datei["Datei"]["tmp_name"],"$dest");
-			if ($imagesize[1]>$imagesize[0]) {
-				$faktor=ceil($imagesize[1]/360);
-			} else {
-				$faktor=ceil($imagesize[0]/480);
-			}
-			$breite=floor($imagesize[0]/$faktor);
-			$hoehe=floor($imagesize[1]/$faktor);
-			$image1 = imagecreatetruecolor($breite,$hoehe);
-			$tue="\$image=imagecreatefrom".$pictyp[$imagesize[2]]."('$dest');";
-			eval($tue);
-			imagecopyresized($image1, $image, 0,0, 0,0,$breite,$hoehe,$imagesize[0],$imagesize[1]);
-			$tue="image".$pictyp[$imagesize[2]]."(\$image1,'$dest');";
-			eval($tue);
+			require_once("documents.php");
+			$dbfile=new document();
+			$dbfile->setDocData("descript","Firmenlogo von ".$daten["name"]);
+			$dbfile->uploadDocument($datei,"/$DIR");
 		}	
 		$rc1=true;
 		if ($ala) {
@@ -517,7 +520,7 @@ function saveNeuFirmaStamm($daten,$files,$typ="C") {
 * doReportC
 * in: data = array
 * out: rc = int
-* Einen Report über Kunden,abweichende Lieferanschrift
+* Einen Report ï¿½ber Kunden,abweichende Lieferanschrift
 * und Kontakte erzeugen
 *****************************************************/
 function doReport($data,$typ="C") {
@@ -587,17 +590,18 @@ global $db;
 }
 function leertpl (&$t,$tpl,$typ,$msg="") {
 global $cp_sonder,$xajax;
-		$tab=array("C" => "firmen","V" => "liefern");
 		$kdtyp=getBusiness();
 		$bundesland=getBundesland(false);
 		$lead=getLeads();
-		$t->set_file(array("fa1" => $tab[$typ].$tpl.".tpl"));
+		$t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
 		$t->set_var(array(
 			AJAXJS	=> $xajax->printJavascript('./xajax/'),
+			FAART => ($typ=="C")?"Kunde":"Lieferant",
+			Q => $typ,
 			Btn1 => "",
 			Btn2 => "",
 			Msg =>	$msg,
-			action => $tab[$typ].$tpl.".php",
+			action => "firmen".$tpl.".php?Q=$typ",
 			id 	=> "",
 			name 	=> "",
 			department_1	=> "",
@@ -722,6 +726,16 @@ global $cp_sonder,$xajax;
                         ));
                         $t->parse("BlockBS","buland2",true);
                 }
+		$employees=getAllUser(array(0=>true,1=>"%"));
+		$t->set_block("fa1","SalesmanListe","BlockBV");
+		if ($employees) foreach ($employees as $vk) {
+			$t->set_var(array(
+				salesmanid => $vk["id"],
+				Salesman => $vk["name"],
+				Ssel => ($vk["id"]==$daten["salesman_id"])?"selected":""
+			));
+			$t->parse("BlockBV","SalesmanListe",true);
+		}
 		$t->set_block("fa1","LeadListe","BlockL");
 		if ($lead) foreach ($lead as $row) {
 			$t->set_var(array(
@@ -748,18 +762,25 @@ global $cp_sonder,$xajax;
 } // leertpl
 function vartpl (&$t,$daten,$typ,$msg,$btn1,$btn2,$tpl) {
 global $cp_sonder,$xajax;
-		$tab=array("C" => "firmen","V" => "liefern");
 		if ($daten["grafik"]) {
-			$Image="<img src='dokumente/".$_SESSION["mansel"]."/".$daten["id"]."/logo.".$daten["grafik"]."' ".$daten["icon"].">";
+			if ($typ=="C") { $DIR="C".$daten["customernumber"]; }
+			else { $DIR="V".$daten["vendornumber"]; };
+			if (file_exists("dokumente/".$_SESSION["mansel"]."/$DIR/logo.".$daten["grafik"])) {
+				$Image="<img src='dokumente/".$_SESSION["mansel"]."/$DIR/logo.".$daten["grafik"]."' ".$daten["icon"].">";
+			} else {
+				$Image="Bild ($DIR/logo.".$daten["grafik"].") nicht<br>im Verzeichnis";
+			}
 		}
 		$kdtyp=getBusiness();
-		$t->set_file(array("fa1" => $tab[$typ].$tpl.".tpl"));
+		$t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
 		$t->set_var(array(
 				AJAXJS	=> $xajax->printJavascript('./xajax/'),
+				FAART => ($typ=="C")?"Kunde":"Lieferant",
+				Q => $typ,
 				Btn1	=> $btn1,
 				Btn2	=> $btn2,
 				Msg	=> $msg,
-				action	=> $tab[$typ].$tpl.".php",
+				action	=> "firmen".$tpl.".php?Q=$typ",
 				id	=> $daten["id"],
                                 customernumber  => $daten["customernumber"],
                                 vendornumber    => $daten["vendornumber"],
@@ -890,6 +911,16 @@ global $cp_sonder,$xajax;
 				SBUSEL => ($bland["id"]==$daten["shiptobland"])?"selected":""
 			));
 			$t->parse("BlockBS","buland2",true);
+		}
+		$employees=getAllUser(array(0=>true,1=>"%"));
+		$t->set_block("fa1","SalesmanListe","BlockBV");
+		if ($employees) foreach ($employees as $vk) {
+			$t->set_var(array(
+				salesmanid => $vk["id"],
+				Salesman => $vk["name"],
+				Ssel => ($vk["id"]==$daten["salesman_id"])?"selected":""
+			));
+			$t->parse("BlockBV","SalesmanListe",true);
 		}
 		if ($daten["employee"]==$_SESSION["loginCRM"]) {
 				$t->set_block("fa1","OwenerListe","Block");

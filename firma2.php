@@ -6,18 +6,22 @@
 	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
 	require("firmacommon.php");
+	$fid=($_GET["fid"])?$_GET["fid"]:$_POST["fid"];
+	$Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];	
 	if ($_POST["insk"]) {
 		insFaKont($_POST);
-		$fid=$_POST["fid"];
 	}
 	if ($_GET["ldap"]) {
 		include("inc/ldapLib.php");
 		$rc=Ldap_add_Customer($_GET["fid"]);
 	}
-	$fid=$_GET["fid"];
+
+	// Einen Kontakt anzeigen lassen
 	if ($_GET["id"]) {
 		$co=getKontaktStamm($_GET["id"]);
 		if (empty($co["cp_cv_id"])) {
+			// Ist keiner Firma zugeordnet
+			$id=$_GET["id"];
 			$fa["name"]="Einzelperson";
 			$fa["department_1"]="";
 			$fa["department_2"]="";
@@ -36,41 +40,51 @@
 			$fa["id"]=0;
 			$ep="";
 		}
-	}
+	} 
 	if ($fid>0){ 
-		$fa=getAllKontakt($fid);		
+		// Aufruf mit einer Firmen-ID
+		$co=getAllKontakt($fid);		
 		$liste="";
-		if (count($fa)>1) {
-			foreach ($fa as $row) {
+		if (count($co)>1) {
+			// Mehr als einen Kontakt gefunden
+			foreach ($co as $row) {
 				$liste.="<option value='".$row["cp_id"];
 				$liste.=($row["cp_id"]==$id)?"' selected>":"'>";
 				$liste.=$row["cp_name"].", ".$row["cp_givenname"]."\n";
 			}
-			$co=$fa[0];
+			$co=$co[0];
 			$init=$co["cp_id"];
-		} else if (count($fa)==0 || $fa==false) {
+			$id=$co["cp_id"];
+		} else if (count($co)==0 || $co==false) {
+			// Keinen Kontakt gefunden
 			$co["cp_greeting"]="Leider keine Kontakte gefunden";
-			$co=$fa[0];
-			$init=$co["cp_id"];
 			$init="";
+		} else {
+			// Genau ein Kontakt
+			$co=$co[0]; 
+			$id=$co["cp_id"];
 		}
-		$fa=getFirmenStamm($fid);
-		$link1="firma1.php?id=".$co["cp_cv_id"];
-		$link2="firma2.php?fid=".$co["cp_cv_id"];
-		$link3="firma3.php?fid=".$co["cp_cv_id"];
-		$link4="firma4.php?pid=".$co["cp_id"]."&fid=".$co["cp_cv_id"];
+		$fa=getFirmenStamm($fid,true,$Q);
+		$KDNR=($Q=="C")?$fa["customernumber"]:$fa["vendornumber"];
+		$link1="firma1.php?Q=$Q&id=$fid";
+		$link2="firma2.php?Q=$Q&fid=$fid";
+		$link3="firma3.php?Q=$Q&fid=$fid";
+		$link4="firma4.php?Q=$Q&fid=$fid&pid=".$co["cp_id"];
 	} else if ($ep=="") {
-		$co["cp_greeting"]="Leider keine Kontakte gefunden";
+		$co["cp_greeting"]="Fehlerhafter Aufruf";
 		$init="";
-		
+		$link1="#";
+		$link2="#";
+		$link3="#";
+		$link4="#";
 	}
 	if (trim($co["cp_grafik"])<>"") {
-		$Image="<img src='dokumente/".$_SESSION["mansel"]."/".$_GET["id"]."/kopf.".$co["cp_grafik"]."' ".$co["size"].">";
+		$Image="<img src='dokumente/".$_SESSION["mansel"]."/$Q$KDNR/".$_GET["id"]."/kopf.".$co["cp_grafik"]."' ".$co["size"].">";
 	} else {
 		$Image="";
 	}
 	if ($co["cp_homepage"]<>"") {
-		$internet=(preg_match("°://°",$co["cp_homepage"]))?$co["cp_homepage"]:"http://".$co["cp_homepage"];
+		$internet=(preg_match("ï¿½://ï¿½",$co["cp_homepage"]))?$co["cp_homepage"]:"http://".$co["cp_homepage"];
 	};
 	$sonder="";
 	if ($cp_sonder) while (list($key,$val) = each($cp_sonder)) {
@@ -79,8 +93,10 @@
 	$t = new Template($base);
 	$t->set_file(array("co1" => "firma2.tpl"));
 	$t->set_var(array(
-			INIT	=> ($init=="")?"":"showContact()",
+			INIT	=> ($init=="")?"showOne($id)":"showContact()",
 			AJAXJS  => $xajax->printJavascript('./xajax/'),
+			FAART => ($Q=="C")?"Kunde":"Lieferant",
+			Q => $Q,
 			Link1 => $link1,
 			Link2 => $link2,
 			Link3 => $link3,
@@ -93,7 +109,7 @@
 			Street => $fa["street"],
 			PID => $co["cp_id"],
 			FID => $co["cp_cv_id"],
-			customernumber	=> $fa["customernumber"],
+			customernumber	=> $KDNR,
 			moreC => ($liste<>"")?"visible":"hidden",
 			kontakte => $liste,
 			ep => $ep,

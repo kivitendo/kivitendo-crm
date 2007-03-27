@@ -5,15 +5,16 @@
 	include("inc/template.inc");
 	include("inc/grafik$jpg.php");
 	include("inc/FirmenLib.php");
+	$Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
 	$fid=$_GET["fid"];
 	$t = new Template($base);
-	$fa=getFirmenStamm($fid);
+	$fa=getFirmenStamm($fid,true,$Q);
 	if ($_GET["linlog"]) { $linlog="&linlog=0"; $ll=true; }
 	else {$linlog="&linlog=1"; $ll=false; }
-	$link1="firma1.php?id=$fid";
-	$link2="firma2.php?fid=$fid";
-	$link3="firma3.php?fid=$fid".$linlog;
-	$link4="firma4.php?fid=$fid";
+	$link1="firma1.php?Q=$Q&id=$fid";
+	$link2="firma2.php?Q=$Q&fid=$fid";
+	$link3="firma3.php?Q=$Q&fid=$fid".$linlog;
+	$link4="firma4.php?Q=$Q&fid=$fid";
 	$name=$fa["name"];
 	$plz=$fa["zipcode"];
 	$ort=$fa["city"];
@@ -28,19 +29,21 @@
 	$JahrZ=$jahr-1;
 	if ($_GET["monat"]) {
 		$m=substr($_GET["monat"],3,4)."-".substr($_GET["monat"],0,2);
-		$reM=getReMonat($_GET["fid"],$m);
+		$reM=getReMonat($_GET["fid"],$m,($Q=="V")?true:false);
 		$t->set_file(array("fa1" => "firma3a.tpl"));
 		$IMG="";
 	} else {
-		$re=getReJahr($fid,$jahr);
-		$an=getAngebJahr($fid,$jahr);
+		$re=getReJahr($fid,$jahr,($Q=="V")?true:false);
+		$an=getAngebJahr($fid,$jahr,($Q=="V")?true:false);
 		$t->set_file(array("fa1" => "firma3.tpl"));
 		$IMG=getLastYearPlot($re,$an,$ll);
 		$monat="";
 	}
 	$t->set_var(array(
+			Q	=> $Q,
+			FAART	=> ($Q=="C")?"Kunde":"Lieferant",
 			FID => $fid,
-			KDNR	=> $fa["customernumber"],
+			KDNR	=> ($Q=="C")?$fa["customernumber"]:$fa["vendornumber"],
 			PID => $pid,
 			Link1 => $link1,
 			Link2 => $link2,

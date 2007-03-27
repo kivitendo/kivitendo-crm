@@ -6,14 +6,12 @@
 	include("inc/crmLib.php");
 	include("inc/UserLib.php");
 	include("inc/persLib.php");
+	include("inc/FirmenLib.php");
 	$t = new Template($base);
+	$Q=($_GET["Quelle"])?$_GET["Quelle"]:$_POST["Quelle"];	
 	
 	if ($_POST["show"]) {
-		if ($_POST["Quelle"]=="L") {
-			header("location:liefer2.php?id=".$_POST["PID"]);
-		} else {
-			header("location:firma2.php?id=".$_POST["PID"]);
-		}
+		header("location:firma2.php?Q=$Q&id=".$_POST["PID"]);
 	} else if ($_POST["save"]||$_POST["neu"]) {
 		if ($_POST["neu"]) { 
 			$_POST["PID"]=0;
@@ -24,7 +22,7 @@
 		if (ereg("^[0-9]+$",$rc)) {
 			$msg="Daten gesichert.";
 			$daten=getKontaktStamm(($_POST["PID"])?$_POST["PID"]:$rc);
-			$daten["Quelle"]=$_POST["Quelle"];
+			$daten["Quelle"]=$Q;
 			$btn1="<input type='submit' name='save' value='sichern update' tabindex='25'>";
 			$btn2="<input type='submit' name='neu' value='sichern als neu'>";
 			$btn3="<input type='submit' name='show' value='zur Anzeige'>";
@@ -42,17 +40,15 @@
 			$btn2="<input type='submit' name='neu' value='sichern als neu'>";			
 			vartplP ($t,$_POST,$msg,$btn1,$btn2,$btn3,$rc,"red",1,3);
 		}
-	} else if ($_POST["edit"] || $_GET["edit"]) {
+	} else if ($_POST["edit"]>0 || $_GET["edit"]>0) {
 		if ($_POST["id"]) {
 			$id=$_POST["id"];
-			$Quelle=$_POST["Quelle"];
 		} else {
 			$id=$_GET["id"];
-			$Quelle=$_GET["Quelle"];
 		}
-		if (!$id) header("location:personen1.php");
+		if (!$id) header("location:personen1.php?Q=$Q");
 		$daten=getKontaktStamm($id);
-		$daten["Quelle"]=$Quelle;
+		$daten["Quelle"]=$Q;
 		$msg="Edit: <b>$id</b>";
 		$btn1="<input type='submit' name='save' value='sichern update' tabindex='25'>";
 		$btn2="<input type='submit' name='neu' value='sichern als neu'>";
@@ -60,7 +56,7 @@
 		vartplP ($t,$daten,$msg,$btn1,$btn2,$btn3,"cp_givenname","white",0,3);
 	} else {
 		$msg="Neue Person";
-		leertplP($t,$_GET["fid"],$msg,3,true,$_GET["Quelle"]);
+		leertplP($t,$_GET["fid"],$msg,3,true,$Q);
 	}
 	$t->pparse("out",array("pers1"));
 

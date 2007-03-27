@@ -5,17 +5,23 @@
 	include("inc/FirmenLib.php");
 	include("inc/crmLib.php");
         require("firmacommon.php");
+	$Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
 	$kdhelp=getWCategorie(true);
 	$id=$_GET["id"];
-	$fa=getFirmenStamm($id);
+	$fa=getFirmenStamm($id,true,$Q);
 	$start=($_GET["start"])?($_GET["start"]):0;
 	$items=getAllTelCall($_GET["id"],true,$start);
 	$cmsg=getCustMsg($id);
 	$t = new Template($base);
 	$t->set_file(array("fa1" => "firma1.tpl"));
 	if ($fa["grafik"]) {
-		$Image="<a href='dokumente/".$_SESSION["mansel"]."/".$_GET["id"]."/logo.".$fa["grafik"]."' target='_blank'>";
-		$Image.="<img src='dokumente/".$_SESSION["mansel"]."/".$_GET["id"]."/logo.".$fa["grafik"]."' ".$fa["icon"]." border='0'></a>";
+		if (file_exists("dokumente/".$_SESSION["mansel"]."/C".$fa["customernumber"]."/logo.".$fa["grafik"])) {
+		$Image="<a href='dokumente/".$_SESSION["mansel"]."/C".$fa["customernumber"]."/logo.".$fa["grafik"]."' target='_blank'>";
+		$Image.="<img src='dokumente/".$_SESSION["mansel"]."/C".$fa["customernumber"]."/logo.".$fa["grafik"]."' ".$fa["icon"]." border='0'></a>";
+		} else {
+			$Image="Bild nicht<br>im Verzeichnis";
+
+		}
 	} else {
 		$Image="";
 	};
@@ -48,6 +54,8 @@
 	$taxzone=array("Inland","EU mit UStId","EU ohne UStId","Ausland");
 	$t->set_var(array(
 			AJAXJS  => $xajax->printJavascript('./xajax/'),
+			FAART => ($Q=="C")?"Kunde":"Lieferant",
+			Q => $Q,
 			FID	=> $id,
 			INID	=> db2date(substr($fa["itime"],0,10)),
 			Fname1	=> $fa["name"],
@@ -82,7 +90,7 @@
 			op	=> sprintf("%0.2f",$fa["op"]),
 			oa	=> sprintf("%0.2f",$fa["oa"]),
 			preisgrp	=> $fa["pricegroup"],
-			Sshipto_id	=> $fa["shipto_id"],
+			Sshipto_id	=> ($fa["shipto_id"]>0)?$fa["shipto_id"]:"",
 			Sname1	=> $fa["shiptoname"],
 			Sdepartment_1	=> $fa["shiptodepartment_1"],
 			Sdepartment_2	=> $fa["shiptodepartment_2"],
@@ -104,6 +112,7 @@
 			PREV	=> $prev,
 			KARTE	=> $karte,
 			zeigeplan => ($karte)?"visible":"hidden",
+			zeigeextra => ($zeigeextra)?"visible":"hidden",
 			login	=> $_SESSION["employee"],
 			password => $_SESSION["password"],
 			leadsrc => $fa["leadsrc"],

@@ -5,13 +5,14 @@
 	include("inc/FirmenLib.php");
 	include("inc/UserLib.php");
 	require("firmacommon.php");
+	$Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
 	$bgcol[1]="#ddddff";
 	$bgcol[2]="#ddffdd";
 	$t = new Template($base);
 	if ($_POST["reset"]) {
-		leertpl($t,1,"C","");
+		leertpl($t,1,$Q,"");
 	} else if ($_POST["felder"]) {
-		$rc=doReport($_POST,"C");
+		$rc=doReport($_POST,$Q);
 		$t->set_file(array("fa1" => "firmen1L.tpl"));
 		if ($rc) { 
 			$tmp="<div style='width:300px'>[<a href='tmp/report_".$_SESSION["loginCRM"].".csv'>Report</a>]</div>";
@@ -23,15 +24,19 @@
 		));
 	} else if ($_POST["suche"]=="suchen" || $_GET["first"]) {
 		if ($_GET["first"]) {
-			$daten=getAllFirmen(array(1,$_GET["first"]),false,"C");
+			$daten=getAllFirmen(array(1,$_GET["first"]),false,$Q);
 		} else {
-			$daten=suchFirma($_POST,"C");
+			$daten=suchFirma($_POST,$Q);
 		};
 		if (count($daten)==1 && $daten<>false) {
-			header ("location:firma1.php?id=".$daten[0]["id"]);
+			header ("location:firma1.php?Q=$Q&id=".$daten[0]["id"]);
 		} else if (count($daten)>1) {
 			$t->set_file(array("fa1" => "firmen1L.tpl"));
 			$t->set_block("fa1","Liste","Block");
+			$t->set_var(array(
+				AJAXJS  => $xajax->printJavascript('./xajax/'),
+				FAART => ($Q=="C")?"Kunde":"Lieferant",
+			));
 			$i=0;
 			clearCSVData();
 			insertCSVData(array("ANREDE","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","KONTAKT","ID",
@@ -40,17 +45,19 @@
 				insertCSVData(array("Firma",$zeile["name"],$zeile["department_1"],
 						$zeile["country"],$zeile["zipcode"],$zeile["city"],$zeile["street"],
 						$zeile["phone"],$zeile["fax"],$zeile["email"],$zeile["contact"],$zeile["id"],
-						$zeile["customernumber"],$zeile["ustid"],$zeile["taxnumber"],
+						($Q=="C")?$zeile["customernumber"]:$zeile["vendornumber"],
+						$zeile["ustid"],$zeile["taxnumber"],
 						$zeile["account_number"],$zeile["bank"],$zeile["bank_code"],
 						$zeile["language"],$zeile["business_id"]));	
 				$t->set_var(array(
-				ID => $zeile["id"],
-				LineCol => $bgcol[($i%2+1)],
-				Name => $zeile["name"],
-				Plz => $zeile["zipcode"],
-				Ort => $zeile["city"],
-				Telefon => $zeile["phone"],
-				eMail => $zeile["email"]
+					Q => $Q,
+					ID => $zeile["id"],
+					LineCol => $bgcol[($i%2+1)],
+					Name => $zeile["name"],
+					Plz => $zeile["zipcode"],
+					Ort => $zeile["city"],
+					Telefon => $zeile["phone"],
+					eMail => $zeile["email"]
 				));
 				$t->parse("Block","Liste",true);
 				$i++;
@@ -63,10 +70,10 @@
 			}
 		} else {
 			$msg="Leider nichts gefunden.";
-			vartpl ($t,$_POST,"C",$msg,"","",1);
+			vartpl ($t,$_POST,$Q,$msg,"","",1);
 		}
 	} else {
-		leertpl ($t,1,"C");
+		leertpl ($t,1,$Q);
 	}
 	$t->pparse("out",array("fa1"));
 ?>

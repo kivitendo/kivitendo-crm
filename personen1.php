@@ -5,7 +5,7 @@
 	include("inc/persLib.php");
 	include("inc/laender.php");
 	include("inc/UserLib.php");
-	
+	include("inc/FirmenLib.php");
 	$bgcol[1]="#ddddff";
 	$bgcol[2]="#ddffdd";
 	$t = new Template($base);
@@ -30,11 +30,11 @@
 			$bgcol[1]="#ddddff";
 			$bgcol[2]="#ddffdd";
 			if ($_POST["FID1"]) { 
-				$dest=($Quelle=="F")?"firma":"liefer"; 
+				$dest=($Quelle=="C")?"firma":"liefer"; 
 				$snd="<input type='submit' name='insk' value='zuordnen'><br><a href='".$dest."2.php?fid=".$_POST["FID1"]."'>zur&uuml;ck</a>";  //<input type='checkbox' value='".$zeile["cp_id"]."'>alle
-                        } else { $snd=""; $dest=""; };
+            } else { $snd=""; $dest=""; };
 			clearCSVData();
-            		insertCSVData(array("ANREDE","TITEL","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","FIRMA","ID"));
+            insertCSVData(array("ANREDE","TITEL","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","FIRMA","ID"));
 			if ($daten) foreach ($daten as $zeile) {
 				insertCSVData(array($zeile["cp_greeting"],$zeile["cp_title"],$zeile["cp_name"],$zeile["cp_givenname"],
 							$zeile["cp_country"],$zeile["cp_zipcode"],$zeile["cp_city"],$zeile["cp_street"],

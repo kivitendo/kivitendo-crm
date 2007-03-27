@@ -1,26 +1,31 @@
 <?
 // $Id$
 	require_once("inc/stdLib.php");
-	include("inc/template.inc");
-	include("inc/crmLib.php");
-	include("inc/persLib.php");
-	include("inc/FirmenLib.php");
+	include("crmLib.php");
+	include("FirmenLib.php");
+	include("documents.php");
 	$pid=($_GET["pid"])?$_GET["pid"]:$_POST["pid"];
 	$fid=($_GET["fid"])?$_GET["fid"]:$_POST["fid"];
 	$did=($_GET["did"])?$_GET["did"]:$_POST["did"];
-	$datum=date("d.m.Y");
-	$zeit=date("H:i");
+	$tab=($_GET["tab"])?$_GET["tab"]:$_POST["tab"];
+	
+	if ($fid) {
+		$fa=getFirmenStamm($fid,true,$tab);
+		$pfad="/$tab";
+		$pfad.=($tab=="C")?$fa["customernumber"]:$fa["vendornumber"];
+	};
+	if ($pid) $pfad.="/$pid";
 	$knopf="<input type='submit' name='erstellen' value='Erstellen'>";
 	if ($_POST["erstellen"]) {
 		$docdata=getDOCvorlage($_POST["docid"]);
 		if ($docdata["document"]["applikation"]=="O") {
 			include('inc/phpOpenOffice.php');
 			$doc = new phpOpenOffice();
-			$fname=substr($docdata["document"]["file"],0,-4);
+			$fname=$docdata["document"]["file"];
 		} else if ($docdata["document"]["applikation"]=="R") {
 			include('inc/phpRtf.php');
 			$doc = new phpRTF();
-			$fname=substr($docdata["document"]["file"],0,-4);
+			$fname=$docdata["document"]["file"];
 		} else if ($docdata["document"]["applikation"]=="B") {
 			require('inc/phpBIN.php');
 			$doc = new phpBIN();
@@ -35,16 +40,34 @@
 		}
 		$doc->parse($vars);
 		$data=$_POST;
-		$data["CID"]=($pid)?$pid:$fid;
-		$data["CRMUSER"]=$_SESSION["loginCRM"];
-		//$doc->download(date("YmdHi").substr($docdata["document"]["file"],0,-4));
-		$pre=date("YmdHi");
-		$doc->prepsave($pre.$fname);
-		insFormDoc($data,$pre.$docdata["document"]["file"]);
+		$name=date("YmdHi").$fname;
+		$doc->prepsave("$name");
+		copy("tmp/$name","dokumente/".$_SESSION["mansel"]."$pfad/$name");
+		$dbfile=new document();
+		$dbfile->setDocData("descript","Dokumentvorlage: ".$docdata["document"]["vorlage"]."\n".$docdata["document"]["beschreibung"]);
+		$dbfile->setDocData("name",$name);
+		$dbfile->setDocData("pfad",$pfad);
+		$rc=$dbfile->saveDocument();
 		$doc->clean();
-		$knopf="Dokument erstellt: <a href='./dokumente/".$_SESSION["mansel"]."/".$data["CID"]."/".$pre.$docdata["document"]["file"]."'>&lt;shift&gt;+&lt;klick&gt;</a>";
+		$cdata["id"]=mknewTelCall();
+		$cdata["Datum"]=date("d.m.Y");
+		$cdata["Zeit"]=date("H:i");
+		$cdata["datei"]=1;
+		$cdata["cause"]=$docdata["document"]["vorlage"];
+		$cdata["c_cause"]=$docdata["document"]["beschreibung"];
+		$cdata["CID"]=($pid)?$pid:$fid;
+		$cdata["Kontakt"]="D";
+		$cdata["bezug"]=0;
+		$cdata["CRMUSER"]=$_SESSION["loginCRM"];
+		updCall($cdata);
+		documenttotc($cdata["id"],$dbfile->id);
+		//$knopf="Dokument erstellt: <a href='$pfad/$name'>&lt;shift&gt;+&lt;klick&gt;</a>";
+		echo "<script language='JavaScript'>top.main_window.dateibaum('left','$pfad');top.main_window.showFile('left','$name');</script>";
+		exit;
 	}
 
+	include("template.inc");
+	include("persLib.php");
 	if (empty($fid)) {
 		$co=getKontaktStamm($pid);
 		$anrede=$co["cp_greeting"]." ".$co["cp_title"];
@@ -55,12 +78,8 @@
 		$ort=$co["cp_city"];
 		$strasse=$co["cp_street"];
 		$art="Einzelperson";
-		$link1="#";
-		$link2="firma2.php?id=$pid";
-		$link3="#";
-		$link4="firma4.php?pid=$pid";
 	} else {
-		$fa=getFirmenStamm($fid);
+		$fa=getFirmenStamm($fid,true,$tab);
 		$anrede="Firma";
 		$name=$fa["name"];
 		$name1=$name;
@@ -79,26 +98,15 @@
 		} else {
 			$art="Firmendokumente";
 		}
-		$link1="firma1.php?id=$fid";
-		$link2="firma2.php?fid=$fid";
-		$link3="firma3.php?fid=$fid";
-		$link4="firma4.php?fid=$fid";
 	}
 	$document=getDocVorlage($did);
 	$t = new Template($base);
 	$t->set_file(array("doc" => "firma4a.tpl"));
 	$t->set_var(array(
+			FAART => ($tab=="C")?"Kunde":"Lieferant",
+			TAB => $tab,
 			FID => $fid,
-			KDNR	=> $fa["customernumber"],
 			PID => $pid,
-			Link1 => $link1,
-			Link2 => $link2,
-			Link3 => $link3,
-			Link4 => $link4,
-			Name => $name,
-			Department_1 => $department_1,
-			Plz => $plz,
-			Ort => $ort,
 			Art => $art,
 			Beschreibung => $document["document"]["beschreibung"],
 			DOCID => $did,
@@ -107,6 +115,8 @@
 	$t->set_block("doc","Liste","Block");
 	$t->set_block("doc","RegEx","Block2");
 	$i=0;
+	$datum=date("d.m.Y");
+	$zeit=date("H:i");
 	if ($document["felder"]) {
 	 foreach($document["felder"] as $zeile) {
 		$value=strtolower($zeile["platzhalter"]);

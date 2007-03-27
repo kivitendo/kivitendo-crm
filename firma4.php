@@ -6,14 +6,16 @@
 	include("inc/crmLib.php");
 	include("inc/FirmenLib.php");
 	include("inc/wvLib.php");
+	require("firmacommon.php");
 	$fid=($_GET["fid"])?$_GET["fid"]:$_POST["fid"];
 	$pid=($_GET["pid"])?$_GET["pid"]:$_POST["pid"];
+	$Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
 	if ($_POST["sichern"]) {
 		$id=($pid)?$pid:$fid;
 		saveDokument($_FILES,$_POST["caption"],date("Y-m-d"),$id,$_SESSION["loginCRM"]);
 	}
 	if (!empty($fid)) {
-		$fa=getFirmenStamm($fid);
+		$fa=getFirmenStamm($fid,true,$Q);
 		if (!empty($pid)){
 			$id=$pid;
 			$co=getKontaktStamm($pid);
@@ -29,28 +31,30 @@
 			$firma="Firmendokumente";
 		}
 		$vertrag=getCustContract($fid);
-		$link1="firma1.php?id=$fid";
-		$link2="firma2.php?fid=$fid";
-		$link3="firma3.php?fid=$fid";
-		$link4="firma4.php?fid=$fid";
+		$link1="firma1.php?Q=$Q&id=$fid";
+		$link2="firma2.php?Q=$Q&fid=$fid";
+		$link3="firma3.php?Q=$Q&fid=$fid";
+		$link4="firma4.php?Q=$Q&fid=$fid&pid=$pid";
 	} else {
-		$id=$pid;
 		$co=getKontaktStamm($pid);
 		$name=$co["cp_givenname"]." ".$co["cp_name"];
 		$plz=$co["cp_zipcode"];
 		$ort=$co["cp_city"];
 		$firma="Einzelperson";
 		$link1="#";
-		$link2="firma2.php?id=$pid";
+		$link2="firma2.php?Q=$Q&id=$pid";
 		$link3="#";
-		$link4="firma4.php?pid=$pid";
+		$link4="firma4.php?Q=$Q&pid=$pid&fid=0";
 	}
-	$files=liesdir($_SESSION["mansel"]."/".$id);
+	$files=liesdir($_SESSION["mansel"]."/".$pid);
 	$t = new Template($base);
 	$t->set_file(array("doc" => "firma4.tpl"));
 	$t->set_var(array(
+			AJAXJS  => $xajax->printJavascript('./xajax/'),
+			FAART => ($Q=="C")?"Kunde":"Lieferant",
+			Q => $Q,
 			FID => $fid,
-			KDNR	=> $fa["customernumber"],
+			customernumber	=> ($Q=="C")?$fa["customernumber"]:$fa["vendornumber"],
 			PID => $pid,
 			Link1 => $link1,
 			Link2 => $link2,
@@ -90,7 +94,7 @@
 	if ($files) foreach ($files as $row) {
 		$t->set_var(array(
 				key => $row["date"]." &nbsp; ".$row["name"],
-				val => $_SESSION["mansel"]."/".$id."/".$row["name"]
+				val => $_SESSION["mansel"]."/".$pid."/".$row["name"]
 		));
 		$t->parse("Block2","Liste2",true);
 	}

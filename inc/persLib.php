@@ -38,7 +38,7 @@ global $db;
 		$firma="Einzelperson";
 		$tab="";
 		$cnd="";
-		if (!empty($rs[0]["cp_cv_id"])) {  // gehört zu einem Kunden oder Lieferanten
+		if (!empty($rs[0]["cp_cv_id"])) {  // gehï¿½rt zu einem Kunden oder Lieferanten
 			$sql="select id,name,department_1,customernumber from customer where id=".$rs[0]["cp_cv_id"];
 			$rs1=$db->getAll($sql);
 			$tab="C";
@@ -55,7 +55,7 @@ global $db;
 		}
 		$daten=$rs[0];
 		if ($daten["cp_grafik"]) {
-			$image="$pfad./dokumente/".$_SESSION["mansel"]."/$id/kopf.".$daten["cp_grafik"];
+			$image="$pfad./dokumente/".$_SESSION["mansel"]."/$tab$cnr/$id/kopf.".$daten["cp_grafik"];
 			if (file_exists($image)) {
 				$size=@getimagesize(trim($image));
 				$daten["size"]=$size[3];
@@ -72,7 +72,7 @@ global $db;
 		$daten["Firma"] = $firma;
 		$daten["Department_1"]=$rs1[0]["department_1"];
 		$daten["tabelle"] = $tab;
-		$daten["customernumber"]=$cnr;
+		$daten["number"]=$cnr;
 	}
 	return $daten;
 };
@@ -165,11 +165,11 @@ global $db;
 		}
 	}
 	if ($where0<>"") $where=substr($where0,0,-1);
-	$sql0="select *,1 as tbl from contacts,customer where cp_cv_id=id  and $rechte $where order by cp_name";
+	$sql0="select *,'C' as tbl from contacts,customer where cp_cv_id=id  and $rechte $where order by cp_name";
 	$rs0=$db->getAll($sql0);
-	$sql0="select *,2 as tbl from contacts,vendor where cp_cv_id=id $where  and $rechte order by cp_name";
+	$sql0="select *,'V' as tbl from contacts,vendor where cp_cv_id=id $where  and $rechte order by cp_name";
 	$rs1=$db->getAll($sql0);
-	$sql0="select *,3 as tbl from contacts where $rechte ".$where." order by cp_name";
+	$sql0="select *,'P' as tbl from contacts where $rechte ".$where." order by cp_name";
 	$rs2=$db->getAll($sql0);
 	$daten=array_merge($rs0,$rs1,$rs2);
 	$key=array();
@@ -251,9 +251,14 @@ global $db;
 		if (!$daten["PID"] or $daten["PID"]<1) $pid=mknewPerson($daten["employee"]);
 		if (!$pid) return "unbekannt";
 		if ($bildok) {
-			$dir=$_SESSION["mansel"]."/".$pid;
-			$dest="./dokumente/".$dir."/kopf.".$typ[$imagesize[2]];
+			if ($daten["nummer"]) {
+				$dir=$daten["Quelle"].$daten["nummer"]."/".$pid;
+			} else {
+				$dir=$pid;
+			};
 			$ok=chkdir($dir);
+			$dir=$_SESSION["mansel"]."/".$dir;
+			$dest="./dokumente/".$dir."/kopf.".$typ[$imagesize[2]];
 			move_uploaded_file($datei["bild"]["tmp_name"],"$dest");
 			if (($imagesize[1] < $imagesize[0]) ) {
 				$hoehe=ceil($imagesize[1]/$imagesize[0]*480);
@@ -338,7 +343,10 @@ global $db;
 }
 function leertplP (&$t,$fid,$msg,$tab,$suche=false,$Quelle="") {
 global $laender,$cp_sonder;
-		if ($fid && $Quelle) $fa="Bekannt";
+		if ($fid && $Quelle) {
+			$fa=getFirmenstamm($fid,false,$Quelle);
+			$nummer=($Quelle=="C")?$fa["customernumber"]:$fa["vendornumber"];
+		}
 		$t->set_file(array("pers1" => "personen".$tab.".tpl"));
 		$t->set_var(array(
 			Fld	=> "cp_title",
@@ -375,7 +383,7 @@ global $laender,$cp_sonder;
 			cp_beziehung	=> "",
 			cp_abteilung	=> "",
 			cp_position 	=> "",
-			Firma 	=> "$fa",
+			Firma 	=> $fa["name"],
 			FID 	=> ($suche)?$fid:"",
 			FID1 	=> $fid,
 			cp_stichwort1	=> "",
@@ -384,6 +392,7 @@ global $laender,$cp_sonder;
 			sond2	=> "",
 			sond3	=> "",
 			sond4	=> "",
+			nummer	=> $nummer,
 			Quelle  => $Quelle,
 			IMG	=> "",
 			IMG_	=> "",
@@ -440,8 +449,17 @@ global $laender,$cp_sonder;
 
 function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
 	global $laender,$cp_sonder;
+		if ($daten["cp_cv_id"] && $daten["Quelle"]) {
+			$fa=getFirmenstamm($daten["cp_cv_id"],false,$daten["Quelle"]);
+			$nummer=($daten["Quelle"]=="C")?$fa["customernumber"]:$fa["vendornumber"];
+		}
 		if (trim($daten["cp_grafik"])<>"") {
-			$Image="<img src='dokumente/".$_SESSION["mansel"]."/".$daten["cp_id"]."/kopf.".$daten["cp_grafik"]."' ".$daten["icon"].">";
+			if ($nummer) {
+				$root="dokumente/".$_SESSION["mansel"]."/".$daten["Quelle"].$nummer."/".$daten["cp_id"];
+			} else {
+				$root="dokumente/".$_SESSION["mansel"]."/".$daten["cp_id"];
+			};
+			$Image="<img src='$root/kopf.".$daten["cp_grafik"]."' ".$daten["icon"].">";
 		}
 		$t->set_file(array("pers1" => "personen".$tab.".tpl"));
 		$t->set_var(array(
@@ -454,6 +472,8 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
 			Msg 	=> $msg,
 			action	=> "personen".$tab.".php",
 			PID 	=> $daten["cp_id"],
+			tabelle => $daten["tabelle"],
+			nummer	=> $nummer,
 			//cpsel1  => ($daten["cp_greeting"]=="Herr")?"checked":"",
 			//cpsel2  => ($daten["cp_greeting"]=="Frau")?"checked":"",
 			//cpsel3  => ($daten["cp_greeting"]<>"Herr" && $daten["cp_greeting"]<>"Frau")?"checked":"",

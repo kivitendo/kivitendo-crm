@@ -161,12 +161,16 @@ input:focus {
 .zeile {  clear: both;
   padding: 2px 0px;
 }
-.zeile2 {  clear: both;
-  padding: 2px 90px;
-}
 .label {
   float: left;
-  width: 90px;
+  width: 11em;
+  text-align: right;
+  padding-top: 3px;
+  padding-right: 5px;
+}
+.label2 {
+  float: left;
+  width: 6em;
   text-align: right;
   padding-top: 3px;
   padding-right: 5px;
@@ -178,13 +182,16 @@ input:focus {
   text-align: left;
 }
 .feld {
-  float: right;
-  width: 205px;
+  float: left;
+  width: 25em;
   text-align: left;
+}
+.zeile2 {  clear: both;
+  padding: 2px 50px;
 }
 .feldxx {
   float: left;
-  width: 230px;
+  width: 30em;
   text-align: left;
 }
 .pad {

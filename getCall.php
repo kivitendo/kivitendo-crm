@@ -79,11 +79,13 @@
 					$daten["Firma"]=$fa["name"];
 					$daten["Plz"]=$fa["zipcode"];
 					$daten["Ort"]=$fa["city"];
+					$daten["nummer"]=$fa["nummer"];
 					break;
 		case "V" :  $fa=getFirmenStamm($fid,true,"V");
 					$daten["Firma"]=$fa["name"];
 					$daten["Plz"]=$fa["zipcode"];
 					$daten["Ort"]=$fa["city"];
+					$daten["nummer"]=$fa["nummer"];
 					break;
 		case "XC" : 
 		case "CC" : 
@@ -91,8 +93,10 @@
 					$daten["Firma"]=$co["cp_givenname"]." ".$co["cp_name"];
 					$daten["Plz"]=$co["cp_zipcode"];
 					$daten["Ort"]=$co["cp_city"];
+					$daten["nummer"]=$co["nummer"];
 					break;
 		default	  : $daten["Firma"]="xxxxxxxxxxxxxx";
+			    $daten["nummer"]="";	
 	} 
 
 	//------------------------------------------- Beginn Ausgabe
@@ -188,6 +192,7 @@
 	$cause=(empty($daten["Betreff"]))?$zeile["cause"]:$daten["Betreff"];
 	$deletes=getCntCallHist($Bezug,true);
 	$t->set_var(array(
+		nummer => $daten["nummer"],
 		EDIT => ($CallEdit and $_GET["hole"])?"visible":"hidden",
 		DELETE => ($CallDel and $_GET["hole"])?"visible":"hidden",
 		HISTORY => ($daten["history"]>0)?"visible":"hidden",
@@ -214,7 +219,7 @@
 		R6 => ($daten["Kontakt"]=="X")?" checked":"",
 		Start => $telcall*-1,
 		Datei => $daten["Datei"],
-		ODatei => (empty($daten["ODatei"]))?"":("<a href='dokumente/".$_SESSION["mansel"]."/".$daten["Kunde"]."/".$daten["ODatei"]."' target='_blank'>".$daten["ODatei"]."</a>"),
+		ODatei => (empty($daten["ODatei"]))?"":("<a href='dokumente/".$_SESSION["mansel"]."/".$daten["Dpfad"]."/".$daten["ODatei"]."' target='_blank'>".$daten["ODatei"]."</a>"),
 		Dcaption => $daten["DCaption"],
 		ID => $daten["ID"],
 	));
@@ -222,7 +227,7 @@
  	if ($daten["Files"]){
 		$t->set_block("cont","Files","Block1");
 		if ($daten["Files"]) foreach($daten["Files"] as $zeile) {
-			$filelink="<a href='dokumente/".$_SESSION["mansel"]."/".$zeile["kunde"]."/".$zeile["filename"]."' target='_blank'>".$zeile["filename"]."</a>";
+			$filelink="<a href='dokumente/".$_SESSION["mansel"]."/".$zeile["pfad"]."/".$zeile["filename"]."' target='_blank'>".$zeile["filename"]."</a>";
 			$t->set_var(array(
 				Anhang	=> $filelink,
 				DCaption => $zeile["descript"]

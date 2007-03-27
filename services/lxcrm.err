@@ -1,0 +1,2654 @@
+2007-03-23 14:52:24 ->SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+DB Error: unknown error
+DB_Error Object
+(
+    [error_message_prefix] => 
+    [mode] => 1
+    [level] => 1024
+    [code] => -1
+    [message] => DB Error: unknown error
+    [userinfo] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id) [nativecode=FEHLER:  fehlender Eintrag in FROM-Klausel für Tabelle »customer«]
+    [backtrace] => Array
+        (
+            [0] => Array
+                (
+                    [file] => /usr/share/php/DB.php
+                    [line] => 888
+                    [function] => PEAR_Error
+                    [class] => PEAR_Error
+                    [type] => ->
+                    [args] => Array
+                        (
+                            [0] => DB Error: unknown error
+                            [1] => -1
+                            [2] => 1
+                            [3] => 1024
+                            [4] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id) [nativecode=FEHLER:  fehlender Eintrag in FROM-Klausel für Tabelle »customer«]
+                        )
+
+                )
+
+            [1] => Array
+                (
+                    [file] => /usr/share/php/PEAR.php
+                    [line] => 557
+                    [function] => DB_Error
+                    [class] => DB_Error
+                    [type] => ->
+                    [args] => Array
+                        (
+                            [0] => -1
+                            [1] => 1
+                            [2] => 1024
+                            [3] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id) [nativecode=FEHLER:  fehlender Eintrag in FROM-Klausel für Tabelle »customer«]
+                        )
+
+                )
+
+            [2] => Array
+                (
+                    [file] => /usr/share/php/DB/common.php
+                    [line] => 1849
+                    [function] => raiseError
+                    [class] => PEAR
+                    [type] => ->
+                    [args] => Array
+                        (
+                            [0] => 
+                            [1] => -1
+                            [2] => 
+                            [3] => 
+                            [4] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id) [nativecode=FEHLER:  fehlender Eintrag in FROM-Klausel für Tabelle »customer«]
+                            [5] => DB_Error
+                            [6] => 1
+                        )
+
+                )
+
+            [3] => Array
+                (
+                    [file] => /usr/share/php/DB/pgsql.php
+                    [line] => 785
+                    [function] => raiseError
+                    [class] => DB_common
+                    [type] => ->
+                    [args] => Array
+                        (
+                            [0] => -1
+                            [1] => 
+                            [2] => 
+                            [3] => 
+                            [4] => FEHLER:  fehlender Eintrag in FROM-Klausel für Tabelle »customer«
+                        )
+
+                )
+
+            [4] => Array
+                (
+                    [file] => /usr/share/php/DB/pgsql.php
+                    [line] => 337
+                    [function] => pgsqlRaiseError
+                    [class] => DB_pgsql
+                    [type] => ->
+                    [args] => Array
+                        (
+                        )
+
+                )
+
+            [5] => Array
+                (
+                    [file] => /usr/share/php/DB/common.php
+                    [line] => 1162
+                    [function] => simpleQuery
+                    [class] => DB_pgsql
+                    [type] => ->
+                    [args] => Array
+                        (
+                            [0] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                        )
+
+                )
+
+            [6] => Array
+                (
+                    [file] => /usr/share/php/DB/common.php
+                    [line] => 1609
+                    [function] => query
+                    [class] => DB_common
+                    [type] => ->
+                    [args] => Array
+                        (
+                            [0] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                        )
+
+                )
+
+            [7] => Array
+                (
+                    [file] => /media/sda5/www/crm/services/inc/class.database.inc.php
+                    [line] => 99
+                    [function] => getAll
+                    [class] => DB_common
+                    [type] => ->
+                    [args] => Array
+                        (
+                            [0] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                            [1] => 2
+                        )
+
+                )
+
+            [8] => Array
+                (
+                    [file] => /media/sda5/www/crm/services/inc/class.contacts.inc.php
+                    [line] => 97
+                    [function] => getAll
+                    [class] => Database
+                    [type] => ->
+                    [args] => Array
+                        (
+                            [0] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                        )
+
+                )
+
+            [9] => Array
+                (
+                    [file] => /media/sda5/www/crm/services/inc/class.xmlrpccontacts.inc.php
+                    [line] => 60
+                    [function] => get_vendor_contacts
+                    [class] => Contacts
+                    [type] => ->
+                    [args] => Array
+                        (
+                        )
+
+                )
+
+            [10] => Array
+                (
+                    [function] => addressbook_boaddressbook_search
+                    [class] => XMLRPCContacts
+                    [type] => ->
+                    [args] => Array
+                        (
+                            [0] => XML_RPC_Message Object
+                                (
+                                    [convert_payload_encoding] => 
+                                    [debug] => 0
+                                    [send_encoding] => 
+                                    [methodname] => addressbook.boaddressbook.search
+                                    [params] => Array
+                                        (
+                                            [0] => XML_RPC_Value Object
+                                                (
+                                                    [me] => Array
+                                                        (
+                                                            [struct] => Array
+                                                                (
+                                                                    [filter] => XML_RPC_Value Object
+                                                                        (
+                                                                            [me] => Array
+                                                                                (
+                                                                                    [string] => 
+                                                                                )
+
+                                                                            [mytype] => 1
+                                                                        )
+
+                                                                    [include_users] => XML_RPC_Value Object
+                                                                        (
+                                                                            [me] => Array
+                                                                                (
+                                                                                    [string] => calendar
+                                                                                )
+
+                                                                            [mytype] => 1
+                                                                        )
+
+                                                                    [order] => XML_RPC_Value Object
+                                                                        (
+                                                                            [me] => Array
+                                                                                (
+                                                                                    [string] => 
+                                                                                )
+
+                                                                            [mytype] => 1
+                                                                        )
+
+                                                                    [query] => XML_RPC_Value Object
+                                                                        (
+                                                                            [me] => Array
+                                                                                (
+                                                                                    [string] => 
+                                                                                )
+
+                                                                            [mytype] => 1
+                                                                        )
+
+                                                                    [sort] => XML_RPC_Value Object
+                                                                        (
+                                                                            [me] => Array
+                                                                                (
+                                                                                    [string] => 
+                                                                                )
+
+                                                                            [mytype] => 1
+                                                                        )
+
+                                                                    [start] => XML_RPC_Value Object
+                                                                        (
+                                                                            [me] => Array
+                                                                                (
+                                                                                    [string] => 0
+                                                                                )
+
+                                                                            [mytype] => 1
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                    [mytype] => 3
+                                                )
+
+                                        )
+
+                                    [payload] => 
+                                    [remove_extra_lines] => 1
+                                    [response_payload] => 
+                                )
+
+                        )
+
+                )
+
+            [11] => Array
+                (
+                    [file] => /usr/share/php/XML/RPC/Server.php
+                    [line] => 640
+                    [function] => call_user_func
+                    [args] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [0] => XMLRPCContacts Object
+                                        (
+                                            [db:private] => Database Object
+                                                (
+                                                    [db:private] => DB_pgsql Object
+                                                        (
+                                                            [phptype] => pgsql
+                                                            [dbsyntax] => pgsql
+                                                            [features] => Array
+                                                                (
+                                                                    [limit] => alter
+                                                                    [new_link] => 4.3.0
+                                                                    [numrows] => 1
+                                                                    [pconnect] => 1
+                                                                    [prepare] => 
+                                                                    [ssl] => 1
+                                                                    [transactions] => 1
+                                                                )
+
+                                                            [errorcode_map] => Array
+                                                                (
+                                                                )
+
+                                                            [connection] => Resource id #20
+                                                            [dsn] => Array
+                                                                (
+                                                                    [phptype] => pgsql
+                                                                    [dbsyntax] => pgsql
+                                                                    [username] => lxoffice
+                                                                    [password] => geheim
+                                                                    [protocol] => 
+                                                                    [hostspec] => localhost
+                                                                    [port] => 
+                                                                    [socket] => 
+                                                                    [database] => unstable
+                                                                )
+
+                                                            [autocommit] => 1
+                                                            [transaction_opcount] => 0
+                                                            [affected] => 0
+                                                            [row] => Array
+                                                                (
+                                                                )
+
+                                                            [_num_rows] => Array
+                                                                (
+                                                                )
+
+                                                            [fetchmode] => 1
+                                                            [fetchmode_object_class] => stdClass
+                                                            [was_connected] => 
+                                                            [last_query] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                                                            [options] => Array
+                                                                (
+                                                                    [result_buffering] => 500
+                                                                    [persistent] => 
+                                                                    [ssl] => 
+                                                                    [debug] => 0
+                                                                    [seqname_format] => %s_seq
+                                                                    [autofree] => 
+                                                                    [portability] => 0
+                                                                    [optimize] => performance
+                                                                )
+
+                                                            [last_parameters] => Array
+                                                                (
+                                                                )
+
+                                                            [prepare_tokens] => Array
+                                                                (
+                                                                )
+
+                                                            [prepare_types] => Array
+                                                                (
+                                                                )
+
+                                                            [prepared_queries] => Array
+                                                                (
+                                                                )
+
+                                                            [_debug] => 
+                                                            [_default_error_mode] => 
+                                                            [_default_error_options] => 
+                                                            [_default_error_handler] => 
+                                                            [_error_class] => DB_Error
+                                                            [_expected_errors] => Array
+                                                                (
+                                                                )
+
+                                                        )
+
+                                                    [rc:private] => DB_Error Object
+ *RECURSION*
+                                                    [showErr:private] => 
+                                                    [debug:private] => 
+                                                    [log:private] => 
+                                                    [errfile:private] => lxcrm.err
+                                                    [logfile:private] => lxcrm.log
+                                                    [lfh:private] => 
+                                                )
+
+                                            [contacts:private] => Contacts Object
+                                                (
+                                                    [db:private] => Database Object
+                                                        (
+                                                            [db:private] => DB_pgsql Object
+                                                                (
+                                                                    [phptype] => pgsql
+                                                                    [dbsyntax] => pgsql
+                                                                    [features] => Array
+                                                                        (
+                                                                            [limit] => alter
+                                                                            [new_link] => 4.3.0
+                                                                            [numrows] => 1
+                                                                            [pconnect] => 1
+                                                                            [prepare] => 
+                                                                            [ssl] => 1
+                                                                            [transactions] => 1
+                                                                        )
+
+                                                                    [errorcode_map] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [connection] => Resource id #20
+                                                                    [dsn] => Array
+                                                                        (
+                                                                            [phptype] => pgsql
+                                                                            [dbsyntax] => pgsql
+                                                                            [username] => lxoffice
+                                                                            [password] => geheim
+                                                                            [protocol] => 
+                                                                            [hostspec] => localhost
+                                                                            [port] => 
+                                                                            [socket] => 
+                                                                            [database] => unstable
+                                                                        )
+
+                                                                    [autocommit] => 1
+                                                                    [transaction_opcount] => 0
+                                                                    [affected] => 0
+                                                                    [row] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [_num_rows] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [fetchmode] => 1
+                                                                    [fetchmode_object_class] => stdClass
+                                                                    [was_connected] => 
+                                                                    [last_query] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                                                                    [options] => Array
+                                                                        (
+                                                                            [result_buffering] => 500
+                                                                            [persistent] => 
+                                                                            [ssl] => 
+                                                                            [debug] => 0
+                                                                            [seqname_format] => %s_seq
+                                                                            [autofree] => 
+                                                                            [portability] => 0
+                                                                            [optimize] => performance
+                                                                        )
+
+                                                                    [last_parameters] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [prepare_tokens] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [prepare_types] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [prepared_queries] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [_debug] => 
+                                                                    [_default_error_mode] => 
+                                                                    [_default_error_options] => 
+                                                                    [_default_error_handler] => 
+                                                                    [_error_class] => DB_Error
+                                                                    [_expected_errors] => Array
+                                                                        (
+                                                                        )
+
+                                                                )
+
+                                                            [rc:private] => DB_Error Object
+ *RECURSION*
+                                                            [showErr:private] => 
+                                                            [debug:private] => 
+                                                            [log:private] => 
+                                                            [errfile:private] => lxcrm.err
+                                                            [logfile:private] => lxcrm.log
+                                                            [lfh:private] => 
+                                                        )
+
+                                                )
+
+                                            [employees:private] => Employees Object
+                                                (
+                                                    [db:private] => Database Object
+                                                        (
+                                                            [db:private] => DB_pgsql Object
+                                                                (
+                                                                    [phptype] => pgsql
+                                                                    [dbsyntax] => pgsql
+                                                                    [features] => Array
+                                                                        (
+                                                                            [limit] => alter
+                                                                            [new_link] => 4.3.0
+                                                                            [numrows] => 1
+                                                                            [pconnect] => 1
+                                                                            [prepare] => 
+                                                                            [ssl] => 1
+                                                                            [transactions] => 1
+                                                                        )
+
+                                                                    [errorcode_map] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [connection] => Resource id #20
+                                                                    [dsn] => Array
+                                                                        (
+                                                                            [phptype] => pgsql
+                                                                            [dbsyntax] => pgsql
+                                                                            [username] => lxoffice
+                                                                            [password] => geheim
+                                                                            [protocol] => 
+                                                                            [hostspec] => localhost
+                                                                            [port] => 
+                                                                            [socket] => 
+                                                                            [database] => unstable
+                                                                        )
+
+                                                                    [autocommit] => 1
+                                                                    [transaction_opcount] => 0
+                                                                    [affected] => 0
+                                                                    [row] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [_num_rows] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [fetchmode] => 1
+                                                                    [fetchmode_object_class] => stdClass
+                                                                    [was_connected] => 
+                                                                    [last_query] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                                                                    [options] => Array
+                                                                        (
+                                                                            [result_buffering] => 500
+                                                                            [persistent] => 
+                                                                            [ssl] => 
+                                                                            [debug] => 0
+                                                                            [seqname_format] => %s_seq
+                                                                            [autofree] => 
+                                                                            [portability] => 0
+                                                                            [optimize] => performance
+                                                                        )
+
+                                                                    [last_parameters] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [prepare_tokens] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [prepare_types] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [prepared_queries] => Array
+                                                                        (
+                                                                        )
+
+                                                                    [_debug] => 
+                                                                    [_default_error_mode] => 
+                                                                    [_default_error_options] => 
+                                                                    [_default_error_handler] => 
+                                                                    [_error_class] => DB_Error
+                                                                    [_expected_errors] => Array
+                                                                        (
+                                                                        )
+
+                                                                )
+
+                                                            [rc:private] => DB_Error Object
+ *RECURSION*
+                                                            [showErr:private] => 
+                                                            [debug:private] => 
+                                                            [log:private] => 
+                                                            [errfile:private] => lxcrm.err
+                                                            [logfile:private] => lxcrm.log
+                                                            [lfh:private] => 
+                                                        )
+
+                                                )
+
+                                            [service_list:private] => Array
+                                                (
+                                                    [addressbook.boaddressbook.search] => Array
+                                                        (
+                                                            [function] => Array
+                                                                (
+                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                    [1] => addressbook_boaddressbook_search
+                                                                )
+
+                                                        )
+
+                                                    [addressbook.boaddressbook.write] => Array
+                                                        (
+                                                            [function] => Array
+                                                                (
+                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                    [1] => addressbook_boaddressbook_write
+                                                                )
+
+                                                        )
+
+                                                    [addressbook.boaddressbook.delete] => Array
+                                                        (
+                                                            [function] => Array
+                                                                (
+                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                    [1] => addressbook_boaddressbook_delete
+                                                                )
+
+                                                        )
+
+                                                    [addressbook.boaddressbook.categories] => Array
+                                                        (
+                                                            [function] => Array
+                                                                (
+                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                    [1] => addressbook_boaddressbook_categories
+                                                                )
+
+                                                        )
+
+                                                    [addressbook.boaddressbook.customfields] => Array
+                                                        (
+                                                            [function] => Array
+                                                                (
+                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                    [1] => addressbook_boaddressbook_customfields
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                    [1] => addressbook_boaddressbook_search
+                                )
+
+                            [1] => XML_RPC_Message Object
+                                (
+                                    [convert_payload_encoding] => 
+                                    [debug] => 0
+                                    [send_encoding] => 
+                                    [methodname] => addressbook.boaddressbook.search
+                                    [params] => Array
+                                        (
+                                            [0] => XML_RPC_Value Object
+                                                (
+                                                    [me] => Array
+                                                        (
+                                                            [struct] => Array
+                                                                (
+                                                                    [filter] => XML_RPC_Value Object
+                                                                        (
+                                                                            [me] => Array
+                                                                                (
+                                                                                    [string] => 
+                                                                                )
+
+                                                                            [mytype] => 1
+                                                                        )
+
+                                                                    [include_users] => XML_RPC_Value Object
+                                                                        (
+                                                                            [me] => Array
+                                                                                (
+                                                                                    [string] => calendar
+                                                                                )
+
+                                                                            [mytype] => 1
+                                                                        )
+
+                                                                    [order] => XML_RPC_Value Object
+                                                                        (
+                                                                            [me] => Array
+                                                                                (
+                                                                                    [string] => 
+                                                                                )
+
+                                                                            [mytype] => 1
+                                                                        )
+
+                                                                    [query] => XML_RPC_Value Object
+                                                                        (
+                                                                            [me] => Array
+                                                                                (
+                                                                                    [string] => 
+                                                                                )
+
+                                                                            [mytype] => 1
+                                                                        )
+
+                                                                    [sort] => XML_RPC_Value Object
+                                                                        (
+                                                                            [me] => Array
+                                                                                (
+                                                                                    [string] => 
+                                                                                )
+
+                                                                            [mytype] => 1
+                                                                        )
+
+                                                                    [start] => XML_RPC_Value Object
+                                                                        (
+                                                                            [me] => Array
+                                                                                (
+                                                                                    [string] => 0
+                                                                                )
+
+                                                                            [mytype] => 1
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                    [mytype] => 3
+                                                )
+
+                                        )
+
+                                    [payload] => 
+                                    [remove_extra_lines] => 1
+                                    [response_payload] => 
+                                )
+
+                        )
+
+                )
+
+            [12] => Array
+                (
+                    [file] => /usr/share/php/XML/RPC/Server.php
+                    [line] => 462
+                    [function] => parseRequest
+                    [class] => XML_RPC_Server
+                    [type] => ->
+                    [args] => Array
+                        (
+                        )
+
+                )
+
+            [13] => Array
+                (
+                    [file] => /usr/share/php/XML/RPC/Server.php
+                    [line] => 420
+                    [function] => createServerPayload
+                    [class] => XML_RPC_Server
+                    [type] => ->
+                    [args] => Array
+                        (
+                        )
+
+                )
+
+            [14] => Array
+                (
+                    [file] => /usr/share/php/XML/RPC/Server.php
+                    [line] => 355
+                    [function] => service
+                    [class] => XML_RPC_Server
+                    [type] => ->
+                    [args] => Array
+                        (
+                        )
+
+                )
+
+            [15] => Array
+                (
+                    [file] => /media/sda5/www/crm/services/inc/class.xmlrpcserver.inc.php
+                    [line] => 55
+                    [function] => XML_RPC_Server
+                    [class] => XML_RPC_Server
+                    [type] => ->
+                    [args] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [addressbook.boaddressbook.search] => Array
+                                        (
+                                            [function] => Array
+                                                (
+                                                    [0] => XMLRPCContacts Object
+                                                        (
+                                                            [db:private] => Database Object
+                                                                (
+                                                                    [db:private] => DB_pgsql Object
+                                                                        (
+                                                                            [phptype] => pgsql
+                                                                            [dbsyntax] => pgsql
+                                                                            [features] => Array
+                                                                                (
+                                                                                    [limit] => alter
+                                                                                    [new_link] => 4.3.0
+                                                                                    [numrows] => 1
+                                                                                    [pconnect] => 1
+                                                                                    [prepare] => 
+                                                                                    [ssl] => 1
+                                                                                    [transactions] => 1
+                                                                                )
+
+                                                                            [errorcode_map] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [connection] => Resource id #20
+                                                                            [dsn] => Array
+                                                                                (
+                                                                                    [phptype] => pgsql
+                                                                                    [dbsyntax] => pgsql
+                                                                                    [username] => lxoffice
+                                                                                    [password] => geheim
+                                                                                    [protocol] => 
+                                                                                    [hostspec] => localhost
+                                                                                    [port] => 
+                                                                                    [socket] => 
+                                                                                    [database] => unstable
+                                                                                )
+
+                                                                            [autocommit] => 1
+                                                                            [transaction_opcount] => 0
+                                                                            [affected] => 0
+                                                                            [row] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [_num_rows] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [fetchmode] => 1
+                                                                            [fetchmode_object_class] => stdClass
+                                                                            [was_connected] => 
+                                                                            [last_query] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                                                                            [options] => Array
+                                                                                (
+                                                                                    [result_buffering] => 500
+                                                                                    [persistent] => 
+                                                                                    [ssl] => 
+                                                                                    [debug] => 0
+                                                                                    [seqname_format] => %s_seq
+                                                                                    [autofree] => 
+                                                                                    [portability] => 0
+                                                                                    [optimize] => performance
+                                                                                )
+
+                                                                            [last_parameters] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [prepare_tokens] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [prepare_types] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [prepared_queries] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [_debug] => 
+                                                                            [_default_error_mode] => 
+                                                                            [_default_error_options] => 
+                                                                            [_default_error_handler] => 
+                                                                            [_error_class] => DB_Error
+                                                                            [_expected_errors] => Array
+                                                                                (
+                                                                                )
+
+                                                                        )
+
+                                                                    [rc:private] => DB_Error Object
+ *RECURSION*
+                                                                    [showErr:private] => 
+                                                                    [debug:private] => 
+                                                                    [log:private] => 
+                                                                    [errfile:private] => lxcrm.err
+                                                                    [logfile:private] => lxcrm.log
+                                                                    [lfh:private] => 
+                                                                )
+
+                                                            [contacts:private] => Contacts Object
+                                                                (
+                                                                    [db:private] => Database Object
+                                                                        (
+                                                                            [db:private] => DB_pgsql Object
+                                                                                (
+                                                                                    [phptype] => pgsql
+                                                                                    [dbsyntax] => pgsql
+                                                                                    [features] => Array
+                                                                                        (
+                                                                                            [limit] => alter
+                                                                                            [new_link] => 4.3.0
+                                                                                            [numrows] => 1
+                                                                                            [pconnect] => 1
+                                                                                            [prepare] => 
+                                                                                            [ssl] => 1
+                                                                                            [transactions] => 1
+                                                                                        )
+
+                                                                                    [errorcode_map] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [connection] => Resource id #20
+                                                                                    [dsn] => Array
+                                                                                        (
+                                                                                            [phptype] => pgsql
+                                                                                            [dbsyntax] => pgsql
+                                                                                            [username] => lxoffice
+                                                                                            [password] => geheim
+                                                                                            [protocol] => 
+                                                                                            [hostspec] => localhost
+                                                                                            [port] => 
+                                                                                            [socket] => 
+                                                                                            [database] => unstable
+                                                                                        )
+
+                                                                                    [autocommit] => 1
+                                                                                    [transaction_opcount] => 0
+                                                                                    [affected] => 0
+                                                                                    [row] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [_num_rows] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [fetchmode] => 1
+                                                                                    [fetchmode_object_class] => stdClass
+                                                                                    [was_connected] => 
+                                                                                    [last_query] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                                                                                    [options] => Array
+                                                                                        (
+                                                                                            [result_buffering] => 500
+                                                                                            [persistent] => 
+                                                                                            [ssl] => 
+                                                                                            [debug] => 0
+                                                                                            [seqname_format] => %s_seq
+                                                                                            [autofree] => 
+                                                                                            [portability] => 0
+                                                                                            [optimize] => performance
+                                                                                        )
+
+                                                                                    [last_parameters] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepare_tokens] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepare_types] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepared_queries] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [_debug] => 
+                                                                                    [_default_error_mode] => 
+                                                                                    [_default_error_options] => 
+                                                                                    [_default_error_handler] => 
+                                                                                    [_error_class] => DB_Error
+                                                                                    [_expected_errors] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                )
+
+                                                                            [rc:private] => DB_Error Object
+ *RECURSION*
+                                                                            [showErr:private] => 
+                                                                            [debug:private] => 
+                                                                            [log:private] => 
+                                                                            [errfile:private] => lxcrm.err
+                                                                            [logfile:private] => lxcrm.log
+                                                                            [lfh:private] => 
+                                                                        )
+
+                                                                )
+
+                                                            [employees:private] => Employees Object
+                                                                (
+                                                                    [db:private] => Database Object
+                                                                        (
+                                                                            [db:private] => DB_pgsql Object
+                                                                                (
+                                                                                    [phptype] => pgsql
+                                                                                    [dbsyntax] => pgsql
+                                                                                    [features] => Array
+                                                                                        (
+                                                                                            [limit] => alter
+                                                                                            [new_link] => 4.3.0
+                                                                                            [numrows] => 1
+                                                                                            [pconnect] => 1
+                                                                                            [prepare] => 
+                                                                                            [ssl] => 1
+                                                                                            [transactions] => 1
+                                                                                        )
+
+                                                                                    [errorcode_map] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [connection] => Resource id #20
+                                                                                    [dsn] => Array
+                                                                                        (
+                                                                                            [phptype] => pgsql
+                                                                                            [dbsyntax] => pgsql
+                                                                                            [username] => lxoffice
+                                                                                            [password] => geheim
+                                                                                            [protocol] => 
+                                                                                            [hostspec] => localhost
+                                                                                            [port] => 
+                                                                                            [socket] => 
+                                                                                            [database] => unstable
+                                                                                        )
+
+                                                                                    [autocommit] => 1
+                                                                                    [transaction_opcount] => 0
+                                                                                    [affected] => 0
+                                                                                    [row] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [_num_rows] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [fetchmode] => 1
+                                                                                    [fetchmode_object_class] => stdClass
+                                                                                    [was_connected] => 
+                                                                                    [last_query] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                                                                                    [options] => Array
+                                                                                        (
+                                                                                            [result_buffering] => 500
+                                                                                            [persistent] => 
+                                                                                            [ssl] => 
+                                                                                            [debug] => 0
+                                                                                            [seqname_format] => %s_seq
+                                                                                            [autofree] => 
+                                                                                            [portability] => 0
+                                                                                            [optimize] => performance
+                                                                                        )
+
+                                                                                    [last_parameters] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepare_tokens] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepare_types] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepared_queries] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [_debug] => 
+                                                                                    [_default_error_mode] => 
+                                                                                    [_default_error_options] => 
+                                                                                    [_default_error_handler] => 
+                                                                                    [_error_class] => DB_Error
+                                                                                    [_expected_errors] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                )
+
+                                                                            [rc:private] => DB_Error Object
+ *RECURSION*
+                                                                            [showErr:private] => 
+                                                                            [debug:private] => 
+                                                                            [log:private] => 
+                                                                            [errfile:private] => lxcrm.err
+                                                                            [logfile:private] => lxcrm.log
+                                                                            [lfh:private] => 
+                                                                        )
+
+                                                                )
+
+                                                            [service_list:private] => Array
+                                                                (
+                                                                    [addressbook.boaddressbook.search] => Array
+ *RECURSION*
+                                                                    [addressbook.boaddressbook.write] => Array
+                                                                        (
+                                                                            [function] => Array
+                                                                                (
+                                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                                    [1] => addressbook_boaddressbook_write
+                                                                                )
+
+                                                                        )
+
+                                                                    [addressbook.boaddressbook.delete] => Array
+                                                                        (
+                                                                            [function] => Array
+                                                                                (
+                                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                                    [1] => addressbook_boaddressbook_delete
+                                                                                )
+
+                                                                        )
+
+                                                                    [addressbook.boaddressbook.categories] => Array
+                                                                        (
+                                                                            [function] => Array
+                                                                                (
+                                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                                    [1] => addressbook_boaddressbook_categories
+                                                                                )
+
+                                                                        )
+
+                                                                    [addressbook.boaddressbook.customfields] => Array
+                                                                        (
+                                                                            [function] => Array
+                                                                                (
+                                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                                    [1] => addressbook_boaddressbook_customfields
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                    [1] => addressbook_boaddressbook_search
+                                                )
+
+                                        )
+
+                                    [addressbook.boaddressbook.write] => Array
+                                        (
+                                            [function] => Array
+                                                (
+                                                    [0] => XMLRPCContacts Object
+                                                        (
+                                                            [db:private] => Database Object
+                                                                (
+                                                                    [db:private] => DB_pgsql Object
+                                                                        (
+                                                                            [phptype] => pgsql
+                                                                            [dbsyntax] => pgsql
+                                                                            [features] => Array
+                                                                                (
+                                                                                    [limit] => alter
+                                                                                    [new_link] => 4.3.0
+                                                                                    [numrows] => 1
+                                                                                    [pconnect] => 1
+                                                                                    [prepare] => 
+                                                                                    [ssl] => 1
+                                                                                    [transactions] => 1
+                                                                                )
+
+                                                                            [errorcode_map] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [connection] => Resource id #20
+                                                                            [dsn] => Array
+                                                                                (
+                                                                                    [phptype] => pgsql
+                                                                                    [dbsyntax] => pgsql
+                                                                                    [username] => lxoffice
+                                                                                    [password] => geheim
+                                                                                    [protocol] => 
+                                                                                    [hostspec] => localhost
+                                                                                    [port] => 
+                                                                                    [socket] => 
+                                                                                    [database] => unstable
+                                                                                )
+
+                                                                            [autocommit] => 1
+                                                                            [transaction_opcount] => 0
+                                                                            [affected] => 0
+                                                                            [row] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [_num_rows] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [fetchmode] => 1
+                                                                            [fetchmode_object_class] => stdClass
+                                                                            [was_connected] => 
+                                                                            [last_query] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                                                                            [options] => Array
+                                                                                (
+                                                                                    [result_buffering] => 500
+                                                                                    [persistent] => 
+                                                                                    [ssl] => 
+                                                                                    [debug] => 0
+                                                                                    [seqname_format] => %s_seq
+                                                                                    [autofree] => 
+                                                                                    [portability] => 0
+                                                                                    [optimize] => performance
+                                                                                )
+
+                                                                            [last_parameters] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [prepare_tokens] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [prepare_types] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [prepared_queries] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [_debug] => 
+                                                                            [_default_error_mode] => 
+                                                                            [_default_error_options] => 
+                                                                            [_default_error_handler] => 
+                                                                            [_error_class] => DB_Error
+                                                                            [_expected_errors] => Array
+                                                                                (
+                                                                                )
+
+                                                                        )
+
+                                                                    [rc:private] => DB_Error Object
+ *RECURSION*
+                                                                    [showErr:private] => 
+                                                                    [debug:private] => 
+                                                                    [log:private] => 
+                                                                    [errfile:private] => lxcrm.err
+                                                                    [logfile:private] => lxcrm.log
+                                                                    [lfh:private] => 
+                                                                )
+
+                                                            [contacts:private] => Contacts Object
+                                                                (
+                                                                    [db:private] => Database Object
+                                                                        (
+                                                                            [db:private] => DB_pgsql Object
+                                                                                (
+                                                                                    [phptype] => pgsql
+                                                                                    [dbsyntax] => pgsql
+                                                                                    [features] => Array
+                                                                                        (
+                                                                                            [limit] => alter
+                                                                                            [new_link] => 4.3.0
+                                                                                            [numrows] => 1
+                                                                                            [pconnect] => 1
+                                                                                            [prepare] => 
+                                                                                            [ssl] => 1
+                                                                                            [transactions] => 1
+                                                                                        )
+
+                                                                                    [errorcode_map] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [connection] => Resource id #20
+                                                                                    [dsn] => Array
+                                                                                        (
+                                                                                            [phptype] => pgsql
+                                                                                            [dbsyntax] => pgsql
+                                                                                            [username] => lxoffice
+                                                                                            [password] => geheim
+                                                                                            [protocol] => 
+                                                                                            [hostspec] => localhost
+                                                                                            [port] => 
+                                                                                            [socket] => 
+                                                                                            [database] => unstable
+                                                                                        )
+
+                                                                                    [autocommit] => 1
+                                                                                    [transaction_opcount] => 0
+                                                                                    [affected] => 0
+                                                                                    [row] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [_num_rows] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [fetchmode] => 1
+                                                                                    [fetchmode_object_class] => stdClass
+                                                                                    [was_connected] => 
+                                                                                    [last_query] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                                                                                    [options] => Array
+                                                                                        (
+                                                                                            [result_buffering] => 500
+                                                                                            [persistent] => 
+                                                                                            [ssl] => 
+                                                                                            [debug] => 0
+                                                                                            [seqname_format] => %s_seq
+                                                                                            [autofree] => 
+                                                                                            [portability] => 0
+                                                                                            [optimize] => performance
+                                                                                        )
+
+                                                                                    [last_parameters] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepare_tokens] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepare_types] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepared_queries] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [_debug] => 
+                                                                                    [_default_error_mode] => 
+                                                                                    [_default_error_options] => 
+                                                                                    [_default_error_handler] => 
+                                                                                    [_error_class] => DB_Error
+                                                                                    [_expected_errors] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                )
+
+                                                                            [rc:private] => DB_Error Object
+ *RECURSION*
+                                                                            [showErr:private] => 
+                                                                            [debug:private] => 
+                                                                            [log:private] => 
+                                                                            [errfile:private] => lxcrm.err
+                                                                            [logfile:private] => lxcrm.log
+                                                                            [lfh:private] => 
+                                                                        )
+
+                                                                )
+
+                                                            [employees:private] => Employees Object
+                                                                (
+                                                                    [db:private] => Database Object
+                                                                        (
+                                                                            [db:private] => DB_pgsql Object
+                                                                                (
+                                                                                    [phptype] => pgsql
+                                                                                    [dbsyntax] => pgsql
+                                                                                    [features] => Array
+                                                                                        (
+                                                                                            [limit] => alter
+                                                                                            [new_link] => 4.3.0
+                                                                                            [numrows] => 1
+                                                                                            [pconnect] => 1
+                                                                                            [prepare] => 
+                                                                                            [ssl] => 1
+                                                                                            [transactions] => 1
+                                                                                        )
+
+                                                                                    [errorcode_map] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [connection] => Resource id #20
+                                                                                    [dsn] => Array
+                                                                                        (
+                                                                                            [phptype] => pgsql
+                                                                                            [dbsyntax] => pgsql
+                                                                                            [username] => lxoffice
+                                                                                            [password] => geheim
+                                                                                            [protocol] => 
+                                                                                            [hostspec] => localhost
+                                                                                            [port] => 
+                                                                                            [socket] => 
+                                                                                            [database] => unstable
+                                                                                        )
+
+                                                                                    [autocommit] => 1
+                                                                                    [transaction_opcount] => 0
+                                                                                    [affected] => 0
+                                                                                    [row] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [_num_rows] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [fetchmode] => 1
+                                                                                    [fetchmode_object_class] => stdClass
+                                                                                    [was_connected] => 
+                                                                                    [last_query] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                                                                                    [options] => Array
+                                                                                        (
+                                                                                            [result_buffering] => 500
+                                                                                            [persistent] => 
+                                                                                            [ssl] => 
+                                                                                            [debug] => 0
+                                                                                            [seqname_format] => %s_seq
+                                                                                            [autofree] => 
+                                                                                            [portability] => 0
+                                                                                            [optimize] => performance
+                                                                                        )
+
+                                                                                    [last_parameters] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepare_tokens] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepare_types] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepared_queries] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [_debug] => 
+                                                                                    [_default_error_mode] => 
+                                                                                    [_default_error_options] => 
+                                                                                    [_default_error_handler] => 
+                                                                                    [_error_class] => DB_Error
+                                                                                    [_expected_errors] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                )
+
+                                                                            [rc:private] => DB_Error Object
+ *RECURSION*
+                                                                            [showErr:private] => 
+                                                                            [debug:private] => 
+                                                                            [log:private] => 
+                                                                            [errfile:private] => lxcrm.err
+                                                                            [logfile:private] => lxcrm.log
+                                                                            [lfh:private] => 
+                                                                        )
+
+                                                                )
+
+                                                            [service_list:private] => Array
+                                                                (
+                                                                    [addressbook.boaddressbook.search] => Array
+                                                                        (
+                                                                            [function] => Array
+                                                                                (
+                                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                                    [1] => addressbook_boaddressbook_search
+                                                                                )
+
+                                                                        )
+
+                                                                    [addressbook.boaddressbook.write] => Array
+ *RECURSION*
+                                                                    [addressbook.boaddressbook.delete] => Array
+                                                                        (
+                                                                            [function] => Array
+                                                                                (
+                                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                                    [1] => addressbook_boaddressbook_delete
+                                                                                )
+
+                                                                        )
+
+                                                                    [addressbook.boaddressbook.categories] => Array
+                                                                        (
+                                                                            [function] => Array
+                                                                                (
+                                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                                    [1] => addressbook_boaddressbook_categories
+                                                                                )
+
+                                                                        )
+
+                                                                    [addressbook.boaddressbook.customfields] => Array
+                                                                        (
+                                                                            [function] => Array
+                                                                                (
+                                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                                    [1] => addressbook_boaddressbook_customfields
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                    [1] => addressbook_boaddressbook_write
+                                                )
+
+                                        )
+
+                                    [addressbook.boaddressbook.delete] => Array
+                                        (
+                                            [function] => Array
+                                                (
+                                                    [0] => XMLRPCContacts Object
+                                                        (
+                                                            [db:private] => Database Object
+                                                                (
+                                                                    [db:private] => DB_pgsql Object
+                                                                        (
+                                                                            [phptype] => pgsql
+                                                                            [dbsyntax] => pgsql
+                                                                            [features] => Array
+                                                                                (
+                                                                                    [limit] => alter
+                                                                                    [new_link] => 4.3.0
+                                                                                    [numrows] => 1
+                                                                                    [pconnect] => 1
+                                                                                    [prepare] => 
+                                                                                    [ssl] => 1
+                                                                                    [transactions] => 1
+                                                                                )
+
+                                                                            [errorcode_map] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [connection] => Resource id #20
+                                                                            [dsn] => Array
+                                                                                (
+                                                                                    [phptype] => pgsql
+                                                                                    [dbsyntax] => pgsql
+                                                                                    [username] => lxoffice
+                                                                                    [password] => geheim
+                                                                                    [protocol] => 
+                                                                                    [hostspec] => localhost
+                                                                                    [port] => 
+                                                                                    [socket] => 
+                                                                                    [database] => unstable
+                                                                                )
+
+                                                                            [autocommit] => 1
+                                                                            [transaction_opcount] => 0
+                                                                            [affected] => 0
+                                                                            [row] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [_num_rows] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [fetchmode] => 1
+                                                                            [fetchmode_object_class] => stdClass
+                                                                            [was_connected] => 
+                                                                            [last_query] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                                                                            [options] => Array
+                                                                                (
+                                                                                    [result_buffering] => 500
+                                                                                    [persistent] => 
+                                                                                    [ssl] => 
+                                                                                    [debug] => 0
+                                                                                    [seqname_format] => %s_seq
+                                                                                    [autofree] => 
+                                                                                    [portability] => 0
+                                                                                    [optimize] => performance
+                                                                                )
+
+                                                                            [last_parameters] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [prepare_tokens] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [prepare_types] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [prepared_queries] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [_debug] => 
+                                                                            [_default_error_mode] => 
+                                                                            [_default_error_options] => 
+                                                                            [_default_error_handler] => 
+                                                                            [_error_class] => DB_Error
+                                                                            [_expected_errors] => Array
+                                                                                (
+                                                                                )
+
+                                                                        )
+
+                                                                    [rc:private] => DB_Error Object
+ *RECURSION*
+                                                                    [showErr:private] => 
+                                                                    [debug:private] => 
+                                                                    [log:private] => 
+                                                                    [errfile:private] => lxcrm.err
+                                                                    [logfile:private] => lxcrm.log
+                                                                    [lfh:private] => 
+                                                                )
+
+                                                            [contacts:private] => Contacts Object
+                                                                (
+                                                                    [db:private] => Database Object
+                                                                        (
+                                                                            [db:private] => DB_pgsql Object
+                                                                                (
+                                                                                    [phptype] => pgsql
+                                                                                    [dbsyntax] => pgsql
+                                                                                    [features] => Array
+                                                                                        (
+                                                                                            [limit] => alter
+                                                                                            [new_link] => 4.3.0
+                                                                                            [numrows] => 1
+                                                                                            [pconnect] => 1
+                                                                                            [prepare] => 
+                                                                                            [ssl] => 1
+                                                                                            [transactions] => 1
+                                                                                        )
+
+                                                                                    [errorcode_map] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [connection] => Resource id #20
+                                                                                    [dsn] => Array
+                                                                                        (
+                                                                                            [phptype] => pgsql
+                                                                                            [dbsyntax] => pgsql
+                                                                                            [username] => lxoffice
+                                                                                            [password] => geheim
+                                                                                            [protocol] => 
+                                                                                            [hostspec] => localhost
+                                                                                            [port] => 
+                                                                                            [socket] => 
+                                                                                            [database] => unstable
+                                                                                        )
+
+                                                                                    [autocommit] => 1
+                                                                                    [transaction_opcount] => 0
+                                                                                    [affected] => 0
+                                                                                    [row] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [_num_rows] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [fetchmode] => 1
+                                                                                    [fetchmode_object_class] => stdClass
+                                                                                    [was_connected] => 
+                                                                                    [last_query] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                                                                                    [options] => Array
+                                                                                        (
+                                                                                            [result_buffering] => 500
+                                                                                            [persistent] => 
+                                                                                            [ssl] => 
+                                                                                            [debug] => 0
+                                                                                            [seqname_format] => %s_seq
+                                                                                            [autofree] => 
+                                                                                            [portability] => 0
+                                                                                            [optimize] => performance
+                                                                                        )
+
+                                                                                    [last_parameters] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepare_tokens] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepare_types] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepared_queries] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [_debug] => 
+                                                                                    [_default_error_mode] => 
+                                                                                    [_default_error_options] => 
+                                                                                    [_default_error_handler] => 
+                                                                                    [_error_class] => DB_Error
+                                                                                    [_expected_errors] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                )
+
+                                                                            [rc:private] => DB_Error Object
+ *RECURSION*
+                                                                            [showErr:private] => 
+                                                                            [debug:private] => 
+                                                                            [log:private] => 
+                                                                            [errfile:private] => lxcrm.err
+                                                                            [logfile:private] => lxcrm.log
+                                                                            [lfh:private] => 
+                                                                        )
+
+                                                                )
+
+                                                            [employees:private] => Employees Object
+                                                                (
+                                                                    [db:private] => Database Object
+                                                                        (
+                                                                            [db:private] => DB_pgsql Object
+                                                                                (
+                                                                                    [phptype] => pgsql
+                                                                                    [dbsyntax] => pgsql
+                                                                                    [features] => Array
+                                                                                        (
+                                                                                            [limit] => alter
+                                                                                            [new_link] => 4.3.0
+                                                                                            [numrows] => 1
+                                                                                            [pconnect] => 1
+                                                                                            [prepare] => 
+                                                                                            [ssl] => 1
+                                                                                            [transactions] => 1
+                                                                                        )
+
+                                                                                    [errorcode_map] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [connection] => Resource id #20
+                                                                                    [dsn] => Array
+                                                                                        (
+                                                                                            [phptype] => pgsql
+                                                                                            [dbsyntax] => pgsql
+                                                                                            [username] => lxoffice
+                                                                                            [password] => geheim
+                                                                                            [protocol] => 
+                                                                                            [hostspec] => localhost
+                                                                                            [port] => 
+                                                                                            [socket] => 
+                                                                                            [database] => unstable
+                                                                                        )
+
+                                                                                    [autocommit] => 1
+                                                                                    [transaction_opcount] => 0
+                                                                                    [affected] => 0
+                                                                                    [row] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [_num_rows] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [fetchmode] => 1
+                                                                                    [fetchmode_object_class] => stdClass
+                                                                                    [was_connected] => 
+                                                                                    [last_query] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                                                                                    [options] => Array
+                                                                                        (
+                                                                                            [result_buffering] => 500
+                                                                                            [persistent] => 
+                                                                                            [ssl] => 
+                                                                                            [debug] => 0
+                                                                                            [seqname_format] => %s_seq
+                                                                                            [autofree] => 
+                                                                                            [portability] => 0
+                                                                                            [optimize] => performance
+                                                                                        )
+
+                                                                                    [last_parameters] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepare_tokens] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepare_types] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepared_queries] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [_debug] => 
+                                                                                    [_default_error_mode] => 
+                                                                                    [_default_error_options] => 
+                                                                                    [_default_error_handler] => 
+                                                                                    [_error_class] => DB_Error
+                                                                                    [_expected_errors] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                )
+
+                                                                            [rc:private] => DB_Error Object
+ *RECURSION*
+                                                                            [showErr:private] => 
+                                                                            [debug:private] => 
+                                                                            [log:private] => 
+                                                                            [errfile:private] => lxcrm.err
+                                                                            [logfile:private] => lxcrm.log
+                                                                            [lfh:private] => 
+                                                                        )
+
+                                                                )
+
+                                                            [service_list:private] => Array
+                                                                (
+                                                                    [addressbook.boaddressbook.search] => Array
+                                                                        (
+                                                                            [function] => Array
+                                                                                (
+                                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                                    [1] => addressbook_boaddressbook_search
+                                                                                )
+
+                                                                        )
+
+                                                                    [addressbook.boaddressbook.write] => Array
+                                                                        (
+                                                                            [function] => Array
+                                                                                (
+                                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                                    [1] => addressbook_boaddressbook_write
+                                                                                )
+
+                                                                        )
+
+                                                                    [addressbook.boaddressbook.delete] => Array
+ *RECURSION*
+                                                                    [addressbook.boaddressbook.categories] => Array
+                                                                        (
+                                                                            [function] => Array
+                                                                                (
+                                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                                    [1] => addressbook_boaddressbook_categories
+                                                                                )
+
+                                                                        )
+
+                                                                    [addressbook.boaddressbook.customfields] => Array
+                                                                        (
+                                                                            [function] => Array
+                                                                                (
+                                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                                    [1] => addressbook_boaddressbook_customfields
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                    [1] => addressbook_boaddressbook_delete
+                                                )
+
+                                        )
+
+                                    [addressbook.boaddressbook.categories] => Array
+                                        (
+                                            [function] => Array
+                                                (
+                                                    [0] => XMLRPCContacts Object
+                                                        (
+                                                            [db:private] => Database Object
+                                                                (
+                                                                    [db:private] => DB_pgsql Object
+                                                                        (
+                                                                            [phptype] => pgsql
+                                                                            [dbsyntax] => pgsql
+                                                                            [features] => Array
+                                                                                (
+                                                                                    [limit] => alter
+                                                                                    [new_link] => 4.3.0
+                                                                                    [numrows] => 1
+                                                                                    [pconnect] => 1
+                                                                                    [prepare] => 
+                                                                                    [ssl] => 1
+                                                                                    [transactions] => 1
+                                                                                )
+
+                                                                            [errorcode_map] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [connection] => Resource id #20
+                                                                            [dsn] => Array
+                                                                                (
+                                                                                    [phptype] => pgsql
+                                                                                    [dbsyntax] => pgsql
+                                                                                    [username] => lxoffice
+                                                                                    [password] => geheim
+                                                                                    [protocol] => 
+                                                                                    [hostspec] => localhost
+                                                                                    [port] => 
+                                                                                    [socket] => 
+                                                                                    [database] => unstable
+                                                                                )
+
+                                                                            [autocommit] => 1
+                                                                            [transaction_opcount] => 0
+                                                                            [affected] => 0
+                                                                            [row] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [_num_rows] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [fetchmode] => 1
+                                                                            [fetchmode_object_class] => stdClass
+                                                                            [was_connected] => 
+                                                                            [last_query] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                                                                            [options] => Array
+                                                                                (
+                                                                                    [result_buffering] => 500
+                                                                                    [persistent] => 
+                                                                                    [ssl] => 
+                                                                                    [debug] => 0
+                                                                                    [seqname_format] => %s_seq
+                                                                                    [autofree] => 
+                                                                                    [portability] => 0
+                                                                                    [optimize] => performance
+                                                                                )
+
+                                                                            [last_parameters] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [prepare_tokens] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [prepare_types] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [prepared_queries] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [_debug] => 
+                                                                            [_default_error_mode] => 
+                                                                            [_default_error_options] => 
+                                                                            [_default_error_handler] => 
+                                                                            [_error_class] => DB_Error
+                                                                            [_expected_errors] => Array
+                                                                                (
+                                                                                )
+
+                                                                        )
+
+                                                                    [rc:private] => DB_Error Object
+ *RECURSION*
+                                                                    [showErr:private] => 
+                                                                    [debug:private] => 
+                                                                    [log:private] => 
+                                                                    [errfile:private] => lxcrm.err
+                                                                    [logfile:private] => lxcrm.log
+                                                                    [lfh:private] => 
+                                                                )
+
+                                                            [contacts:private] => Contacts Object
+                                                                (
+                                                                    [db:private] => Database Object
+                                                                        (
+                                                                            [db:private] => DB_pgsql Object
+                                                                                (
+                                                                                    [phptype] => pgsql
+                                                                                    [dbsyntax] => pgsql
+                                                                                    [features] => Array
+                                                                                        (
+                                                                                            [limit] => alter
+                                                                                            [new_link] => 4.3.0
+                                                                                            [numrows] => 1
+                                                                                            [pconnect] => 1
+                                                                                            [prepare] => 
+                                                                                            [ssl] => 1
+                                                                                            [transactions] => 1
+                                                                                        )
+
+                                                                                    [errorcode_map] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [connection] => Resource id #20
+                                                                                    [dsn] => Array
+                                                                                        (
+                                                                                            [phptype] => pgsql
+                                                                                            [dbsyntax] => pgsql
+                                                                                            [username] => lxoffice
+                                                                                            [password] => geheim
+                                                                                            [protocol] => 
+                                                                                            [hostspec] => localhost
+                                                                                            [port] => 
+                                                                                            [socket] => 
+                                                                                            [database] => unstable
+                                                                                        )
+
+                                                                                    [autocommit] => 1
+                                                                                    [transaction_opcount] => 0
+                                                                                    [affected] => 0
+                                                                                    [row] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [_num_rows] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [fetchmode] => 1
+                                                                                    [fetchmode_object_class] => stdClass
+                                                                                    [was_connected] => 
+                                                                                    [last_query] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                                                                                    [options] => Array
+                                                                                        (
+                                                                                            [result_buffering] => 500
+                                                                                            [persistent] => 
+                                                                                            [ssl] => 
+                                                                                            [debug] => 0
+                                                                                            [seqname_format] => %s_seq
+                                                                                            [autofree] => 
+                                                                                            [portability] => 0
+                                                                                            [optimize] => performance
+                                                                                        )
+
+                                                                                    [last_parameters] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepare_tokens] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepare_types] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepared_queries] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [_debug] => 
+                                                                                    [_default_error_mode] => 
+                                                                                    [_default_error_options] => 
+                                                                                    [_default_error_handler] => 
+                                                                                    [_error_class] => DB_Error
+                                                                                    [_expected_errors] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                )
+
+                                                                            [rc:private] => DB_Error Object
+ *RECURSION*
+                                                                            [showErr:private] => 
+                                                                            [debug:private] => 
+                                                                            [log:private] => 
+                                                                            [errfile:private] => lxcrm.err
+                                                                            [logfile:private] => lxcrm.log
+                                                                            [lfh:private] => 
+                                                                        )
+
+                                                                )
+
+                                                            [employees:private] => Employees Object
+                                                                (
+                                                                    [db:private] => Database Object
+                                                                        (
+                                                                            [db:private] => DB_pgsql Object
+                                                                                (
+                                                                                    [phptype] => pgsql
+                                                                                    [dbsyntax] => pgsql
+                                                                                    [features] => Array
+                                                                                        (
+                                                                                            [limit] => alter
+                                                                                            [new_link] => 4.3.0
+                                                                                            [numrows] => 1
+                                                                                            [pconnect] => 1
+                                                                                            [prepare] => 
+                                                                                            [ssl] => 1
+                                                                                            [transactions] => 1
+                                                                                        )
+
+                                                                                    [errorcode_map] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [connection] => Resource id #20
+                                                                                    [dsn] => Array
+                                                                                        (
+                                                                                            [phptype] => pgsql
+                                                                                            [dbsyntax] => pgsql
+                                                                                            [username] => lxoffice
+                                                                                            [password] => geheim
+                                                                                            [protocol] => 
+                                                                                            [hostspec] => localhost
+                                                                                            [port] => 
+                                                                                            [socket] => 
+                                                                                            [database] => unstable
+                                                                                        )
+
+                                                                                    [autocommit] => 1
+                                                                                    [transaction_opcount] => 0
+                                                                                    [affected] => 0
+                                                                                    [row] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [_num_rows] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [fetchmode] => 1
+                                                                                    [fetchmode_object_class] => stdClass
+                                                                                    [was_connected] => 
+                                                                                    [last_query] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                                                                                    [options] => Array
+                                                                                        (
+                                                                                            [result_buffering] => 500
+                                                                                            [persistent] => 
+                                                                                            [ssl] => 
+                                                                                            [debug] => 0
+                                                                                            [seqname_format] => %s_seq
+                                                                                            [autofree] => 
+                                                                                            [portability] => 0
+                                                                                            [optimize] => performance
+                                                                                        )
+
+                                                                                    [last_parameters] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepare_tokens] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepare_types] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepared_queries] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [_debug] => 
+                                                                                    [_default_error_mode] => 
+                                                                                    [_default_error_options] => 
+                                                                                    [_default_error_handler] => 
+                                                                                    [_error_class] => DB_Error
+                                                                                    [_expected_errors] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                )
+
+                                                                            [rc:private] => DB_Error Object
+ *RECURSION*
+                                                                            [showErr:private] => 
+                                                                            [debug:private] => 
+                                                                            [log:private] => 
+                                                                            [errfile:private] => lxcrm.err
+                                                                            [logfile:private] => lxcrm.log
+                                                                            [lfh:private] => 
+                                                                        )
+
+                                                                )
+
+                                                            [service_list:private] => Array
+                                                                (
+                                                                    [addressbook.boaddressbook.search] => Array
+                                                                        (
+                                                                            [function] => Array
+                                                                                (
+                                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                                    [1] => addressbook_boaddressbook_search
+                                                                                )
+
+                                                                        )
+
+                                                                    [addressbook.boaddressbook.write] => Array
+                                                                        (
+                                                                            [function] => Array
+                                                                                (
+                                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                                    [1] => addressbook_boaddressbook_write
+                                                                                )
+
+                                                                        )
+
+                                                                    [addressbook.boaddressbook.delete] => Array
+                                                                        (
+                                                                            [function] => Array
+                                                                                (
+                                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                                    [1] => addressbook_boaddressbook_delete
+                                                                                )
+
+                                                                        )
+
+                                                                    [addressbook.boaddressbook.categories] => Array
+ *RECURSION*
+                                                                    [addressbook.boaddressbook.customfields] => Array
+                                                                        (
+                                                                            [function] => Array
+                                                                                (
+                                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                                    [1] => addressbook_boaddressbook_customfields
+                                                                                )
+
+                                                                        )
+
+                                                                )
+
+                                                        )
+
+                                                    [1] => addressbook_boaddressbook_categories
+                                                )
+
+                                        )
+
+                                    [addressbook.boaddressbook.customfields] => Array
+                                        (
+                                            [function] => Array
+                                                (
+                                                    [0] => XMLRPCContacts Object
+                                                        (
+                                                            [db:private] => Database Object
+                                                                (
+                                                                    [db:private] => DB_pgsql Object
+                                                                        (
+                                                                            [phptype] => pgsql
+                                                                            [dbsyntax] => pgsql
+                                                                            [features] => Array
+                                                                                (
+                                                                                    [limit] => alter
+                                                                                    [new_link] => 4.3.0
+                                                                                    [numrows] => 1
+                                                                                    [pconnect] => 1
+                                                                                    [prepare] => 
+                                                                                    [ssl] => 1
+                                                                                    [transactions] => 1
+                                                                                )
+
+                                                                            [errorcode_map] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [connection] => Resource id #20
+                                                                            [dsn] => Array
+                                                                                (
+                                                                                    [phptype] => pgsql
+                                                                                    [dbsyntax] => pgsql
+                                                                                    [username] => lxoffice
+                                                                                    [password] => geheim
+                                                                                    [protocol] => 
+                                                                                    [hostspec] => localhost
+                                                                                    [port] => 
+                                                                                    [socket] => 
+                                                                                    [database] => unstable
+                                                                                )
+
+                                                                            [autocommit] => 1
+                                                                            [transaction_opcount] => 0
+                                                                            [affected] => 0
+                                                                            [row] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [_num_rows] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [fetchmode] => 1
+                                                                            [fetchmode_object_class] => stdClass
+                                                                            [was_connected] => 
+                                                                            [last_query] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                                                                            [options] => Array
+                                                                                (
+                                                                                    [result_buffering] => 500
+                                                                                    [persistent] => 
+                                                                                    [ssl] => 
+                                                                                    [debug] => 0
+                                                                                    [seqname_format] => %s_seq
+                                                                                    [autofree] => 
+                                                                                    [portability] => 0
+                                                                                    [optimize] => performance
+                                                                                )
+
+                                                                            [last_parameters] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [prepare_tokens] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [prepare_types] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [prepared_queries] => Array
+                                                                                (
+                                                                                )
+
+                                                                            [_debug] => 
+                                                                            [_default_error_mode] => 
+                                                                            [_default_error_options] => 
+                                                                            [_default_error_handler] => 
+                                                                            [_error_class] => DB_Error
+                                                                            [_expected_errors] => Array
+                                                                                (
+                                                                                )
+
+                                                                        )
+
+                                                                    [rc:private] => DB_Error Object
+ *RECURSION*
+                                                                    [showErr:private] => 
+                                                                    [debug:private] => 
+                                                                    [log:private] => 
+                                                                    [errfile:private] => lxcrm.err
+                                                                    [logfile:private] => lxcrm.log
+                                                                    [lfh:private] => 
+                                                                )
+
+                                                            [contacts:private] => Contacts Object
+                                                                (
+                                                                    [db:private] => Database Object
+                                                                        (
+                                                                            [db:private] => DB_pgsql Object
+                                                                                (
+                                                                                    [phptype] => pgsql
+                                                                                    [dbsyntax] => pgsql
+                                                                                    [features] => Array
+                                                                                        (
+                                                                                            [limit] => alter
+                                                                                            [new_link] => 4.3.0
+                                                                                            [numrows] => 1
+                                                                                            [pconnect] => 1
+                                                                                            [prepare] => 
+                                                                                            [ssl] => 1
+                                                                                            [transactions] => 1
+                                                                                        )
+
+                                                                                    [errorcode_map] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [connection] => Resource id #20
+                                                                                    [dsn] => Array
+                                                                                        (
+                                                                                            [phptype] => pgsql
+                                                                                            [dbsyntax] => pgsql
+                                                                                            [username] => lxoffice
+                                                                                            [password] => geheim
+                                                                                            [protocol] => 
+                                                                                            [hostspec] => localhost
+                                                                                            [port] => 
+                                                                                            [socket] => 
+                                                                                            [database] => unstable
+                                                                                        )
+
+                                                                                    [autocommit] => 1
+                                                                                    [transaction_opcount] => 0
+                                                                                    [affected] => 0
+                                                                                    [row] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [_num_rows] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [fetchmode] => 1
+                                                                                    [fetchmode_object_class] => stdClass
+                                                                                    [was_connected] => 
+                                                                                    [last_query] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                                                                                    [options] => Array
+                                                                                        (
+                                                                                            [result_buffering] => 500
+                                                                                            [persistent] => 
+                                                                                            [ssl] => 
+                                                                                            [debug] => 0
+                                                                                            [seqname_format] => %s_seq
+                                                                                            [autofree] => 
+                                                                                            [portability] => 0
+                                                                                            [optimize] => performance
+                                                                                        )
+
+                                                                                    [last_parameters] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepare_tokens] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepare_types] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepared_queries] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [_debug] => 
+                                                                                    [_default_error_mode] => 
+                                                                                    [_default_error_options] => 
+                                                                                    [_default_error_handler] => 
+                                                                                    [_error_class] => DB_Error
+                                                                                    [_expected_errors] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                )
+
+                                                                            [rc:private] => DB_Error Object
+ *RECURSION*
+                                                                            [showErr:private] => 
+                                                                            [debug:private] => 
+                                                                            [log:private] => 
+                                                                            [errfile:private] => lxcrm.err
+                                                                            [logfile:private] => lxcrm.log
+                                                                            [lfh:private] => 
+                                                                        )
+
+                                                                )
+
+                                                            [employees:private] => Employees Object
+                                                                (
+                                                                    [db:private] => Database Object
+                                                                        (
+                                                                            [db:private] => DB_pgsql Object
+                                                                                (
+                                                                                    [phptype] => pgsql
+                                                                                    [dbsyntax] => pgsql
+                                                                                    [features] => Array
+                                                                                        (
+                                                                                            [limit] => alter
+                                                                                            [new_link] => 4.3.0
+                                                                                            [numrows] => 1
+                                                                                            [pconnect] => 1
+                                                                                            [prepare] => 
+                                                                                            [ssl] => 1
+                                                                                            [transactions] => 1
+                                                                                        )
+
+                                                                                    [errorcode_map] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [connection] => Resource id #20
+                                                                                    [dsn] => Array
+                                                                                        (
+                                                                                            [phptype] => pgsql
+                                                                                            [dbsyntax] => pgsql
+                                                                                            [username] => lxoffice
+                                                                                            [password] => geheim
+                                                                                            [protocol] => 
+                                                                                            [hostspec] => localhost
+                                                                                            [port] => 
+                                                                                            [socket] => 
+                                                                                            [database] => unstable
+                                                                                        )
+
+                                                                                    [autocommit] => 1
+                                                                                    [transaction_opcount] => 0
+                                                                                    [affected] => 0
+                                                                                    [row] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [_num_rows] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [fetchmode] => 1
+                                                                                    [fetchmode_object_class] => stdClass
+                                                                                    [was_connected] => 
+                                                                                    [last_query] => SELECT * FROM contacts INNER JOIN vendor ON (contacts.cp_cv_id = customer.id)
+                                                                                    [options] => Array
+                                                                                        (
+                                                                                            [result_buffering] => 500
+                                                                                            [persistent] => 
+                                                                                            [ssl] => 
+                                                                                            [debug] => 0
+                                                                                            [seqname_format] => %s_seq
+                                                                                            [autofree] => 
+                                                                                            [portability] => 0
+                                                                                            [optimize] => performance
+                                                                                        )
+
+                                                                                    [last_parameters] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepare_tokens] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepare_types] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [prepared_queries] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                    [_debug] => 
+                                                                                    [_default_error_mode] => 
+                                                                                    [_default_error_options] => 
+                                                                                    [_default_error_handler] => 
+                                                                                    [_error_class] => DB_Error
+                                                                                    [_expected_errors] => Array
+                                                                                        (
+                                                                                        )
+
+                                                                                )
+
+                                                                            [rc:private] => DB_Error Object
+ *RECURSION*
+                                                                            [showErr:private] => 
+                                                                            [debug:private] => 
+                                                                            [log:private] => 
+                                                                            [errfile:private] => lxcrm.err
+                                                                            [logfile:private] => lxcrm.log
+                                                                            [lfh:private] => 
+                                                                        )
+
+                                                                )
+
+                                                            [service_list:private] => Array
+                                                                (
+                                                                    [addressbook.boaddressbook.search] => Array
+                                                                        (
+                                                                            [function] => Array
+                                                                                (
+                                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                                    [1] => addressbook_boaddressbook_search
+                                                                                )
+
+                                                                        )
+
+                                                                    [addressbook.boaddressbook.write] => Array
+                                                                        (
+                                                                            [function] => Array
+                                                                                (
+                                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                                    [1] => addressbook_boaddressbook_write
+                                                                                )
+
+                                                                        )
+
+                                                                    [addressbook.boaddressbook.delete] => Array
+                                                                        (
+                                                                            [function] => Array
+                                                                                (
+                                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                                    [1] => addressbook_boaddressbook_delete
+                                                                                )
+
+                                                                        )
+
+                                                                    [addressbook.boaddressbook.categories] => Array
+                                                                        (
+                                                                            [function] => Array
+                                                                                (
+                                                                                    [0] => XMLRPCContacts Object
+ *RECURSION*
+                                                                                    [1] => addressbook_boaddressbook_categories
+                                                                                )
+
+                                                                        )
+
+                                                                    [addressbook.boaddressbook.customfields] => Array
+ *RECURSION*
+                                                                )
+
+                                                        )
+
+                                                    [1] => addressbook_boaddressbook_customfields
+                                                )
+
+                                        )
+
+                                )
+
+                            [1] => 1
+                        )
+
+                )
+
+            [16] => Array
+                (
+                    [file] => /media/sda5/www/crm/services/xmlrpc.php
+                    [line] => 25
+                    [function] => doService
+                    [class] => XMLRPCServer
+                    [type] => ->
+                    [args] => Array
+                        (
+                        )
+
+                )
+
+        )
+
+    [callback] => 
+)
+

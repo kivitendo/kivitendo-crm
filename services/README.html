@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 2.0  (Linux)">
+	<META NAME="CREATED" CONTENT="20070321;16585300">
+	<META NAME="CHANGED" CONTENT="20070321;20165900">
+</HEAD>
+<BODY LANG="de-DE" DIR="LTR">
+<H1>XML/RPC-Service f&uuml;r LX-Office CRM</H1>
+<P STYLE="margin-top: 0.42cm; page-break-after: avoid"><FONT FACE="Albany, sans-serif"><FONT SIZE=4>Momentaner
+Stand</FONT></FONT></P>
+<P>Der XML/RPC-Service unterst&uuml;tzt momentan den
+lesenden/schreibenden Zugriff auf die Kontaktdaten von LX-Office
+(Benutzerdaten nur lesend). Die Schnittstelle wurde so geschaffen,
+dass der Zugriff via Kaddressbook m&ouml;glich ist. KDE seitig wurde
+diese Schnittstelle urspr&uuml;nglich f&uuml;r den Zugriff auf die
+Groupware eGroupware implementiert. N&auml;here Informationen findet
+man auf den jeweiligen Internetseiten der beiden Projekten.</P>
+<P>Die getestete Kaddressbook Version ist 3.5.3. Prinzipiell sollte
+es aber auch mit „&auml;lteren“ Versionen funktionieren. Die
+LX-Office Version ist 2.4.2. Auch hier sollte es abw&auml;rtskompatibel
+sein, solange sich die Datenbankstruktur nicht ge&auml;ndert hat.</P>
+<P STYLE="margin-top: 0.42cm; page-break-after: avoid"><FONT FACE="Albany, sans-serif"><FONT SIZE=4>Installation
+und Konfiguration</FONT></FONT></P>
+<UL>
+	<LI><P>Das tgz-Archiv entpacken (am Besten in das CRM-Verzeichnis). 
+	</P>
+	<LI><P>Benutzerrechte &auml;ndern: Bsp. chown -R wwwrun:www
+	services, chmod -R 644 services</P>
+	<LI><P>In der Datei header.inc.php den Pfad zur LX-Office ERP Root
+	anpassen.</P>
+	<LI><P>Anschlie&szlig;end die Verbindungseinstellungen in
+	KAddressbook vornehmen. Ein hilfreicher Artikel findet man hier
+	<A HREF="http://www.pro-linux.de/berichte/kontact_egroupware.html">http://www.pro-linux.de/berichte/kontact_egroupware.html</A>.
+	Es m&uuml;ssen hierbei nur die URL (mit http:// am Anfang !!!), der
+	ERP-Username, sowie das ERP-Passwort angegeben werden.<BR><U>Die URL
+	muss dann auf die Datei xmlrpc.php verweisen</U>.</P>
+	<LI><P>Das war es. Jetzt sollte man eigentlich schon auf die
+	Kontaktdaten zugreifen k&ouml;nnen.</P>
+</UL>
+<P><B><U>Hinweis</U></B>: Dieser Service ist noch experimentell. D.h.
+Benutzung auf eigene Gefahr ;-) !</P>
+</BODY>
+</HTML>

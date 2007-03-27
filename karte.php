@@ -3,11 +3,12 @@
 	require("inc/stdLib.php");
 	include("inc/FirmenLib.php");
 	include('inc/phpOpenOffice.php');
-	if ($_GET["fid"]) {
+	
+	if ($_GET["Q"]=="C") {
 		$fa=getFirmenStamm($_GET["fid"],true,"C");
 		$fa["number"]=$fa["customernumber"];
-	} if ($_GET["lid"]) {
-		$fa=getFirmenStamm($_GET["lid"],true,"V");
+	} else {
+		$fa=getFirmenStamm($_GET["fid"],true,"V");
 		$fa["number"]=$fa["vendornumber"];
 		$fa["kdtyp"]=$fa["lityp"];
 	}

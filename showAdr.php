@@ -45,8 +45,9 @@
 		$id=$_GET["sid"];
 		$dest="sid=".$_GET["sid"];
 		$data=getShipStamm($_GET["sid"]);
-		$anrede="Firma";
+		//$anrede="Firma";
 		if ($data) {
+			$anrede=$data ["shiptogreeting"];
 			$name=$data ["shiptoname"];
 			$name2=$data["shiptodepartment_1"];
 			$kontakt=$data ["shiptocontact"];
@@ -83,7 +84,8 @@
 			$dest="lid=".$_GET["lid"];
 			$data=getFirmenStamm($_GET["lid"],true,"V");
 		}
-		$anrede="Firma";
+		//$anrede="Firma";
+		$anrede=$data ["greeting"];
 		$name=$data ["name"];
 		$name1=$name;
 		$name2=$data["department_1"];

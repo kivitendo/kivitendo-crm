@@ -46,6 +46,7 @@
 		var sil = shiptoids.length;
 		var sid = 0;
 		function nextshipto(dir) {
+			if (sil<2) return;
 			if (dir=="-") {
 				if (sid>0) {
 					sid--;
@@ -59,20 +60,20 @@
 					sid=0; 
 				}
 			}
-			xajax_showShipadress(shiptoids[sid],"C");
+			xajax_showShipadress(shiptoids[sid],"{Q}");
 		}
 	//-->
 	</script>
 	</head>
 <body onLoad="submenu('{kdview}');">
-<p class="listtop">Detailansicht <span title="Wichtige Mitteilung">{Cmsg}&nbsp;</span></p>
+<p class="listtop">Detailansicht {FAART} <span title="Wichtige Mitteilung">{Cmsg}&nbsp;</span></p>
 <form name="kdhelp">
 <div style="position:absolute; top:40px; left:10px;  width:770px;">
 	<ul id="maintab" class="shadetabs">
-	<li class="selected"><a href="firma1.php?id={FID}" id="aktuell">Stammdaten</a></li>
-	<li><a href="firma2.php?fid={FID}">Ansprechpartner</a></li>
-	<li><a href="firma3.php?fid={FID}">Ums&auml;tze</a></li>
-	<li><a href="firma4.php?fid={FID}">Dokumente</a></li>
+	<li class="selected"><a href="firma1.php?Q={Q}&id={FID}" id="aktuell">Stammdaten</a></li>
+	<li><a href="firma2.php?Q={Q}&fid={FID}">Ansprechpartner</a></li>
+	<li><a href="firma3.php?Q={Q}&fid={FID}">Ums&auml;tze</a></li>
+	<li><a href="firma4.php?Q={Q}&fid={FID}">Dokumente</a></li>
 	<li><select style="visibility:{chelp}" name="kdhelp" onChange="KdHelp()">
 <!-- BEGIN kdhelp -->
 		<option value="{cid}">{cname}</option>
@@ -115,6 +116,8 @@
 			&nbsp;
 			<a href="#" onCLick="anschr(1);" title="Briefanschrift &amp; Etikett"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a></form>
 			&nbsp;
+			<a href="extrafelder.php?owner={Q}{FID}" target="_blank" title="Extra Daten" style="visibility:{zeigeextra};"><img src="image/extra.png" alt="Extras" border="0" /></a>
+			&nbsp;
 			<span style="visibility:{zeigeplan};"><a href="{KARTE}" target="_blank"><img src="image/karte.gif" title="Ortsplan" border="0"></a></span>
 
 	</div>
@@ -128,9 +131,9 @@
 			<li id="sublie"><a href="#" onClick="submenu('lie')">Lieferadresse</a></li>
 			<li id="subnot"><a href="#" onClick="submenu('not')">Notizen</a></li>
 			<li id="subinf"><a href="#" onClick="submenu('inf')">sonst.Infos</a></li>
-			<li><a href="vcardexp.php?fid={FID}">VCard</a></li>
-			<li><a href="karte.php?fid={FID}">Kartei</a></li>
-			<li><a href="firmen3.php?id={FID}&edit=1">Bearbeiten</a></li>
+			<li><a href="vcardexp.php?Q={Q}&fid={FID}">VCard</a></li>
+			<li><a href="karte.php?Q={Q}&fid={FID}">Kartei</a></li>
+			<li><a href="firmen3.php?Q={Q}&id={FID}&edit=1">Bearbeiten</a></li>
 		</ul>
 	</div>
 
@@ -190,9 +193,9 @@
 </table>
 	<span style="position:absolute; bottom:10px;  text-align:left; border:0px solid black">
 		<form name="ksearch" onSubmit="return ks();"> &nbsp;
-		<a href="firma1.php?id={FID}&start={PREV}"><img src="image/leftarrow.png" align="middle" border="0" title="zur&uuml;ck"></a> 
-		<a href="firma1.php?id={FID}&start={PAGER}" class="bold"><img src="image/reload.png" align="middle" border="0" title="reload"></a> 
-		<a href="firma1.php?id={FID}&start={NEXT}"><img src="image/rightarrow.png" align="middle" border="0" title="mehr"></a>&nbsp;
+		<a href="firma1.php?Q={Q}&id={FID}&start={PREV}"><img src="image/leftarrow.png" align="middle" border="0" title="zur&uuml;ck"></a> 
+		<a href="firma1.php?Q={Q}&id={FID}&start={PAGER}" class="bold"><img src="image/reload.png" align="middle" border="0" title="reload"></a> 
+		<a href="firma1.php?Q={Q}&id={FID}&start={NEXT}"><img src="image/rightarrow.png" align="middle" border="0" title="mehr"></a>&nbsp;
 		<input type="text" name="suchwort" size="20">
 		<input type="image" src="image/suchen_kl.png" name="ok" value="suchen" align="middle" border="0"> 
 		</form>

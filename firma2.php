@@ -84,7 +84,7 @@
 		$Image="";
 	}
 	if ($co["cp_homepage"]<>"") {
-		$internet=(preg_match("�://�",$co["cp_homepage"]))?$co["cp_homepage"]:"http://".$co["cp_homepage"];
+		$internet=(preg_match("^://^",$co["cp_homepage"]))?$co["cp_homepage"]:"http://".$co["cp_homepage"];
 	};
 	$sonder="";
 	if ($cp_sonder) while (list($key,$val) = each($cp_sonder)) {
@@ -96,6 +96,7 @@
 			INIT	=> ($init=="")?"showOne($id)":"showContact()",
 			AJAXJS  => $xajax->printJavascript('./xajax/'),
 			FAART => ($Q=="C")?"Kunde":"Lieferant",
+			interv	=> $_SESSION["interv"]*1000,
 			Q => $Q,
 			Link1 => $link1,
 			Link2 => $link2,

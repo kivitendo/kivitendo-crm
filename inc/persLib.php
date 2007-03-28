@@ -210,12 +210,12 @@ global $db;
 			"cp_abteilung" => array(0,0,1,"Abteilung",25),	   "cp_position" => array(0,0,1,"Position",25),
 			"cp_cv_id" => array(0,0,6,"FID",0),		   "name" => array(1,0,1,"Firma",75),		
 			"cp_owener" => array(0,0,6,"CRM-User",0),	   "cp_grafik" => array(0,0,9,"Grafik",4),);				
-	if (!empty($datei["bild"]["name"])) {  		// eine Datei wird mitgeliefert
-			$typ=array(1=>"gif",2=>"jpeg",3=>"png",4=>false);
-			$imagesize=getimagesize($datei["bild"]['tmp_name'],&$info);
-			if ($imagesize[2]>0 && $imagesize[2]<4) {
-				$bildok=chkdir($_SESSION["mansel"]."/".$pid);
-				$daten["cp_grafik"]=$typ[$imagesize[2]];
+	if (!empty($datei["Datei"]["name"])) {  		// eine Datei wird mitgeliefert
+			$pictyp=array("gif","jpeg","png","jpg");
+			$ext=substr($datei["Datei"]["name"],strrpos($datei["Datei"]["name"],".")+1);
+			if (in_array($ext,$pictyp)) {
+				$daten["cp_grafik"]=$ext;
+				$datei["Datei"]['name']="kopf.$ext";
 				$bildok=true;
 			}
 	} else {
@@ -250,35 +250,18 @@ global $db;
 	if ($fehler==-1) {
 		if (!$daten["PID"] or $daten["PID"]<1) $pid=mknewPerson($daten["employee"]);
 		if (!$pid) return "unbekannt";
+		if ($daten["nummer"]) {
+			$dir=$daten["Quelle"].$daten["nummer"]."/".$pid;
+		} else {
+			$dir=$pid;
+		};
+		$ok=chkdir($dir);
 		if ($bildok) {
-			if ($daten["nummer"]) {
-				$dir=$daten["Quelle"].$daten["nummer"]."/".$pid;
-			} else {
-				$dir=$pid;
-			};
-			$ok=chkdir($dir);
-			$dir=$_SESSION["mansel"]."/".$dir;
-			$dest="./dokumente/".$dir."/kopf.".$typ[$imagesize[2]];
-			move_uploaded_file($datei["bild"]["tmp_name"],"$dest");
-			if (($imagesize[1] < $imagesize[0]) ) {
-				$hoehe=ceil($imagesize[1]/$imagesize[0]*480);
-				$breite=480;
-			} else {
-				$breite=ceil($imagesize[0]/$imagesize[1]*360);
-				$hoehe=360;
-			}
-			if ($typ[$imagesize[2]]=="gif") {
-				$image1 = imagecreate($breite,$hoehe);
-			} else {
-				$image1 = imagecreatetruecolor($breite,$hoehe);
-			}
-			$tue="\$image=imagecreatefrom".$typ[$imagesize[2]]."('$dest');";
-			eval($tue);
-			imagecopyresized($image1, $image, 0,0, 0,0,$breite,$hoehe,$imagesize[0],$imagesize[1]);
-			//echo "!imagecopyresized(".$image1.",".$image.",0,0,0,0,".$breite.",".$hoehe.",".$imagesize[0].",".$imagesize[1].")!";
-			$tue="image".$typ[$imagesize[2]]."(\$image1,'$dest');";
-			eval($tue);
-		}
+			require_once("documents.php");
+			$dbfile=new document();
+			$dbfile->setDocData("descript","Foto von ".$daten["cp_givenname"]." ".$daten["cp_name"]);
+			$dbfile->uploadDocument($datei,"/$dir");
+		}	
 		mkTelNummer($pid,"P",$tels);
 		$sql0="update contacts set ".$query0."cp_employee=".$_SESSION["loginCRM"]." where cp_id=$pid";
 		if($db->query($sql0)) {

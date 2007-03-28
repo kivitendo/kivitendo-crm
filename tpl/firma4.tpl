@@ -135,7 +135,11 @@
 	</script>
 <body onLoad="dateibaum('left','/{Q}{customernumber}/{PID}');">
 <p class="listtop">Detailansicht {FAART}</p>
-<div style="position:absolute; top:44px; left:10px;  width:770px;">
+<form name="firma4" enctype='multipart/form-data' action="{action}" method="post">
+<input type="hidden" name="pid" value="{PID}">
+<input type="hidden" name="fid" value="{FID}">
+<input type="hidden" name="Q" value="{Q}">
+<div style="position:absolute; top:3.5em; left:1.2em;  width:60em;">
 	<ul id="maintab" class="shadetabs">
 	<li><a href="{Link1}">Kundendaten</a><li>
 	<li><a href="{Link2}">Ansprechpartner</a></li>
@@ -144,14 +148,10 @@
 	</ul>
 </div>
 
-<span style="position:absolute; left:10px; top:67px; width:99%; height:90%;">
+<span style="position:absolute; left:10px; top:5.7em; width:99%; height:90%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
-<form name="firma4" enctype='multipart/form-data' action="{action}" method="post">
-<input type="hidden" name="pid" value="{PID}">
-<input type="hidden" name="fid" value="{FID}">
-<input type="hidden" name="Q" value="{Q}">
 <span style="float:left; width:40%; height:90%; text-align:center; padding:2px; border: 1px solid black; border-bottom: 0px;">
-	<div style="float:left; width:100%; height:50px; text-align:left; border-bottom: 1px solid black;" class="fett">
+	<div style="float:left; width:100%; height:4.5em; text-align:left; border-bottom: 1px solid black;" class="fett">
 	<table>
 	<tr><td>{Name}</td><td></td></tr>
 	<tr><td>{customernumber}</td><td> {PID}</td></tr>
@@ -170,7 +170,7 @@
 </span>
 
 <span style="float:left; width:58%; height:90%; text-align:left; border: 1px solid black; border-bottom: 0px; padding:2px; border-left:0px;">
-	<div style="float:left; width:100%; height:50px; text-align:left; border-bottom: 1px solid black;" class="fett">
+	<div style="float:left; width:100%; height:4.5em; text-align:left; border-bottom: 1px solid black;" class="fett">
 	<table>
 	<tr><td>Dokumentvorlagen:</td><td>
 	<select name="vorlage" id="vorlage" onChange="showD();" style="width:150px;">

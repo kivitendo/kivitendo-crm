@@ -149,7 +149,7 @@
 	</div>
 	<div class="zeile2">
 		<span class="label">Bild</span>
-		<span class="feld"><input type="file" name="bild" size="10" maxlength="75" tabindex="23"></span>
+		<span class="feld"><input type="file" name="Datei" size="10" maxlength="75" tabindex="23"></span>
 		<span class="label"> </span>
 		<span class="feld"></span>
 	</div>

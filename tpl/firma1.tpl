@@ -6,6 +6,20 @@
 	{AJAXJS}
 	<script language="JavaScript" type="text/javascript">
 	<!--
+		var start = 0;
+		var max = 0;
+		function showCall(dir) {
+			if (dir<0) {
+				if(start>19) { start-=19; }
+				else { start=0; }; }
+			else if (dir>0) {
+				if ((start+19)<max) { start+=19; } 
+				else if (max<19) { start=0; }
+				else { start=max-19; }; 
+			}
+			xajax_showCalls({FID},start,1);
+			setTimeout('showCall(0)',{interv});
+		}
 		function showItem(id) {
 			F1=open("getCall.php?Q=C&fid={FID}&Bezug="+id,"Caller","width=610, height=600, left=100, top=50, scrollbars=yes");
 		}
@@ -65,10 +79,10 @@
 	//-->
 	</script>
 	</head>
-<body onLoad="submenu('{kdview}');">
+<body onLoad="submenu('{kdview}'); showCall(0);">
 <p class="listtop">Detailansicht {FAART} <span title="Wichtige Mitteilung">{Cmsg}&nbsp;</span></p>
 <form name="kdhelp">
-<div style="position:absolute; top:40px; left:10px;  width:770px;">
+<div style="position:absolute; top:3.3em; left:1.2em;  width:60em;">
 	<ul id="maintab" class="shadetabs">
 	<li class="selected"><a href="firma1.php?Q={Q}&id={FID}" id="aktuell">Stammdaten</a></li>
 	<li><a href="firma2.php?Q={Q}&fid={FID}">Ansprechpartner</a></li>
@@ -83,50 +97,48 @@
 </div>
 </form>
 
-<span style="position:absolute; left:10px; top:67px; width:99%;">
+<span style="position:absolute; left:1em; top:5.7em; width:99%;">
 <!-- Begin Code --------------------------------------------- -->
-<span style="float:left; width:53%; height:450px; text-align:center; border: 1px solid black;">
-	<div style="float:left; width:64%; height:175px; text-align:left; border-bottom: 0px solid black; padding:2px;" class="gross">
-		{Fname1}<br />
-		{Fdepartment_1}<br />
-		{Fdepartment_2}
-		{Strasse}<br />
-		<span class="mini">&nbsp;<br /></span>
-		{Land}-{Plz} {Ort}<br />
-		<span class="smal">{Bundesland}<br /></span>
-		{Fcontact}<br />
-		Tel: {Telefon}<br />
-		Fax: {Fax}<br />	
-	</div>
-	<div style="float:left; width:33%; height:175px; text-align:right; border-bottom: 0px solid black; padding:2px;" class="gross">
-		{customernumber}<br />
-		{IMG}<br /><br />
-			<form action="../oe.pl" method="post">
-	  		<input type="hidden" name="path" value="bin/mozilla">
-			<input type="hidden" name="login" value="{login}">
-			<input type="hidden" name="action" value="add">
-			<input type="hidden" name="type" value="sales_order">
-			<input type="hidden" name="password" value="{password}">
-	  		<input type="hidden" name="customer_id" value="{FID}">
-			<input type="image" src="image/auftrag.png" value="Auftrag" title="neuen Auftrag eingeben" style="visibility:{zeige};">
-			<input type="hidden" name="type" value="sales_quotation">
-			<input type="image" src="image/angebot.png" value="Angebot" title="neues Angebot erstellen" style="visibility:{zeige};">
+<span style="float:left; width:46em; height:38em; text-align:center; border: 1px solid black;">
+	<div style="position:absolute; width:46em;">
+		<div style="float:left; width:64%; height:14.0em; text-align:left; border-bottom: 0px solid black; padding:2px;" class="gross">
+			{Fname1}<br />
+			{Fdepartment_1}<br />
+			{Fdepartment_2}
+			{Strasse}<br />
+			<span class="mini">&nbsp;<br /></span>
+			{Land}-{Plz} {Ort}<br />
+			<span class="smal">{Bundesland}<br /></span>
+			{Fcontact}<br />
+			<font color="#444444">Tel:</font> {Telefon}	&nbsp;&nbsp;&nbsp;	<font color="#444444">Fax:</font> {Fax}<br />	
+			[<a href="mail.php?TO={eMail}&KontaktTO=C{FID}">&nbsp;{eMail}</a>]<br />
+			<a href="{Internet}" target="_blank">&nbsp;{Internet}</a>
+		</div>
+		<div style="float:left; width:33%; height:14.0em; text-align:right; border-bottom: 0px solid black; padding:2px;" class="gross">
+			{customernumber}<br />
+			{IMG}<br /><br />
+				<form action="../oe.pl" method="post">
+				<input type="hidden" name="path" value="bin/mozilla">
+				<input type="hidden" name="login" value="{login}">
+				<input type="hidden" name="action" value="add">
+				<input type="hidden" name="type" value="sales_order">
+				<input type="hidden" name="password" value="{password}">
+				<input type="hidden" name="customer_id" value="{FID}">
+				<input type="image" src="image/auftrag.png" value="Auftrag" title="neuen Auftrag eingeben" style="visibility:{zeige};">
+				<input type="hidden" name="type" value="sales_quotation">
+				<input type="image" src="image/angebot.png" value="Angebot" title="neues Angebot erstellen" style="visibility:{zeige};">
 
-			<img src="image/kreuzchen.gif" title="Gesperrter Kunde"style="visibility:{verstecke};" >
-			&nbsp;
-			<a href="#" onCLick="anschr(1);" title="Briefanschrift &amp; Etikett"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a></form>
-			&nbsp;
-			<a href="extrafelder.php?owner={Q}{FID}" target="_blank" title="Extra Daten" style="visibility:{zeigeextra};"><img src="image/extra.png" alt="Extras" border="0" /></a>
-			&nbsp;
-			<span style="visibility:{zeigeplan};"><a href="{KARTE}" target="_blank"><img src="image/karte.gif" title="Ortsplan" border="0"></a></span>
+				<img src="image/kreuzchen.gif" title="Gesperrter Kunde"style="visibility:{verstecke};" >
+				&nbsp;
+				<a href="#" onCLick="anschr(1);" title="Briefanschrift &amp; Etikett"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a><br>
+				&nbsp;<br>
+				<a href="extrafelder.php?owner={Q}{FID}" target="_blank" title="Extra Daten" style="visibility:{zeigeextra};"><img src="image/extra.png" alt="Extras" border="0" /></a>
+				&nbsp;<br><br>
+				<span style="visibility:{zeigeplan};"><a href="{KARTE}" target="_blank"><img src="image/karte.gif" title="Ortsplan" border="0"></a></span>&nbsp;</form>
 
+		</div>
 	</div>
-	<div style="float:both; width:100%; height:225px; text-align:left; border-bottom: 1px solid black;" class="gross">
-		<a href="mail.php?TO={eMail}&KontaktTO=C{FID}">&nbsp;{eMail}</a><br />
-		<a href="{Internet}" target="_blank">&nbsp;{Internet}</a>
-
-	</div>
-	<div style="position:absolute; width:100%; height:17px; text-align:left; border-bottom: 0px solid black;left:5px; top:225px;" class="gross">
+	<div style="position:absolute; width:45.5em; height:1.4em; text-align:left; padding-left:0.5em; border-top: 1px solid black;left:0px; top:19em;">
 		<ul id="submenu" class="subshadetabs">
 			<li id="sublie"><a href="#" onClick="submenu('lie')">Lieferadresse</a></li>
 			<li id="subnot"><a href="#" onClick="submenu('not')">Notizen</a></li>
@@ -137,9 +149,8 @@
 		</ul>
 	</div>
 
-	<span id="lie" style="visibility:visible; position:absolute; text-align:left;width:48%; left:5px; top:245px;" >
+	<span id="lie" style="visibility:visible; position:absolute; text-align:left;width:48%; left:1.2em; top:22.0em;" >
 		<div class="smal" >
-		<br />
 		<span id="shiptoname">{Sname1}</span> &nbsp;&nbsp;<a href="#" onCLick="anschr(2);"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a>&nbsp; &nbsp; 
 		Anzahl Anschriften:{Scnt} <a href="javascript:nextshipto('-');"><img src="image/leftarrow.png" border="0"></a> 
 		<span id="SID">{Sshipto_id}</span> <a href="javascript:nextshipto('+');"><img src="image/rightarrow.png" border="0"></a><br />
@@ -156,7 +167,7 @@
 		</div>
 	</span>
 
-	<span id="not" style="visibility:hidden;position:absolute;  text-align:left;width:48%; left:5px; top:250px;">
+	<span id="not" style="visibility:hidden;position:absolute;  text-align:left;width:47%; left:1.2em; top:22.0em;">
 		<div class="smal" >
 		Checkbox: <span class="value">{sonder}</span><br />
 		Branche: <span class="value">{branche}</span><br />
@@ -165,7 +176,7 @@
 		</div>
 	</span>	
 
-	<span id="inf" style="visibility:hidden;position:absolute; text-align:left;width:48%; left:5px; top:250px;">
+	<span id="inf" style="visibility:hidden;position:absolute; text-align:left;width:48%; left:1.2em; top:22.0em;">
 		<div class="smal" >
 		Kundentyp: <span class="value">{kdtyp}</span> &nbsp;&nbsp;&nbsp; Quelle:<span class="value">{lead} {leadsrc}</span><br />
 		Rabatt: <span class="value">{rabatt}</span> &nbsp;&nbsp;&nbsp; Preisgruppe: <span class="value">{preisgrp}</span><br /><br />
@@ -180,26 +191,21 @@
 	</span>
 </span>
 
-<span style="float:left; width:46%; height:450px; text-align:left; border: 1px solid black; border-left:0px;">
-<table width="99%" summary="Kontaktverlauf">
-<!-- BEGIN Liste -->
-	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showItem({Nr});">
-		<td class="smal" width="105" height="14px">{Datum} {Zeit}</td>
-		<td class="smal" style="width:38;text-align:right;">{Nr}&nbsp;</td>
-		<td class="smal le"> {Betreff}</td>
-		<td class="smal le">{Name}</td>
-	</tr>
-<!-- END Liste -->
-</table>
-	<span style="position:absolute; bottom:10px;  text-align:left; border:0px solid black">
-		<form name="ksearch" onSubmit="return ks();"> &nbsp;
-		<a href="firma1.php?Q={Q}&id={FID}&start={PREV}"><img src="image/leftarrow.png" align="middle" border="0" title="zur&uuml;ck"></a> 
-		<a href="firma1.php?Q={Q}&id={FID}&start={PAGER}" class="bold"><img src="image/reload.png" align="middle" border="0" title="reload"></a> 
-		<a href="firma1.php?Q={Q}&id={FID}&start={NEXT}"><img src="image/rightarrow.png" align="middle" border="0" title="mehr"></a>&nbsp;
+<span style="float:left; width:46%; height:38em; text-align:left; border: 1px solid black; border-left:0px;">
+	<table class="calls" width='99%' id="calls">
+	</table>
+	<!--span style="float:left;  text-align:left; border:0px solid black"-->	
+	<span style="position:absolute; bottom:10px; visibility:{none};">
+		<form name="ksearch"> &nbsp; 
+		<img src="image/leftarrow.png" align="middle" border="0" title="zur&uuml;ck" onClick="showCall(-1);"> 
+		<img src="image/reload.png" align="middle" border="0" title="reload" onClick="showCall(0);"> 
+		<img src="image/rightarrow.png" align="middle" border="0" title="mehr" onClick="showCall(1);">&nbsp;
 		<input type="text" name="suchwort" size="20">
-		<input type="image" src="image/suchen_kl.png" name="ok" value="suchen" align="middle" border="0"> 
+		<input type="hidden" name="Q" value="{Q}">
+		<input type="submit" src="image/suchen_kl.png" name="ok" value="suchen" align="middle" border="0"> 
 		</form>
 	</span>
+
 </span>
 <!-- End Code --------------------------------------------- -->
 </span>

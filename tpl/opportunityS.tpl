@@ -26,33 +26,33 @@
 <input type="hidden" name="id" value="{id}">
 <input type="hidden" name="fid" value="{fid}">
 <input type="hidden" name="firma" value="{name}">
-<div style="position:absolute; left:1px; width:550px; top:50px; border: 0px solid black; text-align:center;" class="normal">
+<div style="position:absolute; left:1px; width:65em; top:4.5em; border: 0px solid black; text-align:center;" class="normal">
 	<div class="zeile">
 		<span class="label" onClick='toggle("fa1","fa2");'>Firma</span>
-		<span class="leftfeld pad value" style="width:450px; display:{block}" id="fa2" onClick='toggle("fa2","fa1");'>{name}</span>
-		<span class="leftfeld"     style="width:450px; display:{none};" id="fa1">
+		<span class="leftfeld pad value" style="width:50em; display:{block}" id="fa2" onClick='toggle("fa2","fa1");'>{name}</span>
+		<span class="leftfeld"     style="width:50em; display:{none};" id="fa1">
 			<input type="text" size="40" name="name" value="{name}" onChange="sichern()"> 
 		<a href="javascript:suchFa();"><img src="image/suchen_kl.png" border="0" title="Firma suchen" ></a>
 		</span>
 	</div>
 	<div class="zeile">
 		<span class="label" onClick='toggle("ti1","ti2");'>Schlagzeile</span>
-		<span class="leftfeld pad value" style="width:450px; display:{block}" onClick='toggle("ti2","ti1");' id="ti2">{title}</span>
-		<span class="leftfeld"     style="width:450px; display:{none};" id="ti1">
+		<span class="leftfeld pad value" style="width:50em; display:{block}" onClick='toggle("ti2","ti1");' id="ti2">{title}</span>
+		<span class="leftfeld"     style="width:50em; display:{none};" id="ti1">
 			<input type="text" size="55" name="title" value="{title}" onChange="sichern()">
 		</span>
 	</div>
 	<div class="zeile">
 		<span class="label" onClick='toggle("be1","be2");'>Betrag</span>
-		<span class="leftfeld pad value" style="width:450px; display:{block}" onClick='toggle("be2","be1");' id="be2">{betrag}</span>
-		<span class="leftfeld"     style="width:450px; display:{none};" id="be1">
+		<span class="leftfeld pad value" style="width:50em; display:{block}" onClick='toggle("be2","be1");' id="be2">{betrag}</span>
+		<span class="leftfeld"     style="width:50em; display:{none};" id="be1">
 			<input type="text" size="10" name="betrag" value="{betrag}" onChange="sichern()"> &euro;
 		</span>
 	</div>
 	<div class="zeile">
 		<span class="label" onClick='toggle("zi1","zi2");'>Zieldatum</span>
-		<span class="leftfeld pad value" style="width:450px; display:{block}" onClick='toggle("zi2","zi1");' id="zi2">{zieldatum}</span>
-		<span class="leftfeld"     style="width:450px; display:{none};" id="zi1">
+		<span class="leftfeld pad value" style="width:50em; display:{block}" onClick='toggle("zi2","zi1");' id="zi2">{zieldatum}</span>
+		<span class="leftfeld"     style="width:50em; display:{none};" id="zi1">
 			<input type="text" size="10" name="zieldatum" id="zieldatum" value="{zieldatum}" onChange="sichern()"> tt.mm.jjjj {jcal1}
 		</span>
 	</div>
@@ -85,10 +85,10 @@
 	</div>
 	<div class="zeile">
 		<span class="label" onClick='toggle("no1","no2");'>Notiz</span>
-		<span class="leftfeld pad value" style="width:450px; display:{block}" onClick='toggle("no2","no1");' id="no2">
+		<span class="leftfeld pad value" style="width:50em; display:{block}" onClick='toggle("no2","no1");' id="no2">
 			{notxt}
 		</span>
-		<span class="leftfeld" style="width:350px; display:{none};" id="no1">
+		<span class="leftfeld" style="width:45em; display:{none};" id="no1">
 			<textarea name="notiz" cols="70" rows="10" onChange="sichern()">{notiz}</textarea>
 		</span>
 	</div>

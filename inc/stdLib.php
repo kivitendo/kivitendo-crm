@@ -83,6 +83,7 @@ global $ERPNAME,$showErr;
 			$_SESSION["termbegin"]=(($tmp["termbegin"]>=0)?$tmp["termbegin"]:8);
 			$_SESSION["termend"]=($tmp["termend"])?$tmp["termend"]:19;
 			$_SESSION["Pre"]=$tmp["pre"];
+			$_SESSION["interv"]=($tmp["interv"]>0)?$tmp["interv"]:60;
 			$_SESSION["loginCRM"]=$tmp["id"];
 			$_SESSION["lang"]=$tmp["countrycode"]; //"de";
 			$_SESSION["kdview"]=$tmp["kdview"];

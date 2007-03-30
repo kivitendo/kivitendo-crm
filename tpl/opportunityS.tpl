@@ -31,7 +31,7 @@
 		<span class="label" onClick='toggle("fa1","fa2");'>Firma</span>
 		<span class="leftfeld pad value" style="width:50em; display:{block}" id="fa2" onClick='toggle("fa2","fa1");'>{name}</span>
 		<span class="leftfeld"     style="width:50em; display:{none};" id="fa1">
-			<input type="text" size="40" name="name" value="{name}" onChange="sichern()"> 
+			<input type="text" size="60" name="name" value="{name}" onChange="sichern()"> 
 		<a href="javascript:suchFa();"><img src="image/suchen_kl.png" border="0" title="Firma suchen" ></a>
 		</span>
 	</div>
@@ -39,12 +39,12 @@
 		<span class="label" onClick='toggle("ti1","ti2");'>Schlagzeile</span>
 		<span class="leftfeld pad value" style="width:50em; display:{block}" onClick='toggle("ti2","ti1");' id="ti2">{title}</span>
 		<span class="leftfeld"     style="width:50em; display:{none};" id="ti1">
-			<input type="text" size="55" name="title" value="{title}" onChange="sichern()">
+			<input type="text" size="65" name="title" value="{title}" onChange="sichern()">
 		</span>
 	</div>
 	<div class="zeile">
-		<span class="label" onClick='toggle("be1","be2");'>Betrag</span>
-		<span class="leftfeld pad value" style="width:50em; display:{block}" onClick='toggle("be2","be1");' id="be2">{betrag}</span>
+		<span class="label" onClick='toggle("be1","be2");'>Auftragssumme</span>
+		<span class="leftfeld pad value" style="width:50em; display:{block}" onClick='toggle("be2","be1");' id="be2">{betrag} &euro;</span>
 		<span class="leftfeld"     style="width:50em; display:{none};" id="be1">
 			<input type="text" size="10" name="betrag" value="{betrag}" onChange="sichern()"> &euro;
 		</span>
@@ -84,12 +84,29 @@
 		</span>
 	</div>
 	<div class="zeile">
+		<span class="label">Zust&auml;ndig</span>
+		<span class="leftfeld"><select name="salesman" onChange="sichern()">
+			<option value="" {esel}>---</option>
+<!-- BEGIN salesman -->
+			<option value="{evals}" {esel}>{ename}</option>
+<!-- END salesman -->
+			</select>
+		</span>
+	</div>
+	<div class="zeile">
+		<span class="label" onClick='toggle("ne1","ne2");'>n&auml;chster Schritt</span>
+		<span class="leftfeld pad value" style="width:50em; display:{block}" onClick='toggle("ne2","ne1");' id="ne2">{next}</span>
+		<span class="leftfeld"     style="width:50em; display:{none};" id="ne1">
+			<input type="text" size="65" name="next" value="{next}" onChange="sichern()">
+		</span>
+	</div>
+	<div class="zeile">
 		<span class="label" onClick='toggle("no1","no2");'>Notiz</span>
 		<span class="leftfeld pad value" style="width:50em; display:{block}" onClick='toggle("no2","no1");' id="no2">
 			{notxt}
 		</span>
 		<span class="leftfeld" style="width:45em; display:{none};" id="no1">
-			<textarea name="notiz" cols="70" rows="10" onChange="sichern()">{notiz}</textarea>
+			<textarea name="notiz" cols="78" rows="10" onChange="sichern()">{notiz}</textarea>
 		</span>
 	</div>
 	<div class="zeile">

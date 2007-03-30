@@ -102,7 +102,7 @@
 		$objResponse->addAssign("cp_id", 	"value", $data["cp_id"]);
                 return $objResponse;	
 	}
-	function showCalls($id,$start) {
+	function showCalls($id,$start,$fa=false) {
 		$i=0;
 		$nun=date("Y-m-d h:i");
 		$itemN[]=array(id => 0,calldate => $nun, caller_id => $employee, cause => "Neuer Eintrag" );
@@ -111,7 +111,7 @@
 		$zeile.="<td class='calls re' width='5%%'>%s&nbsp;</td>";
 		$zeile.="<td class='calls le' width='55%%'>%s</td>";
 		$zeile.="<td class='calls le' width='15%%'>%s</td></tr>\n";
-		$items=getAllTelCall($id,false,$start);
+		$items=getAllTelCall($id,$fa,$start);
 		if ($items) {
 			$item=array_merge($itemN,$items);
 		} else {

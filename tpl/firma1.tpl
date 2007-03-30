@@ -76,13 +76,18 @@
 			}
 			xajax_showShipadress(shiptoids[sid],"{Q}");
 		}
+	var f1 = null;
+	function toolwin(tool) {
+		leftpos=Math.floor(screen.width/2);
+		f1=open(tool,'LxO-Tool','height=250,width=350,left='+leftpos+',top=50,status=no,toolbar=no,menubar=no,location=no,titlebar=no,scrollbars=no,fullscreen=no;')
+	}
 	//-->
 	</script>
 	</head>
 <body onLoad="submenu('{kdview}'); showCall(0);">
 <p class="listtop">Detailansicht {FAART} <span title="Wichtige Mitteilung">{Cmsg}&nbsp;</span></p>
 <form name="kdhelp">
-<div style="position:absolute; top:3.3em; left:1.2em;  width:60em;">
+<div style="position:absolute; top:3.3em; left:1.2em;  width:50em;">
 	<ul id="maintab" class="shadetabs">
 	<li class="selected"><a href="firma1.php?Q={Q}&id={FID}" id="aktuell">Stammdaten</a></li>
 	<li><a href="firma2.php?Q={Q}&fid={FID}">Ansprechpartner</a></li>
@@ -94,6 +99,12 @@
 <!-- END kdhelp -->
 	</select>
 	</ul>
+</div>
+<div style="position:absolute; top:1.3em; left:51em;  width:30em;">
+	<img src="tools/rechner.png"  onClick="toolwin('tools/Rechner.html')" title="einfacher Tischrechner"> &nbsp;
+	<img src="tools/notiz.png"  onClick="toolwin('postit.php?popup=1')" title="Postit Notizen"> &nbsp;
+	<img src="tools/kalender.png"  onClick="toolwin('tools/kalender.php')" title="Kalender"> &nbsp;
+	<a href="javascript:void(s=prompt('Geben%20Sie%20einen%20Begriff%20zum%20&Uuml;bersetzen%20ein.',''));if(s)leow=open('http://dict.leo.org/?lp=ende&search='+escape(s),'LEODict','width=750,height=550,scrollbars=yes,resizeable=yes');if(leow)leow.focus();"><img src="tools/leo.png"  title="LEO Englisch/Deutsch" border="0"></a> &nbsp;
 </div>
 </form>
 

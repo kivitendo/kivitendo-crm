@@ -1,8 +1,9 @@
 <?php
 // $Id:  $
 	require_once("inc/stdLib.php");
-	include("inc/template.inc");
-	include("inc/crmLib.php");
+	include("template.inc");
+	include("crmLib.php");
+	include("UserLib.php");
 	$t = new Template($base);
 	$jscal ="<style type='text/css'>@import url(../../$ERPNAME/js/jscalendar/calendar-win2k-1.css);</style>\n";
 	$jscal.="<script type='text/javascript' src='../../$ERPNAME/js/jscalendar/calendar.js'></script>\n";
@@ -17,6 +18,7 @@
 		$_POST["suchen"]=1;
 	}
 	$oppstat=getOpportunityStatus();
+	$salesman=getAllUser(array(0=>true,1=>"%"));
 	if ($_POST["suchen"]) {
 		$data=suchOpportunity($_POST);
 		$none="block";
@@ -97,6 +99,16 @@
 		));
 		$t->parse("BlockS","status",true);
 	}
+	$t->set_block("op","salesman","BlockV");
+	if (!$daten["salesman"]) $daten["salesman"]=$_SESSION["loginCRM"];
+	if ($salesman) foreach ($salesman as $row) {
+		$t->set_var(array(
+			esel => ($row["id"]==$daten["salesman"])?"selected":"",
+			evals => $row["id"],
+			ename => ($row["name"])?$row["name"]:$row["login"]
+		));
+		$t->parse("BlockV","salesman",true);
+	}
 	$t->set_var(array(
 		id => $daten["id"],
 		fid => $daten["fid"],
@@ -104,7 +116,8 @@
 		name => ($daten["firma"])?$daten["firma"]:$_POST["firma"],
 		zieldatum => ($daten["zieldatum"])?db2date($daten["zieldatum"]):"",
 		betrag => ($daten["betrag"])?sprintf("%0.2f",$daten["betrag"]):"",
-		notxt => ($daten["notiz"])?$daten["notiz"]:"---",
+		next => ($daten["next"])?$daten["next"]:$_POST["next"],
+		notxt => ($daten["notiz"])?nl2br($daten["notiz"]):"---",
 		notiz => $daten["notiz"],
 		ssel.$daten["status"] => "selected",
 		csel.$daten["chance"] => "selected",

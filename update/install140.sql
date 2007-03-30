@@ -241,6 +241,8 @@ CREATE TABLE opportunity(
 	zieldatum date,
 	chance integer,
 	status integer,
+	salesman int,
+	next character varying(100),
 	notiz text,
 	itime timestamp DEFAULT now(),
 	mtime timestamp,

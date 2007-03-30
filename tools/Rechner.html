@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+       "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Tischrechner</title>
+<script language="JavaScript">
+<!-- hide this script tag's contents from old browsers 
+
+var anzeige = null;
+function addChar(character) {
+    if(anzeige.value == null || anzeige.value == "0")
+        anzeige.value = character
+    else
+        anzeige.value += character
+    clear=0;
+}
+function deleteChar() {
+    anzeige.value = anzeige.value.substring(0, anzeige.value.length - 1)
+}
+function Rechnen() {
+	if (checkNum(anzeige.value))
+		anzeige.value = eval(anzeige.value)
+	clear=0;
+	return false;
+}
+function Quadrat() {
+	Rechnen();
+	anzeige.value = eval(anzeige.value) * eval(anzeige.value)
+	clear=0;
+}
+function Wurzel() {
+	Rechnen();
+	anzeige.value = eval(Math.pow(parseFloat(anzeige.value),.5))
+	clear=0;
+}
+function Prozent() {
+	l=anzeige.value.length-1;
+	z="";
+	while (l>0) {
+		c=anzeige.value.charAt(l);
+		anzeige.value=anzeige.value.substring(0, anzeige.value.length - 1);
+		if (c>="0" && c<="9" ) {
+			z = c + z;
+			l--;
+		} else {
+			Rechnen();
+			if (z.length>0) { 
+				if (c=="+" || c=="-") {
+					tmp = anzeige.value + "/100*" + z;
+					c += eval(tmp);
+					addChar(c);
+				} else {
+					tmp = z + "/100";
+					c += eval(tmp);
+					addChar(c);
+				}
+			};
+			Rechnen();
+			break;
+		}
+	}
+	clear=0;
+}
+var clear=0;
+function Clear() {
+	if (clear==0) {
+		clear=1;
+		deleteChar();
+	} else {
+		clear=0;
+		anzeige.value=0;
+	}
+}
+function checkNum(str) {
+	for (var i = 0; i < str.length; i++) {
+		var ch = str.substring(i, i+1)
+		if (ch < "0" || ch > "9") {
+			if (ch != "/" && ch != "*" && ch != "+" && ch != "-" 
+				&& ch != "(" && ch!= ")" && ch!=".") {
+				alert("invalid entry!")
+				return false
+			}
+		}
+	}
+	return true
+}
+var memory=0;
+function Memory() {
+	if (checkNum(anzeige.value))
+		memory=anzeige.value;
+	clear=0;
+}
+function RecallMemory() {
+	if (memory>0) addChar(memory);
+	clear=0;
+}
+function init() {
+	anzeige=document.rechner.display;
+	window.resizeTo(169, 254);
+	window.focus();
+}
+//-->
+</script>
+</head>
+<body onLoad="init();" style="padding:0px; margin:0px;">
+<img src="Rechner.png" width="169" height="227" border="0" usemap="#map" />
+<map name="map">
+<!-- #$-:Image Map file created by GIMP Imagemap Plugin -->
+<!-- #$-:GIMP Imagemap Plugin by Maurits Rijk -->
+<!-- #$-:Please do not edit lines starting with "#$" -->
+<!-- #$VERSION:2.0 -->
+<!-- #$AUTHOR:Holger Lindemann -->
+<area shape="rect" coords="16,77,41,98"     alt="("    onClick="addChar('(')" />
+<area shape="rect" coords="45,76,68,97"     alt=")"    onClick="addChar(')')" />
+<area shape="rect" coords="16,102,40,124"   alt="%"    onClick="Prozent()"/>
+<area shape="rect" coords="16,128,41,151"   alt="M"    onClick="Memory()" />
+<area shape="rect" coords="15,154,40,177"   alt="RM"   onClick="RecallMemory()" />
+<area shape="rect" coords="15,181,40,204"   alt="C"    onClick="Clear()" />
+<area shape="rect" coords="71,76,96,98"     alt="SQRT" onClick="Wurzel()" />
+<area shape="rect" coords="99,76,124,98"    alt="^2"   onClick="Quadrat()" />
+<area shape="rect" coords="127,76,152,98"   alt="/"    onClick="addChar('/')" />
+<area shape="rect" coords="128,102,152,124" alt="*"    onClick="addChar('*')" />
+<area shape="rect" coords="128,127,153,150" alt="-"    onClick="addChar('-')" />
+<area shape="rect" coords="128,154,155,204" alt="+"    onClick="addChar('+')" />
+<area shape="rect" coords="100,180,125,204" alt="="    onClick="Rechnen()"    />
+<area shape="rect" coords="71,180,97,205"   alt="."    onClick="addChar('.')" />
+<area shape="rect" coords="43,181,69,205"   alt="0"    onClick="addChar('0')" />
+<area shape="rect" coords="43,154,69,177"   alt="1"    onClick="addChar('1')" />
+<area shape="rect" coords="72,153,97,177"   alt="2"    onClick="addChar('2')" />
+<area shape="rect" coords="99,153,125,177"  alt="3"    onClick="addChar('3')" />
+<area shape="rect" coords="44,127,69,151"   alt="4"    onClick="addChar('4')" />
+<area shape="rect" coords="72,127,97,150"   alt="5"    onClick="addChar('5')" />
+<area shape="rect" coords="99,127,125,150"  alt="6"    onClick="addChar('6')" />
+<area shape="rect" coords="44,101,68,124"   alt="7"    onClick="addChar('7')" />
+<area shape="rect" coords="71,101,97,124"   alt="8"    onClick="addChar('8')" />
+<area shape="rect" coords="99,101,124,124"  alt="9"    onClick="addChar('9')" />
+</map>
+<div id="display" style="position:absolute; left:30px; z-index:1; top:24px; height:30px; width:100px;">
+<form name="rechner" onSubmit="return Rechnen();"><input style="text-align:right; font-size:14px;" type="text"   size="12" name="display" value="0"></form>
+</div> 
+<script language="JavaScript">self.focus()</script>
+</body>
+</html>

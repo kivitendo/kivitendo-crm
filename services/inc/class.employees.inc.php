@@ -10,7 +10,8 @@
 
 	class Employees
 	{
-		public function Employees() {
+		public function Employees($db) {
+			$this->db =$db;
 		}
 		
 		public function set_db($db) {
@@ -33,7 +34,7 @@
 					'email' => "'".$params['email']."'"
 				);
 						
-			$sql_query = 'UPDATE Employees set ';
+			$sql_query = 'UPDATE employee set ';
 			foreach($entries as $key => $val) {
 				$sql_query .= $key . '=' . $val . ", " ;    		
 			}

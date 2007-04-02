@@ -9,6 +9,7 @@
 	\**************************************************************************/
 	
 require_once 'DB.php';
+require_once ('inc/class.datetime.inc.php');
 
 class Database extends DB {
 
@@ -114,6 +115,21 @@ class Database extends DB {
 			return DB::quoteSmart($string); 
 		}
 	}
+	
+	  
+	  static function db2time($datetime) {
+	  	
+	  	return DateTimeConv::timeStringToStamp($datetime);	  	
+	  }
+	  
+	  static function time2db($datetime, $dateonly) {
+	  	
+	  	return DateTimeConv::timeStampToString($datetime, 'sql', $dateonly);	  	
+	  }
+//	  
+//	  static function convert2db($datetimestr) {
+//	  	return DateTimeConv::convert($datetimestr, 'sql');  		  	
+//	  }
 
 	/****************************************************
 	* uudecode

@@ -1,13 +1,13 @@
 <?php
 
-	/**************************************************************************\
-	* This file was originaly written by Jan Dierolf (jadi75@gmx.de)           *
-	* ------------------------------------------------------------------------ *
-	*  This program is free software; you can redistribute it and/or modify it *
-	*  under the terms of the GNU General Public License as published by the   *
-	*  Free Software Foundation; either version 2 of the License, or (at your  *
-	*  option) any later version.                                              *
-	\**************************************************************************/
+    /**************************************************************************\
+    * This file was originaly written by Jan Dierolf (jadi75@gmx.de)           *
+    * ------------------------------------------------------------------------ *
+    *  This program is free software; you can redistribute it and/or modify it *
+    *  under the terms of the GNU General Public License as published by the   *
+    *  Free Software Foundation; either version 2 of the License, or (at your  *
+    *  option) any later version.                                              *
+    \**************************************************************************/
 
       class DateTimeConv
       {
@@ -109,55 +109,55 @@
 
               return DateTimeConv::timeStampToString($time, $format);
         }
-          		// convert a date-array or timestamp into a datetime.iso8601 string
-			
-		static function date2iso8601($datetime, $simpleDate=TRUE)
-		{
-			if (!is_array($datetime))
-			{
-				if($simpleDate)
-				{
-					return date('Ymd\TH:i:s',$datetime);
-				}
-				return date('Y-m-d\TH:i:s',$datetime);
-			}
+                // convert a date-array or timestamp into a datetime.iso8601 string
+            
+        static function date2iso8601($datetime, $simpleDate=TRUE)
+        {
+            if (!is_array($datetime))
+            {
+                if($simpleDate)
+                {
+                    return date('Ymd\TH:i:s',$datetime);
+                }
+                return date('Y-m-d\TH:i:s',$datetime);
+            }
 
-			$formatstring = "%04d-%02d-%02dT%02d:%02d:%02d";
-			if($simpleDate)
-			{
-				$formatstring = "%04d%02d%02dT%02d:%02d:%02d";
-			}
-			return sprintf($formatstring,
-				$datetime['year'],$datetime['month'],$datetime['mday'],
-				$datetime['hour'],$datetime['min'],$datetime['sec']);
-		}
+            $formatstring = "%04d-%02d-%02dT%02d:%02d:%02d";
+            if($simpleDate)
+            {
+                $formatstring = "%04d%02d%02dT%02d:%02d:%02d";
+            }
+            return sprintf($formatstring,
+                $datetime['year'],$datetime['month'],$datetime['mday'],
+                $datetime['hour'],$datetime['min'],$datetime['sec']);
+        }
 
-		// convert a datetime.iso8601 string into a datearray or timestamp
-		static function iso86012date($isodate,$timestamp=False)
-		{
-			$arr = array();
+        // convert a datetime.iso8601 string into a datearray or timestamp
+        static function iso86012date($isodate,$timestamp=False)
+        {
+            $arr = array();
 
-			if (ereg('^([0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})$',$isodate,$arr))
-			{
-				// $isodate is simple ISO8601, remove the difference between split and ereg
-				array_shift($arr);
-			}
-			elseif (($arr = split('[-:T]',$isodate)) && count($arr) == 6)
-			{
-				// $isodate is extended ISO8601, do nothing
-			}
-			else
-			{
-				return False;
-			}
+            if (ereg('^([0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})$',$isodate,$arr))
+            {
+                // $isodate is simple ISO8601, remove the difference between split and ereg
+                array_shift($arr);
+            }
+            elseif (($arr = split('[-:T]',$isodate)) && count($arr) == 6)
+            {
+                // $isodate is extended ISO8601, do nothing
+            }
+            else
+            {
+                return False;
+            }
 
-				foreach(array('year','month','mday','hour','min','sec') as $n => $name)
-				{
-					$date[$name] = (int)$arr[$n];
-				}
-				return $timestamp ? mktime($date['hour'],$date['min'],$date['sec'],
-					$date['month'],$date['mday'],$date['year']) : $date;
-		}
+                foreach(array('year','month','mday','hour','min','sec') as $n => $name)
+                {
+                    $date[$name] = (int)$arr[$n];
+                }
+                return $timestamp ? mktime($date['hour'],$date['min'],$date['sec'],
+                    $date['month'],$date['mday'],$date['year']) : $date;
+        }
 
           /**
            * Converts a Unix timestamp or date/time string to a human-readable

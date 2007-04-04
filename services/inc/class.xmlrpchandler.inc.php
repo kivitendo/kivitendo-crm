@@ -23,7 +23,7 @@
             $decoded_val = XML_RPC_decode($xml_rpc_value);
             
             if(is_array($decoded_val)) {
-                $this->decode_charset($decoded_val, null, array('ISO-8859-1', 'UTF-8'));
+                $this->decode_charset($decoded_val, null, array($GLOBALS['db_charset'], 'UTF-8'));
             }           
             
             return $decoded_val;
@@ -31,7 +31,7 @@
         
         protected function encode($value) {         
             if(is_array($value)) {
-                $this->decode_charset($value, null, array('UTF-8', 'ISO-8859-1'));
+                $this->decode_charset($value, null, array('UTF-8', $GLOBALS['db_charset']));
             }                       
             $encoded_val = XML_RPC_encode($value);
             return $encoded_val;

@@ -19,6 +19,9 @@
 
     define('M_SERVICES', 'services');   
     
+    //TODO: sollte an einer zentralen Stele stehen; kann ueber PEAR::DB nicht abgefragt werden
+    $GLOBALS['db_charset'] = 'ISO-8859-1';
+    
     //--- some initialization stuff
     // initialize logging service
     Logger::setLevel(L_DEBUG3);

@@ -117,7 +117,8 @@
 		} else {
 			$item=$itemN;
 		}
-		$tmp="";
+		$tmp="<table class='calls' width='99%'>";
+		//$tmp="";
 		if ($item) foreach($item as $col){
 			if ($col["new"]) { $cause="<b>".htmlentities($col["cause"])."</b>"; }
 			else { $cause=htmlentities($col["cause"]); }
@@ -125,8 +126,9 @@
 						$col["id"],$cause,htmlentities($col["cp_name"]));
 			$i=($i==1)?0:1;
 		}
+		$tmp.="</table>";
 		$objResponse = new xajaxResponse();
-		$objResponse->addAssign("calls", 	"innerHTML", $tmp);
+		$objResponse->addAssign("tellcalls", 	"innerHTML", $tmp);
 		if ($start==0) {
 			$max=getAllTelCallMax($id,$firma);
 			$objResponse->addScript("max = $max;");

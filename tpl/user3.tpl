@@ -1,4 +1,4 @@
-<!-- $Id: user3.tpl,v 1.3 2005/11/02 10:38:58 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title>User Stamm</title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -33,7 +33,7 @@
 <!-- Beginn Code ----------------------------------------------->
 {msg}<br>
 Zugriffbeschr&auml;nkungen f&uuml;r Kunden und Personen durch Gruppen einrichten<br><br>
-<div class="smal">
+<div class="mini">
 	<form name="gruppe" action="user2.php" method="post">
 		<input type="hidden" name="id" value="{UID}">
 		Neue Gruppe: <input type="text" name="name"  size="20" maxlength="40">

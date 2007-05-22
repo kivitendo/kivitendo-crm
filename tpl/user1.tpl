@@ -33,7 +33,7 @@
 <div id="user">
 <input type="button" name="mails" value="Mails zeigen" onClick="onoff()">
 
-<table border="0" class="smal">
+<table border="0" class="mini">
 
 	<input type="hidden" name="UID" value="{UID}">
 	<input type="hidden" name="Login" value="{Login}">

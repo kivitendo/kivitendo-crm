@@ -43,27 +43,27 @@
 <INPUT TYPE="hidden" name="MAX_FILE_SIZE" value="2000000">
 <INPUT TYPE="hidden" name="KontaktCC" value="{KontaktCC}">
 <tr>
-	<td class="smal re" width="60px"></td>
-	<td class="smal re" width="*x"></td>
-	<td class="smal re" width="*"></td>
+	<td class="mini re" width="60px"></td>
+	<td class="mini re" width="*x"></td>
+	<td class="mini re" width="*"></td>
 </tr>
 <tr>
-	<td class="smal re">An:</td>
-	<td class="smal">Serienmail</td>
+	<td class="mini re">An:</td>
+	<td class="mini">Serienmail</td>
 	<td rowspan="7" class="le" style="vertical-align:middle;"><input type="submit" name="ok" value="senden"><br><br>{btn}</td>
 </tr><tr>
-	<td class="smal re">CC:</td>
-	<td class="smal"><input type="text" name="CC" value="{CC}" size="65" maxlength="125" tabindex="2"> <input type="button" name="scc" value="suchen" onClick="suchMail('CC');"></td>
+	<td class="mini re">CC:</td>
+	<td class="mini"><input type="text" name="CC" value="{CC}" size="65" maxlength="125" tabindex="2"> <input type="button" name="scc" value="suchen" onClick="suchMail('CC');"></td>
 </tr><tr>
-	<td class="smal re">Betreff:</td>
-	<td class="smal"><input type="text" name="Subject" value="{Subject}" size="67" maxlength="125" tabindex="3"></td>
+	<td class="mini re">Betreff:</td>
+	<td class="mini"><input type="text" name="Subject" value="{Subject}" size="67" maxlength="125" tabindex="3"></td>
 </tr><tr>
-	<td class="smal re">Text:</td>
-	<td class="smal">
+	<td class="mini re">Text:</td>
+	<td class="mini">
 	<textarea name="BodyText" cols="91" rows="15" tabindex="4" onFocus="setcur(this);">{BodyText}</textarea>
 	</td>
 </tr><tr>
-	<td class="smal re">Datei:</td>
+	<td class="mini re">Datei:</td>
 	<td><input type="file" name="Datei" size="55" maxlength="125"></td>
 </tr>
 

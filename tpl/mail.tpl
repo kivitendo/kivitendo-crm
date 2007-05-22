@@ -66,11 +66,10 @@
 	//-->
 	</script>
 <body onLoad="doInit();" >
-<!--table width="103%" class="karte" border="0"><tr><td class="karte"-->
 <!-- Beginn Code ------------------------------------------->
 <p class="listtop">eMail versenden <font color="red">{Msg}</font></p>
 <center>
-<table style="width:680px;">
+<table style="width:40em;" >
 <form name="mailform" action="mail.php" enctype='multipart/form-data' method="post" onSubmit="return sende();">
 <INPUT TYPE="hidden" name="MAX_FILE_SIZE" value="2000000">
 <INPUT TYPE="hidden" name="QUELLE" value="{QUELLE}">
@@ -79,46 +78,49 @@
 <INPUT TYPE="hidden" name="MID" value="{vorlage}">
 <INPUT TYPE="hidden" name="aktion" value="">
 <tr>
-	<td class="smal re" width="90px"></td>
-	<td class="smal re" width="*x"></td>
-	<td class="smal re" width="*"></td>
+	<td class=" re" width="3em"></td>
+	<td class=" re" width="*"></td>
+	<td class=" re" width="*"></td>
 </tr>
 <tr>
-	<td class="smal re">An:</td>
-	<td class="smal"><input type="text" name="TO" value="{TO}" size="65" maxlength="125" tabindex="1"> <input type="button" name="sto" value="suchen" onClick="suchMail('TO');"></td>
-	<td rowspan="7" class="le" style="vertical-align:middle;"><br><input type="button" name="ok" onClick="sende();" value="senden"><br>{btn}
-							<br><br><input type="button" name="save" onClick="saveTpl();" value="Vorlage
-sichern">
-							<br><br><input type="button" name="del" onClick="delTpl();" value="Vorlage
-l&ouml;schen"></td>
+	<td class="klein re">An:</td>
+	<td class=""><input type="text" name="TO" value="{TO}" size="70" maxlength="125" tabindex="1"> 
+					<input type="button" name="sto" value="suchen" onClick="suchMail('TO');"></td>
+	<td rowspan="7" class="le" style="vertical-align:middle;">
+					<br><input type="button" name="ok" onClick="sende();" value="senden"><br>{btn}
+					<br><br><input type="button" name="save" onClick="saveTpl();" value="Vorlage
+sichern">				<br><br><input type="button" name="del" onClick="delTpl();" value="Vorlage
+l&ouml;schen">
+	</td>
 </tr><tr>
-	<td class="smal re" nowrap>B<input type="checkbox" name="bcc" value="1">CC:</td>
-	<td class="smal"><input type="text" name="CC" value="{CC}" size="65" maxlength="125" tabindex="2"> <input type="button" name="scc" value="suchen" onClick="suchMail('CC');"></td>
+	<td class="klein re" nowrap>B<input type="checkbox" name="bcc" value="1">CC:</td>
+	<td class=""><input type="text" name="CC" value="{CC}" size="70" maxlength="125" tabindex="2"> 
+					<input type="button" name="scc" value="suchen" onClick="suchMail('CC');"></td>
 </tr><tr>
-	<td class="smal re">Vorlage:</td>
-	<td class="smal"><select name="vorlage" id="vorlagen" tabindex="3" style="width:480px;" onChange="getVorlage();">
+	<td class="klein re">Vorlage:</td>
+	<td class=""><select name="vorlage" id="vorlagen" tabindex="3" style="width:44em;" onChange="getVorlage();">
 		<option value=""></option>
 <!-- BEGIN Betreff -->
 		<option value="{MID}">{CAUSE}</option>
 <!-- END Betreff -->
 	</select></td>
 </tr><tr>
-	<td class="smal re">Betreff:</td>
-	<td class="smal"><input type="text" name="Subject" id="Subject" value="{Subject}" size="67" maxlength="125" tabindex="3"></td>
+	<td class="klein re">Betreff:</td>
+	<td class=""><input type="text" name="Subject" id="Subject" value="{Subject}" size="80" maxlength="125" tabindex="3"></td>
 </tr><tr>
-	<td class="smal re">Text:</td>
-	<td class="smal">
-	<textarea name="BodyText" id="BodyText" cols="91" rows="15" tabindex="4" onFocus="setcur(this);">{BodyText}</textarea>
+	<td class="klein re" valign="top">Text:</td>
+	<td class="">
+	<textarea class="klein" name="BodyText" id="BodyText" cols="80" rows="12" tabindex="4" onFocus="setcur(this);">{BodyText}</textarea>
 	</td>
 </tr><tr>
-	<td class="smal re">Datei:</td>
-	<td><input type="file" name="Datei[]" size="55" maxlength="125"></td>
+	<td class="klein re">Datei:</td>
+	<td><input type="file" name="Datei[]" size="48" maxlength="125"></td>
 </tr><tr>
-	<td class="smal re">Datei:</td>
-	<td><input type="file" name="Datei[]" size="55" maxlength="125"></td>
+	<td class="klein re">Datei:</td>
+	<td><input type="file" name="Datei[]" size="48" maxlength="125"></td>
 </tr><tr>
-	<td class="smal re">Datei:</td>
-	<td><input type="file" name="Datei[]" size="55" maxlength="125"></td>
+	<td class="klein re">Datei:</td>
+	<td><input type="file" name="Datei[]" size="48" maxlength="125"></td>
 </tr>
 
 </form>

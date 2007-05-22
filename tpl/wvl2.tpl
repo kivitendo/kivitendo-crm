@@ -15,7 +15,6 @@
 	//-->
 	</script>
 <body onLoad="doInit();">
-<!--table width="103%" class="karte"><tr><td class="karte"-->
 <!-- Beginn Code ------------------------------------------->
 <p class="listtop">Wiedervorlage</p>
 <table width="100%" border="0">
@@ -27,16 +26,16 @@
 <input type="hidden" name="cp_cv_id" value="{cpcvid}">
 <input type="hidden" name="DCaption" value="{DCaption}">
 <tr>
-	<td class="smal" width="350px">
+	<td class="klein" width="350px">
 	<select name="CRMUSER" tabindex="1">
 <!-- BEGIN Selectbox -->
 		<option value="{UID}"{Sel}>{Login}</option>
 <!-- END Selectbox -->
 	</select>
 	<input type="text" name="name" size="18" maxlength="75"  value="{Fname}"   tabindex="1"> <input type="button" name="dst" value=" ? " onClick="suchDst();">
-	<br>CRM-User &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Zugewiesen an
-	</td><td class="smal" width="120px">
-	<input type="text" name="Finish" size="10" maxlength="10" value="{Finish}" tabindex="3"><br>Zu Erledigen bis
+	<br><span class="klein">CRM-User &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Zugewiesen an</span>
+	</td><td class="klein" width="120px">
+	<input type="text" name="Finish" size="10" maxlength="10" value="{Finish}" tabindex="3"><br><span class="klein">Zu Erledigen bis</span>
 	</td>
 	<td rowspan="5">
 		<iframe src="wvll.php" name="wvll" width="359" height="410" marginheight="0" marginwidth="0" align="left">
@@ -44,9 +43,9 @@
 		</iframe>
 	</td>
 </tr><tr>
-	<td class="smal">
-	<input type="text" name="Cause" size="31" maxlength="60" value="{Cause}" tabindex="4"><br>Betreff
-	</td><td class="smal"">
+	<td class="klein">
+	<input type="text" name="Cause" size="31" maxlength="60" value="{Cause}" tabindex="4"><br><span class="klein">Betreff</span>
+	</td><td class="klein">
 	<!--input type="radio" name="Status" value="1" tabindex="5" {Status1}>1&nbsp;
 	<input type="radio" name="Status" value="2" tabindex="6" {Status2}>2&nbsp;
 	<input type="radio" name="Status" value="3" tabindex="7" {Status3}>3&nbsp;
@@ -54,8 +53,8 @@
 	<br>Priorit&auml;t-->
 	</td>
 </tr><tr>
-	<td class="smal" colspan="2">
-	<textarea name="LangTxt" cols="71" rows="14" tabindex="9">{LangTxt}</textarea><br>Beschreibung
+	<td class="klein" colspan="2">
+	<textarea name="LangTxt" cols="71" rows="14" tabindex="9">{LangTxt}</textarea><br><span class="klein">Beschreibung</span>
 	</td>
 </tr>
 <!-- BEGIN Filebox -->
@@ -69,7 +68,6 @@
 </form>
 </td></tr></table>
 <!-- End Code ------------------------------------------->
-<!--/td></tr></table-->
 </body>
 </html>
 

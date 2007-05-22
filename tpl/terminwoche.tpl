@@ -27,9 +27,9 @@
 <input type="button" value="<--" onClick="womin()"> [<a href="prtwkal.php?kw={kw}&year={year}">KW {kw}</a>] <input type="button" value="-->" onClick="woplu()"> <input type="button" value="Monat" onClick="showlist('M')"> 
 
 <br><br>
-<table style="width:350px" bgcolor="#ffffff">
+<table style="width:29em" bgcolor="#ffffff" class="klein">
 <!-- BEGIN Woche -->
-	<tr><td class="smal {col} re" width="70px" onClick="tag('{datum}')">{S1}</td><td class="smal" onClick="zeige({tid})">{S2}</td></tr>
+	<tr><td class="{col} re"  style="width:4.8em" onClick="tag('{datum}')">{S1}</td><td style="width:24em" onClick="zeige({tid})">{S2}</td></tr>
 <!-- END Woche -->
 </table>
 </center>

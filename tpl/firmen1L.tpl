@@ -25,11 +25,11 @@
 <table>
 <!-- BEGIN Liste -->
 	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showK({ID});">
-		<td class="smal">{Name}</td><td class="smal">{Plz} {Ort}</td><td class="smal">{Telefon}</td><td class="smal">{eMail}</td></tr>
+		<td class="mini">{Name}</td><td class="mini">{Plz} {Ort}</td><td class="mini">{Telefon}</td><td class="mini">{eMail}</td></tr>
 <!-- END Liste -->
 </table>
 {report}
-</td><td class="smal">
+</td><td class="mini">
 <form>
 	<input type="button" name="etikett" value="Etiketten" onClick="chngSerial('etiketten');">&nbsp;
 	<a href="sermail.php"><input type="button" name="email" value="Serienmail"></a>&nbsp;

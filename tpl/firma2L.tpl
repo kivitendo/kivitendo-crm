@@ -31,7 +31,7 @@
 		{Plz} {Ort}<br />
 </div>
 <div style="position:absolute; left:1px; top:50px; width:100%; text-align:left; border: 0px solid black;" class="normal">
-Kontakt [<a href="personen3.php?fid={FID}&Quelle=F" class="bold">neu eingeben</a>] - [<a href="personen1.php?fid={FID}&Quelle=F" class="bold">aus Bestand zuf&uuml;gen</a>] - oder ausw&auml;hlen:
+Kontakt [<a href="personen3.php?fid={FID}&Quelle=F" class="fett">neu eingeben</a>] - [<a href="personen1.php?fid={FID}&Quelle=F" class="fett">aus Bestand zuf&uuml;gen</a>] - oder ausw&auml;hlen:
 <br />
 <table class="liste">
 	<tr colspan="0">

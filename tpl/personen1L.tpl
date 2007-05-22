@@ -27,14 +27,14 @@
 <!-- Beginn Code ------------------------------------------->
 <form name="personen" action="{DEST}2.php" method="post">
 <input type="hidden" name="fid" value="{FID}">
-<table><tr><td class="smal">
+<table><tr><td class="mini">
 <!-- BEGIN Liste -->
-	<tr class="smal" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showK({PID},'{TBL}');">
+	<tr class="mini" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showK({PID},'{TBL}');">
 		<td>{Name}</td><td>&nbsp;{Plz} {Ort}</td><td>&nbsp;{Telefon}</td><td>&nbsp;{eMail}</td><td>&nbsp;{Firma}</td><td>&nbsp;{insk}</td></tr>
 <!-- END Liste -->	
-	<tr><td class="smal re" colspan="6">{snd}</td></tr>
+	<tr><td class="mini re" colspan="6">{snd}</td></tr>
 </table>
-</td><td class="smal">
+</td><td class="mini">
 <form>
 	<input type="button" name="etikett" value="Etiketten" onClick="chngSerial('etiketten');">&nbsp;
 	<a href="sermail.php"><input type="button" name="email" value="Serienmail"></a>&nbsp;

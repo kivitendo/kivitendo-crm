@@ -19,11 +19,11 @@
 	</script>
 
 <body topmargin="0" leftmargin="0"  marginwidth="0" marginheight="0">
-<!--table width="103%" class="karte" border="0"><tr><td class="karte" -->
 <!-- Beginn Code ------------------------------------------->
 <table class="liste" width="100%">
 <!-- BEGIN Liste -->
-	<tr  class="smal" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showW({ID},'{Art}');">
+	<tr  class="klein" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showW({ID},'{Art}');">
+
 		<td nowrap width="30%">{Initdate}</td>
 		<td width="10px" style="background-color:{Type};">{Status}</td>
 		<td width="*">{Cause}</td>
@@ -31,8 +31,7 @@
 	</tr>
 <!-- END Liste -->
 </table>
-<a href="wvll.php">refresh</a>
+<a href="wvll.php" class="klein">refresh</a>
 <!-- Hier endet die Karte ------------------------------------------->
-<!--/td></tr></table-->
 </body>
 </html>

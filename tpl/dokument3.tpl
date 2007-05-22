@@ -57,15 +57,15 @@
 	<tr>
 		<form name="neu" action="dokument3.php" method="post">
 		<input type="hidden" name="docid" value="{docid}">
-		<td class="smal"><input type="text" name="feldname" size="15" maxlength="20"><br>Feldname</td>
-		<td class="smal"><input type="text" name="platzhalter" size="12" maxlength="20"><br>Platzhalter</td>
-		<td class="smal"><input type="text" name="laenge" size="2" maxlength="5"><br>L&auml;nge</td>
-		<td class="smal"><input type="text" name="zeichen" size="12" maxlength="20"><br>Zeichen</td>
-		<td class="smal"><input type="text" name="position" size="2" maxlength="5"><br>Pos.</td>
-		<td class="smal"></td>
+		<td class="mini"><input type="text" name="feldname" size="15" maxlength="20"><br>Feldname</td>
+		<td class="mini"><input type="text" name="platzhalter" size="12" maxlength="20"><br>Platzhalter</td>
+		<td class="mini"><input type="text" name="laenge" size="2" maxlength="5"><br>L&auml;nge</td>
+		<td class="mini"><input type="text" name="zeichen" size="12" maxlength="20"><br>Zeichen</td>
+		<td class="mini"><input type="text" name="position" size="2" maxlength="5"><br>Pos.</td>
+		<td class="mini"></td>
 	</tr>
-	<tr class="smal">
-		<td class="smal" colspan="5"><input type="text" name="beschreibung" size="60" maxlength="200"><br>Beschreibung</td>
+	<tr>
+		<td class="mini" colspan="5"><input type="text" name="beschreibung" size="60" maxlength="200"><br>Beschreibung</td>
 		<td><input type="submit" name="neu" value="neu"></td>
 		</form>
 	</tr>

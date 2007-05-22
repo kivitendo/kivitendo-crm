@@ -37,7 +37,7 @@
 <input type="hidden" name="fid" value="{FID}">
 <table class="liste">
 <!-- BEGIN Liste -->
-	<tr  class="smal" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showK({PID},{TBL});"><td>{Name}</td><td>{Plz} {Ort}</td><td>{Telefon}</td><td>{eMail}</td><td>{Firma}</td><td>{insk}</td></tr>
+	<tr  class="mini" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showK({PID},{TBL});"><td>{Name}</td><td>{Plz} {Ort}</td><td>{Telefon}</td><td>{eMail}</td><td>{Firma}</td><td>{insk}</td></tr>
 <!-- END Liste -->	
 	<tr><td colspan="5"></td><td>{snd}</td></tr>
 </table>

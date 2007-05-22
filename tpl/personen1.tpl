@@ -10,43 +10,43 @@
 <input type="hidden" name="Quelle" value="{Quelle}">
 <input type="hidden" name="employee" value="{employee}">
 
-<span style="float:left; top:47px; border: 0px solid black;">
+<span style="float:left; top:3.0em; left:1em; border: 0px solid black;">
 <!-- Beginn Code ------------------------------------------->
 <p class="listheading">| 
-<a href="{action}?Quelle={Quelle}&first=A" class="bold">A</a> |
-<a href="{action}?Quelle={Quelle}&first=B" class="bold">B</a> |
-<a href="{action}?Quelle={Quelle}&first=C" class="bold">C</a> |
-<a href="{action}?Quelle={Quelle}&first=D" class="bold">D</a> |
-<a href="{action}?Quelle={Quelle}&first=E" class="bold">E</a> |
-<a href="{action}?Quelle={Quelle}&first=F" class="bold">F</a> |
-<a href="{action}?Quelle={Quelle}&first=G" class="bold">G</a> |
-<a href="{action}?Quelle={Quelle}&first=H" class="bold">H</a> |
-<a href="{action}?Quelle={Quelle}&first=I" class="bold">I</a> |
-<a href="{action}?Quelle={Quelle}&first=J" class="bold">J</a> |
-<a href="{action}?Quelle={Quelle}&first=K" class="bold">K</a> |
-<a href="{action}?Quelle={Quelle}&first=L" class="bold">L</a> |
-<a href="{action}?Quelle={Quelle}&first=M" class="bold">M</a> |
-<a href="{action}?Quelle={Quelle}&first=N" class="bold">N</a> |
-<a href="{action}?Quelle={Quelle}&first=O" class="bold">O</a> |
-<a href="{action}?Quelle={Quelle}&first=P" class="bold">P</a> |
-<a href="{action}?Quelle={Quelle}&first=Q" class="bold">Q</a> |
-<a href="{action}?Quelle={Quelle}&first=R" class="bold">R</a> |
-<a href="{action}?Quelle={Quelle}&first=S" class="bold">S</a> |
-<a href="{action}?Quelle={Quelle}&first=T" class="bold">T</a> |
-<a href="{action}?Quelle={Quelle}&first=U" class="bold">U</a> |
-<a href="{action}?Quelle={Quelle}&first=V" class="bold">V</a> |
-<a href="{action}?Quelle={Quelle}&first=W" class="bold">W</a> |
-<a href="{action}?Quelle={Quelle}&first=X" class="bold">X</a> |
-<a href="{action}?Quelle={Quelle}&first=Y" class="bold">Y</a> |
-<a href="{action}?Quelle={Quelle}&first=Z" class="bold">Z</a> |
-<a href="{action}?Quelle={Quelle}&first=~" class="bold">*</a> |</p>
+<a href="{action}?Quelle={Quelle}&first=A" class="fett">A</a> |
+<a href="{action}?Quelle={Quelle}&first=B" class="fett">B</a> |
+<a href="{action}?Quelle={Quelle}&first=C" class="fett">C</a> |
+<a href="{action}?Quelle={Quelle}&first=D" class="fett">D</a> |
+<a href="{action}?Quelle={Quelle}&first=E" class="fett">E</a> |
+<a href="{action}?Quelle={Quelle}&first=F" class="fett">F</a> |
+<a href="{action}?Quelle={Quelle}&first=G" class="fett">G</a> |
+<a href="{action}?Quelle={Quelle}&first=H" class="fett">H</a> |
+<a href="{action}?Quelle={Quelle}&first=I" class="fett">I</a> |
+<a href="{action}?Quelle={Quelle}&first=J" class="fett">J</a> |
+<a href="{action}?Quelle={Quelle}&first=K" class="fett">K</a> |
+<a href="{action}?Quelle={Quelle}&first=L" class="fett">L</a> |
+<a href="{action}?Quelle={Quelle}&first=M" class="fett">M</a> |
+<a href="{action}?Quelle={Quelle}&first=N" class="fett">N</a> |
+<a href="{action}?Quelle={Quelle}&first=O" class="fett">O</a> |
+<a href="{action}?Quelle={Quelle}&first=P" class="fett">P</a> |
+<a href="{action}?Quelle={Quelle}&first=Q" class="fett">Q</a> |
+<a href="{action}?Quelle={Quelle}&first=R" class="fett">R</a> |
+<a href="{action}?Quelle={Quelle}&first=S" class="fett">S</a> |
+<a href="{action}?Quelle={Quelle}&first=T" class="fett">T</a> |
+<a href="{action}?Quelle={Quelle}&first=U" class="fett">U</a> |
+<a href="{action}?Quelle={Quelle}&first=V" class="fett">V</a> |
+<a href="{action}?Quelle={Quelle}&first=W" class="fett">W</a> |
+<a href="{action}?Quelle={Quelle}&first=X" class="fett">X</a> |
+<a href="{action}?Quelle={Quelle}&first=Y" class="fett">Y</a> |
+<a href="{action}?Quelle={Quelle}&first=Z" class="fett">Z</a> |
+<a href="{action}?Quelle={Quelle}&first=~" class="fett">*</a> |</p>
 	<div class="zeile">
 		<span class="label">Anrede</span>
 		<span class="leftfeld">
-			<input type="radio" name="greeting" value="H" {cpsel1}>Herr 
-			<input type="radio" name="greeting" value="F" {cpsel2}>Frau    
+			<input type="radio" name="greeting" value="H" {cpsel1}><span class="klein">Herr </span>
+			<input type="radio" name="greeting" value="F" {cpsel2}><span class="klein">Frau </span>
 			<input type="radio" name="greeting" value="O" {cpsel3}>
-				<input type="text" name="cp_greeting" size="7" maxlength="75" value="{cp_greeting}" tabindex="1">
+				<input type="text" name="cp_greeting" size="6" maxlength="75" value="{cp_greeting}" tabindex="1">
 		</span>
 		<span class="label">Abteilung</span>
 		<span class="leftfeld"><input type="text" name="cp_abteilung" size="20" maxlength="25" value="{cp_abteilung}" tabindex="12"></span>
@@ -73,7 +73,7 @@
 		<span class="label">Strasse</span>
 		<span class="leftfeld"><input type="text" name="cp_street" size="27" maxlength="75" value="{cp_street}" tabindex="5"></span>
 		<span class="label">Geb.-Datum</span>
-		<span class="leftfeld"><input type="text" name="cp_gebdatum" size="12" maxlength="10" value="{cp_gebdatum}" tabindex="16"> TT.MM.JJJJ</span>
+		<span class="leftfeld"><input type="text" name="cp_gebdatum" size="12" maxlength="10" value="{cp_gebdatum}" tabindex="16"><span class="klein">TT.MM.JJJJ</span></span>
 	</div>
 	<div class="zeile">
 		<span class="label">Land / Plz</span>
@@ -105,7 +105,7 @@
 		{Btn1} {Btn3} <input type="submit" name="suche" value="suchen"> <input type="submit" name="reset" value="clear">
 	</div>
 </span>
-<span style="float:left;   top:47px; border: 0px solid black;">
+<span style="float:left;   top:3em; border: 0px solid black;">
 	<br><br><br><br>
 <!-- BEGIN sonder -->
 	<input type="checkbox" name="cp_sonder[]" value="{sonder_id}">{sonder_name}<br>

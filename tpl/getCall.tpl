@@ -24,11 +24,10 @@
 	</script>
 <body >
 
-<table class="karte"><tr><td class="karte" style="height:580px;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <form name="call" action="getCall.php" enctype='multipart/form-data' method="post">
 <INPUT TYPE="hidden" name="MAX_FILE_SIZE" value="2000000">
-<table class="stamm" width="100%">
+<table width="100%">
 			<td rowspan="3">
 				<select name="CRMUSER">
 <!-- BEGIN Selectbox -->
@@ -47,10 +46,10 @@
 				</select>
 				<input type="submit" name="verschiebe" value="verschieben">
 			</td></tr>
-	<tr><td class="smal bold">{Firma}</td></tr>
-	<tr><td class="smal bold">{Plz} {Ort}</td></tr>
+	<tr><td class="klein fett">{Firma}</td></tr>
+	<tr><td class="klein fett">{Plz} {Ort}</td></tr>
 </table>
-<br>
+<hr width="100%">
 <input type="hidden" name="Bezug" value="{Bezug}">
 <input type="hidden" name="bezug" value="{bezug}">
 <input type="hidden" name="fid" value="{FID}">
@@ -62,21 +61,21 @@
 <input type="text" name="cause" value="{NBetreff}" size="43" maxlength="125"> &nbsp; <input type="text" name="Datum" value="{NDatum}" size="11" maxlength="10"> 
 <input type="text" name="Zeit" value="{NZeit}" size="6" maxlength="5"> &nbsp; 
 <!--input type="reset" value="reset" onClick="javascript:location.href='getCall.php?fid={FID}&id={ID}'"--><br>
-<span class="smal">Betreff</span><br>
-<textarea name="c_cause" cols="76" rows="12" wrap="physical">{LangTxt}</textarea><br>
-<span class="smal">Bemerkung &nbsp; &nbsp; &nbsp;<!--a href="#" onClick="artikel()">Artikelliste</a--></span><br>
+<span class="klein">Betreff</span><br>
+<textarea name="c_cause" cols="80" rows="10" wrap="physical" >{LangTxt}</textarea><br>
+<span class="klein">Bemerkung &nbsp; &nbsp; &nbsp;<!--a href="#" onClick="artikel()">Artikelliste</a--></span><br>
 <table>
 <tr><td><input type="file" name="Datei[]" value="{Datei}" size="35" maxlength="125"><br>
-	     <span class="smal">Datei/Dokument<b> {ODatei}</b></span></td>
+	     <span class="klein">Datei/Dokument<b> {ODatei}</b></span></td>
 	<td rowspan="2">
 <!-- BEGIN Files -->
 	{Anhang} 
 <!-- END Files -->
 	</td></tr>
 <tr><td><input type="text" name="DCaption" value="{DCaption}" size="46" maxlength="125"><br>
-<span class="smal">Datei Beschreibung</span></td></tr>
+<span class="klein">Datei Beschreibung</span></td></tr>
 <tr><td colspan="2">
-<span class="smal">Kontaktart: 
+<span class="klein">Kontaktart: 
 <input type="radio" name="Kontakt" value="T" {R1}>Telefon	&nbsp;
 <input type="radio" name="Kontakt" value="M" {R2}>eMail &nbsp;
 <input type="radio" name="Kontakt" value="S" {R3}>Fax/Brief &nbsp;
@@ -96,12 +95,12 @@
 </table>
 <table class="liste" width="100%">
 <!-- BEGIN Liste -->
-	<tr  class="smal" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showCall({IID});">
+	<tr  onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showCall({IID});">
 		<td width="118px">{Datum}</td><td>{Betreff}</td><td style="background-color:{Type};">{Kontakt}</td></tr>
 <!-- END Liste -->
 </table>
 <!-- Hier endet die Karte ------------------------------------------->
-</td></tr></table>
+<!--/td></tr></table-->
 <script language="JavaScript">self.focus()</script>
 </body>
 </html>

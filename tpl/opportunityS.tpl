@@ -20,15 +20,15 @@
 	{jcal0}
 <body>
 <p class="listtop">Auftragschance</p>
-<span style="position:absolute; left:10px; top:50px; width:95%;">
+<span style="position:absolute; left:1em; top:3.3em; width:95%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <form name="formular" action="opportunity.php" method="post">
 <input type="hidden" name="id" value="{id}">
 <input type="hidden" name="fid" value="{fid}">
 <input type="hidden" name="firma" value="{name}">
-<div style="position:absolute; left:1px; width:65em; top:4.5em; border: 0px solid black; text-align:center;" class="normal">
+<div style="position:absolute; left:1px; width:65em; top:3em; border: 0px solid black; text-align:center;" >
 	<div class="zeile">
-		<span class="label" onClick='toggle("fa1","fa2");'>Firma</span>
+		<span class="label klein" onClick='toggle("fa1","fa2");'>Firma</span>
 		<span class="leftfeld pad value" style="width:50em; display:{block}" id="fa2" onClick='toggle("fa2","fa1");'>{name}</span>
 		<span class="leftfeld"     style="width:50em; display:{none};" id="fa1">
 			<input type="text" size="60" name="name" value="{name}" onChange="sichern()"> 
@@ -36,28 +36,28 @@
 		</span>
 	</div>
 	<div class="zeile">
-		<span class="label" onClick='toggle("ti1","ti2");'>Schlagzeile</span>
+		<span class="label klein" onClick='toggle("ti1","ti2");'>Schlagzeile</span>
 		<span class="leftfeld pad value" style="width:50em; display:{block}" onClick='toggle("ti2","ti1");' id="ti2">{title}</span>
 		<span class="leftfeld"     style="width:50em; display:{none};" id="ti1">
 			<input type="text" size="65" name="title" value="{title}" onChange="sichern()">
 		</span>
 	</div>
 	<div class="zeile">
-		<span class="label" onClick='toggle("be1","be2");'>Auftragssumme</span>
+		<span class="label klein" onClick='toggle("be1","be2");'>Auftragssumme</span>
 		<span class="leftfeld pad value" style="width:50em; display:{block}" onClick='toggle("be2","be1");' id="be2">{betrag} &euro;</span>
 		<span class="leftfeld"     style="width:50em; display:{none};" id="be1">
 			<input type="text" size="10" name="betrag" value="{betrag}" onChange="sichern()"> &euro;
 		</span>
 	</div>
 	<div class="zeile">
-		<span class="label" onClick='toggle("zi1","zi2");'>Zieldatum</span>
+		<span class="label klein" onClick='toggle("zi1","zi2");'>Zieldatum</span>
 		<span class="leftfeld pad value" style="width:50em; display:{block}" onClick='toggle("zi2","zi1");' id="zi2">{zieldatum}</span>
 		<span class="leftfeld"     style="width:50em; display:{none};" id="zi1">
 			<input type="text" size="10" name="zieldatum" id="zieldatum" value="{zieldatum}" onChange="sichern()"> tt.mm.jjjj {jcal1}
 		</span>
 	</div>
 	<div class="zeile">
-		<span class="label">Chance</span>
+		<span class="label klein">Chance</span>
 		<span class="leftfeld"><select name="chance" onChange="sichern()">
 			<option value="" {csel}>---</option>
 			<option value="1" {csel1}>10%</option>
@@ -74,7 +74,7 @@
 		</span>
 	</div>
 	<div class="zeile">
-		<span class="label">Status</span>
+		<span class="label klein">Status</span>
 		<span class="leftfeld"><select name="status" onChange="sichern()">
 			<option value="" {ssel}>---</option>
 <!-- BEGIN status -->
@@ -84,7 +84,7 @@
 		</span>
 	</div>
 	<div class="zeile">
-		<span class="label">Zust&auml;ndig</span>
+		<span class="label klein">Zust&auml;ndig</span>
 		<span class="leftfeld"><select name="salesman" onChange="sichern()">
 			<option value="" {esel}>---</option>
 <!-- BEGIN salesman -->
@@ -94,13 +94,13 @@
 		</span>
 	</div>
 	<div class="zeile">
-		<span class="label" onClick='toggle("ne1","ne2");'>n&auml;chster Schritt</span>
+		<span class="label klein" onClick='toggle("ne1","ne2");'>n&auml;chster Schritt</span>
 		<span class="leftfeld pad value" style="width:50em; display:{block}" onClick='toggle("ne2","ne1");' id="ne2">{next}</span>
 		<span class="leftfeld"     style="width:50em; display:{none};" id="ne1">
 			<input type="text" size="65" name="next" value="{next}" onChange="sichern()">
 		</span>
 	</div>
-	<div class="zeile">
+	<div class="zeile klein">
 		<span class="label" onClick='toggle("no1","no2");'>Notiz</span>
 		<span class="leftfeld pad value" style="width:50em; display:{block}" onClick='toggle("no2","no1");' id="no2">
 			{notxt}

@@ -6,7 +6,7 @@
 <body>
 <p class="listtop">Wissensdatenbank</p>
 
-<span style="position:absolute; left:10px; top:67px; width:95%; border: 0px solid black">
+<span style="position:absolute; left:1em; top:5em; width:95%; border: 0px solid black">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 	<div style="float:left; width:33%; text-align:left; border: 0px solid red" >
 		<form name="wissen" action="wissen.php" method="post">

@@ -55,7 +55,6 @@
 	</script>
 <body>
 
-<!--table width="103%" class="karte" border="0"><tr><td class="karte"-->
 <!-- Beginn Code ------------------------------------------->
 <p class="listtop">Termine</p>
 <font color="red">{Msg}</font>
@@ -63,12 +62,12 @@
 <form name="termedit" action="termin.php" method="post" onSubmit="return go()";>
 <input type="hidden" name="uid" value="{uid}">
 <tr>
-	<td width="*" >
+	<td width="*" valign="top">
 
 		{OK}
 		<!--input type="button" value="Zeige" onClick="showlist('T')"><hr-->
 		<table>
-			<tr><td class="norm">von:</td><td class="norm"><input type="text" name="vondat" size="9" maxlength="10" value="{VONDAT}">
+			<tr><td >von:</td><td ><input type="text" name="vondat" size="9" maxlength="10" value="{VONDAT}">
 <a href="#" title='Vondatum' onClick="kal('vondat')" ><img src='image/date.png' align='middle' border="0"></a>
 <!--input type="button" value="K" onClick="kal('vondat')"-->
 					<select name="von">
@@ -83,7 +82,7 @@
 <!-- END repeat -->
 					</select>
 				</td></tr>
-			<tr><td class="norm">bis:</td><td class="norm"><input type="text" name="bisdat" size="9" maxlength="10" value="{BISDAT}">
+			<tr><td >bis:</td><td ><input type="text" name="bisdat" size="9" maxlength="10" value="{BISDAT}">
 <a href="#" title='Bisdatum' onClick="kal('bisdat')" ><img src='image/date.png' align='middle' border="0"></a>
 <!--input type="button" value="K" onClick="kal('bisdat')"-->
 					<select name="bis">
@@ -92,38 +91,38 @@
 						<option value="{tval2}"{tsel2}>{tkey2}</option>
 <!-- END Time2 -->
 					</select>
-					nur Arbeitstage<input type="checkbox" name="ft" value="1" {FT}>
+					<span class="klein">nur Arbeitstage</span><input type="checkbox" name="ft" value="1" {FT}>
 				</td></tr>
-			<tr><td class="norm" colspan="2"><input type="text" name="grund" size="37" maxlength="75" value="{GRUND}">
+			<tr><td colspan="2"><input type="text" name="grund" size="37" maxlength="75" value="{GRUND}">
 						 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 <a href="termin.php"><input type="reset" name="clear" value="clear"></a>
-						<br>Grund</td></tr>
-			<tr><td class="norm" colspan="2"><textarea name="lang" cols="40" rows="3">{LANG}</textarea>
+						<br><span class="mini">Grund</span></td></tr>
+			<tr><td colspan="2"><textarea name="lang" cols="40" rows="4">{LANG}</textarea>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" name="sichern" value="sichern">	
-						<br>Bemerkungen</td></tr>
-			<tr><td class="norm" colspan="2">
+						<br><span class="mini">Bemerkungen</span></td></tr>
+			<tr><td colspan="2">
 					<input type="text" name="suchname" size="20" maxlength="25" value=""><input type="button" value="suche Teilnehmer" onClick="suchName()">
 					<br>
 					<table><tr>
-					<td class="norm"><select name="teiln" id="kannusr" size="5">
+					<td ><select name="teiln" id="kannusr" size="5">
 <!-- BEGIN User -->
 						<option value="{USRID}">{USRNAME}</option>
 <!-- END User -->
-					</select><br><span class="norm">CRM-User</span></td>
-					<td class="norm"><input type="button" value="&lt;--" onClick="subusr()" title="entfernen"><br>
+					</select><br><span class="mini">CRM-User</span></td>
+					<td ><input type="button" value="&lt;--" onClick="subusr()" title="entfernen"><br>
 							<br><input type="button" value="--&gt;" onClick="addusr()" title="dazunehmen"></td>
-					<td class="norm"><select name="user[]" id="istusr" size="5">
+					<td ><select name="user[]" id="istusr" size="5">
 <!-- BEGIN Selusr -->
 						<option value="{UID}">{UNAME}</option>
 <!-- END Selusr -->
-					</select><br><span class="norm">Teilnehmer</span></td>
+					</select><br><span class="mini">Teilnehmer</span></td>
 
 					</tr></table>
 			</td></tr>
 		</table>
 	</td>
 	<td width="20px"></td>
-	<td width="*" class="norm ce">
+	<td width="*" class="ce">
 				<select name="Tag" style="width:44px">
 <!-- BEGIN Tage -->
 			<option value="{TV}"{TS}>{TK}</option>
@@ -142,7 +141,7 @@
 		<input type="button" value="Zeigen" onClick="showlist('T')">
 		<!--input type="button" value="Woche" onClick="showlist('W')">
 		<input type="button" value="Monat" onClick="showlist('M')"-->
-		<iframe src="termlist.php?ansicht={ANSICHT}&datum={DATUM}" name="Termine" width="370" height="380" marginheight="0" marginwidth="0" align="left">
+		<iframe src="termlist.php?ansicht={ANSICHT}&datum={DATUM}" name="Termine" style="width:25em; height:28em" marginheight="0" marginwidth="0" align="left">
 		<p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>
 		</iframe>
 	</td>

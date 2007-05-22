@@ -1,89 +1,45 @@
 body 		{ font-family: Verdana, Arial, Helvetica, sans-serif;
-		  font-size: 12px;
+		  font-size: 13pt;
 		  background-image: url("fade.png"); background-repeat:repeat-x;
 		  background-color: white; color: black;
 		  border-collapse:collapse; }
 
-A         	{ text-decoration: none; color: black;font-size: 12px;font-family: Verdana, Arial, Helvetica, sans-serif;}
+A         	{ text-decoration: none; color: black; font-size: 1em;}
 A:link		{ color: black;  }
 A:visited	{ color: black;  }
 A:hover		{ color:#8c1919;}
 A:active	{ text-decoration: underline; }
 
-A.reiterA      	{ color: #888888; font-size: 12px;}
-
-table		{ border-collapse:collapse; border-width: 0px; padding: 0px; margin: 2px; border-spacing:0px; }
-td		{ vertical-align:top; text-align:left;margin:0px;padding:0px; }
 
 table.liste	{ border-collapse:collapse; border-width: 0px; border-style:solid; border-color:black;padding: 2px; margin: 2px; border-spacing:0px; }
 td.liste	{ height:1.8em;  border-width:0px; border-style:solid; text-align:left; font-size: 1.2em;vertical-align:middle;margin:0px;padding:3px;}
 
 table.reiter	{ width:60%; table-layout:fixed;}
-td.reiter	{ border-width:thin;height:21px; border-style:solid; text-align:center; font-size: 12px;vertical-align:middle; width:25%;}
-td.sel		{ border-color:#333333;}
-td.desel	{ border-color:#888888; }
+td.reiter	{ border-width:thin;height:21px; border-style:solid; text-align:center; font-size: 1em;vertical-align:middle; width:25%;}
 td.reiter:hover	{ background-color: #cccccc; }
-table.karte	{ background-image: url('px_3.gif'); width:99%;}
-td.karte	{ height:430px; }
 
 table.stamm	{ border-width:1px; border-style:solid; border-color:black; padding:0px; margin:0px; width:100%; }
 td.stamm	{ margin:0px;padding:2px; }
-td.smal		{ font-size:11px;padding:2px; }
-td.norm		{ font-size:12px;padding:2px; }
-th.smal		{ font-size:11px;padding:2px; }
-tr.topbot	{ border-width:1px 0px 1px 0px; border-style:solid; border-color:black;}
-td.dot 		{ border-width:1px 1px 1px 1px; border-style:solid; border-color:#666666;}
+td.norm		{ font-size:1em;padding:2px; }
 td.ce		{ text-align:center;}
 td.le		{ text-align:left;}
 td.re		{ text-align:right;}
-table.calls	{ font-size:1em;padding:2px; }
-tr.calls1	{ height:1.3em; background-color:#ddddff; }
-tr.calls0	{ height:1.3em; background-color:#ddffdd; }
-tr.calls1:hover  { background-color:#FF0000; }
-tr.calls0:hover  { background-color:#FF0000; }
-#tabmenue {
-  padding: 3px;
-}
-#tabmenue li {
-  display: inline; 
-}
-#tabmenue li a {
-  -moz-border-radius-topleft: 10px;
-  -moz-border-radius-topright: 10px;
-  padding: 3px 1em;
-  margin-left: 3px;
-  text-decoration: none; 
-  border: 1px solid black;
-}
-#tabmenue li a#aktuell {
-  padding-bottom: 4px; color: #888888; 
-  border-bottom: 0px solid #222;
-}
-#tabmenue a:hover { background-color: #cccccc; }
+table.calls	{ font-size:.8em;padding:0.2em; }
+tr.calls1	{ padding-top:0.2em; padding-bottom:0.2em; background-color:#ddddff; }
+tr.calls0	{ padding-top:0.2em; padding-bottom:0.2em; background-color:#ddffdd; }
+tr.calls1:hover	{ background-color:#ff0000; }
+tr.calls0:hover	{ background-color:#ff0000; }
 
-#submenue {
-  padding: 0px;
+.normal {
+        font-size: 1em;
+	font-weight: normal;
 }
-#submenue li {
-  display: inline; 
-}
-#submenue li a {
-  -moz-border-radius-bottomleft: 10px;
-  -moz-border-radius-bottomright: 10px;
-  padding: 2px ;
-  border: 1px solid black;
-  margin-top: 0px;
-  margin-left: 2px;
-  border: 1px solid black;
-  border-top: 0px;
-  text-decoration: none; 
-}
-#submenue a:hover { background-color: #cccccc; }
+.gross { font-size: 1.2em; }
+.mini  { font-size: .6em; }
+.klein { font-size: .8em; }
+.fett  { font-weight: bold; }
 
-.smal		{ font-size:12px; }
-.bold		{ font-weight:bold;}
-
-.liste		{ font-size:10px;  padding:0px; margin:0px; }
+.liste		{ font-size:0.8em;  padding:0px; margin:0px; }
 .gr 		{ background-color:#bbbbbb; vertical-align:bottom;}
 .lg 		{ background-color:#dddddd; vertical-align:bottom;}
 .ft		{ background-color:#ffd5d5; vertical-align:bottom;}
@@ -95,16 +51,16 @@ tr.calls0:hover  { background-color:#FF0000; }
 .bgcol4 	{ background-color:#ffdddd; }
 .caption 	{ font-size:9px;color:blue; }
 
-textarea  	{ font-size: 12px; font-family:Verdana,Arial,Helvetica,sans-serif;}
-.wikil          { color:#5555ff; font-weight:bold; font-size:12px; }
-.wikin          { color:#555555; font-weight:bold; font-size:12px; }
-.wikiw          { color:#55ff55; font-weight:bold; font-size:12px; }
+textarea  	{ font-size: 1em; font-family:Verdana,Arial,Helvetica,sans-serif;}
+.wikil          { color:#5555ff; font-weight:bold; font-size:1em; }
+.wikin          { color:#555555; font-weight:bold; font-size:1em; }
+.wikiw          { color:#55ff55; font-weight:bold; font-size:1em; }
 
 .listtop {
         background-color: rgb(236,233,216);
         text-align:left;
         padding:5px;
-        font-size: 10pt;
+        font-size: 0.8em;
         color: black;
         font-weight: bolder;
         border-style:dashed;
@@ -118,7 +74,7 @@ textarea  	{ font-size: 12px; font-family:Verdana,Arial,Helvetica,sans-serif;}
 }
                                                                                                                  
 .listheading {
-        font-size: 9pt;
+        font-size: 0.7em;
         padding:3px;
         background-color:
         rgb(236,233,216);
@@ -129,25 +85,9 @@ textarea  	{ font-size: 12px; font-family:Verdana,Arial,Helvetica,sans-serif;}
         border-style:dotted;
         border-width:thin;
 }
-.normal {
-        font-size: 1.1em;
-	font-weight: normal;
-}
-.gross {
-        font-size: 1.3em;
-}
-.mini { 
-        font-size: .6em;
-}
-.klein { 
-        font-size: .9em;
-}
-.fett { 
-        font-weight: bold;
-}
 .value {
-	border: 0px solid #999999;
-	background-color: #ffffff;
+	border: 0px;
+	//background-color: #ffffff;
 }
 .value:before {
 	content:"[ ";	
@@ -161,37 +101,43 @@ input:focus {
 .zeile {  clear: both;
   padding: 2px 0px;
 }
+.labelLe {
+  float: left;
+  width: 7em;
+  //background-color: #f0f0f0;
+  text-align: left;
+}
 .label {
   float: left;
   width: 11em;
   text-align: right;
-  padding-top: 3px;
-  padding-right: 5px;
+  padding-top: 0.3em;
+  padding-right: 0.5em;
 }
 .label2 {
   float: left;
   width: 6em;
   text-align: right;
-  padding-top: 3px;
-  padding-right: 5px;
+  padding-top: 0.3em;
+  padding-right: 0.5em;
 }
 .smalfeld{
   padding-left: 2px;
   float: right;
-  width: 180px;
+  width: 14em;
   text-align: left;
 }
 .feld {
   float: left;
-  width: 25em;
+  width: 15em;
   text-align: left;
 }
 .zeile2 {  clear: both;
-  padding: 2px 50px;
+  padding: 0.2em 4em;
 }
 .feldxx {
   float: left;
-  width: 30em;
+  width: 25em;
   text-align: left;
 }
 .pad {

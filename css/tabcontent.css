@@ -1,10 +1,10 @@
 .shadetabs{
-padding: 3px 0;
+padding: 0.2em 0;
 margin-left: 0;
-margin-top: 2px;
+margin-top: 0.2em;
 margin-bottom: 0;
 font-weight:bold;
-font-size:12px;
+font-size:0.7em;
 list-style-type: none;
 text-align: left; /*set to left, center, or right to align the menu as desired*/
 }
@@ -16,8 +16,8 @@ margin: 0;
 
 .shadetabs li a{
 text-decoration: none;
-padding: 3px 7px;
-margin-right: 3px;
+padding: 0.3em 0.6em;
+margin-right: 0.3em;
 border: 1px solid #778;
 color: #2d2b2b;
 background: white url(shade.gif) top left repeat-x;
@@ -55,12 +55,12 @@ text-decoration: none;
 }
 
 .subshadetabs{
-padding: 2px 0;
+padding:0.2em 0;
 margin-left: 0;
-margin-top: 1px;
+margin-top: 0.1em;
 margin-bottom: 0;
+font-size:0.6em;
 font-weight:500;
-font-size:smaller;
 list-style-type: none;
 text-align: left; /*set to left, center, or right to align the menu as desired*/
 }
@@ -72,11 +72,11 @@ margin: 0;
 
 .subshadetabs li a{
 text-decoration: none;
-padding: 1px 3px;
-margin-right: 3px;
+padding: 0.1em 0.3em;
+margin-right: 0.3em;
 border: 1px solid #778;
 color: #2d2b2b;
-background: white url(shade.gif) top left repeat-x;
+background: white url(shadeactive.gif) top left repeat-x;
 }
 
 .subshadetabs li a:link {
@@ -97,12 +97,12 @@ color: #2d2b2b;
 
 .subshadetabs li.selected {
 position: relative;
-top: -2px;
+background: white url(shade.gif);
+top: 0.3em;
 }
 
 .supshadetabs li.selected a { /*selected main tab style */
 background-color: white;
-background: white url(shadeactive.gif);
 border-top-color: white;
 }
 
@@ -114,7 +114,7 @@ text-decoration: none;
 border: 1px solid gray;
 width: 90%;
 margin-bottom: 1em;
-padding: 10px;
+padding: 0.9em;
 }
 
 .tabcontent{

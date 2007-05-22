@@ -31,11 +31,11 @@ CREATE TABLE documents (
 	filename text,
 	descript text,
 	datum date,
+	zeit time,
 	size integer,
 	pfad text,
 	employee integer,
-	id integer DEFAULT nextval('id'::text),
-	kunde integer);
+	id integer DEFAULT nextval('id'::text));
 	
 CREATE TABLE wiedervorlage (
 	id integer DEFAULT nextval('crmid'::text) NOT NULL,
@@ -363,6 +363,7 @@ ALTER TABLE customer ADD COLUMN sonder int;
 ALTER TABLE customer ADD COLUMN lead integer;
 ALTER TABLE customer ADD COLUMN leadsrc character varying(25);
 ALTER TABLE customer ADD COLUMN bland int4;
+ALTER TABLE customer ADD COLUMN konzern int4;
 ALTER TABLE vendor ADD COLUMN owener int4;
 ALTER TABLE vendor ADD COLUMN employee int4;
 ALTER TABLE vendor ADD COLUMN kundennummer character varying(20);
@@ -373,6 +374,7 @@ ALTER TABLE vendor ADD COLUMN sonder int;
 ALTER TABLE vendor ADD COLUMN bland int4;
 ALTER TABLE vendor ADD COLUMN lead integer;
 ALTER TABLE vendor ADD COLUMN leadsrc character varying(25);
+ALTER TABLE vendor ADD COLUMN konzern int4;
 ALTER TABLE shipto ADD COLUMN shiptoowener int4;
 ALTER TABLE shipto ADD COLUMN shiptoemployee int4;
 ALTER TABLE shipto ADD COLUMN shiptobland int4;

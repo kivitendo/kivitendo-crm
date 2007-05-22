@@ -14,19 +14,24 @@
 			nr=document.firmen.Alle.selectedIndex;
 			val=document.firmen.Alle.options[nr].value;
 			txt=document.firmen.Alle.options[nr].text;
-			opener.document.formular.name.value=txt;
 <? if ($pers==1) { ?>
 			opener.document.formular.cp_cv_id.value=val;
+			opener.document.formular.name.value=txt;
 <? } else if ($op) { ?>
 			opener.document.formular.fid.value=val.substr(1,val.length);
+			opener.document.formular.name.value=txt;
+<? } else if ($_GET["konzernname"]) {?>
+			opener.document.neueintrag.konzern.value=val.substr(1,val.length);
+			opener.document.neueintrag.konzernname.value=txt;
 <? } else {?>
 			opener.document.formular.cp_cv_id.value=val.substr(1,val.length);
+			opener.document.formular.name.value=txt;
 <? } ?>
 <? if ($nq==1) { ?>
-			if (val.substr(0,1)=="L") {
-				opener.document.formular.Quelle.value="L";
+			if (val.substr(0,1)=="V") {
+				opener.document.formular.Quelle.value="V";
 			} else {
-				opener.document.formular.Quelle.value="F";
+				opener.document.formular.Quelle.value="C";
 			}
 <? } ?>
 		}
@@ -38,10 +43,15 @@
 <select name="Alle" >
 	<option value=''>Einzelperson</option>
 <?
-	$name=strtoupper($_GET["name"]);
+	$name=($_GET["name"])?strtoupper($_GET["name"]):strtoupper($_GET["konzernname"]);
 	if ($name=="EINZELPERSON") $name="";
-	$datenC=getAllFirmen(array(1,$name),true,"C");
-	$datenL=getAllFirmen(array(1,$name),true,"V");
+	if ($_GET["tab"]) {
+		$tmp="daten".$_GET["tab"];
+		$datenC=getAllFirmen(array(1,$name),true,$_GET["tab"]);
+	} else {
+		$datenC=getAllFirmen(array(1,$name),true,"C");
+		$datenL=getAllFirmen(array(1,$name),true,"V");
+	}
 	if ($pers) {
 		$datenP=getAllPerson(array(1,$name));
 		if ($datenP) foreach ($datenP as $zeile) {

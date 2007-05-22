@@ -43,7 +43,7 @@
 			Q	=> $Q,
 			FAART	=> ($Q=="C")?"Kunde":"Lieferant",
 			FID => $fid,
-			KDNR	=> ($Q=="C")?$fa["customernumber"]:$fa["vendornumber"],
+			kdnr	=> $fa["nummer"],
 			PID => $pid,
 			Link1 => $link1,
 			Link2 => $link2,

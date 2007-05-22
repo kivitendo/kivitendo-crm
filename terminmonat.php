@@ -41,8 +41,8 @@
 <center>
 <input type="button" value="<--" onClick="monmin()"> [<a href="prtmkal.php?month=<?= $month ?>&year=<?= $year ?>"><?= $month."/".$year ?></a>] <input type="button" value="-->" onClick="monplu()">
 <br><br>
-<table style="width:335px">
-	<tr><th width="30px"class="gr">Kw</th><th width="49px" class="gr">Mo</th><th width="49px" class="gr">Di</th><th width="49px" class="gr">Mi</th><th width="49px" class="gr">Do</th><th width="49px" class="gr">Fr</th><th width="30px" class="gr">Sa</th><th width="30px" class="gr">So</th></tr>
+<table style="width:29em" class="klein">
+	<tr><th style="width:2.1em" class="gr">Kw</th><th style="width:3.9em" class="gr">Mo</th><th style="width:3.9em" class="gr">Di</th><th style="width:3.9em" class="gr">Mi</th><th style="width:3.9em" class="gr">Do</th><th style="width:3.9em" class="gr">Fr</th><th style="width:3.0em" class="gr">Sa</th><th style="width:3.0em" class="gr">So</th></tr>
 <?
 	$firstday=mktime(0,0,0,$month,1,$year);
 	$anztage=date("t", mktime(0,0,0,($month+1),0,$year));
@@ -60,13 +60,13 @@
 		else {$da = 1;}
 		// set week number for the first time
  		$W=strftime("%V",mktime(0,0,0,$month,$da+2,$year));
-		echo "\t<tr height='50px'>\n\t\t<td class='norm gr re' onClick='kw({$W})'>$W</td>\n";
+		echo "\t<tr height='50px'>\n\t\t<td class='gr ce' onClick='kw({$W})'>$W</td>\n";
 		// show days of the previous month
 		if ( date("w", mktime(0,0,0,$month,1,$year)) == 0) { $start = 7; }
 		else {$start = date("w", mktime(0,0,0,$month,1,$year)); }
   		for ($a = ($start-2); $a>=0; $a--) {
     		$d = date("t", mktime(0,0,0,$month,0,$year)) - $a;
-			echo "\t\t<td class='smal lg re'>$d</td>\n";
+			echo "\t\t<td class='klein lg re'>$d</td>\n";
   		}
 		// show days of the actual month
 		for ($d=1; $d <= $anztage; $d++) {
@@ -79,22 +79,22 @@
 			} else {
 				$da = $d;
 			}
-			if (in_array($d,$days)) { $bg=" background='image/data.gif'";} else { $bg="";};
+			if (in_array($d,$days)) { $bg=" style='background-image:url(image/data.gif); background-repeat:no-repeat;background-position:center;'";} else { $bg="";};
 			if (date("w",mktime(0,0,0,$month,$d,$year))==0 || date("w",mktime(0,0,0,$month,$d,$year))==6 || in_array($akt,$ftk)) { $col="ft";} else { $col="we";};
 			// day link
-			echo"\t\t<td class='norm dot $col re'$bg onClick='tag(\"".sprintf("%02d",$d).".".sprintf("%02d",$month).".".$year."\")'>$da</td>\n";
+			echo"\t\t<td class='dot $col re'$bg onClick='tag(\"".sprintf("%02d",$d).".".sprintf("%02d",$month).".".$year."\")'>$da</td>\n";
 			if (date("w", mktime(0,0,0,$month,$d,$year)) == 0)  {// && date("t", mktime(0,0,0,($month+1),0,$year)) > $d )  {
 				echo "\t</tr>\n";
 				$da = $d + 1;
 				$W=strftime("%V",mktime(0,0,0,$month,$da+2,$year));
-				echo "\t<tr height='50px'>\n\t\t<td class='norm gr re' onClick='kw({$W})'>$W</td>\n";
+				echo "\t<tr style='height:4em'>\n\t\t<td class='gr ce' onClick='kw({$W})'>$W</td>\n";
 			}
 		}
 		// show days of the next month
 		if (date("w", mktime(0,0,0,$month+1,1,$year)) <> 1) {
 			$d=1;
 			while (date("w", mktime(0,0,0,($month+1),$d,$year)) <> 1) {
-				echo"\t\t<td class='smal lg re'>$d</td>\n";
+				echo"\t\t<td class='klein lg re'>$d</td>\n";
 				$d++;
 			}
 		}

@@ -122,7 +122,7 @@
 		$value=strtolower($zeile["platzhalter"]);
 		if ($zeile["laenge"]>60) {
 			$rows=floor($zeile["laenge"]/60)+1;
-			$input="<textarea cols=60 rows=$rows name='".$zeile["platzhalter"]."'>".${$value}."</textarea>";
+			$input="<textarea class='klein' cols=60 rows=$rows name='".$zeile["platzhalter"]."'>".${$value}."</textarea>";
 		} else {
 			$input="<input type='text' name='".$zeile["platzhalter"]."' size='".$zeile["laenge"]."' value='".${$value}."'>";
 		}

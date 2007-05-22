@@ -1,7 +1,7 @@
 <?
 // $Id$
 require_once("inc/stdLib.php");
-
+$popup=($_GET["popup"])?$_GET["popup"]:0;
 
 function getAllPostIt($id) {
 global $db;
@@ -64,17 +64,18 @@ if ($_POST["save"]) {
 	<script language="JavaScript">
 	<!--
 	function PopUp() {
-		f1=open("postit.php?popup=1","PostIt","width=600,height=600");
+		f1=open("postit.php?popup=1","PostIt","width=600,height=400");
 	}
 	//-->
 	</script>
 	</head>
-<body>
-<table>
+<body onLoad="if (1==<?= $popup ?>) window.resizeTo(600,400);">
+<p class="listtop">Notizen</p>
+<table >
 <?
 $liste=getAllPostIt($_SESSION["loginCRM"]);
 if ($liste) foreach($liste as $row) {
-	echo "<tr class='smal'><td>";
+	echo "<tr class='klein'><td>";
 	echo db2date(substr($row["date"],0,10))." ".substr($row["date"],11,5);
 	echo "</td><td>&nbsp;[<a href='postit.php?hole=".$row["id"]."'>".$row["cause"]."</a>]</td></tr>\n";
 };
@@ -82,8 +83,8 @@ if ($liste) foreach($liste as $row) {
 </table>
 <form name="postit" method="post" action="postit.php">
 <input type="hidden" name="id" value="<?= $data["id"] ?>">
-<input type="text" name="cause" size="75" maxlength="100" value="<?= $data["cause"] ?>"><br />
-<textarea rows="7" cols="85" name="notes"><?= $data["notes"] ?></textarea><br />
+<input type="text" name="cause" size="77" maxlength="100" value="<?= $data["cause"] ?>"><br />
+<textarea class="klein" rows="7" cols="80" name="notes"><?= $data["notes"] ?></textarea><br />
 <input type="submit" name="save" value="sichern">&nbsp;
 <input type="submit" name="clear" value="clear">&nbsp;
 <input type="submit" name="delete" value="l&ouml;schen">&nbsp;

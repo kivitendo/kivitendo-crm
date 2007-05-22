@@ -55,6 +55,7 @@
 			Q => $Q,
 			FID => $fid,
 			customernumber	=> ($Q=="C")?$fa["customernumber"]:$fa["vendornumber"],
+			kdnr => $fa["nummer"],
 			PID => $pid,
 			Link1 => $link1,
 			Link2 => $link2,

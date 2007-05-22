@@ -19,11 +19,12 @@ $logmail=true;
 $jcalendar=true;
 $listLimit=200;
 $tinymce=false;
+$zeigeextra=true;
 $jpg=false;
+//$jpg=true;
 $showErr=false;
 $CallEdit = true;
 $CallDel = true;
-$AJAX=true;
 //Verschiedene Map-Anbieter können hier eingestellt werden
 //Leerzeichenersatz
 //GoYellow

@@ -190,7 +190,7 @@ function chkFld(&$val,$empty,$rule,$len) {
 		case 1 : $ok=ereg("[[:alnum:]\xE4\xF6\xFC\xC4\xD6\xDC\xDF]+$leer",$val); // String
 			 if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
 			 break;
-		case 2 : if ($empty===0 && empty($val)) { $ok=true; $val="null"; }
+		case 2 : if ($empty===0 && empty($val)) { $ok=true; $val=""; }
 			 else {$ok=ereg("^[0-9]{4,5}$",$val);}; // Plz
 			 if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
 			 break;
@@ -305,7 +305,7 @@ global $db;
 		$rs=$db->query($sql);
 	}
 	foreach($tels as $tel) {
-		$tel=strtr($tel,array(" "=>"","-"=>"","/"=>"","("=>"",")"=>""));
+		$tel=strtr($tel,array(" "=>"","-"=>"","/"=>"","\\"=>"","("=>"",")"=>""));
 		if (substr($tel,0,1)=="+") $tel=substr($tel,3);
 		if (substr($tel,0,1)=="0") $tel=substr($tel,1);
 		if (trim($tel)<>"") {

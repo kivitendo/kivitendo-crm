@@ -256,7 +256,7 @@ class phpOpenOffice
 	function prepsave($filename) {
 		if($filename == "") $filename = $this->getRandomString(16);
 		$info = pathinfo($this->zipFile);
-		$fullfile = $filename.".".$info["extension"];
+		$fullfile = $filename; //.".".$info["extension"];
 		$this->downloadFile = POO_TMP_PATH."/".$fullfile;
 		$this->savefile($this->downloadFile);
 		//echo "!".$filename;

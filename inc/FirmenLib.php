@@ -93,13 +93,22 @@ global $db;
 		return false;
 	} else {
 		$row=$rs[0];
+		if ($row["konzern"]) {
+			$sql="select name from %s where id = %d";
+			if ($tab=="C") {
+				$krs=$db->getAll(sprintf($sql,"customer",$row["konzern"]));
+			} else {
+				$krs=$db->getAll(sprintf($sql,"vendor",$row["konzern"]));
+			}
+			if ($krs) $row["konzernname"]=$krs[0]["name"];
+		}
 		if ($tab=="C") { $nummer=$row["customernumber"]; }
 		else { $nummer=$row["vendornumber"]; };
 		if ($row["grafik"]) {
 			$DIR=$tab.$nummer;
 			$image="./dokumente/".$_SESSION["mansel"]."/$DIR/logo.".$row["grafik"];
 			if (file_exists($image)) {
-				$size=@getimagesize(trim($image));
+				$size=@getimagesize($image);
 				$row["size"]=$size[3];
 				if ($size[1]>$size[0]) {
 					$faktor=ceil($size[1]/70);
@@ -109,6 +118,8 @@ global $db;
 				$breite=floor($size[0]/$faktor);
 				$hoehe=floor($size[1]/$faktor);
 				$row["icon"]="width=\"$breite\" height=\"$hoehe\"";
+			} else {
+				$daten["name"]=getcwd()." $image: not found";
 			}
 		}
 		$rs3=getAllShipto($id,$tab);
@@ -334,7 +345,7 @@ global $db;
 			lead => array(0,0,6,"Leadquelle",0),		leadsrc => array(0,0,1,"Leadquelle",15),
 			bland => array(0,0,6,"Bundesland",0),		taxzone_id => array(0,1,6,"Steuerzone",0),
 			sonder => array(0,0,10,"SonderFlag",0),		salesman_id => array(0,0,6,"Vertriebler",0),
-			shiptoname => array(1,0,1,"Liefername",75), 
+			shiptoname => array(1,0,1,"Liefername",75), 	konzern	=> array(0,0,6,"Konzern",0),
 			shiptostreet => array(1,0,1,"Lieferstrasse",75),
 			shiptobland => array(1,0,6,"Liefer-Bundesland",0),
 			shiptocountry => array(1,0,8,"Lieferland",3),
@@ -369,7 +380,7 @@ global $db;
 					} else {							//Daten == Zahl
 						$query1.=$keys[$i]."=".$tmpval.",";
 					}
-					if ($keys[$i]=="Ltel"||$keys[$i]=="Lfax") $tels2[]=$tmpval;
+					if ($keys[$i]=="shiptophone"||$keys[$i]=="shiptofax") $tels2[]=$tmpval;
 				}
 			} else {			// select f�r Rechnungsanschrift bilden
 				if (!chkFld($tmpval,$dbfld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) { 
@@ -381,7 +392,7 @@ global $db;
 					} else {
 						$query0.=$keys[$i]."=".$tmpval.",";
 					}
-					if ($keys[$i]=="Rtel"||$keys[$i]=="Rfax") $tels1[]=$tmpval;
+					if ($keys[$i]=="phone"||$keys[$i]=="fax") $tels1[]=$tmpval;
 				}
 			}
 		}
@@ -406,7 +417,7 @@ global $db;
 		}
 		$query1=substr($query1,0,-1)." ";
 		$sql0="update ".$tab[$typ]." set $query0 where id=$fid";
-		mkTelNummer($fid,"C",$tels1);
+		mkTelNummer($fid,$typ,$tels1);
 		if ($bildok) {
 			require_once("documents.php");
 			$dbfile=new document();
@@ -618,6 +629,7 @@ global $cp_sonder,$xajax;
 			branche_	=> "",
 			vendornumber    => "",
 			customernumber  => "",
+			kdnr	=> "",
                         v_customer_id   => "",
 			ustid	=> "",
 			taxnumber => "",
@@ -784,6 +796,7 @@ global $cp_sonder,$xajax;
 				id	=> $daten["id"],
                                 customernumber  => $daten["customernumber"],
                                 vendornumber    => $daten["vendornumber"],
+				kdnr	=>  $daten["nummer"],
 				v_customer_id   => $daten["v_customer_id"],
 				name 	=> $daten["name"],
 				greeting_ 	=> $daten["greeting_"],
@@ -798,6 +811,8 @@ global $cp_sonder,$xajax;
 				email	=> $daten["email"],
 				homepage => $daten["homepage"],
 				sw	=> $daten["sw"],
+				konzern => $daten["konzern"],
+				konzernname => $daten["konzernname"],
 				branche_	=> $daten["branche_"],
 				ustid	=> $daten["ustid"],
 				taxnumber => $daten["taxnumber"],

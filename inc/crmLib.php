@@ -257,7 +257,7 @@ global $db;
 	$datei["Datei"]["tmp_name"]="./tmp/".$file;
 	$datei["Datei"]["size"]=filesize("./tmp/".$file);
 	$datei["Datei"]["name"]=$file;
-	$dateiID=saveDokument($datei,$rs[0]["vorlage"],$datum,$data["CID"],$data["CRMUSER"]);
+	$dateiID=saveDokument($datei,$rs[0]["vorlage"],$datum,$data["CID"],$data["CRMUSER"],""); //##### letzten Parameter noch ändern
 	$did=documenttotc($id,$dateiID);
 	$c_cause=addslashes($rs[0]["beschreibung"]);
 	$c_cause=nl2br($rs[0]["beschreibung"]);
@@ -291,7 +291,7 @@ global $db;
 			$dat["Datei"]["type"]=$datei["Datei"]["type"][$o];
 			$dat["Datei"]["size"]=$datei["Datei"]["size"][$o];
 			$text=($data["DCaption"])?$data["DCaption"]:$data["cause"];
-			$dateiID=saveDokument($dat,$text,$datum,$data["CID"],$data["CRMUSER"]);
+			$dateiID=saveDokument($dat,$text,$datum,$data["CID"],$data["CRMUSER"],"/".$data["nummer"]);
 			$did=documenttotc($id,$dateiID);
 			$did=1;
 		};
@@ -322,7 +322,7 @@ global $db;
 		$dat["Datei"]["type"]=$datei["Datei"]["type"][0];
 		$dat["Datei"]["size"]=$datei["Datei"]["size"][0];
 		$text=($data["DCaption"])?$data["DCaption"]:$data["cause"];
-		$dateiID=saveDokument($dat,$text,$datum,$data["CID"],$data["CRMUSER"]);
+		$dateiID=saveDokument($dat,$text,$datum,$data["CID"],$data["CRMUSER"],"/".$data["nummer"]);
 		$did=documenttotc($id,$dateiID);
 		$did=1;
 	}
@@ -422,21 +422,21 @@ return $id;
 * out: rs = id des Dokumentes
 * ein Dokument sichern
 *****************************************************/
-function saveDokument($Datei,$Beschreibung,$datum,$CID,$CRMUSER) {
+function saveDokument($Datei,$Beschreibung,$datum,$CID,$CRMUSER,$pfad="") {
 global $db;
 	$Name=$Datei["Datei"]["name"];
 	$Size=$Datei["Datei"]["size"];
 	if ($CID>0) {									// gehört einem Kontakt
-		$dir=$_SESSION["mansel"]."/".$CID;
+		$pfad.="/$CID";
 	} else {  										// gehört einem User
-		$dir=$_SESSION["mansel"]."/".$CRMUSER;
+		$pfad.="/$CRMUSER";
 	};
-	$dest="./dokumente/".$dir."/".$Name;
-	$ok=chkdir($dir);
+	$dest="./dokumente/".$_SESSION["mansel"].$pfad."/".$Name;
+	$ok=chkdir($pfad);
 	if (copy($Datei["Datei"]["tmp_name"],$dest)) {
 		//unlink($Datei["Datei"]['tmp_name']);	Macht doch PHP selber
 		$id=mknewDocument();
-		$sql="update documents set filename='$Name',descript='$Beschreibung',datum='$datum',size=$Size,employee=$CRMUSER,kunde=$CID where id=$id";
+		$sql="update documents set filename='$Name',descript='$Beschreibung',datum='$datum',size=$Size,employee=$CRMUSER,kunde=$CID,pfad=$pfad where id=$id";
 		$rs=$db->query($sql);
 		if(!$rs) {
 			$rs=false;
@@ -447,24 +447,34 @@ global $db;
 	};
 	return $rs;
 }
-
+function saveDocAttribut($name,$pfad,$komment,$id,$kunde) {
+global $db;
+	if ($id>0) $rs=getDokument($id);
+	if ($rs) {
+		$sql="update documents set filename='$name',descript='$komment' where id = $id";
+	} else {
+		$sql="insert into documents (filename,descript,datum,employee,kunde,pfad) values (";
+		$sql.="'$name','$komment',".date("Y-m-d").",".$_SESSION["loginCRM"].",$kunde,'$pfad')";
+	}
+	$rc=$db->query($sql);
+}
 /****************************************************
 * delDokument
 * in: id = int
 * out:
 * ein Dokument löschen
 *****************************************************/
-function delDokument($id) {
+function delDokument($id,$file="") {
 global $db;
-	$data=getDokument($id); // gibt es das dokument
-	if ($data) {
-		$sql="delete from documents where id=$id";   // aus db löschen
-		$rs=$db->query($sql);
-		if($rs) { // auf platte löschen
-			$pre=($data["kunde"]>0)?$data["kunde"]:$data["employee"];
-			// fehlt noch was
+	if ($id>0) {
+		$data=getDokument($id); // gibt es das dokument
+		if ($data) {
+			$file="dokumente/".$_SESSION["mansel"].$data["pfad"]."/".$data["filename"];
+			$sql="delete from documents where id=$id";   // aus db löschen
+			$rs=$db->query($sql);
 		}
 	}
+	if ($file) unlink("$file");
 }
 
 /****************************************************
@@ -529,13 +539,16 @@ global $db;
 			if ($dat) {
 				$daten["Kunde"]=($dat["kunde"]>0)?$dat["kunde"]:$dat["employee"];
 				$daten["Datei"]=$dat["filename"];
+				$daten["Dpath"]=$dat["pfad"];
 				$daten["DCaption"]=$dat["descript"];
 			} else {
+				$daten["Dpath"]="";
 				$daten["Datei"]="";
 				$daten["DCaption"]="";
 				$daten["Kunde"]="";
 			}
 		} else {
+			$daten["Dpath"]="";
 			$daten["Datei"]="";
 			$daten["DCaption"]="";
 			$daten["Kunde"]="";
@@ -675,7 +688,7 @@ global $db;
 			$dat["Datei"]["type"]=$datei["Datei"]["type"][$o];
 			$dat["Datei"]["size"]=$datei["Datei"]["size"][$o];
 			if (!$data["DCaption"]) $data["DCaption"]=$data["Cause"];
-			$dateiID=saveDokument($dat,$data["DCaption"],$nun,0,$data["CRMUSER"]);
+			$dateiID=saveDokument($dat,$data["DCaption"],$nun,0,$data["CRMUSER"],"");
 		}
 		if ($anz>1) $dateiID=1;
 	} else {
@@ -769,7 +782,7 @@ global $db;
 				fwrite($f,$body);
 				fclose($f);
 				$Datei["Datei"]["size"]=filesize($Datei["Datei"]["tmp_name"]);
-				$did[]=saveDokument($Datei,$data["DCaption"],$nun,$kontaktID,$data["CRMUSER"]);
+				$did[]=saveDokument($Datei,$data["DCaption"],$nun,$kontaktID,$data["CRMUSER"],"");
 			}
 		} else {
 			$data["DateiID"]=false;
@@ -1014,9 +1027,10 @@ function getOneMail($usr,$nr) {
 	$body=$mybody.$htmlbody."\n".$x;
 	$c=count($structure->parts);
 	$files=array();
+	if (!$start) $start=0;
 	for ($i=$start; $i<$c; $i++) {
 		$part0=$structure->parts[$i];
-    	if ( ! empty($part0->type) or $part0->type===0 ) {
+	    	if ( ! empty($part0->type) or $part0->type===0 ) {
 			$part=$i+1;
 			$parameters=$part0->parameters;
 			$attach_type=$part0->subtype;
@@ -1067,8 +1081,8 @@ function getOneMail($usr,$nr) {
 	$data["LangTxt"]=$body;
 	$data["Datei"]=$anhang;
 	$data["status"]="2";
-	$data["InitCrm"]=$head[""];
-	$data["CRMUSER"]=$head[""];
+	$data["InitCrm"]=$_SESSION["loginCRM"];	//$head[""];
+	$data["CRMUSER"]=$_SESSION["employee"];	//$head[""];
 	$data["DCaption"]=($files)?$cause:"";
 	$data["Anhang"]=$files;
 	return $data;
@@ -2071,8 +2085,8 @@ global $db;
 function suchOpportunity($data) {
 global $db;
 	if ($data) while (list($key,$val)=each($data)) {
-		if (in_array($key,array("title","notiz","zieldatum")) and $val) { $val=str_replace("*","%",$val); $where.="and $key like '$val%' "; }
-		else if (in_array($key,array("status","chance")) and $val) { $where.="and $key = $val "; };
+		if (in_array($key,array("title","notiz","zieldatum","next")) and $val) { $val=str_replace("*","%",$val); $where.="and $key like '$val%' "; }
+		else if (in_array($key,array("status","chance","salesman")) and $val) { $where.="and $key = $val "; };
 	}
 	if ($data["fid"]  and $data["name"]) { 
 		$where.="and (fid in (select id from customer where lower(name) like '%".strtolower($data["name"])."%') or fid = ".$data["fid"].")";
@@ -2102,8 +2116,10 @@ global $db;
 		}
 	}
 	$datum=date2db($data["zieldatum"]);
-		$tmp="update opportunity set fid=%d,title='%s',zieldatum='%s', betrag=%s, chance=%d, status=%d, notiz='%s', mtime='%s',memployee=%d where id=%d";
-		$sql=sprintf($tmp,$data["fid"],$data["title"],$datum,$data["betrag"],$data["chance"],$data["status"],$data["notiz"],date("Y-m-d H:i:s"),$_SESSION["loginCRM"],$data["id"]);
+		$tmp="update opportunity set fid=%d,title='%s',zieldatum='%s', betrag=%s, chance=%d, status=%d, salesman=%d, ";
+		$tmp.="next='%s', notiz='%s', mtime='%s',memployee=%d where id=%d";
+		$sql=sprintf($tmp,$data["fid"],$data["title"],$datum,$data["betrag"],$data["chance"],$data["status"],$data["salesman"],
+				$data["next"],$data["notiz"],date("Y-m-d H:i:s"),$_SESSION["loginCRM"],$data["id"]);
 		$rc=$db->query($sql);
 		if ($rc) {
 			return $data["id"];

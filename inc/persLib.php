@@ -37,7 +37,7 @@ global $db;
 	} else {
 		$firma="Einzelperson";
 		$tab="";
-		$cnd="";
+		$cnr="";
 		if (!empty($rs[0]["cp_cv_id"])) {  // geh�rt zu einem Kunden oder Lieferanten
 			$sql="select id,name,department_1,customernumber from customer where id=".$rs[0]["cp_cv_id"];
 			$rs1=$db->getAll($sql);
@@ -56,8 +56,9 @@ global $db;
 		$daten=$rs[0];
 		if ($daten["cp_grafik"]) {
 			$image="$pfad./dokumente/".$_SESSION["mansel"]."/$tab$cnr/$id/kopf.".$daten["cp_grafik"];
+			clearstatcache();
 			if (file_exists($image)) {
-				$size=@getimagesize(trim($image));
+				$size=@getimagesize($image);
 				$daten["size"]=$size[3];
 				if ($size[1]>$size[0]) {
 					$faktor=ceil($size[1]/70);
@@ -67,6 +68,8 @@ global $db;
 				$breite=floor($size[0]/$faktor);
 				$hoehe=floor($size[1]/$faktor);
 				$daten["icon"]="width=\"$breite\" height=\"$hoehe\"";
+			} else {
+				$daten["icon"]="width=\"75\" height=\"100\"";
 			}
 		}
 		$daten["Firma"] = $firma;
@@ -204,15 +207,14 @@ global $db;
 			"cp_homepage" =>array(0,0,4,"Homepage",0),	   "cp_fax" => array(0,0,3,"Fax",30),
 			"cp_email" => array(0,0,5,"eMail",0), 		   "cp_privatemail" => array(0,0,5,"Private eMail",0),
 			"cp_notes" => array(0,0,1,"Bemerkungen",0),	   "cp_stichwort1" => array(0,0,1,"Stichworte",50),
-			"cp_salutation" => array(0,0,1,"Briefanrede",125),
-			"cp_privatphone" => array(0,0,3,"Privattelefon 1",30),
-			"cp_birthday" => array(0,0,7,"Geb-Datum",0),"cp_beziehung" => array(0,0,6,"Beziehung",0),
+			"cp_salutation" => array(0,0,1,"Briefanrede",125), "cp_privatphone" => array(0,0,3,"Privattelefon 1",30),
+			"cp_birthday" => array(0,0,7,"Geb-Datum",0),	   "cp_beziehung" => array(0,0,6,"Beziehung",0),
 			"cp_abteilung" => array(0,0,1,"Abteilung",25),	   "cp_position" => array(0,0,1,"Position",25),
 			"cp_cv_id" => array(0,0,6,"FID",0),		   "name" => array(1,0,1,"Firma",75),		
 			"cp_owener" => array(0,0,6,"CRM-User",0),	   "cp_grafik" => array(0,0,9,"Grafik",4),);				
 	if (!empty($datei["Datei"]["name"])) {  		// eine Datei wird mitgeliefert
 			$pictyp=array("gif","jpeg","png","jpg");
-			$ext=substr($datei["Datei"]["name"],strrpos($datei["Datei"]["name"],".")+1);
+			$ext=strtolower(substr($datei["Datei"]["name"],strrpos($datei["Datei"]["name"],".")+1));
 			if (in_array($ext,$pictyp)) {
 				$daten["cp_grafik"]=$ext;
 				$datei["Datei"]['name']="kopf.$ext";
@@ -233,38 +235,41 @@ global $db;
 	for ($i=0; $i<$anzahl; $i++) {
 		if (in_array($keys[$i],$dbf)) {
 			$tmpval=trim($daten[$keys[$i]]);
-			if ($dbfld[$keys[$i]][0]==1) {
+			if ($dbfld[$keys[$i]][0]==1) { // Daten nicht für contacts
 				continue;
 			} else {
-				if (!chkFld($tmpval,$dbfld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) {  $fehler=$dbfld[$keys[$i]][3]; $fehler=$keys[$i]; $i=$anzahl+1;}
+				if (!chkFld($tmpval,$dbfld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) {  
+							$fehler=$dbfld[$keys[$i]][3]; $fehler=$keys[$i]; 
+							$i=$anzahl+1;
+				}
 				if ($keys[$i]=="cp_phone1"||$keys[$i]=="cp_phone2"||$keys[$i]=="cp_fax") $tels[]=$tmpval;
 				$query0.=$keys[$i]."="; 
-				if (in_array($dbfld[$keys[$i]][2],array(0,1,2,3,4,5,7,8,9))) {
+				if (in_array($dbfld[$keys[$i]][2],array(0,1,2,3,4,5,7,8,9))) {  //Stringwert
 						$query0.="'".$tmpval."',";
 				} else {
-						$query0.=$tmpval.",";
+						$query0.=$tmpval.",";		//Zahlwert
 				}
 			}
 		}
 	}
-	if ($fehler==-1) {
-		if (!$daten["PID"] or $daten["PID"]<1) $pid=mknewPerson($daten["employee"]);
-		if (!$pid) return "unbekannt";
-		if ($daten["nummer"]) {
+	if ($fehler==-1) { //Kein Fehler aufgetreten
+		if (!$daten["PID"] or $daten["PID"]<1) $pid=mknewPerson($daten["employee"]);  //Neue Person
+		if (!$pid) return "unbekannt";	//Hat keine PID
+		if ($daten["nummer"]) {  //Gehört zu einem Cust./Vend.
 			$dir=$daten["Quelle"].$daten["nummer"]."/".$pid;
 		} else {
 			$dir=$pid;
 		};
 		$ok=chkdir($dir);
-		if ($bildok) {
-			require_once("documents.php");
+		if ($bildok) {  //Ein Bild wird mitgeliefert
+			require_once("documents.php");  // db-Eintrag und upload
 			$dbfile=new document();
 			$dbfile->setDocData("descript","Foto von ".$daten["cp_givenname"]." ".$daten["cp_name"]);
 			$dbfile->uploadDocument($datei,"/$dir");
 		}	
 		mkTelNummer($pid,"P",$tels);
 		$sql0="update contacts set ".$query0."cp_employee=".$_SESSION["loginCRM"]." where cp_id=$pid";
-		if($db->query($sql0)) {
+		if($db->query($sql0)) {  //Erfolgreich gesichert
 			return $pid;			
 		} else {
 			return "unbekannt";
@@ -291,12 +296,13 @@ global $db;
 * mknewPerson
 * in:
 * out: id = int
-* Kundensatz erzeugen ( insert )
+* Personensatz erzeugen ( insert )
 *****************************************************/
 function mknewPerson($id) {
 global $db;
 	$newID=uniqid (rand());
-	if (!$id) {$uid='null';} else {$uid=$id;};
+	//Wird zur Zeit nicht verwendet
+	//if (!$id) {$uid='null';} else {$uid=$id;};
 	$sql="insert into contacts (cp_name,cp_employee) values ('$newID',$id)";
 	$rc=$db->query($sql);
 	if ($rc) {
@@ -310,20 +316,33 @@ global $db;
 	} else {
 		$id=false;
 	}
-return $id;
+	return $id;
 }
+/****************************************************
+* getCpAnreden
+* in:
+* out: rs = array
+* Gespeicherte Anreden von Personen holen
+*****************************************************/
 function getCpAnreden() {
 global $db;
 	$sql="select distinct (cp_greeting) from contacts";
 	$rs=$db->getAll($sql);
 	return $rs;
 }
+/****************************************************
+* getCpBriefAnreden
+* in:
+* out: rs = array
+* Gespeicherte Briefanreden von Personen holen
+*****************************************************/
 function getCpBriefAnreden() {
 global $db;
 	$sql="select distinct (cp_salutation) from contacts";
 	$rs=$db->getAll($sql);
 	return $rs;
 }
+
 function leertplP (&$t,$fid,$msg,$tab,$suche=false,$Quelle="") {
 global $laender,$cp_sonder;
 		if ($fid && $Quelle) {

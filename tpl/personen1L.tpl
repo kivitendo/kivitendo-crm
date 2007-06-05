@@ -25,8 +25,9 @@
 <p class="listtop">Ergebnis Personensuche</p>
 <table width="100%" border="0"><tr><td valign="top">
 <!-- Beginn Code ------------------------------------------->
-<form name="personen" action="{DEST}2.php" method="post">
+<form name="personen" action="firma2.php" method="post">
 <input type="hidden" name="fid" value="{FID}">
+<input type="hidden" name="Q" value="{Q}">
 <table><tr><td class="mini">
 <!-- BEGIN Liste -->
 	<tr class="mini" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showK({PID},'{TBL}');">

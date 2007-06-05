@@ -8,13 +8,13 @@
 *****************************************************/
 function chkTable($fid){
 global $db;
-	$file="firma2.php";
+	$file="C";
 	$sql="select count(*) from customer where id=$fid";
 	$row=$db->getAll($sql);
 	if ($row[0]["count"]<1) {
 		$sql="select count(*) from vendor where id=$fid";
 		$row=$db->getAll($sql);
-		if ($row[0]["count"]==1) $file="liefer2.php";
+		if ($row[0]["count"]==1) $file="V";
 	}
 	return $file;
 };

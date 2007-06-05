@@ -10,7 +10,7 @@
 	$bgcol[2]="#ddffdd";
 	$t = new Template($base);
 	$Quelle=($_POST["Quelle"])?$_POST["Quelle"]:$_GET["Quelle"];	
-	if (!$Quelle) $Quelle="F";
+	if (!$Quelle) $Quelle="C";
 	if ($_GET["first"]) {
 		$_POST["cp_name"]=$_GET["first"];
 		$_POST["fuzzy"]="%";
@@ -30,11 +30,11 @@
 			$bgcol[1]="#ddddff";
 			$bgcol[2]="#ddffdd";
 			if ($_POST["FID1"]) { 
-				$dest=($Quelle=="C")?"firma":"liefer"; 
-				$snd="<input type='submit' name='insk' value='zuordnen'><br><a href='".$dest."2.php?fid=".$_POST["FID1"]."'>zur&uuml;ck</a>";  //<input type='checkbox' value='".$zeile["cp_id"]."'>alle
-            } else { $snd=""; $dest=""; };
+				$snd="<input type='submit' name='insk' value='zuordnen'><br><a href='firma2.php?Q=$Quelle&fid=".$_POST["FID1"]."'>zur&uuml;ck</a>";  
+				//<input type='checkbox' value='".$zeile["cp_id"]."'>alle
+            		} else { $snd=""; $dest=""; };
 			clearCSVData();
-            insertCSVData(array("ANREDE","TITEL","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","FIRMA","ID"));
+            		insertCSVData(array("ANREDE","TITEL","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","FIRMA","ID"));
 			if ($daten) foreach ($daten as $zeile) {
 				insertCSVData(array($zeile["cp_greeting"],$zeile["cp_title"],$zeile["cp_name"],$zeile["cp_givenname"],
 							$zeile["cp_country"],$zeile["cp_zipcode"],$zeile["cp_city"],$zeile["cp_street"],
@@ -56,7 +56,8 @@
 					TBL => $zeile["tbl"],
 					insk => $insk,
 					DEST => $dest,
-					QUELLE => $Quelle
+					QUELLE => $Quelle,
+					Q => $Quelle
 				));
 				$t->parse("Block","Liste",true);
 				$i++;

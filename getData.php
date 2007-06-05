@@ -47,8 +47,8 @@ if ($_POST["adress"]) {
 <!--
 	function showD (src,id) {
 		Frame=eval("parent.main_window");
-		if      (src=="C") {	uri="firma1.php?id=" + id }
-		else if (src=="V") {	uri="liefer1.php?id=" + id; }
+		if      (src=="C") {	uri="firma1.php?Q=C&id=" + id }
+		else if (src=="V") {	uri="firma1.php?Q=V&id=" + id; }
 		else if (src=="E") {	uri="user1.php?id=" + id; }
 		else if (src=="K") {	uri="kontakt.php?id=" + id; }
 		Frame.location.href=uri;

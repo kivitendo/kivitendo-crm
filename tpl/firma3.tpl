@@ -23,7 +23,7 @@
 	</ul>
 </div>
 
-<span style="position:absolute; left:1em; top:4.1em; width:99%;">
+<span style="position:absolute; left:1em; top:4.3em; width:99%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <div style="position:absolute; left:0px; top:0.0em; width:35em; border:1px solid black">
 	<span class="fett">{Name} &nbsp; {kdnr}</span><br />

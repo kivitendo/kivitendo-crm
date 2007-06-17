@@ -152,7 +152,7 @@
 	</ul>
 </div>
 
-<span style="position:absolute; left:1em; top:4.1em; width:99%; height:90%;">
+<span style="position:absolute; left:1em; top:4.3em; width:99%; height:90%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <span style="float:left; width:40%; height:90%; text-align:center; padding:2px; border: 1px solid black; border-bottom: 0px;">
 	<div style="float:left; width:100%; height:3.5em; text-align:left; border-bottom: 1px solid black;" >

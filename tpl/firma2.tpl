@@ -8,7 +8,7 @@
 	<!--
 		function showItem(id) {
 			pid=document.contact.cp_id.value;
-			F1=open("getCall.php?Q=CC&pid="+pid+"&Bezug="+id,"Caller","width=48em, height=600, left=100, top=50, scrollbars=yes");
+			F1=open("getCall.php?Q=CC&pid="+pid+"&Bezug="+id,"Caller","width=680, height=680, left=100, top=50, scrollbars=yes");
 		}
 		function anschr() {
 			pid=document.contact.cp_id.value;
@@ -74,7 +74,7 @@
 	</ul>
 </div>
 
-<span style="position:absolute; left:1em; top:4.1em; width:99%;">
+<span style="position:absolute; left:1em; top:4.3em; width:99%;">
 <!-- Beginn Code ------------------------------------------->
 <div style="float:left; width:32em; height:32em;  border: 1px solid black;" >
      	<div style="position:absolute; left:0em; width:32em;" >	

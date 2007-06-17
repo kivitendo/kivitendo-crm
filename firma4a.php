@@ -3,7 +3,7 @@
 	require_once("inc/stdLib.php");
 	include("crmLib.php");
 	include("FirmenLib.php");
-	include("documents.php");
+	require_once("documents.php");
 	$pid=($_GET["pid"])?$_GET["pid"]:$_POST["pid"];
 	$fid=($_GET["fid"])?$_GET["fid"]:$_POST["fid"];
 	$did=($_GET["did"])?$_GET["did"]:$_POST["did"];
@@ -69,31 +69,33 @@
 	include("template.inc");
 	include("persLib.php");
 	if (empty($fid)) {
-		$co=getKontaktStamm($pid);
-		$anrede=$co["cp_greeting"]." ".$co["cp_title"];
-		$name2=$co["cp_givenname"];
-		$name1=$co["cp_name"];
-		$name=$name2." ".$name1;
-		$plz=$co["cp_zipcode"];
-		$ort=$co["cp_city"];
-		$strasse=$co["cp_street"];
+		$data=getKontaktStamm($pid);
+		$data["anrede"]=$data["cp_greeting"]." ".$data["cp_title"];
+		$data["name2"]=$data["cp_givenname"];
+		$data["name1"]=$data["cp_name"];
+		$data["name"]=$name2." ".$name1;
+		$data["plz"]=$data["cp_zipcode"];
+		$data["ort"]=$data["cp_city"];
+		$data["strasse"]=$co["cp_street"];
 		$art="Einzelperson";
 	} else {
-		$fa=getFirmenStamm($fid,true,$tab);
+		$data=getFirmenStamm($fid,true,$tab);
 		$anrede="Firma";
-		$name=$fa["name"];
-		$name1=$name;
-		$name2=$fa["department_1"];
-		$kontakt=$fa["contact"];
-		$plz=$fa["zipcode"];
-		$ort=$fa["city"];
-		$strasse=$fa["street"];
+		$data["anrede"]=$data["greeting"];
+		$data["name"]=$data["name"];
+		$data["name1"]=$data["name"];
+		$data["name2"]=$data["department_1"];
+		$data["kontakt"]=$data["contact"];
+		$data["plz"]=$data["zipcode"];
+		$data["ort"]=$data["city"];
+		$data["strasse"]=$data["street"];
 		if (!empty($pid)){
 			$co=getKontaktStamm($pid);
-			$anredepers=$co["cp_greeting"];
-			$anredepers.=($co["cp_title"])?" ".$co["cp_title"]:"";
-			$namepers=$co["cp_givenname"]." ".$co["cp_name"];
-			$plzpers=$co["cp_zipcode"]; $ortpers=$co["cp_city"]; $strassepers=$co["cp_street"];
+			$data["anredepers"]=$co["cp_greeting"];
+			$data["anredepers"].=($co["cp_title"])?" ".$co["cp_title"]:"";
+			$data["namepers"]=$co["cp_givenname"]." ".$co["cp_name"];
+			$data["plzpers"]=$co["cp_zipcode"]; $ortpers=$co["cp_city"]; $strassepers=$co["cp_street"];
+			$data=array_merge($data,$co);
 			$art="Firma/Kontakt";
 		} else {
 			$art="Firmendokumente";
@@ -115,16 +117,16 @@
 	$t->set_block("doc","Liste","Block");
 	$t->set_block("doc","RegEx","Block2");
 	$i=0;
-	$datum=date("d.m.Y");
-	$zeit=date("H:i");
+	$data["datum"]=date("d.m.Y");
+	$data["zeit"]=date("H:i");
 	if ($document["felder"]) {
 	 foreach($document["felder"] as $zeile) {
 		$value=strtolower($zeile["platzhalter"]);
 		if ($zeile["laenge"]>60) {
 			$rows=floor($zeile["laenge"]/60)+1;
-			$input="<textarea class='klein' cols=60 rows=$rows name='".$zeile["platzhalter"]."'>".${$value}."</textarea>";
+			$input="<textarea class='klein' cols=60 rows=$rows name='".$zeile["platzhalter"]."'>".$data[$value]."</textarea>";
 		} else {
-			$input="<input type='text' name='".$zeile["platzhalter"]."' size='".$zeile["laenge"]."' value='".${$value}."'>";
+			$input="<input type='text' name='".$zeile["platzhalter"]."' size='".$zeile["laenge"]."' value='".$data[$value]."'>";
 		}
 		$t->set_var(array(
 			EINGABE => $input,

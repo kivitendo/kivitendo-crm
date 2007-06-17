@@ -335,7 +335,6 @@ global $db;
 			contact => array(0,0,1,"Kontakt",75),		v_customer_id => array(0,0,1,"Kundennummer",50),
 			//vendornumber => array(0,0,0,"Lieferantennummer",20),
 			//customernumber => array(0,0,0,"Kundennummer",20),	
-                        v_customer_id => array(0,0,0,"Kundennummer",20),	
 			sw => array(0,0,1,"Stichwort",50),		notes => array(0,0,0,"Bemerkungen",0),
 			ustid => array(0,0,0,"UStId",0),		taxnumber => array(0,0,0,"Steuernummer",0),
 			bank => array(0,0,1,"Bankname",50),		bank_code => array(0,0,6,"Bankleitzahl",15),
@@ -406,7 +405,7 @@ global $db;
 			$query0=substr($query0,0,-1);
 			$DIR="V".$daten["vendornumber"];
 		} else {
-			$tmpnr=newnr($tab[$typ]);
+			$tmpnr=newnr($tab[$typ],$daten["business_id"]);
 			if ($typ=="C") {
 				$DIR="C".$tmpnr;
 				$query0=$query0."customernumber='$tmpnr' ";
@@ -473,15 +472,23 @@ global $db;
 * out: id = string
 * eine Kundennummer erzeugen 
 *****************************************************/
-function newnr($typ) {
+function newnr($typ,$bid=0) {
 global $db;
 	$rc=$db->query("BEGIN");
-	$rs=$db->getAll("select ".$typ."number from defaults");
+	if ($bid>0) {
+		$rs=$db->getAll("select customernumberinit  as ".$typ."number from business where id = $bid");
+	} else {
+		$rs=$db->getAll("select ".$typ."number from defaults");
+	};
 	preg_match("/([^0-9]*)([0-9]+)/",$rs[0][$typ."number"],$t);
 	if (count($t)==3) { $y=$t[2]+1; $pre=$t[1]; }
 	else { $y=$t[1]+1; $pre=""; };
 	$newnr=$pre.$y;
-	$rc=$db->query("update defaults set ".$typ."number='$newnr'");
+	if ($bid>0) {
+		$rc=$db->query("update business set customernumberinit='$newnr' where id = $bid");
+	} else {
+		$rc=$db->query("update defaults set ".$typ."number='$newnr'");
+	}
 	if ($rc) { $db->query("COMMIT"); }
 	else { $db->query("ROLLBACK"); $newnr=""; };
 	return $newnr;

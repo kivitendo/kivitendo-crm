@@ -30,7 +30,7 @@
 
 	$data["CID"]=$masch["customer_id"];
 	$data["CRMUSER"]=$_SESSION["loginCRM"];
-	insFormDoc($data,$pre.$rep["template"]);
+	insFormDoc($data,$pre.$rep["template"]); //Wird nur hier benutzt, also unbedingt ändern
 	//$doc->clean();
 	//$knopf="Dokument erstellt: <a href='./".$_SESSION["mansel"]."/".$data["CID"]."/".$pre.$rep["template"]."'>&lt;shift&gt;+&lt;klick&gt;</a>";
 	$knopf="Dokument erstellt: <a href='./tmp/".$pre.$rep["template"]."'>&lt;shift&gt;+&lt;klick&gt;</a>";

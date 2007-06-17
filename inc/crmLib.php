@@ -1,6 +1,8 @@
 <?
 // $Id$
 
+require_once("documents.php");
+
 /****************************************************
 * mkSuchwort
 * in: suchwort = String
@@ -241,7 +243,7 @@ global $db;
 }
 
 /****************************************************
-* insFormDoc
+* insFormDoc  !!wird nur in prtWVertragOOo.php benutzt. Ändern!!
 * in: data = array(Formularfelder)
 * out: id = des Calls
 * ein neues FormDokument speichern
@@ -282,6 +284,12 @@ global $db;
 	$id=mknewTelCall();
 	$dateiID=0;
 	$did="null";
+	if ($data["fid"]!=$data["CID"]) {
+		$pfad="/".$data["Q"][0].$data["nummer"]."/".$data["CID"];
+	} else {
+		$pfad="/".$data["Q"][0].$data["nummer"];
+	}
+	echo "($pfad)";
 	$datum=$data['Datum']." ".$data['Zeit'].":00";  // Postgres timestamp
 	$anz=($datei["Datei"]["name"][0]<>"")?count($datei["Datei"]["name"]):0;
 	for ($o=0; $o<$anz; $o++) {
@@ -291,7 +299,11 @@ global $db;
 			$dat["Datei"]["type"]=$datei["Datei"]["type"][$o];
 			$dat["Datei"]["size"]=$datei["Datei"]["size"][$o];
 			$text=($data["DCaption"])?$data["DCaption"]:$data["cause"];
-			$dateiID=saveDokument($dat,$text,$datum,$data["CID"],$data["CRMUSER"],"/".$data["nummer"]);
+			$dbfile=new document();
+			$dbfile->setDocData("descript",$text);
+			$rc=$dbfile->uploadDocument($dat,$pfad);
+			$dateiID=$dbfile->id;
+			//$dateiID=saveDokument($dat,$text,$datum,$data["CID"],$data["CRMUSER"],$pfad);
 			$did=documenttotc($id,$dateiID);
 			$did=1;
 		};
@@ -322,7 +334,11 @@ global $db;
 		$dat["Datei"]["type"]=$datei["Datei"]["type"][0];
 		$dat["Datei"]["size"]=$datei["Datei"]["size"][0];
 		$text=($data["DCaption"])?$data["DCaption"]:$data["cause"];
-		$dateiID=saveDokument($dat,$text,$datum,$data["CID"],$data["CRMUSER"],"/".$data["nummer"]);
+		$dbfile=new document();
+		$dbfile->setDocData("descript",$text);
+		$rc=$dbfile->uploadDocument($dat,$pfad);
+		$dateiID=$dbfile->id;
+		//$dateiID=saveDokument($dat,$text,$datum,$data["CID"],$data["CRMUSER"],"/".$data["nummer"]);
 		$did=documenttotc($id,$dateiID);
 		$did=1;
 	}
@@ -427,9 +443,9 @@ global $db;
 	$Name=$Datei["Datei"]["name"];
 	$Size=$Datei["Datei"]["size"];
 	if ($CID>0) {									// gehört einem Kontakt
-		$pfad.="/$CID";
+		$dir=$_SESSION["mansel"]."/".$CID;
 	} else {  										// gehört einem User
-		$pfad.="/$CRMUSER";
+		$dir=$_SESSION["mansel"]."/".$CRMUSER;
 	};
 	$dest="./dokumente/".$_SESSION["mansel"].$pfad."/".$Name;
 	$ok=chkdir($pfad);
@@ -688,7 +704,12 @@ global $db;
 			$dat["Datei"]["type"]=$datei["Datei"]["type"][$o];
 			$dat["Datei"]["size"]=$datei["Datei"]["size"][$o];
 			if (!$data["DCaption"]) $data["DCaption"]=$data["Cause"];
-			$dateiID=saveDokument($dat,$data["DCaption"],$nun,0,$data["CRMUSER"],"");
+	                $dbfile=new document();
+	                $dbfile->setDocData("descript",$data["DCaption"]);
+			$pfad=$data["CRMUSER"];
+        	        $rc=$dbfile->uploadDocument($dat,$pfad);
+                	$dateiID=$dbfile->id;       
+			//$dateiID=saveDokument($dat,$data["DCaption"],$nun,0,$data["CRMUSER"],"");
 		}
 		if ($anz>1) $dateiID=1;
 	} else {
@@ -782,7 +803,12 @@ global $db;
 				fwrite($f,$body);
 				fclose($f);
 				$Datei["Datei"]["size"]=filesize($Datei["Datei"]["tmp_name"]);
-				$did[]=saveDokument($Datei,$data["DCaption"],$nun,$kontaktID,$data["CRMUSER"],"");
+				$dbfile=new document();
+		                $dbfile->setDocData("descript",$data["DCaption"]);
+				$pfad=$data["CRMUSER"];
+        		        $rc=$dbfile->uploadDocument($dat,$pfad);
+                		$did[]=$dbfile->id;     
+				//$did[]=saveDokument($Datei,$data["DCaption"],$nun,$kontaktID,$data["CRMUSER"],"");
 			}
 		} else {
 			$data["DateiID"]=false;

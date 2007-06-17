@@ -12,7 +12,7 @@ Achten Sie darauf, dass Sie über TCP Zugriff auf die PostgreSQL
 haben (pg_hba.conf, postgresql.conf), was aber erledigt ist, wenn die ERP läuft.
 
 Vorrausetzungen:
-	Lx-Office ERP 2.1.x
+	Lx-Office ERP 2.4.x
 	PHP >= 4.2x
 	PEAR::DB
 	PEAR::Contact_Vcard_Build
@@ -79,7 +79,7 @@ z.B. Debian
 ERP-Menu erweitern:
 	cd lx-office-erp
 	mv menu.ini menu.ini.crm
-	cat crm/update/menu130.ini menu.ini.crm > menu.ini
+	cat crm/update/menu140.ini menu.ini.crm > menu.ini
 
 Menuicon kopieren
 	cd lx-office-erp

@@ -3,7 +3,7 @@
 	include("FirmenLib.php");
 	include("persLib.php");
 	include("crmLib.php");
-	include("documents.php");
+	require_once("documents.php");
 	function getShipto($id) {
 		$data=getShipStamm($id);
 		$objResponse = new xajaxResponse();
@@ -70,7 +70,7 @@
 		else if (preg_match("/ISO-8859-1/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-1"; }
 		else { $charset="ISO-8859-1"; };
 		if ($data["cp_grafik"]) {
-			$root="dokumente/".$_SESSION["mansel"]."/".$data["tabelle"].$data["number"]."/".$data["cp_id"];
+			$root="dokumente/".$_SESSION["mansel"]."/".$data["tabelle"].$data["nummer"]."/".$data["cp_id"];
 			$img="<img src='$root/kopf.".$data["cp_grafik"]."' ".$data["icon"]." border='0'>";
 			$data["cp_grafik"]="<a href='$root/kopf.".$data["cp_grafik"]."' target='_blank'>$img</a>";
 		};

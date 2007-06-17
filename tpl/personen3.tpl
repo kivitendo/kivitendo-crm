@@ -144,32 +144,40 @@
 </span>
 <span id="tab3" style="visibility:hidden; position:absolute; text-align:left;width:90%; left:0.8em; top:4.4em; border:1px solid black;">
 <!--span style="float:left; text-align:left; border: 0px solid black;"-->
-	<div class="zeile2">
-		<span class="label klein">Stichworte</span>
-		<span class="feld"><input type="text" name="cp_stichwort1" size="25" maxlength="50" value="{cp_stichwort1}" tabindex="22"></span>
-	</div>
-	<div class="zeile2">
-		<span class="label klein">Geb.-Datum</span>
-		<span class="feld"><input type="text" name="cp_birthday" size="10" maxlength="10" value="{cp_birthday}" tabindex="17"><span class="klein"> TT.MM.JJJJ</span></span>
-		<span class="label klein">Beziehung</span>
-		<span class="feld"><input type="text" name="cp_beziehung" size="10" maxlength="10" value="{cp_beziehung}" tabindex="24"></span>
-	</div>
-	<div class="zeile2">
-		<span class="label klein">Bild</span>
-		<span class="feld"><input type="file" name="Datei" size="10" maxlength="75" tabindex="23"></span>
-		<span class="label klein"> </span>
-		<span class="feld"></span>
-	</div>
-	<div class="zeile2" style="align:left;">
-		<span class="klein">Bemerkungen</span><br>
-		<span class="feldxx" style="border:0px solid black;"><textarea class="klein" name="cp_notes" cols="55" rows="4" tabindex="25">{cp_notes}</textarea></span>
-		<span class="label">{IMG}{IMG_}</span>
-	</div>
-	<div class="zeile2">Sonderflags:
-<!-- BEGIN sonder -->
-	<div class="zeile2"><input type="checkbox" name="cp_sonder[]" value="{sonder_id}" {sonder_sel}>{sonder_name}</div>
-<!-- END sonder -->					
-	</div>
+	<span  style="float:left;">
+		<div class="zeile2">
+			<span class="label klein">Stichworte</span>
+			<span class="feld"><input type="text" name="cp_stichwort1" size="25" maxlength="50" value="{cp_stichwort1}" tabindex="22"></span>
+		</div>
+		<div class="zeile2">
+			<span class="label klein">Geb.-Datum</span>
+			<span class="feld"><input type="text" name="cp_birthday" size="10" maxlength="10" value="{cp_birthday}" tabindex="17"><span class="klein"> TT.MM.JJJJ</span></span>
+		</div>
+		<div class="zeile2">
+			<span class="label klein">Bild</span>
+			<span class="feld"><input type="file" name="Datei" size="10" maxlength="75" tabindex="23"></span>
+		</div>
+		<div class="zeile2">
+			<span class="label klein">Visitenkarte</span>
+			<span class="feld"><input type="file" name="Datei" size="10" maxlength="75" tabindex="23"></span>
+		</div>
+		<div class="zeile2" style="align:left;">
+			<span class="klein">Bemerkungen</span><br>
+			<span class="feldxx" style="border:0px solid black;"><textarea class="klein" name="cp_notes" cols="55" rows="4" tabindex="25">{cp_notes}</textarea></span>
+		</div>
+		<div class="zeile2">
+			<span class="label klein">Beziehung</span>
+			<span class="feld"><input type="text" name="cp_beziehung" size="8" maxlength="10" value="{cp_beziehung}" tabindex="24"></span>
+		</div>
+	</span><span style="float:left;">
+		<!--div class="zeile2"-->Sonderflags:
+	<!-- BEGIN sonder -->
+			<div class="zeile2"><input type="checkbox" name="cp_sonder[]" value="{sonder_id}" {sonder_sel}>{sonder_name}</div>
+	<!-- END sonder -->					
+		<!--/div-->
+			<span class="label">{IMG}{IMG_}<br>
+			{visitenkarte}</span>
+	</span>
 </span>
 <span style="position:absolute; left:1.2em; top:20em; width:52em; height:2em; text-align:left; border: 0px solid red;">
 	<br><br>

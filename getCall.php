@@ -125,7 +125,7 @@
         	}
 	} else {
 		if ($co["cp_cv_id"]) {
-			$first[]=array("cp_id"=>$fid,"cp_name"=>"Firma","cp_givenname"=>"allgemein");
+			$first[]=array("cp_id"=>$co["cp_cv_id"],"cp_name"=>"Firma","cp_givenname"=>"allgemein");
 			$contact=getAllKontakt($co["cp_cv_id"]);
 			if ($contact) {
 				$contact=array_merge($first,$contact);

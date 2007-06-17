@@ -3,7 +3,7 @@ session_start();
 echo "<html><head>\n";
 if ($_POST) {
 	include("inc/stdLib.php");
-	include("documents.php");
+	require_once("documents.php");
 	$dbfile=new document();
 	$dbfile->setDocData("descript",$_POST["descript"]);
 	$rc=$dbfile->uploadDocument($_FILES,$_POST["pfad"]);

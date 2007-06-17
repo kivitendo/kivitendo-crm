@@ -75,7 +75,7 @@ global $db;
 		$daten["Firma"] = $firma;
 		$daten["Department_1"]=$rs1[0]["department_1"];
 		$daten["tabelle"] = $tab;
-		$daten["number"]=$cnr;
+		$daten["nummer"]=$cnr;
 	}
 	return $daten;
 };

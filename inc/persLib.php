@@ -212,12 +212,12 @@ global $db;
 			"cp_abteilung" => array(0,0,1,"Abteilung",25),	   "cp_position" => array(0,0,1,"Position",25),
 			"cp_cv_id" => array(0,0,6,"FID",0),		   "name" => array(1,0,1,"Firma",75),		
 			"cp_owener" => array(0,0,6,"CRM-User",0),	   "cp_grafik" => array(0,0,9,"Grafik",4),);				
-	if (!empty($datei["Datei"]["name"])) {  		// eine Datei wird mitgeliefert
+	if (!empty($datei["Datei"]["name"]["bild"])) {  		// eine Datei wird mitgeliefert
 			$pictyp=array("gif","jpeg","png","jpg");
-			$ext=strtolower(substr($datei["Datei"]["name"],strrpos($datei["Datei"]["name"],".")+1));
+			$ext=strtolower(substr($datei["Datei"]["name"]["bild"],strrpos($datei["Datei"]["name"]["bild"],".")+1));
 			if (in_array($ext,$pictyp)) {
 				$daten["cp_grafik"]=$ext;
-				$datei["Datei"]['name']="kopf.$ext";
+				$datei["Datei"]['name']["bild"]="kopf.$ext";
 				$bildok=true;
 			}
 	} else {
@@ -239,7 +239,7 @@ global $db;
 				continue;
 			} else {
 				if (!chkFld($tmpval,$dbfld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) {  
-							$fehler=$dbfld[$keys[$i]][3]; $fehler=$keys[$i]; 
+							$fehler=$dbfld[$keys[$i]][3]; $fehler.=$keys[$i]; 
 							$i=$anzahl+1;
 				}
 				if ($keys[$i]=="cp_phone1"||$keys[$i]=="cp_phone2"||$keys[$i]=="cp_fax") $tels[]=$tmpval;
@@ -265,8 +265,24 @@ global $db;
 			require_once("documents.php");  // db-Eintrag und upload
 			$dbfile=new document();
 			$dbfile->setDocData("descript","Foto von ".$daten["cp_givenname"]." ".$daten["cp_name"]);
-			$dbfile->uploadDocument($datei,"/$dir");
+			$bild["Datei"]["name"]=$datei["Datei"]["name"]["bild"];
+			$bild["Datei"]["tmp_name"]=$datei["Datei"]["tmp_name"]["bild"];
+			$bild["Datei"]["size"]=$datei["Datei"]["size"]["bild"];
+			$bild["Datei"]["type"]=$datei["Datei"]["type"]["bild"];
+			$bild["Datei"]["error"]=$datei["Datei"]["error"]["bild"];
+			$dbfile->uploadDocument($bild,"/$dir");
 		}	
+		if ($datei["Datei"]["name"]["visit"]) {
+			$bild["Datei"]["name"]="vcard$pid.".
+				strtolower(substr($datei["Datei"]["name"]["visit"],strrpos($datei["Datei"]["name"]["visit"],".")+1));
+			$bild["Datei"]["tmp_name"]=$datei["Datei"]["tmp_name"]["visit"];
+			$bild["Datei"]["size"]=$datei["Datei"]["size"]["visit"];
+			$bild["Datei"]["type"]=$datei["Datei"]["type"]["visit"];
+			$bild["Datei"]["error"]=$datei["Datei"]["error"]["visit"];
+			$dbfile=new document();
+			$dbfile->setDocData("descript","Visitenkarte von ".$daten["cp_givenname"]." ".$daten["cp_name"]);
+			$dbfile->uploadDocument($bild,"/$dir");
+		}
 		mkTelNummer($pid,"P",$tels);
 		$sql0="update contacts set ".$query0."cp_employee=".$_SESSION["loginCRM"]." where cp_id=$pid";
 		if($db->query($sql0)) {  //Erfolgreich gesichert
@@ -462,6 +478,16 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
 				$root="dokumente/".$_SESSION["mansel"]."/".$daten["cp_id"];
 			};
 			$Image="<img src='$root/kopf.".$daten["cp_grafik"]."' ".$daten["icon"].">";
+			$tmp=glob("$root/vcard".$daten["cp_id"].".*");
+			if ($tmp)  foreach ($tmp as $vcard) {
+				//$vcard=$tmp[0];
+				$ext=explode(".",$vcard);
+				$ext=strtolower($ext[count($ext)-1]);
+				if (in_array($ext,array("jpg","jpeg","gif","png","pdf","ps"))) {
+					$VCARD="<img src='$root/vcard".$daten["cp_id"].".$ext' width='110' height='80'>";
+					break;
+				}
+			}
 		}
 		$t->set_file(array("pers1" => "personen".$tab.".tpl"));
 		$t->set_var(array(
@@ -509,6 +535,7 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
 			Quelle  => $daten["Quelle"],
 			IMG	=> $Image,
 			IMG_	=> $daten["cp_grafik"],
+			visitenkarte	=> $VCARD,
 			init    => ($daten["cp_employee"])?$daten["cp_employee"]:"ERP",
 			employee => $_SESSION["loginCRM"]
 			));

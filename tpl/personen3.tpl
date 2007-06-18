@@ -33,7 +33,7 @@
 <p class="listtop">Personen eingeben/editieren</p>
 
 <!-- Beginn Code ------------------------------------------->
-<div style="position:absolute; top:2.95em; left:1em;  width:45em;">
+<div style="position:absolute; top:2.80em; left:1em;  width:45em;">
 	<ul id="maintab" class="shadetabs">
 	<li id="subtab1" ><a href="#" onClick="submenu('tab1')">Person</a></li>
 	<li id="subtab2" ><a href="#" onClick="submenu('tab2')">Firma</a></li>
@@ -155,11 +155,11 @@
 		</div>
 		<div class="zeile2">
 			<span class="label klein">Bild</span>
-			<span class="feld"><input type="file" name="Datei" size="10" maxlength="75" tabindex="23"></span>
+			<span class="feld"><input type="file" name="Datei[bild]" size="10" maxlength="75" tabindex="23"></span>
 		</div>
 		<div class="zeile2">
 			<span class="label klein">Visitenkarte</span>
-			<span class="feld"><input type="file" name="Datei" size="10" maxlength="75" tabindex="23"></span>
+			<span class="feld"><input type="file" name="Datei[visit]" size="10" maxlength="75" tabindex="23"></span>
 		</div>
 		<div class="zeile2" style="align:left;">
 			<span class="klein">Bemerkungen</span><br>

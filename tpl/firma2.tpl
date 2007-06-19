@@ -109,6 +109,7 @@
 			<span id="cp_birthday" style="padding-right:1px;"></span></br />
 			<span id="cp_position" style="padding-right:1px;"></span><br />
 			<span id="cp_abteilung" style="padding-right:1px;"></span><br />
+			<span id="cp_vcard" style="padding-right:1px;"></span><br />
 		</div>
     	<!--/div>
 	<div style="position:absolute;top:21em; left:0em; width:38em;  text-align:left; border-bottom: 1px solid black;"-->

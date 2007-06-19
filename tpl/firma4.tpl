@@ -80,7 +80,7 @@
 		name=	document.getElementById("docname").value;
 		pfad=	document.getElementById("docpfad").value;
 		if (!id) id=0;
-		xajax_delFile(id,name,pfad);
+		xajax_delFile(id,pfad,name);
 		dateibaum('left',pfadleft)
 		dateibaum('right',pfadright);
 		deletefile();

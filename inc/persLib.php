@@ -55,7 +55,7 @@ global $db;
 		}
 		$daten=$rs[0];
 		if ($daten["cp_grafik"]) {
-			$image="$pfad./dokumente/".$_SESSION["mansel"]."/$tab$cnr/$id/kopf.".$daten["cp_grafik"];
+			$image="$pfad./dokumente/".$_SESSION["mansel"]."/$tab$cnr/$id/kopf$id.".$daten["cp_grafik"];
 			clearstatcache();
 			if (file_exists($image)) {
 				$size=@getimagesize($image);
@@ -194,6 +194,7 @@ global $db;
 function savePersonStamm($daten,$datei) {
 global $db;
 	$tmp=0;
+	$pid=$daten["PID"];
 	if ($daten["cp_sonder"]) foreach ($daten["cp_sonder"] as $data) {
 		$tmp+=$data;
 	}
@@ -217,7 +218,7 @@ global $db;
 			$ext=strtolower(substr($datei["Datei"]["name"]["bild"],strrpos($datei["Datei"]["name"]["bild"],".")+1));
 			if (in_array($ext,$pictyp)) {
 				$daten["cp_grafik"]=$ext;
-				$datei["Datei"]['name']["bild"]="kopf.$ext";
+				$datei["Datei"]['name']["bild"]="kopf$pid.$ext";
 				$bildok=true;
 			}
 	} else {
@@ -229,7 +230,6 @@ global $db;
 	$dbf=array_keys($dbfld);
 	$fid=$daten["fid"];
 	$anzahl=count($keys);
-	$pid=$daten["PID"];
 	$fehler=-1;
 	$tels=array();
 	for ($i=0; $i<$anzahl; $i++) {
@@ -477,7 +477,7 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
 			} else {
 				$root="dokumente/".$_SESSION["mansel"]."/".$daten["cp_id"];
 			};
-			$Image="<img src='$root/kopf.".$daten["cp_grafik"]."' ".$daten["icon"].">";
+			$Image="<img src='$root/kopf".$daten["cp_id"].".".$daten["cp_grafik"]."' ".$daten["icon"].">";
 			$tmp=glob("$root/vcard".$daten["cp_id"].".*");
 			if ($tmp)  foreach ($tmp as $vcard) {
 				//$vcard=$tmp[0];

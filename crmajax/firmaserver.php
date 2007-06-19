@@ -69,11 +69,22 @@
 		else if (preg_match("/ISO-8859-15/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-15"; }
 		else if (preg_match("/ISO-8859-1/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-1"; }
 		else { $charset="ISO-8859-1"; };
+		$root="dokumente/".$_SESSION["mansel"]."/".$data["tabelle"].$data["nummer"]."/".$data["cp_id"];
 		if ($data["cp_grafik"]) {
-			$root="dokumente/".$_SESSION["mansel"]."/".$data["tabelle"].$data["nummer"]."/".$data["cp_id"];
-			$img="<img src='$root/kopf.".$data["cp_grafik"]."' ".$data["icon"]." border='0'>";
-			$data["cp_grafik"]="<a href='$root/kopf.".$data["cp_grafik"]."' target='_blank'>$img</a>";
+			$img="<img src='$root/kopf".$data["cp_id"].".".$data["cp_grafik"]."' ".$data["icon"]." border='0'>";
+			$data["cp_grafik"]="<a href='$root/kopf".$data["cp_id"].".".$data["cp_grafik"]."' target='_blank'>$img</a>";
 		};
+		$tmp=glob("../$root/vcard".$data["cp_id"].".*");
+		$data["cp_vcard"]="";
+		if ($tmp)  foreach ($tmp as $vcard) {
+			$ext=explode(".",$vcard);
+			$ext=strtolower($ext[count($ext)-1]);
+			if (in_array($ext,array("jpg","jpeg","gif","png","pdf","ps"))) {
+				//$data["cp_vcard"]="<a href='$root/vcard$id.$ext' target='_blank'>Visitenkarte</a>";
+				$data["cp_vcard"]="<a href='$vcard' target='_blank'>Visitenkarte</a>";
+				break;
+			}
+		}
 		$data["cp_email"]="<a href='mail.php?TO=".$data["cp_email"]."&KontaktTO=P".$data["cp_id"]."'>".$data["cp_email"]."</a>";
 		$data["cp_homepage"]="<a href='".$data["cp_homepage"]."' target='_blank'>".$data["cp_homepage"]."</a>";
 		if (strpos($data["cp_birthday"],"-")) {
@@ -90,7 +101,7 @@
 		if ($data["cp_privatphone"]) $data["cp_privatphone"]="Privat: ".$data["cp_privatphone"];
 		if ($data["cp_mobile2"]) $data["cp_mobile2"]="(".$data["cp_mobile2"].")";
 		if ($data["cp_privatemail"]) $data["cp_privatemail"]="Privat: <a href='mail.php?TO=".$data["cp_privatemail"]."&KontaktTO=P".$data["cp_id"]."'>".$data["cp_privatemail"]."</a>";;
-		$nocodec = array("cp_email","cp_homepage","cp_zipcode","cp_birthday","cp_grafik","cp_privatemail");
+		$nocodec = array("cp_email","cp_homepage","cp_zipcode","cp_birthday","cp_grafik","cp_privatemail","cp_vcard");
 		$objResponse = new xajaxResponse();
 		foreach ($data as $key=>$val) {
 			if (in_array($key,$nocodec)) {

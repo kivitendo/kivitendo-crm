@@ -60,20 +60,43 @@
 			xajax_showCalls(y,0);
 			setTimeout('showCall(0)',{interv});
 		}
+		function KdHelp() {
+			id=document.kdhelp.kdhelp.options[document.kdhelp.kdhelp.selectedIndex].value;
+			f1=open("wissen.php?kdhelp=1&m="+id,"Wissen","width=750, height=600, left=50, top=50, scrollbars=yes");
+			document.kdhelp.kdhelp.selectedIndex=0;
+		}
+	var f1 = null;
+	function toolwin(tool) {
+		leftpos=Math.floor(screen.width/2);
+		f1=open(tool,"Adresse","width=350, height=200, left="+leftpos+", top=50, status=no,toolbar=no,menubar=no,location=no,titlebar=no,scrollbars=no,fullscreen=no");
+	}
 	//-->
 	</script>
 <body onLoad="{INIT}">
-<p class="listtop">Detailansicht {FAART}</p>
-<div style="position:absolute; top:2.7em; left:1.2em;  width:42em;">
+<p class="listtop">Detailansicht {FAART} <span title="Wichtige Mitteilung">{Cmsg}</span></p>
+<form name="kdhelp">
+<div style="position:absolute; top:1.5em; left:1.1em;  width:60em;">
+    <div style="float:left; padding-top:1.2em; ";>
 	<ul id="maintab" class="shadetabs">
 	<li><a href="{Link1}">Kundendaten</a><li>
 	<li class="selected"><a href="{Link2}" id="aktuell">Ansprechpartner</a></li>
 	<li><a href="{Link3}">Ums&auml;tze</a></li>
 	<li><a href="javascript:doclink();">Dokumente</a></li>
-	<span title="Wichtige Mitteilung">{Cmsg}</span>
+	<li><select style="visibility:{chelp}" name="kdhelp" onChange="KdHelp()">
+<!-- BEGIN kdhelp -->
+		<option value="{cid}">{cname}</option>
+<!-- END kdhelp -->
+	</select>
 	</ul>
+    </div>
+    <div style="float:left; padding-left:1em; ">
+	<img src="tools/rechner.png"  onClick="toolwin('tools/Rechner.html')" title="einfacher Tischrechner"> &nbsp;
+	<img src="tools/notiz.png"  onClick="toolwin('postit.php?popup=1')" title="Postit Notizen"> &nbsp;
+	<img src="tools/kalender.png"  onClick="toolwin('tools/kalender.php')" title="Kalender"> &nbsp;
+	<a href="javascript:void(s=prompt('Geben%20Sie%20einen%20Begriff%20zum%20&Uuml;bersetzen%20ein.',''));if(s)leow=open('http://dict.leo.org/?lp=ende&search='+escape(s),'LEODict','width=750,height=550,scrollbars=yes,resizeable=yes');if(leow)leow.focus();"><img src="tools/leo.png"  title="LEO Englisch/Deutsch" border="0"></a> &nbsp;
+    </div>
 </div>
-
+</form>
 <span style="position:absolute; left:1em; top:4.3em; width:99%;">
 <!-- Beginn Code ------------------------------------------->
 <div style="float:left; width:32em; height:32em;  border: 1px solid black;" >

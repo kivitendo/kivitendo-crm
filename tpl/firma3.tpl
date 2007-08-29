@@ -29,7 +29,7 @@
 	<span class="fett">{Name} &nbsp; {kdnr}</span><br />
 	{Plz} {Ort}
 </div>
-<span style="position:absolute; left:38em; top:0.7em;">[<a href="opportunity.php?fid={FID}">Auftragschancen</a>]</span>
+<span style="position:absolute; left:38em; top:0.7em;">[<a href="opportunity.php?Q={Q}&fid={FID}">Auftragschancen</a>]</span>
 <div style="position:absolute; left:1em; top:5em; width:99%;text-align:center;" class="normal">
 	<div style="float:left; width:23em; text-align:left; " >
 		<table style="width:100%;">

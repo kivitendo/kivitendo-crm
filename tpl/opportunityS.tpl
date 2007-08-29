@@ -24,6 +24,7 @@
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <form name="formular" action="opportunity.php" method="post">
 <input type="hidden" name="id" value="{id}">
+<input type="hidden" name="Quelle" value="{Q}">
 <input type="hidden" name="fid" value="{fid}">
 <input type="hidden" name="firma" value="{name}">
 <div style="position:absolute; left:1px; width:65em; top:3em; border: 0px solid black; text-align:center;" >
@@ -119,10 +120,10 @@
 	</div>
 
 </div>
-<span style="display:{block};">
-	<a href="firma1.php?id={fid}"><img src="image/addressbook.png" border="0" alt="Kundenstammdaten" title="Kundenstammdaten"></a>
-	<a href="opportunity.php?fid={fid}"><img src="image/listen.png" border="0" alt="Chancen eines Kunden" title="Chancen eines Kunden"></a>
-	<a href="opportunity.php"><img src="image/new.png" border="0" alt="Neu/Suche" title="Neu/Suche"></a>
+<span style="display:{stamm};">
+	<a href="firma1.php?Q={Q}&id={fid}"><img src="image/addressbook.png" border="0" alt="Kundenstammdaten" title="Kundenstammdaten"></a>
+	<a href="opportunity.php?Q={Q}&fid={fid}"><img src="image/listen.png" border="0" alt="Chancen eines Kunden" title="Chancen eines Kunden"></a>
+	<a href="opportunity.php?Q={Q}&fid={fid}&new=1"><img src="image/new.png" border="0" alt="Neu/Suche" title="Neu/Suche"></a>
 </span>				
 </form>
 <!-- Hier endet die Karte ------------------------------------------->

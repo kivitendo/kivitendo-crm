@@ -18,7 +18,7 @@
 	<tr ><td class="norm">Firma&nbsp;</td><td class="norm">&nbsp;Auftrag</td><td class="norm" style="width:20;text-align:right">%</td><td class="norm" style="width:80;text-align:center">&euro;</td></tr>
 <!-- BEGIN Liste -->
 	<tr  onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showO({id});" colspan="0">
-		<td class="norm"><a href="opportunity.php?id={id}">{name}</a>&nbsp;</td><td class="norm">&nbsp;{title}</td><td class="norm" style="width:20;text-align:right">{chance}</td><td class="norm" style="width:80;text-align:right"> {betrag}</td></tr>
+		<td class="norm">{name}&nbsp;</td><td class="norm">&nbsp;{title}</td><td class="norm" style="width:20;text-align:right">{chance}</td><td class="norm" style="width:80;text-align:right"> {betrag}</td></tr>
 <!-- END Liste -->
 </table>
 <!-- Hier endet die Karte ------------------------------------------->

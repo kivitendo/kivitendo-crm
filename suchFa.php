@@ -13,21 +13,23 @@
 		function auswahl() {
 			nr=document.firmen.Alle.selectedIndex;
 			val=document.firmen.Alle.options[nr].value;
-			txt=document.firmen.Alle.options[nr].text;
+			tmp=document.firmen.Alle.options[nr].text;
+			txt=tmp.substr(0,(tmp.length - 2));
+			fid=val.substr(1,val.length);
 <? if ($pers==1) { ?>
 			opener.document.formular.cp_cv_id.value=val;
 			opener.document.formular.name.value=txt;
 <? } else if ($op) { ?>
-			opener.document.formular.fid.value=val.substr(1,val.length);
+			opener.document.formular.fid.value=fid;
 			opener.document.formular.name.value=txt;
 <? } else if ($_GET["konzernname"]) {?>
-			opener.document.neueintrag.konzern.value=val.substr(1,val.length);
+			opener.document.neueintrag.konzern.value=fid;
 			opener.document.neueintrag.konzernname.value=txt;
 <? } else {?>
-			opener.document.formular.cp_cv_id.value=val.substr(1,val.length);
+			opener.document.formular.cp_cv_id.value=fid;
 			opener.document.formular.name.value=txt;
 <? } ?>
-<? if ($nq==1) { ?>
+<? if ($nq==1 || $op) { ?>
 			if (val.substr(0,1)=="V") {
 				opener.document.formular.Quelle.value="V";
 			} else {
@@ -55,14 +57,14 @@
 	if ($pers) {
 		$datenP=getAllPerson(array(1,$name));
 		if ($datenP) foreach ($datenP as $zeile) {
-			echo "\t<option value='P".$zeile["cp_id"]."'>".$zeile["cp_name"].", ".$zeile["cp_givenname"]."</option>\n";
+			echo "\t<option value='P".$zeile["cp_id"]."'>".$zeile["cp_name"].", ".$zeile["cp_givenname"]." P</option>\n";
 		}
 	}
 	if ($datenC) foreach ($datenC as $zeile) {
-		echo "\t<option value='C".$zeile["id"]."'>".$zeile["name"]."</option>\n";
+		echo "\t<option value='C".$zeile["id"]."'>".$zeile["name"]." K</option>\n";
 	}
 	if ($datenL) foreach ($datenL as $zeile) {
-		echo "\t<option value='L".$zeile["id"]."'>".$zeile["name"]."</option>\n";
+		echo "\t<option value='V".$zeile["id"]."'>".$zeile["name"]." L</option>\n";
 	}
 
 ?>

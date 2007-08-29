@@ -12,10 +12,24 @@
         $jscal1="<script type='text/javascript'><!--\nCalendar.setup( {\n";
 	$jscal1.="inputField : 'zieldatum',ifFormat :'%d.%m.%Y',align : 'BL', button : 'trigger1'} );\n";
         $jscal1.="//-->\n</script>";
-	if ($_GET["fid"])  {
+	$stamm="none";
+	if ($_GET["Q"] and $_GET["fid"]) {
 		$fid=$_GET["fid"];
-		$_POST["fid"]=$fid;
-		$_POST["suchen"]=1;
+		if ($_GET["new"]) {
+			include_once("inc/FirmenLib.php");
+			$daten["firma"]=getName($fid,$_GET["Q"]);
+			$daten["fid"]=$fid;
+			$daten["tab"]=$_GET["Q"];
+		} else {
+			$_POST["Quelle"]=$_GET["Q"];
+			$_POST["fid"]=$fid;
+			$_POST["suchen"]=1;
+		}
+			$search="visible";
+			$save="visible";
+			$none="block";
+			$stamm="block";
+			$block="none";			
 	}
 	$oppstat=getOpportunityStatus();
 	$salesman=getAllUser(array(0=>true,1=>"%"));
@@ -30,7 +44,7 @@
 				$t->set_var(array(
 					LineCol	=> $bgcol[($i%2+1)],
 					id => $row["id"], 
-					name => $row["firma"], 
+					name => $row["firma".strtolower($row["tab"])], 
 					title => $row["title"],
 					chance => $row["chance"]*10, 
 					betrag => sprintf("%0.2f",$row["betrag"]), 
@@ -40,24 +54,30 @@
 				$t->parse("Block","Liste",true);
 				$i++;
 			}
+			$stamm="block";
 			$t->pparse("out",array("op"));
 			exit;
 		} else if (count($data)==0 || !$data){
 			if ($_POST["fid"]) {
-				include("inc/FirmenLib.php");
-				$data["name"]=getName($_POST["fid"],"C");
+				include_once("inc/FirmenLib.php");
+				$data["name"]=getName($_POST["fid"],$_POST["Quelle"]);
 			};
 			$msg="Nichts gefunden!";
 			$daten["fid"]=$_POST["fid"];
 			$daten["firma"]=$data["name"];
+			$daten["tab"]=$_POST["Quelle"];
 			$search="visible";
 			$save="visible";
+			$none="block";
+			$block="none";
+			$stamm="none";
 		} else {
-			$daten=$data[0];
+			$daten=getOneOpportunity($data[0]["id"]);
 			$save="visible";
 			$search="hidden";
 			$none="none";
 			$block="block";
+			$stamm="block";
 		}
 	} else if ($_POST["save"]) {
 		$rc=saveOpportunity($_POST);
@@ -69,6 +89,7 @@
 			$search="hidden";
 			$none="block";
 			$block="none";
+			$stamm="block";
 		} else {
 			$daten=getOneOpportunity($rc);
 			$msg="Daten gesichert";
@@ -76,6 +97,7 @@
 			$search="hidden";
 			$none="none";
 			$block="block";
+			$stamm="block";
 		}
 	} else if ($_GET["id"]) {
 		$daten=getOneOpportunity($_GET["id"]);
@@ -83,6 +105,7 @@
 		$search="hidden";
 		$none="none";
 		$block="block";
+		$stamm="block";
 	} else {
 		$save="visible";
 		$search="visible";
@@ -111,6 +134,7 @@
 	}
 	$t->set_var(array(
 		id => $daten["id"],
+		Q => $daten["tab"],
 		fid => $daten["fid"],
 		title => $daten["title"],
 		name => ($daten["firma"])?$daten["firma"]:$_POST["firma"],
@@ -123,6 +147,7 @@
 		csel.$daten["chance"] => "selected",
 		save => $save,
 		search => $search,
+		stamm => $stamm,
 		block => $block,
 		none => $none,
 		button => $button,

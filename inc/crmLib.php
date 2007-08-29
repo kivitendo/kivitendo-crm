@@ -2098,13 +2098,24 @@ global $db;
 }
 function getOneOpportunity($id) {
 global $db;
-	$sql="select O.*,C.name as firma from  opportunity O left join customer C on O.fid=C.id where O.id = $id";
+	//$sql="select O.*,C.name as firma from  opportunity O left join customer C on O.fid=C.id where O.id = $id";
+	$sql="select * from  opportunity where id = $id";
 	$rs=$db->getAll($sql);
+	if ($rs) {
+		if ($rs[0]["tab"]=="V") {
+			$sql="select name from vendor where id = ".$rs[0]["fid"];
+		} else {
+			$sql="select name from customer where id = ".$rs[0]["fid"];
+		}
+		$rs2=$db->getAll($sql);
+		$rs[0]["firma"]=$rs2[0]["name"];
+	}
 	return $rs[0];
 }
 function getOpportunity($fid) {
 global $db;
-	$sql="select O.*,C.name as firma from  opportunity O left join customer C on O.fid=C.id where fid = $fid";
+	$sql="select O.*,C.name as firmaC,V.name as firmaV from  opportunity O left join customer C on O.fid=C.id ";
+	$sql.="left join vendor V on O.fid=V.id where fid = $fid";
 	$rs=$db->getAll($sql);
 	return $rs;
 }
@@ -2114,37 +2125,40 @@ global $db;
 		if (in_array($key,array("title","notiz","zieldatum","next")) and $val) { $val=str_replace("*","%",$val); $where.="and $key like '$val%' "; }
 		else if (in_array($key,array("status","chance","salesman")) and $val) { $where.="and $key = $val "; };
 	}
-	if ($data["fid"]  and $data["name"]) { 
+	/*if ($data["fid"]  and $data["name"]) { 
 		$where.="and (fid in (select id from customer where lower(name) like '%".strtolower($data["name"])."%') or fid = ".$data["fid"].")";
-	} else if ($data["fid"]) { 
-		$where.="and fid = ".$data["fid"]; 
+	} else */ //Nonsens!
+	if ($data["fid"]) { 
+		$where.="and fid = ".$data["fid"]." and tab='".$data["Quelle"]."'"; 
 	} else if ($data["name"]) {
-		$where.="and fid in (select id from customer where lower(name) like '%".strtolower($data["name"])."%')";
+		$where.="and (fid in (select id from customer where lower(name) like '%".strtolower($data["name"])."%')";
+		$where.="or fid in (select id from vendor where lower(name) like '%".strtolower($data["name"])."%') )";
 	}
-	$sql="select O.*,C.name as firma from  opportunity O left join customer C on O.fid=C.id where ".substr($where,3)." order by chance desc,betrag desc";
+	$sql="select O.*,C.name as firmaC,V.name as firmaV from  opportunity O left join customer C on O.fid=C.id ";
+	$sql.="left join vendor V on O.fid=V.id where ".substr($where,3)." order by chance desc,betrag desc";
 	$rs=$db->getAll($sql);
 	return $rs;
 }
 function saveOpportunity($data) {
 global $db;
 	if ($data["fid"] and $data["title"] and $data["betrag"] and $data["status"] and $data["chance"] and $data["zieldatum"]) {
-	$data["betrag"]=str_replace(",",".",$data["betrag"]);
-	if (!$data["id"]) {
-		$newID=uniqid (rand());
-		$sql="insert into opportunity (title) values ('$newID')";
-		$rc=$db->query($sql);
-		$sql="select * from opportunity where title='$newID'";
-		$rs=$db->getAll($sql);
-		if(!$rs) {
-			return false;
-		} else {
-			$data["id"]=$rs[0]["id"];
+		$data["betrag"]=str_replace(",",".",$data["betrag"]);
+		if (!$data["id"]) {
+			$newID=uniqid (rand());
+			$sql="insert into opportunity (title) values ('$newID')";
+			$rc=$db->query($sql);
+			$sql="select * from opportunity where title='$newID'";
+			$rs=$db->getAll($sql);
+			if(!$rs) {
+				return false;
+			} else {
+				$data["id"]=$rs[0]["id"];
+			}
 		}
-	}
-	$datum=date2db($data["zieldatum"]);
-		$tmp="update opportunity set fid=%d,title='%s',zieldatum='%s', betrag=%s, chance=%d, status=%d, salesman=%d, ";
+		$datum=date2db($data["zieldatum"]);
+		$tmp="update opportunity set fid=%d,tab='%s',title='%s',zieldatum='%s', betrag=%s, chance=%d, status=%d, salesman=%d, ";
 		$tmp.="next='%s', notiz='%s', mtime='%s',memployee=%d where id=%d";
-		$sql=sprintf($tmp,$data["fid"],$data["title"],$datum,$data["betrag"],$data["chance"],$data["status"],$data["salesman"],
+		$sql=sprintf($tmp,$data["fid"],$data["Quelle"],$data["title"],$datum,$data["betrag"],$data["chance"],$data["status"],$data["salesman"],
 				$data["next"],$data["notiz"],date("Y-m-d H:i:s"),$_SESSION["loginCRM"],$data["id"]);
 		$rc=$db->query($sql);
 		if ($rc) {

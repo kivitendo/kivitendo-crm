@@ -8,6 +8,7 @@
 	require("firmacommon.php");
 	$fid=($_GET["fid"])?$_GET["fid"]:$_POST["fid"];
 	$Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];	
+	$kdhelp=getWCategorie(true);
 	if ($_POST["insk"]) {
 		insFaKont($_POST);
 	}
@@ -116,6 +117,19 @@
 			ep => $ep,
 			Edit => "Bearbeiten",
 			none => ($ep=="" && $init=="")?"hidden":"visible",
+			chelp 		=> ($kdhelp)?"visible":"hidden"
 	));
+	if ($kdhelp) { 
+		$t->set_block("co1","kdhelp","Block1");
+		$tmp[]=array("id"=>-1,"name"=>"Online Kundenhilfe");
+		$kdhelp=array_merge($tmp,$kdhelp); 
+		foreach($kdhelp as $col) {
+			$t->set_var(array(
+				cid => $col["id"],
+				cname => $col["name"]
+			));	
+			$t->parse("Block1","kdhelp",true);
+		};
+	}
 	$t->Lpparse("out",array("co1"),$_SESSION["lang"],"firma");
 ?>

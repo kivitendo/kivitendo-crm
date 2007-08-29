@@ -80,8 +80,8 @@
 			$ext=explode(".",$vcard);
 			$ext=strtolower($ext[count($ext)-1]);
 			if (in_array($ext,array("jpg","jpeg","gif","png","pdf","ps"))) {
-				//$data["cp_vcard"]="<a href='$root/vcard$id.$ext' target='_blank'>Visitenkarte</a>";
-				$data["cp_vcard"]="<a href='$vcard' target='_blank'>Visitenkarte</a>";
+				$data["cp_vcard"]="<a href='$root/vcard$id.$ext' target='_blank'>Visitenkarte</a>";
+				//$data["cp_vcard"]="<a href='$vcard' target='_blank'>Visitenkarte</a>";
 				break;
 			}
 		}
@@ -300,8 +300,8 @@
 	}
 	function getDocVorlage_($did,$fid=0,$pid=0,$tab="C") {
 		$inhalt="<div id='iframe2'>";
-        $inhalt.="        <iframe id='newdoc' width='100%' height='100%' name='newdoc' src='firma4a.php?did=$did&fid=$fid&tab=$tab&pid=$pid' frameborder='0'></iframe>";
-	    $inhalt.="</div>";
+        	$inhalt.="        <iframe id='newdoc' width='100%' height='100%' name='newdoc' src='firma4a.php?did=$did&fid=$fid&tab=$tab&pid=$pid' frameborder='0'></iframe>";
+	   	$inhalt.="</div>";
 		$objResponse = new xajaxResponse();
 		$objResponse->addAssign("fbright", 	"innerHTML", $inhalt);
         return $objResponse;

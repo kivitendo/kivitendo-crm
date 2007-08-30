@@ -1,7 +1,7 @@
 <?
 
 function suchPerson($nummer) {
-global $db;
+	$db=$_SESSION["db"];
 	$sql="select * from contacts where cp_id=$nummer";
 	$rs=$db->getAll($sql);
 	if (!empty($rs) && $rs[0]["cp_id"]==$nummer) { // Person gefunden
@@ -26,7 +26,7 @@ global $db;
 }
 
 function suchtabelle($nummer)   {
-global $db;
+	$db=$_SESSION["db"];
 	$sql="select * from customer where id=$nummer";
 	$rs=$db->getAll($sql);
 	if (empty($rs) || !$rs) { // Kein Kunde

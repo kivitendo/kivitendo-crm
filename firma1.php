@@ -14,9 +14,9 @@
 	$t = new Template($base);
 	$t->set_file(array("fa1" => "firma1.tpl"));
 	if ($fa["grafik"]) {
-		if (file_exists("dokumente/".$_SESSION["mansel"]."/C".$fa["customernumber"]."/logo.".$fa["grafik"])) {
-		$Image="<a href='dokumente/".$_SESSION["mansel"]."/C".$fa["customernumber"]."/logo.".$fa["grafik"]."' target='_blank'>";
-		$Image.="<img src='dokumente/".$_SESSION["mansel"]."/C".$fa["customernumber"]."/logo.".$fa["grafik"]."' ".$fa["icon"]." border='0'></a>";
+		if (file_exists("dokumente/".$_SESSION["mansel"]."/$Q".$fa["nummer"]."/logo.".$fa["grafik"])) {
+		$Image="<a href='dokumente/".$_SESSION["mansel"]."/$Q".$fa["nummer"]."/logo.".$fa["grafik"]."' target='_blank'>";
+		$Image.="<img src='dokumente/".$_SESSION["mansel"]."/$Q".$fa["nummer"]."/logo.".$fa["grafik"]."' ".$fa["icon"]." border='0'></a>";
 		} else {
 			$Image="Bild nicht<br>im Verzeichnis";
 		}

@@ -71,8 +71,8 @@
 		else { $charset="ISO-8859-1"; };
 		$root="dokumente/".$_SESSION["mansel"]."/".$data["tabelle"].$data["nummer"]."/".$data["cp_id"];
 		if ($data["cp_grafik"]) {
-			$img="<img src='$root/kopf".$data["cp_id"].".".$data["cp_grafik"]."' ".$data["icon"]." border='0'>";
-			$data["cp_grafik"]="<a href='$root/kopf".$data["cp_id"].".".$data["cp_grafik"]."' target='_blank'>$img</a>";
+			$img="<img src='$root/kopf.".$data["cp_grafik"]."' ".$data["icon"]." border='0'>";
+			$data["cp_grafik"]="<a href='$root/kopf.".$data["cp_grafik"]."' target='_blank'>$img</a>";
 		};
 		$tmp=glob("../$root/vcard".$data["cp_id"].".*");
 		$data["cp_vcard"]="";

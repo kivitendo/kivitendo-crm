@@ -68,7 +68,7 @@ global $db;
 		$sql="select sum(amount) from oe where customer_id=$id and quotation='f' and closed = 'f'";
 		$rs=$db->getAll($sql);
 		$oa=$rs[0]["sum"];
-		$sql="select sum(amount) fro>m ar where customer_id=$id and amount<>paid";
+		$sql="select sum(amount) from ar where customer_id=$id and amount<>paid";
 		$rs=$db->getAll($sql);
 		$op=$rs[0]["sum"];
 		$sql="select C.*,E.login,B.description as kdtyp,B.discount as typrabatt,P.pricegroup,L.lead as leadname,BL.bundesland from customer C ";

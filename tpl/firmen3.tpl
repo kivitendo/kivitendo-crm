@@ -49,6 +49,7 @@
 	}
 	function suchFa() {
 			val=document.neueintrag.konzernname.value;
+			if (val=="") val="%";
 			f1=open("suchFa.php?tab={Q}&konzernname="+val,"suche","width=350,height=200,left=100,top=100");
 		}
 	//-->

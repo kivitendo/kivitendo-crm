@@ -31,8 +31,8 @@
 		else if (preg_match("/ISO-8859-15/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-15"; }
 		else if (preg_match("/ISO-8859-1/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-1"; }
 		else { $charset="ISO-8859-1"; };
-		foreach ($data as $row) { 
-			$objResponse->addCreateOption($bl,html_entity_decode($row["bundesland"],ENT_NOQUOTES,$charset),$row["id"]);		
+		foreach ($data as $row) {
+			$objResponse->addCreateOption($bl,html_entity_decode($row["bundesland"],ENT_NOQUOTES,$charset),$row["id"]);
 		}
 		return $objResponse;
 	}
@@ -60,7 +60,7 @@
                 $objResponse->addAssign("shiptocontact",        "innerHTML", $data["shiptocontact"]);
                 $objResponse->addAssign("shiptoemail",		"innerHTML", $maillink);
                 $objResponse->addAssign("shiptohomepage",	"innerHTML", $htmllink);
-                return $objResponse;	
+                return $objResponse;
 	}
 	function showContactadress($id){
 		global $cp_sonder;
@@ -70,7 +70,7 @@
 		else if (preg_match("/ISO-8859-1/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-1"; }
 		else { $charset="ISO-8859-1"; };
 		$root="dokumente/".$_SESSION["mansel"]."/".$data["tabelle"].$data["nummer"]."/".$data["cp_id"];
-		if ($data["cp_grafik"]) {
+		if (!empty($data["cp_grafik"]) && $data["cp_grafik"]<>"     ") {
 			$img="<img src='$root/kopf.".$data["cp_grafik"]."' ".$data["icon"]." border='0'>";
 			$data["cp_grafik"]="<a href='$root/kopf.".$data["cp_grafik"]."' target='_blank'>$img</a>";
 		};
@@ -91,7 +91,7 @@
 			$data["cp_birthday"]=db2date($data["cp_birthday"]);
 		}
 		$sonder="";
-		if ($cp_sonder)	{ 
+		if ($cp_sonder)	{
 			while (list($key,$val) = each($cp_sonder)) {
 				$sonder.=($data["cp_sonder"] & $key)?"$val ":"";
 			}
@@ -111,7 +111,7 @@
 			}
 		}
 		$objResponse->addAssign("cp_id", 	"value", $data["cp_id"]);
-                return $objResponse;	
+                return $objResponse;
 	}
 	function showCalls($id,$start,$fa=false) {
 		$i=0;
@@ -144,7 +144,7 @@
 			$max=getAllTelCallMax($id,$firma);
 			$objResponse->addScript("max = $max;");
 		}
-                return $objResponse;	
+                return $objResponse;
 	}
 	function showDir($id,$directory) {
 		$directory = trim( rtrim( $directory, " /\\" ) );
@@ -158,11 +158,11 @@
 			clearstatcache();
 	        	while ( false !== ( $entry = $dir_object->read() ) ) {
 		            // '.' interessiert nicht
-		            if ( $entry !== '.' ) { 
+		            if ( $entry !== '.' ) {
 				if ($entry === '..' ) {
-						if ($directory=="/" || $directory=="") { 
+						if ($directory=="/" || $directory=="") {
 							continue;
-						} else { 
+						} else {
 							$tmp=substr($directory,0,strrpos($directory,"/"));
 							$inhalt.=sprintf($dir,$tmp,"[ .. ]");
 						}
@@ -179,7 +179,7 @@
 		$objResponse = new xajaxResponse();
 		$objResponse->addAssign("fb$id", 	"innerHTML", $inhalt);
 		$objResponse->addAssign("path", 	"innerHTML", ($directory)?$directory:"/");
-                return $objResponse;	
+                return $objResponse;
 
 	}
 	function showFile($pfad,$file) {
@@ -231,14 +231,14 @@
 				"<a href='#' onClick='movefile(\"dokumente/".$_SESSION["mansel"]."$pfad/$file\",$id)'>verschieben</a>");
 		$objResponse->addAssign("subedit",	"innerHTML",
 				"<a href='#' onClick='editattribut($id)'>Attribute bearbeiten</a>");
-                return $objResponse;	
+                return $objResponse;
 	}
 	function moveFile($file,$pfadleft) {
 		$oldpath=substr($file,0,strrpos($file,"/"));
 		$file=substr($file,strrpos($file,"/"));
 		if ($oldpath<>$pfadleft) {
 			$pre="../dokumente/".$_SESSION["mansel"];
-			rename("../".$oldpath.$file,$pre.$pfadleft.$file);	
+			rename("../".$oldpath.$file,$pre.$pfadleft.$file);
 			$dbfile=new document();
 			$rs=$dbfile->searchDocument($file,$oldpath);
 			if ($rs) {
@@ -251,7 +251,7 @@
 		$objResponse = new xajaxResponse();
 		$objResponse->addScript("dateibaum('left','$pfadleft')");
 		$objResponse->addScript("showFile('left','$file')");
-                return $objResponse;	
+                return $objResponse;
 	};
 	function saveAttribut($name,$oldname,$pfad,$komment,$id=0) {
 		$dbfile=new document();
@@ -279,7 +279,7 @@
 		} else {
 			$objResponse->addScript("alert('Fehler beim Sichern')");
 		}
-                return $objResponse;	
+                return $objResponse;
 	}
 	function newDir($id,$pfad,$newdir) {
 		chdir("../dokumente/".$_SESSION["mansel"]."/$pfad");
@@ -313,8 +313,8 @@
 			$anredepers=$co["cp_greeting"];
 			$anredepers.=($co["cp_title"])?" ".$co["cp_title"]:"";
 			$namepers=$co["cp_givenname"]." ".$co["cp_name"];
-			$plzpers=$co["cp_zipcode"]; 
-			$ortpers=$co["cp_city"]; 
+			$plzpers=$co["cp_zipcode"];
+			$ortpers=$co["cp_city"];
 			$strassepers=$co["cp_street"];
 			if (!$co["cp_cv_id"]) $art="Einzelperson";
 		};
@@ -350,7 +350,7 @@
 		$input.="</table><input type='submit' name='send' value='erzeugen'></form></body></html>";
 		$objResponse = new xajaxResponse();
 		$objResponse->addAssign("fbright", 	"innerHTML", $input);
-                return $objResponse;	
+                return $objResponse;
 	}
 	require("firmacommon.php");
 	$xajax->processRequests();

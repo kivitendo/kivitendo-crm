@@ -117,17 +117,17 @@
 	<div style="position:absolute; left:0em; width:32em; " >
 		<div style="float:left; width:64%; height:10em; text-align:left; border-bottom: 0px solid black; padding:0.2em;" >
 			<span class="gross">{Fname1}</span><br />
-			{Fdepartment_1}<br />
-			{Fdepartment_2}
+			{Fdepartment_1}	{Fdepartment_2}<br />
 			{Strasse}<br />
 			<span class="mini">&nbsp;<br /></span>
 			{Land}-{Plz} {Ort}<br />
-			<span class="klein">{Bundesland}<br />
-			<span class="mini">&nbsp;<br /></span>
-			{Fcontact}<br />
-			<span class="mini">&nbsp;<br /></span>
+			<span class="klein">
+			{Bundesland}
+			<span class="mini"><br />&nbsp;<br /></span>
+			{Fcontact}
+			<span class="mini"><br />&nbsp;<br /></span>
 			<font color="#444444">Tel:</font> {Telefon}	&nbsp;&nbsp;&nbsp;	<font color="#444444">Fax:</font> {Fax}<br />	
-			<span class="mini">&nbsp;<br /></span>
+			<!--span class="mini">&nbsp;<br /></span-->
 			&nbsp;[<a href="mail.php?TO={eMail}&KontaktTO=C{FID}">{eMail}</a>]<br />
 			&nbsp;<a href="{Internet}" target="_blank">{Internet}</a></span>
 		</div>
@@ -195,17 +195,16 @@
 		</div>
 	</span>	
 
-	<span id="inf" style="visibility:hidden;position:absolute; text-align:left;width:32em; left:1.2em; top:17.5em;">
+	<span id="inf" style="visibility:hidden;position:absolute; text-align:left;width:32em; left:1.2em; top:17.1em;">
 		<div style="width:35em;" class="klein">
 		Konzern: <span class="value"><a href="firma1.php?Q={Q}&id={konzern}">{konzernname}</a></span><br />
-		<br />
 		Kundentyp: <span class="value">{kdtyp}</span> &nbsp;&nbsp;&nbsp; Quelle:<span class="value">{lead} {leadsrc}</span><br />
 		Rabatt: <span class="value">{rabatt}</span> &nbsp;&nbsp;&nbsp; Preisgruppe: <span class="value">{preisgrp}</span><br /><br />
 		Erstelldatum: <span class="value">{erstellt}</span> &nbsp;&nbsp;&nbsp; Ge&auml;ndert:<span class="value">{modify}</span><br /> 
 		Steuer-Nr.: <span class="value">{Taxnumber}</span> &nbsp;&nbsp;&nbsp; UStId: <span class="value">{USTID}</span><br />
 		Steuerzone: <span class="value">{Steuerzone}</span><br /><br />
 		Zahlungsziel: <span class="value">{terms}</span> Tage &nbsp;&nbsp;&nbsp;Kreditlimit: <span class="value">{kreditlim}</span><br />
-		Offene Posten: <span class="value">{op}</span> &nbsp;&nbsp;&nbsp;offene Auftr&auml;ge: <span class="value">{oa}</span><br /><br />
+		Offene Posten: <span class="value">{op}</span> &nbsp;&nbsp;&nbsp;offene Auftr&auml;ge: <span class="value">{oa}</span><br />
 		Bankname: <span class="value">{bank}</span><br />
 		Blz: <span class="value">{blz}</span> &nbsp;&nbsp;&nbsp; Konto: <span class="value">{konto}</span>
 		</div>

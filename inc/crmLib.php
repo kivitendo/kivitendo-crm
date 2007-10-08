@@ -289,7 +289,6 @@ global $db;
 	} else {
 		$pfad="/".$data["Q"][0].$data["nummer"];
 	}
-	echo "($pfad)";
 	$datum=$data['Datum']." ".$data['Zeit'].":00";  // Postgres timestamp
 	$anz=($datei["Datei"]["name"][0]<>"")?count($datei["Datei"]["name"]):0;
 	for ($o=0; $o<$anz; $o++) {

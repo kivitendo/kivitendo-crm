@@ -125,7 +125,20 @@
 				$data["CRMUSER"]=$_SESSION["loginCRM"];
 				$data["cause"]=$Subject;
 				$data["c_cause"]=$BodyText."\nAbs: ".$abs;
-				$data["CID"]="";
+				$data["Q"]=$_POST["KontaktTO"][0];
+				if ($data["Q"]=="C" || $data["Q"]=="V") {
+					include("inc/FirmenLib.php");
+					$empf=getFirmenStamm(substr($KontaktTO,1),true,substr($KontaktTO,0,1));
+					$data["fid"]=$empf["id"];
+					$data["CID"]=$empf["id"];
+					$data["nummer"]=$empf["nummer"];
+				} else {
+					include("inc/persLib.php");
+					$empf=getKontaktStamm(substr($KontaktTO,1));
+					$data["fid"]=$empf["cp_cv_id"];
+					$data["CID"]==$empf["cp_id"];
+					$data["nummer"]=$empf["nummer"];
+				};		
 				$data["Kontakt"]="M";
 				$data["Bezug"]=0;
 				$data['Zeit']=date("H:i");

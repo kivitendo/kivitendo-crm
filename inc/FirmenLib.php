@@ -226,7 +226,8 @@ function suchstr($muster,$typ="C") {
 			city=>"shiptocity",phone=>"shiptophone",fax=>"shiptofax",
 			email=>"shiptoemail",department_1=>"shiptodepartment_1",
 			department_2=>"shiptodepartment_2",country=>"shiptocountry");
-	$fuzzy=$muster["fuzzy"];
+	$fuzzy2=$muster["fuzzy"];
+	$fuzzy1=($muster["pre"])?$_SESSION["Pre"]:"";
 	$keys=array_keys($muster);
 	$suchfld=array_keys($dbfld);
 	$anzahl=count($keys);
@@ -243,9 +244,9 @@ function suchstr($muster,$typ="C") {
 				$suchwort=trim($muster[$keys[$i]]);
 			}
 			$suchwort=strtr($suchwort,"*?","%_");
-			$tmp1.="and $case1 ".$kenz[$typ].".".$keys[$i]." $case2 like '".$suchwort."$fuzzy' ";
+			$tmp1.="and $case1 ".$kenz[$typ].".".$keys[$i]." $case2 like '$fuzzy1".$suchwort."$fuzzy2' ";
 			if ($tbl1 && $dbfld2[$keys[$i]]) 
-				$tmp2.="and $case1 S.".$dbfld2[$keys[$i]]." $case2 like '".$suchwort."$fuzzy' ";
+				$tmp2.="and $case1 S.".$dbfld2[$keys[$i]]." $case2 like '$fuzzy1".$suchwort."$fuzzy2' ";
 		}
 	}
 	if ($muster["sonder"]) {

@@ -133,7 +133,7 @@
 	<div class="zeile">
 			<b>{Msg}</b><br>
 			<input type="checkbox" name="shipto" value="1" checked tabindex="20">auch in abweichender Lieferanschrift suchen<br>
-			<input type="checkbox" name="fuzzy" value="%" checked tabindex="21">Unscharf suchen<br>
+			<input type="checkbox" name="fuzzy" value="%" checked tabindex="21">Unscharf suchen <input type="checkbox" name="pre" value="1">mit Pr&auml;fix<br>
 			<input type="checkbox" name="employee" value="{employee}" tabindex="22">nur selber angelegte<br>
 			<input type="submit" name="suche" value="suchen" tabindex="23">&nbsp;
 			<input type="submit" name="reset" value="clear" tabindex="24"> &nbsp;<input type="button" name="rep" value="Report" onClick="report()" tabindex="23">

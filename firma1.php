@@ -111,6 +111,8 @@
 			NEXT		=> $next,
 			PREV		=> $prev,
 			KARTE		=> $karte,
+			sales		=> ($Q=="C")?"sales":"purchase",
+			request		=> ($Q=="C")?"sales":"request",
 			zeigeplan 	=> ($karte)?"visible":"hidden",
 			zeigeextra 	=> ($zeigeextra)?"visible":"hidden",
 			login		=> $_SESSION["employee"],

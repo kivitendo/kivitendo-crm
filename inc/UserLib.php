@@ -79,6 +79,11 @@ global $db;
 		$daten["Abteilung"]=$rs[0]["abteilung"];
 		$daten["Position"]=$rs[0]["position"];
 		$daten["Vertreter"]=$rs[0]["vertreter"];
+		if ($rs[0]["vertreter"]) {
+			$sql="select * from employee where id=".$rs[0]["vertreter"];
+			$rs3=$db->getAll($sql);
+			$daten["VName"]=$rs3[0]["login"]." ".$rs3[0]["name"];
+		}
 		$daten["gruppen"]=$rs2;
 		$daten["etikett"]=$rs[0]["etikett"];
 		$daten["countrycode"]=$rs[0]["countrycode"];

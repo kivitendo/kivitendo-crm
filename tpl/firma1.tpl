@@ -138,12 +138,10 @@
 				<input type="hidden" name="path" value="bin/mozilla">
 				<input type="hidden" name="login" value="{login}">
 				<input type="hidden" name="action" value="add">
-				<input type="hidden" name="type" value="sales_order">
 				<input type="hidden" name="password" value="{password}">
 				<input type="hidden" name="customer_id" value="{FID}">
-				<input type="image" src="image/auftrag.png" value="Auftrag" title="neuen Auftrag eingeben" style="visibility:{zeige};">
-				<input type="hidden" name="type" value="sales_quotation">
-				<input type="image" src="image/angebot.png" value="Angebot" title="neues Angebot erstellen" style="visibility:{zeige};">
+				<input type="image" src="image/auftrag.png" name="type" value="{sales}_order" title="neuen Auftrag eingeben" style="visibility:{zeige};">
+				<input type="image" src="image/angebot.png" name="type" value="{request}_quotation" title="Angebot/Anfrage erstellen" style="visibility:{zeige};">
 
 				<img src="image/kreuzchen.gif" title="Gesperrter Kunde"style="visibility:{verstecke};" >
 				&nbsp;

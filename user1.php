@@ -15,14 +15,14 @@
 	} else if ($_POST["mkmbx"]) {
 		$rc=createMailBox($_POST["Postf2"],$_POST["Login"]);
 	} 
-	$fa=getUserStamm($_SESSION["loginCRM"]);
 	$t = new Template($base);
-	if ($fa["Login"]==$_SESSION["employee"]) {
-		$t->set_file(array("usr1" => "user1.tpl"));
-	} else {
+	if ($_GET["id"]) {
+		$fa=getUserStamm($_GET["id"]);
 		$t->set_file(array("usr1" => "user1b.tpl"));
+	} else {
+		$fa=getUserStamm($_SESSION["loginCRM"]);
+		$t->set_file(array("usr1" => "user1.tpl"));
 	}
-
 	if ($fa) foreach ($fa["gruppen"] as $row) {
 		$gruppen.=$row["grpname"]."<br>";
 	}
@@ -38,7 +38,7 @@
 			Strasse => $fa["Strasse"],
 			Plz => $fa["Plz"],
 			Ort => $fa["Ort"],
-			UID => $_SESSION["loginCRM"],
+			UID => $fa["Id"],
 			Tel1 => $fa["Tel1"],
 			Tel2 => $fa["Tel2"],
 			Regel => $fa["Regel"],
@@ -58,52 +58,55 @@
 			termend	=> $tend,
 			GRUPPE => $gruppen
 			));
-	$t->set_block("usr1","Selectbox","Block");
-	$select=(!empty($fa["Vertreter"]))?$fa["Vertreter"]:$fa["Id"];
-	$user=getAllUser(array(0=>true,1=>""));
-	if ($user) foreach($user as $zeile) {
-		$t->set_var(array(
-			Sel => ($select==$zeile["id"])?" selected":"",
-			Vertreter	=>	$zeile["id"],
-			VName	=>	$zeile["name"]
-		));
-		$t->parse("Block","Selectbox",true);
-	}
-	$t->set_block("usr1","SelectboxB","BlockB");
-	$ALabels=getLableNames();
-	if ($ALabels) foreach ($ALabels as $data) {
+	if ($_GET["id"]) {	
+		$t->set_var(array(Vertreter => $fa["Vertreter"]." ".$fa["VName"]));
+	} else {
+		$t->set_block("usr1","Selectbox","Block");
+		$select=(!empty($fa["Vertreter"]))?$fa["Vertreter"]:$fa["Id"];
+		$user=getAllUser(array(0=>true,1=>""));
+		if ($user) foreach($user as $zeile) {
 			$t->set_var(array(
-				FSel => ($data["id"]==$fa["etikett"])?" selected":"",
-				LID	=>	$data["id"],
-				FTXT =>	$data["name"]
+				Sel => ($select==$zeile["id"])?" selected":"",
+				Vertreter	=>	$zeile["id"],
+				VName	=>	$zeile["name"]
 			));
-			$t->parse("BlockB","SelectboxB",true);
+			$t->parse("Block","Selectbox",true);
+		}
+		$t->set_block("usr1","SelectboxB","BlockB");
+		$ALabels=getLableNames();
+		if ($ALabels) foreach ($ALabels as $data) {
+				$t->set_var(array(
+					FSel => ($data["id"]==$fa["etikett"])?" selected":"",
+					LID	=>	$data["id"],
+					FTXT =>	$data["name"]
+				));
+				$t->parse("BlockB","SelectboxB",true);
+		}
+		$t->set_block("usr1","SelectboxC","BlockC");
+		$language=array("de"=>"Deutsch","en"=>"English","fr"=>"France");
+		while(list($key,$val) = each($language)) {
+			$t->set_var(array(
+				LSel => ($key==$fa["countrycode"])?" selected":"",
+				LID  =>	$key,
+				LTXT =>	$val
+			));
+			$t->parse("BlockC","SelectboxC",true);
+		}
+		$t->set_block("usr1","Liste","BlockD");
+		$i=0;
+		if ($items) foreach($items as $col){
+			$t->set_var(array(
+				IID => $col["id"],
+				LineCol	=> $bgcol[($i%2+1)],
+				Datum	=> db2date(substr($col["calldate"],0,10)),
+				Zeit	=> substr($col["calldate"],11,5),
+				Name	=> $col["cp_name"],
+				Betreff	=> $col["cause"],
+				Nr		=> $col["id"]
+			));
+			$t->parse("BlockD","Liste",true);
+			$i++;
+		}
 	}
-	$t->set_block("usr1","SelectboxC","BlockC");
-	$language=array("de"=>"Deutsch","en"=>"English","fr"=>"France");
-	while(list($key,$val) = each($language)) {
-		$t->set_var(array(
-			LSel => ($key==$fa["countrycode"])?" selected":"",
-			LID  =>	$key,
-			LTXT =>	$val
-		));
-		$t->parse("BlockC","SelectboxC",true);
-	}
-	$t->set_block("usr1","Liste","BlockD");
-	$i=0;
-	if ($items) foreach($items as $col){
-		$t->set_var(array(
-			IID => $col["id"],
-			LineCol	=> $bgcol[($i%2+1)],
-			Datum	=> db2date(substr($col["calldate"],0,10)),
-			Zeit	=> substr($col["calldate"],11,5),
-			Name	=> $col["cp_name"],
-			Betreff	=> $col["cause"],
-			Nr		=> $col["id"]
-		));
-		$t->parse("BlockD","Liste",true);
-		$i++;
-	}
-	
 	$t->pparse("out",array("usr1"));
 ?>

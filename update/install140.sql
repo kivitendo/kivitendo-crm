@@ -413,8 +413,8 @@ ALTER TABLE contacts ADD COLUMN cp_stichwort1 character varying(50);
 ALTER TABLE contacts ADD COLUMN cp_gebdatum character varying(10);
 ALTER TABLE contacts ADD COLUMN cp_owener integer;
 ALTER TABLE contacts ADD COLUMN cp_employee integer;
-ALTER TABLE contacts ADD COLUMN cp_grafik char varying(5);
-ALTER TABLE contacts ADD COLUMN cp_country char varying(3);
+ALTER TABLE contacts ADD COLUMN cp_grafik character varying(5);
+ALTER TABLE contacts ADD COLUMN cp_country character varying(3);
 ALTER TABLE contacts ADD COLUMN cp_salutation text;
 ALTER TABLE defaults ADD COLUMN contnumber text;
 

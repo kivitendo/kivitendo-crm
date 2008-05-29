@@ -12,7 +12,7 @@ Achten Sie darauf, dass Sie über TCP Zugriff auf die PostgreSQL
 haben (pg_hba.conf, postgresql.conf), was aber erledigt ist, wenn die ERP läuft.
 
 Vorrausetzungen:
-	Lx-Office ERP 2.4.x
+	Lx-Office ERP 2.6.x 
 	PHP >= 4.2x
 	PEAR::DB
 	PEAR::Contact_Vcard_Build
@@ -40,10 +40,19 @@ installieren.  Ein weiteres Paket ist dafür Vorraussetzung:
 
 jpgraph muß nicht mehr verwendet werden. Alternativ wird PEAR::Image_Graph verwendet.
 
+PHP5:
+Den Fehlerreporting evtl. etwas runterschrauben. 
+error_reporting  =  E_ALL & ~E_NOTICE
+
+PHP-Code wird angezeigt:
+short_open_tag = On
+
+
 AJAX:
 Nach und nach werden einige Masken mit Ajax bedient. 
 Das Paket xajax muß im CRM-Verzeichnis im Unterverzeichnis "xajax" installiert werden
 oder per Link eingebunden werden.
+Aktuell wird "xajax" mitgeliefert.
 
 
 Wird mit einem Alias für das LxO-Verzeichnis benutzt und soll in einigen Masken der 

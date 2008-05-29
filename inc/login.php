@@ -6,7 +6,7 @@ while( list($key,$val) = each($_SESSION) ) {
 clearstatcache();
 require ("VERSION.php");
 if ($_POST["erpname"]) {
-	if (is_file("../".$_POST["erpname"]."/users/".$_GET["login"].".conf")) {
+	if (is_file("../".$_POST["erpname"]."/config/authentication.pl")) {
 		if (is_writable("inc/conf.php")) {
 			$name=false;
 			$configfile=file("inc/conf.php");
@@ -28,16 +28,14 @@ if ($_POST["erpname"]) {
 	}
 	$ERPNAME=$_POST["erpname"];
 }
-if ($_GET["login"]||$_POST["login"]) {
-	$login=($_GET["login"])?$_GET["login"]:$_POST["login"];
-}
 
-$usrfile="../$ERPNAME/users/$login.conf";
+$conffile="../$ERPNAME/config/authentication.pl";
 
-if (!$login) {
+/*if (!$login) {
 	header("location: ups.html");
-} else if (is_file($usrfile)) {
-	$tmp=anmelden($login);
+} else */
+if (is_file($conffile)) {
+	$tmp=anmelden();
 	if ($tmp) {
 		if (chkVer()) {
 			$db=$_SESSION["db"];
@@ -51,10 +49,10 @@ if (!$login) {
 		exit;
 	}
 } else {
-	echo "$usrfile nicht gefunden<br>$PHPSELF<br>";
+	echo "Configfile nicht gefunden<br>$PHPSELF<br>";
+	echo "Lx-Office ERP V 2.6.0 oder gr&ouml;&szlig;er erwartet!!!<br><br>";
 	echo "<form name='erppfad' method='post' action='".$PHPSELF."'>";
 	echo "Bitte den Verzeichnisnamen (nicht den Pfad) der ERP eingeben:<br>";
-	echo "<input type='hidden' name='login' value='".$_GET["login"]."'>";	
 	echo "<input type='text' name='erpname'>";
 	echo "<input type='submit' name='saveerp' value='sichern'>";
 	echo "</form>";

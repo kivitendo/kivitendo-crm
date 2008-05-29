@@ -46,16 +46,16 @@ class myDB extends DB {
 	}
 	
 	function myDB($host,$user,$pwd,$db,$port,$showErr=false) {
-		if ($pwd>"") {
+		/*if ($pwd>"") {
 			$passwd=$this->uudecode($pwd);
 		} else {
 			$passwd="";
-		}
+		}*/
 		//$dns="pgsql://$user$passwd@$host:$port/$db";
 		$dsn = array(
                     'phptype'  => 'pgsql',
                     'username' => $user,
-                    'password' => $passwd,
+                    'password' => $pwd,
                     'hostspec' => $host,
                     'database' => $db,
                     'port'     => $port

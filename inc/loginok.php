@@ -1,26 +1,16 @@
 <?
 // $Id$
-if ($_GET["login"]) {
-	$login=$_GET["login"];
-}  
+if ($_SESSION["cookie"]) $sessid=$_COOKIE[$_SESSION["cookie"]];
 if (!$_SESSION["db"] ||
-    ($login && $_SESSION["employee"]<>$login) ) {
-	if ($_SESSION["employee"] && !$login) $login=$_SESSION["employee"];
-	if ($login) {
+    $sessid=="" ||
+    ($_SESSION["sessid"]<>$_COOKIE[$_SESSION["cookie"]])) {
 		while( list($key,$val) = each($_SESSION) ) {
 			unset($_SESSION[$key]);
 		}
-		if (!is_file("../$ERPNAME/users/".$login.".conf")) header("location: login.php");
-		$tmp=anmelden($_GET["login"]);
+		$tmp=anmelden();
+		if (!$tmp) header("location:ups.html");
 		$db=$_SESSION["db"];
-		$_SESSION["db"]=$db;
 		$_SESSION["loginok"]="ok";
-	} else {
-		while( list($key,$val) = each($_SESSION) ) {
-			unset($_SESSION[$key]);
-		}
-		header("location: ups.html");
-    	}
 } else {
 	$db=new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"],$showErr);
 	$_SESSION["db"]=$db;

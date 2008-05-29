@@ -1,11 +1,17 @@
 <?
 session_start();
+
 $version='$Id$';
 $inclpa=ini_get('include_path');
 ini_set('include_path',$inclpa.":../:./crmajax:./inc:../inc");
 
 require_once "conf.php";
 require_once "db.php";
+
+if (!$_SESSION["db"] || !$_SESSION["cookie"] ||
+	($_SESSION["cookie"] && !$_COOKIE[$_SESSION["cookie"]]) ) {
+	require_once "login.php";
+};
 
 
 /****************************************************
@@ -42,38 +48,81 @@ require_once "db.php";
      return $Datum;
   }
 
+function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
+	global $ERPNAME;
+	$db=new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport,true);
+	$sql="select sc.session_id,u.id from auth.session_content sc left join auth.user u on ";
+	$sql.="u.login=sc.sess_value left join auth.session s on s.id=sc.session_id ";
+	$sql.="where session_id = '$cookie' and sc.sess_key='login'";// order by s.mtime desc";
+	$rs=$db->getAll($sql,"authuser_1");
+	//echo $sql.count($rs);
+	if (!$rs) return false;
+	$stmp="";
+	if (count($rs)>1) {
+		header("location:../../$ERPNAME/login.pl?action=logout");
+		/*foreach($rs as $row) {
+			$stmp.=$row["session_id"].",";
+		}
+		$sql1="delete from session where id in (".substr($stmp,-1).")";	
+		$sql2="delete from session_content where session_id in (".substr($stmp,-1).")";	
+		$db->query($sql1,"authuser_A");
+		$db->query($sql2,"authuser_B");
+		$sql3="insert into session ";*/
+	}
+	$sql="select * from auth.user_config where user_id=".$rs[0]["id"];
+	$rs1=$db->getAll($sql,"authuser_2");
+	$auth=array();
+	$keys=array("login","dbname","dbpasswd","dbhost","dbport","dbuser");
+	foreach ($rs1 as $row) {
+		if (in_array($row["cfg_key"],$keys)) {
+			$auth[$row["cfg_key"]]=$row["cfg_value"];
+		}
+	}
+	$sql="update auth.session set mtime = '".date("Y-M-d H:i:s.100001")."' where id = '".$rs[0]["session_id"]."'"; 
+	$db->query($sql,"authuser_3");
+	return $auth;
+}
+
 /****************************************************
 * anmelden
 * in: name,pwd = String
 * out: rs = integer
 * prüft ob name und kennwort in db sind und liefer die UserID
 *****************************************************/
-function anmelden($name) {
+function anmelden() {
 global $ERPNAME,$showErr;
 	ini_set("gc_maxlifetime","3600");
-	$tmp = @file_get_contents("../".$ERPNAME."/users/".$_GET["login"].".conf");
-	preg_match("/dbname => '(.+)'/",$tmp,$hits);
+	$tmp = @file_get_contents("../".$ERPNAME."/config/authentication.pl");
+	preg_match("/'db'[ ]*=> '(.+)'/",$tmp,$hits);
 	$dbname=$hits[1];
-	preg_match("/dbpasswd => '(.+)'/",$tmp,$hits);
+	preg_match("/'password'[ ]*=> '(.+)'/",$tmp,$hits);
 	$dbpasswd=$hits[1];
-	preg_match("/dbuser => '(.+)'/",$tmp,$hits);
+	preg_match("/'user'[ ]*=> '(.+)'/",$tmp,$hits);
 	$dbuser=$hits[1];
-	preg_match("/dbhost => '(.+)'/",$tmp,$hits);
-	$dbhost=$hits[1];
-	preg_match("/dbport => '(.+)'/",$tmp,$hits);
-	$dbport=$hits[1];
-	if (!$dbhost) $dbhost="localhost";
-	chkdir($dbname);
-   	$_SESSION["employee"]=$_GET["login"];
-   	$_SESSION["password"]=$_GET["password"];
-	$_SESSION["mansel"]=$dbname;
-	$_SESSION["dbname"]=$dbname;
-	$_SESSION["dbhost"]=$dbhost;
-	$_SESSION["dbport"]=(empty($dbport))?5432:$dbport;
-	$_SESSION["dbuser"]=$dbuser;
-	$_SESSION["dbpasswd"]=$dbpasswd;		
+	preg_match("/'host'[ ]*=> '(.+)'/",$tmp,$hits);
+	$dbhost=($hits[1])?$hits[1]:"localhost";
+	preg_match("/'port'[ ]*=> '(.+)'/",$tmp,$hits);
+	$dbport=($hits[1])?$hits[1]:"5432";
+	preg_match("/^[ ]*\$self->\{cookie_name\}[ ]*=[ ]*'(.+)'/",$tmp,$hits);
+	$cookiename=$hits[1];
+	if (!$cookiename) $cookiename='lx_office_erp_session_id';
+	$cookie=$_COOKIE[$cookiename];
+	if (!$cookie) header("location: ups.html");
+	$auth=authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie);
+	if (!$auth) { return false; };
+	chkdir($auth["dbname"]);
+	$_SESSION["sessid"]=$cookie;
+	$_SESSION["cookie"]=$cookiename;
+   	$_SESSION["employee"]=$auth["login"];
+	$_SESSION["mansel"]=$auth["dbname"];
+	$_SESSION["dbname"]=$auth["dbname"];
+	$_SESSION["dbhost"]=(!$auth["dbhost"])?"localhost":$auth["dbhost"];
+	$_SESSION["dbport"]=(!$auth["dbport"])?"5432":$auth["dbport"];
+	$_SESSION["dbuser"]=$auth["dbuser"];
+	$_SESSION["dbpasswd"]=$auth["dbpasswd"];	
 	$_SESSION["db"]=new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"],$showErr);
-	$sql="select * from employee where login='$name'";
+	$_SESSION["authcookie"]=$authcookie;
+	$sql="select * from employee where login='".$auth["login"]."'";
 	$rs=$_SESSION["db"]->getAll($sql);
 	if(!$rs) {
 		return false;

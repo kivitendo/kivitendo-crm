@@ -54,7 +54,7 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
 	$sql="select sc.session_id,u.id from auth.session_content sc left join auth.user u on ";
 	$sql.="u.login=sc.sess_value left join auth.session s on s.id=sc.session_id ";
 	$sql.="where session_id = '$cookie' and sc.sess_key='login'";// order by s.mtime desc";
-	$rs=$db->getAll($sql,"authuser_1");
+	$rs=$db->getAll($sql,"authuser_0");
 	//echo $sql.count($rs);
 	if (!$rs) return false;
 	$stmp="";
@@ -69,10 +69,14 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
 		$db->query($sql2,"authuser_B");
 		$sql3="insert into session ";*/
 	}
+	$sql="select * from auth.user where id=".$rs[0]["id"];
+	$rs1=$db->getAll($sql,"authuser_1");
+	if (!$rs1) return false;
+	$auth=array();
+	$auth["login"]=$rs1[0]["login"];
 	$sql="select * from auth.user_config where user_id=".$rs[0]["id"];
 	$rs1=$db->getAll($sql,"authuser_2");
-	$auth=array();
-	$keys=array("login","dbname","dbpasswd","dbhost","dbport","dbuser");
+	$keys=array("dbname","dbpasswd","dbhost","dbport","dbuser");
 	foreach ($rs1 as $row) {
 		if (in_array($row["cfg_key"],$keys)) {
 			$auth[$row["cfg_key"]]=$row["cfg_value"];

@@ -92,7 +92,7 @@ if ($_POST["adress"]) {
 	echo "<br>";
 } else if ($_POST["kontakt"]){
 ?>
-<script langusage="JavaScript">
+<script language="JavaScript">
 	sw="<?= $_POST["swort"]; ?>";
 	if (sw != "") 
 		F1=open("suchKontakt.php?suchwort="+sw+"&Q=S","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");

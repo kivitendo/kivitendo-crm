@@ -607,6 +607,14 @@ global $db;
 	$rs=$db->getAll($sql);
 	return $rs;
 }
+function getVariablen($id) {
+global $db;
+	$sql="select C.name,C.description,V.text_Value from  ";
+	$sql.="custom_variables V left join custom_variable_configs C on V.config_id=C.id ";
+	$sql.="where trans_id = $id";
+	$rs=$db->getAll($sql);
+	return $rs;
+}
 function leertpl (&$t,$tpl,$typ,$msg="") {
 global $cp_sonder,$xajax;
 		$kdtyp=getBusiness();
@@ -668,7 +676,8 @@ global $cp_sonder,$xajax;
 			employee => $_SESSION["loginCRM"],
 			Radio   => "&nbsp;alle<input type='radio' name='Typ' value='' checked>",
 			init	=> $_SESSION["employee"],
-			txid0 => "selected"
+			txid0 => "selected",
+			variablen => "" 
 			));
 		$t->set_block("fa1","TypListe","BlockT");
 		if ($kdtyp) foreach ($kdtyp as $row) {
@@ -792,6 +801,8 @@ global $cp_sonder,$xajax;
 			}
 		}
 		$kdtyp=getBusiness();
+		$tmp=getVariablen($daten["id"]);
+		$varablen=($tmp>0)?"$tmp Variablen":"";
 		$t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
 		$t->set_var(array(
 				AJAXJS	=> $xajax->printJavascript('./xajax/'),
@@ -856,7 +867,8 @@ global $cp_sonder,$xajax;
 				login	=> $_SESSION{"login"},
 				employee => $_SESSION["loginCRM"],
 				password	=> $_SESSION["password"],
-				txid.$daten["taxzone_id"] => "selected"
+				txid.$daten["taxzone_id"] => "selected",
+				variablen => $varablen
 		));
 		$t->set_block("fa1","TypListe","BlockT");
 		if ($kdtyp) foreach ($kdtyp as $row) {

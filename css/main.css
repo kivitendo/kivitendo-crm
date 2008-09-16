@@ -87,7 +87,6 @@ textarea  	{ font-size: 1em; font-family:Verdana,Arial,Helvetica,sans-serif;}
 }
 .value {
 	border: 0px;
-	//background-color: #ffffff;
 }
 .value:before {
 	content:"[ ";	
@@ -104,7 +103,6 @@ input:focus {
 .labelLe {
   float: left;
   width: 7em;
-  //background-color: #f0f0f0;
   text-align: left;
 }
 .label {

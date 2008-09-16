@@ -82,6 +82,12 @@
 		leftpos=Math.floor(screen.width/2);
 		f1=open(tool,"Adresse","width=350, height=200, left="+leftpos+", top=50, status=no,toolbar=no,menubar=no,location=no,titlebar=no,scrollbars=no,fullscreen=no");
 	}
+	function showVar() {
+		document.getElementById("Variablen").style.visibility="visible";
+	}
+	function hideVar() {
+		document.getElementById("Variablen").style.visibility="hidden";
+	}
 	//-->
 	</script>
 	</head>
@@ -183,8 +189,16 @@
 	</span>
 
 	<span id="not" style="visibility:hidden;position:absolute;  text-align:left;width:32em; left:1.2em; top:18.0em;">
+		<div id="Variablen" style="position: absolute; z-Index: 2; background-color:white; visibility: hidden">
+			<table>
+			{Vars}
+			</table>
+			<br>
+			[ <a href='#' onClick="hideVar();">verstecken</a> ]
+		</div>
 		<div style="width:35em;" class="klein">
 		<table class="normal">
+		<tr><td>Variablen:   </td><td><div class="value"><a href='#' onClick="showVar();">{variablen}</a></div></td></tr>
 		<tr><td>Checkbox:   </td><td><div class="value">{sonder} </div></td></tr>
 		<tr><td>Branche:    </td><td><div class="value">{branche}</div></td></tr>
 		<tr><td>Stichworte: </td><td><div class="value">{sw}     </div></td></tr>

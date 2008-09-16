@@ -11,6 +11,15 @@
 	$fa=getFirmenStamm($id,true,$Q);
 	$start=($_GET["start"])?($_GET["start"]):0;
 	$cmsg=getCustMsg($id);
+	$tmp=getVariablen($id);
+	$variablem="";
+	$Vars="";
+	if (count($tmp)>0) {
+		$variablen=count($tmp)." Variablen";
+		foreach ($tmp as $row) {
+			$Vars.="<tr><td>".$row["description"]." </td><td>: ".$row["text_value"]."</td></tr>\n";
+		}
+	}
 	$t = new Template($base);
 	$t->set_file(array("fa1" => "firma1.tpl"));
 	if ($fa["grafik"]) {
@@ -118,12 +127,15 @@
 			login		=> $_SESSION["employee"],
 			password 	=> $_SESSION["password"],
 			leadsrc 	=> $fa["leadsrc"],
+			variablen 	=> $variablen,
+			Vars	 	=> $Vars,
 			erstellt	=> db2date($fa["itime"]),
 			modify 		=> db2date($fa["mtime"]),
 			kdview 		=> $views[$_SESSION["kdview"]],
 			zeige 		=> ($fa["obsolete"]=="f")?"visible":"hidden",
 			verstecke 	=> ($fa["obsolete"]=="t")?"visible":"hidden",
-			chelp 		=> ($kdhelp)?"visible":"hidden"
+			chelp 		=> ($kdhelp)?"visible":"hidden",
+			none		=> "visible"
 	));
 	$t->set_block("fa1","Liste","Block");
 	$i=0;

@@ -257,6 +257,12 @@
 		<span class="feldxx"><input type="text" name="account_number" size="35" maxlength="15" value="{account_number}" tabindex="9"></span>
 	</div>
 	<div class="zeile2">
+		<span class="label klein">Lastschrift</span>
+		<span class="feldxx"><input type="radio" value="t" name="direct_debit" {direct_debitt} tabindex="9">Ja
+				<input type="radio" value="f" name="direct_debit" {direct_debitf} tabindex="9">Nein
+		</span>
+	</div>
+	<div class="zeile2">
 		<span class="label klein">Leadquelle</span>
 		<span class="feldxx">
 			<select name="lead" tabindex="10" style="width:10em;">

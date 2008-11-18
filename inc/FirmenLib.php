@@ -397,7 +397,15 @@ global $db;
 			}
 		}
 	}
-	
+	if ($daten["direct_debit"]=="t") {
+		if (empty($daten["bank"]) or empty($daten["account_number"]) or empty($daten["bank_code"])) {
+			$fehler="Lastschrift: Bankverbindung fehlt";
+		} else {
+			$query0.="direct_debit='t',";
+		}
+	} else {
+			$query0.="direct_debit='f',";
+	}	
 	if ($fehler=="ok") {
 		if ($daten["customernumber"]) {
 			$query0=substr($query0,0,-1);
@@ -655,6 +663,7 @@ global $cp_sonder,$xajax;
 			bank	=> "",
 			bank_code	=> "",
 			account_number	=> "",
+			direct_debitf   => "checked",
 			terms		=> "",
 			kreditlim	=> "",
 			op		=> "",
@@ -840,6 +849,7 @@ global $cp_sonder,$xajax;
 				notes	=> $daten["notes"],
 				bank	=> $daten["bank"],
 				bank_code	=> $daten["bank_code"],
+				direct_debit.$daten["direct_debit"] => "checked",
 				account_number	=> $daten["account_number"],
 				terms		=> $daten["terms"],
 				kreditlim	=> $daten["creditlimit"],

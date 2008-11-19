@@ -105,7 +105,7 @@
 		<span class="label klein">Land / Plz</span>
 		<span class="feldxx">
 			<input type="text" name="country" size="2" maxlength="75" value="{country}" tabindex="7" onBlur="mkBuland('bland')">/
-			<input type="text" name="zipcode" size="5" maxlength="10" value="{zipcode}" tabindex="8">
+			<input type="text" id="zipcode" name="zipcode" size="5" maxlength="10" value="{zipcode}" tabindex="8">
 			<select name="bland" id="bland" tabindex="9" style="width:150px;">
 				<option value=""></option>
 <!-- BEGIN buland -->
@@ -116,11 +116,11 @@
 	</div>
 	<div class="zeile2">
 		<span class="label klein">Ort</span>
-		<span class="feldxx"><input type="text" name="city" size="35" maxlength="75" value="{city}" tabindex="10"></span>
+		<span class="feldxx"><input type="text" id="city" name="city" size="35" maxlength="75" value="{city}" tabindex="10"></span>
 	</div>
 	<div class="zeile2">
 		<span class="label klein">Telefon</span>
-		<span class="feldxx"><input type="text" name="phone" size="35" maxlength="30" value="{phone}" tabindex="11"></span>
+		<span class="feldxx"><input type="text" id="phone" name="phone" size="35" maxlength="30" value="{phone}" tabindex="11"></span>
 	</div>
 	<div class="zeile2">
 		<span class="label klein">Fax</span>
@@ -147,6 +147,7 @@
 			<span class="feldxx">
 			{IMG}
 			</span>
+			<span id="geosearchR" class="feldxx"></span></span>
 		</div>
 	</span>
 
@@ -214,6 +215,11 @@
 	</div>
 	<br><br>
 	<br><br>
+	<span style="position:absolute; left:35em; top:3em;text-align:left;">
+		<div class="zeile2">
+			<span id="geosearchL" class="feldxx"></span></span>
+		</div>
+	</span>
 </span>
 <!-- Ende tab2 -->
 <span id="tab3" style="visibility:hidden;  position:absolute; text-align:left;width:90%; left:0.8em; top:4.3em; border:1px solid black; display:inline;">
@@ -327,15 +333,16 @@
 <!-- END sonder -->	
 	</div>
 </span>
-<span id="tab4" style="position:absolute; text-align:left;width:48%; left:0.8em; top:32em;"> 			
+<span id="tab4" style="position:absolute; text-align:left;width:48%; left:0.8em; top:34.5em;"> 			
 			{Btn1} &nbsp;{Btn2} &nbsp; 
-			<input type="submit" name="saveneu" value="sichern neu" tabindex="37"> &nbsp;
-			<input type="submit" name="reset" value="clear" tabindex="38"> &nbsp;
-			<input type="button" name="" value="VCard" onClick="vcard()" tabindex="39">
+			<input type="submit" name="saveneu" value="sichern neu" tabindex="97"> &nbsp;
+			<input type="submit" name="reset" value="clear" tabindex="98"> &nbsp;
+			<input type="button" name="" value="VCard" onClick="vcard()" tabindex="99">
 </span>
 <!-- End Code ------------------------------------------->
 </span>
 </form>
+	<script type='text/javascript' src='inc/geosearch.js'></script>
 </body>
 </html>
 			

@@ -85,9 +85,9 @@ if ($liste) foreach($liste as $row) {
 <input type="hidden" name="id" value="<?= $data["id"] ?>">
 <input type="text" name="cause" size="77" maxlength="100" value="<?= $data["cause"] ?>"><br />
 <textarea class="klein" rows="7" cols="80" name="notes"><?= $data["notes"] ?></textarea><br />
-<input type="submit" name="save" value="sichern">&nbsp;
-<input type="submit" name="clear" value="clear">&nbsp;
-<input type="submit" name="delete" value="l&ouml;schen">&nbsp;
+<input type="submit" class="sichern" name="save" value="sichern">&nbsp;
+<input type="submit" class="clear" name="clear" value="clear">&nbsp;
+<input type="submit" class="sichernneu" name="delete" value="l&ouml;schen">&nbsp;
 <? if ($_GET["popup"]==1) { ?>
 <input type="button" name="ppp" value="Close" onCLick="self.close();">
 <? }  else { ?>

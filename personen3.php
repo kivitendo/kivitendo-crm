@@ -23,21 +23,21 @@
 			$msg="Daten gesichert.";
 			$daten=getKontaktStamm(($_POST["PID"])?$_POST["PID"]:$rc);
 			$daten["Quelle"]=$Q;
-			$btn1="<input type='submit' name='save' value='sichern update' tabindex='25'>";
-			$btn2="<input type='submit' name='neu' value='sichern als neu'>";
-			$btn3="<input type='submit' name='show' value='zur Anzeige'>";
+			$btn3="<input type='submit' class='sichern' name='save' value='sichern update' tabindex='25'>";
+			$btn1="<input type='submit' class='anzeige' name='show' value='zur Anzeige'>";
+			$btn2="<input type='submit' class='sichernneu' name='neu' value='sichern als neu'>";
 			vartplP ($t,$daten,$msg,$btn1,$btn2,$btn3,"cp_givenname","white",0,3);
 		} else {
 			if ($_POST["PID"]) {
 				$_POST["cp_id"]=$_POST["PID"];
-				$btn1="<input type='submit' name='save' value='sichern update' tabindex='25'>";
-				$btn3="<input type='submit' name='show' value='zur Anzeige'>";
+				$btn3="<input type='submit' class='sichern' name='save' value='sichern update' tabindex='25'>";
+				$btn1="<input type='submit' class='anzeige' name='show' value='zur Anzeige'>";
 			} else {
 				$btn1="";
 				$btn3="";
 			}
 			$msg="Fehler beim Sichern ($rc)";
-			$btn2="<input type='submit' name='neu' value='sichern als neu'>";			
+			$btn2="<input type='submit' class='sichernneu' name='neu' value='sichern als neu'>";			
 			vartplP ($t,$_POST,$msg,$btn1,$btn2,$btn3,$rc,"red",1,3);
 		}
 	} else if ($_POST["edit"]>0 || $_GET["edit"]>0) {
@@ -50,9 +50,9 @@
 		$daten=getKontaktStamm($id);
 		$daten["Quelle"]=$Q;
 		$msg="Edit: <b>$id</b>";
-		$btn1="<input type='submit' name='save' value='sichern update' tabindex='25'>";
-		$btn2="<input type='submit' name='neu' value='sichern als neu'>";
-		$btn3="<input type='submit' name='show' value='zur Anzeige'>";
+		$btn3="<input type='submit' class='sichern' name='save' value='sichern update' tabindex='25'>";
+		$btn1="<input type='submit' class='anzeige' name='show' value='zur Anzeige'>";
+		$btn2="<input type='submit' class='sichernneu' name='neu' value='sichern als neu'>";
 		vartplP ($t,$daten,$msg,$btn1,$btn2,$btn3,"cp_givenname","white",0,3);
 	} else {
 		$msg="Neue Person";

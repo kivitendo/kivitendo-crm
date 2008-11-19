@@ -1,6 +1,11 @@
 <?
 	require_once("inc/stdLib.php");
-	$ort=strtoupper($_GET["ort"]);
+	$ort=$_GET["ort"];
+	//Umlaute wandeln hängt von der Serverumgebung ab!!
+	//$loc_de = setlocale (LC_ALL, 'de_DE@euro', 'de_DE', 'de', 'ge');
+	//HACK!!
+	$ort=strtr($ort,array(chr(228)=>"AE",chr(246)=>"OE",chr(252)=>"UE",chr(223)=>"SS"));
+	$ort=strtoupper($ort);
 	$plz=$_GET["plz"];
 	$wo=$_GET["wo"];
 	if ($plz and $ort) {

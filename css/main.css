@@ -165,4 +165,16 @@ input:focus {
 .diff2 {
 	color: red;
 }
+.sichern {
+	background-color: #cc5555;
+}
+.sichernneu {
+	background-color: #ff0000;
+}
+.anzeige {
+	background-color: #6666cc;
+}
+.clear {
+	background-color: #55cc55;
+}
 

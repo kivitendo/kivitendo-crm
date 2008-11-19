@@ -181,7 +181,7 @@
 </span>
 <span style="position:absolute; left:1.2em; top:20em; width:52em; height:2em; text-align:left; border: 0px solid red;">
 	<br><br>
-	{Btn3} {Btn1} <input type='submit' name='neu' value='sichern als neu' tabindex="28">
+	{Btn3} {Btn1} <input type='submit' class='sichernneu' name='neu' value='sichern als neu' tabindex="28">
 	<input type="submit" name="reset" value="clear" tabindex="29"> <input type="button" name="" value="VCard" onClick="vcard()" tabindex="30">
 	<span class="klein">Berechtigung</span> <select name="cp_owener"  tabindex="31"> 
 <!-- BEGIN OwenerListe -->

@@ -102,7 +102,7 @@
 	</div>
 	<div class="zeile">
 		<input type="checkbox" name="fuzzy" value="%" checked>Unscharf suchen&nbsp;&nbsp;<b>{Msg}</b>  <br>
-		{Btn1} {Btn3} <input type="submit" name="suche" value="suchen"> <input type="submit" name="reset" value="clear">
+		{Btn1} {Btn3} <input type="submit" class="anzeige" name="suche" value="suchen"> <input type="submit" class="clear" name="reset" value="clear">
 	</div>
 </span>
 <span style="float:left;   top:3em; border: 0px solid black;">

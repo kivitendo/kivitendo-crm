@@ -95,10 +95,10 @@
 				</td></tr>
 			<tr><td colspan="2"><input type="text" name="grund" size="37" maxlength="75" value="{GRUND}">
 						 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <a href="termin.php"><input type="reset" name="clear" value="clear"></a>
+                                                <a href="termin.php"><input type="reset" class="clear" name="clear" value="clear"></a>
 						<br><span class="mini">Grund</span></td></tr>
 			<tr><td colspan="2"><textarea name="lang" cols="40" rows="4">{LANG}</textarea>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" name="sichern" value="sichern">	
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="sichern" name="sichern" value="sichern">	
 						<br><span class="mini">Bemerkungen</span></td></tr>
 			<tr><td colspan="2">
 					<input type="text" name="suchname" size="20" maxlength="25" value=""><input type="button" value="suche Teilnehmer" onClick="suchName()">
@@ -138,7 +138,7 @@
 			<option value="{JV}"{JS}>{JK}</option>
 <!-- END Jahre -->
 		</select>
-		<input type="button" value="Zeigen" onClick="showlist('T')">
+		<input type="button" class="anzeige" value="Zeigen" onClick="showlist('T')">
 		<!--input type="button" value="Woche" onClick="showlist('W')">
 		<input type="button" value="Monat" onClick="showlist('M')"-->
 		<iframe src="termlist.php?ansicht={ANSICHT}&datum={DATUM}" name="Termine" style="width:25em; height:28em" marginheight="0" marginwidth="0" align="left">

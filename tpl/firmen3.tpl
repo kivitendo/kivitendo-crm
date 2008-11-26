@@ -252,11 +252,13 @@
 	</div>
 	<div class="zeile2">
 		<span class="label klein">Bank</span>
-		<span class="feldxx"><input type="text" name="bank" size="35" maxlength="55" value="{bank}" tabindex="7"></span>
+		<span class="feldxx"><input type="text" id="bank" name="bank" size="35" maxlength="55" value="{bank}" tabindex="7"></span>
 	</div>
 	<div class="zeile2">
 		<span class="label klein">Blz</span>
-		<span class="feldxx"><input type="text" name="bank_code" size="35" maxlength="10" value="{bank_code}" tabindex="8"></span>
+		<span class="feldxx"><input type="text" id="blz" name="bank_code" size="35" maxlength="10" value="{bank_code}" tabindex="8">
+		</span>
+		<span id="blzsearch" style="text-align:left;"></span>
 	</div>
 	<div class="zeile2">
 		<span class="label klein">Konto-Nr</span>
@@ -344,6 +346,7 @@
 </form>
 	<script type='text/javascript' src='inc/geosearchF.js'></script>
 	<script type='text/javascript' src='inc/geosearch.js'></script>
+	<script type='text/javascript' src='inc/blzsearch.js'></script>
 </body>
 </html>
 			

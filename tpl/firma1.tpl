@@ -88,6 +88,9 @@
 	function hideVar() {
 		document.getElementById("Variablen").style.visibility="hidden";
 	}
+	function showOP(was) {
+                F1=open("op_.php?fa={Fname1}&op="+was,"OP","width=950, height=450, left=100, top=50, scrollbars=yes");
+        }
 	//-->
 	</script>
 	</head>
@@ -216,7 +219,7 @@
 		Steuer-Nr.: <span class="value">{Taxnumber}</span> &nbsp;&nbsp;&nbsp; UStId: <span class="value">{USTID}</span><br />
 		Steuerzone: <span class="value">{Steuerzone}</span><br /><br />
 		Zahlungsziel: <span class="value">{terms}</span> Tage &nbsp;&nbsp;&nbsp;Kreditlimit: <span class="value">{kreditlim}</span><br />
-		Offene Posten: <span class="value">{op}</span> &nbsp;&nbsp;&nbsp;offene Auftr&auml;ge: <span class="value">{oa}</span><br />
+		Offene Posten: <span class="value" onClick="showOP('{apr}');">{op}</span> &nbsp;&nbsp;&nbsp;offene Auftr&auml;ge: <span class="value" onClick="showOP('oe');">{oa}</span><br />
 		Bankname: <span class="value">{bank}</span><br />
 		Blz: <span class="value">{blz}</span> &nbsp;&nbsp;&nbsp; Konto: <span class="value">{konto}</span><br />
 		Teilnahme an Lastschrift: <span class="value">{directdebit}</span><br />

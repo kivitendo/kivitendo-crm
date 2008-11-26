@@ -71,6 +71,7 @@
 <input type="hidden" name="id" value="{id}">
 <input type="hidden" id="shipto_id" name="shipto_id" value="{shipto_id}">
 <input type="hidden" name="customernumber" value="{customernumber}">
+<input type="hidden" name="vendornumber" value="{vendornumber}">
 <input type="hidden" name="employee" value="{employee}">
 <input type="hidden" name="grafik" value="{grafik}">
 <span id="tab1" style="visibility:visible; position:absolute; text-align:left;width:90%; left:0.8em; top:4.3em; border:1px solid black;">

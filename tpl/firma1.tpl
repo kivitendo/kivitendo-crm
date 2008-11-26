@@ -211,19 +211,77 @@
 	</span>	
 
 	<span id="inf" style="visibility:hidden;position:absolute; text-align:left;width:32em; left:1.2em; top:17.1em;">
-		<div style="width:35em;" class="klein">
-		Konzern: <span class="value"><a href="firma1.php?Q={Q}&id={konzern}">{konzernname}</a></span><br />
-		Kundentyp: <span class="value">{kdtyp}</span> &nbsp;&nbsp;&nbsp; Quelle:<span class="value">{lead} {leadsrc}</span><br />
-		Rabatt: <span class="value">{rabatt}</span> &nbsp;&nbsp;&nbsp; Preisgruppe: <span class="value">{preisgrp}</span><br /><br />
-		Erstelldatum: <span class="value">{erstellt}</span> &nbsp;&nbsp;&nbsp; Ge&auml;ndert:<span class="value">{modify}</span><br /> 
-		Steuer-Nr.: <span class="value">{Taxnumber}</span> &nbsp;&nbsp;&nbsp; UStId: <span class="value">{USTID}</span><br />
-		Steuerzone: <span class="value">{Steuerzone}</span><br /><br />
-		Zahlungsziel: <span class="value">{terms}</span> Tage &nbsp;&nbsp;&nbsp;Kreditlimit: <span class="value">{kreditlim}</span><br />
-		Offene Posten: <span class="value" onClick="showOP('{apr}');">{op}</span> &nbsp;&nbsp;&nbsp;offene Auftr&auml;ge: <span class="value" onClick="showOP('oe');">{oa}</span><br />
-		Bankname: <span class="value">{bank}</span><br />
-		Blz: <span class="value">{blz}</span> &nbsp;&nbsp;&nbsp; Konto: <span class="value">{konto}</span><br />
-		Teilnahme an Lastschrift: <span class="value">{directdebit}</span><br />
+		<div  class="zeile klein">
+			<span class="labelLe">Konzern:</span>
+			<span class="value"><a href="firma1.php?Q={Q}&id={konzern}">{konzernname}</a></span>
 		</div>
+		<div  class="zeile klein">
+			<span class="labelLe">Kundentyp:</span>
+			<span class="value">{kdtyp}</span>
+			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+			<span class="labelLe">Quelle:</span>
+			<span class="value">{lead} {leadsrc}</span>
+		</div>
+		<div  class="zeile klein">
+ 			<span class="labelLe">Rabatt:</span>
+			<span class="value">{rabatt}</span>
+			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+			<span class="labelLe">Preisgruppe:</span>
+			<span class="value">{preisgrp}</span>
+		</div>
+		<div  class="zeile klein">
+			<span class="labelLe">Erstelldatum:</span>
+			<span class="value">{erstellt}</span>
+			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+			<span class="labelLe">Ge&auml;ndert:</span>
+			<span class="value">{modify}</span>
+		</div>
+		<br />
+		<div  class="zeile klein">
+			<span class="labelLe">Steuer-Nr.:</span>
+			<span class="value">{Taxnumber}</span>
+			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+			<span class="labelLe">UStId:</span>
+			<span class="value">{USTID}</span>
+		</div>
+		<div  class="zeile klein">
+			<span class="labelLe">Steuerzone:</span>
+			<span class="value">{Steuerzone}</span>
+			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+		</div>
+		<br />
+		<div  class="zeile klein">
+			<span class="labelLe">Zahlungsziel:</span>
+			<span class="value">{terms} Tage</span>
+			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+			<span class="labelLe">Kreditlimit:</span>
+			<span class="value">{kreditlim}</span>
+		</div>
+		<div  class="zeile">
+			<span class="space mini">offene</span>
+		</div>
+		<div  class="zeile klein">
+			<span class="labelLe">- Posten:</span>
+			<span class="value" onClick="showOP('{apr}');">{op}</span>
+			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+			<span class="labelLe">- Auftr&auml;ge:</span>
+			<span class="value" onClick="showOP('oe');">{oa}</span>
+		</div>
+		<br />
+		<div  class="zeile klein">
+			<span class="labelLe">Bankname:</span>
+			<span class="value">{bank}</span>
+		</div>
+		<div  class="zeile klein">
+			<span class="labelLe">Blz:</span>
+			<span class="value">{blz}</span>
+			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+			<span class="labelLe">Konto:</span>
+			<span class="value">{konto}</span>
+		</div>
+		<div  class="zeile klein">
+			<span class="space">Teilnahme an Lastschrift:</span><span class="value">{directdebit}</span>
+		</div>	
 	</span>
 </div>
 

@@ -336,12 +336,13 @@
 <span id="tab4" style="position:absolute; text-align:left;width:48%; left:0.8em; top:34.5em;"> 			
 			{Btn1} &nbsp;{Btn2} &nbsp; 
 			<input type="submit" class="sichernneu" name="saveneu" value="sichern neu" tabindex="97"> &nbsp;
-			<input type="submit" name="reset" value="clear" tabindex="98"> &nbsp;
+			<input type="submit" class="clear" name="reset" value="clear" tabindex="98"> &nbsp;
 			<input type="button" name="" value="VCard" onClick="vcard()" tabindex="99">
 </span>
 <!-- End Code ------------------------------------------->
 </span>
 </form>
+	<script type='text/javascript' src='inc/geosearchF.js'></script>
 	<script type='text/javascript' src='inc/geosearch.js'></script>
 </body>
 </html>

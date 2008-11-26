@@ -62,7 +62,7 @@
 				</select>
 		</span>
 		<span class="label klein">Telefon 1</span>
-		<span class="feld"><input type="text" name="cp_phone1" size="25" maxlength="75" value="{cp_phone1}" tabindex="12"></span>
+		<span class="feld"><input type="text" id="phone" name="cp_phone1" size="25" maxlength="75" value="{cp_phone1}" tabindex="12"></span>
 	</div>
 	<div class="zeile2">
 		<span class="label2 klein">Briefanrede</span>
@@ -107,12 +107,14 @@
 	</div>
 	<div class="zeile2">
 		<span class="label2 klein">Land / Plz</span>
-		<span class="feld"><input type="text" name="cp_country" size="2" maxlength="3" value="{cp_country}" tabindex="9"> / 
-				  <input type="text" name="cp_zipcode" size="5" maxlength="10" value="{cp_zipcode}" tabindex="10"></span>
+		<span class="feld"><input type="text" id="country" name="cp_country" size="2" maxlength="3" value="{cp_country}" tabindex="9"> / 
+				  <input type="text" id="zipcode" name="cp_zipcode" size="5" maxlength="10" value="{cp_zipcode}" tabindex="10">
+		</span>
 	</div>
 	<div class="zeile2">
 		<span class="label2 klein">Ort</span>
-		<span class="feld"><input type="text" name="cp_city" size="25" maxlength="75" value="{cp_city}" tabindex="11"></span>
+		<span class="feld"><input type="text" id="city" name="cp_city" size="25" maxlength="75" value="{cp_city}" tabindex="11"></span>
+				  <span id="geosearchP" class="feldxx"></span>
 	</div>
 	<div class="zeile2">
 		<span class="label2 klein">Homepage</span>
@@ -182,7 +184,7 @@
 <span style="position:absolute; left:1.2em; top:20em; width:52em; height:2em; text-align:left; border: 0px solid red;">
 	<br><br>
 	{Btn3} {Btn1} <input type='submit' class='sichernneu' name='neu' value='sichern als neu' tabindex="28">
-	<input type="submit" name="reset" value="clear" tabindex="29"> <input type="button" name="" value="VCard" onClick="vcard()" tabindex="30">
+	<input type="submit" class="clear" name="reset" value="clear" tabindex="29"> <input type="button" name="" value="VCard" onClick="vcard()" tabindex="30">
 	<span class="klein">Berechtigung</span> <select name="cp_owener"  tabindex="31"> 
 <!-- BEGIN OwenerListe -->
 		<option value="{grpid}" {Gsel}>{Gname}</option>
@@ -194,5 +196,7 @@
 <input type="hidden" name="cp_cv_id" size="7" maxlength="10" value="{FID}" tabindex="32">
 </form>
 <!-- End Code ------------------------------------------->
+	<script type='text/javascript' src='inc/geosearchP.js'></script>
+	<script type='text/javascript' src='inc/geosearch.js'></script>
 </body>
 </html>

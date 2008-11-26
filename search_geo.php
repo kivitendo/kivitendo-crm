@@ -47,7 +47,7 @@
 		nr=document.firmen.Alle.selectedIndex;
 		val=document.firmen.Alle.options[nr].value;
 		tmp=val.split("--");		
-		if (wo=="R") {
+		if (wo=="R" || wo=="P") {
 			opener.document.getElementById("zipcode").value=tmp[0];
 			opener.document.getElementById("city").value=tmp[1];
 			opener.document.getElementById("phone").value=tmp[2];

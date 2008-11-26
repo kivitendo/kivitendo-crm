@@ -1,4 +1,12 @@
 <?
+$from=16;  // Anrufernummer
+$to=18;    // Zielnummer
+$constring="created"; // Eindeutiges Wort für Anwahlzeile
+$connect=9; // Position eindeutiges Wort 
+//Beispiellog von Capilog
+//Mon Jul  7 15:31:25 2008 Connection 0x81324f8: Connection object created for incoming call PLCI 101 from 0731229 to 58322 CIP 0x4
+//Mon Jul  7 15:31:25 2008 Connection 0x81324f8: rejecting with cause 34a9
+//Mon Jul  7 15:31:25 2008 Connection 0x81324f8: Connection object deleted
 $bgcol[1]="#ddddff";
 $bgcol[2]="#ddffdd";
 $bgcol[3]="#ff6666";

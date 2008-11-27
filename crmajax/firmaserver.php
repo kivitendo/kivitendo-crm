@@ -153,8 +153,8 @@
 		    $dir_object = dir( "../dokumente/".$_SESSION["mansel"]."/".$directory );
 		    // Gibt neues Verzeichnis aus
 			$inhalt="<ul>";
-			$dir="<li onClick='dateibaum(\"$id\",\"%s\")'>%s";
-			$datei="<li onClick='showFile(\"$id\",\"%s\")'>%s";
+			$dir="<li class='ptr' onClick='dateibaum(\"$id\",\"%s\")'>%s";
+			$datei="<li class='ptr' onClick='showFile(\"$id\",\"%s\")'>%s";
 			clearstatcache();
 	        	while ( false !== ( $entry = $dir_object->read() ) ) {
 		            // '.' interessiert nicht

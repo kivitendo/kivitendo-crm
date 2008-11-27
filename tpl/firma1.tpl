@@ -135,8 +135,9 @@
 			<span class="mini"><br />&nbsp;<br /></span>
 			{Fcontact}
 			<span class="mini"><br />&nbsp;<br /></span>
-			<font color="#444444">Tel:</font> {Telefon}	&nbsp;&nbsp;&nbsp;	<font color="#444444">Fax:</font> {Fax}<br />	
-			<!--span class="mini">&nbsp;<br /></span-->
+			<font color="#444444"> Tel:</font> {Telefon}<br />
+			<font color="#444444"> Fax:</font> {Fax}<br />	
+			<span class="mini">&nbsp;<br /></span>
 			&nbsp;[<a href="mail.php?TO={eMail}&KontaktTO=C{FID}">{eMail}</a>]<br />
 			&nbsp;<a href="{Internet}" target="_blank">{Internet}</a></span>
 		</div>
@@ -158,7 +159,8 @@
 				&nbsp;<br>
 				<a href="extrafelder.php?owner={Q}{FID}" target="_blank" title="Extra Daten" style="visibility:{zeigeextra};"><img src="image/extra.png" alt="Extras" border="0" /></a>
 				&nbsp;<br><br>
-				<span style="visibility:{zeigeplan};"><a href="{KARTE}" target="_blank"><img src="image/karte.gif" title="Ortsplan" border="0"></a></span>&nbsp;</form>
+				<span style="visibility:{zeigeplan};"><a href="{KARTE}" target="_blank"><img src="image/karte.gif" title="Ortsplan" border="0"></a></span>&nbsp;</form><br />
+				{verkaeufer}
 
 		</div>
 	</div>

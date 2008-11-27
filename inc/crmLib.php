@@ -602,12 +602,12 @@ global $db;
 *****************************************************/
 function getWvl($crmuser) {
 global $db;
-	$sql="select * from wiedervorlage where (employee=$crmuser or employee is null) and status > 0 order by  finishdate asc ,initdate asc";
+	$sql="select * from wiedervorlage where (employee=$crmuser or employee is null) and status > '0' order by  finishdate asc ,initdate asc";
 	$rs=$db->getAll($sql);
 	if(!$rs) {
 		$rs=false;
 	} else {
-		if (count($rs)==0) $rs=array(array("id"=>0,"initdate"=>date("Y-m-d H:i:00"),"cause"=>"Keine Einträge"));
+		if (count($rs)==0) $rs=array(array("id"=>0,"initdate"=>date("Y-m-d H:i:00"),"cause"=>"Keine Eintr&auml;ge"));
 	}
 	return $rs;
 }

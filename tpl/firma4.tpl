@@ -158,7 +158,7 @@
 	<div style="float:left; width:100%; height:3.5em; text-align:left; border-bottom: 1px solid black;" >
 	<table>
 	<tr><td class="fett">{Name}</td><td></td></tr>
-	<tr><td class="fett">{customernumber}</td><td> {PID}</td></tr>
+	<tr><td class="fett">Kd-Nr: {customernumber}</td><td>ID: {PID}</td></tr>
 	</table>
 	</div>
 	<div style="float:left; width:100%; text-align:left; border-bottom: 0px solid black;" >

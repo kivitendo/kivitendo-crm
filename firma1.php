@@ -80,6 +80,7 @@
 			Fax		=> $fa["fax"],
 			Fcontact	=> $fa["contact"],
 			eMail		=> $fa["email"],
+			verkaeufer	=> $fa["verkaeufer"],
 			branche 	=> $fa["branche"],
 			sw 		=> $fa["sw"],
 			sonder		=> $sonder,

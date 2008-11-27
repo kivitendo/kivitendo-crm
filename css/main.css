@@ -45,6 +45,11 @@ tr.calls0:hover	{ background-color:#ff0000; }
 .ft		{ background-color:#ffd5d5; vertical-align:bottom;}
 .we		{ background-color:#ffffff; vertical-align:bottom;}
 
+.op 		{ color:#cc3333; font-weight:bold; cursor:pointer;}
+.oa 		{ color:#3333cc; font-weight:bold; cursor:pointer;}
+
+.ptr 		{ cursor:pointer;}
+
 .bgcol1 	{ background-color:#ddddff; }
 .bgcol2 	{ background-color:#ddffdd; }
 .bgcol3 	{ background-color:#eeeeee; }
@@ -85,7 +90,12 @@ textarea  	{ font-size: 1em; font-family:Verdana,Arial,Helvetica,sans-serif;}
         border-style:dotted;
         border-width:thin;
 }
+.space {
+  	float: left;
+  	border: 0px;
+}
 .value {
+  	float: left;
 	border: 0px;
 }
 .value:before {

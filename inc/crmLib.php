@@ -603,13 +603,29 @@ global $db;
 function getWvl($crmuser) {
 global $db;
 	$sql="select * from wiedervorlage where (employee=$crmuser or employee is null) and status > '0' order by  finishdate asc ,initdate asc";
-	$rs=$db->getAll($sql);
-	if(!$rs) {
-		$rs=false;
+	$rs1=$db->getAll($sql);
+	if(!$rs1) {
+		$rs1=false;
 	} else {
-		if (count($rs)==0) $rs=array(array("id"=>0,"initdate"=>date("Y-m-d H:i:00"),"cause"=>"Keine Eintr&auml;ge"));
+		if (count($rs1)==0) $rs1=array(array("id"=>0,"initdate"=>date("Y-m-d H:i:00"),"cause"=>"Keine Eintr&auml;ge"));
 	}
-	return $rs;
+	$sql="SELECT follow_ups.id,follow_up_date,created_for_user,subject,body,trans_id,note_id,trans_module from ";
+	$sql.="follow_ups left join notes on note_id=notes.id where done='f' and created_for_user=$crmuser";
+	$rs2=$db->getAll($sql);
+	if ($rs2) {
+		foreach ($rs2 as $row) {
+			$rs1[]=array("id"=>$row["id"],
+				"cause"=>$row["subject"],
+				"desctipt"=>$row["body"],
+				"kontakt"=>$row["trans_module"],
+				"status"=>"F",
+				"initemployee"=>$row["created_by"],
+				"employee"=>$row["created_for_user"],
+				"initdate"=>$row["follow_up_date"],
+				"note_id"=>$row["note_id"]);
+		}
+	}
+	return $rs1;
 }
 
 /****************************************************
@@ -675,6 +691,38 @@ global $db;
 }
 
 /****************************************************
+* getOneERP
+* in: id = int
+* out: rs = array(Felder der db)
+* einen Datensatz aus follow_ups/notes holen
+*****************************************************/
+function getOneERP($id) {
+global $db;
+	$sql="SELECT follow_ups.id,follow_up_date,created_for_user,subject,body,trans_id,note_id,trans_module,follow_ups.created_by,";
+	$sql.="follow_ups.itime,follow_ups.mtime ";
+	$sql.="from follow_ups left join notes on note_id=notes.id where done='f' and follow_ups.id=$id";
+	$rs=$db->getAll($sql);
+	$data["id"]=$rs[0]["id"];
+	$data["Initdate"]=substr($rs[0]["itime"],0,19);
+	$data["Change"]=substr($rs[0]["mtime"],0,19);
+	$data["Finish"]=($rs[0]["follow_up_date"]<>"")?db2date($rs[0]["follow_up_date"]):"";
+	$data["Cause"]=$rs[0]["subject"];
+	$data["LangTxt"]=stripslashes(ereg_replace("<br />","",$rs[0]["body"]));
+	$data["Datei"]="";
+	$data["DName"]="";
+	$data["DPath"]="";
+	$data["DCaption"]="";
+	$data["status"]="1";
+	$data["CRMUSER"]=$rs[0]["created_for_user"];
+	$data["InitCrm"]=$rs[0]["created_by"];
+	$data["kontakt"]="F";
+	$data["noteid"]=$rs[0]["note_id"];
+	$data["kontaktid"]="";
+	$data["kontakttab"]="";
+	$data["kontaktname"]=$rsN[0]["name"].$rsN[0]["sep"].$rsN[0]["name2"];
+	return $data;
+}
+/****************************************************
 * insWvl
 * in: data = array(Formularfelder), datei = übergebene Datei
 * out: rs = boolean
@@ -718,17 +766,30 @@ global $db;
 	$finish=($data["Finish"]<>"")?", finishdate='".date2db($data["Finish"])." 0:0:00'":"";
 	$descript=addslashes($data["LangTxt"]);
 	$descript=nl2br($descript);
-	$sql="update wiedervorlage set employee=".$data["CRMUSER"].", cause='".$data["Cause"]."', descript='$descript', document=$dateiID, status=".$data["status"];
-	$sql.=",kontakt='".$data["kontakt"]."',changedate='$nun'".$finish;
-	$sql.=" where id=".$data["WVLID"];
-	$rs=$db->query($sql);
-	if(!$rs) {
-		$rs=false;
-	} else {$rs=$data["WVLID"];};
-	if ($data["cp_cv_id"]<>$data["cp_cv_id_old"]) {  // es wurd eine Zuweisung an einen Kunden gemacht
-		//$id=moveWvl($data["WVLID"],$data["cp_cv_id"]);
-		$id=kontaktWvl($data["WVLID"],$data["cp_cv_id"]);
-		if ($id) {$rs=$id;} else {$rs=false;}
+	if ($data["kontakt"]=="F") {
+		$rc=$db->query("BEGIN");
+		$sql="update notes set subject='".$data["Cause"]."',body='$descript', created_by=".$_SESSION["loginCRM"];
+		$sql.=" where id=".$data["noteid"];
+		$rc=$db->query($sql);
+		if (!$rc) { $db->query("ROLLBACK"); return false; };
+		$sql="update follow_ups set created_for_user=".$data["CRMUSER"].",done='".(($data["status"]!=1)?"t":"f")."', ";
+		$sql.="follow_up_date ='".date2db($data["Finish"])."' where id = ".$data["WVLID"];
+		$rc=$db->query($sql);
+		if (!$rc) { $db->query("ROLLBACK"); return false; };
+		$rs=$db->query("COMMIT");
+	} else {
+		$sql="update wiedervorlage set employee=".$data["CRMUSER"].", cause='".$data["Cause"]."', descript='$descript', ";
+		$sql.="document=$dateiID, status=".$data["status"].",kontakt='".$data["kontakt"]."',changedate='$nun'".$finish;
+		$sql.=" where id=".$data["WVLID"];
+		$rs=$db->query($sql);
+		if(!$rs) {
+			$rs=false;
+		} else {$rs=$data["WVLID"];};
+		if ($data["cp_cv_id"]<>$data["cp_cv_id_old"]) {  // es wurd eine Zuweisung an einen Kunden gemacht
+			//$id=moveWvl($data["WVLID"],$data["cp_cv_id"]);
+			$id=kontaktWvl($data["WVLID"],$data["cp_cv_id"]);
+			if ($id) {$rs=$id;} else {$rs=false;}
+		}
 	}
 	return $rs;
 }

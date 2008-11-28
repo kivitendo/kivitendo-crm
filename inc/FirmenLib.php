@@ -104,6 +104,13 @@ global $db;
 			}
 			if ($krs) $row["konzernname"]=$krs[0]["name"];
 		}
+		if ($tab=="C") {
+			$sql="select count(*) from customer where konzern = ".$id;
+		} else {
+			$sql="select count(*) from vendor where konzern = ".$id;
+		}
+		$knr=$db->getAll($sql);
+		$row["konzernmember"]=$knr[0]["count"];
 		if ($tab=="C") { $nummer=$row["customernumber"]; }
 		else { $nummer=$row["vendornumber"]; };
 		if ($row["grafik"]) {
@@ -542,6 +549,22 @@ return $id;
 function saveNeuFirmaStamm($daten,$files,$typ="C") {
 	$daten["id"]=mknewFirma($_SESSION["loginCRM"],$typ);
 	$rs=saveFirmaStamm($daten,$files,$typ);
+	return $rs;
+}
+
+
+function getKonzerne($fid,$Q,$typ="T") {
+global $db;
+	if ($Q=="C") $tab="customer";
+	else $tab="vendor";
+	if ($typ=="T") {
+		if ($Q=="C") $sql="select id,name,zipcode,city,country,customernumber as number,konzern from customer where konzern = $fid";
+		else $sql="select id,name,zipcode,city,country,vendornumber as number,konzern from $tab where konzern = $fid";
+	} else {
+		if ($Q=="C") $sql="select id,name,zipcode,city,country,customernumber as number,konzern from customer where id = $fid";
+		else $sql="select id,name,zipcode,city,country,vendornumber as number,konzern from $tab where id = $fid";
+	}
+	$rs=$db->getAll($sql);
 	return $rs;
 }
 

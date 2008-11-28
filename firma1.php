@@ -90,6 +90,7 @@
 			blz 		=> $fa["bank_code"],
 			konto 		=> $fa["account_number"],
 			konzernname	=> $fa["konzernname"],
+			konzernmember	=> ($fa["konzernmember"]>0)?"( ".$fa["konzernmember"]." )":"( * )",
 			konzern		=> $fa["konzern"],
 			Internet	=> $internet,
 			USTID		=> $fa["ustid"],

@@ -41,7 +41,6 @@
 	}
 	$nun=date("Y-m-d 00:00:00");
 	$nun1=date("Y-m-d H:i");
-	
 	if ($wvl) foreach($wvl as $col){
 		if ($col["finishdate"] || $col["stoptag"]) {
 			if ( ($col["finishdate"]<>"" && $col["finishdate"]<$nun) || 
@@ -52,10 +51,16 @@
 			}
 			$datum=mkdate(($col["finishdate"])?$col["finishdate"]:$col["stoptag"]." ".$col["stopzeit"].":00");
 		} else {
-			$datum=mkdate(($col["initdate"])?$col["initdate"]:$col["starttag"]." ".$col["startzeit"].":00");
+			if ($col["trans_module"]) {
+				$datum=mkdate($col["initdate"]." 00:00:00");
+			} else {
+				$datum=mkdate(($col["initdate"])?$col["initdate"]:$col["starttag"]." ".$col["startzeit"].":00");
+			}
 			$bgc=$bgcol[($i%2+1)];
 		}
-		$Art=($col["starttag"])?"T":"D";
+		if ($col["status"]=="F") { $Art="F"; }
+		else if ($col["starttag"]) { $Art="T"; }
+		else { $Art="D"; };
 		$t->set_var(array(
 			LineCol => $bgc,
 			Type	=> $typcol[($col["kontakt"])?$col["kontakt"]:"X"],

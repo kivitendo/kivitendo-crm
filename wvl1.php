@@ -34,6 +34,10 @@
  			header ("location:wvl1.php");
 			exit;
 		}
+	} else if ($_GET["erp"]) {
+		$data=getOneERP($_GET["erp"]);
+		$msg="";
+		$sel=$_SESSION["loginCRM"];
 	} else if ($_GET["show"]) {
 		$data=getOneWvl($_GET["show"]);
 		$msg="";
@@ -71,6 +75,7 @@
 	else if ($data["kontakttab"]=="V") { $stammlink="liefer1.php?id=".$data["kontaktid"]; };
 	$t->set_var(array(
 			Msg		=> $msg,
+			hide	=> ($data["kontakt"]=="F")?"hidden":"visible",
 			Cause => $data["Cause"],
 			LangTxt => $data["LangTxt"],
 			Datei => $data["Datei"],
@@ -87,8 +92,10 @@
 			R3 => ($data["kontakt"]=="S")?" checked":"",
 			R4 => ($data["kontakt"]=="P")?" checked":"",
 			R5 => ($data["kontakt"]=="D")?" checked":"",
+			R6 => ($data["kontakt"]=="F")?" checked":"",
 			CID => $_SESSION["loginCRM"],
 			WVLID => $data["id"],
+			noteid => $data["noteid"],
 			Finish => $data["Finish"],
 			jcal0 => ($jcalendar)?$jscal:"",
 			jcal1 => ($jcalendar)?"<a href='#' id='trigger1' name='Finish' title='Zieldatum' onClick='false'><img src='image/date.png' border='0' align='middle'></a>":"",

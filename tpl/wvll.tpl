@@ -10,6 +10,8 @@
  			uri="wvl1.php?show=" + id;
  		} else if (art=="T") {
  			uri="termin.php";
+ 		} else if (art=="F") {
+ 			uri="wvl1.php?erp=" + id;
 		} else {
 			uri="wvl1.php?mail=" + id;
 		}

@@ -216,6 +216,7 @@
 		<div  class="zeile klein">
 			<span class="labelLe">Konzern:</span>
 			<span class="value"><a href="firma1.php?Q={Q}&id={konzern}">{konzernname}</a></span>
+			<span> &nbsp; <a href="konzern.php?Q={Q}&fid={FID}">{konzernmember}</a></span>
 		</div>
 		<div  class="zeile klein">
 			<span class="labelLe">Kundentyp:</span>

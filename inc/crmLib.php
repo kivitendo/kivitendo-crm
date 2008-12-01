@@ -742,7 +742,8 @@ function insWvl($data,$datei="") {
 function updWvl($data,$datei="") {
 global $db;
 	$nun=date("Y-m-d H:i:00");
-	$anz=($datei["Datei"]["name"][0]<>"")?count($datei["Datei"]["name"]):0;
+	$anz=0;
+	if ($datei) $anz=($datei["Datei"]["name"][0]<>"")?count($datei["Datei"]["name"]):0;
 	if ($anz>0) {  // ein neues Dokument
 		if ($data["DateiID"]) delDokument($data["DateiID"]); // ein altes löschen
 		for ($o=0; $o<$anz; $o++) {

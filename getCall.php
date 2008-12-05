@@ -22,7 +22,6 @@
 	$daten["Files"]=false;
 	$daten["Anzeige"]=0;
 	$daten["Datei"]="";
-	$daten["ODatei"]="";
 	$daten["DCaption"]="";
 	$daten["Q"]=$Q;
 	$daten["CID"]=($pid>0)?$pid:$fid;
@@ -46,8 +45,6 @@
 		$daten=getCall($_GET["hole"]);
 		$Bezug=($daten["Bezug"]==0)?$daten["ID"]:$daten["Bezug"];
 		$select=$daten["employee"];
-		$daten["Datei"]="";
-		$daten["ODatei"]=$daten["Datei"];
 		$co=getKontaktStamm($daten["CID"]);
 		if ($co["cp_id"]) {
 			$pid=$co["cp_id"];
@@ -145,7 +142,7 @@
 		));
 		$t->parse("Block3","Selectbox2",true);
 	}
-	//------------------------------------------- Kontaktverläufe
+	//------------------------------------------- Kontaktverlï¿½ufe
 	$t->set_block("cont","Selectbox3","Block4");
 	if ($Q<>"XX")	{
 		$thread=getAllTelCall(($pid)?$pid:$fid,($Q=="C" || $Q=="V"),0,-1); // Liste Verschieben
@@ -219,11 +216,11 @@
 		R6 => ($daten["Kontakt"]=="X")?" checked":"",
 		Start => $telcall*-1,
 		Datei => $daten["Datei"],
-		ODatei => (empty($daten["ODatei"]))?"":("<a href='dokumente/".$_SESSION["mansel"]."/".$daten["Dpfad"]."/".$daten["ODatei"]."' target='_blank'>".$daten["ODatei"]."</a>"),
+		ODatei => (empty($daten["Datei"]))?"":("<a href='dokumente/".$_SESSION["mansel"]."/".$daten["Dpfad"]."/".$daten["Datei"]."' target='_blank'>".$daten["Datei"]."</a>"),
 		Dcaption => $daten["DCaption"],
 		ID => $daten["ID"],
 	));
-	//------------------------------------------- Dateianhänge
+	//------------------------------------------- Dateianhï¿½nge
  	if ($daten["Files"]){
 		$t->set_block("cont","Files","Block1");
 		if ($daten["Files"]) foreach($daten["Files"] as $zeile) {

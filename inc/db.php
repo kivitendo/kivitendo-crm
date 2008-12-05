@@ -85,13 +85,13 @@ class myDB extends DB {
 	}
 
 	function begin() {
-		$this->query("BEGIN");
+		return $this->query("BEGIN");
 	}
 	function commit() {
-		$this->query("COMMIT");
+		return $this->query("COMMIT");
 	}
 	function rollback() {
-		$this->query("ROLLBACK");
+		return $this->query("ROLLBACK");
 	}
 
 	function getAll($sql) {

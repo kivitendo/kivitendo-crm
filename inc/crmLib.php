@@ -17,7 +17,7 @@ function mkSuchwort($suchwort) {
 	} else { 								// nein Name
 		if (empty($suchwort)) $suchwort=" ";
 		$sw[0]=1;
-		setlocale(LC_ALL,"C");  // keine Großbuchastaben für Umlaute
+		setlocale(LC_ALL,"C");  // keine Groï¿½buchastaben fï¿½r Umlaute
 		$suchwort=strtoupper($suchwort);
 	};
 	$sw[1]=$suchwort;
@@ -48,7 +48,7 @@ global $db;
 	if(!$rs) {
 		$rs=false;
 	} else {
-		if ($start>0 && count($rs)==0) { //Mit dem Offset keine Eiträge gefunden, also die vorherigen Einträge lesen
+		if ($start>0 && count($rs)==0) { //Mit dem Offset keine Eitrï¿½ge gefunden, also die vorherigen Eintrï¿½ge lesen
 			$start=($start>$lim)?($start-$lim):0;
 			$rs=$db->getAll($sql." order by calldate desc offset $start ".(($lim>0)?"limit $lim":""));
 		}
@@ -136,7 +136,7 @@ global $db;
 * saveAllTelCall
 * in: id = int
 * out: rs = array(Felder der db)
-* sichert einen geänderten TelCall-Eintrag
+* sichert einen geï¿½nderten TelCall-Eintrag
 *****************************************************/
 function saveTelCall($id,$empl,$grund) {
 global $db;
@@ -243,7 +243,7 @@ global $db;
 }
 
 /****************************************************
-* insFormDoc  !!wird nur in prtWVertragOOo.php benutzt. Ändern!!
+* insFormDoc  !!wird nur in prtWVertragOOo.php benutzt. ï¿½ndern!!
 * in: data = array(Formularfelder)
 * out: id = des Calls
 * ein neues FormDokument speichern
@@ -259,7 +259,7 @@ global $db;
 	$datei["Datei"]["tmp_name"]="./tmp/".$file;
 	$datei["Datei"]["size"]=filesize("./tmp/".$file);
 	$datei["Datei"]["name"]=$file;
-	$dateiID=saveDokument($datei,$rs[0]["vorlage"],$datum,$data["CID"],$data["CRMUSER"],""); //##### letzten Parameter noch ändern
+	$dateiID=saveDokument($datei,$rs[0]["vorlage"],$datum,$data["CID"],$data["CRMUSER"],""); //##### letzten Parameter noch ï¿½ndern
 	$did=documenttotc($id,$dateiID);
 	$c_cause=addslashes($rs[0]["beschreibung"]);
 	$c_cause=nl2br($rs[0]["beschreibung"]);
@@ -274,7 +274,7 @@ global $db;
 
 /****************************************************
 * insCall
-* in: data = array(Formularfelder) datei = übergebene Datei
+* in: data = array(Formularfelder) datei = ï¿½bergebene Datei
 * out: id = des Calls
 * einen neuen Anruf speichern
 *****************************************************/
@@ -318,9 +318,9 @@ global $db;
 }
 /****************************************************
 * updCall
-* in: data = array(Formularfelder) datei = übergebene Datei
+* in: data = array(Formularfelder) datei = ï¿½bergebene Datei
 * out: id = des Calls
-* einen geänderten Anruf speichern
+* einen geï¿½nderten Anruf speichern
 *****************************************************/
 function updCall($data,$datei=false) {
 global $db;
@@ -441,9 +441,9 @@ function saveDokument($Datei,$Beschreibung,$datum,$CID,$CRMUSER,$pfad="") {
 global $db;
 	$Name=$Datei["Datei"]["name"];
 	$Size=$Datei["Datei"]["size"];
-	if ($CID>0) {									// gehört einem Kontakt
+	if ($CID>0) {									// gehï¿½rt einem Kontakt
 		$dir=$_SESSION["mansel"]."/".$CID;
-	} else {  										// gehört einem User
+	} else {  										// gehï¿½rt einem User
 		$dir=$_SESSION["mansel"]."/".$CRMUSER;
 	};
 	$dest="./dokumente/".$_SESSION["mansel"].$pfad."/".$Name;
@@ -477,7 +477,7 @@ global $db;
 * delDokument
 * in: id = int
 * out:
-* ein Dokument löschen
+* ein Dokument lï¿½schen
 *****************************************************/
 function delDokument($id,$file="") {
 global $db;
@@ -485,7 +485,7 @@ global $db;
 		$data=getDokument($id); // gibt es das dokument
 		if ($data) {
 			$file="dokumente/".$_SESSION["mansel"].$data["pfad"]."/".$data["filename"];
-			$sql="delete from documents where id=$id";   // aus db löschen
+			$sql="delete from documents where id=$id";   // aus db lï¿½schen
 			$rs=$db->query($sql);
 		}
 	}
@@ -554,16 +554,16 @@ global $db;
 			if ($dat) {
 				$daten["Kunde"]=($dat["kunde"]>0)?$dat["kunde"]:$dat["employee"];
 				$daten["Datei"]=$dat["filename"];
-				$daten["Dpath"]=$dat["pfad"];
+				$daten["Dpfad"]=$dat["pfad"];
 				$daten["DCaption"]=$dat["descript"];
 			} else {
-				$daten["Dpath"]="";
+				$daten["Dpfad"]="";
 				$daten["Datei"]="";
 				$daten["DCaption"]="";
 				$daten["Kunde"]="";
 			}
 		} else {
-			$daten["Dpath"]="";
+			$daten["Dpfad"]="";
 			$daten["Datei"]="";
 			$daten["DCaption"]="";
 			$daten["Kunde"]="";
@@ -722,11 +722,48 @@ global $db;
 	$data["kontaktname"]=$rsN[0]["name"].$rsN[0]["sep"].$rsN[0]["name2"];
 	return $data;
 }
+
+/****************************************************
+* mkPfad
+* in: wer = String
+* out: pfad = String
+* einen Dokumentenpfad erstellen
+*****************************************************/
+function mkPfad($wer,$alt) {
+global $db;
+	$pfad="";
+	if (substr($wer,0,1)=="P") {
+		$tmp=substr($wer,1);
+		$rs=$db->getAll("select customernumber from customer C, contacts P where P.cp_cv_id=C.id and cp_id=$tmp");
+		if ($rs[0]["customernumber"]) {
+			$pfad="C".$rs[0]["customernumber"]."/$tmp";
+		} else {
+			$rs=$db->getAll("select vendornumber from vendor V, contacts P where P.cp_cv_id=V.id and cp_id=$tmp");
+			if ($rs[0]["vendornumber"]) {
+				$pfad="V".$rs[0]["vendornumber"]."/$tmp";
+			} else {
+				$pfad=$tmp;
+			}
+		}
+	} else if ($wer<>""){
+		$tmp=substr($wer,1);
+		$ttmp=substr($wer,0,1);
+		if ($ttmp=="C") {
+			$rs=$db->getAll("select customernumber as number from customer where id=$tmp");
+		} else {
+			$rs=$db->getAll("select vendornumber as number from vendor where id=$tmp");
+		}
+		$pfad=$ttmp.$rs[0]["number"];
+	} else  {
+		$pfad=$alt;
+	}
+	return $pfad;
+}
 /****************************************************
 * insWvl
-* in: data = array(Formularfelder), datei = übergebene Datei
+* in: data = array(Formularfelder), datei = Ã¼bergebene Datei
 * out: rs = boolean
-* einen Datensatz in wiedervorlage einfügen
+* einen Datensatz in wiedervorlage einfÃ¼gen
 *****************************************************/
 function insWvl($data,$datei="") {
 	$data["WVLID"]=mknewWVL();
@@ -735,7 +772,7 @@ function insWvl($data,$datei="") {
 }
 /****************************************************
 * updWvl
-* in: data = array(Formularfelder), datei = übergebene Datei
+* in: data = array(Formularfelder), datei = Ã¼bergebene Datei
 * out: rs = boolean
 * einen Datensatz in wiedervorlage aktualisieren
 *****************************************************/
@@ -743,9 +780,10 @@ function updWvl($data,$datei="") {
 global $db;
 	$nun=date("Y-m-d H:i:00");
 	$anz=0;
+	$pfad="";
 	if ($datei) $anz=($datei["Datei"]["name"][0]<>"")?count($datei["Datei"]["name"]):0;
 	if ($anz>0) {  // ein neues Dokument
-		if ($data["DateiID"]) delDokument($data["DateiID"]); // ein altes löschen
+		if ($data["DateiID"]) delDokument($data["DateiID"]); // ein altes lÃ¶schen
 		for ($o=0; $o<$anz; $o++) {
 			$dat["Datei"]["name"]=$datei["Datei"]["name"][$o];
 			$dat["Datei"]["tmp_name"]=$datei["Datei"]["tmp_name"][$o];
@@ -754,7 +792,7 @@ global $db;
 			if (!$data["DCaption"]) $data["DCaption"]=$data["Cause"];
 	                $dbfile=new document();
 	                $dbfile->setDocData("descript",$data["DCaption"]);
-			$pfad=$data["CRMUSER"];
+			$pfad=mkPfad($data["cp_cv_id"],$data["CRMUSER"]);
         	        $rc=$dbfile->uploadDocument($dat,$pfad);
                 	$dateiID=$dbfile->id;       
 			//$dateiID=saveDokument($dat,$data["DCaption"],$nun,0,$data["CRMUSER"],"");
@@ -785,10 +823,11 @@ global $db;
 		$rs=$db->query($sql);
 		if(!$rs) {
 			$rs=false;
-		} else {$rs=$data["WVLID"];};
-		if ($data["cp_cv_id"]<>$data["cp_cv_id_old"]) {  // es wurd eine Zuweisung an einen Kunden gemacht
-			//$id=moveWvl($data["WVLID"],$data["cp_cv_id"]);
-			$id=kontaktWvl($data["WVLID"],$data["cp_cv_id"]);
+		} else {
+			$rs=$data["WVLID"];
+		};
+		if ($data["cp_cv_id"]<>$data["cp_cv_id_old"] or $data["status"]<1) {  // es wurd eine Zuweisung an einen Kunden gemacht
+			$id=kontaktWvl($data["WVLID"],$data["cp_cv_id"],$pfad);
 			if ($id) {$rs=$id;} else {$rs=false;}
 		}
 	}
@@ -812,7 +851,7 @@ global $db;
 * documenttotc
 * in: newID,did = integer
 * out: rs = boolean
-* eine DockId von Person auf Telcall ändern
+* eine DockId von Person auf Telcall Ã¤ndern
 *****************************************************/
 function documenttotc_($newID,$tid) {
 global $db;
@@ -856,7 +895,7 @@ global $db;
 					eregi("GIF",$file[3]) 	||
  					eregi("JPEG",$file[3]) 	||
 					eregi("PNG",$file[3])){
-        			$body   =imap_base64($body);
+        					$body   =imap_base64($body);
 				};
 				$Datei["Datei"]["name"]=$file[1];
    				$Datei["Datei"]["tmp_name"]="./tmp/".$data["CRMUSER"]."_".$file[0];
@@ -866,10 +905,9 @@ global $db;
 				$Datei["Datei"]["size"]=filesize($Datei["Datei"]["tmp_name"]);
 				$dbfile=new document();
 		                $dbfile->setDocData("descript",$data["DCaption"]);
-				$pfad=$data["CRMUSER"];
-        		        $rc=$dbfile->uploadDocument($dat,$pfad);
+				$pfad=mkPfad($data["cp_cv_id"],$data["CRMUSER"]);
+        		        $rc=$dbfile->uploadDocument($Datei,$pfad);
                 		$did[]=$dbfile->id;     
-				//$did[]=saveDokument($Datei,$data["DCaption"],$nun,$kontaktID,$data["CRMUSER"],"");
 			}
 		} else {
 			$data["DateiID"]=false;
@@ -890,93 +928,42 @@ global $db;
 }
 
 /****************************************************
-* moveWvl
-* in: id,fid = int
-* out: rs = id
-* eine wiedervorlage nach telcall verschieben
-*****************************************************/
-function moveWvl($id,$fid) {
-global $db;
-	$sql="select * from wiedervorlage where id=$id";
-	$rs=$db->getAll($sql);
-	if(!$rs) {
-		$ok=-1;
-	} else {
-		$nun=date("Y-m-d H:i:00");
-		// insCall($data,$datei)
-		$tid=mknewTelCall();
-		$sql="update telcall set cause='".$rs[0]["cause"]."',caller_id=$fid,calldate='$nun',c_long='".$rs[0]["descript"]."',employee=".$rs[0]["employee"].",kontakt='".$rs[0]["kontakt"]."',bezug=0,dokument=".$rs[0]["document"]." where id=$tid";
-		$rc=$db->query($sql);
-		if(!$rc) {
-			$ok=-1;
-		} else {
-			$ok=$tid;
-			$sql="update wiedervorlage set status=0, finishdate='$nun' where id=$id";
-			$rc=$db->query($sql);
-			if(!$rc) {
-				$ok=-1;
-			} else 	if ($rs[0]["document"] && $rs[0]["kontakt"]<>"M") {
-				$sql="select * from documents where id=".$rs[0]["document"];
-				$rsD=$db->getAll($sql);
-				$von="dokumente/".$_SESSION["mansel"]."/".$rsD[0]["employee"]."/".$rsD[0]["filename"];
-				$dir=$_SESSION["mansel"]."/".$fid;
-				$ok=chkdir($dir);
-				$nach="dokumente/".$dir."/".$rsD[0]["filename"];
-				copy("$von $nach");
-				unlink($von);
-				$sql="update documents set kunde=".$fid." where id=".$rsD[0]["id"];
-				$rc=$db->query($sql);
-				if(!$rc) { $ok=-1; }
-			}
-		}
-	}
-	return $ok;
-}
-
-/****************************************************
 * kontaktWvl
 * in: id,fid = int
 * out: rs = id
 * eine wiedervorlage mit telcall verbinden
 *****************************************************/
-function kontaktWvl($id,$fid) {
+function kontaktWvl($id,$fid,$pfad) {
 global $db;
 	$sql="select * from wiedervorlage where id=$id";
 	$rs=$db->getAll($sql);
+	if(!$rs) return false;
 	$nun=date("Y-m-d H:i:00");
-	$tab="'".substr($fid,0,1)."'";
+	$tab=substr($fid,0,1);
 	$fid=substr($fid,1);
-	if(!$rs) {
-		$ok=-1;
-	} else if ($rs[0]["kontaktid"]>0 and $fid<>$rs[0]["kontaktid"]){
-		// bisherigen Kontakteintrag ungültig markieren
+	if (!$db->begin()) return false;;
+	if ($rs[0]["kontaktid"]>0 and $fid<>$rs[0]["kontaktid"]){
+		// bisherigen Kontakteintrag ungÃ¼ltig markieren
 		$sql="update telcall set cause=cause||' storniert' where id=".$rs[0]["tellid"];
-		$rc=$db->query($sql);
-		// neuen Eintraag generieren
-		if ($fid>0) {
-			$tid=mknewTelCall();
-			$sql="update telcall set cause='".$rs[0]["cause"]."',caller_id=$fid,calldate='$nun',c_long='".$rs[0]["descript"]."',employee=".$rs[0]["employee"].",kontakt='".$rs[0]["kontakt"]."',bezug=0,dokument=".$rs[0]["document"]." where id=$tid";
-			$rc=$db->query($sql);
-			if(!$rc) { $ok=-1; } else { $ok=$tid; };
-			// wvl updaten
-		} else {
-			$fid="null"; $tab="null"; $tid="null";
-		}
-		$sql="update wiedervorlage set kontaktid=$fid,kontakttab=$tab,tellid=$tid where id=$id";
-		$rc=$db->query($sql);
-	//} else if ($rs[0]["kontaktid"]>0) {
-	} else if ($rs[0]["kontaktid"]>0 and $fid==$rs[0]["kontaktid"]) {
-		// ok
-	} else {
+		//$rc=$db->query($sql);
+		if (!$db->query($sql)) return false;
+	} 
+	if (!$rs[0]["kontaktid"]>0 or empty($rs[0]["kontaktid"])) {
 		$tid=mknewTelCall();
-		$sql="update telcall set cause='".$rs[0]["cause"]."',caller_id=$fid,calldate='$nun',c_long='".$rs[0]["descript"]."',employee=".$rs[0]["employee"].",kontakt='".$rs[0]["kontakt"]."',bezug=0,dokument=".$rs[0]["document"]." where id=$tid";
+		$sql="update telcall set cause='".$rs[0]["cause"]."',caller_id=$fid,calldate='$nun',";
+		$sql.="c_long='".$rs[0]["descript"]."',employee=".$rs[0]["employee"].",kontakt='".$rs[0]["kontakt"];
+		$sql.="',bezug=0,dokument=".$rs[0]["document"]." where id=$tid";
 		$rc=$db->query($sql);
 		if(!$rc) {
-			$ok=-1;
+			$db->rollback();
+			return false;
 		} else {
 			$ok=$tid;
-			$sql="update wiedervorlage set kontaktid=$fid,kontakttab=$tab,tellid=$tid where id=$id";
-			$rc=$db->query($sql);
+			$sql="update wiedervorlage set kontaktid=$fid,kontakttab='$tab',tellid=$tid where id=$id";
+			if (!$db->query($sql)) {
+				$db->rollback();
+				return false;
+			}
 		}
 	}
 	
@@ -985,16 +972,24 @@ global $db;
 				$sql="select * from documents where id=".$rs[0]["document"];
 				$rsD=$db->getAll($sql);
 				$von="dokumente/".$_SESSION["mansel"]."/".$rsD[0]["employee"]."/".$rsD[0]["filename"];
-				$dir=$_SESSION["mansel"]."/".$fid;
-				$ok=chkdir($dir);
-				$nach="dokumente/".$dir."/".$rsD[0]["filename"];
-				copy("$von $nach");
-				$sql="update documents set kunde=".$fid." where id=".$rsD[0]["id"];
-				$rc=$db->query($sql);
-				if(!$rc) { $ok=-1; }
+				if ($pfad) {
+					$pfad=$_SESSION["mansel"]."/".$pfad;
+				} else {
+					$pfad=mkPfad($tab.$fid,$fid);
+				}
+				$ok=chkdir($pfad);
+				$nach="dokumente/".$_SESSION["mansel"]."/".$pfad."/".$rsD[0]["filename"];
+				$rc=rename($von,$nach);
+				if ($rc) {
+					$sql="update documents set kunde=".$fid.", pfad='".$pfad."' where id=".$rsD[0]["id"];
+					if (!$db->query($sql)) {
+						$db->rollback();
+						return false;
+					}
+				}
 		}
 	}
-	return $ok;
+	return $db->commit();
 }
 
 
@@ -1265,7 +1260,7 @@ function moveMail($mail,$id) {
 * delMail
 * in: mail,id = int
 * out:
-* eine Mail  als geslöscht marmieren
+* eine Mail  als geslï¿½scht marmieren
 * !! wg. Probleme mit einigen IMAP-Installationen
 * !! nur ein markieren mit Delete
 *****************************************************/
@@ -1317,7 +1312,7 @@ global $db,$Pre;
 	usort($rs,"eMailSort");
 	return $rs;
 }
-/* Sortierfunktion für eMail-Adressen */
+/* Sortierfunktion fï¿½r eMail-Adressen */
 function eMailSort($a,$b) {
     if ($a["name"] == $b["name"]) return 0;
     return ($a["name"] < $b["name"]) ? -1 : 1;
@@ -1369,7 +1364,7 @@ global $db;
 		$rechng[$dat]=array("summe"=>0,"count"=>0,"curr"=>"Eur");
 	}
 	$rechng["Jahr  "]=array("summe"=>0,"count"=>0,"curr"=>"Eur");
-	// unterschiedliche Währungen sind noch nicht berücksichtigt. Summe stimmt aber.
+	// unterschiedliche Wï¿½hrungen sind noch nicht berï¿½cksichtigt. Summe stimmt aber.
 	if ($rs) foreach ($rs as $re){
 		$m=substr($re["transdate"],0,4).substr($re["transdate"],5,2);
 		$rechng[$m]["summe"]+=$re["netamount"];
@@ -1418,7 +1413,7 @@ global $db;
 * monat = char(2)
 * liefern = boolean
 * out: rs = array
-* Rechnungsdaten für den Monat
+* Rechnungsdaten fï¿½r den Monat
 *****************************************************/
 function getReMonat($fid,$monat,$liefer=false){
 global $db;
@@ -1441,7 +1436,7 @@ global $db;
 * cmp
 * in: $a,$b = datum
 * out: 0,1,-1
-* Funktion für Usort
+* Funktion fï¿½r Usort
 *****************************************************/
 function cmp ($a, $b) {
     return strcmp($b["transdate"],$a["transdate"]);
@@ -1855,7 +1850,7 @@ function feiertage($jahr) {
     $holiday[mktime(0, 0, 0, 12, 26, $jahr)]= 'G,2. Weihnachtsfeiertag';
     $holiday[mktime(0, 0, 0, 12, 31, $jahr)]= 'F,Sylvester';
 
-    // Bewegliche Feiertage, von Ostern abhängig
+    // Bewegliche Feiertage, von Ostern abhï¿½ngig
     $holiday[$easter - $CAL_SEC_DAY * 48]= 'R,Rosenmontag';
     $holiday[$easter - $CAL_SEC_DAY * 46]= 'R,Aschermittwoch';
     $holiday[$easter - $CAL_SEC_DAY *  2]= 'G,Karfreitag';
@@ -1866,7 +1861,7 @@ function feiertage($jahr) {
     $holiday[$easter + $CAL_SEC_DAY * 50]= 'G,Pfingstmontag';
     $holiday[$easter + $CAL_SEC_DAY * 60]= 'R,Fronleichnam BW,BY,HE,NW,RP,SL';
 
-    // Bewegliche Feiertage, vom ersten Advent abhängig
+    // Bewegliche Feiertage, vom ersten Advent abhï¿½ngig
     $holiday[$advent]=                      'F,1. Advent';
     $holiday[$advent + $CAL_SEC_DAY *  7]=  'F,2. Advent';
     $holiday[$advent + $CAL_SEC_DAY * 14]=  'F,3. Advent';
@@ -2083,8 +2078,8 @@ global $db;
 }
 function diff($text1,$text2) {
 //Geschrieben von TBT am 28-11-2002 um 16:20
-	$text1=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace(' ','°','\\1')",$text1);
-	$text2=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace(' ','°','\\1')",$text2);
+	$text1=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace(' ','ï¿½','\\1')",$text1);
+	$text2=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace(' ','ï¿½','\\1')",$text2);
 	$array1 = explode(" ", str_replace(array("   ","    ","  ", "\r", "\n"), array(" "," "," ", "", ""), $text1));
 	$array2 = explode(" ", str_replace(array("   ","    ","  ", "\r", "\n"), array(" "," "," ", "", ""), $text2));
 	$max1 = count($array1);
@@ -2105,7 +2100,7 @@ function diff($text1,$text2) {
 			$start2++;
 			continue;
 		} 
-		// Gegenschaukel wenn übersprunge Wörter
+		// Gegenschaukel wenn ï¿½bersprunge Wï¿½rter
 		if(($diff1 = $pos11 - $pos21) > 1){
 			while($pos22 < $max2 && $array1[$pos12] != $array2[$pos22]){
 				++$pos22;
@@ -2147,8 +2142,8 @@ while(list($key2,) = each($array2)){
 }
 $text1=implode(" ", $safe1);
 $text2=implode(" ", $safe2);
-$text1=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace('°',' ','\\1')",$text1);
-$text2=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace('°',' ','\\1')",$text2);
+$text1=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace('ï¿½',' ','\\1')",$text1);
+$text2=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace('ï¿½',' ','\\1')",$text2);
 return array($text1,$text2);
 }
 function getOpportunityStatus() {

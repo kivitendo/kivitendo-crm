@@ -76,11 +76,12 @@ class document {
 		$this->pfad=$pfad;
 		//Gibt es das Dokument so schon in der db
 		$this->id=$this->searchDocument($this->name,$pfad);
-		$dest="./dokumente/".$_SESSION["mansel"].$pfad."/".$this->name;
+		$dest="./dokumente/".$_SESSION["mansel"]."/".$pfad."/".$this->name;
 		if (chkdir($pfad)) {
 			//Zielpfad vorhanden
 			if (! copy($file["Datei"]["tmp_name"],$dest)) {
 				$this->error="Datei '$dest' wurde nicht hochgeladen!";
+				echo $this->error;
 				return false;
 			}
 		} else {

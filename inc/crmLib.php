@@ -17,7 +17,7 @@ function mkSuchwort($suchwort) {
 	} else { 								// nein Name
 		if (empty($suchwort)) $suchwort=" ";
 		$sw[0]=1;
-		setlocale(LC_ALL,"C");  // keine Gro�buchastaben f�r Umlaute
+		setlocale(LC_ALL,"C");  // keine Großbuchastaben für Umlaute
 		$suchwort=strtoupper($suchwort);
 	};
 	$sw[1]=$suchwort;
@@ -70,6 +70,13 @@ global $db;
 	}
 	return $rs;
 }
+
+/****************************************************
+* getAllTelCallMax
+* in: id = int, firma = int
+* out: count(rs) = int
+* Anzahl aller Einträge einer Fa
+*****************************************************/
 function getAllTelCallMax($id,$firma) {
 global $db;
 	if ($firma) {	// dann hole alle Kontakte der Firma
@@ -121,6 +128,12 @@ global $db;
 	return $rs;
 }
 
+/****************************************************
+* delTelCall
+* in: id = int
+* out: 
+* einen TelCall Eintrag löschen
+*****************************************************/
 function delTelCall($id) {
 global $db;
 	$rs=$db->getAll("select * from telcall where id=$id");
@@ -136,7 +149,7 @@ global $db;
 * saveAllTelCall
 * in: id = int
 * out: rs = array(Felder der db)
-* sichert einen ge�nderten TelCall-Eintrag
+* sichert einen geänderten TelCall-Eintrag
 *****************************************************/
 function saveTelCall($id,$empl,$grund) {
 global $db;
@@ -145,10 +158,18 @@ global $db;
 	$tmp=$rs[0];
 	$sql="insert into telcallhistory (orgid,cause,caller_id,calldate,c_long,employee,kontakt,bezug,dokument,chgid,grund,datum)";
 	$sql.=" values (%d,'%s',%d,'%s','%s',%d,'%s',%d,%d,%d,'%s','%s')";
-	$rs=$db->query(sprintf($sql,$tmp["id"],$tmp["cause"],$tmp["caller_id"],$tmp["calldate"],$tmp["c_long"],$tmp["employee"],$tmp["kontakt"],$tmp["bezug"],$tmp["dokument"],$empl,$grund,date("Y-m-d H:i:s")));
+	$rs=$db->query(sprintf($sql,$tmp["id"],$tmp["cause"],$tmp["caller_id"],$tmp["calldate"],$tmp["c_long"],
+				$tmp["employee"],$tmp["kontakt"],$tmp["bezug"],$tmp["dokument"],$empl,$grund,date("Y-m-d H:i:s")));
 	return $rs;
 }
 
+/****************************************************
+* mkPager
+* in: items = array, 
+* in: pager = int, start = int, next = int, prev = int
+* out: 
+* TelCall-Einträge Seitenweise bereitstellen
+*****************************************************/
 function mkPager(&$items,&$pager,&$start,&$next,&$prev) {
 	if ($items) {
 		$pager=$start;
@@ -170,6 +191,13 @@ function mkPager(&$items,&$pager,&$start,&$next,&$prev) {
 		$prev=0;
 	}
 }
+
+/****************************************************
+* mvTelCall
+* in: TID = int, Anzeige = int, CID = int
+* out: rs = boolean
+* einen TelCall-Eintrag verschieben
+*****************************************************/
 function mvTelcall($TID,$Anzeige,$CID) {
 global $db;
 	$call=getCall($Anzeige,$_SESSION["loginCRM"],"U");
@@ -243,7 +271,7 @@ global $db;
 }
 
 /****************************************************
-* insFormDoc  !!wird nur in prtWVertragOOo.php benutzt. �ndern!!
+* insFormDoc  !!wird nur in prtWVertragOOo.php benutzt. ändern!!
 * in: data = array(Formularfelder)
 * out: id = des Calls
 * ein neues FormDokument speichern
@@ -259,11 +287,12 @@ global $db;
 	$datei["Datei"]["tmp_name"]="./tmp/".$file;
 	$datei["Datei"]["size"]=filesize("./tmp/".$file);
 	$datei["Datei"]["name"]=$file;
-	$dateiID=saveDokument($datei,$rs[0]["vorlage"],$datum,$data["CID"],$data["CRMUSER"],""); //##### letzten Parameter noch �ndern
+	$dateiID=saveDokument($datei,$rs[0]["vorlage"],$datum,$data["CID"],$data["CRMUSER"],""); //##### letzten Parameter noch ändern
 	$did=documenttotc($id,$dateiID);
 	$c_cause=addslashes($rs[0]["beschreibung"]);
 	$c_cause=nl2br($rs[0]["beschreibung"]);
-	$sql="update telcall set cause='".$rs[0]["vorlage"]."',c_long='$c_cause',caller_id='".$data["CID"]."',calldate='$datum',kontakt='D',dokument=$did,bezug='0',employee=".$data["CRMUSER"]." where id=$id";
+	$sql="update telcall set cause='".$rs[0]["vorlage"]."',c_long='$c_cause',caller_id='".$data["CID"];
+	$sql.="',calldate='$datum',kontakt='D',dokument=$did,bezug='0',employee=".$data["CRMUSER"]." where id=$id";
 	$rs=$db->query($sql);
 	if(!$rs) {
 		$id=false;
@@ -274,7 +303,7 @@ global $db;
 
 /****************************************************
 * insCall
-* in: data = array(Formularfelder) datei = �bergebene Datei
+* in: data = array(Formularfelder) datei = übergebene Datei
 * out: id = des Calls
 * einen neuen Anruf speichern
 *****************************************************/
@@ -309,7 +338,9 @@ global $db;
 	}
 	$c_cause=addslashes($data["c_cause"]);
 	$c_cause=nl2br($c_cause);
-	$sql="update telcall set cause='".$data["cause"]."',c_long='$c_cause',caller_id='".$data["CID"]."',calldate='$datum',kontakt='".$data["Kontakt"]."',dokument=$did,bezug='".$data["Bezug"]."',employee='".$data["CRMUSER"]."' where id=$id";
+	$sql="update telcall set cause='".$data["cause"]."',c_long='$c_cause',caller_id='".$data["CID"];
+	$sql.="',calldate='$datum',kontakt='".$data["Kontakt"]."',dokument=$did,bezug='".$data["Bezug"];
+	$sql.="',employee='".$data["CRMUSER"]."' where id=$id";
 	$rs=$db->query($sql);
 	if(!$rs) {
 		$id=false;
@@ -343,7 +374,9 @@ global $db;
 	}
 	$c_cause=addslashes($data["c_cause"]);
 	$c_cause=nl2br($c_cause);
-	$sql="update telcall set cause='".$data["cause"]."',c_long='$c_cause',caller_id='".$data["CID"]."',calldate='$datum',kontakt='".$data["Kontakt"]."',dokument=$did,bezug='".$data["bezug"]."',employee='".$data["CRMUSER"]."' where id=".$data["id"];
+	$sql="update telcall set cause='".$data["cause"]."',c_long='$c_cause',caller_id='".$data["CID"]."',";
+	$sql.="calldate='$datum',kontakt='".$data["Kontakt"]."',dokument=$did,bezug='".$data["bezug"]."',";
+	$sql.="employee='".$data["CRMUSER"]."' where id=".$data["id"];
 	$rs=$db->query($sql);
 	if(!$rs) {
 		$id=false;
@@ -441,9 +474,9 @@ function saveDokument($Datei,$Beschreibung,$datum,$CID,$CRMUSER,$pfad="") {
 global $db;
 	$Name=$Datei["Datei"]["name"];
 	$Size=$Datei["Datei"]["size"];
-	if ($CID>0) {									// geh�rt einem Kontakt
+	if ($CID>0) {									// gehört einem Kontakt
 		$dir=$_SESSION["mansel"]."/".$CID;
-	} else {  										// geh�rt einem User
+	} else {  									// gehört einem User
 		$dir=$_SESSION["mansel"]."/".$CRMUSER;
 	};
 	$dest="./dokumente/".$_SESSION["mansel"].$pfad."/".$Name;
@@ -451,7 +484,8 @@ global $db;
 	if (copy($Datei["Datei"]["tmp_name"],$dest)) {
 		//unlink($Datei["Datei"]['tmp_name']);	Macht doch PHP selber
 		$id=mknewDocument();
-		$sql="update documents set filename='$Name',descript='$Beschreibung',datum='$datum',size=$Size,employee=$CRMUSER,kunde=$CID,pfad=$pfad where id=$id";
+		$sql="update documents set filename='$Name',descript='$Beschreibung',datum='$datum',";
+		$sql.="size=$Size,employee=$CRMUSER,kunde=$CID,pfad=$pfad where id=$id";
 		$rs=$db->query($sql);
 		if(!$rs) {
 			$rs=false;
@@ -462,6 +496,14 @@ global $db;
 	};
 	return $rs;
 }
+
+/****************************************************
+* saveDocAttribut
+* in: name = string, pfad =  string
+* in: komment = string,  id = int, kunde = id
+* out: 
+* Attribute zu einem Dokument sichern
+*****************************************************/
 function saveDocAttribut($name,$pfad,$komment,$id,$kunde) {
 global $db;
 	if ($id>0) $rs=getDokument($id);
@@ -473,11 +515,12 @@ global $db;
 	}
 	$rc=$db->query($sql);
 }
+
 /****************************************************
 * delDokument
 * in: id = int
 * out:
-* ein Dokument l�schen
+* ein Dokument löschen
 *****************************************************/
 function delDokument($id,$file="") {
 global $db;
@@ -509,10 +552,10 @@ global $db;
 }
 
 /****************************************************
-* getDokument
+* getAllDokument
 * in: id = int
 * out: rs = array(Felder der db)
-* ein Dokument aus db holen
+* alle Dokumente zu einem telcall aus db holen
 *****************************************************/
 function getAllDokument($id){
 global $db;
@@ -573,6 +616,13 @@ global $db;
 	}
 	return $daten;
 }
+
+/****************************************************
+* getCntCallHist
+* in: id = int, bezug = boolean
+* out: int
+* Änderungen an TelCall inst History schreiben 
+*****************************************************/
 function getCntCallHist($id,$bezug=false) {
 global $db;
 	if ($bezug) {
@@ -584,6 +634,12 @@ global $db;
 	return $rs[0]["cnt"];
 }
 
+/****************************************************
+* getCallHistory
+* in:  id = int, bezug = boolean
+* out: array
+* History zu einem TelCall holen
+*****************************************************/
 function getCallHistory($id,$bezug=false) {
 global $db;
 	if ($bezug) {
@@ -594,6 +650,7 @@ global $db;
 	$rs=$db->getAll($sql);
 	return $rs;
 }
+
 /****************************************************
 * getWvl
 * in: crmuser = int
@@ -759,6 +816,7 @@ global $db;
 	}
 	return $pfad;
 }
+
 /****************************************************
 * insWvl
 * in: data = array(Formularfelder), datei = übergebene Datei
@@ -770,6 +828,7 @@ function insWvl($data,$datei="") {
 	$rs=updWvl($data,$datei);
 	return $rs;
 }
+
 /****************************************************
 * updWvl
 * in: data = array(Formularfelder), datei = übergebene Datei
@@ -826,9 +885,9 @@ global $db;
 		} else {
 			$rs=$data["WVLID"];
 		};
-		if ($data["cp_cv_id"]<>$data["cp_cv_id_old"] or $data["status"]<1) {  // es wurd eine Zuweisung an einen Kunden gemacht
+		if ($data["cp_cv_id"]<>$data["cp_cv_id_old"] or $data["status"]<1) {  // es wurde eine neue Zuweisung an einen Kunden gemacht
 			$id=kontaktWvl($data["WVLID"],$data["cp_cv_id"],$pfad);
-			if ($id) {$rs=$id;} else {$rs=false;}
+			if ($id) {$rs=$data["WVLID"];} else {$rs=false;}
 		}
 	}
 	return $rs;
@@ -886,6 +945,16 @@ global $db;
 			$mbox = imap_open ("{".$srv["msrv"].":143/imap/notls}", $srv["postf"],$srv["kennw"]);
 			//$mbox = imap_open ("{".$srv["msrv"].":143}", $srv["postf"],$srv["kennw"]);
 			$data["DateiID"]=true;
+			$data["c_cause"]=$data["LangTxt"];
+			$data["cause"]=$data["Cause"];
+			$data["Bezug"]=0;
+			$data["Kontakt"]="M";
+			$data["Datum"]=date("d.m.Y");
+			$data["Zeit"]=date("H:i");
+			$CID=$data["CID"];
+			$data["CID"]=$kontaktID;
+			$tid=insCall($data,false);
+			if (!$tid) return false;
 			foreach($data["dateien"] as $mail){
 				//trenne Anhang und speichere in tmp
 				$file=split(",",$mail);
@@ -907,22 +976,21 @@ global $db;
 		                $dbfile->setDocData("descript",$data["DCaption"]);
 				$pfad=mkPfad($data["cp_cv_id"],$data["CRMUSER"]);
         		        $rc=$dbfile->uploadDocument($Datei,$pfad);
-                		$did[]=$dbfile->id;     
+                                $did=$dbfile->id;     
+                                documenttotc($tid,$did);
 			}
+			moveMail($data["Mail"],$CID);
+			$sql="update telcall set dokument=1 where id = $tid";
+			$rc=$db->query($sql);
+			return $rc;
 		} else {
 			$data["DateiID"]=false;
 		}
 		// bis hier ok
-		$id=insWvl($data);
-		if ($id) {
-			moveMail($data["Mail"],$data["CID"]);
-			if ($did) foreach ($did as $d) {
-				documenttotc($id,$d);
-			}
-			$rs=true;
-		} else { $rs=false; };
+		$rs=true;
 	} else { 
-		$rs=false; 
+		//$rs=false; 
+		$rs=1;
 	};
 	return $rs;
 }
@@ -966,19 +1034,19 @@ global $db;
 			}
 		}
 	}
-	
 	if ($rs[0]["status"]<1) {
 		if ($rs[0]["document"] && $rs[0]["kontakt"]<>"M") {
-				$sql="select * from documents where id=".$rs[0]["document"];
-				$rsD=$db->getAll($sql);
-				$von="dokumente/".$_SESSION["mansel"]."/".$rsD[0]["employee"]."/".$rsD[0]["filename"];
-				if ($pfad) {
-					$pfad=$_SESSION["mansel"]."/".$pfad;
-				} else {
-					$pfad=mkPfad($tab.$fid,$fid);
-				}
-				$ok=chkdir($pfad);
-				$nach="dokumente/".$_SESSION["mansel"]."/".$pfad."/".$rsD[0]["filename"];
+			$sql="select * from documents where id=".$rs[0]["document"];
+			$rsD=$db->getAll($sql);
+			$von="dokumente/".$_SESSION["mansel"]."/".$rsD[0]["employee"]."/".$rsD[0]["filename"];
+			if (!$pfad) {
+				//$pfad=$_SESSION["mansel"]."/".$pfad;
+			//} else {
+				$pfad=mkPfad($tab.$fid,$fid);
+			}
+			$ok=chkdir($pfad);
+			$nach="dokumente/".$_SESSION["mansel"]."/".$pfad."/".$rsD[0]["filename"];
+			if (file_exists($von)) {
 				$rc=rename($von,$nach);
 				if ($rc) {
 					$sql="update documents set kunde=".$fid.", pfad='".$pfad."' where id=".$rsD[0]["id"];
@@ -987,11 +1055,20 @@ global $db;
 						return false;
 					}
 				}
+			} else if(file_exists($nach)) {
+				$sql="update documents set kunde=".$fid.", pfad='".$pfad."' where id=".$rsD[0]["id"];
+				if (!$db->query($sql)) {
+					$db->rollback();
+					return false;
+				}
+			} else {
+				$db->rollback();
+				return false;
+			}
 		}
 	}
 	return $db->commit();
 }
-
 
 /****************************************************
 * decode_string
@@ -1045,15 +1122,15 @@ function holeMailHeader($usr) {
 				if (is_array ($overview )) {
     				reset ($overview);
     				while (list ($key, $val) = each ($overview)) {
-						if (!$val->deleted) {
-							$datum=substr($val->date,4,-9);
-							$gelesen=($val->seen)?"-":"+";
-							$m[]=array("Nr"=>$val->msgno,
-									"Datum"=>$datum,
-									"Betreff"=>htmlspecialchars(decode_string($val->subject)),
-									"Abs"=>htmlspecialchars(decode_string($val->from)),
-									"Gelesen"=>$gelesen);
-						}
+					if (!$val->deleted) {
+						$datum=substr($val->date,4,-9);
+						$gelesen=($val->seen)?"-":"+";
+						$m[]=array("Nr"=>$val->msgno,
+								"Datum"=>$datum,
+								"Betreff"=>htmlspecialchars(decode_string($val->subject)),
+								"Abs"=>htmlspecialchars(decode_string($val->from)),
+								"Gelesen"=>$gelesen);
+					}
     				}
 					if (empty($m)) $m[]=array("Nr"=>0,"Datum"=>"","Betreff"=>"Keine Mails","Abs"=>"","Gelesen"=>"");
 				}
@@ -1200,45 +1277,45 @@ global $db;
 * !! noch weiter Testen
 *****************************************************/
 function createMailBox($name,$id) {
-$srv=getUsrMailData($id);
-$mbox = imap_open ("{".$srv["msrv"].":143/imap/notls}", $srv["postf"],$srv["kennw"]);
-$name1 = $name;
-$name2 = imap_utf7_encode ($name);
-$newname = $name1;
-echo "Newname will be '$name1'<br>\n";
+	$srv=getUsrMailData($id);
+	$mbox = imap_open ("{".$srv["msrv"].":143/imap/notls}", $srv["postf"],$srv["kennw"]);
+	$name1 = $name;
+	$name2 = imap_utf7_encode ($name);
+	$newname = $name1;
+	echo "Newname will be '$name1'<br>\n";
 
-# we will now create a new mailbox "phptestbox" in your inbox folder,
-# check its status after creation and finaly remove it to restore
-# your inbox to its initial state
+	# we will now create a new mailbox "phptestbox" in your inbox folder,
+	# check its status after creation and finaly remove it to restore
+	# your inbox to its initial state
 
-if (@imap_createmailbox ($mbox,imap_utf7_encode ("{".$srv["msrv"]."}INBOX.$newname"))) {
-    $status = @imap_status($mbox,"{".$srv["msrv"]."}INBOX.$newname",SA_ALL);
-    if($status) {
-        print("your new mailbox '$name1' has the following status:<br>\n");
-        print("Messages:   ". $status->messages   )."<br>\n";
-        print("Recent:     ". $status->recent     )."<br>\n";
-        print("Unseen:     ". $status->unseen     )."<br>\n";
-        print("UIDnext:    ". $status->uidnext    )."<br>\n";
-        print("UIDvalidity:". $status->uidvalidity)."<br>\n";
+	if (@imap_createmailbox ($mbox,imap_utf7_encode ("{".$srv["msrv"]."}INBOX.$newname"))) {
+	    $status = @imap_status($mbox,"{".$srv["msrv"]."}INBOX.$newname",SA_ALL);
+	    if($status) {
+		print("your new mailbox '$name1' has the following status:<br>\n");
+		print("Messages:   ". $status->messages   )."<br>\n";
+		print("Recent:     ". $status->recent     )."<br>\n";
+		print("Unseen:     ". $status->unseen     )."<br>\n";
+		print("UIDnext:    ". $status->uidnext    )."<br>\n";
+		print("UIDvalidity:". $status->uidvalidity)."<br>\n";
 
-        if (imap_renamemailbox ($mbox,"{".$srv["msrv"]."}INBOX.$newname", "{your.imap.host}INBOX.$name2")) {
-            echo "renamed new mailbox from '$name1' to '$name2'<br>\n";
-            $newname=$name2;
-        } else {
-            print "imap_renamemailbox on new mailbox failed: ".imap_last_error ()."<br>\n";
-        }
-    } else {
-            print "imap_status on new mailbox failed: ".imap_last_error()."<br>\n";
-    }
-    if (@imap_deletemailbox($mbox,"{".$srv["msrv"]."}INBOX.$newname")) {
-        print "new mailbox removed to restore initial state<br>\n";
-    } else {
-        print  "imap_deletemailbox on new mailbox failed: ".implode ("<br>\n", imap_errors())."<br>\n";
-    }
-} else {
-    print "could not create new mailbox: ".implode ("<br>\n",imap_errors())."<br>\n";
-}
-imap_close($mbox);
+		if (imap_renamemailbox ($mbox,"{".$srv["msrv"]."}INBOX.$newname", "{your.imap.host}INBOX.$name2")) {
+		    echo "renamed new mailbox from '$name1' to '$name2'<br>\n";
+		    $newname=$name2;
+		} else {
+		    print "imap_renamemailbox on new mailbox failed: ".imap_last_error ()."<br>\n";
+		}
+	    } else {
+		    print "imap_status on new mailbox failed: ".imap_last_error()."<br>\n";
+	    }
+	    if (@imap_deletemailbox($mbox,"{".$srv["msrv"]."}INBOX.$newname")) {
+		print "new mailbox removed to restore initial state<br>\n";
+	    } else {
+		print  "imap_deletemailbox on new mailbox failed: ".implode ("<br>\n", imap_errors())."<br>\n";
+	    }
+	} else {
+	    print "could not create new mailbox: ".implode ("<br>\n",imap_errors())."<br>\n";
+	}
+	imap_close($mbox);
 }
 
 /****************************************************
@@ -1260,7 +1337,7 @@ function moveMail($mail,$id) {
 * delMail
 * in: mail,id = int
 * out:
-* eine Mail  als gesl�scht marmieren
+* eine Mail  als geslöscht marmieren
 * !! wg. Probleme mit einigen IMAP-Installationen
 * !! nur ein markieren mit Delete
 *****************************************************/
@@ -1269,7 +1346,6 @@ function delMail($mail,$id) {
 	$mbox = imap_open ("{".$srv["msrv"].":143/imap/notls}", $srv["postf"],$srv["kennw"]);
 	imap_delete($mbox,$mail);
 }
-
 
 /****************************************************
 * getIntervall
@@ -1287,8 +1363,6 @@ global $db;
 	if ($rs[0]["interv"]) { return $rs[0]["interv"]; }
 	else { return 60; }
 }
-
-
 
 /****************************************************
 * getAllMails
@@ -1312,12 +1386,24 @@ global $db,$Pre;
 	usort($rs,"eMailSort");
 	return $rs;
 }
-/* Sortierfunktion f�r eMail-Adressen */
+
+/****************************************************
+* eMailSort
+* in: a,b = array
+* out: array
+* Sortierfunktion für eMail-Adressen
+*****************************************************/
 function eMailSort($a,$b) {
     if ($a["name"] == $b["name"]) return 0;
     return ($a["name"] < $b["name"]) ? -1 : 1;
 }
 
+/****************************************************
+* chkMailAdr
+* in: mailadr = string
+* out: string
+* Mailaddr. auf Gültigkeit prüfen
+*****************************************************/
 function chkMailAdr ($mailadr) {
 	if (substr(",",$mailadr)) {
 		$tmp=split(",",$mailadr);
@@ -1348,11 +1434,13 @@ global $db;
 	$lastYearV=date("Y-m-d",mktime(0, 0, 0, date("m")+1, 1, $jahr-1));
 	$lastYearB=date("Y-m-d",mktime(0, 0, 0, date("m"), 31, $jahr));
 	if ($liefer) {
-		$sql="select * from oe where vendor_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' and closed = 'f' and quotation = 'f' order by transdate desc";
+		$sql="select * from oe where vendor_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' ";
+		$sql.="and closed = 'f' and quotation = 'f' order by transdate desc";
 		$rs2=$db->getAll($sql);
 		$sql="select * from ap where vendor_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' order by transdate desc";
 	} else {
-		$sql="select * from oe where customer_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' and closed = 'f' and quotation = 'f' order by transdate desc";
+		$sql="select * from oe where customer_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' ";
+		$sql.="and closed = 'f' and quotation = 'f' order by transdate desc";
 		$rs2=$db->getAll($sql);
 		$sql="select * from ar where customer_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' order by transdate desc";
 	};
@@ -1364,7 +1452,7 @@ global $db;
 		$rechng[$dat]=array("summe"=>0,"count"=>0,"curr"=>"Eur");
 	}
 	$rechng["Jahr  "]=array("summe"=>0,"count"=>0,"curr"=>"Eur");
-	// unterschiedliche W�hrungen sind noch nicht ber�cksichtigt. Summe stimmt aber.
+	// unterschiedliche Währungen sind noch nicht berücksichtigt. Summe stimmt aber.
 	if ($rs) foreach ($rs as $re){
 		$m=substr($re["transdate"],0,4).substr($re["transdate"],5,2);
 		$rechng[$m]["summe"]+=$re["netamount"];
@@ -1386,9 +1474,11 @@ global $db;
 	$lastYearV=date("Y-m-d",mktime(0, 0, 0, date("m"), 1, $jahr-1));
 	$lastYearB=date("Y-m-d",mktime(0, 0, 0, date("m")+1, -1, $jahr));
 	if ($liefer) {
-		$sql="select * from oe where vendor_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' and quotation = 't' order by transdate desc";
+		$sql="select * from oe where vendor_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' ";
+		$sql.="and quotation = 't' order by transdate desc";
 	} else {
-		$sql="select * from oe where customer_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' and quotation = 't' order by transdate desc";
+		$sql="select * from oe where customer_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' ";
+		$sql.="and quotation = 't' order by transdate desc";
 	}
 	$rs=$db->getAll($sql);
 	$rechng=array();
@@ -1413,7 +1503,7 @@ global $db;
 * monat = char(2)
 * liefern = boolean
 * out: rs = array
-* Rechnungsdaten f�r den Monat
+* Rechnungsdaten für den Monat
 *****************************************************/
 function getReMonat($fid,$monat,$liefer=false){
 global $db;
@@ -1436,7 +1526,7 @@ global $db;
 * cmp
 * in: $a,$b = datum
 * out: 0,1,-1
-* Funktion f�r Usort
+* Funktion für Usort
 *****************************************************/
 function cmp ($a, $b) {
     return strcmp($b["transdate"],$a["transdate"]);
@@ -1454,14 +1544,16 @@ function cmp ($a, $b) {
 function getRechParts($id,$tab) {
 global $db;
 	if ($tab=="R" || $tab=="V") {
-		$sql="select *,I.sellprice as endprice,I.fxsellprice as orgprice,I.discount,I.description as artikel from invoice I left join parts P on P.id=I.parts_id where trans_id=$id";
+		$sql="select *,I.sellprice as endprice,I.fxsellprice as orgprice,I.discount,I.description as artikel ";
+		$sql.="from invoice I left join parts P on P.id=I.parts_id where trans_id=$id";
 		if ($tab=="V") {
 			$sql1="select amount as brutto, netamount as netto,transdate, intnotes, notes,quonumber,ordnumber from ap where id=$id";
 		} else {
 			$sql1="select amount as brutto, netamount as netto,transdate, intnotes, notes,quonumber,ordnumber from ar where id=$id";
 		}
 	} else {
-		$sql="select *,O.sellprice as endprice,O.sellprice as orgprice,O.discount,O.description as artikel from orderitems O left join parts P on P.id=O.parts_id where trans_id=$id";
+		$sql="select *,O.sellprice as endprice,O.sellprice as orgprice,O.discount,O.description as artikel ";
+		$sql.="from orderitems O left join parts P on P.id=O.parts_id where trans_id=$id";
 		$sql1="select amount as brutto, netamount as netto,transdate, intnotes, notes, quotation,quonumber from oe where id=$id";
 	}
 	$rs=$db->getAll($sql);
@@ -1539,6 +1631,12 @@ global $db;
 	}
 }
 
+/****************************************************
+* getUsrNamen
+* in: user = string
+* out: array
+* 
+*****************************************************/
 function getUsrNamen($user) {
 global $db;
 	if ($user) foreach ($user as $row) {
@@ -1563,6 +1661,13 @@ global $db;
 	}
 	return $data;
 }
+
+/****************************************************
+* newTermin
+* in: 
+* out: int
+* neuen Termineintrag generieren
+*****************************************************/
 function newTermin() {
 global $db;
 	$newID=uniqid (rand());
@@ -1576,6 +1681,13 @@ global $db;
 		return $rs[0]["id"];
 	}
 }
+
+/****************************************************
+* saveTermin
+* in: data = array
+* out: ??? Überprüfen
+* einen Termin sichern
+*****************************************************/
 function saveTermin($data) {
 global $db;
 	if (!$data["tid"]) {
@@ -1641,7 +1753,9 @@ global $db;
 			if ($tab<>"G" && $tab<>"E") {
 				$tid=mknewTelCall();
 				$nun=date2db($data["vondat"])." ".$data["von"].":00";
-				$sql="update telcall set cause='".$data["grund"]."',caller_id=$nr,calldate='$nun',c_long='".$data["lang"]."',employee='".$_SESSION["loginCRM"]."',kontakt='X',bezug=0 where id=$tid";
+				$sql="update telcall set cause='".$data["grund"];
+				$sql.="',caller_id=$nr,calldate='$nun',c_long='".$data["lang"];
+				$sql.="',employee='".$_SESSION["loginCRM"]."',kontakt='X',bezug=0 where id=$tid";
 				$rc=$db->query($sql);
 				if(!$rs) {
 					$rs=-1;
@@ -1651,6 +1765,13 @@ global $db;
 		}
 	}
 }
+
+/****************************************************
+* checkTermin
+* in: start=string,stop=string,von=string,bis=string,TID = int
+* out: array
+* 
+*****************************************************/
 function checkTermin($start,$stop,$von,$bis,$TID=0) {
 global $db;
 	$grp=getGrp($_SESSION["loginCRM"],true);
@@ -1674,6 +1795,12 @@ global $db;
 	return $ids;
 }
 
+/****************************************************
+* getTerminList
+* in: id = int
+* out: array
+* 
+*****************************************************/
 function getTerminList($id) {
 global $db;
 	$sql="select id,cause,starttag,stoptag,startzeit,stopzeit from termine where id in ($id)";
@@ -1685,6 +1812,12 @@ global $db;
 	}
 }
 
+/****************************************************
+* getTermin
+* in: day,month,year = int, art = char
+* out: array
+* 
+*****************************************************/
 function getTermin($day,$month,$year,$art) {
 global $db;
 	$grp=getGrp($_SESSION["loginCRM"],true);
@@ -1692,7 +1825,8 @@ global $db;
 	if ($art=="M") {
 		$min=mktime(0,0,0,$month,1,$year);
 		$max=mktime(0,0,0,$month,date("t",$min),$year);
-		$sql="select * from termdate D left join terminmember M on M.termin=D.termid  where jahr=$year and monat='$month' and ($rechte)  order by tag";
+		$sql="select * from termdate D left join terminmember M on M.termin=D.termid ";
+		$sql.="where jahr=$year and monat='$month' and ($rechte)  order by tag";
 		$rs=$db->getAll($sql);
 		if(!$rs) {
 			return false;
@@ -1700,7 +1834,8 @@ global $db;
 			return $rs;
 		}
 	} else if ($art=="T") {
-		$sql="select * from termine T left join termdate D on T.id=D.termid left join terminmember M on M.termin=D.termid  where jahr=$year and monat='$month' and tag='$day' and ($rechte)  order by starttag, startzeit";
+		$sql="select * from termine T left join termdate D on T.id=D.termid left join terminmember M on M.termin=D.termid ";
+		$sql.="where jahr=$year and monat='$month' and tag='$day' and ($rechte)  order by starttag, startzeit";
 		$rs=$db->getAll($sql);
 		if(!$rs) {
 			return false;
@@ -1726,6 +1861,13 @@ global $db;
 		}
 	}
 }
+
+/****************************************************
+* getTerminData
+* in: tid = int
+* out: array
+* 
+*****************************************************/
 function getTerminData($tid) {
 global $db;
 	$sql="select * from termine T left join termdate D on T.id=D.termid where T.id=$tid";
@@ -1736,6 +1878,13 @@ global $db;
 			return $rs[0];
 		}
 }
+
+/****************************************************
+* getTerminUser
+* in: tid = int
+* out: array
+* 
+*****************************************************/
 function getTerminUser($tid) {
 global $db;
 	$sql="select tabelle||member as uid from terminmember where termin=$tid";
@@ -1747,6 +1896,12 @@ global $db;
 		}
 }
 
+/****************************************************
+* deleteTermin
+* in: id = int
+* out: 
+* 
+*****************************************************/
 function deleteTermin($id) {
 global $db;
 	$sql1="delete from termine where id=$id";
@@ -1756,13 +1911,22 @@ global $db;
 	$sql3="delete from termdate where termid=$id";
 	$rc=$db->query($sql3);
 }
+
+/****************************************************
+* getNextTermin
+* in: tid = int
+* out: array
+* 
+*****************************************************/
 function getNextTermin($tid) {
 global $db;
 	$nun=date("Y-m-dH:i");
 	$grp=getGrp($tid,true);
 	if ($grp) $rechte.=" M.member in $grp";
-	//$sql="select * from termine T left join termdate D on D.termid=T.id left join terminmember M on M.termin=T.id where D.jahr||'-'||D.monat||'-'||D.tag||T.startzeit>='$nun' and $rechte order by jahr,monat,tag,startzeit limit 1";
-	$sql="select * from termine T left join termdate D on D.termid=T.id left join terminmember M on M.termin=T.id where D.jahr||'-'||D.monat||'-'||D.tag||T.startzeit>'$nun' and $rechte order by jahr,monat,tag,startzeit limit 1";
+	//$sql="select * from termine T left join termdate D on D.termid=T.id left join terminmember M on M.termin=T.id ";
+	//$sql.="where D.jahr||'-'||D.monat||'-'||D.tag||T.startzeit>='$nun' and $rechte order by jahr,monat,tag,startzeit limit 1";
+	$sql="select * from termine T left join termdate D on D.termid=T.id left join terminmember M on M.termin=T.id ";
+	$sql.="where D.jahr||'-'||D.monat||'-'||D.tag||T.startzeit>'$nun' and $rechte order by jahr,monat,tag,startzeit limit 1";
 	$rs=$db->getAll($sql);
 	//echo $sql;
 	if ($rs[0]["termid"]) {
@@ -1776,12 +1940,26 @@ global $db;
 	}
 	return $data;
 }
+
+/****************************************************
+* advent
+* in: year = int
+* out: int
+* 
+*****************************************************/
 function advent($year= -1) {
 	if ($year == -1) $year= date('Y');
 	$s= mktime(0, 0, 0, 11, 26, $year);
 	while (0 != date('w', $s)) $s+= 86400;
 	return $s;
 }
+
+/****************************************************
+* eastern
+* in: year = int
+* out: int
+* 
+*****************************************************/
 function eastern($year= -1) {
       if ($year == -1) $year= date('Y');
       // the Golden number
@@ -1813,6 +1991,13 @@ function eastern($year= -1) {
       }
       return mktime(0, 0, 0, $m, $d, $year, -1);
 }
+
+/****************************************************
+* ostern
+* in: intYear = int
+* out:  int
+* 
+*****************************************************/
 function ostern($intYear) {
 	$a = 0; $b = 0; $c = 0; $d = 0; $e = 0;
 	$intDay = 0; $intMonth = 0;
@@ -1832,11 +2017,18 @@ function ostern($intYear) {
    	$intDay = 18;
 	return mktime(0,0,0,$intMonth,$intDay,$intYear);
 }
+
+/****************************************************
+* feiertage
+* in:  jahr = int
+* out: array
+* 
+*****************************************************/
 function feiertage($jahr) {
-	$holiday= array();
-	$CAL_SEC_DAY=86400;
-	$easter=eastern($jahr);
-	$advent=advent($jahr);
+    $holiday= array();
+    $CAL_SEC_DAY=86400;
+    $easter=eastern($jahr);
+    $advent=advent($jahr);
     // Feste Feiertage
     $holiday[mktime(0, 0, 0, 1,   1, $jahr)]= 'G,Neujahr';
     $holiday[mktime(0, 0, 0, 1,   6, $jahr)]= 'R,Heilige 3 K&ouml;nige BW,BY,ST';
@@ -1850,7 +2042,7 @@ function feiertage($jahr) {
     $holiday[mktime(0, 0, 0, 12, 26, $jahr)]= 'G,2. Weihnachtsfeiertag';
     $holiday[mktime(0, 0, 0, 12, 31, $jahr)]= 'F,Sylvester';
 
-    // Bewegliche Feiertage, von Ostern abh�ngig
+    // Bewegliche Feiertage, von Ostern abhängig
     $holiday[$easter - $CAL_SEC_DAY * 48]= 'R,Rosenmontag';
     $holiday[$easter - $CAL_SEC_DAY * 46]= 'R,Aschermittwoch';
     $holiday[$easter - $CAL_SEC_DAY *  2]= 'G,Karfreitag';
@@ -1861,7 +2053,7 @@ function feiertage($jahr) {
     $holiday[$easter + $CAL_SEC_DAY * 50]= 'G,Pfingstmontag';
     $holiday[$easter + $CAL_SEC_DAY * 60]= 'R,Fronleichnam BW,BY,HE,NW,RP,SL';
 
-    // Bewegliche Feiertage, vom ersten Advent abh�ngig
+    // Bewegliche Feiertage, vom ersten Advent abhängig
     $holiday[$advent]=                      'F,1. Advent';
     $holiday[$advent + $CAL_SEC_DAY *  7]=  'F,2. Advent';
     $holiday[$advent + $CAL_SEC_DAY * 14]=  'F,3. Advent';
@@ -1872,6 +2064,12 @@ function feiertage($jahr) {
     return $holiday;
 }
 
+/****************************************************
+* getCustMsg
+* in: id = int, all = boolean
+* out: string
+* 
+*****************************************************/
 function getCustMsg($id,$all=false) {
 global $db;
 	if (!$all) { $where="fid=$id and akt='t'"; }
@@ -1881,28 +2079,34 @@ global $db;
 	}
 	$sql="select * from custmsg where $where ";
 	$rs=$db->getAll($sql);
-		if(!$rs) {
-			return false;
+	if(!$rs) {
+		return false;
+	} else {
+		if ($all==1) {
+			return $rs;
+		} else if ($all>1) {
+			return $rs[0];
 		} else {
-			if ($all==1) {
-				return $rs;
-			} else if ($all>1) {
-				return $rs[0];
-			} else {
-				if ($rs[0]) {
-					switch ($rs[0]["prio"]) {
-						case 1 : $atre="<font color='red'><blink>"; $atra="</blink></font>";break;
-						case 2 : $atre="<blink>"; $atra="</blink>"; break;
-						case 3 : $atre=""; $atra=""; break;
-						default : $atre=""; $atra="";
-					}
-					$msg=$atre.$rs[0]["msg"].$atra;
+			if ($rs[0]) {
+				switch ($rs[0]["prio"]) {
+					case 1 : $atre="<font color='red'><blink>"; $atra="</blink></font>";break;
+					case 2 : $atre="<blink>"; $atra="</blink>"; break;
+					case 3 : $atre=""; $atra=""; break;
+					default : $atre=""; $atra="";
 				}
+				$msg=$atre.$rs[0]["msg"].$atra;
 			}
-			return $msg;
 		}
+		return $msg;
+	}
 }
 
+/****************************************************
+* saveCustMsg
+* in:  data = array
+* out: 
+* 
+*****************************************************/
 function saveCustMsg($data) {
 global $db;
 	if (!$data["cp_cv_id"]) return false;
@@ -1917,25 +2121,45 @@ global $db;
 	}
 }
 
+/****************************************************
+* getOneLable
+* in: format = int
+* out: array
+* 
+*****************************************************/
 function getOneLable($format) {
-		global $db;
-		$lab=false;
-		$sql="select * from labels where id=".$format;
-		$rs=$db->getAll($sql);
-		if ($rs) {
-			$sql="select * from labeltxt where lid=".$rs[0]["id"];
-			$rs2=$db->getAll($sql);
-			$lab=$rs[0];
-			$lab["Text"]=$rs2;
-		}
-		return $lab;
+	global $db;
+	$lab=false;
+	$sql="select * from labels where id=".$format;
+	$rs=$db->getAll($sql);
+	if ($rs) {
+		$sql="select * from labeltxt where lid=".$rs[0]["id"];
+		$rs2=$db->getAll($sql);
+		$lab=$rs[0];
+		$lab["Text"]=$rs2;
 	}
+	return $lab;
+}
+
+/****************************************************
+* getLableNames
+* in: 
+* out: array
+* 
+*****************************************************/
 function getLableNames() {
-		global $db;
-		$sql="select id,name from labels";
-		$rs=$db->getAll($sql);
-		return $rs;
-	}
+	global $db;
+	$sql="select id,name from labels";
+	$rs=$db->getAll($sql);
+	return $rs;
+}
+
+/****************************************************
+* mknewLable
+* in: id = int
+* out: int
+* 
+*****************************************************/
 function mknewLable($id=0) {
 	global $db;
 	$newID=uniqid (rand());
@@ -1952,14 +2176,28 @@ function mknewLable($id=0) {
 	} else {
 		$id=false;
 	}
-return $id;
+	return $id;
 }
+
+/****************************************************
+* insLable
+* in: data = array
+* out: int
+* 
+*****************************************************/
 function insLable($data) {
 	$data["id"]=mknewLable();
 	$data["name"]=$data["custname"];
 	$data["cust"]="C";
 	return updLable($data);
 }
+
+/****************************************************
+* updLable
+* in: data = array
+* out: int
+* 
+*****************************************************/
 function updLable($data) {
 	global $db;
 	$data["fontsize"]="10";
@@ -1984,6 +2222,12 @@ function updLable($data) {
 	return $data["id"];
 }
 
+/****************************************************
+* getWPath
+* in: id = int
+* out: string
+* 
+*****************************************************/
 function getWPath($id) {
 global $db;
 	$sql="select * from wissencategorie where id = $id";
@@ -1999,6 +2243,13 @@ global $db;
 	}
 	return $pfad;
 }
+
+/****************************************************
+* getWCategorie
+* in: kdhelp = boolean
+* out: array
+* 
+*****************************************************/
 function getWCategorie($kdhelp=false) {
 global $db;
 	if ($kdhelp) { $kdhelp="where kdhelp is true";
@@ -2018,6 +2269,13 @@ global $db;
 		return false;
 	}
 }
+
+/****************************************************
+* insWCategorie
+* in: data = array
+* out: int
+* 
+*****************************************************/
 function insWCategorie($data) {
 global $db;
 	$tmp = split(",",$data["m"]);
@@ -2041,16 +2299,31 @@ global $db;
         	$tmp[0]=0;
 	}
 	$name=htmlentities($data["catname"]);
-	$sql="update wissencategorie set name='".$name."',hauptgruppe='".$data["hg"]."',kdhelp=".(($data["kdhelp"]==1)?'true':'false')." where id = ".$id;
+	$sql="update wissencategorie set name='".$name."',hauptgruppe='".$data["hg"];
+	$sql.="',kdhelp=".(($data["kdhelp"]==1)?'true':'false')." where id = ".$id;
 	$rc=$db->query($sql);
 	return ($rc)?$rs[0]["id"]:false;
 }
+
+/****************************************************
+* getOneWCategorie
+* in: id = int
+* out: array
+* 
+*****************************************************/
 function getOneWCategorie($id) {
 global $db;
 	$sql="select * from  wissencategorie where id = $id";
 	$rs=$db->getAll($sql);
 	return $rs[0];
 }
+
+/****************************************************
+* getWContent
+* in: id = int
+* out: array
+* 
+*****************************************************/
 function getWContent($id) {
 global $db;
 	$sql="select O.*,A.name,E.login from wissencontent O left join wissencategorie A on A.id=O.categorie ";
@@ -2062,6 +2335,13 @@ global $db;
 		return false;
 	}
 }
+
+/****************************************************
+* insWContent
+* in: data = array
+* out: int
+* 
+*****************************************************/
 function insWContent($data) {
 global $db;
 	$tmp = split(",",$data["m"]);
@@ -2070,21 +2350,35 @@ global $db;
 	$rc=$db->query($sql);
 	return $rc;
 }
+
+
+/****************************************************
+* getWHistory
+* in: id = int
+* out: array
+* 
+*****************************************************/
 function getWHistory($id) {
 global $db;
 	$sql="select W.*,E.login from  wissencontent W left join employee E on W.employee=E.id where categorie = $id order by initdate";
 	$rs=$db->getAll($sql);
 	return $rs;
 }
+
+/****************************************************
+* diff
+* in: text1,text2 = string
+* out: array
+*
+* Geschrieben von TBT-Moderator php-resource.de am 28-11-2002
+*****************************************************/
 function diff($text1,$text2) {
-//Geschrieben von TBT am 28-11-2002 um 16:20
-	$text1=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace(' ','�','\\1')",$text1);
-	$text2=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace(' ','�','\\1')",$text2);
+	$text1=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace(' ','°°','\\1')",$text1);
+	$text2=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace(' ','°°','\\1')",$text2);
 	$array1 = explode(" ", str_replace(array("   ","    ","  ", "\r", "\n"), array(" "," "," ", "", ""), $text1));
 	$array2 = explode(" ", str_replace(array("   ","    ","  ", "\r", "\n"), array(" "," "," ", "", ""), $text2));
 	$max1 = count($array1);
 	$max2 = count($array2);
-//print_r($array1);
 	$start1 = $start2 = 0;
 	$jump1 = $jump2 = 0;
 	while($start1 < $max1 && $start2 < $max2){
@@ -2100,7 +2394,7 @@ function diff($text1,$text2) {
 			$start2++;
 			continue;
 		} 
-		// Gegenschaukel wenn �bersprunge W�rter
+		// Gegenschaukel wenn übersprunge Wörter
 		if(($diff1 = $pos11 - $pos21) > 1){
 			while($pos22 < $max2 && $array1[$pos12] != $array2[$pos22]){
 				++$pos22;
@@ -2125,33 +2419,47 @@ function diff($text1,$text2) {
 			$start2 = $pos21 + 1;
 			$jump1 = $diff1;
 		}
+	}
+	$safe1 = explode(" ", str_replace(array("   ","    ","  ", "\r", "\n"), array(" "," "," ", "", ""), $text1));
+	reset($array1);
+	while(list($key1,) = each($array1)){
+	    if (preg_match("/<\/?([ou]l|li|img|input)/i",$safe1[$key1])) {
+		    $safe1[$key1] = "[_" . $safe1[$key1] . "_]";
+	    } else {
+		    $safe1[$key1] = "<span class='diff1'>" . $safe1[$key1] . "</span>";
+	    }
+	}
+	$safe2 = explode(" ", str_replace(array("   ","    ","  ", "\r", "\n"), array(" "," "," ", "", ""), $text2));
+	reset($array2);
+	while(list($key2,) = each($array2)){
+	    $safe2[$key2] = "<span class='diff2'>" . $safe2[$key2] . "</span>";
+	}
+	$text1=implode(" ", $safe1);
+	$text2=implode(" ", $safe2);
+	$text1=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace('°°',' ','\\1')",$text1);
+	$text2=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace('°°',' ','\\1')",$text2);
+	return array($text1,$text2);
 }
-$safe1 = explode(" ", str_replace(array("   ","    ","  ", "\r", "\n"), array(" "," "," ", "", ""), $text1));
-reset($array1);
-while(list($key1,) = each($array1)){
-    if (preg_match("/<\/?([ou]l|li|img|input)/i",$safe1[$key1])) {
-	    $safe1[$key1] = "[_" . $safe1[$key1] . "_]";
-    } else {
-	    $safe1[$key1] = "<span class='diff1'>" . $safe1[$key1] . "</span>";
-    }
-}
-$safe2 = explode(" ", str_replace(array("   ","    ","  ", "\r", "\n"), array(" "," "," ", "", ""), $text2));
-reset($array2);
-while(list($key2,) = each($array2)){
-    $safe2[$key2] = "<span class='diff2'>" . $safe2[$key2] . "</span>";
-}
-$text1=implode(" ", $safe1);
-$text2=implode(" ", $safe2);
-$text1=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace('�',' ','\\1')",$text1);
-$text2=preg_replace("/(<[a-z]+[a-z]*[^>]*?>)/e","ereg_replace('�',' ','\\1')",$text2);
-return array($text1,$text2);
-}
+
+/****************************************************
+* getOpportunityStatus
+* in: 
+* out: array
+* 
+*****************************************************/
 function getOpportunityStatus() {
 global $db;
 	$sql="select * from opport_status order by sort";
 	$rs=$db->getAll($sql);
 	return $rs;
 }
+
+/****************************************************
+* getOneOpportunity
+* in: id = int
+* out: array
+* 
+*****************************************************/
 function getOneOpportunity($id) {
 global $db;
 	//$sql="select O.*,C.name as firma from  opportunity O left join customer C on O.fid=C.id where O.id = $id";
@@ -2168,6 +2476,13 @@ global $db;
 	}
 	return $rs[0];
 }
+
+/****************************************************
+* getOpportunity
+* in: fid = int
+* out: array
+* 
+*****************************************************/
 function getOpportunity($fid) {
 global $db;
 	$sql="select O.*,C.name as firmaC,V.name as firmaV from  opportunity O left join customer C on O.fid=C.id ";
@@ -2175,6 +2490,13 @@ global $db;
 	$rs=$db->getAll($sql);
 	return $rs;
 }
+
+/****************************************************
+* suchOpportunity
+* in: data = array
+* out: boolean
+* 
+*****************************************************/
 function suchOpportunity($data) {
 global $db;
 	if ($data) while (list($key,$val)=each($data)) {
@@ -2195,6 +2517,13 @@ global $db;
 	$rs=$db->getAll($sql);
 	return $rs;
 }
+
+/****************************************************
+* saveOpportunity
+* in: data = array
+* out: int
+* 
+*****************************************************/
 function saveOpportunity($data) {
 global $db;
 	if ($data["fid"] and $data["title"] and $data["betrag"] and $data["status"] and $data["chance"] and $data["zieldatum"]) {
@@ -2226,6 +2555,13 @@ global $db;
 		return false;
 	}
 }
+
+/****************************************************
+* saveMailVorlage
+* in: data = array
+* out: int
+* 
+*****************************************************/
 function saveMailVorlage($data) {
 global $db;
 	if ($data["MID"]) {
@@ -2234,12 +2570,20 @@ global $db;
 	} else {
 		$sql="insert into mailvorlage (cause,c_long,employee) values ('%s','%s',%d)";
 		$rc=$db->query(sprintf($sql,$data["Subject"],$data["BodyText"],$_SESSION["loginCRM"]));
-		$sql="select id from mailvorlage where cause='".$data["Subject"]."' and c_long='".$_SESSION["loginCRM"]."' and employee=".$_SESSION["loginCRM"];
+		$sql="select id from mailvorlage where cause='".$data["Subject"];
+		$sql.="' and c_long='".$_SESSION["loginCRM"]."' and employee=".$_SESSION["loginCRM"];
 		$rs=$db->getAll($sql);
 		if ($rs[0]["id"]>0) return $rs[0]["id"];
 	}
 	return $rc;
 }
+
+/****************************************************
+* getMailVorlage
+* in: 
+* out: array
+* 
+*****************************************************/
 function getMailVorlage() {
 global $db;
 	$sql="select * from mailvorlage order by cause";
@@ -2250,6 +2594,13 @@ global $db;
 		return $rs;
 	}
 }
+
+/****************************************************
+* getOneMailVorlage
+* in: MID = int
+* out: array
+* 
+*****************************************************/
 function getOneMailVorlage($MID) {
 global $db;
 	$sql="select * from mailvorlage where id = $MID";
@@ -2260,6 +2611,13 @@ global $db;
 		return $rs[0];
 	}
 }
+
+/****************************************************
+* deleteMailVorlage
+* in: id = int
+* out: int
+* 
+*****************************************************/
 function deleteMailVorlage($id) {
 global $db;
 	$sql="delete from mailvorlage where id = $id";

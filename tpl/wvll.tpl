@@ -25,11 +25,10 @@
 <table class="liste" width="100%">
 <!-- BEGIN Liste -->
 	<tr  class="klein" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showW({ID},'{Art}');">
-
-		<td nowrap width="30%">{Initdate}</td>
+		<td nowrap >{Initdate}</td>
 		<td width="10px" style="background-color:{Type};">{Status}</td>
-		<td width="*">{Cause}</td>
-		<td width="20%">{IniUser}</td>
+		<td width="50%">{Cause}</td>
+		<td width="30%">{IniUser}</td>
 	</tr>
 <!-- END Liste -->
 </table>

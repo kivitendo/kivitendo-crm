@@ -35,10 +35,10 @@
 	<input type="text" name="name" size="18" maxlength="75"  value="{Fname}"   tabindex="1"> <input type="button" name="dst" value=" ? " onClick="suchDst();">
 	<br><span class="klein">CRM-User &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Zugewiesen an</span>
 	</td><td class="klein" width="120px">
-	<input type="text" name="Finish" size="10" maxlength="10" value="{Finish}" tabindex="3"><br><span class="klein">Zu Erledigen bis</span>
+	<!--input type="text" name="Finish" size="10" maxlength="10" value="{Finish}" tabindex="3"><br><span class="klein">Zu Erledigen bis</span-->
 	</td>
 	<td rowspan="5">
-		<iframe src="wvll.php" name="wvll" width="359" height="410" marginheight="0" marginwidth="0" align="left">
+		<iframe src="wvll.php" name="wvll" width="500" height="410" marginheight="0" marginwidth="0" align="left">
 		<p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>
 		</iframe>
 	</td>
@@ -54,7 +54,7 @@
 	</td>
 </tr><tr>
 	<td class="klein" colspan="2">
-	<textarea name="LangTxt" cols="71" rows="14" tabindex="9">{LangTxt}</textarea><br><span class="klein">Beschreibung</span>
+	<textarea name="LangTxt" cols="65" rows="14" tabindex="9">{LangTxt}</textarea><br><span class="klein">Beschreibung</span>
 	</td>
 </tr>
 <!-- BEGIN Filebox -->

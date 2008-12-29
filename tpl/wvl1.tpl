@@ -40,7 +40,7 @@
 	</td><td class="klein"><input type="text" name="Finish" id="Finish" size="11" maxlength="10" value="{Finish}" tabindex="3">{jcal1}
 							<br><span class="klein">Zu Erledigen bis</span></td>
 	<td rowspan="6">
-		<iframe src="wvll.php" name="wvll" width="399" height="480" marginheight="0" marginwidth="0" align="left">
+		<iframe src="wvll.php" name="wvll" width="500" height="480" marginheight="0" marginwidth="0" align="left">
 		<p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>
 		</iframe>
 	</td>
@@ -57,7 +57,7 @@
 	<br><span class="klein">Priorit&auml;t</span></td>
 </tr><tr>
 	<td class="klein" colspan="2">
-	<textarea name="LangTxt" cols="60" rows="11" tabindex="9">{LangTxt}</textarea><br><span class="klein">Beschreibung</span>
+	<textarea name="LangTxt" cols="65" rows="11" tabindex="9">{LangTxt}</textarea><br><span class="klein">Beschreibung</span>
 	</td>
 </tr><tr>
 	<td class="klein" style="visibility:{hide};">

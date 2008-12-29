@@ -33,7 +33,7 @@
 		$Image="";
 	};
 	if ($fa["homepage"]<>"") {
-		$internet=(preg_match("°://°",$fa["homepage"]))?$fa["homepage"]:"http://".$fa["homepage"];
+		$internet=(preg_match("^://^",$fa["homepage"]))?$fa["homepage"]:"http://".$fa["homepage"];
 	};
 	if ($fa["discount"]) {
 		$rab=($fa["discount"]*100)."%";

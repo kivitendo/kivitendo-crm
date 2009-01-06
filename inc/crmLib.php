@@ -1500,21 +1500,22 @@ global $db;
 /****************************************************
 * getReMonat
 * in: fid = int
+* jahr = char(4)
 * monat = char(2)
 * liefern = boolean
 * out: rs = array
 * Rechnungsdaten für den Monat
 *****************************************************/
-function getReMonat($fid,$monat,$liefer=false){
+function getReMonat($fid,$jahr,$monat,$liefer=false){
 global $db;
-	if ($liefer) {
-		$sql1="select * from ap where vendor_id=$fid and transdate like '$monat%' order by transdate desc";
-		$sql2="select * from oe where vendor_id=$fid and transdate like '$monat%' and closed = 'f' order by transdate desc";
-	} else {
-		$sql1="select * from ar where customer_id=$fid and transdate like '$monat%' order by transdate desc";
-		//$sql2="select * from oe where customer_id=$fid and transdate like '$monat%' and closed = 'f' order by transdate desc";
-		$sql2="select * from oe where customer_id=$fid and transdate like '$monat%' order by transdate desc";
-	};
+        $next = ($monat<12)?"$jahr-".($monat+1)."-01":($jahr+1)."-01-01";
+        if ($liefer) {
+                $sql1="select * from ap where vendor_id=$fid and transdate >= '$jahr-$monat-01' and transdate < '$next' order by transdate desc";
+                $sql2="select * from oe where vendor_id=$fid and transdate >= '$jahr-$monat-01' and transdate < '$next' and closed = 'f' order by transdate desc";
+        } else {
+                $sql1="select * from ar where customer_id=$fid and transdate >= '$jahr-$monat-01' and transdate < '$next' order by transdate desc";
+                $sql2="select * from oe where customer_id=$fid and transdate >= '$jahr-$monat-01' and transdate < '$next' order by transdate desc";
+        };
 	$rs2=$db->getAll($sql2);
 	$rs1=$db->getAll($sql1);
 	$rs=array_merge($rs1,$rs2);
@@ -1724,7 +1725,7 @@ global $db;
 			}
 			$sql="insert into termdate (termid,tag,monat,jahr,kw) values (";
 			$sql.="$termid,'".date("d",$von)."','".date("m",$von)."',".date("Y",$von).",".strftime("%V",$von).")";
-			if (($data["ft"] && date("w",$von)<>6 && date("w",$von)<>0 && !in_array($von,$ftk)) || !$data["ft"])
+			if (($data["ft"] && date("w",$von)<>6 && date("w",$von)<>0 && !in_array($von,$ftk)) || !$data["ft"] || $von==$bis)
 				$rc=$db->query($sql);
 			switch ($data["wdhlg"]) {
 				case '0' :

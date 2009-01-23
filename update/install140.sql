@@ -236,6 +236,7 @@ CREATE TABLE wissencontent(
 CREATE TABLE opportunity(
 	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	fid integer,
+	tab char(1),
 	title character varying(100),
 	betrag numeric (15,5),
 	zieldatum date,

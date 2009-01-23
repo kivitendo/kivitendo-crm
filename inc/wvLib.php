@@ -172,9 +172,11 @@ function updateVertrag($data) {
 		$rc=$db->query(sprintf($sql,$data["bemerkung"],$data["betrag"],$start,$stop,$data["vid"]));
 	}
 	if ($rc) {
-		$sql="select mid from contmasch where cid=".$data["contractnumber"];
+		//$sql="select mid from contmasch where cid=".$data["contractnumber"];
+		$sql="select mid from contmasch where cid=".$data["vid"];
 		$rs=$db->getAll($sql);
-		$sql="delete from contmasch where cid=".$data["contractnumber"];
+		//$sql="delete from contmasch where cid=".$data["contractnumber"];
+		$sql="delete from contmasch where cid=".$data["vid"];
 		$rc=$db->query($sql);
 		$in=array();
 		if ($rc) {
@@ -185,7 +187,8 @@ function updateVertrag($data) {
 				if ($row[3]) continue;
 				$in[]=$row[0];
 				$standort=($row[2]<>"")?$row[2]:"Kunde";
-				$rc1=newCM($row[0],$data["contractnumber"]);
+				//$rc1=newCM($row[0],$data["contractnumber"]);
+				$rc1=newCM($row[0],$data["vid"]);
 				if (!in_array(array(mid => $row[0]),$rs)) { $rc2=insHistory($row[0],"contadd",$data["contractnumber"]); } else { $rc2=true; };
 				$rc3=$db->query("update maschine set standort = '$standort' where id=".$row[0]);
 				if (!$rc1 || !$rc2 || !$rc3) {
@@ -251,7 +254,8 @@ function getSernumber($sn,$pn=false) {
 	$sql="select M.*,K.name,K.street,K.zipcode,K.city,K.phone,P.partnumber,P.description,P.notes,V.*,C.mid,P.id as parts_id ";
 	$sql.="from maschine M left join parts P on P.id=M.parts_id ";
 	$sql.="left join contmasch C on C.mid=M.id ";
-	$sql.="left join contract V on V.contractnumber=C.cid ";	
+	//$sql.="left join contract V on V.contractnumber=C.cid ";	
+	$sql.="left join contract V on V.cid=C.cid ";	
 	$sql.="left join customer K on K.id=V.customer_id ";
 	$sql.="where M.serialnumber like '%$sn%' ";
 	$sql.=($pn)?"and parts_id=$pn":"";
@@ -263,7 +267,8 @@ function getArtnumber($sn) {
 	$sql="select M.*,K.name,K.street,K.zipcode,K.city,K.phone,P.partnumber,P.description,P.notes,V.*,C.mid ";
 	$sql.="from maschine M left join parts P on P.id=M.parts_id ";
 	$sql.="left join contmasch C on C.mid=M.id ";
-	$sql.="left join contract V on V.contractnumber=C.cid ";	
+	//$sql.="left join contract V on V.contractnumber=C.cid ";	
+	$sql.="left join contract V on V.cid=C.cid ";	
 	$sql.="left join customer K on K.id=V.customer_id ";
 	$sql.="where P.partnumber like '%$sn%'";
 	$rs=$db->getAll($sql);	
@@ -288,7 +293,8 @@ function getCustContract($fid) {
 }
 function getAllMaschine($mid) {
 	global $db;
-	$sql="select X.mid,V.*,M.*,P.description from contmasch X left join contract V on V.contractnumber=X.cid ";
+	//$sql="select X.mid,V.*,M.*,P.description from contmasch X left join contract V on V.contractnumber=X.cid ";
+	$sql="select X.mid,V.*,M.*,P.description from contmasch X left join contract V on V.cid=X.cid ";
 	$sql.="left join maschine M on M.id=X.mid left join parts P on P.id=M.parts_id where X.mid=$mid";
 	$rs=$db->getAll($sql);	
 	return $rs[0];		
@@ -307,8 +313,8 @@ function insRAuftrag($data) {
 	$rc=$db->query("update defaults set sonumber=".$aid);
 	$sql="insert into repauftrag (aid,mid,kdnr,cause,schaden,anlagedatum,bearbdate,employee,bearbeiter,status,counter) ";
 	$sql.="values ($aid,%d,'%s','%s','%s','%s','%s',%d,%d,%d,%d)";
-	$rc=$db->query(sprintf($sql,$data["mid"],$data["kdnr"],$data["cause"],$data["schaden"],date("Y-m-d"),date2db($data["datum"]),$_SESSION["loginCRM"],$data["bid"],$data["status"],$data["counter"]));
-	//          echo sprintf($sql,$data["mid"],$data["kdnr"],$data["cause"],$data["schaden"],date("Y-m-d"),date2db($data["datum"]),$_SESSION["loginCRM"],$data["bid"],$data["status"],$data["counter"]);
+	$rc=$db->query(sprintf($sql,$data["mid"],$data["kdnr"],$data["cause"],$data["schaden"],
+			date("Y-m-d"),date2db($data["datum"]),$_SESSION["loginCRM"],$data["bid"],$data["status"],$data["counter"]));
 	if ($rc) { 
 		insHistory($data["mid"],"RepAuftr","$aid|".$data["cause"]);
 		if ($data["counter"]) {
@@ -320,8 +326,10 @@ function insRAuftrag($data) {
 }
 function updRAuftrag($data) {
 	global $db;
-	$sql="update repauftrag set cause='%s', schaden='%s', reparatur='%s', status=%d, employee=%d, bearbeiter=%d, bearbdate='%s', counter=%d where aid=%d";
-	$rc=$db->query(sprintf($sql,$data["cause"],$data["schaden"],$data["behebung"],$data["status"],$_SESSION["loginCRM"],$data["bid"],date2db($data["datum"]),$data["counter"],$data["aid"]));
+	$sql="update repauftrag set cause='%s', schaden='%s', reparatur='%s', status=%d, ";
+	$sql.="employee=%d, bearbeiter=%d, bearbdate='%s', counter=%d where aid=%d";
+	$rc=$db->query(sprintf($sql,$data["cause"],$data["schaden"],$data["behebung"],$data["status"],
+			$_SESSION["loginCRM"],$data["bid"],date2db($data["datum"]),$data["counter"],$data["aid"]));
 	if ($rc) { 
 		$rc=updateCounter($data["counter"],$data["mid"]);	
 		return getRAuftrag($data["aid"]); }
@@ -397,8 +405,10 @@ function safeMaschMat($mid,$aid,$material) {
 function getVertragStat($vid,$jahr) {
 	global $db;
 	$sql="select M.parts_id as artnr,A.mid,A.aid,sum((A.betrag*menge)) as summe,M.serialnumber ";
-	$sql.="from maschmat A left join maschine M on M.id=A.mid, contract V left join contmasch C on C.cid=V.contractnumber, ";
-	$sql.="repauftrag R, parts P where V.cid=$vid and  C.mid=M.id  and R.aid=A.aid and P.id=A.parts_id and R.anlagedatum like '$jahr%' ";
+	//$sql.="from maschmat A left join maschine M on M.id=A.mid, contract V left join contmasch C on C.cid=V.contractnumber, ";
+	$sql.="from maschmat A left join maschine M on M.id=A.mid, contract V left join contmasch C on C.cid=V.cid, ";
+	$sql.="repauftrag R, parts P where V.cid=$vid and  C.mid=M.id  and R.aid=A.aid and P.id=A.parts_id and ";
+	$sql.="(R.anlagedatum >= '$jahr-01-01' and R.anlagedatum <= '$jahr-12-31') ";
 	$sql.="group by artnr,A.mid,A.aid,M.serialnumber";
 	#$sql="select A.parts_id,P.partnumber,M.parts_id as artnr,A.mid,A.aid,(A.betrag*menge) as summe,M.serialnumber ";
 	#$sql.="from maschmat A left join maschine M on M.id=A.mid, contract V left join contmasch C on C.cid=V.contractnumber, ";

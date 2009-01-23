@@ -5,9 +5,9 @@
 	include("inc/wvLib.php");
 	$rep=suchVertrag($_GET["aid"]);
 	$rep=$rep[0];
-	$masch=getVertragMaschinen($rep["contractnumber"]);
+	//$masch=getVertragMaschinen($rep["contractnumber"]);
+	$masch=getVertragMaschinen($rep["cid"]);
 	$firma=getFirmenStamm($masch["customer_id"]);
-	print_r($firma);
 	include('inc/phpOpenOffice.php');
 	$doc = new phpOpenOffice();
 	$doc->loadDocument("vorlage/wv".$rep["template"]);

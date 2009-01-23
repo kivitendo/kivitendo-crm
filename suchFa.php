@@ -43,7 +43,7 @@
 <center>Gefundene - Eintr&auml;ge:<br><br>
 <form name="firmen">
 <select name="Alle" >
-	<option value=''>Einzelperson</option>
+	<option value=''>nichts markiert</option>
 <?
 	$name=($_GET["name"])?strtoupper($_GET["name"]):strtoupper($_GET["konzernname"]);
 	if ($name=="EINZELPERSON") $name="";

@@ -14,9 +14,9 @@ $wvende[x]=165.0;	$wvende[y]=206.5;	//WV-Ende
 $wvbetrag[x]=70.0;	$wvbetrag[y]=215.0;	//WV-Betrag
 $wvbem[x]=20.0;		$wvbem[y]=237.0;	//Zusatzvereinbarung
 $wvkopf[x]=24.0;	$wvkopf[y]=25.0;	//Kopf Anlageblatt Maschinen
-$wvmasch[x]=24.0;				//Bezeichnung Maschine
-$wvsernr[x]=135.0;				//Seriennummer
-$wvsort[x]=24.0;				//Standort
+$wvmasch=24.0;					//Bezeichnung Maschine
+$wvsernr=135.0;					//Seriennummer
+$wvsort=24.0;					//Standort
 $wvfont='Helvetica';	$wvsize='12';   	//Schriftart + Größe
 
 //Reparaturauftrag

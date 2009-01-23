@@ -1,13 +1,14 @@
 <!-- $Id$ -->
 <html>
 	<head><title></title>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 	<script language="JavaScript">
 	<!--
 
 		function suchFa() {
 			val=document.formular.name.value;
-			f1=open("suchFa.php?nq=1&name="+val,"suche","width=350,height=200,left=100,top=100");
+			f1=open("suchFa.php?tab=C&nq=1&name="+val,"suche","width=350,height=200,left=100,top=100");
 		}
 		function suchMa() {
 			val=document.formular.masch.value;

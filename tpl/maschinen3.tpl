@@ -1,6 +1,7 @@
-<!-- $Id: maschinen3.tpl,v 1.3 2005/11/02 10:38:59 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title></title>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 	<script language="JavaScript">
 	<!--

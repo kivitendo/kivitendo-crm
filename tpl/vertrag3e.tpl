@@ -1,13 +1,14 @@
 <!-- $Id$ -->
 <html>
 	<head><title></title>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 	<script language="JavaScript">
 	<!--
 
 		function suchFa() {
 			val=document.formular.name.value;
-			f1=open("suchFa.php?nq=1&name="+val,"suche","width=350,height=200,left=100,top=100");
+			f1=open("suchFa.php?tab=C&nq=1&name="+val,"suche","width=350,height=200,left=100,top=100");
 		}
 		function suchMa() {
 			val=document.formular.masch.value;
@@ -46,13 +47,13 @@ Vertrag: {VertragNr}
 	</tr>
 	<tr>
 		<td class="norm" width="40%"><input type="text" name="name" size="30" maxlength="75" value="{Firma}" onFocus="blur()"> <b>
-			<a href="firma1.php?id={FID}">[{KDNR}]</a> </b><br>Firma<br><br></td>
+			<a href="firma1.php?Q=C&id={FID}">[{KDNR}]</a> </b><br>Firma<br><br></td>
 		<td class="norm" width="60%"><input type="hidden" name="contractnumber" value="{VertragNr}"><input type="hidden" name="cp_cv_id" value="{FID}">
 			<input type="text" name="anfangdatum" size="10" maxlength="10" value="{anfangdatum}" tabindex="6">&nbsp; <input type="text" name="endedatum" size="10" maxlength="10" value="{endedatum}" tabindex="6"><br>
 			<b>Vertragsdatum von &nbsp; bis</b></td>
 	</tr>
 	<tr>
-		<td class="norm"><input type="text" name="masch" size="30" value="" tabindex="6"> <input type="button" name="ma" value="suchen" onClick="suchMa();"  tabindex="7"><br>ArtNr. Maschine<br><br></td>
+		<td class="norm" nowrap><input type="text" name="masch" size="30" value="" tabindex="6"> <input type="button" name="ma" value="suchen" onClick="suchMa();"  tabindex="7"><br>ArtNr. Maschine<br><br></td>
 		<td class="norm"><input type="text" name="betrag" size="10" maxlength="10" value="{betrag}" tabindex="6">&euro;<br>Betrag </td>
 	</tr>
 	<tr>
@@ -72,7 +73,7 @@ Vertrag: {VertragNr}
 			<input type="submit" name="stat" value="auswerten">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<input type="button" name="prt" value=" WV drucken" onCLick="drucke({VertragNr})"><br>Jahr
 		</td>
-		<td class="norm"><br>
+		<td class="norm" valign="top"><br>
 			<input type="submit" name="ok" value="WV sichern">
 		</td>
 	</tr>

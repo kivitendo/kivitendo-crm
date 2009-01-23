@@ -1,6 +1,7 @@
 <!-- $Id$ -->
 <html>
 	<head><title></title>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 	<script language="JavaScript">
 	<!--
@@ -58,7 +59,7 @@
 	</tr>
 	<tr>
 		<td class="norm" colspan="2"><br><b>Vertragsnummer: </b><a href="vertrag3.php?vid={cid}">[{contractnumber}]</a>
-			&nbsp;&nbsp;&nbsp;<b>Kunde: </b><a href="firma1.php?id={custid}">[{customer}]</a></td>
+			&nbsp;&nbsp;&nbsp;<b>Kunde: </b><a href="firma1.php?Q=C&id={custid}">[{customer}]</a></td>
 	</tr>
 	<tr>
 		<td class="norm"><br><b>History</b></td>

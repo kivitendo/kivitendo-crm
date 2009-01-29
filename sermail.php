@@ -26,25 +26,37 @@
 		if ($okC) {
 			$anh="";
 			if ($_FILES["Datei"]["name"]<>"") {
-				move_uploaded_file($_FILES["Datei"]["tmp_name"],"tmp/".$_SESSION["loginCRM"].".file");
+				$dat["Datei"]["name"]=$_FILES["Datei"]["name"];
+				$dat["Datei"]["tmp_name"]=$_FILES["Datei"]["tmp_name"];
+				$dat["Datei"]["type"]=$_FILES["Datei"]["type"];
+				$dat["Datei"]["size"]=$_FILES["Datei"]["size"];
+				$dbfile=new document();
+				$dbfile->setDocData("descript",$Subject);
+				$ok=chkdir($_SESSION["loginCRM"].'/SerMail');
+				$pfad=$_SESSION["loginCRM"].'/SerMail';
+				$rc=$dbfile->uploadDocument($_FILES,$pfad);
+				$dateiID=$dbfile->id;
 				$dateiname=$_FILES["Datei"]["name"];
-				$type=$_FILES["Datei"]["type"];
+				//move_uploaded_file($_FILES["Datei"]["tmp_name"],"./dokumente/".$_SESSION["mansel"]."/".$_SESSION["loginCRM"]."/".$dateiname);
+				//"tmp/".$_SESSION["loginCRM"].".file");
+				//$type=$_FILES["Datei"]["type"];
+
 			}
 			$limit=50;
-			$abs=$user["Name"]." <".$user["eMail"].">";
-		 	$headers['Replay-To']=$abs;
-			$headers['From']=$abs;
-			$headers['Return-Path']=$abs;
-			$headers['X-Mailer']='PHP/'.phpversion();
+			$abs=sprintf("%s <%s>",$user["Name"],$user["eMail"]);
+			$headers=array(
+                                        "Return-Path"   => $user["eMail"],
+                                        "Reply-To"      => $abs,
+                                        "From"          => $abs,
+                                        "X-Mailer"      => "PHP/".phpversion(),
+                                        "Subject"       => $Subject);
 			//$headers['Content-Type']='text/plain; charset=utf-8';
 			//$headers['Content-Type']='text/plain; charset=iso-8859-1';
-			$headers['Subject']=$Subject;
-			$_SESSION["abs"]=$abs;
 			$_SESSION["headers"]=$headers;
-			$_SESSION["subject"]=$Subject;
 			$_SESSION["bodytxt"]=$BodyText;
 			$_SESSION["dateiname"]=$dateiname;
 			$_SESSION["type"]=$type;
+			$_SESSION["dateiId"]=($dateiID)?$dateiID:0;
 			$_SESSION["limit"]=$limit;
 
 			$sendtxt="Es &ouml;ffnet sich nun ein extra Fenster.<br>";

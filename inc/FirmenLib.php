@@ -580,10 +580,9 @@ global $db;
 	$kenz=array("C" => "K","V" => "L");
 	$tab=array("C" => "customer","V" => "vendor");
 	$loginCRM=$_SESSION["loginCRM"];
-	$felder=substr($data,0,-1);
+	$felder=substr($data['felder'],0,-1);
 	$tmp=suchstr($data,$typ);
 	$where=$tmp["where"]; $tabs=$tmp["tabs"]; 
-	$felder=substr($data["felder"],0,-1);
 	if ($typ=="C") {
 		$rechte="(".berechtigung("K.").")";
 	} else {
@@ -593,7 +592,7 @@ global $db;
 		$where=($where=="")?"":"and $where";
 		if (eregi("shipto",$tabs) or ereg("S.",$felder)) {
 			$sql="select $felder from ".$tab[$typ]." ".$kenz[$typ]." left join shipto S ";
-			$sql.="on S.trans_id=".$kenz[$typ].".id where S.module='CT' and $rechte $where order by ".$kenz[$typ].".name";
+			$sql.="on S.trans_id=".$kenz[$typ].".id where (S.module='CT' or S.module is null) and $rechte $where order by ".$kenz[$typ].".name";
 		} else {
 			$sql="select $felder from ".$tab[$typ]." ".$kenz[$typ]." where $rechte $where order by ".$kenz[$typ].".name";
 		}
@@ -603,7 +602,7 @@ global $db;
 		if (eregi("shipto",$tabs) or ereg("S.",$felder)) {
 			$sql="select $felder from ".$tab[$typ]." ".$kenz[$typ]." left join shipto S ";
 			$sql.="on S.trans_id=".$kenz[$typ].".id left join contacts P on ".$kenz[$typ].".id=P.cp_cv_id ";
-			$sql.="where S.module='CT' and $rechte $where order by ".$kenz[$typ].".name,P.cp_name";
+			$sql.="where (S.module='CT' or S.module is null)  and $rechte $where order by ".$kenz[$typ].".name,P.cp_name";
 		} else {
 			$sql="select $felder from  ".$tab[$typ]." ".$kenz[$typ]." left join contacts P ";
 			$sql.="on ".$kenz[$typ].".id=P.cp_cv_id where $rechte $where order by ".$kenz[$typ].".name,P.cp_name";

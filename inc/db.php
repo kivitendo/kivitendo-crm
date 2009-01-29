@@ -1,5 +1,14 @@
 <?
-require_once "DB.php";
+if (! @include_once('DB.php') ) {
+	echo "Konnte das Modul DB nicht laden!<br>";
+	echo "Pr&uuml;fen Sie Ihre Installation:<br>";
+	echo "pear list | grep DB<br>";
+	echo "Variable '\$include_path' in der php.ini<br>"; 
+	echo "aktueller Wert: ".ini_get('include_path');
+	echo "<br><br><a href='inc/install.php?check=1'>Installations - Check durchf&uuml;hren</a><br>";
+	exit (1);
+};
+
 class myDB extends DB {
 
  var $db = false;

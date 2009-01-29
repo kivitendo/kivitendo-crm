@@ -312,7 +312,7 @@ global $db;
 	$data['Datum']=date2db($data['Datum']);
 	$id=mknewTelCall();
 	$dateiID=0;
-	$did="null";
+	$did=($data["DateiID"]>0)?$data["DateiID"]:"null";
 	if ($data["fid"]!=$data["CID"]) {
 		$pfad="/".$data["Q"][0].$data["nummer"]."/".$data["CID"];
 	} else {

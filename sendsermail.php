@@ -8,18 +8,16 @@ include_once("Mail/mime.php");
 $offset=($_GET["offset"])?$_GET["offset"]:1;
 $mime = new Mail_Mime("\n");
 $mail =& Mail::factory("mail");
-			
-
 $headers=$_SESSION["headers"];
-$subject=$_SESSION["subject"];
+$subject=$headers["Subject"];
 $bodytxt=$_SESSION["bodytxt"];
 $limit=$_SESSION["limit"];
-
+$abs=$headers["Return-Path"];
 if ($logmail) $f=fopen("tmp/maillog.txt","a");
-
+$dateiname=$_SESSION["dateiname"];
 if ($dateiname) {
-	$ftmp=fopen("tmp/".$_SESSION["loginCRM"].".file","rb");
-	$filedata=fread($ftmp,filesize("tmp/".$_SESSION["loginCRM"].".file"));
+	$ftmp=fopen("./dokumente/".$_SESSION["mansel"]."/".$_SESSION["loginCRM"]."/SerMail/".$dateiname,"rb");
+	$filedata=fread($ftmp,filesize("./dokumente/".$_SESSION["mansel"]."/".$_SESSION["loginCRM"]."/SerMail/".$dateiname));
 	fclose($ftmp);
 	$mime->addAttachment($filedata, $_SESSION["type"],$_SESSION["dateiname"], false );
 }
@@ -28,6 +26,7 @@ $sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' limit 1"
 $data=$db->getAll($sql);
 $felder=split(";",$data[0]["csvdaten"]);
 $pemail=array_search("EMAIL",$felder);
+$cid=array_search("ID",$felder);
 $pkont=array_search("KONTAKT",$felder);
 $sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' offset ".$offset." limit ".$limit;
 $data=$db->getAll($sql);
@@ -61,25 +60,25 @@ if ($data) {
 			};
 			$mime->setTXTBody($text);
 			//$body = $mime->get(array("text_encoding"=>"quoted-printable"));
-			//$body = $mime->get(array("text_charset"=>"utf-8"));
-			$body = $mime->get();
+			$body = $mime->get(array("text_charset"=>"utf-8"));
 			$hdr = $mime->headers($headers);
+			if (!empty($_SESSION["frommail"])) $mail->_params="-f ".$_SESSION["frommail"];
 			$rc=$mail->send($to, $hdr, $body);
 			if ($rc) {
 				$data["CRMUSER"]=$_SESSION["loginCRM"];
-				$data["cause"]=$subject;
+				$data["cause"]="Sermail: ".$subject;
 				$data["c_cause"]=$bodytxt."\nAbs: ".$abs;
-				$data["CID"]="";
+				//if ($dateiname) $data["c_cause"].="\nDatei: ".$_SESSION["loginCRM"].'/'.$dateiname;
+				$data["CID"]=$tmp[$cid];
 				$data["Kontakt"]="m";
 				$data["Bezug"]=0;
 				$data['Zeit']=date("H:i");
 				$data['Datum']=date("d.m.Y");
-				$data["DateiID"]=0;
+				$data["DateiID"]=$_SESSION["dateiId"];
 				$data["Status"]=1;
 				$data["DCaption"]=$subject;
 				$stamm=false;
 				// Einträge in den Kontaktverlauf
-				$data["CID"]=$tmp[10];
 				insCall($data,false);
 				if ($_GET["first"]==1) {
 					$data["CID"]=$_SESSION["loginCRM"];		// Dann halt beim Absender in den Thread eintragen
@@ -89,14 +88,18 @@ if ($data) {
 					insCall($data,false);
 					$_GET["first"]=0;
 				}		
-				if ($logmail) fputs($f,date("Y-m-d H:i").";ok;$to;$abs;$subject\n");
+				if ($logmail) fputs($f,date("Y-m-d H:i").";ok;$to;$abs;S:$subject\n");
 			} else {
-				if ($logmail) fputs($f,date("Y-m-d H:i").";error;$to;$abs;$subject\n");
+				if ($logmail) fputs($f,date("Y-m-d H:i").";error;$to;$abs;S:$subject\n");
 			} // if $rc
 		} //if to
 	} // foreach
 	header("location: sendsermail.php?offset=".($offset+$limit));
 } else {
+	if ($dateiname) {
+		$ok=chkdir($_SESSION["loginCRM"]);
+        	copy("tmp/".$_SESSION["loginCRM"].".file","./dokumente/".$_SESSION["mansel"]."/".$_SESSION["loginCRM"]."/".$dateiname);
+	};
 ?>
 	<center>
 	Keine weiteren Mails.<br>

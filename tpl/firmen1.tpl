@@ -4,7 +4,7 @@
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 	<script language="JavaScript" type="text/javascript">
   		function report() {
-  			f1=open("report.php?tab=customer","Report","width=600; height=500; left=100; top=100");
+  			f1=open("report.php?tab={Q}","Report","width=600; height=300; left=100; top=100");
   		}
 	</script>
 <body onLoad="document.erwsuche.name.focus();">
@@ -47,50 +47,50 @@
 		<span class="label">Firmenname</span>
 		<span class="leftfeld"><input type="text" name="name" size="27" maxlength="75" value="{name}" tabindex="1"></span>
 		<span class="label">Branche</span>
-		<span class="leftfeld"><input type="text" name="branche" size="27" maxlength="25" value="{branche}" tabindex="11"></span>
+		<span class="leftfeld"><input type="text" name="branche" size="27" maxlength="25" value="{branche}" tabindex="21"></span>
 	</div>
 	<div class="zeile">
 		<span class="label">Abteilung</span>
 		<span class="leftfeld"><input type="text" name="department_1" size="27" maxlength="75" value="{department_1}" tabindex="2"></span>
 		<span class="label">Stichwort</span>
-		<span class="leftfeld"><input type="text" name="sw" size="27" maxlength="125" value="{sw}" tabindex="12"></span>
+		<span class="leftfeld"><input type="text" name="sw" size="27" maxlength="125" value="{sw}" tabindex="22"></span>
 	</div>
 	<div class="zeile">
 		<span class="label">Strasse</span>
 		<span class="leftfeld"><input type="text" name="street" size="27" maxlength="75" value="{street}" tabindex="3"></span>
 		<span class="label">Bemerkung</span>
-		<span class="leftfeld"><input type="text" name="notes" size="27" maxlength="125" value="{notes}" tabindex="13"></span>
+		<span class="leftfeld"><input type="text" name="notes" size="27" maxlength="125" value="{notes}" tabindex="23"></span>
 	</div>
 	<div class="zeile">
 		<span class="label">Land / Plz</span>
 		<span class="leftfeld"><input type="text" name="country" size="2" maxlength="5" value="{country}" tabindex="4"> / 
 					<input type="text" name="zipcode" size="7" maxlength="7" value="{zipcode}" tabindex="5"></span>
 		<span class="label">Bank</span>
-		<span class="leftfeld"><input type="text" name="bank" size="27" maxlength="50" value="{bank}" tabindex="14"></span>
+		<span class="leftfeld"><input type="text" name="bank" size="27" maxlength="50" value="{bank}" tabindex="24"></span>
 	</div>
 	<div class="zeile">
 		<span class="label">Ort</span>
 		<span class="leftfeld"><input type="text" name="city" size="27" maxlength="75" value="{city}" tabindex="6"></span>
 		<span class="label">Blz</span>
-		<span class="leftfeld"><input type="text" name="bank_code" size="27" maxlength="15" value="{bank_code}" tabindex="15"></span>
+		<span class="leftfeld"><input type="text" name="bank_code" size="27" maxlength="15" value="{bank_code}" tabindex="26"></span>
 	</div>
 	<div class="zeile">
 		<span class="label">Telefon</span>
 		<span class="leftfeld"><input type="text" name="phone" size="27" maxlength="75" value="{phone}" tabindex="7"></span>
 		<span class="label">Konto</span>
-		<span class="leftfeld"><input type="text" name="account_number" size="27" maxlength="15" value="{account_number}" tabindex="16"></span>
+		<span class="leftfeld"><input type="text" name="account_number" size="27" maxlength="15" value="{account_number}" tabindex="27"></span>
 	</div>
 	<div class="zeile">
 		<span class="label">Fax</span>
 		<span class="leftfeld"><input type="text" name="fax" size="27" maxlength="125" value="{fax}" tabindex="8"></span>
 		<span class="label">UStID</span>
-		<span class="leftfeld"><input type="text" name="ustid" size="27" maxlength="12" value="{ustid}" tabindex="17"></span>
+		<span class="leftfeld"><input type="text" name="ustid" size="27" maxlength="12" value="{ustid}" tabindex="28"></span>
 	</div>
 	<div class="zeile">
 		<span class="label">eMail</span>
 		<span class="leftfeld"><input type="text" name="email" size="27" maxlength="125" value="{email}" tabindex="9"></span>
 		<span class="label">www</span>
-		<span class="leftfeld"><input type="text" name="homepage" size="27" maxlength="125" value="{homepage}" tabindex="18"></span>
+		<span class="leftfeld"><input type="text" name="homepage" size="27" maxlength="125" value="{homepage}" tabindex="29"></span>
 	</div>
 	<div class="zeile">
 		<span class="label">Kundentyp</span>
@@ -102,7 +102,7 @@
 			</select>
 		</span>
 		<span class="label">Sprache</span>
-		<span class="leftfeld">	<select name="language" tabindex="19">
+		<span class="leftfeld">	<select name="language" tabindex="30">
 				<option value="">
 				<option value="de">deutsch
 				<option value="en">englisch
@@ -118,25 +118,27 @@
 				<option value="{Lid}" {Lsel}>{Lead}</option>
 <!-- END LeadListe -->				
 			</select>
-			<input type="text" name="leadsrc" size="5" value="{leadsrc}">
+			<input type="text" name="leadsrc" size="5" value="{leadsrc}" tabindex="12">
 		</span>
 		<span class="label">Kunden-Nr</span>
-		<span class="leftfeld"><input type="text" name="customernumber" size="27" maxlength="15" value="{customernumber}" tabindex="20"></span>
+		<span class="leftfeld"><input type="text" name="customernumber" size="27" maxlength="15" value="{customernumber}" tabindex="32"></span>
 
 	</div>
 	<div class="zeile">
 		<span class="label">SonderFlag</span>
 <!-- BEGIN sonder -->
-	<input type="checkbox" name="sonder[]" value="{sonder_id}">{sonder_name} 
+	<input type="checkbox" name="sonder[]" tabindex="33" value="{sonder_id}">{sonder_name} 
 <!-- END sonder -->	
 	</div>
 	<div class="zeile">
 			<b>{Msg}</b><br>
-			<input type="checkbox" name="shipto" value="1" checked tabindex="20">auch in abweichender Lieferanschrift suchen<br>
-			<input type="checkbox" name="fuzzy" value="%" checked tabindex="21">Unscharf suchen <input type="checkbox" name="pre" value="1">mit Pr&auml;fix<br>
-			<input type="checkbox" name="employee" value="{employee}" tabindex="22">nur selber angelegte<br>
-			<input type="submit" class="anzeige" name="suche" value="suchen" tabindex="23">&nbsp;
-			<input type="submit" class="clear" name="reset" value="clear" tabindex="24"> &nbsp;<input type="button" name="rep" value="Report" onClick="report()" tabindex="23">
+			<input type="checkbox" name="shipto" value="1" checked tabindex="40">auch in abweichender Lieferanschrift suchen<br>
+			<input type="checkbox" name="fuzzy" value="%" checked tabindex="41">Unscharf suchen <input type="checkbox" name="pre" value="1">mit Pr&auml;fix<br>
+			<input type="checkbox" name="employee" value="{employee}" tabindex="42">nur selber angelegte<br>
+			<input type="submit" class="anzeige" name="suche" value="suchen" tabindex="43">&nbsp;
+			<input type="submit" class="clear" name="reset" value="clear" tabindex="44"> &nbsp;
+			<input type="button" name="rep" value="Report" onClick="report()" tabindex="45"><br>
+			{report}
 	</div>
 </form>
 <!-- End Code ------------------------------------------->

@@ -15,7 +15,9 @@
 				include("inc/FirmenLib.php");
 				$empf=getFirmenStamm(substr($KontaktTO,1),true,substr($KontaktTO,0,1));
 			};
-			$empf=array_merge($user,$empf);
+			foreach ($user as $key=>$val) {
+				$empf['employee'.strtolower($key)]=$val;
+			}
 			preg_match_all("/%([A-Z0-9_]+)%/iU",$BodyText,$ph, PREG_PATTERN_ORDER);
 			$ph=array_slice($ph,1);
 			if ($ph[0]) {
@@ -32,21 +34,25 @@
 		}
 		$MailSign=ereg_replace("\r","",$user["MailSign"]);
 		$objResponse = new xajaxResponse();
-		$objResponse->addAssign("Subject", "value", utf8_encode($Subject));
-		$objResponse->addAssign("BodyText", "value", utf8_encode($BodyText." \n".$MailSign));
+		$objResponse->addAssign("rcmsg", "innerHTML", "");
+		$objResponse->addAssign("Subject", "value", $Subject);
+		$objResponse->addAssign("BodyText", "value", $BodyText." \n".$MailSign);
 		return $objResponse;
 	}
 	function saveMailTpl($sub,$txt,$mid=0) {
-		$rc=saveMailVorlage(array("Subject"=>utf8_decode($sub),"BodyText"=>utf8_decode($txt),"MID"=>$mid));
+		$rc=saveMailVorlage(array("Subject"=>$sub,"BodyText"=>$txt,"MID"=>$mid));
+		$objResponse = new myXajaxResponse();
 		if ($rc){
-			$objResponse = new myXajaxResponse();
 			if ($mid>0) {
 				$objResponse->modOption("vorlagen", $sub);
-				return $objResponse;
 			} else {
 				$objResponse->addCreateOption("vorlagen",$sub,$rc);
-				return $objResponse;
 			}
+			$objResponse->addAssign("rcmsg", "innerHTML", "Vorlage gesichert");
+			return $objResponse;
+		} else {
+			$objResponse->addAssign("rcmsg", "innerHTML", "Fehler beim sichern");
+			return $objResponse;
 		}
 		return true;
 	}
@@ -56,6 +62,11 @@
 		$objResponse->delOption("vorlagen");
 		$objResponse->addAssign("Subject", "value", "");
 		$objResponse->addAssign("BodyText", "value", "");
+		if ($rc) {
+			$objResponse->addAssign("rcmsg", "innerHTML", "Vorlage gelöscht");
+		} else {
+			$objResponse->addAssign("rcmsg", "innerHTML", "Vorlage konnte nicht gelöscht werden");
+		}
 		return $objResponse;
 	}
 

@@ -128,6 +128,7 @@
 					foreach ($x as $u) {
 						$y=$platzhalter[$u];
 						if (${$y} <>"" and $first) {
+							$y=utf8_decode($y);
 							$row["zeile"]=str_replace("%".$u."%",${$y},$row["zeile"]);	
 							if ($oder>0) $first=false;
 						} else {
@@ -143,7 +144,8 @@
 						} else {
 							$text=$row["zeile"];
 						}
-						$tmp[]=array("text"=>$text,"font"=>$row["font"]);
+						$tmp[]=array("text"=>utf8_decode($text),"font"=>$row["font"]);
+						//$tmp[]=array("text"=>$text,"font"=>$row["font"]);
 					}
 			}
 		};

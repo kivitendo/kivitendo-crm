@@ -50,6 +50,7 @@
 								$p=array_search($u,$felder);
 								if ($p!==false) { $y=$data[$p]; } else { $y=""; }
 								if ($y<>"" and $first) {
+									$y=utf8_decode($y);
 									$row["zeile"]=str_replace("%".$u."%",$y,$row["zeile"]);
 									if ($oder>0) $first=false;
 								} else {
@@ -65,7 +66,8 @@
 						} else {
 							$text=$row["zeile"];
 						}
-						$tmp[]=array("text"=>$text,"font"=>$row["font"]);
+						$tmp[]=array("text"=>utf8_decode($text),"font"=>$row["font"]);
+						//$tmp[]=array("text"=>$text,"font"=>$row["font"]);
 					}
 				};
 				$pdf->Add_PDF_Label2($tmp);

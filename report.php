@@ -1,12 +1,12 @@
 <?
 // $Id$
 require_once("inc/stdLib.php");
-if ($_GET["tab"]=="customer") {
+if ($_GET["tab"]=="C") {
 	$tabellen=array("customer"=>array("Kunden","K"),
 			"shipto"=>array("Abweichend","S"),
 			"contacts"=>array("Personen","P"));
 	$noshow=array("itime","mtime");
-} else if ($_GET["tab"]=="vendor") {
+} else if ($_GET["tab"]=="V") {
 	$tabellen=array("vendor"=>array("Lieferant","L"),
 			"shipto"=>array("Abweichend","S"),
 			"contacts"=>array("Personen","P"));

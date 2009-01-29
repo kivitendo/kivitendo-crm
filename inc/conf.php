@@ -1,8 +1,9 @@
 <?
+$VERSION='1.4.0';
 $from=16;  // Anrufernummer
 $to=18;    // Zielnummer
 $constring="created"; // Eindeutiges Wort für Anwahlzeile
-$connect=9; // Position eindeutiges Wort 
+$connect=9; // Position eindeutiges Wort
 //Beispiellog von Capilog
 //Mon Jul  7 15:31:25 2008 Connection 0x81324f8: Connection object created for incoming call PLCI 101 from 0731229 to 58322 CIP 0x4
 //Mon Jul  7 15:31:25 2008 Connection 0x81324f8: rejecting with cause 34a9
@@ -46,5 +47,5 @@ $stadtplan="http://www.viamichelin.de/viamichelin/deu/dyn/controller/mapPerformP
 //http://maps.google.de/maps?f=d&hl=de&saddr=89073+ulm,+ulmergasse+11&daddr=Hafenstra%C3%9Fe+5,+24837+Schleswig&sll=51.399206,9.887695&sspn=11.934881,29.443359&ie=UTF8&z=5&ll=51.454007,9.887695&spn=11.920677,29.443359&om=1
 //$planspace="+";
 //$stadtplan="http://maps.google.de/maps?f=d&hl=de&daddr=%TOSTREET%,%TOZIPCODE%+%TOCITY%&saddr=%FROMSTREET%,%FROMZIPCODE%+%FROMCITY%";
-$ERPNAME="unstable";
+$ERPNAME="lx-office-erp";
 ?>

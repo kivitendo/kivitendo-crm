@@ -1,15 +1,10 @@
-<? 
+<?php 
 	session_start();
 	$ver=file("VERSION");
 	$ver=$ver[0];
 	if ($_GET["test"]=="ja") {
 		require("inc/stdLib.php");
 		$rc=$db->getAll("select * from crm order by version","Status");
-		if ($rc) {
-			foreach ($rc as $row) {
-				echo $row["version"]." ".$row["datum"]." ".$row["uid"]."<br>";
-			}
-		}
 		
 	}
 ?>
@@ -22,7 +17,7 @@
 <!--table class="karte"><tr><td class="karte"-->
 <!---------------------------------------------------------------------->
 <center>
-<?
+<?php
 $db=false;
 $prog=false;
 $d = dir("tmp/");
@@ -44,8 +39,17 @@ if ($db) { echo "<a href='tmp/install.log'>Datenbankinstallation</a><br>"; } els
 	<tr><td>PHP-Umgebung:</td><td>[<a href="info.php">anzeigen</a>]</td></tr>
 	<tr><td>Session<a href="showsess.php?ok=show">:</a></td><td>[<a href="showsess.php">l&ouml;schen</a>]</td></tr>
 	<tr><td>db-Zugriff:</td><td>[<a href="status.php?test=ja">testen</a>]</td></tr>
+	<tr><td>Installationscheck:</td><td>[<a href='inc/install.php?check=1'>durchf&uuml;hren</a>]</td></tr>
 </table>
-<a href="showsess.php">
+<?php
+	if ($rc) {
+		echo 'Datenbankzugriff erfolgreich!<br>';
+		foreach ($rc as $row) {
+			echo 'Installierte Version: '.$row["version"].' vom: '.$row["datum"].' durch: '.$row["uid"].'<br>';
+		}
+	}
+
+?>
 </center>
 <!---------------------------------------------------------------------->
 <!--/td></tr></table-->

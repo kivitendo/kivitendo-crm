@@ -13,15 +13,16 @@
 		leertpl($t,1,$Q,"");
 	} else if ($_POST["felder"]) {
 		$rc=doReport($_POST,$Q);
-		$t->set_file(array("fa1" => "firmen1L.tpl"));
+		$t->set_file(array("fa1" => "firmen1.tpl"));
 		if ($rc) { 
-			$tmp="<div style='width:300px'>[<a href='tmp/report_".$_SESSION["loginCRM"].".csv'>Report</a>]</div>";
+			$tmp="<div style='width:300px'>[<a href='tmp/report_".$_SESSION["loginCRM"].".csv'>download Report</a>]</div>";
 		} else {
 			$tmp="Keine Treffer";
 		}
 		$t->set_var(array( 
 				report => $tmp
 		));
+		leertpl($t,1,$Q,"");
 	} else if ($_POST["suche"]=="suchen" || $_GET["first"]) {
 		if ($_GET["first"]) {
 			$daten=getAllFirmen(array(1,$_GET["first"]),false,$Q);
@@ -73,7 +74,7 @@
 			vartpl ($t,$_POST,$Q,$msg,"","",1);
 		}
 	} else {
-		leertpl ($t,1,$Q);
+		leertpl($t,1,$Q);
 	}
 	$t->pparse("out",array("fa1"));
 ?>

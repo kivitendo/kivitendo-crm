@@ -60,8 +60,8 @@
 		}
 		function delTpl() {
 			x=document.mailform.vorlage.selectedIndex
-			x=document.mailform.vorlage.selectedIndex;
-			xajax_delMailTpl(x);
+			mid=document.mailform.vorlage.options[x].value;
+			xajax_delMailTpl(mid);
 		}
 	//-->
 	</script>
@@ -88,8 +88,8 @@
 					<input type="button" name="sto" value="suchen" onClick="suchMail('TO');"></td>
 	<td rowspan="7" class="le" style="vertical-align:middle;">
 					<br><input type="button" name="ok" onClick="sende();" value="senden"><br>{btn}
-					<br><br><input type="button" name="save" onClick="saveTpl();" value="Vorlage
-sichern">				<br><br><input type="button" name="del" onClick="delTpl();" value="Vorlage
+					<br><br><input type="button" style="visibility:{hide}" name="save" onClick="saveTpl();" value="Vorlage
+sichern">				<br><br><input type="button" style="visibility:{hide}" name="del" onClick="delTpl();" value="Vorlage
 l&ouml;schen">
 	</td>
 </tr><tr>
@@ -121,6 +121,10 @@ l&ouml;schen">
 </tr><tr>
 	<td class="klein re">Datei:</td>
 	<td><input type="file" name="Datei[]" size="48" maxlength="125"></td>
+</tr>
+</tr><tr>
+	<td class="klein re"></td>
+	<td><span id="rcmsg"></span></td>
 </tr>
 
 </form>

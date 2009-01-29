@@ -1,4 +1,4 @@
-Lx-Office CRM 1.3.0  
+Lx-Office CRM 1.4.0  
 
 
 Installtion Lx-Office CRM
@@ -23,13 +23,14 @@ Vorrausetzungen:
 	oder
 		PEAR::Image_Canvas
 		PEAR::Image_Graph
-	fpdf + fpdi (http://www.fpdf.de/downloads/)
+	fpdf (http://www.fpdf.de/downloads/)
+	fpdi (http://www.setasign.de/products/pdf-php-solutions/fpdi/downloads/)
 	ttf-freefont
 	php-gd,php-imap
 	xajax (http://www.xajaxproject.org/)
 
 z.B. debian:
-apt-get install libapache2-mod-php4 php4-gd php4-imap php-mail-mime php4-pear php4-pgsql  php-fpdf php-mail-mime imagemagick
+apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail-mime php5-pear php5-pgsql  php-fpdf php-mail-mime imagemagick
 
 Achtung! Das PEAR-Paket Image_Graph und Image_Canvas sind noch nicht "stable". Daher mit :
 
@@ -44,6 +45,8 @@ jpgraph muﬂ nicht mehr verwendet werden. Alternativ wird PEAR::Image_Graph verwe
 PHP5:
 Den Fehlerreporting evtl. etwas runterschrauben. 
 error_reporting  =  E_ALL & ~E_NOTICE
+
+Wird jpgraph verwendet, dann muﬂ unbedingt jpgraph2 verwendet werden
 
 PHP-Code wird angezeigt:
 short_open_tag = On

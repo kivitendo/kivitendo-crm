@@ -1,9 +1,12 @@
 <?
 $VERSION='1.4.0';
-$from=16;  // Anrufernummer
-$to=18;    // Zielnummer
-$constring="created"; // Eindeutiges Wort für Anwahlzeile
-$connect=9; // Position eindeutiges Wort
+// Die volgenden Datenbanken müssen extra installiert werden. Siehe install.txt 
+$GEODB=true; // Geodatenbank vorhanden
+$BLZDB=false; // BLZ-Datenbank vorhanden
+$from=16;  // Anrufernummer (Telcall)
+$to=18;    // Zielnummer (Telcall)
+$constring="created"; // Eindeutiges Wort für Anwahlzeile (Telcall)
+$connect=9; // Position eindeutiges Wort (Tellcall)
 //Beispiellog von Capilog
 //Mon Jul  7 15:31:25 2008 Connection 0x81324f8: Connection object created for incoming call PLCI 101 from 0731229 to 58322 CIP 0x4
 //Mon Jul  7 15:31:25 2008 Connection 0x81324f8: rejecting with cause 34a9

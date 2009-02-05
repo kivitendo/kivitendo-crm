@@ -648,7 +648,7 @@ global $db;
 	return $rs;
 }
 function leertpl (&$t,$tpl,$typ,$msg="") {
-global $cp_sonder,$xajax;
+global $cp_sonder,$xajax,$GEODB,$BLZDB;
 		$kdtyp=getBusiness();
 		$bundesland=getBundesland(false);
 		$lead=getLeads();
@@ -706,6 +706,10 @@ global $cp_sonder,$xajax;
 			T1		=> " checked",
 			T2		=> "",
 			T3		=> "",
+			GEO1		=> ($GEODB)?"":"!--",
+			GEO2		=> ($GEODB)?"":"--",
+			BLZ1		=> ($BLZDB)?"":"!--",
+			BLZ2		=> ($BLZDB)?"":"--",
 			employee => $_SESSION["loginCRM"],
 			Radio   => "&nbsp;alle<input type='radio' name='Typ' value='' checked>",
 			init	=> $_SESSION["employee"],
@@ -823,7 +827,7 @@ global $cp_sonder,$xajax;
 		}
 } // leertpl
 function vartpl (&$t,$daten,$typ,$msg,$btn1,$btn2,$tpl) {
-global $cp_sonder,$xajax;
+global $cp_sonder,$xajax,$GEODB,$BLZDB;
 		if ($daten["grafik"]) {
 			if ($typ=="C") { $DIR="C".$daten["customernumber"]; }
 			else { $DIR="V".$daten["vendornumber"]; };
@@ -902,6 +906,10 @@ global $cp_sonder,$xajax;
 				employee => $_SESSION["loginCRM"],
 				password	=> $_SESSION["password"],
 				txid.$daten["taxzone_id"] => "selected",
+				GEO1		=> ($GEODB)?"":"!--",
+				GEO2		=> ($GEODB)?"":"--",
+				BLZ1		=> ($BLZDB)?"":"!--",
+				BLZ2		=> ($BLZDB)?"":"--",
 				variablen => $varablen
 		));
 		$t->set_block("fa1","TypListe","BlockT");

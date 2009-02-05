@@ -345,9 +345,9 @@
 <!-- End Code ------------------------------------------->
 </span>
 </form>
-	<script type='text/javascript' src='inc/geosearchF.js'></script>
-	<script type='text/javascript' src='inc/geosearch.js'></script>
-	<script type='text/javascript' src='inc/blzsearch.js'></script>
+	<{GEO1}script type='text/javascript' src='inc/geosearchF.js'></script>
+	<script type='text/javascript' src='inc/geosearch.js'></script{GEO2}>
+	<{BLZ1}script type='text/javascript' src='inc/blzsearch.js'></script{BLZ2}>
 </body>
 </html>
 			

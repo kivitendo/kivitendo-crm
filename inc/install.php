@@ -13,14 +13,12 @@ echo "<br>Installation der Version $VERSION";
 echo " der Datenbankinstanz: ".$_SESSION["dbname"]."<br>";
 ob_flush();
 flush();
-if (is_writable($p."tmp/install.log")) {
+if ($log=@fopen($p."tmp/install.log","a")) {
 	$logfile="tmp/install.log";
-	$log=fopen($p."tmp/install.log","a");
 	echo "Logfile in tmp/install.log<br>";
 } else {
-	if (is_writable("/tmp/install.log")) {
+	if ($log=@fopen("/tmp/install.log","a")) {
 		$logfile="/tmp/install.log";
-		$log=fopen("/tmp/install.log","a");
 		echo "Logfile in /tmp/install.log<br>";
 	} else {
 		$logfile="";

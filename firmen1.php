@@ -10,7 +10,7 @@
 	$bgcol[2]="#ddffdd";
 	$t = new Template($base);
 	if ($_POST["reset"]) {
-		leertpl($t,1,$Q,"");
+		leertpl($t,1,$Q,"",true);
 	} else if ($_POST["felder"]) {
 		$rc=doReport($_POST,$Q);
 		$t->set_file(array("fa1" => "firmen1.tpl"));
@@ -22,7 +22,7 @@
 		$t->set_var(array( 
 				report => $tmp
 		));
-		leertpl($t,1,$Q,"");
+		leertpl($t,1,$Q,"",true);
 	} else if ($_POST["suche"]=="suchen" || $_GET["first"]) {
 		if ($_GET["first"]) {
 			$daten=getAllFirmen(array(1,$_GET["first"]),false,$Q);
@@ -71,10 +71,10 @@
 			}
 		} else {
 			$msg="Leider nichts gefunden.";
-			vartpl ($t,$_POST,$Q,$msg,"","",1);
+			vartpl ($t,$_POST,$Q,$msg,"","",1,true);
 		}
 	} else {
-		leertpl($t,1,$Q);
+		leertpl($t,1,$Q,"",true);
 	}
 	$t->pparse("out",array("fa1"));
 ?>

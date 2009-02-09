@@ -47,9 +47,20 @@ function newname($root,$old,$new) {
 	if ($ok) $ok=rename($root."/".$old,$root."/".$new);
 	return $ok;
 }
-
 //Verzeichnisse umbenennen
 $root="dokumente/".$_SESSION["mansel"];
+$docfile=$updatefile."_doc";
+if ($doclog=@fopen("tmp/".$docfile.".log","a") ) {
+	fputs($log,"DocLog in tmp/$docfile.log\n");
+} else if ($doclog=@fopen("/tmp/".$docfile.".log","a") ) {
+	fputs($log,"DocLog in /tmp/$docfile.log\n");
+	echo "Logfile (Doc) in /tmp<br> Schreibrechte im CRM-Verzeichnis pr&uuml;fen<br>";
+} else {
+	echo "Kann kein Logfile (Doc) erstellen<br>";
+	fputs($log,"Kein DocLog.\n");
+	$doclog=false;
+}
+
 chdir ("$root");
 $tmp=glob("*");
 chdir("../..");
@@ -63,8 +74,9 @@ if ($tmp)  foreach ($tmp as $filename) {
 			$tab=suchtabelle($filename);
 			if ($tab) {
 				echo 'Verzeichnis '.$filename.' nach '.$tab.' verschieben: ';
-				echo (newname($root,$filename,$tab))?'ok':'fehler';
-				echo "<br>\n";
+				$ok=newname($root,$filename,$tab)?'ok':'fehler';
+				if ($doclog) fputs($doclog,$filename.' -> '.$tab.' '.$ok."\n");
+				echo "$ok<br>\n";
 			} else {
 				$personen[]=$filename;
 			}
@@ -75,25 +87,30 @@ if ($personen) foreach ($personen as $filename) {
 	$tab=suchPerson($filename);
 	if ($tab) {
 		echo 'Verzeichnis '.$filename.' nach '.$tab.' verschieben: ';
-                echo (newname($root,$filename,$tab))?'ok':'fehler';
-                echo "<br>\n";
+		$ok=newname($root,$filename,$tab)?'ok':'fehler';
+		if ($doclog) fputs($doclog,$filename.' -> '.$tab.' '.$ok."\n");
+		echo "$ok<br>\n";
 	} else {
         	echo 'Verzeichnis '.$filename." nicht verschoben<br>\n";
+		if ($doclog) fputs($doclog,$filename.' nicht verschoben '."\n");
         }
 
 }
 
 //Pfadnamen berichtigen
 echo "Pfadnamen erg&auml;nzen ";
-$log=fopen("/tmp/test.x","w");
 fputs($log,"Pfadnamen in db ändern\n");
+if ($doclog) fputs($doclog,"Pfadnamen in db ändern\n");
 $sql="select oid,kunde from documents";
 $data=$db->getAll($sql);
 if ($data) foreach ($data as $file) {
 	$pfad=suchtabelle($file["kunde"]);
 	$sql="update documents set pfad='/$pfad' where oid=".$file["oid"];
 	$ok=$db->query($sql);
-	if (!$ok) fputs($log,$file["oid"]." -> $pfad Fehler\n");
+	if (!$ok) {
+		if ($doclog) fputs($doclog,$file["oid"]." -> $pfad Fehler\n");
+		fputs($log,$file["oid"]." -> $pfad Fehler\n");
+	}
 }
 echo "done<br>";
 ?>

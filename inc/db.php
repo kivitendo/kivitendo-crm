@@ -22,12 +22,15 @@ class myDB extends DB {
  
 	function dbFehler($sql,$err) {
 		$efh=fopen($this->errfile,"a");
-		fputs($efh,date("Y-m-d H:i:s ->"));
-		fputs($efh,$sql."\n");
-		fputs($efh,$err."\n");
-		fputs($efh,print_r($this->rc["message"],true));
-		fputs($efh,print_r($this->rc["userinfo"],true));
-		fputs($efh,print_r($this->rc["backtrace"][0],true));
+		fputs($efh,date("Y-m-d H:i:s \n"));
+		fputs($efh,'SQL:'.$sql."\n");
+		fputs($efh,'Msg:'.$err."\n");
+		fputs($efh,print_r($this->rc->backtrace[0],true)."\n");
+		$cnt=count($this->rc->backtrace);
+		for ($i=0; $i<$cnt; $i++) {
+			fputs($efh,$this->rc->backtrace[$i]['line'].':'.$this->rc->backtrace[$i]['file']."\n");
+		}
+		fputs($efh,"--------------------------------------------- \n");
 		fputs($efh,"\n");
 		fclose($efh);
 		if ($this->showErr)
@@ -48,7 +51,14 @@ class myDB extends DB {
 			$this->lfh=fopen($this->logfile,"a");
 		fputs($this->lfh,date("Y-m-d H:i:s ->"));
 		fputs($this->lfh,$txt."\n");
-		fputs($this->lfh,print_r($this->rc,true));
+		if (!empty($this->rc->backtrace[0])) {
+			fputs($this->lfh,'Fehler: '."\n");
+			fputs($this->lfh,print_r($this->rc->backtrace[0],true)."\n");
+			$cnt=count($this->rc->backtrace);
+			fputs($this->lfh,$this->rc->backtrace[$cnt]['line'].':'.$this->rc->backtrace[$cnt]['file']."\n");
+		} else {
+			fputs($this->lfh,print_r($this->rc,true));
+		}
 		fputs($this->lfh,"\n");
 	}
 
@@ -57,12 +67,6 @@ class myDB extends DB {
 	}
 	
 	function myDB($host,$user,$pwd,$db,$port,$showErr=false) {
-		/*if ($pwd>"") {
-			$passwd=$this->uudecode($pwd);
-		} else {
-			$passwd="";
-		}*/
-		//$dns="pgsql://$user$passwd@$host:$port/$db";
 		$dsn = array(
                     'phptype'  => 'pgsql',
                     'username' => $user,

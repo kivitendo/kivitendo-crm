@@ -25,7 +25,9 @@ class myDB extends DB {
 		fputs($efh,date("Y-m-d H:i:s ->"));
 		fputs($efh,$sql."\n");
 		fputs($efh,$err."\n");
-		fputs($efh,print_r($this->rc,true));
+		fputs($efh,print_r($this->rc["message"],true));
+		fputs($efh,print_r($this->rc["userinfo"],true));
+		fputs($efh,print_r($this->rc["backtrace"][0],true));
 		fputs($efh,"\n");
 		fclose($efh);
 		if ($this->showErr)

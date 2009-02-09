@@ -4,7 +4,6 @@ while( list($key,$val) = each($_SESSION) ) {
 	unset($_SESSION[$key]);
 };
 clearstatcache();
-require ("VERSION.php");
 if ($_POST["erpname"]) {
 	if (is_file("../".$_POST["erpname"]."/config/authentication.pl")) {
 		if (is_writable("inc/conf.php")) {

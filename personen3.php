@@ -17,7 +17,11 @@
 			$_POST["PID"]=0;
 			$rc=savePersonStamm($_POST,$_FILES);
 		} else {
-			$rc=savePersonStamm($_POST,$_FILES);
+			if (chkTimeStamp("contacts",$_POST["PID"],$_POST["mtime"])) {
+				$rc=savePersonStamm($_POST,$_FILES);
+			} else {
+				$rc=-10;
+			}
 		}
 		if (ereg("^[0-9]+$",$rc)) {
 			$msg="Daten gesichert.";
@@ -36,7 +40,11 @@
 				$btn1="";
 				$btn3="";
 			}
-			$msg="Fehler beim Sichern ($rc)";
+			if ($rc==-10) {
+				$msg="Daten wurden inzwischen modifiziert";
+			} else {
+				$msg="Fehler beim Sichern ($rc)";
+			};
 			$btn2="<input type='submit' class='sichernneu' name='neu' value='sichern als neu'>";			
 			vartplP ($t,$_POST,$msg,$btn1,$btn2,$btn3,$rc,"red",1,3);
 		}

@@ -44,6 +44,7 @@
 
 <form name="formular" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="PID" value="{PID}">
+<input type="hidden" name="mtime" value="{mtime}">
 <input type="hidden" name="FID1" value="{FID1}">
 <input type="hidden" name="Quelle" value="{Quelle}">
 <input type="hidden" name="employee" value="{employee}">

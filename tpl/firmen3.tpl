@@ -74,6 +74,7 @@
 <input type="hidden" name="vendornumber" value="{vendornumber}">
 <input type="hidden" name="employee" value="{employee}">
 <input type="hidden" name="grafik" value="{grafik}">
+<input type="hidden" name="mtime" value="{mtime}">
 <span id="tab1" style="visibility:visible; position:absolute; text-align:left;width:90%; left:0.8em; top:4.3em; border:1px solid black;">
 	<div class="zeile2">
 		<span class="label klein">Anrede </span>

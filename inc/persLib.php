@@ -499,6 +499,7 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
 			Btn3 	=> $btn3,
 			Msg 	=> $msg,
 			action	=> "personen".$tab.".php",
+			mtime 	=> $daten["mtime"],
 			PID 	=> $daten["cp_id"],
 			tabelle => $daten["tabelle"],
 			nummer	=> $nummer,

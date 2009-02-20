@@ -311,6 +311,22 @@ global $db;
 		return false;
 	}
 }
+
+function chkTimeStamp($tabelle,$id,$stamp,$begin=false) {
+global $db;
+	if ($tabelle=="contacts") {
+		$sql = "select mtime from $tabelle where cp_id = $id";
+	} else {
+		$sql = "select mtime from $tabelle where id = $id";
+	}
+	$rs = $db->getOne($sql);
+	if ($rs["mtime"]==$stamp) {
+		if ($begin) $db->begin();
+		return true;
+	} else {
+		return false;
+	}
+}
 /****************************************************
 * saveFirmaStamm
 * in: daten = array
@@ -850,6 +866,7 @@ global $cp_sonder,$xajax,$GEODB,$BLZDB;
 		$t->set_var(array(
 				AJAXJS	=> $xajax->printJavascript('./xajax/'),
 				FAART => ($typ=="C")?"Kunde":"Lieferant",
+				mtime	=> $daten["mtime"],
 				Q => $typ,
 				Btn1	=> $btn1,
 				Btn2	=> $btn2,

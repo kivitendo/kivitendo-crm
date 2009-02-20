@@ -121,6 +121,14 @@ class myDB extends DB {
 		}
 	}
 
+	function getOne($sql) {
+		$rs = $this->getAll($sql);
+		if ($rs) {
+			return $rs[0];
+		} else {
+			return false;
+		}
+	}
 	function saveData($txt) {
 		if (get_magic_quotes_gpc()) { 	
 			return $txt;

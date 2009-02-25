@@ -76,6 +76,7 @@
 			Bundesland	=> $fa["bundesland"],
 			Plz		=> $fa["zipcode"],
 			Ort		=> $fa["city"],
+			GEODB		=> $GEODB,
 			Telefon		=> $fa["phone"],
 			Fax		=> $fa["fax"],
 			Fcontact	=> $fa["contact"],

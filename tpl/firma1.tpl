@@ -91,6 +91,13 @@
 	function showOP(was) {
                 F1=open("op_.php?fa={Fname1}&op="+was,"OP","width=950, height=450, left=100, top=50, scrollbars=yes");
         }
+	function surfgeo() {
+		if ({GEODB}) {
+			F1=open("surfgeodb.php?plz={Plz}&ort={Ort}","GEO","width=550, height=350, left=100, top=50, scrollbars=yes");
+		} else {
+			alert("GEO-Datenbank nicht aktiviert");
+		}
+	}
 	//-->
 	</script>
 	</head>
@@ -129,7 +136,7 @@
 			{Fdepartment_1}	{Fdepartment_2}<br />
 			{Strasse}<br />
 			<span class="mini">&nbsp;<br /></span>
-			{Land}-{Plz} {Ort}<br />
+			<span onClick="surfgeo()">{Land}-{Plz} {Ort}</span><br />
 			<span class="klein">
 			{Bundesland}
 			<span class="mini"><br />&nbsp;<br /></span>

@@ -110,3 +110,55 @@ Im Browser die ERP aufrufen und anmelden
 
 Melden Sie sich nun an LxO-ERP an und wählen Sie einen CRM-Menüeintrag aus.
 Die Datenbankinstallation wird nun durchgeführt.
+
+Geo-Datenbank:
+--------------
+In der Adressdatenmaske können einige Daten aus einer Geodatenbank gefüllt werden.
+Dazu muß zuvor die Datenbank angelegt werden.
+
+Dazu ein Terminalfenster öffnen oder per Fernzugriff auf dem Server auf der Konsole 
+anmelden. In das Unterverzeichnis 'update' der CRM wechseln. Die Postgresql-Konsole 
+mit der entsprechenden Datenbankinstanz aufrufen:
+	psql -U <dbuser> -W <meinedb>
+In der PostgreSQL-Konsole folgendes eingeben:
+	\i GEO.sql
+Es rasseln eine Menge Meldungen durch, es sollten keine Fehler auftreten.
+Die Konsole mit '\q' verlassen.
+
+Jetzt noch die inc/conf.php öffnen und den Wert hinter 'GEODB' auf 'true' ändern.
+
+Jetzt erscheint in den Eingabemasken ein Knopf 'suche Ort'. Geben Sie in Plz, Ort oder
+Vorwahl einen (Teil-)Begrif ein und klicken Sie auf den Knopf. In einem Pop-Up werden
+die Treffer angezeigt. Wird ein Wert ausgewählt, wird in Plz,Ort,Vorwahl der dazugehörige 
+Wert eingetragen.
+
+BLZ-Datenbank:
+--------------
+In der Adressdatenmaske können einige Daten aus einer BLZ-Datenbank gefüllt werden.
+Dazu muß zuvor die Datenbank angelegt werden.
+
+Dazu ein Terminalfenster öffnen oder per Fernzugriff auf dem Server auf der Konsole 
+anmelden. In das Unterverzeichnis 'update' der CRM wechseln. Die Postgresql-Konsole 
+mit der entsprechenden Datenbankinstanz aufrufen:
+	psql -U <dbuser> -W <meinedb>
+In der PostgreSQL-Konsole folgendes eingeben:
+	\i BLZ.sql
+Es rasseln eine Menge Meldungen durch, es sollten keine Fehler auftreten.
+Die Konsole mit '\q' verlassen.
+
+Kopieren Sie die Datei update/blz.php nach <lx-office-erp>/lxo-import/ .
+Erweitern Sie das LxO-Menü in der Sektion CSV-Import:
+
+[System--Import CSV--BLZ]
+module=lxo-import/blz.php
+
+Jetzt noch die inc/conf.php öffnen und den Wert hinter 'BLZDB' auf 'true' ändern.
+
+Melden Sie sich neu an. Holen Sie von :
+http://www.bundesbank.de/
+die aktuellen Bankleitzahlen. Rufen Sie das Programm "System->CSV-Import->BLZ" auf
+und importieren Sie damit die Daten.
+
+In der Bearbeitungsmaske der Firmen bekommen Sie nun unter "Sonstiges" einen neuen Knopf.
+
+

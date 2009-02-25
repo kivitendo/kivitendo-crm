@@ -1,24 +1,31 @@
 <?
 	require_once("inc/stdLib.php");
 	$ort=$_GET["ort"];
+	$bank=$_GET["bank"];
 	//Umlaute wandeln hängt von der Serverumgebung ab!!
 	//$loc_de = setlocale (LC_ALL, 'de_DE@euro', 'de_DE', 'de', 'ge');
 	$blz=$_GET["blz"];
+	$plz=$_GET["plz"];
 	$wo=$_GET["wo"];
+	$mitort=$_GET["mitort"];
 	$sql="SELECT * from blz_data where ";
 	if ($blz) {
-	  	$sql.="blz like '%$blz%' ";
+	  	$sql.="blz like '$blz%' ";
 	}
-	if ($ort) {
-	  	$ort=strtoupper($ort);
-	  	if ($blz) $sql.="and ";
-	  	$sql.="UPPER(ort) like '%$ort%' ";
-	} 
 	if ($bank) {
 		$bank=strtoupper($_GET["bank"]);
-		if ($blz or $ort) $sql.="and ";
+		if ($blz) $sql.="and ";
 		$sql.="UPPER(kurzbez) like '%$bank%' ";
 	}
+	if ($ort and $mitort) {
+	  	$ort=strtoupper($ort);
+	  	if ($blz or $bank) $sql.="and ";
+	  	$sql.="UPPER(ort) like '%$ort%' ";
+	} 
+	if ($plz and $mitort) {
+	  	if ($bank or $blz or $ort) $sql.="and ";
+	  	$sql.="plz like '$plz%' ";
+	} 
 	$sql.="order by plz,kurzbez";
 	$rs=$db->getAll($sql);
 ?>

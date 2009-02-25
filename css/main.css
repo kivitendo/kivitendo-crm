@@ -44,6 +44,7 @@ tr.calls0:hover	{ background-color:#ff0000; }
 .lg 		{ background-color:#dddddd; vertical-align:bottom;}
 .ft		{ background-color:#ffd5d5; vertical-align:bottom;}
 .we		{ background-color:#ffffff; vertical-align:bottom;}
+.hg		{ color:#cccccc; }
 
 .op 		{ color:#cc3333; font-weight:bold; cursor:pointer;}
 .oa 		{ color:#3333cc; font-weight:bold; cursor:pointer;}

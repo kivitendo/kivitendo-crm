@@ -49,19 +49,19 @@ class MyGeo {
 		$sql = 'SELECT ta.loc_id,ta.text_type,tn.name,ta.text_val,ta.text_locale from  ';
 		$sql.= 'geodb_textdata ta left join geodb_type_names tn on tn.type_id=ta.text_type ';
 		$sql.= 'where loc_id ='.$loc_id;
-		$sql.= 'union all ';
+		$sql.= ' union all ';
 		$sql.= 'SELECT loc_id,float_type,tn.name,cast(float_val as text),\'\' from ';
 		$sql.= 'geodb_floatdata left join geodb_type_names tn on tn.type_id=float_type ';
 		$sql.= 'where loc_id ='.$loc_id;
-		$sql.= 'union all ';
+		$sql.= ' union all ';
 		$sql.= 'SELECT loc_id,int_type,tn.name,cast(int_val as text),\'\' from ';
 		$sql.= 'geodb_intdata left join geodb_type_names tn on tn.type_id=int_type ';
 		$sql.= 'where loc_id ='.$loc_id;
-		$sql.= 'union all ';
+		$sql.= ' union all ';
 		$sql.= 'SELECT loc_id,coord_type,textcat(tn.name,\' lat\'),cast(lat as text),\'\' from ';
 		$sql.= 'geodb_coordinates left join geodb_type_names tn on tn.type_id=coord_type ';
 		$sql.= 'where loc_id ='.$loc_id;
-		$sql.= 'union all ';
+		$sql.= ' union all ';
 		$sql.= 'SELECT loc_id,coord_type,textcat(tn.name,\' lon\'),cast(lon as text),\'\' from ';
 		$sql.= 'geodb_coordinates left join geodb_type_names tn on tn.type_id=coord_type ';
 		$sql.= 'where loc_id ='.$loc_id;
@@ -133,9 +133,10 @@ if ($_GET["loc_id"]) {
 	$geo->getData($_GET['loc_id']);
 	echo "<tr><td><b>".$geo->Plz.' '.$geo->Name."</b></td><td>".$geo->Type."</td></tr>";
 	echo "<tr class='mini'><td>Bezeichnung</td><td>Type</td></tr>";
-	echo '<tr><td>'.$geo->Vorwahl.' </td>';
-	echo '<td>'.$geo->Kfz.'</td></tr>';
+	echo '<tr><td>'.$geo->Vorwahl.' </td><td>'.$geo->Kfz.'</td></tr>';
 	echo "<tr class='mini'><td>Vorwahl</td><td>KFZ</td></tr>";
+	echo '<tr><td>'.$geo->Einwohner.' </td><td>'.$geo->Flaeche.'</td></tr>';
+	echo "<tr class='mini'><td>Einwohner</td><td>Fl&auml;che qkm</td></tr>";
 	if ($geo->Lat) {
   	    echo '<tr><td>'.(($geo->Lat>0)?'N':'S').$geo->Lat.' '.(($geo->Lon>0)?'E':'W').$geo->Lon.'</td><td>'.$geo->Verw.'</td></tr>';
 	    echo "<tr class='mini'><td>GEO-Koordinaten</b></td><td>Verwaltung</td></tr>";

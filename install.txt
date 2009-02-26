@@ -132,6 +132,15 @@ Vorwahl einen (Teil-)Begrif ein und klicken Sie auf den Knopf. In einem Pop-Up w
 die Treffer angezeigt. Wird ein Wert ausgewählt, wird in Plz,Ort,Vorwahl der dazugehörige 
 Wert eingetragen.
 
+Die Ortsuche nutzt nur einen kleinen Teile der Geodaten die gespeichert sind (25-70MB). 
+Klicken Sie in der Stammdatenmaske auf den Ortsnamen, öffnet siche ein neues Fenster.
+Es werden zunächst alle Orte mit gleichem Namen und gleicher PLZ angezeigt. Klicken Sie
+darauf, werden erweiterte Daten angezeigt. So können Sie durch Gemeinden, Kreise, 
+Bundesländer usw. surfen.
+
+Weitere Informationen zu den Daten sind hier zu finden:
+http://opengeodb.giswiki.org/wiki/OpenGeoDB
+
 BLZ-Datenbank:
 --------------
 In der Adressdatenmaske können einige Daten aus einer BLZ-Datenbank gefüllt werden.

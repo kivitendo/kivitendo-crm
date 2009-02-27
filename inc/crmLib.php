@@ -940,21 +940,21 @@ global $db;
 		$nun=date("Y-m-d H:i:00");
 		$data["kontakt"]="M";
 		$did=false;
+		$data["c_cause"]=$data["LangTxt"];
+		$data["cause"]=$data["Cause"];
+		$data["Bezug"]=0;
+		$data["Kontakt"]="M";
+		$data["Datum"]=date("d.m.Y");
+		$data["Zeit"]=date("H:i");
+		$CID=$data["CID"];
+		$data["CID"]=$kontaktID;
+		$tid=insCall($data,false);
+		if (!$tid) return false;
 		if (!empty($data["dateien"])) {
 			$srv=getUsrMailData($data["CRMUSER"]);
 			$mbox = imap_open ("{".$srv["msrv"].":143/imap/notls}", $srv["postf"],$srv["kennw"]);
 			//$mbox = imap_open ("{".$srv["msrv"].":143}", $srv["postf"],$srv["kennw"]);
 			$data["DateiID"]=true;
-			$data["c_cause"]=$data["LangTxt"];
-			$data["cause"]=$data["Cause"];
-			$data["Bezug"]=0;
-			$data["Kontakt"]="M";
-			$data["Datum"]=date("d.m.Y");
-			$data["Zeit"]=date("H:i");
-			$CID=$data["CID"];
-			$data["CID"]=$kontaktID;
-			$tid=insCall($data,false);
-			if (!$tid) return false;
 			foreach($data["dateien"] as $mail){
 				//trenne Anhang und speichere in tmp
 				$file=split(",",$mail);
@@ -985,6 +985,7 @@ global $db;
 			return $rc;
 		} else {
 			$data["DateiID"]=false;
+			moveMail($data["Mail"],$data["CID"]);
 		}
 		// bis hier ok
 		$rs=true;
@@ -1147,6 +1148,30 @@ function holeMailHeader($usr) {
 	};
 }
 
+function getSenderMail($email) {
+global $db;
+	preg_match("/<(.*@.+\.[^>]+)/",$email,$clean);
+	$sql="select id,name from customer where email like '%$clean%'";
+	$clean=$clean[1];
+	$rs=$db->getOne($sql);
+	$t="C";
+	if (!$rs) {
+		$sql="select id,name from vendor where email like '%$clean%'";
+		$rs=$db->getOne($sql);
+		$t="V";
+	} 
+	if (!$rs) {
+		$sql="select cp_id as id ,cp_name as name from contacts where cp_email like '%$clean%'";
+		$rs=$db->getOne($sql);
+		$t="P";
+	} 
+	if ($rs) {
+		return array('kontaktname'=>$rs['name'],'kontaktid'=>$rs['id'],'kontakttab'=>$t);
+	} else {
+		return array('name'=>'','id'=>'');
+	}
+}
+
 /****************************************************
 * getOneMail
 * in: usr = int, nr = int
@@ -1160,7 +1185,9 @@ function getOneMail($usr,$nr) {
 	$head=@imap_header( $mbox,$nr );
 	if (!$head) return;
 	//$fullheader	=imap_fetchheader($mbox,$nr);
-	$mybody=decode_string($head->fromaddress)."\n".$head->date."\n";
+	$senderadr=decode_string($head->fromaddress)."\n".$head->date."\n";
+	$sender=getSenderMail($senderadr);
+	$mybody=$senderadr;
 	//$body.=imap_body($mbox,$nr);//,1.1,FTUID);
 	$htmlbody="Empty Message Body";
 	$structure=imap_fetchstructure($mbox,$nr);
@@ -1235,6 +1262,11 @@ function getOneMail($usr,$nr) {
 	$body.=$bodyX;
 	$cause=htmlspecialchars(decode_string($head->Subject));
 	$data["id"]=$nr;
+	$data['kontaktname']=$sender['kontaktname'];
+	$data['kontakttab']=$sender['kontakttab'];
+	$data['kontaktid']=$sender['kontaktid'];
+	$data["sendername"]=$sender["name"];
+	$data["senderid"]=$sender["id"];
 	$data["Initdate"]=substr($head->date,4,-5);
 	$data["Cause"]=$cause;
 	$data["LangTxt"]=$body;
@@ -1328,8 +1360,8 @@ function createMailBox($name,$id) {
 *****************************************************/
 function moveMail($mail,$id) {
 	$srv=getUsrMailData($id);
-	$mbox = imap_open ("{".$srv["msrv"].":143/imap/notls}", $srv["postf"],$srv["kennw"]);
-	imap_delete($mbox,$mail);
+	$mbox = @imap_open ("{".$srv["msrv"].":143/imap/notls}", $srv["postf"],$srv["kennw"]);
+	@imap_delete($mbox,$mail);
 	// imap_mail_move ($mbox,$mail,$srv["postf2"]);
 }
 

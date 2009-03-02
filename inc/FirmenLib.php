@@ -671,7 +671,7 @@ global $cp_sonder,$xajax,$GEODB,$BLZDB;
 		$lead=getLeads();
 		$t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
 		$t->set_var(array(
-			AJAXJS	=> $xajax->printJavascript('./xajax/'),
+			AJAXJS	=> $xajax->printJavascript('/xajax/'),
 			FAART => ($typ=="C")?"Kunde":"Lieferant",
 			Q => $typ,
 			Btn1 => "",
@@ -865,7 +865,7 @@ global $cp_sonder,$xajax,$GEODB,$BLZDB;
 		$varablen=($tmp>0)?"$tmp Variablen":"";
 		$t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
 		$t->set_var(array(
-				AJAXJS	=> $xajax->printJavascript('./xajax/'),
+				AJAXJS	=> $xajax->printJavascript('/xajax/'),
 				FAART => ($typ=="C")?"Kunde":"Lieferant",
 				mtime	=> $daten["mtime"],
 				Q => $typ,

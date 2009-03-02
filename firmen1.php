@@ -35,7 +35,7 @@
 			$t->set_file(array("fa1" => "firmen1L.tpl"));
 			$t->set_block("fa1","Liste","Block");
 			$t->set_var(array(
-				AJAXJS  => $xajax->printJavascript('./xajax/'),
+				AJAXJS  => $xajax->printJavascript('/xajax/'),
 				FAART => ($Q=="C")?"Kunde":"Lieferant",
 			));
 			$i=0;

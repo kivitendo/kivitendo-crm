@@ -59,7 +59,7 @@
 	$views=array(""=> "lie",1=>"lie",2=>"not",3=>"inf");
 	$taxzone=array("Inland","EU mit UStId","EU ohne UStId","Ausland");
 	$t->set_var(array(
-			AJAXJS  	=> $xajax->printJavascript('./xajax/'),
+			AJAXJS  	=> $xajax->printJavascript('/xajax/'),
 			FAART 		=> ($Q=="C")?"Kunde":"Lieferant",
 			Q 		=> $Q,
 			FID		=> $id,

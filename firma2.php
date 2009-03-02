@@ -95,7 +95,7 @@
 	$t->set_file(array("co1" => "firma2.tpl"));
 	$t->set_var(array(
 			INIT	=> ($init=="")?"showOne($id)":"showContact()",
-			AJAXJS  => $xajax->printJavascript('./xajax/'),
+			AJAXJS  => $xajax->printJavascript('/xajax/'),
 			FAART => ($Q=="C")?"Kunde":"Lieferant",
 			interv	=> $_SESSION["interv"]*1000,
 			Q => $Q,

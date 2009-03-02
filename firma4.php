@@ -50,7 +50,7 @@
 	$t = new Template($base);
 	$t->set_file(array("doc" => "firma4.tpl"));
 	$t->set_var(array(
-			AJAXJS  => $xajax->printJavascript('./xajax/'),
+			AJAXJS  => $xajax->printJavascript('/xajax/'),
 			FAART => ($Q=="C")?"Kunde":"Lieferant",
 			Q => $Q,
 			FID => $fid,

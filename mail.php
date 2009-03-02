@@ -199,7 +199,7 @@
                 $t->parse("Block","Betreff",true);
 	}
 	$t->set_var(array(
-			AJAXJS	=> $xajax->printJavascript('./xajax/'),
+			AJAXJS	=> $xajax->printJavascript('/xajax/'),
 			Msg	=> $msg,
 			btn	=> $btn,
 			Subject => $Subject,

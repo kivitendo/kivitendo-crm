@@ -72,12 +72,8 @@
 	<tr><td class="norm">Regel</td><td>{Regel}</td>
 		<td>&nbsp;</td><td>{GRUPPE}</td></tr>
 	<tr><td class="norm">Mailserver</td><td><input type="text" name="Msrv" value="{Msrv}" maxlength="40"></td>
-		<td class="norm">Sprache</td>
-		<td class="norm"><select name="countrycode">
-<!-- BEGIN SelectboxC -->
-						<option value="{LID}"{LSel}>{LTXT}</option>
-<!-- END SelectboxC -->
-						</select> In einer k&uuml;nftigen Version.
+		<td class="norm"></td>
+		<td class="norm">
 		</td></tr>
 	<tr><td class="norm">Postfach</td><td class="norm"><input type="text" name="Postf" value="{Postf}" size="10" maxlength="25"> Kennwort <input type="text" name="Kennw" value="{Kennw}" size="10" maxlength="10"></td>
 	    <td class="norm">Termine</td><td>

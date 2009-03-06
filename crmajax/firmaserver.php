@@ -116,7 +116,7 @@
 	function showCalls($id,$start,$fa=false) {
 		$i=0;
 		$nun=date("Y-m-d h:i");
-		$itemN[]=array(id => 0,calldate => $nun, caller_id => $employee, cause => "Neuer Eintrag" );
+		$itemN[]=array(id => 0,calldate => $nun, caller_id => $employee, cause => translate('newItem','firma') );
 		$zeile ="<tr class='calls%d' onClick='showItem(%d);'>";
 		$zeile.="<td class='calls' nowrap width='15%%'>%s %s</td>";
 		$zeile.="<td class='calls re' width='5%%'>%s&nbsp;</td>";
@@ -205,15 +205,15 @@
 		else if (in_array($ext,array("SH","BAT"))) { $type="Shell-Script"; $pic="exe.png";}
 		else { $type="Unbekannt"; $pic="foo.png"; };
 		$info ="<br>$pfad/<b>$file</b><br><br>";
-		$info.="Dateityp: <img src='image/icon/$pic'> $type<br>";
-		$info.="Dateigr&ouml;sse: $size<br>Dateizeit: $zeit<br>";
+		$info.=translate('filetyp','firma').": <img src='image/icon/$pic'> $type<br>";
+		$info.=translate('filesize','firma').": $size<br>".translate('filetime','firma').": $zeit<br>";
 		$dbfile=new document();
 		$rs=$dbfile->searchDocument($file,$pfad);
 		$id=0;
 		if ($rs) {
 			$rs=$dbfile->getDokument($rs);
-			$info.="<br>Kommentar&auml;nderung: ".db2date($rs["datum"])." ".$rs["zeit"]."<br>";
-			$info.="Kommentar: ".nl2br($rs["descript"])."<br>";
+			$info.="<br>".translate('Description update','firma').": ".db2date($rs["datum"])." ".$rs["zeit"]."<br>";
+			$info.=translate('Description','firma').": ".nl2br($rs["descript"])."<br>";
 			$id=$rs["id"];
 		}
 		$objResponse = new xajaxResponse();
@@ -224,13 +224,13 @@
 		$objResponse->addAssign("docdescript",	"value", $rs["descript"]);
 		$objResponse->addAssign("fbright", 	"innerHTML", $info);
 		$objResponse->addAssign("subdownload",	"innerHTML",
-				"<a href='#' onClick='download(\"dokumente/".$_SESSION["mansel"]."$pfad/$file\")'>download</a>");
+				"<a href='#' onClick='download(\"dokumente/".$_SESSION["mansel"]."$pfad/$file\")'>".translate('download','firma')."</a>");
 		$objResponse->addAssign("subdelete",	"innerHTML",
-				"<a href='#' onClick='deletefile(\"dokumente/".$_SESSION["mansel"]."$pfad/$file\",$id)'>l&ouml;schen</a>");
+				"<a href='#' onClick='deletefile(\"dokumente/".$_SESSION["mansel"]."$pfad/$file\",$id)'>".translate('delete_','firma')."</a>");
 		$objResponse->addAssign("submove",	"innerHTML",
-				"<a href='#' onClick='movefile(\"dokumente/".$_SESSION["mansel"]."$pfad/$file\",$id)'>verschieben</a>");
+				"<a href='#' onClick='movefile(\"dokumente/".$_SESSION["mansel"]."$pfad/$file\",$id)'>".translate('move_','firma')."</a>");
 		$objResponse->addAssign("subedit",	"innerHTML",
-				"<a href='#' onClick='editattribut($id)'>Attribute bearbeiten</a>");
+				"<a href='#' onClick='editattribut($id)'>".translate('edit attribute','firma')."</a>");
                 return $objResponse;
 	}
 	function moveFile($file,$pfadleft) {

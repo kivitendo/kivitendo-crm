@@ -15,7 +15,7 @@ global $db;
 	if ($val["Vertreter"]==$val["UID"]) {$vertreter="null";} else {$vertreter=$val["Vertreter"];};
 	$sql="update employee set name='".$val["Name"]."',etikett=".$val["etikett"].", addr1='".$val["Strasse"]."', addr2='".$val["Plz"]."', addr3='";
 	$sql.=$val["Ort"]."', workphone='".$val["Tel2"]."', homephone='".$val["Tel1"]."', notes='".$val["Bemerkung"]."',";
-	$sql.="msrv='".$val["Msrv"]."', postf='".$val["Postf"]."', kennw='".$val["Kennw"]."', countrycode='".$val["countrycode"]."', postf2='";
+	$sql.="msrv='".$val["Msrv"]."', postf='".$val["Postf"]."', kennw='".$val["Kennw"]."',  postf2='";
 	$sql.=$val["Postf2"]."', interv='".$val["Interv"]."', pre='".$val["Pre"]."', abteilung='".$val["Abteilung"]."',";
 	$sql.="position='".$val["Position"]."', vertreter=$vertreter,mailsign='".$val["MailSign"]."',email='".$val["eMail"];
 	$sql.="',termbegin=".$val["termbegin"].",termend=".$val["termend"].",kdview=".$val["kdview"]." where id=".$val["UID"];
@@ -86,7 +86,6 @@ global $db;
 		}
 		$daten["gruppen"]=$rs2;
 		$daten["etikett"]=$rs[0]["etikett"];
-		$daten["countrycode"]=$rs[0]["countrycode"];
 		$daten["termbegin"]=$rs[0]["termbegin"];
 		$daten["termend"]=$rs[0]["termend"];
 		$daten["kdview"]=$rs[0]["kdview"];

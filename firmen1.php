@@ -17,7 +17,7 @@
 		if ($rc) { 
 			$tmp="<div style='width:300px'>[<a href='tmp/report_".$_SESSION["loginCRM"].".csv'>download Report</a>]</div>";
 		} else {
-			$tmp="Keine Treffer";
+			$tmp="Sorry, not found";
 		}
 		$t->set_var(array( 
 				report => $tmp
@@ -36,7 +36,7 @@
 			$t->set_block("fa1","Liste","Block");
 			$t->set_var(array(
 				AJAXJS  => $xajax->printJavascript('/xajax/'),
-				FAART => ($Q=="C")?"Kunde":"Lieferant",
+				FAART => ($Q=="C")?"Customer":"Vendor", 
 			));
 			$i=0;
 			clearCSVData();
@@ -70,11 +70,11 @@
 				}
 			}
 		} else {
-			$msg="Leider nichts gefunden.";
+			$msg="Sorry, not found.";
 			vartpl ($t,$_POST,$Q,$msg,"","",1,true);
 		}
 	} else {
 		leertpl($t,1,$Q,"",true);
 	}
-	$t->pparse("out",array("fa1"));
+	$t->Lpparse("out",array("fa1"),$_SESSION["lang"],"firma");
 ?>

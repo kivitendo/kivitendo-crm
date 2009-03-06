@@ -60,7 +60,7 @@
 	$taxzone=array("Inland","EU mit UStId","EU ohne UStId","Ausland");
 	$t->set_var(array(
 			AJAXJS  	=> $xajax->printJavascript('/xajax/'),
-			FAART 		=> ($Q=="C")?"Kunde":"Lieferant",
+			FAART 		=> ($Q=="C")?"Customer":"Vendor",	//"Kunde":"Lieferant",
 			Q 		=> $Q,
 			FID		=> $id,
 			INID		=> db2date(substr($fa["itime"],0,10)),
@@ -87,7 +87,7 @@
 			sonder		=> $sonder,
 			notiz 		=> nl2br($fa["notes"]),
 			bank 		=> $fa["bank"],
-			directdebit	=> ($fa["direct_debit"])?"Ja":"Nein",
+			directdebit	=> ($fa["direct_debit"])?"JA":"NEIN",
 			blz 		=> $fa["bank_code"],
 			konto 		=> $fa["account_number"],
 			konzernname	=> $fa["konzernname"],

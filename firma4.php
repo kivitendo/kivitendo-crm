@@ -51,7 +51,7 @@
 	$t->set_file(array("doc" => "firma4.tpl"));
 	$t->set_var(array(
 			AJAXJS  => $xajax->printJavascript('/xajax/'),
-			FAART => ($Q=="C")?"Kunde":"Lieferant",
+			FAART => ($Q=="C")?"Customer":"Vendor",       //"Kunde":"Lieferant",
 			Q => $Q,
 			FID => $fid,
 			customernumber	=> ($Q=="C")?$fa["customernumber"]:$fa["vendornumber"],

@@ -16,10 +16,10 @@
 <p class="listtop">Kundenkontakte</p>
 <div style="position:absolute; top:44px; left:10px;  width:770px;">
 	<ul id="maintab" class="shadetabs">
-	<li><a href="{Link1}">Kundendaten</a><li>
-	<li class="selected"><a href="{Link2}" id="aktuell">Ansprechpartner</a></li>
-	<li><a href="{Link3}">Ums&auml;tze</a></li>
-	<li><a href="{Link4}">Dokumente</a></li>
+	<li><a href="{Link1}">Custombase</a><li>
+	<li class="selected"><a href="{Link2}" id="aktuell">Contacts</a></li>
+	<li><a href="{Link3}">Sales</a></li>
+	<li><a href="{Link4}">Documents</a></li>
 	<span title="Wichtige MItteilung">{Cmsg}</span>
 	</ul>
 </div>

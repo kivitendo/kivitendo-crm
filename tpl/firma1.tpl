@@ -107,10 +107,10 @@
 <div style="position:absolute; top:1.5em; left:1.1em;  width:60em;">
     <div style="float:left; padding-top:1.2em; ";>
 	<ul id="maintab" class="shadetabs">
-	<li class="selected"><a href="firma1.php?Q={Q}&id={FID}" id="aktuell">Stammdaten</a></li>
-	<li><a href="firma2.php?Q={Q}&fid={FID}">Ansprechpartner</a></li>
-	<li><a href="firma3.php?Q={Q}&fid={FID}">Ums&auml;tze</a></li>
-	<li><a href="firma4.php?Q={Q}&fid={FID}">Dokumente</a></li>
+	<li class="selected"><a href="firma1.php?Q={Q}&id={FID}" id="aktuell">Custombase</a></li>
+	<li><a href="firma2.php?Q={Q}&fid={FID}">Contacts</a></li>
+	<li><a href="firma3.php?Q={Q}&fid={FID}">Sales</a></li>
+	<li><a href="firma4.php?Q={Q}&fid={FID}">Documents</a></li>
 	<li><select style="visibility:{chelp}" name="kdhelp" onChange="KdHelp()">
 <!-- BEGIN kdhelp -->
 		<option value="{cid}">{cname}</option>
@@ -173,12 +173,12 @@
 	</div>
 	<div style="position:absolute; width:32.0em; height:1.4em; text-align:left;  border-top: 1px solid black;left:0px; top:15.5em;">
 		<ul id="submenu" class="subshadetabs" style="padding-left:5px;">
-			<li id="sublie"><a href="#" onClick="submenu('lie')">Lieferadresse</a></li>
-			<li id="subnot"><a href="#" onClick="submenu('not')">Notizen</a></li>
-			<li id="subinf"><a href="#" onClick="submenu('inf')">sonst.Infos</a></li>
+			<li id="sublie"><a href="#" onClick="submenu('lie')">shipto_</a></li>
+			<li id="subnot"><a href="#" onClick="submenu('not')">notes_</a></li>
+			<li id="subinf"><a href="#" onClick="submenu('inf')">miscInfo</a></li>
 			<li><a href="vcardexp.php?Q={Q}&fid={FID}">VCard</a></li>
-			<li><a href="karte.php?Q={Q}&fid={FID}">Kartei</a></li>
-			<li><a href="firmen3.php?Q={Q}&id={FID}&edit=1">Bearbeiten</a></li>
+			<li><a href="karte.php?Q={Q}&fid={FID}">Register</a></li>
+			<li><a href="firmen3.php?Q={Q}&id={FID}&edit=1">edit_</a></li>
 		</ul>
 	</div>
 
@@ -210,52 +210,52 @@
 		</div>
 		<div style="width:35em;" class="klein">
 		<table class="normal">
-		<tr><td>Variablen:   </td><td><div class="value"><a href='#' onClick="showVar();">{variablen}</a></div></td></tr>
+		<tr><td>variables:   </td><td><div class="value"><a href='#' onClick="showVar();">{variablen}</a></div></td></tr>
 		<tr><td>Checkbox:   </td><td><div class="value">{sonder} </div></td></tr>
-		<tr><td>Branche:    </td><td><div class="value">{branche}</div></td></tr>
-		<tr><td>Stichworte: </td><td><div class="value">{sw}     </div></td></tr>
-		<tr><td valign="top">Bemerkungen:</td><td><div class="value">{notiz}  </div></td></tr>
+		<tr><td>Industry:    </td><td><div class="value">{branche}</div></td></tr>
+		<tr><td>Catchword: </td><td><div class="value">{sw}     </div></td></tr>
+		<tr><td valign="top">Remarks:</td><td><div class="value">{notiz}  </div></td></tr>
 		</table>
 		</div>
 	</span>	
 
 	<span id="inf" style="visibility:hidden;position:absolute; text-align:left;width:32em; left:1.2em; top:17.1em;">
 		<div  class="zeile klein">
-			<span class="labelLe">Konzern:</span>
+			<span class="labelLe">Concern:</span>
 			<span class="value"><a href="firma1.php?Q={Q}&id={konzern}">{konzernname}</a></span>
 			<span> &nbsp; <a href="konzern.php?Q={Q}&fid={FID}">{konzernmember}</a></span>
 		</div>
 		<div  class="zeile klein">
-			<span class="labelLe">Kundentyp:</span>
+			<span class="labelLe">Business:</span>
 			<span class="value">{kdtyp}</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
-			<span class="labelLe">Quelle:</span>
+			<span class="labelLe">Source:</span>
 			<span class="value">{lead} {leadsrc}</span>
 		</div>
 		<div  class="zeile klein">
- 			<span class="labelLe">Rabatt:</span>
+ 			<span class="labelLe">Discount:</span>
 			<span class="value">{rabatt}</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
-			<span class="labelLe">Preisgruppe:</span>
+			<span class="labelLe">Price group:</span>
 			<span class="value">{preisgrp}</span>
 		</div>
 		<div  class="zeile klein">
-			<span class="labelLe">Erstelldatum:</span>
+			<span class="labelLe">Init date:</span>
 			<span class="value">{erstellt}</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
-			<span class="labelLe">Ge&auml;ndert:</span>
+			<span class="labelLe">update:</span>
 			<span class="value">{modify}</span>
 		</div>
 		<br />
 		<div  class="zeile klein">
-			<span class="labelLe">Steuer-Nr.:</span>
+			<span class="labelLe">Tax number.:</span>
 			<span class="value">{Taxnumber}</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
 			<span class="labelLe">UStId:</span>
 			<span class="value">{USTID}</span>
 		</div>
 		<div  class="zeile klein">
-			<span class="labelLe">Steuerzone:</span>
+			<span class="labelLe">Tax zone:</span>
 			<span class="value">{Steuerzone}</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
 		</div>
@@ -268,29 +268,29 @@
 			<span class="value">{kreditlim}</span>
 		</div>
 		<div  class="zeile">
-			<span class="space mini">offene</span>
+			<span class="space mini">outstanding</span>
 		</div>
 		<div  class="zeile klein">
-			<span class="labelLe">- Posten:</span>
+			<span class="labelLe">- items:</span>
 			<span class="value" onClick="showOP('{apr}');">{op}</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
-			<span class="labelLe">- Auftr&auml;ge:</span>
+			<span class="labelLe">- orders:</span>
 			<span class="value" onClick="showOP('oe');">{oa}</span>
 		</div>
 		<br />
 		<div  class="zeile klein">
-			<span class="labelLe">Bankname:</span>
+			<span class="labelLe">Bank name:</span>
 			<span class="value">{bank}</span>
 		</div>
 		<div  class="zeile klein">
-			<span class="labelLe">Blz:</span>
+			<span class="labelLe">Bank code:</span>
 			<span class="value">{blz}</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
-			<span class="labelLe">Konto:</span>
+			<span class="labelLe">Account:</span>
 			<span class="value">{konto}</span>
 		</div>
 		<div  class="zeile klein">
-			<span class="space">Teilnahme an Lastschrift:</span><span class="value">{directdebit}</span>
+			<span class="space">Direct debit:</span><span class="value">{directdebit}</span>
 		</div>	
 	</span>
 </div>

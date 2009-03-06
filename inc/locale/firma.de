@@ -1,0 +1,21 @@
+<?
+// Übersetzungen für die Firmenmasken in Deutsch
+$texts	= array(
+	"Umsätze der letzten 12 Monate"	=> "Ums&auml;tze der letzten 12 Monate",
+	"Umsätze/Angebote von Monat"	=> "Ums&auml;tze/Angebote von Monat",
+	"Umsätze"			=> "Ums&auml;tze",
+	"Edit"				=> "Bearbeiten",
+        "JA"            => "Ja"
+        "NEIN"          => "Nein",
+        "filetyp"       => "Dateityp",
+        "filesize" 	=> "Dateigr&ouml;sse",
+        "filetime"      => "Dateizeit",
+        "Description"   => "Kommentar",
+        "Description update" =>  "Kommentar &auml;nderung",
+        "download"      => "download",
+        "delete"	=> "l&ouml;schen",
+   	"move"		=> "verschieben",
+        "edit attribute" => "Attribute bearbeiten",
+	"newItem"	=> "Neuer Eintrag"
+);
+?>

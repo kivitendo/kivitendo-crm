@@ -1,0 +1,18 @@
+<?
+// Übersetzungen für die Firmenmasken in Französisch 
+$texts	= array(
+	"Leider keine Kontakte gefunden" => "Sorry, no Contact found",
+	"Kundendaten"	=> "Customer",
+	"Kontakte"	=> "Contact",
+	"UmsÃ¤tze"	=> "Transactions",
+	"Dokumente"	=> "Documents",
+	"Lieferadresse"	=> "Shipto",
+	"refresh"	=> "refresh",
+	"Edit"		=> "Edit",
+	"Kontakt eingeben"	=> "new Contact",
+	"Kontakt aus Liste"	=> "Contact from List",
+	"Tel"		=> "Phone",
+	"Fax"		=> "Fax",
+	"Mob"		=> "Mobile"
+);
+?>

@@ -391,8 +391,6 @@ ALTER TABLE employee ADD COLUMN vertreter int4;
 ALTER TABLE employee ADD COLUMN mailsign text;
 ALTER TABLE employee ADD COLUMN email character varying(50);
 ALTER TABLE employee ADD COLUMN etikett int4;
-ALTER TABLE employee ADD COLUMN countrycode char (2);
-ALTER TABLE employee ALTER countrycode SET DEFAULT 'de';
 ALTER TABLE employee ADD COLUMN termbegin integer;
 ALTER TABLE employee ADD COLUMN termend integer;
 ALTER TABLE employee ADD COLUMN kdview integer;
@@ -414,7 +412,6 @@ ALTER TABLE contacts ADD COLUMN cp_country character varying(3);
 ALTER TABLE contacts ADD COLUMN cp_salutation text;
 ALTER TABLE defaults ADD COLUMN contnumber text;
 
-UPDATE employee SET countrycode='de';
 UPDATE employee set etikett=(select id from labels limit 1);
 UPDATE defaults SET contnumber=1000;
 UPDATE employee SET kdview = 1;

@@ -30,7 +30,7 @@ Vorrausetzungen:
 	xajax (http://www.xajaxproject.org/)
 
 z.B. debian:
-apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail-mime php5-pear php5-pgsql  php-fpdf php-mail-mime imagemagick
+apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail-mime php5-pear php5-pgsql  php-fpdf php-mail-mime imagemagick php-xajax
 
 Achtung! Das PEAR-Paket Image_Graph und Image_Canvas sind noch nicht "stable". Daher mit :
 
@@ -46,7 +46,7 @@ PHP5:
 Den Fehlerreporting evtl. etwas runterschrauben. 
 error_reporting  =  E_ALL & ~E_NOTICE
 
-Wird jpgraph verwendet, dann muﬂ unbedingt jpgraph2 verwendet werden
+Wird jpgraph mit PHP5 verwendet, dann muﬂ unbedingt jpgraph2 eingesetzt werden
 
 PHP-Code wird angezeigt:
 short_open_tag = On
@@ -54,9 +54,7 @@ short_open_tag = On
 
 AJAX:
 Nach und nach werden einige Masken mit Ajax bedient. 
-Das Paket xajax muﬂ im CRM-Verzeichnis im Unterverzeichnis "xajax" installiert werden
-oder per Link eingebunden werden.
-Aktuell wird "xajax" mitgeliefert.
+"xajax" wird nicht mehr mitgeliefert!! xajax  sollte ganz normal im Pfad erreichbar sein.
 
 
 Wird mit einem Alias f¸r das LxO-Verzeichnis benutzt und soll in einigen Masken der 

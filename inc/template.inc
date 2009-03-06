@@ -249,7 +249,9 @@ class Template {
   function Lpparse($target, $varname, $lang, $file, $append = false) {
   	$x=$this->finish($this->parse($target, $varname, $append));
   	if ($lang) {
-	  	include("$file.$lang");
+	  	include("locale/$file.$lang");
+		$arrayTmpl=array_keys($texts);
+		$arrayShow=array_values($texts);
 		$x=str_replace($arrayTmpl, $arrayShow, $x);
 	}
 	print $x;

@@ -48,6 +48,14 @@ if (!$_SESSION["db"] || !$_SESSION["cookie"] ||
      return $Datum;
   }
 
+function translate($word,$file) {
+	include("locale/$file.".$_SESSION['lang']);
+	if ($texts[$word]) {
+        	return $texts[$word];
+	} else {
+		return $word;
+	}
+}
 function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
 	global $ERPNAME;
 	$db=new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport,true);
@@ -76,7 +84,7 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
 	$auth["login"]=$rs1[0]["login"];
 	$sql="select * from auth.user_config where user_id=".$rs[0]["id"];
 	$rs1=$db->getAll($sql,"authuser_2");
-	$keys=array("dbname","dbpasswd","dbhost","dbport","dbuser");
+	$keys=array("dbname","dbpasswd","dbhost","dbport","dbuser","countrycode");
 	foreach ($rs1 as $row) {
 		if (in_array($row["cfg_key"],$keys)) {
 			$auth[$row["cfg_key"]]=$row["cfg_value"];
@@ -124,6 +132,7 @@ global $ERPNAME,$showErr;
 	$_SESSION["dbport"]=(!$auth["dbport"])?"5432":$auth["dbport"];
 	$_SESSION["dbuser"]=$auth["dbuser"];
 	$_SESSION["dbpasswd"]=$auth["dbpasswd"];	
+	$_SESSION["lang"]=$auth["countrycode"]; 
 	$_SESSION["db"]=new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"],$showErr);
 	$_SESSION["authcookie"]=$authcookie;
 	$sql="select * from employee where login='".$auth["login"]."'";
@@ -138,7 +147,6 @@ global $ERPNAME,$showErr;
 			$_SESSION["Pre"]=$tmp["pre"];
 			$_SESSION["interv"]=($tmp["interv"]>0)?$tmp["interv"]:60;
 			$_SESSION["loginCRM"]=$tmp["id"];
-			$_SESSION["lang"]=$tmp["countrycode"]; //"de";
 			$_SESSION["kdview"]=$tmp["kdview"];
 			$sql="select * from defaults";
 			$rs=$_SESSION["db"]->getAll($sql);

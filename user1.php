@@ -82,16 +82,6 @@
 				));
 				$t->parse("BlockB","SelectboxB",true);
 		}
-		$t->set_block("usr1","SelectboxC","BlockC");
-		$language=array("de"=>"Deutsch","en"=>"English","fr"=>"France");
-		while(list($key,$val) = each($language)) {
-			$t->set_var(array(
-				LSel => ($key==$fa["countrycode"])?" selected":"",
-				LID  =>	$key,
-				LTXT =>	$val
-			));
-			$t->parse("BlockC","SelectboxC",true);
-		}
 		$t->set_block("usr1","Liste","BlockD");
 		$i=0;
 		if ($items) foreach($items as $col){

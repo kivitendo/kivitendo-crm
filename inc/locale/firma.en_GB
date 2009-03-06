@@ -21,6 +21,7 @@ $texts	= array(
 	"delete_"	=> "delete",
 	"move_"		=> "move",
 	"save_"		=> "save",
+	"clear_"	=> "clear",
 	"create_"	=> "create",
 	"SalesOrder"    => "Sales/Orders from",
 	"OP_"		=> "oi",

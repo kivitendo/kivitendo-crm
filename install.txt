@@ -30,7 +30,7 @@ Vorrausetzungen:
 	xajax (http://www.xajaxproject.org/)
 
 z.B. Debian oder Ubuntu:
-apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail-mime php-pear php-db php5-pgsql php-fpdf php-mail-mime imagemagick php-xajax ttf-freefont
+apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-db php5-pgsql php-fpdf php-mail-mime imagemagick php-xajax ttf-freefont
 
 Achtung! Das PEAR-Paket Image_Graph und Image_Canvas sind noch nicht "stable". Daher mit :
 

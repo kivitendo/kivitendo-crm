@@ -323,6 +323,8 @@ global $db;
 	$sql="select * from leads order by lead";
 	$rs=$db->getAll($sql);
 	$tmp[]=array("id"=>"","lead"=>"unknown");
+	if (!$rs)
+		$rs = array();
 	$rs=array_merge($tmp,$rs);
 	return $rs;
 }

@@ -159,10 +159,12 @@ Erweitern Sie das LxO-Menü in der Sektion CSV-Import:
 [System--Import CSV--BLZ]
 module=lxo-import/blz.php
 
+Die max_execution_time  sollte groß genu gewählt werden. Es sind über 20000 Datensätze.
+
 Jetzt noch die inc/conf.php öffnen und den Wert hinter 'BLZDB' auf 'true' ändern.
 
 Melden Sie sich neu an. Holen Sie von :
-http://www.bundesbank.de/
+http://www.bundesbank.de/zahlungsverkehr/zahlungsverkehr_bankleitzahlen_download.php
 die aktuellen Bankleitzahlen. Rufen Sie das Programm "System->CSV-Import->BLZ" auf
 und importieren Sie damit die Daten.
 

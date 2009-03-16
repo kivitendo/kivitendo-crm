@@ -1,12 +1,58 @@
-<?
+<?php
+/**
+*	document	
+*	Klasse für Dokumentenhandling
+*
+*
+*
+*       @version        0.2
+*       @author 	Holger Lindemann <hli@lx-system.de>
+*
+*	Paket	Lx-Office-CRM
+*/
 class document {
 
+
+/**
+*	aktuelle Datenbankinstanz
+*       @var object $db
+*/
  var $db = false;
+
+/**
+*	Die letzte Fehlermeldung
+*       @var string $error
+*/
  var $error = false;
+
+/**
+*	Dokumentenname
+*       @var string $name
+*/
  var $name = "";
+
+/**
+*	Dokumentenpfad
+*       @var string $pfad
+*/
  var $pfad = "";
+
+/**
+*	Dokumentenbeschreibung
+*       @var string $descript
+*/
  var $descript = "";
+
+/**
+*	Dateigröße
+*       @var integer $size
+*/
  var $size = false;
+
+/**
+*	Dokumenten ID
+*       @var integer $id
+*/
  var $id = false;
 
 	function document($id=false,$fname="",$fpath="",$descript="") {
@@ -21,29 +67,56 @@ class document {
 			$this->setDocData("descript",$descript);
 		}
 	}
+
+/**
+*	Dokumentvariable setzen
+*
+*       @access public
+*       @param  string $key	Name der Variablen
+*       @param  string $val	Wert der Variablen
+*/
 	function setDocData($key,$val=false) {
 		$this->$key=$val;
 	}
+
+/**
+*	Ein Dokument muß Namen und Pfad haben
+*	Daten vorher einstellen mit setDocData()
+*
+*       @access public
+*       @return boolean         Erfolg der Aktion
+*/
 	function chkDocData() {
 		//Name und Pfad müssen gesetzt sein
 		if (empty($this->name) || empty($this->pfad))  return false; 
 		return true;
 	}
+
+/**
+*	Dokumentdaten speichern
+*	Daten vorher einstellen mit setDocData()
+*
+*       @access public
+*       @return boolean         Erfolg der Aktion
+*/
 	function saveDocument() {
 		//Dokumentdaten in db speichern
 		if (!$this->chkDocData()) return false; 
 		if (!$this->id) {
 			//es ist ein neues Dokument, bzw. eines ohne db-Eintrag
-			//wurde ohne Anwendung ins Verzeichnis gestellt.
+			//wurde vielleicht ohne Anwendung ins Verzeichnis gestellt.
 			return $this->newDocument();
 		} else {
 			//einen bestehenden Eintrag ändern
-			$sql ="update documents set filename='".$this->name."',";
-			$sql.="descript='".$this->descript."',datum='".date("Y-m-d")."',zeit='".date("H:i:s")."',";
-			//wird bei Upload gesetzt.
-			if ($this->size) $sql.="size=".$this->size.",";
-			$sql.="employee=".$_SESSION["loginCRM"].",pfad='".$this->pfad."' where id=".$this->id;
-			if (!$this->db->query($sql)) {
+			$felder=array('filename','descript','datum','zeit','employee','pfad');
+			$werte=array($this->name,$this->descript,date("Y-m-d"),date("H:i:s"),$_SESSION["loginCRM"],$this->pfad);
+			if ($this->size) {
+				//wird bei einem Upload gesetzt.
+				$felder[]='size';
+				$werte[]=$this->size;
+			}
+			$rc=$this->db->update('documents',$felder,$werte,'id='.$this->id);
+			if (!$rc) {
 				$this->error="Datei '".$this->name."' nicht gesichert";
 				return false;
 			} else {
@@ -52,11 +125,19 @@ class document {
 			}
 		}
 	}
+
+/**
+*	Ein neues Dokument anlegen
+*	Daten vorher einstellen mit setDocData()
+*
+*       @access public
+*       @return boolean         Erfolg der Aktion
+*/
 	function newDocument() {
-		$sql ="insert into documents (filename,descript,datum,zeit,size,employee,pfad) ";
-		$sql.="values ('%s','%s','%s','%s',%d,%d,'%s')";
-		$sql=sprintf($sql,$this->name,$this->descript,date("Y-m-d"),date("H:i:s"),$this->size,$_SESSION["loginCRM"],$this->pfad);
-		$rc=$this->db->query($sql);
+		$rc=$this->db->insert('documents',
+					array('filename','descript','datum','zeit','size','employee','pfad'),
+					array($this->name,$this->descript,date("Y-m-d"),date("H:i:s"),$this->size,$_SESSION["loginCRM"],$this->pfad)
+			);
 		if ($rc) {
 			//sichern erfolgreich, ID holen.
 			$this->id=$this->searchDocument($this->name,$this->pfad);
@@ -69,6 +150,14 @@ class document {
 		}
 	}
 
+/**
+*	Ein Dokument hochladen
+*
+*       @access public
+*       @param  string $name	Name des Dokuments
+*       @param  string $pfad	Pfad des Dokuments
+*       @return boolean         Erfolg der Aktion
+*/
 	function uploadDocument($file,$pfad) {
 		$this->name=$file["Datei"]["name"];
 		$this->size=$file["Datei"]["size"];
@@ -91,16 +180,32 @@ class document {
 		return $this->saveDocument();
 	}	
 
+/**
+*       Ein Dokument in der DB suchen
+*
+*       @access public
+*       @param  string $name	Name des Dokuments
+*       @param  string $pfad	Pfad des Dokuments
+*       @return array  $id      ID des Dokuments oder "false"
+*/
 	function searchDocument($name,$pfad) {
+		//kein abschließender Slash
 		if (substr($pfad,-1)=="/") $pfad=substr($pfad,0,-1);
-		$sql="select * from documents where filename = '$name' and pfad = '$pfad'";
-		$rs=$this->db->getAll($sql);
+		$sql="select id from documents where filename = '$name' and pfad = '$pfad'";
+		$rs=$this->db->getOne($sql);
 		if(!$rs) {
 			return false;
 		}
-		return $rs[0]["id"];
+		return $rs["id"];
 	}
 
+/**
+*       Ein Dokument im Filesystem und in der DB löschen
+*
+*       @access public
+*       @param  string  $p      woher kommt der Aufruf
+*	@return boolean		Erfolg der Aktion
+*/
 	function deleteDocument($p="") {
 		// $p=="" Aufruf aus Docroot, $p=="." Aufruf aus crmajax
 		$dest="$p./dokumente/".$_SESSION["mansel"].$this->pfad."/".$this->name;
@@ -124,16 +229,23 @@ class document {
 		};
 	}
 
+/**
+*       Ein Dokument aus  der DB holen
+*
+*       @access public
+*       @param  integer $id      ID des Dokuments das angefordert wird
+*       @return array   $rs      Dokumentendaten oder "false"
+*/
 	function getDokument($id) {
 		$sql="select * from documents where id=$id";
-		$rs=$this->db->getAll($sql);
-		$this->setDocData("name",($rs)?$rs[0]["filename"]:false);
-		$this->setDocData("pfad",($rs)?$rs[0]["pfad"]:false);
-		$this->setDocData("descript",($rs)?$rs[0]["descript"]:false);
-		$this->setDocData("size",($rs)?$rs[0]["size"]:false);
+		$rs=$this->db->getOne($sql);
+		$this->setDocData("name",($rs)?$rs["filename"]:false);
+		$this->setDocData("pfad",($rs)?$rs["pfad"]:false);
+		$this->setDocData("descript",($rs)?$rs["descript"]:false);
+		$this->setDocData("size",($rs)?$rs["size"]:false);
 		$this->setDocData("id",($rs)?$id:false);
 		if(!$rs) return false;
-		return $rs[0];
+		return $rs;
 	}
 
 } 

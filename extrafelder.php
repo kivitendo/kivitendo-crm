@@ -32,8 +32,8 @@ global $db;
 	$rc=$db->query($sql);
 	foreach ($data as $key=>$val) {
 		if (in_array($key,$nosave)) continue;
-		$val=addslashes(trim($val));
-		$rc=$db->query(sprintf($insert,$owner,$key,$val));
+		$val=trim($val);
+		$rc=$db->insert('extra_felder',array('owner','fkey','fval'),array($owner,$key,$val));
 		if (!$rc) { $db->query("ROLLBACK"); return false; };
 	}
 	$rc=$db->query("COMMIT");

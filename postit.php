@@ -25,8 +25,7 @@ function savePostIt($data) {
 global $db;
 	if (!$data["id"]) {
 		$newID=uniqid (rand());
-		$sql="insert into postit (employee,date,cause) values (".$_SESSION["loginCRM"].",now(),'$newID')";
-	        $rc=$db->query($sql);
+		$rc=$db->insert(postit,array('employee','date','cause'),array($_SESSION["loginCRM"],'now()',$newID));
 		if ($rc) {
                 	$sql="select id from postit where cause = '$newID'";
 	                $rs=$db->getAll($sql);
@@ -39,8 +38,7 @@ global $db;
                         return false;
                 }
 	}
-	$sql="update postit set cause='%s',notes='%s' where id = %d";
-	$rc=$db->query(sprintf($sql,substr($data["cause"],0,100),addslashes($data["notes"]),$data["id"]));
+	$rc=$db->update('postit',array('cause','notes'),array(substr($data["cause"],0,100),$data["notes"]),'id = '.$data['id']);
 	return $rc;
 }
 function DelPostIt($id) {

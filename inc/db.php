@@ -139,6 +139,7 @@ class myDB extends DB {
 		$this->rc=@$this->db->execute($sth, $values);
 		if(DB::isError($this->rc)) {
 			$this->dbFehler($sql,$this->rc->getMessage());
+			$this->dbFehler(print_r($fields,true),print_r($values,true));
 			$this->rollback();
 			return false;
 		}
@@ -162,6 +163,7 @@ class myDB extends DB {
 		$sth = $this->db->autoPrepare($table, $fields, DB_AUTOQUERY_INSERT);
 		if (PEAR::isError($sth)) {
 			$this->dbFehler($sql,$sth->getMessage());
+			$this->dbFehler(print_r($fields,true),print_r($values,true));
 			$this->rollback();
 			return false;
 		}

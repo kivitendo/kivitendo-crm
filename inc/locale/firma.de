@@ -1,5 +1,7 @@
 <?
 // Übersetzungen für die Firmenmasken in Deutsch
+// Unter Umständen die Reihefolge der Übersetzungen ändern
+// Aus 'Datei hochladen" wird 'Datumi hochladen" == 2x übersetzt 
 $texts	= array(
 	"Umsätze der letzten 12 Monate"	=> "Ums&auml;tze der letzten 12 Monate",
 	"Umsätze/Angebote von Monat"	=> "Ums&auml;tze/Angebote von Monat",
@@ -62,6 +64,7 @@ $texts	= array(
 	"Price group"	=> "Preisgruppe",
 	"Credit limit"	=> "Kreditlimit",
 	"Credit period" => "Zahlungsziehl",
+	"Date"		=> "Datum",
 	"outstanding"	=> "offene",
 	"items"		=> "Posten",
 	"orders"	=> "Auftr&auml;ge",
@@ -69,7 +72,7 @@ $texts	= array(
         "filesize" 	=> "Dateigr&ouml;sse",
         "filetime"      => "Dateizeit",
         "Description"   => "Kommentar",
-        "Description update" =>  "Kommentar &auml;nderung",
+        "Description update" =>  "Kommentar&auml;nderung",
         "download"      => "download",
         "delete_"	=> "l&ouml;schen",
    	"move_"		=> "verschieben",
@@ -101,7 +104,6 @@ $texts	= array(
 	"later"		=> "Sp&auml;ter",
 	"SalesOrder"	=> "Ums&auml;tze/Angebote von",
 	"Number"	=> "Nummer",
-	"Date"		=> "Datum",
 	"OP_"		=> "OP",
 	"invoice_"	=> "echnung",
 	"quotation_"	=> "ngenot",

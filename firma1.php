@@ -153,8 +153,8 @@
 	}
 	if ($kdhelp) { 
 		$t->set_block("fa1","kdhelp","Block1");
-		$tmp[]=array("id"=>-1,"name"=>"Online Kundenhilfe");
-		$kdhelp=array_merge($tmp,$kdhelp); 
+		$kdtmp[]=array("id"=>-1,"name"=>"Online Kundenhilfe");
+		$kdhelp=array_merge($kdtmp,$kdhelp); 
 		foreach($kdhelp as $col) {
 			$t->set_var(array(
 				cid => $col["id"],

@@ -115,11 +115,17 @@ In der Adressdatenmaske können einige Daten aus einer Geodatenbank gefüllt werde
 Dazu muß zuvor die Datenbank angelegt werden.
 
 Dazu ein Terminalfenster öffnen oder per Fernzugriff auf dem Server auf der Konsole 
-anmelden. In das Unterverzeichnis 'update' der CRM wechseln. Die Postgresql-Konsole 
-mit der entsprechenden Datenbankinstanz aufrufen:
+anmelden. In das Unterverzeichnis 'update' der CRM wechseln.
+
+Die GeoDaten entpacken:
+
+gunzip  geodaten.sql.gz
+
+Die Postgresql-Konsole mit der entsprechenden Datenbankinstanz aufrufen:
 	psql -U <dbuser> -W <meinedb>
 In der PostgreSQL-Konsole folgendes eingeben:
-	\i GEO.sql
+	\i geostruck.sql
+	\i geodaten.sql
 Es rasseln eine Menge Meldungen durch, es sollten keine Fehler auftreten.
 Die Konsole mit '\q' verlassen.
 

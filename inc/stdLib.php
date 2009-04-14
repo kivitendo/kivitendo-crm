@@ -58,7 +58,7 @@ function translate($word,$file) {
 }
 function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
 	global $ERPNAME;
-	$db=new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport,true);
+	$db=new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
 	$sql="select sc.session_id,u.id from auth.session_content sc left join auth.user u on ";
 	$sql.="u.login=sc.sess_value left join auth.session s on s.id=sc.session_id ";
 	$sql.="where session_id = '$cookie' and sc.sess_key='login'";// order by s.mtime desc";
@@ -102,7 +102,7 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
 * prüft ob name und kennwort in db sind und liefer die UserID
 *****************************************************/
 function anmelden() {
-global $ERPNAME,$showErr;
+global $ERPNAME;
 	ini_set("gc_maxlifetime","3600");
 	$tmp = @file_get_contents("../".$ERPNAME."/config/authentication.pl");
 	preg_match("/'db'[ ]*=> '(.+)'/",$tmp,$hits);
@@ -113,7 +113,7 @@ global $ERPNAME,$showErr;
 	$dbuser=$hits[1];
 	preg_match("/'host'[ ]*=> '(.+)'/",$tmp,$hits);
 	$dbhost=($hits[1])?$hits[1]:"localhost";
-	preg_match("/'port'[ ]*=> '(.+)'/",$tmp,$hits);
+	preg_match("/'port'[ ]*=> (.+)/",$tmp,$hits);
 	$dbport=($hits[1])?$hits[1]:"5432";
  	preg_match("/[ ]*\\\$self->\{cookie_name\}[ ]*=[ ]*'(.+)'/",$tmp,$hits);
 	$cookiename=$hits[1];
@@ -133,7 +133,7 @@ global $ERPNAME,$showErr;
 	$_SESSION["dbuser"]=$auth["dbuser"];
 	$_SESSION["dbpasswd"]=$auth["dbpasswd"];	
 	$_SESSION["lang"]=$auth["countrycode"]; 
-	$_SESSION["db"]=new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"],$showErr);
+	$_SESSION["db"]=new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
 	$_SESSION["authcookie"]=$authcookie;
 	$sql="select * from employee where login='".$auth["login"]."'";
 	$rs=$_SESSION["db"]->getAll($sql);
@@ -162,8 +162,6 @@ global $ERPNAME,$showErr;
 function chkVer() {
 global $VERSION;
 	$db=$_SESSION["db"];
-	$tmp=$db->showErr;
-	$db->showErr=false;
 	$rc=$db->getAll("select * from crm order by datum desc");
 	if (!$rc || $rc[0]["version"]=="" || $rc[0]["version"]==false) {
 		echo "CRM-Tabellen sind nicht (vollst&auml;ndig) installiert"; 

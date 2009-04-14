@@ -24,8 +24,6 @@ $owner=($_GET["owner"])?$_GET["owner"]:$_POST["owner"];
 function saveFelder($data) {
 global $db;
 	$nosave=array("save","owner");
-	$insert ="insert into extra_felder (owner,fkey,fval) ";
-	$insert.=" values ('%s','%s','%s')";
 	$owner=$data["owner"];
 	$rc=$db->query("BEGIN");
 	$sql="delete from extra_felder where owner = '$owner'";

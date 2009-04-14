@@ -2285,7 +2285,7 @@ global $db;
 *****************************************************/
 function getWCategorie($kdhelp=false) {
 global $db;
-	if ($kdhelp) { $kdhelp="where kdhelp is true";
+	if ($kdhelp) { 
 		$sql="select * from wissencategorie where kdhelp is true order by name";
 	} else {
 		$sql="select * from wissencategorie order by hauptgruppe,name";

@@ -12,7 +12,7 @@ if (!$_SESSION["db"] ||
 		$db=$_SESSION["db"];
 		$_SESSION["loginok"]="ok";
 } else {
-	$db=new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"],$showErr);
+	$db=new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
 	$_SESSION["db"]=$db;
 	$_SESSION["loginok"]="ok";
 }

@@ -100,12 +100,24 @@ class MyGeo {
 	function MyGeo($db) {
 		$this->db=$db;
 	}
-	function suchOrt($ort,$plz) {
+	function suchOrt($ort,$plz,$tel,$fuzzy=0,$ao="or") {
 		$sql= 'select loc_id,text_type,name,text_val from  geodb_textdata ';
-		$sql.='ta left join geodb_type_names tn on tn.type_id=ta.text_type where ';
-		$sql.='loc_id in (SELECT loc_id from  geodb_textdata where text_val = \''.$plz.'\' ';
-		$sql.='or text_val = \''.$ort.'\') and text_type in (500100000,500300000) ';
-		$sql.='order by loc_id,text_type';
+		$sql.='ta left join geodb_type_names tn on tn.type_id=ta.text_type where loc_id in (';
+		$subsel='SELECT loc_id from  geodb_textdata where ';
+		$where='';
+		$type=array();
+		if ($fuzzy==1) { $f1='like'; $f2='%'; }
+		else { $f1='='; $f2=''; }
+		if ($ao == "and") {
+			if ($ort<>"") {	$where=$subsel.' UPPER(text_val) '.$f1.' \''.strtoupper($ort).$f2.'\' and text_type = \'500100000\' '; }
+			if ($plz<>"") {	$where.=((empty($where))?'':'INTERSECT ').$subsel.' text_val '.$f1.' \''.$plz.$f2.'\' and text_type = \'500300000\'  '; }
+			if ($tel<>"") {	$where.=((empty($where))?'':'INTERSECT ').$subsel.' text_val '.$f1.' \''.$tel.$f2.'\' and text_type = \'500400000\'  ';	}
+		} else {
+			if ($ort<>"") {	$where=$subsel.'( UPPER(text_val) '.$f1.' \''.strtoupper($ort).$f2.'\' and text_type = \'500100000\' ) '; }
+			if ($plz<>"") {	$where.=((empty($where))?$subsel:' OR ').'( text_val '.$f1.' \''.$plz.$f2.'\' and text_type = \'500300000\' ) '; }
+			if ($tel<>"") {	$where.=((empty($where))?subsel:' OR ').'( text_val '.$f1.' \''.$tel.$f2.'\' and text_type = \'500400000\' ) ';	}
+		}
+		$sql.=$where.') order by loc_id,text_type';
 		$rs=$this->db->getAll($sql);
 		return $rs;
 	}
@@ -156,7 +168,7 @@ if ($_GET["loc_id"]) {
 	if ($_GET['gemid']>0) {
 		$rs=$geo->suchGemeinden($_GET['gemid']);
 	} else {
-		$rs=$geo->suchOrt($_GET["ort"],$_GET["plz"]);
+		$rs=$geo->suchOrt($_GET["ort"],$_GET["plz"],$_GET["tel"],$_GET["fuzzy"],$_GET["ao"]);
 	}
 	if ($rs) foreach($rs as $row) {
 		if ($lastid<>$row["loc_id"]) {

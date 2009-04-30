@@ -85,7 +85,7 @@
 			if (array_key_exists("invnumber",$col)){
 				$typ="R";
 				$renr=$col["invnumber"];
-				$offen=($col["amount"]==$col["paid"])?"-":"+";
+				$offen=($col["amount"]==$col["paid"])?"+":"-";
 			} else {
 				if ($col["quotation"]=="f") {
 					$typ="L";

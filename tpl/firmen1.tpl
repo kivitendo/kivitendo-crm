@@ -6,6 +6,17 @@
   		function report() {
   			f1=open("report.php?tab={Q}","Report","width=600; height=300; left=100; top=100");
   		}
+		function surfgeo() {
+			if ({GEODB}) {
+				fuzzy=(document.erwsuche.fuzzy.checked==true)?1:0;
+				plz=document.erwsuche.zipcode.value;
+				ort=document.erwsuche.city.value;
+				tel=document.erwsuche.phone.value;
+				F1=open("surfgeodb.php?ao=and&plz="+plz+"&ort="+ort+"&tel="+tel+"&fuzzy="+fuzzy,"GEO","width=550, height=350, left=100, top=50, scrollbars=yes");
+			} else {
+				alert("GEO-Datenbank nicht aktiviert");
+			}
+		}
 	</script>
 <body onLoad="document.erwsuche.name.focus();">
 
@@ -137,7 +148,9 @@
 			<input type="checkbox" name="employee" value="{employee}" tabindex="42">only by own<br>
 			<input type="submit" class="anzeige" name="suche" value="search_" tabindex="43">&nbsp;
 			<input type="submit" class="clear" name="reset" value="clear_" tabindex="44"> &nbsp;
-			<input type="button" name="rep" value="Report" onClick="report()" tabindex="45"><br>
+			<input type="button" name="rep" value="Report" onClick="report()" tabindex="45"> &nbsp;
+			<input type="button" name="geo" value="GeoDB" onClick="surfgeo()" tabindex="46" style="visibility:{GEOS}"> &nbsp;
+			<br>
 			{report}
 	</div>
 </form>

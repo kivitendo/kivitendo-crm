@@ -1,35 +1,39 @@
 <?php
+
+$log=false;
+
 if ($_POST) {
 	session_start();
 	chdir("..");
 	include("inc/conf.php");
-	include("inc/db.php");
+	include_once("inc/db.php");
 	include("inc/loginok.php");
-	$updatefile="update".$_POST["oldver"]."-$VERSION";
-	$updatefile=str_replace(".","",$updatefile);
-	if (! $log=@fopen("tmp/".$updatefile.".log","a") ) {
-		if ($log=@fopen("/tmp/".$updatefile.".log","a") ) {
-			echo "Logfile in /tmp<br> Schreibrechte im CRM-Verzeichnis pr&uuml;fen<br>";
-		} else {
-			echo "Kann kein Logfile $updatefile.log (2) erstellen<br>";
-			exit(1);
-		}
-	}
 }
-fputs($log,date("d.m.Y H:i:s")."\n");
-fputs($log,$_POST["oldver"]."->140\n");
+	$updatefile=basename(__FILE__,".php");
+       	$log=@fopen('tmp/'.$updatefile.'.log','a');
+	if (!$log) {
+        	$log=@fopen('/tmp/'.$updatefile.'.log','a');
+		if ($log) {
+		    echo 'Logfile in /tmp<br> Schreibrechte im CRM-Verzeichnis pr&uuml;fen<br>';
+		} else {
+			echo 'Kann kein Logfile'.$updatefile.'.log erstellen<br>';
+		}
+        }
+
+log2file($log,date("d.m.Y H:i:s"));
+log2file($log,$updatefile);
 
 if ($_POST["ok"]) {
-	fputs($log,"Update ok\n");
+	log2file($log,"Update ok");
 	echo "Datenbankinstanz ".$_SESSION["dbname"]." erweitern : ";
 	if (ob_get_level() == 0) ob_start();
 	ob_flush();
 	flush();
 	$f=fopen("update/".$updatefile.".sql","r");
 	if (!$f) { 
-		fputs($log,"$updatefile.sql nicht gefunden\n");
+		log2file($log,"$updatefile.sql nicht gefunden");
 		echo "<br>Kann Datei $updatefile.sql nicht &ouml;ffnen.<br>Abbruch!";
-		fclose($log);
+		if ($log) fclose($log);
 		exit();
 	}
 	echo $updatefile.".sql verwendet<br>";
@@ -51,11 +55,10 @@ if ($_POST["ok"]) {
 				$query=$query_;
                         }
 			$rc=$db->query(substr($query,0,-1));
-			if ($rc) { $ok++; echo "."; fputs($log,"."); }
-			else { $fehl++; echo "!"; fputs($log,"!");};
+			if ($rc) { $ok++; echo "."; log2file($log,substr($query,0,6)." ok"); }
+			else { $fehl++; echo "!"; log2file($log,substr($query,0,6)." Fehler!");};
 			if ($pos % 10 == 0) {
 				echo " ";
-				fputs($log," ");
 			}
 			ob_flush();
 			flush();
@@ -63,13 +66,13 @@ if ($_POST["ok"]) {
 		};
 		$zeile=trim(fgets($f,1000));
 	};
-	fputs($log,"\n");
+	log2file($log,"");
 	if ($fehl>0) { 
 		echo "Es sind $fehl Fehler aufgetreten<br>";  
-		fputs($log,"Es sind $fehl Fehler aufgetreten\n");
+		log2file($log,"Es sind $fehl Fehler aufgetreten");
 	}
 	else { 
-		fputs($log,"Datenbankupdate erfolgreich\n");
+		log2file($log,"Datenbankupdate erfolgreich");
 		echo "Datenbankupdate erfolgreich durchgef&uuml;hrt.<br>"; 
 	}
 	require ("update/newdocdir.php");
@@ -79,9 +82,9 @@ if ($_POST["ok"]) {
 	echo "Abbruch";
 	exit;
 } else {
-echo "Vorraussetzungen pr&uuml;fen:<br>";
+	echo "Vorraussetzungen pr&uuml;fen:<br>";
         $path=ini_get("include_path");
-        fputs($log,"Suchpfad: $path\n");
+        log2file($log,"Suchpfad: $path");
         $pfade=split(":",$path);
         $chkfile=array("DB","DB/pgsql","fpdf","fpdi","Mail","Mail/mime","Image/Canvas","Image/Graph",
                         "jpgraph","Contact_Vcard_Build","Contact_Vcard_Parse","xajax/xajax.inc");
@@ -90,7 +93,6 @@ echo "Vorraussetzungen pr&uuml;fen:<br>";
         foreach($chkfile as $file) {
                 echo "$file: ";
                 $ook=false;
-                fputs($log,"$file: ");
                 foreach($pfade as $path) {
                         if (is_readable($path."/".$file.".php")) {
                                 $ook=true;
@@ -99,20 +101,20 @@ echo "Vorraussetzungen pr&uuml;fen:<br>";
                 }
                 if ($ook) {
                         echo "ok<br>";
-                        fputs($log,"ok\n");
+			log2file($log,"$file: ok");
                 } else {
                         $ok=false;
 			if ($chkstat[$pos]==1) {
                                 $dbok=false;
                                 echo "<font color='red'><b>unbedingt Erforderlich!!</b></font><br>";
-                                fputs($log,"Fehler: Erforderlich\n");
+				log2file($log,"$file: Fehler: Erforderlich");
                         } else {
                                 echo "<font color='red'>dieses Paket fehlt oder kann nicht geladen werden.</font><br>";
-                                fputs($log,"Fehler\n");
+				log2file($log,"$file: Fehler");
                         }
-                }
-        }
-	fclose($log);
+         	}
+	}
+	@fclose($log);
 ?>
 Die Verzeichnisstruktur der Dokumente (Kunden/Lieferanten/Kontakte) hat sich ge&auml;ndert.<br>
 Das Script versucht die Verzeichnisse entsprechent umzubenennen und zu verschieben.<br>
@@ -124,4 +126,11 @@ Bitte erstellen Sie zun&auml;chst ein Backup des Dokumentenverzeichnis (crm/doku
 </form>
 <?php 
 } 
+
+function log2file($log,$txt) {
+	if ($log) {
+		fputs($log,$txt."\n");
+	}
+}
+
 ?>

@@ -1,7 +1,7 @@
 <?
 $VERSION='1.4.0';
 // Die volgenden Datenbanken müssen extra installiert werden. Siehe install.txt 
-$GEODB=true; // Geodatenbank vorhanden
+$GEODB=false; // Geodatenbank vorhanden
 $BLZDB=false; // BLZ-Datenbank vorhanden
 $from=16;  // Anrufernummer (Telcall)
 $to=18;    // Zielnummer (Telcall)
@@ -36,7 +36,7 @@ $jpg=false;
 //$jpg=true;
 $showErr=false;
 $CallEdit = true;
-$CallDel = true;
+$CallDel = false;
 //Verschiedene Map-Anbieter können hier eingestellt werden
 //Leerzeichenersatz
 //GoYellow

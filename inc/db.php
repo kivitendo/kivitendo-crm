@@ -14,7 +14,7 @@ class myDB extends DB {
  var $db = false;
  var $rc = false;
  var $showErr = false; // Browserausgabe
- var $log = true;     // Alle Abfragen mitloggen
+ var $log = false;     // Alle Abfragen mitloggen
  var $errfile = "tmp/lxcrm.err";
  var $logfile = "tmp/lxcrm.log";
  var $lfh = false;
@@ -97,7 +97,11 @@ class myDB extends DB {
 	* OUT: true/false
 	**********************************************/ 
 	function query($sql) {
-		if (strpos($sql,";")>0) return false;
+		if (strpos($sql,";")>0) {
+			//Sql-Injection? HTML-Sonderzeichen zulassen
+			if (!preg_match("/&[a-zA-Z]+$/",substr($sql,0,strpos($sql,";"))))
+				return false;
+		}
 		$this->rc=@$this->db->query($sql);
 		if ($this->log) $this->writeLog($sql);
 		if(DB::isError($this->rc)) {

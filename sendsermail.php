@@ -24,7 +24,7 @@ if ($dateiname) {
 
 $sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' limit 1";
 $data=$db->getAll($sql);
-$felder=split(";",$data[0]["csvdaten"]);
+$felder=split(":",$data[0]["csvdaten"]);
 $pemail=array_search("EMAIL",$felder);
 $cid=array_search("ID",$felder);
 $pkont=array_search("KONTAKT",$felder);
@@ -34,7 +34,7 @@ if ($data) {
 	$bodytxt=strip_tags($bodytxt);
 	foreach ($data as $row) {
 		$to="";
-		$tmp=split(";",$row["csvdaten"]);
+		$tmp=split(":",$row["csvdaten"]);
 		$text=$bodytxt;
 		if ($tmp[$pemail]=="") continue;
 		if ($tmp[$pkont]<>"" and $tmp[$pemail]<>"") {

@@ -33,10 +33,10 @@
 		$daten=$db->getAll($sql);
 		if ($daten) {
 			$felder=array_shift($daten);
-			$felder=split(";",$felder["csvdaten"]);
+			$felder=split(":",$felder["csvdaten"]);
 			$felder[]="TEXT";
 			foreach ($daten as $row) {
-				$data=split(";",$row["csvdaten"]);
+				$data=split(":",$row["csvdaten"]);
 				$data[]=$_POST["text"];
 				unset($tmp);
 				foreach ($label["Text"] as $row) {

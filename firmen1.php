@@ -43,7 +43,7 @@
 			insertCSVData(array("ANREDE","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","KONTAKT","ID",
 						"KDNR","USTID","STEUERNR","KTONR","BANK","BLZ","LANG","KDTYP"));
 			if ($daten) foreach ($daten as $zeile) {
-				insertCSVData(array("Firma",$zeile["name"],$zeile["department_1"],
+				insertCSVData(array($zeile["greeting"],$zeile["name"],$zeile["department_1"],
 						$zeile["country"],$zeile["zipcode"],$zeile["city"],$zeile["street"],
 						$zeile["phone"],$zeile["fax"],$zeile["email"],$zeile["contact"],$zeile["id"],
 						($Q=="C")?$zeile["customernumber"]:$zeile["vendornumber"],

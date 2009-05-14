@@ -646,7 +646,7 @@ function insertCSVData($data) {
 global $db;
 	$tmpstr="";
 	foreach ($data as $row) {
-		$tmpstr.=$row.";";
+		$tmpstr.=$row.":";
 	};
 	$sql="insert into tempcsvdata (uid,csvdaten) values (";
 	$sql.="'".$_SESSION["loginCRM"]."','".substr($tmpstr,0,-1)."')";

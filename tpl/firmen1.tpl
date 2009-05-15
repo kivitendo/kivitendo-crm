@@ -112,7 +112,7 @@
 <!-- END TypListe -->				
 			</select>
 		</span>
-		<span class="label">Lang</span>
+		<span class="label">Language</span>
 		<span class="leftfeld">	<select name="language" tabindex="30">
 				<option value="">
 				<option value="de">deutsch

@@ -18,6 +18,7 @@
 		} else {
 			if ($_POST["Mail"]) { 
 				$ok=insWvlM($_POST);
+				if ($_POST["cp_cv_id"]<>"") delMail($_POST["Mail"],$_POST["CID"]);
 			} else {
 				$ok=insWvl($_POST,$_FILES);
 			}

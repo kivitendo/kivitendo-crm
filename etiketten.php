@@ -50,7 +50,7 @@
 								$p=array_search($u,$felder);
 								if ($p!==false) { $y=$data[$p]; } else { $y=""; }
 								if ($y<>"" and $first) {
-									$y=utf8_decode($y);
+									//$y=utf8_decode($y);
 									$row["zeile"]=str_replace("%".$u."%",$y,$row["zeile"]);
 									if ($oder>0) $first=false;
 								} else {

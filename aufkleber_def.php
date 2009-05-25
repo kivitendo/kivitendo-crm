@@ -243,7 +243,7 @@
 	<form name="adrtxt" method="post">
 <table style="width:290px">
 	<tr>
-		<th colspan="3" class="listelement norm">Texte für  Aufkleber</th>
+		<th colspan="3" class="listelement norm">Texte f&uuml;r  Aufkleber</th>
 	</tr>
 	<tr>
 		<th colspan="2" class="listtop">Font</th>

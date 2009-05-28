@@ -159,7 +159,8 @@ In der PostgreSQL-Konsole folgendes eingeben:
 Es rasseln eine Menge Meldungen durch, es sollten keine Fehler auftreten.
 Die Konsole mit '\q' verlassen.
 
-Kopieren Sie die Datei update/blz.php nach <lx-office-erp>/lxo-import/ .
+Kopieren Sie die Datei update/blz.php nach <lx-office-erp>/lxo-import/ wenn diese noch
+nicht vorhanden ist.
 Erweitern Sie das LxO-Menü in der Sektion CSV-Import:
 
 [System--Import CSV--BLZ]
@@ -173,6 +174,8 @@ Melden Sie sich neu an. Holen Sie von :
 http://www.bundesbank.de/zahlungsverkehr/zahlungsverkehr_bankleitzahlen_download.php
 die aktuellen Bankleitzahlen. Rufen Sie das Programm "System->CSV-Import->BLZ" auf
 und importieren Sie damit die Daten.
+
+Die Daten dürfen auf keinen Fall in UTF-8 gewandelt werden !!!
 
 In der Bearbeitungsmaske der Firmen bekommen Sie nun unter "Sonstiges" einen neuen Knopf.
 

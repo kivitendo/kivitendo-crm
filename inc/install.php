@@ -129,7 +129,7 @@ if ($dbok) {
 	if ($_GET['check']==2 || $_GET['check']=='') {
 		$sql="select * from defaults";
 		$rs=$db->getAll($sql);
-		if (substr($rs[0]["version"],0,4)>="2.4.") {  //Muß noch an die akt. Version angepasst werden !!!!
+		if (substr($rs[0]["version"],0,4)>="2.6.") {  //Muß noch an die akt. Version angepasst werden !!!!
 			fputs($log,$rs[0]["version"]." als Basis\n");
 			echo "$ok. ERP-DB gefunden<br>";
 		} else {

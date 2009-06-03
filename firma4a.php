@@ -36,7 +36,11 @@
 		if ($docdata["felder"]) foreach($docdata["felder"] as $zeile) {
 			$value=$zeile["platzhalter"];
 			$name=strtoupper($value);
-			$vars[$name] = $_POST[$value];
+			if (ini_get("default_charset")=='utf-8') {
+				$vars[$name] = utf8_decode($_POST[$value]);
+			} else {
+				$vars[$name] = $_POST[$value];
+			}
 		}
 		$doc->parse($vars);
 		$data=$_POST;

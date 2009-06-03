@@ -47,7 +47,7 @@ class document {
 *	Dateigröße
 *       @var integer $size
 */
- var $size = false;
+ var $size = 0;
 
 /**
 *	Dokumenten ID

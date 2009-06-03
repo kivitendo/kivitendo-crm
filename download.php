@@ -5,7 +5,7 @@
 </head>
 <body onLoad="self.focus();">
 <div align="center"><a href="<?= $_GET['file'] ?>">Der Download startet sofort.<br \> 
-Falls Ihr Browser die automatische Weiterleitung nicht unterstützt klicken Sie hier!</a><br><br>
+Falls Ihr Browser die automatische Weiterleitung nicht unterst&uuml;tzt klicken Sie hier!</a><br><br>
 <a href="JavaScript:self.close();">close</a>
 </div>
 </body>

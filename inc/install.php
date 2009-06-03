@@ -127,9 +127,10 @@ echo "Vorraussetzungen pr&uuml;fen:<br>";
 
 if ($dbok) {
 	if ($_GET['check']==2 || $_GET['check']=='') {
-		$sql="select * from defaults";
+		//$sql="select * from defaults";
+		$sql="SELECT * from schema_info  where tag like 'release_%' order by tag desc limit 1";
 		$rs=$db->getAll($sql);
-		if (substr($rs[0]["version"],0,4)>="2.6.") {  //Muß noch an die akt. Version angepasst werden !!!!
+		if (substr($rs[0]["tag"],0,11)>="release_2_6") {  //Muß noch an die akt. Version angepasst werden !!!!
 			fputs($log,$rs[0]["version"]." als Basis\n");
 			echo "$ok. ERP-DB gefunden<br>";
 		} else {

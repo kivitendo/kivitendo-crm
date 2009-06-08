@@ -93,8 +93,8 @@
 
 		$template="vertrag3e.tpl";
 		$vertrag=getVertrag($vid);
-		//$maschinen=getVertragMaschinen($vertrag["contractnumber"]);
-		$maschinen=getVertragMaschinen($vid);
+		$maschinen=getVertragMaschinen($vertrag["contractnumber"]);
+		//$maschinen=getVertragMaschinen($vid);
 	}
 
 	$t->set_file(array("vert" => $template));

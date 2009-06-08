@@ -1,4 +1,4 @@
-<!-- $Id: repauftrag.tpl,v 1.5 2005/12/03 09:47:22 hli Exp $ -->
+<!-- $Id$ -->
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -30,7 +30,7 @@
 		</td>
 		<td class="norm re">
 			Tel.: {telefon}<br>
-			Firma: [<a href="firma1.php?id={kdnr}">{kdnr}</a>]<br>
+			Firma: [<a href="firma1.php?Q=C&id={kdnr}">{customernumber}</a>]<br>
 			Vertrag: [<a href="vertrag3.php?vid={cid}">{contractnumber}</a>]
 		</td>
 		<td class="norm"><b>{AID}</b></td>

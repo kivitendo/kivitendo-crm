@@ -293,8 +293,8 @@ function getCustContract($fid) {
 }
 function getAllMaschine($mid) {
 	global $db;
-	//$sql="select X.mid,V.*,M.*,P.description from contmasch X left join contract V on V.contractnumber=X.cid ";
-	$sql="select X.mid,V.*,M.*,P.description from contmasch X left join contract V on V.cid=X.cid ";
+	$sql="select X.mid,V.*,M.*,P.description from contmasch X left join contract V on V.contractnumber=cast (X.cid as text) ";
+	//$sql="select X.mid,V.*,M.*,P.description from contmasch X left join contract V on V.cid=X.cid ";
 	$sql.="left join maschine M on M.id=X.mid left join parts P on P.id=M.parts_id where X.mid=$mid";
 	$rs=$db->getAll($sql);	
 	return $rs[0];		

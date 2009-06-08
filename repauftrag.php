@@ -82,6 +82,7 @@
 		mid => $mid,
 		name => $firma["name"],
 		kdnr => $firma["id"],
+		customernumber => $firma["customernumber"],
 		strasse => $firma["street"],
 		plz => $firma["zipcode"],
 		ort => $firma["city"],

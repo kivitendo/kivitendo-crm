@@ -254,8 +254,8 @@ function getSernumber($sn,$pn=false) {
 	$sql="select M.*,K.name,K.street,K.zipcode,K.city,K.phone,P.partnumber,P.description,P.notes,V.*,C.mid,P.id as parts_id ";
 	$sql.="from maschine M left join parts P on P.id=M.parts_id ";
 	$sql.="left join contmasch C on C.mid=M.id ";
-	//$sql.="left join contract V on V.contractnumber=C.cid ";	
-	$sql.="left join contract V on V.cid=C.cid ";	
+	$sql.="left join contract V on V.contractnumber=cast (C.cid as text) ";	
+	//$sql.="left join contract V on V.cid=C.cid ";	
 	$sql.="left join customer K on K.id=V.customer_id ";
 	$sql.="where M.serialnumber like '%$sn%' ";
 	$sql.=($pn)?"and parts_id=$pn":"";

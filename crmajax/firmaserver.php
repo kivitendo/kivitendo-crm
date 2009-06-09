@@ -46,14 +46,14 @@
 		$htmllink="<a href='".$data["shiptohomepage"]."' target='_blank'>".$data["shiptohomepage"]."</a>";
 		$objResponse = new xajaxResponse();
                 $objResponse->addAssign("SID",         		"innerHTML", $id);
-                $objResponse->addAssign("shiptoname",           "innerHTML", htmlentities($data["shiptoname"]));
-                $objResponse->addAssign("shiptodepartment_1",   "innerHTML", htmlentities($data["shiptodepartment_1"]));
-                $objResponse->addAssign("shiptodepartment_2",   "innerHTML", htmlentities($data["shiptodepartment_2"]));
-                $objResponse->addAssign("shiptostreet",         "innerHTML", htmlentities($data["shiptostreet"])); //,ENT_NOQUOTES,$charset));
+                $objResponse->addAssign("shiptoname",           "innerHTML", htmlentities($data["shiptoname"],ENT_NOQUOTES,$charset));
+                $objResponse->addAssign("shiptodepartment_1",   "innerHTML", htmlentities($data["shiptodepartment_1"],ENT_NOQUOTES,$charset));
+                $objResponse->addAssign("shiptodepartment_2",   "innerHTML", htmlentities($data["shiptodepartment_2"],ENT_NOQUOTES,$charset));
+                $objResponse->addAssign("shiptostreet",         "innerHTML", htmlentities($data["shiptostreet"],ENT_NOQUOTES,$charset));
                 $objResponse->addAssign("shiptocountry",        "innerHTML", $data["shiptocountry"]);
                 $objResponse->addAssign("shiptobland",          "innerHTML", html_entity_decode($data["shiptobundesland"],ENT_NOQUOTES,$charset));
                 $objResponse->addAssign("shiptozipcode",        "innerHTML", $data["shiptozipcode"]);
-                $objResponse->addAssign("shiptocity",           "innerHTML", htmlentities($data["shiptocity"]));
+                $objResponse->addAssign("shiptocity",           "innerHTML", htmlentities($data["shiptocity"],ENT_NOQUOTES,$charset));
                 $objResponse->addAssign("shiptocontact",        "innerHTML", $data["shiptocontact"]);
                 $objResponse->addAssign("shiptophone",          "innerHTML", $data["shiptophone"]);
                 $objResponse->addAssign("shiptofax",            "innerHTML", $data["shiptofax"]);
@@ -107,13 +107,17 @@
 			if (in_array($key,$nocodec)) {
                 		$objResponse->addAssign($key,            "innerHTML", $val);
 			} else {
-                		$objResponse->addAssign($key,            "innerHTML", htmlentities($val));
+                		$objResponse->addAssign($key,            "innerHTML", htmlentities($val,ENT_NOQUOTES,$charset));
 			}
 		}
 		$objResponse->addAssign("cp_id", 	"value", $data["cp_id"]);
                 return $objResponse;
 	}
 	function showCalls($id,$start,$fa=false) {
+		if (preg_match("/UTF-8/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="UTF-8"; }
+		else if (preg_match("/ISO-8859-15/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-15"; }
+		else if (preg_match("/ISO-8859-1/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-1"; }
+		else { $charset="ISO-8859-1"; };
 		$i=0;
 		$nun=date("Y-m-d h:i");
 		$itemN[]=array(id => 0,calldate => $nun, caller_id => $employee, cause => translate('newItem','firma') );
@@ -131,10 +135,10 @@
 		$tmp="<table class='calls' width='99%'>";
 		//$tmp="";
 		if ($item) foreach($item as $col){
-			if ($col["new"]) { $cause="<b>".htmlentities($col["cause"])."</b>"; }
-			else { $cause=htmlentities($col["cause"]); }
+			if ($col["new"]) { $cause="<b>".htmlentities($col["cause"],ENT_NOQUOTES,$charset)."</b>"; }
+			else { $cause=htmlentities($col["cause"],ENT_NOQUOTES,$charset); }
 			$tmp.=sprintf($zeile,$i,$col["id"],db2date(substr($col["calldate"],0,10)),substr($col["calldate"],11,5),
-						$col["id"],$cause,htmlentities($col["cp_name"]));
+						$col["id"],$cause,htmlentities($col["cp_name"],ENT_NOQUOTES,$charset));
 			$i=($i==1)?0:1;
 		}
 		$tmp.="</table>";

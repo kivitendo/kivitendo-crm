@@ -3,6 +3,8 @@ $VERSION='1.4.0';
 // Die volgenden Datenbanken müssen extra installiert werden. Siehe install.txt 
 $GEODB=false; // Geodatenbank vorhanden
 $BLZDB=false; // BLZ-Datenbank vorhanden
+//php-db => "", mdb2 => "m"
+$dbmodul="m";
 $from=16;  // Anrufernummer (Telcall)
 $to=18;    // Zielnummer (Telcall)
 $constring="created"; // Eindeutiges Wort für Anwahlzeile (Telcall)
@@ -29,7 +31,7 @@ define("FONTSTYLE","1");
 $cp_sonder=array(1 => "News", 2 => "Test 1");
 $logmail=true;
 $jcalendar=true;
-$listLimit=200;
+$listLimit=20000;
 $tinymce=false;
 $zeigeextra=true;
 $jpg=false;

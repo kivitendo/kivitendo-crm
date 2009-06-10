@@ -4,7 +4,7 @@ $VERSION='1.4.0';
 $GEODB=false; // Geodatenbank vorhanden
 $BLZDB=false; // BLZ-Datenbank vorhanden
 //php-db => "", mdb2 => "m"
-$dbmodul="m";
+$dbmodul="";
 $from=16;  // Anrufernummer (Telcall)
 $to=18;    // Zielnummer (Telcall)
 $constring="created"; // Eindeutiges Wort für Anwahlzeile (Telcall)

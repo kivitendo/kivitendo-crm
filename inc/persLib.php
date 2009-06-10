@@ -123,7 +123,7 @@ global $db;
 function suchPerson($muster) {
 global $db;
 	$rechte=berechtigung("cp_");
-	if ($muster["cp_name"]=="~") {
+	if ($muster["cp_name"]=="~") {	//ist dies nur der sonderfall falls einer eine tilde eingibt? ein undokumentiertes ei? @holgi jb 10.6.09
 		$where0=" and upper(cp_name) ~ '^\[^A-Z\].*$'  ";
 	} else {
 		// Array zu jedem Formularfed: Tabelle (0=contact,1=cust/vend), TabName, toUpper
@@ -139,6 +139,18 @@ global $db;
 		$dbf=array_keys($dbfld);
 		$anzahl=count($keys);
 		$where0="";
+		/*
+			Die join-Abfrage die  über die Tabelle customer geht, muss entsprechend vorher vorbereitet werden
+			Analog dann die Erweiterung für Kundentyp. Falls keine Personensuche über customer.name gewünscht ist,
+			wird entsprechend die Tabelle customer vorbelegt
+		*/
+		$joinCustomer = ",customer K" ;	//das ist etwas fies, aber falls kein join über customer, müssen wir entsprechend hier die werte setzen
+		if ($muster["customer_name"]){	// Falls das Feld Firmenname gefüllt ist
+	    $joinCustomer 	= " left join customer K on C.cp_cv_id=K.id";	//hier jetzt der left join und die werte oben überschreiben 
+																																		//WICHTIG Leerzeichen am Anfang für ',' (s.a. Vorbelegung)
+			$where0 				.= "and K.name ilike '%" . $muster["customer_name"] . "%' "; //Leerzeichen für Holgis substr nicht vergessen!!!
+		}
+
 		$daten=false;
 		$tbl0=false;
 		$fuzzy=$muster["fuzzy"];
@@ -167,22 +179,53 @@ global $db;
 			$where0.="and (cp_sonder & $x) = $x ";
 		}
 	}
-	if ($where0<>"") $where=substr($where0,0,-1);
-	$sql0="select *,'C' as tbl from contacts,customer where cp_cv_id=id  and $rechte $where order by cp_name";
-	$rs0=$db->getAll($sql0);
-	$sql0="select *,'V' as tbl from contacts,vendor where cp_cv_id=id $where  and $rechte order by cp_name";
+	$felderContact="C.cp_id, C.cp_greeting, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email";
+
+	/*	Nehme entweder die Adressdaten des Ansprechpartners oder die der Rechnungsadresse. Da cp_phone etc mit einer leeren
+			Zeichenkette gefüllt wird, das NULLIF-Hilfskonstrukt (s.a. http://www.postgresql.org/docs/8.1/static/functions-conditional.html) */
+	$felderContcatOrCustomerVendor="COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1";
+	
+	if ($where0<>"") $where=substr($where0,0,-1); // wofür hier noch ein substr? warum wird der letzte eintrag abgeschnitten? jb 9.6.09
+
+	$rs0=array(); //leere arrays initialisieren, damit es keinen fehler bei der funktion array_merge gibt
+	if ($muster["customer"]){ 	//auf checkbox customer mit Titel Kunden prüfen
+		$sql0="select $felderContact, $felderContcatOrCustomerVendor, K.name as name, 
+				 'C' as tbl from contacts C$joinCustomer where C.cp_cv_id=K.id $where and $rechte order by cp_name";
+		$rs0=$db->getAll($sql0);
+	}
+	
+	$rs1=array(); //s.o.
+	if ($muster["vendor"]){ //auf checkbox vendor mit Titel Lieferant prüfen
+	$sql0="select $felderContact, $felderContcatOrCustomerVendor, V.name as name,'V' as tbl 
+				 from contacts C,vendor V where C.cp_cv_id=V.id $where and $rechte order by cp_name";
 	$rs1=$db->getAll($sql0);
-	$sql0="select *,'P' as tbl from contacts where $rechte ".$where." order by cp_name";
+	}
+
+	/*Hinweis: Diese Abfrage sucht nur nach nicht zugeordneten Ansprechpartner (gelöscht). 
+	  Ferner wäre es schön die Auswahl an der Oberfläche kenntlich zu machen jb 9.6.2009 
+		Und auch so umgesetzt jb 10.6.2009																									*/
+	
+	$rs2=array(); //s.o.
+	if ($muster["deleted"]){ //auf checkbox deleted mit Titel "gelöschte Ansprechpartner (Kunden und Lieferanten)" prüfen
+	$sql0="select $felderContact, C.cp_country, C.cp_zipcode, C.cp_city, C.cp_street, C.cp_phone1, 
+				 '' as name,'P' as tbl from contacts C where $rechte ".$where." and C.cp_cv_id is null order by cp_name";
 	$rs2=$db->getAll($sql0);
-	$daten=array_merge($rs0,$rs1,$rs2);
-	$key=array();
+	}
+
+	return array_merge($rs0,$rs1,$rs2);	//alle ergebnisse zusammenziehen und zurückgeben
+	//return $daten;
+	
+	// wozu war dies hier überhaupt mal gedacht? jb 9.6.2009
+	/*$key=array();
 	foreach ($daten as $satz) {
 		if (!in_array($satz["cp_id"],$key)) {
 			$key[]=$satz["cp_id"];
 			$daten_neu[]=$satz;
 		}
 	};
-	return $daten_neu;
+	return $daten_neu; */
 }
 
 /****************************************************

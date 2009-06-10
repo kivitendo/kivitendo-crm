@@ -100,8 +100,15 @@
 		<span class="label">www</span>
 		<span class="leftfeld"><input type="text" name="cp_homepage" size="27" maxlength="25" value="{cp_homepage}" tabindex="19"></span>
 	</div>
+  <div class="zeile">
+    <span class="label">Firmenname</span>
+    <span class="leftfeld"><input type="text" name="customer_name" size="27" maxlength="75" value="{customer_name}" tabindex="11"></span>
+    <!-- span class="label">Kundentyp</span>
+    <span class="leftfeld"><input type="text" name="business_description" size="27" maxlength="75" value="{business_description}" tabindex="20"></span -->
+  </div>
 	<div class="zeile">
-		<input type="checkbox" name="fuzzy" value="%" checked>Unscharf suchen&nbsp;&nbsp;<b>{Msg}</b>  <br>
+		<input type="checkbox" name="fuzzy" value="%" checked>Unscharf suchen&nbsp;&nbsp;<b>{Msg}</b> <input type="checkbox" name="vendor" checked>Lieferanten	<input type="checkbox" name="customer" checked>Kunden <br>
+		 <input type="checkbox" name="deleted" checked>gelöschte Ansprechpartner (Kunden und Lieferanten)<br>
 		{Btn1} {Btn3} <input type="submit" class="anzeige" name="suche" value="suchen"> <input type="submit" class="clear" name="reset" value="clear">
 	</div>
 </span>

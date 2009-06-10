@@ -38,7 +38,7 @@ global $db;
 		$firma="Einzelperson";
 		$tab="";
 		$cnr="";
-		if (!empty($rs[0]["cp_cv_id"])) {  // geh�rt zu einem Kunden oder Lieferanten
+		if (!empty($rs[0]["cp_cv_id"])) {  // gehört zu einem Kunden oder Lieferanten
 			$sql="select id,name,department_1,customernumber from customer where id=".$rs[0]["cp_cv_id"];
 			$rs1=$db->getAll($sql);
 			$tab="C";
@@ -144,11 +144,17 @@ global $db;
 			Analog dann die Erweiterung für Kundentyp. Falls keine Personensuche über customer.name gewünscht ist,
 			wird entsprechend die Tabelle customer vorbelegt
 		*/
-		$joinCustomer = ",customer K" ;	//das ist etwas fies, aber falls kein join über customer, müssen wir entsprechend hier die werte setzen
+		$joinCustomer = ",customer K";	//das ist etwas fies, aber falls kein join über customer, müssen wir entsprechend hier die werte setzen
+		$joinVendor		= ",vendor V";
 		if ($muster["customer_name"]){	// Falls das Feld Firmenname gefüllt ist
 	    $joinCustomer 	= " left join customer K on C.cp_cv_id=K.id";	//hier jetzt der left join und die werte oben überschreiben 
 																																		//WICHTIG Leerzeichen am Anfang für ',' (s.a. Vorbelegung)
-			$where0 				.= "and K.name ilike '%" . $muster["customer_name"] . "%' "; //Leerzeichen für Holgis substr nicht vergessen!!!
+			$whereCustomer	= "and K.name ilike '%" . $muster["customer_name"] . "%' "; //Leerzeichen für Holgis substr nicht vergessen!!!
+	    /* weil die maske sowohl in Lieferant als auch Kunde sucht, hier auch die Lieferanten-Einschränkung.
+			 * @holgi Warum heisst es hier wieder vendor V??? und nicht vendor L (Lieferant)
+			*/
+			$joinVendor 	= " left join vendor V on C.cp_cv_id=V.id";	//hier jetzt der left join und die werte oben überschreiben 
+			$whereVendor	= "and V.name ilike '%" . $muster["customer_name"] . "%' "; //Leerzeichen für Holgis substr nicht vergessen!!!
 		}
 
 		$daten=false;
@@ -192,14 +198,14 @@ global $db;
 	$rs0=array(); //leere arrays initialisieren, damit es keinen fehler bei der funktion array_merge gibt
 	if ($muster["customer"]){ 	//auf checkbox customer mit Titel Kunden prüfen
 		$sql0="select $felderContact, $felderContcatOrCustomerVendor, K.name as name, 
-				 'C' as tbl from contacts C$joinCustomer where C.cp_cv_id=K.id $where and $rechte order by cp_name";
+				 'C' as tbl from contacts C$joinCustomer where C.cp_cv_id=K.id $whereCustomer $where and $rechte order by cp_name";
 		$rs0=$db->getAll($sql0);
 	}
 	
 	$rs1=array(); //s.o.
 	if ($muster["vendor"]){ //auf checkbox vendor mit Titel Lieferant prüfen
 	$sql0="select $felderContact, $felderContcatOrCustomerVendor, V.name as name,'V' as tbl 
-				 from contacts C,vendor V where C.cp_cv_id=V.id $where and $rechte order by cp_name";
+				 from contacts C$joinVendor where C.cp_cv_id=V.id $whereVendor $where and $rechte order by cp_name";
 	$rs1=$db->getAll($sql0);
 	}
 

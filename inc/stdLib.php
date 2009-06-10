@@ -6,7 +6,7 @@ $inclpa=ini_get('include_path');
 ini_set('include_path',$inclpa.":../:./crmajax:./inc:../inc");
 
 require_once "conf.php";
-require_once "db.php";
+require_once $dbmodul."db.php";
 
 if (!$_SESSION["db"] || !$_SESSION["cookie"] ||
 	($_SESSION["cookie"] && !$_COOKIE[$_SESSION["cookie"]]) ) {
@@ -653,6 +653,16 @@ global $db;
 	$rc=$db->query($sql);
 	return $rc;
 }
-
+function startTime() {
+	$zeitmessung=microtime();
+	$zeittemp=explode(" ",$zeitmessung);
+	$zeitmessung=$zeittemp[0]+$zeittemp[1];
+	return $zeitmessung;
+}	
+function stopTime($start) {
+	$stop=startTime();
+	$zeit = $stop - $start;
+	return substr($zeit,0,8);
+}	
 require_once "login".$_SESSION["loginok"].".php";
 ?>

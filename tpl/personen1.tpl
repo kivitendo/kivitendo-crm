@@ -45,7 +45,7 @@
 		<span class="leftfeld">
 			<input type="radio" name="greeting" value="H" {cpsel1}><span class="klein">Herr </span>
 			<input type="radio" name="greeting" value="F" {cpsel2}><span class="klein">Frau </span>
-			<input type="radio" name="greeting" value="O" {cpsel3}>
+			<input type="radio" name="greeting" value="O" {cpsel3} checked><span class="klein">Beide</span>
 				<input type="text" name="cp_greeting" size="6" maxlength="75" value="{cp_greeting}" tabindex="1">
 		</span>
 		<span class="label">Abteilung</span>
@@ -107,19 +107,21 @@
     <span class="leftfeld"><input type="text" name="business_description" size="27" maxlength="75" value="{business_description}" tabindex="20"></span -->
   </div>
 	<div class="zeile">
-		<input type="checkbox" name="fuzzy" value="%" checked>Unscharf suchen&nbsp;&nbsp;<b>{Msg}</b> <input type="checkbox" name="vendor" checked>Lieferanten	<input type="checkbox" name="customer" checked>Kunden <br>
-		 <input type="checkbox" name="deleted" checked>gelöschte Ansprechpartner (Kunden und Lieferanten)<br>
+		<input type="checkbox" name="fuzzy" value="%" checked><span class="klein">Unscharf suchen&nbsp;&nbsp;<b>{Msg}</b></span> <input type="checkbox" name="vendor" checked><span class="klein">Lieferanten</span><input type="checkbox" name="customer" checked><span class="klein">Kunden</span><br>
+		 <input type="checkbox" name="deleted"><span class="klein">gelöschte Ansprechpartner (Kunden und Lieferanten)</span><br>
 		{Btn1} {Btn3} <input type="submit" class="anzeige" name="suche" value="suchen"> <input type="submit" class="clear" name="reset" value="clear">
 	</div>
 </span>
-<span style="float:left;   top:3em; border: 0px solid black;">
-	<br><br><br><br>
+<div style="margin-left:2.5em; float:left;   margin-top:3em; border: 0px solid black;">
+
+<!-- Gibt es hier die Möglichkeit eine Fallentscheidung zu machen?  Falls sonder dann einblenden:-->
+Attribute: <br>
 <!-- BEGIN sonder -->
-	<input type="checkbox" name="cp_sonder[]" value="{sonder_id}">{sonder_name}<br>
-<!-- END sonder -->			
+	<input class="klein" type="checkbox" name="cp_sonder[]" value="{sonder_id}"><span class="klein">{sonder_name}</span><br>
+<!-- END sonder -->		
+</div>	
 </form>
 <!-- End Code ------------------------------------------->
-</span>
 </body>
 </html>
 

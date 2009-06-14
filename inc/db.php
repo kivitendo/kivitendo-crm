@@ -14,7 +14,7 @@ class myDB extends DB {
  var $db = false;
  var $rc = false;
  var $showErr = false; // Browserausgabe
- var $log = false;     // Alle Abfragen mitloggen
+ var $log = true;     // Alle Abfragen mitloggen
  var $errfile = "tmp/lxcrm.err";
  var $logfile = "tmp/lxcrm.log";
  var $lfh = false;
@@ -24,7 +24,7 @@ class myDB extends DB {
 	* IN: $sql - SQL-Statement
 	* IN: $err - Fehlermeldung
 	* OUT: NONE
-	**********************************************/ 
+	**********************************************/
 	function dbFehler($sql,$err) {
 		$efh=fopen($this->errfile,"a");
 		fputs($efh,date("Y-m-d H:i:s \n"));
@@ -46,7 +46,7 @@ class myDB extends DB {
 	* writelog - Texte in ein Log-File ausgeben
 	* IN: $txt - SQL-Statement oder Text
 	* OUT: NONE
-	**********************************************/ 
+	**********************************************/
 	function writeLog($txt) {
 		if ($this->lfh===false)
 			$this->lfh=fopen($this->logfile,"a");
@@ -71,7 +71,7 @@ class myDB extends DB {
 	* myDB - Konstruktor
 	* IN: $host,$user,$pwd,$db,$port - Parameter der Datenbank
 	* OUT: DB-Objekt
-	**********************************************/ 
+	**********************************************/
 	function myDB($host,$user,$pwd,$db,$port) {
 		$dsn = array(
                     'phptype'  => 'pgsql',
@@ -95,7 +95,7 @@ class myDB extends DB {
 	* query - beliebiges SQL-Statement absetzen
 	* IN: $sql - Statement
 	* OUT: true/false
-	**********************************************/ 
+	**********************************************/
 	function query($sql) {
 		if (strpos($sql,";")>0) {
 			//Sql-Injection? HTML-Sonderzeichen zulassen
@@ -120,7 +120,7 @@ class myDB extends DB {
 	* IN: $values - dazugehörige Werte
 	* IN: $where - welcher Datensatz
 	* OUT: true/false
-	**********************************************/ 
+	**********************************************/
 	function update($table,$fields,$values,$where) {
 		if (strpos($where,"=")<1) {
 			$this->dbFehler('Update','Where missing or wrong: '.$where);
@@ -156,7 +156,7 @@ class myDB extends DB {
 	* IN: $fields - betroffene Felder
 	* IN: $values - dazugehörige Werte
 	* OUT: true/false
-	**********************************************/ 
+	**********************************************/
 	function insert($table,$fields,$values) {
 		if ($this->log) {
 			$this->writeLog('Insert in: '.$table);
@@ -215,13 +215,45 @@ class myDB extends DB {
 		}
 	}
 	function saveData($txt) {
-		//if (get_magic_quotes_gpc()) { 	
-		if (get_magic_quotes_runtime()) { 	
+		if (get_magic_quotes_runtime()) {
 			return $txt;
 		} else {
 			return DB::quoteSmart($string); 
 		}
 	}
+	/**
+	 *
+	 * Benutzt PEAR::executeMultiple. Erwartet als
+	 * Zeichenkette das PreparedStatement
+	 * und die entsprechenden Werte für das Statement
+	 * Ist ferner transaktionssicher (autocommit off)
+	 * @param string $statement
+	 * @param mixed $data
+	 * 
+	 * @return boolean
+	 */
+	function executeMultiple($statement, $data){
+		if ($this->log) {							//Logging
+			$this->writeLog("executeMultiple: $statement");
+			$this->writeLog("mit den Werten:" . $data);
+		}
 
+		$sth = $this->db->prepare($statement);						//Prepare
+		if (PEAR::isError($sth)) {
+			$this->dbFehler($sql,$sth->getMessage());
+			$this->rollback();
+			return false;
+		}
+
+		$this->db->autoCommit(false);											//Autocommit aus
+		$res =& $this->db->executeMultiple($sth, $data); 	//Daten senden
+		$this->db->commit();															// Commit
+		if (PEAR::isError($res)) {
+			$this->dbFehler($sql,$sth->getMessage());
+			$this->rollback();
+			return false;
+		}
+		return true;
+	}
 }
 ?>

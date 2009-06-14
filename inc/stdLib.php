@@ -644,12 +644,17 @@ global $db;
 }
 function insertCSVData($data) {
 global $db;
-	$tmpstr="";
-	foreach ($data as $row) {
+	$tmpstr= implode(":",$data);	// das find ich besser als unten
+	
+/*	foreach ($data as $row) {
 		$tmpstr.=$row.":";
+		
 	};
+*/
 	$sql="insert into tempcsvdata (uid,csvdaten) values (";
-	$sql.="'".$_SESSION["loginCRM"]."','".substr($tmpstr,0,-1)."')";
+//	$sql.="'".$_SESSION["loginCRM"]."','".substr($tmpstr,0,-1)."')";
+	$sql.=	"'" . $_SESSION["loginCRM"]. "','"
+						  . $db->db->escapeSimple($tmpstr) . "')";	//erstmal korrekt escapen und den blöden substr weg. Sowas will ich nicht mehr sehen ;-)
 	$rc=$db->query($sql);
 	return $rc;
 }

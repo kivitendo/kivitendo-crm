@@ -9,7 +9,7 @@
 	$bgcol[1]="#ddddff";
 	$bgcol[2]="#ddffdd";
 	$t = new Template($base);
-	$Quelle=($_POST["Quelle"])?$_POST["Quelle"]:$_GET["Quelle"];	
+	$Quelle=($_POST["Quelle"])?$_POST["Quelle"]:$_GET["Quelle"];
 	if (!$Quelle) $Quelle="C";
 	if ($_GET["first"]) {
 		$_POST["cp_name"]=$_GET["first"];
@@ -57,7 +57,9 @@
 					insk => $insk,
 					DEST => $dest,
 					QUELLE => $Quelle,
-					Q => $Quelle
+					Q => $Quelle,
+					//ANZAHL_ANSPRECHPARTNER => count($daten),	//brauch ich nicht unbedingt
+					laufende_nummer => $i		//die brauch ich unbedingt um die hidden PID_$i zu bilden
 				));
 				$t->parse("Block","Liste",true);
 				$i++;
@@ -68,6 +70,21 @@
 					break;
 				}
 			}
+			/*
+				Falls es entsprechende "Sonderflags", d.h. Attribute für An-
+				sprechpartner gibt, dies als Liste anzeigen um direkt vielen
+				Ansprechpartnern diese(s) Attribut(e) zuzuordnen
+			*/
+			$t->set_block("pers1","sonder","Block3");
+			if ($cp_sonder) while (list($key,$val) = each($cp_sonder)) {
+				$t->set_var(array(
+					sonder_sel => "",
+					sonder_id => $key,
+					sonder_name => $val
+				));
+			$t->parse("Block3","sonder",true);
+			} // Ende if $cp_sonder  (entsprechende "Sonderflags")
+
 			$t->set_var(array(
 				snd => $snd,
 				FID => $_POST["FID1"],

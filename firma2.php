@@ -16,10 +16,10 @@
 		include("inc/ldapLib.php");
 		$rc=Ldap_add_Customer($_GET["fid"]);
 	}
-	/* 
+	/*
 	 * Ein Attribut zu einem oder vielen Ansprechpartnern speichern
 	 * Die Abfrage ist deswegen hier, weil personen1L.tpl ansonsten einzelne Ansprechpartner in der Firma aussucht
-  */
+	*/
 	if (	 $_POST["ansprechpartnern_attribute_zuordnen"]	//			Der Knopf wurde gedrückt
 			&& $_POST["cp_sonder"]														// UND	Sonderflag gesetzt == Ansprechpartner-Attribut
 			&& $_POST["PID_0"]){															// UND	Mindestens eine Ansprechpartner-ID
@@ -44,12 +44,12 @@
 									array($_POST["cp_sonder"], $_POST["PID_$i"]));
 			$i++;
 		}
-		/* 
+		/*
 		 * In db gekapselte Funktion von executeMultiple (s.a. PEAR-Dokumentation db oder mdb2)
 		 * Wir wollen 'update contacts set cp_sonder=$BITWERT where cp_id=PID_$i'
 		 * Stand 14.6. Transaktionssicher über alle Werte und als PreparedStatement als Batch (perfetto!)
 		 * Wie können wir hier einen Rückgabewert prüfen und eine ordentliche Rückmeldung geben
-		 */
+		*/
 		if ($db->executeMultiple('UPDATE contacts SET cp_sonder= ? WHERE cp_id= ?', $ansprechpartner_array)){
 			/* Das gefällt mir auch noch nicht so ganz, aber ich gebe lieber eine unschöne Erfolgsmeldung aus,
 			 * als gar keine... jb 14.6.09
@@ -75,13 +75,9 @@
 			echo "<br> Attribute" . $_POST["cp_sonder"];
 			echo "<br> Attribute 2" . $_POST["FID"];
 			echo "<br> Attribute 3" . $_POST["ansprechpartnern_attribute_zuordnen"];
-		
+		}// Debug-Ausgabe ENDE
 		exit;
-		}
-		// Debug-Ausgabe ENDE
 	}// Ende if von ansprechpartnern_attribute_zuordnen
-
-
 
 	// Einen Kontakt anzeigen lassen
 	if ($_GET["id"]) {

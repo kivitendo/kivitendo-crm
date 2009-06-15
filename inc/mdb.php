@@ -225,7 +225,7 @@ class myDB extends MDB2 {
 		if (get_magic_quotes_runtime()) { 	
 			return $txt;
 		} else {
-			return DB::quote($string); 
+			return $this->db->escape($txt); 
 		}
 	}
 

@@ -652,9 +652,10 @@ global $db;
 	};
 */
 	$sql="insert into tempcsvdata (uid,csvdaten) values (";
-//	$sql.="'".$_SESSION["loginCRM"]."','".substr($tmpstr,0,-1)."')";
+	//$sql.="'".$_SESSION["loginCRM"]."','".$tmpstr."')";
 	$sql.=	"'" . $_SESSION["loginCRM"]. "','"
-						  . $db->db->escapeSimple($tmpstr) . "')";		//erstmal korrekt escapen und den blöden substr weg.  Sowas will ich nicht mehr sehen ;-)
+	  . $db->saveData($tmpstr) . "')";		//erstmal korrekt escapen und den blöden substr weg.  Sowas will ich nicht mehr sehen ;-)
+	//  . $db->db->escapeSimple($tmpstr) . "')";		//erstmal korrekt escapen und den blöden substr weg.  Sowas will ich nicht mehr sehen ;-)
 	$rc=$db->query($sql);
 	return $rc;
 }

@@ -218,7 +218,7 @@ class myDB extends DB {
 		if (get_magic_quotes_runtime()) {
 			return $txt;
 		} else {
-			return DB::quoteSmart($string); 
+			return $this->db->escapeSimple($txt);
 		}
 	}
 	/**

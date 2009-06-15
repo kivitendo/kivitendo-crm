@@ -36,12 +36,12 @@
 		 *	mdb2 executeMultiple scheint hier mein Freund zu sein.
 		 *  ERGÄNZUNG 14.6.: Tada, gibt es auch in der PEAR:DB Somit alles vom Feinsten.
 		*/
-
+		if ($_POST["cp_sonder"]<0) $_POST["cp_sonder"]=0;
 		$i=0;																				//schleifenzähler auf 0
-		$ansprechpartner_array=array();							//initialisierung mit einem leeren Array
-		while ($_POST["PID_$i"]){										// Über alle Ansprechpartner
+		$ansprechpartner_array=array();						//initialisierung mit einem leeren Array
+		while ($_POST["PID_$i"]){						// Über alle Ansprechpartner
 			array_push ($ansprechpartner_array,				// Fügen wir den Array (cp_sonder, cp_id) hinzu
-									array($_POST["cp_sonder"], $_POST["PID_$i"]));
+					array($_POST["cp_sonder"], $_POST["PID_$i"]));
 			$i++;
 		}
 		/*

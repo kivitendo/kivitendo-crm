@@ -1,0 +1,119 @@
+Lx-Office Style Guide
+---------------------
+
+Die folgenden Regeln haben das Ziel, den Code möglichst gut les- und wartbar
+zu machen. Dazu gehört zum Einen, dass der Code einheitlich eingerückt ist,
+aber auch, dass Mehrdeutigkeit so weit es geht vermieden wird (Stichworte
+"Klammern" oder "Hash-Keys").
+
+Diese Regeln sind keine Schikane, sondern erleichtern allen das Leben!
+
+--------------------------------------------------------------------------
+
+1. Es werden keine "echten" TAB-Zeichen sondern Leerzeichen verwendet.
+   Perltidy: -nt
+
+2. Die Einrückung beträgt vier Leerzeichen.
+   Beispiel:
+
+   function test {
+       echo "Hallo Welt";
+   }
+
+3. Öffnende geschweifte Klammern befinden sich auf der gleichen Zeile wie
+   der letzte Befehl.
+   Beispiele:
+
+   function test {
+   ...
+   }
+
+   oder
+
+   if ($rows > 0) {
+     ...
+   }
+
+4. Schließende geschweifte Klammern sind so weit eingerückt wie der Befehl/
+   die öffnende schließende Klammer, die den Block gestartet hat, und nicht
+   auf der Ebene des Inhalts. Die gleichen Beispiele wie bei 3. gelten.
+
+5. Die Wörter "else" "else if", "while" befinden sich auf der gleichen
+   Zeile wie schließende geschweifte Klammern.
+   Beispiele:
+
+   if ($sum"> 1000) {
+     ...
+   } else if ($sum > 0) {
+     ...
+   } else {
+     ...
+   }
+
+   do {
+     ...
+   } while ($a > 0);
+
+6. Parameter von Funktionsaufrufen müssen mit runden Klammern versehen
+   werden.
+   Beispiel:
+
+   debug("Konnte Datei nicht oeffnen.\n");
+
+7. Verschiedene Klammern
+
+  7.1 Aufeinander folgende runde Klammern sollten nicht durch Leerzeichen
+      abgesetzt werden.
+      Beispiel:
+
+      if (($debug == 1) && (($sum - 100) < 0)) {
+        ...
+      }
+
+  7.2 Nach und vor eckigen Klammern sollten keine Leerzeichen stehen.
+      Beispiel:
+
+      $array[$i + 1] = 4;
+
+8. Mehrzeilige Befehle
+
+  8.1 Werden die Parameter eines Funktionsaufrufes auf mehrere Zeilen
+      aufgeteilt, so müssen diese bis zu der Spalte eingerückt werden,
+      in der die ersten Funktionsparameter in der ersten Zeile stehen.
+      Beispiel:
+
+      $sth = $dbh->prepare("SELECT * FROM some_table WHERE col = ?",
+                           $some_col_value);
+
+  8.2 Wird ein Befehl auf einer neuen Zeile forgesetzt, so ist ab der
+      zweiten Zeile zusätzlich vier Leerzeichen einzurücken.
+      Beispiel:
+
+      my $rowcount =
+          $row_$i ? $i : $rowcount - $rowbase;
+
+9. Kommentare
+
+  9.1 Kommentare, die alleine in einer Zeile stehen, sollten soweit wie der
+      Code eingerückt sein.
+
+  9.2 Seitliche hängende Kommentare sollten einheitlich formatiert werden.
+
+10. Die Maximale Zeilenlänge ist nicht bescränkt. Zeilenlängen <= 80 
+    helfen, weil sie dann im Textmodus / per SSH deutlich besser lesbar
+    sind. Oft genug ist es aber nicht möglich oder nur unter großen
+    Verrenkungen, diese Vorgabe einzuhalten.
+
+    Zeilen sollten nicht länger als 132 Zeichen sein.
+
+11. Dateien sollten im UTF-8 Format gespeichert werden.
+
+12. Zeilenumbrüche bitte UNIX - Style (\n) 
+--------------------------------------------------------------------------
+.vimrc:
+set fileencodings=utf-8
+set expandtab
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+

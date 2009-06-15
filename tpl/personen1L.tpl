@@ -36,7 +36,7 @@
 	  <input type="hidden" name="PID_{laufende_nummer}" value="{PID}"> <!-- hier muss noch ein schleifenzähler rein, muss nicht mehr ist als hidden variable dabei -> nächste Idee, brauch ich auch gar nicht als hidden wert (s.a. Algorithmus in firma2.php), aber kann ich in dieser template-engine (phplip) irgendwie besser kommentare setzen?-->
 <!-- END Liste -->
 	
-	<tr><td class="klein" colspan="6"> <select class="klein" name="cp_sonder"> <!-- BEGIN sonder --> <option value="{sonder_id}">{sonder_name}</option><!-- END sonder --> <input type="submit" name="ansprechpartnern_attribute_zuordnen" class="klein" value="Ansprechpartnern Attribute zuordnen" ><span class="mini">Hinweis: Alle vorher definierten Attribute werden überschrieben</span>
+	<tr><td class="klein" colspan="6"> <select class="klein" name="cp_sonder"><option value="-1">l&ouml;schen</option> <!-- BEGIN sonder --> <option value="{sonder_id}">{sonder_name}</option><!-- END sonder --> <input type="submit" name="ansprechpartnern_attribute_zuordnen" class="klein" value="Ansprechpartnern Attribute zuordnen" ><span class="mini">Hinweis: Alle vorher definierten Attribute werden überschrieben</span>
  </td></tr>
 	<tr><td class="mini re" colspan="6">{snd}</td></tr>
 </table>

@@ -642,22 +642,44 @@ function clearCSVData() {
 global $db;
 	return $db->query("delete from tempcsvdata where uid = '".$_SESSION["loginCRM"]."'");
 }
+
+
+/**
+ * Schreibt eine :-separierte Zeichenkette in die Tabelle tempcsvdata unter csvdaten
+ * Die Einträge sind über die Benutzer-Session wieder auffindbar und werden immer 
+ * wieder gelöscht. TODO: Soll das immer so sein?, dann vielleicht das Löschen in diese
+ * Funktion integrieren?
+ * Der erste Eintrag soll immer der INDEX sein, d.h. die entsprechenden Spaltennamen
+ * TODO Ist es möglich den ersten Eintrag zu prüfen, um somit weniger Fehler beim 
+ * Aufrufen zu erzeugen? jb 16.6.2009
+ * 
+ * @param string $data 
+ * 
+ * @return $rc TODO auf boolean setzen und korrekte Fehlerbehandlung umsetzen
+ */
 function insertCSVData($data) {
-global $db;
-	$tmpstr= implode(":",$data);	// das find ich besser als unten
-	
-/*	foreach ($data as $row) {
-		$tmpstr.=$row.":";
-		
-	};
-*/
-	$sql="insert into tempcsvdata (uid,csvdaten) values (";
-	//$sql.="'".$_SESSION["loginCRM"]."','".$tmpstr."')";
-	$sql.=	"'" . $_SESSION["loginCRM"]. "','"
-	  . $db->saveData($tmpstr) . "')";		//erstmal korrekt escapen und den blöden substr weg.  Sowas will ich nicht mehr sehen ;-)
-	//  . $db->db->escapeSimple($tmpstr) . "')";		//erstmal korrekt escapen und den blöden substr weg.  Sowas will ich nicht mehr sehen ;-)
-	$rc=$db->query($sql);
-	return $rc;
+    global $db;
+    $tmpstr = implode(":",$data);                                               // ANREDE:NAME:STRASSE (...)
+    $sql = "insert into tempcsvdata (uid,csvdaten) values ('"
+            . $_SESSION["loginCRM"] . "','" . $db->saveData($tmpstr) . "')";    // saveData escapt die Zeichenkette
+                                                                                // je nach DB-Modul (mdb2 db) (s.a. db.php)
+    $rc=$db->query($sql);
+    return $rc;     //Fehlerbehandlung? Wie sieht es aus mit exceptions? Müssen wir php4-kompatibel sein?
+                    //Sollte eigentlich schon immer in den Funktionen direkt passieren 
+                    // http://pear.php.net/manual/de/standars.errors.php
+}
+
+/**
+ * Liest die entsprechenden Daten der :-separierte Zeichenkette aus der Tabelle tempcsvdata.
+ * Ruft selber nur getAll auf und schiebt die Fehlermeldung dann nach oben. Frage:
+ * Kann man das eleganter gestalten?
+ * 
+ * @return false, mixed
+ */
+function getCSVData(){
+    global $db;
+    $sql="select * from tempcsvdata where uid = '" . $_SESSION["loginCRM"] .  "'";
+    return $db->getAll($sql);   //liefert false bei misserfolg
 }
 function startTime() {
 	$zeitmessung=microtime();

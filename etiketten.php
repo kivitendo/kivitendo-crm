@@ -29,9 +29,14 @@
 		$pdf->Open(); 
 		unset($tmp);
 		if ($SX<>1 or $SY<>1)	$pdf->AddPage();
-		$sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."'";
-		$daten=$db->getAll($sql);
-		if ($daten) {
+//        $daten = getCSVIndex($_SESSION["loginCRM"]);  //Index? limit 1 bringt mir einen wert mit Z
+        $daten = getCSVData();
+        if ($daten == false){   // Fehler beim Laden der Daten, entsprechend Abbrechen
+            echo "Fehler beim Laden der Werte bitte Fehlermeldung unter tmp/lxcrm.log prüfen";
+            exit;
+        }
+//        print_r ($daten); //alter debug
+		if (is_array($daten)) {
 			$felder=array_shift($daten);
 			$felder=split(":",$felder["csvdaten"]);
 			$felder[]="TEXT";

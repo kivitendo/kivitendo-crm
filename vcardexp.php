@@ -25,7 +25,7 @@
 		// add a work address
 		$vcard->addAddress('', '', $data["cp_street"], $data["cp_city"], '', $data["cp_zipcode"], $data["cp_country"]);
 		$vcard->addParam('TYPE', 'HOME');
-		if ($data["cp_gebdatum"]) $vcard->setBirthday($data["cp_gebdatum"]);
+		if ($data["cp_birthday"]) $vcard->setBirthday($data["cp_birthday"]);
 		if ($data["cp_notes"]) $vcard->setNote($data["cp_notes"]);
 		if ($data["cp_phone1"]) {
 			$vcard->addTelephone($data["cp_phone1"]);

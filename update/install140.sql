@@ -404,7 +404,7 @@ ALTER TABLE contacts ADD COLUMN cp_beziehung integer;
 ALTER TABLE contacts ADD COLUMN cp_sonder integer;
 ALTER TABLE contacts ADD COLUMN cp_position character varying(45);
 ALTER TABLE contacts ADD COLUMN cp_stichwort1 character varying(50);
-ALTER TABLE contacts ADD COLUMN cp_gebdatum character varying(10);
+--ALTER TABLE contacts ADD COLUMN cp_gebdatum character varying(10);
 ALTER TABLE contacts ADD COLUMN cp_owener integer;
 ALTER TABLE contacts ADD COLUMN cp_employee integer;
 ALTER TABLE contacts ADD COLUMN cp_grafik character varying(5);

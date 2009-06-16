@@ -1,5 +1,5 @@
 <?
-// $Id: vcard.php,v 1.2 2005/09/22 08:53:58 hli Exp $
+// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
 	require_once 'Contact_Vcard_Parse.php';
@@ -98,7 +98,7 @@ function saveMAIL($dest,$value,&$container) {
 		opener.document.formular.cp_homepage.value="<?= $adress["URL"]; ?>";
 		opener.document.formular.name.value="<?= $adress["ORG"]["FIRMA"]; ?>";
 		opener.document.formular.cp_abteilung.value="<?= $adress["ORG"]["ABTLG"]; ?>";
-		opener.document.formular.cp_gebdatum.value="<?= db2date($adress["N"]["BDAY"]); ?>";
+		opener.document.formular.cp_birthday.value="<?= db2date($adress["N"]["BDAY"]); ?>";
 		opener.document.formular.cp_notes.value="<?= $adress["NOTE"]; ?>";
 		self.close();
 <? } else if ($adress and $_POST["src"]=="F") { 

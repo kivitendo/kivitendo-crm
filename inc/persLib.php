@@ -132,7 +132,7 @@ global $db;
 					"cp_phone1" => 0,"cp_phone2" => 0,"cp_fax" => 0,
 					"cp_homepage" => 1,"cp_email" => 1,
 					"cp_notes" => 1,"cp_stichwort1" => 1,
-					"cp_gebdatum" => 0,"cp_beziehung" => 1,
+					"cp_birthday" => 0,"cp_beziehung" => 1,
 					"cp_abteilung" => 1,"cp_position" => 1,
 					"cp_cv_id" => 0,"cp_owener" => 0);
 		$keys=array_keys($muster);
@@ -172,7 +172,7 @@ global $db;
 					$suchwort=trim($muster[$keys[$i]]);
 				}
 				$suchwort=strtr($suchwort,"*?","%_");
-				if ($keys[$i]=="cp_gebdatum") {$d=split("\.",$suchwort); $suchwort=$d[2]."-".$d[1]."-".$d[0]; };
+				if ($keys[$i]=="cp_birthday") {$d=split("\.",$suchwort); $suchwort=$d[2]."-".$d[1]."-".$d[0]; };
 				$where0.="and $case1".$keys[$i]."$case2 like '".$suchwort."$fuzzy' ";
 				if ($keys[$i]=="cp_phone1") $where0.="and cp_phone2 like '".$suchwort."$fuzzy' ";
 			}
@@ -185,7 +185,7 @@ global $db;
 			$where0.="and (cp_sonder & $x) = $x ";
 		}
 	}
-	$felderContact="C.cp_id, C.cp_greeting, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email";
+	$felderContact="C.cp_id, C.cp_greeting, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder";
 
 	/*	Nehme entweder die Adressdaten des Ansprechpartners oder die der Rechnungsadresse. Da cp_phone etc mit einer leeren
 			Zeichenkette gefüllt wird, das NULLIF-Hilfskonstrukt (s.a. http://www.postgresql.org/docs/8.1/static/functions-conditional.html) */
@@ -446,7 +446,7 @@ global $laender,$cp_sonder;
 			cp_email 	=> "",
 			cp_privatemail 	=> "",
 			cp_homepage 	=> "",
-			cp_gebdatum	=> "",
+			cp_birthday	=> "",
 			cp_beziehung	=> "",
 			cp_abteilung	=> "",
 			cp_position 	=> "",

@@ -57,7 +57,7 @@
                     'cp_phone1' => "'".$params['cp_phone1']."'",
                     'cp_email' => "'".$params['cp_email']."'",
                     'cp_homepage' => "'".$params['cp_homepage']."'",
-                    'cp_gebdatum' =>"'".$params['cp_gebdatum']."'",
+                    'cp_birthday' =>"'".$params['cp_birthday']."'",
                     'cp_abteilung' => "'".$params['cp_abteilung']."'",
                     'cp_position' => 'null',
                     'cp_stichwort1' => 'null',

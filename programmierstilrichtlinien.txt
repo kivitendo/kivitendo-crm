@@ -103,6 +103,9 @@ Diese Regeln sind keine Schikane, sondern erleichtern allen das Leben!
   9.2 Seitliche hängende Kommentare sollten einheitlich formatiert werden.
 
   9.3 Die Kommentare sollten phpdoc-konform sein (Siehe auch: http://www.phpdoc.org/)
+ 
+  9.4 Warum man das tun sollte: 
+      http://manual.phpdoc.org/HTMLSmartyConverter/HandS/phpDocumentor/tutorial_phpDocumentor.pkg.html
 
 10. Die Maximale Zeilenlänge ist nicht bescränkt. Zeilenlängen <= 80 
     helfen, weil sie dann im Textmodus / per SSH deutlich besser lesbar

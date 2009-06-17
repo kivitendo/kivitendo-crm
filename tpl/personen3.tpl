@@ -173,7 +173,7 @@
 			<span class="feld"><input type="text" name="cp_beziehung" size="8" maxlength="10" value="{cp_beziehung}" tabindex="24"></span>
 		</div>
 	</span><span style="float:left;">
-		<!--div class="zeile2"-->Sonderflags:
+		<!--div class="zeile2"-->Attribute:
 	<!-- BEGIN sonder -->
 			<div class="zeile2"><input type="checkbox" name="cp_sonder[]" value="{sonder_id}" {sonder_sel}>{sonder_name}</div>
 	<!-- END sonder -->					

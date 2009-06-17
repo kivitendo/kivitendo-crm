@@ -652,16 +652,17 @@ global $db;
  * Der erste Eintrag soll immer der INDEX sein, d.h. die entsprechenden Spaltennamen
  * TODO Ist es möglich den ersten Eintrag zu prüfen, um somit weniger Fehler beim 
  * Aufrufen zu erzeugen? jb 16.6.2009
- * 
+ *
  * @param string $data 
- * 
+ *
  * @return $rc TODO auf boolean setzen und korrekte Fehlerbehandlung umsetzen
  */
-function insertCSVData($data) {
+function insertCSVData($data,$id){
     global $db;
     $tmpstr = implode(":",$data);                                               // ANREDE:NAME:STRASSE (...)
-    $sql = "insert into tempcsvdata (uid,csvdaten) values ('"
-            . $_SESSION["loginCRM"] . "','" . $db->saveData($tmpstr) . "')";    // saveData escapt die Zeichenkette
+    $sql = "insert into tempcsvdata (uid,csvdaten,id) values ('"
+            . $_SESSION["loginCRM"] . "','" . $db->saveData($tmpstr) . "','" 
+            . $db->saveData($id) . "')";                                        // saveData escapt die Zeichenkette
                                                                                 // je nach DB-Modul (mdb2 db) (s.a. db.php)
     $rc=$db->query($sql);
     return $rc;     //Fehlerbehandlung? Wie sieht es aus mit exceptions? Müssen wir php4-kompatibel sein?
@@ -679,6 +680,19 @@ function insertCSVData($data) {
 function getCSVData(){
     global $db;
     $sql="select * from tempcsvdata where uid = '" . $_SESSION["loginCRM"] .  "'";
+    return $db->getAll($sql);   //liefert false bei misserfolg
+}
+
+/**
+ * Liefert die aktuell in der CRM-Session gespeicherte IDs.
+ * Klammert die CSV-Kopfzeile aus, da nur ids größer 0 aus der DB gelesen werden
+ * False bei Misserfolg. Leider ansonsten Kopie von getCSVData. Ideen?
+ * 
+ * @return false, mixed
+ */
+function getCSVDataID(){
+    global $db;
+    $sql="select id from tempcsvdata where uid = '" . $_SESSION["loginCRM"] .  "' and id > 0";
     return $db->getAll($sql);   //liefert false bei misserfolg
 }
 function startTime() {

@@ -17,6 +17,8 @@ fval     text
 );
 CREATE INDEX extrafld_key ON extra_felder USING btree (owner);
 insert into crm (uid,datum,version) values (0,now(),'1.4.0');
--- Geburstage zusammenführen
+-- Geburtstage zusammenführen
 update contacts set cp_birthday = coalesce(cp_gebdatum,cp_birthday);
 alter table contacts drop column cp_gebdatum;
+--
+alter table tempcsvdata add column id integer;

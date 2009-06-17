@@ -274,8 +274,9 @@ CREATE TABLE postit (
 );
 
 CREATE TABLE tempcsvdata (
-	uid  integer,
-	csvdaten text
+    uid  integer,
+    csvdaten text,
+    id  integer
 );
 
 CREATE TABLE mailvorlage (

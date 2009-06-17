@@ -33,9 +33,6 @@
 	<tr class="mini" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showK({PID},'{TBL}');">
 		<td>{Name}</td><td>&nbsp;{Plz} {Ort}</td><td>&nbsp;{Telefon}</td><td>&nbsp;{eMail}</td><td>&nbsp;{Firma}</td><td>&nbsp;{insk}</td></tr>
 <!-- END Liste -->
-	
-	<tr><td class="klein" colspan="6"> <select class="klein" name="cp_sonder"><option value="-1">l&ouml;schen</option> <!-- BEGIN sonder --> <option value="{sonder_id}">{sonder_name}</option><!-- END sonder --> <input type="submit" name="ansprechpartnern_attribute_zuordnen" class="klein" value="Ansprechpartnern Attribute zuordnen" ><span class="mini">Hinweis: Alle vorher definierten Attribute werden überschrieben</span>
- </td></tr>
 	<tr><td class="mini re" colspan="6">{snd}</td></tr>
 </table>
 </td><td class="mini">

@@ -21,7 +21,8 @@
 			$msg="Trefferanzahl zu gro&szlig;. Bitte einschr&auml;nken.";
 			$btn1="";
 			vartplP($t,$_POST,$msg,$btn1,$btn1,$btn1,"Anrede","white",$_POST["FID1"],1);
-		} if (count($daten)==1 && $daten<>false && !$_POST["FID1"]) {
+		} if (count($daten)==1 && $daten<>false && !$_POST["FID1"]) { //@holgi Eine Prüfung FID1 wird dreimal gemacht, vielleicht
+                                                                  // kann man das vereinheitlichen?
 			header ("location:kontakt.php?id=".$daten[0]["cp_id"]);
 		} else if (count($daten)>=1) {
 			$t->set_file(array("pers1" => "personen1L.tpl"));
@@ -29,21 +30,23 @@
 			$i=0;
 			$bgcol[1]="#ddddff";
 			$bgcol[2]="#ddffdd";
-			if ($_POST["FID1"]) { 
-				$snd="<input type='submit' name='insk' value='zuordnen'><br><a href='firma2.php?Q=$Quelle&fid=".$_POST["FID1"]."'>zur&uuml;ck</a>";  
-				//<input type='checkbox' value='".$zeile["cp_id"]."'>alle
-            		} else { $snd=""; $dest=""; };
-			clearCSVData();
-            		insertCSVData(array("ANREDE","TITEL","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","FIRMA","ID"));
-			if ($daten) foreach ($daten as $zeile) {
-				insertCSVData(array($zeile["cp_greeting"],$zeile["cp_title"],$zeile["cp_name"],$zeile["cp_givenname"],
-							$zeile["cp_country"],$zeile["cp_zipcode"],$zeile["cp_city"],$zeile["cp_street"],
-							$zeile["cp_phone1"],$zeile["cp_fax"],$zeile["cp_email"],$zeile["name"],$zeile["cp_id"]));
-				if ($_POST["FID1"]) {
-					$insk="<input type='checkbox' name='kontid[]' value='".$zeile["cp_id"]."'>"; 
-				} else { 
-					$insk=""; 
-				};
+            if ($_POST["FID1"]) { 
+                $snd="<input type='submit' name='insk' value='zuordnen'><br><a href='firma2.php?Q=$Quelle&fid=".$_POST["FID1"]."'>zur&uuml;ck</a>";  
+            } else { 
+                $snd=""; $dest=""; 
+            };
+            clearCSVData();
+            insertCSVData(array("ANREDE","TITEL","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","FIRMA","ID"),-1);
+            if ($daten) foreach ($daten as $zeile) { //Diese Algorithmus macht die Suche bei einer großen Trefferzahl langsam ...
+                                                     // TODO executeMultiple ... ;-) jb 16.6.2009
+                insertCSVData(array($zeile["cp_greeting"],$zeile["cp_title"],$zeile["cp_name"],$zeile["cp_givenname"],
+                $zeile["cp_country"],$zeile["cp_zipcode"],$zeile["cp_city"],$zeile["cp_street"],
+                $zeile["cp_phone1"],$zeile["cp_fax"],$zeile["cp_email"],$zeile["name"],$zeile["cp_id"]),$zeile["cp_id"]);
+                if ($_POST["FID1"]) {
+                    $insk="<input type='checkbox' name='kontid[]' value='".$zeile["cp_id"]."'>"; 
+                } else { 
+                    $insk=""; 
+                };
 				$t->set_var(array(
 					PID => $zeile["cp_id"],
 					LineCol => $bgcol[($i%2+1)],
@@ -59,7 +62,7 @@
 					QUELLE => $Quelle,
 					Q => $Quelle,
 					//ANZAHL_ANSPRECHPARTNER => count($daten),	//brauch ich nicht unbedingt
-					laufende_nummer => $i		//die brauch ich unbedingt um die hidden PID_$i zu bilden
+					//laufende_nummer => $i		//die brauch ich unbedingt um die hidden PID_$i zu bilden   //die brauch ich jetzt auch nicht mehr tempcsvdata
 				));
 				$t->parse("Block","Liste",true);
 				$i++;

@@ -60,11 +60,17 @@
 			echo "\t<option value='P".$zeile["cp_id"]."'>".$zeile["cp_name"].", ".$zeile["cp_givenname"]." P</option>\n";
 		}
 	}
-	if ($datenC) foreach ($datenC as $zeile) {
-		echo "\t<option value='C".$zeile["id"]."'>".$zeile["name"]." K</option>\n";
+	if ($datenC) {
+        if ($_GET["tab"]=="V")
+            $tab="L";
+        else
+            $tab="K";
+        foreach ($datenC as $zeile) {
+	    	echo "\t<option value='C".$zeile["id"]."'>".$zeile["customernumber"]." ".$zeile["name"]." $tab</option>\n";
+        }
 	}
 	if ($datenL) foreach ($datenL as $zeile) {
-		echo "\t<option value='V".$zeile["id"]."'>".$zeile["name"]." L</option>\n";
+		echo "\t<option value='V".$zeile["id"]."'>".$zeile["vendornumber"]." ".$zeile["name"]." L</option>\n";
 	}
 
 ?>

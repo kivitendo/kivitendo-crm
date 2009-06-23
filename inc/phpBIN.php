@@ -55,7 +55,9 @@
             Replace Markers
         */
         function assign ($_marker, $_marker_content) {
-	    $suche="/".$this->START_DELIMETER.$_marker."[ ]+?".$this->END_DELIMETER."/i";
+	    //wieso das??:
+	    //$suche="/".$this->START_DELIMETER.$_marker."[ ]?".$this->END_DELIMETER."/i";
+	    $suche="/".$this->START_DELIMETER.$_marker.$this->END_DELIMETER."/i";
 	    preg_match($suche,$this->content,$gefunden);
 	    if ($gefunden) {
 		$length=strlen($gefunden[0]);

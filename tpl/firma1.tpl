@@ -27,7 +27,7 @@
 			if (A==1) {
 				F1=open("showAdr.php?fid={FID}","Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
 			} else {
-				F1=open("showAdr.php?sid={FID}","Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
+				F1=open("showAdr.php?sid="+A,"Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
 			}
 		}
 		function notes() {
@@ -181,7 +181,7 @@
 
 	<span id="lie" style="visibility:visible; position:absolute; text-align:left;width:32em; left:1.2em; top:17.5em;" >
 		<div  class="klein">
-		<span id="shiptoname">{Sname1}</span> &nbsp;&nbsp;<a href="#" onCLick="anschr(2);"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a>&nbsp; &nbsp; 
+		<span id="shiptoname">{Sname1}</span> &nbsp;&nbsp;<a href="#" onCLick="anschr({Sshipto_id});"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a>&nbsp; &nbsp; 
 		Anzahl Anschriften:{Scnt} <a href="javascript:nextshipto('-');"><img src="image/leftarrow.png" border="0"></a> 
 		<span id="SID">{Sshipto_id}</span> <a href="javascript:nextshipto('+');"><img src="image/rightarrow.png" border="0"></a><br />
 		<span id="shiptodepartment_1">{Sdepartment_1}</span> &nbsp; &nbsp; <span id="shiptodepartment_2">{Sdepartment_2}</span> <br />

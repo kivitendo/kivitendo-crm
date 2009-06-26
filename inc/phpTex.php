@@ -1,22 +1,20 @@
 <?php
 
     /**
-        xlsTemplate - Simple Class for LxOffice CRM to replace some markers in an Excel Sheet.
+        texTemplate - Simple Class for LxOffice CRM to replace some markers in an  Tex-Document.
         Start and end delimeters are defined as member variables and can be changed.
-        Replaces text must have same length as placeholder in excel sheet.
-
-        If the text is too long it will be stripped, if the text is too short it wuill be filled up with
-        a special char defined in member var $SPACE;
 
         (c) 2006 LINET Services -
         @author Timo Springmann t.springmann@linet-services.de
+        (c) 2009 Lx-System -
+        @author Holger Lindemann hli@lx-system.de
 
     */
     if (!defined('TMP_PATH')) {
         define('TMP_PATH', './tmp');
     }
 
-    class phpBIN {
+    class phpTex {
 
         var $content = "";
         var $original = "";
@@ -30,7 +28,7 @@
 
 	var $loaded = false;
         /*
-            Constructor. Expects filename of xls-template which must be readable
+            Constructor. Expects filename of tex-template which must be readable
         */
     function loadDocument ($filename) {
 	    if (!$this->loaded) {
@@ -97,15 +95,15 @@
 		$this->save($this->downloadFile);	
 	}
 
-        /*
-            Send file to browser
-        */
-        function sendFile ($name = "export.xls") {
-            header('Content-type: application/msexcel');
-	        header('Content-Transfer-Encoding: binary');
-            header("Content-Disposition: attachment; filename=$name");
-            echo $this->content;
-        }
+    /*
+        Send file to browser
+    */
+    function sendFile ($name = "export.tex") {
+        header('Content-type: application/text');
+	    header('Content-Transfer-Encoding: binary');
+        header("Content-Disposition: attachment; filename=$name");
+        echo $this->content;
+    }
 
  	function clean() {
 	}
@@ -125,15 +123,12 @@
  
  }
 
-
-
     /*
         TEST
     */
 
-#    $xls = new xlsTemplate("test.xls");
-#    $xls->assign("NAME", "Timo");
-#    $xls->replaceMarkers();
-#    $xls->sendFile();
+#    $doc = new phpTex("test.tex");
+#    $doc->parse(array("NAME"=>"Timo"));
+#    $doc->sendFile();
 
 ?>

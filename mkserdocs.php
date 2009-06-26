@@ -53,7 +53,6 @@ if ($data) {
             $nname=$hli2erp["P"][$name];
             $vars[$nname] = $tmp[$pos[$name]];
         }
-print_r($vars);
         $doc->parse($vars);
         $doc->save($_SESSION["savefiledir"]."/".$row["id"]."_".$_SESSION["datei"]);
         echo $row["id"]; flush();

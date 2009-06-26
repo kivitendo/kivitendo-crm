@@ -36,7 +36,7 @@
                 $snd=""; $dest=""; 
             };
             clearCSVData();
-            insertCSVData(array("ANREDE","TITEL","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","FIRMA","ID"),-1);
+            insertCSVData(array("ANREDE","TITEL","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","FIRMA","GESCHLECHT","ID"),-1);
             if ($daten) foreach ($daten as $zeile) { //Diese Algorithmus macht die Suche bei einer großen Trefferzahl langsam ...
                                                      // TODO executeMultiple ... ;-) jb 16.6.2009
             /* 
@@ -45,7 +45,7 @@
             */
                 insertCSVData(array($zeile["cp_greeting"],$zeile["cp_title"],$zeile["cp_name"],$zeile["cp_givenname"],
                 $zeile["cp_country"],$zeile["cp_zipcode"],$zeile["cp_city"],$zeile["cp_street"],
-                $zeile["cp_phone1"],$zeile["cp_fax"],$zeile["cp_email"],$zeile["name"],$zeile["cp_id"]),$zeile["cp_id"]);
+                $zeile["cp_phone1"],$zeile["cp_fax"],$zeile["cp_email"],$zeile["name"],$zeile["cp_gender"],$zeile["cp_id"]),$zeile["cp_id"]);
                 if ($_POST["FID1"]) {
                     $insk="<input type='checkbox' name='kontid[]' value='".$zeile["cp_id"]."'>"; 
                 } else { 

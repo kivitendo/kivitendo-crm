@@ -41,14 +41,16 @@ foreach($felder as $value) {
     $vars[$name]="";
     $pos[$name]=$i++;
 }; 
+$data1["CRMUSER"]=$_SESSION["loginCRM"];
+$data1["cause"]=$_SESSION["SUBJECT"];
 $sql="select * from tempcsvdata where uid = ".$_SESSION["loginCRM"]." offset 1";
 $data=$db->getAll($sql);
 if ($data) {
     foreach ($data as $row) {
         $tmp=split(":",$row["csvdaten"]);
-        $tmp[]=$_SESSION["DATUM"];
-        $tmp[]=$_SESSION["BETREFF"];
-        $tmp[]=$_SESSION["ZTEXT"];
+        $tmp[]=$_SESSION["DATE"];
+        $tmp[]=$_SESSION["SUBJECT"];
+        $tmp[]=$_SESSION["BODY"];
         foreach($felder as $name) {
             $nname=$hli2erp["P"][$name];
             $vars[$nname] = $tmp[$pos[$name]];

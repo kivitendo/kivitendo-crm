@@ -12,7 +12,7 @@
 		}
 	}
 	function chngSerial(site) {
-		etikett.document.location.href = site + ".php";
+		etikett.document.location.href = site + ".php?src=F";
 	}
 	//-->
 	</script>

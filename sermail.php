@@ -20,7 +20,7 @@
 			if($rc<>"ok") { 
 				$okC=false; $msg.=" CC:".$rc; 
 			} else {
-				insertCSVData(array("CC",$CC,"","","","","","",$CC,""));
+				insertCSVData(array("CC",$CC,"","","","","","",$CC,""),-1);
 			}
 		};
 		if ($okC) {

@@ -41,7 +41,7 @@
 			$i=0;
 			clearCSVData();
 			insertCSVData(array("ANREDE","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","KONTAKT","ID",
-						"KDNR","USTID","STEUERNR","KTONR","BANK","BLZ","LANG","KDTYP"));
+						"KDNR","USTID","STEUERNR","KTONR","BANK","BLZ","LANG","KDTYP"),-1);
 			if ($daten) foreach ($daten as $zeile) {
 				insertCSVData(array($zeile["greeting"],$zeile["name"],$zeile["department_1"],
 						$zeile["country"],$zeile["zipcode"],$zeile["city"],$zeile["street"],
@@ -49,7 +49,7 @@
 						($Q=="C")?$zeile["customernumber"]:$zeile["vendornumber"],
 						$zeile["ustid"],$zeile["taxnumber"],
 						$zeile["account_number"],$zeile["bank"],$zeile["bank_code"],
-						$zeile["language"],$zeile["business_id"]));	
+						$zeile["language"],$zeile["business_id"]),$zeile["id"]);	
 				$t->set_var(array(
 					Q => $Q,
 					ID => $zeile["id"],

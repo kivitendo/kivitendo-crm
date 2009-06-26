@@ -32,9 +32,9 @@ $doc->savecontent();
 $sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' limit 1";
 $data=$db->getAll($sql);
 $felder=split(":",$data[0]["csvdaten"]);
-$felder[]="DATUM";
-$felder[]="BETREFF";
-$felder[]="ZTEXT";
+$felder[]="DATE";
+$felder[]="SUBJECT";
+$felder[]="BODY";
 $i=0;
 foreach($felder as $value) {
     $name=strtoupper($value);

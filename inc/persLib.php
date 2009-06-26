@@ -134,7 +134,7 @@ global $db;
 					"cp_notes" => 1,"cp_stichwort1" => 1,
 					"cp_birthday" => 0,"cp_beziehung" => 1,
 					"cp_abteilung" => 1,"cp_position" => 1,
-					"cp_cv_id" => 0,"cp_owener" => 0);
+					"cp_cv_id" => 0,"cp_owener" => 0,"cp_gender" => 1);
 		$keys=array_keys($muster);
 		$dbf=array_keys($dbfld);
 		$anzahl=count($keys);
@@ -185,7 +185,7 @@ global $db;
 			$where0.="and (cp_sonder & $x) = $x ";
 		}
 	}
-	$felderContact="C.cp_id, C.cp_greeting, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder";
+	$felderContact="C.cp_id, C.cp_greeting, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender ";
 
 	/*	Nehme entweder die Adressdaten des Ansprechpartners oder die der Rechnungsadresse. Da cp_phone etc mit einer leeren
 			Zeichenkette gefüllt wird, das NULLIF-Hilfskonstrukt (s.a. http://www.postgresql.org/docs/8.1/static/functions-conditional.html) */

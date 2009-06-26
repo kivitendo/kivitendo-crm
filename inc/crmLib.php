@@ -2331,7 +2331,7 @@ global $db;
         } else if (count($tmp)==1) {
         	$tmp[0]=0;
 	}
-	$name=htmlentities($data["catname"]);
+    $name=html_entity_decode($data["catname"]);
 	$sql="update wissencategorie set name='".$name."',hauptgruppe='".$data["hg"];
 	$sql.="',kdhelp=".(($data["kdhelp"]==1)?'true':'false')." where id = ".$id;
 	$rc=$db->query($sql);

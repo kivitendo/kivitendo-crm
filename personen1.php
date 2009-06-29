@@ -46,10 +46,10 @@
             $anredenHerr = getCpAnredenGeneric('male');
 
             //DEBUG BROWSER Anfang
+            $BROWSERDEBUG=false;
             if ($BROWSERDEBUG){
               echo "Frau"; print_r($anredenFrau);
               echo "Herr"; print_r($anredenHerr);
-              echo "nur ein wert" . $anredenFrau['18802'];
             }
             //DEBUG BROWSER Ende
 
@@ -59,10 +59,15 @@
                                                      // TODO executeMultiple ... ;-) jb 16.6.2009
             if ($zeile["cp_gender"] =="f"){
                 $zeile["cp_greeting"]= $anredenFrau[$zeile["language_id"]];
-                //echo "da" . $anredenFrau["language_id"];
+                if ($BROWSERDEBUG){
+                    echo "Anrede Frau" . $anredenFrau["language_id"];
+                    echo "Language ID" . $zeile["language_id"];
+                }
             }else if ($zeile["cp_gender"] =="m"){
                         $zeile["cp_greeting"]= $anredenHerr[$zeile["language_id"]];
-                        //  echo "do" . $anredenHerr["language_id"];
+                        if ($BROWSERDEBUG){
+                            echo "Anrede Herr" . $anredenHerr["language_id"];
+                        }
                     }else {
                         $zeile["cp_greeting"]="KEIN GESCHLECHT";
               }

@@ -25,6 +25,7 @@
         var $START_DELIMETER = "<%";
         var $END_DELIMETER = "%>";
         var $SPACE = " ";
+        var $transchr = array("&"=>"\&","_"=>"\_","%"=>"\%");
 
 	var $loaded = false;
         /*
@@ -67,7 +68,7 @@
 	    preg_match($suche,$this->content,$gefunden);
 	    if ($gefunden) {
             $this->markers[$_marker]["original"]=$suche;
-            $this->markers[$_marker]['content'] = $_marker_content;
+            $this->markers[$_marker]['content'] = strtr($this->transchr,$_marker_content);
         } else return false;
 	}
 

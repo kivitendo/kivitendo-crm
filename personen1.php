@@ -37,8 +37,39 @@
             };
             clearCSVData();
             insertCSVData(array("ANREDE","TITEL","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","FIRMA","GESCHLECHT","ID"),-1);
+             /*
+             * An dieser Stelle suchen wir die entsprechenden Werte für die verschiedenen Anreden der vorhandenen Sprachen.
+             * Die Routine befindet sich im Backend persLib.php
+             * Die Daten hierfür kommen aus der Tabelle generic_translations ursprünglich ein xplace Commit s.a. xplace Rev. 7667
+             */
+            $anredenFrau = getCpAnredenGeneric('female');
+            $anredenHerr = getCpAnredenGeneric('male');
+
+            //DEBUG BROWSER Anfang
+            if ($BROWSERDEBUG){
+              echo "Frau"; print_r($anredenFrau);
+              echo "Herr"; print_r($anredenHerr);
+              echo "nur ein wert" . $anredenFrau['18802'];
+            }
+            //DEBUG BROWSER Ende
+
+
+
             if ($daten) foreach ($daten as $zeile) { //Diese Algorithmus macht die Suche bei einer großen Trefferzahl langsam ...
                                                      // TODO executeMultiple ... ;-) jb 16.6.2009
+            if ($zeile["cp_gender"] =="f"){
+                $zeile["cp_greeting"]= $anredenFrau[$zeile["language_id"]];
+                //echo "da" . $anredenFrau["language_id"];
+            }else if ($zeile["cp_gender"] =="m"){
+                        $zeile["cp_greeting"]= $anredenHerr[$zeile["language_id"]];
+                        //  echo "do" . $anredenHerr["language_id"];
+                    }else {
+                        $zeile["cp_greeting"]="KEIN GESCHLECHT";
+              }
+              /*if ($zeile["cp_country"] == 'Deutschland'){ //Schnellanpassung für xplace. Kann wieder raus, da dies in der Druckvorlage gesetzt wird
+                $zeile["cp_country"]='';
+              }*/
+
             /* 
              * Der Blog ist sowieso gut und sollte mal hier angemerkt werden 'google: "mokka mit schlag"
              * http://cafe.elharo.com/optimization/how-to-write-network-backup-software-a-lesson-in-practical-optimization/

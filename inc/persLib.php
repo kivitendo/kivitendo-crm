@@ -127,14 +127,15 @@ global $db;
 		$where0=" and upper(cp_name) ~ '^\[^A-Z\].*$'  ";
 	} else {
 		// Array zu jedem Formularfed: Tabelle (0=contact,1=cust/vend), TabName, toUpper
-	    	$dbfld=array("cp_name" => 1,"cp_givenname" => 1,"cp_greeting" => 1,"cp_title" => 1,
+    /* Änderung 29.6.2009 cp_greeting rausgeworfen und cp_gender eingefügt. Hinweis für Holger cp_gender kommt aus Tabelle 0 ;-)  jb*/
+	    	$dbfld=array("cp_name" => 1,"cp_givenname" => 1,"cp_gender" => 0,"cp_title" => 1,
 					"cp_street" => 1,"cp_zipcode" => 0,"cp_city" => 1,"cp_country" => 0,
 					"cp_phone1" => 0,"cp_phone2" => 0,"cp_fax" => 0,
 					"cp_homepage" => 1,"cp_email" => 1,
 					"cp_notes" => 1,"cp_stichwort1" => 1,
 					"cp_birthday" => 0,"cp_beziehung" => 1,
 					"cp_abteilung" => 1,"cp_position" => 1,
-					"cp_cv_id" => 0,"cp_owener" => 0,"cp_gender" => 1);
+					"cp_cv_id" => 0,"cp_owener" => 0);
 		$keys=array_keys($muster);
 		$dbf=array_keys($dbfld);
 		$anzahl=count($keys);
@@ -160,8 +161,11 @@ global $db;
 		$daten=false;
 		$tbl0=false;
 		$fuzzy=$muster["fuzzy"];
-		if ($muster["greeting"]=="H") { $muster["cp_greeting"]="Herr"; }
-		else if ($muster["greeting"]=="F") { $muster["cp_greeting"]="Frau"; };
+    /*
+     * Entsprechend hier die Anpassungen für das Geschlecht jb
+    */
+		if ($muster["greeting"]=="H") { $muster["cp_gender"]="m"; }
+		else if ($muster["greeting"]=="F") { $muster["cp_gender"]="f"; };
 		for ($i=0; $i<$anzahl; $i++) {
 			if (in_array($keys[$i],$dbf) && $muster[$keys[$i]]) {
 				if ($dbfld[$keys[$i]]==1)  {
@@ -185,7 +189,7 @@ global $db;
 			$where0.="and (cp_sonder & $x) = $x ";
 		}
 	}
-	$felderContact="C.cp_id, C.cp_greeting, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender ";
+	$felderContact="C.cp_id, C.cp_greeting, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender";
 
 	/*	Nehme entweder die Adressdaten des Ansprechpartners oder die der Rechnungsadresse. Da cp_phone etc mit einer leeren
 			Zeichenkette gefüllt wird, das NULLIF-Hilfskonstrukt (s.a. http://www.postgresql.org/docs/8.1/static/functions-conditional.html) */
@@ -393,6 +397,19 @@ function getCpAnreden() {
 global $db;
 	$sql="select distinct (cp_greeting) from contacts";
 	$rs=$db->getAll($sql);
+	return $rs;
+}
+/****************************************************
+* getCpAnredenGeneric
+* in:
+* out: rs = array
+* Gespeicherte Anreden sprachbezogen aus generic_translations holen
+* return mixed
+*****************************************************/
+function getCpAnredenGeneric($gender) {
+	global $db;
+	$sql = "select language_id,translation from generic_translations where translation_type ILIKE 'greetings::$gender%'";
+	$rs=$db->getAssoc($sql);
 	return $rs;
 }
 /****************************************************

@@ -145,16 +145,16 @@ global $db;
 			Analog dann die Erweiterung für Kundentyp. Falls keine Personensuche über customer.name gewünscht ist,
 			wird entsprechend die Tabelle customer vorbelegt
 		*/
-		$joinCustomer = ",customer K";	//das ist etwas fies, aber falls kein join über customer, müssen wir entsprechend hier die werte setzen
-		$joinVendor		= ",vendor V";
+		$joinCustomer = " left join customer K on C.cp_cv_id=K.id";	//das ist etwas fies, aber falls kein join über customer, müssen wir entsprechend hier die werte setzen
+		$joinVendor		= " left join vendor V on C.cp_cv_id=V.id"; //LEERZEICHEN AM ANFANG!! Nerv
 		if ($muster["customer_name"]){	// Falls das Feld Firmenname gefüllt ist
-	    $joinCustomer 	= " left join customer K on C.cp_cv_id=K.id";	//hier jetzt der left join und die werte oben überschreiben 
+//	    $joinCustomer 	= " left join customer K on C.cp_cv_id=K.id";	//hier jetzt der left join und die werte oben überschreiben 
 																																		//WICHTIG Leerzeichen am Anfang für ',' (s.a. Vorbelegung)
 			$whereCustomer	= "and K.name ilike '%" . $muster["customer_name"] . "%' "; //Leerzeichen für Holgis substr nicht vergessen!!!
 	    /* weil die maske sowohl in Lieferant als auch Kunde sucht, hier auch die Lieferanten-Einschränkung.
 			 * @holgi Warum heisst es hier wieder vendor V??? und nicht vendor L (Lieferant)
 			*/
-			$joinVendor 	= " left join vendor V on C.cp_cv_id=V.id";	//hier jetzt der left join und die werte oben überschreiben 
+//			$joinVendor 	= " left join vendor V on C.cp_cv_id=V.id";	//hier jetzt der left join und die werte oben überschreiben 
 			$whereVendor	= "and V.name ilike '%" . $muster["customer_name"] . "%' "; //Leerzeichen für Holgis substr nicht vergessen!!!
 		}
 
@@ -189,7 +189,7 @@ global $db;
 			$where0.="and (cp_sonder & $x) = $x ";
 		}
 	}
-	$felderContact="C.cp_id, C.cp_greeting, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender";
+	$felderContact="C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender";
 
 	/*	Nehme entweder die Adressdaten des Ansprechpartners oder die der Rechnungsadresse. Da cp_phone etc mit einer leeren
 			Zeichenkette gefüllt wird, das NULLIF-Hilfskonstrukt (s.a. http://www.postgresql.org/docs/8.1/static/functions-conditional.html) */
@@ -201,14 +201,14 @@ global $db;
 
 	$rs0=array(); //leere arrays initialisieren, damit es keinen fehler bei der funktion array_merge gibt
 	if ($muster["customer"]){ 	//auf checkbox customer mit Titel Kunden prüfen
-		$sql0="select $felderContact, $felderContcatOrCustomerVendor, K.name as name, 
+		$sql0="select $felderContact, $felderContcatOrCustomerVendor, K.name as name, K.language_id as language_id, 
 				 'C' as tbl from contacts C$joinCustomer where C.cp_cv_id=K.id $whereCustomer $where and $rechte order by cp_name";
 		$rs0=$db->getAll($sql0);
 	}
 	
 	$rs1=array(); //s.o.
 	if ($muster["vendor"]){ //auf checkbox vendor mit Titel Lieferant prüfen
-	$sql0="select $felderContact, $felderContcatOrCustomerVendor, V.name as name,'V' as tbl 
+	$sql0="select $felderContact, $felderContcatOrCustomerVendor, V.name as name, V.language_id as language_id, 'V' as tbl 
 				 from contacts C$joinVendor where C.cp_cv_id=V.id $whereVendor $where and $rechte order by cp_name";
 	$rs1=$db->getAll($sql0);
 	}
@@ -395,7 +395,7 @@ global $db;
 *****************************************************/
 function getCpAnreden() {
 global $db;
-	$sql="select distinct (cp_greeting) from contacts";
+	$sql="select translation from generic_translations where translation_type ILIKE '%greeting%'";
 	$rs=$db->getAll($sql);
 	return $rs;
 }

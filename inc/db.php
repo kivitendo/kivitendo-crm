@@ -205,6 +205,22 @@ class myDB extends DB {
 			return $this->rc;
 		}
 	}
+/**
+ * Holt die Daten als assoziatives Array aus der DB.
+ * S.a. PEAR::getAssoc
+ * return mixed, false
+ */
+  function getAssoc($sql){
+    $this->rc=$this->db->getAssoc($sql);
+    if ($this->log) $this->writeLog($sql);
+    if(DB::isError($this->rc)) {
+      $this->dbFehler($sql,$this->rc->getMessage());
+      return false;
+    } else {
+//          echo "Mem D4:" . memory_get_usage() . "\n"; // 36640
+      return $this->rc;
+    }
+  }
 
 	function getOne($sql) {
 		$rs = $this->getAll($sql);

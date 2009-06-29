@@ -68,7 +68,7 @@
 	    preg_match($suche,$this->content,$gefunden);
 	    if ($gefunden) {
             $this->markers[$_marker]["original"]=$suche;
-            $this->markers[$_marker]['content'] = strtr($this->transchr,$_marker_content);
+            $this->markers[$_marker]['content'] = strtr($_marker_content,$this->transchr);
         } else return false;
 	}
 

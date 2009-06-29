@@ -51,6 +51,7 @@
                 } else { 
                     $insk=""; 
                 };
+                $sonder=0;
 				$t->set_var(array(
 					PID => $zeile["cp_id"],
 					LineCol => $bgcol[($i%2+1)],
@@ -91,11 +92,13 @@
 				));
 			$t->parse("Block3","sonder",true);
 			} // Ende if $cp_sonder  (entsprechende "Sonderflags")
+            if ($_POST["cp_sonder"]) foreach ($_POST["cp_sonder"] as $tmp) { $sonder+=$tmp; }
 
 			$t->set_var(array(
 				snd => $snd,
 				FID => $_POST["FID1"],
 				no => ($_POST["FID1"])?"return;":"",
+                sonder => $sonder,
 			));
 		} else {
 			$msg="Leider nichts gefunden.";

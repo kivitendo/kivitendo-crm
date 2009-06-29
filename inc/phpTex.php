@@ -81,6 +81,10 @@
         return $count;
     }
 
+    function cleanTemplate() {
+        $suche="/".$this->START_DELIMETER."[a-z0-9 _\-]+".$this->END_DELIMETER."/i";
+        $this->content = preg_replace($suche,"",$this->content);
+    }
 
 	function save($filename) {
 		$fp = fopen($filename, "w");

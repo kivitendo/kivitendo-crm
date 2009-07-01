@@ -1,4 +1,4 @@
-<!-- $Id$ -->
+<!-- $Id: personen1.tpl 4293 2009-06-14 08:21:08Z jbueren $ -->
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -41,12 +41,13 @@
 <a href="{action}?Quelle={Quelle}&first=Z" class="fett">Z</a> |
 <a href="{action}?Quelle={Quelle}&first=~" class="fett">*</a> |</p>
 	<div class="zeile">
-		<span class="label">Anrede</span>
+		<span class="label">.:gender:.</span>
 		<span class="leftfeld">
-			<input type="radio" name="greeting" value="H" {cpsel1}><span class="klein">Herr </span>
-			<input type="radio" name="greeting" value="F" {cpsel2}><span class="klein">Frau </span>
-			<input type="radio" name="greeting" value="O" {cpsel3} checked><span class="klein">Beide</span>
-				<input type="text" name="cp_greeting" size="6" maxlength="75" value="{cp_greeting}" tabindex="1">
+             <select name="cp_gender" tabindex="1" style="width:9em;">
+                    <option value="" {cp_gender}>
+                    <option value="m" {cp_genderm}>.:male:.
+                    <option value="f" {cp_genderf}>.:female:.
+                </select>
 		</span>
 		<span class="label">Abteilung</span>
 		<span class="leftfeld"><input type="text" name="cp_abteilung" size="20" maxlength="25" value="{cp_abteilung}" tabindex="12"></span>

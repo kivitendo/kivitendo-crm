@@ -1,4 +1,4 @@
-<!-- $Id$ -->
+<!-- $Id: personen3.tpl 4316 2009-06-17 08:30:54Z jbueren $ -->
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
@@ -52,14 +52,11 @@
 <input type="hidden" name="nummer" value="{nummer}">
 <span id="tab1" style="visibility:visible; position:absolute; text-align:left;width:95%; left:0.8em; top:4.4em; border:1px solid black;">
 	<div class="zeile2">
-		<span class="label2 klein">Anrede</span>
+		<span class="label2 klein">.:gender:.</span>
 		<span class="feld">
-				<input type="text" name="cp_greeting_" size="8" value="{cp_greeting_}" tabindex="1">
-				<select name="cp_greeting" tabindex="2" style="width:9em;">
-					<option value="">
-<!-- BEGIN anreden -->
-					<option value="{ANREDE}" {ASEL}>{ANREDE}
-<!-- END anreden -->
+				<select name="cp_gender" tabindex="2" style="width:9em;">
+					<option value="m" {cp_genderm}>.:male:.
+					<option value="f" {cp_genderf}>.:female:.
 				</select>
 		</span>
 		<span class="label klein">Telefon 1</span>

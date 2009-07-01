@@ -63,7 +63,7 @@
                 return $objResponse;
 	}
 	function showContactadress($id){
-		global $cp_sonder;
+		$cp_sonder = getSonder();
 		$data=getKontaktStamm($id,".");
 		if (preg_match("/UTF-8/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="UTF-8"; }
 		else if (preg_match("/ISO-8859-15/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-15"; }
@@ -92,11 +92,13 @@
 		}
 		$sonder="";
 		if ($cp_sonder)	{
-			while (list($key,$val) = each($cp_sonder)) {
-				$sonder.=($data["cp_sonder"] & $key)?"$val ":"";
+			foreach ($cp_sonder as  $row) {
+				$sonder.=($data["cp_sonder"] & $row["svalue"])?$row["skey"]." ":"";
 			}
 			$data["cp_sonder"]=$sonder;
 		}
+ 		if ($data["cp_gender"]=='m') { $data["cp_greeting"]=translate('.:greetmale:.','firma'); 
+ 		} else { $data["cp_greeting"]=translate('.:greetfemale:.','firma'); };
 		if ($data["cp_phone2"]) $data["cp_phone2"]="(".$data["cp_phone2"].")";
 		if ($data["cp_privatphone"]) $data["cp_privatphone"]="Privat: ".$data["cp_privatphone"];
 		if ($data["cp_mobile2"]) $data["cp_mobile2"]="(".$data["cp_mobile2"].")";
@@ -314,7 +316,8 @@
 		$document=getDOCvorlage($did);
 		if ($pid>0) {
 			$co=getKontaktStamm($pid);
-			$anredepers=$co["cp_greeting"];
+		    if ($data["cp_gender"]=='m') { $anredepers=translate('.:greetmale:.','firma'); 
+            } else { $anredepers=translate('.:greetfemale:.','firma'); };
 			$anredepers.=($co["cp_title"])?" ".$co["cp_title"]:"";
 			$namepers=$co["cp_givenname"]." ".$co["cp_name"];
 			$plzpers=$co["cp_zipcode"];
@@ -324,7 +327,7 @@
 		};
 		if ($fid>0) {
 			$fa=getFirmenStamm($fid,$tab);
-			$anrede="Firma";
+			$anrede=$fa["greeting"];
 			$name=$fa["name"];
 			$name1=$name;
 			$name2=$fa["department_1"];

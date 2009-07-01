@@ -705,6 +705,17 @@ function stopTime($start) {
 	$stop=startTime();
 	$zeit = $stop - $start;
 	return substr($zeit,0,8);
-}	
+}
+/**
+ * Sonderflags jetzt aus der Datenbank
+ *
+ * @retunr array
+ */	
+function getSonder() {
+    global $db;
+    $sql="select * from sonderflag order by svalue";
+    return $db->getAll($sql);
+}
+
 require_once "login".$_SESSION["loginok"].".php";
 ?>

@@ -1,5 +1,5 @@
 <?
-// $Id$
+// $Id: firma1.php 4128 2009-05-15 07:08:13Z hlindemann $
 	require("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/FirmenLib.php");
@@ -43,8 +43,9 @@
 		$rab="";
 	}
 	$sonder="";
-	if ($cp_sonder) while (list($key,$val) = each($cp_sonder)) {
-		$sonder.=($fa["sonder"] & $key)?"$val ":"";
+    $cp_sonder=getSonder();
+	if ($cp_sonder) foreach ($cp_sonder as $row) {
+		$sonder.=($fa["sonder"] & $row["svalue"])?$row["skey"]." ":"";
 	}
 	$karte=str_replace(array("%TOSTREET%","%TOZIPCODE%","%TOCITY%"),array(strtr($fa["street"]," ",$planspace),$fa["zipcode"],$fa["city"]),$stadtplan);
 	if (preg_match("/%FROM/",$karte)) {

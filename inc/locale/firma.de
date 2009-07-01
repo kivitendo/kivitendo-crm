@@ -3,6 +3,11 @@
 // Unter Umständen die Reihefolge der Übersetzungen ändern
 // Aus 'Datei hochladen" wird 'Datumi hochladen" == 2x übersetzt 
 $texts	= array(
+    ".:gender:." => 'Geschlecht',
+    ".:male:." => 'männlich',
+    ".:female:." => 'weiblich',
+    ".:greetmale:." => 'Herr',
+    ".:greetfemale:." => 'Frau',
 	"Umsätze der letzten 12 Monate"	=> "Ums&auml;tze der letzten 12 Monate",
 	"Umsätze/Angebote von Monat"	=> "Ums&auml;tze/Angebote von Monat",
 	"Umsätze"			=> "Ums&auml;tze",

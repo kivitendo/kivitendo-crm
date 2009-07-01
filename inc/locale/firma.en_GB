@@ -1,6 +1,12 @@
 <?
 // Übersetzungen für die Firmenmasken in Englisch
 $texts	= array(
+    ".:gender:." => 'Gender',
+    ".:male:." => 'male',
+    ".:female:." => 'female',
+    ".:greetmale:." => 'Mr.',
+    ".:greetfemale:." => 'Mrs.',
+
 	"Leider keine Kontakte gefunden" => "Sorry, no Contact found",
 	"Detailansicht" => "Detail View",
 	"Custombase"	=> "Customer data",

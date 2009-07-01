@@ -149,7 +149,7 @@ global $db;
 		$joinVendor		= " left join vendor V on C.cp_cv_id=V.id"; //LEERZEICHEN AM ANFANG!! Nerv
 		if ($muster["customer_name"]){	// Falls das Feld Firmenname gefüllt ist
 //	    $joinCustomer 	= " left join customer K on C.cp_cv_id=K.id";	//hier jetzt der left join und die werte oben überschreiben 
-																																		//WICHTIG Leerzeichen am Anfang für ',' (s.a. Vorbelegung)
+																		//WICHTIG Leerzeichen am Anfang für ',' (s.a. Vorbelegung)
 			$whereCustomer	= "and K.name ilike '%" . $muster["customer_name"] . "%' "; //Leerzeichen für Holgis substr nicht vergessen!!!
 	    /* weil die maske sowohl in Lieferant als auch Kunde sucht, hier auch die Lieferanten-Einschränkung.
 			 * @holgi Warum heisst es hier wieder vendor V??? und nicht vendor L (Lieferant)
@@ -163,9 +163,10 @@ global $db;
 		$fuzzy=$muster["fuzzy"];
     /*
      * Entsprechend hier die Anpassungen für das Geschlecht jb
-    */
+        Brauchen wir nicht mehr hli
 		if ($muster["greeting"]=="H") { $muster["cp_gender"]="m"; }
 		else if ($muster["greeting"]=="F") { $muster["cp_gender"]="f"; };
+    */
 		for ($i=0; $i<$anzahl; $i++) {
 			if (in_array($keys[$i],$dbf) && $muster[$keys[$i]]) {
 				if ($dbfld[$keys[$i]]==1)  {
@@ -208,9 +209,9 @@ global $db;
 	
 	$rs1=array(); //s.o.
 	if ($muster["vendor"]){ //auf checkbox vendor mit Titel Lieferant prüfen
-	$sql0="select $felderContact, $felderContcatOrCustomerVendor, V.name as name, V.language_id as language_id, 'V' as tbl 
+	    $sql0="select $felderContact, $felderContcatOrCustomerVendor, V.name as name, V.language_id as language_id, 'V' as tbl 
 				 from contacts C$joinVendor where C.cp_cv_id=V.id $whereVendor $where and $rechte order by cp_name";
-	$rs1=$db->getAll($sql0);
+	    $rs1=$db->getAll($sql0);
 	}
 
 	/*Hinweis: Diese Abfrage sucht nur nach nicht zugeordneten Ansprechpartner (gelöscht). 
@@ -219,23 +220,12 @@ global $db;
 	
 	$rs2=array(); //s.o.
 	if ($muster["deleted"]){ //auf checkbox deleted mit Titel "gelöschte Ansprechpartner (Kunden und Lieferanten)" prüfen
-	$sql0="select $felderContact, C.cp_country, C.cp_zipcode, C.cp_city, C.cp_street, C.cp_phone1, 
+	    $sql0="select $felderContact, C.cp_country, C.cp_zipcode, C.cp_city, C.cp_street, C.cp_phone1, 
 				 '' as name,'P' as tbl from contacts C where $rechte ".$where." and C.cp_cv_id is null order by cp_name";
-	$rs2=$db->getAll($sql0);
+	    $rs2=$db->getAll($sql0);
 	}
 
 	return array_merge($rs0,$rs1,$rs2);	//alle ergebnisse zusammenziehen und zurückgeben
-	//return $daten;
-	
-	// wozu war dies hier überhaupt mal gedacht? jb 9.6.2009
-	/*$key=array();
-	foreach ($daten as $satz) {
-		if (!in_array($satz["cp_id"],$key)) {
-			$key[]=$satz["cp_id"];
-			$daten_neu[]=$satz;
-		}
-	};
-	return $daten_neu; */
 }
 
 /****************************************************
@@ -253,19 +243,20 @@ global $db;
 	}
 	$daten["cp_sonder"]=$tmp;
 	// Array zu jedem Formularfed: Tabelle (0=contact,1=cust/vend),  require(0=nein,1=ja), Regel
-	$dbfld=array(	"cp_name" => array(0,1,1,"Name",75),	"cp_givenname" => array(0,1,1,"Vorname",75),	"cp_greeting" => array(0,0,1,"Anrede",75),
-			"cp_title" => array(0,0,1,"Titel",75),	"cp_street" => array(0,0,1,"Strasse",75),	"cp_zipcode" => array(0,0,2,"Plz",10),
-			"cp_city" => array(0,0,1,"Ort",75),	"cp_country" => array(0,0,8,"Land",3), 		"cp_sonder" => array(0,0,10,"SonderFlag",0),
-			"cp_phone1" => array(0,0,3,"Telefon 1",30),	   "cp_phone2" => array(0,0,3,"Telefon 2",30),	
-			"cp_mobile1" => array(0,0,3,"Mobiletelefon 1",30), "cp_mobile2" => array(0,0,3,"Mobiletelefon 2",30),	
-			"cp_homepage" =>array(0,0,4,"Homepage",0),	   "cp_fax" => array(0,0,3,"Fax",30),
-			"cp_email" => array(0,0,5,"eMail",0), 		   "cp_privatemail" => array(0,0,5,"Private eMail",0),
-			"cp_notes" => array(0,0,1,"Bemerkungen",0),	   "cp_stichwort1" => array(0,0,1,"Stichworte",50),
-			"cp_salutation" => array(0,0,1,"Briefanrede",125), "cp_privatphone" => array(0,0,3,"Privattelefon 1",30),
-			"cp_birthday" => array(0,0,7,"Geb-Datum",0),	   "cp_beziehung" => array(0,0,6,"Beziehung",0),
-			"cp_abteilung" => array(0,0,1,"Abteilung",25),	   "cp_position" => array(0,0,1,"Position",25),
-			"cp_cv_id" => array(0,0,6,"FID",0),		   "name" => array(1,0,1,"Firma",75),		
-			"cp_owener" => array(0,0,6,"CRM-User",0),	   "cp_grafik" => array(0,0,9,"Grafik",4),);				
+    // cp_greeting ist raus hli
+	$dbfld=array(	"cp_name" => array(0,1,1,"Name",75),	    "cp_givenname" => array(0,1,1,"Vorname",75),	"cp_gender" => array(0,0,1,"Geschlecht",1),
+			"cp_title" => array(0,0,1,"Titel",75),	            "cp_street" => array(0,0,1,"Strasse",75),	    "cp_zipcode" => array(0,0,2,"Plz",10),
+			"cp_city" => array(0,0,1,"Ort",75),	                "cp_country" => array(0,0,8,"Land",3), 		    "cp_sonder" => array(0,0,10,"SonderFlag",0),
+			"cp_phone1" => array(0,0,3,"Telefon 1",30),	        "cp_phone2" => array(0,0,3,"Telefon 2",30),	
+			"cp_mobile1" => array(0,0,3,"Mobiletelefon 1",30),  "cp_mobile2" => array(0,0,3,"Mobiletelefon 2",30),	
+			"cp_homepage" =>array(0,0,4,"Homepage",0),	        "cp_fax" => array(0,0,3,"Fax",30),
+			"cp_email" => array(0,0,5,"eMail",0), 		        "cp_privatemail" => array(0,0,5,"Private eMail",0),
+			"cp_notes" => array(0,0,1,"Bemerkungen",0),	        "cp_stichwort1" => array(0,0,1,"Stichworte",50),
+			"cp_salutation" => array(0,0,1,"Briefanrede",125),  "cp_privatphone" => array(0,0,3,"Privattelefon 1",30),
+			"cp_birthday" => array(0,0,7,"Geb-Datum",0),	    "cp_beziehung" => array(0,0,6,"Beziehung",0),
+			"cp_abteilung" => array(0,0,1,"Abteilung",25),	    "cp_position" => array(0,0,1,"Position",25),
+			"cp_cv_id" => array(0,0,6,"FID",0),		            "name" => array(1,0,1,"Firma",75),		
+			"cp_owener" => array(0,0,6,"CRM-User",0),	        "cp_grafik" => array(0,0,9,"Grafik",4),);				
 	if (!empty($datei["Datei"]["name"]["bild"])) {  		// eine Datei wird mitgeliefert
 			$pictyp=array("gif","jpeg","png","jpg");
 			$ext=strtolower(substr($datei["Datei"]["name"]["bild"],strrpos($datei["Datei"]["name"]["bild"],".")+1));
@@ -277,7 +268,6 @@ global $db;
 	} else {
 		$daten["cp_grafik"]=$daten["IMG_"];
 	}
-	if ($daten["cp_greeting_"]) $daten["cp_greeting"]=$daten["cp_greeting_"];
 	if ($daten["cp_salutation_"]) $daten["cp_salutation"]=$daten["cp_salutation_"];
 	$keys=array_keys($daten);
 	$dbf=array_keys($dbfld);
@@ -426,7 +416,10 @@ global $db;
 }
 
 function leertplP (&$t,$fid,$msg,$tab,$suche=false,$Quelle="") {
-global $laender,$cp_sonder;
+global $laender;
+//cp_greeting raus hli
+//Sonderflag aus DB hli
+        $cp_sonder = getSonder();
 		if ($fid && $Quelle) {
 			$fa=getFirmenstamm($fid,false,$Quelle);
 			$nummer=($Quelle=="C")?$fa["customernumber"]:$fa["vendornumber"];
@@ -445,11 +438,11 @@ global $laender,$cp_sonder;
 			cpsel1  => "checked",
 			cpsel2  => "",
 			cpsel3  => "",
-			cp_greeting_	=> "",
 			cp_salutation_  => "",
 			cp_title 	=> "",
 			cp_givenname 	=> "",
 			cp_name 	=> "",
+			cp_genderm 	=> "selected",
 			cp_street 	=> "",
 			cp_country	=> "",
 			cp_zipcode 	=> "",
@@ -503,15 +496,6 @@ global $laender,$cp_sonder;
 				));
 				$t->parse("Block2","OwenerListe",true);
 			}		
-			$anreden=getCpAnreden();
-			$t->set_block("pers1","anreden","BlockA");
-			if ($anreden) foreach ($anreden as $anrede) {
-				$t->set_var(array(
-					ANREDE	=> $anrede["cp_greeting"],
-					ASEL	=> ($anrede["cp_greeting"]==$daten["cp_greeting"])?"selected":"",
-				));
-				$t->parse("BlockA","anreden",true);
-			}
 			$anreden=getCpBriefAnreden();
 			$t->set_block("pers1","briefanred","BlockB");
 			if ($anreden) foreach ($anreden as $anrede) {
@@ -522,17 +506,20 @@ global $laender,$cp_sonder;
 				$t->parse("BlockB","briefanred",true);
 			}
 			$t->set_block("pers1","sonder","Block3");
-			if ($cp_sonder) while (list($key,$val) = each($cp_sonder)) {
-				$t->set_var(array(
-					sonder_id => $key,
-					sonder_name => $val
-				));
+            if ($cp_sonder) foreach ($cp_sonder as $row) {
+                $t->set_var(array(
+                    sonder_id => $row["svalue"],
+                    sonder_name => $row["skey"]
+                ));
 				$t->parse("Block3","sonder",true);
 			}
 }
 
 function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
-	global $laender,$cp_sonder;
+	global $laender;
+//cp_greeting raus hli
+//Sonderflag aus DB hli
+        $cp_sonder = getSonder();
 		if ($daten["cp_cv_id"] && $daten["Quelle"]) {
 			$fa=getFirmenstamm($daten["cp_cv_id"],false,$daten["Quelle"]);
 			$nummer=($daten["Quelle"]=="C")?$fa["customernumber"]:$fa["vendornumber"];
@@ -569,13 +556,10 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
 			PID 	=> $daten["cp_id"],
 			tabelle => $daten["tabelle"],
 			nummer	=> $nummer,
-			//cpsel1  => ($daten["cp_greeting"]=="Herr")?"checked":"",
-			//cpsel2  => ($daten["cp_greeting"]=="Frau")?"checked":"",
-			//cpsel3  => ($daten["cp_greeting"]<>"Herr" && $daten["cp_greeting"]<>"Frau")?"checked":"",
-			cp_greeting_	=> $daten["cp_greeting_"], //($daten["cp_greeting"]!="Herr" && $daten["cp_greeting"]!="Frau")?$daten["cp_greeting"]:"",
 			cp_title 	=> $daten["cp_title"],
 			cp_givenname 	=> $daten["cp_givenname"],
 			cp_name 	=> $daten["cp_name"],
+			cp_gender.$daten["cp_gender"] => "selected",
 			cp_salutation_	=> $daten["cp_salutation_"],
 			cp_street 	=> $daten["cp_street"],
 			cp_country	=> $daten["cp_country"],
@@ -635,16 +619,6 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
 				));
 				$t->parse("Block2","OwenerListe",true);
 			}
-			$anreden=getCpAnreden();
-			$t->set_block("pers1","anreden","BlockA");
-			if ($anreden) foreach ($anreden as $anrede) {
-				$t->set_var(array(
-					ANREDE	=> $anrede["cp_greeting"],
-					ASEL	=> ($anrede["cp_greeting"]==$daten["cp_greeting"])?"selected":"",
-				));
-				$t->parse("BlockA","anreden",true);
-			}
-			$t->set_block("pers1","sonder","Block3");
 			$anreden=getCpBriefAnreden();
 			$t->set_block("pers1","briefanred","BlockB");
 			if ($anreden) foreach ($anreden as $anrede) {
@@ -654,12 +628,13 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
 				));
 				$t->parse("BlockB","briefanred",true);
 			}
-			if ($cp_sonder) while (list($key,$val) = each($cp_sonder)) {
-				$t->set_var(array(
-					sonder_sel => ($daten["cp_sonder"] & $key)?"checked":"",
-					sonder_id => $key,
-					sonder_name => $val
-				));
+            $t->set_block("pers1","sonder","Block3");
+            if ($cp_sonder) foreach ($cp_sonder as $row) {
+                $t->set_var(array(
+                    sonder_sel => ($daten["cp_sonder"] & $row["svalue"])?"checked":"",
+                    sonder_id => $row["svalue"],
+                    sonder_name => $row["skey"]
+                ));
 				$t->parse("Block3","sonder",true);
 			}
 }

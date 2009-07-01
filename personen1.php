@@ -48,37 +48,35 @@
             //DEBUG BROWSER Anfang
             $BROWSERDEBUG=false;
             if ($BROWSERDEBUG){
-              echo "Frau"; print_r($anredenFrau);
-              echo "Herr"; print_r($anredenHerr);
+              echo "Frau"; print_r($anredenFrau); echo "<br>";
+              echo "Herr"; print_r($anredenHerr); echo "<br>";
             }
             //DEBUG BROWSER Ende
 
-
-
             if ($daten) foreach ($daten as $zeile) { //Diese Algorithmus macht die Suche bei einer großen Trefferzahl langsam ...
                                                      // TODO executeMultiple ... ;-) jb 16.6.2009
-            if ($zeile["cp_gender"] =="f"){
-                $zeile["cp_greeting"]= $anredenFrau[$zeile["language_id"]];
-                if ($BROWSERDEBUG){
-                    echo "Anrede Frau" . $anredenFrau["language_id"];
-                    echo "Language ID" . $zeile["language_id"];
-                }
-            }else if ($zeile["cp_gender"] =="m"){
+                if ($zeile["cp_gender"] =="f"){
+                    $zeile["cp_greeting"]= $anredenFrau[$zeile["language_id"]];
+                    if ($BROWSERDEBUG){
+                        echo "Anrede Frau" . $anredenFrau["language_id"] . "<br>";
+                        echo "Language ID" . $zeile["language_id"] . "<br>";
+                    }
+                } else if ($zeile["cp_gender"] =="m"){
                         $zeile["cp_greeting"]= $anredenHerr[$zeile["language_id"]];
                         if ($BROWSERDEBUG){
-                            echo "Anrede Herr" . $anredenHerr["language_id"];
+                            echo "Anrede Herr" . $anredenHerr["language_id"] . "<br>";
                         }
-                    }else {
+                } else {
                         $zeile["cp_greeting"]="KEIN GESCHLECHT";
-              }
-              /*if ($zeile["cp_country"] == 'Deutschland'){ //Schnellanpassung für xplace. Kann wieder raus, da dies in der Druckvorlage gesetzt wird
+                }
+                /*if ($zeile["cp_country"] == 'Deutschland'){ //Schnellanpassung für xplace. Kann wieder raus, da dies in der Druckvorlage gesetzt wird
                 $zeile["cp_country"]='';
-              }*/
+                }*/
 
-            /* 
-             * Der Blog ist sowieso gut und sollte mal hier angemerkt werden 'google: "mokka mit schlag"
-             * http://cafe.elharo.com/optimization/how-to-write-network-backup-software-a-lesson-in-practical-optimization/
-            */
+                /* 
+                 * Der Blog ist sowieso gut und sollte mal hier angemerkt werden 'google: "mokka mit schlag"
+                 * http://cafe.elharo.com/optimization/how-to-write-network-backup-software-a-lesson-in-practical-optimization/
+                */
                 insertCSVData(array($zeile["cp_greeting"],$zeile["cp_title"],$zeile["cp_name"],$zeile["cp_givenname"],
                 $zeile["cp_country"],$zeile["cp_zipcode"],$zeile["cp_city"],$zeile["cp_street"],
                 $zeile["cp_phone1"],$zeile["cp_fax"],$zeile["cp_email"],$zeile["name"],$zeile["cp_gender"],$zeile["cp_id"]),$zeile["cp_id"]);
@@ -102,8 +100,6 @@
 					DEST => $dest,
 					QUELLE => $Quelle,
 					Q => $Quelle,
-					//ANZAHL_ANSPRECHPARTNER => count($daten),	//brauch ich nicht unbedingt
-					//laufende_nummer => $i		//die brauch ich unbedingt um die hidden PID_$i zu bilden   //die brauch ich jetzt auch nicht mehr tempcsvdata
 				));
 				$t->parse("Block","Liste",true);
 				$i++;
@@ -114,28 +110,6 @@
 					break;
 				}
 			}
-			/*
-				Falls es entsprechende "Sonderflags", d.h. Attribute für An-
-				sprechpartner gibt, dies als Liste anzeigen um direkt vielen
-				Ansprechpartnern diese(s) Attribut(e) zuzuordnen
-			*/
-			$t->set_block("pers1","sonder","Block3");
-			if ($cp_sonder) while (list($key,$val) = each($cp_sonder)) {
-				$t->set_var(array(
-					sonder_sel => "",
-					sonder_id => $key,
-					sonder_name => $val
-				));
-			$t->parse("Block3","sonder",true);
-			} // Ende if $cp_sonder  (entsprechende "Sonderflags")
-            if ($_POST["cp_sonder"]) foreach ($_POST["cp_sonder"] as $tmp) { $sonder+=$tmp; }
-
-			$t->set_var(array(
-				snd => $snd,
-				FID => $_POST["FID1"],
-				no => ($_POST["FID1"])?"return;":"",
-                sonder => $sonder,
-			));
 		} else {
 			$msg="Leider nichts gefunden.";
 			$btn1="";
@@ -144,5 +118,5 @@
 	} else {
 		leertplP($t,$_GET["fid"],"",1,false,$Quelle);
 	}
-	$t->pparse("out",array("pers1"));
+	$t->Lpparse("out",array("pers1"),$_SESSION["lang"],"firma");
 ?>

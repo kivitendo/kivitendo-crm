@@ -1,5 +1,5 @@
 <?
-// $Id$
+// $Id: firma2.php 4299 2009-06-15 10:06:58Z hlindemann $
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");
@@ -120,7 +120,7 @@
 			$id=$co["cp_id"];
 		} else if (count($co)==0 || $co==false) {
 			// Keinen Kontakt gefunden
-			$co["cp_greeting"]="Leider keine Kontakte gefunden";
+			$co["cp_name"]="Leider keine Kontakte gefunden";
 			$init="";
 		} else {
 			// Genau ein Kontakt
@@ -134,7 +134,7 @@
 		$link3="firma3.php?Q=$Q&fid=$fid";
 		$link4="firma4.php?Q=$Q&fid=$fid&pid=".$co["cp_id"];
 	} else if ($ep=="") {
-		$co["cp_greeting"]="Fehlerhafter Aufruf";
+		$co["cp_name"]="Fehlerhafter Aufruf";
 		$init="";
 		$link1="#";
 		$link2="#";

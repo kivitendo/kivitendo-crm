@@ -1,5 +1,9 @@
 <?
 require_once("inc/stdLib.php");
+
+//Sonderflags jetzt aus der DB
+$cp_sonder=getSonder();
+
 include("inc/crmLib.php");  //brauch ich die hier? kommen hier die globalen Werte her? jb 17.6.2009
 /*
  * Ein Attribut zu einem oder vielen Ansprechpartnern speichern
@@ -103,8 +107,8 @@ if (   $_POST["ansprechpartnern_attribute_zuordnen"]        // Der Knopf wurde g
 <?php  if ($cp_sonder){
         echo "&nbsp;Attribut:<br>";
         echo "&nbsp;<select class=\"klein\" name=\"cp_sonder\">";
-        while (list($key,$val) = each($cp_sonder)) {
-            echo "<option value=\"$key\">$val</option>";
+        foreach ($cp_sonder as $row) {
+            echo '<option value="'.$row["svalue"].'">'.$row["skey"].'</option>';
         }
     }
 ?> <option value="-1">Zuordnung l&ouml;schen</option> <br><br><br>

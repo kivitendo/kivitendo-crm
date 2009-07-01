@@ -1,5 +1,5 @@
 <?
-// $Id$
+// $Id: personen3.php 3578 2009-02-20 14:33:28Z hlindemann $
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/laender.php");
@@ -66,6 +66,6 @@
 		$msg="Neue Person";
 		leertplP($t,$_GET["fid"],$msg,3,true,$Q);
 	}
-	$t->pparse("out",array("pers1"));
+	$t->Lpparse("out",array("pers1"),$_SESSION["lang"],"firma");
 
 ?>

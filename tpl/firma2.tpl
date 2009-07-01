@@ -73,15 +73,15 @@
 	//-->
 	</script>
 <body onLoad="{INIT}">
-<p class="listtop">Detailansicht {FAART} <span title="Wichtige Mitteilung">{Cmsg}</span></p>
+<p class="listtop">.:detailview:. {FAART} <span title="Wichtige Mitteilung">{Cmsg}</span></p>
 <form name="kdhelp">
 <div style="position:absolute; top:1.5em; left:1.1em;  width:60em;">
     <div style="float:left; padding-top:1.2em; ";>
 	<ul id="maintab" class="shadetabs">
-	<li><a href="{Link1}">Custombase</a><li>
-	<li class="selected"><a href="{Link2}" id="aktuell">Contacts</a></li>
-	<li><a href="{Link3}">Sales</a></li>
-	<li><a href="javascript:doclink();">Documents</a></li>
+	<li><a href="{Link1}">.:Custombase:.</a><li>
+	<li class="selected"><a href="{Link2}" id="aktuell">.:Contacts:.</a></li>
+	<li><a href="{Link3}">.:Sales:.</a></li>
+	<li><a href="javascript:doclink();">.:Documents:.</a></li>
 	<li><select style="visibility:{chelp}" name="kdhelp" onChange="KdHelp()">
 <!-- BEGIN kdhelp -->
 		<option value="{cid}">{cname}</option>
@@ -106,7 +106,7 @@
 			<form name="contact">
 			<input type="hidden" name="cp_id" id="cp_id" value="{PID}">
 			<input type="hidden" name="Q" value="{Q}">
-			&nbsp;{Fname1} &nbsp; &nbsp; KdNr.: {customernumber} &nbsp; &nbsp;
+			&nbsp;{Fname1} &nbsp; &nbsp; .:KdNr:.: {customernumber} &nbsp; &nbsp;
 			<select name="liste" id="liste" style="visibility:{moreC}; width:150px;" onChange="showContact();">
 			{kontakte}</select><br />
 			&nbsp;{Fdepartment_1}<br /> 
@@ -145,8 +145,8 @@
 	<div style="position:absolute; text-align:center; left:0em; bottom:0.6em; width:32em; ">
 		<!--[<a href="firma2.php?fid={PID}&ldap=1&Quelle=F">LDAP</a>]-->
 		<span style="visibility:{none};">[<a href="javascript:vcard()">VCard</a>] </span> 
-		<b>Contact_:</b> [<a href="javascript:cedit(1);">{Edit}</a>] 
-		[<a href="#" onClick="cedit(0);">keyin</a>] [<a href="#" onClick="sellist();">fromList</a>]
+		<b>.:Contact:.:</b> [<a href="javascript:cedit(1);">{Edit}</a>] 
+		[<a href="#" onClick="cedit(0);">.:keyin:.</a>] [<a href="#" onClick="sellist();">.:fromList:.</a>]
 	</div>
 </div>
 <div style="float:left; width:45%; height:32em; text-align:left; border: 1px solid black; border-left:0px;" >
@@ -160,7 +160,7 @@
 		<img src="image/rightarrow.png" align="middle" border="0" title="mehr" onClick="showCall(1);">&nbsp;
 		<input type="text" name="suchwort" size="20">
 		<input type="hidden" name="Q" value="{Q}">
-		<input type="submit" src="image/suchen_kl.png" name="ok" value="search_" align="middle" border="0"> 
+		<input type="submit" src="image/suchen_kl.png" name="ok" value=".:search:." align="middle" border="0"> 
 		</form>
 	</span>
 </div>

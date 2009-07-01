@@ -61,7 +61,7 @@
 	$taxzone=array("Inland","EU mit UStId","EU ohne UStId","Ausland");
 	$t->set_var(array(
 			AJAXJS  	=> $xajax->printJavascript('/xajax/'),
-			FAART 		=> ($Q=="C")?"Customer":"Vendor",	//"Kunde":"Lieferant",
+			FAART 		=> ($Q=="C")?".:Customer:.":".:Vendor:.",
 			Q 		=> $Q,
 			FID		=> $id,
 			INID		=> db2date(substr($fa["itime"],0,10)),

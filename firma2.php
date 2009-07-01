@@ -158,7 +158,7 @@
 	$t->set_var(array(
 			INIT	=> ($init=="")?"showOne($id)":"showContact()",
 			AJAXJS  => $xajax->printJavascript('/xajax/'),
-			FAART => ($Q=="C")?"Customer":"Vendor",   //"Kunde":"Lieferant",
+			FAART => ($Q=="C")?".:Customer:.":".:Vendor:.",   //"Kunde":"Lieferant",
 			interv	=> $_SESSION["interv"]*1000,
 			Q => $Q,
 			Link1 => $link1,
@@ -177,7 +177,7 @@
 			moreC => ($liste<>"")?"visible":"hidden",
 			kontakte => $liste,
 			ep => $ep,
-			Edit => "edit",
+			Edit => ".:edit:.",
 			none => ($ep=="" && $init=="")?"hidden":"visible",
 			chelp 		=> ($kdhelp)?"visible":"hidden"
 	));

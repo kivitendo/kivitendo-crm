@@ -40,7 +40,7 @@
 	}
 	$t->set_var(array(
 			Q	=> $Q,
-			FAART	=> ($Q=="C")?"Customer":"Vendor",       //"Kunde":"Lieferant",
+			FAART	=> ($Q=="C")?".:Customer:.":".:Vendor:.",       //"Kunde":"Lieferant",
 			FID => $fid,
 			kdnr	=> $fa["nummer"],
 			PID => $pid,
@@ -55,7 +55,7 @@
 			JAHR => $jahr,
 			JAHRV => $JahrV,
 			JAHRZ => $JahrZ,
-			JAHRVTXT => ($JahrV>0)?"later":"",
+			JAHRVTXT => ($JahrV>0)?".:later:.":"",
 			Monat => $monat
 			));
 	if ($re) {

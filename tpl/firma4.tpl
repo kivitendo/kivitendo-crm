@@ -138,17 +138,17 @@
 	//-->
 	</script>
 <body onLoad="dateibaum('left','/{Q}{customernumber}/{PID}');">
-<p class="listtop">Detailansicht {FAART}</p>
+<p class="listtop">.:detailview:. {FAART}</p>
 <form name="firma4" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="pid" value="{PID}">
 <input type="hidden" name="fid" value="{FID}">
 <input type="hidden" name="Q" value="{Q}">
 <div style="position:absolute; top:2.7em; left:1.2em;  width:42em;">
 	<ul id="maintab" class="shadetabs">
-	<li><a href="{Link1}">Custombase</a><li>
-	<li><a href="{Link2}">Contacts</a></li>
-	<li><a href="{Link3}">Sales</a></li>
-	<li class="selected"><a href="{Link4}" id="aktuell">Documents</a></li>
+	<li><a href="{Link1}">.:Custombase:.</a><li>
+	<li><a href="{Link2}">.:Contacts:.</a></li>
+	<li><a href="{Link3}">.:Sales:.</a></li>
+	<li class="selected"><a href="{Link4}" id="aktuell">.:Documents:.</a></li>
 	</ul>
 </div>
 
@@ -158,17 +158,17 @@
 	<div style="float:left; width:100%; height:3.5em; text-align:left; border-bottom: 1px solid black;" >
 	<table>
 	<tr><td class="fett">{Name}</td><td></td></tr>
-	<tr><td class="fett">KdNr.: {customernumber}</td><td>ID: {PID}</td></tr>
+	<tr><td class="fett">.:KdNr:.: {customernumber}</td><td>ID: {PID}</td></tr>
 	</table>
 	</div>
 	<div style="float:left; width:100%; text-align:left; border-bottom: 0px solid black;" >
 	<ul id="submenu" class="subshadetabs">
-		<li id="subnewfile"><a href="#" onClick="newFile('left')">uploadDocument</a></li>
-		<li id="subnewfolder"><a href="#" onClick="newDir('left')">newDirectory</a></li>
-		<li id="subrefresh"><a href="#" onClick="dateibaum('left',pfadleft)">reread</a></li>
+		<li id="subnewfile"><a href="#" onClick="newFile('left')">.:uploadDocument:.</a></li>
+		<li id="subnewfolder"><a href="#" onClick="newDir('left')">.:newDirectory:.</a></li>
+		<li id="subrefresh"><a href="#" onClick="dateibaum('left',pfadleft)">.:reread:.</a></li>
 	</ul>
 	<br>
-	current path: <span id="path"></span>
+	.:current path:.: <span id="path"></span>
 	<span id="fbleft"></span>
 	</div>
 </span>
@@ -176,14 +176,14 @@
 <span style="float:left; width:58%; height:90%; text-align:left; border: 1px solid black; border-bottom: 0px; padding:2px; border-left:0px;">
 	<div style="float:left; width:100%; height:3.5em; text-align:left; border-bottom: 1px solid black;" class="fett">
 	<table>
-	<tr><td>Templates:</td><td>
+	<tr><td>.:Templates:.:</td><td>
 	<select name="vorlage" id="vorlage" onChange="showD();" style="width:150px;">
 		<option value=""></option>
 <!-- BEGIN Liste -->
 		<option value="{ID}">{Bezeichnung}</option>
 <!-- END Liste -->
 	</select></td></tr>
-	<tr><td>Service contract:</td><td>
+	<tr><td>.:Service contract:.:</td><td>
 	<select name="wv" id="wv" onChange="showV();" style="width:150px;">
 		<option value=""></option> 
 <!-- BEGIN Vertrag -->
@@ -194,11 +194,11 @@
 	</div>
 	<div style="float:left; width:100%;  text-align:left; border-bottom: 0px solid black;" class="normal">
 	<ul id="submenu2" class="subshadetabs">
-		<li id="subfilebrowser"><a href="#" onClick="dateibaum('right',pfadleft)">Filebrowser</a></li>
-		<li id="subdownload" style="visibility:hidden;"><a href="#" >download</a></li>
-		<li id="subdelete" style="visibility:hidden;"><a href="#" >delete_</a></li>
-		<li id="submove" style="visibility:hidden;"><a href="#" >move_</a></li>
-		<li id="subedit" style="visibility:hidden;"><a href="#" >edit attribute</a></li>
+		<li id="subfilebrowser"><a href="#" onClick="dateibaum('right',pfadleft)">.:Filebrowser:.</a></li>
+		<li id="subdownload" style="visibility:hidden;"><a href="#" >.:download:.</a></li>
+		<li id="subdelete" style="visibility:hidden;"><a href="#" >.:delete:.</a></li>
+		<li id="submove" style="visibility:hidden;"><a href="#" >.:move:.</a></li>
+		<li id="subedit" style="visibility:hidden;"><a href="#" >.:edit attribute:.</a></li>
 	</ul><br>
 	    <span id="fbright"></span>
 	</div>
@@ -206,11 +206,11 @@
 <div id="fixiert" style="visibility:hidden; position:absolute; left:5em; width:20em; height:6em; z-index:1; top:10em; 
 	text-align:center; border:3px solid black; background-image: url('css/fade.png');  " class="klein">
 	<table width="99%" class="klein lg">
-	<tr style="border-bottom:1px solid black;"><td>Create a new Directory</td><td align="right"><a href="javascript:newDir()">(X)</a></td></tr>
+	<tr style="border-bottom:1px solid black;"><td>.:Create a new Directory:.</td><td align="right"><a href="javascript:newDir()">(X)</a></td></tr>
 	</table>
 	<br>
 	<input type="hidden" name="seite" id="seite">
-	<input type="text" name="subdir" id="subdir" size="20"> <input type="button" name="sdok" value="create_" onClick="mkDir();">
+	<input type="text" name="subdir" id="subdir" size="20"> <input type="button" name="sdok" value=".:create:." onClick="mkDir();">
 </div>
 <div id="uploadfr" style="visibility:hidden; position:absolute; left:4em; z-index:1; top:10em; height:16em; width:20em; border:3px solid black; "  >
                 <iframe id="frupload" name="frupload" src="upload.php?fid={FID}&pid={PID}" frameborder="0" width="100%" height="100%"></iframe>
@@ -218,7 +218,7 @@
 <div id="attribut" style="visibility:hidden; position:absolute; left:5em; z-index:1; top:10em; width:23em; 
 	text-align:center; border:3px solid black; background-image: url('css/fade.png');" class="klein" >
 	<table width="99%" class="klein lg">
-	<tr style="border-bottom:1px solid black;"><td>edit attribute</td><td align="right"><a href="javascript:editattribut()">(X)</a></td></tr>
+	<tr style="border-bottom:1px solid black;"><td>.:edit attribute:.</td><td align="right"><a href="javascript:editattribut()">(X)</a></td></tr>
 	</table>
 	<input type="hidden" name="docid" id="docid" value="">
 	<input type="hidden" name="docoldname" id="docoldname" value="">
@@ -226,21 +226,21 @@
 	<center>
 	<table >
 	<tr><td class="klein"><textarea name="docdescript" id="docdescript" cols="34" rows="4"></textarea></td></tr>
-	<tr><td class="mini">Description</td></tr>
+	<tr><td class="mini">.:Description:.</td></tr>
 	<tr><td class="klein"><input type="text" name="docname" id="docname" size="35" value=""></td></tr>
-	<tr><td class="mini">Filename</td></tr>
-	<tr><td class="re"><input type="button" name="saveAtr" value="save_" onClick="saveAttribut();"></td></tr>
+	<tr><td class="mini">.:Filename:.</td></tr>
+	<tr><td class="re"><input type="button" name="saveAtr" value=".:save:." onClick="saveAttribut();"></td></tr>
 	</table>
 	</center>
 </div>
 <div id="fileDel" style="visibility:hidden; position:absolute; left:4em; z-index:1; top:10em; height:16em; width:23em; border:3px solid black; 
 	text-align:center;  background-image: url('css/fade.png');" class="klein" >
 	<table width="99%" class="klein lg">
-	<tr style="border-bottom:1px solid black;"><td>Delete a File</td><td align="right"><a href="javascript:deletefile()">(X)</a></td></tr>
+	<tr style="border-bottom:1px solid black;"><td>.:Delete a File:.</td><td align="right"><a href="javascript:deletefile()">(X)</a></td></tr>
 	</table>
 	<h4 id="delfilename"></h4>
-	<a href="javascript:filedelete();"><img src="image/eraser.png" border="0">Really.</a><br \><br \>
-	<a href="javascript:deletefile();"><img src="image/fileclose.png" border="0">Better not</a>
+	<a href="javascript:filedelete();"><img src="image/eraser.png" border="0">.:Really:.</a><br \><br \>
+	<a href="javascript:deletefile();"><img src="image/fileclose.png" border="0">.:Better not:.</a>
 </div>
 	
 <!-- Hier endet die Karte ------------------------------------------->

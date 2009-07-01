@@ -102,15 +102,15 @@
 	</script>
 	</head>
 <body onLoad="submenu('{kdview}'); showCall(0);">
-<p class="listtop">Detailansicht {FAART} <span title="Wichtige Mitteilung">{Cmsg}&nbsp;</span></p>
+<p class="listtop">.:detailview:. {FAART} <span title="Wichtige Mitteilung">{Cmsg}&nbsp;</span></p>
 <form name="kdhelp">
 <div style="position:absolute; top:1.5em; left:1.1em;  width:60em;">
     <div style="float:left; padding-top:1.2em; ";>
 	<ul id="maintab" class="shadetabs">
-	<li class="selected"><a href="firma1.php?Q={Q}&id={FID}" id="aktuell">Custombase</a></li>
-	<li><a href="firma2.php?Q={Q}&fid={FID}">Contacts</a></li>
-	<li><a href="firma3.php?Q={Q}&fid={FID}">Sales</a></li>
-	<li><a href="firma4.php?Q={Q}&fid={FID}">Documents</a></li>
+	<li class="selected"><a href="firma1.php?Q={Q}&id={FID}" id="aktuell">.:Custombase:.</a></li>
+	<li><a href="firma2.php?Q={Q}&fid={FID}">.:Contacts:.</a></li>
+	<li><a href="firma3.php?Q={Q}&fid={FID}">.:Sales:.</a></li>
+	<li><a href="firma4.php?Q={Q}&fid={FID}">.:Documents:.</a></li>
 	<li><select style="visibility:{chelp}" name="kdhelp" onChange="KdHelp()">
 <!-- BEGIN kdhelp -->
 		<option value="{cid}">{cname}</option>
@@ -170,19 +170,19 @@
 	</div>
 	<div style="position:absolute; width:32.0em; height:1.4em; text-align:left;  border-top: 1px solid black;left:0px; top:15.5em;">
 		<ul id="submenu" class="subshadetabs" style="padding-left:5px;">
-			<li id="sublie"><a href="#" onClick="submenu('lie')">shipto_</a></li>
-			<li id="subnot"><a href="#" onClick="submenu('not')">notes_</a></li>
-			<li id="subinf"><a href="#" onClick="submenu('inf')">miscInfo</a></li>
+			<li id="sublie"><a href="#" onClick="submenu('lie')">.:shipto:.</a></li>
+			<li id="subnot"><a href="#" onClick="submenu('not')">.:notes:.</a></li>
+			<li id="subinf"><a href="#" onClick="submenu('inf')">.:miscInfo:.</a></li>
 			<li><a href="vcardexp.php?Q={Q}&fid={FID}">VCard</a></li>
-			<li><a href="karte.php?Q={Q}&fid={FID}">Register</a></li>
-			<li><a href="firmen3.php?Q={Q}&id={FID}&edit=1">edit_</a></li>
+			<li><a href="karte.php?Q={Q}&fid={FID}">.:register:.</a></li>
+			<li><a href="firmen3.php?Q={Q}&id={FID}&edit=1">.:edit:.</a></li>
 		</ul>
 	</div>
 
 	<span id="lie" style="visibility:visible; position:absolute; text-align:left;width:32em; left:1.2em; top:17.5em;" >
 		<div  class="klein">
 		<span id="shiptoname">{Sname1}</span> &nbsp;&nbsp;<a href="#" onCLick="anschr({Sshipto_id});"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a>&nbsp; &nbsp; 
-		Anzahl Anschriften:{Scnt} <a href="javascript:nextshipto('-');"><img src="image/leftarrow.png" border="0"></a> 
+		.:shipto count:.:{Scnt} <a href="javascript:nextshipto('-');"><img src="image/leftarrow.png" border="0"></a> 
 		<span id="SID">{Sshipto_id}</span> <a href="javascript:nextshipto('+');"><img src="image/rightarrow.png" border="0"></a><br />
 		<span id="shiptodepartment_1">{Sdepartment_1}</span> &nbsp; &nbsp; <span id="shiptodepartment_2">{Sdepartment_2}</span> <br />
 		<span id="shiptostreet">{SStrasse}</span><br />
@@ -191,8 +191,8 @@
 		<span id="shiptobland">{SBundesland}</span><br />
 		<span class="mini">&nbsp;<br /></span>
 		<span id="shiptocontact">{Scontact}</span><br />
-		Tel: <span id="shiptophone">{STelefon}</span><br />
-		Fax: <span id="shiptofax">{SFax}</span><br />
+		.:tel:.: <span id="shiptophone">{STelefon}</span><br />
+		.:fax:.: <span id="shiptofax">{SFax}</span><br />
 		<span id="shiptoemail"><a href="mail.php?TO={SeMail}&KontaktTO=C{FID}">{SeMail}</a></span>
 		</div>
 	</span>
@@ -203,91 +203,91 @@
 			{Vars}
 			</table>
 			<br>
-			[ <a href='#' onClick="hideVar();">verstecken</a> ]
+			[ <a href='#' onClick="hideVar();">.:hide:.</a> ]
 		</div>
 		<div style="width:35em;" class="klein">
 		<table class="normal">
-		<tr><td>variables:   </td><td><div class="value"><a href='#' onClick="showVar();">{variablen}</a></div></td></tr>
-		<tr><td>Checkbox:   </td><td><div class="value">{sonder} </div></td></tr>
-		<tr><td>Industry:    </td><td><div class="value">{branche}</div></td></tr>
-		<tr><td>Catchword: </td><td><div class="value">{sw}     </div></td></tr>
-		<tr><td valign="top">Remarks:</td><td><div class="value">{notiz}  </div></td></tr>
+		<tr><td>.:variables:.:   </td><td><div class="value"><a href='#' onClick="showVar();">{variablen}</a></div></td></tr>
+		<tr><td>.:Checkbox:.:   </td><td><div class="value">{sonder} </div></td></tr>
+		<tr><td>.:Industry:.:    </td><td><div class="value">{branche}</div></td></tr>
+		<tr><td>.:Catchword:.: </td><td><div class="value">{sw}     </div></td></tr>
+		<tr><td valign="top">.:Remarks:.:</td><td><div class="value">{notiz}  </div></td></tr>
 		</table>
 		</div>
 	</span>	
 
 	<span id="inf" style="visibility:hidden;position:absolute; text-align:left;width:32em; left:1.2em; top:17.1em;">
 		<div  class="zeile klein">
-			<span class="labelLe">Concern:</span>
+			<span class="labelLe">.:Concern:.:</span>
 			<span class="value"><a href="firma1.php?Q={Q}&id={konzern}">{konzernname}</a></span>
 			<span> &nbsp; <a href="konzern.php?Q={Q}&fid={FID}">{konzernmember}</a></span>
 		</div>
 		<div  class="zeile klein">
-			<span class="labelLe">Business:</span>
+			<span class="labelLe">.:Business:.:</span>
 			<span class="value">{kdtyp}</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
-			<span class="labelLe">Source:</span>
+			<span class="labelLe">.:Source:.:</span>
 			<span class="value">{lead} {leadsrc}</span>
 		</div>
 		<div  class="zeile klein">
- 			<span class="labelLe">Discount:</span>
+ 			<span class="labelLe">.:Discount:.:</span>
 			<span class="value">{rabatt}</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
-			<span class="labelLe">Price group:</span>
+			<span class="labelLe">.:Price group:.:</span>
 			<span class="value">{preisgrp}</span>
 		</div>
 		<div  class="zeile klein">
-			<span class="labelLe">Init date:</span>
+			<span class="labelLe">.:Init date:.:</span>
 			<span class="value">{erstellt}</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
-			<span class="labelLe">update:</span>
+			<span class="labelLe">.:update:.:</span>
 			<span class="value">{modify}</span>
 		</div>
 		<br />
 		<div  class="zeile klein">
-			<span class="labelLe">Tax number.:</span>
+			<span class="labelLe">.:taxnumber:.:</span>
 			<span class="value">{Taxnumber}</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
 			<span class="labelLe">UStId:</span>
 			<span class="value">{USTID}</span>
 		</div>
 		<div  class="zeile klein">
-			<span class="labelLe">Tax zone:</span>
+			<span class="labelLe">.:taxzone:.:</span>
 			<span class="value">{Steuerzone}</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
 		</div>
 		<br />
 		<div  class="zeile klein">
-			<span class="labelLe">Zahlungsziel:</span>
-			<span class="value">{terms} Tage</span>
+			<span class="labelLe">.:terms:.:</span>
+			<span class="value">{terms} .:days:.</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
-			<span class="labelLe">Kreditlimit:</span>
+			<span class="labelLe">.:creditlimit:.:</span>
 			<span class="value">{kreditlim}</span>
 		</div>
 		<div  class="zeile">
-			<span class="space mini">outstanding</span>
+			<span class="space mini">.:outstanding:.</span>
 		</div>
 		<div  class="zeile klein">
-			<span class="labelLe">- items:</span>
+			<span class="labelLe">- .:items:.:</span>
 			<span class="value" onClick="showOP('{apr}');">{op}</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
-			<span class="labelLe">- orders:</span>
+			<span class="labelLe">- .:orders:.:</span>
 			<span class="value" onClick="showOP('oe');">{oa}</span>
 		</div>
 		<br />
 		<div  class="zeile klein">
-			<span class="labelLe">Bank name:</span>
+			<span class="labelLe">.:bankname:.:</span>
 			<span class="value">{bank}</span>
 		</div>
 		<div  class="zeile klein">
-			<span class="labelLe">Bank code:</span>
+			<span class="labelLe">.:bankcode:.:</span>
 			<span class="value">{blz}</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
-			<span class="labelLe">Account:</span>
+			<span class="labelLe">.:account:.:</span>
 			<span class="value">{konto}</span>
 		</div>
 		<div  class="zeile klein">
-			<span class="space">Direct debit:</span><span class="value">{directdebit}</span>
+			<span class="space">.:directdebit:.:</span><span class="value">{directdebit}</span>
 		</div>	
 	</span>
 </div>

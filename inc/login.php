@@ -28,8 +28,11 @@ if ($_POST["erpname"]) {
 	$ERPNAME=$_POST["erpname"];
 }
 
-$conffile="../$ERPNAME/config/authentication.pl";
-
+if (substr(getcwd(),-3)=="inc") {
+    $conffile="../../$ERPNAME/config/authentication.pl";
+} else {
+    $conffile="../$ERPNAME/config/authentication.pl";
+}
 /*if (!$login) {
 	header("location: ups.html");
 } else */

@@ -473,7 +473,7 @@ global $db;
 		}
 		$rc0=$db->query($sql0);
 		if ($rc0 and $rc1) { $rc=$fid; }
-		else { $rc=-1; $fehler="unknown"; };
+		else { $rc=-1; $fehler=".:unknown:."; };
 		return array($rc,$fehler);
 	} else {
 		if ($daten["saveneu"]){
@@ -672,7 +672,7 @@ global $cp_sonder,$xajax,$GEODB,$BLZDB;
 		$t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
 		$t->set_var(array(
 			AJAXJS	=> $xajax->printJavascript('/xajax/'),
-			FAART => ($typ=="C")?"Customer":"Vendor",
+			FAART => ($typ=="C")?".:Customer:.":".:Vendor:.",
 			Q => $typ,
 			Btn1 => "",
 			Btn2 => "",
@@ -867,7 +867,7 @@ global $cp_sonder,$xajax,$GEODB,$BLZDB;
 		$t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
 		$t->set_var(array(
 				AJAXJS	=> $xajax->printJavascript('/xajax/'),
-				FAART => ($typ=="C")?"Customer":"Vendor", 	//"Kunde":"Lieferant",
+			    FAART => ($typ=="C")?".:Customer:.":".:Vendor:.",
 				mtime	=> $daten["mtime"],
 				Q => $typ,
 				Btn1	=> $btn1,
@@ -1021,7 +1021,7 @@ global $cp_sonder,$xajax,$GEODB,$BLZDB;
 			if ($daten["employee"]==$_SESSION["loginCRM"]) {
 					$t->set_block("fa1","OwenerListe","Block");
 					$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>"Alle");
-					$first[]=array("grpid"=>$_SESSION["loginCRM"],"rechte"=>"w","grpname"=>"Pers&ouml;nlich");
+					$first[]=array("grpid"=>$_SESSION["loginCRM"],"rechte"=>"w","grpname"=>".:personal:.");
 					$grps=getGruppen();
 					if ($grps) {
 						$user=array_merge($first,getGruppen());
@@ -1046,7 +1046,7 @@ global $cp_sonder,$xajax,$GEODB,$BLZDB;
 					$t->set_var(array(
 						grpid => $daten["owener"],
 						Gsel => "selected",
-						Gname => ($daten["owener"])?getOneGrp($daten["owener"]):"&ouml;ffentlich",
+						Gname => ($daten["owener"])?getOneGrp($daten["owener"]):".:public:.",
 					));
 					$t->parse("Block","OwenerListe",true);
 			}

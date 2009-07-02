@@ -303,7 +303,7 @@
 		<img src="image/rightarrow.png" align="middle" border="0" title="mehr" onClick="showCall(1);">&nbsp;
 		<input type="text" name="suchwort" size="20">
 		<input type="hidden" name="Q" value="{Q}">
-		<input type="submit" src="image/suchen_kl.png" name="ok" value="suchen" align="middle" border="0"> 
+		<input type="submit" src="image/suchen_kl.png" name="ok" value=".:search:." align="middle" border="0"> 
 		</form>
 	</span>
 

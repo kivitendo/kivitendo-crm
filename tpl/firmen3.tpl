@@ -56,14 +56,14 @@
 	</script>
 <body onLoad="submenu('tab1'); document.neueintrag.name.focus();">
 
-<p class="listtop"> {FAART} eingeben/editieren</p>
+<p class="listtop"> {FAART} .:keyin:./.:edit:.</p>
 
 <!-- Beginn Code ------------------------------------------->
 <div style="position:absolute; top:2.8em; left:1em;  width:45em;">
 	<ul id="maintab" class="shadetabs">
-	<li id="subtab1" ><a href="#" onClick="submenu('tab1')">Rechnungsanschrift</a></li>
-	<li id="subtab2" ><a href="#" onClick="submenu('tab2')">Lieferanschrift</a></li>
-	<li id="subtab3" ><a href="#" onClick="submenu('tab3')">Sonstiges</a></li>
+	<li id="subtab1" ><a href="#" onClick="submenu('tab1')">.:address:.</a></li>
+	<li id="subtab2" ><a href="#" onClick="submenu('tab2')">.:shipto:.</a></li>
+	<li id="subtab3" ><a href="#" onClick="submenu('tab3')">.:misc:.</a></li>
 	<li>{Msg}
 	</ul>
 </div>
@@ -78,7 +78,7 @@
 <span id="tab1" style="visibility:visible; position:absolute; text-align:left;width:90%; left:0.8em; top:4.3em; border:1px solid black;">
 	<div class="zeile2">
 		<span class="label klein">Anrede </span>
-		<span class="feldxx"> <input type="text" name="greeting_" size="15" maxlength="75" value="{greeting_}" tabindex="1">
+		<span class="feldxx"> <input type="text" name=".:greeting:." size="15" maxlength="75" value="{greeting_}" tabindex="1">
 				<select name="greeting" tabindex="2">
 					<option value="">
 <!-- BEGIN anreden -->
@@ -88,23 +88,23 @@
 		</span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Firmenname </span>
+		<span class="label klein">.:company:. </span>
 		<span class="feldxx"> <input type="text" name="name" size="35" maxlength="75" value="{name}" tabindex="3"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Abteilung 1</span>
+		<span class="label klein">.:department:. 1</span>
 		<span class="feldxx"><input type="text" name="department_1" size="35" maxlength="75" value="{department_1}" tabindex="4"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Abteilung 2</span>
+		<span class="label klein">.:department:. 2</span>
 		<span class="feldxx"><input type="text" name="department_2" size="35" maxlength="75" value="{department_2}" tabindex="5"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Strasse</span>
+		<span class="label klein">.:street:.</span>
 		<span class="feldxx"><input type="text" name="street" size="35" maxlength="75" value="{street}" tabindex="6"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Land / Plz</span>
+		<span class="label klein">.:country:. / .:zipcode:.</span>
 		<span class="feldxx">
 			<input type="text" name="country" size="2" maxlength="75" value="{country}" tabindex="7" onBlur="mkBuland('bland')">/
 			<input type="text" id="zipcode" name="zipcode" size="5" maxlength="10" value="{zipcode}" tabindex="8">
@@ -117,27 +117,27 @@
 		</span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Ort</span>
+		<span class="label klein">.:city:.</span>
 		<span class="feldxx"><input type="text" id="city" name="city" size="35" maxlength="75" value="{city}" tabindex="10"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Telefon</span>
+		<span class="label klein">.:phone:.</span>
 		<span class="feldxx"><input type="text" id="phone" name="phone" size="35" maxlength="30" value="{phone}" tabindex="11"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Fax</span>
+		<span class="label klein">.:fax:.</span>
 		<span class="feldxx"><input type="text" name="fax" size="35" maxlength="30" value="{fax}" tabindex="12"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">eMail</span>
+		<span class="label klein">.:email:.</span>
 		<span class="feldxx"><input type="text" name="email" size="35" maxlength="125" value="{email}" tabindex="13"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Kontakt</span>
+		<span class="label klein">.:Contacts:.</span>
 		<span class="feldxx"><input type="text" name="contact" size="35" maxlength="125" value="{contact}" tabindex="14"></span>
 	</div>
 	<div class="zeile2">
-		<span class="klein">Bemerkungen</span><br>
+		<span class="klein">.:Remarks:.</span><br>
 		<textarea name="notes" cols="70" rows="3" tabindex="15">{notes}</textarea><br />
 	</div>
 	<span style="position:absolute; left:35em; top:3em;text-align:left;">
@@ -167,23 +167,23 @@
 		</select></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Firmenname</span>
+		<span class="label klein">.:company:.</span>
 		<span class="feldxx"><input type="text" id="shiptoname" name="shiptoname" size="35" maxlength="75" value="{shiptoname}" tabindex="2"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Abteilung 1</span>
+		<span class="label klein">.:department:. 1</span>
 		<span class="feldxx"><input type="text" id="shiptodepartment_1" name="shiptodepartment_1" size="35" maxlength="75" value="{shiptodepartment_1}" tabindex="3"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Abteilung 2</span>
+		<span class="label klein">.:department:. 2</span>
 		<span class="feldxx"><input type="text" id="shiptodepartment_2" name="shiptodepartment_2" size="35" maxlength="75" value="{shiptodepartment_2}" tabindex="4"></span
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Strasse</span>
+		<span class="label klein">.:street:.</span>
 		<span class="feldxx"><input type="text" id="shiptostreet" name="shiptostreet" size="35" maxlength="75" value="{shiptostreet}" tabindex="5"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Land / Plz</span>
+		<span class="label klein">.:country:. / .:zipcode:.</span>
 		<span class="feldxx">
 			<input type="text" id="shiptocountry" name="shiptocountry" size="2" value="{shiptocountry}" tabindex="6" onBlur="mkBuland('shiptobland'ch);">/
 			<input type="text" id="shiptozipcode" name="shiptozipcode" size="5" maxlength="10" value="{shiptozipcode}" tabindex="7">
@@ -196,23 +196,23 @@
 		</span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Ort</span>
+		<span class="label klein">.:city:.</span>
 		<span class="feldxx"><input type="text" id="shiptocity" name="shiptocity" size="35" maxlength="75" value="{shiptocity}" tabindex="9"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Telefon</span>
+		<span class="label klein">.:phone:.</span>
 		<span class="feldxx"><input type="text" id="shiptophone" name="shiptophone" size="35" maxlength="30" value="{shiptophone}" tabindex="10"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Fax</span>
+		<span class="label klein">.:fax:.</span>
 		<span class="feldxx"><input type="text" id="shiptofax" name="shiptofax" size="35" maxlength="30" value="{shiptofax}" tabindex="11"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">eMail</span>
+		<span class="label klein">.:email:.</span>
 		<span class="feldxx"><input type="text" id="shiptoemail" name="shiptoemail" size="35" maxlength="125" value="{shiptoemail}" tabindex="12"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Kontakt</span>
+		<span class="label klein">.:Contacts:.</span>
 		<span class="feldxx"><input type="text" id="shiptocontact" name="shiptocontact" size="35" maxlength="75" value="{shiptocontact}" tabindex="13"></span>
 	</div>
 	<br><br>
@@ -226,7 +226,7 @@
 <!-- Ende tab2 -->
 <span id="tab3" style="visibility:hidden;  position:absolute; text-align:left;width:90%; left:0.8em; top:4.3em; border:1px solid black; display:inline;">
 	<div class="zeile2">
-		<span class="label klein">Branche</span>
+		<span class="label klein">.:Industry:.</span>
 		<span class="feldxx"><input type="text" name="branche_" size="15" maxlength="25" value="{branche_}" tabindex="1">
 				<select name="branche" tabindex="2" style="width:11em;">
 					<option value="">
@@ -237,11 +237,11 @@
 		</span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Stichwort</span>
+		<span class="label klein">.:Catchword:.</span>
 		<span class="feldxx"><input type="text" name="sw" size="35" value="{sw}" maxlength="50" tabindex="3"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Homepage</span>
+		<span class="label klein">.:homepage:.</span>
 		<span class="feldxx"><input type="text" name="homepage" size="35" maxlength="75" value="{homepage}" tabindex="4"></span>
 	</div>
 	<div class="zeile2">
@@ -249,31 +249,31 @@
 		<span class="feldxx"><input type="text" name="ustid" size="35" maxlength="15" value="{ustid}" tabindex="5"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Steuernr.</span>
+		<span class="label klein">.:taxnumber:.</span>
 		<span class="feldxx"><input type="text" name="taxnumber" size="35" maxlength="35" value="{taxnumber}" tabindex="6"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Bank</span>
+		<span class="label klein">.:bankname:.</span>
 		<span class="feldxx"><input type="text" id="bank" name="bank" size="35" maxlength="55" value="{bank}" tabindex="7"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Blz</span>
+		<span class="label klein">.:bankcode:.</span>
 		<span class="feldxx"><input type="text" id="blz" name="bank_code" size="35" maxlength="10" value="{bank_code}" tabindex="8">
 		</span>
 		<span id="blzsearch" style="text-align:left;"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Konto-Nr</span>
+		<span class="label klein">.:account:.</span>
 		<span class="feldxx"><input type="text" name="account_number" size="35" maxlength="15" value="{account_number}" tabindex="9"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Lastschrift</span>
-		<span class="feldxx"><input type="radio" value="t" name="direct_debit" {direct_debitt} tabindex="9">Ja
-				<input type="radio" value="f" name="direct_debit" {direct_debitf} tabindex="9">Nein
+		<span class="label klein">.:shipto:.</span>
+		<span class="feldxx"><input type="radio" value="t" name="direct_debit" {direct_debitt} tabindex="9">.:yes:.
+				<input type="radio" value="f" name="direct_debit" {direct_debitf} tabindex="9">.:no:.
 		</span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Leadquelle</span>
+		<span class="label klein">.:leadsource:.</span>
 		<span class="feldxx">
 			<select name="lead" tabindex="10" style="width:10em;">
 <!-- BEGIN LeadListe -->
@@ -284,7 +284,7 @@
 		</span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Kundentyp</span>
+		<span class="label klein">.:Business:.</span>
 		<span class="feldxx">
 			<select name="business_id" tabindex="12">
 <!-- BEGIN TypListe -->
@@ -294,7 +294,7 @@
 		</span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Steuerzone</span>
+		<span class="label klein">.:taxzone:.</span>
 		<span class="feldxx">
 			<select name="taxzone_id" tabindex="13">
 				<option value="0" {txid0}>Inland
@@ -305,13 +305,13 @@
 		</span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Konzern</span>
+		<span class="label klein">.:Concern:.</span>
 		<input type="hidden" name="konzern" value="{konzern}">
 		<span class="feldxx"><input type="text" name="konzernname" size="30" value="{konzernname}" maxlength="50" tabindex="14">{konzern}<input type="button" name="suche" value="suchen" onClick="suchFa();"></span>
 	</div>
 
 	<div class="zeile2">
-		<span class="label klein">Verk&auml;ufer</span>
+		<span class="label klein">.:salesman:.</span>
 		<span class="feldxx">
 			<select name="salesman_id" tabindex="15">
 				<option value=""></option>
@@ -322,7 +322,7 @@
 		</span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">Berechtig.</span>
+		<span class="label klein">.:authority:.Berechtig.</span>
 		<span class="feldxx">
 			<select name="owener" tabindex="16">
 <!-- BEGIN OwenerListe -->
@@ -339,8 +339,8 @@
 </span>
 <span id="tab4" style="position:absolute; text-align:left;width:48%; left:0.8em; top:34.5em;"> 			
 			{Btn1} &nbsp;{Btn2} &nbsp; 
-			<input type="submit" class="sichernneu" name="saveneu" value="sichern neu" tabindex="97"> &nbsp;
-			<input type="submit" class="clear" name="reset" value="clear" tabindex="98"> &nbsp;
+			<input type="submit" class="sichernneu" name="saveneu" value=".:save:. .:new:." tabindex="97"> &nbsp;
+			<input type="submit" class="clear" name="reset" value=".:clear:." tabindex="98"> &nbsp;
 			<input type="button" name="" value="VCard" onClick="vcard()" tabindex="99">
 </span>
 <!-- End Code ------------------------------------------->

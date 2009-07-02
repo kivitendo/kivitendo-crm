@@ -145,7 +145,7 @@
 	<div style="position:absolute; text-align:center; left:0em; bottom:0.6em; width:32em; ">
 		<!--[<a href="firma2.php?fid={PID}&ldap=1&Quelle=F">LDAP</a>]-->
 		<span style="visibility:{none};">[<a href="javascript:vcard()">VCard</a>] </span> 
-		<b>.:Contact:.:</b> [<a href="javascript:cedit(1);">{Edit}</a>] 
+		<b>.:Contacts:.:</b> [<a href="javascript:cedit(1);">{Edit}</a>] 
 		[<a href="#" onClick="cedit(0);">.:keyin:.</a>] [<a href="#" onClick="sellist();">.:fromList:.</a>]
 	</div>
 </div>

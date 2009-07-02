@@ -1224,7 +1224,7 @@ function getOneMail($usr,$nr) {
 			$encoding=$part0->encoding;
 			$text_encoding=$mime_encoding[$encoding];
 			if (empty($text_encoding)) {
-				$text_encoding="unknown";
+				$text_encoding=".:unknown:.";
 			}
 			$description=$part0->description;
 			if (eregi("RFC822",$attach_type)) {

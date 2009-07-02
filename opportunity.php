@@ -7,11 +7,11 @@
 	$t = new Template($base);
 	$jscal ="<style type='text/css'>@import url(../../$ERPNAME/js/jscalendar/calendar-win2k-1.css);</style>\n";
 	$jscal.="<script type='text/javascript' src='../../$ERPNAME/js/jscalendar/calendar.js'></script>\n";
-        $jscal.="<script type='text/javascript' src='../../$ERPNAME/js/jscalendar/lang/calendar-de.js'></script>\n";
-        $jscal.="<script type='text/javascript' src='../../$ERPNAME/js/jscalendar/calendar-setup.js'></script>\n";
-        $jscal1="<script type='text/javascript'><!--\nCalendar.setup( {\n";
+    $jscal.="<script type='text/javascript' src='../../$ERPNAME/js/jscalendar/lang/calendar-de.js'></script>\n";
+    $jscal.="<script type='text/javascript' src='../../$ERPNAME/js/jscalendar/calendar-setup.js'></script>\n";
+    $jscal1="<script type='text/javascript'><!--\nCalendar.setup( {\n";
 	$jscal1.="inputField : 'zieldatum',ifFormat :'%d.%m.%Y',align : 'BL', button : 'trigger1'} );\n";
-        $jscal1.="//-->\n</script>";
+    $jscal1.="//-->\n</script>";
 	$stamm="none";
 	if ($_GET["Q"] and $_GET["fid"]) {
 		$fid=$_GET["fid"];
@@ -55,14 +55,14 @@
 				$i++;
 			}
 			$stamm="block";
-			$t->pparse("out",array("op"));
+	        $t->Lpparse("out",array("op"),$_SESSION["lang"],"work");
 			exit;
 		} else if (count($data)==0 || !$data){
 			if ($_POST["fid"]) {
 				include_once("inc/FirmenLib.php");
 				$data["name"]=getName($_POST["fid"],$_POST["Quelle"]);
 			};
-			$msg="Nichts gefunden!";
+			$msg=".:notfound:.!";
 			$daten["fid"]=$_POST["fid"];
 			$daten["firma"]=$data["name"];
 			$daten["tab"]=$_POST["Quelle"];
@@ -82,7 +82,7 @@
 	} else if ($_POST["save"]) {
 		$rc=saveOpportunity($_POST);
 		if (!$rc) { 
-			$msg="Fehler beim Sichern";
+			$msg=".:error:. .:save:.";
 			$daten=$_POST;
 			$daten["zieldatum"]=date2db($daten["zieldatum"]);
 			$save="visible";
@@ -92,7 +92,7 @@
 			$stamm="block";
 		} else {
 			$daten=getOneOpportunity($rc);
-			$msg="Daten gesichert";
+			$msg=".:datasave:.";
 			$save="visible";
 			$search="hidden";
 			$none="none";
@@ -154,8 +154,8 @@
 		msg => $msg,
 		jcal0 => ($jcalendar)?$jscal:"",
 		jcal2 => ($jcalendar)?$jscal1:"",
-		//jcal1 => ($jcalendar)?"<input type='image' src='image/date.png' title='Zieldatum suchen' name='zieldatum' align='middle' id='trigger1' value='?'>":""
-		jcal1 => ($jcalendar)?"<a href='#' id='trigger1' name='zieldatum' title='Zieldatum suchen' onClick='false'><img src='image/date.png' border='0' align='middle'></a>":""
+		//jcal1 => ($jcalendar)?"<input type='image' src='image/date.png' title='.:targetdate:. .:search:.' name='zieldatum' align='middle' id='trigger1' value='?'>":""
+		jcal1 => ($jcalendar)?"<a href='#' id='trigger1' name='zieldatum' title='.:targetdate:. .:search:.' onClick='false'><img src='image/date.png' border='0' align='middle'></a>":""
 	));
-	$t->pparse("out",array("op"));
+	$t->Lpparse("out",array("op"),$_SESSION["lang"],"work");
 ?>

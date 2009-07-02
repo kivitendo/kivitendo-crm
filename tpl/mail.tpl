@@ -13,11 +13,11 @@
 			cc=document.mailform.CC.value;
 			subj=document.mailform.Subject.value;
 			if (to == "" && cc == "") {
-				alert ("Kein Empfänger angegeben");
+				alert (".:no_to:.");
 				return false;
 			}
 			if (subj == "") {
-				alert("Kein Betreff angegeben");
+				alert(".:no_subject:.");
 				return false;
 			}
 			document.mailform.aktion.value="sendmail";
@@ -67,7 +67,7 @@
 	</script>
 <body onLoad="doInit();" >
 <!-- Beginn Code ------------------------------------------->
-<p class="listtop">eMail versenden <font color="red">{Msg}</font></p>
+<p class="listtop">.:email:. .:send:. <font color="red">{Msg}</font></p>
 <center>
 <table style="width:40em;" >
 <form name="mailform" action="mail.php" enctype='multipart/form-data' method="post" onSubmit="return sende();">
@@ -83,21 +83,21 @@
 	<td class=" re" width="*"></td>
 </tr>
 <tr>
-	<td class="klein re">An:</td>
+	<td class="klein re">.:to:.:</td>
 	<td class=""><input type="text" name="TO" value="{TO}" size="70" maxlength="125" tabindex="1"> 
 					<input type="button" name="sto" value="suchen" onClick="suchMail('TO');"></td>
 	<td rowspan="7" class="le" style="vertical-align:middle;">
-					<br><input type="button" name="ok" onClick="sende();" value="senden"><br>{btn}
-					<br><br><input type="button" style="visibility:{hide}" name="save" onClick="saveTpl();" value="Vorlage
-sichern">				<br><br><input type="button" style="visibility:{hide}" name="del" onClick="delTpl();" value="Vorlage
-l&ouml;schen">
+					<br><input type="button" name="ok" onClick="sende();" value=".:send:."><br>{btn}
+					<br><br><input type="button" style="visibility:{hide}" name="save" onClick="saveTpl();" value=".:template:.
+.:save:.">				<br><br><input type="button" style="visibility:{hide}" name="del" onClick="delTpl();" value=".:template:.
+.:delete:.">
 	</td>
 </tr><tr>
 	<td class="klein re" nowrap>B<input type="checkbox" name="bcc" value="1">CC:</td>
 	<td class=""><input type="text" name="CC" value="{CC}" size="70" maxlength="125" tabindex="2"> 
-					<input type="button" name="scc" value="suchen" onClick="suchMail('CC');"></td>
+					<input type="button" name="scc" value=".:search:." onClick="suchMail('CC');"></td>
 </tr><tr>
-	<td class="klein re">Vorlage:</td>
+	<td class="klein re">.:template:.:</td>
 	<td class=""><select name="vorlage" id="vorlagen" tabindex="3" style="width:44em;" onChange="getVorlage();">
 		<option value=""></option>
 <!-- BEGIN Betreff -->
@@ -105,21 +105,21 @@ l&ouml;schen">
 <!-- END Betreff -->
 	</select></td>
 </tr><tr>
-	<td class="klein re">Betreff:</td>
+	<td class="klein re">.:subject:.:</td>
 	<td class=""><input type="text" name="Subject" id="Subject" value="{Subject}" size="80" maxlength="125" tabindex="3"></td>
 </tr><tr>
-	<td class="klein re" valign="top">Text:</td>
+	<td class="klein re" valign="top">.:body:.:</td>
 	<td class="">
 	<textarea class="klein" name="BodyText" id="BodyText" cols="80" rows="12" tabindex="4" onFocus="setcur(this);">{BodyText}</textarea>
 	</td>
 </tr><tr>
-	<td class="klein re">Datei:</td>
+	<td class="klein re">.:file:.:</td>
 	<td><input type="file" name="Datei[]" size="48" maxlength="125"></td>
 </tr><tr>
-	<td class="klein re">Datei:</td>
+	<td class="klein re">.:file:.:</td>
 	<td><input type="file" name="Datei[]" size="48" maxlength="125"></td>
 </tr><tr>
-	<td class="klein re">Datei:</td>
+	<td class="klein re">.:file:.:</td>
 	<td><input type="file" name="Datei[]" size="48" maxlength="125"></td>
 </tr>
 </tr><tr>

@@ -1,0 +1,35 @@
+2009-07-02 18:54:40 
+SQL:select name from  where id = 918
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select name from  where id = 918 [nativecode=FEHLER:  Syntaxfehler bei »where«
+LINE 1: select name from  where id = 918
+                          ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+307:/var/www/lx-office-crm/inc/FirmenLib.php
+20:/var/www/lx-office-crm/opportunity.php
+--------------------------------------------- 
+

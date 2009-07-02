@@ -13,7 +13,7 @@
 	if ($_POST["newcat"]) {
 		$catinput="<input type='text' size='20' name='catname'><input type='checkbox' name='kdhelp' value='1'> ";
 		$catinput.="<input type='hidden' name='hg' value='".$tmp[0]."'>";
-		$catinput.="<input type='image' src='image/save_kl.png' title='sichern' name='savecat' value='ok'><br>";
+		$catinput.="<input type='image' src='image/save_kl.png' title='.:save:.' name='savecat' value='ok'><br>";
 	} else if ($_POST["savecat"]) {
 		$rc=insWCategorie($_POST);
 	} else if ($_POST["editcat"] && $tmp[0]<>"" ) {
@@ -22,7 +22,7 @@
 		$catinput.="<input type='hidden' name='hg' value='".$catname["hauptgruppe"]."'>";
 		$catinput.="<input type='text' size='20' name='catname' value='".$catname["name"]."'>";
 		$catinput.="<input type='checkbox' name='kdhelp' value='1' ".(($catname["kdhelp"]=="t")?"checked":"")."> ";
-		$catinput.="<input type='image' src='image/save_kl.png' title='sichern' name='savecat' value='ok'><br>";
+		$catinput.="<input type='image' src='image/save_kl.png' title='.:save:.' name='savecat' value='ok'><br>";
 	}
 	$data=getWCategorie();
 	$tpl = new Template($base);
@@ -35,11 +35,11 @@
 		if ($content) {
 			$datum=substr($content["initdate"],8,2).".".substr($content["initdate"],5,2).".".substr($content["initdate"],0,4);
 			$datum.=" ".substr($content["initdate"],11,2).":".substr($content["initdate"],14,2);
-			$hl="Versionsnummer: ".$content["version"]." vom $datum Benutzer: ".$content["login"];
-			$button="<input type='image' src='image/edit_kl.png' title='Editieren' name='edit' value='Edit'>";
+			$hl=".:vernr:.: ".$content["version"]." .:from:. $datum .:employee:.: ".$content["login"];
+			$button="<input type='image' src='image/edit_kl.png' title='Editieren' name='edit' value='.:edit:.'>";
 		} else {
-			$hl="Bitte einen Beitrag w&auml;hlen";
-			$button="<input type='image' src='image/neu.png' title='Neuer Beitrag'  name='neu' value='Neuer Beitrag'>";
+			$hl=".:selectarticle:.";
+			$button="<input type='image' src='image/neu.png' title='.:new:. .:article:.'  name='neu' value='.:new:. .:article:.'>";
 		}
 
 	} else if ($_POST["history"]){
@@ -52,7 +52,7 @@
 			$content["version"]=$cnt;
 		}
 		if ($rs) {
-			$button="<input type='image' src='image/cancel_kl.png' title='Normale Ansicht' name='reload' value='Normal'>";
+			$button="<input type='image' src='image/cancel_kl.png' title='.:normview:.' name='reload' value='Normal'>";
 			for ($i=0; $i<$cnt; $i++) {
 				$datum=substr($rs[$i]["initdate"],8,2).".".substr($rs[$i]["initdate"],5,2).".".substr($rs[$i]["initdate"],0,4);
 				$datum.=" ".substr($rs[$i]["initdate"],11,2).":".substr($rs[$i]["initdate"],14,2);
@@ -62,7 +62,7 @@
 			if ($cnt>1) 
 				$contdata.="Version: ".$rs[$diff1]["version"]."<hr />".$diffrs[0]."<br /><br />Version: ".$rs[$diff2]["version"]."<hr />".$diffrs[1];
 		} else {
-			$contdata="Kein Daten.";
+			$contdata=".:no_data:.";
 		}
 	} else {
 		if ($tmp[0]) $content=getWContent($tmp[0]);
@@ -70,25 +70,25 @@
 		if ($content) {	
 			$datum=substr($content["initdate"],8,2).".".substr($content["initdate"],5,2).".".substr($content["initdate"],0,4);
 			$datum.=" ".substr($content["initdate"],11,2).":".substr($content["initdate"],14,2);
-			$hl="Versionsnummer: ".$content["version"]." vom $datum Benutzer: ".$content["login"];
-			$button="<input type='image' src='image/edit_kl.png' title='Editieren' name='edit' value='Edit'>";
+			$hl=".:last:. .:vernr:.: ".$content["version"]." .:from:. $datum .:employee:.: ".$content["login"];
+			$button="<input type='image' src='image/edit_kl.png' title='.:edit:.' name='edit' value='.:edit:.'>";
 		} else {
-			$hl="Bitte einen Beitrag w&auml;hlen";
-			$button="<input type='image' src='image/neu.png' title='Neuer Beitrag'  name='neu' value='Neuer Beitrag'>";
+			$hl=".:selectarticle:.";
+			$button="<input type='image' src='image/neu.png' title='.:new:. .:article:.'  name='neu' value='.:new:. .:article:.'>";
 		}
 		if ($_POST["edit"]) {
 			$datum=substr($content["initdate"],8,2).".".substr($content["initdate"],5,2).".".substr($content["initdate"],0,4);
 			$datum.=" ".substr($content["initdate"],11,2).":".substr($content["initdate"],14,2);
-			$hl="letzte Versionsnummer: ".$content["version"]." vom $datum Benutzer: ".$content["login"];
-			$button="<input type='image' src='image/save_kl.png' tilte='Sichern' name='savecontent' value='Save'>";
-			$button.=" <input type='image' src='image/cancel_kl.png' title='Abbruch' name='abbruch' value='Abbruch'>";
+			$hl=".:last:. .:vernr:.: ".$content["version"]." .:from:. $datum .:employee:.: ".$content["login"];
+			$button="<input type='image' src='image/save_kl.png' tilte='.:save:.' name='savecontent' value='.:save:.'>";
+			$button.=" <input type='image' src='image/cancel_kl.png' title='.:escape:.' name='abbruch' value='.:escape:.'>";
 			$pre="<textarea id='elm1' name='content' cols='75' rows='18'>";
 			$post="</textarea>";
 		}
 		if ($_POST["neu"]) {
-			$hl="Neuer Beitrag. Versionsnummer: 1 am ".date("d.m.Y")." Benutzer: ".$_SESSION["loginCRM"];
-			$button="<input type='image' src='image/save_kl.png' tilte='Sichern' name='savecontent' value='Save'>";
-			$button.=" <input type='image' src='image/cancel_kl.png' title='Abbruch' name='abbruch' value='Abbruch'>";
+			$hl=".:new:. .:article:. .:vernr:.: 1 .:from:. ".date("d.m.Y")." .:employee:.: ".$_SESSION["loginCRM"];
+			$button="<input type='image' src='image/save_kl.png' tilte='.:save:.' name='savecontent' value='.:save:.'>";
+			$button.=" <input type='image' src='image/cancel_kl.png' title='.:escape:.' name='abbruch' value='.:escape:.'>";
 			$pre="<textarea id='elm1' name='content' cols='75' rows='18'>";
 			$post="</textarea>";
 		}
@@ -146,5 +146,5 @@ function Thread($HauptGrp,$t,$m,&$tpl)    {
 		catinput => $catinput,
 		tiny => $tiny
 		));
-	$tpl->pparse("out",array("wi"));
+	$tpl->Lpparse("out",array("wi"),$_SESSION["lang"],"work");
 ?>

@@ -4,7 +4,7 @@
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 	{tiny}
 <body>
-<p class="listtop">Wissensdatenbank</p>
+<p class="listtop">.:knowhowdb:.</p>
 
 <span style="position:absolute; left:1em; top:5em; width:95%; border: 0px solid black">
 <!-- Hier beginnt die Karte  ------------------------------------------->
@@ -13,13 +13,13 @@
 		<input type="hidden" name="id" value="{id}">
 		<input type="hidden" name="m" value="{menuitem}">
 		<input type="hidden" name="version" value="{version}">
-		<strong><a href='wissen.php?m=0'>Kategorien</a></strong><br>
+		<strong><a href='wissen.php?m=0'>.:categories:.</a></strong><br>
 		{menu}
 	 	<br />
 		{catinput}
-		<span> Eine neue Kategorie erstellen <br>unter &quot;<b>{catname}</b>&quot;</span>
-		<input type="image" src="image/neu.png" name="newcat" title="Neue Kategorie erstellen" value="erstellen" align="middle">
-		<input type="image" src="image/edit_kl.png" name="editcat" title="Kategorie bearbeiten" value="bearbeiten" align="middle">
+		<span> .:newcat:. <br>.:below:. &quot;<b>{catname}</b>&quot;</span>
+		<input type="image" src="image/neu.png" name="newcat" title=".:newcat:." value=".:create:." align="middle">
+		<input type="image" src="image/edit_kl.png" name="editcat" title=".:editcat:." value=".:edit:." align="middle">
 	</div>
 	<div style="float:left; width:65%; text-align:left; border: 0px solid blue; padding-left: 10px;" >
 		{headline}<br />

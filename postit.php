@@ -57,7 +57,7 @@ if ($_POST["save"]) {
 }
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
-	<head><title>Firma Stamm</title>
+	<head><title><?= translate(".:LxO:.","work"); ?> <?= translate(".:postit:.","work"); ?></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 	<script language="JavaScript">
 	<!--
@@ -68,7 +68,7 @@ if ($_POST["save"]) {
 	</script>
 	</head>
 <body onLoad="if (1==<?= $popup ?>) window.resizeTo(600,400);">
-<p class="listtop">Notizen</p>
+<p class="listtop"><?= translate(".:notes:.","work"); ?></p>
 <table >
 <?
 $liste=getAllPostIt($_SESSION["loginCRM"]);
@@ -83,13 +83,13 @@ if ($liste) foreach($liste as $row) {
 <input type="hidden" name="id" value="<?= $data["id"] ?>">
 <input type="text" name="cause" size="77" maxlength="100" value="<?= $data["cause"] ?>"><br />
 <textarea class="klein" rows="7" cols="80" name="notes"><?= $data["notes"] ?></textarea><br />
-<input type="submit" class="sichern" name="save" value="sichern">&nbsp;
-<input type="submit" class="clear" name="clear" value="clear">&nbsp;
-<input type="submit" class="sichernneu" name="delete" value="l&ouml;schen">&nbsp;
+<input type="submit" class="sichern" name="save" value="<?= translate(".:save:.","work"); ?>">&nbsp;
+<input type="submit" class="clear" name="clear" value="<?= translate(".:clear:.","work"); ?>">&nbsp;
+<input type="submit" class="sichernneu" name="delete" value="<?= translate(".:delete:.","work"); ?>">&nbsp;
 <? if ($_GET["popup"]==1) { ?>
-<input type="button" name="ppp" value="Close" onCLick="self.close();">
+<input type="button" name="ppp" value="<?= translate(".:close:.","work"); ?>" onCLick="self.close();">
 <? }  else { ?>
-<input type="button" name="ppp" value="Pop Up" onCLick="PopUp();">
+<input type="button" name="ppp" value="<?= translate(".:popup:.","work"); ?>" onCLick="PopUp();">
 <? } ?>
 </from>
 </body>

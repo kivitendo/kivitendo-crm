@@ -1,7 +1,12 @@
 <?php
 
-
-    $templates = glob("tpl/*.tpl");
+    if ($argc>0) {
+        echo $argv[1]."\n";
+        $templates = glob($argv[1]);
+    } else {
+        echo "tpl/*.tpl\n";
+        $templates = glob("tpl/*.tpl");
+    }
     if ($templates) foreach ($templates as $file) {
         echo "$file: ";
         $text = file_get_contents($file);

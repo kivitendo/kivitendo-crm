@@ -13,19 +13,19 @@
 		$TO=$_POST["TO"];
 		$KontaktTO=$_POST["KontaktTO"];
 		if (preg_match("/mail.php/",$referer)) {
-			$btn="<a href='mail.php'><input type=\"button\" name=\"return\" value=\"neu\"></a>";
+			$btn="<a href='mail.php'><input type=\"button\" name=\"return\" value=\".:new:.\"></a>";
 		} else {
-			$btn="<a href=\"$referer\"><input type=\"button\" name=\"return\" value=\"zur&uuml;ck\"></a>";
+			$btn="<a href=\"$referer\"><input type=\"button\" name=\"return\" value=\".:back:.\"></a>";
 		}
 	} else if (preg_match("/.+\.pl/",$referer)) { //Kommt vom Menue
 		$referer="mail.php";
-		$btn="<a href='mail.php'><input type=\"button\" name=\"return\" value=\"neu\"></a>";
+		$btn="<a href='mail.php'><input type=\"button\" name=\"return\" value=\".:new:.\"></a>";
 		$hide="visible";
 	} else { // Rückkehr zur Ausgangsseite
 		$TO=$_GET["TO"];
 		$KontaktTO=$_GET["KontaktTO"];
 		if (substr($KontaktTO,0,1)=="P") $referer.="&id=".substr($KontaktTO,1);
-		$btn="<a href=\"$referer\"><input type=\"button\" name=\"return\" value=\"zur&uuml;ck\"></a>";
+		$btn="<a href=\"$referer\"><input type=\"button\" name=\"return\" value=\"i.:back:.\"></a>";
 		$hide="hidden";
 	}
 	if ($_POST["aktion"]=="tplsave") {
@@ -214,5 +214,5 @@
 			hide    => $hide,
 			vorlage => ($_GET["MID"])?$_GET["MID"]:$_POST["MID"]
 			));
-	$t->pparse("out",array("mail"));
+	$t->Lpparse("out",array("mail"),$_SESSION["lang"],"work");
 ?>

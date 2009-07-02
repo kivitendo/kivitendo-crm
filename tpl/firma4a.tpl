@@ -15,7 +15,7 @@
 	</script>
 <body>
 
-<p class="listtop">Dokumenterstellung</p>
+<p class="listtop">.:generate document:.</p>
 <span style="position:absolute; left:10px; top:10px; width:98%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <form name="firma4" action="firma4a.php" method="post" onsubmit="return chkfld();">
@@ -27,7 +27,7 @@
 {Beschreibung}<br>
 <table>
 <!-- BEGIN Liste -->
-	<tr><td>{Feldname} </td><td title="Eingabe zu {Feldname}">&nbsp;{EINGABE}</td></tr>
+	<tr><td>{Feldname} </td><td title=".:keyin:. {Feldname}">&nbsp;{EINGABE}</td></tr>
 <!-- END Liste -->
 </table><br>
 {Knopf}

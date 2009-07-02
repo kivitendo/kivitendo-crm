@@ -102,7 +102,7 @@
 	</script>
 	</head>
 <body onLoad="submenu('{kdview}'); showCall(0);">
-<p class="listtop">.:detailview:. {FAART} <span title="Wichtige Mitteilung">{Cmsg}&nbsp;</span></p>
+<p class="listtop">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
 <form name="kdhelp">
 <div style="position:absolute; top:1.5em; left:1.1em;  width:60em;">
     <div style="float:left; padding-top:1.2em; ";>
@@ -119,10 +119,10 @@
 	</ul>
     </div>
     <div style="float:left; padding-left:1em; ">
-	<img src="tools/rechner.png"  onClick="toolwin('tools/Rechner.html')" title="einfacher Tischrechner"> &nbsp;
-	<img src="tools/notiz.png"  onClick="toolwin('postit.php?popup=1')" title="Postit Notizen"> &nbsp;
-	<img src="tools/kalender.png"  onClick="toolwin('tools/kalender.php')" title="Kalender"> &nbsp;
-	<a href="javascript:void(s=prompt('Geben%20Sie%20einen%20Begriff%20zum%20&Uuml;bersetzen%20ein.',''));if(s)leow=open('http://dict.leo.org/?lp=ende&search='+escape(s),'LEODict','width=750,height=550,scrollbars=yes,resizeable=yes');if(leow)leow.focus();"><img src="tools/leo.png"  title="LEO Englisch/Deutsch" border="0"></a> &nbsp;
+	<img src="tools/rechner.png"  onClick="toolwin('tools/Rechner.html')" title=".:simple calculator:."> &nbsp;
+	<img src="tools/notiz.png"  onClick="toolwin('postit.php?popup=1')" title=".:postit notes:."> &nbsp;
+	<img src="tools/kalender.png"  onClick="toolwin('tools/kalender.php')" title=".:calender:."> &nbsp;
+	<a href="javascript:void(s=prompt('.:ask leo:.',''));if(s)leow=open('http://dict.leo.org/?lp=ende&search='+escape(s),'LEODict','width=750,height=550,scrollbars=yes,resizeable=yes');if(leow)leow.focus();"><img src="tools/leo.png"  title="LEO .:english/german:." border="0"></a> &nbsp;
     </div>
 </div>
 </form>
@@ -142,8 +142,8 @@
 			<span class="mini"><br />&nbsp;<br /></span>
 			{Fcontact}
 			<span class="mini"><br />&nbsp;<br /></span>
-			<font color="#444444"> Tel:</font> {Telefon}<br />
-			<font color="#444444"> Fax:</font> {Fax}<br />	
+			<font color="#444444"> .:tel:.:</font> {Telefon}<br />
+			<font color="#444444"> .:fax:.:</font> {Fax}<br />	
 			<span class="mini">&nbsp;<br /></span>
 			&nbsp;[<a href="mail.php?TO={eMail}&KontaktTO=C{FID}">{eMail}</a>]<br />
 			&nbsp;<a href="{Internet}" target="_blank">{Internet}</a></span>
@@ -157,13 +157,13 @@
 				<input type="image" src="image/auftrag.png" name="type" value="{sales}_order" title="neuen Auftrag eingeben" style="visibility:{zeige};">
 				<input type="image" src="image/angebot.png" name="type" value="{request}_quotation" title="Angebot/Anfrage erstellen" style="visibility:{zeige};">
 
-				<img src="image/kreuzchen.gif" title="Gesperrter Kunde"style="visibility:{verstecke};" >
+				<img src="image/kreuzchen.gif" title=".:locked address:."style="visibility:{verstecke};" >
 				&nbsp;
-				<a href="#" onCLick="anschr(1);" title="Briefanschrift &amp; Etikett"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a><br>
+				<a href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0" /></a><br>
 				&nbsp;<br>
-				<a href="extrafelder.php?owner={Q}{FID}" target="_blank" title="Extra Daten" style="visibility:{zeigeextra};"><img src="image/extra.png" alt="Extras" border="0" /></a>
+				<a href="extrafelder.php?owner={Q}{FID}" target="_blank" title=".:extra data:." style="visibility:{zeigeextra};"><img src="image/extra.png" alt="Extras" border="0" /></a>
 				&nbsp;<br><br>
-				<span style="visibility:{zeigeplan};"><a href="{KARTE}" target="_blank"><img src="image/karte.gif" title="Ortsplan" border="0"></a></span>&nbsp;</form><br />
+				<span style="visibility:{zeigeplan};"><a href="{KARTE}" target="_blank"><img src="image/karte.gif" title=".:city map:." border="0"></a></span>&nbsp;</form><br />
 				{verkaeufer}
 
 		</div>
@@ -181,7 +181,7 @@
 
 	<span id="lie" style="visibility:visible; position:absolute; text-align:left;width:32em; left:1.2em; top:17.5em;" >
 		<div  class="klein">
-		<span id="shiptoname">{Sname1}</span> &nbsp;&nbsp;<a href="#" onCLick="anschr({Sshipto_id});"><img src="image/brief.png" alt="Etikett drucken" border="0" /></a>&nbsp; &nbsp; 
+		<span id="shiptoname">{Sname1}</span> &nbsp;&nbsp;<a href="#" onCLick="anschr({Sshipto_id});"><img src="image/brief.png" alt=".:print label:." border="0" /></a>&nbsp; &nbsp; 
 		.:shipto count:.:{Scnt} <a href="javascript:nextshipto('-');"><img src="image/leftarrow.png" border="0"></a> 
 		<span id="SID">{Sshipto_id}</span> <a href="javascript:nextshipto('+');"><img src="image/rightarrow.png" border="0"></a><br />
 		<span id="shiptodepartment_1">{Sdepartment_1}</span> &nbsp; &nbsp; <span id="shiptodepartment_2">{Sdepartment_2}</span> <br />

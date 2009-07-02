@@ -73,7 +73,7 @@
 	//-->
 	</script>
 <body onLoad="{INIT}">
-<p class="listtop">.:detailview:. {FAART} <span title="Wichtige Mitteilung">{Cmsg}</span></p>
+<p class="listtop">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}</span></p>
 <form name="kdhelp">
 <div style="position:absolute; top:1.5em; left:1.1em;  width:60em;">
     <div style="float:left; padding-top:1.2em; ";>
@@ -90,10 +90,10 @@
 	</ul>
     </div>
     <div style="float:left; padding-left:1em; ">
-	<img src="tools/rechner.png"  onClick="toolwin('tools/Rechner.html')" title="einfacher Tischrechner"> &nbsp;
-	<img src="tools/notiz.png"  onClick="toolwin('postit.php?popup=1')" title="Postit Notizen"> &nbsp;
-	<img src="tools/kalender.png"  onClick="toolwin('tools/kalender.php')" title="Kalender"> &nbsp;
-	<a href="javascript:void(s=prompt('Geben%20Sie%20einen%20Begriff%20zum%20&Uuml;bersetzen%20ein.',''));if(s)leow=open('http://dict.leo.org/?lp=ende&search='+escape(s),'LEODict','width=750,height=550,scrollbars=yes,resizeable=yes');if(leow)leow.focus();"><img src="tools/leo.png"  title="LEO Englisch/Deutsch" border="0"></a> &nbsp;
+	<img src="tools/rechner.png"  onClick="toolwin('tools/Rechner.html')" title=".:simple calculator:."> &nbsp;
+	<img src="tools/notiz.png"  onClick="toolwin('postit.php?popup=1')" title=".:postit notes:."> &nbsp;
+	<img src="tools/kalender.png"  onClick="toolwin('tools/kalender.php')" title=".:calender:."> &nbsp;
+	<a href="javascript:void(s=prompt('.:ask leo:.',''));if(s)leow=open('http://dict.leo.org/?lp=ende&search='+escape(s),'LEODict','width=750,height=550,scrollbars=yes,resizeable=yes');if(leow)leow.focus();"><img src="tools/leo.png"  title="LEO .:english/german:." border="0"></a> &nbsp;
     </div>
 </div>
 </form>

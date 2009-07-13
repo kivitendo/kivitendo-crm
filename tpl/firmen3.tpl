@@ -185,7 +185,7 @@
 	<div class="zeile2">
 		<span class="label klein">.:country:. / .:zipcode:.</span>
 		<span class="feldxx">
-			<input type="text" id="shiptocountry" name="shiptocountry" size="2" value="{shiptocountry}" tabindex="6" onBlur="mkBuland('shiptobland'ch);">/
+			<input type="text" id="shiptocountry" name="shiptocountry" size="2" value="{shiptocountry}" tabindex="6" onBlur="mkBuland('shiptobland');">/
 			<input type="text" id="shiptozipcode" name="shiptozipcode" size="5" maxlength="10" value="{shiptozipcode}" tabindex="7">
 			<select id="shiptobland" name="shiptobland" tabindex="8" style="width:12em;">
 				<option value=""></option>

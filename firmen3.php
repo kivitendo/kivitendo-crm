@@ -4,7 +4,7 @@
 	include("inc/template.inc");
 	include("inc/FirmenLib.php");
 	include("inc/UserLib.php");
-	require("firmacommon.php");
+	require("firmacommon".XajaxVer.".php");
 	$Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
 	$t = new Template($base);
 	$t->set_file(array("fa1" => "firmen3.tpl"));

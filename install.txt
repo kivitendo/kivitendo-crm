@@ -55,13 +55,29 @@ short_open_tag = On
 AJAX:
 Nach und nach werden einige Masken mit Ajax bedient. 
 "xajax" wird nicht mehr mitgeliefert!! xajax  sollte ganz normal im Pfad erreichbar sein.
-
+Zwei Versionen sind im Umlauf. Bei Debian und Ubuntu wird als Paket V0.23 geliefert.
+Aktuell ist die Version 0.5.
+Egal wohin das Xajax-Paket installiert wird, sollten einige Links angelegt werden.
+V0.23:
+    kann nach /usr/share/php in das Verzeichnis xajax installiert werden.
+    Softlink anlegen: ln -s /usr/share/php/xajax /pfadzulxocrm/crmajax/
+V0.50:
+    Das Minimalpaket kann unter /pfadzulxocrm/crmajax/ entpakt werden
+    oder
+    zwei Links anlegen /pfadzu/xajax/xajax_core /pfadzulxocrm/crmajax/
+    und /pfadzu/xajax/xajax_js /pfadzulxocrm/crmajax/
+Dann noch in der inc/conf.php die richtige Konstanten aktivieren:
+//Xajax => 0.5 evtl. auch 0.6
+define("XajaxVer","05");
+define("XajaxPath","./crmajax/");
+//Xajax = 0.23
+//define("XajaxVer","");
+//define("XajaxPath","./crmajax/xajax");
 
 Wird mit einem Alias für das LxO-Verzeichnis benutzt und soll in einigen Masken der 
 jscalendar der ERP benutzt werden, muß das Verzeichnis ins CRM-Verzeichnis verlinkt werden:
 cd lx-office-crm
 ln -s ../lx-office-erp/js
-
 
 evtl. php.ini anpassen:
 include_path = ".:/usr/share/php:/usr/share/fpdf:/usr/share/jpgraph"

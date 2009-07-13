@@ -5,6 +5,14 @@ $GEODB=false; // Geodatenbank vorhanden
 $BLZDB=false; // BLZ-Datenbank vorhanden
 //php-db => "", mdb2 => "m"
 $dbmodul="";
+
+//Xajax => 0.5 evtl. auch 0.6
+define("XajaxVer","05");
+define("XajaxPath","./crmajax/");
+//Xajax = 0.23
+//define("XajaxVer","");
+//define("XajaxPath","./crmajax/xajax");
+
 $from=16;  // Anrufernummer (Telcall)
 $to=18;    // Zielnummer (Telcall)
 $constring="created"; // Eindeutiges Wort für Anwahlzeile (Telcall)

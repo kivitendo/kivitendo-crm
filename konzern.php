@@ -3,7 +3,6 @@
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/FirmenLib.php");
-	require("firmacommon.php");
 
 	$fid=($_GET["fid"])?$_GET["fid"]:$_POST["fid"];
 	$Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];	

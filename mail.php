@@ -6,7 +6,7 @@
 	include("inc/UserLib.php");
 	include_once("Mail.php");
 	include_once("Mail/mime.php");
-	require("mailcommon.php");
+	require("mailcommon".XajaxVer.".php");
 	$referer=getenv("HTTP_REFERER");
 	if (preg_match("/mail.php/",$referer)) {
 		$referer=$_POST["QUELLE"];
@@ -25,7 +25,7 @@
 		$TO=$_GET["TO"];
 		$KontaktTO=$_GET["KontaktTO"];
 		if (substr($KontaktTO,0,1)=="P") $referer.="&id=".substr($KontaktTO,1);
-		$btn="<a href=\"$referer\"><input type=\"button\" name=\"return\" value=\"i.:back:.\"></a>";
+		$btn="<a href=\"$referer\"><input type=\"button\" name=\"return\" value=\".:back:.\"></a>";
 		$hide="hidden";
 	}
 	if ($_POST["aktion"]=="tplsave") {
@@ -199,8 +199,8 @@
                 $t->parse("Block","Betreff",true);
 	}
 	$t->set_var(array(
-			AJAXJS	=> $xajax->printJavascript('/xajax/'),
-			Msg	=> $msg,
+			AJAXJS	=> $xajax->printJavascript(XajaxPath),
+			Msg	=> $msg.XajaxPath,
 			btn	=> $btn,
 			Subject => $Subject,
 			BodyText => $BodyText,

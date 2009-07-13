@@ -4,7 +4,7 @@
 	include("inc/template.inc");
 	include("inc/FirmenLib.php");
 	include("inc/UserLib.php");
-	require("firmacommon.php");
+	require("firmacommon".XajaxVer.".php");
 	$Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
 	$bgcol[1]="#ddddff";
 	$bgcol[2]="#ddffdd";
@@ -35,7 +35,7 @@
 			$t->set_file(array("fa1" => "firmen1L.tpl"));
 			$t->set_block("fa1","Liste","Block");
 			$t->set_var(array(
-				AJAXJS  => $xajax->printJavascript('/xajax/'),
+				AJAXJS  => $xajax->printJavascript(XajaxPath),
 				FAART => ($Q=="C")?"Customer":"Vendor", 
 			));
 			$i=0;

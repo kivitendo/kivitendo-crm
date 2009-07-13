@@ -4,36 +4,45 @@
 	include("persLib.php");
 	include("crmLib.php");
 	require_once("documents.php");
+
 	function getShipto($id) {
-		$data=getShipStamm($id);
+        $data=getShipStamm($id);
 		$objResponse = new xajaxResponse();
-		$objResponse->addAssign("shiptoname", 		"value", $data["shiptoname"]);
-		$objResponse->addAssign("shiptodepartment_1",	"value", $data["shiptodepartment_1"]);
-		$objResponse->addAssign("shiptodepartment_2",	"value", $data["shiptodepartment_2"]);
-		$objResponse->addAssign("shiptostreet", 	"value", $data["shiptostreet"]);
-		$objResponse->addAssign("shiptocity", 		"value", $data["shiptocity"]);
-		$objResponse->addAssign("shiptocontact", 	"value", $data["shiptocontact"]);
-		$objResponse->addAssign("shiptocountry", 	"value", $data["shiptocountry"]);
-		$objResponse->addAssign("shiptophone", 		"value", $data["shiptophone"]);
-		$objResponse->addAssign("shiptofax", 		"value", $data["shiptofax"]);
-		$objResponse->addAssign("shiptoemail", 		"value", $data["shiptoemail"]);
-		$objResponse->addAssign("shiptozipcode", 	"value", $data["shiptozipcode"]);
-		$objResponse->addAssign("shipto_id", 		"value", $data["shipto_id"]);
-		$objResponse->addAssign("module", 		"value", $data["module"]);
-		$objResponse->addAssign("shiptobland", 		"value", $data["shiptobland"]);
+		$objResponse->assign("shiptoname", 		"value", $data["shiptoname"]);
+		$objResponse->assign("shiptodepartment_1",	"value", $data["shiptodepartment_1"]);
+		$objResponse->assign("shiptodepartment_2",	"value", $data["shiptodepartment_2"]);
+		$objResponse->assign("shiptostreet", 	"value", $data["shiptostreet"]);
+		$objResponse->assign("shiptocity", 		"value", $data["shiptocity"]);
+		$objResponse->assign("shiptocontact", 	"value", $data["shiptocontact"]);
+		$objResponse->assign("shiptocountry", 	"value", $data["shiptocountry"]);
+		$objResponse->assign("shiptophone", 		"value", $data["shiptophone"]);
+		$objResponse->assign("shiptofax", 		"value", $data["shiptofax"]);
+		$objResponse->assign("shiptoemail", 		"value", $data["shiptoemail"]);
+		$objResponse->assign("shiptozipcode", 	"value", $data["shiptozipcode"]);
+		$objResponse->assign("shipto_id", 		"value", $data["shipto_id"]);
+		$objResponse->assign("module", 		"value", $data["module"]);
+		$objResponse->assign("shiptobland", 		"value", $data["shiptobland"]);
 		return $objResponse;
 	}
 	function Buland($land,$bl) {
 		$data=getBundesland(strtoupper($land));
-		$objResponse = new myXajaxResponse();
-		$objResponse->delAllOptions($bl);
+		$objResponse = new XajaxResponse();
+        $sScript = "var i = document.getElementById('".$bl."').length;";
+        $sScript.= "while ( i > 0) {";
+        $sScript.= "document.getElementById('".$bl."').options[i-1]=null;";
+        $sScript.= "i--;}";
+		$objResponse->script($sScript);
 		if (preg_match("/UTF-8/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="UTF-8"; }
 		else if (preg_match("/ISO-8859-15/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-15"; }
 		else if (preg_match("/ISO-8859-1/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-1"; }
 		else { $charset="ISO-8859-1"; };
+        $sScript = "var objOption = new Option('', '');";
+        $sScript .= "document.getElementById('".$bl."').options.add(objOption);";
 		foreach ($data as $row) {
-			$objResponse->addCreateOption($bl,html_entity_decode($row["bundesland"],ENT_NOQUOTES,$charset),$row["id"]);
+            $sScript .= "var objOption = new Option('".html_entity_decode($row["bundesland"],ENT_NOQUOTES,$charset)."', '".$row["id"]."');";
+            $sScript .= "document.getElementById('".$bl."').options.add(objOption);";
 		}
+		$objResponse->script($sScript);
 		return $objResponse;
 	}
 	function showShipadress($id,$tab){
@@ -45,21 +54,21 @@
 		$maillink="<a href='mail.php?TO=".$data["shiptoemail"]."&KontaktTO=$tab".$data["trans_id"]."'>".$data["shiptoemail"]."</a>";
 		$htmllink="<a href='".$data["shiptohomepage"]."' target='_blank'>".$data["shiptohomepage"]."</a>";
 		$objResponse = new xajaxResponse();
-                $objResponse->addAssign("SID",         		"innerHTML", $id);
-                $objResponse->addAssign("shiptoname",           "innerHTML", htmlentities($data["shiptoname"],ENT_NOQUOTES,$charset));
-                $objResponse->addAssign("shiptodepartment_1",   "innerHTML", htmlentities($data["shiptodepartment_1"],ENT_NOQUOTES,$charset));
-                $objResponse->addAssign("shiptodepartment_2",   "innerHTML", htmlentities($data["shiptodepartment_2"],ENT_NOQUOTES,$charset));
-                $objResponse->addAssign("shiptostreet",         "innerHTML", htmlentities($data["shiptostreet"],ENT_NOQUOTES,$charset));
-                $objResponse->addAssign("shiptocountry",        "innerHTML", $data["shiptocountry"]);
-                $objResponse->addAssign("shiptobland",          "innerHTML", html_entity_decode($data["shiptobundesland"],ENT_NOQUOTES,$charset));
-                $objResponse->addAssign("shiptozipcode",        "innerHTML", $data["shiptozipcode"]);
-                $objResponse->addAssign("shiptocity",           "innerHTML", htmlentities($data["shiptocity"],ENT_NOQUOTES,$charset));
-                $objResponse->addAssign("shiptocontact",        "innerHTML", $data["shiptocontact"]);
-                $objResponse->addAssign("shiptophone",          "innerHTML", $data["shiptophone"]);
-                $objResponse->addAssign("shiptofax",            "innerHTML", $data["shiptofax"]);
-                $objResponse->addAssign("shiptocontact",        "innerHTML", $data["shiptocontact"]);
-                $objResponse->addAssign("shiptoemail",		"innerHTML", $maillink);
-                $objResponse->addAssign("shiptohomepage",	"innerHTML", $htmllink);
+                $objResponse->assign("SID",         		"innerHTML", $id);
+                $objResponse->assign("shiptoname",           "innerHTML", htmlentities($data["shiptoname"],ENT_NOQUOTES,$charset));
+                $objResponse->assign("shiptodepartment_1",   "innerHTML", htmlentities($data["shiptodepartment_1"],ENT_NOQUOTES,$charset));
+                $objResponse->assign("shiptodepartment_2",   "innerHTML", htmlentities($data["shiptodepartment_2"],ENT_NOQUOTES,$charset));
+                $objResponse->assign("shiptostreet",         "innerHTML", htmlentities($data["shiptostreet"],ENT_NOQUOTES,$charset));
+                $objResponse->assign("shiptocountry",        "innerHTML", $data["shiptocountry"]);
+                $objResponse->assign("shiptobland",          "innerHTML", html_entity_decode($data["shiptobundesland"],ENT_NOQUOTES,$charset));
+                $objResponse->assign("shiptozipcode",        "innerHTML", $data["shiptozipcode"]);
+                $objResponse->assign("shiptocity",           "innerHTML", htmlentities($data["shiptocity"],ENT_NOQUOTES,$charset));
+                $objResponse->assign("shiptocontact",        "innerHTML", $data["shiptocontact"]);
+                $objResponse->assign("shiptophone",          "innerHTML", $data["shiptophone"]);
+                $objResponse->assign("shiptofax",            "innerHTML", $data["shiptofax"]);
+                $objResponse->assign("shiptocontact",        "innerHTML", $data["shiptocontact"]);
+                $objResponse->assign("shiptoemail",		"innerHTML", $maillink);
+                $objResponse->assign("shiptohomepage",	"innerHTML", $htmllink);
                 return $objResponse;
 	}
 	function showContactadress($id){
@@ -107,12 +116,12 @@
 		$objResponse = new xajaxResponse();
 		foreach ($data as $key=>$val) {
 			if (in_array($key,$nocodec)) {
-                		$objResponse->addAssign($key,            "innerHTML", $val);
+                		$objResponse->assign($key,            "innerHTML", $val);
 			} else {
-                		$objResponse->addAssign($key,            "innerHTML", htmlentities($val,ENT_NOQUOTES,$charset));
+                		$objResponse->assign($key,            "innerHTML", htmlentities($val,ENT_NOQUOTES,$charset));
 			}
 		}
-		$objResponse->addAssign("cp_id", 	"value", $data["cp_id"]);
+		$objResponse->assign("cp_id", 	"value", $data["cp_id"]);
                 return $objResponse;
 	}
 	function showCalls($id,$start,$fa=false) {
@@ -145,10 +154,10 @@
 		}
 		$tmp.="</table>";
 		$objResponse = new xajaxResponse();
-		$objResponse->addAssign("tellcalls", 	"innerHTML", $tmp);
+		$objResponse->assign("tellcalls", 	"innerHTML", $tmp);
 		if ($start==0) {
 			$max=getAllTelCallMax($id,$firma);
-			$objResponse->addScript("max = $max;");
+			$objResponse->script("max = $max;");
 		}
                 return $objResponse;
 	}
@@ -183,8 +192,8 @@
 		        $dir_object->close();
 	    }
 		$objResponse = new xajaxResponse();
-		$objResponse->addAssign("fb$id", 	"innerHTML", $inhalt);
-		$objResponse->addAssign("path", 	"innerHTML", ($directory)?$directory:"/");
+		$objResponse->assign("fb$id", 	"innerHTML", $inhalt);
+		$objResponse->assign("path", 	"innerHTML", ($directory)?$directory:"/");
                 return $objResponse;
 
 	}
@@ -223,19 +232,19 @@
 			$id=$rs["id"];
 		}
 		$objResponse = new xajaxResponse();
-		$objResponse->addAssign("docname",	"value", $file);
-		$objResponse->addAssign("docoldname",	"value", $file);
-		$objResponse->addAssign("docpfad",	"value", $pfad);
-		$objResponse->addAssign("docid",	"value", $id);
-		$objResponse->addAssign("docdescript",	"value", $rs["descript"]);
-		$objResponse->addAssign("fbright", 	"innerHTML", $info);
-		$objResponse->addAssign("subdownload",	"innerHTML",
+		$objResponse->assign("docname",	"value", $file);
+		$objResponse->assign("docoldname",	"value", $file);
+		$objResponse->assign("docpfad",	"value", $pfad);
+		$objResponse->assign("docid",	"value", $id);
+		$objResponse->assign("docdescript",	"value", $rs["descript"]);
+		$objResponse->assign("fbright", 	"innerHTML", $info);
+		$objResponse->assign("subdownload",	"innerHTML",
 				"<a href='#' onClick='download(\"dokumente/".$_SESSION["mansel"]."$pfad/$file\")'>".translate('.:download:.','firma')."</a>");
-		$objResponse->addAssign("subdelete",	"innerHTML",
+		$objResponse->assign("subdelete",	"innerHTML",
 				"<a href='#' onClick='deletefile(\"dokumente/".$_SESSION["mansel"]."$pfad/$file\",$id)'>".translate('.:delete:.','firma')."</a>");
-		$objResponse->addAssign("submove",	"innerHTML",
+		$objResponse->assign("submove",	"innerHTML",
 				"<a href='#' onClick='movefile(\"dokumente/".$_SESSION["mansel"]."$pfad/$file\",$id)'>".translate('.:move:.','firma')."</a>");
-		$objResponse->addAssign("subedit",	"innerHTML",
+		$objResponse->assign("subedit",	"innerHTML",
 				"<a href='#' onClick='editattribut($id)'>".translate('.:edit attribute:.','firma')."</a>");
                 return $objResponse;
 	}
@@ -255,8 +264,8 @@
 		}
 		if ($file[0]=="/") $file=substr($file,1);
 		$objResponse = new xajaxResponse();
-		$objResponse->addScript("dateibaum('left','$pfadleft')");
-		$objResponse->addScript("showFile('left','$file')");
+		$objResponse->script("dateibaum('left','$pfadleft')");
+		$objResponse->script("showFile('left','$file')");
                 return $objResponse;
 	};
 	function saveAttribut($name,$oldname,$pfad,$komment,$id=0) {
@@ -278,12 +287,12 @@
 		$rc=$dbfile->saveDocument();
 		$objResponse = new xajaxResponse();
 		if ($rc) {
-			//$objResponse->addScript("dateibaum('left','$pfad');showFile('left','$name');editattribut();");
-			$objResponse->addScript("dateibaum('left','$pfad')");
-			$objResponse->addScript("showFile('left','$oldname')");
-			$objResponse->addScript("editattribut()");
+			//$objResponse->script("dateibaum('left','$pfad');showFile('left','$name');editattribut();");
+			$objResponse->script("dateibaum('left','$pfad')");
+			$objResponse->script("showFile('left','$oldname')");
+			$objResponse->script("editattribut()");
 		} else {
-			$objResponse->addScript("alert('Fehler beim Sichern')");
+			$objResponse->script("alert('Fehler beim Sichern')");
 		}
                 return $objResponse;
 	}
@@ -309,7 +318,7 @@
         	$inhalt.="        <iframe id='newdoc' width='100%' height='100%' name='newdoc' src='firma4a.php?did=$did&fid=$fid&tab=$tab&pid=$pid' frameborder='0'></iframe>";
 	   	$inhalt.="</div>";
 		$objResponse = new xajaxResponse();
-		$objResponse->addAssign("fbright", 	"innerHTML", $inhalt);
+		$objResponse->assign("fbright", 	"innerHTML", $inhalt);
         return $objResponse;
 	}
 	function getDocVorlage__($did,$fid=0,$pid=0,$tab="C") {
@@ -356,11 +365,10 @@
 		};
 		$input.="</table><input type='submit' name='send' value='erzeugen'></form></body></html>";
 		$objResponse = new xajaxResponse();
-		$objResponse->addAssign("fbright", 	"innerHTML", $input);
+		$objResponse->assign("fbright", 	"innerHTML", $input);
                 return $objResponse;
 	}
-	require("firmacommon.php");
-	$xajax->processRequests();
-
+	require("crmajax/firmacommon".XajaxVer.".php");
+	$xajax->processRequest();
 
 ?>

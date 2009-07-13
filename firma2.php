@@ -5,7 +5,7 @@
 	include("inc/crmLib.php");
 	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
-	require("firmacommon.php");
+	require("firmacommon".XajaxVer.".php");
 	$fid=($_GET["fid"])?$_GET["fid"]:$_POST["fid"];
 	$Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];	
 	$kdhelp=getWCategorie(true);
@@ -157,7 +157,7 @@
 	$t->set_file(array("co1" => "firma2.tpl"));
 	$t->set_var(array(
 			INIT	=> ($init=="")?"showOne($id)":"showContact()",
-			AJAXJS  => $xajax->printJavascript('/xajax/'),
+			AJAXJS  => $xajax->printJavascript(XajaxPath),
 			FAART => ($Q=="C")?".:Customer:.":".:Vendor:.",   //"Kunde":"Lieferant",
 			interv	=> $_SESSION["interv"]*1000,
 			Q => $Q,

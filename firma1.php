@@ -4,7 +4,7 @@
 	include("inc/template.inc");
 	include("inc/FirmenLib.php");
 	include("inc/crmLib.php");
-        require("firmacommon.php");
+    require("firmacommon".XajaxVer.".php");
 	$Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
 	$kdhelp=getWCategorie(true);
 	$id=$_GET["id"];
@@ -60,7 +60,7 @@
 	$views=array(""=> "lie",1=>"lie",2=>"not",3=>"inf");
 	$taxzone=array("Inland","EU mit UStId","EU ohne UStId","Ausland");
 	$t->set_var(array(
-			AJAXJS  	=> $xajax->printJavascript('/xajax/'),
+			AJAXJS  	=> $xajax->printJavascript(XajaxPath),
 			FAART 		=> ($Q=="C")?".:Customer:.":".:Vendor:.",
 			Q 		=> $Q,
 			FID		=> $id,

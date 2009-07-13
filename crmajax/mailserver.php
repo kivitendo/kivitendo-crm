@@ -2,6 +2,7 @@
 	require_once("../inc/stdLib.php");
 	include("crmLib.php");
 	include("UserLib.php");
+
 	function getMailTpl($id,$KontaktTO='') {
 		$data=getOneMailVorlage($id);
 		$Subject=$data["cause"];
@@ -34,44 +35,50 @@
 		}
 		$MailSign=ereg_replace("\r","",$user["MailSign"]);
 		$objResponse = new xajaxResponse();
-		$objResponse->addAssign("rcmsg", "innerHTML", "");
-		$objResponse->addAssign("Subject", "value", $Subject);
-		$objResponse->addAssign("BodyText", "value", $BodyText." \n".$MailSign);
+		$objResponse->assign("rcmsg", "innerHTML", "");
+		$objResponse->assign("Subject", "value", $Subject);
+		$objResponse->assign("BodyText", "value", $BodyText." \n".$MailSign);
 		return $objResponse;
 	}
 	function saveMailTpl($sub,$txt,$mid=0) {
 		$rc=saveMailVorlage(array("Subject"=>$sub,"BodyText"=>$txt,"MID"=>$mid));
-		$objResponse = new myXajaxResponse();
+		$objResponse = new XajaxResponse();
 		if ($rc){
 			if ($mid>0) {
-				$objResponse->modOption("vorlagen", $sub);
+                $sScript = "var sel = document.getElementById('vorlagen').selectedIndex;";
+                $sScript .= "document.getElementById('vorlagen').options[sel].text = '$sub';";
+                $objResponse->script($sScript);
 			} else {
-				$objResponse->addCreateOption("vorlagen",$sub,$rc);
+                $sScript  = "var objOption = new Option('".$sub."', '".$rc."');";
+                $sScript .= "document.getElementById('vorlagen').options.add(objOption);";
+                $objResponse->script($sScript);
 			}
-			$objResponse->addAssign("rcmsg", "innerHTML", "Vorlage gesichert");
+			$objResponse->assign("rcmsg", "innerHTML", "Vorlage gesichert");
 			return $objResponse;
 		} else {
-			$objResponse->addAssign("rcmsg", "innerHTML", "Fehler beim sichern");
+			$objResponse->assign("rcmsg", "innerHTML", "Fehler beim sichern");
 			return $objResponse;
 		}
 		return true;
 	}
 	function delMailTpl($id) {
 		$rc=deleteMailVorlage($id);
-		$objResponse = new myXajaxResponse();
-		$objResponse->delOption("vorlagen");
-		$objResponse->addAssign("Subject", "value", "");
-		$objResponse->addAssign("BodyText", "value", "");
+		$objResponse = new XajaxResponse();
+        //delOptions
+        $sScript = "var sel = document.getElementById('vorlagen').selectedIndex;";
+        $sScript .= "document.getElementById('vorlagen').options[sel]=null;";
+        $objResponse->script($sScript);
+		$objResponse->assign("Subject", "value", "");
+		$objResponse->assign("BodyText", "value", "");
 		if ($rc) {
-			$objResponse->addAssign("rcmsg", "innerHTML", "Vorlage gelöscht");
+			$objResponse->assign("rcmsg", "innerHTML", "Vorlage gelöscht");
 		} else {
-			$objResponse->addAssign("rcmsg", "innerHTML", "Vorlage konnte nicht gelöscht werden");
+			$objResponse->assign("rcmsg", "innerHTML", "Vorlage konnte nicht gelöscht werden");
 		}
 		return $objResponse;
 	}
 
-	require("mailcommon.php");
-	$xajax->processRequests();
-
+	require("mailcommon".XajaxVer.".php");
+	$xajax->processRequest();
 
 ?>

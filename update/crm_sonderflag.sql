@@ -7,6 +7,12 @@ CREATE TABLE sonderflag (
     sorder int
 );
 
-INSERT INTO sonderflag (svalue,skey,sorder) VALUES (1,'News',1);
-INSERT INTO sonderflag (svalue,skey,sorder) VALUES (2,'WV',2);
-INSERT INTO sonderflag (svalue,skey,sorder) VALUES (4,'Test',3);
+-- @php: *
+$i=1;
+foreach ($cp_sonder as $key=>$val) {
+    $rc=$db->query("insert into sonderflag (svalue,skey,sorder) values ($key,'$val',$i)");
+    echo "$key:$val:$i:$rc<br>";
+    $i++;
+}
+-- @exec: *
+

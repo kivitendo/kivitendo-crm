@@ -39,7 +39,7 @@ if ($db) { echo "<a href='tmp/install.log'>Datenbankinstallation</a><br>"; } els
 	<tr><td>PHP-Umgebung:</td><td>[<a href="info.php">anzeigen</a>]</td></tr>
 	<tr><td>Session<a href="showsess.php?ok=show">:</a></td><td>[<a href="showsess.php">l&ouml;schen</a>]</td></tr>
 	<tr><td>db-Zugriff:</td><td>[<a href="status.php?test=ja">testen</a>]</td></tr>
-	<tr><td>Updatecheck:</td><td>[<a href='inc/update_neu.php'>durchf&uuml;hren</a>]</td></tr>
+	<tr><td>Updatecheck<a href="update/newdocdir.php?chk=1">:</a></td><td>[<a href='update_neu.php'>durchf&uuml;hren</a>]</td></tr>
 	<tr><td>Installationscheck:</td><td>[<a href='inc/install.php?check=1'>durchf&uuml;hren</a>]</td></tr>
 </table>
 <?php

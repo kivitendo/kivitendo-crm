@@ -181,7 +181,7 @@ global $db;
 		} else {
 			$row2 = $rs3[0];
 		}
-		$daten=array_merge($row,$row2);
+		$daten=array_merge($row2,$row);
 	}
 	$daten["shiptocnt"]=($shipcnt>0)?$shipcnt:0;
 	$daten["shiptoids"]=$shipids;
@@ -353,36 +353,36 @@ global $db;
 	};
 	// Array zu jedem Formularfed: Tabelle (0=customer/vendor,1=shipto), require(0=nein,1=ja), Spaltenbezeichnung, Regel
 	$dbfld=array(	name => array(0,1,1,"Name",75),			greeting => array(0,0,1,"Anrede",75),
-			department_1 => array(0,0,1,"Zusatzname",75),	department_2 => array(0,0,1,"Abteilung",75),
-			country => array(0,0,8,"Land",3),		zipcode => array(0,1,2,"Plz",10),
-			city => array(0,1,1,"Ort",75),			street => array(0,1,1,"Strasse",75),
-			fax => array(0,0,3,"Fax",30),			phone => array(0,0,3,"Telefon",30),
-			email => array(0,0,5,"eMail",0),		homepage =>array(0,0,4,"Homepage",0),
-			contact => array(0,0,1,"Kontakt",75),		v_customer_id => array(0,0,1,"Kundennummer",50),
-			//vendornumber => array(0,0,0,"Lieferantennummer",20),
-			//customernumber => array(0,0,0,"Kundennummer",20),	
-			sw => array(0,0,1,"Stichwort",50),		notes => array(0,0,0,"Bemerkungen",0),
-			ustid => array(0,0,0,"UStId",0),		taxnumber => array(0,0,0,"Steuernummer",0),
-			bank => array(0,0,1,"Bankname",50),		bank_code => array(0,0,6,"Bankleitzahl",15),
-			account_number => array(0,0,6,"Kontonummer",15),
-			branche => array(0,0,1,"Branche",25),		business_id => array(0,0,6,"Kundentyp",0),
-			owener => array(0,0,6,"CRM-User",0),		grafik => array(0,0,9,"Grafik",4),
-			lead => array(0,0,6,"Leadquelle",0),		leadsrc => array(0,0,1,"Leadquelle",15),
-			bland => array(0,0,6,"Bundesland",0),		taxzone_id => array(0,1,6,"Steuerzone",0),
-			sonder => array(0,0,10,"SonderFlag",0),		salesman_id => array(0,0,6,"Vertriebler",0),
-			shiptoname => array(1,0,1,"Liefername",75), 	konzern	=> array(0,0,6,"Konzern",0),
-			shiptostreet => array(1,0,1,"Lieferstrasse",75),
-			shiptobland => array(1,0,6,"Liefer-Bundesland",0),
-			shiptocountry => array(1,0,8,"Lieferland",3),
-			shiptozipcode => array(1,0,2,"Liefer-Plz",10),
-			shiptocity => array(1,0,1,"Lieferort",75),
-			shiptocontact => array(1,0,1,"Kontakt",75),
-			shiptophone => array(1,0,3,"Liefer Telefon",30),
-			shiptofax => array(1,0,3,"Lieferfax",30),
-			shiptoemail => array(1,0,5,"Liefer-eMail",0),
-			shiptodepartment_1 => array(1,0,1,"Lieferzusatzname",75),
-			shiptodepartment_2 => array(1,0,1,"Lieferabteilung",75));
-	$keys=array_keys($daten);
+	    department_1 => array(0,0,1,"Zusatzname",75),	department_2 => array(0,0,1,"Abteilung",75),
+        country => array(0,0,8,"Land",3),	        	zipcode => array(0,1,2,"Plz",10),
+        city => array(0,1,1,"Ort",75),		        	street => array(0,1,1,"Strasse",75),
+        fax => array(0,0,3,"Fax",30),		        	phone => array(0,0,3,"Telefon",30),
+        email => array(0,0,5,"eMail",0),	        	homepage =>array(0,0,4,"Homepage",0),
+	    contact => array(0,0,1,"Kontakt",75),		    v_customer_id => array(0,0,1,"Kundennummer",50),
+	    //vendornumber => array(0,0,0,"Lieferantennummer",20),
+	    //customernumber => array(0,0,0,"Kundennummer",20),	
+	    sw => array(0,0,1,"Stichwort",50),	        	notes => array(0,0,0,"Bemerkungen",0),
+	    ustid => array(0,0,0,"UStId",0),	        	taxnumber => array(0,0,0,"Steuernummer",0),
+	    bank => array(0,0,1,"Bankname",50),	        	bank_code => array(0,0,6,"Bankleitzahl",15),
+	    account_number => array(0,0,6,"Kontonummer",15),
+	    branche => array(0,0,1,"Branche",25),	    	business_id => array(0,0,6,"Kundentyp",0),
+	    owener => array(0,0,6,"CRM-User",0),	    	grafik => array(0,0,9,"Grafik",4),
+	    lead => array(0,0,6,"Leadquelle",0),	    	leadsrc => array(0,0,1,"Leadquelle",15),
+	    bland => array(0,0,6,"Bundesland",0),	    	taxzone_id => array(0,1,6,"Steuerzone",0),
+	    sonder => array(0,0,10,"SonderFlag",0),	        salesman_id => array(0,0,6,"Vertriebler",0),
+	    shiptoname => array(1,0,1,"Liefername",75), 	konzern	=> array(0,0,6,"Konzern",0),
+	    shiptostreet => array(1,0,1,"Lieferstrasse",75),
+	    shiptobland => array(1,0,6,"Liefer-Bundesland",0),
+	    shiptocountry => array(1,0,8,"Lieferland",3),
+	    shiptozipcode => array(1,0,2,"Liefer-Plz",10),
+	    shiptocity => array(1,0,1,"Lieferort",75),
+	    shiptocontact => array(1,0,1,"Kontakt",75),
+	    shiptophone => array(1,0,3,"Liefer Telefon",30),
+	    shiptofax => array(1,0,3,"Lieferfax",30),
+	    shiptoemail => array(1,0,5,"Liefer-eMail",0),
+	    shiptodepartment_1 => array(1,0,1,"Lieferzusatzname",75),
+	    shiptodepartment_2 => array(1,0,1,"Lieferabteilung",75));
+	    $keys=array_keys($daten);
 	$dbf=array_keys($dbfld);
 	$anzahl=count($keys);
 	$fid=$daten["id"];
@@ -665,7 +665,8 @@ global $db;
 	return $rs;
 }
 function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false) {
-global $cp_sonder,$xajax,$GEODB,$BLZDB;
+global $xajax,$GEODB,$BLZDB;
+        $cp_sonder = getSonder(False);
 		$kdtyp=getBusiness();
 		$bundesland=getBundesland(false);
 		$lead=getLeads();
@@ -745,25 +746,26 @@ global $cp_sonder,$xajax,$GEODB,$BLZDB;
 			$t->parse("BlockT","TypListe",true);
 		}
 		if ($typ=="C") {
-                        $lead=getLeads();
-                        $t->set_block("fa1","LeadListe","BlockL");
-                        if ($lead) foreach ($lead as $row) {
-                                $t->set_var(array(
-                                        Lid => $row["id"],
-                                        Lsel => ($row["id"]==$daten["lead"])?"selected":"",
-                                        Lead => $row["lead"],
-                                ));
-                                $t->parse("BlockL","LeadListe",true);
-                        }
-                }
-		$t->set_block("fa1","sonder","BlockS");
-			if ($cp_sonder) while (list($key,$val) = each($cp_sonder)) {
-				$t->set_var(array(
-					sonder_id => $key,
-					sonder_name => $val
-				));
-				$t->parse("BlockS","sonder",true);
-			}
+            $lead=getLeads();
+            $t->set_block("fa1","LeadListe","BlockL");
+            if ($lead) foreach ($lead as $row) {
+                    $t->set_var(array(
+                            Lid => $row["id"],
+                            Lsel => ($row["id"]==$daten["lead"])?"selected":"",
+                            Lead => $row["lead"],
+                    ));
+                    $t->parse("BlockL","LeadListe",true);
+            }
+        }
+        $t->set_block("fa1","sonder","BlockS");
+        if ($cp_sonder) foreach ($cp_sonder as $row) {
+            $t->set_var(array(
+                sonder_id => $row["svalue"],
+                sonder_key => $row["skey"]
+            ));
+            $t->parse("BlockS","sonder",true);
+        }
+
 		$anreden=getAnreden();
 		$t->set_block("fa1","anreden","BlockA");
 		if ($anreden) foreach ($anreden as $anrede) {
@@ -851,7 +853,8 @@ global $cp_sonder,$xajax,$GEODB,$BLZDB;
 } // leertpl
 
 function vartpl (&$t,$daten,$typ,$msg,$btn1,$btn2,$tpl,$suchmaske=false) {
-global $cp_sonder,$xajax,$GEODB,$BLZDB;
+global $xajax,$GEODB,$BLZDB;
+        $cp_sonder = getSonder(False);
 		if ($daten["grafik"]) {
 			if ($typ=="C") { $DIR="C".$daten["customernumber"]; }
 			else { $DIR="V".$daten["vendornumber"]; };
@@ -875,8 +878,8 @@ global $cp_sonder,$xajax,$GEODB,$BLZDB;
 				Msg	=> $msg,
 				action	=> "firmen".$tpl.".php?Q=$typ",
 				id	=> $daten["id"],
-                                customernumber  => $daten["customernumber"],
-                                vendornumber    => $daten["vendornumber"],
+                customernumber  => $daten["customernumber"],
+                vendornumber    => $daten["vendornumber"],
 				kdnr	=>  $daten["nummer"],
 				v_customer_id   => $daten["v_customer_id"],
 				name 	=> $daten["name"],
@@ -960,15 +963,15 @@ global $cp_sonder,$xajax,$GEODB,$BLZDB;
 				$t->parse("BlockL","LeadListe",true);
 			}
 		}
-		$t->set_block("fa1","sonder","BlockS");
-			if ($cp_sonder) while (list($key,$val) = each($cp_sonder)) {
-				$t->set_var(array(
-					sonder_sel => ($daten["sonder"] & $key)?"checked":"",
-					sonder_id => $key,
-					sonder_name => $val
-				));
-				$t->parse("BlockS","sonder",true);
-			}
+        $t->set_block("fa1","sonder","BlockS");
+        if ($cp_sonder) foreach ($cp_sonder as $row) {
+            $t->set_var(array(
+                sonder_sel => ($daten["sonder"] & $row["svalue"])?"checked":"",
+                sonder_id => $row["svalue"],
+                sonder_key => $row["skey"]
+            ));
+            $t->parse("BlockS","sonder",true);
+        }
 		$anreden=getAnreden();
 		$t->set_block("fa1","anreden","BlockA");
 		if ($anreden) foreach ($anreden as $anrede) {

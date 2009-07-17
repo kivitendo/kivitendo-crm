@@ -419,7 +419,7 @@ function leertplP (&$t,$fid,$msg,$tab,$suche=false,$Quelle="") {
 global $laender;
 //cp_greeting raus hli
 //Sonderflag aus DB hli
-        $cp_sonder = getSonder();
+        $cp_sonder = getSonder(False);
 		if ($fid && $Quelle) {
 			$fa=getFirmenstamm($fid,false,$Quelle);
 			$nummer=($Quelle=="C")?$fa["customernumber"]:$fa["vendornumber"];
@@ -509,7 +509,7 @@ global $laender;
             if ($cp_sonder) foreach ($cp_sonder as $row) {
                 $t->set_var(array(
                     sonder_id => $row["svalue"],
-                    sonder_name => $row["skey"]
+                    sonder_key => $row["skey"],
                 ));
 				$t->parse("Block3","sonder",true);
 			}
@@ -519,7 +519,7 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
 	global $laender;
 //cp_greeting raus hli
 //Sonderflag aus DB hli
-        $cp_sonder = getSonder();
+        $cp_sonder = getSonder(False);
 		if ($daten["cp_cv_id"] && $daten["Quelle"]) {
 			$fa=getFirmenstamm($daten["cp_cv_id"],false,$daten["Quelle"]);
 			$nummer=($daten["Quelle"]=="C")?$fa["customernumber"]:$fa["vendornumber"];
@@ -633,7 +633,7 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
                 $t->set_var(array(
                     sonder_sel => ($daten["cp_sonder"] & $row["svalue"])?"checked":"",
                     sonder_id => $row["svalue"],
-                    sonder_name => $row["skey"]
+                    sonder_key => $row["skey"],
                 ));
 				$t->parse("Block3","sonder",true);
 			}

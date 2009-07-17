@@ -172,7 +172,7 @@
 	</span><span style="float:left;">
 		<!--div class="zeile2"-->.:sflag:.:
 	<!-- BEGIN sonder -->
-			<div class="zeile2"><input type="checkbox" name="cp_sonder[]" value="{sonder_id}" {sonder_sel}>{sonder_name}</div>
+			<div class="zeile2"><input type="checkbox" name="cp_sonder[]" value="{sonder_id}" {sonder_sel}>{sonder_key}</div>
 	<!-- END sonder -->					
 		<!--/div-->
 			<span class="label">{IMG}{IMG_}<br>

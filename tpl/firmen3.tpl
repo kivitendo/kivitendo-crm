@@ -333,7 +333,7 @@
 	</div>
 	<div class="zeile2">
 <!-- BEGIN sonder -->
-	<input type="checkbox"  name="sonder[]" value="{sonder_id}" {sonder_sel} tabindex="17"><span class="klein">{sonder_name} </span>
+	<input type="checkbox"  name="sonder[]" value="{sonder_id}" {sonder_sel} tabindex="17"><span class="klein">{sonder_key} </span>
 <!-- END sonder -->	
 	</div>
 </span>

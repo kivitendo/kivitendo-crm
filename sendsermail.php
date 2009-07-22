@@ -1,6 +1,7 @@
 <?
 //mb_internal_encoding("UTF-8");
 require_once("inc/stdLib.php");
+include("inc/UserLib.php");
 require_once("inc/crmLib.php");
 include_once("Mail.php");
 include_once("Mail/mime.php");
@@ -9,6 +10,8 @@ $offset=($_GET["offset"])?$_GET["offset"]:1;
 $mime = new Mail_Mime("\n");
 $mail =& Mail::factory("mail");
 $headers=$_SESSION["headers"];
+$user=getUserStamm($_SESSION["loginCRM"]);
+$mail->_params="-f ".$user["eMail"];
 $subject=$headers["Subject"];
 $bodytxt=$_SESSION["bodytxt"];
 $limit=$_SESSION["limit"];
@@ -96,10 +99,11 @@ if ($data) {
 	} // foreach
 	header("location: sendsermail.php?offset=".($offset+$limit));
 } else {
+    /* Was soll das??
 	if ($dateiname) {
 		$ok=chkdir($_SESSION["loginCRM"]);
-        	copy("tmp/".$_SESSION["loginCRM"].".file","./dokumente/".$_SESSION["mansel"]."/".$_SESSION["loginCRM"]."/".$dateiname);
-	};
+       	copy("./dokumente/".$_SESSION["mansel"]."/".$_SESSION["loginCRM"]."/SerMail/$dateiname","./dokumente/".$_SESSION["mansel"]."/".$_SESSION["loginCRM"]."/".$dateiname);
+	}; */
 ?>
 	<center>
 	Keine weiteren Mails.<br>

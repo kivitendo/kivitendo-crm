@@ -53,9 +53,9 @@
 						</select>
 		</td></tr>
 	<tr><td class="norm">Name</td><td><input type="text" name="Name" value="{Name}" maxlength="75"></td>
-		<td class="norm">Abteilung</td>	<td><input type="text" name="Abteilung" value="{Abteilung}" maxlength="25"></td></tr>
+		<td class="norm">Abteilung</td>	<td><input type="text" name="Abteilung" value="{Abteilung}" maxlength="75"></td></tr>
 	<tr><td class="norm">Strasse</td><td><input type="text" name="Strasse" value="{Strasse}" maxlength="75"></td>
-		<td class="norm">Position</td><td><input type="text" name="Position" value="{Position}" maxlength="25"></td></tr>
+		<td class="norm">Position</td><td><input type="text" name="Position" value="{Position}" maxlength="75"></td></tr>
 	<tr><td class="norm">Plz Ort</td><td><input type="text" name="Plz" value="{Plz}" size="6" maxlength="10"> <input type="text" name="Ort" value="{Ort}"  maxlength="75"></td>
 		<td class="norm">eMail</td><td><input type="text" name="eMail" value="{eMail}" size="30" maxlength="125"></td></tr>
 	<tr><td class="norm">Telefon priv.</td><td><input type="text" name="Tel1" value="{Tel1}" maxlength="30"></td>
@@ -75,7 +75,7 @@
 		<td class="norm"></td>
 		<td class="norm">
 		</td></tr>
-	<tr><td class="norm">Postfach</td><td class="norm"><input type="text" name="Postf" value="{Postf}" size="10" maxlength="25"> Kennwort <input type="text" name="Kennw" value="{Kennw}" size="10" maxlength="10"></td>
+	<tr><td class="norm">Postfach</td><td class="norm"><input type="text" name="Postf" value="{Postf}" size="10" maxlength="75"> Kennwort <input type="text" name="Kennw" value="{Kennw}" size="10" maxlength="20"></td>
 	    <td class="norm">Termine</td><td>
 	    	von <select name="termbegin">{termbegin}</select> 
 	    	bis <select name="termend">{termend}</select> Uhr</td></tr>

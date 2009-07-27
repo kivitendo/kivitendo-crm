@@ -71,7 +71,7 @@
 	</td><td></td>
 	<tr><td class="norm">Regel</td><td>{Regel}</td>
 		<td>&nbsp;</td><td>{GRUPPE}</td></tr>
-	<tr><td class="norm">Mailserver</td><td><input type="text" name="Msrv" value="{Msrv}" maxlength="40"></td>
+	<tr><td class="norm">Mailserver</td><td><input type="text" name="Msrv" value="{Msrv}" maxlength="75"></td>
 		<td class="norm"></td>
 		<td class="norm">
 		</td></tr>

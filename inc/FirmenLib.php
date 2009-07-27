@@ -972,6 +972,15 @@ global $xajax,$GEODB,$BLZDB;
             ));
             $t->parse("BlockS","sonder",true);
         }
+        $shiptos=getAllShipto($daten["id"],$typ);
+		$t->set_block("fa1","shiptos","BlockS");
+		if ($shiptos) foreach ($shiptos as $ship) {
+			$t->set_var(array(
+                SHIPID  => $ship["shipto_id"],
+                SHIPTO  => $ship["shiptoname"].", ".$ship["shiptostreet"].", ".$ship["shiptocity"]
+			));
+			$t->parse("BlockS","shiptos",true);
+		}
 		$anreden=getAnreden();
 		$t->set_block("fa1","anreden","BlockA");
 		if ($anreden) foreach ($anreden as $anrede) {

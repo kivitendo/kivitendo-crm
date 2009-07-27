@@ -22,7 +22,11 @@
 <?
 	$daten=getAllMails($_GET["name"]);
 	if ($daten) foreach ($daten as $zeile) {
-		echo "\t<option value='".$zeile["src"].$zeile["id"]."'>".$zeile["name"]." &lt;".$zeile["email"]."&gt;</option>\n";
+        if ($zeile["name"]<>"") {
+    		echo "\t<option value='".$zeile["src"].$zeile["id"]."'>".$zeile["name"]." &lt;".$zeile["email"]."&gt;</option>\n";
+        } else {
+    		echo "\t<option value='".$zeile["src"].$zeile["id"]."'>".$zeile["email"]."</option>\n";
+        }
 	}
 ?>
 </select><br>

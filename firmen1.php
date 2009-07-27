@@ -23,7 +23,7 @@
 				report => $tmp
 		));
 		leertpl($t,1,$Q,"",true);
-	} else if ($_POST["suche"]=="suchen" || $_GET["first"]) {
+	} else if ($_POST["suche"]!="" || $_GET["first"]) {
 		if ($_GET["first"]) {
 			$daten=getAllFirmen(array(1,$_GET["first"]),false,$Q);
 		} else {

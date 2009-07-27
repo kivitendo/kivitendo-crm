@@ -34,6 +34,7 @@ CREATE TABLE documents (
 	zeit time,
 	size integer,
 	pfad text,
+	kunde integer,
 	employee integer,
 	id integer DEFAULT nextval('id'::text));
 	
@@ -314,9 +315,9 @@ INSERT INTO bundesland (country,bundesland) VALUES ('D','Nordrhein-Westfalen');
 INSERT INTO bundesland (country,bundesland) VALUES ('D','Rheinland-Pfalz');
 INSERT INTO bundesland (country,bundesland) VALUES ('D','Saarland');
 INSERT INTO bundesland (country,bundesland) VALUES ('D','Sachsen');
-INSERT INTO bundesland (country,bundesland) VALUES ('D','Sachen-Anhalt');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Sachsen-Anhalt');
 INSERT INTO bundesland (country,bundesland) VALUES ('D','Schleswig-Holstein');
-INSERT INTO bundesland (country,bundesland) VALUES ('D','Th&uuml;ingen');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Th&uuml;ringen');
 
 INSERT INTO bundesland (country,bundesland) VALUES ('CH','Aargau');
 INSERT INTO bundesland (country,bundesland) VALUES ('CH','Appenzell Ausserrhoden');

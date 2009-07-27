@@ -302,7 +302,7 @@ fval     text
 );
 CREATE INDEX extrafld_key ON extra_felder USING btree (owner);
 
-INSERT INTO bundesland (country,bundesland) VALUES ('D','Baden-W&uuml;ttemberg');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Baden-W&uuml;rttemberg');
 INSERT INTO bundesland (country,bundesland) VALUES ('D','Bayern');
 INSERT INTO bundesland (country,bundesland) VALUES ('D','Berlin');
 INSERT INTO bundesland (country,bundesland) VALUES ('D','Brandenburg');

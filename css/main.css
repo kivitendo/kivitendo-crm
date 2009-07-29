@@ -63,7 +63,9 @@ textarea  	{ font-size: 1em; font-family:Verdana,Arial,Helvetica,sans-serif;}
 .wikiw          { color:#55ff55; font-weight:bold; font-size:1em; }
 
 .listtop {
-        background-color: rgb(236,233,216);
+        ;background-color: rgb(236,233,216);
+        background-color: rgb(192,205,222);
+        background-image:url("../image/mobi.jpg"); background-repeat:no-repeat;background-position:right;
         text-align:left;
         padding:5px;
         font-size: 0.8em;
@@ -71,6 +73,7 @@ textarea  	{ font-size: 1em; font-family:Verdana,Arial,Helvetica,sans-serif;}
         font-weight: bolder;
         border-style:dashed;
         border-width:thin;
+        height:1.5em;
 }
 .listelement {
          background-image: url("fade2.png");
@@ -113,7 +116,7 @@ input:focus {
 }
 .labelLe {
   float: left;
-  width: 7em;
+  width: 8em;
   text-align: left;
 }
 .label {

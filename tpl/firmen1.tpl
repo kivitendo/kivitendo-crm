@@ -146,8 +146,8 @@
 			<input type="checkbox" name="shipto" value="1" checked tabindex="40">.:also in:. .:shipto:.<br>
 			<input type="checkbox" name="fuzzy" value="%" checked tabindex="41">.:fuzzy search:. <input type="checkbox" name="pre" value="1">.:with prefix:.<br>
 			<input type="checkbox" name="employee" value="{employee}" tabindex="42">.:only by own:.<br>
-			<input type="submit" class="anzeige" name="suche" value="search_" tabindex="43">&nbsp;
-			<input type="submit" class="clear" name="reset" value="clear_" tabindex="44"> &nbsp;
+			<input type="submit" class="anzeige" name="suche" value=".:search:." tabindex="43">&nbsp;
+			<input type="submit" class="clear" name="reset" value=".:clear:." tabindex="44"> &nbsp;
 			<input type="button" name="rep" value="Report" onClick="report()" tabindex="45"> &nbsp;
 			<input type="button" name="geo" value="GeoDB" onClick="surfgeo()" tabindex="46" style="visibility:{GEOS}"> &nbsp;
 			<br>

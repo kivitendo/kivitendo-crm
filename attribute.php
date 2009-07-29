@@ -2,7 +2,7 @@
 require_once("inc/stdLib.php");
 
 //Sonderflags jetzt aus der DB
-$cp_sonder=getSonder();
+$cp_sonder=getSonder(False);
 
 include("inc/crmLib.php");  //brauch ich die hier? kommen hier die globalen Werte her? jb 17.6.2009
 /*

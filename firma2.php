@@ -5,7 +5,7 @@
 	include("inc/crmLib.php");
 	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
-	require("firmacommon".XajaxVer.".php");
+    require("firmacommon".XajaxVer.".php");
 	$fid=($_GET["fid"])?$_GET["fid"]:$_POST["fid"];
 	$Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];	
 	$kdhelp=getWCategorie(true);

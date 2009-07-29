@@ -43,7 +43,7 @@
 		$rab="";
 	}
 	$sonder="";
-    $cp_sonder=getSonder();
+    $cp_sonder=getSonder(False);
 	if ($cp_sonder) foreach ($cp_sonder as $row) {
 		$sonder.=($fa["sonder"] & $row["svalue"])?$row["skey"]." ":"";
 	}
@@ -99,7 +99,8 @@
 			Steuerzone 	=> ($fa["taxzone_id"])?$taxzone[$fa["taxzone_id"]]:$taxzone[0],
 			Taxnumber	=> $fa["taxnumber"],
 			rabatt		=> $rab,
-			terms		=> $fa["terms"],
+			//terms		=> $fa["terms"],
+			terms		=> ($fa["terms_netto"])?$fa["terms_netto"]:"0",
 			kreditlim	=> sprintf("%0.2f",$fa["creditlimit"]),
 			op		=> ($fa["op"]>0)?sprintf("<span class='op'>%0.2f</span>",$fa["op"]):"0.00",
 			oa		=> ($fa["oa"]>0)?sprintf("<span class='oa'>%0.2f</span>",$fa["oa"]):"0.00",

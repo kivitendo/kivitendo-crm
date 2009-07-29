@@ -71,9 +71,10 @@ global $db;
 		$sql="select sum(amount) from ar where customer_id=$id and amount<>paid";
 		$rs=$db->getAll($sql);
 		$op=$rs[0]["sum"];
-		$sql="select C.*,E.name as verkaeufer,B.description as kdtyp,B.discount as typrabatt,P.pricegroup,L.lead as leadname,BL.bundesland from customer C ";
+		$sql="select C.*,E.name as verkaeufer,B.description as kdtyp,B.discount as typrabatt,P.pricegroup,";
+        $sql.="L.lead as leadname,BL.bundesland,T.terms_netto from customer C ";
 		$sql.="left join employee E on C.salesman_id=E.id left join business B on B.id=C.business_id ";
-		$sql.="left join bundesland BL on BL.id=C.bland ";
+		$sql.="left join bundesland BL on BL.id=C.bland left join payment_terms T on T.id=C.payment_id ";
 		$sql.="left join pricegroup P on P.id=C.klass left join leads L on C.lead=L.id ";
 		$sql.="where C.id=$id";
 	} else if ($tab=="V") {
@@ -354,7 +355,7 @@ global $db;
 	// Array zu jedem Formularfed: Tabelle (0=customer/vendor,1=shipto), require(0=nein,1=ja), Spaltenbezeichnung, Regel
 	$dbfld=array(	name => array(0,1,1,"Name",75),			greeting => array(0,0,1,"Anrede",75),
 	    department_1 => array(0,0,1,"Zusatzname",75),	department_2 => array(0,0,1,"Abteilung",75),
-        country => array(0,0,8,"Land",3),	        	zipcode => array(0,1,2,"Plz",10),
+        country => array(0,0,8,"Land",25),	        	zipcode => array(0,1,2,"Plz",10),
         city => array(0,1,1,"Ort",75),		        	street => array(0,1,1,"Strasse",75),
         fax => array(0,0,3,"Fax",30),		        	phone => array(0,0,3,"Telefon",30),
         email => array(0,0,5,"eMail",0),	        	homepage =>array(0,0,4,"Homepage",0),
@@ -757,13 +758,13 @@ global $xajax,$GEODB,$BLZDB;
                     $t->parse("BlockL","LeadListe",true);
             }
         }
-        $t->set_block("fa1","sonder","BlockS");
+        $t->set_block("fa1","sonder","BlockF");
         if ($cp_sonder) foreach ($cp_sonder as $row) {
             $t->set_var(array(
                 sonder_id => $row["svalue"],
                 sonder_key => $row["skey"]
             ));
-            $t->parse("BlockS","sonder",true);
+            $t->parse("BlockF","sonder",true);
         }
 
 		$anreden=getAnreden();
@@ -963,14 +964,14 @@ global $xajax,$GEODB,$BLZDB;
 				$t->parse("BlockL","LeadListe",true);
 			}
 		}
-        $t->set_block("fa1","sonder","BlockS");
+        $t->set_block("fa1","sonder","BlockF");
         if ($cp_sonder) foreach ($cp_sonder as $row) {
             $t->set_var(array(
                 sonder_sel => ($daten["sonder"] & $row["svalue"])?"checked":"",
                 sonder_id => $row["svalue"],
                 sonder_key => $row["skey"]
             ));
-            $t->parse("BlockS","sonder",true);
+            $t->parse("BlockF","sonder",true);
         }
         $shiptos=getAllShipto($daten["id"],$typ);
 		$t->set_block("fa1","shiptos","BlockS");

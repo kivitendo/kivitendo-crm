@@ -49,7 +49,7 @@
 	</div>
 	<div style="float:left; text-align:right; width:520px;" class="fett">
 	<center>.:Netto sales over 12 Month:. 
-	[<a href='firma3.php?fid={FID}&jahr={JAHRZ}'>.:earlier:.</a>] [<a href='firma3.php?fid={FID}&jahr={JAHRV}'>{JAHRVTXT}</a>]</center>
+	[<a href='firma3.php?Q={Q}&fid={FID}&jahr={JAHRZ}'>.:earlier:.</a>] [<a href='firma3.php?Q={Q}&fid={FID}&jahr={JAHRV}'>{JAHRVTXT}</a>]</center>
 		<img src="{IMG}" width="500" height="280" title="Netto sales over 12 Month"><br /><br />
 	</div>
 </div>

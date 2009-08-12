@@ -2,44 +2,52 @@
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
-<body onLoad="document.formular.cp_greeting.focus();">
+    <script language="JavaScript">
+        function setLetter(letter) {
+            document.formular.cp_name.value=letter;
+            document.formular.first.value="1";
+            document.formular.submit();
+        }
+    </script>
+<body onLoad="document.formular.cp_name.focus();">
 <p class="listtop">Personensuche</p>
 
 <form name="formular" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="FID1" value="{FID1}">
+<input type="hidden" name="first" value="">
 <input type="hidden" name="Quelle" value="{Quelle}">
 <input type="hidden" name="employee" value="{employee}">
 
 <span style="float:left; top:3.0em; left:1em; border: 0px solid black;">
 <!-- Beginn Code ------------------------------------------->
 <p class="listheading">| 
-<a href="{action}?Quelle={Quelle}&first=A" class="fett">A</a> |
-<a href="{action}?Quelle={Quelle}&first=B" class="fett">B</a> |
-<a href="{action}?Quelle={Quelle}&first=C" class="fett">C</a> |
-<a href="{action}?Quelle={Quelle}&first=D" class="fett">D</a> |
-<a href="{action}?Quelle={Quelle}&first=E" class="fett">E</a> |
-<a href="{action}?Quelle={Quelle}&first=F" class="fett">F</a> |
-<a href="{action}?Quelle={Quelle}&first=G" class="fett">G</a> |
-<a href="{action}?Quelle={Quelle}&first=H" class="fett">H</a> |
-<a href="{action}?Quelle={Quelle}&first=I" class="fett">I</a> |
-<a href="{action}?Quelle={Quelle}&first=J" class="fett">J</a> |
-<a href="{action}?Quelle={Quelle}&first=K" class="fett">K</a> |
-<a href="{action}?Quelle={Quelle}&first=L" class="fett">L</a> |
-<a href="{action}?Quelle={Quelle}&first=M" class="fett">M</a> |
-<a href="{action}?Quelle={Quelle}&first=N" class="fett">N</a> |
-<a href="{action}?Quelle={Quelle}&first=O" class="fett">O</a> |
-<a href="{action}?Quelle={Quelle}&first=P" class="fett">P</a> |
-<a href="{action}?Quelle={Quelle}&first=Q" class="fett">Q</a> |
-<a href="{action}?Quelle={Quelle}&first=R" class="fett">R</a> |
-<a href="{action}?Quelle={Quelle}&first=S" class="fett">S</a> |
-<a href="{action}?Quelle={Quelle}&first=T" class="fett">T</a> |
-<a href="{action}?Quelle={Quelle}&first=U" class="fett">U</a> |
-<a href="{action}?Quelle={Quelle}&first=V" class="fett">V</a> |
-<a href="{action}?Quelle={Quelle}&first=W" class="fett">W</a> |
-<a href="{action}?Quelle={Quelle}&first=X" class="fett">X</a> |
-<a href="{action}?Quelle={Quelle}&first=Y" class="fett">Y</a> |
-<a href="{action}?Quelle={Quelle}&first=Z" class="fett">Z</a> |
-<a href="{action}?Quelle={Quelle}&first=~" class="fett">*</a> |</p>
+<a href="#" onClick="setLetter('A');" class="fett">A</a> |
+<a href="#" onClick="setLetter('B');" class="fett">B</a> |
+<a href="#" onClick="setLetter('C');" class="fett">C</a> |
+<a href="#" onClick="setLetter('D');" class="fett">D</a> |
+<a href="#" onClick="setLetter('E');" class="fett">E</a> |
+<a href="#" onClick="setLetter('F');" class="fett">F</a> |
+<a href="#" onClick="setLetter('G');" class="fett">G</a> |
+<a href="#" onClick="setLetter('H');" class="fett">H</a> |
+<a href="#" onClick="setLetter('I');" class="fett">I</a> |
+<a href="#" onClick="setLetter('J');" class="fett">J</a> |
+<a href="#" onClick="setLetter('K');" class="fett">K</a> |
+<a href="#" onClick="setLetter('L');" class="fett">L</a> |
+<a href="#" onClick="setLetter('M');" class="fett">M</a> |
+<a href="#" onClick="setLetter('N');" class="fett">N</a> |
+<a href="#" onClick="setLetter('O');" class="fett">O</a> |
+<a href="#" onClick="setLetter('P');" class="fett">P</a> |
+<a href="#" onClick="setLetter('Q');" class="fett">Q</a> |
+<a href="#" onClick="setLetter('R');" class="fett">R</a> |
+<a href="#" onClick="setLetter('S');" class="fett">S</a> |
+<a href="#" onClick="setLetter('T');" class="fett">T</a> |
+<a href="#" onClick="setLetter('U');" class="fett">U</a> |
+<a href="#" onClick="setLetter('V');" class="fett">V</a> |
+<a href="#" onClick="setLetter('W');" class="fett">W</a> |
+<a href="#" onClick="setLetter('X');" class="fett">X</a> |
+<a href="#" onClick="setLetter('Y');" class="fett">Y</a> |
+<a href="#" onClick="setLetter('Z');" class="fett">Z</a> |
+<a href="#" onClick="setLetter('~');" class="fett">*</a> |</p>
 	<div class="zeile">
 		<span class="label">.:gender:.</span>
 		<span class="leftfeld">
@@ -109,7 +117,7 @@
   </div>
 	<div class="zeile">
 		<input type="checkbox" name="fuzzy" value="%" checked><span class="klein">Unscharf suchen&nbsp;&nbsp;<b>{Msg}</b></span> <input type="checkbox" name="vendor" checked><span class="klein">Lieferanten</span><input type="checkbox" name="customer" checked><span class="klein">Kunden</span><br>
-		 <input type="checkbox" name="deleted"><span class="klein">gelöschte Ansprechpartner (Kunden und Lieferanten)</span><br>
+		 <input type="checkbox" name="deleted"><span class="klein">gelöschte Ansprechpartner (Kunden und Lieferanten) oder private Adressen</span><br>
 		{Btn1} {Btn3} <input type="submit" class="anzeige" name="suche" value="suchen"> <input type="submit" class="clear" name="reset" value="clear">
 	</div>
 </span>

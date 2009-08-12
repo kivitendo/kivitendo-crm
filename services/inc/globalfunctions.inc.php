@@ -8,7 +8,8 @@
     *  option) any later version.                                              *
     \**************************************************************************/
     
-
+require_once "../inc/conf.php";
+require_once "../inc/db.php";
     
     function mk_dir($path, $rights = 0777) {
       $folder_path = array(
@@ -172,5 +173,39 @@
         }
         return $_GET['menuaction'] ? $_GET['menuaction'] : str_replace(EGW_SERVER_ROOT,'',$_SERVER['SCRIPT_FILENAME']);
     }
+function anmelden($user,$pwd) {
+global $ERPNAME;
+    ini_set("gc_maxlifetime","3600");
+    $tmp = @file_get_contents("../../".$ERPNAME."/config/authentication.pl");
+        preg_match("/'db'[ ]*=> '(.+)'/",$tmp,$hits);
+        $dbname=$hits[1];
+        preg_match("/'password'[ ]*=> '(.+)'/",$tmp,$hits);
+        $dbpasswd=$hits[1];
+        preg_match("/'user'[ ]*=> '(.+)'/",$tmp,$hits);
+        $dbuser=$hits[1];
+        preg_match("/'host'[ ]*=> '(.+)'/",$tmp,$hits);
+        $dbhost=($hits[1])?$hits[1]:"localhost";
+        preg_match("/'port'[ ]*=> '?(.+)'?/",$tmp,$hits);
+        $dbport=($hits[1])?$hits[1]:"5432";
+        $db=new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport,true);
+        if (!$db) return false; 
+        $passwd = crypt($pwd,substr($user,0,2));
+        $sql="select * from auth.user U left join auth.user_config C on U.id = C.user_id where U.login='$user' and U.password = '$passwd'";
+        $rs1=$db->getAll($sql,"amelden");
+        if (!$rs1) return false;
+        $_SESSION["login"]=$user;
+        $keys=array("dbname","dbpasswd","dbhost","dbport","dbuser");
+        foreach ($rs1 as $row) {
+                if (in_array($row["cfg_key"],$keys)) {
+                        $_SESSION[$row["cfg_key"]]=$row["cfg_value"];
+                }
+        }
+        if (empty($_SESSION["dbhost"])) $_SESSION["dbhost"]="localhost";
+        if (empty($_SESSION["dbport"])) $_SESSION["dbport"]="5432";
+        $_SESSION["mansel"]=$_SESSION["dbname"];
+        $_SESSION["employee"]=$user;
+        $_SESSION["password"]=$pwd;
+        return true;
+}
 
 ?>

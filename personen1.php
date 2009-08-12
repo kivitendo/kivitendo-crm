@@ -15,7 +15,7 @@
 		$_POST["cp_name"]=$_GET["first"];
 		$_POST["fuzzy"]="%";
 	}
-	if ($_POST["suche"]=="suchen" || $_GET["first"]) {
+	if ($_POST["suche"]=="suchen" || $_POST["first"]=="1") {
 		$daten=suchPerson($_POST);
 		if (!chkAnzahl($daten,$tmp)) {
 			$msg="Trefferanzahl zu gro&szlig;. Bitte einschr&auml;nken.";

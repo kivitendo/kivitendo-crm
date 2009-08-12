@@ -124,6 +124,7 @@ function suchPerson($muster) {
 global $db;
 	$rechte=berechtigung("cp_");
 	if ($muster["cp_name"]=="~") {	//ist dies nur der sonderfall falls einer eine tilde eingibt? ein undokumentiertes ei? @holgi jb 10.6.09
+                                    // Nein, das ist der Stern in der oberen Zeile. Hätte auch ein anderes Zeichen sein können. hli
 		$where0=" and upper(cp_name) ~ '^\[^A-Z\].*$'  ";
 	} else {
 		// Array zu jedem Formularfed: Tabelle (0=contact,1=cust/vend), TabName, toUpper
@@ -220,11 +221,11 @@ global $db;
 	
 	$rs2=array(); //s.o.
 	if ($muster["deleted"]){ //auf checkbox deleted mit Titel "gelöschte Ansprechpartner (Kunden und Lieferanten)" prüfen
+                            // es gibt nicht nur gelöschte Personen, sonder auch Personen ohne Zuordnung zu Firmen, z.B. private Adressen
 	    $sql0="select $felderContact, C.cp_country, C.cp_zipcode, C.cp_city, C.cp_street, C.cp_phone1, 
 				 '' as name,'P' as tbl from contacts C where $rechte ".$where." and C.cp_cv_id is null order by cp_name";
 	    $rs2=$db->getAll($sql0);
 	}
-
 	return array_merge($rs0,$rs1,$rs2);	//alle ergebnisse zusammenziehen und zurückgeben
 }
 

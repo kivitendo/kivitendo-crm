@@ -267,9 +267,9 @@
 		<span class="feldxx"><input type="text" name="account_number" size="35" maxlength="15" value="{account_number}" tabindex="9"></span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">.:shipto:.</span>
+		<span class="label klein">.:directdebit:.</span>
 		<span class="feldxx"><input type="radio" value="t" name="direct_debit" {direct_debitt} tabindex="9">.:yes:.
-				<input type="radio" value="f" name="direct_debit" {direct_debitf} tabindex="9">.:no:.
+				<input type="radio" value="f" name="direct_debit" {direct_debitf} {direct_debit} tabindex="9">.:no:.
 		</span>
 	</div>
 	<div class="zeile2">

@@ -88,7 +88,7 @@
 			sonder		=> $sonder,
 			notiz 		=> nl2br($fa["notes"]),
 			bank 		=> $fa["bank"],
-			directdebit	=> ($fa["direct_debit"])?".:yes:.":".:no:.",
+			directdebit	=> ($fa["direct_debit"]=="t")?".:yes:.":".:no:.",
 			blz 		=> $fa["bank_code"],
 			konto 		=> $fa["account_number"],
 			konzernname	=> $fa["konzernname"],

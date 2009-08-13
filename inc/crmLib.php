@@ -1858,10 +1858,20 @@ function getTermin($day,$month,$year,$art,$cuid=false) {
 global $db;
     if ($cuid==-1) {
         $rechte="";
-    } else if ($cuid) {
-        $rechte="and M.member = $cuid";
     } else {
-        $rechte="and M.member = ".$_SESSION["loginCRM"];
+        $sql="select distinct(grpid) from grpusr where usrid=$cuid";
+        $rs=$db->getAll($sql);
+        if ($rs) {
+            foreach ($rs as $r) $tmp[]=$r["grpid"];
+            $grp = "or (M.member in (".implode(",",$tmp).") and M.tabelle='G'))";
+        } else {
+            $grp=")";
+        }
+        if ($cuid) {
+            $rechte="and ((M.member = $cuid and M.tabelle ='E') $grp";
+        } else {
+            $rechte="and ((M.member = ".$_SESSION["loginCRM"]." and M.tabelle ='E') $grp";
+        }
     }
 	//$grp=getGrp($_SESSION["loginCRM"],true);
 	//if ($grp) $rechte.=" M.member in $grp";

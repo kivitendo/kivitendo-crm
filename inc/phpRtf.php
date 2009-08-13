@@ -41,8 +41,7 @@ class phpRTF
 		// Find a random folder name for PCLZIP_OPT_ADD_PATH
 		$info = pathinfo($filename);
 		$this->parserFiles = POO_TMP_PATH."/".$this->getRandomString(16).".".$info["extension"];
-		exec ("cp $filename ".$this->parserFiles);
-
+		$rc = exec ("cp $filename ".$this->parserFiles);
 	}
 
 	// Put variables into extracted content file
@@ -67,6 +66,8 @@ class phpRTF
 
 		foreach(array_keys($variables) as $key)
 		{
+            //Zeilenümbrüche müssen noch implementiert werden
+            //Dazu muß die GANZE Zeile in der der Platzhalter steht eingelesen und kopiert werden. Für JEDEN Umbruch
 			$this->parsedDocuments = str_replace(POO_VAR_PREFIX.$key.POO_VAR_SUFFIX, $variables[$key], $this->parsedDocuments);
 		}
 	}
@@ -94,10 +95,11 @@ class phpRTF
 	}
 
         function prepsave($filename) {
-                if($filename == "") $filename = $this->getRandomString(16);
-		$info = pathinfo($this->parserFiles);
-                $fullfile = $filename.".".$info["extension"];
-                $this->downloadFile = POO_TMP_PATH."/".$fullfile;
+                if($filename == "") {
+		            $info = pathinfo($this->parserFiles);
+                    $filename = $this->getRandomString(16);
+                }
+                $this->downloadFile = POO_TMP_PATH."/".$filename;
                 $this->savefile($this->downloadFile);
         }
 

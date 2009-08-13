@@ -21,16 +21,14 @@
 		if ($docdata["document"]["applikation"]=="O") {
 			include('inc/phpOpenOffice.php');
 			$doc = new phpOpenOffice();
-			$fname=$docdata["document"]["file"];
 		} else if ($docdata["document"]["applikation"]=="R") {
 			include('inc/phpRtf.php');
 			$doc = new phpRTF();
-			$fname=$docdata["document"]["file"];
 		} else if ($docdata["document"]["applikation"]=="B") {
 			require('inc/phpBIN.php');
 			$doc = new phpBIN();
-			$fname=$docdata["document"]["file"];
 		}
+		$fname=$docdata["document"]["file"];
 		$doc->loadDocument("vorlage/".$docdata["document"]["file"]);
 		$vars= array();
 		if ($docdata["felder"]) foreach($docdata["felder"] as $zeile) {

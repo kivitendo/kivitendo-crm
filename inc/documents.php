@@ -242,7 +242,7 @@ class document {
 		$this->setDocData("name",($rs)?$rs["filename"]:false);
 		$this->setDocData("pfad",($rs)?$rs["pfad"]:false);
 		$this->setDocData("descript",($rs)?$rs["descript"]:false);
-		$this->setDocData("size",($rs)?$rs["size"]:false);
+		$this->setDocData("size",($rs)?$rs["size"]:0);
 		$this->setDocData("id",($rs)?$id:false);
 		if(!$rs) return false;
 		return $rs;

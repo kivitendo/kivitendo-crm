@@ -9,11 +9,15 @@
 	$data=getTerminData($_GET["termid"]);
 	$usr=getTerminUser($_GET["termid"]);
     $privat = ($data["privat"]=='t' && $data["uid"]!=$_SESSION["loginCRM"]);
+    $edit = false;
+    if ($data["uid"]==$_SESSION["loginCRM"]) $edit = true;
 	$links="";
 	if ($usr) foreach ($usr as $row) {
 		if (substr($row["uid"],0,1)<>"G" and $row["uid"]<>"E".$_SESSION["loginCRM"]) {
 			$user[]=$row["uid"];
-		}
+		} else if ($row["uid"]=="E".$_SESSION["loginCRM"]) {
+             $edit = true;
+        }
 	}
 	if ($user) {
 		$selusr=getUsrNamen($user);
@@ -72,7 +76,7 @@
 <br>
 <br>
 <input type="button" onClick="self.close()" value="schlie&szlig;en"> &nbsp; &nbsp;
-<? if (!$privat) { ?>
+<? if (!$privat && $edit) { ?>
 <input type="button" onClick="delterm()" value="l&ouml;schen"> &nbsp; &nbsp;
 <input type="button" onClick="editterm()" value="&auml;ndern">
 <? } ?>

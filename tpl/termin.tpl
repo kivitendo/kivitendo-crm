@@ -100,10 +100,11 @@
 						<br><span class="mini">Grund</span></td></tr>
 			<tr><td colspan="2">Privattermin <input type="checkbox" name="privat" value="1" {CHKPRIVAT}></td></tr>
 			<tr><td colspan="2"><textarea name="lang" cols="40" rows="4">{LANG}</textarea>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="sichern" name="sichern" value="sichern">	
-						<br><span class="mini">Bemerkungen</span></td></tr>
+						<br><span class="mini">Bemerkungen</span>
 			<tr><td colspan="2">
 					<input type="text" name="suchname" size="20" maxlength="25" value=""><input type="button" value="suche Teilnehmer" onClick="suchName()">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="submit" class="sichern" name="sichern" value="sichern">
 					<br>
 					<table><tr>
 					<td ><select name="teiln" id="kannusr" size="5">

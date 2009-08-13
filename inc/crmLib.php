@@ -1745,7 +1745,7 @@ global $db;
 		if ((($bis==$von) || ($data["wdhlg"]<>"0")) && $data["bis"]<$data["von"] )   $data["bis"]=$data["von"];
 		$sql="update termine set cause='".$data["grund"]."',c_cause='".$data["lang"];
 		$sql.="',starttag='".date("Y-m-d",$von)."',stoptag='".date("Y-m-d",$bis)."',startzeit='".$data["von"]."',stopzeit='".$data["bis"]."',";
-		$sql.="repeat=".$data["wdhlg"].",ft='".$data["ft"]."',uid=".$data["uid"];
+		$sql.="repeat=".$data["wdhlg"].",ft='".$data["ft"]."',uid=".$data["uid"].",privat='".(($data["privat"]==1)?'t':'f')."' ";
 		$sql.=" where id=".$termid;
 		$rc=$db->query($sql);
 		if ($rc) {
@@ -1854,15 +1854,24 @@ global $db;
 * out: array
 * 
 *****************************************************/
-function getTermin($day,$month,$year,$art) {
+function getTermin($day,$month,$year,$art,$cuid=false) {
 global $db;
-	$grp=getGrp($_SESSION["loginCRM"],true);
-	if ($grp) $rechte.=" M.member in $grp";
+    if ($cuid==-1) {
+        $rechte="";
+    } else if ($cuid) {
+        $rechte="and M.member = $cuid";
+    } else {
+        $rechte="and M.member = ".$_SESSION["loginCRM"];
+    }
+	//$grp=getGrp($_SESSION["loginCRM"],true);
+	//if ($grp) $rechte.=" M.member in $grp";
 	if ($art=="M") {
 		$min=mktime(0,0,0,$month,1,$year);
 		$max=mktime(0,0,0,$month,date("t",$min),$year);
 		$sql="select * from termdate D left join terminmember M on M.termin=D.termid ";
-		$sql.="where jahr=$year and monat='$month' and ($rechte)  order by tag";
+		//$sql.="where jahr=$year and monat='$month' and ($rechte)  order by tag";
+		$sql.="where jahr=$year and monat='$month' $rechte  order by tag";
+		//$sql.="where jahr=$year and monat='$month' and M.member = $uid  order by tag";
 		$rs=$db->getAll($sql);
 		if(!$rs) {
 			return false;
@@ -1871,7 +1880,9 @@ global $db;
 		}
 	} else if ($art=="T") {
 		$sql="select * from termine T left join termdate D on T.id=D.termid left join terminmember M on M.termin=D.termid ";
-		$sql.="where jahr=$year and monat='$month' and tag='$day' and ($rechte)  order by starttag, startzeit";
+		//$sql.="where jahr=$year and monat='$month' and tag='$day' and ($rechte)  order by starttag, startzeit";
+		//$sql.="where jahr=$year and monat='$month' and tag='$day' and M.member = $uid  order by starttag, startzeit";
+		$sql.="where jahr=$year and monat='$month' and tag='$day'  $rechte  order by starttag, startzeit";
 		$rs=$db->getAll($sql);
 		if(!$rs) {
 			return false;
@@ -1888,7 +1899,9 @@ global $db;
 		} else {
 			$sql.="((monat='$month' and tag>='$day') or (monat='$stopmonth' and tag<='$stopday')) ";
 		}
-		$sql.="and ($rechte) order by startzeit";
+		//$sql.="and ($rechte) order by startzeit";
+		//$sql.="and M.member = $uid order by startzeit";
+		$sql.=" $rechte order by startzeit";
 		$rs=$db->getAll($sql);
 		if(!$rs) {
 			return false;

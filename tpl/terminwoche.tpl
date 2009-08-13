@@ -5,16 +5,16 @@
 	<script language="JavaScript">
 	<!--
 	function showlist(was) {
-			self.location.href="termlist.php?ansicht="+was+"&datum={tag}"; //month="+mo+"&year="+ja+"&day="+tg;
+			self.location.href="termlist.php?cuid={CUID}&ansicht="+was+"&datum={tag}"; //month="+mo+"&year="+ja+"&day="+tg;
 	}
 	function tag(tg) {
-		self.location.href="termlist.php?ansicht=T&datum="+tg;
+		self.location.href="termlist.php?cuid={CUID}&ansicht=T&datum="+tg;
 	}
 	function womin() {
-			self.location.href="termlist.php?ansicht=W&kw={kw1}&year={year1}";
+			self.location.href="termlist.php?cuid={CUID}&ansicht=W&kw={kw1}&year={year1}";
 	}
 	function woplu() {
-			self.location.href="termlist.php?ansicht=W&kw={kw2}&year={year2}";
+			self.location.href="termlist.php?cuid={CUID}&ansicht=W&kw={kw2}&year={year2}";
 	}
 	function zeige(tid) {
 		if (tid>0)

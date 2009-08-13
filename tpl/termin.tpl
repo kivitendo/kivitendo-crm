@@ -6,10 +6,11 @@
 	<script language="JavaScript">
 	<!--
 		function showlist(was) {
+			uid=document.termedit.caluser.options[document.termedit.caluser.selectedIndex].value;
 			mo=document.termedit.Monat.options[document.termedit.Monat.selectedIndex].value;
 			ja=document.termedit.Jahr.options[document.termedit.Jahr.selectedIndex].value;
 			tg=document.termedit.Tag.options[document.termedit.Tag.selectedIndex].value;
-			Termine.location.href="termlist.php?ansicht="+was+"&datum="+tg+"."+mo+"."+ja; //month="+mo+"&year="+ja+"&day="+tg;
+			Termine.location.href="termlist.php?cuid="+uid+"&ansicht="+was+"&datum="+tg+"."+mo+"."+ja; //month="+mo+"&year="+ja+"&day="+tg;
 		}
 		function suchName() {
 			f=open("suchName.php?name="+document.termedit.suchname.value,"Name","width=400,height=200,left=200,top=100");
@@ -95,8 +96,9 @@
 				</td></tr>
 			<tr><td colspan="2"><input type="text" name="grund" size="37" maxlength="75" value="{GRUND}">
 						 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <a href="termin.php"><input type="reset" class="clear" name="clear" value="clear"></a>
+                         <a href="termin.php"><input type="reset" class="clear" name="clear" value="clear"></a>
 						<br><span class="mini">Grund</span></td></tr>
+			<tr><td colspan="2">Privattermin <input type="checkbox" name="privat" value="1" {CHKPRIVAT}></td></tr>
 			<tr><td colspan="2"><textarea name="lang" cols="40" rows="4">{LANG}</textarea>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="sichern" name="sichern" value="sichern">	
 						<br><span class="mini">Bemerkungen</span></td></tr>
@@ -122,7 +124,7 @@
 		</table>
 	</td>
 	<td width="20px"></td>
-	<td width="*" class="ce">
+	<td width="28em" class="li">
 				<select name="Tag" style="width:44px">
 <!-- BEGIN Tage -->
 			<option value="{TV}"{TS}>{TK}</option>
@@ -139,9 +141,14 @@
 <!-- END Jahre -->
 		</select>
 		<input type="button" class="anzeige" value="Zeigen" onClick="showlist('T')">
+        <select name="caluser" id="calusr" size="1">
+<!-- BEGIN CalUser -->
+			<option value="{CUID}" {CUIDSEL}>{CUNAME}</option>
+<!-- END CalUser -->
+        </select>
 		<!--input type="button" value="Woche" onClick="showlist('W')">
 		<input type="button" value="Monat" onClick="showlist('M')"-->
-		<iframe src="termlist.php?ansicht={ANSICHT}&datum={DATUM}" name="Termine" style="width:25em; height:28em" marginheight="0" marginwidth="0" align="left">
+		<iframe src="termlist.php?ansicht={ANSICHT}&datum={DATUM}" name="Termine" style="width:27em; height:30em" marginheight="0" marginwidth="0" align="left">
 		<p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>
 		</iframe>
 	</td>

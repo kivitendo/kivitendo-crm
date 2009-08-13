@@ -8,6 +8,7 @@
 	}
 	$data=getTerminData($_GET["termid"]);
 	$usr=getTerminUser($_GET["termid"]);
+    $privat = ($data["privat"]=='t' && $data["uid"]!=$_SESSION["loginCRM"]);
 	$links="";
 	if ($usr) foreach ($usr as $row) {
 		if (substr($row["uid"],0,1)<>"G" and $row["uid"]<>"E".$_SESSION["loginCRM"]) {
@@ -51,7 +52,7 @@
 </head>
 <body>
 <?
-	echo "Termin: <b>".$data["cause"]."</b><br>";
+	echo "Termin: <b>".(($privat)?"Privattermin":$data["cause"])."</b><br>";
 	echo db2date($data["starttag"])." ".$data["startzeit"]." - ";
 	echo ($data["stoptag"]<>$data["starttag"])?db2date($data["stoptag"])." ".$data["stopzeit"]:$data["stopzeit"];
 	echo "<br>";
@@ -60,15 +61,21 @@
 	echo "<br>";
 	if ($ft[$x]) echo $ft[$x];
 	echo "<hr><br>";
-	echo $data["c_cause"]."<br>";
+    if ($privat) {
+        echo "Privattermin<br />";
+    } else {
+    	echo $data["c_cause"]."<br />";
+    }
 ?>
 <hr>
 <?= $links ?>
 <br>
 <br>
 <input type="button" onClick="self.close()" value="schlie&szlig;en"> &nbsp; &nbsp;
+<? if (!$privat) { ?>
 <input type="button" onClick="delterm()" value="l&ouml;schen"> &nbsp; &nbsp;
 <input type="button" onClick="editterm()" value="&auml;ndern">
+<? } ?>
 <script language='JavaScript'>self.focus();</script>
 </body>
 </html>

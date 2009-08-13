@@ -2,7 +2,7 @@
 // $ID: $
 	require_once("inc/stdLib.php");
 	include_once("inc/crmLib.php");
-
+    $CUID=($_GET["cuid"])?$_GET["cuid"]:$_SESSION["loginCRM"];
 ?>
 <html>
 	<head><title></title>
@@ -21,19 +21,19 @@
 	}
 <? } else { ?>
 	function tag(tg) {
-		self.location.href="termlist.php?ansicht=T&datum="+tg;
+		self.location.href="termlist.php?cuid=<?= $CUID ?>&ansicht=T&datum="+tg;
 	}
 	function kw(w) {
-		self.location.href="termlist.php?ansicht=W&kw="+w+"&year="+<?= $year ?>;
+		self.location.href="termlist.php?cuid=<?= $CUID ?>&ansicht=W&kw="+w+"&year="+<?= $year ?>;
 	}
 <?
 	}
 ?>
 	function monmin() {
-			self.location.href="terminmonat.php?ansicht=M&datum=01.<?= ($month>1)?($month-1):12 ?>.<?= ($month>1)?$year:($year-1) ?>&fld=<?= $_GET["fld"] ?>";
+			self.location.href="terminmonat.php?cuid=<?= $CUID ?>&ansicht=M&datum=01.<?= ($month>1)?($month-1):12 ?>.<?= ($month>1)?$year:($year-1) ?>&fld=<?= $_GET["fld"] ?>";
 	}
 	function monplu() {
-			self.location.href="terminmonat.php?ansicht=M&datum=01.<?= ($month<12)?($month+1):1 ?>.<?= ($month<12)?$year:($year+1) ?>&fld=<?= $_GET["fld"] ?>";
+			self.location.href="terminmonat.php?cuid=<?= $CUID ?>&ansicht=M&datum=01.<?= ($month<12)?($month+1):1 ?>.<?= ($month<12)?$year:($year+1) ?>&fld=<?= $_GET["fld"] ?>";
 	}
 	//-->
 	</script>
@@ -48,10 +48,10 @@
 	$anztage=date("t", mktime(0,0,0,($month+1),0,$year));
 	$ft=feiertage($year);
 	$ftk=array_keys($ft);
-		$data=getTermin(0,$month,$year,"M");
+		$data=getTermin(0,$month,$year,"M",$CUID);
 		$tmp=array();
 		if ($data) foreach ($data as $term) {
-			$tmp[$term["tag"]]=1;
+			$tmp[$term["tag"]]+=1;
 		}
 		$days=array_keys($tmp);
 		//first week, still in last month?

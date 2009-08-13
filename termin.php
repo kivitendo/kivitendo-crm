@@ -10,10 +10,11 @@
 	$data["ft"]=1;
 	$data["user"][]="E".$_SESSION["loginCRM"];
 	if ($_GET["holen"]) {
-		$term=getTerminData($_GET["holen"]);
+		$term=getTerminData($_GET["holen"],$_GET["CUID"]);
 		$data["tid"]=$_GET["holen"]; $data["grund"]=$term["cause"];$data["lang"]=$term["c_cause"];
 		$data["wdhlg"]=$term["repeat"];$data["ft"]=$term["ft"];
 		$data["vondat"]=db2date($term["starttag"]);$data["bisdat"]=db2date($term["stoptag"]);
+        $data["privat"]=($term["privat"]=='t')?1:0;
 		$DATUM=$data["vondat"];
 		$data["von"]=$term["startzeit"];$data["bis"]=$term["stopzeit"];
 		$user=getTerminUser($_GET["holen"]);
@@ -46,6 +47,7 @@
 			$data["grund"]=$_POST["grund"];$data["lang"]=$_POST["lang"];
 			$data["ft"]=$_POST["ft"];$data["wdhlg"]=$_POST["wdhlg"];
 			$data["user"]=$_POST["user"]; $data["tid"]=$_POST["tid"];
+            $data["privat"]=$_POST["privat"];
 			$DATUM=$_POST["vondat"];
 		};
 	}
@@ -61,7 +63,7 @@
 	$t->set_file(array("term" => "termin.tpl"));
 	$t->set_block("term","User","Block");
 	if ($mit) foreach($mit as $zeile) {
-		if ($zeile["id"]==$loginCRM) $name=$zeile["name"];
+		if ($zeile["id"]==$_SESSION["loginCRM"]) $name=$zeile["name"];
 		$t->set_var(array(
 			USRID	=>	"E".$zeile["id"],
 			USRNAME	=>	($zeile["name"])?$zeile["name"]:$zeile["login"]
@@ -70,10 +72,10 @@
 	}
 	if($grp) {
 		foreach($grp as $zeile) {
-			if ($zeile["id"]==$loginCRM) $name=$zeile["name"];
+			if ($zeile["id"]==$_SESSION["loginCRM"]) $name=$zeile["name"];
 			$t->set_var(array(
 				USRID	=>	"G".$zeile["grpid"],
-				USRNAME	=>	$zeile["grpname"]
+				USRNAME	=>	"G:".$zeile["grpname"]
 			));
 			$t->parse("Block","User",true);
 		}
@@ -87,6 +89,21 @@
 			));
 			$t->parse("BlockU","Selusr",true);
 		}
+	}
+	$t->set_block("term","CalUser","BlockV");
+    $tmpid=($_GET["CUID"])?$_GET["CUID"]:$_SESSION["loginCRM"];
+	$t->set_var(array(
+			CUID => -1,
+			CUNAME => "Alle"
+	));
+	$t->parse("BlockV","CalUser",true);
+	if ($mit) foreach($mit as $row) {
+		$t->set_var(array(
+			CUID => $row["id"],
+            CUIDSEL => ($row["id"]==$tmpid)?"selected":"",
+			CUNAME => ($row["name"])?$row["name"]:$row["login"]
+		));
+		$t->parse("BlockV","CalUser",true);
 	}
 	$t->set_block("term","Tage","BlockT");
 	for ($i=1; $i<32; $i++) {
@@ -160,6 +177,7 @@
 		MM => $Monat,
 		YY => $Jahr,
 		OK => $ok,
+        CHKPRIVAT => ($data["privat"]==1)?"checked":"",
 		VONDAT => $data["vondat"],
 		BISDAT => $data["bisdat"],
 		VON => $data["von"],

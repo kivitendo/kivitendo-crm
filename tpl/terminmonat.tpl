@@ -5,10 +5,10 @@
 	<script language="JavaScript">
 	<!--
 	function tag(tg) {
-		self.location.href="termlist.php?ansicht=T&tag="+tg;
+		self.location.href="termlist.php?cuid={CIUD}&ansicht=T&tag="+tg;
 	}
 	function kw(w) {
-		self.location.href="termlist.php?ansicht=W&kw="+w;
+		self.location.href="termlist.php?cuid={CIUD}&ansicht=W&kw="+w;
 	}
 	//-->
 	</script>

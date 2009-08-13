@@ -6,13 +6,13 @@
 	<script language="JavaScript">
 	<!--
 	function showlist(was) {
-			self.location.href="termlist.php?ansicht="+was+"&datum={tag}"; //month="+mo+"&year="+ja+"&day="+tg;
+			self.location.href="termlist.php?cuid={CUID}&ansicht="+was+"&datum={tag}"; //month="+mo+"&year="+ja+"&day="+tg;
 	}
 	function tamin() {
-			self.location.href="termlist.php?ansicht=T&datum={dat1}";
+			self.location.href="termlist.php?cuid={CUID}&ansicht=T&datum={dat1}";
 	}
 	function taplu() {
-			self.location.href="termlist.php?ansicht=T&datum={dat2}";
+			self.location.href="termlist.php?cuid={CUID}&ansicht=T&datum={dat2}";
 	}
 	function zeige(tid) {
 		if (tid>0)

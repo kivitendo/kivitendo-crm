@@ -65,6 +65,7 @@ global $db;
 function getFirmenStamm($id,$ws=true,$tab='C') {
 global $db;
 	if ($tab=="C") {
+        // Umsätze holen
 		$sql="select sum(amount) from oe where customer_id=$id and quotation='f' and closed = 'f'";
 		$rs=$db->getAll($sql);
 		$oa=$rs[0]["sum"];
@@ -78,6 +79,7 @@ global $db;
 		$sql.="left join pricegroup P on P.id=C.klass left join leads L on C.lead=L.id ";
 		$sql.="where C.id=$id";
 	} else if ($tab=="V") {
+        // Umsätze holen
 		$sql="select sum(amount) as summe from ap where vendor_id=$id and amount<>paid";
 	        $rs=$db->getAll($sql);
         	$op=$rs[0]["summe"];
@@ -91,11 +93,15 @@ global $db;
 	} else {
 		return false;
 	}
-	$rs=$db->getAll($sql);  // Rechnungsanschrift
-	if(!$rs) {
+	$row=$db->getOne($sql);  // Rechnungsanschrift
+	if(!$row) {
 		return false;
 	} else {
-		$row=$rs[0];
+        $sql = "select * from history_erp where trans_id = $id and snumbers like '%rnumber_%' order by itime desc limit 1";
+	    $rs2 = $db->getOne($sql);  // Rechnungsanschrift
+        if ($rs2["itime"]<>$row["itime"])
+            $row["mtime"] = $rs2["itime"];
+        $row["modemployee"] = $rs2["employee_id"];
 		if ($row["konzern"]) {
 			$sql="select name from %s where id = %d";
 			if ($tab=="C") {
@@ -930,7 +936,7 @@ global $xajax,$GEODB,$BLZDB;
 				T1	=> ($daten["typ"]=="1")?"checked":"",
 				T2	=> ($daten["typ"]=="2")?"checked":"",
 				T3	=> ($daten["typ"]=="3")?"checked":"",
-				init	=> ($daten["employee"])?$daten["employee"]:"ERP",
+				init	=> ($daten["employee"])?$daten["employee"]:"ERP ".$daten["modemployee"],
 				login	=> $_SESSION{"login"},
 				employee => $_SESSION["loginCRM"],
 				password	=> $_SESSION["password"],
@@ -1031,7 +1037,7 @@ global $xajax,$GEODB,$BLZDB;
 				));
 				$t->parse("BlockBV","SalesmanListe",true);
 			}
-			if ($daten["employee"]==$_SESSION["loginCRM"]) {
+			if ($daten["employee"]==$_SESSION["loginCRM"] || $daten["modemployee"]==$_SESSION["loginCRM"] ) {
 					$t->set_block("fa1","OwenerListe","Block");
 					$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>"Alle");
 					$first[]=array("grpid"=>$_SESSION["loginCRM"],"rechte"=>"w","grpname"=>".:personal:.");

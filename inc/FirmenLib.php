@@ -81,15 +81,15 @@ global $db;
 	} else if ($tab=="V") {
         // Umsätze holen
 		$sql="select sum(amount) as summe from ap where vendor_id=$id and amount<>paid";
-	        $rs=$db->getAll($sql);
-        	$op=$rs[0]["summe"];
+	    $rs=$db->getAll($sql);
+        $op=$rs[0]["summe"];
 		$sql="select sum(amount) from oe where vendor_id=$id and quotation='f' and closed = 'f'";
 		$rs=$db->getAll($sql);
 		$oa=$rs[0]["sum"];
 		$sql="select C.*,E.name as verkaeufer,B.description as kdtyp,B.discount as typrabatt,BL.bundesland from vendor C ";
-	        $sql.="left join employee E on C.salesman_id=E.id left join business B on B.id=C.business_id ";
+	    $sql.="left join employee E on C.salesman_id=E.id left join business B on B.id=C.business_id ";
 		$sql.="left join bundesland BL on BL.id=C.bland ";
-        	$sql.="where C.id=$id";
+        $sql.="where C.id=$id";
 	} else {
 		return false;
 	}
@@ -99,7 +99,7 @@ global $db;
 	} else {
         $sql = "select * from history_erp where trans_id = $id and snumbers like '%rnumber_%' order by itime desc limit 1";
 	    $rs2 = $db->getOne($sql);  // Rechnungsanschrift
-        if ($rs2["itime"]<>$row["itime"])
+        if ($rs2) if ($rs2["itime"]<>$row["itime"])
             $row["mtime"] = $rs2["itime"];
         $row["modemployee"] = $rs2["employee_id"];
 		if ($row["konzern"]) {
@@ -327,7 +327,7 @@ global $db;
 		$sql = "select mtime from $tabelle where id = $id";
 	}
 	$rs = $db->getOne($sql);
-	if ($rs["mtime"]==$stamp) {
+	if ($rs["mtime"]<=$stamp) {
 		if ($begin) $db->begin();
 		return true;
 	} else {

@@ -65,6 +65,12 @@
 			f1=open("wissen.php?kdhelp=1&m="+id,"Wissen","width=750, height=600, left=50, top=50, scrollbars=yes");
 			document.kdhelp.kdhelp.selectedIndex=0;
 		}
+        function ks() {
+            sw=document.ksearch.suchwort.value;
+            if (sw != "")
+                F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
+            return false;
+        }
 	var f1 = null;
 	function toolwin(tool) {
 		leftpos=Math.floor(screen.width/2);
@@ -154,7 +160,7 @@
 	</div>
 	<!--span style="float:left;  text-align:left; border:0px solid black"-->	
 	<span style="position:absolute; bottom:0.6em; visibility:{none};">
-		<form name="ksearch"> &nbsp; 
+		<form name="ksearch" onSubmit="return ks();"> &nbsp; 
 		<img src="image/leftarrow.png" align="middle" border="0" title="zur&uuml;ck" onClick="showCall(-1);"> 
 		<img src="image/reload.png" align="middle" border="0" title="reload" onClick="showCall(0);"> 
 		<img src="image/rightarrow.png" align="middle" border="0" title="mehr" onClick="showCall(1);">&nbsp;

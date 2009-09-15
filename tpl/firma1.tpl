@@ -80,7 +80,7 @@
 	var f1 = null;
 	function toolwin(tool) {
 		leftpos=Math.floor(screen.width/2);
-		f1=open(tool,"Adresse","width=350, height=200, left="+leftpos+", top=50, status=no,toolbar=no,menubar=no,location=no,titlebar=no,scrollbars=no,fullscreen=no");
+        f1=open(tool,"Adresse","width=350, height=200, left="+leftpos+", top=50, status=no,toolbar=no,menubar=no,location=no,titlebar=no,scrollbars=no,fullscreen=no");
 	}
 	function showVar() {
 		document.getElementById("Variablen").style.visibility="visible";
@@ -297,7 +297,7 @@
 	</div>
 	<!--span style="float:left;  text-align:left; border:0px solid black"-->	
 	<span style="position:absolute; bottom:10px; visibility:{none};">
-		<form name="ksearch"> &nbsp; 
+		<form name="ksearch" onSubmit="return ks();"> &nbsp; 
 		<img src="image/leftarrow.png" align="middle" border="0" title="zur&uuml;ck" onClick="showCall(-1);"> 
 		<img src="image/reload.png" align="middle" border="0" title="reload" onClick="showCall(0);"> 
 		<img src="image/rightarrow.png" align="middle" border="0" title="mehr" onClick="showCall(1);">&nbsp;

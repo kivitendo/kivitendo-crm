@@ -9,6 +9,8 @@
 	$t = new Template($base);
 	$t->set_file(array("fa1" => "firmen3.tpl"));
 	if ($_POST["saveneu"]) {
+        $_POST["customernumber"]=false;
+        $_POST["vendornumber"]=false;
 		$rc=saveNeuFirmaStamm($_POST,$_FILES,$Q);
 		if ($rc[0]>0) { header("location:firmen3.php?Q=$Q&id=".$rc[0]."&edit=1");}
 		else { $msg="Fehler beim Sichern (".($rc[1]).")"; };

@@ -1,16 +1,30 @@
 <?php 
-	session_start();
-	$ver=file("VERSION");
-	$ver=$ver[0];
-	if ($_GET["test"]=="ja") {
-		require("inc/stdLib.php");
-		$rc=$db->getAll("select * from crm order by version","Status");
-		
-	}
+session_start();
+require_once("inc/conf.php");
+if ($logfile) 
+    require("crmajax/logcommon".XajaxVer.".php");
+$ver=file("VERSION");
+$ver=$ver[0];
+if ($_GET["test"]=="ja") {
+	require("inc/stdLib.php");
+	$rc=$db->getAll("select * from crm order by version","Status");
+}
 ?>
 <html>
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+<?php
+    if ($logfile) {
+    echo $xajax->printJavascript(XajaxPath) 
+?>
+    <script language="JavaScript" type="text/javascript">
+    <!--
+        function chksrv() {
+            xajax_chkSrv();
+        }
+    -->
+    </script>
+<?    } ?>
 <body>
 <p class="listtop">Status</p>
 
@@ -41,7 +55,11 @@ if ($db) { echo "<a href='tmp/install.log'>Datenbankinstallation</a><br>"; } els
 	<tr><td>db-Zugriff:</td><td>[<a href="status.php?test=ja">testen</a>]</td></tr>
 	<tr><td>Updatecheck<a href="update/newdocdir.php?chk=1">:</a></td><td>[<a href='update_neu.php'>durchf&uuml;hren</a>]</td></tr>
 	<tr><td>Installationscheck:</td><td>[<a href='inc/install.php?check=1'>durchf&uuml;hren</a>]</td></tr>
+<? if ($logfile) { ?>
+ 	<tr><td><input type="button" value="Server" onClick="chksrv()">:</td><td>[<div id='SRV'></div>]</td></tr>
+<? } ?>
 </table>
+    
 <?php
 	if ($rc) {
 		echo 'Datenbankzugriff erfolgreich!<br>';

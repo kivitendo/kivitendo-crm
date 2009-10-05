@@ -141,6 +141,10 @@ global $ERPNAME;
 		return false;
 	} else {
 		if ($rs) {
+	        $tmp = @file_get_contents("../".$ERPNAME."/config/lx-erp.conf");
+	        preg_match("/dbcharset[\s]*=[\s]*'(.+)';/",$tmp,$hits);
+	        $charset=$hits[1];
+			$_SESSION["charset"]=$charset;
 			$tmp=$rs[0];
 			$_SESSION["termbegin"]=(($tmp["termbegin"]>=0)?$tmp["termbegin"]:8);
 			$_SESSION["termend"]=($tmp["termend"])?$tmp["termend"]:19;

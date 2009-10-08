@@ -1037,7 +1037,9 @@ global $xajax,$GEODB,$BLZDB;
 				));
 				$t->parse("BlockBV","SalesmanListe",true);
 			}
-			if ($daten["employee"]==$_SESSION["loginCRM"] || $daten["modemployee"]==$_SESSION["loginCRM"] ) {
+            /* Check if the user is allowed to change the access group - Behaviour changed by DO: 
+                Let (all) users change the group if none is set yet */
+			if (!isset($daten["employee"]) || $daten["employee"]==$_SESSION["loginCRM"] || $daten["modemployee"]==$_SESSION["loginCRM"] ) {
 					$t->set_block("fa1","OwenerListe","Block");
 					$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>"Alle");
 					$first[]=array("grpid"=>$_SESSION["loginCRM"],"rechte"=>"w","grpname"=>".:personal:.");

@@ -1741,63 +1741,69 @@ global $db;
 		if (!$data["bisdat"]) $data["bisdat"]=$data["vondat"];
 		$von=mktime(0,0,0,substr($data["vondat"],3,2),substr($data["vondat"],0,2),substr($data["vondat"],6,4));
 		$bis=mktime(0,0,0,substr($data["bisdat"],3,2),substr($data["bisdat"],0,2),substr($data["bisdat"],6,4));
+		//Bisdatum nicht kleiner Vondatum
 		if ($bis<$von) $bis=$von;
+ 		//Bisdatum nicht grösser Vondatum, dann biszeit>=vonzeit 
 		if ((($bis==$von) || ($data["wdhlg"]<>"0")) && $data["bis"]<$data["von"] )   $data["bis"]=$data["von"];
 		$sql="update termine set cause='".$data["grund"]."',c_cause='".$data["lang"];
 		$sql.="',starttag='".date("Y-m-d",$von)."',stoptag='".date("Y-m-d",$bis)."',startzeit='".$data["von"]."',stopzeit='".$data["bis"]."',";
 		$sql.="repeat=".$data["wdhlg"].",ft='".$data["ft"]."',uid=".$data["uid"].",privat='".(($data["privat"]==1)?'t':'f')."' ";
+ 		// echtes Datum eintragen, schadet mal nicht und wird künfig verwendet.
+ 		$sql.=",start='".date("Y-m-d H:i:00",$von." ".$data["von"])."', stop='".date("Y-m-d H:i:00",$bis." ".$data["bis"])."' ";
 		$sql.=" where id=".$termid;
 		$rc=$db->query($sql);
 		if ($rc) {
-		$year=date("Y",$von);
-		$ft=feiertage($year);
-		$ftk=array_keys($ft);
-		while ($bis>=$von) {
-			if (date("Y",$von)<>$year) {
-				$year=date("Y",$von);
-				$ft=feiertage($year);
-				$ftk=array_keys($ft);
-			}
-			$sql="insert into termdate (termid,tag,monat,jahr,kw) values (";
-			$sql.="$termid,'".date("d",$von)."','".date("m",$von)."',".date("Y",$von).",".strftime("%V",$von).")";
-			if (($data["ft"] && date("w",$von)<>6 && date("w",$von)<>0 && !in_array($von,$ftk)) || !$data["ft"] || $von==$bis)
-				$rc=$db->query($sql);
-			switch ($data["wdhlg"]) {
-				case '0' :
-				case '1' : $von+=60*60*24;
-						 break;
-				case '2' : $von+=60*60*24*2;
-						 break;
-				case '7' : $von+=60*60*24*7;
-						 break;
-				case '14' : $von+=60*60*24*14;
-						  break;
-				case '30' : $von=mktime(0,0,0,date("m",$von)+1,date("d",$von),date("Y",$von));
-						   break;
-				case '365' : $von=mktime(0,0,0,date("m",$von),date("d",$von),date("Y",$von)+1);
-						   break;
-				default :  $bis=mktime(0,0,0,12,31,2100);
-			}
-		}
-		if ($data["user"]) foreach($data["user"] as $teiln) {
-			$nr=substr($teiln,1);
-			$tab=substr($teiln,0,1);
-			$sql="insert into terminmember (termin,member,tabelle) values (";
-			$sql.=$termid.",$nr,'$tab')";
-			$rc=$db->query($sql);
-			//if ($tabelle<>"G") {
-			if ($tab<>"G" && $tab<>"E") {
-				$tid=mknewTelCall();
-				$nun=date2db($data["vondat"])." ".$data["von"].":00";
-				$sql="update telcall set cause='".$data["grund"];
-				$sql.="',caller_id=$nr,calldate='$nun',c_long='".$data["lang"];
-				$sql.="',employee='".$_SESSION["loginCRM"]."',kontakt='X',bezug=0 where id=$tid";
-				$rc=$db->query($sql);
-				if(!$rs) {
-					$rs=-1;
-				}
-			}
-		}
+			$year=date("Y",$von);
+			$ft=feiertage($year);
+			$ftk=array_keys($ft);
+			$idx=0;
+			while ($bis>=$von) {
+  			    if (date("Y",$von)<>$year) {
+  			        $year=date("Y",$von);
+  			        $ft=feiertage($year);
+  			        $ftk=array_keys($ft);
+  			    }
+                $sql="insert into termdate (termid,tag,monat,jahr,kw,idx) values (";
+                $sql.="$termid,'".date("d",$von)."','".date("m",$von)."',".date("Y",$von).",".strftime("%V",$von).",".$idx.")";
+                if (($data["ft"] && date("w",$von)<>6 && date("w",$von)<>0 && !in_array($von,$ftk)) || !$data["ft"] || $von==$bis)
+                    $rc=$db->query($sql);
+                switch ($data["wdhlg"]) {
+                    case '0' :
+                    case '1' : $von+=60*60*24;
+                             break;
+                    case '2' : $von+=60*60*24*2;
+                             break;
+                    case '7' : $von+=60*60*24*7;
+                             break;
+                    case '14' : $von+=60*60*24*14;
+                              break;
+                    case '30' : $von=mktime(0,0,0,date("m",$von)+1,date("d",$von),date("Y",$von));
+                               break;
+                    case '365' : $von=mktime(0,0,0,date("m",$von),date("d",$von),date("Y",$von)+1);
+                               break;
+                    default :  $bis=mktime(0,0,0,12,31,2100);
+                }
+                $idx++;
+            }
+            if ($data["user"]) foreach($data["user"] as $teiln) {
+                $nr=substr($teiln,1);
+                $tab=substr($teiln,0,1);
+                $sql="insert into terminmember (termin,member,tabelle) values (";
+                $sql.=$termid.",$nr,'$tab')";
+                $rc=$db->query($sql);
+                //if ($tabelle<>"G") {
+                if ($tab<>"G" && $tab<>"E") {
+                    $tid=mknewTelCall();
+                    $nun=date2db($data["vondat"])." ".$data["von"].":00";
+                    $sql="update telcall set cause='".$data["grund"];
+                    $sql.="',caller_id=$nr,calldate='$nun',c_long='".$data["lang"];
+                    $sql.="',employee='".$_SESSION["loginCRM"]."',kontakt='X',bezug=0 where id=$tid";
+                    $rc=$db->query($sql);
+                    if(!$rs) {
+                        $rs=-1;
+                    }
+                }
+            }
 		}
 	}
 }
@@ -1817,6 +1823,8 @@ global $db;
 	$start.=$von;
 	$stop.=$bis;
 	$sql="select distinct id from termine D left join terminmember M on M.termin=D.id  where ";
+    //$sql.="(start between '$start' and '$stop' ) or ";
+    //$sql.="(stop between '$start' and '$stop') ";
 	$sql.="((starttag||startzeit between '$start' and '$stop' ) or ";
 	$sql.="(stoptag||stopzeit between '$start' and '$stop'))";
 	if ($TID>0) $sql.=" and id<>$TID";
@@ -1902,7 +1910,7 @@ global $db;
 	} else if ($art=="W") {
 		$stopmonth=date("m",mktime(0,0,0,$month,$day+6,$year));
 		$stopday=date("d",mktime(0,0,0,$month,$day+6,$year));
-		$sql="select * from termine T left join termdate D on T.id=D.termid where jahr=$year and ";
+		//$sql="select * from termine T left join termdate D on T.id=D.termid where jahr=$year and ";
 		$sql="select * from termine T left join termdate D on T.id=D.termid left join terminmember M on M.termin=D.termid  where jahr=$year and ";
 		if ($stopmonth==$month) {
 			$sql.="monat='$month' and (tag>='$day' and tag<='$stopday') ";

@@ -99,8 +99,8 @@ CREATE TABLE termine (
 	stop timestamp without time zone,
 	repeat integer,
 	ft char(1),
-	starttag char(10),
-	stoptag char(10),
+	starttag date,
+	stoptag date,
 	startzeit char(5),
 	stopzeit char(5),
     privat boolean default false,
@@ -118,7 +118,9 @@ CREATE TABLE termdate (
 	jahr integer,
 	kw integer,
 	tag character(2),
-	monat character(2));
+	monat character(2),
+    idx integer,
+);
 
 CREATE TABLE custmsg (
 	id integer DEFAULT nextval('crmid'::text) NOT NULL,
@@ -219,6 +221,14 @@ CREATE TABLE maschine (
 	standort text,
 	inspdatum DATE,
 	counter BIGINT);
+
+CREATE TABLE sonderflag (
+    svalue int,
+    skey text,
+    sorder int
+);
+INSERT INTO  sonderflag (svalue,skey,sorder) VALUES (1,'News',1);
+INSERT INTO  sonderflag (svalue,skey,sorder) VALUES (2,'Test 1',2);
 
 CREATE TABLE wissencategorie(
 	id integer DEFAULT nextval('crmid'::text) NOT NULL,

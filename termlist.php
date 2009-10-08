@@ -130,7 +130,9 @@
 			if ($row["termin"]<>$lastt || $lastd<>$row["tag"]) {
 				$w=date("w",mktime(0,0,0,$row["monat"],$row["tag"],$row["jahr"]))-1;
                 if ($row["member"]!=$_SESSION["loginCRM"]) { $rcol="<font color='#44ff44'>"; } else { $rcol="<font color='#4444ff'>"; }
-				$termdate[$w][]=array("txt"=>$rcol.$row["startzeit"]." ".(($row["privat"]=='t' && $row["member"]!=$_SESSION["loginCRM"])?"Privat":$row["cause"]),"</font>","id"=>$row["termin"],"ft"=>($i==5||$i==6)?1:0);
+				$termdate[$w][]=array(
+                    "txt"=>$rcol.(($row["idx"]>0)?" ^^^ ":$row["startzeit"])." ".(($row["privat"]=='t' && $row["member"]!=$_SESSION["loginCRM"])?"Privat":$row["cause"]),"</font>","id"=>$row["termin"],
+                    "ft"=>($i==5||$i==6)?1:0);
 				$kaldrk[$drkwt[$w]]["txt"].=$row["startzeit"]." ".(($row["privat"]=='t' && $row["member"]!=$_SESSION["loginCRM"])?"Privat":$row["cause"])."\n";
 				$kaldrk[$drkwt[$w]]["datum"]=$row["tag"].".".$row["monat"];
 				$lastt=$row["termin"];

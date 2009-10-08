@@ -54,10 +54,11 @@
 		}
 	//-->
 	</script>
+    <script type='text/javascript' src='inc/help.js'></script>
 <body>
 
 <!-- Beginn Code ------------------------------------------->
-<p class="listtop">Termine</p>
+<p class="listtop" onClick="help('Termine');">Termine (?)</p>
 <font color="red">{Msg}</font>
 <table>
 <form name="termedit" action="termin.php" method="post" onSubmit="return go()";>

@@ -1,0 +1,84 @@
+<html>
+    <head>
+        <title>Lx-Office CRM:  suche Firma</title>
+        <link rel="stylesheet" type="text/css" href="../css/main.css">
+    </head>
+<body>
+<a name="top"></a>
+[<a href="#suche">Eingabe einer Suche</a>]  
+[<a href="#ergebnis">Ergebnis der Suche</a>] 
+[<a href="#report">Reportgenerator</a>] 
+[<a href="#serien">Serienbrief & co.</a>]
+<br />
+<br />
+<a name="suche"><b>Die Suchmaske</a></b><br />
+<hr>
+<p>In der Suchmaske befindet sich als erstes eine Zeile mit allen Buchstaben und ein Stern.<br />
+Klicken Sie einen der Buchstaben an, so wird sofort eine Suche nach allen Firmen mit diesem Anfangsbuchstaben gestartet.
+Der Stern sucht nach Firmen die nicht mit einem Buchstaben beginnen, z.B. einer Zahl oder einem Sonderzeichen.</p>
+<p>Darunter befinden sich f&uuml;r sehr viele Felder der Datenbank je ein Eingabefeld. Geben Sie dort Ihren Suchbegriff ein. 
+Je mehr Felder Sie ausf&uuml;llen, desto mehr wird das Suchergebnis eingegr&auml;nzt. So genannte Jokerzeichen sind erlaubt:<br />
+? oder _ stehen f&uuml;r ein beliebiges Zeichen<br /> * oder % f&uuml;r beliebig viele Zeichen </p>
+<p>
+<i>meier</i> findet Meier aber nicht Meierei<br />
+<i>meier*</i> findet Meier und Meierei<br />
+<i>m?ier</i> findet Meier und auch Maier ....<br />
+<i>*meier</i> findet Hintermeier</p> 
+<ul>
+<li>Jedes Suchwort kann intern automatisch mit einem Stern erg&auml;nzt werden. Dazu mu&szlig; das H&auml;kchen &quot;Unscharf Suche&quot; aktiviert sein. <br />
+<li>Wollen Sie Ihren Begriff beliebig in einem Feld suchen,
+mu&szlig; ein Stern vorangestellt werden. Dieser Prefix kann auch hinterlegt werden und mu&szlig; dann nur weiter unten aktiviert werden.<br />
+<li>Soll die Suche nicht in abweichenden Lieferanschriften durchgef&uuml;hrt werden, so deaktivieren sie die entsprechende Checkbox.<br />
+<li>Auch kann die Suche auf Adressen beschr&auml;nkt werden, die der angemeldete Benutzer angelegt hat.
+</ul>
+<br />
+Starten Sie die Suche mit dem Knopf <i>suche</i>. Mit <i>l&ouml;schen</i> k&ouml;nnen Sie die Maske zur&uuml;cksetzen.<br />
+<i>Report</i>  siehe [<a href="#report">Reportgenerator</a>]
+<p>
+</p>
+[<a href="#top">nach Oben</a>]
+<br />
+<br />
+<a name="ergebnis"><b>Suchergebnis</b></a><br />
+<hr>
+<p>Wurde kein Treffer in der Datenbank erziehlt, so erscheint die Suchmaske sofort wieder mit den eingegebenen Werten und einer Fehlermeldung.</p>
+<p>Werden mehrere Treffer erziehlt, so werden diese auf einer neuen Seite als Liste ausgegeben.<br />Mit einem Klick auf einen Eintrag wird der Datensatz sofort in der Stammdatenmaske angezeigt.<br />
+Es kann mit der Treffermenge auch eine [<a href="#serien">Massenaktion</a>] gestartet werden.</p>
+<p>Bei nur einem Treffer wird sofort in die Stammdatenmaske gewechselt.</p>
+<br />
+[<a href="#top">nach Oben</a>]
+<br />
+<br />
+<a name="report"><b>Reportgenerator</b></a><br />
+<hr>
+Die Suche kann als Report in einer CSV-Datei gespeichert werden.<br />
+<p>Es &ouml;ffnet sich zun&auml;chst ein neues Fenster mit drei Auswahlboxen. Die erste Box stellt die Datenbanfelder der Kunden-/Lieferantenadresse bereit, die zweite Box die Felder der abweichenden Anschriften. In der letzten Box stehen die Felder der Ansprechpartner bereit.<br />
+W&auml;hlen Sie  die ben&ouml;tigten Felder in den Auswahlboxen aus. F&uuml;r Mehrfachselektionen m&uuml;ssen Sie die Taste <i>strg</i> gedr&uuml;ckt halten.<br />
+Mit dem Knopf <i>&uuml;bernehmen</i> starten Sie den Generator. Das Fenster schlie&szlig;t sich wieder und eine leere Suchmaske wird wieder angezeigt. Unterhalb der Aktionskn&ouml;pfe wird Ihnen nun ein Link angeboten, mit dem Sie die Daten lokal speichern k&ouml;nnen.</p>
+Es kann vorkommen, dass eine Firma mehrfach in der Datei aufgenommen wurde. Das liegt daran, dass es dann mehrere Ansprechpartner oder abw. Adressen gibt.<br />
+<br />
+[<a href="#top">nach Oben</a>]
+<br />
+<br />
+<a name="serien"><b>Massenaktionen</b></a><br />
+<hr>
+Serienbriefe, Serien E-Mail und Etiketten k&ouml;nnen mit der Ergebnismenge erstellt werden. Daf&uuml;r werden entsprechende Aktionskn&ouml;pfe bereitgestellt.
+Etiketten sind voreingestellt.<br /><br />
+<b>Etiketten</b><br />
+<p>W&auml;hlen Sie zun&auml;chst das passende Etikett aus. Im folgenden Eingabefeld k&ouml;nnen Sie noch einen freien Text eingeben. Zuletzt bestimmen Sie die Position, bei der mit der Etikettenerstellung begonnen werden soll. z.B. wenn bereits zwei Etiketten fehlen.<br />
+Klicken Sie auf <i>erzeugen</i>, es wird Ihnen ein PDF-Dokument f&uuml;r den Ausdruck bereitgestellt.</p>
+<br />
+<b>Serienbrief</b><br />
+Die einizgen freien Felder f&uuml;r den Serienbrief sind DATE, SUBJECT und BODY.<br />
+Geben Sie in den Felder Ihren gew&uuml;nschten Text ein. W&auml;hlen Sie noch die passende Vorlage auf Ihren lokalen Laufwerken und klicken Sie auf <i>erzeugen</i>.<br /> Es &ouml;ffnet sich ein neues Fenster. Dieses bitte erst nach Aufforderung schlie&szlig;en.<br />
+<br />
+<b>Serien E-Mail</b><br />
+Beim angemeldete Benutzer mu&szlig; eine E-Mail Adresse eingestellt sein. Mit dieser werden die E-Mails verschickt.<br />
+<p>Es &ouml;ffnet sich die E-Mail Maske. Sie k&ouml;nnen einen weiteren Empf&auml;nger eingeben. Geben Sie nun einen eindeutigen Betreff ein und den Text der Nachricht. Eine Datei k&ouml;nnen sie an die Mail anh&auml;ngen.<br />
+Klicken Sie auf <i>senden</i>. Ein Fenster &ouml;ffnet sich. Bitte erst nach Aufforderung schlie&szlig;en.</p> 
+<br />
+[<a href="#top">nach Oben</a>]
+<br />
+<center>[<a href="javascript:self.close();">Fenster schlie&szlig;en</a>]
+</body>
+</html>

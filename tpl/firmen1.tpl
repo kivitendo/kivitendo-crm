@@ -18,12 +18,13 @@
 			}
 		}
 	</script>
+    <script type='text/javascript' src='inc/help.js'></script>
 <body onLoad="document.erwsuche.name.focus();">
 
 <form name="erwsuche" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="felder" value="">
 <input type="hidden" name="Q" value="{Q}">
-<p class="listtop">.:Companys:. .:search:. {FAART}</p>
+<p class="listtop" onClick="help('SuchFirma');">.:Companys:. .:search:. {FAART} (?)</p>
 <span style="position:absolute; left:1em; top:3.0em; border: 0px solid black;">
 <!-- Beginn Code ------------------------------------------->
 <p class="listheading">| 

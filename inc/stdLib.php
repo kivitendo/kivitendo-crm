@@ -461,7 +461,7 @@ global $db;
 
 function updDocFld($data) {
 global $db;
-	$sql="update docfelder set feldname='".$data["feldname"]."', platzhalter='".$data["platzhalter"];
+	$sql="update docfelder set feldname='".$data["feldname"]."', platzhalter='".strtoupper($data["platzhalter"]);
 	$sql.="', beschreibung='".$data["beschreibung"]."',laenge=".$data["laenge"].",zeichen='".$data["zeichen"];
 	$sql.="',position=".$data["position"].",docid=".$data["docid"]." where fid=".$data["fid"];
 	$rs=$db->query($sql);

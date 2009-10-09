@@ -32,6 +32,7 @@
 			sel1 =>	($docdata["document"]["applikation"]=="O")?"checked":"",
 			sel2 =>	($docdata["document"]["applikation"]=="R")?"checked":"",
 			sel3 => ($docdata["document"]["applikation"]=="B")?"checked":"",
+			sel4 =>	($docdata["document"]["applikation"]=="T")?"checked":"",
 			did => $did
 		));
 	$t->pparse("out",array("doc"));

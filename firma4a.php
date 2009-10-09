@@ -24,6 +24,9 @@
 		} else if ($docdata["document"]["applikation"]=="R") {
 			include('inc/phpRtf.php');
 			$doc = new phpRTF();
+		} else if ($docdata["document"]["applikation"]=="T") {
+			include('inc/phpTex.php');
+			$doc = new phpTex();
 		} else if ($docdata["document"]["applikation"]=="B") {
 			require('inc/phpBIN.php');
 			$doc = new phpBIN();
@@ -72,31 +75,31 @@
 	include("persLib.php");
 	if (empty($fid)) {
 		$data=getKontaktStamm($pid);
-		$data["anrede"]=$data["cp_greeting"]." ".$data["cp_title"];
-		$data["name2"]=$data["cp_givenname"];
-		$data["name1"]=$data["cp_name"];
-		$data["name"]=$name2." ".$name1;
-		$data["plz"]=$data["cp_zipcode"];
-		$data["ort"]=$data["cp_city"];
-		$data["strasse"]=$co["cp_street"];
+		$data["ANREDE"]=$data["cp_greeting"]." ".$data["cp_title"];
+		$data["NAME2"]=$data["cp_givenname"];
+		$data["NAME1"]=$data["cp_name"];
+		$data["NAME"]=$name2." ".$name1;
+		$data["PLZ"]=$data["cp_zipcode"];
+		$data["ORT"]=$data["cp_city"];
+		$data["STRASSE"]=$co["cp_street"];
 		$art="Einzelperson";
 	} else {
 		$data=getFirmenStamm($fid,true,$tab);
 		$anrede="Firma";
-		$data["anrede"]=$data["greeting"];
-		$data["name"]=$data["name"];
-		$data["name1"]=$data["name"];
-		$data["name2"]=$data["department_1"];
-		$data["kontakt"]=$data["contact"];
-		$data["plz"]=$data["zipcode"];
-		$data["ort"]=$data["city"];
-		$data["strasse"]=$data["street"];
+		$data["ANREDE"]=$data["greeting"];
+		$data["NAME"]=$data["name"];
+		$data["NAME1"]=$data["name"];
+		$data["NAME2"]=$data["department_1"];
+		$data["KONTAKT"]=$data["contact"];
+		$data["PLZ"]=$data["zipcode"];
+		$data["ORT"]=$data["city"];
+		$data["STRASSE"]=$data["street"];
 		if (!empty($pid)){
 			$co=getKontaktStamm($pid);
-			$data["anredepers"]=$co["cp_greeting"];
-			$data["anredepers"].=($co["cp_title"])?" ".$co["cp_title"]:"";
-			$data["namepers"]=$co["cp_givenname"]." ".$co["cp_name"];
-			$data["plzpers"]=$co["cp_zipcode"]; $ortpers=$co["cp_city"]; $strassepers=$co["cp_street"];
+			$data["ANREDEPERS"]=$co["cp_greeting"];
+			$data["ANREDEPERS"].=($co["cp_title"])?" ".$co["cp_title"]:"";
+			$data["NAMEPERS"]=$co["cp_givenname"]." ".$co["cp_name"];
+			$data["PLZPERS"]=$co["cp_zipcode"]; $ortpers=$co["cp_city"]; $strassepers=$co["cp_street"];
 			$data=array_merge($data,$co);
 			$art="Firma/Kontakt";
 		} else {
@@ -119,11 +122,11 @@
 	$t->set_block("doc","Liste","Block");
 	$t->set_block("doc","RegEx","Block2");
 	$i=0;
-	$data["datum"]=date("d.m.Y");
-	$data["zeit"]=date("H:i");
+	$data["DATUM"]=date("d.m.Y");
+	$data["ZEIT"]=date("H:i");
 	if ($document["felder"]) {
 	 foreach($document["felder"] as $zeile) {
-		$value=strtolower($zeile["platzhalter"]);
+		$value=$zeile["platzhalter"];
 		if ($zeile["laenge"]>60) {
 			$rows=floor($zeile["laenge"]/60)+1;
 			$input="<textarea class='klein' cols=60 rows=$rows name='".$zeile["platzhalter"]."'>".$data[$value]."</textarea>";

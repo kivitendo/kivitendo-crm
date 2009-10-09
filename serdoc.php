@@ -7,7 +7,9 @@ require_once("documents.php");
 
 if ($_GET["src"]) $_POST["src"]=$_GET["src"];
 
-$filetype=array("rtf","tex","odt","swf");
+//$filetype=array("rtf","tex","odt","swf","sxw");
+//derzeit kein RTF
+$filetype=array("tex","odt","swf","sxw");
 
 if ($_POST["erzeugen"]) {
     if (!empty($_FILES["datei"]["name"])) {
@@ -42,7 +44,7 @@ if ($_POST["erzeugen"]) {
             $_SESSION["datei"]=$_FILES["datei"]["name"];
             
             //POP-Up erzeugt die Dokumente
-            $js="f1=open('mkserdocs.php','SerDoc','width=600,height=100')";
+            $js="f1=open('mkserdocs.php?src=".$_POST["src"]."','SerDoc','width=600,height=100')";
 
             //Formular nicht noch einmal sicken
             $display="hidden";

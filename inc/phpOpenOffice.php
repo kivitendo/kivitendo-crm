@@ -65,11 +65,28 @@ class phpOpenOffice
 {
 	var $tmpDirName = "";
 	var $parserFiles = "";
+	var $parserFilessave = "";
 	var $parsedDocuments = "";
 	var $mimetypeFile = "";
 	var $mimetype = "";
 	var $zipFile = "";
 	var $downloadfile = "";
+    var $serbrief = False;
+
+    function savecontent() {
+        $this->serbrief = True;
+		foreach (array_keys($this->parserFiles) as $file) {
+			$fp = fopen($this->parserFiles[$file], "r");
+			$this->DocumentsContent[$file] = fread($fp, filesize($this->parserFiles[$file]));
+			fclose($fp);
+        }
+    }
+
+    function getoriginal() {
+        empty($this->parsedDocuments);
+    }
+    function cleanTemplate() {
+    }
 
 	// Load document from filesystem
 	function loadDocument($filename)
@@ -83,14 +100,12 @@ class phpOpenOffice
 			$this->zipFile = $filename;
 		}
 
-
 		// Find a random folder name for PCLZIP_OPT_ADD_PATH
 		$this->tmpDirName = $this->getRandomString(16);
 		$this->mimetypeFile = POO_TMP_PATH."/".$this->tmpDirName."/mimetype";
 		$this->parserFiles = array();
 		$this->parserFiles["content.xml"] = POO_TMP_PATH."/".$this->tmpDirName."/content.xml";
 		$this->parserFiles["styles.xml"] = POO_TMP_PATH."/".$this->tmpDirName."/styles.xml";
-
 
 		// Open archive and extract content.xml
 		$archive = new PclZip($filename);
@@ -134,29 +149,28 @@ class phpOpenOffice
 			$this->handleError("Directory not found: ".$this->tmpDirName, E_USER_ERROR);
 		}
 
-
 		// Is argument valid ?
 		if(!is_array($variables))
 		{
 			$this->handleError("First parameter need to been an array.", E_USER_ERROR);
 		}
 
-
 		// Read mimetype
 		$fp = fopen($this->mimetypeFile, "r");
 		$this->mimetype = fread($fp, filesize($this->mimetypeFile));
 		fclose($fp);
 
-
 		// Open files and start parsing
 		$parsedDocuments = array();
 		foreach (array_keys($this->parserFiles) as $file)
 		{
-		//$file="content.xml";
-			$fp = fopen($this->parserFiles[$file], "r");
-			$this->parsedDocuments[$file] = fread($fp, filesize($this->parserFiles[$file]));
-			fclose($fp);
-
+            if ($this->serbrief) {
+                $this->parsedDocuments[$file] = $this->DocumentsContent[$file];
+            } else {
+			    $fp = fopen($this->parserFiles[$file], "r");
+			    $this->parsedDocuments[$file] = fread($fp, filesize($this->parserFiles[$file]));
+			    fclose($fp);
+            }
 			foreach(array_keys($variables) as $key)
 			{
 				$value = $this->xmlencode( $variables[$key] );
@@ -205,6 +219,11 @@ class phpOpenOffice
 		$xml = utf8_encode($xml);
 		return $xml;
 	}
+
+
+    function save($filename) {
+        $this->savefile($filename);
+    }
 
 	// Save parsed document
 	function savefile($filename)

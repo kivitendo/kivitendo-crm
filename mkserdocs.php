@@ -23,6 +23,7 @@ switch ($typ) {
                 $doc = new phpTex();
                 break;
     case "odt" : 
+    case "swf" : 
     case "sxw" : 
                 define('POO_TMP_PATH', $_SESSION["savefiledir"]);
                 require("inc/phpOpenOffice.php");
@@ -61,10 +62,10 @@ $tdata["Status"]=1;
 $tdata["DateiID"]=$_SESSION["dateiId"];
 
 //Daten holen 
-$sql="select * from tempcsvdata where uid = ".$_SESSION["loginCRM"]." offset 1";
+$sql="select * from tempcsvdata where uid = ".$_SESSION["loginCRM"]." and id >0"; //offset 1";
 $data=$db->getAll($sql);
 $cnt=1;
-$_SESSION["src"]="P";
+$_SESSION["src"]=($_GET["src"]<>"")?$_GET["src"]:"P";
 if ($data) {
     foreach ($data as $row) {
         $tmp=split(":",$row["csvdaten"]);
@@ -73,10 +74,18 @@ if ($data) {
         $tmp[]=$_SESSION["BODY"];
         $tmp[]=$tmpfile;
         foreach($felder as $name) {
-            $nname=$hli2erp[$_SESSION["src"]][$name];
-            //$nname=$name;
+            if ($_SESSION["rub"]==1) {
+                //Künftig werden db-Feldnamen verwendet zZ nur RuB
+                $nname=$hli2erp[$_SESSION["src"]][$name];
+            } else {
+                $nname=$name;
+            }
             $vars[$nname] = $tmp[$pos[$name]];
         }
+        $vars["DATUM"]=$vars["DATE"];
+        $vars["BETREFF"]=$vars["SUBJECT"];
+        $vars["INHALT"]=$vars["BODY"];
+        $vars["NAME"]=$vars["NAME1"];
         $tdata["CID"]=$row["id"];
         insCall($tdata,false);
         $doc->parse($vars);
@@ -84,6 +93,8 @@ if ($data) {
         $doc->save($_SESSION["savefiledir"]."/".$row["id"]."_".$_SESSION["datei"]);
         if ($cnt++ % 10 == 0) echo "."; flush();
         $doc->getoriginal();
+        foreach ($vars as $key=>$val) { $vars[$key]=""; };
+        empty($tmp); 
     }
 }
 //$doc->clean();

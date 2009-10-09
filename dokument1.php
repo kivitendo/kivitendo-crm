@@ -21,6 +21,9 @@
 	if (!$user) $user[0]=array(docid=>0,vorlage=>"Keine Vorlagen eingestellt",applikation=>"O");
 	if ($user) foreach($user as $zeile) {
 		switch ($zeile["applikation"]) {
+			case "T": 
+				$format = "Tex";
+				break;
 			case "O": 
 				$format = "OOo";
 				break;

@@ -45,7 +45,8 @@
 Dokumententyp
 <input type="radio" name="applikation" value="O" {sel1}>OOo
 <input type="radio" name="applikation" value="R" {sel2}>RTF
-<input type="radio" name="applikation" value="B" {sel3}>Bin&auml;rfile<br><br>
+<input type="radio" name="applikation" value="B" {sel3}>Bin&auml;rfile 
+<input type="radio" name="applikation" value="T" {sel4}>Tex<br><br>
 <input type="submit" name="ok" value="sichern"> <input type="submit" name="del" value="l&ouml;schen">
 </td></tr></table>
 <!-- Hier endet die Karte ------------------------------------------->

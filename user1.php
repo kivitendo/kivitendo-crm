@@ -10,7 +10,6 @@
 		$_SESSION["termbegin"]=$_POST["termbegin"];
 		$_SESSION["termend"]=$_POST["termend"];
 		$_SESSION["pre"]=$_POST["pre"];
-		$_SESSION["lang"]=$_POST["lang"];
 		$_SESSION["kdview"]=$_POST["kdview"];
 	} else if ($_POST["mkmbx"]) {
 		$rc=createMailBox($_POST["Postf2"],$_POST["Login"]);

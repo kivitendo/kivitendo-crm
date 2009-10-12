@@ -3,10 +3,12 @@
 <head>
 <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
 <title>Simple calendar setup [flat calendar]</title>
-<link type="text/css" REL="stylesheet" HREF="/<?= $ERPNAME ?>/js/jscalendar/calendar-win2k-1.css"></link>
-<script type='text/javascript' src='/<?= $ERPNAME ?>/js/jscalendar/calendar.js'></script>
-<script type='text/javascript' src='/<?= $ERPNAME ?>/js/jscalendar/lang/calendar-de.js'></script>
-<script type='text/javascript' src='/<?= $ERPNAME ?>/js/jscalendar/calendar-setup.js'></script>
+<!--link type="text/css" REL="stylesheet" HREF="../<?= $ERPNAME ?>/js/jscalendar/calendar-win2k-1.css"></link-->
+<style type='text/css'>@import url(../../../lx-office-erp/js/jscalendar/calendar-win2k-1.css);</style>
+
+<script type='text/javascript' src='../../../<?= $ERPNAME ?>/js/jscalendar/calendar.js'></script>
+<script type='text/javascript' src='../../../<?= $ERPNAME ?>/js/jscalendar/lang/calendar-de.js'></script>
+<script type='text/javascript' src='../../../<?= $ERPNAME ?>/js/jscalendar/calendar-setup.js'></script>
 </head>
 
 <body onLoad="window.resizeTo(240, 215);" style="padding:0px; margin:0px;">

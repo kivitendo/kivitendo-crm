@@ -223,6 +223,20 @@ global $db;
 }
 
 /****************************************************
+* getPaymet
+* in: id = int
+* out: daten = array
+* Alle Zahlungsbedngungen
+*****************************************************/
+function getPayment() {
+global $db;
+    $sqlpt = "select * from payment_terms";
+    $rspt = $db->getAll($sqlpt);
+    $leer=array(array("id"=>"","description"=>"----------"));
+    return array_merge($leer,$rspt);
+}
+
+/****************************************************
 * suchstr
 * in: muster = string
 * out: daten = array
@@ -379,6 +393,7 @@ global $db;
 	    bank => array(0,0,1,"Bankname",50),	        	bank_code => array(0,0,6,"Bankleitzahl",15),
 	    iban => array(0,0,1,"IBAN",24),	        	    bic => array(0,0,1,"BIC",15),
 	    account_number => array(0,0,6,"Kontonummer",15),
+	    payment_id => array(0,1,6,"Zahlungsbedingungen",0),
 	    branche => array(0,0,1,"Branche",25),	    	business_id => array(0,0,6,"Kundentyp",0),
 	    owener => array(0,0,6,"CRM-User",0),	    	grafik => array(0,0,9,"Grafik",4),
 	    lead => array(0,0,6,"Leadquelle",0),	    	leadsrc => array(0,0,1,"Leadquelle",15),
@@ -791,6 +806,16 @@ global $xajax,$GEODB,$BLZDB;
 			));
 			$t->parse("BlockA","anreden",true);
 		}
+		$payment=getPayment();
+		$t->set_block("fa1","payment","BlockP");
+		if ($payment) foreach ($payment as $pt) {
+			$t->set_var(array(
+				PAYMENT	=> $pt["description"],
+				Pid 	=> $pt["id"],
+				PSEL	=> ($pt["id"]==$daten["payment_id"])?"selected":"",
+			));
+			$t->parse("BlockP","payment",true);
+		}
 		$branchen=getBranchen();
 		$t->set_block("fa1","branchen","BlockR");
 		if ($branchen) foreach ($branchen as $branche) {
@@ -1007,6 +1032,16 @@ global $xajax,$GEODB,$BLZDB;
 				ASEL	=> ($anrede["greeting"]==$daten["greeting"])?"selected":"",
 			));
 			$t->parse("BlockA","anreden",true);
+		}
+		$payment=getPayment();
+		$t->set_block("fa1","payment","BlockP");
+		if ($payment) foreach ($payment as $pt) {
+			$t->set_var(array(
+				PAYMENT	=> $pt["description"],
+				Pid 	=> $pt["id"],
+				PSEL	=> ($pt["id"]==$daten["payment_id"])?"selected":"",
+			));
+			$t->parse("BlockP","payment",true);
 		}
 		$branchen=getBranchen();
 		$t->set_block("fa1","branchen","BlockR");

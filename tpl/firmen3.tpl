@@ -317,6 +317,16 @@
 		</span>
 	</div>
 	<div class="zeile2">
+		<span class="label klein">.:payment_terms:.</span>
+		<span class="feldxx">
+			<select name="payment_id" tabindex="12">
+<!-- BEGIN payment -->
+				<option value="{Pid}" {PSEL}>{PAYMENT}</option>
+<!-- END payment -->
+			</select>
+		</span>
+	</div>
+	<div class="zeile2">
 		<span class="label klein">.:Concern:.</span>
 		<input type="hidden" name="konzern" value="{konzern}">
 		<span class="feldxx"><input type="text" name="konzernname" size="30" value="{konzernname}" maxlength="50" tabindex="14">{konzern}<input type="button" name="suche" value="suchen" onClick="suchFa();"></span>

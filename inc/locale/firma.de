@@ -123,6 +123,7 @@ $texts  = array(
   '.:phone:.'        => 'Telefon',
   '.:email:.'        => 'E-Mail',
   '.:lang:.'         => 'Sprache',
+  '.:payment_terms:.' => 'Zahlungsbedingungen',
   '.:leadsource:.'   => 'Leadquelle',
   '.:sflag:.'        => 'Sonderflag',
   '.:also in:.'      => 'auch in',

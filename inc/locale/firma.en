@@ -122,6 +122,7 @@ $texts  = array(
   '.:phone:.'        => 'Phone',
   '.:email:.'        => 'eMail',
   '.:lang:.'         => 'Language',
+  '.:payment_terms:.' => 'Payment terms',
   '.:leadsource:.'   => 'Leadsource',
   '.:sflag:.'        => 'Special Flag',
   '.:also in:.'      => 'also in',

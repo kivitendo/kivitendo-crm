@@ -63,7 +63,8 @@
 	<ul id="maintab" class="shadetabs">
 	<li id="subtab1" ><a href="#" onClick="submenu('tab1')">.:address:.</a></li>
 	<li id="subtab2" ><a href="#" onClick="submenu('tab2')">.:shipto:.</a></li>
-	<li id="subtab3" ><a href="#" onClick="submenu('tab3')">.:misc:.</a></li>
+	<li id="subtab3" ><a href="#" onClick="submenu('tab3')">.:bank/tax:.</a></li>
+	<li id="subtab4" ><a href="#" onClick="submenu('tab4')">.:misc:.</a></li>
 	<li>{Msg}
 	</ul>
 </div>
@@ -226,25 +227,6 @@
 <!-- Ende tab2 -->
 <span id="tab3" style="visibility:hidden;  position:absolute; text-align:left;width:90%; left:0.8em; top:4.3em; border:1px solid black; display:inline;">
 	<div class="zeile2">
-		<span class="label klein">.:Industry:.</span>
-		<span class="feldxx"><input type="text" name="branche_" size="15" maxlength="25" value="{branche_}" tabindex="1">
-				<select name="branche" tabindex="2" style="width:11em;">
-					<option value="">
-<!-- BEGIN branchen -->
-					<option value="{BRANCHE}" {BSEL}>{BRANCHE}
-<!-- END branchen -->
-				</select>
-		</span>
-	</div>
-	<div class="zeile2">
-		<span class="label klein">.:Catchword:.</span>
-		<span class="feldxx"><input type="text" name="sw" size="35" value="{sw}" maxlength="50" tabindex="3"></span>
-	</div>
-	<div class="zeile2">
-		<span class="label klein">.:homepage:.</span>
-		<span class="feldxx"><input type="text" name="homepage" size="35" maxlength="75" value="{homepage}" tabindex="4"></span>
-	</div>
-	<div class="zeile2">
 		<span class="label klein">UStId</span>
 		<span class="feldxx"><input type="text" name="ustid" size="35" maxlength="15" value="{ustid}" tabindex="5"></span>
 	</div>
@@ -267,10 +249,40 @@
 		<span class="feldxx"><input type="text" name="account_number" size="35" maxlength="15" value="{account_number}" tabindex="9"></span>
 	</div>
 	<div class="zeile2">
+		<span class="label klein">.:iban:.</span>
+		<span class="feldxx"><input type="text" name="iban" size="35" maxlength="25" value="{iban}" tabindex="10"></span>
+	</div>
+	<div class="zeile2">
+		<span class="label klein">.:bic:.</span>
+		<span class="feldxx"><input type="text" name="bic" size="35" maxlength="15" value="{bic}" tabindex="11"></span>
+	</div>
+	<div class="zeile2">
 		<span class="label klein">.:directdebit:.</span>
-		<span class="feldxx"><input type="radio" value="t" name="direct_debit" {direct_debitt} tabindex="9">.:yes:.
-				<input type="radio" value="f" name="direct_debit" {direct_debitf} {direct_debit} tabindex="9">.:no:.
+		<span class="feldxx"><input type="radio" value="t" name="direct_debit" {direct_debitt} tabindex="12">.:yes:.
+				<input type="radio" value="f" name="direct_debit" {direct_debitf} {direct_debit} tabindex="13">.:no:.
 		</span>
+	</div>
+</span>
+<!-- Ende tab3 -->
+<span id="tab4" style="visibility:hidden;  position:absolute; text-align:left;width:90%; left:0.8em; top:4.3em; border:1px solid black; display:inline;">
+<div class="zeile2">
+    <span class="label klein">.:Industry:.</span>
+		<span class="feldxx"><input type="text" name="branche_" size="15" maxlength="25" value="{branche_}" tabindex="1">
+				<select name="branche" tabindex="2" style="width:11em;">
+					<option value="">
+<!-- BEGIN branchen -->
+					<option value="{BRANCHE}" {BSEL}>{BRANCHE}
+<!-- END branchen -->
+				</select>
+		</span>
+	</div>
+	<div class="zeile2">
+		<span class="label klein">.:Catchword:.</span>
+		<span class="feldxx"><input type="text" name="sw" size="35" value="{sw}" maxlength="50" tabindex="3"></span>
+	</div>
+	<div class="zeile2">
+		<span class="label klein">.:homepage:.</span>
+		<span class="feldxx"><input type="text" name="homepage" size="35" maxlength="75" value="{homepage}" tabindex="4"></span>
 	</div>
 	<div class="zeile2">
 		<span class="label klein">.:leadsource:.</span>

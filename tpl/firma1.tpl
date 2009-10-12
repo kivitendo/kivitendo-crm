@@ -278,17 +278,23 @@
 		<div  class="zeile klein">
 			<span class="labelLe">.:bankname:.:</span>
 			<span class="value">{bank}</span>
+			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+			<span class="space">.:directdebit:.:</span><span class="value">{directdebit}</span>
 		</div>
 		<div  class="zeile klein">
 			<span class="labelLe">.:bankcode:.:</span>
 			<span class="value">{blz}</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
-			<span class="labelLe">.:account:.:</span>
-			<span class="value">{konto}</span>
+			<span class="labelLe">.:bic:.:</span>
+			<span class="value">{bic}</span>
 		</div>
 		<div  class="zeile klein">
-			<span class="space">.:directdebit:.:</span><span class="value">{directdebit}</span>
-		</div>	
+			<span class="labelLe">.:account:.:</span>
+			<span class="value">{konto}</span>
+			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+			<span class="labelLe">.:iban:.:</span>
+			<span class="value">{iban}</span>
+		</div>
 	</span>
 </div>
 

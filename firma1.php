@@ -91,6 +91,8 @@
 			directdebit	=> ($fa["direct_debit"]=="t")?".:yes:.":".:no:.",
 			blz 		=> $fa["bank_code"],
 			konto 		=> $fa["account_number"],
+            iban        => $fa["iban"],
+            bic         => $fa["bic"],
 			konzernname	=> $fa["konzernname"],
 			konzernmember	=> ($fa["konzernmember"]>0)?"( ".$fa["konzernmember"]." )":"( * )",
 			konzern		=> $fa["konzern"],

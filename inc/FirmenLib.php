@@ -97,11 +97,17 @@ global $db;
 	if(!$row) {
 		return false;
 	} else {
-        $sql = "select * from history_erp where trans_id = $id and snumbers like '%rnumber_%' order by itime desc limit 1";
-	    $rs2 = $db->getOne($sql);  // Rechnungsanschrift
-        if ($rs2) if ($rs2["itime"]<>$row["itime"])
-            $row["mtime"] = $rs2["itime"];
-        $row["modemployee"] = $rs2["employee_id"];
+        /* history_erp wird wohl nicht richtig gepflegt, also erst einmal raus
+        if ($row["mtime"]=="") {
+            $sql = "select * from history_erp where trans_id = $id and snumbers like '%rnumber_%' order by itime desc limit 1";
+    	    $rs2 = $db->getOne($sql);  // Rechnungsanschrift
+            if ($rs2) if ($rs2["itime"]<>$row["itime"])
+               $row["mtime"] = $rs2["itime"];
+            $row["modemployee"] = $rs2["employee_id"];
+        } else {
+            $row["modemployee"] = $row["employee"];
+        }*/
+            $row["modemployee"] = $row["employee"];
 		if ($row["konzern"]) {
 			$sql="select name from %s where id = %d";
 			if ($tab=="C") {
@@ -371,6 +377,7 @@ global $db;
 	    sw => array(0,0,1,"Stichwort",50),	        	notes => array(0,0,0,"Bemerkungen",0),
 	    ustid => array(0,0,0,"UStId",0),	        	taxnumber => array(0,0,0,"Steuernummer",0),
 	    bank => array(0,0,1,"Bankname",50),	        	bank_code => array(0,0,6,"Bankleitzahl",15),
+	    iban => array(0,0,1,"IBAN",24),	        	    bic => array(0,0,1,"BIC",15),
 	    account_number => array(0,0,6,"Kontonummer",15),
 	    branche => array(0,0,1,"Branche",25),	    	business_id => array(0,0,6,"Kundentyp",0),
 	    owener => array(0,0,6,"CRM-User",0),	    	grafik => array(0,0,9,"Grafik",4),
@@ -703,7 +710,7 @@ global $xajax,$GEODB,$BLZDB;
 			vendornumber    => "",
 			customernumber  => "",
 			kdnr	=> "",
-                        v_customer_id   => "",
+            v_customer_id   => "",
 			ustid	=> "",
 			taxnumber => "",
 			contact => "",
@@ -711,6 +718,8 @@ global $xajax,$GEODB,$BLZDB;
 			notes	=> "",
 			bank	=> "",
 			bank_code	=> "",
+            iban    => "",
+            bic     => "",
 			account_number	=> "",
 			direct_debitf   => "checked",
 			terms		=> "",
@@ -912,6 +921,8 @@ global $xajax,$GEODB,$BLZDB;
 				notes	=> $daten["notes"],
 				bank	=> $daten["bank"],
 				bank_code	=> $daten["bank_code"],
+				iban	=> $daten["iban"],
+				bic	    => $daten["bic"],
 				direct_debit.$daten["direct_debit"] => "checked",
 				account_number	=> $daten["account_number"],
 				terms		=> $daten["terms"],

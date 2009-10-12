@@ -126,7 +126,7 @@
 <!-- Gibt es hier die Möglichkeit eine Fallentscheidung zu machen?  Falls sonder dann einblenden:-->
 Attribute: <br>
 <!-- BEGIN sonder -->
-	<input class="klein" type="checkbox" name="cp_sonder[]" value="{sonder_id}"><span class="klein">{sonder_name}</span><br>
+	<input class="klein" type="checkbox" name="cp_sonder[]" value="{sonder_id}"><span class="klein">{sonder_key}</span><br>
 <!-- END sonder -->		
 </div>	
 </form>

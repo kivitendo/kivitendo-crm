@@ -50,8 +50,10 @@
 			xajax_showCalls(y,start);
 		}
 		function showOne(id) {
-            		xajax_showContactadress(id);
-			xajax_showCalls(id,0);
+            if (id>0) { 
+           	    xajax_showContactadress(id);
+			    xajax_showCalls(id,0);
+            }
 		}
 		function showContact() {
 			x=document.contact.liste.selectedIndex;

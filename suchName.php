@@ -23,7 +23,13 @@
 <select name="Alle" >
 <?
 	$name=strtoupper($_GET["name"]);
-	$daten=array_merge(getAllPerson(array(1,$name)),getAllFirmen(array(1,$name),true,"C"),getAllFirmen(array(1,$name),true,"V"));
+    $pers=getAllPerson(array(1,$name));
+    $cust=getAllFirmen(array(1,$name),true,"C");
+    $vend=getAllFirmen(array(1,$name),true,"V");
+    $daten = array();
+    if ($pers) $daten=$pers;
+    if ($cust) $daten=array_merge($daten,$cust);
+    if ($vend) $daten=array_merge($daten,$vend);
 	if ($daten) foreach ($daten as $zeile) {
 		echo "\t<option value='".$zeile["tab"].$zeile["id"]."'>".$zeile["name"]."</option>\n";
 	}

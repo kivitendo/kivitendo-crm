@@ -133,6 +133,7 @@
 			apr		=> ($Q=="C")?"ar":"ap",
 			zeigeplan 	=> ($karte)?"visible":"hidden",
 			zeigeextra 	=> ($zeigeextra)?"visible":"hidden",
+			tools    	=> ($tools)?"visible":"hidden",
 			login		=> $_SESSION["employee"],
 			password 	=> $_SESSION["password"],
 			leadsrc 	=> $fa["leadsrc"],

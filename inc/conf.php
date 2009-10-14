@@ -12,7 +12,6 @@ define("XajaxPath","./crmajax/");
 //Xajax = 0.23
 //define("XajaxVer","");
 //define("XajaxPath","./crmajax/xajax");
-
 $from=16;  // Anrufernummer (Telcall)
 $to=18;    // Zielnummer (Telcall)
 $constring="created"; // Eindeutiges Wort für Anwahlzeile (Telcall)
@@ -35,15 +34,13 @@ $typcol["X"]="#fa05ff";
 define("FPDF_FONTPATH","/usr/share/fpdf/font/");
 define("FONTART","2");
 define("FONTSTYLE","1");
-//Zahl ist Bit-stelle 1 = 1, 2 = 2, 3 = 4, 4 = 8...
-$cp_sonder=array(1 => "News", 2 => "Test 1");
 $logmail=true;
 $jcalendar=true;
 $listLimit=20000;
 $tinymce=false;
 $zeigeextra=true;
+$tools=true;
 $jpg=false;
-//$jpg=true;
 $showErr=false;
 $CallEdit = true;
 $CallDel = false;

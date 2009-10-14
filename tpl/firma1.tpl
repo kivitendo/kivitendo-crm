@@ -80,7 +80,7 @@
 	var f1 = null;
 	function toolwin(tool) {
 		leftpos=Math.floor(screen.width/2);
-        f1=open(tool,"Adresse","width=350, height=200, left="+leftpos+", top=50, status=no,toolbar=no,menubar=no,location=no,titlebar=no,scrollbars=no,fullscreen=no");
+        f1=open(tool,"Adresse","width=350, height=200, left="+leftpos+", top=50, status=no,toolbar=no,menubar=no,location=no,titlebar=no,scrollbars=yes,fullscreen=no");
 	}
 	function showVar() {
 		document.getElementById("Variablen").style.visibility="visible";
@@ -118,10 +118,10 @@
 	</select>
 	</ul>
     </div>
-    <div style="float:left; padding-left:1em; ">
+    <div style="float:left; padding-left:1em; visibility:{tools};" >
 	<img src="tools/rechner.png"  onClick="toolwin('tools/Rechner.html')" title=".:simple calculator:."> &nbsp;
 	<img src="tools/notiz.png"  onClick="toolwin('postit.php?popup=1')" title=".:postit notes:."> &nbsp;
-	<img src="tools/kalender.png"  onClick="toolwin('tools/kalender.php')" title=".:calender:."> &nbsp;
+	<img src="tools/kalender.png"  onClick="toolwin('tools/kalender.php?Q={Q}&id={FID}')" title=".:calender:."> &nbsp;
 	<a href="javascript:void(s=prompt('.:ask leo:.',''));if(s)leow=open('http://dict.leo.org/?lp=ende&search='+escape(s),'LEODict','width=750,height=550,scrollbars=yes,resizeable=yes');if(leow)leow.focus();"><img src="tools/leo.png"  title="LEO .:english/german:." border="0"></a> &nbsp;
     </div>
 </div>

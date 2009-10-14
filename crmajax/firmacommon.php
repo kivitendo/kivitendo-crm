@@ -1,11 +1,12 @@
 <?
     require_once ("xajax/xajax.inc.php");
 
-
-    $xajax = new xajax("crmajax/firmaserver.php");
+    if (empty($punkt)) $punkt = "";
+    $xajax = new xajax($punkt."./crmajax/firmaserver.php");
 
     define("xajaxver", $xajax->getVersion());
 
+    $xajax->registerFunction("getCustomTermin");
     $xajax->registerFunction("Buland");
     $xajax->registerFunction("getShipto");
     $xajax->registerFunction("showShipadress");

@@ -5,6 +5,20 @@
 	include("crmLib.php");
 	require_once("documents.php");
 
+    function getCustomTermin($id,$tab,$day) {
+        $termine = getCustTermin($id,$tab,$day);
+        if ($termine)  {
+            foreach ($termine as $term) {
+               $inhalt .= "<span onClick='getCall(".$term["cid"].")'>";
+               $inhalt .= db2date(substr($term["start"],0,10))." ".$term["cause"].":".$term["cp_name"]."<br /></span>";
+            }
+        } else {
+            $inhalt = "Keine Termine";
+        };
+		$objResponse = new xajaxResponse();
+        $objResponse->assign("termin-container", "innerHTML", $inhalt);
+		return $objResponse;
+    }
 	function getShipto($id) {
         $data=getShipStamm($id);
 		$objResponse = new xajaxResponse();

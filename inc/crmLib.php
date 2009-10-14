@@ -1796,7 +1796,7 @@ global $db;
                     $tid=mknewTelCall();
                     $nun=date2db($data["vondat"])." ".$data["von"].":00";
                     $sql="update telcall set cause='".$data["grund"];
-                    $sql.="',caller_id=$nr,calldate='$nun',c_long='".$data["lang"];
+                    $sql.="',caller_id=$nr,calldate='$nun',termin_id=$termid,c_long='".$data["lang"];
                     $sql.="',employee='".$_SESSION["loginCRM"]."',kontakt='X',bezug=0 where id=$tid";
                     $rc=$db->query($sql);
                     if(!$rs) {

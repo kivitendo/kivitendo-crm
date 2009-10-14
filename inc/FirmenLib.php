@@ -612,7 +612,25 @@ global $db;
 	$rs=$db->getAll($sql);
 	return $rs;
 }
-
+function getCustTermin($id,$tab,$day) {
+global $db;
+    if ($tab=="P") {
+        $sql="select * from  termine T left join terminmember M on T.id=M.termin where M.member = $id ";
+    } else {
+        $sql="select T.*,C.cp_name,X.id as cid from  termine T left join terminmember M on T.id=M.termin ";
+        $sql.="left join contacts C on C.cp_id=M.Member left join telcall X on X.termin_id=T.id ";
+        $sql.="where M.member in ";
+        $sql.="($id,(select cp_id from contacts where cp_cv_id = 473))";
+    }
+    if ($day) {
+        $sql.=" and start = '$day 00:00:00'";
+    } else {
+        $day=date("Y-m-d 00:00:00");
+        $sql.= " and start >= '$day' order by start limit 5 ";
+    }
+    $rs = $db->getAll($sql);
+    return $rs;
+}
 /****************************************************
 * doReportC
 * in: data = array

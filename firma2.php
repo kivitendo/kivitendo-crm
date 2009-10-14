@@ -176,6 +176,7 @@
 			customernumber	=> $KDNR,
 			moreC => ($liste<>"")?"visible":"hidden",
 			kontakte => $liste,
+            tools => ($tools)?"visible":"hidden",
 			ep => $ep,
 			Edit => ".:edit:.",
 			none => ($ep=="" && $init=="")?"hidden":"visible",

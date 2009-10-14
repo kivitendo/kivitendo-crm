@@ -122,7 +122,7 @@
 			</span>
 		</div>
 		<div style="float:left; width:70%; height:13em; text-align:left; border-bottom: 0px solid black;" >
-			&nbsp;<span id="cp_greeting"></span> <span id="cp_title"></span><br />
+			&nbsp;<span id="cp_greeting">.:none:. .:Contacts:.</span> <span id="cp_title"></span><br />
 			&nbsp;<span id="cp_givenname"></span> <span id="cp_name"></span><br />
 			&nbsp;<span id="cp_street"></span><br />
 			<span class="mini">&nbsp;<br /></span>

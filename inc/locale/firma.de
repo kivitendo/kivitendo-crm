@@ -159,5 +159,6 @@ $texts  = array(
   '.:mobile:.'       => 'Mobiltelefon',
   '.:view:.'         => 'Anzeigen',
   '.:error:.'        => 'Fehler',
+  '.:none:.'         => 'Kein',
 ); 
 ?>

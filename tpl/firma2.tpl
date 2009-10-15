@@ -128,14 +128,14 @@
 			<span class="mini">&nbsp;<br /></span>
 			&nbsp;<span id="cp_country"></span><span id="cp_zipcode"></span> <span id="cp_city"></span><br />
 			<span class="mini">&nbsp;<br /></span>
-			&nbsp;<img src="image/telefon.gif" style="visibility:{none};"> <span id="cp_phone1"></span> <span id="cp_phone2"></span><br />
-			&nbsp;&nbsp;<img src="image/mobile.gif" style="visibility:{none};"> <span id="cp_mobile1"></span> <span id="cp_mobile2"></span><br />
-			&nbsp;<img src="image/fax.gif" style="visibility:{none};"> <span id="cp_fax"></span><br />
+			&nbsp;<img src="image/telefon.gif" style="visibility:{none};" id="phone"> <span id="cp_phone1"></span> <span id="cp_phone2"></span><br />
+			&nbsp;&nbsp;<img src="image/mobile.gif" style="visibility:{none};" id="mobile"> <span id="cp_mobile1"></span> <span id="cp_mobile2"></span><br />
+			&nbsp;<img src="image/fax.gif" style="visibility:{none};" id="fax"> <span id="cp_fax"></span><br />
 			&nbsp;<span id="cp_email"></span><br />
 			&nbsp;<span id="cp_homepage"></span><br /><br />
 		</div>
-		<div style="float:left; width:29%; height:13em; text-align:right; border-bottom: 0px solid black;" >
-			<a href="#" onCLick="anschr();"><img src="image/brief.png" border="0" style="visibility:{none};"></a><br />
+		<div style="float:left; width:29%; height:13em; text-align:right; border-bottom: 0px solid black;" id="cpinhalt2">
+			<a href="#" onCLick="anschr();"><img src="image/brief.png" border="0" style="visibility:{none};" id="cpbrief"></a><br />
 			<span id="cp_grafik" style="padding-right:1px;"></span></br >
 			<span id="cp_birthday" style="padding-right:1px;"></span></br />
 			<span id="cp_position" style="padding-right:1px;"></span><br />
@@ -161,7 +161,7 @@
 	<div class="calls" width='99%' id="tellcalls">
 	</div>
 	<!--span style="float:left;  text-align:left; border:0px solid black"-->	
-	<span style="position:absolute; bottom:0.6em; visibility:{none};">
+	<span style="position:absolute; bottom:0.6em; visibility:{none};" id="threadtool">
 		<form name="ksearch" onSubmit="return ks();"> &nbsp; 
 		<img src="image/leftarrow.png" align="middle" border="0" title="zur&uuml;ck" onClick="showCall(-1);"> 
 		<img src="image/reload.png" align="middle" border="0" title="reload" onClick="showCall(0);"> 

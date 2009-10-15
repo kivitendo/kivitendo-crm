@@ -158,5 +158,7 @@ $texts  = array(
   '.:view:.'         => 'View',
   '.:error:.'        => 'Error',
   '.:none:.'         => 'No',
+  '.:back:.'         => 'back',
+  '.:allocate:.'     => 'allocate',
 );
 ?>

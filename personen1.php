@@ -31,7 +31,7 @@
 			$bgcol[1]="#ddddff";
 			$bgcol[2]="#ddffdd";
             if ($_POST["FID1"]) { 
-                $snd="<input type='submit' name='insk' value='zuordnen'><br><a href='firma2.php?Q=$Quelle&fid=".$_POST["FID1"]."'>zur&uuml;ck</a>";  
+                $snd="<input type='submit' name='insk' value='.:allocate:.'><br>[<a href='firma2.php?Q=$Quelle&fid=".$_POST["FID1"]."'>.:back:.</a>]";  
             } else { 
                 $snd=""; $dest=""; 
             };
@@ -82,12 +82,14 @@
                 $zeile["cp_phone1"],$zeile["cp_fax"],$zeile["cp_email"],$zeile["name"],$zeile["cp_gender"],$zeile["cp_id"]),$zeile["cp_id"]);
                 if ($_POST["FID1"]) {
                     $insk="<input type='checkbox' name='kontid[]' value='".$zeile["cp_id"]."'>"; 
+                    $js="";
                 } else { 
+                    $js='showK('.$zeile["cp_id"].',"'.$zeile["tbl"].'");'; //showK({PID},'{TBL}')
                     $insk=""; 
                 };
                 $sonder=0;
 				$t->set_var(array(
-					PID => $zeile["cp_id"],
+                    js => $js,
 					LineCol => $bgcol[($i%2+1)],
 					Name => $zeile["cp_name"].", ".$zeile["cp_givenname"],
 					Plz => $zeile["cp_zipcode"],
@@ -95,7 +97,6 @@
 					Telefon => $zeile["cp_phone1"],
 					eMail => $zeile["cp_email"],
 					Firma => $zeile["name"],
-					TBL => $zeile["tbl"],
 					insk => $insk,
 					DEST => $dest,
 					QUELLE => $Quelle,
@@ -110,8 +111,12 @@
 					break;
 				}
 			}
+            $t->set_var(array(
+                snd => $snd,
+                FID => $_POST["FID1"]
+            ));
 		} else {
-			$msg="Leider nichts gefunden.";
+			$msg="Sorry, not found.";
 			$btn1="";
 			vartplP($t,$_POST,$msg,$btn1,$btn1,$btn1,"Anrede","white",$_POST["FID1"],1);
 		}

@@ -160,5 +160,7 @@ $texts  = array(
   '.:view:.'         => 'Anzeigen',
   '.:error:.'        => 'Fehler',
   '.:none:.'         => 'Kein',
+  '.:back:.'         => 'Zur&uuml;ck',
+  '.:allocate:.'     => 'Zuordnen',
 ); 
 ?>

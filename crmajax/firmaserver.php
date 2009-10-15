@@ -99,6 +99,7 @@
 		};
 		$tmp=glob("../$root/vcard".$data["cp_id"].".*");
 		$data["cp_vcard"]="";
+		$objResponse = new xajaxResponse();
 		if ($tmp)  foreach ($tmp as $vcard) {
 			$ext=explode(".",$vcard);
 			$ext=strtolower($ext[count($ext)-1]);
@@ -127,7 +128,6 @@
 		if ($data["cp_mobile2"]) $data["cp_mobile2"]="(".$data["cp_mobile2"].")";
 		if ($data["cp_privatemail"]) $data["cp_privatemail"]="Privat: <a href='mail.php?TO=".$data["cp_privatemail"]."&KontaktTO=P".$data["cp_id"]."'>".$data["cp_privatemail"]."</a>";;
 		$nocodec = array("cp_email","cp_homepage","cp_zipcode","cp_birthday","cp_grafik","cp_privatemail","cp_vcard");
-		$objResponse = new xajaxResponse();
 		foreach ($data as $key=>$val) {
 			if (in_array($key,$nocodec)) {
                 		$objResponse->assign($key,            "innerHTML", $val);
@@ -136,6 +136,11 @@
 			}
 		}
 		$objResponse->assign("cp_id", 	"value", $data["cp_id"]);
+        if ($data["cp_phone1"] || $data["cp_phone2"]) $objResponse->script("document.getElementById('phone').style.visibility='visible'");
+        if ($data["cp_mobile1"] || $data["cp_mobile2"]) $objResponse->script("document.getElementById('mobile').style.visibility='visible'");
+        if ($data["cp_fax"]) $objResponse->script("document.getElementById('fax').style.visibility='visible'");
+        $objResponse->script("document.getElementById('cpinhalt2').style.visibility='visible'");
+        $objResponse->script("document.getElementById('cpbrief').style.visibility='visible'");
                 return $objResponse;
 	}
 	function showCalls($id,$start,$fa=false) {
@@ -173,7 +178,8 @@
 			$max=getAllTelCallMax($id,$firma);
 			$objResponse->script("max = $max;");
 		}
-                return $objResponse;
+        $objResponse->script("document.getElementById('threadtool').style.visibility='visible'");
+        return $objResponse;
 	}
 	function showDir($id,$directory) {
 		$directory = trim( rtrim( $directory, " /\\" ) );
@@ -203,12 +209,12 @@
 		            }
 	        	}
 			$inhalt.="</ul>";
-		        $dir_object->close();
+	        $dir_object->close();
 	    }
 		$objResponse = new xajaxResponse();
 		$objResponse->assign("fb$id", 	"innerHTML", $inhalt);
 		$objResponse->assign("path", 	"innerHTML", ($directory)?$directory:"/");
-                return $objResponse;
+        return $objResponse;
 
 	}
 	function showFile($pfad,$file) {

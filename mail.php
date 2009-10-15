@@ -200,7 +200,7 @@
 	}
 	$t->set_var(array(
 			AJAXJS	=> $xajax->printJavascript(XajaxPath),
-			Msg	=> $msg.XajaxPath,
+			Msg	=> $msg,
 			btn	=> $btn,
 			Subject => $Subject,
 			BodyText => $BodyText,

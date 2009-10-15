@@ -136,9 +136,21 @@
 			}
 		}
 		$objResponse->assign("cp_id", 	"value", $data["cp_id"]);
-        if ($data["cp_phone1"] || $data["cp_phone2"]) $objResponse->script("document.getElementById('phone').style.visibility='visible'");
-        if ($data["cp_mobile1"] || $data["cp_mobile2"]) $objResponse->script("document.getElementById('mobile').style.visibility='visible'");
-        if ($data["cp_fax"]) $objResponse->script("document.getElementById('fax').style.visibility='visible'");
+        if ($data["cp_phone1"] || $data["cp_phone2"]) {
+                $objResponse->script("document.getElementById('phone').style.visibility='visible'");
+        } else {
+                $objResponse->script("document.getElementById('phone').style.visibility='hidden'");
+        }
+        if ($data["cp_mobile1"] || $data["cp_mobile2"]) {
+                $objResponse->script("document.getElementById('mobile').style.visibility='visible'");
+        } else {
+                $objResponse->script("document.getElementById('mobile').style.visibility='hidden'");
+        }
+        if ($data["cp_fax"]) {
+                $objResponse->script("document.getElementById('fax').style.visibility='visible'");
+        } else {
+                $objResponse->script("document.getElementById('fax').style.visibility='hidden'");
+        }
         $objResponse->script("document.getElementById('cpinhalt2').style.visibility='visible'");
         $objResponse->script("document.getElementById('cpbrief').style.visibility='visible'");
                 return $objResponse;

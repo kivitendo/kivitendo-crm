@@ -172,7 +172,7 @@
 			Ort => $fa["city"],
 			Street => $fa["street"],
 			PID => $co["cp_id"],
-			FID => $co["cp_cv_id"],
+			FID => ($co["cp_cv_id"])?$co["cp_cv_id"]:$fid,
 			customernumber	=> $KDNR,
 			moreC => ($liste<>"")?"visible":"hidden",
 			kontakte => $liste,

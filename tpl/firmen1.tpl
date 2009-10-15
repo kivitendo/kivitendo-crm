@@ -139,7 +139,7 @@
 	<div class="zeile">
 		<span class="label">.:sflag:.</span>
 <!-- BEGIN sonder -->
-	<input type="checkbox" name="sonder[]" tabindex="33" value="{sonder_id}">{sonder_name} 
+	<input type="checkbox" name="sonder[]" tabindex="33" value="{sonder_id}">{sonder_key} 
 <!-- END sonder -->	
 	</div>
 	<div class="zeile">

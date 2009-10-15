@@ -19,7 +19,6 @@
 	$ft=feiertage($year);
 	$ftk=array_keys($ft);
 	$data=getTermin(0,$month,$year,"M");
-	$data=getTermin(0,$month,$year,"M");
 		$tmp=array();
 		if ($data) foreach ($data as $term) {
 			$tmp[$term["tag"]]++;

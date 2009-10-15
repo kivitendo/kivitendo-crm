@@ -1864,7 +1864,7 @@ global $db;
 *****************************************************/
 function getTermin($day,$month,$year,$art,$cuid=false) {
 global $db;
-    if ($cuid==-1) {
+    if ($cuid<=0) {
         $rechte="";
     } else {
         $sql="select distinct(grpid) from grpusr where usrid=$cuid";

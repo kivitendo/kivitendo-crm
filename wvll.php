@@ -33,7 +33,7 @@
 	}
 
 	$wvl=getWvl($_SESSION["loginCRM"]);
-	$termine=getTermin(date("d"),date("m"),date("Y"),"T");
+	$termine=getTermin(date("d"),date("m"),date("Y"),"T",$_SESSION["loginCRM"]);
 	if ($termine && $wvl) {
 		 $wvl=array_merge($termine,$wvl);
 	} else if ($termine) {

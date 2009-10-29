@@ -135,31 +135,29 @@
 		$t->parse("BlockJ","Jahre",true);
 	}
 	$t->set_block("term","Time1","Block1");
-	for ($i=$_SESSION["termbegin"]; $i<=$_SESSION["termend"]; $i++){
-		$j=sprintf("%02d",$i);
-		$t->set_var(array(
-			tval1	=>	$j.":00", 
-			tkey1	=>	$j.":00",
-			tsel1	=>  ($data["von"]=="$j:00")?" selected":"",
-			tval2	=>	$j.":30", 
-			tkey2	=>	$j.":30",
-			tsel2	=>  ($data["von"]=="$j:30")?" selected":"", 
-		));
-		$t->parse("Block1","Time1",true);
-	}
 	$t->set_block("term","Time2","Block2");
 	for ($i=$_SESSION["termbegin"]; $i<=$_SESSION["termend"]; $i++){
 		$j=sprintf("%02d",$i);
 		$t->set_var(array(
 			tval1	=>	$j.":00", 
 			tkey1	=>	$j.":00",
-			tsel1	=>  ($data["bis"]=="$j:00")?" selected":"",
-			tval2	=>	$j.":30", 
-			tkey2	=>	$j.":30",
-			tsel2	=>  ($data["bis"]=="$j:30")?" selected":"",
+			tsel1	=>  ($data["von"]=="$j:00")?" selected":"",
 		));
+		$t->parse("Block1","Time1",true);
 		$t->parse("Block2","Time2",true);
-	}
+        if ($_SESSION["termseq"]>0) {
+            for ($s = $_SESSION["termseq"] ; $s < 60; $s+=$_SESSION["termseq"]) {
+                $sq = sprintf("%02d",$s);
+                $t->set_var(array(
+                    tval1	=>	$j.":".$sq, 
+                    tkey1	=>	$j.":".$sq,
+                    tsel1	=>  ($data["von"]=="$j:$sq")?" selected":""
+                ));
+                $t->parse("Block1","Time1",true);
+                $t->parse("Block2","Time2",true);
+            }
+	    }
+    }
 	$rpt=array("0"=>"einmalig","1"=>"t&auml;glich","2"=>"2-t&auml;gig","7"=>"w&ouml;chentlich","14"=>"2-w&ouml;chentlich","30"=>"monatlich","365"=>"j&auml;hrlich");
 	$t->set_block("term","repeat","Block3");
 	while(list($key,$val) = each($rpt)){

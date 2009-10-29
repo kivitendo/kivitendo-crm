@@ -81,8 +81,10 @@
 	    	bis <select name="termend">{termend}</select> Uhr</td></tr>
 	<!--tr><td>Backup-Pf</td><td><input type="text" name="Postf2" value="{Postf2}" size="10"> </td><td></td></tr-->
 	<tr><td class="norm">Intervall</td><td class="norm"><input type="text" name="Interv" value="{Interv}" size="4" maxlength="5">sec. &nbsp;&nbsp; PreSearch <input type="text" name="Pre" value="{Pre}" size="10"></td>
-	    <td>&nbsp;</td><td><input type="submit" name="ok" value="sichern"></td></tr>
+	    <td>Terminabstand</td><td><input type="text" name="termseq" value="{termseq}" size="3"> Minuten</td></tr>
 	<!--tr><td colspan="4"><input type="submit" name="mkmbx" value="Mailbox erzeugen"></td><td></td><td></td></tr-->
+
+	   <tr><td>&nbsp;</td><td><input type="submit" name="ok" value="sichern"></td></tr>
 
 	</form>
 </table>

@@ -2,6 +2,8 @@
 if ($_GET['check']==1) {
 	$p='../';
 	$check=true;
+    $inclpa=ini_get('include_path');
+    ini_set('include_path',$inclpa.":../:./crmajax:./inc:../inc");
 } else {	
    	$p='';
    	$check=false;
@@ -74,36 +76,68 @@ echo "Vorraussetzungen pr&uuml;fen:<br>";
         $path=ini_get("include_path");
         fputs($log,"Suchpfad: $path\n");
         $pfade=split(":",$path);
-        $chkfile=array("DB","DB/pgsql","fpdf","fpdi","Mail","Mail/mime","Image/Canvas","Image/Graph",
-			"jpgraph","Contact_Vcard_Build","Contact_Vcard_Parse","xajax/xajax.inc");
+        $chkfile=array("DB"=>array("DB","MDB2"),"Driver"=>array("DB/pgsql","MDB2/Driver/pgsql"),
+                        "fpdf","fpdi","Mail","Mail/mime",
+                        "Image/Canvas","Image/Graph","jpgraph",
+		                "Contact_Vcard_Build","Contact_Vcard_Parse",
+                        "Xajax"=>array("xajax/xajax.inc","xajax_core/xajax.inc"));
         $chkstat=array(1,1,0,0,0,0,0,0,0,0,0,1);
         $OK=true;
-	$pos=0;
-	$dbok=true;
-        foreach($chkfile as $file) {
-                echo "$file: ";
+	    $pos=0;
+	    $dbok=true;
+        foreach($chkfile as $key=>$file) {
                 $ook=false;
-                fputs($log,"$file: ");
-                foreach($pfade as $path) {
+                if (is_array($file)) {
+                    foreach ($file as $altfile) {
+                        echo "$altfile: ";
+                        fputs($log,"$altfile: ");
+                        $aok=false;
+                        foreach($pfade as $path) {
+                            $path = ((substr($path,0,1)=="/")?"":$p).$path;
+                            if (is_readable($path."/".$altfile.".php")) {
+                                $aok=true;
+                                $ook=true;
+                                break;
+                            }
+                        }
+                        if ($aok) {
+                            echo "ok<br>";
+                            fputs($log,"ok\n");
+                        } else {
+                            echo "fehlt<br>";
+                            fputs($log,"fehlt\n");
+                        }
+                    }
+                    echo "$key: ";
+                    fputs($log,"$key ");
+                    if ($ook) {
+                        echo "$ok<br>";
+                        fputs($log,"ok\n");
+                    }
+                } else {
+                    echo "$file: ";
+                    fputs($log,"$file: ");
+                    foreach($pfade as $path) {
                         if (is_readable($path."/".$file.".php")) {
                                 $ook=true;
                                 break;
                         }
-                }
-                if ($ook) {
+                    }
+                    if ($ook) {
                         echo "$ok<br>";
                         fputs($log,"ok\n");
-                } else {
-			//if ($file=="DB" or $file=="DB/pgsql") $dbok=false;
-                        $OK=false;
-			if ($chkstat[$pos]==1) {
-				$dbok=false;
-				echo "<font color='red'><b>unbedingt Erforderlich!!</b></font><br>";
-                        	fputs($log,"Fehler: Erforderlich\n");
-			} else {
-				echo "<font color='red'>dieses Paket fehlt oder kann nicht geladen werden.</font><br>";
-                        	fputs($log,"Fehler\n");
-			}
+                    };
+                }
+                if (!$ook) {
+                    $OK=false;
+                    if ($chkstat[$pos]==0) {
+                        echo "<font color='red'>dieses Paket fehlt oder kann nicht geladen werden.</font><br>";
+                                    fputs($log,"Fehler\n");
+                    } else {
+                        $dbok=false;
+                        echo "<font color='red'><b>unbedingt Erforderlich!!</b></font><br>";
+                                    fputs($log,"Fehler: Erforderlich\n");
+                    }
                 }
 		$pos++;
         }
@@ -130,7 +164,7 @@ if ($dbok) {
 		//$sql="select * from defaults";
 		$sql="SELECT * from schema_info  where tag like 'release_%' order by tag desc limit 1";
 		$rs=$db->getAll($sql);
-		if (substr($rs[0]["tag"],0,11)>="release_2_6") {  //Muß noch an die akt. Version angepasst werden !!!!
+		if (substr($rs[0]["tag"],0,11)>="release_2_6") {  
 			fputs($log,$rs[0]["version"]." als Basis\n");
 			echo "$ok. ERP-DB gefunden<br>";
 		} else {

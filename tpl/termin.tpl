@@ -75,7 +75,7 @@
 					<select name="von">
 <!-- BEGIN Time1 -->
 						<option value="{tval1}"{tsel1}>{tkey1}</option>
-						<option value="{tval2}"{tsel2}>{tkey2}</option>
+						<!--option value="{tval2}"{tsel2}>{tkey2}</option-->
 <!-- END Time1 -->
 					</select>
 					<select name="wdhlg">

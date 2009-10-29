@@ -37,7 +37,7 @@
                     $grund.=$row["cause"]."</font>] ";
                 }
 				$tid=$row["termid"];
-				for($v; $v<=$b; $v+=1800) {
+				for($v; $v<=$b; $v+=$_SESSION["termseq"]*60) { //1800) {
 					if (date("G",$v)>=$_SESSION["termbegin"] && date("G",$v)<=$_SESSION["termend"]) {
 						$termdata[date("G:i",$v)].="<span  onClick=\"zeige(".$tid.")\">".$grund."</span>";
 						$termid[date("G:i",$v)]=$tid;
@@ -65,13 +65,18 @@
 				tid => $termid["$i:00"],
 			));
 			$t->parse("Block","Stunden",true);
-			$t->set_var(array(
-				col => "we",
-				zeit => sprintf("%02d:30",$i),
-				text => $termdata["$i:30"],
-				tid => $termid["$i:30"],
-			));
-			$t->parse("Block","Stunden",true);
+            if ($_SESSION["termseq"]>0) {
+                for ($s = $_SESSION["termseq"] ; $s < 60; $s+=$_SESSION["termseq"]) {
+                    $sq = sprintf("%02d",$s);
+                    $t->set_var(array(
+                        col => "we",
+                        zeit => sprintf("%02d:$sq",$i),
+                        text => $termdata["$i:$sq"],
+                        tid => $termid["$i:$sq"],
+                    ));
+                    $t->parse("Block","Stunden",true);
+                }
+            }
 		}
 		$t->set_var(array(
 			tag => $day.".".$month.".".$year,

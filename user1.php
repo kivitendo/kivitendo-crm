@@ -4,7 +4,7 @@
 	include("inc/template.inc");
 	include("inc/crmLib.php");
 	include("inc/UserLib.php");
-	if ($_POST["ok"]) {
+	if ($_POST["ok"] and $_POST["termseq"]<61) {
 		$rc=saveUserStamm($_POST);
 		$id=$_POST["UID"];
 		$_SESSION["termbegin"]=$_POST["termbegin"];
@@ -55,6 +55,7 @@
 			Position => $fa["Position"],
 			termbegin => $tbeg,
 			termend	=> $tend,
+			termseq	=> ($fa["termseq"])?$fa["termseq"]:30,
 			GRUPPE => $gruppen
 			));
 	if ($_GET["id"]) {	

@@ -12,13 +12,15 @@
 function saveUserStamm($val) {
 global $db;
 	if (!$val["Interv"]) $val["Interv"]=60;
+	if (!$val["termseq"]) $val["termseq"]=30;
 	if ($val["Vertreter"]==$val["UID"]) {$vertreter="null";} else {$vertreter=$val["Vertreter"];};
 	$sql="update employee set name='".$val["Name"]."',etikett=".$val["etikett"].", addr1='".$val["Strasse"]."', addr2='".$val["Plz"]."', addr3='";
 	$sql.=$val["Ort"]."', workphone='".$val["Tel2"]."', homephone='".$val["Tel1"]."', notes='".$val["Bemerkung"]."',";
 	$sql.="msrv='".$val["Msrv"]."', postf='".$val["Postf"]."', kennw='".$val["Kennw"]."',  postf2='";
 	$sql.=$val["Postf2"]."', interv='".$val["Interv"]."', pre='".$val["Pre"]."', abteilung='".$val["Abteilung"]."',";
 	$sql.="position='".$val["Position"]."', vertreter=$vertreter,mailsign='".$val["MailSign"]."',email='".$val["eMail"];
-	$sql.="',termbegin=".$val["termbegin"].",termend=".$val["termend"].",kdview=".$val["kdview"]." where id=".$val["UID"];
+	$sql.="',termbegin=".$val["termbegin"].",termend=".$val["termend"].",kdview=".$val["kdview"];
+    $sql.=",termseq=".$val["termseq"]." where id=".$val["UID"];
 	$rc=$db->query($sql);
 	if ($val["Tel1"]) mkTelNummer($val["UID"],"E",array($val["Tel1"]));
 }
@@ -88,6 +90,7 @@ global $db;
 		$daten["etikett"]=$rs[0]["etikett"];
 		$daten["termbegin"]=$rs[0]["termbegin"];
 		$daten["termend"]=$rs[0]["termend"];
+		$daten["termseq"]=$rs[0]["termseq"];
 		$daten["kdview"]=$rs[0]["kdview"];
 		return $daten;
 	}

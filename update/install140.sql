@@ -406,6 +406,8 @@ ALTER TABLE employee ADD COLUMN email character varying(50);
 ALTER TABLE employee ADD COLUMN etikett int4;
 ALTER TABLE employee ADD COLUMN termbegin integer;
 ALTER TABLE employee ADD COLUMN termend integer;
+ALTER TABLE employee ADD COLUMN termseq int;
+ALTER TABLE employee ALTER COLUMN termseq SET DEFAULT 30;
 ALTER TABLE employee ADD COLUMN kdview integer;
 ALTER TABLE employee alter COLUMN kdview SET DEFAULT 1;
 ALTER TABLE contacts ADD COLUMN cp_street character varying(75);

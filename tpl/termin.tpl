@@ -75,7 +75,6 @@
 					<select name="von">
 <!-- BEGIN Time1 -->
 						<option value="{tval1}"{tsel1}>{tkey1}</option>
-						<!--option value="{tval2}"{tsel2}>{tkey2}</option-->
 <!-- END Time1 -->
 					</select>
 					<select name="wdhlg">
@@ -90,7 +89,6 @@
 					<select name="bis">
 <!-- BEGIN Time2 -->
 						<option value="{tval1}"{tsel1}>{tkey1}</option>
-						<option value="{tval2}"{tsel2}>{tkey2}</option>
 <!-- END Time2 -->
 					</select>
 					<span class="klein">nur Arbeitstage</span><input type="checkbox" name="ft" value="1" {FT}>

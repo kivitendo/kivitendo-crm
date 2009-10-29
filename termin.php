@@ -126,7 +126,7 @@
 		$t->parse("BlockM","Monat",true);
 	}
 	$t->set_block("term","Jahre","BlockJ");
-	for ($i=2004; $i<2010; $i++) {
+	for ($i=2004; $i<2020; $i++) {
 		$t->set_var(array(
 			JV => $i,
 			JK => $i,

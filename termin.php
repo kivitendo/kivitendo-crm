@@ -22,7 +22,20 @@
 			$data["user"][]=$row["uid"];
 		}
 	}
-	if ($_POST["sichern"]) {
+    if ($_POST["search"]<>"") {
+        $rs = searchTermin($_POST["search"],($_POST["uid"]>0)?$_POST["uid"]:0);
+        if (count($rs)>0) {
+            $rc=true;
+            $ts="S";
+            foreach ($rs as $t) {
+                $ts.=$t["id"].",";
+            }
+            $ANSICHT=$ts;
+        } else {
+            $rc=false;
+            $data["grund"]=".:not found:.";
+        }
+	} else if ($_POST["sichern"]) {
 		if (!$_POST["ok"]) {
 			$rs=checkTermin($_POST["vondat"],$_POST["bisdat"],$_POST["von"],$_POST["bis"],($_POST["tid"]>0)?$_POST["tid"]:0);
 			$DATUM=$_POST["vondat"];
@@ -186,5 +199,5 @@
 		ANSICHT => $ANSICHT,
 		DATUM => $DATUM
 	));
-	$t->pparse("out",array("term"));
+	$t->Lpparse("out",array("term"),$_SESSION["lang"],"work");
 ?>

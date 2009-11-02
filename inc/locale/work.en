@@ -26,6 +26,7 @@ $texts  = array(
   '.:email:.'	     => 'email',
   '.:send:.'	     => 'send',
   '.:to:.'	         => 'To',
+  '.:till:.'	     => 'untill',
   '.:delete:.'	     => 'delete',
   '.:template:.'	 => 'Template',
   '.:subject:.'	     => 'Subject',
@@ -43,6 +44,7 @@ $texts  = array(
   '.:vernr:.'        => 'Versionsnumber',
   '.:employee:.'     => 'Employee',
   '.:from:.'         => 'from',
+  '.:by:.'           => 'from',
   '.:selectarticle:.' => 'Please, select an article',
   '.:normview:.'     => 'Normale View',
   '.:no_data:.'      => 'No Data.',
@@ -54,6 +56,12 @@ $texts  = array(
   '.:close:.'        => 'close',
   '.:postit:.'       => 'Post it',
   '.:popup:.'        => 'Pop up'
-
+  '.:conflict with termin:.'   => 'conflict with termin',
+  '.:search result:.'    => 'search result',
+  '.:private date:.'     => 'private date',
+  '.:member:.'      => 'member',
+  '.:only working days:.'   => 'only working days',
+  '.:remarks:.'        => 'Remarks',
+  '.:not found:.'    => 'not found',
 );
 ?>

@@ -1828,7 +1828,7 @@ global $db;
 	$sql.="((starttag||startzeit between '$start' and '$stop' ) or ";
 	$sql.="(stoptag||stopzeit between '$start' and '$stop'))";
 	if ($TID>0) $sql.=" and id<>$TID";
-	if ($grp) $sql.="and (M.member in $grp)";
+	if ($grp) $sql.=" and (M.member in $grp)";
 	//folgendes tut irgendwie nicht
 	//$rs=$db->getAll($sql);
 	//dann erst einmal so
@@ -1837,6 +1837,21 @@ global $db;
 		$ids[]=array("id"=>$row["id"]);
 	}
 	return $ids;
+}
+
+function searchTermin($suche,$TID=0) {
+global $db;
+    $grp=getGrp($_SESSION["loginCRM"],true);
+    $sql="select distinct id from termine D left join terminmember M on M.termin=D.id  where ";
+    $sql.="upper(cause) like '%".strtoupper($suche)."%'";
+	if ($TID>0) $sql.=" and member=$TID";
+	//if ($grp) $sql.=" and (M.member in $grp)";
+	$rs=$db->query($sql);
+	while ($row = $rs->fetchRow(DB_FETCHMODE_ASSOC)) {
+		$ids[]=array("id"=>$row["id"]);
+	}
+	return $ids;
+    
 }
 
 /****************************************************

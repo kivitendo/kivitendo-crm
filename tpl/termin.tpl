@@ -15,6 +15,13 @@
 		function suchName() {
 			f=open("suchName.php?name="+document.termedit.suchname.value,"Name","width=400,height=200,left=200,top=100");
 		}
+        function searchT() {
+            tid = document.termedit.caluser.options[document.termedit.caluser.selectedIndex].value;
+            document.termedit.uid.value=tid;
+            document.termedit.search.value=document.termedit.grund.value;
+            document.termedit.submit();
+            //Termine.location.href="termlist.php?cuid="+tid+"&ansicht=S&grund="+suche;
+        }
 		function subusr() {
 			nr=document.getElementById("istusr").selectedIndex;
 			document.getElementById("istusr").options[nr]=null
@@ -63,13 +70,14 @@
 <table>
 <form name="termedit" action="termin.php" method="post" onSubmit="return go()";>
 <input type="hidden" name="uid" value="{uid}">
+<input type="hidden" name="search" value="">
 <tr>
 	<td width="*" valign="top">
 
 		{OK}
 		<!--input type="button" value="Zeige" onClick="showlist('T')"><hr-->
 		<table>
-			<tr><td >von:</td><td ><input type="text" name="vondat" size="9" maxlength="10" value="{VONDAT}">
+			<tr><td >.:by:.:</td><td ><input type="text" name="vondat" size="9" maxlength="10" value="{VONDAT}">
 <a href="#" title='Vondatum' onClick="kal('vondat')" ><img src='image/date.png' align='middle' border="0"></a>
 <!--input type="button" value="K" onClick="kal('vondat')"-->
 					<select name="von">
@@ -83,7 +91,7 @@
 <!-- END repeat -->
 					</select>
 				</td></tr>
-			<tr><td >bis:</td><td ><input type="text" name="bisdat" size="9" maxlength="10" value="{BISDAT}">
+			<tr><td >.:till:.:</td><td ><input type="text" name="bisdat" size="9" maxlength="10" value="{BISDAT}">
 <a href="#" title='Bisdatum' onClick="kal('bisdat')" ><img src='image/date.png' align='middle' border="0"></a>
 <!--input type="button" value="K" onClick="kal('bisdat')"-->
 					<select name="bis">
@@ -93,21 +101,21 @@
 					</select>
 					<span class="klein">nur Arbeitstage</span><input type="checkbox" name="ft" value="1" {FT}>
 				</td></tr>
-			<tr><td colspan="2"><input type="text" name="grund" size="37" maxlength="75" value="{GRUND}">
-						 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                         <a href="termin.php"><input type="reset" class="clear" name="clear" value="clear"></a>
-						<br><span class="mini">Grund</span></td></tr>
-			<tr><td colspan="2">Privattermin <input type="checkbox" name="privat" value="1" {CHKPRIVAT}></td></tr>
+			<tr><td colspan="2"><input type="text" name="grund" size="35" maxlength="75" value="{GRUND}">
+						 &nbsp;&nbsp;
+		                 <input type="button" class="anzeige" value=".:search:." onClick="searchT()"><br />
+                         <!--input type="submit" class="anzeige" name="search" value=".:search:."><br /-->
+						<span class="mini">.:cause:.</span></td></tr>
+			<tr><td colspan="2">.:private date:. <input type="checkbox" name="privat" value="1" {CHKPRIVAT}> </td></tr>
 			<tr><td colspan="2"><textarea name="lang" cols="40" rows="4">{LANG}</textarea>
-						<br><span class="mini">Bemerkungen</span>
+						<br><span class="mini">.:remarks:.</span>
 			<tr><td colspan="2">
-					<input type="text" name="suchname" size="20" maxlength="25" value=""><input type="button" value="suche Teilnehmer" onClick="suchName()">
+					<input type="text" name="suchname" size="20" maxlength="25" value=""><input type="button" value=".:search:. .:member:." onClick="suchName()">
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="submit" class="sichern" name="sichern" value="sichern">
-					<br>
-					<table><tr>
+                        <input type="submit" class="sichern" name="sichern" value=".:save:."></td></tr>
+			<tr><td colspan="2"><table>
 					<td ><select name="teiln" id="kannusr" size="5">
-<!-- BEGIN User -->
+<!-- BEGIN Usr -->
 						<option value="{USRID}">{USRNAME}</option>
 <!-- END User -->
 					</select><br><span class="mini">CRM-User</span></td>
@@ -117,9 +125,10 @@
 <!-- BEGIN Selusr -->
 						<option value="{UID}">{UNAME}</option>
 <!-- END Selusr -->
-					</select><br><span class="mini">Teilnehmer</span></td>
+					</select><br><span class="mini">.:member:.</span></td>
 
-					</tr></table>
+					</tr></table><br />
+                    <a href="termin.php"><input type="reset" class="clear" name="clear" value=".:clear:."></a>
 			</td></tr>
 		</table>
 	</td>
@@ -140,7 +149,7 @@
 			<option value="{JV}"{JS}>{JK}</option>
 <!-- END Jahre -->
 		</select>
-		<input type="button" class="anzeige" value="Zeigen" onClick="showlist('T')">
+		<input type="button" class="anzeige" value=".:show:." onClick="showlist('T')">
         <select name="caluser" id="calusr" size="1">
 <!-- BEGIN CalUser -->
 			<option value="{CUID}" {CUIDSEL}>{CUNAME}</option>

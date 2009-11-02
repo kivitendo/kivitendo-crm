@@ -87,7 +87,7 @@
 			year => $year,
             CUID => $_GET["cuid"],
 		));
-	} else if (substr($ansicht,0,1)=="K") {	
+	} else if (substr($ansicht,0,1)=="K" or substr($ansicht,0,1)=="S") {	
 		$data=getTerminList(substr($ansicht,1,-1));
 		$t->set_file(array("term" => "terminlist.tpl"));
 		$t->set_block("term","Liste","Block");
@@ -100,6 +100,9 @@
 			));
 			$t->parse("Block","Liste",true);
 		}
+		$t->set_var(array(
+            HEADLINE => (substr($ansicht,0,1)=="S")?".:search result:.":".:conflict with termin:."
+        ));
 	} else if ($ansicht=="W") {
 		$kw=$_GET["kw"];
 		if ($_GET["year"]>0) {
@@ -211,5 +214,5 @@
 		$t->set_file(array("term" => "termintag.tpl"));
 	}
 
-	$t->pparse("out",array("term"));
+    $t->Lpparse("out",array("term"),$_SESSION["lang"],"work");
 ?>

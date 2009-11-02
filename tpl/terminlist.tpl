@@ -14,10 +14,10 @@
 <body >
 <center>
 <br>
-Konflikte mit diesen Terminen:<br><br>
+{HEADLINE}<br><br>
 <table style="width:29em" bgcolor="#ffffff" class="normal">
 <!-- BEGIN Liste -->
-	<tr onClick="zeige({tid})"><td class="we le" style="width:8.5em">{start}</td><td class="{we} le" style="width:8.5em">{stop}</td><td class="{we}">{cause}</td></tr>
+	<tr onClick="zeige({tid})"><td class="we le" style="width:7.0em">{start}</td><td class="{we} le" style="width:7.0em">{stop}</td><td class="{we}">{cause}</td></tr>
 	<tr><td class="gr" colspan="3"></td></tr>
 <!-- END Liste -->
 </table>

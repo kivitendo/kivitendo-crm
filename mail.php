@@ -76,6 +76,7 @@
 			$abs=sprintf("%s <%s>",$user["Name"],$user["eMail"]);
 			$Subject=preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["Subject"]);
 			$headers=array( 
+                    "Content-type" => "text/plain; charset=".ini_get("default_charset"),
 					"Return-Path"	=> $abs,
 					"Reply-To"	=> $abs,
 					"From"		=> $abs,

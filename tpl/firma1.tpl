@@ -272,7 +272,7 @@
 			<span class="value" onClick="showOP('{apr}');">{op}</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
 			<span class="labelLe">- .:orders:.:</span>
-			<span class="value" onClick="showOP('oe');">{oa}</span>
+			<span class="value" onClick="showOP('oe{Q}');">{oa}</span>
 		</div>
 		<br />
 		<div  class="zeile klein">

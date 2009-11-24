@@ -115,7 +115,7 @@
                         <input type="submit" class="sichern" name="sichern" value=".:save:."></td></tr>
 			<tr><td colspan="2"><table>
 					<td ><select name="teiln" id="kannusr" size="5">
-<!-- BEGIN Usr -->
+<!-- BEGIN User -->
 						<option value="{USRID}">{USRNAME}</option>
 <!-- END User -->
 					</select><br><span class="mini">CRM-User</span></td>

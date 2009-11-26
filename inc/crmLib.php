@@ -1543,7 +1543,12 @@ global $db;
 *****************************************************/
 function getReMonat($fid,$jahr,$monat,$liefer=false){
 global $db;
-        $next = ($monat<12)?"$jahr-".($monat+1)."-01":($jahr+1)."-01-01";
+        if ($monat=="00") {
+            $next=($jahr+1).'-01-01';
+            $monat='01';
+        } else {
+            $next = ($monat<12)?"$jahr-".($monat+1)."-01":($jahr+1)."-01-01";
+        }
         if ($liefer) {
                 $sql1="select * from ap where vendor_id=$fid and transdate >= '$jahr-$monat-01' and transdate < '$next' order by transdate desc";
                 $sql2="select * from oe where vendor_id=$fid and transdate >= '$jahr-$monat-01' and transdate < '$next' and closed = 'f' order by transdate desc";

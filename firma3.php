@@ -28,7 +28,11 @@
 	}
 	$JahrZ=$jahr-1;
 	if ($_GET["monat"]) {
-		$reM=getReMonat($_GET["fid"],substr($_GET["monat"],3,4),substr($_GET["monat"],0,2),($Q=="V")?true:false);
+        if (substr($_GET["monat"],-4)=="Jahr" ) {
+		    $reM=getReMonat($_GET["fid"],$jahr,"00",($Q=="V")?true:false);
+        } else {
+		    $reM=getReMonat($_GET["fid"],substr($_GET["monat"],3,4),substr($_GET["monat"],0,2),($Q=="V")?true:false);
+        }
 		$t->set_file(array("fa1" => "firma3a.tpl"));
 		$IMG="";
 	} else {

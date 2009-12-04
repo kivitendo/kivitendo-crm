@@ -76,7 +76,6 @@
 			$abs=sprintf("%s <%s>",$user["Name"],$user["eMail"]);
 			$Subject=preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["Subject"]);
 			$headers=array( 
-                    "Content-type" => "text/plain; charset=".ini_get("default_charset"),
 					"Return-Path"	=> $abs,
 					"Reply-To"	=> $abs,
 					"From"		=> $abs,
@@ -105,14 +104,17 @@
 					if ($_FILES["Datei"]["name"][$o]<>"") {
 						//move_uploaded_file($_FILES["Datei"]["tmp_name"][$o],"tmp/".$_FILES["Datei"]["name"][$o]);
 						copy($_FILES["Datei"]["tmp_name"][$o],"tmp/".$_FILES["Datei"]["name"][$o]);
-						$mime->addAttachment("tmp/".$_FILES["Datei"]["name"][$o] , $_FILES["Datei"]["type"][$o]);
+						$mime->addAttachment("tmp/".$_FILES["Datei"]["name"][$o] , $_FILES["Datei"]["type"][$o],
+                                                $_FILES["Datei"]["name"][$o]);
 						unlink ("tmp/".$_FILES["Datei"]["name"][$o]);
 						$anh=true;
 					}
 				}
-			}
+			} else {
+                $headers["Content-Type"] = "text/plain; charset=".ini_get("default_charset");
+            }
 			
-			$body = $mime->get(array("text_encoding"=>"quoted-printable"));
+			$body = $mime->get(array("text_encoding"=>"quoted-printable","text_charset"=>ini_get("default_charset")));
 			$hdr = $mime->headers($headers);
 			$mail->_params="-f ".$user["eMail"];
 			$rc=$mail->send($to, $hdr, $body);

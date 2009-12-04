@@ -393,7 +393,7 @@ global $db;
 	    bank => array(0,0,1,"Bankname",50),	        	bank_code => array(0,0,6,"Bankleitzahl",15),
 	    iban => array(0,0,1,"IBAN",24),	        	    bic => array(0,0,1,"BIC",15),
 	    account_number => array(0,0,6,"Kontonummer",15),
-	    payment_id => array(0,1,6,"Zahlungsbedingungen",0),
+	    payment_id => array(0,0,6,"Zahlungsbedingungen",0),
 	    branche => array(0,0,1,"Branche",25),	    	business_id => array(0,0,6,"Kundentyp",0),
 	    owener => array(0,0,6,"CRM-User",0),	    	grafik => array(0,0,9,"Grafik",4),
 	    lead => array(0,0,6,"Leadquelle",0),	    	leadsrc => array(0,0,1,"Leadquelle",15),

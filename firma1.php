@@ -62,6 +62,7 @@
 	$t->set_var(array(
 			AJAXJS  	=> $xajax->printJavascript(XajaxPath),
 			FAART 		=> ($Q=="C")?".:Customer:.":".:Vendor:.",
+			CuVe 		=> ($Q=="C")?"customer":"vendor",
 			Q 		=> $Q,
 			FID		=> $id,
 			INID		=> db2date(substr($fa["itime"],0,10)),

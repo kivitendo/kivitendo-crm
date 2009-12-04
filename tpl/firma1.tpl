@@ -153,7 +153,7 @@
 			{IMG}<br /><br />
 				<form action="../oe.pl" method="post">
 				<input type="hidden" name="action" value="add">
-				<input type="hidden" name="customer_id" value="{FID}">
+				<input type="hidden" name="{CuVe}_id" value="{FID}">
 				<input type="image" src="image/auftrag.png" name="type" value="{sales}_order" title="neuen Auftrag eingeben" style="visibility:{zeige};">
 				<input type="image" src="image/angebot.png" name="type" value="{request}_quotation" title="Angebot/Anfrage erstellen" style="visibility:{zeige};">
 

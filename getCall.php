@@ -27,7 +27,6 @@
 	$daten["CID"]=($pid>0)?$pid:$fid;
 	$daten["Kunde"]=0;
 	$daten["Anzeige"]=0;                       	
-
 	if ($_POST["verschiebe"]) {
 		$rc=mvTelcall($_POST["TID"],$_POST["id"],$_POST["CID"]);
 		$daten["Betreff"]=$_POST["Betreff"];
@@ -70,7 +69,7 @@
 		} else {	
 			$daten=$_POST;
 		}											// if ($rc)
-	} 										//  end sichern
+    }								//  end sichern
 	switch ($Q) {
 		case "C" :  $fa=getFirmenStamm($fid,true,"C");
 					$daten["Firma"]=$fa["name"];
@@ -206,6 +205,7 @@
 		CID => $cid,
 		FID => $fid,
 		PID => $pid,
+        INOUT.$daten["inout"] => "checked",
 		bezug => $daten["Bezug"],
 		Bezug => ($Bezug)?$Bezug:0,
 		R1 => ($daten["Kontakt"]=="T")?" checked":"",
@@ -220,7 +220,7 @@
 		Dcaption => $daten["DCaption"],
 		ID => $daten["ID"],
 	));
-	//------------------------------------------- Dateianh�nge
+	//------------------------------------------- Dateianhänge
  	if ($daten["Files"]){
 		$t->set_block("cont","Files","Block1");
 		if ($daten["Files"]) foreach($daten["Files"] as $zeile) {

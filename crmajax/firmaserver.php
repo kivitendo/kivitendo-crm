@@ -165,8 +165,8 @@
 		$itemN[]=array(id => 0,calldate => $nun, caller_id => $employee, cause => translate('.:newItem:.','firma') );
 		$zeile ="<tr class='calls%d' onClick='showItem(%d);'>";
 		$zeile.="<td class='calls' nowrap width='15%%'>%s %s</td>";
-		$zeile.="<td class='calls re' width='5%%'>%s&nbsp;</td>";
-		$zeile.="<td class='calls le' width='55%%'>%s</td>";
+		$zeile.="<td class='calls re' width='6%%'>%s%s&nbsp;</td>";
+		$zeile.="<td class='calls le' width='54%%'>%s</td>";
 		$zeile.="<td class='calls le' width='15%%'>%s</td></tr>\n";
 		$items=getAllTelCall($id,$fa,$start);
 		if ($items) {
@@ -179,8 +179,11 @@
 		if ($item) foreach($item as $col){
 			if ($col["new"]) { $cause="<b>".htmlentities($col["cause"],ENT_NOQUOTES,$charset)."</b>"; }
 			else { $cause=htmlentities($col["cause"],ENT_NOQUOTES,$charset); }
+            if ($col["inout"]=="i") { $inout="<"; }
+            else if ($col["inout"]=="o") { $inout=">"; }
+            else { $inout="-"; } 
 			$tmp.=sprintf($zeile,$i,$col["id"],db2date(substr($col["calldate"],0,10)),substr($col["calldate"],11,5),
-						$col["id"],$cause,htmlentities($col["cp_name"],ENT_NOQUOTES,$charset));
+						$col["id"],$inout,$cause,htmlentities($col["cp_name"],ENT_NOQUOTES,$charset));
 			$i=($i==1)?0:1;
 		}
 		$tmp.="</table>";

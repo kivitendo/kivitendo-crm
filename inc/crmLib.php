@@ -36,12 +36,12 @@ function getAllTelCall($id,$firma,$start=0,$lim=19) {
 global $db;
 	if (!$start || $start<0) $start=0;
 	if ($firma) {	// dann hole alle Kontakte der Firma
-		$sql="select id,caller_id,kontakt,cause,calldate,cp_name from ";
+		$sql="select id,caller_id,kontakt,cause,calldate,cp_name,inout from ";
 		$sql.="telcall left join contacts on caller_id=cp_id where bezug=0 ";
 		$sql.="and (caller_id in (select cp_id from contacts where cp_cv_id=$id) or caller_id=$id)";
  	} else {  // hole nur die einer Person
 		$where="and caller_id=$id and caller_id=cp_id";
-		$sql="select id,caller_id,kontakt,cause,calldate,cp_name from ";
+		$sql="select id,caller_id,kontakt,cause,calldate,cp_name,inout from ";
 		$sql.="telcall left join contacts on caller_id=cp_id where bezug=0 and caller_id=$id";
 	}
 	$rs=$db->getAll($sql." order by calldate desc offset $start ".(($lim>0)?"limit $lim":""));
@@ -340,7 +340,7 @@ global $db;
 	$c_cause=nl2br($c_cause);
 	$sql="update telcall set cause='".$data["cause"]."',c_long='$c_cause',caller_id='".$data["CID"];
 	$sql.="',calldate='$datum',kontakt='".$data["Kontakt"]."',dokument=$did,bezug='".$data["Bezug"];
-	$sql.="',employee='".$data["CRMUSER"]."' where id=$id";
+	$sql.="',employee='".$data["CRMUSER"]."',inout='".$data["inout"]."' where id=$id";
 	$rs=$db->query($sql);
 	if(!$rs) {
 		$id=false;
@@ -376,7 +376,7 @@ global $db;
 	$c_cause=nl2br($c_cause);
 	$sql="update telcall set cause='".$data["cause"]."',c_long='$c_cause',caller_id='".$data["CID"]."',";
 	$sql.="calldate='$datum',kontakt='".$data["Kontakt"]."',dokument=$did,bezug='".$data["bezug"]."',";
-	$sql.="employee='".$data["CRMUSER"]."' where id=".$data["id"];
+	$sql.="employee='".$data["CRMUSER"]."',inout='".$data["inout"]."' where id=".$data["id"];
 	$rs=$db->query($sql);
 	if(!$rs) {
 		$id=false;
@@ -588,6 +588,7 @@ global $db;
 		$c_cause=stripslashes($c_cause);
 		$daten["LangTxt"]=$c_cause;
 		$daten["CID"]=$rs[0]["caller_id"];
+		$daten["inout"]=$rs[0]["inout"];
 		$daten["Bezug"]=$rs[0]["bezug"];
 		$daten["employee"]=$rs[0]["employee"];
 		if ($rs[0]["dokument"]==1) {

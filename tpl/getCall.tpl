@@ -83,6 +83,12 @@
 <input type="radio" name="Kontakt" value="D" {R5}>Datei &nbsp;
 <input type="radio" name="Kontakt" value="X" {R6}>Termin &nbsp; 
 </span></td></tr>
+<tr><td colspan="2">
+<span class="klein">Richtung: 
+<input type="radio" name="inout" value="i" {INOUTi}>von Kunde	&nbsp;
+<input type="radio" name="inout" value="o" {INOUTo}>an Kunde	&nbsp;
+<input type="radio" name="inout" value="" {INOUT}>undefiniert	&nbsp;
+</span></td></tr>
 <tr><td style="text-align:right" colspan="2">
 	<input type="button" name="history" value="H" style="visibility:{HDEL}" onClick="histDelCall();"> 
 	<input type="button" name="history" value="history" style="visibility:{HISTORY}" onClick="historyCall();"> 
@@ -96,7 +102,7 @@
 <table class="liste" width="100%">
 <!-- BEGIN Liste -->
 	<tr  onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showCall({IID});">
-		<td width="118px">{Datum}</td><td>{Betreff}</td><td style="background-color:{Type};">{Kontakt}</td></tr>
+		<td width="118px">{Datum}</td><td>{Betreff}</td><td style="background-color:{Type};">{Kontakt}{inout}</td></tr>
 <!-- END Liste -->
 </table>
 <!-- Hier endet die Karte ------------------------------------------->

@@ -89,7 +89,7 @@
 		document.getElementById("Variablen").style.visibility="hidden";
 	}
 	function showOP(was) {
-                F1=open("op_.php?fa={Fname1}&op="+was,"OP","width=950, height=450, left=100, top=50, scrollbars=yes");
+                F1=open("op_.php?Q={Q}&fa={Fname1}&op="+was,"OP","width=950, height=450, left=100, top=50, scrollbars=yes");
         }
 	function surfgeo() {
 		if ({GEODB}) {
@@ -272,7 +272,7 @@
 			<span class="value" onClick="showOP('{apr}');">{op}</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
 			<span class="labelLe">- .:orders:.:</span>
-			<span class="value" onClick="showOP('oe{Q}');">{oa}</span>
+			<span class="value" onClick="showOP('oe');">{oa}</span>
 		</div>
 		<br />
 		<div  class="zeile klein">

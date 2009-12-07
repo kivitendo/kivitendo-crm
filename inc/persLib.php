@@ -39,18 +39,20 @@ global $db;
 		$tab="";
 		$cnr="";
 		if (!empty($rs[0]["cp_cv_id"])) {  // gehört zu einem Kunden oder Lieferanten
-			$sql="select id,name,department_1,customernumber from customer where id=".$rs[0]["cp_cv_id"];
+			$sql="select id,name,department_1,customernumber,language_id from customer where id=".$rs[0]["cp_cv_id"];
 			$rs1=$db->getAll($sql);
-			$tab="C";
-			$cnr=$rs1[0]["customernumber"];
 			if (empty($rs1[0]["name"])) {  // nicht zu Kunde sondern zu Lieferant
-				$sql="select id,name,department_1,vendornumber from vendor   where id=".$rs[0]["cp_cv_id"];
+				$sql="select id,name,department_1,vendornumber,language_id from vendor   where id=".$rs[0]["cp_cv_id"];
 				$rs1=$db->getAll($sql);
 				$tab="V";
 				$cnr=$rs1[0]["vendornumber"];
-			}
-			if($rs1[0]["name"]) { 
 				$firma=$rs1[0]["name"]; 
+                $language_id=$rs1[0]["language_id"];
+			} else {
+			    $tab="C";
+			    $cnr=$rs1[0]["customernumber"];
+				$firma=$rs1[0]["name"]; 
+                $language_id=$rs1[0]["language_id"];
 			}
 		}
 		$daten=$rs[0];
@@ -76,6 +78,7 @@ global $db;
 		$daten["Department_1"]=$rs1[0]["department_1"];
 		$daten["tabelle"] = $tab;
 		$daten["nummer"]=$cnr;
+        $daten["language_id"]=$language_id;
 	}
 	return $daten;
 };
@@ -127,9 +130,9 @@ global $db;
                                     // Nein, das ist der Stern in der oberen Zeile. Hätte auch ein anderes Zeichen sein können. hli
 		$where0=" and upper(cp_name) ~ '^\[^A-Z\].*$'  ";
 	} else {
-		// Array zu jedem Formularfed: Tabelle (0=contact,1=cust/vend), TabName, toUpper
-    /* Änderung 29.6.2009 cp_greeting rausgeworfen und cp_gender eingefügt. Hinweis für Holger cp_gender kommt aus Tabelle 0 ;-)  jb*/
-	    	$dbfld=array("cp_name" => 1,"cp_givenname" => 1,"cp_gender" => 0,"cp_title" => 1,
+		// Array zu jedem Formularfed: 1 == toUpper
+        /* Änderung 29.6.2009 cp_greeting rausgeworfen und cp_gender eingefügt. Hinweis für Holger cp_gender kommt aus Tabelle 0 ;-)  jb*/
+	   	$dbfld=array("cp_name" => 1,"cp_givenname" => 1,"cp_gender" => 0,"cp_title" => 1,
 					"cp_street" => 1,"cp_zipcode" => 0,"cp_city" => 1,"cp_country" => 0,
 					"cp_phone1" => 0,"cp_phone2" => 0,"cp_fax" => 0,
 					"cp_homepage" => 1,"cp_email" => 1,
@@ -154,6 +157,7 @@ global $db;
 			$whereCustomer	= "and K.name ilike '%" . $muster["customer_name"] . "%' "; //Leerzeichen für Holgis substr nicht vergessen!!!
 	    /* weil die maske sowohl in Lieferant als auch Kunde sucht, hier auch die Lieferanten-Einschränkung.
 			 * @holgi Warum heisst es hier wieder vendor V??? und nicht vendor L (Lieferant)
+               @JAN: weil das in den Firmenmasken so ist, daher sollte K auch zu C werden ;=) . 
 			*/
 //			$joinVendor 	= " left join vendor V on C.cp_cv_id=V.id";	//hier jetzt der left join und die werte oben überschreiben 
 			$whereVendor	= "and V.name ilike '%" . $muster["customer_name"] . "%' "; //Leerzeichen für Holgis substr nicht vergessen!!!
@@ -207,7 +211,6 @@ global $db;
 				 'C' as tbl from contacts C$joinCustomer where C.cp_cv_id=K.id $whereCustomer $where and $rechte order by cp_name";
 		$rs0=$db->getAll($sql0);
 	}
-	
 	$rs1=array(); //s.o.
 	if ($muster["vendor"]){ //auf checkbox vendor mit Titel Lieferant prüfen
 	    $sql0="select $felderContact, $felderContcatOrCustomerVendor, V.name as name, V.language_id as language_id, 'V' as tbl 
@@ -216,6 +219,7 @@ global $db;
 	}
 
 	/*Hinweis: Diese Abfrage sucht nur nach nicht zugeordneten Ansprechpartner (gelöscht). 
+    @JAN: nicht nur gelöscht, sind auch Personen ohne Zuordnung zu Firmen, z.B. priv. Kontakte
 	  Ferner wäre es schön die Auswahl an der Oberfläche kenntlich zu machen jb 9.6.2009 
 		Und auch so umgesetzt jb 10.6.2009																									*/
 	
@@ -289,9 +293,17 @@ global $db;
 				if ($keys[$i]=="cp_phone1"||$keys[$i]=="cp_phone2"||$keys[$i]=="cp_fax") $tels[]=$tmpval;
 				$query0.=$keys[$i]."="; 
 				if (in_array($dbfld[$keys[$i]][2],array(0,1,2,3,4,5,7,8,9))) {  //Stringwert
-						$query0.="'".$tmpval."',";
+                        if (empty($tmpval)) {
+                            $query0.="null,";
+                        } else {
+						    $query0.="'".$tmpval."',";
+                        }
 				} else {
-						$query0.=$tmpval.",";		//Zahlwert
+                        if (empty($tmpval)) {
+                            $query0.="null,";
+                        } else {
+						    $query0.=$tmpval.",";		//Zahlwert
+                        }
 				}
 			}
 		}

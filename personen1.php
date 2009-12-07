@@ -56,13 +56,21 @@
             if ($daten) foreach ($daten as $zeile) { //Diese Algorithmus macht die Suche bei einer großen Trefferzahl langsam ...
                                                      // TODO executeMultiple ... ;-) jb 16.6.2009
                 if ($zeile["cp_gender"] =="f"){
-                    $zeile["cp_greeting"]= $anredenFrau[$zeile["language_id"]];
+                    if ($zeile["language_id"]) {
+                        $zeile["cp_greeting"]= $anredenFrau[$zeile["language_id"]];
+                    } else {
+                        $zeile["cp_greeting"]="Frau";
+                    }
                     if ($BROWSERDEBUG){
                         echo "Anrede Frau" . $anredenFrau["language_id"] . "<br>";
                         echo "Language ID" . $zeile["language_id"] . "<br>";
                     }
                 } else if ($zeile["cp_gender"] =="m"){
+                    if ($zeile["language_id"]) {
                         $zeile["cp_greeting"]= $anredenHerr[$zeile["language_id"]];
+                    } else {
+                        $zeile["cp_greeting"]="Herr";
+                    }
                         if ($BROWSERDEBUG){
                             echo "Anrede Herr" . $anredenHerr["language_id"] . "<br>";
                         }

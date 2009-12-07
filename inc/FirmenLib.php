@@ -7,9 +7,19 @@
 * out: rs = array(Felder der db)
 * hole die abweichenden Lieferdaten
 *****************************************************/
-function getShipStamm($id) {
+function getShipStamm($id,$tab="C",$complete=false) {
 global $db;
-	$sql="select S.*,BL.bundesland as shiptobundesland from shipto S left join bundesland BL on S.shiptobland=BL.id where S.shipto_id=$id ";
+    if ($complete) {
+        $sql ="select shiptoname,COALESCE(shiptostreet,street) as shiptostreet,COALESCE(shiptocity,city) as shiptocity,";
+        $sql.="COALESCE(shiptocountry,country) as shiptocountry,";
+        $sql.="COALESCE(shiptozipcode,zipcode) as shiptozipcode,";
+        $sql.="COALESCE(shiptodepartment_1,department_1) as shiptodepartment_1,";
+        $sql.="COALESCE(shiptodepartment_2,department_2) as shiptodepartment_2,";
+        $sql.="COALESCE(shiptocontact,contact) as shiptocontact from shipto left join ".(($tab=="C")?"customer":"vendor")." on trans_id=id ";
+        $sql.="where shipto_id=$id";
+    } else {
+	    $sql="select S.*,BL.bundesland as shiptobundesland from shipto S left join bundesland BL on S.shiptobland=BL.id where S.shipto_id=$id ";
+    }
 	$rs2=$db->getAll($sql);
 	if(!$rs2) {
 		return false;
@@ -430,9 +440,17 @@ global $db;
 					$i=$anzahl; 
 				} else {
 					if (in_array($dbfld[$keys[$i]][2],array(0,1,2,3,4,5,7,8,9))) { //Daten == Zeichenkette
-						$query1.=$keys[$i]."='".$tmpval."',";
+                        if (empty($tmpval)) {
+						    $query1.=$keys[$i]."=null,";
+                        } else {
+						    $query1.=$keys[$i]."='".$tmpval."',";
+                        }
 					} else {							//Daten == Zahl
-						$query1.=$keys[$i]."=".$tmpval.",";
+                        if (empty($tmpval) && !$tmpval===0) {
+						    $query1.=$keys[$i]."=null,";
+                        } else {
+						    $query1.=$keys[$i]."=".$tmpval.",";
+                        }
 					}
 					if ($keys[$i]=="shiptophone"||$keys[$i]=="shiptofax") $tels2[]=$tmpval;
 				}
@@ -442,9 +460,17 @@ global $db;
 					$i=$anzahl; 
 				} else {
 					if (in_array($dbfld[$keys[$i]][2],array(0,1,2,3,4,5,7,8,9))) {
-						$query0.=$keys[$i]."='".$tmpval."',";
-					} else {
-						$query0.=$keys[$i]."=".$tmpval.",";
+                        if (empty($tmpval)) {
+						    $query0.=$keys[$i]."=null,";
+                        } else {
+						    $query0.=$keys[$i]."='".$tmpval."',";
+                        }
+					} else {							//Daten == Zahl
+                        if (empty($tmpval) && !$tmpval===0) {
+						    $query0.=$keys[$i]."=null,";
+                        } else {
+						    $query0.=$keys[$i]."=".$tmpval.",";
+                        }
 					}
 					if ($keys[$i]=="phone"||$keys[$i]=="fax") $tels1[]=$tmpval;
 				}

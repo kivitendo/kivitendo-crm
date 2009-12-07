@@ -25,14 +25,14 @@
 		}
 		function anschr(A) {
 			if (A==1) {
-				F1=open("showAdr.php?fid={FID}","Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
-			} else {
-				F1=open("showAdr.php?sid="+A,"Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
+				F1=open("showAdr.php?Q={Q}&fid={FID}","Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
+            } else if (A>1) {
+				F1=open("showAdr.php?Q={Q}&sid="+A,"Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
 			}
 		}
 		function notes() {
-                                F1=open("showNote.php?fid={FID}","Notes","width=400, height=400, left=100, top=50, scrollbars=yes");
-                }
+            F1=open("showNote.php?fid={FID}","Notes","width=400, height=400, left=100, top=50, scrollbars=yes");
+        }
 		function vcard(){
 			document.location.href="vcardexp.php?fid={FID}";
 		}

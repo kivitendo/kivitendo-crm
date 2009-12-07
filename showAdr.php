@@ -7,6 +7,8 @@
 	include("inc/UserLib.php");
 	$ALabels=getLableNames();
 	$freitext=$_POST["freitext"];
+    $Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
+    $complete=($_POST["complete"])?"checked":"";
 	if (!$_POST["format"] || empty($_POST["format"])) {
 		$usr=getUserStamm($_SESSION["loginCRM"]);
 		$etikett=($usr["etikett"])?$usr["etikett"]:$ALabels[0]["id"];
@@ -17,6 +19,8 @@
 		$etikett=$_POST["format"];
 	}
 	if ($_GET["pid"]) {
+        $anredenFrau = getCpAnredenGeneric('female');
+        $anredenHerr = getCpAnredenGeneric('male');
 		$dest="pid=".$_GET["pid"];
 		$data=getKontaktStamm($_GET["pid"]);
 		$id=$_GET["pid"];
@@ -28,23 +32,31 @@
 			if (!$data2) $data2=getFirmenStamm($data["cp_cv_id"],true,"V");
 			$firma=$data2["name"];
 		}
-		$anrede=$data["cp_greeting"];
-		$title=$data["cp_title"];
+        if ($data["language_id"]) {
+            if ($data["cp_gender"]=="m") {
+	            $anrede = $anredenHerr[$data["language_id"]]; 
+            } else { 
+	            $anrede = $anredenFrau[$data["language_id"]]; 
+            }
+        } else {
+            $anrede = ($data["cp_gender"]=="m")?"Herr":"Frau";
+        }
+		$titel=$data["cp_title"];
 		$name=$data["cp_givenname"]." ".$data["cp_name"];
 		$name1=$data["cp_name"];
 		$name2=$data["cp_givenname"];
-		$strasse=$data["cp_street"];
-		$land=$data["cp_country"];
-		$plz=$data["cp_zipcode"];
-		$ort=$data["cp_city"];
-		$telefon=$data["cp_phone1"];
+		$strasse=(!$data["cp_street"] && $complete)?$data2["street"]:$data["cp_street"];
+		$land=(!$data["cp_country"] && $complete)?$data2["country"]:$data["cp_country"];
+		$plz=(!$data["cp_zipcode"] && $complete)?$data2["zipcode"]:$data["cp_zipcode"];
+		$ort=(!$data["cp_city"] && $complete)?$data2["city"]:$data["cp_city"];
+		$telefon=(!$data["cp_phone1"] && $complete)?$data2["phone1"]:$data["cp_phone1"];
 		$fax=$data["cp_fax"];
 		$email=$data["cp_email"];
 		$kontakt="";
 	} else if ($_GET["sid"]) {
 		$id=$_GET["sid"];
 		$dest="sid=".$_GET["sid"];
-		$data=getShipStamm($_GET["sid"]);
+		$data=getShipStamm($_GET["sid"],$Q,$_POST["complete"]);
 		//$anrede="Firma";
 		if ($data) {
 			$anrede=$data ["shiptogreeting"];
@@ -58,40 +70,19 @@
 			$telefon=$data["shiptophone"];
 			$fax=$data["shiptofax"];
 			$email=$data["shiptoemail"];
-		} else {
-			$data=getFirmenStamm($_GET["sid"],true,"C");
-			if ($data["name"]=="") $data=getFirmenStamm($_GET["sid"],true,"V");
-			$name=$data ["name"];
-			$name2=$data["department_1"];
-			$kontakt=$data ["contact"];
-			$strasse=$data ["street"];
-			$land=$data ["country"];
-			$plz=$data["zipcode"];
-			$ort=$data["city"];
-			$telefon=$data["phone"];
-			$fax=$data["fax"];
-			$email=$data["email"];
-			$kdnr=$data["customernumber"];
-		}
+		} 
 		$name1=$name;
 	} else {
-		if ($_GET["fid"]) {
-			$id=$_GET["fid"];
-			$dest="fid=".$_GET["fid"];
-			$data=getFirmenStamm($_GET["fid"],true,"C");
-		} else if ($_GET["lid"]) {
-			$id=$_GET["lid"];
-			$dest="lid=".$_GET["lid"];
-			$data=getFirmenStamm($_GET["lid"],true,"V");
-		}
-		//$anrede="Firma";
-		$anrede=$data ["greeting"];
+		$id=$_GET["fid"];
+		$dest="fid=".$_GET["fid"];
+		$data=getFirmenStamm($_GET["fid"],true,$Q);
+		$anrede=$data["greeting"];
 		$name=$data ["name"];
 		$name1=$name;
 		$name2=$data["department_1"];
-		$kontakt=$data ["contact"];
-		$strasse=$data ["street"];
-		$land=$data ["country"];
+		$kontakt=$data["contact"];
+		$strasse=$data["street"];
+		$land=$data["country"];
 		$plz=$data["zipcode"];
 		$ort=$data["city"];
 		$telefon=$data["phone"];
@@ -101,7 +92,7 @@
 	}
 	$label=getOneLable($etikett);
 	if ($_POST["print"]) {
-		$platzhalter=array("ANREDE"=>"anrede","TITEL"=>"title","TEXT"=>"freitext",
+		$platzhalter=array("ANREDE"=>"anrede","TITEL"=>"titel","TEXT"=>"freitext",
 				   "NAME"=>"name","NAME1"=>"name1","NAME2"=>"name2",
 				   "STRASSE"=>"strasse","PLZ"=>"plz","ORT"=>"ort","LAND"=>"land",
 				   "KONTAKT"=>"kontakt","FIRMA"=>"firma","ID"=>"id","KDNR"=>"kdnr",
@@ -160,14 +151,15 @@
 <body>
 <form name='form' method='post' action='showAdr.php'>
 <input type="hidden" name="src" value="<?= $dest ?>">
+<input type="hidden" name="Q" value="<?= $Q ?>">
 <p class="norm">
 Anschrift<br><hr>
-	<?=  ($firma)?"Firma ".$firma."<br><br>":"" ?>
+	<?= ($firma)?"Firma ".$firma."<br><br>":"" ?>
 	<?= $anrede ?> <?= $title ?><br>
-	<?= $name ?><br>
-	<?=  ($name2)?$name2."<br>":"" ?>
-	<?=  ($kontakt)?$kontakt."<br>":"" ?>
-	<?=  $strasse ?><br><br>
+    <?= $name ?><br>
+	<?= (!$_GET["pid"] && $name2)?"$name2<br>":"" ?>
+	<?= ($kontakt)?$kontakt."<br>":"" ?>
+	<?= $strasse ?><br><br>
 	<?= ($land<>"")?$land." - ":"" ?>
 	<?= $plz ?> <?= $ort ?><br>
 </p>
@@ -175,6 +167,9 @@ Anschrift<br><hr>
 	<input type="text" name="freitext" size="25" value="<?= $freitext ?>">
 	<hr>
 	<table>
+<? if ($_GET["pid"] or $_GET["sid"]) { ?>
+        <tr><td colspan="2">Daten aus Hauptanschrift erg&auml;nzen <input type="checkbox" name="complete" value="1" <?= $complete ?>></TD></tr>
+<? } ?>
 		<tr><td>Etikett&nbsp;</td>
 			<td>
 				<select name='format' >
@@ -182,11 +177,11 @@ Anschrift<br><hr>
 					<option value='<?= $data["id"]?>'<?= ($data["id"]==$etikett)?" selected":"" ?>><?= $data["name"] ?>
 
 <?	} ?>
-				</select>&nbsp;<input type='submit' name='chfrm' value='wechseln'><br><br> 
+				</select>&nbsp;<input type='submit' name='chfrm' value='Ansicht erneuern'>
 			</td>
 		</tr>
 		<tr>
-			<td>
+			<td><br> 
 <?	$sel="checked";
 	for ($y=1; $y<=$label["ny"];$y++) {
 		echo "\t\t\t\t";
@@ -199,6 +194,7 @@ Anschrift<br><hr>
 ?>
 			</td>
 			<td>
+                <br />
 				<input type='submit' name='print' value='erzeugen'></form><br><br>
 				<a href="javascript:self.close()">schlie&szlig;en</a>
 				<script language='JavaScript'>self.focus();</script>

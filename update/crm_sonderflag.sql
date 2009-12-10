@@ -6,6 +6,8 @@ CREATE TABLE sonderflag (
     skey text,
     sorder int
 );
+ALTER TABLE sonderflag ADD  primary key (svalue);
+ALTER TABLE sonderflag ADD CONSTRAINT benutzereingabe unique (skey);
 
 -- @php: *
 $i=1;

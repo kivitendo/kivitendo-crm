@@ -140,7 +140,7 @@ global $ERPNAME;
 	if(!$rs) {
 		return false;
 	} else {
-		if ($rs) {
+	//	if ($rs) { //ist schon oben abgefangen jb 09.12.09
 	        $tmp = @file_get_contents("../".$ERPNAME."/config/lx-erp.conf");
 	        preg_match("/dbcharset[\s]*=[\s]*'(.+)';/",$tmp,$hits);
 	        $charset=$hits[1];
@@ -156,10 +156,15 @@ global $ERPNAME;
 			$sql="select * from defaults";
 			$rs=$_SESSION["db"]->getAll($sql);
 			$_SESSION["ERPver"]=$rs[0]["version"];
+			$_SESSION["countries"] = array(array('',''));
+			$sql="select id,country from countries";
+			$rs=$_SESSION["db"]->getAssoc($sql);
+			$_SESSION["countries"] = $rs;
+			$_SESSION["countries"] = array(0=>'') + $_SESSION["countries"];	//unshift_array mit beibehaltung der schlüssel
 			return true;
-		} else {
+/*		} else {
 			return false;
-		}
+		}*/
 	}
 }
 

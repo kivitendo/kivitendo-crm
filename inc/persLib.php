@@ -133,7 +133,7 @@ global $db;
 		// Array zu jedem Formularfed: 1 == toUpper
         /* Änderung 29.6.2009 cp_greeting rausgeworfen und cp_gender eingefügt. Hinweis für Holger cp_gender kommt aus Tabelle 0 ;-)  jb*/
 	   	$dbfld=array("cp_name" => 1,"cp_givenname" => 1,"cp_gender" => 0,"cp_title" => 1,
-					"cp_street" => 1,"cp_zipcode" => 0,"cp_city" => 1,"cp_country" => 0,
+					"cp_street" => 1,"cp_zipcode" => 0,"cp_city" => 1,"cp_country" => 0, "country" => 0,
 					"cp_phone1" => 0,"cp_phone2" => 0,"cp_fax" => 0,
 					"cp_homepage" => 1,"cp_email" => 1,
 					"cp_notes" => 1,"cp_stichwort1" => 1,
@@ -149,7 +149,9 @@ global $db;
 			Analog dann die Erweiterung für Kundentyp. Falls keine Personensuche über customer.name gewünscht ist,
 			wird entsprechend die Tabelle customer vorbelegt
 		*/
-		$joinCustomer = " left join customer K on C.cp_cv_id=K.id";	//das ist etwas fies, aber falls kein join über customer, müssen wir entsprechend hier die werte setzen
+		$joinCustomer = " left join customer K on C.cp_cv_id=K.id";	// das ist etwas fies,
+																	// aber falls kein join über customer,
+																	// müssen wir entsprechend hier die werte setzen
 		$joinVendor		= " left join vendor V on C.cp_cv_id=V.id"; //LEERZEICHEN AM ANFANG!! Nerv
 		if ($muster["customer_name"]){	// Falls das Feld Firmenname gefüllt ist
 //	    $joinCustomer 	= " left join customer K on C.cp_cv_id=K.id";	//hier jetzt der left join und die werte oben überschreiben 
@@ -166,12 +168,7 @@ global $db;
 		$daten=false;
 		$tbl0=false;
 		$fuzzy=$muster["fuzzy"];
-    /*
-     * Entsprechend hier die Anpassungen für das Geschlecht jb
-        Brauchen wir nicht mehr hli
-		if ($muster["greeting"]=="H") { $muster["cp_gender"]="m"; }
-		else if ($muster["greeting"]=="F") { $muster["cp_gender"]="f"; };
-    */
+
 		for ($i=0; $i<$anzahl; $i++) {
 			if (in_array($keys[$i],$dbf) && $muster[$keys[$i]]) {
 				if ($dbfld[$keys[$i]]==1)  {
@@ -527,6 +524,13 @@ global $laender;
                 ));
 				$t->parse("Block3","sonder",true);
 			}
+		 $t->set_block("pers1","countries","Block4");
+		 if ($_SESSION["countries"]) foreach ($_SESSION["countries"] as $row) {
+				 $t->set_var(array(
+					country => $row,
+					));
+					$t->parse("Block4","countries",true);
+			}
 }
 
 function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
@@ -642,15 +646,22 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
 				));
 				$t->parse("BlockB","briefanred",true);
 			}
-            $t->set_block("pers1","sonder","Block3");
-            if ($cp_sonder) foreach ($cp_sonder as $row) {
-                $t->set_var(array(
-                    sonder_sel => ($daten["cp_sonder"] & $row["svalue"])?"checked":"",
-                    sonder_id => $row["svalue"],
-                    sonder_key => $row["skey"],
-                ));
-				$t->parse("Block3","sonder",true);
+      $t->set_block("pers1","sonder","Block3");
+      if ($cp_sonder) foreach ($cp_sonder as $row) {
+			$t->set_var(array(
+			  sonder_sel => ($daten["cp_sonder"] & $row["svalue"])?"checked":"",
+              sonder_id => $row["svalue"],
+              sonder_key => $row["skey"],
+          ));
+					$t->parse("Block3","sonder",true);
+			}
+		 $t->set_block("pers1","countries","Block4");
+		if ($_SESSION["countries"]) foreach ($_SESSION["countries"] as $row) {
+			$t->set_var(array(
+				country_sel => ($daten["country"] == $row) ? "selected":"",
+				country => $row,
+			));
+					$t->parse("Block4","countries",true);
 			}
 }
-
 ?>

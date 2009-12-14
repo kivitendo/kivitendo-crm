@@ -1483,11 +1483,12 @@ global $db;
 	$rs1=$db->getAll($sql);
 	$rs=array_merge($rs1,$rs2);
 	$rechng=array();
+    $curr = getCurr();
 	for ($i=11; $i>=0; $i--) {
 		$dat=date("Ym",mktime(0, 0, 0, date("m")-$i, 1 , $jahr));
-		$rechng[$dat]=array("summe"=>0,"count"=>0,"curr"=>"Eur");
+		$rechng[$dat]=array("summe"=>0,"count"=>0,"curr"=>$curr);
 	}
-	$rechng["Jahr  "]=array("summe"=>0,"count"=>0,"curr"=>"Eur");
+	$rechng["Jahr  "]=array("summe"=>0,"count"=>0,"curr"=>$curr);
 	// unterschiedliche Währungen sind noch nicht berücksichtigt. Summe stimmt aber.
 	if ($rs) foreach ($rs as $re){
 		$m=substr($re["transdate"],0,4).substr($re["transdate"],5,2);
@@ -1518,11 +1519,12 @@ global $db;
 	}
 	$rs=$db->getAll($sql);
 	$rechng=array();
+    $curr = getCurr();
 	for ($i=11; $i>=0; $i--) {
 		$dat=date("Ym",mktime(0, 0, 0, date("m")-$i, 1, date("Y")));
-		$rechng[$dat]=array("summe"=>0,"count"=>0,"curr"=>"Eur");
+		$rechng[$dat]=array("summe"=>0,"count"=>0,"curr"=>$curr);
 	}
-	$rechng["Jahr  "]=array("summe"=>0,"count"=>0,"curr"=>"Eur");
+	$rechng["Jahr  "]=array("summe"=>0,"count"=>0,"curr"=>$curr);
 	if ($rs) foreach ($rs as $re){
 		$m=substr($re["transdate"],0,4).substr($re["transdate"],5,2);
 		$rechng[$m]["summe"]+=$re["netamount"];
@@ -1531,6 +1533,23 @@ global $db;
 		$rechng["Jahr  "]["count"]++;
 	}
 	return $rechng;
+}
+
+/****************************************************
+* getCurr
+* out: curr = String
+*****************************************************/
+function getCurr() {
+global $db;
+    $sql="SELECT curr FROM defaults";
+	$rsc=$db->getAll($sql);
+    if ($rsc[0]['curr']) {
+        $curr = split(":",$rsc[0]['curr']);
+        $curr = $curr[0];
+    } else {
+        $curr = "Eur";
+    }
+    return $curr;
 }
 
 /****************************************************

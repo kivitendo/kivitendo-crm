@@ -90,14 +90,14 @@
 					<input type="text" name="cp_country" size="2" maxlength="3" value="{cp_country}" tabindex="6">
 					<input type="text" name="cp_zipcode" size="7" maxlength="7" value="{cp_zipcode}" tabindex="7">
 				</span>
-				<span class="label">Land</span>
+				<!-- span class="label">Land</span>
 				<span class="leftfeld">
 			<select name="country" tabindex="10">
 			<!-- BEGIN countries -->
 				<option value="{country}" {country_sel}>{country}</option>
 			<!-- END countries -->
 			</select>
-				</span>
+				</span -->
 
 			</div>
 			<div class="zeile">

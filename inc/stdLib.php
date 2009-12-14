@@ -156,11 +156,12 @@ global $ERPNAME;
 			$sql="select * from defaults";
 			$rs=$_SESSION["db"]->getAll($sql);
 			$_SESSION["ERPver"]=$rs[0]["version"];
-			$_SESSION["countries"] = array(array('',''));
+			/*$_SESSION["countries"] = array(array('',''));
 			$sql="select id,country from countries";
 			$rs=$_SESSION["db"]->getAssoc($sql);
 			$_SESSION["countries"] = $rs;
 			$_SESSION["countries"] = array(0=>'') + $_SESSION["countries"];	//unshift_array mit beibehaltung der schlüssel
+      */
 			return true;
 /*		} else {
 			return false;

@@ -3,7 +3,7 @@ if (! @include_once('MDB2.php') ) {
 	echo "Konnte das Modul MDB2 nicht laden!<br>";
 	echo "Pr&uuml;fen Sie Ihre Installation:<br>";
 	echo "pear list | grep MDB2<br>";
-	echo "Variable '\$include_path' in der php.ini<br>"; 
+	echo "Variable '\$include_path' in der php.ini<br>";
 	echo "aktueller Wert: ".ini_get('include_path');
 	echo "<br><br><a href='inc/install.php?check=1'>Installations - Check durchf&uuml;hren</a><br>";
 	exit (1);
@@ -24,7 +24,7 @@ class myDB extends MDB2 {
 	* IN: $sql - SQL-Statement
 	* IN: $err - Fehlermeldung
 	* OUT: NONE
-	**********************************************/ 
+	**********************************************/
 	function dbFehler($sql,$err) {
 		$efh=fopen($this->errfile,"a");
 		fputs($efh,date("Y-m-d H:i:s \n"));
@@ -46,7 +46,7 @@ class myDB extends MDB2 {
 	* writelog - Texte in ein Log-File ausgeben
 	* IN: $txt - SQL-Statement oder Text
 	* OUT: NONE
-	**********************************************/ 
+	**********************************************/
 	function writeLog($txt) {
 		if ($this->lfh===false)
 			$this->lfh=fopen($this->logfile,"a");
@@ -66,12 +66,12 @@ class myDB extends MDB2 {
 	function closeLogfile() {
 		fclose($this->lfh);
 	}
-	
+
 	/**********************************************
 	* myDB - Konstruktor
 	* IN: $host,$user,$pwd,$db,$port - Parameter der Datenbank
 	* OUT: DB-Objekt
-	**********************************************/ 
+	**********************************************/
 	function myDB($host,$user,$pwd,$db,$port) {
 		$dsn = array(
                     'phptype'  => 'pgsql',
@@ -87,7 +87,7 @@ class myDB extends MDB2 {
 		$this->db=& MDB2::factory($dsn,$options);
 		if (!$this->db || PEAR::isError($this->db)) {
 			if ($this->log) $this->writeLog('Connect Error: '.$dns);
-			$this->dbFehler('Connect '.print_r($dsn,true),$this->db->getMessage()); 
+			$this->dbFehler('Connect '.print_r($dsn,true),$this->db->getMessage());
 			die ($this->db->getMessage());
 		}
 		$this->db->setFetchMode(MDB2_FETCHMODE_ASSOC);
@@ -99,7 +99,7 @@ class myDB extends MDB2 {
 	* query - beliebiges SQL-Statement absetzen
 	* IN: $sql - Statement
 	* OUT: true/false
-	**********************************************/ 
+	**********************************************/
 	function query($sql) {
 		if (strpos($sql,";")>0) {
 			//Sql-Injection? HTML-Sonderzeichen zulassen
@@ -124,7 +124,7 @@ class myDB extends MDB2 {
 	* IN: $values - dazugehörige Werte
 	* IN: $where - welcher Datensatz
 	* OUT: true/false
-	**********************************************/ 
+	**********************************************/
 	function update($table,$fields,$values,$where) {
 		if (strpos($where,"=")<1) {
 			$this->dbFehler('Update','Where missing or wrong: '.$where);
@@ -161,7 +161,7 @@ class myDB extends MDB2 {
 	* IN: $fields - betroffene Felder
 	* IN: $values - dazugehörige Werte
 	* OUT: true/false
-	**********************************************/ 
+	**********************************************/
 	function insert($table,$fields,$values) {
 		if ($this->log) {
 			$this->writeLog('Insert in: '.$table);
@@ -189,7 +189,7 @@ class myDB extends MDB2 {
 
 	function begin() {
 		if ($this->log) $this->writeLog('BEGIN');
-		return $this->db->beginTransactio();
+		return $this->db->beginTransaction();
 	}
 	function commit() {
 		if ($this->log) $this->writeLog('COMMIT');
@@ -211,6 +211,23 @@ class myDB extends MDB2 {
 			return $this->rc;
 		}
 	}
+	/**
+	 * Holt die Daten als assoziatives Array aus der DB.
+	 * S.a. PEAR::getAssoc
+	 * return mixed, false
+	 */
+  function getAssoc($sql){
+		$this->db->loadModule('Extended');
+
+    $this->rc=$this->db->getAssoc($sql);
+    if ($this->log) $this->writeLog($sql);
+    if(PEAR::isError($this->rc)) {
+				$this->dbFehler($sql,$this->rc->getMessage());
+	      return false;
+    } else {
+				return $this->rc;
+    }
+  }
 
 	function getOne($sql) {
 		$rs = $this->db->queryRow($sql);
@@ -221,13 +238,63 @@ class myDB extends MDB2 {
 		}
 	}
 	function saveData($txt) {
-		//if (get_magic_quotes_gpc()) { 	
-		if (get_magic_quotes_runtime()) { 	
+		//if (get_magic_quotes_gpc()) {
+		if (get_magic_quotes_runtime()) {
 			return $txt;
 		} else {
-			return $this->db->escape($txt); 
+			return $this->db->escape($txt);
 		}
 	}
+	/**
+	 *
+	 * Benutzt PEAR::executeMultiple. Erwartet als
+	 * Zeichenkette das PreparedStatement
+	 * und die entsprechenden Werte für das Statement
+	 * Ist ferner transaktionssicher (autocommit off)
+	 * @param string $statement
+	 * @param mixed $data
+	 *
+	 * @return boolean
+	 */
+	function executeMultiple($statement, $data){
+		$this->db->loadModule('Extended');
+		if (!$this->db->supports('transactions')){
+			exit();
+		}
 
+		if ($this->log) {							//Logging
+			$this->writeLog("executeMultiple: $statement");
+			$this->writeLog("mit den Werten:" . $data);
+			/*foreach($data as $key2=>$value2){
+					foreach($value2 as $key=>$value){
+							$this->writeLog("hier:" . $key . "wert:" . $value);
+					}
+			}*/
+		}
+
+		$sth = $this->db->prepare($statement);						//Prepare
+		if (PEAR::isError($sth)) {
+			$this->dbFehler($sql,$sth->getMessage());
+			$this->rollback();
+			return false;
+		}
+
+		$res =& $this->db->beginTransaction();
+		$res =& $this->db->extended->executeMultiple($sth, $data); 	//Daten senden
+		if ($this->log){
+				$this->writeLog($res);
+		}
+		if (PEAR::isError($res)) {
+				$this->dbFehler($sql,$sth->getMessage());
+				$this->rollback();
+				return false;
+		}else{
+				$res = $this->commit();
+				if ($this->log){
+						$this->writeLog($res);
+				}
+		}
+		return true;
+	}
 }
 ?>

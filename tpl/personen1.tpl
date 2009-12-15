@@ -85,45 +85,54 @@
 		<span class="leftfeld"><input type="text" name="cp_gebdatum" size="12" maxlength="10" value="{cp_gebdatum}" tabindex="16"><span class="klein">TT.MM.JJJJ</span></span>
 	</div>
 	<div class="zeile">
-		<span class="label">Land / Plz</span>
-		<span class="leftfeld">
-			<input type="text" name="cp_country" size="2" maxlength="3" value="{cp_country}" tabindex="6">
-			<input type="text" name="cp_zipcode" size="7" maxlength="7" value="{cp_zipcode}" tabindex="7">
-		</span>
-	</div>
-	<div class="zeile">
-		<span class="label">Ort</span>
-		<span class="leftfeld"><input type="text" name="cp_city" size="27" maxlength="75" value="{cp_city}" tabindex="8"></span>
-		<span class="label">Fax</span>
-		<span class="leftfeld"><input type="text" name="cp_fax" size="27" maxlength="75" value="{cp_fax}" tabindex="17"></span>
-	</div>
-	<div class="zeile">
-		<span class="label">Telefon</span>
-		<span class="leftfeld"><input type="text" name="cp_phone1" size="27" maxlength="75" value="{cp_phone1}" tabindex="9"></span>
-		<span class="label">eMail</span>
-		<span class="leftfeld"><input type="text" name="cp_email" size="27" maxlength="75" value="{cp_email}" tabindex="18"></span>
-	</div>
-	<div class="zeile">
-		<span class="label">Mobiltelefon</span>
-		<span class="leftfeld"><input type="text" name="cp_phone2" size="27" maxlength="75" value="{cp_phone2}" tabindex="10"></span>
-		<span class="label">www</span>
-		<span class="leftfeld"><input type="text" name="cp_homepage" size="27" maxlength="25" value="{cp_homepage}" tabindex="19"></span>
-	</div>
-  <div class="zeile">
-    <span class="label">Firmenname</span>
-    <span class="leftfeld"><input type="text" name="customer_name" size="27" maxlength="75" value="{customer_name}" tabindex="11"></span>
-    <!-- span class="label">Kundentyp</span>
-    <span class="leftfeld"><input type="text" name="business_description" size="27" maxlength="75" value="{business_description}" tabindex="20"></span -->
-  </div>
-	<div class="zeile">
-		<input type="checkbox" name="fuzzy" value="%" checked><span class="klein">Unscharf suchen&nbsp;&nbsp;<b>{Msg}</b></span> <input type="checkbox" name="vendor" checked><span class="klein">Lieferanten</span><input type="checkbox" name="customer" checked><span class="klein">Kunden</span><br>
-		 <input type="checkbox" name="deleted"><span class="klein">gelöschte Ansprechpartner (Kunden und Lieferanten) oder private Adressen</span><br>
-		{Btn1} {Btn3} <input type="submit" class="anzeige" name="suche" value="suchen"> <input type="submit" class="clear" name="reset" value="clear">
-	</div>
-</span>
-<div style="margin-left:2.5em; float:left;   margin-top:3em; border: 0px solid black;">
+				<span class="label">Länder-Kode / Plz</span>
+				<span class="leftfeld">
+					<input type="text" name="cp_country" size="2" maxlength="3" value="{cp_country}" tabindex="6">
+					<input type="text" name="cp_zipcode" size="7" maxlength="7" value="{cp_zipcode}" tabindex="7">
+				</span>
+				<!-- span class="label">Land</span>
+				<span class="leftfeld">
+			<select name="country" tabindex="10">
+			<!-- BEGIN countries -->
+				<option value="{country}" {country_sel}>{country}</option>
+			<!-- END countries -->
+			</select>
+				</span -->
 
-<!-- Gibt es hier die Möglichkeit eine Fallentscheidung zu machen?  Falls sonder dann einblenden:-->
+			</div>
+			<div class="zeile">
+				<span class="label">Ort</span>
+				<span class="leftfeld"><input type="text" name="cp_city" size="27" maxlength="75" value="{cp_city}" tabindex="8"></span>
+				<span class="label">Fax</span>
+				<span class="leftfeld"><input type="text" name="cp_fax" size="27" maxlength="75" value="{cp_fax}" tabindex="17"></span>
+			</div>
+			<div class="zeile">
+				<span class="label">Telefon</span>
+				<span class="leftfeld"><input type="text" name="cp_phone1" size="27" maxlength="75" value="{cp_phone1}" tabindex="9"></span>
+				<span class="label">eMail</span>
+				<span class="leftfeld"><input type="text" name="cp_email" size="27" maxlength="75" value="{cp_email}" tabindex="18"></span>
+			</div>
+			<div class="zeile">
+				<span class="label">Mobiltelefon</span>
+				<span class="leftfeld"><input type="text" name="cp_phone2" size="27" maxlength="75" value="{cp_phone2}" tabindex="10"></span>
+				<span class="label">www</span>
+				<span class="leftfeld"><input type="text" name="cp_homepage" size="27" maxlength="25" value="{cp_homepage}" tabindex="19"></span>
+			</div>
+		  <div class="zeile">
+			<span class="label">Firmenname</span>
+			<span class="leftfeld"><input type="text" name="customer_name" size="27" maxlength="75" value="{customer_name}" tabindex="11"></span>
+			<!-- span class="label">Kundentyp</span>
+			<span class="leftfeld"><input type="text" name="business_description" size="27" maxlength="75" value="{business_description}" tabindex="20"></span -->
+		  </div>
+			<div class="zeile">
+				<input type="checkbox" name="fuzzy" value="%" checked><span class="klein">Unscharf suchen&nbsp;&nbsp;<b>{Msg}</b></span> <input type="checkbox" name="vendor" checked><span class="klein">Lieferanten</span><input type="checkbox" name="customer" checked><span class="klein">Kunden</span><br>
+				 <input type="checkbox" name="deleted"><span class="klein">gelöschte Ansprechpartner (Kunden und Lieferanten) oder private Adressen</span><br>
+				{Btn1} {Btn3} <input type="submit" class="anzeige" name="suche" value="suchen"> <input type="submit" class="clear" name="reset" value="clear">
+			</div>
+		</span>
+		<div style="margin-left:2.5em; float:left;   margin-top:3em; border: 0px solid black;">
+
+		<!-- Gibt es hier die Möglichkeit eine Fallentscheidung zu machen?  Falls sonder dann einblenden:-->
 Attribute: <br>
 <!-- BEGIN sonder -->
 	<input class="klein" type="checkbox" name="cp_sonder[]" value="{sonder_id}"><span class="klein">{sonder_key}</span><br>

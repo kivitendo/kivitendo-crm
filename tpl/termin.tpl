@@ -15,6 +15,11 @@
 		function suchName() {
 			f=open("suchName.php?name="+document.termedit.suchname.value,"Name","width=400,height=200,left=200,top=100");
 		}
+        function saveT() {
+			selall();
+            document.termedit.sichern.value=1;
+            document.termedit.submit();
+        }
         function searchT() {
             tid = document.termedit.caluser.options[document.termedit.caluser.selectedIndex].value;
             document.termedit.uid.value=tid;
@@ -55,10 +60,6 @@
 			}*/
 			showlist("T");
 		}
-		function go() {
-			selall();
-			return true;
-		}
 	//-->
 	</script>
     <script type='text/javascript' src='inc/help.js'></script>
@@ -68,9 +69,10 @@
 <p class="listtop" onClick="help('Termine');">Termine (?)</p>
 <font color="red">{Msg}</font>
 <table>
-<form name="termedit" action="termin.php" method="post" onSubmit="return go()";>
+<form name="termedit" action="termin.php" method="post" >
 <input type="hidden" name="uid" value="{uid}">
 <input type="hidden" name="search" value="">
+<input type="hidden" name="sichern" value="">
 <tr>
 	<td width="*" valign="top">
 
@@ -112,7 +114,7 @@
 			<tr><td colspan="2">
 					<input type="text" name="suchname" size="20" maxlength="25" value=""><input type="button" value=".:search:. .:member:." onClick="suchName()">
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="submit" class="sichern" name="sichern" value=".:save:."></td></tr>
+                        <input type="button" class="sichern" name="sich" value=".:save:." onClick="saveT()"></td></tr>
 			<tr><td colspan="2"><table>
 					<td ><select name="teiln" id="kannusr" size="5">
 <!-- BEGIN User -->
@@ -157,7 +159,7 @@
         </select>
 		<!--input type="button" value="Woche" onClick="showlist('W')">
 		<input type="button" value="Monat" onClick="showlist('M')"-->
-		<iframe src="termlist.php?ansicht={ANSICHT}&datum={DATUM}" name="Termine" style="width:27em; height:30em" marginheight="0" marginwidth="0" align="left">
+		<iframe src="termlist.php?ansicht={ANSICHT}&datum={DATUM}" name="Termine" style="width:29em; height:31em" marginheight="0" marginwidth="0" align="left">
 		<p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>
 		</iframe>
 	</td>

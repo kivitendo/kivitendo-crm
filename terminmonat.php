@@ -12,8 +12,30 @@
 <?
 	list($day,$month,$year)=split("\.",$_GET["datum"]);
 	if (strlen($month)==1) $month="0$month";
-	if ($_GET["fld"]) {
+    if ($_GET["fld"]=="suchfld") {
 ?>
+	function tag(tg) {
+        d = tg.substr(0,2);
+        m = tg.substr(3,2);
+        y = "20" + tg.substr(6,2);
+        y = tg.substr(6,4);
+        for (i=0; i<opener.document.termedit.Tag.length; i++) {
+            if (opener.document.termedit.Tag.options[i].value == d) 
+        		opener.document.termedit.Tag.selectedIndex=i;
+        }
+        for (i=0; i<opener.document.termedit.Monat.length; i++) { 
+            if (opener.document.termedit.Monat.options[i].value == m) {
+        		opener.document.termedit.Monat.selectedIndex=i;
+            }
+        }
+        for (i=0; i<opener.document.termedit.Jahr.length; i++) {
+            if (opener.document.termedit.Jahr.options[i].value == y) 
+        		opener.document.termedit.Jahr.selectedIndex=i;
+        }
+	}
+	function kw(w) {
+	}
+<?  } else if ($_GET["fld"]) { ?>
 	function tag(tg) {
 		opener.document.termedit.<?= $_GET["fld"] ?>.value=tg;
 	}

@@ -151,6 +151,7 @@
 			<input type="submit" class="clear" name="reset" value=".:clear:." tabindex="44"> &nbsp;
 			<input type="button" name="rep" value="Report" onClick="report()" tabindex="45"> &nbsp;
 			<input type="button" name="geo" value="GeoDB" onClick="surfgeo()" tabindex="46" style="visibility:{GEOS}"> &nbsp;
+            <a href="extrafelder.php?owner={Q}0"><img src="image/extra.png" alt="Extras" title="Extras" border="0" /></a>
 			<br>
 			{report}
 	</div>

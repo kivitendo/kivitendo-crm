@@ -12,7 +12,7 @@
 </head>
 <body onLoad="window.resizeTo(850, 520)">
 <center>
-<h2>Bauvorhaben</h2>
+<h2>Bauvorhaben</h2>{msg}
 <h4>Informationen &uuml;ber einen Interessenten der ein Haus bauen m&ouml;chte</h4>
 <form name="extra" action="extrafelder.php" method="post" onSubmit="return checkfelder();">
 <input type="hidden" name="owner" value="{owner}">
@@ -43,6 +43,7 @@
 	<td>Datum der Fertigstellung</td></tr>
 </table>
 <input type="submit" name="save" value="sichern">&nbsp;&nbsp;&nbsp;<input type="button" onClick="self.close();" value="close">
+<input type="submit" name="suche" value="suchen">
 </form>
 </center>
 </body>

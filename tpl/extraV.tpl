@@ -15,6 +15,7 @@
 <h2>Ein Test</h2>
 <form name="test" action="extrafelder.php" method="post" onSubmit="return checkfelder();">
 <input type="hidden" name="owner" value="{owner}">
+<input type="hidden" name="suche" value="">
 <table>
 <tr><td>Name</td><td><input type="text" name="name" size="30" value="{name}"></td></tr>
 <tr><td>Strasse</td><td><input type="text" name="strasse" size="30" value="{strasse}"></td></tr>
@@ -34,6 +35,7 @@
 
 </table>
 <input type="submit" name="save" value="sichern">
+<input type="button" name="such" value="suchen" onClick="document.test.suche.value=1; submit()">
 </form>
 </center>
 </body>

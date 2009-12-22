@@ -1864,11 +1864,13 @@ global $db;
 	return $ids;
 }
 
-function searchTermin($suche,$TID=0) {
+function searchTermin($suche,$von,$bis,$TID=0) {
 global $db;
     $grp=getGrp($_SESSION["loginCRM"],true);
     $sql="select distinct id from termine D left join terminmember M on M.termin=D.id  where ";
-    $sql.="upper(cause) like '%".strtoupper($suche)."%'";
+    $sql.="cause ilike '%$suche%'";
+    if ($von) $sql .= " and start >= '".date2db($von)."%'";
+    if ($bis) $sql .= " and stop <= '".date2db($bis)."%'";
 	if ($TID>0) $sql.=" and member=$TID";
 	//if ($grp) $sql.=" and (M.member in $grp)";
 	$rs=$db->query($sql);
@@ -1876,7 +1878,6 @@ global $db;
 		$ids[]=array("id"=>$row["id"]);
 	}
 	return $ids;
-    
 }
 
 /****************************************************

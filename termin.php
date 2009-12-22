@@ -23,7 +23,8 @@
 		}
 	}
     if ($_POST["search"]<>"") {
-        $rs = searchTermin($_POST["search"],($_POST["uid"]>0)?$_POST["uid"]:0);
+        $_POST["search"] = strtr($_POST["search"],"*","%");
+        $rs = searchTermin($_POST["search"],$_POST["vondat"],$_POST["bisdat"],($_POST["uid"]>0)?$_POST["uid"]:0);
         if (count($rs)>0) {
             $rc=true;
             $ts="S";
@@ -71,7 +72,7 @@
 	if (!$Tag) $Tag=date("d");
 	if (!$Monat)$Monat=date("m");
 	if (!$Jahr) $Jahr=date("Y");
-	if (!$data["vondat"]) $data["vondat"]="$Tag.$Monat.$Jahr";
+	if (!$data["vondat"] and !$emptyVon) $data["vondat"]="$Tag.$Monat.$Jahr";
 	$t = new Template($base);
 	$t->set_file(array("term" => "termin.tpl"));
 	$t->set_block("term","User","Block");

@@ -34,6 +34,7 @@ $typcol["X"]="#fa05ff";
 define("FPDF_FONTPATH","/usr/share/fpdf/font/");
 define("FONTART","2");
 define("FONTSTYLE","1");
+$emptyVon = True;
 $logmail=true;
 $jcalendar=true;
 $listLimit=20000;

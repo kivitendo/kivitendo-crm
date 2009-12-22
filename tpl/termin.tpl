@@ -136,7 +136,7 @@
 	</td>
 	<td width="20px"></td>
 	<td width="28em" class="li">
-        <a href="#" title='Bisdatum' onClick="kal('suchfld')" ><img src='image/date.png' align='middle' border="0"></a>
+        <a href="#" title='suchfld' onClick="kal('suchfld')" ><img src='image/date.png' align='middle' border="0"></a>
 				<select name="Tag" style="width:44px">
 <!-- BEGIN Tage -->
 			<option value="{TV}"{TS}>{TK}</option>

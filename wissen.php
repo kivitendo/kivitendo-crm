@@ -16,6 +16,20 @@
 		$catinput.="<input type='image' src='image/save_kl.png' title='.:save:.' name='savecat' value='ok'><br>";
 	} else if ($_POST["savecat"]) {
 		$rc=insWCategorie($_POST);
+	} else if ($_POST["suche"]) {
+        $kat = explode(",",$_POST["kat"]);
+        $treffer  = suchWDB($_POST["wort"],$kat[0]);
+        $notfound="";
+        if (count($treffer)==0) {
+            $notfound="not found";    
+        } else if (count($treffer)==1) {
+            header ("location:wissen.php?kdhelp=1&m=".$treffer[0]["id"]);
+        } else {
+            $tmp = "[<a href='wissen.php?kdhelp=1&m=%s' class=''>%s</a>]<br />\n";
+            foreach ($treffer as $line) {
+                $WDtreffer .= sprintf($tmp,$line["id"],$line["name"]);
+            }
+        }
 	} else if ($_POST["editcat"] && $tmp[0]<>"" ) {
 		$catname=getOneWCategorie($tmp[0]);
 		$catinput="<input type='hidden' name='cid' value='".$tmp[0]."'>";
@@ -144,7 +158,17 @@ function Thread($HauptGrp,$t,$m,&$tpl)    {
 		button1 => $button,
 		button2 => ($content["version"]>1)?"<input type='image' src='image/history_kl.png' title='History' name='history' value='History'>":"",
 		catinput => $catinput,
-		tiny => $tiny
+		tiny => $tiny,
 		));
+    if ($_POST["suche"]) $tpl->set_var(array(
+		notfound => $notfound,
+		headline => "Trefferliste",
+		pre => "",
+		post =>  "",
+		button1 => "",
+		button2 => "",
+        content => $WDtreffer,
+		));
+
 	$tpl->Lpparse("out",array("wi"),$_SESSION["lang"],"work");
 ?>

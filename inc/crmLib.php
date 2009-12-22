@@ -2472,7 +2472,27 @@ global $db;
 	$rs=$db->getAll($sql);
 	return $rs;
 }
+/**
+ * TODO: short description.
+ * 
+ * @param mixed $wort 
+ * @param mixed $kat  
+ * 
+ * @return TODO
+ */
 
+/****************************************************
+* suchWDB
+* in: wort = string, kat = int
+* out: array
+* 
+*****************************************************/
+function suchWDB($wort,$kat) {
+global $db;
+    $sql = "SELECT WK.* from wissencontent WC left join wissencategorie WK on WC.categorie=WK.id where content ilike '%".trim($wort)."%'";
+	$rs=$db->getAll($sql);
+	return $rs;
+}
 /****************************************************
 * diff
 * in: text1,text2 = string

@@ -20,6 +20,11 @@
 		<span> .:newcat:. <br>.:below:. &quot;<b>{catname}</b>&quot;</span>
 		<input type="image" src="image/neu.png" name="newcat" title=".:newcat:." value=".:create:." align="middle">
 		<input type="image" src="image/edit_kl.png" name="editcat" title=".:editcat:." value=".:edit:." align="middle">
+        <br />
+       <form name="wdb" action="wissen.php" method="post">
+        <input type="hidden" name="kat" value="{m}">
+        <input type="text" name="wort" value="{notfound}"><input type="submit" name="suche" value="suche">
+        <form>
 	</div>
 	<div style="float:left; width:65%; text-align:left; border: 0px solid blue; padding-left: 10px;" >
 		{headline}<br />

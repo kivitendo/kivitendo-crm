@@ -207,11 +207,11 @@
 		</div>
 		<div style="width:35em;" class="klein">
 		<table class="normal">
-		<tr><td>.:variables:.:   </td><td><div class="value"><a href='#' onClick="showVar();">{variablen}</a></div></td></tr>
-		<tr><td>.:Checkbox:.:   </td><td><div class="value">{sonder} </div></td></tr>
-		<tr><td>.:Industry:.:    </td><td><div class="value">{branche}</div></td></tr>
-		<tr><td>.:Catchword:.: </td><td><div class="value">{sw}     </div></td></tr>
-		<tr><td valign="top">.:Remarks:.:</td><td><div class="value">{notiz}  </div></td></tr>
+		<tr><td class="labelLe">.:variables:.:   </td><td><div class="value"><a href='#' onClick="showVar();">{variablen}</a></div></td></tr>
+		<tr><td class="labelLe">.:Checkbox:.:   </td><td><div class="value">{sonder} </div></td></tr>
+		<tr><td class="labelLe">.:Industry:.:    </td><td><div class="value">{branche}</div></td></tr>
+		<tr><td class="labelLe">.:Catchword:.: </td><td><div class="value">{sw}     </div></td></tr>
+		<tr><td class="labelLe" valign="top">.:Remarks:.:</td><td><div class="value">{notiz}  </div></td></tr>
 		</table>
 		</div>
 	</span>	
@@ -279,7 +279,7 @@
 			<span class="labelLe">.:bankname:.:</span>
 			<span class="value">{bank}</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
-			<span class="space">.:directdebit:.:</span><span class="value">{directdebit}</span>
+			<span class="labelLe">.:directdebit:.:</span><span class="value">{directdebit}</span>
 		</div>
 		<div  class="zeile klein">
 			<span class="labelLe">.:bankcode:.:</span>

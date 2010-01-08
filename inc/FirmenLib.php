@@ -870,7 +870,9 @@ global $xajax,$GEODB,$BLZDB;
 			$t->parse("BlockR","anchen",true);
 		}
 		if (!$suchmaske) {
-			$shiptos=getAllShipto($daten["id"],$tpl);
+      if (isset($daten["id"])){		//beim Neuanlegen nicht überprüfen ...
+        $shiptos=getAllShipto($daten["id"],$tpl);
+      }
 			$t->set_block("fa1","shiptos","BlockST");
 			if ($shiptos) foreach ($shiptos as $ship) {
 				$t->set_var(array(

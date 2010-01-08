@@ -59,7 +59,7 @@ function translate($word,$file) {
 function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
 	global $ERPNAME;
 	$db=new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
-	$sql="select sc.session_id,u.id from auth.session_content sc left join auth.user u on ";
+	$sql="select sc.session_id,u.id from auth.session_content sc left join auth.\"user\" u on ";
 	$sql.="u.login=sc.sess_value left join auth.session s on s.id=sc.session_id ";
 	$sql.="where session_id = '$cookie' and sc.sess_key='login'";// order by s.mtime desc";
 	$rs=$db->getAll($sql,"authuser_0");
@@ -77,7 +77,7 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
 		$db->query($sql2,"authuser_B");
 		$sql3="insert into session ";*/
 	}
-	$sql="select * from auth.user where id=".$rs[0]["id"];
+	$sql="select * from auth.\"user\" where id=".$rs[0]["id"];
 	$rs1=$db->getAll($sql,"authuser_1");
 	if (!$rs1) return false;
 	$auth=array();

@@ -166,39 +166,39 @@ global $db;
 			$shipids="";
 		}
 		if (!$rs3[0]) {  // es ist keine abweichende Anschrift da
-			if ($ws) {	// soll dann aber mit Re-Anschrift gef�llt werden
+			if ($ws) {	// soll dann aber mit Re-Anschrift gefüllt werden
 				$row2=Array(
-					shiptoname => $row["name"],
-					shiptodepartment_1 => $row["department_1"],
-					ship>todepartment_2 => $row["department_2"],
-					shiptostreet => $row["street"],
-					shiptozipcode => $row["zipcode"],
-					shiptocity => $row["city"],
-					shiptocountry => $row["country"],
-					shiptobundesland => $row["bundesland"],
-					shiptocontact => "",
-					shiptophone => $row["phone"],
-					shiptofax => $row["fax"],
-					shiptoemail => $row["email"],
-					shiptocountry => $row["country"],
-					shipto_id => -1
+					'shiptoname' => $row["name"],
+					'shiptodepartment_1' => $row["department_1"],
+					'shiptodepartment_2' => $row["department_2"],
+					'shiptostreet' => $row["street"],
+					'shiptozipcode' => $row["zipcode"],
+					'shiptocity' => $row["city"],
+					'shiptocountry' => $row["country"],
+					'shiptobundesland' => $row["bundesland"],
+					'shiptocontact' => "",
+					'shiptophone' => $row["phone"],
+					'shiptofax' => $row["fax"],
+					'shiptoemail' => $row["email"],
+					'shiptocountry' => $row["country"],
+					'shipto_id' => -1
 				);
 			} else {  // leeres Array bilden
 				$row2=Array(
-					shiptoname => "",
-					shiptodepartment_1 => "",
-					shiptodepartment_2 => "",
-					shiptostreet => "",
-					shiptozipcode => "",
-					shiptocity => "",
-					shiptocountry => "",
-					shiptobundesland => "",
-					shiptocontact => "",
-					shiptophone => "",
-					shiptofax => "",
-					shiptoemail => "",
-					shiptocountrycountry => "",
-					shipto_id => ""
+					'shiptoname' => "",
+					'shiptodepartment_1' => "",
+					'shiptodepartment_2' => "",
+					'shiptostreet' => "",
+					'shiptozipcode' => "",
+					'shiptocity' => "",
+					'shiptocountry' => "",
+					'shiptobundesland' => "",
+					'shiptocontact' => "",
+					'shiptophone' => "",
+					'shiptofax' => "",
+					'shiptoemail' => "",
+					'shiptocountrycountry' => "",
+					'shipto_id' => ""
 				);
 			}
 		} else {
@@ -815,7 +815,7 @@ global $xajax,$GEODB,$BLZDB;
 		if ($kdtyp) foreach ($kdtyp as $row) {
 			$t->set_var(array(
 				Bid => $row["id"],
-				Bsel => ($row["id"]==$daten["business_id"])?"selected":"",
+				Bsel => '', //($row["id"]==$daten["business_id"])?"selected":"",
 				Btype => $row["description"]
 			));
 			$t->parse("BlockT","TypListe",true);

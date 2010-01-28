@@ -119,7 +119,7 @@ CREATE TABLE termdate (
 	kw integer,
 	tag character(2),
 	monat character(2),
-    idx integer,
+    idx integer
 );
 
 CREATE TABLE custmsg (

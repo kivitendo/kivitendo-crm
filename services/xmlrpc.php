@@ -1,48 +1,89 @@
 <?php
-    /**************************************************************************\
-    * This file was originaly written by Jan Dierolf (jadi75@gmx.de)           *
-    * ------------------------------------------------------------------------ *
-    *  This program is free software; you can redistribute it and/or modify it *
-    *  under the terms of the GNU General Public License as published by the   *
-    *  Free Software Foundation; either version 2 of the License, or (at your  *
-    *  option) any later version.                                              *
-    \**************************************************************************/
+	/**************************************************************************\
+	* eGroupWare xmlrpc server                                                 *
+	* http://www.egroupware.org                                                *
+	* This file written by Miles Lott <milos@groupwhere.org>                   *
+	* --------------------------------------------                             *
+	*  This program is free software; you can redistribute it and/or modify it *
+	*  under the terms of the GNU General Public License as published by the   *
+	*  Free Software Foundation; either version 2 of the License, or (at your  *
+	*  option) any later version.                                              *
+	\**************************************************************************/
 
-    require_once('./header.inc.php');
+	/* $Id: xmlrpc.php 20295 2006-02-15 12:31:25Z  $ */
+	/* $Source$ */
+	/*list($usec, $sec) = explode(" ", microtime());
+    $GLOBALS["logfile"]=fopen("/tmp/egwx.log","w");
+	$GLOBALS['concisus']['script_start'] = ((float)$usec + (float)$sec);*/
 
-    require_once('inc/class.xmlrpcserver.inc.php');
-    require_once('inc/class.xpcegwcontacts.inc.php');
-    
-    
+	$GLOBALS['egw_info'] = array();
+	$GLOBALS['egw_info']['flags'] = array(
+		'currentapp'            => 'login',
+		'noheader'              => True,
+		'disable_Template_class' => True
+	);
+    fputs($GLOBALS["logfile"],print_r($GLOBALS,true)."\n");
+	include('header.inc.php');
 
-    $server = XMLRPCServer::instance();
-    // check date format
-    $isodate = isset($headers['isoDate']) ? $headers['isoDate'] : $headers['isodate'];
-    $isodate = ($isodate == 'simple') ? True : False;
-    // set date format
-    $server->setSimpleDate($isodate);
-    
-    // verify incoming user
-    $server->authed = verifyuser();
-    if(!$server->authed) {
-        Logger::log(M_SERVICES, L_DEBUG3, "Request without, userdata -> allow only system services",__FILE__,__LINE__);
-        $server->doSystemService();
-        Logger::log(M_SERVICES, L_INFO, "*** service finished ***",__FILE__,__LINE__);
-        return;     
-    }
+	//viniciuscb: a secure way to know if we're in a xmlrpc call...
+	$GLOBALS['egw_info']['server']['xmlrpc'] = true;
 
-    Logger::log(M_SERVICES, L_DEBUG3, 'Login: '. $_SESSION['employee']. ', password: '. $_SESSION['password']. ', auth='. ($server->authed ? 'true' : 'false'),__FILE__,__LINE__);
-    
+	$server = CreateObject('phpgwapi.xmlrpc_server');
 
-    // create contact service handler based on kaddressbook <=> egroupware interface
-    $xmlrpccontacts = new XPCEGWContacts($_SESSION['db'], $_SESSION['loginCRM']);
+	/* uncomment here if you want to show all of the testing functions for compatibility */
+	//include(EGW_API_INC . '/xmlrpc.interop.php');
 
-    // add service to the server
-    $server->addService($xmlrpccontacts->get_rpc_list());
-    // handle service request
-    $server->doService();
-    Logger::log(M_SERVICES, L_INFO, "*** service finished ***",__FILE__,__LINE__);
+	if (!$GLOBALS['egw_info']['server']['xmlrpc_enabled'])
+	{
+		$server->xmlrpc_error(9999,'xmlrpc service is not enabled in the eGroupWare system configuration');
+		exit;
+	}
 
+	/* Note: this command only available natively in Apache (Netscape/iPlanet/SunONE in php >= 4.3.3) */
+	if(!function_exists('getallheaders'))
+	{
+		function getallheaders()
+		{
+			settype($headers,'array');
+			foreach($_SERVER as $h => $v)
+			{
+				if(ereg('HTTP_(.+)',$h,$hp))
+				{
+					$headers[$hp[1]] = $v;
+				}
+			}
+			return $headers;
+		}
+	}
+	$headers = getallheaders();
 
+	//print_r($headers);
+	$isodate = $headers['isoDate'] ? $headers['isoDate'] : $headers['isodate'];
+	$isodate = ($isodate == 'simple') ? True : False;
+	$server->setSimpleDate($isodate);
+	$auth_header = $headers['Authorization'] ? $headers['Authorization'] : $headers['authorization'];
 
+	if(eregi('Basic *([^ ]*)',$auth_header,$auth))
+	{
+		list($sessionid,$kp3) = explode(':',base64_decode($auth[1]));
+		//echo "auth='$auth[1]', sessionid='$sessionid', kp3='$kp3'\n";
+	}
+	else
+	{
+		$sessionid = get_var('sessionid',array('COOKIE','GET'));
+		$kp3 = get_var('kp3',array('COOKIE','GET'));
+	}
+	$server->authed = $GLOBALS['egw']->session->verify($sessionid,$kp3);
+
+	if (!$server->authed and isset($_SERVER['PHP_AUTH_USER']) and isset($_SERVER['PHP_AUTH_PW']))
+	{
+		$authed = $GLOBALS['egw']->session->create($login.'@'.$domain, $_SERVER['PHP_AUTH_PW'], 'text');
+
+		if ($authed)
+		{
+			$server->authed = true;
+		}
+	}
+
+	$server->service($_SERVER['HTTP_RAW_POST_DATA']);
 ?>

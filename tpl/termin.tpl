@@ -108,7 +108,14 @@
 		                 <input type="button" class="anzeige" value=".:search:." onClick="searchT()"><br />
                          <!--input type="submit" class="anzeige" name="search" value=".:search:."><br /-->
 						<span class="mini">.:cause:.</span></td></tr>
-			<tr><td colspan="2">.:private date:. <input type="checkbox" name="privat" value="1" {CHKPRIVAT}> </td></tr>
+			<tr>
+                <td>.:private date:.: </td> 
+                <td><input type="checkbox" name="privat" value="1" {CHKPRIVAT}> .:categorie:.: <select name="kategorie">
+<!-- BEGIN Kat -->
+						<option value="{catid}"{catsel}>{catname}</option>
+<!-- END Kat -->
+                    </select>
+            </tr>
 			<tr><td colspan="2"><textarea name="lang" cols="40" rows="4">{LANG}</textarea>
 						<br><span class="mini">.:remarks:.</span>
 			<tr><td colspan="2">

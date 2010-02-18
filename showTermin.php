@@ -13,7 +13,7 @@
     if ($data["uid"]==$_SESSION["loginCRM"]) $edit = true;
 	$links="";
 	if ($usr) foreach ($usr as $row) {
-		if (substr($row["uid"],0,1)<>"G" and $row["uid"]<>"E".$_SESSION["loginCRM"]) {
+		if (substr($row["uid"],0,1)<>"f" and $row["uid"]<>"E".$_SESSION["loginCRM"]) {
 			$user[]=$row["uid"];
 		} else if ($row["uid"]=="E".$_SESSION["loginCRM"]) {
              $edit = true;
@@ -25,7 +25,11 @@
 			if (substr($row["id"],0,1)=="C") { $tmp="firma1.php?Q=C&id=".substr($row["id"],1); }
 			else if (substr($row["id"],0,1)=="V") { $tmp="firma1.php?Q=V&id=".substr($row["id"],1); }
 			else if (substr($row["id"],0,1)=="P") { $tmp="kontakt.php?id=".substr($row["id"],1); }
-			$links.="[<a href='#' onClick='openstamm(\"$tmp\")'>".(($row["name"])?$row["name"]:$row["login"])."</a>] &nbsp; \n";
+            if (substr($row["id"],0,1)=="G") {  
+                $links.="(".$row["name"].")&nbsp;";
+            } else {
+			    $links.="[<a href='#' onClick='openstamm(\"$tmp\")'>".(($row["name"])?$row["name"]:$row["login"])."</a>] &nbsp; \n";
+            }
 		}
 	}
 	list($tt,$mm,$yy)=split("\.",$data["starttag"]);

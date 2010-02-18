@@ -9,12 +9,14 @@
 	$ANSICHT="T";
 	$data["ft"]=1;
 	$data["user"][]="E".$_SESSION["loginCRM"];
+    $kategorie = getTermincat(true);
 	if ($_GET["holen"]) {
 		$term=getTerminData($_GET["holen"],$_GET["CUID"]);
 		$data["tid"]=$_GET["holen"]; $data["grund"]=$term["cause"];$data["lang"]=$term["c_cause"];
 		$data["wdhlg"]=$term["repeat"];$data["ft"]=$term["ft"];
 		$data["vondat"]=db2date($term["starttag"]);$data["bisdat"]=db2date($term["stoptag"]);
         $data["privat"]=($term["privat"]=='t')?1:0;
+        $data["kategorie"] = $term["kategorie"];
 		$DATUM=$data["vondat"];
 		$data["von"]=$term["startzeit"];$data["bis"]=$term["stopzeit"];
 		$user=getTerminUser($_GET["holen"]);
@@ -147,6 +149,15 @@
 			JS => ($i==$Jahr)?" selected":""
 		));
 		$t->parse("BlockJ","Jahre",true);
+	}
+	$t->set_block("term","Kat","Block0");
+    foreach ($kategorie as $kat) {
+		$t->set_var(array(
+			catid => $kat["catid"],
+		    catname => $kat["catname"],
+			catsel => ($kat["catid"]==$data["kategorie"])?" selected":""
+		));
+		$t->parse("Block0","Kat",true);
 	}
 	$t->set_block("term","Time1","Block1");
 	$t->set_block("term","Time2","Block2");

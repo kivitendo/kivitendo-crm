@@ -63,5 +63,11 @@ $texts  = array(
   '.:only working days:.'   => 'only working days',
   '.:remarks:.'        => 'Remarks',
   '.:not found:.'    => 'not found',
+  '.:order:.'    => 'Order',
+  '.:name:.'    => 'Description',
+  '.:delete:.'    => 'delete',
+  '.:save:.'    => 'save',
+  '.:categorie termin:.'    => 'Categorie (Termin)',
+  '.:special flag:.'    => 'Special flags',
 );
 ?>

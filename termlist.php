@@ -17,7 +17,6 @@
 		$data=getTermin($day,$month,$year,"T",$_GET["cuid"]);
 		$termdata=array();
 		$tlist=array();
-
 		if ($data) foreach($data as $row) {
 			if (!in_array($row["id"],$tlist)) {
 				if ($row["stoptag"]>"$year-$month-$day" && $row["repeat"]=="0") $row["stopzeit"]="24:00";
@@ -51,7 +50,6 @@
 				$tlist[]=$row["id"];
 			}
 		}
-		//print_r($termdata);
 		$t->set_file(array("term" => "termintag.tpl"));
 		$t1=date("d.m.Y",mktime(0,0,0,$month,$day-1,$year));
 		$t2=date("d.m.Y",mktime(0,0,0,$month,$day+1,$year));
@@ -71,7 +69,11 @@
                     $t->set_var(array(
                         col => "we",
                         zeit => sprintf("%02d:$sq",$i),
-                        text => $termdata["$i:$sq"],
+                        text => $termdata["$i:$sq"],      
+                        /* hier habe ich ein Problem!!!
+                         * Wenn die Benutzer unterschiedliche Squenzen (Zeitabstände) haben,
+                         * werden nicht alle Termine angezeigt
+                        */
                         tid => $termid["$i:$sq"],
                     ));
                     $t->parse("Block","Stunden",true);

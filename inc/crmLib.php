@@ -1770,7 +1770,7 @@ global $db;
 		if ($bis<$von) $bis=$von;
  		//Bisdatum nicht grösser Vondatum, dann biszeit>=vonzeit 
 		if ((($bis==$von) || ($data["wdhlg"]<>"0")) && $data["bis"]<$data["von"] )   $data["bis"]=$data["von"];
-		$sql="update termine set cause='".$data["grund"]."',c_cause='".$data["lang"];
+		$sql="update termine set cause='".$data["grund"]."',kategorie=".$data["kategorie"].",c_cause='".$data["lang"];
 		$sql.="',starttag='".date("Y-m-d",$von)."',stoptag='".date("Y-m-d",$bis)."',startzeit='".$data["von"]."',stopzeit='".$data["bis"]."',";
 		$sql.="repeat=".$data["wdhlg"].",ft='".$data["ft"]."',uid=".$data["uid"].",privat='".(($data["privat"]==1)?'t':'f')."' ";
  		// echtes Datum eintragen, schadet mal nicht und wird künfig verwendet.
@@ -1888,7 +1888,7 @@ global $db;
 *****************************************************/
 function getTerminList($id) {
 global $db;
-	$sql="select id,cause,starttag,stoptag,startzeit,stopzeit from termine where id in ($id)";
+	$sql="select id,cause,starttag,stoptag,startzeit,stopzeit,kategorie from termine where id in ($id)";
 	$rs=$db->getAll($sql);
 	if(!$rs) {
 		return false;

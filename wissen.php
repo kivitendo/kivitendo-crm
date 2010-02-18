@@ -10,13 +10,13 @@
 	}
 	$tmp = split(",",$m);
 	if (!$tmp[0]) $tmp[0]=0;
-	if ($_POST["newcat"]) {
+	if ($_POST["aktion"] == "newcat") {
 		$catinput="<input type='text' size='20' name='catname'><input type='checkbox' name='kdhelp' value='1'> ";
 		$catinput.="<input type='hidden' name='hg' value='".$tmp[0]."'>";
-		$catinput.="<input type='image' src='image/save_kl.png' title='.:save:.' name='savecat' value='ok'><br>";
-	} else if ($_POST["savecat"]) {
+		$catinput.="<image src='image/save_kl.png' title='.:save:.' onClick=\"go('savecat')\"><br>";
+	} else if ($_POST["aktion"] == "savecat") {
 		$rc=insWCategorie($_POST);
-	} else if ($_POST["suche"]) {
+	} else if ($_POST["aktion"]=="suche") {
         $kat = explode(",",$_POST["kat"]);
         $treffer  = suchWDB($_POST["wort"],$kat[0]);
         $notfound="";
@@ -30,19 +30,19 @@
                 $WDtreffer .= sprintf($tmp,$line["id"],$line["name"]);
             }
         }
-	} else if ($_POST["editcat"] && $tmp[0]<>"" ) {
+	} else if ($_POST["aktion"] == "editcat" && $tmp[0]<>"" ) {
 		$catname=getOneWCategorie($tmp[0]);
 		$catinput="<input type='hidden' name='cid' value='".$tmp[0]."'>";
 		$catinput.="<input type='hidden' name='hg' value='".$catname["hauptgruppe"]."'>";
 		$catinput.="<input type='text' size='20' name='catname' value='".$catname["name"]."'>";
 		$catinput.="<input type='checkbox' name='kdhelp' value='1' ".(($catname["kdhelp"]=="t")?"checked":"")."> ";
-		$catinput.="<input type='image' src='image/save_kl.png' title='.:save:.' name='savecat' value='ok'><br>";
+		$catinput.="<image src='image/save_kl.png' title='.:save:.' onClick=\"go('savecat')\"><br>";
 	}
 	$data=getWCategorie();
 	$tpl = new Template($base);
 	$pre=""; $post="";
 	$button="";
-	if ($_POST["savecontent"]) {
+	if ($_POST["aktion"] == "savecontent") {
 		$rc=insWContent($_POST);
 		$content=getWContent($tmp[0]);
 		$contdata=$content["content"];
@@ -50,13 +50,15 @@
 			$datum=substr($content["initdate"],8,2).".".substr($content["initdate"],5,2).".".substr($content["initdate"],0,4);
 			$datum.=" ".substr($content["initdate"],11,2).":".substr($content["initdate"],14,2);
 			$hl=".:vernr:.: ".$content["version"]." .:from:. $datum .:employee:.: ".$content["login"];
-			$button="<input type='image' src='image/edit_kl.png' title='Editieren' name='edit' value='.:edit:.'>";
+		    $button = "<image src='image/edit_kl.png' title='.:edit:.' onClick=\"go('edit')\"><br>";
+			//$button="<input type='image' src='image/edit_kl.png' title='Editieren' name='edit' value='.:edit:.'>";
 		} else {
 			$hl=".:selectarticle:.";
-			$button="<input type='image' src='image/neu.png' title='.:new:. .:article:.'  name='neu' value='.:new:. .:article:.'>";
+		    $button = "<image src='image/neu.png' title='.:new:. .:article:.' onClick=\"go('neu')\"><br>";
+			//$button="<input type='image' src='image/neu.png' title='.:new:. .:article:.'  name='neu' value='.:new:. .:article:.'>";
 		}
 
-	} else if ($_POST["history"]){
+	} else if ($_POST["aktion"] == "history"){
 		$rs=getWHistory($tmp[0]);
 		$cnt=count($rs);
 		if ($cnt>1) {
@@ -66,7 +68,8 @@
 			$content["version"]=$cnt;
 		}
 		if ($rs) {
-			$button="<input type='image' src='image/cancel_kl.png' title='.:normview:.' name='reload' value='Normal'>";
+		    $button = "<image src='image/cancel_kl.png' title='.:normview:.' onClick=\"go('reload')\"><br>";
+			//$button="<input type='image' src='image/cancel_kl.png' title='.:normview:.' name='reload' value='Normal'>";
 			for ($i=0; $i<$cnt; $i++) {
 				$datum=substr($rs[$i]["initdate"],8,2).".".substr($rs[$i]["initdate"],5,2).".".substr($rs[$i]["initdate"],0,4);
 				$datum.=" ".substr($rs[$i]["initdate"],11,2).":".substr($rs[$i]["initdate"],14,2);
@@ -85,24 +88,30 @@
 			$datum=substr($content["initdate"],8,2).".".substr($content["initdate"],5,2).".".substr($content["initdate"],0,4);
 			$datum.=" ".substr($content["initdate"],11,2).":".substr($content["initdate"],14,2);
 			$hl=".:last:. .:vernr:.: ".$content["version"]." .:from:. $datum .:employee:.: ".$content["login"];
-			$button="<input type='image' src='image/edit_kl.png' title='.:edit:.' name='edit' value='.:edit:.'>";
+		    $button = "<image src='image/edit_kl.png' title='.:edit:.' onClick=\"go('edit')\"><br>";
+			//$button="<input type='image' src='image/edit_kl.png' title='.:edit:.' name='edit' value='.:edit:.'>";
 		} else {
 			$hl=".:selectarticle:.";
-			$button="<input type='image' src='image/neu.png' title='.:new:. .:article:.'  name='neu' value='.:new:. .:article:.'>";
+		    $button = "<image src='image/neu.png' title='.:new:. .:article:.' onClick=\"go('neu')\"><br>";
+			//$button="<input type='image' src='image/neu.png' title='.:new:. .:article:.'  name='neu' value='.:new:. .:article:.'>";
 		}
-		if ($_POST["edit"]) {
+		if ($_POST["aktion"] == "edit") {
 			$datum=substr($content["initdate"],8,2).".".substr($content["initdate"],5,2).".".substr($content["initdate"],0,4);
 			$datum.=" ".substr($content["initdate"],11,2).":".substr($content["initdate"],14,2);
 			$hl=".:last:. .:vernr:.: ".$content["version"]." .:from:. $datum .:employee:.: ".$content["login"];
-			$button="<input type='image' src='image/save_kl.png' tilte='.:save:.' name='savecontent' value='.:save:.'>";
-			$button.=" <input type='image' src='image/cancel_kl.png' title='.:escape:.' name='abbruch' value='.:escape:.'>";
+		    $button = "<image src='image/save_kl.png' title='.:save:.' onClick=\"go('savecontent')\"> ";
+		    $button .= "<image src='image/cancel_kl.png' title='.:normview:.' onClick=\"go('reload')\"><br>";
+			//$button="<input type='image' src='image/save_kl.png' tilte='.:save:.' name='savecontent' value='.:save:.'>";
+			//$button.=" <input type='image' src='image/cancel_kl.png' title='.:escape:.' name='abbruch' value='.:escape:.'>";
 			$pre="<textarea id='elm1' name='content' cols='75' rows='18'>";
 			$post="</textarea>";
 		}
-		if ($_POST["neu"]) {
+		if ($_POST["aktion"] == "neu") {
 			$hl=".:new:. .:article:. .:vernr:.: 1 .:from:. ".date("d.m.Y")." .:employee:.: ".$_SESSION["loginCRM"];
-			$button="<input type='image' src='image/save_kl.png' tilte='.:save:.' name='savecontent' value='.:save:.'>";
-			$button.=" <input type='image' src='image/cancel_kl.png' title='.:escape:.' name='abbruch' value='.:escape:.'>";
+		    $button = "<image src='image/save_kl.png' title='.:save:.' onClick=\"go('savecontent')\"> ";
+		    $button .= "<image src='image/cancel_kl.png' title='.:normview:.' onClick=\"go('reload')\"><br>";
+			//$button="<input type='image' src='image/save_kl.png' tilte='.:save:.' name='savecontent' value='.:save:.'>";
+			//$button.=" <input type='image' src='image/cancel_kl.png' title='.:escape:.' name='abbruch' value='.:escape:.'>";
 			$pre="<textarea id='elm1' name='content' cols='75' rows='18'>";
 			$post="</textarea>";
 		}
@@ -156,11 +165,11 @@ function Thread($HauptGrp,$t,$m,&$tpl)    {
 		pre => $pre,
 		post =>  $post,
 		button1 => $button,
-		button2 => ($content["version"]>1)?"<input type='image' src='image/history_kl.png' title='History' name='history' value='History'>":"",
+		button2 => ($content["version"]>1)?"<image src='image/history_kl.png' title='History' onClick=\"go('history')\">":"",
 		catinput => $catinput,
 		tiny => $tiny,
 		));
-    if ($_POST["suche"]) $tpl->set_var(array(
+    if ($_POST["aktion"]=="suche") $tpl->set_var(array(
 		notfound => $notfound,
 		headline => "Trefferliste",
 		pre => "",

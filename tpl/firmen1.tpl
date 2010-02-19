@@ -56,6 +56,10 @@
 <a href="{action}&first=Z" class="fett">Z</a> |
 <a href="{action}&first=~" class="fett">*</a> |</p>
 	<div class="zeile">
+		<span class="label">.:KdNr:.</span>
+		<span class="leftfeld"><input type="text" name="customernumber" size="27" maxlength="15" value="{customernumber}" tabindex="1"></span>
+	</div>
+	<div class="zeile">
 		<span class="label">.:company:.</span>
 		<span class="leftfeld"><input type="text" name="name" size="27" maxlength="75" value="{name}" tabindex="1"></span>
 		<span class="label">.:Industry:.</span>
@@ -132,8 +136,8 @@
 			</select>
 			<input type="text" name="leadsrc" size="5" value="{leadsrc}" tabindex="12">
 		</span>
-		<span class="label">.:KdNr:.</span>
-		<span class="leftfeld"><input type="text" name="customernumber" size="27" maxlength="15" value="{customernumber}" tabindex="32"></span>
+		<span class="label">.:headcount:.</span>
+		<span class="leftfeld"><input type="text" name="headcount" size="7" maxlength="7" value="{headcount}" tabindex="32"></span>
 
 	</div>
 	<div class="zeile">

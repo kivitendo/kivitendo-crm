@@ -160,5 +160,6 @@ $texts  = array(
   '.:none:.'         => 'No',
   '.:back:.'         => 'back',
   '.:allocate:.'     => 'allocate',
+  '.:headcount:.'    => 'Headcount'
 );
 ?>

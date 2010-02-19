@@ -255,6 +255,8 @@
 			<span class="labelLe">.:taxzone:.:</span>
 			<span class="value">{Steuerzone}</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+			<span class="labelLe">.:headcount:.:</span>
+			<span class="value">{headcount}</span>
 		</div>
 		<br />
 		<div  class="zeile klein">

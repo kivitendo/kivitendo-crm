@@ -102,6 +102,7 @@
 			Steuerzone 	=> ($fa["taxzone_id"])?$taxzone[$fa["taxzone_id"]]:$taxzone[0],
 			Taxnumber	=> $fa["taxnumber"],
 			rabatt		=> $rab,
+            headcount   => $fa["headcount"],
 			//terms		=> $fa["terms"],
 			terms		=> ($fa["terms_netto"])?$fa["terms_netto"]:"0",
 			kreditlim	=> sprintf("%0.2f",$fa["creditlimit"]),

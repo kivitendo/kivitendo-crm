@@ -250,25 +250,25 @@ global $db;
 * suchstr
 * in: muster = string
 * out: daten = array
-* Suchstring �ber customer,shipto zusamensetzen
+* Suchstring über customer,shipto zusamensetzen
 *****************************************************/
 function suchstr($muster,$typ="C") {
 	$kenz=array("C" => "K","V" => "L");
 	$tab=array("C" => "customer","V" => "vendor");
 	
-	// Array zu jedem Formularfed: Tabelle (0=cust,1=ship), TabName, toUpper
-	$dbfld=array(name => array(0,1),street => array(0,1),zipcode => array(0,0),
-			city => array(0,1),phone => array(0,0),fax => array(0,0),
-			homepage =>array(0,1),email => array(0,1),notes => array(0,1),
-			department_1 => array(0,1),department_2 => array(0,1),
-			country => array(0,1),typ => array(0,0),sw => array(0,1),
-			language => array(0,0), business_id => array(0,0),
-			ustid => array(0,1), taxnumber => array(0,0), lead => array(0,0),leadsrc => array(0,1),
-			bank => array(0,1), bank_code => array(0,0), account_number => array(0,0),
-			vendornumber => array(0,1),v_customer_id => array(0,0),
-			kundennummer => array(0,0),customernumber => array(0,1),
-			employee => array(0,0), branche => array(0,1));
-	$dbfld2=array(name => "shiptoname", street=>"shiptostreet",ziptocode=>"shiptozipcode",
+	// Array zu jedem Formularfed: 0=String,2=Int
+	$dbfld=array(name => 0, street => 0, zipcode => 0,
+			city => 0, phone => 0, fax => 0,
+			homepage => 0, email => 0, notes => 0,
+			department_1 => 0, department_2 => 0,
+			country => 0, typ => 2, sw => 0,
+			language => 0, business_id => 2,
+			ustid => 0, taxnumber => 0, lead => 2, leadsrc => 0,
+			bank => 0, bank_code => 0, account_number => 0,
+			vendornumber => 0, v_customer_id => 0,
+			kundennummer => 0, customernumber => 0,
+			employee => 2, branche => 0, headcount => 2);
+	$dbfld2=array(name => "shiptoname", street=>"shiptostreet",zipcode=>"shiptozipcode",
 			city=>"shiptocity",phone=>"shiptophone",fax=>"shiptofax",
 			email=>"shiptoemail",department_1=>"shiptodepartment_1",
 			department_2=>"shiptodepartment_2",country=>"shiptocountry");
@@ -282,17 +282,30 @@ function suchstr($muster,$typ="C") {
 	$tmp1=""; $tmp2="";
 	for ($i=0; $i<$anzahl; $i++) {
 		if (in_array($keys[$i],$suchfld) and $muster[$keys[$i]]<>"") {
-			if ($dbfld[$keys[$i]][1]==1) {
-				$case1="upper("; $case2=")";
-				$suchwort=strtoupper(trim($muster[$keys[$i]]));
-			} else {
-				$case1=""; $case2="";
-				$suchwort=trim($muster[$keys[$i]]);
-			}
+            $suchwort=trim($muster[$keys[$i]]);
 			$suchwort=strtr($suchwort,"*?","%_");
-			$tmp1.="and $case1 ".$kenz[$typ].".".$keys[$i]." $case2 like '$fuzzy1".$suchwort."$fuzzy2' ";
-			if ($tbl1 && $dbfld2[$keys[$i]]) 
-				$tmp2.="and $case1 S.".$dbfld2[$keys[$i]]." $case2 like '$fuzzy1".$suchwort."$fuzzy2' ";
+			if ($dbfld[$keys[$i]]==2) {
+                $search=array();
+                preg_match_all("/([<>]?[\d]+)/",$suchwort,$treffer);
+                if ($treffer[0]) {
+                    foreach ($treffer[0] as $val) {
+                        if ($val[0] == ">" || $val[0] == "<") {
+                            $search[] = $kenz[$typ].".".$keys[$i]." ".$val[0]." ".substr($val,1);
+                        } else {
+                            $search[] = $kenz[$typ].".".$keys[$i]." = ".$val;
+                        }
+                    }
+                    $suchwort = "( ".implode(" and ",$search)." )";
+			        $tmp1.="and ".$suchwort." ";
+                }
+			} else {
+			    if ($tbl1 && $dbfld2[$keys[$i]]) {
+				    $tmp1.="and (S.".$dbfld2[$keys[$i]]." ilike '$fuzzy1".$suchwort."$fuzzy2' ";
+			        $tmp1.="or ".$kenz[$typ].".".$keys[$i]." ilike '$fuzzy1".$suchwort."$fuzzy2' ) ";
+                } else {
+			        $tmp1.="and ".$kenz[$typ].".".$keys[$i]." ilike '$fuzzy1".$suchwort."$fuzzy2' ";
+                }
+			}
 		}
 	}
 	if ($muster["sonder"]) {
@@ -303,14 +316,10 @@ function suchstr($muster,$typ="C") {
 	}
 	if ($tbl1) {
 		$tabs=$tab[$typ]." ".$kenz[$typ]." left join shipto S on ".$kenz[$typ].".id=S.trans_id";
-		if ($tmp1) $where="(".substr($tmp1,3). ") ";
-		if ($tmp2) { 
-			$where.="or (".substr($tmp2,3).")"; 
-		} 
 	} else {
 		$tabs=$tab[$typ]." ".$kenz[$typ];
-		if ($tmp1) $where=substr($tmp1,3);
 	}
+	if ($tmp1) $where=substr($tmp1,3);
 	return array("where"=>$where,"tabs"=>$tabs); 
 }
 
@@ -420,7 +429,8 @@ global $db;
 	    shiptofax => array(1,0,3,"Lieferfax",30),
 	    shiptoemail => array(1,0,5,"Liefer-eMail",0),
 	    shiptodepartment_1 => array(1,0,1,"Lieferzusatzname",75),
-	    shiptodepartment_2 => array(1,0,1,"Lieferabteilung",75));
+	    shiptodepartment_2 => array(1,0,1,"Lieferabteilung",75),
+        headcount => array(0,0,6,"Anzahl Mitarbeiter",10));
 	    $keys=array_keys($daten);
 	$dbf=array_keys($dbfld);
 	$anzahl=count($keys);
@@ -779,6 +789,7 @@ global $xajax,$GEODB,$BLZDB;
 			bank_code	=> "",
             iban    => "",
             bic     => "",
+            headcount => "",
 			account_number	=> "",
 			direct_debitf   => "checked",
 			terms		=> "",
@@ -994,6 +1005,7 @@ global $xajax,$GEODB,$BLZDB;
 				bank_code	=> $daten["bank_code"],
 				iban	=> $daten["iban"],
 				bic	    => $daten["bic"],
+                headcount => $daten["headcount"],
 				direct_debit.$daten["direct_debit"] => "checked",
 				account_number	=> $daten["account_number"],
 				terms		=> $daten["terms"],

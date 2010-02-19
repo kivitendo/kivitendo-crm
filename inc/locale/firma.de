@@ -162,5 +162,6 @@ $texts  = array(
   '.:none:.'         => 'Kein',
   '.:back:.'         => 'Zur&uuml;ck',
   '.:allocate:.'     => 'Zuordnen',
+  '.:headcount:.'    => 'Anzahl Mitarbeiter'
 ); 
 ?>

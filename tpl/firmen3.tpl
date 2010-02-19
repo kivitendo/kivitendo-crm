@@ -327,6 +327,10 @@
 		</span>
 	</div>
 	<div class="zeile2">
+		<span class="label klein">.:headcount:.</span>
+		<span class="feldxx"><input type="text" name="headcount" size="5" maxlength="5" value="{headcount}" tabindex="14"></span>
+	</div>
+	<div class="zeile2">
 		<span class="label klein">.:Concern:.</span>
 		<input type="hidden" name="konzern" value="{konzern}">
 		<span class="feldxx"><input type="text" name="konzernname" size="30" value="{konzernname}" maxlength="50" tabindex="14">{konzern}<input type="button" name="suche" value="suchen" onClick="suchFa();"></span>

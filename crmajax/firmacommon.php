@@ -15,6 +15,7 @@
     $xajax->registerFunction("showDir");
     $xajax->registerFunction("newDir");
     $xajax->registerFunction("moveFile");
+    $xajax->registerFunction("lockFile");
     $xajax->registerFunction("delFile");
     $xajax->registerFunction("showFile");
     $xajax->registerFunction("getDocVorlage_");

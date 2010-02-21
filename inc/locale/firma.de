@@ -80,7 +80,7 @@ $texts  = array(
   '.:filetyp:.'      => 'Dateiart',
   '.:filesize:.'     => 'Dateigr&ouml;&szlig;e',
   '.:filetime:.'     => 'Dateizeit',
-  '.:Description update:.' => 'Beschreibung sichern',
+  '.:Description update:.' => 'Beschreibung ge&auml;ndert',
   '.:save:.'	     => 'sichern',
   '.:Delete a File:.' => 'eine Datei l&ouml;schen',
   '.:Really:.'	     => 'Wirklich',
@@ -162,6 +162,10 @@ $texts  = array(
   '.:none:.'         => 'Kein',
   '.:back:.'         => 'Zur&uuml;ck',
   '.:allocate:.'     => 'Zuordnen',
-  '.:headcount:.'    => 'Anzahl Mitarbeiter'
+  '.:headcount:.'    => 'Anzahl Mitarbeiter',
+  '.:lock file:.'    => 'Datei sperren',
+  '.:file locked:.'  => 'Datei gesperrt',
+  '.:locked:.'       => 'gesperrt durch',
+  '.:documents:.'    => 'Dokumente'
 ); 
 ?>

@@ -160,6 +160,10 @@ $texts  = array(
   '.:none:.'         => 'No',
   '.:back:.'         => 'back',
   '.:allocate:.'     => 'allocate',
-  '.:headcount:.'    => 'Headcount'
+  '.:headcount:.'    => 'Headcount',
+  '.:lock file:.'    => 'lock file',
+  '.:file locked:.'  => 'file locked',
+  '.:locked:.'       => 'locked',
+  '.:documents:.'    => 'Documents'
 );
 ?>

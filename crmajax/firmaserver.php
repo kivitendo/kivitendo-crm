@@ -264,6 +264,7 @@
         $id=0;
         if ($rs) {
             $rs=$dbfile->getDokument($rs);
+            if ($rs["lock"]>0) $info.="<br /><font color='red'>".translate('.:locked:.','firma')." : ".$rs["lockname"]."</font><br />";
             $info.="<br>".translate('.:Description update:.','firma').": ".db2date($rs["datum"])." ".$rs["zeit"]."<br>";
             $info.=translate('.:Description:.','firma').": ".nl2br($rs["descript"])."<br>";
             $id=$rs["id"];
@@ -283,32 +284,79 @@
                 "<a href='#' onClick='movefile(\"dokumente/".$_SESSION["mansel"]."$pfad/$file\",$id)'>".translate('.:move:.','firma')."</a>");
         $objResponse->assign("subedit",    "innerHTML",
                 "<a href='#' onClick='editattribut($id)'>".translate('.:edit attribute:.','firma')."</a>");
+        $objResponse->assign("lock",    "innerHTML",
+                "<a href='#' onClick='xajax_lockFile(\"$file\",\"$pfad\",$id)'>".translate('.:lock file:.','firma')."</a>");
                 return $objResponse;
     }
+    /**
+     * TODO: short description.
+     * 
+     * @param mixed $file 
+     * @param mixed $path 
+     * @param int   $id   Optional, defaults to 0. 
+     * 
+     * @return TODO
+     */
+    function lockFile($file,$path,$id=0) {
+        $dbfile=new document();
+        if ($id==0) {
+            $id=$dbfile->searchDocument($file,$path);
+            if ($id) {
+                $rs=$dbfile->getDokument($id);
+            } else {
+                $dbfile->setDocData("pfad",$path);
+                $dbfile->setDocData("name",$file);
+            }
+        } else {
+            $rs=$dbfile->getDokument($id);
+        }
+        if ($dbfile->lock>0) {
+            if ($dbfile->lock==$_SESSION["loginCRM"])
+                $dbfile->setDocData("lock",0);
+        } else {
+            $dbfile->setDocData("lock",$_SESSION["loginCRM"]);
+        }
+        $rc=$dbfile->saveDocument();
+        $objResponse = new xajaxResponse();
+        $objResponse->script("showFile('left','$file')");
+        return $objResponse;
+    }
+
     function moveFile($file,$pfadleft) {
+        $objResponse = new xajaxResponse();
         $oldpath=substr($file,0,strrpos($file,"/"));
-        $file=substr($file,strrpos($file,"/"));
+        $file=substr($file,strrpos($file,"/")+1);
         if ($oldpath<>$pfadleft) {
             $pre="../dokumente/".$_SESSION["mansel"];
-            rename("../".$oldpath.$file,$pre.$pfadleft.$file);
             $dbfile=new document();
-            $rs=$dbfile->searchDocument($file,$oldpath);
-            if ($rs) {
-                $rc=$dbfile->getDokument($rs["id"]);
+            $tmp = split("/",$oldpath);
+            $opath = "/".implode("/",array_slice($tmp,2));
+            $id=$dbfile->searchDocument($file,$opath);
+            if ($id) {
+                $rs=$dbfile->getDokument($id);
+                if ($dbfile->lock>0) {
+                    return;
+                }
                 $dbfile->setDocData("pfad",$pfadleft);
                 $rc=$dbfile->saveDocument();
             }
+            rename("../".$oldpath."/".$file,$pre.$pfadleft."/".$file);
         }
         if ($file[0]=="/") $file=substr($file,1);
-        $objResponse = new xajaxResponse();
         $objResponse->script("dateibaum('left','$pfadleft')");
         $objResponse->script("showFile('left','$file')");
-                return $objResponse;
+        return $objResponse;
     };
     function saveAttribut($name,$oldname,$pfad,$komment,$id=0) {
         $dbfile=new document();
         if ($id>0) {
             $rc=$dbfile->getDokument($id);
+            if ($dbfile->lock>0) {
+                $objResponse = new xajaxResponse();
+                $objResponse->script("showFile('left','$oldname')");
+                $objResponse->script("editattribut()");
+                return $objResponse;
+            }
         } else {
             $dbfile->setDocData("pfad",$pfad);
         };
@@ -331,7 +379,7 @@
         } else {
             $objResponse->script("alert('Fehler beim Sichern')");
         }
-                return $objResponse;
+        return $objResponse;
     }
     function newDir($id,$pfad,$newdir) {
         chdir("../dokumente/".$_SESSION["mansel"]."/$pfad");
@@ -342,6 +390,11 @@
         $dbfile=new document();
         if ($id>0) {
             $dbfile->getDokument($id);
+            if ($dbfile->lock>0) {
+                $objResponse = new xajaxResponse();
+                $objResponse->script("showFile('left','$file')");
+                return $objResponse;
+            }
         } else {
             $dbfile->setDocData("name",$file);
             $dbfile->setDocData("pfad",$pfad);

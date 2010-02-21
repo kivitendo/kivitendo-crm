@@ -121,6 +121,7 @@
 		document.getElementById("subdelete").style.visibility="visible";
 		document.getElementById("subdownload").style.visibility="visible";
 		document.getElementById("subedit").style.visibility="visible";
+        document.getElementById("lock").style.visibility="visible";
 		document.getElementById("submove").style.visibility="visible";
 	}
 	function dateibaum(seite,start) {
@@ -130,6 +131,7 @@
 			document.getElementById("subdelete").style.visibility="hidden";
 			document.getElementById("subdownload").style.visibility="hidden";
 			document.getElementById("subedit").style.visibility="hidden";
+            document.getElementById("lock").style.visibility="hidden";
 			document.getElementById("submove").style.visibility="hidden";
 		};
 		xajax_showDir(seite,start);
@@ -199,6 +201,7 @@
 		<li id="subdelete" style="visibility:hidden;"><a href="#" >.:delete:.</a></li>
 		<li id="submove" style="visibility:hidden;"><a href="#" >.:move:.</a></li>
 		<li id="subedit" style="visibility:hidden;"><a href="#" >.:edit attribute:.</a></li>
+        <li id="lock" style="visibility:hidden;"><a href="#" >.:lock file:.</a></li>
 	</ul><br>
 	    <span id="fbright"></span>
 	</div>

@@ -15,6 +15,7 @@
     $xajax->register(XAJAX_FUNCTION,"showCalls");
     $xajax->register(XAJAX_FUNCTION,"showDir");
     $xajax->register(XAJAX_FUNCTION,"newDir");
+    $xajax->register(XAJAX_FUNCTION,"lockFile");
     $xajax->register(XAJAX_FUNCTION,"moveFile");
     $xajax->register(XAJAX_FUNCTION,"delFile");
     $xajax->register(XAJAX_FUNCTION,"showFile");

@@ -50,6 +50,18 @@ class document {
  var $size = 0;
 
 /**
+* lock	
+*       @var int $lock
+*/
+ var $lock = 0;
+
+/**
+*	lockname
+*       @var string $lockname
+*/
+ var $lockname = "";
+
+/**
 *	Dokumenten ID
 *       @var integer $id
 */
@@ -108,8 +120,8 @@ class document {
 			return $this->newDocument();
 		} else {
 			//einen bestehenden Eintrag ändern
-			$felder=array('filename','descript','datum','zeit','employee','pfad');
-			$werte=array($this->name,$this->descript,date("Y-m-d"),date("H:i:s"),$_SESSION["loginCRM"],$this->pfad);
+			$felder=array('filename','descript','datum','zeit','employee','pfad','lock');
+			$werte=array($this->name,$this->descript,date("Y-m-d"),date("H:i:s"),$_SESSION["loginCRM"],$this->pfad,$this->lock);
 			if ($this->size) {
 				//wird bei einem Upload gesetzt.
 				$felder[]='size';
@@ -237,13 +249,15 @@ class document {
 *       @return array   $rs      Dokumentendaten oder "false"
 */
 	function getDokument($id) {
-		$sql="select * from documents where id=$id";
+		$sql="SELECT d.*,COALESCE(e.name,e.login) as lockname from documents d left join employee e on d.lock=e.id where d.id = $id";
 		$rs=$this->db->getOne($sql);
 		$this->setDocData("name",($rs)?$rs["filename"]:false);
 		$this->setDocData("pfad",($rs)?$rs["pfad"]:false);
 		$this->setDocData("descript",($rs)?$rs["descript"]:false);
 		$this->setDocData("size",($rs)?$rs["size"]:0);
 		$this->setDocData("id",($rs)?$id:false);
+		$this->setDocData("lock",($rs)?$rs["lock"]:0);
+		$this->setDocData("lockname",($rs)?$rs["lockname"]:0);
 		if(!$rs) return false;
 		return $rs;
 	}

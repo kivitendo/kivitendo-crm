@@ -167,6 +167,7 @@
 			tval1	=>	$j.":00", 
 			tkey1	=>	$j.":00",
 			tsel1	=>  ($data["von"]=="$j:00")?" selected":"",
+            tsel2	=>  ($data["bis"]=="$j:00")?" selected":""
 		));
 		$t->parse("Block1","Time1",true);
 		$t->parse("Block2","Time2",true);
@@ -176,7 +177,8 @@
                 $t->set_var(array(
                     tval1	=>	$j.":".$sq, 
                     tkey1	=>	$j.":".$sq,
-                    tsel1	=>  ($data["von"]=="$j:$sq")?" selected":""
+                    tsel1	=>  ($data["von"]=="$j:$sq")?" selected":"",
+                    tsel2	=>  ($data["bis"]=="$j:$sq")?" selected":""
                 ));
                 $t->parse("Block1","Time1",true);
                 $t->parse("Block2","Time2",true);

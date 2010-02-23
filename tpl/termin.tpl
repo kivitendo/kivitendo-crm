@@ -98,7 +98,7 @@
 <!--input type="button" value="K" onClick="kal('bisdat')"-->
 					<select name="bis">
 <!-- BEGIN Time2 -->
-						<option value="{tval1}"{tsel1}>{tkey1}</option>
+						<option value="{tval1}"{tsel2}>{tkey1}</option>
 <!-- END Time2 -->
 					</select>
 					<span class="klein">nur Arbeitstage</span><input type="checkbox" name="ft" value="1" {FT}>

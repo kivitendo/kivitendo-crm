@@ -69,5 +69,6 @@ $texts  = array(
   '.:save:.'    => 'save',
   '.:categorie termin:.'    => 'Categorie (Termin)',
   '.:special flag:.'    => 'Special flags',
+  '.:location:.'    => 'Location'
 );
 ?>

@@ -1775,6 +1775,7 @@ global $db;
 		$sql.="repeat=".$data["wdhlg"].",ft='".$data["ft"]."',uid=".$data["uid"].",privat='".(($data["privat"]==1)?'t':'f')."' ";
  		// echtes Datum eintragen, schadet mal nicht und wird künfig verwendet.
  		$sql.=",start='".date("Y-m-d H:i:00",$von." ".$data["von"])."', stop='".date("Y-m-d H:i:00",$bis." ".$data["bis"])."' ";
+        $sql.=",location='".$data["location"]."' ";
 		$sql.=" where id=".$termid;
 		$rc=$db->query($sql);
 		if ($rc) {

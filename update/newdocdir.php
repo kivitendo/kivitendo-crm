@@ -1,5 +1,5 @@
 <?
-
+if ($_GET["chk"]==1) include("../inc/stdLib.php");
 function suchPerson($nummer) {
 	$db=$_SESSION["db"];
 	$sql="select * from contacts where cp_id=$nummer";
@@ -44,23 +44,33 @@ function suchtabelle($nummer)   {
 
 function newname($root,$old,$new) {
 	$ok=chkdir($new);
-	if ($ok) $ok=rename($root."/".$old,$root."/".$new);
+	if ($ok)    {
+         $ok=rename($root."/".$old,$root."/".$new);
+         if ($ok) {
+            $sql="update documents set path='$new' where kunde = $old";
+            $ok = $db->query($sql);
+            if (!$ok) {
+                rename($root."/".$new,$root."/".$old);
+            }
+        }
+    }
 	return $ok;
 }
 //Verzeichnisse umbenennen
 $root="dokumente/".$_SESSION["mansel"];
+if (!$updatefile) $updatefile="chk";
 $docfile=$updatefile."_doc";
 if ($doclog=@fopen("tmp/".$docfile.".log","a") ) {
-	fputs($log,"DocLog in tmp/$docfile.log\n");
+	if ($log) fputs($log,"DocLog in tmp/$docfile.log\n");
 } else if ($doclog=@fopen("/tmp/".$docfile.".log","a") ) {
-	fputs($log,"DocLog in /tmp/$docfile.log\n");
+	if ($log) fputs($log,"DocLog in /tmp/$docfile.log\n");
 	echo "Logfile (Doc) in /tmp<br> Schreibrechte im CRM-Verzeichnis pr&uuml;fen<br>";
 } else {
 	echo "Kann kein Logfile (Doc) erstellen<br>";
 	fputs($log,"Kein DocLog.\n");
 	$doclog=false;
 }
-
+if ($_GET["chk"]==1) chdir (".."); 
 chdir ("$root");
 $tmp=glob("*");
 chdir("../..");
@@ -91,26 +101,13 @@ if ($personen) foreach ($personen as $filename) {
 		if ($doclog) fputs($doclog,$filename.' -> '.$tab.' '.$ok."\n");
 		echo "$ok<br>\n";
 	} else {
-        	echo 'Verzeichnis '.$filename." nicht verschoben<br>\n";
+        $sql="update documents set path='$filename' where kunde = $filename";
+        $ok = $db->query($sql);
+       	echo 'Verzeichnis '.$filename." nicht verschoben<br>\n";
 		if ($doclog) fputs($doclog,$filename.' nicht verschoben '."\n");
         }
 
 }
 
-//Pfadnamen berichtigen
-echo "Pfadnamen erg&auml;nzen ";
-fputs($log,"Pfadnamen in db ändern\n");
-if ($doclog) fputs($doclog,"Pfadnamen in db ändern\n");
-$sql="select oid,kunde from documents";
-$data=$db->getAll($sql);
-if ($data) foreach ($data as $file) {
-	$pfad=suchtabelle($file["kunde"]);
-	$sql="update documents set pfad='/$pfad' where oid=".$file["oid"];
-	$ok=$db->query($sql);
-	if (!$ok) {
-		if ($doclog) fputs($doclog,$file["oid"]." -> $pfad Fehler\n");
-		fputs($log,$file["oid"]." -> $pfad Fehler\n");
-	}
-}
 echo "done<br>";
 ?>

@@ -71,5 +71,6 @@ $texts  = array(
   '.:save:.'    => 'sichern',
   '.:categorie termin:.'    => 'Terminkategorien',
   '.:special flag:.'    => 'Sonderflags',
+  '.:location:.'    => 'Ort'
 );
 ?>

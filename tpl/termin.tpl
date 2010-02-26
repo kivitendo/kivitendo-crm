@@ -108,6 +108,8 @@
 		                 <input type="button" class="anzeige" value=".:search:." onClick="searchT()"><br />
                          <!--input type="submit" class="anzeige" name="search" value=".:search:."><br /-->
 						<span class="mini">.:cause:.</span></td></tr>
+			<tr><td colspan="2"><input type="text" name="location" size="35" maxlength="75" value="{LOCATION}"><br />
+                <span class="mini">.:location:.</span></td></tr>
 			<tr>
                 <td>.:private date:.: </td> 
                 <td><input type="checkbox" name="privat" value="1" {CHKPRIVAT}> .:categorie:.: <select name="kategorie">

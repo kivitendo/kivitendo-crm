@@ -13,7 +13,7 @@
 	if ($_GET["holen"]) {
 		$term=getTerminData($_GET["holen"],$_GET["CUID"]);
 		$data["tid"]=$_GET["holen"]; $data["grund"]=$term["cause"];$data["lang"]=$term["c_cause"];
-		$data["wdhlg"]=$term["repeat"];$data["ft"]=$term["ft"];
+		$data["wdhlg"]=$term["repeat"];$data["ft"]=$term["ft"]; $data["location"]=$term["location"];
 		$data["vondat"]=db2date($term["starttag"]);$data["bisdat"]=db2date($term["stoptag"]);
         $data["privat"]=($term["privat"]=='t')?1:0;
         $data["kategorie"] = $term["kategorie"];
@@ -208,6 +208,7 @@
 		VON => $data["von"],
 		BIS => $data["bis"],
 		GRUND => $data["grund"],
+        LOCATION => $data["location"],
 		LANG => $data["lang"],
 		FT => ($data["ft"])?" checked":"",
 		ANSICHT => $ANSICHT,

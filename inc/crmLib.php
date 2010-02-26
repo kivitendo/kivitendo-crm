@@ -1889,7 +1889,8 @@ global $db;
 *****************************************************/
 function getTerminList($id) {
 global $db;
-	$sql="select id,cause,starttag,stoptag,startzeit,stopzeit,kategorie from termine where id in ($id)";
+	//$sql="select id,cause,starttag,stoptag,startzeit,stopzeit,kategorie,location,c_cause from termine where id in ($id)";
+	$sql="select T.*,K.catname from termine T left join termincat K on K.catid=T.kategorie where T.id in ($id)";
 	$rs=$db->getAll($sql);
 	if(!$rs) {
 		return false;

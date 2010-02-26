@@ -56,7 +56,8 @@
 			termbegin => $tbeg,
 			termend	=> $tend,
 			termseq	=> ($fa["termseq"])?$fa["termseq"]:30,
-			GRUPPE => $gruppen
+			GRUPPE => $gruppen,
+            DATUM => date('d.m.Y')
 			));
 	if ($_GET["id"]) {	
 		$t->set_var(array(Vertreter => $fa["Vertreter"]." ".$fa["VName"]));

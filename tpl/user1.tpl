@@ -3,7 +3,7 @@
 	<head><title>User Stamm</title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 	<style type="text/css">
-	#fixiert {
+	#mailwin {
 	    position: absolute;
 	    top: 3.2em; left: 10em;
 	    width: 40em;
@@ -13,25 +13,39 @@
 	}
 	</style>
 	<script language="JavaScript">
-	var on = false;
-	function onoff() {
-		if (on) {
-			on = false;
-			document.getElementById("fixiert").style.visibility = "hidden";
+	var MailOn = false;
+	function Mailonoff() {
+		if (MailOn) {
+			MailOn = false;
+			document.getElementById("mailwin").style.visibility = "hidden";
 			document.user.mails.value="Mails zeigen";
 		} else {
-			on = true;
-			document.getElementById("fixiert").style.visibility = "visible";
+			MailOn = true;
+			document.getElementById("mailwin").style.visibility = "visible";
 			document.user.mails.value="Mails verstecken";
 		}
 	}
+    function kal(fld) {
+        f=open("terminmonat.php?datum={DATUM}&fld="+fld,"Name","width=410,height=390,left=200,top=100");
+        f.focus();
+    }
+    function go(art) {
+        start=document.termedit.start.value;
+        stop=document.termedit.stop.value;
+        document.location.href="mkics.php?ext="+art+"&start="+start+"&stop="+stop;
+    }
 	</script>
 <body>
 <p class="listtop">Benutzer Stammdaten</p>
 <!-- Beginn Code ----------------------------------------------->
+<div id="mailwin" style="visibility:hidden"> 
+	<iframe src="userMail.php?id={UID}&start=0" name="Termine" width="100%" height="100%"  marginheight="0" marginwidth="0" align="left">
+	<p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>
+	</iframe>
+</div>
 <form name="user" action="user1.php" method="post">
 <div id="user">
-<input type="button" name="mails" value="Mails zeigen" onClick="onoff()">
+<!--input type="reset" name="mails" value="Mails zeigen" onClick="Mailonoff()"-->
 
 <table border="0" class="mini">
 
@@ -88,11 +102,12 @@
 
 	</form>
 </table>
-</div>
-<div id="fixiert" style="visibility:hidden"> 
-	<iframe src="userMail.php?id={UID}&start=0" name="Termine" width="100%" height="100%"  marginheight="0" marginwidth="0" align="left">
-	<p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>
-	</iframe>
+Kalenderexport: 
+<form name="termedit">
+<input type="text" size="10" id="start" name="start"><img src='image/date.png' border='0' align='middle' onClick="kal('start')";>
+<input type="text" size="10" id="stop" name="stop"><img src='image/date.png' border='0' align='middle' id='triggerStop' onClick="kal('stop')";>
+<a href="#" onClick="go('ics')">ics</a> <a href="#" onClick="go('vcs')">vcs</a>
+</form>
 </div>
 <!-- End Code ----------------------------------------------->
 <!--/td></tr></table-->

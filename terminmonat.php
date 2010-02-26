@@ -4,7 +4,7 @@
 	include_once("inc/crmLib.php");
     $CUID=($_GET["cuid"])?$_GET["cuid"]:$_SESSION["loginCRM"];
 ?>
-<html>
+<html onLoad="self.focus()">
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 	<script language="JavaScript">
@@ -123,7 +123,7 @@
 ?>
 	</tr>
 </table>
-
+[<a href="javaScript:self.close()">close</a>]
 </center>
 </body>
 </html>

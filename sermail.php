@@ -6,7 +6,7 @@
 	include("inc/UserLib.php");
 
 	$user=getUserStamm($_SESSION["loginCRM"]);
-	$MailSign=ereg_replace("\n","<br>",$user["MailSign"]);
+	$MailSign=ereg_replace("\n","<br>",$user["mailsign"]);
 	$MailSign=ereg_replace("\r","",$MailSign);
 
 	if ($_POST) {
@@ -43,9 +43,9 @@
 
 			}
 			$limit=50;
-			$abs=sprintf("%s <%s>",$user["Name"],$user["eMail"]);
+			$abs=sprintf("%s <%s>",$user["name"],$user["email"]);
 			$headers=array(
-                                        "Return-Path"   => $user["eMail"],
+                                        "Return-Path"   => $user["email"],
                                         "Reply-To"      => $abs,
                                         "From"          => $abs,
                                         "X-Mailer"      => "PHP/".phpversion(),
@@ -67,7 +67,7 @@
 			$sendtxt.="<pre>$BodyText</pre>";
 		}
 	}  else {
-		$BodyText=" \n".ereg_replace("\r","",$user["MailSign"]);
+		$BodyText=" \n".ereg_replace("\r","",$user["mailsign"]);
 	}
 	
 		$t = new Template($base);

@@ -51,8 +51,8 @@
 	if (preg_match("/%FROM/",$karte)) {
 		include "inc/UserLib.php";
 		$user=getUserStamm($_SESSION["loginCRM"]);
-		if ($user["Strasse"]<>"" and $user["Ort"]<>"" and $user["Plz"]) {
-			$karte=str_replace(array("%FROMSTREET%","%FROMZIPCODE%","%FROMCITY%"),array(strtr($user["Strasse"]," ",$planspace),$user["Plz"],$user["Ort"]),$karte);
+		if ($user["addr1"]<>"" and $user["addr3"]<>"" and $user["addr2"]) {
+			$karte=str_replace(array("%FROMSTREET%","%FROMZIPCODE%","%FROMCITY%"),array(strtr($user["addr1"]," ",$planspace),$user["addr2"],$user["addr3"]),$karte);
 		} else {
 			$karte="";
 		};

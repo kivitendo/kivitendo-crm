@@ -8,7 +8,7 @@
 	$year=$_GET["year"];
 	$month=$_GET["month"];
 	$day=$_GET["day"];
-	$vars=array("JAHR"=>$year,"MONAT"=>$month,"TAG"=>$day,"NAME"=>$usr["Name"]);
+	$vars=array("JAHR"=>$year,"MONAT"=>$month,"TAG"=>$day,"NAME"=>$usr["name"]);
 	$data=getTermin($day,$month,$year,"T");
 	$ft=feiertage($year);
 	$ftk=array_keys($ft);
@@ -45,8 +45,8 @@
 			}
 		}
 	$doc = new phpOpenOffice();
-	if (file_exists("vorlage/kaltag_".$usr["Login"].".sxw")) {
-		$doc->loadDocument("vorlage/kaltag_".$usr["Login"].".sxw");
+	if (file_exists("vorlage/kaltag_".$usr["login"].".sxw")) {
+		$doc->loadDocument("vorlage/kaltag_".$usr["login"].".sxw");
 	} else {
 		$doc->loadDocument("vorlage/kaltag.sxw");
 	}

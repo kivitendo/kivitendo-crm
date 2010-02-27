@@ -11,19 +11,19 @@
 *****************************************************/
 function saveUserStamm($val) {
 global $db;
-	if (!$val["Interv"]) $val["Interv"]=60;
+	if (!$val["interv"]) $val["interv"]=60;
 	if (!$val["termseq"]) $val["termseq"]=30;
-	if ($val["Vertreter"]==$val["UID"]) {$vertreter="null";} else {$vertreter=$val["Vertreter"];};
-	$sql="update employee set name='".$val["Name"]."',etikett=".$val["etikett"].", addr1='".$val["Strasse"]."', addr2='".$val["Plz"]."', addr3='";
-	$sql.=$val["Ort"]."', workphone='".$val["Tel2"]."', homephone='".$val["Tel1"]."', notes='".$val["Bemerkung"]."',";
-	$sql.="msrv='".$val["Msrv"]."', postf='".$val["Postf"]."', kennw='".$val["Kennw"]."',  postf2='";
-	$sql.=$val["Postf2"]."', interv='".$val["Interv"]."', pre='".$val["Pre"]."', abteilung='".$val["Abteilung"]."',";
-	$sql.="position='".$val["Position"]."', vertreter=$vertreter,mailsign='".$val["MailSign"]."',email='".$val["eMail"];
+	if ($val["vertreter"]==$val["uid"]) {$vertreter="null";} else {$vertreter=$val["vertreter"];};
+	$sql="update employee set name='".$val["name"]."',etikett=".$val["etikett"].", addr1='".$val["addr1"]."', addr2='".$val["addr2"]."', addr3='";
+	$sql.=$val["addr3"]."', workphone='".$val["workphone"]."', homephone='".$val["homephone"]."', notes='".$val["notes"]."',";
+	$sql.="msrv='".$val["msrv"]."', postf='".$val["postf"]."', kennw='".$val["kennw"]."',  postf2='";
+	$sql.=$val["postf2"]."', interv='".$val["interv"]."', pre='".$val["pre"]."', abteilung='".$val["abteilung"]."',";
+	$sql.="position='".$val["position"]."', vertreter=$vertreter,mailsign='".$val["mailsign"]."',email='".$val["email"];
 	$sql.="',termbegin=".$val["termbegin"].",termend=".$val["termend"].",kdview=".$val["kdview"];
     $sql.=",icalart='".$val["icalart"]."',icaldest='".$val["icaldest"]."',icalext='".$val["icalext"];
-    $sql.="',termseq=".$val["termseq"]." where id=".$val["UID"];
+    $sql.="',termseq=".$val["termseq"]." where id=".$val["uid"];
 	$rc=$db->query($sql);
-	if ($val["Tel1"]) mkTelNummer($val["UID"],"E",array($val["Tel1"]));
+	if ($val["homephone"]) mkTelNummer($val["uid"],"E",array($val["homephone"]));
 }
 
 /****************************************************
@@ -61,7 +61,8 @@ global $db;
 	} else {
 		$sql="select  * from gruppenname N left join grpusr G on G.grpid=N.grpid  where usrid=$id";
 		$rs2=$db->getAll($sql);
-		$daten["Id"]=$rs[0]["id"];
+        $daten = $rs[0];
+		/*$daten["Id"]=$rs[0]["id"];
 		$daten["Login"]=$rs[0]["login"];
 		$daten["Name"]=$rs[0]["name"];
 		$daten["Strasse"]=$rs[0]["addr1"];
@@ -81,11 +82,11 @@ global $db;
 		$daten["Pre"]=$rs[0]["pre"];
 		$daten["Abteilung"]=$rs[0]["abteilung"];
 		$daten["Position"]=$rs[0]["position"];
-		$daten["Vertreter"]=$rs[0]["vertreter"];
+		$daten["Vertreter"]=$rs[0]["vertreter"];*/
 		if ($rs[0]["vertreter"]) {
 			$sql="select * from employee where id=".$rs[0]["vertreter"];
 			$rs3=$db->getAll($sql);
-			$daten["VName"]=$rs3[0]["login"]." ".$rs3[0]["name"];
+			$daten["vname"]=$rs3[0]["login"]." ".$rs3[0]["name"];
 		}
 		$daten["gruppen"]=$rs2;
 		$daten["etikett"]=$rs[0]["etikett"];

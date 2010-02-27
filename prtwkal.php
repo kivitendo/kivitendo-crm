@@ -24,7 +24,7 @@
 	$vars["JAHR"]=$year;
 	$vars["KW"]=$kw;
 	$usr=getUserStamm($_SESSION["loginCRM"]);
-	$vars["NAME"]=$usr["Name"];
+	$vars["NAME"]=$usr["name"];
 	for($i=0; $i<7; $i++) {
 		$vars[$drkwt[$i]]=date("d.m.",mktime(0,0,0,$month,$tag+$i,$year));
 	}
@@ -37,8 +37,8 @@
 		} else { $lastt=0;}
 	}
 	$doc = new phpOpenOffice();
-	if (file_exists("vorlage/kalwoche_".$usr["Login"].".sxw")) {
-		$doc->loadDocument("vorlage/kalwoche_".$usr["Login"].".sxw");
+	if (file_exists("vorlage/kalwoche_".$usr["login"].".sxw")) {
+		$doc->loadDocument("vorlage/kalwoche_".$usr["login"].".sxw");
 	} else {
 		$doc->loadDocument("vorlage/kalwoche.sxw");
 	}

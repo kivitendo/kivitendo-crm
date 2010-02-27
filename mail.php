@@ -73,7 +73,7 @@
 			$mime = new Mail_Mime("\n");
 			$mail =& Mail::factory("mail");
 			$user=getUserStamm($_SESSION["loginCRM"]);
-			$abs=sprintf("%s <%s>",$user["Name"],$user["eMail"]);
+			$abs=sprintf("%s <%s>",$user["name"],$user["email"]);
 			$Subject=preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["Subject"]);
 			$headers=array( 
 					"Return-Path"	=> $abs,
@@ -116,7 +116,7 @@
 			
 			$body = $mime->get(array("text_encoding"=>"quoted-printable","text_charset"=>ini_get("default_charset")));
 			$hdr = $mime->headers($headers);
-			$mail->_params="-f ".$user["eMail"];
+			$mail->_params="-f ".$user["email"];
 			$rc=$mail->send($to, $hdr, $body);
 			if ($logmail) {
 				$f=fopen("tmp/maillog.txt","a");
@@ -183,9 +183,9 @@
 		}
 	} else {	
 		$user=getUserStamm($_SESSION["loginCRM"]);
-		$MailSign=ereg_replace("\r","",$user["MailSign"]);
+		$MailSign=ereg_replace("\r","",$user["mailsign"]);
 		$BodyText=" \n".$MailSign;
-		$MailSign=ereg_replace("\n","<br>",$user["MailSign"]);
+		$MailSign=ereg_replace("\n","<br>",$user["mailsign"]);
 		$MailSign=ereg_replace("\r","",$MailSign);
 	}
 

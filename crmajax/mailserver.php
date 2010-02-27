@@ -33,7 +33,7 @@
 				else if ($anrede) { $BodyText=preg_replace("/%cp_anrede%/","",$BodyText); }
 			}
 		}
-		$MailSign=ereg_replace("\r","",$user["MailSign"]);
+		$MailSign=ereg_replace("\r","",$user["mailsign"]);
 		$objResponse = new xajaxResponse();
 		$objResponse->assign("rcmsg", "innerHTML", "");
 		$objResponse->assign("Subject", "value", $Subject);

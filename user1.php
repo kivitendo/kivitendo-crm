@@ -32,27 +32,27 @@
 		$tend.="<option value=$z".(($j==$z)?" selected":"").">$z";
 	}
 	$t->set_var(array(
-			Login => $fa["Login"],
-			Name => $fa["Name"],
-			Strasse => $fa["Strasse"],
-			Plz => $fa["Plz"],
-			Ort => $fa["Ort"],
-			UID => $fa["Id"],
-			Tel1 => $fa["Tel1"],
-			Tel2 => $fa["Tel2"],
-			Regel => $fa["Regel"],
-			Bemerkung => $fa["Bemerkung"],
-			MailSign => $fa["MailSign"],
-			eMail => $fa["eMail"],
-			Msrv =>	$fa["Msrv"],
-			Kennw => $fa["Kennw"],
-			Postf => $fa["Postf"],
-			Postf2 => $fa["Postf2"],
-			Interv => $fa["Interv"],
-			Pre => $fa["Pre"],
+			login => $fa["login"],
+			name => $fa["name"],
+			addr1 => $fa["addr1"],
+			addr2 => $fa["addr2"],
+			addr3 => $fa["addr3"],
+			uid => $fa["id"],
+			homephone => $fa["homephone"],
+			workphone => $fa["workphone"],
+			role => $fa["role"],
+			notes => $fa["notes"],
+			mailsign => $fa["mailsign"],
+			email => $fa["email"],
+			msrv =>	$fa["msrv"],
+			kennw => $fa["kennw"],
+			postf => $fa["postf"],
+			postf2 => $fa["postf2"],
+			interv => $fa["interv"],
+			pre => $fa["pre"],
 			kdview.$fa["kdview"] => "selected",
-			Abteilung => $fa["Abteilung"],
-			Position => $fa["Position"],
+			abteilung => $fa["abteilung"],
+			position => $fa["position"],
 			termbegin => $tbeg,
 			termend	=> $tend,
 			termseq	=> ($fa["termseq"])?$fa["termseq"]:30,
@@ -63,16 +63,16 @@
             icalart.$fa["icalart"] => "selected",
 			));
 	if ($_GET["id"]) {	
-		$t->set_var(array(Vertreter => $fa["Vertreter"]." ".$fa["VName"]));
+		$t->set_var(array(Vertreter => $fa["vertreter"]." ".$fa["vname"]));
 	} else {
 		$t->set_block("usr1","Selectbox","Block");
-		$select=(!empty($fa["Vertreter"]))?$fa["Vertreter"]:$fa["Id"];
+		$select=(!empty($fa["vertreter"]))?$fa["vertreter"]:$fa["id"];
 		$user=getAllUser(array(0=>true,1=>""));
 		if ($user) foreach($user as $zeile) {
 			$t->set_var(array(
 				Sel => ($select==$zeile["id"])?" selected":"",
-				Vertreter	=>	$zeile["id"],
-				VName	=>	$zeile["name"]
+				vertreter	=>	$zeile["id"],
+				vname	=>	$zeile["name"]
 			));
 			$t->parse("Block","Selectbox",true);
 		}

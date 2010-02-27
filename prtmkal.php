@@ -6,7 +6,7 @@
 	$month=$_GET["month"];
 	$year=$_GET["year"];
 	$usr=getUserStamm($_SESSION["loginCRM"]);
-	$vars=array("KW1"=>"","KW2"=>"","KW3"=>"","KW4"=>"","KW5"=>"","KW6"=>"","NAME"=>$usr["Name"],"MONAT"=>$month,"JAHR"=>$year);
+	$vars=array("KW1"=>"","KW2"=>"","KW3"=>"","KW4"=>"","KW5"=>"","KW6"=>"","NAME"=>$usr["name"],"MONAT"=>$month,"JAHR"=>$year);
 	$kaltg=array(" ","MO","DI","MI","DO","FR","SA","SO");
 	for ($i=1; $i<7; $i++) 
 		for ($j=1; $j<8; $j++) {
@@ -85,8 +85,8 @@
 		$vars[$drkwt[$i]]=date("d.m.",mktime(0,0,0,$month,$tag+$i,$year));
 	}
 	$doc = new phpOpenOffice();
-	if (file_exists("vorlage/kalmonat_".$usr["Login"].".sxw")) {
-		$doc->loadDocument("vorlage/kalmonat_".$usr["Login"].".sxw");
+	if (file_exists("vorlage/kalmonat_".$usr["login"].".sxw")) {
+		$doc->loadDocument("vorlage/kalmonat_".$usr["login"].".sxw");
 	} else {
 		$doc->loadDocument("vorlage/kalmonat.sxw");
 	}

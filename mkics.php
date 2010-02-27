@@ -8,7 +8,7 @@
     $stop = ($_POST["stop"]<>"")?$_POST["stop"]:'';
     $termine = searchTermin('%',$start,$stop,$_SESSION["loginCRM"]);
     $v = new vcalendar(); // create a new calendar instance
-    $v->setConfig( 'unique_id', strtr($user["Name"],' ','_')); // set Your unique id
+    $v->setConfig( 'unique_id', strtr($user["name"],' ','_')); // set Your unique id
     $v->setProperty( 'method', 'PUBLISH' ); // required of some calendar software
     if ($termine) {
         $ts="";
@@ -37,7 +37,7 @@
             //$vevent->setProperty( "Exrule" , array ("FREQ" => "", "INTERVAL" => "MONTHLY" , "UNTIL" => "20060831", "INTERVAL" => 2)
             $vevent->setProperty( 'summary', $term["cause"] );
             $vevent->setProperty( 'description', $term["c_cause"] );
-            $vevent->setProperty( 'attendee', $user["eMail"] );
+            $vevent->setProperty( 'attendee', $user["email"] );
             $v->setComponent ( $vevent ); // add event to calendar
         }
     }
@@ -46,7 +46,7 @@
         $v->returnCalendar();
     } else if ($_POST["icalart"]=="mail") {
         $user=getUserStamm($_SESSION["loginCRM"]);
-        $abs=sprintf("%s <%s>",$user["Name"],$user["eMail"]);        
+        $abs=sprintf("%s <%s>",$user["name"],$user["email"]);        
         $Subject="LxO-Kalender";
         $v->setConfig( 'directory', "tmp/" ); // identify directory
         $v->saveCalendar(); // save calendar to file
@@ -65,7 +65,7 @@
         $body = $mime->get(array("text_encoding"=>"quoted-printable","text_charset"=>ini_get("default_charset")));
         $hdr = $mime->headers($headers);
         $mail =& Mail::factory("mail");
-        $mail->_params="-f ".$user["eMail"];
+        $mail->_params="-f ".$user["email"];
         $rc=$mail->send($_POST["icaldest"], $hdr, $body);                
     } else {
         $v->setConfig( 'directory', $_POST["icaldest"] ); // identify directory

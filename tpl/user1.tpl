@@ -30,10 +30,6 @@
         f.focus();
     }
     function go(art) {
-        //art = document.termedit.icalext.value;
-        //start=document.termedit.start.value;
-        //stop=document.termedit.stop.value;
-        //document.location.href="mkics.php?ext="+art+"&start="+start+"&stop="+stop;
         document.termedit.action=art+".php";
         document.termedit.submit();
     }
@@ -48,7 +44,7 @@
 <p class="listtop">Benutzer Stammdaten</p>
 <!-- Beginn Code ----------------------------------------------->
 <div id="mailwin" style="visibility:hidden"> 
-	<iframe src="userMail.php?id={UID}&start=0" name="Termine" width="100%" height="100%"  marginheight="0" marginwidth="0" align="left">
+	<iframe src="userMail.php?id={uid}&start=0" name="Termine" width="100%" height="100%"  marginheight="0" marginwidth="0" align="left">
 	<p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>
 	</iframe>
 </div>
@@ -61,16 +57,16 @@
 	<input type="hidden" name="icalart" value="{icalart}">
 	<input type="hidden" name="icaldest" value="{icaldest}">
 	<input type="hidden" name="icalext" value="{icalext}">
-	<input type="hidden" name="UID" value="{UID}">
-	<input type="hidden" name="Login" value="{Login}">
-	<tr><td class="norm">User ID</td><td>{UID}</td>
-		<td class="norm">Vertreter</td><td class="norm"><select name="Vertreter">
+	<input type="hidden" name="uid" value="{uid}">
+	<input type="hidden" name="login" value="{login}">
+	<tr><td class="norm">User ID</td><td>{uid}</td>
+		<td class="norm">Vertreter</td><td class="norm"><select name="vertreter">
 <!-- BEGIN Selectbox -->
-						<option value="{Vertreter}"{Sel}>{VName}</option>
+						<option value="{vertreter}"{Sel}>{vname}</option>
 <!-- END Selectbox -->
 						</select>
 		</td></tr>
-	<tr><td class="norm">Login</td><td>{Login}</td>
+	<tr><td class="norm">Login</td><td>{login}</td>
 
 		<td class="norm">Etikett</td><td class="norm"><select name="etikett">
 <!-- BEGIN SelectboxB -->
@@ -78,16 +74,16 @@
 <!-- END SelectboxB -->
 						</select>
 		</td></tr>
-	<tr><td class="norm">Name</td><td><input type="text" name="Name" value="{Name}" maxlength="75"></td>
-		<td class="norm">Abteilung</td>	<td><input type="text" name="Abteilung" value="{Abteilung}" maxlength="75"></td></tr>
-	<tr><td class="norm">Strasse</td><td><input type="text" name="Strasse" value="{Strasse}" maxlength="75"></td>
-		<td class="norm">Position</td><td><input type="text" name="Position" value="{Position}" maxlength="75"></td></tr>
-	<tr><td class="norm">Plz Ort</td><td><input type="text" name="Plz" value="{Plz}" size="6" maxlength="10"> <input type="text" name="Ort" value="{Ort}"  maxlength="75"></td>
-		<td class="norm">eMail</td><td><input type="text" name="eMail" value="{eMail}" size="30" maxlength="125"></td></tr>
-	<tr><td class="norm">Telefon priv.</td><td><input type="text" name="Tel1" value="{Tel1}" maxlength="30"></td>
-		<td class="norm">gesch&auml;ftl.</td><td><input type="text" name="Tel2" value="{Tel2}" maxlength="30"></td></tr>
-	<tr><td class="norm">Bemerkung</td><td><textarea name="Bemerkung" cols="37" rows="3">{Bemerkung}</textarea></td>
-		<td class="norm">Mail-<br>unterschrift</td><td><textarea name="MailSign" cols="37" rows="3">{MailSign}</textarea></td></tr>
+	<tr><td class="norm">Name</td><td><input type="text" name="name" value="{name}" maxlength="75"></td>
+		<td class="norm">Abteilung</td>	<td><input type="text" name="abteilung" value="{abteilung}" maxlength="75"></td></tr>
+	<tr><td class="norm">Strasse</td><td><input type="text" name="addr1" value="{addr1}" maxlength="75"></td>
+		<td class="norm">Position</td><td><input type="text" name="position" value="{position}" maxlength="75"></td></tr>
+	<tr><td class="norm">Plz Ort</td><td><input type="text" name="addr2" value="{addr2}" size="6" maxlength="10"> <input type="text" name="addr3" value="{addr3}"  maxlength="75"></td>
+		<td class="norm">E-Mail</td><td><input type="text" name="email" value="{email}" size="30" maxlength="125"></td></tr>
+	<tr><td class="norm">Telefon priv.</td><td><input type="text" name="homephone" value="{homephone}" maxlength="30"></td>
+		<td class="norm">gesch&auml;ftl.</td><td><input type="text" name="workphone" value="{workphone}" maxlength="30"></td></tr>
+	<tr><td class="norm">Bemerkung</td><td><textarea name="notes" cols="37" rows="3">{notes}</textarea></td>
+		<td class="norm">Mail-<br>unterschrift</td><td><textarea name="mailsign" cols="37" rows="3">{mailsign}</textarea></td></tr>
 	<tr><td class="norm">Kd-Ansicht</td><td>
 		<select name="kdview">
 		<option value="1"{kdview1}>Lieferanschrift
@@ -95,18 +91,18 @@
 		<option value="3"{kdview3}>sonst.Infos
 		</select>
 	</td><td></td>
-	<tr><td class="norm">Regel</td><td>{Regel}</td>
+	<tr><td class="norm">Regel</td><td>{role}</td>
 		<td>&nbsp;</td><td>{GRUPPE}</td></tr>
-	<tr><td class="norm">Mailserver</td><td><input type="text" name="Msrv" value="{Msrv}" maxlength="75"></td>
+	<tr><td class="norm">Mailserver</td><td><input type="text" name="msrv" value="{msrv}" maxlength="75"></td>
 		<td class="norm"></td>
 		<td class="norm">
 		</td></tr>
-	<tr><td class="norm">Postfach</td><td class="norm"><input type="text" name="Postf" value="{Postf}" size="10" maxlength="75"> Kennwort <input type="text" name="Kennw" value="{Kennw}" size="10" maxlength="20"></td>
+	<tr><td class="norm">Postfach</td><td class="norm"><input type="text" name="postf" value="{postf}" size="10" maxlength="75"> Kennwort <input type="text" name="kennw" value="{kennw}" size="10" maxlength="20"></td>
 	    <td class="norm">Termine</td><td>
 	    	von <select name="termbegin">{termbegin}</select> 
 	    	bis <select name="termend">{termend}</select> Uhr</td></tr>
 	<!--tr><td>Backup-Pf</td><td><input type="text" name="Postf2" value="{Postf2}" size="10"> </td><td></td></tr-->
-	<tr><td class="norm">Intervall</td><td class="norm"><input type="text" name="Interv" value="{Interv}" size="4" maxlength="5">sec. &nbsp;&nbsp; PreSearch <input type="text" name="Pre" value="{Pre}" size="10"></td>
+	<tr><td class="norm">Intervall</td><td class="norm"><input type="text" name="interv" value="{interv}" size="4" maxlength="5">sec. &nbsp;&nbsp; PreSearch <input type="text" name="pre" value="{pre}" size="10"></td>
 	    <td>Terminabstand</td><td><input type="text" name="termseq" value="{termseq}" size="3"> Minuten</td></tr>
 	<!--tr><td colspan="4"><input type="submit" name="mkmbx" value="Mailbox erzeugen"></td><td></td><td></td></tr-->
 

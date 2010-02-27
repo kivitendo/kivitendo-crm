@@ -57,7 +57,10 @@
 			termend	=> $tend,
 			termseq	=> ($fa["termseq"])?$fa["termseq"]:30,
 			GRUPPE => $gruppen,
-            DATUM => date('d.m.Y')
+            DATUM => date('d.m.Y'),
+            icalext => $fa["icalext"],
+            icaldest => $fa["icaldest"],
+            icalart.$fa["icalart"] => "selected",
 			));
 	if ($_GET["id"]) {	
 		$t->set_var(array(Vertreter => $fa["Vertreter"]." ".$fa["VName"]));

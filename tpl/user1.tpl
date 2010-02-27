@@ -30,9 +30,18 @@
         f.focus();
     }
     function go(art) {
-        start=document.termedit.start.value;
-        stop=document.termedit.stop.value;
-        document.location.href="mkics.php?ext="+art+"&start="+start+"&stop="+stop;
+        //art = document.termedit.icalext.value;
+        //start=document.termedit.start.value;
+        //stop=document.termedit.stop.value;
+        //document.location.href="mkics.php?ext="+art+"&start="+start+"&stop="+stop;
+        document.termedit.action=art+".php";
+        document.termedit.submit();
+    }
+    function getical() {
+        document.user.icalart.value = document.termedit.icalart.options[document.termedit.icalart.selectedIndex].value;
+        document.user.icaldest.value = document.termedit.icaldest.value;
+        document.user.icalext.value = document.termedit.icalext.value;
+        return true;
     }
 	</script>
 <body>
@@ -43,12 +52,15 @@
 	<p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>
 	</iframe>
 </div>
-<form name="user" action="user1.php" method="post">
+<form name="user" action="user1.php" method="post" onSubmit="return getical();">
 <div id="user">
 <!--input type="reset" name="mails" value="Mails zeigen" onClick="Mailonoff()"-->
 
 <table border="0" class="mini">
 
+	<input type="hidden" name="icalart" value="{icalart}">
+	<input type="hidden" name="icaldest" value="{icaldest}">
+	<input type="hidden" name="icalext" value="{icalext}">
 	<input type="hidden" name="UID" value="{UID}">
 	<input type="hidden" name="Login" value="{Login}">
 	<tr><td class="norm">User ID</td><td>{UID}</td>
@@ -103,10 +115,28 @@
 	</form>
 </table>
 Kalenderexport: 
-<form name="termedit">
-<input type="text" size="10" id="start" name="start"><img src='image/date.png' border='0' align='middle' onClick="kal('start')";>
-<input type="text" size="10" id="stop" name="stop"><img src='image/date.png' border='0' align='middle' id='triggerStop' onClick="kal('stop')";>
-<a href="#" onClick="go('ics')">ics</a> <a href="#" onClick="go('vcs')">vcs</a>
+<form name="termedit" method="post" action="mkics.php" onSubmit="return false;">
+<table>
+<tr>
+<td><input type="text" size="10" id="start" name="start"><img src='image/date.png' border='0' align='middle' onClick="kal('start')";></td>
+<td><input type="text" size="10" id="stop" name="stop"><img src='image/date.png' border='0' align='middle' id='triggerStop' onClick="kal('stop')";></td>
+<td><select name="icalart">
+    <option value="file" {icalartfile}>File (Server)
+    <option value="mail" {icalartmail}>E-Mail
+    <option value="client" {icalartclient}>Browser
+    </select>
+</td>
+<td><input type="text" size="4"  id="ext"  name="icalext" value="{icalext}"></td>
+<td><input type="text" size="40"  id="dest"  name="icaldest" value="{icaldest}"></td>
+<td><a href="#" onClick="go('mkics')">go</a></td>
+</tr><tr>
+<td class="klein">von</td>
+<td class="klein">bis</td>
+<td class="klein">Art</td>
+<td class="klein">Endung</td>
+<td class="klein">Ziel</td>
+<td></td>
+</tr></table>
 </form>
 </div>
 <!-- End Code ----------------------------------------------->

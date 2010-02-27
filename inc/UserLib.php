@@ -20,7 +20,8 @@ global $db;
 	$sql.=$val["Postf2"]."', interv='".$val["Interv"]."', pre='".$val["Pre"]."', abteilung='".$val["Abteilung"]."',";
 	$sql.="position='".$val["Position"]."', vertreter=$vertreter,mailsign='".$val["MailSign"]."',email='".$val["eMail"];
 	$sql.="',termbegin=".$val["termbegin"].",termend=".$val["termend"].",kdview=".$val["kdview"];
-    $sql.=",termseq=".$val["termseq"]." where id=".$val["UID"];
+    $sql.=",icalart='".$val["icalart"]."',icaldest='".$val["icaldest"]."',icalext='".$val["icalext"];
+    $sql.="',termseq=".$val["termseq"]." where id=".$val["UID"];
 	$rc=$db->query($sql);
 	if ($val["Tel1"]) mkTelNummer($val["UID"],"E",array($val["Tel1"]));
 }
@@ -92,6 +93,9 @@ global $db;
 		$daten["termend"]=$rs[0]["termend"];
 		$daten["termseq"]=$rs[0]["termseq"];
 		$daten["kdview"]=$rs[0]["kdview"];
+		$daten["icalart"]=$rs[0]["icalart"];
+		$daten["icalext"]=$rs[0]["icalext"];
+		$daten["icaldest"]=$rs[0]["icaldest"];
 		return $daten;
 	}
 }

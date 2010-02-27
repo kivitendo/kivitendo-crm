@@ -4,8 +4,8 @@
     include("inc/UserLib.php");
     require_once( 'inc/iCalcreator.class.php' );
     $user=getUserStamm($_SESSION["loginCRM"]);
-    $start=($_GET["start"]<>"")?$_GET["start"]:date('d.m.Y');
-    $stop = ($_GET["stop"]<>"")?$_GET["stop"]:'';
+    $start=($_POST["start"]<>"")?$_POST["start"]:date('d.m.Y');
+    $stop = ($_POST["stop"]<>"")?$_POST["stop"]:'';
     $termine = searchTermin('%',$start,$stop,$_SESSION["loginCRM"]);
     $v = new vcalendar(); // create a new calendar instance
     $v->setConfig( 'unique_id', strtr($user["Name"],' ','_')); // set Your unique id
@@ -41,8 +41,35 @@
             $v->setComponent ( $vevent ); // add event to calendar
         }
     }
-    $v->setConfig( 'directory', 'calendar' ); // identify directory
-    $v->setConfig( 'filename', $user["Login"].'_calendar.'.$_GET["ext"] ); // set file name
-    $v->saveCalendar(); // save calendar to file
+    $v->setConfig( 'filename', date('Ymd').'_calendar.'.$_POST["icalext"] ); // set file name
+    if ($_POST["icalart"]=="client") {
+        $v->returnCalendar();
+    } else if ($_POST["icalart"]=="mail") {
+        $user=getUserStamm($_SESSION["loginCRM"]);
+        $abs=sprintf("%s <%s>",$user["Name"],$user["eMail"]);        
+        $Subject="LxO-Kalender";
+        $v->setConfig( 'directory', "tmp/" ); // identify directory
+        $v->saveCalendar(); // save calendar to file
+        include_once("Mail.php");
+        include_once("Mail/mime.php");
+        $headers=array(
+                "Return-Path"   => $abs,
+                "Reply-To"  => $abs,
+                "From"      => $abs,
+                "X-Mailer"  => "PHP/".phpversion(),
+                "Subject"   => $Subject);
+        $mime = new Mail_Mime("\n");
+        $mime->setTXTBody("");
+        echo "!".$v->getConfig('directory')."/".$v->getConfig('filename')."!".$v->getConfig('filename')."!";
+        $mime->addAttachment($v->getConfig('directory')."/".$v->getConfig('filename'),"text/plain",$v->getConfig('filename'));
+        $body = $mime->get(array("text_encoding"=>"quoted-printable","text_charset"=>ini_get("default_charset")));
+        $hdr = $mime->headers($headers);
+        $mail =& Mail::factory("mail");
+        $mail->_params="-f ".$user["eMail"];
+        $rc=$mail->send($_POST["icaldest"], $hdr, $body);                
+    } else {
+        $v->setConfig( 'directory', $_POST["icaldest"] ); // identify directory
+        $v->saveCalendar(); // save calendar to file
+    }
     echo $cnt.' Termine exportiert';
 ?>

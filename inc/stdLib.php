@@ -6,6 +6,7 @@ $inclpa=ini_get('include_path');
 ini_set('include_path',$inclpa.":../:./crmajax:./inc:../inc");
 
 require_once "conf.php";
+require_once "version.php";
 require_once $dbmodul."db.php";
 
 if (!$_SESSION["db"] || !$_SESSION["cookie"] ||
@@ -181,7 +182,8 @@ global $VERSION;
 		exit;
 	} else if($rc[0]["version"]<>$VERSION) {
 		echo "Istversion: ".$rc[0]["version"]." Sollversion: ".$VERSION."<br>";
-		require("update.php");
+		require("update_neu.php");
+		//require("update.php");
 		exit;
 	} else {
 		return true;

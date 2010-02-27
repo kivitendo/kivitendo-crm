@@ -1,10 +1,9 @@
 <?php 
 session_start();
 require_once("inc/conf.php");
+require_once("inc/version.php");
 if ($logfile) 
     require("crmajax/logcommon".XajaxVer.".php");
-$ver=file("VERSION");
-$ver=$ver[0];
 if ($_GET["test"]=="ja") {
 	require("inc/stdLib.php");
 	$rc=$db->getAll("select * from crm order by version","Status");
@@ -45,7 +44,7 @@ if ($prog) { echo "<a href='tmp/instprog.log'>Programminstallation</a><br>"; } e
 if ($db) { echo "<a href='tmp/install.log'>Datenbankinstallation</a><br>"; } else { echo "Kein Logfile f&uuml;r Datenbankinstallation<br>"; }
 ?>
 <table>
-	<tr><td>ProgrammVersion</td><td>[<?= $ver ?>]</td></tr>
+	<tr><td>ProgrammVersion</td><td>[<?= $VERSION." ".$SUBVER ?>]</td></tr>
 	<tr><td>Datenbank:</td><td> [<?= $_SESSION["dbname"] ?>]</td></tr>
 	<tr><td>db-Server:</td><td>[<?= $_SESSION["dbhost"] ?>]</td></tr>
 	<tr><td>Benutzer:</td><td>[<?= $_SESSION["employee"] ?>:<?= $_SESSION["loginCRM"] ?>]</td></tr>
@@ -53,7 +52,7 @@ if ($db) { echo "<a href='tmp/install.log'>Datenbankinstallation</a><br>"; } els
 	<tr><td>PHP-Umgebung:</td><td>[<a href="info.php">anzeigen</a>]</td></tr>
 	<tr><td>Session<a href="showsess.php?ok=show">:</a></td><td>[<a href="showsess.php">l&ouml;schen</a>]</td></tr>
 	<tr><td>db-Zugriff:</td><td>[<a href="status.php?test=ja">testen</a>]</td></tr>
-	<tr><td>Updatecheck<a href="update/newdocdir.php?chk=1">:</a></td><td>[<a href='update_neu.php'>durchf&uuml;hren</a>]</td></tr>
+	<tr><td>Updatecheck<a href="update/newdocdir.php?chk=1">:</a></td><td>[<a href='inc/update_neu.php'>durchf&uuml;hren</a>]</td></tr>
 	<tr><td>Installationscheck:</td><td>[<a href='inc/install.php?check=1'>durchf&uuml;hren</a>]</td></tr>
 <? if ($logfile) { ?>
  	<tr><td><input type="button" value="Server" onClick="chksrv()">:</td><td>[<div id='SRV'></div>]</td></tr>

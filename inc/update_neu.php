@@ -1,12 +1,14 @@
 <?php
-    require_once("stdLib.php");
+    chdir("..");
+    require_once("inc/stdLib.php");
     $sql = "SELECT tag || '.sql' as tag  from schema_info where tag like 'crm_%' order by tag";
     $rs  = $_SESSION["db"]->getAll($sql);
     if (!$rs) { $isnow=array();} 
     else { foreach ($rs as $row) { $isnow[]=$row["tag"];} };
-    chdir("../update");
+    chdir("update");
     $update = glob("crm_*.sql");
     chdir("..");
+    $code=false;
     if (!is_array($update)) $update=array();
     $todo = array_diff($update,$isnow);
     if ($todo) {
@@ -17,12 +19,21 @@
                 if (empty($zeile)) { $zeile=trim(fgets($f,1000)); continue; };
                 if (preg_match("/^-- @([^:]+):(.+)/",$zeile,$treffer)) { 
                     $tmp=$treffer[1]; 
-                    ${$tmp}=$treffer[2];
-                    echo $tmp.":".${$tmp}."<br>"; flush();
+                    if ($tmp=="php") {
+                        $query = "";
+                        $code=true;
+                    } else if ($tmp=="exec") {
+                        $code=false;
+                        eval($query);
+                        $query = "";
+                    } else {
+                        ${$tmp}=$treffer[2];
+                        echo $tmp.":".${$tmp}."<br>"; flush();
+                    }
                     $zeile=trim(fgets($f,1000)); continue; 
                 };
                 if (preg_match("/^--/",$zeile)) { $zeile=trim(fgets($f,1000)); continue; };
-                if (!preg_match("/;$/",$zeile)) {
+                if (!preg_match("/;$/",$zeile) or $code) {
                     $query.=$zeile;
                     $zeile=trim(fgets($f,1000));
                 } else {
@@ -40,6 +51,8 @@
             $sql="insert into schema_info (tag,login) values ('crm_%s','%s')";
             $rc = $_SESSION["db"]->query(sprintf($sql,trim($tag),$_SESSION["employee"]));
             if ($rc) {
+                $sql = "INSERT INTO crm (uid,datum,version) values (".$_SESSION["loginCRM"].",now(),'".$VERSION."')";
+                $rc = $_SESSION["db"]->query($sql);
                 $db->commit();
                 echo "update ok<br>";
             } else {

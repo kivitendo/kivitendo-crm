@@ -50,24 +50,25 @@
 						$zeile["ustid"],$zeile["taxnumber"],
 						$zeile["account_number"],$zeile["bank"],$zeile["bank_code"],
 						$zeile["language"],$zeile["business_id"]),$zeile["id"]);	
-				$t->set_var(array(
-					Q => $Q,
-					ID => $zeile["id"],
-					LineCol => $bgcol[($i%2+1)],
-                    KdNr => ($Q=="C")?$zeile["customernumber"]:$zeile["vendornumber"],
-					Name => $zeile["name"],
-					Plz => $zeile["zipcode"],
-					Ort => $zeile["city"],
-					Telefon => $zeile["phone"],
-					eMail => $zeile["email"]
-				));
-				$t->parse("Block","Liste",true);
-				$i++;
-				if ($i>=$listLimit) {
-					$t->set_var(array(
-						report => "$listLimit von ".count($daten)." Treffern",
-					));
-					break;
+                if ($i<$listLimit) {
+                    $t->set_var(array(
+                        Q => $Q,
+                        ID => $zeile["id"],
+                        LineCol => $bgcol[($i%2+1)],
+                        KdNr => ($Q=="C")?$zeile["customernumber"]:$zeile["vendornumber"],
+                        Name => $zeile["name"],
+                        Plz => $zeile["zipcode"],
+                        Ort => $zeile["city"],
+                        Telefon => $zeile["phone"],
+                        eMail => $zeile["email"]
+                    ));
+                    $t->parse("Block","Liste",true);
+                    $i++;
+                    if ($i>=$listLimit) {
+					    $t->set_var(array(
+						    report => "$listLimit von ".count($daten)." Treffern",
+					    ));
+                    }
 				}
 			}
 		} else {

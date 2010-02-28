@@ -78,6 +78,7 @@
                         $zeile["cp_greeting"]="KEIN GESCHLECHT";
                 }
                 /*if ($zeile["cp_country"] == 'Deutschland'){ //Schnellanpassung für xplace. Kann wieder raus, da dies in der Druckvorlage gesetzt wird
+                                                              //@Jan: Des war ja nun wohl erst recht Nonsens
                 $zeile["cp_country"]='';
                 }*/
 
@@ -96,28 +97,29 @@
                     $insk=""; 
                 };
                 $sonder=0;
-				$t->set_var(array(
-                    js => $js,
-					LineCol => $bgcol[($i%2+1)],
-					Name => $zeile["cp_name"].", ".$zeile["cp_givenname"],
-					Plz => $zeile["cp_zipcode"],
-					Ort => $zeile["cp_city"],
-					Telefon => $zeile["cp_phone1"],
-					eMail => $zeile["cp_email"],
-					Firma => $zeile["name"],
-					insk => $insk,
-					DEST => $dest,
-					QUELLE => $Quelle,
-					Q => $Quelle,
-				));
-				$t->parse("Block","Liste",true);
-				$i++;
-				if ($i>=$listLimit) {
-					$t->set_var(array(
-						report => "$listLimit von ".count($daten)." Treffern",
-					));
-					break;
-				}
+				if ($i<$listLimit) {
+                    $t->set_var(array(
+                        js => $js,
+                        LineCol => $bgcol[($i%2+1)],
+                        Name => $zeile["cp_name"].", ".$zeile["cp_givenname"],
+                        Plz => $zeile["cp_zipcode"],
+                        Ort => $zeile["cp_city"],
+                        Telefon => $zeile["cp_phone1"],
+                        eMail => $zeile["cp_email"],
+                        Firma => $zeile["name"],
+                        insk => $insk,
+                        DEST => $dest,
+                        QUELLE => $Quelle,
+                        Q => $Quelle,
+                    ));
+                    $t->parse("Block","Liste",true);
+                    $i++;
+                    if ($i>=$listLimit) {
+                        $t->set_var(array(
+                            report => "$listLimit von ".count($daten)." Treffern",
+                        ));
+                    }
+                }
 			}
             $t->set_var(array(
                 snd => $snd,

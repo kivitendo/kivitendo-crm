@@ -134,6 +134,7 @@ Kalenderexport:
 <td></td>
 </tr></table>
 </form>
+<img src="{IMG}" width="500" height="280" title="Netto sales over 12 Month">
 </div>
 <!-- End Code ----------------------------------------------->
 <!--/td></tr></table-->

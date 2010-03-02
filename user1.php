@@ -1,6 +1,6 @@
 <?php
-// $Id$
 	require_once("inc/stdLib.php");
+    include("inc/grafik$jpg.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");
 	include("inc/UserLib.php");
@@ -31,7 +31,12 @@
 		$tbeg.="<option value=$z".(($i==$z)?" selected":"").">$z";
 		$tend.="<option value=$z".(($j==$z)?" selected":"").">$z";
 	}
+    if ($jahr=="") $jahr = date("Y");
+    $re = getReJahr($fa["id"],$jahr,false,true);
+    $an = getAngebJahr($fa["id"],$jahr,false,true);
+    $IMG=getLastYearPlot($re,$an,false);
 	$t->set_var(array(
+            IMG => $IMG,
 			login => $fa["login"],
 			name => $fa["name"],
 			addr1 => $fa["addr1"],

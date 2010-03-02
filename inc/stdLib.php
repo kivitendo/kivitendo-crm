@@ -91,6 +91,17 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
 			$auth[$row["cfg_key"]]=$row["cfg_value"];
 		}
 	}
+    $sql = "SELECT granted from auth.group_rights G where G.right = 'sales_all_edit' and G.group_id in (select group_id from auth.user_group where user_id = ".$rs[0]["id"].")";
+	$rs=$db->getAll($sql,"authuser_3");
+    $auth["sales_edit_all"] = 'f';
+    if ($rs) {
+        foreach ($rs as $row) {
+             if ($row["granted"] == 't') {
+                   $auth["sales_edit_all"] = 't';
+                   break;
+              }
+         }
+    }
 	$sql="update auth.session set mtime = '".date("Y-M-d H:i:s.100001")."' where id = '".$rs[0]["session_id"]."'"; 
 	$db->query($sql,"authuser_3");
 	return $auth;
@@ -133,6 +144,7 @@ global $ERPNAME;
 	$_SESSION["dbport"]=(!$auth["dbport"])?"5432":$auth["dbport"];
 	$_SESSION["dbuser"]=$auth["dbuser"];
 	$_SESSION["dbpasswd"]=$auth["dbpasswd"];	
+    $_SESSION["sales_edit_all"] = $auth["sales_edit_all"];
 	$_SESSION["lang"]=$auth["countrycode"]; 
 	$_SESSION["db"]=new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
 	$_SESSION["authcookie"]=$authcookie;

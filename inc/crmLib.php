@@ -1465,20 +1465,26 @@ function chkMailAdr ($mailadr) {
 * out: rechng = array
 * Rechnungsdaten je Monat
 *****************************************************/
-function getReJahr($fid,$jahr,$liefer=false) {
+function getReJahr($fid,$jahr,$liefer=false,$user=false) {
 global $db;
 	$lastYearV=date("Y-m-d",mktime(0, 0, 0, date("m")+1, 1, $jahr-1));
 	$lastYearB=date("Y-m-d",mktime(0, 0, 0, date("m"), 31, $jahr));
+    if ($user) {
+        $sea = " and salesman_id = ".$fid." ";
+    } else if ($_SESSION["sales_edit_all"] == "f") {
+        $sea = sprintf(" and (employee_id = %d or salesman_id = %d) ", $_SESSION["loginCRM"], $_SESSION["loginCRM"]);
+    }
+    $sql  = "select sum(netamount),count(*),substr(cast(transdate as text),1,4)||substr(cast(transdate as text),6,2) as month,'%s' from %s ";
+    $sql .= "where %s=%d and transdate >= '%s' and transdate <= '%s' %s group by month ";
+
 	if ($liefer) {
-		$sql="select * from oe where vendor_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' ";
-		$sql.="and closed = 'f' and quotation = 'f' order by transdate desc";
-		$rs2=$db->getAll($sql);
-		$sql="select * from ap where vendor_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' order by transdate desc";
+        $bezug = ($user)?"employee_id":"vendor_id";
+		$rs2=$db->getAll(sprintf($sql,'A','oe',$bezug,$fid,$lastYearV,$lastYearB,$sea));
+		$sql=sprintf($sql,'R','ap',$bezug,$fid,$lastYearV,$lastYearB,$sea);
 	} else {
-		$sql="select * from oe where customer_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' ";
-		$sql.="and closed = 'f' and quotation = 'f' order by transdate desc";
-		$rs2=$db->getAll($sql);
-		$sql="select * from ar where customer_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' order by transdate desc";
+        $bezug = ($user)?"employee_id":"customer_id";
+		$rs2=$db->getAll(sprintf($sql,'A','oe',$bezug,$fid,$lastYearV,$lastYearB,$sea));
+		$sql=sprintf($sql,'R','ar',$bezug,$fid,$lastYearV,$lastYearB,$sea);
 	};
 	$rs1=$db->getAll($sql);
 	$rs=array_merge($rs1,$rs2);
@@ -1491,10 +1497,10 @@ global $db;
 	$rechng["Jahr  "]=array("summe"=>0,"count"=>0,"curr"=>$curr);
 	// unterschiedliche Währungen sind noch nicht berücksichtigt. Summe stimmt aber.
 	if ($rs) foreach ($rs as $re){
-		$m=substr($re["transdate"],0,4).substr($re["transdate"],5,2);
-		$rechng[$m]["summe"]+=$re["netamount"];
-		$rechng[$m]["count"]++;
-		$rechng["Jahr  "]["summe"]+=$re["netamount"];
+        $m = $re["month"];
+		$rechng[$m]["summe"] = $re["sum"];
+		$rechng[$m]["count"] = $re["count"];
+		$rechng["Jahr  "]["summe"] += $re["sum"];
 		$rechng["Jahr  "]["count"]++;
 	}
 	return $rechng;
@@ -1506,18 +1512,23 @@ global $db;
 * out: rechng = array
 * Angebotsdaten je Monat
 *****************************************************/
-function getAngebJahr($fid,$jahr,$liefer=false) {
+function getAngebJahr($fid,$jahr,$liefer=false,$user=false) {
 global $db;
 	$lastYearV=date("Y-m-d",mktime(0, 0, 0, date("m"), 1, $jahr-1));
 	$lastYearB=date("Y-m-d",mktime(0, 0, 0, date("m")+1, -1, $jahr));
+    if ($user) {
+        $sea = " and salesman_id = ".$fid." ";
+    } else if ($_SESSION["sales_edit_all"] == "f") {
+        $sea = sprintf(" and (employee_id = %d or salesman_id = %d) ", $_SESSION["loginCRM"], $_SESSION["loginCRM"]);
+    }
+    $sql  = "select sum(netamount),count(*),substr(cast(transdate as text),1,4)||substr(cast(transdate as text),6,2) as month from oe ";
+    $sql .= "where %s=%d and quotation = 't' and transdate >= '%s' and transdate <= '%s' %s group by month ";
 	if ($liefer) {
-		$sql="select * from oe where vendor_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' ";
-		$sql.="and quotation = 't' order by transdate desc";
+        $bezug = ($user)?"employee_id":"vendor_id";
 	} else {
-		$sql="select * from oe where customer_id=$fid and transdate >= '$lastYearV' and transdate <= '$lastYearB' ";
-		$sql.="and quotation = 't' order by transdate desc";
+        $bezug = ($user)?"employee_id":"customer_id";
 	}
-	$rs=$db->getAll($sql);
+	$rs=$db->getAll(sprintf($sql,$bezug,$fid,$lastYearV,$lastYearB,$sea));
 	$rechng=array();
     $curr = getCurr();
 	for ($i=11; $i>=0; $i--) {
@@ -1526,10 +1537,10 @@ global $db;
 	}
 	$rechng["Jahr  "]=array("summe"=>0,"count"=>0,"curr"=>$curr);
 	if ($rs) foreach ($rs as $re){
-		$m=substr($re["transdate"],0,4).substr($re["transdate"],5,2);
-		$rechng[$m]["summe"]+=$re["netamount"];
-		$rechng[$m]["count"]++;
-		$rechng["Jahr  "]["summe"]+=$re["netamount"];
+        $m = $re["month"];
+		$rechng[$m]["summe"] = $re["sum"];
+		$rechng[$m]["count"] = $re["count"];
+		$rechng["Jahr  "]["summe"] += $re["sum"];
 		$rechng["Jahr  "]["count"]++;
 	}
 	return $rechng;
@@ -1563,6 +1574,7 @@ global $db;
 *****************************************************/
 function getReMonat($fid,$jahr,$monat,$liefer=false){
 global $db;
+    if ($_SESSION["sales_edit_all"] == "f") $sea = sprintf(" and (employee_id = %d or salesman_id = %d) ", $_SESSION["loginCRM"], $_SESSION["loginCRM"]);
         if ($monat=="00") {
             $next=($jahr+1).'-01-01';
             $monat='01';
@@ -1570,11 +1582,11 @@ global $db;
             $next = ($monat<12)?"$jahr-".($monat+1)."-01":($jahr+1)."-01-01";
         }
         if ($liefer) {
-                $sql1="select * from ap where vendor_id=$fid and transdate >= '$jahr-$monat-01' and transdate < '$next' order by transdate desc";
-                $sql2="select * from oe where vendor_id=$fid and transdate >= '$jahr-$monat-01' and transdate < '$next' and closed = 'f' order by transdate desc";
+                $sql1="select * from ap where vendor_id=$fid and transdate >= '$jahr-$monat-01' and transdate < '$next' $sea order by transdate desc";
+                $sql2="select * from oe where vendor_id=$fid and transdate >= '$jahr-$monat-01' and transdate < '$next' $sea and closed = 'f' order by transdate desc";
         } else {
-                $sql1="select * from ar where customer_id=$fid and transdate >= '$jahr-$monat-01' and transdate < '$next' order by transdate desc";
-                $sql2="select * from oe where customer_id=$fid and transdate >= '$jahr-$monat-01' and transdate < '$next' order by transdate desc";
+                $sql1="select * from ar where customer_id=$fid and transdate >= '$jahr-$monat-01' and transdate < '$next' $sea order by transdate desc";
+                $sql2="select * from oe where customer_id=$fid and transdate >= '$jahr-$monat-01' and transdate < '$next' $sea order by transdate desc";
         };
 	$rs2=$db->getAll($sql2);
 	$rs1=$db->getAll($sql1);

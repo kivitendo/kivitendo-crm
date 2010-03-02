@@ -169,7 +169,7 @@
         </select>
 		<!--input type="button" value="Woche" onClick="showlist('W')">
 		<input type="button" value="Monat" onClick="showlist('M')"-->
-		<iframe src="termlist.php?ansicht={ANSICHT}&datum={DATUM}" name="Termine" style="width:29em; height:31em" marginheight="0" marginwidth="0" align="left">
+		<iframe src="termlist.php?cuid={uid}&ansicht={ANSICHT}&datum={DATUM}" name="Termine" style="width:29em; height:31em" marginheight="0" marginwidth="0" align="left">
 		<p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>
 		</iframe>
 	</td>

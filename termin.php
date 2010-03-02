@@ -212,7 +212,7 @@
 		LANG => $data["lang"],
 		FT => ($data["ft"])?" checked":"",
 		ANSICHT => $ANSICHT,
-		DATUM => $DATUM
+		DATUM => ($DATUM=="")?date('d.m.Y'):$DATUM
 	));
 	$t->Lpparse("out",array("term"),$_SESSION["lang"],"work");
 ?>

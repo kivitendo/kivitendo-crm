@@ -3,6 +3,9 @@
 	<head><title></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
     <script language="JavaScript">
+    function filesearch() {
+        f=open("filelist.php","File","width=900,height=650,left=200,top=100");
+    }
     function go(was) {
         document.wissen.aktion.value=was;
         document.wissen.submit();
@@ -32,7 +35,7 @@
         <input type="text" name="wort" value="{notfound}"> 
 		<img src="image/search.png" border="0" title=".:search:." align="middle" onClick="go('suche')">
 	</div>
-	<div style="float:left; width:65%; text-align:left; border: 0px solid blue; padding-left: 10px;" >
+	<div style="float:left; width:65%; text-align:left; border: 0px solid blue; padding-left: 10px;" id="wdbfile">
 		{headline}<br />
 		<hr />
 		{pre}{content}{post}<br />

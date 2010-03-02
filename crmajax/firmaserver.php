@@ -286,6 +286,8 @@
                 "<a href='#' onClick='editattribut($id)'>".translate('.:edit attribute:.','firma')."</a>");
         $objResponse->assign("lock",    "innerHTML",
                 "<a href='#' onClick='xajax_lockFile(\"$file\",\"$pfad\",$id)'>".translate('.:lock file:.','firma')."</a>");
+        $objResponse->assign("picup",    "innerHTML",
+                "<a href='#' onClick='picup(\"dokumente/".$_SESSION["mansel"]."$pfad/\",\"$file\")'>".translate('.:picup:.','firma')."</a>");
                 return $objResponse;
     }
     /**

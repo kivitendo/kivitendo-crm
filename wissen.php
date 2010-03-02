@@ -100,7 +100,8 @@
 			$datum.=" ".substr($content["initdate"],11,2).":".substr($content["initdate"],14,2);
 			$hl=".:last:. .:vernr:.: ".$content["version"]." .:from:. $datum .:employee:.: ".$content["login"];
 		    $button = "<image src='image/save_kl.png' title='.:save:.' onClick=\"go('savecontent')\"> ";
-		    $button .= "<image src='image/cancel_kl.png' title='.:normview:.' onClick=\"go('reload')\"><br>";
+		    $button .= "<image src='image/cancel_kl.png' title='.:normview:.' onClick=\"go('reload')\"> ";
+		    $button .= "<image src='image/file_kl.png' title='.:picfile:.' onClick=\"filesearch()\"><br>";
 			//$button="<input type='image' src='image/save_kl.png' tilte='.:save:.' name='savecontent' value='.:save:.'>";
 			//$button.=" <input type='image' src='image/cancel_kl.png' title='.:escape:.' name='abbruch' value='.:escape:.'>";
 			$pre="<textarea id='elm1' name='content' cols='75' rows='18'>";
@@ -109,7 +110,8 @@
 		if ($_POST["aktion"] == "neu") {
 			$hl=".:new:. .:article:. .:vernr:.: 1 .:from:. ".date("d.m.Y")." .:employee:.: ".$_SESSION["loginCRM"];
 		    $button = "<image src='image/save_kl.png' title='.:save:.' onClick=\"go('savecontent')\"> ";
-		    $button .= "<image src='image/cancel_kl.png' title='.:normview:.' onClick=\"go('reload')\"><br>";
+		    $button .= "<image src='image/cancel_kl.png' title='.:normview:.' onClick=\"go('reload')\"> ";
+		    $button .= "<image src='image/file_kl.png' title='.:picfile:.' onClick=\"filesearch()\"><br>";
 			//$button="<input type='image' src='image/save_kl.png' tilte='.:save:.' name='savecontent' value='.:save:.'>";
 			//$button.=" <input type='image' src='image/cancel_kl.png' title='.:escape:.' name='abbruch' value='.:escape:.'>";
 			$pre="<textarea id='elm1' name='content' cols='75' rows='18'>";

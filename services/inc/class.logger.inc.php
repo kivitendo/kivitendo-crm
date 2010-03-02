@@ -34,22 +34,25 @@ class Logger
             self::$logpath = $path;
     }
     
-    static public function initModule( $module , $openmode='w')
+    static public function initModule( $module , $openmode='w', $file)
     {
         if (array_key_exists($module, self::$logfiles)) {
             self::syslogger( "ALERT", "Logger ".$module." already initialized" );
             return;
         }
         $logfile = self::$logpath.$module.".log";
-        $writable = is_writable($logfile);
+
+        $writable = is_writable(self::$logpath);
         if(!$writable) {
-            self::syslogger( "ALERT", "Failed to open logfile ".$logfile );
+            fputs($file,"writeerror\n");
+            self::syslogger( "ALERT", "Failed to write logpath ".self::$logpath );
             return false;
         }
         
         // open file, set pointer to end, if missing create.
         $handle = fopen($logfile , $openmode);
         if(!$handle) {
+            fputs($file,"handleerror\n");
             self::syslogger( "ALERT", "Failed to open logfile ".$logfile );
             return false;
         }

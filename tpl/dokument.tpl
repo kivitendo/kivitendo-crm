@@ -86,6 +86,7 @@
     }
 	var pfadleft = "";
 	var pfadright = "";
+    var pickup = {PICUP};
 	function showFile(seite,file) {
 		if(seite=="left") { 
 			xajax_showFile(pfadleft,file); 
@@ -97,7 +98,48 @@
 		document.getElementById("subedit").style.visibility="visible";
 		document.getElementById("lock").style.visibility="visible";
 		document.getElementById("submove").style.visibility="visible";
+        if (pickup) document.getElementById("picup").style.visibility="visible";
 	}
+    function picup(pfad,file) {
+        //opener.document.getElementById("elm1").value="<a href='"+pfad+file+"'>"+file+"</a>";
+        text = "<a href='"+pfad+file+"'>"+file+"</a>";
+        var input = opener.document.getElementById("elm1");
+        input.focus();
+        /* für Internet Explorer */
+        if(typeof document.selection != 'undefined') {
+            /* Einfügen des Formatierungscodes */
+            var range = document.selection.createRange();
+            range.text = text;
+            /* Anpassen der Cursorposition */
+            range = document.selection.createRange();
+            range.moveStart('character', text.length);      
+            range.select();
+        } else if(typeof input.selectionStart != 'undefined') {
+        /* für neuere auf Gecko basierende Browser */
+            var start = input.selectionStart;
+            input.value =  input.value.substr(0, start) + text + input.value.substr(start);
+            /* Anpassen der Cursorposition */
+            var pos;
+            pos = start + text.length;
+            input.selectionStart = pos;
+            input.selectionEnd = pos;
+      } else {
+      /* für die übrigen Browser */
+      /* Abfrage der Einfügeposition */
+          var pos;
+          var re = new RegExp('^[0-9]{0,3}$');
+          while(!re.test(pos)) {
+            pos = prompt("Einfügen an Position (0.." + input.value.length + "):", "0");
+          }
+          if(pos > input.value.length) {
+            pos = input.value.length;
+          }
+          /* Einfügen des Formatierungscodes */
+          var insText = prompt("Bitte geben Sie den zu formatierenden Text ein:");
+          input.value = input.value.substr(0, pos) + aTag + insText + eTag + input.value.substr(pos);
+      }
+        self.close();
+    }
 	function dateibaum(seite,start) {
 		if(seite=="left") { pfadleft=start; }
 		else { 
@@ -144,6 +186,7 @@
         <li id="submove" style="visibility:hidden;"><a href="#" >.:move:.</a></li>
         <li id="subedit" style="visibility:hidden;"><a href="#" >.:edit attribute:.</a></li>
         <li id="lock" style="visibility:hidden;"><a href="#" >.:lock file:.</a></li>
+        <li id="picup" style="visibility:hidden;"><a href="#" >.:picup:.</a></li>
     </ul><br>
         <span id="fbright"></span>
     </div>

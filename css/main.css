@@ -9,6 +9,9 @@ A:link		{ color: black;  }
 A:visited	{ color: black;  }
 A:hover		{ color:#8c1919;}
 A:active	{ text-decoration: underline; }
+#wdbfile  A {
+    color: #22a;
+}
 
 
 table.liste	{ border-collapse:collapse; border-width: 0px; border-style:solid; border-color:black;padding: 2px; margin: 2px; border-spacing:0px; }
@@ -192,4 +195,3 @@ input:focus {
 .clear {
 	background-color: #55cc55;
 }
-

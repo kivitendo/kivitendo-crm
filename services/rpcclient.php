@@ -20,8 +20,8 @@
 //$cli = new XML_RPC_Client('/egw/xmlrpc.php', 'localhost');
 //$cli = new XML_RPC_Client('/egw/xmlrpc.php?DBGSESSID=1@localhost:10001', 'localhost');
 //$cli = new XML_RPC_Client('/egroupware/xmlrpc.php', 'ldapserver');
-$cli = new XML_RPC_Client('/lx/crm/services/xmlrpc.php?DBGSESSID=1@localhost:10001', 'localhost');
-//$cli = new XML_RPC_Client('/lx/crm/services/xmlrpc.php', 'localhost');
+//$cli = new XML_RPC_Client('/lx/crm/services/xmlrpc.php?DBGSESSID=1@localhost:10001', 'localhost');
+$cli = new XML_RPC_Client('/lx-office-erp//crm/services/xmlrpc.php', 'localhost');
 //$cli = new XML_RPC_Client('/lx/crm/services/xmlrpc.php', 'ldapserver');
 
 
@@ -64,8 +64,8 @@ function doLogin() {
 
     $params = new XML_RPC_Value(array(
         "domain" => new XML_RPC_Value("default"),
-        "username" => new XML_RPC_Value("jd"),
-        "password" => new XML_RPC_Value("joshi75")), "struct");
+        "username" => new XML_RPC_Value("hli"),
+        "password" => new XML_RPC_Value("27123")), "struct");
     
     $resp = rpc_call('system.login', $params);
      
@@ -259,9 +259,8 @@ function calender_bocalender_search() {
 
 }
 
-$cli->setCredentials ('jd','joshi75');
-//$cli->setCredentials ('md','mane');
-//$auth = doLogin();
+$cli->setCredentials ('hli','27123');
+$auth = doLogin();
 //if(!$auth)
 //  return;
 //$cli->setCredentials ($auth['sessionid'], $auth['kp3']);

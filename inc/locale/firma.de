@@ -166,6 +166,7 @@ $texts  = array(
   '.:lock file:.'    => 'Datei sperren',
   '.:file locked:.'  => 'Datei gesperrt',
   '.:locked:.'       => 'gesperrt durch',
-  '.:documents:.'    => 'Dokumente'
+  '.:documents:.'    => 'Dokumente',
+  '.:picup:.'        => '&Uuml;bernehmen',
 ); 
 ?>

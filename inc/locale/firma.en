@@ -164,6 +164,7 @@ $texts  = array(
   '.:lock file:.'    => 'lock file',
   '.:file locked:.'  => 'file locked',
   '.:locked:.'       => 'locked',
-  '.:documents:.'    => 'Documents'
+  '.:documents:.'    => 'Documents',
+  '.:picup:.'        => 'Transfer',
 );
 ?>

@@ -72,8 +72,8 @@
 	$t = new Template($base);
 	$t->set_file(array("wvl" => $templ));
 	     if ($data["kontakttab"]=="P") { $stammlink="kontakt.php?id=".$data["kontaktid"]; }
-	else if ($data["kontakttab"]=="C") { $stammlink="firma1.php?id=".$data["kontaktid"]; }
-	else if ($data["kontakttab"]=="V") { $stammlink="liefer1.php?id=".$data["kontaktid"]; };
+	else if ($data["kontakttab"]=="C") { $stammlink="firma1.php?Q=C&id=".$data["kontaktid"]; }
+	else if ($data["kontakttab"]=="V") { $stammlink="liefer1.php?Q=V&id=".$data["kontaktid"]; };
 	$t->set_var(array(
 			Msg		=> $msg,
 			hide	=> ($data["kontakt"]=="F")?"hidden":"visible",

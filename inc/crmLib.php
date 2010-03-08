@@ -338,7 +338,7 @@ global $db;
 	}
 	$c_cause=addslashes($data["c_cause"]);
 	$c_cause=nl2br($c_cause);
-	$sql="update telcall set cause='".$data["cause"]."',c_long='$c_cause',caller_id='".$data["CID"];
+	$sql="update telcall set cause='".$data["cause"]."',c_long=E'$c_cause',caller_id='".$data["CID"];
 	$sql.="',calldate='$datum',kontakt='".$data["Kontakt"]."',dokument=$did,bezug='".$data["Bezug"];
 	$sql.="',employee='".$data["CRMUSER"]."',inout='".$data["inout"]."' where id=$id";
 	$rs=$db->query($sql);
@@ -349,9 +349,9 @@ global $db;
 }
 /****************************************************
 * updCall
-* in: data = array(Formularfelder) datei = �bergebene Datei
+* in: data = array(Formularfelder) datei = übergebene Datei
 * out: id = des Calls
-* einen ge�nderten Anruf speichern
+* einen geänderten Anruf speichern
 *****************************************************/
 function updCall($data,$datei=false) {
 global $db;

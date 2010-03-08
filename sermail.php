@@ -44,15 +44,21 @@
 			}
 			$limit=50;
 			$abs=sprintf("%s <%s>",$user["name"],$user["email"]);
+            // geht hier nicht ums Konvertieren, sonder ums Quoten!
+            mb_internal_encoding(ini_get("default_charset"));
+            $Name = mb_encode_mimeheader($user["name"], ini_get("default_charset"), 'Q', '');
+            $abs = $Name.' <'.$user["email"].'>';
+            $SubjectMail = mb_encode_mimeheader($Subject, ini_get("default_charset"), 'Q', '');
 			$headers=array(
                                         "Return-Path"   => $user["email"],
                                         "Reply-To"      => $abs,
                                         "From"          => $abs,
                                         "X-Mailer"      => "PHP/".phpversion(),
-                                        "Subject"       => $Subject);
+                                        "Subject"       => $SubjectMail);
 			//$headers['Content-Type']='text/plain; charset=utf-8';
 			//$headers['Content-Type']='text/plain; charset=iso-8859-1';
 			$_SESSION["headers"]=$headers;
+            $_SESSION["Subject"]=$Subject;
 			$_SESSION["bodytxt"]=$BodyText;
 			$_SESSION["dateiname"]=$dateiname;
 			$_SESSION["type"]=$type;

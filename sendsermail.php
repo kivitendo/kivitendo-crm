@@ -5,7 +5,7 @@ include("inc/UserLib.php");
 require_once("inc/crmLib.php");
 include_once("Mail.php");
 include_once("Mail/mime.php");
-
+mb_internal_encoding(ini_get("default_charset"));
 $offset=($_GET["offset"])?$_GET["offset"]:1;
 $mime = new Mail_Mime("\n");
 $mail =& Mail::factory("mail");
@@ -13,6 +13,7 @@ $headers=$_SESSION["headers"];
 $user=getUserStamm($_SESSION["loginCRM"]);
 $mail->_params="-f ".$user["email"];
 $subject=$headers["Subject"];
+$betreff=$_SESSION["Subject"];
 $bodytxt=$_SESSION["bodytxt"];
 $limit=$_SESSION["limit"];
 $abs=$headers["Return-Path"];
@@ -41,7 +42,8 @@ if ($data) {
 		$text=$bodytxt;
 		if ($tmp[$pemail]=="") continue;
 		if ($tmp[$pkont]<>"" and $tmp[$pemail]<>"") {
-			$to=$tmp[$pkont]." <".$tmp[$pemail].">";
+            $Name = mb_encode_mimeheader($tmp[$pkont], ini_get("default_charset"), 'Q', '');
+			$to=$Name." <".$tmp[$pemail].">";
 		} else {
 			$to=$tmp[$pemail];
 		}
@@ -69,7 +71,7 @@ if ($data) {
 			$rc=$mail->send($to, $hdr, $body);
 			if ($rc) {
 				$data["CRMUSER"]=$_SESSION["loginCRM"];
-				$data["cause"]="Sermail: ".$subject;
+				$data["cause"]="Sermail: ".$betreff;
 				$data["c_cause"]=$bodytxt."\nAbs: ".$abs;
 				//if ($dateiname) $data["c_cause"].="\nDatei: ".$_SESSION["loginCRM"].'/'.$dateiname;
 				$data["CID"]=$tmp[$cid];
@@ -79,7 +81,7 @@ if ($data) {
 				$data['Datum']=date("d.m.Y");
 				$data["DateiID"]=$_SESSION["dateiId"];
 				$data["Status"]=1;
-				$data["DCaption"]=$subject;
+				$data["DCaption"]=$betreff;
 				$stamm=false;
 				// Einträge in den Kontaktverlauf
 				insCall($data,false);
@@ -91,9 +93,9 @@ if ($data) {
 					insCall($data,false);
 					$_GET["first"]=0;
 				}		
-				if ($logmail) fputs($f,date("Y-m-d H:i").";ok;$to;$abs;S:$subject\n");
+				if ($logmail) fputs($f,date("Y-m-d H:i").";ok;$to;$abs;S:$betreff\n");
 			} else {
-				if ($logmail) fputs($f,date("Y-m-d H:i").";error;$to;$abs;S:$subject\n");
+				if ($logmail) fputs($f,date("Y-m-d H:i").";error;$to;$abs;S:$betreff\n");
 			} // if $rc
 		} //if to
 	} // foreach

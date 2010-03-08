@@ -73,14 +73,18 @@
 			$mime = new Mail_Mime("\n");
 			$mail =& Mail::factory("mail");
 			$user=getUserStamm($_SESSION["loginCRM"]);
-			$abs=sprintf("%s <%s>",$user["name"],$user["email"]);
-			$Subject=preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["Subject"]);
+            // geht hier nicht ums Konvertieren, sonder ums Quoten!
+            mb_internal_encoding(ini_get("default_charset"));
+            $Name = mb_encode_mimeheader($user["name"], ini_get("default_charset"), 'Q', '');
+            $abs = $Name.' <'.$user["email"].'>';
+			$Subject = preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["Subject"]);
+            $SubjectMail = mb_encode_mimeheader($Subject, ini_get("default_charset") , 'Q', '');
 			$headers=array( 
 					"Return-Path"	=> $abs,
 					"Reply-To"	=> $abs,
 					"From"		=> $abs,
 					"X-Mailer"	=> "PHP/".phpversion(),
-					"Subject"	=> $Subject);
+					"Subject"	=> $SubjectMail);
 
       			$to=($TO)?$TO:$CC;
       			if (substr(",",$to)) {
@@ -121,16 +125,16 @@
 			if ($logmail) {
 				$f=fopen("tmp/maillog.txt","a");
 				if ($rc) {
-					fputs($f,date("Y-m-d H:i").";ok;".$TO.";".$CC.";$abs;".$Subject.";\n");
+					fputs($f,date("Y-m-d H:i").';ok;'.$TO.';'.$CC.';'.$user["name"].' <'.$user["email"].'>;'.$Subject.";\n");
 				} else {
-					fputs($f,date("Y-m-d H:i").";error;".$_POST["TO"].";".$_POST["CC"].";$abs;".$_POST["Subject"].";".PEAR_Error::getMessage()."\n");
+					fputs($f,date("Y-m-d H:i").';error;'.$_POST["TO"].';'.$_POST["CC"].';'.$user["name"].' <'.$user["email"].'>;'.$_POST["Subject"].';'.PEAR_Error::getMessage()."\n");
 				}
 			}
 			if ($rc) {
 				if (!$anh) { $_FILES=false; };
 				$data["CRMUSER"]=$_SESSION["loginCRM"];
 				$data["cause"]=$Subject;
-				$data["c_cause"]=$BodyText."\nAbs: ".$abs;
+				$data["c_cause"]=$BodyText."\nAbs: ".$user["name"].' <'.$user["email"].'>';
 				$data["Q"]=$_POST["KontaktTO"][0];
 				if ($data["Q"]=="C" || $data["Q"]=="V") {
 					include("inc/FirmenLib.php");

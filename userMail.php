@@ -15,7 +15,7 @@
 		<script language="JavaScript">
 	<!--
 		function showItem(Q,id) {
-			F1=open("getCall.php?hole="+id+Q,"Caller","width=610, height=600, left=100, top=50, scrollbars=yes");
+			F1=open("getCall.php?hole="+id+Q,"Caller","width=800, height=650, left=100, top=50, scrollbars=yes");
 		}
 	//-->
 	</script>

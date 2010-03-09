@@ -184,7 +184,9 @@ class document {
 				$this->error="Datei '$dest' wurde nicht hochgeladen!";
 				echo $this->error;
 				return false;
-			}
+			} else {
+                unlink($file["Datei"]["tmp_name"]);
+            }
 		} else {
 			$this->error="Verzeichnis '$pfad' konte nicht angelegt werden!";
 			return false;

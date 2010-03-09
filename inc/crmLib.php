@@ -2,6 +2,7 @@
 // $Id$
 
 require_once("documents.php");
+include ("mailLib.php");
 
 /****************************************************
 * mkSuchwort
@@ -928,14 +929,13 @@ global $db;
 *****************************************************/
 function insWvlM($data) {
 global $db;
-	/*
 	if(empty($data["cp_cv_id"]) && $data["status"]<1) {
 		$kontaktID=$data["CRMUSER"];
 		//$data["cp_cv_id"]=$data["CRMUSER"];
-	} else {  */
+	} else {  
 		$kontaktID=substr($data["cp_cv_id"],1);
 		$kontaktTAB=substr($data["cp_cv_id"],0,1);
-	//}
+	}
 	if(!empty($kontaktID)) {
 		$data["status"]=0;
 		$nun=date("Y-m-d H:i:00");
@@ -952,33 +952,19 @@ global $db;
 		$tid=insCall($data,false);
 		if (!$tid) return false;
 		if (!empty($data["dateien"])) {
-			$srv=getUsrMailData($data["CRMUSER"]);
-			$mbox = imap_open ("{".$srv["msrv"].":143/imap/notls}", $srv["postf"],$srv["kennw"]);
-			//$mbox = imap_open ("{".$srv["msrv"].":143}", $srv["postf"],$srv["kennw"]);
 			$data["DateiID"]=true;
 			foreach($data["dateien"] as $mail){
 				//trenne Anhang und speichere in tmp
 				$file=split(",",$mail);
-				$body=imap_fetchbody($mbox,$data["Mail"],$file[0]);
-				$head=imap_header($mbox,$data["Mail"],$file[0]);
-				if ($file[2]==3 ||
-					eregi("GIF",$file[3]) 	||
- 					eregi("JPEG",$file[3]) 	||
-					eregi("PNG",$file[3])){
-        					$body   =imap_base64($body);
-				};
-				$Datei["Datei"]["name"]=$file[1];
-   				$Datei["Datei"]["tmp_name"]="./tmp/".$data["CRMUSER"]."_".$file[0];
-				$f=fopen($Datei["Datei"]["tmp_name"],"w");
-				fwrite($f,$body);
-				fclose($f);
-				$Datei["Datei"]["size"]=filesize($Datei["Datei"]["tmp_name"]);
+				$Datei["Datei"]["name"]=$file[0];
+   				$Datei["Datei"]["tmp_name"]="./tmp/".$file[0];
+				$Datei["Datei"]["size"]=$file[1];
 				$dbfile=new document();
-		                $dbfile->setDocData("descript",$data["DCaption"]);
+		        $dbfile->setDocData("descript",$data["DCaption"]);
 				$pfad=mkPfad($data["cp_cv_id"],$data["CRMUSER"]);
-        		        $rc=$dbfile->uploadDocument($Datei,$pfad);
-                                $did=$dbfile->id;     
-                                documenttotc($tid,$did);
+        		$rc=$dbfile->uploadDocument($Datei,$pfad);
+                $did=$dbfile->id;     
+                documenttotc($tid,$did);
 			}
 			moveMail($data["Mail"],$CID);
 			$sql="update telcall set dokument=1 where id = $tid";
@@ -1113,26 +1099,24 @@ function decode_string ($string) {
 function holeMailHeader($usr) {
 	$srv=getUsrMailData($usr);
 	$m=array();
-	if ($srv["msrv"] && $srv["postf"]) {  /// gar kein Mailserver/Postfach eingetragen
-		$mbox =@imap_open ("{".$srv["msrv"].":143/imap/notls}", $srv["postf"],$srv["kennw"]);
-		// evtl noch pop3 einbauen
+	if ($srv["msrv"] && $srv["postf"]) {  // Mailserver/Postfach eingetragen
+        $mbox = mail_login($srv["msrv"],"143",$srv["postf"],$srv["kennw"]);
 		if ($mbox) {
-			$anzahl=imap_num_msg($mbox);
+            $status = mail_stat($mbox);
+			$anzahl= $status["Nmsgs"] - $status["Deleted"];
 			if ($anzahl>0) {
-				$overview = imap_fetch_overview ($mbox, "1:$anzahl", 0);
+                $overview = mail_list($mbox);
 				$m=false;
 				if (is_array ($overview )) {
-    				reset ($overview);
-    				while (list ($key, $val) = each ($overview)) {
-					if (!$val->deleted) {
-						$datum=substr($val->date,4,-9);
-						$gelesen=($val->seen)?"-":"+";
-						$m[]=array("Nr"=>$val->msgno,
-								"Datum"=>$datum,
-								"Betreff"=>htmlspecialchars(decode_string($val->subject)),
-								"Abs"=>htmlspecialchars(decode_string($val->from)),
-								"Gelesen"=>$gelesen);
-					}
+                    foreach ($overview as $mail) {
+                        if (!$mail["deleted"]) {
+                            $gelesen=($mail["seen"])?"-":"+";
+                            $m[]=array("Nr"     =>  $mail["msgno"],
+                                    "Datum"     =>  $mail["date"]." ".$mail["time"],
+                                    "Betreff"   =>  $mail["subject"],
+                                    "Abs"       =>  $mail["from"],
+                                    "Gelesen"   =>  $gelesen);
+                        }
     				}
 					if (empty($m)) $m[]=array("Nr"=>0,"Datum"=>"","Betreff"=>"Keine Mails","Abs"=>"","Gelesen"=>"");
 				}
@@ -1180,102 +1164,42 @@ global $db;
 * eine Mail holen
 *****************************************************/
 function getOneMail($usr,$nr) {
-	$srv=getUsrMailData($usr);
-	$mbox = imap_open ("{".$srv["msrv"].":143/imap/notls}", $srv["postf"],$srv["kennw"]);
-	// hier dann auch pop einbauen
-	$head=@imap_header( $mbox,$nr );
-	if (!$head) return;
-	//$fullheader	=imap_fetchheader($mbox,$nr);
-	$senderadr=decode_string($head->fromaddress)."\n".$head->date."\n";
-	$sender=getSenderMail($senderadr);
-	$mybody=$senderadr;
-	//$body.=imap_body($mbox,$nr);//,1.1,FTUID);
-	$htmlbody="Empty Message Body";
-	$structure=imap_fetchstructure($mbox,$nr);
-	if ( eregi("MIXED",$structure->subtype) )  {
-		$x=imap_fetchbody($mbox,$nr,1);
-		$body   =imap_fetchbody($mbox,$nr,1.1,FTUID);
-		$fullheader	=@imap_fetchheader($mbox,$nr,1.1);
-		if ( eregi("Content-Type: text/html",$fullheader) ) {
-			$htmlbody=$body;
-		} else {
-			$htmlbody=imap_qprint($body);
-		}
-	}
-	if ( eregi("Empty Message",$htmlbody) ) {
-		$fullheader	=imap_fetchheader($mbox,$nr);
-		$body	=imap_fetchbody($mbox,$nr,1);
-		if ( eregi("Content-Type: text/html",$fullheader) ) {
-			$htmlbody=$body;
-		} else {
-			$htmlbody=imap_qprint($body);
-		}
-	}
-	$body=$mybody.$htmlbody."\n".$x;
-	$c=count($structure->parts);
 	$files=array();
-	if (!$start) $start=0;
-	for ($i=$start; $i<$c; $i++) {
-		$part0=$structure->parts[$i];
-	    	if ( ! empty($part0->type) or $part0->type===0 ) {
-			$part=$i+1;
-			$parameters=$part0->parameters;
-			$attach_type=$part0->subtype;
-			$mytype=$part0->type;
-			$encoding=$part0->encoding;
-			$text_encoding=$mime_encoding[$encoding];
-			if (empty($text_encoding)) {
-				$text_encoding=".:unknown:.";
-			}
-			$description=$part0->description;
-			if (eregi("RFC822",$attach_type)) {
-				$tmp=imap_fetchbody($mbox,$nr,$part);
-				$t=split("\n",$tmp);
-				$hd=""; $bd=""; $s=true;
-				foreach($t as $z){
-					if ($s) {
-						if(ord($z[0])<>13){
-							$hd.=$z;
-						} else {
-							$s=false;
-						}
-					} else {
-						$bd.=$z;
-					}
-				}
-				if (strlen($bd)>1)	{
-					$bodyX.="\n".imap_qprint($bd);
-				} else {
-					$bodyX.="\n".$hd;
-				};
-  			} else {
-				$enc=$encoding;
-				$typ=$attach_type;
-				$att=$parameters[0]->attribute;
-				$val=$parameters[0]->value;
-				$val=eregi_replace(" ","_",$val);
-				$size=sprintf("%0.2f",$part0->bytes / 1024);
-				$files[]=array("size"=>$size,"name"=>$val,"nummer"=>$part,"type"=>$typ,"encode"=>$enc);
-			}
-		}
+    mb_internal_encoding(ini_get("default_charset"));
+	$srv=getUsrMailData($usr);
+        $mbox = mail_login($srv["msrv"],"143",$srv["postf"],$srv["kennw"]);
+    $head = mail_parse_headers(mail_retr($mbox,$nr));
+	if (!$head) return;
+    $senderadr = $head["From"]."\n".$head["Date"]."\n";
+	$sender = getSenderMail($head["From"]);
+	$mybody = $senderadr;
+	$htmlbody = "Empty Message Body";
+	$structure = imap_fetchstructure($mbox,$nr);
+    $parts = create_part_array($structure);
+
+	$body = mail_get_body($mbox,$nr,$parts[0]);
+    $subject = $head["Subject"];
+
+	if ( !eregi("PLAIN",$structure->subtype) )  {
+       for ($p=1; $p < count($parts); $p++) {
+            $attach = mail_get_file($mbox,$nr,$parts[$p]);
+            if ($attach) $files[] = $attach;
+        }
 	}
-	$body=htmlspecialchars(decode_string(imap_qprint($body)));
-	$body.=$bodyX;
-	$cause=htmlspecialchars(decode_string($head->Subject));
 	$data["id"]=$nr;
 	$data['kontaktname']=$sender['kontaktname'];
 	$data['kontakttab']=$sender['kontakttab'];
 	$data['kontaktid']=$sender['kontaktid'];
 	$data["sendername"]=$sender["name"];
 	$data["senderid"]=$sender["id"];
-	$data["Initdate"]=substr($head->date,4,-5);
-	$data["Cause"]=$cause;
-	$data["LangTxt"]=$body;
+	$data["Initdate"]=$head["date"];
+	$data["Cause"]=$subject;
+	$data["LangTxt"]=$mybody.$body; 
 	$data["Datei"]=$anhang;
 	$data["status"]="2";
 	$data["InitCrm"]=$_SESSION["loginCRM"];	//$head[""];
 	$data["CRMUSER"]=$_SESSION["employee"];	//$head[""];
-	$data["DCaption"]=($files)?$cause:"";
+	$data["DCaption"]=($files)?$data["Cause"]:"";
 	$data["Anhang"]=$files;
 	return $data;
 }

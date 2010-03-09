@@ -102,15 +102,16 @@
 			jcal1 => ($jcalendar)?"<a href='#' id='trigger1' name='Finish' title='Zieldatum' onClick='false'><img src='image/date.png' border='0' align='middle'></a>":"",
 			JS => $js,
 			stammlink => $stammlink,
-			Mail => $_GET["mail"]
+			Mail => $_GET["mail"],  
+            mailtype => $data["mailtype"],
 			));
 	if ($templ=="wvl2.tpl") {
 		$t->set_block("wvl","Filebox","Block2");
 		if ($data["Anhang"]){
+			$FILES="<td colspan='2'><input type='checkbox' name='dateien[]' value='%s,%s,%s' checked>[<a href='tmp/%s' class='klein'>%s</a>]</td>";
 			foreach($data["Anhang"] as $zeile) {
-				$FILES="<td colspan='2'><input type='checkbox' name='dateien[]' value='%s,%s,%s,%s' checked>%s</td>";
 				$t->set_var(array(
-					file	=>	sprintf($FILES,$zeile["nummer"],$zeile["name"],$zeile["encode"],$zeile["type"],$zeile["name"])
+					file	=>	sprintf($FILES,$zeile["name"],$zeile["size"],$zeile["type"],$zeile["name"],$zeile["name"])
 				));
 				$t->parse("Block2","Filebox",true);
 			}

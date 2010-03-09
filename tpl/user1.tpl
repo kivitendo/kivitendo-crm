@@ -50,7 +50,7 @@
 </div>
 <form name="user" action="user1.php" method="post" onSubmit="return getical();">
 <div id="user">
-<!--input type="reset" name="mails" value="Mails zeigen" onClick="Mailonoff()"-->
+<input type="reset" name="mails" value="Mails zeigen" onClick="Mailonoff()">
 
 <table border="0" class="mini">
 

@@ -1,6 +1,11 @@
 <?php
-    chdir("..");
-    require_once("inc/stdLib.php");
+    $wiam = getCwd();
+    if (substr($wiam,-3) == "inc") {
+    	chdir("..");
+    	require_once("inc/stdLib.php");
+    } else {
+    	require_once("stdLib.php");
+    };
     $sql = "SELECT tag || '.sql' as tag  from schema_info where tag like 'crm_%' order by tag";
     $rs  = $_SESSION["db"]->getAll($sql);
     if (!$rs) { $isnow=array();} 

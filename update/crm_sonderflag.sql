@@ -12,7 +12,9 @@ ALTER TABLE sonderflag ADD CONSTRAINT benutzereingabe unique (skey);
 -- @php: *
 $i=1;
 foreach ($cp_sonder as $key=>$val) {
-    $rc=$db->query("insert into sonderflag (svalue,skey,sorder) values ($key,'$val',$i)");
+    $sql = "insert into sonderflag (svalue,skey,sorder) values ($key,'$val',$i)";
+    echo $sql;
+    $rc=$db->query($sql);
     echo "$key:$val:$i:$rc<br>";
     $i++;
 }

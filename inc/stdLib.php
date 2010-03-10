@@ -194,7 +194,7 @@ global $VERSION;
 		exit;
 	} else if($rc[0]["version"]<>$VERSION) {
 		echo "Istversion: ".$rc[0]["version"]." Sollversion: ".$VERSION."<br>";
-		require("update_neu.php");
+		require("inc/update_neu.php");
 		//require("update.php");
 		exit;
 	} else {
@@ -734,7 +734,7 @@ function stopTime($start) {
 /**
  * Sonderflags jetzt aus der Datenbank
  *
- * @retunr array
+ * @return array
  */	
 function getSonder($lang=false) {
     global $db;
@@ -769,9 +769,9 @@ function saveSonderFlag($data) {
 /**
  * Kattegorien für Termine
  *
- * @retunr array
+ * @return array
  */	
-function getTermincat($empty=fale,$lang=false) {
+function getTermincat($empty=false,$lang=false) {
     global $db;
     $sql = "SELECT catid,catname, sorder, catname as translation from termincat order by sorder";
     $data = $db->getAll($sql);

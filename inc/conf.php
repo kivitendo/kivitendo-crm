@@ -1,5 +1,4 @@
-<?
-$VERSION='1.4.0';
+<?php
 // Die volgenden Datenbanken müssen extra installiert werden. Siehe install.txt 
 $GEODB=false; // Geodatenbank vorhanden
 $BLZDB=false; // BLZ-Datenbank vorhanden
@@ -37,7 +36,7 @@ define("FONTSTYLE","1");
 $emptyVon = True;
 $logmail=true;
 $jcalendar=true;
-$listLimit=20000;
+$listLimit=500;
 $tinymce=false;
 $zeigeextra=true;
 $tools=true;

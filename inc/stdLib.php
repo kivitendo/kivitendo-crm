@@ -1,7 +1,6 @@
 <?
 session_start();
 
-$version='$Id$';
 $inclpa=ini_get('include_path');
 ini_set('include_path',$inclpa.":../:./crmajax:./inc:../inc");
 

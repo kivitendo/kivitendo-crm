@@ -6,6 +6,18 @@
     } else {
     	require_once("stdLib.php");
     };
+
+	function updatever($db,$VERSION) {
+                $sql = "INSERT INTO crm (uid,datum,version) values (".$_SESSION["loginCRM"].",now(),'".$VERSION."')";
+                $rc = $_SESSION["db"]->query($sql);
+                $db->commit();
+		echo "Versionsnummer gesetzt<br>";
+		if (is_file("update/update$VERSION.txt")) {
+			echo "<h2>Wichtig!</h2>";
+			echo readfile("update/update$VERSION.txt");
+		}
+        }
+
     $sql = "SELECT tag || '.sql' as tag  from schema_info where tag like 'crm_%' order by tag";
     $rs  = $_SESSION["db"]->getAll($sql);
     if (!$rs) { $isnow=array();} 
@@ -13,7 +25,8 @@
     chdir("update");
     $update = glob("crm_*.sql");
     chdir("..");
-    $code=false;
+    $code = false;
+    $ok = true;
     if (!is_array($update)) $update=array();
     $todo = array_diff($update,$isnow);
     if ($todo) {
@@ -55,21 +68,23 @@
             } 
             $sql="insert into schema_info (tag,login) values ('crm_%s','%s')";
             $rc = $_SESSION["db"]->query(sprintf($sql,trim($tag),$_SESSION["employee"]));
-            if ($rc) {
-                $sql = "INSERT INTO crm (uid,datum,version) values (".$_SESSION["loginCRM"].",now(),'".$VERSION."')";
-                $rc = $_SESSION["db"]->query($sql);
-                $db->commit();
-                echo "update ok<br>";
-            } else {
+	    if (!$rc) {
+		$ok = false;
                 $db->rollback();
-            }
+                exit(2);
+	    } 
+	}
+        if ($ok) {
+		updatever($db,$VERSION);
+                echo "update ok<br>";
         }
     } else {
-        echo "System uptodate";
+	if ($_GET["oldver"] and $_GET["oldver"]<>$VERSION) updatever($db,$VERSION);
+        echo "System uptodate<br />";
     };
     $sql="select tag,login,itime  from schema_info where tag ilike 'crm_%' order by itime";
     $liste = $_SESSION["db"]->getAll($sql);
-    echo "<table>\n";     
+    echo "<br /><table>\n";     
     $zeile = "<tr><td>%s</td><td>%s</td><td>%s</td></tr>\n";
     if ($liste) foreach ($liste as $line) {
         echo sprintf($zeile,$line["tag"],$line["login"],$line["itime"]);

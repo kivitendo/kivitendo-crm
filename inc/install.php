@@ -10,6 +10,7 @@ if ($_GET['check']==1) {
 }
 $p=($_GET['check']==1)?'../':'';
 include($p.'inc/conf.php');
+include($p.'inc/version.php');
 if (ob_get_level() == 0) ob_start();
 echo "<br>Installation der Version $VERSION";
 echo " der Datenbankinstanz: ".$_SESSION["dbname"]."<br>";
@@ -83,8 +84,8 @@ echo "Vorraussetzungen pr&uuml;fen:<br>";
                         "Xajax"=>array("xajax/xajax.inc","xajax_core/xajax.inc"));
         $chkstat=array(1,1,0,0,0,0,0,0,0,0,0,1);
         $OK=true;
-	    $pos=0;
-	    $dbok=true;
+	$pos=0;
+	$dbok=true;
         foreach($chkfile as $key=>$file) {
                 $ook=false;
                 if (is_array($file)) {

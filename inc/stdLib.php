@@ -193,7 +193,7 @@ global $VERSION;
 		exit;
 	} else if($rc[0]["version"]<>$VERSION) {
 		echo "Istversion: ".$rc[0]["version"]." Sollversion: ".$VERSION."<br>";
-		require("inc/update_neu.php");
+		require("inc/update_neu.php?oldver=".$rc[0]["version"]);
 		//require("update.php");
 		exit;
 	} else {

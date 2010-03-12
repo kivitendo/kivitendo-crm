@@ -79,7 +79,7 @@
                 echo "update ok<br>";
         }
     } else {
-	if ($_GET["oldver"] and $_GET["oldver"]<>$VERSION) updatever($db,$VERSION);
+	if ($GLOBALS["oldver"] and $GLOBALS["oldver"]<>$VERSION) updatever($db,$VERSION);
         echo "System uptodate<br />";
     };
     $sql="select tag,login,itime  from schema_info where tag ilike 'crm_%' order by itime";
@@ -90,5 +90,4 @@
         echo sprintf($zeile,$line["tag"],$line["login"],$line["itime"]);
     };
     echo "</table>";     
-
 ?>

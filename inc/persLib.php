@@ -126,6 +126,16 @@ global $db;
 function suchPerson($muster) {
 global $db;
 	$rechte=berechtigung("cp_");
+	/*
+		Die join-Abfrage die  über die Tabelle customer geht, muss entsprechend vorher vorbereitet werden
+		Analog dann die Erweiterung für Kundentyp. Falls keine Personensuche über customer.name gewünscht ist,
+		wird entsprechend die Tabelle customer vorbelegt
+        @Jan, auch wenn über Anfangsbuchstabe gesucht wird, muß das berücksichtigt werden
+	*/
+	$joinCustomer = " left join customer K on C.cp_cv_id=K.id";	// das ist etwas fies,
+																// aber falls kein join über customer,
+																// müssen wir entsprechend hier die werte setzen
+	$joinVendor		= " left join vendor V on C.cp_cv_id=V.id"; //LEERZEICHEN AM ANFANG!! Nerv
 	if ($muster["cp_name"]=="~") {	//ist dies nur der sonderfall falls einer eine tilde eingibt? ein undokumentiertes ei? @holgi jb 10.6.09
                                     // Nein, das ist der Stern in der oberen Zeile. Hätte auch ein anderes Zeichen sein können. hli
 		$where0=" and upper(cp_name) ~ '^\[^A-Z\].*$'  ";
@@ -144,25 +154,16 @@ global $db;
 		$dbf=array_keys($dbfld);
 		$anzahl=count($keys);
 		$where0="";
-		/*
-			Die join-Abfrage die  über die Tabelle customer geht, muss entsprechend vorher vorbereitet werden
-			Analog dann die Erweiterung für Kundentyp. Falls keine Personensuche über customer.name gewünscht ist,
-			wird entsprechend die Tabelle customer vorbelegt
-		*/
-		$joinCustomer = " left join customer K on C.cp_cv_id=K.id";	// das ist etwas fies,
-																	// aber falls kein join über customer,
-																	// müssen wir entsprechend hier die werte setzen
-		$joinVendor		= " left join vendor V on C.cp_cv_id=V.id"; //LEERZEICHEN AM ANFANG!! Nerv
 		if ($muster["customer_name"]){	// Falls das Feld Firmenname gefüllt ist
-//	    $joinCustomer 	= " left join customer K on C.cp_cv_id=K.id";	//hier jetzt der left join und die werte oben überschreiben 
-																		//WICHTIG Leerzeichen am Anfang für ',' (s.a. Vorbelegung)
-			$whereCustomer	= "and K.name ilike '%" . $muster["customer_name"] . "%' "; //Leerzeichen für Holgis substr nicht vergessen!!!
-	    /* weil die maske sowohl in Lieferant als auch Kunde sucht, hier auch die Lieferanten-Einschränkung.
-			 * @holgi Warum heisst es hier wieder vendor V??? und nicht vendor L (Lieferant)
+//          $joinCustomer 	= " left join customer K on C.cp_cv_id=K.id";	//hier jetzt der left join und die werte oben überschreiben 
+                                                                            //WICHTIG Leerzeichen am Anfang für ',' (s.a. Vorbelegung)
+            $whereCustomer	= "and K.name ilike '%" . $muster["customer_name"] . "%' "; //Leerzeichen für Holgis substr nicht vergessen!!!
+            /* weil die maske sowohl in Lieferant als auch Kunde sucht, hier auch die Lieferanten-Einschränkung.
+             * @holgi Warum heisst es hier wieder vendor V??? und nicht vendor L (Lieferant)
                @JAN: weil das in den Firmenmasken so ist, daher sollte K auch zu C werden ;=) . 
-			*/
-//			$joinVendor 	= " left join vendor V on C.cp_cv_id=V.id";	//hier jetzt der left join und die werte oben überschreiben 
-			$whereVendor	= "and V.name ilike '%" . $muster["customer_name"] . "%' "; //Leerzeichen für Holgis substr nicht vergessen!!!
+            */
+//          $joinVendor 	= " left join vendor V on C.cp_cv_id=V.id";	//hier jetzt der left join und die werte oben überschreiben 
+            $whereVendor	= "and V.name ilike '%" . $muster["customer_name"] . "%' "; //Leerzeichen für Holgis substr nicht vergessen!!!
 		}
 
 		$daten=false;

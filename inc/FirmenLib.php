@@ -223,6 +223,7 @@ global $db;
 *****************************************************/
 function getAllShipto($id,$tab="C") {
 global $db;
+    if (empty($id)) return false;
 	//$sql="select distinct shiptoname,shiptodepartment_1,shiptodepartment_2,shiptostreet,shiptozipcode,";
 	//$sql.="shiptocity,shiptocountry,shiptocontact,shiptophone,shiptofax,shiptoemail,shipto_id from shipto ";
 	//$sql="select (module<>'CT') as vkdoc,* from shipto where trans_id=$id";

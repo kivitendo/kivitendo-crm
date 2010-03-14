@@ -5,6 +5,7 @@
     <script language="JavaScript">
     function filesearch() {
         f=open("dokument.php","File","width=900,height=650,left=200,top=100");
+        f.pickup = true;
     }
     function go(was) {
         document.wissen.aktion.value=was;

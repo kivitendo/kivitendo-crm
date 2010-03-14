@@ -1,5 +1,4 @@
-<?
-// $Id$
+<?php
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/FirmenLib.php");
@@ -49,5 +48,4 @@
 		leertpl($t,3,$Q,"Neueingabe");
 	}
         $t->Lpparse("out",array("fa1"),$_SESSION["lang"],"firma");
-
 ?>

@@ -1,4 +1,4 @@
-<?
+<?php
 if (! @include_once('DB.php') ) {
 	echo "Konnte das Modul DB nicht laden!<br>";
 	echo "Pr&uuml;fen Sie Ihre Installation:<br>";

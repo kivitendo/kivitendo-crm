@@ -1,5 +1,4 @@
-<?
-// $Id: firma1.php 4128 2009-05-15 07:08:13Z hlindemann $
+<?php
 	require("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/FirmenLib.php");

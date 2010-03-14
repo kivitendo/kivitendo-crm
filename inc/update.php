@@ -1,5 +1,4 @@
-<?
-// $Id$
+<?php
 	echo "Update auf Version $VERSION<br>";
 	$updatefile="update/update".$rc[0]["version"]."-$VERSION";
 	$updatefile=str_replace(".","",$updatefile);

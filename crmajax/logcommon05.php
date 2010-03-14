@@ -1,4 +1,4 @@
-<?
+<?php
     require_once ("xajax_core/xajax.inc.php");
 
     $xajax = new xajax("crmajax/logserver.php");

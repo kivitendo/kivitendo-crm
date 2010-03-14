@@ -1,5 +1,4 @@
-<?
-// $Id$
+<?php
 	require_once 'Contact_Vcard_Build.php';
 	require_once("inc/stdLib.php");
 	include("inc/FirmenLib.php");

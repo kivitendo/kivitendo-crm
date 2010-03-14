@@ -1,5 +1,4 @@
-<?
-// $Id$
+<?php
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
 	include("inc/UserLib.php");	
@@ -91,9 +90,9 @@
 	<input type="hidden" name="src" value="<?= $dest ?>">
 	&nbsp;Etikett:<br>
 	&nbsp;<select name='format' >
-<?	foreach ($ALabels as $data) { ?>
+<?php	foreach ($ALabels as $data) { ?>
 		<option value='<?= $data["id"]?>'<?= ($data["id"]==$_POST["format"])?" selected":"" ?>><?= $data["name"] ?>
-<?	} ?>
+<?php	} ?>
 	</select>&nbsp;<input type='submit' name='chfrm' value='wechseln'><br>
 	<hr>
 	Freier Text<br>
@@ -101,7 +100,7 @@
 	<hr>
 	&nbsp;Bitte Startposition ausw&auml;hlen.<br>
 	&nbsp;Es wird Spaltenweise verarbeitet.<br>
-<?
+<?php
 	$sel=" checked";
 	for ($y=1; $y<=$label["ny"];$y++) {
 		echo "\t\t\t\t".sprintf("&nbsp;%02d",$y);

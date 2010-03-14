@@ -1,5 +1,4 @@
-<?
-// $Id$
+<?php
 	require_once("inc/stdLib.php");
 	include("inc/wvLib.php");
 	if ($_POST["ok"]) {
@@ -16,7 +15,7 @@
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 <body >
 <p class="listtop">Wartungsvertr&auml;ge suchen</p>
-<?
+<?php
 		if (count($vid)>1) {
 			echo "<table>\n";
 			foreach($vid as $nr) {

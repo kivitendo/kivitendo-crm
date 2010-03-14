@@ -1,5 +1,4 @@
-<?
-// $Id: kartei.php hlindemann $
+<?php
 	require("inc/stdLib.php");
 	include("inc/FirmenLib.php");
 	include('inc/phpOpenOffice.php');
@@ -30,4 +29,3 @@
 	$doc->clean();
 
 ?>
-

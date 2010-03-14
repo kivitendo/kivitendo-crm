@@ -1,5 +1,4 @@
-<?
-// $Id$
+<?php
 	require_once("inc/stdLib.php");
 	include("inc/wvLib.php");
 
@@ -21,7 +20,7 @@
 <center>Gefundene - Maschinen:<br><br>
 <form name="firmen">
 <select name="Alle" >
-<?
+<?php
 	$daten=getAllMaschinen($masch);
 	if ($daten) foreach ($daten as $zeile) {
 		echo "\t<option value='".$zeile["id"]."'>".substr($zeile["description"],0,20)." | ".$zeile["serialnumber"]."</option>\n";

@@ -23,7 +23,7 @@
 <body>
  	<table style="width:99%">
  		<tr><td colspan="3">&nbsp;versendete Benutzermails:</td></tr>
-<?
+<?php
     if ($items) foreach ($items as $col) {
         $jj++;
 		if ($col["cp_email"]) {
@@ -50,7 +50,7 @@
 	<tr height="14px" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='<?= $bgcol[($jj%2+1)] ?>';" bgcolor="<?= $bgcol[($jj%2+1)] ?>" onClick="showItem(<?= $Q.$col["id"] ?>);">
 		<td class="smal" width="100px"><?= db2date(substr($col["calldate"],0,10)) ?> <?= substr($col["calldate"],11,5) ?></td>
 		<td class="smal le"><?= $email ?></td><td class="smal le"><?= $col["cause"] ?></td></tr>
-<?		
+<?php
 	}
 ?>
 		<tr><td>&nbsp;</td><td colspan="3"><a href="userMail.php?id=<?= $id ?>&start=<?= $prev ?>">&lt;&lt;</a> &nbsp; &nbsp; <a href="userMail.php?id=<?= $id ?>&start=<?= $next ?>">&gt;&gt;</a></td></tr>

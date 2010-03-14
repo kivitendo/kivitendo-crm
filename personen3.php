@@ -1,5 +1,4 @@
-<?
-// $Id: personen3.php 3578 2009-02-20 14:33:28Z hlindemann $
+<?php
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/laender.php");
@@ -67,5 +66,4 @@
 		leertplP($t,$_GET["fid"],$msg,3,true,$Q);
 	}
 	$t->Lpparse("out",array("pers1"),$_SESSION["lang"],"firma");
-
 ?>

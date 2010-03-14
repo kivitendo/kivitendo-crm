@@ -1,5 +1,4 @@
-<?
-// $Id$
+<?php
 	require_once("inc/stdLib.php");
 	if ($_GET["fid"]) {
 		include("inc/FirmenLib.php");
@@ -16,7 +15,7 @@
 <head><title>Lx-Notiz</title>
 </head>
 <body>
-<?
+<?php
 if ($data["notes"]) {
 	echo strtr($data["notes"],array("\n" => "<br>"));
 } else if ($data["cp_notes"]) {

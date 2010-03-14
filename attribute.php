@@ -1,4 +1,4 @@
-<?
+<?php
 require_once("inc/stdLib.php");
 
 //Sonderflags jetzt aus der DB

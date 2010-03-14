@@ -1,4 +1,4 @@
-<?
+<?php
 	require_once("inc/stdLib.php");
 	$ort=$_GET["ort"];
 	//Umlaute wandeln hängt von der Serverumgebung ab!!
@@ -63,7 +63,7 @@
 <center>Gefundene - Eintr&auml;ge:<br><br>
 <form name="firmen">
 <select name="Alle" >
-<?
+<?php
 	if ($rs) foreach ($data as $key=>$zeile) {
 		$tmp=array_keys($zeile);
 		$ort=$zeile["ort"]; 
@@ -81,5 +81,3 @@
 </form>
 </body>
 </html>
-
-

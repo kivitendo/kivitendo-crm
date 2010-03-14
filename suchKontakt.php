@@ -1,5 +1,4 @@
-<? 
-// $Id: $ 
+<?php
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
 	$sw=strtoupper($_GET["suchwort"]);
@@ -27,7 +26,7 @@
 </head>
 <body>
 <center>Gesucht wurde nach: <?= $_GET["suchwort"] ?></center><br>
-<?
+<?php
 	if($rs) {	
 		echo "<table width='95%'>\n";
 		$i=0;

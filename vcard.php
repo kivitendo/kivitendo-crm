@@ -1,4 +1,4 @@
-<?
+<?php
 // $Id$
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
@@ -82,7 +82,7 @@ function saveMAIL($dest,$value,&$container) {
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 	<script language="JavaScript">
 	<!--
-<?	if ($adress and $_POST["src"]=="P") {  ?>
+<?php	if ($adress and $_POST["src"]=="P") {  ?>
 		opener.document.formular.cp_title.value="<?= $adress["N"]["PRE"]; ?>";
 		opener.document.formular.cp_position.value="<?= $adress["N"]["TITLE"]; ?>";
 		opener.document.formular.cp_givenname.value="<?= $adress["N"]["VORNAME"]; ?>";
@@ -101,7 +101,7 @@ function saveMAIL($dest,$value,&$container) {
 		opener.document.formular.cp_birthday.value="<?= db2date($adress["N"]["BDAY"]); ?>";
 		opener.document.formular.cp_notes.value="<?= $adress["NOTE"]; ?>";
 		self.close();
-<? } else if ($adress and $_POST["src"]=="F") { 
+<?php } else if ($adress and $_POST["src"]=="F") { 
 		if ($adress["EMAIL"]["PREF"]) {
 			$email=$adress["EMAIL"]["PREF"];
 		} else if ($adress["EMAIL"]["WORK"]) {
@@ -122,7 +122,7 @@ function saveMAIL($dest,$value,&$container) {
 		opener.document.neueintrag.sw.value="";
 		opener.document.neueintrag.notes.value="<?= $adress["NOTE"]; ?>";
 		self.close();
-<? } ?>
+<?php } ?>
 	//-->
 	</script>
 <body>

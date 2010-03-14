@@ -1,5 +1,4 @@
-<?
-// $Id$
+<?php
 if ($_SESSION["cookie"]) $sessid=$_COOKIE[$_SESSION["cookie"]];
 if (!$_SESSION["db"] ||
     $sessid=="" ||

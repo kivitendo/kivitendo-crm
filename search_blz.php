@@ -1,4 +1,4 @@
-<?
+<?php
 	require_once("inc/stdLib.php");
 	$ort=$_GET["ort"];
 	$bank=$_GET["bank"];
@@ -48,7 +48,7 @@
 <center>Gefundene - Eintr&auml;ge:<br><br>
 <form name="firmen">
 <select name="Alle" >
-<?
+<?php
 	if ($rs) foreach ($rs as $zeile) {
 		$ort=$zeile["ort"]; 
 		$kurz=$zeile["kurzbez"]; 
@@ -64,5 +64,3 @@
 </form>
 </body>
 </html>
-
-

@@ -1,4 +1,4 @@
-<?
+<?php
 // $Id$
 	require_once("inc/stdLib.php");
 	include("inc/FirmenLib.php");
@@ -167,22 +167,22 @@ Anschrift<br><hr>
 	<input type="text" name="freitext" size="25" value="<?= $freitext ?>">
 	<hr>
 	<table>
-<? if ($_GET["pid"] or $_GET["sid"]) { ?>
+<?php if ($_GET["pid"] or $_GET["sid"]) { ?>
         <tr><td colspan="2">Daten aus Hauptanschrift erg&auml;nzen <input type="checkbox" name="complete" value="1" <?= $complete ?>></TD></tr>
-<? } ?>
+<?php } ?>
 		<tr><td>Etikett&nbsp;</td>
 			<td>
 				<select name='format' >
-<?	foreach ($ALabels as $data) { ?>
+<?php foreach ($ALabels as $data) { ?>
 					<option value='<?= $data["id"]?>'<?= ($data["id"]==$etikett)?" selected":"" ?>><?= $data["name"] ?>
 
-<?	} ?>
+<?php } ?>
 				</select>&nbsp;<input type='submit' name='chfrm' value='Ansicht erneuern'>
 			</td>
 		</tr>
 		<tr>
 			<td><br> 
-<?	$sel="checked";
+<?php $sel="checked";
 	for ($y=1; $y<=$label["ny"];$y++) {
 		echo "\t\t\t\t";
 		for ($x=1; $x<=$label["nx"];$x++) {

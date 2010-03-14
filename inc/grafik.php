@@ -1,5 +1,4 @@
-<?
-// $Id$
+<?php
 require_once 'Image/Graph.php';
 require_once 'Image/Canvas.php'; 
 

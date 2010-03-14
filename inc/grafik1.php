@@ -1,5 +1,4 @@
-<?
-// $Id: grafik.php 2006-09-21 11:13:59Z hlindemann $
+<?php
 unset($GLOBALS['php_errormsg']);
 include ("jpgraph.php");
 include ("jpgraph_line.php");

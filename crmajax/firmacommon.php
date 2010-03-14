@@ -1,4 +1,4 @@
-<?
+<?php
     require_once ("xajax/xajax.inc.php");
 
     if (empty($punkt)) $punkt = "";

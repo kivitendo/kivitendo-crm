@@ -1,4 +1,4 @@
-<?
+<?php
 // $Id$
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
@@ -45,7 +45,7 @@
 </table>
 <table>
 <tr class='smal'><td>Menge</td><td>Einh.</td><td>Artikel</td><td>VKpreis</td><td>Einzelpreis</td><td>Summe</td></tr>
-<?
+<?php
 $i=0;
 
 if (empty($reP)) {
@@ -77,7 +77,7 @@ if (empty($reP)) {
 		<td colspan='5' align='right'>Rechnungssumme Brutto</td><td align='right'><?= sprintf("%0.2f",$tmp[1]["brutto"]) ?></td>
 	</tr>
 	
-<? } ?>
+<?php } ?>
 
 	<tr  class='smal' onMouseover='this.bgColor="#FF0000";' onMouseout='this.bgColor="<?= $bgcol[($i%2+1)] ?>";' bgcolor='<?= $bgcol[($i%2+1)] ?>'>
 		<td colspan='2' align='left'>Re-Notiz:</td><td colspan='4'> <?= $tmp[1]["notes"] ?></td>

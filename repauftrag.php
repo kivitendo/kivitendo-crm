@@ -1,5 +1,4 @@
-<?
-// $Id$
+<?php
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/FirmenLib.php");	
@@ -109,4 +108,3 @@
 	$t->pparse("out",array("masch"));
 
 ?>
-

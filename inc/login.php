@@ -1,5 +1,4 @@
-<?
-// $Id$
+<?php
 while( list($key,$val) = each($_SESSION) ) {
 	unset($_SESSION[$key]);
 };

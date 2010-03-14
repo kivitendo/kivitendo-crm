@@ -1,4 +1,4 @@
-<?
+<?php
     require_once ("xajax_core/xajax.inc.php");
     if (empty($punkt)) $punkt = "";
     $xajax = new xajax("$punkt./crmajax/firmaserver.php");

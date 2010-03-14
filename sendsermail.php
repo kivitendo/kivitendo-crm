@@ -1,4 +1,4 @@
-<?
+<?php
 //mb_internal_encoding("UTF-8");
 require_once("inc/stdLib.php");
 include("inc/UserLib.php");
@@ -113,4 +113,4 @@ if ($data) {
 	jetzt schie&szlig;en</a>
 	</center>
 	
-<? } ?>
+<?php } ?>

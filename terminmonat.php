@@ -1,4 +1,4 @@
-<?
+<?php
 // $ID: $
 	require_once("inc/stdLib.php");
 	include_once("inc/crmLib.php");
@@ -9,7 +9,7 @@
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 	<script language="JavaScript">
 	<!--
-<?
+<?php
 	list($day,$month,$year)=split("\.",$_GET["datum"]);
 	if (strlen($month)==1) $month="0$month";
     if ($_GET["fld"]=="suchfld") {
@@ -35,20 +35,20 @@
 	}
 	function kw(w) {
 	}
-<?  } else if ($_GET["fld"]) { ?>
+<?php  } else if ($_GET["fld"]) { ?>
 	function tag(tg) {
 		opener.document.termedit.<?= $_GET["fld"] ?>.value=tg;
 	}
 	function kw(w) {
 	}
-<? } else { ?>
+<?php } else { ?>
 	function tag(tg) {
 		self.location.href="termlist.php?cuid=<?= $CUID ?>&ansicht=T&datum="+tg;
 	}
 	function kw(w) {
 		self.location.href="termlist.php?cuid=<?= $CUID ?>&ansicht=W&kw="+w+"&year="+<?= $year ?>;
 	}
-<?
+<?php
 	}
 ?>
 	function monmin() {
@@ -65,7 +65,7 @@
 <br><br>
 <table style="width:29em" class="klein">
 	<tr><th style="width:2.1em" class="gr">Kw</th><th style="width:3.9em" class="gr">Mo</th><th style="width:3.9em" class="gr">Di</th><th style="width:3.9em" class="gr">Mi</th><th style="width:3.9em" class="gr">Do</th><th style="width:3.9em" class="gr">Fr</th><th style="width:3.0em" class="gr">Sa</th><th style="width:3.0em" class="gr">So</th></tr>
-<?
+<?php
 	$firstday=mktime(0,0,0,$month,1,$year);
 	$anztage=date("t", mktime(0,0,0,($month+1),0,$year));
 	$ft=feiertage($year);

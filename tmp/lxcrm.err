@@ -1,5 +1,5 @@
-2009-07-02 18:54:40 
-SQL:select name from  where id = 918
+2010-03-10 08:47:46 
+SQL:select X.mid,V.*,M.*,P.description from contmasch X left join contract V on V.contractnumber=cast (X.cid as text) left join maschine M on M.id=X.mid left join parts P on P.id=M.parts_id where X.mid=
 Msg:DB Error: unknown error
 Array
 (
@@ -14,9 +14,9 @@ Array
             [1] => -1
             [2] => 1
             [3] => 1024
-            [4] => select name from  where id = 918 [nativecode=FEHLER:  Syntaxfehler bei »where«
-LINE 1: select name from  where id = 918
-                          ^]
+            [4] => select X.mid,V.*,M.*,P.description from contmasch X left join contract V on V.contractnumber=cast (X.cid as text) left join maschine M on M.id=X.mid left join parts P on P.id=M.parts_id where X.mid= [nativecode=FEHLER:  Syntaxfehler am Ende der Eingabe
+LINE 1: ...M.id=X.mid left join parts P on P.id=M.parts_id where X.mid=
+                                                                       ^]
         )
 
 )
@@ -29,7 +29,879 @@ LINE 1: select name from  where id = 918
 1216:/usr/share/php/DB/common.php
 1663:/usr/share/php/DB/common.php
 199:/var/www/lx-office-crm/inc/db.php
-307:/var/www/lx-office-crm/inc/FirmenLib.php
-20:/var/www/lx-office-crm/opportunity.php
+299:/var/www/lx-office-crm/inc/wvLib.php
+11:/var/www/lx-office-crm/artikel.php
+--------------------------------------------- 
+
+2010-03-10 08:47:46 
+SQL:select *,P.description from maschmat M left join parts P on M.parts_id=P.id where mid= and aid=
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select *,P.description from maschmat M left join parts P on M.parts_id=P.id where mid= and aid= [nativecode=FEHLER:  Syntaxfehler bei »and«
+LINE 1: ...t M left join parts P on M.parts_id=P.id where mid= and aid=
+                                                               ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+361:/var/www/lx-office-crm/inc/wvLib.php
+12:/var/www/lx-office-crm/artikel.php
+--------------------------------------------- 
+
+2010-03-10 08:48:03 
+SQL:select * from maschmat where aid=
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select * from maschmat where aid= [nativecode=FEHLER:  Syntaxfehler am Ende der Eingabe
+LINE 1: select * from maschmat where aid=
+                                         ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+369:/var/www/lx-office-crm/inc/wvLib.php
+9:/var/www/lx-office-crm/artikel.php
+--------------------------------------------- 
+
+2010-03-10 08:48:03 
+SQL:delete from maschmat where aid=
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => delete from maschmat where aid= [nativecode=FEHLER:  Syntaxfehler am Ende der Eingabe
+LINE 1: delete from maschmat where aid=
+                                       ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+105:/var/www/lx-office-crm/inc/db.php
+375:/var/www/lx-office-crm/inc/wvLib.php
+9:/var/www/lx-office-crm/artikel.php
+--------------------------------------------- 
+
+2010-03-10 08:48:04 
+SQL:select X.mid,V.*,M.*,P.description from contmasch X left join contract V on V.contractnumber=cast (X.cid as text) left join maschine M on M.id=X.mid left join parts P on P.id=M.parts_id where X.mid=
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select X.mid,V.*,M.*,P.description from contmasch X left join contract V on V.contractnumber=cast (X.cid as text) left join maschine M on M.id=X.mid left join parts P on P.id=M.parts_id where X.mid= [nativecode=FEHLER:  Syntaxfehler am Ende der Eingabe
+LINE 1: ...M.id=X.mid left join parts P on P.id=M.parts_id where X.mid=
+                                                                       ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+299:/var/www/lx-office-crm/inc/wvLib.php
+11:/var/www/lx-office-crm/artikel.php
+--------------------------------------------- 
+
+2010-03-10 08:48:04 
+SQL:select *,P.description from maschmat M left join parts P on M.parts_id=P.id where mid= and aid=
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select *,P.description from maschmat M left join parts P on M.parts_id=P.id where mid= and aid= [nativecode=FEHLER:  Syntaxfehler bei »and«
+LINE 1: ...t M left join parts P on M.parts_id=P.id where mid= and aid=
+                                                               ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+361:/var/www/lx-office-crm/inc/wvLib.php
+12:/var/www/lx-office-crm/artikel.php
+--------------------------------------------- 
+
+2010-03-13 00:52:41 
+SQL:select C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender, COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1, K.name as name, K.language_id as language_id, 
+				 'C' as tbl from contacts C where C.cp_cv_id=K.id   and upper(cp_name) ~ '^\[^A-Z\].*$'  and ( cp_owener=376 or cp_owener is null or cp_owener in (3119)) order by cp_name
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender, COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1, K.name as name, K.language_id as language_id, 
+				 'C' as tbl from contacts C where C.cp_cv_id=K.id   and upper(cp_name) ~ '^\[^A-Z\].*$'  and ( cp_owener=376 or cp_owener is null or cp_owener in (3119)) order by cp_name [nativecode=FEHLER:  Spalte »country« existiert nicht
+LINE 1: ...C.cp_gender as cp_gender, COALESCE (C.cp_country, country) a...
+                                                             ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+209:/var/www/lx-office-crm/inc/persLib.php
+19:/var/www/lx-office-crm/personen1.php
+--------------------------------------------- 
+
+2010-03-13 00:52:41 
+SQL:select C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender, COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1, V.name as name, V.language_id as language_id, 'V' as tbl 
+				 from contacts C where C.cp_cv_id=V.id   and upper(cp_name) ~ '^\[^A-Z\].*$'  and ( cp_owener=376 or cp_owener is null or cp_owener in (3119)) order by cp_name
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender, COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1, V.name as name, V.language_id as language_id, 'V' as tbl 
+				 from contacts C where C.cp_cv_id=V.id   and upper(cp_name) ~ '^\[^A-Z\].*$'  and ( cp_owener=376 or cp_owener is null or cp_owener in (3119)) order by cp_name [nativecode=FEHLER:  Spalte »country« existiert nicht
+LINE 1: ...C.cp_gender as cp_gender, COALESCE (C.cp_country, country) a...
+                                                             ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+215:/var/www/lx-office-crm/inc/persLib.php
+19:/var/www/lx-office-crm/personen1.php
+--------------------------------------------- 
+
+2010-03-13 00:52:48 
+SQL:select C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender, COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1, K.name as name, K.language_id as language_id, 
+				 'C' as tbl from contacts C where C.cp_cv_id=K.id   and upper(cp_name) ~ '^\[^A-Z\].*$'  and ( cp_owener=376 or cp_owener is null or cp_owener in (3119)) order by cp_name
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender, COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1, K.name as name, K.language_id as language_id, 
+				 'C' as tbl from contacts C where C.cp_cv_id=K.id   and upper(cp_name) ~ '^\[^A-Z\].*$'  and ( cp_owener=376 or cp_owener is null or cp_owener in (3119)) order by cp_name [nativecode=FEHLER:  Spalte »country« existiert nicht
+LINE 1: ...C.cp_gender as cp_gender, COALESCE (C.cp_country, country) a...
+                                                             ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+209:/var/www/lx-office-crm/inc/persLib.php
+19:/var/www/lx-office-crm/personen1.php
+--------------------------------------------- 
+
+2010-03-13 00:52:48 
+SQL:select C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender, COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1, V.name as name, V.language_id as language_id, 'V' as tbl 
+				 from contacts C where C.cp_cv_id=V.id   and upper(cp_name) ~ '^\[^A-Z\].*$'  and ( cp_owener=376 or cp_owener is null or cp_owener in (3119)) order by cp_name
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender, COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1, V.name as name, V.language_id as language_id, 'V' as tbl 
+				 from contacts C where C.cp_cv_id=V.id   and upper(cp_name) ~ '^\[^A-Z\].*$'  and ( cp_owener=376 or cp_owener is null or cp_owener in (3119)) order by cp_name [nativecode=FEHLER:  Spalte »country« existiert nicht
+LINE 1: ...C.cp_gender as cp_gender, COALESCE (C.cp_country, country) a...
+                                                             ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+215:/var/www/lx-office-crm/inc/persLib.php
+19:/var/www/lx-office-crm/personen1.php
+--------------------------------------------- 
+
+2010-03-13 00:54:13 
+SQL:select C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender, COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1, K.name as name, K.language_id as language_id, 
+				 'C' as tbl from contacts C where C.cp_cv_id=K.id   and upper(cp_name) ~ '^\[^A-Z\].*$'  and ( cp_owener=376 or cp_owener is null or cp_owener in (3119)) order by cp_name
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender, COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1, K.name as name, K.language_id as language_id, 
+				 'C' as tbl from contacts C where C.cp_cv_id=K.id   and upper(cp_name) ~ '^\[^A-Z\].*$'  and ( cp_owener=376 or cp_owener is null or cp_owener in (3119)) order by cp_name [nativecode=FEHLER:  Spalte »country« existiert nicht
+LINE 1: ...C.cp_gender as cp_gender, COALESCE (C.cp_country, country) a...
+                                                             ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+209:/var/www/lx-office-crm/inc/persLib.php
+19:/var/www/lx-office-crm/personen1.php
+--------------------------------------------- 
+
+2010-03-13 00:54:13 
+SQL:select C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender, COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1, V.name as name, V.language_id as language_id, 'V' as tbl 
+				 from contacts C where C.cp_cv_id=V.id   and upper(cp_name) ~ '^\[^A-Z\].*$'  and ( cp_owener=376 or cp_owener is null or cp_owener in (3119)) order by cp_name
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender, COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1, V.name as name, V.language_id as language_id, 'V' as tbl 
+				 from contacts C where C.cp_cv_id=V.id   and upper(cp_name) ~ '^\[^A-Z\].*$'  and ( cp_owener=376 or cp_owener is null or cp_owener in (3119)) order by cp_name [nativecode=FEHLER:  Spalte »country« existiert nicht
+LINE 1: ...C.cp_gender as cp_gender, COALESCE (C.cp_country, country) a...
+                                                             ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+215:/var/www/lx-office-crm/inc/persLib.php
+19:/var/www/lx-office-crm/personen1.php
+--------------------------------------------- 
+
+2010-03-13 00:56:58 
+SQL:select C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender, COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1, K.name as name, K.language_id as language_id, 
+				 'C' as tbl from contacts C where C.cp_cv_id=K.id   and upper(cp_name) ~ '^\[^A-Z\].*$'  and ( cp_owener=376 or cp_owener is null or cp_owener in (3119)) order by cp_name
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender, COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1, K.name as name, K.language_id as language_id, 
+				 'C' as tbl from contacts C where C.cp_cv_id=K.id   and upper(cp_name) ~ '^\[^A-Z\].*$'  and ( cp_owener=376 or cp_owener is null or cp_owener in (3119)) order by cp_name [nativecode=FEHLER:  Spalte »country« existiert nicht
+LINE 1: ...C.cp_gender as cp_gender, COALESCE (C.cp_country, country) a...
+                                                             ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+209:/var/www/lx-office-crm/inc/persLib.php
+19:/var/www/lx-office-crm/personen1.php
+--------------------------------------------- 
+
+2010-03-13 00:56:58 
+SQL:select C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender, COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1, V.name as name, V.language_id as language_id, 'V' as tbl 
+				 from contacts C where C.cp_cv_id=V.id   and upper(cp_name) ~ '^\[^A-Z\].*$'  and ( cp_owener=376 or cp_owener is null or cp_owener in (3119)) order by cp_name
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender, COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1, V.name as name, V.language_id as language_id, 'V' as tbl 
+				 from contacts C where C.cp_cv_id=V.id   and upper(cp_name) ~ '^\[^A-Z\].*$'  and ( cp_owener=376 or cp_owener is null or cp_owener in (3119)) order by cp_name [nativecode=FEHLER:  Spalte »country« existiert nicht
+LINE 1: ...C.cp_gender as cp_gender, COALESCE (C.cp_country, country) a...
+                                                             ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+216:/var/www/lx-office-crm/inc/persLib.php
+19:/var/www/lx-office-crm/personen1.php
+--------------------------------------------- 
+
+2010-03-13 00:57:31 
+SQL:select C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender, COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1, K.name as name, K.language_id as language_id, 
+				 'C' as tbl from contacts C where C.cp_cv_id=K.id   and upper(cp_name) ~ '^\[^A-Z\].*$'  and ( cp_owener=376 or cp_owener is null or cp_owener in (3119)) order by cp_name
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender, COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1, K.name as name, K.language_id as language_id, 
+				 'C' as tbl from contacts C where C.cp_cv_id=K.id   and upper(cp_name) ~ '^\[^A-Z\].*$'  and ( cp_owener=376 or cp_owener is null or cp_owener in (3119)) order by cp_name [nativecode=FEHLER:  Spalte »country« existiert nicht
+LINE 1: ...C.cp_gender as cp_gender, COALESCE (C.cp_country, country) a...
+                                                             ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+209:/var/www/lx-office-crm/inc/persLib.php
+19:/var/www/lx-office-crm/personen1.php
+--------------------------------------------- 
+
+2010-03-13 00:57:31 
+SQL:select C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender, COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1, V.name as name, V.language_id as language_id, 'V' as tbl 
+				 from contacts C where C.cp_cv_id=V.id   and upper(cp_name) ~ '^\[^A-Z\].*$'  and ( cp_owener=376 or cp_owener is null or cp_owener in (3119)) order by cp_name
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender, COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
+																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1, V.name as name, V.language_id as language_id, 'V' as tbl 
+				 from contacts C where C.cp_cv_id=V.id   and upper(cp_name) ~ '^\[^A-Z\].*$'  and ( cp_owener=376 or cp_owener is null or cp_owener in (3119)) order by cp_name [nativecode=FEHLER:  Spalte »country« existiert nicht
+LINE 1: ...C.cp_gender as cp_gender, COALESCE (C.cp_country, country) a...
+                                                             ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+216:/var/www/lx-office-crm/inc/persLib.php
+19:/var/www/lx-office-crm/personen1.php
+--------------------------------------------- 
+
+2010-03-13 01:57:01 
+SQL:select s.*,b.bundesland as shiptobundesland from shipto s left join bundesland b on s.shiptobland=b.id  where trans_id= and module='CT' order by itime
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select s.*,b.bundesland as shiptobundesland from shipto s left join bundesland b on s.shiptobland=b.id  where trans_id= and module='CT' order by itime [nativecode=FEHLER:  Syntaxfehler bei »and«
+LINE 1: ...ndesland b on s.shiptobland=b.id  where trans_id= and module...
+                                                             ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+231:/var/www/lx-office-crm/inc/FirmenLib.php
+1076:/var/www/lx-office-crm/inc/FirmenLib.php
+76:/var/www/lx-office-crm/firmen1.php
+--------------------------------------------- 
+
+2010-03-13 01:57:03 
+SQL:select s.*,b.bundesland as shiptobundesland from shipto s left join bundesland b on s.shiptobland=b.id  where trans_id= and module='CT' order by itime
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select s.*,b.bundesland as shiptobundesland from shipto s left join bundesland b on s.shiptobland=b.id  where trans_id= and module='CT' order by itime [nativecode=FEHLER:  Syntaxfehler bei »and«
+LINE 1: ...ndesland b on s.shiptobland=b.id  where trans_id= and module...
+                                                             ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+231:/var/www/lx-office-crm/inc/FirmenLib.php
+1076:/var/www/lx-office-crm/inc/FirmenLib.php
+76:/var/www/lx-office-crm/firmen1.php
+--------------------------------------------- 
+
+2010-03-13 01:59:05 
+SQL:select s.*,b.bundesland as shiptobundesland from shipto s left join bundesland b on s.shiptobland=b.id  where trans_id= and module='CT' order by itime
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select s.*,b.bundesland as shiptobundesland from shipto s left join bundesland b on s.shiptobland=b.id  where trans_id= and module='CT' order by itime [nativecode=FEHLER:  Syntaxfehler bei »and«
+LINE 1: ...ndesland b on s.shiptobland=b.id  where trans_id= and module...
+                                                             ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+231:/var/www/lx-office-crm/inc/FirmenLib.php
+1076:/var/www/lx-office-crm/inc/FirmenLib.php
+76:/var/www/lx-office-crm/firmen1.php
+--------------------------------------------- 
+
+2010-03-13 01:59:11 
+SQL:select s.*,b.bundesland as shiptobundesland from shipto s left join bundesland b on s.shiptobland=b.id  where trans_id= and module='CT' order by itime
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select s.*,b.bundesland as shiptobundesland from shipto s left join bundesland b on s.shiptobland=b.id  where trans_id= and module='CT' order by itime [nativecode=FEHLER:  Syntaxfehler bei »and«
+LINE 1: ...ndesland b on s.shiptobland=b.id  where trans_id= and module...
+                                                             ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+231:/var/www/lx-office-crm/inc/FirmenLib.php
+1076:/var/www/lx-office-crm/inc/FirmenLib.php
+76:/var/www/lx-office-crm/firmen1.php
+--------------------------------------------- 
+
+2010-03-13 01:59:15 
+SQL:select s.*,b.bundesland as shiptobundesland from shipto s left join bundesland b on s.shiptobland=b.id  where trans_id= and module='CT' order by itime
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select s.*,b.bundesland as shiptobundesland from shipto s left join bundesland b on s.shiptobland=b.id  where trans_id= and module='CT' order by itime [nativecode=FEHLER:  Syntaxfehler bei »and«
+LINE 1: ...ndesland b on s.shiptobland=b.id  where trans_id= and module...
+                                                             ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+231:/var/www/lx-office-crm/inc/FirmenLib.php
+1076:/var/www/lx-office-crm/inc/FirmenLib.php
+76:/var/www/lx-office-crm/firmen1.php
+--------------------------------------------- 
+
+2010-03-14 01:17:51 
+SQL:select s.*,b.bundesland as shiptobundesland from shipto s left join bundesland b on s.shiptobland=b.id  where trans_id= and module='CT' order by itime
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select s.*,b.bundesland as shiptobundesland from shipto s left join bundesland b on s.shiptobland=b.id  where trans_id= and module='CT' order by itime [nativecode=FEHLER:  Syntaxfehler bei »and«
+LINE 1: ...ndesland b on s.shiptobland=b.id  where trans_id= and module...
+                                                             ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+231:/var/www/lx-office-crm/inc/FirmenLib.php
+1076:/var/www/lx-office-crm/inc/FirmenLib.php
+76:/var/www/lx-office-crm/firmen1.php
+--------------------------------------------- 
+
+2010-03-14 01:18:57 
+SQL:select s.*,b.bundesland as shiptobundesland from shipto s left join bundesland b on s.shiptobland=b.id  where trans_id= and module='CT' order by itime
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select s.*,b.bundesland as shiptobundesland from shipto s left join bundesland b on s.shiptobland=b.id  where trans_id= and module='CT' order by itime [nativecode=FEHLER:  Syntaxfehler bei »and«
+LINE 1: ...ndesland b on s.shiptobland=b.id  where trans_id= and module...
+                                                             ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+231:/var/www/lx-office-crm/inc/FirmenLib.php
+1076:/var/www/lx-office-crm/inc/FirmenLib.php
+76:/var/www/lx-office-crm/firmen1.php
+--------------------------------------------- 
+
+2010-03-14 01:19:39 
+SQL:select s.*,b.bundesland as shiptobundesland from shipto s left join bundesland b on s.shiptobland=b.id  where trans_id= and module='CT' order by itime
+Msg:DB Error: unknown error
+Array
+(
+    [file] => /usr/share/php/DB.php
+    [line] => 966
+    [function] => PEAR_Error
+    [class] => PEAR_Error
+    [type] => ->
+    [args] => Array
+        (
+            [0] => DB Error: unknown error
+            [1] => -1
+            [2] => 1
+            [3] => 1024
+            [4] => select s.*,b.bundesland as shiptobundesland from shipto s left join bundesland b on s.shiptobland=b.id  where trans_id= and module='CT' order by itime [nativecode=FEHLER:  Syntaxfehler bei »and«
+LINE 1: ...ndesland b on s.shiptobland=b.id  where trans_id= and module...
+                                                             ^]
+        )
+
+)
+
+966:/usr/share/php/DB.php
+569:/usr/share/php/PEAR.php
+1903:/usr/share/php/DB/common.php
+790:/usr/share/php/DB/pgsql.php
+337:/usr/share/php/DB/pgsql.php
+1216:/usr/share/php/DB/common.php
+1663:/usr/share/php/DB/common.php
+199:/var/www/lx-office-crm/inc/db.php
+231:/var/www/lx-office-crm/inc/FirmenLib.php
+1077:/var/www/lx-office-crm/inc/FirmenLib.php
+76:/var/www/lx-office-crm/firmen1.php
 --------------------------------------------- 
 

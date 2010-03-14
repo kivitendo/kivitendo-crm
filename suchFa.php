@@ -1,4 +1,4 @@
-<?
+<?php
 // $Id$
 	require_once("inc/stdLib.php");
 	include("inc/FirmenLib.php");
@@ -16,26 +16,26 @@
 			tmp=document.firmen.Alle.options[nr].text;
 			txt=tmp.substr(0,(tmp.length - 2));
 			fid=val.substr(1,val.length);
-<? if ($pers==1) { ?>
+<?php if ($pers==1) { ?>
 			opener.document.formular.cp_cv_id.value=val;
 			opener.document.formular.name.value=txt;
-<? } else if ($op) { ?>
+<?php } else if ($op) { ?>
 			opener.document.formular.fid.value=fid;
 			opener.document.formular.name.value=txt;
-<? } else if ($_GET["konzernname"]) {?>
+<?php } else if ($_GET["konzernname"]) {?>
 			opener.document.neueintrag.konzern.value=fid;
 			opener.document.neueintrag.konzernname.value=txt;
-<? } else {?>
+<?php } else {?>
 			opener.document.formular.cp_cv_id.value=fid;
 			opener.document.formular.name.value=txt;
-<? } ?>
-<? if ($nq==1 || $op) { ?>
+<?php } 
+ if ($nq==1 || $op) { ?>
 			if (val.substr(0,1)=="V") {
 				opener.document.formular.Quelle.value="V";
 			} else {
 				opener.document.formular.Quelle.value="C";
 			}
-<? } ?>
+<?php } ?>
 		}
 	//-->
 	</script>
@@ -44,7 +44,7 @@
 <form name="firmen">
 <select name="Alle" >
 	<option value=''>nichts markiert</option>
-<?
+<?php
 	$name=($_GET["name"])?strtoupper($_GET["name"]):strtoupper($_GET["konzernname"]);
 	if ($name=="EINZELPERSON") $name="";
 	if ($_GET["tab"]) {

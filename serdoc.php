@@ -1,5 +1,4 @@
-<?
-// $Id$
+<?php
 session_start();
 include("inc/stdLib.php");
 require_once("documents.php");

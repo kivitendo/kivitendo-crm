@@ -1,5 +1,4 @@
-<?
-// $Id: suchMail.php,v 1.3 2005/11/02 10:37:51 hli Exp $
+<?php
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
 ?>
@@ -19,7 +18,7 @@
 <center>Gefundene Eintr&auml;ge:<br><br>
 <form name="mails">
 <select name="Alle" >
-<?
+<?php
 	$daten=getAllMails($_GET["name"]);
 	if ($daten) foreach ($daten as $zeile) {
         if ($zeile["name"]<>"") {

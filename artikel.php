@@ -1,6 +1,4 @@
-<?
-// $Id: artikel.php,v 1.4 2005/12/01 08:12:48 hli Exp $
-
+<?php
 	require_once("inc/stdLib.php");
 	include("inc/wvLib.php");
 	$mid=($_GET["mid"])?$_GET["mid"]:$_POST["mid"];
@@ -58,7 +56,7 @@
 	<tr><td>
 			<select name="gruppen" size="8" Style="width:450px" onDblClick="getData()">
 			<option value=''>Artikel ohne Warengruppe</option>
-<?
+<?php
 	$partsgrp=getAllPG();
 	if ($partsgrp) foreach ($partsgrp as $zeile) {
  		echo "\t<option value='".$zeile["id"]."'>".$zeile["partsgroup"]."</option>\n";
@@ -83,7 +81,7 @@
 		<input type="hidden" name="mid" value="<?= $mid ?>">
 		<input type="hidden" name="aid" value="<?= $aid ?>">		
 		<select name="material[]" size="6" Style="width:450px">
-<?
+<?php
 
 	if ($material) foreach ($material as $zeile) {
 		$val=$zeile["menge"];

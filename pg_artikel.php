@@ -1,5 +1,4 @@
-<?
-// $Id: pg_artikel.php,v 1.4 2005/12/01 08:12:48 hli Exp $
+<?php
 	require_once("inc/stdLib.php");
 	require_once("inc/wvLib.php");
 ?>
@@ -21,7 +20,7 @@
 	</script>
 <form name="pgartikel">
 <select name="artikel" size="7" Style="width:448px" onDblClick="putData()">
-<?	
+<?php
 	$daten=getGrpArtikel($_GET["pg"]);
 	if ($daten) foreach ($daten as $zeile) {
 		if ($zeile["lastcost"]<>0) {

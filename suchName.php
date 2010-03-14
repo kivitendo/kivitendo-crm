@@ -1,5 +1,4 @@
-<?
-// $Id$
+<?php
 	require_once("inc/stdLib.php");
 	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
@@ -21,7 +20,7 @@
 <center>Gefundene - Eintr&auml;ge:<br><br>
 <form name="firmen">
 <select name="Alle" >
-<?
+<?php
 	$name=strtoupper($_GET["name"]);
     $pers=getAllPerson(array(1,$name));
     $cust=getAllFirmen(array(1,$name),true,"C");

@@ -1,4 +1,4 @@
-<?
+<?php
 if ($_GET["chk"]==1) include("../inc/stdLib.php");
 function suchPerson($nummer) {
 	$db=$_SESSION["db"];

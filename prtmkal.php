@@ -1,4 +1,4 @@
-<?
+<?php
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
 	include("inc/UserLib.php");

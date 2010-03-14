@@ -1,4 +1,4 @@
-<?
+<?php
 // +----------------------------------------------------------------------+
 // | phpOpenOffice - Solution for modifying OpenOffice documents with PHP |
 // | v0.1b - 18/12/2003                                                   |

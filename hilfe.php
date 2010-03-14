@@ -1,11 +1,6 @@
-<? 
-// $Id: menu1.php 1012 2006-03-29 12:42:02Z hlindemann $
+<?php
 	require_once("inc/stdLib.php");
 	if ($_SESSION["loginCRM"])  {
-		function getVersion() {
-			$ver=file("VERSION");
-			return $ver[0];
-		};
 		$v=($_SESSION["dbname"])?getVersiondb():"";
 	}
 	

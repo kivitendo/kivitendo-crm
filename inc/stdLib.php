@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 
 $inclpa=ini_get('include_path');

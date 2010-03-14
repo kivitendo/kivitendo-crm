@@ -1,4 +1,4 @@
-<?
+<?php
 session_start();
 /*
 --Das kommt in den Livebetrieb

@@ -1,5 +1,4 @@
-<?
-// $Id: liefer3.php 898 2006-02-17 14:25:37Z hlindemann $
+<?php
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");

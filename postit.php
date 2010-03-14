@@ -1,4 +1,4 @@
-<?
+<?php
 // $Id$
 require_once("inc/stdLib.php");
 $popup=($_GET["popup"])?$_GET["popup"]:0;
@@ -70,7 +70,7 @@ if ($_POST["save"]) {
 <body onLoad="if (1==<?= $popup ?>) window.resizeTo(600,400);">
 <p class="listtop"><?= translate(".:notes:.","work"); ?></p>
 <table >
-<?
+<?php
 $liste=getAllPostIt($_SESSION["loginCRM"]);
 if ($liste) foreach($liste as $row) {
 	echo "<tr class='klein'><td>";
@@ -86,11 +86,11 @@ if ($liste) foreach($liste as $row) {
 <input type="submit" class="sichern" name="save" value="<?= translate(".:save:.","work"); ?>">&nbsp;
 <input type="submit" class="clear" name="clear" value="<?= translate(".:clear:.","work"); ?>">&nbsp;
 <input type="submit" class="sichernneu" name="delete" value="<?= translate(".:delete:.","work"); ?>">&nbsp;
-<? if ($_GET["popup"]==1) { ?>
+<?php if ($_GET["popup"]==1) { ?>
 <input type="button" name="ppp" value="<?= translate(".:close:.","work"); ?>" onCLick="self.close();">
-<? }  else { ?>
+<?php }  else { ?>
 <input type="button" name="ppp" value="<?= translate(".:popup:.","work"); ?>" onCLick="PopUp();">
-<? } ?>
+<?php } ?>
 </from>
 </body>
 </html>

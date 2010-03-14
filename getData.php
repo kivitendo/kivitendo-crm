@@ -1,4 +1,4 @@
-<?
+<?php
 // $Id$
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
@@ -8,7 +8,7 @@
 <link REL="stylesheet" HREF="css/main.css" TYPE="text/css" TITLE="Lx-System stylesheet">
 </head>
 <body onLoad="document.suche.swort.focus()";>
-<?	
+<?php
 if ($_POST["adress"]) {
 	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
@@ -56,7 +56,7 @@ if ($_POST["adress"]) {
 //-->
 </script>
 <p class="listtop">Suchergebnis</p>
-<?
+<?php
 	if ($anzahl>0) {
 		echo "<table class=\"liste\">\n";
 		echo "<tr class='bgcol3'><th>KD-Nr</th><th class=\"liste\">Name</th><th class=\"liste\">Anschrift</th><th class=\"liste\">Telefon</th><th></th></tr>\n";
@@ -98,7 +98,7 @@ if ($_POST["adress"]) {
 		F1=open("suchKontakt.php?suchwort="+sw+"&Q=S","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
 </script>			
 
-<? }?>
+<?php }?>
 <p class="listtop">Schnellsuche Kunde/Lieferant/Kontakte und Kontaktverlauf</p>
 	<form name="suche" action="getData.php" method="post">
 	<input type="text" name="swort" size="20"> suche 

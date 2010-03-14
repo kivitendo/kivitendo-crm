@@ -1,4 +1,4 @@
-<?
+<?php
 if ($_GET['check']==1) {
 	$p='../';
 	$check=true;

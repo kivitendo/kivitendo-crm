@@ -1,4 +1,4 @@
-<?// $Id$
+<?php
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
 	
@@ -221,7 +221,7 @@
 	<tr><td class="ce">
 			<select name="format">
 				<option></option>
-<?
+<?php
 	foreach ($ALabels as $data) {
 		echo "\t\t\t\t<option value='".$data["id"]."'";
 		if ($data["id"]==$format) echo " selected";
@@ -249,7 +249,7 @@
 		<th colspan="2" class="listtop">Font</th>
 		<th class="listtop">Text</th>
 	</tr>
-<?	for ($i=0; $i<$Textzeilen;$i++) { ?>
+<?php	for ($i=0; $i<$Textzeilen;$i++) { ?>
 		<tr><td width="50px"><select name="Schrift[]">
 				<option value="6"<?= $SG6[$i] ?>>6
 				<option value="7"<?= $SG7[$i] ?>>7
@@ -265,7 +265,7 @@
 			</select>
 			</td>
 			<td width="*" class="norm"><?= $i ?></td><td><input type="text" name="Text[]" size="30" value="<?= $Text[$i] ?>"></td></tr>
-<? } ?>
+<?php } ?>
 </table>
 </td></tr>
 

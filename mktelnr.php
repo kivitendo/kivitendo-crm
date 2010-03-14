@@ -1,4 +1,4 @@
-<? // $Id$
+<?php
 	require_once ("inc/stdLib.php");
 	$sql1="select id,phone from customer where phone <> ''";
 	//$sql2="select trans_id as id,shiptophone as phone from shipto where phone <> ''";

@@ -1,5 +1,4 @@
-<?
-// $Id$
+<?php
 require_once("inc/stdLib.php");
 if ($_GET["tab"]=="C") {
 	$tabellen=array("customer"=>array("Kunden","K"),
@@ -57,16 +56,16 @@ $anzahl=count($tabellen);
  <form name="report" method="post" action="report.php">
  <table>
  	<tr>
-<? foreach ($tabellen as $key=>$val) { ?> 	
+<?php foreach ($tabellen as $key=>$val) { ?> 	
  		<td><?= $val[0] ?><br>
  			<select name="name" size="10" multiple>
- <? 
+ <?php 
  		foreach ($felder[$key] as $row) { 
  			echo 	"<option value='".$val[1].".".$row."'>".$row."</option>";
  		} 
  ?>
 		</select></td>
-<? } ?>
+<?php } ?>
 	</tr>
  </table>
  <input type="button" name="senden" value="&uuml;bernehmen" onClick="sende()"/>

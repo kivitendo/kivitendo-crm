@@ -1,4 +1,4 @@
-<?
+<?php
 
 	function chkSrv() {
         $x = @exec('tail -5 /var/log/apache2/error.log',$status1); 

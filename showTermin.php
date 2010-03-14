@@ -1,5 +1,4 @@
-<?
-// $Id$
+<?php
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
 	if ($_GET["del"]) {
@@ -59,7 +58,7 @@
 </script>
 </head>
 <body>
-<?
+<?php
 	echo "Termin: <b>".(($privat)?"Privattermin":$data["cause"])."</b><br>";
     if ($data["location"]) echo "Ort: ".$data["location"]."<br />";
 	echo db2date($data["starttag"])." ".$data["startzeit"]." - ";
@@ -81,10 +80,10 @@
 <br>
 <br>
 <input type="button" onClick="self.close()" value="schlie&szlig;en"> &nbsp; &nbsp;
-<? if (!$privat && $edit) { ?>
+<?php if (!$privat && $edit) { ?>
 <input type="button" onClick="delterm()" value="l&ouml;schen"> &nbsp; &nbsp;
 <input type="button" onClick="editterm()" value="&auml;ndern">
-<? } ?>
+<?php } ?>
 <script language='JavaScript'>self.focus();</script>
 </body>
 </html>

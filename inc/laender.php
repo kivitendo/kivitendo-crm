@@ -1,4 +1,4 @@
-<?
+<?php
 /*
 	Hier können die Länderkennzeichen für die Masken eingestellt werden.
 	Die Reihenfolge hier bestimmt die Reihenfolge im Menue.

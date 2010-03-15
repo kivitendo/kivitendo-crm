@@ -3,7 +3,7 @@
 	<head><title>CRM - VCard</title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 <body>
-	<h2>Vordefinierte Felder</h2>
+	<h3>Vordefinierte Platzhalter</h3>
 	<table>
 	<tr><td>name </td><td>a) Name der Firma</td></tr>
 	<tr><td>	</td><td>b) Einzelperson</td></tr>
@@ -14,9 +14,19 @@
 	<tr><td>b) Daten von Ansprechpartner</td></tr>
 	<tr><td>datum </td><td>TT.MM.JJJJ</td></tr>
 	<tr><td>zeit </td><td>HH:MM</td></tr>
-
 	<tr><td colspan="2">a) Ausgangsreiter ist "Firma"</td></tr>
 	<tr><td colspan="2">b+c) Ausgangsreiter ist "Ansprechpartner"</td></tr>
-</table>
+    </table>
+	<h3>Zeichen</h3>
+	<table>
+	<tr><td>[0-9] </td><td>Nur Zahlen</td></tr>
+	<tr><td>[a-zA-Z] </td><td>Klein- + Gro&szlig;buchstaben</td></tr>
+	<tr><td>[\s\w\W] </td><td>Alle Zeichen (auch Umbr&uuml;che)</td></tr>
+	<tr><td><b>.</b> </td><td>Ein beliebiges Zeichen (keine Sonderzeichen)</td></tr>
+	<tr><td>[AB_0-3] </td><td>Die Ziffern 0-3, der Unterstrich, A + B</td></tr>
+    </table>
+    \s = Whitespace<br />
+    \w = [a-zA-Z_0-9]<br />
+    \W = weder Buchstabe noch Zahl noch Unterstrich = [^\w]<br />
 </body>
 </html>

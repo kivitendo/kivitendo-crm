@@ -5,7 +5,7 @@
 	<script language="JavaScript">
 	<!--
 		function showH() {
-			f1=open("dochelp.html","hilfe","width=400,height=350,left=100,top=100");
+			f1=open("dochelp.html","hilfe","width=550,height=630,left=100,top=100");
 		}
 	//-->
 	</script>
@@ -23,7 +23,7 @@
 			<a href="{Link3}" class="reiterA">Felder</a>
 		</td>
 		<td class="reiter desel">
-			<a href="{Link4}"></a>
+			<a href="#" onClick="showH()">Hilfe</a>
 		</td>
 	</tr>
 </table>

@@ -9,8 +9,8 @@
 			nr=document.mails.Alle.selectedIndex;
 			txt=document.mails.Alle.options[nr].text;
 			val=document.mails.Alle.options[nr].value;
-			opener.document.mailform.<?= $_GET["adr"] ?>.value=txt;
-			opener.document.mailform.Kontakt<?= $_GET["adr"] ?>.value=val;
+			opener.document.mailform.<?php echo  $_GET["adr"] ?>.value=txt;
+			opener.document.mailform.Kontakt<?php echo  $_GET["adr"] ?>.value=val;
 		}
 	//-->
 	</script>

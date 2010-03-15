@@ -78,8 +78,8 @@
 	</tr>
 	<tr><td>verbrauchtes Material und erbrachte Leistungen:</td><td></form><form name="mat" action="artikel.php" method="post" onSubmit="return selall();"></td></tr>
 	<tr><td>	
-		<input type="hidden" name="mid" value="<?= $mid ?>">
-		<input type="hidden" name="aid" value="<?= $aid ?>">		
+		<input type="hidden" name="mid" value="<?php echo  $mid ?>">
+		<input type="hidden" name="aid" value="<?php echo  $aid ?>">		
 		<select name="material[]" size="6" Style="width:450px">
 <?php
 

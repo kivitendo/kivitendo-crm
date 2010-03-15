@@ -19,8 +19,8 @@
 &quot;Lx-Office CRM&quot; ist ein Teilprodukt aus dem Lx-Office Paket.<br>
 
 die Software unterliegt der <a href="hilfe/artistic.html" target="_blank">Artistic License</a><br><br>
-Verwendete Datenbank: [<?= $_SESSION["dbname"] ?>] Version [<?= $v ?>]  auf Server [<?= $_SESSION["dbhost"] ?>]<br>
-Benutzer [<?= $_SESSION["employee"] ?>:<?= $_SESSION["loginCRM"] ?>] [<?= session_id() ?>]
+Verwendete Datenbank: [<?php echo  $_SESSION["dbname"] ?>] Version [<?php echo  $v ?>]  auf Server [<?php echo  $_SESSION["dbhost"] ?>]<br>
+Benutzer [<?php echo  $_SESSION["employee"] ?>:<?php echo  $_SESSION["loginCRM"] ?>] [<?php echo  session_id() ?>]
 <br><br><br>
 &gt;<a href="hilfe/index.html">Online-Hilfe</a>&lt;<br>
 </center>

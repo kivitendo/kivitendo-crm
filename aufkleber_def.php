@@ -127,9 +127,9 @@
 <p class=listtop>Etiketten-Editor</p>
 <table><tr><td class="norm" style="width:280px">
 <form name="defaufkleber" action="aufkleber_def.php" method="post">
-<input type="hidden" name="id" value="<?= $id ?>">
-<input type="hidden" name="name" value="<?= $name ?>">
-<input type="hidden" name="cust" value="<?= $cust ?>">
+<input type="hidden" name="id" value="<?php echo  $id ?>">
+<input type="hidden" name="name" value="<?php echo  $name ?>">
+<input type="hidden" name="cust" value="<?php echo  $cust ?>">
 <table style="width:100%">
 	<tr>
 		<th colspan="4" class="listelement norm">Seitendefinition</th>
@@ -141,18 +141,18 @@
 		<td>Format</td>
 		<td>
 			<select name="papersize">
-				<option value="A4"<?= $PA4 ?>>A4
-				<option value="A3"<?= $PA3 ?>>A3
-				<option value="A5"<?= $PA5 ?>>A5
-				<option value="letter"<?= $Pletter ?>>Letter
-				<option value="legal"<?= $Plegal ?>>Legal
+				<option value="A4"<?php echo  $PA4 ?>>A4
+				<option value="A3"<?php echo  $PA3 ?>>A3
+				<option value="A5"<?php echo  $PA5 ?>>A5
+				<option value="letter"<?php echo  $Pletter ?>>Letter
+				<option value="legal"<?php echo  $Plegal ?>>Legal
 			</select>
 		</td>
 		<td>Metric</td>
 		<td>
 			<select name="metric">
-				<option value="mm"<?= $mm ?>>mm
-				<option value="in"<?= $in ?>>in
+				<option value="mm"<?php echo  $mm ?>>mm
+				<option value="in"<?php echo  $in ?>>in
 			</select>
 		</td>
 	</tr>
@@ -160,22 +160,22 @@
 		<th colspan="4" class="listtop">Seitenr&auml;nder</th>
 	</tr>
 	<tr>
-		<td>oben</td><td><input type="text" name="margintop" size="6" value="<?= $margintop ?>"></td>
-		<td>links</td><td><input type="text" name="marginleft" size="6" value="<?=  $marginleft ?>"></td>
+		<td>oben</td><td><input type="text" name="margintop" size="6" value="<?php echo  $margintop ?>"></td>
+		<td>links</td><td><input type="text" name="marginleft" size="6" value="<?php echo   $marginleft ?>"></td>
 	</tr>	
 	<tr>
 		<th colspan="4" class="listtop">Abst&auml;nde</th>
 	</tr>
 	<tr>
-		<td>Spalten</td><td><input type="text" name="spacex" size="6" value="<?= $spacex ?>"></td>
-		<td>Zeilen</td><td><input type="text" name="spacey" size="6" value="<?= $spacey ?>"></td>
+		<td>Spalten</td><td><input type="text" name="spacex" size="6" value="<?php echo  $spacex ?>"></td>
+		<td>Zeilen</td><td><input type="text" name="spacey" size="6" value="<?php echo  $spacey ?>"></td>
 	</tr>
 	<tr>
 		<th colspan="4" class="listtop">Gr&ouml;&szlig;e der Aufkleber</th>
 	</tr>
 	<tr>
-		<td>Breite</td><td><input type="text" name="width" size="6" value="<?= $width ?>"></td>
-		<td>H&ouml;he</td><td><input type="text" name="height" size="6" value="<?= $height ?>"></td>
+		<td>Breite</td><td><input type="text" name="width" size="6" value="<?php echo  $width ?>"></td>
+		<td>H&ouml;he</td><td><input type="text" name="height" size="6" value="<?php echo  $height ?>"></td>
 	</tr>
 	<tr>
 		<th colspan="4" class="listtop">Anzahl der Aufkleber</th>
@@ -183,28 +183,28 @@
 	<tr>
 		<td>Spalten</td>
 		<td><select name="nx">
-			<option value="1"<?= $S1 ?>>1
-			<option value="2"<?= $S2 ?>>2
-			<option value="3"<?= $S3 ?>>3
-			<option value="4"<?= $S4 ?>>4
-			<option value="5"<?= $S5 ?>>5
-			<option value="6"<?= $S6 ?>>6
+			<option value="1"<?php echo  $S1 ?>>1
+			<option value="2"<?php echo  $S2 ?>>2
+			<option value="3"<?php echo  $S3 ?>>3
+			<option value="4"<?php echo  $S4 ?>>4
+			<option value="5"<?php echo  $S5 ?>>5
+			<option value="6"<?php echo  $S6 ?>>6
 			</select>
 		</td>
 		<td>Zeilen</td>
 		<td><select name="ny">
-			<option value="1"<?= $Z1 ?>>1
-			<option value="2"<?= $Z2 ?>>2
-			<option value="3"<?= $Z3 ?>>3
-			<option value="4"<?= $Z4 ?>>4
-			<option value="5"<?= $Z5 ?>>5
-			<option value="6"<?= $Z6 ?>>6
-			<option value="7"<?= $Z7 ?>>7
-			<option value="8"<?= $Z8 ?>>8
-			<option value="9"<?= $Z9 ?>>9
-			<option value="10"<?= $Z10 ?>>10
-			<option value="11"<?= $Z11 ?>>11
-			<option value="12"<?= $Z12 ?>>12
+			<option value="1"<?php echo  $Z1 ?>>1
+			<option value="2"<?php echo  $Z2 ?>>2
+			<option value="3"<?php echo  $Z3 ?>>3
+			<option value="4"<?php echo  $Z4 ?>>4
+			<option value="5"<?php echo  $Z5 ?>>5
+			<option value="6"<?php echo  $Z6 ?>>6
+			<option value="7"<?php echo  $Z7 ?>>7
+			<option value="8"<?php echo  $Z8 ?>>8
+			<option value="9"<?php echo  $Z9 ?>>9
+			<option value="10"<?php echo  $Z10 ?>>10
+			<option value="11"<?php echo  $Z11 ?>>11
+			<option value="12"<?php echo  $Z12 ?>>12
 			</select>
 		</td>
 	</tr>
@@ -251,20 +251,20 @@
 	</tr>
 <?php	for ($i=0; $i<$Textzeilen;$i++) { ?>
 		<tr><td width="50px"><select name="Schrift[]">
-				<option value="6"<?= $SG6[$i] ?>>6
-				<option value="7"<?= $SG7[$i] ?>>7
-				<option value="8"<?= $SG8[$i] ?>>8
-				<option value="9"<?= $SG9[$i] ?>>9
-				<option value="10"<?= $SG10[$i] ?>>10
-				<option value="11"<?= $SG11[$i] ?>>11
-				<option value="12"<?= $SG12[$i] ?>>12
-				<option value="13"<?= $SG13[$i] ?>>13
-				<option value="14"<?= $SG14[$i] ?>>14
-				<option value="15"<?= $SG15[$i] ?>>15
-				<option value="16"<?= $SG16[$i] ?>>16
+				<option value="6"<?php echo  $SG6[$i] ?>>6
+				<option value="7"<?php echo  $SG7[$i] ?>>7
+				<option value="8"<?php echo  $SG8[$i] ?>>8
+				<option value="9"<?php echo  $SG9[$i] ?>>9
+				<option value="10"<?php echo  $SG10[$i] ?>>10
+				<option value="11"<?php echo  $SG11[$i] ?>>11
+				<option value="12"<?php echo  $SG12[$i] ?>>12
+				<option value="13"<?php echo  $SG13[$i] ?>>13
+				<option value="14"<?php echo  $SG14[$i] ?>>14
+				<option value="15"<?php echo  $SG15[$i] ?>>15
+				<option value="16"<?php echo  $SG16[$i] ?>>16
 			</select>
 			</td>
-			<td width="*" class="norm"><?= $i ?></td><td><input type="text" name="Text[]" size="30" value="<?= $Text[$i] ?>"></td></tr>
+			<td width="*" class="norm"><?php echo  $i ?></td><td><input type="text" name="Text[]" size="30" value="<?php echo  $Text[$i] ?>"></td></tr>
 <?php } ?>
 </table>
 </td></tr>

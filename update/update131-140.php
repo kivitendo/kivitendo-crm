@@ -118,9 +118,9 @@ if ($_POST["ok"]) {
 ?>
 Die Verzeichnisstruktur der Dokumente (Kunden/Lieferanten/Kontakte) hat sich ge&auml;ndert.<br>
 Das Script versucht die Verzeichnisse entsprechent umzubenennen und zu verschieben.<br>
-Bitte erstellen Sie zun&auml;chst ein Backup des Dokumentenverzeichnis (crm/dokumente/<?= $_SESSION["dbname"] ?>).
+Bitte erstellen Sie zun&auml;chst ein Backup des Dokumentenverzeichnis (crm/dokumente/<?php echo  $_SESSION["dbname"] ?>).
 <form name="update" method="post" action="update/update131-140.php">
-	<input type="hidden" name="oldver" value="<?= $rc[0]["version"] ?>">
+	<input type="hidden" name="oldver" value="<?php echo  $rc[0]["version"] ?>">
 	<input type="submit" name="ok" value="ok">
 	<input type="submit" name="nok" value="nee - lieber nicht">
 </form>

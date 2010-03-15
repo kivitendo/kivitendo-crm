@@ -150,31 +150,31 @@
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 <body>
 <form name='form' method='post' action='showAdr.php'>
-<input type="hidden" name="src" value="<?= $dest ?>">
-<input type="hidden" name="Q" value="<?= $Q ?>">
+<input type="hidden" name="src" value="<?php echo  $dest ?>">
+<input type="hidden" name="Q" value="<?php echo  $Q ?>">
 <p class="norm">
 Anschrift<br><hr>
-	<?= ($firma)?"Firma ".$firma."<br><br>":"" ?>
-	<?= $anrede ?> <?= $title ?><br>
-    <?= $name ?><br>
-	<?= (!$_GET["pid"] && $name2)?"$name2<br>":"" ?>
-	<?= ($kontakt)?$kontakt."<br>":"" ?>
-	<?= $strasse ?><br><br>
-	<?= ($land<>"")?$land." - ":"" ?>
-	<?= $plz ?> <?= $ort ?><br>
+	<?php echo  ($firma)?"Firma ".$firma."<br><br>":"" ?>
+	<?php echo  $anrede ?> <?php echo  $title ?><br>
+    <?php echo  $name ?><br>
+	<?php echo  (!$_GET["pid"] && $name2)?"$name2<br>":"" ?>
+	<?php echo  ($kontakt)?$kontakt."<br>":"" ?>
+	<?php echo  $strasse ?><br><br>
+	<?php echo  ($land<>"")?$land." - ":"" ?>
+	<?php echo  $plz ?> <?php echo  $ort ?><br>
 </p>
 	<hr>
-	<input type="text" name="freitext" size="25" value="<?= $freitext ?>">
+	<input type="text" name="freitext" size="25" value="<?php echo  $freitext ?>">
 	<hr>
 	<table>
 <?php if ($_GET["pid"] or $_GET["sid"]) { ?>
-        <tr><td colspan="2">Daten aus Hauptanschrift erg&auml;nzen <input type="checkbox" name="complete" value="1" <?= $complete ?>></TD></tr>
+        <tr><td colspan="2">Daten aus Hauptanschrift erg&auml;nzen <input type="checkbox" name="complete" value="1" <?php echo  $complete ?>></TD></tr>
 <?php } ?>
 		<tr><td>Etikett&nbsp;</td>
 			<td>
 				<select name='format' >
 <?php foreach ($ALabels as $data) { ?>
-					<option value='<?= $data["id"]?>'<?= ($data["id"]==$etikett)?" selected":"" ?>><?= $data["name"] ?>
+					<option value='<?php echo  $data["id"]?>'<?php echo  ($data["id"]==$etikett)?" selected":"" ?>><?php echo  $data["name"] ?>
 
 <?php } ?>
 				</select>&nbsp;<input type='submit' name='chfrm' value='Ansicht erneuern'>

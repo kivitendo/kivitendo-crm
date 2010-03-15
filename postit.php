@@ -57,7 +57,7 @@ if ($_POST["save"]) {
 }
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
-	<head><title><?= translate(".:LxO:.","work"); ?> <?= translate(".:postit:.","work"); ?></title>
+	<head><title><?php echo  translate(".:LxO:.","work"); ?> <?php echo  translate(".:postit:.","work"); ?></title>
 	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
 	<script language="JavaScript">
 	<!--
@@ -67,8 +67,8 @@ if ($_POST["save"]) {
 	//-->
 	</script>
 	</head>
-<body onLoad="if (1==<?= $popup ?>) window.resizeTo(600,400);">
-<p class="listtop"><?= translate(".:notes:.","work"); ?></p>
+<body onLoad="if (1==<?php echo  $popup ?>) window.resizeTo(600,400);">
+<p class="listtop"><?php echo  translate(".:notes:.","work"); ?></p>
 <table >
 <?php
 $liste=getAllPostIt($_SESSION["loginCRM"]);
@@ -80,16 +80,16 @@ if ($liste) foreach($liste as $row) {
 ?>
 </table>
 <form name="postit" method="post" action="postit.php">
-<input type="hidden" name="id" value="<?= $data["id"] ?>">
-<input type="text" name="cause" size="77" maxlength="100" value="<?= $data["cause"] ?>"><br />
-<textarea class="klein" rows="7" cols="80" name="notes"><?= $data["notes"] ?></textarea><br />
-<input type="submit" class="sichern" name="save" value="<?= translate(".:save:.","work"); ?>">&nbsp;
-<input type="submit" class="clear" name="clear" value="<?= translate(".:clear:.","work"); ?>">&nbsp;
-<input type="submit" class="sichernneu" name="delete" value="<?= translate(".:delete:.","work"); ?>">&nbsp;
+<input type="hidden" name="id" value="<?php echo  $data["id"] ?>">
+<input type="text" name="cause" size="77" maxlength="100" value="<?php echo  $data["cause"] ?>"><br />
+<textarea class="klein" rows="7" cols="80" name="notes"><?php echo  $data["notes"] ?></textarea><br />
+<input type="submit" class="sichern" name="save" value="<?php echo  translate(".:save:.","work"); ?>">&nbsp;
+<input type="submit" class="clear" name="clear" value="<?php echo  translate(".:clear:.","work"); ?>">&nbsp;
+<input type="submit" class="sichernneu" name="delete" value="<?php echo  translate(".:delete:.","work"); ?>">&nbsp;
 <?php if ($_GET["popup"]==1) { ?>
-<input type="button" name="ppp" value="<?= translate(".:close:.","work"); ?>" onCLick="self.close();">
+<input type="button" name="ppp" value="<?php echo  translate(".:close:.","work"); ?>" onCLick="self.close();">
 <?php }  else { ?>
-<input type="button" name="ppp" value="<?= translate(".:popup:.","work"); ?>" onCLick="PopUp();">
+<input type="button" name="ppp" value="<?php echo  translate(".:popup:.","work"); ?>" onCLick="PopUp();">
 <?php } ?>
 </from>
 </body>

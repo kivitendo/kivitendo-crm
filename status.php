@@ -44,11 +44,11 @@ if ($prog) { echo "<a href='tmp/instprog.log'>Programminstallation</a><br>"; } e
 if ($db) { echo "<a href='tmp/install.log'>Datenbankinstallation</a><br>"; } else { echo "Kein Logfile f&uuml;r Datenbankinstallation<br>"; }
 ?>
 <table>
-	<tr><td>ProgrammVersion</td><td>[<?= $VERSION." ".$SUBVER ?>]</td></tr>
-	<tr><td>Datenbank:</td><td> [<?= $_SESSION["dbname"] ?>]</td></tr>
-	<tr><td>db-Server:</td><td>[<?= $_SESSION["dbhost"] ?>]</td></tr>
-	<tr><td>Benutzer:</td><td>[<?= $_SESSION["employee"] ?>:<?= $_SESSION["loginCRM"] ?>]</td></tr>
-	<tr><td>Session-ID:</td><td>[<?= session_id() ?>]</td></tr>
+	<tr><td>ProgrammVersion</td><td>[<?php echo  $VERSION." ".$SUBVER ?>]</td></tr>
+	<tr><td>Datenbank:</td><td> [<?php echo  $_SESSION["dbname"] ?>]</td></tr>
+	<tr><td>db-Server:</td><td>[<?php echo  $_SESSION["dbhost"] ?>]</td></tr>
+	<tr><td>Benutzer:</td><td>[<?php echo  $_SESSION["employee"] ?>:<?php echo  $_SESSION["loginCRM"] ?>]</td></tr>
+	<tr><td>Session-ID:</td><td>[<?php echo  session_id() ?>]</td></tr>
 	<tr><td>PHP-Umgebung:</td><td>[<a href="info.php">anzeigen</a>]</td></tr>
 	<tr><td>Session<a href="showsess.php?ok=show">:</a></td><td>[<a href="showsess.php">l&ouml;schen</a>]</td></tr>
 	<tr><td>db-Zugriff:</td><td>[<a href="status.php?test=ja">testen</a>]</td></tr>

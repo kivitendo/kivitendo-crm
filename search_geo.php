@@ -42,7 +42,7 @@
 <html>
 	<script language="JavaScript">
 	<!--
-	var wo = '<?= $wo ?>';
+	var wo = '<?php echo  $wo ?>';
 	function auswahl() {
 		nr=document.firmen.Alle.selectedIndex;
 		val=document.firmen.Alle.options[nr].value;

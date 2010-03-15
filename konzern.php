@@ -38,7 +38,7 @@
 	<script language="JavaScript">
 		function show(id) {
 			Frame=eval("parent.main_window");
-			uri="firma1.php?Q=<?= $Q ?>&id="+id;
+			uri="firma1.php?Q=<?php echo  $Q ?>&id="+id;
 			Frame.location.href=uri;
 		}
 	</script>

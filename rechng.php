@@ -39,9 +39,9 @@
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <table width="100%">
 <tr class='smal'><td>Rechnung Anschrift</td><td>Lieferanschrift</td><td></td></tr>
-<tr class='smal'><td><?= $adr["name"]."<br>".$adr["street"]."<br>".$adr["zipcode"]." ".$adr["city"] ?></td>
-	<td><?= $NAME."<br>".$STRASSE."<br>".$ORT ?></td
-	<td style="vertical-align:top; text-align:right;" nowrap><?= $header." vom ".db2date($tmp[1]["transdate"]) ?><br><?= $header2 ?><br><?= $header3 ?></td></tr>
+<tr class='smal'><td><?php echo  $adr["name"]."<br>".$adr["street"]."<br>".$adr["zipcode"]." ".$adr["city"] ?></td>
+	<td><?php echo  $NAME."<br>".$STRASSE."<br>".$ORT ?></td
+	<td style="vertical-align:top; text-align:right;" nowrap><?php echo  $header." vom ".db2date($tmp[1]["transdate"]) ?><br><?php echo  $header2 ?><br><?php echo  $header3 ?></td></tr>
 </table>
 <table>
 <tr class='smal'><td>Menge</td><td>Einh.</td><td>Artikel</td><td>VKpreis</td><td>Einzelpreis</td><td>Summe</td></tr>
@@ -67,23 +67,23 @@ if (empty($reP)) {
 		$i++;
 	}
 ?>
-	<tr  class='smal' onMouseover='this.bgColor="#FF0000";' onMouseout='this.bgColor="<?= $bgcol[($i%2+1)] ?>";' bgcolor='<?= $bgcol[($i%2+1)] ?>'>
-		<td colspan='5' align='right'>Rechnungssumme Netto</td><td align='right'><?= sprintf("%0.2f",$tmp[1]["netto"]) ?></td>
+	<tr  class='smal' onMouseover='this.bgColor="#FF0000";' onMouseout='this.bgColor="<?php echo  $bgcol[($i%2+1)] ?>";' bgcolor='<?php echo  $bgcol[($i%2+1)] ?>'>
+		<td colspan='5' align='right'>Rechnungssumme Netto</td><td align='right'><?php echo  sprintf("%0.2f",$tmp[1]["netto"]) ?></td>
 	</tr>
-	<tr  class='smal' onMouseover='this.bgColor="#FF0000";' onMouseout='this.bgColor="<?= $bgcol[($i%2+1)] ?>";' bgcolor='<?= $bgcol[($i%2+1)] ?>'>
-		<td colspan='5' align='right'>enthaltene MwSt</td><td align='right'><?= sprintf("%0.2f",($tmp[1]["brutto"]-$tmp[1]["netto"])) ?></td>
+	<tr  class='smal' onMouseover='this.bgColor="#FF0000";' onMouseout='this.bgColor="<?php echo  $bgcol[($i%2+1)] ?>";' bgcolor='<?php echo  $bgcol[($i%2+1)] ?>'>
+		<td colspan='5' align='right'>enthaltene MwSt</td><td align='right'><?php echo  sprintf("%0.2f",($tmp[1]["brutto"]-$tmp[1]["netto"])) ?></td>
 	</tr>
-	<tr  class='smal' onMouseover='this.bgColor="#FF0000";' onMouseout='this.bgColor="<?= $bgcol[($i%2+1)] ?>";' bgcolor='<?= $bgcol[($i%2+1)] ?>'>
-		<td colspan='5' align='right'>Rechnungssumme Brutto</td><td align='right'><?= sprintf("%0.2f",$tmp[1]["brutto"]) ?></td>
+	<tr  class='smal' onMouseover='this.bgColor="#FF0000";' onMouseout='this.bgColor="<?php echo  $bgcol[($i%2+1)] ?>";' bgcolor='<?php echo  $bgcol[($i%2+1)] ?>'>
+		<td colspan='5' align='right'>Rechnungssumme Brutto</td><td align='right'><?php echo  sprintf("%0.2f",$tmp[1]["brutto"]) ?></td>
 	</tr>
 	
 <?php } ?>
 
-	<tr  class='smal' onMouseover='this.bgColor="#FF0000";' onMouseout='this.bgColor="<?= $bgcol[($i%2+1)] ?>";' bgcolor='<?= $bgcol[($i%2+1)] ?>'>
-		<td colspan='2' align='left'>Re-Notiz:</td><td colspan='4'> <?= $tmp[1]["notes"] ?></td>
+	<tr  class='smal' onMouseover='this.bgColor="#FF0000";' onMouseout='this.bgColor="<?php echo  $bgcol[($i%2+1)] ?>";' bgcolor='<?php echo  $bgcol[($i%2+1)] ?>'>
+		<td colspan='2' align='left'>Re-Notiz:</td><td colspan='4'> <?php echo  $tmp[1]["notes"] ?></td>
 	</tr>
-	<tr  class='smal' onMouseover='this.bgColor="#FF0000";' onMouseout='this.bgColor="<?= $bgcol[($i%2+1)] ?>";' bgcolor='<?= $bgcol[($i%2+1)] ?>'>
-		<td colspan='2' align='left'>Intern:</td><td colspan='4'> <?= $tmp[1]["intnotes"] ?></td>
+	<tr  class='smal' onMouseover='this.bgColor="#FF0000";' onMouseout='this.bgColor="<?php echo  $bgcol[($i%2+1)] ?>";' bgcolor='<?php echo  $bgcol[($i%2+1)] ?>'>
+		<td colspan='2' align='left'>Intern:</td><td colspan='4'> <?php echo  $tmp[1]["intnotes"] ?></td>
 	</tr>
 </table>
 <center><a href="javascript:self.close()">schlie&szlig;en</a>

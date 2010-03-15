@@ -87,16 +87,16 @@
 <body>
 
 <form name='form' method='post' action='etiketten.php'>
-	<input type="hidden" name="src" value="<?= $dest ?>">
+	<input type="hidden" name="src" value="<?php echo  $dest ?>">
 	&nbsp;Etikett:<br>
 	&nbsp;<select name='format' >
 <?php	foreach ($ALabels as $data) { ?>
-		<option value='<?= $data["id"]?>'<?= ($data["id"]==$_POST["format"])?" selected":"" ?>><?= $data["name"] ?>
+		<option value='<?php echo  $data["id"]?>'<?php echo  ($data["id"]==$_POST["format"])?" selected":"" ?>><?php echo  $data["name"] ?>
 <?php	} ?>
 	</select>&nbsp;<input type='submit' name='chfrm' value='wechseln'><br>
 	<hr>
 	Freier Text<br>
-	&nbsp;<input type="text" name="text" size="25" value="<?= $freitext ?>">
+	&nbsp;<input type="text" name="text" size="25" value="<?php echo  $freitext ?>">
 	<hr>
 	&nbsp;Bitte Startposition ausw&auml;hlen.<br>
 	&nbsp;Es wird Spaltenweise verarbeitet.<br>

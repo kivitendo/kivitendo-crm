@@ -58,13 +58,13 @@ if ($_POST["erzeugen"]) {
 Daten f&uuml;r den Serienbrief:<br />
 <form name="serdoc" action="serdoc.php" enctype='multipart/form-data' method="post">
 <INPUT TYPE="hidden" name="MAX_FILE_SIZE" value="5000000">
-<input type="hidden" name="src" value="<?= $_POST["src"] ?>">
-Datum: <input type="text" name="date" size="12" value="<?= $_POST["date"] ?>"><br />
-Betreff: <input type="text" name="subject" size="30" value="<?= $_POST["subject"] ?>"><br />
+<input type="hidden" name="src" value="<?php echo  $_POST["src"] ?>">
+Datum: <input type="text" name="date" size="12" value="<?php echo  $_POST["date"] ?>"><br />
+Betreff: <input type="text" name="subject" size="30" value="<?php echo  $_POST["subject"] ?>"><br />
 Zusatztext:<br />
-<textarea name="body" cols="50" rows="8"><?= $_POST["body"] ?></textarea><br />
+<textarea name="body" cols="50" rows="8"><?php echo  $_POST["body"] ?></textarea><br />
 Datei: <input type="file" name="datei" size="28"><br />
-<?= $_FILES["datei"]["name"] ?><br />
-<input type="submit" name="erzeugen" value="erzeugen" style="visibility:<?= $display ?>">
+<?php echo  $_FILES["datei"]["name"] ?><br />
+<input type="submit" name="erzeugen" value="erzeugen" style="visibility:<?php echo  $display ?>">
 </form>
-<script language="JavaScript"><?= $js ?></script>
+<script language="JavaScript"><?php echo  $js ?></script>

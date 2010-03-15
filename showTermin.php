@@ -43,13 +43,13 @@
 
 <script language="JavaScript">
 	function editterm() {
-		opener.top.main_window.location.href='termin.php?holen=<?= $_GET["termid"] ?>';
+		opener.top.main_window.location.href='termin.php?holen=<?php echo  $_GET["termid"] ?>';
 		self.close();
 	}
 	function delterm() {
 		Check = confirm("Wirklich löschen?");
 		if(Check == false) return false;
-		document.location.href='showTermin.php?del=<?= $_GET["termid"] ?>';
+		document.location.href='showTermin.php?del=<?php echo  $_GET["termid"] ?>';
 	}
 	function openstamm(link) {
 		opener.top.main_window.location.href=link;
@@ -76,7 +76,7 @@
     }
 ?>
 <hr>
-<?= $links ?>
+<?php echo  $links ?>
 <br>
 <br>
 <input type="button" onClick="self.close()" value="schlie&szlig;en"> &nbsp; &nbsp;

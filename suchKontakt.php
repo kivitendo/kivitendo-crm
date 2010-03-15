@@ -25,7 +25,7 @@
 </script>
 </head>
 <body>
-<center>Gesucht wurde nach: <?= $_GET["suchwort"] ?></center><br>
+<center>Gesucht wurde nach: <?php echo  $_GET["suchwort"] ?></center><br>
 <?php
 	if($rs) {	
 		echo "<table width='95%'>\n";

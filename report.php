@@ -34,7 +34,7 @@ $anzahl=count($tabellen);
 	<script language="JavaScript">
 		function sende() { 
 			felder="";
-			for (i=0; i < <?= $anzahl ?>; i++) {
+			for (i=0; i < <?php echo  $anzahl ?>; i++) {
 				anz=document.report.elements[i].length;
 				for (j=0; j<anz; j++) {
 					if (document.report.elements[i].options[j].selected==true) {
@@ -57,7 +57,7 @@ $anzahl=count($tabellen);
  <table>
  	<tr>
 <?php foreach ($tabellen as $key=>$val) { ?> 	
- 		<td><?= $val[0] ?><br>
+ 		<td><?php echo  $val[0] ?><br>
  			<select name="name" size="10" multiple>
  <?php 
  		foreach ($felder[$key] as $row) { 

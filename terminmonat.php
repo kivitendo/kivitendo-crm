@@ -37,31 +37,31 @@
 	}
 <?php  } else if ($_GET["fld"]) { ?>
 	function tag(tg) {
-		opener.document.termedit.<?= $_GET["fld"] ?>.value=tg;
+		opener.document.termedit.<?php echo  $_GET["fld"] ?>.value=tg;
 	}
 	function kw(w) {
 	}
 <?php } else { ?>
 	function tag(tg) {
-		self.location.href="termlist.php?cuid=<?= $CUID ?>&ansicht=T&datum="+tg;
+		self.location.href="termlist.php?cuid=<?php echo  $CUID ?>&ansicht=T&datum="+tg;
 	}
 	function kw(w) {
-		self.location.href="termlist.php?cuid=<?= $CUID ?>&ansicht=W&kw="+w+"&year="+<?= $year ?>;
+		self.location.href="termlist.php?cuid=<?php echo  $CUID ?>&ansicht=W&kw="+w+"&year="+<?php echo  $year ?>;
 	}
 <?php
 	}
 ?>
 	function monmin() {
-			self.location.href="terminmonat.php?cuid=<?= $CUID ?>&ansicht=M&datum=01.<?= ($month>1)?($month-1):12 ?>.<?= ($month>1)?$year:($year-1) ?>&fld=<?= $_GET["fld"] ?>";
+			self.location.href="terminmonat.php?cuid=<?php echo  $CUID ?>&ansicht=M&datum=01.<?php echo  ($month>1)?($month-1):12 ?>.<?php echo  ($month>1)?$year:($year-1) ?>&fld=<?php echo  $_GET["fld"] ?>";
 	}
 	function monplu() {
-			self.location.href="terminmonat.php?cuid=<?= $CUID ?>&ansicht=M&datum=01.<?= ($month<12)?($month+1):1 ?>.<?= ($month<12)?$year:($year+1) ?>&fld=<?= $_GET["fld"] ?>";
+			self.location.href="terminmonat.php?cuid=<?php echo  $CUID ?>&ansicht=M&datum=01.<?php echo  ($month<12)?($month+1):1 ?>.<?php echo  ($month<12)?$year:($year+1) ?>&fld=<?php echo  $_GET["fld"] ?>";
 	}
 	//-->
 	</script>
 <body onLoad="self.focus()">
 <center>
-<input type="button" value="<--" onClick="monmin()"> [<a href="prtmkal.php?month=<?= $month ?>&year=<?= $year ?>"><?= $month."/".$year ?></a>] <input type="button" value="-->" onClick="monplu()">
+<input type="button" value="<--" onClick="monmin()"> [<a href="prtmkal.php?month=<?php echo  $month ?>&year=<?php echo  $year ?>"><?php echo  $month."/".$year ?></a>] <input type="button" value="-->" onClick="monplu()">
 <br><br>
 <table style="width:29em" class="klein">
 	<tr><th style="width:2.1em" class="gr">Kw</th><th style="width:3.9em" class="gr">Mo</th><th style="width:3.9em" class="gr">Di</th><th style="width:3.9em" class="gr">Mi</th><th style="width:3.9em" class="gr">Do</th><th style="width:3.9em" class="gr">Fr</th><th style="width:3.0em" class="gr">Sa</th><th style="width:3.0em" class="gr">So</th></tr>

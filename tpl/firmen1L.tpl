@@ -34,6 +34,7 @@
 	<input type="button" name="etikett" value=".:label:." onClick="chngSerial('etiketten');">&nbsp;
 	<a href="sermail.php"><input type="button" name="email" value=".:sermail:."></a>&nbsp;
 	<input type="button" name="brief" value=".:serdoc:." onClick="chngSerial('serdoc');">
+	<input type="button" name="vcard" value=".:servcard:." onClick="chngSerial('servcard');">
 </form>
 	<br>
 	<iframe src="etiketten.php" name="etikett" width="300" height="380" scrolling="yes"> marginheight="0" marginwidth="0" align="left">

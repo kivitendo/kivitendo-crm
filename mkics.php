@@ -68,8 +68,13 @@
         $mail->_params="-f ".$user["email"];
         $rc=$mail->send($_POST["icaldest"], $hdr, $body);                
     } else {
+        if (strtoupper($_POST["icaldest"]) == "HOME")  $_POST["icaldest"] = "dokumente/".$_SESSION["mansel"]."/".$_SESSION["loginCRM"]."/";
         $v->setConfig( 'directory', $_POST["icaldest"] ); // identify directory
         $v->saveCalendar(); // save calendar to file
     }
-    echo $cnt.' Termine exportiert';
+    if ($cnt>0) {
+        echo $cnt.' Termine exportiert';
+    } else {
+        echo "Keine Termine";
+    }
 ?>

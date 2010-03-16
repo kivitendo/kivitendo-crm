@@ -78,6 +78,8 @@
 			$vcard->addTelephone($data["fax"]);
 			$vcard->addParam('TYPE', 'FAX');
 		}
+        //Kommt auf den Empfänger an, weiter testen.
+		//if ($data["notes"]) $vcard->setNote(str_replace("\r",chr(10),$data["notes"]));
 		if ($data["notes"]) $vcard->setNote($data["notes"]);
 	} else {
 		exit;

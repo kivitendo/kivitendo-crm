@@ -34,7 +34,8 @@
 		$link2="firma2.php?Q=$Q&fid=$fid";
 		$link3="firma3.php?Q=$Q&fid=$fid";
 		$link4="firma4.php?Q=$Q&fid=$fid&pid=$pid";
-	} else {
+	} else {    
+        $fid = 0;
 		$co=getKontaktStamm($pid);
 		$name=$co["cp_givenname"]." ".$co["cp_name"];
 		$plz=$co["cp_zipcode"];

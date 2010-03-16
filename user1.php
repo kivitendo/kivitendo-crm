@@ -15,7 +15,7 @@
 		$rc=createMailBox($_POST["Postf2"],$_POST["Login"]);
 	} 
 	$t = new Template($base);
-	if ($_GET["id"]) {
+	if ($_GET["id"] && $_GET["id"]<>$_SESSION["loginCRM"]) {
 		$fa=getUserStamm($_GET["id"]);
 		$t->set_file(array("usr1" => "user1b.tpl"));
 	} else {
@@ -68,7 +68,7 @@
             icalart.$fa["icalart"] => "selected",
 			));
 	if ($_GET["id"]) {	
-		$t->set_var(array(Vertreter => $fa["vertreter"]." ".$fa["vname"]));
+		$t->set_var(array(vertreter => $fa["vertreter"]." ".$fa["vname"]));
 	} else {
 		$t->set_block("usr1","Selectbox","Block");
 		$select=(!empty($fa["vertreter"]))?$fa["vertreter"]:$fa["id"];

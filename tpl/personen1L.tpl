@@ -41,6 +41,7 @@
     <input type="button" name="attribute" value="Attribute" onClick="chngSerial('attribute');">&nbsp;
     <a href="sermail.php"><input type="button" name="email" value="Serienmail"></a>&nbsp;
     <input type="button" name="brief" value="Serienbrief" onClick="chngSerial('serdoc');">
+    <input type="button" name="vcard" value=".:servcard:." onClick="chngSerial('servcard');">
 </form>
 	<iframe src="etiketten.php" name="etikett" width="380" height="380" marginheight="0" marginwidth="0" align="left">
 		<p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>

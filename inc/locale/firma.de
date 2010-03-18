@@ -168,5 +168,6 @@ $texts  = array(
   '.:locked:.'       => 'gesperrt durch',
   '.:documents:.'    => 'Dokumente',
   '.:picup:.'        => '&Uuml;bernehmen',
+  '.:servcard:.'     => 'VCards'
 ); 
 ?>

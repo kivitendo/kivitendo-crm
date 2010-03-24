@@ -35,6 +35,7 @@ if (!$_SESSION["db"] || !$_SESSION["cookie"] ||
 * wandelt ein "normales" Datum in ein db-Datum um
 *****************************************************/
   function date2db($Datum) {
+     if (empty($Datum)) return date("Y-m-d");
      $Datum=ereg_replace("/","\.",$Datum);
      $Datum=ereg_replace("-","\.",$Datum);
      $Datum=ereg_replace(",","\.",$Datum);
@@ -84,12 +85,17 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
 	$auth["login"]=$rs1[0]["login"];
 	$sql="select * from auth.user_config where user_id=".$rs[0]["id"];
 	$rs1=$db->getAll($sql,"authuser_2");
-	$keys=array("dbname","dbpasswd","dbhost","dbport","dbuser","countrycode");
+	$keys=array("dbname","dbpasswd","dbhost","dbport","dbuser","countrycode","stylesheet","company","address","vclimit","signature","email","tel");
 	foreach ($rs1 as $row) {
 		if (in_array($row["cfg_key"],$keys)) {
 			$auth[$row["cfg_key"]]=$row["cfg_value"];
 		}
 	}
+    $auth["dbhost"]=(!$auth["dbhost"])?"localhost":$auth["dbhost"];
+    $auth["dbport"]=(!$auth["dbport"])?"5432":$auth["dbport"];
+    $auth["mansel"]=$auth["dbname"];
+    $auth["employee"]=$auth["login"];
+    $auth["lang"]=$auth["countrycode"];
     $sql = "SELECT granted from auth.group_rights G where G.right = 'sales_all_edit' and G.group_id in (select group_id from auth.user_group where user_id = ".$rs[0]["id"].")";
 	$rs=$db->getAll($sql,"authuser_3");
     $auth["sales_edit_all"] = 'f';
@@ -134,20 +140,12 @@ global $ERPNAME;
 	$auth=authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie);
 	if (!$auth) { return false; };
 	chkdir($auth["dbname"]);
+    $_SESSION = $auth;
 	$_SESSION["sessid"]=$cookie;
 	$_SESSION["cookie"]=$cookiename;
-   	$_SESSION["employee"]=$auth["login"];
-	$_SESSION["mansel"]=$auth["dbname"];
-	$_SESSION["dbname"]=$auth["dbname"];
-	$_SESSION["dbhost"]=(!$auth["dbhost"])?"localhost":$auth["dbhost"];
-	$_SESSION["dbport"]=(!$auth["dbport"])?"5432":$auth["dbport"];
-	$_SESSION["dbuser"]=$auth["dbuser"];
-	$_SESSION["dbpasswd"]=$auth["dbpasswd"];	
-    $_SESSION["sales_edit_all"] = $auth["sales_edit_all"];
-	$_SESSION["lang"]=$auth["countrycode"]; 
 	$_SESSION["db"]=new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
 	$_SESSION["authcookie"]=$authcookie;
-	$sql="select * from employee where login='".$auth["login"]."'";
+	$sql="select * from employee where login='".$_SESSION["login"]."'";
 	$rs=$_SESSION["db"]->getAll($sql);
 	if(!$rs) {
 		return false;

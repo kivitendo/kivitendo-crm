@@ -1,4 +1,4 @@
--- $Id: install130.sql $
+-- $Id: install141.sql $
 CREATE SEQUENCE "crmid" start 1 increment 1 maxvalue 9223372036854775807 minvalue 1 cache 1;
 
 CREATE TABLE telcall (
@@ -431,7 +431,7 @@ UPDATE employee set etikett=(select id from labels limit 1);
 UPDATE defaults SET contnumber=1000;
 UPDATE employee SET kdview = 1;
 
-INSERT INTO crm (uid,datum,version) VALUES (0,now(),'1.4.0');
+INSERT INTO crm (uid,datum,version) VALUES (0,now(),'1.4.1');
 
 CREATE INDEX td_termin_key ON termdate USING btree (termid);
 CREATE INDEX td_jahr_key ON termdate USING btree (jahr);
@@ -450,3 +450,11 @@ CREATE INDEX contacts_name_key ON contacts USING btree (cp_name);
 CREATE INDEX telcall_id_key ON telcall USING btree (id);
 CREATE INDEX telcall_bezug_key ON telcall USING btree (bezug);
 CREATE INDEX mid_key ON contmasch USING btree (mid);
+
+INSERT INTO schema_info (tag,login) VALUES ('crm_bundeslaender','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_CleanContact','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_employeeFeldLaenge','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_PrivatTermin','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_sonderflag','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_TerminDate','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_TerminSequenz','install');

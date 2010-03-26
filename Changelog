@@ -1,17 +1,18 @@
 Version 1.4.1:
+	leeres Datum bei date2db wird aktuelles Datum
 	VCard Serienexport für Kunden + Personen
 	Bug 1371
 	Verbesserungen beim Update
 	Bug 1365
 	Fenster für Mail vergrössert
-	Bug 1092
+	Bug 1092 Umlautdarstellung von eingehenden e-Mails
 	Knopf "Mails" wieder anzeigen
 	Aufräumen nach dem Upload
 	Mail: Absender und Betreff richtig Quoten
 	SQL:Syntax für Escape-Zeichenketten für Backslashes
 	WVL:Adresslink korrigiert.
 	Fehlendes ergänzt, überflüssiges weg.
-	Bug 814
+	Bug 814 Dokumente in Wissens DB 
 	Bug 1319
 	Feature: sales_edit_all
 	listLimit soll nur Anzeige, nicht aber CSV Daten betreffen.
@@ -46,7 +47,7 @@ Version 1.4.1:
 	Constraints für Tabelle sonderflag
 	Sonderflag editieren
 	Beim Speichern von Stammdaten leere Felder mit "null" belegen, da sonst	coalese nicht greift
-	Bug 679
+	Bug 679 Ausgehende/Eingehende Anrufe trennen
 	Aufruf offener Posten/Aufträge geändert
 	Preisanfrage fehlerhaft
 	Keine Pflicht für Zahlungsbedingungen
@@ -55,11 +56,11 @@ Version 1.4.1:
 	Bug 1274
 	Bug 1273
 	Fehlendes "e" im Templateblock ergänzt
-	Bug 1068
-	Bug 1218
+	Bug 1068 mails  charset
+	Bug 1218 Featurerequest "Terminsuche"
 	Überflüssige Zeile entfernt
-	Bug 1217
-	Bug 1216
+	Bug 1217 Zeitliche Einteilung der Termine
+	Bug 1216 Termine-Jahreszahlenauswahl 
 	Doppelter Funktionsaufruf
 	Nur eigene Termine anzeigen
 	Fehler bei Terminabfrage aus Wiedervorlage
@@ -70,7 +71,7 @@ Version 1.4.1:
 	Tools in der Stammdatenmaske abschaltbar
 	Zahlungsbedingungen bearbeiten
 	Minikalender:Pfad zur ERP aus URL
-	BUG 1203
+	BUG 1203 
 	Coutrycode auf en geändert
 	Platzhaltername korrigiert
 	IBAN/BIC anzeige + eingabe

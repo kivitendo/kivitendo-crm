@@ -188,6 +188,7 @@ global $VERSION;
 		echo "CRM-Tabellen sind nicht (vollst&auml;ndig) installiert"; 
 		flush(); 
 		require("install.php");
+		require("inc/update_neu.php");
 		exit;
 	} else if($rc[0]["version"]<>$VERSION) {
 		echo "Istversion: ".$rc[0]["version"]." Sollversion: ".$VERSION."<br>";

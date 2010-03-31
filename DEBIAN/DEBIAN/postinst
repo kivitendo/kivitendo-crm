@@ -1,0 +1,147 @@
+#!/bin/sh
+#set -x
+
+pear=`pear config-get php_dir | cut -d '=' -f 2`
+
+
+if [ -f $pear/PEAR.php ]; then 
+#Pear gefunden
+
+#PEAR-Pakete
+echo  Image_Canvas
+if [ `pear list | grep -c Image_Canvas` -lt 1 ]; then
+# ist nicht installiert
+	echo installiere
+        pear install -f Image_Canvas
+fi
+if ! [ -d /usr/share/php/Image/Canvas/Fonts ]; then
+echo  Image_Canvas
+# ist ne alte Version
+	echo update 
+        pear install -f Image_Canvas
+fi
+echo Image_Color
+if [ `pear list | grep -c Image_Color` -lt 1 ]; then
+	echo installiere
+        pear install Image_Color
+fi
+echo Image_Graph
+if [ `pear list | grep -c Image_Graph` -lt 1 ]; then
+	echo installiere
+        pear install -f Image_Graph
+fi
+echo Contact_Vcard_Build
+if [ `pear list | grep -c Contact_Vcard_Build` -lt 1 ]; then
+	echo installiere
+        pear install Contact_Vcard_Build
+fi
+echo Contact_Vcard_Parse
+if [ `pear list | grep -c Contact_Vcard_Parse` -lt 1 ]; then
+	echo installiere
+        pear install Contact_Vcard_Parse
+fi
+
+else
+
+	echo "PEAR nicht gefunden"
+	echo "Bitte folgende  Pakete uU installieren:"
+	echo "Image_Canvas Image_Color Image_Graph Contact_Vcard_Build Contact_Vcard_Parse"
+
+fi
+
+#Xajax einhängen
+if ! [ -e /usr/lib/lx-office-erp/crmajax/xajax ] ; then
+    ln -s /usr/share/php/xajax/ /usr/lib/lx-office-erp/crmajax/xajax
+fi
+
+#Font für Umsatzgrafik
+echo Font
+if [ `grep -c FreeSans.ttf /usr/share/php/Image/Canvas/Fonts/fontmap.txt` -lt 1 ]; then
+	echo einbinden
+    if ! [ -e /usr/share/php/Image/Canvas/Fonts ] ; then
+        # Hier gibt es unterschiedliche Versionen
+        mkdir /usr/share/php/Image/Canvas/Fonts
+    fi
+    ln /usr/share/fonts/truetype/freefont/FreeSans.ttf /usr/share/php/Image/Canvas/Fonts/FreeSans.ttf
+    echo "FreeSans,FreeSans.ttf" >> /usr/share/php/Image/Canvas/Fonts/fontmap.txt
+fi
+
+
+#Update oder Install
+cnt=`grep -c CRM /usr/lib/lx-office-erp/menu.ini`
+
+
+#CRM in ERP einhängen
+if [ -L /usr/lib/lx-office-erp/crm ]; then
+	#alten Link entfernen
+	rm /usr/lib/lx-office-erp/crm
+	ln -s /usr/lib/lx-office-crm /usr/lib/lx-office-erp/crm
+elif [ -d /usr/lib/lx-office-erp/crm ]; then
+	#crm ist ein Unterverzeichnis, umbenennen
+	mv /usr/lib/lx-office-erp/crm /usr/lib/lx-office-erp/crm_
+	ln -s /usr/lib/lx-office-crm /usr/lib/lx-office-erp/crm
+	#alte, bestehende Vorlagen umkopieren
+	cp -ar /usr/lib/lx-office-erp/crm_/vorlage/* /usr/lib/lx-office-erp/crm/vorlage
+else
+	#ist noch nicht drin
+	ln -s /usr/lib/lx-office-crm /usr/lib/lx-office-erp/crm
+fi
+
+rm /usr/lib/lx-office-erp/image/CRM.png 2>/dev/null
+ln -s /usr/lib/lx-office-crm/image/CRM.png /usr/lib/lx-office-erp/image/CRM.png
+
+#Menu anpassen
+echo "ERP-Menue wird angepasst"
+if ! [ -f /usr/lib/lx-office-erp/crm_menu.ini ]; then
+    #Noch keine Sicherheitskopie vom Original erstellt.
+    cp /usr/lib/lx-office-erp/menu.ini /usr/lib/lx-office-erp/crm_menu.ini  
+fi
+
+#cp /usr/lib/lx-office-crm/update/blz.php /usr/lib/lx-office-erp/lxo-import/
+
+#if [ $cnt == 0 ]; then
+#	#Neues Menu: CRM-Einträge + Sicherheitskopie = neues Menu
+#	if [ -f /usr/lib/lx-office-erp/menu.ini.default ]; then
+#		cat /usr/lib/lx-office-crm/update/menu131.ini /usr/lib/lx-office-erp/menu.ini.default > /usr/lib/lx-office-erp/menu.ini 
+#	else 
+#		cat /usr/lib/lx-office-crm/update/menu131.ini /usr/lib/lx-office-erp/crm_menu.ini > /usr/lib/lx-office-erp/menu.ini  
+#	fi
+#fi
+cat /usr/lib/lx-office-crm/update/menu141.ini /usr/lib/lx-office-erp/menu.default > /usr/lib/lx-office-erp/menu.ini 
+
+if [ -e /usr/lib/lx-office-crm/inc/conf.php.ok ]; then
+    # vorhanden, dann zurücksichern.
+    mv /usr/lib/lx-office-crm/inc/conf.php /usr/lib/lx-office-crm/inc/conf.php.org
+    grep -v VERSION /usr/lib/lx-office-crm/inc/conf.php.org > /usr/lib/lx-office-crm/inc/conf.php
+	cat /usr/lib/lx-office-crm/update/conf141.php >> /usr/lib/lx-office-crm/inc/conf.php
+fi
+
+if [ `grep -c CallEdit /usr/lib/lx-office-crm/inc/conf.php` -lt 1 ]; then
+	echo "<?php" >> /usr/lib/lx-office-crm/inc/conf.php;
+	echo "\$showErr = false;" >> /usr/lib/lx-office-crm/inc/conf.php;
+	echo "\$logmail = true;" >> /usr/lib/lx-office-crm/inc/conf.php;
+	echo "\$jcalendar = true;" >> /usr/lib/lx-office-crm/inc/conf.php;
+	echo "\$listLimit = 500;" >> /usr/lib/lx-office-crm/inc/conf.php;
+	echo "\$tinymce = false;" >> /usr/lib/lx-office-crm/inc/conf.php;
+	echo "\$CallEdit = true;" >> /usr/lib/lx-office-crm/inc/conf.php;
+	echo "\$CallDel = true;" >> /usr/lib/lx-office-crm/inc/conf.php;
+	echo "?>" >> /usr/lib/lx-office-crm/inc/conf.php;
+fi
+
+if [ `grep -c GEODB /usr/lib/lx-office-crm/inc/conf.php` -lt 1 ]; then
+	echo "<?php" >> /usr/lib/lx-office-crm/inc/conf.php;
+	echo "\$GEODB = false;" >> /usr/lib/lx-office-crm/inc/conf.php;
+	echo "\$BLZDB = false;" >> /usr/lib/lx-office-crm/inc/conf.php;
+	echo "?>" >> /usr/lib/lx-office-crm/inc/conf.php;
+fi
+
+if [ `grep -c dbmodul /usr/lib/lx-office-crm/inc/conf.php` -lt 1 ]; then
+    echo "<?php" >> /usr/lib/lx-office-crm/inc/conf.php;
+    echo "\dbmodul=\"\";" >> /usr/lib/lx-office-crm/inc/conf.php;
+    echo "define(\"XajaxVer\",\"\");" >> /usr/lib/lx-office-crm/inc/conf.php;
+    echo "define(\"XajaxPath\",\"./crmajax/xajax\");" >> /usr/lib/lx-office-crm/inc/conf.php;
+	echo "?>" >> /usr/lib/lx-office-crm/inc/conf.php;
+fi
+
+chown www-data: /usr/lib/lx-office-erp/menu.ini
+chown www-data: /usr/lib/lx-office-crm/inc/conf.php

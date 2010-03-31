@@ -1,0 +1,5 @@
+#!/bin/sh
+if [ -e /usr/lib/lx-office-crm/inc/conf.php ]; then
+	# vorhanden, dann sichern.
+        cp /usr/lib/lx-office-crm/inc/conf.php /usr/lib/lx-office-crm/inc/conf.php.ok
+fi

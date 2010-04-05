@@ -7,6 +7,9 @@ pear=`pear config-get php_dir | cut -d '=' -f 2`
 if [ -f $pear/PEAR.php ]; then 
 #Pear gefunden
 
+#Pear updaten
+pear channel-update pear.php.net
+
 #PEAR-Pakete
 echo  Image_Canvas
 if [ `pear list | grep -c Image_Canvas` -lt 1 ]; then
@@ -51,11 +54,10 @@ fi
 
 #Xajax einhängen
 if ! [ -e /usr/lib/lx-office-erp/crmajax/xajax ] ; then
-    ln -s /usr/share/php/xajax/ /usr/lib/lx-office-erp/crmajax/xajax
+    ln -s /usr/share/php/xajax/ /usr/lib/lx-office-crm/crmajax/xajax
 fi
 
 #Font für Umsatzgrafik
-echo Font
 if [ `grep -c FreeSans.ttf /usr/share/php/Image/Canvas/Fonts/fontmap.txt` -lt 1 ]; then
 	echo einbinden
     if ! [ -e /usr/share/php/Image/Canvas/Fonts ] ; then

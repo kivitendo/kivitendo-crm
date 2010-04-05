@@ -34,6 +34,9 @@ cp -a $SRC/*.* usr/lib/lx-office-crm
 find . -name ".git*" -exec rm -rf {} \;
 find . -name ".dummy" -exec rm -rf {} \;
 
+#Die Geodaten nicht ins Paket.
+rm usr/lib/lx-office-crm/update/geodaten.sql.gz
+
 #Rechte setzen
 chown -R www-data: usr/lib/lx-office-crm
 chown -R www-data: var/lib/lx-office-crm

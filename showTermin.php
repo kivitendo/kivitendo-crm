@@ -31,7 +31,7 @@
             }
 		}
 	}
-	list($tt,$mm,$yy)=split("\.",$data["starttag"]);
+	list($tt,$mm,$yy)=explode("\.",$data["starttag"]);
 	$ft=feiertage($yy);
 	$x=mktime(0,0,0,$mm,$tt,$yy);
 	$wdhlg=array("0"=>"einmalig","1"=>"t&auml;glich","2"=>"2-t&auml;gig","7"=>"w&ouml;chentlich",

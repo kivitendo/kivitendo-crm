@@ -374,7 +374,7 @@ function safeMaschMat($mid,$aid,$material) {
 		}
 		$rc=$db->query("delete from maschmat where aid=$aid");
 		foreach ($material as $zeile) {
-			$tmp=split(";",$zeile);
+			$tmp=explode(";",$zeile);
 			$sql="insert into maschmat (mid,aid,menge,parts_id,betrag) values (%d,%d,%f,%d,'%s')";
 			$rc=$db->query(sprintf($sql,$mid,$aid,$tmp[0],$tmp[1],$tmp[2]));
 			if (!$rc) break;

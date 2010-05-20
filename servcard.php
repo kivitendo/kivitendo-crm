@@ -9,7 +9,7 @@ if ($_POST) {
         $pfad = $_SESSION["loginCRM"]."/vcard";
         chkdir($pfad);
         $pfad = "./dokumente/".$_SESSION["mansel"]."/".$pfad."/";
-        $felder=split(":",$csvdata[0]["csvdaten"]);
+        $felder=explode(":",$csvdata[0]["csvdaten"]);
         $personen = False;
         if (in_array("TITEL",$felder)) $personen = True;
         $i=0;
@@ -28,7 +28,7 @@ if ($_POST) {
             $vcard = new Contact_Vcard_Build();
             if ($_POST["targetcode"] !=  $srvcode) 
                 $row["csvdaten"] = iconv($srvcode,$_POST["targetcode"],$row["csvdaten"]);
-            $data = split(":",$row["csvdaten"]);
+            $data = explode(":",$row["csvdaten"]);
             $vcard->setFormattedName($data[$felder["NAME1"]]);
             if ($data[$felder["NAME2"]]) {
                 if ($personen) {

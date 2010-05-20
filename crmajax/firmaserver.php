@@ -331,7 +331,7 @@
         if ($oldpath<>$pfadleft) {
             $pre="../dokumente/".$_SESSION["mansel"];
             $dbfile=new document();
-            $tmp = split("/",$oldpath);
+            $tmp = explode("/",$oldpath);
             $opath = "/".implode("/",array_slice($tmp,2));
             $id=$dbfile->searchDocument($file,$opath);
             if ($id) {

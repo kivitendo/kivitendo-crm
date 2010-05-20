@@ -955,7 +955,7 @@ global $db;
 			$data["DateiID"]=true;
 			foreach($data["dateien"] as $mail){
 				//trenne Anhang und speichere in tmp
-				$file=split(",",$mail);
+				$file=explode(",",$mail);
 				$Datei["Datei"]["name"]=$file[0];
    				$Datei["Datei"]["tmp_name"]="./tmp/".$file[0];
 				$Datei["Datei"]["size"]=$file[1];
@@ -1366,7 +1366,7 @@ function eMailSort($a,$b) {
 *****************************************************/
 function chkMailAdr ($mailadr) {
 	if (substr(",",$mailadr)) {
-		$tmp=split(",",$mailadr);
+		$tmp=explode(",",$mailadr);
 	}else {
 		$tmp=array($mailadr);
 	}
@@ -1479,7 +1479,7 @@ global $db;
     $sql="SELECT curr FROM defaults";
 	$rsc=$db->getAll($sql);
     if ($rsc[0]['curr']) {
-        $curr = split(":",$rsc[0]['curr']);
+        $curr = explode(":",$rsc[0]['curr']);
         $curr = $curr[0];
     } else {
         $curr = "Eur";
@@ -2324,7 +2324,7 @@ global $db;
 *****************************************************/
 function insWCategorie($data) {
 global $db;
-	$tmp = split(",",$data["m"]);
+	$tmp = explode(",",$data["m"]);
 	if (!$data["cid"]) {
 		$newID=uniqid (rand());
 		$sql="insert into wissencategorie (name,kdhelp) values ('$newID','".(($data["kdhelp"]==1)?'true':'false')."')";
@@ -2390,7 +2390,7 @@ global $db;
 *****************************************************/
 function insWContent($data) {
 global $db;
-	$tmp = split(",",$data["m"]);
+	$tmp = explode(",",$data["m"]);
 	$sql="insert into wissencontent (initdate,content,employee,version,categorie) values ";
 	$sql.="(now(),'".trim($data["content"])."',".$_SESSION["loginCRM"].",".($data["version"]+1).",".$tmp[0].")";
 	$rc=$db->query($sql);

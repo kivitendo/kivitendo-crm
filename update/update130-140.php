@@ -85,7 +85,7 @@ if ($_POST["ok"]) {
 	echo "Vorraussetzungen pr&uuml;fen:<br>";
         $path=ini_get("include_path");
         log2file($log,"Suchpfad: $path");
-        $pfade=split(":",$path);
+        $pfade=explode(":",$path);
         $chkfile=array("DB","DB/pgsql","fpdf","fpdi","Mail","Mail/mime","Image/Canvas","Image/Graph",
                         "jpgraph","Contact_Vcard_Build","Contact_Vcard_Parse","xajax/xajax.inc");
         $chkstat=array(1,1,0,0,0,0,0,0,0,0,0,1);

@@ -10,7 +10,7 @@
 	<script language="JavaScript">
 	<!--
 <?php
-	list($day,$month,$year)=split("\.",$_GET["datum"]);
+	list($day,$month,$year)=explode("\.",$_GET["datum"]);
 	if (strlen($month)==1) $month="0$month";
     if ($_GET["fld"]=="suchfld") {
 ?>

@@ -11,7 +11,7 @@
 	$kw=$_GET["kw"];
 	$year=$_GET["year"];
 	if (!$kw) {
-		list($day,$month,$year)=split("\.",$datum);
+		list($day,$month,$year)=explode("\.",$datum);
 		$kw=date("W",mktime(0,0,0,$month,$day,$year));
 	}
 	$ft=feiertage($year);

@@ -13,7 +13,7 @@
 		$usr=getUserStamm($_SESSION["loginCRM"]);
 		$etikett=($usr["etikett"])?$usr["etikett"]:$ALabels[0]["id"];
 	} else {
-		$tmp=split("=",$_POST["src"]);
+		$tmp=explode("=",$_POST["src"]);
 		$_GET[$tmp[0]]=$tmp[1];
 		if ($tmp[2]=="ep") $_GET["ep"]=$tmp[3];  
 		$etikett=$_POST["format"];
@@ -102,7 +102,7 @@
 							'NX'=>$label["nx"], 'NY'=>$label["ny"], 'SpaceX'=>$label["spacex"], 'SpaceY'=>$label["spacey"],
 							'width'=>$label["width"], 'height'=>$label["height"], 'font-size'=>6);
 		require_once('inc/PDF_Label.php');
-		$tmp=split(":",$_POST["xy"]);
+		$tmp=explode(":",$_POST["xy"]);
 		$SX=substr($tmp[0],1);
 		$SY=substr($tmp[1],1);
 		$pdf = new PDF_Label($lableformat, $label["metric"], $SX, $SY);

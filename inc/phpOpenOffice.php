@@ -179,7 +179,7 @@ class phpOpenOffice
 				if (!strpos($value,"\n")) {
 					$this->parsedDocuments[$file] = str_replace(POO_VAR_PREFIX.$key.POO_VAR_SUFFIX, $value, $this->parsedDocuments[$file]);
 				} else {
-					$tmp=split("\n",$value);
+					$tmp=explode("\n",$value);
 					$first=true;
 					$ersetze="";
 					$tags=$this->findtags(POO_VAR_PREFIX.$key.POO_VAR_SUFFIX,$this->parsedDocuments[$file]);

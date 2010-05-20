@@ -4,8 +4,8 @@
 	include("inc/crmLib.php");
 
 	function mkdate($dat) {
-		$t=split(" ",substr($dat,0,-3));
-		$n=split("-",$t[0]);
+		$t=explode(" ",substr($dat,0,-3));
+		$n=explode("-",$t[0]);
 		$d=date("d M Y",mktime(0, 0, 0, $n[1], $n[2], $n[0]));
 		return $d." ".$t[1];
 	}

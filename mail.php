@@ -88,7 +88,7 @@
 
       			$to=($TO)?$TO:$CC;
       			if (substr(",",$to)) {
-      				$tmp=split(",",$to);
+      				$tmp=explode(",",$to);
       				$to=array();
       				foreach ($tmp as $row) { $to[]=trim($row); }
       			}

@@ -179,7 +179,7 @@ global $db;
 					$suchwort=trim($muster[$keys[$i]]);
 				}
 				$suchwort=strtr($suchwort,"*?","%_");
-				if ($keys[$i]=="cp_birthday") {$d=split("\.",$suchwort); $suchwort=$d[2]."-".$d[1]."-".$d[0]; };
+				if ($keys[$i]=="cp_birthday") {$d=explode("\.",$suchwort); $suchwort=$d[2]."-".$d[1]."-".$d[0]; };
 				$where0.="and $case1".$keys[$i]."$case2 like '".$suchwort."$fuzzy' ";
 				if ($keys[$i]=="cp_phone1") $where0.="and cp_phone2 like '".$suchwort."$fuzzy' ";
 			}

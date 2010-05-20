@@ -6,7 +6,7 @@
 	$disp="style='display:none'";
 	if ($_POST["search"] or $_GET["sernr"]) {
 		if ($_POST["serialnumber"]) {
-			$tmp=split("\|",$_POST["serialnumber"]);
+			$tmp=explode("\|",$_POST["serialnumber"]);
 			$data=getSernumber($tmp[0],$tmp[1]);
 		} else if ($_GET["sernr"]) {
 			$data=getSernumber($_GET["sernr"]);

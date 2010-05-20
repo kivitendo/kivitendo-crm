@@ -21,7 +21,7 @@
 							'SpaceY'=>$label["spacey"],
 							'width'=>$label["width"], 'height'=>$label["height"], 'font-size'=>6);
 		require_once('inc/PDF_Label.php');
-		$tmp=split(":",$_POST["xy"]);
+		$tmp=explode(":",$_POST["xy"]);
 		$SX=substr($tmp[0],1);
 		$SY=substr($tmp[1],1);
 		$pdf = new PDF_Label($lableformat, $label["metric"], $SX, $SY);
@@ -37,10 +37,10 @@
 //        print_r ($daten); //alter debug
 		if (is_array($daten)) {
 			$felder=array_shift($daten);
-			$felder=split(":",$felder["csvdaten"]);
+			$felder=explode(":",$felder["csvdaten"]);
 			$felder[]="TEXT";
 			foreach ($daten as $row) {
-				$data=split(":",$row["csvdaten"]);
+				$data=explode(":",$row["csvdaten"]);
 				$data[]=$_POST["text"];
 				unset($tmp);
 				foreach ($label["Text"] as $row) {

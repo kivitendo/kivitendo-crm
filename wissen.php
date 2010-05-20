@@ -7,7 +7,7 @@
 		$tmp=getWPath($m);
 		$m.=",".$tmp;
 	}
-	$tmp = split(",",$m);
+	$tmp = explode(",",$m);
 	if (!$tmp[0]) $tmp[0]=0;
 	if ($_POST["aktion"] == "newcat") {
 		$catinput="<input type='text' size='20' name='catname'><input type='checkbox' name='kdhelp' value='1'> ";
@@ -120,7 +120,7 @@
 
 function Thread($HauptGrp,$t,$m,&$tpl)    {	
 	global $data,$menu;
-	$sp=split(",",$m.",0");	
+	$sp=explode(",",$m.",0");	
 	$result=$data[$HauptGrp];
 	if (count($result) > 0) {
 		$x=0;

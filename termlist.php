@@ -13,7 +13,7 @@
 	$t = new Template($base);
 	if ($ansicht=="T") {
 		if (!$datum) {$day=date("d"); $month=date("m"); $year=date("Y");}
-		else {list($day,$month,$year)=split("\.",$datum);}
+		else {list($day,$month,$year)=explode("\.",$datum);}
 		$data=getTermin($day,$month,$year,"T",$_GET["cuid"]);
 		$termdata=array();
 		$tlist=array();
@@ -21,9 +21,9 @@
 			if (!in_array($row["id"],$tlist)) {
 				if ($row["stoptag"]>"$year-$month-$day" && $row["repeat"]=="0") $row["stopzeit"]="24:00";
 				if ($row["starttag"]<"$year-$month-$day" && $row["repeat"]=="0") $row["startzeit"]="00:00";
-				$tmp=split(":",$row["startzeit"]);
+				$tmp=explode(":",$row["startzeit"]);
 				$v=mktime($tmp[0],$tmp[1],0,$month,$day,$year);
-				$tmp=split(":",$row["stopzeit"]);
+				$tmp=explode(":",$row["stopzeit"]);
 				$b=mktime($tmp[0],$tmp[1],0,$month,$day,$year);
                 if ($row["privat"]=='t' && $row["member"]!=$_SESSION["loginCRM"]) {
 				    $grund="[<font color='#44ff44'>Privat</font>] ";
@@ -113,7 +113,7 @@
 			$year=substr($datum,6,4);
 		}
 		if (empty($kw) || $kw==0 || $kw=="") {
-			list($day,$month,$year)=split("\.",$datum);
+			list($day,$month,$year)=explode("\.",$datum);
 			$kw=date("W",mktime(0,0,0,$month,$day,$year));
 		}
 		$firstmonday = firstkw($year);

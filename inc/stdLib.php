@@ -22,7 +22,7 @@ if (!$_SESSION["db"] || !$_SESSION["cookie"] ||
 *****************************************************/
  function db2date($datum) {
      if (strpos($datum,"-")) {
-     	$D=split("-",$datum);
+     	$D=explode("-",$datum);
      	$datum=sprintf ("%02d.%02d.%04d",$D[2],$D[1],$D[0]);
      }
      return $datum;
@@ -40,7 +40,7 @@ if (!$_SESSION["db"] || !$_SESSION["cookie"] ||
      $Datum=ereg_replace("-","\.",$Datum);
      $Datum=ereg_replace(",","\.",$Datum);
      $Datum=ereg_replace(" ","\.",$Datum);
-     $D=split("\.",$Datum);
+     $D=explode("\.",$Datum);
 	 if (count($D)==1) { $D[1]=date("m"); };
 	 if (count($D)==2 || $D[2]=="") { $D[2]=date("Y"); };
 	 if ($D[2]<38) { $D[2]=2000+$D[2]; }
@@ -212,7 +212,7 @@ function chkdir($dir,$p="") {
 	if (file_exists("$p./dokumente/".$_SESSION["mansel"]."/".$dir)) {	
 		return true;
 	} else {
-		$dirs=split("/",$dir);
+		$dirs=explode("/",$dir);
 		$tmp=$_SESSION["mansel"]."/";
 		foreach ($dirs as $dir) {
 			if (!file_exists("$p./dokumente/$tmp".$dir)) {
@@ -294,7 +294,7 @@ function chkFld(&$val,$empty,$rule,$len) {
 		case 7 : if ($empty===0 && empty($val)) { $ok=true; $val="0000-00-00";} // Datum
 			 else {
 			  	$ok=ereg("^[0-3][0-9]\.[0-1][0-9]\.([0-9][0-9]|[012][0-9][0-9][0-9])$",$val);
-				$t=split("\.",$val);
+				$t=explode("\.",$val);
 				if ($ok) $val=$t[2]."-".$t[1]."-".$t[0];
 			 }
 			 break;

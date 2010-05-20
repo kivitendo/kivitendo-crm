@@ -76,7 +76,7 @@ fputs($log,$VERSION."\n");
 echo "Vorraussetzungen pr&uuml;fen:<br>";
         $path=ini_get("include_path");
         fputs($log,"Suchpfad: $path\n");
-        $pfade=split(":",$path);
+        $pfade=explode(":",$path);
         $chkfile=array("DB"=>array("DB","MDB2"),"Driver"=>array("DB/pgsql","MDB2/Driver/pgsql"),
                         "fpdf","fpdi","Mail","Mail/mime",
                         "Image/Canvas","Image/Graph","jpgraph",

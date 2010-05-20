@@ -37,7 +37,7 @@ $doc->loadDocument("./dokumente/".$_SESSION["mansel"]."/serbrief/".$_SESSION["da
 $doc->savecontent();
 $sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' limit 1";
 $data=$db->getAll($sql);
-$felder=split(":",$data[0]["csvdaten"]);
+$felder=explode(":",$data[0]["csvdaten"]);
 $felder[]="DATE";
 $felder[]="SUBJECT";
 $felder[]="BODY";
@@ -68,7 +68,7 @@ $cnt=1;
 $_SESSION["src"]=($_GET["src"]<>"")?$_GET["src"]:"P";
 if ($data) {
     foreach ($data as $row) {
-        $tmp=split(":",$row["csvdaten"]);
+        $tmp=explode(":",$row["csvdaten"]);
         $tmp[]=$_SESSION["DATE"];
         $tmp[]=$_SESSION["SUBJECT"];
         $tmp[]=$_SESSION["BODY"];

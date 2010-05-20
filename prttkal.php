@@ -25,9 +25,9 @@
 			if (!in_array($row["id"],$tlist)) {
 				if ($row["stoptag"]>"$year-$month-$day" && $row["repeat"]=="0") $row["stopzeit"]="24:00";
 				if ($row["starttag"]<"$year-$month-$day" && $row["repeat"]=="0") $row["startzeit"]="00:00";
-				$tmp=split(":",$row["startzeit"]);
+				$tmp=explode(":",$row["startzeit"]);
 				$v=mktime($tmp[0],$tmp[1],0,$month,$day,$year);
-				$tmp=split(":",$row["stopzeit"]);
+				$tmp=explode(":",$row["stopzeit"]);
 				$b=mktime($tmp[0],$tmp[1],0,$month,$day,$year);
 				$grund=$row["cause"];
 				$tid=$row["termid"];

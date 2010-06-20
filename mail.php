@@ -18,6 +18,10 @@
 			$btn="<a href=\"$referer\"><input type=\"button\" name=\"return\" value=\".:back:.\"></a>";
 		}
 	} else if (preg_match("/.+\.pl/",$referer)) { //Kommt vom Menue
+		$TO=$_GET["TO"];
+		$KontaktTO=$_GET["KontaktTO"];
+        if ($_GET["vc"]=="customer") { $KontaktTO="C".$KontaktTO;} 
+        elseif ($_GET["vc"]=="vendor") { $KontaktTO="V".$KontaktTO;} ;
 		$referer="mail.php";
 		$btn="<a href='mail.php'><input type=\"button\" name=\"return\" value=\".:new:.\"></a>";
 		$hide="visible";

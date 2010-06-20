@@ -7,7 +7,9 @@
 	include("inc/UserLib.php");
 	$ALabels=getLableNames();
 	$freitext=$_POST["freitext"];
-    $Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
+    if ($_GET["vc"]=="customer") { $Q="C";}
+    elseif ($_GET["vc"]=="vendor") { $Q="V";} 
+    else { $Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];}
     $complete=($_POST["complete"])?"checked":"";
 	if (!$_POST["format"] || empty($_POST["format"])) {
 		$usr=getUserStamm($_SESSION["loginCRM"]);

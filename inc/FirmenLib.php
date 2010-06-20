@@ -742,9 +742,9 @@ global $db;
 function getVariablen($id) {
 global $db;
 	if (!($id>0)) return false;
-	$sql="select C.name,C.description,V.text_Value from  ";
+	$sql="select C.name,C.description,C.type,C.options,C.default_value,V.text_Value,V.bool_value,V.timestamp_value,V.number_value from  ";
 	$sql.="custom_variables V left join custom_variable_configs C on V.config_id=C.id ";
-	$sql.="where trans_id = $id";
+	$sql.="where trans_id = $id and module = 'CT'";
 	$rs=$db->getAll($sql);
 	return $rs;
 }

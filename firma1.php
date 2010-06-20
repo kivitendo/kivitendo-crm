@@ -16,7 +16,21 @@
 	if (count($tmp)>0) {
 		$variablen=count($tmp)." Variablen";
 		foreach ($tmp as $row) {
-			$Vars.="<tr><td>".$row["description"]." </td><td>: ".$row["text_value"]."</td></tr>\n";
+			$Vars .= "<tr><td>".$row["description"]." </td><td>: ";
+            if ($row["type"]=="text") { $Vars .= $row["text_value"];  }
+            else if ($row["type"]=="textfield") { $Vars .= $row["text_value"];  }
+            else if ($row["type"]=="number") { 
+                preg_match("/PRECISION[ ]*=[ ]*([0-9]+)/i",$row["options"],$pos);
+                if ($pos[1]) { $Vars .= sprintf("%0.".$pos[1]."f",$row["number_value"]);  }
+                else {$Vars .= $row["number_value"];}
+            }
+            else if ($row["type"]=="date") { 
+                if ($row["timestamp_value"]) 
+                    $Vars .= db2date(substr($row["timestamp_value"],0,10));  
+            }
+            else if ($row["type"]=="bool") { $Vars .= ($row["bool_value"]=='f')?'nein':'ja';  }
+            else if ($row["type"]=="select") { $Vars .= $row["text_value"];  }
+            $Vars .= "</td></tr>\n";
 		}
 	}
 	$t = new Template($base);

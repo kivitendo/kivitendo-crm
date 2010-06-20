@@ -1398,7 +1398,7 @@ global $db;
     } else if ($_SESSION["sales_edit_all"] == "f") {
         $sea = sprintf(" and (employee_id = %d or salesman_id = %d) ", $_SESSION["loginCRM"], $_SESSION["loginCRM"]);
     }
-    $sql  = "select sum(netamount),count(*),substr(cast(transdate as text),1,4)||substr(cast(transdate as text),6,2) as month,'%s' from %s ";
+    $sql  = "select sum(netamount),count(*),substr(cast(transdate as text),1,4)||substr(cast(transdate as text),6,2) as month,'%s' as tab from %s ";
     $sql .= "where %s=%d and transdate >= '%s' and transdate <= '%s' %s group by month ";
 
 	if ($liefer) {
@@ -1421,11 +1421,13 @@ global $db;
 	$rechng["Jahr  "]=array("summe"=>0,"count"=>0,"curr"=>$curr);
 	// unterschiedliche Währungen sind noch nicht berücksichtigt. Summe stimmt aber.
 	if ($rs) foreach ($rs as $re){
+        if ($re["tab"]=="R") {
         $m = $re["month"];
 		$rechng[$m]["summe"] = $re["sum"];
 		$rechng[$m]["count"] = $re["count"];
 		$rechng["Jahr  "]["summe"] += $re["sum"];
 		$rechng["Jahr  "]["count"]++;
+        }
 	}
 	return $rechng;
 }

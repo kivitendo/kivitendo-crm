@@ -64,12 +64,12 @@
 		}
 	} else if ($_POST["aktion"]=="sendmail") {
 		$okT=true; $okC=true; $msg="";
-		if ($_POST["TO"]) { 
-			$TO=preg_replace( "/[^a-z0-9 !?:;,.\/_\-=+@#$&\*\(\)]/im", "", $_POST["TO"]);
+		if ($_POST["TO"]) {
+			$TO=preg_replace( "/[^a-z0-9 !?:;,.\/_\-=+@#$&\*\(\)<>]/im", "", $_POST["TO"]);
 			$rc=chkMailAdr($TO); if($rc<>"ok") { $okT=false; $msg="TO:".$rc; }; 
 		};
 		if ($_POST["CC"]) { 
-			$CC=preg_replace( "/[^a-z0-9 !?:;,.\/_\-=+@#$&\*\(\)]/im", "", $_POST["CC"]);
+			$CC=preg_replace( "/[^a-z0-9 !?:;,.\/_\-=+@#$&\*\(\)<>]/im", "", $_POST["CC"]);
 			$rc=chkMailAdr($CC); if($rc<>"ok") { $okC=false; $msg.=" CC:".$rc; }; 
 		};
 		if (!$_POST["TO"] && !$_POST["CC"]) {$okT=false; $msg="Kein (g&uuml;ltiger) Empf&auml;nger";};

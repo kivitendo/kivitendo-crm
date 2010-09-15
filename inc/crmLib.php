@@ -1803,11 +1803,13 @@ global $db;
 	return $ids;
 }
 
-function searchTermin($suche,$von,$bis,$TID=0) {
+function searchTermin($suche,$cat,$von,$bis,$TID=0) {
 global $db;
     $grp=getGrp($_SESSION["loginCRM"],true);
     $sql="select distinct id from termine D left join terminmember M on M.termin=D.id  where ";
-    $sql.="cause ilike '%$suche%'";
+    if ($suche<>"") $sql.="cause ilike '%$suche%'";
+    if ($cat>0) if ($suche<>"") $sql.=" and kategorie = ".$cat;
+                else  $sql.="kategorie = ".$cat;
     if ($von) $sql .= " and start >= '".date2db($von)."%'";
     if ($bis) $sql .= " and stop <= '".date2db($bis)."%'";
 	if ($TID>0) $sql.=" and member=$TID";
@@ -1828,7 +1830,7 @@ global $db;
 function getTerminList($id) {
 global $db;
 	//$sql="select id,cause,starttag,stoptag,startzeit,stopzeit,kategorie,location,c_cause from termine where id in ($id)";
-	$sql="select T.*,K.catname from termine T left join termincat K on K.catid=T.kategorie where T.id in ($id)";
+	$sql="select T.*,K.catname,K.ccolor from termine T left join termincat K on K.catid=T.kategorie where T.id in ($id)";
 	$rs=$db->getAll($sql);
 	if(!$rs) {
 		return false;
@@ -1867,7 +1869,7 @@ global $db;
 	if ($art=="M") {
 		$min=mktime(0,0,0,$month,1,$year);
 		$max=mktime(0,0,0,$month,date("t",$min),$year);
-		$sql="select * from termdate D left join terminmember M on M.termin=D.termid ";
+		$sql  = "select * from termdate D left join terminmember M on M.termin=D.termid ";
 		//$sql.="where jahr=$year and monat='$month' and ($rechte)  order by tag";
 		$sql.="where jahr=$year and monat='$month' $rechte  order by tag";
 		//$sql.="where jahr=$year and monat='$month' and M.member = $uid  order by tag";
@@ -1879,6 +1881,7 @@ global $db;
 		}
 	} else if ($art=="T") {
 		$sql="select * from termine T left join termdate D on T.id=D.termid left join terminmember M on M.termin=D.termid ";
+        $sql .= "left join termincat K on K.catid=T.kategorie ";
 		//$sql.="where jahr=$year and monat='$month' and tag='$day' and ($rechte)  order by starttag, startzeit";
 		//$sql.="where jahr=$year and monat='$month' and tag='$day' and M.member = $uid  order by starttag, startzeit";
 		$sql.="where jahr=$year and monat='$month' and tag='$day'  $rechte  order by starttag, startzeit";
@@ -1892,7 +1895,9 @@ global $db;
 		$stopmonth=date("m",mktime(0,0,0,$month,$day+6,$year));
 		$stopday=date("d",mktime(0,0,0,$month,$day+6,$year));
 		//$sql="select * from termine T left join termdate D on T.id=D.termid where jahr=$year and ";
-		$sql="select * from termine T left join termdate D on T.id=D.termid left join terminmember M on M.termin=D.termid  where jahr=$year and ";
+		$sql="select * from termine T left join termdate D on T.id=D.termid left join terminmember M on M.termin=D.termid  ";
+        $sql .= "left join termincat K on K.catid=T.kategorie ";
+        $sql .= "where jahr=$year and ";
 		if ($stopmonth==$month) {
 			$sql.="monat='$month' and (tag>='$day' and tag<='$stopday') ";
 		} else {
@@ -1918,7 +1923,7 @@ global $db;
 *****************************************************/
 function getTerminData($tid) {
 global $db;
-	$sql="select * from termine T left join termdate D on T.id=D.termid where T.id=$tid";
+	$sql="select T.*,K.catname,K,ccolor from termine T left join termincat K on K.catid=T.kategorie where T.id = $tid";
 	$rs=$db->getAll($sql);
 		if(!$rs) {
 			return false;
@@ -1987,6 +1992,49 @@ global $db;
 		$data["zeit"]=-1;
 	}
 	return $data;
+}
+
+/**
+ * Kattegorien für Termine
+ *
+ * @return array
+ */
+function getTermincat($empty=false,$lang=false) {
+    global $db;
+    $sql = "SELECT catid,catname, sorder, catname as translation,ccolor from termincat order by sorder";
+    $data = $db->getAll($sql);
+    if ($empty){
+        $ecat[] = array("catid"=>0,"catname"=>"","sorder"=>0);
+        $data = array_merge($ecat,$data);
+    }
+    return $data;
+}
+
+/**
+ * TODO: short description.
+ * 
+ * @param double $data 
+ * 
+ * @return TODO
+ */
+function saveTermincat($data) {
+    global $db;
+    foreach($data["tcat"] as $row) {
+        if ($row["del"]==1) {
+            $sql="delete from termincat where catid=".$row["catid"];
+        } else if ($row["new"]==1) {
+            if ($row["catid"] && $row["catname"]) {
+                $sql="insert into termincat (catid,catname,sorder,ccolor) values (";
+                $sql.=$row["catid"].",'".$row["catname"]."',".$row["sorder"].",'".$row["ccolor"]."')";
+            } else {
+                $sql=False;
+            }
+        } else {
+            $sql="update termincat set sorder=".$row["sorder"].", catname='".$row["catname"]."', ccolor='".$row["ccolor"]."' where catid = ".$row["catid"];
+        }
+        if ($sql)
+            $rc = $db->query($sql);
+    }
 }
 
 /****************************************************
@@ -2393,8 +2441,10 @@ global $db;
 function insWContent($data) {
 global $db;
 	$tmp = explode(",",$data["m"]);
+    $cont = trim($data["content"]);
+    $cont = addslashes($cont);
 	$sql="insert into wissencontent (initdate,content,employee,version,categorie) values ";
-	$sql.="(now(),'".trim($data["content"])."',".$_SESSION["loginCRM"].",".($data["version"]+1).",".$tmp[0].")";
+	$sql.="(now(),'".$cont."',".$_SESSION["loginCRM"].",".($data["version"]+1).",".$tmp[0].")";
 	$rc=$db->query($sql);
 	return $rc;
 }

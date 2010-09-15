@@ -13,7 +13,7 @@
 	$t = new Template($base);
 	if ($ansicht=="T") {
 		if (!$datum) {$day=date("d"); $month=date("m"); $year=date("Y");}
-		else {list($day,$month,$year)=explode("\.",$datum);}
+		else {list($day,$month,$year)=explode(".",$datum);}
 		$data=getTermin($day,$month,$year,"T",$_GET["cuid"]);
 		$termdata=array();
 		$tlist=array();
@@ -25,15 +25,20 @@
 				$v=mktime($tmp[0],$tmp[1],0,$month,$day,$year);
 				$tmp=explode(":",$row["stopzeit"]);
 				$b=mktime($tmp[0],$tmp[1],0,$month,$day,$year);
+                if ($row["ccolor"]<>"" and $row["ccolor"]<>"ffffff") {
+                    $grund='<span style="background-color:#'.$row["ccolor"].'">';
+                } else {
+                    $grund="<span>";
+                }
                 if ($row["privat"]=='t' && $row["member"]!=$_SESSION["loginCRM"]) {
-				    $grund="[<font color='#44ff44'>Privat</font>] ";
+				    $grund.="[<font color='#44ff44'>Privat</font>]</span> ";
                 } else {
                     if ($row["member"]!=$_SESSION["loginCRM"]) {
-				        $grund="[<font color='#ff4444'>";
+				        $grund.="[<font color='#ff4444'>";
                     } else {
-				        $grund="[<font color='#4444ff'>";
+				        $grund.="[<font color='#4444ff'>";
                     };
-                    $grund.=$row["cause"]."</font>] ";
+                    $grund.=$row["cause"]."</font>]</span> ";
                 }
 				$tid=$row["termid"];
 				for($v; $v<=$b; $v+=$_SESSION["termseq"]*60) { //1800) {
@@ -43,7 +48,12 @@
 						$grund="|| ";
 						$tid=0;
 					} else {
-						$grund="[<font color='#44444f'>".(($row["privat"]=='t' && $row["member"]!=$_SESSION["loginCRM"])?"Privat":$row["cause"])."</font>] ";
+                if ($row["ccolor"]<>"" and $row["ccolor"]<>"ffffff") {
+                    $grund='<span style="background-color:#'.$row["ccolor"].'">';
+                } else {
+                    $grund="<span>";
+                }
+						$grund="[<font color='#44444f'>".(($row["privat"]=='t' && $row["member"]!=$_SESSION["loginCRM"])?"Privat":$row["cause"])."</font>] </span>";
 						$tid=$row["termid"];
 					}
 				}
@@ -113,7 +123,7 @@
 			$year=substr($datum,6,4);
 		}
 		if (empty($kw) || $kw==0 || $kw=="") {
-			list($day,$month,$year)=explode("\.",$datum);
+			list($day,$month,$year)=explode(".",$datum);
 			$kw=date("W",mktime(0,0,0,$month,$day,$year));
 		}
 		$firstmonday = firstkw($year);
@@ -139,7 +149,11 @@
 		if ($data) foreach($data as $row) {
 			if ($row["termin"]<>$lastt || $lastd<>$row["tag"]) {
 				$w=date("w",mktime(0,0,0,$row["monat"],$row["tag"],$row["jahr"]))-1;
-                if ($row["member"]!=$_SESSION["loginCRM"]) { $rcol="<font color='#44ff44'>"; } else { $rcol="<font color='#4444ff'>"; }
+                if ($row["member"]!=$_SESSION["loginCRM"]) { $rcol="<font color='#44ff44'>"; } 
+                else { 
+                    if ($row["ccolor"]) $rcol="<font color='".$row["ccolor"]."'>";
+                    else                $rcol="<font color='#4444ff'>"; 
+                }
 				$termdate[$w][]=array(
                     "txt"=>$rcol.(($row["idx"]>0)?" ^^^ ":$row["startzeit"])." ".(($row["privat"]=='t' && $row["member"]!=$_SESSION["loginCRM"])?"Privat":$row["cause"]),"</font>","id"=>$row["termin"],
                     "ft"=>($i==5||$i==6)?1:0);

@@ -1,8 +1,8 @@
 <?php
 // $Id: tcatedit.php 1038 2010-02-18 15:44:55Z hlindemann $
 	require_once("inc/stdLib.php");
+	require_once("inc/crmLib.php");
     include("inc/template.inc");
-
 	if ($_POST["ok"]) {
         $rc = saveTermincat($_POST);
 	}
@@ -21,7 +21,8 @@
             neu => 0,
             cid => $row["catid"],
             cname => $row["catname"],
-            order => $row["sorder"]
+            order => $row["sorder"],
+            ccolor => $row["ccolor"]
         ));
         $t->parse("Block0","TKat",true);
         $i++;
@@ -32,7 +33,8 @@
         neu => 1,
         cid => $max+1,
         cname => "",
-        order => $row["sorder"]+1
+        order => $row["sorder"]+1,
+        ccolor => 'ffffff'
     ));
     $t->parse("Block0","TKat",true);
     $t->Lpparse("out",array("cat"),$_SESSION["lang"],"work");

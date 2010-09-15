@@ -1,0 +1,329 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<style text="text/css">
+<!--
+#farbwahl
+{
+     position:relative;
+     width:256px;
+     height:256px;
+     padding:0px;
+     border:1px solid black;
+}
+#vorschau
+{
+     position:relative;
+     background-color:#fff;
+     border:1px solid black;
+}
+#wahl
+{
+     position:relative;
+     background-color:#fff;
+     border:1px solid black;
+}
+-->
+</style>
+
+<script type="text/javascript">
+
+addary = new Array();
+addary[0] = new Array(0,1,0);   // rot
+addary[1] = new Array(-1,0,0);  // rot gruen
+addary[2] = new Array(0,0,1);   // gruen
+addary[3] = new Array(0,-1,0);  // gruen blau
+addary[4] = new Array(1,0,0);   // blau
+addary[5] = new Array(0,0,-1);  // rot blau
+addary[6] = new Array(255,1,1); // rot
+clrary = new Array(360);
+
+for(i = 0; i < 6; i++)
+{
+    for(j = 0; j < 60; j++)
+    {
+        clrary[60 * i + j] = new Array(3);
+
+        for(k = 0; k < 3; k++)
+        {
+             clrary[60 * i + j][k] = addary[6][k];
+             addary[6][k] += (addary[i][k] * 4);
+        }
+    }
+}
+
+
+function getColor(xk,yk)
+{
+     var x,y, sx, sy, qx, qy, q, quad, xa, ya, d, deg, n;
+
+     x = yk * 4;
+     y = xk * 4;
+
+     sx = x - 512;
+     sy = y - 512;
+
+     qx = (sx < 0)?0:1;
+     qy = (sy < 0)?0:1;
+
+     q = 2 * qy + qx;
+     quad = new Array(-180,360,180,0);
+
+     xa = Math.abs(sx);
+     ya = Math.abs(sy);
+
+     d = ya * 45 / xa;
+
+     if(ya > xa) d = 90 - (xa * 45 / ya);
+
+     deg = Math.floor(Math.abs(quad[q] - d));
+     n = 0;
+
+     sx = Math.abs(x - 512);
+     sy = Math.abs(y - 512);
+
+     r = Math.sqrt((sx * sx) + (sy * sy));
+
+     if(x == 512 & y == 512)
+     {
+        c = "000000";
+     }
+     else
+     {
+        for(i = 0; i < 3; i++)
+        {
+            r2 = clrary[deg][i] * r / 256;
+            if(r > 256) r2 += Math.floor(r - 256);
+            if(r2 > 255) r2 = 255;
+            n = 256 * n + Math.floor(r2);
+        }
+        c = n.toString(16);
+        while(c.length < 6) c = "0" + c;
+     }
+     return c;
+}
+
+
+function getLayerObj(id)
+{
+    var objLayer = null;
+    if(document.all) objLayer = document.all[id]; // IE 4
+    else if(document.getElementById) objLayer = document.getElementById(id); // DOM
+    else if(document.layers) objLayer = document.layers[id];
+    return objLayer;
+}
+
+function getLayerPosition()
+{
+      var obj = getLayerObj('farbwahl');
+      var pos = {posX:0, posY:0};
+
+      if(obj.offsetParent)
+      {
+          var o = obj;
+          while(o.offsetParent)
+          {
+              pos.posX += o.offsetLeft;
+              o = o.offsetParent;
+          }
+      }
+      else if(obj.x)
+      {
+          pos.posX += obj.x;
+      }
+      else if(document.layers)
+      {
+          pos.posX += obj.pageX;
+      }
+
+      if(obj.offsetParent)
+      {
+          var o = obj;
+          while(o.offsetParent)
+          {
+              pos.posY += o.offsetTop;
+              o = o.offsetParent;
+          }
+      }
+      else if(obj.y)
+      {
+         pos.posY += obj.y;
+      }
+      else if(document.layers)
+      {
+          pos.posY += obj.pageY;
+      }
+      return pos;
+}
+
+function getMousePosition(e)
+{
+    var posX = 0;
+    var posY = 0;
+
+    if(e)
+    {
+       posX = e.pageX;
+       posY = e.pageY;
+    }
+    else
+    {
+       posX = window.event.x;
+       posY = window.event.y;
+    }
+    return { posX:posX, posY:posY };
+}
+
+function getPositionOnImage(e)
+{
+    var m_pos = getMousePosition(e);
+    var l_pos = getLayerPosition(e);
+
+    var posX = m_pos.posX - l_pos.posX;
+    var posY = m_pos.posY - l_pos.posY;
+
+    return { posX:posX, posY:posY };
+}
+
+
+function changeColor(farbe,id)
+{
+    var obj = getLayerObj(id);
+    if(!obj) return;// alert('Fehler!\n' + id + ' ist kein Objekt.');
+
+    if(obj.style)
+    {
+        obj.style.backgroundColor = farbe;
+    }
+    else
+    {
+        obj.bgColor = farbe;
+    }
+}
+
+function preview(e)
+{
+    var posX = getPositionOnImage(e).posX;
+    var posY = getPositionOnImage(e).posY;
+    var farbe = getColor(posX,posY);
+
+    changeColor("#"+farbe,"vorschau");
+    document.fw.vorschau_wert.value = farbe;
+}
+
+function wahlclick()
+{
+    var farbe = document.fw.vorschau_wert.value;
+    changeColor("#"+farbe,"wahl");
+    document.fw.wahl_wert.value = farbe;
+}
+
+function init()
+{
+    var farbw;
+    if(document.all)
+    {
+        farbw = document.all["farbwahl"];
+        farbw.onmousemove = preview;
+        farbw.onclick = wahlclick;
+    }
+    else if(document.getElementById)
+    {
+        farbw = document.getElementById("farbwahl");
+        farbw.addEventListener("mousemove", preview, false);
+        farbw.addEventListener("click", wahlclick, false);
+    }
+    else if(document.layers)
+    {
+        farbw = document.layers["farbwahl"].document;
+        farbw.captureEvents(Event.MOUSEMOVE);
+        farbw.onmousemove = preview;
+        farbw.captureEvents(Event.MOUSEUP);
+        farbw.onmouseup = wahlclick;
+    }
+}
+
+function setColor() {
+    strGET=document.location.search.substr(1,document.location.search.length);
+    if(strGET!='') {
+        gArr=strGET.split('&');
+        for(i=0;i<gArr.length;++i) {
+            v=''; vArr=gArr[i].split('=');
+            if(vArr.length>1){
+                if (vArr[0]=="idx") idx = vArr[1];
+            }
+        }
+    } else {
+        idx = 0;
+    }
+    opener.setColor(document.fw.wahl_wert.value,idx);
+    self.close();
+}
+// -->
+</script>
+</head>
+
+<body onLoad="init();">
+
+
+<table border="1" cellspacing="0" cellpadding="2">
+  <tr>
+      <td><b>Farbe w&auml;hlen...</b></td>
+  </tr>
+  <tr>
+      <td>
+
+      <table border="0" cellspacing="10" cellpadding="0">
+      <tr>
+          <td>
+              <div id="farbwahl"><a href="#"><img src="image/farbwahl.jpg" border="0"></A></div>
+          </td>
+          <td valign="bottom">
+               <table border="0" cellspacing="5" cellpadding="0">
+                   <tr>
+                       <form name="fw">
+                       <td>Vorschau:</td>
+                   </tr>
+                   <tr>
+                       <td>
+                           <div id="vorschau">&nbsp;<img src="#" width="100" height="1"></div>
+                       </td>
+                   </tr>
+                   <tr>
+                       <td>
+                           <input type="text" value="#ffffff" name="vorschau_wert">
+                       </td>
+                   </tr>
+                   <tr>
+                       <td>
+                           Ausgew&auml;hlt:
+                       </td>
+                   </tr>
+                   <tr>
+                       <td>
+                           <div id="wahl">&nbsp;
+                           <img src="#" width="100" height="1"></div>
+                       </td>
+                   </tr>
+                   <tr>
+                   <td>
+                       <input type="text" value="#ffffff" name="wahl_wert">
+                   </td>
+               </tr>
+               <tr>
+                   <td align="right">
+                       <input type="button" value="&Uuml;bernehmen" onClick="setColor();">
+                   </td>
+               </form>
+               </tr>
+               </table>
+              </td>
+          </tr>
+          </table>
+      </td>
+  </tr>
+</table>
+
+
+</body>
+</html>

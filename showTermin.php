@@ -61,6 +61,7 @@
 <?php
 	echo "Termin: <b>".(($privat)?"Privattermin":$data["cause"])."</b><br>";
     if ($data["location"]) echo "Ort: ".$data["location"]."<br />";
+    if ($data["catname"]) echo $data["catname"].'<br />';
 	echo db2date($data["starttag"])." ".$data["startzeit"]." - ";
 	echo ($data["stoptag"]<>$data["starttag"])?db2date($data["stoptag"])." ".$data["stopzeit"]:$data["stopzeit"];
 	echo "<br>";

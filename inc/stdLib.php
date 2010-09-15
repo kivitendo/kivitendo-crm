@@ -765,41 +765,5 @@ function saveSonderFlag($data) {
 
 }
 
-/**
- * Kattegorien für Termine
- *
- * @return array
- */	
-function getTermincat($empty=false,$lang=false) {
-    global $db;
-    $sql = "SELECT catid,catname, sorder, catname as translation from termincat order by sorder";
-    $data = $db->getAll($sql);
-    if ($empty){
-        $ecat[] = array("catid"=>0,"catname"=>"","sorder"=>0);
-        $data = array_merge($ecat,$data);
-    }
-    return $data;
-}
-
-function saveTermincat($data) {
-    global $db;
-    foreach($data["tcat"] as $row) {
-        if ($row["del"]==1) {
-            $sql="delete from termincat where catid=".$row["catid"];
-        } else if ($row["new"]==1) {
-            if ($row["catid"]) {
-                $sql="insert into termincat (catid,catname,sorder) values (";
-                $sql.=$row["catid"].",'".$row["catname"]."',".$row["sorder"].")";
-            } else {
-                $sql=False;
-            }
-        } else {
-            $sql="update termincat set sorder=".$row["sorder"].", catname='".$row["catname"]."' where catid = ".$row["catid"];
-        }
-        if ($sql) 
-            $rc = $db->query($sql);
-    }
-}
-
 require_once "login".$_SESSION["loginok"].".php";
 ?>

@@ -20,9 +20,16 @@
 		function histDelCall() {
 			f1=open("callHistory.php?id={Bezug}&del=1","history","width=580,height=480,left=250,top=100,scroppbars=yes");
 		}
+        function showwv() {
+            if (document.call.wvl.checked) {
+                document.getElementById('wv').style.visibility='visible';
+            } else {
+                document.getElementById('wv').style.visibility='hidden';
+            }
+        }
 	//-->
 	</script>
-<body >
+<body onLoad="showwv()">
 
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <form name="call" action="getCall.php" enctype='multipart/form-data' method="post">
@@ -58,8 +65,9 @@
 <input type="hidden" name="nummer" value="{nummer}">
 <input type="hidden" name="Q" value="{Q}">
 <input type="hidden" name="datei" value="{ODatei}">
-<input type="text" name="cause" value="{NBetreff}" size="43" maxlength="125"> &nbsp; <input type="text" name="Datum" value="{NDatum}" size="11" maxlength="10"> 
-<input type="text" name="Zeit" value="{NZeit}" size="6" maxlength="5"> &nbsp; 
+<input type="text" name="cause" value="{NBetreff}" size="43" maxlength="125"> &nbsp; <input type="text" name="Datum" value="{NDatum}" size="9" maxlength="10"> 
+<input type="text" name="Zeit" value="{NZeit}" size="6" maxlength="5">&nbsp; 
+WV<input type="checkbox" name="wvl" value="1" onClick="showwv()"> <span id="wv" style="visibility:hidden"><input type="text" size="8" name="wvldate" value="{wvldate}" maxlength="10"></span>
 <!--input type="reset" value="reset" onClick="javascript:location.href='getCall.php?fid={FID}&id={ID}'"--><br>
 <span class="klein">Betreff</span><br>
 <textarea name="c_cause" cols="80" rows="10" wrap="physical" >{LangTxt}</textarea><br>

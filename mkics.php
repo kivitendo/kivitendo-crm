@@ -6,7 +6,7 @@
     $user=getUserStamm($_SESSION["loginCRM"]);
     $start=($_POST["start"]<>"")?$_POST["start"]:date('d.m.Y');
     $stop = ($_POST["stop"]<>"")?$_POST["stop"]:'';
-    $termine = searchTermin('%',$start,$stop,$_SESSION["loginCRM"]);
+    $termine = searchTermin('%',0,$start,$stop,$_SESSION["loginCRM"]);
     $v = new vcalendar(); // create a new calendar instance
     $v->setConfig( 'unique_id', strtr($user["name"],' ','_')); // set Your unique id
     $v->setProperty( 'method', 'PUBLISH' ); // required of some calendar software

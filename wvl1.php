@@ -4,10 +4,10 @@
 	include("inc/template.inc");
 	include("inc/crmLib.php");
 	include("inc/UserLib.php");
-	$jscal ="<style type='text/css'>@import url(../../$ERPNAME/js/jscalendar/calendar-win2k-1.css);</style>\n";
-	$jscal.="<script type='text/javascript' src='../../$ERPNAME/js/jscalendar/calendar.js'></script>\n";
-    $jscal.="<script type='text/javascript' src='../../$ERPNAME/js/jscalendar/lang/calendar-de.js'></script>\n";
-    $jscal.="<script type='text/javascript' src='../../$ERPNAME/js/jscalendar/calendar-setup.js'></script>\n";
+	$jscal ="<style type='text/css'>@import url(../js/jscalendar/calendar-win2k-1.css);</style>\n";
+	$jscal.="<script type='text/javascript' src='../js/jscalendar/calendar.js'></script>\n";
+    $jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
+    $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar-setup.js'></script>\n";
 
 	$data["id"]=0;
 	$templ="wvl1.tpl";

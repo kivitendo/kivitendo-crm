@@ -5,10 +5,10 @@
 	include("crmLib.php");
 	include("UserLib.php");
 	$t = new Template($base);
-	$jscal ="<style type='text/css'>@import url(../../$ERPNAME/js/jscalendar/calendar-win2k-1.css);</style>\n";
-	$jscal.="<script type='text/javascript' src='../../$ERPNAME/js/jscalendar/calendar.js'></script>\n";
-    $jscal.="<script type='text/javascript' src='../../$ERPNAME/js/jscalendar/lang/calendar-de.js'></script>\n";
-    $jscal.="<script type='text/javascript' src='../../$ERPNAME/js/jscalendar/calendar-setup.js'></script>\n";
+	$jscal ="<style type='text/css'>@import url(../js/jscalendar/calendar-win2k-1.css);</style>\n";
+	$jscal.="<script type='text/javascript' src='../js/jscalendar/calendar.js'></script>\n";
+    $jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
+    $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar-setup.js'></script>\n";
     $jscal1="<script type='text/javascript'><!--\nCalendar.setup( {\n";
 	$jscal1.="inputField : 'zieldatum',ifFormat :'%d.%m.%Y',align : 'BL', button : 'trigger1'} );\n";
     $jscal1.="//-->\n</script>";

@@ -8,6 +8,8 @@
 	if ($_GET["pid"]) {
 		include("inc/persLib.php");
 		$data=getKontaktStamm($_GET["pid"]);
+        //UID
+        $vcard->setKey($_GET["pid"]);
 		// set a formatted name
 		$vcard->setFormattedName($data["cp_givenname"]." ".$data["cp_name"]);
 		// set the structured name parts
@@ -23,7 +25,7 @@
 		}
 		// add a work address
 		$vcard->addAddress('', '', $data["cp_street"], $data["cp_city"], '', $data["cp_zipcode"], $data["cp_country"]);
-		$vcard->addParam('TYPE', 'HOME');
+		$vcard->addParam('TYPE', 'WORK');
 		if ($data["cp_birthday"]) $vcard->setBirthday($data["cp_birthday"]);
 		if ($data["cp_notes"]) $vcard->setNote($data["cp_notes"]);
 		if ($data["cp_phone1"]) {
@@ -39,7 +41,11 @@
 		if ($data["cp_cv_id"] && $data["tabelle"]=="C") {
 			$fa=getFirmenStamm($data["cp_cv_id"]);
 			$vcard->addAddress('', '', $fa["street"], $fa["city"], '', $fa["zipcode"], $fa["country"]);
-			$vcard->addParam('TYPE', 'WORK');
+			$vcard->addParam('TYPE', 'DOM');
+            if ($fa["phone"]) {
+                $vcard->addTelephone($fa["phone"]);
+                $vcard->addParam('TYPE', 'DOM');
+            }
 			if ($data["cp_abteilung"]) {
 				$vcard->addOrganization(array($fa["name"],$data["cp_abteilung"]));
 			} else {
@@ -49,11 +55,17 @@
 		} else if ($data["cp_cv_id"] && $data["tabelle"]=="V") {
 			$fa=getFirmenStamm($data["cp_cv_id"],true,"V");
 			$vcard->addAddress('', '', $fa["street"], $fa["city"], '', $fa["zipcode"], $fa["country"]);
-			$vcard->addParam('TYPE', 'WORK');
+			$vcard->addParam('TYPE', 'DOM');
+            if ($fa["phone"]) {
+                $vcard->addTelephone($fa["phone"]);
+                $vcard->addParam('TYPE', 'DOM');
+            }
 			$vcard->addOrganization($fa["name"]);
 		}
 	} else if ($_GET["fid"]) {
 		$data=getFirmenStamm($_GET["fid"],true,$Q);
+        //UID
+        $vcard->setKey($Q.$data["nummer"]);
 		$vcard->setFormattedName($data["name"]);
 		if ($data["department_1"]) { 
 			$vcard->setName($data["name"],$data["department_1"],"","","");	

@@ -10,11 +10,11 @@ function mail_login($host,$port,$user,$pass,$pop=false,$folder="INBOX",$ssl=fals
         $ssl=($ssl==false)?"/notls":"";
         $server = "{"."$host:$port/imap$ssl"."}";
     }
-    return (imap_open($server,$user,$pass));
+    return (@imap_open($server,$user,$pass));
 }
 function mail_stat($connection)       
 {
-    $check = imap_mailboxmsginfo($connection);
+    $check = @imap_mailboxmsginfo($connection);
     return ((array)$check);
 }
 function mail_list($connection,$message="")
@@ -24,10 +24,10 @@ function mail_list($connection,$message="")
     {
         $range=$message;
     } else {
-        $MC = imap_check($connection);
+        $MC = @imap_check($connection);
         $range = "1:".$MC->Nmsgs;
     }
-    $response = imap_fetch_overview($connection,$range);
+    $response = @imap_fetch_overview($connection,$range);
     foreach ($response as $msg) {
         $msg->subject = mb_decode_mimeheader($msg->subject);
         $msg->from = mb_decode_mimeheader($msg->from);
@@ -41,11 +41,11 @@ function mail_list($connection,$message="")
 }
 function mail_retr($conn,$message)
 {
-    return(imap_fetchheader($conn,$message,FT_PREFETCHTEXT));
+    return(@imap_fetchheader($conn,$message,FT_PREFETCHTEXT));
 }
 function mail_dele($conn,$message)
 {
-    return(imap_delete($conn,$message));
+    return(@imap_delete($conn,$message));
 }
 function mail_parse_headers($headers)
 {
@@ -61,7 +61,7 @@ function mail_parse_headers($headers)
 function mail_mime_to_array($conn,$mid,$parse_headers=false)
 {
     $struc = imap_fetchstructure($conn,$mid);
-    $mail = mail_get_parts($conn,$mid,$stuc,0);
+    $mail = @mail_get_parts($conn,$mid,$stuc,0);
     if ($parse_headers) $mail[0]["parsed"]=mail_parse_headers($mail[0]["data"]);
     return($mail);
 }

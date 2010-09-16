@@ -758,8 +758,10 @@ global $db;
 function getOneERP($id) {
 global $db;
 	$sql="SELECT follow_ups.id,follow_up_date,created_for_user,subject,body,trans_id,note_id,trans_module,follow_ups.created_by,";
-	$sql.="follow_ups.itime,follow_ups.mtime ";
-	$sql.="from follow_ups left join notes on note_id=notes.id where done='f' and follow_ups.id=$id";
+	$sql.="follow_ups.itime,follow_ups.mtime,C.id as c,V.id as v, coalesce(V.name,C.name) as name ";
+	$sql.="from follow_ups left join notes on note_id=notes.id ";
+    $sql.="left join vendor V on V.id=trans_id left join customer C on C.id=trans_id ";
+    $sql.="where done='f' and follow_ups.id=$id";
 	$rs=$db->getAll($sql);
 	$data["id"]=$rs[0]["id"];
 	$data["Initdate"]=substr($rs[0]["itime"],0,19);
@@ -776,9 +778,9 @@ global $db;
 	$data["InitCrm"]=$rs[0]["created_by"];
 	$data["kontakt"]="F";
 	$data["noteid"]=$rs[0]["note_id"];
-	$data["kontaktid"]="";
-	$data["kontakttab"]="";
-	$data["kontaktname"]=$rsN[0]["name"].$rsN[0]["sep"].$rsN[0]["name2"];
+	$data["kontaktid"]=($rs[0]["c"]>0)?$rs[0]["c"]:$rs[0]["v"];
+	$data["kontakttab"]=($rs[0]["c"]>0)?"C":"V";
+	$data["kontaktname"]=$rs[0]["name"];
 	return $data;
 }
 
@@ -868,12 +870,16 @@ global $db;
 	$descript=nl2br($descript);
 	if ($data["kontakt"]=="F") {
 		$rc=$db->query("BEGIN");
-		$sql="update notes set subject='".$data["Cause"]."',body='$descript', created_by=".$_SESSION["loginCRM"];
+		$sql="update notes set subject='".$data["Cause"]."',body='$descript', created_by=".$_SESSION["loginCRM"].",trans_id=".substr($data["cp_cv_id"],1);
 		$sql.=" where id=".$data["noteid"];
 		$rc=$db->query($sql);
 		if (!$rc) { $db->query("ROLLBACK"); return false; };
 		$sql="update follow_ups set created_for_user=".$data["CRMUSER"].",done='".(($data["status"]!=1)?"t":"f")."', ";
 		$sql.="follow_up_date ='".date2db($data["Finish"])."' where id = ".$data["WVLID"];
+		$rc=$db->query($sql);
+		if (!$rc) { $db->query("ROLLBACK"); return false; };
+        $sql="update follow_up_links set trans_id=".substr($data["cp_cv_id"],1).",trans_type='".((substr($data["cp_cv_id"],0,1)=="V")?"vendor":"customer");
+        $sql.="',trans_info='".$data["name"]."' where follow_up_id = ".$data["WVLID"];
 		$rc=$db->query($sql);
 		if (!$rc) { $db->query("ROLLBACK"); return false; };
 		$rs=$db->query("COMMIT");

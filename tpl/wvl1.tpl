@@ -34,9 +34,9 @@
 		<option value="{UID}"{Sel}>{Login}</option>
 <!-- END Selectbox -->
 	</select>
-	<span style="visibility:{hide};">
+	<span style="visibility:{nohide};">
 	<input type="text" name="name" size="14" maxlength="75"  value="{Fname}"tabindex="2"> <input type="button" name="dst" value=" ? " onClick="suchDst();" tabindex="99"> </span>
-	<br><span class="klein">CRM-User &nbsp; &nbsp; &nbsp;</span><span class="klein" style="visibility:{hide};">Zugewiesen an &nbsp;[<a href="{stammlink}" name="addresse">Adresse</a>]</span>
+	<br><span class="klein">CRM-User &nbsp; &nbsp; &nbsp;</span><span class="klein" style="visibility:{nohide};">Zugewiesen an &nbsp;[<a href="{stammlink}" name="addresse">Adresse</a>]</span>
 	</td><td class="klein"><input type="text" name="Finish" id="Finish" size="11" maxlength="10" value="{Finish}" tabindex="3">{jcal1}
 							<br><span class="klein">Zu Erledigen bis</span></td>
 	<td rowspan="6">

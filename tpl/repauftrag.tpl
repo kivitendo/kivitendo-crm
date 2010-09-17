@@ -1,7 +1,8 @@
 <!-- $Id$ -->
 <html>
 	<head><title></title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 	<script language="JavaScript">
 		function material() {
 			//F1=open("getCall.php?Q=C&fid={FAD}","Caller","width=610, height=600, left=100, top=50, scrollbars=yes");

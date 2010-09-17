@@ -157,7 +157,8 @@
 	$t->set_var(array(
 			INIT	=> ($init=="")?"showOne($id)":"showContact()",
 			AJAXJS  => $xajax->printJavascript(XajaxPath),
-			FAART => ($Q=="C")?".:Customer:.":".:Vendor:.",   //"Kunde":"Lieferant",
+			FAART   => ($Q=="C")?".:Customer:.":".:Vendor:.",   //"Kunde":"Lieferant",
+            ERPCSS  => $_SESSION["stylesheet"],
 			interv	=> $_SESSION["interv"]*1000,
 			Q => $Q,
 			Link1 => $link1,

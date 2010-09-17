@@ -21,6 +21,7 @@
 	$t = new Template($base);
 	$t->set_file(array("doc" => "dokument2.tpl"));
 	$t->set_var(array(
+            ERPCSS      => $_SESSION["stylesheet"],
 			Link1 => $link1,
 			Link2 => $link2,
 			Link3 => $link3,

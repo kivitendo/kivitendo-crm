@@ -1,7 +1,8 @@
 <!-- $Id: vorlage.tpl,v 1.3 2005/11/02 10:38:59 hli Exp $ -->
 <html>
 	<head><title></title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 <body>
 
 <table class="reiter">

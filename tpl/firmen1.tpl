@@ -1,7 +1,9 @@
 <!-- $Id$ -->
 <html>
 	<head><title></title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+
 	<script language="JavaScript" type="text/javascript">
   		function report() {
   			f1=open("report.php?tab={Q}","Report","width=600; height=300; left=100; top=100");

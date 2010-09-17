@@ -1,7 +1,8 @@
 <!-- $Id$ -->
 <html>
 	<head><title></title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 	<link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
 	{AJAXJS}
 	<script language="JavaScript">
@@ -59,13 +60,13 @@
 <p class="listtop"> {FAART} .:keyin:./.:edit:.</p>
 
 <!-- Beginn Code ------------------------------------------->
-<div style="position:absolute; top:2.8em; left:1em;  width:45em;">
+<div style="position:absolute; top:3.3em; left:1em;  width:45em;">
 	<ul id="maintab" class="shadetabs">
 	<li id="subtab1" ><a href="#" onClick="submenu('tab1')">.:address:.</a></li>
 	<li id="subtab2" ><a href="#" onClick="submenu('tab2')">.:shipto:.</a></li>
 	<li id="subtab3" ><a href="#" onClick="submenu('tab3')">.:bank/tax:.</a></li>
 	<li id="subtab4" ><a href="#" onClick="submenu('tab4')">.:misc:.</a></li>
-	<li>{Msg}
+	<span>{Msg}</span>
 	</ul>
 </div>
 <form name="neueintrag" enctype='multipart/form-data' action="{action}" method="post">
@@ -76,7 +77,7 @@
 <input type="hidden" name="employee" value="{employee}">
 <input type="hidden" name="grafik" value="{grafik}">
 <input type="hidden" name="mtime" value="{mtime}">
-<span id="tab1" style="visibility:visible; position:absolute; text-align:left;width:90%; left:0.8em; top:4.3em; border:1px solid black;">
+<span id="tab1" style="visibility:visible; position:absolute; text-align:left;width:90%; left:0.8em; top:4.8em; border:1px solid black;">
 	<div class="zeile2">
 		<span class="label klein">Anrede </span>
 		<span class="feldxx"> <input type="text" name=".:greeting:." size="15" maxlength="75" value="{greeting_}" tabindex="1">
@@ -156,7 +157,7 @@
 
 </span>
 <!-- Ende tab1 -->
-<span id="tab2" style="visibility:hidden;  position:absolute; text-align:left;width:90%; left:0.8em; top:4.3em; border:1px solid black;">
+<span id="tab2" style="visibility:hidden;  position:absolute; text-align:left;width:90%; left:0.8em; top:4.8em; border:1px solid black;">
 	<br>
 	<div class="zeile2">
 		<span class="label klein"></span>
@@ -225,7 +226,7 @@
 	</span>
 </span>
 <!-- Ende tab2 -->
-<span id="tab3" style="visibility:hidden;  position:absolute; text-align:left;width:90%; left:0.8em; top:4.3em; border:1px solid black; display:inline;">
+<span id="tab3" style="visibility:hidden;  position:absolute; text-align:left;width:90%; left:0.8em; top:4.8em; border:1px solid black; display:inline;">
 	<div class="zeile2">
 		<span class="label klein">UStId</span>
 		<span class="feldxx"><input type="text" name="ustid" size="35" maxlength="15" value="{ustid}" tabindex="5"></span>
@@ -264,7 +265,7 @@
 	</div>
 </span>
 <!-- Ende tab3 -->
-<span id="tab4" style="visibility:hidden;  position:absolute; text-align:left;width:90%; left:0.8em; top:4.3em; border:1px solid black; display:inline;">
+<span id="tab4" style="visibility:hidden;  position:absolute; text-align:left;width:90%; left:0.8em; top:4.8em; border:1px solid black; display:inline;">
 <div class="zeile2">
     <span class="label klein">.:Industry:.</span>
 		<span class="feldxx"><input type="text" name="branche_" size="15" maxlength="25" value="{branche_}" tabindex="1">

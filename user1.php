@@ -36,6 +36,7 @@
     $an = getAngebJahr($fa["id"],$jahr,false,true);
     $IMG=getLastYearPlot($re,$an,false);
 	$t->set_var(array(
+            ERPCSS      => $_SESSION["stylesheet"],
             IMG => $IMG,
 			login => $fa["login"],
 			name => $fa["name"],

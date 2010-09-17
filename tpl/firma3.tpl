@@ -1,7 +1,8 @@
 <!-- $Id$ -->
 <html>
 	<head><title></title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 	<link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
 	<script language="JavaScript">
 	<!--
@@ -14,7 +15,7 @@
 	</script>
 <body>
 <p class="listtop">.:detailview:. {FAART}</p>
-<div style="position:absolute; top:2.7em; left:1.2em;  width:42em;">
+<div style="position:absolute; top:3.4em; left:1.1em;  width:42em;">
 	<ul id="maintab" class="shadetabs">
 	<li><a href="{Link1}">.:Custombase:.</a><li>
 	<li><a href="{Link2}">.:Contacts:.</a></li>
@@ -23,7 +24,7 @@
 	</ul>
 </div>
 
-<span style="position:absolute; left:1em; top:4.3em; width:99%;">
+<span style="position:absolute; left:1em; top:5.2em; width:99%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <div style="position:absolute; left:0px; top:0.0em; width:35em; border:1px solid black">
 	<span class="fett">{Name} &nbsp; {kdnr}</span><br />

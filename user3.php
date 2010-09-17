@@ -19,6 +19,7 @@
 	$t = new Template($base);
 	$t->set_file(array("msg" => "user4.tpl"));
 	$t->set_var(array(
+            ERPCSS      => $_SESSION["stylesheet"],
 			FID => $fid,
 			Firma => $name
 			));

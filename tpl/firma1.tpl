@@ -1,7 +1,8 @@
 <!-- $Id$ -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head><title>Firma Stamm</title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+	<link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+	<link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 	<link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
 	{AJAXJS}
 	<script language="JavaScript" type="text/javascript">
@@ -27,7 +28,8 @@
 			if (A==1) {
 				F1=open("showAdr.php?Q={Q}&fid={FID}","Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
             } else if (A>1) {
-				F1=open("showAdr.php?Q={Q}&sid="+A,"Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
+                sid = document.getElementById('SID').firstChild.nodeValue;
+				F1=open("showAdr.php?Q={Q}&sid="+sid,"Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
 			}
 		}
 		function notes() {
@@ -104,10 +106,10 @@
 <body onLoad="submenu('{kdview}'); showCall(0);">
 <p class="listtop">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
 <form name="kdhelp">
-<div style="position:absolute; top:1.5em; left:1.1em;  width:60em;">
-    <div style="float:left; padding-top:1.2em; ";>
+<div style="position:absolute; top:1.7em; left:1.1em; ">
+    <div style="float:left; padding-top:1.5em; ";>
 	<ul id="maintab" class="shadetabs">
-	<li class="selected"><a href="firma1.php?Q={Q}&id={FID}" id="aktuell">.:Custombase:.</a></li>
+	<li class="selected"><a href="firma1.php?Q={Q}&id={FID}">.:Custombase:.</a></li>
 	<li><a href="firma2.php?Q={Q}&fid={FID}">.:Contacts:.</a></li>
 	<li><a href="firma3.php?Q={Q}&fid={FID}">.:Sales:.</a></li>
 	<li><a href="firma4.php?Q={Q}&fid={FID}">.:Documents:.</a></li>
@@ -118,7 +120,7 @@
 	</select>
 	</ul>
     </div>
-    <div style="float:left; padding-left:1em; visibility:{tools};" >
+    <div style="float:right; padding-left:1em; padding-bottom:2em; visibility:{tools};" >
 	<img src="tools/rechner.png"  onClick="toolwin('tools/Rechner.html')" title=".:simple calculator:."> &nbsp;
 	<img src="tools/notiz.png"  onClick="toolwin('postit.php?popup=1')" title=".:postit notes:."> &nbsp;
 	<img src="tools/kalender.png"  onClick="toolwin('tools/kalender.php?Q={Q}&id={FID}')" title=".:calender:."> &nbsp;
@@ -127,9 +129,9 @@
 </div>
 </form>
 
-<span style="position:absolute; left:1em; top:4.3em; width:99%;" >
+<span style="position:absolute; left:1em; top:5.2em; width:99%;" >
 <!-- Begin Code --------------------------------------------- -->
-<div style="float:left; width:32em; height:32em; text-align:center; border: 1px solid black;" >
+<div style="float:left; width:32em; height:33em; text-align:center; border: 1px solid black;" >
 	<div style="position:absolute; left:0em; width:32em; " >
 		<div style="float:left; width:64%; height:10em; text-align:left; border-bottom: 0px solid black; padding:0.2em;" >
 			<span class="gross">{Fname1}</span><br />
@@ -300,7 +302,7 @@
 	</span>
 </div>
 
-<div style="float:left; width:46%; height:32em; text-align:left; border: 1px solid black; border-left:0px;">
+<div style="float:left; width:46%; height:33em; text-align:left; border: 1px solid black; border-left:0px;">
 	<div class="calls" width='99%' id="tellcalls" >
 	</div>
 	<!--span style="float:left;  text-align:left; border:0px solid black"-->	

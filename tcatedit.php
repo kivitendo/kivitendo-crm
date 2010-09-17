@@ -29,6 +29,7 @@
         if ($row["catid"]>$max) $max=$row["catid"];
     };
     $t->set_var(array(
+        ERPCSS      => $_SESSION["stylesheet"],
         idx => $i,
         neu => 1,
         cid => $max+1,

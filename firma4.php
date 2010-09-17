@@ -51,7 +51,8 @@
 	$t->set_file(array("doc" => "firma4.tpl"));
 	$t->set_var(array(
 			AJAXJS  => $xajax->printJavascript(XajaxPath),
-			FAART => ($Q=="C")?".:Customer:.":".:Vendor:.",       //"Kunde":"Lieferant",
+			FAART   => ($Q=="C")?".:Customer:.":".:Vendor:.",       //"Kunde":"Lieferant",
+            ERPCSS  => $_SESSION["stylesheet"],
 			Q => $Q,
 			FID => $fid,
 			customernumber	=> ($Q=="C")?$fa["customernumber"]:$fa["vendornumber"],

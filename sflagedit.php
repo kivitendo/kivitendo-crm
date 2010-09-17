@@ -30,6 +30,7 @@
     };
     if ( $max == 0 ) $max = 0.5;
     $t->set_var(array(
+        ERPCSS      => $_SESSION["stylesheet"],
         idx => $i,
         neu => 1,
         skey => "",

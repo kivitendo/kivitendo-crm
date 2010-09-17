@@ -12,7 +12,8 @@
 ?>
 <html>
 	<head><title></title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="../css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
 <body >
 <p class="listtop">Wartungsvertr&auml;ge suchen</p>
 <?php

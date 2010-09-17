@@ -1,0 +1,154 @@
+
+#wdbfile  A {
+    color: #22a;
+}
+
+table.liste	{ border-collapse:collapse; border-width: 0px; border-style:solid; border-color:black;padding: 2px; margin: 2px; border-spacing:0px; }
+td.liste	{ height:1.8em;  border-width:0px; border-style:solid; text-align:left; font-size: 1.2em;vertical-align:middle;margin:0px;padding:3px;}
+
+table.reiter	{ width:60%; table-layout:fixed;}
+td.reiter	{ border-width:thin;height:21px; border-style:solid; text-align:center; font-size: 1em;vertical-align:middle; width:25%;}
+td.reiter:hover	{ background-color: #cccccc; }
+
+table.stamm	{ border-width:1px; border-style:solid; border-color:black; padding:0px; margin:0px; width:100%; }
+td.stamm	{ margin:0px;padding:2px; }
+td.norm		{ font-size:1em;padding:2px; }
+td.ce		{ text-align:center;}
+td.le		{ text-align:left;}
+td.re		{ text-align:right;}
+table.calls	{ font-size:.8em;padding:0.0em;  }
+tr.calls1	{ padding-top:0.2em; padding-bottom:0.2em; background-color:#ddddff; }
+tr.calls0	{ padding-top:0.2em; padding-bottom:0.2em; background-color:#ddffdd; }
+tr.calls1:hover	{ background-color:#ff0000; }
+tr.calls0:hover	{ background-color:#ff0000; }
+
+.normal {
+    font-size: 1em;
+	font-weight: normal;
+}
+.gross { font-size: 1.2em; }
+.mini  { font-size: .6em; }
+.klein { font-size: .8em; }
+.fett  { font-weight: bold; }
+
+.liste		{ font-size:0.8em;  padding:0px; margin:0px; }
+.gr 		{ background-color:#bbbbbb; vertical-align:bottom;}
+.lg 		{ background-color:#dddddd; vertical-align:bottom;}
+.ft		{ background-color:#ffd5d5; vertical-align:bottom;}
+.we		{ background-color:#ffffff; vertical-align:bottom;}
+.hg		{ color:#cccccc; }
+
+.op 		{ color:#cc3333; font-weight:bold; cursor:pointer;}
+.oa 		{ color:#3333cc; font-weight:bold; cursor:pointer;}
+
+.ptr 		{ cursor:pointer;}
+
+.bgcol1 	{ background-color:#ddddff; }
+.bgcol2 	{ background-color:#ddffdd; }
+.bgcol3 	{ background-color:#eeeeee; }
+.bgcol4 	{ background-color:#ffdddd; }
+.caption 	{ font-size:9px;color:blue; }
+
+textarea  	{ font-size: 1em; font-family:Verdana,Arial,Helvetica,sans-serif;}
+.wikil          { color:#5555ff; font-weight:bold; font-size:1em; }
+.wikin          { color:#555555; font-weight:bold; font-size:1em; }
+.wikiw          { color:#55ff55; font-weight:bold; font-size:1em; }
+
+.space {
+  	float: left;
+  	border: 0px;
+}
+.value {
+  	float: left;
+	border: 0px;
+}
+.value:before {
+	content:"[ ";	
+}
+.value:after {
+	content:" ]";
+}
+input:focus {
+	background-color:yellow;
+}
+.zeile {  clear: both;
+  padding: 2px 0px;
+}
+.labelLe {
+  background-color:#e8e8e8;
+  float: left;
+  width: 8em;
+  text-align: left;
+}
+.label {
+  float: left;
+  width: 11em;
+  text-align: right;
+  padding-top: 0.3em;
+  padding-right: 0.5em;
+}
+.label2 {
+  float: left;
+  width: 6em;
+  text-align: right;
+  padding-top: 0.3em;
+  padding-right: 0.5em;
+}
+.smalfeld{
+  padding-left: 2px;
+  float: right;
+  width: 14em;
+  text-align: left;
+}
+.feld {
+  float: left;
+  width: 15em;
+  text-align: left;
+}
+.zeile2 {  clear: both;
+  padding: 0.2em 4em;
+}
+.feldxx {
+  float: left;
+  width: 25em;
+  text-align: left;
+}
+.pad {
+  padding-top: 3px;
+  padding-left: 2px;
+}
+.leftfeld {
+  float: left;
+  width: 205px;
+  text-align: left;
+}
+.diff1:before {
+	content:"[";	
+}
+.diff1:after {
+	content:"]";
+}
+.diff1 {
+	color: green;
+}
+.diff2:before {
+	content:"[ ";	
+}
+.diff2:after {
+	content:" ]";
+}
+.diff2 {
+	color: red;
+}
+.sichern {
+	background-color: #cc5555;
+}
+.sichernneu {
+	background-color: #ff0000;
+}
+.anzeige {
+	background-color: #6666cc;
+}
+.clear {
+	background-color: #55cc55;
+}

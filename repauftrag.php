@@ -75,6 +75,7 @@
 		$sel1=""; $sel2="";
 	} 
 	$t->set_var(array(
+        ERPCSS      => $_SESSION["stylesheet"],
 		action => "repauftrag.php",
 		msg => $msg,
 		AID => $rep["aid"],

@@ -2,9 +2,9 @@
 // Die volgenden Datenbanken müssen extra installiert werden. Siehe install.txt 
 $GEODB=false; // Geodatenbank vorhanden
 $BLZDB=false; // BLZ-Datenbank vorhanden
+$tools=true;
 //php-db => "", mdb2 => "m"
 $dbmodul="";
-$logfile = true;
 //Xajax => 0.5 evtl. auch 0.6
 define("XajaxVer","05");
 define("XajaxPath","./crmajax/");
@@ -33,14 +33,13 @@ $typcol["X"]="#fa05ff";
 define("FPDF_FONTPATH","/usr/share/fpdf/font/");
 define("FONTART","2");
 define("FONTSTYLE","1");
-$emptyVon = True;
 $logmail=true;
 $jcalendar=true;
 $listLimit=500;
 $tinymce=false;
 $zeigeextra=true;
-$tools=true;
 $jpg=false;
+//$jpg=true;
 $showErr=false;
 $CallEdit = true;
 $CallDel = false;
@@ -54,8 +53,10 @@ $CallDel = false;
 $planspace="+";
 //$stadtplan="http://www.viamichelin.de/viamichelin/deu/dyn/controller/mapPerformPage?strAddress=%TOSTREET%&strCP=%TOZIPCODE%&strLocation=%TOCITY%&strDestCP=89073&strDestLocation=Ulm&strDestAddress=Ensingerstr+11";
 //Google
+//http://maps.google.de/maps?f=d&hl=de&saddr=89073+ulm,+ulmergasse+11&daddr=Hafenstra%C3%9Fe+5,+24837+Schleswig&sll=51.399206,9.887695&sspn=11.934881,29.443359&ie=UTF8&z=5&ll=51.454007,9.887695&spn=11.920677,29.443359&om=1;
 //$planspace="+";
 //$stadtplan="http://maps.google.de/maps?f=d&hl=de&daddr=%TOSTREET%,%TOZIPCODE%+%TOCITY%&saddr=%FROMSTREET%,%FROMZIPCODE%+%FROMCITY%";
 $stadtplan="http://maps.google.de/maps?f=d&hl=de&daddr=%TOSTREET%,%TOZIPCODE%+%TOCITY%";
 $ERPNAME="lx-office-erp";
+$test=1;
 ?>

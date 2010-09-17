@@ -5,7 +5,8 @@
 ?>
 <html>
 <head><title></title>
-<link REL="stylesheet" HREF="css/main.css" TYPE="text/css" TITLE="Lx-System stylesheet">
+    <link type="text/css" REL="stylesheet" HREF="../css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
 </head>
 <body onLoad="document.suche.swort.focus()";>
 <?php

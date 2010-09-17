@@ -1,6 +1,7 @@
 <html>
     <head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
     <script language="JavaScript">
         function getColor(idx) {
             f1=open('farbwahl.html?idx='+idx,'farbe','width=500,height=350');

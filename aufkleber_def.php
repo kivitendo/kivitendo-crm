@@ -121,7 +121,8 @@
 <html>
 	<head>
 		<title></title>
-		<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+        <link type="text/css" REL="stylesheet" HREF="../css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
 	</head>
 <body>
 <p class=listtop>Etiketten-Editor</p>

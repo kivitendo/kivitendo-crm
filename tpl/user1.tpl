@@ -1,7 +1,8 @@
 <!-- $Id$ -->
 <html>
 	<head><title>User Stamm</title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 	<style type="text/css">
 	#mailwin {
 	    position: absolute;

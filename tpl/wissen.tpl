@@ -1,7 +1,8 @@
 <!-- $Id: liefer3.tpl 946 2006-03-01 12:42:11Z hlindemann $ -->
 <html>
 	<head><title></title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
     <script language="JavaScript">
     function filesearch() {
         f=open("dokument.php?P=1","File","width=900,height=650,left=200,top=100");

@@ -210,6 +210,7 @@
                 $t->parse("Block","Betreff",true);
 	}
 	$t->set_var(array(
+            ERPCSS      => $_SESSION["stylesheet"],
 			AJAXJS	=> $xajax->printJavascript(XajaxPath),
 			Msg	=> $msg,
 			btn	=> $btn,

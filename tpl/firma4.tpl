@@ -1,7 +1,8 @@
 <!-- $Id$ -->
 <html>
 	<head><title></title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 	<link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
 	{AJAXJS}
 	<script language="JavaScript">
@@ -145,7 +146,7 @@
 <input type="hidden" name="pid" value="{PID}">
 <input type="hidden" name="fid" value="{FID}">
 <input type="hidden" name="Q" value="{Q}">
-<div style="position:absolute; top:2.7em; left:1.2em;  width:42em;">
+<div style="position:absolute; top:3.4em; left:1.1em;  width:42em;">
 	<ul id="maintab" class="shadetabs">
 	<li><a href="{Link1}">.:Custombase:.</a><li>
 	<li><a href="{Link2}">.:Contacts:.</a></li>
@@ -154,10 +155,10 @@
 	</ul>
 </div>
 
-<span style="position:absolute; left:1em; top:4.3em; width:99%; height:90%;">
+<span style="position:absolute; left:1em; top:5.2em; width:99%; height:90%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <span style="float:left; width:40%; height:90%; text-align:center; padding:2px; border: 1px solid black; border-bottom: 0px;">
-	<div style="float:left; width:100%; height:3.5em; text-align:left; border-bottom: 1px solid black;" >
+	<div style="float:left; width:100%; height:4em; text-align:left; border-bottom: 1px solid black;" >
 	<table>
 	<tr><td class="fett">{Name}</td><td></td></tr>
 	<tr><td class="fett">.:KdNr:.: {customernumber}</td><td>ID: {PID}</td></tr>
@@ -176,7 +177,7 @@
 </span>
 
 <span style="float:left; width:58%; height:90%; text-align:left; border: 1px solid black; border-bottom: 0px; padding:2px; border-left:0px;">
-	<div style="float:left; width:100%; height:3.5em; text-align:left; border-bottom: 1px solid black;" class="fett">
+	<div style="float:left; width:100%; height:4em; text-align:left; padding-top: 0; border-top: 0; border-bottom: 1px solid black;" class="fett">
 	<table>
 	<tr><td>.:Templates:.:</td><td>
 	<select name="vorlage" id="vorlage" onChange="showD();" style="width:150px;">

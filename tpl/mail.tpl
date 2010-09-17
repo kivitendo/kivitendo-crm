@@ -1,7 +1,8 @@
 <!-- $ID: $ -->
 <html>
 	<head><title></title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 	{AJAXJS}
 	<script language="JavaScript">
 	<!--
@@ -110,7 +111,7 @@
 </tr><tr>
 	<td class="klein re" valign="top">.:body:.:</td>
 	<td class="">
-	<textarea class="klein" name="BodyText" id="BodyText" cols="80" rows="12" tabindex="4" onFocus="setcur(this);">{BodyText}</textarea>
+	<textarea class="normal" name="BodyText" id="BodyText" cols="100" rows="14" tabindex="4" onFocus="setcur(this);">{BodyText}</textarea>
 	</td>
 </tr><tr>
 	<td class="klein re">.:file:.:</td>

@@ -196,6 +196,7 @@
 		$t->parse("Block3","repeat",true);
 	}
 	$t->set_var(array(
+        ERPCSS      => $_SESSION["stylesheet"],
 		uid => $_SESSION["loginCRM"],
 		TID => $data["tid"],
 		TT => $Tag,

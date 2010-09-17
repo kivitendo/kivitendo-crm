@@ -99,6 +99,7 @@
 	$t->set_file(array("vert" => $template));
 
 	$t->set_var(array(
+        ERPCSS      => $_SESSION["stylesheet"],
 		VID => $vid,
 		vorlage_old => $vertrag["customer_id"]."/".$vertrag["template"],
 		vorlage => $vertrag["template"],

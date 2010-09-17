@@ -12,6 +12,7 @@
 	$t = new Template($base);
 	$t->set_file(array("doc" => "dokument.tpl"));
 	$t->set_var(array(
+            ERPCSS      => $_SESSION["stylesheet"],
 			AJAXJS  => $xajax->printJavascript(XajaxPath),
             PICUP => $pickup,
 			));

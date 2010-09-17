@@ -91,6 +91,7 @@ if ($_POST["suche"]) {
         $t->set_file(array("fa1" => "firmen1L.tpl"));
         $t->set_block("fa1","Liste","Block");
         $t->set_var(array(
+            ERPCSS      => $_SESSION["stylesheet"],
             AJAXJS  => $xajax->printJavascript(XajaxPath),
             FAART => ($Q=="C")?"Customer":"Vendor",
             msg => $msg,

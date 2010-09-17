@@ -1,7 +1,8 @@
 <!-- $ID: $ -->
 <html>
 	<head><title></title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 
 	<script language="JavaScript">
 	<!--
@@ -107,9 +108,9 @@
 						 &nbsp;&nbsp;
 		                 <input type="button" class="anzeige" value=".:search:." onClick="searchT()"><br />
                          <!--input type="submit" class="anzeige" name="search" value=".:search:."><br /-->
-						<span class="mini">.:cause:.</span></td></tr>
+						<span class="klein">.:cause:.</span></td></tr>
 			<tr><td colspan="2"><input type="text" name="location" size="35" maxlength="75" value="{LOCATION}"><br />
-                <span class="mini">.:location:.</span></td></tr>
+                <span class="klein">.:location:.</span></td></tr>
 			<tr>
                 <td>.:private date:.: </td> 
                 <td><input type="checkbox" name="privat" value="1" {CHKPRIVAT}> .:categorie:.: <select name="kategorie">
@@ -118,8 +119,8 @@
 <!-- END Kat -->
                     </select>
             </tr>
-			<tr><td colspan="2"><textarea name="lang" cols="40" rows="4">{LANG}</textarea>
-						<br><span class="mini">.:remarks:.</span>
+			<tr><td colspan="2"><textarea name="lang" cols="60" rows="4">{LANG}</textarea>
+						<br><span class="klein">.:remarks:.</span>
 			<tr><td colspan="2">
 					<input type="text" name="suchname" size="20" maxlength="25" value=""><input type="button" value=".:search:. .:member:." onClick="suchName()">
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -129,14 +130,14 @@
 <!-- BEGIN User -->
 						<option value="{USRID}">{USRNAME}</option>
 <!-- END User -->
-					</select><br><span class="mini">CRM-User</span></td>
+					</select><br><span class="klein">CRM-User</span></td>
 					<td ><input type="button" value="&lt;--" onClick="subusr()" title="entfernen"><br>
 							<br><input type="button" value="--&gt;" onClick="addusr()" title="dazunehmen"></td>
 					<td ><select name="user[]" id="istusr" size="5">
 <!-- BEGIN Selusr -->
 						<option value="{UID}">{UNAME}</option>
 <!-- END Selusr -->
-					</select><br><span class="mini">.:member:.</span></td>
+					</select><br><span class="klein">.:member:.</span></td>
 
 					</tr></table><br />
                     <a href="termin.php"><input type="reset" class="clear" name="clear" value=".:clear:."></a>
@@ -161,15 +162,16 @@
 			<option value="{JV}"{JS}>{JK}</option>
 <!-- END Jahre -->
 		</select>
-		<input type="button" class="anzeige" value=".:show:." onClick="showlist('T')">
+        <br />
         <select name="caluser" id="calusr" size="1">
 <!-- BEGIN CalUser -->
 			<option value="{CUID}" {CUIDSEL}>{CUNAME}</option>
 <!-- END CalUser -->
         </select>
+		<input type="button" class="anzeige" value=".:show:." onClick="showlist('T')">
 		<!--input type="button" value="Woche" onClick="showlist('W')">
 		<input type="button" value="Monat" onClick="showlist('M')"-->
-		<iframe src="termlist.php?cuid={uid}&ansicht={ANSICHT}&datum={DATUM}" name="Termine" style="width:29em; height:31em" marginheight="0" marginwidth="0" align="left">
+	<iframe src="termlist.php?cuid={uid}&ansicht={ANSICHT}&datum={DATUM}" name="Termine" style="width:32em; height:34em" marginheight="0" marginwidth="0" align="left">
 		<p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>
 		</iframe>
 	</td>

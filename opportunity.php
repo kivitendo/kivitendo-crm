@@ -133,6 +133,7 @@
 		$t->parse("BlockV","salesman",true);
 	}
 	$t->set_var(array(
+        ERPCSS      => $_SESSION["stylesheet"],
 		id => $daten["id"],
 		Q => $daten["tab"],
 		fid => $daten["fid"],

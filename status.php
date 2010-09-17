@@ -11,7 +11,8 @@ if ($_GET["test"]=="ja") {
 ?>
 <html>
 	<head><title></title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="../css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
 <?php
     if ($logfile) {
     echo $xajax->printJavascript(XajaxPath) 

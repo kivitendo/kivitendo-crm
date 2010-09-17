@@ -91,6 +91,7 @@
             }
 		}
 		$t->set_var(array(
+            ERPCSS      => $_SESSION["stylesheet"],
 			tag => $day.".".$month.".".$year,
 			dat1 => $t1,
 			dat2 => $t2,
@@ -113,6 +114,7 @@
 			$t->parse("Block","Liste",true);
 		}
 		$t->set_var(array(
+            ERPCSS      => $_SESSION["stylesheet"],
             HEADLINE => (substr($ansicht,0,1)=="S")?".:search result:.":".:conflict with termin:."
         ));
 	} else if ($ansicht=="W") {
@@ -214,6 +216,7 @@
 			$x+=60*60*24;
 		}
 		$t->set_var(array(
+                    ERPCSS      => $_SESSION["stylesheet"],
 					tag => $tag,
 					kw => $kw,
 					kw1 => $kw1,

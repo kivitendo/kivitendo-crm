@@ -58,7 +58,8 @@ if ($_POST["save"]) {
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head><title><?php echo  translate(".:LxO:.","work"); ?> <?php echo  translate(".:postit:.","work"); ?></title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="../css/<?php echo $_SESSION["stylesheet"] ?>"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"] ?>"></link>
 	<script language="JavaScript">
 	<!--
 	function PopUp() {
@@ -81,8 +82,8 @@ if ($liste) foreach($liste as $row) {
 </table>
 <form name="postit" method="post" action="postit.php">
 <input type="hidden" name="id" value="<?php echo  $data["id"] ?>">
-<input type="text" name="cause" size="77" maxlength="100" value="<?php echo  $data["cause"] ?>"><br />
-<textarea class="klein" rows="7" cols="80" name="notes"><?php echo  $data["notes"] ?></textarea><br />
+<input type="text" name="cause" size="90" maxlength="100" value="<?php echo  $data["cause"] ?>"><br />
+<textarea class="normal" rows="7" cols="80" name="notes"><?php echo  $data["notes"] ?></textarea><br />
 <input type="submit" class="sichern" name="save" value="<?php echo  translate(".:save:.","work"); ?>">&nbsp;
 <input type="submit" class="clear" name="clear" value="<?php echo  translate(".:clear:.","work"); ?>">&nbsp;
 <input type="submit" class="sichernneu" name="delete" value="<?php echo  translate(".:delete:.","work"); ?>">&nbsp;

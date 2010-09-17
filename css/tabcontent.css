@@ -1,29 +1,26 @@
+
 .shadetabs{
-padding: 0.2em 0;
-margin-left: 0;
-margin-top: 0.2em;
-margin-bottom: 0;
-font-weight:bold;
-font-size:0.7em;
+padding: 0 0 0 0;
+margin: 2 0 0 0;
+font-size: 1.0em;
+font-weight: bolder;
 list-style-type: none;
 text-align: left; /*set to left, center, or right to align the menu as desired*/
 }
 
 .shadetabs li{
 display: inline;
-margin: 0;
+padding:0 0 0 0;
+margin: 0 4 0 0;
+background: white url(shade.gif);
 }
 
 .shadetabs li a{
+font-size: 1.0em;
 text-decoration: none;
-padding: 0.3em 0.6em;
-margin-right: 0.3em;
+position: relative;
+padding: 2 2;
 border: 1px solid #778;
-color: #2d2b2b;
-background: white url(shade.gif) top left repeat-x;
-}
-
-.shadetabs li a:visited {
 color: #2d2b2b;
 }
 
@@ -31,9 +28,14 @@ color: #2d2b2b;
 color: #2d2b2b;
 }
 
-.shadetabs li a:hover {
-text-decoration: underline;
+.shadetabs li a:visited {
 color: #2d2b2b;
+}
+
+.shadetabs li a:hover {
+color: #2d2b2b;
+text-decoration: underline;
+background-color: rgba(0,0,0,0);
 }
 
 .shadetabs li a:active {
@@ -41,25 +43,20 @@ color: #2d2b2b;
 }
 
 .shadetabs li.selected {
-position: relative;
-top: -2px;
+background: white url(shadeactive.gif) top left repeat-x;
+#top: 1px;
 }
 
-.shadetabs li.selected a { /*selected main tab style */
-background-image: url(shadeactive.gif);
-border-bottom-color: white;
-}
-
-.shadetabs li.selected a:hover { /*selected main tab style */
+.shadetabs li.selected a:hover {
+color: #2d2b2b;
 text-decoration: none;
 }
 
+
 .subshadetabs{
-padding:0.2em 0;
-margin-left: 0;
-margin-top: 0.1em;
-margin-bottom: 0;
-font-size:0.6em;
+padding: 0 0 0 0;
+margin: 0 0 0 0;
+font-size: 0.8em;
 font-weight:500;
 list-style-type: none;
 text-align: left; /*set to left, center, or right to align the menu as desired*/
@@ -67,16 +64,16 @@ text-align: left; /*set to left, center, or right to align the menu as desired*/
 
 .subshadetabs li{
 display: inline;
-margin: 0;
+padding:2 2 2 2;
+margin: 0 2 0 0;
+background: white url(shade.gif);
+border: 1px solid #778;
 }
 
 .subshadetabs li a{
+font-size: 0.8em;
 text-decoration: none;
-padding: 0.1em 0.3em;
-margin-right: 0.3em;
-border: 1px solid #778;
 color: #2d2b2b;
-background: white url(shadeactive.gif) top left repeat-x;
 }
 
 .subshadetabs li a:link {
@@ -88,7 +85,9 @@ color: #2d2b2b;
 }
 
 .subshadetabs li a:hover {
+color: #2d2b2b;
 text-decoration: underline;
+background-color: rgba(0,0,0,0);
 }
 
 .subshadetabs li a:active {
@@ -96,31 +95,13 @@ color: #2d2b2b;
 }
 
 .subshadetabs li.selected {
-position: relative;
-background: white url(shade.gif);
-top: 0.3em;
+background: white url(shadeactive.gif) top left repeat-x;
+#position: relative;
+top: -2px;
 }
 
-.supshadetabs li.selected a { /*selected main tab style */
-background-color: white;
-border-top-color: white;
-}
-
-.subshadetabs li.selected a:hover { /*selected main tab style */
+.subshadetabs li.selected a:hover {
+color: #2d2b2b;
 text-decoration: none;
 }
 
-.tabcontentstyle{ /*style of tab content oontainer*/
-border: 1px solid gray;
-width: 90%;
-margin-bottom: 1em;
-padding: 0.9em;
-}
-
-.tabcontent{
-display:none;
-}
-
-@media print {
-.tabcontent { display:block!important; }
-}

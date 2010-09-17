@@ -1,7 +1,8 @@
 <!-- $Id$ -->
 <html>
 	<head><title></title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 	<script language="JavaScript">
 	<!--
 	function toggle(was1,was2) {
@@ -107,7 +108,7 @@
 			{notxt}
 		</span>
 		<span class="leftfeld" style="width:45em; display:{none};" id="no1">
-			<textarea name="notiz" cols="78" rows="10" onChange="sichern()">{notiz}</textarea>
+			<textarea name="notiz" cols="80" rows="10" onChange="sichern()">{notiz}</textarea>
 		</span>
 	</div>
 	<div class="zeile">

@@ -2,7 +2,8 @@
 <html>
 	<head><title></title>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 	<script language="JavaScript">
 	<!--
 

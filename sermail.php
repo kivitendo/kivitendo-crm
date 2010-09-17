@@ -79,6 +79,7 @@
 		$t = new Template($base);
 		$t->set_file(array("mail" => "sermail.tpl"));
 		$t->set_var(array(
+                ERPCSS      => $_SESSION["stylesheet"],
 				Msg	 => $msg,
 				CC	 => $CC,
 				Subject  => $Subject,

@@ -1,7 +1,8 @@
 <!-- $Id$ -->
 <html>
 	<head><title></title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 	<link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
 	{AJAXJS}
 	<script language="JavaScript">
@@ -159,7 +160,7 @@
 <p class="listtop">.:documents:. </p>
 <form name="dokument.php" enctype='multipart/form-data' action="{action}" method="post">
 
-<span style="position:absolute; left:1em; top:4.3em; width:99%; height:90%;">
+<span style="position:absolute; left:1em; top:3.0em; width:99%; height:90%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 
 <!-- linker Dateibaum: -->
@@ -205,12 +206,12 @@
 </div>
 
 <!-- Eine Datei hochladen: -->
-<div id="uploadfr" style="visibility:hidden; position:absolute; left:4em; z-index:1; top:10em; height:16em; width:20em; border:3px solid black; "  >
+<div id="uploadfr" style="visibility:hidden; position:absolute; left:4em; z-index:1; top:10em; height:16em; width:23em; border:3px solid black; "  >
     <iframe id="frupload" name="frupload" src="upload.php?fid=0&pid=0" frameborder="0" width="100%" height="100%"></iframe>
 </div>
 
 <!-- Attribute editieren: -->
-<div id="attribut" style="visibility:hidden; position:absolute; left:5em; z-index:1; top:10em; width:23em; 
+<div id="attribut" style="visibility:hidden; position:absolute; left:5em; z-index:1; top:10em; width:30em; 
 	text-align:center; border:3px solid black; background-image: url('css/fade.png');" class="klein" >
 	<table width="99%" class="klein lg">
 	<tr style="border-bottom:1px solid black;"><td>.:edit attribute:.</td><td align="right"><a href="javascript:editattribut()">(X)</a></td></tr>

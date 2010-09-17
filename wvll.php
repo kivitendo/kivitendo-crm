@@ -74,6 +74,7 @@
 		$i++;
 	} 
 	$t->set_var(array(
+        ERPCSS      => $_SESSION["stylesheet"],
 		Interv => (!$interv || $interv<10)?999999:$interv
 	));
 	$t->pparse("out",array("wvl"));

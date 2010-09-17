@@ -1,7 +1,8 @@
 <!-- $Id: personen3.tpl 4316 2009-06-17 08:30:54Z jbueren $ -->
 <html>
 	<head><title></title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 	<link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
 
 	<script language="JavaScript">
@@ -33,12 +34,12 @@
 <p class="listtop">.:personen:. .:keyin:./.:edit:.</p>
 
 <!-- Beginn Code ------------------------------------------->
-<div style="position:absolute; top:2.80em; left:1em;  width:45em;">
+<div style="position:absolute; top:3.1em; left:1em;  width:45em;">
 	<ul id="maintab" class="shadetabs">
 	<li id="subtab1" ><a href="#" onClick="submenu('tab1')">.:person:.</a></li>
 	<li id="subtab2" ><a href="#" onClick="submenu('tab2')">.:Company:.</a></li>
 	<li id="subtab3" ><a href="#" onClick="submenu('tab3')">.:misc:.</a></li>
-	<li>{Msg}
+	<span>{Msg}</span>
 	</ul>
 </div>
 
@@ -50,7 +51,7 @@
 <input type="hidden" name="employee" value="{employee}">
 <input type="hidden" name="IMG_" value="{IMG_}">
 <input type="hidden" name="nummer" value="{nummer}">
-<span id="tab1" style="visibility:visible; position:absolute; text-align:left;width:95%; left:0.8em; top:4.4em; border:1px solid black;">
+<span id="tab1" style="visibility:visible; position:absolute; text-align:left;width:95%; left:0.8em; top:4.8em; border:1px solid black;">
 	<div class="zeile2">
 		<span class="label2 klein">.:gender:.</span>
 		<span class="feld">
@@ -122,7 +123,7 @@
 	</div>
 	<br><br>
 </span>
-<span id="tab2" style="visibility:hidden; position:absolute; text-align:left;width:90%; left:0.8em; top:4.4em; border:1px solid black;">
+<span id="tab2" style="visibility:hidden; position:absolute; text-align:left;width:90%; left:0.8em; top:4.8em; border:1px solid black;">
 	<br><br>
 	<div class="zeile2">
 		<span class="label klein">.:Company:.</span>
@@ -142,7 +143,7 @@
 	</div>
 	<br>
 </span>
-<span id="tab3" style="visibility:hidden; position:absolute; text-align:left;width:90%; left:0.8em; top:4.4em; border:1px solid black;">
+<span id="tab3" style="visibility:hidden; position:absolute; text-align:left;width:90%; left:0.8em; top:4.8em; border:1px solid black;">
 <!--span style="float:left; text-align:left; border: 0px solid black;"-->
 	<span  style="float:left;">
 		<div class="zeile2">
@@ -179,7 +180,7 @@
 			{visitenkarte}</span>
 	</span>
 </span>
-<span style="position:absolute; left:1.2em; top:20em; width:52em; height:2em; text-align:left; border: 0px solid red;">
+<span style="position:absolute; left:1.2em; top:24.5em; width:52em; height:2em; text-align:left; border: 0px solid red;">
 	<br><br>
 	{Btn3} {Btn1} <input type='submit' class='sichernneu' name='neu' value='.:save:. .:new:.' tabindex="28">
 	<input type="submit" class="clear" name="reset" value=".:clear:." tabindex="29"> <input type="button" name="" value="VCard" onClick="vcard()" tabindex="30">

@@ -103,7 +103,7 @@
 		    $button .= "<image src='image/file_kl.png' title='.:picfile:.' onClick=\"filesearch()\"><br>";
 			//$button="<input type='image' src='image/save_kl.png' tilte='.:save:.' name='savecontent' value='.:save:.'>";
 			//$button.=" <input type='image' src='image/cancel_kl.png' title='.:escape:.' name='abbruch' value='.:escape:.'>";
-			$pre="<textarea id='elm1' name='content' cols='75' rows='18'>";
+			$pre="<textarea id='elm1' name='content' cols='95' rows='18'>";
 			$post="</textarea>";
 		}
 		if ($_POST["aktion"] == "neu") {
@@ -113,7 +113,7 @@
 		    $button .= "<image src='image/file_kl.png' title='.:picfile:.' onClick=\"filesearch()\"><br>";
 			//$button="<input type='image' src='image/save_kl.png' tilte='.:save:.' name='savecontent' value='.:save:.'>";
 			//$button.=" <input type='image' src='image/cancel_kl.png' title='.:escape:.' name='abbruch' value='.:escape:.'>";
-			$pre="<textarea id='elm1' name='content' cols='75' rows='18'>";
+			$pre="<textarea id='elm1' name='content' cols='95' rows='18'>";
 			$post="</textarea>";
 		}
 	}
@@ -156,6 +156,7 @@ function Thread($HauptGrp,$t,$m,&$tpl)    {
 	}
 	$catname=getOneWCategorie($tmp[0]);
 	$tpl->set_var(array(
+        ERPCSS      => $_SESSION["stylesheet"],
 		menu => $menu,
 		menuitem => "$m",
 		catname => ($catname["name"])?$catname["name"]:"\\",

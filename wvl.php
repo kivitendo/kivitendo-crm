@@ -6,6 +6,7 @@
 	$t = new Template($base);
 	$t->set_file(array("wvl" => "wvl.tpl"));
 	$t->set_var(array(
+            ERPCSS      => $_SESSION["stylesheet"],
 			Cause => $data["Cause"],
 			LangTxt => $data["LangTxt"],
 			Dokument => $data["Dokument"],

@@ -24,6 +24,7 @@
 	$t = new Template($base);
 	$t->set_file(array("usr2" => "user3.tpl"));
 	$t->set_var(array(
+            ERPCSS      => $_SESSION["stylesheet"],
 			UID => $_SESSION["loginCRM"],
 			msg => $msg
 			));

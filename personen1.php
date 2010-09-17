@@ -118,6 +118,10 @@
                             report => "$listLimit von ".count($daten)." Treffern",
                         ));
                     }
+                    $t->set_var(array(
+                        ERPCSS      => $_SESSION["stylesheet"],
+                        ));
+
                 }
 			}
             $t->set_var(array(

@@ -188,6 +188,7 @@
 	$cause=(empty($daten["Betreff"]))?$zeile["cause"]:$daten["Betreff"];
 	$deletes=getCntCallHist($Bezug,true);
 	$t->set_var(array(
+        ERPCSS      => $_SESSION["stylesheet"],
 		nummer => $daten["nummer"],
 		EDIT => ($CallEdit and $_GET["hole"])?"visible":"hidden",
 		DELETE => ($CallDel and $_GET["hole"])?"visible":"hidden",

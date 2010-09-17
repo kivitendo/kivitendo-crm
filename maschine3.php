@@ -23,6 +23,9 @@
 				));
 				$t->parse("Block1","Sernumber",true);
 			}
+	        $t->set_var(array(
+                ERPCSS      => $_SESSION["stylesheet"],
+            ));
 			$t->pparse("out",array("vert"));			
 			exit;
 		} else if (!$data) {
@@ -49,6 +52,7 @@
 	}
 	$t->set_file(array("masch" => "maschinen3.tpl"));
 	$t->set_var(array(
+        ERPCSS      => $_SESSION["stylesheet"],
 		action => "maschine3.php",
 		msg => $msg,
 		parts_id	=> $pid,

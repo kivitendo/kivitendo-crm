@@ -6,7 +6,7 @@
 	$disp="style='display:none'";
 	if ($_POST["search"] or $_GET["sernr"]) {
 		if ($_POST["serialnumber"]) {
-			$tmp=explode("\|",$_POST["serialnumber"]);
+			$tmp=explode("|",$_POST["serialnumber"]);
 			$data=getSernumber($tmp[0],$tmp[1]);
 		} else if ($_GET["sernr"]) {
 			$data=getSernumber($_GET["sernr"]);
@@ -25,6 +25,9 @@
 				));
 				$t->parse("Block1","Sernumber",true);
 			}
+	        $t->set_var(array(
+                ERPCSS      => $_SESSION["stylesheet"],
+            ));
 			$t->pparse("out",array("vert"));			
 			exit;
 		} else if (!$data) {
@@ -57,6 +60,7 @@
 	$cnt=($data["mid"])?getCounter($data["mid"]):"";
 	$t->set_file(array("masch" => "maschinen1.tpl"));
 	$t->set_var(array(
+        ERPCSS      => $_SESSION["stylesheet"],
 		action => "maschine1.php",
 		msg => $msg,
 		disp => $disp,

@@ -1,7 +1,8 @@
 <!-- $Id$ -->
 <html>
 	<head><title></title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 	<link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
 	{AJAXJS}
 	<script language="JavaScript">
@@ -81,10 +82,10 @@
 	//-->
 	</script>
 <body onLoad="{INIT}">
-<p class="listtop">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}</span></p>
+<p class="listtop" >.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}</span></p>
 <form name="kdhelp">
-<div style="position:absolute; top:1.5em; left:1.1em;  width:60em;">
-    <div style="float:left; padding-top:1.2em; ";>
+<div style="position:absolute; top:1.7em; left:1.1em;">
+    <div style="float:left; padding-top:1.5em; ";>
 	<ul id="maintab" class="shadetabs">
 	<li><a href="{Link1}">.:Custombase:.</a><li>
 	<li class="selected"><a href="{Link2}" id="aktuell">.:Contacts:.</a></li>
@@ -97,7 +98,7 @@
 	</select>
 	</ul>
     </div>
-    <div style="float:left; padding-left:1em;  visibility:{tools};">
+    <div style="float:right; padding-left:1em;  visibility:{tools};">
 	<img src="tools/rechner.png"  onClick="toolwin('tools/Rechner.html')" title=".:simple calculator:."> &nbsp;
 	<img src="tools/notiz.png"  onClick="toolwin('postit.php?popup=1')" title=".:postit notes:."> &nbsp;
 	<img src="tools/kalender.png"  onClick="toolwin('tools/kalender.php?Q=P&id={PID}')" title=".:calender:."> &nbsp;
@@ -105,7 +106,7 @@
     </div>
 </div>
 </form>
-<span style="position:absolute; left:1em; top:4.3em; width:99%;">
+<span style="position:absolute; left:1em; top:5.2em; width:99%;">
 <!-- Beginn Code ------------------------------------------->
 <div style="float:left; width:32em; height:32em;  border: 1px solid black;" >
      	<div style="position:absolute; left:0em; width:32em;" >	
@@ -118,7 +119,7 @@
 			<select name="liste" id="liste" style="visibility:{moreC}; width:150px;" onChange="showContact();">
 			{kontakte}</select><br />
 			&nbsp;{Fdepartment_1}<br /> 
-			&nbsp;{Plz} {Ort}</form><br />
+			&nbsp;{Plz} {Ort}</form>
 			</span>
 		</div>
 		<div style="float:left; width:70%; height:13em; text-align:left; border-bottom: 0px solid black;" >

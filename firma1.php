@@ -75,6 +75,7 @@
 	$t->set_var(array(
 			AJAXJS  	=> $xajax->printJavascript(XajaxPath),
 			FAART 		=> ($Q=="C")?".:Customer:.":".:Vendor:.",
+            ERPCSS      => $_SESSION["stylesheet"],
 			CuVe 		=> ($Q=="C")?"customer":"vendor",
 			Q 		=> $Q,
 			FID		=> $id,

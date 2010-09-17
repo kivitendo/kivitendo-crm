@@ -44,7 +44,8 @@
 	$t->set_var(array(
 			Q	=> $Q,
 			FAART	=> ($Q=="C")?".:Customer:.":".:Vendor:.",       //"Kunde":"Lieferant",
-			FID => $fid,
+            ERPCSS  => $_SESSION["stylesheet"],
+			FID     => $fid,
 			kdnr	=> $fa["nummer"],
 			PID => $pid,
 			Link1 => $link1,

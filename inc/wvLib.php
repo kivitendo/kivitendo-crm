@@ -39,7 +39,7 @@ function getArtikel($sw) {
 
 function getMaschSer($ser,$pid) {
 	global $db;
-	$sql="select * from maschine left join history on id=mid where serialnumber=$ser and parts_id=$pid and art='neu'";
+	$sql="select * from maschine left join history on id=mid where serialnumber='$ser' and parts_id=$pid and art='neu'";
 	$rs=$db->getAll($sql);
 	if(!$rs) {
 		$rs=false;
@@ -130,6 +130,7 @@ function saveNewVertrag($data) {
 	$sql="insert into contract (contractnumber,template,bemerkung,customer_id,betrag,anfangdatum,endedatum) values ('%s','%s','%s','%d','%s','%s','%s')";
 	$start=($data["anfangdatum"]<>"00.00.0000" && !empty($data["anfangdatum"]))?date2db($data["anfangdatum"]):date("Y-m-d");	
 	$stop=($data["endedatum"]<>"00.00.0000" && !empty($data["endedatum"]))?date2db($data["endedatum"]):$start;
+    if ($stop<$start) $stop=$start;
 	$rc=$db->query(sprintf($sql,$newID,$data["vorlage"],$data["bemerkung"],$data["cp_cv_id"],$data["betrag"],$start,$stop));
 	if ($rc) {
 		$sql="select * from contract where contractnumber='$newID'";

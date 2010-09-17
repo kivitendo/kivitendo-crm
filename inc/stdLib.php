@@ -40,7 +40,7 @@ if (!$_SESSION["db"] || !$_SESSION["cookie"] ||
      $Datum=ereg_replace("-","\.",$Datum);
      $Datum=ereg_replace(",","\.",$Datum);
      $Datum=ereg_replace(" ","\.",$Datum);
-     $D=explode("\.",$Datum);
+     $D=explode(".",$Datum);
 	 if (count($D)==1) { $D[1]=date("m"); };
 	 if (count($D)==2 || $D[2]=="") { $D[2]=date("Y"); };
 	 if ($D[2]<38) { $D[2]=2000+$D[2]; }
@@ -96,6 +96,7 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     $auth["mansel"]=$auth["dbname"];
     $auth["employee"]=$auth["login"];
     $auth["lang"]=$auth["countrycode"];
+    $auth["stylesheet"]=$auth["stylesheet"];
     $sql = "SELECT granted from auth.group_rights G where G.right = 'sales_all_edit' and G.group_id in (select group_id from auth.user_group where user_id = ".$rs[0]["id"].")";
 	$rs=$db->getAll($sql,"authuser_3");
     $auth["sales_edit_all"] = 'f';

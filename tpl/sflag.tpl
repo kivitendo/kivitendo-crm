@@ -9,7 +9,7 @@
 <form name="termincat" method="post" action="sflagedit.php">
     <table><tr><th>.:order:.</th><th>.:name:.</th><th>.:delete:.</th></tr>
 
-<!-- BEGIN Flag -->
+<!-- BEGIN SonderFlag -->
     <tr>
         <td><input type='hidden' name='sonder[{idx}][new]' value='{neu}'>
             <input type='hidden' name='sonder[{idx}][svalue]' value='{svalue}'>
@@ -22,7 +22,7 @@
             <input type='checkbox' name='sonder[{idx}][del]' value='1'>
         </td>
     </tr>
-<!-- END Flag -->
+<!-- END SonderFlag -->
 
     </table>
     <input type="submit" name="ok" value=".:save:.">

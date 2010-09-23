@@ -115,16 +115,16 @@
 		<span class="leftfeld">
 			<select name="business_id" tabindex="10">
 <!-- BEGIN TypListe -->	
-				<option value="{Bid}" {Bsel}>{Btype}</option>
+				<option value="{BTid}" {BTsel}>{BTtext}</option>
 <!-- END TypListe -->				
 			</select>
 		</span>
 		<span class="label">.:lang:.</span>
-		<span class="leftfeld">	<select name="language" tabindex="30">
+		<span class="leftfeld">	<select name="language_id" tabindex="30">
 				<option value="">
-				<option value="de">deutsch
-				<option value="en">englisch
-				<option value="fr">franz&ouml;sisch
+<!-- BEGIN LAnguage -->	
+				<option value="{LAid}" {LAsel}>{LAtext}
+<!-- END LAnguage -->	
 			</select>
 		</span>
 	</div>
@@ -133,7 +133,7 @@
 		<span class="leftfeld">
 			<select name="lead" tabindex="11" style="width:110px;">
 <!-- BEGIN LeadListe -->	
-				<option value="{Lid}" {Lsel}>{Lead}</option>
+				<option value="{LLid}" {LLsel}>{LLtext}</option>
 <!-- END LeadListe -->				
 			</select>
 			<input type="text" name="leadsrc" size="5" value="{leadsrc}" tabindex="12">
@@ -144,9 +144,9 @@
 	</div>
 	<div class="zeile">
 		<span class="label">.:sflag:.</span>
-<!-- BEGIN sonder -->
-	<input type="checkbox" name="sonder[]" tabindex="33" value="{sonder_id}">{sonder_key} 
-<!-- END sonder -->	
+<!-- BEGIN SonderFlag -->
+	<input type="checkbox" name="sonder[]" tabindex="33" value="{SFid}">{SFtext} 
+<!-- END SonderFlag -->	
 	</div>
 	<div class="zeile">
 			<b>{Msg}</b><br>

@@ -209,6 +209,7 @@
 		</div>
 		<div style="width:35em;" class="klein">
 		<table class="normal">
+		<tr><td class="labelLe">.:language:.:   </td><td><div class="value">{language}</a></div></td></tr>
 		<tr><td class="labelLe">.:variables:.:   </td><td><div class="value"><a href='#' onClick="showVar();">{variablen}</a></div></td></tr>
 		<tr><td class="labelLe">.:Checkbox:.:   </td><td><div class="value">{sonder} </div></td></tr>
 		<tr><td class="labelLe">.:Industry:.:    </td><td><div class="value">{branche}</div></td></tr>

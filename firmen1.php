@@ -49,7 +49,7 @@
 						($Q=="C")?$zeile["customernumber"]:$zeile["vendornumber"],
 						$zeile["ustid"],$zeile["taxnumber"],
 						$zeile["account_number"],$zeile["bank"],$zeile["bank_code"],
-						$zeile["language"],$zeile["business_id"]),$zeile["id"]);	
+						$zeile["language_id"],$zeile["business_id"]),$zeile["id"]);	
                 if ($i<$listLimit) {
                     $t->set_var(array(
                         Q => $Q,

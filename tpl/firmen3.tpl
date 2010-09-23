@@ -84,7 +84,7 @@
 				<select name="greeting" tabindex="2">
 					<option value="">
 <!-- BEGIN anreden -->
-					<option value="{ANREDE}" {ASEL}>{ANREDE}
+					<option value="{Aid}" {Asel}>{Atext}
 <!-- END anreden -->
 				</select>
 		</span>
@@ -113,7 +113,7 @@
 			<select name="bland" id="bland" tabindex="9" style="width:150px;">
 				<option value=""></option>
 <!-- BEGIN buland -->
-				<option value="{BUVAL}" {BUSEL}>{BUTXT}</option>
+				<option value="{BLid}" {BLsel}>{BLtext}</option>
 <!-- END buland -->
 			</select>
 		</span>
@@ -164,7 +164,7 @@
 		<span class="feldxx"><select name="shiptoadress" style="width:19em;" tabindex="1" onChange="getShipadress();">
 				<option value=""></option>
 <!-- BEGIN shiptos -->
-				<option value="{SHIPID}">{SHIPTO}</option>
+				<option value="{STid}">{STtext}</option>
 <!-- END shiptos -->
 		</select></span>
 	</div>
@@ -192,7 +192,7 @@
 			<select id="shiptobland" name="shiptobland" tabindex="8" style="width:12em;">
 				<option value=""></option>
 <!-- BEGIN buland2 -->
-				<option value="{SBUVAL}" {SBUSEL}>{SBUTXT}</option>
+				<option value="{BSid}" {BSsel}>{BStext}</option>
 <!-- END buland2 -->
 			</select>
 		</span>
@@ -272,7 +272,7 @@
 				<select name="branche" tabindex="2" style="width:11em;">
 					<option value="">
 <!-- BEGIN branchen -->
-					<option value="{BRANCHE}" {BSEL}>{BRANCHE}
+					<option value="{BRid}" {BRsel}>{BRtext}
 <!-- END branchen -->
 				</select>
 		</span>
@@ -290,7 +290,7 @@
 		<span class="feldxx">
 			<select name="lead" tabindex="10" style="width:10em;">
 <!-- BEGIN LeadListe -->
-				<option value="{Lid}" {Lsel}>{Lead}</option>
+				<option value="{LLid}" {LLsel}>{LLtext}</option>
 <!-- END LeadListe -->
 			</select>
 			<input type="text" name="leadsrc" size="15" maxlength="15" value="{leadsrc}" tabindex="11">
@@ -301,7 +301,7 @@
 		<span class="feldxx">
 			<select name="business_id" tabindex="12">
 <!-- BEGIN TypListe -->
-				<option value="{Bid}" {Bsel}>{Btype}</option>
+				<option value="{BTid}" {BTsel}>{BTtext}</option>
 <!-- END TypListe -->
 			</select>
 		</span>
@@ -322,7 +322,7 @@
 		<span class="feldxx">
 			<select name="payment_id" tabindex="12">
 <!-- BEGIN payment -->
-				<option value="{Pid}" {PSEL}>{PAYMENT}</option>
+				<option value="{Pid}" {Psel}>{Ptext}</option>
 <!-- END payment -->
 			</select>
 		</span>
@@ -343,25 +343,39 @@
 			<select name="salesman_id" tabindex="15">
 				<option value=""></option>
 <!-- BEGIN SalesmanListe -->
-				<option value="{salesmanid}" {Ssel}>{Salesman}</option>
+				<option value="{SMid}" {SMsel}>{SMtext}</option>
 <!-- END SalesmanListe -->
 			</select>
 		</span>
 	</div>
 	<div class="zeile2">
-		<span class="label klein">.:authority:.Berechtig.</span>
+		<span class="label klein">.:language:.</span>
+		<span class="feldxx">
+			<select name="language_id" tabindex="15">
+				<option value=""></option>
+<!-- BEGIN LAnguage -->
+				<option value="{LAid}" {LAsel}>{LAtext}</option>
+<!-- END LAnguage -->
+			</select>
+		</span>
+	</div>
+	<div class="zeile2">
+		<span class="label klein">.:authority:.</span>
 		<span class="feldxx">
 			<select name="owener" tabindex="16">
 <!-- BEGIN OwenerListe -->
-				<option value="{grpid}" {Gsel}>{Gname}</option>
+				<option value="{OLid}" {OLsel}>{OLtext}</option>
 <!-- END OwenerListe -->
 			</select> &nbsp; <span class="klein">{init}</span>
 		</span>
 	</div>
 	<div class="zeile2">
-<!-- BEGIN sonder -->
-	<input type="checkbox"  name="sonder[]" value="{sonder_id}" {sonder_sel} tabindex="17"><span class="klein">{sonder_key} </span>
-<!-- END sonder -->	
+<!-- BEGIN SonderFlag -->
+	<input type="checkbox"  name="sonder[]" value="{SFid}" {SFsel} tabindex="17"><span class="klein">{SFtext} </span>
+<!-- END SonderFlag -->	
+	</div>
+	<div class="zeile2">
+   {variablen}
 	</div>
 </span>
 <span id="tab4" style="position:absolute; text-align:left;width:48%; left:0.8em; top:34.5em;"> 			

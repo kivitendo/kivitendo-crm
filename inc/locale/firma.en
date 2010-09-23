@@ -166,6 +166,7 @@ $texts  = array(
   '.:locked:.'       => 'locked',
   '.:documents:.'    => 'Documents',
   '.:picup:.'        => 'Transfer',
-  '.:servcard:.'     => 'VCards'
+  '.:servcard:.'     => 'VCards',
+  '.:language:.'     => 'Language'
 );
 ?>

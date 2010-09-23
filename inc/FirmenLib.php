@@ -83,10 +83,11 @@ global $db;
 		$rs=$db->getAll($sql);
 		$op=$rs[0]["sum"];
 		$sql="select C.*,E.name as verkaeufer,B.description as kdtyp,B.discount as typrabatt,P.pricegroup,";
-        $sql.="L.lead as leadname,BL.bundesland,T.terms_netto from customer C ";
+        $sql.="L.lead as leadname,BL.bundesland,T.terms_netto,LA.description as language from customer C ";
 		$sql.="left join employee E on C.salesman_id=E.id left join business B on B.id=C.business_id ";
 		$sql.="left join bundesland BL on BL.id=C.bland left join payment_terms T on T.id=C.payment_id ";
 		$sql.="left join pricegroup P on P.id=C.klass left join leads L on C.lead=L.id ";
+        $sql.="left join language LA on LA.id = C.language_id ";
 		$sql.="where C.id=$id";
 	} else if ($tab=="V") {
         // Umsätze holen
@@ -96,8 +97,10 @@ global $db;
 		$sql="select sum(amount) from oe where vendor_id=$id and quotation='f' and closed = 'f'";
 		$rs=$db->getAll($sql);
 		$oa=$rs[0]["sum"];
-		$sql="select C.*,E.name as verkaeufer,B.description as kdtyp,B.discount as typrabatt,BL.bundesland from vendor C ";
+		$sql="select C.*,E.name as verkaeufer,B.description as kdtyp,B.discount as typrabatt,BL.bundesland,";
+        $sql.="L.lead as leadname,LA.description as language from vendor C ";
 	    $sql.="left join employee E on C.salesman_id=E.id left join business B on B.id=C.business_id ";
+        $sql.="left join language LA on LA.id = C.language_id left join leads L on C.lead=L.id ";
 		$sql.="left join bundesland BL on BL.id=C.bland ";
         $sql.="where C.id=$id";
 	} else {
@@ -263,7 +266,7 @@ function suchstr($muster,$typ="C") {
 			homepage => 0, email => 0, notes => 0,
 			department_1 => 0, department_2 => 0,
 			country => 0, typ => 2, sw => 0,
-			language => 0, business_id => 2,
+			language_id => 2, business_id => 2,
 			ustid => 0, taxnumber => 0, lead => 2, leadsrc => 0,
 			bank => 0, bank_code => 0, account_number => 0,
 			vendornumber => 0, v_customer_id => 0,
@@ -412,7 +415,7 @@ global $db;
 	    ustid => array(0,0,0,"UStId",0),	        	taxnumber => array(0,0,0,"Steuernummer",0),
 	    bank => array(0,0,1,"Bankname",50),	        	bank_code => array(0,0,6,"Bankleitzahl",15),
 	    iban => array(0,0,1,"IBAN",24),	        	    bic => array(0,0,1,"BIC",15),
-	    account_number => array(0,0,6,"Kontonummer",15),
+	    account_number => array(0,0,6,"Kontonummer",15), language_id =>  array(0,0,6,"Sprache",0),
 	    payment_id => array(0,0,6,"Zahlungsbedingungen",0),
 	    branche => array(0,0,1,"Branche",25),	    	business_id => array(0,0,6,"Kundentyp",0),
 	    owener => array(0,0,6,"CRM-User",0),	    	grafik => array(0,0,9,"Grafik",4),
@@ -748,12 +751,9 @@ global $db;
 	$rs=$db->getAll($sql);
 	return $rs;
 }
+
 function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false) {
 global $xajax,$GEODB,$BLZDB;
-        $cp_sonder = getSonder(False);
-		$kdtyp=getBusiness();
-		$bundesland=getBundesland(false);
-		$lead=getLeads();
 		$t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
 		$t->set_var(array(
 			AJAXJS	=> $xajax->printJavascript(XajaxPath),
@@ -809,9 +809,6 @@ global $xajax,$GEODB,$BLZDB;
 			shiptofax	=> "",
 			shiptoemail	=> "",
 			shiptocontact	=> "",
-			T1		=> " checked",
-			T2		=> "",
-			T3		=> "",
 			GEODB           => ($GEODB)?'1==1':'1>2',
 			GEOS		=> ($GEODB)?"visible":"hidden",
 			GEO1		=> ($GEODB)?"":"!--",
@@ -819,142 +816,52 @@ global $xajax,$GEODB,$BLZDB;
 			BLZ1		=> ($BLZDB)?"":"!--",
 			BLZ2		=> ($BLZDB)?"":"--",
 			employee => $_SESSION["loginCRM"],
-			Radio   => "&nbsp;alle<input type='radio' name='Typ' value='' checked>",
 			init	=> $_SESSION["employee"],
 			txid0 => "selected",
 			variablen => "" 
 			));
-		$t->set_block("fa1","TypListe","BlockT");
-		if ($kdtyp) foreach ($kdtyp as $row) {
-			$t->set_var(array(
-				Bid => $row["id"],
-				Bsel => '', //($row["id"]==$daten["business_id"])?"selected":"",
-				Btype => $row["description"]
-			));
-			$t->parse("BlockT","TypListe",true);
-		}
-		if ($typ=="C") {
-            $lead=getLeads();
-            $t->set_block("fa1","LeadListe","BlockL");
-            if ($lead) foreach ($lead as $row) {
-                    $t->set_var(array(
-                            Lid => $row["id"],
-                            Lsel => ($row["id"]==$daten["lead"])?"selected":"",
-                            Lead => $row["lead"],
-                    ));
-                    $t->parse("BlockL","LeadListe",true);
-            }
-        }
-        $t->set_block("fa1","sonder","BlockF");
+        $cp_sonder = getSonder(False);
+        $t->set_block("fa1","SonderFlag","BlockSF");
         if ($cp_sonder) foreach ($cp_sonder as $row) {
             $t->set_var(array(
-                sonder_id => $row["svalue"],
-                sonder_key => $row["skey"]
+                SFid => $row["svalue"],
+                SFsel => '',
+                SFtext => $row["skey"]
             ));
-            $t->parse("BlockF","sonder",true);
+            $t->parse("BlockSF","SonderFlag",true);
         }
-
+        $lang = getLanguage();
+        doBlock($t,"fa1","LAnguage","LA",$lang,"id","description",false);
+		$kdtyp=getBusiness();
+        doBlock($t,"fa1","TypListe","BT",$kdtyp,"id","description",false);
 		$anreden=getAnreden();
-		$t->set_block("fa1","anreden","BlockA");
-		if ($anreden) foreach ($anreden as $anrede) {
-			$t->set_var(array(
-				ANREDE	=> $anrede["greeting"],
-				ASEL	=> ($anrede["greeting"]==$daten["greeting"])?"selected":"",
-			));
-			$t->parse("BlockA","anreden",true);
-		}
+        doBlock($t,"fa1","anreden","A",$anreden,"greeting","greeting",$daten["greeting"]);
 		$payment=getPayment();
-		$t->set_block("fa1","payment","BlockP");
-		if ($payment) foreach ($payment as $pt) {
-			$t->set_var(array(
-				PAYMENT	=> $pt["description"],
-				Pid 	=> $pt["id"],
-				PSEL	=> ($pt["id"]==$daten["payment_id"])?"selected":"",
-			));
-			$t->parse("BlockP","payment",true);
-		}
+        doBlock($t,"fa1","payment","P",$payment,"id","description",$daten["payment_id"]);
 		$branchen=getBranchen();
-		$t->set_block("fa1","branchen","BlockR");
-		if ($branchen) foreach ($branchen as $branche) {
-			$t->set_var(array(
-				BRANCHE	=> $anrede["branche"],
-				BSEL	=> ($anrede["branche"]==$daten["branche"])?"selected":"",
-			));
-			$t->parse("BlockR","anchen",true);
-		}
+        doBlock($t,"fa1","branchen","BR",$branchen,"branche","branche",$daten["branche"]);
+		$lead=getLeads();
+        doBlock($t,"fa1","LeadListe","LL",$lead,"id","lead",$daten["lead"]);
 		if (!$suchmaske) {
-      if (isset($daten["id"])){		//beim Neuanlegen nicht überprüfen ...
-        $shiptos=getAllShipto($daten["id"],$tpl);
-      }
-			$t->set_block("fa1","shiptos","BlockST");
-			if ($shiptos) foreach ($shiptos as $ship) {
-				$t->set_var(array(
-					SHIPTO  => $ship["shiptoname"]." ".$ship["shiptodepartment_1"],
-					SHIPID  => $ship["shipto_id"],
-				));
-				$t->parse("BlockST","shiptos",true);
-			}
+            doBlock($t,"fa1","shiptos","ST",$shiptos,"shipto_id",array("shiptoname","shiptodepartment_1"),false);
 		}
-		$bundesland=getBundesland(strtoupper($daten["country"]));
-		$t->set_block("fa1","buland","BlockB");
-                if ($bundesland) foreach ($bundesland as $bland) {
-                        $t->set_var(array(
-                                BUVAL => $bland["id"],
-                                BUTXT => $bland["bundesland"],
-                                BUSEL => ($bland["id"]==$daten["bland"])?"selected":""
-                        ));
-                        $t->parse("BlockB","buland",true);
-                }
+		$bundesland=getBundesland(false);
+        doBlock($t,"fa1","buland","BL",$bundesland,"id","bundesland",$daten["bland"]);
 		if (!$suchmaske) {
-			$bundesland=getBundesland(strtoupper($daten["shiptocountry"]));
-			$t->set_block("fa1","buland2","BlockBS");
-			if ($bundesland) foreach ($bundesland as $bland) {
-				$t->set_var(array(
-					SBUVAL => $bland["id"],
-					SBUTXT => $bland["bundesland"],
-					SBUSEL => ($bland["id"]==$daten["shiptobland"])?"selected":""
-				));
-				$t->parse("BlockBS","buland2",true);
-			}
+            doBlock($t,"fa1","buland2","BS",$bundesland,"id","bundesland",$daten["shiptobland"]);
 			$employees=getAllUser(array(0=>true,1=>"%"));
-			$t->set_block("fa1","SalesmanListe","BlockBV");
-			if ($employees) foreach ($employees as $vk) {
-				$t->set_var(array(
-					salesmanid => $vk["id"],
-					Salesman => $vk["name"],
-					Ssel => ($vk["id"]==$daten["salesman_id"])?"selected":""
-				));
-				$t->parse("BlockBV","SalesmanListe",true);
-			}
-                }
-		$t->set_block("fa1","LeadListe","BlockL");
-		if ($lead) foreach ($lead as $row) {
-			$t->set_var(array(
-				Lid => $row["id"],
-				Lsel => ($row["id"]==$daten["lead"])?"selected":"",
-				Lead => $row["lead"]
-			));
-			$t->parse("BlockL","LeadListe",true);
-		}
-		$t->set_block("fa1","OwenerListe","Block");
-		$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>"public");
-		$first[]=array("grpid"=>$_SESSION["loginCRM"],"rechte"=>"w","grpname"=>"private");
+            doBlock($t,"fa1","SalesmanListe","SM",$employees,"id","name",$daten["salesman_id"]);
+        }
+		$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>".:public:.");
+		$first[]=array("grpid"=>$_SESSION["loginCRM"],"rechte"=>"w","grpname"=>".:personal:.");
 		$tmp=getGruppen();
 		if ($tmp) { $user=array_merge($first,$tmp); }
 		else { $user=$first; };
-		if ($user) foreach($user as $zeile) {
-			$t->set_var(array(
-				grpid => $zeile["grpid"],
-				Gsel => "",
-				Gname => $zeile["grpname"],
-			));
-			$t->parse("Block","OwenerListe",true);
-		}
+        doBlock($t,"fa1","OwenerListe","OL",$user,"grpid","grpname",false);
 } // leertpl
 
 function vartpl (&$t,$daten,$typ,$msg,$btn1,$btn2,$tpl,$suchmaske=false) {
 global $xajax,$GEODB,$BLZDB;
-        $cp_sonder = getSonder(False);
 		if ($daten["grafik"]) {
 			if ($typ=="C") { $DIR="C".$daten["customernumber"]; }
 			else { $DIR="V".$daten["vendornumber"]; };
@@ -964,9 +871,8 @@ global $xajax,$GEODB,$BLZDB;
 				$Image="Bild ($DIR/logo.".$daten["grafik"].") nicht<br>im Verzeichnis";
 			}
 		}
-		$kdtyp=getBusiness();
 		if (!$suchmaske) $tmp=getVariablen($daten["id"]);
-		$varablen=($tmp>0)?"$tmp Variablen":"";
+		$varablen=($tmp>0)?count($tmp)." Variablen":"";
 		$t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
 		$t->set_var(array(
 				AJAXJS	=> $xajax->printJavascript(XajaxPath),
@@ -1015,24 +921,8 @@ global $xajax,$GEODB,$BLZDB;
 				kreditlim	=> $daten["creditlimit"],
 				op		=> $daten["op"],
 				preisgrp	=> $daten["preisgroup"],
-			/*	shipto_id	=> $daten["shipto_id"],
-				shiptoname	=> $daten["shiptoname"],
-				shiptodepartment_1	=> $daten["shiptodepartment_1"],
-				shiptodepartment_2	=> $daten["shiptodepartment_2"],
-				shiptostreet	=> $daten["shiptostreet"],
-				shiptocountry	=> $daten["shiptocountry"],
-				shiptozipcode	=> $daten["shiptozipcode"],
-				shiptocity	=> $daten["shiptocity"],
-				shiptophone	=> $daten["shiptophone"],
-				shiptofax	=> $daten["shiptofax"],
-				shiptoemail	=> $daten["shiptoemail"],
-				shiptocontact	=> $daten["shiptocontact"], */
 				IMG		=> $Image,
 				grafik	=> $daten["grafik"],
-				Radio 	=> "",
-				T1	=> ($daten["typ"]=="1")?"checked":"",
-				T2	=> ($daten["typ"]=="2")?"checked":"",
-				T3	=> ($daten["typ"]=="3")?"checked":"",
 				init	=> ($daten["employee"])?$daten["employee"]:"ERP ".$daten["modemployee"],
 				login	=> $_SESSION{"login"},
 				employee => $_SESSION["loginCRM"],
@@ -1046,137 +936,58 @@ global $xajax,$GEODB,$BLZDB;
 				BLZ2		=> ($BLZDB)?"":"--",
 				variablen => $varablen
 		));
-		$t->set_block("fa1","TypListe","BlockT");
-		if ($kdtyp) foreach ($kdtyp as $row) {
-			$t->set_var(array(
-				Bid => $row["id"],
-				Bsel => ($row["id"]==$daten["business_id"])?"selected":"",
-				Btype => $row["description"],
-			));
-			$t->parse("BlockT","TypListe",true);
-		}
-		if ($typ=="C") {
-			$lead=getLeads();
-			$t->set_block("fa1","LeadListe","BlockL");
-			if ($lead) foreach ($lead as $row) {
-				$t->set_var(array(
-					Lid => $row["id"],
-					Lsel => ($row["id"]==$daten["lead"])?"selected":"",
-					Lead => $row["lead"],
-				));
-				$t->parse("BlockL","LeadListe",true);
-			}
-		}
-        $t->set_block("fa1","sonder","BlockF");
+        $cp_sonder = getSonder(False);
+        $t->set_block("fa1","SonderFlag","BlockSF");
         if ($cp_sonder) foreach ($cp_sonder as $row) {
             $t->set_var(array(
-                sonder_sel => ($daten["sonder"] & $row["svalue"])?"checked":"",
-                sonder_id => $row["svalue"],
-                sonder_key => $row["skey"]
+                SFsel => ($daten["sonder"] & $row["svalue"])?"checked":"",
+                SFid => $row["svalue"],
+                SFtext => $row["skey"]
             ));
-            $t->parse("BlockF","sonder",true);
+            $t->parse("BlockSF","SonderFlag",true);
         }
+        $lang = getLanguage();
+        doBlock($t,"fa1","LAnguage","LA",$lang,"id","description",$daten["language_id"]);
+		$kdtyp=getBusiness();
+        doBlock($t,"fa1","TypListe","BT",$kdtyp,"id","description",$daten["business_id"]);
+		$lead=getLeads();
+        doBlock($t,"fa1","LeadListe","LL",$lead,"id","lead",$daten["lead"]);
         $shiptos=getAllShipto($daten["id"],$typ);
-		$t->set_block("fa1","shiptos","BlockS");
-		if ($shiptos) foreach ($shiptos as $ship) {
-			$t->set_var(array(
-                SHIPID  => $ship["shipto_id"],
-                SHIPTO  => $ship["shiptoname"].", ".$ship["shiptostreet"].", ".$ship["shiptocity"]
-			));
-			$t->parse("BlockS","shiptos",true);
-		}
+        doBlock($t,"fa1","shiptos","ST",$shiptos,"shipto_id",array("shiptoname","shiptostreet","shiptocity"),false);
 		$anreden=getAnreden();
-		$t->set_block("fa1","anreden","BlockA");
-		if ($anreden) foreach ($anreden as $anrede) {
-			$t->set_var(array(
-				ANREDE	=> $anrede["greeting"],
-				ASEL	=> ($anrede["greeting"]==$daten["greeting"])?"selected":"",
-			));
-			$t->parse("BlockA","anreden",true);
-		}
+        doBlock($t,"fa1","anreden","A",$anreden,"greeting","greeting",$daten["greeting"]);
 		$payment=getPayment();
-		$t->set_block("fa1","payment","BlockP");
-		if ($payment) foreach ($payment as $pt) {
-			$t->set_var(array(
-				PAYMENT	=> $pt["description"],
-				Pid 	=> $pt["id"],
-				PSEL	=> ($pt["id"]==$daten["payment_id"])?"selected":"",
-			));
-			$t->parse("BlockP","payment",true);
-		}
+        doBlock($t,"fa1","payment","P",$payment,"id","description",$daten["payment_id"]);
 		$branchen=getBranchen();
-		$t->set_block("fa1","branchen","BlockR");
-		if ($branchen) foreach ($branchen as $branche) {
-			$t->set_var(array(
-				BRANCHE	=> $branche["branche"],
-				BSEL	=> ($branche["branche"]==$daten["branche"])?"selected":"",
-			));
-			$t->parse("BlockR","branchen",true);
-		}
+        doBlock($t,"fa1","branchen","BR",$branchen,"branche","branche",$daten["branche"]);
 		$bundesland=getBundesland(strtoupper($daten["country"]));
-		$t->set_block("fa1","buland","BlockB");
-		if ($bundesland) foreach ($bundesland as $bland) {
-			$t->set_var(array(
-				BUVAL => $bland["id"],
-				BUTXT => $bland["bundesland"],
-				BUSEL => ($bland["id"]==$daten["bland"])?"selected":""
-			));
-			$t->parse("BlockB","buland",true);
-		}
+        doBlock($t,"fa1","buland","BL",$bundesland,"id","bundesland",$daten["bland"]);
 		if (!$suchmaske) {
 			$bundesland=getBundesland(strtoupper($daten["shiptocountry"]));
-			$t->set_block("fa1","buland2","BlockBS");
-			if ($bundesland) foreach ($bundesland as $bland) {
-				$t->set_var(array(
-					SBUVAL => $bland["id"],
-					SBUTXT => $bland["bundesland"],
-					SBUSEL => ($bland["id"]==$daten["shiptobland"])?"selected":""
-				));
-				$t->parse("BlockBS","buland2",true);
-			}
+            doBlock($t,"fa1","buland2","BS",$bundesland,"id","bundesland",$daten["shiptobland"]);
 			$employees=getAllUser(array(0=>true,1=>"%"));
-			$t->set_block("fa1","SalesmanListe","BlockBV");
-			if ($employees) foreach ($employees as $vk) {
-				$t->set_var(array(
-					salesmanid => $vk["id"],
-					Salesman => $vk["name"],
-					Ssel => ($vk["id"]==$daten["salesman_id"])?"selected":""
-				));
-				$t->parse("BlockBV","SalesmanListe",true);
-			}
+            doBlock($t,"fa1","SalesmanListe","SM",$employees,"id","name",$daten["salesman_id"]);
             /* Check if the user is allowed to change the access group - Behaviour changed by DO: 
                 Let (all) users change the group if none is set yet */
 			if (!isset($daten["employee"]) || $daten["employee"]==$_SESSION["loginCRM"] || $daten["modemployee"]==$_SESSION["loginCRM"] ) {
-					$t->set_block("fa1","OwenerListe","Block");
-					$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>"Alle");
+					$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>".:public:.");
 					$first[]=array("grpid"=>$_SESSION["loginCRM"],"rechte"=>"w","grpname"=>".:personal:.");
 					$grps=getGruppen();
 					if ($grps) {
-						$user=array_merge($first,getGruppen());
+						$user=array_merge($first,$grps);
 					} else {
 						$user=$first;
-					}
-					$selectOwen=$daten["owener"];
-					if ($user) foreach($user as $zeile) {
-						if ($zeile["grpid"]==$selectOwen) {
-							$sel="selected";
-						} else {
-							$sel="";
-						}
-						$t->set_var(array(
-							grpid => $zeile["grpid"],
-							Gsel => $sel,
-							Gname => $zeile["grpname"],
-						));
-						$t->parse("Block","OwenerListe",true);
-					}
-				} else {
-					$t->set_var(array(
+					};
+                    doBlock($t,"fa1","OwenerListe","OL",$user,"grpid","grpname",$daten["owener"]);
+			} else {
+                    $user[0] = array("grpid"=>$daten["owener"],"grpname"=>($daten["owener"])?getOneGrp($daten["owener"]):".:public:.");
+                    doBlock($t,"fa1","OwenerListe","OL",$user,"grpid","grpname",$daten["owener"]);
+					/*$t->set_var(array(
 						grpid => $daten["owener"],
 						Gsel => "selected",
 						Gname => ($daten["owener"])?getOneGrp($daten["owener"]):".:public:.",
 					));
-					$t->parse("Block","OwenerListe",true);
+					$t->parse("Block","OwenerListe",true);*/
 			}
 		} //if (!$suchmaske)
 } // vartpl

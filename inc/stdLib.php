@@ -766,5 +766,47 @@ function saveSonderFlag($data) {
 
 }
 
+/**
+ * TODO: Listen in Templates füllen.
+ *
+ * @param object $t Template
+ * @param string $tpl Templatename
+ * @param string $pre Platzhalter / Blockname
+ * @param array  $data Daten
+ * @param string $id  Spaltenname für ID
+ * @param string $text  Spaltenname für Text
+ *
+ * @return void
+ */
+function  doBlock(&$t,$tpl,$liste,$pre,$data,$id,$text,$selid) {
+        $t->set_block($tpl,$liste,'Block'.$pre);
+        if ($data) foreach ($data as $row) {
+            if (is_array($text)) {
+                $textval = '';
+                foreach ($text as $txt) {
+                    $textval .= $row[$txt]." ";
+                }
+            } else {
+                $textval =  $row[$text];
+            }
+            $x[$pre.'id']   = $row[$id];
+            $x[$pre.'text'] = $textval;
+            if ($selid) $x[$pre.'sel']  =  ($row[$id]==$selid)?"selected":"";
+            $t->set_var($x);
+            $t->parse('Block'.$pre,$liste,true);
+        }
+}
+
+/**
+ * TODO: short description.
+ * 
+ * @return TODO
+ */
+function getLanguage() {
+    global $db;
+    $sql = "select id,description from language";
+    return $db->getAll($sql);
+}
+
 require_once "login".$_SESSION["loginok"].".php";
 ?>

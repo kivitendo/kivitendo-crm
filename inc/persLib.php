@@ -429,7 +429,6 @@ function leertplP (&$t,$fid,$msg,$tab,$suche=false,$Quelle="") {
 global $laender;
 //cp_greeting raus hli
 //Sonderflag aus DB hli
-        $cp_sonder = getSonder(False);
 		if ($fid && $Quelle) {
 			$fa=getFirmenstamm($fid,false,$Quelle);
 			$nummer=($Quelle=="C")?$fa["customernumber"]:$fa["vendornumber"];
@@ -487,58 +486,31 @@ global $laender;
 			IMG_	=> "",
 			employee => $_SESSION["loginCRM"],
 			init    => $_SESSION["employee"]
-			));
-			$t->set_block("pers1","OwenerListe","Block2");
-			$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>"Alle");
-			$first[]=array("grpid"=>$daten["OwenID"],"rechte"=>"w","grpname"=>"Pers&ouml;nlich");
-			$tmp=getGruppen();
-	                if ($tmp) { $user=array_merge($first,$tmp); }
-        	        else { $user=$first; };
-			$selectOwen=1;
-			if ($user) foreach($user as $zeile) {
-				if ($zeile["grpid"]==$selectOwen) {
-					$sel="selected";
-				} else {
-					$sel="";
-				}
-				$t->set_var(array(
-					grpid => $zeile["grpid"],
-					Gsel => $sel,
-					Gname => $zeile["grpname"],
-				));
-				$t->parse("Block2","OwenerListe",true);
-			}		
-			$anreden=getCpBriefAnreden();
-			$t->set_block("pers1","briefanred","BlockB");
-			if ($anreden) foreach ($anreden as $anrede) {
-				$t->set_var(array(
-					BRIEFAN	=> $anrede["cp_salutation"],
-					BSEL	=> ($anrede["cp_salutation"]==$daten["cp_salutation"])?"selected":"",
-				));
-				$t->parse("BlockB","briefanred",true);
-			}
-			$t->set_block("pers1","sonder","Block3");
-            if ($cp_sonder) foreach ($cp_sonder as $row) {
-                $t->set_var(array(
-                    sonder_id => $row["svalue"],
-                    sonder_key => $row["skey"],
-                ));
-				$t->parse("Block3","sonder",true);
-			}
-		 $t->set_block("pers1","countries","Block4");
-		 if ($_SESSION["countries"]) foreach ($_SESSION["countries"] as $row) {
-				 $t->set_var(array(
-					country => $row,
-					));
-					$t->parse("Block4","countries",true);
-			}
+		));
+		$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>".:public:.");
+		$first[]=array("grpid"=>$daten["cp_employee"],"rechte"=>"w","grpname"=>".:personal:.");
+		$grp=getGruppen();
+		if ($grp) {	$user=array_merge($first,$grp); }
+		else { $user=$first; };
+        doBlock($t,"pers1","OwenerListe","OL",$user,"grpid","grpname","1");
+		$anreden=getCpBriefAnreden();
+        doBlock($t,"pers1","briefanred","BA",$anreden,"cp_salutation","cp_salutation",$daten["cp_salutation"]); 
+        $cp_sonder = getSonder(False);
+		$t->set_block("pers1","SonderFlag","BlockSF");
+        if ($cp_sonder) foreach ($cp_sonder as $row) {
+            $t->set_var(array(
+                SFid => $row["svalue"],
+                SFsel => '',
+                SFtext => $row["skey"],
+            ));
+			$t->parse("BlockSF","sonder",true);
+		}
 }
 
 function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
 	global $laender;
 //cp_greeting raus hli
 //Sonderflag aus DB hli
-        $cp_sonder = getSonder(False);
 		if ($daten["cp_cv_id"] && $daten["Quelle"]) {
 			$fa=getFirmenstamm($daten["cp_cv_id"],false,$daten["Quelle"]);
 			$nummer=($daten["Quelle"]=="C")?$fa["customernumber"]:$fa["vendornumber"];
@@ -609,61 +581,34 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
 			visitenkarte	=> $VCARD,
 			init    => ($daten["cp_employee"])?$daten["cp_employee"]:"ERP",
 			employee => $_SESSION["loginCRM"]
-			));
-			$t->set_block("pers1","OwenerListe","Block2");
-			if ($daten["cp_employee"]==$_SESSION["loginCRM"]) {
-				$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>"Alle");
-				$first[]=array("grpid"=>$daten["cp_employee"],"rechte"=>"w","grpname"=>"Pers&ouml;nlich");
-				$grp=getGruppen();
-				if ($grp) {	$user=array_merge($first,$grp); }
-				else { $user=$first; };
-				$selectOwen=$daten["cp_owener"];
-				if ($user) foreach($user as $zeile) {
-					if ($zeile["grpid"]==$selectOwen) {
-						$sel="selected";
-					} else {
-						$sel="";
-					}
-					$t->set_var(array(
-						grpid => $zeile["grpid"],
-						Gsel => $sel,
-						Gname => $zeile["grpname"],
-					));
-					$t->parse("Block2","OwenerListe",true);
-				}
-			} else {
-				$t->set_var(array(
-					grpid => $daten["cp_owener"],
-					Gsel => "selected",
-					Gname => ($daten["cp_owener"])?getOneGrp($daten["cp_owener"]):"&ouml;ffentlich",
-				));
-				$t->parse("Block2","OwenerListe",true);
-			}
-			$anreden=getCpBriefAnreden();
-			$t->set_block("pers1","briefanred","BlockB");
-			if ($anreden) foreach ($anreden as $anrede) {
-				$t->set_var(array(
-					BRIEFAN	=> $anrede["cp_salutation"],
-					BSEL	=> ($anrede["cp_salutation"]==$daten["cp_salutation"])?"selected":"",
-				));
-				$t->parse("BlockB","briefanred",true);
-			}
-      $t->set_block("pers1","sonder","Block3");
-      if ($cp_sonder) foreach ($cp_sonder as $row) {
-			$t->set_var(array(
-			  sonder_sel => ($daten["cp_sonder"] & $row["svalue"])?"checked":"",
-              sonder_id => $row["svalue"],
-              sonder_key => $row["skey"],
-          ));
-					$t->parse("Block3","sonder",true);
-			}
-		 $t->set_block("pers1","countries","Block4");
-		if ($_SESSION["countries"]) foreach ($_SESSION["countries"] as $row) {
-			$t->set_var(array(
-				country_sel => ($daten["country"] == $row) ? "selected":"",
-				country => $row,
-			));
-					$t->parse("Block4","countries",true);
-			}
+		));
+		if ($daten["cp_employee"]==$_SESSION["loginCRM"]) {
+			$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>".:public:.");
+			$first[]=array("grpid"=>$daten["cp_employee"],"rechte"=>"w","grpname"=>".:personal:.");
+			$grp=getGruppen();
+			if ($grp) {	$user=array_merge($first,$grp); }
+			else { $user=$first; };
+            doBlock($t,"pers1","OwenerListe","OL",$user,"grpid","grpname",$daten["cp_owener"]);
+		} else {
+            $user[0] = array("grpid"=>$daten["cp_owener"],"grpname"=>($daten["cp_owener"])?getOneGrp($daten["cp_owener"]):".:public:.");
+            doBlock($t,"pers1","OwenerListe","OL",$user,"grpid","grpname",$daten["cp_owener"]);
+			/*$t->set_var(array(
+				grpid => $daten["cp_owener"],
+				Gsel => "selected",
+				Gname => ($daten["cp_owener"])?getOneGrp($daten["cp_owener"]):"&ouml;ffentlich",
+			));*/
+		}
+		$anreden=getCpBriefAnreden();
+        doBlock($t,"pers1","briefanred","BA",$anreden,"cp_salutation","cp_salutation",$daten["cp_salutation"]); 
+        $cp_sonder = getSonder(False);
+        $t->set_block("pers1","SonderFlag","Block3");
+        if ($cp_sonder) foreach ($cp_sonder as $row) {
+            $t->set_var(array(
+                SFsel  => ($daten["cp_sonder"] & $row["svalue"])?"checked":"",
+                SFid   => $row["svalue"],
+                SFtext => $row["skey"],
+            ));
+            $t->parse("Block3","SonderFlag",true);
+	    }    
 }
 ?>

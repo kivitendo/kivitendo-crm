@@ -123,6 +123,7 @@
 			op		=> ($fa["op"]>0)?sprintf("<span class='op'>%0.2f</span>",$fa["op"]):"0.00",
 			oa		=> ($fa["oa"]>0)?sprintf("<span class='oa'>%0.2f</span>",$fa["oa"]):"0.00",
 			preisgrp	=> $fa["pricegroup"],
+            language    => $fa["language"],
 			Sshipto_id	=> ($fa["shipto_id"]>0)?$fa["shipto_id"]:"",
 			Sname1		=> $fa["shiptoname"],
 			Sdepartment_1	=> $fa["shiptodepartment_1"],

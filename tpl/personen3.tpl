@@ -68,7 +68,7 @@
 		<span class="feld"><select name="cp_salutation" tabindex="3" style="width:15em;">
 					<option value="">
 <!-- BEGIN briefanred -->
-					<option value="{BRIEFAN}" {BSEL}>{BRIEFAN}
+					<option value="{BAid}" {BAsel}>{BAtext}
 <!-- END briefanred -->
 				</select></span>
 		<span class="label klein">2</span>
@@ -172,9 +172,9 @@
 		</div>
 	</span><span style="float:left;">
 		<!--div class="zeile2"-->.:sflag:.:
-	<!-- BEGIN sonder -->
-			<div class="zeile2"><input type="checkbox" name="cp_sonder[]" value="{sonder_id}" {sonder_sel}>{sonder_key}</div>
-	<!-- END sonder -->					
+	<!-- BEGIN SonderFlag -->
+			<div class="zeile2"><input type="checkbox" name="cp_sonder[]" value="{SFid}" {SFsel}>{SFtext}</div>
+	<!-- END SonderFlag -->					
 		<!--/div-->
 			<span class="label">{IMG}{IMG_}<br>
 			{visitenkarte}</span>
@@ -186,7 +186,7 @@
 	<input type="submit" class="clear" name="reset" value=".:clear:." tabindex="29"> <input type="button" name="" value="VCard" onClick="vcard()" tabindex="30">
 	<span class="klein">.:authority:.</span> <select name="cp_owener"  tabindex="31"> 
 <!-- BEGIN OwenerListe -->
-		<option value="{grpid}" {Gsel}>{Gname}</option>
+		<option value="{OLid}" {OLsel}>{OLtext}</option>
 <!-- END OwenerListe -->
 	</select> {init}
 </span>

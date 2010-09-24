@@ -1,6 +1,5 @@
 <?php
 session_start();
-echo "<html><head>\n";
 include("inc/stdLib.php");
 if ($_POST) {
 	require_once("documents.php");
@@ -24,15 +23,19 @@ if ($_POST) {
 	</script>
 <?php  }; 
 } ?>
-<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
-<head><body class="klein" style="padding:0em; margin:0em;">
-<table width="100%" class="klein lg">
-	<tr style="border-bottom:1px solid black;"><td><?php echo  translate('.:uploadDocument:.','firma') ?></td><td align="right"><a href="javascript:top.main_window.newFile('left')">(X)</a></td></tr>
+<html><head>
+<title></title>
+    <link type="text/css" REL="stylesheet" HREF="../css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
+</head>
+<body class="klein" style="padding:0em; margin:0em;">
+<table width="100%" class="klein">
+	<tr class="dochead"><td><?php echo  translate('.:uploadDocument:.','firma') ?></td><td align="right"><a href="javascript:top.main_window.newFile('left')">(X)</a></td></tr>
 </table>
 <form name="iform" action="upload.php?fid=<?php echo  $_GET["fid"] ?>&pid=<?php echo  $_GET["pid"] ?>" method="post" enctype="multipart/form-data">
 <input id="upldpath" name="pfad" type="hidden">
 <br>
-&nbsp;<textarea name="descript" id="caption" cols="37" rows="3"></textarea><br>
+&nbsp;<textarea name="descript" class="normal" id="caption" cols="35" rows="3"></textarea><br>
 &nbsp;<?php echo  translate('.:Remarks:.','firma') ?><br>
 &nbsp;<input id="Datei" type="file" name="Datei" size="19"><br>
 &nbsp;<?php echo  translate('.:Filename:.','firma') ?><br>

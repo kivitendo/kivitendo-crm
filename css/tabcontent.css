@@ -44,7 +44,6 @@ color: #2d2b2b;
 
 .shadetabs li.selected {
 background: white url(shadeactive.gif) top left repeat-x;
-#top: 1px;
 }
 
 .shadetabs li.selected a:hover {
@@ -96,7 +95,6 @@ color: #2d2b2b;
 
 .subshadetabs li.selected {
 background: white url(shadeactive.gif) top left repeat-x;
-#position: relative;
 top: -2px;
 }
 

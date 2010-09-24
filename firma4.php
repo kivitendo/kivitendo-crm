@@ -9,10 +9,6 @@
 	$fid=($_GET["fid"])?$_GET["fid"]:$_POST["fid"];
 	$pid=($_GET["pid"])?$_GET["pid"]:$_POST["pid"];
 	$Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
-	if ($_POST["sichern"]) {
-		$id=($pid)?$pid:$fid;
-		saveDokument($_FILES,$_POST["caption"],date("Y-m-d"),$id,$_SESSION["loginCRM"]);
-	}
 	if (!empty($fid)) {
 		$fa=getFirmenStamm($fid,true,$Q);
 		if (!empty($pid)){

@@ -1,4 +1,4 @@
-
+body { font-size: 1.0em; }
 #wdbfile  A {
     color: #22a;
 }
@@ -23,7 +23,7 @@ tr.calls1:hover	{ background-color:#ff0000; }
 tr.calls0:hover	{ background-color:#ff0000; }
 
 .normal {
-    font-size: 1em;
+    font-size: 1.0em;
 	font-weight: normal;
 }
 .gross { font-size: 1.2em; }
@@ -152,3 +152,16 @@ input:focus {
 .clear {
 	background-color: #55cc55;
 }
+.docfrm {
+    background-image: url("fade2.png"); background-repeat:repeat-x;
+    height:25em; 
+    width:35em;
+    border:3px solid black; 
+    vertical-align:top;
+}
+.dochead {
+    border-bottom:1px solid black;
+    background-color: rgb(236,233,216);
+    vertical-align:bottom;
+}
+

@@ -151,6 +151,7 @@
 <head><title></title>
     <link type="text/css" REL="stylesheet" HREF="../css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
     <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
+</head>
 <body>
 <form name='form' method='post' action='showAdr.php'>
 <input type="hidden" name="src" value="<?php echo  $dest ?>">

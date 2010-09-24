@@ -61,6 +61,14 @@
 		pfad=document.getElementById("docpfad").value;
 		komment=document.getElementById("docdescript").value;
 		id=	document.getElementById("docid").value;
+		wvdate = document.getElementById("wvdate").value;
+		wvid = document.getElementById("wvid").value;
+        if (document.firma4.pid.value!='') {
+            fid='P' + document.firma4.pid.value;
+        } else {
+            fid= document.firma4.Q.value + document.firma4.fid.value;
+        }
+		//xajax_saveAttribut(name,oldname,pfad,komment,wvdate,wvid,fid,id);
 		xajax_saveAttribut(name,oldname,pfad,komment,id);
 	}
 	var onL = false;
@@ -158,9 +166,9 @@
 <span style="position:absolute; left:1em; top:5.2em; width:99%; height:90%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <span style="float:left; width:40%; height:90%; text-align:center; padding:2px; border: 1px solid black; border-bottom: 0px;">
-	<div style="float:left; width:100%; height:4em; text-align:left; border-bottom: 1px solid black;" >
+	<div style="float:left; width:100%; height:4.5em; text-align:left; border-bottom: 1px solid black;" >
 	<table>
-	<tr><td class="fett">{Name}</td><td></td></tr>
+	<tr><td class="fett normal">{Name}</td><td></td></tr>
 	<tr><td class="fett">.:KdNr:.: {customernumber}</td><td>ID: {PID}</td></tr>
 	</table>
 	</div>
@@ -177,7 +185,7 @@
 </span>
 
 <span style="float:left; width:58%; height:90%; text-align:left; border: 1px solid black; border-bottom: 0px; padding:2px; border-left:0px;">
-	<div style="float:left; width:100%; height:4em; text-align:left; padding-top: 0; border-top: 0; border-bottom: 1px solid black;" class="fett">
+	<div style="float:left; width:100%; height:4.5em; text-align:left; padding-top: 0; border-top: 0; border-bottom: 1px solid black;" class="fett">
 	<table>
 	<tr><td>.:Templates:.:</td><td>
 	<select name="vorlage" id="vorlage" onChange="showD();" style="width:150px;">
@@ -207,44 +215,52 @@
 	    <span id="fbright"></span>
 	</div>
 </span>
-<div id="fixiert" style="visibility:hidden; position:absolute; left:5em; width:20em; height:6em; z-index:1; top:10em; 
-	text-align:center; border:3px solid black; background-image: url('css/fade.png');  " class="klein">
-	<table width="99%" class="klein lg">
-	<tr style="border-bottom:1px solid black;"><td>.:Create a new Directory:.</td><td align="right"><a href="javascript:newDir()">(X)</a></td></tr>
+
+<!-- Neues Verzeichnis  -->
+<div id="fixiert" style="visibility:hidden; position:absolute; left:5em; top:10em; z-index:1;" class="docfrm">
+	<table width="99%" class="klein">
+	<tr class="dochead"><td>.:Create a new Directory:.</td><td align="right"><a href="javascript:newDir()">(X)</a></td></tr>
+	<tr><td height="100%">&nbsp;</td></tr>
+	<tr><td class="ce"><input type="hidden" name="seite" id="seite">
+	<input type="text" name="subdir" id="subdir" size="26"> <input type="button" name="sdok" value=".:create:." onClick="mkDir();"></td></tr>
 	</table>
-	<br>
-	<input type="hidden" name="seite" id="seite">
-	<input type="text" name="subdir" id="subdir" size="20"> <input type="button" name="sdok" value=".:create:." onClick="mkDir();">
 </div>
-<div id="uploadfr" style="visibility:hidden; position:absolute; left:4em; z-index:1; top:10em; height:16em; width:20em; border:3px solid black; "  >
-                <iframe id="frupload" name="frupload" src="upload.php?fid={FID}&pid={PID}" frameborder="0" width="100%" height="100%"></iframe>
+
+<!-- Datei upload  -->
+<div id="uploadfr" style="visibility:hidden; position:absolute; left:4em; top:10em; z-index:1;" class="docfrm">
+    <iframe id="frupload" name="frupload" src="upload.php?fid={FID}&pid={PID}" frameborder="0" width="100%" height="100%"></iframe>
 </div>
-<div id="attribut" style="visibility:hidden; position:absolute; left:5em; z-index:1; top:10em; width:23em; 
-	text-align:center; border:3px solid black; background-image: url('css/fade.png');" class="klein" >
-	<table width="99%" class="klein lg">
-	<tr style="border-bottom:1px solid black;"><td>.:edit attribute:.</td><td align="right"><a href="javascript:editattribut()">(X)</a></td></tr>
+
+<!-- Dateiattribute ändern  -->
+<div id="attribut" style="visibility:hidden; position:absolute; left:5em; top:10em; z-index:1;" class="docfrm">
+	<table width="99%" class="klein">
+	<tr class="dochead"><td>.:edit attribute:.</td><td align="right"><a href="javascript:editattribut()">(X)</a></td></tr>
 	</table>
 	<input type="hidden" name="docid" id="docid" value="">
+	<input type="hidden" name="wvid" id="wvid" value="">
 	<input type="hidden" name="docoldname" id="docoldname" value="">
 	<input type="hidden" name="docpfad" id="docpfad" value="">
 	<center>
 	<table >
-	<tr><td class="klein"><textarea name="docdescript" id="docdescript" cols="34" rows="4"></textarea></td></tr>
+	<tr><td class="klein"><textarea name="docdescript" id="docdescript" cols="38" rows="4"></textarea></td></tr>
 	<tr><td class="mini">.:Description:.</td></tr>
 	<tr><td class="klein"><input type="text" name="docname" id="docname" size="35" value=""></td></tr>
 	<tr><td class="mini">.:Filename:.</td></tr>
+	<tr><td class="klein"><input type="text" name="iwvdate" id="wvdate" size="15" value=""></td></tr>
+	<!--tr><td class="mini">.:wvdate:.</td></tr-->
 	<tr><td class="re"><input type="button" name="saveAtr" value=".:save:." onClick="saveAttribut();"></td></tr>
 	</table>
 	</center>
 </div>
-<div id="fileDel" style="visibility:hidden; position:absolute; left:4em; z-index:1; top:10em; height:16em; width:23em; border:3px solid black; 
-	text-align:center;  background-image: url('css/fade.png');" class="klein" >
-	<table width="99%" class="klein lg">
-	<tr style="border-bottom:1px solid black;"><td>.:Delete a File:.</td><td align="right"><a href="javascript:deletefile()">(X)</a></td></tr>
+
+<!-- Datei löschen -->
+<div id="fileDel" style="visibility:hidden; position:absolute; left:4em; top:10em; z-index:1;" class="docfrm">
+	<table width="99%" class="klein">
+	<tr class="dochead"><td>.:Delete a File:.</td><td align="right"><a href="javascript:deletefile()">(X)</a></td></tr>
+	<tr><td height="100%">&nbsp;</td></tr>
+	<tr><td class="ce"><a href="javascript:filedelete();"><img src="image/eraser.png" border="0">.:Really:.</a></td></tr>
+	<tr><td class="ce"><a href="javascript:deletefile();"><img src="image/fileclose.png" border="0">.:Better not:.</a></td></tr>
 	</table>
-	<h4 id="delfilename"></h4>
-	<a href="javascript:filedelete();"><img src="image/eraser.png" border="0">.:Really:.</a><br \><br \>
-	<a href="javascript:deletefile();"><img src="image/fileclose.png" border="0">.:Better not:.</a>
 </div>
 	
 <!-- Hier endet die Karte ------------------------------------------->

@@ -195,26 +195,24 @@
 
 
 <!-- Neues Verzeichnis erstellen: -->
-<div id="fixiert" style="visibility:hidden; position:absolute; left:5em; width:20em; height:6em; z-index:1; top:10em; 
-	text-align:center; border:3px solid black; background-image: url('css/fade.png');  " class="klein">
-	<table width="99%" class="klein lg">
-	<tr style="border-bottom:1px solid black;"><td>.:Create a new Directory:.</td><td align="right"><a href="javascript:newDir()">(X)</a></td></tr>
-	</table>
-	<br>
-	<input type="hidden" name="seite" id="seite">
-	<input type="text" name="subdir" id="subdir" size="20"> <input type="button" name="sdok" value=".:create:." onClick="mkDir();">
+<div id="fixiert" style="visibility:hidden; position:absolute; left:5em; top:10em; z-index:1;" class="docfrm">
+    <table width="99%" class="klein">
+    <tr class="dochead"><td>.:Create a new Directory:.</td><td align="right"><a href="javascript:newDir()">(X)</a></td></tr>
+    <tr><td height="100%">&nbsp;</td></tr>
+    <tr><td class="ce"><input type="hidden" name="seite" id="seite">
+    <input type="text" name="subdir" id="subdir" size="26"> <input type="button" name="sdok" value=".:create:." onClick="mkDir();"></td></tr>
+    </table>
 </div>
 
 <!-- Eine Datei hochladen: -->
-<div id="uploadfr" style="visibility:hidden; position:absolute; left:4em; z-index:1; top:10em; height:16em; width:23em; border:3px solid black; "  >
+<div id="uploadfr" style="visibility:hidden; position:absolute; left:4em; top:10em; z-index:1;" class="docfrm">
     <iframe id="frupload" name="frupload" src="upload.php?fid=0&pid=0" frameborder="0" width="100%" height="100%"></iframe>
 </div>
 
 <!-- Attribute editieren: -->
-<div id="attribut" style="visibility:hidden; position:absolute; left:5em; z-index:1; top:10em; width:30em; 
-	text-align:center; border:3px solid black; background-image: url('css/fade.png');" class="klein" >
-	<table width="99%" class="klein lg">
-	<tr style="border-bottom:1px solid black;"><td>.:edit attribute:.</td><td align="right"><a href="javascript:editattribut()">(X)</a></td></tr>
+<div id="attribut" style="visibility:hidden; position:absolute; left:5em; top:10em; z-index:1;" class="docfrm">
+	<table width="99%" class="klein">
+	<tr class="dochead"><td>.:edit attribute:.</td><td align="right"><a href="javascript:editattribut()">(X)</a></td></tr>
 	</table>
 	<input type="hidden" name="docid" id="docid" value="">
 	<input type="hidden" name="docoldname" id="docoldname" value="">
@@ -231,14 +229,13 @@
 </div>
 
 <!-- Eine Datei löschen: -->
-<div id="fileDel" style="visibility:hidden; position:absolute; left:4em; z-index:1; top:10em; height:16em; width:23em; border:3px solid black; 
-	text-align:center;  background-image: url('css/fade.png');" class="klein" >
-	<table width="99%" class="klein lg">
-	<tr style="border-bottom:1px solid black;"><td>.:Delete a File:.</td><td align="right"><a href="javascript:deletefile()">(X)</a></td></tr>
-	</table>
-	<h4 id="delfilename"></h4>
-	<a href="javascript:filedelete();"><img src="image/eraser.png" border="0">.:Really:.</a><br \><br \>
-	<a href="javascript:deletefile();"><img src="image/fileclose.png" border="0">.:Better not:.</a>
+<div id="fileDel" style="visibility:hidden; position:absolute; left:4em; top:10em; z-index:1;" class="docfrm">
+    <table width="99%" class="klein">
+    <tr class="dochead"><td>.:Delete a File:.</td><td align="right"><a href="javascript:deletefile()">(X)</a></td></tr>
+    <tr><td height="100%">&nbsp;</td></tr>
+    <tr><td class="ce"><a href="javascript:filedelete();"><img src="image/eraser.png" border="0">.:Really:.</a></td></tr>
+    <tr><td class="ce"><a href="javascript:deletefile();"><img src="image/fileclose.png" border="0">.:Better not:.</a></td></tr>
+    </table>
 </div>
 	
 <!-- Hier endet die Karte ------------------------------------------->

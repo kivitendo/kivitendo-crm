@@ -61,8 +61,8 @@
 		pfad=document.getElementById("docpfad").value;
 		komment=document.getElementById("docdescript").value;
 		id=	document.getElementById("docid").value;
-		wvdate = document.getElementById("wvdate").value;
-		wvid = document.getElementById("wvid").value;
+		//wvdate = document.getElementById("wvdate").value;
+		//wvid = document.getElementById("wvid").value;
         if (document.firma4.pid.value!='') {
             fid='P' + document.firma4.pid.value;
         } else {
@@ -246,8 +246,8 @@
 	<tr><td class="mini">.:Description:.</td></tr>
 	<tr><td class="klein"><input type="text" name="docname" id="docname" size="35" value=""></td></tr>
 	<tr><td class="mini">.:Filename:.</td></tr>
-	<tr><td class="klein"><input type="text" name="iwvdate" id="wvdate" size="15" value=""></td></tr>
-	<!--tr><td class="mini">.:wvdate:.</td></tr-->
+	<!--tr><td class="klein"><input type="text" name="iwvdate" id="wvdate" size="15" value=""></td></tr>
+	<tr><td class="mini">.:wvdate:.</td></tr-->
 	<tr><td class="re"><input type="button" name="saveAtr" value=".:save:." onClick="saveAttribut();"></td></tr>
 	</table>
 	</center>

@@ -349,6 +349,7 @@
         $objResponse->script("showFile('left','$file')");
         return $objResponse;
     };
+    //function saveAttribut($name,$oldname,$pfad,$komment,$wvdate=false,$wvid=0,$faid=0,$id=0) {
     function saveAttribut($name,$oldname,$pfad,$komment,$id=0) {
         $dbfile=new document();
         if ($id>0) {
@@ -374,6 +375,18 @@
         $rc=$dbfile->saveDocument();
         $objResponse = new xajaxResponse();
         if ($rc) {
+            /*if (validDate($wvdate)) {
+                $data["DateiID"]=$dbfile->id;
+                $data["Finish"]=$wvdate;
+                $data["LangTxt"]=$komment;
+                $data["Cause"]=$name;
+                $data["Kontakt"]='D';
+                $data["cp_cv_id"]=$faid;
+                $data["WVLID"]=$wvid;
+                $data["status"]='1';
+                if ($wvid>0) { $ok=updWvl($data,false); }
+                else { $ok=insWvl($data,false); };
+            }*/
             //$objResponse->script("dateibaum('left','$pfad');showFile('left','$name');editattribut();");
             $objResponse->script("dateibaum('left','$pfad')");
             $objResponse->script("showFile('left','$oldname')");

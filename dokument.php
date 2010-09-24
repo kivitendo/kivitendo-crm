@@ -3,9 +3,6 @@
 	include("inc/template.inc");
 	include("inc/crmLib.php");
 	require("firmacommon".XajaxVer.".php");
-	if ($_POST["sichern"]) {
-		saveDokument($_FILES,$_POST["caption"],date("Y-m-d"),$id,$_SESSION["loginCRM"]);
-	}
     $pickup = "false";
     if ($_GET["P"]=="1") $pickup = "true";
 	$files=liesdir($_SESSION["mansel"]);

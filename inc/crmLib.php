@@ -310,6 +310,18 @@ global $db;
 *****************************************************/
 function insCall($data,$datei) {
 global $db;
+    /*if ($data["wvldate"]) {
+        $wv["LangTxt"]=$data["c_cause"];
+        $wv["Cause"]=$data["cause"];
+        $wv["cp_cv_id"]=$data["Q"].$data["CID"];
+        //$wv["DateiID"]=$dateiID;
+        $wv["kontakt"]=$data["Kontakt"];
+        $wv["status"]="1";
+        $wv["CRMUSER"]=$data["CRMUSER"];
+        $wv["Finish"]=$data["wvldate"];
+        $id=insWvl($wv,$datei,true);
+        return $id;
+    }*/
 	$data['Datum']=date2db($data['Datum']);
 	$id=mknewTelCall();
 	$dateiID=0;
@@ -323,11 +335,8 @@ global $db;
 	$anz=($datei["Datei"]["name"][0]<>"")?count($datei["Datei"]["name"]):0;
 	for ($o=0; $o<$anz; $o++) {
 		if ($datei["Datei"]["name"][$o]<>"") {
-			$dat["Datei"]["name"]=$datei["Datei"]["name"][$o];
-			$dat["Datei"]["tmp_name"]=$datei["Datei"]["tmp_name"][$o];
-			$dat["Datei"]["type"]=$datei["Datei"]["type"][$o];
-			$dat["Datei"]["size"]=$datei["Datei"]["size"][$o];
 			$text=($data["DCaption"])?$data["DCaption"]:$data["cause"];
+            $pfad=mkPfad($data["Q"].$data["CID"],$data["CRMUSER"]);
 			$dbfile=new document();
 			$dbfile->setDocData("descript",$text);
 			$rc=$dbfile->uploadDocument($dat,$pfad);
@@ -346,6 +355,19 @@ global $db;
 	if(!$rs) {
 		$id=false;
 	}
+    if ($data["wvldate"]) {
+        $wv["LangTxt"]=$data["c_cause"];
+        $wv["Cause"]=$data["cause"];
+        $wv["cp_cv_id"]=$data["Q"].$data["CID"];
+        $wv["cp_cv_id_old"]=$wv["cp_cv_id"];
+        $wv["DateiID"]=$dateiID;
+        $wv["kontakt"]=$data["Kontakt"];
+        $wv["status"]="1";
+        $wv["CRMUSER"]=$data["CRMUSER"];
+        $wv["Finish"]=$data["wvldate"];
+        $wv["tellid"]=$id;
+        insWvl($wv,False);
+    }
 	return $id;
 }
 /****************************************************
@@ -360,11 +382,8 @@ global $db;
 	$did=($data["datei"])?$data["datei"]:"Null";
 	$datum=$data['Datum']." ".$data['Zeit'].":00";  // Postgres timestamp
 	if ($datei["Datei"]["name"][0]<>"") {
-		$dat["Datei"]["name"]=$datei["Datei"]["name"][0];
-		$dat["Datei"]["tmp_name"]=$datei["Datei"]["tmp_name"][0];
-		$dat["Datei"]["type"]=$datei["Datei"]["type"][0];
-		$dat["Datei"]["size"]=$datei["Datei"]["size"][0];
 		$text=($data["DCaption"])?$data["DCaption"]:$data["cause"];
+        $pfad=mkPfad($data["Q"].$data["CID"],$data["CRMUSER"]);
 		$dbfile=new document();
 		$dbfile->setDocData("descript",$text);
 		$rc=$dbfile->uploadDocument($dat,$pfad);
@@ -382,6 +401,27 @@ global $db;
 	if(!$rs) {
 		$id=false;
 	}
+    if ($data["wvldate"]) {
+        $wv["LangTxt"]=$data["c_cause"];
+        $wv["Cause"]=$data["cause"];
+        $wv["cp_cv_id"]=$data["Q"].$data["CID"];
+        $wv["cp_cv_id_old"]=$wv["cp_cv_id"];
+        $wv["DateiID"]=$dateiID;
+        $wv["kontakt"]=$data["Kontakt"];
+        $wv["status"]="1";
+        $wv["CRMUSER"]=$data["CRMUSER"];
+        $wv["Finish"]=$data["wvldate"];
+        $wv["tellid"]=$id;
+        $wv["WVLID"]=$data["wvlid"];
+        if ($data["wvlid"] && $data["wvl"]) {
+            updWvl($wv,False);
+        } else if ($data["wvlid"] && !$data["wvl"]) {
+            $wv["status"]="0";
+            updWvl($wv,False);
+        } else if ($data["wvldate"]) {
+            insWvl($wv,False);
+        }
+    }
 	return $id;
 }
 
@@ -505,7 +545,7 @@ global $db;
 *****************************************************/
 function getCall($id) {
 global $db;
-	$sql="select * from telcall where id=$id";
+	$sql="select T.*,W.finishdate as wvldate,W.id as wvlid from telcall T left join wiedervorlage W on W.tellid=T.id where T.id=$id";
 	$rs=$db->getAll($sql);
 	if(!$rs) {
 		$daten=false;
@@ -520,6 +560,8 @@ global $db;
 		$daten["CID"]=$rs[0]["caller_id"];
 		$daten["inout"]=$rs[0]["inout"];
 		$daten["Bezug"]=$rs[0]["bezug"];
+        $daten["wvldate"]=db2date(substr($rs[0]["wvldate"],0,10));
+        $daten["wvlid"]=$rs[0]["wvlid"];
 		$daten["employee"]=$rs[0]["employee"];
 		if ($rs[0]["dokument"]==1) {
 			$daten["Files"]=getAllDokument($id);
@@ -646,6 +688,7 @@ global $db;
 			$datei=getDokument($rs[0]["document"]);
 			if ($datei) {
 				$pre=($datei["kunde"]>0)?$datei["kunde"]:$datei["employee"];
+                $pre=$datei["pfad"];
 				$name=$datei["filename"];
 				$path=$_SESSION["mansel"]."/".$pre."/";
 			} else {
@@ -782,11 +825,11 @@ global $db;
 			$dat["Datei"]["type"]=$datei["Datei"]["type"][$o];
 			$dat["Datei"]["size"]=$datei["Datei"]["size"][$o];
 			if (!$data["DCaption"]) $data["DCaption"]=$data["Cause"];
-	                $dbfile=new document();
-	                $dbfile->setDocData("descript",$data["DCaption"]);
-			$pfad=mkPfad($data["cp_cv_id"],$data["CRMUSER"]);
-        	        $rc=$dbfile->uploadDocument($dat,$pfad);
-                	$dateiID=$dbfile->id;       
+	        $dbfile=new document();
+	        $dbfile->setDocData("descript",$data["DCaption"]);
+		  	$pfad=mkPfad($data["cp_cv_id"],$data["CRMUSER"]);
+        	$rc=$dbfile->uploadDocument($dat,$pfad);
+            $dateiID=$dbfile->id;       
 			//$dateiID=saveDokument($dat,$data["DCaption"],$nun,0,$data["CRMUSER"],"");
 		}
 		if ($anz>1) $dateiID=1;
@@ -815,6 +858,10 @@ global $db;
 	} else {
 		$sql="update wiedervorlage set employee=".$data["CRMUSER"].", cause='".$data["Cause"]."', descript='$descript', ";
 		$sql.="document=$dateiID, status=".$data["status"].",kontakt='".$data["kontakt"]."',changedate='$nun'".$finish;
+        if ($data["tellid"]) {
+             $sql.=",kontaktid=".substr($data["cp_cv_id"],1).",kontakttab='".substr($data["cp_cv_id"],0,1)."'";
+             $sql.=",tellid=".$data["tellid"];
+        }
 		$sql.=" where id=".$data["WVLID"];
 		$rs=$db->query($sql);
 		if(!$rs) {
@@ -824,7 +871,8 @@ global $db;
 		};
 		if ($data["cp_cv_id"]<>$data["cp_cv_id_old"] or $data["status"]<1) {  // es wurde eine neue Zuweisung an einen Kunden gemacht
 			$id=kontaktWvl($data["WVLID"],$data["cp_cv_id"],$pfad);
-			if ($id) {$rs=$data["WVLID"];} else {$rs=false;}
+			if ($id) {
+                $rs=$data["WVLID"];} else {$rs=false;}
 		}
 	}
 	return $rs;

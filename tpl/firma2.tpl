@@ -9,7 +9,7 @@
 	<!--
 		function showItem(id) {
 			pid=document.contact.cp_id.value;
-			F1=open("getCall.php?Q=CC&pid="+pid+"&Bezug="+id,"Caller","width=680, height=680, left=100, top=50, scrollbars=yes");
+			F1=open("getCall.php?Q=CC&pid="+pid+"&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
 		}
 		function anschr() {
 			pid=document.contact.cp_id.value;

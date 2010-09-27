@@ -5,6 +5,10 @@
 	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
 	include("inc/UserLib.php");
+    $jscal ="<style type='text/css'>@import url(../js/jscalendar/calendar-win2k-1.css);</style>\n";
+    $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar.js'></script>\n";
+    $jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
+    $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar-setup.js'></script>\n";
 	$fid=($_POST["fid"])?$_POST["fid"]:$_GET["fid"];
 	$pid=($_POST["pid"])?$_POST["pid"]:$_GET["pid"];
 	$INIT=($_POST["INIT"])?$_POST["INIT"]:$_GET["INIT"];
@@ -27,6 +31,8 @@
 	$daten["CID"]=($pid>0)?$pid:$fid;
 	$daten["Kunde"]=0;
 	$daten["Anzeige"]=0;                       	
+    $daten["wvldate"]="";
+    $daten["wvlid"]=false;
 	if ($_POST["verschiebe"]) {
 		$rc=mvTelcall($_POST["TID"],$_POST["id"],$_POST["CID"]);
 		$daten["Betreff"]=$_POST["Betreff"];
@@ -201,6 +207,9 @@
 		Plz => $daten["Plz"],
 		Ort => $daten["Ort"],
 		NDatum => $daten["Datum"],
+        wvl => ($daten["wvldate"])?"checked":"",
+        wvldate => $daten["wvldate"],
+        WVLID => $daten["wvlid"],
 		NZeit => $daten["Zeit"],
 		LangTxt => $daten["LangTxt"],
 		CID => $cid,
@@ -215,6 +224,10 @@
 		R4 => ($daten["Kontakt"]=="P")?" checked":"",
 		R5 => ($daten["Kontakt"]=="D")?" checked":"",
 		R6 => ($daten["Kontakt"]=="X")?" checked":"",
+        jscal => ($jcalendar)?$jscal:"",
+        jscal1 => ($jcalendar)?"<a href='#' id='trigger1' name='Datum' title='Erstelldatum' onClick='false'><img src='image/date.png' border='0' align='middle'></a>":"",
+        jscal2 => ($jcalendar)?"<a href='#' id='trigger2' name='wvldate' title='Wiedervorlagedatum' onClick='false'><img src='image/date.png' border='0' align='middle'></a>":"",
+
 		Start => $telcall*-1,
 		Datei => $daten["Datei"],
 		ODatei => (empty($daten["Datei"]))?"":("<a href='dokumente/".$_SESSION["mansel"]."/".$daten["Dpfad"]."/".$daten["Datei"]."' target='_blank'>".$daten["Datei"]."</a>"),

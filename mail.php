@@ -91,7 +91,7 @@
 					"Subject"	=> $SubjectMail);
 
       			$to=($TO)?$TO:$CC;
-      			if (substr(",",$to)) {
+      			if ((strpos($to,",")>0)) {
       				$tmp=explode(",",$to);
       				$to=array();
       				foreach ($tmp as $row) { $to[]=trim($row); }

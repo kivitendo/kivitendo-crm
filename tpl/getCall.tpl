@@ -67,7 +67,7 @@
 <input type="hidden" name="wvlid" value="{WVLID}">
 <input type="hidden" name="nummer" value="{nummer}">
 <input type="hidden" name="Q" value="{Q}">
-<input type="hidden" name="datei" value="{ODatei}">
+<input type="hidden" name="datei" value="{DateiID}">
 <input type="text" name="cause" value="{NBetreff}" size="43" maxlength="125"> &nbsp; 
 <input type="text" name="Datum" value="{NDatum}" id="Datum" size="9" maxlength="10">{jscal1} 
 <input type="text" name="Zeit" value="{NZeit}" size="6" maxlength="5">&nbsp; 
@@ -78,7 +78,7 @@ WV<input type="checkbox" name="wvl" value="1" onClick="showwv()" {wvl}> <span id
 <span class="klein">Bemerkung &nbsp; &nbsp; &nbsp;<!--a href="#" onClick="artikel()">Artikelliste</a--></span><br>
 <table>
 <tr><td><input type="file" name="Datei[]" value="{Datei}" size="35" maxlength="125"><br>
-	     <span class="klein">Datei/Dokument<b> {ODatei}</b></span></td>
+	     <span class="klein">Datei/Dokument<b> {ODatei}</b>{DateiID}</span></td>
 	<td rowspan="2">
 <!-- BEGIN Files -->
 	{Anhang} 

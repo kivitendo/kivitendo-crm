@@ -685,13 +685,15 @@ global $db;
         foreach ($rs2 as $row) {
             $rs1[]=array("id"=>$row["id"],
                 "cause"=>$row["subject"],
-                "desctipt"=>$row["body"],
+                "descript"=>$row["body"],
                 "kontakt"=>$row["trans_module"],
                 "status"=>"F",
+                "kontakt"=>"F",
+                "trans_module"=>$row["trans_module"],
                 "initemployee"=>$row["created_by"],
                 "employee"=>$row["created_for_user"],
                 "ename" => $row["ename"],
-                "initdate"=>$row["follow_up_date"],
+                "initdate"=>$row["follow_up_date"]." 00:00",
                 "note_id"=>$row["note_id"]);
         }
     }
@@ -1417,7 +1419,7 @@ function eMailSort($a,$b) {
 * Mailaddr. auf Gültigkeit prüfen
 *****************************************************/
 function chkMailAdr ($mailadr) {
-    if (substr(",",$mailadr)) {
+    if (strpos($mailadr,",")>0) {
         $tmp=explode(",",$mailadr);
     }else {
         $tmp=array($mailadr);

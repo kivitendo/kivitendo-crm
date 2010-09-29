@@ -170,5 +170,6 @@ $texts  = array(
   '.:picup:.'        => '&Uuml;bernehmen',
   '.:servcard:.'     => 'VCards',
   '.:language:.'     => 'Sprache',
+  '.:deletetcontact:.' => 'gel&ouml;schte Ansprechpartner (Kunden und Lieferanten) oder private Adressen',
 ); 
 ?>

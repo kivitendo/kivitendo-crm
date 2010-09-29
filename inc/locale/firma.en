@@ -167,6 +167,7 @@ $texts  = array(
   '.:documents:.'    => 'Documents',
   '.:picup:.'        => 'Transfer',
   '.:servcard:.'     => 'VCards',
-  '.:language:.'     => 'Language'
+  '.:language:.'     => 'Language',
+  '.:deletetcontact:.' => 'deletet contacts (customer and vendor) or private address'
 );
 ?>

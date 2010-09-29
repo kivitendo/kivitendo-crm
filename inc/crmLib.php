@@ -456,24 +456,60 @@ global $db;
 * out: id = int
 * WVLnsatz erzeugen ( insert )
 *****************************************************/
-function mknewWVL() {
+function mknewWVL($erp=false) {
 global $db;
     $newID=uniqid (rand());
     $datum=date("Y-m-d H:m:i");
-    $sql="insert into wiedervorlage (cause,initdate,initemployee) values ('$newID','$datum',".$_SESSION["loginCRM"].")";
-    $rc=$db->query($sql);
-    if ($rc) {
-        $sql="select id from wiedervorlage where cause = '$newID'";
-        $rs=$db->getAll($sql);
-        if ($rs) {
-            $id=$rs[0]["id"];
+    $db->begin();
+    if ($erp) {
+        $sql = "insert into notes (subject,created_by) values ('$newID',".$_SESSION["loginCRM"].")";
+        $rc=$db->query($sql);
+        if ($rc) {
+            $sql = "select id from notes where subject = '$newID'";
+            $rs=$db->getAll($sql);
+            if ($rs) {
+                $sql = "insert into follow_ups (note_id,follow_up_date,created_for_user,created_by) values (";
+                $sql.= $rs[0]["id"].",'".substr($datum,0,10)."',".$_SESSION["loginCRM"].",".$_SESSION["loginCRM"].")";
+                $rc=$db->query($sql);
+                if ($rc) {
+                    $data["noteid"] = $rs[0]["id"];
+                    $sql = "select id from follow_ups where note_id = ".$data["noteid"];
+                    $rs=$db->getAll($sql);
+                    if ($rs) {
+                        $data["WVLID"] = $rs[0]["id"];
+                        $db->commit();
+                    } else {
+                        $data["WVLID"] = false;
+                        $db->rollback();
+                    }
+                }
+            } else {
+                $data["WVLID"] = false;
+                $db->rollback();
+            }
         } else {
-            $id=false;
-        }
+            $data["WVLID"] = false;
+            $db->rollback();
+        } 
     } else {
-        $id=false;
+        $sql="insert into wiedervorlage (cause,initdate,initemployee) values ('$newID','$datum',".$_SESSION["loginCRM"].")";
+        $rc=$db->query($sql);
+        if ($rc) {
+            $sql="select id from wiedervorlage where cause = '$newID'";
+            $rs=$db->getAll($sql);
+            if ($rs) {
+                $data["WVLID"] = $rs[0]["id"];
+                $db->commit();
+            } else {
+                $data["WVLID"] = false;
+                $db->rollback();
+            }
+        } else {
+            $data["WVLID"] = false;
+            $db->rollback();
+        }
     }
-    return $id;
+    return $data;
 }
 
 /****************************************************
@@ -633,15 +669,17 @@ global $db;
 *****************************************************/
 function getWvl($crmuser) {
 global $db;
-    $sql="select * from wiedervorlage where (employee=$crmuser or employee is null) and status > '0' order by  finishdate asc ,initdate asc";
+    $sql="select *,(select name from employee where id= employee) as ename, (select name from employee where id=initemployee) as iname  ";
+    $sql.="from wiedervorlage where (employee=$crmuser or employee is null) and status > '0' order by  finishdate asc ,initdate asc";
     $rs1=$db->getAll($sql);
     if(!$rs1) {
         $rs1=false;
     } else {
         if (count($rs1)==0) $rs1=array(array("id"=>0,"initdate"=>date("Y-m-d H:i:00"),"cause"=>"Keine Eintr&auml;ge"));
     }
-    $sql="SELECT follow_ups.id,follow_up_date,created_for_user,subject,body,trans_id,note_id,trans_module from ";
-    $sql.="follow_ups left join notes on note_id=notes.id where done='f' and created_for_user=$crmuser";
+    $sql="SELECT follow_ups.id,follow_up_date,created_for_user,subject,body,trans_id,note_id,trans_module,E.name as ename from ";
+    $sql.="follow_ups left join notes on note_id=notes.id left join employee E on E.id=follow_ups.created_for_user ";
+    $sql.="where done='f' and created_for_user=$crmuser";
     $rs2=$db->getAll($sql);
     if ($rs2) {
         foreach ($rs2 as $row) {
@@ -652,6 +690,7 @@ global $db;
                 "status"=>"F",
                 "initemployee"=>$row["created_by"],
                 "employee"=>$row["created_for_user"],
+                "ename" => $row["ename"],
                 "initdate"=>$row["follow_up_date"],
                 "note_id"=>$row["note_id"]);
         }
@@ -751,9 +790,19 @@ global $db;
     $data["InitCrm"]=$rs[0]["created_by"];
     $data["kontakt"]="F";
     $data["noteid"]=$rs[0]["note_id"];
-    $data["kontaktid"]=($rs[0]["c"]>0)?$rs[0]["c"]:$rs[0]["v"];
-    $data["kontakttab"]=($rs[0]["c"]>0)?"C":"V";
-    $data["kontaktname"]=$rs[0]["name"];
+    if ($rs[0]["c"]>0) {
+        $data["kontaktid"]=$rs[0]["c"];
+        $data["kontakttab"]="C";
+        $data["kontaktname"]=$rs[0]["name"];
+    } else if ($rs[0]["v"]>0) {
+        $data["kontaktid"]=$rs[0]["v"];
+        $data["kontakttab"]="V";
+        $data["kontaktname"]=$rs[0]["name"];
+    } else {
+        $data["kontaktid"]=false;
+        $data["kontakttab"]="";
+        $data["kontaktname"]="";
+    }
     return $data;
 }
 
@@ -801,7 +850,7 @@ global $db;
 * einen Datensatz in wiedervorlage einfügen
 *****************************************************/
 function insWvl($data,$datei="") {
-    $data["WVLID"]=mknewWVL();
+    $data = array_merge($data,mknewWVL($data["kontakt"]=="F"));
     $rs=updWvl($data,$datei);
     return $rs;
 }
@@ -842,9 +891,14 @@ global $db;
     $descript=addslashes($data["LangTxt"]);
     $descript=nl2br($descript);
     if ($data["kontakt"]=="F") {
-        $rc=$db->query("BEGIN");
         $sql ="update notes set subject='".$data["Cause"]."',body='$descript', created_by=".$_SESSION["loginCRM"];
-	$sql.=",trans_id=".substr($data["cp_cv_id"],1);
+        if ($data["cp_cv_id"]) {
+    	    $sql.=",trans_id=".substr($data["cp_cv_id"],1);
+            $sql.=",trans_module='ct'";
+        } else {
+            $sql.=",trans_id=".$data["WVLID"];
+            $sql.=",trans_module='fu'";
+        }
         $sql.=" where id=".$data["noteid"];
         $rc=$db->query($sql);
         if (!$rc) { $db->query("ROLLBACK"); return false; };
@@ -852,12 +906,24 @@ global $db;
         $sql.="follow_up_date ='".date2db($data["Finish"])."' where id = ".$data["WVLID"];
         $rc=$db->query($sql);
         if (!$rc) { $db->query("ROLLBACK"); return false; };
-        $sql ="update follow_up_links set trans_id=".substr($data["cp_cv_id"],1);
-	$sql.=",trans_type='".((substr($data["cp_cv_id"],0,1)=="V")?"vendor":"customer");
-        $sql.="',trans_info='".$data["name"]."' where follow_up_id = ".$data["WVLID"];
-        $rc=$db->query($sql);
-        if (!$rc) { $db->query("ROLLBACK"); return false; };
-        $rs=$db->query("COMMIT");
+        if ($data["cp_cv_id"]) {
+            $sql = "select id from follow_up_links where follow_up_id = ".$data["WVLID"];
+            $rs = $db->getOne($sql);
+            $rc=$db->query("BEGIN");
+            if (!$rs) {
+                $sql = "insert into follow_up_links (follow_up_id,trans_id,trans_type,trans_info) values (";
+                $sql.= $data["WVLID"].",".substr($data["cp_cv_id"],1).",'".((substr($data["cp_cv_id"],0,1)=="C")?"customer":"vendor");
+                $sql.= "','".$data["name"]."')";
+                $rc = $db->query($sql);
+            } else {
+                $sql ="update follow_up_links set trans_id=".substr($data["cp_cv_id"],1);
+	            $sql.=",trans_type='".((substr($data["cp_cv_id"],0,1)=="V")?"vendor":"customer");
+                $sql.="',trans_info='".$data["name"]."' where follow_up_id = ".$data["WVLID"];
+                $rc=$db->query($sql);
+            }
+            if (!$rc) { $db->query("ROLLBACK"); return false; };
+            $rs=$db->query("COMMIT");
+        }
     } else {
         $sql="update wiedervorlage set employee=".$data["CRMUSER"].", cause='".$data["Cause"]."', descript='$descript', ";
         $sql.="document=$dateiID, status=".$data["status"].",kontakt='".$data["kontakt"]."',changedate='$nun'".$finish;

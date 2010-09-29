@@ -67,7 +67,8 @@
 			Cause => $col["cause"],
 			Initdate => $datum,
 			ID => $col["id"],
-			IniUser => ($col["initemployee"])?$col["initemployee"]:$col["employee"],
+			//IniUser => ($col["initemployee"])?$col["initemployee"]:$col["employee"],
+			IniUser => ($col["ename"])?$col["ename"]:$col["employee"],
 			Art => $Art
 		));
 		$t->parse("Block","Liste",true);

@@ -115,7 +115,7 @@
 			</div>
 			<div class="zeile">
 				<span class="label">Mobiltelefon</span>
-				<span class="leftfeld"><input type="text" name="cp_phone2" size="27" maxlength="75" value="{cp_phone2}" tabindex="10"></span>
+				<span class="leftfeld"><input type="text" name="cp_mobile1" size="27" maxlength="75" value="{cp_mobile1}" tabindex="10"></span>
 				<span class="label">www</span>
 				<span class="leftfeld"><input type="text" name="cp_homepage" size="27" maxlength="25" value="{cp_homepage}" tabindex="19"></span>
 			</div>

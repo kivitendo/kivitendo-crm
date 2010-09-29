@@ -92,7 +92,7 @@ function getAllPerson($sw,$Pre=true) {
 global $db;
 		if ($Pre) $Pre=$_SESSION["Pre"];
 		$rechte=berechtigung("cp_");
-		if (!$sw[0]) { $where="cp_phone1 like '$Pre".$sw[1]."%' or cp_phone2 like '$Pre".$sw[1]."%' "; }
+		if (!$sw[0]) { $where="cp_phone1 like '$Pre".$sw[1]."%' or cp_mobile1 like '$Pre".$sw[1]."%' "; }
 		else { $where="upper(cp_name) like '$Pre".$sw[1]."%' "; }
 		$sql="select *,'P' as tab,cp_id as id,cp_name as name  from contacts where ($where) and $rechte";
 		$rs=$db->getAll($sql);
@@ -143,7 +143,7 @@ global $db;
         /* Änderung 29.6.2009 cp_greeting rausgeworfen und cp_gender eingefügt. Hinweis für Holger cp_gender kommt aus Tabelle 0 ;-)  jb*/
 	   	$dbfld=array("cp_name" => 1,"cp_givenname" => 1,"cp_gender" => 0,"cp_title" => 1,
 					"cp_street" => 1,"cp_zipcode" => 0,"cp_city" => 1,"cp_country" => 0, "country" => 0,
-					"cp_phone1" => 0,"cp_phone2" => 0,"cp_fax" => 0,
+					"cp_phone1" => 0,"cp_mobile1" => 0,"cp_fax" => 0,
 					"cp_homepage" => 1,"cp_email" => 1,
 					"cp_notes" => 1,"cp_stichwort1" => 1,
 					"cp_birthday" => 0,"cp_beziehung" => 1,
@@ -181,7 +181,7 @@ global $db;
 				$suchwort=strtr($suchwort,"*?","%_");
 				if ($keys[$i]=="cp_birthday") {$d=explode("\.",$suchwort); $suchwort=$d[2]."-".$d[1]."-".$d[0]; };
 				$where0.="and $case1".$keys[$i]."$case2 like '".$suchwort."$fuzzy' ";
-				if ($keys[$i]=="cp_phone1") $where0.="and cp_phone2 like '".$suchwort."$fuzzy' ";
+				if ($keys[$i]=="cp_phone1") $where0.="and cp_mobile1 like '".$suchwort."$fuzzy' ";
 			}
 		}
 		$x=0;

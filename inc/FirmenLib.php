@@ -270,7 +270,7 @@ function suchstr($muster,$typ="C") {
 			ustid => 0, taxnumber => 0, lead => 2, leadsrc => 0,
 			bank => 0, bank_code => 0, account_number => 0,
 			vendornumber => 0, v_customer_id => 0,
-			kundennummer => 0, customernumber => 0,
+			kundennummer => 0, customernumber => 0, contact => 0,
 			employee => 2, branche => 0, headcount => 2);
 	$dbfld2=array(name => "shiptoname", street=>"shiptostreet",zipcode=>"shiptozipcode",
 			city=>"shiptocity",phone=>"shiptophone",fax=>"shiptofax",

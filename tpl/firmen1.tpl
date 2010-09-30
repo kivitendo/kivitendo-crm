@@ -60,6 +60,8 @@
 	<div class="zeile">
 		<span class="label">.:KdNr:.</span>
 		<span class="leftfeld"><input type="text" name="customernumber" size="27" maxlength="15" value="{customernumber}" tabindex="1"></span>
+		<span class="label">.:contact:.</span>
+		<span class="leftfeld"><input type="text" name="contact" size="27" maxlength="25" value="{contact}" tabindex="21"></span>
 	</div>
 	<div class="zeile">
 		<span class="label">.:company:.</span>

@@ -315,7 +315,7 @@ global $db;
         $pfad="P".$data["CID"];
         $wv["cp_cv_id"]="P".$data["CID"];
     } else {
-        $pfad=$data["Q"][0].$data["nummer"];
+        $pfad=$data["Q"][0].$data["fid"];
         $wv["cp_cv_id"]=$data["Q"][0].$data["CID"];
     }
     if ($datei["Datei"]["name"][0]<>"") {

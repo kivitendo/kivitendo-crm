@@ -1,22 +1,22 @@
 <?php
     $wiam = getCwd();
     if (substr($wiam,-3) == "inc") {
-    	chdir("..");
-    	require_once("inc/stdLib.php");
+        chdir("..");
+        require_once("inc/stdLib.php");
     } else {
-    	require_once("stdLib.php");
+        require_once("stdLib.php");
     };
 
-	function updatever($db,$VERSION) {
-                $sql = "INSERT INTO crm (uid,datum,version) values (".$_SESSION["loginCRM"].",now(),'".$VERSION."')";
-                $rc = $_SESSION["db"]->query($sql);
-                $db->commit();
-		echo "Versionsnummer gesetzt<br>";
-		if (is_file("update/update$VERSION.txt")) {
-			echo "<h2>Wichtig!</h2>";
-			echo readfile("update/update$VERSION.txt");
-		}
+    function updatever($db,$VERSION) {
+        $sql = "INSERT INTO crm (uid,datum,version) values (".$_SESSION["loginCRM"].",now(),'".$VERSION."')";
+        $rc = $_SESSION["db"]->query($sql);
+        $db->commit();
+        echo "Versionsnummer gesetzt<br>";
+        if (is_file("update/update$VERSION.txt")) {
+            echo "<h2>Wichtig!</h2>";
+            echo readfile("update/update$VERSION.txt");
         }
+    }
 
     $sql = "SELECT tag || '.sql' as tag  from schema_info where tag like 'crm_%' order by tag";
     $rs  = $_SESSION["db"]->getAll($sql);
@@ -68,26 +68,28 @@
             } 
             $sql="insert into schema_info (tag,login) values ('crm_%s','%s')";
             $rc = $_SESSION["db"]->query(sprintf($sql,trim($tag),$_SESSION["employee"]));
-	    if (!$rc) {
-		$ok = false;
+            if (!$rc) {
+            $ok = false;
                 $db->rollback();
                 exit(2);
-	    } 
-	}
+            } 
+        }
         if ($ok) {
-		updatever($db,$VERSION);
-                echo "update ok<br>";
+            updatever($db,$VERSION);
+            echo "update ok<br>";
         }
     } else {
-	if ($GLOBALS["oldver"] and $GLOBALS["oldver"]<>$VERSION) updatever($db,$VERSION);
-        echo "System uptodate<br />";
+        if ($GLOBALS["oldver"] and $GLOBALS["oldver"]<>$VERSION) updatever($db,$VERSION);
+        if (!$LOGIN) echo "System uptodate<br />";
     };
-    $sql="select tag,login,itime  from schema_info where tag ilike 'crm_%' order by itime";
-    $liste = $_SESSION["db"]->getAll($sql);
-    echo "<br /><table>\n";     
-    $zeile = "<tr><td>%s</td><td>%s</td><td>%s</td></tr>\n";
-    if ($liste) foreach ($liste as $line) {
-        echo sprintf($zeile,$line["tag"],$line["login"],$line["itime"]);
-    };
-    echo "</table>";     
+    if (!$LOGIN) {
+        $sql="select tag,login,itime  from schema_info where tag ilike 'crm_%' order by itime";
+        $liste = $_SESSION["db"]->getAll($sql);
+        echo "<br /><table>\n";     
+        $zeile = "<tr><td>%s</td><td>%s</td><td>%s</td></tr>\n";
+        if ($liste) foreach ($liste as $line) {
+            echo sprintf($zeile,$line["tag"],$line["login"],$line["itime"]);
+        };
+        echo "</table>";     
+    }
 ?>

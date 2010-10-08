@@ -41,6 +41,8 @@ if (is_file($conffile)) {
 		if (chkVer()) {
 			$db=$_SESSION["db"];
 			$_SESSION["loginok"]="ok";
+            $LOGIN=True;
+            require ("update_neu.php");
 		} else {
 			echo "db-Version nicht ok";
 			exit;

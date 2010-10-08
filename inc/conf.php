@@ -30,6 +30,7 @@ $typcol["P"]="#f70727";
 $typcol["P"]="#ea0bd0";
 $typcol["D"]="#ff4605";
 $typcol["X"]="#fa05ff";
+$typcol["F"]="#af05ff";
 define("FPDF_FONTPATH","/usr/share/fpdf/font/");
 define("FONTART","2");
 define("FONTSTYLE","1");
@@ -39,7 +40,7 @@ $listLimit=500;
 $tinymce=false;
 $zeigeextra=true;
 $jpg=false;
-//$jpg=true;
+//$jpg=true; //jpgraph
 $showErr=false;
 $CallEdit = true;
 $CallDel = false;
@@ -57,6 +58,8 @@ $planspace="+";
 //$planspace="+";
 //$stadtplan="http://maps.google.de/maps?f=d&hl=de&daddr=%TOSTREET%,%TOZIPCODE%+%TOCITY%&saddr=%FROMSTREET%,%FROMZIPCODE%+%FROMCITY%";
 $stadtplan="http://maps.google.de/maps?f=d&hl=de&daddr=%TOSTREET%,%TOZIPCODE%+%TOCITY%";
+$Expunge=True;
+//Seen, Answered, Flagged, Deleted, Draft
+$MailFlag='Flagged';
 $ERPNAME="lx-office-erp";
-$test=1;
 ?>

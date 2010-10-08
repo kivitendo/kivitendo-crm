@@ -14,9 +14,8 @@
 	$t->set_block("wvl","Liste","Block");
 	$i=0;
 	$interv=getIntervall($_SESSION["loginCRM"]);
-	$mail=holeMailHeader($_SESSION["loginCRM"]);
-	if ($mail)
-	foreach($mail as $col){
+	$mail=holeMailHeader($_SESSION["loginCRM"],$MailFlag);
+	if ($mail) foreach($mail as $col){
 		$t->set_var(array(
 			LineCol => $bgcol[($i%2+1)],
 			Type	=> $typcol["M"],
@@ -62,7 +61,7 @@
 		else { $Art="D"; };
 		$t->set_var(array(
 			LineCol => $bgc,
-			Type	=> $typcol[($col["kontakt"])?$col["kontakt"]:"X"],
+			Type	=> ($typcol[($col["kontakt"])?$col["kontakt"]:"X"]).$col["sel"],
 			Status => ($col["status"])?$col["status"]:"-",
 			Cause => $col["cause"],
 			Initdate => $datum,

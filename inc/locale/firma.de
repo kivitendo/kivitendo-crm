@@ -171,5 +171,7 @@ $texts  = array(
   '.:servcard:.'     => 'VCards',
   '.:language:.'     => 'Sprache',
   '.:deletetcontact:.' => 'gel&ouml;schte Ansprechpartner (Kunden und Lieferanten) oder private Adressen',
+  '.:wv:.'          => 'Wiedervorlage',
+  '.:termin:.'      => 'Termin',
 ); 
 ?>

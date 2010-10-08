@@ -981,7 +981,7 @@ global $db;
 * out: rs = boolean
 * einen Mail-Datensatz in WVL nach telcall verschieben
 *****************************************************/
-function insWvlM($data) {
+function insWvlM($data,$Flag,$Expunge) {
 global $db;
     if(empty($data["cp_cv_id"]) && $data["status"]<1) {
         $kontaktID=$data["CRMUSER"];
@@ -1020,13 +1020,13 @@ global $db;
                 $did=$dbfile->id;     
                 documenttotc($tid,$did);
             }
-            moveMail($data["Mail"],$CID);
+            moveMail($data["MailUID"],$CID,$Flag,$Expunge);
             $sql="update telcall set dokument=1 where id = $tid";
             $rc=$db->query($sql);
             return $rc;
         } else {
             $data["DateiID"]=false;
-            moveMail($data["Mail"],$data["CID"]);
+            moveMail($data["MailUID"],$CID,$Flag,$Expunge);
         }
         // bis hier ok
         $rs=true;
@@ -1150,11 +1150,11 @@ function decode_string ($string) {
 * out: rs = array
 * alle Mailheader holen
 *****************************************************/
-function holeMailHeader($usr) {
+function holeMailHeader($usr,$Flag) {
     $srv=getUsrMailData($usr);
     $m=array();
     if ($srv["msrv"] && $srv["postf"]) {  // Mailserver/Postfach eingetragen
-        $mbox = mail_login($srv["msrv"],"143",$srv["postf"],$srv["kennw"]);
+        $mbox = mail_login($srv["msrv"],$srv["port"],$srv["postf"],$srv["mailuser"],$srv["kennw"],$srv["pop"],$srv["ssl"]);
         if ($mbox) {
             $status = mail_stat($mbox);
             $anzahl= $status["Nmsgs"] - $status["Deleted"];
@@ -1163,13 +1163,14 @@ function holeMailHeader($usr) {
                 $m=false;
                 if (is_array ($overview )) {
                     foreach ($overview as $mail) {
-                        if (!$mail["deleted"]) {
+                        if (!$mail["deleted"] && !$mail[strtolower($Flag)]) {
                             $gelesen=($mail["seen"])?"-":"+";
                             $m[]=array("Nr"     =>  $mail["msgno"],
                                     "Datum"     =>  $mail["date"]." ".$mail["time"],
                                     "Betreff"   =>  $mail["subject"],
                                     "Abs"       =>  $mail["from"],
-                                    "Gelesen"   =>  $gelesen);
+                                    "Gelesen"   =>  $gelesen,
+                                    "sel"       => $mail["flaged"]);
                         }
                     }
                     if (empty($m)) $m[]=array("Nr"=>0,"Datum"=>"","Betreff"=>"Keine Mails","Abs"=>"","Gelesen"=>"");
@@ -1178,6 +1179,7 @@ function holeMailHeader($usr) {
             } else {
                 $m[]=array("Nr"=>0,"Datum"=>"","Betreff"=>"Keine Mails","Abs"=>"","Gelesen"=>"");
             }
+            mail_close($mbox);
         } else {  // Mailserver nicht erreicht
             $m[]=array("Nr"=>0,"Datum"=>"","Betreff"=>"can't connect to Mailserver ","Abs"=>"","Gelesen"=>"");
         }
@@ -1221,26 +1223,34 @@ function getOneMail($usr,$nr) {
     $files=array();
     mb_internal_encoding(ini_get("default_charset"));
     $srv=getUsrMailData($usr);
-        $mbox = mail_login($srv["msrv"],"143",$srv["postf"],$srv["kennw"]);
+    $mbox = mail_login($srv["msrv"],$srv["port"],$srv["postf"],$srv["mailuser"],$srv["kennw"],$srv["pop"],$srv["ssl"]);
     $head = mail_parse_headers(mail_retr($mbox,$nr));
     if (!$head) return;
+    $info = mail_fetch_overview($mbox,$nr);
     $senderadr = $head["From"]."\n".$head["Date"]."\n";
     $sender = getSenderMail($head["From"]);
     $mybody = $senderadr;
     $htmlbody = "Empty Message Body";
-    $structure = imap_fetchstructure($mbox,$nr);
-    $parts = create_part_array($structure);
-
-    $body = mail_get_body($mbox,$nr,$parts[0]);
     $subject = $head["Subject"];
-
+    $structure = imap_fetchstructure($mbox,$nr);
+    if ($structure->parts) {
+        $parts = create_part_array($structure);
+        $body = mail_get_body($mbox,$nr,$parts[0]);
+    } else {
+        $head["encoding"] = $structure->encoding;
+        $head["ifsubtype"] = $structure->ifsubtype;
+        $head["subtype"] = $structure->subtype;
+        $body = mail_getBody($mbox,$nr,$head);
+    }
     if ( !eregi("PLAIN",$structure->subtype) )  {
        for ($p=1; $p < count($parts); $p++) {
             $attach = mail_get_file($mbox,$nr,$parts[$p]);
             if ($attach) $files[] = $attach;
         }
     }
+    mail_close($mbox);
     $data["id"]=$nr;
+    $data["uid"]=$info[0]->uid;
     $data['kontaktname']=$sender['kontaktname'];
     $data['kontakttab']=$sender['kontakttab'];
     $data['kontaktid']=$sender['kontaktid'];
@@ -1272,6 +1282,8 @@ global $db;
         $data=false;
     } else {
         $data["msrv"]=$rs[0]["msrv"];
+        $data["port"]=$rs[0]["port"];
+        $data["mailuser"]=$rs[0]["mailuser"];
         $data["postf"]=$rs[0]["postf"];
         $data["kennw"]=$rs[0]["kennw"];
         $data["postf2"]=$rs[0]["postf2"];
@@ -1289,7 +1301,7 @@ global $db;
 *****************************************************/
 function createMailBox($name,$id) {
     $srv=getUsrMailData($id);
-    $mbox = imap_open ("{".$srv["msrv"].":143/imap/notls}", $srv["postf"],$srv["kennw"]);
+    $mbox = mail_login($srv["msrv"],$srv["port"],$srv["postf"],$srv["mailuser"],$srv["kennw"],$srv["pop"],$srv["ssl"]);
     $name1 = $name;
     $name2 = imap_utf7_encode ($name);
     $newname = $name1;
@@ -1333,29 +1345,28 @@ function createMailBox($name,$id) {
 * moveMail
 * in: mail,id = int
 * out:
-* eine Mail  in eine andere Mailbox verschieben
-* !! wg. Probleme mit einigen IMAP-Installationen
-* !! nur ein markieren mit Delete
+* eine Mail markieren bzw. löschen
 *****************************************************/
-function moveMail($mail,$id) {
+function moveMail($mail,$id,$Flag,$Expunge) {
     $srv=getUsrMailData($id);
-    $mbox = @imap_open ("{".$srv["msrv"].":143/imap/notls}", $srv["postf"],$srv["kennw"]);
-    @imap_delete($mbox,$mail);
-    // imap_mail_move ($mbox,$mail,$srv["postf2"]);
+    $mbox = mail_login($srv["msrv"],$srv["port"],$srv["postf"],$srv["mailuser"],$srv["kennw"],$srv["pop"],$srv["ssl"]);
+    mail_flag($mbox,$mail,$Flag);
+    if ($Expunge && $Flag=='Delete')  mail_expunge($mbox); 
+    $mbox_close($mbox);
 }
 
 /****************************************************
 * delMail
 * in: mail,id = int
 * out:
-* eine Mail  als geslöscht marmieren
-* !! wg. Probleme mit einigen IMAP-Installationen
-* !! nur ein markieren mit Delete
+* eine Mail löschen marmieren oder gelöscht markieren
 *****************************************************/
-function delMail($mail,$id) {
+function delMail($mail,$id,$Expunge) {
     $srv=getUsrMailData($id);
-    $mbox = imap_open ("{".$srv["msrv"].":143/imap/notls}", $srv["postf"],$srv["kennw"]);
-    imap_delete($mbox,$mail);
+    $mbox = mail_login($srv["msrv"],$srv["port"],$srv["postf"],$srv["mailuser"],$srv["kennw"],$srv["pop"],$srv["ssl"]);
+    mail_dele($mbox,$mail);
+    if ($Expunge)  mail_expunge($mbox); 
+    $mbox_close($mbox);
 }
 
 /****************************************************
@@ -2230,7 +2241,18 @@ global $db;
     $sql="select * from custmsg where $where ";
     $rs=$db->getAll($sql);
     if(!$rs) {
-        return false;
+        $sql = "select id,cause,coalesce(finishdate,'9999-12-31 00:00:00') as finishdate  from wiedervorlage where status > '0' and (kontaktid = $id or ";
+        $sql.= "kontaktid in (select cp_id from contacts where cp_cv_id = $id)) ";
+        $sql.=" order by finishdate,initdate";
+        $rs=$db->getAll($sql);
+        if ($rs) {
+            $cnt = count($rs);
+            $msg = "<font color='red'>.:wv:. ($cnt) ".$rs[0]["cause"];
+            if ($rs[0]["finishdate"][4] != "9999") $msg .= " &gt;&gt; ".db2date($rs[0]["finishdate"],0,10);
+            return $msg."</font>";
+        } else {
+            return false;
+        }
     } else {
         if ($all==1) {
             return $rs;

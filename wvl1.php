@@ -8,7 +8,6 @@
     $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar.js'></script>\n";
     $jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
     $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar-setup.js'></script>\n";
-
     $data["id"]=0;
     $templ="wvl1.tpl";
     $js="";
@@ -17,8 +16,7 @@
             $ok=updWvl($_POST,$_FILES);
         } else {
             if ($_POST["Mail"]) { 
-                $ok=insWvlM($_POST);
-                if ($_POST["cp_cv_id"]<>"") delMail($_POST["Mail"],$_POST["CID"]);
+                $ok=insWvlM($_POST,$MailFlag,$Expunge);
             } else {
                 $ok=insWvl($_POST,$_FILES);
             }
@@ -32,7 +30,7 @@
                 $sel=$_SESSION["loginCRM"];
         } else {
             $data["id"]=0;
-             header ("location:wvl1.php");
+            header ("location:wvl1.php");
             exit;
         }
     } else if ($_GET["erp"]) {
@@ -44,7 +42,7 @@
         $msg="";
         $sel=$data["CRMUSER"];
     } else if ($_POST["delete"]) {
-        delMail($_POST["Mail"],$_POST["CID"]);
+        delMail($_POST["Mail"],$_POST["CID"],$Expunge);
         $msg="";
         $sel=$_POST["CRMUSER"];
     } else if ($_GET["mail"]) {
@@ -104,6 +102,7 @@
             JS => $js,
             stammlink => $stammlink,
             Mail => $_GET["mail"],  
+            MailUID => $data["uid"],  
             mailtype => $data["mailtype"],
             ));
     if ($templ=="wvl2.tpl") {

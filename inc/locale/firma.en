@@ -168,6 +168,8 @@ $texts  = array(
   '.:picup:.'        => 'Transfer',
   '.:servcard:.'     => 'VCards',
   '.:language:.'     => 'Language',
-  '.:deletetcontact:.' => 'deletet contacts (customer and vendor) or private address'
+  '.:deletetcontact:.' => 'deletet contacts (customer and vendor) or private address',
+  '.:wv:.'          => 'Follow-up',
+  '.:termin:.'      => 'Termin',
 );
 ?>

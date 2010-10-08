@@ -23,6 +23,7 @@
 <input type="hidden" name="CID" value="{CID}">
 <input type="hidden" name="WVLID" value="{WVLID}">
 <input type="hidden" name="Mail" value="{Mail}">
+<input type="hidden" name="MailUID" value="{MailUID}">
 <input type="hidden" name="cp_cv_id" value="{cpcvid}">
 <input type="hidden" name="DCaption" value="{DCaption}">
 <tr>

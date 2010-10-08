@@ -1,36 +1,59 @@
 <?php
-function mail_login($host,$port,$user,$pass,$pop=false,$folder="INBOX",$ssl=false)
-{
+
+function mail_login($host,$port,$folder,$user,$pass,$pop,$ssl) {
     if ($pop) {
-        if (empty($port)) $port = '110';
-        $ssl = ($ssl==false)?"/novalidate-cert":"";
+        if ($ssl=='n') {
+            $ssl = "/notls";
+            if (empty($port)) $port = '110';
+        } else if ($ssl == 't') {
+            $ssl = "/tls/novalidate-cert";
+            if (empty($port)) $port = '995';
+        } else {
+            $ssl = "/ssl/novalidate-cert";
+            if (empty($port)) $port = '995';
+        }
         $server = "{"."$host:$port/pop3$ssl"."}$folder";
     } else {
         if (empty($port)) $port = '143';
-        $ssl=($ssl==false)?"/notls":"";
+        if ($ssl=='f') {
+            $ssl="/notls";
+            if (empty($port)) $port = '143';
+        } else if ($ssl == 't') {
+            $ssl = "/tls/novalidate-cert";
+            if (empty($port)) $port = '993';
+        } else {
+            $ssl = "/ssl/novalidate-cert";
+            if (empty($port)) $port = '993';
+        }
         $server = "{"."$host:$port/imap$ssl"."}";
     }
-    return (@imap_open($server,$user,$pass));
+    if (empty($folder)) $folder = 'INBOX';
+    return (@imap_open($server.$folder,$user,$pass));
 }
-function mail_stat($connection)       
-{
+
+function mail_close($conn) {
+    @imap_close($conn);
+}
+function mail_stat($connection) {
     $check = @imap_mailboxmsginfo($connection);
     return ((array)$check);
 }
-function mail_list($connection,$message="")
-{
+
+function mail_list($connection,$message="") {
     mb_internal_encoding(ini_get("default_charset"));
-    if ($message)
-    {
+    if ($message)  {
         $range=$message;
     } else {
         $MC = @imap_check($connection);
         $range = "1:".$MC->Nmsgs;
     }
-    $response = @imap_fetch_overview($connection,$range);
+    $response = imap_fetch_overview($connection,$range);
     foreach ($response as $msg) {
         $msg->subject = mb_decode_mimeheader($msg->subject);
-        $msg->from = mb_decode_mimeheader($msg->from);
+        //Als Apache-Modul wird leider nur ein Teil des From geliefert.
+        //So kommt entweder nur der Name oder die E-Mail Adresse.
+        //Das CLI-Modul macht das Richtig
+        $msg->from = mb_decode_mimeheader($msg->from);  
         $msg->to = mb_decode_mimeheader($msg->to);
         $date = date_parse($msg->date);
         $msg->date = sprintf("%02d.%02d.%04d",$date["day"],$date["month"],$date["year"]);
@@ -39,16 +62,48 @@ function mail_list($connection,$message="")
     }
     return $result;
 }
-function mail_retr($conn,$message)
-{
+
+function mail_retr($conn,$message) {
     return(@imap_fetchheader($conn,$message,FT_PREFETCHTEXT));
 }
-function mail_dele($conn,$message)
-{
+
+/**
+ * mail_fetch_overview: Liefert einen Überblick über den gewünschten Mailbereich
+ * 
+ * @param Object $conn    
+ * @param String $mail 
+ * 
+ * @return TODO
+ */
+function mail_fetch_overview($conn,$mail) {
+    return @imap_fetch_overview ($conn,$mail);
+}
+
+function mail_dele($conn,$mail) {
     return(@imap_delete($conn,$message));
 }
-function mail_parse_headers($headers)
-{
+
+function mail_expunge($conn) {
+    return(@imap_expunge($conn));
+}
+
+function mail_seen($conn,$mail) {
+    return mail_flag($conn,$mail,'Seen');
+}
+
+function mail_flag($conn,$mailuid,$flag) {
+    if ($flag == "Flagged") {
+        return(@imap_setflag_full($conn,$mailuid,"\\$flag",SE_UID));
+    } else {
+        return(@imap_setflag_full($conn,$mailuid,"\\$flag",SE_UID));
+    }
+}
+
+function mail_answered($conn,$message) {
+    return(@imap_setflag_full($conn,$message,"\\Answered"));
+}
+
+function mail_parse_headers($headers) {
     mb_internal_encoding(ini_get("default_charset"));
     $headers=preg_replace('/\r\n\s+/m', '',$headers);
     preg_match_all('/([^: ]+): (.+?(?:\r\n\s(?:.+?))*)?\r\n/m', $headers, $matches);
@@ -58,15 +113,15 @@ function mail_parse_headers($headers)
     if ($result["To"] != "") $result["To"] = mb_decode_mimeheader($result["To"]);
     return($result);
 }
-function mail_mime_to_array($conn,$mid,$parse_headers=false)
-{
+
+function mail_mime_to_array($conn,$mid,$parse_headers=false) {
     $struc = imap_fetchstructure($conn,$mid);
     $mail = @mail_get_parts($conn,$mid,$stuc,0);
     if ($parse_headers) $mail[0]["parsed"]=mail_parse_headers($mail[0]["data"]);
     return($mail);
 }
-function mail_get_parts($conn,$mid,$part,$prefix)
-{   
+
+function mail_get_parts($conn,$mid,$part,$prefix) {   
     $attachments=array();
     $attachments[$prefix]=mail_decode_part($conn,$mid,$part,$prefix);
     if (isset($part->parts)) // multipart
@@ -77,8 +132,8 @@ function mail_get_parts($conn,$mid,$part,$prefix)
     }
     return $attachments;
 }
-function mail_decode_part($conn,$message_number,$part,$prefix)
-{
+
+function mail_decode_part($conn,$message_number,$part,$prefix) {
     $attachment = array();
 
     if($part->ifdparameters) {
@@ -111,9 +166,7 @@ function mail_decode_part($conn,$message_number,$part,$prefix)
     return($attachment);
 }
 
-
 function create_part_array($structure, $prefix="") {
-    //print_r($structure);
     if (sizeof($structure->parts) > 0) {    // There some sub parts
         foreach ($structure->parts as $count => $part) {
             add_part_to_array($part, $prefix.($count+1), $part_array);
@@ -123,6 +176,7 @@ function create_part_array($structure, $prefix="") {
     }
    return $part_array;
 }
+
 // Sub function for create_part_array(). Only called by create_part_array() and itself.
 function add_part_to_array($obj, $partno, & $part_array) {
     $part_array[] = array('part_number' => $partno, 'part_object' => $obj);
@@ -150,8 +204,8 @@ function add_part_to_array($obj, $partno, & $part_array) {
         }
     }
 }
-function mail_get_file($conn,$mail,$part) 
-{
+
+function mail_get_file($conn,$mail,$part) {
     $partno = $part["part_number"];
     if ($partno < 2) return false;
     $type = $part["part_object"]->subtype;
@@ -181,14 +235,33 @@ function mail_get_file($conn,$mail,$part)
     return $data;
 }
 
-function mail_get_body($conn,$mail,$part) 
-{
+function mail_getBody($conn,$mail,$header) {
+    $body = @imap_body($conn, $mail);
+    if ($header["Content-Transfer-Encoding"]=="base64") {
+        $body = @imap_base64($body);
+    } else if ($header["Content-Transfer-Encoding"]=="7bit") {
+        //$body = @imap_utf7_decode($body);
+        //Tut net wirklich.
+    } else if ($header["Content-Transfer-Encoding"]=="quoted-printable") {
+        $body = @imap_qprint($body);
+    } else if (!$header["Content-Transfer-Encoding"]) {
+        $body = @imap_qprint($body);
+    };
+    if ($header) foreach ($header as $head) {
+        if (preg_match("/charset=([^ ]+)/",$head,$hit)) $charset = $hit[1];
+    };
+    if ($charset) $body = iconv($charset,ini_get("default_charset")."//Transient",$body);
+    return $body;
+    
+}
+
+function mail_get_body($conn,$mail,$part) {
     $partno = $part["part_number"];
     $type = $part["part_object"]->subtype;
     if ($type == "PLAIN") {
-        $body = imap_fetchbody($conn,$mail,$partno);
+        $body = @imap_fetchbody($conn,$mail,$partno);
     } else if ($type == "HTML") {
-        $htmlbody = imap_fetchbody($conn,$mail,$partno);
+        $htmlbody = @imap_fetchbody($conn,$mail,$partno);
         //den htmlbody noch als File speichern??
         $body = strip_tags($htmlbody);
     }
@@ -196,7 +269,7 @@ function mail_get_body($conn,$mail,$part)
     if ($part["part_object"]->parameters) foreach ($part["part_object"]->parameters as $param) {
         if ($param->attribute == "charset") $charset = $param->value;
     }
-    $body = imap_qprint($body);
+    $body = @imap_qprint($body);
     $body = iconv($charset,ini_get("default_charset")."//Transient",$body);
     return $body;
 }

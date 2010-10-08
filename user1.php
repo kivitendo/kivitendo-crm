@@ -5,6 +5,8 @@
 	include("inc/crmLib.php");
 	include("inc/UserLib.php");
 	if ($_POST["ok"] and $_POST["termseq"]<61) {
+        if ($_POST["proto"]==1) { $_POST["proto"] = 't';
+        } else { $_POST["proto"] = 'f';}
 		$rc=saveUserStamm($_POST);
 		$id=$_POST["UID"];
 		$_SESSION["termbegin"]=$_POST["termbegin"];
@@ -22,6 +24,8 @@
 		$fa=getUserStamm($_SESSION["loginCRM"]);
 		$t->set_file(array("usr1" => "user1.tpl"));
 	}
+    if (empty($fa["ssl"])) $fa["ssl"] = "n";
+    if (empty($fa["proto"])) $fa["proto"] = "t";
 	if ($fa) foreach ($fa["gruppen"] as $row) {
 		$gruppen.=$row["grpname"]."<br>";
 	}
@@ -51,9 +55,14 @@
 			mailsign => $fa["mailsign"],
 			email => $fa["email"],
 			msrv =>	$fa["msrv"],
+			port => $fa["port"],
+			mailuser =>	$fa["mailuser"],
 			kennw => $fa["kennw"],
 			postf => $fa["postf"],
 			postf2 => $fa["postf2"],
+            protopop => ($fa["proto"]=="f")?"checked":"",
+            protoimap => ($fa["proto"]=="t")?"checked":"",
+            ssl.$fa["ssl"] => "checked",
 			interv => $fa["interv"],
 			pre => $fa["pre"],
 			kdview.$fa["kdview"] => "selected",

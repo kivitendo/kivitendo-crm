@@ -13,7 +13,7 @@ global $db;
 	if (!$val["termseq"]) $val["termseq"]=30;
 	if ($val["vertreter"]==$val["uid"]) {$vertreter="null";} else {$vertreter=$val["vertreter"];};
     $fld = array('name','etikett','addr1','addr2','addr3','workphone','homephone','notes',
-                'msrv','postf','kennw','postf2','interv','pre','abteilung','position',
+                'msrv','port','proto','ssl','postf','mailuser','kennw','postf2','interv','pre','abteilung','position',
                 'mailsign','email','icalart','icaldest','icalext');
 	$sql  = "update employee set ";
     foreach ($fld as $key) {

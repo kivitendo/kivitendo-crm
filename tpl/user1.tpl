@@ -40,6 +40,10 @@
         document.user.icalext.value = document.termedit.icalext.value;
         return true;
     }
+    function selPort() {
+        po = document.user.selport.selectedIndex;
+        document.user.port.value=document.user.selport.options[po].value;
+    }
 	</script>
 <body>
 <p class="listtop">Benutzer Stammdaten</p>
@@ -60,15 +64,20 @@
 	<input type="hidden" name="icalext" value="{icalext}">
 	<input type="hidden" name="uid" value="{uid}">
 	<input type="hidden" name="login" value="{login}">
-	<tr><td class="norm">User ID</td><td>{uid}</td>
+	<tr><td class="norm">Login</td><td>{login} : {uid}</td>
 		<td class="norm">Vertreter</td><td class="norm"><select name="vertreter">
 <!-- BEGIN Selectbox -->
 						<option value="{vertreter}"{Sel}>{vname}</option>
 <!-- END Selectbox -->
 						</select>
 		</td></tr>
-	<tr><td class="norm">Login</td><td>{login}</td>
-
+	<tr><td class="norm">Kd-Ansicht</td><td>
+		<select name="kdview">
+		<option value="1"{kdview1}>Lieferanschrift
+		<option value="2"{kdview2}>Bemerkungen
+		<option value="3"{kdview3}>sonst.Infos
+		</select>
+        </td>
 		<td class="norm">Etikett</td><td class="norm"><select name="etikett">
 <!-- BEGIN SelectboxB -->
 						<option value="{LID}"{FSel}>{FTXT}</option>
@@ -85,26 +94,36 @@
 		<td class="norm">gesch&auml;ftl.</td><td><input type="text" name="workphone" value="{workphone}" maxlength="30"></td></tr>
 	<tr><td class="norm">Bemerkung</td><td><textarea name="notes" cols="37" rows="3">{notes}</textarea></td>
 		<td class="norm">Mail-<br>unterschrift</td><td><textarea name="mailsign" cols="37" rows="3">{mailsign}</textarea></td></tr>
-	<tr><td class="norm">Kd-Ansicht</td><td>
-		<select name="kdview">
-		<option value="1"{kdview1}>Lieferanschrift
-		<option value="2"{kdview2}>Bemerkungen
-		<option value="3"{kdview3}>sonst.Infos
-		</select>
-	</td><td></td>
 	<tr><td class="norm">Regel</td><td>{role}</td>
 		<td>&nbsp;</td><td>{GRUPPE}</td></tr>
-	<tr><td class="norm">Mailserver</td><td><input type="text" name="msrv" value="{msrv}" maxlength="75"></td>
-		<td class="norm"></td>
-		<td class="norm">
+	<tr><td class="norm">Mailserver</td><td><input type="text" name="msrv" value="{msrv}" size="25" maxlength="75"></td>
+		<td class="norm">Mailuser</td>
+		<td class="norm"><input type="text" name="mailuser" value="{mailuser}" size="25" maxlength="75">
 		</td></tr>
-	<tr><td class="norm">Postfach</td><td class="norm"><input type="text" name="postf" value="{postf}" size="10" maxlength="75"> Kennwort <input type="text" name="kennw" value="{kennw}" size="10" maxlength="20"></td>
-	    <td class="norm">Termine</td><td>
-	    	von <select name="termbegin">{termbegin}</select> 
-	    	bis <select name="termend">{termend}</select> Uhr</td></tr>
+	<tr><td class="norm">Postfach</td><td class="norm"><input type="text" name="postf" value="{postf}" size="10" maxlength="75"> Port <input type="text" name="port" value="{port}" size="4" maxlength="6">
+        <select name="selport" onChange="selPort();">
+            <option value=""></option>
+            <option value="110">110</option>
+            <option value="143">143</option>
+            <option value="993">993</option>
+            <option value="995">995</option>
+        </select>
+        </td>
+		<td class="norm">Kennwort</td>
+		<td class="norm"><input type="password" name="kennw" value="{kennw}" maxlength="75">
 	<!--tr><td>Backup-Pf</td><td><input type="text" name="Postf2" value="{Postf2}" size="10"> </td><td></td></tr-->
-	<tr><td class="norm">Intervall</td><td class="norm"><input type="text" name="interv" value="{interv}" size="4" maxlength="5">sec. &nbsp;&nbsp; PreSearch <input type="text" name="pre" value="{pre}" size="10"></td>
-	    <td>Terminabstand</td><td><input type="text" name="termseq" value="{termseq}" size="3"> Minuten</td></tr>
+		</td></tr>
+	<tr><td class="norm">Protokoll</td><td><input type="radio" name="proto" value="0" {protopop}>POP <input type="radio" name="proto" value="1" {protoimap}>IMAP</td>
+		<td class="norm">SSL</td>
+		<td class="norm"><input type="radio" name="ssl" value="n" {ssln}>notls <input type="radio" name="ssl" value="s" {ssls}>ssl <input type="radio" name="ssl" value="t" {sslt}>tls
+		</td></tr>
+	<tr><td class="norm">Termine</td><td>
+	    	von <select name="termbegin">{termbegin}</select> 
+	    	bis <select name="termend">{termend}</select> Uhr</td>
+	    <td class="norm">Terminabstand</td><td><input type="text" name="termseq" value="{termseq}" size="3"> Minuten</td></tr>
+	<tr><td class="norm">Intervall</td><td>
+        <input type="text" name="interv" value="{interv}" size="4" maxlength="5">sec. &nbsp;&nbsp; PreSearch <input type="text" name="pre" value="{pre}" size="10"></td>
+		<td></td></tr>
 	<!--tr><td colspan="4"><input type="submit" name="mkmbx" value="Mailbox erzeugen"></td><td></td><td></td></tr-->
 
 	   <tr><td>&nbsp;</td><td><input type="submit" name="ok" value="sichern"></td></tr>

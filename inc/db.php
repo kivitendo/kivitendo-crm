@@ -14,7 +14,7 @@ class myDB extends DB {
  var $db = false;
  var $rc = false;
  var $showErr = false; // Browserausgabe
- var $log = false;     // Alle Abfragen mitloggen
+ var $log = true;     // Alle Abfragen mitloggen
  var $errfile = "tmp/lxcrm.err";
  var $logfile = "tmp/lxcrm.log";
  var $lfh = false;
@@ -99,8 +99,19 @@ class myDB extends DB {
 	function query($sql) {
 		if (strpos($sql,";")>0) {
 			//Sql-Injection? HTML-Sonderzeichen zulassen
-			if (!preg_match("/&[a-zA-Z]+$/",substr($sql,0,strpos($sql,";"))))
+			//if (!preg_match("/&[a-zA-Z]+$/",substr($sql,0,strpos($sql,";")))) {
+            //ok, kommt nach einem Semikolon ein SQL-Befehl? Dann abweisen
+            if (preg_match("/[^;]*[ ]*(drop|delete|insert|select|update) .*/i",$sql)) {
+			    $this->dbFehler($sql,"SQL-Injection?");
 				return false;
+                //
+                //oder
+                //Das Semikolon in Anführungsstriche setzen und weitermachen.
+                //Hilft aber nicht wenn mehrere Kommandos nacheinander kommen. 
+                //evtl. das "if" durch eine Whileschleife ersetzen.
+                //$sql = preg_replace('/([^;]*)(;[ ]*)(drop|delete|insert|select|update)( .*)/i','${1}\"${2}\"${3}${4}',$sql);
+                //
+            }
 		}
 		$this->rc=@$this->db->query($sql);
 		if ($this->log) $this->writeLog($sql);

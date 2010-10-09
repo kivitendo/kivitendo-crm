@@ -1191,9 +1191,9 @@ function holeMailHeader($usr,$Flag) {
 
 function getSenderMail($email) {
 global $db;
-    preg_match("/<(.*@.+\.[^>]+)/",$email,$clean);
+    if (!preg_match("/<(.*@.+\.[^>]+)/",$email,$clean))  $clean = $email;
     $sql="select id,name from customer where email like '%$clean%'";
-    $clean=$clean[1];
+    //$clean=$clean[1];
     $rs=$db->getOne($sql);
     $t="C";
     if (!$rs) {

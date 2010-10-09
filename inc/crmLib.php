@@ -1189,11 +1189,23 @@ function holeMailHeader($usr,$Flag) {
     };
 }
 
+/**
+ * TODO: short description.
+ * 
+ * @param mixed        
+ * @param mixed $email 
+ * @param mixed $clean 
+ * 
+ * @return TODO
+ */
 function getSenderMail($email) {
 global $db;
-    if (!preg_match("/<(.*@.+\.[^>]+)/",$email,$clean))  $clean = $email;
+    if (!preg_match("/[^<]*<(.*@.+\.[^>]+)/",$email,$clean)) {
+             $clean = $email;
+    } else {
+        $clean=$clean[1];
+    }
     $sql="select id,name from customer where email like '%$clean%'";
-    //$clean=$clean[1];
     $rs=$db->getOne($sql);
     $t="C";
     if (!$rs) {

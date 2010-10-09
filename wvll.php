@@ -23,7 +23,7 @@
 			Cause => $col["Betreff"],
 			Initdate => $col["Datum"],
 			ID => $col["Nr"],
-			IniUser => $col["Abs"],
+			IniUser => htmlspecialchars($col["Abs"]),
 			Art => "M"
 		));
 		$t->parse("Block","Liste",true);

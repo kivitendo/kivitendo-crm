@@ -25,17 +25,19 @@ class myDB extends DB {
 	* IN: $err - Fehlermeldung
 	* OUT: NONE
 	**********************************************/
-	function dbFehler($sql,$err) {
+	function dbFehler($sql,$err,$rc=false) {
 		$efh=fopen($this->errfile,"a");
 		fputs($efh,date("Y-m-d H:i:s \n"));
 		fputs($efh,'SQL:'.$sql."\n");
 		fputs($efh,'Msg:'.$err."\n");
-		fputs($efh,print_r($this->rc->backtrace[0],true)."\n");
-		$cnt=count($this->rc->backtrace);
-		for ($i=0; $i<$cnt; $i++) {
-			fputs($efh,$this->rc->backtrace[$i]['line'].':'.$this->rc->backtrace[$i]['file']."\n");
-		}
-		fputs($efh,"--------------------------------------------- \n");
+        if ($rc) {
+    		fputs($efh,print_r($rc->backtrace[0],true)."\n");
+	    	$cnt=count($rc->backtrace);
+		    for ($i=0; $i<$cnt; $i++) {
+			    fputs($efh,$rc->backtrace[$i]['line'].':'.$rc->backtrace[$i]['file']."\n");
+    		}
+        };
+   		fputs($efh,"--------------------------------------------- \n");
 		fputs($efh,"\n");
 		fclose($efh);
 		if ($this->showErr)
@@ -52,14 +54,6 @@ class myDB extends DB {
 			$this->lfh=fopen($this->logfile,"a");
 		fputs($this->lfh,date("Y-m-d H:i:s ->"));
 		fputs($this->lfh,$txt."\n");
-		if (!empty($this->rc->backtrace[0])) {
-			fputs($this->lfh,'Fehler: '."\n");
-			fputs($this->lfh,print_r($this->rc->backtrace[0],true)."\n");
-			$cnt=count($this->rc->backtrace);
-			fputs($this->lfh,$this->rc->backtrace[$cnt]['line'].':'.$this->rc->backtrace[$cnt]['file']."\n");
-		} else {
-			fputs($this->lfh,print_r($this->rc,true));
-		}
 		fputs($this->lfh,"\n");
 	}
 
@@ -113,14 +107,14 @@ class myDB extends DB {
                 //
             }
 		}
-		$this->rc=@$this->db->query($sql);
+		$rc=@$this->db->query($sql);
 		if ($this->log) $this->writeLog($sql);
-		if(DB::isError($this->rc)) {
-			$this->dbFehler($sql,$this->rc->getMessage());
+		if(DB::isError($rc)) {
+			$this->dbFehler($sql,$rc->getMessage(),$rc);
 			$this->rollback();
 			return false;
 		} else {
-			return $this->rc;
+			return $rc;
 		}
 	}
 
@@ -151,9 +145,9 @@ class myDB extends DB {
 			return false;
 		}
 		//wenn ok, ausführen
-		$this->rc=@$this->db->execute($sth, $values);
-		if(DB::isError($this->rc)) {
-			$this->dbFehler($sql,$this->rc->getMessage());
+		$rc=@$this->db->execute($sth, $values);
+		if(DB::isError($rc)) {
+			$this->dbFehler($sql,$rc->getMessage());
 			$this->dbFehler(print_r($fields,true),print_r($values,true));
 			$this->rollback();
 			return false;
@@ -183,9 +177,9 @@ class myDB extends DB {
 			return false;
 		}
 		//wenn ok, ausführen
-		$this->rc=@$this->db->execute($sth, $values);
-		if(DB::isError($this->rc)) {
-			$this->dbFehler($sql,$this->rc->getMessage());
+		$rc=@$this->db->execute($sth, $values);
+		if(DB::isError($rc)) {
+			$this->dbFehler($sql,$rc->getMessage(),$rc);
 			$this->rollback();
 			return false;
 		}
@@ -207,13 +201,13 @@ class myDB extends DB {
 
 	function getAll($sql) {
 		if (strpos($sql,";")>0) return false;
-		$this->rc=$this->db->getAll($sql,DB_FETCHMODE_ASSOC);
+		$rc=$this->db->getAll($sql,DB_FETCHMODE_ASSOC);
 		if ($this->log) $this->writeLog($sql);
-		if(DB::isError($this->rc)) {
-			$this->dbFehler($sql,$this->rc->getMessage());
+		if(DB::isError($rc)) {
+			$this->dbFehler($sql,$rc->getMessage(),$rc);
 			return false;
 		} else {
-			return $this->rc;
+			return $rc;
 		}
 	}
 /**
@@ -222,14 +216,14 @@ class myDB extends DB {
  * return mixed, false
  */
   function getAssoc($sql){
-    $this->rc=$this->db->getAssoc($sql);
+    $rc=$this->db->getAssoc($sql);
     if ($this->log) $this->writeLog($sql);
-    if(DB::isError($this->rc)) {
-      $this->dbFehler($sql,$this->rc->getMessage());
+    if(DB::isError($rc)) {
+      $this->dbFehler($sql,$rc->getMessage(),$rc);
       return false;
     } else {
 //          echo "Mem D4:" . memory_get_usage() . "\n"; // 36640
-      return $this->rc;
+      return $rc;
     }
   }
 

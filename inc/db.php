@@ -95,7 +95,7 @@ class myDB extends DB {
 			//Sql-Injection? HTML-Sonderzeichen zulassen
 			//if (!preg_match("/&[a-zA-Z]+$/",substr($sql,0,strpos($sql,";")))) {
             //ok, kommt nach einem Semikolon ein SQL-Befehl? Dann abweisen
-            if (preg_match("/[^;]*[ ]*(drop|delete|insert|select|update) .*/i",$sql)) {
+            if (preg_match("/.+[^;]*[ ]*(drop|delete|insert|select|update) .*/i",$sql)) {
 			    $this->dbFehler($sql,"SQL-Injection?");
 				return false;
                 //

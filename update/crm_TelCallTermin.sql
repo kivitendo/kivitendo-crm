@@ -1,5 +1,6 @@
 -- @tag: TelCallTermin
 -- @description: Bezug zur Termintabelle 
+-- @depends: termincat
 
 ALTER TABLE telcall ADD COLUMN termin_id integer;
 

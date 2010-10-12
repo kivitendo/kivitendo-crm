@@ -7,17 +7,34 @@
         require_once("stdLib.php");
     };
 
-    function updatever($db,$VERSION) {
-        $sql = "INSERT INTO crm (uid,datum,version) values (".$_SESSION["loginCRM"].",now(),'".$VERSION."')";
-        $rc = $_SESSION["db"]->query($sql);
-        $db->commit();
-        echo "Versionsnummer gesetzt<br>";
-        if (is_file("update/update$VERSION.txt")) {
-            echo "<h2>Wichtig!</h2>";
-            echo readfile("update/update$VERSION.txt");
-        }
-    }
+    if (!function_exists('updatever')) {
+	    function updatever($db,$VERSION) {
+		$sql = "INSERT INTO crm (uid,datum,version) values (".$_SESSION["loginCRM"].",now(),'".$VERSION."')";
+		$rc = $_SESSION["db"]->query($sql);
+		$db->commit();
+		echo "Versionsnummer gesetzt<br>";
+		if (is_file("update/update$VERSION.txt")) {
+		    echo "<h2>Wichtig!</h2>";
+		    echo readfile("update/update$VERSION.txt");
+		}
+	    }
+    };
 
+    if (!function_exists('sorttodo')) {
+	    function sorttodo($todo) {
+		$todonew = array();
+		foreach ($todo as $sql) {
+			$file = file_get_contents("update/".$sql);
+			if (preg_match("/@depends: ([^\n;]+)/",$file,$hit)) {
+				if (in_array("crm_".$hit[1].".sql",$todo) && !in_array("crm_".$hit[1].".sql",$todonew)) {
+					$todonew[] = "crm_".$hit[1].".sql";
+				} 
+			}
+			if (!in_array($sql,$todonew)) $todonew[] = $sql;
+		}
+		return $todonew;
+	    }
+    }
     $sql = "SELECT tag || '.sql' as tag  from schema_info where tag like 'crm_%' order by tag";
     $rs  = $_SESSION["db"]->getAll($sql);
     if (!$rs) { $isnow=array();} 
@@ -30,6 +47,13 @@
     if (!is_array($update)) $update=array();
     $todo = array_diff($update,$isnow);
     if ($todo) {
+	$todonew = sorttodo($todo);
+	echo "<br>";
+	while (array_diff($todo,$todonew)) {
+		$todo = $todonew;	
+		$todonew = sorttodo($todo);
+	}
+	$todo = $todonew;	
         $rc=$db->begin();
         foreach ($todo as $upd) {
             $f = fopen("update/".$upd,"r");

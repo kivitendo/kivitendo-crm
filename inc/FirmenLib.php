@@ -758,6 +758,7 @@ global $xajax,$GEODB,$BLZDB;
 		$t->set_var(array(
 			AJAXJS	=> $xajax->printJavascript(XajaxPath),
 			FAART   => ($typ=="C")?".:Customer:.":".:Vendor:.",
+			FAART2  => ($typ=="C")?".:Customer Name:.":".:Vendor Name:.",
             ERPCSS  => $_SESSION["stylesheet"],
 			Q => $typ,
 			Btn1 => "",
@@ -877,6 +878,7 @@ global $xajax,$GEODB,$BLZDB;
 		$t->set_var(array(
 				AJAXJS	=> $xajax->printJavascript(XajaxPath),
 			    FAART => ($typ=="C")?".:Customer:.":".:Vendor:.",
+			    FAART2  => ($typ=="C")?".:Customer Name:.":".:Vendor Name:.",
                 ERPCSS  => $_SESSION["stylesheet"],
 				mtime	=> $daten["mtime"],
 				Q => $typ,

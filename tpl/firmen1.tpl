@@ -60,11 +60,11 @@
 	<div class="zeile">
 		<span class="label">.:KdNr:.</span>
 		<span class="leftfeld"><input type="text" name="customernumber" size="27" maxlength="15" value="{customernumber}" tabindex="1"></span>
-		<span class="label">.:contact:.</span>
+		<span class="label">.:Contact:.</span>
 		<span class="leftfeld"><input type="text" name="contact" size="27" maxlength="25" value="{contact}" tabindex="21"></span>
 	</div>
 	<div class="zeile">
-		<span class="label">.:company:.</span>
+		<span class="label">{FAART2}</span>
 		<span class="leftfeld"><input type="text" name="name" size="27" maxlength="75" value="{name}" tabindex="1"></span>
 		<span class="label">.:Industry:.</span>
 		<span class="leftfeld"><input type="text" name="branche" size="27" maxlength="25" value="{branche}" tabindex="21"></span>

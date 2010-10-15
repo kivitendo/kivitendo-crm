@@ -111,7 +111,7 @@
 </tr><tr>
 	<td class="klein re" valign="top">.:body:.:</td>
 	<td class="">
-	<textarea class="normal" name="BodyText" id="BodyText" cols="100" rows="14" tabindex="4" onFocus="setcur(this);">{BodyText}</textarea>
+	<textarea class="normal" name="BodyText" id="BodyText" cols="100" rows="14" tabindex="4" wrap="hard" onFocus="setcur(this);">{BodyText}</textarea>
 	</td>
 </tr><tr>
 	<td class="klein re">.:file:.:</td>

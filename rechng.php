@@ -23,9 +23,9 @@
 		$mul=-1;
 	} else {
 		if ($tmp[1]["quotation"]=="t") {
-			$header="Angebots Nr: ".$nr;
+			$header="Angebots Nr: ".(($nr!="")?$nr:$tmp[1]["quonumber"]);
 		} else {
-			$header="Auftrags Nr: ".$nr;
+			$header="Auftrags Nr: ".(($nr!="")?$nr:$tmp[1]["ordnumber"]);
 			$header2=($tmp[1]["quonumber"])?"Angebots Nr: ".$tmp[1]["quonumber"]:"";
 		}
 		$mul=1;

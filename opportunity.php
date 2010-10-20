@@ -13,6 +13,7 @@
 	$jscal1.="inputField : 'zieldatum',ifFormat :'%d.%m.%Y',align : 'BL', button : 'trigger1'} );\n";
     $jscal1.="//-->\n</script>";
 	$stamm="none";
+    $show = "visible";
 	if ($_GET["Q"] and $_GET["fid"]) {
 		$fid=$_GET["fid"];
 		if ($_GET["new"]) {
@@ -21,7 +22,7 @@
 			$daten["fid"]=$fid;
 			$daten["tab"]=$_GET["Q"];
 		} else {
-			$_POST["Quelle"]=$_GET["Q"];
+			$_POST["tab"]=$_GET["Q"];
 			$_POST["fid"]=$fid;
 			$_POST["suchen"]=1;
 		}
@@ -30,42 +31,55 @@
 			$none="block";
 			$stamm="block";
 			$block="none";			
-	}
+	} else if ($_GET["history"]) {
+        $history = true;
+        $show = "hidden";
+        $_POST["oppid"]=$_GET["history"];
+    }
 	$oppstat=getOpportunityStatus();
 	$salesman=getAllUser(array(0=>true,1=>"%"));
-	if ($_POST["suchen"]) {
+	if ($_POST["suchen"] || $history) {
 		$data=suchOpportunity($_POST);
 		$none="block";
 		$block="none";
 		if (count($data)>1){
 			$t->set_file(array("op" => "opportunityL.tpl"));
 			$t->set_block("op","Liste","Block");
+            $last = 0;
 			foreach ($data as $row) {
-				$t->set_var(array(
-					LineCol	=> $bgcol[($i%2+1)],
-					id => $row["id"], 
-					name => $row["firma".strtolower($row["tab"])], 
-					title => $row["title"],
-					chance => $row["chance"]*10, 
-					betrag => sprintf("%0.2f",$row["betrag"]), 
-					status => $row["status"],
-					datum => db2date($row["zieldatum"]),
-				));
-				$t->parse("Block","Liste",true);
-				$i++;
+                if ($last <> $row["oppid"] || $history) {
+                    $t->set_var(array(
+                        LineCol	=> $bgcol[($i%2+1)],
+                        id => $row["id"], 
+                        firma => ($last==$row["oppid"])?"":$row["firma"], 
+                        oppid => $row["oppid"],
+                        show => $show,
+                        title => $row["title"],
+                        chance => $row["chance"]*10, 
+                        betrag => sprintf("%0.2f",$row["betrag"]), 
+                        status => $row["statusname"],
+                        datum => db2date($row["zieldatum"]),
+                    ));
+                    $t->parse("Block","Liste",true);
+                    $i++;
+                } 
+                $last = $row["oppid"];
 			}
 			$stamm="block";
+        	$t->set_var(array(
+                ERPCSS      => $_SESSION["stylesheet"],
+            ));
 	        $t->Lpparse("out",array("op"),$_SESSION["lang"],"work");
 			exit;
 		} else if (count($data)==0 || !$data){
 			if ($_POST["fid"]) {
 				include_once("inc/FirmenLib.php");
-				$data["name"]=getName($_POST["fid"],$_POST["Quelle"]);
+				$data["firma"]=getName($_POST["fid"],$_POST["tab"]);
 			};
 			$msg=".:notfound:.!";
 			$daten["fid"]=$_POST["fid"];
-			$daten["firma"]=$data["name"];
-			$daten["tab"]=$_POST["Quelle"];
+			$daten["firma"]=$data["firma"];
+			$daten["tab"]=$_POST["tab"];
 			$search="visible";
 			$save="visible";
 			$none="block";
@@ -132,13 +146,24 @@
 		));
 		$t->parse("BlockV","salesman",true);
 	}
+	$t->set_block("op","auftrag","BlockA");
+	if ($daten["orders"]) foreach ($daten["orders"] as $row) {
+		$t->set_var(array(
+			asel => ($row["id"]==$daten["auftrag"])?"selected":"",
+			aval => $row["id"],
+			aname => $row["ordnumber"]." : ".db2date($row["transdate"])
+		));
+		$t->parse("BlockA","auftrag",true);
+	}
 	$t->set_var(array(
         ERPCSS      => $_SESSION["stylesheet"],
 		id => $daten["id"],
-		Q => $daten["tab"],
+		oppid => $daten["oppid"],
+		auftrag => ($daten["auftrag"]>0)?$daten["auftrag"]:"0",
+		tab => $daten["tab"],
 		fid => $daten["fid"],
 		title => $daten["title"],
-		name => ($daten["firma"])?$daten["firma"]:$_POST["firma"],
+		firma => ($daten["firma"])?$daten["firma"]:$_POST["firma"],
 		zieldatum => ($daten["zieldatum"])?db2date($daten["zieldatum"]):"",
 		betrag => ($daten["betrag"])?sprintf("%0.2f",$daten["betrag"]):"",
 		next => ($daten["next"])?$daten["next"]:$_POST["next"],

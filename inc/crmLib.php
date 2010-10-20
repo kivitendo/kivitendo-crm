@@ -1630,7 +1630,7 @@ global $db;
     } else {
         $sql="select *,O.sellprice as endprice,O.sellprice as orgprice,O.discount,O.description as artikel ";
         $sql.="from orderitems O left join parts P on P.id=O.parts_id where trans_id=$id";
-        $sql1="select amount as brutto, netamount as netto,transdate, intnotes, notes, quotation,quonumber from oe where id=$id";
+        $sql1="select amount as brutto, netamount as netto,transdate, intnotes, notes, quotation,quonumber,ordnumber from oe where id=$id";
     }
     $rs=$db->getAll($sql);
     if(!$rs) {
@@ -2668,18 +2668,12 @@ global $db;
 *****************************************************/
 function getOneOpportunity($id) {
 global $db;
-    //$sql="select O.*,C.name as firma from  opportunity O left join customer C on O.fid=C.id where O.id = $id";
-    $sql="select * from  opportunity where id = $id";
+    $sql="select O.*,coalesce(V.name,C.name) as firma from  opportunity O ";
+    $sql.="left join customer C on O.fid=C.id left join vendor V on O.fid=V.id where O.id = $id";
     $rs=$db->getAll($sql);
-    if ($rs) {
-        if ($rs[0]["tab"]=="V") {
-            $sql="select name from vendor where id = ".$rs[0]["fid"];
-        } else {
-            $sql="select name from customer where id = ".$rs[0]["fid"];
-        }
-        $rs2=$db->getAll($sql);
-        $rs[0]["firma"]=$rs2[0]["name"];
-    }
+    $sql  = "select id,ordnumber,transdate from oe where vendor_id = ".$rs[0]["fid"];
+    $sql .= " or customer_id = ".$rs[0]["fid"]." and (closed = 'f' or ordnumber = '".$rs[0]["auftrag"]."') order by transdate";
+    $rs[0]["orders"]=$db->getAll($sql);
     return $rs[0];
 }
 
@@ -2691,8 +2685,8 @@ global $db;
 *****************************************************/
 function getOpportunity($fid) {
 global $db;
-    $sql="select O.*,C.name as firmaC,V.name as firmaV from  opportunity O left join customer C on O.fid=C.id ";
-    $sql.="left join vendor V on O.fid=V.id where fid = $fid";
+    $sql="select O.*,coalesce(V.name,C.name) as firma from  opportunity O left join customer C on O.fid=C.id ";
+    $sql.="left join vendor V on O.fid=V.id where fid = $fid order by oppid, itime desc";
     $rs=$db->getAll($sql);
     return $rs;
 }
@@ -2705,6 +2699,7 @@ global $db;
 *****************************************************/
 function suchOpportunity($data) {
 global $db;
+    $where = "";
     if ($data) while (list($key,$val)=each($data)) {
         if (in_array($key,array("title","notiz","zieldatum","next")) and $val) { $val=str_replace("*","%",$val); $where.="and $key like '$val%' "; }
         else if (in_array($key,array("status","chance","salesman")) and $val) { $where.="and $key = $val "; };
@@ -2713,13 +2708,16 @@ global $db;
         $where.="and (fid in (select id from customer where lower(name) like '%".strtolower($data["name"])."%') or fid = ".$data["fid"].")";
     } else */ //Nonsens!
     if ($data["fid"]) { 
-        $where.="and fid = ".$data["fid"]." and tab='".$data["Quelle"]."'"; 
-    } else if ($data["name"]) {
-        $where.="and (fid in (select id from customer where lower(name) like '%".strtolower($data["name"])."%')";
-        $where.="or fid in (select id from vendor where lower(name) like '%".strtolower($data["name"])."%') )";
+        $where.="and fid = ".$data["fid"]." and tab='".$data["tab"]."'"; 
+    } else if ($data["firma"]) {
+        $where.="and (fid in (select id from customer where name ilike '%".$data["firma"]."%')";
+        $where.="or fid in (select id from vendor where name ilike '%".$data["firma"]."%') )";
+    } else if ($data["oppid"]) {
+        $where="    oppid = ".$data["oppid"];
     }
-    $sql="select O.*,C.name as firmaC,V.name as firmaV from  opportunity O left join customer C on O.fid=C.id ";
-    $sql.="left join vendor V on O.fid=V.id where ".substr($where,3)." order by chance desc,betrag desc";
+    $sql="select O.*,OS.statusname,coalesce(V.name,C.name) as firma from  opportunity O left join opport_status OS on OS.id=O.status ";
+    $sql.="left join customer C on O.fid=C.id ";
+    $sql.="left join vendor V on O.fid=V.id where ".substr($where,3)." order by oppid,itime desc"; //chance desc,betrag desc";
     $rs=$db->getAll($sql);
     return $rs;
 }
@@ -2734,9 +2732,12 @@ function saveOpportunity($data) {
 global $db;
     if ($data["fid"] and $data["title"] and $data["betrag"] and $data["status"] and $data["chance"] and $data["zieldatum"]) {
         $data["betrag"]=str_replace(",",".",$data["betrag"]);
-        if (!$data["id"]) {
-            $newID=uniqid (rand());
-            $sql="insert into opportunity (title) values ('$newID')";
+        $newID=uniqid (rand());
+        if (!$data["oppid"]) {
+            $sql="insert into opportunity (title,oppid) values ('$newID',(select coalesce(max(oppid)+1,1001) from opportunity))";
+        } else {
+            $sql="insert into opportunity (title,oppid) values ('$newID',".$data["oppid"].")";
+        }
             $rc=$db->query($sql);
             $sql="select * from opportunity where title='$newID'";
             $rs=$db->getAll($sql);
@@ -2745,12 +2746,13 @@ global $db;
             } else {
                 $data["id"]=$rs[0]["id"];
             }
-        }
+        //}
+        if (!$data["auftrag"]) $data["auftrag"] = "null";
         $datum=date2db($data["zieldatum"]);
         $tmp="update opportunity set fid=%d,tab='%s',title='%s',zieldatum='%s', betrag=%s, chance=%d, status=%d, salesman=%d, ";
-        $tmp.="next='%s', notiz='%s', mtime='%s',memployee=%d where id=%d";
-        $sql=sprintf($tmp,$data["fid"],$data["Quelle"],$data["title"],$datum,$data["betrag"],$data["chance"],$data["status"],$data["salesman"],
-                $data["next"],$data["notiz"],date("Y-m-d H:i:s"),$_SESSION["loginCRM"],$data["id"]);
+        $tmp.="next='%s', notiz='%s', auftrag=%s, memployee=%d where id=%d";
+        $sql=sprintf($tmp,$data["fid"],$data["tab"],$data["title"],$datum,$data["betrag"],$data["chance"],$data["status"],$data["salesman"],
+                $data["next"],$data["notiz"],$data["auftrag"],$_SESSION["loginCRM"],$rs[0]["id"]);
         $rc=$db->query($sql);
         if ($rc) {
             return $data["id"];

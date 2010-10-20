@@ -16,6 +16,11 @@
 		val=document.formular.name.value;
 		f1=open("suchFa.php?op=1&name="+val,"suche","width=350,height=200,left=100,top=100");
 	}
+    function quotation(nr) {
+        if (nr>0) {
+            f=open("rechng.php?id=L{auftrag}","Auftrag","width=650,height=400,left=100,top=100");
+        } 
+    }
 	//-->
 	</script>
 	{jcal0}
@@ -25,15 +30,25 @@
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <form name="formular" action="opportunity.php" method="post">
 <input type="hidden" name="id" value="{id}">
-<input type="hidden" name="Quelle" value="{Q}">
+<input type="hidden" name="oppid" value="{oppid}">
+<input type="hidden" name="tab" value="{tab}">
 <input type="hidden" name="fid" value="{fid}">
-<input type="hidden" name="firma" value="{name}">
-<div style="position:absolute; left:1px; width:65em; top:3em; border: 0px solid black; text-align:center;" >
+<input type="hidden" name="firma" value="{firma}">
+<span style="display:{stamm};">
+	<a href="firma1.php?Q={tab}&id={fid}"><img src="image/addressbook.png" border="0" alt=".:masterdata:." title=".:masterdata:."></a>
+	<a href="opportunity.php?Q={tab}&fid={fid}"><img src="image/listen.png" border="0" alt=".:opportunitys:." title=".:opportunitys:."></a>
+	<a href="opportunity.php?Q={tab}&fid={fid}&new=1"><img src="image/new.png" border="0" alt=".:new:./.:search:." title=".:new:./.:search:."></a>
+    <a href="opportunity.php?history={oppid}"><img src="image/history.png" border="0" alt=".:history:." title=".:history:."></a>
+    <img src="image/nummer.png" border="0" alt=".:quotation:." title=".:quotation:." onClick="quotation({auftrag});">
+    <br /><br />
+</span>				
+<!--div style="position:absolute; left:1px; width:65em; top:3em; border: 1px solid black; text-align:center;" -->
+<div style="position:absolute;  left:1px;  top:3.3em; border: 0px solid black; text-align:center;" >
 	<div class="zeile">
 		<span class="label klein" onClick='toggle("fa1","fa2");'>.:company:.</span>
-		<span class="leftfeld pad value" style="width:50em; display:{block}" id="fa2" onClick='toggle("fa2","fa1");'>{name}</span>
+		<span class="leftfeld pad value" style="width:50em; display:{block}" id="fa2" onClick='toggle("fa2","fa1");'>{firma}</span>
 		<span class="leftfeld"     style="width:50em; display:{none};" id="fa1">
-			<input type="text" size="60" name="name" value="{name}" onChange="sichern()"> 
+			<input type="text" size="60" name="name" value="{firma}" onChange="sichern()"> 
 		<a href="javascript:suchFa();"><img src="image/suchen_kl.png" border="0" title=".:searchcompany:." ></a>
 		</span>
 	</div>
@@ -96,6 +111,16 @@
 		</span>
 	</div>
 	<div class="zeile">
+		<span class="label klein">.:quotation:.</span>
+		<span class="leftfeld"><select name="auftrag" onChange="sichern()">
+			<option value="" {asel}>---</option>
+<!-- BEGIN auftrag -->
+			<option value="{aval}" {asel}>{aname}</option>
+<!-- END auftrag -->
+			</select>
+		</span>
+	</div>
+	<div class="zeile">
 		<span class="label klein" onClick='toggle("ne1","ne2");'>.:nextstep:.</span>
 		<span class="leftfeld pad value" style="width:50em; display:{block}" onClick='toggle("ne2","ne1");' id="ne2">{next}</span>
 		<span class="leftfeld"     style="width:50em; display:{none};" id="ne1">
@@ -121,11 +146,6 @@
 	</div>
 
 </div>
-<span style="display:{stamm};">
-	<a href="firma1.php?Q={Q}&id={fid}"><img src="image/addressbook.png" border="0" alt=".:masterdata:." title=".:masterdata:."></a>
-	<a href="opportunity.php?Q={Q}&fid={fid}"><img src="image/listen.png" border="0" alt=".:opportunitys:." title=".:opportunitys:."></a>
-	<a href="opportunity.php?Q={Q}&fid={fid}&new=1"><img src="image/new.png" border="0" alt=".:new:./.:search:." title=".:new:./.:search:."></a>
-</span>				
 </form>
 <!-- Hier endet die Karte ------------------------------------------->
 </span>

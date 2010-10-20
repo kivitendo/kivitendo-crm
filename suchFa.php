@@ -6,6 +6,7 @@
 
 	$pers=$_GET["pers"];
 	$op=$_GET["op"];
+	$nq=$_GET["nq"];
 ?>
 <html>
 	<script language="JavaScript">
@@ -22,6 +23,7 @@
 <?php } else if ($op) { ?>
 			opener.document.formular.fid.value=fid;
 			opener.document.formular.name.value=txt;
+			opener.document.formular.tab.value=val.substr(0,1);
 <?php } else if ($_GET["konzernname"]) {?>
 			opener.document.neueintrag.konzern.value=fid;
 			opener.document.neueintrag.konzernname.value=txt;
@@ -29,12 +31,8 @@
 			opener.document.formular.cp_cv_id.value=fid;
 			opener.document.formular.name.value=txt;
 <?php } 
- if ($nq==1 || $op) { ?>
-			if (val.substr(0,1)=="V") {
-				opener.document.formular.Quelle.value="V";
-			} else {
-				opener.document.formular.Quelle.value="C";
-			}
+ if ($nq==1) { ?>
+			opener.document.formular.Quelle.value=val.substr(0,1);
 <?php } ?>
 		}
 	//-->

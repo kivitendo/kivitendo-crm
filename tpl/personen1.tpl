@@ -114,20 +114,20 @@
 				<span class="leftfeld"><input type="text" name="cp_email" size="27" maxlength="75" value="{cp_email}" tabindex="18"></span>
 			</div>
 			<div class="zeile">
-				<span class="label">.:mobile:.</span>
-				<span class="leftfeld"><input type="text" name="cp_mobile1" size="27" maxlength="75" value="{cp_mobile1}" tabindex="10"></span>
+			    <span class="label">.:company:.</span>
+			    <span class="leftfeld"><input type="text" name="customer_name" size="27" maxlength="75" value="{customer_name}" tabindex="10"></span>
 				<span class="label">www</span>
 				<span class="leftfeld"><input type="text" name="cp_homepage" size="27" maxlength="25" value="{cp_homepage}" tabindex="19"></span>
 			</div>
 		  <div class="zeile">
-			<span class="label">.:company:.</span>
-			<span class="leftfeld"><input type="text" name="customer_name" size="27" maxlength="75" value="{customer_name}" tabindex="11"></span>
 			<!-- span class="label">.:Business:.</span>
 			<span class="leftfeld"><input type="text" name="business_description" size="27" maxlength="75" value="{business_description}" tabindex="20"></span -->
 		  </div>
 			<div class="zeile">
-				<input type="checkbox" name="fuzzy" value="%" checked><span class="klein">.:fuzzy search:.&nbsp;&nbsp;<b>{Msg}</b></span> <input type="checkbox" name="vendor" checked><span class="klein">.:Vendor:.</span><input type="checkbox" name="customer" checked><span class="klein">.:Customer:.</span><br>
+				<span class="klein"><input type="checkbox" name="fuzzy" value="%" checked>.:fuzzy search:.&nbsp;&nbsp;<input type="checkbox" name="pre" value="1" {preon}>.:with prefix:.&nbsp;&nbsp;<b>{Msg}</b></span><br />
+                 <input type="checkbox" name="vendor" checked><span class="klein">.:Vendor:.</span><input type="checkbox" name="customer" checked><span class="klein">.:Customer:.</span><br>
 				 <input type="checkbox" name="deleted"><span class="klein">gelöschte Ansprechpartner (Kunden und Lieferanten) oder private Adressen</span><br>
+                
 				{Btn1} {Btn3} <input type="submit" class="anzeige" name="suche" value="suchen"> <input type="submit" class="clear" name="reset" value="clear">
 			</div>
 		</span>

@@ -124,6 +124,8 @@ global $db;
 *****************************************************/
 function suchPerson($muster) {
 global $db;
+    $pre = ($_SESSION["preon"])?"%":"";
+	$fuzzy=$muster["fuzzy"];
 	$rechte=berechtigung("cp_");
 	/*
 		Die join-Abfrage die  über die Tabelle customer geht, muss entsprechend vorher vorbereitet werden
@@ -137,51 +139,51 @@ global $db;
 	$joinVendor		= " left join vendor V on C.cp_cv_id=V.id"; //LEERZEICHEN AM ANFANG!! Nerv
 	if ($muster["cp_name"]=="~") {	//ist dies nur der sonderfall falls einer eine tilde eingibt? ein undokumentiertes ei? @holgi jb 10.6.09
                                     // Nein, das ist der Stern in der oberen Zeile. Hätte auch ein anderes Zeichen sein können. hli
-		$where0=" and upper(cp_name) ~ '^\[^A-Z\].*$'  ";
+		$where="and upper(cp_name) ~ '^\[^A-Z\].*$'";
 	} else {
 		// Array zu jedem Formularfed: 1 == toUpper
-        /* Änderung 29.6.2009 cp_greeting rausgeworfen und cp_gender eingefügt. Hinweis für Holger cp_gender kommt aus Tabelle 0 ;-)  jb*/
-	   	$dbfld=array("cp_name" => 1,"cp_givenname" => 1,"cp_gender" => 0,"cp_title" => 1,
-					"cp_street" => 1,"cp_zipcode" => 0,"cp_city" => 1,"cp_country" => 0, "country" => 0,
-					"cp_phone1" => 0,"cp_mobile1" => 0,"cp_fax" => 0,
-					"cp_homepage" => 1,"cp_email" => 1,
-					"cp_notes" => 1,"cp_stichwort1" => 1,
-					"cp_birthday" => 0,"cp_beziehung" => 1,
-					"cp_abteilung" => 1,"cp_position" => 1,
-					"cp_cv_id" => 0,"cp_owener" => 0);
+        /* Änderung 29.6.2009 cp_greeting rausgeworfen und cp_gender eingefügt. Hinweis für Holger cp_gender kommt aus Tabelle 0 ;-)  jb
+        'Tabelle 0/1' brauche ich nicht mehr 8=) */
+	   	$dbf = array("cp_name",     "cp_givenname", "cp_gender",    "cp_title" ,
+					"cp_street",    "cp_zipcode",   "cp_city",      "cp_country",   "country",
+					"cp_phone1",    "cp_fax",       "cp_homepage",  "cp_email",
+					"cp_notes",     "cp_stichwort1","cp_birthday",  "cp_beziehung",
+					"cp_abteilung", "cp_position",	"cp_cv_id",     "cp_owener");
 		$keys=array_keys($muster);
-		$dbf=array_keys($dbfld);
 		$anzahl=count($keys);
-		$where0="";
+		$where="";
 		if ($muster["customer_name"]){	// Falls das Feld Firmenname gefüllt ist
 //          $joinCustomer 	= " left join customer K on C.cp_cv_id=K.id";	//hier jetzt der left join und die werte oben überschreiben 
-                                                                            //WICHTIG Leerzeichen am Anfang für ',' (s.a. Vorbelegung)
-            $whereCustomer	= "and K.name ilike '%" . $muster["customer_name"] . "%' "; //Leerzeichen für Holgis substr nicht vergessen!!!
+                                                                            //WICHTIG Leerzeichen am Anfang für ',' (s.a. Vorbelegung)a
+            $whereCustomer	= "and K.name ilike '$pre" . $muster["customer_name"] . "$fuzzy'"; 
             /* weil die maske sowohl in Lieferant als auch Kunde sucht, hier auch die Lieferanten-Einschränkung.
              * @holgi Warum heisst es hier wieder vendor V??? und nicht vendor L (Lieferant)
                @JAN: weil das in den Firmenmasken so ist, daher sollte K auch zu C werden ;=) . 
+               @JAN: Ich will die Suche nach Daten gezielt steuern. 'Maier' soll 'Maier' finden und nicht 'Meine Maierei'!
+                    durch die Schalter $pre und $fuzzy kann das nun jeder für sich entscheiden!
             */
 //          $joinVendor 	= " left join vendor V on C.cp_cv_id=V.id";	//hier jetzt der left join und die werte oben überschreiben 
-            $whereVendor	= "and V.name ilike '%" . $muster["customer_name"] . "%' "; //Leerzeichen für Holgis substr nicht vergessen!!!
+            $whereVendor	= "and V.name ilike '$pre" . $muster["customer_name"] . "$fuzzy'"; 
 		}
 
 		$daten=false;
 		$tbl0=false;
-		$fuzzy=$muster["fuzzy"];
 
 		for ($i=0; $i<$anzahl; $i++) {
 			if (in_array($keys[$i],$dbf) && $muster[$keys[$i]]) {
-				if ($dbfld[$keys[$i]]==1)  {
-					$case1="upper("; $case2=")";
-					$suchwort=strtoupper(trim($muster[$keys[$i]]));
-				} else {
-					$case1=""; $case2="";
-					$suchwort=trim($muster[$keys[$i]]);
-				}
+				$suchwort=trim($muster[$keys[$i]]);
 				$suchwort=strtr($suchwort,"*?","%_");
 				if ($keys[$i]=="cp_birthday") {$d=explode("\.",$suchwort); $suchwort=$d[2]."-".$d[1]."-".$d[0]; };
-				$where0.="and $case1".$keys[$i]."$case2 like '".$suchwort."$fuzzy' ";
-				if ($keys[$i]=="cp_phone1") $where0.="and cp_mobile1 like '".$suchwort."$fuzzy' ";
+				if ($keys[$i]=="cp_phone1") {
+                    //Telefonnummer in beliebigen Telefonfeld suchen.
+                    $where.="and (cp_phone1 like '".$pre.$suchwort."$fuzzy' ";
+                    $where.="or cp_phone2 like '".$pre.$suchwort."$fuzzy' ";
+                    $where.="or cp_mobile1 like '".$pre.$suchwort."$fuzzy' ";
+                    $where.="or cp_mobile2 like '".$pre.$suchwort."$fuzzy' ";
+                    $where.="or cp_satphone like '".$pre.$suchwort."$fuzzy') ";
+                } else {
+				    $where.="and ".$keys[$i]." ilike '".$pre.$suchwort."$fuzzy' ";
+                }
 			}
 		}
 		$x=0;
@@ -189,7 +191,7 @@ global $db;
 			foreach ($muster["cp_sonder"] as $row) {
 				$x+=$row;
 			}
-			$where0.="and (cp_sonder & $x) = $x ";
+			$where.="and (cp_sonder & $x) = $x ";
 		}
 	}
 	$felderContact="C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender";
@@ -200,7 +202,6 @@ global $db;
 																	COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
 																	COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1";
 	
-	if ($where0<>"") $where=substr($where0,0,-1); // wofür hier noch ein substr? warum wird der letzte eintrag abgeschnitten? jb 9.6.09
 
 	$rs0=array(); //leere arrays initialisieren, damit es keinen fehler bei der funktion array_merge gibt
 	if ($muster["customer"]){ 	//auf checkbox customer mit Titel Kunden prüfen
@@ -445,6 +446,7 @@ global $laender;
 			Msg 	=> $msg,
 			action  => "personen".$tab.".php",
 			PID 	=> "",
+            preon   => ($_SESSION["preon"])?"checked":"",
 			cpsel1  => "checked",
 			cpsel2  => "",
 			cpsel3  => "",
@@ -543,6 +545,7 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
 			Btn1 	=> $btn1,
 			Btn3 	=> $btn3,
 			Msg 	=> $msg,
+            preon   => ($daten["pre"])?"checked":"",
 			action	=> "personen".$tab.".php",
 			mtime 	=> $daten["mtime"],
 			PID 	=> $daten["cp_id"],

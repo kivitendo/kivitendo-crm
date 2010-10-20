@@ -11,7 +11,9 @@
 		$id=$_POST["UID"];
 		$_SESSION["termbegin"]=$_POST["termbegin"];
 		$_SESSION["termend"]=$_POST["termend"];
+		$_SESSION["termseq"]=$_POST["termseq"];
 		$_SESSION["pre"]=$_POST["pre"];
+		$_SESSION["preon"]=$_POST["preon"];
 		$_SESSION["kdview"]=$_POST["kdview"];
 	} else if ($_POST["mkmbx"]) {
 		$rc=createMailBox($_POST["Postf2"],$_POST["Login"]);
@@ -76,6 +78,7 @@
             icalext => $fa["icalext"],
             icaldest => $fa["icaldest"],
             icalart.$fa["icalart"] => "selected",
+            preon => ($fa["preon"])?"checked":"",
 			));
 	if ($_GET["id"]) {	
 		$t->set_var(array(vertreter => $fa["vertreter"]." ".$fa["vname"]));

@@ -123,7 +123,7 @@
 	    <td class="norm">Terminabstand</td><td><input type="text" name="termseq" value="{termseq}" size="3"> Minuten</td></tr>
 	<tr><td class="norm">Intervall</td><td>
         <input type="text" name="interv" value="{interv}" size="4" maxlength="5">sec. &nbsp;&nbsp; PreSearch <input type="text" name="pre" value="{pre}" size="10"></td>
-		<td></td></tr>
+	    <td class="norm">immer mit Pre</td><td><input type="checkbox" value='t' name="preon" {preon}>Ja</td></tr>
 	<!--tr><td colspan="4"><input type="submit" name="mkmbx" value="Mailbox erzeugen"></td><td></td><td></td></tr-->
 
 	   <tr><td>&nbsp;</td><td><input type="submit" name="ok" value="sichern"></td></tr>

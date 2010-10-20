@@ -24,7 +24,7 @@
 			$data["user"][]=$row["uid"];
 		}
 	}
-    if ($_POST["search"]<>"" || $_POST["kategorie"]>0) {
+    if ($_POST["search"]<>"" || ($_POST["kategorie"]>0 && !$_POST["sichern"])) {
         $_POST["search"] = strtr($_POST["search"],"*","%");
         $rs = searchTermin($_POST["search"],$_POST["kategorie"],$_POST["vondat"],$_POST["bisdat"],($_POST["uid"]>0)?$_POST["uid"]:0);
         if (count($rs)>0) {

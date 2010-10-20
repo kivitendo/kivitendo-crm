@@ -22,8 +22,9 @@ if ($_POST) {
                 $filename= "Fvcard.".$_POST["extension"];
             }
             $f = fopen($pfad.$filename,"w");
-        } 
+        }
         $srvcode = strtoupper(ini_get("default_charset"));
+        $cnt=0;
         foreach ($csvdata as $row) {
             $vcard = new Contact_Vcard_Build();
             if ($_POST["targetcode"] !=  $srvcode) 
@@ -79,6 +80,7 @@ if ($_POST) {
             }
             unset($vcard);
             unset($text);
+            $cnt++;
         };
         if ($_POST["single"]) fclose($f);
         if ($_POST["zip"]) {
@@ -90,7 +92,8 @@ if ($_POST) {
                 $archiveFiles = glob("*_vcard.".$_POST["extension"]);
                 chdir($oldpath);
             } else {
-                $archiveFiles[] = "vcard.".$_POST["extension"];
+                //$archiveFiles[] = "vcard.".$_POST["extension"];
+                $archiveFiles[] = $filename; 
             }
             $filename= "vcard.".$_POST["extension"].".zip";
             $archive = new PclZip($pfad.$filename);
@@ -115,7 +118,7 @@ if ($_POST) {
             
         }
     };
-    echo "Erledigt";
+    echo "$cnt Adressen bearbeitet.";
 } else {
     $codecs = array("ISO_8859-1","ISO_8859-15","ASCII","UTF-8","UTF-7","Windows-1252");
     $srvcode = strtoupper(ini_get("default_charset"));

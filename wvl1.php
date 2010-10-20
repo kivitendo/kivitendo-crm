@@ -76,6 +76,7 @@
             ERPCSS      => $_SESSION["stylesheet"],
             Msg        => $msg,
             hide    => ($data["kontakt"]=="F")?"hidden":"visible",
+            nohide    => "visible",
             Cause => $data["Cause"],
             LangTxt => $data["LangTxt"],
             Datei => $data["Datei"],

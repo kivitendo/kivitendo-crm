@@ -24,6 +24,7 @@
 <!-- Beginn Code ------------------------------------------->
 <p class="listtop">Wartungsvertr&auml;ge eingeben/editieren</p>
 <form name="formular" enctype='multipart/form-data' action="{action}" method="post">
+<input type="hidden" name="Quelle" value="">
 <table>
 	
 	<tr>

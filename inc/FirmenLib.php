@@ -343,10 +343,31 @@ function suchFirma($muster,$tab="C") {
 global $db;
 	$rechte=berechtigung();
 	$tmp=suchstr($muster,$tab);
+    if ($muster["umsatz"]) {
+        if ($muster["year"]) $year = " and  transdate between '".$muster["year"]."-01-01' and '".$muster["year"]."-12-31'";
+        preg_match_all("/([<=>]?[\d]+)/",$muster["umsatz"],$treffer);
+        if ($treffer[0]) {
+            if ($tab=="C") {
+                $umstpl = "(select sum(amount) from ar where customer_id=K.id $year)";
+            } else {
+                $umstpl = "(select sum(amount) from ap where customer_id=L.id $year)";
+            }
+            foreach ($treffer[0] as $val) {
+                if ($val[0] == ">" || $val[0] == "<" || $val[0] == "=") {
+                    $ums[] = $umstpl.$val[0].substr($val,1);
+                }
+            }
+            $umsatz= " and (".implode(" and ",$ums).") ";
+        }
+    }
 	$where=$tmp["where"]; 
 	$tabs=$tmp["tabs"];
 	if ($where<>"") {
-		$sql="select * from $tabs where ($where) and $rechte";
+        if ($umsatz) {
+		    $sql="select *,$umstpl as umsatz from $tabs where ($where) $umsatz and $rechte";
+        } else {
+		    $sql="select * from $tabs where ($where) and $rechte";
+        }
 		$rs=$db->getAll($sql);
 		if(!$rs) {
 			$daten=false;
@@ -757,6 +778,14 @@ global $db;
 	$rs=$db->getAll($sql);
 	return $rs;
 }
+function getUmsatzJahre($tab) {
+global $db;
+	$sql="select distinct(substr(CAST(transdate as text),1,4)) as year from $tab";
+	$rs=$db->getAll($sql);
+    $leer=array(array("year"=>""));
+    return array_merge($leer,$rs);
+	return $rs;
+}
 
 function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false) {
 global $xajax,$GEODB,$BLZDB;
@@ -838,6 +867,8 @@ global $xajax,$GEODB,$BLZDB;
             ));
             $t->parse("BlockSF","SonderFlag",true);
         }
+        $jahre = getUmsatzJahre(($typ=="C")?"ar":"ap");
+        doBlock($t,"fa1","YearListe","YL",$jahre,"year","year",false);
         $lang = getLanguage();
         doBlock($t,"fa1","LAnguage","LA",$lang,"id","description",false);
 		$kdtyp=getBusiness();
@@ -929,6 +960,7 @@ global $xajax,$GEODB,$BLZDB;
 				account_number	=> $daten["account_number"],
 				terms		=> $daten["terms"],
 				kreditlim	=> $daten["creditlimit"],
+                umsatz      => $daten["umsatz"],
 				op		=> $daten["op"],
 				preisgrp	=> $daten["preisgroup"],
 				IMG		=> $Image,
@@ -956,6 +988,8 @@ global $xajax,$GEODB,$BLZDB;
             ));
             $t->parse("BlockSF","SonderFlag",true);
         }
+        $jahre = getUmsatzJahre(($typ=="C")?"ar":"ap");
+        doBlock($t,"fa1","YearListe","YL",$jahre,"year","year",$daten["year"]);
         $lang = getLanguage();
         doBlock($t,"fa1","LAnguage","LA",$lang,"id","description",$daten["language_id"]);
 		$kdtyp=getBusiness();

@@ -40,16 +40,20 @@
 			));
 			$i=0;
 			clearCSVData();
-			insertCSVData(array("ANREDE","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","KONTAKT","ID",
-						"KDNR","USTID","STEUERNR","KTONR","BANK","BLZ","LANG","KDTYP"),-1);
+            $header = array("ANREDE","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","KONTAKT","ID",
+						"KDNR","USTID","STEUERNR","KTONR","BANK","BLZ","LANG","KDTYP");
+            if ($_POST["umsatz"]) $header[]="UMSATZ";
+			insertCSVData($header,-1);
 			if ($daten) foreach ($daten as $zeile) {
-				insertCSVData(array($zeile["greeting"],$zeile["name"],$zeile["department_1"],
+                $data = array($zeile["greeting"],$zeile["name"],$zeile["department_1"],
 						$zeile["country"],$zeile["zipcode"],$zeile["city"],$zeile["street"],
 						$zeile["phone"],$zeile["fax"],$zeile["email"],$zeile["contact"],$zeile["id"],
 						($Q=="C")?$zeile["customernumber"]:$zeile["vendornumber"],
 						$zeile["ustid"],$zeile["taxnumber"],
 						$zeile["account_number"],$zeile["bank"],$zeile["bank_code"],
-						$zeile["language_id"],$zeile["business_id"]),$zeile["id"]);	
+						$zeile["language_id"],$zeile["business_id"]);	
+                if ($_POST["umsatz"]) $data[]=$zeile["umsatz"];
+				insertCSVData($data,$zeile["id"]);
                 if ($i<$listLimit) {
                     $t->set_var(array(
                         Q => $Q,

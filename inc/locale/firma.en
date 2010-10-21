@@ -173,5 +173,7 @@ $texts  = array(
   '.:deletetcontact:.' => 'deletet contacts (customer and vendor) or private address',
   '.:wv:.'          => 'Follow-up',
   '.:termin:.'      => 'Termin',
+  '.:sales volume:.'   => 'Sales volume',
+  '.:year:.'        => 'Year'
 );
 ?>

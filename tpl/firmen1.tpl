@@ -142,7 +142,16 @@
 		</span>
 		<span class="label">.:headcount:.</span>
 		<span class="leftfeld"><input type="text" name="headcount" size="7" maxlength="7" value="{headcount}" tabindex="32"></span>
-
+	</div>
+	<div class="zeile">
+        <span class="label">.:sales volume:.</span>
+        <span class="leftfeld"><input type="text" name="umsatz" size="7" maxlength="25" value="{umsatz}" tabindex="32"></span>
+        <span class="label">.:year:.</span>
+			<select name="year" tabindex="11" style="width:110px;">
+<!-- BEGIN YearListe -->	
+				<option value="{YLid}" {YLsel}>{YLtext}</option>
+<!-- END YearListe -->				
+			</select>
 	</div>
 	<div class="zeile">
 		<span class="label">.:sflag:.</span>

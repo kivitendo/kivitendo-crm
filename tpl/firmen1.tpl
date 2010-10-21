@@ -84,7 +84,7 @@
 	<div class="zeile">
 		<span class="label">.:country:. / .:zipcode:.</span>
 		<span class="leftfeld"><input type="text" name="country" size="2" maxlength="5" value="{country}" tabindex="4"> / 
-					<input type="text" name="zipcode" size="7" maxlength="7" value="{zipcode}" tabindex="5"></span>
+					<input type="text" name="zipcode" size="7" maxlength="15" value="{zipcode}" tabindex="5"></span>
 		<span class="label">.:bankname:.</span>
 		<span class="leftfeld"><input type="text" name="bank" size="27" maxlength="50" value="{bank}" tabindex="24"></span>
 	</div>
@@ -92,13 +92,13 @@
 		<span class="label">.:city:.</span>
 		<span class="leftfeld"><input type="text" name="city" size="27" maxlength="75" value="{city}" tabindex="6"></span>
 		<span class="label">.:bankcode:.</span>
-		<span class="leftfeld"><input type="text" name="bank_code" size="27" maxlength="15" value="{bank_code}" tabindex="26"></span>
+		<span class="leftfeld"><input type="text" name="bank_code" size="27" maxlength="25" value="{bank_code}" tabindex="26"></span>
 	</div>
 	<div class="zeile">
 		<span class="label">.:phone:.</span>
 		<span class="leftfeld"><input type="text" name="phone" size="27" maxlength="75" value="{phone}" tabindex="7"></span>
 		<span class="label">.:account:.</span>
-		<span class="leftfeld"><input type="text" name="account_number" size="27" maxlength="15" value="{account_number}" tabindex="27"></span>
+		<span class="leftfeld"><input type="text" name="account_number" size="27" maxlength="25" value="{account_number}" tabindex="27"></span>
 	</div>
 	<div class="zeile">
 		<span class="label">.:fax:.</span>

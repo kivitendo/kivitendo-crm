@@ -261,14 +261,14 @@ function suchstr($muster,$typ="C") {
 	$tab=array("C" => "customer","V" => "vendor");
 	
 	// Array zu jedem Formularfed: 0=String,2=Int
-	$dbfld=array(name => 0, street => 0, zipcode => 0,
-			city => 0, phone => 0, fax => 0,
+	$dbfld=array(name => 0, street => 0, zipcode => 1,
+			city => 0, phone => 1, fax => 1,
 			homepage => 0, email => 0, notes => 0,
 			department_1 => 0, department_2 => 0,
-			country => 0, typ => 2, sw => 0,
+			country => 0, sw => 0,
 			language_id => 2, business_id => 2,
-			ustid => 0, taxnumber => 0, lead => 2, leadsrc => 0,
-			bank => 0, bank_code => 0, account_number => 0,
+			ustid => 1, taxnumber => 1, lead => 2, leadsrc => 0,
+			bank => 0, bank_code => 1, account_number => 1,
 			vendornumber => 0, v_customer_id => 0,
 			kundennummer => 0, customernumber => 0, contact => 0,
 			employee => 2, branche => 0, headcount => 2);
@@ -288,15 +288,21 @@ function suchstr($muster,$typ="C") {
 		if (in_array($keys[$i],$suchfld) and $muster[$keys[$i]]<>"") {
             $suchwort=trim($muster[$keys[$i]]);
 			$suchwort=strtr($suchwort,"*?","%_");
+			if ($dbfld[$keys[$i]]==1) {
+                if ($suchwort[0] == "<" ||
+                    $suchwort[0] == ">" ||
+                    $suchwort[0] == "=" ) $dbfld[$keys[$i]]=2;
+            }
 			if ($dbfld[$keys[$i]]==2) {
                 $search=array();
-                preg_match_all("/([<>]?[\d]+)/",$suchwort,$treffer);
+                preg_match_all("/([<=>]?[\d]+)/",$suchwort,$treffer);
                 if ($treffer[0]) {
                     foreach ($treffer[0] as $val) {
-                        if ($val[0] == ">" || $val[0] == "<") {
-                            $search[] = $kenz[$typ].".".$keys[$i]." ".$val[0]." ".substr($val,1);
+                        if ($val[0] == ">" || $val[0] == "<" || $val[0] == "=") {
+                            $search[] = $kenz[$typ].".".$keys[$i]." ".$val[0]." '".substr($val,1)."'";
                         } else {
-                            $search[] = $kenz[$typ].".".$keys[$i]." = ".$val;
+                            //Dropdown-Boxen liefern kein "=" mit.
+                            $search[] = $kenz[$typ].".".$keys[$i]." = '".$val."'";
                         }
                     }
                     $suchwort = "( ".implode(" and ",$search)." )";

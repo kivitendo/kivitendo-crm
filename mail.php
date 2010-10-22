@@ -140,38 +140,55 @@
                 $data["CRMUSER"]=$_SESSION["loginCRM"];
                 $data["cause"]=$Subject;
                 $data["c_cause"]=$BodyText."\nAbs: ".$user["name"].' <'.$user["email"].'>';
-                $data["Q"]=$_POST["KontaktTO"][0];
-                if ($data["Q"]=="C" || $data["Q"]=="V") {
-                    include("inc/FirmenLib.php");
-                    $empf=getFirmenStamm(substr($KontaktTO,1),true,substr($KontaktTO,0,1));
-                    $data["fid"]=$empf["id"];
-                    $data["CID"]=$empf["id"];
-                    $data["nummer"]=$empf["nummer"];
-                } else {
-                    include("inc/persLib.php");
-                    $empf=getKontaktStamm(substr($KontaktTO,1));
-                    $data["fid"]=$empf["cp_cv_id"];
-                    $data["CID"]==$empf["cp_id"];
-                    $data["nummer"]=$empf["nummer"];
-                };        
+                if (!$_POST["KontaktTO"]) {
+                    //Aufruf erfolgte nicht aus Kundenmaske
+                    //Hoffentlich ist die E-Mail nur einmal vergeben.
+                    //Suche erfolgt zuerst in customer, dann vendort und control
+                    //Der erste Treffer wird genommen.
+                    if ($_POST["TO"]) {
+                        $tmp = getSenderMail($_POST["TO"]);
+                        $_POST["KontaktTO"] = $tmp["kontakttab"].$tmp["kontaktid"];
+                    } else {
+                        //Wenn kein TO, dann ist aber CC
+                        $tmp = getSenderMail($_POST["CC"]);
+                        $_POST["KontaktTO"] = $tmp["kontakttab"].$tmp["kontaktid"];
+                    }
+                }
                 $data["Kontakt"]="M";
                 $data["Bezug"]=0;
                 $data['Zeit']=date("H:i");
                 $data['Datum']=date("d.m.Y");
                 $data["DateiID"]=0;
                 $data["Status"]=1;
+                $data["inout"]='o';
                 $data["DCaption"]=$Subject;
                 $stamm=false;
-                // Einträge in den Kontaktverlauf
-                if ($_POST["KontaktTO"] && substr($_POST["KontaktTO"],0,1)<>"E"){
-                    $data["CID"]=substr($_POST["KontaktTO"],1);
-                    insCall($data,$_FILES);
-                    $stamm=true;
-                }
-                if ($_POST["KontaktCC"] && !substr($_POST["KontaktCC"],0,1)<>"E"){
-                    $data["CID"]=substr($_POST["KontaktCC"],1);
-                    insCall($data,$_FILES);
-                    $stamm=true;
+                if ($_POST["KontaktTO"]!="") {
+                    $data["Q"]=$_POST["KontaktTO"][0];
+                    if ($data["Q"]=="C" || $data["Q"]=="V") {
+                        include("inc/FirmenLib.php");
+                        $empf=getFirmenStamm(substr($KontaktTO,1),true,substr($KontaktTO,0,1));
+                        $data["fid"]=$empf["id"];
+                        $data["CID"]=$empf["id"];
+                        $data["nummer"]=$empf["nummer"];
+                    } else {
+                        include("inc/persLib.php");
+                        $empf=getKontaktStamm(substr($KontaktTO,1));
+                        $data["fid"]=$empf["cp_cv_id"];
+                        $data["CID"]==$empf["cp_id"];
+                        $data["nummer"]=$empf["nummer"];
+                    };        
+                    // Einträge in den Kontaktverlauf
+                    if ($_POST["KontaktTO"] && substr($_POST["KontaktTO"],0,1)<>"E"){
+                        $data["CID"]=substr($_POST["KontaktTO"],1);
+                        insCall($data,$_FILES);
+                        $stamm=true;
+                    }
+                    if ($_POST["KontaktCC"] && !substr($_POST["KontaktCC"],0,1)<>"E"){
+                        $data["CID"]=substr($_POST["KontaktCC"],1);
+                        insCall($data,$_FILES);
+                        $stamm=true;
+                    }
                 }
                 if (!$stamm) {
                     $data["CID"]=$_SESSION["loginCRM"];        // Dann halt beim Absender in den Thread eintragen

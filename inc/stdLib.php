@@ -7,7 +7,7 @@ ini_set('include_path',$inclpa.":../:./crmajax:./inc:../inc");
 require_once "conf.php";
 require_once "version.php";
 require_once $dbmodul."db.php";
-
+//if ($DEBUG && !$_SESSION["DEBUG"]) {
 if (!$_SESSION["db"] || !$_SESSION["cookie"] ||
 	($_SESSION["cookie"] && !$_COOKIE[$_SESSION["cookie"]]) ) {
 	require_once "login.php";
@@ -161,6 +161,7 @@ global $ERPNAME;
 			$_SESSION["termend"]=($tmp["termend"])?$tmp["termend"]:19;
 			$_SESSION["termseq"]=($tmp["termseq"])?$tmp["termseq"]:30;
 			$_SESSION["Pre"]=$tmp["pre"];
+			$_SESSION["preon"]=$tmp["preon"];
 			$_SESSION["interv"]=($tmp["interv"]>0)?$tmp["interv"]:60;
 			$_SESSION["loginCRM"]=$tmp["id"];
 			$_SESSION["kdview"]=$tmp["kdview"];

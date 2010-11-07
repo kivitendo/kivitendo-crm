@@ -388,6 +388,14 @@ global $db;
 		return false;
 	}
 }
+function getFaID($name) {
+global $db;
+    $sql="select id,C from customer where name ilike '%$name%'";
+    $sql = "SELECT id,'C',name as tab from customer where name ilike '%$name%' union ";
+    $sql.= "SELECT id,'V',name as tab from vendor   where name ilike '%$name%'";
+    $rs=$db->getAll($sql);
+    return $rs;
+}
 
 function chkTimeStamp($tabelle,$id,$stamp,$begin=false) {
 global $db;

@@ -72,5 +72,28 @@ $texts  = array(
   '.:location:.'    => 'Location',
   '.:history:.'     => 'History',
   '.:quotation:.'   => 'Quotation'
+  '.:description:.' => 'Description',
+  '.:startdate:.'   => 'Startdate',
+  '.:stopdate:.'    => 'Stopdate',
+  '.:active:.'      => 'Aktive',
+  '.:project:.'     => 'Project',
+  '.:yes:.'         => 'Yes',
+  '.:no:.'          => 'No',
+  '.:timetracker:.' => 'Time tracker',
+  '.:now:.'         => 'now',
+  '.:start work:.'  => 'Start work',
+  '.:stop work:.'   => 'Stop work',
+  '.:stop now:.'    => 'stop now',
+  '.:used:.'        => 'used',
+  '.:remain:.'      => 'remaining',
+  '.:hours:.'       => 'Hours',
+  '.:minutes:.'     => 'Minutes',
+  '.:clearing:.'    => 'clearing',
+  '.:aim:.'         => 'Aim',
+  '.:non ambiguous:.'    => 'not ambiguous',
+  '.:saved:.'       => 'Data saved,
+  '.:saving:.'      => 'saving data',
+  '.::.'    => '',
+
 );
 ?>

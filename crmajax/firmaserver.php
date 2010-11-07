@@ -68,22 +68,22 @@
         $maillink="<a href='mail.php?TO=".$data["shiptoemail"]."&KontaktTO=$tab".$data["trans_id"]."'>".$data["shiptoemail"]."</a>";
         $htmllink="<a href='".$data["shiptohomepage"]."' target='_blank'>".$data["shiptohomepage"]."</a>";
         $objResponse = new xajaxResponse();
-                $objResponse->assign("SID",                  "innerHTML", $id);
-                $objResponse->assign("shiptoname",           "innerHTML", htmlentities($data["shiptoname"],ENT_NOQUOTES,$charset));
-                $objResponse->assign("shiptodepartment_1",   "innerHTML", htmlentities($data["shiptodepartment_1"],ENT_NOQUOTES,$charset));
-                $objResponse->assign("shiptodepartment_2",   "innerHTML", htmlentities($data["shiptodepartment_2"],ENT_NOQUOTES,$charset));
-                $objResponse->assign("shiptostreet",         "innerHTML", htmlentities($data["shiptostreet"],ENT_NOQUOTES,$charset));
-                $objResponse->assign("shiptocountry",        "innerHTML", $data["shiptocountry"]);
-                $objResponse->assign("shiptobland",          "innerHTML", html_entity_decode($data["shiptobundesland"],ENT_NOQUOTES,$charset));
-                $objResponse->assign("shiptozipcode",        "innerHTML", $data["shiptozipcode"]);
-                $objResponse->assign("shiptocity",           "innerHTML", htmlentities($data["shiptocity"],ENT_NOQUOTES,$charset));
-                $objResponse->assign("shiptocontact",        "innerHTML", $data["shiptocontact"]);
-                $objResponse->assign("shiptophone",          "innerHTML", $data["shiptophone"]);
-                $objResponse->assign("shiptofax",            "innerHTML", $data["shiptofax"]);
-                $objResponse->assign("shiptocontact",        "innerHTML", $data["shiptocontact"]);
-                $objResponse->assign("shiptoemail",          "innerHTML", $maillink);
-                $objResponse->assign("shiptohomepage",       "innerHTML", $htmllink);
-                return $objResponse;
+        $objResponse->assign("SID",                  "innerHTML", $id);
+        $objResponse->assign("shiptoname",           "innerHTML", htmlentities($data["shiptoname"],ENT_NOQUOTES,$charset));
+        $objResponse->assign("shiptodepartment_1",   "innerHTML", htmlentities($data["shiptodepartment_1"],ENT_NOQUOTES,$charset));
+        $objResponse->assign("shiptodepartment_2",   "innerHTML", htmlentities($data["shiptodepartment_2"],ENT_NOQUOTES,$charset));
+        $objResponse->assign("shiptostreet",         "innerHTML", htmlentities($data["shiptostreet"],ENT_NOQUOTES,$charset));
+        $objResponse->assign("shiptocountry",        "innerHTML", $data["shiptocountry"]);
+        $objResponse->assign("shiptobland",          "innerHTML", html_entity_decode($data["shiptobundesland"],ENT_NOQUOTES,$charset));
+        $objResponse->assign("shiptozipcode",        "innerHTML", $data["shiptozipcode"]);
+        $objResponse->assign("shiptocity",           "innerHTML", htmlentities($data["shiptocity"],ENT_NOQUOTES,$charset));
+        $objResponse->assign("shiptocontact",        "innerHTML", $data["shiptocontact"]);
+        $objResponse->assign("shiptophone",          "innerHTML", $data["shiptophone"]);
+        $objResponse->assign("shiptofax",            "innerHTML", $data["shiptofax"]);
+        $objResponse->assign("shiptocontact",        "innerHTML", $data["shiptocontact"]);
+        $objResponse->assign("shiptoemail",          "innerHTML", $maillink);
+        $objResponse->assign("shiptohomepage",       "innerHTML", $htmllink);
+        return $objResponse;
     }
     function showContactadress($id){
         $cp_sonder = getSonder();
@@ -420,8 +420,8 @@
     }
     function getDocVorlage_($did,$fid=0,$pid=0,$tab="C") {
         $inhalt="<div id='iframe2'>";
-            $inhalt.="        <iframe id='newdoc' width='100%' height='100%' name='newdoc' src='firma4a.php?did=$did&fid=$fid&tab=$tab&pid=$pid' frameborder='0'></iframe>";
-           $inhalt.="</div>";
+        $inhalt.="        <iframe id='newdoc' width='100%' height='100%' name='newdoc' src='firma4a.php?did=$did&fid=$fid&tab=$tab&pid=$pid' frameborder='0'></iframe>";
+        $inhalt.="</div>";
         $objResponse = new xajaxResponse();
         $objResponse->assign("fbright",     "innerHTML", $inhalt);
         return $objResponse;
@@ -471,7 +471,89 @@
         $input.="</table><input type='submit' name='send' value='erzeugen'></form></body></html>";
         $objResponse = new xajaxResponse();
         $objResponse->assign("fbright",     "innerHTML", $input);
-                return $objResponse;
+        return $objResponse;
+    }
+    function editTevent($id) {
+        $data = getOneTevent($id);
+        $objResponse = new xajaxResponse();
+        $objResponse->assign("ttevent",        "value", $data["ttevent"]);
+        $objResponse->assign("eventid",        "value", $id);
+        $a = explode(" ",$data["ttstart"]);
+        $objResponse->assign("startd",         "value", db2date($a[0]));
+        $objResponse->assign("startt",         "value", substr($a[1],0,5));
+        if ($data["ttstop"]) {
+            $b = explode(" ",$data["ttstop"]);
+            $sd = db2date($b[0]);
+            $st = substr($b[1],0,5);
+        } else {
+            $sd = "";
+            $st = "";
+        }
+        $objResponse->assign("stopd",          "value", $sd);
+        $objResponse->assign("stopt",          "value", $st);
+        return $objResponse;
+    }
+    function listTevents($id) {
+        $events = getTTEvents($id);
+        if (!$events) return false;
+        $tt = getOneTT($events[0]["ttid"]);
+        $objResponse = new xajaxResponse();
+        $liste = "<form name='cleared' method='post' action='timetrack.php'>";
+        $liste.= "<input type='hidden' name='tid' value='".$events[0]["ttid"]."'>";
+        $liste.= "<table>";
+        $i = 0;
+        $now = time();
+        $diff = 0;
+        if ($events) foreach ($events as $row) {
+            $a = explode(" ",$row["ttstart"]);
+            $t1 = strtotime($row["ttstart"]);
+            if ($row["ttstop"]) {
+                $b = explode(" ",$row["ttstop"]);   
+                $stop = db2date($b[0])." ".substr($b[1],0,5);
+                $t2 = strtotime($row["ttstop"]);
+            } else {
+                $t2 = $now;
+                $stop = "<a href='timetrack.php?tid=".$row["ttid"]."&eventid=".$row["id"]."&stop=now'>.:stopnow:.</a>";
+            };
+            $diff += $t2 - $t1;
+            $i++; 
+            if ($row["cleared"] == "t") {
+                $clear = "<td>-</td>";
+            } else {
+                if ($row["uid"] == $_SESSION["loginCRM"]) {
+                    $clear = "<td><input type='checkbox' name='clear[]' value='".$row["id"]."'></td>";
+                } else {
+                    $clear = "<td>+</td>";
+                };
+            }
+            $liste .= "<tr class='calls".($i%2)."' onClick='editrow(".$row["id"].");'>$clear<td>".db2date($a[0])." ".substr($a[1],0,5)."</td>";
+            $liste .= "<td>".$stop."</td><td>".$row["user"]."</td><td>";
+            if (strlen($row["ttevent"])>40) {
+                $liste .= substr($row["ttevent"],0,40)."...</td></tr>";
+            } else {
+                $liste .= $row["ttevent"]."</td></tr>";
+            }
+        };
+        $diff = floor($diff / 60);
+        if ($tt["aim"]>0) {
+            $rest = $tt["aim"] * 60 - $diff;
+            $rstd = floor($rest/60);
+            $rmin = ($rest%60);
+            $rest = translate('.:remain:.','work')." $rstd:$rmin ".translate('.:hours:.','work');
+        } else {
+            $rest = "";
+        }
+        if ($diff>60) {
+            $min = sprintf("%02d",($diff % 60));
+            $std = floor($diff/60);
+            $use = "$std:$min ".translate('.:hours:.','work');
+        } else {    
+            $use = $diff." ".translate('.:minutes:.','work');
+        }
+        $liste .= "</table><input type='submit' name='clr' value='".translate(".:clearing:.","work")."'></form>";
+        $objResponse->assign("summtime",       "innerHTML", translate(".:used:.","work")." $use $rest");
+        $objResponse->assign("eventliste",     "innerHTML", $liste);
+        return $objResponse;
     }
     require("crmajax/firmacommon".XajaxVer.".php");
     $xajax->processRequest();

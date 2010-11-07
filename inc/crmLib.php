@@ -2832,4 +2832,196 @@ global $db;
     $rc=$db->query($sql);
     return $rc;
 }
+
+/**
+ * TODO: short description.
+ * 
+ * @param double $data 
+ * 
+ * @return TODO
+ */
+function saveTT($data) {
+global $db;
+    if ($data["name"] && !$data["fid"]) {
+        $rs = getFaID($data["name"]);
+        if (count($rs)==1) {
+            $data["fid"] = $rs[0]["id"];
+            $data["tab"] = $rs[0]["tab"];
+        } else if (count($rs)>1) {
+            $data["msg"] = ".:customer:. .:non ambiguous:.";
+            return $data;
+        } else {
+            $data["msg"] = ".:customer:. .:not found:.";
+            return $data;
+        }
+    }
+    if (!$data["id"]>0) {
+        $newID=uniqid (rand());
+        $sql = "insert into timetrack (ttname) values ('$newID')";
+        $rc = $db->query($sql);
+        if ($rc) {
+            $sql = "select * from timetrack where ttname = '$newID'";
+            $rs = $db->getOne($sql);
+            $data["id"] = $rs["id"];
+        }
+    }
+    $sql = "update timetrack set ttname = '".$data["ttname"]."',";
+    $sql.= "ttdescription = '".$data["ttdescription"]."',";
+    $sql.= "uid = ".$_SESSION["loginCRM"].",";
+    if ($data["fid"]) $sql.= "fid = ".$data["fid"].",tab = '".$data["tab"]."',";
+    if ($data["startdate"]) $sql.= "startdate = '".date2db($data["startdate"])."',";
+    if ($data["stopdate"]) $sql.= "stopdate = '".date2db($data["stopdate"])."',";
+    if ($data["aim"]) $sql.= "aim = ".$data["aim"].",";
+    $sql.= "active = '".$data["active"]."'";
+    $sql.= " where id = ".$data["id"];
+    $rc = $db->query($sql);
+    if ($rc) {
+        $data["msg"] = ".:saved:.";
+    } else {
+        $data["msg"] = ".:error:. .:saving:.";
+    }
+    $data["uid"] = $_SESSION["loginCRM"];
+    return $data;
+}
+
+/**
+ * TODO: short description.
+ * 
+ * @param double $data 
+ * 
+ * @return TODO
+ */
+function searchTT($data) {
+global $db;
+    $sql = "select *  from timetrack where 1=1";
+    if ($data["fid"]) { 
+        $sql .= " and fid = ".$data["fid"];
+    } else if ($data["name"]) {
+        $sql .= " and fid in (select id from customer where name ilike '%".$data["name"]."%')";
+    }
+    if ($data["ttname"]) $sql .= " and ttname ilike '%".$data["ttname"]."%'";
+    if ($data["ttdescription"]) $sql .= " and ttdescription ilike '%".$data["ttdescription"]."%'";
+    if ($data["startdate"]) $sql .= " and startdate >= '".date2db($data["startdate"])."'";
+    if ($data["stopdate"]) $sql .= " and stopdate <= '".date2db($data["stopdate"])."'";
+    if ($data["active"]) $sql .= " and active = '".$data["active"]."'";
+    $rs = $db->getAll($sql);
+    return $rs;
+}
+
+/**
+ * TODO: short description.
+ * 
+ * @param int $id 
+ * 
+ * @return TODO
+ */
+function getOneTT($id) {
+global $db;
+    $sql = "select t.*,v.name as vname,c.name as cname from timetrack t ";
+    $sql.= "left join customer c on c.id=t.fid ";
+    $sql.= "left join vendor v on v.id=t.fid ";
+    $sql.= "where t.id = $id";
+    $rs = $db->getOne($sql);
+    $rs["name"]=($rs["tab"]=="C")?$rs["cname"]:$rs["vname"];
+    $rs["startdate"] = db2date($rs["startdate"]);
+    $rs["stopdate"] = db2date($rs["stopdate"]);
+    $rs["events"] = getTTEvents($id);
+    return $rs;
+}
+/**
+ * TODO: short description.
+ * 
+ * @param int $id 
+ * 
+ * @return TODO
+ */
+function getTTEvents($id) {
+global $db;
+    $sql = "select t.*,coalesce(e.name,e.login) as user from tt_event t ";
+    $sql.= "left join employee e on e.id=t.uid where ttid = $id order by t.ttstart";
+    $rs = $db->getAll($sql);
+    return $rs;
+}
+/**
+ * TODO: short description.
+ * 
+ * @param int $id 
+ * 
+ * @return TODO
+ */
+function deleteTT($id) {
+global $db;
+}
+
+/**
+ * TODO: short description.
+ * 
+ * @param double $data 
+ * 
+ * @return TODO
+ */
+function saveTTevent($data) {
+global $db;
+    if ($data["start"]=="1") {
+        $adate = date("'Y-m-d H:i'");
+    } else {
+        list($d,$m,$y) = explode(".",$data["startd"]);
+        list($h,$i) = explode(":",$data["startt"]);
+        if (checkdate($m,$d,$y) && ($h>=0 && $h<24) && ($i>=0 && $i<60)) { 
+            $adate = sprintf("'%04d-%02d-%02d %02d:%02d'",$y,$m,$d,$h,$i);
+        } else {
+            return false;
+        }
+    };
+    if ($data["stop"]=="1") {
+        $edate = date("'Y-m-d H:i'");
+    } else if ($data["stopd"]) {
+        list($d,$m,$y) = explode(".",$data["startd"]);
+        list($h,$i) = explode(":",$data["startt"]);
+        if (checkdate($m,$d,$y) && ($h>=0 && $h<24) && ($i>=0 && $i<60)) { 
+            $edate = sprintf("'%04d-%02d-%02d %02d:%02d'",$y,$m,$d,$h,$i);
+        } else {
+            return false;
+        }
+    } else {
+        $edate = "null";
+    }
+    if ($data["eventid"]) {
+        $sql = "update tt_event set ttevent = '".$data["ttevent"]."',ttstart=$adate,";
+        $sql.= "ttstop=$edate where id = ".$data["eventid"];
+    } else {
+        $sql = "insert into tt_event (ttid,uid,ttevent,ttstart,ttstop) values (";
+        $sql.= $data["tid"].",".$_SESSION["loginCRM"].",'".$data["ttevent"]."',";
+        $sql.= $adate.",".$edate.")";
+    }
+    $rc = $db->query($sql);
+}
+
+/**
+ * TODO: short description.
+ * 
+ * @param int    $id   
+ * @param string $stop 
+ * 
+ * @return TODO
+ */
+function stopTTevent($id,$stop) {
+global $db;
+    $sql = "update tt_event set ttstop = '$stop' where id = $id";
+    $rc = $db->query($sql);
+    return $rc;
+}
+/**
+ * TODO: short description.
+ * 
+ * @param int $id 
+ * 
+ * @return TODO
+ */
+function getOneTevent($id) {
+global $db;
+    $sql = "select * from tt_event where id = $id";
+    $rs = $db->getOne($sql);
+    return $rs;
+}
 ?>

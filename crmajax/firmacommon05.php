@@ -21,5 +21,6 @@
     $xajax->register(XAJAX_FUNCTION,"showFile");
     $xajax->register(XAJAX_FUNCTION,"getDocVorlage_");
     $xajax->register(XAJAX_FUNCTION,"saveAttribut");
-
+    $xajax->register(XAJAX_FUNCTION,"editTevent");
+    $xajax->register(XAJAX_FUNCTION,"listTevents");
 ?>

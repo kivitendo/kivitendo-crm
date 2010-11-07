@@ -20,5 +20,7 @@
     $xajax->registerFunction("showFile");
     $xajax->registerFunction("getDocVorlage_");
     $xajax->registerFunction("saveAttribut");
+    $xajax->registerFunction("editTevent");
+    $xajax->registerFunction("listTevents");
 
 ?>

@@ -257,7 +257,6 @@ CREATE TABLE opportunity(
 	salesman int,
 	next character varying(100),
 	notiz text,
-    oppid integer NOT NULL,
     auftrag integer DEFAULT 0,
 	itime timestamp DEFAULT now(),
 	iemployee integer,

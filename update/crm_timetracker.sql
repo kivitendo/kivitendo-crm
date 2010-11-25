@@ -10,7 +10,7 @@ CREATE TABLE timetrack (
     startdate date,
     stopdate date,
     aim integer,
-    active boolean DEFAULT 't'
+    active boolean DEFAULT 't',
     uid integer NOT NULL,
 );
 

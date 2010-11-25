@@ -194,7 +194,7 @@ global $db;
 			$where.="and (cp_sonder & $x) = $x ";
 		}
 	}
-	$felderContact="C.cp_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender";
+	$felderContact="C.cp_id, C.cp_cv_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_sonder, C.cp_gender as cp_gender";
 
 	/*	Nehme entweder die Adressdaten des Ansprechpartners oder die der Rechnungsadresse. Da cp_phone etc mit einer leeren
 			Zeichenkette gefüllt wird, das NULLIF-Hilfskonstrukt (s.a. http://www.postgresql.org/docs/8.1/static/functions-conditional.html) */

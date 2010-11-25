@@ -35,7 +35,20 @@
                 $snd=""; $dest=""; 
             };
             clearCSVData();
-            insertCSVData(array("ANREDE","TITEL","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","FIRMA","GESCHLECHT","ID"),-1);
+            $header = array("ANREDE","TITEL","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","FIRMA","FaID","GESCHLECHT","ID");
+            $sql = "select name from custom_variable_configs where module = 'CT'";
+            $rs = $db->getAll($sql);
+            if ($rs) {
+                $cvar = 0;
+                foreach ($rs as $row) {
+                    $cvheader[] = "vc_cvar_".$row["name"];
+                    $header[] = "VC_CVAR_".strtoupper($row["name"]);
+                    $cvar++;
+                };
+            }  else {
+                $cvar = false;
+            }
+            insertCSVData($header,-1);
              /*
              * An dieser Stelle suchen wir die entsprechenden Werte für die verschiedenen Anreden der vorhandenen Sprachen.
              * Die Routine befindet sich im Backend persLib.php
@@ -85,9 +98,21 @@
                  * Der Blog ist sowieso gut und sollte mal hier angemerkt werden 'google: "mokka mit schlag"
                  * http://cafe.elharo.com/optimization/how-to-write-network-backup-software-a-lesson-in-practical-optimization/
                 */
-                insertCSVData(array($zeile["cp_greeting"],$zeile["cp_title"],$zeile["cp_name"],$zeile["cp_givenname"],
-                $zeile["cp_country"],$zeile["cp_zipcode"],$zeile["cp_city"],$zeile["cp_street"],
-                $zeile["cp_phone1"],$zeile["cp_fax"],$zeile["cp_email"],$zeile["name"],$zeile["cp_gender"],$zeile["cp_id"]),$zeile["cp_id"]);
+                $save = array($zeile["cp_greeting"],$zeile["cp_title"],$zeile["cp_name"],$zeile["cp_givenname"],
+                        $zeile["cp_country"],$zeile["cp_zipcode"],$zeile["cp_city"],$zeile["cp_street"],
+                        $zeile["cp_phone1"],$zeile["cp_fax"],$zeile["cp_email"],$zeile["name"],$zeile["cp_cv_id"],
+                        $zeile["cp_gender"],$zeile["cp_id"]); 
+                if ($cvar>0) {
+                    $rs = getFirmaCVars($zeile["cp_cv_id"]);
+                    if ($rs) {
+                        foreach($cvheader as $cvh) {
+                            $save[] = $rs[$cvh];
+                        }
+                    } else {
+                        for ($i=0; $i<$cvar; $i++) $save[] = false;
+                    }
+                }
+                insertCSVData($save,$zeile["cp_id"]);
                 if ($_POST["FID1"]) {
                     $insk="<input type='checkbox' name='kontid[]' value='".$zeile["cp_id"]."'>"; 
                     $js="";

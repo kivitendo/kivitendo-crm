@@ -2,6 +2,7 @@
 	require_once("../inc/stdLib.php");
 	include("crmLib.php");
 	include("UserLib.php");
+	include("FirmenLib.php");
 
 	function getMailTpl($id,$KontaktTO='') {
 		$data=getOneMailVorlage($id);
@@ -12,6 +13,8 @@
 			if (substr($KontaktTO,0,1)=="P") {
 				include("inc/persLib.php");
 				$empf=getKontaktStamm(substr($KontaktTO,1));
+                $tmp = getFirmaCVars($empf["cp_cv_id"]);
+                if ($tmp) foreach($tmp as $key=>$val) { $empf[$key]=$val; };
 			} else if ($KontaktTO) {
 				include("inc/FirmenLib.php");
 				$empf=getFirmenStamm(substr($KontaktTO,1),true,substr($KontaktTO,0,1));

@@ -10,7 +10,7 @@
 function getShipStamm($id,$tab="C",$complete=false) {
 global $db;
     if ($complete) {
-        $sql ="select shiptoname,COALESCE(shiptostreet,street) as shiptostreet,COALESCE(shiptocity,city) as shiptocity,";
+        $sql ="select trans_id,shiptoname,COALESCE(shiptostreet,street) as shiptostreet,COALESCE(shiptocity,city) as shiptocity,";
         $sql.="COALESCE(shiptocountry,country) as shiptocountry,";
         $sql.="COALESCE(shiptozipcode,zipcode) as shiptozipcode,";
         $sql.="COALESCE(shiptodepartment_1,department_1) as shiptodepartment_1,";

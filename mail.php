@@ -42,6 +42,8 @@
         if (substr($KontaktTO,0,1)=="K") {
             include("inc/persLib.php");
             $empf=getKontaktStamm(substr($KontaktTO,1));
+            $tmp = getFirmaCVars($empf["cp_cv_id"]);
+            if ($tmp) foreach($tmp as $key=>$val) { $empf[$key]=$val; };
             $TO=$empf["cp_email"];
         } else if ($KontaktTO) {
             include("inc/FirmenLib.php");

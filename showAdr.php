@@ -55,6 +55,7 @@
         $fax=$data["cp_fax"];
         $email=$data["cp_email"];
         $kontakt="";
+        if ($data2) $data = $data2;
     } else if ($_GET["sid"]) {
         $id=$_GET["sid"];
         $dest="sid=".$_GET["sid"];
@@ -73,6 +74,7 @@
             $fax=$data["shiptofax"];
             $email=$data["shiptoemail"];
         } 
+        $data=getFirmaCVars($data["trans_id"]);
         $name1=$name;
     } else {
         $id=$_GET["fid"];
@@ -99,7 +101,7 @@
                    "STRASSE"=>"strasse","PLZ"=>"plz","ORT"=>"ort","LAND"=>"land",
                    "KONTAKT"=>"kontakt","FIRMA"=>"firma","ID"=>"id","KDNR"=>"kdnr",
                    "EMAIL"=>"email","TEL"=>"telefon","FAX"=>"fax");
-       foreach ($data as $key=>$val) {
+        foreach ($data as $key=>$val) {
             $key = strtoupper($key);
             if (substr($key,0,8) == "VC_CVAR_") {
                 $platzhalter[$key] = $key;

@@ -18,8 +18,8 @@ if ($_POST) {
 	if ($rc) {
 	?>
 	<script>
+		top.main_window.dateibaum('left','<?php echo  $_POST["pfad"] ?>');
 		top.main_window.newFile('left');
-		top.main_window.dateibaum('left','<?php echo  $_POST["pfad"] ?>')
 	</script>
 <?php  }; 
 } ?>
@@ -28,7 +28,7 @@ if ($_POST) {
     <link type="text/css" REL="stylesheet" HREF="../css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
     <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
 </head>
-<body class="klein" style="padding:0em; margin:0em;">
+<body class="docfrm klein" style="padding:0em; margin:0em;" >
 <table width="100%" class="klein">
 	<tr class="dochead"><td><?php echo  translate('.:uploadDocument:.','firma') ?></td><td align="right"><a href="javascript:top.main_window.newFile('left')">(X)</a></td></tr>
 </table>

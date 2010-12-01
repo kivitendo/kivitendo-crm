@@ -98,6 +98,8 @@ $texts  = array(
   '.:missing:.'     => 'fehlender',
   '.:customer:.'    => 'Kunde',
   '.:clrok:.'       => 'Checkbox markieren',
+  '.:nothing to do:.'  => 'nichts zu tun',
+  '.:all:.'    	    => 'alle',
   '.::.'    => '',
 );
 ?>

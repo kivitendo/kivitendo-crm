@@ -311,7 +311,7 @@ function insCall($data,$datei) {
 global $db;
     $id=mknewTelCall();
     if ($data["fid"]!=$data["CID"]) {
-	//Ein Ansprechpartner ausgewählt
+    //Ein Ansprechpartner ausgewählt
         $pfad="P".$data["CID"];
         $wv["cp_cv_id"]="P".$data["CID"];
     } else {
@@ -895,7 +895,7 @@ global $db;
     if ($data["kontakt"]=="F") {
         $sql ="update notes set subject='".$data["Cause"]."',body='$descript', created_by=".$_SESSION["loginCRM"];
         if ($data["cp_cv_id"]) {
-    	    $sql.=",trans_id=".substr($data["cp_cv_id"],1);
+            $sql.=",trans_id=".substr($data["cp_cv_id"],1);
             $sql.=",trans_module='ct'";
         } else {
             $sql.=",trans_id=".$data["WVLID"];
@@ -919,7 +919,7 @@ global $db;
                 $rc = $db->query($sql);
             } else {
                 $sql ="update follow_up_links set trans_id=".substr($data["cp_cv_id"],1);
-	            $sql.=",trans_type='".((substr($data["cp_cv_id"],0,1)=="V")?"vendor":"customer");
+                $sql.=",trans_type='".((substr($data["cp_cv_id"],0,1)=="V")?"vendor":"customer");
                 $sql.="',trans_info='".$data["name"]."' where follow_up_id = ".$data["WVLID"];
                 $rc=$db->query($sql);
             }
@@ -2253,7 +2253,8 @@ global $db;
     $sql="select * from custmsg where $where ";
     $rs=$db->getAll($sql);
     if(!$rs) {
-        $sql = "select id,cause,coalesce(finishdate,'9999-12-31 00:00:00') as finishdate  from wiedervorlage where status > '0' and (kontaktid = $id or ";
+        $sql = "select id,cause,coalesce(finishdate,'9999-12-31 00:00:00') as finishdate  ";
+        $sql.= "from wiedervorlage where status > '0' and (kontaktid = $id or ";
         $sql.= "kontaktid in (select cp_id from contacts where cp_cv_id = $id)) ";
         $sql.=" order by finishdate,initdate";
         $rs=$db->getAll($sql);
@@ -2701,8 +2702,11 @@ function suchOpportunity($data) {
 global $db;
     $where = "";
     if ($data) while (list($key,$val)=each($data)) {
-        if (in_array($key,array("title","notiz","zieldatum","next")) and $val) { $val=str_replace("*","%",$val); $where.="and $key like '$val%' "; }
-        else if (in_array($key,array("status","chance","salesman")) and $val) { $where.="and $key = $val "; };
+        if (in_array($key,array("title","notiz","zieldatum","next")) and $val) { 
+            $val=str_replace("*","%",$val); $where.="and $key like '$val%' "; 
+        } else if (in_array($key,array("status","chance","salesman")) and $val) { 
+            $where.="and $key = $val "; 
+        };
     }
     /*if ($data["fid"]  and $data["name"]) { 
         $where.="and (fid in (select id from customer where lower(name) like '%".strtolower($data["name"])."%') or fid = ".$data["fid"].")";
@@ -2915,7 +2919,7 @@ global $db;
  * 
  * @return TODO
  */
-function getOneTT($id) {
+function getOneTT($id,$event=true) {
 global $db;
     $sql = "select t.*,v.name as vname,c.name as cname from timetrack t ";
     $sql.= "left join customer c on c.id=t.fid ";
@@ -2925,7 +2929,7 @@ global $db;
     $rs["name"]=($rs["tab"]=="C")?$rs["cname"]:$rs["vname"];
     $rs["startdate"] = db2date($rs["startdate"]);
     $rs["stopdate"] = db2date($rs["stopdate"]);
-    $rs["events"] = getTTEvents($id);
+    if ($event) $rs["events"] = getTTEvents($id,"o",false);
     return $rs;
 }
 /**
@@ -2935,10 +2939,12 @@ global $db;
  * 
  * @return TODO
  */
-function getTTEvents($id) {
+function getTTEvents($id,$alle,$evtid) {
 global $db;
     $sql = "select t.*,coalesce(e.name,e.login) as user from tt_event t ";
-    $sql.= "left join employee e on e.id=t.uid where ttid = $id order by t.ttstart";
+    $sql.= "left join employee e on e.id=t.uid where ttid = $id ";
+    if (!$alle) $sql.= "and cleared='f' ";
+    $sql.= $evtid." order by t.ttstart";
     $rs = $db->getAll($sql);
     return $rs;
 }
@@ -2951,7 +2957,7 @@ global $db;
  */
 function deleteTT($id) {
 global $db;
-    $ev = getTTEvents($id);
+    $ev = getTTEvents($id,"d",false);
     if (count($ev)>0) return false;
     $sql = "DELETE from timetrack where  id = $id";
     $rc = $db->query($sql);
@@ -2981,10 +2987,11 @@ global $db;
     if ($data["stop"]=="1") {
         $edate = date("'Y-m-d H:i'");
     } else if ($data["stopd"]) {
-        list($d,$m,$y) = explode(".",$data["startd"]);
-        list($h,$i) = explode(":",$data["startt"]);
+        list($d,$m,$y) = explode(".",$data["stopd"]);
+        list($h,$i) = explode(":",$data["stopt"]);
         if (checkdate($m,$d,$y) && ($h>=0 && $h<24) && ($i>=0 && $i<60)) { 
             $edate = sprintf("'%04d-%02d-%02d %02d:%02d'",$y,$m,$d,$h,$i);
+            if ($edate<$adate) $edate = $adate;
         } else {
             return false;
         }
@@ -3028,5 +3035,82 @@ global $db;
     $sql = "select * from tt_event where id = $id";
     $rs = $db->getOne($sql);
     return $rs;
+}
+
+function mkTTorder($id,$evids) {
+global $db,$ttpart,$tttime,$ttround;
+    $tt = getOneTT($id,$false);
+    //Steuerzone ermitteln (0-3)
+    $sql = "select taxzone_id from customer where id = ".$tt["fid"];
+    $rs = $db->getOne($sql);
+    $tzid = $rs["taxzone_id"];
+    //Artikeldaten holen
+    $sql = "select * from parts where partnumber = '$ttpart'";
+    $part = $db->getOne($sql); 
+    $partid = $part["id"];
+    $sellprice = $part["sellprice"];
+    $unit = $part["unit"];
+    //Kontoid ermitteln anhand der Buchungsgruppe und Steuerzone
+    $sql = "select income_accno_id_$tzid as chartid from buchungsgruppen where id = ".$part["buchungsgruppen_id"];
+    $rs = $db->getOne($sql); 
+    //Steuersatz ermitteln
+    $sql  = "select rate + 1 as tax from tax left join taxkeys on taxkey=taxkey_id where taxkeys.chart_id = ".$rs["chartid"];
+    $sql .= " and tax_id = tax.id and startdate <= now() order by startdate desc limit 1";
+    $rs = $db->getOne($sql); 
+    $tax = $rs["tax"];
+    $curr = getCurr();
+    $db->begin();
+    //Events holen
+    $events = getTTEvents($id,false,$evids);
+    if (!$events) { 
+        return ".:nothing to do:.";
+    };
+    //Auftrag erzeugen
+    $sonumber = nextNumber("sonumber");
+    if (!$sonumber) return ".:error:.";
+    $newID=uniqid (rand());
+    $sql="insert into oe (notes,ordnumber,cusordnumber) values ('$newID','$sonumber','".$tt["fid"]."')";
+    $rc = $db->query($sql,"newOE");
+    $sql = "select id from oe where notes = '$newID'";
+    $rs = $db->getOne($sql);
+    $trans_id = $rs["id"];
+    $sql_i = "INSERT INTO orderitems (trans_id, parts_id, description, qty, sellprice, unit, ship, discount,serialnumber) values (";
+    foreach ($events as $row) {
+        if ($row["ttstop"] == "") {
+            $db->rollback();
+            return ".:close event:.";
+        }
+        $t1 = strtotime($row["ttstart"]);
+        $t2 = strtotime($row["ttstop"]);
+        //Minuten
+        $diff = floor(($t2 - $t1) / 60);
+        //Abrechnungseinheiten
+        $time = floor($diff / $tttime);
+        //Ist der Rest über der Tolleranz
+        if ($diff - ($tttime * $time) > $round) $time++;
+        $price =  $time * $sellprice;
+        //Orderitemseintrag
+        $sql = $sql_i."$trans_id,$partid,'".$row["ttevent"]."',$time,$sellprice,'$unit',0,0,'$diff')";
+        $rc = $db->query($sql);
+        $netamount += $price;
+    }
+    //OE-Eintrag updaten
+    $amount = $netamount * $tax; 
+    $sql  = "update oe set transdate=now(),";
+    $sql .= "customer_id=".$tt["fid"].", amount=".$amount.", netamount=".$netamount;
+    $sql .= ", reqdate=now(), notes='".$tt["ttname"]."\n".$tt["ttdescription"];
+    $sql .= "', taxincluded='f', curr='$curr',employee_id=".$_SESSION["loginCRM"].", vendor_id=0 ";
+    $sql .="where id=".$trans_id;
+    $rc=$db->query($sql,"uodOE");
+    if (!$rc) {
+        $db->rollback();
+        return ".:error:.";
+    } else {
+        //Events als Abgerechnet markieren.
+        $sql = "UPDATE tt_event t set cleared = 't' where t.ttid = $id $evids";
+        $rc = $db->query($sql);
+        $db->commit();
+        return ".:ok:.";
+    }
 }
 ?>

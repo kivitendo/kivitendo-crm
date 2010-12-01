@@ -96,7 +96,8 @@ $texts  = array(
   '.:missing:.'     => 'missing',
   '.:customer:.'    => 'customer',
   '.:clrok:.'       => 'select checkbox',
-
+  '.:nothing to do:.'  => 'nothing to do',
+  '.:all:.'         => 'all',
   '.::.'    => '',
 
 );

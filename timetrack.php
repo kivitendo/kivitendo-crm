@@ -42,10 +42,10 @@
             $data["msg"] = ".:not found:.";
         } else {
             $data = getOneTT($data[0]["id"]);
-	    $delete = ($data["uid"]==$_SESSION["loginCRM"])?True:False;
+	        $delete = ($data["uid"]==$_SESSION["loginCRM"])?True:False;
         }
     } else if ($_POST["getone"]) {
-            $data = getOneTT($_POST["tid"]);
+        $data = getOneTT($_POST["tid"]);
 	    $delete = ($data["uid"]==$_SESSION["loginCRM"])?True:False;
     } else if ($_POST["delete"]) {
         $rc = deleteTT($_POST["id"]);
@@ -55,10 +55,12 @@
             $msg = ".:not posible:.";
         };
     } else if ($_POST["clr"]) {
-            if ($_POST["clrok"]=="1") {
+            if ($_POST["clrok"]=="1" || count($_POST["clear"])>0) {
                 if ($_POST["tid"]) {
+                    if (count($_POST["clear"])>0) $evids = "and t.id in (".implode(",",$_POST["clear"]).") ";
+                    $msg = mkTTorder($_POST["tid"],$evids);
                     $data = getOneTT($_POST["tid"]);
-                    $data["msg"] = "ok";
+                    $data["msg"] = $msg;
                 } else {
                     $data["msg"] = ".:missing:. .:customer:.";
                 }

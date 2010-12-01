@@ -95,6 +95,9 @@ $texts  = array(
   '.:non ambiguous:.'    => 'nicht eindeutig',
   '.:saved:.'       => 'Daten gesichert',
   '.:saving:.'      => 'Speichern',
+  '.:missing:.'     => 'fehlender',
+  '.:customer:.'    => 'Kunde',
+  '.:clrok:.'       => 'Checkbox markieren',
   '.::.'    => '',
 );
 ?>

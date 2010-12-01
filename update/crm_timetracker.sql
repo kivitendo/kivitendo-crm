@@ -11,7 +11,7 @@ CREATE TABLE timetrack (
     stopdate date,
     aim integer,
     active boolean DEFAULT 't',
-    uid integer NOT NULL,
+    uid integer NOT NULL
 );
 
 CREATE TABLE tt_event (

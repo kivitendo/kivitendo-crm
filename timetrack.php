@@ -42,9 +42,11 @@
             $data["msg"] = ".:not found:.";
         } else {
             $data = getOneTT($data[0]["id"]);
+	    $delete = ($data["uid"]==$_SESSION["loginCRM"])?True:False;
         }
     } else if ($_POST["getone"]) {
             $data = getOneTT($_POST["tid"]);
+	    $delete = ($data["uid"]==$_SESSION["loginCRM"])?True:False;
     } else if ($_POST["delete"]) {
         $rc = deleteTT($_POST["id"]);
         if ($rc) {
@@ -53,35 +55,23 @@
             $msg = ".:not posible:.";
         };
     } else if ($_POST["clr"]) {
-            $data = getOneTT($_POST["tid"]);
-            if ($data["fid"]) {
-                print_r($_POST);
+            if ($_POST["clrok"]=="1") {
+                if ($_POST["tid"]) {
+                    $data = getOneTT($_POST["tid"]);
+                    $data["msg"] = "ok";
+                } else {
+                    $data["msg"] = ".:missing:. .:customer:.";
+                }
             } else {
-                $data["msg"] = ".:missing:. .:customer:.";
+                $data = getOneTT($_POST["tid"]);
+                $data["msg"] = ".:clrok:.";
             }
     } else {
         unset($data);
         $data["active"] = "t";
     }
     if ($data["events"]) {
-        $t->set_block("tt","ttliste","Blocktt");
-        foreach ($data["events"] as $row) {
-            $a = explode(" ",$row["ttstart"]);
-            if ($row["ttstop"]) {
-                $b = explode(" ",$row["ttstop"]);   
-                $stop = db2date($b[0])." ".substr($b[1],0,5);
-            } else {
-                $stop = "<a href='timetrack.php?tid=".$row["ttid"]."&eventid=".$row["id"]."&stop=now'>.:stopnow:.</a>";
-            }
-            $t->set_var(array(
-                ttstart => db2date($a[0])." ".substr($a[1],0,5),
-                ttstop  => $stop,
-                ttuid   => $row["uid"],
-                ttevent => $row["ttevent"],
-                ttedit  => $row["id"]
-            ));
-            $t->parse("Blocktt","ttliste",true);
-        };
+	$delete = False;
     }
     $t->set_var(array(
         ERPCSS  => $_SESSION["stylesheet"],
@@ -100,6 +90,7 @@
         active.$data["active"] => "checked",
         msg     => $data["msg"],
         visible => ($visible)?"visible":"hidden",
+        delete  => ($delete)?"visible":"hidden",
         chkevent => ($data["id"]>0)?"onLoad='getEventListe();'":"",
         jcal0 => ($jcalendar)?$jscal1:"",
         jcal1 => ($jcalendar)?"<a href='#' id='trigger1' name='START' title='.:startdate:.' onClick='false'><img src='image/date.png' border='0' align='middle'></a>":"",

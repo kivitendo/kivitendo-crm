@@ -93,6 +93,10 @@ $texts  = array(
   '.:non ambiguous:.'    => 'not ambiguous',
   '.:saved:.'       => 'Data saved,
   '.:saving:.'      => 'saving data',
+  '.:missing:.'     => 'missing',
+  '.:customer:.'    => 'customer',
+  '.:clrok:.'       => 'select checkbox',
+
   '.::.'    => '',
 
 );

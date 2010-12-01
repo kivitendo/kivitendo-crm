@@ -14,7 +14,8 @@
         xajax_editTevent(id);
     }
     function getEventListe() {
-        xajax_listTevents({id});
+	id = document.formular.id.value
+        xajax_listTevents(id);
     }
 	//-->
 	</script>
@@ -71,11 +72,11 @@
 	<div class="zeile">
 		<span class="label"></span>
         <span style="visibility:{noown}">
-		<input type="image" src="image/save_kl.png" alt='.:save:.' title='.:save:.' name="save" value=".:save:." style="visibility:{save};"> &nbsp;
+		<input type="image" src="image/save_kl.png" alt='.:save:.' title='.:save:.' name="save" value=".:save:." > &nbsp;
 		<input type="image" src="image/cancel_kl.png" alt='.:delete:.' title='.:delete:.' name="delete" value=".:delete:." style="visibility:{delete};"> &nbsp;
         </span>
-		<input type="image" src="image/neu.png" alt='.:new:.' title='.:new:.' name="clear" value=".:new:." style="visibility:{new};"> &nbsp;
-		<input type="image" src="image/suchen.png" alt='.:search:.' title='.:search:.' name="search" value=".:search:." style="visibility:{search};"> &nbsp;
+		<input type="image" src="image/neu.png" alt='.:new:.' title='.:new:.' name="clear" value=".:new:." > &nbsp;
+		<input type="image" src="image/suchen.png" alt='.:search:.' title='.:search:.' name="search" value=".:search:." > &nbsp;
         <span id="summtime"></span>
 	</div>
 

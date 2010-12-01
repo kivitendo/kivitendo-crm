@@ -495,9 +495,9 @@
     }
     function listTevents($id) {
         $events = getTTEvents($id);
-        if (!$events) return false;
-        $tt = getOneTT($events[0]["ttid"]);
         $objResponse = new xajaxResponse();
+        if (!$events) return  $objResponse;;
+        $tt = getOneTT($events[0]["ttid"]);
         $liste = "<form name='cleared' method='post' action='timetrack.php'>";
         $liste.= "<input type='hidden' name='tid' value='".$events[0]["ttid"]."'>";
         $liste.= "<table>";
@@ -513,7 +513,7 @@
                 $t2 = strtotime($row["ttstop"]);
             } else {
                 $t2 = $now;
-                $stop = "<a href='timetrack.php?tid=".$row["ttid"]."&eventid=".$row["id"]."&stop=now'>.:stopnow:.</a>";
+                $stop = "<a href='timetrack.php?tid=".$row["ttid"]."&eventid=".$row["id"]."&stop=now'><b>".translate('.:stop now:.','work')."</b></a>";
             };
             $diff += $t2 - $t1;
             $i++; 
@@ -550,7 +550,8 @@
         } else {    
             $use = $diff." ".translate('.:minutes:.','work');
         }
-        $liste .= "</table><input type='submit' name='clr' value='".translate(".:clearing:.","work")."'></form>";
+        $liste .= "</table><input type='checkbox' name='clrok' value='1'>";
+	$liste .= "<input type='submit' name='clr' value='".translate(".:clearing:.","work")."'></form>";
         $objResponse->assign("summtime",       "innerHTML", translate(".:used:.","work")." $use $rest");
         $objResponse->assign("eventliste",     "innerHTML", $liste);
         return $objResponse;

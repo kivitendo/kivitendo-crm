@@ -2857,7 +2857,7 @@ global $db;
     }
     if (!$data["id"]>0) {
         $newID=uniqid (rand());
-        $sql = "insert into timetrack (ttname) values ('$newID')";
+        $sql = "insert into timetrack (uid,ttname) values (1,'$newID')";
         $rc = $db->query($sql);
         if ($rc) {
             $sql = "select * from timetrack where ttname = '$newID'";
@@ -2951,6 +2951,11 @@ global $db;
  */
 function deleteTT($id) {
 global $db;
+    $ev = getTTEvents($id);
+    if (count($ev)>0) return false;
+    $sql = "DELETE from timetrack where  id = $id";
+    $rc = $db->query($sql);
+    return $rc;
 }
 
 /**

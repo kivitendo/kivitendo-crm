@@ -146,7 +146,6 @@
     	<!--/div>
 	<div style="position:absolute;top:21em; left:0em; width:38em;  text-align:left; border-bottom: 1px solid black;"-->
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<hr width="100%">
-		&nbsp;<span id="cp_sonder"></span><br>
 		&nbsp;<span id="cp_notes" class="klein" style="width:36em;"></span><br>
 		<hr>
 		&nbsp;<span id="cp_privatphone"></span> <span id="cp_privatemail"></span><br />

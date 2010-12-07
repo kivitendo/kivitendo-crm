@@ -171,11 +171,6 @@
 			<span class="feld"><input type="text" name="cp_beziehung" size="8" maxlength="10" value="{cp_beziehung}" tabindex="24"></span>
 		</div>
 	</span><span style="float:left;">
-		<!--div class="zeile2"-->.:sflag:.:
-	<!-- BEGIN SonderFlag -->
-			<div class="zeile2"><input type="checkbox" name="cp_sonder[]" value="{SFid}" {SFsel}>{SFtext}</div>
-	<!-- END SonderFlag -->					
-		<!--/div-->
 			<span class="label">{IMG}{IMG_}<br>
 			{visitenkarte}</span>
 	</span>

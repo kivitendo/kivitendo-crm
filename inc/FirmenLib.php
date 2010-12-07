@@ -354,12 +354,6 @@ function suchstr($muster,$typ="C") {
             }
         }
     }
-    if ($muster["sonder"]) {
-        foreach ($muster["sonder"] as $row) {
-            $x+=$row;
-        }
-        $tmp1.="and (".$kenz[$typ].".sonder & $x) = $x";
-    }
     if ($tbl1) {
         $tabs=$tab[$typ]." ".$kenz[$typ]." left join shipto S on ".$kenz[$typ].".id=S.trans_id";
     } else {
@@ -458,11 +452,6 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
 global $db;
     $kenz=array("C" => "K","V" => "L");
     $tab=array("C" => "customer","V" => "vendor");
-    $tmp=0;
-    if ($daten["sonder"]) foreach ($daten["sonder"] as $data) {
-        $tmp+=$data;
-    }
-    $daten["sonder"]=$tmp;
     if (!empty($datei["Datei"]["name"])) {          // eine Datei wird mitgeliefert
             $pictyp=array("gif","jpeg","png","jpg");
             $ext=substr($datei["Datei"]["name"],strrpos($datei["Datei"]["name"],".")+1);
@@ -492,7 +481,7 @@ global $db;
         owener => array(0,0,6,"CRM-User",0),            grafik => array(0,0,9,"Grafik",4),
         lead => array(0,0,6,"Leadquelle",0),            leadsrc => array(0,0,1,"Leadquelle",15),
         bland => array(0,0,6,"Bundesland",0),            taxzone_id => array(0,1,6,"Steuerzone",0),
-        sonder => array(0,0,10,"SonderFlag",0),            salesman_id => array(0,0,6,"Vertriebler",0),
+        salesman_id => array(0,0,6,"Vertriebler",0),
         shiptoname => array(1,0,1,"Liefername",75),     konzern    => array(0,0,6,"Konzern",0),
         shiptostreet => array(1,0,1,"Lieferstrasse",75),
         shiptobland => array(1,0,6,"Liefer-Bundesland",0),
@@ -901,16 +890,6 @@ global $xajax,$GEODB,$BLZDB;
             txid0 => "selected",
             variablen => "" 
             ));
-        $cp_sonder = getSonder(False);
-        $t->set_block("fa1","SonderFlag","BlockSF");
-        if ($cp_sonder) foreach ($cp_sonder as $row) {
-            $t->set_var(array(
-                SFid => $row["svalue"],
-                SFsel => '',
-                SFtext => $row["skey"]
-            ));
-            $t->parse("BlockSF","SonderFlag",true);
-        }
         $jahre = getUmsatzJahre(($typ=="C")?"ar":"ap");
         doBlock($t,"fa1","YearListe","YL",$jahre,"year","year",false);
         $lang = getLanguage();
@@ -1022,16 +1001,6 @@ global $xajax,$GEODB,$BLZDB;
                 BLZ2        => ($BLZDB)?"":"--",
                 variablen => $varablen
         ));
-        $cp_sonder = getSonder(False);
-        $t->set_block("fa1","SonderFlag","BlockSF");
-        if ($cp_sonder) foreach ($cp_sonder as $row) {
-            $t->set_var(array(
-                SFsel => ($daten["sonder"] & $row["svalue"])?"checked":"",
-                SFid => $row["svalue"],
-                SFtext => $row["skey"]
-            ));
-            $t->parse("BlockSF","SonderFlag",true);
-        }
         $jahre = getUmsatzJahre(($typ=="C")?"ar":"ap");
         doBlock($t,"fa1","YearListe","YL",$jahre,"year","year",$daten["year"]);
         $lang = getLanguage();

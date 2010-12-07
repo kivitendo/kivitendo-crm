@@ -41,9 +41,13 @@
 		function ks() {
 			sw=document.ksearch.suchwort.value;
 			if (sw != "") 
-				F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
+    			F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
 			return false;
 		}
+        function doLink() {
+            lnk = document.getElementById('actionmenu').options[document.getElementById('actionmenu').selectedIndex].value;
+            window.location.href = lnk;
+        }
 		var last = 'lie';
 		function submenu(id) {
 			document.getElementById(last).style.visibility='hidden';
@@ -84,12 +88,6 @@
 		leftpos=Math.floor(screen.width/2);
         f1=open(tool,"Adresse","width=350, height=200, left="+leftpos+", top=50, status=no,toolbar=no,menubar=no,location=no,titlebar=no,scrollbars=yes,fullscreen=no");
 	}
-	function showVar() {
-		document.getElementById("Variablen").style.visibility="visible";
-	}
-	function hideVar() {
-		document.getElementById("Variablen").style.visibility="hidden";
-	}
 	function showOP(was) {
                 F1=open("op_.php?Q={Q}&fa={Fname1}&op="+was,"OP","width=950, height=450, left=100, top=50, scrollbars=yes");
         }
@@ -118,6 +116,12 @@
 		<option value="{cid}">{cname}</option>
 <!-- END kdhelp -->
 	</select>
+        <select id="actionmenu" onchange="doLink();">
+            <option>Aktionen</option>
+            <option value='vcardexp.php?Q={Q}&fid={FID}'>VCard</option>
+            <option value='karte.php?Q={Q}&fid={FID}'>.:register:.</option>
+            <option value='firmen3.php?Q={Q}&id={FID}&edit=1'>.:edit:.</option>
+        </select>
 	</ul>
     </div>
     <div style="float:right; padding-left:1em; padding-bottom:2em; visibility:{tools};" >
@@ -174,10 +178,9 @@
 		<ul id="submenu" class="subshadetabs" style="padding-left:5px;">
 			<li id="sublie"><a href="#" onClick="submenu('lie')">.:shipto:.</a></li>
 			<li id="subnot"><a href="#" onClick="submenu('not')">.:notes:.</a></li>
+			<li id="subvar"><a href="#" onClick="submenu('var')">.:variablen:.</a></li>
+			<li id="subfin"><a href="#" onClick="submenu('fin')">.:FinanzInfo:.</a></li>
 			<li id="subinf"><a href="#" onClick="submenu('inf')">.:miscInfo:.</a></li>
-			<li><a href="vcardexp.php?Q={Q}&fid={FID}">VCard</a></li>
-			<li><a href="karte.php?Q={Q}&fid={FID}">.:register:.</a></li>
-			<li><a href="firmen3.php?Q={Q}&id={FID}&edit=1">.:edit:.</a></li>
 		</ul>
 	</div>
 
@@ -200,31 +203,47 @@
 	</span>
 
 	<span id="not" style="visibility:hidden;position:absolute;  text-align:left;width:32em; left:1.2em; top:18.0em;">
-		<div id="Variablen" style="position: absolute; z-Index: 2; background-color:white; visibility: hidden">
-			<table>
-			{Vars}
-			</table>
-			<br>
-			[ <a href='#' onClick="hideVar();">.:hide:.</a> ]
+		<div  class="zeile klein">
+		    <span class="labelLe">.:Catchword:.</span><span class="value">{sw}     </span>
+		<div  class="zeile klein">
 		</div>
-		<div style="width:35em;" class="klein">
-		<table class="normal">
-		<tr><td class="labelLe">.:language:.:   </td><td><div class="value">{language}</a></div></td></tr>
-		<tr><td class="labelLe">.:variables:.:   </td><td><div class="value"><a href='#' onClick="showVar();">{variablen}</a></div></td></tr>
-		<tr><td class="labelLe">.:Checkbox:.:   </td><td><div class="value">{sonder} </div></td></tr>
-		<tr><td class="labelLe">.:Industry:.:    </td><td><div class="value">{branche}</div></td></tr>
-		<tr><td class="labelLe">.:Catchword:.: </td><td><div class="value">{sw}     </div></td></tr>
-		<tr><td class="labelLe" valign="top">.:Remarks:.:</td><td><div class="value">{notiz}  </div></td></tr>
-		</table>
+		    <span class="labelLe" valign="top">.:Remarks:.</span><span class="value">{notiz}</span>
 		</div>
 	</span>	
 
-	<span id="inf" style="visibility:hidden;position:absolute; text-align:left;width:32em; left:1.2em; top:17.1em;">
+	<span id="var" style="visibility:hidden;position:absolute;  text-align:left;width:32em; left:1.2em; top:18.0em;">
+		<div  class="zeile klein">
+<!-- BEGIN vars -->
+		 <span class="labelLe">{varname}</span><span class="value">{varvalue}</span><br />
+<!-- END vars -->
+		</div>
+	</span>	
+
+	<span id="inf" style="visibility:hidden;position:absolute;  text-align:left;width:32em; left:1.2em; top:18.0em;">
 		<div  class="zeile klein">
 			<span class="labelLe">.:Concern:.:</span>
 			<span class="value"><a href="firma1.php?Q={Q}&id={konzern}">{konzernname}</a></span>
 			<span> &nbsp; <a href="konzern.php?Q={Q}&fid={FID}">{konzernmember}</a></span>
 		</div>
+		<div  class="zeile klein">
+			<span class="labelLe">.:headcount:.:</span><span class="value">{headcount}</span>
+		</div>
+        <br />
+		<div  class="zeile klein">
+		    <span class="labelLe">.:language:.:</span><span class="value">{language}</span>
+		<div  class="zeile klein">
+		</div>
+		    <span class="labelLe">.:Industry:.</span><span class="value">{branche}</span>
+		</div>
+        <br />
+		<div  class="zeile klein">
+			<span class="labelLe">.:Init date:.:</span>	<span class="value">{erstellt}</span>
+			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+			<span class="labelLe">.:update:.:</span><span class="value">{modify}</span>
+		</div>
+	</span>	
+
+	<span id="fin" style="visibility:hidden;position:absolute; text-align:left;width:32em; left:1.2em; top:17.1em;">
 		<div  class="zeile klein">
 			<span class="labelLe">.:Business:.:</span>
 			<span class="value">{kdtyp}</span>
@@ -239,13 +258,6 @@
 			<span class="labelLe">.:Price group:.:</span>
 			<span class="value">{preisgrp}</span>
 		</div>
-		<div  class="zeile klein">
-			<span class="labelLe">.:Init date:.:</span>
-			<span class="value">{erstellt}</span>
-			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
-			<span class="labelLe">.:update:.:</span>
-			<span class="value">{modify}</span>
-		</div>
 		<br />
 		<div  class="zeile klein">
 			<span class="labelLe">.:taxnumber:.:</span>
@@ -258,8 +270,6 @@
 			<span class="labelLe">.:taxzone:.:</span>
 			<span class="value">{Steuerzone}</span>
 			<span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
-			<span class="labelLe">.:headcount:.:</span>
-			<span class="value">{headcount}</span>
 		</div>
 		<br />
 		<div  class="zeile klein">

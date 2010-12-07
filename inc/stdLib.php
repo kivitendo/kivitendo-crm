@@ -736,40 +736,6 @@ function stopTime($start) {
     $zeit = $stop - $start;
     return substr($zeit,0,8);
 }
-/**
- * Sonderflags jetzt aus der Datenbank
- *
- * @return array
- */    
-function getSonder($lang=false) {
-    global $db;
-    //$sql = "SELECT * from sflag left join generic_translations on translation_type = ('sflag::' || skey) ";
-    //$sql.= ($lang)?"and (language_id=$lang) ":"and language_id is null ";
-    //$sql.= "order by sortorder";
-    $sql = "SELECT svalue, skey, sorder, skey as translation from sonderflag order by sorder";
-    return $db->getAll($sql);
-}
-
-function saveSonderFlag($data) {
-    global $db;
-    foreach($data["sonder"] as $row) {
-        if ($row["del"]==1) {
-            $sql="delete from sonderflag where svalue=".$row["svalue"];
-        } else if ($row["new"]==1) {
-            if ($row["skey"]) {
-                $sql = "insert into sonderflag (svalue,skey,sorder) values (";
-                $sql.= $row["svalue"].",'".$row["skey"]."',".$row["sorder"].")";
-            } else {
-                $sql = False;
-            }
-        } else {
-            $sql = "update sonderflag set sorder=".$row["sorder"].", skey='".$row["skey"]."' where svalue = ".$row["svalue"];
-        }
-        if ($sql) 
-            $rc = $db->query($sql);
-    }
-
-}
 
 /**
  * TODO: Listen in Templates füllen.

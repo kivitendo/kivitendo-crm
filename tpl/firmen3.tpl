@@ -370,11 +370,6 @@
         </span>
     </div>
     <div class="zeile2">
-<!-- BEGIN SonderFlag -->
-    <input type="checkbox"  name="sonder[]" value="{SFid}" {SFsel} tabindex="17"><span class="klein">{SFtext} </span>
-<!-- END SonderFlag -->    
-    </div>
-    <div class="zeile2">
    {variablen}
     </div>
 </span>

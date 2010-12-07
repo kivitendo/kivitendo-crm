@@ -86,7 +86,6 @@
         return $objResponse;
     }
     function showContactadress($id){
-        $cp_sonder = getSonder();
         $data=getKontaktStamm($id,".");
         if (preg_match("/UTF-8/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="UTF-8"; }
         else if (preg_match("/ISO-8859-15/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-15"; }
@@ -113,13 +112,6 @@
         $data["cp_homepage"]="<a href='".$data["cp_homepage"]."' target='_blank'>".$data["cp_homepage"]."</a>";
         if (strpos($data["cp_birthday"],"-")) {
             $data["cp_birthday"]=db2date($data["cp_birthday"]);
-        }
-        $sonder="";
-        if ($cp_sonder)    {
-            foreach ($cp_sonder as  $row) {
-                $sonder.=($data["cp_sonder"] & $row["svalue"])?$row["skey"]." ":"";
-            }
-            $data["cp_sonder"]=$sonder;
         }
          if ($data["cp_gender"]=='m') { $data["cp_greeting"]=translate('.:greetmale:.','firma'); 
          } else { $data["cp_greeting"]=translate('.:greetfemale:.','firma'); };

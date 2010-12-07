@@ -12,29 +12,34 @@
 	$cmsg=getCustMsg($id);
 	$tmp=getVariablen($id);
 	$variablem="";
-	$Vars="";
-	if (count($tmp)>0) {
-		$variablen=count($tmp)." Variablen";
-		foreach ($tmp as $row) {
-			$Vars .= "<tr><td>".$row["description"]." </td><td>: ";
-            if ($row["type"]=="text") { $Vars .= $row["text_value"];  }
-            else if ($row["type"]=="textfield") { $Vars .= $row["text_value"];  }
-            else if ($row["type"]=="number") { 
-                preg_match("/PRECISION[ ]*=[ ]*([0-9]+)/i",$row["options"],$pos);
-                if ($pos[1]) { $Vars .= sprintf("%0.".$pos[1]."f",$row["number_value"]);  }
-                else {$Vars .= $row["number_value"];}
-            }
-            else if ($row["type"]=="date") { 
-                if ($row["timestamp_value"]) 
-                    $Vars .= db2date(substr($row["timestamp_value"],0,10));  
-            }
-            else if ($row["type"]=="bool") { $Vars .= ($row["bool_value"]=='f')?'nein':'ja';  }
-            else if ($row["type"]=="select") { $Vars .= $row["text_value"];  }
-            $Vars .= "</td></tr>\n";
-		}
-	}
 	$t = new Template($base);
 	$t->set_file(array("fa1" => "firma1.tpl"));
+	if (count($tmp)>0) {
+		$t->set_block("fa1","vars","BlockS");
+		$variablen=count($tmp)." Variablen";
+        $Vars = "<table>\n";
+		foreach ($tmp as $row) {
+            switch ($row["type"]) {
+                case "select"   :  
+                case "text"     : 
+                case "textfeld" : $txt = $row["text_value"];
+                                  break;
+                case "number"   : preg_match("/PRECISION[ ]*=[ ]*([0-9]+)/i",$row["options"],$pos);
+                                  if ($pos[1]) { $txt = sprintf("%0.".$pos[1]."f",$row["number_value"]);  }
+                                  else {$txt = $row["number_value"];}
+                                  break;
+                case "date"     : $txt = ($row["timestamp_value"])?db2date(substr($row["timestamp_value"],0,10)):"";
+                                  break;
+                case "bool"     : $txt = ($row["bool_value"]=='f')?'.:no:.':'.:yes:.'; 
+                                  break;
+            }
+            $t->set_var(array(
+                varname => $row["description"],
+                varvalue => $txt
+            ));
+            $t->parse("BlockS","vars",true);
+        }
+	}
 	if ($fa["grafik"]) {
 		if (file_exists("dokumente/".$_SESSION["mansel"]."/$Q".$fa["nummer"]."/logo.".$fa["grafik"])) {
 		$Image="<a href='dokumente/".$_SESSION["mansel"]."/$Q".$fa["nummer"]."/logo.".$fa["grafik"]."' target='_blank'>";
@@ -55,11 +60,6 @@
 	} else {
 		$rab="";
 	}
-	$sonder="";
-    $cp_sonder=getSonder(False);
-	if ($cp_sonder) foreach ($cp_sonder as $row) {
-		$sonder.=($fa["sonder"] & $row["svalue"])?$row["skey"]." ":"";
-	}
 	$karte=str_replace(array("%TOSTREET%","%TOZIPCODE%","%TOCITY%"),array(strtr($fa["street"]," ",$planspace),$fa["zipcode"],$fa["city"]),$stadtplan);
 	if (preg_match("/%FROM/",$karte)) {
 		include "inc/UserLib.php";
@@ -77,8 +77,8 @@
 			FAART 		=> ($Q=="C")?".:Customer:.":".:Vendor:.",
             ERPCSS      => $_SESSION["stylesheet"],
 			CuVe 		=> ($Q=="C")?"customer":"vendor",
-			Q 		=> $Q,
-			FID		=> $id,
+			Q 		    => $Q,
+			FID		    => $id,
 			INID		=> db2date(substr($fa["itime"],0,10)),
 			interv		=> $_SESSION["interv"]*1000,
 			Fname1		=> $fa["name"],
@@ -90,17 +90,16 @@
 			Strasse 	=> $fa["street"],
 			Land		=> $fa["country"],
 			Bundesland	=> $fa["bundesland"],
-			Plz		=> $fa["zipcode"],
-			Ort		=> $fa["city"],
+			Plz	    	=> $fa["zipcode"],
+			Ort		    => $fa["city"],
 			GEODB		=> ($GEODB)?'1==1':'1>2',
 			Telefon		=> $fa["phone"],
-			Fax		=> $fa["fax"],
+			Fax		    => $fa["fax"],
 			Fcontact	=> $fa["contact"],
 			eMail		=> $fa["email"],
 			verkaeufer	=> $fa["verkaeufer"],
 			branche 	=> $fa["branche"],
-			sw 		=> $fa["sw"],
-			sonder		=> $sonder,
+			sw 		    => $fa["sw"],
 			notiz 		=> nl2br($fa["notes"]),
 			bank 		=> $fa["bank"],
 			directdebit	=> ($fa["direct_debit"]=="t")?".:yes:.":".:no:.",
@@ -120,8 +119,8 @@
 			//terms		=> $fa["terms"],
 			terms		=> ($fa["terms_netto"])?$fa["terms_netto"]:"0",
 			kreditlim	=> sprintf("%0.2f",$fa["creditlimit"]),
-			op		=> ($fa["op"]>0)?sprintf("<span class='op'>%0.2f</span>",$fa["op"]):"0.00",
-			oa		=> ($fa["oa"]>0)?sprintf("<span class='oa'>%0.2f</span>",$fa["oa"]):"0.00",
+			op		    => ($fa["op"]>0)?sprintf("<span class='op'>%0.2f</span>",$fa["op"]):"0.00",
+			oa		    => ($fa["oa"]>0)?sprintf("<span class='oa'>%0.2f</span>",$fa["oa"]):"0.00",
 			preisgrp	=> $fa["pricegroup"],
             language    => $fa["language"],
 			Sshipto_id	=> ($fa["shipto_id"]>0)?$fa["shipto_id"]:"",

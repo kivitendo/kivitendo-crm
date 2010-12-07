@@ -120,8 +120,7 @@
                     $js='showK('.$zeile["cp_id"].',"'.$zeile["tbl"].'");'; //showK({PID},'{TBL}')
                     $insk=""; 
                 };
-                $sonder=0;
-				if ($i<$listLimit) {
+		if ($i<$listLimit) {
                     $t->set_var(array(
                         js => $js,
                         LineCol => $bgcol[($i%2+1)],

@@ -15,68 +15,6 @@
 		include("inc/ldapLib.php");
 		$rc=Ldap_add_Customer($_GET["fid"]);
 	}
-	/*
-	 * Ein Attribut zu einem oder vielen Ansprechpartnern speichern
-	 * Die Abfrage ist deswegen hier, weil personen1L.tpl ansonsten einzelne Ansprechpartner in der Firma aussucht
-	*/
-	if (	 $_POST["ansprechpartnern_attribute_zuordnen"]	//			Der Knopf wurde gedrückt
-			&& $_POST["cp_sonder"]														// UND	Sonderflag gesetzt == Ansprechpartner-Attribut
-			&& $_POST["PID_0"]){															// UND	Mindestens eine Ansprechpartner-ID
-
-		/*
-		 *	Alle übergebenen personen-ids (ansprechpartner) werden in einem array 
-		 *  zusammengebaut und dann später als where-bedingung (cp_id für contacts)
-		 *  verwendet. Man spart sich den Zähler "mitzuschleifen" (solange eine 
-		 *  letzte laufende_nummer da ist, sind noch Ansprechpartner vorhanden) jb 13.6.09
-		 *	Eigentlich war die ursprüngliche Idee einen update analog zu addBatch (java)
-		 *  umzusetzen, scheint leider in der PEAR-DB nicht umgesetzt zu sein (autocommit on/off ist
-		 *	ja was anderes). Deswegen jede Eingabe zwar als Prepared Statement aber doch leider einzeln
-		 *	Oder kann ich die Funktion in db.php ändern?
-		 *	mdb2 executeMultiple scheint hier mein Freund zu sein.
-		 *  ERGÄNZUNG 14.6.: Tada, gibt es auch in der PEAR:DB Somit alles vom Feinsten.
-		*/
-		if ($_POST["cp_sonder"]<0) $_POST["cp_sonder"]=0;
-		$i=0;																				//schleifenzähler auf 0
-		$ansprechpartner_array=array();						//initialisierung mit einem leeren Array
-		while ($_POST["PID_$i"]){						// Über alle Ansprechpartner
-			array_push ($ansprechpartner_array,				// Fügen wir den Array (cp_sonder, cp_id) hinzu
-					array($_POST["cp_sonder"], $_POST["PID_$i"]));
-			$i++;
-		}
-		/*
-		 * In db gekapselte Funktion von executeMultiple (s.a. PEAR-Dokumentation db oder mdb2)
-		 * Wir wollen 'update contacts set cp_sonder=$BITWERT where cp_id=PID_$i'
-		 * Stand 14.6. Transaktionssicher über alle Werte und als PreparedStatement als Batch (perfetto!)
-		 * Wie können wir hier einen Rückgabewert prüfen und eine ordentliche Rückmeldung geben
-		*/
-		if ($db->executeMultiple('UPDATE contacts SET cp_sonder= ? WHERE cp_id= ?', $ansprechpartner_array)){
-			/* Das gefällt mir auch noch nicht so ganz, aber ich gebe lieber eine unschöne Erfolgsmeldung aus,
-			 * als gar keine... jb 14.6.09
-			*/
-//			ob_start();
-			echo "Alle Ansprechpartner erfolgreich mit dem Wert versehen";
-//			Header("Location: ");
-//			ob_flush();
-		}else{
-			echo "Fehler beim Speichern der Werte. Details befinden sich unter \$Pfad_zur_CRM/tmp/lxcrm.log";
-		}
-
-
-		// Debug-Ausgabe ANFANG Anm. jb 14.6. in der db.php gibt es den Parameter showError,
-		// vielleicht kann/sollte man den global setzen?
-		if ($BROWSERDEBUG == true){
-			foreach ($ansprechpartner_array as $ansprechpartner){
-				echo "Ansprechpartner: $ansprechpartner  <br>";
-			}
-			echo "<br> Attribut-Wert zu Ansprechparnter " . $_POST["cp_sonder"];
-			echo "Ansprechpartner";
-			echo "<br> Anzahl" . $_POST["ANZAHL_ANSPRECHPARTNER"];
-			echo "<br> Attribute" . $_POST["cp_sonder"];
-			echo "<br> Attribute 2" . $_POST["FID"];
-			echo "<br> Attribute 3" . $_POST["ansprechpartnern_attribute_zuordnen"];
-		}// Debug-Ausgabe ENDE
-		exit;
-	}// Ende if von ansprechpartnern_attribute_zuordnen
 
 	// Einen Kontakt anzeigen lassen
 	if ($_GET["id"]) {
@@ -148,10 +86,6 @@
 	if ($co["cp_homepage"]<>"") {
 		$internet=(preg_match("^://^",$co["cp_homepage"]))?$co["cp_homepage"]:"http://".$co["cp_homepage"];
 	};
-	$sonder="";
-	if ($cp_sonder) while (list($key,$val) = each($cp_sonder)) {
-		$sonder.=($co["cp_sonder"] & $key)?"($val) ":"";
-	}
 	$t = new Template($base);
 	$t->set_file(array("co1" => "firma2.tpl"));
 	$t->set_var(array(

@@ -39,7 +39,6 @@
 </td><td class="mini">
 <form>
     <input type="button" name="etikett" value="Etiketten" onClick="chngSerial('etiketten');">&nbsp;
-    <input type="button" name="attribute" value="Attribute" onClick="chngSerial('attribute');">&nbsp;
     <a href="sermail.php"><input type="button" name="email" value="Serienmail"></a>&nbsp;
     <input type="button" name="brief" value="Serienbrief" onClick="chngSerial('serdoc');">
     <input type="button" name="vcard" value=".:servcard:." onClick="chngSerial('servcard');">

@@ -133,11 +133,6 @@
 		</span>
 		<div style="margin-left:2.5em; float:left;   margin-top:3em; border: 0px solid black;">
 
-		<!-- Gibt es hier die Möglichkeit eine Fallentscheidung zu machen?  Falls sonder dann einblenden:-->
-.:sflag:.: <br>
-<!-- BEGIN SonderFlag -->
-	<input class="klein" type="checkbox" name="cp_sonder[]" value="{SFid}"><span class="klein">{SFtext}</span><br>
-<!-- END SonderFlag -->		
 </div>	
 </form>
 <!-- End Code ------------------------------------------->

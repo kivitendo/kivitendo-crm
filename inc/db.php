@@ -14,7 +14,7 @@ class myDB extends DB {
  var $db = false;
  var $rc = false;
  var $showErr = false; // Browserausgabe
- var $log = true;     // Alle Abfragen mitloggen
+ var $log = false;     // Alle Abfragen mitloggen
  var $errfile = "tmp/lxcrm.err";
  var $logfile = "tmp/lxcrm.log";
  var $lfh = false;

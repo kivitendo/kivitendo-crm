@@ -75,7 +75,9 @@
 		<select name="kdview">
 		<option value="1"{kdview1}>Lieferanschrift
 		<option value="2"{kdview2}>Bemerkungen
-		<option value="3"{kdview3}>sonst.Infos
+		<option value="3"{kdview3}>Variablen
+		<option value="4"{kdview4}>FinanzInfos
+		<option value="5"{kdview5}>sonst.Infos
 		</select>
         </td>
 		<td class="norm">Etikett</td><td class="norm"><select name="etikett">
@@ -115,7 +117,7 @@
 		</td></tr>
 	<tr><td class="norm">Protokoll</td><td><input type="radio" name="proto" value="0" {protopop}>POP <input type="radio" name="proto" value="1" {protoimap}>IMAP</td>
 		<td class="norm">SSL</td>
-		<td class="norm"><input type="radio" name="ssl" value="n" {ssln}>notls <input type="radio" name="ssl" value="s" {ssls}>ssl <input type="radio" name="ssl" value="t" {sslt}>tls
+		<td class="norm"><input type="radio" name="ssl" value="f" {sslf}>notls <input type="radio" name="ssl" value="t" {sslt}>ssl <!--input type="radio" name="ssl" value="t" {sslt}>tls-->
 		</td></tr>
 	<tr><td class="norm">Termine</td><td>
 	    	von <select name="termbegin">{termbegin}</select> 

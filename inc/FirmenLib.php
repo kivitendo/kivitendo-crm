@@ -72,7 +72,7 @@ global $db;
 * out: daten = array
 * Stammdaten einer Firma holen
 *****************************************************/
-function getFirmenStamm($id,$ws=true,$tab='C') {
+function getFirmenStamm($id,$ws=true,$tab='C',$cvar=true) {
 global $db;
     if ($tab=="C") {
         // Umsätze holen
@@ -210,8 +210,10 @@ global $db;
         $daten=array_merge($row2,$row);
     }
     //benutzerdef. Variablen:
-    $cvars = getFirmaCVars($id);
-    if ($cvars) $daten = array_merge($daten,$cvars);
+    if ($cvar) {
+        $cvars = getFirmaCVars($id);
+        if ($cvars) $daten = array_merge($daten,$cvars);
+    }
     $daten["shiptocnt"]=($shipcnt>0)?$shipcnt:0;
     $daten["shiptoids"]=$shipids;
     $daten["op"]=$op;
@@ -231,7 +233,7 @@ function getFirmaCVars($id) {
 global $db;
     $sql = "select C.name,C.type,V.bool_value,V.timestamp_value,V.text_value,V.number_value,C.module ";
     $sql.= "from custom_variables V left join custom_variable_configs C on C.id=V.config_id ";
-    $sql.= "where V.trans_id =".$id;
+    $sql.= "where V.trans_id =".$id." and module = 'CT'";
     $rs = $db->getAll($sql);
     if ($rs) { 
         foreach ($rs as $row) {
@@ -462,36 +464,29 @@ global $db;
             }
     };
     // Array zu jedem Formularfed: Tabelle (0=customer/vendor,1=shipto), require(0=nein,1=ja), Spaltenbezeichnung, Regel
-    $dbfld=array(    name => array(0,1,1,"Name",75),            greeting => array(0,0,1,"Anrede",75),
-        department_1 => array(0,0,1,"Zusatzname",75),    department_2 => array(0,0,1,"Abteilung",75),
-        country => array(0,0,8,"Land",25),                zipcode => array(0,1,2,"Plz",10),
-        city => array(0,1,1,"Ort",75),                    street => array(0,1,1,"Strasse",75),
-        fax => array(0,0,3,"Fax",30),                    phone => array(0,0,3,"Telefon",30),
-        email => array(0,0,5,"eMail",0),                homepage =>array(0,0,4,"Homepage",0),
-        contact => array(0,0,1,"Kontakt",75),            v_customer_id => array(0,0,1,"Kundennummer",50),
-        //vendornumber => array(0,0,0,"Lieferantennummer",20),
-        //customernumber => array(0,0,0,"Kundennummer",20),    
-        sw => array(0,0,1,"Stichwort",50),                notes => array(0,0,0,"Bemerkungen",0),
-        ustid => array(0,0,0,"UStId",0),                taxnumber => array(0,0,0,"Steuernummer",0),
-        bank => array(0,0,1,"Bankname",50),                bank_code => array(0,0,6,"Bankleitzahl",15),
-        iban => array(0,0,1,"IBAN",24),                    bic => array(0,0,1,"BIC",15),
-        account_number => array(0,0,6,"Kontonummer",15), language_id =>  array(0,0,6,"Sprache",0),
+    $dbfld=array(    name => array(0,1,1,"Name",75),        greeting => array(0,0,1,"Anrede",75),
+        department_1 => array(0,0,1,"Zusatzname",75),       department_2 => array(0,0,1,"Abteilung",75),
+        country => array(0,0,8,"Land",25),                  zipcode => array(0,1,2,"Plz",10),
+        city => array(0,1,1,"Ort",75),                      street => array(0,1,1,"Strasse",75),
+        fax => array(0,0,3,"Fax",30),                       phone => array(0,0,3,"Telefon",30),
+        email => array(0,0,5,"eMail",0),                    homepage =>array(0,0,4,"Homepage",0),
+        contact => array(0,0,1,"Kontakt",75),               v_customer_id => array(0,0,1,"Kundennummer",50),
+        sw => array(0,0,1,"Stichwort",50),                  notes => array(0,0,0,"Bemerkungen",0),
+        ustid => array(0,0,0,"UStId",0),                    taxnumber => array(0,0,0,"Steuernummer",0),
+        bank => array(0,0,1,"Bankname",50),                 bank_code => array(0,0,6,"Bankleitzahl",15),
+        iban => array(0,0,1,"IBAN",24),                     bic => array(0,0,1,"BIC",15),
+        account_number => array(0,0,6,"Kontonummer",15),    language_id =>  array(0,0,6,"Sprache",0),
         payment_id => array(0,0,6,"Zahlungsbedingungen",0),
-        branche => array(0,0,1,"Branche",25),            business_id => array(0,0,6,"Kundentyp",0),
-        owener => array(0,0,6,"CRM-User",0),            grafik => array(0,0,9,"Grafik",4),
-        lead => array(0,0,6,"Leadquelle",0),            leadsrc => array(0,0,1,"Leadquelle",15),
-        bland => array(0,0,6,"Bundesland",0),            taxzone_id => array(0,1,6,"Steuerzone",0),
-        salesman_id => array(0,0,6,"Vertriebler",0),
-        shiptoname => array(1,0,1,"Liefername",75),     konzern    => array(0,0,6,"Konzern",0),
-        shiptostreet => array(1,0,1,"Lieferstrasse",75),
-        shiptobland => array(1,0,6,"Liefer-Bundesland",0),
-        shiptocountry => array(1,0,8,"Lieferland",3),
-        shiptozipcode => array(1,0,2,"Liefer-Plz",10),
-        shiptocity => array(1,0,1,"Lieferort",75),
-        shiptocontact => array(1,0,1,"Kontakt",75),
-        shiptophone => array(1,0,3,"Liefer Telefon",30),
-        shiptofax => array(1,0,3,"Lieferfax",30),
-        shiptoemail => array(1,0,5,"Liefer-eMail",0),
+        branche => array(0,0,1,"Branche",25),               business_id => array(0,0,6,"Kundentyp",0),
+        owener => array(0,0,6,"CRM-User",0),                grafik => array(0,0,9,"Grafik",4),
+        lead => array(0,0,6,"Leadquelle",0),                leadsrc => array(0,0,1,"Leadquelle",15),
+        bland => array(0,0,6,"Bundesland",0),               taxzone_id => array(0,1,6,"Steuerzone",0),
+        salesman_id => array(0,0,6,"Vertriebler",0),        konzern    => array(0,0,6,"Konzern",0),
+        shiptoname => array(1,0,1,"Liefername",75),         shiptostreet => array(1,0,1,"Lieferstrasse",75),
+        shiptobland => array(1,0,6,"Liefer-Bundesland",0),  shiptocountry => array(1,0,8,"Lieferland",3),
+        shiptozipcode => array(1,0,2,"Liefer-Plz",10),      shiptocity => array(1,0,1,"Lieferort",75),
+        shiptocontact => array(1,0,1,"Kontakt",75),         shiptophone => array(1,0,3,"Liefer Telefon",30),
+        shiptofax => array(1,0,3,"Lieferfax",30),           shiptoemail => array(1,0,5,"Liefer-eMail",0),
         shiptodepartment_1 => array(1,0,1,"Lieferzusatzname",75),
         shiptodepartment_2 => array(1,0,1,"Lieferabteilung",75),
         headcount => array(0,0,6,"Anzahl Mitarbeiter",10));
@@ -507,7 +502,7 @@ global $db;
     for ($i=0; $i<$anzahl; $i++) {
         if (in_array($keys[$i],$dbf)) {
             $tmpval=trim($daten[$keys[$i]]);
-            if ($dbfld[$keys[$i]][0]==1) {  // select f�r Lieferanschrift bilden
+            if ($dbfld[$keys[$i]][0]==1) {  // select für Lieferanschrift bilden
                 if ($tmpval) $ala=true;
                 if (!chkFld($tmpval,$dbfld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) { 
                     $fehler=$dbfld[$keys[$i]][3]; 
@@ -528,7 +523,7 @@ global $db;
                     }
                     if ($keys[$i]=="shiptophone"||$keys[$i]=="shiptofax") $tels2[]=$tmpval;
                 }
-            } else {            // select f�r Rechnungsanschrift bilden
+            } else {            // select für Rechnungsanschrift bilden
                 if (!chkFld($tmpval,$dbfld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) { 
                     $fehler=$dbfld[$keys[$i]][3]; 
                     $i=$anzahl; 
@@ -601,8 +596,41 @@ global $db;
             if ($rc1) mkTelNummer($fid,"S",$tels2);
         }
         $rc0=$db->query($sql0);
-        if ($rc0 and $rc1) { $rc=$fid; }
-        else { $rc=-1; $fehler=".:unknown:."; };
+        if ($rc0 and $rc1) { 
+            $rc=$fid; 
+            //ab hier CVARS
+            //Alle möglichen Vars holen
+            $sql = "SELECT id,name,type from custom_variable_configs where module = 'CT'";
+            $vars = $db->getAll($sql);
+            if ($vars) foreach ($vars as $row) $vartype[$row["name"]] = array("id"=>$row["id"],"type"=>$row["type"]);
+            $sqltpl = "insert into custom_variables (config_id,trans_id,bool_value,timestamp_value,text_value,number_value)";
+            $sqltpl.= "values (%d,%d,%s,%s,%s,%s)";
+            //bisherige Einträge löschen.
+            $sql = "delete from custom_variables where trans_id = ".$daten["id"];
+            $rcc = $db->query($sql);
+            //Insert bilden
+            foreach ($daten as $key=>$val) {
+                if (substr($key,0,5) == "cvar_") {
+                //eine CVar
+                    $name = substr($key,5);
+                    //Values erzeugen
+                    $date = "null";
+                    $num = "null";
+                    $bool = "null";
+                    $text = "null";
+                    switch ($vartype[$name]["type"]) {
+                        case "select"   : 
+                        case "textfield": 
+                        case "text"     : $text = "'$val'"; break;
+                        case "number"   : $num  = sprintf("%0.2f",$val); break;
+                        case "date"     : $date = "'".date2db($val)."'"; break;
+                        case "bool"     : $bool = ($val=='t')?"'t'":"'f'"; break;
+                    };
+                    $sql = sprintf($sqltpl,$vartype[$name]["id"],$daten["id"],$bool,$date,$text,$num);
+                    $rcc = $db->query($sql);
+                }
+            }
+        } else { $rc=-1; $fehler=".:unknown:."; };
         return array($rc,$fehler);
     } else {
         if ($daten["saveneu"]){
@@ -811,6 +839,12 @@ global $db;
     $rs=$db->getAll($sql);
     return $rs;
 }
+function getAlleVariablen() {
+global $db;
+    $sql  = "select id,name,description,type,default_value,options from custom_variable_configs where module = 'CT' order by sortkey";
+    $rs=$db->getAll($sql);
+    return $rs;
+}
 function getUmsatzJahre($tab) {
 global $db;
     $sql="select distinct(substr(CAST(transdate as text),1,4)) as year from $tab";
@@ -820,14 +854,81 @@ global $db;
     return $rs;
 }
 
+function cvar_edit($id,$new=false) {
+    $cvar = getVariablen($id);
+    if ($cvar) foreach ($cvar as $row) {
+        switch ($row["type"]) {
+            case "select"   :
+            case "text"     :
+            case "textfield": ${$row["name"]} = $row["text_value"];
+                              break;
+            case "number"   : preg_match("/PRECISION[ ]*=[ ]*([0-9]+)/i",$row["options"],$pos);
+                              if ($pos[1]) { ${$row["name"]} = sprintf("%0.".$pos[1]."f",$row["number_value"]);  }
+                              else {${$row["name"]} = $row["number_value"];}
+                              break;
+            case "date"     : ${$row["name"]} = ($row["timestamp_value"])?db2date(substr($row["timestamp_value"],0,10)):"";
+                              break;
+            case "bool"     : ${$row["name"]} = ($row["bool_value"]=='t')?'checked':' ';
+        }
+    }
+    $cvar = getAlleVariablen();
+    $output = '';
+    if ($cvar) foreach ($cvar as $row) {
+        $input = "";
+        switch ($row["type"]) {
+                case "select"   : if (!${$row["name"]}) ${$row["name"]}=$row["options"];
+                                  $input = "<select name='cvar_".$row["name"]."'>";
+                                  $opt = explode("##",$row["default_value"]);
+                                  if ($opt) foreach ($opt as $o) {
+                                    $input .= "<option value='".$o."' ";
+                                    $input .= (${$row["name"]}==$o)?"selected>$o":">$o";
+                                  };
+                                  $input .= "</select>";
+                                  break;
+                case "date"     : $kal = '<input name="cvar_'.$row["name"].'_button" id="cvar_'.$row["name"].'_trigger" type="button" value="?"> ';
+                                  $kal.= '<script type="text/javascript"><!-- '."\n";
+                                  $kal.= 'Calendar.setup({ inputField : "cvar_'.$row["name"].'",';
+                                  $kal.= 'ifFormat   : "%d.%m.%Y",';
+                                  $kal.= 'align      : "BL",';
+                                  $kal.= 'button     : "cvar_'.$row["name"].'_trigger"});';
+                                  $kal.= "\n".'--></script>'."\n";
+                case "number"   : 
+                case "text"     : $input = "<input type='text' name='cvar_".$row["name"]."' id='cvar_".$row["name"]."'  value='";
+                                  if ($new) {
+                                     $input.= ((${$row["name"]})?${$row["name"]}:$row["default_value"])."'>".$kal;
+                                  } else {
+                                     $input.= ${$row["name"]}."'>".$kal;
+                                  }
+                                  $kal = "";
+                                  break;
+                case "textfield": preg_match("/width[ ]*=[ ]*(\d+)/i",$row["option"],$hit); $w = ($hit[1]>5)?$hit[1]:30;
+                                  preg_match("/height[ ]*=[ ]*(\d+)/i",$row["option"],$hit); $h = ($hit[1]>1)?$hit[1]:3; 
+                                  $input = "<textarea cols='$w' rows='$h' name='cvar_".$row["name"]."'>".${$row["name"]}."</textarea>";
+                                  break;
+                case "bool"     : if (${$row["name"]}=='' && $new) ${$row["name"]}=($row["default_value"])?"checked":"";
+                                  $input = "<input type='checkbox' name='cvar_".$row["name"]."' value='t' ";
+                                  $input .= ${$row["name"]}.'>';
+                                  break;
+            }
+            $output .= "<div class='zeile2'><span class='label klein'>";
+            $output .= $row["description"]."</span><span class='value'>".$input."</span></div>\n";
+    }
+    return $output;
+}
+
 function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false) {
-global $xajax,$GEODB,$BLZDB;
+global $xajax,$GEODB,$BLZDB,$jcalendar;
+        $jscal ="<style type='text/css'>@import url(../js/jscalendar/calendar-win2k-1.css);</style>\n";
+        $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar.js'></script>\n";
+        $jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
+        $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar-setup.js'></script>\n";
         $t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
         $t->set_var(array(
             AJAXJS      => $xajax->printJavascript(XajaxPath),
             FAART       => ($typ=="C")?".:Customer:.":".:Vendor:.",
             FAART2      => ($typ=="C")?".:Customer Name:.":".:Vendor Name:.",
             ERPCSS      => $_SESSION["stylesheet"],
+            jcal0       => ($jcalendar)?$jscal:"",
             Q           => $typ,
             Btn1        => "",
             Btn2        => "",
@@ -888,6 +989,7 @@ global $xajax,$GEODB,$BLZDB;
             employee => $_SESSION["loginCRM"],
             init    => $_SESSION["employee"],
             txid0 => "selected",
+            cvars       => cvar_edit(0,TRUE),
             variablen => "" 
             ));
         $jahre = getUmsatzJahre(($typ=="C")?"ar":"ap");
@@ -923,7 +1025,11 @@ global $xajax,$GEODB,$BLZDB;
 } // leertpl
 
 function vartpl (&$t,$daten,$typ,$msg,$btn1,$btn2,$tpl,$suchmaske=false) {
-global $xajax,$GEODB,$BLZDB;
+global $xajax,$GEODB,$BLZDB,$jcalendar;
+        $jscal ="<style type='text/css'>@import url(../js/jscalendar/calendar-win2k-1.css);</style>\n";
+        $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar.js'></script>\n";
+        $jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
+        $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar-setup.js'></script>\n";
         if ($daten["grafik"]) {
             if ($typ=="C") { $DIR="C".$daten["customernumber"]; }
             else { $DIR="V".$daten["vendornumber"]; };
@@ -942,6 +1048,7 @@ global $xajax,$GEODB,$BLZDB;
                 FAART2      => ($typ=="C")?".:Customer Name:.":".:Vendor Name:.",
                 ERPCSS      => $_SESSION["stylesheet"],
                 mtime       => $daten["mtime"],
+                jcal0       => ($jcalendar)?$jscal:"",
                 Q           => $typ,
                 Btn1        => $btn1,
                 Btn2        => $btn2,
@@ -999,6 +1106,7 @@ global $xajax,$GEODB,$BLZDB;
                 GEO2        => ($GEODB)?"":"--",
                 BLZ1        => ($BLZDB)?"":"!--",
                 BLZ2        => ($BLZDB)?"":"--",
+                cvars       => cvar_edit($daten["id"]), 
                 variablen => $varablen
         ));
         $jahre = getUmsatzJahre(($typ=="C")?"ar":"ap");

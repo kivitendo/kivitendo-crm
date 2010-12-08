@@ -20,9 +20,16 @@
         $Vars = "<table>\n";
 		foreach ($tmp as $row) {
             switch ($row["type"]) {
-                case "select"   :  
-                case "text"     : 
-                case "textfeld" : $txt = $row["text_value"];
+                case "textfield": preg_match("/width[ ]*=[ ]*(\d+)/i",$row["option"],$hit); $w = ($hit[1]>5)?$hit[1]:30;
+				  $txt = ''; 
+				  while (strlen($row["text_value"])>$w) {
+				  	$txt .= substr($row["text_value"],0,$w)."<br>";
+					$row["text_value"] = substr($row["text_value"],$w);
+				  };
+				  $txt .= $row["text_value"];
+				  break;                     
+                case "select"   : 
+                case "text"     : $txt = $row["text_value"];
                                   break;
                 case "number"   : preg_match("/PRECISION[ ]*=[ ]*([0-9]+)/i",$row["options"],$pos);
                                   if ($pos[1]) { $txt = sprintf("%0.".$pos[1]."f",$row["number_value"]);  }

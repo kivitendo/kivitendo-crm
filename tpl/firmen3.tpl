@@ -55,6 +55,7 @@
         }
     //-->
     </script>
+    {jcal0}
 <body onLoad="submenu('tab1'); document.neueintrag.name.focus();">
 
 <p class="listtop"> {FAART} .:keyin:./.:edit:.</p>
@@ -66,6 +67,7 @@
     <li id="subtab2" ><a href="#" onClick="submenu('tab2')">.:shipto:.</a></li>
     <li id="subtab3" ><a href="#" onClick="submenu('tab3')">.:bank/tax:.</a></li>
     <li id="subtab4" ><a href="#" onClick="submenu('tab4')">.:misc:.</a></li>
+    <li id="subtab5" ><a href="#" onClick="submenu('tab5')">.:variablen:.</a></li>
     <span>{Msg}</span>
     </ul>
 </div>
@@ -81,7 +83,7 @@
     <div class="zeile2">
         <span class="label klein">Anrede </span>
         <span class="feldxx"> <input type="text" name=".:greeting:." size="15" maxlength="75" value="{greeting_}" tabindex="1">
-                <select name="greeting" tabindex="2">
+                <select name="greeting" id="greeting" tabindex="2">
                     <option value="">
 <!-- BEGIN anreden -->
                     <option value="{Aid}" {Asel}>{Atext}
@@ -161,7 +163,7 @@
     <br>
     <div class="zeile2">
         <span class="label klein"></span>
-        <span class="feldxx"><select name="shiptoadress" style="width:19em;" tabindex="1" onChange="getShipadress();">
+        <span class="feldxx"><select name="shiptoadress" id="shiptoadress" style="width:19em;" tabindex="1" onChange="getShipadress();">
                 <option value=""></option>
 <!-- BEGIN shiptos -->
                 <option value="{STid}">{STtext}</option>
@@ -189,7 +191,7 @@
         <span class="feldxx">
             <input type="text" id="shiptocountry" name="shiptocountry" size="2" value="{shiptocountry}" tabindex="6" onBlur="mkBuland('shiptobland');">/
             <input type="text" id="shiptozipcode" name="shiptozipcode" size="5" maxlength="10" value="{shiptozipcode}" tabindex="7">
-            <select id="shiptobland" name="shiptobland" tabindex="8" style="width:12em;">
+            <select id="shiptobland" name="shiptobland" id="shiptobland" tabindex="8" style="width:12em;">
                 <option value=""></option>
 <!-- BEGIN buland2 -->
                 <option value="{BSid}" {BSsel}>{BStext}</option>
@@ -269,7 +271,7 @@
 <div class="zeile2">
     <span class="label klein">.:Industry:.</span>
         <span class="feldxx"><input type="text" name="branche_" size="15" maxlength="25" value="{branche_}" tabindex="1">
-                <select name="branche" tabindex="2" style="width:11em;">
+                <select name="branche" id="branche" tabindex="2" style="width:11em;">
                     <option value="">
 <!-- BEGIN branchen -->
                     <option value="{BRid}" {BRsel}>{BRtext}
@@ -288,7 +290,7 @@
     <div class="zeile2">
         <span class="label klein">.:leadsource:.</span>
         <span class="feldxx">
-            <select name="lead" tabindex="10" style="width:10em;">
+            <select name="lead" id"lead" tabindex="10" style="width:10em;">
 <!-- BEGIN LeadListe -->
                 <option value="{LLid}" {LLsel}>{LLtext}</option>
 <!-- END LeadListe -->
@@ -299,7 +301,7 @@
     <div class="zeile2">
         <span class="label klein">.:Business:.</span>
         <span class="feldxx">
-            <select name="business_id" tabindex="12">
+            <select name="business_id" id="business_id"  tabindex="12">
 <!-- BEGIN TypListe -->
                 <option value="{BTid}" {BTsel}>{BTtext}</option>
 <!-- END TypListe -->
@@ -309,7 +311,7 @@
     <div class="zeile2">
         <span class="label klein">.:taxzone:.</span>
         <span class="feldxx">
-            <select name="taxzone_id" tabindex="13">
+            <select name="taxzone_id" id="taxzone_id"  tabindex="13">
                 <option value="0" {txid0}>Inland
                 <option value="1" {txid1}>EU mit UStID
                 <option value="2" {txid2}>EU ohne UStID
@@ -320,7 +322,7 @@
     <div class="zeile2">
         <span class="label klein">.:payment_terms:.</span>
         <span class="feldxx">
-            <select name="payment_id" tabindex="12">
+            <select name="payment_id" id="payment_id" tabindex="12">
 <!-- BEGIN payment -->
                 <option value="{Pid}" {Psel}>{Ptext}</option>
 <!-- END payment -->
@@ -340,7 +342,7 @@
     <div class="zeile2">
         <span class="label klein">.:salesman:.</span>
         <span class="feldxx">
-            <select name="salesman_id" tabindex="15">
+            <select name="salesman_id" id="salesman_id" tabindex="15">
                 <option value=""></option>
 <!-- BEGIN SalesmanListe -->
                 <option value="{SMid}" {SMsel}>{SMtext}</option>
@@ -351,7 +353,7 @@
     <div class="zeile2">
         <span class="label klein">.:language:.</span>
         <span class="feldxx">
-            <select name="language_id" tabindex="15">
+            <select name="language_id" id="language_id" tabindex="15">
                 <option value=""></option>
 <!-- BEGIN LAnguage -->
                 <option value="{LAid}" {LAsel}>{LAtext}</option>
@@ -362,14 +364,17 @@
     <div class="zeile2">
         <span class="label klein">.:authority:.</span>
         <span class="feldxx">
-            <select name="owener" tabindex="16">
+            <select name="owener" id="owener" tabindex="16">
 <!-- BEGIN OwenerListe -->
                 <option value="{OLid}" {OLsel}>{OLtext}</option>
 <!-- END OwenerListe -->
             </select> &nbsp; <span class="klein">{init}</span>
         </span>
     </div>
+</span>
+<span id="tab5" style="visibility:hidden;  position:absolute; text-align:left;width:90%; left:0.8em; top:4.8em; border:1px solid black; display:inline;">
     <div class="zeile2">
+   {cvars}
    {variablen}
     </div>
 </span>

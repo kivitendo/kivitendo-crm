@@ -24,7 +24,9 @@
     } else if ($_GET["stop"]=="now") {
         $rc = stopTTevent($_GET["eventid"],date('Y-m-d H:i'));
         $data = getOneTT($_GET["tid"]);
-    } else if ($_POST["search"]) {
+	
+    } else if ($_POST["search"] || $_GET["fid"]) {
+    	if ($_GET["fid"]) $_POST = $_GET;
         $data = searchTT($_POST);
         if (count($data)>1) {
             $t->set_block("tt","Liste","Block");
@@ -37,16 +39,18 @@
             }
             $visible = true;
             $data = $_POST;
+	    if ($_GET["fid"])	$data["backlink"] = "firma1.php?Q=".$_GET["Q"]."&id=".$_GET["fid"];
         } else if (count($data)==0) {
             $data = $_POST;
             $data["msg"] = ".:not found:.";
+	    if ($_GET["fid"])	$data["backlink"] = "firma1.php?Q=".$_GET["Q"]."&id=".$_GET["fid"];
         } else {
             $data = getOneTT($data[0]["id"]);
-	        $delete = ($data["uid"]==$_SESSION["loginCRM"])?True:False;
+	    $delete = ($data["uid"]==$_SESSION["loginCRM"])?True:False;
         }
     } else if ($_POST["getone"]) {
         $data = getOneTT($_POST["tid"]);
-	    $delete = ($data["uid"]==$_SESSION["loginCRM"])?True:False;
+        $delete = ($data["uid"]==$_SESSION["loginCRM"])?True:False;
     } else if ($_POST["delete"]) {
         $rc = deleteTT($_POST["id"]);
         if ($rc) {
@@ -75,9 +79,12 @@
     if ($data["events"]) {
 	$delete = False;
     }
+    if ($data["fid"]) $data["backlink"] = "firma1.php?Q=".$data["tab"]."&id=".$data["fid"];
     $t->set_var(array(
         ERPCSS  => $_SESSION["stylesheet"],
         AJAXJS  => $xajax->printJavascript(XajaxPath),
+	backlink => $data["backlink"],
+	blshow  => ($data["backlink"])?"visible":"hidden",
         noevent => ($data["active"]=="t")?"visible":"hidden",
         noown   => ($data["id"]>0 && $data["uid"]!=$_SESSION["loginCRM"])?"hidden":"visible",
         id      => $data["id"],

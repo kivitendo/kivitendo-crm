@@ -155,6 +155,7 @@
 		));
 		$t->parse("BlockA","auftrag",true);
 	}
+	if ($daten["fid"]) $backlink = "firma1.php?Q=".$daten["tab"]."&id=".$daten["fid"];
 	$t->set_var(array(
         ERPCSS      => $_SESSION["stylesheet"],
 		id => $daten["id"],
@@ -177,6 +178,8 @@
 		block => $block,
 		none => $none,
 		button => $button,
+		backlink => $backlink,
+		blshow => ($backlink)?"visible":"hidden",
 		msg => $msg,
 		jcal0 => ($jcalendar)?$jscal:"",
 		jcal2 => ($jcalendar)?$jscal1:"",

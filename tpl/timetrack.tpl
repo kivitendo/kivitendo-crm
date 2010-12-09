@@ -28,6 +28,7 @@
 <input type="hidden" name="id" value="{id}">
 <input type="hidden" name="tab" value="{tab}">
 <input type="hidden" name="fid" value="{fid}">
+<input type="hidden" name="backlink" value="{backlink}">
 <span style='visibility:{visible}'>
 <br />
 <select name="tid">
@@ -75,8 +76,13 @@
 		<input type="image" src="image/save_kl.png" alt='.:save:.' title='.:save:.' name="save" value=".:save:." > &nbsp;
 		<input type="image" src="image/cancel_kl.png" alt='.:delete:.' title='.:delete:.' name="delete" value=".:delete:." style="visibility:{delete};"> &nbsp;
         </span>
+        <span style="visibility:{blshow}">
+		<a href={backlink}><image src="image/firma.png" alt='.:back:.' title='.:back:.' border="0" ></a>&nbsp;
+        </span>
+        <span>
 		<input type="image" src="image/neu.png" alt='.:new:.' title='.:new:.' name="clear" value=".:new:." > &nbsp;
 		<input type="image" src="image/suchen.png" alt='.:search:.' title='.:search:.' name="search" value=".:search:." > &nbsp;
+        </span>
         <span id="summtime"></span>
 	</div>
 

@@ -796,4 +796,12 @@ function nextNumber($number) {
     }
 }
 require_once "login".$_SESSION["loginok"].".php";
+if ($_SESSION["xajax"]) {
+	define("XajaxVer","");
+	define("XajaxPath","./crmajax/xajax");
+} else {
+	define("XajaxVer","05");
+	define("XajaxPath","./crmajax/");
+}
+
 ?>

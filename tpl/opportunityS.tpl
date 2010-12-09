@@ -140,7 +140,8 @@
 		<span class="label"></span>
 		<span class="leftfeld" style="width:350px; display:{none};" id="ok">
 			<input type="image" src="image/suchen_kl.png" alt='.:search:.' title='.:search:.' name="suchen" value=".:search:." style="visibility:{search};"> &nbsp;
-			<input type='image' src='image/save_kl.png' alt='Sichern' title='.:save:.' name='save' value='.:new:.' style="visibility:{save};"> &nbsp; 
+			<input type='image' src='image/save_kl.png' alt='.:save:.' title='.:save:.' name='save' value='.:new:.' style="visibility:{save};"> &nbsp; 
+			<a href={backlink}><input type='image' src='image/firma.png' alt='.:back:.' title='.:back:.' name='back' value='.:back:.' style="visibility:{blshow};"></a> &nbsp; 
 			{msg}
 		</span>
 	</div>

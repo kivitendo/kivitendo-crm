@@ -5,6 +5,7 @@
     include("inc/FirmenLib.php");
     include("inc/UserLib.php");
     require("firmacommon".XajaxVer.".php");
+    require("firmacommon".XajaxVer.".php");
     $Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
     $bgcol[1]="#ddddff";
     $bgcol[2]="#ddffdd";

@@ -14,8 +14,9 @@
         $KontaktTO=$_POST["KontaktTO"];
         if (preg_match("/mail.php/",$referer)) {
             $btn="<a href='mail.php'><input type=\"button\" name=\"return\" value=\".:new:.\"></a>";
+            $btn='<a href="mail.php"><image src="image/new.png" alt=".:new:." title=".:new:." border="0" ></a>';
         } else {
-            $btn="<a href=\"$referer\"><input type=\"button\" name=\"return\" value=\".:back:.\"></a>";
+            $btn='<a href="'.$referer.'"><image src="image/firma.png" alt=".:back:." title=".:back:." border="0" ></a>';
         }
     } else if (preg_match("/.+\.pl/",$referer)) { //Kommt vom Menue
         $TO=$_GET["TO"];
@@ -23,13 +24,13 @@
         if ($_GET["vc"]=="customer") { $KontaktTO="C".$KontaktTO;} 
         elseif ($_GET["vc"]=="vendor") { $KontaktTO="V".$KontaktTO;} ;
         $referer="mail.php";
-        $btn="<a href='mail.php'><input type=\"button\" name=\"return\" value=\".:new:.\"></a>";
+        $btn='<a href="mail.php"><image src="image/new.png" alt=".:new:." title=".:new:." border="0" ></a>';
         $hide="visible";
     } else { // Rückkehr zur Ausgangsseite
         $TO=$_GET["TO"];
         $KontaktTO=$_GET["KontaktTO"];
         if (substr($KontaktTO,0,1)=="P") $referer.="&id=".substr($KontaktTO,1);
-        $btn="<a href=\"$referer\"><input type=\"button\" name=\"return\" value=\".:back:.\"></a>";
+        $btn='<a href="'.$referer.'"><image src="image/firma.png" alt=".:back:." title=".:back:." border="0" ></a>';
         $hide="hidden";
     }
     if ($_POST["aktion"]=="tplsave") {

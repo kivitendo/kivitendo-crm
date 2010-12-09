@@ -88,9 +88,9 @@
 	<td class=""><input type="text" name="TO" value="{TO}" size="70" maxlength="125" tabindex="1"> 
 					<input type="button" name="sto" value="suchen" onClick="suchMail('TO');"></td>
 	<td rowspan="7" class="le" style="vertical-align:middle;">
-					<br><input type="button" name="ok" onClick="sende();" value=".:send:."><br>{btn}
-					<br><br><input type="button" style="visibility:{hide}" name="save" onClick="saveTpl();" value=".:template:.
-.:save:.">				<br><br><input type="button" style="visibility:{hide}" name="del" onClick="delTpl();" value=".:template:.
+					<br><image src='image/mail-send.png' border='0' name="ok" onClick="sende();" title=".:send:."><br>{btn}
+					<br><br><image src='image/save_kl.png' border='0' style="visibility:{hide}" name="save" onClick="saveTpl();" title=".:template:.
+.:save:.">				<br><br><image src='image/eraser.png' border='0' style="visibility:{hide}" name="del" onClick="delTpl();" title=".:template:.
 .:delete:.">
 	</td>
 </tr><tr>

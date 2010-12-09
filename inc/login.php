@@ -41,6 +41,15 @@ if (is_file($conffile)) {
 		if (chkVer()) {
 			$db=$_SESSION["db"];
 			$_SESSION["loginok"]="ok";
+			if (file_exists("crmajax/xajax/xajax.inc.php")) {
+				$_SESSION["xajax"]='023';
+				define("XajaxVer","");
+				define("XajaxPath","./crmajax/xajax");
+			} else {
+				$_SESSION["xajax"]="05";
+				define("XajaxVer","05");
+				define("XajaxPath","./crmajax/");
+			}
             $LOGIN=True;
             require ("update_neu.php");
 		} else {

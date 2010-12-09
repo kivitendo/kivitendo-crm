@@ -316,6 +316,7 @@ function suchstr($muster,$typ="C") {
             department_2=>"shiptodepartment_2",country=>"shiptocountry");
     $fuzzy2=$muster["fuzzy"];
     $fuzzy1=($muster["pre"])?$_SESSION["Pre"]:"";
+    $andor = $muster["andor"];
     $keys=array_keys($muster);
     $suchfld=array_keys($dbfld);
     $anzahl=count($keys);
@@ -343,15 +344,15 @@ function suchstr($muster,$typ="C") {
                             $search[] = $kenz[$typ].".".$keys[$i]." = '".$val."'";
                         }
                     }
-                    $suchwort = "( ".implode(" and ",$search)." )";
-                    $tmp1.="and ".$suchwort." ";
+                    $suchwort = "( ".implode(" $andor ",$search)." )";
+                    $tmp1.="$andor ".$suchwort." ";
                 }
             } else {
                 if ($tbl1 && $dbfld2[$keys[$i]]) {
-                    $tmp1.="and (S.".$dbfld2[$keys[$i]]." ilike '$fuzzy1".$suchwort."$fuzzy2' ";
+                    $tmp1.="$andor (S.".$dbfld2[$keys[$i]]." ilike '$fuzzy1".$suchwort."$fuzzy2' ";
                     $tmp1.="or ".$kenz[$typ].".".$keys[$i]." ilike '$fuzzy1".$suchwort."$fuzzy2' ) ";
                 } else {
-                    $tmp1.="and ".$kenz[$typ].".".$keys[$i]." ilike '$fuzzy1".$suchwort."$fuzzy2' ";
+                    $tmp1.="$andor ".$kenz[$typ].".".$keys[$i]." ilike '$fuzzy1".$suchwort."$fuzzy2' ";
                 }
             }
         }
@@ -375,6 +376,7 @@ function suchFirma($muster,$tab="C") {
 global $db;
     $rechte=berechtigung();
     $tmp=suchstr($muster,$tab);
+    $andor = $muster["andor"];
     if ($muster["umsatz"]) {
         if ($muster["year"]) $year = " and  transdate between '".$muster["year"]."-01-01' and '".$muster["year"]."-12-31'";
         preg_match_all("/([<=>]?[\d]+)/",$muster["umsatz"],$treffer);
@@ -389,14 +391,14 @@ global $db;
                     $ums[] = $umstpl.$val[0].substr($val,1);
                 }
             }
-            $umsatz= " and (".implode(" and ",$ums).") ";
+            $umsatz= " $andor (".implode(" and ",$ums).") ";
         }
     }
     $where=$tmp["where"]; 
     $tabs=$tmp["tabs"];
     if ($where<>"") {
         if ($umsatz) {
-            $sql="select *,$umstpl as umsatz from $tabs where ($where) $umsatz and $rechte";
+            $sql="select *,$umstpl as umsatz from $tabs where ($where $umsatz) and $rechte";
         } else {
             $sql="select * from $tabs where ($where) and $rechte";
         }

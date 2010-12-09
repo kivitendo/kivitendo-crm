@@ -179,6 +179,8 @@ $texts  = array(
   '.:sales volume:.'    => 'Umsatz',
   '.:year:.'            => 'Jahr',
   '.:variablen:.'       => 'Variablen',
-  '.:FinanzInfo:.'      => 'Finanzinfos'
+  '.:FinanzInfo:.'      => 'Finanzinfos',
+  '.:all:.'		=> 'alle (und)',
+  '.:some:.'		=> 'einige (oder)',
 ); 
 ?>

@@ -125,7 +125,9 @@ global $db;
 function suchPerson($muster) {
 global $db;
     $pre = ($_SESSION["preon"])?"%":"";
+    $pre = ($muster["pre"])?$_SESSION["Pre"]:"";
     $fuzzy=$muster["fuzzy"];
+    $andor = $muster["andor"];
     $rechte=berechtigung("cp_");
     /*
         Die join-Abfrage die  über die Tabelle customer geht, muss entsprechend vorher vorbereitet werden
@@ -155,7 +157,7 @@ global $db;
         if ($muster["customer_name"]){    // Falls das Feld Firmenname gefüllt ist
 //          $joinCustomer     = " left join customer K on C.cp_cv_id=K.id";    //hier jetzt der left join und die werte oben überschreiben 
                                                                             //WICHTIG Leerzeichen am Anfang für ',' (s.a. Vorbelegung)a
-            $whereCustomer    = "and K.name ilike '$pre" . $muster["customer_name"] . "$fuzzy'"; 
+            $whereCustomer    = "K.name ilike '$pre" . $muster["customer_name"] . "$fuzzy'"; 
             /* weil die maske sowohl in Lieferant als auch Kunde sucht, hier auch die Lieferanten-Einschränkung.
              * @holgi Warum heisst es hier wieder vendor V??? und nicht vendor L (Lieferant)
                @JAN: weil das in den Firmenmasken so ist, daher sollte K auch zu C werden ;=) . 
@@ -163,12 +165,16 @@ global $db;
                     durch die Schalter $pre und $fuzzy kann das nun jeder für sich entscheiden!
             */
 //          $joinVendor     = " left join vendor V on C.cp_cv_id=V.id";    //hier jetzt der left join und die werte oben überschreiben 
-            $whereVendor    = "and V.name ilike '$pre" . $muster["customer_name"] . "$fuzzy'"; 
-        }
+            $whereVendor    = "V.name ilike '$pre" . $muster["customer_name"] . "$fuzzy'"; 
+        } else {
+		$whereCustomer = '1=1';
+		$whereVendor   = '1=1';
+	}
 
         $daten=false;
         $tbl0=false;
 
+	$where = array();
         for ($i=0; $i<$anzahl; $i++) {
             if (in_array($keys[$i],$dbf) && $muster[$keys[$i]]) {
                 $suchwort=trim($muster[$keys[$i]]);
@@ -176,16 +182,18 @@ global $db;
                 if ($keys[$i]=="cp_birthday") {$d=explode("\.",$suchwort); $suchwort=$d[2]."-".$d[1]."-".$d[0]; };
                 if ($keys[$i]=="cp_phone1") {
                     //Telefonnummer in beliebigen Telefonfeld suchen.
-                    $where.="and (cp_phone1 like '".$pre.$suchwort."$fuzzy' ";
-                    $where.="or cp_phone2 like '".$pre.$suchwort."$fuzzy' ";
-                    $where.="or cp_mobile1 like '".$pre.$suchwort."$fuzzy' ";
-                    $where.="or cp_mobile2 like '".$pre.$suchwort."$fuzzy' ";
-                    $where.="or cp_satphone like '".$pre.$suchwort."$fuzzy') ";
+                    $tmp  ="(cp_phone1 like '".$pre.$suchwort."$fuzzy' ";
+                    $tmp .="or cp_phone2 like '".$pre.$suchwort."$fuzzy' ";
+                    $tmp .="or cp_mobile1 like '".$pre.$suchwort."$fuzzy' ";
+                    $tmp .="or cp_mobile2 like '".$pre.$suchwort."$fuzzy' ";
+                    $tmp .="or cp_satphone like '".$pre.$suchwort."$fuzzy')";
+		    $where[] = $tmp;
                 } else {
-                    $where.="and ".$keys[$i]." ilike '".$pre.$suchwort."$fuzzy' ";
+                    $where[].=$keys[$i]." ilike '".$pre.$suchwort."$fuzzy'";
                 }
             }
         }
+	$where = implode (" $andor ",$where);
         $x=0;
     }
     $felderContact="C.cp_id, C.cp_cv_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_gender as cp_gender";
@@ -200,16 +208,15 @@ global $db;
     $rs0=array(); //leere arrays initialisieren, damit es keinen fehler bei der funktion array_merge gibt
     if ($muster["customer"]){     //auf checkbox customer mit Titel Kunden prüfen
         $sql0="select $felderContact, $felderContcatOrCustomerVendor, K.name as name, K.language_id as language_id, 
-                 'C' as tbl from contacts C$joinCustomer where C.cp_cv_id=K.id $whereCustomer $where and $rechte order by cp_name";
+                 'C' as tbl from contacts C$joinCustomer where C.cp_cv_id=K.id and ($whereCustomer $andor $where) and $rechte order by cp_name";
         $rs0=$db->getAll($sql0);
     }
     $rs1=array(); //s.o.
     if ($muster["vendor"]){ //auf checkbox vendor mit Titel Lieferant prüfen
         $sql0="select $felderContact, $felderContcatOrCustomerVendor, V.name as name, V.language_id as language_id, 'V' as tbl 
-                 from contacts C$joinVendor where C.cp_cv_id=V.id $whereVendor $where and $rechte order by cp_name";
+                 from contacts C$joinVendor where C.cp_cv_id=V.id and ($whereVendor $andor $where) and $rechte order by cp_name";
         $rs1=$db->getAll($sql0);
     }
-
     /*Hinweis: Diese Abfrage sucht nur nach nicht zugeordneten Ansprechpartner (gelöscht). 
     @JAN: nicht nur gelöscht, sind auch Personen ohne Zuordnung zu Firmen, z.B. priv. Kontakte
       Ferner wäre es schön die Auswahl an der Oberfläche kenntlich zu machen jb 9.6.2009 
@@ -219,7 +226,7 @@ global $db;
     if ($muster["deleted"]){ //auf checkbox deleted mit Titel "gelöschte Ansprechpartner (Kunden und Lieferanten)" prüfen
                             // es gibt nicht nur gelöschte Personen, sonder auch Personen ohne Zuordnung zu Firmen, z.B. private Adressen
         $sql0="select $felderContact, C.cp_country, C.cp_zipcode, C.cp_city, C.cp_street, C.cp_phone1, 
-                 '' as name,'P' as tbl from contacts C where $rechte ".$where." and C.cp_cv_id is null order by cp_name";
+                 '' as name,'P' as tbl from contacts C where $rechte and (".$where.") and C.cp_cv_id is null order by cp_name";
         $rs2=$db->getAll($sql0);
     }
     return array_merge($rs0,$rs1,$rs2);    //alle ergebnisse zusammenziehen und zurückgeben

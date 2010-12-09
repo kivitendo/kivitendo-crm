@@ -124,7 +124,10 @@
 			<span class="leftfeld"><input type="text" name="business_description" size="27" maxlength="75" value="{business_description}" tabindex="20"></span -->
 		  </div>
 			<div class="zeile">
-				<span class="klein"><input type="checkbox" name="fuzzy" value="%" checked>.:fuzzy search:.&nbsp;&nbsp;<input type="checkbox" name="pre" value="1" {preon}>.:with prefix:.&nbsp;&nbsp;<b>{Msg}</b></span><br />
+				<span class="klein">
+					.:search:. <input type="radio" name="andor" value="and" checked tabindex="40">.:all:. <input type="radio" name="andor" value="or" tabindex="40">.:some:.<br>
+
+					<input type="checkbox" name="fuzzy" value="%" checked>.:fuzzy search:.&nbsp;&nbsp;<input type="checkbox" name="pre" value="1" {preon}>.:with prefix:.&nbsp;&nbsp;<b>{Msg}</b></span><br />
                  <input type="checkbox" name="vendor" checked><span class="klein">.:Vendor:.</span><input type="checkbox" name="customer" checked><span class="klein">.:Customer:.</span><br>
 				 <input type="checkbox" name="deleted"><span class="klein">gelöschte Ansprechpartner (Kunden und Lieferanten) oder private Adressen</span><br>
                 

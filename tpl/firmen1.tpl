@@ -155,6 +155,7 @@
 	</div>
 	<div class="zeile">
 			<b>{Msg}</b><br>
+			.:search:. <input type="radio" name="andor" value="and" checked tabindex="40">.:all:. <input type="radio" name="andor" value="or" tabindex="40">.:some:.<br>
 			<input type="checkbox" name="shipto" value="1" checked tabindex="40">.:also in:. .:shipto:.<br>
 			<input type="checkbox" name="fuzzy" value="%" checked tabindex="41">.:fuzzy search:. <input type="checkbox" name="pre" value="1" {preon}>.:with prefix:.<br>
 			<input type="checkbox" name="employee" value="{employee}" tabindex="42">.:only by own:.<br>

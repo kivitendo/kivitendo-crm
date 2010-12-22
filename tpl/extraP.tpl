@@ -7,6 +7,7 @@
 		// da die sonst von der TemplateEngie gelöscht wird
 		function checkfelder() {
 			if (!document.test.plz.value.match(/^[0-9]+$/)) { alert ("Fehlerhafte PLZ"); return false; };
+			document.test.save.value=1;
 			document.test.submit();
 		}
 		function doSubmit() {
@@ -21,6 +22,7 @@
 <form name="test" action="extrafelder.php" method="post" >
 <input type="hidden" name="owner" value="{owner}">
 <input type="hidden" name="suche" value="">
+<input type="hidden" name="save" value="">
 <table>
 <tr><td>Name</td><td><input type="text" name="name" size="30" value="{name}"></td></tr>
 <tr><td>Strasse</td><td><input type="text" name="strasse" size="30" value="{strasse}"></td></tr>
@@ -40,7 +42,7 @@
 			<input type="checkbox" name="chkfld3"  value="2" {chkfld3_2}>C</td></tr>
 
 </table>
-<input type="button" name="save" value="sichern" onClick="checkfelder()">
+<input type="button" name="saveit" value="sichern" onClick="checkfelder()">
 <input type="button" name="search" value="suchen" onClick="doSubmit();">
 </form>
 </center>

@@ -29,7 +29,8 @@
 <form name="personen" action="firma2.php" method="post">
 <input type="hidden" name="fid" value="{FID}">
 <input type="hidden" name="Q" value="{Q}">
-<table border="0"><tr><td class="mini">
+<table border="0"><tr><td class="mini" valign="top">
+<table>
 <!-- BEGIN Liste -->
 	<tr class="mini" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick='{js}'>
 		<td>{Name}</td><td>&nbsp;{Plz} {Ort}</td><td>&nbsp;{Telefon}</td><td>&nbsp;{eMail}</td><td>&nbsp;{Firma}</td><td>&nbsp;{insk}</td></tr>

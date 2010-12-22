@@ -1,8 +1,7 @@
 <!-- $Id: personen1.tpl 4293 2009-06-14 08:21:08Z jbueren $ -->
 <html>
 	<head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
     <script language="JavaScript">
         function setLetter(letter) {
             document.formular.cp_name.value=letter;
@@ -11,7 +10,7 @@
         }
     </script>
 <body onLoad="document.formular.cp_name.focus();">
-<p class="listtop">.:person:. .:search:.</p>
+<p class="listtop">Personensuche</p>
 
 <form name="formular" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="FID1" value="{FID1}">
@@ -58,35 +57,35 @@
                     <option value="f" {cp_genderf}>.:female:.
                 </select>
 		</span>
-		<span class="label">.:department:.</span>
+		<span class="label">Abteilung</span>
 		<span class="leftfeld"><input type="text" name="cp_abteilung" size="20" maxlength="25" value="{cp_abteilung}" tabindex="12"></span>
 	</div>
 	<div class="zeile">
-		<span class="label">.:title:.</span>
+		<span class="label">Titel</span>
 		<span class="leftfeld"><input type="text" name="cp_title" size="27" maxlength="75" value="{cp_title}" tabindex="2"></span>
-		<span class="label">.:position:.</span>
+		<span class="label">Position</span>
 		<span class="leftfeld"><input type="text" name="cp_position" size="20" maxlength="25" value="{cp_position}" tabindex="13"></span>
 	</div>
 	<div class="zeile">
-		<span class="label">.:givenname:.</span>
+		<span class="label">Vorname</span>
 		<span class="leftfeld"><input type="text" name="cp_givenname" size="27" maxlength="75" value="{cp_givenname}" tabindex="3"></span>
 		<span class="label">Stichwort</span>
 		<span class="leftfeld"><input type="text" name="cp_stichwort1" size="25" maxlength="50" value="{cp_stichwort1}" tabindex="14"></span>
 	</div>
 	<div class="zeile">
-		<span class="label">.:name:.</span>
+		<span class="label">Nachname</span>
 		<span class="leftfeld"><input type="text" name="cp_name" size="27" maxlength="75" value="{cp_name}" tabindex="4"></span>
-		<span class="label">.:notes:.</span>
+		<span class="label">Bemerkung</span>
 		<span class="leftfeld"><input type="text" name="cp_notes" size="25" maxlength="50" value="{cp_notes}" tabindex="15"></span>
 	</div>
 	<div class="zeile">
-		<span class="label">.:street:.</span>
+		<span class="label">Strasse</span>
 		<span class="leftfeld"><input type="text" name="cp_street" size="27" maxlength="75" value="{cp_street}" tabindex="5"></span>
-		<span class="label">.:birthday:.</span>
+		<span class="label">Geb.-Datum</span>
 		<span class="leftfeld"><input type="text" name="cp_gebdatum" size="12" maxlength="10" value="{cp_gebdatum}" tabindex="16"><span class="klein">TT.MM.JJJJ</span></span>
 	</div>
 	<div class="zeile">
-				<span class="label">.:country:. / .:zipcode:.</span>
+				<span class="label">Länder-Kode / Plz</span>
 				<span class="leftfeld">
 					<input type="text" name="cp_country" size="2" maxlength="3" value="{cp_country}" tabindex="6">
 					<input type="text" name="cp_zipcode" size="7" maxlength="7" value="{cp_zipcode}" tabindex="7">
@@ -102,41 +101,43 @@
 
 			</div>
 			<div class="zeile">
-				<span class="label">.:city:.</span>
+				<span class="label">Ort</span>
 				<span class="leftfeld"><input type="text" name="cp_city" size="27" maxlength="75" value="{cp_city}" tabindex="8"></span>
-				<span class="label">.:fax:.</span>
+				<span class="label">Fax</span>
 				<span class="leftfeld"><input type="text" name="cp_fax" size="27" maxlength="75" value="{cp_fax}" tabindex="17"></span>
 			</div>
 			<div class="zeile">
-				<span class="label">.:phone:.</span>
+				<span class="label">Telefon</span>
 				<span class="leftfeld"><input type="text" name="cp_phone1" size="27" maxlength="75" value="{cp_phone1}" tabindex="9"></span>
-				<span class="label">.:email:.</span>
+				<span class="label">eMail</span>
 				<span class="leftfeld"><input type="text" name="cp_email" size="27" maxlength="75" value="{cp_email}" tabindex="18"></span>
 			</div>
 			<div class="zeile">
-			    <span class="label">.:company:.</span>
-			    <span class="leftfeld"><input type="text" name="customer_name" size="27" maxlength="75" value="{customer_name}" tabindex="10"></span>
+				<span class="label">Mobiltelefon</span>
+				<span class="leftfeld"><input type="text" name="cp_phone2" size="27" maxlength="75" value="{cp_phone2}" tabindex="10"></span>
 				<span class="label">www</span>
 				<span class="leftfeld"><input type="text" name="cp_homepage" size="27" maxlength="25" value="{cp_homepage}" tabindex="19"></span>
 			</div>
 		  <div class="zeile">
-			<!-- span class="label">.:Business:.</span>
+			<span class="label">Firmenname</span>
+			<span class="leftfeld"><input type="text" name="customer_name" size="27" maxlength="75" value="{customer_name}" tabindex="11"></span>
+			<!-- span class="label">Kundentyp</span>
 			<span class="leftfeld"><input type="text" name="business_description" size="27" maxlength="75" value="{business_description}" tabindex="20"></span -->
 		  </div>
 			<div class="zeile">
-				<span class="klein">
-					.:search:. <input type="radio" name="andor" value="and" checked tabindex="40">.:all:. <input type="radio" name="andor" value="or" tabindex="40">.:some:.<br>
-
-					<input type="checkbox" name="fuzzy" value="%" checked>.:fuzzy search:.&nbsp;&nbsp;<input type="checkbox" name="pre" value="1" {preon}>.:with prefix:.&nbsp;&nbsp;<b>{Msg}</b></span><br />
-                 <input type="checkbox" name="vendor" checked><span class="klein">.:Vendor:.</span><input type="checkbox" name="customer" checked><span class="klein">.:Customer:.</span><br>
+				<input type="checkbox" name="fuzzy" value="%" checked><span class="klein">Unscharf suchen&nbsp;&nbsp;<b>{Msg}</b></span> <input type="checkbox" name="vendor" checked><span class="klein">Lieferanten</span><input type="checkbox" name="customer" checked><span class="klein">Kunden</span><br>
 				 <input type="checkbox" name="deleted"><span class="klein">gelöschte Ansprechpartner (Kunden und Lieferanten) oder private Adressen</span><br>
-                
 				{Btn1} {Btn3} <input type="submit" class="anzeige" name="suche" value="suchen"> <input type="submit" class="clear" name="reset" value="clear">
 				<a href="extrafelder.php?owner=P0"><img src="image/extra.png" alt="Extras" title="Extras" border="0" /></a>
 			</div>
 		</span>
 		<div style="margin-left:2.5em; float:left;   margin-top:3em; border: 0px solid black;">
 
+		<!-- Gibt es hier die Möglichkeit eine Fallentscheidung zu machen?  Falls sonder dann einblenden:-->
+Attribute: <br>
+<!-- BEGIN sonder -->
+	<input class="klein" type="checkbox" name="cp_sonder[]" value="{sonder_id}"><span class="klein">{sonder_key}</span><br>
+<!-- END sonder -->		
 </div>	
 </form>
 <!-- End Code ------------------------------------------->

@@ -83,6 +83,8 @@
             // geht hier nicht ums Konvertieren, sonder ums Quoten!
             mb_internal_encoding(ini_get("default_charset"));
             $Name = mb_encode_mimeheader($user["name"], ini_get("default_charset"), 'Q', '');
+            $zeichen = "a-z0-9 ";
+            if (preg_match("/[$zeichen]*[^$zeichen]+[$zeichen]*/i",$Name)) $Name = '"'.$Name.'"';
             $abs = $Name.' <'.$user["email"].'>';
             $Subject = preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["Subject"]);
             $SubjectMail = mb_encode_mimeheader($Subject, ini_get("default_charset") , 'Q', '');

@@ -132,6 +132,7 @@
 				 <input type="checkbox" name="deleted"><span class="klein">gelöschte Ansprechpartner (Kunden und Lieferanten) oder private Adressen</span><br>
                 
 				{Btn1} {Btn3} <input type="submit" class="anzeige" name="suche" value="suchen"> <input type="submit" class="clear" name="reset" value="clear">
+				<a href="extrafelder.php?owner=P0"><img src="image/extra.png" alt="Extras" title="Extras" border="0" /></a>
 			</div>
 		</span>
 		<div style="margin-left:2.5em; float:left;   margin-top:3em; border: 0px solid black;">

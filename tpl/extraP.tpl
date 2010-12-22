@@ -7,20 +7,26 @@
 		// da die sonst von der TemplateEngie gelöscht wird
 		function checkfelder() {
 			if (!document.test.plz.value.match(/^[0-9]+$/)) { alert ("Fehlerhafte PLZ"); return false; };
-			return true;
+			document.test.submit();
+		}
+		function doSubmit() {
+			document.test.suche.value=1;
+			document.test.submit();
 		}
 	</script>
 </head>
 <body onLoad="window.resizeTo(580, 420)">
 <center>
 <h2>Ein Test</h2>
-<form name="test" action="extrafelder.php" method="post" onSubmit="return checkfelder();">
+<form name="test" action="extrafelder.php" method="post" >
 <input type="hidden" name="owner" value="{owner}">
+<input type="hidden" name="suche" value="">
 <table>
 <tr><td>Name</td><td><input type="text" name="name" size="30" value="{name}"></td></tr>
 <tr><td>Strasse</td><td><input type="text" name="strasse" size="30" value="{strasse}"></td></tr>
 <tr><td>Plz/Ort</td><td><input type="text" name="plz" size="5" value="{plz}"><input type="text" name="ort" size="25" value="{ort}"></td></tr>
 <tr><td>Test</td><td><select name="test">
+<option value="" {test0}>
 <option value="1" {test1}>Wert1
 <option value="2" {test2}>Wert2
 <option value="3" {test3}>Wert3
@@ -34,7 +40,8 @@
 			<input type="checkbox" name="chkfld3"  value="2" {chkfld3_2}>C</td></tr>
 
 </table>
-<input type="submit" name="save" value="sichern">
+<input type="button" name="save" value="sichern" onClick="checkfelder()">
+<input type="button" name="search" value="suchen" onClick="doSubmit();">
 </form>
 </center>
 </body>

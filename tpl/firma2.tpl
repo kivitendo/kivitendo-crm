@@ -136,6 +136,7 @@
 			&nbsp;<span id="cp_homepage"></span><br /><br />
 		</div>
 		<div style="float:left; width:29%; height:13em; text-align:right; border-bottom: 0px solid black;" id="cpinhalt2">
+			<a href="extrafelder.php?owner=P{PID}" target="_blank" title=".:extra data:." style="visibility:{zeigeextra};"><img src="image/extra.png" alt="Extras" border="0" /></a>
 			<a href="#" onCLick="anschr();"><img src="image/brief.png" border="0" style="visibility:{none};" id="cpbrief"></a><br />
 			<span id="cp_grafik" style="padding-right:1px;"></span></br >
 			<span id="cp_birthday" style="padding-right:1px;"></span></br />

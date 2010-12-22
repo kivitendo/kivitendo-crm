@@ -23,6 +23,7 @@ $owner=($_GET["owner"])?$_GET["owner"]:$_POST["owner"];
 function suchFelder($data) {
 global $db;
     $tab = substr($data['owner'],0,1);
+    if ($tab=="P") $cp="cp_";
     foreach ($data as $key=>$val) { 
         if ($key == "suche") continue;
         if ($key == "owner") continue;
@@ -34,6 +35,8 @@ global $db;
         $sql = "select * from customer where id in ($sql)";
     } else if ($tab == "V") {
         $sql = "select * from vendor where id in ($sql)";
+    } else if ($tab == "P") {
+        $sql = "select * from contacts where cp_id in ($sql)";
     }
     $rs = $db->getAll($sql);
     return $rs;
@@ -44,8 +47,8 @@ global $db;
 	$nosave=array("save","owner");
 	$owner=$data["owner"];
 	$rc=$db->query("BEGIN");
-    $tab = substr($owner,0,1);
-    $owner = substr($owner,1);
+        $tab = substr($owner,0,1);
+        $owner = substr($owner,1);
 	$sql="delete from extra_felder where tab = '$tab' and owner = '$owner'";
 	$rc=$db->query($sql);
 	foreach ($data as $key=>$val) {
@@ -85,7 +88,11 @@ if ($_POST["save"]) saveFelder($_POST);
 if ($_POST["suche"]) {
     $daten = suchFelder($_POST);
     if (count($daten)==1 && $daten<>false) {
-            header ("location:firma1.php?Q=$maske&id=".$daten[0]["id"]);
+	    if ($maske=="P") {
+            	header ("location:kontakt.php?id=".$daten[0]["cp_id"]);
+	    } else {
+            	header ("location:firma1.php?Q=$maske&id=".$daten[0]["id"]);
+	    }
     } else if (count($daten)>1) {
         require("firmacommon".XajaxVer.".php");
         $t->set_file(array("fa1" => "firmen1L.tpl"));
@@ -98,7 +105,7 @@ if ($_POST["suche"]) {
         ));
         $i=0;
         clearCSVData();
-       insertCSVData(array("ANREDE","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","KONTAKT","ID",
+        insertCSVData(array("ANREDE","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","KONTAKT","ID",
                     "KDNR","USTID","STEUERNR","KTONR","BANK","BLZ","LANG","KDTYP"),-1);
         foreach ($daten as $zeile) {
             insertCSVData(array($zeile["greeting"],$zeile["name"],$zeile["department_1"],

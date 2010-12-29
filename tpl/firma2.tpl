@@ -26,15 +26,15 @@
 		function cedit(ed){				
 			pid=false;
 			if (ed)	pid=document.contact.cp_id.value;
-			parent.main_window.location.href="personen3.php?id="+pid+"&edit="+ed+"&Quelle={Q}&fid={FID}";
+			document.location.href="personen3.php?id="+pid+"&edit="+ed+"&Quelle={Q}&fid={FID}";
 		}
 		function sellist(){				
 			pid=document.contact.cp_id.value;
-			parent.main_window.location.href="personen1.php?fid={FID}&Quelle={Q}";
+			document.location.href="personen1.php?fid={FID}&Quelle={Q}";
 		}
 		function doclink(){				
 			pid=document.contact.cp_id.value;
-			parent.main_window.location.href="firma4.php?Q={Q}&fid={FID}&pid="+pid;
+			document.location.href="firma4.php?Q={Q}&fid={FID}&pid="+pid;
 		}
 		var start = 0;
 		var max = 0;
@@ -115,11 +115,12 @@
 			<form name="contact">
 			<input type="hidden" name="cp_id" id="cp_id" value="{PID}">
 			<input type="hidden" name="Q" value="{Q}">
-			&nbsp;{Fname1} &nbsp; &nbsp; .:KdNr:.: {customernumber} &nbsp; &nbsp;
+			&nbsp;{Fname1} &nbsp; &nbsp; .:KdNr:.: {customernumber} &nbsp; &nbsp;<br />
+			&nbsp;{Fdepartment_1}<br />
+			&nbsp;{Plz} {Ort}
 			<select name="liste" id="liste" style="visibility:{moreC}; width:150px;" onChange="showContact();">
-			{kontakte}</select><br />
-			&nbsp;{Fdepartment_1}<br /> 
-			&nbsp;{Plz} {Ort}</form>
+			{kontakte}</select>
+            </form>
 			</span>
 		</div>
 		<div style="float:left; width:70%; height:13em; text-align:left; border-bottom: 0px solid black;" >
@@ -144,18 +145,19 @@
 			<span id="cp_abteilung" style="padding-right:1px;"></span><br />
 			<span id="cp_vcard" style="padding-right:1px;"></span><br />
 		</div>
-    	<!--/div>
-	<div style="position:absolute;top:21em; left:0em; width:38em;  text-align:left; border-bottom: 1px solid black;"-->
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<hr width="100%">
-		&nbsp;<span id="cp_notes" class="klein" style="width:36em;"></span><br>
-		<hr>
-		&nbsp;<span id="cp_privatphone"></span> <span id="cp_privatemail"></span><br />
-	</div>
-	<div style="position:absolute; text-align:center; left:0em; bottom:0.6em; width:32em; ">
-		<!--[<a href="firma2.php?fid={PID}&ldap=1&Quelle=F">LDAP</a>]-->
-		<span style="visibility:{none};">[<a href="javascript:vcard()">VCard</a>] </span> 
-		<b>.:Contacts:.:</b> [<a href="javascript:cedit(1);">{Edit}</a>] 
-		[<a href="#" onClick="cedit(0);">.:keyin:.</a>] [<a href="#" onClick="sellist();">.:fromList:.</a>]
+	    <div style="position:absolute;top:18em; left:0em; width:32em;  text-align:left; border-bottom: 0px solid black;">
+		    &nbsp;<span id="cp_privatphone"></span> <span id="cp_privatemail"></span><br />
+     		<hr width="100%">
+            <ul id="submenu" class="subshadetabs" style="padding-left:5px;">
+                <li id="subvca"><a href="#" onClick="vcard()" >VCard</a></li>
+		        <b>.:Contacts:.:</b> 
+                <li id="subedit"><a href="#" onClick="cedit(1)" >{Edit}</a></li>
+                <li id="subkeyi"><a href="#" onClick="cedit(0)" >.:keyin:.</a></li>
+                <li id="sublist"><a href="#" onClick="sellist()">.:fromList:.</a></li>
+            </ul>
+		    <hr>
+		    <span id="cp_notes" class="klein" style="width:36em;"></span>
+	    </div>
 	</div>
 </div>
 <div style="float:left; width:45%; height:32em; text-align:left; border: 1px solid black; border-left:0px;" >

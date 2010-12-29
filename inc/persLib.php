@@ -244,8 +244,10 @@ global $db;
     $pid=$daten["PID"];
     // Array zu jedem Formularfed: Tabelle (0=contact,1=cust/vend),  require(0=nein,1=ja), Regel
     // cp_greeting ist raus hli
-    $dbfld=array("cp_name" => array(0,1,1,"Name",75),           "cp_givenname" => array(0,1,1,"Vorname",75),        "cp_gender" => array(0,0,1,"Geschlecht",1),
-            "cp_title" => array(0,0,1,"Titel",75),              "cp_street" => array(0,0,1,"Strasse",75),           "cp_zipcode" => array(0,0,2,"Plz",10),
+    $dbfld=array("cp_name" => array(0,1,1,"Name",75),           "cp_givenname" => array(0,1,1,"Vorname",75),        
+            "cp_gender" => array(0,0,1,"Geschlecht",1),
+            "cp_title" => array(0,0,1,"Titel",75),              "cp_street" => array(0,0,1,"Strasse",75),           
+            "cp_zipcode" => array(0,0,2,"Plz",10),
             "cp_city" => array(0,0,1,"Ort",75),                 "cp_country" => array(0,0,8,"Land",3),     
             "cp_phone1" => array(0,0,3,"Telefon 1",30),         "cp_phone2" => array(0,0,3,"Telefon 2",30),    
             "cp_mobile1" => array(0,0,3,"Mobiletelefon 1",30),  "cp_mobile2" => array(0,0,3,"Mobiletelefon 2",30),    

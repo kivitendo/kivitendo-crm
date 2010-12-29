@@ -275,36 +275,36 @@ function chkFld(&$val,$empty,$rule,$len) {
     if ($empty===0) $leer="|^$";
     switch ($rule) {
         case 1 : $ok=ereg("[[:alnum:]\xE4\xF6\xFC\xC4\xD6\xDC\xDF]+$leer",$val); // String
-             if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
-             break;
+                 if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
+                 break;
         case 2 : if ($empty===0 && empty($val)) { $ok=true; $val=""; }
-             else {$ok=ereg("^[0-9]{4,5}$",$val);}; // Plz
-             if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
-             break;
+                 else {$ok=ereg("^[0-9]{4,5}$",$val);}; // Plz
+                 if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
+                 break;
         case 3 : if ($empty===0 && empty($val)) { $ok=true; $val=""; }
-             else { $ok=ereg("^070[01][ A-Z]{6,9}$", $val) || ereg("^\+?[0-9\(\)/ \-]+$", $val); }; //Telefon
-             //else { $ok=eregi("^([+][ ]?[1-9][0-9][ ]?(\(0\))?[ ]?|[(]?[0][ ]?)[0-9]{2,4}[-)/ ]*[ ]?[1-9][0-9 -]{2,16}$", $val); }; //Telefon
-             if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
-             break;
+                 else { $ok=ereg("^070[01][ A-Z]{6,9}$", $val) || ereg("^\+?[0-9\(\)/ \-]+$", $val); }; //Telefon
+                 //else { $ok=eregi("^([+][ ]?[1-9][0-9][ ]?(\(0\))?[ ]?|[(]?[0][ ]?)[0-9]{2,4}[-)/ ]*[ ]?[1-9][0-9 -]{2,16}$", $val); }; //Telefon
+                 if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
+                 break;
         case 4 : $ok=ereg("^(http(s)?://)?([a-zA-Z0-9\-]*\.)?[a-zA-Z0-9\-]{2,}(\.[a-zA-Z0-9\-]{2,})?(\.[a-zA-Z0-9\-]{2,})(/.*)?$".$leer,$val); // www
-             if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
-             break;
+                 if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
+                 break;
         case 5 : $ok=ereg("^([A-Za-z_0-9]+)([A-Za-z_0-9\.\-]+)([A-Za-z_0-9]*)\@([a-zA-Z0-9][a-zA-Z0-9._-]*\\.)*[a-zA-Z0-9][a-zA-Z0-9._-]*\\.[a-zA-Z]{2,5}$".$leer,$val); //eMail
-             if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
-             break;
+                 if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
+                 break;
         case 6 : if ($empty===0 && empty($val)) { $ok=true; $val="null"; }
                  else {$ok=ereg("^[0-9]+$",$val); } // Ganzzahlen
-                break;
+                 break;
         case 7 : if ($empty===0 && empty($val)) { $ok=true; $val="0000-00-00";} // Datum
-             else {
-                  $ok=ereg("^[0-3][0-9]\.[0-1][0-9]\.([0-9][0-9]|[012][0-9][0-9][0-9])$",$val);
-                $t=explode("\.",$val);
-                if ($ok) $val=$t[2]."-".$t[1]."-".$t[0];
-             }
-             break;
+                 else {
+                     $ok=ereg("^[0-3][0-9]\.[0-1][0-9]\.([0-9][0-9]|[012][0-9][0-9][0-9])$",$val);
+                     $t=explode(".",$val);
+                     if ($ok) $val=$t[2]."-".$t[1]."-".$t[0];
+                 }
+                 break;
         case 8 : $val=toUpper($val); $ok=ereg("[[:alnum:]\xE4\xF6\xFC\xC4\xD6\xDC\xDF]+$leer",$val); // String
-             if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
-             break;
+                 if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
+                 break;
         default : $ok=true;
     }
     return $ok;

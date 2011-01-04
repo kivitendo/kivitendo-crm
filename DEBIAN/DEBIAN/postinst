@@ -1,6 +1,9 @@
 #!/bin/sh
 #set -x
 
+
+pear upgrade PEAR
+
 pear=`pear config-get php_dir | cut -d '=' -f 2`
 
 

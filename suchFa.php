@@ -55,7 +55,7 @@
 	if ($pers) {
 		$datenP=getAllPerson(array(1,$name));
 		if ($datenP) foreach ($datenP as $zeile) {
-			echo "\t<option value='P".$zeile["cp_id"]."'>".$zeile["cp_name"].", ".$zeile["cp_givenname"]." P</option>\n";
+			echo "\t<option value='P".$zeile["cp_id"]."'>".$zeile["cp_name"].", ".$zeile["cp_givenname"].", ".$zeile["cp_city"]." P</option>\n";
 		}
 	}
 	if ($datenC) {
@@ -64,11 +64,11 @@
         else
             $tab="K";
         foreach ($datenC as $zeile) {
-	    	echo "\t<option value='C".$zeile["id"]."'>".$zeile["customernumber"]." ".$zeile["name"]." $tab</option>\n";
+	    	echo "\t<option value='C".$zeile["id"]."'>".$zeile["customernumber"]." ".$zeile["name"].", ".$zeile["city"]." $tab</option>\n";
         }
 	}
 	if ($datenL) foreach ($datenL as $zeile) {
-		echo "\t<option value='V".$zeile["id"]."'>".$zeile["vendornumber"]." ".$zeile["name"]." L</option>\n";
+		echo "\t<option value='V".$zeile["id"]."'>".$zeile["vendornumber"]." ".$zeile["name"].", ".$zeile["city"]." L</option>\n";
 	}
 
 ?>

@@ -182,5 +182,6 @@ $texts  = array(
   '.:FinanzInfo:.'      => 'Finanzinfos',
   '.:all:.'		=> 'alle (und)',
   '.:some:.'		=> 'einige (oder)',
+  '.:timetrack:.'       => 'Zeiterfassung',
 ); 
 ?>

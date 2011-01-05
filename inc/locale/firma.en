@@ -179,5 +179,6 @@ $texts  = array(
   '.:FinanzInfo:.'      => 'Finanz infos',
   '.:all:.'             => 'all (and)',
   '.:some:.'            => 'some (or)',
+  '.:timetrack:.'       => 'Timetracker',
 );
 ?>

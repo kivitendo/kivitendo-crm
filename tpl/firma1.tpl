@@ -194,8 +194,8 @@
 		<span id="shiptodepartment_1">{Sdepartment_1}</span> &nbsp; &nbsp; <span id="shiptodepartment_2">{Sdepartment_2}</span> <br />
 		<span id="shiptostreet">{SStrasse}</span><br />
 		<span class="mini">&nbsp;<br /></span>
-		<span id="shiptocountry">{SLand}</span>-<span id="SPlz">{SPlz}</span> <span id="shiptoSOrt">{SOrt}</span><br />
-		<span id="shiptobland">{SBundesland}</span><br />
+		<span id="shiptocountry">{SLand}</span>-<span id="shiptozipcode">{SPlz}</span> <span id="shiptocity">{SOrt}</span><br />
+		<span id="shiptobundesland">{SBundesland}</span><br />
 		<span class="mini">&nbsp;<br /></span>
 		<span id="shiptocontact">{Scontact}</span><br />
 		.:tel:.: <span id="shiptophone">{STelefon}</span><br />

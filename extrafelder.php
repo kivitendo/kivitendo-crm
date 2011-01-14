@@ -45,7 +45,7 @@ global $db;
 
 function saveFelder($data) {
 global $db;
-	$nosave=array("save","owner");
+	$nosave=array("save","owner","suche");
 	$owner=$data["owner"];
 	$rc=$db->query("BEGIN");
         $tab = substr($owner,0,1);
@@ -75,8 +75,8 @@ global $db;
 			$val=$row["fval"];
 			$t->set_var(array(
 				$key => $val,
-				$key.$val => "selected",
-				$key."_".$val => "checked"
+				$key.$val => ($val)?"selected":"",
+				$key."_".$val => ($val)?"checked":""
 			));
 		}
 	}
@@ -190,8 +190,13 @@ if ($_POST["suche"]) {
         $msg="Sorry, not found.";
     }
 }
-
 $t->set_file(array("extra" => "extra$maske.tpl"));
+$visible = 'style="visibility:visible"';
+$hidden = 'style="visibility:hidden"';
+$t->set_var(array(
+    "visiblesichern" => ($owner=='P0')?$hidden:$visible,
+    "visiblesuchen"  => ($owner=='P0')?$visible:$hidden,
+));
 getFelder($owner,$t);
 $t->pparse("out",array("extra"));
 ?>

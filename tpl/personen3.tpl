@@ -34,7 +34,7 @@
 <p class="listtop">.:personen:. .:keyin:./.:edit:.</p>
 
 <!-- Beginn Code ------------------------------------------->
-<div style="position:absolute; top:3.1em; left:1em;  width:45em;">
+<div style="position:absolute; top:3.1em; left:1em;  width:65em;">
 	<ul id="maintab" class="shadetabs">
 	<li id="subtab1" ><a href="#" onClick="submenu('tab1')">.:person:.</a></li>
 	<li id="subtab2" ><a href="#" onClick="submenu('tab2')">.:Company:.</a></li>

@@ -61,7 +61,7 @@
 <p class="listtop"> {FAART} .:keyin:./.:edit:.</p>
 
 <!-- Beginn Code ------------------------------------------->
-<div style="position:absolute; top:3.3em; left:1em;  width:45em;">
+<div style="position:absolute; top:3.3em; left:1em;  width:65em;">
     <ul id="maintab" class="shadetabs">
     <li id="subtab1" ><a href="#" onClick="submenu('tab1')">.:address:.</a></li>
     <li id="subtab2" ><a href="#" onClick="submenu('tab2')">.:shipto:.</a></li>

@@ -1,5 +1,5 @@
 #!/bin/bash
-VER="1.4.1"
+VER="1.4.2beta"
 #Jedes neue Paket der gleichen Version bekommt eine eigene Nummer
 NR="0"
 
@@ -14,6 +14,7 @@ cd $DEST
 #Struktur anlegen:
 cp -a $SRC/DEBIAN/* .
 rm ./mk*.sh
+rm README
 
 #Dateien kopieren:
 #aber keine fertigen Konfigurationen, nur *.default

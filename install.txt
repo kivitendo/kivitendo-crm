@@ -12,14 +12,16 @@ Achten Sie darauf, dass Sie ¸ber TCP Zugriff auf die PostgreSQL
 haben (pg_hba.conf, postgresql.conf), was aber erledigt ist, wenn die ERP l‰uft.
 
 Vorrausetzungen:
-	Lx-Office ERP 2.6.x 
+	Lx-Office ERP >= 2.6.2 
 	PHP >= 4.2x
-	PEAR::MDB2
-	PEAR::MDB2#pgsql
+	 	PERR::DB 
+	oder
+	 	PEAR::MDB2
+	 	PEAR::MDB2#pgsql
 	PEAR::Contact_Vcard_Build
 	PEAR::Contact_Vcard_Parse
 	PEAR::Mail_Mime oder php-mail-mime
-		jpgraph
+		jpgraph3
 	oder
 		PEAR::Image_Canvas
 		PEAR::Image_Graph
@@ -44,11 +46,13 @@ jpgraph muﬂ nicht mehr verwendet werden. Alternativ wird PEAR::Image_Graph verwe
 
 PHP5:
 Den Fehlerreporting evtl. etwas runterschrauben. 
-error_reporting  =  E_ALL & ~E_NOTICE
+error_reporting  =  E_ALL & ~E_NOTICE 
+PHP5.3:
+error_reporting  =  E_ALL & ~E_NOTICE & ~E_DEPRECATED
 
-Wird jpgraph mit PHP5 verwendet, dann muﬂ unbedingt jpgraph2 eingesetzt werden
+Wird jpgraph mit PHP5 verwendet, dann muﬂ unbedingt min. jpgraph2 eingesetzt werden
 
-PHP-Code wird angezeigt:
+PHP-Code wird angezeigt (sollte nicht mehr vorkommen):
 short_open_tag = On
 
 

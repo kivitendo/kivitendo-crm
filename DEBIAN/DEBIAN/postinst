@@ -56,7 +56,7 @@ else
 fi
 
 #Xajax einhängen
-if ! [ -e /usr/lib/lx-office-erp/crmajax/xajax ] ; then
+if ! [ -e /usr/lib/lx-office-crm/crmajax/xajax ] ; then
     ln -s /usr/share/php/xajax/ /usr/lib/lx-office-crm/crmajax/xajax
 fi
 
@@ -102,23 +102,21 @@ if ! [ -f /usr/lib/lx-office-erp/crm_menu.ini ]; then
     cp /usr/lib/lx-office-erp/menu.ini /usr/lib/lx-office-erp/crm_menu.ini  
 fi
 
-#cp /usr/lib/lx-office-crm/update/blz.php /usr/lib/lx-office-erp/lxo-import/
+if [ $cnt == 0 ]; then
+  if  [ -f /usr/lib/lx-office-erp/menu.default ]; then
+    cat /usr/lib/lx-office-crm/update/menu141.ini /usr/lib/lx-office-erp/menu.default > /usr/lib/lx-office-erp/menu.ini
+  elif  [ -f /usr/lib/lx-office-erp/crm_menu.ini ]; then
+    cat /usr/lib/lx-office-crm/update/menu141.ini /usr/lib/lx-office-erp/crm_menu.ini > /usr/lib/lx-office-erp/menu.ini
+  fi
+fi
 
-#if [ $cnt == 0 ]; then
-#	#Neues Menu: CRM-Einträge + Sicherheitskopie = neues Menu
-#	if [ -f /usr/lib/lx-office-erp/menu.ini.default ]; then
-#		cat /usr/lib/lx-office-crm/update/menu131.ini /usr/lib/lx-office-erp/menu.ini.default > /usr/lib/lx-office-erp/menu.ini 
-#	else 
-#		cat /usr/lib/lx-office-crm/update/menu131.ini /usr/lib/lx-office-erp/crm_menu.ini > /usr/lib/lx-office-erp/menu.ini  
-#	fi
-#fi
-cat /usr/lib/lx-office-crm/update/menu141.ini /usr/lib/lx-office-erp/menu.default > /usr/lib/lx-office-erp/menu.ini 
-
-if [ -e /usr/lib/lx-office-crm/inc/conf.php.ok ]; then
+if ! [ -e /usr/lib/lx-office-crm/inc/conf.php ]; then
     # vorhanden, dann zurücksichern.
+    cp /usr/lib/lx-office-crm/inc/conf.php.default /usr/lib/lx-office-crm/inc/conf.php
+else
     mv /usr/lib/lx-office-crm/inc/conf.php /usr/lib/lx-office-crm/inc/conf.php.org
     grep -v VERSION /usr/lib/lx-office-crm/inc/conf.php.org > /usr/lib/lx-office-crm/inc/conf.php
-	cat /usr/lib/lx-office-crm/update/conf141.php >> /usr/lib/lx-office-crm/inc/conf.php
+    cat /usr/lib/lx-office-crm/update/conf142.php >> /usr/lib/lx-office-crm/inc/conf.php
 fi
 
 if [ `grep -c CallEdit /usr/lib/lx-office-crm/inc/conf.php` -lt 1 ]; then
@@ -148,5 +146,14 @@ if [ `grep -c dbmodul /usr/lib/lx-office-crm/inc/conf.php` -lt 1 ]; then
 	echo "?>" >> /usr/lib/lx-office-crm/inc/conf.php;
 fi
 
+if [ `grep -c MailFlag /usr/lib/lx-office-crm/inc/conf.php` -lt 1 ]; then
+    	echo "<?php" >> /usr/lib/lx-office-crm/inc/conf.php;
+    	echo "\$Expunge=True;" >> /usr/lib/lx-office-crm/inc/conf.php;
+    	echo "\$MailFlag=\"Flagged\";" >> /usr/lib/lx-office-crm/inc/conf.php;
+    	echo "\$ttpart=\"\";" >> /usr/lib/lx-office-crm/inc/conf.php;
+    	echo "\$tttime=60;" >> /usr/lib/lx-office-crm/inc/conf.php;
+    	echo "\$ttround=15;" >> /usr/lib/lx-office-crm/inc/conf.php;
+	echo "?>" >> /usr/lib/lx-office-crm/inc/conf.php;
+fi
 chown www-data: /usr/lib/lx-office-erp/menu.ini
 chown www-data: /usr/lib/lx-office-crm/inc/conf.php

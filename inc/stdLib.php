@@ -36,10 +36,8 @@ function db2date($datum) {
 *****************************************************/
 function date2db($Datum) {
    if (empty($Datum)) return date("Y-m-d");
-   $Datum=ereg_replace("/","\.",$Datum);
-   $Datum=ereg_replace("-","\.",$Datum);
-   $Datum=ereg_replace(",","\.",$Datum);
-   $Datum=ereg_replace(" ","\.",$Datum);
+   $repl = array ("/","-",","," ");
+   $Datum = str_replace($repl,".",$Datum);
    $D=explode(".",$Datum);
    if (count($D)==1) { $D[1]=date("m"); };
    if (count($D)==2 || $D[2]=="") { $D[2]=date("Y"); };
@@ -275,35 +273,35 @@ $arrayLower=array('ç'
 function chkFld(&$val,$empty,$rule,$len) {
     if ($empty===0) $leer="|^$";
     switch ($rule) {
-        case 1 : $ok=ereg("[[:alnum:]\xE4\xF6\xFC\xC4\xD6\xDC\xDF]+$leer",$val); // String
+        case 1 : $ok = preg_match('/[a-z0-9äöüÄÖÜß ]'.$leer.'/i',$val,$hit); //String
                  if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
                  break;
         case 2 : if ($empty===0 && empty($val)) { $ok=true; $val=""; }
-                 else {$ok=ereg("^[0-9]{4,5}$",$val);}; // Plz
+                 else {$ok=preg_match('/^[0-9]{4,5}$/',$val,$hit);}; // Plz
                  if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
                  break;
         case 3 : if ($empty===0 && empty($val)) { $ok=true; $val=""; }
-                 else { $ok=ereg("^070[01][ A-Z]{6,9}$", $val) || ereg("^\+?[0-9\(\)/ \-]+$", $val); }; //Telefon
+                 else { $ok=preg_match('°^070[01][ A-Z]{6,9}$°', $val,$hit) || preg_match('°^\+?[0-9\(\)/ \-]+$°', $val,$hit); }; //Telefon
                  //else { $ok=eregi("^([+][ ]?[1-9][0-9][ ]?(\(0\))?[ ]?|[(]?[0][ ]?)[0-9]{2,4}[-)/ ]*[ ]?[1-9][0-9 -]{2,16}$", $val); }; //Telefon
                  if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
                  break;
-        case 4 : $ok=ereg("^(http(s)?://)?([a-zA-Z0-9\-]*\.)?[a-zA-Z0-9\-]{2,}(\.[a-zA-Z0-9\-]{2,})?(\.[a-zA-Z0-9\-]{2,})(/.*)?$".$leer,$val); // www
+        case 4 : $ok=preg_match('°^(http(s)?://)?([a-zA-Z0-9\-]*\.)?[a-zA-Z0-9\-]{2,}(\.[a-zA-Z0-9\-]{2,})?(\.[a-zA-Z0-9\-]{2,})(/.*)?$'.$leer.'°',$val,$hit); // www
                  if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
                  break;
-        case 5 : $ok=ereg("^([A-Za-z_0-9]+)([A-Za-z_0-9\.\-]+)([A-Za-z_0-9]*)\@([a-zA-Z0-9][a-zA-Z0-9._-]*\\.)*[a-zA-Z0-9][a-zA-Z0-9._-]*\\.[a-zA-Z]{2,5}$".$leer,$val); //eMail
+        case 5 : $ok=preg_match('°^([a-z_0-9]+)([a-z_0-9\.\-]+)([a-z_0-9]*)\@([a-z0-9][a-z0-9._-]*\\.)*[a-z0-9][a-z0-9._-]*\\.[a-z]{2,5}$'.$leer.'°i',$val,$hit); //eMail
                  if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
                  break;
         case 6 : if ($empty===0 && empty($val)) { $ok=true; $val="null"; }
-                 else {$ok=ereg("^[0-9]+$",$val); } // Ganzzahlen
+                 else {$ok=preg_match('/^[0-9]+$/',$val,$hit); } // Ganzzahlen
                  break;
         case 7 : if ($empty===0 && empty($val)) { $ok=true; $val="0000-00-00";} // Datum
                  else {
-                     $ok=ereg("^[0-3][0-9]\.[0-1][0-9]\.([0-9][0-9]|[012][0-9][0-9][0-9])$",$val);
+                     $ok=preg_match('/^[0-3][0-9]\.[0-1][0-9]\.([0-9][0-9]|[012][0-9][0-9][0-9])$/',$val,$hit);
                      $t=explode(".",$val);
                      if ($ok) $val=$t[2]."-".$t[1]."-".$t[0];
                  }
                  break;
-        case 8 : $val=toUpper($val); $ok=ereg("[[:alnum:]\xE4\xF6\xFC\xC4\xD6\xDC\xDF]+$leer",$val); // String
+        case 8 : $val=toUpper($val); $ok=preg_match("/[A-ZÄÖÜß]+$leer/",$val,$hit); // String
                  if (strlen($val)>$len && $len>0) $val=substr($val,0,$len);
                  break;
         default : $ok=true;

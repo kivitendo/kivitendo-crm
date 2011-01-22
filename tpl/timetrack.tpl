@@ -20,8 +20,10 @@
 	//-->
 	</script>
 	{jcal0}
+    <script type='text/javascript' src='inc/help.js'></script>
+
 <body {chkevent}>
-<p class="listtop">.:timetracker:.</p>
+<p class="listtop" onClick="help('TimeTrack');">.:timetracker:. (?)</p>
 <span style="position:absolute; left:1em; top:1.4em; width:95%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <form name="formular" action="timetrack.php" method="post">
@@ -91,14 +93,17 @@
 <br />
 <div>
 <form name="ttevent" method="post" action="timetrack.php">
+<input type="hidden" name="cleared" value="{cleared}">
 <input type="hidden" name="tid" value="{id}">
 <input type="hidden" name="eventid" value="" id="eventid">
 <span style="visibility:{noevent}"><table>
 <tr><td>.:start work:.</td><td>.:stop work:.</td></tr>
-<tr><td><input type="text" size="8" name="startd" id="startd">{jcal3} <input type="text" size="4" name="startt" id="startt"><input type="checkbox" name="start" value="1">.:now:.</td><td>
-<input type="text" size="8" name="stopd" id="stopd">{jcal4}  <input type="text" size="4" name="stopt" id="stopt"> <input type="checkbox" name="stop" value="1">.:now:.</td></tr>
-<tr><td colspan="2">
-<textarea cols="60" rows="3" name="ttevent" id="ttevent"></textarea><input type="submit" name="savett" value=".:save:."></td></tr>
+<tr><td><input type="text" size="8" name="startd" id="startd">{jcal3} <input type="text" size="4" name="startt" id="startt"><input type="checkbox" name="start" value="1">.:now:.</td>
+    <td><input type="text" size="8" name="stopd"  id="stopd">{jcal4}  <input type="text" size="4" name="stopt"  id="stopt"> <input type="checkbox" name="stop"  value="1">.:now:.</td><td></td></tr>
+<tr><td colspan="2"><textarea cols="60" rows="3" name="ttevent" id="ttevent"></textarea></td>
+    <td><input type="reset" name="resett" value=".:reset:."><br />
+        <input type="submit" name="savett" value=".:save:.">
+	</td></tr>
 </table></span>
 </form>
 </div>

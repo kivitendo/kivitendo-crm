@@ -2941,8 +2941,8 @@ global $db;
  */
 function getTTEvents($id,$alle,$evtid) {
 global $db;
-    $sql = "select t.*,coalesce(e.name,e.login) as user from tt_event t ";
-    $sql.= "left join employee e on e.id=t.uid where ttid = $id ";
+    $sql = "select t.*,coalesce(e.name,e.login) as user,oe.ordnumber from tt_event t ";
+    $sql.= "left join employee e on e.id=t.uid left join oe on t.cleared=oe.id where ttid = $id ";
     if (!$alle) $sql.= "and cleared='f' ";
     $sql.= $evtid." order by t.ttstart";
     $rs = $db->getAll($sql);
@@ -2985,12 +2985,12 @@ global $db;
         }
     };
     if ($data["stop"]=="1") {
-        $edate = date("'Y-m-d H:i'");
+        $edate = date("'Y-m-d H:i:00'");
     } else if ($data["stopd"]) {
         list($d,$m,$y) = explode(".",$data["stopd"]);
         list($h,$i) = explode(":",$data["stopt"]);
         if (checkdate($m,$d,$y) && ($h>=0 && $h<24) && ($i>=0 && $i<60)) { 
-            $edate = sprintf("'%04d-%02d-%02d %02d:%02d'",$y,$m,$d,$h,$i);
+            $edate = sprintf("'%04d-%02d-%02d %02d:%02d:00'",$y,$m,$d,$h,$i);
             if ($edate<$adate) $edate = $adate;
         } else {
             return false;
@@ -2999,8 +2999,14 @@ global $db;
         $edate = "null";
     }
     if ($data["eventid"]) {
-        $sql = "update tt_event set ttevent = '".$data["ttevent"]."',ttstart=$adate,";
-        $sql.= "ttstop=$edate where id = ".$data["eventid"];
+	$old = getOneTevent($data["eventid"]);
+	if ($adate <> "'".$old["ttstart"]."'" || $edate <> "'".$old["ttstop"]."'") {
+	        $sql = "update tt_event set ttevent = '".$data["ttevent"]."',ttstart=$adate,";
+        	$sql.= "ttstop=$edate, cleared = null ";
+	} else {
+	        $sql = "update tt_event set ttevent = '".$data["ttevent"]."' ";
+	}
+        $sql .= "where id = ".$data["eventid"];
     } else {
         $sql = "insert into tt_event (ttid,uid,ttevent,ttstart,ttstop) values (";
         $sql.= $data["tid"].",".$_SESSION["loginCRM"].",'".$data["ttevent"]."',";
@@ -3107,7 +3113,7 @@ global $db,$ttpart,$tttime,$ttround;
         return ".:error:.";
     } else {
         //Events als Abgerechnet markieren.
-        $sql = "UPDATE tt_event t set cleared = 't' where t.ttid = $id $evids";
+        $sql = "UPDATE tt_event t set cleared = $trans_id where t.ttid = $id $evids";
         $rc = $db->query($sql);
         $db->commit();
         return ".:ok:.";

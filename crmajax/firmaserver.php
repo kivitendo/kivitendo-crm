@@ -469,6 +469,7 @@
     function editTevent($id) {
         $data = getOneTevent($id);
         $objResponse = new xajaxResponse();
+        $objResponse->assign("cleared",        "value", $data["ordnumber"] );
         $objResponse->assign("ttevent",        "value", $data["ttevent"]);
         $objResponse->assign("eventid",        "value", $id);
         $a = explode(" ",$data["ttstart"]);
@@ -511,7 +512,7 @@
 	    $min = $t2 - $t1;
             $diff += $min;
             $i++; 
-            if ($row["cleared"] == "t") {
+            if ($row["cleared"] > 0) {
                 $clear = "<td>-</td>";
             } else {
                 if ($row["uid"] == $_SESSION["loginCRM"]) {
@@ -523,10 +524,11 @@
             $liste .= "<tr class='calls".($i%2)."' onClick='editrow(".$row["id"].");'>$clear<td>".db2date($a[0])." ".substr($a[1],0,5)."</td>";
             $liste .= "<td>".$stop."</td><td align='right'>".floor($min/60)."</td><td>".$row["user"]."</td><td>";
             if (strlen($row["ttevent"])>40) {
-                $liste .= substr($row["ttevent"],0,40)."...</td></tr>";
+                $liste .= substr($row["ttevent"],0,40)."...</td><td>";
             } else {
-                $liste .= $row["ttevent"]."</td></tr>";
+                $liste .= $row["ttevent"]."</td><td>";
             }
+	    $liste .= $row["ordnumber"]."</td></tr>";
         };
         $diff = floor($diff / 60);
         if ($tt["aim"]>0) {

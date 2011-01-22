@@ -21,6 +21,6 @@ CREATE TABLE tt_event (
     ttevent text NOT NULL,
     ttstart timestamp without time zone,
     ttstop timestamp without time zone,
-    cleared  boolean DEFAULT 'f'
+    cleared int
 );
     

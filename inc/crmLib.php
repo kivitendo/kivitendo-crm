@@ -13,7 +13,7 @@ include ("mailLib.php");
 function mkSuchwort($suchwort) {
     $suchwort=ereg_replace("\*","%",$suchwort);
     $suchwort=ereg_replace("\?","_",$suchwort);
-    if (ereg("^[0-9 -/]+[0-9 -/%]*$",$suchwort)) {   // Telefonnummer?
+    if (preg_match('/^[0-9 -/]+[0-9 -/%]*$/',$suchwort)) {   // Telefonnummer?
         $sw[0]=0;
     } else {                                 // nein Name
         if (empty($suchwort)) $suchwort=" ";
@@ -1119,13 +1119,13 @@ global $db;
 * dekodiert einen MailString
 *****************************************************/
 function decode_string ($string) {
-   if (eregi("=?([A-Z,0-9,-]+)?([A-Z,0-9,-]+)?([A-Z,0-9,-,=,_]+)?=", $string)) {
+   if (preg_match('/=?([A-Z,0-9,-]+)?([A-Z,0-9,-]+)?([A-Z,0-9,-,=,_]+)?=/i', $string)) {
       $coded_strings = explode('=?', $string);
       $counter = 1;
       $string = $coded_strings[0]; // add non encoded text that is before the encoding 
       while ($counter < sizeof($coded_strings)) {
          $elements = explode('?', $coded_strings[$counter]); // part 0 = charset 
-         if (eregi("Q", $elements[1])) {
+         if (preg_match('/Q/i', $elements[1])) {
             $elements[2] = str_replace('_', ' ', $elements[2]);
             $elements[2] = eregi_replace("=([A-F,0-9]{2})", "%\\1", $elements[2]);
             $string .= urldecode($elements[2]);
@@ -1254,7 +1254,7 @@ function getOneMail($usr,$nr) {
         $head["subtype"] = $structure->subtype;
         $body = mail_getBody($mbox,$nr,$head);
     }
-    if ( !eregi("PLAIN",$structure->subtype) )  {
+    if ( !preg_match('/PLAIN/i',$structure->subtype) )  {
        for ($p=1; $p < count($parts); $p++) {
             $attach = mail_get_file($mbox,$nr,$parts[$p]);
             if ($attach) $files[] = $attach;

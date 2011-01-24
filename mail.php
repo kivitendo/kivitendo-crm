@@ -214,10 +214,10 @@
         }
     } else {    
         $user=getUserStamm($_SESSION["loginCRM"]);
-        $MailSign=ereg_replace("\r","",$user["mailsign"]);
+        $MailSign=str_replace("\r","",$user["mailsign"]);
         $BodyText=" \n".$MailSign;
-        $MailSign=ereg_replace("\n","<br>",$user["mailsign"]);
-        $MailSign=ereg_replace("\r","",$MailSign);
+        $MailSign=str_replace("\n","<br>",$user["mailsign"]);
+        $MailSign=str_replace("\r","",$MailSign);
     }
 
     $t = new Template($base);

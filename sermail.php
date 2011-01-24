@@ -6,8 +6,8 @@
 	include("inc/UserLib.php");
 
 	$user=getUserStamm($_SESSION["loginCRM"]);
-	$MailSign=ereg_replace("\n","<br>",$user["mailsign"]);
-	$MailSign=ereg_replace("\r","",$MailSign);
+	$MailSign=str_replace("\n","<br>",$user["mailsign"]);
+	$MailSign=str_replace("\r","",$MailSign);
 
 	if ($_POST) {
 		$Subject=preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["Subject"]);
@@ -73,7 +73,7 @@
 			$sendtxt.="<pre>$BodyText</pre>";
 		}
 	}  else {
-		$BodyText=" \n".ereg_replace("\r","",$user["mailsign"]);
+		$BodyText=" \n".str_replace("\r","",$user["mailsign"]);
 	}
 	
 		$t = new Template($base);

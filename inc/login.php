@@ -11,11 +11,11 @@ if ($_POST["erpname"]) {
 			$f=fopen("inc/conf.php","w");
 			foreach($configfile as $row) {
 				$tmp=trim($row);
-				if (ereg("ERPNAME",$tmp)) {
+				if (preg_match('/ERPNAME/',$tmp)) {
 					fputs($f,'$ERPNAME="'.$_POST["erpname"]."\";\n");
 					$name=true;
 				} else {
-					if (ereg("\?>",$tmp) && !$name) fputs($f,'$ERPNAME="'.$_POST["erpname"].'";'."\n");
+					if (preg_match('/\?>/',$tmp) && !$name) fputs($f,'$ERPNAME="'.$_POST["erpname"].'";'."\n");
 					fputs($f,$tmp."\n");
 				}
 			}

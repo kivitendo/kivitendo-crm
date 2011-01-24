@@ -10,7 +10,7 @@ function getWVorlagen() {
 	$dh = opendir("./vorlage");
 	$vorlagen=array();
 	while (false !== ($filename = readdir($dh))) {
-		if (!is_dir($filename) and ereg("wv.+\.pdf",$filename) ) { $vorlagen[]=substr($filename,2); };
+		if (!is_dir($filename) and preg_match('/wv.+\.pdf/',$filename) ) { $vorlagen[]=substr($filename,2); };
 	}
 	return $vorlagen;
 }

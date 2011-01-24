@@ -36,9 +36,9 @@ $db=false;
 $prog=false;
 $d = dir("tmp/");
 while (false !== ($entry = $d->read())) {
-	if (ereg("upd.*log",$entry)) echo "<a href='tmp/$entry'>$entry</a><br>\n";
-	if (ereg("instprog.log",$entry)) $prog=true;
-	if (ereg("install.log",$entry)) $db=true;
+	if (preg_match('/upd.*log/',$entry)) echo "<a href='tmp/$entry'>$entry</a><br>\n";
+	if (preg_match('/instprog.log/',$entry)) $prog=true;
+	if (preg_match('/install.log/',$entry)) $db=true;
 }
 $d->close();
 if ($prog) { echo "<a href='tmp/instprog.log'>Programminstallation</a><br>"; } else { echo "Kein Logfile f&uuml;r Programminstallation<br>"; }

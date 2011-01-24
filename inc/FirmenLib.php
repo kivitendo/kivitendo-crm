@@ -781,9 +781,9 @@ global $db;
     } else {
         $rechte="true";
     }
-    if (!ereg("P.",$felder)) {
+    if (!preg_match('/P./',$felder)) {
         $where=($where=="")?"":"and $where";
-        if (eregi("shipto",$tabs) or ereg("S.",$felder)) {
+        if (preg_match('/shipto/i',$tabs) or preg_match('/S./',$felder)) {
             $sql="select $felder from ".$tab[$typ]." ".$kenz[$typ]." left join shipto S ";
             $sql.="on S.trans_id=".$kenz[$typ].".id where (S.module='CT' or S.module is null) and $rechte $where order by ".$kenz[$typ].".name";
         } else {
@@ -792,7 +792,7 @@ global $db;
     } else {
         $rechte.=(($rechte)?" and (":"(").berechtigung("P.cp_").")";
         $where=($where=="")?"":"and $where";
-        if (eregi("shipto",$tabs) or ereg("S.",$felder)) {
+        if (preg_match('/shipto/i',$tabs) or preg_match('/S./',$felder)) {
             $sql="select $felder from ".$tab[$typ]." ".$kenz[$typ]." left join shipto S ";
             $sql.="on S.trans_id=".$kenz[$typ].".id left join contacts P on ".$kenz[$typ].".id=P.cp_cv_id ";
             $sql.="where (S.module='CT' or S.module is null)  and $rechte $where order by ".$kenz[$typ].".name,P.cp_name";

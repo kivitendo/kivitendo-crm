@@ -22,7 +22,7 @@
 				$rc=-10;
 			}
 		}
-		if (ereg("^[0-9]+$",$rc)) {
+		if (preg_match('/^[0-9]+$/',$rc)) {
 			$msg="Daten gesichert.";
 			$daten=getKontaktStamm(($_POST["PID"])?$_POST["PID"]:$rc);
 			$daten["Quelle"]=$Q;

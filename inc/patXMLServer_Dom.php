@@ -91,7 +91,7 @@
         {
     		// check for requestType pat_*
     		$regs	=	array();
-    		if( ereg( "^pat_(.+)$", $requestType, $regs ) )
+    		if( preg_match( '/^pat_(.+)$/', $requestType, $regs ) )
     		{
     			$method	=	"_internal_".$regs[1];
                 $this->sendDebugMessage( "trying to call introspection method $method." );

@@ -14,7 +14,7 @@ haben (pg_hba.conf, postgresql.conf), was aber erledigt ist, wenn die ERP läuft.
 Vorrausetzungen:
 	Lx-Office ERP >= 2.6.2 
 	PHP >= 4.2x
-	 	PERR::DB 
+	 	PEAR::DB 
 	oder
 	 	PEAR::MDB2
 	 	PEAR::MDB2#pgsql

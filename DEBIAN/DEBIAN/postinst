@@ -1,11 +1,9 @@
 #!/bin/sh
 #set -x
 
-
 pear upgrade PEAR
 
 pear=`pear config-get php_dir | cut -d '=' -f 2`
-
 
 if [ -f $pear/PEAR.php ]; then 
 #Pear gefunden
@@ -55,9 +53,30 @@ else
 
 fi
 
-#Xajax einhängen
-if ! [ -e /usr/lib/lx-office-crm/crmajax/xajax ] ; then
-    ln -s /usr/share/php/xajax/ /usr/lib/lx-office-crm/crmajax/xajax
+UPGRADE=0
+if  [ -e /usr/lib/lx-office-crm/inc/conf.php.ok ] ; then
+	UPGRADE=1
+fi
+
+Xver=`dpkg -l php-xajax 2>/dev/null | grep "ii " | cut -d. -f2`
+XAJAX=0
+if [ $Xver == "2" ]; then
+	#Xajax einhängen
+	if ! [ -e /usr/lib/lx-office-crm/crmajax/xajax ] ; then
+	    ln -s /usr/share/php/xajax/ /usr/lib/lx-office-crm/crmajax/xajax
+ 	    XAJAX=1
+	fi
+elif [ $Xver == "5" ]; then
+	#Xajax einhängen
+	if ! [ -e /usr/lib/lx-office-crm/crmajax/xajax_core ] ; then
+	    ln -s /usr/share/php/xajax_core/ /usr/lib/lx-office-crm/crmajax/xajax_core
+	    ln -s /usr/share/php/xajax_js/ /usr/lib/lx-office-crm/crmajax/xajax_js
+ 	    XAJAX=1
+	fi
+fi
+#Xajax nicht eingehängt
+if   ( [ $UPGRADE == "0" ] && [ $XAJAX == "0" ] ) ;then
+	db_get lx-office-crm/xajaxerr
 fi
 
 #Font für Umsatzgrafik
@@ -65,7 +84,7 @@ if [ `grep -c FreeSans.ttf /usr/share/php/Image/Canvas/Fonts/fontmap.txt` -lt 1 
 	echo einbinden
     if ! [ -e /usr/share/php/Image/Canvas/Fonts ] ; then
         # Hier gibt es unterschiedliche Versionen
-        mkdir /usr/share/php/Image/Canvas/Fonts
+        mkdir /usr/share/php/Image/Canvas/Fonts 2>/dev/null
     fi
     ln /usr/share/fonts/truetype/freefont/FreeSans.ttf /usr/share/php/Image/Canvas/Fonts/FreeSans.ttf
     echo "FreeSans,FreeSans.ttf" >> /usr/share/php/Image/Canvas/Fonts/fontmap.txt
@@ -111,9 +130,9 @@ if [ $cnt == 0 ]; then
 fi
 
 if ! [ -e /usr/lib/lx-office-crm/inc/conf.php ]; then
-    # vorhanden, dann zurücksichern.
     cp /usr/lib/lx-office-crm/inc/conf.php.default /usr/lib/lx-office-crm/inc/conf.php
 else
+    # vorhanden, dann zurücksichern.
     mv /usr/lib/lx-office-crm/inc/conf.php /usr/lib/lx-office-crm/inc/conf.php.org
     grep -v VERSION /usr/lib/lx-office-crm/inc/conf.php.org > /usr/lib/lx-office-crm/inc/conf.php
     cat /usr/lib/lx-office-crm/update/conf142.php >> /usr/lib/lx-office-crm/inc/conf.php

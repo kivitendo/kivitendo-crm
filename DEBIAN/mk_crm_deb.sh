@@ -6,7 +6,7 @@ NR="0"
 #hier wurde das Git-Paket entpakt:
 SRC=/tmp/lx-office-crm
 #hier wird das Debian-Paket gebaut:
-DEST=/tmp/lx-office/lx-office-crm_$VER-$NR-all
+DEST=/tmp/package/lx-office-crm_$VER-$NR-all
 
 mkdir -p $DEST
 cd $DEST

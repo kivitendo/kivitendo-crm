@@ -23,12 +23,12 @@ config_pear() {
 		#Font für Umsatzgrafik
 		if ! [ -e /usr/share/php/Image/Canvas/Fonts ] ; then
 			# Hier gibt es unterschiedliche Versionen
-			mkdir /usr/share/php/Image/Canvas/Fonts 2>/dev/null
+			mkdir -p /usr/share/php/Image/Canvas/Fonts 2>/dev/null
 			touch /usr/share/php/Image/Canvas/Fonts/fontmap.txt
 		fi
 		if [ `grep -c FreeSans.ttf /usr/share/php/Image/Canvas/Fonts/fontmap.txt` -lt 1 ]; then
 			echo Font einbinden
-		    	ln /usr/share/fonts/truetype/freefont/FreeSans.ttf /usr/share/php/Image/Canvas/Fonts/FreeSans.ttf
+		    	ln -s /usr/share/fonts/truetype/freefont/FreeSans.ttf /usr/share/php/Image/Canvas/Fonts/FreeSans.ttf
 		    	echo "FreeSans,FreeSans.ttf" >> /usr/share/php/Image/Canvas/Fonts/fontmap.txt
 		fi
 		if [ `pear list | grep -c Image_Color` -lt 1 ]; then

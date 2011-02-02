@@ -13,7 +13,7 @@ include ("mailLib.php");
 function mkSuchwort($suchwort) {
     $suchwort=ereg_replace("\*","%",$suchwort);
     $suchwort=ereg_replace("\?","_",$suchwort);
-    if (preg_match('/^[0-9 -/]+[0-9 -/%]*$/',$suchwort)) {   // Telefonnummer?
+    if (preg_match('/!^[0-9 -/]+[0-9 -/%]*$!',$suchwort)) {   // Telefonnummer?
         $sw[0]=0;
     } else {                                 // nein Name
         if (empty($suchwort)) $suchwort=" ";

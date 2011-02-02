@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #set -x
 
 config_pear() {
@@ -57,13 +57,13 @@ config_pear() {
 config_xajax() {
 	Xver=`dpkg -l php-xajax 2>/dev/null | grep "ii " | cut -d. -f2`
 	XAJAX=0
-	if [ $Xver == "2" ]; then
+	if [ "$Xver#" == "2#" ]; then
 		#Xajax einhängen
 		if ! [ -e /usr/lib/lx-office-crm/crmajax/xajax ] ; then
 		    ln -s /usr/share/php/xajax/ /usr/lib/lx-office-crm/crmajax/xajax
 		    XAJAX=1
 		fi
-	elif [ $Xver == "5" ]; then
+	elif [ "$Xver#" == "5#" ]; then
 		#Xajax einhängen
 		if ! [ -e /usr/lib/lx-office-crm/crmajax/xajax_core ] ; then
 		    ln -s /usr/share/php/xajax_core/ /usr/lib/lx-office-crm/crmajax/xajax_core
@@ -72,7 +72,7 @@ config_xajax() {
 		fi
 	fi
 	#Xajax nicht eingehängt
-	if   [ $XAJAX == "0" ] ;then
+	if   [ "$XAJAX#" == "0#" ] ;then
 		db_get lx-office-crm/xajaxerr
 	fi
 }
@@ -110,7 +110,7 @@ config_menu() {
 
 	cnt=`grep -c CRM /usr/lib/lx-office-erp/menu.ini`
 
-	if [ $cnt == 0 ]; then
+	if [ "$cnt#" == "0#" ]; then
 	  if  [ -f /usr/lib/lx-office-erp/menu.default ]; then
 	    cat /usr/lib/lx-office-crm/update/menu.ini /usr/lib/lx-office-erp/menu.default > /usr/lib/lx-office-erp/menu.ini
 	  elif  [ -f /usr/lib/lx-office-erp/crm_menu.ini ]; then

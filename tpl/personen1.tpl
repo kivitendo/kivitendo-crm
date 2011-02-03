@@ -1,7 +1,9 @@
 <!-- $Id: personen1.tpl 4293 2009-06-14 08:21:08Z jbueren $ -->
 <html>
-	<head><title></title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <head><title></title>
+    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+
     <script language="JavaScript">
         function setLetter(letter) {
             document.formular.cp_name.value=letter;

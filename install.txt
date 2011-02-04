@@ -1,4 +1,4 @@
-Lx-Office CRM 1.4.0  
+Lx-Office CRM 1.4.2  
 
 
 Installtion Lx-Office CRM
@@ -34,6 +34,8 @@ Vorrausetzungen:
 z.B. Debian oder Ubuntu:
 apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-db php5-pgsql php-fpdf php-mail-mime imagemagick php-xajax ttf-freefont
 
+jpgraph muß nicht mehr verwendet werden, wenn aber dann die Version 3. Alternativ wird PEAR::Image_Graph verwendet, kann aber mit PHP 5.3 Probleme machen.
+
 Achtung! Das PEAR-Paket Image_Graph und Image_Canvas sind noch nicht "stable". Daher mit :
 
 	pear install -f Image_Graph
@@ -42,7 +44,6 @@ Achtung! Das PEAR-Paket Image_Graph und Image_Canvas sind noch nicht "stable". D
 installieren.  Ein weiteres Paket ist dafür Vorraussetzung:
 	PEAR::Image_Color  
 
-jpgraph muß nicht mehr verwendet werden. Alternativ wird PEAR::Image_Graph verwendet.
 
 PHP5:
 Den Fehlerreporting evtl. etwas runterschrauben. 
@@ -50,11 +51,8 @@ error_reporting  =  E_ALL & ~E_NOTICE
 PHP5.3:
 error_reporting  =  E_ALL & ~E_NOTICE & ~E_DEPRECATED
 
-Wird jpgraph mit PHP5 verwendet, dann muß unbedingt min. jpgraph2 eingesetzt werden
-
 PHP-Code wird angezeigt (sollte nicht mehr vorkommen):
 short_open_tag = On
-
 
 AJAX:
 Nach und nach werden einige Masken mit Ajax bedient. 
@@ -124,7 +122,7 @@ Andere:
 	apache, apache2, httpd, www-run
 
 Im Browser die ERP aufrufen und anmelden
-	 -http://localhost/lx-office-erp/login.pl
+	 -http://localhost/lx-office/login.pl
 
 Melden Sie sich nun an LxO-ERP an und wählen Sie einen CRM-Menüeintrag aus.
 Die Datenbankinstallation wird nun durchgeführt.
@@ -198,5 +196,12 @@ und importieren Sie damit die Daten.
 Die Daten dürfen auf keinen Fall in UTF-8 gewandelt werden !!!
 
 In der Bearbeitungsmaske der Firmen bekommen Sie nun unter "Sonstiges" einen neuen Knopf.
+
+Zeiterfassung:
+--------------
+in der inc/conf.php müßen einige Vorbereitungen getätig werden:
+$ttpart='azstd'; //Artikelnummer für Arbeitszeit
+$tttime=60;     //Anzahl der Minuten für eine Einheit
+$ttround=15;    //Ab hier wird eine Einheit berechnet
 
 

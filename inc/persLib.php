@@ -210,12 +210,14 @@ global $db;
         $sql0="select $felderContact, $felderContcatOrCustomerVendor, K.name as name, K.language_id as language_id, 
                  'C' as tbl from contacts C$joinCustomer where C.cp_cv_id=K.id and ($whereCustomer $andor $where) and $rechte order by cp_name";
         $rs0=$db->getAll($sql0);
+        if (!$rs0) $rs0=array();
     }
     $rs1=array(); //s.o.
     if ($muster["vendor"]){ //auf checkbox vendor mit Titel Lieferant prüfen
         $sql0="select $felderContact, $felderContcatOrCustomerVendor, V.name as name, V.language_id as language_id, 'V' as tbl 
                  from contacts C$joinVendor where C.cp_cv_id=V.id and ($whereVendor $andor $where) and $rechte order by cp_name";
         $rs1=$db->getAll($sql0);
+        if (!$rs1) $rs1=array();
     }
     /*Hinweis: Diese Abfrage sucht nur nach nicht zugeordneten Ansprechpartner (gelöscht). 
     @JAN: nicht nur gelöscht, sind auch Personen ohne Zuordnung zu Firmen, z.B. priv. Kontakte
@@ -228,6 +230,7 @@ global $db;
         $sql0="select $felderContact, C.cp_country, C.cp_zipcode, C.cp_city, C.cp_street, C.cp_phone1, 
                  '' as name,'P' as tbl from contacts C where $rechte and (".$where.") and C.cp_cv_id is null order by cp_name";
         $rs2=$db->getAll($sql0);
+        if (!$rs2) $rs2=array();
     }
     return array_merge($rs0,$rs1,$rs2);    //alle ergebnisse zusammenziehen und zurückgeben
 }

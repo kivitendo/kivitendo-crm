@@ -199,6 +199,7 @@
             $dir="<li class='ptr' onClick='dateibaum(\"$id\",\"%s\")'>%s";
             $datei="<li class='ptr' onClick='showFile(\"$id\",\"%s\")'>%s";
             clearstatcache();
+            $Eintrag = array();
             while ( false !== ( $entry = $dir_object->read() ) ) {
                     // '.' interessiert nicht
                     if ( $entry !== '.' ) {

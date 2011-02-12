@@ -1364,7 +1364,7 @@ function moveMail($mail,$id,$Flag,$Expunge) {
     $mbox = mail_login($srv["msrv"],$srv["port"],$srv["postf"],$srv["mailuser"],$srv["kennw"],$srv["pop"],$srv["ssl"]);
     mail_flag($mbox,$mail,$Flag);
     if ($Expunge && $Flag=='Delete')  mail_expunge($mbox); 
-    $mbox_close($mbox);
+    mbox_close($mbox);
 }
 
 /****************************************************

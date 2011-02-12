@@ -28,7 +28,7 @@ function mail_login($host,$port,$folder,$user,$pass,$pop,$ssl) {
         $server = "{"."$host:$port/imap$ssl"."}";
     }
     if (empty($folder)) $folder = 'INBOX';
-    return (@imap_open($server.$folder,$user,$pass));
+    return (imap_open($server.$folder,$user,$pass));
 }
 
 function mail_close($conn) {

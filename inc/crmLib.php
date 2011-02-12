@@ -1297,6 +1297,7 @@ global $db;
         $data["port"]=$rs[0]["port"];
         $data["mailuser"]=$rs[0]["mailuser"];
         $data["postf"]=$rs[0]["postf"];
+        $data["ssl"]=$rs[0]["ssl"];
         $data["kennw"]=$rs[0]["kennw"];
         $data["postf2"]=$rs[0]["postf2"];
     }
@@ -1364,7 +1365,7 @@ function moveMail($mail,$id,$Flag,$Expunge) {
     $mbox = mail_login($srv["msrv"],$srv["port"],$srv["postf"],$srv["mailuser"],$srv["kennw"],$srv["pop"],$srv["ssl"]);
     mail_flag($mbox,$mail,$Flag);
     if ($Expunge && $Flag=='Delete')  mail_expunge($mbox); 
-    mbox_close($mbox);
+    mail_close($mbox);
 }
 
 /****************************************************
@@ -1378,7 +1379,7 @@ function delMail($mail,$id,$Expunge) {
     $mbox = mail_login($srv["msrv"],$srv["port"],$srv["postf"],$srv["mailuser"],$srv["kennw"],$srv["pop"],$srv["ssl"]);
     mail_dele($mbox,$mail);
     if ($Expunge)  mail_expunge($mbox); 
-    $mbox_close($mbox);
+    mail_close($mbox);
 }
 
 /****************************************************

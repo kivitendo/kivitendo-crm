@@ -14,21 +14,20 @@ function mail_login($host,$port,$folder,$user,$pass,$pop,$ssl) {
         }
         $server = "{"."$host:$port/pop3$ssl"."}$folder";
     } else {
-        if (empty($port)) $port = '143';
-        if ($ssl=='f') {
+        if ($ssl=='n') {
             $ssl="/notls";
             if (empty($port)) $port = '143';
         } else if ($ssl == 't') {
-            $ssl = "/tls/novalidate-cert";
+            $ssl = "/ssl/novalidate-cert";
             if (empty($port)) $port = '993';
         } else {
-            $ssl = "/ssl/novalidate-cert";
+            $ssl = "/tls/novalidate-cert";
             if (empty($port)) $port = '993';
         }
         $server = "{"."$host:$port/imap$ssl"."}";
     }
     if (empty($folder)) $folder = 'INBOX';
-    return (imap_open($server.$folder,$user,$pass));
+    return (@imap_open($server.$folder,$user,$pass));
 }
 
 function mail_close($conn) {

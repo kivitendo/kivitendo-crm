@@ -117,7 +117,7 @@
 		</td></tr>
 	<tr><td class="norm">Protokoll</td><td><input type="radio" name="proto" value="0" {protopop}>POP <input type="radio" name="proto" value="1" {protoimap}>IMAP</td>
 		<td class="norm">SSL</td>
-		<td class="norm"><input type="radio" name="ssl" value="f" {sslf}>notls <input type="radio" name="ssl" value="t" {sslt}>ssl <!--input type="radio" name="ssl" value="t" {sslt}>tls-->
+		<td class="norm"><input type="radio" name="ssl" value="n" {ssln}>notls <input type="radio" name="ssl" value="t" {sslt}>ssl <input type="radio" name="ssl" value="f" {sslf}>tls
 		</td></tr>
 	<tr><td class="norm">Termine</td><td>
 	    	von <select name="termbegin">{termbegin}</select> 

@@ -5,11 +5,11 @@ Installtion Lx-Office CRM
 -------------------------
 
 Dieses Installationsscript erzeugt die notwendigen Verzeichnisse und Tabellen
-für die CRM und erweitert einige Tabellen der ERP. Die
-Funktionstüchtigkeit der ERP wird dadurch nicht beeinträchtigt.
+fÃ¼r die CRM und erweitert einige Tabellen der ERP. Die
+FunktionstÃ¼chtigkeit der ERP wird dadurch nicht beeintrÃ¤chtigt.
 
-Achten Sie darauf, dass Sie über TCP Zugriff auf die PostgreSQL
-haben (pg_hba.conf, postgresql.conf), was aber erledigt ist, wenn die ERP läuft.
+Achten Sie darauf, dass Sie Ã¼ber TCP Zugriff auf die PostgreSQL
+haben (pg_hba.conf, postgresql.conf), was aber erledigt ist, wenn die ERP lÃ¤uft.
 
 Vorrausetzungen:
 	Lx-Office ERP >= 2.6.2 
@@ -34,14 +34,14 @@ Vorrausetzungen:
 z.B. Debian oder Ubuntu:
 apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-db php5-pgsql php-fpdf php-mail-mime imagemagick php-xajax ttf-freefont
 
-jpgraph muß nicht mehr verwendet werden, wenn aber dann die Version 3. Alternativ wird PEAR::Image_Graph verwendet, kann aber mit PHP 5.3 Probleme machen.
+jpgraph muÃŸ nicht mehr verwendet werden, wenn aber dann die Version 3. Alternativ wird PEAR::Image_Graph verwendet, kann aber mit PHP 5.3 Probleme machen.
 
 Achtung! Das PEAR-Paket Image_Graph und Image_Canvas sind noch nicht "stable". Daher mit :
 
 	pear install -f Image_Graph
 	pear install -f Image_Canvas
 
-installieren.  Ein weiteres Paket ist dafür Vorraussetzung:
+installieren.  Ein weiteres Paket ist dafÃ¼r Vorraussetzung:
 	PEAR::Image_Color  
 
 
@@ -76,8 +76,8 @@ define("XajaxPath","./crmajax/");
 //define("XajaxVer","");
 //define("XajaxPath","./crmajax/xajax");
 
-Wird mit einem Alias für das LxO-Verzeichnis benutzt und soll in einigen Masken der 
-jscalendar der ERP benutzt werden, muß das Verzeichnis ins CRM-Verzeichnis verlinkt werden:
+Wird mit einem Alias fÃ¼r das LxO-Verzeichnis benutzt und soll in einigen Masken der 
+jscalendar der ERP benutzt werden, muÃŸ das Verzeichnis ins CRM-Verzeichnis verlinkt werden:
 cd lx-office-crm
 ln -s ../lx-office-erp/js
 
@@ -87,7 +87,7 @@ extension=gd.so
 .
 .
 
-Font für fpdf installieren (Debian):
+Font fÃ¼r fpdf installieren (Debian):
 cd /usr/share/php/Image/Canvas/Fonts
 cp /usr/share/fonts/truetype/freefont/FreeSans.ttf .
 echo FreeSans,FreeSans.ttf >> fontmap.txt 
@@ -115,7 +115,7 @@ Menuicon kopieren
 	cp crm/image/CRM.png image/
 
 
-Eigentümer der Datei auf Webserver setzen
+EigentÃ¼mer der Datei auf Webserver setzen
 z.B. Debian:
 	chown -R www-data: crm/
 Andere:
@@ -124,15 +124,15 @@ Andere:
 Im Browser die ERP aufrufen und anmelden
 	 -http://localhost/lx-office/login.pl
 
-Melden Sie sich nun an LxO-ERP an und wählen Sie einen CRM-Menüeintrag aus.
-Die Datenbankinstallation wird nun durchgeführt.
+Melden Sie sich nun an LxO-ERP an und wÃ¤hlen Sie einen CRM-MenÃ¼eintrag aus.
+Die Datenbankinstallation wird nun durchgefÃ¼hrt.
 
 Geo-Datenbank:
 --------------
-In der Adressdatenmaske können einige Daten aus einer Geodatenbank gefüllt werden.
-Dazu muß zuvor die Datenbank angelegt werden.
+In der Adressdatenmaske kÃ¶nnen einige Daten aus einer Geodatenbank gefÃ¼llt werden.
+Dazu muÃŸ zuvor die Datenbank angelegt werden.
 
-Dazu ein Terminalfenster öffnen oder per Fernzugriff auf dem Server auf der Konsole 
+Dazu ein Terminalfenster Ã¶ffnen oder per Fernzugriff auf dem Server auf der Konsole 
 anmelden. In das Unterverzeichnis 'update' der CRM wechseln.
 
 Die GeoDaten entpacken:
@@ -147,28 +147,28 @@ In der PostgreSQL-Konsole folgendes eingeben:
 Es rasseln eine Menge Meldungen durch, es sollten keine Fehler auftreten.
 Die Konsole mit '\q' verlassen.
 
-Jetzt noch die inc/conf.php öffnen und den Wert hinter 'GEODB' auf 'true' ändern.
+Jetzt noch die inc/conf.php Ã¶ffnen und den Wert hinter 'GEODB' auf 'true' Ã¤ndern.
 
 Jetzt erscheint in den Eingabemasken ein Knopf 'suche Ort'. Geben Sie in Plz, Ort oder
 Vorwahl einen (Teil-)Begrif ein und klicken Sie auf den Knopf. In einem Pop-Up werden
-die Treffer angezeigt. Wird ein Wert ausgewählt, wird in Plz,Ort,Vorwahl der dazugehörige 
+die Treffer angezeigt. Wird ein Wert ausgewÃ¤hlt, wird in Plz,Ort,Vorwahl der dazugehÃ¶rige 
 Wert eingetragen.
 
 Die Ortsuche nutzt nur einen kleinen Teile der Geodaten die gespeichert sind (25-70MB). 
-Klicken Sie in der Stammdatenmaske auf den Ortsnamen, öffnet siche ein neues Fenster.
-Es werden zunächst alle Orte mit gleichem Namen und gleicher PLZ angezeigt. Klicken Sie
-darauf, werden erweiterte Daten angezeigt. So können Sie durch Gemeinden, Kreise, 
-Bundesländer usw. surfen.
+Klicken Sie in der Stammdatenmaske auf den Ortsnamen, Ã¶ffnet siche ein neues Fenster.
+Es werden zunÃ¤chst alle Orte mit gleichem Namen und gleicher PLZ angezeigt. Klicken Sie
+darauf, werden erweiterte Daten angezeigt. So kÃ¶nnen Sie durch Gemeinden, Kreise, 
+BundeslÃ¤nder usw. surfen.
 
 Weitere Informationen zu den Daten sind hier zu finden:
 http://opengeodb.giswiki.org/wiki/OpenGeoDB
 
 BLZ-Datenbank:
 --------------
-In der Adressdatenmaske können einige Daten aus einer BLZ-Datenbank gefüllt werden.
-Dazu muß zuvor die Datenbank angelegt werden.
+In der Adressdatenmaske kÃ¶nnen einige Daten aus einer BLZ-Datenbank gefÃ¼llt werden.
+Dazu muÃŸ zuvor die Datenbank angelegt werden.
 
-Dazu ein Terminalfenster öffnen oder per Fernzugriff auf dem Server auf der Konsole 
+Dazu ein Terminalfenster Ã¶ffnen oder per Fernzugriff auf dem Server auf der Konsole 
 anmelden. In das Unterverzeichnis 'update' der CRM wechseln. Die Postgresql-Konsole 
 mit der entsprechenden Datenbankinstanz aufrufen:
 	psql -U <dbuser> -W <meinedb>
@@ -179,29 +179,29 @@ Die Konsole mit '\q' verlassen.
 
 Kopieren Sie die Datei update/blz.php nach <lx-office-erp>/lxo-import/ wenn diese noch
 nicht vorhanden ist.
-Erweitern Sie das LxO-Menü in der Sektion CSV-Import:
+Erweitern Sie das LxO-MenÃ¼ in der Sektion CSV-Import:
 
 [System--Import CSV--BLZ]
 module=lxo-import/blz.php
 
-Die max_execution_time  sollte groß genu gewählt werden. Es sind über 20000 Datensätze.
+Die max_execution_time  sollte groÃŸ genu gewÃ¤hlt werden. Es sind Ã¼ber 20000 DatensÃ¤tze.
 
-Jetzt noch die inc/conf.php öffnen und den Wert hinter 'BLZDB' auf 'true' ändern.
+Jetzt noch die inc/conf.php Ã¶ffnen und den Wert hinter 'BLZDB' auf 'true' Ã¤ndern.
 
 Melden Sie sich neu an. Holen Sie von :
 http://www.bundesbank.de/zahlungsverkehr/zahlungsverkehr_bankleitzahlen_download.php
 die aktuellen Bankleitzahlen. Rufen Sie das Programm "System->CSV-Import->BLZ" auf
 und importieren Sie damit die Daten.
 
-Die Daten dürfen auf keinen Fall in UTF-8 gewandelt werden !!!
+Die Daten dÃ¼rfen auf keinen Fall in UTF-8 gewandelt werden !!!
 
 In der Bearbeitungsmaske der Firmen bekommen Sie nun unter "Sonstiges" einen neuen Knopf.
 
 Zeiterfassung:
 --------------
-in der inc/conf.php müßen einige Vorbereitungen getätig werden:
-$ttpart='azstd'; //Artikelnummer für Arbeitszeit
-$tttime=60;     //Anzahl der Minuten für eine Einheit
+in der inc/conf.php mÃ¼ÃŸen einige Vorbereitungen getÃ¤tig werden:
+$ttpart='azstd'; //Artikelnummer fÃ¼r Arbeitszeit
+$tttime=60;     //Anzahl der Minuten fÃ¼r eine Einheit
 $ttround=15;    //Ab hier wird eine Einheit berechnet
 
 

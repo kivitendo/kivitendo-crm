@@ -1,7 +1,7 @@
 <?php
 $texts  = array(
   '.:detailview:.'      => 'Detailansicht',
-  '.:Custombase:.'      => 'Kundenstamm',
+  '.:Custombase:.'      => 'Firmenstamm',
   '.:Contacts:.'        => 'Ansprechpartner',
   '.:Sales:.'           => 'Ums&auml;tze',
   '.:Documents:.'       => 'Dokumente',

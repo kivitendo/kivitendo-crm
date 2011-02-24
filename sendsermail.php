@@ -42,7 +42,7 @@ if ($data) {
 		$text=$bodytxt;
 		if ($tmp[$pemail]=="") continue;
 		if ($tmp[$pkont]<>"" and $tmp[$pemail]<>"") {
-            $Name = mb_encode_mimeheader($tmp[$pkont], ini_get("default_charset"), 'Q', '');
+                        $Name = mb_encode_mimeheader($tmp[$pkont], ini_get("default_charset"), 'Q', '');
 			$to=$Name." <".$tmp[$pemail].">";
 		} else {
 			$to=$tmp[$pemail];
@@ -64,10 +64,8 @@ if ($data) {
 				}};
 			};
 			$mime->setTXTBody($text);
-			//$body = $mime->get(array("text_encoding"=>"quoted-printable"));
-			$body = $mime->get(array("text_charset"=>"utf-8"));
+                        $body = $mime->get(array("text_encoding"=>"quoted-printable","text_charset"=>ini_get("default_charset")));
 			$hdr = $mime->headers($headers);
-			if (!empty($_SESSION["frommail"])) $mail->_params="-f ".$_SESSION["frommail"];
 			$rc=$mail->send($to, $hdr, $body);
 			if ($rc) {
 				$data["CRMUSER"]=$_SESSION["loginCRM"];

@@ -24,7 +24,7 @@
 			}
 		};
 		if ($okC) {
-			$anh="";
+                        $dateiname = "";
 			if ($_FILES["Datei"]["name"]<>"") {
 				$dat["Datei"]["name"]=$_FILES["Datei"]["name"];
 				$dat["Datei"]["tmp_name"]=$_FILES["Datei"]["tmp_name"];
@@ -37,31 +37,25 @@
 				$rc=$dbfile->uploadDocument($_FILES,$pfad);
 				$dateiID=$dbfile->id;
 				$dateiname=$_FILES["Datei"]["name"];
-				//move_uploaded_file($_FILES["Datei"]["tmp_name"],"./dokumente/".$_SESSION["mansel"]."/".$_SESSION["loginCRM"]."/".$dateiname);
-				//"tmp/".$_SESSION["loginCRM"].".file");
-				//$type=$_FILES["Datei"]["type"];
-
 			}
 			$limit=50;
 			$abs=sprintf("%s <%s>",$user["name"],$user["email"]);
-            // geht hier nicht ums Konvertieren, sonder ums Quoten!
-            mb_internal_encoding(ini_get("default_charset"));
-            $Name = mb_encode_mimeheader($user["name"], ini_get("default_charset"), 'Q', '');
-            $abs = $Name.' <'.$user["email"].'>';
-            $SubjectMail = mb_encode_mimeheader($Subject, ini_get("default_charset"), 'Q', '');
+                        // geht hier nicht ums Konvertieren, sonder ums Quoten!
+                        mb_internal_encoding(ini_get("default_charset"));
+                        $Name = mb_encode_mimeheader($user["name"], ini_get("default_charset"), 'Q', '');
+                        $abs = $Name.' <'.$user["email"].'>';
+                        $SubjectMail = mb_encode_mimeheader($Subject, ini_get("default_charset"), 'Q', '');
 			$headers=array(
                                         "Return-Path"   => $user["email"],
                                         "Reply-To"      => $abs,
                                         "From"          => $abs,
                                         "X-Mailer"      => "PHP/".phpversion(),
                                         "Subject"       => $SubjectMail);
-			//$headers['Content-Type']='text/plain; charset=utf-8';
-			//$headers['Content-Type']='text/plain; charset=iso-8859-1';
+                        if ($dateiname=="")   $headers["Content-Type"] = "text/plain; charset=".ini_get("default_charset");
 			$_SESSION["headers"]=$headers;
-            $_SESSION["Subject"]=$Subject;
+                        $_SESSION["Subject"]=$Subject;
 			$_SESSION["bodytxt"]=$BodyText;
 			$_SESSION["dateiname"]=$dateiname;
-			$_SESSION["type"]=$type;
 			$_SESSION["dateiId"]=($dateiID)?$dateiID:0;
 			$_SESSION["limit"]=$limit;
 
@@ -69,7 +63,7 @@
 			$sendtxt.="Bitte schlie&szlig;en sie es nur wenn sie dazu aufgefordert werden,<br>";
 			$sendtxt.="da sonst der Mailversand beendet wird.<br><br>";
 			$sendtxt.="Sie k&ouml;nnen aber ganz normal mit anderen Programmteilen arbeiten.";
-			$sendtxt.="<script language='JavaScript'>fx=open('sendsermail.php?first=1$anh','sendmail','width=200,height=100');</script>";
+			$sendtxt.="<script language='JavaScript'>fx=open('sendsermail.php?first=1','sendmail','width=200,height=100');</script>";
 			$sendtxt.="<pre>$BodyText</pre>";
 		}
 	}  else {

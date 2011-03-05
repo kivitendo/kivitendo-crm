@@ -47,9 +47,9 @@ global $db;
             $where.="upper(department_1) ~ '^\[^A-Z\].*$' or ";
             $where.="upper(department_2) ~ '^\[^A-Z\].*$' "; 
         } else  {
-            $where="upper(name) like '$Pre".$sw[1]."%' or ";
-            $where.="upper(department_1) like '$Pre".$sw[1]."%' or ";
-            $where.="upper(department_2) like '$Pre".$sw[1]."%'"; 
+            $where="name ilike '$Pre".$sw[1]."%' or ";
+            $where.="department_1 ilike '$Pre".$sw[1]."%' or ";
+            $where.="department_2 ilike '$Pre".$sw[1]."%'"; 
         }
     }
     if ($tab=="C") {

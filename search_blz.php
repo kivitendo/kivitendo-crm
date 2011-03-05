@@ -22,10 +22,10 @@
 	  	if ($blz or $bank) $sql.="and ";
 	  	$sql.="UPPER(ort) like '%$ort%' ";
 	} 
-	/*if ($plz and $mitort) {
+	if ($plz and $mitort) {
 	  	if ($bank or $blz or $ort) $sql.="and ";
 	  	$sql.="plz like '$plz%' ";
-	} */
+	} 
 	$sql.="order by plz,kurzbez";
 	$rs=$db->getAll($sql);
 ?>

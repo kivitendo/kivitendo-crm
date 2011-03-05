@@ -44,7 +44,7 @@
 			}
 		}
 		function getVorlage() {
-			x=document.mailform.vorlage.selectedIndex
+			x=document.mailform.vorlage.selectedIndex;
 			if (x>0) {
 				y=document.mailform.vorlage.options[x].value;
 				xajax_getMailTpl(y,'{KontaktTO}');

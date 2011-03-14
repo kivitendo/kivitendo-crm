@@ -23,7 +23,7 @@ if ($_POST) {
             }
             $f = fopen($pfad.$filename,"w");
         }
-        $srvcode = strtoupper(ini_get("default_charset"));
+        $srvcode = strtoupper($_SESSION["charset"]);
         $cnt=0;
         foreach ($csvdata as $row) {
             $vcard = new Contact_Vcard_Build();
@@ -121,7 +121,7 @@ if ($_POST) {
     echo "$cnt Adressen bearbeitet.";
 } else {
     $codecs = array("ISO_8859-1","ISO_8859-15","ASCII","UTF-8","UTF-7","Windows-1252");
-    $srvcode = strtoupper(ini_get("default_charset"));
+    $srvcode = strtoupper($_SESSION["charset"]);
     $p = sprintf("sel%d",array_search($srvcode,$codecs));
     ${$p} = "selected";
 ?>

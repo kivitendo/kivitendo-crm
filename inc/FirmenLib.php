@@ -229,11 +229,13 @@ global $db;
  * 
  * @return array
  */
-function getFirmaCVars($id) {
+function getFirmaCVars($id,$search=false) {
 global $db;
     $sql = "select C.name,C.type,V.bool_value,V.timestamp_value,V.text_value,V.number_value,C.module ";
     $sql.= "from custom_variables V left join custom_variable_configs C on C.id=V.config_id ";
     $sql.= "where V.trans_id =".$id." and module = 'CT'";
+    if ($sql) $sql .= " and C.searchable='t' ";
+    $sql .= "order by C.sortkey";
     $rs = $db->getAll($sql);
     if ($rs) { 
         foreach ($rs as $row) {
@@ -254,6 +256,13 @@ global $db;
     } else {
         return false;
     }
+}
+
+function getCvars() {
+global $db;
+    $sql = "select * from custom_variable_configs where module = 'CT' and searchable='t' order by sortkey";
+    $rs = $db->getAll($sql);
+    return $rs;
 }
 
 /****************************************************
@@ -321,6 +330,9 @@ function suchstr($muster,$typ="C") {
     $suchfld=array_keys($dbfld);
     $anzahl=count($keys);
     $tbl0=false;
+    $tbl2=false;
+    $cols="";
+    $cvcnt = 0;
     if ($muster["shipto"]){$tbl1=true;} else {$tbl1=false;}
     $tmp1=""; $tmp2="";
     for ($i=0; $i<$anzahl; $i++) {
@@ -355,15 +367,55 @@ function suchstr($muster,$typ="C") {
                     $tmp1.="$andor ".$kenz[$typ].".".$keys[$i]." ilike '$fuzzy1".$suchwort."$fuzzy2' ";
                 }
             }
-        }
+        } else if (substr($keys[$i],0,4)=="vc_c") {
+                $suchwort=trim($muster[$keys[$i]]);
+                $suchwort=strtr($suchwort,"*?","%_");
+                if ($suchwort != "") {
+			$tbl2 = true;
+                        $cvcnt ++;
+                        preg_match("/vc_cvar_([a-z]+)_(.+)/",$keys[$i],$hits);
+                        $t = $hits[1];
+                        $n = $hits[2];
+                        if ($t=="bool") {
+                            $tmp2[] = "(CC.name='$n' and CC.id=CV.config_id and CV.bool_value='$suchwort')";	
+                        } else if ($t=="number") {
+                            $tmp2[] = "(CC.name='$n' and CC.id=CV.config_id and CV.number_value='$suchwort')";	
+                        } else if ($t=="timestamp") {
+                            $suchwort = date2db($suchwort);
+                            $tmp2[] = "(CC.name='$n' and CC.id=CV.config_id and CV.timestamp_value='$suchwort')";	
+                        } else if ($t=="select") {
+                            $tmp2[] = "(CC.name='$n' and CC.id=CV.config_id and CV.text_value='$suchwort')";	
+                        } else {
+                            $tmp2[] = "(CC.name='$n' and CC.id=CV.config_id and CV.".$t."_value ilike '$fuzzy1$suchwort$fuzzy2')";	
+                        }
+                }
+	}
     }
     if ($tbl1) {
+        $cols = $kenz[$typ].".*,S.*";
         $tabs=$tab[$typ]." ".$kenz[$typ]." left join shipto S on ".$kenz[$typ].".id=S.trans_id";
     } else {
+        $cols = $kenz[$typ].".*";
         $tabs=$tab[$typ]." ".$kenz[$typ];
     }
+    if ($tbl2) {
+       $cols .= ",count(CV.*) as cv_cnt";
+       if ($cvcnt>1) { 
+           $tmp2 = join(" or ",$tmp2); 
+       } else {
+           $tmp2 = $tmp2[0]; 
+       };
+       if ($tmp1) {
+           $tmp1 .= " $andor (".$tmp2.")";
+       } else {
+           $tmp1 .= "   ".$tmp2;
+       }
+       $tabs .= " left join custom_variables CV on CV.trans_id=".$kenz[$typ].".id ";
+       $tabs .= ",custom_variable_configs  CC ";
+       //$tabs .= " left join custom_variable_configs  CC on CC.id=CV.config_id ";
+    }
     if ($tmp1) $where=substr($tmp1,3);
-    return array("where"=>$where,"tabs"=>$tabs); 
+    return array("where"=>$where,"tabs"=>$tabs,"cols"=>$cols); 
 }
 
 /****************************************************
@@ -396,12 +448,14 @@ global $db;
     }
     $where=$tmp["where"]; 
     $tabs=$tmp["tabs"];
+    $cols=$tmp["cols"];
     if ($where<>"") {
         if ($umsatz) {
-            $sql="select *,$umstpl as umsatz from $tabs where ($where $umsatz) and $rechte";
+            $sql="select $cols,$umstpl as umsatz from $tabs where ($where $umsatz) and $rechte";
         } else {
-            $sql="select * from $tabs where ($where) and $rechte";
+            $sql="select $cols from $tabs where ($where) and $rechte";
         }
+echo $sql;
         $rs=$db->getAll($sql);
         if(!$rs) {
             $daten=false;
@@ -1018,6 +1072,47 @@ global $xajax,$GEODB,$BLZDB,$jcalendar;
             $employees=getAllUser(array(0=>true,1=>"%"));
             doBlock($t,"fa1","SalesmanListe","SM",$employees,"id","name",$daten["salesman_id"]);
         }
+        $cvars = getCvars();
+        $t->set_block('fa1','cvarListe','BlockCV');
+        if ($cvars) {
+            $i = 1;
+            foreach ($cvars as $cvar) {
+               switch ($cvar["type"]) {
+                   case "bool"   : $fld = "<input type='checkbox' name='vc_cvar_bool_".$cvar["name"]."' value='t'>";
+                                   break;
+                   case "date"   : $fld = "<input type='text' name='vc_cvar_timestamp_".$cvar["name"]."' id='cvar_".$cvar["name"]."' value=''>";
+                                   $fld.="<input name='cvar_".$cvar["name"]."_button' id='cvar_".$cvar["name"]."_trigger' type='button' value='?'>";
+                                   $fld.= '<script type="text/javascript"><!-- '."\n";
+                                   $fld.= 'Calendar.setup({ inputField : "cvar_'.$cvar["name"].'",';
+                                   $fld.= 'ifFormat   : "%d.%m.%Y",';
+                                   $fld.= 'align      : "BL",';
+                                   $fld.= 'button     : "cvar_'.$cvar["name"].'_trigger"});';
+                                   $fld.= "\n".'--></script>'."\n";
+
+                                   break;
+                   case "select" : $o = explode("##",$cvar["options"]);
+                                   $fld = "<select name='vc_cvar_text_".$cvar["name"]."'>\n<option value=''>---------\n";
+                                   foreach($o as $tmp) {
+                                     $fld .= "<option value='$tmp'>$tmp\n";
+                                   }
+                                   $fld .= "</select>";
+                                   break;
+                   default	 : $fld = "<input type='text' name='vc_cvar_".$cvar["type"]."_".$cvar["name"]."' value=''>";
+               }
+               $t->set_var(array( 
+                  'varlable'.$i => $cvar["description"],
+                  'varfld'.$i   => $fld,
+               ));
+               if ($i==1) { $i = 2; }
+               else { $i = 1;  $t->parse('BlockCV','cvarListe',true); }
+            } 
+           if ($i==2) { 
+               $t->set_var(array(
+                  'varlable2' => "",
+                  'varfld2'   => "",
+               ));
+               $t->parse('BlockCV','cvarListe',true); }
+        }
         $first[]=array("grpid"=>"","rechte"=>"w","grpname"=>".:public:.");
         $first[]=array("grpid"=>$_SESSION["loginCRM"],"rechte"=>"w","grpname"=>".:personal:.");
         $tmp=getGruppen();
@@ -1129,6 +1224,52 @@ global $xajax,$GEODB,$BLZDB,$jcalendar;
         doBlock($t,"fa1","branchen","BR",$branchen,"branche","branche",$daten["branche"]);
         $bundesland=getBundesland(strtoupper($daten["country"]));
         doBlock($t,"fa1","buland","BL",$bundesland,"id","bundesland",$daten["bland"]);
+        $cvars = getCvars();
+        $t->set_block('fa1','cvarListe','BlockCV');
+        if ($cvars) {
+            $i = 1;
+            foreach ($cvars as $cvar) {
+               switch ($cvar["type"]) {
+                   case "bool"   : $fld = "<input type='checkbox' name='vc_cvar_bool_".$cvar["name"]."' value='t'";
+                                   if ($daten["vc_cvar_bool_".$cvar["name"]]=="t") $fld .= " checked";
+                                   $fld.= ">";
+                                   break;
+                   case "date"   : $fld = "<input type='text' name='vc_cvar_timestamp_".$cvar["name"]."' value='";
+                                   $fld.= db2date($daten["vc_cvar_timestamp_".$cvar["name"]])."' id='cvar_".$cvar["name"]."'>";
+                                   $fld.="<input name='cvar_".$cvar["name"]."_button' id='cvar_".$cvar["name"]."_trigger' type='button' value='?'>";
+                                   $fld.= '<script type="text/javascript"><!-- '."\n";
+                                   $fld.= 'Calendar.setup({ inputField : "cvar_'.$cvar["name"].'",';
+                                   $fld.= 'ifFormat   : "%d.%m.%Y",';
+                                   $fld.= 'align      : "BL",';
+                                   $fld.= 'button     : "cvar_'.$cvar["name"].'_trigger"});';
+                                   $fld.= "\n".'--></script>'."\n";
+                                   break;
+                   case "select" : $o = explode("##",$cvar["options"]);
+                                   $fld = "<select name='vc_cvar_".$cvar["type"]."_".$cvar["name"]."'>\n<option value=''>---------\n";
+                                   foreach($o as $tmp) {
+                                     $fld .= "<option value='$tmp'";
+                                     if ($daten["vc_cvar_".$cvar["type"]."_".$cvar["name"]]==$tmp) $fld .= " selected";
+                                     $fld .= ">$tmp\n";
+                                   }
+                                   $fld .= "</select>";
+                                   break;
+                   default	 : $fld = "<input type='text' name='vc_cvar_".$cvar["type"]."_".$cvar["name"]."' value='";
+                                   $fld.= $daten["vc_cvar_".$cvar["type"]."_".$cvar["name"]]."'>";
+               }
+               $t->set_var(array( 
+                  'varlable'.$i => $cvar["description"],
+                  'varfld'.$i   => $fld,
+               ));
+               if ($i==1) { $i = 2; }
+               else { $i = 1;  $t->parse('BlockCV','cvarListe',true); }
+            } 
+           if ($i==2) { 
+               $t->set_var(array(
+                  'varlable2' => "",
+                  'varfld2'   => "",
+               ));
+               $t->parse('BlockCV','cvarListe',true); }
+        }
         if (!$suchmaske) {
             $bundesland=getBundesland(strtoupper($daten["shiptocountry"]));
             doBlock($t,"fa1","buland2","BS",$bundesland,"id","bundesland",$daten["shiptobland"]);

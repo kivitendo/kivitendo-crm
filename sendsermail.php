@@ -5,7 +5,7 @@ include("inc/UserLib.php");
 require_once("inc/crmLib.php");
 include_once("Mail.php");
 include_once("Mail/mime.php");
-mb_internal_encoding(ini_get("default_charset"));
+mb_internal_encoding($_SESSION["charset"]);
 $offset=($_GET["offset"])?$_GET["offset"]:1;
 $mime = new Mail_Mime("\n");
 $mail =& Mail::factory("mail");
@@ -42,7 +42,7 @@ if ($data) {
 		$text=$bodytxt;
 		if ($tmp[$pemail]=="") continue;
 		if ($tmp[$pkont]<>"" and $tmp[$pemail]<>"") {
-                        $Name = mb_encode_mimeheader($tmp[$pkont], ini_get("default_charset"), 'Q', '');
+                        $Name = mb_encode_mimeheader($tmp[$pkont], $_SESSION["charset"], 'Q', '');
 			$to=$Name." <".$tmp[$pemail].">";
 		} else {
 			$to=$tmp[$pemail];
@@ -64,7 +64,7 @@ if ($data) {
 				}};
 			};
 			$mime->setTXTBody($text);
-                        $body = $mime->get(array("text_encoding"=>"quoted-printable","text_charset"=>ini_get("default_charset")));
+                        $body = $mime->get(array("text_encoding"=>"quoted-printable","text_charset"=>$_SESSION["charset"]));
 			$hdr = $mime->headers($headers);
 			$rc=$mail->send($to, $hdr, $body);
 			if ($rc) {

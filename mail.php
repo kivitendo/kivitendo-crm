@@ -81,13 +81,13 @@
             $mail =& Mail::factory("mail");
             $user=getUserStamm($_SESSION["loginCRM"]);
             // geht hier nicht ums Konvertieren, sonder ums Quoten!
-            mb_internal_encoding(ini_get("default_charset"));
-            $Name = mb_encode_mimeheader($user["name"], ini_get("default_charset"), 'Q', '');
+            mb_internal_encoding($_SESSION["charset"]);
+            $Name = mb_encode_mimeheader($user["name"], $_SESSION["charset"], 'Q', '');
             $zeichen = "a-z0-9 ";
             if (preg_match("/[$zeichen]*[^$zeichen]+[$zeichen]*/i",$Name)) $Name = '"'.$Name.'"';
             $abs = $Name.' <'.$user["email"].'>';
             $Subject = preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["Subject"]);
-            $SubjectMail = mb_encode_mimeheader($Subject, ini_get("default_charset") , 'Q', '');
+            $SubjectMail = mb_encode_mimeheader($Subject, $_SESSION["charset"] , 'Q', '');
             $headers=array( 
                     "Return-Path"    => $abs,
                     "Reply-To"    => $abs,
@@ -123,10 +123,10 @@
                     }
                 }
             } else {
-                $headers["Content-Type"] = "text/plain; charset=".ini_get("default_charset");
+                $headers["Content-Type"] = "text/plain; charset=".$_SESSION["charset"];
             }
             
-            $body = $mime->get(array("text_encoding"=>"quoted-printable","text_charset"=>ini_get("default_charset")));
+            $body = $mime->get(array("text_encoding"=>"quoted-printable","text_charset"=>$_SESSION["charset"]));
             $hdr = $mime->headers($headers);
             $mail->_params="-f ".$user["email"];
             $rc=$mail->send($to, $hdr, $body);

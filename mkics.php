@@ -62,7 +62,7 @@
         $mime->setTXTBody("");
         echo "!".$v->getConfig('directory')."/".$v->getConfig('filename')."!".$v->getConfig('filename')."!";
         $mime->addAttachment($v->getConfig('directory')."/".$v->getConfig('filename'),"text/plain",$v->getConfig('filename'));
-        $body = $mime->get(array("text_encoding"=>"quoted-printable","text_charset"=>ini_get("default_charset")));
+        $body = $mime->get(array("text_encoding"=>"quoted-printable","text_charset"=>$_SESSION["charset"]));
         $hdr = $mime->headers($headers);
         $mail =& Mail::factory("mail");
         $mail->_params="-f ".$user["email"];

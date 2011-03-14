@@ -1,7 +1,7 @@
 <?php
 // Die volgenden Datenbanken müssen extra installiert werden. Siehe install.txt 
 $GEODB=false; // Geodatenbank vorhanden
-$BLZDB=false; // BLZ-Datenbank vorhanden
+$BLZDB=true; // BLZ-Datenbank vorhanden
 $tools=true;
 //php-db => "", mdb2 => "m"
 $dbmodul="";
@@ -64,5 +64,6 @@ $MailFlag='Flagged';
 $ttpart='azstd'; //Artikelnummer für Arbeitszeit
 $tttime=60;	//Anzahl der Minuten für eine Einheit
 $ttround=15;	//Ab hier wird eine Einheit berechnet
+$logfile=true;
 $ERPNAME="lx-office-erp";
 ?>

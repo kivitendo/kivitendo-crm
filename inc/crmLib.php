@@ -1233,7 +1233,7 @@ global $db;
 *****************************************************/
 function getOneMail($usr,$nr) {
     $files=array();
-    mb_internal_encoding(ini_get("default_charset"));
+    mb_internal_encoding($_SESSION["charset"]);
     $srv=getUsrMailData($usr);
     $mbox = mail_login($srv["msrv"],$srv["port"],$srv["postf"],$srv["mailuser"],$srv["kennw"],$srv["pop"],$srv["ssl"]);
     $head = mail_parse_headers(mail_retr($mbox,$nr));

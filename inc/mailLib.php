@@ -39,7 +39,7 @@ function mail_stat($connection) {
 }
 
 function mail_list($connection,$message="") {
-    mb_internal_encoding(ini_get("default_charset"));
+    mb_internal_encoding($_SESSION["charset"]);
     if ($message)  {
         $range=$message;
     } else {
@@ -103,7 +103,7 @@ function mail_answered($conn,$message) {
 }
 
 function mail_parse_headers($headers) {
-    mb_internal_encoding(ini_get("default_charset"));
+    mb_internal_encoding($_SESSION["charset"]);
     $headers=preg_replace('/\r\n\s+/m', '',$headers);
     preg_match_all('/([^: ]+): (.+?(?:\r\n\s(?:.+?))*)?\r\n/m', $headers, $matches);
     foreach ($matches[1] as $key =>$value) $result[$value]=$matches[2][$key];
@@ -249,7 +249,7 @@ function mail_getBody($conn,$mail,$header) {
     if ($header) foreach ($header as $head) {
         if (preg_match("/charset=([^ ]+)/",$head,$hit)) $charset = $hit[1];
     };
-    if ($charset) $body = iconv($charset,ini_get("default_charset")."//Transient",$body);
+    if ($charset) $body = iconv($charset,$_SESSION["charset"]."//Transient",$body);
     return $body;
     
 }
@@ -264,12 +264,12 @@ function mail_get_body($conn,$mail,$part) {
         //den htmlbody noch als File speichern??
         $body = strip_tags($htmlbody);
     }
-    $charset = ini_get("default_charset");
+    $charset = $_SESSION["charset"];
     if ($part["part_object"]->parameters) foreach ($part["part_object"]->parameters as $param) {
         if ($param->attribute == "charset") $charset = $param->value;
     }
     $body = @imap_qprint($body);
-    $body = iconv($charset,ini_get("default_charset")."//Transient",$body);
+    $body = iconv($charset,$_SESSION["charset"]."//Transient",$body);
     return $body;
 }
 

@@ -277,7 +277,7 @@ function getArtnumber($sn) {
 }
 function getHistory($nr) {
 	global $db;
-	$sql="select * from history where mid=$nr order by datum desc, oid  desc";
+	$sql="select * from history where mid=$nr order by datum itime  desc";
 	$rs=$db->getAll($sql);	
 	return $rs;	
 }

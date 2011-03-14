@@ -306,7 +306,12 @@ global $db;
 function suchstr($muster,$typ="C") {
     $kenz=array("C" => "K","V" => "L");
     $tab=array("C" => "customer","V" => "vendor");
-    
+    //Suche in den CVars:
+    $cvartemp = "EXISTS ( SELECT cvar.id FROM custom_variables cvar ";
+    $cvartemp.= "LEFT JOIN custom_variable_configs cvarcfg ON (cvar.config_id = cvarcfg.id) ";
+    $cvartemp.= "WHERE (cvarcfg.module = 'CT') AND (cvarcfg.name  = '%s') AND ";
+    $cvartemp.= "(cvar.trans_id  = %s.id) AND (%s)"; 
+    $cvartemp.= "AND (cvar.sub_module = 'CT' or cvar.sub_module is null) )"; 
     // Array zu jedem Formularfed: 0=String,2=Int
     $dbfld=array(name => 0, street => 0, zipcode => 1,
             city => 0, phone => 1, fax => 1,
@@ -377,42 +382,37 @@ function suchstr($muster,$typ="C") {
                         $t = $hits[1];
                         $n = $hits[2];
                         if ($t=="bool") {
-                            $tmp2[] = "(CC.name='$n' and CC.id=CV.config_id and CV.bool_value='$suchwort')";	
+                            $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.bool_value, false) = TRUE ");
                         } else if ($t=="number") {
-                            $tmp2[] = "(CC.name='$n' and CC.id=CV.config_id and CV.number_value='$suchwort')";	
+                            $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.number_value, '') = '$suchwort' ");
                         } else if ($t=="timestamp") {
                             $suchwort = date2db($suchwort);
-                            $tmp2[] = "(CC.name='$n' and CC.id=CV.config_id and CV.timestamp_value='$suchwort')";	
+                            $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.timestamp_value, '') = '$suchwort' ");
                         } else if ($t=="select") {
-                            $tmp2[] = "(CC.name='$n' and CC.id=CV.config_id and CV.text_value='$suchwort')";	
+                            $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.text_value, '') = '$suchwort' ");
                         } else {
-                            $tmp2[] = "(CC.name='$n' and CC.id=CV.config_id and CV.".$t."_value ilike '$fuzzy1$suchwort$fuzzy2')";	
+                            $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.text_value, '') ilike '$fuzzy1$suchwort$fuzzy2' ");
                         }
                 }
 	}
     }
+    $cols = "distinct ".$kenz[$typ].".*";
     if ($tbl1) {
-        $cols = $kenz[$typ].".*,S.*";
         $tabs=$tab[$typ]." ".$kenz[$typ]." left join shipto S on ".$kenz[$typ].".id=S.trans_id";
     } else {
-        $cols = $kenz[$typ].".*";
         $tabs=$tab[$typ]." ".$kenz[$typ];
     }
     if ($tbl2) {
-       $cols .= ",count(CV.*) as cv_cnt";
        if ($cvcnt>1) { 
-           $tmp2 = join(" or ",$tmp2); 
+           $tmp2 = join(" $andor ",$tmp2); 
        } else {
            $tmp2 = $tmp2[0]; 
        };
        if ($tmp1) {
            $tmp1 .= " $andor (".$tmp2.")";
        } else {
-           $tmp1 .= "   ".$tmp2;
+           $tmp1 = "   ".$tmp2;
        }
-       $tabs .= " left join custom_variables CV on CV.trans_id=".$kenz[$typ].".id ";
-       $tabs .= ",custom_variable_configs  CC ";
-       //$tabs .= " left join custom_variable_configs  CC on CC.id=CV.config_id ";
     }
     if ($tmp1) $where=substr($tmp1,3);
     return array("where"=>$where,"tabs"=>$tabs,"cols"=>$cols); 
@@ -455,7 +455,6 @@ global $db;
         } else {
             $sql="select $cols from $tabs where ($where) and $rechte";
         }
-echo $sql;
         $rs=$db->getAll($sql);
         if(!$rs) {
             $daten=false;
@@ -1080,7 +1079,7 @@ global $xajax,$GEODB,$BLZDB,$jcalendar;
                switch ($cvar["type"]) {
                    case "bool"   : $fld = "<input type='checkbox' name='vc_cvar_bool_".$cvar["name"]."' value='t'>";
                                    break;
-                   case "date"   : $fld = "<input type='text' name='vc_cvar_timestamp_".$cvar["name"]."' id='cvar_".$cvar["name"]."' value=''>";
+                   case "date"   : $fld = "<input type='text' name='vc_cvar_timestamp_".$cvar["name"]."' size='10' id='cvar_".$cvar["name"]."' value=''>";
                                    $fld.="<input name='cvar_".$cvar["name"]."_button' id='cvar_".$cvar["name"]."_trigger' type='button' value='?'>";
                                    $fld.= '<script type="text/javascript"><!-- '."\n";
                                    $fld.= 'Calendar.setup({ inputField : "cvar_'.$cvar["name"].'",';
@@ -1234,7 +1233,7 @@ global $xajax,$GEODB,$BLZDB,$jcalendar;
                                    if ($daten["vc_cvar_bool_".$cvar["name"]]=="t") $fld .= " checked";
                                    $fld.= ">";
                                    break;
-                   case "date"   : $fld = "<input type='text' name='vc_cvar_timestamp_".$cvar["name"]."' value='";
+                   case "date"   : $fld = "<input type='text' name='vc_cvar_timestamp_".$cvar["name"]."' size='10' value='";
                                    $fld.= db2date($daten["vc_cvar_timestamp_".$cvar["name"]])."' id='cvar_".$cvar["name"]."'>";
                                    $fld.="<input name='cvar_".$cvar["name"]."_button' id='cvar_".$cvar["name"]."_trigger' type='button' value='?'>";
                                    $fld.= '<script type="text/javascript"><!-- '."\n";

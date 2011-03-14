@@ -21,6 +21,7 @@
 		}
 	</script>
     <script type='text/javascript' src='inc/help.js'></script>
+    {jcal0}
 <body onLoad="document.erwsuche.name.focus();">
 
 <form name="erwsuche" enctype='multipart/form-data' action="{action}" method="post">
@@ -145,15 +146,23 @@
 	</div>
 	<div class="zeile">
         <span class="label">.:sales volume:.</span>
-        <span class="leftfeld"><input type="text" name="umsatz" size="7" maxlength="25" value="{umsatz}" tabindex="32"></span>
-        <span class="label">.:year:.</span>
-			<select name="year" tabindex="11" style="width:110px;">
+        <span class="leftfeld"><input type="text" name="umsatz" size="7" maxlength="25" value="{umsatz}" tabindex="32"> .:year:. 
+			<select name="year" tabindex="11" >
 <!-- BEGIN YearListe -->	
 				<option value="{YLid}" {YLsel}>{YLtext}</option>
 <!-- END YearListe -->				
-			</select>
+			</select></span>
 	</div>
+<!-- BEGIN cvarListe -->	
 	<div class="zeile">
+		<span class="label">{varlable1}</span>
+		<span class="leftfeld">{varfld1}</span>
+		<span class="label">{varlable2}</span>
+		<span class="leftfeld">{varfld2}</span>
+	</div>
+<!-- END cvarListe -->	
+	<div class="zeile">
+                        <br>
 			<b>{Msg}</b><br>
 			.:search:. <input type="radio" name="andor" value="and" checked tabindex="40">.:all:. <input type="radio" name="andor" value="or" tabindex="40">.:some:.<br>
 			<input type="checkbox" name="shipto" value="1" checked tabindex="40">.:also in:. .:shipto:.<br>
@@ -163,7 +172,7 @@
 			<input type="submit" class="clear" name="reset" value=".:clear:." tabindex="44"> &nbsp;
 			<input type="button" name="rep" value="Report" onClick="report()" tabindex="45"> &nbsp;
 			<input type="button" name="geo" value="GeoDB" onClick="surfgeo()" tabindex="46" style="visibility:{GEOS}"> &nbsp;
-            <a href="extrafelder.php?owner={Q}0"><img src="image/extra.png" alt="Extras" title="Extras" border="0" /></a>
+                        <a href="extrafelder.php?owner={Q}0"><img src="image/extra.png" alt="Extras" title="Extras" border="0" /></a>
 			<br>
 			{report}
 	</div>

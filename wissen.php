@@ -44,7 +44,7 @@
 	if ($_POST["aktion"] == "savecontent") {
 		$rc=insWContent($_POST);
 		$content=getWContent($tmp[0]);
-		$contdata=$content["content"];
+		$contdata=stripslashes($content["content"]);
 		if ($content) {
 			$datum=substr($content["initdate"],8,2).".".substr($content["initdate"],5,2).".".substr($content["initdate"],0,4);
 			$datum.=" ".substr($content["initdate"],11,2).":".substr($content["initdate"],14,2);
@@ -82,7 +82,7 @@
 		}
 	} else {
 		if ($tmp[0]) $content=getWContent($tmp[0]);
-		$contdata=$content["content"];
+		$contdata=stripslashes($content["content"]);
 		if ($content) {	
 			$datum=substr($content["initdate"],8,2).".".substr($content["initdate"],5,2).".".substr($content["initdate"],0,4);
 			$datum.=" ".substr($content["initdate"],11,2).":".substr($content["initdate"],14,2);

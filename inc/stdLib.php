@@ -123,42 +123,46 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
 function anmelden() {
 global $ERPNAME;
     ini_set("gc_maxlifetime","3600");
-    if (file_exists("../".$ERPNAME."/config/authentication.pl")) {
-	$lxo = fopen("../".$ERPNAME."/config/authentication.pl","r");
-    } else if (file_exists("../".$ERPNAME."/config/authentication.pl.default")) {
-	$lxo = fopen("../".$ERPNAME."/config/authentication.pl.default","r");
+    if (file_exists("../".$ERPNAME."/config/lx_office.conf")) {
+	$lxo = fopen("../".$ERPNAME."/config/lx_office.conf","r");
+    } else if (file_exists("../".$ERPNAME."/config/lx_office.conf.default")) {
+	$lxo = fopen("../".$ERPNAME."/config/lx_office.conf.default","r");
     } else {
         return false;
     }
     $dbsec = false;
     $tmp = fgets($lxo,512);
     while (!feof($lxo)) {
-       if (preg_match("/^[\s]*#/",$tmp)) {
+       if (preg_match("/^[\s]*#/",$tmp)) { //Kommentar, überlesen
     	    $tmp = fgets($lxo,512);
 	    continue;
        }
-       if (preg_match("!LDAP_config!",$tmp)) $dbsec = false;
+       //if (preg_match("!LDAP_config!",$tmp)) $dbsec = false;
+       if (preg_match("!\[authentication/ldap\]!",$tmp)) $dbsec = false;
        if ($dbsec) {
-	    preg_match("/'db'[ ]*=> '(.+)'/",$tmp,$hits);
+	    preg_match("/db[ ]*= (.+)/",$tmp,$hits);
             if ($hits[1]) $dbname=$hits[1];
-	    preg_match("/'password'[ ]*=> '([^']+)'/",$tmp,$hits);
+	    preg_match("/password[ ]*= (.+)/",$tmp,$hits);
 	    if ($hits[1]) $dbpasswd=$hits[1];
-	    preg_match("/'user'[ ]*=> '(.+)'/",$tmp,$hits);
+	    preg_match("/user[ ]*= (.+)/",$tmp,$hits);
 	    if ($hits[1]) $dbuser=$hits[1];
-	    preg_match("/'host'[ ]*=> '(.+)'/",$tmp,$hits);
+	    preg_match("/host[ ]*= (.+)/",$tmp,$hits);
 	    if ($hits[1]) $dbhost=($hits[1])?$hits[1]:"localhost";
-	    preg_match("/'port'[ ]*=> ([0-9]+)/",$tmp,$hits);
+	    preg_match("/port[ ]*= ([0-9]+)/",$tmp,$hits);
 	    if ($hits[1]) $dbport=($hits[1])?$hits[1]:"5432";
-            if (preg_match("/\[[a-z]+/",$tmp)) break;
+            if (preg_match("/\[[a-z]+/",$tmp)) $dbsec = False;
     	    $tmp = fgets($lxo,512);
 	    continue;
        }
-       preg_match("/cookie_name.[ ]*=[ ]*'(.+)'/",$tmp,$hits);
+       preg_match("/cookie_name[ ]*=[ ]*(.+)/",$tmp,$hits);
        if ($hits[1]) $cookiename=$hits[1];
-       //if (preg_match("!\[authentication/database\]!",$tmp)) $dbsec = true;
-       if (preg_match("!DB_config!",$tmp)) $dbsec = true;
+       preg_match("/dbcharset[ ]*=[ ]*(.+)/",$tmp,$hits);
+       if ($hits[1]) $dbcharset=$hits[1];
+       if (preg_match("!\[authentication/database\]!",$tmp)) $dbsec = true;
+       //if (preg_match("!DB_config!",$tmp)) $dbsec = true;
        $tmp = fgets($lxo,512);
     }
+    echo $db.$dbuser.$dbhost.$password;
     if (!$cookiename) $cookiename='lx_office_erp_session_id';
     $cookie=$_COOKIE[$cookiename];
     if (!$cookie) header("location: ups.html");
@@ -178,9 +182,10 @@ global $ERPNAME;
     //    if ($rs) { //ist schon oben abgefangen jb 09.12.09
        $charset = ini_get("default_charset");
        if ($charset=="") {
-           $tmp = @file_get_contents("../".$ERPNAME."/config/lx-erp.conf");
-           preg_match("/dbcharset[\s]*=[\s]*'(.+)';/",$tmp,$hits);
-           $charset=$hits[1];
+           //$tmp = @file_get_contents("../".$ERPNAME."/config/lx-erp.conf");
+           //preg_match("/dbcharset[\s]*=[\s]*'(.+)';/",$tmp,$hits);
+           //$charset=$hits[1];
+           $charset = $dbcharset;
        }
        $_SESSION["charset"]=$charset;
        $tmp=$rs[0];

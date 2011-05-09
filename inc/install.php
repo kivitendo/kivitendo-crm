@@ -150,13 +150,13 @@ echo "Vorraussetzungen pr&uuml;fen:<br>";
         fputs($log,"\n");
 
 //ERP da?
-	$OK=is_file($p."../$ERPNAME/config/authentication.pl");
+	$OK=is_file($p."../$ERPNAME/config/lx_office.conf");
 	fputs($log,"$ERPNAME : ");
 	fputs($log,(($OK)?"gefunden":"fehler")."\n");
 	if ($OK) {
-		echo "ERP authtenticaltion.pl gefunden<br>";
+		echo "ERP lx_office.conf gefunden<br>";
 	} else {
-		echo "ERP (authentication.pl) nicht gefunden. Abbruch.<br>";
+		echo "ERP (lx_office.conf) nicht gefunden. Abbruch.<br>";
 		exit(1);
 	}
 

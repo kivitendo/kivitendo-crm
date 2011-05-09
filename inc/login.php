@@ -4,7 +4,7 @@ while( list($key,$val) = each($_SESSION) ) {
 };
 clearstatcache();
 if ($_POST["erpname"]) {
-	if (is_file("../".$_POST["erpname"]."/config/authentication.pl")) {
+	if (is_file("../".$_POST["erpname"]."/config/lx_office.conf")) {
 		if (is_writable("inc/conf.php")) {
 			$name=false;
 			$configfile=file("inc/conf.php");
@@ -28,9 +28,9 @@ if ($_POST["erpname"]) {
 }
 
 if (substr(getcwd(),-3)=="inc") {
-    $conffile="../../$ERPNAME/config/authentication.pl";
+    $conffile="../../$ERPNAME/config/lx_office.conf";
 } else {
-    $conffile="../$ERPNAME/config/authentication.pl";
+    $conffile="../$ERPNAME/config/lx_office.conf";
 }
 /*if (!$login) {
 	header("location: ups.html");

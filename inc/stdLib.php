@@ -162,7 +162,6 @@ global $ERPNAME;
        //if (preg_match("!DB_config!",$tmp)) $dbsec = true;
        $tmp = fgets($lxo,512);
     }
-    echo $db.$dbuser.$dbhost.$password;
     if (!$cookiename) $cookiename='lx_office_erp_session_id';
     $cookie=$_COOKIE[$cookiename];
     if (!$cookie) header("location: ups.html");

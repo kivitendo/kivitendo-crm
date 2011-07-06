@@ -30,24 +30,24 @@
 <input type="hidden" name="fid" value="{FID}">
 <input type="hidden" name="Q" value="{Q}">
 <table border="0"><tr><td class="mini" valign="top">
-<table>
+    <table width="100%">
 <!-- BEGIN Liste -->
 	<tr class="mini" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick='{js}'>
-		<td>{Name}</td><td>&nbsp;{Plz} {Ort}</td><td>&nbsp;{Telefon}</td><td>&nbsp;{eMail}</td><td>&nbsp;{Firma}</td><td>&nbsp;{insk}</td></tr>
+		<td>{Name}</td><td>&nbsp;{Plz}</td><td>{Ort}</td><td>&nbsp;{Telefon}</td><td>&nbsp;{eMail}</td><td>&nbsp;{Firma}</td><td>&nbsp;{insk}</td></tr>
 <!-- END Liste -->
 	<tr><td class="re" colspan="6">{snd}</td></tr>
-</table>
-</td><td class="mini">
-<form>
-    <input type="button" name="etikett" value="Etiketten" onClick="chngSerial('etiketten');">&nbsp;
-    <a href="sermail.php"><input type="button" name="email" value="Serienmail"></a>&nbsp;
-    <input type="button" name="brief" value="Serienbrief" onClick="chngSerial('serdoc');">
-    <input type="button" name="vcard" value=".:servcard:." onClick="chngSerial('servcard');">
-</form>
-	<iframe src="etiketten.php" name="etikett" width="380" height="380" marginheight="0" marginwidth="0" align="left">
-		<p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>
-	</iframe>
-</td></tr>
+    </table>
+</td>
+<td class="mini">
+    <form>
+	    <input type="button" name="etikett" value="Etiketten" onClick="chngSerial('etiketten');">&nbsp;
+	    <a href="sermail.php"><input type="button" name="email" value="Serienmail"></a>&nbsp;
+	    <input type="button" name="brief" value="Serienbrief" onClick="chngSerial('serdoc');">
+	    <input type="button" name="vcard" value=".:servcard:." onClick="chngSerial('servcard');">
+    </form><br />
+    <iframe src="etiketten.php" name="etikett" width="380" height="380" marginheight="0" marginwidth="0" align="left">
+ 	    <p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>
+    </iframe>
 <!-- Hier endet die Karte ------------------------------------------->
 </td></tr></table>
 </body>

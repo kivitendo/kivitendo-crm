@@ -25,8 +25,8 @@
 
 <table>
 <!-- BEGIN Liste -->
-	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showK({ID});">
-		<td class="mini">{KdNr}</td><td class="mini">{Name}</td><td class="mini">{Plz} {Ort}</td><td class="mini">{Telefon}</td><td class="mini">{eMail}</td></tr>
+	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showK({ID});" class="mini">
+		<td>{KdNr}</td><td>{Name}</td><td>{Plz}</td><td>{Ort}</td><td>{Strasse}</td><td>{Telefon}</td><td>{eMail}</td></tr>
 <!-- END Liste -->
 </table>
 {report}

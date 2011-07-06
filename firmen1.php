@@ -72,7 +72,7 @@
                             $data[] = $rs[$cvh];
                         }
                     } else {
-                        for ($i=0; $i<$cvar; $i++) $data[] = false;
+                        for ($j=0; $j<$cvar; $j++) $data[] = false;
                     }
                 }
                 insertCSVData($data,$zeile["id"]);
@@ -80,11 +80,12 @@
                     $t->set_var(array(
                         Q => $Q,
                         ID => $zeile["id"],
-                        LineCol => $bgcol[($i%2+1)],
+                        LineCol => $bgcol[($i%2)+1],
                         KdNr => ($Q=="C")?$zeile["customernumber"]:$zeile["vendornumber"],
-                        Name => $zeile["name"],
+                        Name => $i.$zeile["name"],
                         Plz => $zeile["zipcode"],
                         Ort => $zeile["city"],
+                        Strasse => $zeile["street"],
                         Telefon => $zeile["phone"],
                         eMail => $zeile["email"]
                     ));

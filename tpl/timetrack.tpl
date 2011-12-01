@@ -75,15 +75,16 @@
 	<div class="zeile">
 		<span class="label"></span>
         <span style="visibility:{noown}">
-		<input type="image" src="image/save_kl.png" alt='.:save:.' title='.:save:.' name="save" value=".:save:." > &nbsp;
-		<input type="image" src="image/cancel_kl.png" alt='.:delete:.' title='.:delete:.' name="delete" value=".:delete:." style="visibility:{delete};"> &nbsp;
+		<input type="hidden" name="action" value="">
+		<img src="image/save_kl.png"   alt='.:save:.'   title='.:save:.'   name="save"   value=".:save:."   onclick="document.formular.action.value='save'; document.formular.submit();"> &nbsp;
+		<img src="image/cancel_kl.png" alt='.:delete:.' title='.:delete:.' name="delete" value=".:delete:." onclick="document.formular.action.value='delete'; document.formular.submit();"style="visibility:{delete};"> &nbsp;
         </span>
         <span style="visibility:{blshow}">
 		<a href={backlink}><image src="image/firma.png" alt='.:back:.' title='.:back:.' border="0" ></a>&nbsp;
         </span>
         <span>
-		<input type="image" src="image/neu.png" alt='.:new:.' title='.:new:.' name="clear" value=".:new:." > &nbsp;
-		<input type="image" src="image/suchen.png" alt='.:search:.' title='.:search:.' name="search" value=".:search:." > &nbsp;
+		<img src="image/neu.png"    alt='.:new:.'    title='.:new:.'    name="clear"  value=".:new:."    onclick="document.formular.action.value='clear'; document.formular.submit();"> &nbsp;
+		<img src="image/suchen.png" alt='.:search:.' title='.:search:.' name="search" value=".:search:." onclick="document.formular.action.value='search'; document.formular.submit();"> &nbsp;
         </span>
         <span id="summtime"></span>
 	</div>

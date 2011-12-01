@@ -16,16 +16,37 @@
     $jscal2.="//-->\n</script>";
     $t = new Template($base);
     $t->set_file(array("tt" => "timetrack.tpl"));
-    if ($_POST["save"]) {
-        $data = saveTT($_POST);
-    } else if ($_POST["savett"]) {
-        $rc = saveTTevent($_POST);
-        $data = getOneTT($_POST["tid"]);
-    } else if ($_GET["stop"]=="now") {
-        $rc = stopTTevent($_GET["eventid"],date('Y-m-d H:i'));
-        $data = getOneTT($_GET["tid"]);
-	
-    } else if ($_POST["search"] || $_GET["fid"]) {
+    if ($_POST["action"] == "save") {
+        //Sichert die obere Maske
+        if ($_POST['fid'] <= 0 )             { $data = $_POST; $data['msg'] = '.:missinge:. .:company:.';   }
+        else if ($_POST['ttname'] == '' )    { $data = $_POST; $data['msg'] = '.:missings:. .:project:.';   }
+        else if ($_POST['startdate'] == '' ) { $data = $_POST; $data['msg'] = '.:missings:. .:startdate:.'; }
+        else if ($_POST['aim'] == '' )       { $data = $_POST; $data['msg'] = '.:missinge:. .:hours:.';     }
+        else {
+            $data = saveTT($_POST);
+        }
+    } else if ($_POST["action"] == "clear") {
+        if ($_POST["fid"] != '') {
+            unset($data);
+            $data['name'] = $_POST['name'];
+	    $data['fid']  = $_POST['fid'];
+	    $data['tab']  = $_POST['tab'];
+            $data["active"] = "t";
+        }
+    } else if ($_POST["action"] == "delete") {
+        //Einen Zeiteintrag löschen, obere Maske
+        $rc = deleteTT($_POST["id"]);
+        if ($rc) {
+            $msg = ".:deleted:.";
+            $data['name'] = $_POST['name'];
+	    $data['fid']  = $_POST['fid'];
+	    $data['tab']  = $_POST['tab'];
+        } else {
+            $data = getOneTT($_POST["id"]);
+            $msg = ".:not posible:.";
+        };
+    } else if ($_POST["action"] == "search" || $_GET["fid"]) {
+        //Suchen eines Zeiteintrages, obere Maske
     	if ($_GET["fid"]) $_POST = $_GET;
         $data = searchTT($_POST);
         if (count($data)>1) {
@@ -49,15 +70,17 @@
 	    $delete = ($data["uid"]==$_SESSION["loginCRM"])?True:False;
         }
     } else if ($_POST["getone"]) {
+        //Eintrag der Auswahlliste der Zeiteinträge einer Firma holen
         $data = getOneTT($_POST["tid"]);
         $delete = ($data["uid"]==$_SESSION["loginCRM"])?True:False;
-    } else if ($_POST["delete"]) {
-        $rc = deleteTT($_POST["id"]);
-        if ($rc) {
-            $msg = ".:deleted:.";
-        } else {
-            $msg = ".:not posible:.";
-        };
+    } else if ($_POST["savett"]) {
+        //Einen Zeiteintrag sichern, untere Maske
+        $rc = saveTTevent($_POST);
+        $data = getOneTT($_POST["tid"]);
+    } else if ($_GET["stop"]=="now") {
+        //Endzeitpunkt für einen Zeiteintrag sichern, untere Maske
+        $rc = stopTTevent($_GET["eventid"],date('Y-m-d H:i'));
+        $data = getOneTT($_GET["tid"]);
     } else if ($_POST["clr"]) {
             if ($_POST["clrok"]=="1" || count($_POST["clear"])>0) {
                 if ($_POST["tid"]) {

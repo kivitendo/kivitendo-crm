@@ -2944,7 +2944,7 @@ function getTTEvents($id,$alle,$evtid) {
 global $db;
     $sql = "select t.*,coalesce(e.name,e.login) as user,oe.ordnumber from tt_event t ";
     $sql.= "left join employee e on e.id=t.uid left join oe on t.cleared=oe.id where ttid = $id ";
-    if (!$alle) $sql.= "and cleared='f' ";
+    if (!$alle) $sql.= "and (cleared < 1 or cleared is NUll) ";
     $sql.= $evtid." order by t.ttstart";
     $rs = $db->getAll($sql);
     return $rs;
@@ -3066,7 +3066,6 @@ global $db,$ttpart,$tttime,$ttround;
     $rs = $db->getOne($sql); 
     $tax = $rs["tax"];
     $curr = getCurr();
-    $db->begin();
     //Events holen
     $events = getTTEvents($id,false,$evids);
     if (!$events) { 
@@ -3081,7 +3080,8 @@ global $db,$ttpart,$tttime,$ttround;
     $sql = "select id from oe where notes = '$newID'";
     $rs = $db->getOne($sql);
     $trans_id = $rs["id"];
-    $sql_i = "INSERT INTO orderitems (trans_id, parts_id, description, qty, sellprice, unit, ship, discount,serialnumber) values (";
+    $sql_i = "INSERT INTO orderitems (trans_id, parts_id, description, qty, sellprice, unit, ship, discount,serialnumber,reqdate) values (";
+    $db->begin();
     foreach ($events as $row) {
         if ($row["ttstop"] == "") {
             $db->rollback();
@@ -3097,8 +3097,12 @@ global $db,$ttpart,$tttime,$ttround;
         if ($diff - ($tttime * $time) > $round) $time++;
         $price =  $time * $sellprice;
         //Orderitemseintrag
-        $sql = $sql_i."$trans_id,$partid,'".$row["ttevent"]."',$time,$sellprice,'$unit',0,0,'$diff')";
+        $sql = $sql_i."$trans_id,$partid,'".$row["ttevent"]."',$time,$sellprice,'$unit',0,0,'$diff','".substr($row['ttstop'],0,10)."')";
         $rc = $db->query($sql);
+        if (!$rc) {
+            $db->rollback();
+            return ".:error:.";
+        }
         $netamount += $price;
     }
     //OE-Eintrag updaten
@@ -3106,7 +3110,7 @@ global $db,$ttpart,$tttime,$ttround;
     $sql  = "update oe set transdate=now(),";
     $sql .= "customer_id=".$tt["fid"].", amount=".$amount.", netamount=".$netamount;
     $sql .= ", reqdate=now(), notes='".$tt["ttname"]."\n".$tt["ttdescription"];
-    $sql .= "', taxincluded='f', curr='$curr',employee_id=".$_SESSION["loginCRM"].", vendor_id=0 ";
+    $sql .= "', taxincluded='f', curr='$curr',employee_id=".$_SESSION["loginCRM"].", vendor_id=Null ";
     $sql .="where id=".$trans_id;
     $rc=$db->query($sql,"uodOE");
     if (!$rc) {

@@ -3,7 +3,7 @@ require_once("inc/stdLib.php");
 if ($_POST) {
     require_once("inc/crmLib.php");
     require_once 'Contact_Vcard_Build.php';
-    $sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' order by oid";
+    $sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' order by id";
     $csvdata=$db->getAll($sql);
     if ($csvdata) {
         $pfad = $_SESSION["loginCRM"]."/vcard";

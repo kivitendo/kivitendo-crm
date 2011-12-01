@@ -82,7 +82,7 @@
                         ID => $zeile["id"],
                         LineCol => $bgcol[($i%2)+1],
                         KdNr => ($Q=="C")?$zeile["customernumber"]:$zeile["vendornumber"],
-                        Name => $i.$zeile["name"],
+                        Name => $zeile["name"],
                         Plz => $zeile["zipcode"],
                         Ort => $zeile["city"],
                         Strasse => $zeile["street"],

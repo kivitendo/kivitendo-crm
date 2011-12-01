@@ -157,11 +157,16 @@
 		<div style="float:left; width:33%; height:10em; text-align:right; border-bottom: 0px solid black; padding:2px;">
 			{kdnr}<br />
 			{IMG}<br /><br />
-				<form action="../oe.pl" method="post">
+				<form action="../oe.pl" method="post" name="oe">
 				<input type="hidden" name="action" value="add">
+				<input type="hidden" name="vc" value="{CuVe}">
+				<input type="hidden" name="type" value="">
+				<input type="hidden" name="action_update" value="Erneuern" id="update_button">
 				<input type="hidden" name="{CuVe}_id" value="{FID}">
-				<input type="image" src="image/auftrag.png" name="type" value="{sales}_order" title="neuen Auftrag eingeben" style="visibility:{zeige};">
-				<input type="image" src="image/angebot.png" name="type" value="{request}_quotation" title="Angebot/Anfrage erstellen" style="visibility:{zeige};">
+				<button type="submit" title="neuen Auftrag eingeben" style="visibility:{zeige};" onClick="document.oe.type.value='{sales}_order'; submit()">
+                                <img src="image/auftrag.png"></button> 
+				<button type="submit" title="Angebot/Anfrage erstellen" style="visibility:{zeige};" onClick="document.oe.type.value='{request}_quotation'; submit()">
+                                <img src="image/angebot.png"></button> 
 
 				<img src="image/kreuzchen.gif" title=".:locked address:."style="visibility:{verstecke};" >
 				&nbsp;

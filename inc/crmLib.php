@@ -2704,7 +2704,7 @@ global $db;
     $where = "";
     if ($data) while (list($key,$val)=each($data)) {
         if (in_array($key,array("title","notiz","zieldatum","next")) and $val) { 
-            $val=str_replace("*","%",$val); $where.="and $key like '$val%' "; 
+            $val=str_replace("*","%",$val); $where.="and $key ilike '$val%' "; 
         } else if (in_array($key,array("status","chance","salesman")) and $val) { 
             $where.="and $key = $val "; 
         };

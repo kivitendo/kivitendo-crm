@@ -7,13 +7,13 @@
 	$t = new Template($base);
 	$jscal ="<style type='text/css'>@import url(../js/jscalendar/calendar-win2k-1.css);</style>\n";
 	$jscal.="<script type='text/javascript' src='../js/jscalendar/calendar.js'></script>\n";
-    $jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
-    $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar-setup.js'></script>\n";
-    $jscal1="<script type='text/javascript'><!--\nCalendar.setup( {\n";
+	$jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
+	$jscal.="<script type='text/javascript' src='../js/jscalendar/calendar-setup.js'></script>\n";
+	$jscal1="<script type='text/javascript'><!--\nCalendar.setup( {\n";
 	$jscal1.="inputField : 'zieldatum',ifFormat :'%d.%m.%Y',align : 'BL', button : 'trigger1'} );\n";
-    $jscal1.="//-->\n</script>";
+	$jscal1.="//-->\n</script>";
 	$stamm="none";
-    $show = "visible";
+	$show = "visible";
 	if ($_GET["Q"] and $_GET["fid"]) {
 		$fid=$_GET["fid"];
 		if ($_GET["new"]) {
@@ -24,7 +24,7 @@
 		} else {
 			$_POST["tab"]=$_GET["Q"];
 			$_POST["fid"]=$fid;
-			$_POST["suchen"]=1;
+			$_POST["action"] = "suchen";
 		}
 			$search="visible";
 			$save="visible";
@@ -32,44 +32,44 @@
 			$stamm="block";
 			$block="none";			
 	} else if ($_GET["history"]) {
-        $history = true;
-        $show = "hidden";
-        $_POST["oppid"]=$_GET["history"];
-    }
+        	$history = true;
+        	$show = "hidden";
+        	$_POST["oppid"]=$_GET["history"];
+    	}
 	$oppstat=getOpportunityStatus();
 	$salesman=getAllUser(array(0=>true,1=>"%"));
-	if ($_POST["suchen"] || $history) {
+	if ($_POST["action"]=='suchen' || $history) {
 		$data=suchOpportunity($_POST);
 		$none="block";
 		$block="none";
 		if (count($data)>1){
 			$t->set_file(array("op" => "opportunityL.tpl"));
 			$t->set_block("op","Liste","Block");
-            $last = 0;
+            		$last = 0;
 			foreach ($data as $row) {
-                if ($last <> $row["oppid"] || $history) {
-                    $t->set_var(array(
-                        LineCol	=> $bgcol[($i%2+1)],
-                        id => $row["id"], 
-                        firma => ($last==$row["oppid"])?"":$row["firma"], 
-                        oppid => $row["oppid"],
-                        show => $show,
-                        title => $row["title"],
-                        chance => $row["chance"]*10, 
-                        betrag => sprintf("%0.2f",$row["betrag"]), 
-                        status => $row["statusname"],
-                        datum => db2date($row["zieldatum"]),
-                    ));
-                    $t->parse("Block","Liste",true);
-                    $i++;
-                } 
-                $last = $row["oppid"];
+			if ($last <> $row["oppid"] || $history) {
+				$t->set_var(array(
+				LineCol	=> $bgcol[($i%2+1)],
+				id => $row["id"], 
+				firma => ($last==$row["oppid"])?"":$row["firma"], 
+				oppid => $row["oppid"],
+				show => $show,
+				title => $row["title"],
+				chance => $row["chance"]*10, 
+				betrag => sprintf("%0.2f",$row["betrag"]), 
+				status => $row["statusname"],
+				datum => db2date($row["zieldatum"]),
+				));
+				$t->parse("Block","Liste",true);
+				$i++;
+			} 
+			$last = $row["oppid"];
 			}
 			$stamm="block";
-        	$t->set_var(array(
-                ERPCSS      => $_SESSION["stylesheet"],
-            ));
-	        $t->Lpparse("out",array("op"),$_SESSION["lang"],"work");
+			$t->set_var(array(
+				ERPCSS      => $_SESSION["stylesheet"],
+			));
+			$t->Lpparse("out",array("op"),$_SESSION["lang"],"work");
 			exit;
 		} else if (count($data)==0 || !$data){
 			if ($_POST["fid"]) {
@@ -93,11 +93,15 @@
 			$block="block";
 			$stamm="block";
 		}
-	} else if ($_POST["save"]) {
+	} else if ($_POST["action"] == "save") {
 		$rc=saveOpportunity($_POST);
 		if (!$rc) { 
 			$msg=".:error:. .:save:.";
 			$daten=$_POST;
+                        if ($_POST["id"]) {
+                            $data = getOneOpportunity($_POST["id"]);	
+			    $daten["orders"]=$data["orders"];
+                        };
 			$daten["zieldatum"]=date2db($daten["zieldatum"]);
 			$save="visible";
 			$search="hidden";

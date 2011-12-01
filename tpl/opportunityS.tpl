@@ -1,6 +1,6 @@
 <!-- $Id$ -->
 <html>
-	<head><title></title>
+    <head><title></title>
     <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
     <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 	<script language="JavaScript">
@@ -16,11 +16,11 @@
 		val=document.formular.name.value;
 		f1=open("suchFa.php?op=1&name="+val,"suche","width=350,height=200,left=100,top=100");
 	}
-    function quotation(nr) {
-        if (nr>0) {
-            f=open("rechng.php?id=L{auftrag}","Auftrag","width=650,height=400,left=100,top=100");
-        } 
-    }
+	function quotation(nr) {
+		if (nr>0) {
+			f=open("rechng.php?id=L{auftrag}","Auftrag","width=650,height=400,left=100,top=100");
+		} 
+	}
 	//-->
 	</script>
 	{jcal0}
@@ -38,9 +38,9 @@
 	<a href="firma1.php?Q={tab}&id={fid}"><img src="image/addressbook.png" border="0" alt=".:masterdata:." title=".:masterdata:."></a>
 	<a href="opportunity.php?Q={tab}&fid={fid}"><img src="image/listen.png" border="0" alt=".:opportunitys:." title=".:opportunitys:."></a>
 	<a href="opportunity.php?Q={tab}&fid={fid}&new=1"><img src="image/new.png" border="0" alt=".:new:./.:search:." title=".:new:./.:search:."></a>
-    <a href="opportunity.php?history={oppid}"><img src="image/history.png" border="0" alt=".:history:." title=".:history:."></a>
-    <img src="image/nummer.png" border="0" alt=".:quotation:." title=".:quotation:." onClick="quotation({auftrag});">
-    <br /><br />
+	<a href="opportunity.php?history={oppid}"><img src="image/history.png" border="0" alt=".:history:." title=".:history:."></a>
+	<img src="image/nummer.png" border="0" alt=".:quotation:." title=".:quotation:." onClick="quotation({auftrag});">
+	<br /><br />
 </span>				
 <!--div style="position:absolute; left:1px; width:65em; top:3em; border: 1px solid black; text-align:center;" -->
 <div style="position:absolute;  left:1px;  top:3.3em; border: 0px solid black; text-align:center;" >
@@ -139,8 +139,9 @@
 	<div class="zeile">
 		<span class="label"></span>
 		<span class="leftfeld" style="width:350px; display:{none};" id="ok">
-			<input type="image" src="image/suchen_kl.png" alt='.:search:.' title='.:search:.' name="suchen" value=".:search:." style="visibility:{search};"> &nbsp;
-			<input type='image' src='image/save_kl.png' alt='.:save:.' title='.:save:.' name='save' value='.:new:.' style="visibility:{save};"> &nbsp; 
+                        <input type="hidden" name="action" value="">
+			<img src="image/suchen_kl.png" alt='.:search:.' title='.:search:.' name="suchen" value=".:search:." style="visibility:{search};" onclick="document.formular.action.value='suchen'; document.formular.submit();"> &nbsp;
+			<img src='image/save_kl.png' alt='.:save:.' title='.:save:.' name='save' value='.:new:.' style="visibility:{save};" onclick="document.formular.action.value='save'; document.formular.submit();"> &nbsp; 
 			<a href={backlink}><input type='image' src='image/firma.png' alt='.:back:.' title='.:back:.' name='back' value='.:back:.' style="visibility:{blshow};"></a> &nbsp; 
 			{msg}
 		</span>

@@ -11,8 +11,8 @@ include ("mailLib.php");
 * Joker umwandeln, Anfrage ist Telefon oder Name
 *****************************************************/
 function mkSuchwort($suchwort) {
-    $suchwort=str_replace("\*","%",$suchwort);
-    $suchwort=str_replace("\?","_",$suchwort);
+    $suchwort=str_replace("*","%",$suchwort);
+    $suchwort=str_replace("?","_",$suchwort);
     if (preg_match('!^[0-9+]+[0-9 -/%]*$!',$suchwort)) {   // Telefonnummer?
         $sw[0]=0;
     } else {                                 // nein Name

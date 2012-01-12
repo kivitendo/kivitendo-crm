@@ -2670,7 +2670,8 @@ global $db;
 *****************************************************/
 function getOneOpportunity($id) {
 global $db;
-    $sql="select O.*,coalesce(V.name,C.name) as firma from  opportunity O ";
+    $sql="select O.*,coalesce(V.name,C.name) as firma,coalesce(E.name,E.login) as user  from  opportunity O ";
+    $sql.="left join employee E on O.memployee=E.id ";
     $sql.="left join customer C on O.fid=C.id left join vendor V on O.fid=V.id where O.id = $id";
     $rs=$db->getAll($sql);
     $sql  = "select id,ordnumber,transdate from oe where vendor_id = ".$rs[0]["fid"];
@@ -2720,8 +2721,10 @@ global $db;
     } else if ($data["oppid"]) {
         $where="    oppid = ".$data["oppid"];
     }
-    $sql="select O.*,OS.statusname,coalesce(V.name,C.name) as firma from  opportunity O left join opport_status OS on OS.id=O.status ";
+    $sql="select O.*,OS.statusname,coalesce(V.name,C.name) as firma,coalesce(E.name,E.login) as user ";
+    $sql.="from  opportunity O left join opport_status OS on OS.id=O.status ";
     $sql.="left join customer C on O.fid=C.id ";
+    $sql.="left join employee E on O.memployee=E.id ";
     $sql.="left join vendor V on O.fid=V.id where ".substr($where,3)." order by oppid,itime desc"; //chance desc,betrag desc";
     $rs=$db->getAll($sql);
     return $rs;

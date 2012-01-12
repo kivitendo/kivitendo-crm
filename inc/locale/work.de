@@ -104,6 +104,7 @@ $texts  = array(
   '.:clrok:.'       => 'Checkbox markieren',
   '.:nothing to do:.'  => 'nichts zu tun',
   '.:all:.'    	    => 'alle',
+  '.:changed:.'     => 'ge&auml;ndert',
   '.::.'    => '',
 );
 ?>

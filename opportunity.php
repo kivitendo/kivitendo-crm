@@ -26,11 +26,11 @@
 			$_POST["fid"]=$fid;
 			$_POST["action"] = "suchen";
 		}
-			$search="visible";
-			$save="visible";
-			$none="block";
-			$stamm="block";
-			$block="none";			
+		$search="visible";
+		$save="visible";
+		$none="block";
+		$stamm="block";
+		$block="none";			
 	} else if ($_GET["history"]) {
         	$history = true;
         	$show = "hidden";
@@ -47,23 +47,25 @@
 			$t->set_block("op","Liste","Block");
             		$last = 0;
 			foreach ($data as $row) {
-			if ($last <> $row["oppid"] || $history) {
-				$t->set_var(array(
-				LineCol	=> $bgcol[($i%2+1)],
-				id => $row["id"], 
-				firma => ($last==$row["oppid"])?"":$row["firma"], 
-				oppid => $row["oppid"],
-				show => $show,
-				title => $row["title"],
-				chance => $row["chance"]*10, 
-				betrag => sprintf("%0.2f",$row["betrag"]), 
-				status => $row["statusname"],
-				datum => db2date($row["zieldatum"]),
-				));
-				$t->parse("Block","Liste",true);
-				$i++;
-			} 
-			$last = $row["oppid"];
+				if ($last <> $row["oppid"] || $history) {
+					$t->set_var(array(
+					LineCol	=> $bgcol[($i%2+1)],
+					id => $row["id"], 
+					firma => ($last==$row["oppid"])?"":$row["firma"], 
+					oppid => $row["oppid"],
+					show => $show,
+					title => $row["title"],
+					chance => $row["chance"]*10, 
+					betrag => sprintf("%0.2f",$row["betrag"]), 
+					status => $row["statusname"],
+					datum => db2date($row["zieldatum"]),
+                                        user => $row["user"],
+                                        chgdate => db2date($row["itime"])
+					));
+					$t->parse("Block","Liste",true);
+					$i++;
+				} 
+				$last = $row["oppid"];
 			}
 			$stamm="block";
 			$t->set_var(array(
@@ -118,6 +120,7 @@
 			$stamm="block";
 		}
 	} else if ($_GET["id"]) {
+                //Genau diesen einen Eintrag holen
 		$daten=getOneOpportunity($_GET["id"]);
 		$save="visible";
 		$search="hidden";
@@ -161,10 +164,11 @@
 	}
 	if ($daten["fid"]) $backlink = "firma1.php?Q=".$daten["tab"]."&id=".$daten["fid"];
 	$t->set_var(array(
-        ERPCSS      => $_SESSION["stylesheet"],
+		ERPCSS      => $_SESSION["stylesheet"],
 		id => $daten["id"],
 		oppid => $daten["oppid"],
 		auftrag => ($daten["auftrag"]>0)?$daten["auftrag"]:"0",
+		auftragshow => ($daten["auftrag"]>0)?"visible":"hidden",
 		tab => $daten["tab"],
 		fid => $daten["fid"],
 		title => $daten["title"],
@@ -174,6 +178,8 @@
 		next => ($daten["next"])?$daten["next"]:$_POST["next"],
 		notxt => ($daten["notiz"])?nl2br($daten["notiz"]):"---",
 		notiz => $daten["notiz"],
+                user => $daten["user"],
+                chgdate => db2date($daten["itime"]),
 		ssel.$daten["status"] => "selected",
 		csel.$daten["chance"] => "selected",
 		save => $save,

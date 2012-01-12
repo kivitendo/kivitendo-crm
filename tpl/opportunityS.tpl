@@ -39,7 +39,8 @@
 	<a href="opportunity.php?Q={tab}&fid={fid}"><img src="image/listen.png" border="0" alt=".:opportunitys:." title=".:opportunitys:."></a>
 	<a href="opportunity.php?Q={tab}&fid={fid}&new=1"><img src="image/new.png" border="0" alt=".:new:./.:search:." title=".:new:./.:search:."></a>
 	<a href="opportunity.php?history={oppid}"><img src="image/history.png" border="0" alt=".:history:." title=".:history:."></a>
-	<img src="image/nummer.png" border="0" alt=".:quotation:." title=".:quotation:." onClick="quotation({auftrag});">
+	<img src="image/nummer.png" border="0" alt=".:quotation:." title=".:quotation:." onClick="quotation({auftrag});" style="visibility:{auftragshow};">
+        .:changed:. {chgdate} .:by:. {user}
 	<br /><br />
 </span>				
 <!--div style="position:absolute; left:1px; width:65em; top:3em; border: 1px solid black; text-align:center;" -->

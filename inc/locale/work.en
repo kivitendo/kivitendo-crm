@@ -101,6 +101,7 @@ $texts  = array(
   '.:clrok:.'       => 'select checkbox',
   '.:nothing to do:.'  => 'nothing to do',
   '.:all:.'         => 'all',
+  '.:changed:.'     => 'changed',
   '.::.'    => '',
 
 );

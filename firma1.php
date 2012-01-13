@@ -39,6 +39,9 @@
                                   break;
                 case "bool"     : $txt = ($row["bool_value"]=='f')?'.:no:.':'.:yes:.'; 
                                   break;
+                case "customer" : $txt = getCvarName($row["number_value"]);
+                                  break;
+                default		: $txt = $row["text_value"];
             }
             $t->set_var(array(
                 varname => $row["description"],

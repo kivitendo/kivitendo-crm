@@ -373,10 +373,14 @@
     </div>
 </span>
 <span id="tab5" style="visibility:hidden;  position:absolute; text-align:left;width:90%; left:0.8em; top:4.8em; border:1px solid black; display:inline;">
-    <div class="zeile2">
-   {cvars}
-   {variablen}
-    </div>
+<!-- BEGIN cvarListe -->
+        <div class="zeile">
+                <span class="label">{varlable1}</span>
+                <span class="leftfeld">{varfld1}</span>
+                <span class="label">{varlable2}</span>
+                <span class="leftfeld">{varfld2}</span>
+        </div>
+<!-- END cvarListe -->
 </span>
 <span id="buttonrow" style="position:absolute; text-align:left;width:48%; left:0.8em; top:34.5em;">             
             {Btn1} &nbsp;{Btn2} &nbsp; 

@@ -244,6 +244,8 @@ global $db;
                 case "textfield":
                 case "select"   : $daten["vc_cvar_".$row["name"]] = $row["text_value"];
                                   break;
+		case "customer"	: $daten["vc_cvar_".$row["name"]] = abs($row["number_value"]);
+				  break;
                 case "number"   : $daten["vc_cvar_".$row["name"]] = $row["number_value"];
                                   break;
                 case "bool"     : $daten["vc_cvar_".$row["name"]] = $row["bool_value"];
@@ -265,6 +267,12 @@ global $db;
     return $rs;
 }
 
+function getCvarName($id) {
+global $db;
+	$sql = "SELECT name,'C' as tab from customer where id = %d union select name,'V' as tab from vendor where id = %d";
+    $rs = $db->getOne(sprintf($sql,$id,$id));
+    return $rs['name'];
+}
 /****************************************************
 * getAllShipto
 * in: id = int
@@ -311,7 +319,7 @@ function suchstr($muster,$typ="C") {
     $cvartemp.= "LEFT JOIN custom_variable_configs cvarcfg ON (cvar.config_id = cvarcfg.id) ";
     $cvartemp.= "WHERE (cvarcfg.module = 'CT') AND (cvarcfg.name  = '%s') AND ";
     $cvartemp.= "(cvar.trans_id  = %s.id) AND (%s)"; 
-    $cvartemp.= "AND (cvar.sub_module = 'CT' or cvar.sub_module is null) )"; 
+    $cvartemp.= "AND (cvar.sub_module = 'CT' or cvar.sub_module is null or cvar.sub_module = '') )"; 
     // Array zu jedem Formularfed: 0=String,2=Int
     $dbfld=array(name => 0, street => 0, zipcode => 1,
             city => 0, phone => 1, fax => 1,
@@ -338,6 +346,10 @@ function suchstr($muster,$typ="C") {
     $tbl2=false;
     $cols="";
     $cvcnt = 0;
+    $cvars = getAlleVariablen();
+    if ($cvars) foreach ($cvars as $row) {
+         $cvar[$row['name']]=$row['type'];
+    };
     if ($muster["shipto"]){$tbl1=true;} else {$tbl1=false;}
     $tmp1=""; $tmp2="";
     for ($i=0; $i<$anzahl; $i++) {
@@ -378,20 +390,19 @@ function suchstr($muster,$typ="C") {
                 if ($suchwort != "") {
 			$tbl2 = true;
                         $cvcnt ++;
-                        preg_match("/vc_cvar_([a-z]+)_(.+)/",$keys[$i],$hits);
-                        $t = $hits[1];
-                        $n = $hits[2];
-                        if ($t=="bool") {
-                            $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.bool_value, false) = TRUE ");
-                        } else if ($t=="number") {
-                            $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.number_value, '') = '$suchwort' ");
-                        } else if ($t=="timestamp") {
-                            $suchwort = date2db($suchwort);
-                            $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.timestamp_value, '') = '$suchwort' ");
-                        } else if ($t=="select") {
-                            $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.text_value, '') = '$suchwort' ");
-                        } else {
-                            $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.text_value, '') ilike '$fuzzy1$suchwort$fuzzy2' ");
+                        preg_match("/vc_cvar_([a-z0-9]+)/",$keys[$i],$hits);
+                        $n = $hits[1];
+                        switch  ($cvar[$n]) {
+                       	   case "bool"	:  $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.bool_value, false) = TRUE ");
+					   break;
+                           case "number":  $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.number_value, '') = '$suchwort' ");
+					   break;
+                           case 'customer': $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.number_value, '') = '$suchwort' ");
+					   break;
+                           case 'timestamp': $suchwort = date2db($suchwort);
+ 		                           $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.timestamp_value, '') = '$suchwort' ");
+					   break;
+			   default	:  $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.text_value, '') ilike '$fuzzy1$suchwort$fuzzy2' ");
                         }
                 }
 	}
@@ -665,9 +676,9 @@ global $db;
             $rcc = $db->query($sql);
             //Insert bilden
             foreach ($daten as $key=>$val) {
-                if (substr($key,0,5) == "cvar_") {
+                if (substr($key,0,8) == "vc_cvar_") {
                 //eine CVar
-                    $name = substr($key,5);
+                   $name = substr($key,8);
                     //Values erzeugen
                     $date = "null";
                     $num = "null";
@@ -678,8 +689,10 @@ global $db;
                         case "textfield": 
                         case "text"     : $text = "'$val'"; break;
                         case "number"   : $num  = sprintf("%0.2f",$val); break;
+                        case "customer" : $num  = $val; break;
                         case "date"     : $date = "'".date2db($val)."'"; break;
                         case "bool"     : $bool = ($val=='t')?"'t'":"'f'"; break;
+                        default		: $text = "'$val'"; break;
                     };
                     $sql = sprintf($sqltpl,$vartype[$name]["id"],$daten["id"],$bool,$date,$text,$num);
                     $rcc = $db->query($sql);
@@ -838,7 +851,7 @@ global $db;
         $where=($where=="")?"":"and $where";
         if (preg_match('/shipto/i',$tabs) or preg_match('/S./',$felder)) {
             $sql="select $felder from ".$tab[$typ]." ".$kenz[$typ]." left join shipto S ";
-            $sql.="on S.trans_id=".$kenz[$typ].".id where (S.module='CT' or S.module is null) and $rechte $where order by ".$kenz[$typ].".name";
+            $sql.="on S.trans_id=".$kenz[$typ].".id where (S.module='CT' or S.module is null or S.module='') and $rechte $where order by ".$kenz[$typ].".name";
         } else {
             $sql="select $felder from ".$tab[$typ]." ".$kenz[$typ]." where $rechte $where order by ".$kenz[$typ].".name";
         }
@@ -848,7 +861,7 @@ global $db;
         if (preg_match('/shipto/i',$tabs) or preg_match('/S./',$felder)) {
             $sql="select $felder from ".$tab[$typ]." ".$kenz[$typ]." left join shipto S ";
             $sql.="on S.trans_id=".$kenz[$typ].".id left join contacts P on ".$kenz[$typ].".id=P.cp_cv_id ";
-            $sql.="where (S.module='CT' or S.module is null)  and $rechte $where order by ".$kenz[$typ].".name,P.cp_name";
+            $sql.="where (S.module='CT' or S.module is null or S.module='')  and $rechte $where order by ".$kenz[$typ].".name,P.cp_name";
         } else {
             $sql="select $felder from  ".$tab[$typ]." ".$kenz[$typ]." left join contacts P ";
             $sql.="on ".$kenz[$typ].".id=P.cp_cv_id where $rechte $where order by ".$kenz[$typ].".name,P.cp_name";
@@ -924,6 +937,8 @@ function cvar_edit($id,$new=false) {
             case "date"     : ${$row["name"]} = ($row["timestamp_value"])?db2date(substr($row["timestamp_value"],0,10)):"";
                               break;
             case "bool"     : ${$row["name"]} = ($row["bool_value"]=='t')?'checked':' ';
+                              break;
+	    case "customer" : ${$row["name"]} = abs($row["number_value"]);
         }
     }
     $cvar = getAlleVariablen();
@@ -947,6 +962,7 @@ function cvar_edit($id,$new=false) {
                                   $kal.= 'align      : "BL",';
                                   $kal.= 'button     : "cvar_'.$row["name"].'_trigger"});';
                                   $kal.= "\n".'--></script>'."\n";
+		case "customer" : 
                 case "number"   : 
                 case "text"     : $input = "<input type='text' name='cvar_".$row["name"]."' id='cvar_".$row["name"]."'  value='";
                                   if ($new) {
@@ -1077,9 +1093,9 @@ global $xajax,$GEODB,$BLZDB,$jcalendar;
             $i = 1;
             foreach ($cvars as $cvar) {
                switch ($cvar["type"]) {
-                   case "bool"   : $fld = "<input type='checkbox' name='vc_cvar_bool_".$cvar["name"]."' value='t'>";
+                   case "bool"   : $fld = "<input type='checkbox' name='vc_cvar_".$cvar["name"]."' value='t'>";
                                    break;
-                   case "date"   : $fld = "<input type='text' name='vc_cvar_timestamp_".$cvar["name"]."' size='10' id='cvar_".$cvar["name"]."' value=''>";
+                   case "date"   : $fld = "<input type='text' name='vc_cvar_".$cvar["name"]."' size='10' id='cvar_".$cvar["name"]."' value=''>";
                                    $fld.="<input name='cvar_".$cvar["name"]."_button' id='cvar_".$cvar["name"]."_trigger' type='button' value='?'>";
                                    $fld.= '<script type="text/javascript"><!-- '."\n";
                                    $fld.= 'Calendar.setup({ inputField : "cvar_'.$cvar["name"].'",';
@@ -1090,13 +1106,16 @@ global $xajax,$GEODB,$BLZDB,$jcalendar;
 
                                    break;
                    case "select" : $o = explode("##",$cvar["options"]);
-                                   $fld = "<select name='vc_cvar_text_".$cvar["name"]."'>\n<option value=''>---------\n";
+                                   $fld = "<select name='vc_cvar_".$cvar["name"]."'>\n<option value=''>---------\n";
                                    foreach($o as $tmp) {
                                      $fld .= "<option value='$tmp'>$tmp\n";
                                    }
                                    $fld .= "</select>";
                                    break;
-                   default	 : $fld = "<input type='text' name='vc_cvar_".$cvar["type"]."_".$cvar["name"]."' value=''>";
+		   case "customer" : 
+       				    $fld = "<input type='hidden' name='vc_cvar_".$cvar["name"]."' value=''>";
+				   break;
+                   default	 : $fld = "<input type='text' name='vc_cvar_".$cvar["name"]."' value=''>";
                }
                $t->set_var(array( 
                   'varlable'.$i => $cvar["description"],
@@ -1229,12 +1248,12 @@ global $xajax,$GEODB,$BLZDB,$jcalendar;
             $i = 1;
             foreach ($cvars as $cvar) {
                switch ($cvar["type"]) {
-                   case "bool"   : $fld = "<input type='checkbox' name='vc_cvar_bool_".$cvar["name"]."' value='t'";
-                                   if ($daten["vc_cvar_bool_".$cvar["name"]]=="t") $fld .= " checked";
+                   case "bool"   : $fld = "<input type='checkbox' name='vc_cvar_".$cvar["name"]."' value='t'";
+                                   if ($daten["vc_cvar_".$cvar["name"]]=="t") $fld .= " checked";
                                    $fld.= ">";
                                    break;
-                   case "date"   : $fld = "<input type='text' name='vc_cvar_timestamp_".$cvar["name"]."' size='10' value='";
-                                   $fld.= db2date($daten["vc_cvar_timestamp_".$cvar["name"]])."' id='cvar_".$cvar["name"]."'>";
+                   case "date"   : $fld = "<input type='text' name='vc_cvar_".$cvar["name"]."' size='10' value='";
+                                   $fld.= db2date($daten["vc_cvar_".$cvar["name"]])."' id='cvar_".$cvar["name"]."'>";
                                    $fld.="<input name='cvar_".$cvar["name"]."_button' id='cvar_".$cvar["name"]."_trigger' type='button' value='?'>";
                                    $fld.= '<script type="text/javascript"><!-- '."\n";
                                    $fld.= 'Calendar.setup({ inputField : "cvar_'.$cvar["name"].'",';
@@ -1244,16 +1263,22 @@ global $xajax,$GEODB,$BLZDB,$jcalendar;
                                    $fld.= "\n".'--></script>'."\n";
                                    break;
                    case "select" : $o = explode("##",$cvar["options"]);
-                                   $fld = "<select name='vc_cvar_".$cvar["type"]."_".$cvar["name"]."'>\n<option value=''>---------\n";
+                                   $fld = "<select name='vc_cvar_".$cvar["name"]."'>\n<option value=''>---------\n";
                                    foreach($o as $tmp) {
                                      $fld .= "<option value='$tmp'";
-                                     if ($daten["vc_cvar_".$cvar["type"]."_".$cvar["name"]]==$tmp) $fld .= " selected";
+                                     if ($daten["vc_cvar_".$cvar["name"]]==$tmp) $fld .= " selected";
                                      $fld .= ">$tmp\n";
                                    }
                                    $fld .= "</select>";
                                    break;
-                   default	 : $fld = "<input type='text' name='vc_cvar_".$cvar["type"]."_".$cvar["name"]."' value='";
-                                   $fld.= $daten["vc_cvar_".$cvar["type"]."_".$cvar["name"]]."'>";
+		   case "customer" : $name = getCvarName($daten['vc_cvar_'.$cvar['name']]);
+       				   $fld = "<input type='hidden' name='vc_cvar_".$cvar["name"]."' value='";
+                                   $fld.= $daten['vc_cvar_'.$cvar['name']]."'>";
+				    $fld .= $name.' ('.$daten['vc_cvar_'.$cvar['name']].')';
+				   break;
+                   default	 : 
+				   $fld = '<input type="text" name="vc_cvar_'.$cvar['name'].'" value="';
+                                   $fld.= $daten['vc_cvar_'.$cvar['name']].'">';
                }
                $t->set_var(array( 
                   'varlable'.$i => $cvar["description"],

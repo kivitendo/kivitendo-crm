@@ -7,82 +7,82 @@
 	{AJAXJS}
 	<script language="JavaScript" type="text/javascript">
 	<!--
-		var start = 0;
-		var max = 0;
-		function showCall(dir) {
-			if (dir<0) {
-				if(start>19) { start-=19; }
-				else { start=0; }; }
-			else if (dir>0) {
-				if ((start+19)<max) { start+=19; } 
-				else if (max<19) { start=0; }
-				else { start=max-19; }; 
-			}
-			xajax_showCalls({FID},start,1);
-			setTimeout('showCall(0)',{interv});
+	var start = 0;
+	var max = 0;
+	function showCall(dir) {
+		if (dir<0) {
+			if(start>19) { start-=19; }
+			else { start=0; }; }
+		else if (dir>0) {
+			if ((start+19)<max) { start+=19; } 
+			else if (max<19) { start=0; }
+			else { start=max-19; }; 
 		}
-		function showItem(id) {
-			F1=open("getCall.php?Q={Q}&fid={FID}&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
+		xajax_showCalls({FID},start,1);
+		setTimeout('showCall(0)',{interv});
+	}
+	function showItem(id) {
+		F1=open("getCall.php?Q={Q}&fid={FID}&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
+	}
+	function anschr(A) {
+		if (A==1) {
+			F1=open("showAdr.php?Q={Q}&fid={FID}","Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
+		} else if (A>1) {
+                	sid = document.getElementById('SID').firstChild.nodeValue;
+			F1=open("showAdr.php?Q={Q}&sid="+sid,"Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
 		}
-		function anschr(A) {
-			if (A==1) {
-				F1=open("showAdr.php?Q={Q}&fid={FID}","Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
-            } else if (A>1) {
-                sid = document.getElementById('SID').firstChild.nodeValue;
-				F1=open("showAdr.php?Q={Q}&sid="+sid,"Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
-			}
-		}
-		function notes() {
+	}
+	function notes() {
             F1=open("showNote.php?fid={FID}","Notes","width=400, height=400, left=100, top=50, scrollbars=yes");
         }
-		function vcard(){
-			document.location.href="vcardexp.php?fid={FID}";
-		}
-		function ks() {
-			sw=document.ksearch.suchwort.value;
-			if (sw != "") 
-    			F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
-			return false;
-		}
+	function vcard(){
+		document.location.href="vcardexp.php?fid={FID}";
+	}
+	function ks() {
+		sw=document.ksearch.suchwort.value;
+		if (sw != "") 
+    		F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
+		return false;
+	}
         function doLink() {
             lnk = document.getElementById('actionmenu').options[document.getElementById('actionmenu').selectedIndex].value;
             window.location.href = lnk;
         }
-		var last = 'lie';
-		function submenu(id) {
-			document.getElementById(last).style.visibility='hidden';
-			document.getElementById(id).style.visibility='visible';
-			men='sub' + id; 
-			//document.getElementById('sub'+last).className="subshadetabs";
-			document.getElementById('sub'+last).className="";
-			document.getElementById('sub'+id).className="selected";
-			last=id;
-		}
-		function KdHelp() {
-			id=document.kdhelp.kdhelp.options[document.kdhelp.kdhelp.selectedIndex].value;
-			f1=open("wissen.php?kdhelp=1&m="+id,"Wissen","width=750, height=600, left=50, top=50, scrollbars=yes");
-			document.kdhelp.kdhelp.selectedIndex=0;
-		}
-		var shiptoids = new Array({Sids});
-		var sil = shiptoids.length;
-		var sid = 0;
-		function nextshipto(dir) {
-			if (sil<2) return;
-			if (dir=="-") {
-				if (sid>0) {
-					sid--;
-				} else {
-					sid = (sil - 1);
-				}
+	var last = 'lie';
+	function submenu(id) {
+		document.getElementById(last).style.visibility='hidden';
+		document.getElementById(id).style.visibility='visible';
+		men='sub' + id; 
+		//document.getElementById('sub'+last).className="subshadetabs";
+		document.getElementById('sub'+last).className="";
+		document.getElementById('sub'+id).className="selected";
+		last=id;
+	}
+	function KdHelp() {
+		id=document.kdhelp.kdhelp.options[document.kdhelp.kdhelp.selectedIndex].value;
+		f1=open("wissen.php?kdhelp=1&m="+id,"Wissen","width=750, height=600, left=50, top=50, scrollbars=yes");
+		document.kdhelp.kdhelp.selectedIndex=0;
+	}
+	var shiptoids = new Array({Sids});
+	var sil = shiptoids.length;
+	var sid = 0;
+	function nextshipto(dir) {
+		if (sil<2) return;
+		if (dir=="-") {
+			if (sid>0) {
+				sid--;
 			} else {
-				if (sid < sil - 1) { 
-					sid++;
-				} else {
-					sid=0; 
-				}
+				sid = (sil - 1);
 			}
-			xajax_showShipadress(shiptoids[sid],"{Q}");
+		} else {
+			if (sid < sil - 1) { 
+				sid++;
+			} else {
+				sid=0; 
+			}
 		}
+		xajax_showShipadress(shiptoids[sid],"{Q}");
+	}
 	var f1 = null;
 	function toolwin(tool) {
 		leftpos=Math.floor(screen.width/2);

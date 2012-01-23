@@ -2664,7 +2664,7 @@ global $db;
 
 /****************************************************
 * getOneOpportunity
-* in: id = int
+* in: id = int, all = boolean
 * out: array
 * 
 *****************************************************/
@@ -2672,12 +2672,31 @@ function getOneOpportunity($id) {
 global $db;
     $sql="select O.*,coalesce(V.name,C.name) as firma,coalesce(E.name,E.login) as user  from  opportunity O ";
     $sql.="left join employee E on O.memployee=E.id ";
-    $sql.="left join customer C on O.fid=C.id left join vendor V on O.fid=V.id where O.id = $id";
+    $sql.="left join customer C on O.fid=C.id left join vendor V on O.fid=V.id where ";
+    $sql .= "O.id = $id"; 
     $rs=$db->getAll($sql);
-    $sql  = "select id,ordnumber,transdate from oe where vendor_id = ".$rs[0]["fid"];
-    $sql .= " or customer_id = ".$rs[0]["fid"]." and (closed = 'f' or ordnumber = '".$rs[0]["auftrag"]."') order by transdate";
+    $sql  = "select id,ordnumber,transdate from oe where ( vendor_id = ".$rs[0]["fid"];
+    $sql .= " or customer_id = ".$rs[0]["fid"].") and (closed = 'f' or ordnumber = '".$rs[0]["auftrag"]."') order by transdate";
     $rs[0]["orders"]=$db->getAll($sql);
     return $rs[0];
+}
+
+/****************************************************
+* getOpportunityHistory
+* in: oppid = int
+* out: array
+* 
+*****************************************************/
+function getOpportunityHistory($oppid) {
+global $db;
+    $sql  = "select O.*,OS.statusname,coalesce(E.name,E.login) as user,oe.ordnumber ";
+    $sql .= "from  opportunity O ";
+    $sql .= "left join employee E on O.memployee=E.id ";
+    $sql .= "left join oe on O.auftrag=oe.id ";
+    $sql .= "left join opport_status OS on O.status = OS.id ";
+    $sql .= "where O.oppid = $oppid order by itime desc offset 1"; 
+    $rs=$db->getAll($sql);
+    return $rs;
 }
 
 /****************************************************

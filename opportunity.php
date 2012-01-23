@@ -196,5 +196,27 @@
 		//jcal1 => ($jcalendar)?"<input type='image' src='image/date.png' title='.:targetdate:. .:search:.' name='zieldatum' align='middle' id='trigger1' value='?'>":""
 		jcal1 => ($jcalendar)?"<a href='#' id='trigger1' name='zieldatum' title='.:targetdate:. .:search:.' onClick='false'><img src='image/date.png' border='0' align='middle'></a>":""
 	));
+        $history = $daten=getOpportunityHistory($daten['oppid']);
+        $i = 0;
+        $t->set_block("op","Liste","Block");
+        if ($history) foreach ($history as $row) {
+		$t->set_var(array(
+			nr	=> $i,
+			LineCol => $bgcol[($i%2+1)],
+			histtitle => $row["title"],
+			histchance => $row["chance"]*10,
+			histbetrag => sprintf("%0.2f",$row["betrag"]),
+			histstatus => $row["statusname"],
+			histdatum => db2date($row["zieldatum"]),
+			histauftrag => $row["ordnumber"],
+			histnext => $row["next"],
+			histnotiz => strtr($row["notiz"],array("\n"=>"<br>")),
+			user => $row["user"],
+			chgdate => db2date($row["itime"])
+		));
+		$t->parse("Block","Liste",true);
+		$i++;
+	}
+
 	$t->Lpparse("out",array("op"),$_SESSION["lang"],"work");
 ?>

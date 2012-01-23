@@ -5,6 +5,12 @@
     <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 	<script language="JavaScript">
 	<!--
+        function hide(nr) {
+		document.getElementById(nr).style.display="none";
+	}
+        function show(nr) {
+		document.getElementById(nr).style.display="inline";
+	}
 	function toggle(was1,was2) {
 		document.getElementById(was1).style.display="none";
 		document.getElementById(was2).style.display="block";
@@ -38,7 +44,7 @@
 	<a href="firma1.php?Q={tab}&id={fid}"><img src="image/addressbook.png" border="0" alt=".:masterdata:." title=".:masterdata:."></a>
 	<a href="opportunity.php?Q={tab}&fid={fid}"><img src="image/listen.png" border="0" alt=".:opportunitys:." title=".:opportunitys:."></a>
 	<a href="opportunity.php?Q={tab}&fid={fid}&new=1"><img src="image/new.png" border="0" alt=".:new:./.:search:." title=".:new:./.:search:."></a>
-	<a href="opportunity.php?history={oppid}"><img src="image/history.png" border="0" alt=".:history:." title=".:history:."></a>
+	<!--a href="opportunity.php?history={oppid}"><img src="image/history.png" border="0" alt=".:history:." title=".:history:."></a-->
 	<img src="image/nummer.png" border="0" alt=".:quotation:." title=".:quotation:." onClick="quotation({auftrag});" style="visibility:{auftragshow};">
         .:changed:. {chgdate} .:by:. {user}
 	<br /><br />
@@ -147,9 +153,25 @@
 			{msg}
 		</span>
 	</div>
-
-</div>
 </form>
+        <table border="0" width="100%">
+	<tr><td>.:subject:.</td><td>.:ordersum:.</td><td>.:targetdate:.</td><td>.:chance:.</td><td>.:status:.</td><td>.:quotation:.</td><td>.:nextstep:.</td><td>.:employee:.</td><td>.:changed:.</td></tr>
+<!-- BEGIN Liste --> 
+        <tr  onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="show('n{nr}');" colspan="0">
+                <td class="norm"> {histtitle}</td>
+                <td class="norm" style="width:7em;text-align:right"> {histbetrag}</td>
+                <td class="norm" style="width:6em;text-align:right"> {histdatum}</td>
+		<td class="norm" style="width:2em;text-align:right"> {histchance}</td>
+		<td class="norm" style="width:10em;text-align:left"> {histstatus}</td>
+		<td class="norm"> {histauftrag}</td>
+		<td class="norm"> {histnext}</td>
+		<td class="norm"> {user}</td>
+		<td class="norm" style="width:6em;text-align:left">&nbsp;{chgdate}</td></tr>
+        <tr  onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="hide('n{nr}');" colspan="0">
+                <td style="display:none" id='n{nr}'  class"norm" colspan="9">{histnotiz}</td></tr>
+<!-- END Liste -->
+       </table>
+</div>
 <!-- Hier endet die Karte ------------------------------------------->
 </span>
 {jcal2}

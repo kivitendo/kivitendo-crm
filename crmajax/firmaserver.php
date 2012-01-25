@@ -190,7 +190,8 @@
         return $objResponse;
     }
     function showDir($id,$directory) {
-        $directory = trim( rtrim( $directory, " /\\" ) );
+         if ($directory != '/') 
+            $directory = trim( rtrim( $directory, " /\\" ) ); //entferne rechts Leezeichen und Slash bzw Backslash
         chkdir($directory,".");
         if ( is_dir("../dokumente/".$_SESSION["mansel"]."/".$directory)) {
             $dir_object = dir( "../dokumente/".$_SESSION["mansel"]."/".$directory );
@@ -229,7 +230,8 @@
 
     }
     function showFile($pfad,$file) {
-        if (substr($pfad,-1)=="/") $pfad=substr($pfad,0,-1);
+        if (substr($pfad,-1)=="/" and $pfad != "/") $pfad=substr($pfad,0,-1);
+        if (substr($pfad,0,2) == "//" ) $pfad = substr($pfad,1);
         clearstatcache();
         $zeit=date("d.m.Y H:i:s",filemtime("../dokumente/".$_SESSION["mansel"]."/$pfad/$file"));
         $size=filesize("../dokumente/".$_SESSION["mansel"]."/$pfad/$file");
@@ -250,7 +252,7 @@
         else if ($ext=="XML") { $type="XML-Datei"; $pic="xml.png";}
         else if (in_array($ext,array("SH","BAT"))) { $type="Shell-Script"; $pic="exe.png";}
         else { $type="Unbekannt"; $pic="foo.png"; };
-        $info ="<br>$pfad/<b>$file</b><br><br>";
+        $info ="<br>$pfad".(($pfad == "/")?'':'/')."<b>$file</b><br><br>";
         $info.=translate('.:filetyp:.','firma').": <img src='image/icon/$pic'> $type<br>";
         $info.=translate('.:filesize:.','firma').": $size<br>".translate('.:filetime:.','firma').": $zeit<br>";
         $dbfile=new document();
@@ -280,9 +282,7 @@
                 "<a href='#' onClick='editattribut($id)'>".translate('.:edit attribute:.','firma')."</a>");
         $objResponse->assign("lock",    "innerHTML",
                 "<a href='#' onClick='xajax_lockFile(\"$file\",\"$pfad\",$id)'>".translate('.:lock file:.','firma')."</a>");
-        $objResponse->assign("picup",    "innerHTML",
-                "<a href='#' onClick='picup(\"dokumente/".$_SESSION["mansel"]."$pfad/\",\"$file\")'>".translate('.:picup:.','firma')."</a>");
-                return $objResponse;
+        return $objResponse;
     }
     /**
      * TODO: short description.
@@ -343,7 +343,6 @@
         $objResponse->script("showFile('left','$file')");
         return $objResponse;
     };
-    //function saveAttribut($name,$oldname,$pfad,$komment,$wvdate=false,$wvid=0,$faid=0,$id=0) {
     function saveAttribut($name,$oldname,$pfad,$komment,$id=0) {
         $dbfile=new document();
         if ($id>0) {
@@ -470,7 +469,7 @@
     function editTevent($id) {
         $data = getOneTevent($id);
         $objResponse = new xajaxResponse();
-        $objResponse->assign("cleared",        "value", $data["ordnumber"] );
+        $objResponse->assign("cleared",        "value", $data["cleared"] );
         $objResponse->assign("ttevent",        "value", $data["ttevent"]);
         $objResponse->assign("eventid",        "value", $id);
         $a = explode(" ",$data["ttstart"]);
@@ -486,6 +485,8 @@
         }
         $objResponse->assign("stopd",          "value", $sd);
         $objResponse->assign("stopt",          "value", $st);
+        if ( $data['cleared'] > 0 )	$objResponse->script("document.getElementById('savett').style.visibility='hidden'");
+	else				$objResponse->script("document.getElementById('savett').style.visibility='visible'");
         return $objResponse;
     }
     function listTevents($id) {

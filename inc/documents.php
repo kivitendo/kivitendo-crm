@@ -67,19 +67,41 @@ class document {
 */
  var $id = false;
 
+
+/**
+*	Dokumenten Debugging
+*       @var filedescr. $f
+*	@var boolen $debug
+*/
+ var $f = '';
+ var $debug = false;
+
 	function document($id=false,$fname="",$fpath="",$descript="") {
+		if ($this->debug) $this->f = fopen("/tmp/doc.log","w");
+		$this->log("newDoc");
 		$this->db=$_SESSION["db"];
 		if ($id>0) {
 			//Variablen mit db-Eintrag vorbelegen
 			getDokument($id);
 		} else {
 			$this->setDocData("name",$fname);
-			if (substr($fpath,-1)=="/") $fpath=substr($fpath,0,-1);
+			if (substr($fpath,-1)=="/" and $pfad != "/") $fpath=substr($fpath,0,-1);
 			$this->setDocData("pfad",$fpath);
 			$this->setDocData("descript",$descript);
 		}
 	}
 
+	function log($txt) {
+		if (!$this->debug) return;
+		fputs($this->f,$txt."\n");
+	}
+	function logvar() {
+		if (!$this->debug) return;
+		$this->log("File: ".$this->pfad." : ".$this->name." : ".$this->size);
+		$this->log("ID: ".$this->id." Dest: ".$dest);
+		$this->log($this->descript);
+		$this->log("Lock: ".$this->lock." : ".$this->lockname);
+	}
 /**
 *	Dokumentvariable setzen
 *
@@ -112,6 +134,7 @@ class document {
 *       @return boolean         Erfolg der Aktion
 */
 	function saveDocument() {
+		$this->log("saveDocument");
 		//Dokumentdaten in db speichern
 		if (!$this->chkDocData()) return false; 
 		if (!$this->id) {
@@ -122,6 +145,8 @@ class document {
 			//einen bestehenden Eintrag ändern
 			$felder=array('filename','descript','datum','zeit','employee','pfad','lock');
 			$werte=array($this->name,$this->descript,date("Y-m-d"),date("H:i:s"),$_SESSION["loginCRM"],$this->pfad,$this->lock);
+		        $this->log("update");
+		        $this->logvar();
 			if ($this->size) {
 				//wird bei einem Upload gesetzt.
 				$felder[]='size';
@@ -146,6 +171,8 @@ class document {
 *       @return boolean         Erfolg der Aktion
 */
 	function newDocument() {
+		$this->log("newDocument");
+		$this->logvar();
 		$rc=$this->db->insert('documents',
 					array('filename','descript','datum','zeit','size','employee','pfad'),
 					array($this->name,$this->descript,date("Y-m-d"),date("H:i:s"),$this->size,$_SESSION["loginCRM"],$this->pfad)
@@ -171,24 +198,27 @@ class document {
 *       @return boolean         Erfolg der Aktion
 */
 	function uploadDocument($file,$pfad) {
+		$this->log("uploadDocument");
 		$this->name=$file["Datei"]["name"];
 		$this->size=$file["Datei"]["size"];
-		if (substr($pfad,-1)=="/") $pfad=substr($pfad,0,-1);
+		if (substr($pfad,-1)=="/" and $pfad != "/") $pfad=substr($pfad,0,-1);
 		$this->pfad=$pfad;
 		//Gibt es das Dokument so schon in der db
 		$this->id=$this->searchDocument($this->name,$pfad);
 		$dest="./dokumente/".$_SESSION["mansel"]."/".$pfad."/".$this->name;
+		$this->logvar();
 		if (chkdir($pfad)) {
 			//Zielpfad vorhanden
 			if (! copy($file["Datei"]["tmp_name"],$dest)) {
 				$this->error="Datei '$dest' wurde nicht hochgeladen!";
 				echo $this->error;
+                                unlink($file["Datei"]["tmp_name"]);
 				return false;
-			} else {
-                unlink($file["Datei"]["tmp_name"]);
-            }
+			} 
+                        unlink($file["Datei"]["tmp_name"]);
 		} else {
 			$this->error="Verzeichnis '$pfad' konte nicht angelegt werden!";
+                        unlink($file["Datei"]["tmp_name"]);
 			return false;
 		}
 		return $this->saveDocument();
@@ -203,8 +233,10 @@ class document {
 *       @return array  $id      ID des Dokuments oder "false"
 */
 	function searchDocument($name,$pfad) {
+		$this->log("searchDocument");
+		$this->log("$name,$pfad");
 		//kein abschließender Slash
-		if (substr($pfad,-1)=="/") $pfad=substr($pfad,0,-1);
+		if (substr($pfad,-1)=="/" and $pfad != "/") $pfad=substr($pfad,0,-1);
 		$sql="select id from documents where filename = '$name' and pfad = '$pfad'";
 		$rs=$this->db->getOne($sql);
 		if(!$rs) {
@@ -221,6 +253,7 @@ class document {
 *	@return boolean		Erfolg der Aktion
 */
 	function deleteDocument($p="") {
+		$this->log("deleteDocument: ".$p);
 		// $p=="" Aufruf aus Docroot, $p=="." Aufruf aus crmajax
 		$dest="$p./dokumente/".$_SESSION["mansel"].$this->pfad."/".$this->name;
 		$rc=unlink($dest);
@@ -251,6 +284,7 @@ class document {
 *       @return array   $rs      Dokumentendaten oder "false"
 */
 	function getDokument($id) {
+		$this->log("getDocument: ".$id);
 		$sql="SELECT d.*,COALESCE(e.name,e.login) as lockname from documents d left join employee e on d.lock=e.id where d.id = $id";
 		$rs=$this->db->getOne($sql);
 		$this->setDocData("name",($rs)?$rs["filename"]:false);

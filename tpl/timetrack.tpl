@@ -94,17 +94,22 @@
 <br />
 <div>
 <form name="ttevent" method="post" action="timetrack.php">
-<input type="hidden" name="cleared" value="{cleared}">
 <input type="hidden" name="tid" value="{id}">
-<input type="hidden" name="eventid" value="" id="eventid">
+<input type="hidden" name="cleared" id='cleared' value="">
+<input type="hidden" name="eventid" id="eventid" value="" >
 <span style="visibility:{noevent}"><table>
-<tr><td>.:start work:.</td><td>.:stop work:.</td></tr>
-<tr><td><input type="text" size="8" name="startd" id="startd">{jcal3} <input type="text" size="4" name="startt" id="startt"><input type="checkbox" name="start" value="1">.:now:.</td>
-    <td><input type="text" size="8" name="stopd"  id="stopd">{jcal4}  <input type="text" size="4" name="stopt"  id="stopt"> <input type="checkbox" name="stop"  value="1">.:now:.</td><td></td></tr>
+<tr><td>.:start work:.</td><td>.:stop work:.</td><td></td></tr>
+<tr><td><input type="text" size="8" name="startd" id="startd">{jcal3} 
+	<input type="text" size="4" name="startt" id="startt"><input type="checkbox" name="start" value="1">.:now:.</td>
+    <td><input type="text" size="8" name="stopd"  id="stopd">{jcal4}  
+	<input type="text" size="4" name="stopt"  id="stopt"> <input type="checkbox" name="stop"  value="1">.:now:.</td>
+    <td></td>
+</tr>
 <tr><td colspan="2"><textarea cols="60" rows="3" name="ttevent" id="ttevent"></textarea></td>
-    <td><input type="reset" name="resett" value=".:reset:."><br />
-        <input type="submit" name="savett" value=".:save:.">
-	</td></tr>
+    <td><input type="reset"  name="resett" value=".:reset:." onClick='document.getElementById("savett").style.visibility="visible"'><br />
+        <input type="submit" name="savett" value=".:save:." id='savett' style='visibility:visible'>
+    </td>
+</tr>
 </table></span>
 </form>
 </div>

@@ -154,10 +154,10 @@ input:focus {
 }
 .docfrm {
     background-image: url("fade2.png"); background-repeat:repeat-x;
-    height:25em; 
-    width:35em;
-    border:3px solid black; 
+    border:2px solid black; 
     vertical-align:top;
+    overflow-y: Hidden;
+    overflow-x: Hidden;
 }
 .dochead {
     border-bottom:1px solid black;

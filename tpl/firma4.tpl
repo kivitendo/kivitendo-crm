@@ -28,11 +28,6 @@
             Frame.location.href=uri;
         }
     }    
-    function openfile() {
-        sel=document.firma4.dateien.selectedIndex;
-        filename=document.firma4.dateien.options[sel].value;
-        open("dokumente/"+filename,"File");
-    }
     function mkDir() {
         seite=document.getElementById("seite").value;
         name=document.getElementById("subdir").value;
@@ -48,11 +43,11 @@
     var onA = false;
     function editattribut() {
         if (onA) {
-                onA = false;
-                document.getElementById("attribut").style.visibility = "hidden";
+            onA = false;
+            document.getElementById("attribut").style.visibility = "hidden";
         } else {
-                onA = true;
-                document.getElementById("attribut").style.visibility = "visible";
+            onA = true;
+            document.getElementById("attribut").style.visibility = "visible";
         }
     }
     function saveAttribut() {
@@ -61,14 +56,11 @@
         pfad=document.getElementById("docpfad").value;
         komment=document.getElementById("docdescript").value;
         id=    document.getElementById("docid").value;
-        //wvdate = document.getElementById("wvdate").value;
-        //wvid = document.getElementById("wvid").value;
         if (document.firma4.pid.value!='') {
             fid='P' + document.firma4.pid.value;
         } else {
             fid= document.firma4.Q.value + document.firma4.fid.value;
         }
-        //xajax_saveAttribut(name,oldname,pfad,komment,wvdate,wvid,fid,id);
         xajax_saveAttribut(name,oldname,pfad,komment,id);
     }
     var onL = false;
@@ -78,7 +70,7 @@
             document.getElementById("fileDel").style.visibility = "hidden";
         } else {
             onL = true;
-            name=    document.getElementById("docname").value;
+            name = document.getElementById("docname").value;
             document.getElementById("delname").innerHTML = name;
             document.getElementById("fileDel").style.visibility = "visible";
         }
@@ -87,9 +79,9 @@
         xajax_moveFile(file,pfadleft);
     }
     function filedelete() {
-        id=    document.getElementById("docid").value;
-        name=    document.getElementById("docname").value;
-        pfad=    document.getElementById("docpfad").value;
+        id = document.getElementById("docid").value;
+        name = document.getElementById("docname").value;
+        pfad = document.getElementById("docpfad").value;
         if (!id) id=0;
         xajax_delFile(id,pfad,name);
         dateibaum('left',pfadleft)
@@ -98,28 +90,28 @@
     }
     var onD = false;
     function newDir(seite) {
-            if (onD) {
-                    onD = false;
-                    document.getElementById("fixiert").style.visibility = "hidden";
-            } else {
-                    onD = true;
-        document.getElementById("seite").value=seite;
-                    document.getElementById("fixiert").style.visibility = "visible";
-                    document.getElementById("subdir").focus();
-            }
+        if (onD) {
+            onD = false;
+            document.getElementById("fixiert").style.visibility = "hidden";
+        } else {
+            onD = true;
+            document.getElementById("seite").value=seite;
+            document.getElementById("fixiert").style.visibility = "visible";
+            document.getElementById("subdir").focus();
+        }
     }
     var onF = false;
     function newFile(seite) {
-            if (onF) {
-                    onF = false;
-                    document.getElementById("uploadfr").style.visibility = "hidden";
-            } else {
-                    onF = true;
-        document.getElementById("seite").value=seite;
-                    document.getElementById("uploadfr").style.visibility = "visible";
-                    frames["frupload"].document.getElementById("upldpath").value=pfadleft;
-                    frames["frupload"].document.getElementById("caption").focus();
-            }
+        if (onF) {
+            onF = false;
+            document.getElementById("uploadfr").style.visibility = "hidden";
+        } else {
+            onF = true;
+            document.getElementById("seite").value=seite;
+            document.getElementById("uploadfr").style.visibility = "visible";
+            frames["frupload"].document.getElementById("upldpath").value=pfadleft;
+            frames["frupload"].document.getElementById("caption").focus();
+        }
     }
     var pfadleft = "";
     var pfadright = "";
@@ -182,7 +174,7 @@
     </ul>
     <br>
     .:current path:.: <span id="path"></span>
-    <span id="fbleft"></span>
+    <span id="fbleft"><!-- Platzhalter für den dynamischen Inhalt --></span>
     </div>
 </span>
 
@@ -214,7 +206,7 @@
         <li id="subedit" style="visibility:hidden;"><a href="#" >.:edit attribute:.</a></li>
         <li id="lock" style="visibility:hidden;"><a href="#" >.:lock file:.</a></li>
     </ul><br>
-        <span id="fbright"></span>
+        <span id="fbright"><!-- Platzhalter für den dynamischen Inhalt --></span>
     </div>
 </span>
 
@@ -229,8 +221,8 @@
 </div>
 
 <!-- Datei upload  -->
-<div id="uploadfr" style="visibility:hidden; position:absolute; left:4em; top:10em; width:29em; height:21em; border:1em; z-index:1;" >
-    <iframe id="frupload" name="frupload" src="upload.php?fid={FID}&pid={PID}" frameborder="0" width="100%" height="100%"></iframe>
+<div id="uploadfr" "class="docfrm" style="visibility:hidden; position:absolute; left:4em; top:10em; z-index:1; width:29em; height:21em;">
+    <iframe id="frupload" name="frupload" src="upload.php" frameborder="0" width="100%" height="100%"></iframe>
 </div>
 
 <!-- Dateiattribute ändern  -->

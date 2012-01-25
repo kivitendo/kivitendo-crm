@@ -42,13 +42,12 @@
 		$link3="#";
 		$link4="firma4.php?Q=$Q&pid=$pid&fid=0";
 	}
-	$files=liesdir($_SESSION["mansel"]."/".$pid);
 	$t = new Template($base);
 	$t->set_file(array("doc" => "firma4.tpl"));
 	$t->set_var(array(
 			AJAXJS  => $xajax->printJavascript(XajaxPath),
 			FAART   => ($Q=="C")?".:Customer:.":".:Vendor:.",       //"Kunde":"Lieferant",
-            ERPCSS  => $_SESSION["stylesheet"],
+            		ERPCSS  => $_SESSION["stylesheet"],
 			Q => $Q,
 			FID => $fid,
 			customernumber	=> ($Q=="C")?$fa["customernumber"]:$fa["vendornumber"],
@@ -87,14 +86,6 @@
 		));
 		$i++;
 		$t->parse("Block","Liste",true);
-	}
-	$t->set_block("doc","Liste2","Block2");
-	if ($files) foreach ($files as $row) {
-		$t->set_var(array(
-				key => $row["date"]." &nbsp; ".$row["name"],
-				val => $_SESSION["mansel"]."/".$pid."/".$row["name"]
-		));
-		$t->parse("Block2","Liste2",true);
 	}
 	$t->set_block("doc","Vertrag","Block3");
 	if ($vertrag) foreach ($vertrag as $row) {

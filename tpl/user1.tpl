@@ -91,7 +91,7 @@
 	<tr><td class="norm">Strasse</td><td><input type="text" name="addr1" value="{addr1}" maxlength="75"></td>
 		<td class="norm">Position</td><td><input type="text" name="position" value="{position}" maxlength="75"></td></tr>
 	<tr><td class="norm">Plz Ort</td><td><input type="text" name="addr2" value="{addr2}" size="6" maxlength="10"> <input type="text" name="addr3" value="{addr3}"  maxlength="75"></td>
-		<td class="norm">E-Mail</td><td><input type="text" name="email" value="{email}" size="30" maxlength="125"></td></tr>
+		<td class="norm">E-Mail</td><td><input type="text" name="email" value="{email}" size="30" maxlength="125">{emailauth}</td></tr>
 	<tr><td class="norm">Telefon priv.</td><td><input type="text" name="homephone" value="{homephone}" maxlength="30"></td>
 		<td class="norm">gesch&auml;ftl.</td><td><input type="text" name="workphone" value="{workphone}" maxlength="30"></td></tr>
 	<tr><td class="norm">Bemerkung</td><td><textarea name="notes" cols="37" rows="3">{notes}</textarea></td>

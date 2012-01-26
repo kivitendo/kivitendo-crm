@@ -26,13 +26,13 @@ if ($dateiname) {
 	$mime->addAttachment($filedata, $_SESSION["type"],$_SESSION["dateiname"], false );
 }
 
-$sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' limit 1";
+$sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' and id = -255";
 $data=$db->getAll($sql);
 $felder=explode(":",$data[0]["csvdaten"]);
 $pemail=array_search("EMAIL",$felder);
 $cid=array_search("ID",$felder);
 $pkont=array_search("KONTAKT",$felder);
-$sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' offset ".$offset." limit ".$limit;
+$sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' order by id offset ".$offset." limit ".$limit;
 $data=$db->getAll($sql);
 if ($data) {
 	$bodytxt=strip_tags($bodytxt);
@@ -67,7 +67,7 @@ if ($data) {
                         $body = $mime->get(array("text_encoding"=>"quoted-printable","text_charset"=>$_SESSION["charset"]));
 			$hdr = $mime->headers($headers);
 			$rc=$mail->send($to, $hdr, $body);
-			if ($rc) {
+			if ($rc && $row['id']>0) {
 				$data["CRMUSER"]=$_SESSION["loginCRM"];
 				$data["cause"]="Sermail: ".$betreff;
 				$data["c_cause"]=$bodytxt."\nAbs: ".$abs;

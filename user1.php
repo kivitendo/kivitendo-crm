@@ -56,6 +56,7 @@
             notes       => $fa["notes"],
             mailsign    => $fa["mailsign"],
             email       => $fa["email"],
+            emailauth   => $_SESSION["email"],
             msrv        => $fa["msrv"],
             port        => $fa["port"],
             mailuser    => $fa["mailuser"],

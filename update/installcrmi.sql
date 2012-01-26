@@ -222,13 +222,6 @@ CREATE TABLE maschine (
 	inspdatum DATE,
 	counter BIGINT);
 
-CREATE TABLE sonderflag (
-    svalue int,
-    skey text,
-    sorder int
-);
-INSERT INTO  sonderflag (svalue,skey,sorder) VALUES (1,'News',1);
-INSERT INTO  sonderflag (svalue,skey,sorder) VALUES (2,'Test 1',2);
 
 CREATE TABLE wissencategorie(
 	id integer DEFAULT nextval('crmid'::text) NOT NULL,

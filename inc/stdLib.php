@@ -738,7 +738,7 @@ function insertCSVData($data,$id){
  */
 function getCSVData(){
     global $db;
-    $sql = "select * from tempcsvdata where uid = '" . $_SESSION["loginCRM"] .  "'";
+    $sql = "select * from tempcsvdata where uid = '" . $_SESSION["loginCRM"] .  "' ORDER BY id";
     return $db->getAll($sql);   //liefert false bei misserfolg
 }
 

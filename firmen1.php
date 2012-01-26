@@ -39,7 +39,7 @@
                 FAART => ($Q=="C")?"Customer":"Vendor", 
             ));
             $i=0;
-            clearCSVData();
+            $rc = clearCSVData();
             $header = array("ANREDE","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","KONTAKT","ID",
                         "KDNR","USTID","STEUERNR","KTONR","BANK","BLZ","LANG","KDTYP");
             if ($_POST["umsatz"]) $header[]="UMSATZ";
@@ -55,7 +55,7 @@
             }  else {
                 $cvar = false;
             }
-            insertCSVData($header,-1);
+            insertCSVData($header,-255);
             if ($daten) foreach ($daten as $zeile) {
                 $data = array($zeile["greeting"],$zeile["name"],$zeile["department_1"],
                         $zeile["country"],$zeile["zipcode"],$zeile["city"],$zeile["street"],

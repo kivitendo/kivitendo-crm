@@ -35,7 +35,7 @@ echo "Bitte das Fenster erst nach Aufforderung schlie&szlig;en<br>";
 
 $doc->loadDocument("./dokumente/".$_SESSION["mansel"]."/serbrief/".$_SESSION["datei"]);
 $doc->savecontent();
-$sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' limit 1";
+$sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' AND id = -255";
 $data=$db->getAll($sql);
 $felder=explode(":",$data[0]["csvdaten"]);
 $felder[]="DATE";

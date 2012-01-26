@@ -38,7 +38,7 @@
 	<input type="button" name="vcard" value=".:servcard:." onClick="chngSerial('servcard');">
 </form>
 	<br>
-	<iframe src="etiketten.php" name="etikett" width="300" height="380" scrolling="yes"> marginheight="0" marginwidth="0" align="left">
+	<iframe src="etiketten.php" name="etikett" width="350" height="380" scrolling="yes"> marginheight="0" marginwidth="0" align="left">
 		<p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>
 	</iframe>
 </td></tr>

@@ -66,7 +66,7 @@
             }
         }
     } else if ($_POST["aktion"]=="sendmail") {
-        $okT=true; $okC=true; $msg="";
+        $okT=true; $okC=true; $okA=true; $msg="";
         if ($_POST["TO"]) {
             $TO=preg_replace( "/[^a-z0-9 !?:;,.\/_\-=+@#$&\*\(\)<>]/im", "", $_POST["TO"]);
             $rc=chkMailAdr($TO); if($rc<>"ok") { $okT=false; $msg="TO:".$rc; }; 
@@ -75,17 +75,25 @@
             $CC=preg_replace( "/[^a-z0-9 !?:;,.\/_\-=+@#$&\*\(\)<>]/im", "", $_POST["CC"]);
             $rc=chkMailAdr($CC); if($rc<>"ok") { $okC=false; $msg.=" CC:".$rc; }; 
         };
-        if (!$_POST["TO"] && !$_POST["CC"]) {$okT=false; $msg="Kein (g&uuml;ltiger) Empf&auml;nger";};
-        if ($okT&&$okC) {
+        if (!$_POST["TO"] && !$_POST["CC"]) {$okT=false; $msg="Kein Empf&auml;nger";};
+        $user=getUserStamm($_SESSION["loginCRM"]);
+        // geht hier nicht ums Konvertieren, sonder ums Quoten!
+        mb_internal_encoding($_SESSION["charset"]);
+        $Name = mb_encode_mimeheader($user["name"], $_SESSION["charset"], 'Q', '');
+        $zeichen = "a-z0-9 ";
+        if (preg_match("/[$zeichen]*[^$zeichen]+[$zeichen]*/i",$Name)) $Name = '"'.$Name.'"';
+        if ( $user["email"] != '' ) {
+            $abs = $Name.' <'.$user["email"].'>';
+            $rc = chkMailAdr($user["email"]); if($rc<>"ok") { $okA=false; $msg.=" Abs:".$rc; };
+        } else if ( $_SESSION['email'] != '' ) {
+            $abs = $Name.' <'.$_SESSION["email"].'>';
+            $rc = chkMailAdr($_SESSION["email"]); if($rc<>"ok") { $okA=false; $msg.=" Abs:".$rc; };
+        } else {
+            $okA=false; $msg.=" Kein Absender";
+        }
+        if ( $okT && $okC && $okA ) {
             $mime = new Mail_Mime("\n");
             $mail =& Mail::factory("mail");
-            $user=getUserStamm($_SESSION["loginCRM"]);
-            // geht hier nicht ums Konvertieren, sonder ums Quoten!
-            mb_internal_encoding($_SESSION["charset"]);
-            $Name = mb_encode_mimeheader($user["name"], $_SESSION["charset"], 'Q', '');
-            $zeichen = "a-z0-9 ";
-            if (preg_match("/[$zeichen]*[^$zeichen]+[$zeichen]*/i",$Name)) $Name = '"'.$Name.'"';
-            $abs = $Name.' <'.$user["email"].'>';
             $Subject = preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["Subject"]);
             $SubjectMail = mb_encode_mimeheader($Subject, $_SESSION["charset"] , 'Q', '');
             $headers=array( 

@@ -12,7 +12,7 @@
 	if ($_POST) {
 		$Subject=preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["Subject"]);
 		$BodyText=preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["BodyText"]);
-		$okC=true;
+		$okC=true; $okA = true;
 		if ($_POST["CC"]<>"") { 
 			$CC=preg_replace( "/[^a-z0-9 !?:;,.\/_\-=+@#$&\*\(\)]/im", "", $_POST["CC"]);
 			$CC=preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $CC);
@@ -20,10 +20,22 @@
 			if($rc<>"ok") { 
 				$okC=false; $msg.=" CC:".$rc; 
 			} else {
-				insertCSVData(array("CC",$CC,"","","","","","",$CC,""),-1);
+				insertCSVData(array('CC',$CC,'','','','','','','',$CC,'',-1,'','','','','','','','',''),-1);
 			}
 		};
-		if ($okC) {
+                // geht hier nicht ums Konvertieren, sonder ums Quoten!
+                mb_internal_encoding($_SESSION["charset"]);
+                $Name = mb_encode_mimeheader($user["name"], $_SESSION["charset"], 'Q', '');
+                if ( $user["email"] != '' ) {
+                    $abs = $Name.' <'.$user["email"].'>';
+                    $rc = chkMailAdr($user["email"]); if($rc<>"ok") { $okA=false; $msg.=" Abs:".$rc; };
+                } else if ( $_SESSION['email'] != '' ) {
+                    $abs = $Name.' <'.$_SESSION["email"].'>';
+                    $rc = chkMailAdr($_SESSION["email"]); if($rc<>"ok") { $okA=false; $msg.=" Abs:".$rc; };
+                } else {
+                    $okA=false; $msg.=" Kein Absender";
+                }
+		if ( $okC && $okA ) {
                         $dateiname = "";
 			if ($_FILES["Datei"]["name"]<>"") {
 				$dat["Datei"]["name"]=$_FILES["Datei"]["name"];
@@ -39,11 +51,6 @@
 				$dateiname=$_FILES["Datei"]["name"];
 			}
 			$limit=50;
-			$abs=sprintf("%s <%s>",$user["name"],$user["email"]);
-                        // geht hier nicht ums Konvertieren, sonder ums Quoten!
-                        mb_internal_encoding($_SESSION["charset"]);
-                        $Name = mb_encode_mimeheader($user["name"], $_SESSION["charset"], 'Q', '');
-                        $abs = $Name.' <'.$user["email"].'>';
                         $SubjectMail = mb_encode_mimeheader($Subject, $_SESSION["charset"], 'Q', '');
 			$headers=array(
                                         "Return-Path"   => $user["email"],

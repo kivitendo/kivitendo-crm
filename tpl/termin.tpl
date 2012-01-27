@@ -49,7 +49,7 @@
 		function kal(fld) {
 			mo=document.termedit.Monat.options[document.termedit.Monat.selectedIndex].value;
 			ja=document.termedit.Jahr.options[document.termedit.Jahr.selectedIndex].value;
-			f=open("terminmonat.php?datum=01."+mo+"."+ja+"&fld="+fld,"Name","width=370,height=360,left=200,top=100");
+			f=open("terminmonat.php?datum=01."+mo+"."+ja+"&fld="+fld,"Name","width=380,height=385,left=200,top=100");
 		}
 		function init() {
 			/*
@@ -144,35 +144,35 @@
 			</td></tr>
 		</table>
 	</td>
-	<td width="20px"></td>
-	<td width="28em" class="li">
-        <a href="#" title='suchfld' onClick="kal('suchfld')" ><img src='image/date.png' align='middle' border="0"></a>
-				<select name="Tag" style="width:44px">
+	<td width="5em"></td>
+	<td width="*" class="li">
+        	<a href="#" title='suchfld' onClick="kal('suchfld')" ><img src='image/date.png' align='middle' border="0"></a>
+		<select name="Tag" style="width:4em">
 <!-- BEGIN Tage -->
 			<option value="{TV}"{TS}>{TK}</option>
 <!-- END Tage -->
 		</select>
-		<select name="Monat" style="width:97px">
+		<select name="Monat" style="width:8em">
 <!-- BEGIN Monat -->
 			<option value="{MV}"{MS}>{MK}</option>
 <!-- END Monat -->
 		</select>
-		<select name="Jahr" style="width:57px">
+		<select name="Jahr" style="width:5em">
 <!-- BEGIN Jahre -->
 			<option value="{JV}"{JS}>{JK}</option>
 <!-- END Jahre -->
 		</select>
-        <br />
-        <select name="caluser" id="calusr" size="1">
+        	<br />
+        	<select name="caluser" id="calusr" size="1">
 <!-- BEGIN CalUser -->
 			<option value="{CUID}" {CUIDSEL}>{CUNAME}</option>
 <!-- END CalUser -->
-        </select>
-		<input type="button" class="anzeige" value=".:show:." onClick="showlist('T')">
+		</select>
+		<input type="button" class="anzeige" value=".:show:." onClick="showlist('T')"><br />
 		<!--input type="button" value="Woche" onClick="showlist('W')">
 		<input type="button" value="Monat" onClick="showlist('M')"-->
-	<iframe src="termlist.php?cuid={uid}&ansicht={ANSICHT}&datum={DATUM}" name="Termine" style="width:32em; height:34em" marginheight="0" marginwidth="0" align="left">
-		<p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>
+		<iframe src="termlist.php?cuid={uid}&ansicht={ANSICHT}&datum={DATUM}" name="Termine" style="width:40em; height:38em" marginheight="0" marginwidth="0" align="left">
+			<p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>
 		</iframe>
 	</td>
 </tr>

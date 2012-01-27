@@ -2290,14 +2290,13 @@ function getOneLable($format) {
     global $db;
     $lab=false;
     $sql="select * from labels where id=".$format;
-    $rs=$db->getAll($sql);
+    $rs=$db->getOne($sql);
     if ($rs) {
-        $sql="select * from labeltxt where lid=".$rs[0]["id"];
+        $sql="select * from labeltxt where lid=".$rs["id"];
         $rs2=$db->getAll($sql);
-        $lab=$rs[0];
-        $lab["Text"]=$rs2;
+        $rs["Text"]=$rs2;
     }
-    return $lab;
+    return $rs;
 }
 
 /****************************************************
@@ -2308,8 +2307,9 @@ function getOneLable($format) {
 *****************************************************/
 function getLableNames() {
     global $db;
-    $sql="select id,name from labels";
+    $sql="select id,name from labels order by name";
     $rs=$db->getAll($sql);
+    if (!$rs) $rs[] = array('id'=>0,'name'=>'------');
     return $rs;
 }
 

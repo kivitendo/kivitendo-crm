@@ -58,12 +58,15 @@
 	function monplu() {
 			self.location.href="terminmonat.php?cuid=<?php echo  $CUID ?>&ansicht=M&datum=01.<?php echo  ($month<12)?($month+1):1 ?>.<?php echo  ($month<12)?$year:($year+1) ?>&fld=<?php echo  $_GET["fld"] ?>";
 	}
+        function chktop() {
+		if ( parent.frames.length == 1 ) document.getElementById("close").style.visibility = "hidden";
+	}
 	//-->
 	</script>
-<body onLoad="self.focus()">
+<body onLoad="chktop(); self.focus()">
 <center>
 <input type="button" value="<--" onClick="monmin()"> [<a href="prtmkal.php?month=<?php echo  $month ?>&year=<?php echo  $year ?>"><?php echo  $month."/".$year ?></a>] <input type="button" value="-->" onClick="monplu()">
-<br><br>
+<br>
 <table style="width:29em" class="klein">
 	<tr><th style="width:2.1em" class="gr">Kw</th><th style="width:3.9em" class="gr">Mo</th><th style="width:3.9em" class="gr">Di</th><th style="width:3.9em" class="gr">Mi</th><th style="width:3.9em" class="gr">Do</th><th style="width:3.9em" class="gr">Fr</th><th style="width:3.0em" class="gr">Sa</th><th style="width:3.0em" class="gr">So</th></tr>
 <?php
@@ -124,7 +127,7 @@
 ?>
 	</tr>
 </table>
-[<a href="javaScript:self.close()">close</a>]
+<div id='close'>[<a href="javaScript:self.close()">close</a>]</div>
 </center>
 </body>
 </html>

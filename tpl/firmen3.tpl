@@ -79,7 +79,7 @@
 <input type="hidden" name="employee" value="{employee}">
 <input type="hidden" name="grafik" value="{grafik}">
 <input type="hidden" name="mtime" value="{mtime}">
-<span id="tab1" style="visibility:visible; position:absolute; text-align:left;width:90%; left:0.8em; top:4.8em; border:1px solid black;">
+<span id="tab1" style="visibility:visible; position:absolute; text-align:left;width:90%; height:36em; left:0.8em; top:4.8em; border:1px solid black;">
     <div class="zeile2">
         <span class="label klein">Anrede </span>
         <span class="feldxx"> <input type="text" name=".:greeting:." size="15" maxlength="75" value="{greeting_}" tabindex="1">
@@ -159,7 +159,7 @@
 
 </span>
 <!-- Ende tab1 -->
-<span id="tab2" style="visibility:hidden;  position:absolute; text-align:left;width:90%; left:0.8em; top:4.8em; border:1px solid black;">
+<span id="tab2" style="visibility:hidden;  position:absolute; text-align:left;width:90%; height:36em; left:0.8em; top:4.8em; border:1px solid black;">
     <br>
     <div class="zeile2">
         <span class="label klein"></span>
@@ -228,7 +228,7 @@
     </span>
 </span>
 <!-- Ende tab2 -->
-<span id="tab3" style="visibility:hidden;  position:absolute; text-align:left;width:90%; left:0.8em; top:4.8em; border:1px solid black; display:inline;">
+<span id="tab3" style="visibility:hidden;  position:absolute; text-align:left;width:90%; height:36em; left:0.8em; top:4.8em; border:1px solid black; display:inline;">
     <div class="zeile2">
         <span class="label klein">UStId</span>
         <span class="feldxx"><input type="text" name="ustid" size="35" maxlength="15" value="{ustid}" tabindex="5"></span>
@@ -267,7 +267,7 @@
     </div>
 </span>
 <!-- Ende tab3 -->
-<span id="tab4" style="visibility:hidden;  position:absolute; text-align:left;width:90%; left:0.8em; top:4.8em; border:1px solid black; display:inline;">
+<span id="tab4" style="visibility:hidden;  position:absolute; text-align:left;width:90%; height:36em; left:0.8em; top:4.8em; border:1px solid black; display:inline;">
 <div class="zeile2">
     <span class="label klein">.:Industry:.</span>
         <span class="feldxx"><input type="text" name="branche_" size="15" maxlength="25" value="{branche_}" tabindex="1">
@@ -372,7 +372,7 @@
         </span>
     </div>
 </span>
-<span id="tab5" style="visibility:hidden;  position:absolute; text-align:left;width:90%; left:0.8em; top:4.8em; border:1px solid black; display:inline;">
+<span id="tab5" style="visibility:hidden;  position:absolute; text-align:left;width:90%; height:36em; left:0.8em; top:4.8em; border:1px solid black; display:inline;">
 <!-- BEGIN cvarListe -->
         <div class="zeile">
                 <span class="label">{varlable1}</span>
@@ -382,7 +382,7 @@
         </div>
 <!-- END cvarListe -->
 </span>
-<span id="buttonrow" style="position:absolute; text-align:left;width:48%; left:0.8em; top:34.5em;">             
+<span id="buttonrow" style="position:absolute; text-align:left;width:48%; left:0.8em; top:38.0em;">             
             {Btn1} &nbsp;{Btn2} &nbsp; 
             <input type="submit" class="sichernneu" name="saveneu" value=".:save:. .:new:." tabindex="97"> &nbsp;
             <input type="submit" class="clear" name="reset" value=".:clear:." tabindex="98"> &nbsp;

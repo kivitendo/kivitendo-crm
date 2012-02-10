@@ -46,6 +46,8 @@
             onA = false;
             document.getElementById("attribut").style.visibility = "hidden";
         } else {
+            onL = false;
+            document.getElementById("fileDel").style.visibility = "hidden";
             onA = true;
             document.getElementById("attribut").style.visibility = "visible";
         }
@@ -69,6 +71,8 @@
             onL = false;
             document.getElementById("fileDel").style.visibility = "hidden";
         } else {
+            document.getElementById("attribut").style.visibility = "hidden";
+            onA = false;
             onL = true;
             name = document.getElementById("docname").value;
             document.getElementById("delname").innerHTML = name;
@@ -160,7 +164,7 @@
 <span style="position:absolute; left:1em; top:5.2em; width:99%; height:90%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <span style="float:left; width:40%; height:90%; text-align:center; padding:2px; border: 1px solid black; border-bottom: 0px;">
-    <div style="float:left; width:100%; height:4.5em; text-align:left; border-bottom: 1px solid black;" >
+    <div style="float:left; width:100%; height:5.5em; text-align:left; border-bottom: 1px solid black;" >
     <table>
     <tr><td class="fett normal">{Name}</td><td></td></tr>
     <tr><td class="fett">.:KdNr:.: {customernumber}</td><td>ID: {PID}</td></tr>
@@ -179,7 +183,7 @@
 </span>
 
 <span style="float:left; width:58%; height:90%; text-align:left; border: 1px solid black; border-bottom: 0px; padding:2px; border-left:0px;">
-    <div style="float:left; width:100%; height:4.5em; text-align:left; padding-top: 0; border-top: 0; border-bottom: 1px solid black;" class="fett">
+    <div style="float:left; width:100%; height:5.5em; text-align:left; padding-top: 0; border-top: 0; border-bottom: 1px solid black;" class="fett">
     <table>
     <tr><td>.:Templates:.:</td><td>
     <select name="vorlage" id="vorlage" onChange="showD();" style="width:150px;">
@@ -226,7 +230,7 @@
 </div>
 
 <!-- Dateiattribute ändern  -->
-<div id="attribut" style="visibility:hidden; position:absolute; left:5em; top:10em; z-index:1;" class="docfrm">
+<div id="attribut" style="visibility:hidden; position:absolute; left:5em; top:10em; width:35em; z-index:1;" class="docfrm">
     <table width="99%" class="klein">
     <tr class="dochead"><td>.:edit attribute:.</td><td align="right"><a href="javascript:editattribut()">(X)</a></td></tr>
     </table>
@@ -236,7 +240,7 @@
     <input type="hidden" name="docpfad" id="docpfad" value="">
     <center>
     <table >
-    <tr><td class="klein"><textarea name="docdescript" id="docdescript" cols="38" rows="4"></textarea></td></tr>
+    <tr><td class="klein"><textarea name="docdescript" id="docdescript" cols="65" rows="8"></textarea></td></tr>
     <tr><td class="mini">.:Description:.</td></tr>
     <tr><td class="klein"><input type="text" name="docname" id="docname" size="35" value=""></td></tr>
     <tr><td class="mini">.:Filename:.</td></tr>
@@ -248,7 +252,7 @@
 </div>
 
 <!-- Datei löschen -->
-<div id="fileDel" style="visibility:hidden; position:absolute; left:4em; top:10em; z-index:1;" class="docfrm">
+<div id="fileDel" style="visibility:hidden; position:absolute; left:4em; top:10em; width:35em; z-index:1;" class="docfrm">
     <table width="99%" class="klein">
     <tr class="dochead"><td>.:Delete a File:.</td><td align="right"><a href="javascript:deletefile()">(X)</a></td></tr>
     <tr><td height="100%">&nbsp;</td></tr>

@@ -41,11 +41,14 @@
         window.setTimeout("downloadfile.close()", 30000);
     }
     var onA = false;
+    var onL = false;
     function editattribut() {
         if (onA) {
             onA = false;
             document.getElementById("attribut").style.visibility = "hidden";
         } else {
+            onL = false;
+            document.getElementById("fileDel").style.visibility = "hidden";
             onA = true;
             document.getElementById("attribut").style.visibility = "visible";
         }
@@ -58,12 +61,13 @@
         id = document.getElementById("docid").value;
         xajax_saveAttribut(name,oldname,pfad,komment,id);
     }
-    var onL = false;
     function deletefile() {
         if (onL) {
             onL = false;
             document.getElementById("fileDel").style.visibility = "hidden";
         } else {
+            onA = false;
+            document.getElementById("attribut").style.visibility = "hidden";
             onL = true;
             name = document.getElementById("docname").value;
             document.getElementById("delname").innerHTML = name;
@@ -190,16 +194,16 @@
 </div>
 
 <!-- Attribute editieren: -->
-<div id="attribut" style="visibility:hidden; position:absolute; left:5em; top:10em; z-index:1;" class="docfrm">
+<div id="attribut" style="visibility:hidden; position:absolute; left:5em; top:10em; width:39em; z-index:1;" class="docfrm">
     <table width="99%" class="klein">
     <tr class="dochead"><td>.:edit attribute:.</td><td align="right"><a href="javascript:editattribut()">(X)</a></td></tr>
     </table>
     <input type="hidden" name="docid" id="docid" value="">
     <input type="hidden" name="docoldname" id="docoldname" value="">
-    <input type="text" name="docpfad" id="docpfad" value="">
+    <input type="hidden" name="docpfad" id="docpfad" value="">
     <center>
     <table >
-    <tr><td class="klein"><textarea name="docdescript" id="docdescript" cols="34" rows="4"></textarea></td></tr>
+    <tr><td class="klein"><textarea name="docdescript" id="docdescript" cols="60" rows="8"></textarea></td></tr>
     <tr><td class="mini">.:Description:.</td></tr>
     <tr><td class="klein"><input type="text" name="docname" id="docname" size="35" value=""></td></tr>
     <tr><td class="mini">.:Filename:.</td></tr>
@@ -209,10 +213,11 @@
 </div>
 
 <!-- Eine Datei löschen: -->
-<div id="fileDel" style="visibility:hidden; position:absolute; left:4em; top:10em; z-index:1;" class="docfrm">
+<div id="fileDel" style="visibility:hidden; position:absolute; left:4em; top:10em; width:39em; z-index:1;" class="docfrm">
     <table width="99%" class="klein">
     <tr class="dochead"><td>.:Delete a File:.</td><td align="right"><a href="javascript:deletefile()">(X)</a></td></tr>
     <tr><td height="100%">&nbsp;</td></tr>
+    <tr><td height="100%" class="ce"><b><span id="delname"></span></b></td></tr>
     <tr><td class="ce"><a href="javascript:filedelete();"><img src="image/eraser.png" border="0">.:Really:.</a></td></tr>
     <tr><td class="ce"><a href="javascript:deletefile();"><img src="image/fileclose.png" border="0">.:Better not:.</a></td></tr>
     </table>

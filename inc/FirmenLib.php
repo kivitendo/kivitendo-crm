@@ -42,7 +42,7 @@ global $db;
     if (!$sw[0]) {
          $where="phone like '$Pre".$sw[1]."%' "; 
     } else { 
-        if ($sw[1]=="~") { 
+        if ($sw[1]=="~") { //Firmenname beginnt nicht mit einem Buchstaben
             $where="upper(name) ~ '^\[^A-Z\].*$' or ";
             $where.="upper(department_1) ~ '^\[^A-Z\].*$' or ";
             $where.="upper(department_2) ~ '^\[^A-Z\].*$' "; 

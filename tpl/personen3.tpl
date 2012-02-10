@@ -51,7 +51,7 @@
 <input type="hidden" name="employee" value="{employee}">
 <input type="hidden" name="IMG_" value="{IMG_}">
 <input type="hidden" name="nummer" value="{nummer}">
-<span id="tab1" style="visibility:visible; position:absolute; text-align:left;width:95%; left:0.8em; top:4.8em; border:1px solid black;">
+<span id="tab1" style="visibility:visible; position:absolute; text-align:left;width:95%; height:36em; left:0.8em; top:4.8em; border:1px solid black;">
 	<div class="zeile2">
 		<span class="label2 klein">.:gender:.</span>
 		<span class="feld">
@@ -123,7 +123,7 @@
 	</div>
 	<br><br>
 </span>
-<span id="tab2" style="visibility:hidden; position:absolute; text-align:left;width:90%; left:0.8em; top:4.8em; border:1px solid black;">
+<span id="tab2" style="visibility:hidden; position:absolute; text-align:left;width:90%; height:36em; left:0.8em; top:4.8em; border:1px solid black;">
 	<br><br>
 	<div class="zeile2">
 		<span class="label klein">.:Company:.</span>
@@ -143,7 +143,7 @@
 	</div>
 	<br>
 </span>
-<span id="tab3" style="visibility:hidden; position:absolute; text-align:left;width:90%; left:0.8em; top:4.8em; border:1px solid black;">
+<span id="tab3" style="visibility:hidden; position:absolute; text-align:left;width:90%; height:36em; left:0.8em; top:4.8em; border:1px solid black;">
 <!--span style="float:left; text-align:left; border: 0px solid black;"-->
 	<span  style="float:left;">
 		<div class="zeile2">
@@ -175,7 +175,7 @@
 			{visitenkarte}</span>
 	</span>
 </span>
-<span style="position:absolute; left:1.2em; top:24.5em; width:52em; height:2em; text-align:left; border: 0px solid red;">
+<span style="position:absolute; left:1.2em; top:34.5em; width:52em; height:2em; text-align:left; border: 0px solid red;">
 	<br><br>
 	{Btn3} {Btn1} <input type='submit' class='sichernneu' name='neu' value='.:save:. .:new:.' tabindex="28">
 	<input type="submit" class="clear" name="reset" value=".:clear:." tabindex="29"> <input type="button" name="" value="VCard" onClick="vcard()" tabindex="30">

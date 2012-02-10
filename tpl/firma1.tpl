@@ -135,8 +135,8 @@
 
 <span style="position:absolute; left:1em; top:5.2em; width:99%;" >
 <!-- Begin Code --------------------------------------------- -->
-<div style="float:left; width:32em; height:33em; text-align:center; border: 1px solid black;" >
-	<div style="position:absolute; left:0em; width:32em; " >
+<div style="float:left; width:35em; height:37em; text-align:center; border: 1px solid black;" >
+	<div style="position:absolute; left:0em; width:35em; " >
 		<div style="float:left; width:64%; height:10em; text-align:left; border-bottom: 0px solid black; padding:0.2em;" >
 			<span class="gross">{Fname1}</span><br />
 			{Fdepartment_1}	{Fdepartment_2}<br />
@@ -158,6 +158,7 @@
 			{kdnr}<br />
 			{IMG}<br /><br />
 				<form action="../oe.pl" method="post" name="oe">
+				<img src="image/kreuzchen.gif" title=".:locked address:."style="visibility:{verstecke};" >
 				<input type="hidden" name="action" value="add">
 				<input type="hidden" name="vc" value="{CuVe}">
 				<input type="hidden" name="type" value="">
@@ -167,21 +168,19 @@
                                 <img src="image/auftrag.png"></button> 
 				<button type="submit" title="Angebot/Anfrage erstellen" style="visibility:{zeige};" onClick="document.oe.type.value='{request}_quotation'; submit()">
                                 <img src="image/angebot.png"></button> 
-
-				<img src="image/kreuzchen.gif" title=".:locked address:."style="visibility:{verstecke};" >
+				</form><br />
+				<span style="visibility:{zeigeplan};"><a href="{KARTE}" target="_blank"><img src="image/karte.gif" title=".:city map:." border="0"></a></span>
 				&nbsp;
 				<a href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0" /></a><br>
-				&nbsp;<br>
+				<br />
 				<a href="extrafelder.php?owner={Q}{FID}" target="_blank" title=".:extra data:." style="visibility:{zeigeextra};"><img src="image/extra.png" alt="Extras" border="0" /></a>
-				&nbsp;<br>
-				<a href="timetrack.php?tab={Q}&fid={FID}&name={Fname1}" title=".:timetrack:."><img src="image/timer.png" alt="Stoppuhr" border="0" /></a>
-				&nbsp;<br><br>
-				<span style="visibility:{zeigeplan};"><a href="{KARTE}" target="_blank"><img src="image/karte.gif" title=".:city map:." border="0"></a></span>&nbsp;</form><br />
+				&nbsp;
+				<a href="timetrack.php?tab={Q}&fid={FID}&name={Fname1}" title=".:timetrack:."><img src="image/timer.png" alt="Stoppuhr" border="0" /></a><br />
 				{verkaeufer}
 
 		</div>
 	</div>
-	<div style="position:absolute; width:32.0em; height:1.4em; text-align:left;  border-top: 1px solid black;left:0px; top:15.5em;">
+	<div style="position:absolute; width:35.0em; height:1.4em; text-align:left;  border-top: 1px solid black;left:0px; top:18.5em;">
 		<ul id="submenu" class="subshadetabs" style="padding-left:5px;">
 			<li id="sublie"><a href="#" onClick="submenu('lie')">.:shipto:.</a></li>
 			<li id="subnot"><a href="#" onClick="submenu('not')">.:notes:.</a></li>
@@ -191,7 +190,7 @@
 		</ul>
 	</div>
 
-	<span id="lie" style="visibility:visible; position:absolute; text-align:left;width:32em; left:1.2em; top:17.5em;" >
+	<span id="lie" style="visibility:visible; position:absolute; text-align:left;width:35em; left:1.2em; top:20.5em;" >
 		<div  class="klein">
 		<span id="shiptoname">{Sname1}</span> &nbsp;&nbsp;<a href="#" onCLick="anschr({Sshipto_id});"><img src="image/brief.png" alt=".:print label:." border="0" /></a>&nbsp; &nbsp; 
 		.:shipto count:.:{Scnt} <a href="javascript:nextshipto('-');"><img src="image/leftarrow.png" border="0"></a> 
@@ -209,7 +208,7 @@
 		</div>
 	</span>
 
-	<span id="not" style="visibility:hidden;position:absolute;  text-align:left;width:32em; left:1.2em; top:18.0em;">
+	<span id="not" style="visibility:hidden;position:absolute;  text-align:left;width:35em; left:1.2em; top:20.5em;">
 		<div  class="zeile klein">
 		    <span class="labelLe">.:Catchword:.</span><span class="value">{sw}     </span>
 		<div  class="zeile klein">
@@ -218,7 +217,7 @@
 		</div>
 	</span>	
 
-	<span id="var" style="visibility:hidden;position:absolute;  text-align:left;width:32em; left:1.2em; top:18.0em;">
+	<span id="var" style="visibility:hidden;position:absolute;  text-align:left;width:32em; left:1.2em; top:20.5em;">
 		<div  class="zeile klein">
 <!-- BEGIN vars -->
 		 <span class="labelLe">{varname}</span><span class="value">{varvalue}</span><br />
@@ -226,7 +225,7 @@
 		</div>
 	</span>	
 
-	<span id="inf" style="visibility:hidden;position:absolute;  text-align:left;width:32em; left:1.2em; top:18.0em;">
+	<span id="inf" style="visibility:hidden;position:absolute;  text-align:left;width:35em; left:1.2em; top:20.5em;">
 		<div  class="zeile klein">
 			<span class="labelLe">.:Concern:.:</span>
 			<span class="value"><a href="firma1.php?Q={Q}&id={konzern}">{konzernname}</a></span>
@@ -250,7 +249,7 @@
 		</div>
 	</span>	
 
-	<span id="fin" style="visibility:hidden;position:absolute; text-align:left;width:32em; left:1.2em; top:17.1em;">
+	<span id="fin" style="visibility:hidden;position:absolute; text-align:left;width:35em; left:1.2em; top:20.5em;">
 		<div  class="zeile klein">
 			<span class="labelLe">.:Business:.:</span>
 			<span class="value">{kdtyp}</span>
@@ -320,11 +319,11 @@
 	</span>
 </div>
 
-<div style="float:left; width:46%; height:33em; text-align:left; border: 1px solid black; border-left:0px;">
+<div style="float:left; width:46%; height:37em; text-align:left; border: 1px solid black; border-left:0px;">
 	<div class="calls" width='99%' id="tellcalls" >
 	</div>
 	<!--span style="float:left;  text-align:left; border:0px solid black"-->	
-	<span style="position:absolute; bottom:10px; visibility:{none};">
+	<span style="position:absolute; bottom:1em; visibility:{none};">
 		<form name="ksearch" onSubmit="return ks();"> &nbsp; 
 		<img src="image/leftarrow.png" align="middle" border="0" title="zur&uuml;ck" onClick="showCall(-1);"> 
 		<img src="image/reload.png" align="middle" border="0" title="reload" onClick="showCall(0);"> 

@@ -108,9 +108,9 @@
 </form>
 <span style="position:absolute; left:1em; top:5.2em; width:99%;">
 <!-- Beginn Code ------------------------------------------->
-<div style="float:left; width:32em; height:32em;  border: 1px solid black;" >
-     	<div style="position:absolute; left:0em; width:32em;" >	
-		<div style="float:left; width:32em; height:4.0em; text-align:left; border-bottom: 1px solid black;">
+<div style="float:left; width:35em; height:37em;  border: 1px solid black;" >
+     	<div style="position:absolute; left:0em; width:35em;" >	
+		<div style="float:left; width:35em; height:4.0em; text-align:left; border-bottom: 1px solid black;">
 			<span class="klein fett">
 			<form name="contact">
 			<input type="hidden" name="cp_id" id="cp_id" value="{PID}">
@@ -145,7 +145,7 @@
 			<span id="cp_abteilung" style="padding-right:1px;"></span><br />
 			<span id="cp_vcard" style="padding-right:1px;"></span><br />
 		</div>
-	    <div style="position:absolute;top:18em; left:0em; width:32em;  text-align:left; border-bottom: 0px solid black;">
+	    <div style="position:absolute;top:18em; left:0em; width:35em;  text-align:left; border-bottom: 0px solid black;">
 		    &nbsp;<span id="cp_privatphone"></span> <span id="cp_privatemail"></span><br />
      		<hr width="100%">
             <ul id="submenu" class="subshadetabs" style="padding-left:5px;">
@@ -161,7 +161,7 @@
 	    </div>
 	</div>
 </div>
-<div style="float:left; width:45%; height:32em; text-align:left; border: 1px solid black; border-left:0px;" >
+<div style="float:left; width:45%; height:37em; text-align:left; border: 1px solid black; border-left:0px;" >
 	<div class="calls" width='99%' id="tellcalls">
 	</div>
 	<!--span style="float:left;  text-align:left; border:0px solid black"-->	

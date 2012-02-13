@@ -1,5 +1,6 @@
 #!/bin/bash
 #set -x
+set -e
 
 source /usr/share/debconf/confmodule
 

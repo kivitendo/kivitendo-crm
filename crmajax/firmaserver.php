@@ -49,7 +49,7 @@
         if (preg_match("/UTF-8/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="UTF-8"; }
         else if (preg_match("/ISO-8859-15/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-15"; }
         else if (preg_match("/ISO-8859-1/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-1"; }
-        else { $charset="ISO-8859-1"; };
+        else { $charset="UTF-8"; };
         $sScript = "var objOption = new Option('', '');";
         $sScript .= "document.getElementById('".$bl."').options.add(objOption);";
         foreach ($data as $row) {
@@ -64,7 +64,7 @@
         if (preg_match("/UTF-8/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="UTF-8"; }
         else if (preg_match("/ISO-8859-15/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-15"; }
         else if (preg_match("/ISO-8859-1/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-1"; }
-        else { $charset="ISO-8859-1"; };
+        else { $charset="UTF-8"; };
         $maillink="<a href='mail.php?TO=".$data["shiptoemail"]."&KontaktTO=$tab".$data["trans_id"]."'>".$data["shiptoemail"]."</a>";
         $htmllink="<a href='".$data["shiptohomepage"]."' target='_blank'>".$data["shiptohomepage"]."</a>";
         $objResponse = new xajaxResponse();
@@ -90,7 +90,7 @@
         if (preg_match("/UTF-8/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="UTF-8"; }
         else if (preg_match("/ISO-8859-15/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-15"; }
         else if (preg_match("/ISO-8859-1/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-1"; }
-        else { $charset="ISO-8859-1"; };
+        else { $charset="UTF-8"; };
         $root="dokumente/".$_SESSION["mansel"]."/".$data["tabelle"].$data["nummer"]."/".$data["cp_id"];
         if (!empty($data["cp_grafik"]) && $data["cp_grafik"]<>"     ") {
             $img="<img src='$root/kopf$id.".$data["cp_grafik"]."' ".$data["icon"]." border='0'>";
@@ -152,7 +152,7 @@
         if (preg_match("/UTF-8/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="UTF-8"; }
         else if (preg_match("/ISO-8859-15/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-15"; }
         else if (preg_match("/ISO-8859-1/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-1"; }
-        else { $charset="ISO-8859-1"; };
+        else { $charset="UTF-8"; };
         $i=0;
         $nun=date("Y-m-d h:i");
         $itemN[]=array(id => 0,calldate => $nun, caller_id => $employee, cause => translate('.:newItem:.','firma') );
@@ -392,6 +392,7 @@
     function newDir($id,$pfad,$newdir) {
         chdir("../dokumente/".$_SESSION["mansel"]."/$pfad");
         mkdir($newdir);
+        chmod($newdir,$dir_mode);
         return new xajaxResponse();
     }
     function delFile($id=0,$pfad="",$file="") {

@@ -59,4 +59,6 @@ $planspace="+";
 //$stadtplan="http://maps.google.de/maps?f=d&hl=de&daddr=%TOSTREET%,%TOZIPCODE%+%TOCITY%&saddr=%FROMSTREET%,%FROMZIPCODE%+%FROMCITY%";
 $stadtplan="http://maps.google.de/maps?f=d&hl=de&daddr=%TOSTREET%,%TOZIPCODE%+%TOCITY%";
 $ERPNAME="lx-office-erp";
+$sep_cust_vendor=true; //Links zu verzeichenissen in Kunden und Lieferanten einteilen
+$dir_mode=0775; //Rechte erzeugter Verzeichnisse, ToDo: Dateien prüfen
 ?>

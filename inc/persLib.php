@@ -287,7 +287,7 @@ global $db;
                 continue;
             } else {
                 if (!chkFld($tmpval,$dbfld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) {  
-                            $fehler=$dbfld[$keys[$i]][3]; $fehler.=$keys[$i]; 
+                            $fehler=$dbfld[$keys[$i]][3]; $fehler.="::".$keys[$i]; 
                             $i=$anzahl+1;
                 }
                 if ($keys[$i]=="cp_phone1"||$keys[$i]=="cp_phone2"||$keys[$i]=="cp_fax") $tels[]=$tmpval;

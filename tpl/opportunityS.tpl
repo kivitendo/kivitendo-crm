@@ -5,10 +5,10 @@
     <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 	<script language="JavaScript">
 	<!--
-        function hide(nr) {
+    function hide(nr) {
 		document.getElementById(nr).style.display="none";
 	}
-        function show(nr) {
+    function show(nr) {
 		document.getElementById(nr).style.display="inline";
 	}
 	function toggle(was1,was2) {
@@ -157,7 +157,7 @@
         <table border="0" width="100%">
 	<tr><td>.:subject:.</td><td>.:ordersum:.</td><td>.:targetdate:.</td><td>.:chance:.</td><td>.:status:.</td><td>.:quotation:.</td><td>.:nextstep:.</td><td>.:employee:.</td><td>.:changed:.</td></tr>
 <!-- BEGIN Liste --> 
-        <tr  onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="show('n{nr}');" colspan="0">
+        <tr  onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="show('n{nr}');">
                 <td class="norm"> {histtitle}</td>
                 <td class="norm" style="width:7em;text-align:right"> {histbetrag}</td>
                 <td class="norm" style="width:6em;text-align:right"> {histdatum}</td>
@@ -167,8 +167,9 @@
 		<td class="norm"> {histnext}</td>
 		<td class="norm"> {user}</td>
 		<td class="norm" style="width:6em;text-align:left">&nbsp;{chgdate}</td></tr>
-        <tr  onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="hide('n{nr}');" colspan="0">
-                <td style="display:none" id='n{nr}'  class"norm" colspan="9">{histnotiz}</td></tr>
+        <tr  onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="hide('n{nr}');" >
+                <!-- Der blöde Firefox kann das nicht mehr ordentlich darstellen -->
+                <td style="display:none" class="norm" id='n{nr}'  colspan="9">{histnotiz}</td></tr>
 <!-- END Liste -->
        </table>
 </div>

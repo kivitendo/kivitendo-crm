@@ -638,6 +638,26 @@ global $db;
                 $query0=$query0."vendornumber='$tmpnr' ";
             }
         }
+        require("links.php");
+		if (!is_dir($dir_abs."/".$DIR)) {
+			mkdir($dir_abs."/".$DIR);  
+		} 
+		chmod($dir_abs."/".$DIR,$dir_mode); 
+		$link_dir_cv=$typ=="C"?$link_dir_cust:$link_dir_vend;
+ 		if (!$dir_abs.$link_dir_cv."/".mkDirName($daten['name'])."_".$DIR) {
+			if (is_dir($dir_abs.$link_dir_cv)) {
+            	if ($dh = opendir($dir_abs.$link_dir_cv)) {
+                	while (($link = readdir($dh)) !== false) {
+   		           		$split = preg_split("/(_".$typ.")([\d]{1,})/",$link, 2, PREG_SPLIT_DELIM_CAPTURE);
+     			 		if ($split[1].$split[2] == "_".$DIR) {
+     			    		unlink($dir_abs.$link_dir_cv."/".$link);
+                    	}
+                    }	
+   		       	}
+    		   	closedir($dh);
+            }      
+        	symlink($dir_abs."/".$DIR, $dir_abs.$link_dir_cv."/".mkDirName($daten['name'])."_".$DIR);
+        }
         $query1=substr($query1,0,-1)." ";
         $sql0="update ".$tab[$typ]." set $query0 where id=$fid";
         mkTelNummer($fid,$typ,$tels1);

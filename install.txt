@@ -1,4 +1,4 @@
-Lx-Office CRM 1.4.2  
+Lx-Office CRM 1.5  
 
 
 Installtion Lx-Office CRM
@@ -209,5 +209,14 @@ in der inc/conf.php müßen einige Vorbereitungen getätig werden:
 $ttpart='azstd'; //Artikelnummer für Arbeitszeit
 $tttime=60;     //Anzahl der Minuten für eine Einheit
 $ttround=15;    //Ab hier wird eine Einheit berechnet
+
+Benutzerfreundliche Links:
+--------------------------
+befinden sich in PfadZumCRM/Datenbankname/link_dir
+Link ins Home-Verzeichnis erstellen:
+ln -s PfadZumCRM/Datenbankname/link_dir_cust /home/username/Kundendaten
+
+
+
 
 

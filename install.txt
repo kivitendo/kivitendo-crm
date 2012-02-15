@@ -216,7 +216,8 @@ befinden sich in PfadZumCRM/Datenbankname/link_dir
 Link ins Home-Verzeichnis erstellen:
 ln -s PfadZumCRM/Datenbankname/link_dir_cust /home/username/Kundendaten
 
+Einige Zusatzprogramme, die ich für mich geschrieben habe. Werden vielleicht ja mal
+von jemanden in Perl umgesetzt, dann kommt das in die ERP.
 
-
-
-
+Installation:
+Menü um update/listen_menu.ini erweitern. Evtl. Bilderverzeichnis verlinken

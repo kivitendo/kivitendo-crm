@@ -183,5 +183,6 @@ $texts  = array(
   '.:all:.'		=> 'alle (und)',
   '.:some:.'		=> 'einige (oder)',
   '.:timetrack:.'       => 'Zeiterfassung',
+  '.:catalog:.'      => 'Katalog',
 ); 
 ?>

@@ -1,0 +1,117 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Diese Vorlage steht unter der GPL-Lizenz, Version2 
+% siehe  http://www.gnu.de/gpl-ger.html
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[a4paper,foldmarks=true]{scrartcl}
+\usepackage{fancyhdr}
+\usepackage[pdftex]{graphicx}
+\usepackage{german}
+\usepackage{icomma}
+\usepackage{longtable}
+\usepackage[utf8]{inputenc}
+\usepackage{pifont}
+\usepackage{setspace}
+\usepackage{textcomp}
+\usepackage{ifthen}
+\usepackage{filecontents}
+\usepackage{ltxtable}
+\usepackage{booktabs}
+\usepackage{etex}
+\usepackage{lastpage}
+\usepackage{multirow} 
+\usepackage{color}
+\setlength{\voffset}{-0.8cm} 
+\setlength{\hoffset}{-1.5cm}
+\setlength{\topmargin}{0cm}
+\setlength{\headheight}{0.5cm}
+\setlength{\headsep}{1cm}
+\setlength{\topskip}{0pt}
+\setlength{\oddsidemargin}{1.0cm}
+\setlength{\evensidemargin}{1.0cm}
+\setlength{\textwidth}{18.1cm}
+\setlength{\textheight}{24.3cm}
+\setlength{\footskip}{1.8cm} 
+\setlength{\parindent}{0pt}
+\renewcommand{\baselinestretch}{1}
+
+%\input{fancy.tex}
+%\input{deutsch.tex}
+
+% ------------------------------------------------------------
+% Der eigtl. Dokumenten-Inhalt beginnt hier:
+% ------------------------------------------------------------
+% Font für Code 39
+\font\xlix=wlc39 scaled 1200
+\newcommand{\barcode}[1]{{\xlix@#1@}}
+\newcommand\WG[1]{%
+    & \multicolumn{2}{c}{\textbf{#1}} & \\
+    \hline
+}
+\newcommand\Zeile[5]{%
+   \ifthispageodd{\multirow{2}{50px}{\includegraphics*[height=35px]{#1}} & 
+		\small #2 &
+		\multicolumn{1}{r}{\small #3} &
+                \ifthenelse{\equal{#5}{}}{}{\barcode{#5}} \\
+		& \multicolumn{2}{l}{\raggedright\small #4}  &\small #2 \\ }
+                {
+                 \ifthenelse{\equal{#5}{}}{}{\barcode{#5}} & 
+                 \small #2 &
+                 \multicolumn{1}{r}{\small #3} &
+                 \multirow{2}{50px}{\includegraphics*[height=35px]{#1}} \\
+		 \small #5 &
+                 \multicolumn{3}{l}{\raggedright\small #4} & \\ }
+}
+
+
+\begin{document}
+% Schrift-Stil festlegen:
+\fontfamily{cmss}\fontsize{12}{15pt plus 0.15pt minus 0.1pt}\selectfont
+
+% Erste Seite
+%\thispagestyle{briefkopf}
+
+% ------------------------------------------------------------
+% Dokument-Info, Bemerkungen, Datum, Bearbeiter, ...
+% ------------------------------------------------------------
+
+%\vspace{4mm}
+
+% ------------------------------------------------------------
+% Die Positionen-Tabelle
+% ------------------------------------------------------------
+\begin{filecontents}{tabelle.tex}
+
+%\begin{longtable}{@{}p{100px}lllp{100px}@{ }@{}} % Definition der Spalten
+%\begin{longtable}{@{}lXll@{ }@{}} % Definition der Spalten
+\begin{longtable}{@{}p{100px}XXp{100px}@{}} % Definition der Spalten
+	% Spaltenueberschriften
+
+	\hline % Trennlinie
+    \endfirsthead
+
+	\hline % Trennlinie
+    \endhead
+
+    % Fuss der Teiltabellen
+    %\multicolumn{5}{r}{Fortsetzung n\"achste Seite. Seite: \thepage{} von \pageref{LastPage}} \\
+  \endfoot
+
+  % Das Ende der Tabelle
+	\hline % Trennlinie
+  \endlastfoot
+
+	% Artikel-Positionen:
+	<%foreach_part%>   
+            \ifthenelse{\equal{<%newpg%>}{new}}{ \WG{<%partsgroup%>} } 
+            { \Zeile{<%image%>}{<%partnumber%>}{<%sellprice%>}{<%description%>}{<%ean%>} }
+	<%end_part%>
+
+	\hline
+\end{longtable}
+\end{filecontents}
+\LTXtable{\textwidth}{tabelle.tex}
+
+\vspace{5mm}
+
+\label{LastPage}
+\end{document}

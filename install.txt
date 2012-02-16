@@ -215,7 +215,19 @@ Benutzerfreundliche Links:
 befinden sich in PfadZumCRM/Datenbankname/link_dir
 Link ins Home-Verzeichnis erstellen:
 ln -s PfadZumCRM/Datenbankname/link_dir_cust /home/username/Kundendaten
+Parameter in der conf.php
+dir_mode=0775;  Owner + Gruppe Schreibrecht, andere Leserecht
+dir_group=users; Mitglieder dieser Gruppe dürfen gesetzte Rechte       
+sep_cust_vendor=true; Kunden und Lieferanten in unterschiedliche Verzeichnisse
 
+Der Webserver sollte Mitglied in der Gruppe "dir_group" sein.
+Das Verzeichnis "dokumente" sollte manuell auf Gruppe gesetzt werden.
+Bei einer Migration auch alle Unterverzeichnisse und Dateien:
+chmod 775 -R dokumente
+chgrp -R users dokumente
+
+Zusatzprogramme:
+----------------
 Einige Zusatzprogramme, die ich für mich geschrieben habe. Werden vielleicht ja mal
 von jemanden in Perl umgesetzt, dann kommt das in die ERP.
 

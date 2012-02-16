@@ -212,13 +212,15 @@ class document {
 			if (! copy($file["Datei"]["tmp_name"],$dest)) {
 				$this->error="Datei '$dest' wurde nicht hochgeladen!";
 				echo $this->error;
-                                unlink($file["Datei"]["tmp_name"]);
+                unlink($file["Datei"]["tmp_name"]);
 				return false;
 			} 
-                        unlink($file["Datei"]["tmp_name"]);
+                unlink($file["Datei"]["tmp_name"]);
+                chmod($dest,$GLOBALS['dir_mode']); 
+                if ( $GLOBALS['dir_group'] ) chgrp($dest,$GLOBALS['dir_group']); 
 		} else {
 			$this->error="Verzeichnis '$pfad' konte nicht angelegt werden!";
-                        unlink($file["Datei"]["tmp_name"]);
+            unlink($file["Datei"]["tmp_name"]);
 			return false;
 		}
 		return $this->saveDocument();

@@ -33,7 +33,8 @@
         name=document.getElementById("subdir").value;
         newDir();
         xajax_newDir(seite,pfadleft,name);
-        xajax_showDir(seite,pfadleft);
+        dateibaum('left',pfadleft)
+        //xajax_showDir(seite,pfadleft);
     }
     var downloadfile = "";
     function download(file) {

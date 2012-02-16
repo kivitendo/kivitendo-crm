@@ -225,6 +225,7 @@ function chkdir($dir,$p="") {
         foreach ( $dirs as $dir ) {
             if ( !file_exists("$p./dokumente/$tmp".$dir) ) {
                 $ok = mkdir("$p./dokumente/$tmp".$dir);
+                if ( $GLOBALS['dir_group'] ) chgrp("$p./dokumente/$tmp".$dir,$GLOBALS['dir_group']); 
                 if ( !$ok ) return false;
             };
             $tmp .= $dir."/";
@@ -789,6 +790,26 @@ function nextNumber($number) {
         return $nr;
     }
 }
+
+/***************************************************************
+*** erzeugt valide Verzeichnisnamen für viele Betriebsysteme ***
+*** invalide Zeichen sind: Umlaute  \ / : * ? " < > |        ***
+***************************************************************/
+function mkDirName($name) {
+//sollte eigentlich in stdLib, diese müsste dann jedoch utf-8 codiert sein! 
+    $ers = array(
+        ' ' => '_',  'ä' => 'ae', 'â' => 'ae', 'ã' => 'ae', 'à' => 'ae', 'á' => 'ae', 'ç' => 'c',
+        'ï' => 'i',  'í' => 'i',  'ì' => 'i',  'î' => 'i',  'ö' => 'oe', 'ó' => 'oe', 'ò' => 'oe',
+        'õ' => 'oe', 'ü' => 'ue', 'ú' => 'ue', 'ù' => 'ue', 'û' => 'ue', 'Ä' => 'Ae', 'Â' => 'Ae',
+        'Ã' => 'Ae', 'Á' => 'Ae', 'À' => 'Ae', 'Ç' => 'C',  'É' => 'E',  'È' => 'E',  'Ê' => 'E',
+        'Ë' => 'E',  'Í' => 'I',  'Ì' => 'I',  'Î' => 'I',  'Ï' => 'I',  'Ö' => 'Oe', 'Ó' => 'Oe',
+        'Ò' => 'Oe', 'Õ' => 'Oe', 'Ô' => 'Oe', 'Ü' => 'Ue', 'Ú' => 'Ue', 'Ù' => 'Ue', 'Û' => 'Ue',
+        '\\'=> '_',  'ß' => 'ss', '/' => '_' , ':' => '_',  '*' => '_',  '?' => '_',  '"' => '_',
+        '<' => '_',  '>' => '_',  '|' => '_' , ',' => '' );
+    return strtr($name,$ers);
+}
+
+
 require_once "login".$_SESSION["loginok"].".php";
 if ( $_SESSION["xajax"] ) {
 	define("XajaxVer","");

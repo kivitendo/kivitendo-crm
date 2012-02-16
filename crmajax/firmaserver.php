@@ -224,7 +224,7 @@
             $dir_object->close();
         }
         $objResponse = new xajaxResponse();
-        $objResponse->assign("fb$id",     "innerHTML", $inhalt);
+        $objResponse->assign("fb$id",    "innerHTML", $inhalt);
         $objResponse->assign("path",     "innerHTML", ($directory)?$directory:"/");
         return $objResponse;
 
@@ -392,7 +392,8 @@
     function newDir($id,$pfad,$newdir) {
         chdir("../dokumente/".$_SESSION["mansel"]."/$pfad");
         mkdir($newdir);
-        chmod($newdir,$dir_mode);
+        chmod($newdir,$GLOBALS['dir_mode']);
+        chgrp($newdir,$GLOBALS['dir_group']);
         return new xajaxResponse();
     }
     function delFile($id=0,$pfad="",$file="") {

@@ -638,11 +638,13 @@ global $db;
                 $query0=$query0."vendornumber='$tmpnr' ";
             }
         }
-        require("links.php");
+        //require("links.php");
+        include("links.php");
 		if (!is_dir($dir_abs."/".$DIR)) {
 			mkdir($dir_abs."/".$DIR);  
-		} 
-		chmod($dir_abs."/".$DIR,$dir_mode); 
+		}
+		chmod($dir_abs."/".$DIR,$GLOBALS['dir_mode']); 
+		if ( $GLOBALS['dir_group'] ) chgrp($dir_abs."/".$DIR,$GLOBALS['dir_group']); 
 		$link_dir_cv=$typ=="C"?$link_dir_cust:$link_dir_vend;
  		if (!$dir_abs.$link_dir_cv."/".mkDirName($daten['name'])."_".$DIR) {
 			if (is_dir($dir_abs.$link_dir_cv)) {

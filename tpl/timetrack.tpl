@@ -43,7 +43,7 @@
 <!--div style="position:absolute; left:1px; width:65em; top:3em; border: 1px solid black; text-align:center;" -->
 <!--div style="position:absolute;  left:1px;  top:3.3em; border: 0px solid black; text-align:left;" -->
 	<div class="zeile">
-		<span class="label klein">.:company:.</span>
+		<span class="label klein">.:name:.</span>
 			<input type="text" size="60" name="name" value="{name}" > 
 		    <a href="javascript:suchFa();"><img src="image/suchen_kl.png" border="0" title=".:searchcompany:." ></a>
 	</div>

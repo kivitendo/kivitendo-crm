@@ -92,7 +92,7 @@
         </span>
     </div>
     <div class="zeile2">
-        <span class="label klein">.:company:. </span>
+        <span class="label klein">.:name:. </span>
         <span class="feldxx"> <input type="text" name="name" size="35" maxlength="75" value="{name}" tabindex="3"></span>
     </div>
     <div class="zeile2">
@@ -171,7 +171,7 @@
         </select></span>
     </div>
     <div class="zeile2">
-        <span class="label klein">.:company:.</span>
+        <span class="label klein">.:name:.</span>
         <span class="feldxx"><input type="text" id="shiptoname" name="shiptoname" size="35" maxlength="75" value="{shiptoname}" tabindex="2"></span>
     </div>
     <div class="zeile2">

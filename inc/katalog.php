@@ -237,7 +237,7 @@ global $db;
        } else {
           continue;
        }
-       if ($row['chargenumber'][$i] == '') { $charge = 'NULL'; } else { $charge = "'".$row['chargenumber'][$i]."'"; };
+       if ($row['chargenumber'][$i] == '') { $charge = "''"; } else { $charge = "'".$row['chargenumber'][$i]."'"; };
        if ($row['bestbefor'][$i] == '') { $best = 'NULL'; } else { $best = "'".$row['bestbefor'][$i]."'"; };
        $sql =  "INSERT INTO inventory (warehouse_id,bin_id,parts_id,employee_id,qty, trans_id,trans_type_id,shippingdate,comment,chargenumber,bestbefore)";
        $sql .= " VALUES (".$row['warehouse'].",".$row['bin'].",".$row['parts_id'][$i].",".$_SESSION['loginCRM'];

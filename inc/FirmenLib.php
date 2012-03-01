@@ -234,7 +234,7 @@ global $db;
     $sql = "select C.name,C.type,V.bool_value,V.timestamp_value,V.text_value,V.number_value,C.module ";
     $sql.= "from custom_variables V left join custom_variable_configs C on C.id=V.config_id ";
     $sql.= "where V.trans_id =".$id." and module = 'CT'";
-    if ($sql) $sql .= " and C.searchable='t' ";
+    //if ($sql) $sql .= " and C.searchable='t' ";
     $sql .= "order by C.sortkey";
     $rs = $db->getAll($sql);
     if ($rs) { 
@@ -262,7 +262,7 @@ global $db;
 
 function getCvars() {
 global $db;
-    $sql = "select * from custom_variable_configs where module = 'CT' and searchable='t' order by sortkey";
+    $sql = "select * from custom_variable_configs where module = 'CT' order by sortkey";
     $rs = $db->getAll($sql);
     return $rs;
 }

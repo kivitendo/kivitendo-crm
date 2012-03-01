@@ -18,8 +18,8 @@ function mkSuchwort($suchwort) {
     } else {                                 // nein Name
         if (empty($suchwort)) $suchwort=" ";
         $sw[0]=1;
-        setlocale(LC_ALL,"C");  // keine Großbuchastaben für Umlaute
-        $suchwort=strtoupper($suchwort);
+        //setlocale(LC_ALL,"C");  // keine Großbuchastaben für Umlaute
+        //$suchwort=strtoupper($suchwort);
     };
     $sw[1]=$suchwort;
     return $sw;

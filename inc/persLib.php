@@ -93,7 +93,7 @@ global $db;
         if ($Pre) $Pre=$_SESSION["Pre"];
         $rechte=berechtigung("cp_");
         if (!$sw[0]) { $where="cp_phone1 like '$Pre".$sw[1]."%' or cp_mobile1 like '$Pre".$sw[1]."%' "; }
-        else { $where="upper(cp_name) like '$Pre".$sw[1]."%' "; }
+        else { $where="cp_name ilike '$Pre".$sw[1]."%' or cp_givenname ilike '$Pre".$sw[1]."%'"; }
         $sql="select *,'P' as tab,cp_id as id,cp_name as name  from contacts where ($where) and $rechte";
         $rs=$db->getAll($sql);
         if(!$rs) {

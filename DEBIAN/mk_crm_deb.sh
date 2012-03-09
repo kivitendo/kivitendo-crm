@@ -1,10 +1,10 @@
 #!/bin/bash
-VER="1.4.2beta"
+VER="1.5.0beta"
 #Jedes neue Paket der gleichen Version bekommt eine eigene Nummer
 NR="0"
 
 #hier wurde das Git-Paket entpakt:
-SRC=/tmp/lx-office-crm
+SRC=/var/www/lx-office-crm
 #hier wird das Debian-Paket gebaut:
 DEST=/tmp/package/lx-office-crm_$VER-$NR-all
 

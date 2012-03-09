@@ -2904,10 +2904,11 @@ function getOneTT($id,$event=true) {
 * out: rs = array
 * Alle Zeiteinträge, untere Maske, holen
 *****************************************************/
-function getTTEvents($id,$alle,$evtid) {
+function getTTEvents($id,$alle,$evtid,$abr=False) {
     $sql  = "SELECT t.*,COALESCE(e.name,e.login) AS user,oe.ordnumber FROM tt_event t ";
     $sql .= "LEFT JOIN employee e ON e.id=t.uid LEFT JOIN oe ON t.cleared=oe.id WHERE ttid = $id ";
     if ( !$alle ) $sql .= "AND (cleared < 1 OR cleared IS NUll) ";
+    if ( $GLOBALS['clearonly'] AND $abr ) $sql .= 'AND uid = '.$_SESSION['loginCRM'].' ';
     $sql .= $evtid." ORDER BY t.ttstart";
     $rs = $_SESSION['db']->getAll($sql);
     return $rs;
@@ -2965,12 +2966,12 @@ function saveTTevent($data) {
     if ( $data["eventid"] ) {
    	    $values = array($data["ttevent"],$adate,$_SESSION['loginCRM']);
 	    $fields = array('ttevent','ttstart','uid');
-        if ($edate) { $values[] = 'ttstop'; $fields[] = $edate; };
+        if ($edate) { $values[] = $edate; $fields[] = 'ttstop'; };
 	    $rc = $_SESSION['db']->update('tt_event',$fields,$values,'id = '.$data["eventid"]);
     } else {
 	    $values = array($data['tid'],$data["ttevent"],$adate,$_SESSION['loginCRM']);
 	    $fields = array('ttid','ttevent','ttstart','uid');
-        if ($edate) { $values[] = 'ttstop'; $fields[] = $edate; };
+        if ($edate) { $values[] = $edate; $fields[] = 'ttstop'; };
 	    $rc = $_SESSION['db']->insert('tt_event',$fields,$values);
     }
     return $rc;
@@ -3031,9 +3032,16 @@ global $ttpart,$tttime,$ttround;
     $tax = $rs["tax"];
     $curr = getCurr();
     //Events holen
-    $events = getTTEvents($id,false,$evids);
+    $events = getTTEvents($id,false,$evids,True);
     if ( !$events ) { 
         return ".:nothing to do:.";
+    };
+    if ( !$evids ) {
+        $evids = 'and t.id in (';
+        foreach ( $events as $row ) {
+            $tmp[] = $row['id'];
+        };
+        $evids .= implode(',',$tmp).') ';
     };
     //Auftrag erzeugen
     $sonumber = nextNumber("sonumber");

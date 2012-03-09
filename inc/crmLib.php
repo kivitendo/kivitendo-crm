@@ -2936,12 +2936,12 @@ function deleteTT($id) {
 function saveTTevent($data) {
     if ( $data["start"] == "1" ) {
 	//Begin jetzt
-        $adate = date("'Y-m-d H:i'");
+        $adate = date("Y-m-d H:i");
     } else {
         list($d,$m,$y) = explode(".",$data["startd"]);
         list($h,$i)    = explode(":",$data["startt"]);
         if ( checkdate($m,$d,$y) && ( $h>=0 && $h<24 ) && ( $i>=0 && $i<60 ) ) { 
-            $adate = sprintf("'%04d-%02d-%02d %02d:%02d:00'",$y,$m,$d,$h,$i);
+            $adate = sprintf("%04d-%02d-%02d %02d:%02d:00",$y,$m,$d,$h,$i);
         } else {
             return false;
         }
@@ -2953,23 +2953,25 @@ function saveTTevent($data) {
         list($d,$m,$y) = explode(".",$data["stopd"]);
         list($h,$i)    = explode(":",$data["stopt"]);
         if ( checkdate($m,$d,$y) && ( $h>=0 && $h<24 ) && ( $i>=0 && $i<60 ) ) { 
-            $edate = sprintf("'%04d-%02d-%02d %02d:%02d:00'",$y,$m,$d,$h,$i);
+            $edate = sprintf("%04d-%02d-%02d %02d:%02d:00",$y,$m,$d,$h,$i);
             if ( $edate < $adate ) $edate = "";
         } else {
             return false;
         }
     } else {
 	//Ende offen
-        $edate = "";
+        $edate = false;
     }
     if ( $data["eventid"] ) {
-	$values = array($data["ttevent"],$adate,$edate,$_SESSION['loginCRM']);
-	$fields = array('ttevent','ttstart','ttstop','uid');
-	$rc = $_SESSION['db']->update('tt_event',$fields,$values,'id = '.$data["eventid"]);
+   	    $values = array($data["ttevent"],$adate,$_SESSION['loginCRM']);
+	    $fields = array('ttevent','ttstart','uid');
+        if ($edate) { $values[] = 'ttstop'; $fields[] = $edate; };
+	    $rc = $_SESSION['db']->update('tt_event',$fields,$values,'id = '.$data["eventid"]);
     } else {
-	$values = array($data['tid'],$data["ttevent"],$adate,$edate,$_SESSION['loginCRM']);
-	$fields = array('ttid','ttevent','ttstart','ttstop','uid');
-	$rc = $_SESSION['db']->insert('tt_event',$fields,$values);
+	    $values = array($data['tid'],$data["ttevent"],$adate,$_SESSION['loginCRM']);
+	    $fields = array('ttid','ttevent','ttstart','uid');
+        if ($edate) { $values[] = 'ttstop'; $fields[] = $edate; };
+	    $rc = $_SESSION['db']->insert('tt_event',$fields,$values);
     }
     return $rc;
 }

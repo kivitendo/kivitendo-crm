@@ -64,6 +64,7 @@ $MailFlag='Flagged';
 $ttpart='azstd'; //Artikelnummer für Arbeitszeit
 $tttime=60;	//Anzahl der Minuten für eine Einheit
 $ttround=15;	//Ab hier wird eine Einheit berechnet
+$clearonly=True; // Nur eigene Aufträge abrechnen
 $logfile=true;
 $ERPNAME="lx-office-erp";
 $sep_cust_vendor=true; //Links zu verzeichenissen in Kunden und Lieferanten einteilen

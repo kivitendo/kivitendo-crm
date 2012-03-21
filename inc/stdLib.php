@@ -90,7 +90,7 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     $auth["mansel"]     = $auth["dbname"];
     $auth["employee"]   = $auth["login"];
     $auth["lang"]       = $auth["countrycode"];
-    $auth["stylesheet"] = $auth["stylesheet"];
+    $auth["stylesheet"] = substr($auth["stylesheet"],0,-4).'/main.css';
     $sql  = "SELECT granted from auth.group_rights G where G.right = 'sales_all_edit' ";
     $sql .= "and G.group_id in (select group_id from auth.user_group where user_id = ".$rs[0]["id"].")";
     $rs = $db->getAll($sql,"authuser_3");

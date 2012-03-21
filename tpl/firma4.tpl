@@ -217,7 +217,7 @@
 
 <!-- Neues Verzeichnis  -->
 <div id="fixiert" style="visibility:hidden; position:absolute; left:5em; top:10em; z-index:1;" class="docfrm">
-    <table width="99%" class="klein">
+    <table width="33em" class="klein">
     <tr class="dochead"><td>.:Create a new Directory:.</td><td align="right"><a href="javascript:newDir()">(X)</a></td></tr>
     <tr><td height="100%">&nbsp;</td></tr>
     <tr><td class="ce"><input type="hidden" name="seite" id="seite">

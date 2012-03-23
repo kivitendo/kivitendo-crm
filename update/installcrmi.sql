@@ -424,7 +424,7 @@ UPDATE employee set etikett=(select id from labels limit 1);
 UPDATE defaults SET contnumber=1000;
 UPDATE employee SET kdview = 1;
 
-INSERT INTO crm (uid,datum,version) VALUES (0,now(),'1.4.1');
+INSERT INTO crm (uid,datum,version) VALUES (0,now(),'1.5.0');
 
 CREATE INDEX td_termin_key ON termdate USING btree (termid);
 CREATE INDEX td_jahr_key ON termdate USING btree (jahr);
@@ -449,5 +449,6 @@ INSERT INTO schema_info (tag,login) VALUES ('crm_CleanContact','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_employeeFeldLaenge','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_PrivatTermin','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_sonderflag','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_sonderflag2','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_TerminDate','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_TerminSequenz','install');

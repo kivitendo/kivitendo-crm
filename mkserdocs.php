@@ -38,10 +38,6 @@ $doc->savecontent();
 $sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' AND id = -255";
 $data=$db->getAll($sql);
 $felder=explode(":",$data[0]["csvdaten"]);
-$felder[]="DATE";
-$felder[]="SUBJECT";
-$felder[]="BODY";
-$felder[]="TMPFILE";
 $tmpfile=substr($_SESSION["datei"],0,-4);
 $i=0;
 foreach($felder as $value) {
@@ -61,6 +57,14 @@ $tdata["Datum"]=date("d.m.Y");
 $tdata["Status"]=1;
 $tdata["DateiID"]=$_SESSION["dateiId"];
 
+function decoder($txt) {
+    if (ini_get("default_charset")=='utf-8') {
+        return utf8_decode($txt);
+    } else {
+       return $txt;
+    }
+}
+
 //Daten holen 
 $sql="select * from tempcsvdata where uid = ".$_SESSION["loginCRM"]." and id >0"; //offset 1";
 $data=$db->getAll($sql);
@@ -69,10 +73,6 @@ $_SESSION["src"]=($_GET["src"]<>"")?$_GET["src"]:"P";
 if ($data) {
     foreach ($data as $row) {
         $tmp=explode(":",$row["csvdaten"]);
-        $tmp[]=$_SESSION["DATE"];
-        $tmp[]=$_SESSION["SUBJECT"];
-        $tmp[]=$_SESSION["BODY"];
-        $tmp[]=$tmpfile;
         foreach($felder as $name) {
             if ($_SESSION["rub"]==1) {
                 //Künftig werden db-Feldnamen verwendet zZ nur RuB
@@ -80,12 +80,13 @@ if ($data) {
             } else {
                 $nname=$name;
             }
-            $vars[$nname] = $tmp[$pos[$name]];
+            $vars[$nname] = decoder($tmp[$pos[$name]]);
         }
-        $vars["DATUM"]=$vars["DATE"];
-        $vars["BETREFF"]=$vars["SUBJECT"];
-        $vars["INHALT"]=$vars["BODY"];
+        $vars["DATUM"]=$_SESSION["DATE"];
+        $vars["BETREFF"]=decoder($_SESSION["SUBJECT"]);
+        $vars["INHALT"]=decoder($_SESSION["BODY"]);
         $vars["NAME"]=$vars["NAME1"];
+        $vars["TMPFILE"] = $tmpfile;
         $tdata["CID"]=$row["id"];
         insCall($tdata,false);
         $doc->parse($vars);

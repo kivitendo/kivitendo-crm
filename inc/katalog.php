@@ -78,7 +78,8 @@ global $db;
         $pricejoin = '';
         $pricewhere = '';
     };
-    $sql  = "SELECT partnumber,P.description,notes,listprice,sellprice,image,P.ean,PG.partsgroup$prices,buchungsgruppen_id as bugru ";
+    //$sql  = "SELECT partnumber,P.description,notes,listprice,sellprice,image,P.ean,PG.partsgroup$prices,buchungsgruppen_id as bugru,P.gv ";
+    $sql  = "SELECT P.*,PG.partsgroup$prices,buchungsgruppen_id as bugru ";
     $sql .= "FROM parts P LEFT JOIN partsgroup PG on PG.id=P.partsgroup_id $pricejoin $cvarjoin ";
     $sql .= "WHERE ".$where.$pricewhere;
     $sql .= " order by PG.partsgroup,partnumber";
@@ -87,14 +88,18 @@ global $db;
     return $rs;
 }
 
-function prepTex($katalog=true) {
+function prepTex($katalog=true,$upload=false) {
     $pre = '';
     $post = '';
     $artikel = '';
     $postline = false;
     $artline = false;
     if ($katalog) {
-    	$vorlage = fopen('vorlage/katalog.tex','r');
+        if ($upload) {
+            $vorlage = fopen('tmp/katalog.org','r');
+        } else {
+            $vorlage = fopen('vorlage/katalog.tex','r');
+        }
     } else {
 	    $vorlage = fopen('vorlage/inventur.tex','r');
     }

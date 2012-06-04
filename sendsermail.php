@@ -26,7 +26,7 @@ if ($dateiname) {
 	$mime->addAttachment($filedata, $_SESSION["type"],$_SESSION["dateiname"], false );
 }
 
-$sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' and id = -255";
+$sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' and id < 1";
 $data=$db->getAll($sql);
 $felder=explode(":",$data[0]["csvdaten"]);
 $pemail=array_search("EMAIL",$felder);

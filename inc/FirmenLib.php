@@ -761,9 +761,19 @@ global $db;
     } else {
         $rs=$db->getAll("select ".$typ."number from defaults");
     };
-    preg_match("/([^0-9]*)([0-9]+)/",$rs[0][$typ."number"],$t);
-    if (count($t)==3) { $y=$t[2]+1; $pre=$t[1]; }
-    else { $y=$t[1]+1; $pre=""; };
+    preg_match("/([0-9]*)([^0-9]*)([0-9]*)/",$rs[0][$typ."number"],$t);
+    if ( $t[3] != '' ) {
+        $pre = $t[1].$t[2];
+        $nr = $t[3];
+    } else if ( $t[2] != '' ) {
+        $pre = $t[1];
+        $nr = $t[2];
+    } else {
+        $pre = '';
+        $nr = $t[1];
+    };
+    $len = strlen($nr);
+    $y = sprintf("%0".$len."d",$nr+1);
     $newnr=$pre.$y;
     if ($bid>0) {
         $rc=$db->query("update business set customernumberinit='$newnr' where id = $bid");

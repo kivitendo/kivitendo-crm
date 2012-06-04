@@ -1758,10 +1758,11 @@ global $db;
         //Bisdatum nicht kleiner Vondatum
         if ($bis<$von) $bis=$von;
          //Bisdatum nicht grösser Vondatum, dann biszeit>=vonzeit 
-        if ((($bis==$von) || ($data["wdhlg"]<>"0")) && $data["bis"]<$data["von"] )   $data["bis"]=$data["von"];
-        $sql="update termine set cause='".$data["grund"]."',kategorie=".$data["kategorie"].",c_cause='".$data["lang"];
+        if ((($bis==$von) || ($data["repeat"]<>"0")) && $data["bis"]<$data["von"] )   $data["bis"]=$data["von"];
+        $sql="update termine set cause='".$data["cause"]."',kategorie=".$data["kategorie"].",c_cause='".$data["c_cause"];
         $sql.="',starttag='".date("Y-m-d",$von)."',stoptag='".date("Y-m-d",$bis)."',startzeit='".$data["von"]."',stopzeit='".$data["bis"]."',";
-        $sql.="repeat=".$data["wdhlg"].",ft='".$data["ft"]."',uid=".$data["uid"].",privat='".(($data["privat"]==1)?'t':'f')."' ";
+        $sql.="repeat=".$data["repeat"].",ft='".$data["ft"]."',uid=".$data["uid"].",privat='".(($data["privat"]==1)?'t':'f')."', ";
+        $sql.="syncid=".$data["syncid"]." ";
          // echtes Datum eintragen, schadet mal nicht und wird künfig verwendet.
          $sql.=",start='".date("Y-m-d H:i:00",$von." ".$data["von"])."', stop='".date("Y-m-d H:i:00",$bis." ".$data["bis"])."' ";
         $sql.=",location='".$data["location"]."' ";
@@ -1782,7 +1783,7 @@ global $db;
                 $sql.="$termid,'".date("d",$von)."','".date("m",$von)."',".date("Y",$von).",".strftime("%V",$von).",".$idx.")";
                 if (($data["ft"] && date("w",$von)<>6 && date("w",$von)<>0 && !in_array($von,$ftk)) || !$data["ft"] || $von==$bis)
                     $rc=$db->query($sql);
-                switch ($data["wdhlg"]) {
+                switch ($data["repeat"]) {
                     case '0' :
                     case '1' : $von+=60*60*24;
                              break;
@@ -1811,7 +1812,7 @@ global $db;
                     $tid=mknewTelCall();
                     $nun=date2db($data["vondat"])." ".$data["von"].":00";
                     $sql="update telcall set cause='".$data["grund"];
-                    $sql.="',caller_id=$nr,calldate='$nun',termin_id=$termid,c_long='".$data["lang"];
+                    $sql.="',caller_id=$nr,calldate='$nun',termin_id=$termid,c_long='".$data["c_cause"];
                     $sql.="',employee='".$_SESSION["loginCRM"]."',kontakt='X',bezug=0 where id=$tid";
                     $rc=$db->query($sql);
                     if(!$rs) {
@@ -3047,7 +3048,8 @@ global $ttpart,$tttime,$ttround;
     $sonumber = nextNumber("sonumber");
     if ( !$sonumber ) return ".:error:.";
     $newID = uniqid (rand());
-    $sql = "INSERT INTO oe (notes,ordnumber,cusordnumber,vendor_id,taxincluded) VALUES ('$newID','$sonumber','".$tt["fid"]."',Null,'f')";
+    $sql  = "INSERT INTO oe (notes,transaction_description,ordnumber,cusordnumber,vendor_id,taxincluded) ";
+    $sql .= "VALUES ('$newID','".$tt["ttname"]."',$sonumber,'".$tt["fid"]."',Null,'f')";
     $rc = $_SESSION['db']->query($sql,"newOE");
     if (!$rc) return ".:error:. 0";
     $sql = "SELECT id FROM oe WHERE notes = '$newID'";
@@ -3085,14 +3087,8 @@ global $ttpart,$tttime,$ttround;
     $nun = date('Y-m-d');
     $amount = $netamount * $tax; 
     $fields = array('transdate','customer_id','amount','netamount','reqdate','notes','curr','employee_id');
-    $values = array($nun,$tt["fid"],$amount,$netamount,$nun,$tt["ttname"]."\n".$tt["ttdescription"],$curr,$_SESSION["loginCRM"]);
+    $values = array($nun,$tt["fid"],$amount,$netamount,$nun,$tt["ttdescription"],$curr,$_SESSION["loginCRM"]);
     $rc = $_SESSION['db']->update('oe',$fields,$values,'id = '.$trans_id);
-    /*$sql  = "update oe set transdate=now(),";
-    $sql .= "customer_id=".$tt["fid"].", amount=".$amount.", netamount=".$netamount;
-    $sql .= ", reqdate=now(), notes='".$tt["ttname"]."\n".$tt["ttdescription"];
-    $sql .= "', taxincluded='f', curr='$curr',employee_id=".$_SESSION["loginCRM"].", vendor_id=Null ";
-    $sql .="where id=".$trans_id;
-    $rc = $_SESSION['db']->query($sql,"uodOE");*/
     if ( !$rc ) {
         $_SESSION['db']->rollback();
         return ".:error:. 2";

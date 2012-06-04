@@ -17,6 +17,10 @@
 	id = document.formular.id.value
         xajax_listTevents(id);
     }
+    function doit(was) {
+        document.formular.action.value=was; 
+        document.formular.submit();
+    }
 	//-->
 	</script>
 	{jcal0}
@@ -27,6 +31,7 @@
 <span style="position:absolute; left:1em; top:1.4em; width:95%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <form name="formular" action="timetrack.php" method="post">
+<input type="hidden" name="clear" value="{clear}">
 <input type="hidden" name="id" value="{id}">
 <input type="hidden" name="tab" value="{tab}">
 <input type="hidden" name="fid" value="{fid}">
@@ -76,15 +81,15 @@
 		<span class="label"></span>
         <span style="visibility:{noown}">
 		<input type="hidden" name="action" value="">
-		<img src="image/save_kl.png"   alt='.:save:.'   title='.:save:.'   name="save"   value=".:save:."   onclick="document.formular.action.value='save'; document.formular.submit();"> &nbsp;
-		<img src="image/cancel_kl.png" alt='.:delete:.' title='.:delete:.' name="delete" value=".:delete:." onclick="document.formular.action.value='delete'; document.formular.submit();"style="visibility:{delete};"> &nbsp;
+		<img src="image/save_kl.png"   alt='.:save:.'   title='.:save:.'   name="save"   value=".:save:."   onclick="doit('save');"> &nbsp;
+		<img src="image/cancel_kl.png" alt='.:delete:.' title='.:delete:.' name="delete" value=".:delete:." onclick="doit('delete');" style="visibility:{delete};"> &nbsp;
         </span>
         <span style="visibility:{blshow}">
 		<a href={backlink}><image src="image/firma.png" alt='.:back:.' title='.:back:.' border="0" ></a>&nbsp;
         </span>
         <span>
-		<img src="image/neu.png"    alt='.:new:.'    title='.:new:.'    name="clear"  value=".:new:."    onclick="document.formular.action.value='clear'; document.formular.submit();"> &nbsp;
-		<img src="image/suchen.png" alt='.:search:.' title='.:search:.' name="search" value=".:search:." onclick="document.formular.action.value='search'; document.formular.submit();"> &nbsp;
+		<img src="image/neu.png"    alt='.:new:.'    title='.:new:.'    name="clear"  value=".:new:."    onclick="doit('clear');"> &nbsp;
+		<img src="image/suchen.png" alt='.:search:.' title='.:search:.' name="search" value=".:search:." onclick="doit('search');"> &nbsp;
         </span>
         <span id="summtime"></span>
 	</div>
@@ -97,7 +102,7 @@
 <input type="hidden" name="tid" value="{id}">
 <input type="hidden" name="cleared" id='cleared' value="">
 <input type="hidden" name="eventid" id="eventid" value="" >
-<span style="visibility:{noevent}"><table>
+<span id="work" style="visibility:{noevent}"><table>
 <tr><td>.:start work:.</td><td>.:stop work:.</td><td></td></tr>
 <tr><td><input type="text" size="8" name="startd" id="startd">{jcal3} 
 	<input type="text" size="4" name="startt" id="startt"><input type="checkbox" name="start" value="1">.:now:.</td>
@@ -107,7 +112,7 @@
 </tr>
 <tr><td colspan="2"><textarea cols="60" rows="3" name="ttevent" id="ttevent"></textarea></td>
     <td><input type="reset"  name="resett" value=".:reset:." onClick='document.getElementById("savett").style.visibility="visible"'><br />
-        <input type="submit" name="savett" value=".:save:." id='savett' style='visibility:visible'>
+        <input type="submit" name="savett" value=".:save:." id='savett' ><!--style='visibility:visible'-->
     </td>
 </tr>
 </table></span>

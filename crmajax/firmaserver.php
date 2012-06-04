@@ -488,11 +488,12 @@
         $objResponse->assign("stopd",          "value", $sd);
         $objResponse->assign("stopt",          "value", $st);
         if ( $data['cleared'] > 0 )	$objResponse->script("document.getElementById('savett').style.visibility='hidden'");
-	else				$objResponse->script("document.getElementById('savett').style.visibility='visible'");
+        else   $objResponse->script("document.getElementById('savett').style.visibility='visible'");
         return $objResponse;
     }
     function listTevents($id) {
         $events = getTTEvents($id,"a",false);
+        $link = "<a href='../oe.pl?action=edit&type=sales_order&vc=customer&id=%d'>";
         $objResponse = new xajaxResponse();
         if (!$events) return  $objResponse;;
         $tt = getOneTT($events[0]["ttid"]);
@@ -513,7 +514,7 @@
                 $t2 = $now;
                 $stop = "<a href='timetrack.php?tid=".$row["ttid"]."&eventid=".$row["id"]."&stop=now'><b>".translate('.:stop now:.','work')."</b></a>";
             };
-	    $min = $t2 - $t1;
+	        $min = $t2 - $t1;
             $diff += $min;
             $i++; 
             if ($row["cleared"] > 0) {
@@ -532,7 +533,7 @@
             } else {
                 $liste .= $row["ttevent"]."</td><td>";
             }
-	    $liste .= $row["ordnumber"]."</td></tr>";
+	        $liste .= sprintf($link,$row['cleared']).$row["ordnumber"]."</a></td></tr>";
         };
         $diff = floor($diff / 60);
         if ($tt["aim"]>0) {
@@ -551,7 +552,7 @@
             $use = $diff." ".translate('.:minutes:.','work');
         }
         $liste .= "</table><input type='checkbox' name='clrok' value='1'>".translate(".:all:.",'work')." ";
-	$liste .= "<input type='submit' name='clr' value='".translate(".:clearing:.","work")."'></form>";
+     	$liste .= "<input type='submit' name='clr' value='".translate(".:clearing:.","work")."'></form>";
         $objResponse->assign("summtime",       "innerHTML", translate(".:used:.","work")." $use $rest");
         $objResponse->assign("eventliste",     "innerHTML", $liste);
         return $objResponse;

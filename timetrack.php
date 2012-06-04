@@ -16,6 +16,7 @@
     $jscal2.="//-->\n</script>";
     $t = new Template($base);
     $t->set_file(array("tt" => "timetrack.tpl"));
+    $data['clear'] = 1;
     if ($_POST["action"] == "save") {
         //Sichert die obere Maske
         if ($_POST['fid'] <= 0 )             { $data = $_POST; $data['msg'] = '.:missinge:. .:company:.';   }
@@ -26,12 +27,13 @@
             $data = saveTT($_POST);
         }
     } else if ($_POST["action"] == "clear") {
-        if ($_POST["fid"] != '') {
+        if ($_POST["fid"] != '' && $_POST['clear'] < 2) {
             unset($data);
             $data['name'] = $_POST['name'];
-	    $data['fid']  = $_POST['fid'];
-	    $data['tab']  = $_POST['tab'];
+	        $data['fid']  = $_POST['fid'];
+	        $data['tab']  = $_POST['tab'];
             $data["active"] = "t";
+            $data['clear'] = 2;
         }
     } else if ($_POST["action"] == "delete") {
         //Einen Zeiteintrag löschen, obere Maske
@@ -39,8 +41,8 @@
         if ($rc) {
             $msg = ".:deleted:.";
             $data['name'] = $_POST['name'];
-	    $data['fid']  = $_POST['fid'];
-	    $data['tab']  = $_POST['tab'];
+	        $data['fid']  = $_POST['fid'];
+	        $data['tab']  = $_POST['tab'];
         } else {
             $data = getOneTT($_POST["id"]);
             $msg = ".:not posible:.";
@@ -106,11 +108,12 @@
     $t->set_var(array(
         ERPCSS  => $_SESSION["stylesheet"],
         AJAXJS  => $xajax->printJavascript(XajaxPath),
-	backlink => $data["backlink"],
-	blshow  => ($data["backlink"])?"visible":"hidden",
-        noevent => ($data["active"]=="t")?"visible":"hidden",
+	    backlink => $data["backlink"],
+	    blshow  => ($data["backlink"])?"visible":"hidden",
+        noevent => ($data["active"]=="t" && $data['id'])?"visible":"hidden",
         noown   => ($data["id"]>0 && $data["uid"]!=$_SESSION["loginCRM"])?"hidden":"visible",
         id      => $data["id"],
+        clear   => $data['clear'],
         name    => $data["name"],
         fid     => $data["fid"],
         tab     => $data["tab"],

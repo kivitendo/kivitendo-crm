@@ -3047,11 +3047,14 @@ global $ttpart,$tttime,$ttround;
     //Auftrag erzeugen
     $sonumber = nextNumber("sonumber");
     if ( !$sonumber ) return ".:error:.";
-    $newID = uniqid (rand());
-    $sql  = "INSERT INTO oe (notes,transaction_description,ordnumber,vendor_id,taxincluded) ";
-    $sql .= "VALUES ('$newID','".$tt["ttname"]."',$sonumber,'".$tt["fid"]."','f')";
+    $sql  = "INSERT INTO oe (notes,transaction_description,ordnumber,customer_id,taxincluded) ";
+    $sql .= "VALUES ('".$tt["ttdescription"]."','".$tt["ttname"]."',$sonumber,'".$tt["fid"]."','f')";
     $rc = $_SESSION['db']->query($sql,"newOE");
-    if (!$rc) return ".:error:. 0";
+    if (!$rc) {
+        $sql = "DELETE FROM oe WHERE ordnumber = '$sonumber'";
+        $rc = $_SESSION['db']->query($sql,"delOE");
+        return ".:error:. 0";
+    }
     $sql = "SELECT id FROM oe WHERE notes = '$newID'";
     $rs = $_SESSION['db']->getOne($sql);
     $trans_id = $rs["id"];

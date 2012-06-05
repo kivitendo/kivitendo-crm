@@ -83,6 +83,7 @@
         //Endzeitpunkt für einen Zeiteintrag sichern, untere Maske
         $rc = stopTTevent($_GET["eventid"],date('Y-m-d H:i'));
         $data = getOneTT($_GET["tid"]);
+        if ( !$rc ) $data['msg'] = ".:error:. .:close event:.";
     } else if ($_POST["clr"]) {
             if ($_POST["clrok"]=="1" || count($_POST["clear"])>0) {
                 if ($_POST["tid"]) {

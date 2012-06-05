@@ -16,7 +16,9 @@
     }
     function getEventListe() {
 	    id = document.formular.id.value
-        xajax_listTevents(id,{fid});
+        fid = document.formular.fid.value
+        if ( fid < 0 ) fid=0;
+        xajax_listTevents(id,fid);
     }
     function doit(was) {
         document.formular.action.value=was; 

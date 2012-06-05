@@ -512,7 +512,11 @@
                 $stop = db2date($b[0])." ".substr($b[1],0,5);
                 $t2 = strtotime($row["ttstop"]);
             } else {
-                $t2 = $now;
+                if ( $t1 <= $now ) {
+                    $t2 = $now;
+                } else {
+                    $t2 = $t1;
+                }
                 $stop = "<a href='timetrack.php?tid=".$row["ttid"]."&eventid=".$row["id"]."&stop=now'><b>".translate('.:stop now:.','work')."</b></a>";
             };
 	        $min = $t2 - $t1;
@@ -555,8 +559,8 @@
         }
         $liste .= "</table><input type='checkbox' name='clrok' value='1'>".translate(".:all:.",'work')." ";
         if ( $lastcleared > 0 ) {
-            $liste .= "<input type='radio' name='order' value='0' checked>neuer Auftrag ";
-            $liste .= "<input type='radio' name='order' value='$lastcleared'>den letzen Ergänzen ";
+            $liste .= "<input type='radio' name='order' value='0' checked>".translate('.:new Order:.','work').' ';
+            $liste .= "<input type='radio' name='order' value='$lastcleared'>".translate('.:add to last Order:.','work').' ';
         };
      	$liste .= "<input type='submit' name='clr' value='".translate(".:clearing:.","work")."'></form>";
         $objResponse->assign("summtime",       "innerHTML", translate(".:used:.","work")." $use $rest");

@@ -3,6 +3,8 @@ set -e
 
 case "$1" in
     remove|deconfigure)
+	rm /usr/lib/lx-office-erp/crm/crmajax/xa* 
+	rm /usr/lib/lx-office-erp/crm 
 	rm /usr/lib/lx-office-erp/crm 
 	rm /usr/lib/lx-office-crm/inc/*.*
 	mv /usr/lib/lx-office-erp/crm_menu.ini /usr/lib/lx-office-erp/menu.ini 2>null

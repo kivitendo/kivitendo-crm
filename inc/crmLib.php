@@ -2986,9 +2986,15 @@ function saveTTevent($data) {
 * Endezeitpunkt für einen Zeiteintrag, unterte Maske, sichern
 *****************************************************/
 function stopTTevent($id,$stop) {
-    $sql = "UPDATE tt_event SET ttstop = '$stop' WHERE id = $id";
-    $rc = $_SESSION['db']->query($sql);
-    return $rc;
+    $sql = "SELECT * FROM tt_event WHERE id = $id";
+    $rs = $_SESSION['db']->getOne($sql,'stopTTevent');
+    if ( $rs['ttstart'] < $stop ) {
+        $sql = "UPDATE tt_event SET ttstop = '$stop' WHERE id = $id";
+        $rc = $_SESSION['db']->query($sql);
+        return $rc;
+    } else {
+        return false;
+    }
 }
 
 /****************************************************

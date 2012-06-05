@@ -103,8 +103,9 @@ CREATE TABLE termine (
 	stoptag date,
 	startzeit char(5),
 	stopzeit char(5),
-    privat boolean default false,
-	uid integer);
+        privat boolean default false,
+	uid integer,
+        syncid text);
 	
 CREATE TABLE terminmember (
 	termin integer,

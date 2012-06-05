@@ -3010,7 +3010,7 @@ function getOneTevent($id) {
 * out: String
 * Aus Zeiteinträgen einen Auftrag generieren
 *****************************************************/
-function mkTTorder($id,$evids) {
+function mkTTorder($id,$evids,$trans_id) {
 global $ttpart,$tttime,$ttround;
     $tt = getOneTT($id,$false);
     //Steuerzone ermitteln (0-3)
@@ -3044,24 +3044,34 @@ global $ttpart,$tttime,$ttround;
         };
         $evids .= implode(',',$tmp).') ';
     };
-    //Auftrag erzeugen
-    $sonumber = nextNumber("sonumber");
-    if ( !$sonumber ) return ".:error:.";
-    $sql  = "INSERT INTO oe (notes,transaction_description,ordnumber,customer_id,taxincluded) ";
-    $sql .= "VALUES ('".$tt["ttdescription"]."','".$tt["ttname"]."',$sonumber,'".$tt["fid"]."','f')";
-    $rc = $_SESSION['db']->query($sql,"newOE");
-    if (!$rc) {
-        $sql = "DELETE FROM oe WHERE ordnumber = '$sonumber'";
-        $rc = $_SESSION['db']->query($sql,"delOE");
-        return ".:error:. 0";
-    }
-    $sql = "SELECT id FROM oe WHERE  ordnumber = '$sonumber'";
-    $rs = $_SESSION['db']->getOne($sql);
-    $trans_id = $rs["id"];
-    if ( $trans_id <= 0 ) {
-        $sql = "DELETE FROM oe WHERE ordnumber = '$sonumber'";
-        $rc = $_SESSION['db']->query($sql,"delOE");
-        return ".:error:. 0";
+    if ( $trans_id < 1 ) {
+        //Auftrag erzeugen
+        $sonumber = nextNumber("sonumber");
+        if ( !$sonumber ) return ".:error:.";
+        $sql  = "INSERT INTO oe (notes,transaction_description,ordnumber,customer_id,taxincluded) ";
+        $sql .= "VALUES ('".$tt["ttdescription"]."','".$tt["ttname"]."',$sonumber,'".$tt["fid"]."','f')";
+        $rc = $_SESSION['db']->query($sql,"newOE");
+        if (!$rc) {
+            $sql = "DELETE FROM oe WHERE ordnumber = '$sonumber'";
+            $rc = $_SESSION['db']->query($sql,"delOE");
+            return ".:error:. 0";
+        }
+        $sql = "SELECT id FROM oe WHERE  ordnumber = '$sonumber'";
+        $rs = $_SESSION['db']->getOne($sql);
+        $trans_id = $rs["id"];
+        if ( $trans_id <= 0 ) {
+            $sql = "DELETE FROM oe WHERE ordnumber = '$sonumber'";
+            $rc = $_SESSION['db']->query($sql,"delOE");
+            return ".:error:. 0";
+        }
+        $netamount = 0;
+    } else {
+        $sql = "SELECT * from oe WHERE id = ".$trans_id;
+        $rc = $_SESSION['db']->getOne($sql,'');
+        if ( ! $rc ) {
+            return ".:error:. 00";
+        }
+        $netamount = $rc['netamount'];
     }
     //$sql_i = 'INSERT INTO orderitems (trans_id, parts_id, description, qty, sellprice, unit, ship, discount,serialnumber,reqdate) values (';
     $fields = array('trans_id', 'parts_id', 'description', 'qty', 'sellprice', 'unit', 'ship', 'discount', 'serialnumber', 'reqdate');

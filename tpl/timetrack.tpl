@@ -4,6 +4,7 @@
     <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
     <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
     {AJAXJS}
+    <!--script type="text/javascript" src="../js/common.js"></script-->
 	<script language="JavaScript">
 	<!--
 	function suchFa() {
@@ -14,12 +15,43 @@
         xajax_editTevent(id);
     }
     function getEventListe() {
-	id = document.formular.id.value
-        xajax_listTevents(id);
+	    id = document.formular.id.value
+        xajax_listTevents(id,{fid});
     }
     function doit(was) {
         document.formular.action.value=was; 
         document.formular.submit();
+    }
+    function chktime(wo) {
+        var timeval = document.getElementById(wo).value;
+        if ( timevall == '' ) return;
+        var ausdruck = /(\d+):(\d+)/;
+        erg = ausdruck.exec(timeval)
+        if ( erg == null ) {
+            alert('Fehlerhafter Ausdruck ('+timeval+')');
+            document.getElementById(wo).value = '';
+            return;
+        }
+        if (erg[1]*1 < 0 || erg[1]*1 > 24) {
+            alert('Fehlerhafter Ausdruck:' + erg[1]);
+            document.getElementById(wo).value = '';
+            return;
+        }
+        if (erg[2] < 0 || erg[2] > 59) {
+            alert('Fehlerhafter Ausdruck:' + erg[2]);
+            document.getElementById(wo).value = '';
+            return;
+        }
+    }
+    function check_right_date_format(fld) {
+        var datum = fld.value;
+        if ( datum == '' ) return;
+        datum = datum.replace(/[-\\\/]/g,'.');
+        if ( datum.match(/\d+\.\d+\.\d+/)) {
+            fld.value = datum;
+        } else {
+            alert("Fehlerhaftes Datumsformat: " + datum);
+        }
     }
 	//-->
 	</script>
@@ -104,10 +136,10 @@
 <input type="hidden" name="eventid" id="eventid" value="" >
 <span id="work" style="visibility:{noevent}"><table>
 <tr><td>.:start work:.</td><td>.:stop work:.</td><td></td></tr>
-<tr><td><input type="text" size="8" name="startd" id="startd">{jcal3} 
-	<input type="text" size="4" name="startt" id="startt"><input type="checkbox" name="start" value="1">.:now:.</td>
-    <td><input type="text" size="8" name="stopd"  id="stopd">{jcal4}  
-	<input type="text" size="4" name="stopt"  id="stopt"> <input type="checkbox" name="stop"  value="1">.:now:.</td>
+<tr><td><input type="text" size="8" name="startd" id="startd" onBlur="check_right_date_format(this)">{jcal3} 
+	<input type="text" size="4" name="startt" id="startt" onblur="chktime('startt');"><input type="checkbox" name="start" value="1">.:now:.</td>
+    <td><input type="text" size="8" name="stopd"  id="stopd" onBlur="check_right_date_format(this)">{jcal4}  
+	<input type="text" size="4" name="stopt"  id="stopt" onblur="chktime('stopt');"> <input type="checkbox" name="stop"  value="1">.:now:.</td>
     <td></td>
 </tr>
 <tr><td colspan="2"><textarea cols="60" rows="3" name="ttevent" id="ttevent"></textarea></td>

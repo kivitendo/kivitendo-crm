@@ -491,9 +491,9 @@
         else   $objResponse->script("document.getElementById('savett').style.visibility='visible'");
         return $objResponse;
     }
-    function listTevents($id) {
+    function listTevents($id,$fid=0) {
         $events = getTTEvents($id,"a",false);
-        $link = "<a href='../oe.pl?action=edit&type=sales_order&vc=customer&id=%d'>";
+        $link = "<a href='../oe.pl?action=edit&type=sales_order&vc=customer&id=%d&callback=crm/timetrack.php%%3ffid=$fid'>";
         $objResponse = new xajaxResponse();
         if (!$events) return  $objResponse;;
         $tt = getOneTT($events[0]["ttid"]);
@@ -503,6 +503,7 @@
         $i = 0;
         $now = time();
         $diff = 0;
+        $lastcleared = 0;
         if ($events) foreach ($events as $row) {
             $a = explode(" ",$row["ttstart"]);
             $t1 = strtotime($row["ttstart"]);
@@ -519,6 +520,7 @@
             $i++; 
             if ($row["cleared"] > 0) {
                 $clear = "<td>-</td>";
+                if ( $row['cleared'] > $lastcleared )  $lastcleared  = $row['cleared']; 
             } else {
                 if ($row["uid"] == $_SESSION["loginCRM"]) {
                     $clear = "<td><input type='checkbox' name='clear[]' value='".$row["id"]."'></td>";
@@ -552,6 +554,10 @@
             $use = $diff." ".translate('.:minutes:.','work');
         }
         $liste .= "</table><input type='checkbox' name='clrok' value='1'>".translate(".:all:.",'work')." ";
+        if ( $lastcleared > 0 ) {
+            $liste .= "<input type='radio' name='order' value='0' checked>neuer Auftrag ";
+            $liste .= "<input type='radio' name='order' value='$lastcleared'>den letzen Ergänzen ";
+        };
      	$liste .= "<input type='submit' name='clr' value='".translate(".:clearing:.","work")."'></form>";
         $objResponse->assign("summtime",       "innerHTML", translate(".:used:.","work")." $use $rest");
         $objResponse->assign("eventliste",     "innerHTML", $liste);

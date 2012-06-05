@@ -87,7 +87,7 @@
             if ($_POST["clrok"]=="1" || count($_POST["clear"])>0) {
                 if ($_POST["tid"]) {
                     if (count($_POST["clear"])>0) $evids = "and t.id in (".implode(",",$_POST["clear"]).") ";
-                    $msg = mkTTorder($_POST["tid"],$evids);
+                    $msg = mkTTorder($_POST["tid"],$evids,$_POST['order']);
                     $data = getOneTT($_POST["tid"]);
                     $data["msg"] = $msg;
                 } else {
@@ -102,7 +102,7 @@
         $data["active"] = "t";
     }
     if ($data["events"]) {
-	$delete = False;
+	    $delete = False;
     }
     if ($data["fid"]) $data["backlink"] = "firma1.php?Q=".$data["tab"]."&id=".$data["fid"];
     $t->set_var(array(

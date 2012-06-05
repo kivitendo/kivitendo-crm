@@ -3055,9 +3055,14 @@ global $ttpart,$tttime,$ttround;
         $rc = $_SESSION['db']->query($sql,"delOE");
         return ".:error:. 0";
     }
-    $sql = "SELECT id FROM oe WHERE notes = '$newID'";
+    $sql = "SELECT id FROM oe WHERE  ordnumber = '$sonumber'";
     $rs = $_SESSION['db']->getOne($sql);
     $trans_id = $rs["id"];
+    if ( $trans_id <= 0 ) {
+        $sql = "DELETE FROM oe WHERE ordnumber = '$sonumber'";
+        $rc = $_SESSION['db']->query($sql,"delOE");
+        return ".:error:. 0";
+    }
     //$sql_i = 'INSERT INTO orderitems (trans_id, parts_id, description, qty, sellprice, unit, ship, discount,serialnumber,reqdate) values (';
     $fields = array('trans_id', 'parts_id', 'description', 'qty', 'sellprice', 'unit', 'ship', 'discount', 'serialnumber', 'reqdate');
     $_SESSION['db']->begin();

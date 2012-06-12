@@ -2906,7 +2906,7 @@ function getOneTT($id,$event=true) {
 * Alle Zeiteinträge, untere Maske, holen
 *****************************************************/
 function getTTEvents($id,$alle,$evtid,$abr=False) {
-    $sql  = "SELECT t.*,COALESCE(e.name,e.login) AS user,oe.ordnumber FROM tt_event t ";
+    $sql  = "SELECT t.*,COALESCE(e.name,e.login) AS user,oe.ordnumber,oe.closed FROM tt_event t ";
     $sql .= "LEFT JOIN employee e ON e.id=t.uid LEFT JOIN oe ON t.cleared=oe.id WHERE ttid = $id ";
     if ( !$alle ) $sql .= "AND (cleared < 1 OR cleared IS NUll) ";
     if ( $GLOBALS['clearonly'] AND $abr ) $sql .= 'AND uid = '.$_SESSION['loginCRM'].' ';

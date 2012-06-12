@@ -65,6 +65,16 @@
         else if (preg_match("/ISO-8859-15/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-15"; }
         else if (preg_match("/ISO-8859-1/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-1"; }
         else { $charset="UTF-8"; };
+        $karte=str_replace(array("%TOSTREET%","%TOZIPCODE%","%TOCITY%"),array(strtr($data["shiptostreet"]," ",$_SESSION['planspace']),$dataa["shiptozipcode"],$data["shiptocity"]),$_SESSION['streetview']);
+        if (preg_match("/%FROM/",$karte)) {
+            include "inc/UserLib.php";
+            $user=getUserStamm($_SESSION["loginCRM"]);
+            if ($user["addr1"]<>"" and $user["addr3"]<>"" and $user["addr2"]) {
+                $karte=str_replace(array("%FROMSTREET%","%FROMZIPCODE%","%FROMCITY%"),array(strtr($user["addr1"]," ",$_SESSION['planspace']),$user["addr2"],$user["addr3"]),$karte);
+            } else {
+                $karte="";
+            };
+        }
         $maillink="<a href='mail.php?TO=".$data["shiptoemail"]."&KontaktTO=$tab".$data["trans_id"]."'>".$data["shiptoemail"]."</a>";
         $htmllink="<a href='".$data["shiptohomepage"]."' target='_blank'>".$data["shiptohomepage"]."</a>";
         $objResponse = new xajaxResponse();
@@ -83,6 +93,7 @@
         $objResponse->assign("shiptocontact",        "innerHTML", $data["shiptocontact"]);
         $objResponse->assign("shiptoemail",          "innerHTML", $maillink);
         $objResponse->assign("shiptohomepage",       "innerHTML", $htmllink);
+        $objResponse->assign("karte2",               "href", $karte);
         return $objResponse;
     }
     function showContactadress($id){
@@ -539,7 +550,9 @@
             } else {
                 $liste .= $row["ttevent"]."</td><td>";
             }
-	        $liste .= sprintf($link,$row['cleared']).$row["ordnumber"]."</a></td></tr>";
+	        $liste .= sprintf($link,$row['cleared']).$row["ordnumber"]."</a>";
+            if ( $row['closed'] == 't' ) $liste .= "*";
+            $liste .= "</td></tr>";
         };
         $diff = floor($diff / 60);
         if ($tt["aim"]>0) {

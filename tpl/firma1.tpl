@@ -28,7 +28,7 @@
 		if (A==1) {
 			F1=open("showAdr.php?Q={Q}&fid={FID}","Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
 		} else if (A>1) {
-                	sid = document.getElementById('SID').firstChild.nodeValue;
+           	sid = document.getElementById('SID').firstChild.nodeValue;
 			F1=open("showAdr.php?Q={Q}&sid="+sid,"Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
 		}
 	}
@@ -169,7 +169,7 @@
 				<button type="submit" title="Angebot/Anfrage erstellen" style="visibility:{zeige};" onClick="document.oe.type.value='{request}_quotation'; submit()">
                                 <img src="image/angebot.png"></button> 
 				</form><br />
-				<span style="visibility:{zeigeplan};"><a href="{KARTE}" target="_blank"><img src="image/karte.gif" title=".:city map:." border="0"></a></span>
+				<span style="visibility:{zeigeplan};"><a href="{KARTE1}" target="_blank"><img src="image/karte.gif" title=".:city map:." border="0"></a></span>
 				&nbsp;
 				<a href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0" /></a><br>
 				<br />
@@ -194,7 +194,9 @@
 		<div  class="klein">
 		<span id="shiptoname">{Sname1}</span> &nbsp;&nbsp;<a href="#" onCLick="anschr({Sshipto_id});"><img src="image/brief.png" alt=".:print label:." border="0" /></a>&nbsp; &nbsp; 
 		.:shipto count:.:{Scnt} <a href="javascript:nextshipto('-');"><img src="image/leftarrow.png" border="0"></a> 
-		<span id="SID">{Sshipto_id}</span> <a href="javascript:nextshipto('+');"><img src="image/rightarrow.png" border="0"></a><br />
+		<span id="SID">{Sshipto_id}</span> <a href="javascript:nextshipto('+');"><img src="image/rightarrow.png" border="0"></a>
+		<span ><a href="{KARTE2}" id='karte2' target="_blank"><img src="image/karte.gif" title=".:city map:." border="0"></a></span>
+                <br />
 		<span id="shiptodepartment_1">{Sdepartment_1}</span> &nbsp; &nbsp; <span id="shiptodepartment_2">{Sdepartment_2}</span> <br />
 		<span id="shiptostreet">{SStrasse}</span><br />
 		<span class="mini">&nbsp;<br /></span>

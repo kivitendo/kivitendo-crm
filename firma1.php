@@ -70,12 +70,14 @@
     } else {
         $rab="";
     }
-    $karte=str_replace(array("%TOSTREET%","%TOZIPCODE%","%TOCITY%"),array(strtr($fa["street"]," ",$planspace),$fa["zipcode"],$fa["city"]),$stadtplan);
+    $karte1=str_replace(array("%TOSTREET%","%TOZIPCODE%","%TOCITY%"),array(strtr($fa["street"]," ",$_SESSION['planspace']),$fa["zipcode"],$fa["city"]),$_SESSION['streetview']);
+    $karte2=str_replace(array("%TOSTREET%","%TOZIPCODE%","%TOCITY%"),array(strtr($fa["shiptostreet"]," ",$_SESSION['planspace']),$fa["shiptozipcode"],$fa["shiptocity"]),$_SESSION['streetview']);
     if (preg_match("/%FROM/",$karte)) {
         include "inc/UserLib.php";
         $user=getUserStamm($_SESSION["loginCRM"]);
         if ($user["addr1"]<>"" and $user["addr3"]<>"" and $user["addr2"]) {
-            $karte=str_replace(array("%FROMSTREET%","%FROMZIPCODE%","%FROMCITY%"),array(strtr($user["addr1"]," ",$planspace),$user["addr2"],$user["addr3"]),$karte);
+            $karte1=str_replace(array("%FROMSTREET%","%FROMZIPCODE%","%FROMCITY%"),array(strtr($user["addr1"]," ",$_SESSION['planspace']),$user["addr2"],$user["addr3"]),$karte1);
+            $karte2=str_replace(array("%FROMSTREET%","%FROMZIPCODE%","%FROMCITY%"),array(strtr($user["addr1"]," ",$_SESSION['planspace']),$user["addr2"],$user["addr3"]),$karte2);
         } else {
             $karte="";
         };
@@ -153,11 +155,12 @@
             PAGER           => $pager,
             NEXT            => $next,
             PREV            => $prev,
-            KARTE           => $karte,
+            KARTE1          => $karte1,
+            KARTE2          => $karte2,
             sales           => ($Q=="C")?"sales":"purchase",
             request         => ($Q=="C")?"sales":"request",
             apr             => ($Q=="C")?"ar":"ap",
-            zeigeplan       => ($karte)?"visible":"hidden",
+            zeigeplan       => ($karte1)?"visible":"hidden",
             zeigeextra      => ($zeigeextra)?"visible":"hidden",
             tools           => ($tools)?"visible":"hidden",
             login           => $_SESSION["employee"],

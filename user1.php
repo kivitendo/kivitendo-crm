@@ -80,6 +80,8 @@
             icaldest    => $fa["icaldest"],
             icalart.$fa["icalart"] => "selected",
             preon       => ($fa["preon"])?"checked":"",
+	    streetview  => ($fa['streetview'])?$fa['streetview']:$stadtplan,
+	    planspace   => ($fa['planspace'])?$fa['planspace']:$planspace,
             ));
     if ($_GET["id"]) {    
         $t->set_var(array(vertreter => $fa["vertreter"]." ".$fa["vname"]));

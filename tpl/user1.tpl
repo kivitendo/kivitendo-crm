@@ -45,8 +45,9 @@
         document.user.port.value=document.user.selport.options[po].value;
     }
 	</script>
+    <script type='text/javascript' src='inc/help.js'></script>
 <body>
-<p class="listtop">Benutzer Stammdaten</p>
+<p class="listtop" onClick="help('User');">Benutzer Stammdaten (?)</p>
 <!-- Beginn Code ----------------------------------------------->
 <div id="mailwin" style="visibility:hidden"> 
 	<iframe src="userMail.php?id={uid}&start=0" name="Termine" width="100%" height="100%"  marginheight="0" marginwidth="0" align="left">
@@ -124,10 +125,15 @@
 	    	bis <select name="termend">{termend}</select> Uhr</td>
 	    <td class="norm">Terminabstand</td><td><input type="text" name="termseq" value="{termseq}" size="3"> Minuten</td></tr>
 	<tr><td class="norm">Intervall</td><td>
-        <input type="text" name="interv" value="{interv}" size="4" maxlength="5">sec. &nbsp;&nbsp; PreSearch <input type="text" name="pre" value="{pre}" size="10"></td>
+            <input type="text" name="interv" value="{interv}" size="4" maxlength="5">sec. &nbsp;&nbsp; PreSearch <input type="text" name="pre" value="{pre}" size="10"></td>
 	    <td class="norm">immer mit Pre</td><td><input type="checkbox" value='t' name="preon" {preon}>Ja</td></tr>
 	<!--tr><td colspan="4"><input type="submit" name="mkmbx" value="Mailbox erzeugen"></td><td></td><td></td></tr-->
-
+	<tr><td class="norm">Kartendienst</td><td colspan="4">
+             <input type="text" name="streetview" size="80" value='{streetview}'>
+        </td></tr>
+	<tr><td class="norm">Leerzeichenersatz</td><td colspan="4">
+             <input type="text" name="planspace" size="3" value='{planspace}'>
+        </td></tr>
 	   <tr><td>&nbsp;</td><td><input type="submit" name="ok" value="sichern"></td></tr>
 
 	</form>

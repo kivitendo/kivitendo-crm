@@ -182,6 +182,8 @@ global $ERPNAME;
         $_SESSION["interv"]     = ($tmp["interv"]>0)?$tmp["interv"]:60;
         $_SESSION["loginCRM"]   = $tmp["id"];
         $_SESSION["kdview"]     = $tmp["kdview"];
+        $_SESSION["streetview"] = $tmp["streetview"];
+        $_SESSION["planspace"]  = $tmp["planspace"];
         $sql = "select * from defaults";
         $rs = $_SESSION["db"]->getAll($sql);
         $_SESSION["ERPver"]     = $rs[0]["version"];

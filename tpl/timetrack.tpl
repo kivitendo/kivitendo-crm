@@ -55,6 +55,30 @@
             alert("Fehlerhaftes Datumsformat: " + datum);
         }
     }
+    function psuche(){  
+        var part = document.getElementById('partnr').value;
+        f1 = open('suchPart.php',"suche","width=650,height=250,left=100,top=100");
+    }
+    function pdelete() {
+        nr = document.getElementById('parts').selectedIndex;
+        document.getElementById('parts').options[nr] = null
+    }
+    function saveTT() {
+        var data = new Array();
+        for ( i=0; i < document.getElementById('parts').length; i++) {
+            data[data.length]=document.getElementById('parts').options[i].value;
+        }
+        document.getElementById('parray').value = data.join('###');
+        return true;
+    }
+    function doReset() {
+        document.getElementById("savett").style.visibility="visible";
+        document.getElementById("pdel").style.visibility="visible";
+        document.getElementById("psearch").style.visibility="visible";
+        for ( i=document.getElementById('parts').length - 1; i>=0; i--) {
+            document.getElementById('parts').options[i] = null;
+        };
+    }
 	//-->
 	</script>
 	{jcal0}
@@ -94,20 +118,18 @@
 		<span class="label klein">.:description:.</span>
 		<textarea cols="60" rows="5" name="ttdescription">{ttdescription}</textarea> 
 	</div>
-	<div class="zeile">
-		<span class="label klein">.:startdate:.</span>
-		<input type="text" size="10" name="startdate" id="START" value="{startdate}" >{jcal1} 
+	<div class="zeile">     
+		<span class="label klein"></span>
+		<span class="klein">.:startdate:.
+		<input type="text" size="10" name="startdate" id="START" value="{startdate}" >{jcal1} </span> &nbsp; &nbsp;
+		<span class="klein">.:stopdate:.
+		<input type="text" size="10" name="stopdate" id="STOP" value="{stopdate}" >{jcal2} </span>
 	</div>
 	<div class="zeile">
-		<span class="label klein">.:stopdate:.</span>
-		<input type="text" size="10" name="stopdate" id="STOP" value="{stopdate}" >{jcal2} 
-	</div>
-	<div class="zeile">
-		<span class="label klein">.:aim:.</span>
-		<input type="text" size="5" name="aim" value="{aim}" >.:hours:.
-	</div>
-	<div class="zeile">
-		<span class="label klein">.:active:.</span>
+		<span class="label klein"></span>
+		<span class="klein">.:aim:.</span>
+		<input type="text" size="5" name="aim" value="{aim}" >.:hours:. &nbsp; &nbsp;
+		<span class="klein">.:active:.</span>
 		<input type="radio" value="t" name="active" {activet}>.:yes:.
 		<input type="radio" value="f" name="active" {activef}>.:no:.
 	</div>
@@ -132,22 +154,29 @@
 </form>
 <br />
 <div>
-<form name="ttevent" method="post" action="timetrack.php">
+<form name="ttevent" method="post" action="timetrack.php" onSubmit="return saveTT();">
 <input type="hidden" name="tid" value="{id}">
+<input type="hidden" id="parray" name="parray" value="">
 <input type="hidden" name="cleared" id='cleared' value="">
 <input type="hidden" name="eventid" id="eventid" value="" >
 <span id="work" style="visibility:{noevent}"><table>
-<tr><td>.:start work:.</td><td>.:stop work:.</td><td></td></tr>
+<tr><td>.:start work:.</td><td>.:stop work:.</td><td>.:material:.</td>
+</tr>
 <tr><td><input type="text" size="8" name="startd" id="startd" onBlur="check_right_date_format(this)">{jcal3} 
 	<input type="text" size="4" name="startt" id="startt" onblur="chktime('startt');"><input type="checkbox" name="start" value="1">.:now:.</td>
     <td><input type="text" size="8" name="stopd"  id="stopd" onBlur="check_right_date_format(this)">{jcal4}  
 	<input type="text" size="4" name="stopt"  id="stopt" onblur="chktime('stopt');"> <input type="checkbox" name="stop"  value="1">.:now:.</td>
-    <td></td>
+    <td><input type="text" name="partnr" id="partnr" style='width:19em;'>
+    <input type="button" name="psearch" id="psearch" value=".:psearch:." onClick="psuche();"></td>
 </tr>
-<tr><td colspan="2"><textarea cols="60" rows="3" name="ttevent" id="ttevent"></textarea></td>
-    <td><input type="reset"  name="resett" value=".:reset:." onClick='document.getElementById("savett").style.visibility="visible"'><br />
-        <input type="submit" name="savett" value=".:save:." id='savett' ><!--style='visibility:visible'-->
-    </td>
+<tr><td colspan="2"><textarea cols="62" rows="5" name="ttevent" id="ttevent"></textarea></td>
+    <td><select name="parts" id="parts" size="5" style='width:19em;'></select>
+    <input type="button" id="pdel" name="pdel" value=".:del:." onClick="pdelete();"></td>
+</tr>
+<tr>
+    <td><input type="reset"  name="resett" value=".:reset:." onClick='doReset();'><</td>
+    <td><input type="submit" name="savett" value=".:save:." id='savett' ><!--style='visibility:visible'--></td>
+    <td></td>
 </tr>
 </table></span>
 </form>

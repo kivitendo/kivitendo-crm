@@ -106,6 +106,13 @@ $texts  = array(
   '.:nothing to do:.'  => 'nothing to do',
   '.:all:.'         => 'all',
   '.:changed:.'     => 'changed',
+  '.:psearch:.'     => 'suchen',
+  '.:del:.'         => 'entfernen',
+  '.:qty:.'         => 'Menge',
+  '.:part:.'        => 'Artikel',
+  '.:txtchg:.'      => 'Text &auml;ndern',
+  '.:clr:.'         => 'l&ouml;schen',
+  '.:material:.'    => 'Material',
   '.::.'    => '',
 );
 ?>

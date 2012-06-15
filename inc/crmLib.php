@@ -2974,6 +2974,28 @@ function saveTTevent($data) {
 	    $fields = array('ttid','ttevent','ttstart','uid');
         if ($edate) { $values[] = $edate; $fields[] = 'ttstop'; };
 	    $rc = $_SESSION['db']->insert('tt_event',$fields,$values);
+        //Annahme: Der User erstellt nicht GLEICHZEITIG 2 Events für den gleichen Auftrag.
+        $sql = "SELECT * FROM tt_event WHERE cleared is Null AND ttid = ".$data['tid']." AND uid = ".$_SESSION['loginCRM']." order by id desc limit 1";
+        $rs = $_SESSION['db']->getOne($sql);
+        $data["eventid"] = $rs['id'];
+    }
+    if ( $data['parray'] != '' ) {
+        $_SESSION['db']->begin();
+        $sql = 'DELETE FROM tt_parts WHERE eid = '.$data['eventid'];
+        $_SESSION['db']->query($sql);
+        $tmp = explode('###',$data['parray']);
+        $sqltpl = "INSERT INTO tt_parts (eid,qty,parts_id,parts_txt) VALUES (".$data['eventid'].",%f,%d,'%s')";
+        foreach ( $tmp as $row ) {
+            $ttp = explode('|',$row);
+            $sql = sprintf($sqltpl,str_replace(',','.',$ttp[0]),$ttp[1],trim($ttp[2]));
+            $rc = $_SESSION['db']->query($sql);
+            if ( !$rc ) {
+                $_SESSION['db']->rollback();
+                $data["msg"] = ".:error:. .:saving:.";
+                break;
+            }
+        }
+        $_SESSION['db']->commit();
     }
     return $rc;
 }
@@ -3005,10 +3027,29 @@ function stopTTevent($id,$stop) {
 *****************************************************/
 function getOneTevent($id) {
     $sql = "SELECT * FROM tt_event WHERE id = $id";
-    $rs = $_SESSION['db']->getOne($sql);
-    return $rs;
+    $rs1 = $_SESSION['db']->getOne($sql);
+    $sql = "SELECT * FROM tt_parts WHERE eid = $id";
+    $rs2 = $_SESSION['db']->getAll($sql);
+    return array('t'=>$rs1,'p'=>$rs2);
 }
 
+function getTTparts($eid) {
+    $sql = 'SELECT * FROM tt_parts LEFT JOIN parts ON parts.id=parts_id WHERE eid = '.$eid; 
+    $rs = $_SESSION['db']->getAll($sql);
+    return $rs;
+}
+function getTax($tzid) {
+    $sql = "SELECT id,income_accno_id_$tzid AS chartid FROM buchungsgruppen";
+    $rs = $_SESSION['db']->getAll($sql);
+    $tax = array();
+    if ( $rs ) foreach ( $rs as $row ) {
+       $sql  = "SELECT rate + 1 AS tax FROM tax LEFT JOIN taxkeys ON taxkey=taxkey_id WHERE taxkeys.chart_id = ".$row["chartid"];
+       $sql .= " AND tax_id = tax.id AND startdate <= now() ORDER BY startdate DESC LIMIT 1";
+       $rsc = $_SESSION['db']->getOne($sql); 
+       $tax[$row['id']] = $rsc['tax'];
+    }
+    return $tax;
+}
 /****************************************************
 * mkTTorder
 * in: id = int 
@@ -3023,20 +3064,15 @@ global $ttpart,$tttime,$ttround;
     $sql = "SELECT taxzone_id FROM customer WHERE id = ".$tt["fid"];
     $rs = $_SESSION['db']->getOne($sql);
     $tzid = $rs["taxzone_id"];
+    $TAX = getTax($tzid);
     //Artikeldaten holen
     $sql = "SELECT * FROM parts WHERE partnumber = '$ttpart'";
     $part = $_SESSION['db']->getOne($sql); 
     $partid = $part["id"];
     $sellprice = $part["sellprice"];
     $unit = $part["unit"];
-    //Kontoid ermitteln anhand der Buchungsgruppe und Steuerzone
-    $sql = "SELECT income_accno_id_$tzid AS chartid FROM buchungsgruppen WHERE id = ".$part["buchungsgruppen_id"];
-    $rs = $_SESSION['db']->getOne($sql); 
     //Steuersatz ermitteln
-    $sql  = "SELECT rate + 1 AS tax FROM tax LEFT JOIN taxkeys ON taxkey=taxkey_id WHERE taxkeys.chart_id = ".$rs["chartid"];
-    $sql .= " AND tax_id = tax.id AND startdate <= now() ORDER BY startdate DESC LIMIT 1";
-    $rs = $_SESSION['db']->getOne($sql); 
-    $tax = $rs["tax"];
+    $tax = $TAX[$part["buchungsgruppen_id"]];
     $curr = getCurr();
     //Events holen
     $events = getTTEvents($id,false,$evids,True);
@@ -3050,6 +3086,7 @@ global $ttpart,$tttime,$ttround;
         };
         $evids .= implode(',',$tmp).') ';
     };
+    $_SESSION['db']->begin();
     if ( $trans_id < 1 ) {
         //Auftrag erzeugen
         $sonumber = nextNumber("sonumber");
@@ -3081,7 +3118,6 @@ global $ttpart,$tttime,$ttround;
     }
     //$sql_i = 'INSERT INTO orderitems (trans_id, parts_id, description, qty, sellprice, unit, ship, discount,serialnumber,reqdate) values (';
     $fields = array('trans_id', 'parts_id', 'description', 'qty', 'sellprice', 'unit', 'ship', 'discount', 'serialnumber', 'reqdate');
-    $_SESSION['db']->begin();
     foreach ( $events as $row ) {
         if ( $row["ttstop"] == "" ) {
             $_SESSION['db']->rollback();
@@ -3097,7 +3133,8 @@ global $ttpart,$tttime,$ttround;
         if ( $diff - ($tttime * $time) > $round ) $time++;
         $price =  $time * $sellprice;
         //Orderitemseintrag
-        $values = array($trans_id,$partid,$row["ttevent"],$time,$sellprice,$unit,0,0,$diff,substr($row['ttstop'],0,10));
+        $rqdate = substr($row['ttstop'],0,10);
+        $values = array($trans_id,$partid,$row["ttevent"],$time,$sellprice,$unit,0,0,$diff,$rqdate);
         //$sql = $sql_i."$trans_id,$partid,'".$row["ttevent"]."',$time,$sellprice,'$unit',0,0,'$diff','".substr($row['ttstop'],0,10)."')";
         //$rc = $_SESSION['db']->query($sql);
         $rc = $_SESSION['db']->insert('orderitems',$fields,$values);
@@ -3106,10 +3143,24 @@ global $ttpart,$tttime,$ttround;
             return ".:error:. 1";
         }
         $netamount += $price;
+        $amount += $price * $tax; 
+        $parts = getTTparts($row["id"]);
+        if ( $parts ) {
+            foreach ( $parts as $part ) {
+                    $values = array($trans_id,$part['parts_id'],$part['parts_txt'],$part['qty'],$part['sellprice'],$part['unit'],0,0,Null,$rqdate);
+                    $rc = $_SESSION['db']->insert('orderitems',$fields,$values);
+                    if ( !$rc ) {
+                        $_SESSION['db']->rollback();
+                        return ".:error:. 2";
+                    }
+                    $netamount += $part['qty'] * $part['sellprice'] ;
+                    $amount +=  $part['qty'] * $part['sellprice'] * $TAX[$part['buchungsgruppen_id']]; 
+            }
+        }
     }
     //OE-Eintrag updaten
     $nun = date('Y-m-d');
-    $amount = $netamount * $tax; 
+    //$amount = $netamount + $mwst; 
     $fields = array('transdate','customer_id','amount','netamount','reqdate','notes','curr','employee_id');
     $values = array($nun,$tt["fid"],$amount,$netamount,$nun,$tt["ttdescription"],$curr,$_SESSION["loginCRM"]);
     $rc = $_SESSION['db']->update('oe',$fields,$values,'id = '.$trans_id);
@@ -3123,5 +3174,10 @@ global $ttpart,$tttime,$ttround;
         $_SESSION['db']->commit();
         return ".:ok:.";
     }
+}
+function getPart($part) {
+    $sql = "SELECT  id,partnumber,description from parts where partnumber ilike '%$part%' or description ilike '%$part%' ORDER by description";
+    $rs = $_SESSION['db']->getAll($sql);
+    return $rs;
 }
 ?>

@@ -482,14 +482,14 @@
     function editTevent($id) {
         $data = getOneTevent($id);
         $objResponse = new xajaxResponse();
-        $objResponse->assign("cleared",        "value", $data["cleared"] );
-        $objResponse->assign("ttevent",        "value", $data["ttevent"]);
+        $objResponse->assign("cleared",        "value", $data['t']["cleared"] );
+        $objResponse->assign("ttevent",        "value", $data['t']["ttevent"]);
         $objResponse->assign("eventid",        "value", $id);
-        $a = explode(" ",$data["ttstart"]);
+        $a = explode(" ",$data['t']["ttstart"]);
         $objResponse->assign("startd",         "value", db2date($a[0]));
         $objResponse->assign("startt",         "value", substr($a[1],0,5));
-        if ($data["ttstop"]) {
-            $b = explode(" ",$data["ttstop"]);
+        if ($data['t']["ttstop"]) {
+            $b = explode(" ",$data['t']["ttstop"]);
             $sd = db2date($b[0]);
             $st = substr($b[1],0,5);
         } else {
@@ -498,8 +498,25 @@
         }
         $objResponse->assign("stopd",          "value", $sd);
         $objResponse->assign("stopt",          "value", $st);
-        if ( $data['cleared'] > 0 )	$objResponse->script("document.getElementById('savett').style.visibility='hidden'");
-        else   $objResponse->script("document.getElementById('savett').style.visibility='visible'");
+        $objResponse->script("clearOption('parts');");
+        $Eintrag = '';
+        if ( $data['p'] ) {
+            foreach ($data['p'] as $row) {
+                $qty = ($row['qty']==(int)$row['qty'])?(int)$row['qty']:(float)$row['qty'];
+                $line = $qty.'|'.$row['parts_id'].'|'.$row['parts_txt'];
+                $Eintrag .= '<option value="'.$line.'">'.$qty.' * '.$row['parts_txt'].'</option>';
+            }
+        }
+        $objResponse->assign('parts','innerHTML', $Eintrag);
+        if ( $data['t']['cleared'] > 0 ) {
+            $objResponse->script("document.getElementById('savett').style.visibility='hidden'");
+            $objResponse->script("document.getElementById('pdel').style.visibility='hidden'");
+            $objResponse->script("document.getElementById('psearch').style.visibility='hidden'");
+        } else {
+            $objResponse->script("document.getElementById('savett').style.visibility='visible'");
+            $objResponse->script("document.getElementById('pdel').style.visibility='visible'");
+            $objResponse->script("document.getElementById('psearch').style.visibility='visible'");
+        }
         return $objResponse;
     }
     function listTevents($id,$fid=0) {

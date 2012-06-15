@@ -105,12 +105,13 @@
     if ($data["events"]) {
 	    $delete = False;
     }
+
     if ($data["fid"]) $data["backlink"] = "firma1.php?Q=".$data["tab"]."&id=".$data["fid"];
     $t->set_var(array(
         ERPCSS  => $_SESSION["stylesheet"],
         AJAXJS  => $xajax->printJavascript(XajaxPath),
-	    backlink => $data["backlink"],
-	    blshow  => ($data["backlink"])?"visible":"hidden",
+        backlink => $data["backlink"],
+        blshow  => ($data["backlink"])?"visible":"hidden",
         noevent => ($data["active"]=="t" && $data['id'])?"visible":"hidden",
         noown   => ($data["id"]>0 && $data["uid"]!=$_SESSION["loginCRM"])?"hidden":"visible",
         id      => $data["id"],

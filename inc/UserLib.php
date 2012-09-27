@@ -139,7 +139,7 @@ global $db;
 
 function getMitglieder($gruppe) {
 global $db;
-    $sql="select * from employee left join grpusr on usrid=id where grpid=$gruppe";
+    $sql="select * from employee left join grpusr on usrid=id where grpid=$gruppe ORDER BY employee.id";
     $rs=$db->getAll($sql);
     if(!$rs) {
         return false;

@@ -40,7 +40,7 @@ function date2db($Datum) {
    $date = str_replace($repl,".",$Datum);
    $t = explode(".",$date);
    if ( checkdate($t[1],$t[0],$t[2]) ) {
-      if ( $t[2] <= date('y') ) {
+      if ( $t[2] <= date('y') + 20 ) {
           $Datum = sprintf('20%02d-%02d-%02d',$t[2],$t[1],$t[0]);
       } else if ( $t[2] > 100 ) {
           $Datum = sprintf('%04d-%02d-%02d',$t[2],$t[1],$t[0]);

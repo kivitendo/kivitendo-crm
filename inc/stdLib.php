@@ -117,10 +117,10 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
 function anmelden() {
 global $ERPNAME;
     ini_set("gc_maxlifetime","3600");
-    if ( file_exists("../".$ERPNAME."/config/lx_office.conf") ) {
-	    $lxo = fopen("../".$ERPNAME."/config/lx_office.conf","r");
-    } else if ( file_exists("../".$ERPNAME."/config/lx_office.conf.default") ) {
-	    $lxo = fopen("../".$ERPNAME."/config/lx_office.conf.default","r");
+    if ( file_exists("../".$ERPNAME."/config/kivitendo.conf") ) {
+	    $lxo = fopen("../".$ERPNAME."/config/kivitendo.conf","r");
+    } else if ( file_exists("../".$ERPNAME."/config/kivitendo.conf.default") ) {
+	    $lxo = fopen("../".$ERPNAME."/config/kivitendo.conf.default","r");
     } else {
         return false;
     }
@@ -154,7 +154,7 @@ global $ERPNAME;
         if ( preg_match("!\[authentication/database\]!",$tmp) ) $dbsec = true;
         $tmp = fgets($lxo,512);
     }
-    if ( !$cookiename ) $cookiename = 'lx_office_erp_session_id';
+    if ( !$cookiename ) $cookiename = 'kivitendo_session_id';
     $cookie = $_COOKIE[$cookiename];
     if ( !$cookie ) header("location: ups.html");
     $auth = authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie);

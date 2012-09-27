@@ -1,4 +1,5 @@
 <?php
+ob_start(); 
 // $Id$
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
@@ -7,6 +8,31 @@
 <head><title></title>
     <link type="text/css" REL="stylesheet" HREF="../css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
     <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
+<?php  
+    if ($ac) { 
+            echo '<link rel="stylesheet" type="text/css" href="css/jquery.autocomplete.css"></link>'; 
+            echo '<script type="text/javascript" src="../js/jquery.js"></script>'; 
+            echo '<script type="text/javascript" src="./inc/jquery.autocomplete.js"></script>'; 
+            echo '<script language="JavaScript"> 
+                            <!-- 
+                            $(function(){ 
+                                    var search = "1"; 
+                                    $("#ac0").autocomplete({ 
+                                            url: "ac.php", 
+                                            minChars: 3, 
+                                            maxItemsToShow: 10, 
+                                            inputClass: "acInput", 
+                                            extraParams: { search: search }, 
+                                            onItemSelect:  
+                                                    function(){ 
+                                                            $("#adresse").click();  
+                                                    } 
+                                    }); 
+                            });              
+                            //--> 
+                            </script>'; 
+    } 
+?> 
 </head>
 <body onLoad="document.suche.swort.focus()";>
 <?php
@@ -56,41 +82,45 @@ if ($_POST["adress"]) {
 	}
 //-->
 </script>
-<p class="listtop">Suchergebnis</p>
 <?php
 	if ($anzahl>0) {
-		echo "<table class=\"liste\">\n";
-		echo "<tr class='bgcol3'><th>KD-Nr</th><th class=\"liste\">Name</th><th class=\"liste\">Anschrift</th><th class=\"liste\">Telefon</th><th></th></tr>\n";
-		$i=0;
-		if ($rsC) foreach($rsC as $row) {
-			echo "<tr onMouseover=\"this.bgColor='#FF0000';\" onMouseout=\"this.bgColor='".$bgcol[($i%2+1)]."';\" bgcolor='".$bgcol[($i%2+1)]."' onClick='showD(\"C\",".$row["id"].");'>".
-				"<td class=\"liste\">".$row["customernumber"]."</td><td class=\"liste\">".$row["name"]."</td>".
-				"<td class=\"liste\">".$row["city"].(($row["street"])?",":"").$row["street"]."</td><td class=\"liste\">".$row["phone"]."</td><td class=\"liste\">K</td></tr>\n";
-			$i++;
-		}
-		if ($rsV) foreach($rsV as $row) {
-			echo "<tr onMouseover=\"this.bgColor='#FF0000';\" onMouseout=\"this.bgColor='".$bgcol[($i%2+1)]."';\" bgcolor='".$bgcol[($i%2+1)]."' onClick='showD(\"V\",".$row["id"].");'>".
-				"<td class=\"liste\">".$row["vendornumber"]."</td><td class=\"liste\">".$row["name"]."</td>".
-				"<td class=\"liste\">".$row["city"].(($row["street"])?",":"").$row["street"]."</td><td class=\"liste\">".$row["phone"]."</td><td class=\"liste\">L</td></tr>\n";
-			$i++;
-		}
-		if ($rsK) foreach($rsK as $row) {
-			echo "<tr onMouseover=\"this.bgColor='#FF0000';\" onMouseout=\"this.bgColor='".$bgcol[($i%2+1)]."';\" bgcolor='".$bgcol[($i%2+1)]."' onClick='showD(\"K\",".$row["cp_id"].");'>".
-				"<td class=\"liste\">".$row["cp_id"]."</td><td class=\"liste\">".$row["cp_name"].", ".$row["cp_givenname"]."</td>".
-				"<td class=\"liste\">".$row["addr2"].(($row["addr1"])?",":"").$row["addr1"]."</td><td class=\"liste\">".$row["cp_phone1"]."</td><td class=\"liste\">P</td></tr>\n";
-			$i++;
-		}
-		if ($rsE) foreach($rsE as $row) {
-			echo "<tr onMouseover=\"this.bgColor='#FF0000';\" onMouseout=\"this.bgColor='".$bgcol[($i%2+1)]."';\" bgcolor='".$bgcol[($i%2+1)]."' onClick='showD(\"E\",".$row["id"].");'>".
-				"<td class=\"liste\">".$row["id"]."</td><td class=\"liste\">".$row["name"]."</td>".
-				"<td class=\"liste\">".$row["addr2"].(($row["addr1"])?",":"").$row["addr1"]."</td><td class=\"liste\">".$row["workphone"]."</td><td class=\"liste\">U</td></tr>\n";
-			$i++;
-		}
-		echo "</table>\n";
-        } else {
-		echo $msg;
-	};
-	echo "<br>";
+            if ($anzahl==1 && $rsC) header("Location: firma1.php?Q=C&id=".$rsC[0]['id']); 
+            if ($anzahl==1 && $rsV) header("Location: firma1.php?Q=V&id=".$rsV[0]['id']); 
+            if ($anzahl==1 && $rsK) header("Location: kontakt.php?id=".$rsK[0]['id']); 
+            if ($anzahl==1 && $rsE) header("Location: user.php?id=".$rsE[0]['id']); 
+            echo '<p class="listtop">Suchergebnis</p>'; 
+            echo "<table class=\"liste\">\n"; 
+            echo "<tr class='bgcol3'><th>KD-Nr</th><th class=\"liste\">Name</th><th class=\"liste\">Anschrift</th><th class=\"liste\">Telefon</th><th></th></tr>\n"; 
+            $i=0; 
+            if ($rsC) foreach($rsC as $row) { 
+                echo "<tr onMouseover=\"this.bgColor='#FF0000';\" onMouseout=\"this.bgColor='".$bgcol[($i%2+1)]."';\" bgcolor='".$bgcol[($i%2+1)]."' onClick='showD(\"C\",".$row["id"].");'>". 
+                             "<td class=\"liste\">".$row["customernumber"]."</td><td class=\"liste\">".$row["name"]."</td>". 
+                                     "<td class=\"liste\">".$row["city"].(($row["street"])?",":"").$row["street"]."</td><td class=\"liste\">".$row["phone"]."</td><td class=\"liste\">K</td></tr>\n"; 
+                $i++; 
+            }  
+            if ($rsV) foreach($rsV as $row) { 
+                echo "<tr onMouseover=\"this.bgColor='#FF0000';\" onMouseout=\"this.bgColor='".$bgcol[($i%2+1)]."';\" bgcolor='".$bgcol[($i%2+1)]."' onClick='showD(\"V\",".$row["id"].");'>". 
+                             "<td class=\"liste\">".$row["vendornumber"]."</td><td class=\"liste\">".$row["name"]."</td>". 
+                                     "<td class=\"liste\">".$row["city"].(($row["street"])?",":"").$row["street"]."</td><td class=\"liste\">".$row["phone"]."</td><td class=\"liste\">L</td></tr>\n"; 
+                $i++; 
+            } 
+            if ($rsK) foreach($rsK as $row) { 
+                echo "<tr onMouseover=\"this.bgColor='#FF0000';\" onMouseout=\"this.bgColor='".$bgcol[($i%2+1)]."';\" bgcolor='".$bgcol[($i%2+1)]."' onClick='showD(\"K\",".$row["cp_id"].");'>". 
+                                     "<td class=\"liste\">".$row["cp_id"]."</td><td class=\"liste\">".$row["cp_name"].", ".$row["cp_givenname"]."</td>". 
+                                     "<td class=\"liste\">".$row["addr2"].(($row["addr1"])?",":"").$row["addr1"]."</td><td class=\"liste\">".$row["cp_phone1"]."</td><td class=\"liste\">P</td></tr>\n"; 
+                $i++; 
+            } 
+            if ($rsE) foreach($rsE as $row) { 
+                echo "<tr onMouseover=\"this.bgColor='#FF0000';\" onMouseout=\"this.bgColor='".$bgcol[($i%2+1)]."';\" bgcolor='".$bgcol[($i%2+1)]."' onClick='showD(\"E\",".$row["id"].");'>". 
+                                     "<td class=\"liste\">".$row["id"]."</td><td class=\"liste\">".$row["name"]."</td>". 
+                                     "<td class=\"liste\">".$row["addr2"].(($row["addr1"])?",":"").$row["addr1"]."</td><td class=\"liste\">".$row["workphone"]."</td><td class=\"liste\">U</td></tr>\n"; 
+                $i++; 
+            } 
+            echo "</table>\n";
+        } else { 
+ 	        echo $msg; 
+        }; 
+ 	echo "<br>"; 
 } else if ($_POST["kontakt"]){
 ?>
 <script language="JavaScript">
@@ -99,12 +129,13 @@ if ($_POST["adress"]) {
 		F1=open("suchKontakt.php?suchwort="+sw+"&Q=S","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
 </script>			
 
-<?php }?>
+<?php }
+ob_end_flush(); 
+?> 
 <p class="listtop">Schnellsuche Kunde/Lieferant/Kontakte und Kontaktverlauf</p>
 	<form name="suche" action="getData.php" method="post">
-	<input type="text" name="swort" size="20"> suche 
-	<input type="submit" name="adress" value="Adresse"> 
+	<input type="text" name="swort" size="20" id="ac0" autocomplete="off"> suche 
+	<input type="submit" name="adress" value="Adresse" id="adresse">
 	<input type="submit" name="kontakt" value="Kontaktverlauf"> <br>
       	<span class="liste">Suchbegriff</span>
 	</form>
-

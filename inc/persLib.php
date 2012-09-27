@@ -90,16 +90,32 @@ global $db;
 *****************************************************/
 function getAllPerson($sw,$Pre=true) {
 global $db;
-        if ($Pre) $Pre=$_SESSION["Pre"];
-        $rechte=berechtigung("cp_");
-        if (!$sw[0]) { $where="cp_phone1 like '$Pre".$sw[1]."%' or cp_mobile1 like '$Pre".$sw[1]."%' "; }
-        else { $where="cp_name ilike '$Pre".$sw[1]."%' or cp_givenname ilike '$Pre".$sw[1]."%'"; }
-        $sql="select *,'P' as tab,cp_id as id,cp_name as name  from contacts where ($where) and $rechte";
-        $rs=$db->getAll($sql);
-        if(!$rs) {
-            $rs=false;
-        };
-        return $rs;
+    if ($Pre) $Pre=$_SESSION["Pre"];
+    $rechte=berechtigung("cp_");
+    if (!$sw[0]) { $where="cp_phone1 like '$Pre".$sw[1]."%' or cp_mobile1 like '$Pre".$sw[1]."%' "; }
+    else { $where="cp_name ilike '$Pre".$sw[1]."%' or cp_givenname ilike '$Pre".$sw[1]."%'"; }
+    $sql="select *,'P' as tab,cp_id as id,cp_name as name  from contacts where ($where) and $rechte";
+    $rs=$db->getAll($sql);
+    if($rs) return $rs;
+    //Was geschieht wenn nach einer Person mit Vor- und Zuname gesucht wird??
+    //Fall 1: Nachname wird zuerst eingeben "Byron Augusta Ada"
+    $sw_array=explode(" ",$sw[1],9);
+    if (!$sw_array[1]) return false;
+    $name=array_shift($sw_array);
+    $givenname=implode(" ",$sw_array);   
+    $where="cp_name ilike '$Pre".$name."%' and cp_givenname ilike '$Pre".$givenname."%'"; 
+    $sql="select *,'P' as tab,cp_id as id,cp_name as name  from contacts where ($where) and $rechte";
+    $rs=$db->getAll($sql);
+    if ($rs) return $rs;
+    //Fall 2: Vorname wird zuerst eingegeben "Augusta Ada Byron"
+    $sw_array=explode(" ",$sw[1],9);
+    $name=array_pop($sw_array);
+    $givenname=implode(" ", $sw_array);    
+    $where="cp_name ilike '$Pre".$name."%' and cp_givenname ilike '$Pre".$givenname."%'"; 
+    $sql="select *,'P' as tab,cp_id as id,cp_name as name  from contacts where ($where) and $rechte";
+    $rs=$db->getAll($sql);
+    if ($rs) return $rs;
+    return false;
 }
 
 /****************************************************

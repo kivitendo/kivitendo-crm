@@ -2,18 +2,22 @@
 session_start();
 require_once("inc/conf.php");
 require_once("inc/version.php");
+require_once("inc/stdLib.php");
 if ($logfile) 
     require("crmajax/logcommon".XajaxVer.".php");
 if ($_GET["test"]=="ja") {
-	require("inc/stdLib.php");
-	$rc=$db->getAll("select * from crm order by version","Status");
+    $rc=$db->getAll("select * from crm order by version","Status");
 }
+$menu =  $_SESSION['menu'];
 ?>
 <html>
-	<head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
+<head><title></title>
+    <?php echo $menu['stylesheets']; ?>
     <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
+    <?php echo $menu['javascripts']; ?>
+
 <?php
+    echo $menu['javascripts'];
     if ($logfile) {
     echo $xajax->printJavascript(XajaxPath) 
 ?>
@@ -26,6 +30,10 @@ if ($_GET["test"]=="ja") {
     </script>
 <?php    } ?>
 <body>
+<?php
+ echo $menu['pre_content'];
+ echo $menu['start_content'];
+?>
 <p class="listtop">Status</p>
 
 <!--table class="karte"><tr><td class="karte"-->
@@ -34,15 +42,15 @@ if ($_GET["test"]=="ja") {
 <?php
 $db=false;
 $prog=false;
-$d = dir("tmp/");
+$d = dir("log/");
 while (false !== ($entry = $d->read())) {
-	if (preg_match('/upd.*log/',$entry)) echo "<a href='tmp/$entry'>$entry</a><br>\n";
+	if (preg_match('/upd.*log/',$entry)) echo "<a href='log/$entry'>$entry</a><br>\n";
 	if (preg_match('/instprog.log/',$entry)) $prog=true;
 	if (preg_match('/install.log/',$entry)) $db=true;
 }
 $d->close();
-if ($prog) { echo "<a href='tmp/instprog.log'>Programminstallation</a><br>"; } else { echo "Kein Logfile f&uuml;r Programminstallation<br>"; }
-if ($db) { echo "<a href='tmp/install.log'>Datenbankinstallation</a><br>"; } else { echo "Kein Logfile f&uuml;r Datenbankinstallation<br>"; }
+if ($prog) { echo "<a href='log/instprog.log'>Programminstallation</a><br>"; } else { echo "Kein Logfile f&uuml;r Programminstallation<br>"; }
+if ($db) { echo "<a href='log/install.log'>Datenbankinstallation</a><br>"; } else { echo "Kein Logfile f&uuml;r Datenbankinstallation<br>"; }
 ?>
 <table>
 	<tr><td>ProgrammVersion</td><td>[<?php echo  $VERSION." ".$SUBVER ?>]</td></tr>
@@ -73,5 +81,6 @@ if ($db) { echo "<a href='tmp/install.log'>Datenbankinstallation</a><br>"; } els
 </center>
 <!---------------------------------------------------------------------->
 <!--/td></tr></table-->
+<?php echo $menu['end_content']; ?>
 </body>
 </html>

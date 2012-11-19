@@ -17,7 +17,7 @@ $betreff=$_SESSION["Subject"];
 $bodytxt=$_SESSION["bodytxt"];
 $limit=$_SESSION["limit"];
 $abs=$headers["Return-Path"];
-if ($logmail) $f=fopen("tmp/maillog.txt","a");
+if ($logmail) $f=fopen("log/maillog.txt","a");
 $dateiname=$_SESSION["dateiname"];
 if ($dateiname) {
 	$ftmp=fopen("./dokumente/".$_SESSION["mansel"]."/".$_SESSION["loginCRM"]."/SerMail/".$dateiname,"rb");

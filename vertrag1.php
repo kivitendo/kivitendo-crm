@@ -1,6 +1,7 @@
 <?php
 	require_once("inc/stdLib.php");
 	include("inc/wvLib.php");
+	$menu =  $_SESSION['menu'];
 	if ($_POST["ok"]) {
 		$vid=suchVertrag($_POST["vid"]);
 		if (!$vid) {
@@ -12,9 +13,13 @@
 ?>
 <html>
 	<head><title></title>
+	<?=$menu['stylesheets'];?>
     <link type="text/css" REL="stylesheet" HREF="../css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
     <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
+    <?=$menu['javascripts'];?>
 <body >
+<?=$menu['pre_content'];?>
+<?=$menu['start_content'];?>
 <p class="listtop">Wartungsvertr&auml;ge suchen</p>
 <?php
 		if (count($vid)>1) {
@@ -30,5 +35,6 @@
 <input type="text" name="vid" size="20" value="" tabindex="1"> &nbsp; 
 <input type="submit" name="ok" value="suchen"><br>Vertragsnummer
 </form>
+<?=$menu['end_content'];?>
 </body>
 </html>

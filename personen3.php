@@ -7,6 +7,14 @@
     include("inc/persLib.php");
     include("inc/FirmenLib.php");
     $t = new Template($base);
+    $menu = $_SESSION['menu'];
+    $t->set_var(array(
+        JAVASCRIPTS   => $menu['javascripts'],
+        STYLESHEETS   => $menu['stylesheets'],
+        PRE_CONTENT   => $menu['pre_content'],
+        START_CONTENT => $menu['start_content'],
+        END_CONTENT   => $menu['end_content']
+    ));
     $Q = ($_GET["Quelle"])?$_GET["Quelle"]:$_POST["Quelle"];    
     
     if ( $_POST["show"] ) {

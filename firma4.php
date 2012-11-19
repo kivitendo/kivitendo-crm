@@ -44,6 +44,15 @@
 	}
 	$t = new Template($base);
 	$t->set_file(array("doc" => "firma4.tpl"));
+        $menu =  $_SESSION['menu'];
+        $t->set_var(array(
+            JAVASCRIPTS   => $menu['javascripts'],
+            STYLESHEETS   => $menu['stylesheets'],
+            PRE_CONTENT   => $menu['pre_content'],
+            START_CONTENT => $menu['start_content'],
+            END_CONTENT   => $menu['end_content']
+        ));
+
 	$t->set_var(array(
 			AJAXJS  => $xajax->printJavascript(XajaxPath),
 			FAART   => ($Q=="C")?".:Customer:.":".:Vendor:.",       //"Kunde":"Lieferant",

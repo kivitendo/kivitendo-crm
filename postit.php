@@ -55,11 +55,13 @@ if ($_POST["save"]) {
 } else if ($_POST["delete"]) {
 	if ($_POST["id"]) $rc=delPostIt($_POST["id"]);
 }
+$menu = $_SESSION['menu'];
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head><title><?php echo  translate(".:LxO:.","work"); ?> <?php echo  translate(".:postit:.","work"); ?></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/<?php echo $_SESSION["stylesheet"] ?>"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"] ?>"></link>
+	<?=$menu['javascripts'];?>
+        <?=$menu['stylesheets'];?>
+        <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"] ?>"></link>
 	<script language="JavaScript">
 	<!--
 	function PopUp() {
@@ -69,6 +71,8 @@ if ($_POST["save"]) {
 	</script>
 	</head>
 <body onLoad="if (1==<?php echo  $popup ?>) window.resizeTo(600,400);">
+<?=$menu['pre_content'];?>
+<?=$menu['start_content'];?>
 <p class="listtop"><?php echo  translate(".:notes:.","work"); ?></p>
 <table >
 <?php
@@ -93,5 +97,6 @@ if ($liste) foreach($liste as $row) {
 <input type="button" name="ppp" value="<?php echo  translate(".:popup:.","work"); ?>" onCLick="PopUp();">
 <?php } ?>
 </from>
+<?=$menu['end_content'];?>
 </body>
 </html>

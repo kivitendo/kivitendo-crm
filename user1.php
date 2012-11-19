@@ -19,6 +19,14 @@
         $rc=createMailBox($_POST["Postf2"],$_POST["Login"]);
     } 
     $t = new Template($base);
+    $menu =  $_SESSION['menu'];
+    $t->set_var(array(
+        JAVASCRIPTS   => $menu['javascripts'],
+        STYLESHEETS   => $menu['stylesheets'],
+        PRE_CONTENT   => $menu['pre_content'],
+        START_CONTENT => $menu['start_content'],
+        END_CONTENT   => $menu['end_content']
+    ));
     if ($_GET["id"] && $_GET["id"]<>$_SESSION["loginCRM"]) {
         $fa=getUserStamm($_GET["id"]);
         $t->set_file(array("usr1" => "user1b.tpl"));

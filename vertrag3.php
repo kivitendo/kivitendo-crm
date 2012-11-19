@@ -5,7 +5,15 @@
 	include("inc/wvLib.php");
 
 	unset($maschinen);
-	$t = new Template($base);	
+	$t = new Template($base);
+        $menu =  $_SESSION['menu'];
+        $t->set_var(array(
+            JAVASCRIPTS   => $menu['javascripts'],
+            STYLESHEETS   => $menu['stylesheets'],
+            PRE_CONTENT   => $menu['pre_content'],
+            START_CONTENT => $menu['start_content'],
+            END_CONTENT   => $menu['end_content']
+        ));
 	$template="vertrag3.tpl";
 	$vid=($_POST["vid"])?$_POST["vid"]:$_GET["vid"];
 	if ($_POST["stat"]) {

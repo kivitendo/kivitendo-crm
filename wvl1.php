@@ -68,6 +68,14 @@
         $sel=$_SESSION["loginCRM"];
     }
     $t = new Template($base);
+    $menu =  $_SESSION['menu']; 
+    $t->set_var(array(
+        JAVASCRIPTS   => $menu['javascripts'],
+        STYLESHEETS   => $menu['stylesheets'],
+        PRE_CONTENT   => $menu['pre_content'],
+        START_CONTENT => $menu['start_content'],
+        END_CONTENT   => $menu['end_content']
+    ));
     $t->set_file(array("wvl" => $templ));
          if ($data["kontakttab"]=="P") { $stammlink="kontakt.php?id=".$data["kontaktid"]; }
     else if ($data["kontakttab"]=="C") { $stammlink="firma1.php?Q=C&id=".$data["kontaktid"]; }
@@ -109,7 +117,7 @@
     if ($templ=="wvl2.tpl") {
         $t->set_block("wvl","Filebox","Block2");
         if ($data["Anhang"]){
-            $FILES="<td colspan='2'><input type='checkbox' name='dateien[]' value='%s,%s,%s' checked>[<a href='tmp/%s' class='klein'>%s</a>]</td>";
+            $FILES="<td colspan='2'><input type='checkbox' name='dateien[]' value='%s,%s,%s' checked>[<a href='/tmp/%s' class='klein'>%s</a>]</td>";
             foreach($data["Anhang"] as $zeile) {
                 $t->set_var(array(
                     file    =>    sprintf($FILES,$zeile["name"],$zeile["size"],$zeile["type"],$zeile["name"],$zeile["name"])

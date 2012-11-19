@@ -3,6 +3,14 @@
 	include("inc/template.inc");
 	include("inc/wvLib.php");	
 	$t = new Template($base);
+        $menu =  $_SESSION['menu'];
+        $t->set_var(array(
+            JAVASCRIPTS   => $menu['javascripts'],
+            STYLESHEETS   => $menu['stylesheets'],
+            PRE_CONTENT   => $menu['pre_content'],
+            START_CONTENT => $menu['start_content'],
+            END_CONTENT   => $menu['end_content']
+        ));
 	if ($_POST["parts_sernr"]) {
 		$data=getMaschSer($_POST["parts_sernr"],$_POST["parts_id"]);
 		$nummern=getNumber($data["parts_id"]);

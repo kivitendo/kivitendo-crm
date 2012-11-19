@@ -33,6 +33,14 @@
             header ("location:firma1.php?Q=$Q&id=".$daten[0]["id"]);
         } else if (count($daten)>1) {
             $t->set_file(array("fa1" => "firmen1L.tpl"));
+            $menu =  $_SESSION['menu']; 
+            $t->set_var(array(
+                JAVASCRIPTS   => $menu['javascripts'],
+                STYLESHEETS   => $menu['stylesheets'],
+                PRE_CONTENT   => $menu['pre_content'],
+                START_CONTENT => $menu['start_content'],
+                END_CONTENT   => $menu['end_content']
+            ));
             $t->set_block("fa1","Liste","Block");
             $t->set_var(array(
                 AJAXJS  => $xajax->printJavascript(XajaxPath),
@@ -96,9 +104,7 @@
                             report => "$listLimit von ".count($daten)." Treffern",
                         ));
                     }
-                    $t->set_var(array(
-                        ERPCSS      => $_SESSION["stylesheet"],
-                        ));
+                   
                 }
             }
         } else {
@@ -108,5 +114,6 @@
     } else {
         leertpl($t,1,$Q,"",true);
     }
+
     $t->Lpparse("out",array("fa1"),$_SESSION["lang"],"firma");
 ?>

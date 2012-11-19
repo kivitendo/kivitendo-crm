@@ -30,7 +30,7 @@ if ($_POST) {
 </head>
 <body class="docfrm" style="padding:0em; margin:0em; width:100%; height:100%;" >
 <table width="100%" class="klein">
-	<tr class="dochead"><td><?php echo  translate('.:uploadDocument:.','firma') ?></td><td align="right"><a href="javascript:top.main_window.newFile('left')">(X)</a></td></tr>
+	<tr class="dochead"><td><?php echo  translate('.:uploadDocument:.','firma') ?></td><td align="right"><a href="javascript:top.newFile('left')">(X)</a></td></tr>
 </table>
 <form name="iform" action="upload.php" method="post" enctype="multipart/form-data">
 <input id="upldpath" name="pfad" type="hidden">

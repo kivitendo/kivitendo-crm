@@ -4,7 +4,7 @@
 	include("inc/crmLib.php");
 	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
-    require("firmacommon".XajaxVer.".php");
+        require("firmacommon".XajaxVer.".php");
 	$fid=($_GET["fid"])?$_GET["fid"]:$_POST["fid"];
 	$Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];	
 	$kdhelp=getWCategorie(true);
@@ -88,11 +88,19 @@
 	};
 	$t = new Template($base);
 	$t->set_file(array("co1" => "firma2.tpl"));
+        $menu =  $_SESSION['menu'];
+        $t->set_var(array(
+            JAVASCRIPTS   => $menu['javascripts'],
+            STYLESHEETS   => $menu['stylesheets'],
+            PRE_CONTENT   => $menu['pre_content'],
+            START_CONTENT => $menu['start_content'],
+            END_CONTENT   => $menu['end_content']
+        ));
 	$t->set_var(array(
 			INIT	=> ($init=="")?"showOne($id)":"showContact()",
 			AJAXJS  => $xajax->printJavascript(XajaxPath),
 			FAART   => ($Q=="C")?".:Customer:.":".:Vendor:.",   //"Kunde":"Lieferant",
-            ERPCSS  => $_SESSION["stylesheet"],
+                        ERPCSS  => $_SESSION["stylesheet"],
 			interv	=> $_SESSION["interv"]*1000,
 			Q => $Q,
 			Link1 => $link1,
@@ -110,7 +118,7 @@
 			customernumber	=> $KDNR,
 			moreC => ($liste<>"")?"visible":"hidden",
 			kontakte => $liste,
-            tools => ($tools)?"visible":"hidden",
+                        tools => ($tools)?"visible":"hidden",
 			ep => $ep,
 			Edit => ".:edit:.",
 			none => ($ep=="" && $init=="")?"hidden":"visible",

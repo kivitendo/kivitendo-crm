@@ -13,6 +13,14 @@
     $tmp=getVariablen($id);
     $variablem="";
     $t = new Template($base);
+    $menu =  $_SESSION['menu'];
+    $t->set_var(array(
+        JAVASCRIPTS   => $menu['javascripts'],
+        STYLESHEETS   => $menu['stylesheets'],
+        PRE_CONTENT   => $menu['pre_content'],
+        START_CONTENT => $menu['start_content'],
+        END_CONTENT   => $menu['end_content']
+    ));
     $t->set_file(array("fa1" => "firma1.tpl"));
     if (count($tmp)>0) {
         $t->set_block("fa1","vars","BlockS");

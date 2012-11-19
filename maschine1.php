@@ -3,6 +3,15 @@
 	include("inc/template.inc");
 	include("inc/wvLib.php");	
 	$t = new Template($base);
+        $menu =  $_SESSION['menu'];
+        $t->set_var(array(
+            JAVASCRIPTS   => $menu['javascripts'],
+            STYLESHEETS   => $menu['stylesheets'],
+            PRE_CONTENT   => $menu['pre_content'],
+            START_CONTENT => $menu['start_content'],
+            END_CONTENT   => $menu['end_content']
+        ));
+
 	$disp="style='display:none'";
 	if ($_POST["search"] or $_GET["sernr"]) {
 		if ($_POST["serialnumber"]) {

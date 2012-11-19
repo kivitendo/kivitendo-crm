@@ -122,11 +122,11 @@
             if ($anz>0) {
                 for ($o=0; $o<$anz; $o++) {
                     if ($_FILES["Datei"]["name"][$o]<>"") {
-                        //move_uploaded_file($_FILES["Datei"]["tmp_name"][$o],"tmp/".$_FILES["Datei"]["name"][$o]);
-                        copy($_FILES["Datei"]["tmp_name"][$o],"tmp/".$_FILES["Datei"]["name"][$o]);
-                        $mime->addAttachment("tmp/".$_FILES["Datei"]["name"][$o] , $_FILES["Datei"]["type"][$o],
+                        //move_uploaded_file($_FILES["Datei"]["tmp_name"][$o],$tmpdir.$_FILES["Datei"]["name"][$o]);
+                        copy($_FILES["Datei"]["tmp_name"][$o],'tmp/'.$_FILES["Datei"]["name"][$o]);
+                        $mime->addAttachment('tmp/'.$_FILES["Datei"]["name"][$o] , $_FILES["Datei"]["type"][$o],
                                                 $_FILES["Datei"]["name"][$o]);
-                        unlink ("tmp/".$_FILES["Datei"]["name"][$o]);
+                        unlink ('tmp/'.$_FILES["Datei"]["name"][$o]);
                         $anh=true;
                     }
                 }
@@ -139,7 +139,7 @@
             $mail->_params="-f ".$user["email"];
             $rc=$mail->send($to, $hdr, $body);
             if ($logmail) {
-                $f=fopen("tmp/maillog.txt","a");
+                $f=fopen('log/maillog.txt','a');
                 if ($rc) {
                     fputs($f,date("Y-m-d H:i").';ok;'.$TO.';'.$CC.';'.$user["name"].' <'.$user["email"].'>;'.$Subject.";\n");
                 } else {
@@ -229,6 +229,15 @@
     }
 
     $t = new Template($base);
+    $menu =  $_SESSION['menu'];
+
+    $t->set_var(array(
+        JAVASCRIPTS   => $menu['javascripts'],
+        STYLESHEETS   => $menu['stylesheets'],
+        PRE_CONTENT   => $menu['pre_content'],
+        START_CONTENT => $menu['start_content'],
+        END_CONTENT   => $menu['end_content']
+    ));
     $t->set_file(array("mail" => "mail.tpl"));
     $t->set_block("mail","Betreff","Block");
     $mailvorlagen=getMailVorlage();
@@ -241,6 +250,7 @@
                 $t->parse("Block","Betreff",true);
     }
     $t->set_var(array(
+            HEADER   => $header,
             ERPCSS      => $_SESSION["stylesheet"],
             AJAXJS    => $xajax->printJavascript(XajaxPath),
             Msg    => $msg,

@@ -1,18 +1,19 @@
 <?php
 ob_start(); 
-// $Id$
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
+        $menu =  $_SESSION['menu'];
 ?>
 <html>
 <head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
+    <?php echo $menu['stylesheets']; ?>
     <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
+    <?php echo $menu['javascripts']; ?>
 <?php  
     if ($ac) { 
             echo '<link rel="stylesheet" type="text/css" href="css/jquery.autocomplete.css"></link>'; 
-            echo '<script type="text/javascript" src="../js/jquery.js"></script>'; 
-            echo '<script type="text/javascript" src="./inc/jquery.autocomplete.js"></script>'; 
+            echo '<script type="text/javascript" src="'.$_SESSION['basepath'].'/js/jquery.js"></script>'; 
+            echo '<script type="text/javascript" src="inc/jquery.autocomplete.js"></script>'; 
             echo '<script language="JavaScript"> 
                             <!-- 
                             $(function(){ 
@@ -36,6 +37,8 @@ ob_start();
 </head>
 <body onLoad="document.suche.swort.focus()";>
 <?php
+echo $menu['pre_content'];
+echo $menu['start_content'];
 if ($_POST["adress"]) {
 	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
@@ -130,6 +133,7 @@ if ($_POST["adress"]) {
 </script>			
 
 <?php }
+echo $menu['end_content'];
 ob_end_flush(); 
 ?> 
 <p class="listtop">Schnellsuche Kunde/Lieferant/Kontakte und Kontaktverlauf</p>

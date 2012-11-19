@@ -117,14 +117,18 @@
 		$Ssel="S".$nx;	$Zsel="Z".$ny;$Psel="P".$papersize; $tmp=$metric;
 		${$Ssel}=" selected";	${$Zsel}=" selected"; ${$Psel}=" selected"; ${$tmp}=" selected";
 	}
+	$menu =  $_SESSION['menu'];
 ?>
 <html>
 	<head>
 		<title></title>
-        <link type="text/css" REL="stylesheet" HREF="../css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
-        <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
+		<?=$menu['stylesheets'];?>
+                <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
+                <?=$menu['javascripts'];?>
 	</head>
 <body>
+<?=$menu['pre_content'];?>
+<?=$menu['start_content'];?>
 <p class=listtop>Etiketten-Editor</p>
 <table><tr><td class="norm" style="width:280px">
 <form name="defaufkleber" action="aufkleber_def.php" method="post">
@@ -273,5 +277,6 @@
 </table>
 
 </form>
+<?=$menu['end_content'];?>
 </body>
 </html>

@@ -2,7 +2,7 @@
 // $Id$
 	usleep(25000); // Timingprobleme??
 	require_once("inc/stdLib.php");
-
+	$menu = $_SESSION['menu'];
 	include("inc/template.inc");
 	include("inc/crmLib.php");
 	include("inc/UserLib.php");
@@ -11,6 +11,13 @@
 	if ($datum=="") $datum=date("d.m.Y");
 	if (!$ansicht) $ansicht="T";
 	$t = new Template($base);
+        $t->set_var(array(
+            JAVASCRIPTS   => $menu['javascripts'],
+            STYLESHEETS   => $menu['stylesheets'],
+            PRE_CONTENT   => $menu['pre_content'],
+            START_CONTENT => $menu['start_content'],
+            END_CONTENT   => $menu['end_content']
+        ));
 	if ($ansicht=="T") {
 		if (!$datum) {$day=date("d"); $month=date("m"); $year=date("Y");}
 		else {list($day,$month,$year)=explode(".",$datum);}

@@ -22,6 +22,14 @@
 	$grp=getGruppen();
 	$mit=getAllUser(array(0=>true,1=>"%"));
 	$t = new Template($base);
+        $menu =  $_SESSION['menu'];
+        $t->set_var(array(
+            JAVASCRIPTS   => $menu['javascripts'],
+            STYLESHEETS   => $menu['stylesheets'],
+            PRE_CONTENT   => $menu['pre_content'],
+            START_CONTENT => $menu['start_content'],
+            END_CONTENT   => $menu['end_content']
+        ));
 	$t->set_file(array("usr2" => "user3.tpl"));
 	$t->set_var(array(
             ERPCSS      => $_SESSION["stylesheet"],

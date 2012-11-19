@@ -41,10 +41,19 @@
 		$IMG=getLastYearPlot($re,$an,$ll);
 		$monat="";
 	}
+        $menu =  $_SESSION['menu'];
+        $t->set_var(array(
+            JAVASCRIPTS   => $menu['javascripts'],
+            STYLESHEETS   => $menu['stylesheets'],
+            PRE_CONTENT   => $menu['pre_content'],
+            START_CONTENT => $menu['start_content'],
+            END_CONTENT   => $menu['end_content']
+        ));
+
 	$t->set_var(array(
 			Q	=> $Q,
 			FAART	=> ($Q=="C")?".:Customer:.":".:Vendor:.",       //"Kunde":"Lieferant",
-            ERPCSS  => $_SESSION["stylesheet"],
+                        ERPCSS  => $_SESSION["stylesheet"],
 			FID     => $fid,
 			kdnr	=> $fa["nummer"],
 			PID => $pid,

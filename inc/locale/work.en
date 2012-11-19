@@ -113,6 +113,7 @@ $texts  = array(
   '.:txtchg:.'      => 'Text &auml;ndern',
   '.:clr:.'         => 'l&ouml;schen',
   '.:material:.'    => 'Material',
+  '.:budget:.'          => 'budget',
   '.::.'    => '',
 );
 ?>

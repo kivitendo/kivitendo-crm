@@ -77,7 +77,7 @@ class document {
  var $debug = false;
 
 	function document($id=false,$fname="",$fpath="",$descript="") {
-		if ($this->debug) $this->f = fopen("/tmp/doc.log","w");
+		if ($this->debug) $this->f = fopen('tmp/doc.log',"w");
 		$this->log("newDoc");
 		$this->db=$_SESSION["db"];
 		if ($id>0) {

@@ -900,7 +900,7 @@ global $db;
         }
     }
     $rc=$db->getAll($sql);
-    $f=fopen("tmp/report_$loginCRM.csv","w");
+    $f=fopen('tmp/report_'.$loginCRM.'.csv',"w");
     fputs($f,$felder."\n");
     if ($rc) {
         foreach ($rc as $row) {
@@ -1026,7 +1026,13 @@ global $xajax,$GEODB,$BLZDB,$jcalendar;
         $jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar-setup.js'></script>\n";
         $t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
+        $menu =  makeMenu();
         $t->set_var(array(
+            JAVASCRIPTS   => $menu['javascripts'],
+            STYLESHEETS   => $menu['stylesheets'],
+            PRE_CONTENT   => $menu['pre_content'],
+            START_CONTENT => $menu['start_content'],
+            END_CONTENT   => $menu['end_content'],
             AJAXJS      => $xajax->printJavascript(XajaxPath),
             FAART       => ($typ=="C")?".:Customer:.":".:Vendor:.",
             FAART2      => ($typ=="C")?".:Customer Name:.":".:Vendor Name:.",
@@ -1189,7 +1195,13 @@ global $xajax,$GEODB,$BLZDB,$jcalendar;
         if (!$suchmaske) $tmp=getVariablen($daten["id"]);
         $varablen=($tmp>0)?count($tmp)." Variablen":"";
         $t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
+        $menu =  makeMenu();
         $t->set_var(array(
+                JAVASCRIPTS   => $menu['javascripts'],
+                STYLESHEETS   => $menu['stylesheets'],
+                PRE_CONTENT   => $menu['pre_content'],
+                START_CONTENT => $menu['start_content'],
+                END_CONTENT   => $menu['end_content'],
                 AJAXJS      => $xajax->printJavascript(XajaxPath),
                 FAART       => ($typ=="C")?".:Customer:.":".:Vendor:.",
                 FAART2      => ($typ=="C")?".:Customer Name:.":".:Vendor Name:.",

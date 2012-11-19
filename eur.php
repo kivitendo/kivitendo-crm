@@ -132,7 +132,7 @@ if ($_POST["ok"]=="erzeugen") {
             foreach ($rechnungen[1] as $row) { echo "<th>".$row." % </th>"; };
         }
         echo "</tr>\n";
-        $f = fopen("./tmp/deb.csv","w");
+        $f = fopen('tmp/deb.csv','w');
         foreach ($rechnungen[0] as $row) {
             $transdate = split("-",$row["transdate"]);
             $transdate = $transdate[2].".".$transdate[1].".";
@@ -201,7 +201,7 @@ if ($_POST["ok"]=="erzeugen") {
         echo "<tr><td colspan=2>Brutto==Netto: (?)</td><td>".$nettobrutto."</td><td></td></tr>";
         echo "</table>";
         fclose($f);
-        echo "<a href='./tmp/deb.csv'>csv</a>";
+        echo '<a href="tmp/deb.csv">csv</a>';
         //echo "<pre>";print_r($tax);echo "</pre>";
    } else {
         echo "Keine Treffer";

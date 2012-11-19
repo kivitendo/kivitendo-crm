@@ -15,7 +15,7 @@ global $db;
     if (!$val["port"]) $val["port"]=($val["proto"]=='1')?'143':'110';
     if (!$val["termseq"]) $val["termseq"]=30;
     if ($val["vertreter"]==$val["uid"]) {$vertreter="null";} else {$vertreter=$val["vertreter"];};
-    $fld = array('name','etikett','addr1','addr2','addr3','workphone','homephone','notes',
+    $fld = array('name','etikett','addr1','addr2','addr3','workphone','homephone','notes','termbegin','termend',
                 'msrv','port','proto','ssl','postf','mailuser','kennw','postf2','interv','pre','abteilung','position',
                 'mailsign','email','icalart','icaldest','icalext','preon','streetview','planspace');
     $sql  = "update employee set ";
@@ -43,7 +43,7 @@ function getAllUser($sw) {
 global $db,$Pre;
         if (!$sw[0]) { $where="workphone like '$Pre".$sw[1]."%' or homephone like '$Pre".$sw[1]."%' "; }
         else { $where="upper(name) like '$Pre".$sw[1]."%' "; }
-        $sql="select * from employee where $where";
+        $sql="select * from employee where $where and employee.deleted = false";
         $rs=$db->getAll($sql);
         if(!$rs) {
             $rs=false;
@@ -139,7 +139,7 @@ global $db;
 
 function getMitglieder($gruppe) {
 global $db;
-    $sql="select * from employee left join grpusr on usrid=id where grpid=$gruppe ORDER BY employee.id";
+    $sql="select * from employee left join grpusr on usrid=id where grpid=$gruppe and employee.deleted = false ORDER BY employee.id";
     $rs=$db->getAll($sql);
     if(!$rs) {
         return false;

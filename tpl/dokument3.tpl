@@ -1,8 +1,9 @@
 <!-- $Id$ -->
 <html>
 	<head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+	{STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        {JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
 		function showH() {
@@ -11,6 +12,8 @@
 	//-->
 	</script>
 <body>
+{PRE_CONTENT}
+{START_CONTENT}
 <p class="listtop">Dokumentvorlagen</p>
 <table class="reiter">
 	<tr>
@@ -73,5 +76,6 @@
 </table>
 <!-- Hier endet die Karte ------------------------------------------->
 <!--/td></tr></table-->
+{END_CONTENT}
 </body>
 </html>

@@ -1,7 +1,8 @@
 <html>
     <head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+    {STYLESHEETS}
     <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+    {JAVASCRIPTS}
     <script language="JavaScript">
         function getColor(idx) {
             f1=open('farbwahl.html?idx='+idx,'farbe','width=500,height=350');
@@ -12,7 +13,8 @@
         }
     </script>
 <body>
-
+{PRE_CONTENT}
+{START_CONTENT}
 <p class="listtop">.:categorie termin:.</p>
 
 <form name="termincat" method="post" action="tcatedit.php">
@@ -39,6 +41,7 @@
     </table>
     <input type="submit" name="ok" value=".:save:.">
 </form>
+{END_CONTENT}
 </body>
 </html>
 

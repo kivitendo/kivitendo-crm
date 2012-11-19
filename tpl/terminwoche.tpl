@@ -1,8 +1,8 @@
 <!-- $ID: $ -->
 <html>
 	<head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+	{STYLESHEETS}
+	<link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 	<script language="JavaScript">
 	<!--
 	function showlist(was) {

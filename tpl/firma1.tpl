@@ -1,10 +1,11 @@
-<!-- $Id$ -->
-<html xmlns="http://www.w3.org/1999/xhtml">
-	<head><title>Firma Stamm</title>
-	<link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+<html>
+        <head><title></title>
+        {STYLESHEETS}
 	<link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 	<link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+	
 	{AJAXJS}
+	{JAVASCRIPTS}
 	<script language="JavaScript" type="text/javascript">
 	<!--
 	var start = 0;
@@ -45,8 +46,10 @@
 		return false;
 	}
         function doLink() {
-            lnk = document.getElementById('actionmenu').options[document.getElementById('actionmenu').selectedIndex].value;
-            window.location.href = lnk;
+            if ( document.getElementById('actionmenu').selectedIndex > 0 ) {
+                lnk = document.getElementById('actionmenu').options[document.getElementById('actionmenu').selectedIndex].value;
+                window.location.href = lnk;
+            }
         }
 	var last = 'lie';
 	function submenu(id) {
@@ -102,9 +105,11 @@
 	</script>
 	</head>
 <body onLoad="submenu('{kdview}'); showCall(0);">
+{PRE_CONTENT}
+{START_CONTENT}
 <p class="listtop">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
 <form name="kdhelp">
-<div style="position:absolute; top:1.7em; left:1.1em; ">
+<div style="position:absolute; top:3.9em; left:0.2em; ">
     <div style="float:left; padding-top:1.5em; ";>
 	<ul id="maintab" class="shadetabs">
 	<li class="selected"><a href="firma1.php?Q={Q}&id={FID}">.:Custombase:.</a></li>
@@ -133,7 +138,7 @@
 </div>
 </form>
 
-<span style="position:absolute; left:1em; top:5.2em; width:99%;" >
+<span style="position:absolute; left:0.2em; top:7.2em; width:99%;" >
 <!-- Begin Code --------------------------------------------- -->
 <div style="float:left; width:35em; height:37em; text-align:center; border: 1px solid black;" >
 	<div style="position:absolute; left:0em; width:35em; " >
@@ -339,6 +344,7 @@
 </div>
 <!-- End Code --------------------------------------------- -->
 </span>
+{END_CONTENT}
 </body>
 </html>
 

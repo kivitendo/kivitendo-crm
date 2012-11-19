@@ -1,8 +1,10 @@
 <!-- $Id: personen1.tpl 4293 2009-06-14 08:21:08Z jbueren $ -->
 <html>
     <head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        {STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+        {JAVASCRIPTS}
 
     <script language="JavaScript">
         function setLetter(letter) {
@@ -12,6 +14,8 @@
         }
     </script>
 <body onLoad="document.formular.cp_name.focus();">
+{PRE_CONTENT}
+{START_CONTENT}
 <p class="listtop">Personensuche</p>
 
 <form name="formular" enctype='multipart/form-data' action="{action}" method="post">
@@ -144,6 +148,7 @@ Attribute: <br>
 </div>	
 </form>
 <!-- End Code ------------------------------------------->
+{END_CONTENT}
 </body>
 </html>
 

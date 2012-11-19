@@ -1,9 +1,10 @@
 <!-- $Id$ -->
 <html>
 	<head><title></title>
+	{STYLESHEETS}
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        {JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
 		function suchMa() {
@@ -17,7 +18,8 @@
 	//-->
 	</script>
 <body >
-
+{PRE_CONTENT}
+{START_CONTENT}
 <table width="99%" border="0"><tr><td>
 <!-- Beginn Code ------------------------------------------->
 <p class="listtop">Maschine info/edit <b>{msg}</b></p>
@@ -73,5 +75,6 @@
 
 <!-- End Code ------------------------------------------->
 </td></tr></table>
+{END_CONTENT}
 </body>
 </html>

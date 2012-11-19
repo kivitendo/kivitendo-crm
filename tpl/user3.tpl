@@ -1,8 +1,9 @@
 <!-- $Id$ -->
 <html>
 	<head><title>User Stamm</title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+	{STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        {JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
 		function doit() {
@@ -30,6 +31,8 @@
 	//-->
 	</script>
 <body>
+{PRE_CONTENT}
+{START_CONTENT}
 <p class="listtop">Gruppen</p>
 <!-- Beginn Code ----------------------------------------------->
 {msg}<br>
@@ -82,5 +85,6 @@ Zugriffbeschr&auml;nkungen f&uuml;r Kunden und Personen durch Gruppen einrichten
 </form>
 <!-- End Code ----------------------------------------------->
 <!--/td></tr></table-->
+{END_CONTENT}
 </body>
 </html>

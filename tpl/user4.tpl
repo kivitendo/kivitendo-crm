@@ -1,8 +1,9 @@
 <!-- $Id$ -->
 <html>
 	<head><title>User Stamm</title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+	{STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        {JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
 		function suchFa() {
@@ -34,6 +35,8 @@
 	//-->
 	</script>
 <body>
+{PRE_CONTENT}
+{START_CONTENT}
 <p class="listtop">Mitteilungen</p>
 <!-- Beginn Code ----------------------------------------------->
 <div  class="norm">
@@ -66,6 +69,7 @@
 
 <!-- End Code ----------------------------------------------->
 <!--/td></tr></table-->
+{END_CONTENT}
 </body>
 </html>
 

@@ -1,8 +1,7 @@
-<!-- $ID: $ -->
 <html>
 	<head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+	{STYLESHEETS}
+	<link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 
 	<script language="JavaScript">
 	<!--
@@ -20,10 +19,10 @@
 			f=open("showTermin.php?termid="+tid,"termine","width=400,height=300,left=300,top=150");
 	}
 	function fill(zeit) {
-		for (i = 0; i < top.main_window.document.termedit.von.length; i++)
-			if (top.main_window.document.termedit.von.options[i].value==zeit)
-				top.main_window.document.termedit.von.options[i].selected=true
-		top.main_window.document.termedit.vondat.value="{tag}";
+		for (i = 0; i < parent.document.termedit.von.length; i++)
+			if (parent.document.termedit.von.options[i].value==zeit)
+				parent.document.termedit.von.options[i].selected=true
+		parent.document.termedit.vondat.value="{tag}";
 	}
 	//-->
 	</script>

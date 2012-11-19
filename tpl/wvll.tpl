@@ -1,7 +1,6 @@
 <html>
 	<head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 	<meta http-equiv="refresh" content="{Interv}; URL=wvll.php">
 	<script language="JavaScript">
 	<!--

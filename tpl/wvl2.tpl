@@ -1,8 +1,10 @@
 <!-- $Id: -->
 <html>
 	<head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        {STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+        {JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
 		function doInit() {
@@ -15,6 +17,8 @@
 	//-->
 	</script>
 <body onLoad="doInit();">
+{PRE_CONTENT}
+{START_CONTENT}
 <!-- Beginn Code ------------------------------------------->
 <p class="listtop">Wiedervorlage</p>
 <table width="100%" border="0">
@@ -69,6 +73,7 @@
 </form>
 </td></tr></table>
 <!-- End Code ------------------------------------------->
+{END_CONTENT}
 </body>
 </html>
 

@@ -1,9 +1,12 @@
 <!-- $Id$ -->
 <html>
 	<head><title>User Stamm</title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+	{STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        {JAVASCRIPTS}
 <body>
+{PRE_CONTENT}
+{START_CONTENT}
 <p class="listtop">Stammdaten</p>
 <!-- Beginn Code ----------------------------------------------->
 <br>
@@ -22,6 +25,7 @@
 </table>
 <!-- End Code ----------------------------------------------->
 <!--/td></tr></table-->
+{END_CONTENT}
 </body>
 </html>
 

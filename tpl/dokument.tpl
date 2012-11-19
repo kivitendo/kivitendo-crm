@@ -1,33 +1,13 @@
 <!-- $Id$ -->
 <html>
     <head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+    {STYLESHEETS}
     <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
     <link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+    {JAVASCRIPTS}
     {AJAXJS}
     <script language="JavaScript">
     <!--
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     function mkDir() {
         seite=document.getElementById("seite").value;
         name=document.getElementById("subdir").value;
@@ -142,10 +122,12 @@
     //-->
     </script>
 <body onLoad="dateibaum('left','/');">
+{PRE_CONTENT}
+{START_CONTENT}
 <p class="listtop">.:documents:. </p>
 <form name="dokument.php" enctype='multipart/form-data' action="{action}" method="post">
 
-<span style="position:absolute; left:1em; top:3.0em; width:99%; height:90%;">
+<span style="position:absolute; left:0.2em; top:5.7em; width:99%; height:90%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 
 <!-- linker Dateibaum: -->
@@ -225,5 +207,6 @@
     
 <!-- Hier endet die Karte ------------------------------------------->
 </span>
+{END_CONTENT}
 </body>
 </html>

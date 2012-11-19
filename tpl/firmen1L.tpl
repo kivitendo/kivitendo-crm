@@ -1,15 +1,16 @@
-<!-- $Id$ -->
 <html>
-	<head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        <head><title></title>
+        {STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+        {AJAXJS}
+        {JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
 	function showK (id) {
 		if (id) {
-			Frame=eval("parent.main_window");
 			uri="firma1.php?Q={Q}&id=" + id;
-			Frame.location.href=uri;
+			location.href=uri;
 		}
 	}
 	function chngSerial(site) {
@@ -18,7 +19,8 @@
 	//-->
 	</script>
 <body>
-
+{PRE_CONTENT}
+{START_CONTENT}
 <p class="listtop">.:search result:. {FAART}</p>
 <table><tr><td valign="top">
 <!-- Beginn Code ------------------------------------------->
@@ -44,5 +46,6 @@
 </td></tr>
 <!-- Hier endet die Karte ------------------------------------------->
 </td></tr></table>
+{END_CONTENT}
 </body>
 </html>

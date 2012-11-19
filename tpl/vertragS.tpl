@@ -1,8 +1,9 @@
 <html>
 	<head><title></title>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        {STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        {JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
 		function drucke(nr)  {
@@ -11,7 +12,8 @@
 	//-->
 	</script>
 <body >
-
+{PRE_CONTENT}
+{START_CONTENT}
 <table width="99%" border="0"><tr><td>
 <!-- Beginn Code ------------------------------------------->
 <p class="listtop">Vertr&auml;ge auswerten</p>
@@ -32,5 +34,6 @@ Aufgelaufene Kosten: {kosten} &nbsp;&nbsp;&nbsp; <b>{diff} &euro;</b>
 </form>
 <!-- End Code ------------------------------------------->
 </td></tr></table>
+{END_CONTENT}
 </body>
 </html>

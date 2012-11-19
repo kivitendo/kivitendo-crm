@@ -1,10 +1,11 @@
-<!-- $Id$ -->
 <html>
-	<head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
-
-	<script language="JavaScript" type="text/javascript">
+        <head><title></title>
+        {STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+        {AJAXJS}
+        {JAVASCRIPTS}
+        <script language="JavaScript" type="text/javascript">
   		function report() {
   			f1=open("report.php?tab={Q}","Report","width=600; height=300; left=100; top=100");
   		}
@@ -23,12 +24,13 @@
     <script type='text/javascript' src='inc/help.js'></script>
     {jcal0}
 <body onLoad="document.erwsuche.name.focus();">
-
+{PRE_CONTENT}
+{START_CONTENT}
 <form name="erwsuche" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="felder" value="">
 <input type="hidden" name="Q" value="{Q}">
 <p class="listtop" onClick="help('SuchFirma');">.:Companys:. .:search:. {FAART} (?)</p>
-<span style="position:absolute; left:1em; top:3.0em; border: 0px solid black;">
+<span style="position:absolute; left:1em; top:5.0em; border: 0px solid black;">
 <!-- Beginn Code ------------------------------------------->
 <p class="listheading">| 
 <a href="{action}&first=A" class="fett">A</a> |
@@ -179,6 +181,7 @@
 </form>
 <!-- End Code ------------------------------------------->
 </span>
+{END_CONTENT}
 </body>
 </html>
 

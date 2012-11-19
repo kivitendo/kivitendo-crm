@@ -1,9 +1,10 @@
 <!-- $Id$ -->
 <html>
 	<head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
-    {AJAXJS}
+	{STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        {JAVASCRIPTS}
+        {AJAXJS}
     <!--script type="text/javascript" src="../js/common.js"></script-->
 	<script language="JavaScript">
 	<!--
@@ -85,8 +86,10 @@
     <script type='text/javascript' src='inc/help.js'></script>
 
 <body {chkevent}>
+{PRE_CONTENT}
+{START_CONTENT}
 <p class="listtop" onClick="help('TimeTrack');">.:timetracker:. (?)</p>
-<span style="position:absolute; left:1em; top:1.4em; width:95%;">
+<span style="position:absolute; left:1em; top:4.4em; width:95%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <form name="formular" action="timetrack.php" method="post">
 <input type="hidden" name="clear" value="{clear}">
@@ -132,6 +135,11 @@
 		<span class="klein">.:active:.</span>
 		<input type="radio" value="t" name="active" {activet}>.:yes:.
 		<input type="radio" value="f" name="active" {activef}>.:no:.
+	</div>
+	<div class="zeile">
+		<span class="label klein"></span>
+		<span class="klein">.:budget:.</span>
+		<input type="text" size="9" name="budget" value="{budget}" >{cur} &nbsp; &nbsp;
 	</div>
 	<div class="zeile">
 		<span class="label"></span>
@@ -187,5 +195,6 @@
 <!-- Hier endet die Karte ------------------------------------------->
 </span>
 {jcal5}
+{END_CONTENT}
 </body>
 </html>

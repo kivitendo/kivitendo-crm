@@ -1,10 +1,11 @@
-<!-- $Id$ -->
 <html>
-    <head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
-    {AJAXJS}
+        <head><title></title>
+        {STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+
+        {AJAXJS}
+        {JAVASCRIPTS}
     <script language="JavaScript">
     <!--
     function showD () {
@@ -148,12 +149,14 @@
     //-->
     </script>
 <body onLoad="dateibaum('left','/{Q}{customernumber}/{PID}');">
+{PRE_CONTENT}
+{START_CONTENT}
 <p class="listtop">.:detailview:. {FAART}</p>
 <form name="firma4" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="pid" value="{PID}">
 <input type="hidden" name="fid" value="{FID}">
 <input type="hidden" name="Q" value="{Q}">
-<div style="position:absolute; top:3.4em; left:1.1em;  width:42em;">
+<div style="position:absolute; top:5.4em; left:0.2em;  width:42em;">
     <ul id="maintab" class="shadetabs">
     <li><a href="{Link1}">.:Custombase:.</a><li>
     <li><a href="{Link2}">.:Contacts:.</a></li>
@@ -162,7 +165,7 @@
     </ul>
 </div>
 
-<span style="position:absolute; left:1em; top:5.2em; width:99%; height:90%;">
+<span style="position:absolute; left:0.2em; top:7.2em; width:99%; height:90%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <span style="float:left; width:40%; height:90%; text-align:center; padding:2px; border: 1px solid black; border-bottom: 0px;">
     <div style="float:left; width:100%; height:5.5em; text-align:left; border-bottom: 1px solid black;" >
@@ -265,5 +268,6 @@
     
 <!-- Hier endet die Karte ------------------------------------------->
 </span>
+{END_CONTENT}
 </body>
 </html>

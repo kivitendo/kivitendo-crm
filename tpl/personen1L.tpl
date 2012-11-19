@@ -1,21 +1,21 @@
-<!-- $Id$ -->
 <html>
 	<head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        {STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+        {JAVASCRIPTS}
+
 	<script language="JavaScript">
 	<!--
 	function showK (id,tbl) {
 		{no}
-		Frame=eval("parent.main_window");
 		uri="firma2.php?Q="+tbl+"&id=" + id;
-		Frame.location.href=uri;
+		location.href=uri;
 	}
 	function showK__ (id) {
 		{no}
-		Frame=eval("parent.main_window");
 		uri="kontakt.php?id=" + id;
-		Frame.location.href=uri;
+		location.href=uri;
 	}
 	function chngSerial(site) {
 		etikett.document.location.href = site + ".php?src=P";
@@ -23,6 +23,8 @@
 	//-->
 	</script>
 <body>
+{PRE_CONTENT}
+{START_CONTENT}
 <p class="listtop">.:search result:. .:Contacts:.</p>
 <table width="100%" border="0"><tr><td valign="top">
 <!-- Beginn Code ------------------------------------------->
@@ -50,5 +52,6 @@
     </iframe>
 <!-- Hier endet die Karte ------------------------------------------->
 </td></tr></table>
+{END_CONTENT}
 </body>
 </html>

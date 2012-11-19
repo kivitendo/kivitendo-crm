@@ -1,21 +1,20 @@
-<!-- $Id$ -->
-<html>
-	<head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+	{STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
 	<link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+	{JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
 	function showM (month) {
-		Frame=eval("parent.main_window");
 		uri="firma3.php?Q={Q}&jahr={JAHR}&monat=" + month + "&fid=" + {FID};
-		Frame.location.href=uri;
+		location.href=uri;
 	}
 	//-->
 	</script>
 <body>
+{PRE_CONTENT}
+{START_CONTENT}
 <p class="listtop">.:detailview:. {FAART}</p>
-<div style="position:absolute; top:3.4em; left:1.1em;  width:42em;">
+<div style="position:absolute; top:5.4em; left:0.2em;  width:42em;">
 	<ul id="maintab" class="shadetabs">
 	<li><a href="{Link1}">.:Custombase:.</a><li>
 	<li><a href="{Link2}">.:Contacts:.</a></li>
@@ -23,8 +22,7 @@
 	<li><a href="{Link4}">.:Documents:.</a></li>
 	</ul>
 </div>
-
-<span style="position:absolute; left:1em; top:5.2em; width:99%;">
+<span style="position:absolute; left:0.2em; top:7.2em; width:99%;" >
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <div style="position:absolute; left:0px; top:0.0em; width:35em; border:1px solid black">
 	<span class="fett">{Name} &nbsp; {kdnr}</span><br />
@@ -56,5 +54,6 @@
 </div>
 <!-- Hier endet die Karte ------------------------------------------->
 </span>
+{END_CONTENT}
 </body>
 </html>

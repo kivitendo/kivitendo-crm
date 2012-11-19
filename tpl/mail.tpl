@@ -1,8 +1,7 @@
-<!-- $ID: $ -->
 <html>
-	<head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        <head><title></title>
+        {STYLESHEETS}
+        {JAVASCRIPTS}
 	{AJAXJS}
 	<script language="JavaScript">
 	<!--
@@ -67,6 +66,8 @@
 	//-->
 	</script>
 <body onLoad="doInit();" >
+{PRE_CONTENT}
+{START_CONTENT}
 <!-- Beginn Code ------------------------------------------->
 <p class="listtop">.:email:. .:send:. <font color="red">{Msg}</font></p>
 <center>
@@ -133,5 +134,6 @@
 </center>
 <!-- End Code ------------------------------------------->
 <!--/td></tr></table-->
+{END_CONTENT}
 </body>
 </html>

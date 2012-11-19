@@ -1,10 +1,11 @@
-<!-- $Id$ -->
 <html>
-	<head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
-	<link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
-	{AJAXJS}
+        <head><title></title>
+        {STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+
+        {AJAXJS}
+        {JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
 		function showItem(id) {
@@ -82,9 +83,11 @@
 	//-->
 	</script>
 <body onLoad="{INIT}">
+{PRE_CONTENT}
+{START_CONTENT}
 <p class="listtop" >.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}</span></p>
 <form name="kdhelp">
-<div style="position:absolute; top:1.7em; left:1.1em;">
+<div style="position:absolute; top:3.9em; left:0.2em;">
     <div style="float:left; padding-top:1.5em; ";>
 	<ul id="maintab" class="shadetabs">
 	<li><a href="{Link1}">.:Custombase:.</a><li>
@@ -106,7 +109,7 @@
     </div>
 </div>
 </form>
-<span style="position:absolute; left:1em; top:5.2em; width:99%;">
+<span style="position:absolute; left:0.2em; top:7.2em; width:99%;" >
 <!-- Beginn Code ------------------------------------------->
 <div style="float:left; width:35em; height:37em;  border: 1px solid black;" >
      	<div style="position:absolute; left:0em; width:35em;" >	
@@ -161,7 +164,7 @@
 	    </div>
 	</div>
 </div>
-<div style="float:left; width:45%; height:37em; text-align:left; border: 1px solid black; border-left:0px;" >
+<div style="float:left; width:46%; height:37em; text-align:left; border: 1px solid black; border-left:0px;">
 	<div class="calls" width='99%' id="tellcalls">
 	</div>
 	<!--span style="float:left;  text-align:left; border:0px solid black"-->	
@@ -179,5 +182,6 @@
 
 <!-- End Code ------------------------------------------->
 </span>
+{END_CONTENT}
 </body>
 </html>

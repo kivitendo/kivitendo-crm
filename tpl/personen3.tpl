@@ -1,9 +1,10 @@
 <!-- $Id: personen3.tpl 4316 2009-06-17 08:30:54Z jbueren $ -->
 <html>
 	<head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
-	<link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+        {STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+        {JAVASCRIPTS}
 
 	<script language="JavaScript">
 	<!--
@@ -30,11 +31,12 @@
 	//-->
 	</script>
 <body onLoad="submenu('tab1'); goFld();">
-
+{PRE_CONTENT}
+{START_CONTENT}
 <p class="listtop">.:personen:. .:keyin:./.:edit:.</p>
 
 <!-- Beginn Code ------------------------------------------->
-<div style="position:absolute; top:3.1em; left:1em;  width:65em;">
+<div style="position:absolute; top:5.7em; left:0.2em;  width:65em;">
 	<ul id="maintab" class="shadetabs">
 	<li id="subtab1" ><a href="#" onClick="submenu('tab1')">.:person:.</a></li>
 	<li id="subtab2" ><a href="#" onClick="submenu('tab2')">.:Company:.</a></li>
@@ -51,7 +53,7 @@
 <input type="hidden" name="employee" value="{employee}">
 <input type="hidden" name="IMG_" value="{IMG_}">
 <input type="hidden" name="nummer" value="{nummer}">
-<span id="tab1" style="visibility:visible; position:absolute; text-align:left;width:95%; height:36em; left:0.8em; top:4.8em; border:1px solid black;">
+<span id="tab1" style="visibility:visible; position:absolute; text-align:left;width:95%; height:36em; left:0.2em; top:7.7em; border:1px solid black;">
 	<div class="zeile2">
 		<span class="label2 klein">.:gender:.</span>
 		<span class="feld">
@@ -123,8 +125,8 @@
 	</div>
 	<br><br>
 </span>
-<span id="tab2" style="visibility:hidden; position:absolute; text-align:left;width:90%; height:36em; left:0.8em; top:4.8em; border:1px solid black;">
-	<br><br>
+<span id="tab2" style="visibility:hidden; position:absolute; text-align:left;width:90%; height:36em; left:0.8em; top:7.7em; border:1px solid black;">
+
 	<div class="zeile2">
 		<span class="label klein">.:Company:.</span>
 		<span class="feld"><input type="text" name="name" size="25" maxlength="75" value="{Firma}" tabindex="18"><input type="button" name="fa" value=".:search:." onClick="suchFa();"  tabindex="19"></span>
@@ -143,7 +145,7 @@
 	</div>
 	<br>
 </span>
-<span id="tab3" style="visibility:hidden; position:absolute; text-align:left;width:90%; height:36em; left:0.8em; top:4.8em; border:1px solid black;">
+<span id="tab3" style="visibility:hidden; position:absolute; text-align:left;width:90%; height:36em; left:0.8em; top:7.7em; border:1px solid black;">
 <!--span style="float:left; text-align:left; border: 0px solid black;"-->
 	<span  style="float:left;">
 		<div class="zeile2">
@@ -192,5 +194,6 @@
 <!-- End Code ------------------------------------------->
 	<script type='text/javascript' src='inc/geosearchP.js'></script>
 	<script type='text/javascript' src='inc/geosearch.js'></script>
+{END_CONTENT}
 </body>
 </html>

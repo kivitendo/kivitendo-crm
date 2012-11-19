@@ -2,8 +2,9 @@
 <html>
 	<head><title></title>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        {STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        {JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
 		function suchMa() {
@@ -16,7 +17,8 @@
 	//-->
 	</script>
 <body >
-
+{PRE_CONTENT}
+{START_CONTENT}
 <table><tr><td>
 <!-- Beginn Code ------------------------------------------->
 <p class="listtop">Vertr&auml;ge eingeben/editieren</p>
@@ -79,5 +81,6 @@ Vertrag: {VertragNr}
 
 <!-- End Code ------------------------------------------->
 </td></tr></table>
+{END_CONTENT}
 </body>
 </html>

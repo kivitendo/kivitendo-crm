@@ -1,8 +1,9 @@
 <!-- $Id$ -->
 <html>
     <head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
+    {STYLESHEETS}
     <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+    {JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
     function hide(nr) {
@@ -31,6 +32,8 @@
 	</script>
 	{jcal0}
 <body>
+{PRE_CONTENT}
+{START_CONTENT}
 <p class="listtop">.:opportunity:.</p>
 <span style="position:absolute; left:1em; top:3.3em; width:95%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
@@ -176,5 +179,6 @@
 <!-- Hier endet die Karte ------------------------------------------->
 </span>
 {jcal2}
+{END_CONTENT}
 </body>
 </html>

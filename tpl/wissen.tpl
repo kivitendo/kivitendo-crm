@@ -1,8 +1,11 @@
 <!-- $Id: liefer3.tpl 946 2006-03-01 12:42:11Z hlindemann $ -->
 <html>
 	<head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        {STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+        {JAVASCRIPTS}
+
     <script language="JavaScript">
     function filesearch() {
         f=open("dokument.php?P=1","File","width=900,height=650,left=200,top=100");
@@ -14,9 +17,11 @@
     </script>
 	{tiny}
 <body>
+{PRE_CONTENT}
+{START_CONTENT}
 <p class="listtop">.:knowhowdb:.</p>
 
-<span style="position:absolute; left:1em; top:5em; width:95%; border: 0px solid black">
+<span style="position:absolute; left:1em; top:7em; width:95%; border: 0px solid black">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 	<form name="wissen" action="wissen.php" method="post" onSubmit="return false">
 	<div style="float:left; width:33%; text-align:left; border: 0px solid red" >
@@ -45,5 +50,6 @@
 	</form>
 <!-- Hier endet die Karte ------------------------------------------->
 </span>
+{END_CONTENT}
 </body>
 </html>

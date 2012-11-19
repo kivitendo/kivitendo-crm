@@ -15,6 +15,14 @@
     $jscal2.="Calendar.setup( {inputField : 'stopd',ifFormat :'%d.%m.%Y',align : 'BL', button : 'trigger4'});\n";
     $jscal2.="//-->\n</script>";
     $t = new Template($base);
+    $menu =   $_SESSION['menu'];
+    $t->set_var(array(
+        JAVASCRIPTS   => $menu['javascripts'],
+        STYLESHEETS   => $menu['stylesheets'],
+        PRE_CONTENT   => $menu['pre_content'],
+        START_CONTENT => $menu['start_content'],
+        END_CONTENT   => $menu['end_content']
+    ));
     $t->set_file(array("tt" => "timetrack.tpl"));
     $data['clear'] = 1;
     if ($_POST["action"] == "save") {
@@ -100,6 +108,7 @@
             }
     } else {
         unset($data);
+        $data["cur"] = getCurr();
         $data["active"] = "t";
     }
     if ($data["events"]) {
@@ -115,6 +124,8 @@
         noevent => ($data["active"]=="t" && $data['id'])?"visible":"hidden",
         noown   => ($data["id"]>0 && $data["uid"]!=$_SESSION["loginCRM"])?"hidden":"visible",
         id      => $data["id"],
+        budget  => sprintf('%0.2f',$data["budget"]),
+        cur     => $data["cur"],
         clear   => $data['clear'],
         name    => $data["name"],
         fid     => $data["fid"],

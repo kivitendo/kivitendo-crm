@@ -11,8 +11,11 @@
 		$fa["number"]=$fa["vendornumber"];
 		$fa["kdtyp"]=$fa["lityp"];
 	}
+	foreach ($fa as $key=>$val) {
+		$fa[$key] = utf8_decode($val);
+	}
 	$var=array();
-		if ($key == "typrabatt") $val=$val*100;
+	if ($key == "typrabatt") $val=$val*100;
 	$fa["typrabatt"]= $fa["typrabatt"]*100;
 	$fa["creditlimit"]= sprintf("%0.2f",$fa["creditlimit"]);
 	$fa["discount"]= sprintf("%0.2f",$fa["discount"]*100);

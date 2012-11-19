@@ -16,19 +16,14 @@ echo "<br>Installation der Version $VERSION";
 echo " der Datenbankinstanz: ".$_SESSION["dbname"]."<br>";
 ob_flush();
 flush();
-if ($log=@fopen($p."tmp/install.log","a")) {
-	$logfile="tmp/install.log";
-	echo "Logfile in tmp/install.log<br>";
+if ($log=@fopen($p.'log/install.log',"a")) {
+	$logfile='$p.log/install.log';
+	echo 'Logfile in '.$logfile.'<br>';
 } else {
-	if ($log=@fopen("/tmp/install.log","a")) {
-		$logfile="/tmp/install.log";
-		echo "Logfile in /tmp/install.log<br>";
-	} else {
-		$logfile="";
-		echo "Keine Schreibrechte f&uuml;r Logfile in tmp und /tmp.<br>";
-		echo "Installation abgebrochen";
-		exit (1);
-	}
+	$logfile="";
+	echo "Keine Schreibrechte f&uuml;r Logfile in log.<br>";
+	echo "Installation abgebrochen";
+	exit (1);
 }
 echo "Schreibrechte im CRM-Verzeichnis pr&uuml;fen<br>";
 if (!file_exists($p."dokumente/".$_SESSION["dbname"]))  {

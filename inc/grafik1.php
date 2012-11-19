@@ -105,8 +105,8 @@ function  getLastYearPlot($re,$an,$art=false) {
 	$graph->xaxis->SetTickLabels($monate);
 	$graph->legend->Pos(0.03,0.90,"left","center");
 
-	$IMG="./tmp/".$employee.".png";
-	@exec("rm ./tmp/$employee.png");
+	$IMG='tmp/'.$employee.'.png';
+	@exec('rm '.$IMG);
 
 	$graph->Stroke($IMG);
 	return $IMG;

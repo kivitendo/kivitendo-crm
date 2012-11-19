@@ -108,8 +108,8 @@ function  getLastYearPlot($re,$an,$art=false) {
 	$Fillbg =& Image_Graph::factory('Image_Graph_Fill_Image', 'image/umsatz.jpg');
 	$Plotarea->setFillStyle($Fillbg); 
 
-	$IMG="./tmp/$employee.png";
-	@exec("rm ./tmp/$employee.png");
+	$IMG='tmp/'.$employee.'.png';
+	@exec('rm '.$IMG);
 	$Graph->done( 
 	    array('filename' => $IMG) 
 	);

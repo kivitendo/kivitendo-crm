@@ -284,8 +284,8 @@ global $db;
     $id=mknewTelCall();
     $dateiID=0;
     $did="null";
-    $datei["Datei"]["tmp_name"]="./tmp/".$file;
-    $datei["Datei"]["size"]=filesize("./tmp/".$file);
+    $datei["Datei"]["tmp_name"]='tmp/'.$file;
+    $datei["Datei"]["size"]=filesize('tmp/'.$file);
     $datei["Datei"]["name"]=$file;
     $dateiID=saveDokument($datei,$rs[0]["vorlage"],$datum,$data["CID"],$data["CRMUSER"],""); //##### letzten Parameter noch ändern
     $did=documenttotc($id,$dateiID);
@@ -984,7 +984,7 @@ global $db;
                 //trenne Anhang und speichere in tmp
                 $file=explode(",",$mail);
                 $Datei["Datei"]["name"]=$file[0];
-                   $Datei["Datei"]["tmp_name"]="./tmp/".$file[0];
+                   $Datei["Datei"]["tmp_name"]='tmp/'.$file[0];
                 $Datei["Datei"]["size"]=$file[1];
                 $dbfile=new document();
                 $dbfile->setDocData("descript",$data["DCaption"]);
@@ -1762,9 +1762,9 @@ global $db;
         $sql="update termine set cause='".$data["cause"]."',kategorie=".$data["kategorie"].",c_cause='".$data["c_cause"];
         $sql.="',starttag='".date("Y-m-d",$von)."',stoptag='".date("Y-m-d",$bis)."',startzeit='".$data["von"]."',stopzeit='".$data["bis"]."',";
         $sql.="repeat=".$data["repeat"].",ft='".$data["ft"]."',uid=".$data["uid"].",privat='".(($data["privat"]==1)?'t':'f')."', ";
-        $sql.="syncid=".$data["syncid"]." ";
-         // echtes Datum eintragen, schadet mal nicht und wird künfig verwendet.
-         $sql.=",start='".date("Y-m-d H:i:00",$von." ".$data["von"])."', stop='".date("Y-m-d H:i:00",$bis." ".$data["bis"])."' ";
+        //$sql.="syncid=".$data["syncid"].", ";
+        // echtes Datum eintragen, schadet mal nicht und wird künfig verwendet.
+        $sql.="start='".date("Y-m-d H:i:00",$von." ".$data["von"])."', stop='".date("Y-m-d H:i:00",$bis." ".$data["bis"])."' ";
         $sql.=",location='".$data["location"]."' ";
         $sql.=" where id=".$termid;
         $rc=$db->query($sql);
@@ -1807,7 +1807,6 @@ global $db;
                 $sql="insert into terminmember (termin,member,tabelle) values (";
                 $sql.=$termid.",$nr,'$tab')";
                 $rc=$db->query($sql);
-                //if ($tabelle<>"G") {
                 if ($tab<>"G" && $tab<>"E") {
                     $tid=mknewTelCall();
                     $nun=date2db($data["vondat"])." ".$data["von"].":00";
@@ -2844,6 +2843,7 @@ function saveTT($data) {
     if ( $data["startdate"] ) 	$sql .= "startdate = '".date2db($data["startdate"])."',";
     if ( $data["stopdate"] ) 	$sql .= "stopdate = '".date2db($data["stopdate"])."',";
     if ( $data["aim"] ) 	$sql .= "aim = ".$data["aim"].",";
+    if ( $data["budget"] ) 	$sql .= "budget = ".$data["budget"].",";
     $sql .= "active = '".$data["active"]."' ";
     $sql .= "WHERE id = ".$data["id"];
     $rc = $_SESSION['db']->query($sql);
@@ -2852,6 +2852,7 @@ function saveTT($data) {
     } else {
         $data["msg"] = ".:error:. .:saving:.";
     }
+    $data['cur'] = getCurr();
     $data["uid"] = $_SESSION["loginCRM"];
     return $data;
 }
@@ -2869,8 +2870,8 @@ function searchTT($data) {
     } else if ( $data["name"] ) {
         $sql .= "AND fid IN (SELECT id FROM customer WHERE name ILIKE '%".$data["name"]."%')";
     }
-    if ( $data["ttname"] ) 	$sql .= " AND ttname ilike '%".$data["ttname"]."%'";
-    if ( $data["ttdescription"] ) $sql .= " AND ttdescription ilike '%".$data["ttdescription"]."%'";
+    if ( $data["ttname"] ) 	$sql .= " AND ttname ilike '%".strtr($data["ttname"],'*','%')."%'";
+    if ( $data["ttdescription"] ) $sql .= " AND ttdescription ilike '%".strtr($data["ttdescription"],'*','%')."%'";
     if ( $data["startdate"] ) 	$sql .= " AND startdate >= '".date2db($data["startdate"])."'";
     if ( $data["stopdate"] ) 	$sql .= " AND stopdate <= '".date2db($data["stopdate"])."'";
     if ( $data["active"] ) 	$sql .= " AND active = '".$data["active"]."'";
@@ -2893,6 +2894,7 @@ function getOneTT($id,$event=true) {
     $rs["name"] = ( $rs["tab"] == "C" )?$rs["cname"]:$rs["vname"];
     $rs["startdate"] = db2date($rs["startdate"]);
     $rs["stopdate"] = db2date($rs["stopdate"]);
+    $rs['cur'] = getCurr();
     if ($event) $rs["events"] = getTTEvents($id,"o",false);
     return $rs;
 }

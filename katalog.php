@@ -49,13 +49,13 @@ if ($_POST['ok']) {
     }
     $rc = fputs($f,$vorlage['post']);
     fclose($f);
-    $rc = @exec("pdflatex -interaction=batchmode -output-directory=tmp/ tmp/katalog.tex",$out,$ret);
+    $rc = @exec('pdflatex -interaction=batchmode -output-directory=tmp/ tmp/katalog.tex',$out,$ret);
     if ( $ret == 1 ) {
-        $rc = @exec("pdflatex -interaction=batchmode -output-directory=tmp/ tmp/katalog.tex",$out,$ret);
-        if (file_exists('tmp/katalog.pdf'))     $link = "tmp/katalog.pdf";
+        $rc = @exec('pdflatex -interaction=batchmode -output-directory=tmp/ tmp/katalog.tex',$out,$ret);
+        if (file_exists('tmp/katalog.pdf'))     $link = 'tmp/katalog.pdf';
     } else {
         echo "Fehler beim Erstellen";
-        $link = "tmp/katalog.log";
+        $link = 'log/katalog.log';
     }
 } 
     $preise = getPreise();

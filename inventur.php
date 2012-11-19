@@ -14,14 +14,14 @@ if ($_POST["erstellen"]=="erstellen") {
    $vorlage = prepTex(false);
    if (file_exists('tmp/inventur.pdf')) unlink('tmp/inventur.pdf');
    if (file_exists('tmp/inventur.tex')) unlink('tmp/inventur.tex');
-   if (file_exists('tmp/tabelle.tex')) unlink('tmp/tabelle.tex');
+   if (file_exists('tmp/tabelle.tex'))  unlink('tmp/tabelle.tex');
    $suche = array('&','_','"','!','#','%');
    $ersetze = array('\&','\_','\"',' : ','\#','\%');
    if ($artikel)  {
         $pg = $artikel[0]['partsgroup_id'];
         $qty = 0;
         if ($_POST['wg'] == 1) {
-            $fname = "tmp/inventur_$pg.pdf";
+            $fname = 'tmp/inventur_'.$pg.'.pdf';
             $link = "<a href='$fname'>WG $pg</a> <br />";
         } else {
             $fname = false;
@@ -37,7 +37,7 @@ if ($_POST["erstellen"]=="erstellen") {
                 fclose($f);
                 closeinventur($fname);
                 $pg = $part['partsgroup_id'];
-                $fname = "tmp/inventur_$pg.pdf";
+                $fname = 'tmp/inventur_'.$pg.'.pdf';
                 $link .= "<a href='$fname'>".$part['partsgroup']."</a><br />";
                 $f = fopen('tmp/inventur.tex','w');
                 $pre = preg_replace("/<%partsgroup%>/i",$part['partsgroup'],$vorlage['pre']);

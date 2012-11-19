@@ -48,7 +48,7 @@
         $user=getUserStamm($_SESSION["loginCRM"]);
         $abs=sprintf("%s <%s>",$user["name"],$user["email"]);        
         $Subject="LxO-Kalender";
-        $v->setConfig( 'directory', "tmp/" ); // identify directory
+        $v->setConfig( 'directory', "/tmp/" ); // identify directory
         $v->saveCalendar(); // save calendar to file
         include_once("Mail.php");
         include_once("Mail/mime.php");

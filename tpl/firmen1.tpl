@@ -1,8 +1,8 @@
 <html>
         <head><title></title>
         {STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
-        <link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}/main.css"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}/tabcontent.css"></link>
         {AJAXJS}
         {JAVASCRIPTS}
         <script language="JavaScript" type="text/javascript">
@@ -30,7 +30,7 @@
 <input type="hidden" name="felder" value="">
 <input type="hidden" name="Q" value="{Q}">
 <p class="listtop" onClick="help('SuchFirma');">.:Companys:. .:search:. {FAART} (?)</p>
-<span style="position:absolute; left:1em; top:5.0em; border: 0px solid black;">
+<span id='contentbox2'>
 <!-- Beginn Code ------------------------------------------->
 <p class="listheading">| 
 <a href="{action}&first=A" class="fett">A</a> |

@@ -2,8 +2,8 @@
 <html>
     <head><title></title>
     {STYLESHEETS}
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}/main.css"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}/tabcontent.css"></link>
     {JAVASCRIPTS}
     {AJAXJS}
     <script language="JavaScript">
@@ -127,7 +127,7 @@
 <p class="listtop">.:documents:. </p>
 <form name="dokument.php" enctype='multipart/form-data' action="{action}" method="post">
 
-<span style="position:absolute; left:0.2em; top:5.7em; width:99%; height:90%;">
+<span id='contentbox2'>
 <!-- Hier beginnt die Karte  ------------------------------------------->
 
 <!-- linker Dateibaum: -->

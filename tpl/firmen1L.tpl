@@ -1,10 +1,9 @@
 <html>
         <head><title></title>
         {STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
-        <link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
-        {AJAXJS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}/main.css"></link>
         {JAVASCRIPTS}
+
 	<script language="JavaScript">
 	<!--
 	function showK (id) {

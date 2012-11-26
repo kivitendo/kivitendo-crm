@@ -1,0 +1,105 @@
+
+.shadetabs{
+padding: 0 0 0 0;
+margin: 2 0 0 0;
+font-size: 1.0em;
+font-weight: bolder;
+list-style-type: none;
+text-align: left; /*set to left, center, or right to align the menu as desired*/
+}
+
+.shadetabs li{
+display: inline;
+padding:0 0 0 0;
+margin: 0 4 0 0;
+background: white url(shade.gif);
+}
+
+.shadetabs li a{
+font-size: 1.0em;
+text-decoration: none;
+position: relative;
+padding: 2 2;
+border: 1px solid #778;
+color: #2d2b2b;
+}
+
+.shadetabs li a:link {
+color: #2d2b2b;
+}
+
+.shadetabs li a:visited {
+color: #2d2b2b;
+}
+
+.shadetabs li a:hover {
+color: #2d2b2b;
+text-decoration: underline;
+background-color: rgba(0,0,0,0);
+}
+
+.shadetabs li a:active {
+color: #2d2b2b;
+}
+
+.shadetabs li.selected {
+background: white url(shadeactive.gif) top left repeat-x;
+}
+
+.shadetabs li.selected a:hover {
+color: #2d2b2b;
+text-decoration: none;
+}
+
+
+.subshadetabs{
+padding: 0 0 0 0;
+margin: 0 0 0 0;
+font-size: 0.8em;
+font-weight:500;
+list-style-type: none;
+text-align: left; /*set to left, center, or right to align the menu as desired*/
+}
+
+.subshadetabs li{
+display: inline;
+padding:2 2 2 2;
+margin: 0 2 0 0;
+background: white url(shade.gif);
+border: 1px solid #778;
+}
+
+.subshadetabs li a{
+font-size: 0.8em;
+text-decoration: none;
+color: #2d2b2b;
+}
+
+.subshadetabs li a:link {
+color: #2d2b2b;
+}
+
+.subshadetabs li a:visited {
+color: #2d2b2b;
+}
+
+.subshadetabs li a:hover {
+color: #2d2b2b;
+text-decoration: underline;
+background-color: rgba(0,0,0,0);
+}
+
+.subshadetabs li a:active {
+color: #2d2b2b;
+}
+
+.subshadetabs li.selected {
+background: white url(shadeactive.gif) top left repeat-x;
+top: -2px;
+}
+
+.subshadetabs li.selected a:hover {
+color: #2d2b2b;
+text-decoration: none;
+}
+

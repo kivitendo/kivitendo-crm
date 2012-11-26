@@ -1,9 +1,14 @@
-<!-- $ID: $ -->
 <html>
 	<head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        {STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}/main.css"></link>
+
+        {AJAXJS}
+        {JAVASCRIPTS}
+
 <body >
+{PRE_CONTENT}
+{START_CONTENT}
 <!-- Beginn Code ------------------------------------------->
 <p class="listtop">.:catalog:.</p>
 <table >
@@ -61,5 +66,6 @@
 </form>
 </table>
 <!-- End Code ------------------------------------------->
+{END_CONTENT}
 </body>
 </html>

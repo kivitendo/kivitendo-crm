@@ -1,6 +1,6 @@
 	{STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
-	<link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}/main.css"></link>
+	<link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}/tabcontent.css"></link>
 	{JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
@@ -14,7 +14,8 @@
 {PRE_CONTENT}
 {START_CONTENT}
 <p class="listtop">.:detailview:. {FAART}</p>
-<div style="position:absolute; top:5.4em; left:0.2em;  width:42em;">
+<!--div style="position:absolute; top:5.4em; left:0.2em;  width:42em;"-->
+<div id="menubox2">
 	<ul id="maintab" class="shadetabs">
 	<li><a href="{Link1}">.:Custombase:.</a><li>
 	<li><a href="{Link2}">.:Contacts:.</a></li>
@@ -22,13 +23,14 @@
 	<li><a href="{Link4}">.:Documents:.</a></li>
 	</ul>
 </div>
-<span style="position:absolute; left:0.2em; top:7.2em; width:99%;" >
+<!--span style="position:absolute; left:0.2em; top:7.2em; width:99%;" -->
+<span id='contentbox' >
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <div style="position:absolute; left:0px; top:0.0em; width:35em; border:1px solid black">
 	<span class="fett">{Name} &nbsp; {kdnr}</span><br />
 	{Plz} {Ort}
 </div>
-<span style="position:absolute; left:38em; top:0.7em;">[<a href="opportunity.php?Q={Q}&fid={FID}">.:Opportunitys:.</a>]</span>
+<span style="position:absolute; left:38em; top:2.1em;">[<a href="opportunity.php?Q={Q}&fid={FID}">.:Opportunitys:.</a>]</span>
 <div style="position:absolute; left:1em; top:5em; width:99%;text-align:center;" class="normal">
 	<div style="float:left; width:23em; text-align:left; " >
 		<table style="width:100%;">

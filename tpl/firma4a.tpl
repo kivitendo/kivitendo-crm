@@ -1,9 +1,12 @@
-<!-- $Id$ -->
 <html>
 	<head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
-	<link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+        {STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}/main.css"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}/tabcontent.css"></link>
+
+        {AJAXJS}
+        {JAVASCRIPTS}
+
 	<script language="JavaScript">
 	<!--
 	function chkfld() {
@@ -15,7 +18,8 @@
 	//-->
 	</script>
 <body>
-
+{PRE_CONTENT}
+{START_CONTENT}
 <p class="listtop">.:generate document:.</p>
 <span style="position:absolute; top:1.1em; left:0.5em;  width:98%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
@@ -36,5 +40,6 @@
 </form>
 <!-- Hier endet die Karte ------------------------------------------->
 </span>
+{END_CONTENT}
 </body>
 </html>

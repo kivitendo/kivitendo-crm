@@ -2,6 +2,8 @@
         <head><title></title>
         {STYLESHEETS}
         {JAVASCRIPTS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}/main.css"></link>
+
 	{AJAXJS}
 	<script language="JavaScript">
 	<!--
@@ -70,8 +72,9 @@
 {START_CONTENT}
 <!-- Beginn Code ------------------------------------------->
 <p class="listtop">.:email:. .:send:. <font color="red">{Msg}</font></p>
+<div id='contentbox2'>
 <center>
-<table style="width:40em;" >
+<table>
 <form name="mailform" action="mail.php" enctype='multipart/form-data' method="post" onSubmit="return sende();">
 <INPUT TYPE="hidden" name="MAX_FILE_SIZE" value="2000000">
 <INPUT TYPE="hidden" name="QUELLE" value="{QUELLE}">
@@ -132,6 +135,7 @@
 </form>
 </table>
 </center>
+</div>
 <!-- End Code ------------------------------------------->
 <!--/td></tr></table-->
 {END_CONTENT}

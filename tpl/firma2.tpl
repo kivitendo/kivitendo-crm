@@ -1,8 +1,8 @@
 <html>
         <head><title></title>
         {STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
-        <link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}/main.css"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}/tabcontent.css"></link>
 
         {AJAXJS}
         {JAVASCRIPTS}
@@ -87,7 +87,8 @@
 {START_CONTENT}
 <p class="listtop" >.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}</span></p>
 <form name="kdhelp">
-<div style="position:absolute; top:3.9em; left:0.2em;">
+<!--div style="position:absolute; top:3.9em; left:0.2em;"-->
+<div id="menubox1">
     <div style="float:left; padding-top:1.5em; ";>
 	<ul id="maintab" class="shadetabs">
 	<li><a href="{Link1}">.:Custombase:.</a><li>
@@ -101,7 +102,7 @@
 	</select>
 	</ul>
     </div>
-    <div style="float:right; padding-left:1em;  visibility:{tools};">
+    <div style="float:left; padding-left:12em;  visibility:{tools};">
 	<img src="tools/rechner.png"  onClick="toolwin('tools/Rechner.html')" title=".:simple calculator:."> &nbsp;
 	<img src="tools/notiz.png"  onClick="toolwin('postit.php?popup=1')" title=".:postit notes:."> &nbsp;
 	<img src="tools/kalender.png"  onClick="toolwin('tools/kalender.php?Q=P&id={PID}')" title=".:calender:."> &nbsp;
@@ -109,7 +110,8 @@
     </div>
 </div>
 </form>
-<span style="position:absolute; left:0.2em; top:7.2em; width:99%;" >
+<!--span style="position:absolute; left:0.2em; top:7.2em; width:99%;" -->
+<span id='contentbox' >
 <!-- Beginn Code ------------------------------------------->
 <div style="float:left; width:35em; height:37em;  border: 1px solid black;" >
      	<div style="position:absolute; left:0em; width:35em;" >	

@@ -1,8 +1,7 @@
 <html>
 	<head><title></title>
         {STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
-        <link type="text/css" REL="stylesheet" HREF="css/tabcontent.css"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}/main.css"></link>
         {JAVASCRIPTS}
 
 	<script language="JavaScript">
@@ -26,21 +25,17 @@
 {PRE_CONTENT}
 {START_CONTENT}
 <p class="listtop">.:search result:. .:Contacts:.</p>
-<table width="100%" border="0"><tr><td valign="top">
+<table><tr><td valign="top">
 <!-- Beginn Code ------------------------------------------->
-<form name="personen" action="firma2.php" method="post">
-<input type="hidden" name="fid" value="{FID}">
-<input type="hidden" name="Q" value="{Q}">
-<table border="0"><tr><td class="mini" valign="top">
-    <table width="100%">
+
+<table>
 <!-- BEGIN Liste -->
-	<tr class="mini" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick='{js}'>
+	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick='{js}'>
 		<td>{Name}</td><td>&nbsp;{Plz}</td><td>{Ort}</td><td>&nbsp;{Telefon}</td><td>&nbsp;{eMail}</td><td>&nbsp;{Firma}</td><td>&nbsp;{insk}</td></tr>
 <!-- END Liste -->
 	<tr><td class="re" colspan="6">{snd}</td></tr>
-    </table>
-</td>
-<td class="mini">
+</table>
+</td><td class="mini">
     <form>
 	    <input type="button" name="etikett" value="Etiketten" onClick="chngSerial('etiketten');">&nbsp;
 	    <a href="sermail.php"><input type="button" name="email" value="Serienmail"></a>&nbsp;

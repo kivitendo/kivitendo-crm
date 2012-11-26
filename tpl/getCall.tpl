@@ -1,8 +1,7 @@
 <!-- $Id$ -->
 <html>
 	<head><title>LX - CRM</title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}/main.css"></link>
 	<script language="JavaScript">
 	<!--
 		function artikel() {

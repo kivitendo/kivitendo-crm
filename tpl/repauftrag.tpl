@@ -1,8 +1,11 @@
-<!-- $Id$ -->
 <html>
 	<head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/{ERPCSS}"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}"></link>
+        {STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}/main.css"></link>
+
+        {AJAXJS}
+        {JAVASCRIPTS}
+
 	<script language="JavaScript">
 		function material() {
 			//F1=open("getCall.php?Q=C&fid={FAD}","Caller","width=610, height=600, left=100, top=50, scrollbars=yes");
@@ -13,7 +16,8 @@
 		}
 	</script>
 <body >
-
+{PRE_CONTENT}
+{START_CONTENT}
 <table><tr><td>
 <!-- Beginn Code ------------------------------------------->
 <p class="listtop">Reparaturauftrag eingeben/editieren</p>
@@ -89,5 +93,6 @@
 
 <!-- End Code ------------------------------------------->
 </td></tr></table>
+{END_CONTENT}
 </body>
 </html>

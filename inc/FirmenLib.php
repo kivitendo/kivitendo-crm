@@ -1026,7 +1026,7 @@ global $xajax,$GEODB,$BLZDB,$jcalendar;
         $jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar-setup.js'></script>\n";
         $t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
-        $menu =  makeMenu();
+        $menu =  $_SESSION['menu'];
         $t->set_var(array(
             JAVASCRIPTS   => $menu['javascripts'],
             STYLESHEETS   => $menu['stylesheets'],
@@ -1195,7 +1195,7 @@ global $xajax,$GEODB,$BLZDB,$jcalendar;
         if (!$suchmaske) $tmp=getVariablen($daten["id"]);
         $varablen=($tmp>0)?count($tmp)." Variablen":"";
         $t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
-        $menu =  makeMenu();
+        $menu =  $_SESSION['menu'];
         $t->set_var(array(
                 JAVASCRIPTS   => $menu['javascripts'],
                 STYLESHEETS   => $menu['stylesheets'],

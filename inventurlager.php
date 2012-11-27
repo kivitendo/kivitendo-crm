@@ -1,12 +1,18 @@
 <?php
     require_once("inc/stdLib.php");
     include('inc/katalog.php');
+    $menu =  $_SESSION['menu'];
 ?>
 <html>
         <head><title></title>
-        <link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <?php echo $menu['stylesheets']; ?>
+    <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>/main.css"></link>
+    <?php echo $menu['javascripts']; ?>
+
 <body>
 <?php
+echo $menu['pre_content'];
+echo $menu['start_content'];
 if ($_POST['ok'] == 'sichern') {
     $rc = updatePartBin($_POST);
     echo $rc;
@@ -37,6 +43,7 @@ if ($_POST['ok'] == 'sichern') {
              $qty = abs($part['qty']);
              if ($part['qty']<0) $qty *= -1;
          };
+         $onhand = (abs($part['onhand']<0))?abs($part['onhand'])*-1:abs($part['onhand']);
          $lager = '';
          if ($part['bin_id']) $lager=' *';
          echo '<input type="hidden" name="parts_id[]"     value="'.$part['parts_id'].'">';
@@ -51,7 +58,7 @@ if ($_POST['ok'] == 'sichern') {
          } else { 
              echo '<input type="hidden" name="bestfefore[]"   value="'.$part['bestbefore'].'">'.$part['bestbefore'].'</td><td>';
          };
-         echo '<input type="text"   name="qty[]"          value="'.$qty.'">'.$part['partunit'].$lager.'</td></tr>';
+         echo '<input type="text"   name="qty[]"          value="'.$qty.'">'.$part['partunit'].' ('.$onhand.')</td></tr>';
       };
 ?>
       </table>
@@ -88,6 +95,8 @@ Lager:
 </select><br />
 <input type="submit" name="ok" value="suchen">
 </form>
-<?php } ?>
+<?php }
+echo $menu['end_content'];
+ ?>
 </body>
 </html>

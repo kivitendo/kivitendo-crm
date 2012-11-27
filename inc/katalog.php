@@ -176,15 +176,15 @@ function closeinventur($name) {
 function getPartBin($pg,$bin) {
 global $db;
     if ($pg == '') {
-	$pg = 'partsgroup_id is NULL ';
+	$pg = "(partsgroup_id is NULL or partsgroup_id = 0) ";
     } else { 
        $pg = "partsgroup_id = $pg ";
     };
     $sql  = 'SELECT p.description AS partdescription, p.partnumber AS partnumber, i.chargenumber AS chargenumber, ';
-    $sql .= 'i.bestbefore AS bestbefore, p.id AS parts_id,i.bin_id, SUM(i.qty) AS qty, p.unit AS partunit ';
+    $sql .= 'i.bestbefore AS bestbefore, p.id AS parts_id,i.bin_id, SUM(i.qty) AS qty, p.unit AS partunit, p.onhand ';
     $sql .= 'FROM parts p LEFT JOIN inventory i  ON i.parts_id  = p.id  LEFT JOIN bin   b ON i.bin_id  = b.id ';
     $sql .= 'WHERE 1=1 AND  (b.id = '.$bin.' or b.id is NULL) AND '.$pg;
-    $sql .= 'GROUP BY partdescription, partnumber, chargenumber, bestbefore,  p.id, partunit,i.bin_id ';
+    $sql .= 'GROUP BY partdescription, partnumber, chargenumber, bestbefore,  p.id, partunit,i.bin_id, p.onhand ';
     $sql .= 'ORDER BY partnumber  ASC';
     $pg = $db->getAll($sql,DB_FETCHMODE_ASSOC);
     return $pg;
@@ -230,6 +230,7 @@ global $db;
     for ($i=0; $i<$len; $i++) {
        if ($row['qty'][$i] == $row['oldqty'][$i]) continue;
        if ($row['qty'][$i] == '') continue;
+       $row['qty'][$i] = strtr($row['qty'][$i],',','.');
        $diff = $row['qty'][$i] - $row['oldqty'][$i];
        if ($diff > 0) {
           //$sqltyp = "SELECT id FROM transfer_type WHERE direction = 'in' and description = 'found'";

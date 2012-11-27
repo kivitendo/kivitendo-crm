@@ -105,6 +105,9 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     }
     $sql = "update auth.session set mtime = '".date("Y-M-d H:i:s.100001")."' where id = '".$rs[0]["session_id"]."'"; 
     $db->query($sql,"authuser_3");
+    $sql = "SELECT * FROM auth.session WHERE id = '".$cookie."'";
+    $rsa =  $db->getOne($sql);
+    $auth['token'] = $rsa['api_token'];
     return $auth;
 }
 
@@ -188,8 +191,9 @@ global $ERPNAME;
         $sql = "select * from defaults";
         $rs = $_SESSION["db"]->getAll($sql);
         $_SESSION["ERPver"]     = $rs[0]["version"];
-        $_SESSION["menu"]       = makeMenu();
+        $_SESSION["menu"]       = makeMenu($_SESSION["sessid"],$_SESSION["token"]);
         $_SESSION["basepath"]   = preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
+        $_SESSION['token']      = False;
         return true;
     }
 }
@@ -814,42 +818,27 @@ function mkDirName($name) {
     return strtr($name,$ers);
 }
 
-function makeMenu(){
+function makeMenu($sess,$token){
     if( !function_exists( 'curl_init' ) ){
         die( 'Curl ist nicht installiert!' );
     }
-    $fd = fopen('tmp/crm.log','a');
-    if ($_SESSION['sessid'] == '') anmelden();
     $BaseUrl  = (empty( $_SERVER['HTTPS'] )) ? 'http://' : 'https://';
     $BaseUrl .= $_SERVER['HTTP_HOST'];
     $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
-    $Url = $BaseUrl.'controller.pl?action=Layout/empty&format=json&{AUTH}login='.$_SESSION['employee'];
-    $pfad = preg_replace( "^/crm/.*^", "", $_SERVER['PHP_SELF'] );
-    $domain = $_SERVER['HTTP_HOST'];
-    $rc = `perl /var/www/lx-office-erp/controller.pl?action=Layout/empty&format=json&{AUTH}login=gtu`;
-    fputs($fd,"vor curlinit. BaseURL: $BaseUrl   Domain: $domain   Pfad: $pfad\n");
-    #fputs($fd,"vor curlinit. URL: $Url\n");
-    #$rc = `/usr/bin/curl $Url`;
-    fputs($fd,"Curl-err: $err Curl-rc.".print_r($rc,true)."\n");
-    #print_r($rc);
+    $Url = $BaseUrl.'controller.pl?action=Layout/empty&format=json';
+    $_SESSION['baseurl'] = $BaseUrl;
     $ch = curl_init();
-    fputs($fd,"nach curlinit.".$ch."\n");
     curl_setopt($ch,CURLOPT_VERBOSE,TRUE);
     curl_setopt( $ch, CURLOPT_URL, $Url );
     curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
     curl_setopt( $ch, CURLOPT_ENCODING, 'gzip,deflate' );
-    curl_setopt($ch, CURLOPT_INTERFACE, getenv('REMOTE_ADDR'));
-    //curl_setopt( $ch, CURLOPT_COOKIE, $_SESSION["cookie"]."='".$_SESSION["sessid"]."'" );
     curl_setopt( $ch, CURLOPT_HTTPHEADER, array (
                 "Connection: keep-alive",
-                "Cookie: ".$_SESSION["cookie"]."=".$_SESSION["sessid"]."; path='$pfad'; domain='$domain'"
+                "Cookie: ".$_SESSION["cookie"]."=".$sess."; ".$_SESSION["cookie"]."_api_token=".$token
                 ));
-    fputs($fd,"vor curlexec.\n");
     $result = curl_exec( $ch );
-    fputs($fd,"nach curlexec.".substr($result,0,100)."\n");
     curl_close( $ch );
     $objResult = json_decode( $result );
-    #fputs($fd,"Json.".$objResult."\n");
     $rs['javascripts'] = '<script type="text/javascript" src="'.$BaseUrl.$objResult->{'javascripts'}[0].'"></script>'."\n".'   ';
     if ($objResult) foreach($objResult->{'stylesheets'} as $style) {
         $rs['stylesheets'] .= '<link rel="stylesheet" href="'.$BaseUrl.$style.'" type="text/css">'."\n".'   ';
@@ -859,7 +848,6 @@ function makeMenu(){
     $rs['pre_content'] = str_replace( 'src="', 'src="'.$BaseUrl, $tmp );
     $rs['start_content'] = $objResult->{'start_content'};
     $rs['end_content'] = $objResult->{'end_content'};
-    fclose($fd);
     return $rs;
 }
 

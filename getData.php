@@ -7,7 +7,7 @@ ob_start();
 <html>
 <head><title></title>
     <?php echo $menu['stylesheets']; ?>
-    <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
+    <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>/main.css"></link>
     <?php echo $menu['javascripts']; ?>
 <?php  
     if ($ac) { 

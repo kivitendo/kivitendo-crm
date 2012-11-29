@@ -4,7 +4,7 @@
 ?>
 <html>
 	<head><title>LX - CRM</title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+        <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"]; ?>main.css"></link>
 	<style type="text/css">
 		td { padding-left:4px; }
 	</style>

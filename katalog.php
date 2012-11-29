@@ -2,7 +2,7 @@
     require("inc/stdLib.php");
     include ('inc/katalog.php');
     $link = "";
-
+    $menu =  $_SESSION['menu'];
 if ($_POST['ok']) {
     $artikel = getArtikel($_POST);
     $tax = getTax();
@@ -104,7 +104,12 @@ if ($_POST['ok']) {
            $t->parse('BlockPr','Preise',true); 
     }
     $t->set_var(array(
-        ERPCSS          => $_SESSION["stylesheet"],
+        ERPCSS          => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+        JAVASCRIPTS     => $menu['javascripts'],
+        STYLESHEETS     => $menu['stylesheets'],
+        PRE_CONTENT     => $menu['pre_content'],
+        START_CONTENT   => $menu['start_content'],
+        END_CONTENT     => $menu['end_content'],
         partnumber	=> $_POST['partnumber'],
         description     => $_POST['description'],
         ean             => $_POST['ean'],

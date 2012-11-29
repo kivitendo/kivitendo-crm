@@ -59,9 +59,9 @@ $menu = $_SESSION['menu'];
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head><title><?php echo  translate(".:LxO:.","work"); ?> <?php echo  translate(".:postit:.","work"); ?></title>
+        <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
 	<?=$menu['javascripts'];?>
         <?=$menu['stylesheets'];?>
-        <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"] ?>"></link>
 	<script language="JavaScript">
 	<!--
 	function PopUp() {

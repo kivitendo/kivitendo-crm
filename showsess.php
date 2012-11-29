@@ -5,8 +5,8 @@
 ?>
 <html>
 <head><title></title>
+    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
     <?php echo $menu['stylesheets']; ?>
-    <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
     <?php echo $menu['javascripts']; ?>
 </head>
 <body>
@@ -31,8 +31,7 @@ if ($_GET["ok"]) {
 	while( list($key,$val) = each($_SESSION) ) {
 		unset($_SESSION[$key]);
 	}
-	echo "ok. Session-Variablen gel&ouml;scht.<br>";
-	echo "Rufen Sie nun einen anderen CRM-Men&uuml;punkt auf, um eine neue Session zu erzeugen";
+        echo '<script type="text/javascript">window.location.href="status.php";</script>';
 }
 echo $menu['end_content'];
 ?>

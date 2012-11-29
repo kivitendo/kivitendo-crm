@@ -1,13 +1,13 @@
 <?php
-// $ID: $
-	require_once("inc/stdLib.php");
-	include_once("inc/crmLib.php");
+    require_once("inc/stdLib.php");
+    include_once("inc/crmLib.php");
     $CUID=($_GET["cuid"])?$_GET["cuid"]:$_SESSION["loginCRM"];
+    $menu =  $_SESSION['menu'];
 ?>
 <html onLoad="self.focus()">
-	<head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/<?php echo $_SESSION["stylesheet"] ?>"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"] ?>"></link>
+    <head><title></title>
+    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
+    <?php echo $menu['stylesheets']; ?>
 	<script language="JavaScript">
 	<!--
 <?php

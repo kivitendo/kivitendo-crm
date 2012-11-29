@@ -6,14 +6,14 @@ ob_start();
 ?>
 <html>
 <head><title></title>
+    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
     <?php echo $menu['stylesheets']; ?>
-    <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>/main.css"></link>
     <?php echo $menu['javascripts']; ?>
 <?php  
     if ($ac) { 
-            echo '<link rel="stylesheet" type="text/css" href="css/jquery.autocomplete.css"></link>'; 
-            echo '<script type="text/javascript" src="'.$_SESSION['basepath'].'/js/jquery.js"></script>'; 
-            echo '<script type="text/javascript" src="inc/jquery.autocomplete.js"></script>'; 
+            echo '<link rel="stylesheet" type="text/css" href="'.$_SESSION['basepath'].'crm/css/jquery.autocomplete.css"></link>'."\n"; 
+            echo '<script type="text/javascript" src="'.$_SESSION['basepath'].'js/jquery.js"></script>'."\n"; 
+            echo '<script type="text/javascript" src="'.$_SESSION['basepath'].'crm/inc/jquery.autocomplete.js"></script>'."\n"; 
             echo '<script language="JavaScript"> 
                             <!-- 
                             $(function(){ 

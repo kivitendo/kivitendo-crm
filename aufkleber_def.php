@@ -122,8 +122,8 @@
 <html>
 	<head>
 		<title></title>
+                <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"]; ?>main.css"></link>
 		<?=$menu['stylesheets'];?>
-                <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
                 <?=$menu['javascripts'];?>
 	</head>
 <body>

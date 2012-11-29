@@ -5,6 +5,7 @@
 	include("inc/FirmenLib.php");
 	$nr=$_GET["nr"];
 	$id=$_GET["id"];
+        $menu =  $_SESSION['menu'];
 	$tmp=getRechParts(substr($id,1),substr($id,0,1));
 	$adr=getRechAdr(substr($id,1),substr($id,0,1),$tmp[0]["shipto_id"]);
 	if ($adr["shiptoname"]) { $NAME=$adr["shiptoname"]; } else { $NAME=$adr["name"]; }
@@ -33,8 +34,17 @@
 ?>
 <html>
 	<head><title></title>
-	<link type="text/css" REL="stylesheet" HREF="css/main1.css"></link>
+        <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
+    <!-- ERP Stylesheet -->
+    <?php echo $menu['stylesheets']; ?>
+    <!-- ERP JavaScripts -->
+    <?php echo $menu['javascripts']; ?>
+    <!-- Ende ERP -->
 <body>
+<?php
+ echo $menu['pre_content'];
+ echo $menu['start_content'];
+?>
 <table width="100%" class="karte"><tr><td class="karte">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <table width="100%">
@@ -90,5 +100,6 @@ if (empty($reP)) {
 <script language='JavaScript'>self.focus();</script>
 <!-- Hier endet die Karte ------------------------------------------->
 </td></tr></table>
+<?php echo $menu['end_content']; ?>
 </body>
 </html>

@@ -1,9 +1,8 @@
-<!-- $Id: personen1.tpl 4293 2009-06-14 08:21:08Z jbueren $ -->
 <html>
     <head><title></title>
+        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
+        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/tabcontent.css"></link>
         {STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}/main.css"></link>
-        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}/tabcontent.css"></link>
         {JAVASCRIPTS}
 
     <script language="JavaScript">

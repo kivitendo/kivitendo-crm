@@ -247,25 +247,25 @@
             CAUSE => $vorlage["cause"],
             C_LONG => $vorlage["c_long"]
         ));
-                $t->parse("Block","Betreff",true);
+        $t->parse("Block","Betreff",true);
     }
     $t->set_var(array(
             HEADER   => $header,
-            ERPCSS      => $_SESSION["stylesheet"],
-            AJAXJS    => $xajax->printJavascript(XajaxPath),
-            Msg    => $msg,
-            btn    => $btn,
-            Subject => $Subject,
+            ERPCSS   => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+            AJAXJS   => $xajax->printJavascript(XajaxPath),
+            Msg      => $msg,
+            btn      => $btn,
+            Subject  => $Subject,
             BodyText => $BodyText,
-            CC     => $CC,
-            TO     => $TO,
+            CC       => $CC,
+            TO       => $TO,
             Sign     => $MailSign,
             KontaktCC => $_POST["KontaktCC"],
             KontaktTO => $KontaktTO,
-            QUELLE     => $referer,
-            JS     => "",
-            hide    => $hide,
-            vorlage => ($_GET["MID"])?$_GET["MID"]:$_POST["MID"]
+            QUELLE   => $referer,
+            JS       => "",
+            hide     => $hide,
+            vorlage  => ($_GET["MID"])?$_GET["MID"]:$_POST["MID"]
             ));
     $t->Lpparse("out",array("mail"),$_SESSION["lang"],"work");
 ?>

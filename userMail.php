@@ -10,9 +10,8 @@
 	mkPager($items,$pager,$start,$next,$prev);
 ?>
 <html>
-	<head><title>User Stamm</title>
-    <link type="text/css" REL="stylesheet" HREF="../css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
+    <head><title>User Stamm</title>
+        <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
 		<script language="JavaScript">
 	<!--
 		function showItem(Q,id) {

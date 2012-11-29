@@ -3,7 +3,8 @@
 ?>
 <html>
 	<head><title></title>
-	<link type="text/css" REL="stylesheet" HREF="css/main1.css"></link>
+	<link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
+
 <body>
 <?php
 if ($_POST["ok"]=="erzeugen") {

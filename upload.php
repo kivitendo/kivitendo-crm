@@ -1,6 +1,7 @@
 <?php
 session_start();
 include("inc/stdLib.php");
+$menu =  $_SESSION['menu'];
 if ($_POST) {
     require_once("documents.php");
     $dbfile=new document();
@@ -25,8 +26,9 @@ if ($_POST) {
 } ?>
 <html><head>
 <title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
+    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
+    <!-- ERP Stylesheet -->
+    <?php echo $menu['stylesheets']; ?>
 </head>
 <body class="docfrm" style="padding:0em; margin:0em; width:100%; height:100%;" >
 <table width="100%" class="klein">

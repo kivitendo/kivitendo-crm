@@ -1,6 +1,6 @@
 <html>
 <head><title>Zusatzdaten</title>
-        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}/main.css"></link>
+        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
 	<script langage="JavaScript">
 		// sind in den Funktionen geschweifte Klammern drin, dann als extra File laden
 		// da die sonst von der TemplateEngie gelöscht wird

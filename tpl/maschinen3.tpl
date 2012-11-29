@@ -1,9 +1,8 @@
-<!-- $Id$ -->
 <html>
 	<head><title></title>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
 	{STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="css/{ERPCSS}/main.css"></link>
         {JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--

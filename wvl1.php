@@ -81,7 +81,7 @@
     else if ($data["kontakttab"]=="C") { $stammlink="firma1.php?Q=C&id=".$data["kontaktid"]; }
     else if ($data["kontakttab"]=="V") { $stammlink="firma1.php?Q=V&id=".$data["kontaktid"]; };
     $t->set_var(array(
-            ERPCSS      => $_SESSION["stylesheet"],
+            ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
             Msg        => $msg,
             hide    => ($data["kontakt"]=="F")?"hidden":"visible",
             nohide    => "visible",

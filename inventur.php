@@ -2,13 +2,21 @@
     require_once("inc/stdLib.php");
     include ('inc/katalog.php');
     $link = "";
+    $menu =  $_SESSION['menu'];
 
 ?>
 <html>
-        <head><title></title>
-        <link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+    <head><title></title>
+    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
+    <!-- ERP Stylesheet -->
+    <?php echo $menu['stylesheets']; ?>
+    <!-- ERP JavaScripts -->
+    <?php echo $menu['javascripts']; ?>
+    <!-- Ende ERP -->
 <body>
 <?php
+ echo $menu['pre_content'];
+ echo $menu['start_content'];
 if ($_POST["erstellen"]=="erstellen") {
    $artikel = getLager($_POST);
    $vorlage = prepTex(false);
@@ -90,6 +98,7 @@ Ist-Bestand ausgeben <input type="checkbox" name="bestand" value="1"><br />
 </select><br />
 <input type="submit" name="erstellen" value="erstellen">
 </form>
+<?php echo $menu['end_content']; ?>
 <?php } ?>
 </body>
 </html>

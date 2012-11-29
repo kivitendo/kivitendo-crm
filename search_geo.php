@@ -38,8 +38,13 @@
 			$data[$zeile["loc_id"]]["plz"][]=$zeile["text_val"];
 		}
 	}
+        $menu =  $_SESSION['menu'];
 ?>
 <html>
+<head><title></title>
+    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
+    <!-- ERP Stylesheet -->
+    <?php echo $menu['stylesheets']; ?>
 	<script language="JavaScript">
 	<!--
 	var wo = '<?php echo  $wo ?>';
@@ -59,6 +64,7 @@
 	}
 	//-->
 	</script>
+</head>
 <body onLoad="self.focus()">
 <center>Gefundene - Eintr&auml;ge:<br><br>
 <form name="firmen">

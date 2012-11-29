@@ -107,7 +107,7 @@ if ($_POST["suche"]) {
         }
         $t->set_block("fa1","Liste","Block");
         $t->set_var(array(
-            ERPCSS      => $_SESSION["stylesheet"],
+            ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
             AJAXJS  => $xajax->printJavascript(XajaxPath),
             FAART => ($Q=="C")?"Customer":"Vendor",
             msg => $msg,

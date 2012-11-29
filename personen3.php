@@ -63,7 +63,7 @@
         } else {
             $id = $_GET["id"];
         }
-        if (!$id) header("location:personen1.php?Q=$Q");
+        if (!$id) header("location:".$_SESSION['basepath']."crm/personen1.php?Q=$Q");
         $daten = getKontaktStamm($id);
         $daten["Quelle"] = $Q;
         $msg  = "Edit: <b>$id</b>";

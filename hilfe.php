@@ -1,5 +1,6 @@
 <?php
 	require_once("inc/stdLib.php");
+        $menu =  $_SESSION['menu'];
 	if ($_SESSION["loginCRM"])  {
 		$v=($_SESSION["dbname"])?getVersiondb():"";
 	}
@@ -7,7 +8,8 @@
 ?>
 <html>
 	<head><title></title>
-	<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
+        <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
+        <?php echo $menu['stylesheets']; ?>
 <body>
 <p class="listtop">Hilfe/Dokumentation</p>
 

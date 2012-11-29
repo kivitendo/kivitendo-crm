@@ -5,10 +5,10 @@
     include("inc/FirmenLib.php");
     include("inc/persLib.php");
     include("inc/UserLib.php");
-    $jscal ="<style type='text/css'>@import url(../js/jscalendar/calendar-win2k-1.css);</style>\n";
-    $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar.js'></script>\n";
-    $jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
-    $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar-setup.js'></script>\n";
+    $jscal ="<style type='text/css'>@import url(".$_SESSION['basepath']."js/jscalendar/calendar-win2k-1.css);</style>\n";
+    $jscal.="<script type='text/javascript' src='".$_SESSION['basepath']."js/jscalendar/calendar.js'></script>\n";
+    $jscal.="<script type='text/javascript' src='".$_SESSION['basepath']."js/jscalendar/lang/calendar-de.js'></script>\n";
+    $jscal.="<script type='text/javascript' src='".$_SESSION['basepath']."js/jscalendar/calendar-setup.js'></script>\n";
     $fid=($_POST["fid"])?$_POST["fid"]:$_GET["fid"];
     $pid=($_POST["pid"])?$_POST["pid"]:$_GET["pid"];
     $INIT=($_POST["INIT"])?$_POST["INIT"]:$_GET["INIT"];
@@ -193,8 +193,10 @@
     }
     $cause=(empty($daten["Betreff"]))?$zeile["cause"]:$daten["Betreff"];
     $deletes=getCntCallHist($Bezug,true);
+    $menu =  $_SESSION['menu'];
     $t->set_var(array(
-        ERPCSS      => $_SESSION["stylesheet"],
+        ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+        STYLESHEETS   => $menu['stylesheets'],
         nummer => $daten["nummer"],
         EDIT => ($CallEdit and $_GET["hole"])?"visible":"hidden",
         DELETE => ($CallDel and $_GET["hole"])?"visible":"hidden",

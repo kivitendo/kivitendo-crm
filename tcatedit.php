@@ -1,11 +1,10 @@
 <?php
-// $Id: tcatedit.php 1038 2010-02-18 15:44:55Z hlindemann $
-	require_once("inc/stdLib.php");
-	require_once("inc/crmLib.php");
+    require_once("inc/stdLib.php");
+    require_once("inc/crmLib.php");
     include("inc/template.inc");
-	if ($_POST["ok"]) {
+    if ($_POST["ok"]) {
         $rc = saveTermincat($_POST);
-	}
+    }
 
     $tcat = getTermincat(false);
     $i=0;
@@ -37,7 +36,7 @@
         if ($row["catid"]>$max) $max=$row["catid"];
     };
     $t->set_var(array(
-        ERPCSS      => $_SESSION["stylesheet"],
+        ERPCSS =>  $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
         idx => $i,
         neu => 1,
         cid => $max+1,

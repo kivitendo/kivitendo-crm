@@ -4,9 +4,9 @@
     $menu =  $_SESSION['menu'];
 ?>
 <html>
-        <head><title></title>
-    <?php echo $menu['stylesheets']; ?>
+    <head><title></title>
     <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>/main.css"></link>
+    <?php echo $menu['stylesheets']; ?>
     <?php echo $menu['javascripts']; ?>
 
 <body>

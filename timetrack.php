@@ -4,10 +4,10 @@
     require("firmacommon".XajaxVer.".php");
     include("inc/template.inc");
 
-    $jscal1 ="<style type='text/css'>@import url(../js/jscalendar/calendar-win2k-1.css);</style>\n";
-    $jscal1.="<script type='text/javascript' src='../js/jscalendar/calendar.js'></script>\n";
-    $jscal1.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
-    $jscal1.="<script type='text/javascript' src='../js/jscalendar/calendar-setup.js'></script>\n";
+    $jscal1 ="<style type='text/css'>@import url(".$_SESSION['basepath']."/js/jscalendar/calendar-win2k-1.css);</style>\n";
+    $jscal1.="<script type='text/javascript' src='".$_SESSION['basepath']."/js/jscalendar/calendar.js'></script>\n";
+    $jscal1.="<script type='text/javascript' src='".$_SESSION['basepath']."/js/jscalendar/lang/calendar-de.js'></script>\n";
+    $jscal1.="<script type='text/javascript' src='".$_SESSION['basepath']."/js/jscalendar/calendar-setup.js'></script>\n";
     $jscal2 ="<script type='text/javascript'><!--\n";
     $jscal2.="Calendar.setup( {inputField : 'START',ifFormat :'%d.%m.%Y',align : 'BL', button : 'trigger1'});\n";
     $jscal2.="Calendar.setup( {inputField : 'STOP',ifFormat :'%d.%m.%Y',align : 'BL', button : 'trigger2'});\n";
@@ -117,7 +117,7 @@
 
     if ($data["fid"]) $data["backlink"] = "firma1.php?Q=".$data["tab"]."&id=".$data["fid"];
     $t->set_var(array(
-        ERPCSS  => $_SESSION["stylesheet"],
+        ERPCSS  => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
         AJAXJS  => $xajax->printJavascript(XajaxPath),
         backlink => $data["backlink"],
         blshow  => ($data["backlink"])?"visible":"hidden",

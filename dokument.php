@@ -14,7 +14,7 @@
     ));
     $t->set_file(array("doc" => "dokument.tpl"));
     $t->set_var(array(
-            ERPCSS  => $_SESSION["stylesheet"],
+            ERPCSS  => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
             AJAXJS  => $xajax->printJavascript(XajaxPath),
             PICUP   => $pickup,
     ));

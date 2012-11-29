@@ -839,15 +839,39 @@ function makeMenu($sess,$token){
     $result = curl_exec( $ch );
     curl_close( $ch );
     $objResult = json_decode( $result );
-    $rs['javascripts'] = '<script type="text/javascript" src="'.$BaseUrl.$objResult->{'javascripts'}[0].'"></script>'."\n".'   ';
-    if ($objResult) foreach($objResult->{'stylesheets'} as $style) {
-        $rs['stylesheets'] .= '<link rel="stylesheet" href="'.$BaseUrl.$style.'" type="text/css">'."\n".'   ';
+    $f = fopen('/tmp/json.log','w');
+    $_arr = get_object_vars($objResult);
+    $rs['javascripts']   = '';
+    $rs['stylesheets']   = '';
+    $rs['pre_content']   = '';
+    $rs['start_content'] = '';
+    $rs['end_content']   = '';
+    if ($objResult) {
+        foreach($objResult->{'javascripts'} as $js) {
+            $rs['javascripts'] .= '<script type="text/javascript" src="'.$BaseUrl.$js.'"></script>'."\n".'   ';
+        }
+        $rs['javascripts'] .= '<script type="text/javascript">';
+        $suche = '^,"([/a-zA-Z_0-9]+)\.(pl|php)^';
+        $ersetze = ',"'.$BaseUrl.'${1}.${2}';
+        foreach($objResult->{'javascripts_inline'} as $js) {
+            $js = preg_replace($suche, $ersetze,$js); 
+            $rs['javascripts'] .= $js; //'<script type="text/javascript" src="'.$BaseUrl.$js.'"></script>'."\n".'   ';
+        }
+        $rs['javascripts'] .= '</script>'."\n";
+        foreach($objResult->{'stylesheets'} as $style) {
+            if ($style) $rs['stylesheets'] .= '<link rel="stylesheet" href="'.$BaseUrl.$style.'" type="text/css">'."\n".'   ';
+        }
+        foreach($objResult->{'stylesheets_inline'} as $style) {
+            if ($style) $rs['stylesheets'] .= '<link rel="stylesheet" href="'.$BaseUrl.$style.'" type="text/css">'."\n".'   ';
+        }
+        $suche = '^([/a-zA-Z_0-9]+)\.(pl|php)^';
+        $ersetze = $BaseUrl.'${1}.${2}';
+        $tmp = preg_replace($suche, $ersetze, $objResult->{'pre_content'} );
+        $tmp = str_replace( 'itemIcon="', 'itemIcon="'.$BaseUrl, $tmp );
+        $rs['pre_content']   = str_replace( 'src="', 'src="'.$BaseUrl, $tmp );
+        $rs['start_content'] = $objResult->{'start_content'};
+        $rs['end_content']   = $objResult->{'end_content'};
     }
-    $tmp = str_replace( 'href="', 'href="'.$BaseUrl, $objResult->{'pre_content'} );
-    $tmp = str_replace( 'itemIcon="', 'itemIcon="'.$BaseUrl, $tmp );
-    $rs['pre_content'] = str_replace( 'src="', 'src="'.$BaseUrl, $tmp );
-    $rs['start_content'] = $objResult->{'start_content'};
-    $rs['end_content'] = $objResult->{'end_content'};
     return $rs;
 }
 

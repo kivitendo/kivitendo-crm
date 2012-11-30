@@ -5,7 +5,6 @@
 	<script language="JavaScript">
 	<!--
 	function showW (id,art) {
-		Frame=eval("top.main_window");
 		if (art=="D") {
  			uri="wvl1.php?show=" + id;
  		} else if (art=="T") {
@@ -15,7 +14,7 @@
 		} else {
 			uri="wvl1.php?mail=" + id;
 		}
-		Frame.location.href=uri;
+		location.href=uri;
 	}
 	//-->
 	</script>

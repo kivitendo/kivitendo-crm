@@ -7,9 +7,8 @@
 	<!--
 	function showD (id) {
 		if (id>0) {
-			Frame=eval("parent.main_window");
 			uri="dokument2.php?did=" + id;
-			Frame.location.href=uri;
+			window.location.href=uri;
 		}
 	}
 	//-->

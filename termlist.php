@@ -121,7 +121,7 @@
             $t->parse("Block","Liste",true);
         }
         $t->set_var(array(
-            ERPCSS      => $_SESSION["stylesheet"],
+            ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
             HEADLINE => (substr($ansicht,0,1)=="S")?".:search result:.":".:conflict with termin:."
         ));
     } else if ($ansicht=="W") {

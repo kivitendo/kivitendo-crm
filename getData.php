@@ -6,7 +6,7 @@ ob_start();
 ?>
 <html>
 <head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
     <?php echo $menu['stylesheets']; ?>
     <?php echo $menu['javascripts']; ?>
 <?php  
@@ -76,12 +76,11 @@ if ($_POST["adress"]) {
 <script language="JavaScript">
 <!--
 	function showD (src,id) {
-		Frame=eval("parent.main_window");
 		if      (src=="C") {	uri="firma1.php?Q=C&id=" + id }
 		else if (src=="V") {	uri="firma1.php?Q=V&id=" + id; }
 		else if (src=="E") {	uri="user1.php?id=" + id; }
 		else if (src=="K") {	uri="kontakt.php?id=" + id; }
-		Frame.location.href=uri;
+		window.location.href=uri;
 	}
 //-->
 </script>

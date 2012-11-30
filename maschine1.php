@@ -35,7 +35,7 @@
                 $t->parse("Block1","Sernumber",true);
             }
             $t->set_var(array(
-                ERPCSS      => $_SESSION["stylesheet"],
+                ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
             ));
             $t->pparse("out",array("vert"));            
             exit;

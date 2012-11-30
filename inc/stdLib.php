@@ -178,6 +178,9 @@ global $ERPNAME;
         if ( $charset == "" ) $charset = $dbcharset;
         $_SESSION["charset"] = $charset;
         $tmp = $rs[0];
+        $BaseUrl  = (empty( $_SERVER['HTTPS'] )) ? 'http://' : 'https://';
+        $BaseUrl .= $_SERVER['HTTP_HOST'];
+        $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
         $_SESSION["termbegin"]  = (($tmp["termbegin"]>=0)?$tmp["termbegin"]:8);
         $_SESSION["termend"]    = ($tmp["termend"])?$tmp["termend"]:19;
         $_SESSION["termseq"]    = ($tmp["termseq"])?$tmp["termseq"]:30;
@@ -192,7 +195,7 @@ global $ERPNAME;
         $rs = $_SESSION["db"]->getAll($sql);
         $_SESSION["ERPver"]     = $rs[0]["version"];
         $_SESSION["menu"]       = makeMenu($_SESSION["sessid"],$_SESSION["token"]);
-        $_SESSION["basepath"]   = preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
+        $_SESSION["basepath"]   = $BaseUrl;
         $_SESSION['token']      = False;
         return true;
     }

@@ -24,9 +24,8 @@
         sel=document.getElementById("wv").selectedIndex;
         nr=document.getElementById("wv").options[sel].value;
         if (nr>0) {
-            Frame=eval("parent.main_window");
             uri="vertrag3.php?vid=" + nr;
-            Frame.location.href=uri;
+            window.location.href=uri;
         }
     }    
     function mkDir() {

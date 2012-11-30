@@ -8,9 +8,8 @@
 	<!--
 	function showD (id) {
 		if (id>0) {
-			Frame=eval("parent.main_window");
 			uri="document2.php?id=" + id;
-			Frame.location.href=uri;
+			window.location.href=uri;
 		}
 	}
 	//-->

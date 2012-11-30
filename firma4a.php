@@ -114,7 +114,7 @@
     $t->set_file(array("doc" => "firma4a.tpl"));
     $t->set_var(array(
             FAART => ($tab=="C")?"Kunde":"Lieferant",
-            ERPCSS      => $_SESSION["stylesheet"],
+            ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
             TAB => $tab,
             FID => $fid,
             PID => $pid,

@@ -75,7 +75,7 @@ textarea  	{ font-size: 1em; font-family:Verdana,Arial,Helvetica,sans-serif;}
 	content:" ]";
 }
 input:focus {
-	background-color:yellow;
+	background-color:#bbbbee;
 }
 .zeile {  clear: both;
   padding: 2px 0px;

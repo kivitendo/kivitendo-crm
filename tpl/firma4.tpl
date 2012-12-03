@@ -166,7 +166,7 @@
 </div>
 
 <!--span style="position:absolute; left:0.2em; top:7.2em; width:99%; height:90%;"-->
-<span id='contenbox'>
+<span id='contentbox'>
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <span style="float:left; width:40%; height:90%; text-align:center; padding:2px; border: 1px solid black; border-bottom: 0px;">
     <div style="float:left; width:100%; height:5.5em; text-align:left; border-bottom: 1px solid black;" >
@@ -175,7 +175,7 @@
     <tr><td class="fett">.:KdNr:.: {customernumber}</td><td>ID: {PID}</td></tr>
     </table>
     </div>
-    <div style="float:left; width:100%; text-align:left; border-bottom: 0px solid black;" >
+    <div style="float:left; width:100%;min-height:300px;  text-align:left; border-bottom: 0px solid black;" >
     <ul id="submenu" class="subshadetabs">
         <li id="subnewfile"><a href="#" onClick="newFile('left')">.:uploadDocument:.</a></li>
         <li id="subnewfolder"><a href="#" onClick="newDir('left')">.:newDirectory:.</a></li>
@@ -187,7 +187,7 @@
     </div>
 </span>
 
-<span style="float:left; width:58%; height:90%; text-align:left; border: 1px solid black; border-bottom: 0px; padding:2px; border-left:0px;">
+<span style="float:left; width:58%; height:90%; text-align:left; border: 1px solid black; border-bottom: 2px; padding:2px; border-left:0px;">
     <div style="float:left; width:100%; height:5.5em; text-align:left; padding-top: 0; border-top: 0; border-bottom: 1px solid black;" class="fett">
     <table>
     <tr><td>.:Templates:.:</td><td>
@@ -206,7 +206,7 @@
     </select></td></tr>
     </table>
     </div>
-    <div style="float:left; width:100%;  text-align:left; border-bottom: 0px solid black;" class="normal">
+    <div style="float:left; width:100%;min-height:300px;   text-align:left; border-bottom: 0px solid black;" class="normal">
     <ul id="submenu2" class="subshadetabs">
         <li id="subfilebrowser"><a href="#" onClick="dateibaum('right',pfadleft)">.:Filebrowser:.</a></li>
         <li id="subdownload" style="visibility:hidden;"><a href="#" >.:download:.</a></li>
@@ -230,7 +230,7 @@
 </div>
 
 <!-- Datei upload  -->
-<div id="uploadfr" "class="docfrm" style="visibility:hidden; position:absolute; left:4em; top:10em; z-index:1; width:29em; height:21em;">
+<div id="uploadfr" class="docfrm" style="visibility:hidden; position:absolute; left:4em; top:10em; z-index:1; width:29em; height:21em;">
     <iframe id="frupload" name="frupload" src="upload.php" frameborder="0" width="100%" height="100%"></iframe>
 </div>
 

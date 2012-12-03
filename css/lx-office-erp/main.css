@@ -5,9 +5,9 @@ body { font-size: 1.0em; }
 #content        { position:relative; top:0em; left:0.1em; width:99%;}
 #menubox1       { position:relative; top:-2.0em; left:0.2em; width:99%;}
 #menubox2       { position:relative; top:-0.3em; left:0.2em; width:99%; }
-#contentbox	{ position:absolute; left:0.2em; top:3.6em; width:99%;}
+#contentbox	{ position:absolute; left:0.2em; top:4.2em; width:99%;}
 #contentbox2    { position:absolute; left:0.2em; top:3.0em; width:99%;}
-
+.contentbox3    { position:absolute; left:0.2em; top:3.0em; width:99%; display:inline; text-align:left;width:90%; height:36em; left:0.8em; top:7.3em; border:0px solid black; }
 
 table.liste	{ border-collapse:collapse; border-width: 0px; border-style:solid; border-color:black;padding: 2px; margin: 2px; border-spacing:0px; }
 td.liste	{ height:1.8em;  border-width:0px; border-style:solid; text-align:left; font-size: 1.2em;vertical-align:middle;margin:0px;padding:3px;}

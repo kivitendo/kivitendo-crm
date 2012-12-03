@@ -132,7 +132,7 @@
 
 <!-- linker Dateibaum: -->
 <span style="float:left; width:40%; height:90%; text-align:center; padding:2px; border: 1px solid black; border-bottom: 0px;">
-    <div style="float:left; width:100%; text-align:left; border-bottom: 0px solid black;" >
+    <div style="float:left; width:100%; min-height:300px; text-align:left; border-bottom: 0px solid black;" >
     <ul id="submenu" class="subshadetabs">
         <li id="subnewfile"><a href="#" onClick="newFile('left')">.:uploadDocument:.</a></li>
         <li id="subnewfolder"><a href="#" onClick="newDir('left')">.:newDirectory:.</a></li>
@@ -146,7 +146,7 @@
 
 <!-- rechter Dateibaum: -->
 <span style="float:left; width:58%; height:90%; text-align:left; border: 1px solid black; border-bottom: 0px; padding:2px; border-left:0px;">
-    <div style="float:left; width:100%;  text-align:left; border-bottom: 0px solid black;" class="normal">
+    <div style="float:left; width:100%; min-height:300px;  text-align:left; border-bottom: 0px solid black;" class="normal">
     <ul id="submenu2" class="subshadetabs">
         <li id="subfilebrowser"><a href="#" onClick="dateibaum('right',pfadleft)">.:Filebrowser:.</a></li>
         <li id="subdownload" style="visibility:hidden;"><a href="#" >.:download:.</a></li>

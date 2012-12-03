@@ -73,6 +73,7 @@ $menu = $_SESSION['menu'];
 <body onLoad="if (1==<?php echo  $popup ?>) window.resizeTo(600,400);">
 <?=$menu['pre_content'];?>
 <?=$menu['start_content'];?>
+<br />
 <p class="listtop"><?php echo  translate(".:notes:.","work"); ?></p>
 <table >
 <?php

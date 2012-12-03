@@ -111,7 +111,7 @@
 <form name="kdhelp">
 <!--div style="position:relative; top:-2.5em; left:0.2em; "-->
 <div id='menubox1'>
-    <div style="float:left; padding-top:1.5em; ";>
+    <span style="float:left;padding-top:1.5em;">
 	<ul id="maintab" class="shadetabs">
 	<li class="selected"><a href="firma1.php?Q={Q}&id={FID}">.:Custombase:.</a></li>
 	<li><a href="firma2.php?Q={Q}&fid={FID}">.:Contacts:.</a></li>
@@ -129,13 +129,13 @@
             <option value='firmen3.php?Q={Q}&id={FID}&edit=1'>.:edit:.</option>
         </select>
 	</ul>
-    </div>
-    <div style="float:left; padding-left:3em; padding-bottom:1em; visibility:{tools};" >
+    </span>
+    <span style="float:left; padding-left:3em; padding-bottom:1em; visibility:{tools};" >
 	<img src="tools/rechner.png"  onClick="toolwin('tools/Rechner.html')" title=".:simple calculator:."> &nbsp;
 	<img src="tools/notiz.png"  onClick="toolwin('postit.php?popup=1')" title=".:postit notes:."> &nbsp;
 	<img src="tools/kalender.png"  onClick="toolwin('tools/kalender.php?Q={Q}&id={FID}')" title=".:calender:."> &nbsp;
 	<a href="javascript:void(s=prompt('.:ask leo:.',''));if(s)leow=open('http://dict.leo.org/?lp=ende&search='+escape(s),'LEODict','width=750,height=550,scrollbars=yes,resizeable=yes');if(leow)leow.focus();"><img src="tools/leo.png"  title="LEO .:english/german:." border="0"></a> &nbsp;
-    </div>
+    </span>
 </div>
 </form>
 
@@ -143,7 +143,7 @@
 <span id='contentbox' >
 <!-- Begin Code --------------------------------------------- -->
 <div style="float:left; width:35em; height:37em; text-align:center; border: 1px solid black;" >
-	<div style="position:absolute; left:0em; width:35em; " >
+	<div style="position:absolute; left:0.2em; width:35em; " >
 		<div style="float:left; width:64%; height:10em; text-align:left; border-bottom: 0px solid black; padding:0.2em;" >
 			<span class="gross">{Fname1}</span><br />
 			{Fdepartment_1}	{Fdepartment_2}<br />
@@ -165,7 +165,7 @@
 			{kdnr}<br />
 			{IMG}<br /><br />
 				<form action="../oe.pl" method="post" name="oe">
-				<img src="image/kreuzchen.gif" title=".:locked address:."style="visibility:{verstecke};" >
+				<img src="image/kreuzchen.gif" title=".:locked address:." style="visibility:{verstecke};" >
 				<input type="hidden" name="action" value="add">
 				<input type="hidden" name="vc" value="{CuVe}">
 				<input type="hidden" name="type" value="">
@@ -188,7 +188,7 @@
 		</div>
 	</div>
 	<div style="position:absolute; width:35.0em; height:1.4em; text-align:left;  border-top: 1px solid black;left:0px; top:18.5em;">
-		<ul id="submenu" class="subshadetabs" style="padding-left:5px;">
+                <ul id="submenu" class="subshadetabs" style="padding-left:5px;">
 			<li id="sublie"><a href="#" onClick="submenu('lie')">.:shipto:.</a></li>
 			<li id="subnot"><a href="#" onClick="submenu('not')">.:notes:.</a></li>
 			<li id="subvar"><a href="#" onClick="submenu('var')">.:variablen:.</a></li>
@@ -328,7 +328,7 @@
 	</span>
 </div>
 
-<div style="position:absolute; top=0.2em; left:35em; width:45%; height:37em; text-align:left; border: 1px solid black; border-left:0px;">
+<div style="float:left;  width:45%; height:37em; text-align:left; border: 1px solid black; border-left:0px; ">
 	<div class="calls" width='99%' id="tellcalls" >
 	</div>
 	<!--span style="float:left;  text-align:left; border:0px solid black"-->	

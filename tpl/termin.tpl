@@ -65,6 +65,7 @@
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
+<br/>
 <!-- Beginn Code ------------------------------------------->
 <p class="listtop" onClick="help('Termine');">Termine (?)</p>
 <font color="red">{Msg}</font>

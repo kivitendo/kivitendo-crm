@@ -842,7 +842,6 @@ function makeMenu($sess,$token){
     $result = curl_exec( $ch );
     curl_close( $ch );
     $objResult = json_decode( $result );
-    $f = fopen('/tmp/json.log','w');
     $_arr = get_object_vars($objResult);
     $rs['javascripts']   = '';
     $rs['stylesheets']   = '';

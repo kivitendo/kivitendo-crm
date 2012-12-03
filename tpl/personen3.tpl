@@ -35,7 +35,7 @@
 <p class="listtop">.:personen:. .:keyin:./.:edit:.</p>
 
 <!-- Beginn Code ------------------------------------------->
-<div style="position:absolute; top:5.7em; left:0.2em;  width:65em;">
+<div id="menubox2">
 	<ul id="maintab" class="shadetabs">
 	<li id="subtab1" ><a href="#" onClick="submenu('tab1')">.:person:.</a></li>
 	<li id="subtab2" ><a href="#" onClick="submenu('tab2')">.:Company:.</a></li>
@@ -52,7 +52,7 @@
 <input type="hidden" name="employee" value="{employee}">
 <input type="hidden" name="IMG_" value="{IMG_}">
 <input type="hidden" name="nummer" value="{nummer}">
-<span id="tab1" style="visibility:visible; position:absolute; text-align:left;width:95%; height:36em; left:0.2em; top:7.7em; border:1px solid black;">
+<span id="tab1" class="contentbox3" style="visibility:visible">
 	<div class="zeile2">
 		<span class="label2 klein">.:gender:.</span>
 		<span class="feld">
@@ -124,7 +124,7 @@
 	</div>
 	<br><br>
 </span>
-<span id="tab2" style="visibility:hidden; position:absolute; text-align:left;width:90%; height:36em; left:0.8em; top:7.7em; border:1px solid black;">
+<span id="tab2" class="contentbox3" style="visibility:hidden">
 
 	<div class="zeile2">
 		<span class="label klein">.:Company:.</span>
@@ -144,8 +144,7 @@
 	</div>
 	<br>
 </span>
-<span id="tab3" style="visibility:hidden; position:absolute; text-align:left;width:90%; height:36em; left:0.8em; top:7.7em; border:1px solid black;">
-<!--span style="float:left; text-align:left; border: 0px solid black;"-->
+<span id="tab3" class="contentbox3" style="visibility:hidden">
 	<span  style="float:left;">
 		<div class="zeile2">
 			<span class="label klein">.:Catchword:.</span>

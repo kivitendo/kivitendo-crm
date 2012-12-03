@@ -1,7 +1,7 @@
 <html>
     <head><title>User Stamm</title>
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
     {STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
     {JAVASCRIPTS}
     <style type="text/css">
     #mailwin {

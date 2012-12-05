@@ -1,5 +1,5 @@
 <?php
-// Die volgenden Datenbanken müssen extra installiert werden. Siehe install.txt 
+// Die folgenden Datenbanken müssen extra installiert werden. Siehe install.txt 
 $GEODB=false; // Geodatenbank vorhanden
 $BLZDB=false; // BLZ-Datenbank vorhanden
 //php-db => "", mdb2 => "m"

@@ -1,4 +1,4 @@
-body { font-size: 0.7em; }
+/*body { foncfsize: 0.7em; }*//*verändert die Schriftgröße im Menü*/
 #wdbfile  A {
     color: #22a;
 }
@@ -116,7 +116,12 @@ input:focus {
 }
 .feldxx {
   float: left;
-  width: 25em;
+  width: 32em;
+  text-align: left;
+}
+.labelxx {
+  float: left;
+  width: 3em;
   text-align: left;
 }
 .pad {

@@ -89,7 +89,7 @@
 <form name="kdhelp">
 <!--div style="position:absolute; top:3.9em; left:0.2em;"-->
 <div id="menubox1">
-    <div style="float:left; padding-top:1.7em; ";>
+    <div style="float:left; " class="top1">
 	<ul id="maintab" class="shadetabs">
 	<li><a href="{Link1}">.:Custombase:.</a><li>
 	<li class="selected"><a href="{Link2}" id="aktuell">.:Contacts:.</a></li>

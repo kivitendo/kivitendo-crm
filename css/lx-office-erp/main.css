@@ -1,4 +1,4 @@
-body { font-size: 1.0em; }
+/*body { font-size: 1.0em; }*//*verändert die Schriftgröße im Menü*/
 #wdbfile  A {
     color: #22a;
 }
@@ -116,7 +116,12 @@ input:focus {
 }
 .feldxx {
   float: left;
-  width: 25em;
+  width: 28em;
+  text-align: left;
+}
+.labelxx {
+  float: left;
+  width: 3em;
   text-align: left;
 }
 .pad {
@@ -125,7 +130,7 @@ input:focus {
 }
 .leftfeld {
   float: left;
-  width: 205px;
+  width: 270px;
   text-align: left;
 }
 .diff1:before {

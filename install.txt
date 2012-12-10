@@ -108,7 +108,7 @@ z.B. Debian
 ERP-Menu erweitern:
 	cd lx-office-erp
 	mv menu.ini menu.ini.crm
-	cat crm/update/menu14?.ini menu.ini.crm > menu.ini
+	cat crm/update/menu.ini menu.ini.crm > menu.ini
 
 Menuicon kopieren
 	cd lx-office-erp

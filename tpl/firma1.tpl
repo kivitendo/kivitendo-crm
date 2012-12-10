@@ -111,7 +111,7 @@
 <form name="kdhelp">
 <!--div style="position:relative; top:-2.5em; left:0.2em; "-->
 <div id='menubox1'>
-    <span style="float:left;padding-top:1.3em;">
+    <span style="float:left;padding-top:1.7em;">
 	<ul id="maintab" class="shadetabs">
 	<li class="selected"><a href="firma1.php?Q={Q}&id={FID}">.:Custombase:.</a></li>
 	<li><a href="firma2.php?Q={Q}&fid={FID}">.:Contacts:.</a></li>

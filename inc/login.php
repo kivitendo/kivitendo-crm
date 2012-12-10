@@ -55,7 +55,12 @@ if ( is_file($conffile) ) {
             exit;
         }
     } else {
-        echo $_SESSION["db"]." nicht erreichbar.";
+        echo $_SESSION["db"]."Session abgelaufen.";
+        $Url  = (empty( $_SERVER['HTTPS'] )) ? 'http://' : 'https://';
+        $Url .= $_SERVER['HTTP_HOST'];
+        $Url .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
+        unset($_SESSION);
+        header('Location: '.$Url.'login.pl?x=1');
         exit;
     }
 } else {

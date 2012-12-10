@@ -1,4 +1,5 @@
 <?php
+session_set_cookie_params(600); // 10 minuten.
 session_start();
 
 $inclpa = ini_get('include_path');
@@ -65,14 +66,16 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     $sql .= "('--- ' || u.login || E'\\n')=sc.sess_value left join auth.session s on s.id=sc.session_id ";
     $sql .= "where session_id = '$cookie' and sc.sess_key='login'";// order by s.mtime desc";
     $rs = $db->getAll($sql,"authuser_0");
-    if ( !$rs ) return false;
+    if ( count($rs) == 0 ) return false;
     $stmp = "";
     if ( count($rs) > 1 ) {
-        header( "location:".preg_replace( "^crm/.*^", "login.pl?action=logout", $_SERVER['REQUEST_URI'] ) );
+        unset($_SESSION);
+        $Url = preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
+        header( "location:".$Url."login.pl?action=logout" );
     }
     $sql = "select * from auth.\"user\" where id=".$rs[0]["id"];
     $rs1 = $db->getAll($sql,"authuser_1");
-    if ( !$rs1 ) return false;
+    if ( count($rs1) == 0 ) return false;
     $auth = array();
     $auth["login"] = $rs1[0]["login"];
     $sql = "select * from auth.user_config where user_id=".$rs[0]["id"];
@@ -842,6 +845,7 @@ function makeMenu($sess,$token){
     $result = curl_exec( $ch );
     curl_close( $ch );
     $objResult = json_decode( $result );
+    if (!is_object($objResult)) anmelden();
     $_arr = get_object_vars($objResult);
     $rs['javascripts']   = '';
     $rs['stylesheets']   = '';

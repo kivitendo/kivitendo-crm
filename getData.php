@@ -39,7 +39,7 @@ ob_start();
 <?php
 echo $menu['pre_content'];
 echo $menu['start_content'];
-if ($_POST["adress"]) {
+if ($_GET["adress"]) {
 	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
 	include("inc/UserLib.php");
@@ -47,7 +47,7 @@ if ($_POST["adress"]) {
 	$msg="Leider nichts gefunden!";
 	$viele="Zu viele Treffer. Bitte einschr&auml;nken.";
 	$found=false;
-	$suchwort=mkSuchwort($_POST["swort"]);
+	$suchwort=mkSuchwort($_GET["swort"]);
 	$anzahl=0;
 	$db->debug=0;
 
@@ -123,10 +123,10 @@ if ($_POST["adress"]) {
  	        echo $msg; 
         }; 
  	echo "<br>"; 
-} else if ($_POST["kontakt"]){
+} else if ($_GET["kontakt"]){
 ?>
 <script language="JavaScript">
-	sw="<?php echo  $_POST["swort"]; ?>";
+	sw="<?php echo  $_GET["swort"]; ?>";
 	if (sw != "") 
 		F1=open("suchKontakt.php?suchwort="+sw+"&Q=S","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
 </script>			
@@ -136,7 +136,7 @@ echo $menu['end_content'];
 ob_end_flush(); 
 ?> 
 <p class="listtop">Schnellsuche Kunde/Lieferant/Kontakte und Kontaktverlauf</p>
-	<form name="suche" action="getData.php" method="post">
+	<form name="suche" action="getData.php" method="get">
 	<input type="text" name="swort" size="20" id="ac0" autocomplete="off"> suche 
 	<input type="submit" name="adress" value="Adresse" id="adresse">
 	<input type="submit" name="kontakt" value="Kontaktverlauf"> <br>

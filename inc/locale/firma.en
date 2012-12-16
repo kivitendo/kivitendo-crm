@@ -185,5 +185,6 @@ $texts  = array(
   '.:some:.'            => 'some (or)',
   '.:timetrack:.'       => 'Timetracker',
   '.:catalog:.'         => 'Catalog',
+  '.:Customer / Vendor exist with same zipcode:.' => 'Customer / Vendor exist with same zipcode'
 );
 ?>

@@ -185,5 +185,6 @@ $texts  = array(
   '.:some:.'		=> 'einige (oder)',
   '.:timetrack:.'       => 'Zeiterfassung',
   '.:catalog:.'      => 'Katalog',
+  '.:Customer / Vendor exist with same zipcode:.' => 'Kunde / Lieferant mit gleicher PLZ existiert bereits'
 ); 
 ?>

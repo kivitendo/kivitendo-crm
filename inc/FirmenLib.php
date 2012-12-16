@@ -520,6 +520,12 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
 global $db;
     $kenz=array("C" => "K","V" => "L");
     $tab=array("C" => "customer","V" => "vendor");
+    include("inc/conf.php");
+    if ($neu && $feature_unique_name_plz) {
+        $sql="SELECT id FROM ".$tab[$typ]." WHERE name = '".$daten['name']."' AND zipcode = '".$daten['zipcode']."'";
+        $rs=$db->getAll($sql);
+        if ($rs[0]['id']) return array(-1,".:Customer / Vendor exist with same zipcode:.");
+    } 
     if (!empty($datei["Datei"]["name"])) {          // eine Datei wird mitgeliefert
             $pictyp=array("gif","jpeg","png","jpg");
             $ext=substr($datei["Datei"]["name"],strrpos($datei["Datei"]["name"],".")+1);
@@ -638,7 +644,6 @@ global $db;
                 $query0=$query0."vendornumber='$tmpnr' ";
             }
         }
-        //require("links.php");
         include("links.php");
 		if (!is_dir($dir_abs."/".$DIR)) {
 			mkdir($dir_abs."/".$DIR);  
@@ -794,12 +799,15 @@ global $db;
 function mknewFirma($id,$typ) {
 global $db;
     $tab=array("C" => "customer","V" => "vendor");
-    $newID=uniqid (rand());
+    $tmpName_0="01010101";    
+    $tmpName_1=uniqid (rand());
+    $sql="DELETE FROM ".$tab[$typ]." WHERE name LIKE '".$tmpName_0."%'";
+    $rc=$db->query($sql);
     if (!$id) {$uid='null';} else {$uid=$id;};
-    $sql="insert into ".$tab[$typ]." (name,employee) values ('$newID',$uid)";
+    $sql="insert into ".$tab[$typ]." (name,employee) values ('$tmpName_0$tmpName_1',$uid)";
     $rc=$db->query($sql);
     if ($rc) {
-        $sql="select id from ".$tab[$typ]." where name = '$newID'";
+        $sql="select id from ".$tab[$typ]." where name = '$tmpName_0$tmpName_1'";
         $rs=$db->getAll($sql);
         if ($rs) {
             $id=$rs[0]["id"];
@@ -821,7 +829,7 @@ return $id;
 *****************************************************/
 function saveNeuFirmaStamm($daten,$files,$typ="C") {
     $daten["id"]=mknewFirma($_SESSION["loginCRM"],$typ);
-    $rs=saveFirmaStamm($daten,$files,$typ);
+    $rs=saveFirmaStamm($daten,$files,$typ,true);
     return $rs;
 }
 

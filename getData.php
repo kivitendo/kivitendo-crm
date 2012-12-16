@@ -2,38 +2,35 @@
 ob_start(); 
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
-        $menu =  $_SESSION['menu'];
+    $menu =  $_SESSION['menu'];
 ?>
 <html>
 <head><title></title>
     <?php echo $menu['stylesheets']; ?>
     <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
     <?php echo $menu['javascripts']; ?>
-<?php  
-    if ($ac) { 
-            echo '<link rel="stylesheet" type="text/css" href="'.$_SESSION['basepath'].'crm/css/jquery.autocomplete.css"></link>'."\n"; 
-            echo '<script type="text/javascript" src="'.$_SESSION['basepath'].'js/jquery.js"></script>'."\n"; 
-            echo '<script type="text/javascript" src="'.$_SESSION['basepath'].'crm/inc/jquery.autocomplete.js"></script>'."\n"; 
-            echo '<script language="JavaScript"> 
-                            <!-- 
-                            $(function(){ 
-                                    var search = "1"; 
-                                    $("#ac0").autocomplete({ 
-                                            url: "ac.php", 
-                                            minChars: 3, 
-                                            maxItemsToShow: 10, 
-                                            inputClass: "acInput", 
-                                            extraParams: { search: search }, 
-                                            onItemSelect:  
-                                                    function(){ 
-                                                            $("#adresse").click();  
-                                                    } 
-                                    }); 
-                            });              
-                            //--> 
-                            </script>'; 
-    } 
-?> 
+    <?php  
+    if ($feature_ac) { 
+        echo '<link rel="stylesheet" type="text/css" href="'.$_SESSION['basepath'].'crm/css/jquery.autocomplete.css"></link>'."\n"; 
+        echo '<script type="text/javascript" src="'.$_SESSION['basepath'].'js/jquery.js"></script>'."\n"; 
+        echo '<script type="text/javascript" src="'.$_SESSION['basepath'].'crm/inc/jquery.autocomplete.js"></script>'."\n"; 
+        echo '<script language="JavaScript"> 
+            <!-- 
+            $(function(){ 
+                var search = "1"; 
+                $("#ac0").autocomplete({ 
+                    url: "ac.php", 
+                    minChars: 3, 
+                    maxItemsToShow: 10, 
+                    inputClass: "acInput", 
+                    extraParams: { search: search }, 
+                    onItemSelect:  function(){ $("#adresse").click(); } 
+                }); 
+            });              
+            //--> 
+            </script>'; 
+    }//end feature_ac 
+    ?> 
 </head>
 <body onLoad="document.suche.swort.focus()";>
 <?php

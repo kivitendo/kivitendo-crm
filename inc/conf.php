@@ -70,5 +70,6 @@ $ERPNAME="lx-office-erp";
 $sep_cust_vendor=true; //Links zu verzeichenissen in Kunden und Lieferanten einteilen
 $dir_mode=0775; //Rechte erzeugter Verzeichnisse, ToDo: Dateien prüfen
 $dir_group='users'; //Gruppe für Dateien und Verzeichnisse
-$ac=true; //AutoComplete ein / aus 
+$feature_ac=true; //Autocompletion  
+$feature_unique_name_plz=true; //Doppelte Namen bei gleicher Plz verbieten (Kunden doppelt anlegen)
 ?>

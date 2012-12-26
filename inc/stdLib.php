@@ -1,4 +1,7 @@
 <?php
+ini_set('session.bug_compat_warn', 0);// Warnung für Sessionbug in neueren Php-Versionen abschalten. 
+ini_set('session.bug_compat_42', 0);  // Das ist natürlich lediglich eine Provirorische Lösung.
+//Warning: Unknown: Your script possibly relies on a session side-effect which existed until PHP 4.2.3. ....
 session_set_cookie_params(600); // 10 minuten.
 session_start();
 
@@ -123,10 +126,13 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
 function anmelden() {
 global $ERPNAME;
     ini_set("gc_maxlifetime","3600");
-    if ( file_exists("../".$ERPNAME."/config/kivitendo.conf") ) {
-	    $lxo = fopen("../".$ERPNAME."/config/kivitendo.conf","r");
-    } else if ( file_exists("../".$ERPNAME."/config/kivitendo.conf.default") ) {
-	    $lxo = fopen("../".$ERPNAME."/config/kivitendo.conf.default","r");
+    $deep = is_dir("../".$ERPNAME) ? "../" : "../../";                // anmelden() aus einem Unterverzeichnis
+    if ( file_exists($deep.$ERPNAME."/config/lx_office.conf") ) {     // Kivitendo ERP wertet aus Kompatibilitätsgrüden
+	    $lxo = fopen($deep.$ERPNAME."/config/lx_office.conf","r"); // auch zuerst die "alte" Konfigurationsdateien aus 
+    } else if ( file_exists($deep.$ERPNAME."/config/kivitendo.conf") ) {
+	    $lxo = fopen($deep.$ERPNAME."/config/kivitendo.conf","r");
+    } else if ( file_exists($deep.$ERPNAME."/config/kivitendo.conf.default") ) {
+	    $lxo = fopen($deep.$ERPNAME."/config/kivitendo.conf.default","r");
     } else {
         return false;
     }
@@ -149,7 +155,7 @@ global $ERPNAME;
 	        if ( $hits[1] ) $dbhost = ($hits[1])?$hits[1]:"localhost";
 	        preg_match("/port[ ]*= ([0-9]+)/",$tmp,$hits);
 	        if ( $hits[1] ) $dbport = ($hits[1])?$hits[1]:"5432";
-            if ( preg_match("/\[[a-z]+/",$tmp) ) $dbsec = False;
+            if ( preg_match("/\[[a-z]+/",$tmp) ) $dbsec = false;
     	    $tmp = fgets($lxo,512);
 	        continue;
         }
@@ -160,6 +166,7 @@ global $ERPNAME;
         if ( preg_match("!\[authentication/database\]!",$tmp) ) $dbsec = true;
         $tmp = fgets($lxo,512);
     }
+    fclose($lxo);
     if ( !$cookiename ) $cookiename = 'kivitendo_session_id';
     $cookie = $_COOKIE[$cookiename];
     if ( !$cookie ) header("location: ups.html");
@@ -170,11 +177,11 @@ global $ERPNAME;
     $_SESSION["sessid"] = $cookie;
     $_SESSION["cookie"] = $cookiename;
     $_SESSION["db"]     = new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
-    $_SESSION["authcookie"] = $authcookie;
+    //$_SESSION["authcookie"] = $authcookie; //todo kann sicher weg 
     $sql = "select * from employee where login='".$_SESSION["login"]."'";
     $rs = $_SESSION["db"]->getAll($sql);
     if( !$rs ) {
-        fclose($fd);
+        //fclose($fd);  //todo kann sicher weg
         return false;
     } else {
         $charset = ini_get("default_charset");
@@ -834,7 +841,6 @@ function makeMenu($sess,$token){
     $Url = $BaseUrl.'controller.pl?action=Layout/empty&format=json';
     $_SESSION['baseurl'] = $BaseUrl;
     $ch = curl_init();
-    curl_setopt($ch,CURLOPT_VERBOSE,TRUE);
     curl_setopt( $ch, CURLOPT_URL, $Url );
     curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
     curl_setopt( $ch, CURLOPT_ENCODING, 'gzip,deflate' );

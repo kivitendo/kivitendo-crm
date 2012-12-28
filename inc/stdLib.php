@@ -842,6 +842,7 @@ function makeMenu($sess,$token){
     $_SESSION['baseurl'] = $BaseUrl;
     $ch = curl_init();
     curl_setopt( $ch, CURLOPT_URL, $Url );
+    curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
     curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
     curl_setopt( $ch, CURLOPT_ENCODING, 'gzip,deflate' );
     curl_setopt( $ch, CURLOPT_HTTPHEADER, array (

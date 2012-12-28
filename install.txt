@@ -1,18 +1,22 @@
-Lx-Office CRM 1.5  
+Kivitendo CRM 1.5.5  
 
-
-Installtion Lx-Office CRM
+Installtion Kivitendo CRM
 -------------------------
+Die Installation der CRM kann von jedem Administrator mit Linux-Grundkenntnissen 
+durchgeführt werden und beansprucht einen Zeitaufwand von fünf bis zehn Minuten. 
 
-Dieses Installationsscript erzeugt die notwendigen Verzeichnisse und Tabellen
-für die CRM und erweitert einige Tabellen der ERP. Die
-Funktionstüchtigkeit der ERP wird dadurch nicht beeinträchtigt.
+Das Installationsscript erzeugt die notwendigen Verzeichnisse und Tabellen
+für die CRM und erweitert einige Tabellen der ERP. Die Funktionstüchtigkeit 
+der ERP wird dadurch nicht beeinträchtigt.
 
-Achten Sie darauf, dass Sie über TCP Zugriff auf die PostgreSQL
-haben (pg_hba.conf, postgresql.conf), was aber erledigt ist, wenn die ERP läuft.
+Die neuste Entwicklerversion kann mit "git clone git://vc.linet-services.de/public/lx-office-crm.git"
+direkt aus dem Repository kopiert werden. Voraussetzung hierfür ist das Programmpaket Git 
+(apt-get install git) 
+
+Kivitendo hieß früher Lx-Office. Dadurch heißen einige Pfade noch lx-office.
 
 Vorrausetzungen:
-	Lx-Office ERP >= 2.6.2 
+	Kivitendo ERP >= 3.0.0
 	PHP >= 4.2x
 	 	PEAR::DB 
 	oder
@@ -21,18 +25,20 @@ Vorrausetzungen:
 	PEAR::Contact_Vcard_Build
 	PEAR::Contact_Vcard_Parse
 	PEAR::Mail_Mime oder php-mail-mime
-		jpgraph3
+		
+	   jpgraph3
 	oder
-		PEAR::Image_Canvas
-		PEAR::Image_Graph
+	   PEAR::Image_Canvas
+	   PEAR::Image_Graph
+	
 	fpdf (http://www.fpdf.de/downloads/)
 	fpdi (http://www.setasign.de/products/pdf-php-solutions/fpdi/downloads/)
 	ttf-freefont
 	php-gd,php-imap
 	xajax (http://www.xajaxproject.org/)
 
-z.B. Debian oder Ubuntu:
-apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-db php5-pgsql php-fpdf php-mail-mime imagemagick php-xajax ttf-freefont
+Fast alle Pakete können unter debianoiden Systemen in der Konsole mit folgendem Behfehl installiert werden.
+apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-db php5-pgsql php-fpdf php-mail-mime imagemagick php-xajax ttf-freefont php5-curl
 
 jpgraph muß nicht mehr verwendet werden, wenn aber dann die Version 3. Alternativ wird PEAR::Image_Graph verwendet, kann aber mit PHP 5.3 Probleme machen.
 
@@ -56,19 +62,20 @@ short_open_tag = On
 
 AJAX:
 Nach und nach werden einige Masken mit Ajax bedient. 
-"xajax" wird nicht mehr mitgeliefert!! xajax  sollte ganz normal im Pfad erreichbar sein.
-Zwei Versionen sind im Umlauf. Bei Debian und Ubuntu wird als Paket V0.23 geliefert.
+"xajax" wird nicht mehr mitgeliefert!! xajax  sollte ganz normal im PfadZurCRM/crmajax erreichbar sein.
+Zwei Versionen sind im Umlauf. Bei sehr alten Debian und Ubuntu wird als Paket V0.23 geliefert.
 Aktuell ist die Version 0.5.
 Egal wohin das Xajax-Paket installiert wird, sollten einige Links angelegt werden.
-V0.23:
+V0.23: (veraltet)
     kann nach /usr/share/php in das Verzeichnis xajax installiert werden.
-    Softlink anlegen: ln -s /usr/share/php/xajax /pfadzulxocrm/crmajax/
-V0.50:
-    Das Minimalpaket kann unter /pfadzulxocrm/crmajax/ entpakt werden
-    oder
-    zwei Links anlegen /pfadzu/xajax/xajax_core /pfadzulxocrm/crmajax/
-    und /pfadzu/xajax/xajax_js /pfadzulxocrm/crmajax/
-Dann noch in der inc/conf.php die richtige Konstanten aktivieren:
+    SymLink anlegen: ln -s /usr/share/php/xajax /PfadZurCRM/crmajax/
+V0.5:
+    Das Minimalpaket kann unter /PfadZurCRM/crmajax/ entpakt werden
+    oder falls schon php-xajax installiert wurde
+    zwei SymLinks anlegen 
+    ln -s /pfadzu/xajax/xajax_core /PfadZurCRM/crmajax/xajax_core
+    ln -s /pfadzu/xajax/xajax_js /PfadZurCRM/crmajax/xajax_js 
+Dann noch in der inc/conf.php die richtige Konstanten kontrollieren ggf aktivieren:
 //Xajax => 0.5 evtl. auch 0.6
 define("XajaxVer","05");
 define("XajaxPath","./crmajax/");
@@ -116,7 +123,7 @@ Menuicon kopieren
 
 
 Eigentümer der Datei auf Webserver setzen
-z.B. Debian:
+z.B. Debian / Ubuntu:
 	chown -R www-data: crm/
 Andere:
 	apache, apache2, httpd, www-run
@@ -124,7 +131,7 @@ Andere:
 Im Browser die ERP aufrufen und anmelden
 	 -http://localhost/lx-office/login.pl
 
-Melden Sie sich nun an LxO-ERP an und wählen Sie einen CRM-Menüeintrag aus.
+Melden Sie sich nun an Kivitendo-ERP an und wählen Sie einen CRM-Menüeintrag aus.
 Die Datenbankinstallation wird nun durchgeführt.
 
 Tiny-MCE:
@@ -205,14 +212,17 @@ In der Bearbeitungsmaske der Firmen bekommen Sie nun unter "Sonstiges" einen neu
 
 Zeiterfassung:
 --------------
-in der inc/conf.php müßen einige Vorbereitungen getätig werden:
+in der inc/conf.php müßen einige Vorbereitungen getätigt werden:
 $ttpart='azstd'; //Artikelnummer für Arbeitszeit
 $tttime=60;     //Anzahl der Minuten für eine Einheit
 $ttround=15;    //Ab hier wird eine Einheit berechnet
 
 Benutzerfreundliche Links:
 --------------------------
-befinden sich in PfadZumCRM/Datenbankname/link_dir
+ermöglichen einfacheres Speichern von Dateien vom Server bzw aus dem Netzwerk
+und befinden sich in PfadZumCRM/Datenbankname/link_dir.
+Die Links werden beim Speichern des Kunden nach dem Format "Kundenname_Kundennummer"
+automatisch oder manuell unter CRM->Admin->Status erzeugt.
 Link ins Home-Verzeichnis erstellen:
 ln -s PfadZumCRM/Datenbankname/link_dir_cust /home/username/Kundendaten
 Parameter in der conf.php

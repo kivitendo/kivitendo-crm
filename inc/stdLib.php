@@ -304,11 +304,11 @@ function chkFld(&$val,$empty,$rule,$len) {
         case 6 : if ( $empty===0 && empty($val) ) { $ok = true; $val = "null"; }
                  else { $ok = preg_match('/^[0-9]+$/',$val,$hit); } // Ganzzahlen
                  break;
-        case 7 : if ( $empty===0 && empty($val) ) { $ok = true; $val = "0000-00-00";} // Datum
-                 else if ( $val == '00.00.0000' ) { $ok = true; $val = "0000-00-00";} 
+        case 7 : if ( $empty===0 && empty($val) ) { $ok = true; $val = null;} // Datum
+                 else if ( $val == '00.00.0000' ) { $ok = true; $val = null;} 
                  else {
                      $t = explode(".",$val);
-                     if ( checkdate($t[1],$t[0],$t[2]) ) {
+                     if ( $ok = checkdate($t[1],$t[0],$t[2]) ) {
                         if ( $t[2] <= date('y') ) {
                             $val = sprintf('20%02d-%02d-%02d',$t[2],$t[1],$t[0]);
                         } else if ( $t[2] > 100 ) {

@@ -326,7 +326,7 @@ global $db;
     }
     if ($fehler==-1) { //Kein Fehler aufgetreten
         if (!$daten["PID"] or $daten["PID"]<1) $pid=mknewPerson($daten["employee"]);  //Neue Person
-        if (!$pid) return "unbekannt";    //Hat keine PID
+        if (!$pid) return "keine PID";    //Hat keine PID
         if ($daten["nummer"]) {  //Gehört zu einem Cust./Vend.
             $dir=$daten["Quelle"].$daten["nummer"]."/".$pid;
         } else {

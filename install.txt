@@ -116,6 +116,8 @@ ERP-Menu erweitern:
 	cd lx-office-erp
 	mv menu.ini menu.ini.crm
 	cat crm/update/menu.ini menu.ini.crm > menu.ini
+Alternativ mit patch:
+    patch -p1 ../lx-office-erp/menu.ini < update/menu.ini.patch -b
 
 Menuicon kopieren
 	cd lx-office-erp

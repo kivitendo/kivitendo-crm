@@ -38,17 +38,24 @@ Vorrausetzungen:
 	xajax (http://www.xajaxproject.org/)
 
 Fast alle Pakete können unter debianoiden Systemen in der Konsole mit folgendem Behfehl installiert werden.
-apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-db php5-pgsql php-fpdf php-mail-mime imagemagick php-xajax ttf-freefont php5-curl
+apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-db php5-pgsql php-fpdf imagemagick php-xajax ttf-freefont php5-curl tinymce
 
 jpgraph muß nicht mehr verwendet werden, wenn aber dann die Version 3. Alternativ wird PEAR::Image_Graph verwendet, kann aber mit PHP 5.3 Probleme machen.
 
+Die restlichen Pearpaket installieren:
+    pear install MDB2#pgsql DB MDB2 Image_Color Contact_Vcard_Build Contact_Vcard_Parse
+
 Achtung! Das PEAR-Paket Image_Graph und Image_Canvas sind noch nicht "stable". Daher mit :
+    pear install -f Image_Graph Image_Canvas
+installieren.
 
-	pear install -f Image_Graph
-	pear install -f Image_Canvas
-
-installieren.  Ein weiteres Paket ist dafür Vorraussetzung:
-	PEAR::Image_Color  
+Installierte Pearpakete anzeigen:
+    pear list
+  
+FPDI installieren:
+    mkdir /usr/share/php/fpdi && cd /usr/share/php/fpdi
+    wget http://www.setasign.de/supra/kon2_dl/55450/FPDI-1.4.3.zip && unzip FPDI-1.4.3.zip
+    ln -s /usr/share/php/fpdi/fpdi.php /usr/share/php/fpdi.php
 
 
 PHP5:
@@ -65,14 +72,14 @@ Nach und nach werden einige Masken mit Ajax bedient.
 "xajax" wird nicht mehr mitgeliefert!! xajax  sollte ganz normal im PfadZurCRM/crmajax erreichbar sein.
 Zwei Versionen sind im Umlauf. Bei sehr alten Debian und Ubuntu wird als Paket V0.23 geliefert.
 Aktuell ist die Version 0.5.
-Egal wohin das Xajax-Paket installiert wird, sollten einige Links angelegt werden.
+Egal wohin das Xajax-Paket installiert wird, sollten einige Links geprüft bzw erzeugt werden.
 V0.23: (veraltet)
     kann nach /usr/share/php in das Verzeichnis xajax installiert werden.
     SymLink anlegen: ln -s /usr/share/php/xajax /PfadZurCRM/crmajax/
 V0.5:
     Das Minimalpaket kann unter /PfadZurCRM/crmajax/ entpakt werden
     oder falls schon php-xajax installiert wurde
-    zwei SymLinks anlegen 
+    zwei SymLinks prüfen ggf anlegen 
     ln -s /pfadzu/xajax/xajax_core /PfadZurCRM/crmajax/xajax_core
     ln -s /pfadzu/xajax/xajax_js /PfadZurCRM/crmajax/xajax_js 
 Dann noch in der inc/conf.php die richtige Konstanten kontrollieren ggf aktivieren:
@@ -120,9 +127,7 @@ Alternativ mit patch:
     patch -p1 ../lx-office-erp/menu.ini < update/menu.ini.patch -b
 
 Menuicon kopieren
-	cd lx-office-erp
-	cp crm/image/CRM.png image/
-
+	cd lx-office-erp && cp crm/image/CRM.png image/
 
 Eigentümer der Datei auf Webserver setzen
 z.B. Debian / Ubuntu:
@@ -137,10 +142,10 @@ Melden Sie sich nun an Kivitendo-ERP an und wählen Sie einen CRM-Menüeintrag a
 Die Datenbankinstallation wird nun durchgeführt.
 
 Tiny-MCE:
-Um den Edito in der Wissens-DB nutzen zu können muß in der conf.php die 
+Um den Editor in der Wissens-DB nutzen zu können muß in der conf.php die 
 Variable tinymce mit True belegt werden.
 Den Ordner /pfad/zu/tinymce/www nach /pfad/zu/lx-office-crm/inc/tiny_mce verlinken.
-
+    ln -s /usr/share/tinymce/www/ /usr/lib/lx-office-crm/inc/tiny_mce
 
 Geo-Datenbank:
 --------------
@@ -222,11 +227,11 @@ $ttround=15;    //Ab hier wird eine Einheit berechnet
 Benutzerfreundliche Links:
 --------------------------
 ermöglichen einfacheres Speichern von Dateien vom Server bzw aus dem Netzwerk
-und befinden sich in PfadZumCRM/Datenbankname/link_dir.
+und befinden sich in PfadZurCRM/Datenbankname/link_dir.
 Die Links werden beim Speichern des Kunden nach dem Format "Kundenname_Kundennummer"
 automatisch oder manuell unter CRM->Admin->Status erzeugt.
 Link ins Home-Verzeichnis erstellen:
-ln -s PfadZumCRM/Datenbankname/link_dir_cust /home/username/Kundendaten
+ln -s PfadZurCRM/Datenbankname/link_dir_cust /home/username/Kundendaten
 Parameter in der conf.php
 dir_mode=0775;  Owner + Gruppe Schreibrecht, andere Leserecht
 dir_group=users; Mitglieder dieser Gruppe dürfen gesetzte Rechte       

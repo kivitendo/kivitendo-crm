@@ -833,7 +833,7 @@ function mkDirName($name) {
 
 function makeMenu($sess,$token){
     if( !function_exists( 'curl_init' ) ){
-        die( 'Curl ist nicht installiert!' );
+        die( 'Curl (php5-curl) ist nicht installiert!' );
     }
     $BaseUrl  = (empty( $_SERVER['HTTPS'] )) ? 'http://' : 'https://';
     $BaseUrl .= $_SERVER['HTTP_HOST'];

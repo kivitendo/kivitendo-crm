@@ -68,6 +68,7 @@ PHP-Code wird angezeigt (sollte nicht mehr vorkommen):
 short_open_tag = On
 
 AJAX:
+Die Installation wird i.d.R. mit apt-get durchgeführt, sämtliche Links bringt die CRM schon mit.
 Nach und nach werden einige Masken mit Ajax bedient. 
 "xajax" wird nicht mehr mitgeliefert!! xajax  sollte ganz normal im PfadZurCRM/crmajax erreichbar sein.
 Zwei Versionen sind im Umlauf. Bei sehr alten Debian und Ubuntu wird als Paket V0.23 geliefert.
@@ -92,10 +93,9 @@ define("XajaxPath","./crmajax/");
 
 Wird mit einem Alias für das LxO-Verzeichnis benutzt und soll in einigen Masken der 
 jscalendar der ERP benutzt werden, muß das Verzeichnis ins CRM-Verzeichnis verlinkt werden:
-cd lx-office-crm
-ln -s ../lx-office-erp/js
+cd lx-office-crm && ln -s ../lx-office-erp/js
 
-evtl. php.ini anpassen:
+evtl. php.ini anpassen: (i.d.R. nicht notwendig)
 include_path = ".:/usr/share/php:/usr/share/fpdf:/usr/share/jpgraph"
 extension=gd.so
 .
@@ -113,11 +113,11 @@ z.B. RPM-Systeme
 z.B. Debian
 	cd /usr/lib/; tar xzf lx-office-crm-{version}.tgz
 
-Crm in die ERP verlinken:
+Crm in die ERP verlinken :
 z.B. RPM-Systeme
-	cd /srv/lx-office-erp; ln -s ../lx-office-crm crm
+	cd /srv/lx-office-erp && ln -s ../lx-office-crm crm
 z.B. Debian
-	cd /usr/lib/lx-office-erp; ln -s ../lx-office-crm crm
+	cd /usr/lib/lx-office-erp && ln -s ../lx-office-crm crm
 
 ERP-Menu erweitern:
 	cd lx-office-erp
@@ -170,7 +170,7 @@ Die Konsole mit '\q' verlassen.
 Jetzt noch die inc/conf.php öffnen und den Wert hinter 'GEODB' auf 'true' ändern.
 
 Jetzt erscheint in den Eingabemasken ein Knopf 'suche Ort'. Geben Sie in Plz, Ort oder
-Vorwahl einen (Teil-)Begrif ein und klicken Sie auf den Knopf. In einem Pop-Up werden
+Vorwahl einen (Teil-)Begriff ein und klicken Sie auf den Knopf. In einem Pop-Up werden
 die Treffer angezeigt. Wird ein Wert ausgewählt, wird in Plz,Ort,Vorwahl der dazugehörige 
 Wert eingetragen.
 
@@ -250,3 +250,7 @@ von jemanden in Perl umgesetzt, dann kommt das in die ERP.
 
 Installation:
 Menü um update/listen_menu.ini erweitern. Evtl. Bilderverzeichnis verlinken
+
+Weitere Informationen, professioneller Support:
+http://www.lx-system.de
+

@@ -9,6 +9,7 @@ if ($_GET['check']==1) {
    	$check=false;
 }
 $p=($_GET['check']==1)?'../':'';
+include("inc/stdLib.php");
 include($p.'inc/conf.php');
 include($p.'inc/version.php');
 if (ob_get_level() == 0) ob_start();
@@ -17,7 +18,7 @@ echo " der Datenbankinstanz: ".$_SESSION["dbname"]."<br>";
 ob_flush();
 flush();
 if ($log=@fopen($p.'log/install.log',"a")) {
-	$logfile='$p.log/install.log';
+	$logfile=$p."log/install.log";
 	echo 'Logfile in '.$logfile.'<br>';
 } else {
 	$logfile="";
@@ -36,7 +37,7 @@ if (!file_exists($p."dokumente/".$_SESSION["dbname"]))  {
 	echo "Verzeichnis 'dokumente/".$_SESSION["dbname"]."' existiert.<br>";
 }
 $ok="<b>ok</b>";
-$fehler="<font color='red'>fehler</font>";
+$fehler="<font color='red'>Fehler!</font>";
 if (is_writable($p."dokumente")) { 
 	echo "dokumente/ : $ok<br>"; 
 	fputs($log,"dokumente/ : ok\n");
@@ -69,11 +70,17 @@ if (is_writable($p."inc/conf.php")) {
 fputs($log,date("d.m.Y H:i:s")."\n");
 fputs($log,$VERSION."\n");
 
-
-echo "Vorraussetzungen pr&uuml;fen:<br>";
+echo "<br>Vorraussetzungen pr&uuml;fen:<br>";
         $path=ini_get("include_path");
         fputs($log,"Suchpfad: $path\n");
         $pfade=explode(":",$path);
+        if( function_exists('curl_init')){
+            echo "Curl: $ok<br>";
+            fputs($log,"Curl : ok\n");
+        } else {
+		      echo "Curl: $fehler<br>";
+		      fputs($log,"Curl : Fehler\n");
+		  }	
         $chkfile=array("DB"=>array("DB","MDB2"),"Driver"=>array("DB/pgsql","MDB2/Driver/pgsql"),
                         "fpdf","fpdi","Mail","Mail/mime",
                         "Image/Canvas","Image/Graph","jpgraph",
@@ -141,19 +148,19 @@ echo "Vorraussetzungen pr&uuml;fen:<br>";
         }
         if (!$OK) {
                 echo "Einige Vorraussetzungen sind nicht erf&uuml;llt.<br>&Uuml;berpr&uuml;fen Sie die die Variable 'include_path' in der 'php.ini'.<br>";
-                echo "Andernfalls installieren Sie die noch fehlenden Pakete<br>";
+                echo "Andernfalls installieren Sie die noch fehlenden Pakete.<br>";
 		echo "Aktueller include_path: ".ini_get('include_path').'<br>';
         }
         fputs($log,"\n");
 
 //ERP da?
-	$OK=is_file($p."../$ERPNAME/config/kivitendo.conf");
+	$OK=is_file($p."../$ERPNAME/config/kivitendo.conf")||is_file($p."../$ERPNAME/config/lx_office.conf");
 	fputs($log,"$ERPNAME : ");
 	fputs($log,(($OK)?"gefunden":"fehler")."\n");
 	if ($OK) {
-		echo "ERP kivitendo.conf gefunden<br>";
+		echo "ERP kivitendo.conf oder lx_office.conf gefunden<br>";
 	} else {
-		echo "ERP (kivitendo.conf) nicht gefunden. Abbruch.<br>";
+		echo "ERP (kivitendo.conf oder lx_office.conf) nicht gefunden. Abbruch.<br>";
 		exit(1);
 	}
 

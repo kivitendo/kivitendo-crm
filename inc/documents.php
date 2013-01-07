@@ -8,7 +8,7 @@
 *       @version        0.2
 *       @author 	Holger Lindemann <hli@lx-system.de>
 *
-*	Paket	Lx-Office-CRM
+*	Paket	CRM
 */
 class document {
 

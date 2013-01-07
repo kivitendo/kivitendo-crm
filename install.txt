@@ -245,11 +245,24 @@ chgrp -R users dokumente
 
 Zusatzprogramme:
 ----------------
-Einige Zusatzprogramme, die ich für mich geschrieben habe. Werden vielleicht ja mal
+Einige Zusatzprogramme (EuR, ZM, Inventur, Katalog), die ich für mich geschrieben habe. Werden vielleicht ja mal
 von jemanden in Perl umgesetzt, dann kommt das in die ERP.
 
 Installation:
 Menü um update/listen_menu.ini erweitern. Evtl. Bilderverzeichnis verlinken
+Einige Zusatzprogrammei (EuR, ZM, Inventur, Katalog), die ich für mich geschrieben habe. Werden vielleicht ja mal
+von jemanden in Perl umgesetzt, dann kommt das in die ERP.
+
+
+Zusatzprogramme 2:
+------------------
+Barcodes für Artikel drucken:
+Den Patch ic_form_header.patch in das File templates/webpages/ic/form_header.html einspielen.
+Das Tex-File vorlage/barcode.tex anpassen.
+
+Etiketten aus Rechnungsmaske drucken und E-Mais verschicken:
+Den Patch is_form_footer.patch in templates/webpages/ir/form_footer.html und
+Patch is_form_footer.patch in templates/webpages/is/form_footer.html einspielen.
 
 Weitere Informationen, professioneller Support:
 http://www.lx-system.de

@@ -8,27 +8,47 @@ ob_start();
 <head><title></title>
     <?php echo $menu['stylesheets']; ?>
     <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
-    <?php echo $menu['javascripts']; ?>
+    <?php if (!$feature_ac) echo $menu['javascripts']; ?>
     <?php  
     if ($feature_ac) { 
-        echo '<link rel="stylesheet" type="text/css" href="'.$_SESSION['basepath'].'crm/css/jquery.autocomplete.css"></link>'."\n"; 
-        echo '<script type="text/javascript" src="'.$_SESSION['basepath'].'js/jquery.js"></script>'."\n"; 
-        echo '<script type="text/javascript" src="'.$_SESSION['basepath'].'crm/inc/jquery.autocomplete.js"></script>'."\n"; 
-        echo '<script language="JavaScript"> 
-            <!-- 
-            $(function(){ 
-                var search = "1"; 
-                $("#ac0").autocomplete({ 
-                    url: "ac.php", 
-                    minChars: 3, 
-                    maxItemsToShow: 10, 
-                    inputClass: "acInput", 
-                    extraParams: { search: search }, 
-                    onItemSelect:  function(){ $("#adresse").click(); } 
-                }); 
-            });              
-            //--> 
-            </script>'; 
+        echo '<link rel="stylesheet" type="text/css" href="'.$_SESSION['basepath'].'crm/jquery-ui/themes/base/jquery-ui.css"></link>'."\n"; 
+        echo   '<script type="text/javascript" src="'.$_SESSION['basepath'].'crm/jquery-ui/jquery.js"></script>'."\n"; 
+        echo   '<script type="text/javascript" src="'.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery-ui.js"></script>'."\n"; 
+        echo   '<style>
+                    .ui-autocomplete-category {
+                        font-weight: bold;
+                        padding: .2em .4em;
+                        margin: .8em 0 .2em;
+                        line-height: 1.5;
+                    }
+                </style>
+                <script>
+                    $.widget("custom.catcomplete", $.ui.autocomplete, {
+                        _renderMenu: function(ul,items) {
+                            var that = this,
+                            currentCategory = "";
+                            $.each( items, function( index, item ) {
+                                if ( item.category != currentCategory ) {
+                                    ul.append( "<li class=\'ui-autocomplete-category\'>" + item.category + "</li>" );
+                                    currentCategory = item.category;
+                                }
+                                that._renderItemData(ul,item);
+                            });
+                        }   
+                    });
+                </script> ';           
+        echo   '<script language="JavaScript"> 
+                    $(function() {
+                        $("#ac0").catcomplete({                          
+                            source: "ac.php?case=fastsearch",                            
+                            minLength: '.$feature_ac_minLength.',                            
+                            delay: '.$feature_ac_delay.',
+                            select: function(e,ui) {
+                                        $("#adress").click();
+                                    }
+                        });
+                    });
+                </script>'; 
     }//end feature_ac 
     ?> 
 </head>
@@ -134,8 +154,8 @@ ob_end_flush();
 ?> 
 <p class="listtop">Schnellsuche Kunde/Lieferant/Kontakte und Kontaktverlauf</p>
 	<form name="suche" action="getData.php" method="get">
-	<input type="text" name="swort" size="20" id="ac0" autocomplete="off"> suche 
-	<input type="submit" name="adress" value="Adresse" id="adresse">
+	<input type="text" name="swort" size="25" id="ac0" autocomplete="off"> suche 
+	<input type="submit" name="adress" value="Adresse" id="adress">
 	<input type="submit" name="kontakt" value="Kontaktverlauf"> <br>
       	<span class="liste">Suchbegriff</span>
 	</form>

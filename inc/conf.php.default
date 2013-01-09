@@ -40,7 +40,7 @@ $listLimit=500;
 $tinymce=false;
 $zeigeextra=true;
 $jpg=false;
-//$jpg=true;
+//$jpg=true; //jpgraph
 $showErr=false;
 $CallEdit = true;
 $CallDel = false;
@@ -58,10 +58,20 @@ $planspace="+";
 //$planspace="+";
 //$stadtplan="http://maps.google.de/maps?f=d&hl=de&daddr=%TOSTREET%,%TOZIPCODE%+%TOCITY%&saddr=%FROMSTREET%,%FROMZIPCODE%+%FROMCITY%";
 $stadtplan="http://maps.google.de/maps?f=d&hl=de&daddr=%TOSTREET%,%TOZIPCODE%+%TOCITY%";
+$Expunge=True;
+//Seen, Answered, Flagged, Deleted, Draft
+$MailFlag='Flagged';
+$ttpart='azstd'; //Artikelnummer für Arbeitszeit
+$tttime=60;	//Anzahl der Minuten für eine Einheit
+$ttround=15;	//Ab hier wird eine Einheit berechnet
+$clearonly=True; //Nur eigene Aufträge abrechnen
+$logfile=true;
 $ERPNAME="lx-office-erp";
 $sep_cust_vendor=true; //Links zu Verzeichenissen in Kunden und Lieferanten einteilen
 $dir_mode=0775; //Rechte erzeugter Verzeichnisse, ToDo: Dateien prüfen
 $dir_group='users'; //Gruppe für Dateien und Verzeichnisse
 $feature_ac=true; //Autocompletion  
+$feature_ac_minLength='3'; //Eingabelänge für die Aktivierung der Autovervollständigung
+$feature_ac_delay='0'; //Verzögerung in ms für die Aktivierung der Autovervollständigung
 $feature_unique_name_plz=true; //Doppelte Namen bei gleicher Plz verbieten (Kunden doppelt anlegen) 
 ?>

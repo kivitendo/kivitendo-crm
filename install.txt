@@ -36,7 +36,8 @@ Vorrausetzungen:
 	ttf-freefont
 	php-gd,php-imap
 	xajax (http://www.xajaxproject.org/)
-
+    curl 
+    jquery-ui (http://jqueryui.com/)
 Fast alle Pakete können unter debianoiden Systemen in der Konsole mit folgendem Behfehl installiert werden.
 apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-db php5-pgsql php-fpdf imagemagick php-xajax ttf-freefont php5-curl tinymce
 
@@ -56,6 +57,13 @@ FPDI installieren:
     mkdir /usr/share/php/fpdi && cd /usr/share/php/fpdi
     wget http://www.setasign.de/supra/kon2_dl/55450/FPDI-1.4.3.zip && unzip FPDI-1.4.3.zip
     ln -s /usr/share/php/fpdi/fpdi.php /usr/share/php/fpdi.php
+    
+jQuery-UI installieren:
+    cd /usr/lib/lx-office-crm    
+    wget https://github.com/downloads/jquery/jquery-ui/jquery-ui-1.9.2.zip && unzip jquery-ui-1.9.2.zip
+    Links prüfen, ggf anlegen    
+    ln -s jquery-ui-1.9.2 jquery-ui 
+    cd jquery-ui-1.9.2 && ln -s jquery-1.8.3.js jquery.js
 
 
 PHP5:
@@ -124,7 +132,7 @@ ERP-Menu erweitern:
 	mv menu.ini menu.ini.crm
 	cat crm/update/menu.ini menu.ini.crm > menu.ini
 Alternativ mit patch:
-    patch -p1 ../lx-office-erp/menu.ini < update/menu.ini.patch -b
+    patch -p1 -b ../lx-office-erp/menu.ini < update/menu.ini.patch 
 
 Menuicon kopieren
 	cd lx-office-erp && cp crm/image/CRM.png image/

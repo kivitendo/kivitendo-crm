@@ -65,7 +65,7 @@ if ( is_file($conffile) ) {
     }
 } else {
     echo "Configfile nicht gefunden<br>$PHPSELF<br>";
-    echo "Lx-Office ERP V 2.6.0 oder gr&ouml;&szlig;er erwartet!!!<br><br>";
+    echo "ERP V 3.0.0 oder gr&ouml;&szlig;er erwartet!!!<br><br>";
     echo "<form name='erppfad' method='post' action='".$PHPSELF."'>";
     echo "Bitte den Verzeichnisnamen (nicht den Pfad) der ERP eingeben:<br>";
     echo "<input type='text' name='erpname'>";

@@ -9,7 +9,7 @@ include("FirmenLib.php");
 include("persLib.php");
 require("androidLib.php");
 $dbA = authDB();
-$auth = userData($dbA,$_POST["sessid"],$_POST["ip"]);
+$auth = userData($dbA,$_POST["sessid"],$_POST["ip"],$_POST["login"],$_POST["password"]);
 fputs($f,"!Auth!");
 fputs($f,print_r($auth,true));
 
@@ -32,6 +32,9 @@ if ($auth["db"]) {
     if (!$rs) {
         echo "";
     } else {
+      while( list($key,$val) = each($rs) ) {
+         if ($val == Null) $rs[$key] = '';
+      }
       fputs($f,print_r($rs,true));
       print(json_encode($rs));
     };

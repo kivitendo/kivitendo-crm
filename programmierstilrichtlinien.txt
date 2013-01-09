@@ -1,5 +1,5 @@
-Lx-Office Style Guide
----------------------
+CRM Style Guide
+---------------
 
 Die folgenden Regeln haben das Ziel, den Code möglichst gut les- und wartbar
 zu machen. Dazu gehört zum Einen, dass der Code einheitlich eingerückt ist,

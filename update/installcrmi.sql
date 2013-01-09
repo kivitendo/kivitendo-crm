@@ -165,7 +165,7 @@ CREATE TABLE labeltxt (
 	zeile text);
 
 INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1), 6, '');
-INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1), 8, 'Lx-Office, Unser Weg 1, 12345 Woanders');
+INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1), 8, 'Lx-System, Unser Weg 1, 12345 Woanders');
 INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1), 6, '');
 INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1), 10, '%ANREDE%');
 INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1), 10, '%NAME1% %NAME2%');

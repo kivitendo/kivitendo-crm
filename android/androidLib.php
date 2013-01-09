@@ -5,6 +5,14 @@ $inclpa=ini_get('include_path');
 ini_set('include_path',$inclpa.":../:./crmajax:./inc:../inc");
 require_once $dbmodul."db.php";
 
+function db2date($datum) {
+   if ( strpos($datum,"-") ) {
+       $D = explode("-",$datum);
+       $datum = sprintf ("%02d.%02d.%04d",$D[2],$D[1],$D[0]);
+   }
+   return $datum;
+}
+
 function authDB() {
 global $ERPNAME;
     ini_set("gc_maxlifetime","3600");

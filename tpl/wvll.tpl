@@ -14,7 +14,7 @@
 		} else {
 			uri="wvl1.php?mail=" + id;
 		}
-		location.href=uri;
+		window.parent.location.href=uri;
 	}
 	//-->
 	</script>

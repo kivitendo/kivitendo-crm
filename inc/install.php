@@ -87,7 +87,7 @@ echo "<br>Voraussetzungen pr&uuml;fen:<br>";
 		                "Contact_Vcard_Build","Contact_Vcard_Parse",
                         "Xajax"=>array("xajax/xajax.inc","xajax_core/xajax.inc"),
                         "jQuery-UI"=>array("jquery-ui/jquery","jquery-ui/ui/jquery-ui"));
-        $chkstat=array(1,1,0,0,0,0,0,0,0,0,0,1,0);
+        $chkstat=array(1,1,0,0,0,0,0,0,0,0,0,1,1);
         $OK=true;
 	$pos=0;
 	$dbok=true;

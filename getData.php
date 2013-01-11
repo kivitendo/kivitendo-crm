@@ -8,12 +8,12 @@ ob_start();
 <head><title></title>
     <?php echo $menu['stylesheets']; ?>
     <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
-    <?php if (!$feature_ac) echo $menu['javascripts']; ?>
     <?php  
+    echo '<link rel="stylesheet" type="text/css" href="'.$_SESSION['basepath'].'crm/jquery-ui/themes/base/jquery-ui.css"></link>'."\n"; 
+    echo   '<script type="text/javascript" src="'.$_SESSION['basepath'].'crm/jquery-ui/jquery.js"></script>'."\n"; 
+    echo   '<script type="text/javascript" src="'.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery-ui.js"></script>'."\n"; 
     if ($feature_ac) { 
-        echo '<link rel="stylesheet" type="text/css" href="'.$_SESSION['basepath'].'crm/jquery-ui/themes/base/jquery-ui.css"></link>'."\n"; 
-        echo   '<script type="text/javascript" src="'.$_SESSION['basepath'].'crm/jquery-ui/jquery.js"></script>'."\n"; 
-        echo   '<script type="text/javascript" src="'.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery-ui.js"></script>'."\n"; 
+        
         echo   '<style>
                     .ui-autocomplete-category {
                         font-weight: bold;
@@ -51,6 +51,11 @@ ob_start();
                 </script>'; 
     }//end feature_ac 
     ?> 
+    <script>
+    $(function() {
+        $( "#dialog" ).dialog();
+    });
+    </script>
 </head>
 <body onLoad="document.suche.swort.focus()";>
 <?php
@@ -60,16 +65,23 @@ if ($_GET["adress"]) {
 	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
 	include("inc/UserLib.php");
-	
-	$msg="Leider nichts gefunden!";
-	$viele="Zu viele Treffer. Bitte einschr&auml;nken.";
+	//ToDo Dialogtexte verbessern?
+	$msg='<div id="dialog" title="Kein Suchwort">
+	            <p>Bitte geben Sie mindestens ein Zeichen ein.</br>Dialog muss nicht geschlossen werden.</p>
+	       </div>';
+	$viele='<div id="dialog" title="Zu viele Treffer">
+	            <p>Die Suche ergibt zu viele Resultate.</br> Bitte geben mehr Zeichen ein.</br>Dialog muss nicht geschlossen werden.</p>
+	       </div>';
+	$keine='<div id="dialog" title="Keine Treffer">
+                <p>Die Suche ergibt kein Resultat.</br>Schreibweise überprüfen!</br>Dialog muss nicht geschlossen werden.</p>
+            </div>';
 	$found=false;
 	$suchwort=mkSuchwort($_GET["swort"]);
 	$anzahl=0;
 	$db->debug=0;
 
 	$rsE=getAllUser($suchwort);
-	if (chkAnzahl($rsE,$anzahl)) {
+	if (chkAnzahl($rsE,$anzahl) && $_GET["swort"]) {
 		$rsV=getAllFirmen($suchwort,true,"V");	
 		if (chkAnzahl($rsV,$anzahl)) {
 			$rsC=getAllFirmen($suchwort,true,"C");
@@ -78,7 +90,7 @@ if ($_GET["adress"]) {
 				if (!chkAnzahl($rsK,$anzahl)) {
 					$msg=$viele;
 				} else {
-					if ($anzahl===0) $msg="Keine Treffer";
+					if ($anzahl===0) $msg=$keine;
 				} 
 			} else {
 				$msg=$viele;
@@ -86,9 +98,7 @@ if ($_GET["adress"]) {
 		} else {
 			$msg=$viele;
 		}
-	} else {
-			$msg=$viele;
-	}
+	} 
 ?>
 <script language="JavaScript">
 <!--

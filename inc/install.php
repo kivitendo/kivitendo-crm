@@ -70,7 +70,7 @@ if (is_writable($p."inc/conf.php")) {
 fputs($log,date("d.m.Y H:i:s")."\n");
 fputs($log,$VERSION."\n");
 
-echo "<br>Vorraussetzungen pr&uuml;fen:<br>";
+echo "<br>Voraussetzungen pr&uuml;fen:<br>";
         $path=ini_get("include_path");
         fputs($log,"Suchpfad: $path\n");
         $pfade=explode(":",$path);
@@ -85,8 +85,9 @@ echo "<br>Vorraussetzungen pr&uuml;fen:<br>";
                         "fpdf","fpdi","Mail","Mail/mime",
                         "Image/Canvas","Image/Graph","jpgraph",
 		                "Contact_Vcard_Build","Contact_Vcard_Parse",
-                        "Xajax"=>array("xajax/xajax.inc","xajax_core/xajax.inc"));
-        $chkstat=array(1,1,0,0,0,0,0,0,0,0,0,1);
+                        "Xajax"=>array("xajax/xajax.inc","xajax_core/xajax.inc"),
+                        "jQuery-UI"=>array("jquery-ui/jquery","jquery-ui/ui/jquery-ui"));
+        $chkstat=array(1,1,0,0,0,0,0,0,0,0,0,1,0);
         $OK=true;
 	$pos=0;
 	$dbok=true;
@@ -99,7 +100,7 @@ echo "<br>Vorraussetzungen pr&uuml;fen:<br>";
                         $aok=false;
                         foreach($pfade as $path) {
                             $path = ((substr($path,0,1)=="/")?"":$p).$path;
-                            if (is_readable($path."/".$altfile.".php")) {
+                            if (is_readable($path."/".$altfile.".php") || is_readable($path."/".$altfile.".js")) {
                                 $aok=true;
                                 $ook=true;
                                 break;
@@ -140,14 +141,14 @@ echo "<br>Vorraussetzungen pr&uuml;fen:<br>";
                                     fputs($log,"Fehler\n");
                     } else {
                         $dbok=false;
-                        echo "<font color='red'><b>unbedingt Erforderlich!!</b></font><br>";
-                                    fputs($log,"Fehler: Erforderlich\n");
+                        echo "<font color='red'><b>unbedingt erforderlich!!</b></font><br>";
+                                    fputs($log,"Fehler: erforderlich\n");
                     }
                 }
 		$pos++;
         }
         if (!$OK) {
-                echo "Einige Vorraussetzungen sind nicht erf&uuml;llt.<br>&Uuml;berpr&uuml;fen Sie die die Variable 'include_path' in der 'php.ini'.<br>";
+                echo "Einige Voraussetzungen sind nicht erf&uuml;llt.<br>&Uuml;berpr&uuml;fen Sie die die Variable 'include_path' in der 'php.ini'.<br>";
                 echo "Andernfalls installieren Sie die noch fehlenden Pakete.<br>";
 		echo "Aktueller include_path: ".ini_get('include_path').'<br>';
         }
@@ -179,7 +180,7 @@ if ($dbok) {
 		}
 	}
 } else {
-	echo "Datenbankvorraussetzung nicht erfüllt, Abbruch<br>";
+	echo "Datenbankvoraussetzung nicht erfüllt, Abbruch<br>";
 	fputs($log,"Abbruch\n");
 	exit(1);
 }

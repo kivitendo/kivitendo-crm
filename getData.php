@@ -7,8 +7,8 @@ ob_start();
 <html>
 <head><title></title>
     <?php echo $menu['stylesheets'].'
-    <link type="text/css" REL="stylesheet" HREF="<'.$_SESSION["basepath"].'crm/css/'.$_SESSION["stylesheet"].'/main.css"></link>
-    <link rel="stylesheet" type="text/css" href="'.$_SESSION['basepath'].'crm/jquery-ui/themes/base/jquery-ui.css"></link> 
+    <link type="text/css" REL="stylesheet" HREF="'.$_SESSION["basepath"].'crm/css/'.$_SESSION["stylesheet"].'/main.css">
+    <link rel="stylesheet" type="text/css" href="'.$_SESSION['basepath'].'crm/jquery-ui/themes/base/jquery-ui.css"> 
     <script type="text/javascript" src="'.$_SESSION['basepath'].'crm/jquery-ui/jquery.js"></script> 
     <script type="text/javascript" src="'.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery-ui.js"></script>'; 
     if ($feature_ac) { 

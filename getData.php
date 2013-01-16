@@ -39,7 +39,7 @@ ob_start();
     <script language="JavaScript"> 
         $(function() {
             $("#ac0").catcomplete({                          
-                source: "ac.php?case=fastsearch",                            
+                source: "jQueryHelpFiles/autocompletion-jQu.php?case=name",                            
                 minLength: '.$feature_ac_minLength.',                            
                 delay: '.$feature_ac_delay.',
                 select: function(e,ui) {

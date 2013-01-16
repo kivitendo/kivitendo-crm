@@ -2,15 +2,15 @@
 ob_start(); 
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
-        $menu = $_SESSION['menu'];
+    $menu = $_SESSION['menu'];
 ?>
 <html>
 <head><title></title>
     <?php echo $menu['stylesheets'].'
     <link type="text/css" REL="stylesheet" HREF="'.$_SESSION["basepath"].'crm/css/'.$_SESSION["stylesheet"].'/main.css">
-    <link rel="stylesheet" type="text/css" href="'.$_SESSION['basepath'].'crm/jquery-ui/css/base/jquery-ui.css"> 
+    <link rel="stylesheet" type="text/css" href="'.$_SESSION['basepath'].'crm/jquery-ui/themes/base/jquery-ui.css"> 
     <script type="text/javascript" src="'.$_SESSION['basepath'].'crm/jquery-ui/jquery.js"></script> 
-    <script type="text/javascript" src="'.$_SESSION['basepath'].'crm/jquery-ui/jquery-ui.js"></script>'; 
+    <script type="text/javascript" src="'.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery-ui.js"></script>'; 
     if ($feature_ac) { 
         echo '   
     <style>
@@ -21,7 +21,7 @@ ob_start();
             line-height: 1.5;
         }
     </style>
-    <script language="JavaScript"> 
+    <script>
         $.widget("custom.catcomplete", $.ui.autocomplete, {
             _renderMenu: function(ul,items) {
                 var that = this,
@@ -50,7 +50,7 @@ ob_start();
     </script>'; 
     }//end feature_ac 
     ?> 
-    <script language="JavaScript"> 
+    <script>
     $(function() {
         $("#dialog").dialog();
     });
@@ -160,14 +160,12 @@ if ($_GET["adress"]) {
 <?php } ?> 
 <p class="listtop">Schnellsuche Kunde/Lieferant/Kontakte und Kontaktverlauf</p>
 <form name="suche" action="getData.php" method="get">
-    <span class="liste">Suchbegriff<br /></span>
     <input type="text" name="swort" size="25" id="ac0" autocomplete="off"> suche 
     <input type="submit" name="adress" value="Adresse" id="adress">
     <input type="submit" name="kontakt" value="Kontaktverlauf"> <br>
+    <span class="liste">Suchbegriff</span>
 </form>
 <?php
     echo $menu['end_content'];
     ob_end_flush(); 
 ?>
-</body>
-</html>

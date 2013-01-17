@@ -14,6 +14,11 @@ direkt aus dem Repository kopiert werden. Voraussetzung hierfür ist das Program
 (apt-get install git) 
 
 Kivitendo hieß früher Lx-Office. Dadurch heißen einige Pfade noch lx-office.
+Die Konfigurationsdatei der ERP wurde von lx_office.conf in kivitendo.conf umbenannt.
+Aus Gründen der Kompatibilität zu älteren Installationen wird die lx_office.conf in der ERP weiterhin ausgewertet.
+Welche ERP-Konfigurationsdatei in der CRM ausgewertet wird, kann in der CRM-Konfigurationsdatei inc/conf.php
+der Variblen $erpConfigFile zugewiesen werden. Achtung, die Dateiendung (.conf) darf nicht mit angeben werden.
+Voreingestellt ist kivitendo.conf.   
 
 Vorrausetzungen:
 	Kivitendo ERP >= 3.0.0

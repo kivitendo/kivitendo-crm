@@ -155,13 +155,13 @@ echo "<br>Voraussetzungen pr&uuml;fen:<br>";
         fputs($log,"\n");
 
 //ERP da?
-	$OK=is_file($p."../$ERPNAME/config/$erp.conf");
+	$OK=is_file($p."../$ERPNAME/config/$erpConfigFile.conf");
 	fputs($log,"$ERPNAME : ");
 	fputs($log,(($OK)?"gefunden":"fehler")."\n");
 	if ($OK) {
-		echo "ERP $erp.conf gefunden<br>";
+		echo "ERP $erpConfigFile.conf gefunden<br>";
 	} else {
-		echo "ERP ($erp.conf) nicht gefunden. Abbruch.<br>";
+		echo "ERP ($erpConfigFile.conf) nicht gefunden. Abbruch.<br>";
 		exit(1);
 	}
 

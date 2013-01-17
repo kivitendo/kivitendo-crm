@@ -124,13 +124,13 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
 * prueft ob name und kennwort in db sind und liefer die UserID
 *****************************************************/
 function anmelden() {
-global $ERPNAME,$erp;
+global $ERPNAME,$erpConfigFile;
     ini_set("gc_maxlifetime","3600");
     $deep = is_dir("../".$ERPNAME) ? "../" : "../../";                // anmelden() aus einem Unterverzeichnis
-    if ( file_exists($deep.$ERPNAME."/config/".$erp.".conf") ) {     // Kivitendo ERP wertet aus Kompatibilitätsgrüden
-	    $lxo = fopen($deep.$ERPNAME."/config/".$erp.".conf","r"); // auch zuerst die "alte" Konfigurationsdateien aus 
-    } else if ( file_exists($deep.$ERPNAME."/config/".$erp.".conf.default") ) {
-	    $lxo = fopen($deep.$ERPNAME."/config/".$erp.".conf.default","r");
+    if ( file_exists($deep.$ERPNAME."/config/".$erpConfigFile.".conf") ) {  
+	    $lxo = fopen($deep.$ERPNAME."/config/".$erpConfigFile.".conf","r");  
+    } else if ( file_exists($deep.$ERPNAME."/config/".$erpConfigFile.".conf.default") ) {
+	    $lxo = fopen($deep.$ERPNAME."/config/".$erpConfigFile.".conf.default","r");
     } else {
         return false;
     }

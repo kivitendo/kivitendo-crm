@@ -6,33 +6,35 @@
     include("inc/UserLib.php");
     include_once("Mail.php");
     include_once("Mail/mime.php");
-    require("mailcommon".XajaxVer.".php");
-    $referer=getenv("HTTP_REFERER");
-    if (preg_match("/mail.php/",$referer)) {
-        $referer=$_POST["QUELLE"];
+
+    if ($_POST["QUELLE"] != '') { 
+        $referer=$_POST["QUELLE"]; 
         $TO=$_POST["TO"];
         $KontaktTO=$_POST["KontaktTO"];
-        if (preg_match("/mail.php/",$referer)) {
-            $btn="<a href='mail.php'><input type=\"button\" name=\"return\" value=\".:new:.\"></a>";
-            $btn='<a href="mail.php"><image src="image/new.png" alt=".:new:." title=".:new:." border="0" ></a>';
-        } else {
-            $btn='<a href="'.$referer.'"><image src="image/firma.png" alt=".:back:." title=".:back:." border="0" ></a>';
-        }
-    } else if (preg_match("/.+\.pl/",$referer)) { //Kommt vom Menue
+    } else if ($_GET["TO"] != '') { 
+        $referer=getenv("HTTP_REFERER");
         $TO=$_GET["TO"];
         $KontaktTO=$_GET["KontaktTO"];
-        if ($_GET["vc"]=="customer") { $KontaktTO="C".$KontaktTO;} 
-        elseif ($_GET["vc"]=="vendor") { $KontaktTO="V".$KontaktTO;} ;
-        $referer="mail.php";
+        if (preg_match("/.+\.php/",$referer)) {
+            $referer = substr($referer,0,strpos($referer,'?'));
+            if (preg_match("/firma/",$referer)) {
+                $btn='<a href="'.$referer.'"><image src="image/firma.png" alt=".:back:." title=".:back:." border="0" ></a>';
+                $hide="hidden";
+            } else {
+                $btn='<a href="mail.php"><image src="image/new.png" alt=".:new:." title=".:new:." border="0" ></a>';
+                $hide="visible";
+            }
+        } else { 
+            $referer = $_SESSION['baseurl'].'/crm/mail.php';
+            $btn='<a href="mail.php"><image src="image/new.png" alt=".:new:." title=".:new:." border="0" ></a>';
+            $hide="visible";
+        };
+    } else { 
+        $referer = ''; 
         $btn='<a href="mail.php"><image src="image/new.png" alt=".:new:." title=".:new:." border="0" ></a>';
         $hide="visible";
-    } else { // Rückkehr zur Ausgangsseite
-        $TO=$_GET["TO"];
-        $KontaktTO=$_GET["KontaktTO"];
-        if (substr($KontaktTO,0,1)=="P") $referer.="&id=".substr($KontaktTO,1);
-        $btn='<a href="'.$referer.'"><image src="image/firma.png" alt=".:back:." title=".:back:." border="0" ></a>';
-        $hide="hidden";
-    }
+    };
+
     if ($_POST["aktion"]=="tplsave") {
         $rc=saveMailVorlage($_POST);
     } else     if ($_POST["MID"]) {
@@ -223,7 +225,7 @@
     } else {    
         $user=getUserStamm($_SESSION["loginCRM"]);
         $MailSign=str_replace("\r","",$user["mailsign"]);
-        $BodyText=" \n".$MailSign;
+        $BodyText="";// \n".$MailSign;
         $MailSign=str_replace("\n","<br>",$user["mailsign"]);
         $MailSign=str_replace("\r","",$MailSign);
     }
@@ -252,7 +254,9 @@
     $t->set_var(array(
             HEADER   => $header,
             ERPCSS   => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-            AJAXJS   => $xajax->printJavascript(XajaxPath),
+            JQUERY   => $_SESSION['basepath'].'crm/',
+            acminlen => $feature_ac_minLength,
+            acdelay  => $feature_ac_delay,
             Msg      => $msg,
             btn      => $btn,
             Subject  => $Subject,

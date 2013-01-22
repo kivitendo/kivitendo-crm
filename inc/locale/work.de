@@ -23,7 +23,9 @@ $texts  = array(
   '.:error:.'        => 'Fehler',
   '.:notfound:.'     => 'nicht gefunden',
   '.:no_to:.'	     => 'Kein Empf&auml;nger angegeben',
-  '.:no_subject:.'	 => 'Kein Betreff angegeben',
+  '.:no_subject:.'   => 'Kein Betreff angegeben',
+  '.:delete_ok:.'    => 'Löschen erfolgreich',
+  '.:error_del:.'    => 'Löschen fehlgeschlagen',
   '.:email:.'	     => 'E-Mail',
   '.:send:.'	     => 'senden',
   '.:to:.'	         => 'An',
@@ -116,7 +118,7 @@ $texts  = array(
   '.:txtchg:.'      => 'Text &auml;ndern',
   '.:clr:.'         => 'l&ouml;schen',
   '.:material:.'    => 'Material',
-  '.:budget:.'		=> 'Budget',
+  '.:budget:.'	    => 'Budget',
   '.::.'    => '',
 );
 ?>

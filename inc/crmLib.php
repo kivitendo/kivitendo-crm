@@ -1380,17 +1380,19 @@ global $db;
 *****************************************************/
 function getAllMails($suche) {
 global $db,$Pre;        
+    //Benutzer
     $sql1="select name,'E' as src,id,email from employee where upper(email) like '$Pre".strtoupper($suche)."%' and email <> '' order by email";
     $rs1=$db->getAll($sql1);
-    //$sql2="select name,'C' as src,id,email from customer where upper(email) like '$Pre".strtoupper($suche)."%' and email <> '' order by email";
+    //Kunden
     $sql2="select '' as name,'C' as src,id,email from customer where upper(email) like '$Pre".strtoupper($suche)."%' and email <> '' order by email";
     $rs2=$db->getAll($sql2);
+    //Personen
     $sql3="select cp_name as name,'K' as src,cp_id as id,cp_email as email from contacts where upper(cp_email) like '$Pre".strtoupper($suche)."%' and cp_email <> '' order by cp_email";
     $rs3=$db->getAll($sql3);
-    //$sql4="select shiptoname as name,'S' as src,trans_id as id,shiptoemail as email from shipto where upper(shiptoemail) like '$Pre".strtoupper($suche)."%' and shiptoemail <> ''  order by shiptoemail";
+    //Abweichende Anschr.
     $sql4="select '' as name,'S' as src,trans_id as id,shiptoemail as email from shipto where upper(shiptoemail) like '$Pre".strtoupper($suche)."%' and shiptoemail <> ''  order by shiptoemail";
     $rs4=$db->getAll($sql4);
-    //$sql5="select name,'V' as src,id,email from vendor where upper(email) like '$Pre".strtoupper($suche)."%' and email <> '' order by email";
+    //Lieferanten
     $sql5="select '' as name,'V' as src,id,email from vendor where upper(email) like '$Pre".strtoupper($suche)."%' and email <> '' order by email";
     $rs5=$db->getAll($sql5);
     $rs=array_merge($rs2,$rs3,$rs5,$rs4,$rs1);
@@ -2745,15 +2747,16 @@ function saveOpportunity($data) {
 *****************************************************/
 function saveMailVorlage($data) {
     if ($data["MID"]) {
-        $sql = "UPDATE mailvorlage SET cause='%s', c_long='%s' WHERE id = %d";
-        $rc = $_SESSION['db']->query(sprintf($sql,$data["Subject"],$data["BodyText"],$data["MID"]));
+        $rc  = $_SESSION['db']->update('mailvorlage',array('cause','c_long'),array($data["Subject"],$data["BodyText"]),'id = '.$data["MID"]);
+        //$sql = "UPDATE mailvorlage SET cause='%s', c_long='%s' WHERE id = %d";
+        //$rc = $_SESSION['db']->query(sprintf($sql,$data["Subject"],$data["BodyText"],$data["MID"]));
     } else { 
         $sql = "INSERT INTO mailvorlage (cause,c_long,employee) VALUES ('%s','%s',%d)";
         $rc = $_SESSION['db']->query(sprintf($sql,$data["Subject"],$data["BodyText"],$_SESSION["loginCRM"]));
         $sql  = "SELECT id FROM mailvorlage WHERE cause='".$data["Subject"];
-        $sql .= "' AND c_long='".$_SESSION["loginCRM"]."' AND employee=".$_SESSION["loginCRM"];
-        $rs = $_SESSION['db']->getAll($sql);
-        if ( $rs[0]["id"] > 0 ) return $rs[0]["id"];
+        $sql .= "' AND c_long='".$data["BodyText"]."' AND employee=".$_SESSION["loginCRM"];
+        $rc = $_SESSION['db']->getAll($sql);
+        if ( $rc[0]["id"] > 0 ) $rc = $rc[0]["id"];
     }
     return $rc;
 }

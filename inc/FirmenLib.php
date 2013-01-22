@@ -65,6 +65,24 @@ global $db;
     };
     return $rs;
 }
+function getAllFirmenByMail($sw,$Pre=true,$tab='C') {
+global $db;
+    if ($Pre) $Pre=$_SESSION["Pre"];
+    $rechte=berechtigung();
+    $where = "email ilike '$Pre$sw%'";
+    if ($tab=="C") {
+        $sql="select name,email,'C' as tab from customer where ($where) and $rechte order by name";
+    } else if ($tab=="V") {
+        $sql="select name,email,'V' as tab from vendor where ($where) and $rechte order by name";
+    } else {
+        return false;
+    }
+    $rs=$db->getAll($sql);
+    if(!$rs) {
+        $rs=false;
+    };
+    return $rs;
+}
 
 /****************************************************
 * getFirmaStamm

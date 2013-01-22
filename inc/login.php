@@ -4,7 +4,7 @@ while( list($key,$val) = each($_SESSION) ) {
 };
 clearstatcache();
 if ($_POST["erpname"]) {
-    if ( is_file("../".$_POST["erpname"]."/config/kivitendo.conf") ) {
+    if ( is_file("../".$_POST["erpname"]."/config/".$erpConfigFile.".conf") ) {
         if ( is_writable("inc/conf.php") ) {
             $name = false;
             $configfile = file("inc/conf.php");
@@ -27,10 +27,10 @@ if ($_POST["erpname"]) {
     $ERPNAME = $_POST["erpname"];
 }
 
-if ( substr(getcwd(),-3) == "inc" ) {
-    $conffile = "../../$ERPNAME/config/kivitendo.conf";
+if ( substr(getcwd(),-3) == "inc" || substr(getcwd(),-6) == "jqhelp"  ) {
+    $conffile = "../../$ERPNAME/config/".$erpConfigFile.".conf";
 } else {
-    $conffile = "../$ERPNAME/config/kivitendo.conf";
+    $conffile = "../$ERPNAME/config/".$erpConfigFile.".conf";
 }
 
 if ( is_file($conffile) ) {

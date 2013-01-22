@@ -4,9 +4,9 @@ if (empty($_GET['term'])) exit;
 require_once("../inc/stdLib.php"); 
 
 if ($_GET['case']=='name') { 
-    require_once("../inc/crmLib.php"); 
-    require_once("../inc/FirmenLib.php"); 
-    require_once("../inc/persLib.php"); 
+    require_once("inc/crmLib.php");     
+    require_once("inc/FirmenLib.php"); 
+    require_once("inc/persLib.php"); 
     $suchwort = mkSuchwort($_GET['term']); 
     $rsC = getAllFirmen($suchwort,true,"C"); 
     $rsV = getAllFirmen($suchwort,true,"V"); 

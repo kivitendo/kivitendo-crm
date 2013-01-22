@@ -227,6 +227,16 @@ global $db;
     $rs = $db->getOne($sql);
     $out = $rs['id'];
     $len = count($row['parts_id']);
+    if ($row['budatum']) {
+        $d = preg_match('/(\d+)\.(\d+).(\d+)/',$row['budatum'],$tmp);
+        if (count($tmp) == 4) {
+            $now = $tmp[3]."-". $tmp[2]."-". $tmp[1];
+        } else {
+            $now = date('Y-m-d');
+        }
+    } else {
+        $now = date('Y-m-d');
+    }
     for ($i=0; $i<$len; $i++) {
        if ($row['qty'][$i] == $row['oldqty'][$i]) continue;
        if ($row['qty'][$i] == '') continue;
@@ -247,7 +257,7 @@ global $db;
        if ($row['bestbefor'][$i] == '') { $best = 'NULL'; } else { $best = "'".$row['bestbefor'][$i]."'"; };
        $sql =  "INSERT INTO inventory (warehouse_id,bin_id,parts_id,employee_id,qty, trans_id,trans_type_id,shippingdate,comment,chargenumber,bestbefore)";
        $sql .= " VALUES (".$row['warehouse'].",".$row['bin'].",".$row['parts_id'][$i].",".$_SESSION['loginCRM'];
-       $sql .= ",$diff,nextval(('id'::text)::regclass),$tt,now(),'".$row["comment"]."',$charge,$best)";
+       $sql .= ",$diff,nextval(('id'::text)::regclass),$tt,'".$now."','".$row["comment"]."',$charge,$best)";
        $rc = $db->query($sql);
        echo $row[$i]["part_id"].$x;
        if ($rc) { echo "ok<br>";} else { echo "error<br>"; };

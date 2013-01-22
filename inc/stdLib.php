@@ -830,14 +830,19 @@ function mkDirName($name) {
 }
 
 function makeMenu($sess,$token){
+global $ERP_BASE_URL;
     if( !function_exists( 'curl_init' ) ){
         die( 'Curl (php5-curl) ist nicht installiert!' );
     }
-    $BaseUrl  = (empty( $_SERVER['HTTPS'] )) ? 'http://' : 'https://';
-    $BaseUrl .= $_SERVER['HTTP_HOST'];
-    $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
-    $Url = $BaseUrl.'controller.pl?action=Layout/empty&format=json';
+    if ( !isset($ERP_BASE_URL) || $ERP_BASE_URL == '' ){
+        $BaseUrl  = (empty( $_SERVER['HTTPS'] )) ? 'http://' : 'https://';
+        $BaseUrl .= $_SERVER['HTTP_HOST'];
+        $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
+    } else {
+        $BaseUrl = $ERP_BASE_URL;
+    }
     $_SESSION['baseurl'] = $BaseUrl;
+    $Url = $BaseUrl.'controller.pl?action=Layout/empty&format=json';
     $ch = curl_init();
     curl_setopt( $ch, CURLOPT_URL, $Url );
     curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );

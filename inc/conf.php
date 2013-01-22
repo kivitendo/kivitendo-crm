@@ -67,6 +67,9 @@ $ttround=15;	//Ab hier wird eine Einheit berechnet
 $clearonly=True; //Nur eigene Aufträge abrechnen
 $logfile=true;
 $ERPNAME="kivitendo-erp"; //Verzeichnisname der ERP
+// Absolute URI zur ERP. Wird benötgt, um Menü und Stylesheets korrekt darzustellen, und sollte immer gesetzt sein.
+// Wenn dieser Wert leer ist, wird stattdessen versucht ein relativer Pfad zu bilden.
+$ERP_BASE_URL='';
 $erpConfigFile='kivitendo'; //Konfigurationsdatei der ERP (ohne .conf-Endung)
 $sep_cust_vendor=true; //Links zu verzeichenissen in Kunden und Lieferanten einteilen
 $dir_mode=0775; //Rechte erzeugter Verzeichnisse, ToDo: Dateien prüfen

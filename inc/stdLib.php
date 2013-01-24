@@ -164,7 +164,7 @@ global $ERPNAME,$erpConfigFile;
         if ( preg_match("!\[authentication/database\]!",$tmp) ) $dbsec = true;
         $tmp = fgets($lxo,512);
     }
-    if ( !$cookiename ) $cookiename = $erp.'_session_id';
+    if ( !$cookiename ) $cookiename = $erpConfigFile.'_session_id';
     fclose($lxo);
     $cookie = $_COOKIE[$cookiename];
     if ( !$cookie ) header("location: ups.html");

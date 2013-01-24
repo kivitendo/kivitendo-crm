@@ -1,6 +1,5 @@
 <?php
 
-	function chkSrv() {
         $x = @exec('tail -5 /var/log/apache2/error.log',$status1); 
         $x = @exec('tail -5 /var/log/apache2/access.log',$status2); 
         if (empty($status1)) {
@@ -14,14 +13,8 @@
         } else {
             $status .= "Access:<br />".implode("<br />",$status2);  
         }
-        $objResponse = new xajaxResponse();
         if (trim($status)=="") $status="Keine Meldung";
-        $objResponse->assign("SRV", "innerHTML", $status);
-        return $objResponse;
-	}
+        echo $status;
 
-    require_once("../inc/conf.php");
-	require("logcommon".XajaxVer.".php");
-	$xajax->processRequest();
 
 ?>

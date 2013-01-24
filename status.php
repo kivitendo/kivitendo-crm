@@ -3,8 +3,6 @@ session_start();
 require_once("inc/conf.php");
 require_once("inc/version.php");
 require_once("inc/stdLib.php");
-if ($logfile) 
-    require("crmajax/logcommon".XajaxVer.".php");
 if ($_GET["test"]=="ja") {
     $rc=$db->getAll("select * from crm order by version","Status");
 }
@@ -12,24 +10,23 @@ $menu =  $_SESSION['menu'];
 ?>
 <html>
 <head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/themes/base/jquery-ui.css">
+    <script type="text/javascript" src="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/jquery.js"></script>
+    <script type="text/javascript" src="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/ui/jquery-ui.js"></script>';
+
     <!-- ERP Stylesheet -->
     <?php echo $menu['stylesheets']; ?>
     <!-- ERP JavaScripts -->
     <?php echo $menu['javascripts']; ?>
     <!-- Ende ERP -->
-<?php
-    if ($logfile) {
-    echo $xajax->printJavascript(XajaxPath) 
-?>
     <script language="JavaScript" type="text/javascript">
-    <!--
         function chksrv() {
-            xajax_chkSrv();
+            $.get("jqhelp/logserver.php",function(data) {
+                $("#SRV").append(data);
+            });
         }
-    -->
     </script>
-<?php    } ?>
 <body>
 <?php
  echo $menu['pre_content'];

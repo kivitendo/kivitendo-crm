@@ -292,6 +292,29 @@ CREATE TABLE mailvorlage (
         employee integer
 );
 
+CREATE TABLE timetrack (
+    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    fid integer,
+    tab char(1),
+    ttname text NOT NULL,
+    ttdescription text,
+    startdate date,
+    stopdate date,
+    aim integer,
+    active boolean DEFAULT 't',
+    uid integer NOT NULL
+);
+
+CREATE TABLE tt_event (
+    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    ttid integer NOT NULL,
+    uid integer NOT NULL,
+    ttevent text NOT NULL,
+    ttstart timestamp without time zone,
+    ttstop timestamp without time zone,
+    cleared int
+);
+
 CREATE TABLE bundesland (
 	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	country character (3),
@@ -404,14 +427,14 @@ ALTER TABLE employee ADD COLUMN termseq int;
 ALTER TABLE employee ALTER COLUMN termseq SET DEFAULT 30;
 ALTER TABLE employee ADD COLUMN kdview integer;
 ALTER TABLE employee alter COLUMN kdview SET DEFAULT 1;
-ALTER TABLE contacts ADD COLUMN cp_street character varying(75);
-ALTER TABLE contacts ADD COLUMN cp_zipcode character varying(10);
-ALTER TABLE contacts ADD COLUMN cp_city character varying(75);
+--ALTER TABLE contacts ADD COLUMN cp_street character varying(75);
+--ALTER TABLE contacts ADD COLUMN cp_zipcode character varying(10);
+--ALTER TABLE contacts ADD COLUMN cp_city character varying(75);
 ALTER TABLE contacts ADD COLUMN cp_homepage text;
 ALTER TABLE contacts ADD COLUMN cp_notes text;
 ALTER TABLE contacts ADD COLUMN cp_beziehung integer;
 ALTER TABLE contacts ADD COLUMN cp_sonder integer;
-ALTER TABLE contacts ADD COLUMN cp_position character varying(75);
+--ALTER TABLE contacts ADD COLUMN cp_position character varying(75);
 ALTER TABLE contacts ADD COLUMN cp_stichwort1 text;
 --ALTER TABLE contacts ADD COLUMN cp_gebdatum character varying(10);
 ALTER TABLE contacts ADD COLUMN cp_owener integer;
@@ -453,3 +476,4 @@ INSERT INTO schema_info (tag,login) VALUES ('crm_sonderflag','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_sonderflag2','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_TerminDate','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_TerminSequenz','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_timetracker','install');

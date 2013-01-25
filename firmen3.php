@@ -3,7 +3,7 @@
 	include("inc/template.inc");
 	include("inc/FirmenLib.php");
 	include("inc/UserLib.php");
-	require("firmacommon".XajaxVer.".php");
+        require("firmacommon".XajaxVer.".php"); // Nur noch drin weil sonst FirenLib auf die Nase fällt
 	$Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
 	$t = new Template($base);
         $menu =  $_SESSION['menu'];
@@ -12,7 +12,8 @@
             STYLESHEETS   => $menu['stylesheets'],
             PRE_CONTENT   => $menu['pre_content'],
             START_CONTENT => $menu['start_content'],
-            END_CONTENT   => $menu['end_content']
+            END_CONTENT   => $menu['end_content'],
+            JQUERY        => $_SESSION['basepath'].'crm/', 
         ));
 
 	$t->set_file(array("fa1" => "firmen3.tpl"));

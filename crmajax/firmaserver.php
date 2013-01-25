@@ -19,46 +19,6 @@
         $objResponse->assign("termin-container", "innerHTML", $inhalt);
         return $objResponse;
     }
-    function getShipto($id) {
-        $data=getShipStamm($id);
-        $objResponse = new xajaxResponse();
-        $objResponse->assign("shiptoname",        "value", $data["shiptoname"]);
-        $objResponse->assign("shiptodepartment_1","value", $data["shiptodepartment_1"]);
-        $objResponse->assign("shiptodepartment_2","value", $data["shiptodepartment_2"]);
-        $objResponse->assign("shiptostreet",      "value", $data["shiptostreet"]);
-        $objResponse->assign("shiptocity",        "value", $data["shiptocity"]);
-        $objResponse->assign("shiptocontact",     "value", $data["shiptocontact"]);
-        $objResponse->assign("shiptocountry",     "value", $data["shiptocountry"]);
-        $objResponse->assign("shiptophone",       "value", $data["shiptophone"]);
-        $objResponse->assign("shiptofax",         "value", $data["shiptofax"]);
-        $objResponse->assign("shiptoemail",       "value", $data["shiptoemail"]);
-        $objResponse->assign("shiptozipcode",     "value", $data["shiptozipcode"]);
-        $objResponse->assign("shipto_id",         "value", $data["shipto_id"]);
-        $objResponse->assign("module",            "value", $data["module"]);
-        $objResponse->assign("shiptobland",       "value", $data["shiptobland"]);
-        return $objResponse;
-    }
-    function Buland($land,$bl) {
-        $data=getBundesland(strtoupper($land));
-        $objResponse = new XajaxResponse();
-        $sScript = "var i = document.getElementById('".$bl."').length;";
-        $sScript.= "while ( i > 0) {";
-        $sScript.= "document.getElementById('".$bl."').options[i-1]=null;";
-        $sScript.= "i--;}";
-        $objResponse->script($sScript);
-        if (preg_match("/UTF-8/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="UTF-8"; }
-        else if (preg_match("/ISO-8859-15/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-15"; }
-        else if (preg_match("/ISO-8859-1/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="ISO-8859-1"; }
-        else { $charset="UTF-8"; };
-        $sScript = "var objOption = new Option('', '');";
-        $sScript .= "document.getElementById('".$bl."').options.add(objOption);";
-        foreach ($data as $row) {
-            $sScript .= "var objOption = new Option('".html_entity_decode($row["bundesland"],ENT_NOQUOTES,$charset)."', '".$row["id"]."');";
-            $sScript .= "document.getElementById('".$bl."').options.add(objOption);";
-        }
-        $objResponse->script($sScript);
-        return $objResponse;
-    }
     function showShipadress($id,$tab){
         $data=getShipStamm($id);
         if (preg_match("/UTF-8/i",$_SERVER["HTTP_ACCEPT_CHARSET"])) { $charset="UTF-8"; }

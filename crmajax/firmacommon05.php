@@ -8,8 +8,6 @@
     //$xajax->configure('debug', true);
 
     $xajax->register(XAJAX_FUNCTION,"getCustomTermin");
-    $xajax->register(XAJAX_FUNCTION,"Buland");
-    $xajax->register(XAJAX_FUNCTION,"getShipto");
     $xajax->register(XAJAX_FUNCTION,"showShipadress");
     $xajax->register(XAJAX_FUNCTION,"showContactadress");
     $xajax->register(XAJAX_FUNCTION,"showCalls");

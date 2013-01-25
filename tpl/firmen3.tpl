@@ -3,8 +3,10 @@
     {STYLESHEETS}
     <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
     <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/tabcontent.css">
+    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
+    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
+    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
     {JAVASCRIPTS}
-    {AJAXJS}
     <script language="JavaScript">
     <!--
     function vcard() {
@@ -19,41 +21,72 @@
             document.getElementById('sub'+last).className="";
             last=id;
         }
-    function mkBuland(tab) {
-        if (tab=="bland") {
-            L=document.neueintrag.country.value
-        } else {
-            L=document.neueintrag.shiptocountry.value
-        };
-        xajax_Buland(L,tab);
-    }
-    function getShipadress() {
-        x=document.neueintrag.shiptoadress.selectedIndex;
-        if (x>0) {
-            y=document.neueintrag.shiptoadress.options[x].value;
-            xajax_getShipto(y)
-        } else {
-            document.neueintrag.shipto_id.value="";
-            document.neueintrag.shiptoname.value="";
-            document.neueintrag.shiptodepartment_1.value="";
-            document.neueintrag.shiptodepartment_2.value="";
-            document.neueintrag.shiptostreet.value="";
-            document.neueintrag.shiptocountry.value="";
-            document.neueintrag.shiptozipcode.value="";
-            document.neueintrag.shiptocity.value="";
-            document.neueintrag.shiptophone.value="";
-            document.neueintrag.shiptofax.value="";
-            document.neueintrag.shiptoemail.value="";
-            document.neueintrag.shiptocontact.value="";
-            document.neueintrag.shiptobland.options[0].selected=true;
-        }
-    }
     function suchFa() {
             val=document.neueintrag.konzernname.value;
             if (val=="") val="%";
             f1=open("suchFa.php?tab={Q}&konzernname="+val,"suche","width=350,height=200,left=100,top=100");
         }
     //-->
+    </script>
+    <script>
+    $(document).ready(
+        function(){
+            $("#country").blur(function(){
+               var country = $("#country").val();
+               $.ajax({
+                   url: "jqhelp/firmaserver.php?task=bland&land="+country,
+                   dataType: 'json',
+                   success: function(items){
+                       $("#bland").empty();
+                       $.each(items, function( index, item ) {
+                           $("<option/>").val(item.id).text(item.val).appendTo("#bland");
+                       })
+                   }
+               })
+            })
+        });
+    $(document).ready(
+        function(){
+            $("#shiptocountry").blur(function(){
+               var country = $("#shiptocountry").val();
+               $.ajax({
+                   url: "jqhelp/firmaserver.php?task=bland&land="+country,
+                   dataType: 'json',
+                   success: function(items){
+                       $("#shiptobland").empty();
+                       $.each(items, function( index, item ) {
+                           $("<option/>").val(item.id).text(item.val).appendTo("#shiptobland");
+                       })
+                   }
+               })
+            })
+        });
+    $(document).ready(
+        function(){
+            $("#shiptoadress").change(function(){
+                id = $("#shiptoadress option:selected").val();
+                Q = $("#Q").val();
+                $.ajax({
+                    url: "jqhelp/firmaserver.php?task=shipto&id="+id+"&Q="+Q,
+                    dataType: 'json',
+                    success: function(data){
+                        $('#shipto_id').val(data.trans_id);
+                        $('#shiptoname').val(data.shiptoname);
+                        $('#shiptodepartment_1').val(data.shiptodepartment_1);
+                        $('#shiptodepartment_2').val(data.shiptodepartment_2);
+                        $('#shiptostreet').val(data.shiptostreet);
+                        $('#shiptocountry').val(data.shiptocountry);
+                        $('#shiptozipcode').val(data.shiptozipcode);
+                        $('#shiptocity').val(data.shiptocity);
+                        $('#shiptophone').val(data.shiptophone);
+                        $('#shiptofax').val(data.shiptofax);
+                        $('#shiptoemail').val(data.shiptoemail);
+                        $('#shiptocontact').val(data.shiptocontact);
+                        $('#shiptobland').val(data.shiptobland);
+                    }
+                })
+            })
+        });
     </script>
     {jcal0}
 <body onLoad="submenu('tab1'); document.neueintrag.name.focus();">
@@ -74,6 +107,7 @@
 </div>
 <form name="neueintrag" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="id" value="{id}">
+<input type="hidden" name="Q" id="Q" value="{Q}">
 <input type="hidden" id="shipto_id" name="shipto_id" value="{shipto_id}">
 <input type="hidden" name="customernumber" value="{customernumber}">
 <input type="hidden" name="vendornumber" value="{vendornumber}">
@@ -112,7 +146,7 @@
     <div class="zeile2">
         <span class="label klein">.:country:. / .:zipcode:.</span>
         <span class="feldxx">
-            <input type="text" name="country" size="2" maxlength="75" value="{country}" tabindex="7" onBlur="mkBuland('bland')">/
+            <input type="text" name="country" id="country" size="2" maxlength="75" value="{country}" tabindex="7" >/
             <input type="text" id="zipcode" name="zipcode" size="5" maxlength="10" value="{zipcode}" tabindex="8">
             <select name="bland" id="bland" tabindex="9" style="width:150px;">
                 <option value=""></option>
@@ -164,7 +198,7 @@
 <span id='tab2' class="contentbox3" style="visibility:hidden;">
     <div class="zeile2">
         <span class="label klein"></span>
-        <span class="feldxx"><select name="shiptoadress" id="shiptoadress" style="width:19em;" tabindex="1" onChange="getShipadress();">
+        <span class="feldxx"><select name="shiptoadress" id="shiptoadress" style="width:19em;" tabindex="1">
                 <option value=""></option>
 <!-- BEGIN shiptos -->
                 <option value="{STid}">{STtext}</option>
@@ -190,7 +224,7 @@
     <div class="zeile2">
         <span class="label klein">.:country:. / .:zipcode:.</span>
         <span class="feldxx">
-            <input type="text" id="shiptocountry" name="shiptocountry" size="2" value="{shiptocountry}" tabindex="6" onBlur="mkBuland('shiptobland');">/
+            <input type="text" id="shiptocountry" name="shiptocountry" size="2" value="{shiptocountry}" tabindex="6" >/
             <input type="text" id="shiptozipcode" name="shiptozipcode" size="5" maxlength="10" value="{shiptozipcode}" tabindex="7">
             <select id="shiptobland" name="shiptobland" id="shiptobland" tabindex="8" style="width:12em;">
                 <option value=""></option>

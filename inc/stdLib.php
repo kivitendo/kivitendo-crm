@@ -388,6 +388,16 @@ global $db;
 *****************************************************/
 function getBundesland($land) {
 global $db;
+    $land = mb_strtolower($land,'utf-8');
+    if (in_array($land,array('deutschland','germany','allemagne','d'))) {
+        $land = 'D';
+    } else if (in_array($land,array('österreich','austria','autriche','a'))) {
+        $land = 'A';
+    } else if (in_array($land,array('schweiz','swiss','suisse','ch'))) {
+        $land = 'CH';
+    } else {
+        $land = '';
+    }
     if ( $land ) {
         $sql = "select * from bundesland where country = '$land' order by country,bundesland";
     } else {

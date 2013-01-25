@@ -2,6 +2,7 @@
     require_once("../inc/stdLib.php");
     include("FirmenLib.php");
     include("crmLib.php");
+    include("persLib.php");
 
     function Buland($land) {
         $data=getBundesland(strtoupper($land));
@@ -54,14 +55,45 @@
         $maillink="<a href='mail.php?TO=".$data["shiptoemail"]."&KontaktTO=$tab".$data["trans_id"]."'>".$data["shiptoemail"]."</a>";
         echo json_encode(array('karte'=>$karte,'mail'=>$maillink,'www'=>$htmllink,'adr'=>$data));
     }
-
+    function showContactadress($id){
+        $data=getKontaktStamm($id,".");
+        if ( !$data ) { 
+            $data = array('cp_id'=>-1,'cp_name'=> translate('.:no contact:.','firma'));
+        } else {
+            $data["cp_email"]="<a href='mail.php?TO=".$data["cp_email"]."&KontaktTO=P".$data["cp_id"]."'>".$data["cp_email"]."</a>";
+            if ($data["cp_privatemail"]) $data["cp_privatemail"]="Privat: <a href='mail.php?TO=".$data["cp_privatemail"]."&KontaktTO=P".$data["cp_id"]."'>".$data["cp_privatemail"]."</a>";;
+            $data["cp_homepage"]="<a href='".$data["cp_homepage"]."' target='_blank'>".$data["cp_homepage"]."</a>";
+            if (strpos($data["cp_birthday"],"-")) { $data["cp_birthday"]=db2date($data["cp_birthday"]); };
+            if ($data["cp_gender"]=='m') { $data["cp_greeting"]=translate('.:greetmale:.','firma'); 
+            } else { $data["cp_greeting"]=translate('.:greetfemale:.','firma'); };
+            $root="dokumente/".$_SESSION["mansel"]."/".$data["tabelle"].$data["nummer"]."/".$data["cp_id"];
+            if (!empty($data["cp_grafik"]) && $data["cp_grafik"]<>"     ") {
+                $img="<img src='$root/kopf$id.".$data["cp_grafik"]."' ".$data["icon"]." border='0'>";
+                $data["cp_grafik"]="<a href='$root/kopf$id.".$data["cp_grafik"]."' target='_blank'>$img</a>";
+            };
+            $tmp=glob("../$root/vcard".$data["cp_id"].".*");
+            $data["cp_vcard"]="";
+            if ($tmp)  foreach ($tmp as $vcard) {
+                $ext=explode(".",$vcard);
+                $ext=strtolower($ext[count($ext)-1]);
+                if (in_array($ext,array("jpg","jpeg","gif","png","pdf","ps"))) {
+                    $data["cp_vcard"]="<a href='$root/vcard$id.$ext' target='_blank'>Visitenkarte</a>";
+                    break;
+                }
+            } 
+            $data["extraF"] = '<a href="extrafelder.php?owner=P'.$id.'" target="_blank" title="'.translate('.:extra data:.','firma').'"><img src="image/extra.png" alt="Extras" border="0" /></a>';
+        }
+        echo json_encode($data);
+    }
 if ($_GET['task'] == 'bland') {
     Buland($_GET['land']);
 } else if ($_GET['task'] == 'shipto') {
     getShipto($_GET['id'],$_GET['Q']);
 } else if ($_GET['task'] == 'showCalls') {
-   showCalls($_GET['id'],$_GET['start'],1);
+   showCalls($_GET['id'],$_GET['start'],$_GET['firma']);
 } else if ($_GET['task'] == 'showShipadress') {
    showShipadress($_GET['id'],$_GET['Q']);
+} else if ($_GET['task'] == 'showContact') {
+   showContactadress($_GET['id']);
 }
 ?>

@@ -16,11 +16,11 @@
         $TO=$_GET["TO"];
         $KontaktTO=$_GET["KontaktTO"];
         if (preg_match("/.+\.php/",$referer)) {
-            $referer = substr($referer,0,strpos($referer,'?'));
             if (preg_match("/firma/",$referer)) {
                 $btn='<a href="'.$referer.'"><image src="image/firma.png" alt=".:back:." title=".:back:." border="0" ></a>';
                 $hide="hidden";
             } else {
+                $referer = substr($referer,0,strpos($referer,'?'));
                 $btn='<a href="mail.php"><image src="image/new.png" alt=".:new:." title=".:new:." border="0" ></a>';
                 $hide="visible";
             }

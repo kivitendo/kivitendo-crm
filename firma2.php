@@ -4,8 +4,8 @@
     include("inc/crmLib.php");
     include("inc/FirmenLib.php");
     include("inc/persLib.php");
-        require("firmacommon".XajaxVer.".php");
-    $fid=($_GET["fid"])?$_GET["fid"]:$_POST["fid"];
+
+    $fid=($_GET["fid"])?$_GET["fid"]:$_POST["fid"];  //Kommt von firma1.php
     $Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];    
     $kdhelp=getWCategorie(true);
     if ($_POST["insk"]) {
@@ -17,7 +17,7 @@
     }
 
     // Einen Kontakt anzeigen lassen
-    if ($_GET["id"]) {
+    if ($_GET["id"]) {				// Kommt nicht von firma1.php
         $co=getKontaktStamm($_GET["id"]);
         if (empty($co["cp_cv_id"])) {
             // Ist keiner Firma zugeordnet
@@ -34,6 +34,7 @@
             $link4="firma4.php?pid=$id";
             $ep="&ep=1";
             $init="";
+            $liste.="<option value='".$co["cp_id"]."' selected>".$co["cp_name"].", ".$co["cp_givenname"]."</option>";
         } else {
             $id=$_GET["id"];
             $fid=$co["cp_cv_id"];
@@ -45,8 +46,9 @@
         // Aufruf mit einer Firmen-ID
         $co=getAllKontakt($fid);
         $liste="";
-        if (count($co)>1) {
-            // Mehr als einen Kontakt gefunden
+        if (count($co)>0) {
+            // Kontakt gefunden
+            if (!$id) $id = $co[0]['cp_id'];
             foreach ($co as $row) {
                 $liste.="<option value='".$row["cp_id"];
                 $liste.=($row["cp_id"]==$id)?"' selected>":"'>";
@@ -59,10 +61,6 @@
             // Keinen Kontakt gefunden
             $co["cp_name"]="Leider keine Kontakte gefunden";
             $init="";
-        } else {
-            // Genau ein Kontakt
-            $co=$co[0]; 
-            $id=$co["cp_id"];
         }
         $fa=getFirmenStamm($fid,true,$Q);
         $KDNR=($Q=="C")?$fa["customernumber"]:$fa["vendornumber"];
@@ -78,14 +76,6 @@
         $link3="#";
         $link4="#";
     }
-    if (trim($co["cp_grafik"])<>"") {
-        $Image="<img src='dokumente/".$_SESSION["mansel"]."/$Q$KDNR/".$_GET["id"]."/kopf.".$co["cp_grafik"]."' ".$co["size"].">";
-    } else {
-        $Image="";
-    }
-    if ($co["cp_homepage"]<>"") {
-        $internet=(preg_match("^://^",$co["cp_homepage"]))?$co["cp_homepage"]:"http://".$co["cp_homepage"];
-    };
     $t = new Template($base);
     $t->set_file(array("co1" => "firma2.tpl"));
     $menu =  $_SESSION['menu'];
@@ -94,11 +84,10 @@
         STYLESHEETS   => $menu['stylesheets'],
         PRE_CONTENT   => $menu['pre_content'],
         START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content']
+        END_CONTENT   => $menu['end_content'],
+        JQUERY        => $_SESSION['basepath'].'crm/',
     ));
     $t->set_var(array(
-            INIT     => ($init=="")?"showOne($id)":"showContact()",
-            AJAXJS   => $xajax->printJavascript(XajaxPath),
             FAART    => ($Q=="C")?".:Customer:.":".:Vendor:.",   //"Kunde":"Lieferant",
             ERPCSS   => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
             interv   => $_SESSION["interv"]*1000,
@@ -113,10 +102,8 @@
             Plz     => $fa["zipcode"],
             Ort     => $fa["city"],
             Street  => $fa["street"],
-            PID     => $co["cp_id"],
             FID     => ($co["cp_cv_id"])?$co["cp_cv_id"]:$fid,
             customernumber    => $KDNR,
-            moreC   => ($liste<>"")?"visible":"hidden",
             kontakte => $liste,
             tools   => ($tools)?"visible":"hidden",
             ep      => $ep,

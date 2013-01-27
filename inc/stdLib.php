@@ -286,7 +286,7 @@ function chkFld(&$val,$empty,$rule,$len) {
                  if ( strlen($val)>$len && $len>0 ) $val = substr($val,0,$len);
                  break;
         case 2 : if ( $empty===0 && empty($val) ) { $ok = true; $val = ""; }
-                 else { $ok=preg_match('/^[0-9]{4,5}$/',$val,$hit); }; // Plz
+                 else { $ok=preg_match('/^[0-9]{2,3}[-]{0,1}[0-9A-Z]{2,4}$/',$val,$hit); }; // Plz: PL=dd-ddd, NL=ddwwww, A=dddd 
                  if ( strlen($val)>$len && $len>0 ) $val = substr($val,0,$len);
                  break;
         case 3 : if ( $empty===0 && empty($val) ) { $ok=true; $val=""; }

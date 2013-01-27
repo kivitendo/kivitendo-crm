@@ -39,6 +39,7 @@ $jcalendar=true;
 $listLimit=500;
 $tinymce=true;
 $zeigeextra=true;
+$zeigelxcars=false; //True wenn die Erweiterung LxCars installiert wurde. http://lxcars.de
 $jpg=false;
 //$jpg=true; //jpgraph
 $showErr=false;

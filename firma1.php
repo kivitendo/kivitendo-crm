@@ -170,6 +170,7 @@
             request         => ($Q=="C")?"sales":"request",
             apr             => ($Q=="C")?"ar":"ap",
             zeigeplan       => ($karte1)?"visible":"hidden",
+            zeigelxcars     => ($zeigelxcars)?"visible":"hidden",
             zeigeextra      => ($zeigeextra)?"visible":"hidden",
             tools           => ($tools)?"visible":"hidden",
             login           => $_SESSION["employee"],

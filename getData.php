@@ -115,7 +115,7 @@ if ($_GET["adress"]) {
         if ($anzahl==1 && $rsC) header("Location: firma1.php?Q=C&id=".$rsC[0]['id']); 
         if ($anzahl==1 && $rsV) header("Location: firma1.php?Q=V&id=".$rsV[0]['id']); 
         if ($anzahl==1 && $rsK) header("Location: kontakt.php?id=".$rsK[0]['id']); 
-        if ($anzahl==1 && $rsE) header("Location: user.php?id=".$rsE[0]['id']); 
+        if ($anzahl==1 && $rsE) header("Location: user1.php?id=".$rsE[0]['id']); 
         echo '<p class="listtop">Suchergebnis</p>'; 
         echo "<table class=\"liste\">\n"; 
         echo "<tr class='bgcol3'><th>KD-Nr</th><th class=\"liste\">Name</th><th class=\"liste\">Anschrift</th><th class=\"liste\">Telefon</th><th></th></tr>\n"; 

@@ -1,24 +1,60 @@
 <html>
-	<head><title></title>
-	{STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
-        {JAVASCRIPTS}
-        {AJAXJS}
-    <!--script type="text/javascript" src="../js/common.js"></script-->
-	<script language="JavaScript">
-	<!--
-	function suchFa() {
-		val=document.formular.name.value;
-		f1=open("suchFa.php?op=1&name="+val,"suche","width=350,height=200,left=100,top=100");
-	}
+<head><title></title>
+{STYLESHEETS}
+    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>a
+    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
+    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
+    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
+
+{JAVASCRIPTS}
+    <script language="JavaScript">
+    <!--
+    function suchFa() {
+        val=document.formular.name.value;
+        f1=open("suchFa.php?op=1&name="+val,"suche","width=350,height=200,left=100,top=100");
+    }
     function editrow(id) {
-        xajax_editTevent(id);
+        $.ajax({
+               url:  'jqhelp/firmaserver.php?task=editTevent&id='+id,
+               dataType: 'json',
+               success: function(data){
+                  $('#startd').val(data.startd);
+                  $('#startt').val(data.startt);
+                  $('#stopd').val(data.stopd);
+                  $('#stopt').val(data.stopt);
+                  $('#cleared').val(data.t.cleared);
+                  $('#eventid').val(id);
+                  $('#ttevent').empty().append(data.t.ttevent);
+                  $('#parts').empty();
+                  $.each(data.p, function( index, part ) {
+                       line = part.qty+'|'+part.parts_id+'|'+part.parts_txt;
+                       $("<option/>").val(line).text( part.qty+' * '+part.parts_txt).appendTo("#parts");
+                  });
+                  if (data.t.cleared > 0) {
+                      $('#savett').hide();
+                      $('#pdel').hide();
+                      $('#psearch').hide();
+                  } else {
+                      $('#savett').show();
+                      $('#pdel').show();
+                      $('#psearch').show();
+                  }
+              }
+        });
     }
     function getEventListe() {
-	    id = document.formular.id.value
+    id = document.formular.id.value
         fid = document.formular.fid.value
         if ( fid < 0 ) fid=0;
-        xajax_listTevents(id,fid);
+        $.ajax({
+               url:  'jqhelp/firmaserver.php?task=geteventlist&fid='+fid+'&id='+id,
+               dataType: 'json',
+               success: function(data){
+                  $('#eventliste').empty().append(data.liste);
+                  $('#summtime').empty().append(data.use);
+                  $('#summtime').append(data.rest);
+              }
+        });
     }
     function doit(was) {
         document.formular.action.value=was; 
@@ -72,16 +108,14 @@
         return true;
     }
     function doReset() {
-        document.getElementById("savett").style.visibility="visible";
-        document.getElementById("pdel").style.visibility="visible";
-        document.getElementById("psearch").style.visibility="visible";
-        for ( i=document.getElementById('parts').length - 1; i>=0; i--) {
-            document.getElementById('parts').options[i] = null;
-        };
+        $('#savett').show();
+        $('#pdel').show();
+        $('#psearch').show();
+        $('#parts').empty();
     }
-	//-->
-	</script>
-	{jcal0}
+    //-->
+    </script>
+    {jcal0}
     <script type='text/javascript' src='inc/help.js'></script>
 
 <body {chkevent}>
@@ -105,57 +139,55 @@
 </select><input type="submit" name="getone" value="ok">
 </span>
 <font color="red"><b>{msg}</b></font>
-<!--div style="position:absolute; left:1px; width:65em; top:3em; border: 1px solid black; text-align:center;" -->
-<!--div style="position:absolute;  left:1px;  top:3.3em; border: 0px solid black; text-align:left;" -->
-	<div class="zeile">
-		<span class="label klein">.:name:.</span>
-			<input type="text" size="60" name="name" value="{name}" > 
-		    <a href="javascript:suchFa();"><img src="image/suchen_kl.png" border="0" title=".:searchcompany:." ></a>
-	</div>
-	<div class="zeile">
-		<span class="label klein">.:project:.</span>
-		<input type="text" size="60" name="ttname" value="{ttname}" > 
-	</div>
-	<div class="zeile">
-		<span class="label klein">.:description:.</span>
-		<textarea cols="60" rows="5" name="ttdescription">{ttdescription}</textarea> 
-	</div>
-	<div class="zeile">     
-		<span class="label klein"></span>
-		<span class="klein">.:startdate:.
-		<input type="text" size="10" name="startdate" id="START" value="{startdate}" >{jcal1} </span> &nbsp; &nbsp;
-		<span class="klein">.:stopdate:.
-		<input type="text" size="10" name="stopdate" id="STOP" value="{stopdate}" >{jcal2} </span>
-	</div>
-	<div class="zeile">
-		<span class="label klein"></span>
-		<span class="klein">.:aim:.</span>
-		<input type="text" size="5" name="aim" value="{aim}" >.:hours:. &nbsp; &nbsp;
-		<span class="klein">.:active:.</span>
-		<input type="radio" value="t" name="active" {activet}>.:yes:.
-		<input type="radio" value="f" name="active" {activef}>.:no:.
-	</div>
-	<div class="zeile">
-		<span class="label klein"></span>
-		<span class="klein">.:budget:.</span>
-		<input type="text" size="9" name="budget" value="{budget}" >{cur} &nbsp; &nbsp;
-	</div>
-	<div class="zeile">
-		<span class="label"></span>
+    <div class="zeile">
+        <span class="label klein">.:name:.</span>
+            <input type="text" size="60" name="name" value="{name}" > 
+            <a href="javascript:suchFa();"><img src="image/suchen_kl.png" border="0" title=".:searchcompany:." ></a>
+    </div>
+    <div class="zeile">
+        <span class="label klein">.:project:.</span>
+        <input type="text" size="60" name="ttname" value="{ttname}" > 
+    </div>
+    <div class="zeile">
+        <span class="label klein">.:description:.</span>
+        <textarea cols="60" rows="5" name="ttdescription">{ttdescription}</textarea> 
+    </div>
+    <div class="zeile">     
+        <span class="label klein"></span>
+        <span class="klein">.:startdate:.
+        <input type="text" size="10" name="startdate" id="START" value="{startdate}" >{jcal1} </span> &nbsp; &nbsp;
+        <span class="klein">.:stopdate:.
+        <input type="text" size="10" name="stopdate" id="STOP" value="{stopdate}" >{jcal2} </span>
+    </div>
+    <div class="zeile">
+        <span class="label klein"></span>
+        <span class="klein">.:aim:.</span>
+        <input type="text" size="5" name="aim" value="{aim}" >.:hours:. &nbsp; &nbsp;
+        <span class="klein">.:active:.</span>
+        <input type="radio" value="t" name="active" {activet}>.:yes:.
+        <input type="radio" value="f" name="active" {activef}>.:no:.
+    </div>
+    <div class="zeile">
+        <span class="label klein"></span>
+        <span class="klein">.:budget:.</span>
+        <input type="text" size="9" name="budget" value="{budget}" >{cur} &nbsp; &nbsp;
+    </div>
+    <div class="zeile">
+        <span class="label"></span>
         <span style="visibility:{noown}">
-		<input type="hidden" name="action" value="">
-		<img src="image/save_kl.png"   alt='.:save:.'   title='.:save:.'   name="save"   value=".:save:."   onclick="doit('save');"> &nbsp;
-		<img src="image/cancel_kl.png" alt='.:delete:.' title='.:delete:.' name="delete" value=".:delete:." onclick="doit('delete');" style="visibility:{delete};"> &nbsp;
+        <input type="hidden" name="action" value="">
+        <img src="image/save_kl.png"   alt='.:save:.'   title='.:save:.'   name="save"   value=".:save:."   onclick="doit('save');"> &nbsp;
+        <img src="image/cancel_kl.png" alt='.:delete:.' title='.:delete:.' name="delete" value=".:delete:." onclick="doit('delete');" style="visibility:{delete};"> &nbsp;
         </span>
         <span style="visibility:{blshow}">
-		<a href={backlink}><image src="image/firma.png" alt='.:back:.' title='.:back:.' border="0" ></a>&nbsp;
+        <a href={backlink}><image src="image/firma.png" alt='.:back:.' title='.:back:.' border="0" ></a>&nbsp;
         </span>
         <span>
-		<img src="image/neu.png"    alt='.:new:.'    title='.:new:.'    name="clear"  value=".:new:."    onclick="doit('clear');"> &nbsp;
-		<img src="image/suchen.png" alt='.:search:.' title='.:search:.' name="search" value=".:search:." onclick="doit('search');"> &nbsp;
+        <img src="image/neu.png"    alt='.:new:.'    title='.:new:.'    name="clear"  value=".:new:."    onclick="doit('clear');"> &nbsp;
+        <img src="image/suchen.png" alt='.:search:.' title='.:search:.' name="search" value=".:search:." onclick="doit('search');"> &nbsp;
         </span>
         <span id="summtime"></span>
-	</div>
+    </div>
 
 <!--/div-->
 </form>
@@ -170,9 +202,9 @@
 <tr><td>.:start work:.</td><td>.:stop work:.</td><td>.:material:.</td>
 </tr>
 <tr><td><input type="text" size="8" name="startd" id="startd" onBlur="check_right_date_format(this)">{jcal3} 
-	<input type="text" size="4" name="startt" id="startt" onblur="chktime('startt');"><input type="checkbox" name="start" value="1">.:now:.</td>
+    <input type="text" size="4" name="startt" id="startt" onblur="chktime('startt');"><input type="checkbox" name="start" value="1">.:now:.</td>
     <td><input type="text" size="8" name="stopd"  id="stopd" onBlur="check_right_date_format(this)">{jcal4}  
-	<input type="text" size="4" name="stopt"  id="stopt" onblur="chktime('stopt');"> <input type="checkbox" name="stop"  value="1">.:now:.</td>
+    <input type="text" size="4" name="stopt"  id="stopt" onblur="chktime('stopt');"> <input type="checkbox" name="stop"  value="1">.:now:.</td>
     <td><input type="text" name="partnr" id="partnr" style='width:19em;'>
     <input type="button" name="psearch" id="psearch" value=".:psearch:." onClick="psuche();"></td>
 </tr>
@@ -181,7 +213,7 @@
     <input type="button" id="pdel" name="pdel" value=".:del:." onClick="pdelete();"></td>
 </tr>
 <tr>
-    <td><input type="reset"  name="resett" value=".:reset:." onClick='doReset();'><</td>
+    <td><input type="reset"  name="resett" value=".:reset:." onClick='doReset();'></td>
     <td><input type="submit" name="savett" value=".:save:." id='savett' ><!--style='visibility:visible'--></td>
     <td></td>
 </tr>

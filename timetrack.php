@@ -1,7 +1,6 @@
 <?php
     require_once("inc/stdLib.php");
     require_once("inc/crmLib.php");
-    require("firmacommon".XajaxVer.".php");
     include("inc/template.inc");
 
     $jscal1 ="<style type='text/css'>@import url(".$_SESSION['basepath']."/js/jscalendar/calendar-win2k-1.css);</style>\n";
@@ -21,7 +20,8 @@
         STYLESHEETS   => $menu['stylesheets'],
         PRE_CONTENT   => $menu['pre_content'],
         START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content']
+        END_CONTENT   => $menu['end_content'],
+        JQUERY        => $_SESSION['basepath'].'crm/',
     ));
     $t->set_file(array("tt" => "timetrack.tpl"));
     $data['clear'] = 1;
@@ -118,7 +118,6 @@
     if ($data["fid"]) $data["backlink"] = "firma1.php?Q=".$data["tab"]."&id=".$data["fid"];
     $t->set_var(array(
         ERPCSS  => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-        AJAXJS  => $xajax->printJavascript(XajaxPath),
         backlink => $data["backlink"],
         blshow  => ($data["backlink"])?"visible":"hidden",
         noevent => ($data["active"]=="t" && $data['id'])?"visible":"hidden",

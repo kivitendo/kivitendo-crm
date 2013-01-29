@@ -4,6 +4,19 @@
     include("crmLib.php");
     include("persLib.php");
 
+    function getCustomTermin($id,$tab,$day) {
+        $termine = getCustTermin($id,$tab,$day);
+        if ($termine)  {
+            foreach ($termine as $term) {
+               $inhalt .= "<span onClick='getCall(".$term["cid"].")'>";
+               $inhalt .= db2date(substr($term["start"],0,10))." ".$term["cause"].":".$term["cp_name"]."<br /></span>";
+            }
+        } else {
+            $inhalt = "Keine Termine";
+        };
+        echo $inhalt;
+    }
+
     function Buland($land) {
         $data=getBundesland(strtoupper($land));
         $rs = array(array('id'=>'','val'=>''));
@@ -85,6 +98,98 @@
         }
         echo json_encode($data);
     }
+
+    function listTevents($id,$fid=0) {
+        $events = getTTEvents($id,"a",false);
+        $link = "<a href='../oe.pl?action=edit&type=sales_order&vc=customer&id=%d&callback=crm/timetrack.php%%3ffid=$fid'>";
+        if (!$events) echo json_encode(array('ok'=>0));
+        $tt = getOneTT($events[0]["ttid"]);
+        $liste = "<form name='cleared' method='post' action='timetrack.php'>";
+        $liste.= "<input type='hidden' name='tid' value='".$events[0]["ttid"]."'>";
+        $liste.= "<table>";
+        $i = 0;
+        $now = time();
+        $diff = 0;
+        $lastcleared = 0;
+        if ($events) foreach ($events as $row) {
+            $a = explode(" ",$row["ttstart"]);
+            $t1 = strtotime($row["ttstart"]);
+            if ($row["ttstop"]) {
+                $b = explode(" ",$row["ttstop"]);   
+                $stop = db2date($b[0])." ".substr($b[1],0,5);
+                $t2 = strtotime($row["ttstop"]);
+            } else {
+                if ( $t1 <= $now ) {
+                    $t2 = $now;
+                } else {
+                    $t2 = $t1;
+                }
+                $stop = "<a href='timetrack.php?tid=".$row["ttid"]."&eventid=".$row["id"]."&stop=now'><b>".translate('.:stop now:.','work')."</b></a>";
+            };
+	        $min = $t2 - $t1;
+            $diff += $min;
+            $i++; 
+            if ($row["cleared"] > 0) {
+                $clear = "<td>-</td>";
+                if ( $row['cleared'] > $lastcleared )  $lastcleared  = $row['cleared']; 
+            } else {
+                if ($row["uid"] == $_SESSION["loginCRM"]) {
+                    $clear = "<td><input type='checkbox' name='clear[]' value='".$row["id"]."'></td>";
+                } else {
+                    $clear = "<td>+</td>";
+                };
+            }
+            $liste .= "<tr class='calls".($i%2)."' onClick='editrow(".$row["id"].");'>$clear<td>".db2date($a[0])." ".substr($a[1],0,5)."</td>";
+            $liste .= "<td>".$stop."</td><td align='right'>".floor($min/60)."</td><td>".$row["user"]."</td><td>";
+            if (strlen($row["ttevent"])>40) {
+                $liste .= substr($row["ttevent"],0,40)."...</td><td>";
+            } else {
+                $liste .= $row["ttevent"]."</td><td>";
+            }
+	        $liste .= sprintf($link,$row['cleared']).$row["ordnumber"]."</a>";
+            if ( $row['closed'] == 't' ) $liste .= "*";
+            $liste .= "</td></tr>";
+        };
+        $diff = floor($diff / 60);
+        if ($tt["aim"]>0) {
+            $rest = $tt["aim"] * 60 - $diff;
+            $rstd = floor($rest/60);
+            $rmin = ($rest%60);
+            $rest = translate('.:remain:.','work')." $rstd:$rmin ".translate('.:hours:.','work');
+        } else {
+            $rest = "";
+        }
+        if ($diff>60) {
+            $min = sprintf("%02d",($diff % 60));
+            $std = floor($diff/60);
+            $use = "$std:$min ".translate('.:hours:.','work');
+        } else {    
+            $use = $diff." ".translate('.:minutes:.','work');
+        }
+        $liste .= "</table><input type='checkbox' name='clrok' value='1'>".translate(".:all:.",'work')." ";
+        if ( $lastcleared > 0 ) {
+            $liste .= "<input type='radio' name='order' value='0' checked>".translate('.:new Order:.','work').' ';
+            $liste .= "<input type='radio' name='order' value='$lastcleared'>".translate('.:add to last Order:.','work').' ';
+        };
+     	$liste .= "<input type='submit' name='clr' value='".translate(".:clearing:.","work")."'></form>";
+        echo json_encode(array('liste'=>$liste,'used'=>$use,'rest'=>$rest,'ok'=>1));
+    }
+    function editTevent($id) {
+        $data = getOneTevent($id);
+        $a = explode(" ",$data['t']["ttstart"]);
+        $data['startd'] = db2date($a[0]);
+        $data['startt'] = substr($a[1],0,5);
+        if ($data['t']["ttstop"]) {
+            $b = explode(" ",$data['t']["ttstop"]);
+            $data['stopd'] = db2date($b[0]);
+            $data['stopt'] = substr($b[1],0,5);
+        } else {
+            $data['stopd'] = "";
+            $data['stopt'] = "";
+        };
+        echo json_encode($data);
+    }
+
 if ($_GET['task'] == 'bland') {
     Buland($_GET['land']);
 } else if ($_GET['task'] == 'shipto') {
@@ -95,5 +200,11 @@ if ($_GET['task'] == 'bland') {
    showShipadress($_GET['id'],$_GET['Q']);
 } else if ($_GET['task'] == 'showContact') {
    showContactadress($_GET['id']);
+} else if ($_GET['task'] == 'geteventlist') {
+   listTevents($_GET['id'],$_GET['fid']);
+} else if ($_GET['task'] == 'editTevent') {
+   editTevent($_GET['id']);
+} else if ($_GET['task'] == 'getCustomTermin') {
+   getCustomTermin($_GET['id'],$_GET['tab'],$_GET['day']);
 }
 ?>

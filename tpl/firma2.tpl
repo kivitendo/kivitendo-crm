@@ -83,10 +83,7 @@
             setTimeout('showCall(0)',{interv});
         }
         function showOne(id) {
-            if (id>0) { 
-                   xajax_showContactadress(id);
-                xajax_showCalls(id,0);
-            }
+            //was wollte ich hier?
         }
         function showContact() {
             pid = $('#liste option:selected').val();

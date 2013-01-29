@@ -1,31 +1,34 @@
 <?
     chdir("..");
     require_once("inc/stdLib.php");
-    include("FirmenLib.php"); 
-    $punkt = ".";
-    require("crmajax/firmacommon".XajaxVer.".php");
-    $tmp = split("crm/",$_SERVER['REQUEST_URI']); 
-    $path=$tmp[0]; 
 ?>
-<html style="background-color: buttonface; color: buttontext;">
+<html>
 <head>
 <title>Simple calendar setup [flat calendar]</title>
 <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
-<link type="text/css" REL="stylesheet" HREF="<?= $path ?>js/jscalendar/calendar-win2k-1.css"></link>
-<?= $xajax->printJavascript("../".XajaxPath); ?>
+    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'] ?>js/jscalendar/calendar-win2k-1.css">
+    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION["basepath"] ?>crm/css/<?php echo $_SESSION["stylesheet"] ?>/main.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/themes/base/jquery-ui.css">
+    <script type="text/javascript" src="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/jquery.js"></script>
+    <script type="text/javascript" src="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/ui/jquery-ui.js"></script>
+
 <script language="JavaScript">
     <!--
     function getCustTermin(day) {
-       xajax_getCustomTermin(<?=$_GET["id"]?>,'<?=$_GET["Q"]?>',day); 
+       $.get('../jqhelp/firmaserver.php?task=getCustomTermin&id=<?php echo $_GET["id"] ?>&tab=<?php echo $_GET["Q"] ?>&day='+day,
+             function(data) {
+                $('#termin-container').empty().append(data); 
+             }
+       ); 
     };
     function getCall(id) {
         F1=open("../getCall.php?Q=<?=$_GET["Q"]?>&fid=<?=$_GET["id"]?>&Bezug="+id,"Caller","width=680, height=680, left=100, top=50, scrollbars=yes");
     }
     //-->
 </script>
-<script type='text/javascript' src='<?= $path ?>js/jscalendar/calendar.js'></script>
-<script type='text/javascript' src='<?= $path ?>js/jscalendar/lang/calendar-de.js'></script>
-<script type='text/javascript' src='<?= $path ?>js/jscalendar/calendar-setup.js'></script>
+<script type='text/javascript' src='<?php echo $_SESSION['basepath'] ?>js/jscalendar/calendar.js'></script>
+<script type='text/javascript' src='<?php echo $_SESSION['basepath'] ?>js/jscalendar/lang/calendar-de.js'></script>
+<script type='text/javascript' src='<?php echo $_SESSION['basepath'] ?>js/jscalendar/calendar-setup.js'></script>
 </head>
 
 <body onLoad="window.resizeTo(300, 320); getCustTermin(0);" style="padding:0px; margin:0px;">

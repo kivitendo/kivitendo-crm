@@ -31,6 +31,7 @@ $jcalendar=true;
 $listLimit=500;
 $tinymce=true;
 $zeigeextra=true;
+$zeigelxcars=false; //True wenn die Erweiterung LxCars installiert wurde. http://lxcars.de
 $showErr=false;
 $CallEdit = true;
 $CallDel = false;

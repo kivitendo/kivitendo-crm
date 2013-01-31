@@ -78,7 +78,7 @@ echo "<br>Voraussetzungen pr&uuml;fen:<br>";
             echo "Curl: $ok<br>";
             fputs($log,"Curl : ok\n");
         } else {
-/	      echo "Curl: $fehler<br>";
+	      echo "Curl: $fehler<br>";
 	      fputs($log,"Curl : Fehler\n");
         }	
         $chkfile=array("DB"=>"MDB2","Driver"=>"MDB2/Driver/pgsql",

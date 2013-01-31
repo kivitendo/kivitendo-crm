@@ -1,4 +1,4 @@
-Kivitendo CRM 1.5.5  
+Kivitendo CRM 1.6.0  
 
 Installtion Kivitendo CRM
 -------------------------
@@ -23,37 +23,25 @@ Voreingestellt ist kivitendo.conf.
 Vorrausetzungen:
 	Kivitendo ERP >= 3.0.0
 	PHP >= 4.2x
-	 	PEAR::DB 
-	oder
-	 	PEAR::MDB2
-	 	PEAR::MDB2#pgsql
+	PEAR::MDB2
+	PEAR::MDB2#pgsql
 	PEAR::Contact_Vcard_Build
 	PEAR::Contact_Vcard_Parse
 	PEAR::Mail_Mime oder php-mail-mime
 		
-	   jpgraph3
-	oder
-	   PEAR::Image_Canvas
-	   PEAR::Image_Graph
+	jpgraph3
 	
 	fpdf (http://www.fpdf.de/downloads/)
 	fpdi (http://www.setasign.de/products/pdf-php-solutions/fpdi/downloads/)
 	ttf-freefont
 	php-gd,php-imap
-	xajax (http://www.xajaxproject.org/)
-    curl 
-    jquery-ui (http://jqueryui.com/)
+        curl 
+        jquery-ui (http://jqueryui.com/)
 Fast alle Pakete können unter debianoiden Systemen in der Konsole mit folgendem Behfehl installiert werden.
-apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-db php5-pgsql php-fpdf imagemagick php-xajax ttf-freefont php5-curl tinymce
-
-jpgraph muß nicht mehr verwendet werden, wenn aber dann die Version 3. Alternativ wird PEAR::Image_Graph verwendet, kann aber mit PHP 5.3 Probleme machen.
+apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-mdb2 php5-mdb2-pgsql php-fpdf imagemagick php-xajax ttf-freefont php5-curl tinymce
 
 Die restlichen Pearpaket installieren:
-    pear install MDB2#pgsql DB MDB2 Image_Color Contact_Vcard_Build Contact_Vcard_Parse
-
-Achtung! Das PEAR-Paket Image_Graph und Image_Canvas sind noch nicht "stable". Daher mit :
-    pear install -f Image_Graph Image_Canvas
-installieren.
+    pear install  Contact_Vcard_Build Contact_Vcard_Parse
 
 Installierte Pearpakete anzeigen:
     pear list
@@ -79,30 +67,6 @@ error_reporting  =  E_ALL & ~E_NOTICE & ~E_DEPRECATED
 
 PHP-Code wird angezeigt (sollte nicht mehr vorkommen):
 short_open_tag = On
-
-AJAX:
-Die Installation wird i.d.R. mit apt-get durchgeführt, sämtliche Links bringt die CRM schon mit.
-Nach und nach werden einige Masken mit Ajax bedient. 
-"xajax" wird nicht mehr mitgeliefert!! xajax  sollte ganz normal im PfadZurCRM/crmajax erreichbar sein.
-Zwei Versionen sind im Umlauf. Bei sehr alten Debian und Ubuntu wird als Paket V0.23 geliefert.
-Aktuell ist die Version 0.5.
-Egal wohin das Xajax-Paket installiert wird, sollten einige Links geprüft bzw erzeugt werden.
-V0.23: (veraltet)
-    kann nach /usr/share/php in das Verzeichnis xajax installiert werden.
-    SymLink anlegen: ln -s /usr/share/php/xajax /PfadZurCRM/crmajax/
-V0.5:
-    Das Minimalpaket kann unter /PfadZurCRM/crmajax/ entpakt werden
-    oder falls schon php-xajax installiert wurde
-    zwei SymLinks prüfen ggf anlegen 
-    ln -s /pfadzu/xajax/xajax_core /PfadZurCRM/crmajax/xajax_core
-    ln -s /pfadzu/xajax/xajax_js /PfadZurCRM/crmajax/xajax_js 
-Dann noch in der inc/conf.php die richtige Konstanten kontrollieren ggf aktivieren:
-//Xajax => 0.5 evtl. auch 0.6
-define("XajaxVer","05");
-define("XajaxPath","./crmajax/");
-//Xajax = 0.23
-//define("XajaxVer","");
-//define("XajaxPath","./crmajax/xajax");
 
 Wird mit einem Alias für das LxO-Verzeichnis benutzt und soll in einigen Masken der 
 jscalendar der ERP benutzt werden, muß das Verzeichnis ins CRM-Verzeichnis verlinkt werden:

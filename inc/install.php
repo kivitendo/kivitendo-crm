@@ -78,16 +78,15 @@ echo "<br>Voraussetzungen pr&uuml;fen:<br>";
             echo "Curl: $ok<br>";
             fputs($log,"Curl : ok\n");
         } else {
-		      echo "Curl: $fehler<br>";
-		      fputs($log,"Curl : Fehler\n");
-		  }	
-        $chkfile=array("DB"=>array("DB","MDB2"),"Driver"=>array("DB/pgsql","MDB2/Driver/pgsql"),
+/	      echo "Curl: $fehler<br>";
+	      fputs($log,"Curl : Fehler\n");
+        }	
+        $chkfile=array("DB"=>"MDB2","Driver"=>"MDB2/Driver/pgsql",
                         "fpdf","fpdi","Mail","Mail/mime",
-                        "Image/Canvas","Image/Graph","jpgraph",
-		                "Contact_Vcard_Build","Contact_Vcard_Parse",
-                        "Xajax"=>array("xajax/xajax.inc","xajax_core/xajax.inc"),
+                        "jpgraph",
+		        "Contact_Vcard_Build","Contact_Vcard_Parse",
                         "jQuery-UI"=>array("jquery-ui/jquery","jquery-ui/ui/jquery-ui"));
-        $chkstat=array(1,1,0,0,0,0,0,0,0,0,0,1,1);
+        $chkstat=array(1,1,0,0,0,0,0,0,0,1);
         $OK=true;
 	$pos=0;
 	$dbok=true;

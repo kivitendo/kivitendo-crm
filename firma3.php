@@ -2,7 +2,7 @@
     require_once("inc/stdLib.php");
     include("inc/crmLib.php");
     include("inc/template.inc");
-    include("inc/grafik$jpg.php");
+    include("inc/grafik1.php");
     include("inc/FirmenLib.php");
     $Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
     $fid=$_GET["fid"];

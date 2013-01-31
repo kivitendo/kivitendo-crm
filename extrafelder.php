@@ -95,7 +95,6 @@ if ($_POST["suche"]) {
 	    }
     } else if (count($daten)>1) {
         clearCSVData();
-        require("firmacommon".XajaxVer.".php");
         if ($maske=="P") {
             $t->set_file(array("fa1" => "personen1L.tpl"));
             insertCSVData(array("ANREDE","TITEL","NAME1","NAME2","LAND","PLZ","ORT","STRASSE",
@@ -108,7 +107,6 @@ if ($_POST["suche"]) {
         $t->set_block("fa1","Liste","Block");
         $t->set_var(array(
             ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-            AJAXJS  => $xajax->printJavascript(XajaxPath),
             FAART => ($Q=="C")?"Customer":"Vendor",
             msg => $msg,
         ));

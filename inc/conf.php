@@ -3,14 +3,6 @@
 $GEODB=false; // Geodatenbank vorhanden
 $BLZDB=true; // BLZ-Datenbank vorhanden
 $tools=true;
-//php-db => "", mdb2 => "m"
-$dbmodul="";
-//Xajax => 0.5 evtl. auch 0.6
-define("XajaxVer","05");
-define("XajaxPath","./crmajax/");
-//Xajax = 0.23
-//define("XajaxVer","");
-//define("XajaxPath","./crmajax/xajax");
 $from=16;  // Anrufernummer (Telcall)
 $to=18;    // Zielnummer (Telcall)
 $constring="created"; // Eindeutiges Wort für Anwahlzeile (Telcall)
@@ -39,8 +31,6 @@ $jcalendar=true;
 $listLimit=500;
 $tinymce=true;
 $zeigeextra=true;
-$jpg=false;
-//$jpg=true; //jpgraph
 $showErr=false;
 $CallEdit = true;
 $CallDel = false;

@@ -1,6 +1,6 @@
 <?php
     require_once("inc/stdLib.php");
-    include("inc/grafik$jpg.php");
+    include("inc/grafik1.php");
     include("inc/template.inc");
     include("inc/crmLib.php");
     include("inc/UserLib.php");

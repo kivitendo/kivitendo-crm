@@ -3,7 +3,6 @@
         {STYLESHEETS}
         <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
 
-        {AJAXJS}
         {JAVASCRIPTS}
 
 	<script language="JavaScript">

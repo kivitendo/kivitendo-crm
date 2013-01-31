@@ -33,7 +33,7 @@
             document.location.href="personen1.php?fid={FID}&Quelle={Q}";
         }
         function doclink(){                
-            pid=document.contact.cp_id.value;
+            pid = $('#liste option:selected').val();
             document.location.href="firma4.php?Q={Q}&fid={FID}&pid="+pid;
         }
         var start = 0;

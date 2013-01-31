@@ -1046,7 +1046,7 @@ function cvar_edit($id,$new=false) {
 }
 
 function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false) {
-global $xajax,$GEODB,$BLZDB,$jcalendar;
+global $GEODB,$BLZDB,$jcalendar;
         $jscal ="<style type='text/css'>@import url(../js/jscalendar/calendar-win2k-1.css);</style>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar.js'></script>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
@@ -1059,7 +1059,6 @@ global $xajax,$GEODB,$BLZDB,$jcalendar;
             PRE_CONTENT   => $menu['pre_content'],
             START_CONTENT => $menu['start_content'],
             END_CONTENT   => $menu['end_content'],
-            AJAXJS      => $xajax->printJavascript(XajaxPath),
             FAART       => ($typ=="C")?".:Customer:.":".:Vendor:.",
             FAART2      => ($typ=="C")?".:Customer Name:.":".:Vendor Name:.",
             ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
@@ -1204,7 +1203,7 @@ global $xajax,$GEODB,$BLZDB,$jcalendar;
 } // leertpl
 
 function vartpl (&$t,$daten,$typ,$msg,$btn1,$btn2,$tpl,$suchmaske=false) {
-global $xajax,$GEODB,$BLZDB,$jcalendar;
+global $GEODB,$BLZDB,$jcalendar;
         $jscal ="<style type='text/css'>@import url(../js/jscalendar/calendar-win2k-1.css);</style>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar.js'></script>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
@@ -1228,7 +1227,6 @@ global $xajax,$GEODB,$BLZDB,$jcalendar;
                 PRE_CONTENT   => $menu['pre_content'],
                 START_CONTENT => $menu['start_content'],
                 END_CONTENT   => $menu['end_content'],
-                AJAXJS      => $xajax->printJavascript(XajaxPath),
                 FAART       => ($typ=="C")?".:Customer:.":".:Vendor:.",
                 FAART2      => ($typ=="C")?".:Customer Name:.":".:Vendor Name:.",
                 ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],

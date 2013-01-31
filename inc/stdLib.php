@@ -10,7 +10,7 @@ ini_set('include_path',$inclpa.":../:./crmajax:./inc:../inc");
 
 require_once "conf.php";
 require_once "version.php";
-require_once $dbmodul."db.php";
+require_once "mdb.php";
 //if ($DEBUG && !$_SESSION["DEBUG"]) {
 if ( !$_SESSION["db"] || !$_SESSION["cookie"] ||
     ( $_SESSION["cookie"] && !$_COOKIE[$_SESSION["cookie"]] ) ) {
@@ -902,11 +902,4 @@ global $ERP_BASE_URL;
 }
 
 require_once "login".$_SESSION["loginok"].".php";
-if ( $_SESSION["xajax"] ) {
-	define("XajaxVer","");
-	define("XajaxPath","./crmajax/xajax");
-} else {
-	define("XajaxVer","05");
-	define("XajaxPath","./crmajax/");
-}
 ?>

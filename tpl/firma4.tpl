@@ -1,152 +1,34 @@
 <html>
         <head><title></title>
-        {STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/tabcontent.css"></link>
-        {AJAXJS}
-        {JAVASCRIPTS}
+{STYLESHEETS}
+    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
+    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/tabcontent.css">
+    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/tabcontent.css">
+    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
+    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
+    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
+
+{JAVASCRIPTS}
     <script language="JavaScript">
     <!--
     function showD () {
-        document.getElementById("subdelete").style.visibility="hidden";
-        document.getElementById("subdownload").style.visibility="hidden";
-        document.getElementById("subedit").style.visibility="hidden";
-        document.getElementById("submove").style.visibility="hidden";
-        sel=document.getElementById("vorlage").selectedIndex;
-        id=document.getElementById("vorlage").options[sel].value;
+        id = $('#vorlage option:selected').val();
         if (id>0) {
+            hidelinks();
             if ("{PID}"=="") { pid=0; } else { pid="{PID}"; };
-            xajax_getDocVorlage_(id,{FID},pid,"{Q}");
+            $.get('jqhelp/firmaserver.php?task=getDocVorlage&fid={FID}&tab={Q}&pid='+pid+"&id="+id,function(data) { $('#fbright').empty().append(data); });
         }
     }
     function showV () {
-        sel=document.getElementById("wv").selectedIndex;
-        nr=document.getElementById("wv").options[sel].value;
+        nr = $('#wv option:selected').val();
         if (nr>0) {
             uri="vertrag3.php?vid=" + nr;
             window.location.href=uri;
         }
     }    
-    function mkDir() {
-        seite=document.getElementById("seite").value;
-        name=document.getElementById("subdir").value;
-        newDir();
-        xajax_newDir(seite,pfadleft,name);
-        dateibaum('left',pfadleft)
-        //xajax_showDir(seite,pfadleft);
-    }
-    var downloadfile = "";
-    function download(file) {
-        downloadfile=open("download.php?file="+file,"Download","width=250px,height=200px,top=50px,menubar=no,status=no,toolbar=no,dependent=yes");
-        window.setTimeout("downloadfile.close()", 30000);
-    }
-    var onA = false;
-    function editattribut() {
-        if (onA) {
-            onA = false;
-            document.getElementById("attribut").style.visibility = "hidden";
-        } else {
-            onL = false;
-            document.getElementById("fileDel").style.visibility = "hidden";
-            onA = true;
-            document.getElementById("attribut").style.visibility = "visible";
-        }
-    }
-    function saveAttribut() {
-        name=document.getElementById("docname").value;
-        oldname=document.getElementById("docoldname").value;
-        pfad=document.getElementById("docpfad").value;
-        komment=document.getElementById("docdescript").value;
-        id=    document.getElementById("docid").value;
-        if (document.firma4.pid.value!='') {
-            fid='P' + document.firma4.pid.value;
-        } else {
-            fid= document.firma4.Q.value + document.firma4.fid.value;
-        }
-        xajax_saveAttribut(name,oldname,pfad,komment,id);
-    }
-    var onL = false;
-    function deletefile() {
-        if (onL) {
-            onL = false;
-            document.getElementById("fileDel").style.visibility = "hidden";
-        } else {
-            document.getElementById("attribut").style.visibility = "hidden";
-            onA = false;
-            onL = true;
-            name = document.getElementById("docname").value;
-            document.getElementById("delname").innerHTML = name;
-            document.getElementById("fileDel").style.visibility = "visible";
-        }
-    }
-    function movefile(file) {
-        xajax_moveFile(file,pfadleft);
-    }
-    function filedelete() {
-        id = document.getElementById("docid").value;
-        name = document.getElementById("docname").value;
-        pfad = document.getElementById("docpfad").value;
-        if (!id) id=0;
-        xajax_delFile(id,pfad,name);
-        dateibaum('left',pfadleft)
-        dateibaum('right',pfadright);
-        deletefile();
-    }
-    var onD = false;
-    function newDir(seite) {
-        if (onD) {
-            onD = false;
-            document.getElementById("fixiert").style.visibility = "hidden";
-        } else {
-            onD = true;
-            document.getElementById("seite").value=seite;
-            document.getElementById("fixiert").style.visibility = "visible";
-            document.getElementById("subdir").focus();
-        }
-    }
-    var onF = false;
-    function newFile(seite) {
-        if (onF) {
-            onF = false;
-            document.getElementById("uploadfr").style.visibility = "hidden";
-        } else {
-            onF = true;
-            document.getElementById("seite").value=seite;
-            document.getElementById("uploadfr").style.visibility = "visible";
-            frames["frupload"].document.getElementById("upldpath").value=pfadleft;
-            frames["frupload"].document.getElementById("caption").focus();
-        }
-    }
-    var pfadleft = "";
-    var pfadright = "";
-    function showFile(seite,file) {
-        if(seite=="left") { 
-            xajax_showFile(pfadleft,file); 
-        } else { 
-            xajax_showFile(pfadright,file); 
-        };
-        document.getElementById("subdelete").style.visibility="visible";
-        document.getElementById("subdownload").style.visibility="visible";
-        document.getElementById("subedit").style.visibility="visible";
-        document.getElementById("lock").style.visibility="visible";
-        document.getElementById("submove").style.visibility="visible";
-    }
-    function dateibaum(seite,start) {
-        if(seite=="left") { pfadleft=start; }
-        else { 
-            pfadright=start; 
-            document.getElementById("subdelete").style.visibility="hidden";
-            document.getElementById("subdownload").style.visibility="hidden";
-            document.getElementById("subedit").style.visibility="hidden";
-            document.getElementById("lock").style.visibility="hidden";
-            document.getElementById("submove").style.visibility="hidden";
-        };
-        xajax_showDir(seite,start);
-        setTimeout("dateibaum('left',pfadleft)",100000) // 100sec
-    }
     //-->
     </script>
-<body onLoad="dateibaum('left','/{Q}{customernumber}/{PID}');">
+<body onLoad="dateibaum('left','/{Q}{customernumber}/{PID}'), hidelinks() ;">
 {PRE_CONTENT}
 {START_CONTENT}
 <p class="listtop">.:detailview:. {FAART}</p>
@@ -176,9 +58,9 @@
     </div>
     <div style="float:left; width:100%;min-height:300px;  text-align:left; border-bottom: 0px solid black;" >
     <ul id="submenu" class="subshadetabs">
-        <li id="subnewfile"><a href="#" onClick="newFile('left')">.:uploadDocument:.</a></li>
+        <li id="subnewfile"  ><a href="#" onClick="newFile('left')">.:uploadDocument:.</a></li>
         <li id="subnewfolder"><a href="#" onClick="newDir('left')">.:newDirectory:.</a></li>
-        <li id="subrefresh"><a href="#" onClick="dateibaum('left',pfadleft)">.:reread:.</a></li>
+        <li id="subrefresh"  ><a href="#" onClick="dateibaum('left',pfadleft)">.:reread:.</a></li>
     </ul>
     <br>
     .:current path:.: <span id="path"></span>
@@ -208,18 +90,18 @@
     <div style="float:left; width:100%;min-height:300px;   text-align:left; border-bottom: 0px solid black;" class="normal">
     <ul id="submenu2" class="subshadetabs">
         <li id="subfilebrowser"><a href="#" onClick="dateibaum('right',pfadleft)">.:Filebrowser:.</a></li>
-        <li id="subdownload" style="visibility:hidden;"><a href="#" >.:download:.</a></li>
-        <li id="subdelete" style="visibility:hidden;"><a href="#" >.:delete:.</a></li>
-        <li id="submove" style="visibility:hidden;"><a href="#" >.:move:.</a></li>
-        <li id="subedit" style="visibility:hidden;"><a href="#" >.:edit attribute:.</a></li>
-        <li id="lock" style="visibility:hidden;"><a href="#" >.:lock file:.</a></li>
+        <li id="subdownload" ><a href="#" onClick='download();'    >.:download:.</a></li>
+        <li id="subdelete"   ><a href="#" onClick='deletefile();'  >.:delete:.</a></li>
+        <li id="submove"     ><a href="#" onClick='movefile();'    >.:move:.</a></li>
+        <li id="subedit"     ><a href="#" onClick='editattribut();'>.:edit attribute:.</a></li>
+        <li id="lock"        ><a href="#" onClick='lockFile();'    >.:lock file:.</a></li>
     </ul><br>
-        <span id="fbright"><!-- Platzhalter für den dynamischen Inhalt --></span>
+        <span id="fbright" style='height:100%;min-height:300px'><!-- Platzhalter für den dynamischen Inhalt --></span>
     </div>
 </span>
 
 <!-- Neues Verzeichnis  -->
-<div id="fixiert" style="visibility:hidden; position:absolute; left:5em; top:10em; z-index:1;" class="docfrm">
+<div id="newwindir" style="position:absolute; left:5em; top:10em; z-index:1;" class="docfrm">
     <table width="33em" class="klein">
     <tr class="dochead"><td>.:Create a new Directory:.</td><td align="right"><a href="javascript:newDir()">(X)</a></td></tr>
     <tr><td height="100%">&nbsp;</td></tr>
@@ -229,19 +111,19 @@
 </div>
 
 <!-- Datei upload  -->
-<div id="uploadfr" class="docfrm" style="visibility:hidden; position:absolute; left:4em; top:10em; z-index:1; width:29em; height:21em;">
+<div id="uploadfr" class="docfrm" style="position:absolute; left:4em; top:10em; z-index:1; width:29em; height:21em;">
     <iframe id="frupload" name="frupload" src="upload.php" frameborder="0" width="100%" height="100%"></iframe>
 </div>
 
 <!-- Dateiattribute ändern  -->
-<div id="attribut" style="visibility:hidden; position:absolute; left:5em; top:10em; width:35em; z-index:1;" class="docfrm">
+<div id="attribut" style="position:absolute; left:5em; top:10em; width:35em; z-index:1;" class="docfrm">
     <table width="99%" class="klein">
     <tr class="dochead"><td>.:edit attribute:.</td><td align="right"><a href="javascript:editattribut()">(X)</a></td></tr>
     </table>
-    <input type="hidden" name="docid" id="docid" value="">
-    <input type="hidden" name="wvid" id="wvid" value="">
+    <input type="hidden" name="docid"      id="docid" value="">
+    <input type="hidden" name="wvid"       id="wvid" value="">
     <input type="hidden" name="docoldname" id="docoldname" value="">
-    <input type="hidden" name="docpfad" id="docpfad" value="">
+    <input type="hidden" name="docpfad"    id="docpfad" value="">
     <center>
     <table >
     <tr><td class="klein"><textarea name="docdescript" id="docdescript" cols="65" rows="8"></textarea></td></tr>
@@ -256,7 +138,7 @@
 </div>
 
 <!-- Datei löschen -->
-<div id="fileDel" style="visibility:hidden; position:absolute; left:4em; top:10em; width:35em; z-index:1;" class="docfrm">
+<div id="fileDel" style="position:absolute; left:4em; top:10em; width:35em; z-index:1;" class="docfrm">
     <table width="99%" class="klein">
     <tr class="dochead"><td>.:Delete a File:.</td><td align="right"><a href="javascript:deletefile()">(X)</a></td></tr>
     <tr><td height="100%">&nbsp;</td></tr>

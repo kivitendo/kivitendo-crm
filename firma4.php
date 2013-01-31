@@ -5,7 +5,6 @@
      include("inc/crmLib.php");
      include("inc/FirmenLib.php");
      include("inc/wvLib.php");
-     require("firmacommon".XajaxVer.".php");
      $fid=($_GET["fid"])?$_GET["fid"]:$_POST["fid"];
      $pid=($_GET["pid"])?$_GET["pid"]:$_POST["pid"];
      $Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
@@ -50,11 +49,11 @@
          STYLESHEETS   => $menu['stylesheets'],
          PRE_CONTENT   => $menu['pre_content'],
          START_CONTENT => $menu['start_content'],
-         END_CONTENT   => $menu['end_content']
+         END_CONTENT   => $menu['end_content'],
+         ERPCSS        => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"]
      ));
 
      $t->set_var(array(
-               AJAXJS  => $xajax->printJavascript(XajaxPath),
                FAART   => ($Q=="C")?".:Customer:.":".:Vendor:.",       //"Kunde":"Lieferant",
                ERPCSS  => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
                Q       => $Q,

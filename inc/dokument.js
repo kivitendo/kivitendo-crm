@@ -134,6 +134,7 @@
                    $('#docdescript').empty().append(data.docdescript);
                    $('#fbright').empty().append(data.fbright);
                    showlinks();
+                   if ( data.lock > 1 ) hidelinks(1);
                }
         })
     }
@@ -150,11 +151,13 @@
                  }
              });        
     }
-    function hidelinks() {
-        $('#subdownload').hide();
+    function hidelinks(lock) {
+        if ( lock < 1 ) {
+            $('#subdownload').hide();
+            $('#lock').hide();
+        }
         $('#subdelete').hide();
         $('#subedit').hide();
-        $('#lock').hide();
         $('#submove').hide();
     }
     function showlinks() {
@@ -169,7 +172,7 @@
         else { 
             aktfile = '';
             pfadright=start; 
-            hidelinks()
+            hidelinks(0)
         };
         if (onD) newDir(seite);
         if (onF) newFile(seite);

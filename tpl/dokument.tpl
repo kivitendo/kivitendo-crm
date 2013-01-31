@@ -8,7 +8,7 @@
     <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
     <script type="text/javascript" src="{JQUERY}inc/dokument.js"></script>
 {JAVASCRIPTS}
-<body onLoad="dateibaum('left','/'), hidelinks() ;">
+<body onLoad="dateibaum('left','/'), hidelinks(0) ;">
 {PRE_CONTENT}
 {START_CONTENT}
 <p class="listtop">.:documents:. </p>

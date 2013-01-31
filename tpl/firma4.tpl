@@ -4,17 +4,15 @@
     <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
     <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/tabcontent.css">
     <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/tabcontent.css">
-    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
     <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
-
+    <script type="text/javascript" src="{JQUERY}inc/dokument.js"></script>
 {JAVASCRIPTS}
     <script language="JavaScript">
     <!--
     function showD () {
         id = $('#vorlage option:selected').val();
         if (id>0) {
-            hidelinks();
+            hidelinks(0);
             if ("{PID}"=="") { pid=0; } else { pid="{PID}"; };
             $.get('jqhelp/firmaserver.php?task=getDocVorlage&fid={FID}&tab={Q}&pid='+pid+"&id="+id,function(data) { $('#fbright').empty().append(data); });
         }
@@ -28,7 +26,7 @@
     }    
     //-->
     </script>
-<body onLoad="dateibaum('left','/{Q}{customernumber}/{PID}'), hidelinks() ;">
+<body onLoad="dateibaum('left','/{Q}{customernumber}/{PID}'), hidelinks(0) ;">
 {PRE_CONTENT}
 {START_CONTENT}
 <p class="listtop">.:detailview:. {FAART}</p>

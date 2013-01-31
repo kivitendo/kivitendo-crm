@@ -268,6 +268,7 @@
                 'docid'=>$id, 
                 'docdescript'=>$rs["descript"],
                 'fbright'=>$info, 
+                'lock'=>$rs["lock"]
              ) ); 
     }
     function lockFile($file,$path,$id=0) {

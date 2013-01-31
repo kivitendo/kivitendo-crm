@@ -9,7 +9,7 @@ if ($_GET['check']==1) {
    	$check=false;
 }
 $p=($_GET['check']==1)?'../':'';
-include("inc/stdLib.php");
+include_once("inc/stdLib.php");
 include($p.'inc/conf.php');
 include($p.'inc/version.php');
 if (ob_get_level() == 0) ob_start();

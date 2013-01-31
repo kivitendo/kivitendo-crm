@@ -19,8 +19,8 @@ if ($_POST) {
     if ($rc) {
 ?>
 	<script language="JavaScript">
-		top.main_window.dateibaum('left','<?php echo  $_POST["pfad"] ?>');
-                top.main_window.document.getElementById("uploadfr").style.visibility = "hidden";
+		top.dateibaum('left','<?php echo  $_POST["pfad"] ?>');
+                top.document.getElementById("uploadfr").style.visibility = "hidden";
 	</script>
 <?php  }; 
 } ?>

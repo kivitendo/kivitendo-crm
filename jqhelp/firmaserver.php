@@ -189,22 +189,225 @@
         };
         echo json_encode($data);
     }
+    function showDir($id,$directory) {
+         if ($directory != '/')
+            $directory = trim( rtrim( $directory, " /\\" ) ); //entferne rechts Leezeichen und Slash bzw Backslash
+        chkdir($directory,".");
+        if ( is_dir("../dokumente/".$_SESSION["mansel"]."/".$directory)) {
+            $dir_object = dir( "../dokumente/".$_SESSION["mansel"]."/".$directory );
+            // Gibt neues Verzeichnis aus
+            $inhalt="<ul>";
+            $dir="<li class='ptr' onClick='dateibaum(\"$id\",\"%s\")'>%s";
+            $datei="<li class='ptr' onClick='showFile(\"$id\",\"%s\")'>%s";
+            clearstatcache();
+            $Eintrag = array();
+            while ( false !== ( $entry = $dir_object->read() ) ) {
+                    // '.' interessiert nicht
+                    if ( $entry !== '.' ) {
+                        if ($entry === '..' ) {
+                            if ($directory=="/" || $directory=="") {
+                                continue;
+                            } else {
+                                $tmp=substr($directory,0,strrpos($directory,"/"));
+                                $Eintrag[]=sprintf($dir,$tmp,"[ .. ]");
+                            }
+                        } else if (is_dir("../dokumente/".$_SESSION["mansel"]."/".$directory."/".$entry)) {
+                            $Eintrag[]=sprintf($dir,$directory."/".$entry,"[ $entry ]");
+                        } else {
+                            $Eintrag[]=sprintf($datei,$entry,"$entry");
+                        }
+                    }
+            }
+            sort($Eintrag);
+            $inhalt.=join("",$Eintrag);
+            $inhalt.="</ul>";
+            $dir_object->close();
+        }
+        echo json_encode( array( 'rc'=>'1', 'fb'=>$inhalt, 'path'=>($directory)?$directory:"/" ) );
+    }
+    function showFile($pfad,$file) {
+        if (substr($pfad,-1)=="/" and $pfad != "/") $pfad=substr($pfad,0,-1);
+        if (substr($pfad,0,2) == "//" ) $pfad = substr($pfad,1);
+        clearstatcache();
+        $zeit=date("d.m.Y H:i:s",filemtime("../dokumente/".$_SESSION["mansel"]."/$pfad/$file"));
+        $size=filesize("../dokumente/".$_SESSION["mansel"]."/$pfad/$file");
+        $ext=strtoupper(substr($file,strrpos($file,".")+1));
+        $pic="file.gif";
+        if ($ext=="PDF") { $type="PDF-File"; $pic="pdf.png"; }
+        else if (in_array($ext,array("ODT","ODF","SXW","STW","WPD","DOC","TXT","RTF","LWP","WPS"))) { $type="Textdokument"; $pic="text.png";}
+        else if (in_array($ext,array("ODS","SXC","STC","VOR","XLS","CSV","123"))) { $type="Tabellendokument"; $pic="calc.png"; }
+        else if (in_array($ext,array("ODP","SXI","SDP","POT","PPS"))) { $type="Pr&auml;sentation"; $pic="praesent.png";}
+        else if (in_array($ext,array("ODG","SXD","SDA","SVG","SDD","DXF"))) { $type="Zeichnungen"; $pic="zeichng.png";}
+        else if (in_array($ext,array("HTM","HTML","STW","SSI","OTH"))) { $type="Webseiten"; $pic="web.png"; }
+        else if (in_array($ext,array("DBF","ODB"))) { $type="Datenbank"; $pic="db.png";}
+        else if (in_array($ext,array("PS", "EPS"))) { $type="Postscript"; $pic="ps.png";}
+        else if (in_array($ext,array("GZ", "TGZ","BZ","ZIP","TBZ"))) { $type="Komprimiert"; $pic="zip.png"; }
+        else if (in_array($ext,array("MP3","OGG","WAV"))) { $type="Audiodatei"; $pic="sound.png";}
+        else if (in_array($ext,array("BMP","GIF","JPG","JPEG","PNG","TIF","PGM","PPM","PCX","PSD","TIFF"))) { $type="Grafik-Datei"; $pic="grafik.png";}
+        else if (in_array($ext,array("WMF","MOV","AVI","VOB","MPG","MPEG","WMV","RM"))) { $type="Video-Datei"; $pic="video.png";}
+        else if ($ext=="XML") { $type="XML-Datei"; $pic="xml.png";}
+        else if (in_array($ext,array("SH","BAT"))) { $type="Shell-Script"; $pic="exe.png";}
+        else { $type="Unbekannt"; $pic="foo.png"; };
+        $info ="<br>$pfad".(($pfad == "/")?'':'/')."<b>$file</b><br><br>";
+        $info.=translate('.:filetyp:.','firma').": <img src='image/icon/$pic'> $type<br>";
+        $info.=translate('.:filesize:.','firma').": $size<br>".translate('.:filetime:.','firma').": $zeit<br>";
+        $dbfile=new document();
+        $rs=$dbfile->searchDocument($file,$pfad);
+        $id=0;
+        if ($rs) {
+            $rs=$dbfile->getDokument($rs);
+            if ($rs["lock"]>0) $info.="<br /><font color='red'>".translate('.:locked:.','firma')." : ".$rs["lockname"]."</font><br />";
+            $info.="<br>".translate('.:Description update:.','firma').": ".db2date($rs["datum"])." ".$rs["zeit"]."<br>";
+            $info.=translate('.:Description:.','firma').": ".nl2br($rs["descript"])."<br>";
+            $id=$rs["id"];
+        }
+        echo json_encode( array( 
+                'docname'=> $file, 
+                'docoldname'=>$file,
+                'docpfad'=>$pfad,
+                'docid'=>$id, 
+                'docdescript'=>$rs["descript"],
+                'fbright'=>$info, 
+             ) ); 
+    }
+    function lockFile($file,$path,$id=0) {
+        $dbfile=new document();
+        if ($id==0) {
+            $id=$dbfile->searchDocument($file,$path);
+            if ($id) {
+                $rs=$dbfile->getDokument($id);
+            } else {
+                $dbfile->setDocData("pfad",$path);
+                $dbfile->setDocData("name",$file);
+            }
+        } else {
+            $rs=$dbfile->getDokument($id);
+        }
+        if ($dbfile->lock>0) {
+            if ($dbfile->lock==$_SESSION["loginCRM"])
+                $dbfile->setDocData("lock",0);
+                $lock = 'unlock';
+        } else {
+            $dbfile->setDocData("lock",$_SESSION["loginCRM"]);
+                $lock = 'lock';
+        }
+        $rc = $dbfile->saveDocument();
+        if ($rc) { echo $lock; }
+        else     { echo 'Error'; };
+    }
+    function moveFile($file,$pfadleft) {
+        $oldpath=substr($file,0,strrpos($file,"/"));
+        $file=substr($file,strrpos($file,"/")+1);
+        if ($oldpath<>$pfadleft) {
+            $pre="../dokumente/".$_SESSION["mansel"];
+            $dbfile=new document();
+            $tmp = explode("/",$oldpath);
+            $opath = "/".implode("/",array_slice($tmp,2));
+            $id=$dbfile->searchDocument($file,$opath);
+            if ($id) {
+                $rs=$dbfile->getDokument($id);
+                if ($dbfile->lock>0) {
+                    echo json_encode( array( 'rc'=>'0', 'frame'=>'left' ) );
+                }
+                $dbfile->setDocData("pfad",$pfadleft);
+                $rc=$dbfile->saveDocument();
+            }
+            rename($pre."/".$oldpath."/".$file,$pre.$pfadleft."/".$file);
+        }
+        if ($file[0]=="/") $file=substr($file,1);
+        echo json_encode( array( 'rc'=>'1', 'frame'=>'left', 'pfad'=>$pfadleft, 'file'=>$file ) );
+    }
+    function saveAttribut($name,$oldname,$pfad,$komment,$id=0) {
+        $dbfile=new document();
+        if ($id>0) {
+            $rc=$dbfile->getDokument($id);
+            if ($dbfile->lock>0) {
+                echo json_encode( array( 'rc'=>'0', 'frame'=>'left', 'file'=>$oldname, 'lock'=>1 ) );
+            }
+        } else {
+            $dbfile->setDocData("pfad",$pfad);
+        };
+        if ($oldname<>$name) {
+            $path="../dokumente/".$_SESSION["mansel"].$pfad.'/';
+            $dbfile->setDocData("name",$name);
+            rename($path.$oldname,$path.$name);
+            $oldname=$name;
+        } else {
+            $dbfile->setDocData("name",$oldname);
+        }
+        $dbfile->setDocData("descript",$komment);
+        $rc=$dbfile->saveDocument();
+        if ($rc) {
+            echo json_encode( array( 'rc'=>'1', 'frame'=>'left', 'pfad'=>$pfad, 'file'=>$name ) );
+        } else {
+            echo json_encode( array( 'rc'=>'0' ) );
+        }
+    }
+    function newDir($pfad,$newdir) {
+        chdir("../dokumente/".$_SESSION["mansel"]."/$pfad");
+        $rc = mkdir($newdir);
+        if ($rc) {
+            chmod($newdir,$GLOBALS['dir_mode']);
+            chgrp($newdir,$GLOBALS['dir_group']);    
+            echo 'ok';
+        } else {
+            echo 'Error';
+        }
+    }
+    function delFile($id=0,$pfad="",$file="") {
+        $dbfile=new document();
+        if ($id>0) {
+            $dbfile->getDokument($id);
+            if ($dbfile->lock>0) {
+                echo 'File lock';
+                return;
+            }
+        } else {
+            $dbfile->setDocData("name",$file);
+            $dbfile->setDocData("pfad",$pfad);
+        }
+        $rc = $dbfile->deleteDocument(".");
+        echo 'ok';
+    }
 
-if ($_GET['task'] == 'bland') {
-    Buland($_GET['land']);
-} else if ($_GET['task'] == 'shipto') {
-    getShipto($_GET['id'],$_GET['Q']);
-} else if ($_GET['task'] == 'showCalls') {
-   showCalls($_GET['id'],$_GET['start'],$_GET['firma']);
-} else if ($_GET['task'] == 'showShipadress') {
-   showShipadress($_GET['id'],$_GET['Q']);
-} else if ($_GET['task'] == 'showContact') {
-   showContactadress($_GET['id']);
-} else if ($_GET['task'] == 'geteventlist') {
-   listTevents($_GET['id'],$_GET['fid']);
-} else if ($_GET['task'] == 'editTevent') {
-   editTevent($_GET['id']);
-} else if ($_GET['task'] == 'getCustomTermin') {
-   getCustomTermin($_GET['id'],$_GET['tab'],$_GET['day']);
-}
+    function getDocVorlage($did,$fid=0,$pid=0,$tab="C") {
+        $inhalt="<div id='iframe2'  style='height:100%;min-height:300px'>";
+        $inhalt.="        <iframe id='newdoc' style='height:100%;min-height:300px;width:100%' name='newdoc' src='firma4a.php?did=$did&fid=$fid&tab=$tab&pid=$pid' frameborder='0'></iframe>";
+        $inhalt.="</div>";
+        echo $inhalt;
+    }
+    
+switch ($_GET['task']) {
+    case 'bland'             : Buland( $_GET['land'] );
+                               break;
+    case 'shipto'            : getShipto( $_GET['id'], $_GET['Q'] );
+                               break;
+    case 'showCalls'         : showCalls( $_GET['id'], $_GET['start'], $_GET['firma'] );
+                               break;
+    case 'showShipadress'    : showShipadress( $_GET['id'], $_GET['Q'] );
+                               break;
+    case 'showContact'       : showContactadress( $_GET['id'] );
+                               break;
+    case 'evteventlist'      : listTevents( $_GET['id'], $_GET['fid'] );
+                               break;
+    case 'getCustomTermin'   : getCustomTermin( $_GET['id'], $_GET['tab'], $_GET['day'] );
+                               break;
+    case 'showDir'           : showDir( $_GET['id'], $_GET['dir'] );
+                               break;
+    case 'showFile'          : showFile( $_GET['pfad'], $_GET['file'] );
+                               break;
+    case 'lockFile'          : lockFile( $_GET['file'],  $_GET['pfad'], $_GET['id'] );
+                               break;
+    case 'moveFile'          : moveFile( $_GET['file'], $_GET['pfadleft'] );
+                               break;
+    case 'saveAttribut'      : saveAttribut( $_GET['name'],  $_GET['oldname'], $_GET['pfad'], $_GET['komment'], $_GET['id'] );
+                               break;
+    case 'newDir'            : newDir( $_GET['pfad'], $_GET['newdir'] );
+                               break;
+    case 'delFile'           : delFile( $_GET['id'], $_GET['pfad'], $_GET['file'] );
+                               break;
+    case 'getDocVorlage'     : getDocVorlage( $_GET['id'], $_GET['fid'], $_GET['pid'], $_GET['tab'] );
+                               break;
+    default                  : echo "nicht erlaubt";
+};
 ?>

@@ -1,9 +1,10 @@
 <html>
 <head><title>Zusatzdaten</title>
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
+        {STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
 	<script langage="JavaScript">
 		// sind in den Funktionen geschweifte Klammern drin, dann als extra File laden
-		// da die sonst von der TemplateEngie gelöscht wird
+		// da die sonst von der TemplateEngie gelöscht werden
                 function checkfelder() {
                         document.test.save.value=1;
                         document.test.submit();

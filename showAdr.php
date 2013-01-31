@@ -5,6 +5,7 @@
     include("inc/persLib.php");
     include("inc/crmLib.php");
     include("inc/UserLib.php");
+    $menu = $_SESSION['menu'];
     $ALabels=getLableNames();
     $freitext=$_POST["freitext"];
     if ($_GET["vc"]=="customer") { $Q="C";}
@@ -158,14 +159,15 @@
 ?>
 <html>
 <head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="../css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
-    <link type="text/css" REL="stylesheet" HREF="css/<?php echo $_SESSION["stylesheet"]; ?>"></link>
+    <?php echo $menu['stylesheets'] ?>
+    <link type="text/css" REL="stylesheet" HREF="'.$_SESSION["basepath"].'crm/css/'.$_SESSION["stylesheet"].'/main.css">
+    <link type="text/css" REL="stylesheet" HREF="../css/<?php echo $_SESSION["stylesheet"]; ?>">
 </head>
 <body>
 <form name='form' method='post' action='showAdr.php'>
 <input type="hidden" name="src" value="<?php echo  $dest ?>">
 <input type="hidden" name="Q" value="<?php echo  $Q ?>">
-<p class="norm">
+<div class="norm">
 Anschrift<br><hr>
     <?php echo  ($firma)?"Firma ".$firma."<br><br>":"" ?>
     <?php echo  $anrede ?> <?php echo  $title ?><br>
@@ -175,7 +177,7 @@ Anschrift<br><hr>
     <?php echo  $strasse ?><br><br>
     <?php echo  ($land<>"")?$land." - ":"" ?>
     <?php echo  $plz ?> <?php echo  $ort ?><br>
-</p>
+</div>
     <hr>
     <input type="text" name="freitext" size="25" value="<?php echo  $freitext ?>">
     <hr>

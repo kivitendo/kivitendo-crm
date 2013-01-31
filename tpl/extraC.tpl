@@ -1,11 +1,12 @@
 <html>
 <head><title>Zusatzdaten</title>
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
+        {STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
 	<script langage="JavaScript">
-		// sind in den Funktionen geschweifte Klammern drin, dann als extra File laden
-		// da die sonst von der TemplateEngie gelöscht wird
+		// sind in den Funktionen geschweifte Klammern drin, dann Leerzeichen nach und vor die Klammer 
+		// da die sonst von der TemplateEngie gelöscht werden
 		function checkfelder() {
-			//if (!document.extra.plz.value.match(/^[0-9]+$/)) { alert ("Fehlerhafte PLZ"); return false; };
+			if (!document.extra.plz.value.match(/^[^0-9]+$/)) { alert ("Fehlerhafte PLZ"); return false; };
 			return true;
 		}
 	</script>

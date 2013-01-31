@@ -1,7 +1,7 @@
 <?php
-// Die volgenden Datenbanken müssen extra installiert werden. Siehe install.txt 
+// Die folgenden Datenbanken müssen extra installiert werden. Siehe install.txt 
 $GEODB=false; // Geodatenbank vorhanden
-$BLZDB=true; // BLZ-Datenbank vorhanden
+$BLZDB=false; // BLZ-Datenbank vorhanden
 $tools=true;
 $from=16;  // Anrufernummer (Telcall)
 $to=18;    // Zielnummer (Telcall)

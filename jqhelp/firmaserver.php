@@ -1,8 +1,8 @@
 <?php
     require_once("../inc/stdLib.php");
-    include("FirmenLib.php");
-    include("crmLib.php");
-    include("persLib.php");
+    include_once("FirmenLib.php");
+    include_once("crmLib.php");
+    include_once("persLib.php");
 
     function getCustomTermin($id,$tab,$day) {
         $termine = getCustTermin($id,$tab,$day);
@@ -371,7 +371,7 @@
         echo 'ok';
     }
 
-    function getDocVorlage($did,$fid=0,$pid=0,$tab="C") {
+    function getDocVorlage_($did,$fid=0,$pid=0,$tab="C") {
         $inhalt="<div id='iframe2'  style='height:100%;min-height:300px'>";
         $inhalt.="        <iframe id='newdoc' style='height:100%;min-height:300px;width:100%' name='newdoc' src='firma4a.php?did=$did&fid=$fid&tab=$tab&pid=$pid' frameborder='0'></iframe>";
         $inhalt.="</div>";
@@ -407,7 +407,7 @@ switch ($_GET['task']) {
                                break;
     case 'delFile'           : delFile( $_GET['id'], $_GET['pfad'], $_GET['file'] );
                                break;
-    case 'getDocVorlage'     : getDocVorlage( $_GET['id'], $_GET['fid'], $_GET['pid'], $_GET['tab'] );
+    case 'getDocVorlage'     : getDocVorlage_( $_GET['id'], $_GET['fid'], $_GET['pid'], $_GET['tab'] );
                                break;
     default                  : echo "nicht erlaubt";
 };

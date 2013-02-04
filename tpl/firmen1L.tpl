@@ -1,8 +1,8 @@
 <html>
         <head><title></title>
         {STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
         {JAVASCRIPTS}
+        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
 
 	<script language="JavaScript">
 	<!--
@@ -26,7 +26,7 @@
 
 <table>
 <!-- BEGIN Liste -->
-	<tr class='bgcolor{LineCol}' onClick="showK({ID});" class="mini">
+	<tr class=' bgcol{LineCol}' onClick="showK({ID});" >
 		<td>{KdNr}</td><td>{Name}</td><td>{Plz}</td><td>{Ort}</td><td>{Strasse}</td><td>{Telefon}</td><td>{eMail}</td></tr>
 <!-- END Liste -->
 </table>

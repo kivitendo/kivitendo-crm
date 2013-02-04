@@ -6,8 +6,8 @@
 ?>
 <html onLoad="self.focus()">
     <head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
     <?php echo $menu['stylesheets']; ?>
+    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
 	<script language="JavaScript">
 	<!--
 <?php

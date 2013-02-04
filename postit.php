@@ -28,17 +28,19 @@ global $db;
 		$rc=$db->insert(postit,array('employee','date','cause'),array($_SESSION["loginCRM"],'now()',$newID));
 		if ($rc) {
                 	$sql="select id from postit where cause = '$newID'";
-	                $rs=$db->getAll($sql);
+	                $rs=$db->getOne($sql);
 		} else {
 			return false;
 		}
                 if ($rs) {
-                        $data["id"]=$rs[0]["id"];
+                        $data["id"]=$rs["id"];
+                        $rc = $db->commit();
                 } else {
                         return false;
                 }
-	}
-	$rc=$db->update('postit',array('cause','notes'),array(substr($data["cause"],0,100),$data["notes"]),'id = '.$data['id']);
+	};
+        $sql = "UPDATE postit SET notes = '".$data["notes"]."',cause='".substr($data["cause"],0,100)."' WHERE id = ".$data['id'];
+        $rc = $db->query($sql);
 	return $rc;
 }
 function DelPostIt($id) {

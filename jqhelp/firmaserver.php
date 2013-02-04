@@ -130,7 +130,7 @@
             $diff += $min;
             $i++; 
             if ($row["cleared"] > 0) {
-                $clear = "<td>-</td>";
+                $clear = "<td class='klein'>-</td>";
                 if ( $row['cleared'] > $lastcleared )  $lastcleared  = $row['cleared']; 
             } else {
                 if ($row["uid"] == $_SESSION["loginCRM"]) {
@@ -389,7 +389,9 @@ switch ($_GET['task']) {
                                break;
     case 'showContact'       : showContactadress( $_GET['id'] );
                                break;
-    case 'evteventlist'      : listTevents( $_GET['id'], $_GET['fid'] );
+    case 'editTevent'        : editTevent( $_GET['id'] );
+                               break;
+    case 'geteventlist'      : listTevents( $_GET['id'], $_GET['fid'] );
                                break;
     case 'getCustomTermin'   : getCustomTermin( $_GET['id'], $_GET['tab'], $_GET['day'] );
                                break;

@@ -2721,8 +2721,8 @@ function saveOpportunity($data) {
     if ($data["fid"] and $data["title"] and $data["betrag"] and $data["status"] and $data["chance"] and $data["zieldatum"]) {
         if (!$data["oppid"]) {
 		//Eine neue Auftragschance
-		$rs = $_SESSION['db']->one('SELECT coalesce(max(oppid)+1,1001) FROM opportunity');
-                $data['oppid'] =  $rs[0];
+		$rs = $_SESSION['db']->getOne('SELECT coalesce(max(oppid)+1,1001) as id FROM opportunity');
+                $data['oppid'] =  $rs['id'];
         } 
         $data["zieldatum"] = date2db($data["zieldatum"]);
         $data["betrag"] = str_replace(",",".",$data["betrag"]);

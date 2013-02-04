@@ -54,11 +54,18 @@ tr.bgcol1 	{ background-color:#ddddff; }
 tr.bgcol1:hover	{ background-color:#ff2222; }
 tr.bgcol2 	{ background-color:#ddffdd; }
 tr.bgcol2:hover	{ background-color:#ff2222; }
-tr.bgcol3 	{ background-color:#eeeeee; }
+tr.bgcol3 	{ background-color:#ee8888; }
 tr.bgcol3:hover	{ background-color:#ff2222; }
 tr.bgcol4 	{ background-color:#ffdddd; }
 tr.bgcol4:hover	{ background-color:#ff2222; }
 .caption 	{ font-size:9px;color:blue; }
+.typcolT        { background-color:#f3f702; }
+.typcolM        { background-color:#18f204; }
+.typcolS        { background-color:#07d3f7; }
+.typcolP        { background-color:#ea0bd0; }
+.typcolD        { background-color:#ff4605; }
+.typcolX        { background-color:#fa05ff; }
+.typcolF        { background-color:#af05ff; }
 
 textarea  	{ font-size: 1em; font-family:Verdana,Arial,Helvetica,sans-serif;}
 .wikil          { color:#5555ff; font-weight:bold; font-size:1em; }

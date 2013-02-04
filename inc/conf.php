@@ -11,14 +11,6 @@ $connect=9; // Position eindeutiges Wort (Tellcall)
 //Mon Jul  7 15:31:25 2008 Connection 0x81324f8: Connection object created for incoming call PLCI 101 from 0731229 to 58322 CIP 0x4
 //Mon Jul  7 15:31:25 2008 Connection 0x81324f8: rejecting with cause 34a9
 //Mon Jul  7 15:31:25 2008 Connection 0x81324f8: Connection object deleted
-$typcol["T"]="#f3f702";
-$typcol["M"]="#18f204";
-$typcol["S"]="#07d3f7";
-$typcol["P"]="#f70727";
-$typcol["P"]="#ea0bd0";
-$typcol["D"]="#ff4605";
-$typcol["X"]="#fa05ff";
-$typcol["F"]="#af05ff";
 define("FPDF_FONTPATH","/usr/share/fpdf/font/");
 define("FONTART","2");
 define("FONTSTYLE","1");

@@ -9,7 +9,8 @@
             STYLESHEETS   => $menu['stylesheets'],
             PRE_CONTENT   => $menu['pre_content'],
             START_CONTENT => $menu['start_content'],
-            END_CONTENT   => $menu['end_content']
+            END_CONTENT   => $menu['end_content'],
+            JQUERY        => $_SESSION['basepath'].'crm/',
         ));
     if ($_POST["parts_sernr"]) {
         $data=getMaschSer($_POST["parts_sernr"],$_POST["parts_id"]);

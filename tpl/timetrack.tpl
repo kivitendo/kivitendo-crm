@@ -1,12 +1,12 @@
 <html>
 <head><title></title>
 {STYLESHEETS}
+{JAVASCRIPTS}
     <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>a
     <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
     <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
     <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
-
-{JAVASCRIPTS}
+    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery.ui.datepicker-de.js"></script>
     <script language="JavaScript">
     <!--
     function suchFa() {
@@ -115,9 +115,15 @@
     }
     //-->
     </script>
-    {jcal0}
     <script type='text/javascript' src='inc/help.js'></script>
-
+	<script>
+        $(function() {
+            $( "#START" ).datepicker($.datepicker.regional[ "de" ]);
+            $( "#STOP" ).datepicker($.datepicker.regional[ "de" ]);
+            $( "#startd" ).datepicker($.datepicker.regional[ "de" ]);
+            $( "#stopd" ).datepicker($.datepicker.regional[ "de" ]);
+        });
+        </script>
 <body {chkevent}>
 {PRE_CONTENT}
 {START_CONTENT}
@@ -155,9 +161,9 @@
     <div class="zeile">     
         <span class="label klein"></span>
         <span class="klein">.:startdate:.
-        <input type="text" size="10" name="startdate" id="START" value="{startdate}" >{jcal1} </span> &nbsp; &nbsp;
+        <input type="text" size="10" name="startdate" id="START" value="{startdate}" > </span> &nbsp; &nbsp;
         <span class="klein">.:stopdate:.
-        <input type="text" size="10" name="stopdate" id="STOP" value="{stopdate}" >{jcal2} </span>
+        <input type="text" size="10" name="stopdate" id="STOP" value="{stopdate}" > </span>
     </div>
     <div class="zeile">
         <span class="label klein"></span>
@@ -201,9 +207,9 @@
 <span id="work" style="visibility:{noevent}"><table>
 <tr><td>.:start work:.</td><td>.:stop work:.</td><td>.:material:.</td>
 </tr>
-<tr><td><input type="text" size="8" name="startd" id="startd" onBlur="check_right_date_format(this)">{jcal3} 
+<tr><td><input type="text" size="8" name="startd" id="startd" onBlur="check_right_date_format(this)"> 
     <input type="text" size="4" name="startt" id="startt" onblur="chktime('startt');"><input type="checkbox" name="start" value="1">.:now:.</td>
-    <td><input type="text" size="8" name="stopd"  id="stopd" onBlur="check_right_date_format(this)">{jcal4}  
+    <td><input type="text" size="8" name="stopd"  id="stopd" onBlur="check_right_date_format(this)">  
     <input type="text" size="4" name="stopt"  id="stopt" onblur="chktime('stopt');"> <input type="checkbox" name="stop"  value="1">.:now:.</td>
     <td><input type="text" name="partnr" id="partnr" style='width:19em;'>
     <input type="button" name="psearch" id="psearch" value=".:psearch:." onClick="psuche();"></td>
@@ -225,7 +231,6 @@
 </table>
 <!-- Hier endet die Karte ------------------------------------------->
 </span>
-{jcal5}
 {END_CONTENT}
 </body>
 </html>

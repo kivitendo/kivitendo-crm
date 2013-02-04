@@ -2,8 +2,13 @@
 	<head><title></title>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 	{STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
         {JAVASCRIPTS}
+        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
+    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
+    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
+    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script> 
+    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery.ui.datepicker-de.js"></script>
+
 	<script language="JavaScript">
 	<!--
 
@@ -16,8 +21,12 @@
 			f1=open("suchMa.php?masch="+val,"suche","width=350,height=200,left=100,top=100");
 		}
 	
+        $(function() {
+            $( "#anfangdatum" ).datepicker($.datepicker.regional[ "de" ]);
+            $( "#endedatum" ).datepicker($.datepicker.regional[ "de" ]);
+        });
 	//-->
-	</script>
+        </script>
 <body >
 {PRE_CONTENT}
 {START_CONTENT}
@@ -45,7 +54,8 @@
 	<tr>
 		<td class="norm"><input type="text" name="name" size="30" maxlength="75" value="{Firma}"> <input type="button" name="fa" value="suchen" onClick="suchFa();"  tabindex="4"> <br>Firma<br><br></td>
 		<td class="norm"><input type="hidden" name="cp_cv_id" value="{FID}">
-			<input type="text" name="anfangdatum" size="10" maxlength="10" value="{anfangdatum}" tabindex="6">&nbsp; <input type="text" name="endedatum" size="10" maxlength="10" value="{endedatum}" tabindex="6"><br>
+			<input type="text" name="anfangdatum" id="anfangdatum" size="10" maxlength="10" value="{anfangdatum}" tabindex="6">&nbsp; 
+                        <input type="text" name="endedatum" id="endedatum" size="10" maxlength="10" value="{endedatum}" tabindex="6"><br>
 			<b>Vertragsdatum von &nbsp; bis</b></td>
 	</tr>
 	<tr>

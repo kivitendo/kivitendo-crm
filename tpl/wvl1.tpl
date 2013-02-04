@@ -1,8 +1,12 @@
 <html>
 	<head><title></title>
         {STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
         {JAVASCRIPTS}
+        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
+    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
+    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
+    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script> 
+    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery.ui.datepicker-de.js"></script>
 	<script language="JavaScript">
 	<!--
 		function doInit() {
@@ -14,7 +18,11 @@
 		}
 	//-->
 	</script>
-	{jcal0}
+	<script>
+        $(function() {
+            $( "#Finish" ).datepicker($.datepicker.regional[ "de" ]);
+        });
+        </script>
 <body onLoad="doInit();" >
 {PRE_CONTENT}
 {START_CONTENT}
@@ -39,7 +47,7 @@
 	<span style="visibility:{nohide};">
 	<input type="text" name="name" size="14" maxlength="75"  value="{Fname}"tabindex="2"> <input type="button" name="dst" value=" ? " onClick="suchDst();" tabindex="99"> </span>
 	<br><span class="klein">CRM-User &nbsp; &nbsp; &nbsp;</span><span class="klein" style="visibility:{nohide};">Zugewiesen an &nbsp;[<a href="{stammlink}" name="addresse">Adresse</a>]</span>
-	</td><td class="klein"><input type="text" name="Finish" id="Finish" size="11" maxlength="10" value="{Finish}" tabindex="3">{jcal1}
+	</td><td class="klein"><input type="text" name="Finish" id="Finish" size="11" maxlength="10" value="{Finish}" tabindex="3">
 							<br><span class="klein">Zu Erledigen bis</span></td>
 	<td rowspan="6">
 		<iframe src="wvll.php" name="wvll" width="500" height="480" marginheight="0" marginwidth="0" align="left">
@@ -85,11 +93,6 @@
 </form>
 </td></tr></table>
 <!-- End Code ------------------------------------------->
-<script type='text/javascript'><!--
-Calendar.setup( {
-inputField : 'Finish',ifFormat :'%d.%m.%Y',align : 'BL', button : 'trigger1'} );
-//-->
-</script>
 {END_CONTENT}
 </body>
 </html>

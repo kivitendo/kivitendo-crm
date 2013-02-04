@@ -11,15 +11,9 @@
         STYLESHEETS   => $menu['stylesheets'],
         PRE_CONTENT   => $menu['pre_content'],
         START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content']
+        END_CONTENT   => $menu['end_content'],
+        JQUERY        => $_SESSION['basepath'].'crm/'
     ));
-    $jscal ="<style type='text/css'>@import url(".$_SESSION['basepath']."/js/jscalendar/calendar-win2k-1.css);</style>\n";
-    $jscal.="<script type='text/javascript' src='".$_SESSION['basepath']."/js/jscalendar/calendar.js'></script>\n";
-    $jscal.="<script type='text/javascript' src='".$_SESSION['basepath']."/js/jscalendar/lang/calendar-de.js'></script>\n";
-    $jscal.="<script type='text/javascript' src='".$_SESSION['basepath']."/js/jscalendar/calendar-setup.js'></script>\n";
-    $jscal1="<script type='text/javascript'><!--\nCalendar.setup( {\n";
-    $jscal1.="inputField : 'zieldatum',ifFormat :'%d.%m.%Y',align : 'BL', button : 'trigger1'} );\n";
-    $jscal1.="//-->\n</script>";
     $stamm="none";
     $show = "visible";
     if ($_GET["Q"] and $_GET["fid"]) {
@@ -199,10 +193,6 @@
         backlink => $backlink,
         blshow  => ($backlink)?"visible":"hidden",
         msg     => $msg,
-        jcal0   => ($jcalendar)?$jscal:"",
-        jcal2   => ($jcalendar)?$jscal1:"",
-        //jcal1 => ($jcalendar)?"<input type='image' src='image/date.png' title='.:targetdate:. .:search:.' name='zieldatum' align='middle' id='trigger1' value='?'>":""
-        jcal1   => ($jcalendar)?"<a href='#' id='trigger1' name='zieldatum' title='.:targetdate:. .:search:.' onClick='false'><img src='image/date.png' border='0' align='middle'></a>":""
     ));
         $history = $daten=getOpportunityHistory($daten['oppid']);
         $i = 0;

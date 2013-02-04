@@ -2,8 +2,12 @@
 	<head><title></title>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 	{STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
         {JAVASCRIPTS}
+        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
+    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
+    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
+    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script> 
+    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery.ui.datepicker-de.js"></script>
 	<script language="JavaScript">
 	<!--
 		function suchMa() {
@@ -20,6 +24,10 @@
 			document.formular.parts_sernr.value=val;
 			document.formular.submit();
 		}
+	
+        $(function() {
+            $( "#inspdatum" ).datepicker($.datepicker.regional[ "de" ]);
+        });
 	//-->
 	</script>
 <body >
@@ -58,7 +66,7 @@
 	</tr>	
 	<tr>
 		<td class="norm"><input type="text" name="snumber" size="40" maxlength="75" value="{snumber}" tabindex="6"><br>neue Seriennummer</td>
-		<td class="norm"><input type="text" name="inspdatum" size="12" maxlength="10" value="{inspdatum}" tabindex="6"><br>n&auml;chstes Inspektionsdatum
+		<td class="norm"><input type="text" name="inspdatum" id="inspdatum" size="12" maxlength="10" value="{inspdatum}" tabindex="6"><br>n&auml;chstes Inspektionsdatum
 	</tr>
 	<tr>
 		<td class="norm">

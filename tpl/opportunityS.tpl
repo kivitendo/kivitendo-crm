@@ -1,8 +1,12 @@
 <html>
     <head><title></title>
     {STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
-    {JAVASCRIPTS}
+   {JAVASCRIPTS}
+    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
+    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
+    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
+    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script> 
+    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery.ui.datepicker-de.js"></script>
 	<script language="JavaScript">
 	<!--
     function hide(nr) {
@@ -29,7 +33,12 @@
 	}
 	//-->
 	</script>
-	{jcal0}
+	<script>
+        $(function() {
+            $( "#zieldatum" ).datepicker($.datepicker.regional[ "de" ]);
+        });
+        </script>
+
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
@@ -79,7 +88,7 @@
 		<span class="label klein" onClick='toggle("zi1","zi2");'>.:targetdate:.</span>
 		<span class="leftfeld pad value" style="width:50em; display:{block}" onClick='toggle("zi2","zi1");' id="zi2">{zieldatum}</span>
 		<span class="leftfeld"     style="width:50em; display:{none};" id="zi1">
-			<input type="text" size="10" name="zieldatum" id="zieldatum" value="{zieldatum}" onChange="sichern()"> tt.mm.jjjj {jcal1}
+			<input type="text" size="10" name="zieldatum" id="zieldatum" value="{zieldatum}" onChange="sichern()"> tt.mm.jjjj 
 		</span>
 	</div>
 	<div class="zeile">
@@ -177,7 +186,6 @@
 </div>
 <!-- Hier endet die Karte ------------------------------------------->
 </span>
-{jcal2}
 {END_CONTENT}
 </body>
 </html>

@@ -4,10 +4,6 @@
     include("inc/template.inc");
     include("inc/crmLib.php");
     include("inc/UserLib.php");
-    $jscal ="<style type='text/css'>@import url(../js/jscalendar/calendar-win2k-1.css);</style>\n";
-    $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar.js'></script>\n";
-    $jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
-    $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar-setup.js'></script>\n";
     $data["id"]=0;
     $templ="wvl1.tpl";
     $js="";
@@ -74,7 +70,8 @@
         STYLESHEETS   => $menu['stylesheets'],
         PRE_CONTENT   => $menu['pre_content'],
         START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content']
+        END_CONTENT   => $menu['end_content'],
+        JQUERY        => $_SESSION['basepath'].'crm/',
     ));
     $t->set_file(array("wvl" => $templ));
          if ($data["kontakttab"]=="P") { $stammlink="kontakt.php?id=".$data["kontaktid"]; }
@@ -106,8 +103,6 @@
             WVLID => $data["id"],
             noteid => $data["noteid"],
             Finish => $data["Finish"],
-            jcal0 => ($jcalendar)?$jscal:"",
-            jcal1 => ($jcalendar)?"<a href='#' id='trigger1' name='Finish' title='Zieldatum' onClick='false'><img src='image/date.png' border='0' align='middle'></a>":"",
             JS => $js,
             stammlink => $stammlink,
             Mail => $_GET["mail"],  

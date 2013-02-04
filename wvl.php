@@ -12,7 +12,8 @@
             DCaption => $data["DCaption"],
             Status => $data["Status"],
             CID => $data["CID"],
-            Finish => $data["Finish"]
+            Finish => $data["Finish"],
+            JQUERY        => $_SESSION['basepath'].'crm/',
             ));
     $t->set_block("wvl","Selectbox","Block1");
     $user=getAllUser("%");

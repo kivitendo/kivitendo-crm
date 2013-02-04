@@ -261,7 +261,7 @@
                 &nbsp;
                 <a href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0" /></a><br>
                 <br />
-                <a href="lxcars/lxcmain.php?owner={FID}&task=1" title="KFZ-Daten" style="visibility:{zeigelxcars};"><img src="./lxcars/image/lxcmain.png" alt="Cars" border="1" /></a>
+                {begin_comment}<a href="lxcars/lxcmain.php?owner={FID}&task=1" title="KFZ-Daten"><img src="./lxcars/image/lxcmain.png" alt="Cars" border="1" /></a>{end_comment}
                 <a href="extrafelder.php?owner={Q}{FID}" target="_blank" title=".:extra data:." style="visibility:{zeigeextra};"><img src="image/extra.png" alt="Extras" border="0" /></a>
                 &nbsp;
                 <a href="timetrack.php?tab={Q}&fid={FID}&name={Fname1}" title=".:timetrack:."><img src="image/timer.png" alt="Stoppuhr" border="0" /></a><br />

@@ -7,19 +7,19 @@
     $kdhelp=getWCategorie(true);
     $id=$_GET["id"];
     $fa=getFirmenStamm($id,true,$Q);
-    $start=($_GET["start"])?($_GET["start"]):0;
+    $start=(isset($_GET["start"]))?($_GET["start"]):0;
     $cmsg=getCustMsg($id);
     $tmp=getVariablen($id);
     $variablem="";
     $t = new Template($base);
     $menu =  $_SESSION['menu'];
     $t->set_var(array(
-        JAVASCRIPTS   => $menu['javascripts'],
-        STYLESHEETS   => $menu['stylesheets'],
-        PRE_CONTENT   => $menu['pre_content'],
-        START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content'],
-        JQUERY        => $_SESSION['basepath'].'crm/',
+        'JAVASCRIPTS'   => $menu['javascripts'],
+        'STYLESHEETS'   => $menu['stylesheets'],
+        'PRE_CONTENT'   => $menu['pre_content'],
+        'START_CONTENT' => $menu['start_content'],
+        'END_CONTENT'   => $menu['end_content'],
+        'JQUERY'        => $_SESSION['basepath'].'crm/',
     ));
     $t->set_file(array("fa1" => "firma1.tpl"));
     if (count($tmp)>0) {
@@ -52,8 +52,8 @@
                 default		: $txt = $row["text_value"];
             }
             $t->set_var(array(
-                varname => $row["description"],
-                varvalue => $txt
+                'varname' => $row["description"],
+                'varvalue' => $txt
             ));
             $t->parse("BlockS","vars",true);
         }
@@ -80,7 +80,7 @@
     }
     $karte1=str_replace(array("%TOSTREET%","%TOZIPCODE%","%TOCITY%"),array(strtr($fa["street"]," ",$_SESSION['planspace']),$fa["zipcode"],$fa["city"]),$_SESSION['streetview']);
     $karte2=str_replace(array("%TOSTREET%","%TOZIPCODE%","%TOCITY%"),array(strtr($fa["shiptostreet"]," ",$_SESSION['planspace']),$fa["shiptozipcode"],$fa["shiptocity"]),$_SESSION['streetview']);
-    if (preg_match("/%FROM/",$karte)) {
+    if (preg_match("/%FROM/",$karte)) { //ToDo? Wo wird $karte definiert??
         include "inc/UserLib.php";
         $user=getUserStamm($_SESSION["loginCRM"]);
         if ($user["addr1"]<>"" and $user["addr3"]<>"" and $user["addr2"]) {
@@ -93,103 +93,103 @@
     $views=array(""=> "lie",1=>"lie",2=>"not",3=>"var",4=>"fin",5=>"inf");
     $taxzone=array("Inland","EU mit UStId","EU ohne UStId","Ausland");
     $t->set_var(array(
-            FAART           => ($Q=="C")?".:Customer:.":".:Vendor:.",
-            ERPCSS          => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-            CuVe            => ($Q=="C")?"customer":"vendor",
-            Q               => $Q,
-            FID             => $id,
-            INID            => db2date(substr($fa["itime"],0,10)),
-            interv          => $_SESSION["interv"]*1000,
-            Fname1          => $fa["name"],
-            kdnr            => $fa["nummer"],
-            kdtyp           => $fa["kdtyp"],
-            lead            => $fa["leadname"],
-            Fdepartment_1   => $fa["department_1"],
-            Fdepartment_2   => ($fa["department_2"])?$fa["department_2"]."<br />":"",
-            Strasse         => $fa["street"],
-            Land            => $fa["country"],
-            Bundesland      => $fa["bundesland"],
-            Plz             => $fa["zipcode"],
-            Ort             => $fa["city"],
-            GEODB           => ($GEODB)?'1==1':'1>2',
-            Telefon         => $fa["phone"],
-            Fax             => $fa["fax"],
-            Fcontact        => $fa["contact"],
-            eMail           => $fa["email"],
-            verkaeufer      => $fa["verkaeufer"],
-            branche         => $fa["branche"],
-            sw              => $fa["sw"],
-            notiz           => nl2br($fa["notes"]),
-            bank            => $fa["bank"],
-            directdebit     => ($fa["direct_debit"]=="t")?".:yes:.":".:no:.",
-            blz             => $fa["bank_code"],
-            konto           => $fa["account_number"],
-            iban            => $fa["iban"],
-            bic             => $fa["bic"],
-            konzernname     => $fa["konzernname"],
-            konzernmember   => ($fa["konzernmember"]>0)?"( ".$fa["konzernmember"]." )":"( * )",
-            konzern         => $fa["konzern"],
-            Internet        => $internet,
-            USTID           => $fa["ustid"],
-            Steuerzone      => ($fa["taxzone_id"])?$taxzone[$fa["taxzone_id"]]:$taxzone[0],
-            Taxnumber       => $fa["taxnumber"],
-            rabatt          => $rab,
-            headcount       => $fa["headcount"],
-            //terms         => $fa["terms"],
-            terms           => ($fa["terms_netto"])?$fa["terms_netto"]:"0",
-            kreditlim       => sprintf("%0.2f",$fa["creditlimit"]),
-            op              => ($fa["op"]>0)?sprintf("<span class='op'>%0.2f</span>",$fa["op"]):"0.00",
-            oa              => ($fa["oa"]>0)?sprintf("<span class='oa'>%0.2f</span>",$fa["oa"]):"0.00",
-            preisgrp        => $fa["pricegroup"],
-            language        => $fa["language"],
-            Sshipto_id      => ($fa["shipto_id"]>0)?$fa["shipto_id"]:"",
-            Sname1          => $fa["shiptoname"],
-            Sdepartment_1   => $fa["shiptodepartment_1"],
-            Sdepartment_2   => $fa["shiptodepartment_2"],
-            SStrasse        => $fa["shiptostreet"],
-            SLand           => $fa["shiptocountry"],
-            SBundesland     => $fa["shiptobundesland"],
-            SPlz            => $fa["shiptozipcode"],
-            SOrt            => $fa["shiptocity"],
-            STelefon        => $fa["shiptophone"],
-            SFax            => $fa["shiptofax"],
-            SeMail          => $fa["shiptoemail"],
-            Scontact        => $fa["shiptocontact"],
-            Scnt            => $fa["shiptocnt"],
-            Sids            => $fa["shiptoids"],
-            Cmsg            => $cmsg,
-            IMG             => $Image,
-            PAGER           => $pager,
-            NEXT            => $next,
-            PREV            => $prev,
-            KARTE1          => $karte1,
-            KARTE2          => $karte2,
-            sales           => ($Q=="C")?"sales":"purchase",
-            request         => ($Q=="C")?"sales":"request",
-            apr             => ($Q=="C")?"ar":"ap",
-            zeigeplan       => ($karte1)?"visible":"hidden",
-            begin_comment   => ($zeigelxcars)?"":"<!-- ",
-            end_comment     => ($zeigelxcars)?"":" -->",
-            zeigeextra      => ($zeigeextra)?"visible":"hidden",
-            tools           => ($tools)?"visible":"hidden",
-            login           => $_SESSION["employee"],
-            password        => $_SESSION["password"],
-            leadsrc         => $fa["leadsrc"],
-            variablen       => $variablen,
-            Vars            => $Vars,
-            erstellt        => db2date($fa["itime"]),
-            modify          => db2date($fa["mtime"]),
-            kdview          => $views[$_SESSION["kdview"]],
-            zeige           => ($fa["obsolete"]=="f")?"visible":"hidden",
-            verstecke       => ($fa["obsolete"]=="t")?"visible":"hidden",
-            chelp           => ($kdhelp)?"visible":"hidden",
-            none            => "visible"
+            'FAART'           => ($Q=="C")?".:Customer:.":".:Vendor:.",
+            'ERPCSS'          => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+            'CuVe'            => ($Q=="C")?"customer":"vendor",
+            'Q'               => $Q,
+            'FID'             => $id,
+            'INID'            => db2date(substr($fa["itime"],0,10)),
+            'interv'          => $_SESSION["interv"]*1000,
+            'Fname1'          => $fa["name"],
+            'kdnr'            => $fa["nummer"],
+            'kdtyp'           => $fa["kdtyp"],
+            'lead'            => $fa["leadname"],
+            'Fdepartment_1'   => $fa["department_1"],
+            'Fdepartment_2'   => ($fa["department_2"])?$fa["department_2"]."<br />":"",
+            'Strasse'         => $fa["street"],
+            'Land'            => $fa["country"],
+            'Bundesland'      => $fa["bundesland"],
+            'Plz'             => $fa["zipcode"],
+            'Ort'             => $fa["city"],
+            'GEODB'           => ($GEODB)?'1==1':'1>2',
+            'Telefon'         => $fa["phone"],
+            'Fax'             => $fa["fax"],
+            'Fcontact'        => $fa["contact"],
+            'eMail'           => $fa["email"],
+            'verkaeufer'      => $fa["verkaeufer"],
+            'branche'         => $fa["branche"],
+            'sw'              => $fa["sw"],
+            'notiz'           => nl2br($fa["notes"]),
+            'bank'            => $fa["bank"],
+            'directdebit'     => ($fa["direct_debit"]=="t")?".:yes:.":".:no:.",
+            'blz'             => $fa["bank_code"],
+            'konto'           => $fa["account_number"],
+            'iban'            => $fa["iban"],
+            'bic'             => $fa["bic"],
+            'konzernname'     => $fa["konzernname"], // ToDo?? definiert??
+            'konzernmember'   => ($fa["konzernmember"]>0)?"( ".$fa["konzernmember"]." )":"( * )",
+            'konzern'         => $fa["konzern"],
+            'Internet'        => $internet,
+            'USTID'           => $fa["ustid"],
+            'Steuerzone'      => ($fa["taxzone_id"])?$taxzone[$fa["taxzone_id"]]:$taxzone[0],
+            'Taxnumber'       => $fa["taxnumber"],
+            'rabatt'          => $rab,
+            'headcount'       => $fa["headcount"],
+            //'terms'         => $fa["terms"],
+            'terms'           => ($fa["terms_netto"])?$fa["terms_netto"]:"0",
+            'kreditlim'       => sprintf("%0.2f",$fa["creditlimit"]),
+            'op'              => ($fa["op"]>0)?sprintf("<span class='op'>%0.2f</span>",$fa["op"]):"0.00",
+            'oa'              => ($fa["oa"]>0)?sprintf("<span class='oa'>%0.2f</span>",$fa["oa"]):"0.00",
+            'preisgrp'        => $fa["pricegroup"],
+            'language'        => $fa["language"],
+            'Sshipto_id'      => ($fa["shipto_id"]>0)?$fa["shipto_id"]:"",
+            'Sname1'          => $fa["shiptoname"],
+            'Sdepartment_1'   => $fa["shiptodepartment_1"],
+            'Sdepartment_2'   => $fa["shiptodepartment_2"],
+            'SStrasse'        => $fa["shiptostreet"],
+            'SLand'           => $fa["shiptocountry"],
+            'SBundesland'     => $fa["shiptobundesland"],
+            'SPlz'            => $fa["shiptozipcode"],
+            'SOrt'            => $fa["shiptocity"],
+            'STelefon'        => $fa["shiptophone"],
+            'SFax'            => $fa["shiptofax"],
+            'SeMail'          => $fa["shiptoemail"],
+            'Scontact'        => $fa["shiptocontact"],
+            'Scnt'            => $fa["shiptocnt"],
+            'Sids'            => $fa["shiptoids"],
+            'Cmsg'            => $cmsg,
+            'IMG'             => $Image,
+            'PAGER'           => $pager,
+            'NEXT'            => $next,
+            'PREV'            => $prev,
+            'KARTE1'          => $karte1,
+            'KARTE2'          => $karte2,
+            'sales'           => ($Q=="C")?"sales":"purchase",
+            'request'         => ($Q=="C")?"sales":"request",
+            'apr'             => ($Q=="C")?"ar":"ap",
+            'zeigeplan'       => ($karte1)?"visible":"hidden",
+            'begin_comment'   => ($zeigelxcars)?"":"<!-- ",
+            'end_comment'     => ($zeigelxcars)?"":" -->",
+            'zeigeextra'      => ($zeigeextra)?"visible":"hidden",
+            'tools'           => ($tools)?"visible":"hidden",
+            'login'           => $_SESSION["employee"],
+            'password'        => $_SESSION["password"],
+            'leadsrc'         => $fa["leadsrc"],
+            'variablen'       => $variablen,
+            'Vars'            => $Vars,
+            'erstellt'        => db2date($fa["itime"]),
+            'modify'          => db2date($fa["mtime"]),
+            'kdview'          => $views[$_SESSION["kdview"]],
+            'zeige'           => ($fa["obsolete"]=="f")?"visible":"hidden",
+            'verstecke'       => ($fa["obsolete"]=="t")?"visible":"hidden",
+            'chelp'           => ($kdhelp)?"visible":"hidden",
+            'none'            => "visible"
     ));
     $t->set_block("fa1","Liste","Block");
     $i=0;
     $nun=date("Y-m-d H:i");
-    $itemN[]=array(id => 0,calldate => $nun, caller_id => $employee, cause => "Neuer Eintrag" );
-    if ($items) {
+    $itemN[]=array('id' => 0,'calldate' => $nun, 'caller_id' => $employee, 'cause' => "Neuer Eintrag" );
+    if ($items) { //ToDo?? definiert??
         $item=array_merge($itemN,$items);
     } else {
         $item=$itemN;
@@ -200,8 +200,8 @@
         $kdhelp=array_merge($kdtmp,$kdhelp); 
         foreach($kdhelp as $col) {
             $t->set_var(array(
-                cid => $col["id"],
-                cname => $col["name"]
+                'cid'   => $col["id"],
+                'cname' => $col["name"]
             ));    
             $t->parse("Block1","kdhelp",true);
         };

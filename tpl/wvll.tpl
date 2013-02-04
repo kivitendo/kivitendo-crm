@@ -23,7 +23,7 @@
 <!-- Beginn Code ------------------------------------------->
 <table class="liste" width="100%">
 <!-- BEGIN Liste -->
-	<tr  class="klein" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showW({ID},'{Art}');">
+	<tr  class="klein bgcol{LineCol}" onClick="showW({ID},'{Art}');">
 		<td nowrap >{Initdate}</td>
 		<td width="10px" style="background-color:{Type};">{Status}</td>
 		<td width="50%">{Cause}</td>

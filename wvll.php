@@ -17,7 +17,7 @@
     $mail=holeMailHeader($_SESSION["loginCRM"],$MailFlag);
     if ($mail) foreach($mail as $col){
         $t->set_var(array(
-            LineCol => $bgcol[($i%2+1)],
+            LineCol => ($i%2+1),
             Type    => $typcol["M"],
             Status => $col["Gelesen"],
             Cause => $col["Betreff"],
@@ -43,9 +43,9 @@
         if ($col["finishdate"] || $col["stoptag"]) {
             if ( ($col["finishdate"]<>"" && $col["finishdate"]<$nun) || 
                  ($col["stoptag"]<>"" && $col["stoptag"]." ".$col["stopzeit"]<$nun1) ) {
-                $bgc=$bgcol[3];
+                $bgc=3;
             } else {
-                $bgc=$bgcol[($i%2+1)];
+                $bgc=($i%2+1);
             }
             $datum=mkdate(($col["finishdate"])?$col["finishdate"]:$col["stoptag"]." ".$col["stopzeit"].":00");
         } else {
@@ -54,7 +54,7 @@
             } else {
                 $datum=mkdate(($col["initdate"])?$col["initdate"]:$col["starttag"]." ".$col["startzeit"].":00");
             }
-            $bgc=$bgcol[($i%2+1)];
+            $bgc=$i%2+1;
         }
         if ($col["status"]=="F") { $Art="F"; }
         else if ($col["starttag"]) { $Art="T"; }

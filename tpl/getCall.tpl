@@ -112,7 +112,7 @@ WV<input type="checkbox" name="wvl" value="1" onClick="showwv()" {wvl}> <span id
 </table>
 <table class="liste" width="100%">
 <!-- BEGIN Liste -->
-	<tr  onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showCall({IID});">
+	<tr  class='bgcol{LineCol}' onClick="showCall({IID});">
 		<td width="118px">{Datum}</td><td>{Betreff}</td><td style="background-color:{Type};">{Kontakt}{inout}</td></tr>
 <!-- END Liste -->
 </table>

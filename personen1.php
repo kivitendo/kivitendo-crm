@@ -5,8 +5,6 @@
     include("inc/laender.php");
     include("inc/UserLib.php");
     include("inc/FirmenLib.php");
-    $bgcol[1]="#ddddff";
-    $bgcol[2]="#ddffdd";
     $t = new Template($base);
     $menu =  $_SESSION['menu'];
     $t->set_var(array(
@@ -35,8 +33,6 @@
             $t->set_file(array("pers1" => "personen1L.tpl"));
             $t->set_block("pers1","Liste","Block");
             $i=0;
-            $bgcol[1]="#ddddff";
-            $bgcol[2]="#ddffdd";
             if ($_POST["FID1"]) { 
                 $snd="<input type='submit' name='insk' value='.:allocate:.'><br>[<a href='firma2.php?Q=$Quelle&fid=".$_POST["FID1"]."'>.:back:.</a>]";  
             } else { 
@@ -116,7 +112,7 @@
                 if ($i<$listLimit) {
                     $t->set_var(array(
                         js => $js,
-                        LineCol => $bgcol[($i%2+1)],
+                        LineCol => ($i%2+1),
                         Name => $zeile["cp_name"].", ".$zeile["cp_givenname"],
                         Plz => $zeile["cp_zipcode"],
                         Ort => $zeile["cp_city"],

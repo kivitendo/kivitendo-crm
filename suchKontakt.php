@@ -39,7 +39,7 @@
 			else if ($row["lname"]) { $name=$row["lname"]; $src="V";  }
 			else if ($row["pname"]) { $name=$row["pname"]; $src="CC"; }
 			else { $name=""; $src=$_GET["Q"]; }
-			echo "<tr height='14px' onMouseover='this.bgColor=\"#FF0000\";' onMouseout='this.bgColor=\"".$bgcol[($i%2+1)]."\";' bgcolor=\"".$bgcol[($i%2+1)]."\" onClick='showItem(".$row["id"].",\"$src\",".$row["caller_id"].");'>";
+			echo "<tr height='14px' class='bgcol".($i%2+1)."'  onClick='showItem(".$row["id"].",\"$src\",".$row["caller_id"].");'>";
 			echo "<td>".db2date($row["calldate"])."&nbsp;</td><td> ".$cause."</td><td>";
 			echo "$name</td></tr>\n";
 			$i++;

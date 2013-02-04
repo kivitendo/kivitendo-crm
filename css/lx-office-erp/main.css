@@ -19,6 +19,7 @@ td.reiter:hover	{ background-color: #cccccc; }
 
 table.stamm	{ border-width:1px; border-style:solid; border-color:black; padding:0px; margin:0px; width:100%; }
 td.stamm	{ margin:0px;padding:2px; }
+tr.norm		{ font-size:1em;padding:2px; }
 td.norm		{ font-size:1em;padding:2px; }
 td.ce		{ text-align:center;}
 td.le		{ text-align:left;}
@@ -50,10 +51,14 @@ tr.calls0:hover	{ background-color:#ff0000; }
 
 .ptr 		{ cursor:pointer;}
 
-.bgcol1 	{ background-color:#ddddff; }
-.bgcol2 	{ background-color:#ddffdd; }
-.bgcol3 	{ background-color:#eeeeee; }
-.bgcol4 	{ background-color:#ffdddd; }
+tr.bgcol1 	{ background-color:#ddddff;  }
+tr.bgcol1:hover	{ background-color:#ff3333;  }
+tr.bgcol2 	{ background-color:#ddffdd; }
+tr.bgcol2:hover { background-color:#ff3333;  }
+tr.bgcol3 	{ background-color:#eeeeee; }
+tr.bgcol3:hover { background-color:#ff3333;  }
+tr.bgcol4 	{ background-color:#ffdddd; }
+tr.bgcol4:hover { background-color:#ff3333;  }
 .caption 	{ font-size:9px;color:blue; }
 
 textarea  	{ font-size: 1em; font-family:Verdana,Arial,Helvetica,sans-serif;}

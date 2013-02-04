@@ -47,14 +47,14 @@
 			<th class="klein">.:OP:.</th>
 		</tr>
 <!-- BEGIN Liste -->
-		<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showP('{Typ}{RNid}','{RNr}');">
-			<td class="klein">{Datum}</td>
-			<td class="klein ce">&nbsp;{RNr}&nbsp;</td>
-			<td class="klein re">{RSumme}&nbsp;&nbsp;</td>
-			<td class="klein re">{RBrutto}&nbsp;</td>
-			<td class="klein">{Curr}</td>
-			<td class="klein ce">&nbsp;{Typ}</td>
-			<td class="klein ce">&nbsp;{offen}</td>
+		<tr class="klein bgcol{LineCol}" onClick="showP('{Typ}{RNid}','{RNr}');">
+			<td class="">{Datum}</td>
+			<td class=" ce">&nbsp;{RNr}&nbsp;</td>
+			<td class=" re">{RSumme}&nbsp;&nbsp;</td>
+			<td class=" re">{RBrutto}&nbsp;</td>
+			<td class="">{Curr}</td>
+			<td class=" ce">&nbsp;{Typ}</td>
+			<td class=" ce">&nbsp;{offen}</td>
 		</tr>
 <!-- END Liste -->
 		<tr><td class="klein" colspan="6"><b>R</b>).:invoice:., <b>A</b>).:quotation:., <b>L</b>).:orders:.</td></tr>

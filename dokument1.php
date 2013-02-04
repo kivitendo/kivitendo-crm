@@ -46,7 +46,7 @@
                 break;
         }
         $t->set_var(array(
-            LineCol    => $bgcol[($i%2+1)],
+            LineCol    => ($i%2+1),
             did =>    $zeile["docid"],
             Bezeichnung =>    $zeile["vorlage"],
             Appl    =>    $format,

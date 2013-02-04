@@ -26,7 +26,7 @@
 
 <table>
 <!-- BEGIN Liste -->
-	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showK({ID});" class="mini">
+	<tr class='bgcolor{LineCol}' onClick="showK({ID});" class="mini">
 		<td>{KdNr}</td><td>{Name}</td><td>{Plz}</td><td>{Ort}</td><td>{Strasse}</td><td>{Telefon}</td><td>{eMail}</td></tr>
 <!-- END Liste -->
 </table>

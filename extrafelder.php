@@ -144,7 +144,7 @@ if ($_POST["suche"]) {
                 };
                 $t->set_var(array(
                         js => $js,
-                        LineCol => $bgcol[($i%2+1)],
+                        LineCol => ($i%2+1),
                         Name => $zeile["cp_name"].", ".$zeile["cp_givenname"],
                         Plz => $zeile["cp_zipcode"],
                         Ort => $zeile["cp_city"],
@@ -171,7 +171,7 @@ if ($_POST["suche"]) {
                 $t->set_var(array(
                         Q => $maske,
                         ID => $zeile["id"],
-                        LineCol => $bgcol[($i%2+1)],
+                        LineCol => ($i%2+1),
                         KdNr => ($maske=="C")?$zeile["customernumber"]:$zeile["vendornumber"],
                         Name => $zeile["name"],
                         Plz => $zeile["zipcode"],

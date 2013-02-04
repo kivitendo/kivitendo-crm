@@ -121,25 +121,25 @@ if ($_GET["adress"]) {
         echo "<tr class='bgcol3'><th>KD-Nr</th><th class=\"liste\">Name</th><th class=\"liste\">Anschrift</th><th class=\"liste\">Telefon</th><th></th></tr>\n"; 
         $i=0; 
         if ($rsC) foreach($rsC as $row) { 
-            echo "<tr onMouseover=\"this.bgColor='#FF0000';\" onMouseout=\"this.bgColor='".$bgcol[($i%2+1)]."';\" bgcolor='".$bgcol[($i%2+1)]."' onClick='showD(\"C\",".$row["id"].");'>". 
+            echo "<tr class='bgcol".($i%2+1)."' onClick='showD(\"C\",".$row["id"].");'>". 
                  "<td class=\"liste\">".$row["customernumber"]."</td><td class=\"liste\">".$row["name"]."</td>". 
                  "<td class=\"liste\">".$row["city"].(($row["street"])?",":"").$row["street"]."</td><td class=\"liste\">".$row["phone"]."</td><td class=\"liste\">K</td></tr>\n"; 
             $i++; 
         }  
         if ($rsV) foreach($rsV as $row) { 
-            echo "<tr onMouseover=\"this.bgColor='#FF0000';\" onMouseout=\"this.bgColor='".$bgcol[($i%2+1)]."';\" bgcolor='".$bgcol[($i%2+1)]."' onClick='showD(\"V\",".$row["id"].");'>". 
+            echo "<tr class='bgcol".($i%2+1)."' onClick='showD(\"V\",".$row["id"].");'>". 
                  "<td class=\"liste\">".$row["vendornumber"]."</td><td class=\"liste\">".$row["name"]."</td>". 
                  "<td class=\"liste\">".$row["city"].(($row["street"])?",":"").$row["street"]."</td><td class=\"liste\">".$row["phone"]."</td><td class=\"liste\">L</td></tr>\n"; 
             $i++; 
         } 
         if ($rsK) foreach($rsK as $row) { 
-            echo "<tr onMouseover=\"this.bgColor='#FF0000';\" onMouseout=\"this.bgColor='".$bgcol[($i%2+1)]."';\" bgcolor='".$bgcol[($i%2+1)]."' onClick='showD(\"K\",".$row["cp_id"].");'>". 
+            echo "<tr class='bgcol."($i%2+1)."' onClick='showD(\"K\",".$row["cp_id"].");'>". 
                  "<td class=\"liste\">".$row["cp_id"]."</td><td class=\"liste\">".$row["cp_name"].", ".$row["cp_givenname"]."</td>". 
                  "<td class=\"liste\">".$row["addr2"].(($row["addr1"])?",":"").$row["addr1"]."</td><td class=\"liste\">".$row["cp_phone1"]."</td><td class=\"liste\">P</td></tr>\n"; 
             $i++; 
         } 
         if ($rsE) foreach($rsE as $row) { 
-            echo "<tr onMouseover=\"this.bgColor='#FF0000';\" onMouseout=\"this.bgColor='".$bgcol[($i%2+1)]."';\" bgcolor='".$bgcol[($i%2+1)]."' onClick='showD(\"E\",".$row["id"].");'>". 
+            echo "<tr class='bgcol".($i%2+1)."' onClick='showD(\"E\",".$row["id"].");'>". 
                  "<td class=\"liste\">".$row["id"]."</td><td class=\"liste\">".$row["name"]."</td>". 
                  "<td class=\"liste\">".$row["addr2"].(($row["addr1"])?",":"").$row["addr1"]."</td><td class=\"liste\">".$row["workphone"]."</td><td class=\"liste\">U</td></tr>\n"; 
             $i++; 

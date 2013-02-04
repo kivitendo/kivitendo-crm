@@ -28,10 +28,10 @@
 		<td>.:changed:.</td>
 	</tr>
 <!-- BEGIN Liste -->
-	<tr  onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showO({id});" colspan="0">
-		<td class="norm">{firma}&nbsp;</td><td class="norm">&nbsp;{title}</td><td class="norm" style="width:20;text-align:right">{chance}</td>
-		<td class="norm" style="width:80;text-align:right"> {betrag}</td><td class="norm">&nbsp;{status}</td>
-		<td class="norm" style="width:60;text-align:right"> {datum}</td><td class="norm">&nbsp;{user}</td><td class="norm">&nbsp;{chgdate}</td>
+	<tr  class="norm bgcol{LineCol}" onClick="showO({id});" colspan="0">
+		<td >{firma}&nbsp;</td><td>&nbsp;{title}</td><td style="width:20;text-align:right">{chance}</td>
+		<td  style="width:80;text-align:right"> {betrag}</td><td>&nbsp;{status}</td>
+		<td  style="width:60;text-align:right"> {datum}</td><td>&nbsp;{user}</td><td>&nbsp;{chgdate}</td>
         <!--td><a href="opportunity.php?history={oppid}"><img src="image/extra.png" border="0" style="visibility:{show}"></a></td-->
 </tr>
 <!-- END Liste -->

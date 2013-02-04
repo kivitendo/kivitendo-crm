@@ -43,7 +43,7 @@
         });
     }
     function getEventListe() {
-    id = document.formular.id.value
+        id = document.formular.id.value
         fid = document.formular.fid.value
         if ( fid < 0 ) fid=0;
         $.ajax({
@@ -62,7 +62,7 @@
     }
     function chktime(wo) {
         var timeval = document.getElementById(wo).value;
-        if ( timevall == '' ) return;
+        if ( timeval == '' ) return;
         var ausdruck = /(\d+):(\d+)/;
         erg = ausdruck.exec(timeval)
         if ( erg == null ) {

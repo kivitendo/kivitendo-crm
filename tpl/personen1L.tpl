@@ -30,7 +30,7 @@
 
 <table>
 <!-- BEGIN Liste -->
-	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick='{js}'>
+	<tr class="bgcol{LineCol}" onClick='{js}'>
 		<td>{Name}</td><td>&nbsp;{Plz}</td><td>{Ort}</td><td>&nbsp;{Telefon}</td><td>&nbsp;{eMail}</td><td>&nbsp;{Firma}</td><td>&nbsp;{insk}</td></tr>
 <!-- END Liste -->
 	<tr><td class="re" colspan="6">{snd}</td></tr>

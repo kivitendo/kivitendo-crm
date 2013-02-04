@@ -174,7 +174,7 @@
         $calls=getAllCauseCall($Bezug);
         if ($calls) foreach($calls as $zeile) {
             $t->set_var(array(
-                LineCol => ($zeile["bezug"]==0)?$bgcol[4]:$bgcol[($i%2+1)],
+                LineCol => ($zeile["bezug"]==0)?4:($i%2+1),
                 Type    => $typcol[strtoupper($zeile["kontakt"])],
                 Datum    =>    db2date($zeile["calldate"]).substr($zeile["calldate"],10,6),
                 Betreff    =>    $zeile["cause"],

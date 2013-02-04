@@ -40,8 +40,8 @@
 <form name="firma4" action="{action}" method="post">
 <table class="liste" style="width:300px">
 <!-- BEGIN Liste -->
-	<tr onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='{LineCol}';" bgcolor="{LineCol}" onClick="showD({did});">
-		<td class="norm">{Bezeichnung}</td><td class="norm">{Appl}</td>
+	<tr class='norm bgcol{LineCol}' onClick="showD({did});">
+		<td>{Bezeichnung}</td><td>{Appl}</td>
 	</tr>
 <!-- END Liste -->
 </table>

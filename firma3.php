@@ -79,7 +79,7 @@
             $colr=array_shift($re);
             $cola=array_shift($an);
             $val=array(
-                LineCol => $bgcol[($i%2+1)],
+                LineCol => ($i%2+1),
                 Month => substr($monate[$i],4,2)."/".substr($monate[$i],0,4),
                 Rcount => $colr["count"],
                 RSumme => sprintf("%01.2f",$colr["summe"]),
@@ -112,7 +112,7 @@
                 }
             }
             $t->set_var(array(
-                LineCol => $bgcol[($i%2+1)],
+                LineCol => ($i%2+1),
                 Datum => db2date($col["transdate"]),
                 RNr    => $renr,
                 RNid => $col["id"],

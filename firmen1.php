@@ -5,8 +5,6 @@
     include("inc/FirmenLib.php");
     include("inc/UserLib.php");
     $Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
-    $bgcol[1]="#ddddff";
-    $bgcol[2]="#ddffdd";
     $t = new Template($base);
     if ($_POST["reset"]) {
         leertpl($t,1,$Q,"",true);
@@ -86,7 +84,7 @@
                     $t->set_var(array(
                         Q => $Q,
                         ID => $zeile["id"],
-                        LineCol => $bgcol[($i%2)+1],
+                        LineCol => ($i%2)+1,
                         KdNr => ($Q=="C")?$zeile["customernumber"]:$zeile["vendornumber"],
                         Name => $zeile["name"],
                         Plz => $zeile["zipcode"],

@@ -62,37 +62,37 @@ if (empty($reP)) {
 	echo "<br><br>Nur Buchungssatz";
 } else {
 	foreach ($reP as $col) {
-		echo "\t<tr  class='smal' onMouseover='this.bgColor=\"#FF0000\";' onMouseout='this.bgColor=\"".$bgcol[($i%2+1)]."\";' bgcolor='".$bgcol[($i%2+1)]."'>";
+		echo "\t<tr  class='smal bgcol".($i%2+1)."'>";
 		echo "\t\t<td width='30px' align='right'>".($col["qty"]*$mul)."</td><td width='30px'>".$col["unit"]."</td>";
 		echo "<td width='280px'>".$col["artikel"]."</td><td width='70px' align='right'>".sprintf("%0.2f",$col["sellprice"])."</td><td width='70px' align='right'>".sprintf("%0.2f",$col["endprice"])."</td><td width='70px' align='right'>".sprintf("%0.2f",$col["endprice"]*$col["qty"]*$mul)."</td>";
 		echo "\t</tr>\n";
 		if ($col["notes"]) {
-			echo "\t<tr  class='smal' onMouseover='this.bgColor=\"#FF0000\";' onMouseout='this.bgColor=\"".$bgcol[($i%2+1)]."\";' bgcolor='".$bgcol[($i%2+1)]."'>";
+			echo "\t<tr  class='smal bgcol".($i%2+1)."'>";
 			echo "\t<td colspan='2'></td><td>".$col["notes"]."</td><td colspan='3'></td></tr>";
 		}
 		if ($col["serialnumber"]) {
-			echo "\t<tr  class='smal' onMouseover='this.bgColor=\"#FF0000\";' onMouseout='this.bgColor=\"".$bgcol[($i%2+1)]."\";' bgcolor='".$bgcol[($i%2+1)]."'>";
+			echo "\t<tr  class='smal bgcol".($i%2+1)."'>";
 			echo "\t<td colspan='2'></td><td colspan='5'>".$col["serialnumber"]."</td></tr>";
 		}
 		$i++;
 	}
 ?>
-	<tr  class='smal' onMouseover='this.bgColor="#FF0000";' onMouseout='this.bgColor="<?php echo  $bgcol[($i%2+1)] ?>";' bgcolor='<?php echo  $bgcol[($i%2+1)] ?>'>
+	<tr  class='smal bgcol".($i%2+1)."'>
 		<td colspan='5' align='right'>Rechnungssumme Netto</td><td align='right'><?php echo  sprintf("%0.2f",$tmp[1]["netto"]) ?></td>
 	</tr>
-	<tr  class='smal' onMouseover='this.bgColor="#FF0000";' onMouseout='this.bgColor="<?php echo  $bgcol[($i%2+1)] ?>";' bgcolor='<?php echo  $bgcol[($i%2+1)] ?>'>
+	<tr  class='smal bgcol".($i%2+1)."'>
 		<td colspan='5' align='right'>enthaltene MwSt</td><td align='right'><?php echo  sprintf("%0.2f",($tmp[1]["brutto"]-$tmp[1]["netto"])) ?></td>
 	</tr>
-	<tr  class='smal' onMouseover='this.bgColor="#FF0000";' onMouseout='this.bgColor="<?php echo  $bgcol[($i%2+1)] ?>";' bgcolor='<?php echo  $bgcol[($i%2+1)] ?>'>
+	<tr  class='smal bgcol".($i%2+1)."'>
 		<td colspan='5' align='right'>Rechnungssumme Brutto</td><td align='right'><?php echo  sprintf("%0.2f",$tmp[1]["brutto"]) ?></td>
 	</tr>
 	
 <?php } ?>
 
-	<tr  class='smal' onMouseover='this.bgColor="#FF0000";' onMouseout='this.bgColor="<?php echo  $bgcol[($i%2+1)] ?>";' bgcolor='<?php echo  $bgcol[($i%2+1)] ?>'>
+	<tr  class='smal bgcol".($i%2+1)."'>
 		<td colspan='2' align='left'>Re-Notiz:</td><td colspan='4'> <?php echo  $tmp[1]["notes"] ?></td>
 	</tr>
-	<tr  class='smal' onMouseover='this.bgColor="#FF0000";' onMouseout='this.bgColor="<?php echo  $bgcol[($i%2+1)] ?>";' bgcolor='<?php echo  $bgcol[($i%2+1)] ?>'>
+	<tr  class='smal bgcol".($i%2+1)."'>
 		<td colspan='2' align='left'>Intern:</td><td colspan='4'> <?php echo  $tmp[1]["intnotes"] ?></td>
 	</tr>
 </table>

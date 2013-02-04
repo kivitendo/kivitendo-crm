@@ -47,7 +47,7 @@
 		}
 
 ?>
-	<tr height="14px" onMouseover="this.bgColor='#FF0000';" onMouseout="this.bgColor='<?php echo $bgcol[($jj%2+1)] ?>';" bgcolor="<?php echo $bgcol[($jj%2+1)] ?>" onClick="showItem(<?php echo $Q.$col['id'] ?>);">
+	<tr height="14px" class='bgcol<?php echo ($jj%2+1) ?>' onClick="showItem(<?php echo $Q.$col['id'] ?>);">
 		<td class="smal" width="100px"><?php echo db2date(substr($col['calldate'],0,10)) ?> <?php echo substr($col['calldate'],11,5) ?></td>
 		<td class="smal le"><?php echo $email ?></td><td class="smal le"><?php echo $col['cause'] ?></td></tr>
 <?php

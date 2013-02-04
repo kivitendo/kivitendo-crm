@@ -51,7 +51,7 @@
             foreach ($data as $row) {
                 if ($last <> $row["oppid"] || $history) {
                     $t->set_var(array(
-                        LineCol  => $bgcol[($i%2+1)],
+                        LineCol  => ($i%2+1),
                         id       => $row["id"], 
                         firma    => ($last==$row["oppid"])?"":$row["firma"], 
                         oppid    => $row["oppid"],
@@ -200,7 +200,7 @@
         if ($history) foreach ($history as $row) {
         $t->set_var(array(
             nr         => $i,
-            LineCol    => $bgcol[($i%2+1)],
+            LineCol    => ($i%2+1),
             histtitle  => $row["title"],
             histchance => $row["chance"]*10,
             histbetrag => sprintf("%0.2f",$row["betrag"]),

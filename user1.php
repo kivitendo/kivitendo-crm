@@ -120,7 +120,7 @@
         if ($items) foreach($items as $col){
             $t->set_var(array(
                 IID => $col["id"],
-                LineCol    => $bgcol[($i%2+1)],
+                LineCol    => ($i%2+1),
                 Datum    => db2date(substr($col["calldate"],0,10)),
                 Zeit    => substr($col["calldate"],11,5),
                 Name    => $col["cp_name"],

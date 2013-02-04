@@ -61,7 +61,8 @@
         else { $Art="D"; };
         $t->set_var(array(
             LineCol => $bgc,
-            Type    => ($typcol[($col["kontakt"])?$col["kontakt"]:"X"]).$col["sel"],
+            //Type    => ($typcol[($col["kontakt"])?$col["kontakt"]:"X"]).$col["sel"],
+            Type    => ($col["kontakt"])?$col["kontakt"]:"X",
             Status => ($col["status"])?$col["status"]:"-",
             Cause => $col["cause"],
             Initdate => $datum,

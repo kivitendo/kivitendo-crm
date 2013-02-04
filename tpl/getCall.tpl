@@ -113,7 +113,7 @@ WV<input type="checkbox" name="wvl" value="1" onClick="showwv()" {wvl}> <span id
 <table class="liste" width="100%">
 <!-- BEGIN Liste -->
 	<tr  class='bgcol{LineCol}' onClick="showCall({IID});">
-		<td width="118px">{Datum}</td><td>{Betreff}</td><td style="background-color:{Type};">{Kontakt}{inout}</td></tr>
+		<td width="118px">{Datum}</td><td>{Betreff}</td><td class='typcol{Type}'>{Kontakt}{inout}</td></tr>
 <!-- END Liste -->
 </table>
 <!-- Hier endet die Karte ------------------------------------------->

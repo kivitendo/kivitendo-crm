@@ -25,7 +25,7 @@
 <!-- BEGIN Liste -->
 	<tr  class="klein bgcol{LineCol}" onClick="showW({ID},'{Art}');">
 		<td nowrap >{Initdate}</td>
-		<td width="10px" style="background-color:{Type};">{Status}</td>
+		<td width="10px" class='typcol{Type}'>{Status}</td>
 		<td width="50%">{Cause}</td>
 		<td width="30%">{IniUser}</td>
 	</tr>

@@ -54,9 +54,9 @@ tr.bgcol1 	{ background-color:#ddddff; }
 tr.bgcol1:hover	{ background-color:#ff2222; }
 tr.bgcol2 	{ background-color:#ddffdd; }
 tr.bgcol2:hover	{ background-color:#ff2222; }
-.bgcol3 	{ background-color:#eeeeee; }
+tr.bgcol3 	{ background-color:#eeeeee; }
 tr.bgcol3:hover	{ background-color:#ff2222; }
-.bgcol4 	{ background-color:#ffdddd; }
+tr.bgcol4 	{ background-color:#ffdddd; }
 tr.bgcol4:hover	{ background-color:#ff2222; }
 .caption 	{ font-size:9px;color:blue; }
 

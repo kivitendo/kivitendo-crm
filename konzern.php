@@ -34,7 +34,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head><title>Firma Stamm</title>
     <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
-    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/tabcontent.css"></link>
     <!-- ERP Stylesheet -->
     <?php echo $menu['stylesheets']; ?>
     <!-- ERP JavaScripts -->

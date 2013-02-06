@@ -30,7 +30,7 @@
 	//-->
 	</script>
    {jscal}
-<body onLoad="showwv()">
+<body onLoad="focus(), showwv()">
 
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <form name="call" action="getCall.php" enctype='multipart/form-data' method="post">

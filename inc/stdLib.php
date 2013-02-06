@@ -5,14 +5,17 @@ ini_set('session.bug_compat_42', 0);  // Das ist natürlich lediglich eine Provi
 session_set_cookie_params(600); // 10 minuten.
 session_start();
 
+//error_reporting (E_ALL & ~E_DEPRECATED);
+//ini_set ('display_errors',1);
+
 $inclpa = ini_get('include_path');
-ini_set('include_path',$inclpa.":../:./crmajax:./inc:../inc");
+ini_set('include_path',$inclpa.":../:./inc:../inc");
 
 require_once "conf.php";
 require_once "version.php";
 require_once "mdb.php";
-//if ($DEBUG && !$_SESSION["DEBUG"]) {
-if ( !$_SESSION["db"] || !$_SESSION["cookie"] ||
+
+if ( !isset($_SESSION["db"])?$_SESSION["db"]:false || !$_SESSION["cookie"] || //$_SESSION["db"] wird benötigt??
     ( $_SESSION["cookie"] && !$_COOKIE[$_SESSION["cookie"]] ) ) {
     require_once "login.php";
 };

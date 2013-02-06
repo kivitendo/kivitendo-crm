@@ -2,7 +2,6 @@
 	<head><title></title>
 	{STYLESHEETS}
         <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
-	<link type="text/css" REL="stylesheet" HREF="{ERPCSS}/tabcontent.css"></link>
 	{JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--

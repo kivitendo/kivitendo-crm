@@ -2,8 +2,6 @@
         <head><title></title>
 {STYLESHEETS}
     <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/tabcontent.css">
-    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/tabcontent.css">
     <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
     <script type="text/javascript" src="{JQUERY}inc/dokument.js"></script>
 {JAVASCRIPTS}

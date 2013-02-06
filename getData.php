@@ -133,7 +133,7 @@ if ($_GET["adress"]) {
             $i++; 
         } 
         if ($rsK) foreach($rsK as $row) { 
-            echo "<tr class='bgcol."($i%2+1)."' onClick='showD(\"K\",".$row["cp_id"].");'>". 
+            echo "<tr class='bgcol.".($i%2+1)."' onClick='showD(\"K\",".$row["cp_id"].");'>". 
                  "<td class=\"liste\">".$row["cp_id"]."</td><td class=\"liste\">".$row["cp_name"].", ".$row["cp_givenname"]."</td>". 
                  "<td class=\"liste\">".$row["addr2"].(($row["addr1"])?",":"").$row["addr1"]."</td><td class=\"liste\">".$row["cp_phone1"]."</td><td class=\"liste\">P</td></tr>\n"; 
             $i++; 
@@ -154,7 +154,7 @@ if ($_GET["adress"]) {
 <script language="JavaScript">
 	sw="<?php echo  $_GET["swort"]; ?>";
 	if (sw != "") 
-		F1=open("suchKontakt.php?suchwort="+sw+"&Q=S","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
+		F1=open("suchKontakt.php?suchwort="+sw+"&Q=S","Suche","width=800, height=600, left=100, top=50, scrollbars=yes");
 </script>			
 
 <?php } ?> 

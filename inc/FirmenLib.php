@@ -866,7 +866,7 @@ global $db;
     $rs=$db->getAll($sql);
     return $rs;
 }
-function getCustTermin($id,$tab,$day) {
+function getCustTermin($id,$tab,$day,$month,$year) {
 global $db;
     if ($tab=="P") {
         $sql="select * from  termine T left join terminmember M on T.id=M.termin where M.member = $id ";
@@ -876,8 +876,12 @@ global $db;
         $sql.="where M.member in ";
         $sql.="($id,(select cp_id from contacts where cp_cv_id = 473))";
     }
-    if ($day) {
-        $sql.=" and start = '$day 00:00:00'";
+    if ($day>0 and $month>0 and $year>0) {
+        $sql.=" and start = '$year-$month-$day 00:00:00'";
+    } else if ($month>0 and $year>0) {
+        if  ( $month < 12 ) { $month2 = $month+1; $year2 = $year; }
+        else { $month2 = '01'; $year2 = $year + 1; }; 
+        $sql .= " and  ( start between '$year-$month-01 00:00:00' and '$year2-$month2-01 00:00:00' ) ";
     } else {
         $day=date("Y-m-d 00:00:00");
         $sql.= " and start >= '$day' order by start limit 5 ";

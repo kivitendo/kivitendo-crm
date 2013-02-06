@@ -4,8 +4,8 @@
     include_once("crmLib.php");
     include_once("persLib.php");
 
-    function getCustomTermin($id,$tab,$day) {
-        $termine = getCustTermin($id,$tab,$day);
+    function getCustomTermin($id,$tab,$day,$month,$year) {
+        $termine = getCustTermin($id,$tab,$day,$month,$year);
         if ($termine)  {
             foreach ($termine as $term) {
                $inhalt .= "<span onClick='getCall(".$term["cid"].")'>";
@@ -393,7 +393,7 @@ switch ($_GET['task']) {
                                break;
     case 'geteventlist'      : listTevents( $_GET['id'], $_GET['fid'] );
                                break;
-    case 'getCustomTermin'   : getCustomTermin( $_GET['id'], $_GET['tab'], $_GET['day'] );
+    case 'getCustomTermin'   : getCustomTermin( $_GET['id'], $_GET['tab'], $_GET['day'], $_GET['month'], $_GET['year'] );
                                break;
     case 'showDir'           : showDir( $_GET['id'], $_GET['dir'] );
                                break;

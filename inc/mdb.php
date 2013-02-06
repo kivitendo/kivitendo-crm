@@ -161,7 +161,7 @@ class myDB extends MDB2 {
             $this->rollback();
             return false;
         }
-        @$this->db->free();
+        //@$this->db->free();
         return true;
     }
 
@@ -193,7 +193,7 @@ class myDB extends MDB2 {
             $this->rollback();
             return false;
         }
-        @$this->db->free();
+        //@$this->db->free();
         return true;
     }
 

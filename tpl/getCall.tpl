@@ -1,7 +1,11 @@
 <html>
 	<head><title>LX - CRM</title>
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
         {STYLESHEETS}
+        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
+    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
+    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
+    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
+    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/i18n/jquery.ui.datepicker-de.js"></script>
 	<script language="JavaScript">
 	<!--
 		function artikel() {
@@ -27,16 +31,19 @@
                 document.getElementById('wv').style.visibility='hidden';
             }
         }
+        $(function() {
+            $( "#wvldate" ).datepicker($.datepicker.regional[ "de" ]);
+            $( "#Datum" ).datepicker($.datepicker.regional[ "de" ]);
+        })
 	//-->
 	</script>
-   {jscal}
 <body onLoad="focus(), showwv()">
 
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <form name="call" action="getCall.php" enctype='multipart/form-data' method="post">
 <INPUT TYPE="hidden" name="MAX_FILE_SIZE" value="2000000">
 <table width="100%">
-			<td rowspan="3">
+			<tr><td rowspan="3">
 				<select name="CRMUSER">
 <!-- BEGIN Selectbox -->
 					<option value="{UID}"{Sel}>{Login}</option>
@@ -68,9 +75,9 @@
 <input type="hidden" name="Q" value="{Q}">
 <input type="hidden" name="datei" value="{DateiID}">
 <input type="text" name="cause" value="{NBetreff}" size="43" maxlength="125"> &nbsp; 
-<input type="text" name="Datum" value="{NDatum}" id="Datum" size="9" maxlength="10">{jscal1} 
+<input type="text" name="Datum" value="{NDatum}" id="Datum" size="9" maxlength="10"> 
 <input type="text" name="Zeit" value="{NZeit}" size="6" maxlength="5">&nbsp; 
-WV<input type="checkbox" name="wvl" value="1" onClick="showwv()" {wvl}> <span id="wv" style="visibility:hidden"><input type="text" size="8" name="wvldate" value="{wvldate}" id="wvldate" maxlength="10">{jscal2}</span>
+WV<input type="checkbox" name="wvl" value="1" onClick="showwv()" {wvl}> <span id="wv" style="visibility:hidden"><input type="text" size="8" name="wvldate" value="{wvldate}" id="wvldate" maxlength="10"></span>
 <!--input type="reset" value="reset" onClick="javascript:location.href='getCall.php?fid={FID}&id={ID}'"--><br>
 <span class="klein">Betreff</span><br>
 <textarea name="c_cause" cols="80" rows="10" wrap="physical" >{LangTxt}</textarea><br>
@@ -117,14 +124,5 @@ WV<input type="checkbox" name="wvl" value="1" onClick="showwv()" {wvl}> <span id
 <!-- END Liste -->
 </table>
 <!-- Hier endet die Karte ------------------------------------------->
-<!--/td></tr></table-->
-<script type='text/javascript'><!--
-Calendar.setup( {
-inputField : 'Datum',ifFormat :'%d.%m.%Y',align : 'BL', button : 'trigger1'} );
-Calendar.setup( {
-inputField : 'wvldate',ifFormat :'%d.%m.%Y',align : 'BL', button : 'trigger2'} );
-//-->
-</script>
-<script language="JavaScript">self.focus()</script>
 </body>
 </html>

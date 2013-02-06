@@ -197,6 +197,7 @@
     $t->set_var(array(
         ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
         STYLESHEETS   => $menu['stylesheets'],
+        JQUERY        => $_SESSION['basepath'].'crm/',
         nummer => $daten["nummer"],
         EDIT => ($CallEdit and $_GET["hole"])?"visible":"hidden",
         DELETE => ($CallDel and $_GET["hole"])?"visible":"hidden",
@@ -226,9 +227,6 @@
         R4 => ($daten["Kontakt"]=="P")?" checked":"",
         R5 => ($daten["Kontakt"]=="D")?" checked":"",
         R6 => ($daten["Kontakt"]=="X")?" checked":"",
-        jscal => ($jcalendar)?$jscal:"",
-        jscal1 => ($jcalendar)?"<a href='#' id='trigger1' name='Datum' title='Erstelldatum' onClick='false'><img src='image/date.png' border='0' align='middle'></a>":"",
-        jscal2 => ($jcalendar)?"<a href='#' id='trigger2' name='wvldate' title='Wiedervorlagedatum' onClick='false'><img src='image/date.png' border='0' align='middle'></a>":"",
 
         Start => $telcall*-1,
         Datei => $daten["Datei"],

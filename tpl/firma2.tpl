@@ -1,9 +1,11 @@
 <html>
         <head><title></title>
         {STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/tabcontent.css"></link>
         {JAVASCRIPTS}
+        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
+    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
+    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
+    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
     <script language="JavaScript">
     <!--
         function showItem(id) {
@@ -179,50 +181,54 @@
             $("#liste").change(function(){ showContact(); }) 
             showContact(); 
         });
+    $(function(){
+         $('button')
+          .button()
+          .click( function(event) { event.preventDefault();  document.location.href=this.getAttribute('name'); });
+         $( "input[type=submit]")
+          .button()
+         .click(function( event ) {
+              event.preventDefault();
+         });
+    });
     </script>
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
 <p class="listtop" >.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}</span></p>
-<form name="kdhelp">
-<!--div style="position:absolute; top:3.9em; left:0.2em;"-->
 <div id="menubox1">
-    <div style="float:left; " class="top1">
-    <ul id="maintab" class="shadetabs">
-    <li><a href="{Link1}">.:Custombase:.</a><li>
-    <li class="selected"><a href="{Link2}" id="aktuell">.:Contacts:.</a></li>
-    <li><a href="{Link3}">.:Sales:.</a></li>
-    <li><a href="javascript:doclink();">.:Documents:.</a></li>
-    <li><select style="visibility:{chelp}" name="kdhelp" onChange="KdHelp()">
+    <span style="float:left;" class="top1">
+    <button name="{Link1}">.:Custombase:.</button>
+    <button name="{Link2}">.:Contacts:.</button>
+    <button name="{Link3}">.:Sales:.</button>
+    <button name="firma4.php?Q={Q}&id={FID}">.:Documents:.</button>
+    <select style="visibility:{chelp}" name="kdhelp" onChange="KdHelp()">
 <!-- BEGIN kdhelp -->
         <option value="{cid}">{cname}</option>
 <!-- END kdhelp -->
     </select>
-    </ul>
-    </div>
-    <div style="float:left; padding-left:12em;  visibility:{tools};">
+    </span>
+    <span style="float:left; padding-left:12em;  visibility:{tools};">
     <img src="tools/rechner.png"  onClick="toolwin('tools/Rechner.html',0)" title=".:simple calculator:."> &nbsp;
     <img src="tools/notiz.png"  onClick="toolwin('postit.php?popup=1',0)" title=".:postit notes:."> &nbsp;
     <img src="tools/kalender.png"  onClick="toolwin('tools/kalender.php?Q=P&id=',1)" title=".:calender:."> &nbsp;
     <a href="javascript:void(s=prompt('.:ask leo:.',''));if(s)leow=open('http://dict.leo.org/?lp=ende&search='+escape(s),'LEODict','width=750,height=550,scrollbars=yes,resizeable=yes');if(leow)leow.focus();"><img src="tools/leo.png"  title="LEO .:english/german:." border="0"></a> &nbsp;
-    </div>
+    </span>
 </div>
-</form>
 <!--span style="position:absolute; left:0.2em; top:7.2em; width:99%;" -->
 <span id='contentbox' >
+<br>
 <!-- Beginn Code ------------------------------------------->
-<div style="float:left; width:35em; height:37em;  border: 1px solid black;" >
-         <div style="position:absolute; left:0em; width:35em;" >    
-        <div style="float:left; width:35em; height:4.0em; text-align:left; border-bottom: 1px solid black;">
-            <span class="klein fett">
+<div style="float:left; width:45em; height:37em;  border: 1px solid black;" >
+        <div style="float:left; width:45em; height:4.5em; text-align:left; border-bottom: 1px solid black;">
             <form name="contact">
-            &nbsp;{Fname1} &nbsp; &nbsp; .:KdNr:.: {customernumber} &nbsp; &nbsp;<br />
+            <span class="fett" >
+            &nbsp;{Fname1} &nbsp; &nbsp; .:KdNr:.: {customernumber}<br />
             &nbsp;{Fdepartment_1}<br />
-            &nbsp;{Plz} {Ort}
-            <select name="liste" id="liste" style="width:150px;" onChange="showContact();">
+            &nbsp;{Plz} {Ort} </span>
+            <select name="liste" id="liste" style="width:150px;float:right;" onChange="showContact();">
             {kontakte}</select>
             </form>
-            </span>
         </div>
         <div style="float:left; width:70%; height:13em; text-align:left; border-bottom: 0px solid black;" >
             &nbsp;<span id="cp_greeting"></span> <span id="cp_title"></span><br />
@@ -246,21 +252,18 @@
             <span id="cp_abteilung" style="padding-right:1px;"></span><br />
             <span id="cp_vcard" style="padding-right:1px;"></span><br />
         </div>
-        <div style="position:absolute;top:18em; left:0em; width:35em;  text-align:left; border-bottom: 0px solid black;">
+        <div style="position:absolute;top:20em; left:0em; width:45em;  text-align:left; border-bottom: 0px solid black;">
             &nbsp;<span id="cp_privatphone"></span> <span id="cp_privatemail"></span><br />
              <hr width="100%">
-            <ul id="submenu" class="subshadetabs" style="padding-left:5px;">
-                <li id="subvca"><a href="#" onClick="vcard()" >VCard</a></li>
+                &nbsp;<input type='submit' value='VCard' onClick="vcard()" >
                 <b>.:Contacts:.:</b> 
-                <li id="subedit"><a href="#" onClick="cedit(1)" >{Edit}</a></li>
-                <li id="subkeyi"><a href="#" onClick="cedit(0)" >.:keyin:.</a></li>
-                <li id="sublist"><a href="#" onClick="sellist()">.:fromList:.</a></li>
-            </ul>
+                <input type='submit' value='{Edit}' onClick="cedit(1)" >
+                <input type='submit' value='.:keyin:.' onClick="cedit(0)" >
+                <input type='submit' value='.:fromList:.' onClick="sellist()">
             <hr>
-            <span id="cp_stichwort1" class="klein fett" style="width:36em;"></span><br />
-            <span id="cp_notes" class="klein" style="width:36em;"></span>
+            <span id="cp_stichwort1" class="klein fett" style="width:45em; padding-left:1em;"></span><br />
+            <span id="cp_notes" class="klein" style="width:45em; padding-left:1em;"></span>
         </div>
-    </div>
 </div>
 <div style="float:left; width:46%; height:37em; text-align:left; border: 1px solid black; border-left:0px;">
     <div class="calls" width='99%' id="tellcalls">

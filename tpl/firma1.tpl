@@ -268,7 +268,7 @@
             {verkaeufer}
         </div>
 </div>
-<div id="fasubmenu" style="position:absolute; width:40.5em; top:15.5em;">
+<div id="fasubmenu" >
     <ul>
     <li><a href="#lie">.:shipto:.    </a></li>
     <li><a href="#not">.:notes:.     </a></li>

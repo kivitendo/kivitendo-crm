@@ -15,9 +15,8 @@
         include("inc/ldapLib.php");
         $rc=Ldap_add_Customer($_GET["fid"]);
     }
-
     // Einen Kontakt anzeigen lassen
-    if ($_GET["id"]) {				// Kommt nicht von firma1.php
+    if (!$fid and $_GET["id"]) {				// Kommt nicht von firma1.php
         $co=getKontaktStamm($_GET["id"]);
         if (empty($co["cp_cv_id"])) {
             // Ist keiner Firma zugeordnet

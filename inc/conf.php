@@ -14,6 +14,7 @@ $connect=9; // Position eindeutiges Wort (Tellcall)
 define("FPDF_FONTPATH","/usr/share/fpdf/font/");
 define("FONTART","2");
 define("FONTSTYLE","1");
+$jpgraph_path=":/usr/share/jpgraph";
 $logmail=true;
 $jcalendar=true;
 $listLimit=500;

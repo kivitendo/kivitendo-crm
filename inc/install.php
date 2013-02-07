@@ -3,7 +3,7 @@ if ($_GET['check']==1) {
 	$p='../';
 	$check=true;
     $inclpa=ini_get('include_path');
-    ini_set('include_path',$inclpa.":../:./crmajax:./inc:../inc");
+    ini_set('include_path',$inclpa.$jpgraph_path.":../:./inc:../inc");
 } else {	
    	$p='';
    	$check=false;

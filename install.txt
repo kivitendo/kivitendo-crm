@@ -7,9 +7,9 @@ durchgeführt werden und beansprucht einen Zeitaufwand von fünf bis zehn Minute
 
 Das Installationsscript erzeugt die notwendigen Verzeichnisse und Tabellen
 für die CRM und erweitert einige Tabellen der ERP. Die Funktionstüchtigkeit 
-der ERP wird dadurch nicht beeinträchtigt.
+der ERP wird dadurch natürlich nicht beeinträchtigt.
 
-Die neuste Entwicklerversion kann mit "git clone git://vc.linet-services.de/public/lx-office-crm.git"
+Die neuste Entwicklerversion kann mit "git clone https://github.com/kivitendo/kivitendo-crm.git"
 direkt aus dem Repository kopiert werden. Voraussetzung hierfür ist das Programmpaket Git 
 (apt-get install git) 
 
@@ -38,7 +38,7 @@ Vorrausetzungen:
         curl 
         jquery-ui (http://jqueryui.com/)
 Fast alle Pakete können unter debianoiden Systemen in der Konsole mit folgendem Behfehl installiert werden.
-apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-mdb2 php5-mdb2-pgsql php-fpdf imagemagick php-xajax ttf-freefont php5-curl tinymce
+apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-mdb2 php5-mdb2-pgsql php-fpdf imagemagick php-xajax ttf-freefont php5-curl tinymce libphp-jpgraph
 
 Die restlichen Pearpaket installieren:
     pear install  Contact_Vcard_Build Contact_Vcard_Parse
@@ -51,30 +51,23 @@ FPDI installieren:
     wget http://www.setasign.de/supra/kon2_dl/55450/FPDI-1.4.3.zip && unzip FPDI-1.4.3.zip
     ln -s /usr/share/php/fpdi/fpdi.php /usr/share/php/fpdi.php
     
-jQuery-UI installieren:
-    cd /usr/lib/lx-office-crm    
-    wget https://github.com/downloads/jquery/jquery-ui/jquery-ui-1.9.2.zip && unzip jquery-ui-1.9.2.zip
-    Links prüfen, ggf anlegen    
-    ln -s jquery-ui-1.9.2 jquery-ui 
-    cd jquery-ui-1.9.2 && ln -s jquery-1.8.3.js jquery.js
-
-
+    
 PHP5:
 Den Fehlerreporting evtl. etwas runterschrauben. 
 error_reporting  =  E_ALL & ~E_NOTICE 
 PHP5.3:
 error_reporting  =  E_ALL & ~E_NOTICE & ~E_DEPRECATED
 
-PHP-Code wird angezeigt (sollte nicht mehr vorkommen):
-short_open_tag = On
+-? PHP-Code wird angezeigt (sollte nicht mehr vorkommen):
+-? short_open_tag = On
 
-Wird mit einem Alias für das LxO-Verzeichnis benutzt und soll in einigen Masken der 
-jscalendar der ERP benutzt werden, muß das Verzeichnis ins CRM-Verzeichnis verlinkt werden:
-cd lx-office-crm && ln -s ../lx-office-erp/js
+-? Wird mit einem Alias für das LxO-Verzeichnis benutzt und soll in einigen Masken der  
+-? jscalendar der ERP benutzt werden, muß das Verzeichnis ins CRM-Verzeichnis verlinkt werden:
+-? cd lx-office-crm && ln -s ../lx-office-erp/js
 
-evtl. php.ini anpassen: (i.d.R. nicht notwendig)
-include_path = ".:/usr/share/php:/usr/share/fpdf:/usr/share/jpgraph"
-extension=gd.so
+-? evtl. php.ini anpassen: (i.d.R. nicht notwendig)
+-? include_path = ".:/usr/share/php:/usr/share/fpdf:/usr/share/jpgraph"
+-? extension=gd.so
 .
 .
 
@@ -113,7 +106,7 @@ Andere:
 	apache, apache2, httpd, www-run
 
 Im Browser die ERP aufrufen und anmelden
-	 -http://localhost/lx-office/login.pl
+	 http://localhost/kivitendo/login.pl
 
 Melden Sie sich nun an Kivitendo-ERP an und wählen Sie einen CRM-Menüeintrag aus.
 Die Datenbankinstallation wird nun durchgeführt.

@@ -30,13 +30,12 @@ Vorrausetzungen:
 	PEAR::Mail_Mime oder php-mail-mime
 		
 	jpgraph3
-	
 	fpdf (http://www.fpdf.de/downloads/)
 	fpdi (http://www.setasign.de/products/pdf-php-solutions/fpdi/downloads/)
 	ttf-freefont
 	php-gd,php-imap
-        curl 
-        jquery-ui (http://jqueryui.com/)
+    php5-curl 
+
 Fast alle Pakete können unter debianoiden Systemen in der Konsole mit folgendem Behfehl installiert werden.
 apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-mdb2 php5-mdb2-pgsql php-fpdf imagemagick php-xajax ttf-freefont php5-curl tinymce libphp-jpgraph
 
@@ -110,12 +109,6 @@ Im Browser die ERP aufrufen und anmelden
 
 Melden Sie sich nun an Kivitendo-ERP an und wählen Sie einen CRM-Menüeintrag aus.
 Die Datenbankinstallation wird nun durchgeführt.
-
-Tiny-MCE:
-Um den Editor in der Wissens-DB nutzen zu können muß in der conf.php die 
-Variable tinymce mit True belegt werden.
-Den Ordner /pfad/zu/tinymce/www nach /pfad/zu/lx-office-crm/inc/tiny_mce verlinken.
-    ln -s /usr/share/tinymce/www/ /usr/lib/lx-office-crm/inc/tiny_mce
 
 Geo-Datenbank:
 --------------

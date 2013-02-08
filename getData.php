@@ -42,8 +42,8 @@ ob_start();
                 source: "jqhelp/autocompletion.php?case=name",                            
                 minLength: '.$feature_ac_minLength.',                            
                 delay: '.$feature_ac_delay.',
-                select: function(e,ui) {
-                    $("#adress").click();
+                select: function(e,ui) {                    
+                    showD(ui.item.src,ui.item.id);
                 }
             });
         });
@@ -123,25 +123,25 @@ if ($_GET["adress"]) {
         if ($rsC) foreach($rsC as $row) { 
             echo "<tr class='bgcol".($i%2+1)."' onClick='showD(\"C\",".$row["id"].");'>". 
                  "<td class=\"liste\">".$row["customernumber"]."</td><td class=\"liste\">".$row["name"]."</td>". 
-                 "<td class=\"liste\">".$row["city"].(($row["street"])?",":"").$row["street"]."</td><td class=\"liste\">".$row["phone"]."</td><td class=\"liste\">K</td></tr>\n"; 
+                 "<td class=\"liste\">".$row["city"].(($row["street"])?", ":"").$row["street"]."</td><td class=\"liste\">".$row["phone"]."</td><td class=\"liste\">K</td></tr>\n"; 
             $i++; 
         }  
         if ($rsV) foreach($rsV as $row) { 
             echo "<tr class='bgcol".($i%2+1)."' onClick='showD(\"V\",".$row["id"].");'>". 
                  "<td class=\"liste\">".$row["vendornumber"]."</td><td class=\"liste\">".$row["name"]."</td>". 
-                 "<td class=\"liste\">".$row["city"].(($row["street"])?",":"").$row["street"]."</td><td class=\"liste\">".$row["phone"]."</td><td class=\"liste\">L</td></tr>\n"; 
+                 "<td class=\"liste\">".$row["city"].(($row["street"])?", ":"").$row["street"]."</td><td class=\"liste\">".$row["phone"]."</td><td class=\"liste\">L</td></tr>\n"; 
             $i++; 
         } 
         if ($rsK) foreach($rsK as $row) { 
             echo "<tr class='bgcol".($i%2+1)."' onClick='showD(\"K\",".$row["cp_id"].");'>". 
                  "<td class=\"liste\">".$row["cp_id"]."</td><td class=\"liste\">".$row["cp_name"].", ".$row["cp_givenname"]."</td>". 
-                 "<td class=\"liste\">".$row["addr2"].(($row["addr1"])?",":"").$row["addr1"]."</td><td class=\"liste\">".$row["cp_phone1"]."</td><td class=\"liste\">P</td></tr>\n"; 
+                 "<td class=\"liste\">".$row["cp_city"].(($row["cp_street"])?", ":"").$row["cp_street"]."</td><td class=\"liste\">".$row["cp_phone1"]."</td><td class=\"liste\">P</td></tr>\n"; 
             $i++; 
         } 
         if ($rsE) foreach($rsE as $row) { 
             echo "<tr class='bgcol".($i%2+1)."' onClick='showD(\"E\",".$row["id"].");'>". 
                  "<td class=\"liste\">".$row["id"]."</td><td class=\"liste\">".$row["name"]."</td>". 
-                 "<td class=\"liste\">".$row["addr2"].(($row["addr1"])?",":"").$row["addr1"]."</td><td class=\"liste\">".$row["workphone"]."</td><td class=\"liste\">U</td></tr>\n"; 
+                 "<td class=\"liste\">".$row["addr2"].(($row["addr1"])?", ":"").$row["addr1"]."</td><td class=\"liste\">".$row["workphone"]."</td><td class=\"liste\">U</td></tr>\n"; 
             $i++; 
         } 
         echo "</table>\n";

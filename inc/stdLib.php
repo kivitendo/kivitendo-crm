@@ -8,12 +8,12 @@ session_start();
 //error_reporting (E_ALL & ~E_DEPRECATED);
 //ini_set ('display_errors',1);
 
-$inclpa = ini_get('include_path');
-ini_set('include_path',$inclpa.":../:./inc:../inc");
-
 require_once "conf.php";
 require_once "version.php";
 require_once "mdb.php";
+
+$inclpa = ini_get('include_path');
+ini_set('include_path',$inclpa.$jpgraph_path.":../:./inc:../inc");
 
 if ( !isset($_SESSION["db"])?$_SESSION["db"]:false || !$_SESSION["cookie"] || //$_SESSION["db"] wird benötigt??
     ( $_SESSION["cookie"] && !$_COOKIE[$_SESSION["cookie"]] ) ) {

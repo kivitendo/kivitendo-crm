@@ -3,16 +3,6 @@
     require_once("inc/crmLib.php");
     include("inc/template.inc");
 
-    $jscal1 ="<style type='text/css'>@import url(".$_SESSION['basepath']."/js/jscalendar/calendar-win2k-1.css);</style>\n";
-    $jscal1.="<script type='text/javascript' src='".$_SESSION['basepath']."/js/jscalendar/calendar.js'></script>\n";
-    $jscal1.="<script type='text/javascript' src='".$_SESSION['basepath']."/js/jscalendar/lang/calendar-de.js'></script>\n";
-    $jscal1.="<script type='text/javascript' src='".$_SESSION['basepath']."/js/jscalendar/calendar-setup.js'></script>\n";
-    $jscal2 ="<script type='text/javascript'><!--\n";
-    $jscal2.="Calendar.setup( {inputField : 'START',ifFormat :'%d.%m.%Y',align : 'BL', button : 'trigger1'});\n";
-    $jscal2.="Calendar.setup( {inputField : 'STOP',ifFormat :'%d.%m.%Y',align : 'BL', button : 'trigger2'});\n";
-    $jscal2.="Calendar.setup( {inputField : 'startd',ifFormat :'%d.%m.%Y',align : 'BL', button : 'trigger3'});\n";
-    $jscal2.="Calendar.setup( {inputField : 'stopd',ifFormat :'%d.%m.%Y',align : 'BL', button : 'trigger4'});\n";
-    $jscal2.="//-->\n</script>";
     $t = new Template($base);
     $menu =   $_SESSION['menu'];
     $t->set_var(array(
@@ -139,13 +129,6 @@
         visible => ($visible)?"visible":"hidden",
         delete  => ($delete)?"visible":"hidden",
         chkevent => ($data["id"]>0)?"onLoad='getEventListe();'":"",
-        jcal0 => ($jcalendar)?$jscal1:"",
-        jcal1 => ($jcalendar)?"<a href='#' id='trigger1' name='START' title='.:startdate:.' onClick='false'><img src='image/date.png' border='0' align='middle'></a>":"",
-        jcal2 => ($jcalendar)?"<a href='#' id='trigger2' name='STOP' title='.:stopdate:.' onClick='false'><img src='image/date.png' border='0' align='middle'></a>":"",
-        jcal3 => ($jcalendar)?"<a href='#' id='trigger3' name='startid' title='.:stopdate:.' onClick='false'><img src='image/date.png' border='0' align='middle'></a>":"",
-        jcal4 => ($jcalendar)?"<a href='#' id='trigger4' name='stopid' title='.:stopdate:.' onClick='false'><img src='image/date.png' border='0' align='middle'></a>":"",
-        jcal5 => ($jcalendar)?$jscal2:"",
-
     ));
 
     $t->Lpparse("out",array("tt"),$_SESSION["lang"],"work");

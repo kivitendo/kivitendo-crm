@@ -20,7 +20,6 @@
 		}
 	</script>
     <script type='text/javascript' src='inc/help.js'></script>
-    {jcal0}
 <body onLoad="document.erwsuche.name.focus();">
 {PRE_CONTENT}
 {START_CONTENT}

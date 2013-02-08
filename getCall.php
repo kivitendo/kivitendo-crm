@@ -5,10 +5,6 @@
     include("inc/FirmenLib.php");
     include("inc/persLib.php");
     include("inc/UserLib.php");
-    $jscal ="<style type='text/css'>@import url(".$_SESSION['basepath']."js/jscalendar/calendar-win2k-1.css);</style>\n";
-    $jscal.="<script type='text/javascript' src='".$_SESSION['basepath']."js/jscalendar/calendar.js'></script>\n";
-    $jscal.="<script type='text/javascript' src='".$_SESSION['basepath']."js/jscalendar/lang/calendar-de.js'></script>\n";
-    $jscal.="<script type='text/javascript' src='".$_SESSION['basepath']."js/jscalendar/calendar-setup.js'></script>\n";
     $fid=($_POST["fid"])?$_POST["fid"]:$_GET["fid"];
     $pid=($_POST["pid"])?$_POST["pid"]:$_GET["pid"];
     $INIT=($_POST["INIT"])?$_POST["INIT"]:$_GET["INIT"];

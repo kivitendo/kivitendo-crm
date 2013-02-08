@@ -1,8 +1,8 @@
 <html>
 	<head><title></title>
         {STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
         {JAVASCRIPTS}
+        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
 
     <script language="JavaScript">
     function filesearch() {
@@ -27,14 +27,16 @@
 		<input type="hidden" name="m" value="{menuitem}">
 		<input type="hidden" name="version" value="{version}">
 		<input type="hidden" name="aktion" value="">
-        <input type="hidden" name="kat" value="{m}">
+                 <input type="hidden" name="kat" value="{m}">
 		<strong><a href='wissen.php?m=0'>.:categories:.</a></strong><br>
 		{menu}
 	 	<br />
+                <span style='visibility:{popup};'>
 		{catinput}
 		<span> .:newcat:. <br>.:below:. &quot;<b>{catname}</b>&quot;</span>
 		<img src="image/neu.png" border="0" title=".:newcat:." align="middle" onClick="go('newcat')">
 		<img src="image/edit_kl.png" border="0" title=".:editcat:." align="middle" onClick="go('editcat')">
+                </span>
         <br />
         <input type="text" name="wort" value="{notfound}"> 
 		<img src="image/search.png" border="0" title=".:search:." align="middle" onClick="go('suche')">

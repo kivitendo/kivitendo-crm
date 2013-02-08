@@ -13,14 +13,14 @@
 	if ($adr["shiptocity"]) { $ORT=$adr["shiptozipcode"]." ".$adr["shiptocity"]; } else { $ORT=$adr["zipcode"]." ".$adr["city"]; };		
 	$reP=$tmp[0];
 	if (substr($id,0,1)=="R") {
-		$header="Rechnung Nr: ".$nr;
-		$header2=($tmp[1]["quonumber"])?"Angebots Nr: ".$tmp[1]["quonumber"]:"";
-		$header3=($tmp[1]["ordnumber"])?"Auftrags Nr: ".$tmp[1]["ordnumber"]:"";
+		$header  = "Rechnung Nr: ".$nr;
+		$header2 = "Angebots Nr: ".(($tmp[1]["quonumber"])?$tmp[1]["quonumber"]:" -");
+		$header3 = "Auftrags Nr: ".(($tmp[1]["ordnumber"])?$tmp[1]["ordnumber"]:" -");
 		$mul=1;
 	} else if (substr($id,0,1)=="V") {
-		$header="Rechnung Nr: ".$nr;
-		$header2=($tmp[1]["quonumber"])?"Angebots Nr: ".$tmp[1]["quonumber"]:"";
-		$header3=($tmp[1]["ordnumber"])?"Auftrags Nr: ".$tmp[1]["ordnumber"]:"";
+		$header  = "Rechnung Nr: ".$nr;
+		$header2 = "Angebots Nr: ".(($tmp[1]["quonumber"])?$tmp[1]["quonumber"]:" -");
+		$header3 = "Auftrags Nr: ".(($tmp[1]["ordnumber"])?$tmp[1]["ordnumber"]:" -");
 		$mul=-1;
 	} else {
 		if ($tmp[1]["quotation"]=="t") {
@@ -33,28 +33,25 @@
 	}
 ?>
 <html>
-	<head><title></title>
-        <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
+<head><title></title>
     <!-- ERP Stylesheet -->
     <?php echo $menu['stylesheets']; ?>
-    <!-- ERP JavaScripts -->
-    <?php echo $menu['javascripts']; ?>
-    <!-- Ende ERP -->
+    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
 <body>
-<?php
- echo $menu['pre_content'];
- echo $menu['start_content'];
-?>
-<table width="100%" class="karte"><tr><td class="karte">
 <!-- Hier beginnt die Karte  ------------------------------------------->
+<tt>
+<?php echo  $header." vom ".db2date($tmp[1]["transdate"]) ?><br>
+<?php echo  $header2 ?><br>
+<?php echo  $header3 ?><br>
+</tt>
 <table width="100%">
 <tr class='smal'><td>Rechnung Anschrift</td><td>Lieferanschrift</td><td></td></tr>
-<tr class='smal'><td><?php echo  $adr["name"]."<br>".$adr["street"]."<br>".$adr["zipcode"]." ".$adr["city"] ?></td>
-	<td><?php echo  $NAME."<br>".$STRASSE."<br>".$ORT ?></td
-	<td style="vertical-align:top; text-align:right;" nowrap><?php echo  $header." vom ".db2date($tmp[1]["transdate"]) ?><br><?php echo  $header2 ?><br><?php echo  $header3 ?></td></tr>
+<tr class="big"><td><?php echo  $adr["name"]."<br>".$adr["street"]."<br>".$adr["zipcode"]." ".$adr["city"] ?></td>
+     <td><?php echo  $NAME."<br>".$STRASSE."<br>".$ORT ?></td>
 </table>
+<hr/>
 <table>
-<tr class='smal'><td>Menge</td><td>Einh.</td><td>Artikel</td><td>VKpreis</td><td>Einzelpreis</td><td>Summe</td></tr>
+<tr class='klein'><td>Menge</td><td>Einh.</td><td>Artikel</td><td>VKpreis</td><td>Einzelpreis</td><td>Summe</td></tr>
 <?php
 $i=0;
 
@@ -99,7 +96,5 @@ if (empty($reP)) {
 <center><a href="javascript:self.close()">schlie&szlig;en</a>
 <script language='JavaScript'>self.focus();</script>
 <!-- Hier endet die Karte ------------------------------------------->
-</td></tr></table>
-<?php echo $menu['end_content']; ?>
 </body>
 </html>

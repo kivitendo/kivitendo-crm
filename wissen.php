@@ -39,15 +39,28 @@
     }
     $data=getWCategorie();
     $tpl = new Template($base);
-        $menu =  $_SESSION['menu'];
+    $menu =  $_SESSION['menu'];
+    if ($_GET["kdhelp"] <> '1') {
+        $popup = 'visible';
         $tpl->set_var(array(
             JAVASCRIPTS   => $menu['javascripts'],
             STYLESHEETS   => $menu['stylesheets'],
             PRE_CONTENT   => $menu['pre_content'],
             START_CONTENT => $menu['start_content'],
-            END_CONTENT   => $menu['end_content']
+            END_CONTENT   => $menu['end_content'],
+            ERPCSS        => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
         ));
-
+    } else {
+        $popup = 'hidden';
+        $tpl->set_var(array(
+            JAVASCRIPTS   => '',
+            STYLESHEETS   => $menu['stylesheets'],
+            PRE_CONTENT   => '',
+            START_CONTENT => '',
+            END_CONTENT   => '',
+            ERPCSS        => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+        ));
+    }
     $pre=""; $post="";
     $button="";
     if ($_POST["aktion"] == "savecontent") {
@@ -165,7 +178,6 @@ function Thread($HauptGrp,$t,$m,&$tpl)    {
     }
     $catname=getOneWCategorie($tmp[0]);
     $tpl->set_var(array(
-        ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
         menu => $menu,
         menuitem => "$m",
         catname => ($catname["name"])?$catname["name"]:"\\",
@@ -178,6 +190,7 @@ function Thread($HauptGrp,$t,$m,&$tpl)    {
         button1 => $button,
         button2 => ($content["version"]>1)?"<image src='image/history_kl.png' title='History' onClick=\"go('history')\">":"",
         catinput => $catinput,
+        popup    => $popup,
         tiny => $tiny,
         ));
     if ($_POST["aktion"]=="suche") $tpl->set_var(array(

@@ -91,8 +91,8 @@
             }
         }
     function KdHelp() {
-        id=document.kdhelp.kdhelp.options[document.kdhelp.kdhelp.selectedIndex].value;
-        f1=open("wissen.php?kdhelp=1&m="+id,"Wissen","width=750, height=600, left=50, top=50, scrollbars=yes");
+        link = $('#kdhelp option:selected').val();
+        f1=open("wissen.php?kdhelp=1&m="+link,"Wissen","width=750, height=600, left=50, top=50, scrollbars=yes");
         document.kdhelp.kdhelp.selectedIndex=0;
     }
     var shiptoids = new Array({Sids});
@@ -202,7 +202,7 @@
         <button name="firma4.php?Q={Q}&fid={FID}">.:Documents:.</button>
     </span>
     <span style="float:left; vertical-alig:bottom">
-        <select style="visibility:{chelp}" name="kdhelp" style="margin-top:0.5em;" onChange="KdHelp()">
+        <select style="visibility:{chelp}" name="kdhelp" id="kdhelp" style="margin-top:0.5em;" onChange="KdHelp()">
 <!-- BEGIN kdhelp -->
             <option value="{cid}">{cname}</option>
 <!-- END kdhelp -->

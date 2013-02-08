@@ -14,15 +14,15 @@ if ($_GET['case']=='name') {
     $rs = array(); 
     if ($rsC) foreach ( $rsC as $key => $value ) { 
         if (count($rs) > 11) break;
-        array_push($rs,array('label'=>$value['name'],'category'=>'')); 
+        array_push($rs,array('label'=>$value['name'],'category'=>'','src'=>'C','id'=>$value['id'])); 
     } 
     if ($rsV) foreach ( $rsV as $key => $value ) {
         if (count($rs) > 11) break; 
-        array_push($rs,array('label'=>$value['name'],'category'=>'Lieferanten'));//ToDo translate 
+        array_push($rs,array('label'=>$value['name'],'category'=>'Lieferanten','src'=>'V','id'=>$value['id']));//ToDo translate 
     } 
     if ($rsK) foreach ( $rsK as $key => $value ) {
         if (count($rs) > 11) break;  
-        array_push($rs,array('label'=>$value['cp_givenname']." ".$value['cp_name'],'category'=>'Personen'));//ToDo translate 
+        array_push($rs,array('label'=>$value['cp_givenname']." ".$value['cp_name'],'category'=>'Personen','src'=>'K','id'=>$value['id']));//ToDo translate 
     } 
     echo json_encode($rs); 
 } 

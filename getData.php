@@ -42,8 +42,8 @@ ob_start();
                 source: "jqhelp/autocompletion.php?case=name",                            
                 minLength: '.$feature_ac_minLength.',                            
                 delay: '.$feature_ac_delay.',
-                select: function(e,ui) {
-                    $("#adress").click();
+                select: function(e,ui) {                    
+                    showD(ui.item.src,ui.item.id);
                 }
             });
         });

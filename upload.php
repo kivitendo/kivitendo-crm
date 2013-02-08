@@ -27,13 +27,8 @@ if ($_POST) {
 <html><head>
 <title></title>
     <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
-    <!-- ERP Stylesheet -->
-    <?php echo $menu['stylesheets']; ?>
 </head>
 <body class="docfrm" style="padding:0em; margin:0em; width:100%; height:100%;" >
-<table width="100%" class="klein">
-	<tr class="dochead"><td><?php echo  translate('.:uploadDocument:.','firma') ?></td><td align="right"><a href="javascript:top.newFile('left')">(X)</a></td></tr>
-</table>
 <form name="iform" action="upload.php" method="post" enctype="multipart/form-data">
 <input id="upldpath" name="pfad" type="hidden">
 <br>

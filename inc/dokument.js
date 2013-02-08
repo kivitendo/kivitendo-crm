@@ -16,19 +16,6 @@
         downloadfile=open("download.php?file="+aktfile,"Download","width=250px,height=200px,top=50px,menubar=no,status=no,toolbar=no,dependent=yes");
         window.setTimeout("downloadfile.close()", 30000);
     }
-    var onA = true;
-    var onL = true;
-    function editattribut() {
-        if (onA) {
-            onA = false;
-            $('#attribut').hide();
-        } else {
-            onL = false;
-            $('#fileDel').hide();
-            onA = true;
-            $('#attribut').show();
-        }
-    }
     function saveAttribut() {
         name    = $('#docname').val();
         oldname = $('#docoldname').val();
@@ -49,19 +36,6 @@
                    }
                }
         });
-    }
-    function deletefile() {
-        if (onL) {
-            onL = false;
-            $('#fileDel').hide();
-        } else {
-            onA = false;
-            $('#attribut').hide();
-            onL = true;
-            name = $('#docname').val();
-            $('#delname').empty().append(name);
-            $('#fileDel').show();
-        }
     }
     function movefile() {
         $.ajax({
@@ -93,25 +67,36 @@
                  }
               });
     }
-    var onD = true;
-    function newDir(seite) {
-        if (onD) {
-            onD = false;
-            $('#newwindir').hide();
+    function deletefile() {
+        if ( $('#fileDel').dialog( "isOpen" ) ) {
+            $('#fileDel').dialog('close');
         } else {
-            onD = true;
-            $('#newwindir').show();
+            $('#fileDel').dialog('open');
+            name = $('#docname').val();
+            $('#delname').empty().append(name);
+        }
+    }
+    function editattribut() {
+        if ( $('#attribut').dialog( "isOpen" ) ) {
+            $('#attribut').dialog('close');
+        } else {
+            $('#attribut').dialog('open');
+        }
+    }
+    function newDir(seite) {
+        if ( $('#newwindir').dialog( "isOpen" ) ) {
+            $('#newwindir').dialog('close');
+        } else {
+            $('#newwindir').dialog('open');
             $('#subdir').focus();
             $('#seite').val(seite);
         }
     }
-    var onF = true;
     function newFile(seite) {
-        if (onF) {
-            onF = false;
-            $('#uploadfr').hide();
+        if ( $('#uploadfr').dialog( "isOpen" ) ) {
+            $('#uploadfr').dialog('close');
         } else {
-            onF = true;
+            $('#uploadfr').dialog('open');
             $('#seite').val(seite);
             $('#uploadfr').show();
             frames["frupload"].document.getElementById("upldpath").value=pfadleft;
@@ -175,10 +160,10 @@
             pfadright=start; 
             hidelinks(0)
         };
-        if (onD) newDir(seite);
-        if (onF) newFile(seite);
-        if (onL) deletefile();
-        if (onA) editattribut();
+        $( '#newwindir').dialog('close');
+        $( "#uploadfr" ).dialog('close');
+        $( "#fileDel" ).dialog('close');
+        $( "#attribut" ).dialog('close');
         $.ajax({
                url: "jqhelp/firmaserver.php?task=showDir&id="+seite+"&dir="+start,
     	       dataType: 'json',
@@ -191,4 +176,78 @@
         });
         setTimeout("dateibaum('left',pfadleft)",100000) // 100sec
     }
+    $(function(){
+         $('button')
+          .button()
+          .click( function(event) { 
+                      event.preventDefault();  
+                      link = this.getAttribute('name');
+                      if ( link == 'close' ) return;
+                      if ( link.substr(0,7) == 'onClick' ) {
+                          eval ( link.substr(8) );
+                      } else {
+                          document.location.href = link; 
+                      };
+                  });
+        $( "#newwindir" ).dialog({
+                   autoOpen: false,
+		   height: 250,
+		   width:  300,
+		   modal: true,
+                   show: {
+                      effect: "blind",
+                      duration: 300
+                   },
+                   hide: {
+                      effect: "blind",
+                      duration: 300
+                   }
+        })
+        $( "#uploadfr" ).dialog({
+                   autoOpen: false,
+		   height: 350,
+		   width:  450,
+		   modal: true,
+                   show: {
+                      effect: "blind",
+                      duration: 300
+                   },
+                   hide: {
+                      effect: "blind",
+                      duration: 300
+                   }
+        })
+        $( "#fileDel" ).dialog({
+                   autoOpen: false,
+		   height: 300,
+		   width:  350,
+		   modal: true,
+                   show: {
+                      effect: "blind",
+                      duration: 300
+                   },
+                   hide: {
+                      effect: "blind",
+                      duration: 300
+                   }
+        })
+        $( "#attribut" ).dialog({
+                   autoOpen: false,
+		   height: 350,
+		   width:  550,
+		   modal: true,
+                   show: {
+                      effect: "blind",
+                      duration: 300
+                   },
+                   hide: {
+                      effect: "blind",
+                      duration: 300
+                   }
+        })
+        $( "#newwindir" ).dialog();
+        $( "#uploadfr" ).dialog();
+        $( "#attribut" ).dialog();
+        $( "#fileDel" ).dialog();
+    });
 

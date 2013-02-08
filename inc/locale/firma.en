@@ -189,6 +189,7 @@ $texts  = array(
   '.:not contact:.'     => 'not contact',
   '.:timetrack:.'       => 'Timetracker',
   '.:catalog:.'         => 'Catalog',
-  '.:Customer / Vendor exist with same zipcode:.' => 'Customer / Vendor exist with same zipcode'
+  '.:Customer / Vendor exist with same zipcode:.' => 'Customer / Vendor exist with same zipcode',
+  '.:close:.'           => 'schließen',
 );
 ?>

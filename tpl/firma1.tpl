@@ -3,7 +3,6 @@
     {STYLESHEETS}
     {JAVASCRIPTS}
     <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
-    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/tabcontent.css"></link>
     <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
     <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
     <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
@@ -200,7 +199,7 @@
         <button name="firma1.php?Q={Q}&id={FID}">.:Custombase:.</button>
         <button name="firma2.php?Q={Q}&fid={FID}">.:Contacts:.</button>
         <button name="firma3.php?Q={Q}&fid={FID}">.:Sales:.</button>
-        <button name="firma4.php?Q={Q}&id={FID}">.:Documents:.</button>
+        <button name="firma4.php?Q={Q}&fid={FID}">.:Documents:.</button>
     </span>
     <span style="float:left; vertical-alig:bottom">
         <select style="visibility:{chelp}" name="kdhelp" style="margin-top:0.5em;" onChange="KdHelp()">

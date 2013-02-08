@@ -1,5 +1,5 @@
 <html>
-        <head><title></title>
+    <head><title></title>
 {STYLESHEETS}
 {JAVASCRIPTS}
     <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
@@ -25,19 +25,7 @@
             window.location.href=uri;
         }
     }    
-    $(function(){
-         $('button')
-          .button()
-          .click( function(event) { 
-                      event.preventDefault();  
-                      link = this.getAttribute('name');
-                      if ( link.substr(0,7) == 'onClick' ) {
-                          eval ( link.substr(8) );
-                      } else {
-                          document.location.href = link; 
-                      };
-                  });
-    });
+
     //-->
     </script>
 <body onLoad="dateibaum('left','/{Q}{customernumber}/{PID}'), hidelinks(0) ;">
@@ -108,51 +96,53 @@
 </span>
 
 <!-- Neues Verzeichnis  -->
-<div id="newwindir" style="position:absolute; left:5em; top:10em; z-index:1;" class="docfrm">
-    <table width="33em" class="klein">
-    <tr class="dochead"><td>.:Create a new Directory:.</td><td align="right"><a href="javascript:newDir()">(X)</a></td></tr>
-    <tr><td height="100%">&nbsp;</td></tr>
-    <tr><td class="ce"><input type="hidden" name="seite" id="seite">
-    <input type="text" name="subdir" id="subdir" size="26"> <input type="button" name="sdok" value=".:create:." onClick="mkDir();"></td></tr>
-    </table>
+<div id="newwindir" title=".:newDirectory:.">
+    <p valign="center"><input type="hidden" name="seite" id="seite">
+    <input type="text" name="subdir" id="subdir" size="26"><br /><br />
+    <input type="button" name="sdok" value=".:create:." onClick="mkDir();"><br />
+    <br />
+    <center><button name="close" onClick="$('#newwindir').dialog('close');">.:close:.</button></center>
+    </p>
 </div>
 
 <!-- Datei upload  -->
-<div id="uploadfr" class="docfrm" style="position:absolute; left:4em; top:10em; z-index:1; width:29em; height:21em;">
-    <iframe id="frupload" name="frupload" src="upload.php" frameborder="0" width="100%" height="100%"></iframe>
+<div id="uploadfr" title=".:uploadDocument:.">
+    <iframe id="frupload" name="frupload" src="upload.php" frameborder="0" width="100%" height="80%"></iframe>
+    <center><button name="close" onClick="$('#uploadfr').dialog('close');">.:close:.</button></center>
 </div>
 
 <!-- Dateiattribute ändern  -->
-<div id="attribut" style="position:absolute; left:5em; top:10em; width:35em; z-index:1;" class="docfrm">
-    <table width="99%" class="klein">
-    <tr class="dochead"><td>.:edit attribute:.</td><td align="right"><a href="javascript:editattribut()">(X)</a></td></tr>
-    </table>
+<div id="attribut" title=".:edit attribute:.">
     <input type="hidden" name="docid"      id="docid" value="">
     <input type="hidden" name="wvid"       id="wvid" value="">
     <input type="hidden" name="docoldname" id="docoldname" value="">
     <input type="hidden" name="docpfad"    id="docpfad" value="">
     <center>
     <table >
-    <tr><td class="klein"><textarea name="docdescript" id="docdescript" cols="65" rows="8"></textarea></td></tr>
-    <tr><td class="mini">.:Description:.</td></tr>
-    <tr><td class="klein"><input type="text" name="docname" id="docname" size="35" value=""></td></tr>
-    <tr><td class="mini">.:Filename:.</td></tr>
+    <tr><td ><textarea name="docdescript" id="docdescript" cols="65" rows="8"></textarea></td></tr>
+    <tr><td class="klein">.:Description:.</td></tr>
+    <tr><td ><input type="text" name="docname" id="docname" size="45" value=""></td></tr>
+    <tr><td class="klein">.:Filename:.</td></tr>
     <!--tr><td class="klein"><input type="text" name="iwvdate" id="wvdate" size="15" value=""></td></tr>
     <tr><td class="mini">.:wvdate:.</td></tr-->
     <tr><td class="re"><input type="button" name="saveAtr" value=".:save:." onClick="saveAttribut();"></td></tr>
     </table>
+    <button name="close" onClick="$('#attribut').dialog('close');">.:close:.</button>
     </center>
 </div>
 
 <!-- Datei löschen -->
-<div id="fileDel" style="position:absolute; left:4em; top:10em; width:35em; z-index:1;" class="docfrm">
-    <table width="99%" class="klein">
-    <tr class="dochead"><td>.:Delete a File:.</td><td align="right"><a href="javascript:deletefile()">(X)</a></td></tr>
-    <tr><td height="100%">&nbsp;</td></tr>
-    <tr><td height="100%" class="ce"><b><span id="delname"></span></b></td></tr>
-    <tr><td class="ce"><a href="javascript:filedelete();"><img src="image/eraser.png" border="0">.:Really:.</a></td></tr>
-    <tr><td class="ce"><a href="javascript:deletefile();"><img src="image/fileclose.png" border="0">.:Better not:.</a></td></tr>
-    </table>
+<div id="fileDel" title=".:delete:.">
+    <p><center>
+    <span class="fett" id="delname"></span><br />
+    <br />
+    <a href="javascript:filedelete();"><img src="image/eraser.png" border="0">.:Really:.</a><br />
+    <br />
+    <a href="javascript:deletefile();"><img src="image/fileclose.png" border="0">.:Better not:.</a><br />
+    <br />
+    <br />
+    <button name="close" onClick="$('#fileDel').dialog('close');">.:close:.</button></center>
+    </p>
 </div>
     
 <!-- Hier endet die Karte ------------------------------------------->

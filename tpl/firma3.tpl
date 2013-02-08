@@ -1,34 +1,37 @@
 <html>
 	<head><title></title>
 	{STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/tabcontent.css"></link>
 	{JAVASCRIPTS}
+        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
+    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
+    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
+    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
 	<script language="JavaScript">
 	<!--
 	function showM (month) {
 		uri="firma3.php?Q={Q}&jahr={JAHR}&monat=" + month + "&fid=" + {FID};
 		location.href=uri;
 	}
+    $(function(){
+         $('button')
+          .button()
+          .click( function(event) { event.preventDefault();  document.location.href=this.getAttribute('name'); });
+    });
 	//-->
 	</script>
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
 <p class="listtop">.:detailview:. {FAART}</p>
-<!--div style="position:absolute; top:5.4em; left:0.2em;  width:42em;"-->
 <div id="menubox2">
-	<ul id="maintab" class="shadetabs">
-	<li><a href="{Link1}">.:Custombase:.</a><li>
-	<li><a href="{Link2}">.:Contacts:.</a></li>
-	<li class="selected"><a href="{Link3}" id="aktuell">.:Sales:.</a></li>
-	<li><a href="{Link4}">.:Documents:.</a></li>
-	</ul>
+    <button name="{Link1}">.:Custombase:.</button>
+    <button name="{Link2}">.:Contacts:.</button>
+    <button name="{Link3}">.:Sales:.</button>
+    <button name="{Link4}">.:Documents:.</button>
 </div>
-<!--span style="position:absolute; left:0.2em; top:7.2em; width:99%;" -->
 <span id='contentbox' >
 <!-- Hier beginnt die Karte  ------------------------------------------->
-<div style="position:absolute; left:0px; top:0.0em; width:35em; border:1px solid black">
+<div style="position:absolute; left:0px; top:1.5em; width:35em; border:1px solid black">
 	<span class="fett">{Name} &nbsp; {kdnr}</span><br />
 	{Plz} {Ort}
 </div>

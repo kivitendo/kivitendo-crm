@@ -161,6 +161,7 @@
         $('#submove').hide();
     }
     function showlinks() {
+        $('#subfilebrowser').show();
         $('#subdownload').show();
         $('#subdelete').show();
         $('#subedit').show();

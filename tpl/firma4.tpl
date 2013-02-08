@@ -1,17 +1,19 @@
 <html>
         <head><title></title>
 {STYLESHEETS}
-    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/tabcontent.css"></link>
-    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-    <script type="text/javascript" src="{JQUERY}inc/dokument.js"></script>
 {JAVASCRIPTS}
+    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
+    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
+    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
+    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
+    <script type="text/javascript" src="{JQUERY}inc/dokument.js"></script>
     <script language="JavaScript">
     <!--
     function showD () {
         id = $('#vorlage option:selected').val();
         if (id>0) {
             hidelinks(0);
+            $('#subfilebrowser').hide();
             if ("{PID}"=="") { pid=0; } else { pid="{PID}"; };
             $.get('jqhelp/firmaserver.php?task=getDocVorlage&fid={FID}&tab={Q}&pid='+pid+"&id="+id,function(data) { $('#fbright').empty().append(data); });
         }
@@ -23,6 +25,19 @@
             window.location.href=uri;
         }
     }    
+    $(function(){
+         $('button')
+          .button()
+          .click( function(event) { 
+                      event.preventDefault();  
+                      link = this.getAttribute('name');
+                      if ( link.substr(0,7) == 'onClick' ) {
+                          eval ( link.substr(8) );
+                      } else {
+                          document.location.href = link; 
+                      };
+                  });
+    });
     //-->
     </script>
 <body onLoad="dateibaum('left','/{Q}{customernumber}/{PID}'), hidelinks(0) ;">
@@ -35,18 +50,16 @@
 <input type="hidden" name="Q" value="{Q}">
 <!--div style="position:absolute; top:5.4em; left:0.2em;  width:42em;"-->
 <div id='menubox2'>
-    <ul id="maintab" class="shadetabs">
-    <li><a href="{Link1}">.:Custombase:.</a><li>
-    <li><a href="{Link2}">.:Contacts:.</a></li>
-    <li><a href="{Link3}">.:Sales:.</a></li>
-    <li class="selected"><a href="{Link4}" id="aktuell">.:Documents:.</a></li>
-    </ul>
+    <button name="{Link1}">.:Custombase:.</button>
+    <button name="{Link2}">.:Contacts:.  </button>
+    <button name="{Link3}">.:Sales:.     </button>
+    <button name="{Link4}">.:Documents:. </button>
 </div>
-
 <!--span style="position:absolute; left:0.2em; top:7.2em; width:99%; height:90%;"-->
 <span id='contentbox'>
+<br>
 <!-- Hier beginnt die Karte  ------------------------------------------->
-<span style="float:left; width:40%; height:90%; text-align:center; padding:2px; border: 1px solid black; border-bottom: 0px;">
+<span style="float:left; width:40%; height:90%;  text-align:center; padding:2px; border: 1px solid black; border-bottom: 0px;">
     <div style="float:left; width:100%; height:5.5em; text-align:left; border-bottom: 1px solid black;" >
     <table>
     <tr><td class="fett normal">{Name}</td><td></td></tr>
@@ -54,11 +67,9 @@
     </table>
     </div>
     <div style="float:left; width:100%;min-height:300px;  text-align:left; border-bottom: 0px solid black;" >
-    <ul id="submenu" class="subshadetabs">
-        <li id="subnewfile"  ><a href="#" onClick="newFile('left')">.:uploadDocument:.</a></li>
-        <li id="subnewfolder"><a href="#" onClick="newDir('left')">.:newDirectory:.</a></li>
-        <li id="subrefresh"  ><a href="#" onClick="dateibaum('left',pfadleft)">.:reread:.</a></li>
-    </ul>
+        <button name="onClick=newFile('left')">.:uploadDocument:.   </button>
+        <button name="onClick=newDir('left')">.:newDirectory:.      </button>
+        <button name="onClick=dateibaum('left',pfadleft)">.:reread:.</button>
     <br>
     .:current path:.: <span id="path"></span>
     <span id="fbleft"><!-- Platzhalter für den dynamischen Inhalt --></span>
@@ -85,14 +96,13 @@
     </table>
     </div>
     <div style="float:left; width:100%;min-height:300px;   text-align:left; border-bottom: 0px solid black;" class="normal">
-    <ul id="submenu2" class="subshadetabs">
-        <li id="subfilebrowser"><a href="#" onClick="dateibaum('right',pfadleft)">.:Filebrowser:.</a></li>
-        <li id="subdownload" ><a href="#" onClick='download();'    >.:download:.</a></li>
-        <li id="subdelete"   ><a href="#" onClick='deletefile();'  >.:delete:.</a></li>
-        <li id="submove"     ><a href="#" onClick='movefile();'    >.:move:.</a></li>
-        <li id="subedit"     ><a href="#" onClick='editattribut();'>.:edit attribute:.</a></li>
-        <li id="lock"        ><a href="#" onClick='lockFile();'    >.:lock file:.</a></li>
-    </ul><br>
+        <button id="subfilebrowser" name="onClick=dateibaum('right',pfadleft)">.:Filebrowser:.</button>
+        <button id="subdownload"    name="onClick=download();">.:download:.                   </button>
+        <button id="subdelete"      name="onClick=deletefile();">.:delete:.                   </button>
+        <button id="submove"        name="onClick=movefile();">.:move:.                       </button> 
+        <button id="subedit"        name="onClick=editattribut();">.:edit attribute:.         </button>
+        <button id="lock"           name="onClick=lockFile();">.:lock file:.                  </button>
+    <br>
         <span id="fbright" style='height:100%;min-height:300px'><!-- Platzhalter für den dynamischen Inhalt --></span>
     </div>
 </span>

@@ -47,7 +47,8 @@
         STYLESHEETS   => $menu['stylesheets'],
         PRE_CONTENT   => $menu['pre_content'],
         START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content']
+        END_CONTENT   => $menu['end_content'],
+        'JQUERY'        => $_SESSION['basepath'].'crm/',
     ));
 
     $t->set_var(array(

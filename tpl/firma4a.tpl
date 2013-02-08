@@ -1,9 +1,8 @@
 <html>
 	<head><title></title>
         {STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
-
         {JAVASCRIPTS}
+        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
 
 	<script language="JavaScript">
 	<!--

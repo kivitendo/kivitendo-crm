@@ -16,7 +16,8 @@
     $t->set_file(array("doc" => "dokument.tpl"));
     $t->set_var(array(
             ERPCSS  => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-            PICUP   => $pickup,
+            PICUP   => ($_GET['P']==1)?'true':'false',
+            mandant => $_SESSION['mansel'],
     ));
     $t->Lpparse("out",array("doc"),$_SESSION["lang"],"firma");
 ?>

@@ -2439,31 +2439,30 @@ global $db;
 *****************************************************/
 function insWCategorie($data) {
 global $db;
-    $tmp = explode(",",$data["m"]);
-    if (!$data["cid"]) {
-        $newID=uniqid (rand());
-        $sql="insert into wissencategorie (name,kdhelp) values ('$newID','".(($data["kdhelp"]==1)?'true':'false')."')";
-        $rc=$db->query($sql);
-        $sql="select * from wissencategorie where name='$newID'";
-        $rs=$db->getAll($sql);
-        if(!$rs) {
+    if ( !$data["cid"] ) {
+        $newID = uniqid (rand());
+        $sql = "insert into wissencategorie (name,kdhelp) values ('$newID','".(($data["kdhelp"]==1)?'true':'false')."')";
+        $rc = $db->query($sql);
+        $sql = "select * from wissencategorie where name='$newID'";
+        $rs = $db->getOne($sql);
+        if( !$rs ) {
             return false;
         } else {
-            $id=$rs[0]["id"];
+            $id = $rs["id"];
         }
     } else {
-        $id=$data["cid"];
+        $id = $data["cid"];
     }
-    if ($tmp[0]=='') {
-            $tmp[0]=0;
-        } else if (count($tmp)==1) {
-            $tmp[0]=0;
-    }
-    $name=html_entity_decode($data["catname"]);
-    $sql="update wissencategorie set name='".$name."',hauptgruppe='".$data["hg"];
-    $sql.="',kdhelp=".(($data["kdhelp"]==1)?'true':'false')." where id = ".$id;
-    $rc=$db->query($sql);
-    return ($rc)?$rs[0]["id"]:false;
+    if ( $kat == '' ) {
+            $kat = 0;
+    } 
+    $name = html_entity_decode( $data["catname"] );
+    if ( $db->update('wissencategorie',
+                      array( 'name', 'hauptgruppe', 'kdhelp' ),
+                      array( $name, $data['hg'], (($data["kdhelp"]==1)?'true':'false') ),
+                     'id='.$id ) ) {
+         return $id;
+     } else {  return false; };
 }
 
 /****************************************************
@@ -2487,11 +2486,14 @@ global $db;
 *****************************************************/
 function getWContent($id) {
 global $db;
+    $rechte = berechtigung();
     $sql="select O.*,A.name,E.login from wissencontent O left join wissencategorie A on A.id=O.categorie ";
-    $sql.="left join employee E on O.employee=E.id where categorie = $id order by initdate desc limit 1";
-    $rs=$db->getAll($sql);
-    if ($rs) {
-        return $rs[0];
+    $sql.="left join employee E on O.employee=E.id where categorie = $id and $rechte order by initdate desc limit 1";
+    //$sql.="left join employee E on O.employee=E.id where categorie = $id order by initdate desc limit 1";
+    $rs = $db->getOne($sql);
+    $f = fopen("/tmp/y","w"); fputs($f,$rechte."\n".$sql."\n".print_r($rs,true)); fclose($f);
+    if ( $rs ) {
+        return $rs;
     } else {
         return false;
     }
@@ -2505,11 +2507,12 @@ global $db;
 *****************************************************/
 function insWContent($data) {
 global $db;
-    $tmp = explode(",",$data["m"]);
+    $kat = $data['kat'];
     $cont = trim($data["content"]);
     $cont = addslashes($cont);
-    $sql="insert into wissencontent (initdate,content,employee,version,categorie) values ";
-    $sql.="(now(),'".$cont."',".$_SESSION["loginCRM"].",".($data["version"]+1).",".$tmp[0].")";
+    $own = ($data['owener'] > 0)?$data['owener']:"null";
+    $sql="insert into wissencontent (initdate,content,employee,version,categorie,owener) values ";
+    $sql.="(now(),'".$cont."',".$_SESSION["loginCRM"].",(SELECT coalesce(max(version)+1,1) FROM wissencontent WHERE categorie = $kat),".$kat.",".$own.")";
     $rc=$db->query($sql);
     return $rc;
 }
@@ -2523,7 +2526,8 @@ global $db;
 *****************************************************/
 function getWHistory($id) {
 global $db;
-    $sql="select W.*,E.login from  wissencontent W left join employee E on W.employee=E.id where categorie = $id order by initdate";
+    $rechte = berechtigung();
+    $sql="select W.*,E.login from  wissencontent W left join employee E on W.employee=E.id where  $rechte and categorie = $id order by initdate";
     $rs=$db->getAll($sql);
     return $rs;
 }
@@ -2544,8 +2548,16 @@ global $db;
 *****************************************************/
 function suchWDB($wort,$kat) {
 global $db;
-    $sql = "SELECT WK.* from wissencontent WC left join wissencategorie WK on WC.categorie=WK.id where content ilike '%".trim($wort)."%'";
-    $rs=$db->getAll($sql);
+    $rechte = berechtigung();
+    $sql = "SELECT distinct WK.* as cid from wissencontent WC left join wissencategorie WK on WC.categorie=WK.id where $rechte and ";
+    if ( $wort != '' ) {
+        $sql .= " content ilike '%".trim($wort)."%' ";
+    } else if ( $kat != '' ) {
+        $sql .= " categorie = $kat ";
+    } else {
+        return false;
+    }
+    $rs = $db->getAll($sql);
     return $rs;
 }
 /****************************************************

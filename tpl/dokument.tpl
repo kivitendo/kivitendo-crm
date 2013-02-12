@@ -7,12 +7,12 @@
     <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
     <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
     <script type="text/javascript" src="{JQUERY}inc/dokument.js"></script>
-<body onLoad="dateibaum('left','/'), hidelinks(0) ;">
+<body onLoad="dateibaum('left','/'), hidelinks(0); pickup = {PICUP}; ">
 {PRE_CONTENT}
 {START_CONTENT}
 <p class="listtop">.:documents:. </p>
 <form name="dokument.php" enctype='multipart/form-data' action="{action}" method="post">
-
+<input type="hidden" id="mandant" value="{mandant}">
 <span id='contentbox2'>
 <!-- Hier beginnt die Karte  ------------------------------------------->
 
@@ -34,6 +34,7 @@
         <button id="submove"        name="onClick=movefile();">.:move:.                       </button> 
         <button id="subedit"        name="onClick=editattribut();">.:edit attribute:.         </button>
         <button id="lock"           name="onClick=lockFile();">.:lock file:.                  </button>
+        <button id="picupbut"       name='onClick=picup();'>.:picup:.                         </button>
         <br>
         <span id="fbright"><!-- Platzhalter für den dynamischen Inhalt --></span>
 </span>

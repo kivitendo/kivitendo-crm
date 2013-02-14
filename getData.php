@@ -10,7 +10,16 @@ ob_start();
     <link type="text/css" REL="stylesheet" HREF="'.$_SESSION["basepath"].'crm/css/'.$_SESSION["stylesheet"].'/main.css">
     <link rel="stylesheet" type="text/css" href="'.$_SESSION['basepath'].'crm/jquery-ui/themes/base/jquery-ui.css"> 
     <script type="text/javascript" src="'.$_SESSION['basepath'].'crm/jquery-ui/jquery.js"></script> 
-    <script type="text/javascript" src="'.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery-ui.js"></script>'; 
+    <script type="text/javascript" src="'.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery-ui.js"></script>
+    <script language="JavaScript">
+        function showD (src,id) {
+	       if      (src=="C") { uri="firma1.php?Q=C&id=" + id }
+		   else if (src=="V") { uri="firma1.php?Q=V&id=" + id; }
+		   else if (src=="E") { uri="user1.php?id=" + id; }
+  		   else if (src=="K") { uri="kontakt.php?id=" + id; }
+		   window.location.href=uri;
+	    }
+    </script>'; 
     if ($feature_ac) { 
         echo '   
     <style>
@@ -98,19 +107,7 @@ if ($_GET["adress"]) {
 			$msg=$viele;
 		}
 	} 
-?>
-<script language="JavaScript">
-<!--
-	function showD (src,id) {
-		if      (src=="C") { uri="firma1.php?Q=C&id=" + id }
-		else if (src=="V") { uri="firma1.php?Q=V&id=" + id; }
-		else if (src=="E") { uri="user1.php?id=" + id; }
-		else if (src=="K") { uri="kontakt.php?id=" + id; }
-		window.location.href=uri;
-	}
-//-->
-</script>
-<?php
+
 	if ($anzahl>0) {
         if ($anzahl==1 && $rsC) header("Location: firma1.php?Q=C&id=".$rsC[0]['id']); 
         if ($anzahl==1 && $rsV) header("Location: firma1.php?Q=V&id=".$rsV[0]['id']); 

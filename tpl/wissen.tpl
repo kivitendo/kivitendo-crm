@@ -6,8 +6,9 @@
     <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
     <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
     <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
-
     <script language="JavaScript">
+    var tiny = false;
+    {init}
     function filesearch() {
         f=open("dokument.php?P=1","File","width=900,height=650,left=200,top=100");
         f.pickup = true;
@@ -20,26 +21,16 @@
         $("#owener option[value='"+data.owener+"']").attr('selected',true);
         $('#id').val(data.id);
         $('#kat').val(data.categorie);
-        $('#edit').show();
-        $('#neu').hide();
-        $('#savecontent').hide();
-        $('#filesearch').hide();
-        $('#history').show();
+        showSel();
     }
     function editContent( editor ) {
         $('#savecontent').show();
         $('#filesearch').show();
         id = $('#kat').val();
         if ( editor ) {
-            $('#edit').hide();
-            $('#reload').show();
-            $('#savecontent').show();
-            $('#filesearch').show();
+            showEdit();
         } else {
-            $('#edit').show();
-            $('#reload').hide();
-            $('#savecontent').hide();
-            $('#filesearch').hide();
+            showSel();
         }
         $.get('jqhelp/wissen.php?task=edit&id='+id+"&edit="+editor, function( content ) {
                 $('#wissencontent').empty();
@@ -51,15 +42,17 @@
             $('#headline').empty().append('[<b>'+$('#catname').text()+'</b>] Neu');
             $('#wissencontent').empty();
             $('#wissencontent').append(content);
-            $('#reload').show();
-            $('#savecontent').show();
-            $('#filesearch').show();
+            showEdit();
+            
         } );
     }
     function saveContent() {
         id = $('#kat').val();
-        content = $('#elm1').val();
-alert(content);
+        if ( tiny ) {
+            content = tinyMCE.activeEditor.contentDocument.body.innerHTML;
+        } else {
+            content = $('#elm1').val();
+        }
         own = $('#owener option:selected').val();
         $.ajax( { 
             url: 'jqhelp/wissen.php?task=savecontent',
@@ -102,9 +95,7 @@ alert(content);
                     $('#wort').val(rc.msg);
                     $('#headline').empty();
                     $('#wissencontent').empty();
-                    $('#edit').hide();
-                    $('#neu').show();
-                    $('#history').hide();
+                    showNew();
                 } else {
                    if ( rc.cnt  == 1 ) {
                        showcontent( rc );
@@ -155,6 +146,7 @@ alert(content);
             $('#newcat').hide();
             $('#editcat').hide();
             $('#savecat').show();
+            $('#hg').val($('#kat').val()); 
             $('#cid').val(''); 
             $('#catedit').show('fast');
             $('#hidenewcat').show('fast');
@@ -206,6 +198,7 @@ alert(content);
             $('#kat').val(0);
             $('#hg').val(0);
             $('#catname').empty().append('/');
+            $('#'+initkat).click();
         })
     }
     </script>
@@ -246,15 +239,37 @@ alert(content);
             $('#wort').keydown(checkForEnterSuche);
         }
     });
-    $(document).ready( function() {
-        mkMenu(true);
-        hidenewCat();
+    function showNew() {
         $('#edit').hide();
         $('#neu').show();
         $('#reload').hide();
         $('#savecontent').hide();
         $('#filesearch').hide();
         $('#history').hide();
+        $('#auth').hide();
+    }
+    function showSel() {
+        $('#edit').show();
+        $('#neu').hide();
+        $('#reload').show();
+        $('#savecontent').hide();
+        $('#filesearch').hide();
+        $('#history').show();
+        $('#auth').hide();
+    }
+    function showEdit() {
+        $('#edit').hide();
+        $('#neu').hide();
+        $('#reload').show();
+        $('#savecontent').show();
+        $('#filesearch').show();
+        $('#auth').show();
+    }
+    $(document).ready( function() {
+        mkMenu(true);
+        hidenewCat();
+        showNew();
+        $('#neu').hide();
         $('#wort').focus( function() {
             $('#wort').val('');
         });
@@ -262,7 +277,7 @@ alert(content);
 
     </script>
 	{tiny}
-<body>
+<body >
 {PRE_CONTENT}
 {START_CONTENT}
 <p class="listtop">.:knowhowdb:.</p>
@@ -274,11 +289,11 @@ alert(content);
 	    <form name="wissen" id='wissen' onSubmit='false'>
 		<input type="hidden" id="id"      name="id"      value="">
                 <input type="hidden" id="kat"     name="kat"     value="">
-                <input type="hidden" id="hg"     name="hg"     value="">
+                <input type="hidden" id="hg"      name="hg"     value="">
                 <span id='wdbmenu'></span><br />
                 <span id='popup' style='visibility:{popup};'>
 	  	    <span id='catedit'>
-                         <input type="hidden" id="cid"    name="cid"     value="">
+                         <input type="hiddden" id="cid"    name="cid"     value="">
                          <input type="text" name="catneu" id="catneu" size=""> <input type="checkbox" name="kdhelp" id="kdhelp" val="1">
                     </span>
  		    <span><br /> .:newcat:. <br>.:below:. &quot;<b><span id='catname'></span></b>&quot;</span>
@@ -303,16 +318,16 @@ alert(content);
                 <img src='image/save_kl.png'    title='.:save:.'            id='savecontent'>
                 <img src='image/file_kl.png'    title='.:picfile:.'         id='filesearch'>
                 <img src='image/history_kl.png' title='History'             id='history'>
-		<span class="klein">{authority}</span> 
+		<span id="auth" class="klein">{authority}
                 <select name="owener" id="owener">
 <!-- BEGIN OwenerListe -->
                     <option value="{OLid}" {OLsel}>{OLtext}</option>
 <!-- END OwenerListe -->
-                </select> 
+                </select> </span> 
 	</div>
 	</form>
 <!-- Hier endet die Karte ------------------------------------------->
-</span>
+</span><span onCLick="$('#436').click();">xxx</span>
 {END_CONTENT}
 </body>
 </html>

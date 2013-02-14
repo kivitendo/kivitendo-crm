@@ -7,7 +7,7 @@
     <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
     <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
     <script type="text/javascript" src="{JQUERY}inc/dokument.js"></script>
-<body onLoad="dateibaum('left','/'), hidelinks(0); pickup = {PICUP}; ">
+<body onLoad="dateibaum('left','/'), hidelinks(0); pickup = {PICUP}; tiny = {tiny};">
 {PRE_CONTENT}
 {START_CONTENT}
 <p class="listtop">.:documents:. </p>

@@ -32,9 +32,17 @@
 
     if ($tinymce) {
         $tiny  = "<script language='javascript' type='text/javascript' src='inc/tiny_mce/tiny_mce.js'></script>\n";
+        $tiny .= "<script language='javascript'> tiny = true;</script>";
     }
+    if ( $_GET['m'] > 0 ) {
+        $rs = getOneWCategorie($_GET['m']);
+        $init = 'var initkat = '.$_GET['m'].';';
+    } else {
+        $init = 'var initkat = -1 ;';
+    };
     $catname=getOneWCategorie($tmp[0]);
     $tpl->set_var(array(
+        init    => $init,
         popup    => $popup,
         PICUP    => "false",
         tiny     => $tiny,

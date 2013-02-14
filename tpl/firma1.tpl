@@ -92,8 +92,10 @@
         }
     function KdHelp() {
         link = $('#kdhelp option:selected').val();
-        f1=open("wissen.php?kdhelp=1&m="+link,"Wissen","width=750, height=600, left=50, top=50, scrollbars=yes");
-        document.kdhelp.kdhelp.selectedIndex=0;
+        if (  $('#kdhelp').prop("selectedIndex") > 0 ) {
+            f1=open("wissen.php?kdhelp=1&m="+link,"Wissen","width=750, height=600, left=50, top=50, scrollbars=yes");
+            $('#kdhelp option')[0].selected = true;
+        }
     }
     var shiptoids = new Array({Sids});
     var sil = shiptoids.length;

@@ -1,12 +1,19 @@
 <?php
 	require_once("inc/stdLib.php");
+    $menu = $_SESSION['menu'];
 ?>
 <html>
 	<head><title></title>
-	<link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
+    <?php echo $menu['stylesheets']; ?>
+	<link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
+    <script type="text/javascript" src="<?php echo $_SESSION['basepath']; ?>crm/jquery-ui/jquery.js"></script>
+    <?php echo $menu['javascript']; ?>
 
 <body>
 <?php
+echo $menu['pre_content'];
+echo $menu['start_content'];
+
 if ($_POST["ok"]=="erzeugen") {
 
     /**
@@ -230,6 +237,8 @@ if ($_POST["ok"]=="erzeugen") {
 </table>
 <input type="submit" name="ok" value="erzeugen">
 </form>
-<?php } ?>
+<?php };
+echo $menu['end_content'];
+?>
 </body>
 </html>

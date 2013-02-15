@@ -14,6 +14,7 @@
             CID => $data["CID"],
             Finish => $data["Finish"],
             JQUERY        => $_SESSION['basepath'].'crm/',
+            'THEME'         => $_SESSION['theme'],
             ));
     $t->set_block("wvl","Selectbox","Block1");
     $user=getAllUser("%");

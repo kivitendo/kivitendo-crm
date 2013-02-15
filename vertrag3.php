@@ -14,6 +14,7 @@
             START_CONTENT => $menu['start_content'],
             END_CONTENT   => $menu['end_content'],
             JQUERY        => $_SESSION['basepath'].'crm/',
+            'THEME'         => $_SESSION['theme'],
         ));
     $template="vertrag3.tpl";
     $vid=($_POST["vid"])?$_POST["vid"]:$_GET["vid"];

@@ -52,6 +52,7 @@
          END_CONTENT   => $menu['end_content'],
          ERPCSS        => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
          JQUERY        => $_SESSION['basepath'].'crm/',
+         'THEME'         => $_SESSION['theme'],
      ));
 
      $t->set_var(array(

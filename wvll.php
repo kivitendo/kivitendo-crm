@@ -76,6 +76,7 @@
     } 
     $t->set_var(array(
         ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+        'THEME'         => $_SESSION['theme'],
         Interv => (!$interv || $interv<10)?999999:$interv
     ));
     $t->pparse("out",array("wvl"));

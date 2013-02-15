@@ -12,7 +12,8 @@
         PRE_CONTENT   => $menu['pre_content'],
         START_CONTENT => $menu['start_content'],
         END_CONTENT   => $menu['end_content'],
-        JQUERY        => $_SESSION['basepath'].'crm/'
+        JQUERY        => $_SESSION['basepath'].'crm/',
+        'THEME'         => $_SESSION['theme'],
     ));
     $stamm="none";
     $show = "visible";

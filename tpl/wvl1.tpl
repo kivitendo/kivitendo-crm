@@ -1,12 +1,12 @@
 <html>
 	<head><title></title>
         {STYLESHEETS}
-        {JAVASCRIPTS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
+    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
     <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
     <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
     <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script> 
     <script type="text/javascript" src="{JQUERY}jquery-ui/ui/i18n/jquery.ui.datepicker-de.js"></script>
+        {JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
 		function doInit() {

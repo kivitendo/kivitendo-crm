@@ -16,7 +16,8 @@
         STYLESHEETS   => $menu['stylesheets'],
         PRE_CONTENT   => $menu['pre_content'],
         START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content']
+        END_CONTENT   => $menu['end_content'],
+        'THEME'         => $_SESSION['theme'],
     ));
     if ($ansicht=="T") {
         if (!$datum) {$day=date("d"); $month=date("m"); $year=date("Y");}

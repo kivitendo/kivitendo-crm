@@ -1,7 +1,9 @@
 <html>
         <head><title></title>
         {STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
+        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
+        <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
+        <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
         {JAVASCRIPTS}
         <script language="JavaScript" type="text/javascript">
   		function report() {
@@ -29,7 +31,7 @@
 <p class="listtop" onClick="help('SuchFirma');">.:Companys:. .:search:. {FAART} (?)</p>
 <span id='contentbox2'>
 <!-- Beginn Code ------------------------------------------->
-<p class="listheading">| 
+<p class="listheading"{JQUERY}>| 
 <a href="{action}&first=A" class="fett">A</a> |
 <a href="{action}&first=B" class="fett">B</a> |
 <a href="{action}&first=C" class="fett">C</a> |

@@ -25,7 +25,8 @@
         STYLESHEETS   => $menu['stylesheets'],
         PRE_CONTENT   => $menu['pre_content'],
         START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content']
+        END_CONTENT   => $menu['end_content'],
+        'THEME'         => $_SESSION['theme'],
     ));
     if ($_GET["id"] && $_GET["id"]<>$_SESSION["loginCRM"]) {
         $fa=getUserStamm($_GET["id"]);
@@ -45,6 +46,7 @@
         $tbeg.="<option value=$z".(($i==$z)?" selected":"").">$z";
         $tend.="<option value=$z".(($j==$z)?" selected":"").">$z";
     }
+
     if ($jahr=="") $jahr = date("Y");
     $re = getReJahr($fa["id"],$jahr,false,true);
     $an = getAngebJahr($fa["id"],$jahr,false,true);
@@ -131,5 +133,17 @@
             $i++;
         }
     }
+    chdir("jquery-ui/themes");
+    $theme = glob("*");
+    $t->set_block('usr1','Theme','BlockT');
+    if ($theme) foreach( $theme as $file) {
+        $t->set_var(array(
+               TSel => ($file==$fa["theme"])?" selected":"",
+               themefile => $file,
+               themename => ucwords(strtr($file,'-',' ')),
+        ));
+        $t->parse('BlockT','Theme',true);
+    };
+    chdir("../..");
     $t->pparse("out",array("usr1"));
 ?>

@@ -208,6 +208,7 @@ global $ERPNAME,$erpConfigFile;
         $_SESSION["menu"]       = makeMenu($_SESSION["sessid"],$_SESSION["token"]);
         $_SESSION["basepath"]   = $BaseUrl;
         $_SESSION['token']      = False;
+        $_SESSION['theme']      = $tmp['theme'];
         return true;
     }
 }
@@ -877,6 +878,7 @@ global $ERP_BASE_URL;
     $rs['end_content']   = '';
     if ($objResult) {
         foreach($objResult->{'javascripts'} as $js) {
+            if ( preg_match('/jquery/',$js)) continue;
             $rs['javascripts'] .= '<script type="text/javascript" src="'.$BaseUrl.$js.'"></script>'."\n".'   ';
         }
         $rs['javascripts'] .= '<script type="text/javascript">';

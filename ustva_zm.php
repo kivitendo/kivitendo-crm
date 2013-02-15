@@ -4,12 +4,10 @@
 ?>
 <html>
     <head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
-    <!-- ERP Stylesheet -->
     <?php echo $menu['stylesheets']; ?>
-    <!-- ERP JavaScripts -->
+    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
+    <script type="text/javascript" src="<?php echo $_SESSION['basepath']; ?>crm/jquery-ui/jquery.js"></script>
     <?php echo $menu['javascripts']; ?>
-    <!-- Ende ERP -->
 <body>
 <?php
  echo $menu['pre_content'];

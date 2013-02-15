@@ -38,7 +38,8 @@
                 START_CONTENT => $menu['start_content'],
                 END_CONTENT   => $menu['end_content'],
                 JQUERY        => $_SESSION['basepath'].'crm/',
-                ERPCSS          => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+                ERPCSS        => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+                THEME         => $_SESSION['theme'],
             ));
             $t->set_block("fa1","Liste","Block");
             $t->set_var(array(

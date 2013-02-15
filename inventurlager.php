@@ -6,12 +6,12 @@
 <html>
     <head><title></title>
     <?php echo $menu['stylesheets']; ?>
-    <?php echo $menu['javascripts']; ?>
     <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'] ?>crm/css/<?php echo $_SESSION["stylesheet"]; ?>/main.css">
     <link rel="stylesheet" type="text/css" href="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/themes/base/jquery-ui.css">
     <script type="text/javascript" src="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/jquery.js"></script>
     <script type="text/javascript" src="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/ui/jquery-ui.js"></script>
     <script type="text/javascript" src="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/ui/i18n/jquery.ui.datepicker-de.js"></script>
+    <?php echo $menu['javascripts']; ?>
     <script type='text/javascript'>
          function getData() {
              document.inventurs.comment.value = document.inventur.comment.value;

@@ -85,6 +85,7 @@
         START_CONTENT => $menu['start_content'],
         END_CONTENT   => $menu['end_content'],
         JQUERY        => $_SESSION['basepath'].'crm/',
+        'THEME'         => $_SESSION['theme'],
     ));
     $t->set_var(array(
             FAART    => ($Q=="C")?".:Customer:.":".:Vendor:.",   //"Kunde":"Lieferant",

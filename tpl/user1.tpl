@@ -2,6 +2,7 @@
     <head><title>User Stamm</title>
     {STYLESHEETS}
         <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
+        <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
     {JAVASCRIPTS}
     <style type="text/css">
     #mailwin {
@@ -121,6 +122,13 @@
     <tr><td class="norm">Protokoll</td><td><input type="radio" name="proto" value="0" {protopop}>POP <input type="radio" name="proto" value="1" {protoimap}>IMAP</td>
         <td class="norm">SSL</td>
         <td class="norm"><input type="radio" name="ssl" value="n" {ssln}>notls <input type="radio" name="ssl" value="t" {sslt}>ssl <input type="radio" name="ssl" value="f" {sslf}>tls
+        </td></tr>
+    <tr><td class="norm">Theme</td><td>
+        <select name="theme">
+<!-- BEGIN Theme -->
+            <option value="{themefile}" {TSel}>{themename}
+<!-- END Theme -->
+       </select>
         </td></tr>
     <tr><td class="norm">Termine</td><td>
             von <select name="termbegin">{termbegin}</select> 

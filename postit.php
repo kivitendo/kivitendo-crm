@@ -61,9 +61,12 @@ $menu = $_SESSION['menu'];
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head><title><?php echo  translate(".:LxO:.","work"); ?> <?php echo  translate(".:postit:.","work"); ?></title>
-        <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
-	<?=$menu['javascripts'];?>
-        <?=$menu['stylesheets'];?>
+    <?php echo $menu['stylesheets'].'
+    <link type="text/css" REL="stylesheet" HREF="'.$_SESSION["basepath"].'crm/css/'.$_SESSION["stylesheet"].'/main.css">
+    <link rel="stylesheet" type="text/css" href="'.$_SESSION['basepath'].'crm/jquery-ui/themes/base/jquery-ui.css"> 
+    <script type="text/javascript" src="'.$_SESSION['basepath'].'crm/jquery-ui/jquery.js"></script> 
+    <script type="text/javascript" src="'.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery-ui.js"></script>'.
+	$menu['javascripts']; ?>
 	<script language="JavaScript">
 	<!--
 	function PopUp() {
@@ -73,8 +76,8 @@ $menu = $_SESSION['menu'];
 	</script>
 	</head>
 <body onLoad="if (1==<?php echo  $popup ?>) window.resizeTo(600,400);">
-<?=$menu['pre_content'];?>
-<?=$menu['start_content'];?>
+<?php echo $menu['pre_content'];
+      echo $menu['start_content'];?>
 <br />
 <p class="listtop"><?php echo  translate(".:notes:.","work"); ?></p>
 <table >
@@ -99,7 +102,7 @@ if ($liste) foreach($liste as $row) {
 <?php }  else { ?>
 <input type="button" name="ppp" value="<?php echo  translate(".:popup:.","work"); ?>" onCLick="PopUp();">
 <?php } ?>
-</from>
-<?=$menu['end_content'];?>
+</form>
+<?php echo $menu['end_content']; ?>
 </body>
 </html>

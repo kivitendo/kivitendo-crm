@@ -16,10 +16,12 @@
     $t->set_var(array(
         'JAVASCRIPTS'   => $menu['javascripts'],
         'STYLESHEETS'   => $menu['stylesheets'],
+        'ERPCSS'        => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
         'PRE_CONTENT'   => $menu['pre_content'],
         'START_CONTENT' => $menu['start_content'],
         'END_CONTENT'   => $menu['end_content'],
         'JQUERY'        => $_SESSION['basepath'].'crm/',
+        'THEME'         => $_SESSION['theme'],
     ));
     $t->set_file(array("fa1" => "firma1.tpl"));
     if (count($tmp)>0) {
@@ -94,7 +96,6 @@
     $taxzone=array("Inland","EU mit UStId","EU ohne UStId","Ausland");
     $t->set_var(array(
             'FAART'           => ($Q=="C")?".:Customer:.":".:Vendor:.",
-            'ERPCSS'          => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
             'CuVe'            => ($Q=="C")?"customer":"vendor",
             'Q'               => $Q,
             'FID'             => $id,

@@ -15,6 +15,7 @@
         START_CONTENT => $menu['start_content'],
         END_CONTENT   => $menu['end_content'],
         JQUERY        => $_SESSION['basepath'].'crm/',
+        'THEME'         => $_SESSION['theme'],
     ));
     $Q = ($_GET["Quelle"])?$_GET["Quelle"]:$_POST["Quelle"];    
     

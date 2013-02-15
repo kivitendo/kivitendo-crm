@@ -110,6 +110,8 @@ if ($_POST['ok']) {
         PRE_CONTENT     => $menu['pre_content'],
         START_CONTENT   => $menu['start_content'],
         END_CONTENT     => $menu['end_content'],
+        'THEME'         => $_SESSION['theme'],
+        'JQUERY'        => $_SESSION['basepath'].'crm/',
         partnumber	=> $_POST['partnumber'],
         description     => $_POST['description'],
         ean             => $_POST['ean'],

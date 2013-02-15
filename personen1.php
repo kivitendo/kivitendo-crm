@@ -12,7 +12,8 @@
         STYLESHEETS   => $menu['stylesheets'],
         PRE_CONTENT   => $menu['pre_content'],
         START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content']
+        END_CONTENT   => $menu['end_content'],
+        'THEME'         => $_SESSION['theme'],
     ));
     $Quelle=($_POST["Quelle"])?$_POST["Quelle"]:$_GET["Quelle"];
     if (!$Quelle) $Quelle="C";

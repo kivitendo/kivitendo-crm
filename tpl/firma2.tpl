@@ -145,10 +145,12 @@
             setTimeout('showCall(0)',{interv});
         }
         function KdHelp() {
-            id=document.kdhelp.kdhelp.options[document.kdhelp.kdhelp.selectedIndex].value;
-            f1=open("wissen.php?kdhelp=1&m="+id,"Wissen","width=750, height=600, left=50, top=50, scrollbars=yes");
-            document.kdhelp.kdhelp.selectedIndex=0;
-        }
+            link = $('#kdhelp option:selected').val();
+            if (  $('#kdhelp').prop("selectedIndex") > 0 ) {
+                f1=open("wissen.php?kdhelp="+link,"Wissen","width=750, height=600, left=50, top=50, scrollbars=yes");
+                $('#kdhelp option')[0].selected = true;
+            }
+        }        
         function ks() {
             sw=document.ksearch.suchwort.value;
             if (sw != "")
@@ -202,7 +204,7 @@
     <button name="{Link2}">.:Contacts:.</button>
     <button name="{Link3}">.:Sales:.</button>
     <button name="firma4.php?Q={Q}&id={FID}">.:Documents:.</button>
-    <select style="visibility:{chelp}" name="kdhelp" onChange="KdHelp()">
+    <select style="visibility:{chelp}" id='kdhelp' name="kdhelp" onChange="KdHelp()">
 <!-- BEGIN kdhelp -->
         <option value="{cid}">{cname}</option>
 <!-- END kdhelp -->

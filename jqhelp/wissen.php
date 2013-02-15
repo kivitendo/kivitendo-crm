@@ -1,4 +1,7 @@
 <?php
+/*
+Wissens-DB Helper-Klassen
+*/
     require_once("../inc/stdLib.php");
     include("inc/UserLib.php");
     include("inc/crmLib.php");
@@ -28,14 +31,14 @@ function suche ( $wort, $kat ) {
 
 function newcat( $data ) {
     $rc = insWCategorie($data);
-    if ( $rc ) { echo '1'; }
+    if ( $rc ) { echo $rc; }
     else { echo '0'; };
 }
 
 function mkcontent( $data ) {
     $data['cnt'] = 1;
     $tmp = split( ' ', $data['initdate'] );
-    $data['datum'] = db2date( $tmp[0] ) . " " . substr( $tmp[1], 0, 5 );
+    $data['datum'] = db2date( $tmp[0] ) . "ho " . substr( $tmp[1], 0, 5 );
     $data['content'] = stripslashes( $data['content'] );
     if ($data['owener'] == null) $data['owener'] = '';
     echo json_encode( $data );
@@ -107,11 +110,13 @@ function Thread($HauptGrp,$data,&$menu)    {
         } else {
              $hide = '';
         }
-        $menu.="<ul id='sub".$thread[$HauptGrp]["id"]."' name='$hide' class='sub".$HauptGrp."'>\n";
+        $menu.="<ul name='$hide' class='sub".$HauptGrp."'>\n";
+        $ul = "sub".$HauptGrp;
         while($thread[$HauptGrp]=array_shift($result)) {
+            //$dbg = "ul: $ul ID: ".$thread[$HauptGrp]["id"]." class: sub".$HauptGrp;
             $kdh=($thread[$HauptGrp]["kdhelp"]=='t')?" +":"";
             $menu.= "<li><a href='#' id='".$thread[$HauptGrp]["id"]."' name='$kdh' class='sub".$HauptGrp."' onClick='toggleMenu(".$HauptGrp.','.$thread[$HauptGrp]["id"].")'>";
-            $menu.=$thread[$HauptGrp]["name"]."</a>$kdh</li>\n"; 
+            $menu.=$thread[$HauptGrp]["name"]."</a>$kdh $dbg</li>\n"; 
             Thread($thread[$HauptGrp]["id"],$data,$menu);
         }
         $menu.="</ul>\n";

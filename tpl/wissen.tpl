@@ -6,26 +6,24 @@
     <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
     <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
     <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
+    {tiny}
     <script language="JavaScript">
-    var tiny = false;
-    {init}
+{init}
+    var savehg  = -1;
+    var savekat = -1;
     function filesearch() {
         f=open("dokument.php?P=1","File","width=900,height=650,left=200,top=100");
         f.pickup = true;
     }
     function showcontent( data ) { 
-        $('#headline').empty();
-        $('#wissencontent').empty();
-        $('#wissencontent').append(data.content);
-        $('#headline').append('[<b>'+data.name+'</b>] '+' Version: <b>'+data.version+'</b> vom <b>'+data.datum+'</b> durch <b>'+data.employee+'</b>');
+        $('#headline').empty().append('[<b>'+data.name+'</b>] '+' Version: <b>'+data.version+'</b> vom <b>'+data.datum+'</b> durch <b>'+data.employee+'</b>');
+        $('#wissencontent').empty().append(data.content);
         $("#owener option[value='"+data.owener+"']").attr('selected',true);
         $('#id').val(data.id);
         $('#kat').val(data.categorie);
         showSel();
     }
     function editContent( editor ) {
-        $('#savecontent').show();
-        $('#filesearch').show();
         id = $('#kat').val();
         if ( editor ) {
             showEdit();
@@ -33,15 +31,13 @@
             showSel();
         }
         $.get('jqhelp/wissen.php?task=edit&id='+id+"&edit="+editor, function( content ) {
-                $('#wissencontent').empty();
-                $('#wissencontent').append(content);
+                $('#wissencontent').empty().append(content);
         } );
     }
     function newContent() { 
         $.get('jqhelp/wissen.php?task=neu', function( content ) {
             $('#headline').empty().append('[<b>'+$('#catname').text()+'</b>] Neu');
-            $('#wissencontent').empty();
-            $('#wissencontent').append(content);
+            $('#wissencontent').empty().append(content);
             showEdit();
             
         } );
@@ -80,8 +76,7 @@
               }
         } );
         $.get('jqhelp/wissen.php?task=history&id='+id+"&v1="+v1+"&v2="+v2, function( content ) {
-                $('#wissencontent').empty();
-                $('#wissencontent').append(content);
+                $('#wissencontent').empty().append(content);
         } );
     }
     function suche() {
@@ -100,8 +95,7 @@
                    if ( rc.cnt  == 1 ) {
                        showcontent( rc );
                    } else {
-                       $('#headline').empty();
-                       $('#headline').append('Trefferliste');
+                       $('#headline').empty().append('Trefferliste');
                        $('#kat').val(-1);
                        $('#neu').hide();
                        $('#history').hide();
@@ -126,31 +120,49 @@
         $('#hidenewcat').hide('fast');
         $('#newcat').show();
         $('#editcat').show();
+        if ( savehg  != -1 ) $('#hg').val( savehg );
+        if ( savekat != -1 ) $('#kat').val( savekat );
+    }
+    var path = new Array();
+    function openpath( hg ) {
+        var subhg = $('#'+hg).attr('class');
+        path.push(subhg);
+        while ( subhg != 'sub0' ) {
+            subhg = $('#'+subhg.substr(3)).attr('class');
+            path.push(subhg);
+        }
+        while ( path.length > 0 ) {
+            x = path.pop();
+            y = "."+x;
+            $('.'+x).slideDown("fast");
+        }
     }
     function saveCat() {
             var newcat = $('#catneu').val();
             var hg = $('#hg').val();
-            var cid = $('#cid').val();
+            var cid = $('#kat').val()
             var kdhelp = ( $('#kdhelp').is(':checked') )?1:0;
             $.get('jqhelp/wissen.php?task=newcat&catname='+newcat+'&hg='+hg+'&kdhelp='+kdhelp+'&cid='+cid, function( rc ) {
-                if ( rc == '1' ) {
+                if ( rc != '0' ) {
                     hidenewCat();
-                    mkMenu(false);
+                    mkMenu(rc);
+                    savehg = -1;
+                    savekst = -1;
                 } else {
                     alert(rc);
                 }
             });
     }
     function newCat() {
-        if ( $('#catedit').is(':hidden') ) {
-            $('#newcat').hide();
-            $('#editcat').hide();
-            $('#savecat').show();
-            $('#hg').val($('#kat').val()); 
-            $('#cid').val(''); 
-            $('#catedit').show('fast');
-            $('#hidenewcat').show('fast');
-       }
+        savehg  = $('#hg').val();
+        savekat = $('#kat').val();
+        $('#newcat').hide();
+        $('#editcat').hide();
+        $('#savecat').show();
+        $('#hg').val($('#kat').val()); 
+        $('#kat').val('');
+        $('#catedit').show('fast');
+        $('#hidenewcat').show('fast');
     }
     function editCat() {
         $('#catneu').val($('#catname').text());
@@ -159,8 +171,11 @@
         } else {  
             $('#kdhelp').attr ('checked', false);
         }
-        newCat();
-        $('#cid').val($('#kat').val());
+        $('#newcat').hide();
+        $('#editcat').hide();
+        $('#savecat').show();
+        $('#catedit').show('fast');
+        $('#hidenewcat').show('fast');
     }
     function checkForEnterSuche(event) {
         if (event.keyCode == 13) {
@@ -172,6 +187,7 @@
         $('#hg').val(hg);
         $('#wort').val('');
         $('#catname').empty().append($('#'+id).text());
+        $('#editcat').show();
         suche(); 
         if ( $('.sub'+id).is(':hidden') ) {
             $('.sub'+id).slideDown("slow");
@@ -189,16 +205,16 @@
         $.get('jqhelp/wissen.php?task=getmenu', function( data ) {
             $('#wdbmenu').empty().append( data );
             $.each($('#wdbmenu').find('ul'), function ( i, sub ) {
-                if (fold) {
-                    if ( sub.getAttribute('name') == 'submenu') $(this).hide(); 
-                } else {
-                    if ( sub.getAttribute('name') == 'submenu' && sub.getAttribute('id')  == '465' ) alert( $(this).parent().val() ); 
-                }
+                if ( sub.getAttribute('name') == 'submenu') $(this).hide(); 
             }) ;
-            $('#kat').val(0);
-            $('#hg').val(0);
-            $('#catname').empty().append('/');
-            $('#'+initkat).click();
+            if ( fold != -1 ) {
+                openpath( fold );
+                $('#'+fold).click();
+            } else {
+                $('#kat').val(0);
+                $('#hg').val(0);
+                $('#catname').empty().append('/');
+            };
         })
     }
     </script>
@@ -266,68 +282,64 @@
         $('#auth').show();
     }
     $(document).ready( function() {
-        mkMenu(true);
+        mkMenu(initkat);
         hidenewCat();
         showNew();
         $('#neu').hide();
+        $('#editcat').hide();
         $('#wort').focus( function() {
             $('#wort').val('');
         });
     }) ;
-
     </script>
-	{tiny}
 <body >
 {PRE_CONTENT}
 {START_CONTENT}
 <p class="listtop">.:knowhowdb:.</p>
 
 <span style="position:absolute; left:1em; top:7em; width:95%; border: 0px solid black">
-<!-- Hier beginnt die Karte  ------------------------------------------->
 	<div style="float:left; width:33%; text-align:left; border: 0px solid red" >
-	    <strong onClick='mkMenu(0);'>.:categories:.</strong><br>
-	    <form name="wissen" id='wissen' onSubmit='false'>
-		<input type="hidden" id="id"      name="id"      value="">
-                <input type="hidden" id="kat"     name="kat"     value="">
-                <input type="hidden" id="hg"      name="hg"     value="">
-                <span id='wdbmenu'></span><br />
-                <span id='popup' style='visibility:{popup};'>
-	  	    <span id='catedit'>
-                         <input type="hiddden" id="cid"    name="cid"     value="">
-                         <input type="text" name="catneu" id="catneu" size=""> <input type="checkbox" name="kdhelp" id="kdhelp" val="1">
-                    </span>
- 		    <span><br /> .:newcat:. <br>.:below:. &quot;<b><span id='catname'></span></b>&quot;</span>
-                    <img src='image/save_kl.png' border="0" title='.:save:.'    align="middle" id='savecat'>
+        <strong onClick='mkMenu(0);'>.:categories:.</strong><br>
+        <form name="wissen" id='wissen' onSubmit='false'>
+            <input type="hidden" id="id"      name="id"      value="">
+            <input type="hidden" id="kat"     name="kat"     value="">
+            <input type="hidden" id="hg"      name="hg"     value="">
+            <span id='wdbmenu'></span><br />
+            <span id='popup' style='visibility:{popup};'>
+        	<span id='catedit'>
+                <input type="text" name="catneu" id="catneu" size=""> <input type="checkbox" name="kdhelp" id="kdhelp" val="1">
+            </span>
+            <span><br /> .:newcat:. <br>.:below:. &quot;<b><span id='catname'></span></b>&quot;<br /></span>
+            <img src='image/save_kl.png' border="0" title='.:save:.'    align="middle" id='savecat'>
 		    <img src="image/neu.png"     border="0" title=".:newcat:."  align="middle" id='newcat'>
-		    <img src="image/edit_kl.png" border="0" title=".:editcat:." align="middle" id='editcat'>
-		    <img src="image/cancel_kl.png" border="0" title=".:normview:." align="middle" id='hidenewcat'>
-                </span>
-                <br />
-                <br />
-                <input type="text" name="wort" id="wort" value="">
-		<img src="image/search.png" border="0" title=".:search:." align="middle" id='wortsuche'>
-	</div>
+            <img src="image/edit_kl.png" border="0" title=".:editcat:." align="middle" id='editcat'>
+            <img src="image/cancel_kl.png" border="0" title=".:normview:." align="middle" id='hidenewcat'>
+            </span>
+            <br />
+            <br />
+            <input type="text" name="wort" id="wort" value="">
+		    <img src="image/search.png" border="0" title=".:search:." align="middle" id='wortsuche'><br>
+    </div>
 	<div style="float:left; width:65%; text-align:left; border: 0px solid blue; padding-left: 10px;" id="wdbfile">
 		<span id='headline'></span><br />
 		<hr />
 		<span id='wissencontent'></span><br />
 		<br />
-                <img src='image/edit_kl.png'    title='.:edit:.'            id='edit'>
-                <img src='image/neu.png'        title='.:new:. .:article:.' id='neu'>
-                <img src='image/cancel_kl.png'  title='.:normview:.'        id='reload'>
-                <img src='image/save_kl.png'    title='.:save:.'            id='savecontent'>
-                <img src='image/file_kl.png'    title='.:picfile:.'         id='filesearch'>
-                <img src='image/history_kl.png' title='History'             id='history'>
-		<span id="auth" class="klein">{authority}
-                <select name="owener" id="owener">
+        <img src='image/edit_kl.png'    title='.:edit:.'            id='edit'>
+        <img src='image/neu.png'        title='.:new:. .:article:.' id='neu'>
+        <img src='image/cancel_kl.png'  title='.:normview:.'        id='reload'>
+        <img src='image/save_kl.png'    title='.:save:.'            id='savecontent'>
+        <img src='image/file_kl.png'    title='.:picfile:.'         id='filesearch'>
+        <img src='image/history_kl.png' title='History'             id='history'>
+		<span id="auth" class="klein">.:authority:.
+            <select name="owener" id="owener">
 <!-- BEGIN OwenerListe -->
-                    <option value="{OLid}" {OLsel}>{OLtext}</option>
+                <option value="{OLid}" {OLsel}>{OLtext}</option>
 <!-- END OwenerListe -->
-                </select> </span> 
+            </select> </span> 
 	</div>
 	</form>
-<!-- Hier endet die Karte ------------------------------------------->
-</span><span onCLick="$('#436').click();">xxx</span>
+</span>
 {END_CONTENT}
 </body>
 </html>

@@ -5,6 +5,7 @@
     include("inc/crmLib.php");
     include("inc/UserLib.php");
     $menu =  $_SESSION['menu'];
+    $t = new Template($base);
     $t->set_var(array(
         JAVASCRIPTS   => $menu['javascripts'],
         STYLESHEETS   => $menu['stylesheets'],
@@ -84,7 +85,6 @@
         $BodyText=" \n".str_replace("\r","",$user["mailsign"]);
     }
     
-        $t = new Template($base);
         $t->set_file(array("mail" => "sermail.tpl"));
         $t->set_var(array(
                 ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],

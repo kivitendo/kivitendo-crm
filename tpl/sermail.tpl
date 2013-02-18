@@ -1,6 +1,12 @@
 <html>
 	<head><title></title>
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
+    {STYLESHEETS}
+    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
+    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
+{THEME}
+    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
+    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
+    {JAVASCRIPTS}
 
 	<script language="JavaScript">
 	<!--
@@ -34,6 +40,8 @@
 	//-->
 	</script>
 <body onLoad="document.mailform.Subject.focus();">
+{PRE_CONTENT}
+{START_CONTENT}
 <!-- Beginn Code ------------------------------------------->
 <p class="listtop">Serienmail versenden <font color="red">{Msg}</font></p>
 <center>
@@ -71,5 +79,6 @@
 {SENDTXT}
 </center>
 <!-- End Code ------------------------------------------->
+{END_CONTENT}
 </body>
 </html>

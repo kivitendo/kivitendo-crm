@@ -173,7 +173,7 @@ function closeinventur($name) {
         $rc = @exec("mv tmp/inventur.pdf $name");
     }
 }
-function getPartBin($pg,$bin) {
+function getPartBin($pg,$obsolete,$bin) {
 global $db;
     if ($pg == '') {
 	$pg = "(partsgroup_id is NULL or partsgroup_id = 0) ";
@@ -182,10 +182,15 @@ global $db;
     };
     $sql  = 'SELECT p.description AS partdescription, p.partnumber AS partnumber, i.chargenumber AS chargenumber, ';
     $sql .= 'i.bestbefore AS bestbefore, p.id AS parts_id,i.bin_id, SUM(i.qty) AS qty, p.unit AS partunit, p.onhand ';
-    $sql .= 'FROM parts p LEFT JOIN inventory i  ON i.parts_id  = p.id  LEFT JOIN bin   b ON i.bin_id  = b.id ';
-    $sql .= 'WHERE 1=1 AND  (b.id = '.$bin.' or b.id is NULL) AND '.$pg;
+    $sql .= 'FROM parts p LEFT JOIN inventory i  ON i.parts_id  = p.id  LEFT JOIN bin   b ON i.bin_id  = b.id WHERE '.$pg;
+    if ( $obsolete != '' ) $sql .= " AND obsolete ='$obsolete' ";
+    $sql .= 'AND  (b.id = '.$bin.' or b.id is NULL )  ';
     $sql .= 'GROUP BY partdescription, partnumber, chargenumber, bestbefore,  p.id, partunit,i.bin_id, p.onhand ';
-    $sql .= 'ORDER BY partnumber  ASC';
+    $sql .= 'union ';
+    $sql .= 'SELECT p.description AS partdescription, p.partnumber AS partnumber, null AS chargenumber, null AS bestbefore, ';
+    $sql .= 'p.id AS parts_id, null, 0 as qty, p.unit AS partunit, p.onhand FROM parts p WHERE '.$pg;
+    if ( $obsolete != '' ) $sql .= " AND obsolete ='$obsolete' ";
+    $sql .= 'order by  partnumber asc, bin_id asc';
     $pg = $db->getAll($sql,DB_FETCHMODE_ASSOC);
     return $pg;
     $sql  = "SELECT id from parts where partnumber ilike '$part'" ;

@@ -8,6 +8,8 @@
     <?php echo $menu['stylesheets']; ?>
     <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'] ?>crm/css/<?php echo $_SESSION["stylesheet"]; ?>/main.css">
     <link rel="stylesheet" type="text/css" href="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/themes/base/jquery-ui.css">
+    <?php echo $_SESSION['theme']; ?>
+
     <script type="text/javascript" src="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/jquery.js"></script>
     <script type="text/javascript" src="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/ui/jquery-ui.js"></script>
     <script type="text/javascript" src="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/ui/i18n/jquery.ui.datepicker-de.js"></script>
@@ -46,7 +48,7 @@ if ($_POST['ok'] == 'sichern') {
     $tmp = explode(':',$_POST['lager']);
     $wh = $tmp[0];
     $bin = $tmp[1];
-    $artikel = getPartBin($_POST['pg'],$bin);
+    $artikel = getPartBin($_POST['pg'],$_POST['obsolete'],$bin);
     echo getLagername($wh,$bin);
     if ($artikel) {
 ?>
@@ -62,7 +64,11 @@ if ($_POST['ok'] == 'sichern') {
       <input type="radio" name="transtype" value="3">Gefunden / Fehlbestand
       <table>
       <tr><td>Nummer</td><td>Artikel</td><td>Chargenumber</td><td>Bestbefore JJJJ-MM-DD</td><td>Menge</td></tr>
-<?php foreach ($artikel as $part) { 
+<?php $last = 0; foreach ($artikel as $part) { 
+         if ( $last == $part['parts_id'] ) {
+             continue;
+         }
+         $last = $part['parts_id'];
          echo "<tr><td>".$part['partnumber']."</td><td>".$part['partdescription']."</td><td>"; 
          if ($part['qty'] == '') {
              $qty = '';
@@ -120,6 +126,7 @@ Inventurbuchung<br />
     <select name="lager">
 <?php echo $Ooptions; ?>
     </select><br />
+    <input type='radio' name='obsolete' value='f' checked>Nur gültige <input type='radio' name='obsolete' value='t'>Nur ungültige <input type='radio' name='obsolete' value=''>Alle Artikel<br/>
     <input type="submit" name="ok" value="suchen">
 </form>
 <?php 

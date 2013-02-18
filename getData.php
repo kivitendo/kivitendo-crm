@@ -6,11 +6,13 @@ ob_start();
 ?>
 <html>
 <head><title></title>
-    <?php echo $menu['stylesheets'].'
-    <link type="text/css" REL="stylesheet" HREF="'.$_SESSION["basepath"].'crm/css/'.$_SESSION["stylesheet"].'/main.css">
-    <link rel="stylesheet" type="text/css" href="'.$_SESSION['basepath'].'crm/jquery-ui/themes/base/jquery-ui.css"> 
-    <script type="text/javascript" src="'.$_SESSION['basepath'].'crm/jquery-ui/jquery.js"></script> 
-    <script type="text/javascript" src="'.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery-ui.js"></script>
+    <?php echo $menu['stylesheets']; ?>
+    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION["basepath"]; ?>crm/css/<?php echo $_SESSION["stylesheet"]; ?>/main.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $_SESSION['basepath']; ?>crm/jquery-ui/themes/base/jquery-ui.css"> 
+    <?php echo $_SESSION['theme']; ?>
+
+    <script type="text/javascript" src="<?php echo $_SESSION['basepath']; ?>crm/jquery-ui/jquery.js"></script> 
+    <script type="text/javascript" src="<?php echo $_SESSION['basepath']; ?>crm/jquery-ui/ui/jquery-ui.js"></script>
     <script language="JavaScript">
         function showD (src,id) {
 	       if      (src=="C") { uri="firma1.php?Q=C&id=" + id }
@@ -19,9 +21,8 @@ ob_start();
   		   else if (src=="K") { uri="kontakt.php?id=" + id; }
 		   window.location.href=uri;
 	    }
-    </script>'; 
-    if ($feature_ac) { 
-        echo '   
+    </script> 
+<?php    if ($feature_ac) { ?>
     <style>
         .ui-autocomplete-category {
             font-weight: bold;
@@ -56,9 +57,9 @@ ob_start();
                 }
             });
         });
-    </script>'; 
-    }//end feature_ac 
-    ?> 
+    </script> 
+<?php    }//end feature_ac 
+?>
     <script>
     $(function() {
         $("#dialog").dialog();

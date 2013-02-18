@@ -2,9 +2,11 @@
 	<head><title></title>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
         {STYLESHEETS}
-        {JAVASCRIPTS}
         <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
+        <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
+    {THEME}    
         <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
+        {JAVASCRIPTS}
 <body >
 {PRE_CONTENT}
 {START_CONTENT}

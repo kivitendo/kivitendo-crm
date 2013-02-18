@@ -72,6 +72,7 @@
         START_CONTENT => $menu['start_content'],
         END_CONTENT   => $menu['end_content'],
         JQUERY        => $_SESSION['basepath'].'crm/',
+        'THEME'         => $_SESSION['theme'],
     ));
     $t->set_file(array("wvl" => $templ));
          if ($data["kontakttab"]=="P") { $stammlink="kontakt.php?id=".$data["kontaktid"]; }

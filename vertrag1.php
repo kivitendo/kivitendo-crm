@@ -15,11 +15,11 @@
     <head><title></title>
     <!-- ERP Stylesheet -->
     <?php echo $menu['stylesheets']; ?>
-    <!-- ERP JavaScripts -->
-    <?php echo $menu['javascripts']; ?>
     <!-- Ende ERP -->
     <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
     <script type="text/javascript" src="<?php echo $_SESSION['basepath']; ?>crm/jquery-ui/jquery.js"></script> 
+    <!-- ERP JavaScripts -->
+    <?php echo $menu['javascripts']; ?>
 <body >
 <?=$menu['pre_content'];?>
 <?=$menu['start_content'];?>

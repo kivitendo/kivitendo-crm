@@ -1,9 +1,9 @@
 <html>
 	<head><title></title>
-        {STYLESHEETS}
-        {JAVASCRIPTS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-
+{STYLESHEETS}
+    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
+    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
+{JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
 	function chkfld() {

@@ -3,8 +3,10 @@
     {STYLESHEETS}
     <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
     <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
+    {THEME}
     <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
     <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
+    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/i18n/jquery.ui.datepicker-de.js"></script>
     {JAVASCRIPTS}
 
     <script language="JavaScript">
@@ -23,6 +25,7 @@
     $(document).ready(
         function(){
             $( "#maintab" ).tabs({ heightStyle: "auto" });
+            $( "#cp_birthday" ).datepicker($.datepicker.regional[ "de" ]);
         });
     //-->
     </script>
@@ -145,7 +148,7 @@
             </div>
             <div class="zeile2">
                 <span class="label klein">.:birthday:.</span>
-                <span class="feld"><input type="text" name="cp_birthday" size="10" maxlength="10" value="{cp_birthday}" tabindex="17"><span class="klein"> TT.MM.JJJJ</span></span>
+                <span class="feld"><input type="text" name="cp_birthday" id="cp_birthday" size="10" maxlength="10" value="{cp_birthday}" tabindex="17"><span class="klein"> TT.MM.JJJJ</span></span>
             </div>
             <div class="zeile2">
                 <span class="label klein">.:image:.</span>

@@ -1,8 +1,10 @@
 <html>
 	<head><title></title>
         {STYLESHEETS}
-        <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
         <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
+        <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
+        {THEME}    
+        <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
         {JAVASCRIPTS}
 <body>
 {PRE_CONTENT}

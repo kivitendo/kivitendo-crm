@@ -3,7 +3,11 @@
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 	{STYLESHEETS}
         <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
+    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
+    {THEME}
         <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
+        <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
+        <script type="text/javascript" src="{JQUERY}jquery-ui/ui/i18n/jquery.ui.datepicker-de.js"></script>   
     {JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
@@ -16,6 +20,11 @@
 			document.formular.maschinen.options[nr]=null	
 		}
 	//-->
+	</script>
+	<script>
+        $(function() {
+            $( "#inspdatum" ).datepicker($.datepicker.regional[ "de" ]);
+        });
 	</script>
 <body >
 {PRE_CONTENT}
@@ -53,7 +62,7 @@
 			<input type="submit" name="ort" value="sichern"></td>
 	</tr>	
 	<tr>
-		<td class="norm"><b>Insp. Datum: </b><input type="text" name="inspdatum" size="9" value="{inspdatum}"> <input type="submit" name="idat" value="sichern"></td>
+		<td class="norm"><b>Insp. Datum: </b><input type="text" name="inspdatum" id="inspdatum" size="9" value="{inspdatum}"> <input type="submit" name="idat" value="sichern"></td>
 		<td class="norm"><b>Z&auml;hler: </b><input type="text" name="counter" size="12" value="{counter}"> <input type="submit" name="cnt" value="sichern"></td>
 	</tr>
 	<tr>

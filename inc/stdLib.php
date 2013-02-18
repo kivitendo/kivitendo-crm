@@ -208,7 +208,8 @@ global $ERPNAME,$erpConfigFile;
         $_SESSION["menu"]       = makeMenu($_SESSION["sessid"],$_SESSION["token"]);
         $_SESSION["basepath"]   = $BaseUrl;
         $_SESSION['token']      = False;
-        $_SESSION['theme']      = $tmp['theme'];
+        $_SESSION['theme']      = ($tmp['theme']=='base')?'':'<link rel="stylesheet" type="text/css" href="'.$_SESSION['baseurl'].'crm/jquery-ui/themes/'.$tmp['theme'].'/jquery-ui.css">';
+        ;
         return true;
     }
 }

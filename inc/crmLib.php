@@ -2491,7 +2491,6 @@ global $db;
     $sql.="left join employee E on O.employee=E.id where categorie = $id and $rechte order by initdate desc limit 1";
     //$sql.="left join employee E on O.employee=E.id where categorie = $id order by initdate desc limit 1";
     $rs = $db->getOne($sql);
-    $f = fopen("/tmp/y","w"); fputs($f,$rechte."\n".$sql."\n".print_r($rs,true)); fclose($f);
     if ( $rs ) {
         return $rs;
     } else {
@@ -2508,12 +2507,13 @@ global $db;
 function insWContent($data) {
 global $db;
     $kat = $data['kat'];
-    $cont = trim($data["content"]);
-    $cont = addslashes($cont);
-    $own = ($data['owener'] > 0)?$data['owener']:"null";
-    $sql="insert into wissencontent (initdate,content,employee,version,categorie,owener) values ";
-    $sql.="(now(),'".$cont."',".$_SESSION["loginCRM"].",(SELECT coalesce(max(version)+1,1) FROM wissencontent WHERE categorie = $kat),".$kat.",".$own.")";
-    $rc=$db->query($sql);
+    $own = ($data['owener'] > 0)?$data['owener']:'';
+    $vers = "(SELECT max(version) FROM wissencontent WHERE categorie = $kat)+1";
+    $prep = "INSERT INTO wissencontent (initdate, content, employee, version, categorie, owener) VALUES (now(), ?, ?, $vers, ?, ?)";
+    $rc = $db->insert('wissencontent',
+                      array('content','employee','categorie','owener'),
+                      array(trim($data['content']),$_SESSION["loginCRM"],$kat,$own),
+                      $prep);
     return $rc;
 }
 

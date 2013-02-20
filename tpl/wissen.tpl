@@ -31,16 +31,15 @@
         } else {
             showSel();
         }
-        $.get('jqhelp/wissen.php?task=edit&id='+id+"&edit="+editor, function( content ) {
+        $.get( 'jqhelp/wissen.php?task=edit&id='+id+'&edit='+editor, function(content) {
                 $('#wissencontent').empty().append(content);
-        } );
+        });
     }
     function newContent() { 
         $.get('jqhelp/wissen.php?task=neu', function( content ) {
             $('#headline').empty().append('[<b>'+$('#catname').text()+'</b>] Neu');
             $('#wissencontent').empty().append(content);
             showEdit();
-            
         } );
     }
     function saveContent() {

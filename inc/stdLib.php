@@ -249,8 +249,8 @@ function chkdir($dir,$p="") {
         $tmp  = $_SESSION["mansel"]."/";
         foreach ( $dirs as $dir ) {
             if ( !file_exists("$p./dokumente/$tmp".$dir) ) {
-                $ok = mkdir("$p./dokumente/$tmp".$dir);
-                if ( $GLOBALS['dir_group'] ) chgrp("$p./dokumente/$tmp".$dir,$GLOBALS['dir_group']); 
+                $ok = @mkdir("$p./dokumente/$tmp".$dir);
+                if ( $GLOBALS['dir_group'] ) @chgrp("$p./dokumente/$tmp".$dir,$GLOBALS['dir_group']); 
                 if ( !$ok ) return false;
             };
             $tmp .= $dir."/";

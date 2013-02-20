@@ -82,7 +82,6 @@
 <html>
 <head><title></title>
     <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
-    <script type="text/javascript" src="<?php echo $_SESSION['basepath']; ?>crm/jquery-ui/ui/jquery-ui.js"></script>
 <body>
 
 <form name='form' method='post' action='etiketten.php'>

@@ -14,7 +14,7 @@ class myDB extends MDB2 {
  var $db = false;
  var $rc = false;
  var $showErr = false; // Browserausgabe
- var $log = false;     // Alle Abfragen mitloggen
+ var $log = true;     // Alle Abfragen mitloggen
  var $errfile = "/tmp/lxcrm.err";
  var $logfile = "/tmp/lxcrm.log";
  var $lfh = false;
@@ -105,6 +105,7 @@ class myDB extends MDB2 {
         if (strpos($sql,";")>0) {
             //Sql-Injection? HTML-Sonderzeichen zulassen
             if (!preg_match("/&[a-zA-Z]+$/",substr($sql,0,strpos($sql,";"))))
+                $this->dbFehler($sql,'SQL-injection??');
                 return false;
         }
         $this->rc=@$this->db->query($sql);
@@ -161,7 +162,6 @@ class myDB extends MDB2 {
             $this->rollback();
             return false;
         }
-        //@$this->db->free();
         return true;
     }
 
@@ -172,15 +172,21 @@ class myDB extends MDB2 {
     * IN: $values - dazugehörige Werte
     * OUT: true/false
     **********************************************/
-    function insert($table,$fields,$values) {
+    function insert($table,$fields,$values,$prepstatement='') {
         if ($this->log) {
             $this->writeLog('Insert in: '.$table,false);
             $this->writeLog(print_r($fields,true),false);
             $this->writeLog(print_r($values,true),false);
+            $this->writeLog($prepstatement,false);
         }
         //SQL-Statement vorbereiten
-        $sth = $this->db->prepare("INSERT INTO $table (".implode(',',$fields).") VALUES (".str_repeat("?,",count($fields)-1)."?)");
+        if ( $prepstatement != '' ) {
+            $sth = $this->db->prepare($prepstatement);
+        } else {
+            $sth = $this->db->prepare("INSERT INTO $table (".implode(',',$fields).") VALUES (".str_repeat("?,",count($fields)-1)."?)");
+        }
         if (PEAR::isError($sth)) {
+            $this->writeLog("Prepare: ".$sth->getMessage(),false);
             $this->dbFehler($sql,$sth->getMessage());
             $this->dbFehler(print_r($fields,true),print_r($values,true));
             $this->rollback();
@@ -189,12 +195,13 @@ class myDB extends MDB2 {
         //wenn ok, ausführen
         $this->rc=@$sth->execute( $values);
         if(PEAR::isError($this->rc)) {
+            $this->writeLog("Execute: ".$this->rc->getMessage(),false);
             $this->dbFehler($sql,$this->rc->getMessage());
             $this->rollback();
             return false;
+        } else {
+            return $this->db->lastInsertID();
         }
-        //@$this->db->free();
-        return true;
     }
 
     function begin() {

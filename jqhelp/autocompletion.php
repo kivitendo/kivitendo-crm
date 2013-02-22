@@ -21,6 +21,10 @@ if ($_GET['case']=='name') {
     if ($rsV) foreach ( $rsV as $key => $value ) {
         if (count($rs) > 11) break; 
         array_push($rs,array('label'=>$value['name'],'category'=>'Lieferanten','src'=>'V','id'=>$value['id']));//ToDo translate 
+        if(isset($_GET['src']) && $_GET['src']=='cv') {
+            echo json_encode($rs); 
+            return;
+        }
     } 
     if ($rsK) foreach ( $rsK as $key => $value ) {
         if (count($rs) > 11) break;  

@@ -26,6 +26,15 @@
         function(){
             $( "#maintab" ).tabs({ heightStyle: "auto" });
             $( "#cp_birthday" ).datepicker($.datepicker.regional[ "de" ]);
+            $(function(){
+                $("#company_name").autocomplete({                          
+                    source: "jqhelp/autocompletion.php?case=name&src=cv",                            
+                    minLength: '2',
+                    select: function(e,ui) {               
+                        $("#cp_cv_id").val(ui.item.id);
+                    }
+                });
+            });
         });
     //-->
     </script>
@@ -50,7 +59,7 @@
     <input type="hidden" name="employee" value="{employee}">
     <input type="hidden" name="IMG_" value="{IMG_}">
     <input type="hidden" name="nummer" value="{nummer}">
-    <input type="hidden" name="cp_cv_id" size="7" maxlength="10" value="{FID}" tabindex="32">
+    <input type="hidden" name="cp_cv_id" id="cp_cv_id" size="7" maxlength="10" value="{FID}" tabindex="32">
 
     <span id="tab1">
         <div class="zeile2">
@@ -128,15 +137,15 @@
     <span id="tab2">
         <div class="zeile2">
             <span class="label klein">.:Company:.</span>
-            <span class="feld"><input type="text" name="name" size="25" maxlength="75" value="{Firma}" tabindex="18"><input type="button" name="fa" value=".:search:." onClick="suchFa();"  tabindex="19"></span>
+            <span class="feld"><input type="text" name="name" id="company_name" size="25" maxlength="75" value="{Firma}" tabindex="18">
         </div>
         <div class="zeile2">
             <span class="label klein">.:department:.</span>
-            <span class="feld"><input type="text" name="cp_abteilung" size="25" maxlength="30" value="{cp_abteilung}" tabindex="20"></span>
+            <span class="feld"><input type="text" name="cp_abteilung" size="25" maxlength="30" value="{cp_abteilung}" tabindex="19"></span>
         </div>
         <div class="zeile2">
             <span class="label klein">.:position:.</span>
-            <span class="feld"><input type="text" name="cp_position" size="25" maxlength="25" value="{cp_position}" tabindex="21"></span>
+            <span class="feld"><input type="text" name="cp_position" size="25" maxlength="25" value="{cp_position}" tabindex="20"></span>
         </div>
     </span>
 
@@ -144,7 +153,7 @@
         <span  style="float:left;">
             <div class="zeile2">
                 <span class="label klein">.:Catchword:.</span>
-                <span class="feld"><input type="text" name="cp_stichwort1" size="25" maxlength="50" value="{cp_stichwort1}" tabindex="22"></span>
+                <span class="feld"><input type="text" name="cp_stichwort1" size="25" maxlength="50" value="{cp_stichwort1}" tabindex="21"></span>
             </div>
             <div class="zeile2">
                 <span class="label klein">.:birthday:.</span>
@@ -152,7 +161,7 @@
             </div>
             <div class="zeile2">
                 <span class="label klein">.:image:.</span>
-                <span class="feld"><input type="file" name="Datei[bild]" size="10" maxlength="75" tabindex="23"></span>
+                <span class="feld"><input type="file" name="Datei[bild]" size="10" maxlength="75" tabindex="22"></span>
             </div>
             <div class="zeile2">
                 <span class="label klein">.:vcard:.</span>

@@ -77,19 +77,9 @@
     }
     $t = new Template($base);
     $t->set_file(array("co1" => "firma2.tpl"));
-    $menu =  $_SESSION['menu'];
-    $t->set_var(array(
-        JAVASCRIPTS   => $menu['javascripts'],
-        STYLESHEETS   => $menu['stylesheets'],
-        PRE_CONTENT   => $menu['pre_content'],
-        START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content'],
-        JQUERY        => $_SESSION['basepath'].'crm/',
-        'THEME'         => $_SESSION['theme'],
-    ));
+    doHeader($t);
     $t->set_var(array(
             FAART    => ($Q=="C")?".:Customer:.":".:Vendor:.",   //"Kunde":"Lieferant",
-            ERPCSS   => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
             interv   => $_SESSION["interv"]*1000,
             Q        => $Q,
             Link1    => $link1,

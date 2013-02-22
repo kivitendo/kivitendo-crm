@@ -30,17 +30,7 @@
             header ("location:firma1.php?Q=$Q&id=".$daten[0]["id"]);
         } else if (count($daten)>1) {
             $t->set_file(array("fa1" => "firmen1L.tpl"));
-            $menu =  $_SESSION['menu']; 
-            $t->set_var(array(
-                JAVASCRIPTS   => $menu['javascripts'],
-                STYLESHEETS   => $menu['stylesheets'],
-                PRE_CONTENT   => $menu['pre_content'],
-                START_CONTENT => $menu['start_content'],
-                END_CONTENT   => $menu['end_content'],
-                JQUERY        => $_SESSION['basepath'].'crm/',
-                ERPCSS        => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-                THEME         => $_SESSION['theme'],
-            ));
+            doHeader($t);
             $t->set_block("fa1","Liste","Block");
             $t->set_var(array(
                 FAART => ($Q=="C")?"Customer":"Vendor", 

@@ -36,10 +36,8 @@
         echo json_encode($data);
     }
     function showCalls($id,$start,$fa=false) {
-        $max=0;
         $nun=date("d.m.Y h:i");
-        $item[]=array('id' => 0, 'new' => '', 'inout' => '', 'calldate' => $nun, 'caller_id' => '', 'cp_name' => $_SESSION['employee'], 'cause' => translate('.:newItem:.','firma') );
-        $items=getAllTelCall($id,$fa,$start);
+        $items=getAllTelCall($id,$fa,$start,200);
         if ($items) {
             foreach ($items as $row) {
                 $row['calldate'] = db2date(substr($row["calldate"],0,10))." ".substr($row["calldate"],11,5);
@@ -47,8 +45,7 @@
                 $item[] = $row;
             }
         } 
-        if ($start==0) $max=getAllTelCallMax($id,$firma);
-        $data = array('items'=>$item,'max'=>$max);
+        $data = array('items'=>$item);
         echo json_encode($data);
     }
     function showShipadress($id,$tab){
@@ -383,7 +380,7 @@ switch ($_GET['task']) {
                                break;
     case 'shipto'            : getShipto( $_GET['id'], $_GET['Q'] );
                                break;
-    case 'showCalls'         : showCalls( $_GET['id'], $_GET['start'], $_GET['firma'] );
+    case 'showCalls'         : showCalls( $_GET['id'], $_GET['firma'] );
                                break;
     case 'showShipadress'    : showShipadress( $_GET['id'], $_GET['Q'] );
                                break;

@@ -6,13 +6,27 @@
     include("inc/UserLib.php");
     $menu =  $_SESSION['menu'];
     $t = new Template($base);
-    $t->set_var(array(
-        JAVASCRIPTS   => $menu['javascripts'],
-        STYLESHEETS   => $menu['stylesheets'],
-        PRE_CONTENT   => $menu['pre_content'],
-        START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content']
-    ));
+    if ( $_GET['src'] == 'F' ) {
+        $t->set_var(array(
+            JAVASCRIPTS   => '',
+            STYLESHEETS   => $menu['stylesheets'],
+            PRE_CONTENT   => '',
+            START_CONTENT => '',
+            END_CONTENT   => '',
+            'JQUERY'        => $_SESSION['basepath'].'crm/',
+            'THEME'         => $_SESSION['theme'],
+        ));
+    } else {
+        $t->set_var(array(
+            JAVASCRIPTS   => $menu['javascripts'],
+            STYLESHEETS   => $menu['stylesheets'],
+            PRE_CONTENT   => $menu['pre_content'],
+            START_CONTENT => $menu['start_content'],
+            END_CONTENT   => $menu['end_content'],
+            'JQUERY'        => $_SESSION['basepath'].'crm/',
+            'THEME'         => $_SESSION['theme'],
+        ));
+    }
     $user=getUserStamm($_SESSION["loginCRM"]);
     $MailSign=str_replace("\n","<br>",$user["mailsign"]);
     $MailSign=str_replace("\r","",$MailSign);

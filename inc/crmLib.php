@@ -32,26 +32,21 @@ function mkSuchwort($suchwort) {
 * out: rs = array(Felder der db)
 * hole alle Anrufe einer Person oder einer Firma
 *****************************************************/
-function getAllTelCall($id,$firma,$start=0,$lim=19) {
+function getAllTelCall($id,$firma) {
 global $db;
-    if (!$start || $start<0) $start=0;
     if ($firma) {    // dann hole alle Kontakte der Firma
         $sql="select id,caller_id,kontakt,cause,calldate,cp_name,inout from ";
         $sql.="telcall left join contacts on caller_id=cp_id where bezug=0 ";
         $sql.="and (caller_id in (select cp_id from contacts where cp_cv_id=$id) or caller_id=$id)";
      } else {  // hole nur die einer Person
-        $where="and caller_id=$id and caller_id=cp_id";
         $sql="select id,caller_id,kontakt,cause,calldate,cp_name,inout from ";
         $sql.="telcall left join contacts on caller_id=cp_id where bezug=0 and caller_id=$id";
+        $where="and caller_id=$id and caller_id=cp_id";
     }
-    $rs=$db->getAll($sql." order by calldate desc offset $start ".(($lim>0)?"limit $lim":""));
+    $rs=$db->getAll($sql." order by calldate desc ");
     if(!$rs) {
         $rs=false;
     } else {
-        if ($start>0 && count($rs)==0) { //Mit dem Offset keine Eiträge gefunden, also die vorherigen Eintr�ge lesen
-            $start=($start>$lim)?($start-$lim):0;
-            $rs=$db->getAll($sql." order by calldate desc offset $start ".(($lim>0)?"limit $lim":""));
-        }
         //Neuesten Eintrag ermitteln
         $sql="select telcall.* from telcall left join contacts on caller_id=cp_id where  ";
         $sql.="(caller_id in (select cp_id from contacts where cp_cv_id=$id) or caller_id=$id) ";
@@ -80,7 +75,7 @@ global $db;
 function getAllTelCallMax($id,$firma) {
 global $db;
     if ($firma) {    // dann hole alle Kontakte der Firma
-        $sql="select id,caller_id,kontakt,cause,calldate,cp_name from ";
+        $sql="select id,caller_id,kontakt,cause,calldate,contacts.cp_name from ";
         $sql.="telcall left join contacts on caller_id=cp_id where bezug=0 ";
         $sql.="and (caller_id in (select cp_id from contacts where cp_cv_id=$id) or caller_id=$id)";
      } else {  // hole nur die einer Person

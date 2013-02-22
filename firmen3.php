@@ -5,17 +5,7 @@
 	include("inc/UserLib.php");
 	$Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
 	$t = new Template($base);
-        $menu =  $_SESSION['menu'];
-        $t->set_var(array(
-            JAVASCRIPTS   => $menu['javascripts'],
-            STYLESHEETS   => $menu['stylesheets'],
-            PRE_CONTENT   => $menu['pre_content'],
-            START_CONTENT => $menu['start_content'],
-            END_CONTENT   => $menu['end_content'],
-            JQUERY        => $_SESSION['basepath'].'crm/', 
-            'THEME'         => $_SESSION['theme'],
-        ));
-
+    doHeader($t);
 	$t->set_file(array("fa1" => "firmen3.tpl"));
 	if ($_POST["saveneu"]) {
 	        $_POST["customernumber"]=false;

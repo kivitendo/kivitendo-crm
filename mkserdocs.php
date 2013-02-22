@@ -1,5 +1,12 @@
 <?php
 session_start();
+    @apache_setenv('no-gzip', 1);
+    @ini_set('zlib.output_compression', 0);
+    @ini_set('implicit_flush', 1);
+
+echo "Bitte das Fenster erst nach Aufforderung schlie&szlig;en<br>";
+ob_end_flush();
+
 require_once("inc/stdLib.php");
 require_once("inc/crmLib.php");
 
@@ -31,7 +38,6 @@ switch ($typ) {
                 break;
 }
 
-echo "Bitte das Fenster erst nach Aufforderung schlie&szlig;en<br>";
 
 $doc->loadDocument("./dokumente/".$_SESSION["mansel"]."/serbrief/".$_SESSION["datei"]);
 $doc->savecontent();
@@ -91,7 +97,7 @@ if ($data) {
         insCall($tdata,false);
         $doc->parse($vars);
         $doc->cleanTemplate();
-        $doc->save($_SESSION["savefiledir"]."/".$row["id"]."_".$_SESSION["datei"]);
+        $doc->save($_SESSION["savefiledir"]."/".$_SESSION['src'].$row["id"]."_".$_SESSION["datei"]);
         if ($cnt++ % 10 == 0) echo "."; flush();
         $doc->getoriginal();
         foreach ($vars as $key=>$val) { $vars[$key]=""; };
@@ -102,3 +108,4 @@ if ($data) {
 ?>
 <br>
 Sie k&ouml;nnen das Fensten jetzt schlie&szlig;en;
+<br><center><a href='javascript:self.close();'>close</a></center>

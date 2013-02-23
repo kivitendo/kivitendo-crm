@@ -10,6 +10,7 @@
     <script language="JavaScript" type="text/javascript">
     <!--
     function showCall() {
+        $('#calls tr[group="tc"]').remove();
         $.ajax({
            url: 'jqhelp/firmaserver.php?task=showCalls&firma=1&id={FID}',
            dataType: 'json',
@@ -17,10 +18,10 @@
                         var content;
                         $.each(data.items, function(i) {
                              content = '';
-                             content += '<tr onClick="showItem('+data.items[i].id+');">'
+                             content += '<tr group="tc" onClick="showItem('+data.items[i].id+');">'
                              content += '<td>' + data.items[i].calldate + '</td>';
                              content += '<td>' + data.items[i].id + '</td>';
-                             content += '<td>' + data.items[i].kontakt;
+                             content += '<td nowrap>' + data.items[i].kontakt;
                              if (data.items[i].inout == 'o') {
                                   content += ' &gt;</td>';
                              } else if (data.items[i].inout == 'i') {
@@ -64,28 +65,22 @@
     function notes() {
             F1=open("showNote.php?fid={FID}","Notes","width=400, height=400, left=100, top=50, scrollbars=yes");
         }
-    function ks() {
-        sw=document.ksearch.suchwort.value;
-        if (sw != "") 
-            F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
-        return false;
-    }
-        function doLink() {
-            if ( document.getElementById('actionmenu').selectedIndex > 0 ) {
-                link = $('#actionmenu option:selected').val();
-                if (link.substr(0,7) =='onClick') {
-                    document.oe.type.value=link.substr(8);
-                    document.oe.submit();
+    function doLink() {
+        if ( document.getElementById('actionmenu').selectedIndex > 0 ) {
+            link = $('#actionmenu option:selected').val();
+            if (link.substr(0,7) =='onClick') {
+                document.oe.type.value=link.substr(8);
+                document.oe.submit();
+            } else {
+                lnk = document.getElementById('actionmenu').options[document.getElementById('actionmenu').selectedIndex].value;
+                if (link.substr(0,4) =='open') {
+                    F1=open(link.substr(5),"CRM","width=350, height=400, left=100, top=50, scrollbars=yes");
                 } else {
-                    lnk = document.getElementById('actionmenu').options[document.getElementById('actionmenu').selectedIndex].value;
-                    if (link.substr(0,4) =='open') {
-                        F1=open(link.substr(5),"CRM","width=350, height=400, left=100, top=50, scrollbars=yes");
-                    } else {
-                        window.location.href = lnk;
-                    }
+                    window.location.href = lnk;
                 }
             }
         }
+    }
     function KdHelp() {
         link = $('#kdhelp option:selected').val();
         if (  $('#kdhelp').prop("selectedIndex") > 0 ) {
@@ -167,7 +162,18 @@
     $(function(){
          $('button')
           .button()
-          .click( function(event) { event.preventDefault();  document.location.href=this.getAttribute('name'); });
+          .click( function(event) { 
+              event.preventDefault();  
+              name = this.getAttribute('name');
+              if ( name == 'ks' ) {
+                  var sw = $('#suchwort').val();
+                  F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
+              } else if ( name == 'reload' ) {
+                  showCall();
+              } else {
+                  document.location.href = name; 
+              }
+          });
          $( "#fasubmenu" ).tabs({ heightStyle: "auto" });
          var index = $('#fasubmenu a[href="#{kdview}"]').parent().index();
          $('#fasubmenu').tabs('select', index);
@@ -361,12 +367,12 @@
         </tbody>
         </table><br>
         <div id="pager" class="pager" style='position:absolute;'>
-        <form name="ksearch" onSubmit="return ks();"> &nbsp; 
+        <form name="ksearch" onSubmit="false ks();"> &nbsp; 
  	   	<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first"/>
  	   	<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev"/>
-            <input type="text" name="suchwort" size="20"><input type="hidden" name="Q" value="{Q}">
-            <button onClick="ks();">.:search:.</button> 
-            <button onClick="showCall(0);">reload</button> 
+            <input type="text" id='suchwort' name="suchwort" size="20"><input type="hidden" name="Q" value="{Q}">
+            <button id='ks' name='ks'>.:search:.</button> 
+            <button id='reload' name='reload'>reload</button> 
  	   	<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
  	   	<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
  	   	<select class="pagesize" id='pagesize'>

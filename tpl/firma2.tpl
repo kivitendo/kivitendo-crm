@@ -150,12 +150,6 @@
                 $('#kdhelp option')[0].selected = true;
             }
         }        
-        function ks() {
-            sw=document.ksearch.suchwort.value;
-            if (sw != "")
-                F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
-            return false;
-        }
     var f1 = null;
     function toolwin(tool,_pid) {
         leftpos=Math.floor(screen.width/2);
@@ -183,7 +177,18 @@
     $(function(){
          $('button')
           .button()
-          .click( function(event) { event.preventDefault();  document.location.href=this.getAttribute('name'); });
+          .click( function(event) { 
+              event.preventDefault();  
+              name = this.getAttribute('name');
+              if ( name == 'ks' ) {
+                  var sw = $('#suchwort').val();
+                  F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
+              } else if ( name == 'reload' ) {
+                  showCall();
+              } else {
+                  document.location.href = name; 
+              }
+          });
          $( "input[type=submit]")
           .button()
          .click(function( event ) {
@@ -276,9 +281,9 @@
         <form name="ksearch" onSubmit="return ks();"> &nbsp; 
  	   	<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first"/>
  	   	<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev"/>
-            <input type="text" name="suchwort" size="20"><input type="hidden" name="Q" value="{Q}">
-            <button onClick="ks();">.:search:.</button> 
-            <button onClick="showCall();">reload</button> 
+            <input type="text" id="suchwort" name="suchwort" size="20"><input type="hidden" name="Q" value="{Q}">
+            <button id='ks' name='ks'>.:search:.</button> 
+            <button id='reload' name='reload'>reload</button>             
  	   	<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
  	   	<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
  	   	<select class="pagesize" id='pagesize'>

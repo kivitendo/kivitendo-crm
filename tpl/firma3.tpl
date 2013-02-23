@@ -1,12 +1,12 @@
 <html>
 	<head><title></title>
-	{STYLESHEETS}
-    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
-    {THEME}
-    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
-	{JAVASCRIPTS}
+{STYLESHEETS}
+{CRMCSS}
+{THEME} 
+{JQUERY}
+{JQUERYUI}
+{JQTABLE}
+{JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
 	function showM (month) {
@@ -19,6 +19,14 @@
           .click( function(event) { event.preventDefault();  document.location.href=this.getAttribute('name'); });
     });
 	//-->
+	</script>
+    <script>
+    $(document).ready(
+        function(){
+            $("#ums").tablesorter({widthFixed: true, widgets: ['zebra'], headers: { 
+                0: { sorter: false }, 1: { sorter: false }, 2: { sorter: false }, 3: { sorter: false }, 4: { sorter: false } } 
+            });
+        })
 	</script>
 <body>
 {PRE_CONTENT}
@@ -39,20 +47,20 @@
 <span style="position:absolute; left:38em; top:2.1em;">[<a href="opportunity.php?Q={Q}&fid={FID}">.:Opportunitys:.</a>]</span>
 <div style="position:absolute; left:1em; top:5em; width:99%;text-align:center;" class="normal">
 	<div style="float:left; width:23em; text-align:left; " >
-		<table style="width:100%;">
-			<tr class="klein">
-				<th width="10%">.:Month:.</th>
+		<table id="ums" class="tablesorter" style="width:100%;">
+			<thead><tr>
+				<th >.:Month:.</th>
 				<th></th><th>.:Sales:.</th>
-				<th>.:Quotation:.</td><td width="10%"></td>
-			</tr>
+				<th>.:Quotation:.</th><th></th>
+			</tr></thead><tbody>
 <!-- BEGIN Liste -->
-			<tr class="klein bgcol{LineCol}" onClick="showM('{Month}');">
+			<tr onClick="showM('{Month}');">
 				<td >{Month}</td>
-				<td >{Rcount}</td><td class="re">{RSumme}</td>
-				<td class="re">{ASumme}</td><td class="">&nbsp;{Curr}</td>
+				<td >{Rcount}</td><td >{RSumme}</td>
+				<td >{ASumme}</td><td >&nbsp;{Curr}</td>
 			</tr>
 <!-- END Liste -->
-		</table>
+		</tbody></table>
 	</div>
 	<div style="float:left; text-align:right; width:520px;" class="fett">
 	<center>.:Netto sales over 12 Month:. 

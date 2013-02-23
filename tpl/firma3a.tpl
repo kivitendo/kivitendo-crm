@@ -1,12 +1,12 @@
 <html>
 	<head><title></title>
-        {STYLESHEETS}
-    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
-    {THEME}
-    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
-        {JAVASCRIPTS}
+{STYLESHEETS}
+{CRMCSS}
+{THEME} 
+{JQUERY}
+{JQUERYUI}
+{JQTABLE}
+{JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
 	function showP (id,nr) {
@@ -22,6 +22,14 @@
     });
 	//-->
 	</script>
+	<script>
+    $(document).ready(
+        function(){
+            $("#ums").tablesorter({widthFixed: true, widgets: ['zebra'], headers: { 
+                0: { sorter: false }, 1: { sorter: false }, 2: { sorter: false }, 3: { sorter: false }, 4: { sorter: false } } 
+            });
+        })
+	</script>    
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
@@ -42,30 +50,30 @@
 <span style="position:absolute; left:38em; top:0.7em;">[<a href="opportunity.php?Q={Q}&fid={FID}">.:Opportunitys:.</a>]</span>
 <div style="position:absolute; left:1em; top:5em; width:45em;text-align:center;" class="normal">
 .:SalesOrder:. .:Month:. {Monat}
-	<table width="100%">
-		<tr>
-			<th class="klein" style="width:6em">.:date:.</th>
-			<th class="klein">.:number:.</th>
-			<th class="klein">.:netto:.</th>
-			<th class="klein">.:brutto:.</th>
-			<th class="klein" width="4em"></th>
-			<th class="klein">.:art:.</th>
-			<th class="klein">.:OP:.</th>
-		</tr>
+	<table id="ums" class="tablesorter" width="100%">
+		<thead><tr>
+			<th style="width:6em">.:date:.</th>
+			<th>.:number:.</th>
+			<th>.:netto:.</th>
+			<th>.:brutto:.</th>
+			<th width="4em"></th>
+			<th>.:art:.</th>
+			<th>.:OP:.</th>
+		</tr></thead><tbody>
 <!-- BEGIN Liste -->
 		<tr class="klein bgcol{LineCol}" onClick="showP('{Typ}{RNid}','{RNr}');">
-			<td class="">{Datum}</td>
-			<td class=" ce">&nbsp;{RNr}&nbsp;</td>
-			<td class=" re">{RSumme}&nbsp;&nbsp;</td>
-			<td class=" re">{RBrutto}&nbsp;</td>
-			<td class="">{Curr}</td>
-			<td class=" ce">&nbsp;{Typ}</td>
-			<td class=" ce">&nbsp;{offen}</td>
+			<td >{Datum}</td>
+			<td >&nbsp;{RNr}&nbsp;</td>
+			<td class='re'>{RSumme}&nbsp;&nbsp;</td>
+			<td class='re'>{RBrutto}&nbsp;</td>
+			<td >{Curr}</td>
+			<td >&nbsp;{Typ}</td>
+			<td >&nbsp;{offen}</td>
 		</tr>
 <!-- END Liste -->
-		<tr><td class="klein" colspan="6"><b>R</b>).:invoice:., <b>A</b>).:quotation:., <b>L</b>).:orders:.</td></tr>
-		<tr><td class="klein" colspan="6"><b>o</b>).:open:., <b>c</b>).:closed:., <b>+</b>).:paid:., <b>-</b>).:not_paid:.</td></tr>
-	</table>
+		<tr><td colspan="7"><b>R</b>).:invoice:., <b>A</b>).:quotation:., <b>L</b>).:orders:.</td></tr>
+		<tr><td colspan="7"><b>o</b>).:open:., <b>c</b>).:closed:., <b>+</b>).:paid:., <b>-</b>).:not_paid:.</td></tr>
+	</tbody></table>
 </div>	
 <!-- Hier endet die Karte ------------------------------------------->
 </span>

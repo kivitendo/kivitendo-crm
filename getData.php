@@ -21,6 +21,9 @@ ob_start();
   		   else if (src=="K") { uri="kontakt.php?id=" + id; }
 		   window.location.href=uri;
 	    }
+        function showItem(id,Q,FID) {
+		    F1=open("<?php echo $_SESSION["basepath"]; ?>crm/getCall.php?Q="+Q+"&fid="+FID+"&hole="+id,"Caller","width=610, height=600, left=100, top=50, scrollbars=yes");
+	    }        
     </script> 
 <?php    if ($feature_ac) { ?>
     <style>
@@ -82,13 +85,41 @@ ob_start();
     <span class="liste">Suchbegriff</span>
 </form>
 <?php //wichtig: focus().val('ohneLeerZeichen')
-    echo $menu['end_content'];
-    ob_end_flush(); 
-if ($_GET["kontakt"] && $_GET['swort'] != '') { ?>
-    <script language="JavaScript">
-        F1=open("suchKontakt.php?suchwort=<?php echo $_GET['swort']; ?>&Q=S","Suche","width=800, height=600, left=100, top=50, scrollbars=yes");
-    </script> 
-<?php
+if ($_GET["kontakt"] && $_GET['swort'] != '') { 
+	$sw = strtoupper( $_GET["suchwort"] );
+	$sw = strtr( $sw, "*?", "%_" );
+	$sql  = "select calldate,cause,t.id,caller_id,bezug,V.name as lname,C.name as kname,P.cp_name as pname ";
+	$sql .= "from telcall t left join customer C on C.id=caller_id left join vendor V on V.id=caller_id ";
+	$sql .= "left join contacts P on caller_id=P.cp_id where UPPER(cause) like '%$sw%' or UPPER(c_long) like '%$sw%' ";
+    $sql .= 'order by bezug,calldate desc limit '.$listLimit;
+	$rs = $db->getAll( $sql );
+	$used = Array();
+	if( $rs ) {	
+        echo "<table id='treffer' class='tablesorter'>\n"; 
+        echo "<thead><tr ><th>Datum</th><th>Grund</th><th>Name</th>\n<tbody>\n"; 
+		$i = 0;
+		foreach ( $rs as $row ) {
+			if ( $row["bezug"] > 0 and in_array($row["bezug"], $used) ) continue;
+			if ( $row["bezug"]==0 ) $used[]=$row["id"];
+			if ( strlen($row["cause"]) > 30 ) { $cause = substr($row["cause"], 0, 30).".."; }
+			else { $cause = $row["cause"]; };
+			if      ( $row["kname"] ) { $name = $row["kname"]; $src="C"; }
+			else if ( $row["lname"] ) { $name = $row["lname"]; $src="V";  }
+			else if ( $row["pname"] ) { $name = $row["pname"]; $src="CC"; }
+			else { $name = ""; $src='S'; }
+			echo "<tr onClick='showItem(".$row["id"].",\"$src\",".$row["caller_id"].");'>";
+			echo "<td>".db2date($row["calldate"])."&nbsp;</td><td> ".$cause."</td><td>";
+			echo "$name</td></tr>\n";
+			$i++;
+			if ($i>=$listLimit) {
+				echo "$listLimit von ".count($rs)." Treffern";
+				break;
+			}
+		}
+		echo "</tbody></table>\n<br>";
+	} else {
+		echo "Keine Treffer!";
+	}
 } else if ($_GET["adress"]) {
 	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
@@ -134,12 +165,12 @@ if ($_GET["kontakt"] && $_GET['swort'] != '') { ?>
         if ($anzahl==1 && $rsK) header("Location: kontakt.php?id=".$rsK[0]['id']); 
         if ($anzahl==1 && $rsE) header("Location: user1.php?id=".$rsE[0]['id']); 
         echo "<table id='treffer' class='tablesorter'>\n"; 
-        echo "<thead><tr ><th>KD-Nr</th><th class=\"liste\">Name</th><th class=\"liste\">Anschrift</th><th class=\"liste\">Telefon</th><th></th></tr></thead>\n<tbody>\n"; 
+        echo "<thead><tr ><th>KD-Nr</th><th>Name</th><th>Anschrift</th><th>Telefon</th><th></th></tr></thead>\n<tbody>\n"; 
         $i=0; 
         if ($rsC) foreach($rsC as $row) { 
-            echo "<tr class='bgcol".($i%2+1)."' onClick='showD(\"C\",".$row["id"].");'>". 
-                 "<td class=\"liste\">".$row["customernumber"]."</td><td class=\"liste\">".$row["name"]."</td>". 
-                 "<td class=\"liste\">".$row["city"].(($row["street"])?", ":"").$row["street"]."</td><td class=\"liste\">".$row["phone"]."</td><td class=\"liste\">K</td></tr>\n"; 
+            echo "<tr onClick='showD(\"C\",".$row["id"].");'>". 
+                 "<td>".$row["customernumber"]."</td><td>".$row["name"]."</td>". 
+                 "<td>".$row["city"].(($row["street"])?", ":"").$row["street"]."</td><td>".$row["phone"]."</td><td>K</td></tr>\n"; 
             $i++; 
         }  
         if ($rsV) foreach($rsV as $row) { 
@@ -161,6 +192,13 @@ if ($_GET["kontakt"] && $_GET['swort'] != '') { ?>
             $i++; 
         } 
         echo "</tbody></table>\n"; ?>
+        
+<?php   } else { 
+ 	        echo $msg; 
+        }; 
+    } 
+    if ($_GET['kontakt'] || $_GET['adress']) {
+?>
         <br>
 <span id="pager" class="pager">
     <form>
@@ -176,12 +214,9 @@ if ($_GET["kontakt"] && $_GET['swort'] != '') { ?>
         </select>
     </form>
 </span>
-        
-<?php   } else { 
- 	        echo $msg; 
-        }; 
-    } 
+<?php } 
+    echo $menu['end_content'];
+    ob_end_flush(); 
 ?>
-
 </body>
 </html>

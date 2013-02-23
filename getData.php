@@ -3,16 +3,16 @@ ob_start();
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
     $menu = $_SESSION['menu'];
+    $head = mkHeader();
 ?>
 <html>
 <head><title></title>
-    <?php echo $menu['stylesheets']; ?>
-    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION["basepath"]; ?>crm/css/<?php echo $_SESSION["stylesheet"]; ?>/main.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo $_SESSION['basepath']; ?>crm/jquery-ui/themes/base/jquery-ui.css"> 
-    <?php echo $_SESSION['theme']; ?>
-
-    <script type="text/javascript" src="<?php echo $_SESSION['basepath']; ?>crm/jquery-ui/jquery.js"></script> 
-    <script type="text/javascript" src="<?php echo $_SESSION['basepath']; ?>crm/jquery-ui/ui/jquery-ui.js"></script>
+<?php echo $menu['stylesheets']; ?>
+<?php echo $head['CRMCSS']; ?>
+<?php echo $head['THEME']; ?>
+<?php echo $head['JQUERY']; ?>
+<?php echo $head['JQUERYUI']; ?>
+<?php echo $head['JQTABLE']; ?>
     <script language="JavaScript">
         function showD (src,id) {
 	       if      (src=="C") { uri="firma1.php?Q=C&id=" + id }
@@ -64,13 +64,32 @@ ob_start();
     $(function() {
         $("#dialog").dialog();
     });
+    $(function() {
+        $("#treffer")
+            .tablesorter({widthFixed: true, widgets: ['zebra']})
+            .tablesorterPager({container: $("#pager"), size: 20, positionFixed: false})
+    });    
     </script>
 </head>
 <body onload=$("#ac0").focus().val('<?php echo preg_replace("#[ ].*#",'',$_GET['swort']);?>');>
+<?php echo $menu['pre_content']; ?>
+<?php echo $menu['start_content']; ?>
+<p class="listtop">Schnellsuche Kunde/Lieferant/Kontakte und Kontaktverlauf</p>
+<form name="suche" action="getData.php" method="get">
+    <input type="text" name="swort" size="25" id="ac0" autocomplete="off"> suche 
+    <input type="submit" name="adress" value="Adresse" id="adress">
+    <input type="submit" name="kontakt" value="Kontaktverlauf"> <br>
+    <span class="liste">Suchbegriff</span>
+</form>
 <?php //wichtig: focus().val('ohneLeerZeichen')
-echo $menu['pre_content'];
-echo $menu['start_content'];
-if ($_GET["adress"]) {
+    echo $menu['end_content'];
+    ob_end_flush(); 
+if ($_GET["kontakt"] && $_GET['swort'] != '') { ?>
+    <script language="JavaScript">
+        F1=open("suchKontakt.php?suchwort=<?php echo $_GET['swort']; ?>&Q=S","Suche","width=800, height=600, left=100, top=50, scrollbars=yes");
+    </script> 
+<?php
+} else if ($_GET["adress"]) {
 	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
 	include("inc/UserLib.php");
@@ -114,9 +133,8 @@ if ($_GET["adress"]) {
         if ($anzahl==1 && $rsV) header("Location: firma1.php?Q=V&id=".$rsV[0]['id']); 
         if ($anzahl==1 && $rsK) header("Location: kontakt.php?id=".$rsK[0]['id']); 
         if ($anzahl==1 && $rsE) header("Location: user1.php?id=".$rsE[0]['id']); 
-        echo '<p class="listtop">Suchergebnis</p>'; 
-        echo "<table class=\"liste\">\n"; 
-        echo "<tr class='bgcol3'><th>KD-Nr</th><th class=\"liste\">Name</th><th class=\"liste\">Anschrift</th><th class=\"liste\">Telefon</th><th></th></tr>\n"; 
+        echo "<table id='treffer' class='tablesorter'>\n"; 
+        echo "<thead><tr ><th>KD-Nr</th><th class=\"liste\">Name</th><th class=\"liste\">Anschrift</th><th class=\"liste\">Telefon</th><th></th></tr></thead>\n<tbody>\n"; 
         $i=0; 
         if ($rsC) foreach($rsC as $row) { 
             echo "<tr class='bgcol".($i%2+1)."' onClick='showD(\"C\",".$row["id"].");'>". 
@@ -142,28 +160,28 @@ if ($_GET["adress"]) {
                  "<td class=\"liste\">".$row["addr2"].(($row["addr1"])?", ":"").$row["addr1"]."</td><td class=\"liste\">".$row["workphone"]."</td><td class=\"liste\">U</td></tr>\n"; 
             $i++; 
         } 
-        echo "</table>\n";
-        } else { 
+        echo "</tbody></table>\n"; ?>
+        <br>
+<span id="pager" class="pager">
+    <form>
+        <img src="<?php echo $_SESSION['baseurl']; ?>crm/jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first"/>
+        <img src="<?php echo $_SESSION['baseurl']; ?>crm/jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev"/>
+        <img src="<?php echo $_SESSION['baseurl']; ?>crm/jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
+        <img src="<?php echo $_SESSION['baseurl']; ?>crm/jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
+        <select class="pagesize" id='pagesize'>
+            <option value="10">10</option>
+            <option value="20" selected>20</option>
+            <option value="30">30</option>
+            <option value="40">40</option>
+        </select>
+    </form>
+</span>
+        
+<?php   } else { 
  	        echo $msg; 
         }; 
-        echo "<br>"; 
-    } else if ($_GET["kontakt"]) {
+    } 
 ?>
-<script language="JavaScript">
-	sw="<?php echo  $_GET["swort"]; ?>";
-	if (sw != "") 
-		F1=open("suchKontakt.php?suchwort="+sw+"&Q=S","Suche","width=800, height=600, left=100, top=50, scrollbars=yes");
-</script>			
 
-<?php } ?> 
-<p class="listtop">Schnellsuche Kunde/Lieferant/Kontakte und Kontaktverlauf</p>
-<form name="suche" action="getData.php" method="get">
-    <input type="text" name="swort" size="25" id="ac0" autocomplete="off"> suche 
-    <input type="submit" name="adress" value="Adresse" id="adress">
-    <input type="submit" name="kontakt" value="Kontaktverlauf"> <br>
-    <span class="liste">Suchbegriff</span>
-</form>
-<?php
-    echo $menu['end_content'];
-    ob_end_flush(); 
-?>
+</body>
+</html>

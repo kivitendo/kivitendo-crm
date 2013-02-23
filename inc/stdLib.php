@@ -97,7 +97,7 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     $auth["dbport"]     = ( !$auth["dbport"] ) ? "5432" : $auth["dbport"];
     $auth["mansel"]     = $auth["dbname"];
     $auth["employee"]   = $auth["login"];
-    $auth["lang"]       = $auth["countrycode"];
+    $auth["lang"]       = ($auth["countrycode"] != '')?$auth["countrycode"]:'en';
     //$auth["stylesheet"] = substr($auth["stylesheet"],0,-4).'/main.css';
     $auth["stylesheet"] = substr($auth["stylesheet"],0,-4);
     $sql  = "SELECT granted from auth.group_rights G where G.right = 'sales_all_edit' ";
@@ -174,6 +174,7 @@ global $ERPNAME,$erpConfigFile;
     $auth = authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie);
     if ( !$auth ) {  return false; };
     chkdir($auth["dbname"]);
+    chkdir($auth["dbname"].'/tmp/');
     $_SESSION = $auth;
     $_SESSION["sessid"] = $cookie;
     $_SESSION["cookie"] = $cookiename;
@@ -242,8 +243,8 @@ function chkVer() {
 * prueft, ob Verzeichnis besteht und legt es bei Bedarf an
 *****************************************************/
 function chkdir($dir,$p="") {
-    if ( file_exists("$p./dokumente/".$_SESSION["mansel"]."/".$dir) ) {    
-        return true;
+    if ( file_exists("$p./dokumente/".$_SESSION["mansel"]."/".$dir) ) { 
+        return getcwd()."$p./dokumente/".$_SESSION["mansel"]."/".$dir;
     } else {
         $dirs = explode("/",$dir);
         $tmp  = $_SESSION["mansel"]."/";
@@ -255,7 +256,7 @@ function chkdir($dir,$p="") {
             };
             $tmp .= $dir."/";
         };
-        return $ok;
+        return getcwd()."$p./dokumente/".$_SESSION["mansel"]."/".$dir;
     }
 }
 
@@ -797,7 +798,53 @@ function  doBlock(&$t,$tpl,$liste,$pre,$data,$id,$text,$selid) {
         $t->parse('Block'.$pre,$liste,true);
     }
 }
+function mkHeader() {
+    $SV = '<script type="text/javascript" src="';
+    $SN = '"></script>'."\n";
+    $LV = '<link rel="stylesheet" type="text/css" href="';
+    $LN = '">'."\n";
+    $head = array(
+        'JQUERY'        => $SV.$_SESSION['basepath'].'crm/jquery-ui/jquery.js'.$SN,
+        'JQUERYUI'      => $LV.$_SESSION['basepath'].'crm/jquery-ui/themes/base/jquery-ui.css'.$LN.
+                           $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery-ui.js'.$SN,
+        'JQTABLE'       => $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/Table/jquery.tablesorter.js'.$SN.
+                           $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/Table/addons/pager/jquery.tablesorter.pager.js'.$SN.
+                           $LV.$_SESSION['basepath'].'crm/jquery-ui/plugin/Table/themes/blue/style.css'.$LN,
+        'JQDATE'        => $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/'.(($_SESSION['lang']=='en')?
+                                                             'jquery.ui.datepicker':
+                                                             'i18n/jquery.ui.datepicker-'.$_SESSION['lang']).
+                                                             '.js'.$SN,
+        'JQFILEUP'      => $LV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/css/jquery.fileupload-ui.css'.$LN.
+                           $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.iframe-transport.js'.$SN.
+                           $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.fileupload.js'.$SN,
+        'JQWIDGET'      => $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery.ui.widget.js'.$SN,
+        'THEME'         => $_SESSION['theme'],
+        'CRMCSS'        => $LV.$_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"].'/main.css'.$LN,
+        'CRMPATH'       => $_SESSION['basepath'].'crm/' );
+    return $head;
 
+}
+function doHeader(&$t) {
+    $head = mkHeader();
+    $menu =  $_SESSION['menu'];
+    $t->set_var(array(
+        JAVASCRIPTS   => $menu['javascripts'],
+        STYLESHEETS   => $menu['stylesheets'],
+        PRE_CONTENT   => $menu['pre_content'],
+        START_CONTENT => $menu['start_content'],
+        END_CONTENT   => $menu['end_content'],
+        JQUERY        => $head['JQUERY'],
+        JQUERYUI      => $head['JQUERYUI'],
+        JQTABLE       => $head['JQTABLE'],
+        JQDATE        => $head['JQDATE'],
+        JQWIDGET      => $head['JQWIDGET'],
+        JQFILEUP      => $head['JQFILEUP'],
+        THEME         => $head['THEME'],
+        CRMCSS        => $head['CRMCSS'],
+        CRMPATH       => $head['CRMPATH']
+    ));
+
+}
 /**
  * TODO: short description.
  * 

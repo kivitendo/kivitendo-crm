@@ -1,12 +1,15 @@
 <html>
 	<head><title></title>
-        {STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
-        <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
+{STYLESHEETS}
+    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
+    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
     {THEME}
-        <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-        <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
-        {JAVASCRIPTS}
+    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
+    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
+    <script type="text/javascript" src="{JQUERY}jquery-ui/plugin/Table/jquery.tablesorter.js"></script>
+    <script type="text/javascript" src="{JQUERY}jquery-ui/plugin/Table/addons/pager/jquery.tablesorter.pager.js"></script>
+    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/plugin/Table/themes/blue/style.css">    
+{JAVASCRIPTS}
 
 	<script language="JavaScript">
 	<!--
@@ -20,37 +23,93 @@
 		uri="kontakt.php?id=" + id;
 		location.href=uri;
 	}
-	function chngSerial(site) {
-		etikett.document.location.href = site + ".php?src=P";
-	}
 	//-->
 	</script>
+    <script>
+	$(function() {
+		$("#treffer")
+			.tablesorter({widthFixed: true, widgets: ['zebra']})
+			.tablesorterPager({container: $("#pager"), size: 20})
+	});
+    $(document).ready(function() {
+    $( "#sercontent" ).dialog({
+      autoOpen: false,
+      show: {
+        effect: "blind",
+        duration: 300
+      },
+      hide: {
+        effect: "explode",
+        duration: 300
+      },
+      //position: { my: "center top", at: "center", of: null } 
+    });
+
+    $( "#butetikett" ).click(function() {
+       $( "#sercontent" ).dialog( "option", "maxWidth", 400 );
+       $( "#sercontent" ).dialog( "open" );
+       $( "#sercontent" ).dialog( { title: "Etiketten" } );
+       $( "#sercontent" ).load("etiketten.php?src=P");
+     });
+    $( "#butvcard" ).click(function() {
+       $( "#sercontent" ).dialog( "option", "maxWidth", 400 );
+       $( "#sercontent" ).dialog( "open" );
+       $( "#sercontent" ).dialog( { title: "V-Cards" } );
+       $( "#sercontent" ).load("servcard.php?src=P");
+     });
+    $( "#butbrief" ).click(function() {
+       $( "#sercontent" ).dialog( "option", "minWidth", 600 );
+       $( "#sercontent" ).dialog( "open" );
+       $( "#sercontent" ).dialog( { title: "Serienbrief" } );
+       $( "#sercontent" ).load("serdoc.php?src=P");
+     });
+    })
+	</script>
+    
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
 <p class="listtop">.:search result:. .:Contacts:.</p>
-<table><tr><td valign="top">
-<!-- Beginn Code ------------------------------------------->
-
-<table>
+<table id="treffer" class="tablesorter" width="90%">  
+    <thead>
+		<tr>
+			<th>Name</th>
+			<th>Plz</th>
+			<th>Ort</th>
+			<th>Telefon</th>
+			<th>E-Mail</th>
+			<th>Firma</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
 <!-- BEGIN Liste -->
-	<tr class="bgcol{LineCol}" onClick='{js}'>
+	<tr onClick='{js}'>
 		<td>{Name}</td><td>&nbsp;{Plz}</td><td>{Ort}</td><td>&nbsp;{Telefon}</td><td>&nbsp;{eMail}</td><td>&nbsp;{Firma}</td><td>&nbsp;{insk}</td></tr>
 <!-- END Liste -->
-	<tr><td class="re" colspan="6">{snd}</td></tr>
+   </tbody>
 </table>
-</td><td class="mini">
-    <form>
-	    <input type="button" name="etikett" value="Etiketten" onClick="chngSerial('etiketten');">&nbsp;
-	    <a href="sermail.php"><input type="button" name="email" value="Serienmail"></a>&nbsp;
-	    <input type="button" name="brief" value="Serienbrief" onClick="chngSerial('serdoc');">
-	    <input type="button" name="vcard" value=".:servcard:." onClick="chngSerial('servcard');">
-    </form><br />
-    <iframe src="etiketten.php" name="etikett" width="380" height="380" marginheight="0" marginwidth="0" align="left">
- 	    <p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>
-    </iframe>
-<!-- Hier endet die Karte ------------------------------------------->
-</td></tr></table>
+<span id="pager" class="pager">
+	<form>
+		<img src="{JQUERY}jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first"/>
+		<img src="{JQUERY}jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev"/>
+		<input type="text" class="pagedisplay"/>
+		<img src="{JQUERY}jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
+		<img src="{JQUERY}jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
+		<select class="pagesize" id='pagesize'>
+			<option value="10">10</option>
+			<option value="20" selected>20</option>
+			<option value="30">30</option>
+			<option value="40">40</option>
+		</select>
+	<input type="button" name="etikett" id="butetikett" value=".:label:." >&nbsp;
+	<input type="button" name="brief"   id="butbrief"   value=".:serdoc:." >&nbsp;
+	<input type="button" name="vcard"   id="butvcard"   value=".:servcard:." >&nbsp;
+	<a href="sermail.php"><input type="button" name="email" value=".:sermail:."></a>
+	</form>
+</span>
+<div id="sercontent"> 
+</div>
 {END_CONTENT}
 </body>
 </html>

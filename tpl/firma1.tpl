@@ -1,37 +1,26 @@
 <html>
     <head><title></title>
-    {STYLESHEETS}
-    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
-    {THEME}
-    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
-    {JAVASCRIPTS}
-    
+{STYLESHEETS}
+{CRMCSS}
+{THEME} 
+{JQUERY}
+{JQUERYUI}
+{JQTABLE}
+{JAVASCRIPTS}
     <script language="JavaScript" type="text/javascript">
     <!--
-    var start = 0;
-    var max = 0;
-    function showCall(dir) {
-        if (dir<0) {
-            if(start>19) { start-=19; }
-            else { start=0; }; }
-        else if (dir>0) {
-            if ((start+19)<max) { start+=19; } 
-            else if (max<19) { start=0; }
-            else { start=max-19; }; 
-        };
+    function showCall() {
         $.ajax({
-           url: "jqhelp/firmaserver.php?task=showCalls&id={FID}&start="+start,
+           url: 'jqhelp/firmaserver.php?task=showCalls&firma=1&id={FID}',
            dataType: 'json',
            success: function(data){
-                        $('#tellcalls').empty();
-                        var content = '<table class="calls" width="99%">';
-                        var lc = 0;
+                        var content;
                         $.each(data.items, function(i) {
-                             content += '<tr class="calls'+lc+'" onClick="showItem('+data.items[i].id+');">'
+                             content = '';
+                             content += '<tr onClick="showItem('+data.items[i].id+');">'
                              content += '<td>' + data.items[i].calldate + '</td>';
-                             content += '<td>' + data.items[i].id;
+                             content += '<td>' + data.items[i].id + '</td>';
+                             content += '<td>' + data.items[i].kontakt;
                              if (data.items[i].inout == 'o') {
                                   content += ' &gt;</td>';
                              } else if (data.items[i].inout == 'i') {
@@ -41,29 +30,35 @@
                              }
                              if ( data.items[i].new == 1 ) {
                                  content += '<td><b>' + data.items[i].cause + '</b></td>';
-                            } else {
+                             } else {
                                  content += '<td>' + data.items[i].cause + '</td>';
-                            }
-                            content += '<td>' + data.items[i].cp_name + '</td></tr>';
-                            lc = ( lc==0 )?1:0;
+                             }
+                             content += '<td>' + data.items[i].cp_name + '</td></tr>';
+                             $('#calls tr:last').after(content);
                         })
-                        content += "</table>"
-                        $('#tellcalls').append(content);
-                        if (data.max>0) max = data.max
+                            $("#calls").trigger('update');
+                            $("#calls")
+                                .tablesorter({widthFixed: true, widgets: ['zebra'], headers: { 2: { sorter: false } } })
+                                .tablesorterPager({container: $("#pager"), size: 15, positionFixed: false})
                     }
            });
-        setTimeout('showCall(0)',{interv});
+        //setTimeout('sortCall()',15);
+        return false;
     }
     function showItem(id) {
         F1=open("getCall.php?Q={Q}&fid={FID}&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
     }
     function anschr(A) {
+        $( "#dialogwin" ).dialog( "option", "maxWidth",  400 );
+        $( "#dialogwin" ).dialog( "option", "maxHeight", 600 );
+        $( "#dialogwin" ).dialog( { title: "Adresse" } );
+        $( "#dialogwin" ).dialog( "open" );
         if (A==1) {
-            F1=open("showAdr.php?Q={Q}&fid={FID}","Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
+            $( "#dialogwin" ).load("showAdr.php?Q={Q}&fid={FID}");    
         } else {
             sid = document.getElementById('SID').firstChild.nodeValue;
-	    if ( sid ) 
-                F1=open("showAdr.php?Q={Q}&sid="+sid,"Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
+            if ( sid ) 
+                $( "#dialogwin" ).load("showAdr.php?Q={Q}&sid="+sid);    
         }
     }
     function notes() {
@@ -162,18 +157,6 @@
     <script>
     $(document).ready(
         function(){
-            $("#left").click(function(){ showCall(-1); }) 
-        });
-    $(document).ready(
-        function(){
-            $("#right").click(function(){ showCall(1); }) 
-        });
-    $(document).ready(
-        function(){
-            $("#reload").click(function(){ showCall(0); }) 
-        });
-    $(document).ready(
-        function(){
             $("#shipleft").click(function(){ nextshipto('-'); }) 
         });
     $(document).ready(
@@ -189,6 +172,20 @@
          var index = $('#fasubmenu a[href="#{kdview}"]').parent().index();
          $('#fasubmenu').tabs('select', index);
     });
+    $(document).ready(
+        function(){
+        $( "#dialogwin" ).dialog({
+          autoOpen: false,
+          show: {
+            effect: "blind",
+            duration: 300
+          },
+          hide: {
+            effect: "explode",
+            duration: 300
+          },
+        });
+    });    
     </script>
     </head>
 <body onLoad=" showCall(0);">
@@ -356,22 +353,33 @@
     </div>
 </div>
 
-<div style="float:left;  width:45%; height:37em; text-align:left; border: 1px solid black; border-left:0px; ">
-    <div class="calls" width='99%' id="tellcalls" >
-    </div>
-    <!--span style="float:left;  text-align:left; border:0px solid black"-->    
-    <span style="position:absolute; bottom:1em; visibility:{none};">
+<div style="float:left; width:45%; height:37em; text-align:left; border: 1px solid grey; border-left:0px;">
+        <table id="calls" class="tablesorter" width="100%" style='margin:0px;'>
+        <thead><tr><th>Datum</th><th>id</th><th class="{ sorter: false }"></th><th>Betreff</th><th>.:contakt:.</th></tr></thead>
+        <tbody>
+        <tr onClick="showItem(0)"><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
+        </tbody>
+        </table><br>
+        <div id="pager" class="pager" style='position:absolute;'>
         <form name="ksearch" onSubmit="return ks();"> &nbsp; 
-        <img src="image/leftarrow.png" align="middle" border="0" id="left" title="zur&uuml;ck" onClick="showCall(-1);"> 
-        <img src="image/reload.png" align="middle" border="0" title="reload" id="reload" onClick="showCall(0);"> 
-        <img src="image/rightarrow.png" align="middle" border="0" title="mehr" id="right" onClick="showCall(1);">&nbsp;
-        <input type="text" name="suchwort" size="20">
-        <input type="hidden" name="Q" value="{Q}">
-        <input type="submit" src="image/suchen_kl.png" name="ok" value=".:search:." align="middle" border="0"> 
+ 	   	<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first"/>
+ 	   	<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev"/>
+            <input type="text" name="suchwort" size="20"><input type="hidden" name="Q" value="{Q}">
+            <button onClick="ks();">.:search:.</button> 
+            <button onClick="showCall(0);">reload</button> 
+ 	   	<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
+ 	   	<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
+ 	   	<select class="pagesize" id='pagesize'>
+ 	   		<option value="10">10</option>
+ 	   		<option value="15" selected>15</option>
+ 	   		<option value="20">20</option>
+ 	   		<option value="25">25</option>
+ 	   		<option value="30">30</option>
+ 	   	</select>
         </form>
-    </span>
-
+        </div>
 </div>
+<div id="dialogwin"></div>
 <!-- End Code --------------------------------------------- -->
 </span>
 {END_CONTENT}

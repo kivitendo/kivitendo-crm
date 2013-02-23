@@ -1,70 +1,96 @@
 <?php
-session_start();
-include("inc/stdLib.php");
-require_once("documents.php");
-
-
-if ($_GET["src"]) $_POST["src"]=$_GET["src"];
-
-//$filetype=array("rtf","tex","odt","swf","sxw");
-//derzeit kein RTF
-$filetype=array("tex","odt","swf","sxw");
-
-if ($_POST["erzeugen"]) {
-    if (!empty($_FILES["datei"]["name"])) {
-        $typ=strtolower(substr($_FILES["datei"]["name"],-3));
-        if (in_array($typ,$filetype)) {
-            //ok, gültige Datei angehängt, vorlage sichern
-            $dest="./dokumente/".$_SESSION["mansel"]."/serbrief";
-            $ok=chkdir("serbrief");
-            copy($_FILES["datei"]["tmp_name"],$dest."/".$_FILES["datei"]["name"]);
-            unlink ($_FILES["datei"]["tmp_name"]);
-
-            //Verzeichnis anlegen für die Serienbriefe
-            $savefiledir="serbrief/".substr($_FILES["datei"]["name"],0,-4);
-            @mkdir($savefiledir);
-            
-            //Dokument in db speichern
-            $dbfile=new document();
-            $dbfile->setDocData("descript",$_POST["subject"]);
-            $dbfile->setDocData("pfad","serbrief");
-            $dbfile->setDocData("name",$_FILES["datei"]["name"]);
-            $dbfile->setDocData("descript",$_POST["body"]);
-            $rc=$dbfile->newDocument();
-            $dbfile->saveDocument();
-        
-            //benötigte Daten in Session speichern
-            $_SESSION["dateiId"] = $dbfile->id;
-            $_SESSION["SUBJECT"]=$_POST["subject"];
-            $_SESSION["BODY"]=$_POST["body"];
-            $_SESSION["DATE"]=$_POST["date"];
-            $_SESSION["src"]=$_POST["src"];
-            $_SESSION["savefiledir"]=$savefiledir;
-            $_SESSION["datei"]=$_FILES["datei"]["name"];
-            
-            //POP-Up erzeugt die Dokumente
-            $js="f1=open('mkserdocs.php?src=".$_POST["src"]."','SerDoc','width=600,height=100')";
-
-            //Formular nicht noch einmal sicken
-            $display="hidden";
-        } else {
-            $js="alert('Ungültiger Dateityp')";
-        }
-    } else {
-        $js="alert('Bitte einen Dateinamen angeben')";
-    }
-} 
+	require_once("inc/stdLib.php");
+    $head = mkHeader();
 ?>
+<html>
+<head><title></title>
+    <style>
+    .progress { position:relative; width:400px; border: 1px solid #bbb; padding: 1px; border-radius: 3px; }
+    .bar { background-color: #B4F5B4; width:0%; height:20px; border-radius: 3px; }
+    .percent { position:absolute; display:inline-block; top:3px; left:48%; }
+    </style>
+<?php echo $head['JQUERY']; ?>
+<?php echo $head['JQUERYUI']; ?>
+<?php echo $head['JQFILEUP']; ?>
+<?php echo $head['JQWIDGET']; ?>
+<?php echo $head['JQDATE']; ?>
+<script>
+$(document).ready(
+$(function () {
+    $('#fileupload').fileupload({
+        dataType: 'json',
+        add: function (e, data) {
+            if( !data.files[0].name.match(/\.(tex)|(odt)|(swf)|(sxw)$/) ) {  //derzeit kein RTF
+                alert ('Falsches Dateiformat');
+                return false;
+            }
+            $('#uplfile').empty().append(data.files[0].name+' ');
+            $('#uplfile').append(data.files[0].size+' ');
+            $('#progress .bar').css('width','0%');
+            $('#uplfile').append($('<button/>').text('Upload')
+                                   .click(function () {
+                                       $('#msg').empty().append('Uploading...');
+                                       data.submit();
+                                   })
+            );
+        },
+        done: function (e, data) {
+            $.each(data.result.files, function (index, file) {
+                if ( file.error != undefined ) { alert(file.error); return; };
+                $('#uplfile').empty().append(file.name+' done');
+                $.ajax({
+                    url: 'jqhelp/serien.php',
+                    dataType: 'json',
+                    type: 'post',
+                    data : { 'datum': $('#formdate').val(), 'subject': $('#subject').val(), 
+                             'body': $('#body').val(), 'src': $('#src').val(), 
+                             'filename':file.name, 'task': 'brief' },
+                    success: function(rc){
+                            if ( !rc.rc ) {
+                                alert(rc.msg);
+                                return;
+                            } else {
+                                f1=open('mkserdocs.php?src='+$('#src').val(),'SerDoc','width=600,height=100')
+                            }
+                    }
+                })
+            });
+        },
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progress .bar').css(
+                'width',
+                progress + '%'
+            );
+            //$('#percent').replaceWith(progress+' %');
+            
+        },
+    });
+})
+);
+</script>
+<script>    
+        $(function() {
+            $( "#formdate" ).datepicker($.datepicker.regional[ "de" ]);
+        });
+</script>    
+</head>
+<body>
 Daten f&uuml;r den Serienbrief:<br />
-<form name="serdoc" action="serdoc.php" enctype='multipart/form-data' method="post">
-<INPUT TYPE="hidden" name="MAX_FILE_SIZE" value="5000000">
-<input type="hidden" name="src" value="<?php echo  $_POST["src"] ?>">
-Datum: <input type="text" name="date" size="12" value="<?php echo  $_POST["date"] ?>"><br />
-Betreff: <input type="text" name="subject" size="30" value="<?php echo  $_POST["subject"] ?>"><br />
+<form name="serdoc" method="post">
+<input type="hidden" name="src" id="src" value='<?php echo $_GET["src"]; ?>'>
+Datum: <input type="text" name="formdate" id="formdate" size="12" value=""><br />
+Betreff: <input type="text" name="subject" id="subject" size="30" value=""><br />
 Zusatztext:<br />
-<textarea name="body" cols="50" rows="8"><?php echo  $_POST["body"] ?></textarea><br />
-Datei: <input type="file" name="datei" size="28"><br />
-<?php echo  $_FILES["datei"]["name"] ?><br />
-<input type="submit" name="erzeugen" value="erzeugen" style="visibility:<?php echo  $display ?>">
+<textarea name="body" id="body" cols="50" rows="8"></textarea><br />
+Datei: <input id="fileupload" type="file" name="files[]" data-url="jqhelp/uploader.php">
 </form>
-<script language="JavaScript"><?php echo  $js ?></script>
+<div id="progress" class="progress" >
+    <div class="bar" id='bar' style="width: 0%;"></div>
+    <!--div class='percent' id='percent'>0 %</div-->
+</div>
+<div id="uplfile"><div>
+<div id="msg"><div>
+</body>
+</html>
+

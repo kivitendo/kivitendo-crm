@@ -13,16 +13,7 @@
     $variablem="";
     $t = new Template($base);
     $menu =  $_SESSION['menu'];
-    $t->set_var(array(
-        'JAVASCRIPTS'   => $menu['javascripts'],
-        'STYLESHEETS'   => $menu['stylesheets'],
-        'ERPCSS'        => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-        'PRE_CONTENT'   => $menu['pre_content'],
-        'START_CONTENT' => $menu['start_content'],
-        'END_CONTENT'   => $menu['end_content'],
-        'JQUERY'        => $_SESSION['basepath'].'crm/',
-        'THEME'         => $_SESSION['theme'],
-    ));
+    doHeader($t);
     $t->set_file(array("fa1" => "firma1.tpl"));
     if (count($tmp)>0) {
         $t->set_block("fa1","vars","BlockS");

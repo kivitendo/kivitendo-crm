@@ -1,12 +1,11 @@
 <html>
     <head><title></title>
-    {STYLESHEETS}
-    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
-    {THEME}
-    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
-    {JAVASCRIPTS}
+{STYLESHEETS}
+{CRMCSS}
+{THEME}
+{JQUERY}
+{JQUERYUI}
+{JAVASCRIPTS}
     <script language="JavaScript">
     <!--
     function vcard() {

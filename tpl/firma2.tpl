@@ -1,11 +1,11 @@
 <html>
         <head><title></title>
 {STYLESHEETS}
-    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
-    {THEME}
-    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
+{CRMCSS}
+{THEME} 
+{JQUERY}
+{JQUERYUI}
+{JQTABLE}
 {JAVASCRIPTS}
     <script language="JavaScript">
     <!--
@@ -15,7 +15,12 @@
         }
         function anschr() {
             pid = $('#liste option:selected').val();
-            F1=open("showAdr.php?Q={Q}&pid="+pid+"{ep}","Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
+            $( "#dialogwin" ).dialog( "option", "maxWidth",  400 );
+            $( "#dialogwin" ).dialog( "option", "maxHeight", 600 );
+            $( "#dialogwin" ).dialog( { title: "Adresse" } );
+            $( "#dialogwin" ).dialog( "open" );
+            $( "#dialogwin" ).load("showAdr.php?Q={Q}&pid="+pid+"{ep}");
+            //F1=open("showAdr.php?Q={Q}&pid="+pid+"{ep}","Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
         }
         function notes() {
             pid = $('#liste option:selected').val();
@@ -41,48 +46,42 @@
         var start = 0;
         var max = 0;
         var y = 0;
-        function showCall(dir) {
-            if (dir<0) {
-                if(start>19) { start-=19; }
-                else { start=0; }; }
-            else if (dir>0) {
-                if ((start+19)<max) { start+=19; } 
-                else if (max<19) { start=0; }
-                else { start=max-19; }; 
-            }
+        function showCall() {
             pid = $('#liste option:selected').val();
+            $('#calls tr[group="usr"]').remove();
             $.ajax({
-                url: "jqhelp/firmaserver.php?task=showCalls&firma=1&id="+pid+"&start="+start,
-                dataType: 'json',
-                success: function(data){
-                             $('#tellcalls').empty();
-                             var content = '<table class="calls" width="99%">';
-                             var lc = 0;
-                             $.each(data.items, function(i) {
-                                  content += '<tr class="calls'+lc+'" onClick="showItem('+data.items[i].id+');">'
-                                  content += '<td>' + data.items[i].calldate + '</td>';
-                                  content += '<td>' + data.items[i].id;
-                                  if (data.items[i].inout == 'o') {
-                                       content += ' &gt;</td>';
-                                  } else if (data.items[i].inout == 'i') {
-                                       content += ' &lt;</td>';
-                                  } else {
-                                       content += ' -</td>';
-                                  }
-                                  if ( data.items[i].new == 1 ) {
-                                      content += '<td><b>' + data.items[i].cause + '</b></td>';
+               url: 'jqhelp/firmaserver.php?task=showCalls&firma=0&id='+pid,
+               dataType: 'json',
+               success: function(data){
+                            var content;
+                            $.each(data.items, function(i) {
+                                 content = '';
+                                 content += '<tr group="usr" onClick="showItem('+data.items[i].id+');">'
+                                 content += '<td>' + data.items[i].calldate + '</td>';
+                                 content += '<td>' + data.items[i].id + '</td>';
+                                 content += '<td>' + data.items[i].kontakt;
+                                 if (data.items[i].inout == 'o') {
+                                      content += ' &gt;</td>';
+                                 } else if (data.items[i].inout == 'i') {
+                                      content += ' &lt;</td>';
                                  } else {
-                                      content += '<td>' + data.items[i].cause + '</td>';
+                                      content += ' -</td>';
+                                 }
+                                 if ( data.items[i].new == 1 ) {
+                                     content += '<td><b>' + data.items[i].cause + '</b></td>';
+                                 } else {
+                                     content += '<td>' + data.items[i].cause + '</td>';
                                  }
                                  content += '<td>' + data.items[i].cp_name + '</td></tr>';
-                                 lc = ( lc==0 )?1:0;
-                             })
-                             content += "</table>"
-                             $('#tellcalls').append(content);
-                             if (data.max>0) max = data.max
-                         }
-                });
-            setTimeout('showCall(0)',{interv});
+                                 $('#calls tr:last').after(content);
+                            })
+                                $("#calls").trigger('update');
+                                $("#calls")
+                                    .tablesorter({widthFixed: true, widgets: ['zebra'], headers: { 2: { sorter: false } } })
+                                    .tablesorterPager({container: $("#pager"), size: 15, positionFixed: false})
+                        }
+               });
+            return false;
         }
         function showOne(id) {
             //was wollte ich hier?
@@ -142,8 +141,7 @@
                               }
                          }
             })
-            showCall(0);
-            setTimeout('showCall(0)',{interv});
+            showCall();
         }
         function KdHelp() {
             link = $('#kdhelp option:selected').val();
@@ -169,21 +167,19 @@
     <script>
     $(document).ready(
         function(){
-            $("#left").click(function(){ showCall(-1); }) 
+        $( "#dialogwin" ).dialog({
+          autoOpen: false,
+          show: {
+            effect: "blind",
+            duration: 300
+          },
+          hide: {
+            effect: "explode",
+            duration: 300
+          },
         });
-    $(document).ready(
-        function(){
-            $("#right").click(function(){ showCall(1); }) 
-        });
-    $(document).ready(
-        function(){
-            $("#reload").click(function(){ showCall(0); }) 
-        });
-    $(document).ready(
-        function(){
-            $("#liste").change(function(){ showContact(); }) 
-            showContact(); 
-        });
+        showContact();
+    });
     $(function(){
          $('button')
           .button()
@@ -194,6 +190,7 @@
               event.preventDefault();
          });
     });
+
     </script>
 <body>
 {PRE_CONTENT}
@@ -269,21 +266,32 @@
         </div>
 </div>
 <div style="float:left; width:46%; height:37em; text-align:left; border: 1px solid black; border-left:0px;">
-    <div class="calls" width='99%' id="tellcalls">
-    </div>
-    <!--span style="float:left;  text-align:left; border:0px solid black"-->    
-    <span style="position:absolute; bottom:0.6em; visibility:{none};" id="threadtool">
+        <table id="calls" class="tablesorter" width="100%" style='margin:0px;'>
+        <thead><tr><th>Datum</th><th>id</th><th class="{ sorter: false }"></th><th>Betreff</th><th>.:contakt:.</th></tr></thead>
+        <tbody>
+        <tr onClick="showItem(0)"><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
+        </tbody>
+        </table><br>
+        <div id="pager" class="pager" style='position:absolute;'>
         <form name="ksearch" onSubmit="return ks();"> &nbsp; 
-        <img src="image/leftarrow.png" align="middle" border="0" title="zur&uuml;ck" id="left"> 
-        <img src="image/reload.png" align="middle" border="0" title="reload" id="reload"> 
-        <img src="image/rightarrow.png" align="middle" border="0" title="mehr" id="right">&nbsp;
-        <input type="text" name="suchwort" size="20">
-        <input type="hidden" name="Q" value="{Q}">
-        <input type="submit" src="image/suchen_kl.png" name="ok" value=".:search:." align="middle" border="0"> 
+ 	   	<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first"/>
+ 	   	<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev"/>
+            <input type="text" name="suchwort" size="20"><input type="hidden" name="Q" value="{Q}">
+            <button onClick="ks();">.:search:.</button> 
+            <button onClick="showCall();">reload</button> 
+ 	   	<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
+ 	   	<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
+ 	   	<select class="pagesize" id='pagesize'>
+ 	   		<option value="10">10</option>
+ 	   		<option value="15" selected>15</option>
+ 	   		<option value="20">20</option>
+ 	   		<option value="25">25</option>
+ 	   		<option value="30">30</option>
+ 	   	</select>
         </form>
-    </span>
+        </div>
 </div>
-
+<div id="dialogwin"></div>
 <!-- End Code ------------------------------------------->
 </span>
 {END_CONTENT}

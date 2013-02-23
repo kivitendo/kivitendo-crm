@@ -1,0 +1,8 @@
+Upload:
+
+Ergebnis bei Nichterfolg
+//({name:"00000001.jpg", size:0, type:"", error:"The uploaded file exceeds the upload_max_filesize directive in php.ini"})
+
+und bei Erfolg:
+//({file:{name:"kurzbrief2 (7).sxw", size:19479, url:"http://192.168.1.85/lx-office/crm/tmp/kurzbrief2%20%287%29.sxw", delete_url:"http://192.168.1.85/lx-office/crm/jqhelp/?file=kurzbrief2%20%287%29.sxw", delete_type:"DELETE"}})
+

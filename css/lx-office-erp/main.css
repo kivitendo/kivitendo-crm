@@ -53,13 +53,13 @@ tr.calls0:hover	{ background-color:#ff0000; }
 .ptr 		{ cursor:pointer;}
 
 tr.bgcol1 	{ background-color:#ddddff;  }
-tr.bgcol1:hover	{ background-color:#ff3333;  }
+tr.bgcol1:hover	{ background-color:#0066FF;  }
 tr.bgcol2 	{ background-color:#ddffdd; }
-tr.bgcol2:hover { background-color:#ff3333;  }
-tr.bgcol3 	{ background-color:#ee8888; }
-tr.bgcol3:hover { background-color:#ff3333;  }
+tr.bgcol2:hover { background-color:#0066FF;  }
+tr.bgcol3 	{ background-color:#dd8888; }
+/*tr.bgcol3:hover { background-color:#0066FF;  }*/
 tr.bgcol4 	{ background-color:#ffdddd; }
-tr.bgcol4:hover { background-color:#ff3333;  }
+tr.bgcol4:hover { background-color:#0066FF;  }
 .caption 	{ font-size:9px;color:blue; }
 
 textarea  	{ font-size: 1em; font-family:Verdana,Arial,Helvetica,sans-serif;}

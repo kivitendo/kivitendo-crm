@@ -2,9 +2,9 @@
         <head><title></title>
 {STYLESHEETS}
 {CRMCSS}
-{THEME} 
 {JQUERY}
 {JQUERYUI}
+{THEME}
 {JQTABLE}
 {JAVASCRIPTS}
     <script language="JavaScript">

@@ -9,9 +9,9 @@ ob_start();
 <head><title></title>
 <?php echo $menu['stylesheets']; ?>
 <?php echo $head['CRMCSS']; ?>
-<?php echo $head['THEME']; ?>
 <?php echo $head['JQUERY']; ?>
 <?php echo $head['JQUERYUI']; ?>
+<?php echo $head['THEME']; ?>
 <?php echo $head['JQTABLE']; ?>
     <script language="JavaScript">
         function showD (src,id) {

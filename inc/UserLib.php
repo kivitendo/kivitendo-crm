@@ -17,7 +17,8 @@ global $db;
     if ($val["vertreter"]==$val["uid"]) {$vertreter="null";} else {$vertreter=$val["vertreter"];};
     $fld = array('name','etikett','addr1','addr2','addr3','workphone','homephone','notes','termbegin','termend',
                 'msrv','port','proto','ssl','postf','mailuser','kennw','postf2','interv','pre','abteilung','position',
-                'mailsign','email','icalart','icaldest','icalext','preon','streetview','planspace','theme');
+                'mailsign','email','icalart','icaldest','icalext','preon','streetview','planspace','theme','feature_ac',
+                'feature_ac_minlength','feature_ac_delay');
     $sql  = "update employee set ";
     foreach ($fld as $key) {
         if ($val[$key]<>"") {
@@ -104,7 +105,6 @@ global $db;
     if ($cnt===0) {
         $sql="delete from grpusr where grpid=$id";
         $rc=$db->query($sql);
-        echo $sql; print_r($rc);
         if(!$rc) return "Mitglieder konnten nicht gel&ouml;scht werden";
         $sql="delete from gruppenname where grpid=$id";
         $rc=$db->query($sql);

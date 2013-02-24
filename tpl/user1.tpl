@@ -145,7 +145,11 @@
         </td></tr>
     <tr><td class="norm">Leerzeichenersatz</td><td colspan="4">
              <input type="text" name="planspace" size="3" value='{planspace}'>
-        </td></tr>
+    </td></tr>
+    <tr><td class="norm">Autocompletion</td><td colspan="4">
+             <input type="checkbox" name="feature_ac" value='t' {feature_ac}>&nbsp;&nbsp; Mindesteingabe: <input type="text" name="feature_ac_minlength" size="1" value='{feature_ac_minlength}'>
+             &nbsp;&nbsp; Verzögerung: <input type="text" name="feature_ac_delay" size="3" value='{feature_ac_delay}'>ms</td>
+   </tr>
        <tr><td>&nbsp;</td><td><input type="submit" name="ok" value="sichern"></td></tr>
 
     </form>

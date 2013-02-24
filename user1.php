@@ -15,7 +15,12 @@
         $_SESSION["pre"]=$_POST["pre"];
         $_SESSION["preon"]=$_POST["preon"];
         $_SESSION["kdview"]=$_POST["kdview"];
-    } else if ($_POST["mkmbx"]) {
+        $_SESSION["planspace"]=$_POST["planspace"];
+        $_SESSION["feature_ac"]=$_POST["feature_ac"];
+        $_SESSION["feature_ac_minLength"]=$_POST["feature_ac_minLength"];
+        $_SESSION["feature_ac_delay"]=$_POST["feature_ac_delay"];  
+        $_SESSION['theme']=($_POST['theme']=='base')?'':'<link rel="stylesheet" type="text/css" href="'.$_SESSION['baseurl'].'crm/jquery-ui/themes/'.$_POST['theme'].'/jquery-ui.css">';   
+        } else if ($_POST["mkmbx"]) {
         $rc=createMailBox($_POST["Postf2"],$_POST["Login"]);
     } 
     $t = new Template($base);
@@ -90,8 +95,11 @@
             icaldest    => $fa["icaldest"],
             icalart.$fa["icalart"] => "selected",
             preon       => ($fa["preon"])?"checked":"",
-	    streetview  => ($fa['streetview'])?$fa['streetview']:$stadtplan,
-	    planspace   => ($fa['planspace'])?$fa['planspace']:$planspace,
+	        streetview  => ($fa['streetview'])?$fa['streetview']:$stadtplan,
+	        planspace   => ($fa['planspace'])?$fa['planspace']:$planspace,
+	        feature_ac             => ($fa['feature_ac'])?'checked':'',
+	        feature_ac_minlength   => $fa['feature_ac_minlength'],
+	        feature_ac_delay       => $fa['feature_ac_delay']
             ));
     if ($_GET["id"]) {    
         $t->set_var(array(vertreter => $fa["vertreter"]." ".$fa["vname"]));

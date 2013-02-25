@@ -18,7 +18,8 @@ global $db;
     $fld = array('name','etikett','addr1','addr2','addr3','workphone','homephone','notes','termbegin','termend',
                 'msrv','port','proto','ssl','postf','mailuser','kennw','postf2','interv','pre','abteilung','position',
                 'mailsign','email','icalart','icaldest','icalext','preon','streetview','planspace','theme','feature_ac',
-                'feature_ac_minlength','feature_ac_delay');
+                'feature_ac_minlength','feature_ac_delay','auftrag_button','angebot_button','rechnung_button','zeige_extra',
+                'zeige_lxcars');
     $sql  = "update employee set ";
     foreach ($fld as $key) {
         if ($val[$key]<>"") {

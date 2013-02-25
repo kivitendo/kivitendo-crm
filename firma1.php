@@ -85,6 +85,7 @@
     }
     $views=array(""=> "lie",1=>"lie",2=>"not",3=>"var",4=>"fin",5=>"inf");
     $taxzone=array("Inland","EU mit UStId","EU ohne UStId","Ausland");
+    $sales=($Q=="C")?"sales":"purchase";
     $t->set_var(array(
             'FAART'           => ($Q=="C")?".:Customer:.":".:Vendor:.",
             'CuVe'            => ($Q=="C")?"customer":"vendor",
@@ -156,13 +157,18 @@
             'PREV'            => $prev,
             'KARTE1'          => $karte1,
             'KARTE2'          => $karte2,
-            'sales'           => ($Q=="C")?"sales":"purchase",
+          
             'request'         => ($Q=="C")?"sales":"request",
             'apr'             => ($Q=="C")?"ar":"ap",
+            //ToDo ToDo
+            'AUFTRAG_BUTTON'  => ($_SESSION['auftrag_button'])?'<button type="submit" title="neuen Auftrag eingeben" onClick="document.oe.type.value='.$sales.'_order; submit()">
+                               <img src="image/auftrag.png"></button>':'', 
+                //<button type="submit" title="Angebot/Anfrage erstellen" style="visibility:{zeige};" onClick="document.oe.type.value='{request}_quotation'; submit()">
+                //                <img src="image/angebot.png"></button> 
             'zeigeplan'       => ($karte1)?"visible":"hidden",
-            'begin_comment'   => ($zeigelxcars)?"":"<!-- ",
-            'end_comment'     => ($zeigelxcars)?"":" -->",
-            'zeigeextra'      => ($zeigeextra)?"visible":"hidden",
+            'begin_comment'   => ($_SESSION['zeige_lxcars'])?"":"<!-- ",
+            'end_comment'     => ($_SESSION['zeige_lxcars'])?"":" -->",
+            'zeigeextra'      => ($_SESSION['zeige_extra'])?"visible":"hidden",
             'tools'           => ($tools)?"visible":"hidden",
             'login'           => $_SESSION["employee"],
             'password'        => $_SESSION["password"],

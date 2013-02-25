@@ -239,7 +239,7 @@
 <input type="hidden" name="type" value="">
 <input type="hidden" name="action_update" value="Erneuern" id="update_button">
 <input type="hidden" name="{CuVe}_id" value="{FID}">
-</form>
+
 <span id='contentbox' style="padding-top:2em;" >
 <!-- Begin Code --------------------------------------------- -->
 <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid black;" >
@@ -264,6 +264,10 @@
             {IMG}<br /><br />
             <img src="image/kreuzchen.gif" title=".:locked address:." style="visibility:{verstecke};" >
             <br />
+            {ANGEBOT_BUTTON}
+            {AUFTRAG_BUTTON}
+            {RECHNUNG_BUTTON}
+            <br />
             <span style="visibility:{zeigeplan};"><a href="{KARTE1}" target="_blank"><img src="image/karte.gif" title=".:city map:." border="0"></a></span>
             &nbsp;
             <a href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0" /></a><br>
@@ -272,6 +276,7 @@
             &nbsp;
             {verkaeufer}
         </div>
+         </form><br />
 </div>
 <div id="fasubmenu" >
     <ul>

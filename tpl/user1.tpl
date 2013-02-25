@@ -150,6 +150,18 @@
              <input type="checkbox" name="feature_ac" value='t' {feature_ac}>&nbsp;&nbsp; Mindesteingabe: <input type="text" name="feature_ac_minlength" size="1" value='{feature_ac_minlength}'>
              &nbsp;&nbsp; Verzögerung: <input type="text" name="feature_ac_delay" size="3" value='{feature_ac_delay}'>ms</td>
    </tr>
+   <tr><td class="norm">Firma Buttons</td><td colspan="4">
+             <input type="checkbox" name="auftrag_button"  value='t' {auftrag_button}>Auftrag&nbsp;&nbsp;  <input type="checkbox" name="angebot_button"  value='t' {angebot_button}>Angebot&nbsp;&nbsp;
+             <input type="checkbox" name="rechnung_button" value='t' {rechnung_button}>Rechnung&nbsp;&nbsp;<input type="checkbox" name="zeige_extra" value='t' {zeige_extra}>Extra&nbsp;&nbsp;
+             <input type="checkbox" name="zeige_lxcars"    value='t' {zeige_lxcars}>LxCars&nbsp;&nbsp;</td>
+   </tr>
+   <tr><td class="norm">Doppelten Kunden anlegen</td><td colspan="4">
+             <input type="checkbox" name="feature_unique_name_plz" value='t' {feature_unique_name_plz}>verbieten</td>
+   </tr>
+   <tr><td class="norm">Links</td><td colspan="4">
+             Gruppe: <input type="text" name="dir_group" size="12" value='{dir_group}'>
+             &nbsp;&nbsp; Rechte: <input type="text" name="dir_mode" size="4" value='{dir_mode}'><input type="checkbox" name="sep_cust_vendor"  value='t' {sep_cust_vendor}>trennen</td>
+   </tr>
        <tr><td>&nbsp;</td><td><input type="submit" name="ok" value="sichern"></td></tr>
 
     </form>

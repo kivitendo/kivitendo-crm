@@ -19,7 +19,13 @@
         $_SESSION["feature_ac"]=$_POST["feature_ac"];
         $_SESSION["feature_ac_minLength"]=$_POST["feature_ac_minLength"];
         $_SESSION["feature_ac_delay"]=$_POST["feature_ac_delay"];  
-        $_SESSION['theme']=($_POST['theme']=='base')?'':'<link rel="stylesheet" type="text/css" href="'.$_SESSION['baseurl'].'crm/jquery-ui/themes/'.$_POST['theme'].'/jquery-ui.css">';   
+        $_SESSION["auftrag_button"]=$_POST["auftrag_button"]; 
+        $_SESSION["angebot_button"]=$_POST["angebot_button"]; 
+        $_SESSION["rechnung_button"]=$_POST["rechnung_button"]; 
+        $_SESSION["zeige_extra"]=$_POST["zeige_extra"]; 
+        $_SESSION["zeige_lxcars"]=$_POST["zeige_lxcars"];         
+        $_SESSION['theme']=($_POST['theme']=='base')?'':'<link rel="stylesheet" type="text/css" href="'.$_SESSION['baseurl'].'crm/jquery-ui/themes/'.$_POST['theme'].'/jquery-ui.css">';  
+        
         } else if ($_POST["mkmbx"]) {
         $rc=createMailBox($_POST["Postf2"],$_POST["Login"]);
     } 
@@ -99,7 +105,12 @@
 	        planspace   => ($fa['planspace'])?$fa['planspace']:$planspace,
 	        feature_ac             => ($fa['feature_ac'])?'checked':'',
 	        feature_ac_minlength   => $fa['feature_ac_minlength'],
-	        feature_ac_delay       => $fa['feature_ac_delay']
+	        feature_ac_delay       => $fa['feature_ac_delay'],
+	        auftrag_button         => ($fa['auftrag_button'])?'checked':'',
+	        angebot_button         => ($fa['angebot_button'])?'checked':'',
+	        rechnung_button        => ($fa['rechnung_button'])?'checked':'',
+	        zeige_extra            => ($fa['zeige_extra'])?'checked':'',
+	        zeige_lxcars           => ($fa['zeige_lxcars'])?'checked':'',
             ));
     if ($_GET["id"]) {    
         $t->set_var(array(vertreter => $fa["vertreter"]." ".$fa["vname"]));

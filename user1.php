@@ -103,14 +103,14 @@
             preon       => ($fa["preon"])?"checked":"",
 	        streetview  => ($fa['streetview'])?$fa['streetview']:$stadtplan,
 	        planspace   => ($fa['planspace'])?$fa['planspace']:$planspace,
-	        feature_ac             => ($fa['feature_ac'])?'checked':'',
+	        feature_ac             => ($fa['feature_ac']=='t')?'checked':'',
 	        feature_ac_minlength   => $fa['feature_ac_minlength'],
 	        feature_ac_delay       => $fa['feature_ac_delay'],
-	        auftrag_button         => ($fa['auftrag_button'])?'checked':'',
-	        angebot_button         => ($fa['angebot_button'])?'checked':'',
-	        rechnung_button        => ($fa['rechnung_button'])?'checked':'',
-	        zeige_extra            => ($fa['zeige_extra'])?'checked':'',
-	        zeige_lxcars           => ($fa['zeige_lxcars'])?'checked':'',
+	        auftrag_button         => ($fa['auftrag_button']=='t')?'checked':'',
+	        angebot_button         => ($fa['angebot_button']=='t')?'checked':'',
+	        rechnung_button        => ($fa['rechnung_button']=='t')?'checked':'',
+	        zeige_extra            => ($fa['zeige_extra']=='t')?'checked':'',
+	        zeige_lxcars           => ($fa['zeige_lxcars']=='t')?'checked':'',
             ));
     if ($_GET["id"]) {    
         $t->set_var(array(vertreter => $fa["vertreter"]." ".$fa["vname"]));

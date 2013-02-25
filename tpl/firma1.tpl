@@ -239,7 +239,7 @@
 <input type="hidden" name="type" value="">
 <input type="hidden" name="action_update" value="Erneuern" id="update_button">
 <input type="hidden" name="{CuVe}_id" value="{FID}">
-
+</form>
 <span id='contentbox' style="padding-top:2em;" >
 <!-- Begin Code --------------------------------------------- -->
 <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid black;" >
@@ -264,9 +264,10 @@
             {IMG}<br /><br />
             <img src="image/kreuzchen.gif" title=".:locked address:." style="visibility:{verstecke};" >
             <br />
+            <form action="../oe.pl" method="post" name="oe1">
             {ANGEBOT_BUTTON}
             {AUFTRAG_BUTTON}
-            {RECHNUNG_BUTTON}
+      		</form>
             <br />
             <span style="visibility:{zeigeplan};"><a href="{KARTE1}" target="_blank"><img src="image/karte.gif" title=".:city map:." border="0"></a></span>
             &nbsp;
@@ -276,7 +277,7 @@
             &nbsp;
             {verkaeufer}
         </div>
-         </form><br />
+        <br />
 </div>
 <div id="fasubmenu" >
     <ul>

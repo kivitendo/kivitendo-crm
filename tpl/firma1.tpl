@@ -233,13 +233,6 @@
     </form>
 </div>
 
-<form action="../oe.pl" method="post" name="oe">
-<input type="hidden" name="action" value="add">
-<input type="hidden" name="vc" value="{CuVe}">
-<input type="hidden" name="type" value="">
-<input type="hidden" name="action_update" value="Erneuern" id="update_button">
-<input type="hidden" name="{CuVe}_id" value="{FID}">
-</form>
 <span id='contentbox' style="padding-top:2em;" >
 <!-- Begin Code --------------------------------------------- -->
 <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid black;" >
@@ -263,19 +256,26 @@
             <span class="fett">{kdnr}</span><br />
             {IMG}<br /><br />
             <img src="image/kreuzchen.gif" title=".:locked address:." style="visibility:{verstecke};" >
-            <br />
-            <form action="../oe.pl" method="post" name="oe1">
-            {ANGEBOT_BUTTON}
-            {AUFTRAG_BUTTON}
+            <form action="../oe.pl" method="post" name="oe">
+                <input type="hidden" name="action" value="add">
+                <input type="hidden" name="vc" value="{CuVe}">
+                <input type="hidden" name="type" value="">
+                <input type="hidden" name="action_update" value="Erneuern" id="update_button">
+                <input type="hidden" name="{CuVe}_id" value="{FID}">
+                <button type="submit" title="neuen Auftrag eingeben"    style="visibility:{AUFTRAG_BUTTON};" onClick="document.oe.type.value='{sales}_order'; submit()">
+                <img src="image/auftrag.png"></button>
+                <button type="submit" title="Angebot/Anfrage erstellen" style="visibility:{ANGEBOT_BUTTON};" onClick="document.oe.type.value='{request}_quotation'; submit()">
+                <img src="image/angebot.png"></button>                 
       		</form>
             <br />
             <span style="visibility:{zeigeplan};"><a href="{KARTE1}" target="_blank"><img src="image/karte.gif" title=".:city map:." border="0"></a></span>
             &nbsp;
-            <a href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0" /></a><br>
-            <br />
-            {begin_comment}<a href="lxcars/lxcmain.php?owner={FID}&task=1" title="KFZ-Daten"><img src="./lxcars/image/lxcmain.png" alt="Cars" border="1" /></a>{end_comment}
+            <a href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0" /></a>
             &nbsp;
+            {begin_comment}<a href="lxcars/lxcmain.php?owner={FID}&task=1" title="KFZ-Daten"><img src="./lxcars/image/lxcmain.png" alt="Cars" border="1" /></a>{end_comment}
+            <br /><br /> 
             {verkaeufer}
+             &nbsp;
         </div>
         <br />
 </div>

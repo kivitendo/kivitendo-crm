@@ -23,7 +23,9 @@ if (!defined('POO_VAR_PREFIX')) {
 if (!defined('POO_VAR_SUFFIX')) {
   define('POO_VAR_SUFFIX', '%');
 }
-
+if (!defined('POO_VAR_MINLEN')) {
+  define('POO_VAR_MINLEN', 2);
+}
 class phpRTF
 {
 
@@ -43,6 +45,22 @@ class phpRTF
 		$this->parserFiles = POO_TMP_PATH."/".$this->getRandomString(16).".".$info["extension"];
 		$rc = exec ("cp $filename ".$this->parserFiles);
 	}
+
+    function getTags() {
+        $fp = fopen($this->parserFiles, "r+b");
+        $file = fread($fp, filesize($this->parserFiles));
+        preg_match_all('/'.POO_VAR_PREFIX.'([A-Z_0-9\{\}]{'.POO_VAR_MINLEN.',})'.POO_VAR_SUFFIX.'/i',$file,$hits);
+        foreach ($hits[1] as $hit) { 
+            $tmp = str_replace(array( '{', '}' ), '', $hit);
+            $hits[2][] = $tmp;
+            $file = str_replace(POO_VAR_PREFIX.$hit.POO_VAR_SUFFIX,POO_VAR_PREFIX.$tmp.POO_VAR_SUFFIX,$file);
+        };
+        fseek($fp,0);
+        fwrite($fp,$file);
+        fclose($fp);
+        $this->parsedDocuments = $file;
+        return $hits[2];
+    }
 
 	// Put variables into extracted content file
 	function parse($variables)

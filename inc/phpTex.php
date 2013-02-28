@@ -21,7 +21,7 @@
         var $last_error = "";
 
         var $markers = array();
-
+        var $VAR_MINLEN = 2;
         var $START_DELIMETER = "<%";
         var $END_DELIMETER = "%>";
         var $SPACE = " ";
@@ -42,7 +42,10 @@
             	return true;
 	    }
     }
-
+    function getTags() {
+        preg_match_all('/'.$this->START_DELIMETER.'([A-Z_0-9]{'.$this->VAR_MINLEN.',})'.$this->END_DELIMETER.'/i',$this->content,$hits);
+        return $hits[1];        
+    }
     function savecontent() {
         $this->original = $this->content;
     }

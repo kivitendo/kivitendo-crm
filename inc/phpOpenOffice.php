@@ -49,6 +49,9 @@ if (!defined('POO_VAR_SUFFIX')) {
   define('POO_VAR_SUFFIX', '%');
 }
 
+if (!defined('POO_VAR_MINLEN')) {
+  define('POO_VAR_MINLEN', 2);
+}
 
 // Callback function for pclzip
 $archiveFiles = array();
@@ -111,7 +114,15 @@ class phpOpenOffice
 		$archive = new PclZip($filename);
 		$list = $archive->extract(PCLZIP_OPT_PATH, POO_TMP_PATH, PCLZIP_OPT_ADD_PATH, $this->tmpDirName);
 	}
-
+    function getTags() {
+        $fp = fopen($this->parserFiles["content.xml"], "r+b");
+        $file = fread($fp, filesize($this->parserFiles["content.xml"]));
+        preg_match_all('/'.POO_VAR_PREFIX.'(<text:span[^>]+>)?([A-Z_0-9]{'.POO_VAR_MINLEN.',})(<\/text:span>)?'.POO_VAR_SUFFIX.'/i',$file,$hits);
+        fseek($fp,0);
+        fwrite($fp,$file);
+        fclose($fp);
+        return $hits[2];
+    }
 	function findtags($key,$string) {
 		$pos=strpos($string,$key);
 		if (!$pos) return false;	
@@ -174,7 +185,8 @@ class phpOpenOffice
 			foreach(array_keys($variables) as $key)
 			{
 				$value = $this->xmlencode( $variables[$key] );
-				$this->parsedDocuments[$file] = str_replace(POO_VAR_PREFIX.$key.POO_VAR_SUFFIX, $value, $this->parsedDocuments[$file]);
+                $this->parsedDocuments[$file] = preg_replace('/'.POO_VAR_PREFIX.'(<text:span[^>]+>)?'.$key.'(<\/text:span>)?'.POO_VAR_SUFFIX.'/i',$value,$this->parsedDocuments[$file]);
+				//$this->parsedDocuments[$file] = str_replace(POO_VAR_PREFIX.$key.POO_VAR_SUFFIX, $value, $this->parsedDocuments[$file]);
 				/*
 				if (!strpos($value,"\n")) {
 					$this->parsedDocuments[$file] = str_replace(POO_VAR_PREFIX.$key.POO_VAR_SUFFIX, $value, $this->parsedDocuments[$file]);

@@ -2,27 +2,9 @@
     require_once("inc/stdLib.php");
     include("inc/template.inc");
     include("inc/persLib.php");
-    $link1="dokument1.php";
-    $link2="dokument2.php";
-    $link3="";
-    $link4="";
     $t = new Template($base);
-    $menu =  $_SESSION['menu'];
-    $t->set_var(array(
-        JAVASCRIPTS   => $menu['javascripts'],
-        STYLESHEETS   => $menu['stylesheets'],
-        PRE_CONTENT   => $menu['pre_content'],
-        START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content']
-    ));
+    doHeader($t);
     $t->set_file(array("doc" => "dokument1.tpl"));
-    $t->set_var(array(
-            ERPCSS => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-            Link1 => $link1,
-            Link2 => $link2,
-            Link3 => $link3,
-            Link4 => $link4
-    ));
     $t->set_block("doc","Liste","Block");
     $user=getVorlagen();
     $i=0;

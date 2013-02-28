@@ -1,23 +1,30 @@
 <html>
     <head><title></title>
 {STYLESHEETS}
-    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
-    {THEME}
-    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
-    <script type="text/javascript" src="{JQUERY}inc/dokument.js"></script>
+{CRMCSS}
+{THEME} 
+{JQUERY}
+{JQUERYUI}
+    <script type="text/javascript" src="{CRMURL}inc/dokument.js"></script>
 {JAVASCRIPTS}
     <script language="JavaScript">
     <!--
+    var serreg;
     function showD () {
-        id = $('#vorlage option:selected').val();
-        if (id>0) {
+        did = $('#vorlage option:selected').val();
+        if (did>0) {
             hidelinks(0);
             $('#subfilebrowser').hide();
             if ("{PID}"=="") { pid=0; } else { pid="{PID}"; };
-            $.get('jqhelp/firmaserver.php?task=getDocVorlage&fid={FID}&tab={Q}&pid='+pid+"&id="+id,function(data) { $('#fbright').empty().append(data); });
-        }
+            $('#iframe1').attr('src', 'firma4a.php?fid={FID}&tab={Q}&pid='+pid+'&did='+did);
+            //window.frames["iframe1"].location.reload();
+
+            //$( "#serbrief" ).load( 'firma4a.php?fid={FID}&tab={Q}&pid='+pid+'&did='+did );
+            $( "#serbrief" ).dialog( "option", "minWidth",  600 );
+            $( "#serbrief" ).dialog( "option", "minHeight", 600 );
+            $( "#serbrief" ).dialog( { title: "Briefvorlage" } );
+            $( "#serbrief" ).dialog( "open" );
+        };
     }
     function showV () {
         nr = $('#wv option:selected').val();
@@ -26,6 +33,20 @@
             window.location.href=uri;
         }
     }    
+    $(document).ready(
+        function(){
+        $( "#serbrief" ).dialog({
+          autoOpen: false,
+          show: {
+            effect: "blind",
+            duration: 300
+          },
+          hide: {
+            effect: "explode",
+            duration: 300
+          },
+        });
+    });
 
     //-->
     </script>
@@ -96,6 +117,7 @@
     </div>
 </span>
 
+
 <!-- Neues Verzeichnis  -->
 <div id="newwindir" title=".:newDirectory:.">
     <p valign="center"><input type="hidden" name="seite" id="seite">
@@ -145,7 +167,12 @@
     <button name="close" onClick="$('#fileDel').dialog('close');">.:close:.</button></center>
     </p>
 </div>
-    
+
+<!-- Briefvorlage  -->
+<div id="serbrief">
+<iframe id="iframe1" width='100%' height='500px'  scrolling="auto" border="0" frameborder="0"><img src='image/wait.gif'></iframe>
+</div>    
+
 <!-- Hier endet die Karte ------------------------------------------->
 </span>
 {END_CONTENT}

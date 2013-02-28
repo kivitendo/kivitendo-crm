@@ -1,11 +1,13 @@
 <html>
 	<head><title></title>
-	{STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-        <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
-    {THEME}
-        <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-    {JAVASCRIPTS}
+{STYLESHEETS}
+{CRMCSS}
+{THEME} 
+{JQUERY}
+{JQUERYUI}
+{JQTABLE}
+{JAVASCRIPTS}
+
 	<script language="JavaScript">
 	<!--
 	function showD (id) {
@@ -16,40 +18,35 @@
 	}
 	//-->
 	</script>
+	<script>
+     $(document).ready(
+        function(){
+            $('#liste').tablesorter({widthFixed: true, widgets: ['zebra'], headers: { 0: { sorter: false }, 1: { sorter: false } } });
+            $( "input[type=reset]")
+            .button().click(function( event ) { 
+                 event.preventDefault();
+                 document.location.href = this.getAttribute('name');
+            });
+        }); 
+	</script>
+    </head>    
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
 <p class="listtop">Dokumentvorlagen</p>
-<table class="reiter">
-	<tr>
-		<td class="reiter sel">
-			<a href="{Link1}" class="reiterA">Dokumente</a>
-		</td>
-		<td class="reiter desel">
-			<a href="{Link2}" >neue Vorlage</a>
-		</td>
-		<td class="reiter desel">
-			<a href="{Link3}" ></a>
-		</td>
-		<td class="reiter desel">
-			<a href="{Link4}"></a>
-		</td>
-	</tr>
-</table>
-
-<!--table width="95%" class="karte"><tr><td class="karte"-->
-<!-- Hier beginnt die Karte  ------------------------------------------->
+<form>
+	<input type="reset" name="dokument1.php" value='Dokumente'>
+	<input type="reset" name="dokument2.php" value='neue Vorlage'>
+</form>
 <br>
-<form name="firma4" action="{action}" method="post">
-<table class="liste" style="width:300px">
+<table class="tablesorter" id="liste" style="width:300px">
+<thead><tr><th>Bezeichnung</th><th>Typ</th></tr></thead><tbody>
 <!-- BEGIN Liste -->
-	<tr class='norm bgcol{LineCol}' onClick="showD({did});">
+	<tr onClick="showD({did});">
 		<td>{Bezeichnung}</td><td>{Appl}</td>
 	</tr>
 <!-- END Liste -->
-</table>
-<!-- Hier endet die Karte ------------------------------------------->
-<!--/td></tr></table-->
+</tbody></table>
 {END_CONTENT}
 </body>
 </html>

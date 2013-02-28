@@ -15,31 +15,17 @@
     } else {
         $docid=($_GET["docid"])?$_GET["docid"]:$_POST["docid"];
     }
-    $link1="dokument1.php";
     $link2="dokument2.php?did=$docid";
     $link3="dokument3.php?docid=$docid";
-    $link4="";
     $doc=getDocVorlage($docid);
     $t = new Template($base);
-    $menu =  $_SESSION['menu'];
-    $t->set_var(array(
-        JAVASCRIPTS   => $menu['javascripts'],
-        STYLESHEETS   => $menu['stylesheets'],
-        PRE_CONTENT   => $menu['pre_content'],
-        START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content'],
-        'THEME'         => $_SESSION['theme'],
-    ));
-
+    doHeader($t);
     $t->set_file(array("doc" => "dokument3.tpl"));
     $t->set_var(array(
-        ERPCSS => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-        Link1 => $link1,
         Link2 => $link2,
         Link3 => $link3,
-        Link4 => $link4,
         vorlage => $doc["document"]["vorlage"]
-        ));
+    ));
     $t->set_block("doc","Liste","Block");
     if ($doc["felder"]) {
         foreach($doc["felder"] as $zeile) {

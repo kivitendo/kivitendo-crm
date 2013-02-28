@@ -109,7 +109,7 @@
                  if (data == 'ok' ) {
                      dateibaum('left',pfadleft);
                      dateibaum('right',pfadright);
-                     deletefile();
+                     $('#fileDel').dialog('close');
                  } else {
                      alert(data);
                  }
@@ -269,7 +269,7 @@
         })
         $( "#fileDel" ).dialog({
                    autoOpen: false,
-		   height: 300,
+		   height: 330,
 		   width:  350,
 		   modal: true,
                    show: {

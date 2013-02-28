@@ -29,13 +29,16 @@ switch ($typ) {
                 require('inc/phpTex.php');
                 $doc = new phpTex();
                 break;
-    case "odt" : 
     case "swf" : 
     case "sxw" : 
                 define('POO_TMP_PATH', $_SESSION["savefiledir"]);
                 require("inc/phpOpenOffice.php");
                 $doc = new phpOpenOffice();
                 break;
+    case "rtf" : 
+                 require('inc/phpRtf.php');
+                 $doc = new phpRTF();
+                 break;
 }
 
 

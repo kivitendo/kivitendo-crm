@@ -1,12 +1,11 @@
-<!-- $Id$ -->
 <html>
 	<head><title></title>
-	{STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-        <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
-    {THEME}    
-        <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-    {JAVASCRIPTS}
+{STYLESHEETS}
+{CRMCSS}
+{THEME} 
+{JQUERY}
+{JQUERYUI}
+{JAVASCRIPTS}    
 	<script language="JavaScript">
 	<!--
 		function showH() {
@@ -14,32 +13,31 @@
 		}
 	//-->
 	</script>
+	<script>
+     $(document).ready(
+        function(){
+            $( "input[type=reset]")
+            .button().click(function( event ) { 
+                 event.preventDefault();
+                 document.location.href = this.getAttribute('name');
+            });
+        }); 
+	</script>    
+    </head>
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
 <p class="listtop">Dokumentvorlagen</p>
-<table class="reiter">
-	<tr>
-		<td class="reiter desel">
-			<a href="{Link1}">Dokumente</a>
-		</td>
-		<td class="reiter desel">
-			<a href="{Link2}">neue Vorlage</a>
-		</td>
-		<td class="reiter sel">
-			<a href="{Link3}" class="reiterA">Felder</a>
-		</td>
-		<td class="reiter desel">
-			<a href="#" onClick="showH()">Hilfe</a>
-		</td>
-	</tr>
-</table>
+<form>
+	<input type="reset" name="dokument1.php" value='Dokumente'>
+	<input type="reset" name="{Link2}" value='neue Vorlage'>
+	<input type="reset" name="{Link3}" value='Felder'>
+	<input type="reset" name="#" onClick="showH()" value='Hilfe'>
+</form>
+<br>
+<h3>{vorlage}</h3>
 
-<!--table width="95%" class="karte"><tr><td class="karte"-->
-<!-- Hier beginnt die Karte  ------------------------------------------->
-{vorlage}<br>
-
-<table style="width:610px">
+<table>
 <!-- BEGIN Liste -->
 	<tr>
 		<form name="update" action="dokument3.php" method="post">
@@ -77,8 +75,6 @@
 		</form>
 	</tr>
 </table>
-<!-- Hier endet die Karte ------------------------------------------->
-<!--/td></tr></table-->
 {END_CONTENT}
 </body>
 </html>

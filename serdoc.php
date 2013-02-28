@@ -1,5 +1,5 @@
 <?php
-	require_once("inc/stdLib.php");
+    require_once("inc/stdLib.php");
     $head = mkHeader();
 ?>
 <html>
@@ -20,7 +20,7 @@ $(function () {
     $('#fileupload').fileupload({
         dataType: 'json',
         add: function (e, data) {
-            if( !data.files[0].name.match(/\.(tex)|(odt)|(swf)|(sxw)$/) ) {  //derzeit kein RTF
+            if( !data.files[0].name.match(/\.(tex)|(rtf)|(swf)|(sxw)$/) ) {  
                 alert ('Falsches Dateiformat');
                 return false;
             }

@@ -65,7 +65,12 @@ if ($_SESSION['feature_ac']) { //funktioniert wegen der Ersetzungen für minLeng
         });
     </script>';  
    }//end feature_ac 
-?>
+?>  
+    <style>
+    table.tablesorter {
+	   width: 900;
+    }    
+    </style>
     <script>
     $(function() {
         $("#dialog").dialog();

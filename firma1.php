@@ -12,7 +12,6 @@
     $tmp=getVariablen($id);
     $variablem="";
     $t = new Template($base);
-    $menu =  $_SESSION['menu'];
     doHeader($t);
     $t->set_file(array("fa1" => "firma1.tpl"));
     if (count($tmp)>0) {

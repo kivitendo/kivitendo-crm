@@ -43,21 +43,10 @@
      }
      $t = new Template($base);
      $t->set_file(array("doc" => "firma4.tpl"));
-     $menu =  $_SESSION['menu'];
+     doHeader($t);
      $t->set_var(array(
-         JAVASCRIPTS   => $menu['javascripts'],
-         STYLESHEETS   => $menu['stylesheets'],
-         PRE_CONTENT   => $menu['pre_content'],
-         START_CONTENT => $menu['start_content'],
-         END_CONTENT   => $menu['end_content'],
-         ERPCSS        => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-         JQUERY        => $_SESSION['basepath'].'crm/',
-         'THEME'         => $_SESSION['theme'],
-     ));
-
-     $t->set_var(array(
+               CRMURL  => $_SESSION['baseurl'].'crm/',
                FAART   => ($Q=="C")?".:Customer:.":".:Vendor:.",       //"Kunde":"Lieferant",
-               ERPCSS  => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
                Q       => $Q,
                FID     => $fid,
                customernumber     => ($Q=="C")?$fa["customernumber"]:$fa["vendornumber"],

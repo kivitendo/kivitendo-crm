@@ -2,9 +2,9 @@
     <head><title></title>
 {STYLESHEETS}
 {CRMCSS}
-{THEME} 
 {JQUERY}
 {JQUERYUI}
+{THEME} 
     <script type="text/javascript" src="{CRMURL}inc/dokument.js"></script>
 {JAVASCRIPTS}
     <script language="JavaScript">

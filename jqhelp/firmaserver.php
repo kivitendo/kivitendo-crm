@@ -368,13 +368,7 @@
         echo 'ok';
     }
 
-    function getDocVorlage_($did,$fid=0,$pid=0,$tab="C") {
-        $inhalt="<div id='iframe2'  style='height:100%;min-height:300px'>";
-        $inhalt.="        <iframe id='newdoc' style='height:100%;min-height:300px;width:100%' name='newdoc' src='firma4a.php?did=$did&fid=$fid&tab=$tab&pid=$pid' frameborder='0'></iframe>";
-        $inhalt.="</div>";
-        echo $inhalt;
-    }
-    
+
 switch ($_GET['task']) {
     case 'bland'             : Buland( $_GET['land'] );
                                break;
@@ -405,8 +399,6 @@ switch ($_GET['task']) {
     case 'newDir'            : newDir( $_GET['pfad'], $_GET['newdir'] );
                                break;
     case 'delFile'           : delFile( $_GET['id'], $_GET['pfad'], $_GET['file'] );
-                               break;
-    case 'getDocVorlage'     : getDocVorlage_( $_GET['id'], $_GET['fid'], $_GET['pid'], $_GET['tab'] );
                                break;
     default                  : echo "nicht erlaubt";
 };

@@ -9,9 +9,9 @@ ob_start();
 <head><title></title>
 <?php echo $menu['stylesheets']; ?>
 <?php echo $head['CRMCSS']; ?>
-<?php echo $head['THEME']; ?>
 <?php echo $head['JQUERY']; ?>
 <?php echo $head['JQUERYUI']; ?>
+<?php echo $head['THEME']; ?>
 <?php echo $head['JQTABLE']; ?>
     <script language="JavaScript">
         function showD (src,id) {
@@ -25,7 +25,10 @@ ob_start();
 		    F1=open("<?php echo $_SESSION["basepath"]; ?>crm/getCall.php?Q="+Q+"&fid="+FID+"&hole="+id,"Caller","width=610, height=600, left=100, top=50, scrollbars=yes");
 	    }        
     </script> 
-<?php    if ($feature_ac) { ?>
+<?php    
+//print_r($_SESSION);
+if ($_SESSION['feature_ac']) { //funktioniert wegen der Ersetzungen für minLength und delay nur mit echo
+    echo '
     <style>
         .ui-autocomplete-category {
             font-weight: bold;
@@ -53,16 +56,21 @@ ob_start();
         $(function() {
             $("#ac0").catcomplete({                          
                 source: "jqhelp/autocompletion.php?case=name",                            
-                minLength: '.$feature_ac_minLength.',                            
-                delay: '.$feature_ac_delay.',
+                minLength: '.$_SESSION['feature_ac_minlength'].',                            
+                delay: '.$_SESSION['feature_ac_delay'].',
                 select: function(e,ui) {                    
                     showD(ui.item.src,ui.item.id);
                 }
             });
         });
-    </script> 
-<?php    }//end feature_ac 
-?>
+    </script>';  
+   }//end feature_ac 
+?>  
+    <style>
+    table.tablesorter {
+	   width: 900;
+    }    
+    </style>
     <script>
     $(function() {
         $("#dialog").dialog();
@@ -74,7 +82,7 @@ ob_start();
     });    
     </script>
 </head>
-<body onload=$("#ac0").focus().val('<?php echo preg_replace("#[ ].*#",'',$_GET['swort']);?>');>
+<body onload="$('#ac0').focus().val('<?php echo preg_replace("#[ ].*#",'',$_GET['swort']);?>');">
 <?php echo $menu['pre_content']; ?>
 <?php echo $menu['start_content']; ?>
 <p class="listtop">Schnellsuche Kunde/Lieferant/Kontakte und Kontaktverlauf</p>
@@ -84,7 +92,7 @@ ob_start();
     <input type="submit" name="kontakt" value="Kontaktverlauf"> <br>
     <span class="liste">Suchbegriff</span>
 </form>
-<?php //wichtig: focus().val('ohneLeerZeichen')
+<?php 
 if ($_GET["kontakt"] && $_GET['swort'] != '') { 
 	$sw = strtoupper( $_GET["suchwort"] );
 	$sw = strtr( $sw, "*?", "%_" );
@@ -168,9 +176,9 @@ if ($_GET["kontakt"] && $_GET['swort'] != '') {
         echo "<thead><tr ><th>KD-Nr</th><th>Name</th><th>Anschrift</th><th>Telefon</th><th></th></tr></thead>\n<tbody>\n"; 
         $i=0; 
         if ($rsC) foreach($rsC as $row) { 
-            echo "<tr onClick='showD(\"C\",".$row["id"].");'>". 
-                 "<td>".$row["customernumber"]."</td><td>".$row["name"]."</td>". 
-                 "<td>".$row["city"].(($row["street"])?", ":"").$row["street"]."</td><td>".$row["phone"]."</td><td>K</td></tr>\n"; 
+            echo "<tr class='bgcol".($i%2+1)."' onClick='showD(\"C\",".$row["id"].");'>". 
+                 "<td class=\"liste\">".$row["customernumber"]."</td><td class=\"liste\">".$row["name"]."</td>". 
+                 "<td class=\"liste\">".$row["city"].(($row["street"])?", ":"").$row["street"]."</td><td class=\"liste\">".$row["phone"]."</td><td class=\"liste\">K</td></tr>\n"; 
             $i++; 
         }  
         if ($rsV) foreach($rsV as $row) { 

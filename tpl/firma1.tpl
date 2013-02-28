@@ -53,8 +53,8 @@ function anschr(A) {
         $( "#dialogwin" ).dialog( "option", "maxWidth", 400 );
         $( "#dialogwin" ).dialog( "option", "maxHeight", 600 );
         $( "#dialogwin" ).dialog( { title: "Adresse" } );
-$( "#dialogwin" ).dialog( "open" );
-if (A==1) {
+        $( "#dialogwin" ).dialog( "open" );
+        if (A==1) {
             $( "#dialogwin" ).load("showAdr.php?Q={Q}&fid={FID}");
         } else {
             sid = document.getElementById('SID').firstChild.nodeValue;
@@ -69,8 +69,11 @@ function doLink() {
         if ( document.getElementById('actionmenu').selectedIndex > 0 ) {
             link = $('#actionmenu option:selected').val();
             if (link.substr(0,7) =='onClick') {
-                document.oe.type.value=link.substr(8);
-                document.oe.submit();
+                if ( link.substr(8) == 'invoice' ) {
+                    doIr();
+                } else {
+                    doOe(link.substr(8));
+                }
             } else {
                 lnk = document.getElementById('actionmenu').options[document.getElementById('actionmenu').selectedIndex].value;
                 if (link.substr(0,4) =='open') {
@@ -78,8 +81,21 @@ function doLink() {
                 } else {
                     window.location.href = lnk;
                 }
+            }
+       }
 }
+function doOe(typ) {
+      document.oe.type.value=typ;
+      document.oe.submit();
 }
+function doIr() {
+      if ( '{Q}' == 'C' ) {
+          document.oe.action='../is.pl';
+      } else {
+          document.oe.action='../ir.pl';
+      }
+      document.oe.type.value='invoice';
+      document.oe.submit();
 }
 function KdHelp() {
         link = $('#kdhelp option:selected').val();
@@ -222,6 +238,7 @@ hide: {
 <option value='firmen3.php?Q={Q}&id={FID}&edit=1'>.:edit:.</option>
 <option value='onClick:{sales}_order'>.:order:. .:develop:.</option>
 <option value='onClick:{request}_quotation'>.:quotation:. .:develop:.</option>
+<option value='onClick:invoice'>.:invoice:. .:develop:.</option>
 </select>
 </span>
 <span style="float:left; padding-left:3em; visibility:{tools};" >
@@ -233,7 +250,7 @@ hide: {
 </form>
 </div>
 
-<form action="../oe.pl" method="post" name="oe">
+<form action="../oe.pl" id="oe" method="post" name="oe">
 <input type="hidden" name="action" value="add">
 <input type="hidden" name="vc" value="{CuVe}">
 <input type="hidden" name="type" value="">
@@ -264,14 +281,13 @@ hide: {
 {IMG}<br /><br />
 <img src="image/kreuzchen.gif" title=".:locked address:." style="visibility:{verstecke};" >
 <br />
-<form action="../oe.pl" method="post" name="oe1">
-{ANGEBOT_BUTTON}
-{AUFTRAG_BUTTON}
-</form>
+<span style="visibility:{ANGEBOT_BUTTON};"><a href="#" onClick="doOe('{sales}_quotation');"><img src="image/angebot.png" title="Angebot/Anfrage erstellen" border="0"></a>&nbsp;</span>
+<span style="visibility:{AUFTRAG_BUTTON};"><a href="#" onClick="doOe('{request}_order');"><img src="image/auftrag.png" title="neuen Auftrag eingeben" border="0"></a>&nbsp;</span>
+<span style="visibility:{RECHNUNG_BUTTON};"><a href="#" onClick="doIr();"><img src="image/rechnung.png" title="neue Rechnung erstellen" border="0"></a>&nbsp;</span>
 <br />
-<span style="visibility:{zeigeplan};"><a href="{KARTE1}" target="_blank"><img src="image/karte.gif" title=".:city map:." border="0"></a></span>
-&nbsp;
-<a href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0" /></a><br>
+<span style="visibility:{zeigeextra};"><a href="extrafelder.php?owner={Q}{FID}" target="_blank"><img src="image/extra.png" title="Extrafelder" border="0"></a>&nbsp;</span>
+<span style="visibility:{zeigeplan};"><a href="{KARTE1}" target="_blank"><img src="image/karte.gif" title=".:city map:." border="0"></a>&nbsp;</span>
+<a href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0" /></a>&nbsp;<br>
 <br />
 {begin_comment}<a href="lxcars/lxcmain.php?owner={FID}&task=1" title="KFZ-Daten"><img src="./lxcars/image/lxcmain.png" alt="Cars" border="1" /></a>{end_comment}
 &nbsp;

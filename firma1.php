@@ -161,10 +161,9 @@
             'request' => ($Q=="C")?"sales":"request",
             'apr' => ($Q=="C")?"ar":"ap",
             //ToDo ToDo
-            'AUFTRAG_BUTTON' => ($_SESSION['auftrag_button']=='t')?'<button type="submit" title="neuen Auftrag eingeben" style="visibility:visible;" onClick="document.oe.type.value=\''.$sales.'_order\'; submit()">
-<img src="image/auftrag.png"></button>':'',
-            'ANGEBOT_BUTTON' => ($_SESSION['angebot_button']=='t')?'<button type="submit" title="Angebot/Anfrage erstellen" style="visibility:visible;" onClick="document.oe.type.value=\''.$request.'_quotation\'; submit()">
-<img src="image/angebot.png"></button>':'',
+            'AUFTRAG_BUTTON' => ($_SESSION['auftrag_button']=='t')?'visible':'hidden',
+            'ANGEBOT_BUTTON' => ($_SESSION['angebot_button']=='t')?'visible':'hidden',
+            'RECHNUNG_BUTTON' => ($_SESSION['rechnung_button']=='t')?'visible':'hidden',
             'zeigeplan' => ($karte1)?"visible":"hidden",
             'begin_comment' => ($_SESSION['zeige_lxcars']=='t')?"":"<!-- ",
             'end_comment' => ($_SESSION['zeige_lxcars']=='t')?"":" -->",
@@ -186,12 +185,6 @@
     $t->set_block("fa1","Liste","Block");
     $i=0;
     $nun=date("Y-m-d H:i");
-    $itemN[]=array('id' => 0,'calldate' => $nun, 'caller_id' => $employee, 'cause' => "Neuer Eintrag" );
-    if ($items) { //ToDo?? definiert??
-        $item=array_merge($itemN,$items);
-    } else {
-        $item=$itemN;
-    }
     if ($kdhelp) {
         $t->set_block("fa1","kdhelp","Block1");
         $kdtmp[]=array("id"=>-1,"name"=>"Online Kundenhilfe");

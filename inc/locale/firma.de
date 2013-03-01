@@ -3,6 +3,7 @@ $texts  = array(
   '.:detailview:.'      => 'Detailansicht',
   '.:Custombase:.'      => 'Firmenstamm',
   '.:Contacts:.'        => 'Ansprechpartner',
+  '.:contact:.'         => 'Kontakt',
   '.:Sales:.'           => 'Ums&auml;tze',
   '.:Documents:.'       => 'Dokumente',
   '.:Company:.'         => 'Firma',

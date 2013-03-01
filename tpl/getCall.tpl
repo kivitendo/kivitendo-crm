@@ -1,11 +1,12 @@
 <html>
 	<head><title>LX - CRM</title>
-        {STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
-    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
-    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/i18n/jquery.ui.datepicker-de.js"></script>
+{STYLESHEETS}
+{CRMCSS}
+{JQUERY}
+{JQUERYUI}
+{THEME}
+{JQDATE}
+{JQTABLE}
 	<script language="JavaScript">
 	<!--
 		function artikel() {
@@ -37,6 +38,14 @@
         })
 	//-->
 	</script>
+	<script>
+    $(document).ready( function(){
+        $('#calls')
+        .tablesorter({widthFixed: true, widgets: ['zebra'], headers: { 0: { sorter: false }, 1: { sorter: false }, 2: { sorter: false } } })
+        .tablesorterPager({container: $("#pager"), size: 10, positionFixed: false})
+    });
+	</script>
+
 <body onLoad="focus(), showwv()">
 
 <!-- Hier beginnt die Karte  ------------------------------------------->
@@ -117,12 +126,28 @@ WV<input type="checkbox" name="wvl" value="1" onClick="showwv()" {wvl}> <span id
 </td></tr>
 </form>
 </table>
-<table class="liste" width="100%">
+<table id='calls' class="tablesorter" width="100%">
+<thead><tr><th></th><th></th><th></th></tr></thead><tbody>
 <!-- BEGIN Liste -->
 	<tr  class='bgcol{LineCol}' onClick="showCall({IID});">
 		<td width="118px">{Datum}</td><td>{Betreff}</td><td class='typcol{Type}'>{Kontakt}{inout}</td></tr>
 <!-- END Liste -->
-</table>
+</tbody></table>
+<div id="pager" class="pager" style='position:absolute;'>
+<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first"/>
+<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev"/>
+<button id='reload' name='reload' onClick="document.location.reload(true)">reload</button>
+<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
+<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
+<select class="pagesize" id='pagesize'>
+<option value="10" selected>10</option>
+<option value="15">15</option>
+<option value="20">20</option>
+<option value="25">25</option>
+<option value="30">30</option>
+</select>
+</div>
+
 <!-- Hier endet die Karte ------------------------------------------->
 </body>
 </html>

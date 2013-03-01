@@ -100,6 +100,7 @@
     //------------------------------------------- Beginn Ausgabe
     $t = new Template($base);
     $t->set_file(array("cont" => "getCall.tpl"));
+    doHeader($t);
     //------------------------------------------- CRMUSER
     $t->set_block("cont","Selectbox","Block2");
     $user=getAllUser("%");
@@ -191,9 +192,6 @@
     $deletes=getCntCallHist($Bezug,true);
     $menu =  $_SESSION['menu'];
     $t->set_var(array(
-        ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-        STYLESHEETS   => $menu['stylesheets'],
-        JQUERY        => $_SESSION['basepath'].'crm/',
         nummer => $daten["nummer"],
         EDIT => ($CallEdit and $_GET["hole"])?"visible":"hidden",
         DELETE => ($CallDel and $_GET["hole"])?"visible":"hidden",

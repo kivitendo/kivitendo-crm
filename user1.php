@@ -34,10 +34,13 @@
     if ($_GET["id"] && $_GET["id"]<>$_SESSION["loginCRM"]) {
         $fa=getUserStamm($_GET["id"]);
         $t->set_file(array("usr1" => "user1b.tpl"));
+        $own = false;
     } else {
         $fa=getUserStamm($_SESSION["loginCRM"]);
         $t->set_file(array("usr1" => "user1.tpl"));
+        $own = true;
     }
+
     if (empty($fa["ssl"])) $fa["ssl"] = "n";
     if (empty($fa["proto"])) $fa["proto"] = "t";
     if ($fa) foreach ($fa["gruppen"] as $row) {
@@ -103,57 +106,48 @@
 	        zeige_extra            => ($fa['zeige_extra']=='t')?'checked':'',
 	        zeige_lxcars           => ($fa['zeige_lxcars']=='t')?'checked':'',
             ));
-    if ($_GET["id"]) {    
-        $t->set_var(array(vertreter => $fa["vertreter"]." ".$fa["vname"]));
-    } else {
-        $t->set_block("usr1","Selectbox","Block");
-        $select=(!empty($fa["vertreter"]))?$fa["vertreter"]:$fa["id"];
-        $user=getAllUser(array(0=>true,1=>""));
-        if ($user) foreach($user as $zeile) {
-            $t->set_var(array(
-                Sel => ($select==$zeile["id"])?" selected":"",
-                vertreter    =>    $zeile["id"],
-                vname    =>    $zeile["name"]
-            ));
-            $t->parse("Block","Selectbox",true);
-        }
-        $t->set_block("usr1","SelectboxB","BlockB");
-        $ALabels=getLableNames();
-        if ($ALabels) foreach ($ALabels as $data) {
+    if ( $own ) {
+        if ($_GET["id"]) {    
+            $t->set_var(array(vertreter => $fa["vertreter"]." ".$fa["vname"]));
+        } else {
+            $t->set_block("usr1","Selectbox","Block");
+            $select=(!empty($fa["vertreter"]))?$fa["vertreter"]:$fa["id"];
+            $user=getAllUser(array(0=>true,1=>""));
+            if ($user) foreach($user as $zeile) {
                 $t->set_var(array(
-                    FSel => ($data["id"]==$fa["etikett"])?" selected":"",
-                    LID    =>    $data["id"],
-                    FTXT =>    $data["name"]
+                    Sel => ($select==$zeile["id"])?" selected":"",
+                    vertreter    =>    $zeile["id"],
+                    vname    =>    $zeile["name"]
                 ));
-                $t->parse("BlockB","SelectboxB",true);
+                $t->parse("Block","Selectbox",true);
+            }
+            $t->set_block("usr1","SelectboxB","BlockB");
+            $ALabels=getLableNames();
+            if ($ALabels) foreach ($ALabels as $data) {
+                    $t->set_var(array(
+                        FSel => ($data["id"]==$fa["etikett"])?" selected":"",
+                        LID    =>    $data["id"],
+                        FTXT =>    $data["name"]
+                    ));
+                    $t->parse("BlockB","SelectboxB",true);
+            }
         }
-        $t->set_block("usr1","Liste","BlockD");
-        $i=0;
-        if ($items) foreach($items as $col){
+        chdir("jquery-ui/themes");
+        $theme = glob("*");
+        $t->set_block('usr1','Theme','BlockT');
+        if ($theme) foreach( $theme as $file) {
             $t->set_var(array(
-                IID => $col["id"],
-                LineCol    => ($i%2+1),
-                Datum    => db2date(substr($col["calldate"],0,10)),
-                Zeit    => substr($col["calldate"],11,5),
-                Name    => $col["cp_name"],
-                Betreff    => $col["cause"],
-                Nr        => $col["id"]
+                   TSel => ($file==$fa["theme"])?" selected":"",
+                   themefile => $file,
+                   themename => ucwords(strtr($file,'-',' ')),
             ));
-            $t->parse("BlockD","Liste",true);
-            $i++;
-        }
-    }
-    chdir("jquery-ui/themes");
-    $theme = glob("*");
-    $t->set_block('usr1','Theme','BlockT');
-    if ($theme) foreach( $theme as $file) {
+            $t->parse('BlockT','Theme',true);
+        };
+        chdir("../..");
+    } else {
         $t->set_var(array(
-               TSel => ($file==$fa["theme"])?" selected":"",
-               themefile => $file,
-               themename => ucwords(strtr($file,'-',' ')),
+            vertreter => $fa["vertreter"]." ".$fa["vname"],
         ));
-        $t->parse('BlockT','Theme',true);
     };
-    chdir("../..");
     $t->pparse("out",array("usr1"));
 ?>

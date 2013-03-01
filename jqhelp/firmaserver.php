@@ -368,6 +368,10 @@
         echo 'ok';
     }
 
+    function getUsermail( $uid ) {
+        $items = getAllTelCallUser($uid,0,"M");
+        echo json_encode( $items );
+    }
 
 switch ($_GET['task']) {
     case 'bland'             : Buland( $_GET['land'] );
@@ -399,6 +403,8 @@ switch ($_GET['task']) {
     case 'newDir'            : newDir( $_GET['pfad'], $_GET['newdir'] );
                                break;
     case 'delFile'           : delFile( $_GET['id'], $_GET['pfad'], $_GET['file'] );
+                               break;
+    case 'usermail'          : getUsermail( $_GET['uid'] );
                                break;
     default                  : echo "nicht erlaubt";
 };

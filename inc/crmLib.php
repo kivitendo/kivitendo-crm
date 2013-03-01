@@ -56,10 +56,9 @@ global $db;
         else { $new=$rs2[0]["bezug"]; };
         $i=0;
         foreach ($rs as $row) {
-            if ($row["id"]==$new) {
-                $rs[$i]["new"]=1;
-                break;
-            }
+            if ($row["id"]==$new) $rs[$i]["new"]=1;
+            $rs[$i]['datum'] = db2date(substr($row['calldate'],0,10));
+            $rs[$i]['zeit'] = substr($row['calldate'],11,5);
             $i++;
         }
     }
@@ -115,8 +114,9 @@ global $db;
         foreach ($rs as $row) {
             if ($row["id"]==$new) {
                 $rs[$i]["new"]=1;
-                break;
-            }
+            };
+            $rs[$i]['datum'] = db2date(substr($rs[$i]["calldate"],0,10));
+            $rs[$i]["zeit"]=substr($rs[$i]["calldate"],11,5);
             $i++;
         }
     }

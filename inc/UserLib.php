@@ -44,7 +44,7 @@ global $db;
 function getAllUser($sw) {
 global $db,$Pre;
         if (!$sw[0]) { $where="workphone like '$Pre".$sw[1]."%' or homephone like '$Pre".$sw[1]."%' "; }
-        else { $where="name ilike '$Pre".$sw[1]."%' "; }
+        else { $where="(name ilike '$Pre".$sw[1]."%') or (login  ilike '$Pre".$sw[1]."%')"; }
         $sql="select * from employee where $where and employee.deleted = false";
         $rs=$db->getAll($sql);
         if(!$rs) {

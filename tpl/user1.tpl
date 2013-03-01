@@ -3,29 +3,60 @@
 {STYLESHEETS}
 {CRMCSS}
 {JQUERY}
-{JQUERY}
+{JQUERYUI}
+{JQTABLE}
 {THEME}    
 {JAVASCRIPTS}
-    <style type="text/css">
-    #mailwin {
-        position: absolute;
-        top: 3.2em; left: 10em;
-        width: 40em;
-        height: 38em;
-        background-color: white;
-        border: 0px solid silver;
-    }
-    </style>
     <script language="JavaScript">
+    function showItem(Q,id) {
+	    F1=open("getCall.php?hole="+id+Q,"Caller","width=800, height=650, left=100, top=50, scrollbars=yes");
+    }
     var MailOn = false;
-    function Mailonoff() {
-        if (MailOn) {
-            MailOn = false;
-            document.getElementById("mailwin").style.visibility = "hidden";
+    function Mailonoff( reload ) {
+        if ( $('#mailwin').dialog( "isOpen" ) && !reload) {
+             $('#mailwin').dialog('close');
             document.user.mails.value="Mails zeigen";
         } else {
-            MailOn = true;
-            document.getElementById("mailwin").style.visibility = "visible";
+            if ( !MailOn) {
+                var Q, p, email;
+                var content = '';
+                $('#mailtable tbody').empty();
+                $.ajax({
+                    url: 'jqhelp/firmaserver.php?task=usermail&uid={uid}',
+                    dataType: 'json',
+                    success: function(data){
+                        $.each(data, function(i, row) {
+                            if ( row.cp_mail != null ) {
+                                email = row.cp_email;
+                                Q     = '&Q=XC&pid='+row.pid;
+                            } else if ( row.cemail != null ) {
+                                email = row.cemail;
+                                Q     = '&Q=C&pid='+row.cid;
+                            } else if ( row.vemail != null ) {
+                                email = row.vemail;
+                                Q     = '&Q=C&pid='+row.vid;
+                            } else {
+                                Q = '&Q=XX';
+                                p = row.cause.indexOf('|');
+                                if ( p>=0 ) {
+                                    email = row.cause.substring(p+1);
+                                    row.cause = row.cause.substring(0,p);
+                                } else {
+                                    email = '--------';
+                                }
+                            }
+                            content += '<tr onClick="showItem(\''+Q+'\','+row.id+');"><td>'+row.datum+' '+row.zeit+'</td><td>'+email+'</td><td>'+row.cause+'</td></tr>';
+                        });
+                        $('#mailtable tbody').append(content);
+                        $("#mailtable").trigger('update');
+                        $("#mailtable")
+                            .tablesorter({widthFixed: true, widgets: ['zebra'] })
+                            .tablesorterPager({container: $("#pager"), size: 15, positionFixed: false})
+                    }
+                })
+                MailOn = true;
+            };
+            $( "#mailwin" ).dialog( "open" )
             document.user.mails.value="Mails verstecken";
         }
     }
@@ -49,22 +80,35 @@
     }
     </script>
     <script type='text/javascript' src='inc/help.js'></script>
+    <script>
+    $(document).ready(
+    function(){
+        $( "#mailwin" ).dialog({
+            autoOpen: false,
+            show: {
+               effect: "blind",
+               duration: 300
+            },
+            hide: {
+               effect: "explode",
+               duration: 300
+            },
+            minWidth: 600,
+            minHeight: 550,
+            title: "Mails"
+        });
+    });
+    </script>
+   
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
 <p class="listtop" onClick="help('User');">Benutzer Stammdaten (?)</p>
-<!-- Beginn Code ----------------------------------------------->
-<div id="mailwin" style="visibility:hidden"> 
-    <iframe src="userMail.php?id={uid}&start=0" name="Termine" width="100%" height="100%"  marginheight="0" marginwidth="0" align="left">
-    <p>Ihr Browser kann leider keine eingebetteten Frames anzeigen</p>
-    </iframe>
-</div>
 <form name="user" action="user1.php" method="post" onSubmit="return getical();">
 <div id="user">
-<input type="reset" name="mails" value="Mails zeigen" onClick="Mailonoff()">
+<input type="reset" name="mails" value="Mails zeigen" onClick="Mailonoff(false)">
 
-<table border="0" class="mini">
-
+<table border="0">
     <input type="hidden" name="icalart" value="{icalart}">
     <input type="hidden" name="icaldest" value="{icaldest}">
     <input type="hidden" name="icalext" value="{icalext}">
@@ -158,10 +202,6 @@
    <tr><td class="norm">Doppelten Kunden anlegen</td><td colspan="4">
              <input type="checkbox" name="feature_unique_name_plz" value='t' {feature_unique_name_plz}>verbieten</td>
    </tr>
-   <tr><td class="norm">Links</td><td colspan="4">
-             Gruppe: <input type="text" name="dir_group" size="12" value='{dir_group}'>
-             &nbsp;&nbsp; Rechte: <input type="text" name="dir_mode" size="4" value='{dir_mode}'><input type="checkbox" name="sep_cust_vendor"  value='t' {sep_cust_vendor}>trennen</td>
-   </tr>
        <tr><td>&nbsp;</td><td><input type="submit" name="ok" value="sichern"></td></tr>
 
     </form>
@@ -191,8 +231,30 @@ Kalenderexport:
 </form>
 <img src="{IMG}" width="500" height="280" title="Netto sales over 12 Month">
 </div>
-<!-- End Code ----------------------------------------------->
-<!--/td></tr></table-->
+<div id="mailwin"> 
+    <table id="mailtable" class="tablesorter">
+    <thead>
+        <tr><th>Datum</th><th>E-Mail</th><th>Betreff</th></tr>
+    </thead>
+    <tbody id='mtablebody'>
+    </tbody>
+    </table>
+    <div id="pager" class="pager">
+        <img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first"/>
+        <img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev"/>
+        <button id='reload' name='reload' onClick="MailOn=false; Mailonoff(true)">reload</button>
+        <img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
+        <img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
+        <select class="pagesize" id='pagesize'>
+            <option value="10">10</option>
+            <option value="15" selected>15</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="30">30</option>
+        </select>
+        </form>
+     </div>
+</div>
 {END_CONTENT}
 </body>
 </html>

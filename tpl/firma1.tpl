@@ -284,7 +284,7 @@ hide: {
 <span style="visibility:{ANGEBOT_BUTTON};"><a href="#" onClick="doOe('{sales}_quotation');"><img src="image/angebot.png" title="Angebot/Anfrage erstellen" border="0"></a>&nbsp;</span>
 <span style="visibility:{AUFTRAG_BUTTON};"><a href="#" onClick="doOe('{request}_order');"><img src="image/auftrag.png" title="neuen Auftrag eingeben" border="0"></a>&nbsp;</span>
 <span style="visibility:{RECHNUNG_BUTTON};"><a href="#" onClick="doIr();"><img src="image/rechnung.png" title="neue Rechnung erstellen" border="0"></a>&nbsp;</span>
-<br />
+<br /><br />
 <span style="visibility:{zeigeextra};"><a href="extrafelder.php?owner={Q}{FID}" target="_blank"><img src="image/extra.png" title="Extrafelder" border="0"></a>&nbsp;</span>
 <span style="visibility:{zeigeplan};"><a href="{KARTE1}" target="_blank"><img src="image/karte.gif" title=".:city map:." border="0"></a>&nbsp;</span>
 <a href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0" /></a>&nbsp;<br>

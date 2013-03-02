@@ -7,7 +7,6 @@
 	$rep=$rep[0];
 	$masch=getVertragMaschinen($rep["cid"]);
 	$firma=getFirmenStamm($rep["customer_id"]);
-	define("FPDF_FONTPATH","../font/");
 	require("fpdf.php");
 	require("fpdi.php");
 	$pdf = new FPDI('P','mm','A4');

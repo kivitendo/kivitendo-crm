@@ -11,7 +11,6 @@
 	if ($material) foreach ($material as $zeile) {
 		$mat.=$zeile["menge"]." x ".substr($zeile["description"],0,70)."\n";
 	};
-	define("FPDF_FONTPATH","../font/");
 	require("fpdf.php");
 	require("fpdi.php");
 	$pdf = new FPDI('P','mm','A4');

@@ -1,7 +1,4 @@
 <?php
-while( list($key,$val) = each($_SESSION) ) {
-    unset($_SESSION[$key]);
-};
 clearstatcache();
 if ($_POST["erpname"]) {
     if ( is_file("../".$_POST["erpname"]."/config/".$_SESSION['erpConfigFile'].".conf") ) {
@@ -25,6 +22,7 @@ if ($_POST["erpname"]) {
         }
     }
     $_SESSION['ERPNAME'] = $_POST["erpname"];
+    $_SESSION['erpConfigFile'] = $_POST['erpConfigFile'];
 }
 
 $conffile = '';
@@ -32,6 +30,11 @@ if ( substr(getcwd(),-3) == "inc" || substr(getcwd(),-6) == "jqhelp"  ) {
     $conffile = "../";
 }
 $conffile .= "../".$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf";
+
+$conf = array('ERPNAME','erpConfigFile');
+while( list($key,$val) = each($_SESSION) ) {
+    if ( ! in_array($key,$conf) ) unset($_SESSION[$key]);
+};
 
 if ( is_file($conffile) ) {
     $tmp = anmelden();
@@ -59,7 +62,9 @@ if ( is_file($conffile) ) {
     echo "ERP V 3.0.0 oder gr&ouml;&szlig;er erwartet!!!<br><br>";
     echo "<form name='erppfad' method='post' action='".$PHPSELF."'>";
     echo "Bitte den Verzeichnisnamen (nicht den Pfad) der ERP eingeben:<br>";
-    echo "<input type='text' name='erpname'>";
+    echo "<input type='text' name='erpname'><br>";
+    echo "Bitte den Namen des Konfigurationsfiles ERP eingeben (ohne conf):<br>";
+    echo "<input type='text' name='conffile'><br>";
     echo "<input type='submit' name='saveerp' value='sichern'>";
     echo "</form>";
     exit;

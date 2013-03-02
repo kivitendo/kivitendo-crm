@@ -7,9 +7,14 @@ session_start();
 
 //error_reporting (E_ALL & ~E_DEPRECATED);
 //ini_set ('display_errors',1);
-
-require_once "conf.php";
-require_once "version.php";
+if ( ! isset($_SESSION['ERPNAME']) ) {
+    require_once "conf.php";
+    $_SESSION['ERPNAME'] = $ERPNAME;
+    $_SESSION['ERP_BASE_URL'] = $ERP_BASE_URL;
+    $_SESSION['erpConfigFile'] = $erpConfigFile;
+    require_once "version.php";
+    $_SESSION['VERSION'] = $VERSION;
+}
 require_once "mdb.php";
 
 $inclpa = ini_get('include_path');

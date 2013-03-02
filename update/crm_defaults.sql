@@ -25,6 +25,9 @@ fputs($fp,"<?php\n");
 foreach ($save as $key) {
     fputs($fp,'$'.$key.'="'.$GLOBALS[$key].'";'."\n");
 }
+fputs($fp,'define("FPDF_FONTPATH","/usr/share/fpdf/font/");'."\n");
+fputs($fp,'define("FONTART","2");'."\n");
+fputs($fp,'define("FONTSTYLE","1");'."\n");
 fputs($fp,"?>");
 fclose($fp);
 -- @exec: *

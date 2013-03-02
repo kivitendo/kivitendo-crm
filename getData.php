@@ -120,7 +120,7 @@ if ($_GET["kontakt"] && $_GET['swort'] != '') {
 			echo "$name</td></tr>\n";
 			$i++;
 			if ($i>=$_SESSION['listLimit']) {
-				echo $_SESSION['listLimit']. von ".count($rs)." Treffern";
+				echo $_SESSION['listLimit']." von ".count($rs)." Treffern";
 				break;
 			}
 		}

@@ -66,7 +66,6 @@
 							'marginLeft'=>$_POST["marginleft"], 'marginTop'=>$_POST["margintop"], 
 							'NX'=>$_POST["nx"], 'NY'=>$_POST["ny"], 'SpaceX'=>$_POST["spacex"], 'SpaceY'=>$_POST["spacey"],
 							'width'=>$_POST["width"], 'height'=>$_POST["height"], 'font-size'=>6);
-		define("FPDF_FONTPATH","/www/cbo/font/");
 		require_once('inc/PDF_Label.php');
 		$SX=1; $SY=1; unset($tmp);
 		$pdf = new PDF_Label($lableformat, $metric, $SX, $SY);

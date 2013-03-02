@@ -281,7 +281,7 @@ class myDB extends MDB2 {
 
         if ($this->log) {                            //Logging
             $this->writeLog("executeMultiple: $statement");
-            $this->writeLog("mit den Werten:" . $data);
+            $this->writeLog("mit den Werten:" . print_r($data,true));
             /*foreach($data as $key2=>$value2){
                     foreach($value2 as $key=>$value){
                             $this->writeLog("hier:" . $key . "wert:" . $value);

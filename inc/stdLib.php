@@ -13,7 +13,7 @@ require_once "version.php";
 require_once "mdb.php";
 
 $inclpa = ini_get('include_path');
-ini_set('include_path',$inclpa.$jpgraph_path.":../:./inc:../inc");
+ini_set('include_path',$inclpa.":../:./inc:../inc");
 
 if ( !isset($_SESSION["db"])?$_SESSION["db"]:false || !$_SESSION["cookie"] || //$_SESSION["db"] wird benötigt??
     ( $_SESSION["cookie"] && !$_COOKIE[$_SESSION["cookie"]] ) ) {
@@ -102,16 +102,19 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     $auth["stylesheet"] = substr($auth["stylesheet"],0,-4);
     $sql  = "SELECT granted from auth.group_rights G where G.right = 'sales_all_edit' ";
     $sql .= "and G.group_id in (select group_id from auth.user_group where user_id = ".$rs[0]["id"].")";
-    $rs = $db->getAll($sql,"authuser_3");
+    $rs3 = $db->getAll($sql,"authuser_3");
     $auth["sales_edit_all"] = 'f';
-    if ( $rs ) {
-        foreach ( $rs as $row ) {
+    if ( $rs3 ) {
+        foreach ( $rs3 as $row ) {
              if ( $row["granted"] == 't' ) {
                    $auth["sales_edit_all"] = 't';
                    break;
               }
          }
     }
+    $sql = "SELECT count(*) as cnt from auth.user_group left join auth.group on id=group_id where name = 'CRMTL' and user_id = ".$rs[0]["id"];
+    $rs  = $db->getAll($sql);
+    $auth['CRMTL'] = $rs[0]['cnt'];
     $sql = "update auth.session set mtime = '".date("Y-M-d H:i:s.100001")."' where id = '".$rs[0]["session_id"]."'"; 
     $db->query($sql,"authuser_3");
     $sql = "SELECT * FROM auth.session WHERE id = '".$cookie."'";
@@ -218,7 +221,9 @@ global $ERPNAME,$erpConfigFile;
         $_SESSION["basepath"]   = $BaseUrl;
         $_SESSION['token']      = False;
         $_SESSION['theme']      = ($tmp['theme']=='base')?'':'<link rel="stylesheet" type="text/css" href="'.$_SESSION['baseurl'].'crm/jquery-ui/themes/'.$tmp['theme'].'/jquery-ui.css">';
-        ;
+        $sql = "select * from crmdefaults";
+        $rs = $_SESSION["db"]->getAll($sql);  //Vor dem Update crm_defauts gibt es einen Fehler
+        if ($rs) foreach ($rs as $row) $_SESSION[$row['key']] = $row['val'];
         return true;
     }
 }

@@ -1,10 +1,10 @@
 <?php 
 session_start();
-require_once("inc/conf.php");
 require_once("inc/version.php");
 require_once("inc/stdLib.php");
+$rc = false;
 if ($_GET["test"]=="ja") {
-    $rc=$db->getAll("select * from crm order by version","Status");
+    $rc = $db->getAll("select * from crm order by version","Status");
 }
 $menu =  $_SESSION['menu'];
 ?>
@@ -33,9 +33,6 @@ $menu =  $_SESSION['menu'];
  echo $menu['start_content'];
 ?>
 <p class="listtop">Status</p>
-
-<!--table class="karte"><tr><td class="karte"-->
-<!---------------------------------------------------------------------->
 <center>
 <?php
 $db=false;
@@ -70,15 +67,13 @@ if ($db) { echo "<a href='log/install.log'>Datenbankinstallation</a><br>"; } els
 <?php
 	if ($rc) {
 		echo 'Datenbankzugriff erfolgreich!<br>';
+print_r($rc);
 		foreach ($rc as $row) {
 			echo 'Installierte Version: '.$row["version"].' vom: '.$row["datum"].' durch: '.$row["uid"].'<br>';
 		}
 	}
-
 ?>
 </center>
-<!---------------------------------------------------------------------->
-<!--/td></tr></table-->
 <?php echo $menu['end_content']; ?>
 </body>
 </html>

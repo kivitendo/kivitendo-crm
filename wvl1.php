@@ -6,13 +6,12 @@
     include("inc/UserLib.php");
     $data["id"]=0;
     $templ="wvl1.tpl";
-    $js="";
     if ($_POST["save"]) {
         if ($_POST["WVLID"]>0) {
             $ok=updWvl($_POST,$_FILES);
         } else {
             if ($_POST["Mail"]) { 
-                $ok=insWvlM($_POST,$MailFlag,$Expunge);
+                $ok=insWvlM($_POST,$_SESSION['MailFlag'],$_SESSION['Expunge']);
             } else {
                 $ok=insWvl($_POST,$_FILES);
             }
@@ -38,7 +37,7 @@
         $msg="";
         $sel=$data["CRMUSER"];
     } else if ($_POST["delete"]) {
-        delMail($_POST["Mail"],$_POST["CID"],$Expunge);
+        delMail($_POST["Mail"],$_POST["CID"],$_SESSION['Expunge']);
         $msg="";
         $sel=$_POST["CRMUSER"];
     } else if ($_GET["mail"]) {
@@ -64,22 +63,12 @@
         $sel=$_SESSION["loginCRM"];
     }
     $t = new Template($base);
-    $menu =  $_SESSION['menu']; 
-    $t->set_var(array(
-        JAVASCRIPTS   => $menu['javascripts'],
-        STYLESHEETS   => $menu['stylesheets'],
-        PRE_CONTENT   => $menu['pre_content'],
-        START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content'],
-        JQUERY        => $_SESSION['basepath'].'crm/',
-        'THEME'         => $_SESSION['theme'],
-    ));
+    doHeader($t);
     $t->set_file(array("wvl" => $templ));
          if ($data["kontakttab"]=="P") { $stammlink="kontakt.php?id=".$data["kontaktid"]; }
     else if ($data["kontakttab"]=="C") { $stammlink="firma1.php?Q=C&id=".$data["kontaktid"]; }
     else if ($data["kontakttab"]=="V") { $stammlink="firma1.php?Q=V&id=".$data["kontaktid"]; };
     $t->set_var(array(
-            ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
             Msg        => $msg,
             hide    => ($data["kontakt"]=="F")?"hidden":"visible",
             nohide    => "visible",
@@ -104,7 +93,6 @@
             WVLID => $data["id"],
             noteid => $data["noteid"],
             Finish => $data["Finish"],
-            JS => $js,
             stammlink => $stammlink,
             Mail => $_GET["mail"],  
             MailUID => $data["uid"],  

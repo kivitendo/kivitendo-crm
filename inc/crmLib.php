@@ -2921,7 +2921,7 @@ function getTTEvents($id,$alle,$evtid,$abr=False) {
     $sql  = "SELECT t.*,COALESCE(e.name,e.login) AS user,oe.ordnumber,oe.closed FROM tt_event t ";
     $sql .= "LEFT JOIN employee e ON e.id=t.uid LEFT JOIN oe ON t.cleared=oe.id WHERE ttid = $id ";
     if ( !$alle ) $sql .= "AND (cleared < 1 OR cleared IS NUll) ";
-    if ( $GLOBALS['clearonly'] AND $abr ) $sql .= 'AND uid = '.$_SESSION['loginCRM'].' ';
+    if ( $_SESSION['clearonly'] AND $abr ) $sql .= 'AND uid = '.$_SESSION['loginCRM'].' ';
     $sql .= $evtid." ORDER BY t.ttstart";
     $rs = $_SESSION['db']->getAll($sql);
     return $rs;
@@ -3070,7 +3070,6 @@ function getTax($tzid) {
 * Aus Zeiteinträgen einen Auftrag generieren
 *****************************************************/
 function mkTTorder($id,$evids,$trans_id) {
-global $ttpart,$tttime,$ttround;
     $tt = getOneTT($id,$false);
     //Steuerzone ermitteln (0-3)
     $sql = "SELECT taxzone_id FROM customer WHERE id = ".$tt["fid"];
@@ -3078,7 +3077,7 @@ global $ttpart,$tttime,$ttround;
     $tzid = $rs["taxzone_id"];
     $TAX = getTax($tzid);
     //Artikeldaten holen
-    $sql = "SELECT * FROM parts WHERE partnumber = '$ttpart'";
+    $sql = "SELECT * FROM parts WHERE partnumber = '".$_SESSION['ttpart']."'";
     $part = $_SESSION['db']->getOne($sql); 
     $partid = $part["id"];
     $sellprice = $part["sellprice"];
@@ -3140,9 +3139,9 @@ global $ttpart,$tttime,$ttround;
         //Minuten
         $diff = floor(($t2 - $t1) / 60);
         //Abrechnungseinheiten
-        $time = floor($diff / $tttime);
+        $time = floor($diff / $_SESSION['tttime']);
         //Ist der Rest über der Tolleranz
-        if ( $diff - ($tttime * $time) > $round ) $time++;
+        if ( $diff - ($_SESSION['tttime'] * $time) > $round ) $time++;
         $price =  $time * $sellprice;
         //Orderitemseintrag
         $rqdate = substr($row['ttstop'],0,10);

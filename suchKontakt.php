@@ -43,8 +43,8 @@
 			echo "<td>".db2date($row["calldate"])."&nbsp;</td><td> ".$cause."</td><td>";
 			echo "$name</td></tr>\n";
 			$i++;
-			if ($i>=$listLimit) {
-				echo "$listLimit von ".count($rs)." Treffern";
+			if ($i>=$_SESSION['listLimit']) {
+				echo $_SESSION['listLimit']." von ".count($rs)." Treffern";
 				break;
 			}
 		}

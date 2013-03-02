@@ -192,7 +192,7 @@
 		$this->sendDebugMessage( "Listening on port ".$this->port.". Server started at ".date( "H:i:s", time() ) );
 
 		//	this allows the shutdown function to check whether the server is already shut down
-		$GLOBALS["_patServerStatus"]	=	"running";
+		$_SESSION["_patServerStatus"]	=	"running";
 		//	this ensures that the server will be sutdown correctly
 		register_shutdown_function( array( $this, "shutdown" ) );
 
@@ -379,9 +379,9 @@
 */
 	function	shutDown()
 	{
-		if( $GLOBALS["_patServerStatus"] != "running" )
+		if( $_SESSION["_patServerStatus"] != "running" )
 			exit;
-		$GLOBALS["_patServerStatus"]	=	"stopped";
+		$_SESSION["_patServerStatus"]	=	"stopped";
 		
 		if( method_exists( $this, "onShutdown" ) )
 			$this->onShutdown();

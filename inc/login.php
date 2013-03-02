@@ -4,7 +4,7 @@ while( list($key,$val) = each($_SESSION) ) {
 };
 clearstatcache();
 if ($_POST["erpname"]) {
-    if ( is_file("../".$_POST["erpname"]."/config/".$erpConfigFile.".conf") ) {
+    if ( is_file("../".$_POST["erpname"]."/config/".$_SESSION['erpConfigFile'].".conf") ) {
         if ( is_writable("inc/conf.php") ) {
             $name = false;
             $configfile = file("inc/conf.php");
@@ -24,14 +24,14 @@ if ($_POST["erpname"]) {
             echo "inc/conf.php ist nicht beschreibbar";
         }
     }
-    $ERPNAME = $_POST["erpname"];
+    $_SESSION['ERPNAME'] = $_POST["erpname"];
 }
 
+$conffile = '';
 if ( substr(getcwd(),-3) == "inc" || substr(getcwd(),-6) == "jqhelp"  ) {
-    $conffile = "../../$ERPNAME/config/".$erpConfigFile.".conf";
-} else {
-    $conffile = "../$ERPNAME/config/".$erpConfigFile.".conf";
+    $conffile = "../";
 }
+$conffile .= "../".$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf";
 
 if ( is_file($conffile) ) {
     $tmp = anmelden();

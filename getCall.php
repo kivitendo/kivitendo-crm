@@ -190,11 +190,10 @@
     }
     $cause=(empty($daten["Betreff"]))?$zeile["cause"]:$daten["Betreff"];
     $deletes=getCntCallHist($Bezug,true);
-    $menu =  $_SESSION['menu'];
     $t->set_var(array(
         nummer => $daten["nummer"],
-        EDIT => ($CallEdit and $_GET["hole"])?"visible":"hidden",
-        DELETE => ($CallDel and $_GET["hole"])?"visible":"hidden",
+        EDIT => ($_SESSION['CallEdit']=='t' and $_GET["hole"])?"visible":"hidden",
+        DELETE => ($_SESSION['CallDel']=='t' and $_GET["hole"])?"visible":"hidden",
         HISTORY => ($daten["history"]>0)?"visible":"hidden",
         HDEL => ($deletes>0)?"visible":"hidden",
         Person => $Person,

@@ -18,7 +18,7 @@ Die Konfigurationsdatei der ERP wurde von lx_office.conf in kivitendo.conf umben
 Aus Gründen der Kompatibilität zu älteren Installationen wird die lx_office.conf in der ERP weiterhin ausgewertet.
 Welche ERP-Konfigurationsdatei in der CRM ausgewertet wird, kann in der CRM-Konfigurationsdatei inc/conf.php
 der Variblen $erpConfigFile zugewiesen werden. Achtung, die Dateiendung (.conf) darf nicht mit angeben werden.
-Voreingestellt ist kivitendo.conf.   
+Voreingestellt ist kivitendo.
 
 Vorrausetzungen:
 	Kivitendo ERP >= 3.0.0
@@ -60,11 +60,7 @@ error_reporting  =  E_ALL & ~E_NOTICE & ~E_DEPRECATED
 -? PHP-Code wird angezeigt (sollte nicht mehr vorkommen):
 -? short_open_tag = On
 
--? Wird mit einem Alias für das LxO-Verzeichnis benutzt und soll in einigen Masken der  
--? jscalendar der ERP benutzt werden, muß das Verzeichnis ins CRM-Verzeichnis verlinkt werden:
--? cd lx-office-crm && ln -s ../lx-office-erp/js
-
--? evtl. php.ini anpassen: (i.d.R. nicht notwendig)
+-? evtl. php.ini anpassen: 
 -? include_path = ".:/usr/share/php:/usr/share/fpdf:/usr/share/jpgraph"
 -? extension=gd.so
 .
@@ -182,10 +178,10 @@ In der Bearbeitungsmaske der Firmen bekommen Sie nun unter "Sonstiges" einen neu
 
 Zeiterfassung:
 --------------
-in der inc/conf.php müßen einige Vorbereitungen getätigt werden:
-$ttpart='azstd'; //Artikelnummer für Arbeitszeit
-$tttime=60;     //Anzahl der Minuten für eine Einheit
-$ttround=15;    //Ab hier wird eine Einheit berechnet
+in der Mandantenmaske  müßen einige Vorbereitungen getätigt werden:
+ttpart = 'azstd'; //Artikelnummer für Arbeitszeit
+tttime = 60;     //Anzahl der Minuten für eine Einheit
+ttround = 15;    //Ab hier wird eine Einheit berechnet
 
 Benutzerfreundliche Links:
 --------------------------
@@ -200,7 +196,7 @@ dir_mode=0775;  Owner + Gruppe Schreibrecht, andere Leserecht
 dir_group=users; Mitglieder dieser Gruppe dürfen gesetzte Rechte       
 sep_cust_vendor=true; Kunden und Lieferanten in unterschiedliche Verzeichnisse
 
-Der Webserver sollte Mitglied in der Gruppe "dir_group" sein.
+Der Webserver muss Mitglied in der Gruppe "dir_group" sein.
 Das Verzeichnis "dokumente" sollte manuell auf Gruppe gesetzt werden.
 Bei einer Migration auch alle Unterverzeichnisse und Dateien:
 chmod 775 -R dokumente

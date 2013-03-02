@@ -73,7 +73,7 @@
                     }
                 }
                 insertCSVData($data,$zeile["id"]);
-                if ($i<$listLimit) {
+                if ($i<$_SESSION['listLimit']) {
                     $t->set_var(array(
                         Q => $Q,
                         ID => $zeile["id"],

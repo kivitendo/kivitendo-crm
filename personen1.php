@@ -111,7 +111,7 @@
                     $js='showK('.$zeile["cp_id"].',"'.$zeile["tbl"].'");'; //showK({PID},'{TBL}')
                     $insk=""; 
                 };
-                if ($i<$listLimit) {
+                if ($i<$_SESSION['listLimit']) {
                     $t->set_var(array(
                         js => $js,
                         LineCol => ($i%2+1),
@@ -128,9 +128,9 @@
                     ));
                     $t->parse("Block","Liste",true);
                     $i++;
-                    if ($i>=$listLimit) {
+                    if ($i>=$_SESSION['listLimit']) {
                         $t->set_var(array(
-                            report => "$listLimit von ".count($daten)." Treffern",
+                            report => $_SESSION['listLimit']." von ".count($daten)." Treffern",
                         ));
                     }
                     $t->set_var(array(

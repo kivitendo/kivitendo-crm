@@ -28,9 +28,9 @@ if ($log=@fopen($p.'log/install.log',"a")) {
 }
 echo "Schreibrechte im CRM-Verzeichnis pr&uuml;fen<br>";
 if (!file_exists($p."dokumente/".$_SESSION["dbname"]))  {
-	$rc=mkdir ($p."dokumente/".$_SESSION["dbname"], $_GLOBALS['dir_mode']);
+	$rc=mkdir ($p."dokumente/".$_SESSION["dbname"], $_SESSION['dir_mode']);
 	if ($rc) { 
-        if ( $GLOBALS["dir_group"] ) chgrp($p."dokumente/".$_SESSION["dbname"], $_GLOBALS['dir_group']);
+        if ( $_SESSION["dir_group"] ) chgrp($p."dokumente/".$_SESSION["dbname"], $_SESSION['dir_group']);
         echo "Verzeichnis: dokumente/".$_SESSION["dbname"]." erfolgreich erstellt.<br>"; 
     } else { echo "Konte Verzeichnis: dokumente/".$_SESSION["dbname"]." nicht erstellen.<br>"; }
 } else {

@@ -99,7 +99,7 @@ if ($_GET["kontakt"] && $_GET['swort'] != '') {
 	$sql  = "select calldate,cause,t.id,caller_id,bezug,V.name as lname,C.name as kname,P.cp_name as pname ";
 	$sql .= "from telcall t left join customer C on C.id=caller_id left join vendor V on V.id=caller_id ";
 	$sql .= "left join contacts P on caller_id=P.cp_id where UPPER(cause) like '%$sw%' or UPPER(c_long) like '%$sw%' ";
-    $sql .= 'order by bezug,calldate desc limit '.$listLimit;
+    $sql .= 'order by bezug,calldate desc limit '.$_SESSION['listLimit'];
 	$rs = $db->getAll( $sql );
 	$used = Array();
 	if( $rs ) {	
@@ -119,8 +119,8 @@ if ($_GET["kontakt"] && $_GET['swort'] != '') {
 			echo "<td>".db2date($row["calldate"])."&nbsp;</td><td> ".$cause."</td><td>";
 			echo "$name</td></tr>\n";
 			$i++;
-			if ($i>=$listLimit) {
-				echo "$listLimit von ".count($rs)." Treffern";
+			if ($i>=$_SESSION['listLimit']) {
+				echo $_SESSION['listLimit']. von ".count($rs)." Treffern";
 				break;
 			}
 		}

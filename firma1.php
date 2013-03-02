@@ -104,7 +104,7 @@
             'Bundesland' => $fa["bundesland"],
             'Plz' => $fa["zipcode"],
             'Ort' => $fa["city"],
-            'GEODB' => ($GEODB)?'1==1':'1>2',
+            'GEODB' => ($_SESSION['GEODB']=='t')?'1==1':'1>2',
             'Telefon' => $fa["phone"],
             'Fax' => $fa["fax"],
             'Fcontact' => $fa["contact"],

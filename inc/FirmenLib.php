@@ -666,8 +666,8 @@ global $db;
 		if (!is_dir($dir_abs."/".$DIR)) {
 			mkdir($dir_abs."/".$DIR);  
 		}
-		chmod($dir_abs."/".$DIR,$GLOBALS['dir_mode']); 
-		if ( $GLOBALS['dir_group'] ) chgrp($dir_abs."/".$DIR,$GLOBALS['dir_group']); 
+		chmod($dir_abs."/".$DIR,$_SESSION['dir_mode']); 
+		if ( $_SESSION['dir_group'] ) chgrp($dir_abs."/".$DIR,$_SESSION['dir_group']); 
 		$link_dir_cv=$typ=="C"?$link_dir_cust:$link_dir_vend;
  		if (!$dir_abs.$link_dir_cv."/".mkDirName($daten['name'])."_".$DIR) {
 			if (is_dir($dir_abs.$link_dir_cv)) {
@@ -1050,7 +1050,6 @@ function cvar_edit($id,$new=false) {
 }
 
 function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false) {
-global $GEODB,$BLZDB,$jcalendar;
         $jscal ="<style type='text/css'>@import url(../js/jscalendar/calendar-win2k-1.css);</style>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar.js'></script>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
@@ -1066,7 +1065,6 @@ global $GEODB,$BLZDB,$jcalendar;
             FAART       => ($typ=="C")?".:Customer:.":".:Vendor:.",
             FAART2      => ($typ=="C")?".:Customer Name:.":".:Vendor Name:.",
             ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-            jcal0       => ($jcalendar)?$jscal:"",
             Q           => $typ,
             Btn1        => "",
             Btn2        => "",
@@ -1118,12 +1116,12 @@ global $GEODB,$BLZDB,$jcalendar;
             shiptofax   => "",
             shiptoemail     => "",
             shiptocontact   => "",
-            GEODB       => ($GEODB)?'1==1':'1>2',
-            GEOS        => ($GEODB)?"visible":"hidden",
-            GEO1        => ($GEODB)?"":"!--",
-            GEO2        => ($GEODB)?"":"--",
-            BLZ1        => ($BLZDB)?"":"!--",
-            BLZ2        => ($BLZDB)?"":"--",
+            GEODB       => ($_SESSION['GEODB']=='t')?'1==1':'1>2',
+            GEOS        => ($_SESSION['GEODB']=='t')?"visible":"hidden",
+            GEO1        => ($_SESSION['GEODB']=='t')?"":"!--",
+            GEO2        => ($_SESSION['GEODB']=='t')?"":"--",
+            BLZ1        => ($_SESSION['BLZDB']=='t')?"":"!--",
+            BLZ2        => ($_SESSION['BLZDB']=='t')?"":"--",
             employee => $_SESSION["loginCRM"],
             init    => $_SESSION["employee"],
             txid0 => "selected",
@@ -1207,7 +1205,6 @@ global $GEODB,$BLZDB,$jcalendar;
 } // leertpl
 
 function vartpl (&$t,$daten,$typ,$msg,$btn1,$btn2,$tpl,$suchmaske=false) {
-global $GEODB,$BLZDB,$jcalendar;
         $jscal ="<style type='text/css'>@import url(../js/jscalendar/calendar-win2k-1.css);</style>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar.js'></script>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
@@ -1235,7 +1232,6 @@ global $GEODB,$BLZDB,$jcalendar;
                 FAART2      => ($typ=="C")?".:Customer Name:.":".:Vendor Name:.",
                 ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
                 mtime       => $daten["mtime"],
-                jcal0       => ($jcalendar)?$jscal:"",
                 Q           => $typ,
                 Btn1        => $btn1,
                 Btn2        => $btn2,
@@ -1287,12 +1283,12 @@ global $GEODB,$BLZDB,$jcalendar;
                 employee    => $_SESSION["loginCRM"],
                 password    => $_SESSION["password"],
                 txid.$daten["taxzone_id"] => "selected",
-                GEODB       => ($GEODB)?'1==1':'1>2',
-                GEOS        => ($GEODB)?"visible":"hidden",
-                GEO1        => ($GEODB)?"":"!--",
-                GEO2        => ($GEODB)?"":"--",
-                BLZ1        => ($BLZDB)?"":"!--",
-                BLZ2        => ($BLZDB)?"":"--",
+                GEODB       => ($_SESSION['GEODB']=='t')?'1==1':'1>2',
+                GEOS        => ($_SESSION['GEODB']=='t')?"visible":"hidden",
+                GEO1        => ($_SESSION['GEODB']=='t')?"":"!--",
+                GEO2        => ($_SESSION['GEODB']=='t')?"":"--",
+                BLZ1        => ($_SESSION['BLZDB']=='t')?"":"!--",
+                BLZ2        => ($_SESSION['BLZDB']=='t')?"":"--",
                 cvars       => cvar_edit($daten["id"]), 
                 variablen => $varablen
         ));

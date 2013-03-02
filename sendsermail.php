@@ -17,7 +17,7 @@ $betreff=$_SESSION["Subject"];
 $bodytxt=$_SESSION["bodytxt"];
 $limit=$_SESSION["limit"];
 $abs=$headers["Return-Path"];
-if ($logmail) $f=fopen("log/maillog.txt","a");
+if ($_SESSION['logmail']) $f=fopen("log/maillog.txt","a");
 $dateiname=$_SESSION["dateiname"];
 if ($dateiname) {
 	$ftmp=fopen("./dokumente/".$_SESSION["mansel"]."/".$_SESSION["loginCRM"]."/SerMail/".$dateiname,"rb");
@@ -91,9 +91,9 @@ if ($data) {
 					insCall($data,false);
 					$_GET["first"]=0;
 				}		
-				if ($logmail) fputs($f,date("Y-m-d H:i").";ok;$to;$abs;S:$betreff\n");
+				if ($_SESSION['logmail']) fputs($f,date("Y-m-d H:i").";ok;$to;$abs;S:$betreff\n");
 			} else {
-				if ($logmail) fputs($f,date("Y-m-d H:i").";error;$to;$abs;S:$betreff\n");
+				if ($_SESSION['logmail']) fputs($f,date("Y-m-d H:i").";error;$to;$abs;S:$betreff\n");
 			} // if $rc
 		} //if to
 	} // foreach

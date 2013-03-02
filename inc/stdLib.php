@@ -264,7 +264,7 @@ function chkdir($dir,$p="") {
         foreach ( $dirs as $dir ) {
             if ( !file_exists("$p./dokumente/$tmp".$dir) ) {
                 $ok = @mkdir("$p./dokumente/$tmp".$dir);
-                if ( $GLOBALS['dir_group'] ) @chgrp("$p./dokumente/$tmp".$dir,$GLOBALS['dir_group']); 
+                if ( $_SESSION['dir_group'] ) @chgrp("$p./dokumente/$tmp".$dir,$_SESSION['dir_group']); 
                 if ( !$ok ) return false;
             };
             $tmp .= $dir."/";

@@ -216,8 +216,8 @@ class document {
 				return false;
 			} 
                 unlink($file["Datei"]["tmp_name"]);
-                chmod($dest,$GLOBALS['dir_mode']); 
-                if ( $GLOBALS['dir_group'] ) chgrp($dest,$GLOBALS['dir_group']); 
+                chmod($dest,$_SESSION['dir_mode']); 
+                if ( $_SESSION['dir_group'] ) chgrp($dest,$_SESSION['dir_group']); 
 		} else {
 			$this->error="Verzeichnis '$pfad' konte nicht angelegt werden!";
             unlink($file["Datei"]["tmp_name"]);

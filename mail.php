@@ -140,7 +140,7 @@
             $hdr = $mime->headers($headers);
             $mail->_params="-f ".$user["email"];
             $rc=$mail->send($to, $hdr, $body);
-            if ($logmail) {
+            if ($_SESSION['logmail']) {
                 $f=fopen('log/maillog.txt','a');
                 if ($rc) {
                     fputs($f,date("Y-m-d H:i").';ok;'.$TO.';'.$CC.';'.$user["name"].' <'.$user["email"].'>;'.$Subject.";\n");

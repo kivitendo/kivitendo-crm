@@ -19,6 +19,7 @@ if ( $_POST['save'] ) {
             $save = false;
         }
     }
+    if ( $_POST['dir_mode'] != '' ) $_POST['dir_mode'] = octdec($_POST['dir_mode']);
     if ( $save ) {
         $last = $_SESSION['db']->getOne('SELECT max(id) as id FROM crmdefaults');
         $insert = "INSERT INTO crmdefaults (key,val,employee) VALUES (?,?,".$_SESSION['loginCRM'].")";

@@ -83,6 +83,7 @@
 <input type="hidden" name="nummer" value="{nummer}">
 <input type="hidden" name="Q" value="{Q}">
 <input type="hidden" name="datei" value="{DateiID}">
+<input type="hidden" name="dateiname" value="{Datei}">
 <input type="text" name="cause" value="{NBetreff}" size="43" maxlength="125"> &nbsp; 
 <input type="text" name="Datum" value="{NDatum}" id="Datum" size="9" maxlength="10"> 
 <input type="text" name="Zeit" value="{NZeit}" size="6" maxlength="5">&nbsp; 

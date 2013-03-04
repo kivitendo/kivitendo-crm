@@ -131,6 +131,7 @@ global $db;
 *****************************************************/
 function delTelCall($id) {
 global $db;
+    //Wenn eine Datei angebunden ist, noch löschen.
     $rs=$db->getAll("select * from telcall where id=$id");
     if ($rs[0]["bezug"]==0) {
         $sql="delete from telcall where bezug=$id";
@@ -322,7 +323,7 @@ global $db;
         $text=($data["DCaption"])?$data["DCaption"]:$data["cause"];
         $dbfile=new document();
         $dbfile->setDocData("descript",$text);
-        $rc=$dbfile->uploadDocument($dat,$pfad);
+        $rc=$dbfile->uploadDocument($dat,"/".$pfad);
         $dateiID=$dbfile->id;
         $did=documenttotc($id,$dateiID);
     } else {
@@ -364,7 +365,8 @@ global $db;
         $pfad="P".$data["CID"];
         $wv["cp_cv_id"]="P".$data["CID"];
     } else {
-        $pfad=$data["Q"][0].$data["nummer"];
+        $pfad=$data["Q"][0].$data["fid"];
+        //$pfad=$data["Q"][0].$data["nummer"];
         $wv["cp_cv_id"]=$data["Q"][0].$data["CID"];
     }
     if ($datei["Datei"]["name"][0]<>"") {
@@ -376,19 +378,24 @@ global $db;
         $text=($data["DCaption"])?$data["DCaption"]:$data["cause"];
         $dbfile=new document();
         $dbfile->setDocData("descript",$text);
-        $rc=$dbfile->uploadDocument($dat,$pfad);
+        $rc=$dbfile->uploadDocument($dat,"/".$pfad);
         $dateiID=$dbfile->id;
-        //$dateiID=saveDokument($dat,$text,$datum,$data["CID"],$data["CRMUSER"],"/".$data["nummer"]);
         $did=documenttotc($data["id"],$dateiID);
-        //$did=1;
+        if ( $data['datei'] != '' ) {
+            $oldfile = new document();
+            $oldfile->setDocData("id",$data['datei']);
+            $oldfile->setDocData("name",$data['dateiname']);
+            $oldfile->setDocData("pfad","/".$pfad);
+            $oldfile->deleteDocument();
+        }
     } else if ($data["datei"]) {
         $dateiID = $data["datei"];
     } else {
         $dateiID = "Null";
     }
+    $data['Datum']=date2db($data['Datum'])." ".$data['Zeit'].":00";  // Postgres timestamp
     $c_cause=addslashes($data["c_cause"]);
     $c_cause=nl2br($c_cause);
-    $data['Datum']=date2db($data['Datum'])." ".$data['Zeit'].":00";  // Postgres timestamp
     $sql="update telcall set cause='".$data["cause"]."',c_long='$c_cause',caller_id='".$data["CID"]."',";
     $sql.="calldate='".$data['Datum']."',kontakt='".$data["Kontakt"]."',dokument=$dateiID,bezug='".$data["bezug"]."',";
     $sql.="employee='".$data["CRMUSER"]."',inout='".$data["inout"]."' where id=".$data["id"];

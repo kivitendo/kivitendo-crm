@@ -216,6 +216,7 @@ class document {
 				return false;
 			} 
                 unlink($file["Datei"]["tmp_name"]);
+                //chmod($dest,decoct($_SESSION['dir_mode'])); 
                 chmod($dest,$_SESSION['dir_mode']); 
                 if ( $_SESSION['dir_group'] ) chgrp($dest,$_SESSION['dir_group']); 
 		} else {
@@ -257,6 +258,7 @@ class document {
 	function deleteDocument($p="") {
 		$this->log("deleteDocument: ".$p);
 		// $p=="" Aufruf aus Docroot, $p=="." Aufruf aus crmajax
+        $f = fopen('/tmp/d','w'); fputs($f,"$p./dokumente/".$_SESSION["mansel"].$this->pfad."/".$this->name); fclose($f);
 		$dest="$p./dokumente/".$_SESSION["mansel"].$this->pfad."/".$this->name;
 		$rc=unlink($dest);
 		if (!$rc) {

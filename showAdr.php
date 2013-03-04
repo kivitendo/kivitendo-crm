@@ -211,7 +211,6 @@ Anschrift<br><hr>
             <td>
                 <br />
                 <input type='submit' name='print' value='erzeugen'></form><br><br>
-                <a href="javascript:self.close()">schlie&szlig;en</a>
                 <script language='JavaScript'>self.focus();</script>
             </td>
         </tr>

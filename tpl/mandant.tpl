@@ -12,8 +12,8 @@
 <table style='visibility:{hide}'>
     <form name="mandant" id="mandant" action="mandant.php" method="post">
     <tr><td colspan='2'><b>externe DBs</b></td></tr>
-    <tr><td>Geo-DB</td>                             <td><input type='checkbox' name='GEODB' id='GEODB' value='t' {GEODB}></td></tr>
-    <tr><td>Blz-DB</td>                             <td><input type='checkbox' name='BLZDB' id='BLZDB' value='t' {BLZDB}></td></tr>
+    <tr><td>Geo-DB</td>                             <td><input type='checkbox' name='GEODB' id='GEODB' value='t' {GEODB}> siehe install.txt</td></tr>
+    <tr><td>Blz-DB</td>                             <td><input type='checkbox' name='BLZDB' id='BLZDB' value='t' {BLZDB}> siehe install.txt</td></tr>
     <tr><td colspan='2'><b>Kontakthred</b></td></tr>
     <tr><td>Editieren</td>                          <td><input type='checkbox' name='CallEdit' id='CallEdit' value='t' {CallEdit}></td></tr>
     <tr><td>L&ouml;schen</td>                       <td><input type='checkbox' name='CallDel' id='CallDel' value='t' {CallDel}></td></tr>
@@ -25,10 +25,10 @@
                                              <option value='Deleted' {Deleted}>Deleted
                                              <option value='Draft' {Draft}>Draft
                                           </select></td></tr>
-    <tr><td>Mailordner bereinigen</td>          <td><input type='checkbox' name='Expunge' id='Expunge' value='t' {Expunge}></td></tr>
+    <tr><td>Mailordner bereinigen</td>          <td><input type='checkbox' name='Expunge' id='Expunge' value='t' {Expunge}> -Expunge- </td></tr>
     <tr><td>versendete Mails loggen</td>        <td><input type='checkbox' name='logmail' id='logmail' value='t' {logmail}></td></tr>
     <tr><td colspan='2'><b>Zeiterfassung</b></td></tr>
-    <tr><td>Artikelnummer für Arbeitszeit</td>  <td><input type='text' name='ttpart' id='ttpart' value='{ttpart}'></td></tr>
+    <tr><td>Artikelnummer für Arbeitszeit</td>  <td><input type='text' name='ttpart' id='ttpart' value='{ttpart}' size='10'></td></tr>
     <tr><td>Minuten je Einheit</td>             <td><input type='text' name='tttime' id='tttime' value='{tttime}' size='5'></td></tr>
     <tr><td>Ab hier eine Einheit</td>           <td><input type='text' name='ttround' id='ttround' value='{ttround}' size='5'>min.</td></tr>
     <tr><td>Nur eigene Aufträge abrechen</td>   <td><input type='checkbox' name='ttclearown' id='ttclearown' {ttclearown} value='t'></td></tr>

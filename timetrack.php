@@ -4,16 +4,7 @@
     include("inc/template.inc");
 
     $t = new Template($base);
-    $menu =   $_SESSION['menu'];
-    $t->set_var(array(
-        JAVASCRIPTS   => $menu['javascripts'],
-        STYLESHEETS   => $menu['stylesheets'],
-        PRE_CONTENT   => $menu['pre_content'],
-        START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content'],
-        JQUERY        => $_SESSION['basepath'].'crm/',
-        'THEME'         => $_SESSION['theme'],
-    ));
+    doHeader($t);
     $t->set_file(array("tt" => "timetrack.tpl"));
     $data['clear'] = 1;
     if ($_POST["action"] == "save") {
@@ -108,7 +99,6 @@
 
     if ($data["fid"]) $data["backlink"] = "firma1.php?Q=".$data["tab"]."&id=".$data["fid"];
     $t->set_var(array(
-        ERPCSS  => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
         backlink => $data["backlink"],
         blshow  => ($data["backlink"])?"visible":"hidden",
         noevent => ($data["active"]=="t" && $data['id'])?"visible":"hidden",

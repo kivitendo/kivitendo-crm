@@ -3148,7 +3148,7 @@ function mkTTorder($id,$evids,$trans_id) {
         //Abrechnungseinheiten
         $time = floor($diff / $_SESSION['tttime']);
         //Ist der Rest über der Tolleranz
-        if ( $diff - ($_SESSION['tttime'] * $time) > $round ) $time++;
+        if ( $diff - ($_SESSION['tttime'] * $time) > $_SESSION['ttround'] ) $time++;
         $price =  $time * $sellprice;
         //Orderitemseintrag
         $rqdate = substr($row['ttstop'],0,10);

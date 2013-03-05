@@ -3,12 +3,14 @@ CREATE SEQUENCE "crmid" start 1 increment 1 maxvalue 9223372036854775807 minvalu
 
 CREATE TABLE telcall (
 	id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    termin_id integer,
 	cause text,
 	caller_id integer NOT NULL,
 	calldate timestamp without time zone NOT NULL,
 	c_long text,
 	employee integer,
 	kontakt character(1),
+    inout char(1) DEFAULT 'i',
 	bezug integer,
 	dokument integer);
 
@@ -35,6 +37,7 @@ CREATE TABLE documents (
 	size integer,
 	pfad text,
 	kunde integer,
+    lock integer DEFAULT 0,
 	employee integer,
 	id integer DEFAULT nextval('id'::text));
 	
@@ -103,15 +106,23 @@ CREATE TABLE termine (
 	stoptag date,
 	startzeit char(5),
 	stopzeit char(5),
-        privat boolean default false,
+    privat boolean default false,
 	uid integer,
-        syncid text);
+    kategorie integer DEFAULT 0,
+    location text,
+    syncid text);
 	
 CREATE TABLE terminmember (
 	termin integer,
 	member integer,
 	tabelle char(1));
-	
+CREATE TABLE termincat (
+    catid int NOT NULL,
+    catname text,
+    sorder integer,
+    ccolor char(6)
+);
+ALTER TABLE termincat ADD  primary key (catid);
 CREATE TABLE termdate (
 	id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	termid integer,
@@ -236,11 +247,13 @@ CREATE TABLE wissencontent(
 	initdate timestamp without time zone NOT NULL,
 	content text,
 	employee integer,
+    owener integer,
 	version integer,
 	categorie integer
 );
 CREATE TABLE opportunity(
 	id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    oppid integer DEFAULT 0 NOT NULL,
 	fid integer,
 	tab char(1),
 	title character varying(100),
@@ -251,13 +264,13 @@ CREATE TABLE opportunity(
 	salesman int,
 	next character varying(100),
 	notiz text,
+    auftrag integer DEFAULT 0,
 	itime timestamp DEFAULT now(),
-	mtime timestamp DEFAULT now(),
 	iemployee integer,
 	memployee integer
 );
 CREATE TABLE opport_status (
-        id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    id integer DEFAULT nextval('crmid'::text) NOT NULL,
 	statusname character varying(50),
 	sort integer
 );
@@ -297,6 +310,7 @@ CREATE TABLE timetrack (
     fid integer,
     tab char(1),
     ttname text NOT NULL,
+    budget numeric(15,5),
     ttdescription text,
     startdate date,
     stopdate date,
@@ -304,7 +318,12 @@ CREATE TABLE timetrack (
     active boolean DEFAULT 't',
     uid integer NOT NULL
 );
-
+CREATE TABLE tt_parts(
+    eid int4,
+    qty numeric(10,3),
+    parts_id int4,
+    parts_txt text
+);
 CREATE TABLE tt_event (
     id integer DEFAULT nextval('crmid'::text) NOT NULL,
     ttid integer NOT NULL,
@@ -322,15 +341,42 @@ CREATE TABLE bundesland (
 );
 
 CREATE SEQUENCE extraid INCREMENT BY 1 MAXVALUE 2147483647 CACHE 1;
-create table extra_felder (
-id       integer DEFAULT nextval('extraid'::text) NOT NULL,
-owner    char(10),
-fkey     text,
-fval     text
+CREATE table extra_felder (
+    id       integer DEFAULT nextval('extraid'::text) NOT NULL,
+    owner    integer,
+    tab      char(1),
+    fkey     text,
+    fval     text
 );
 CREATE INDEX extrafld_key ON extra_felder USING btree (owner);
 
-INSERT INTO bundesland (country,bundesland) VALUES ('D','Baden-W&uuml;rttemberg');
+CREATE TABLE crmdefaults (
+    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    employee integer NOT NULL DEFAULT -1,
+    key text,
+    val text,
+    modify timestamp without time zone DEFAULT NOW()
+);
+INSERT INTO crmdefaults (key,val,employee) VALUES ('ttpart','',-1);
+INSERT INTO crmdefaults (key,val,employee) VALUES ('tttime','60',-1);
+INSERT INTO crmdefaults (key,val,employee) VALUES ('ttround','15',-1);
+INSERT INTO crmdefaults (key,val,employee) VALUES ('ttclearown','',-1);
+INSERT INTO crmdefaults (key,val,employee) VALUES ('GEODB','',-1);
+INSERT INTO crmdefaults (key,val,employee) VALUES ('BLZDB','',-1);
+INSERT INTO crmdefaults (key,val,employee) VALUES ('CallDel','',-1);
+INSERT INTO crmdefaults (key,val,employee) VALUES ('CallEdit','',-1);
+INSERT INTO crmdefaults (key,val,employee) VALUES ('Expunge','',-1);
+INSERT INTO crmdefaults (key,val,employee) VALUES ('MailFlag','Flagged',-1);
+INSERT INTO crmdefaults (key,val,employee) VALUES ('logmail','t',-1);
+INSERT INTO crmdefaults (key,val,employee) VALUES ('dir_group','users',-1);
+INSERT INTO crmdefaults (key,val,employee) VALUES ('dir_mode','493',-1);
+INSERT INTO crmdefaults (key,val,employee) VALUES ('sep_cust_vendor','t',-1);
+INSERT INTO crmdefaults (key,val,employee) VALUES ('listLimit','500',-1);
+INSERT INTO crmdefaults (key,val,employee) VALUES ('tinymce','',-1);
+INSERT INTO crmdefaults (key,val,employee) VALUES ('showErr','',-1);
+INSERT INTO crmdefaults (key,val,employee) VALUES ('logfile','',-1);
+
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Baden-Württemberg');
 INSERT INTO bundesland (country,bundesland) VALUES ('D','Bayern');
 INSERT INTO bundesland (country,bundesland) VALUES ('D','Berlin');
 INSERT INTO bundesland (country,bundesland) VALUES ('D','Brandenburg');
@@ -345,7 +391,7 @@ INSERT INTO bundesland (country,bundesland) VALUES ('D','Saarland');
 INSERT INTO bundesland (country,bundesland) VALUES ('D','Sachsen');
 INSERT INTO bundesland (country,bundesland) VALUES ('D','Sachsen-Anhalt');
 INSERT INTO bundesland (country,bundesland) VALUES ('D','Schleswig-Holstein');
-INSERT INTO bundesland (country,bundesland) VALUES ('D','Th&uuml;ringen');
+INSERT INTO bundesland (country,bundesland) VALUES ('D','Thüringen');
 
 INSERT INTO bundesland (country,bundesland) VALUES ('CH','Aargau');
 INSERT INTO bundesland (country,bundesland) VALUES ('CH','Appenzell Ausserrhoden');
@@ -356,7 +402,7 @@ INSERT INTO bundesland (country,bundesland) VALUES ('CH','Bern');
 INSERT INTO bundesland (country,bundesland) VALUES ('CH','Freiburg');
 INSERT INTO bundesland (country,bundesland) VALUES ('CH','Genf');
 INSERT INTO bundesland (country,bundesland) VALUES ('CH','Glarus');
-INSERT INTO bundesland (country,bundesland) VALUES ('CH','Graub&uuml;nden');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Graubünden');
 INSERT INTO bundesland (country,bundesland) VALUES ('CH','Jura');
 INSERT INTO bundesland (country,bundesland) VALUES ('CH','Luzern');
 INSERT INTO bundesland (country,bundesland) VALUES ('CH','Neuenburg');
@@ -372,12 +418,12 @@ INSERT INTO bundesland (country,bundesland) VALUES ('CH','Uri');
 INSERT INTO bundesland (country,bundesland) VALUES ('CH','Waadt');
 INSERT INTO bundesland (country,bundesland) VALUES ('CH','Wallis');
 INSERT INTO bundesland (country,bundesland) VALUES ('CH','Zug');
-INSERT INTO bundesland (country,bundesland) VALUES ('CH','Z&uuml;rich');
+INSERT INTO bundesland (country,bundesland) VALUES ('CH','Zürich');
 
 INSERT INTO bundesland (country,bundesland) VALUES ('A','Burgenland');
-INSERT INTO bundesland (country,bundesland) VALUES ('A','K&auml;rnten');
-INSERT INTO bundesland (country,bundesland) VALUES ('A','Nieder&ouml;sterreich');
-INSERT INTO bundesland (country,bundesland) VALUES ('A','Ober&ouml;sterreich');
+INSERT INTO bundesland (country,bundesland) VALUES ('A','Kärnten');
+INSERT INTO bundesland (country,bundesland) VALUES ('A','Niederösterreich');
+INSERT INTO bundesland (country,bundesland) VALUES ('A','Oberösterreich');
 INSERT INTO bundesland (country,bundesland) VALUES ('A','Salzburg');
 INSERT INTO bundesland (country,bundesland) VALUES ('A','Steiermark');
 INSERT INTO bundesland (country,bundesland) VALUES ('A','Tirol');
@@ -395,6 +441,7 @@ ALTER TABLE customer ADD COLUMN lead integer;
 ALTER TABLE customer ADD COLUMN leadsrc character varying(25);
 ALTER TABLE customer ADD COLUMN bland int4;
 ALTER TABLE customer ADD COLUMN konzern int4;
+ALTER TABLE customer ADD COLUMN headcount int;
 ALTER TABLE vendor ADD COLUMN owener int4;
 ALTER TABLE vendor ADD COLUMN employee int4;
 ALTER TABLE vendor ADD COLUMN kundennummer character varying(20);
@@ -406,6 +453,7 @@ ALTER TABLE vendor ADD COLUMN bland int4;
 ALTER TABLE vendor ADD COLUMN lead integer;
 ALTER TABLE vendor ADD COLUMN leadsrc character varying(25);
 ALTER TABLE vendor ADD COLUMN konzern int4;
+ALTER TABLE vendor ADD COLUMN headcount int;
 ALTER TABLE shipto ADD COLUMN shiptoowener int4;
 ALTER TABLE shipto ADD COLUMN shiptoemployee int4;
 ALTER TABLE shipto ADD COLUMN shiptobland int4;
@@ -427,6 +475,11 @@ ALTER TABLE employee ADD COLUMN termseq int;
 ALTER TABLE employee ALTER COLUMN termseq SET DEFAULT 30;
 ALTER TABLE employee ADD COLUMN kdview integer;
 ALTER TABLE employee alter COLUMN kdview SET DEFAULT 1;
+ALTER TABLE employee ADD COLUMN icalart text;
+ALTER TABLE employee ADD COLUMN icaldest text;
+ALTER TABLE employee ADD COLUMN icalext text;
+ALTER TABLE employee ADD COLUMN streetview text;
+ALTER TABLE employee ADD COLUMN planspace char;
 --ALTER TABLE contacts ADD COLUMN cp_street character varying(75);
 --ALTER TABLE contacts ADD COLUMN cp_zipcode character varying(10);
 --ALTER TABLE contacts ADD COLUMN cp_city character varying(75);
@@ -468,12 +521,29 @@ CREATE INDEX telcall_id_key ON telcall USING btree (id);
 CREATE INDEX telcall_bezug_key ON telcall USING btree (bezug);
 CREATE INDEX mid_key ON contmasch USING btree (mid);
 
+INSERT INTO schema_info (tag,login) VALUES ('crm_defaults','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_bundeslaender','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_CleanContact','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_employeeFeldLaenge','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_PrivatTermin','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_sonderflag','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_sonderflag2','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_TerminDate','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_bundeslaenderutf','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_CallDirekt','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_employeeIcal','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_extrafelder','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_headcount','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_lockfile','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_OpportunityQuotation','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_Stichwort','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_streetview','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_TerminSequenz','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_TerminDate','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_TelCallTermin','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_termincat','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_TerminCatCol','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_TerminLocation','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_timetracker','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_timetracker_budget','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_timetracker_parts','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_wissen_own','install');

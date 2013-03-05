@@ -8,7 +8,7 @@
                   );
 if ( $_POST['save'] ) {
     $save = true;
-    if ( isset($_POST['ttpart']) ) {
+    if ( isset($_POST['ttpart']) && $_POST['ttpart'] != '') {
         $sql = "SELECT count(*) as cnt FROM parts WHERE partnumber = '".$_POST['ttpart']."'";
         $rs  = $_SESSION['db']->getOne($sql);
         if ( $rs['cnt'] == 0 ) {

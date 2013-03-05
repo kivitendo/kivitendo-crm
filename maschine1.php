@@ -105,7 +105,7 @@
                 $beschr=substr($zeile["beschreibung"],0,40);
         };
         $t->set_var(array(
-            date   =>    db2date($zeile["datum"]),
+            date   =>    db2date(substr($zeile["itime"],0,10)),
             art   =>    $art,
             beschreibung =>    $beschr
         ));

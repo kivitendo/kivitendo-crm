@@ -213,7 +213,7 @@ function updateVertrag($data) {
 }
 function insHistory($mid,$art,$beschreibung) {
 	global $db;
-	$sql="insert into history (mid,datum,art,beschreibung) values ($mid,'".date("Y-m-d")."','$art','$beschreibung')";
+	$sql="insert into history (mid,art,beschreibung) values ($mid,'$art','$beschreibung')";
 	$rc=$db->query($sql);
 	return $rc;
 }
@@ -277,7 +277,7 @@ function getArtnumber($sn) {
 }
 function getHistory($nr) {
 	global $db;
-	$sql="select * from history where mid=$nr order by datum itime  desc";
+	$sql="select * from history where mid=$nr order by itime  desc";
 	$rs=$db->getAll($sql);	
 	return $rs;	
 }

@@ -42,7 +42,7 @@
 		</td>
 		<td class="norm">
 			<input type="text" name="partnumber" value="{partnumber}" maxlength="15"> 
-			<input type="submit" name="search" value="suchen"> &nbsp; &nbsp; &nbsp;<span {disp}><a href="repauftrag.php?mid={mid}"><button>neuer Auftrag</button></a></span>
+			<input type="submit" name="search" value="suchen"> &nbsp; &nbsp; &nbsp;<span {disp}>[<a href="repauftrag.php?mid={mid}">neuer Auftrag</a>]</span>
 			<br>Artikelnummer
 		</td>
 	</tr>

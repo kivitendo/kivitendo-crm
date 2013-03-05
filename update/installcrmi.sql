@@ -191,7 +191,7 @@ CREATE TABLE  contmasch(
 	
 CREATE TABLE history (
 	mid integer,
-	datum date,
+	itime timestamp without time zone default now(),
 	art character varying(20),
 	beschreibung text);
 	
@@ -546,3 +546,4 @@ INSERT INTO schema_info (tag,login) VALUES ('crm_timetracker','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_timetracker_budget','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_timetracker_parts','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_wissen_own','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_wvhistory','install');

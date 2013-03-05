@@ -3,6 +3,8 @@
 {STYLESHEETS}
 {CRMCSS}
 {JQUERY}
+{JQUERYUI}
+{THEME}
 {JAVASCRIPTS}
 </head>
 <body>

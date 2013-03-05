@@ -13,10 +13,10 @@ if ( $_POST['save'] ) {
         $rs  = $_SESSION['db']->getOne($sql);
         if ( $rs['cnt'] == 0 ) {
             $msg = "Artikel nicht gefunden";
-            $save = false;
+            //$save = false;
         } else if ( $rs['cnt'] > 1 ) {
             $msg = "Artikelnummer nicht eindeutig";
-            $save = false;
+            //$save = false;
         }
     }
     if ( $_POST['dir_mode'] != '' ) $_POST['dir_mode'] = octdec($_POST['dir_mode']);

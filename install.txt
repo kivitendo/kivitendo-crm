@@ -106,6 +106,27 @@ Im Browser die ERP aufrufen und anmelden
 Melden Sie sich nun an Kivitendo-ERP an und wählen Sie einen CRM-Menüeintrag aus.
 Die Datenbankinstallation wird nun durchgeführt.
 
+Update auf Version 1.6.0
+------------------------
+Die Einstellungen in der inc/conf.php sind auf ein Minimum reduziert worden.
+Diese Einstellungen können nun für jeden Mandenten über die Oberfläche eingestellt werden.
+Dazu muß mind. ein Benutzer besondere Rechte bekommen. Bitte dazu admin.pl aufrufen.
+Legen Sie eine neuen Gruppe CRMTL an. Das einzige Recht das hier unter CRM gesetzt sein muß ist 
+'Admin Status'.
+Ordnen Sie einen Benutzer dieser Gruppe zu. 
+Dieser Benutzer wir in kommenden Versionen mehr Aufgaben bekommen, daher "sparsam" vergeben.
+Wenn noch nicht geschehen, die menu.ini nach CRM--Admin--Status ergänzen:
+
+[CRM--Admin--Mandant]
+ACCESS=crm_adminstatus
+module=crm/mandant.php
+
+Sollte die Migration der inc/conf.php fehlschlagen, prüfen Sie ob die Tabelle 'crmdefaults' 
+angelegt wurde. Wenn ja, können die Einstellungen über die Oberfläche nachgeholt werden.
+Wenn Nein, dann bitte die Tabelle manuell anlegen. Dazu einfach den oberen Teil aus
+der Datei update/crm_defaults.sql "CREATE .... );" auf der Datenbankkonsole ausführen.
+
+
 Geo-Datenbank:
 --------------
 In der Adressdatenmaske können einige Daten aus einer Geodatenbank gefüllt werden.
@@ -126,7 +147,7 @@ In der PostgreSQL-Konsole folgendes eingeben:
 Es rasseln eine Menge Meldungen durch, es sollten keine Fehler auftreten.
 Die Konsole mit '\q' verlassen.
 
-Jetzt noch die inc/conf.php öffnen und den Wert hinter 'GEODB' auf 'true' ändern.
+Jetzt noch die Mandantenkonfiguration öffnen und die Checkbox hinter 'GEODB' setzen.
 
 Jetzt erscheint in den Eingabemasken ein Knopf 'suche Ort'. Geben Sie in Plz, Ort oder
 Vorwahl einen (Teil-)Begriff ein und klicken Sie auf den Knopf. In einem Pop-Up werden
@@ -165,7 +186,7 @@ module=lxo-import/blz.php
 
 Die max_execution_time  sollte groß genu gewählt werden. Es sind über 20000 Datensätze.
 
-Jetzt noch die inc/conf.php öffnen und den Wert hinter 'BLZDB' auf 'true' ändern.
+Jetzt noch die Mandantenkonfiguration öffnen und die Checkbox hinter 'BLZDB' setzen.
 
 Melden Sie sich neu an. Holen Sie von :
 http://www.bundesbank.de/zahlungsverkehr/zahlungsverkehr_bankleitzahlen_download.php
@@ -184,7 +205,8 @@ Die Links werden beim Speichern des Kunden nach dem Format "Kundenname_Kundennum
 automatisch oder manuell unter CRM->Admin->Status erzeugt.
 Link ins Home-Verzeichnis erstellen:
 ln -s PfadZurCRM/Datenbankname/link_dir_cust /home/username/Kundendaten
-Parameter in der conf.php
+
+Jetzt noch die Mandantenkonfiguration öffnen und folgende Parameter setzen:
 dir_mode=0775;  Owner + Gruppe Schreibrecht, andere Leserecht
 dir_group=users; Mitglieder dieser Gruppe dürfen gesetzte Rechte       
 sep_cust_vendor=true; Kunden und Lieferanten in unterschiedliche Verzeichnisse

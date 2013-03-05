@@ -4,7 +4,7 @@
                   'GEODB','BLZDB','CallDel','CallEdit',
                   'Expunge','MailFlag','logmail',
                   'dir_group','dir_mode','sep_cust_vendor',
-                  'listLimit','tinymce','showErr','logfile',
+                  'listLimit','showErr','logfile',
                   );
 if ( $_POST['save'] ) {
     $save = true;
@@ -77,12 +77,10 @@ if ( $_POST['save'] ) {
             dir_group   => $data['dir_group'],
             dir_mode    => decoct($data['dir_mode']),
             sep_cust_vendor     => ($data['sep_cust_vendor'] == 't')?'checked':'',
-            tinymce     => ($data['tinymce'] == 't')?'checked':'',
             listLimit   => $data['listLimit'],
             showErr     => ($data['showErr'] == 't')?'checked':'',
             logfile     => ($data['logfile'] == 't')?'checked':'',
             msg         => $msg,
-
         ));
     }
     $t->pparse("out",array("mand"));

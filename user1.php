@@ -24,6 +24,7 @@
         $_SESSION["rechnung_button"]=$_POST["rechnung_button"]; 
         $_SESSION["zeige_extra"]=$_POST["zeige_extra"]; 
         $_SESSION["zeige_lxcars"]=$_POST["zeige_lxcars"];         
+        $_SESSION["tinymce"]=$_POST["tinymce"];
         $_SESSION['theme']=($_POST['theme']=='base')?'':'<link rel="stylesheet" type="text/css" href="'.$_SESSION['baseurl'].'crm/jquery-ui/themes/'.$_POST['theme'].'/jquery-ui.css">';  
         
         } else if ($_POST["mkmbx"]) {
@@ -105,6 +106,7 @@
 	        rechnung_button        => ($fa['rechnung_button']=='t')?'checked':'',
 	        zeige_extra            => ($fa['zeige_extra']=='t')?'checked':'',
 	        zeige_lxcars           => ($fa['zeige_lxcars']=='t')?'checked':'',
+            tinymce                => ($fa['tinymce'] == 't')?'checked':'',
             ));
     if ( $own ) {
         if ($_GET["id"]) {    

@@ -372,7 +372,6 @@ INSERT INTO crmdefaults (key,val,employee) VALUES ('dir_group','users',-1);
 INSERT INTO crmdefaults (key,val,employee) VALUES ('dir_mode','493',-1);
 INSERT INTO crmdefaults (key,val,employee) VALUES ('sep_cust_vendor','t',-1);
 INSERT INTO crmdefaults (key,val,employee) VALUES ('listLimit','500',-1);
-INSERT INTO crmdefaults (key,val,employee) VALUES ('tinymce','',-1);
 INSERT INTO crmdefaults (key,val,employee) VALUES ('showErr','',-1);
 INSERT INTO crmdefaults (key,val,employee) VALUES ('logfile','',-1);
 

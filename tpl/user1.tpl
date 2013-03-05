@@ -175,7 +175,9 @@
             <option value="{themefile}" {TSel}>{themename}
 <!-- END Theme -->
        </select>
-        </td></tr>
+        </td>
+       <td>TinyMCE</td><td><input type='checkbox' name='tinymce' id='tinymce' {tinymce} value='t'></td>
+        </tr>
     <tr><td class="norm">Termine</td><td>
             von <select name="termbegin">{termbegin}</select> 
             bis <select name="termend">{termend}</select> Uhr</td>

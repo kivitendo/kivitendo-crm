@@ -4,6 +4,9 @@ include ("jpgraph.php");
 include ("jpgraph_line.php");
 include ("jpgraph_bar.php");
 include ("jpgraph_log.php");
+define("FPDF_FONTPATH","/usr/share/fpdf/font/");
+define("FONTART","2");
+define("FONTSTYLE","1");
 
 /****************************************************
 * getLastYearPlot

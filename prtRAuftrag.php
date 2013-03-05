@@ -2,7 +2,10 @@
 	require_once("inc/stdLib.php");
 	include("inc/FirmenLib.php");	
 	include("inc/wvLib.php");
-        include("inc/pdfpos.php");
+    include("inc/pdfpos.php");
+    define("FPDF_FONTPATH","/usr/share/fpdf/font/");
+    define("FONTART","2");
+    define("FONTSTYLE","1");
 	$rep=getRAuftrag($_GET["aid"]);
 	$masch=getAllMaschine($rep["mid"]);
 	$firma=getFirmenStamm($masch["customer_id"]);

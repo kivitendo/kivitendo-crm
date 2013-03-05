@@ -6,6 +6,7 @@ ALTER TABLE employee     ADD COLUMN listen_theme             TEXT;
 ALTER TABLE employee     ADD COLUMN auftrag_button           BOOL    DEFAULT FALSE;
 ALTER TABLE employee     ADD COLUMN angebot_button           BOOL    DEFAULT FALSE;
 ALTER TABLE employee     ADD COLUMN rechnung_button          BOOL    DEFAULT FALSE;
+ALTER TABLE employee     ADD COLUMN tinymce                  BOOL    DEFAULT FALSE;
 ALTER TABLE employee     ADD COLUMN zeige_extra              BOOL    DEFAULT TRUE;
 ALTER TABLE employee     ADD COLUMN zeige_lxcars             BOOL    DEFAULT FALSE;
 ALTER TABLE employee     ADD COLUMN feature_ac               BOOL    DEFAULT FALSE;

@@ -7,9 +7,8 @@ session_start();
 
 //error_reporting (E_ALL & ~E_DEPRECATED);
 //ini_set ('display_errors',1);
-
-require_once "conf.php";
 if ( ! isset($_SESSION['ERPNAME']) ) {
+    require_once "conf.php";
     $_SESSION['ERPNAME'] = $ERPNAME;
     $_SESSION['ERP_BASE_URL'] = $ERP_BASE_URL;
     $_SESSION['erpConfigFile'] = $erpConfigFile;
@@ -19,7 +18,7 @@ if ( ! isset($_SESSION['ERPNAME']) ) {
 require_once "mdb.php";
 
 $inclpa = ini_get('include_path');
-ini_set('include_path',$inclpa.":../:./inc:../inc".$jpgraph_path);
+ini_set('include_path',$inclpa.":../:./inc:../inc");
 
 if ( !isset($_SESSION["db"])?$_SESSION["db"]:false || !$_SESSION["cookie"] || //$_SESSION["db"] wird benötigt??
     ( $_SESSION["cookie"] && !$_COOKIE[$_SESSION["cookie"]] ) ) {

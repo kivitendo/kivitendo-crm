@@ -168,44 +168,41 @@
     $(document).ready(
         function(){
             $("#shipleft").click(function(){ nextshipto('-'); })
-        });
-    $(document).ready(
-         function(){
             $("#shipright").click(function(){ nextshipto('+'); })
-         });
-    $(document).ready( function(){ nextshipto('o'); } );
-    $(function(){
-         $('button')
-          .button()
-          .click( function(event) {
-              event.preventDefault();
-              name = this.getAttribute('name');
-              if ( name == 'ks' ) {
-                  var sw = $('#suchwort').val();
-                  F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
-              } else if ( name == 'reload' ) {
-                  showCall();
-              } else {
-                  document.location.href = name;
-              }
-          });
-          $( "#fasubmenu" ).tabs({ heightStyle: "auto" });
-          var index = $('#fasubmenu a[href="#{kdview}"]').parent().index();
-          $('#fasubmenu').tabs('select', index);
-    });
-    $(document).ready( function(){
-        $( "#dialogwin" ).dialog({
-            autoOpen: false,
-            show: {
-                effect: "blind",
-                duration: 300
-            },
-            hide: {
-                effect: "explode",
-                duration: 300
-            },
-        });
-    });
+            nextshipto('o'); 
+            $('button').button().click( 
+            function(event) {
+                event.preventDefault();
+                name = this.getAttribute('name');
+                if ( name == 'ks' ) {
+                    var sw = $('#suchwort').val();
+                    F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
+                } else if ( name == 'reload' ) {
+                    showCall();
+                } else {
+                    document.location.href = name;
+                }
+            });
+            $("#fasubmenu").tabs({ heightStyle: "auto" });
+            var index = $('#fasubmenu a[href="#{kdview}"]').parent().index();
+            $("#fasubmenu").tabs('select', index);
+            $("#dialogwin").dialog({
+                autoOpen: false,
+                show: {
+                    effect: "blind",
+                    duration: 300
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 300
+                },
+            });
+            $(".firmabutton").button().click(
+            function( event ) {
+                event.preventDefault();
+            });
+        }
+    );
 </script>
 </head>
 <body onLoad=" showCall(0);">
@@ -279,15 +276,15 @@
             {IMG}<br /><br />
             <img src="image/kreuzchen.gif" title=".:locked address:." style="visibility:{verstecke};" >
             <br />
-            <span style="visibility:{ANGEBOT_BUTTON};"><a href="#" onClick="doOe('{sales}_quotation');"><img src="image/angebot.png" title="Angebot/Anfrage erstellen" border="0"></a>&nbsp;</span>
-            <span style="visibility:{AUFTRAG_BUTTON};"><a href="#" onClick="doOe('{request}_order');"><img src="image/auftrag.png" title="neuen Auftrag eingeben" border="0"></a>&nbsp;</span>
-            <span style="visibility:{RECHNUNG_BUTTON};"><a href="#" onClick="doIr();"><img src="image/rechnung.png" title="neue Rechnung erstellen" border="0"></a>&nbsp;</span>
+            <span style="visibility:{ANGEBOT_BUTTON};"><a class="firmabutton" href="#" onClick="doOe('{sales}_quotation');"><img src="image/angebot.png" title="Angebot/Anfrage erstellen" border="0"></a>&nbsp;</span>
+            <span style="visibility:{AUFTRAG_BUTTON};"><a class="firmabutton" href="#" onClick="doOe('{request}_order');"><img src="image/auftrag.png" title="neuen Auftrag eingeben" border="0"></a>&nbsp;</span>
+            <span style="visibility:{RECHNUNG_BUTTON};"><a class="firmabutton" href="#" onClick="doIr();"><img src="image/rechnung.png" title="neue Rechnung erstellen" border="0"></a>&nbsp;</span>
             <br /><br />
-            <span style="visibility:{zeigeextra};"><a href="extrafelder.php?owner={Q}{FID}" target="_blank"><img src="image/extra.png" title="Extrafelder" border="0"></a>&nbsp;</span>
-            <span style="visibility:{zeigeplan};"><a href="{KARTE1}" target="_blank"><img src="image/karte.gif" title=".:city map:." border="0"></a>&nbsp;</span>
-            <a href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0" /></a>&nbsp;<br>
+            <span style="visibility:{zeigeextra};"><a class="firmabutton" href="extrafelder.php?owner={Q}{FID}" target="_blank"><img src="image/extra.png" title="Extrafelder" border="0"></a>&nbsp;</span>
+            <span style="visibility:{zeigeplan};"><a class="firmabutton" href="{KARTE1}" target="_blank"><img src="image/karte.gif" title=".:city map:." border="0"></a>&nbsp;</span>
+            <a class="firmabutton" href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0" /></a>&nbsp;<br>
             <br />
-            {begin_comment}<a href="lxcars/lxcmain.php?owner={FID}&task=1" title="KFZ-Daten"><img src="./lxcars/image/lxcmain.png" alt="Cars" border="1" /></a>{end_comment}
+            {begin_comment}<a class="firmabutton" href="lxcars/lxcmain.php?owner={FID}&task=1" title="KFZ-Daten"><img src="./lxcars/image/lxcmain.png" alt="Cars" border="1" /></a>{end_comment}
             &nbsp;
             {verkaeufer}
         </div>

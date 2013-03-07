@@ -1,14 +1,14 @@
 <html>
 	<head><title></title>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-	{STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
-    {THEME}
-        <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-        <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
-        <script type="text/javascript" src="{JQUERY}jquery-ui/ui/i18n/jquery.ui.datepicker-de.js"></script>   
-    {JAVASCRIPTS}
+{STYLESHEETS}
+{CRMCSS}
+{JQUERY}
+{JQUERYUI}
+{THEME}
+{JQDATE}
+{JQTABLE}
+{JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
 		function suchMa() {
@@ -18,20 +18,22 @@
 		function delMa() {	
 			nr=document.formular.maschinen.selectedIndex;
 			document.formular.maschinen.options[nr]=null	
-		}
+	}
 	//-->
 	</script>
 	<script>
-        $(function() {
-            $( "#inspdatum" ).datepicker($.datepicker.regional[ "de" ]);
-        });
+    $(function() {
+        $( "#inspdatum" ).datepicker($.datepicker.regional[ "de" ]);
+		$("#treffer")
+			.tablesorter({widthFixed: true, widgets: ['zebra'], headers: { 1: { sorter: false }, 2: { sorter: false }} })
+			.tablesorterPager({container: $("#pager"), size: 20});
+	});
 	</script>
+    <script type='text/javascript' src='inc/help.js'></script>
 <body >
 {PRE_CONTENT}
 {START_CONTENT}
-<table width="99%" border="0"><tr><td>
-<!-- Beginn Code ------------------------------------------->
-<p class="listtop">Maschine info/edit <b>{msg}</b></p>
+<p class="listtop" onClick="help('MaschinenEingebenEditieren');">Maschine info/edit (?)<b>{msg}</b></p>
 <form name="formular" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="mid" value="{mid}">
 <table cellpadding="2">
@@ -73,17 +75,42 @@
 		<td class="norm"><br><b>History</b></td>
 		<td class="norm"></td>
 	</tr>
+</table>
+<table id="treffer" class="tablesorter" style="width:40em;">  
+    <thead>
+		<tr>
+			<th>Datum</th>
+			<th>Art</th>
+			<th></th>
+			<th>Bemerkung</th>
+		</tr>
+	</thead>
+	<tbody>
 <!-- BEGIN History -->		
 	<tr>
-		<td class="norm">{date} {art}</td>
+		<td class="norm">{date}</td>
+		<td class="norm">{art}</td>
+		<td class="norm">{open}</td>
 		<td class="norm">{beschreibung}</td>		
 	</tr>
 <!-- END History -->
+</tbody>
 </table>
 </form>
-
-<!-- End Code ------------------------------------------->
-</td></tr></table>
+<span id="pager" class="pager">
+	<form>
+		<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first"/>
+		<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev"/>
+		<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
+		<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
+		<select class="pagesize" id='pagesize'>
+			<option value="10">10</option>
+			<option value="20" selected>20</option>
+			<option value="30">30</option>
+			<option value="40">40</option>
+		</select>
+	</form>
+</span>
 {END_CONTENT}
 </body>
 </html>

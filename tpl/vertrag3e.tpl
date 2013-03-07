@@ -1,13 +1,14 @@
 <html>
 	<head><title></title>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-        {STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-        <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
-    {THEME}
-        <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-        {JAVASCRIPTS}
-	<script language="JavaScript">
+{STYLESHEETS}
+{CRMCSS}
+{JQUERY}
+{JQUERYUI}
+{JQDATE}
+{THEME}
+{JAVASCRIPTS}
+    <script language="JavaScript">
 	<!--
 		function suchMa() {
 			val=document.formular.masch.value;
@@ -16,14 +17,18 @@
 		function drucke(nr)  {
 			f=open("prtWVertrag.php?aid="+nr,"drucke","width=10,height=10,left=10,top=10");
 		}	
+        $(function() {
+            $( "#anfangdatum" ).datepicker($.datepicker.regional[ "de" ]);
+            $( "#endedatum" ).datepicker($.datepicker.regional[ "de" ]);
+        });
+
 	//-->
 	</script>
+    <script type='text/javascript' src='inc/help.js'></script>
 <body >
 {PRE_CONTENT}
 {START_CONTENT}
-<table><tr><td>
-<!-- Beginn Code ------------------------------------------->
-<p class="listtop">Vertr&auml;ge eingeben/editieren</p>
+<p class="listtop" onClick="help('WVEingebenEditieren');">Warungsvertr&auml;ge editieren (?)</p>
 <form name="formular" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="vid" value="{VID}">
 Vertrag: {VertragNr}
@@ -43,21 +48,22 @@ Vertrag: {VertragNr}
 		</td>
 	</tr>
 	<tr>
-		<td class="norm" colspan="2"><textarea name="bemerkung" cols="80" rows="3" tabindex="2">{Notiz}</textarea><br>Bemerkungen<br><br></td>
+		<td class="norm" colspan="2"><textarea name="bemerkung" cols="80" rows="3" tabindex="2">{Notiz}</textarea><br>Bemerkungen</td>
 	</tr>
 	<tr>
-		<td class="norm" width="40%"><input type="text" name="name" size="30" maxlength="75" value="{Firma}" onFocus="blur()"> <b>
-			<a href="firma1.php?Q=C&id={FID}">[{KDNR}]</a> </b><br>Firma<br><br></td>
-		<td class="norm" width="60%"><input type="hidden" name="contractnumber" value="{VertragNr}"><input type="hidden" name="cp_cv_id" value="{FID}">
-			<input type="text" name="anfangdatum" size="10" maxlength="10" value="{anfangdatum}" tabindex="6">&nbsp; <input type="text" name="endedatum" size="10" maxlength="10" value="{endedatum}" tabindex="6"><br>
-			<b>Vertragsdatum von &nbsp; bis</b></td>
+		<td class="norm" ><input type="text" name="name" size="30" maxlength="75" value="{Firma}" onFocus="blur()"> <b>
+			<a href="firma1.php?Q=C&id={FID}">[{KDNR}]</a> </b><br>Firma</td>
+		<td class="norm" ><input type="hidden" name="contractnumber" value="{VertragNr}"><input type="hidden" name="cp_cv_id" value="{FID}">
+			<input type="text" name="anfangdatum" id="anfangdatum" size="10" maxlength="10" value="{anfangdatum}" tabindex="6">&nbsp; 
+            <input type="text" name="endedatum"   id="endedatum"   size="10" maxlength="10" value="{endedatum}" tabindex="6"><br>
+			<b>von</b> Vertragsdatum <b>bis</b></td>
 	</tr>
 	<tr>
-		<td class="norm" nowrap><input type="text" name="masch" size="30" value="" tabindex="6"> <input type="button" name="ma" value="suchen" onClick="suchMa();"  tabindex="7"><br>ArtNr. Maschine<br><br></td>
+		<td class="norm" nowrap><input type="text" name="masch" size="30" value="" tabindex="6"> <input type="button" name="ma" value="suchen" onClick="suchMa();"  tabindex="7"><br>ArtNr. Maschine</td>
 		<td class="norm"><input type="text" name="betrag" size="10" maxlength="10" value="{betrag}" tabindex="6">&euro;<br>Betrag </td>
 	</tr>
 	<tr>
-		<td class="norm"><input id="neuid" type="hidden" name="maschinen[0][0]" value=""><input id="neuname" type="text" name="maschinen[0][1]" size="30" maxlength="35" value="" tabindex="8"><br>neue Maschine<br><br></td>
+		<td class="norm"><input id="neuid" type="hidden" name="maschinen[0][0]" value=""><input id="neuname" type="text" name="maschinen[0][1]" size="30" maxlength="35" value="" tabindex="8"><br>neue Maschine</td>
 		<td class="norm"><input type="text" name="maschinen[0][2]" size="30" maxlength="75" value="" tabindex="9"> (l&ouml;schen)<br>Standort</td>		
 	</tr>	
 <!-- BEGIN Maschinen -->		
@@ -81,8 +87,6 @@ Vertrag: {VertragNr}
 </table>
 </form>
 
-<!-- End Code ------------------------------------------->
-</td></tr></table>
 {END_CONTENT}
 </body>
 </html>

@@ -6,16 +6,7 @@
 
     unset($maschinen);
     $t = new Template($base);
-        $menu =  $_SESSION['menu'];
-        $t->set_var(array(
-            JAVASCRIPTS   => $menu['javascripts'],
-            STYLESHEETS   => $menu['stylesheets'],
-            PRE_CONTENT   => $menu['pre_content'],
-            START_CONTENT => $menu['start_content'],
-            END_CONTENT   => $menu['end_content'],
-            JQUERY        => $_SESSION['basepath'].'crm/',
-            'THEME'         => $_SESSION['theme'],
-        ));
+    doHeader($t);
     $template="vertrag3.tpl";
     $vid=($_POST["vid"])?$_POST["vid"]:$_GET["vid"];
     if ($_POST["stat"]) {
@@ -102,14 +93,13 @@
 
         $template="vertrag3e.tpl";
         $vertrag=getVertrag($vid);
-        $maschinen=getVertragMaschinen($vertrag["contractnumber"]);
-        //$maschinen=getVertragMaschinen($vid);
+        //$maschinen=getVertragMaschinen($vertrag["contractnumber"]);
+        $maschinen=getVertragMaschinen($vid);
     }
 
     $t->set_file(array("vert" => $template));
 
     $t->set_var(array(
-        ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
         VID => $vid,
         vorlage_old => $vertrag["customer_id"]."/".$vertrag["template"],
         vorlage => $vertrag["template"],

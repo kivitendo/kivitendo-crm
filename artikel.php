@@ -8,10 +8,13 @@
 	}
 	$masch=getAllMaschine($mid);
 	$material=getAllMat($aid,$mid);
+    $menu = $_SESSION['menu'];
+    $head = mkHeader();    
 ?>
 <html>
 	<head><title>LX - CRM</title>
-	<link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath']; ?>crm/css/main.css"></link>
+<?php echo $menu['stylesheets']; ?>
+<?php echo $head['CRMCSS']; ?>    
 	<script language="JavaScript">
 	<!--
 		function selall() {

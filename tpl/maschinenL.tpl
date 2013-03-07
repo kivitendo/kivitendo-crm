@@ -1,21 +1,18 @@
 <html>
 	<head><title></title>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-        {STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css"></link>
-        <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
-    {THEME}    
-        <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-        {JAVASCRIPTS}
+{STYLESHEETS}
+{CRMCSS}
+{JQUERY}
+{JQUERYUI}
+{JAVASCRIPTS}
 <body >
 {PRE_CONTENT}
 {START_CONTENT}
-<table width="99%" border="0"><tr><td>
-<!-- Beginn Code ------------------------------------------->
 <p class="listtop">Maschinen Trefferliste</p>
 <form name="formular"  action="{action}" method="post">
 <input type="hidden" name="MID" value="{MID}">
-<select name="serialnumber" size="15">
+<select name="{fldname}" size="25">
 <!-- BEGIN Sernumber -->
     <option value="{number}">{description}
 <!-- END Sernumber -->

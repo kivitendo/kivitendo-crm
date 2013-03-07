@@ -1,12 +1,12 @@
 <html>
 	<head><title></title>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-        {STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-        <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
-    {THEME}
-        <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-        {JAVASCRIPTS}
+{STYLESHEETS}
+{CRMCSS}
+{JQUERY}
+{JQUERYUI}
+{THEME}
+{JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
 		function drucke(nr)  {
@@ -18,7 +18,6 @@
 {PRE_CONTENT}
 {START_CONTENT}
 <table width="99%" border="0"><tr><td>
-<!-- Beginn Code ------------------------------------------->
 <p class="listtop">Vertr&auml;ge auswerten</p>
 <form name="formular" enctype='multipart/form-data' action="{action}" method="post"">
 <input type="hidden" name="vid" value="{VID}">
@@ -35,7 +34,6 @@ Errechnete (nicht tats&auml;chliche) Einnahmen: {einnahme}<br>
 Aufgelaufene Kosten: {kosten} &nbsp;&nbsp;&nbsp; <b>{diff} &euro;</b>
 </div>
 </form>
-<!-- End Code ------------------------------------------->
 </td></tr></table>
 {END_CONTENT}
 </body>

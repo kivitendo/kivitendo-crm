@@ -1,14 +1,13 @@
 <html>
 	<head><title></title>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-	{STYLESHEETS}
-    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
-    {THEME}
-    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script> 
-    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/i18n/jquery.ui.datepicker-de.js"></script>
-    {JAVASCRIPTS}
+{STYLESHEETS}
+{CRMCSS}
+{JQUERY}
+{JQUERYUI}
+{THEME}
+{JQDATE}
+{JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
 		function suchMa() {
@@ -31,12 +30,11 @@
         });
 	//-->
 	</script>
+    <script type='text/javascript' src='inc/help.js'></script>
 <body >
 {PRE_CONTENT}
 {START_CONTENT}
-<table><tr><td class="ce">
-<!-- Beginn Code ------------------------------------------->
-<p class="listtop">Maschinen eingeben/editieren <b>{msg}</b></p>
+<p class="listtop" onClick="help('MaschinenEingebenEditieren');">Maschinen eingeben/editieren (?)<b>{msg}</b></p>
 <form name="formular" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="parts_id" value="{parts_id}">
 <input type="hidden" name="mid" value="{mid}">
@@ -87,8 +85,6 @@
 </table>
 </form>
 
-<!-- End Code ------------------------------------------->
-</td></tr></table>
 {END_CONTENT}
 </body>
 </html>

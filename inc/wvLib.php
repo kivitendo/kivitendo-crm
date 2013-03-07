@@ -92,7 +92,7 @@ function saveNewMaschine($data) {
 			$sql="update maschine set standort='Lager' where id=$mid";
 			$rc=$db->query($sql);
 			if ($rc) {
-				$rc=insHistory($mid,'neu',$data["beschreibung"]);
+				$rc=insHistory($mid,'neu','Aufnahme',null);
 			};
 			if ($rc) { $db->commit(); }
 			else { $db->rollback(); };
@@ -143,8 +143,8 @@ function saveNewVertrag($data) {
 			$i=0;
 			foreach ($data["maschinen"] as $row) {
 				$standort=($row[2]<>"")?$row[2]:"Kunde";
-				$rc1=newCM($row[0],$cn);
-				$rc2=insHistory($row[0],"contadd","$cn");
+				$rc1=newCM($row[0],$cid);
+				$rc2=insHistory($row[0],"contadd",'Vertrag zugeordnet',$cn);
 				$rc3=$db->query("update maschine set standort = '$standort' where id=".$row[0]);
 				if (!$rc1 || !$rc2 || !$rc3) {
 					$db->rollback();
@@ -211,9 +211,9 @@ function updateVertrag($data) {
 		return $data["vid"];
 	}
 }
-function insHistory($mid,$art,$beschreibung) {
+function insHistory($mid,$art,$beschreibung,$bezug) {
 	global $db;
-	$sql="insert into history (mid,art,beschreibung) values ($mid,'$art','$beschreibung')";
+	$sql="insert into history (mid,art,beschreibung,bezug) values ($mid,'$art','$beschreibung',$bezug)";
 	$rc=$db->query($sql);
 	return $rc;
 }
@@ -255,8 +255,8 @@ function getSernumber($sn,$pn=false) {
 	$sql="select M.*,K.name,K.street,K.zipcode,K.city,K.phone,P.partnumber,P.description,P.notes,V.*,C.mid,P.id as parts_id ";
 	$sql.="from maschine M left join parts P on P.id=M.parts_id ";
 	$sql.="left join contmasch C on C.mid=M.id ";
-	$sql.="left join contract V on V.contractnumber=cast (C.cid as text) ";	
-	//$sql.="left join contract V on V.cid=C.cid ";	
+	//$sql.="left join contract V on V.contractnumber=cast (C.cid as text) ";	
+	$sql.="left join contract V on V.cid=C.cid ";	
 	$sql.="left join customer K on K.id=V.customer_id ";
 	$sql.="where M.serialnumber like '%$sn%' ";
 	$sql.=($pn)?"and parts_id=$pn":"";
@@ -277,7 +277,7 @@ function getArtnumber($sn) {
 }
 function getHistory($nr) {
 	global $db;
-	$sql="select * from history where mid=$nr order by itime  desc";
+	$sql="SELECT H.*,R.status from history H left join repauftrag R on bezug = aid where H.mid = $nr order by itime  desc";
 	$rs=$db->getAll($sql);	
 	return $rs;	
 }
@@ -294,8 +294,8 @@ function getCustContract($fid) {
 }
 function getAllMaschine($mid) {
 	global $db;
-	$sql="select X.mid,V.*,M.*,P.description from contmasch X left join contract V on V.contractnumber=cast (X.cid as text) ";
-	//$sql="select X.mid,V.*,M.*,P.description from contmasch X left join contract V on V.cid=X.cid ";
+	//$sql="select X.mid,V.*,M.*,P.description from contmasch X left join contract V on V.contractnumber=cast (X.cid as text) ";
+	$sql="select X.mid,V.*,M.*,P.description from contmasch X left join contract V on V.cid=X.cid ";
 	$sql.="left join maschine M on M.id=X.mid left join parts P on P.id=M.parts_id where X.mid=$mid";
 	$rs=$db->getAll($sql);	
 	return $rs[0];		
@@ -317,7 +317,7 @@ function insRAuftrag($data) {
 	$rc=$db->query(sprintf($sql,$data["mid"],$data["kdnr"],$data["cause"],$data["schaden"],
 			date("Y-m-d"),date2db($data["datum"]),$_SESSION["loginCRM"],$data["bid"],$data["status"],$data["counter"]));
 	if ($rc) { 
-		insHistory($data["mid"],"RepAuftr","$aid|".$data["cause"]);
+		insHistory($data["mid"],"RepAuftr","$aid|".$data["cause"],$aid);
 		if ($data["counter"]) {
 			$rc=updateCounter($data["counter"],$data["mid"]);
 		}

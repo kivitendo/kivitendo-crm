@@ -2,6 +2,8 @@
     require_once("inc/stdLib.php");
     include("inc/wvLib.php");
     $menu =  $_SESSION['menu'];
+    $head = mkHeader();
+
     if ($_POST["ok"]) {
         $vid=suchVertrag($_POST["vid"]);
         if (!$vid) {
@@ -13,31 +15,41 @@
 ?>
 <html>
     <head><title></title>
-    <!-- ERP Stylesheet -->
-    <?php echo $menu['stylesheets']; ?>
-    <!-- Ende ERP -->
-    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
-    <script type="text/javascript" src="<?php echo $_SESSION['basepath']; ?>crm/jquery-ui/jquery.js"></script> 
-    <!-- ERP JavaScripts -->
-    <?php echo $menu['javascripts']; ?>
+<?php echo $menu['stylesheets']; ?>
+<?php echo $head['CRMCSS']; ?>
+<?php echo $head['JQUERY']; ?>
+<?php echo $head['JQUERYUI']; ?>
+<?php echo $head['THEME']; ?>
+<?php echo $head['JQTABLE']; ?>
+<?php echo $menu['javascripts']; ?>
+    <script>
+    $(function() {
+        $("#treffer")
+            .tablesorter({widthFixed: true, widgets: ['zebra']})
+    });    
+    </script>
+
 <body >
-<?=$menu['pre_content'];?>
-<?=$menu['start_content'];?>
+<?php echo $menu['pre_content'];?>
+<?php echo $menu['start_content'];?>
 <p class="listtop">Wartungsvertr&auml;ge suchen</p>
-<?php
-        if (count($vid)>1) {
-            echo "<table>\n";
-            foreach($vid as $nr) {
-                echo "<tr><td>[<a href=vertrag3.php?vid=".$nr["cid"].">".$nr["cid"]."</a>]</td><td>".$nr["contractnumber"]."</td><td>".$nr["name"]."</td></tr>\n";
-            }
-            echo "</table>\n";
-        }
-        echo $msg;
-?>
 <form name="formular" enctype='multipart/form-data' action="vertrag1.php" method="post">
 <input type="text" name="vid" size="20" value="" tabindex="1"> &nbsp; 
 <input type="submit" name="ok" value="suchen"><br>Vertragsnummer
 </form>
-<?=$menu['end_content'];?>
+<?php  echo $msg; ?><br>
+<table id='treffer' class='tablesorter'>
+<thead><tr ><th>Vertragsnummer</th><th>Kunde</th></tr></thead>
+<tbody>
+<?php
+        if (count($vid)>1) {
+            foreach($vid as $nr) {
+                echo "<tr><td>[<a href=vertrag3.php?vid=".$nr["cid"].">".$nr["contractnumber"]."</a>]</td><td>".$nr["name"]."</td></tr>\n";
+            }
+        }
+?>
+</tbody>
+</table>
+<?php echo $menu['end_content'];?>
 </body>
 </html>

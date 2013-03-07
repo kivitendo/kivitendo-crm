@@ -3,16 +3,7 @@
     include("inc/template.inc");
     include("inc/wvLib.php");    
     $t = new Template($base);
-        $menu =  $_SESSION['menu'];
-        $t->set_var(array(
-            JAVASCRIPTS   => $menu['javascripts'],
-            STYLESHEETS   => $menu['stylesheets'],
-            PRE_CONTENT   => $menu['pre_content'],
-            START_CONTENT => $menu['start_content'],
-            END_CONTENT   => $menu['end_content'],
-            JQUERY        => $_SESSION['basepath'].'crm/',
-            'THEME'         => $_SESSION['theme'],
-        ));
+
     if ($_POST["parts_sernr"]) {
         $data=getMaschSer($_POST["parts_sernr"],$_POST["parts_id"]);
         $nummern=getNumber($data["parts_id"]);
@@ -22,20 +13,20 @@
     if ($_POST["search"]) {
         $data=getArtikel($_POST["partnumber"]."%");
         if (count($data)>1) {
-            $t->set_file(array("vert" => "maschinenL.tpl"));        
+            $t->set_file(array("vert" => "maschinenL.tpl"));
+            doHeader($t);
+            $t->set_var(array(
+                    fldname => "partnumber",
+                    action => "maschine3.php",
+            ));
             $t->set_block("vert","Sernumber","Block1");
             foreach($data as $zeile) {    
                 $t->set_var(array(
-                    fldname => "partnumber",
-                    action => "maschine3.php",
-                    number     => $zeile["partnumber"],
-                    description    =>    $zeile["description"]
+                    number         => $zeile["partnumber"],
+                    description    =>   $zeile["description"]
                 ));
                 $t->parse("Block1","Sernumber",true);
             }
-            $t->set_var(array(
-                ERPCSS    =>  $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-            ));
             $t->pparse("out",array("vert"));            
             exit;
         } else if (!$data) {
@@ -61,8 +52,8 @@
         $bekannt=getBekannt($data["id"]);    
     }
     $t->set_file(array("masch" => "maschinen3.tpl"));
+    doHeader($t);
     $t->set_var(array(
-        ERPCSS    =>  $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
         action    => "maschine3.php",
         msg       => $msg,
         parts_id  => $pid,

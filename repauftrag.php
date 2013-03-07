@@ -27,33 +27,39 @@
     
     $t = new Template($base);
     $t->set_file(array("masch" => "repauftrag.tpl"));
-    
+    doHeader($t);
+
     if (!$rep["datum"]) $rep["datum"]=date("d.m.Y");
 
     $t->set_block("masch","History","Block1");    
     if($hist) {
-        //$hist=array_reverse($hist);
-        $i=0;
-        while ($zeile = array_shift($hist) and $i<4 ) {
+        if ($rep['aid']) {
+            $t->set_var(array(
+                date   =>   '',
+                art   =>    '',
+                open  =>    ' ',
+                beschreibung =>  "<a href='repauftrag.php?mid=$mid'>Neuer Auftrag</a>" 
+            ));
+            $t->parse("Block1","History",true);
+        };
+        while ($zeile = array_shift($hist)) {
+            $open = ' ';
             if ($zeile["art"]=="RepAuftr") {
-                preg_match("/^([0-9]+)\|(.+)/",$zeile["beschreibung"],$treffer);
-                $art="<a href='repauftrag.php?hole=".$treffer[1]."'>RepAuftr</a>";
-                $beschr=$treffer[2];
+                $open = ($zeile['status']==2)?'close':'open';
+                $art="<a href='repauftrag.php?hole=".$zeile['bezug']."'>RepAuftr</a>";
             } else if ($zeile["art"]=="contsub") {
-                $beschr=$zeile["beschreibung"];
                 $vid=suchVertrag($beschr);
                 $art="<a href='vertrag3.php?vid=".$vid[0]["cid"]."'>contsub</a>";
             } else {
-                $art=$zeile["art"];
-                $beschr=$zeile["beschreibung"];
-            };
+                continue;
+            }
             $t->set_var(array(
-                date   =>    db2date($zeile["datum"]),
+                date   =>    db2date(substr($zeile["itime"],0,10)),
                 art   =>    $art,
-                beschreibung =>    $beschr
+                open  =>    $open,
+                beschreibung =>  $zeile["beschreibung"] 
             ));
             $t->parse("Block1","History",true);
-            $i++;
         }
     }        
     if (!$rep["aid"]) {
@@ -74,17 +80,7 @@
         $sel3="checked";
         $sel1=""; $sel2="";
     } 
-    $menu =  $_SESSION['menu'];
     $t->set_var(array(
-        JAVASCRIPTS   => $menu['javascripts'],
-        STYLESHEETS   => $menu['stylesheets'],
-        PRE_CONTENT   => $menu['pre_content'],
-        START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content'],
-        'THEME'         => $_SESSION['theme'],
-    ));
-    $t->set_var(array(
-        ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
         action => "repauftrag.php",
         msg => $msg,
         AID => $rep["aid"],
@@ -107,7 +103,7 @@
         cause => $rep["cause"],
         counter => $rep["counter"],        
         datum => $rep["datum"],
-        anlagedatum => db2date(substr($rep["anlagedatum"],0,10))." ".substr($rep["anlagedatum"],11,5),        
+        anlagedatum => db2date(substr($rep["anlagedatum"],0,10)),
         sel1 => $sel1,
         sel2 => $sel2,
         sel3 => $sel3,

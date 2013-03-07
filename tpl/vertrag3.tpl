@@ -1,18 +1,15 @@
 <html>
 	<head><title></title>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-	{STYLESHEETS}
-    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
-    {THEME}
-    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script> 
-    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/i18n/jquery.ui.datepicker-de.js"></script>
-    {JAVASCRIPTS}
-
-	<script language="JavaScript">
+{STYLESHEETS}
+{CRMCSS}
+{JQUERY}
+{JQUERYUI}
+{JQDATE}
+{THEME}
+{JAVASCRIPTS}
+    <script language="JavaScript">
 	<!--
-
 		function suchFa() {
 			val=document.formular.name.value;
 			f1=open("suchFa.php?tab=C&nq=1&name="+val,"suche","width=350,height=200,left=100,top=100");
@@ -21,25 +18,22 @@
 			val=document.formular.masch.value;
 			f1=open("suchMa.php?masch="+val,"suche","width=350,height=200,left=100,top=100");
 		}
-	
         $(function() {
             $( "#anfangdatum" ).datepicker($.datepicker.regional[ "de" ]);
             $( "#endedatum" ).datepicker($.datepicker.regional[ "de" ]);
         });
 	//-->
-        </script>
+    </script>
+    <script type='text/javascript' src='inc/help.js'></script>
 <body >
 {PRE_CONTENT}
 {START_CONTENT}
-<table width="99%" border="0"><tr><td>
-<!-- Beginn Code ------------------------------------------->
-<p class="listtop">Wartungsvertr&auml;ge eingeben/editieren</p>
+<p class="listtop" onClick="help('WVEingebenEditieren');">Wartungsvertr&auml;ge eingeben (?)</p>
 <form name="formular" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="Quelle" value="">
 <table>
-	
 	<tr>
-		<td class="norm" width="40%">
+		<td class="norm" >
 			<select name="vorlage"  tabindex="1" style='width:300px;z-index: 1;'>
 <!-- BEGIN Vorlage -->
 				<option value="{Vertrag}" {Vsel}>{Vertrag}</option>
@@ -47,24 +41,24 @@
 			</select>
 			<br>Vertragsvorlage<br><br>
 		</td>
-		<td class="norm" width="60%"></td>
+		<td class="norm" ></td>
 	</tr>
 	<tr>
-		<td class="norm" colspan="2"><textarea name="bemerkung" cols="80" rows="3" tabindex="2">{Notiz}</textarea><br>Bemerkungen<br><br></td>
+		<td class="norm" colspan="2"><textarea name="bemerkung" cols="80" rows="3" tabindex="2">{Notiz}</textarea><br>Bemerkungen</td>
 	</tr>
 	<tr>
-		<td class="norm"><input type="text" name="name" size="30" maxlength="75" value="{Firma}"> <input type="button" name="fa" value="suchen" onClick="suchFa();"  tabindex="4"> <br>Firma<br><br></td>
+		<td class="norm"><input type="text" name="name" size="30" maxlength="75" value="{Firma}"> <input type="button" name="fa" value="suchen" onClick="suchFa();"  tabindex="4"> <br>Firma</td>
 		<td class="norm"><input type="hidden" name="cp_cv_id" value="{FID}">
 			<input type="text" name="anfangdatum" id="anfangdatum" size="10" maxlength="10" value="{anfangdatum}" tabindex="6">&nbsp; 
-                        <input type="text" name="endedatum" id="endedatum" size="10" maxlength="10" value="{endedatum}" tabindex="6"><br>
-			<b>Vertragsdatum von &nbsp; bis</b></td>
+            <input type="text" name="endedatum"   id="endedatum"   size="10" maxlength="10" value="{endedatum}"   tabindex="6"><br>
+			<b>von</b> Vertragsdatum <b>bis</b></td>
 	</tr>
 	<tr>
-		<td class="norm"><input type="text" name="masch" size="30" maxlength="15" value="" tabindex="6"> <input type="button" name="ma" value="suchen" onClick="suchMa();"  tabindex="7"><br>ArtNr. Maschine<br><br></td>
+		<td class="norm"><input type="text" name="masch" size="30" maxlength="15" value="" tabindex="6"> <input type="button" name="ma" value="suchen" onClick="suchMa();"  tabindex="7"><br>ArtNr. Maschine</td>
 		<td class="norm"><input type="text" name="betrag" size="10" maxlength="12" value="{betrag}" align="right" tabindex="6">&euro;<br>Betrag </td>
 	</tr>	
 	<tr>
-		<td class="norm"><input id="neuid" type="hidden" name="maschinen[0][0]" value=""><input id="neuname" type="text" name="maschinen[0][1]" size="30" value="" tabindex="8"><br>neue Maschine<br><br></td>
+		<td class="norm"><input id="neuid" type="hidden" name="maschinen[0][0]" value=""><input id="neuname" type="text" name="maschinen[0][1]" size="30" value="" tabindex="8"><br>neue Maschine</td>
 		<td class="norm"><input type="text" name="maschinen[0][2]" size="30" value="" tabindex="9"><br>Standort</td>		
 	</tr>	
 <!-- BEGIN Maschinen -->		
@@ -86,8 +80,6 @@
 </table>
 </form>
 
-<!-- End Code ------------------------------------------->
-</td></tr></table>
 {END_CONTENT}
 </body>
 </html>

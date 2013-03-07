@@ -192,5 +192,8 @@ $texts  = array(
   '.:catalog:.'      => 'Katalog',
   '.:Customer / Vendor exist with same zipcode:.' => 'Kunde / Lieferant mit gleicher PLZ existiert bereits',
   '.:close:.'           => 'schließen',
+  '.:unit:.'            => 'Einheit',
+  '.:qty:.'             => 'Menge',
+  '.:part:.'            => 'Artikel'
 ); 
 ?>

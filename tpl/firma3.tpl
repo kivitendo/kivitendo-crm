@@ -26,6 +26,9 @@
             $("#ums").tablesorter({widthFixed: true, widgets: ['zebra'], headers: { 
                 0: { sorter: false }, 1: { sorter: false }, 2: { sorter: false }, 3: { sorter: false }, 4: { sorter: false } } 
             });
+            $("#topparts").tablesorter({widthFixed: true, widgets: ['zebra'], headers: { 
+                0: { sorter: false }, 1: { sorter: false }, 2: { sorter: false }, 3: { sorter: false }, 4: { sorter: false }, 5: { sorter: false },6: { sorter: false }} 
+            });
         })
 	</script>
 <body>
@@ -45,7 +48,7 @@
 	{Plz} {Ort}
 </div>
 <span style="position:absolute; left:38em; top:2.1em;">[<a href="opportunity.php?Q={Q}&fid={FID}">.:Opportunitys:.</a>]</span>
-<div style="position:absolute; left:1em; top:5em; width:99%;text-align:center;" class="normal">
+<div style="position:absolute; left:1em; top:5em; text-align:center;" class="normal">
 	<div style="float:left; width:23em; text-align:left; " >
 		<table id="ums" class="tablesorter" style="width:100%;">
 			<thead><tr>
@@ -61,12 +64,24 @@
 			</tr>
 <!-- END Liste -->
 		</tbody></table>
-	</div>
-	<div style="float:left; text-align:right; width:520px;" class="fett">
+	</div> &nbsp; 
+	<div style="float:left; text-align:right; width:40em; " class="fett">
 	<center>.:Netto sales over 12 Month:. 
 	[<a href='firma3.php?Q={Q}&fid={FID}&jahr={JAHRZ}'>.:earlier:.</a>] [<a href='firma3.php?Q={Q}&fid={FID}&jahr={JAHRV}'>{JAHRVTXT}</a>]</center>
-		<img src="{IMG}" width="500" height="280" title="Netto sales over 12 Month"><br /><br />
+		<img src="{IMG}" width="520" height="320" title="Netto sales over 12 Month"><br /><br />
 	</div>
+    <div><br>
+    <table id='topparts' class="tablesorter">
+        <thead><tr>
+			<th >.:date:.</th>
+			<th>.:part:.</th><th>.:qty:.</th>
+			<th>.:unit:.</th><th>%</th><th></th><th>.:Sales:.</th>
+		</tr></thead><tbody>
+<!-- BEGIN TopListe -->
+           <tr><td>{transdate}</td><td>{description}</td><td align='right'>{qty}</td><td>{unit}</td><td align='right'>{rabatt}</td><td align='right'>{sellprice}</td><td align='right'>{summe}</td></tr>
+<!-- END TopListe -->
+    </tbody></table>
+    </div>
 </div>
 <!-- Hier endet die Karte ------------------------------------------->
 </span>

@@ -49,11 +49,11 @@ function  getLastYearPlot($re,$an,$art=false) {
 		$sumA[]=0;
 	}
 	$avg=array_splice ($avg,0,-1);
-	$graph = new Graph(500,280);
+	$graph = new Graph(520,320);
 	if ($art) {$art="textlin";}
 	else {$art="textlog";};
 	$graph->SetScale($art);
-	$graph->img->SetMargin(70,20,25,70);
+	$graph->img->SetMargin(65,10,10,90);
 
 	$sumplot = new BarPlot($sum);		// Graph Umsatz
 	$sumplot->SetColor("darkgreen");

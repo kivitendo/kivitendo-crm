@@ -138,7 +138,7 @@ global $db;
         } else {
             $row["modemployee"] = $row["employee"];
         }*/
-            $row["modemployee"] = $row["employee"];
+        $row["modemployee"] = $row["employee"];
         if ($row["konzern"]) {
             $sql="select name from %s where id = %d";
             if ($tab=="C") {
@@ -983,7 +983,20 @@ global $db;
     return array_merge($leer,$rs);
     return $rs;
 }
-
+function getTopParts($cid) {
+global $db;
+    $limit = 5;
+    $sql  = 'SELECT trans_id,parts_id,description,qty,discount,sellprice,fxsellprice,(qty*sellprice) as summe,ar.transdate,unit ';
+    $sql .= 'from ar left join invoice on ar.id=trans_id where  customer_id = '.$cid.' order by  ';
+    $ums = $db->getAll($sql.'summe desc limit '.$limit);
+    $qty = $db->getAll($sql.'qty desc,ar.transdate desc limit '.$limit);
+    $headU[] = array('trans_id'=>'','parts_id'=>'','description'=>'','qty'=>'','discount'=>'','sellprice'=>'','fxsellprice'=>'','summe'=>'','transdate'=>'','unit'=>'');
+    $headQ = $headU;
+    $headU[0]['description'] = '<b>Umsatzstärkste Artikel</b>';
+    $headQ[0]['description'] = '<b>Am meisten verkaufte Artikel</b>';
+    $top = array_merge($headU, $ums, $headQ, $qty);
+    return $top;
+}
 function cvar_edit($id,$new=false) {
     $cvar = getVariablen($id);
     if ($cvar) foreach ($cvar as $row) {

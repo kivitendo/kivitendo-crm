@@ -35,6 +35,7 @@
         $t->set_file(array("fa1" => "firma3a.tpl"));
         $IMG="";
     } else {
+        $top = getTopParts($fid);
         $re=getReJahr($fid,$jahr,($Q=="V")?true:false);
         $an=getAngebJahr($fid,$jahr,($Q=="V")?true:false);
         $t->set_file(array("fa1" => "firma3.tpl"));
@@ -80,6 +81,21 @@
             $t->set_var($val);
             $t->parse("Block","Liste",true);
             //$i++;
+        }
+    }
+    if ($top) {
+        $t->set_block("fa1","TopListe","BlockTP");
+        foreach ($top as $row) {
+            $t->set_var(array(
+                transdate   => db2date($row['transdate']),
+                description => $row['description'],
+                qty         => $row['qty'],
+                unit        => $row['unit'],
+                rabatt      => ($row['discount'])?$row['discount']*100:'',
+                sellprice   => sprintf('%0.2f',$row['sellprice']),
+                summe       => sprintf('%0.2f',$row['summe'])
+            ));
+            $t->parse("BlockTP","TopListe",true);
         }
     }
     if ($reM) {

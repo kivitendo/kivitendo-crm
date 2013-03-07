@@ -29,15 +29,19 @@ if ($_POST['ok']) {
         if ($_POST['preise'] == '1') { $preis = $part['sellprice']; }
         else if ($_POST['preise'] == '2') { $preis = $part['listprice']; }
         else { $preis = $part['price']; };
+        if ($_POST['prozent'] > 0) {
+            if ($_POST['pm']=='+') { $preis += $preis / 100 * $_POST['prozent']; }
+            else                   { $preis -= $preis / 100 * $_POST['prozent']; };
+        }
         if ($_POST['addtax']) $preis = $preis * (1 + $tax[$part['bugru']]['rate']);
         foreach ($part as $key=>$val) {
             if ($key == 'description') $val = str_replace($suche,$ersetze,$val);
             //if ($key == 'image') $val = str_replace($suche,$ersetze,$val);
             if ($key == 'image') {
-                 if ($val == '') $val = 'bilder/nopic.png';
-                 if (preg_match('/http[s]*:/i',$val)) $val = 'bilder/nopic.png';
-                 if (! preg_match('/\.png$/i',$val)) $val = 'bilder/nopic.png';
-                 if (!file_exists($val)) $val = 'bilder/nopic.png';
+                 if ($val == '') $val = 'image/nopic.png';
+                 if (preg_match('/http[s]*:/i',$val)) $val = 'image/nopic.png';
+                 if (! preg_match('/\.(png|jpg)$/i',$val)) $val = 'image/nopic.png';
+                 if (!file_exists($val)) $val = 'image/nopic.png';
             }
             $line = preg_replace("/<%newpg%>/i",'xxx',$line);
             if ($key == 'partsgroup') $val = 'x';
@@ -50,16 +54,32 @@ if ($_POST['ok']) {
     $rc = fputs($f,$vorlage['post']);
     fclose($f);
     $rc = @exec('pdflatex -interaction=batchmode -output-directory=tmp/ tmp/katalog.tex',$out,$ret);
-    if ( $ret == 1 ) {
+    if ( $ret == 0 ) {
         $rc = @exec('pdflatex -interaction=batchmode -output-directory=tmp/ tmp/katalog.tex',$out,$ret);
-        if (file_exists('tmp/katalog.pdf'))     $link = 'tmp/katalog.pdf';
+        if (file_exists('tmp/katalog.pdf'))   {  
+            $link = 'tmp/katalog.pdf'; 
+            $msg = "RC:$rc Ret:$ret Out:".$out[0];
+     	} else { 
+            $link = '';
+            if (file_exists('tmp/katalog.log'))   { 
+                $linklog = 'tmp/katalog.log';
+            }
+            $msg = "Kein PDF erstellt<br>RC:$rc Ret:$ret Out:".$out[0]; 
+        };
     } else {
-        echo "Fehler beim Erstellen";
-        $link = 'log/katalog.log';
+        if (file_exists('tmp/katalog.pdf'))   {
+            $link = 'tmp/katalog.pdf'; 
+            $msg  = 'Evlt nicht korrekt<br>';
+        }
+        $msg .= "Fehler beim Erstellen<br>RC:$rc Ret:$ret Out:".$out[0];
+        $linklog = 'tmp/katalog.log';
     }
-} 
+} else {
+    $_POST['pm']='-';
+}
     $preise = getPreise();
     $cvars = getCustoms();
+    $pglist = getPgList();
     include("inc/template.inc");
     $t = new Template($base);
     $t->set_file(array("kat" => "katalog.tpl"));
@@ -112,12 +132,18 @@ if ($_POST['ok']) {
         END_CONTENT     => $menu['end_content'],
         'THEME'         => $_SESSION['theme'],
         'JQUERY'        => $_SESSION['basepath'].'crm/',
-        partnumber	=> $_POST['partnumber'],
+        partnumber	    => $_POST['partnumber'],
         description     => $_POST['description'],
         ean             => $_POST['ean'],
+        prozent         => $_POST['prozent'],
+        'pm'.$_POST['pm']  => 'checked',
+        $_POST['order'] => 'selected',
         partsgroup      => $_POST['partsgroup'],
-        addtax		=> ($_POST['addtax'])?"checked":"",
-        link		=> $link
+        pglist          => $pglist,
+        addtax	        => ($_POST['addtax'])?"checked":"",
+        linklog	        => $linklog,
+        link	        => $link,
+        msg	            => $msg
     ));
     $t->set_block("kat","Liste","Block");
     $t->Lpparse("out",array("kat"),$_SESSION["lang"],"firma");

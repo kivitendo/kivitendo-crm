@@ -227,6 +227,10 @@ Menü um update/listen_menu.ini erweitern. Evtl. Bilderverzeichnis verlinken
 Einige Zusatzprogrammei (EuR, ZM, Inventur, Katalog), die ich für mich geschrieben habe. Werden vielleicht ja mal
 von jemanden in Perl umgesetzt, dann kommt das in die ERP.
 
+Wenn Barcode im Tex erzeugt werden soll, muss der Webserver in seinem Homeverzeichnis, idR. /var/www, 
+Schreibrechte besitzen. Oder aber es muss das Fontverzeichnis dort abgelegt werden.
+Im Homeverzeichnis des Users wird mit dem folgenden Befehl ein Verzeichnis .texmf-var angelegt
+mktexpk --mfmode / --bdpi 600 --mag 1+120/600 --dpi 720 wlc39
 
 Zusatzprogramme 2:
 ------------------

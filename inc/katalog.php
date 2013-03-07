@@ -50,7 +50,7 @@ global $db;
 
 function getArtikel($data) {
 global $db;
-    $no = array('ok','preise','addtax');
+    $no = array('ok','preise','addtax','pglist','prozent','pm','order');
     $where = '';
     $tmp[] = ' 1=1 ';
     if ($data) {
@@ -61,6 +61,12 @@ global $db;
                $cvar[] = "(CVC.name='".$hit[2]."' and CV.".$hit[1]."_value='$val' and CV.trans_id=P.id)";
                continue;
            }
+           if ($key == 'partnumber' and strpos($val,',')) {
+               $pnr = split(',',$val);
+               foreach ($pnr as $nr) $pnumber[] = "'$nr'";
+               $tmp[] = ' partnumber in ('.implode(',',$pnumber).') ';
+               continue;
+           }
            if (trim($val))  $tmp[] = " ($key ilike '%$val%') ";
         }
         if (count($tmp)>0) $where = implode("and",$tmp);
@@ -69,7 +75,7 @@ global $db;
              $cvarjoin = ",custom_variable_configs CVC LEFT JOIN custom_variables CV on CV.config_id=CVC.id ";
         }
     } 
-    if ($data['preise']>1) { 
+    if ($data['preise']>2) { 
 	$prices = ',PR.price '; 
         $pricejoin = ' LEFT JOIN prices PR on PR.parts_id=P.id';
         $pricewhere = ' and (PR.pricegroup_id='.$data['preise'].' or PR.pricegroup_id is null)';
@@ -82,7 +88,7 @@ global $db;
     $sql  = "SELECT P.*,PG.partsgroup$prices,buchungsgruppen_id as bugru ";
     $sql .= "FROM parts P LEFT JOIN partsgroup PG on PG.id=P.partsgroup_id $pricejoin $cvarjoin ";
     $sql .= "WHERE ".$where.$pricewhere;
-    $sql .= " order by PG.partsgroup,partnumber";
+    $sql .= " order by ".$data['order'];
     //echo $sql;
     $rs=$db->getAll($sql);
     return $rs;
@@ -137,7 +143,16 @@ global $db;
     $rs = $_SESSION["db"]->getAll($sql,DB_FETCHMODE_ASSOC);
     return $rs;
 }
-
+function getPgList() {
+global $db;
+    $sql = "SELECT partsgroup from partsgroup order by partsgroup";
+    $rs = $_SESSION["db"]->getAll($sql,DB_FETCHMODE_ASSOC);
+    $list = "<option value=''></option>\n";
+    if ($rs) foreach ($rs as $pg) {
+        $list .= "<option value='".$pg['partsgroup']."'>".$pg['partsgroup']."</option>\n";
+    }
+    return $list;
+}
 function getLager($data) {
 global $db;
    if ($data['lager'] == '0') {

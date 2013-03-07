@@ -1,6 +1,6 @@
 --- menu.ini.crm	2012-12-28 19:56:12.159632961 +0100
 +++ menu.ini	2012-12-28 21:41:41.871210128 +0100
-@@ -1,3 +1,122 @@
+@@ -1,3 +1,126 @@
 +[CRM]
 +
 +[CRM--Schnellsuche]
@@ -115,6 +115,10 @@
 +[CRM--Admin--Benutzer]
 +ACCESS=crm_adminuser
 +module=crm/user1.php
++
++[CRM--Admin--Mandant]
++ACCESS=crm_adminstatus
++module=crm/mandant.php
 +
 +[CRM--Admin--Status]
 +ACCESS=crm_adminstatus

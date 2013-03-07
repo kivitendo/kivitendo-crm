@@ -9,7 +9,7 @@ CREATE TABLE crmdefaults (
 );
 -- @php: *
 echo 'Variablen in DB schreiben<br>';
-$keys = array('ttpart','tttime','ttround','ttclearown','GEODB','BLZDB','CallDel','CallEdit','Expunge','MailFlag','logmail','dir_group','dir_mode','sep_cust_vendor','listLimit','showErr','logfile');
+$keys = array('ttpart','tttime','ttround','ttclearown','GEODB','BLZDB','CallDel','CallEdit','Expunge','MailFlag','logmail','dir_group','dir_mode','sep_cust_vendor','listLimit','showErr','logfile','kicktel_API','google_API');
 $sql = "insert into crmdefaults (key,val,employee) values ('%s','%s',".$_SESSION['loginCRM'].")";
 foreach ($keys as $row ) {
     $rc=$_SESSION['db']->query( sprintf( $sql, $row, $GLOBALS[$row] ) );

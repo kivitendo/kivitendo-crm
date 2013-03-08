@@ -35,7 +35,7 @@
         }
         echo json_encode($data);
     }
-    function showCalls($id,$start,$fa=false) {
+    function showCalls($id,$fa=false) {
         $nun=date("d.m.Y h:i");
         $items=getAllTelCall($id,$fa,$start,200);
         if ($items) {

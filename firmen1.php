@@ -73,7 +73,7 @@
                     }
                 }
                 insertCSVData($data,$zeile["id"]);
-                if ($i<$_SESSION['listLimit']) {
+                if ( $i < $_SESSION['listLimit'] ) {
                     $t->set_var(array(
                         Q => $Q,
                         ID => $zeile["id"],
@@ -89,12 +89,14 @@
                     ));
                     $t->parse("Block","Liste",true);
                     $i++;
-                    if ($i>=$listLimit) {
+                    if ( $i >= $_SESSION['listLimit'] ) {
                         $t->set_var(array(
-                            report => "$listLimit von ".count($daten)." Treffern",
+                            report => $_SESSION['listlimit'].' von '.count($daten).' Treffer',
                         ));
                     }
-                   
+                    $t->set_var(array(
+                        CRMTL => ($_SESSION['CRMTL'] == 1)?'visible':'hidden'
+                    ));
                 }
             }
         } else {

@@ -21,7 +21,7 @@
     <script>
 	$(function() {
 		$("#treffer")
-			.tablesorter({widthFixed: true, widgets: ['zebra']})
+			.tablesorter({widthFixed: true, widgets: ['zebra'], headers: { 7: { sorter: false } }})
 			.tablesorterPager({container: $("#pager"), size: 20})
 	});
     $(document).ready(function() {
@@ -105,7 +105,8 @@
 	<input type="button" name="etikett" id="butetikett" value=".:label:." >&nbsp;
 	<input type="button" name="brief"   id="butbrief"   value=".:serdoc:." >&nbsp;
 	<input type="button" name="vcard"   id="butvcard"   value=".:servcard:." >&nbsp;
-	<a href="sermail.php"><input type="button" name="email" value=".:sermail:."></a>
+	<a href="sermail.php"><input type="button" name="email" value=".:sermail:."></a>&nbsp;
+	<span style="visibility:{CRMTL}">Kundenzuordnung (Noch nicht implementiert)</span>
 	</form>
 </span>
 {report}

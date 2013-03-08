@@ -476,6 +476,7 @@ global $db;
         }
     }
     $where=$tmp["where"]; 
+    if ($muster['obsolete']) $where .= " and obsolete = '".$muster['obsolete']."' ";
     $tabs=$tmp["tabs"];
     $cols=$tmp["cols"];
     if ($where<>"") {

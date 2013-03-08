@@ -194,6 +194,8 @@ $texts  = array(
   '.:close:.'           => 'schließen',
   '.:unit:.'            => 'Einheit',
   '.:qty:.'             => 'Menge',
-  '.:part:.'            => 'Artikel'
+  '.:part:.'            => 'Artikel',
+  '.:obsolete:.'        => 'Ungültig',
+  '.:equal:.'           => 'Egal'
 ); 
 ?>

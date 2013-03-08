@@ -84,7 +84,8 @@
                         Ort => $zeile["city"],
                         Strasse => $zeile["street"],
                         Telefon => $zeile["phone"],
-                        eMail => $zeile["email"]
+                        eMail => $zeile["email"],
+                        obsolete => ($zeile['obsolete']=='t')?'.:yes:.':''
                     ));
                     $t->parse("Block","Liste",true);
                     $i++;

@@ -79,12 +79,13 @@
 			<th>Strasse</th>
 			<th>Telefon</th>
 			<th>E-Mail</th>
+			<th>.:obsolete:.</th>
 		</tr>
 	</thead>
 	<tbody>
 <!-- BEGIN Liste -->
     <tr onClick="showK({ID});">
-		<td>{KdNr}</td><td>{Name}</td><td>{Plz}</td><td>{Ort}</td><td>{Strasse}</td><td>{Telefon}</td><td>{eMail}</td></tr>
+		<td>{KdNr}</td><td>{Name}</td><td>{Plz}</td><td>{Ort}</td><td>{Strasse}</td><td>{Telefon}</td><td>{eMail}</td><td>{obsolete}</td></tr>
 <!-- END Liste -->
 	</tbody>
 </table>

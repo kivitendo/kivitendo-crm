@@ -143,7 +143,7 @@
                         $('#shiptophone').empty().append(adr.shiptophone);
                         $('#shiptofax').empty().append(adr.shiptofax);
                         $('#shiptoemail').empty().append(data.mail);
-                        $('a#karte2').attr("href",data.karte);
+                        $('#karte2').attr("href",data.karte);
                     }
         })
     }
@@ -199,7 +199,9 @@
             });
             $(".firmabutton").button().click(
             function( event ) {
-                event.preventDefault();
+                if ( this.getAttribute('name') != 'extra' && this.getAttribute('name') != 'karte' ) {
+                    event.preventDefault();
+                };
             });
         }
     );
@@ -234,6 +236,7 @@
             <option value='onClick:{sales}_order'>.:order:. .:develop:.</option>
             <option value='onClick:{request}_quotation'>.:quotation:. .:develop:.</option>
             <option value='onClick:invoice'>.:invoice:. .:develop:.</option>
+            {begin_comment}<option value='lxcars/lxcmain.php?owner={FID}&task=1'>KFZ-Daten</option>{end_comment}
         </select>
     </span>
     <span style="float:left; padding-left:3em; visibility:{tools};" >
@@ -255,7 +258,7 @@
 
 <span id='contentbox' style="padding-top:2em;" >
     <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid black;" >
-        <div class="gross" style="float:left; width:64%; height:10em; text-align:left; border-bottom: 0px solid black; padding:0.2em;" >
+        <div class="gross" style="float:left; width:60%; height:25em; text-align:left; border: 0px solid black; padding:0.2em;" >
             <span class="fett">{Fname1}</span><br />
             {Fdepartment_1} {Fdepartment_2}<br />
             {Strasse}<br />
@@ -271,22 +274,19 @@
             &nbsp;[<a href="mail.php?TO={eMail}&KontaktTO=C{FID}">{eMail}</a>]<br />
             &nbsp;<a href="{Internet}" target="_blank">{Internet}</a></span>
         </div>
-        <div style="float:left; width:33%; height:10em; text-align:right; border-bottom: 0px solid black; padding:2px;">
-            <span class="fett">{kdnr}</span><br />
-            {IMG}<br /><br />
-            <img src="image/kreuzchen.gif" title=".:locked address:." style="visibility:{verstecke};" >
-            <br />
+        <div style="float:left; width:37%; height:25em; text-align:right; border: 0px solid black; padding:0.2em;">
+            <span valign='top'><span class="fett">{kdnr}</span> <img src="image/kreuzchen.gif" title=".:locked address:." style="visibility:{verstecke};" > {verkaeufer}
+            {IMG}<br /></span>
+            <br class='mini'>
             <span style="visibility:{ANGEBOT_BUTTON};"><a class="firmabutton" href="#" onClick="doOe('{sales}_quotation');"><img src="image/angebot.png" title="Angebot/Anfrage erstellen" border="0"></a>&nbsp;</span>
             <span style="visibility:{AUFTRAG_BUTTON};"><a class="firmabutton" href="#" onClick="doOe('{request}_order');"><img src="image/auftrag.png" title="neuen Auftrag eingeben" border="0"></a>&nbsp;</span>
-            <span style="visibility:{RECHNUNG_BUTTON};"><a class="firmabutton" href="#" onClick="doIr();"><img src="image/rechnung.png" title="neue Rechnung erstellen" border="0"></a>&nbsp;</span>
-            <br /><br />
-            <span style="visibility:{zeigeextra};"><a class="firmabutton" href="extrafelder.php?owner={Q}{FID}" target="_blank"><img src="image/extra.png" title="Extrafelder" border="0"></a>&nbsp;</span>
-            <span style="visibility:{zeigeplan};"><a class="firmabutton" href="{KARTE1}" target="_blank"><img src="image/karte.gif" title=".:city map:." border="0"></a>&nbsp;</span>
-            <a class="firmabutton" href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0" /></a>&nbsp;<br>
-            <br />
+            <span style="visibility:{RECHNUNG_BUTTON};"><a class="firmabutton" href="#" onClick="doIr();"><img src="image/rechnung.png" title="neue Rechnung erstellen" border="0"></a>&nbsp;</span><br />
+            <br class='mini'>
+            <span style="visibility:{zeigeextra};"><a class="firmabutton" href="extrafelder.php?owner={Q}{FID}" name="extra" target="_blank"><img src="image/extra.png" title="Extrafelder" border="0"></a>&nbsp;</span>
+            <span style="visibility:{zeigeplan};"><a class="firmabutton" href="{KARTE1}" name="karte" target="_blank"><img src="image/karte.gif" title=".:city map:." border="0"></a>&nbsp;</span>
+            <span><a class="firmabutton" href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0" /></a>&nbsp;</span><br>
+            <br class='mini'>
             {begin_comment}<a class="firmabutton" href="lxcars/lxcmain.php?owner={FID}&task=1" title="KFZ-Daten"><img src="./lxcars/image/lxcmain.png" alt="Cars" border="1" /></a>{end_comment}
-            &nbsp;
-            {verkaeufer}
         </div>
         <br />
     </div>

@@ -195,6 +195,7 @@ $texts  = array(
   '.:unit:.'            => 'Unit',
   '.:qty:.'             => 'Qty',
   '.:part:.'            => 'Part'
-
+  '.:obsolete:.'        => 'Obsolete',
+  '.:equal:.'           => 'Equal'
 );
 ?>

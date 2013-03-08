@@ -1,6 +1,6 @@
 <?php
-// $Id: user2.php,v 1.4 2005/11/02 10:37:52 hli Exp $
     require_once("inc/stdLib.php");
+    if ( $_SESSION['CRMTL'] != 1 ) header("location:no.html");
     include("inc/template.inc");
     include("inc/crmLib.php");
     include("inc/UserLib.php");
@@ -22,18 +22,9 @@
     $grp=getGruppen();
     $mit=getAllUser(array(0=>true,1=>"%"));
     $t = new Template($base);
-    $menu =  $_SESSION['menu'];
-    $t->set_var(array(
-        JAVASCRIPTS   => $menu['javascripts'],
-        STYLESHEETS   => $menu['stylesheets'],
-        PRE_CONTENT   => $menu['pre_content'],
-        START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content'],
-        'THEME'         => $_SESSION['theme'],
-    ));
+    doHeader($t);
     $t->set_file(array("usr2" => "user3.tpl"));
     $t->set_var(array(
-            ERPCSS => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
             UID    => $_SESSION["loginCRM"],
             msg    => $msg
             ));

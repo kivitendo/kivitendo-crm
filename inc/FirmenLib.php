@@ -540,7 +540,7 @@ global $db;
     $kenz=array("C" => "K","V" => "L");
     $tab=array("C" => "customer","V" => "vendor");
     include("inc/conf.php");
-    if ($neu && $feature_unique_name_plz) {
+    if ($neu && $_SESSION['feature_unique_name_plz']=='t') {
         $sql="SELECT id FROM ".$tab[$typ]." WHERE name = '".$daten['name']."' AND zipcode = '".$daten['zipcode']."'";
         $rs=$db->getAll($sql);
         if ($rs[0]['id']) return array(-1,".:Customer / Vendor exist with same zipcode:.");

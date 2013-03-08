@@ -18,4 +18,7 @@ ALTER TABLE employee     ADD COLUMN dir_mode                 CHAR(4) DEFAULT '07
 ALTER TABLE employee     ADD COLUMN sep_cust_vendor          BOOL    DEFAULT TRUE;
 ALTER TABLE employee     ADD COLUMN show_err                 BOOL    DEFAULT FALSE;
 ALTER TABLE employee     ADD COLUMN data_from_tel            BOOL    DEFAULT FALSE;
-ALTER TABLE employee     ADD COLUMN php_error                TEXT;
+ALTER TABLE employee     ADD COLUMN php_error                INT;
+ALTER TABLE employee     ADD COLUMN zeige_karte              BOOL    DEFAULT TRUE;
+ALTER TABLE employee     ADD COLUMN zeige_etikett            BOOL    DEFAULT FALSE;
+ALTER TABLE employee     ADD COLUMN zeige_tools              BOOL    DEFAULT TRUE;

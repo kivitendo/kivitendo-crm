@@ -239,7 +239,7 @@
             {begin_comment}<option value='lxcars/lxcmain.php?owner={FID}&task=1'>KFZ-Daten</option>{end_comment}
         </select>
     </span>
-    <span style="float:left; padding-left:3em; visibility:{tools};" >
+    <span style="float:left; padding-left:3em; visibility:{zeige_tools};" >
         <img src="tools/rechner.png" onClick="toolwin('tools/Rechner.html')" title=".:simple calculator:." style="margin-bottom:1.3em;"> &nbsp;
         <img src="tools/notiz.png" onClick="toolwin('postit.php?popup=1')" title=".:postit notes:." style="margin-bottom:1.3em;"> &nbsp;
         <img src="tools/kalender.png" onClick="toolwin('tools/kalender.php?Q={Q}&id={FID}')" title=".:calender:." style="margin-bottom:1.3em;"> &nbsp;
@@ -282,11 +282,11 @@
             <span style="visibility:{AUFTRAG_BUTTON};"><a class="firmabutton" href="#" onClick="doOe('{request}_order');"><img src="image/auftrag.png" title="neuen Auftrag eingeben" border="0"></a>&nbsp;</span>
             <span style="visibility:{RECHNUNG_BUTTON};"><a class="firmabutton" href="#" onClick="doIr();"><img src="image/rechnung.png" title="neue Rechnung erstellen" border="0"></a>&nbsp;</span><br />
             <br class='mini'>
-            <span style="visibility:{zeigeextra};"><a class="firmabutton" href="extrafelder.php?owner={Q}{FID}" name="extra" target="_blank"><img src="image/extra.png" title="Extrafelder" border="0"></a>&nbsp;</span>
-            <span style="visibility:{zeigeplan};"><a class="firmabutton" href="{KARTE1}" name="karte" target="_blank"><img src="image/karte.gif" title=".:city map:." border="0"></a>&nbsp;</span>
-            <span><a class="firmabutton" href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0" /></a>&nbsp;</span><br>
+            <span style="visibility:{zeige_extra};"><a class="firmabutton" href="extrafelder.php?owner={Q}{FID}" name="extra" target="_blank"><img src="image/extra.png" title="Extrafelder" border="0"></a>&nbsp;</span>
+            <span style="visibility:{zeige_karte};"><a class="firmabutton" href="{KARTE1}" name="karte" target="_blank"><img src="image/karte.gif" title=".:city map:." border="0"></a>&nbsp;</span>
+            <span style="visibility:{zeige_etikett};"><a class="firmabutton" href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0" /></a>&nbsp;</span><br>
             <br class='mini'>
-            {begin_comment}<a class="firmabutton" href="lxcars/lxcmain.php?owner={FID}&task=1" title="KFZ-Daten"><img src="./lxcars/image/lxcmain.png" alt="Cars" border="1" /></a>{end_comment}
+            {begin_comment}<a href="lxcars/lxcmain.php?owner={FID}&task=1" title="KFZ-Daten"><img src="./lxcars/image/lxcmain.png" alt="Cars" border="1" /></a>{end_comment}
         </div>
         <br />
     </div>

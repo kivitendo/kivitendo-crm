@@ -23,10 +23,13 @@
         $_SESSION["angebot_button"]=$_POST["angebot_button"]; 
         $_SESSION["rechnung_button"]=$_POST["rechnung_button"]; 
         $_SESSION["zeige_extra"]=$_POST["zeige_extra"]; 
-        $_SESSION["zeige_lxcars"]=$_POST["zeige_lxcars"];         
+        $_SESSION["zeige_lxcars"]=$_POST["zeige_lxcars"];  
+        $_SESSION["zeige_karte"]=$_POST["zeige_karte"];
+        $_SESSION["zeige_etikett"]=$_POST["zeige_etikett"];
+        $_SESSION["zeige_tools"]=$_POST["zeige_tools"];       
         $_SESSION["tinymce"]=$_POST["tinymce"];
         $_SESSION['theme']=($_POST['theme']=='base')?'':'<link rel="stylesheet" type="text/css" href="'.$_SESSION['baseurl'].'crm/jquery-ui/themes/'.$_POST['theme'].'/jquery-ui.css">';  
-        
+        $_SESSION['feature_unique_name_plz']=$_POST["feature_unique_name_plz"];
         } else if ($_POST["mkmbx"]) {
         $rc=createMailBox($_POST["Postf2"],$_POST["Login"]);
     } 
@@ -105,9 +108,14 @@
 	        angebot_button         => ($fa['angebot_button']=='t')?'checked':'',
 	        rechnung_button        => ($fa['rechnung_button']=='t')?'checked':'',
 	        zeige_extra            => ($fa['zeige_extra']=='t')?'checked':'',
+	        zeige_karte            => ($fa['zeige_karte']=='t')?'checked':'',
+	        zeige_etikett          => ($fa['zeige_etikett']=='t')?'checked':'',
+	        zeige_tools          => ($fa['zeige_tools']=='t')?'checked':'',
+	        feature_unique_name_plz=> ($fa['feature_unique_name_plz']=='t')?'checked':'',
 	        zeige_lxcars           => ($fa['zeige_lxcars']=='t')?'checked':'',
             tinymce                => ($fa['tinymce'] == 't')?'checked':'',
             ));
+            
     if ( $own ) {
         if ($_GET["id"]) {    
             $t->set_var(array(vertreter => $fa["vertreter"]." ".$fa["vname"]));

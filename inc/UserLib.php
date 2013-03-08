@@ -19,7 +19,7 @@ global $db;
                 'msrv','port','proto','ssl','postf','mailuser','kennw','postf2','interv','pre','abteilung','position',
                 'mailsign','email','icalart','icaldest','icalext','preon','streetview','planspace','theme','feature_ac',
                 'feature_ac_minlength','feature_ac_delay','auftrag_button','angebot_button','rechnung_button','zeige_extra',
-                'zeige_lxcars','tinymce');
+                'zeige_lxcars','tinymce','feature_unique_name_plz','zeige_karte','zeige_etikett','zeige_tools');
     $sql  = "update employee set ";
     foreach ($fld as $key) {
         if ($val[$key]<>"") {

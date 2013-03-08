@@ -9,26 +9,26 @@
         } else { $_POST["proto"] = 'f';}
         $rc=saveUserStamm($_POST);
         $id=$_POST["UID"];
-        $_SESSION["termbegin"]=$_POST["termbegin"];
-        $_SESSION["termend"]=$_POST["termend"];
-        $_SESSION["termseq"]=$_POST["termseq"];
-        $_SESSION["pre"]=$_POST["pre"];
-        $_SESSION["preon"]=$_POST["preon"];
-        $_SESSION["kdview"]=$_POST["kdview"];
-        $_SESSION["planspace"]=$_POST["planspace"];
-        $_SESSION["feature_ac"]=$_POST["feature_ac"];
-        $_SESSION["feature_ac_minLength"]=$_POST["feature_ac_minLength"];
-        $_SESSION["feature_ac_delay"]=$_POST["feature_ac_delay"];  
-        $_SESSION["auftrag_button"]=$_POST["auftrag_button"]; 
-        $_SESSION["angebot_button"]=$_POST["angebot_button"]; 
-        $_SESSION["rechnung_button"]=$_POST["rechnung_button"]; 
-        $_SESSION["zeige_extra"]=$_POST["zeige_extra"]; 
-        $_SESSION["zeige_lxcars"]=$_POST["zeige_lxcars"];  
-        $_SESSION["zeige_karte"]=$_POST["zeige_karte"];
-        $_SESSION["zeige_etikett"]=$_POST["zeige_etikett"];
-        $_SESSION["zeige_tools"]=$_POST["zeige_tools"];       
-        $_SESSION["tinymce"]=$_POST["tinymce"];
-        $_SESSION['theme']=($_POST['theme']=='base')?'':'<link rel="stylesheet" type="text/css" href="'.$_SESSION['baseurl'].'crm/jquery-ui/themes/'.$_POST['theme'].'/jquery-ui.css">';  
+        $_SESSION["termbegin"]  	= $_POST["termbegin"];
+        $_SESSION["termend"]		= $_POST["termend"];
+        $_SESSION["termseq"]		= $_POST["termseq"];
+        $_SESSION["pre"]		= $_POST["pre"];
+        $_SESSION["preon"]		= $_POST["preon"];
+        $_SESSION["kdview"]		= $_POST["kdview"];
+        $_SESSION["planspace"]		= $_POST["planspace"];
+        $_SESSION["feature_ac"]		= $_POST["feature_ac"];
+        $_SESSION["feature_ac_minlength"]	= $_POST["feature_ac_minlength"];
+        $_SESSION["feature_ac_delay"]	= $_POST["feature_ac_delay"];  
+        $_SESSION["auftrag_button"]	= $_POST["auftrag_button"]; 
+        $_SESSION["angebot_button"]	= $_POST["angebot_button"]; 
+        $_SESSION["rechnung_button"]	= $_POST["rechnung_button"]; 
+        $_SESSION["zeige_extra"]	= $_POST["zeige_extra"]; 
+        $_SESSION["zeige_lxcars"]	= $_POST["zeige_lxcars"];  
+        $_SESSION["zeige_karte"]	= $_POST["zeige_karte"];
+        $_SESSION["zeige_etikett"]	= $_POST["zeige_etikett"];
+        $_SESSION["zeige_tools"]	= $_POST["zeige_tools"];       
+        $_SESSION["tinymce"]		= $_POST["tinymce"];
+        $_SESSION['theme']		= ($_POST['theme']=='base')?'':'<link rel="stylesheet" type="text/css" href="'.$_SESSION['baseurl'].'crm/jquery-ui/themes/'.$_POST['theme'].'/jquery-ui.css">';  
         $_SESSION['feature_unique_name_plz']=$_POST["feature_unique_name_plz"];
         } else if ($_POST["mkmbx"]) {
         $rc=createMailBox($_POST["Postf2"],$_POST["Login"]);
@@ -44,7 +44,6 @@
         $t->set_file(array("usr1" => "user1.tpl"));
         $own = true;
     }
-
     if (empty($fa["ssl"])) $fa["ssl"] = "n";
     if (empty($fa["proto"])) $fa["proto"] = "t";
     if ($fa) foreach ($fa["gruppen"] as $row) {
@@ -99,20 +98,20 @@
             icaldest    => $fa["icaldest"],
             icalart.$fa["icalart"] => "selected",
             preon       => ($fa["preon"])?"checked":"",
-	        streetview  => ($fa['streetview'])?$fa['streetview']:$stadtplan,
-	        planspace   => ($fa['planspace'])?$fa['planspace']:$planspace,
-	        feature_ac             => ($fa['feature_ac']=='t')?'checked':'',
-	        feature_ac_minlength   => $fa['feature_ac_minlength'],
-	        feature_ac_delay       => $fa['feature_ac_delay'],
-	        auftrag_button         => ($fa['auftrag_button']=='t')?'checked':'',
-	        angebot_button         => ($fa['angebot_button']=='t')?'checked':'',
-	        rechnung_button        => ($fa['rechnung_button']=='t')?'checked':'',
-	        zeige_extra            => ($fa['zeige_extra']=='t')?'checked':'',
-	        zeige_karte            => ($fa['zeige_karte']=='t')?'checked':'',
-	        zeige_etikett          => ($fa['zeige_etikett']=='t')?'checked':'',
-	        zeige_tools          => ($fa['zeige_tools']=='t')?'checked':'',
-	        feature_unique_name_plz=> ($fa['feature_unique_name_plz']=='t')?'checked':'',
-	        zeige_lxcars           => ($fa['zeige_lxcars']=='t')?'checked':'',
+	    streetview  => ($fa['streetview'])?$fa['streetview']:$stadtplan,
+	    planspace   => ($fa['planspace'])?$fa['planspace']:$planspace,
+	    feature_ac             => ($fa['feature_ac']=='t')?'checked':'',
+	    feature_ac_minlength   => $fa['feature_ac_minlength'],
+	    feature_ac_delay       => $fa['feature_ac_delay'],
+	    auftrag_button         => ($fa['auftrag_button']=='t')?'checked':'',
+	    angebot_button         => ($fa['angebot_button']=='t')?'checked':'',
+	    rechnung_button        => ($fa['rechnung_button']=='t')?'checked':'',
+	    zeige_extra            => ($fa['zeige_extra']=='t')?'checked':'',
+	    zeige_karte            => ($fa['zeige_karte']=='t')?'checked':'',
+	    zeige_etikett          => ($fa['zeige_etikett']=='t')?'checked':'',
+	    zeige_tools            => ($fa['zeige_tools']=='t')?'checked':'',
+	    feature_unique_name_plz=> ($fa['feature_unique_name_plz']=='t')?'checked':'',
+	    zeige_lxcars           => ($fa['zeige_lxcars']=='t')?'checked':'',
             tinymce                => ($fa['tinymce'] == 't')?'checked':'',
             ));
             

@@ -188,8 +188,10 @@ global $ERPNAME,$erpConfigFile;
     $_SESSION["cookie"] = $cookiename;
     $_SESSION["db"]     = new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
     //$_SESSION["authcookie"] = $authcookie; //todo kann sicher weg 
-    $sql = "select * from employee where login='".$_SESSION["login"]."'";
-    $rs = $_SESSION["db"]->getAll($sql);
+    include('UserLib.php');
+    $rs = getUserStamm(0,$_SESSION["login"]);
+    //$sql = "select * from employee where login='".$_SESSION["login"]."'";
+    //$rs = $_SESSION["db"]->getAll($sql);
     if( !$rs ) {
         //fclose($fd);  //todo kann sicher weg
         return false;
@@ -197,7 +199,7 @@ global $ERPNAME,$erpConfigFile;
         $charset = ini_get("default_charset");
         if ( $charset == "" ) $charset = $dbcharset;
         $_SESSION["charset"] = $charset;
-        $tmp = $rs[0];
+        $tmp = $rs;
         $BaseUrl  = (empty( $_SERVER['HTTPS'] )) ? 'http://' : 'https://';
         $BaseUrl .= $_SERVER['HTTP_HOST'];
         $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
@@ -208,7 +210,7 @@ global $ERPNAME,$erpConfigFile;
         $_SESSION["preon"]      = $tmp["preon"];
         $_SESSION["interv"]     = ($tmp["interv"]>0)?$tmp["interv"]:60;
         $_SESSION["loginCRM"]   = $tmp["id"];
-        $_SESSION["kdview"]     = $tmp["kdview"];
+        $_SESSION["kdview"]     = ($tmp["kdview"])?$tmp['kdview']:0;
         $_SESSION["streetview"] = $tmp["streetview"];
         $_SESSION["planspace"]  = $tmp["planspace"];
         $_SESSION["feature_ac"]             = $tmp["feature_ac"];

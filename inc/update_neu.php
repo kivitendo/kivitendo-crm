@@ -69,8 +69,13 @@ require "version.php";
                         $code = true;
                     } else if ( $tmp == "exec" ) {
                         $code = false;
-                        eval($query);
+                        $rc = eval($query);
                         $query = "";
+                        if ( $rc < 0 ) {
+                           echo "Probleme beim Update, alle &Auml;nderungen werden zur&uuml;ck genommen";
+                           $db->rollback();
+                           exit(1); 
+                        }
                     } else {
                         ${$tmp} = $treffer[2];
                         echo $tmp.":".${$tmp}."<br>"; flush();

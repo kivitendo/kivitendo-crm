@@ -357,6 +357,13 @@ CREATE TABLE crmdefaults (
     val text,
     modify timestamp without time zone DEFAULT NOW()
 );
+CREATE TABLE crmemployee (
+    ceid integer DEFAULT nextval('crmid'::text) NOT NULL,
+    uid int,
+    key text,
+    val text,
+    typ char(1) DEFAULT 't'
+);
 INSERT INTO crmdefaults (key,val,employee) VALUES ('ttpart','',-1);
 INSERT INTO crmdefaults (key,val,employee) VALUES ('tttime','60',-1);
 INSERT INTO crmdefaults (key,val,employee) VALUES ('ttround','15',-1);
@@ -456,29 +463,6 @@ ALTER TABLE vendor ADD COLUMN headcount int;
 ALTER TABLE shipto ADD COLUMN shiptoowener int4;
 ALTER TABLE shipto ADD COLUMN shiptoemployee int4;
 ALTER TABLE shipto ADD COLUMN shiptobland int4;
-ALTER TABLE employee ADD COLUMN msrv character varying(75);
-ALTER TABLE employee ADD COLUMN postf character varying(75);
-ALTER TABLE employee ADD COLUMN kennw character varying(20);
-ALTER TABLE employee ADD COLUMN postf2 character varying(25);
-ALTER TABLE employee ADD COLUMN abteilung character varying(75);
-ALTER TABLE employee ADD COLUMN position character varying(75);
-ALTER TABLE employee ADD COLUMN interv int4;
-ALTER TABLE employee ADD COLUMN pre character varying(5);
-ALTER TABLE employee ADD COLUMN vertreter int4;
-ALTER TABLE employee ADD COLUMN mailsign text;
-ALTER TABLE employee ADD COLUMN email character varying(50);
-ALTER TABLE employee ADD COLUMN etikett int4;
-ALTER TABLE employee ADD COLUMN termbegin integer;
-ALTER TABLE employee ADD COLUMN termend integer;
-ALTER TABLE employee ADD COLUMN termseq int;
-ALTER TABLE employee ALTER COLUMN termseq SET DEFAULT 30;
-ALTER TABLE employee ADD COLUMN kdview integer;
-ALTER TABLE employee alter COLUMN kdview SET DEFAULT 1;
-ALTER TABLE employee ADD COLUMN icalart text;
-ALTER TABLE employee ADD COLUMN icaldest text;
-ALTER TABLE employee ADD COLUMN icalext text;
-ALTER TABLE employee ADD COLUMN streetview text;
-ALTER TABLE employee ADD COLUMN planspace char;
 --ALTER TABLE contacts ADD COLUMN cp_street character varying(75);
 --ALTER TABLE contacts ADD COLUMN cp_zipcode character varying(10);
 --ALTER TABLE contacts ADD COLUMN cp_city character varying(75);
@@ -495,10 +479,6 @@ ALTER TABLE contacts ADD COLUMN cp_grafik character varying(5);
 ALTER TABLE contacts ADD COLUMN cp_country character varying(3);
 ALTER TABLE contacts ADD COLUMN cp_salutation text;
 ALTER TABLE defaults ADD COLUMN contnumber text;
-
-UPDATE employee set etikett=(select id from labels limit 1);
-UPDATE defaults SET contnumber=1000;
-UPDATE employee SET kdview = 1;
 
 INSERT INTO crm (uid,datum,version) VALUES (0,now(),'1.6.0');
 
@@ -547,3 +527,4 @@ INSERT INTO schema_info (tag,login) VALUES ('crm_timetracker_budget','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_timetracker_parts','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_wissen_own','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_wvhistory','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_CRMemployee','install');

@@ -821,7 +821,7 @@ global $db;
     $tmpName_0="01010101";    
     $tmpName_1=uniqid (rand());
     $sql="DELETE FROM ".$tab[$typ]." WHERE name LIKE '".$tmpName_0."%'";
-    $rc=$db->query($sql);
+   // $rc=$db->query($sql); Kommentiert bis ERP-Bug #2201 gefixt ist
     if (!$id) {$uid='null';} else {$uid=$id;};
     $sql="insert into ".$tab[$typ]." (name,employee) values ('$tmpName_0$tmpName_1',$uid)";
     $rc=$db->query($sql);

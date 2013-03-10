@@ -33,7 +33,7 @@
         $init = "\tvar initkat = -1;\n";
     }
 
-    if ($tinymce) {
+    if ($_SESSION['tinymce']) {
         $tiny  =  "<script language='javascript' type='text/javascript' src='inc/tiny_mce/tiny_mce.js'></script>\n";
         $init  .= "\tvar tiny = true;\n";
     } else {
@@ -41,10 +41,10 @@
     };
 
     $tpl->set_var(array(
-        init     => $init,
-        popup    => $popup,
-        PICUP    => "false",
-        tiny     => $tiny,
+        'init'     => $init,
+        'popup'    => $popup,
+        'PICUP'    => "false",
+        'tiny'     => $tiny,
         ));
 
     if ( ( $content["owner"] == $_SESSION["loginCRM"] ) || ( $content['owner'] == '' ) ) {

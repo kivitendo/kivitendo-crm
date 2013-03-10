@@ -33,7 +33,8 @@ global $db;
             $sql .= $key."=null,";
         }
     }
-    $sql = substr($sql,-1);
+    
+    $sql = substr($sql,0,-1);
     $sql .= " where id=".$val["uid"];
     $rc=$db->query($sql);
     if ($val["homephone"]) mkTelNummer($val["uid"],"E",array($val["homephone"]));

@@ -187,47 +187,50 @@ global $ERPNAME,$erpConfigFile;
     $_SESSION["sessid"] = $cookie;
     $_SESSION["cookie"] = $cookiename;
     $_SESSION["db"]     = new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
-    //$_SESSION["authcookie"] = $authcookie; //todo kann sicher weg 
-    include('UserLib.php');
-    $rs = getUserStamm(0,$_SESSION["login"]);
-    //$sql = "select * from employee where login='".$_SESSION["login"]."'";
-    //$rs = $_SESSION["db"]->getAll($sql);
+    $sql = "select * from employee where login='".$_SESSION["login"]."'";
+    $rs = $_SESSION["db"]->getAll($sql);
+    $_SESSION['uid']=$rs[0]['id'];//
     if( !$rs ) {
-        //fclose($fd);  //todo kann sicher weg
         return false;
     } else {
         $charset = ini_get("default_charset");
         if ( $charset == "" ) $charset = $dbcharset;
         $_SESSION["charset"] = $charset;
-        $tmp = $rs;
+        $tmp = $rs[0];
+        include("inc/UserLib.php");
+        $user_data=getUserStamm($_SESSION["uid"]);
+        //print_r($user_data);
         $BaseUrl  = (empty( $_SERVER['HTTPS'] )) ? 'http://' : 'https://';
         $BaseUrl .= $_SERVER['HTTP_HOST'];
         $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
-        $_SESSION["termbegin"]  = (($tmp["termbegin"]>=0)?$tmp["termbegin"]:8);
-        $_SESSION["termend"]    = ($tmp["termend"])?$tmp["termend"]:19;
-        $_SESSION["termseq"]    = ($tmp["termseq"])?$tmp["termseq"]:30;
-        $_SESSION["Pre"]        = $tmp["pre"];
-        $_SESSION["preon"]      = $tmp["preon"];
-        $_SESSION["interv"]     = ($tmp["interv"]>0)?$tmp["interv"]:60;
-        $_SESSION["loginCRM"]   = $tmp["id"];
-        $_SESSION["kdview"]     = ($tmp["kdview"])?$tmp['kdview']:0;
-        $_SESSION["streetview"] = $tmp["streetview"];
-        $_SESSION["planspace"]  = $tmp["planspace"];
-        $_SESSION["feature_ac"]             = $tmp["feature_ac"];
-        $_SESSION["feature_ac_minlength"]   = $tmp["feature_ac_minlength"];
-        $_SESSION["feature_ac_delay"]       = $tmp["feature_ac_delay"];
-        $_SESSION["auftrag_button"]         = $tmp["auftrag_button"];
-        $_SESSION["angebot_button"]         = $tmp["angebot_button"];
-        $_SESSION["rechnung_button"]        = $tmp["rechnung_button"];
-        $_SESSION["zeige_extra"]            = $tmp["zeige_extra"];
-        $_SESSION["zeige_lxcars"]           = $tmp["zeige_lxcars"];
+        $_SESSION["termbegin"]              = (($user_data["termbegin"]>=0)?$user_data["termbegin"]:8);
+        $_SESSION["termend"]                = ($user_data["termend"])?$user_data["termend"]:19;
+        $_SESSION["termseq"]                = ($user_data["termseq"])?$user_data["termseq"]:30;
+        $_SESSION["Pre"]                    = $user_data["pre"];
+        $_SESSION["preon"]                  = $user_data["preon"];
+        $_SESSION["interv"]                 = ($user_data["interv"]>0)?$user_data["interv"]:60;
+        $_SESSION["loginCRM"]               = $user_data["id"];
+        $_SESSION["kdview"]                 = $user_data["kdview"];
+        $_SESSION["streetview"]             = $user_data["streetview"];
+        $_SESSION["planspace"]              = $user_data["planspace"];
+        $_SESSION["feature_ac"]             = $user_data["feature_ac"];
+        $_SESSION["feature_ac_minlength"]   = $user_data["feature_ac_minlength"];
+        $_SESSION["feature_ac_delay"]       = $user_data["feature_ac_delay"];
+        $_SESSION["auftrag_button"]         = $user_data["auftrag_button"];
+        $_SESSION["angebot_button"]         = $user_data["angebot_button"];
+        $_SESSION["rechnung_button"]        = $user_data["rechnung_button"];
+        $_SESSION["zeige_extra"]            = $user_data["zeige_extra"];
+        $_SESSION["zeige_karte"]            = $user_data["zeige_karte"];
+        $_SESSION["zeige_etikett"]          = $user_data["zeige_etikett"];
+        $_SESSION["zeige_lxcars"]           = $user_data["zeige_lxcars"];
+        $_SESSION["tinymce"]                = $user_data["tinymce"];
         $sql = "select * from defaults";
         $rs = $_SESSION["db"]->getAll($sql);
         $_SESSION["ERPver"]     = $rs[0]["version"];
         $_SESSION["menu"]       = makeMenu($_SESSION["sessid"],$_SESSION["token"]);
         $_SESSION["basepath"]   = $BaseUrl;
         $_SESSION['token']      = False;
-        $_SESSION['theme']      = ($tmp['theme']=='base')?'':'<link rel="stylesheet" type="text/css" href="'.$_SESSION['baseurl'].'crm/jquery-ui/themes/'.$tmp['theme'].'/jquery-ui.css">';
+        $_SESSION['theme']      = ($user_data['theme']=='base')?'':'<link rel="stylesheet" type="text/css" href="'.$_SESSION['baseurl'].'crm/jquery-ui/themes/'.$user_data['theme'].'/jquery-ui.css">';
         $sql = "select * from crmdefaults";
         $rs = $_SESSION["db"]->getAll($sql);  //Vor dem Update crm_defauts gibt es einen Fehler
         if ($rs) foreach ($rs as $row) $_SESSION[$row['key']] = $row['val'];
@@ -366,9 +369,10 @@ function berechtigung($tab="") {
 }
 
 function chkAnzahl(&$data,&$anzahl) {    
+global $listLimit;
     if ( $data ) { $cnt = count($data);
     } else { $cnt = 0; }
-    if ( ($cnt+$anzahl) > $_SESSION['listLimit'] ) {
+    if ( ($cnt+$anzahl) > $listLimit ) {
         $anzahl = 0;
         return false;
      } else {

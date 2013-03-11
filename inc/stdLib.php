@@ -369,10 +369,9 @@ function berechtigung($tab="") {
 }
 
 function chkAnzahl(&$data,&$anzahl) {    
-global $listLimit;
     if ( $data ) { $cnt = count($data);
     } else { $cnt = 0; }
-    if ( ($cnt+$anzahl) > $listLimit ) {
+    if ( ($cnt+$anzahl) > $_SESSION['listLimit'] ) {
         $anzahl = 0;
         return false;
      } else {

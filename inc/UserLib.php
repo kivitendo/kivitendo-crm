@@ -19,7 +19,7 @@ global $db;
     $fld = array('msrv' => 't', 'postf' => 't', 'kennw' => 't', 'postf2' => 't','mailsign' => 't','email' => 't','mailuser' => 't','port' => 'i','proto' => 'b','ssl' => 't',
                  'abteilung' => 't','position' => 't','interv' => 'i','pre' => 't','preon' => 'b','vertreter' => 'i',
                  'etikett' => 'i','termbegin' => 'i','termend' => 'i','termseq' => 'i','kdview' => 'i','icalart' => 't','icaldest' => 't','icalext' => 't',
-                 'pwd' => 't','deleted' => 'b','streetview' => 't','planspace' => 't','theme' => 't','helpmode' => 'b','listen_theme'=>'t',
+                 'deleted' => 'b','streetview' => 't','planspace' => 't','theme' => 't','helpmode' => 'b','listen_theme'=>'t',
                  'auftrag_button' => 'b','angebot_button' => 'b','rechnung_button' => 'b',
                  'zeige_extra' => 'b','zeige_lxcars' => 'b','zeige_karte' => 'b','zeige_tools' => 'b','zeige_etikett' => 'b',
                  'feature_ac' => 'b','feature_ac_minlength' => 'i','feature_ac_delay' => 'i','feature_unique_name_plz' => 'b',

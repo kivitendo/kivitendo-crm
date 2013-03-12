@@ -1,11 +1,14 @@
 <?php
-	require_once("inc/stdLib.php");
+    require_once("inc/stdLib.php");
     $keys = array('ttpart','tttime','ttround','ttclearown',
                   'GEODB','BLZDB','CallDel','CallEdit',
                   'Expunge','MailFlag','logmail',
                   'dir_group','dir_mode','sep_cust_vendor',
                   'listLimit','showErr','logfile',
                   );
+    foreach($keys as $value) {
+        $_SESSION[$value] = $_POST[$value];
+    }
 if ( $_POST['save'] ) {
     $save = true;
     if ( isset($_POST['ttpart']) && $_POST['ttpart'] != '') {

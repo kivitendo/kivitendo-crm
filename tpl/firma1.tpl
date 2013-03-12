@@ -186,6 +186,16 @@
             $("#fasubmenu").tabs({ heightStyle: "auto" });
             var index = $('#fasubmenu a[href="#{kdview}"]').parent().index();
             $("#fasubmenu").tabs('select', index);
+            $(function() {
+                $( "#right_tabs" ).tabs({
+                    beforeLoad: function( event, ui ) {
+                        ui.jqXHR.error(function() {
+                        ui.panel.html(
+                            ".:Couldn't load this tab. We'll try to fix this as soon as possible.:." );
+                        });
+                    }
+                });
+            });
             $("#dialogwin").dialog({
                 autoOpen: false,
                 show: {
@@ -199,7 +209,7 @@
             });
             $(".firmabutton").button().click(
             function( event ) {
-                if ( this.getAttribute('name') != 'extra' && this.getAttribute('name') != 'karte' ) {
+                if ( this.getAttribute('name') != 'extra' && this.getAttribute('name') != 'karte' && this.getAttribute('name') != 'lxcars') {
                     event.preventDefault();
                 };
             });
@@ -378,8 +388,16 @@
 </div>
 
 <div style="float:left; width:45%; height:37em; text-align:left; border: 1px solid grey; border-left:0px;">
-    <table id="calls" class="tablesorter" width="100%" style='margin:0px;'>
-    <thead><tr><th>Datum</th><th>id</th><th class="{ sorter: false }"></th><th>Betreff</th><th>.:contakt:.</th></tr></thead>
+    <div id="right_tabs">
+        <ul>
+            <li><a href="#contact">.:contact:.</a></li>
+            <li><a href="jqhelp/get_doc.php?was=order">.:orders:.</a></li>
+            <li><a href="jqhelp/get_doc.php?was=quotation">.:Quotation:.</a></li>
+            <li><a href="jqhelp/get_doc.php?was=invoice">.:Invoice:.</a></li>
+        </ul>
+    <div id="contact">
+            <table id="calls" class="tablesorter" width="100%" style='margin:0px;'>
+    <thead><tr><th>Datum</th><th>id</th><th class="{ sorter: false }"></th><th>Betreff</th><th>.:contact:.</th></tr></thead>
     <tbody>
     <tr onClick="showItem(0)"><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
     </tbody>
@@ -402,6 +420,9 @@
         </select>
         </form>
     </div>
+    </div>
+</div>
+
 </div>
 <div id="dialogwin"></div>
 </span>

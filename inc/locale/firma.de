@@ -97,7 +97,9 @@ $texts  = array(
   '.:art:.'             => 'Art',
   '.:OP:.'              => 'OP',
   '.:invoice:.'         => 'Rechnung',
+  '.:Invoice:.'         => 'Rechnungen',
   '.:quotation:.'       => 'Angebot',
+  '.:Quotation:.'       => 'Angebote',
   '.:open:.'            => 'offen',
   '.:closed:.'          => 'geschlossen',
   '.:paid:.'            => 'bezahlt',
@@ -196,6 +198,7 @@ $texts  = array(
   '.:qty:.'             => 'Menge',
   '.:part:.'            => 'Artikel',
   '.:obsolete:.'        => 'Ungültig',
-  '.:equal:.'           => 'Egal'
+  '.:equal:.'           => 'Egal',
+  ".:Couldn't load this tab. We'll try to fix this as soon as possible.:." => 'Konnte diesen Tab nicht laden. Wir werden versuchen den Fehler so schnelle wie möglich zu behenben.'
 ); 
 ?>

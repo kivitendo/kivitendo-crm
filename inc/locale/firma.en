@@ -98,7 +98,9 @@ $texts  = array(
   '.:art:.'          => 'Typ',
   '.:OP:.'           => 'OP',
   '.:invoice:.'      => 'Invoice',
+  '.:Invoice:.'      => 'Invoice',
   '.:quotation:.'    => 'Quotation',
+  '.:Quotation:.'    => 'Quotation', 
   '.:open:.'         => 'open',
   '.:closed:.'       => 'closed',
   '.:paid:.'         => 'paid',
@@ -196,6 +198,8 @@ $texts  = array(
   '.:qty:.'             => 'Qty',
   '.:part:.'            => 'Part'
   '.:obsolete:.'        => 'Obsolete',
-  '.:equal:.'           => 'Equal'
+  '.:equal:.'           => 'Equal',
+  '.:Couldn't load this tab. We'll try to fix this as soon as possible.:.' => 'Couldn't load this tab. We'll try to fix this as soon as possible.'
+  
 );
 ?>

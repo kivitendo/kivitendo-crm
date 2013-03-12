@@ -9,27 +9,22 @@
 
     if ( isset($_GET['kdhelp']) && $_GET["kdhelp"] > '0') {
         $popup = 'hidden';
+        $head = mkHeader();
         $tpl->set_var(array(
             'JAVASCRIPTS'   => '',
             'STYLESHEETS'   => $menu['stylesheets'],
             'PRE_CONTENT'   => '',
             'START_CONTENT' => '',
             'END_CONTENT'   => '',
-            'ERPCSS'        => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-            'JQUERY'        => $_SESSION['basepath'].'crm/'
+            'JQUERYUI'      => $head['JQUERYUI'],
+            'THEME'         => $head['THEME'],
+            'CRMCSS'        => $head['CRMCSS'],
+            'JQUERY'        => $head['JQUERY'],
         ));
         $init = "\tvar initkat = ".$_GET['kdhelp'].";\n";
     } else {
         $popup = 'visible';
-        $tpl->set_var(array(
-            'JAVASCRIPTS'   => $menu['javascripts'],
-            'STYLESHEETS'   => $menu['stylesheets'],
-            'PRE_CONTENT'   => $menu['pre_content'],
-            'START_CONTENT' => $menu['start_content'],
-            'END_CONTENT'   => $menu['end_content'],
-            'ERPCSS'        => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-            'JQUERY'        => $_SESSION['basepath'].'crm/'
-        ));
+        doHeader($tpl);
         $init = "\tvar initkat = -1;\n";
     }
 

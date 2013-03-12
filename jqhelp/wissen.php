@@ -83,10 +83,10 @@ function history ( $data ) {
 function getonecontent( $id, $edit ) {
     $data = getWContent( $id );
     if ( $edit == 1 ) {
-        $content  = "<textarea id='elm1' name='content' cols='99' rows='21'>";
+        $content  = "<textarea id='elm1' name='content' class='tinymce' cols='99' rows='21'>";
         $content .= stripslashes( $data['content'] );
         $content .= "</textarea>";
-        if ($GLOBALS['tinymce']) 
+        if ($_SESSION['tinymce']) 
             $content .= "<script language='javascript' type='text/javascript' src='inc/tiny.js'></script>";
         echo $content;
     } else {

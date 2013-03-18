@@ -101,8 +101,8 @@ class myDB extends MDB2 {
     * IN: $sql - Statement
     * OUT: true/false
     **********************************************/
-    function query($sql) {
-        if (strpos($sql,";")>0) {
+    function query($sql, $force = False) {
+        if (strpos($sql,";")>0 and !$force) {
             //Sql-Injection? HTML-Sonderzeichen zulassen
             if (!preg_match("/&[a-zA-Z]+$/",substr($sql,0,strpos($sql,";"))))
                 $this->dbFehler($sql,'SQL-injection??');

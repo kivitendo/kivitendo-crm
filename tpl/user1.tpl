@@ -116,6 +116,7 @@
     <input type="hidden" name="login" value="{login}">
     <tr><td class="norm">Login</td><td>{login} : {uid}</td>
         <td class="norm">Vertreter</td><td class="norm"><select name="vertreter">
+                        <option value=""></option>
 <!-- BEGIN Selectbox -->
                         <option value="{vertreter}"{Sel}>{vname}</option>
 <!-- END Selectbox -->

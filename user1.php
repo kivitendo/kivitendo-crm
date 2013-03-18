@@ -9,28 +9,19 @@
         } else { $_POST["proto"] = 'f';}
         $rc=saveUserStamm($_POST);
         $id=$_POST["UID"];
-        $_SESSION["termbegin"]  	= $_POST["termbegin"];
-        $_SESSION["termend"]		= $_POST["termend"];
-        $_SESSION["termseq"]		= $_POST["termseq"];
-        $_SESSION["pre"]		= $_POST["pre"];
-        $_SESSION["preon"]		= $_POST["preon"];
-        $_SESSION["kdview"]		= $_POST["kdview"];
-        $_SESSION["planspace"]		= $_POST["planspace"];
-        $_SESSION["feature_ac"]		= $_POST["feature_ac"];
-        $_SESSION["feature_ac_minlength"]	= $_POST["feature_ac_minlength"];
-        $_SESSION["feature_ac_delay"]	= $_POST["feature_ac_delay"];  
-        $_SESSION["auftrag_button"]	= $_POST["auftrag_button"]; 
-        $_SESSION["angebot_button"]	= $_POST["angebot_button"]; 
-        $_SESSION["rechnung_button"]	= $_POST["rechnung_button"]; 
-        $_SESSION["zeige_extra"]	= $_POST["zeige_extra"]; 
-        $_SESSION["zeige_lxcars"]	= $_POST["zeige_lxcars"];  
-        $_SESSION["zeige_karte"]	= $_POST["zeige_karte"];
-        $_SESSION["zeige_etikett"]	= $_POST["zeige_etikett"];
-        $_SESSION["zeige_tools"]	= $_POST["zeige_tools"];       
-        $_SESSION["tinymce"]		= $_POST["tinymce"];
-        $_SESSION['theme']		= ($_POST['theme']=='base')?'':'<link rel="stylesheet" type="text/css" href="'.$_SESSION['baseurl'].'crm/jquery-ui/themes/'.$_POST['theme'].'/jquery-ui.css">';  
-        $_SESSION['feature_unique_name_plz']=$_POST["feature_unique_name_plz"];
-        } else if ($_POST["mkmbx"]) {
+        $no = array('save','uid','login','ok');
+        $chkbox = array('tinymce','preon','feature_ac','angebot_button','auftrag_button','rechnung_button',
+                        'zeige_extra','zeige_lxcars','zeige_etikett','zeige_tools','show_err','php_error');
+        while ( list($key,$val) = each ($_POST) ) {
+            if ( ! in_array($key,$no) ) 
+                if ( in_array($key,$chkbox) ) {
+                    $_SESSION[$key] = ($val=='t')?'t':'f';
+                } else {
+                    $_SESSION[$key] = $val;
+                }
+        }
+        $_SESSION['theme'] = '<link rel="stylesheet" type="text/css" href="'.$_SESSION['baseurl'].'crm/jquery-ui/themes/'.$_POST['theme'].'/jquery-ui.css">';  
+    } else if ($_POST["mkmbx"]) {
         $rc=createMailBox($_POST["Postf2"],$_POST["Login"]);
     } 
     $t = new Template($base);
@@ -38,6 +29,7 @@
     if ($_GET["id"] && $_GET["id"]<>$_SESSION["loginCRM"]) {
         $fa=getUserStamm($_GET["id"]);
         $t->set_file(array("usr1" => "user1b.tpl"));
+        $t->set_var(array(vertreter => $fa["vertreter"]." ".$fa["vname"]));
         $own = false;
     } else {
         $fa=getUserStamm($_SESSION["loginCRM"]);
@@ -61,85 +53,85 @@
     $an = getAngebJahr($fa["id"],$jahr,false,true);
     $IMG=getLastYearPlot($re,$an,false);
     $t->set_var(array(
-            IMG         => $IMG,
-            login       => $fa["login"],
-            name        => $fa["name"],
-            addr1       => $fa["addr1"],
-            addr2       => $fa["addr2"],
-            addr3       => $fa["addr3"],
-            uid         => $fa["id"],
-            homephone   => $fa["homephone"],
-            workphone   => $fa["workphone"],
-            role        => $fa["role"],
-            notes       => $fa["notes"],
-            mailsign    => $fa["mailsign"],
-            email       => $fa["email"],
-            emailauth   => $_SESSION["email"],
-            msrv        => $fa["msrv"],
-            port        => $fa["port"],
-            mailuser    => $fa["mailuser"],
-            kennw       => $fa["kennw"],
-            postf       => $fa["postf"],
-            postf2      => $fa["postf2"],
-            protopop    => ($fa["proto"]=="f")?"checked":"",
-            protoimap   => ($fa["proto"]=="t")?"checked":"",
-            ssl.$fa["ssl"] => "checked",
-            interv      => $fa["interv"],
-            pre         => $fa["pre"],
-            kdview.$fa["kdview"] => "selected",
-            abteilung   => $fa["abteilung"],
-            position    => $fa["position"],
-            termbegin   => $tbeg,
-            termend     => $tend,
-            termseq     => ($fa["termseq"])?$fa["termseq"]:30,
-            GRUPPE      => $gruppen,
-            DATUM       => date('d.m.Y'),
-            icalext     => $fa["icalext"],
-            icaldest    => $fa["icaldest"],
+            IMG                    => $IMG,
+            login                  => $fa["login"],
+            name                   => $fa["name"],
+            addr1                  => $fa["addr1"],
+            addr2                  => $fa["addr2"],
+            addr3                  => $fa["addr3"],
+            uid                    => $fa["id"],
+            homephone              => $fa["homephone"],
+            workphone              => $fa["workphone"],
+            role                   => $fa["role"],
+            notes                  => $fa["notes"],
+            mailsign               => $fa["mailsign"],
+            email                  => $fa["email"],
+            emailauth              => $_SESSION["email"],
+            msrv                   => $fa["msrv"],
+            port                   => $fa["port"],
+            mailuser               => $fa["mailuser"],
+            kennw                  => $fa["kennw"],
+            postf                  => $fa["postf"],
+            postf2                 => $fa["postf2"],
+            protopop               => ($fa["proto"]=="f")?"checked":"",
+            protoimap              => ($fa["proto"]=="t")?"checked":"",
+            show_err               => ($fa["show_err"]=="t")?"checked":"",
+            php_error              => ($fa["php_error"]=="t")?"checked":"",
+            ssl.$fa["ssl"]         => "checked",
+            interv                 => $fa["interv"],
+            pre                    => $fa["pre"],
+            kdview.$fa["kdview"]   => "selected",
+            abteilung              => $fa["abteilung"],
+            position               => $fa["position"],
+            termbegin              => $tbeg,
+            termend                => $tend,
+            termseq                => ($fa["termseq"])?$fa["termseq"]:30,
+            GRUPPE                 => $gruppen,
+            DATUM                  => date('d.m.Y'),
+            icalext                => $fa["icalext"],
+            icaldest               => $fa["icaldest"],
             icalart.$fa["icalart"] => "selected",
-            preon       => ($fa["preon"])?"checked":"",
-	    streetview  => ($fa['streetview'])?$fa['streetview']:$stadtplan,
-	    planspace   => ($fa['planspace'])?$fa['planspace']:$planspace,
-	    feature_ac             => ($fa['feature_ac']=='t')?'checked':'',
-	    feature_ac_minlength   => $fa['feature_ac_minlength'],
-	    feature_ac_delay       => $fa['feature_ac_delay'],
-	    auftrag_button         => ($fa['auftrag_button']=='t')?'checked':'',
-	    angebot_button         => ($fa['angebot_button']=='t')?'checked':'',
-	    rechnung_button        => ($fa['rechnung_button']=='t')?'checked':'',
-	    zeige_extra            => ($fa['zeige_extra']=='t')?'checked':'',
-	    zeige_karte            => ($fa['zeige_karte']=='t')?'checked':'',
-	    zeige_etikett          => ($fa['zeige_etikett']=='t')?'checked':'',
-	    zeige_tools            => ($fa['zeige_tools']=='t')?'checked':'',
-	    feature_unique_name_plz=> ($fa['feature_unique_name_plz']=='t')?'checked':'',
-	    zeige_lxcars           => ($fa['zeige_lxcars']=='t')?'checked':'',
+            preon                  => ($fa["preon"])?"checked":"",
+            streetview             => ($fa['streetview'])?$fa['streetview']:$stadtplan,
+            planspace              => ($fa['planspace'])?$fa['planspace']:$planspace,
+            feature_ac             => ($fa['feature_ac']=='t')?'checked':'',
+            feature_ac_minlength   => $fa['feature_ac_minlength'],
+            feature_ac_delay       => $fa['feature_ac_delay'],
+            auftrag_button         => ($fa['auftrag_button']=='t')?'checked':'',
+            angebot_button         => ($fa['angebot_button']=='t')?'checked':'',
+            rechnung_button        => ($fa['rechnung_button']=='t')?'checked':'',
+            zeige_extra            => ($fa['zeige_extra']=='t')?'checked':'',
+            zeige_karte            => ($fa['zeige_karte']=='t')?'checked':'',
+            zeige_etikett          => ($fa['zeige_etikett']=='t')?'checked':'',
+            zeige_tools            => ($fa['zeige_tools']=='t')?'checked':'',
+            feature_unique_name_plz=> ($fa['feature_unique_name_plz']=='t')?'checked':'',
+            zeige_lxcars           => ($fa['zeige_lxcars']=='t')?'checked':'',
             tinymce                => ($fa['tinymce'] == 't')?'checked':'',
-            ));
+    ));
             
     if ( $own ) {
-        if ($_GET["id"]) {    
-            $t->set_var(array(vertreter => $fa["vertreter"]." ".$fa["vname"]));
-        } else {
-            $t->set_block("usr1","Selectbox","Block");
-            $select=(!empty($fa["vertreter"]))?$fa["vertreter"]:$fa["id"];
-            $user=getAllUser(array(0=>true,1=>""));
-            if ($user) foreach($user as $zeile) {
+        $t->set_block("usr1","Selectbox","Block");
+        $select = ( !empty($fa["vertreter"]) )?$fa["vertreter"]:$fa["id"];
+        $user = getAllUser(array(0=>true,1=>""));
+        if ($user) foreach($user as $zeile) {
+            if ( $zeile['id'] != $_SESSION['loginCRM'] ){
                 $t->set_var(array(
-                    Sel => ($select==$zeile["id"])?" selected":"",
-                    vertreter    =>    $zeile["id"],
-                    vname    =>    $zeile["name"]
+                    Sel         => ($select==$zeile["id"])?" selected":"",
+                    vertreter   => $zeile["id"],
+                    vname       => ($zeile["name"]!='')?$zeile['name']:$zeile['login']
                 ));
                 $t->parse("Block","Selectbox",true);
             }
-            $t->set_block("usr1","SelectboxB","BlockB");
-            $ALabels=getLableNames();
-            if ($ALabels) foreach ($ALabels as $data) {
-                    $t->set_var(array(
-                        FSel => ($data["id"]==$fa["etikett"])?" selected":"",
-                        LID    =>    $data["id"],
-                        FTXT =>    $data["name"]
-                    ));
-                    $t->parse("BlockB","SelectboxB",true);
-            }
+        }
+        $t->set_block("usr1","SelectboxB","BlockB");
+        $ALabels = getLableNames();
+        if ($ALabels) foreach ($ALabels as $data) {
+                $t->set_var(array(
+                    FSel    => ($data["id"]==$fa["etikett"])?" selected":"",
+                    LID     =>  $data["id"],
+                    FTXT    =>  $data["name"]
+                ));
+                $t->parse("BlockB","SelectboxB",true);
         }
         chdir("jquery-ui/themes");
         $theme = glob("*");

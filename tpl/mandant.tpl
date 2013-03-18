@@ -43,8 +43,8 @@
     <tr><td>Show-Error</td>                 <td><input type='checkbox' name='showErr' id='showErr' {showErr} value='t'></td></tr>
     <tr><td>Logfile (/tmp/lxcrm.err)</td>   <td><input type='checkbox' name='logfile' id='logfile' {logfile} value='t'></td></tr>
     <tr><td>Listenlimit</td>                <td><input type='text' name='listLimit' id='listLimit' value='{listLimit}' size='8'></td></tr>
+    <tr><td><input type="submit" name="save" id="save" value="sicher"></td><td></td></tr>
 </table>
-<input type="submit" name="save" id="save" value="sicher">
 </form>
 {END_CONTENT}
 </body>

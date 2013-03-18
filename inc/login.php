@@ -1,5 +1,6 @@
 <?php
 clearstatcache();
+session_start();
 if ($_POST["erpname"]) {
     if ( is_file("../".$_POST["erpname"]."/config/".$_SESSION['erpConfigFile'].".conf") ) {
         if ( is_writable("inc/conf.php") ) {
@@ -31,32 +32,41 @@ if ( substr(getcwd(),-3) == "inc" || substr(getcwd(),-6) == "jqhelp"  ) {
 }
 $conffile .= "../".$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf";
 
-$conf = array('ERPNAME','erpConfigFile');
-while( list($key,$val) = each($_SESSION) ) {
-    if ( ! in_array($key,$conf) ) unset($_SESSION[$key]);
-};
+//$conf = array('ERPNAME','erpConfigFile');
+//while( list($key,$val) = each($_SESSION) ) {
+//    if ( ! in_array($key,$conf) ) unset($_SESSION[$key]);
+//};
 
 if ( is_file($conffile) ) {
     $tmp = anmelden();
     if ( $tmp ) {
-        if ( chkVer() ) {
+        $rs = $_SESSION['db']->getOne('SELECT * FROM crm ORDER BY version DESC LIMIT 1');
+        if ( !$rs || $rs["version"]=="" || $rs["version"]==false ) {
+            echo "CRM-Tabellen sind nicht (vollst&auml;ndig) installiert"; 
+            flush(); 
+            require("install.php");
+            require("inc/update_neu.php");
+        } else if (  $rs["version"] <> $_SESSION['VERSION'] ) {
+            echo "Istversion: ".$rc[0]["version"]." Sollversion: ".$_SESSION['VERSION']."<br>";
+            $oldver=$rc[0]["version"];
+            require("inc/update_neu.php");
+        } else {
             $db = $_SESSION["db"];
             $_SESSION["loginok"] = "ok";
             $LOGIN = True;
             require ("update_neu.php");
-        } else {
+        } /*else {
             echo "db-Version nicht ok";
-            exit;
-        }
+            exit;*/
     } else {
-        echo $_SESSION["db"]."Session abgelaufen.";
+        echo $_SESSION["man"]." Session abgelaufen.";
         $Url  = (empty( $_SERVER['HTTPS'] )) ? 'http://' : 'https://';
         $Url .= $_SERVER['HTTP_HOST'];
         $Url .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
-        unset($_SESSION);
+        session_unset();
         header('Location: '.$Url.'login.pl?x=1');
         exit;
-    }
+    };
 } else {
     echo "Configfile nicht gefunden<br>$PHPSELF<br>";
     echo "ERP V 3.0.0 oder gr&ouml;&szlig;er erwartet!!!<br><br>";

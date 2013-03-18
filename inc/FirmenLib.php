@@ -8,7 +8,6 @@
 * hole die abweichenden Lieferdaten
 *****************************************************/
 function getShipStamm($id,$tab="C",$complete=false) {
-global $db;
     if ($complete) {
         $sql ="select trans_id,shiptoname,COALESCE(shiptostreet,street) as shiptostreet,COALESCE(shiptocity,city) as shiptocity,";
         $sql.="COALESCE(shiptocountry,country) as shiptocountry,";
@@ -20,7 +19,7 @@ global $db;
     } else {
         $sql="select S.*,BL.bundesland as shiptobundesland from shipto S left join bundesland BL on S.shiptobland=BL.id where S.shipto_id=$id ";
     }
-    $rs2=$db->getAll($sql);
+    $rs2=$_SESSION['db']->getAll($sql);
     if(!$rs2) {
         return false;
     } else {
@@ -36,7 +35,6 @@ global $db;
 * hole alle Kunden
 *****************************************************/
 function getAllFirmen($sw,$Pre=true,$tab='C') {
-global $db;
     if ($Pre) $Pre=$_SESSION["Pre"];
     $rechte=berechtigung();
     if (!$sw[0]) {
@@ -59,14 +57,13 @@ global $db;
     } else {
         return false;
     }
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if(!$rs) {
         $rs=false;
     };
     return $rs;
 }
 function getAllFirmenByMail($sw,$Pre=true,$tab='C') {
-global $db;
     if ($Pre) $Pre=$_SESSION["Pre"];
     $rechte=berechtigung();
     $where = "email ilike '$Pre$sw%'";
@@ -77,7 +74,7 @@ global $db;
     } else {
         return false;
     }
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if(!$rs) {
         $rs=false;
     };
@@ -91,15 +88,14 @@ global $db;
 * Stammdaten einer Firma holen
 *****************************************************/
 function getFirmenStamm($id,$ws=true,$tab='C',$cvar=true) {
-global $db;
     if ($tab=="C") {
         // Umsätze holen
         $sql="select sum(amount) from oe where customer_id=$id and quotation='f' and closed = 'f'";
-        $rs=$db->getAll($sql);
-        $oa=$rs[0]["sum"];
+        $rs=$_SESSION['db']->getOne($sql);
+        $oa=$rs["sum"];
         $sql="select sum(amount) from ar where customer_id=$id and amount<>paid";
-        $rs=$db->getAll($sql);
-        $op=$rs[0]["sum"];
+        $rs=$_SESSION['db']->getOne($sql);
+        $op=$rs["sum"];
         $sql="select C.*,E.name as verkaeufer,B.description as kdtyp,B.discount as typrabatt,P.pricegroup,";
         $sql.="L.lead as leadname,BL.bundesland,T.terms_netto,LA.description as language from customer C ";
         $sql.="left join employee E on C.salesman_id=E.id left join business B on B.id=C.business_id ";
@@ -110,11 +106,11 @@ global $db;
     } else if ($tab=="V") {
         // Umsätze holen
         $sql="select sum(amount) as summe from ap where vendor_id=$id and amount<>paid";
-        $rs=$db->getAll($sql);
-        $op=$rs[0]["summe"];
+        $rs=$_SESSION['db']->getOne($sql);
+        $op=$rs["summe"];
         $sql="select sum(amount) from oe where vendor_id=$id and quotation='f' and closed = 'f'";
-        $rs=$db->getAll($sql);
-        $oa=$rs[0]["sum"];
+        $rs=$_SESSION['db']->getOne($sql);
+        $oa=$rs["sum"];
         $sql="select C.*,E.name as verkaeufer,B.description as kdtyp,B.discount as typrabatt,BL.bundesland,";
         $sql.="L.lead as leadname,LA.description as language from vendor C ";
         $sql.="left join employee E on C.salesman_id=E.id left join business B on B.id=C.business_id ";
@@ -124,7 +120,7 @@ global $db;
     } else {
         return false;
     }
-    $row=$db->getOne($sql);  // Rechnungsanschrift
+    $row=$_SESSION['db']->getOne($sql);  // Rechnungsanschrift
     if(!$row) {
         return false;
     } else {
@@ -142,9 +138,9 @@ global $db;
         if ($row["konzern"]) {
             $sql="select name from %s where id = %d";
             if ($tab=="C") {
-                $krs=$db->getAll(sprintf($sql,"customer",$row["konzern"]));
+                $krs=$_SESSION['db']->getAll(sprintf($sql,"customer",$row["konzern"]));
             } else {
-                $krs=$db->getAll(sprintf($sql,"vendor",$row["konzern"]));
+                $krs=$_SESSION['db']->getAll(sprintf($sql,"vendor",$row["konzern"]));
             }
             if ($krs) $row["konzernname"]=$krs[0]["name"];
         }
@@ -153,8 +149,8 @@ global $db;
         } else {
             $sql="select count(*) from vendor where konzern = ".$id;
         }
-        $knr=$db->getAll($sql);
-        $row["konzernmember"]=$knr[0]["count"];
+        $knr=$_SESSION['db']->getOne($sql);
+        $row["konzernmember"]=$knr["count"];
         if ($tab=="C") { $nummer=$row["customernumber"]; }
         else { $nummer=$row["vendornumber"]; };
         if ($row["grafik"]) {
@@ -248,13 +244,12 @@ global $db;
  * @return array
  */
 function getFirmaCVars($id,$search=false) {
-global $db;
     $sql = "select C.name,C.type,V.bool_value,V.timestamp_value,V.text_value,V.number_value,C.module ";
     $sql.= "from custom_variables V left join custom_variable_configs C on C.id=V.config_id ";
     $sql.= "where V.trans_id =".$id." and module = 'CT'";
     //if ($sql) $sql .= " and C.searchable='t' ";
     $sql .= "order by C.sortkey";
-    $rs = $db->getAll($sql);
+    $rs = $_SESSION['db']->getAll($sql);
     if ($rs) { 
         foreach ($rs as $row) {
             switch ($row["type"]) {
@@ -997,6 +992,31 @@ global $db;
     $headQ[0]['description'] = '<b>Am meisten verkaufte Artikel</b>';
     $top = array_merge($headU, $ums, $headQ, $qty);
     return $top;
+}
+/****************************************************
+* getLeads
+* out: array
+* Leadsquellen holen
+*****************************************************/
+function getLeads() {
+    $sql = "select * from leads order by lead";
+    $rs = $_SESSION['db']->getAll($sql);
+    $tmp[] = array("id"=>"","lead"=>".:unknown:.");
+    if ( !$rs )
+        $rs = array();
+    $rs = array_merge($tmp,$rs);
+    return $rs;
+}
+/****************************************************
+* getBusiness
+* out: array
+* Kundentype holen
+*****************************************************/
+function getBusiness() {
+    $sql = "select * from business order by description";
+    $rs = $_SESSION['db']->getAll($sql);
+    $leer = array(array("id"=>"","description"=>"----------"));
+    return array_merge($leer,$rs);
 }
 function cvar_edit($id,$new=false) {
     $cvar = getVariablen($id);

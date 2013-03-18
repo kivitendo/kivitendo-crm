@@ -7,8 +7,6 @@
         require_once("stdLib.php");
     };
 
-require "version.php";
-
     if (!function_exists('updatever')) {
 	    function updatever($db,$VERSION) {
 		    $sql = "INSERT INTO crm (uid,datum,version) values (".$_SESSION["loginCRM"].",now(),'".$VERSION."')";
@@ -89,7 +87,7 @@ require "version.php";
                     $zeile = trim(fgets($f,1000));
                 } else {
                     $query .= substr($zeile,0,-1);
-                    $rc = $_SESSION["db"]->query($query);
+                    $rc = $_SESSION["db"]->query($query, True);
                     if ( !$rc ) {
                         echo "Probleme beim Update, alle &Auml;nderungen werden zur&uuml;ck genommen";
                         $db->rollback();
@@ -112,7 +110,7 @@ require "version.php";
             echo "update ok<br>";
         }
     } else {
-        if ( $GLOBALS["oldver"] and $GLOBALS["oldver"] <> $VERSION ) updatever($db,$VERSION);
+        if ( isset($oldver) and $oldver <> $_SESSION['VERSION'] ) updatever($db,$_SESSION['VERSION']);
         if ( !$LOGIN ) echo "System uptodate<br />";
     };
     if ( !$LOGIN ) {

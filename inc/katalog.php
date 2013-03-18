@@ -88,7 +88,11 @@ global $db;
     $sql  = "SELECT P.*,PG.partsgroup$prices,buchungsgruppen_id as bugru ";
     $sql .= "FROM parts P LEFT JOIN partsgroup PG on PG.id=P.partsgroup_id $pricejoin $cvarjoin ";
     $sql .= "WHERE ".$where.$pricewhere;
-    $sql .= " order by ".$data['order'];
+    if ($data['order'] == 'spezial' and count($pnumber)>1) {
+        $sql .= " order by idx(array[".implode(',',$pnumber)."], partnumber)";
+    } else {
+        $sql .= " order by ".$data['order'];
+    }
     //echo $sql;
     $rs=$db->getAll($sql);
     return $rs;

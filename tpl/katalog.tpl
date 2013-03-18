@@ -70,6 +70,7 @@
         <option value='partnumber,PG.partsgroup' {partnumber,PG.partsgroup}>Artikelnummer, Warengruppe
         <option value='ean' {ean}>EAN
         <option value='description,partnumber'   {description,partnumber}>Artikelbezeichnung, Artikelnummer
+        <option value='spezial' {spezial}>Artikelnummern (Eingabe)
     </select>
     </span>
 </div>

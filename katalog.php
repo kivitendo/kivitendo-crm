@@ -13,8 +13,8 @@ if ($_POST['ok']) {
     if (file_exists('tmp/tabelle.tex')) unlink('tmp/tabelle.tex');
     $f = fopen('tmp/katalog.tex','w');
     $rc = fputs($f,$vorlage['pre']);
-    $suche = array('&','_','"','!','#');
-    $ersetze = array('\&','\_','\"',' : ','\#');
+    $suche = array('&','_','"','!','#','%');
+    $ersetze = array('\&','\_','\"',' : ','\#','\%');
     if ($artikel) foreach($artikel as $part) {
         $line = $vorlage['artikel'];
         if ($lastPG != $part['partsgroup']) {

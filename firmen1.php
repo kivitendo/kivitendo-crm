@@ -1,6 +1,5 @@
 <?php
-// $Id$
-    require_once("inc/stdLib.php");
+    include_once("inc/stdLib.php");
     include("inc/template.inc");
     include("inc/FirmenLib.php");
     include("inc/UserLib.php");

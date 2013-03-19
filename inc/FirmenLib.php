@@ -127,7 +127,7 @@ function getFirmenStamm($id,$ws=true,$tab='C',$cvar=true) {
         /* history_erp wird wohl nicht richtig gepflegt, also erst einmal raus
         if ($row["mtime"]=="") {
             $sql = "select * from history_erp where trans_id = $id and snumbers like '%rnumber_%' order by itime desc limit 1";
-            $rs2 = $db->getOne($sql);  // Rechnungsanschrift
+            $rs2 = $_SESSION['db']->getOne($sql);  // Rechnungsanschrift
             if ($rs2) if ($rs2["itime"]<>$row["itime"])
                $row["mtime"] = $rs2["itime"];
             $row["modemployee"] = $rs2["employee_id"];
@@ -138,11 +138,11 @@ function getFirmenStamm($id,$ws=true,$tab='C',$cvar=true) {
         if ($row["konzern"]) {
             $sql="select name from %s where id = %d";
             if ($tab=="C") {
-                $krs=$_SESSION['db']->getAll(sprintf($sql,"customer",$row["konzern"]));
+                $krs=$_SESSION['db']->getOne(sprintf($sql,"customer",$row["konzern"]));
             } else {
-                $krs=$_SESSION['db']->getAll(sprintf($sql,"vendor",$row["konzern"]));
+                $krs=$_SESSION['db']->getOne(sprintf($sql,"vendor",$row["konzern"]));
             }
-            if ($krs) $row["konzernname"]=$krs[0]["name"];
+            if ($krs) $row["konzernname"]=$krs["name"];
         }
         if ($tab=="C") {
             $sql="select count(*) from customer where konzern = ".$id;
@@ -274,16 +274,14 @@ function getFirmaCVars($id,$search=false) {
 }
 
 function getCvars() {
-global $db;
     $sql = "select * from custom_variable_configs where module = 'CT' order by sortkey";
-    $rs = $db->getAll($sql);
+    $rs = $_SESSION['db']->getAll($sql);
     return $rs;
 }
 
 function getCvarName($id) {
-global $db;
 	$sql = "SELECT name,'C' as tab from customer where id = %d union select name,'V' as tab from vendor where id = %d";
-    $rs = $db->getOne(sprintf($sql,$id,$id));
+    $rs = $_SESSION['db']->getOne(sprintf($sql,$id,$id));
     return $rs['name'];
 }
 /****************************************************
@@ -293,14 +291,13 @@ global $db;
 * Alle abweichende Anschriften einer Firma holen
 *****************************************************/
 function getAllShipto($id,$tab="C") {
-global $db;
     if (empty($id)) return false;
     //$sql="select distinct shiptoname,shiptodepartment_1,shiptodepartment_2,shiptostreet,shiptozipcode,";
     //$sql.="shiptocity,shiptocountry,shiptocontact,shiptophone,shiptofax,shiptoemail,shipto_id from shipto ";
     //$sql="select (module<>'CT') as vkdoc,* from shipto where trans_id=$id";
     $sql="select s.*,b.bundesland as shiptobundesland from shipto s left join bundesland b on s.shiptobland=b.id ";
     $sql.=" where trans_id=$id and module='CT' order by itime";
-    $rs=$db->getAll($sql);  
+    $rs=$_SESSION['db']->getAll($sql);  
     return $rs;
 }
 
@@ -311,9 +308,8 @@ global $db;
 * Alle Zahlungsbedngungen
 *****************************************************/
 function getPayment() {
-global $db;
     $sqlpt = "select * from payment_terms";
-    $rspt = $db->getAll($sqlpt);
+    $rspt = $_SESSION['db']->getAll($sqlpt);
     $leer=array(array("id"=>"","description"=>"----------"));
     return array_merge($leer,$rspt);
 }
@@ -449,7 +445,6 @@ function suchstr($muster,$typ="C") {
 * KundenDaten suchen
 *****************************************************/
 function suchFirma($muster,$tab="C") {
-global $db;
     $rechte=berechtigung();
     $tmp=suchstr($muster,$tab);
     $andor = $muster["andor"];
@@ -480,7 +475,7 @@ global $db;
         } else {
             $sql="select $cols from $tabs where ($where) and $rechte";
         }
-        $rs=$db->getAll($sql);
+        $rs=$_SESSION['db']->getAll($sql);
         if(!$rs) {
             $daten=false;
         } else {
@@ -490,35 +485,32 @@ global $db;
     return $daten;
 }
 function getName($id,$typ="C") {
-global $db;
     $tab=array("C" => "customer","V" => "vendor");
     $sql="select name from ".$tab[$typ]." where id = $id";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getOne($sql);
     if ($rs) {
-        return $rs[0]["name"];
+        return $rs["name"];
     } else {
         return false;
     }
 }
 function getFaID($name) {
-global $db;
     $sql="select id,C from customer where name ilike '%$name%'";
     $sql = "SELECT id,'C',name as tab from customer where name ilike '%$name%' union ";
     $sql.= "SELECT id,'V',name as tab from vendor   where name ilike '%$name%'";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     return $rs;
 }
 
 function chkTimeStamp($tabelle,$id,$stamp,$begin=false) {
-global $db;
     if ($tabelle=="contacts") {
         $sql = "select mtime from $tabelle where cp_id = $id";
     } else {
         $sql = "select mtime from $tabelle where id = $id";
     }
-    $rs = $db->getOne($sql);
+    $rs = $_SESSION['db']->getOne($sql);
     if ($rs["mtime"]<=$stamp) {
-        if ($begin) $db->begin();
+        if ($begin) $_SESSION['db']->begin();
         return true;
     } else {
         return false;
@@ -531,13 +523,12 @@ global $db;
 * KundenDaten sichern ( update )
 *****************************************************/
 function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
-global $db;
     $kenz=array("C" => "K","V" => "L");
     $tab=array("C" => "customer","V" => "vendor");
     include("inc/conf.php");
     if ($neu && $_SESSION['feature_unique_name_plz']=='t') {
         $sql="SELECT id FROM ".$tab[$typ]." WHERE name = '".$daten['name']."' AND zipcode = '".$daten['zipcode']."'";
-        $rs=$db->getAll($sql);
+        $rs=$_SESSION['db']->getAll($sql);
         if ($rs[0]['id']) return array(-1,".:Customer / Vendor exist with same zipcode:.");
     } 
     if (!empty($datei["Datei"]["name"])) {          // eine Datei wird mitgeliefert
@@ -692,29 +683,29 @@ global $db;
         if ($ala) {
             if ($daten["shipto_id"]>0) {
                 $sql1="update shipto set $query1 where shipto_id=".$daten["shipto_id"];
-                $rc1=$db->query($sql1);
+                $rc1=$_SESSION['db']->query($sql1);
             } else {
                 $sid=newShipto($fid);
                 if ($sid) {
                     $sql1="update shipto set $query1 where shipto_id=".$sid;
-                    $rc1=$db->query($sql1);
+                    $rc1=$_SESSION['db']->query($sql1);
                 }
             };
             if ($rc1) mkTelNummer($fid,"S",$tels2);
         }
-        $rc0=$db->query($sql0);
+        $rc0=$_SESSION['db']->query($sql0);
         if ($rc0 and $rc1) { 
             $rc=$fid; 
             //ab hier CVARS
             //Alle möglichen Vars holen
             $sql = "SELECT id,name,type from custom_variable_configs where module = 'CT'";
-            $vars = $db->getAll($sql);
+            $vars = $_SESSION['db']->getAll($sql);
             if ($vars) foreach ($vars as $row) $vartype[$row["name"]] = array("id"=>$row["id"],"type"=>$row["type"]);
             $sqltpl = "insert into custom_variables (config_id,trans_id,bool_value,timestamp_value,text_value,number_value)";
             $sqltpl.= "values (%d,%d,%s,%s,%s,%s)";
             //bisherige Einträge löschen.
             $sql = "delete from custom_variables where trans_id = ".$daten["id"];
-            $rcc = $db->query($sql);
+            $rcc = $_SESSION['db']->query($sql);
             //Insert bilden
             foreach ($daten as $key=>$val) {
                 if (substr($key,0,8) == "vc_cvar_") {
@@ -736,7 +727,7 @@ global $db;
                         default		: $text = "'$val'"; break;
                     };
                     $sql = sprintf($sqltpl,$vartype[$name]["id"],$daten["id"],$bool,$date,$text,$num);
-                    $rcc = $db->query($sql);
+                    $rcc = $_SESSION['db']->query($sql);
                 }
             }
         } else { $rc=-1; $fehler=".:unknown:."; };
@@ -744,25 +735,24 @@ global $db;
     } else {
         if ($daten["saveneu"]){
             $sql="delete from ".$tab[$typ]." where id=".$daten["id"];
-            $rc0=$db->query($sql); 
+            $rc0=$_SESSION['db']->query($sql); 
         };
         return array(-1,$fehler);
     };
 }
 
 function newShipto($fid) {
-global $db;
-    $rc=$db->query("BEGIN");
+    $rc=$_SESSION['db']->query("BEGIN");
     $newID=uniqid (rand());
     $sql="insert into shipto (trans_id,shiptoname,module) values ($fid,'$newID','CT')";
-    $rc=$db->query($sql);
+    $rc=$_SESSION['db']->query($sql);
     $sql="select shipto_id from shipto where shiptoname='$newID'";
-    $rs=$db->getAll($sql);
-    if ($rs[0]["shipto_id"]) { 
-        $db->query("COMMIT");
-        return $rs[0]["shipto_id"];
+    $rs=$_SESSION['db']->getOne($sql);
+    if ($rs["shipto_id"]) { 
+        $_SESSION['db']->query("COMMIT");
+        return $rs["shipto_id"];
     } else {
-        $db->query("ROLLBACK");
+        $_SESSION['db']->query("ROLLBACK");
         return false;
     }
 }
@@ -773,14 +763,13 @@ global $db;
 * eine Kundennummer erzeugen 
 *****************************************************/
 function newnr($typ,$bid=0) {
-global $db;
-    $rc=$db->query("BEGIN");
+    $rc=$_SESSION['db']->query("BEGIN");
     if ($bid>0) {
-        $rs=$db->getAll("select customernumberinit  as ".$typ."number from business where id = $bid");
+        $rs=$_SESSION['db']->getOne("select customernumberinit  as ".$typ."number from business where id = $bid");
     } else {
-        $rs=$db->getAll("select ".$typ."number from defaults");
+        $rs=$_SESSION['db']->getOne("select ".$typ."number from defaults");
     };
-    preg_match("/([0-9]*)([^0-9]*)([0-9]*)/",$rs[0][$typ."number"],$t);
+    preg_match("/([0-9]*)([^0-9]*)([0-9]*)/",$rs[$typ."number"],$t);
     if ( $t[3] != '' ) {
         $pre = $t[1].$t[2];
         $nr = $t[3];
@@ -795,12 +784,12 @@ global $db;
     $y = sprintf("%0".$len."d",$nr+1);
     $newnr=$pre.$y;
     if ($bid>0) {
-        $rc=$db->query("update business set customernumberinit='$newnr' where id = $bid");
+        $rc=$_SESSION['db']->query("update business set customernumberinit='$newnr' where id = $bid");
     } else {
-        $rc=$db->query("update defaults set ".$typ."number='$newnr'");
+        $rc=$_SESSION['db']->query("update defaults set ".$typ."number='$newnr'");
     }
-    if ($rc) { $db->query("COMMIT"); }
-    else { $db->query("ROLLBACK"); $newnr=""; };
+    if ($rc) { $_SESSION['db']->query("COMMIT"); }
+    else { $_SESSION['db']->query("ROLLBACK"); $newnr=""; };
     return $newnr;
 }
 
@@ -811,18 +800,17 @@ global $db;
 * Kundensatz erzeugen ( insert )
 *****************************************************/
 function mknewFirma($id,$typ) {
-global $db;
     $tab=array("C" => "customer","V" => "vendor");
     $tmpName_0="01010101";    
     $tmpName_1=uniqid (rand());
     $sql="DELETE FROM ".$tab[$typ]." WHERE name LIKE '".$tmpName_0."%'";
-   // $rc=$db->query($sql); Kommentiert bis ERP-Bug #2201 gefixt ist
+   // $rc=$_SESSION['db']->query($sql); Kommentiert bis ERP-Bug #2201 gefixt ist
     if (!$id) {$uid='null';} else {$uid=$id;};
     $sql="insert into ".$tab[$typ]." (name,employee) values ('$tmpName_0$tmpName_1',$uid)";
-    $rc=$db->query($sql);
+    $rc=$_SESSION['db']->query($sql);
     if ($rc) {
         $sql="select id from ".$tab[$typ]." where name = '$tmpName_0$tmpName_1'";
-        $rs=$db->getAll($sql);
+        $rs=$_SESSION['db']->getAll($sql);
         if ($rs) {
             $id=$rs[0]["id"];
         } else {
@@ -849,7 +837,6 @@ function saveNeuFirmaStamm($daten,$files,$typ="C") {
 
 
 function getKonzerne($fid,$Q,$typ="T") {
-global $db;
     if ($Q=="C") $tab="customer";
     else $tab="vendor";
     if ($typ=="T") {
@@ -859,11 +846,10 @@ global $db;
         if ($Q=="C") $sql="select id,name,zipcode,city,country,customernumber as number,konzern from customer where id = $fid";
         else $sql="select id,name,zipcode,city,country,vendornumber as number,konzern from $tab where id = $fid";
     }
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     return $rs;
 }
 function getCustTermin($id,$tab,$day,$month,$year) {
-global $db;
     if ($tab=="P") {
         $sql="select * from  termine T left join terminmember M on T.id=M.termin where M.member = $id ";
     } else {
@@ -882,7 +868,7 @@ global $db;
         $day=date("Y-m-d 00:00:00");
         $sql.= " and start >= '$day' order by start limit 5 ";
     }
-    $rs = $db->getAll($sql);
+    $rs = $_SESSION['db']->getAll($sql);
     return $rs;
 }
 /****************************************************
@@ -893,7 +879,6 @@ global $db;
 * und Kontakte erzeugen
 *****************************************************/
 function doReport($data,$typ="C") {
-global $db;
     $kenz=array("C" => "K","V" => "L");
     $tab=array("C" => "customer","V" => "vendor");
     $loginCRM=$_SESSION["loginCRM"];
@@ -925,7 +910,7 @@ global $db;
             $sql.="on ".$kenz[$typ].".id=P.cp_cv_id where $rechte $where order by ".$kenz[$typ].".name,P.cp_name";
         }
     }
-    $rc=$db->getAll($sql);
+    $rc=$_SESSION['db']->getAll($sql);
     $f=fopen('tmp/report_'.$loginCRM.'.csv',"w");
     fputs($f,$felder."\n");
     if ($rc) {
@@ -945,47 +930,41 @@ global $db;
     } 
 }
 function getAnreden() {
-global $db;
     $sql="select distinct (greeting) from customer";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     return $rs;
 }
 function getBranchen() {
-global $db;
     $sql="select distinct (branche) from customer";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     return $rs;
 }
 function getVariablen($id) {
-global $db;
     if (!($id>0)) return false;
     $sql="select C.name,C.description,C.type,C.options,C.default_value,V.text_Value,V.bool_value,V.timestamp_value,V.number_value from  ";
     $sql.="custom_variables V left join custom_variable_configs C on V.config_id=C.id ";
     $sql.="where trans_id = $id and module = 'CT'";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     return $rs;
 }
 function getAlleVariablen() {
-global $db;
-    $sql  = "select id,name,description,type,default_value,options from custom_variable_configs where module = 'CT' order by sortkey";
-    $rs=$db->getAll($sql);
+    $sql = "select id,name,description,type,default_value,options from custom_variable_configs where module = 'CT' order by sortkey";
+    $rs  = $_SESSION['db']->getAll($sql);
     return $rs;
 }
 function getUmsatzJahre($tab) {
-global $db;
     $sql="select distinct(substr(CAST(transdate as text),1,4)) as year from $tab";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     $leer=array(array("year"=>""));
     return array_merge($leer,$rs);
     return $rs;
 }
 function getTopParts($cid) {
-global $db;
     $limit = 5;
     $sql  = 'SELECT trans_id,parts_id,description,qty,discount,sellprice,fxsellprice,(qty*sellprice) as summe,ar.transdate,unit ';
     $sql .= 'from ar left join invoice on ar.id=trans_id where  customer_id = '.$cid.' order by  ';
-    $ums = $db->getAll($sql.'summe desc limit '.$limit);
-    $qty = $db->getAll($sql.'qty desc,ar.transdate desc limit '.$limit);
+    $ums = $_SESSION['db']->getAll($sql.'summe desc limit '.$limit);
+    $qty = $_SESSION['db']->getAll($sql.'qty desc,ar.transdate desc limit '.$limit);
     $headU[] = array('trans_id'=>'','parts_id'=>'','description'=>'','qty'=>'','discount'=>'','sellprice'=>'','fxsellprice'=>'','summe'=>'','transdate'=>'','unit'=>'');
     $headQ = $headU;
     $headU[0]['description'] = '<b>Umsatzstärkste Artikel</b>';

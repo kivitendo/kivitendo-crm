@@ -1,5 +1,4 @@
 <?php
-	session_start();
         include("inc/stdLib.php");
         $menu = $_SESSION['menu'];
 ?>

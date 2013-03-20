@@ -21,7 +21,7 @@ if ( ! isset($_SESSION['dbhost']) ) {
     require_once "version.php";
     $_SESSION['VERSION'] = $VERSION;
     require_once "login.php";
-    exit();
+    //exit();
 } else {
     if ( !$_SESSION["cookie"] || 
          ( $_SESSION["cookie"] && !$_COOKIE[$_SESSION["cookie"]] ) ) {

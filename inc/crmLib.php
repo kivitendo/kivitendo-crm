@@ -3198,4 +3198,28 @@ function getPart($part) {
     $rs = $_SESSION['db']->getAll($sql);
     return $rs;
 }
+function getIOQ($fid,$was,$vend=0){
+global $db;
+    //if ($_SESSION["sales_edit_all"] == "f") $sea = sprintf(" and (employee_id = %d or salesman_id = %d) ", $_SESSION["loginCRM"], $_SESSION["loginCRM"]);
+    //$closed_sql = $close?"AND closed = 'f' ":" ";
+    $cust_vend = $vend?"vendor_id":"customer_id";
+    $ar_ap = ($liefe)?"ap":"ar";
+    switch($was) {
+        case "inv": //Rechnungen
+            $sql = "SELECT DISTINCT ON ($ar_ap.id) to_char($ar_ap.transdate, 'DD.MM.YYYY') as date, description, COALESCE(ROUND(amount,2))||' '||COALESCE(curr) as amount, ";
+            $sql.= "invnumber as number, $ar_ap.id  FROM $ar_ap LEFT JOIN invoice  ON $ar_ap.id=trans_id  WHERE $cust_vend = $fid";//-- ORDER by ar.id,invoice.id;
+            break;
+        case "ord": //Aufträge
+            $sql = "SELECT DISTINCT ON (oe.id) to_char(oe.transdate, 'DD.MM.YYYY') as date, description, COALESCE(ROUND(amount,2))||' '||COALESCE(curr) as amount, ";
+            $sql.= "oe.ordnumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id=trans_id WHERE quotation = FALSE AND $cust_vend = $fid"; 
+            break;
+        case "quo": //Angebote
+            $sql = "SELECT DISTINCT ON (oe.id) to_char(oe.transdate, 'DD.MM.YYYY') as date, description, COALESCE(ROUND(amount,2))||' '||COALESCE(curr) as amount, ";
+            $sql.= "oe.quonumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id=trans_id WHERE quotation = TRUE AND $cust_vend = $fid";
+    }   
+    $rs = $db->getAll($sql);
+    $rs['sql'] = $sql;
+    return $rs;
+}
+
 ?>

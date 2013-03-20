@@ -2,15 +2,18 @@
 ini_set('session.bug_compat_warn', 0);// Warnung für Sessionbug in neueren Php-Versionen abschalten. 
 ini_set('session.bug_compat_42', 0);  // Das ist natürlich lediglich eine Provirorische Lösung.
 //Warning: Unknown: Your script possibly relies on a session side-effect which existed until PHP 4.2.3. ....
-session_set_cookie_params(600); // 10 minuten.
+session_set_cookie_params(1800); // 30 minuten.
 session_start();
-
-require_once "mdb.php";
 
 //error_reporting (E_ALL & ~E_DEPRECATED);
 //ini_set ('display_errors',1);
-if ( ! isset($_SESSION['ERPNAME']) ) {
-    session_unset ();
+
+$inclpa = ini_get('include_path');
+ini_set('include_path',$inclpa.":../:./inc:../inc");
+
+include_once "mdb.php";
+
+if ( ! isset($_SESSION['dbhost']) ) {
     require_once "conf.php";
     $_SESSION['ERPNAME'] = $ERPNAME;
     $_SESSION['ERP_BASE_URL'] = $ERP_BASE_URL;
@@ -19,16 +22,14 @@ if ( ! isset($_SESSION['ERPNAME']) ) {
     $_SESSION['VERSION'] = $VERSION;
     require_once "login.php";
     exit();
-}
-
-$inclpa = ini_get('include_path');
-ini_set('include_path',$inclpa.":../:./inc:../inc");
-
-if ( !isset($_SESSION["db"])?$_SESSION["db"]:false || !$_SESSION["cookie"] || //$_SESSION["db"] wird benötigt??
-    ( $_SESSION["cookie"] && !$_COOKIE[$_SESSION["cookie"]] ) ) {
-    //Sollte nicht vorkommen
-    header("location: ups.html");
-    //require_once "login.php";
+} else {
+    if ( !$_SESSION["cookie"] || 
+         ( $_SESSION["cookie"] && !$_COOKIE[$_SESSION["cookie"]] ) ) {
+         //Sollte nicht vorkommen
+         header("location: ups.html");
+    };
+    $_SESSION['db']     = new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
+    $db = $_SESSION['db']; // Der muss später weg.
 };
 
 
@@ -142,14 +143,13 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
 * prueft ob name und kennwort in db sind und liefer die UserID
 *****************************************************/
 function anmelden() {
-global $ERPNAME,$erpConfigFile;
     ini_set("gc_maxlifetime","3600");
     //Konfigurationsfile der ERP einlesen
-    $deep = is_dir("../".$ERPNAME) ? "../" : "../../";                // anmelden() aus einem Unterverzeichnis
-    if ( file_exists($deep.$ERPNAME."/config/".$erpConfigFile.".conf") ) {  
-	    $lxo = fopen($deep.$ERPNAME."/config/".$erpConfigFile.".conf","r");  
-    } else if ( file_exists($deep.$ERPNAME."/config/".$erpConfigFile.".conf.default") ) {
-	    $lxo = fopen($deep.$ERPNAME."/config/".$erpConfigFile.".conf.default","r");
+    $deep = is_dir("../".$_SESSION['ERPNAME']) ? "../" : "../../";                // anmelden() aus einem Unterverzeichnis
+    if ( file_exists($deep.$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf") ) {  
+	    $lxo = fopen($deep.$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf","r");  
+    } else if ( file_exists($deep.$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf.default") ) {
+	    $lxo = fopen($deep.$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf.default","r");
     } else {
         return false;
     }
@@ -157,34 +157,27 @@ global $ERPNAME,$erpConfigFile;
     $tmp = fgets($lxo,512);
     //Parameter für die Auth-DB finden
     while ( !feof($lxo) ) {
-        if ( preg_match("/^[\s]*#/",$tmp) ) { //Kommentar, ueberlesen
+        if ( preg_match("/^[\s]*#/",$tmp) || $tmp == "\n" ) { //Kommentar, ueberlesen
             $tmp = fgets($lxo,512);
 	        continue;
         }
         if ( $dbsec && preg_match("!\[.+]!",$tmp) ) $dbsec = false;
         if ( $dbsec ) {
-	        preg_match("/db[ ]*= (.+)/",$tmp,$hits);
-                if ( $hits[1] ) $dbname = $hits[1];
-	        preg_match("/password[ ]*= (.+)/",$tmp,$hits);
-	        if ( $hits[1] ) $dbpasswd = $hits[1];
-	        preg_match("/user[ ]*= (.+)/",$tmp,$hits);
-	        if ( $hits[1] ) $dbuser = $hits[1];
-	        preg_match("/host[ ]*= (.+)/",$tmp,$hits);
-	        if ( $hits[1] ) $dbhost = ($hits[1])?$hits[1]:"localhost";
-	        preg_match("/port[ ]*= ([0-9]+)/",$tmp,$hits);
-	        if ( $hits[1] ) $dbport = ($hits[1])?$hits[1]:"5432";
+	        if ( preg_match("/db[ ]*= (.+)/",$tmp,$hits) )       $dbname = $hits[1];
+	        if ( preg_match("/password[ ]*= (.+)/",$tmp,$hits) ) $dbpasswd = $hits[1];
+	        if ( preg_match("/user[ ]*= (.+)/",$tmp,$hits) )     $dbuser = $hits[1];
+	        if ( preg_match("/host[ ]*= (.+)/",$tmp,$hits) )     $dbhost = ($hits[1])?$hits[1]:"localhost";
+	        if ( preg_match("/port[ ]*= ([0-9]+)/",$tmp,$hits) ) $dbport = ($hits[1])?$hits[1]:"5432";
             if ( preg_match("/\[[a-z]+/",$tmp) ) $dbsec = false;
     	    $tmp = fgets($lxo,512);
 	        continue;
         }
-        preg_match("/cookie_name[ ]*=[ ]*(.+)/",$tmp,$hits);
-        if ( $hits[1] ) $cookiename = $hits[1];
-        preg_match("/dbcharset[ ]*=[ ]*(.+)/",$tmp,$hits);
-        if ( $hits[1] ) $dbcharset = $hits[1];
-        if ( preg_match("!\[authentication/database\]!",$tmp) ) $dbsec = true;
+        if ( preg_match("/cookie_name[ ]*=[ ]*(.+)/",$tmp,$hits) ) $cookiename = $hits[1];
+        if ( preg_match("/dbcharset[ ]*=[ ]*(.+)/",$tmp,$hits) )   $dbcharset = $hits[1];
+        if ( preg_match("!\[authentication/database\]!",$tmp) )    $dbsec = true;
         $tmp = fgets($lxo,512);
     }
-    if ( !$cookiename ) $cookiename = $erpConfigFile.'_session_id';
+    if ( !$cookiename ) $cookiename = $_SESSION['erpConfigFile'].'_session_id';
     fclose($lxo);
     $cookie = $_COOKIE[$cookiename];
     if ( !$cookie ) header("location: ups.html");
@@ -216,6 +209,8 @@ global $ERPNAME,$erpConfigFile;
         $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
         if ($user_data) while (list($key,$val) = each($user_data)) $_SESSION[$key] = $val;
         $_SESSION["loginCRM"]               = $user_data["id"];
+        $theme = ($user_data['theme']=='')?'base':$user_data['theme'];
+        $_SESSION['theme']  = $theme;
         $sql = "select * from defaults";
         $rs = $_SESSION["db"]->getAll($sql);
         $_SESSION["ERPver"]     = $rs[0]["version"];
@@ -740,7 +735,7 @@ function mkHeader() {
     $LN = '">'."\n";
     $head = array(
         'JQUERY'        => $SV.$_SESSION['basepath'].'crm/jquery-ui/jquery.js'.$SN,
-        'JQUERYUI'      => $LV.$_SESSION['basepath'].'crm/jquery-ui/themes/base/jquery-ui.css'.$LN.
+        'JQUERYUI'      => $LV.$_SESSION['basepath'].'crm/jquery-ui/themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN.
                            $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery-ui.js'.$SN,
         'JQTABLE'       => $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/Table/jquery.tablesorter.js'.$SN.
                            $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/Table/addons/pager/jquery.tablesorter.pager.js'.$SN.
@@ -753,8 +748,7 @@ function mkHeader() {
                            $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.iframe-transport.js'.$SN.
                            $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.fileupload.js'.$SN,
         'JQWIDGET'      => $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery.ui.widget.js'.$SN,
-        'THEME'         => (($_SESSION['theme']!='')||($_SESSION['theme']=='base'))?($LV.$_SESSION['basepath'].'crm/jquery-ui/themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN):'',
-        //ToDo: In $_SESSION['theme'] darf eigentlich gar kein 'base' mehr stehen, wird ja eh immer eingebunden, besser in user1 ändern, 
+        'THEME'         => $LV.$_SESSION['basepath'].'crm/jquery-ui/themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN,
         'CRMCSS'        => $LV.$_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"].'/main.css'.$LN,
         'CRMPATH'       => $_SESSION['basepath'].'crm/' );
     return $head;
@@ -764,20 +758,20 @@ function doHeader(&$t) {
     $head = mkHeader();
     $menu =  $_SESSION['menu'];
     $t->set_var(array(
-        JAVASCRIPTS   => $menu['javascripts'],
-        STYLESHEETS   => $menu['stylesheets'],
-        PRE_CONTENT   => $menu['pre_content'],
-        START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content'],
-        JQUERY        => $head['JQUERY'],
-        JQUERYUI      => $head['JQUERYUI'],
-        JQTABLE       => $head['JQTABLE'],
-        JQDATE        => $head['JQDATE'],
-        JQWIDGET      => $head['JQWIDGET'],
-        JQFILEUP      => $head['JQFILEUP'],
-        THEME         => $head['THEME'],
-        CRMCSS        => $head['CRMCSS'],
-        CRMPATH       => $head['CRMPATH']
+        'JAVASCRIPTS'   => $menu['javascripts'],
+        'STYLESHEETS'   => $menu['stylesheets'],
+        'PRE_CONTENT'   => $menu['pre_content'],
+        'START_CONTENT' => $menu['start_content'],
+        'END_CONTENT'   => $menu['end_content'],
+        'JQUERY'        => $head['JQUERY'],
+        'JQUERYUI'      => $head['JQUERYUI'],
+        'JQTABLE'       => $head['JQTABLE'],
+        'JQDATE'        => $head['JQDATE'],
+        'JQWIDGET'      => $head['JQWIDGET'],
+        'JQFILEUP'      => $head['JQFILEUP'],
+        'THEME'         => $head['THEME'],
+        'CRMCSS'        => $head['CRMCSS'],
+        'CRMPATH'       => $head['CRMPATH']
     ));
 }
 /**
@@ -825,16 +819,15 @@ function mkDirName($name) {
 }
 
 function makeMenu($sess,$token){
-global $ERP_BASE_URL;
     if( !function_exists( 'curl_init' ) ){
         die( 'Curl (php5-curl) ist nicht installiert!' );
     }
-    if ( !isset($ERP_BASE_URL) || $ERP_BASE_URL == '' ){
+    if ( !isset($_SESSION['ERP_BASE_URL']) || $_SESSION['ERP_BASE_URL'] == '' ){
         $BaseUrl  = (empty( $_SERVER['HTTPS'] )) ? 'http://' : 'https://';
         $BaseUrl .= $_SERVER['HTTP_HOST'];
         $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
     } else {
-        $BaseUrl = $ERP_BASE_URL;
+        $BaseUrl = $_SESSION['ERP_BASE_URL'];
     }
     $_SESSION['baseurl'] = $BaseUrl;
     $Url = $BaseUrl.'controller.pl?action=Layout/empty&format=json';

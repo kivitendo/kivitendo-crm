@@ -20,7 +20,7 @@
                     $_SESSION[$key] = $val;
                 }
         }
-        $_SESSION['theme'] = '<link rel="stylesheet" type="text/css" href="'.$_SESSION['baseurl'].'crm/jquery-ui/themes/'.$_POST['theme'].'/jquery-ui.css">';  
+        $_SESSION['theme'] = $_POST['theme'];  
     } else if ($_POST["mkmbx"]) {
         $rc=createMailBox($_POST["Postf2"],$_POST["Login"]);
     } 

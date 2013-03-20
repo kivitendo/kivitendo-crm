@@ -216,8 +216,6 @@ global $ERPNAME,$erpConfigFile;
         $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
         if ($user_data) while (list($key,$val) = each($user_data)) $_SESSION[$key] = $val;
         $_SESSION["loginCRM"]               = $user_data["id"];
-        $theme = ($user_data['theme']=='')?'base':$user_data['theme'];
-        $_SESSION['theme']  = '<link rel="stylesheet" type="text/css" href="'.$_SESSION['baseurl'].'crm/jquery-ui/themes/'.$theme.'/jquery-ui.css">';
         $sql = "select * from defaults";
         $rs = $_SESSION["db"]->getAll($sql);
         $_SESSION["ERPver"]     = $rs[0]["version"];
@@ -755,7 +753,8 @@ function mkHeader() {
                            $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.iframe-transport.js'.$SN.
                            $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.fileupload.js'.$SN,
         'JQWIDGET'      => $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery.ui.widget.js'.$SN,
-        'THEME'         => $_SESSION['theme'],
+        'THEME'         => (($_SESSION['theme']!='')||($_SESSION['theme']=='base'))?($LV.$_SESSION['basepath'].'crm/jquery-ui/themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN):'',
+        //ToDo: In $_SESSION['theme'] darf eigentlich gar kein 'base' mehr stehen, wird ja eh immer eingebunden, besser in user1 ändern, 
         'CRMCSS'        => $LV.$_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"].'/main.css'.$LN,
         'CRMPATH'       => $_SESSION['basepath'].'crm/' );
     return $head;

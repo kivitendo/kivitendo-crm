@@ -34,8 +34,8 @@ function getShipStamm($id,$tab="C",$complete=false) {
 * out: rs = array(Felder der db)
 * hole alle Kunden
 *****************************************************/
-function getAllFirmen($sw,$Pre=true,$tab='C') {
-    if ($Pre) $Pre=$_SESSION["Pre"];
+function getAllFirmen($sw,$usePre=true,$tab='C') {
+    if ($usePre) $Pre=$_SESSION["pre"];
     $rechte=berechtigung();
     if (!$sw[0]) {
          $where="phone like '$Pre".$sw[1]."%' "; 
@@ -63,8 +63,8 @@ function getAllFirmen($sw,$Pre=true,$tab='C') {
     };
     return $rs;
 }
-function getAllFirmenByMail($sw,$Pre=true,$tab='C') {
-    if ($Pre) $Pre=$_SESSION["Pre"];
+function getAllFirmenByMail($sw,$usePre=true,$tab='C') {
+    if ($usePre) $Pre=$_SESSION["pre"];
     $rechte=berechtigung();
     $where = "email ilike '$Pre$sw%'";
     if ($tab=="C") {
@@ -346,7 +346,7 @@ function suchstr($muster,$typ="C") {
             email=>"shiptoemail",department_1=>"shiptodepartment_1",
             department_2=>"shiptodepartment_2",country=>"shiptocountry");
     $fuzzy2=$muster["fuzzy"];
-    $fuzzy1=($muster["pre"])?$_SESSION["Pre"]:"";
+    $fuzzy1=($muster["pre"])?$_SESSION["pre"]:"";
     $andor = $muster["andor"];
     $keys=array_keys($muster);
     $suchfld=array_keys($dbfld);

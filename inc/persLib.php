@@ -88,9 +88,9 @@ global $db;
 * out: rs = array(Felder der db)
 * hole Liste der Kontaktpersonen
 *****************************************************/
-function getAllPerson($sw,$Pre=true) {
+function getAllPerson($sw,$usePre=true) {
 global $db;
-    if ($Pre) $Pre=$_SESSION["Pre"];
+    if ($usePre) $Pre=$_SESSION["pre"];
     $rechte=berechtigung("cp_");
     if (!$sw[0]) { $where="cp_phone1 like '$Pre".$sw[1]."%' or cp_mobile1 like '$Pre".$sw[1]."%' "; }
     else { $where="cp_name ilike '$Pre".$sw[1]."%' or cp_givenname ilike '$Pre".$sw[1]."%'"; }
@@ -141,7 +141,7 @@ global $db;
 function suchPerson($muster) {
 global $db;
     $pre = ($_SESSION["preon"])?"%":"";
-    $pre = ($muster["pre"])?$_SESSION["Pre"]:"";
+    $pre = ($muster["pre"])?$_SESSION["pre"]:"";
     $fuzzy=$muster["fuzzy"];
     $andor = $muster["andor"];
     $rechte=berechtigung("cp_");

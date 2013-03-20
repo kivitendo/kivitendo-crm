@@ -209,7 +209,7 @@ function anmelden() {
         $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
         if ($user_data) while (list($key,$val) = each($user_data)) $_SESSION[$key] = $val;
         $_SESSION["loginCRM"]               = $user_data["id"];
-        $_SESSION['theme']  = ($user_data['theme']=='' || $user_data['theme']=='base')?$user_data['theme']:'';
+        $_SESSION['theme']  = ($user_data['theme']=='' || $user_data['theme']=='base')?'':$user_data['theme'];
         $sql = "select * from defaults";
         $rs = $_SESSION["db"]->getAll($sql);
         $_SESSION["ERPver"]     = $rs[0]["version"];

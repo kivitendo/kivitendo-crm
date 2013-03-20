@@ -209,8 +209,7 @@ function anmelden() {
         $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
         if ($user_data) while (list($key,$val) = each($user_data)) $_SESSION[$key] = $val;
         $_SESSION["loginCRM"]               = $user_data["id"];
-        $theme = ($user_data['theme']=='')?'base':$user_data['theme'];
-        $_SESSION['theme']  = $theme;
+        $_SESSION['theme']  = ($user_data['theme']=='' || $user_data['theme']=='base')?$user_data['theme']:'';
         $sql = "select * from defaults";
         $rs = $_SESSION["db"]->getAll($sql);
         $_SESSION["ERPver"]     = $rs[0]["version"];
@@ -735,7 +734,7 @@ function mkHeader() {
     $LN = '">'."\n";
     $head = array(
         'JQUERY'        => $SV.$_SESSION['basepath'].'crm/jquery-ui/jquery.js'.$SN,
-        'JQUERYUI'      => $LV.$_SESSION['basepath'].'crm/jquery-ui/themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN.
+        'JQUERYUI'      => $LV.$_SESSION['basepath'].'crm/jquery-ui/themes/base/jquery-ui.css'.$LN.
                            $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery-ui.js'.$SN,
         'JQTABLE'       => $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/Table/jquery.tablesorter.js'.$SN.
                            $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/Table/addons/pager/jquery.tablesorter.pager.js'.$SN.
@@ -748,7 +747,7 @@ function mkHeader() {
                            $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.iframe-transport.js'.$SN.
                            $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.fileupload.js'.$SN,
         'JQWIDGET'      => $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery.ui.widget.js'.$SN,
-        'THEME'         => $LV.$_SESSION['basepath'].'crm/jquery-ui/themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN,
+        'THEME'         => ($_SESSION['theme']!='')? $LV.$_SESSION['basepath'].'crm/jquery-ui/themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN:'',
         'CRMCSS'        => $LV.$_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"].'/main.css'.$LN,
         'CRMPATH'       => $_SESSION['basepath'].'crm/' );
     return $head;

@@ -20,7 +20,7 @@
                     $_SESSION[$key] = $val;
                 }
         }
-        $_SESSION['theme'] = $_POST['theme'];  
+        $_SESSION['theme'] = ($_POST['theme']!='base')?$_POST['theme']:'';  
     } else if ($_POST["mkmbx"]) {
         $rc=createMailBox($_POST["Postf2"],$_POST["Login"]);
     } 

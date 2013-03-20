@@ -391,9 +391,9 @@
     <div id="right_tabs">
         <ul>
             <li><a href="#contact">.:contact:.</a></li>
-            <li><a href="jqhelp/get_doc.php?was=order">.:orders:.</a></li>
-            <li><a href="jqhelp/get_doc.php?was=quotation">.:Quotation:.</a></li>
-            <li><a href="jqhelp/get_doc.php?was=invoice">.:Invoice:.</a></li>
+            <li><a href="jqhelp/get_doc.php?was=ord&fid={FID}">.:orders:.</a></li>
+            <li><a href="jqhelp/get_doc.php?was=quo&fid={FID}">.:Quotation:.</a></li>
+            <li><a href="jqhelp/get_doc.php?was=inv&fid={FID}">.:Invoice:.</a></li>
         </ul>
     <div id="contact">
             <table id="calls" class="tablesorter" width="100%" style='margin:0px;'>

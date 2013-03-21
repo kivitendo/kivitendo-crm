@@ -3,25 +3,23 @@
 *** Erzeugt eine Tabelle mit offenen bzw. allen Aufträgen, Angeboten oder Rechungen   ***
 ****************************************************************************************/
 
-//ToDo: is Customer or Vendor!!!!!!
+//ToDo: bgCol, sortierbar, suche, LimitAnzahl, klickbar!!
 
 
 include ("../inc/crmLib.php");
 include ("../inc/stdLib.php");
-if($_GET['was']=="ord") {
-    echo "Tab Aufträge: Tabellen noch nicht implementiert";
-    $rs = getIOQ($_GET['fid'],"ord" );
-     print_r($rs);
-}
-else if($_GET['was']=="quo") {
-    echo "Tab Angebote: Tabellen noch nicht implementiert";
-    $rs = getIOQ($_GET['fid'],"quo" );
-    print_r($rs);
-    }
-else if($_GET['was']=="inv") {
-    echo "Tab Rechnungen: Tabellen";
-    $rs = getIOQ($_GET['fid'],"inv" );
-    print_r($rs);
-    }
+$rs = getIOQ($_GET['fid'],$_GET['Q'],$_GET["type"]);
+echo "<table id='result_ioq' class='tablesorter'>\n"; 
+echo "<thead><tr><th>.:date:.</th><th>.:decription:.</th><th>.:amount:.</th><th>.:number:.</th></tr></thead>\n<tbody>\n";
+$i=0; 
+if ($rs) 
+    foreach($rs as $row) { 
+        echo "<tr class='bgcol".($i%2+1)."' onClick='OpenIOQ(\"C\",".$row["id"].");'>". 
+             "<td class=\"liste\">".$row["date"]."</td><td class=\"liste\">".$row["description"]."</td>". 
+             "<td class=\"liste\">".$row["amount"]."</td><td class=\"liste\">".$row["number"]."</td></tr>\n"; 
+        $i++; 
+    } 
+    echo "</tbody></table>\n"; 
+
 ?>
     

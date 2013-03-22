@@ -1,0 +1,12 @@
+--- webpages/ic/form_header.html	2012-12-28 14:29:08.000000000 +0100
++++ /tmp/form_header.html	2012-12-28 14:28:47.000000000 +0100
+@@ -67,7 +67,8 @@
+              </tr>
+              <tr>
+                <th align="right">[% 'EAN-Code' | $T8 %]</th>
+-               <td><input name="ean" size="40" value="[% HTML.escape(ean) %]"></td>
++               <td><input name="ean" size="40" value="[% HTML.escape(ean) %]">
++                   <a href="crm/barcode.php?pid=[% HTML.escape(id) %]">print</a></td>
+              </tr>
+              <tr>
+               [%- IF all_partsgroup.size %]

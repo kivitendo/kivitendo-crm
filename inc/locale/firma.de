@@ -59,6 +59,7 @@ $texts  = array(
   '.:Customer:.'        => 'Kunde',
   '.:Customer Name:.'   => 'Kundenname',
   '.:Vendor:.'          => 'Lieferant',
+  '.:vendors:.'         => 'Lieferanten',
   '.:Vendor Name:.'     => 'Lieferantenname',
   '.:KdNr:.'            => 'KdNr.',
   '.:contacts:.'        => 'Kundenkontakte',
@@ -66,6 +67,7 @@ $texts  = array(
   '.:keyin:.'           => 'eingeben',
   '.:fromList:.'        => 'aus Liste',
   '.:search:.'          => 'suche',
+  '.:Search:.'          => 'Suche',
   '.:uploadDocument:.'  => 'Datei hochladen',
   '.:newDirectory:.'    => 'neues Verzeichnis',
   '.:newItem:.'         => 'neuer Eintrag',
@@ -199,6 +201,16 @@ $texts  = array(
   '.:part:.'            => 'Artikel',
   '.:obsolete:.'        => 'Ungültig',
   '.:equal:.'           => 'Egal',
-  ".:Couldn't load this tab. We'll try to fix this as soon as possible.:." => 'Konnte diesen Tab nicht laden. Wir werden versuchen den Fehler so schnelle wie möglich zu behenben.'
+  ".:Couldn't load this tab. We'll try to fix this as soon as possible.:." => 'Konnte diesen Tab nicht laden. Wir werden versuchen den Fehler so schnelle wie möglich zu behenben.',
+  '.:date:.'            => 'Datum',
+  '.:first position:.'  => 'Erste Position',
+  '.:amount:.'          => 'Betrag',
+  '.:number:.'          => 'Nummer',
+  '.:fast search customer/vendor/contacts and contact history:.'           => 'Schnellsuche Kunde/Lieferant/Kontakte und Kontaktverlauf',
+  '.:adress:.'          => 'Adresse',
+  '.:contact history:.' => 'Kontaktverlauf',
+  '.:search keyword:.'  => 'Suchbegriff',
+  '.:users:.'           => 'Benutzer'
+  
 ); 
 ?>

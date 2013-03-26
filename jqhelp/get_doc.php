@@ -29,7 +29,8 @@ include ("../inc/crmLib.php");
 include ("../inc/stdLib.php");
 $rs = getIOQ($_GET['fid'],$_GET['Q'],$_GET["type"]);
 echo "<table id='result_ioq' class='tablesorter'>\n"; 
-echo "<thead><tr><th>.:date:.</th><th>.:decription:.</th><th>.:amount:.</th><th>.:number:.</th></tr></thead>\n<tbody>\n";
+echo "<thead><tr><th>".translate('.:date:.','firma')."</th><th>".translate('.:first position:.','firma')."</th><th>"
+     .translate('.:amount:.','firma')."</th><th>".translate('.:number:.','firma')." </th></tr></thead>\n<tbody>\n";
 $i=0; 
 if ($rs) 
     foreach($rs as $row) { 

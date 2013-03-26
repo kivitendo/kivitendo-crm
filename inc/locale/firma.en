@@ -60,6 +60,7 @@ $texts  = array(
   '.:Customer:.'     => 'Customer',
   '.:Customer Name:.' => 'Customer name',
   '.:Vendor:.'       => 'Vendor',
+  '.:vendors:.'       =>'Vendors',
   '.:Vendor Name:.'  => 'Vendor name',
   '.:KdNr:.'	     => 'Number.',
   '.:Contact:.'	     => 'Contact',
@@ -67,6 +68,7 @@ $texts  = array(
   '.:keyin:.'	     => 'Key in',
   '.:fromList:.'	 => 'From List',
   '.:search:.'	     => 'search',
+  '.:Search:.'       => 'Search',
   '.:uploadDocument:.'	 => 'upload Document',
   '.:newDirectory:.'	 => 'new Directory',
   '.:newItem:.'      => 'new Item',
@@ -199,7 +201,15 @@ $texts  = array(
   '.:part:.'            => 'Part'
   '.:obsolete:.'        => 'Obsolete',
   '.:equal:.'           => 'Equal',
-  '.:Couldn't load this tab. We'll try to fix this as soon as possible.:.' => 'Couldn't load this tab. We'll try to fix this as soon as possible.'
-  
+  ".:Couldn't load this tab. We'll try to fix this as soon as possible.:." => "Couldn't load this tab. We'll try to fix this as soon as possible.",
+  '.:date:.'            => 'Date',
+  '.:first position:.'  => 'First Position',
+  '.:amount:.'          => 'Amount',
+  '.:number:.'          => 'Number',
+  '.:fast search customer/vendor/contacts and contact history:.'           => 'Fast Search Customer/Vendor/Contacts and Contact History',
+  '.:adress:.'          => 'Adress',
+  '.:contact history:.' => 'Contact History',
+  '.:search keyword:.'  => 'Search Keyword',
+  '.:users:.'           => 'Users'
 );
 ?>

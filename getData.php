@@ -83,16 +83,17 @@ if ($_SESSION['feature_ac']) { //funktioniert wegen der Ersetzungen für minLeng
     </script>
 </head>
 <body onload="$('#ac0').focus().val('<?php echo preg_replace("#[ ].*#",'',$_GET['swort']);?>');">
-<?php echo $menu['pre_content']; ?>
-<?php echo $menu['start_content']; ?>
-<p class="listtop">Schnellsuche Kunde/Lieferant/Kontakte und Kontaktverlauf</p>
-<form name="suche" action="getData.php" method="get">
-    <input type="text" name="swort" size="25" id="ac0" autocomplete="off"> suche 
-    <input type="submit" name="adress" value="Adresse" id="adress">
-    <input type="submit" name="kontakt" value="Kontaktverlauf"> <br>
-    <span class="liste">Suchbegriff</span>
-</form>
 <?php 
+echo $menu['pre_content'];
+echo $menu['start_content'];
+echo '<p class="listtop">'.translate('.:fast search customer/vendor/contacts and contact history:.','firma').'</p>
+<form name="suche" action="getData.php" method="get">
+    <input type="text" name="swort" size="25" id="ac0" autocomplete="off"> '.translate('.:Search:.','firma').' 
+    <input type="submit" name="adress" value="'.translate('.:adress:.','firma').'" id="adress">
+    <input type="submit" name="kontakt" value="'.translate('.:contact history:.','firma').'"> <br>
+    <span class="liste">'.translate('.:search keyword:.','firma').'</span>
+</form>';
+
 if ($_GET["kontakt"] && $_GET['swort'] != '') { 
 	$sw = strtoupper( $_GET["suchwort"] );
 	$sw = strtr( $sw, "*?", "%_" );

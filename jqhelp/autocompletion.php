@@ -20,7 +20,7 @@ if ($_GET['case']=='name') {
     } 
     if ($rsV) foreach ( $rsV as $key => $value ) {
         if (count($rs) > 11) break; 
-        array_push($rs,array('label'=>$value['name'],'category'=>'Lieferanten','src'=>'V','id'=>$value['id']));//ToDo translate 
+        array_push($rs,array('label'=>$value['name'],'category'=>translate('.:vendors:.','firma'),'src'=>'V','id'=>$value['id']));
         if(isset($_GET['src']) && $_GET['src']=='cv') {
             echo json_encode($rs); 
             return;
@@ -28,11 +28,11 @@ if ($_GET['case']=='name') {
     } 
     if ($rsK) foreach ( $rsK as $key => $value ) {
         if (count($rs) > 11) break;  
-        array_push($rs,array('label'=>$value['cp_givenname']." ".$value['cp_name'],'category'=>'Personen','src'=>'K','id'=>$value['id']));//ToDo translate 
+        array_push($rs,array('label'=>$value['cp_givenname']." ".$value['cp_name'],'category'=>translate('.:personen:.','firma'),'src'=>'K','id'=>$value['id'])); 
     } 
     if ($rsE) foreach ( $rsE as $key => $value ) {
         if (count($rs) > 11) break;  
-        array_push($rs,array('label'=>$value['name'],'category'=>'Benutzer','src'=>'E','id'=>$value['id']));//ToDo translate 
+        array_push($rs,array('label'=>$value['name'],'category'=>translate('.:users:.','firma'),'src'=>'E','id'=>$value['id']));
     }
     echo json_encode($rs); 
 } 

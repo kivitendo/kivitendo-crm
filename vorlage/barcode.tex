@@ -1,0 +1,37 @@
+\documentclass{article}
+\usepackage{fancyhdr}
+
+% Font für Code 39
+\font\xlixa=wlc39 scaled 1200
+\newcommand{\barcodea}[1]{{\xlixa@#1@}}
+% Font für Code 93
+\font\xlixb=wlc93 scaled 1200
+\newcommand{\barcodeb}[1]{{\xlixb@#1@}}
+% Font für Code 11
+\font\xlixc=wlc11 scaled 1200
+\newcommand{\barcodec}[1]{{\xlixc@#1@}}
+% Font für Code 128
+\font\xlixd=wlc128 scaled 1200
+\newcommand{\barcoded}[1]{{\xlixd@#1@}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\pagestyle{empty}
+
+\begin{document}
+   
+<%description%>\\
+<%ean%>  Euro <%bruttosell%>\\
+ean 11 \\
+\barcodec{<%ean%>}\\
+\\
+ean 39\\
+\barcodea{<%ean%>}\\
+\\
+ean 93\\
+\barcodeb{<%ean%>}\\
+\\
+ean 128\\
+\barcodec{<%ean%>}
+
+\end{document}

@@ -355,6 +355,7 @@ CREATE TABLE crmdefaults (
     employee integer NOT NULL DEFAULT -1,
     key text,
     val text,
+    grp char(10),
     modify timestamp without time zone DEFAULT NOW()
 );
 CREATE TABLE crmemployee (
@@ -364,23 +365,23 @@ CREATE TABLE crmemployee (
     val text,
     typ char(1) DEFAULT 't'
 );
-INSERT INTO crmdefaults (key,val,employee) VALUES ('ttpart','',-1);
-INSERT INTO crmdefaults (key,val,employee) VALUES ('tttime','60',-1);
-INSERT INTO crmdefaults (key,val,employee) VALUES ('ttround','15',-1);
-INSERT INTO crmdefaults (key,val,employee) VALUES ('ttclearown','',-1);
-INSERT INTO crmdefaults (key,val,employee) VALUES ('GEODB','',-1);
-INSERT INTO crmdefaults (key,val,employee) VALUES ('BLZDB','',-1);
-INSERT INTO crmdefaults (key,val,employee) VALUES ('CallDel','',-1);
-INSERT INTO crmdefaults (key,val,employee) VALUES ('CallEdit','',-1);
-INSERT INTO crmdefaults (key,val,employee) VALUES ('Expunge','',-1);
-INSERT INTO crmdefaults (key,val,employee) VALUES ('MailFlag','Flagged',-1);
-INSERT INTO crmdefaults (key,val,employee) VALUES ('logmail','t',-1);
-INSERT INTO crmdefaults (key,val,employee) VALUES ('dir_group','users',-1);
-INSERT INTO crmdefaults (key,val,employee) VALUES ('dir_mode','493',-1);
-INSERT INTO crmdefaults (key,val,employee) VALUES ('sep_cust_vendor','t',-1);
-INSERT INTO crmdefaults (key,val,employee) VALUES ('listLimit','500',-1);
-INSERT INTO crmdefaults (key,val,employee) VALUES ('showErr','',-1);
-INSERT INTO crmdefaults (key,val,employee) VALUES ('logfile','',-1);
+INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('ttpart','','mandant',-1);
+INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('tttime','60','mandant',-1);
+INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('ttround','15','mandant',-1);
+INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('ttclearown','','mandant',-1);
+INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('GEODB','','mandant',-1);
+INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('BLZDB','','mandant',-1);
+INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('CallDel','','mandant',-1);
+INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('CallEdit','','mandant',-1);
+INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('Expunge','','mandant',-1);
+INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('MailFlag','Flagged','mandant',-1);
+INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('logmail','t','mandant',-1);
+INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('dir_group','users','mandant',-1);
+INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('dir_mode','493','mandant',-1);
+INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('sep_cust_vendor','t','mandant',-1);
+INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('listLimit','500','mandant',-1);
+INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('showErr','','mandant',-1);
+INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('logfile','','mandant',-1);
 
 INSERT INTO bundesland (country,bundesland) VALUES ('D','Baden-Württemberg');
 INSERT INTO bundesland (country,bundesland) VALUES ('D','Bayern');

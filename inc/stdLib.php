@@ -216,7 +216,7 @@ function anmelden() {
         $_SESSION["menu"]       = makeMenu($_SESSION["sessid"],$_SESSION["token"]);
         $_SESSION["basepath"]   = $BaseUrl;
         $_SESSION['token']      = False;
-        $sql = "select * from crmdefaults";
+        $sql = "select * from crmdefaults where grp = 'mandant'";
         $rs = $_SESSION["db"]->getAll($sql);  //Vor dem Update crm_defauts gibt es einen Fehler
         if ($rs) foreach ($rs as $row) $_SESSION[$row['key']] = $row['val'];
         return true;

@@ -25,14 +25,14 @@ if ( $_POST['save'] ) {
     if ( $_POST['dir_mode'] != '' ) $_POST['dir_mode'] = octdec($_POST['dir_mode']);
     if ( $save ) {
         $last = $_SESSION['db']->getOne('SELECT max(id) as id FROM crmdefaults');
-        $insert = "INSERT INTO crmdefaults (key,val,employee) VALUES (?,?,".$_SESSION['loginCRM'].")";
+        $insert = "INSERT INTO crmdefaults (key,val,grp,employee) VALUES (?,?,'mandant',".$_SESSION['loginCRM'].")";
         $data = array();
         foreach ($keys as $row) { $data[] = array($row,$_POST[$row]); };
         $rc = $_SESSION['db']->executeMultiple($insert,$data);
         if ( $rc ) {
             $msg = 'Sichern erfolgt';
             if ( $last['id'] ) {
-                $sql = 'DELETE FROM crmdefaults WHERE id <= '.$last['id'];
+                $sql = 'DELETE FROM crmdefaults WHERE grp = 'mandant' and id <= '.$last['id'];
                 $rc = $_SESSION['db']->query($sql);
             }
             $_SESSION['db']->commit();
@@ -42,7 +42,7 @@ if ( $_POST['save'] ) {
         }
     }
 }
-    $sql = "SELECT * FROM crmdefaults";
+    $sql = "SELECT * FROM crmdefaults WHERE grp = 'mandant'";
     $rs  = $_SESSION['db']->getAll($sql);
     $data = array();
     if ( $rs ) foreach ( $rs as $row ) $data[$row['key']] = $row['val'];

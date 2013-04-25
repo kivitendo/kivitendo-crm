@@ -215,5 +215,7 @@ Anschrift<br><hr>
             </td>
         </tr>
     </table>
+    <br>
+    <a href="JavaScript:self.close()">schließen</a>
 </body>
 </html>

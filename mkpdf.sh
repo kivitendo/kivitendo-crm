@@ -12,8 +12,8 @@ echo einen Katalog zu erstellen.
 echo Entweder die Dateirechte ändern und diese Dateien entfernen!
 echo 
 pdflatex -interaction=batchmode -output-directory=tmp/ tmp/katalog.tex
-echo 
 if [ $? -eq 0 ]; then
+    echo 
     pdflatex -interaction=batchmode -output-directory=tmp/ tmp/katalog.tex
     echo 
     if [ -f  tmp/katalog.pdf ]; then

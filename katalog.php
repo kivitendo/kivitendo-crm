@@ -13,8 +13,8 @@ if ($_POST['ok']) {
     if (file_exists('tmp/tabelle.tex')) unlink('tmp/tabelle.tex');
     $f = fopen('tmp/katalog.tex','w');
     $rc = fputs($f,$vorlage['pre']);
-    $suche = array('&','_','"','!','#','%');
-    $ersetze = array('\&','\_','\"',' : ','\#','\%');
+    $suche = array('&','_','"','!','#','%','(',')');
+    $ersetze = array('\&','\_','\"',' : ','\#','\%','\{','\}');
     if ($artikel) foreach($artikel as $part) {
         $line = $vorlage['artikel'];
         if ($lastPG != $part['partsgroup']) {
@@ -36,6 +36,7 @@ if ($_POST['ok']) {
         if ($_POST['addtax']) $preis = $preis * (1 + $tax[$part['bugru']]['rate']);
         foreach ($part as $key=>$val) {
             if ($key == 'description') $val = str_replace($suche,$ersetze,$val);
+            if ($key == 'notes') $val = str_replace($suche,$ersetze,$val);
             //if ($key == 'image') $val = str_replace($suche,$ersetze,$val);
             if ($key == 'image') {
                  if ($val == '') $val = 'image/nopic.png';

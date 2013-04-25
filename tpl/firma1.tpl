@@ -45,6 +45,9 @@
         });
         return false;
     }
+    function dhl() {
+        F1=open("dhl.php?Q={Q}&fid={FID}&popup=1","Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
+    }
     function showItem(id) {
         F1=open("getCall.php?Q={Q}&fid={FID}&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
     }
@@ -296,6 +299,7 @@
             <span style="visibility:{zeige_karte};"><a class="firmabutton" href="{KARTE1}" name="karte" target="_blank"><img src="image/karte.gif" title=".:city map:." border="0"></a>&nbsp;</span>
             <span style="visibility:{zeige_etikett};"><a class="firmabutton" href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0" /></a>&nbsp;</span><br>
             <br class='mini'>
+            <span style="visibility:{zeige_dhl};"><a class="firmabutton" href="#" onCLick="dhl();" title="DHL"><img src="image/briefkasten.gif" alt="DHL" border="0" /></a>&nbsp;</span>
             {begin_comment}<a href="lxcars/lxcmain.php?owner={FID}&task=1" title="KFZ-Daten"><img src="./lxcars/image/lxcmain.png" alt="Cars" border="1" /></a>{end_comment}
         </div>
         <br />

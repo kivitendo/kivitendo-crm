@@ -166,6 +166,7 @@
             'zeige_karte' => ($_SESSION['zeige_karte']=='t')?'visible':'hidden',
             'zeige_etikett' => ($_SESSION['zeige_etikett']=='t')?'visible':'hidden',  
             'zeige_extra' => ($_SESSION['zeige_extra']=='t')?"visible":"hidden",         
+            'zeige_dhl' => ($_SESSION['zeige_dhl']=='t')?"visible":"hidden",         
             'begin_comment' => ($_SESSION['zeige_lxcars']=='t'&&$Q=="C")?"":"<!-- ",
             'end_comment' => ($_SESSION['zeige_lxcars']=='t'&&$Q=="C")?"":" -->",
             'zeige_tools' => ($_SESSION['zeige_tools']=='t')?"visible":"hidden",

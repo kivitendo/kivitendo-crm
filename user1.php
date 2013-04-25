@@ -11,7 +11,7 @@
         $id=$_POST["UID"];
         $no = array('save','uid','login','ok');
         $chkbox = array('tinymce','preon','feature_ac','angebot_button','auftrag_button','rechnung_button',
-                        'zeige_extra','zeige_lxcars','zeige_etikett','zeige_tools','show_err','php_error');
+                        'zeige_extra','zeige_lxcars','zeige_etikett','zeige_tools','zeige_dhl','show_err','php_error');
         while ( list($key,$val) = each ($_POST) ) {
             if ( ! in_array($key,$no) ) 
                 if ( in_array($key,$chkbox) ) {
@@ -101,6 +101,7 @@
             angebot_button         => ($fa['angebot_button']=='t')?'checked':'',
             rechnung_button        => ($fa['rechnung_button']=='t')?'checked':'',
             zeige_extra            => ($fa['zeige_extra']=='t')?'checked':'',
+            zeige_dhl              => ($fa['zeige_dhl']=='t')?'checked':'',
             zeige_karte            => ($fa['zeige_karte']=='t')?'checked':'',
             zeige_etikett          => ($fa['zeige_etikett']=='t')?'checked':'',
             zeige_tools            => ($fa['zeige_tools']=='t')?'checked':'',

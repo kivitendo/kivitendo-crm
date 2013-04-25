@@ -201,6 +201,7 @@
              <input type="checkbox" name="angebot_button"  value='t' {angebot_button}>Angebot&nbsp;&nbsp; <input type="checkbox" name="auftrag_button"  value='t' {auftrag_button}>Auftrag&nbsp;&nbsp;  
              <input type="checkbox" name="rechnung_button" value='t' {rechnung_button}>Rechnung&nbsp;&nbsp;<input type="checkbox" name="zeige_extra" value='t' {zeige_extra}>Extra&nbsp;&nbsp;
              <input type="checkbox" name="zeige_karte" value='t' {zeige_karte}>Karte&nbsp;&nbsp;<input type="checkbox" name="zeige_etikett" value='t' {zeige_etikett}>Etikett&nbsp;&nbsp;
+             <input type="checkbox" name="zeige_dhl" value='t' {zeige_dhl}>DHL&nbsp;&nbsp;
              <input type="checkbox" name="zeige_tools" value='t' {zeige_tools}>Tools&nbsp;&nbsp;<input type="checkbox" name="zeige_lxcars"    value='t' {zeige_lxcars}>LxCars&nbsp;&nbsp;</td>
    </tr>
    <tr><td class="norm">Doppelten Kunden anlegen</td><td colspan="4">

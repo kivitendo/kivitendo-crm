@@ -1,12 +1,11 @@
 <html>
     <head><title></title>
-    {STYLESHEETS}
-    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
-    {THEME}
-    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
-    {JAVASCRIPTS}
+{STYLESHEETS}
+{CRMCSS}
+{JQUERY}
+{JQUERYUI}
+{THEME}
+{JAVASCRIPTS}
     <script language="JavaScript">
         function doInit() {
             {JS}
@@ -154,6 +153,7 @@
 <INPUT TYPE="hidden" name="KontaktCC" id="KontaktCC" value="{KontaktCC}">
 <INPUT TYPE="hidden" name="MID" value="{vorlage}">
 <INPUT TYPE="hidden" name="aktion" id="aktion" value="">
+<INPUT TYPE="hidden" name="popup" value="{popup}">
 <tr>
 	<td class=" re" width="3em"></td>
 	<td class=" re" width="*"></td>
@@ -166,7 +166,8 @@
 	<td rowspan="7" class="le" style="vertical-align:middle;">
 			<br><image src='image/mail-send.png' border='0' name="ok"  title=".:send:." onClick="sende();"><br>{btn}
 			<br><br><image src='image/save_kl.png' border='0' style="visibility:{hide}" name="save" onClick="saveTpl();"  title=".:template:.
-.:save:.">		<br><br><image src='image/eraser.png' border='0' style="visibility:{hide}" name="del" onClick="delTpl();" title=".:template:.
+.:save:.">
+            <br><br><image src='image/eraser.png' border='0' style="visibility:{hide}" name="del" onClick="delTpl();" title=".:template:.
 .:delete:.">
 	</td>
 </tr><tr>
@@ -205,6 +206,7 @@
 
 </form>
 </table>
+{closelink}
 </center>
 </div>
 <!-- End Code ------------------------------------------->

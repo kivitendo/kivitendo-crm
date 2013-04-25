@@ -6,6 +6,11 @@
     include("inc/UserLib.php");
     include_once("Mail.php");
     include_once("Mail/mime.php");
+    if ( isset($_GET['popup']) or isset($_POST['popup']) ) {
+        $popup = true;
+    } else {
+        $popup = false;
+    }
 
     if ($_POST["QUELLE"] != '') { 
         $referer=$_POST["QUELLE"]; 
@@ -232,15 +237,29 @@
 
     $t = new Template($base);
     $menu =  $_SESSION['menu'];
+    $head = mkHeader();
 
-    $t->set_var(array(
-        JAVASCRIPTS   => $menu['javascripts'],
-        STYLESHEETS   => $menu['stylesheets'],
-        PRE_CONTENT   => $menu['pre_content'],
-        START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content'],
-        'THEME'         => $_SESSION['theme'],
-    ));
+    if ( $popup ) {
+        $t->set_var(array(
+            'STYLESHEETS' => $menu['stylesheets'],
+            'CRMCSS'      => $head['CRMCSS'],
+            'THEME'       => $head['theme'],
+            'JQUERY'      => $head['JQUERY'],
+        ));
+        $hide = 'hidden';
+    } else {
+        $t->set_var(array(
+            'JAVASCRIPTS'   => $menu['javascripts'],
+            'STYLESHEETS'   => $menu['stylesheets'],
+            'PRE_CONTENT'   => $menu['pre_content'],
+            'START_CONTENT' => $menu['start_content'],
+            'END_CONTENT'   => $menu['end_content'],
+            'CRMCSS'        => $head['CRMCSS'],
+            'THEME'         => $head['theme'],
+            'JQUERY'        => $head['JQUERY'],
+            'JQUERYUI'      => $head['JQUERYUI']
+        ));
+    }
     $t->set_file(array("mail" => "mail.tpl"));
     $t->set_block("mail","Betreff","Block");
     $mailvorlagen=getMailVorlage();
@@ -254,8 +273,6 @@
     }
     $t->set_var(array(
             HEADER   => $header,
-            ERPCSS   => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-            JQUERY   => $_SESSION['basepath'].'crm/',
             acminlen => $feature_ac_minLength,
             acdelay  => $feature_ac_delay,
             Msg      => $msg,
@@ -270,6 +287,8 @@
             QUELLE   => $referer,
             JS       => "",
             hide     => $hide,
+            popup    => $popup,
+            closelink => ($popup)?'<a href="JavaScript:self.close()">.:close:.</a>':'',
             vorlage  => ($_GET["MID"])?$_GET["MID"]:$_POST["MID"]
             ));
     $t->Lpparse("out",array("mail"),$_SESSION["lang"],"work");

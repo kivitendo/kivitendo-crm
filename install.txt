@@ -37,7 +37,7 @@ Vorrausetzungen:
     php5-curl 
 
 Fast alle Pakete können unter debianoiden Systemen in der Konsole mit folgendem Behfehl installiert werden.
-apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-mdb2 php5-mdb2-pgsql php-fpdf imagemagick php-xajax ttf-freefont php5-curl tinymce libphp-jpgraph
+apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-mdb2 php5-mdb2-pgsql php-fpdf imagemagick ttf-freefont php5-curl tinymce libphp-jpgraph
 
 Die restlichen Pearpaket installieren:
     pear install  Contact_Vcard_Build Contact_Vcard_Parse
@@ -50,21 +50,28 @@ FPDI installieren:
     wget http://www.setasign.de/supra/kon2_dl/55450/FPDI-1.4.3.zip && unzip FPDI-1.4.3.zip
     ln -s /usr/share/php/fpdi/fpdi.php /usr/share/php/fpdi.php
     
-    
-PHP5:
-Den Fehlerreporting evtl. etwas runterschrauben. 
-error_reporting  =  E_ALL & ~E_NOTICE 
-PHP5.3:
-error_reporting  =  E_ALL & ~E_NOTICE & ~E_DEPRECATED
 
--? PHP-Code wird angezeigt (sollte nicht mehr vorkommen):
--? short_open_tag = On
+Anpassungen in der /etc/php5/apache2/php.ini:
+    Das Fehlerreporting evtl. etwas runterschrauben. 
+    PHP5:
+        error_reporting  =  E_ALL & ~E_NOTICE 
+    PHP5.3:
+        error_reporting  =  E_ALL & ~E_NOTICE & ~E_DEPRECATED
 
--? evtl. php.ini anpassen: 
--? include_path = ".:/usr/share/php:/usr/share/fpdf:/usr/share/jpgraph"
--? extension=gd.so
-.
-.
+    PHP-Code wird angezeigt (sollte nicht mehr vorkommen):
+        short_open_tag = On
+
+    sonstiges:
+        include_path = ".:/usr/share/php:/usr/share/fpdf:/usr/share/jpgraph"
+        default_charset = "utf-8"
+        log_errors = On
+
+    hier sind evtl. eigene Anpassungen nötig:    
+        post_max_size = 8M
+        upload_max_filesize = 8M
+        memory_limit = 128M
+        max_execution_time = 60
+
 
 Font für fpdf installieren (Debian):
 cd /usr/share/php/Image/Canvas/Fonts
@@ -219,13 +226,12 @@ chgrp -R users dokumente
 
 Zusatzprogramme:
 ----------------
-Einige Zusatzprogramme (EuR, ZM, Inventur, Katalog), die ich für mich geschrieben habe. Werden vielleicht ja mal
+Einige Zusatzprogramme (EuR, ZM, Inventur, Katalog, DHL-Adress CSV,Artikelmassenänderung), 
+die ich für mich geschrieben habe. Werden vielleicht ja mal
 von jemanden in Perl umgesetzt, dann kommt das in die ERP.
 
 Installation:
 Menü um update/listen_menu.ini erweitern. Evtl. Bilderverzeichnis verlinken
-Einige Zusatzprogrammei (EuR, ZM, Inventur, Katalog), die ich für mich geschrieben habe. Werden vielleicht ja mal
-von jemanden in Perl umgesetzt, dann kommt das in die ERP.
 
 Wenn Barcode im Tex erzeugt werden soll, muss der Webserver in seinem Homeverzeichnis, idR. /var/www, 
 Schreibrechte besitzen. Oder aber es muss das Fontverzeichnis dort abgelegt werden.
@@ -239,8 +245,10 @@ Den Patch ic_form_header.patch in das File templates/webpages/ic/form_header.htm
 Das Tex-File vorlage/barcode.tex anpassen.
 
 Etiketten aus Rechnungsmaske drucken und E-Mais verschicken:
-Den Patch is_form_footer.patch in templates/webpages/ir/form_footer.html und
+Den Patch ir_form_footer.patch in templates/webpages/ir/form_footer.html und
 Patch is_form_footer.patch in templates/webpages/is/form_footer.html einspielen.
+
+patch -p1 -b templates/webpages/is/form_footer.html < crm/update/is_form_footer.patch
 
 Weitere Informationen, professioneller Support:
 http://www.lx-system.de

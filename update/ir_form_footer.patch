@@ -1,13 +1,13 @@
---- ir/form_footer.html	2012-11-22 09:17:07.000000000 +0100
-+++ /tmp/form_footer.html	2012-12-28 14:26:57.000000000 +0100
-@@ -90,7 +90,9 @@
- 
+--- form_footer.html.orig	2013-04-25 12:01:54.000000000 +0200
++++ form_footer.html	2013-04-25 12:01:51.000000000 +0200
+@@ -93,6 +93,10 @@
+ <p>[% print_options %]</p>
  
    [% IF id %]
--
-+    <input class="submit" type="button" name="crmemail" id="crmemail" value="E-Mail" onClick="f1=open('crm/mail.php?TO=[% email %]&KontanktTO=C[% customer_id %]','E-Mail','width=950, height=550, left=100, top=50, scrollbars=yes')">
-+    <input class="submit" type="button" name="crmetikett" id="crmetikett" value="Etikett" onClick="f1=open('crm/showAdr.php?Q=C&fid=[% customer_id %]','Etikett','width=400, height=350, left=100, top=50, scrollbars=yes')">
-+    <input class="submit" type="button" name="crm" id="crm" value="CRM" onClick="window.location.href='crm/firma1.php?Q=C&id=[% customer_id %]'">
++    <input class="submit" type="button" name="crmemail"   id="crmemail"   value="E-Mail"  onClick="f1=open('crm/mail.php?popup=1&TO=[% email %]&KontanktTO=V[% vendor_id %]','E-Mail','width=950, height=550, left=100, top=50, scrollbars=yes')">
++    <input class="submit" type="button" name="crmetikett" id="crmetikett" value="Etikett" onClick="f1=open('crm/showAdr.php?Q=V&fid=[% vendor_id %]','Etikett','width=400, height=350, left=100, top=50, scrollbars=yes')">
++    <input class="submit" type="button" name="dhl" id="dhl" value="DHL" onClick="f1=open('crm/dhl.php?popup=1&Q=V&fid=[% vendor_id %]','DHL','width=800, height=400, left=100, top=50, scrollbars=yes')">
++    <input class="submit" type="button" name="crm" id="crm" value="CRM" onClick="window.location.href='crm/firma1.php?Q=V&id=[% vendor_id %]'">  
+ 
      <input class="submit" type="submit" accesskey="u" name="action" id="update_button" value="[% 'Update' | $T8 %]">
  [% IF  show_storno %]
-     <input class="submit" type="submit" name="action" value="[% 'Storno' | $T8 %]">

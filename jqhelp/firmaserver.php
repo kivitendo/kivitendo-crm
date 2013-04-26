@@ -16,7 +16,27 @@
         };
         echo $inhalt;
     }
-
+    function addFaStamm2Sess( $id, $tab='C', $prod, $cup ) {
+        if ( $id ) $data = getFirmenStamm( $id, false, $tab );
+        if ( $data and $id ) {
+            $fa['RECV_NAME1']   = $data['name'];
+            $fa['RECV_NAME2']   = $data[''];
+            $fa['RECV_STREET']  = $data['street'];
+            $fa['RECV_HOUSENUMBER'] = '';
+            $fa['RECV_PLZ']     = $data['zipcode'];
+            $fa['RECV_CITY']    = $data['city'];
+            $fa['RECV_COUNTRY'] = strtoupper( substr( $data['country'],0,3 ) );
+            $fa['RECV_PRODUCT'] = $prod;
+            $fa['RECV_CUPON']   = $cup;
+            $_SESSION['DHL'][] = $fa;
+            if ( in_array( $fa['RECV_COUNTRY'], array('DEU','AUT','CHE','FRA','ITA','ESP') ) ) {
+                echo 'ok';
+            } else {
+                echo 'ISO3';
+            }
+        };
+        echo 'ERROR';
+    }
     function Buland($land) {
         $data=getBundesland(strtoupper($land));
         $rs = array(array('id'=>'','val'=>''));
@@ -345,8 +365,8 @@
         chdir("../dokumente/".$_SESSION["mansel"]."/$pfad");
         $rc = mkdir($newdir);
         if ($rc) {
-            chmod($newdir,$GLOBALS['dir_mode']);
-            chgrp($newdir,$GLOBALS['dir_group']);    
+            chmod($newdir,$_SESSION['dir_mode']);
+            chgrp($newdir,$_SESSION['dir_group']);    
             echo 'ok';
         } else {
             echo 'Error';
@@ -375,6 +395,8 @@
 
 switch ($_GET['task']) {
     case 'bland'             : Buland( $_GET['land'] );
+                               break;
+    case 'showFaAdress'      : getFaStamm( $_GET['id'], $_GET['Q'] );
                                break;
     case 'shipto'            : getShipto( $_GET['id'], $_GET['Q'] );
                                break;

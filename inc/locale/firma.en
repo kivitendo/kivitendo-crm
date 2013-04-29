@@ -4,6 +4,7 @@ $texts  = array(
   '.:Custombase:.'	 => 'Custombase',
   '.:Contacts:.'	 => 'Contacts',
   '.:contact:.'      => 'Contact',
+  '.:no contact:.'   => 'No Contakts',
   '.:Sales:.'	     => 'Sales',
   '.:Documents:.'	 => 'Documents',
   '.:Company:.'	     => 'Compamy',

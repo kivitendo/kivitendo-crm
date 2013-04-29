@@ -4,6 +4,7 @@ $texts  = array(
   '.:Custombase:.'      => 'Firmenstamm',
   '.:Contacts:.'        => 'Ansprechpartner',
   '.:contact:.'         => 'Kontakt',
+  '.:no contact:.'      => 'Keine Kontakte',
   '.:Sales:.'           => 'Ums&auml;tze',
   '.:Documents:.'       => 'Dokumente',
   '.:Company:.'         => 'Firma',

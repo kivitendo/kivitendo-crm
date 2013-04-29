@@ -32,7 +32,7 @@ if ( $_POST['save'] ) {
         if ( $rc ) {
             $msg = 'Sichern erfolgt';
             if ( $last['id'] ) {
-                $sql = 'DELETE FROM crmdefaults WHERE grp = 'mandant' and id <= '.$last['id'];
+                $sql = "DELETE FROM crmdefaults WHERE grp = 'mandant' and id <= ".$last['id'];
                 $rc = $_SESSION['db']->query($sql);
             }
             $_SESSION['db']->commit();

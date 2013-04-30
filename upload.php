@@ -14,23 +14,30 @@ if ($_POST) {
         $rc = False;
     } else {
         $dbfile->setDocData("descript",$_POST["descript"]);
-        $rc=$dbfile->uploadDocument($_FILES,$_POST["pfad"]);
+        $rc=$dbfile->uploadDocument($_FILES,$_POST["upldpath"]);
     }
     if ($rc) {
 ?>
 	<script language="JavaScript">
-		top.dateibaum('left','<?php echo  $_POST["pfad"] ?>');
-                top.document.getElementById("uploadfr").style.visibility = "hidden";
+		top.dateibaum('left','<?php echo  $_POST["upldpath"] ?>');
+        top.document.getElementById("uploadfr").style.visibility = "hidden";
 	</script>
 <?php  }; 
 } ?>
 <html><head>
 <title></title>
-    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
+	<script language="JavaScript">
+        function getpath() {
+            var p = top.document.getElementById('path').innerHTML;
+            document.getElementById('upldpath').value = p;
+            return true;
+        }
+	</script>
+    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
 </head>
 <body class="docfrm" style="padding:0em; margin:0em; width:100%; height:100%;" >
-<form name="iform" action="upload.php" method="post" enctype="multipart/form-data">
-<input id="upldpath" name="pfad" type="hidden">
+<form name="iform" action="upload.php" method="post" enctype="multipart/form-data" onSubmit="return getpath();">
+<input id="upldpath" name="upldpath" type="hidden">
 <br>
 &nbsp;<textarea name="descript" class="normal" id="caption" cols="35" rows="3"></textarea><br>
 &nbsp;<?php echo  translate('.:Remarks:.','firma') ?><br>

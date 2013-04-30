@@ -134,7 +134,7 @@
     function newDir(seite) {
         if ( $('#newwindir').dialog( "isOpen" ) ) {
             $('#newwindir').dialog('close');
-        } else {
+        } else {                            
             $('#newwindir').dialog('open');
             $('#subdir').focus();
             $('#seite').val(seite);
@@ -147,8 +147,6 @@
             $('#uploadfr').dialog('open');
             $('#seite').val(seite);
             $('#uploadfr').show();
-            frames["frupload"].document.getElementById("upldpath").value=pfadleft;
-            frames["frupload"].document.getElementById("caption").focus();
        }
     }
     var pfadleft = "";

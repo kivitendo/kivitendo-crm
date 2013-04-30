@@ -529,3 +529,5 @@ INSERT INTO schema_info (tag,login) VALUES ('crm_timetracker_parts','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_wissen_own','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_wvhistory','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_CRMemployee','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_UserFolder','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_UserMailssl','install');

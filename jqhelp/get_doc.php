@@ -8,11 +8,11 @@
 		else if (src=="V"&&type=="ord") { uri="../oe.pl?action=edit&type=sales_order&vc=vendor&id=" + id }
      	window.location.href=uri;
 	}
-	$(document).ready(
-   	$(function() {
-      	$("#result_ioq")
-         	.tablesorter({widthFixed: true, widgets: ['zebra']})
-            .tablesorterPager({container: $("#pager"), size: 20, positionFixed: false})
+    $(document).ready(
+       	$(function() {
+      	    $("#result_ioq")
+         	    .tablesorter({widthFixed: true, widgets: ['zebra']})
+                .tablesorterPager({container: $("#pager"), size: 15, positionFixed: false})
 		})
 	);  
 </script>
@@ -34,9 +34,9 @@ echo "<thead><tr><th>".translate('.:date:.','firma')."</th><th>".translate('.:fi
 $i=0; 
 if ($rs) 
     foreach($rs as $row) { 
-        echo "<tr class='bgcol".($i%2+1)."' onClick='OpenIOQ(\"".$_GET['Q']."\",".$row["id"].",\"".$_GET['type']."\");'>". 
-             "<td class=\"liste\">".$row["date"]."</td><td class=\"liste\">".$row["description"]."</td>". 
-             "<td class=\"liste\">".$row["amount"]."</td><td class=\"liste\">".$row["number"]."</td></tr>\n"; 
+        echo "<tr onClick='OpenIOQ(\"".$_GET['Q']."\",".$row["id"].",\"".$_GET['type']."\");'>". 
+             "<td>".$row["date"]."</td><td>".$row["description"]."</td>". 
+             "<td>".$row["amount"]."</td><td>".$row["number"]."</td></tr>\n"; 
         $i++; 
     } 
 echo "</tbody></table>\n"; 
@@ -48,8 +48,8 @@ echo "</tbody></table>\n";
     <img src="<?php echo $_SESSION['baseurl']; ?>crm/jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
     <img src="<?php echo $_SESSION['baseurl']; ?>crm/jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
     <select class="pagesize" id='pagesize'>
-        <option value="10" selected>10</option>
-        <option value="15">15</option>
+        <option value="10">10</option>
+        <option value="15" selected>15</option>
         <option value="20">20</option>
         <option value="25">25</option>
         <option value="30">30</option>

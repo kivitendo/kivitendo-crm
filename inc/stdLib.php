@@ -879,5 +879,5 @@ function makeMenu($sess,$token){
     return $rs;
 }
 
-require_once "login".$_SESSION["loginok"].".php";
+//require_once "login".$_SESSION["loginok"].".php";
 ?>

@@ -43,6 +43,9 @@
                                   break;
                 default	: $txt = $row["text_value"];
             }
+            if (strpos($txt , "http://") === 0 || strpos($txt , "www.") === 0){ 
+                $txt = "<a href=\"".$txt."\" target=\"_blank\">".$txt."</a>";
+            }
             $t->set_var(array(
                 'varname' => $row["description"],
                 'varvalue' => $txt

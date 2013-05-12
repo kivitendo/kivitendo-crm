@@ -211,6 +211,7 @@ $texts  = array(
   '.:adress:.'          => 'Adress',
   '.:contact history:.' => 'Contact History',
   '.:search keyword:.'  => 'Search Keyword',
-  '.:users:.'           => 'Users'
+  '.:users:.'           => 'Users',
+  '.:employee:.'        => 'Employee'
 );
 ?>

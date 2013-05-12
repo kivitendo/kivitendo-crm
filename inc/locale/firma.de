@@ -211,7 +211,8 @@ $texts  = array(
   '.:adress:.'          => 'Adresse',
   '.:contact history:.' => 'Kontaktverlauf',
   '.:search keyword:.'  => 'Suchbegriff',
-  '.:users:.'           => 'Benutzer'
+  '.:users:.'           => 'Benutzer',
+  '.:employee:.'        => 'Bearbeiter'
   
 ); 
 ?>

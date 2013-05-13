@@ -301,6 +301,7 @@
             <br class='mini'>
             <span style="visibility:{zeige_dhl};"><a class="firmabutton" href="#" onCLick="dhl();" title="DHL"><img src="image/briefkasten.gif" alt="DHL" border="0" /></a>&nbsp;</span>
             {begin_comment}<a href="lxcars/lxcmain.php?owner={FID}&task=1" title="KFZ-Daten"><img src="./lxcars/image/lxcmain.png" alt="Cars" border="1" /></a>{end_comment}
+            <br /><br /><br /><span style="visibility:{zeige_bearbeiter};">.:employee:.: {bearbeiter}</span>
         </div>
         <br />
     </div>
@@ -395,8 +396,8 @@
     <div id="right_tabs">
         <ul>
             <li><a href="#contact">.:contact:.</a></li>
-            <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=ord">.:orders:.</a></li>
             <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=quo">.:Quotation:.</a></li>
+            <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=ord">.:orders:.</a></li>
             <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=inv">.:Invoice:.</a></li>
         </ul>
     <div id="contact">

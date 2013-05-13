@@ -3198,28 +3198,27 @@ function getPart($part) {
     $rs = $_SESSION['db']->getAll($sql);
     return $rs;
 }
-function getIOQ($fid,$Q,$type){
-//ToDo: Eingangsrechnungen testen
+function getIOQ($fid,$Q,$type,$close){
 global $db;
+    //ToDo Option "Nur offene IOQ anzeigen"
     //if ($_SESSION["sales_edit_all"] == "f") $sea = sprintf(" and (employee_id = %d or salesman_id = %d) ", $_SESSION["loginCRM"], $_SESSION["loginCRM"]);
     //$closed_sql = $close?"AND closed = 'f' ":" ";
-    $cust_vend = ($Q='C')?"customer_id":"vendor_id";
+    $cust_vend = ($Q=='C')?"customer_id":"vendor_id";
     $ar_ap = ($Q=='C')?"ar":"ap";
     switch($type) {
         case "inv": //Rechnungen
             $sql = "SELECT DISTINCT ON ($ar_ap.id) to_char($ar_ap.transdate, 'DD.MM.YYYY') as date, description, COALESCE(ROUND(amount,2))||' '||COALESCE(curr) as amount, ";
-            $sql.= "invnumber as number, $ar_ap.id  FROM $ar_ap LEFT JOIN invoice  ON $ar_ap.id=trans_id  WHERE $cust_vend = $fid";//-- ORDER by ar.id,invoice.id;
+            $sql.= "invnumber as number, $ar_ap.id FROM $ar_ap LEFT JOIN invoice  ON $ar_ap.id=trans_id  WHERE $cust_vend = $fid ORDER BY $ar_ap.id, invoice.id";
             break;
         case "ord": //Aufträge
             $sql = "SELECT DISTINCT ON (oe.id) to_char(oe.transdate, 'DD.MM.YYYY') as date, description, COALESCE(ROUND(amount,2))||' '||COALESCE(curr) as amount, ";
-            $sql.= "oe.ordnumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id=trans_id WHERE quotation = FALSE AND $cust_vend = $fid"; 
+            $sql.= "oe.ordnumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id=trans_id WHERE quotation = FALSE AND $cust_vend = $fid ORDER BY oe.id, orderitems.id"; 
             break;
         case "quo": //Angebote
             $sql = "SELECT DISTINCT ON (oe.id) to_char(oe.transdate, 'DD.MM.YYYY') as date, description, COALESCE(ROUND(amount,2))||' '||COALESCE(curr) as amount, ";
-            $sql.= "oe.quonumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id=trans_id WHERE quotation = TRUE AND $cust_vend = $fid";
-    }   
+            $sql.= "oe.quonumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id=trans_id WHERE quotation = TRUE AND $cust_vend = $fid ORDER BY oe.id, orderitems.id";
+    } 
     $rs = $db->getAll($sql);
-    //$rs['sql'] = $sql;
     return $rs;
 }
 

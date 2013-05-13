@@ -14,16 +14,19 @@ function saveUserStamm($val) {
     if ( !$val["port"] )    $val["port"] = ( $val["proto"] == '1' )?'143':'110';
     if ( !$val["termseq"] ) $val["termseq"] = 30;
     if ( $val["vertreter"] == $val["uid"] ) { $vertreter = "null"; } else { $vertreter = $val["vertreter"]; };
+    //print_r($val);
+    
     $std = array('name','addr1','addr2','addr3','workphone','homephone','notes');
     $fld = array('msrv' => 't', 'postf' => 't', 'kennw' => 't', 'postf2' => 't','mailsign' => 't','email' => 't','mailuser' => 't','port' => 'i','proto' => 'b','ssl' => 't',
                  'abteilung' => 't','position' => 't','interv' => 'i','pre' => 't','preon' => 'b','vertreter' => 'i',
                  'etikett' => 'i','termbegin' => 'i','termend' => 'i','termseq' => 'i','kdview' => 'i','icalart' => 't','icaldest' => 't','icalext' => 't',
                  'deleted' => 'b','streetview' => 't','planspace' => 't','theme' => 't','helpmode' => 'b','listen_theme'=>'t',
-                 'auftrag_button' => 'b','angebot_button' => 'b','rechnung_button' => 'b',
-                 'zeige_extra' => 'b','zeige_lxcars' => 'b','zeige_karte' => 'b','zeige_tools' => 'b','zeige_etikett' => 'b',
+                 'auftrag_button' => 'b','angebot_button' => 'b','rechnung_button' => 'b','liefer_button' => 'b',
+                 'zeige_extra' => 'b','zeige_lxcars' => 'b','zeige_karte' => 'b','zeige_tools' => 'b','zeige_etikett' => 'b','zeige_bearbeiter' => 'b',
                  'feature_ac' => 'b','feature_ac_minlength' => 'i','feature_ac_delay' => 'i','feature_unique_name_plz' => 'b',
-                 'show_err' => 'b', 'php_error' => 'b',
+                 'showErr' => 'b', 'php_error' => 'b','zeige_dhl' => 'b',
                  'kicktel_api' => 't','data_from_tel' => 'b','tinymce' => 'b');
+    foreach ($fld as $key => $value) $_SESSION[$key] = $val[$key]; //Einstellungen nach dem Sichern gleich übernehmen (ohne neues Login)
     $sql  = "update employee set ";
     foreach ($std as $key) {
         if ($val[$key]<>"") {

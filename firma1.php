@@ -43,6 +43,9 @@
                                   break;
                 default	: $txt = $row["text_value"];
             }
+            if (strpos($txt , "http://") === 0 || strpos($txt , "www.") === 0){ 
+                $txt = "<a href=\"".$txt."\" target=\"_blank\">".$txt."</a>";
+            }
             $t->set_var(array(
                 'varname' => $row["description"],
                 'varvalue' => $txt
@@ -110,6 +113,7 @@
             'Fcontact' => $fa["contact"],
             'eMail' => $fa["email"],
             'verkaeufer' => $fa["verkaeufer"],
+            'bearbeiter' => $fa["bearbeiter"],
             'branche' => $fa["branche"],
             'sw' => $fa["sw"],
             'notiz' => nl2br($fa["notes"]),
@@ -165,8 +169,9 @@
             'RECHNUNG_BUTTON' => ($_SESSION['rechnung_button']=='t')?'visible':'hidden',
             'zeige_karte' => ($_SESSION['zeige_karte']=='t')?'visible':'hidden',
             'zeige_etikett' => ($_SESSION['zeige_etikett']=='t')?'visible':'hidden',  
-            'zeige_extra' => ($_SESSION['zeige_extra']=='t')?"visible":"hidden",         
-            'zeige_dhl' => ($_SESSION['zeige_dhl']=='t')?"visible":"hidden",         
+            'zeige_extra' => ($_SESSION['zeige_extra']=='t')?"visible":"hidden", 
+            'zeige_bearbeiter' => ($_SESSION['zeige_bearbeiter']=='t')?"visible":"hidden",      
+            'zeige_dhl' => ($_SESSION['zeige_dhl']=='t')?"visible":"hidden",        
             'begin_comment' => ($_SESSION['zeige_lxcars']=='t'&&$Q=="C")?"":"<!-- ",
             'end_comment' => ($_SESSION['zeige_lxcars']=='t'&&$Q=="C")?"":" -->",
             'zeige_tools' => ($_SESSION['zeige_tools']=='t')?"visible":"hidden",

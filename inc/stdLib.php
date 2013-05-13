@@ -4,10 +4,11 @@ ini_set('session.bug_compat_42', 0);  // Das ist natürlich lediglich eine Provi
 //Warning: Unknown: Your script possibly relies on a session side-effect which existed until PHP 4.2.3. ....
 session_set_cookie_params(1800); // 30 minuten.
 session_start();
-
-//error_reporting (E_ALL & ~E_DEPRECATED);
-//ini_set ('display_errors',1);
-
+//print_r($_SESSION);
+if ( $_SESSION['php_error'] ) {
+    error_reporting (E_ALL & ~E_DEPRECATED);
+    ini_set ('display_errors',1);
+}
 $inclpa = ini_get('include_path');
 ini_set('include_path',$inclpa.":../:./inc:../inc");
 
@@ -879,5 +880,5 @@ function makeMenu($sess,$token){
     return $rs;
 }
 
-require_once "login".$_SESSION["loginok"].".php";
+//require_once "login".$_SESSION["loginok"].".php";
 ?>

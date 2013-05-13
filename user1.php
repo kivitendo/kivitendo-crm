@@ -10,8 +10,8 @@
         $rc=saveUserStamm($_POST);
         $id=$_POST["UID"];
         $no = array('save','uid','login','ok');
-        $chkbox = array('tinymce','preon','feature_ac','angebot_button','auftrag_button','rechnung_button',
-                        'zeige_extra','zeige_lxcars','zeige_etikett','zeige_tools','zeige_dhl','show_err','php_error');
+        $chkbox = array('tinymce','preon','feature_ac','angebot_button','auftrag_button','rechnung_button','liefer_button',
+                        'zeige_extra','zeige_lxcars','zeige_etikett','zeige_tools','zeige_bearbeiter','zeige_dhl','showErr','php_error');
         while ( list($key,$val) = each ($_POST) ) {
             if ( ! in_array($key,$no) ) 
                 if ( in_array($key,$chkbox) ) {
@@ -75,7 +75,7 @@
             postf2                 => $fa["postf2"],
             protopop               => ($fa["proto"]=="f")?"checked":"",
             protoimap              => ($fa["proto"]=="t")?"checked":"",
-            show_err               => ($fa["show_err"]=="t")?"checked":"",
+            showErr                => ($fa["showErr"]=="t")?"checked":"",
             php_error              => ($fa["php_error"]=="t")?"checked":"",
             ssl.$fa["ssl"]         => "checked",
             interv                 => $fa["interv"],
@@ -100,11 +100,13 @@
             auftrag_button         => ($fa['auftrag_button']=='t')?'checked':'',
             angebot_button         => ($fa['angebot_button']=='t')?'checked':'',
             rechnung_button        => ($fa['rechnung_button']=='t')?'checked':'',
+            liefer_button          => ($fa['liefer_button']=='t')?'checked':'',
             zeige_extra            => ($fa['zeige_extra']=='t')?'checked':'',
             zeige_dhl              => ($fa['zeige_dhl']=='t')?'checked':'',
             zeige_karte            => ($fa['zeige_karte']=='t')?'checked':'',
             zeige_etikett          => ($fa['zeige_etikett']=='t')?'checked':'',
             zeige_tools            => ($fa['zeige_tools']=='t')?'checked':'',
+            zeige_bearbeiter       => ($fa['zeige_bearbeiter']=='t')?'checked':'',
             feature_unique_name_plz=> ($fa['feature_unique_name_plz']=='t')?'checked':'',
             zeige_lxcars           => ($fa['zeige_lxcars']=='t')?'checked':'',
             tinymce                => ($fa['tinymce'] == 't')?'checked':'',

@@ -96,12 +96,12 @@ function getFirmenStamm($id,$ws=true,$tab='C',$cvar=true) {
         $sql="select sum(amount) from ar where customer_id=$id and amount<>paid";
         $rs=$_SESSION['db']->getOne($sql);
         $op=$rs["sum"];
-        $sql="select C.*,E.name as verkaeufer,B.description as kdtyp,B.discount as typrabatt,P.pricegroup,";
+        $sql="select C.*,E.name as verkaeufer,EMP.name as bearbeiter,B.description as kdtyp,B.discount as typrabatt,P.pricegroup,";
         $sql.="L.lead as leadname,BL.bundesland,T.terms_netto,LA.description as language from customer C ";
-        $sql.="left join employee E on C.salesman_id=E.id left join business B on B.id=C.business_id ";
-        $sql.="left join bundesland BL on BL.id=C.bland left join payment_terms T on T.id=C.payment_id ";
-        $sql.="left join pricegroup P on P.id=C.klass left join leads L on C.lead=L.id ";
-        $sql.="left join language LA on LA.id = C.language_id ";
+        $sql.="left join employee E on C.salesman_id=E.id left join employee EMP on C.employee=EMP.id ";
+        $sql.="left join business B on B.id=C.business_id left join bundesland BL on BL.id=C.bland ";
+        $sql.="left join payment_terms T on T.id=C.payment_id left join pricegroup P on P.id=C.klass ";
+        $sql.="left join leads L on C.lead=L.id left join language LA on LA.id = C.language_id ";
         $sql.="where C.id=$id";
     } else if ($tab=="V") {
         // Umsätze holen
@@ -111,8 +111,8 @@ function getFirmenStamm($id,$ws=true,$tab='C',$cvar=true) {
         $sql="select sum(amount) from oe where vendor_id=$id and quotation='f' and closed = 'f'";
         $rs=$_SESSION['db']->getOne($sql);
         $oa=$rs["sum"];
-        $sql="select C.*,E.name as verkaeufer,B.description as kdtyp,B.discount as typrabatt,BL.bundesland,";
-        $sql.="L.lead as leadname,LA.description as language from vendor C ";
+        $sql="select C.*,E.name as verkaeufer,EMP.name as bearbeiter,B.description as kdtyp,B.discount as typrabatt,BL.bundesland,";
+        $sql.="L.lead as leadname,LA.description as language from vendor C left join employee EMP on C.employee=EMP.id ";
         $sql.="left join employee E on C.salesman_id=E.id left join business B on B.id=C.business_id ";
         $sql.="left join language LA on LA.id = C.language_id left join leads L on C.lead=L.id ";
         $sql.="left join bundesland BL on BL.id=C.bland ";

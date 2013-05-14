@@ -7,7 +7,7 @@ if (!$_SESSION["db"] ||
 			unset($_SESSION[$key]);
 		}
 		$tmp=anmelden();
-		if (!$tmp) header("location:ups.html");
+		if (!$tmp) echo "+++++++++++++++++++++++++++ Fehler: anmelden fehlgeschlagen! +++++++++++++++++++++++++++";
 		$db=$_SESSION["db"];
 		$_SESSION["loginok"]="ok";
 } else {

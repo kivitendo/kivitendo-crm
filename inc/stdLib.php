@@ -13,9 +13,9 @@ $inclpa = ini_get('include_path');
 ini_set('include_path',$inclpa.":../:./inc:../inc");
 
 include_once "mdb.php";
+require_once "conf.php";
 
 if ( ! isset($_SESSION['dbhost']) ) {
-    require_once "conf.php";
     $_SESSION['ERPNAME'] = $ERPNAME;
     $_SESSION['ERP_BASE_URL'] = $ERP_BASE_URL;
     $_SESSION['erpConfigFile'] = $erpConfigFile;
@@ -145,12 +145,14 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
 *****************************************************/
 function anmelden() {
     ini_set("gc_maxlifetime","3600");
+    global $ERPNAME; // ! das funzt nicht mit $_SESSION[ERPNAME] weil die Session in loginok.php zerstört wird...
+    global $erpConfigFile;
     //Konfigurationsfile der ERP einlesen
-    $deep = is_dir("../".$_SESSION['ERPNAME']) ? "../" : "../../";                // anmelden() aus einem Unterverzeichnis
-    if ( file_exists($deep.$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf") ) {  
-	    $lxo = fopen($deep.$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf","r");  
-    } else if ( file_exists($deep.$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf.default") ) {
-	    $lxo = fopen($deep.$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf.default","r");
+    $deep = is_dir("../".$ERPNAME) ? "../" : "../../";                // anmelden() aus einem Unterverzeichnis
+    if ( file_exists($deep.$ERPNAME."/config/".$erpConfigFile.".conf") ) {  
+	    $lxo = fopen($deep.$ERPNAME."/config/".$erpConfigFile.".conf","r");  
+    } else if ( file_exists($deep.$ERPNAME."/config/".$erpConfigFile.".conf.default") ) {
+	    $lxo = fopen($deep.$ERPNAME."/config/".$erpConfigFile.".conf.default","r");
     } else {
         return false;
     }
@@ -880,5 +882,5 @@ function makeMenu($sess,$token){
     return $rs;
 }
 
-//require_once "login".$_SESSION["loginok"].".php";
+require_once "login".$_SESSION["loginok"].".php";
 ?>

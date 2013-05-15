@@ -5,6 +5,7 @@
                   'Expunge','MailFlag','logmail',
                   'dir_group','dir_mode','sep_cust_vendor',
                   'listLimit','showErr','logfile',
+                  'stadtplan','planspace'
                   );
     foreach($keys as $value) {
         $_SESSION[$value] = $_POST[$value];
@@ -66,25 +67,27 @@ if ( $_POST['save'] ) {
         ));
     } else {
         $t->set_var(array(
-            GEODB       => ($data['GEODB'] == 't')?'checked':'',
-            BLZDB       => ($data['BLZDB'] == 't')?'checked':'',
-            CallEdit    => ($data['CallEdit'] == 't')?'checked':'',
-            CallDel     => ($data['CallDel'] == 't')?'checked':'',
+            'GEODB'       => ($data['GEODB'] == 't')?'checked':'',
+            'BLZDB'       => ($data['BLZDB'] == 't')?'checked':'',
+            'CallEdit'    => ($data['CallEdit'] == 't')?'checked':'',
+            'CallDel'     => ($data['CallDel'] == 't')?'checked':'',
             $data['MailFlag'] => 'selected',
-            Expunge     => ($data['Expunge'] == 't')?'checked':'',
-            logmail     => ($data['logmail'] == 't')?'checked':'',
-            ttpart      => $data['ttpart'], 
-            tttime      => $data['tttime'],
-            ttround     => $data['ttround'],
-            ttclearown  => ($data['clearown'] == 't')?'checked':'',
-            dir_group   => $data['dir_group'],
-            dir_mode    => decoct($data['dir_mode']),
-            sep_cust_vendor     => ($data['sep_cust_vendor'] == 't')?'checked':'',
-            listLimit   => $data['listLimit'],
-            showErr     => ($data['showErr'] == 't')?'checked':'',
-            logfile     => ($data['logfile'] == 't')?'checked':'',
-            msg         => $msg,
-        ));
+            'Expunge'     => ($data['Expunge'] == 't')?'checked':'',
+            'logmail'     => ($data['logmail'] == 't')?'checked':'',
+            'stadtplan'   => $data['stadtplan'],
+            'planspace'   => $data['planspace'],
+            'ttpart'      => $data['ttpart'], 
+            'tttime'      => $data['tttime'],
+            'ttround'     => $data['ttround'],
+            'ttclearown'  => ($data['clearown'] == 't')?'checked':'',
+            'dir_group'   => $data['dir_group'],
+            'dir_mode'    => decoct($data['dir_mode']),
+            'sep_cust_vendor'     => ($data['sep_cust_vendor'] == 't')?'checked':'',
+            'listLimit'   => $data['listLimit'],
+            'showErr'     => ($data['showErr'] == 't')?'checked':'',
+            'logfile'     => ($data['logfile'] == 't')?'checked':'',
+            'msg'         => $msg,
+        )); 
     }
     $t->pparse("out",array("mand"));
 ?>

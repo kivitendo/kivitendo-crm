@@ -35,6 +35,14 @@
         $fa=getUserStamm($_SESSION["loginCRM"]);
         $t->set_file(array("usr1" => "user1.tpl"));
         $own = true;
+    };
+    if ( empty($fa['streetview']) ) {
+        $sql = "SELECT val FROM crmdefaults WHERE grp = 'mandant' AND key = 'stadtplan'";
+        $rs = $_SESSION['db']->getOne($sql);
+        $fa['streetview'] = $rs['val'];
+        $sql = "SELECT val FROM crmdefaults WHERE grp = 'mandant' AND key = 'planspace'";
+        $rs = $_SESSION['db']->getOne($sql);
+        $fa['planspace'] = $rs['val']; 
     }
     if (empty($fa["ssl"])) $fa["ssl"] = "n";
     if (empty($fa["proto"])) $fa["proto"] = "t";

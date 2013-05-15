@@ -97,6 +97,20 @@
             minHeight: 550,
             title: "Mails"
         });
+        $( "#edit_theme" ).button().click(function( event ) {
+            event.preventDefault();
+            var theme = $("#theme").val()
+            $.ajax({
+                type: "POST",
+                url:  "jqhelp/getThemeUrl.php",
+                data: {theme: theme},
+                success: function(result){ 
+                    if( result == "noThemeFile" ) alert("Kein Themefile gefunden! ")
+                    else if( result == "base" ) alert("Base kann nicht bearbeitet werden!")                    
+                    else window.open(result);
+                }
+            })
+        });
     });
     </script>
    
@@ -171,11 +185,12 @@
         <td class="norm"><input type="radio" name="ssl" value="n" {ssln}>notls <input type="radio" name="ssl" value="t" {sslt}>ssl <input type="radio" name="ssl" value="f" {sslf}>tls
         </td></tr>
     <tr><td class="norm">Theme</td><td>
-        <select name="theme">
+        <select name="theme" id="theme">
 <!-- BEGIN Theme -->
             <option value="{themefile}" {TSel}>{themename}
 <!-- END Theme -->
        </select>
+       <button id="edit_theme">bearbeiten</button>
         </td>
        <td>TinyMCE</td><td><input type='checkbox' name='tinymce' id='tinymce' {tinymce} value='t'></td>
         </tr>

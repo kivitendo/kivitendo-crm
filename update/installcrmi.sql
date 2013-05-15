@@ -502,6 +502,7 @@ CREATE INDEX telcall_bezug_key ON telcall USING btree (bezug);
 CREATE INDEX mid_key ON contmasch USING btree (mid);
 
 INSERT INTO schema_info (tag,login) VALUES ('crm_defaults','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_defaults_gruppe','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_bundeslaender','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_CleanContact','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_employeeFeldLaenge','install');

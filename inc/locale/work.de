@@ -119,6 +119,7 @@ $texts  = array(
   '.:clr:.'         => 'l&ouml;schen',
   '.:material:.'    => 'Material',
   '.:budget:.'	    => 'Budget',
+  '.:color:.'       => 'Farbe',
   '.::.'    => '',
 );
 ?>

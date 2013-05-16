@@ -1,7 +1,8 @@
 <?php
 	require_once("inc/stdLib.php");
 	include("inc/crmLib.php");
-	
+	$menu = $_SESSION['menu'];
+    $head = mkHeader();
 	if ($_POST["hole"]) {
 		unset($_POST["Text"]);
 		$label=getOneLable($_POST["format"]);
@@ -116,15 +117,17 @@
 		$Ssel="S".$nx;	$Zsel="Z".$ny;$Psel="P".$papersize; $tmp=$metric;
 		${$Ssel}=" selected";	${$Zsel}=" selected"; ${$Psel}=" selected"; ${$tmp}=" selected";
 	}
-	$menu =  $_SESSION['menu'];
 ?>
 <html>
 	<head>
 		<title></title>
-		   <?php echo $menu['stylesheets'];?>
-           <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"]; ?>main.css">
-           <script type="text/javascript" src="<?php echo $_SESSION['basepath']; ?>crm/jquery-ui/jquery.js"></script> 
-           <?php echo $menu['javascripts'];?>
+<?php echo $menu['stylesheets']; ?>
+<?php echo $head['CRMCSS']; ?>
+<?php echo $head['JQUERY']; ?>
+<?php echo $head['JQUERYUI']; ?>
+<?php echo $head['THEME']; ?>
+<?php echo $head['JQTABLE']; ?>
+<?php echo $menu['javascripts']; ?>
 
 	</head>
 <body>
@@ -278,6 +281,6 @@
 </table>
 
 </form>
-<?=$menu['end_content'];?>
+<?php echo $menu['end_content']; ?>
 </body>
 </html>

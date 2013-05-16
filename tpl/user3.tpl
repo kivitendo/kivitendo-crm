@@ -1,11 +1,12 @@
 <html>
 	<head><title>User Stamm</title>
-{STYLESHEETS}
-{CRMCSS}
-{JQUERY}
-{JQUERYUI}
-{THEME}
-{JAVASCRIPTS}    
+    {STYLESHEETS}
+    {CRMCSS}
+    {JQUERY}
+    {JQUERYUI}
+    {THEME}
+    {JAVASCRIPTS}
+
 	<script language="JavaScript">
 	<!--
 		function doit() {

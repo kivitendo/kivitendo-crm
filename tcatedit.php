@@ -11,15 +11,7 @@
     $max=0;
 
     $t = new Template($base);
-    $menu =  $_SESSION['menu'];
-    $t->set_var(array(
-        JAVASCRIPTS   => $menu['javascripts'],
-        STYLESHEETS   => $menu['stylesheets'],
-        PRE_CONTENT   => $menu['pre_content'],
-        START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content'],
-        'THEME'         => $_SESSION['theme'],
-    ));
+    doHeader($t);
     $t->set_file(array("cat" => "tcat.tpl"));
     $t->set_block("cat","TKat","Block0");
     //$t->debug = true;

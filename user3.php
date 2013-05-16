@@ -17,18 +17,9 @@
     $fid=$_POST["cp_cv_id"];
     $name=$_POST["name"];
     $t = new Template($base);
-    $menu =  $_SESSION['menu'];
-    $t->set_var(array(
-        JAVASCRIPTS   => $menu['javascripts'],
-        STYLESHEETS   => $menu['stylesheets'],
-        PRE_CONTENT   => $menu['pre_content'],
-        START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content'],
-        'THEME'         => $_SESSION['theme'],
-    ));
+    doHeader($t);
     $t->set_file(array("msg" => "user4.tpl"));
     $t->set_var(array(
-            ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
             FID => $fid,
             Firma => $name
             ));

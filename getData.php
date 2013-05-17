@@ -138,7 +138,7 @@ if ($_GET["kontakt"] && $_GET['swort'] != '') {
 	            <p>Bitte geben Sie mindestens ein Zeichen ein.</p>
 	       </div>';
 	$viele='<div id="dialog" title="Zu viele Suchergebnisse">
-	            <p>Die Suche ergibt zu viele Resultate.</br> Bitte geben mehr Zeichen ein.</p>
+	            <p>Die Suche ergibt zu viele Resultate.</br> Bitte geben Sie mehr Zeichen ein.</p>
 	       </div>';
 	$keine='<div id="dialog" title="Nichts gefunden">
                 <p>Dieser Suchbegriff ergibt kein Resultat.</br>Bitte überprüfen Sie die Schreibweise!</p>

@@ -160,7 +160,7 @@ if ($csvArray) foreach($csvArray as $key => $row) {
             $CustNb = newnr('customer',$end_id); 
             echo "Nummer: ".$CustNb; 
             $payment = $row['20']=='PayPal'?$paypalId:$payotherId;         
-            //$sql = "INSERT INTO customer (name, department_1, street, zipcode, city, country, business_id, customernumber, lead, payment_id  ) VALUES ";
+            $sql = "INSERT INTO customer (name, department_1, street, zipcode, city, country, business_id, customernumber, lead, payment_id  ) VALUES ";
             $sql.= "('".$row["2"]."', '".$row["1"]."', '".$row["4"].$row["5"]."', '".$row["8"]."','".$row["6"]."', '".$row['9']."', ".$end_id.", '".$CustNb."', ".$ebayLeadId.", ".$paypalId." )";
             echo "SQL: ".$sql;            
             $rcc = $db->query($sql);

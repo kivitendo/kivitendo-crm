@@ -41,6 +41,11 @@ if ( is_file($conffile) ) {
     $tmp = anmelden();
     if ( $tmp ) {
         $rs = $_SESSION['db']->getOne('SELECT * FROM crm ORDER BY version DESC LIMIT 1');
+        if ( is_object($rs) ) {
+            echo "DebugInfo: MDB2 hat statt einem Array ein Objekt zurückgeben,  
+                  PHP Fatal error:  Cannot use object of type MDB2_Error as array";           
+            print_r($rs);
+        }    
         if ( !$rs || $rs["version"]=="" || $rs["version"]==false ) {
             echo "CRM-Tabellen sind nicht (vollst&auml;ndig) installiert"; 
             flush(); 

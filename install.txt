@@ -50,6 +50,9 @@ FPDI installieren:
     wget http://www.setasign.de/supra/kon2_dl/55450/FPDI-1.4.3.zip && unzip FPDI-1.4.3.zip
     ln -s /usr/share/php/fpdi/fpdi.php /usr/share/php/fpdi.php
     
+Die Pfade können entweder in der php.ini oder durch umbenennen der htaccess.txt in .htaccess angepasst werden.
+    mv htaccess.txt .htaccess
+    
 
 Anpassungen in der /etc/php5/apache2/php.ini:
     Das Fehlerreporting evtl. etwas runterschrauben. 

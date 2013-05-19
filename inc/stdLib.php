@@ -210,7 +210,9 @@ function anmelden() {
         $BaseUrl  = (empty( $_SERVER['HTTPS'] )) ? 'http://' : 'https://';
         $BaseUrl .= $_SERVER['HTTP_HOST'];
         $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
-        if ($user_data) while (list($key,$val) = each($user_data)) $_SESSION[$key] = $val;
+        //reset($user_data); Bei while( list(..) ) = each; muss immer erst der Array-Pointer zurückgesetzt werden! 
+        //if ($user_data) while (list($key,$val) = each($user_data)) $_SESSION[$key] = $val;
+        if ($user_data) foreach ($user_data as $key => $val) $_SESSION[$key] = $val;// foreach ist kürzer + schneller
         $_SESSION["loginCRM"]               = $user_data["id"];
         $_SESSION['theme']  = ($user_data['theme']=='' || $user_data['theme']=='base')?'':$user_data['theme'];
         $sql = "select * from defaults";

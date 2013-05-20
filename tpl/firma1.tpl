@@ -90,6 +90,16 @@
       document.oe.type.value=typ;
       document.oe.submit();
     }
+    function doDo() {
+      document.oe.action='../do.pl';
+      if ( '{Q}' == 'C' ) {      
+        document.oe.type.value='sales_delivery_order';
+      }
+      else{
+        document.oe.type.value='purchase_delivery_order';
+      }
+      document.oe.submit();
+    }
     function doIr() {
         if ( '{Q}' == 'C' ) {
             document.oe.action='../is.pl';
@@ -249,6 +259,7 @@
             <option value='onClick:{sales}_order'>.:order:. .:develop:.</option>
             <option value='onClick:{request}_quotation'>.:quotation:. .:develop:.</option>
             <option value='onClick:invoice'>.:invoice:. .:develop:.</option>
+            <option value='onClick:sales_delivery_order_edit'>.:delivery order:. .:develop:.</option>
             {begin_comment}<option value='lxcars/lxcmain.php?owner={FID}&task=1'>KFZ-Daten</option>{end_comment}
         </select>
     </span>
@@ -271,7 +282,7 @@
 
 <span id='contentbox' style="padding-top:2em;" >
     <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid black;" >
-        <div class="gross" style="float:left; width:60%; height:25em; text-align:left; border: 0px solid black; padding:0.2em;" >
+        <div class="gross" style="float:left; width:55%; height:25em; text-align:left; border: 0px solid black; padding:0.2em;" >
             <span class="fett">{Fname1}</span><br />
             {Fdepartment_1} {Fdepartment_2}<br />
             {Strasse}<br />
@@ -287,12 +298,13 @@
             &nbsp;[<a href="mail.php?TO={eMail}&KontaktTO=C{FID}">{eMail}</a>]<br />
             &nbsp;<a href="{Internet}" target="_blank">{Internet}</a></span>
         </div>
-        <div style="float:left; width:37%; height:25em; text-align:right; border: 0px solid black; padding:0.2em;">
+        <div style="float:left; width:43%; height:25em; text-align:right; border: 0px solid black; padding:0.2em;">
             <span valign='top'><span class="fett">{kdnr}</span> <img src="image/kreuzchen.gif" title=".:locked address:." style="visibility:{verstecke};" > {verkaeufer}
             {IMG}<br /></span>
             <br class='mini'>
             <span style="visibility:{ANGEBOT_BUTTON};"><a class="firmabutton" href="#" onClick="doOe('{sales}_quotation');"><img src="image/angebot.png" title="Angebot/Anfrage erstellen" border="0"></a>&nbsp;</span>
             <span style="visibility:{AUFTRAG_BUTTON};"><a class="firmabutton" href="#" onClick="doOe('{request}_order');"><img src="image/auftrag.png" title="neuen Auftrag eingeben" border="0"></a>&nbsp;</span>
+            <span style="visibility:{LIEFER_BUTTON};"><a class="firmabutton" href="#" onClick="doDo();"><img src="image/lieferschein.png" title="neuen Lieferschein erstellen" border="0"></a>&nbsp;</span>
             <span style="visibility:{RECHNUNG_BUTTON};"><a class="firmabutton" href="#" onClick="doIr();"><img src="image/rechnung.png" title="neue Rechnung erstellen" border="0"></a>&nbsp;</span><br />
             <br class='mini'>
             <span style="visibility:{zeige_extra};"><a class="firmabutton" href="extrafelder.php?owner={Q}{FID}" name="extra" target="_blank"><img src="image/extra.png" title="Extrafelder" border="0"></a>&nbsp;</span>

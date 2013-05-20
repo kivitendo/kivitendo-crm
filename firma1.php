@@ -167,6 +167,7 @@
             'AUFTRAG_BUTTON' => ($_SESSION['auftrag_button']=='t')?'visible':'hidden',
             'ANGEBOT_BUTTON' => ($_SESSION['angebot_button']=='t')?'visible':'hidden',
             'RECHNUNG_BUTTON' => ($_SESSION['rechnung_button']=='t')?'visible':'hidden',
+            'LIEFER_BUTTON' => ($_SESSION['liefer_button']=='t')?'visible':'hidden',
             'zeige_karte' => ($_SESSION['zeige_karte']=='t')?'visible':'hidden',
             'zeige_etikett' => ($_SESSION['zeige_etikett']=='t')?'visible':'hidden',  
             'zeige_extra' => ($_SESSION['zeige_extra']=='t')?"visible":"hidden", 

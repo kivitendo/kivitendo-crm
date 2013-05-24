@@ -73,7 +73,10 @@
             if (link.substr(0,7) =='onClick') {
                 if ( link.substr(8) == 'invoice' ) {
                     doIr();
-                } else {
+                } else if ( link.substr(8) == 'delivery_order'){
+                    doDo();  
+                }
+                else {
                     doOe(link.substr(8));
                 }
             } else {
@@ -108,6 +111,10 @@
         }
         document.oe.type.value='invoice';
         document.oe.submit();
+    }
+    function doLxCars() {
+        uri='lxcars/lxcmain.php?owner={FID}&task=1' 
+        window.location.href=uri;
     }
     function KdHelp() {
         link = $('#kdhelp option:selected').val();
@@ -256,11 +263,11 @@
             <option value='vcardexp.php?Q={Q}&fid={FID}'>VCard</option>
             <option value='karte.php?Q={Q}&fid={FID}'>.:register:. .:develop:.</option>
             <option value='firmen3.php?Q={Q}&id={FID}&edit=1'>.:edit:.</option>
-            <option value='onClick:{sales}_order'>.:order:. .:develop:.</option>
             <option value='onClick:{request}_quotation'>.:quotation:. .:develop:.</option>
+            <option value='onClick:{sales}_order'>.:order:. .:develop:.</option>
+            <option value='onClick:delivery_order'>.:delivery order:. .:develop:.</option>
             <option value='onClick:invoice'>.:invoice:. .:develop:.</option>
-            <option value='onClick:sales_delivery_order_edit'>.:delivery order:. .:develop:.</option>
-            {begin_comment}<option value='lxcars/lxcmain.php?owner={FID}&task=1'>KFZ-Daten</option>{end_comment}
+           
         </select>
     </span>
     <span style="float:left; padding-left:3em; visibility:{zeige_tools};" >
@@ -302,18 +309,20 @@
             <span valign='top'><span class="fett">{kdnr}</span> <img src="image/kreuzchen.gif" title=".:locked address:." style="visibility:{verstecke};" > {verkaeufer}
             {IMG}<br /></span>
             <br class='mini'>
-            <span style="visibility:{ANGEBOT_BUTTON};"><a class="firmabutton" href="#" onClick="doOe('{sales}_quotation');"><img src="image/angebot.png" title="Angebot/Anfrage erstellen" border="0"></a>&nbsp;</span>
-            <span style="visibility:{AUFTRAG_BUTTON};"><a class="firmabutton" href="#" onClick="doOe('{request}_order');"><img src="image/auftrag.png" title="neuen Auftrag eingeben" border="0"></a>&nbsp;</span>
-            <span style="visibility:{LIEFER_BUTTON};"><a class="firmabutton" href="#" onClick="doDo();"><img src="image/lieferschein.png" title="neuen Lieferschein erstellen" border="0"></a>&nbsp;</span>
-            <span style="visibility:{RECHNUNG_BUTTON};"><a class="firmabutton" href="#" onClick="doIr();"><img src="image/rechnung.png" title="neue Rechnung erstellen" border="0"></a>&nbsp;</span><br />
+               {ANGEBOT_BUTTON}
+               {AUFTRAG_BUTTON}
+               {LIEFER_BUTTON}
+               {RECHNUNG_BUTTON}<br />
             <br class='mini'>
-            <span style="visibility:{zeige_extra};"><a class="firmabutton" href="extrafelder.php?owner={Q}{FID}" name="extra" target="_blank"><img src="image/extra.png" title="Extrafelder" border="0"></a>&nbsp;</span>
-            <span style="visibility:{zeige_karte};"><a class="firmabutton" href="{KARTE1}" name="karte" target="_blank"><img src="image/karte.gif" title=".:city map:." border="0"></a>&nbsp;</span>
-            <span style="visibility:{zeige_etikett};"><a class="firmabutton" href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0" /></a>&nbsp;</span><br>
+               {EXTRA_BUTTON}
+               {KARTE_BUTTON}
+               {ETIKETT_BUTTON}
+            <br />
             <br class='mini'>
-            <span style="visibility:{zeige_dhl};"><a class="firmabutton" href="#" onCLick="dhl();" title="DHL"><img src="image/briefkasten.gif" alt="DHL" border="0" /></a>&nbsp;</span>
-            {begin_comment}<a href="lxcars/lxcmain.php?owner={FID}&task=1" title="KFZ-Daten"><img src="./lxcars/image/lxcmain.png" alt="Cars" border="1" /></a>{end_comment}
-            <br /><br /><br /><span style="visibility:{zeige_bearbeiter};">.:employee:.: {bearbeiter}</span>
+               {DHL_BUTTON}
+               {LxCars_BUTTON}
+            <br /><br />
+            <span style="visibility:{zeige_bearbeiter};">.:employee:.: {bearbeiter}</span>
         </div>
         <br />
     </div>

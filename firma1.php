@@ -164,17 +164,25 @@
             'sales'	=> ($Q=="C")?"sales":"purchase",
             'request' => ($Q=="C")?"sales":"request",
             'apr' => ($Q=="C")?"ar":"ap",
-            'AUFTRAG_BUTTON' => ($_SESSION['auftrag_button']=='t')?'visible':'hidden',
-            'ANGEBOT_BUTTON' => ($_SESSION['angebot_button']=='t')?'visible':'hidden',
-            'RECHNUNG_BUTTON' => ($_SESSION['rechnung_button']=='t')?'visible':'hidden',
-            'LIEFER_BUTTON' => ($_SESSION['liefer_button']=='t')?'visible':'hidden',
-            'zeige_karte' => ($_SESSION['zeige_karte']=='t')?'visible':'hidden',
-            'zeige_etikett' => ($_SESSION['zeige_etikett']=='t')?'visible':'hidden',  
-            'zeige_extra' => ($_SESSION['zeige_extra']=='t')?"visible":"hidden", 
+            'ANGEBOT_BUTTON' => ($_SESSION['angebot_button']=='t')?
+                                '<a class="firmabutton" href="#" onClick="doOe(\''.$sales.'_quotation\');"><img src="image/angebot.png" title="Angebot/Anfrage erstellen" border="0"></a>&nbsp;':'',
+            'AUFTRAG_BUTTON' => ($_SESSION['auftrag_button']=='t')?
+                                '<a class="firmabutton" href="#" onClick="doOe(\''.$request.'_order\');"><img src="image/auftrag.png" title="neuen Auftrag eingeben" border="0"></a>&nbsp;':'',
+            'LIEFER_BUTTON'  => ($_SESSION['liefer_button']=='t')? 
+                                '<a class="firmabutton" href="#" onClick="doDo();"><img src="image/lieferschein.png" title="neuen Lieferschein erstellen" border="0"></a>&nbsp;':'',
+            'RECHNUNG_BUTTON'=> ($_SESSION['rechnung_button']=='t')?
+                                '<a class="firmabutton" href="#" onClick="doIr();"><img src="image/rechnung.png" title="neue Rechnung erstellen" border="0"></a>&nbsp;':'',
+            'EXTRA_BUTTON'   => ($_SESSION['zeige_extra']=='t')?
+                                '<a class="firmabutton" href="extrafelder.php?owner='.$Q.$id.'" name="extra" target="_blank"><img src="image/extra.png" title="Extrafelder" border="0"></a>&nbsp;':'',                   
+            'KARTE_BUTTON'   => ($_SESSION['zeige_karte']=='t')?
+                                '<a class="firmabutton" href="'.$karte1.'" name="karte" target="_blank"><img src="image/karte.png" title=".:city map:." border="0"></a>&nbsp;':'',
+            'ETIKETT_BUTTON' => ($_SESSION['zeige_etikett']=='t')?
+                                '<a class="firmabutton" href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0" /></a>&nbsp;':'',  
+            'DHL_BUTTON'     => ($_SESSION['zeige_dhl']=='t')?
+                                '<a class="firmabutton" href="#" onCLick="dhl();" title="DHL"><img src="image/dhl.png" alt="DHL" border="0" /></a>&nbsp;':'', 
+            'LxCars_BUTTON'  => ($_SESSION['zeige_lxcars']=='t'&&$Q=="C")?
+                               '<a class="firmabutton" href="#" onCLick="doLxCars();" title="KFZ-Daten"><img src="image/auto.png" alt="LxCars" /></a>&nbsp;':'',
             'zeige_bearbeiter' => ($_SESSION['zeige_bearbeiter']=='t')?"visible":"hidden",      
-            'zeige_dhl' => ($_SESSION['zeige_dhl']=='t')?"visible":"hidden",        
-            'begin_comment' => ($_SESSION['zeige_lxcars']=='t'&&$Q=="C")?"":"<!-- ",
-            'end_comment' => ($_SESSION['zeige_lxcars']=='t'&&$Q=="C")?"":" -->",
             'zeige_tools' => ($_SESSION['zeige_tools']=='t')?"visible":"hidden",
             'login' => $_SESSION["employee"],
             'password' => $_SESSION["password"],

@@ -859,7 +859,8 @@
                 return /^[-+]?\d*$/.test($.trim(s.replace(/[,.']/g, '')));
             };
             this.clearTableBody = function (table) {
-                if ($.browser.msie) {
+                //if ($.browser.msie) { $.browser existiert in 1.9 nicht mehr
+                if (false) {
                     function empty() {
                         while (this.firstChild)
                         this.removeChild(this.firstChild);

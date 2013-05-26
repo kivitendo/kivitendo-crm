@@ -205,7 +205,7 @@
             });
             $("#fasubmenu").tabs({ heightStyle: "auto" });
             var index = $('#fasubmenu a[href="#{kdview}"]').parent().index();
-            $("#fasubmenu").tabs('select', index);
+            $("#fasubmenu").tabs("option", "active",  index);
             $(function() {
                 $( "#right_tabs" ).tabs({
                     beforeLoad: function( event, ui ) {

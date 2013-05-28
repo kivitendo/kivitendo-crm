@@ -52,7 +52,23 @@ FPDI installieren:
     
 Die Pfade können entweder in der php.ini oder durch umbenennen der htaccess.txt in .htaccess angepasst werden.
     mv htaccess.txt .htaccess
-    
+   
+Die conf.php:
+Drei Variablen bestimmen die Grundsätzliche Konfiguration der CRM.
+ERPNAME		: Verzeichnisname der ERP, Default "kivitendo-erp" 
+erpConfigFile	: Name des Konfigfiles der ERP, Default "kivitendo"
+ERP_BASE_URL	: Kommt nur bei (Reverse)-Proxy zum Zuge. Default ""
+                  Hier ist die URL des Proxy einzutragen. Beispiel:
+              
+Apacheconfig auf dem Proxy für den Virtualhost:
+        ProxyPass /lxodemo/ http://192.168.1.100/demo2/
+        ProxyPassReverse /lxodemo http://192.168.1.100/demo2/
+
+LxO-Config auf dem Zielserver:
+	AliasMatch ^/demo2/[^/]+\.pl /var/www/30/demoerp/dispatcher.fcgi
+	Alias       /demo2/          /var/www/30/demoerp/
+Inhalt von ERP_BASE_URL:
+	"http://192.168.1.85/lxodemo/"
 
 Anpassungen in der /etc/php5/apache2/php.ini:
     Das Fehlerreporting evtl. etwas runterschrauben. 

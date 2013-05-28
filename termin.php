@@ -76,16 +76,7 @@
     if (!$Jahr) $Jahr=date("Y");
     if (!$data["vondat"] and !$emptyVon) $data["vondat"]="$Tag.$Monat.$Jahr";
     $t = new Template($base);
-        $menu =  $_SESSION['menu'];
-        $t->set_var(array(
-            JAVASCRIPTS   => $menu['javascripts'],
-            STYLESHEETS   => $menu['stylesheets'],
-            PRE_CONTENT   => $menu['pre_content'],
-            START_CONTENT => $menu['start_content'],
-            END_CONTENT   => $menu['end_content'],
-            'THEME'         => $_SESSION['theme'],
-        ));
-
+    doHeader($t);
     $t->set_file(array("term" => "termin.tpl"));
     $t->set_block("term","User","Block");
     if ($mit) foreach($mit as $zeile) {

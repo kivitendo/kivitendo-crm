@@ -233,6 +233,7 @@ function getFirmenStamm($id,$ws=true,$tab='C',$cvar=true) {
     $daten["op"]=$op;
     $daten["oa"]=$oa;
     $daten["nummer"]=$nummer;
+    history(array($id,$daten['name'],$tab));
     return $daten;
 };
 

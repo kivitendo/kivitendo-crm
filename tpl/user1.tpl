@@ -128,6 +128,7 @@
     <input type="hidden" name="icalext" value="{icalext}">
     <input type="hidden" name="uid" value="{uid}">
     <input type="hidden" name="login" value="{login}">
+    <input type="hidden" name="search_history" value="{search_history}">
     <tr><td class="norm">Login</td><td>{login} : {uid}</td>
         <td class="norm">Vertreter</td><td class="norm"><select name="vertreter">
                         <option value=""></option>

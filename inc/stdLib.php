@@ -33,6 +33,7 @@ if ( ! isset($_SESSION['dbhost']) ) {
     $db = $_SESSION['db']; // Der muss später weg.
 };
 
+require_once "login".$_SESSION["loginok"].".php";
 
 /****************************************************
 * db2date
@@ -736,6 +737,7 @@ function mkHeader() {
     $SV = '<script type="text/javascript" src="';
     $SN = '"></script>'."\n";
     $LV = '<link rel="stylesheet" type="text/css" href="';
+    $LVID = '<link id="'.$_SESSION['theme'].'" rel="stylesheet" type="text/css" href="';
     $LN = '">'."\n";
     $head = array(
         'JQUERY'        => $SV.$_SESSION['basepath'].'crm/jquery-ui/jquery.js'.$SN,
@@ -752,9 +754,12 @@ function mkHeader() {
                            $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.iframe-transport.js'.$SN.
                            $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.fileupload.js'.$SN,
         'JQWIDGET'      => $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery.ui.widget.js'.$SN,
-        'THEME'         => ($_SESSION['theme']!='')? $LV.$_SESSION['basepath'].'crm/jquery-ui/themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN:'',
+        'THEME'         => ($_SESSION['theme']!='')? $LVID  .$_SESSION['basepath'].'crm/jquery-ui/themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN:'',
         'CRMCSS'        => $LV.$_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"].'/main.css'.$LN,
+        'JUI-DROPDOWN'  => $LV.$_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"].'/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.css'.$LN.
+                           $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.min.js'.$SN,
         'CRMPATH'       => $_SESSION['basepath'].'crm/' );
+        
     return $head;
 
 }
@@ -883,6 +888,24 @@ function makeMenu($sess,$token){
     }
     return $rs;
 }
+/*******************************************************************************************************************************************************
+*** History wird mit Parameter schreibend benutzt, ohne Paramter gibt Sie die History zurück ***********************************************************
+*******************************************************************************************************************************************************/
+function history($data=false) {
+    if ( $_SESSION['loginok'] == 'ok' ){
+        $sql = "select val from crmemployee where uid = '" . $_SESSION["loginCRM"] .  "' AND key = 'search_history'";
+        $rs =   $_SESSION['db']->getOne($sql);
+        $array_of_data = json_decode($rs['val']);
+        if ( !$data ) {
+             return $array_of_data;
+        }
+        else {
+            $array_of_data[] = $data; //mit is_in_array prüfen ob daten schon vorhanden wenn ja dann an erste Stelle 
+            $sql = "UPDATE crmemployee SET val = '".json_encode( $array_of_data)."' WHERE uid = ".$_SESSION['uid']." AND key = 'search_history'";
+            $_SESSION['db']->query($sql);
+        }
+    }
+//ToDO Anzahl begrenzen count(array
+}
 
-require_once "login".$_SESSION["loginok"].".php";
 ?>

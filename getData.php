@@ -13,6 +13,7 @@ ob_start();
 <?php echo $head['JQUERYUI']; ?>
 <?php echo $head['THEME']; ?>
 <?php echo $head['JQTABLE']; ?>
+<?php echo $head['JUI-DROPDOWN']; ?>
     <script language="JavaScript">
         function showD (src,id) {
 	       if      (src=="C") { uri="firma1.php?Q=C&id=" + id }
@@ -66,21 +67,64 @@ if ($_SESSION['feature_ac']) { //funktioniert wegen der Ersetzungen für minLeng
     </script>';  
    }//end feature_ac 
 ?>  
-    <style>
+<style>
     table.tablesorter {
 	   width: 900;
-    }    
-    </style>
-    <script>
-    $(function() {
+    }  
+    #jui_dropdown_demo {
+        height: 400px;
+    }
+    #jui_dropdown_demo button {
+        padding: 3px !important;
+    }
+    #jui_dropdown_demo ul li {
+        background: none;
+        display: inline-block;
+        list-style: none;
+    }   
+
+    .drop_container {
+        margin: 10px 10px 10px 10px ;
+        display: inline-block;
+    }   
+    .menu {
+        position: absolute;
+        width: 240px !important;
+        margin-top: 3px !important;
+    }     
+</style>
+<script>
+     $(function() {
         $("#dialog").dialog();
     });
     $(function() {
         $("#treffer")
             .tablesorter({widthFixed: true, widgets: ['zebra']})
             .tablesorterPager({container: $("#pager"), size: 20, positionFixed: false})
-    });    
-    </script>
+    }); 
+
+    $(function() {
+        $.ajax({
+            url: "jqhelp/getHistory.php",
+            context: $('#menu'),
+            success: function(data) {
+                $(this).html(data);
+                $("#drop").jui_dropdown({
+                    launcher_id: 'launcher',
+                    launcher_container_id: 'launcher_container',
+                    menu_id: 'menu',
+                    containerClass: 'drop_container',
+                    menuClass: 'menu',
+                    launchOnMouseEnter:true,
+                    onSelect: function(event, data) {
+                        showD(data.id.substring(0,1), data.id.substring(1));
+                    }
+                });
+            }
+        });
+          
+    });
+</script>
 </head>
 <body onload="$('#ac0').focus().val('<?php echo preg_replace("#[ ].*#",'',$_GET['swort']);?>');">
 <?php 
@@ -93,6 +137,11 @@ echo '<p class="listtop">'.translate('.:fast search customer/vendor/contacts and
     <input type="submit" name="kontakt" value="'.translate('.:contact history:.','firma').'"> <br>
     <span class="liste">'.translate('.:search keyword:.','firma').'</span>
 </form>';
+echo '<div id="drop">
+  <div id="launcher_container">
+    <button id="launcher">'.translate('.:history tracking:.','firma').'</button>
+  </div>
+  <ul id="menu"> </ul>';
 
 if ($_GET["kontakt"] && $_GET['swort'] != '') { 
 	$sw = strtoupper( $_GET["suchwort"] );
@@ -129,7 +178,8 @@ if ($_GET["kontakt"] && $_GET['swort'] != '') {
 	} else {
 		echo "Keine Treffer!";
 	}
-} else if ($_GET["adress"]) {
+} 
+else if ($_GET["adress"]) {
 	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
 	include("inc/UserLib.php");
@@ -200,29 +250,36 @@ if ($_GET["kontakt"] && $_GET['swort'] != '') {
                  "<td class=\"liste\">".$row["addr2"].(($row["addr1"])?", ":"").$row["addr1"]."</td><td class=\"liste\">".$row["workphone"]."</td><td class=\"liste\">U</td></tr>\n"; 
             $i++; 
         } 
-        echo "</tbody></table>\n"; ?>
-        
-<?php   } else { 
- 	        echo $msg; 
-        }; 
+        echo "</tbody></table>\n"; 
+        echo '
+        <span id="pager" class="pager">
+            <form>
+                <img src="'.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first"/>
+                <img src="'.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev"/>
+                <img src="'.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
+                <img src="'.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
+                <select class="pagesize" id="pagesize">
+                    <option value="10">10</option>
+                    <option value="20" selected>20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                </select>
+            </form>
+        </span>';
+   
     } 
+    else { 
+        echo $msg; 
+    }; 
+} //END ELSEIF adress
     if ($_GET['kontakt'] || $_GET['adress']) {
 ?>
+
+  
         <br>
-<span id="pager" class="pager">
-    <form>
-        <img src="<?php echo $_SESSION['baseurl']; ?>crm/jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first"/>
-        <img src="<?php echo $_SESSION['baseurl']; ?>crm/jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev"/>
-        <img src="<?php echo $_SESSION['baseurl']; ?>crm/jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
-        <img src="<?php echo $_SESSION['baseurl']; ?>crm/jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
-        <select class="pagesize" id='pagesize'>
-            <option value="10">10</option>
-            <option value="20" selected>20</option>
-            <option value="30">30</option>
-            <option value="40">40</option>
-        </select>
-    </form>
-</span>
+
+
+
 <?php } 
     echo $menu['end_content'];
     ob_end_flush(); 

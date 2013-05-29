@@ -118,6 +118,7 @@
             feature_unique_name_plz=> ($fa['feature_unique_name_plz']=='t')?'checked':'',
             zeige_lxcars           => ($fa['zeige_lxcars']=='t')?'checked':'',
             tinymce                => ($fa['tinymce'] == 't')?'checked':'',
+            search_history         => $fa['search_history']
     ));
             
     if ( $own ) {

@@ -25,7 +25,7 @@ function saveUserStamm($val) {
                  'zeige_extra' => 'b','zeige_lxcars' => 'b','zeige_karte' => 'b','zeige_tools' => 'b','zeige_etikett' => 'b','zeige_bearbeiter' => 'b',
                  'feature_ac' => 'b','feature_ac_minlength' => 'i','feature_ac_delay' => 'i','feature_unique_name_plz' => 'b',
                  'showErr' => 'b', 'php_error' => 'b','zeige_dhl' => 'b',
-                 'kicktel_api' => 't','data_from_tel' => 'b','tinymce' => 'b');
+                 'kicktel_api' => 't','data_from_tel' => 'b','tinymce' => 'b','search_history' => 't');
     foreach ($fld as $key => $value) $_SESSION[$key] = $val[$key]; //Einstellungen nach dem Sichern gleich übernehmen (ohne neues Login)
     $sql  = "update employee set ";
     foreach ($std as $key) {

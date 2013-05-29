@@ -908,4 +908,10 @@ function history($data=false) {
 //ToDO Anzahl begrenzen count(array
 }
 
+function getCurr() {
+    $sql = "SELECT * from currencies";
+    $rs = $_SESSION['db']->getAll($sql);
+    return $rs;
+}
+
 ?>

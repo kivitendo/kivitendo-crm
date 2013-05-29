@@ -343,6 +343,16 @@
             </span>
         </div>
         <div class="zeile2">
+            <span class="label klein">.:currency:.</span>
+            <span class="feldxx">
+                <select name="currency_id" id="currency_id" tabindex="13">
+<!-- BEGIN currency -->
+                    <option value="{Cid}" {Psel}>{Ctext}</option>
+<!-- END currency -->
+                </select>
+            </span>
+        </div>
+        <div class="zeile2">
             <span class="label klein">.:payment_terms:.</span>
             <span class="feldxx">
                 <select name="payment_id" id="payment_id" tabindex="12">

@@ -566,7 +566,7 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
         shiptofax => array(1,0,3,"Lieferfax",30),           shiptoemail => array(1,0,5,"Liefer-eMail",0),
         shiptodepartment_1 => array(1,0,1,"Lieferzusatzname",75),
         shiptodepartment_2 => array(1,0,1,"Lieferabteilung",75),
-        headcount => array(0,0,6,"Anzahl Mitarbeiter",10));
+        headcount => array(0,0,6,"Anzahl Mitarbeiter",10),   currency_id => array(0,0,6,"Currency",0));
         $keys=array_keys($daten);
     $dbf=array_keys($dbfld);
     $anzahl=count($keys);
@@ -806,7 +806,7 @@ function mknewFirma($id,$typ) {
     $sql="DELETE FROM ".$tab[$typ]." WHERE name LIKE '".$tmpName_0."%'";
    // $rc=$_SESSION['db']->query($sql); Kommentiert bis ERP-Bug #2201 gefixt ist
     if (!$id) {$uid='null';} else {$uid=$id;};
-    $sql="insert into ".$tab[$typ]." (name,employee) values ('$tmpName_0$tmpName_1',$uid)";
+    $sql="insert into ".$tab[$typ]." (name,employee,currency_id) values ('$tmpName_0$tmpName_1',$uid,1)";
     $rc=$_SESSION['db']->query($sql);
     if ($rc) {
         $sql="select id from ".$tab[$typ]." where name = '$tmpName_0$tmpName_1'";
@@ -1155,6 +1155,8 @@ function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false) {
         doBlock($t,"fa1","branchen","BR",$branchen,"branche","branche",$daten["branche"]);
         $lead=getLeads();
         doBlock($t,"fa1","LeadListe","LL",$lead,"id","lead",$daten["lead"]);
+        $curr=getCurr();
+        doBlock($t,"fa1","curr","C",$curr,"id","name",$daten["currency_id"]);
         if (!$suchmaske) {
             doBlock($t,"fa1","shiptos","ST",$shiptos,"shipto_id",array("shiptoname","shiptodepartment_1"),false);
         }
@@ -1323,6 +1325,8 @@ function vartpl (&$t,$daten,$typ,$msg,$btn1,$btn2,$tpl,$suchmaske=false) {
         doBlock($t,"fa1","branchen","BR",$branchen,"branche","branche",$daten["branche"]);
         $bundesland=getBundesland(strtoupper($daten["country"]));
         doBlock($t,"fa1","buland","BL",$bundesland,"id","bundesland",$daten["bland"]);
+        $curr=getCurr();
+        doBlock($t,"fa1","currency","C",$curr,"id","name",$daten["currency_id"]);
         $cvars = getCvars();
         $t->set_block('fa1','cvarListe','BlockCV');
         if ($cvars) {

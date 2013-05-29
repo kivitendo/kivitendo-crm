@@ -18,7 +18,7 @@
                         var content;
                         $.each(data.items, function(i) {
                              content = '';
-                             content += '<tr group="tc" onClick="showItem('+data.items[i].id+');">'
+                             content += '<tr class="verlauf" group="tc" onClick="showItem('+data.items[i].id+');">'
                              content += '<td>' + data.items[i].calldate + '</td>';
                              content += '<td>' + data.items[i].id + '</td>';
                              content += '<td nowrap>' + data.items[i].kontakt;
@@ -336,81 +336,87 @@
         <li><a href="#inf">.:miscInfo:. </a></li>
         </ul>
 
-    <div id="lie" class="klein">
-        <span class="fett" id="shiptoname"></span> &nbsp;&nbsp;&nbsp;&nbsp;
-        .:shipto count:.:{Scnt} <img src="image/leftarrow.png" id='shipleft' border="0">
-        <span id="SID"></span> <img src="image/rightarrow.png" id='shipright' border="0">&nbsp; &nbsp;
-       
-        <a href="#" onCLick="anschr();" align="right"><img src="image/brief.png" alt=".:print label:." border="0"/></a>&nbsp; &nbsp;
-        <a href="" id='karte2' target="_blank" align="right"><img src="image/karte.gif" title=".:city map:." border="0"></a><br />
-       
-        <span id="shiptodepartment_1"></span> &nbsp; &nbsp; <span id="shiptodepartment_2"></span> <br />
-        <span id="shiptostreet"></span><br />
-        <span class="mini">&nbsp;<br /></span>
-        <span id="shiptocountry"></span>-<span id="shiptozipcode"></span> <span id="shiptocity"></span><br />
-        <span id="shiptobundesland"></span><br />
-        <span class="mini">&nbsp;<br /></span>
-        <span id="shiptocontact"></span><br />
-        .:tel:.: <span id="shiptophone"></span><br />
-        .:fax:.: <span id="shiptofax"></span><br />
-        <span id="shiptoemail"></span>
-    </div>
-
-    <div id="not">
-        <span class="labelLe klein">.:Catchword:.</span><span class="value">{sw} </span><br />
-        <span class="labelLe klein" valign="top">.:Remarks:.</span><span class="value">{notiz}</span>
-    </div>
-   
-    <div id="var" >
-        <div class="zeile klein">
-<!-- BEGIN vars -->
-        <span class="labelLe">{varname}</span><span class="value">{varvalue}</span><br />
-<!-- END vars -->
+        <div id="lie" class="klein">
+            <span class="fett" id="shiptoname"></span> &nbsp;&nbsp;&nbsp;&nbsp;
+            .:shipto count:.:{Scnt} <img src="image/leftarrow.png" id='shipleft' border="0">
+            <span id="SID"></span> <img src="image/rightarrow.png" id='shipright' border="0">&nbsp; &nbsp;
+           
+            <a href="#" onCLick="anschr();" align="right"><img src="image/brief.png" alt=".:print label:." border="0"/></a>&nbsp; &nbsp;
+            <a href="" id='karte2' target="_blank" align="right"><img src="image/karte.gif" title=".:city map:." border="0"></a><br />
+           
+            <span id="shiptodepartment_1"></span> &nbsp; &nbsp; <span id="shiptodepartment_2"></span> <br />
+            <span id="shiptostreet"></span><br />
+            <span class="mini">&nbsp;<br /></span>
+            <span id="shiptocountry"></span>-<span id="shiptozipcode"></span> <span id="shiptocity"></span><br />
+            <span id="shiptobundesland"></span><br />
+            <span class="mini">&nbsp;<br /></span>
+            <span id="shiptocontact"></span><br />
+            .:tel:.: <span id="shiptophone"></span><br />
+            .:fax:.: <span id="shiptofax"></span><br />
+            <span id="shiptoemail"></span>
         </div>
-    </div>
-   
-    <div id="inf">
-        <span class="labelLe">.:Concern:.:</span>
-        <span class="value"><a href="firma1.php?Q={Q}&id={konzern}">{konzernname}</a></span>
-        <span> &nbsp; <a href="konzern.php?Q={Q}&fid={FID}">{konzernmember}</a></span><br />
-        <br />
-        <span class="labelLe">.:Industry:. </span> <span class="value">{branche} </span><br />
-        <br />
-        <span class="labelLe">.:headcount:.:</span> <br /><span class="value">{headcount}</span><br />
-        <br />
-        <span class="labelLe">.:language:.: </span> <span class="value">{language} </span><br />
-        <br />
-        <span class="labelLe">.:Init date:.:</span> <span class="value">{erstellt} </span>
-        <span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
-        <span class="labelLe">.:update:.: </span> <span class="value">{modify} </span><br />
-        <br />
-    </div>
-
-    <div id="fin" >
-        <table width="100%"><tr><td>
-        <span class="labelLe">.:Source:.:</span> <span class="value">{lead} {leadsrc}</span><br />
-        <span class="labelLe">.:Business:.:</span> <span class="value">{kdtyp}</span><br />
-        <span class="labelLe">.:taxnumber:.:</span> <span class="value">{Taxnumber}</span><br />
-        <span class="labelLe">UStId:</span> <span class="value">{USTID}</span><br />
-        <span class="labelLe">.:taxzone:.:</span> <span class="value">{Steuerzone}</span><br />
-        <span class="labelLe">.:bankname:.:</span> <span class="value">{bank}</span><br />
-        <span class="labelLe">.:directdebit:.:</span> <span class="value">{directdebit}</span><br />
-        <span class="labelLe">.:bankcode:.:</span> <span class="value">{blz}</span><br />
-        <span class="labelLe">.:bic:.:</span> <span class="value">{bic}</span><br />
-        <span class="labelLe">.:account:.:</span> <span class="value">{konto}</span><br />
-        <span class="labelLe">.:iban:.:</span> <span class="value">{iban}</span><br />
-        </td><td valign="top">
-        <span class="labelLe">.:Discount:.:</span> <span class="value">{rabatt}</span><br />
-        <span class="labelLe">.:Price group:.:</span> <span class="value">{preisgrp}</span><br />
-        <span class="labelLe">.:terms:.:</span> <span class="value">{terms} .:days:.</span><br />
-        <span class="labelLe">.:creditlimit:.:</span> <span class="value">{kreditlim}</span><br />
-        <span class="space">.:outstanding:. :</span><br />
-        <span class="labelLe">- .:items:.:</span>
-        <span class="value" onClick="showOP('{apr}');">{op}</span><br />
-        <span class="labelLe">- .:orders:.:</span>
-        <span class="value" onClick="showOP('oe');">{oa}</span></br />
-        </td></tr></table>
-    </div>
+ 
+        <div id="not">
+            <table width="100%"><tr><td>
+            <span class="labelLe ">.:Catchword:.</span><span class="value">{sw} </span><br />
+            <span class="labelLe " valign="top">.:Remarks:.</span><span class="value">{notiz}</span>
+            </td></tr></table>
+        </div>
+       
+        <div id="var" >
+            <div class="zeile klein">
+            <table width="100%"><tr><td>
+<!-- BEGIN vars -->
+            <span class="labelLe">{varname}</span><span class="value">{varvalue}</span><br />
+<!-- END vars -->
+            </td></tr></table>
+            </div>
+        </div>
+       
+        <div id="inf">
+            <table width="100%"><tr><td>
+            <span class="labelLe">.:Concern:.:</span>
+            <span class="value"><a href="firma1.php?Q={Q}&id={konzern}">{konzernname}</a></span>
+            <span> &nbsp; <a href="konzern.php?Q={Q}&fid={FID}">{konzernmember}</a></span><br />
+            <br />
+            <span class="labelLe">.:Industry:. </span> <span class="value">{branche} </span><br />
+            <br />
+            <span class="labelLe">.:headcount:.:</span> <br /><span class="value">{headcount}</span><br />
+            <br />
+            <span class="labelLe">.:language:.: </span> <span class="value">{language} </span><br />
+            <br />
+            <span class="labelLe">.:Init date:.:</span> <span class="value">{erstellt} </span>
+            <span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span class="labelLe">.:update:.: </span> <span class="value">{modify} </span><br />
+            </td></tr></table>
+            <br />
+        </div>
+ 
+        <div id="fin" >
+            <table width="100%"><tr><td>
+            <span class="labelLe">.:Source:.:</span> <span class="value">{lead} {leadsrc}</span><br />
+            <span class="labelLe">.:Business:.:</span> <span class="value">{kdtyp}</span><br />
+            <span class="labelLe">.:taxnumber:.:</span> <span class="value">{Taxnumber}</span><br />
+            <span class="labelLe">UStId:</span> <span class="value">{USTID}</span><br />
+            <span class="labelLe">.:taxzone:.:</span> <span class="value">{Steuerzone}</span><br />
+            <span class="labelLe">.:bankname:.:</span> <span class="value">{bank}</span><br />
+            <span class="labelLe">.:directdebit:.:</span> <span class="value">{directdebit}</span><br />
+            <span class="labelLe">.:bankcode:.:</span> <span class="value">{blz}</span><br />
+            <span class="labelLe">.:bic:.:</span> <span class="value">{bic}</span><br />
+            <span class="labelLe">.:account:.:</span> <span class="value">{konto}</span><br />
+            <span class="labelLe">.:iban:.:</span> <span class="value">{iban}</span><br />
+            </td><td valign="top">
+            <span class="labelLe">.:Discount:.:</span> <span class="value">{rabatt}</span><br />
+            <span class="labelLe">.:Price group:.:</span> <span class="value">{preisgrp}</span><br />
+            <span class="labelLe">.:terms:.:</span> <span class="value">{terms} .:days:.</span><br />
+            <span class="labelLe">.:creditlimit:.:</span> <span class="value">{kreditlim}</span><br />
+            <span class="space">.:outstanding:. :</span><br />
+            <span class="labelLe">- .:items:.:</span>
+            <span class="value" onClick="showOP('{apr}');">{op}</span><br />
+            <span class="labelLe">- .:orders:.:</span>
+            <span class="value" onClick="showOP('oe');">{oa}</span></br />
+            </td></tr></table>
+        </div>
 </div>
 
 <div style="float:left; width:45%; height:37em; text-align:left; border: 1px solid grey; border-left:0px;">
@@ -425,7 +431,7 @@
             <table id="calls" class="tablesorter" width="100%" style='margin:0px;'>
     <thead><tr><th>Datum</th><th>id</th><th class="{ sorter: false }"></th><th>Betreff</th><th>.:contact:.</th></tr></thead>
     <tbody>
-    <tr onClick="showItem(0)"><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
+    <tr onClick="showItem(0)" class='verlauf'><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
     </tbody>
     </table><br>
     <div id="pager" class="pager" style='position:absolute;'>

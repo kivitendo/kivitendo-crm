@@ -1533,11 +1533,10 @@ global $db;
 *****************************************************/
 function getCurr() {
 global $db;
-    $sql="SELECT curr FROM defaults";
-    $rsc=$db->getAll($sql);
-    if ($rsc[0]['curr']) {
-        $curr = explode(":",$rsc[0]['curr']);
-        $curr = $curr[0];
+    $sql="SELECT name FROM currencies WHERE id = (SELECT currency_id FROM defaults)";
+    $rsc=$db->getOne($sql);
+    if ($rsc['name']) {
+       $curr = $rsc['name'];
     } else {
         $curr = "Eur";
     }

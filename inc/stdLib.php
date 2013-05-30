@@ -909,4 +909,10 @@ function history($data=false) {
     }
 }
 
+function getCurr() {
+    $sql = "SELECT * from currencies";
+    $rs = $_SESSION['db']->getAll($sql);
+    return $rs;
+}
+
 ?>

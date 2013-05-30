@@ -909,7 +909,7 @@ function history($data=false) {
     }
 }
 
-function getCurr() {
+function getCurrencies() {
     $sql = "SELECT * from currencies";
     $rs = $_SESSION['db']->getAll($sql);
     return $rs;

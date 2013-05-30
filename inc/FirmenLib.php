@@ -1155,7 +1155,7 @@ function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false) {
         doBlock($t,"fa1","branchen","BR",$branchen,"branche","branche",$daten["branche"]);
         $lead=getLeads();
         doBlock($t,"fa1","LeadListe","LL",$lead,"id","lead",$daten["lead"]);
-        $curr=getCurr();
+        $curr=getCurrencies();
         doBlock($t,"fa1","curr","C",$curr,"id","name",$daten["currency_id"]);
         if (!$suchmaske) {
             doBlock($t,"fa1","shiptos","ST",$shiptos,"shipto_id",array("shiptoname","shiptodepartment_1"),false);
@@ -1325,7 +1325,7 @@ function vartpl (&$t,$daten,$typ,$msg,$btn1,$btn2,$tpl,$suchmaske=false) {
         doBlock($t,"fa1","branchen","BR",$branchen,"branche","branche",$daten["branche"]);
         $bundesland=getBundesland(strtoupper($daten["country"]));
         doBlock($t,"fa1","buland","BL",$bundesland,"id","bundesland",$daten["bland"]);
-        $curr=getCurr();
+        $curr=getCurrencies();
         doBlock($t,"fa1","currency","C",$curr,"id","name",$daten["currency_id"]);
         $cvars = getCvars();
         $t->set_block('fa1','cvarListe','BlockCV');

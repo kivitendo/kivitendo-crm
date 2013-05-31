@@ -5,16 +5,7 @@
     include("crmLib.php");
     include("UserLib.php");
     $t = new Template($base);
-    $menu =  $_SESSION['menu'];
-    $t->set_var(array(
-        JAVASCRIPTS   => $menu['javascripts'],
-        STYLESHEETS   => $menu['stylesheets'],
-        PRE_CONTENT   => $menu['pre_content'],
-        START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content'],
-        JQUERY        => $_SESSION['basepath'].'crm/',
-        'THEME'         => $_SESSION['theme'],
-    ));
+    doheader($t);
     $stamm="none";
     $show = "visible";
     if ($_GET["Q"] and $_GET["fid"]) {

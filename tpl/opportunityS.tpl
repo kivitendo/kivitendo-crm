@@ -1,13 +1,13 @@
 <html>
     <head><title></title>
-    {STYLESHEETS}
-    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
-    {THEME}
-    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script> 
-    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/i18n/jquery.ui.datepicker-de.js"></script>
-    {JAVASCRIPTS}
+{STYLESHEETS}
+{CRMCSS}
+{JQUERY}
+{JQUERYUI}
+{THEME}
+{JQDATE}
+{JQTABLE}
+{JAVASCRIPTS}
 	<script language="JavaScript">
 	<!--
     function hide(nr) {
@@ -37,6 +37,10 @@
 	<script>
         $(function() {
             $( "#zieldatum" ).datepicker($.datepicker.regional[ "de" ]);
+            $( "#history" ).tablesorter({widthFixed: true, widgets: ['zebra'], headers: { 
+                0: { sorter: false }, 1: { sorter: false }, 2: { sorter: false }, 3: { sorter: false }, 4: { sorter: false }, 
+                5: { sorter: false }, 6: { sorter: false }, 7: { sorter: false }, 8: { sorter: false } } 
+            });
         });
         </script>
 
@@ -166,24 +170,26 @@
 		</span>
 	</div>
 </form>
-        <table border="0" width="100%">
+    <table id='history' class="tablesorter" width="100%">
+    <thead>
 	<tr><td>.:subject:.</td><td>.:ordersum:.</td><td>.:targetdate:.</td><td>.:chance:.</td><td>.:status:.</td><td>.:quotation:.</td><td>.:nextstep:.</td><td>.:employee:.</td><td>.:changed:.</td></tr>
+    </thead><tbody>
 <!-- BEGIN Liste --> 
-        <tr  class="bgcol{LineCol}" onClick="show('n{nr}');">
-                <td class="norm"> {histtitle}</td>
-                <td class="norm" style="width:7em;text-align:right"> {histbetrag}</td>
-                <td class="norm" style="width:6em;text-align:right"> {histdatum}</td>
-		<td class="norm" style="width:2em;text-align:right"> {histchance}</td>
-		<td class="norm" style="width:10em;text-align:left"> {histstatus}</td>
-		<td class="norm"> {histauftrag}</td>
-		<td class="norm"> {histnext}</td>
-		<td class="norm"> {user}</td>
-		<td class="norm" style="width:6em;text-align:left">&nbsp;{chgdate}</td></tr>
-        <tr  class='bgcolor{LineCol}' onClick="hide('n{nr}');" >
-                <!-- Der blöde Firefox kann das nicht mehr ordentlich darstellen -->
-                <td style="display:none" class="norm" id='n{nr}'  colspan="9">{histnotiz}</td></tr>
+        <tr onClick="show('n{nr}');">
+        <td> {histtitle}</td>
+        <td style="width:7em;text-align:right"> {histbetrag}</td>
+        <td style="width:6em;text-align:right"> {histdatum}</td>
+		<td style="width:2em;text-align:right"> {histchance}</td>
+		<td style="width:10em;text-align:left"> {histstatus}</td>
+		<td> {histauftrag}</td>
+		<td> {histnext}</td>
+		<td> {user}</td>
+		<td style="width:6em;text-align:left">&nbsp;{chgdate}</td></tr>
+        <tr onClick="hide('n{nr}');" >
+        <!-- Der blöde Firefox kann das nicht mehr ordentlich darstellen -->
+        <td style="display:none"  id='n{nr}'  colspan="9">{histnotiz}</td></tr>
 <!-- END Liste -->
-       </table>
+    </tbody></table>
 </div>
 <!-- Hier endet die Karte ------------------------------------------->
 </span>

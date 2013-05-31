@@ -20,12 +20,16 @@
             'THEME'         => $head['THEME'],
             'CRMCSS'        => $head['CRMCSS'],
             'JQUERY'        => $head['JQUERY'],
+            'baseurl'       => $_SESSION['baseurl'],
         ));
         $init = "\tvar initkat = ".$_GET['kdhelp'].";\n";
     } else {
         $popup = 'visible';
         doHeader($tpl);
         $init = "\tvar initkat = -1;\n";
+        $tpl->set_var(array(
+            'baseurl'       => $_SESSION['baseurl'],
+        ));
     }
 
     if ($_SESSION['tinymce']) {

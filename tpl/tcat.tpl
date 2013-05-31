@@ -21,7 +21,7 @@
 <p class="listtop">.:categorie termin:.</p>
 
 <form name="termincat" method="post" action="tcatedit.php">
-    <table><tr><th>.:order:.</th><th>.:name:.</th><th>.:color:.</th><th>.:delete:.</th></tr>
+    <table><tr><th>.:sortorder:.</th><th>.:name:.</th><th>.:color:.</th><th>.:delete:.</th></tr>
 
 <!-- BEGIN TKat -->
     <tr>

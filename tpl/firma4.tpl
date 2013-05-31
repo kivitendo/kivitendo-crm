@@ -69,14 +69,14 @@
 <span id='contentbox'>
 <br>
 <!-- Hier beginnt die Karte  ------------------------------------------->
-<span style="float:left; width:40%; height:90%;  text-align:center; padding:2px; border: 1px solid black; border-bottom: 0px;">
-    <div style="float:left; width:100%; height:5.5em; text-align:left; border-bottom: 1px solid black;" >
+<span style="float:left; width:40%; height:90%;  text-align:center; padding:2px; border: 1px solid lightgray; border-bottom: 0px;">
+    <div style="float:left; width:100%; height:5.5em; text-align:left; border-bottom: 1px solid lightgray;" >
     <table>
     <tr><td class="fett normal">{Name}</td><td></td></tr>
     <tr><td class="fett">.:KdNr:.: {customernumber}</td><td>ID: {PID}</td></tr>
     </table>
     </div>
-    <div style="float:left; width:100%;min-height:300px;  text-align:left; border-bottom: 0px solid black;" >
+    <div style="float:left; width:100%;min-height:300px;  text-align:left; border-bottom: 0px;" >
         <button name="onClick=newFile('left')">.:uploadDocument:.   </button>
         <button name="onClick=newDir('left')">.:newDirectory:.      </button>
         <button name="onClick=dateibaum('left',pfadleft)">.:reread:.</button>
@@ -86,8 +86,8 @@
     </div>
 </span>
 
-<span style="float:left; width:58%; height:90%; text-align:left; border: 1px solid black; border-bottom: 2px; padding:2px; border-left:0px;">
-    <div style="float:left; width:100%; height:5.5em; text-align:left; padding-top: 0; border-top: 0; border-bottom: 1px solid black;" class="fett">
+<span style="float:left; width:58%; height:90%; text-align:left; border: 1px solid lightgray; border-bottom: 2px; padding:2px; border-left:0px;">
+    <div style="float:left; width:100%; height:5.5em; text-align:left; padding-top: 0; border-top: 0; border-bottom: 1px solid lightgray;" class="fett">
     <table>
     <tr><td>.:Templates:.:</td><td>
     <select name="vorlage" id="vorlage" onChange="showD();" style="width:150px;">
@@ -105,7 +105,7 @@
     </select></td></tr>
     </table>
     </div>
-    <div style="float:left; width:100%;min-height:300px;   text-align:left; border-bottom: 0px solid black;" class="normal">
+    <div style="float:left; width:100%;min-height:300px;   text-align:left; border-bottom: 0px;" class="normal">
         <button id="subfilebrowser" name="onClick=dateibaum('right',pfadleft)">.:Filebrowser:.</button>
         <button id="subdownload"    name="onClick=download();">.:download:.                   </button>
         <button id="subdelete"      name="onClick=deletefile();">.:delete:.                   </button>

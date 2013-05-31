@@ -39,7 +39,7 @@
                         })
                         $("#calls").trigger('update');
                         $("#calls")
-                            .tablesorter({widthFixed: true, widgets: ['zebra'], headers: { 2: { sorter: false } } })
+                             .tablesorter({widthFixed: true, widgets: ['zebra'], headers: { 2: { sorter: false } } })
                              .tablesorterPager({container: $("#pager"), size: 15, positionFixed: false})
                     }
         });
@@ -288,7 +288,7 @@
 </form>
 
 <span id='contentbox' style="padding-top:2em;" >
-    <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid black;" >
+    <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid lightgray;" >
         <div class="gross" style="float:left; width:55%; height:25em; text-align:left; border: 0px solid black; padding:0.2em;" >
             <span class="fett">{Fname1}</span><br />
             {Fdepartment_1} {Fdepartment_2}<br />
@@ -419,7 +419,7 @@
         </div>
 </div>
 
-<div style="float:left; width:45%; height:37em; text-align:left; border: 1px solid grey; border-left:0px;">
+<div style="float:left; width:45%; height:37em; text-align:left; border: 1px solid lightgrey; border-left:0px;">
     <div id="right_tabs">
         <ul>
             <li><a href="#contact">.:contact:.</a></li>

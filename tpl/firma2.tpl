@@ -224,8 +224,8 @@
 <span id='contentbox' >
 <br>
 <!-- Beginn Code ------------------------------------------->
-<div style="float:left; width:45em; height:37em;  border: 1px solid black;" >
-        <div style="float:left; width:45em; height:4.5em; text-align:left; border-bottom: 1px solid black;">
+<div style="float:left; width:45em; height:37em;  border: 1px solid lightgray;" >
+        <div style="float:left; width:45em; height:4.5em; text-align:left; border-bottom: 1px solid lightgray;">
             <form name="contact">
             <span class="fett" >
             &nbsp;{Fname1} &nbsp; &nbsp; .:KdNr:.: {customernumber}<br />
@@ -235,7 +235,7 @@
             {kontakte}</select>
             </form>
         </div>
-        <div style="float:left; width:70%; height:13em; text-align:left; border-bottom: 0px solid black;" >
+        <div style="float:left; width:70%; height:13em; text-align:left; border-bottom: 0px solid lightgray;" >
             &nbsp;<span id="cp_greeting"></span> <span id="cp_title"></span><br />
             &nbsp;<span id="cp_givenname"></span> <span id="cp_name"></span><br />
             &nbsp;<span id="cp_street"></span><br />
@@ -248,7 +248,7 @@
             &nbsp;<span id="cp_email"></span><br />
             &nbsp;<span id="cp_homepage"></span><br /><br />
         </div>
-        <div style="float:left; width:29%; height:13em; text-align:right; border-bottom: 0px solid black;" id="cpinhalt2">
+        <div style="float:left; width:29%; height:13em; text-align:right; border-bottom: 0px ;" id="cpinhalt2">
             <span id="extraF"></span>
             <a href="#" onCLick="anschr();"><img src="image/brief.png" border="0" style="visibility:{none};" id="cpbrief"></a><br />
             <span id="cp_grafik" style="padding-right:1px;"></span></br >
@@ -257,7 +257,7 @@
             <span id="cp_abteilung" style="padding-right:1px;"></span><br />
             <span id="cp_vcard" style="padding-right:1px;"></span><br />
         </div>
-        <div style="position:absolute;top:20em; left:0em; width:45em;  text-align:left; border-bottom: 0px solid black;">
+        <div style="position:absolute;top:20em; left:0em; width:45em;  text-align:left; border-bottom: 0px;">
             &nbsp;<span id="cp_privatphone"></span> <span id="cp_privatemail"></span><br />
              <hr width="100%">
                 &nbsp;<input type='submit' value='VCard' onClick="vcard()" >
@@ -270,7 +270,7 @@
             <span id="cp_notes" class="klein" style="width:45em; padding-left:1em;"></span>
         </div>
 </div>
-<div style="float:left; width:46%; height:37em; text-align:left; border: 1px solid black; border-left:0px;">
+<div style="float:left; width:46%; height:37em; text-align:left; border: 1px solid lightgray; border-left:0px;">
         <table id="calls" class="tablesorter" width="100%" style='margin:0px;'>
         <thead><tr><th>Datum</th><th>id</th><th class="{ sorter: false }"></th><th>Betreff</th><th>.:contakt:.</th></tr></thead>
         <tbody>

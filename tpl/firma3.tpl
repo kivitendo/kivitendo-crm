@@ -43,7 +43,7 @@
 </div>
 <span id='contentbox' >
 <!-- Hier beginnt die Karte  ------------------------------------------->
-<div style="position:absolute; left:0px; top:1.5em; width:35em; border:1px solid black">
+<div style="position:absolute; left:0px; top:1.5em; width:35em; border:1px solid lightgray">
 	<span class="fett">{Name} &nbsp; {kdnr}</span><br />
 	{Plz} {Ort}
 </div>

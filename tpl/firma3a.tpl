@@ -43,7 +43,7 @@
 
 <span style="position:absolute; left:0.2em; top:7.2em; width:99%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
-<div style="position:absolute; left:1.5px; top:0em; width:35em; border:1px solid black">
+<div style="position:absolute; left:1.5px; top:0em; width:35em; border:1px solid lightgray">
 	<span class="fett">{Name} &nbsp; {kdnr}</span><br />
 	{Plz} {Ort}
 </div>

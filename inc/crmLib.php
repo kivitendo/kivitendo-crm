@@ -3206,16 +3206,16 @@ global $db;
     $ar_ap = ($Q=='C')?"ar":"ap";
     switch($type) {
         case "inv": //Rechnungen
-            $sql = "SELECT DISTINCT ON ($ar_ap.id) to_char($ar_ap.transdate, 'DD.MM.YYYY') as date, description, COALESCE(ROUND(amount,2))||' '||COALESCE(curr) as amount, ";
-            $sql.= "invnumber as number, $ar_ap.id FROM $ar_ap LEFT JOIN invoice  ON $ar_ap.id=trans_id  WHERE $cust_vend = $fid ORDER BY $ar_ap.id, invoice.id";
+            $sql = "SELECT DISTINCT ON ($ar_ap.id) to_char($ar_ap.transdate, 'DD.MM.YYYY') as date, description, COALESCE(ROUND(amount,2))||' '||COALESCE(C.name) as amount, ";
+            $sql.= "invnumber as number, $ar_ap.id FROM $ar_ap LEFT JOIN invoice  ON $ar_ap.id=trans_id LEFT JOIN currencies C on currency_id=C.id  WHERE $cust_vend = $fid ORDER BY $ar_ap.id, invoice.id";
             break;
         case "ord": //Aufträge
-            $sql = "SELECT DISTINCT ON (oe.id) to_char(oe.transdate, 'DD.MM.YYYY') as date, description, COALESCE(ROUND(amount,2))||' '||COALESCE(curr) as amount, ";
-            $sql.= "oe.ordnumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id=trans_id WHERE quotation = FALSE AND $cust_vend = $fid ORDER BY oe.id, orderitems.id"; 
+            $sql = "SELECT DISTINCT ON (oe.id) to_char(oe.transdate, 'DD.MM.YYYY') as date, description, COALESCE(ROUND(amount,2))||' '||COALESCE(C.name) as amount, ";
+            $sql.= "oe.ordnumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id=trans_id LEFT JOIN currencies C on currency_id=C.id WHERE quotation = FALSE AND $cust_vend = $fid ORDER BY oe.id, orderitems.id"; 
             break;
         case "quo": //Angebote
-            $sql = "SELECT DISTINCT ON (oe.id) to_char(oe.transdate, 'DD.MM.YYYY') as date, description, COALESCE(ROUND(amount,2))||' '||COALESCE(curr) as amount, ";
-            $sql.= "oe.quonumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id=trans_id WHERE quotation = TRUE AND $cust_vend = $fid ORDER BY oe.id, orderitems.id";
+            $sql = "SELECT DISTINCT ON (oe.id) to_char(oe.transdate, 'DD.MM.YYYY') as date, description, COALESCE(ROUND(amount,2))||' '||COALESCE(C.name) as amount, ";
+            $sql.= "oe.quonumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id=trans_id LEFT JOIN currencies C on currency_id=C.id WHERE quotation = TRUE AND $cust_vend = $fid ORDER BY oe.id, orderitems.id";
     } 
     $rs = $db->getAll($sql);
     return $rs;

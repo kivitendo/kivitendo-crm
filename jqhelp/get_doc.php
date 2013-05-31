@@ -1,6 +1,6 @@
 <script>
 	function OpenIOQ (src,id,type) {
-		if 	     (src=="C"&&type=="inv") { uri="../is.pl?action=edit&id=" + id }
+		if 	    (src=="C"&&type=="inv") { uri="../is.pl?action=edit&id=" + id }
 		else if (src=="V"&&type=="inv") { uri="../ap.pl?action=edit&id=" + id }
 		else if (src=="C"&&type=="quo") { uri="../oe.pl?action=edit&type=sales_quotation&vc=customer&id=" + id }
 		else if (src=="V"&&type=="quo") { uri="../oe.pl?action=edit&type=sales_quotation&vc=vendor&id=" + id }
@@ -27,7 +27,7 @@
 
 include ("../inc/crmLib.php");
 include ("../inc/stdLib.php");
-$rs = getIOQ($_GET['fid'],$_GET['Q'],$_GET["type"]);
+$rs = getIOQ($_GET['fid'],$_GET['Q'],$_GET["type"],false);
 echo "<table id='result_ioq' class='tablesorter'>\n"; 
 echo "<thead><tr><th>".translate('.:date:.','firma')."</th><th>".translate('.:first position:.','firma')."</th><th>"
      .translate('.:amount:.','firma')."</th><th>".translate('.:number:.','firma')." </th></tr></thead>\n<tbody>\n";
@@ -36,7 +36,7 @@ if ($rs)
     foreach($rs as $row) { 
         echo "<tr onClick='OpenIOQ(\"".$_GET['Q']."\",".$row["id"].",\"".$_GET['type']."\");'>". 
              "<td>".$row["date"]."</td><td>".$row["description"]."</td>". 
-             "<td>".$row["amount"]."</td><td>".$row["number"]."</td></tr>\n"; 
+             "<td align='right'>".$row["amount"]."</td><td>".$row["number"]."</td></tr>\n"; 
         $i++; 
     } 
 echo "</tbody></table>\n"; 

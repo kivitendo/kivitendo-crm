@@ -65,11 +65,11 @@ if ($_FILES['file']['type'] != 'text/csv') exit();
 move_uploaded_file($_FILES['file']['tmp_name'], "upload/import-src.csv"); 
 
 //Datei nach UTF8 konvertieren
-$command = "iconv -f ISO-8859-15 -t UTF8 -c -o upload/import-utf8.csv upload/import-src.csv";
-system($command);
+//$command = "iconv -f ISO-8859-15 -t UTF8 -c -o upload/import-utf8.csv upload/import-src.csv";
+//system($command);
 //$data = array();
 $row = 1;
-if (($handle = fopen("upload/import-utf8.csv", "r")) !== FALSE) {
+if (($handle = fopen("upload/import-src.csv", "r")) !== FALSE) {
  
     while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
         //$num = count($data);
@@ -160,8 +160,8 @@ if ($csvArray) foreach($csvArray as $key => $row) {
             $CustNb = newnr('customer',$end_id); 
             echo "Nummer: ".$CustNb; 
             $payment = $row['20']=='PayPal'?$paypalId:$payotherId;         
-            $sql = "INSERT INTO customer (name, department_1, street, zipcode, city, country, business_id, customernumber, lead, payment_id  ) VALUES ";
-            $sql.= "('".$row["2"]."', '".$row["1"]."', '".$row["4"].$row["5"]."', '".$row["8"]."','".$row["6"]."', '".$row['9']."', ".$end_id.", '".$CustNb."', ".$ebayLeadId.", ".$paypalId." )";
+            $sql = "INSERT INTO customer (name, department_1, street, zipcode, city, country, business_id, customernumber, lead, payment_id, currency_id  ) VALUES ";
+            $sql.= "('".$row["2"]."', '".$row["1"]."', '".$row["4"].$row["5"]."', '".$row["8"]."','".$row["6"]."', '".$row['9']."', ".$end_id.", '".$CustNb."', ".$ebayLeadId.", ".$paypalId." , 1 )";
             echo "SQL: ".$sql;            
             $rcc = $db->query($sql);
         }

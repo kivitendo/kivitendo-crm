@@ -33,7 +33,7 @@ function mkSuchwort($suchwort) {
 * hole alle Anrufe einer Person oder einer Firma
 *****************************************************/
 function getAllTelCall($id,$firma) {
-global $db;
+
     if ($firma) {    // dann hole alle Kontakte der Firma
         $sql="select id,caller_id,kontakt,cause,calldate,cp_name,inout from ";
         $sql.="telcall left join contacts on caller_id=cp_id where bezug=0 ";
@@ -43,7 +43,7 @@ global $db;
         $sql.="telcall left join contacts on caller_id=cp_id where bezug=0 and caller_id=$id";
         $where="and caller_id=$id and caller_id=cp_id";
     }
-    $rs=$db->getAll($sql." order by calldate desc ");
+    $rs=$_SESSION['db']->getAll($sql." order by calldate desc ");
     if(!$rs) {
         $rs=false;
     } else {
@@ -51,7 +51,7 @@ global $db;
         $sql="select telcall.*,cp_name from telcall left join contacts on caller_id=cp_id where  ";
         $sql.="(caller_id in (select cp_id from contacts where cp_cv_id=$id) or caller_id=$id) ";
         $sql.="order by calldate desc limit 1";
-        $rs2=$db->getAll($sql);
+        $rs2=$_SESSION['db']->getAll($sql);
         if ($rs2[0]["bezug"]==0) { $new=$rs2[0]["id"]; }
         else { $new=$rs2[0]["bezug"]; };
         $i=0;
@@ -72,7 +72,7 @@ global $db;
 * Anzahl aller Einträge einer Fa
 *****************************************************/
 function getAllTelCallMax($id,$firma) {
-global $db;
+
     if ($firma) {    // dann hole alle Kontakte der Firma
         $sql="select id,caller_id,kontakt,cause,calldate,contacts.cp_name from ";
         $sql.="telcall left join contacts on caller_id=cp_id where bezug=0 ";
@@ -82,7 +82,7 @@ global $db;
         $sql="select id,caller_id,kontakt,cause,calldate,cp_name from ";
         $sql.="telcall left join contacts on caller_id=cp_id where bezug=0 and caller_id=$id";
     }
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     return count($rs);
 }
 /****************************************************
@@ -92,7 +92,7 @@ global $db;
 * hole alle Anrufe einer Person oder einer Firma
 *****************************************************/
 function getAllTelCallUser($id,$start=0,$art) {
-global $db;
+
     if (!$start) $start=0;
     $sql="select telcall.id,caller_id,kontakt,cause,calldate,cp_email,C.email as cemail,";
     $sql.="V.email as vemail,V.id as vid, C.id as cid,cp_id as pid from telcall ";
@@ -100,14 +100,14 @@ global $db;
     $sql.="left join customer C on C.id=caller_id ";
     $sql.="left join vendor V on V.id=caller_id ";    
     $sql.="where telcall.employee=$id and kontakt = '$art'";
-    $rs=$db->getAll($sql." order by calldate desc offset $start limit 19");
+    $rs=$_SESSION['db']->getAll($sql." order by calldate desc offset $start limit 19");
     if(!$rs) {
         $rs=false;
     } else {
         $sql="select telcall.* from telcall left join contacts on caller_id=cp_id where  ";
         $sql.="(caller_id in (select cp_id from contacts where cp_cv_id=$id) or caller_id=$id) ";
         $sql.="order by calldate desc limit 1";
-        $rs2=$db->getAll($sql);
+        $rs2=$_SESSION['db']->getAll($sql);
         if ($rs2[0]["bezug"]==0) { $new=$rs2[0]["id"]; }
         else { $new=$rs2[0]["bezug"]; };
         $i=0;
@@ -130,15 +130,15 @@ global $db;
 * einen TelCall Eintrag löschen
 *****************************************************/
 function delTelCall($id) {
-global $db;
+
     //Wenn eine Datei angebunden ist, noch löschen.
-    $rs=$db->getAll("select * from telcall where id=$id");
+    $rs=$_SESSION['db']->getAll("select * from telcall where id=$id");
     if ($rs[0]["bezug"]==0) {
         $sql="delete from telcall where bezug=$id";
-        $rs=$db->query($sql);
+        $rs=$_SESSION['db']->query($sql);
     }
     $sql="delete from telcall where id=$id";
-    $rc=$db->query($sql);
+    $rc=$_SESSION['db']->query($sql);
 }
 
 /****************************************************
@@ -148,13 +148,13 @@ global $db;
 * sichert einen geänderten TelCall-Eintrag
 *****************************************************/
 function saveTelCall($id,$empl,$grund) {
-global $db;
+
     $sql="select id,cause,caller_id,calldate,c_long,employee,kontakt,bezug,dokument from telcall where id = %d";
-    $rs=$db->getAll(sprintf($sql,$id));
+    $rs=$_SESSION['db']->getAll(sprintf($sql,$id));
     $tmp=$rs[0];
     $sql="insert into telcallhistory (orgid,cause,caller_id,calldate,c_long,employee,kontakt,bezug,dokument,chgid,grund,datum)";
     $sql.=" values (%d,'%s',%d,'%s','%s',%d,'%s',%d,%d,%d,'%s','%s')";
-    $rs=$db->query(sprintf($sql,$tmp["id"],$tmp["cause"],$tmp["caller_id"],$tmp["calldate"],$tmp["c_long"],
+    $rs=$_SESSION['db']->query(sprintf($sql,$tmp["id"],$tmp["cause"],$tmp["caller_id"],$tmp["calldate"],$tmp["c_long"],
                 $tmp["employee"],$tmp["kontakt"],$tmp["bezug"],$tmp["dokument"],$empl,$grund,date("Y-m-d H:i:s")));
     return $rs;
 }
@@ -195,7 +195,7 @@ function mkPager(&$items,&$pager,&$start,&$next,&$prev) {
 * einen TelCall-Eintrag verschieben
 *****************************************************/
 function mvTelcall($TID,$Anzeige,$CID) {
-global $db;
+
     $call=getCall($Anzeige,$_SESSION["loginCRM"],"U");
     $caller="";
     if ($call["CID"]!=$CID) {
@@ -205,7 +205,7 @@ global $db;
         } else {
             $sql="update telcall set bezug=0, caller_id=$CID where id=$Anzeige";
         }
-        $rc=$db->query($sql);
+        $rc=$_SESSION['db']->query($sql);
     } 
     if ($TID<>$Anzeige) {
         if ($call["bezug"]==0) {
@@ -215,11 +215,11 @@ global $db;
             $sql="update telcall set bezug=$TID where id=$Anzeige";
             $sqlH="update telcallhistory set orgid=$TID where orgid=$Anzeige";
         }
-        $rc=$db->query($sqlH);
+        $rc=$_SESSION['db']->query($sqlH);
     } else {
         return false;
     }
-    $rs=$db->query($sql);
+    $rs=$_SESSION['db']->query($sql);
     return $rs;
 }
 
@@ -231,9 +231,9 @@ global $db;
 * wo erfolgt er aufruf? kann ersetzt werden, s.o.
 *****************************************************/
 function getAllUsrCall($id) {
-global $db;
+
     $sql="select * from telcall where caller_id=$id order by calldate desc";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if(!$rs) {
         $rs=false;
     }
@@ -247,9 +247,9 @@ global $db;
 * hole alle Anrufe einer Person zu einem Betreff
 *****************************************************/
 function getAllCauseCall($id) {
-global $db;
+
     $sql="select * from telcall where id=$id";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if(!$rs) {
         $rs=false;
     } else {
@@ -258,7 +258,7 @@ global $db;
         } else {
             $sql="select * from telcall where bezug=".$rs[0]["id"]." or id=$id order by calldate desc";
         }
-        $rs=$db->getAll($sql);
+        $rs=$_SESSION['db']->getAll($sql);
         if(!$rs) {
             $rs=false;
         }
@@ -273,9 +273,9 @@ global $db;
 * ein neues FormDokument speichern
 *****************************************************/
 function insFormDoc($data,$file) {
-global $db;
+
     $sql="select * from docvorlage where docid=".$data["docid"];
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     $datum=date("Y-m-d H:i:00");
     $id=mknewTelCall();
     $dateiID=0;
@@ -289,7 +289,7 @@ global $db;
     $c_cause=nl2br($rs[0]["beschreibung"]);
     $sql="update telcall set cause='".$rs[0]["vorlage"]."',c_long='$c_cause',caller_id='".$data["CID"];
     $sql.="',calldate='$datum',kontakt='D',dokument=$did,bezug='0',employee=".$data["CRMUSER"]." where id=$id";
-    $rs=$db->query($sql);
+    $rs=$_SESSION['db']->query($sql);
     if(!$rs) {
         $id=false;
     }
@@ -304,7 +304,7 @@ global $db;
 * einen neuen Anruf speichern
 *****************************************************/
 function insCall($data,$datei) {
-global $db;
+
     $id=mknewTelCall();
     if ($data["fid"]!=$data["CID"]) {
     //Ein Ansprechpartner ausgewählt
@@ -335,7 +335,7 @@ global $db;
     $sql="update telcall set cause='".$data["cause"]."',c_long=E'$c_cause',caller_id='".$data["CID"];
     $sql.="',calldate='".$data['Datum']."',kontakt='".$data["Kontakt"]."',dokument=$dateiID,bezug='".$data["Bezug"];
     $sql.="',employee='".$data["CRMUSER"]."',inout='".$data["inout"]."' where id=$id";
-    $rs=$db->query($sql);
+    $rs=$_SESSION['db']->query($sql);
     if(!$rs) {
         $id=false;
     }
@@ -360,7 +360,7 @@ global $db;
 * einen geänderten Anruf speichern
 *****************************************************/
 function updCall($data,$datei=false) {
-global $db;
+
     if ($data["fid"]!=$data["CID"]) {
         $pfad="P".$data["CID"];
         $wv["cp_cv_id"]="P".$data["CID"];
@@ -399,7 +399,7 @@ global $db;
     $sql="update telcall set cause='".$data["cause"]."',c_long='$c_cause',caller_id='".$data["CID"]."',";
     $sql.="calldate='".$data['Datum']."',kontakt='".$data["Kontakt"]."',dokument=$dateiID,bezug='".$data["bezug"]."',";
     $sql.="employee='".$data["CRMUSER"]."',inout='".$data["inout"]."' where id=".$data["id"];
-    $rs=$db->query($sql);
+    $rs=$_SESSION['db']->query($sql);
     if(!$rs) {
         $id=false;
     }
@@ -433,14 +433,14 @@ global $db;
 * TelCallsatz erzeugen ( insert )
 *****************************************************/
 function mknewTelCall() {
-global $db;
+
     $newID=uniqid (rand());
     $datum=date("Y-m-d H:m:i");
     $sql="insert into telcall (cause,caller_id,calldate) values ('$newID',0,'$datum')";
-    $rc=$db->query($sql);
+    $rc=$_SESSION['db']->query($sql);
     if ($rc) {
         $sql="select id from telcall where cause = '$newID'";
-        $rs=$db->getAll($sql);
+        $rs=$_SESSION['db']->getAll($sql);
         if ($rs) {
             $id=$rs[0]["id"];
         } else {
@@ -459,56 +459,56 @@ global $db;
 * WVLnsatz erzeugen ( insert )
 *****************************************************/
 function mknewWVL($erp=false) {
-global $db;
+
     $newID=uniqid (rand());
     $datum=date("Y-m-d H:m:i");
-    $db->begin();
+    $_SESSION['db']->begin();
     if ($erp) {
         $sql = "insert into notes (subject,created_by) values ('$newID',".$_SESSION["loginCRM"].")";
-        $rc=$db->query($sql);
+        $rc=$_SESSION['db']->query($sql);
         if ($rc) {
             $sql = "select id from notes where subject = '$newID'";
-            $rs=$db->getAll($sql);
+            $rs=$_SESSION['db']->getAll($sql);
             if ($rs) {
                 $sql = "insert into follow_ups (note_id,follow_up_date,created_for_user,created_by) values (";
                 $sql.= $rs[0]["id"].",'".substr($datum,0,10)."',".$_SESSION["loginCRM"].",".$_SESSION["loginCRM"].")";
-                $rc=$db->query($sql);
+                $rc=$_SESSION['db']->query($sql);
                 if ($rc) {
                     $data["noteid"] = $rs[0]["id"];
                     $sql = "select id from follow_ups where note_id = ".$data["noteid"];
-                    $rs=$db->getAll($sql);
+                    $rs=$_SESSION['db']->getAll($sql);
                     if ($rs) {
                         $data["WVLID"] = $rs[0]["id"];
-                        $db->commit();
+                        $_SESSION['db']->commit();
                     } else {
                         $data["WVLID"] = false;
-                        $db->rollback();
+                        $_SESSION['db']->rollback();
                     }
                 }
             } else {
                 $data["WVLID"] = false;
-                $db->rollback();
+                $_SESSION['db']->rollback();
             }
         } else {
             $data["WVLID"] = false;
-            $db->rollback();
+            $_SESSION['db']->rollback();
         } 
     } else {
         $sql="insert into wiedervorlage (cause,initdate,initemployee) values ('$newID','$datum',".$_SESSION["loginCRM"].")";
-        $rc=$db->query($sql);
+        $rc=$_SESSION['db']->query($sql);
         if ($rc) {
             $sql="select id from wiedervorlage where cause = '$newID'";
-            $rs=$db->getAll($sql);
+            $rs=$_SESSION['db']->getAll($sql);
             if ($rs) {
                 $data["WVLID"] = $rs[0]["id"];
-                $db->commit();
+                $_SESSION['db']->commit();
             } else {
                 $data["WVLID"] = false;
-                $db->rollback();
+                $_SESSION['db']->rollback();
             }
         } else {
             $data["WVLID"] = false;
-            $db->rollback();
+            $_SESSION['db']->rollback();
         }
     }
     return $data;
@@ -522,9 +522,9 @@ global $db;
 * ein Dokument aus db holen
 *****************************************************/
 function getDokument($id) {
-global $db;
+
     $sql="select * from documents where id=$id";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if(!$rs) {
         $rs=false;
     }
@@ -538,9 +538,9 @@ global $db;
 * alle Dokumente zu einem telcall aus db holen
 *****************************************************/
 function getAllDokument($id){
-global $db;
+
     $sql="select B.* from documenttotc A,documents B where A.telcall=$id and A.documents=B.id";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if(!$rs) {
         $rs=false;
     }
@@ -554,9 +554,9 @@ global $db;
 * einen Datensatz aus telcall holen
 *****************************************************/
 function getCall($id) {
-global $db;
+
     $sql="select T.*,W.finishdate as wvldate,W.id as wvlid from telcall T left join wiedervorlage W on W.tellid=T.id where T.id=$id";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if(!$rs) {
         $daten=false;
     } else {
@@ -609,13 +609,13 @@ global $db;
 * Änderungen an TelCall inst History schreiben 
 *****************************************************/
 function getCntCallHist($id,$bezug=false) {
-global $db;
+
     if ($bezug) {
         $sql="select count(*) as cnt from telcallhistory where bezug=$id and grund='D'";
     } else  {
         $sql="select count(*) as cnt from telcallhistory where orgid=$id";
     }
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     return $rs[0]["cnt"];
 }
 
@@ -626,13 +626,13 @@ global $db;
 * History zu einem TelCall holen
 *****************************************************/
 function getCallHistory($id,$bezug=false) {
-global $db;
+
     if ($bezug) {
         $sql="select * from telcallhistory where bezug=$id order by datum desc";
     } else  {
         $sql="select * from telcallhistory where orgid=$id order by datum desc";
     }
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     return $rs;
 }
 
@@ -643,10 +643,10 @@ global $db;
 * alle wiedervorlagen eines Users auslesen
 *****************************************************/
 function getWvl($crmuser) {
-global $db;
+
     $sql="select *,(select name from employee where id= employee) as ename, (select name from employee where id=initemployee) as iname  ";
     $sql.="from wiedervorlage where (employee=$crmuser or employee is null) and status > '0' order by  finishdate asc ,initdate asc";
-    $rs1=$db->getAll($sql);
+    $rs1=$_SESSION['db']->getAll($sql);
     if(!$rs1) {
         $rs1=false;
     } else {
@@ -655,7 +655,7 @@ global $db;
     $sql="SELECT follow_ups.id,follow_up_date,created_for_user,subject,body,trans_id,note_id,trans_module,E.name as ename from ";
     $sql.="follow_ups left join notes on note_id=notes.id left join employee E on E.id=follow_ups.created_for_user ";
     $sql.="where done='f' and created_for_user=$crmuser";
-    $rs2=$db->getAll($sql);
+    $rs2=$_SESSION['db']->getAll($sql);
     if ($rs2) {
         foreach ($rs2 as $row) {
             $rs1[]=array("id"=>$row["id"],
@@ -682,22 +682,22 @@ global $db;
 * einen Datensatz aus wiedervorlage holen
 *****************************************************/
 function getOneWvl($id) {
-global $db;
+
     //$sql="select W.*,C.cp_name,C.cp_givenname from wiedervorlage W left join contacts C on W.kontaktid=C.cp_id where id=$id";
     $sql="select * from wiedervorlage where id=$id";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if(!$rs) {
         $data=false;
     } else {
         switch ($rs[0]["kontakttab"]) {
             case "C" : $sql="select name,'' as sep,'' as name2 from customer where id = ".$rs[0]["kontaktid"]; 
-                        $rsN=$db->getAll($sql); 
+                        $rsN=$_SESSION['db']->getAll($sql); 
                         break;
             case "V" : $sql="select name,'' as sep,'' as name2  from vendor where id = ".$rs[0]["kontaktid"];
-                        $rsN=$db->getAll($sql); 
+                        $rsN=$_SESSION['db']->getAll($sql); 
                         break;
             case "P" : $sql="select cp_name as name ,', ' as sep ,cp_givenname as name2 from contacts where cp_id = ".$rs[0]["kontaktid"];
-                        $rsN=$db->getAll($sql); 
+                        $rsN=$_SESSION['db']->getAll($sql); 
                         break;
             default    :    $rsN=false;
         }
@@ -745,13 +745,13 @@ global $db;
 * einen Datensatz aus follow_ups/notes holen
 *****************************************************/
 function getOneERP($id) {
-global $db;
+
     $sql="SELECT follow_ups.id,follow_up_date,created_for_user,subject,body,trans_id,note_id,trans_module,follow_ups.created_by,";
     $sql.="follow_ups.itime,follow_ups.mtime,C.id as c,V.id as v, coalesce(V.name,C.name) as name ";
     $sql.="from follow_ups left join notes on note_id=notes.id ";
     $sql.="left join vendor V on V.id=trans_id left join customer C on C.id=trans_id ";
     $sql.="where done='f' and follow_ups.id=$id";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     $data["id"]=$rs[0]["id"];
     $data["Initdate"]=substr($rs[0]["itime"],0,19);
     $data["Change"]=substr($rs[0]["mtime"],0,19);
@@ -790,15 +790,15 @@ global $db;
 * einen Dokumentenpfad erstellen
 *****************************************************/
 function mkPfad($wer,$alt) {
-global $db;
+
     $pfad="";
     if (substr($wer,0,1)=="P") {
         $tmp=substr($wer,1);
-        $rs=$db->getAll("select customernumber from customer C, contacts P where P.cp_cv_id=C.id and cp_id=$tmp");
+        $rs=$_SESSION['db']->getAll("select customernumber from customer C, contacts P where P.cp_cv_id=C.id and cp_id=$tmp");
         if ($rs[0]["customernumber"]) {
             $pfad="C".$rs[0]["customernumber"]."/$tmp";
         } else {
-            $rs=$db->getAll("select vendornumber from vendor V, contacts P where P.cp_cv_id=V.id and cp_id=$tmp");
+            $rs=$_SESSION['db']->getAll("select vendornumber from vendor V, contacts P where P.cp_cv_id=V.id and cp_id=$tmp");
             if ($rs[0]["vendornumber"]) {
                 $pfad="V".$rs[0]["vendornumber"]."/$tmp";
             } else {
@@ -809,9 +809,9 @@ global $db;
         $tmp=substr($wer,1);
         $ttmp=substr($wer,0,1);
         if ($ttmp=="C") {
-            $rs=$db->getAll("select customernumber as number from customer where id=$tmp");
+            $rs=$_SESSION['db']->getAll("select customernumber as number from customer where id=$tmp");
         } else {
-            $rs=$db->getAll("select vendornumber as number from vendor where id=$tmp");
+            $rs=$_SESSION['db']->getAll("select vendornumber as number from vendor where id=$tmp");
         }
         $pfad=$ttmp.$rs[0]["number"];
     } else  {
@@ -839,7 +839,7 @@ function insWvl($data,$datei="") {
 * einen Datensatz in wiedervorlage aktualisieren
 *****************************************************/
 function updWvl($data,$datei="") {
-global $db;
+
     $nun=date("Y-m-d H:i:00");
     $anz=0;
     $pfad="";
@@ -877,29 +877,29 @@ global $db;
             $sql.=",trans_module='fu'";
         }
         $sql.=" where id=".$data["noteid"];
-        $rc=$db->query($sql);
-        if (!$rc) { $db->query("ROLLBACK"); return false; };
+        $rc=$_SESSION['db']->query($sql);
+        if (!$rc) { $_SESSION['db']->query("ROLLBACK"); return false; };
         $sql="update follow_ups set created_for_user=".$data["CRMUSER"].",done='".(($data["status"]!=1)?"t":"f")."', ";
         $sql.="follow_up_date ='".date2db($data["Finish"])."' where id = ".$data["WVLID"];
-        $rc=$db->query($sql);
-        if (!$rc) { $db->query("ROLLBACK"); return false; };
+        $rc=$_SESSION['db']->query($sql);
+        if (!$rc) { $_SESSION['db']->query("ROLLBACK"); return false; };
         if ($data["cp_cv_id"]) {
             $sql = "select id from follow_up_links where follow_up_id = ".$data["WVLID"];
-            $rs = $db->getOne($sql);
-            $rc=$db->query("BEGIN");
+            $rs = $_SESSION['db']->getOne($sql);
+            $rc=$_SESSION['db']->query("BEGIN");
             if (!$rs) {
                 $sql = "insert into follow_up_links (follow_up_id,trans_id,trans_type,trans_info) values (";
                 $sql.= $data["WVLID"].",".substr($data["cp_cv_id"],1).",'".((substr($data["cp_cv_id"],0,1)=="C")?"customer":"vendor");
                 $sql.= "','".$data["name"]."')";
-                $rc = $db->query($sql);
+                $rc = $_SESSION['db']->query($sql);
             } else {
                 $sql ="update follow_up_links set trans_id=".substr($data["cp_cv_id"],1);
                 $sql.=",trans_type='".((substr($data["cp_cv_id"],0,1)=="V")?"vendor":"customer");
                 $sql.="',trans_info='".$data["name"]."' where follow_up_id = ".$data["WVLID"];
-                $rc=$db->query($sql);
+                $rc=$_SESSION['db']->query($sql);
             }
-            if (!$rc) { $db->query("ROLLBACK"); return false; };
-            $rs=$db->query("COMMIT");
+            if (!$rc) { $_SESSION['db']->query("ROLLBACK"); return false; };
+            $rs=$_SESSION['db']->query("COMMIT");
         }
     } else {
         $sql="update wiedervorlage set employee=".$data["CRMUSER"].", cause='".$data["Cause"]."', descript='$descript', ";
@@ -909,7 +909,7 @@ global $db;
              $sql.=",tellid=".$data["tellid"];
         }
         $sql.=" where id=".$data["WVLID"];
-        $rs=$db->query($sql);
+        $rs=$_SESSION['db']->query($sql);
         if(!$rs) {
             $rs=false;
         } else {
@@ -931,9 +931,9 @@ global $db;
 * eine DockId zum Telcall oder Person zuordnen
 *****************************************************/
 function documenttotc($newID,$did) {
-global $db;
+
     $sql="insert into documenttotc (telcall,documents) values ($newID,$did)";
-    $rs=$db->query($sql);
+    $rs=$_SESSION['db']->query($sql);
     return $rs;
 }
 
@@ -944,9 +944,9 @@ global $db;
 * eine DockId von Person auf Telcall ändern
 *****************************************************/
 function documenttotc_($newID,$tid) {
-global $db;
+
     $sql="update documenttotc set telcall=$tid where telcall=$newID";
-    $rs=$db->query($sql);
+    $rs=$_SESSION['db']->query($sql);
     return $rs;
 }
 
@@ -957,7 +957,7 @@ global $db;
 * einen Mail-Datensatz in WVL nach telcall verschieben
 *****************************************************/
 function insWvlM($data,$Flag,$Expunge) {
-global $db;
+
     if(empty($data["cp_cv_id"]) && $data["status"]<1) {
         $kontaktID=$data["CRMUSER"];
         //$data["cp_cv_id"]=$data["CRMUSER"];
@@ -997,7 +997,7 @@ global $db;
             }
             moveMail($data["MailUID"],$CID,$Flag,$Expunge);
             $sql="update telcall set dokument=1 where id = $tid";
-            $rc=$db->query($sql);
+            $rc=$_SESSION['db']->query($sql);
             return $rc;
         } else {
             $data["DateiID"]=false;
@@ -1019,34 +1019,34 @@ global $db;
 * eine wiedervorlage mit telcall verbinden
 *****************************************************/
 function kontaktWvl($id,$fid,$pfad) {
-global $db;
+
     $sql="select * from wiedervorlage where id=$id";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if(!$rs) return false;
     $nun=date("Y-m-d H:i:00");
     $tab=substr($fid,0,1);
     $fid=substr($fid,1);
-    if (!$db->begin()) return false;;
+    if (!$_SESSION['db']->begin()) return false;;
     if ($rs[0]["kontaktid"]>0 and $fid<>$rs[0]["kontaktid"]){
         // bisherigen Kontakteintrag ungültig markieren
         $sql="update telcall set cause=cause||' storniert' where id=".$rs[0]["tellid"];
-        //$rc=$db->query($sql);
-        if (!$db->query($sql)) return false;
+        //$rc=$_SESSION['db']->query($sql);
+        if (!$_SESSION['db']->query($sql)) return false;
     } 
     if (!$rs[0]["kontaktid"]>0 or empty($rs[0]["kontaktid"])) {
         $tid=mknewTelCall();
         $sql="update telcall set cause='".$rs[0]["cause"]."',caller_id=$fid,calldate='$nun',";
         $sql.="c_long='".$rs[0]["descript"]."',employee=".$rs[0]["employee"].",kontakt='".$rs[0]["kontakt"];
         $sql.="',bezug=0,dokument=".$rs[0]["document"]." where id=$tid";
-        $rc=$db->query($sql);
+        $rc=$_SESSION['db']->query($sql);
         if(!$rc) {
-            $db->rollback();
+            $_SESSION['db']->rollback();
             return false;
         } else {
             $ok=$tid;
             $sql="update wiedervorlage set kontaktid=$fid,kontakttab='$tab',tellid=$tid where id=$id";
-            if (!$db->query($sql)) {
-                $db->rollback();
+            if (!$_SESSION['db']->query($sql)) {
+                $_SESSION['db']->rollback();
                 return false;
             }
         }
@@ -1054,7 +1054,7 @@ global $db;
     if ($rs[0]["status"]<1) {
         if ($rs[0]["document"] && $rs[0]["kontakt"]<>"M") {
             $sql="select * from documents where id=".$rs[0]["document"];
-            $rsD=$db->getAll($sql);
+            $rsD=$_SESSION['db']->getAll($sql);
             $von="dokumente/".$_SESSION["mansel"]."/".$rsD[0]["employee"]."/".$rsD[0]["filename"];
             if (!$pfad) {
                 //$pfad=$_SESSION["mansel"]."/".$pfad;
@@ -1067,24 +1067,24 @@ global $db;
                 $rc=rename($von,$nach);
                 if ($rc) {
                     $sql="update documents set kunde=".$fid.", pfad='".$pfad."' where id=".$rsD[0]["id"];
-                    if (!$db->query($sql)) {
-                        $db->rollback();
+                    if (!$_SESSION['db']->query($sql)) {
+                        $_SESSION['db']->rollback();
                         return false;
                     }
                 }
             } else if(file_exists($nach)) {
                 $sql="update documents set kunde=".$fid.", pfad='".$pfad."' where id=".$rsD[0]["id"];
-                if (!$db->query($sql)) {
-                    $db->rollback();
+                if (!$_SESSION['db']->query($sql)) {
+                    $_SESSION['db']->rollback();
                     return false;
                 }
             } else {
-                $db->rollback();
+                $_SESSION['db']->rollback();
                 return false;
             }
         }
     }
-    return $db->commit();
+    return $_SESSION['db']->commit();
 }
 
 /****************************************************
@@ -1174,23 +1174,23 @@ function holeMailHeader($usr,$Flag) {
  * @return TODO
  */
 function getSenderMail($email) {
-global $db;
+
     if (!preg_match("/[^<]*<(.*@.+\.[^>]+)/",$email,$clean)) {
              $clean = $email;
     } else {
         $clean=$clean[1];
     }
     $sql="select id,name from customer where email like '%$clean%'";
-    $rs=$db->getOne($sql);
+    $rs=$_SESSION['db']->getOne($sql);
     $t="C";
     if (!$rs) {
         $sql="select id,name from vendor where email like '%$clean%'";
-        $rs=$db->getOne($sql);
+        $rs=$_SESSION['db']->getOne($sql);
         $t="V";
     } 
     if (!$rs) {
         $sql="select cp_id as id ,cp_name as name from contacts where cp_email like '%$clean%'";
-        $rs=$db->getOne($sql);
+        $rs=$_SESSION['db']->getOne($sql);
         $t="P";
     } 
     if ($rs) {
@@ -1262,9 +1262,8 @@ function getOneMail($usr,$nr) {
 * die Maildaten des Users holen
 *****************************************************/
 function getUsrMailData($id) {
-global $db;
     $sql="select * from employee where id='$id'";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if(!$rs) {
         $data=false;
     } else {
@@ -1364,9 +1363,8 @@ function delMail($mail,$id,$Expunge) {
 * Userspezifischen Updateintervall holen
 *****************************************************/
 function getIntervall($id) {
-global $db;
     $sql="select * from employee where id=$id";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if(!$rs) {
         return 60;
     }
@@ -1381,22 +1379,21 @@ global $db;
 * hole alle eMails
 *****************************************************/
 function getAllMails($suche) {
-global $db,$Pre;        
     //Benutzer
-    $sql1="select name,'E' as src,id,email from employee where upper(email) like '$Pre".strtoupper($suche)."%' and email <> '' order by email";
-    $rs1=$db->getAll($sql1);
+    $sql1="select name,'E' as src,id,email from employee where upper(email) like '".$_SESSION['pre'].strtoupper($suche)."%' and email <> '' order by email";
+    $rs1=$_SESSION['db']->getAll($sql1);
     //Kunden
-    $sql2="select '' as name,'C' as src,id,email from customer where upper(email) like '$Pre".strtoupper($suche)."%' and email <> '' order by email";
-    $rs2=$db->getAll($sql2);
+    $sql2="select '' as name,'C' as src,id,email from customer where upper(email) like '".$_SESSION['pre'].strtoupper($suche)."%' and email <> '' order by email";
+    $rs2=$_SESSION['db']->getAll($sql2);
     //Personen
-    $sql3="select cp_name as name,'K' as src,cp_id as id,cp_email as email from contacts where upper(cp_email) like '$Pre".strtoupper($suche)."%' and cp_email <> '' order by cp_email";
-    $rs3=$db->getAll($sql3);
+    $sql3="select cp_name as name,'K' as src,cp_id as id,cp_email as email from contacts where upper(cp_email) like '".$_SESSION['pre'].strtoupper($suche)."%' and cp_email <> '' order by cp_email";
+    $rs3=$_SESSION['db']->getAll($sql3);
     //Abweichende Anschr.
-    $sql4="select '' as name,'S' as src,trans_id as id,shiptoemail as email from shipto where upper(shiptoemail) like '$Pre".strtoupper($suche)."%' and shiptoemail <> ''  order by shiptoemail";
-    $rs4=$db->getAll($sql4);
+    $sql4="select '' as name,'S' as src,trans_id as id,shiptoemail as email from shipto where upper(shiptoemail) like '".$_SESSION['pre'].strtoupper($suche)."%' and shiptoemail <> ''  order by shiptoemail";
+    $rs4=$_SESSION['db']->getAll($sql4);
     //Lieferanten
-    $sql5="select '' as name,'V' as src,id,email from vendor where upper(email) like '$Pre".strtoupper($suche)."%' and email <> '' order by email";
-    $rs5=$db->getAll($sql5);
+    $sql5="select '' as name,'V' as src,id,email from vendor where upper(email) like '".$_SESSION['pre'].strtoupper($suche)."%' and email <> '' order by email";
+    $rs5=$_SESSION['db']->getAll($sql5);
     $rs=array_merge($rs2,$rs3,$rs5,$rs4,$rs1);
     usort($rs,"eMailSort");
     return $rs;
@@ -1445,7 +1442,6 @@ function chkMailAdr ($mailadr) {
 * Rechnungsdaten je Monat
 *****************************************************/
 function getReJahr($fid,$jahr,$liefer=false,$user=false) {
-global $db;
     $lastYearV=date("Y-m-d",mktime(0, 0, 0, date("m")+1, 1, $jahr-1));
     $lastYearB=date("Y-m-d",mktime(0, 0, 0, date("m"), 31, $jahr));
     if ($user) {
@@ -1458,14 +1454,14 @@ global $db;
 
     if ($liefer) {
         $bezug = ($user)?"employee_id":"vendor_id";
-        $rs2=$db->getAll(sprintf($sql,'A','oe',$bezug,$fid,$lastYearV,$lastYearB,$sea));
+        $rs2=$_SESSION['db']->getAll(sprintf($sql,'A','oe',$bezug,$fid,$lastYearV,$lastYearB,$sea));
         $sql=sprintf($sql,'R','ap',$bezug,$fid,$lastYearV,$lastYearB,$sea);
     } else {
         $bezug = ($user)?"employee_id":"customer_id";
-        $rs2=$db->getAll(sprintf($sql,'A','oe',$bezug,$fid,$lastYearV,$lastYearB,$sea));
+        $rs2=$_SESSION['db']->getAll(sprintf($sql,'A','oe',$bezug,$fid,$lastYearV,$lastYearB,$sea));
         $sql=sprintf($sql,'R','ar',$bezug,$fid,$lastYearV,$lastYearB,$sea);
     };
-    $rs1=$db->getAll($sql);
+    $rs1=$_SESSION['db']->getAll($sql);
     $rs=array_merge($rs1,$rs2);
     $rechng=array();
     $curr = getCurr();
@@ -1494,7 +1490,6 @@ global $db;
 * Angebotsdaten je Monat
 *****************************************************/
 function getAngebJahr($fid,$jahr,$liefer=false,$user=false) {
-global $db;
     $lastYearV=date("Y-m-d",mktime(0, 0, 0, date("m"), 1, $jahr-1));
     $lastYearB=date("Y-m-d",mktime(0, 0, 0, date("m")+1, -1, $jahr));
     if ($user) {
@@ -1509,7 +1504,7 @@ global $db;
     } else {
         $bezug = ($user)?"employee_id":"customer_id";
     }
-    $rs=$db->getAll(sprintf($sql,$bezug,$fid,$lastYearV,$lastYearB,$sea));
+    $rs=$_SESSION['db']->getAll(sprintf($sql,$bezug,$fid,$lastYearV,$lastYearB,$sea));
     $rechng=array();
     $curr = getCurr();
     for ($i=11; $i>=0; $i--) {
@@ -1532,9 +1527,8 @@ global $db;
 * out: curr = String
 *****************************************************/
 function getCurr() {
-global $db;
     $sql="SELECT name FROM currencies WHERE id = (SELECT currency_id FROM defaults)";
-    $rsc=$db->getOne($sql);
+    $rsc=$_SESSION['db']->getOne($sql);
     if ($rsc['name']) {
        $curr = $rsc['name'];
     } else {
@@ -1553,7 +1547,6 @@ global $db;
 * Rechnungsdaten für den Monat
 *****************************************************/
 function getReMonat($fid,$jahr,$monat,$liefer=false){
-global $db;
     if ($_SESSION["sales_edit_all"] == "f") $sea = sprintf(" and (employee_id = %d or salesman_id = %d) ", $_SESSION["loginCRM"], $_SESSION["loginCRM"]);
         if ($monat=="00") {
             $next=($jahr+1).'-01-01';
@@ -1568,8 +1561,8 @@ global $db;
                 $sql1="select * from ar where customer_id=$fid and transdate >= '$jahr-$monat-01' and transdate < '$next' $sea order by transdate desc";
                 $sql2="select * from oe where customer_id=$fid and transdate >= '$jahr-$monat-01' and transdate < '$next' $sea order by transdate desc";
         };
-    $rs2=$db->getAll($sql2);
-    $rs1=$db->getAll($sql1);
+    $rs2=$_SESSION['db']->getAll($sql2);
+    $rs1=$_SESSION['db']->getAll($sql1);
     $rs=array_merge($rs1,$rs2);
     usort($rs,"cmp");
     return $rs;
@@ -1595,7 +1588,6 @@ function cmp ($a, $b) {
 * Reschnungspositionen holen
 *****************************************************/
 function getRechParts($id,$tab) {
-global $db;
     if ($tab=="R" || $tab=="V") {
         $sql="select *,I.sellprice as endprice,I.fxsellprice as orgprice,I.discount,I.description as artikel ";
         $sql.="from invoice I left join parts P on P.id=I.parts_id where trans_id=$id";
@@ -1609,11 +1601,11 @@ global $db;
         $sql.="from orderitems O left join parts P on P.id=O.parts_id where trans_id=$id";
         $sql1="select amount as brutto, netamount as netto,transdate, intnotes, notes, quotation,quonumber,ordnumber from oe where id=$id";
     }
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if(!$rs) {
         return false;
     } else {
-        $rs2=$db->getAll($sql1);
+        $rs2=$_SESSION['db']->getAll($sql1);
         $data[0]=$rs;
         if($rs2) {
             $data[1]=$rs2[0];
@@ -1630,16 +1622,15 @@ global $db;
 * Reschnungadress holen
 *****************************************************/
 function getRechAdr($id,$tab) {
-global $db;
     if ($tab=="R" || $tab=="V") {
         if ($tab=="R") { $tab="ar"; $firma="customer"; } else { $tab="ap"; $firma="vendor"; };
         if ($_SESSION["ERPver"]>="2.2.0.10") {
-            $rs=$db->getAll("select shipto_id from $tab where id=$id");
+            $rs=$_SESSION['db']->getAll("select shipto_id from $tab where id=$id");
             if ($rs[0]["shipto_id"]>0) {
                 $sql="select F.*,S.* from $tab A left join shipto S on S.shipto_id=A.shipto_id, $firma F where ";
                 $sql.="A.id=$id and F.id=A.".$firma."_id";
             } else {
-                $rs=$db->getAll("select * from shipto where trans_id=$id and module='".strtoupper($tab)."'");
+                $rs=$_SESSION['db']->getAll("select * from shipto where trans_id=$id and module='".strtoupper($tab)."'");
                 if ($rs[0]["shipto_id"]>0) {
                     $sql="select F.*,S.* from $tab A left join shipto S on S.trans_id=A.id, $firma F where ";
                     $sql.="A.id=$id and F.id=A.".$firma."_id and S.module='".strtoupper($tab)."'";
@@ -1647,27 +1638,27 @@ global $db;
                     $sql="select F.* from $tab A left join $firma F on F.id=A.".$firma."_id where A.id=$id";
                 }
             }
-            $rs=$db->getAll($sql);
+            $rs=$_SESSION['db']->getAll($sql);
             if($rs) { return $rs[0]; } else { return false;    };
         } else {
             $sql="select * from $firma F left join shipto S on F.id=S.trans_id left join $tab A on A.".$firma."_id=F.id where A.id=$id";
-            $rs=$db->getAll($sql);
+            $rs=$_SESSION['db']->getAll($sql);
             if ($rs[0]["id"]>0) {
                 return $rs[0];
             } else {
-                $rs=$db->getAll("select * from $firma F left join $tab A on A.".$firma."_id=F.id where A.id=$id");
+                $rs=$_SESSION['db']->getAll("select * from $firma F left join $tab A on A.".$firma."_id=F.id where A.id=$id");
                 if($rs) { return $rs[0]; } else { return false;    };
             }
         }
     } else {
         if ($_SESSION["ERPver"]>="2.2.0.10") {    
             $firma="customer";
-            $rs=$db->getAll("select shipto_id from oe where id=$id");
+            $rs=$_SESSION['db']->getAll("select shipto_id from oe where id=$id");
             if ($rs[0]["shipto_id"]>0) {
                 $sql="select F.*,S.* from oe O left join shipto S on S.shipto_id=O.shipto_id, $firma F where ";
                 $sql.="O.id=$id and C.id=O.".$firma."_id";
             } else {
-                $rs=$db->getAll("select * from shipto where trans_id=$id and module='OE'");
+                $rs=$_SESSION['db']->getAll("select * from shipto where trans_id=$id and module='OE'");
                 if ($rs[0]["shipto_id"]>0) {
                     $sql="select F.*,S.* from oe O left join shipto S on S.trans_id=O.id, $firma F where ";
                     $sql.="O.id=$id and F.id=O.".$firma."_id and S.module='OE'";
@@ -1675,10 +1666,10 @@ global $db;
                     $sql="select F.* from oe O left join $firma F on F.id=O.".$firma."_id where O.id=$id";
                 }
             }
-            $rs=$db->getAll($sql);
+            $rs=$_SESSION['db']->getAll($sql);
             if($rs) { return $rs[0]; } else { return false;    };
         } else {
-            $rs=$db->getAll("select * from $firma F left join $tab O on O.".$firma."_id=F.id where O.id=$id");
+            $rs=$_SESSION['db']->getAll("select * from $firma F left join $tab O on O.".$firma."_id=F.id where O.id=$id");
             if($rs) { return $rs[0]; } else { return false;    };
         }
     }
@@ -1691,7 +1682,7 @@ global $db;
 * 
 *****************************************************/
 function getUsrNamen($user) {
-global $db;
+
     if ($user) foreach ($user as $row) {
              if (substr($row,0,1)=="G") {$grp.=substr($row,1).",";}
         else if (substr($row,0,1)=="E") {$empl.=substr($row,1).",";}
@@ -1706,7 +1697,7 @@ global $db;
     if ($cont) $sql[]="select 'P'||cp_id as id,cp_name as name from contacts where cp_id in (".substr($cont,0,-1).")";
     $data=false;
     if ($sql) foreach ($sql as $row) {
-        $rs=$db->getAll($row);
+        $rs=$_SESSION['db']->getAll($row);
         if($rs) {
             if (empty($data)) {$data=$rs;}
             else {$data=array_merge($data,$rs);};
@@ -1722,12 +1713,12 @@ global $db;
 * neuen Termineintrag generieren
 *****************************************************/
 function newTermin() {
-global $db;
+
     $newID=uniqid (rand());
     $sql="insert into termine (c_cause) values ('$newID')";
-    $rc=$db->query($sql);
+    $rc=$_SESSION['db']->query($sql);
     $sql="select * from termine where c_cause='$newID'";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if(!$rs) {
         return false;
     } else {
@@ -1742,15 +1733,15 @@ global $db;
 * einen Termin sichern
 *****************************************************/
 function saveTermin($data) {
-global $db;
+
     if (!$data["tid"]) {
         $termid=newTermin();
     } else {
         $termid=$data["tid"];
         $sql="delete from terminmember where termin=$termid";
-        $rc=$db->query($sql);
+        $rc=$_SESSION['db']->query($sql);
         $sql="delete from termdate where termid=$termid";
-        $rc=$db->query($sql);
+        $rc=$_SESSION['db']->query($sql);
     }
     if (!$termid) {
         return false;
@@ -1770,7 +1761,7 @@ global $db;
         $sql.="start='".date("Y-m-d H:i:00",$von." ".$data["von"])."', stop='".date("Y-m-d H:i:00",$bis." ".$data["bis"])."' ";
         $sql.=",location='".$data["location"]."' ";
         $sql.=" where id=".$termid;
-        $rc=$db->query($sql);
+        $rc=$_SESSION['db']->query($sql);
         if ($rc) {
             $year=date("Y",$von);
             $ft=feiertage($year);
@@ -1785,7 +1776,7 @@ global $db;
                 $sql="insert into termdate (termid,tag,monat,jahr,kw,idx) values (";
                 $sql.="$termid,'".date("d",$von)."','".date("m",$von)."',".date("Y",$von).",".strftime("%V",$von).",".$idx.")";
                 if (($data["ft"] && date("w",$von)<>6 && date("w",$von)<>0 && !in_array($von,$ftk)) || !$data["ft"] || $von==$bis)
-                    $rc=$db->query($sql);
+                    $rc=$_SESSION['db']->query($sql);
                 switch ($data["repeat"]) {
                     case '0' :
                     case '1' : $von+=60*60*24;
@@ -1809,14 +1800,14 @@ global $db;
                 $tab=substr($teiln,0,1);
                 $sql="insert into terminmember (termin,member,tabelle) values (";
                 $sql.=$termid.",$nr,'$tab')";
-                $rc=$db->query($sql);
+                $rc=$_SESSION['db']->query($sql);
                 if ($tab<>"G" && $tab<>"E") {
                     $tid=mknewTelCall();
                     $nun=date2db($data["vondat"])." ".$data["von"].":00";
                     $sql="update telcall set cause='".$data["grund"];
                     $sql.="',caller_id=$nr,calldate='$nun',termin_id=$termid,c_long='".$data["c_cause"];
                     $sql.="',employee='".$_SESSION["loginCRM"]."',kontakt='X',bezug=0 where id=$tid";
-                    $rc=$db->query($sql);
+                    $rc=$_SESSION['db']->query($sql);
                     if(!$rs) {
                         $rs=-1;
                     }
@@ -1833,7 +1824,7 @@ global $db;
 * 
 *****************************************************/
 function checkTermin($start,$stop,$von,$bis,$TID=0) {
-global $db;
+
     $grp=getGrp($_SESSION["loginCRM"],true);
     $start=date2db($start);
     $stop=date2db($stop);
@@ -1848,9 +1839,9 @@ global $db;
     if ($TID>0) $sql.=" and id<>$TID";
     if ($grp) $sql.=" and (M.member in $grp)";
     //folgendes tut irgendwie nicht
-    //$rs=$db->getAll($sql);
+    //$rs=$_SESSION['db']->getAll($sql);
     //dann erst einmal so
-    $rs=$db->query($sql);
+    $rs=$_SESSION['db']->query($sql);
     while ($row = $rs->fetchRow(DB_FETCHMODE_ASSOC)) {
         $ids[]=array("id"=>$row["id"]);
     }
@@ -1858,7 +1849,7 @@ global $db;
 }
 
 function searchTermin($suche,$cat,$von,$bis,$TID=0) {
-global $db;
+
     $grp=getGrp($_SESSION["loginCRM"],true);
     $sql="select distinct id from termine D left join terminmember M on M.termin=D.id  where ";
     if ($suche<>"") $sql.="cause ilike '%$suche%'";
@@ -1868,7 +1859,7 @@ global $db;
     if ($bis) $sql .= " and stop <= '".date2db($bis)."%'";
     if ($TID>0) $sql.=" and member=$TID";
     //if ($grp) $sql.=" and (M.member in $grp)";
-    $rs=$db->query($sql);
+    $rs=$_SESSION['db']->query($sql);
     while ($row = $rs->fetchRow(DB_FETCHMODE_ASSOC)) {
         $ids[]=array("id"=>$row["id"]);
     }
@@ -1882,10 +1873,10 @@ global $db;
 * 
 *****************************************************/
 function getTerminList($id) {
-global $db;
+
     //$sql="select id,cause,starttag,stoptag,startzeit,stopzeit,kategorie,location,c_cause from termine where id in ($id)";
     $sql="select T.*,K.catname,K.ccolor from termine T left join termincat K on K.catid=T.kategorie where T.id in ($id)";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if(!$rs) {
         return false;
     } else {
@@ -1900,12 +1891,12 @@ global $db;
 * 
 *****************************************************/
 function getTermin($day,$month,$year,$art,$cuid=false) {
-global $db;
+
     if ($cuid<=0) {
         $rechte="";
     } else {
         $sql="select distinct(grpid) from grpusr where usrid=$cuid";
-        $rs=$db->getAll($sql);
+        $rs=$_SESSION['db']->getAll($sql);
         if ($rs) {
             foreach ($rs as $r) $tmp[]=$r["grpid"];
             $grp = "or (M.member in (".implode(",",$tmp).") and M.tabelle='G'))";
@@ -1927,7 +1918,7 @@ global $db;
         //$sql.="where jahr=$year and monat='$month' and ($rechte)  order by tag";
         $sql.="where jahr=$year and monat='$month' $rechte  order by tag";
         //$sql.="where jahr=$year and monat='$month' and M.member = $uid  order by tag";
-        $rs=$db->getAll($sql);
+        $rs=$_SESSION['db']->getAll($sql);
         if(!$rs) {
             return false;
         } else {
@@ -1939,7 +1930,7 @@ global $db;
         //$sql.="where jahr=$year and monat='$month' and tag='$day' and ($rechte)  order by starttag, startzeit";
         //$sql.="where jahr=$year and monat='$month' and tag='$day' and M.member = $uid  order by starttag, startzeit";
         $sql.="where jahr=$year and monat='$month' and tag='$day'  $rechte  order by starttag, startzeit";
-        $rs=$db->getAll($sql);
+        $rs=$_SESSION['db']->getAll($sql);
         if(!$rs) {
             return false;
         } else {
@@ -1960,7 +1951,7 @@ global $db;
         //$sql.="and ($rechte) order by startzeit";
         //$sql.="and M.member = $uid order by startzeit";
         $sql.=" $rechte order by startzeit";
-        $rs=$db->getAll($sql);
+        $rs=$_SESSION['db']->getAll($sql);
         if(!$rs) {
             return false;
         } else {
@@ -1976,9 +1967,9 @@ global $db;
 * 
 *****************************************************/
 function getTerminData($tid) {
-global $db;
+
     $sql="select T.*,K.catname,K,ccolor from termine T left join termincat K on K.catid=T.kategorie where T.id = $tid";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
         if(!$rs) {
             return false;
         } else {
@@ -1993,9 +1984,9 @@ global $db;
 * 
 *****************************************************/
 function getTerminUser($tid) {
-global $db;
+
     $sql="select tabelle||member as uid from terminmember where termin=$tid";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
         if(!$rs) {
             return false;
         } else {
@@ -2010,13 +2001,13 @@ global $db;
 * 
 *****************************************************/
 function deleteTermin($id) {
-global $db;
+
     $sql1="delete from termine where id=$id";
-    $rc=$db->query($sql1);
+    $rc=$_SESSION['db']->query($sql1);
     $sql2="delete from terminmember where termin=$id";
-    $rc=$db->query($sql2);
+    $rc=$_SESSION['db']->query($sql2);
     $sql3="delete from termdate where termid=$id";
-    $rc=$db->query($sql3);
+    $rc=$_SESSION['db']->query($sql3);
 }
 
 /****************************************************
@@ -2026,7 +2017,7 @@ global $db;
 * 
 *****************************************************/
 function getNextTermin($tid) {
-global $db;
+
     $nun=date("Y-m-dH:i");
     $grp=getGrp($tid,true);
     if ($grp) $rechte.=" M.member in $grp";
@@ -2034,7 +2025,7 @@ global $db;
     //$sql.="where D.jahr||'-'||D.monat||'-'||D.tag||T.startzeit>='$nun' and $rechte order by jahr,monat,tag,startzeit limit 1";
     $sql="select * from termine T left join termdate D on D.termid=T.id left join terminmember M on M.termin=T.id ";
     $sql.="where D.jahr||'-'||D.monat||'-'||D.tag||T.startzeit>'$nun' and $rechte order by jahr,monat,tag,startzeit limit 1";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     //echo $sql;
     if ($rs[0]["termid"]) {
         $data["id"]=$rs[0]["termid"];
@@ -2054,9 +2045,9 @@ global $db;
  * @return array
  */
 function getTermincat($empty=false,$lang=false) {
-    global $db;
+    
     $sql = "SELECT catid,catname, sorder, catname as translation,ccolor from termincat order by sorder";
-    $data = $db->getAll($sql);
+    $data = $_SESSION['db']->getAll($sql);
     if ($empty){
         $ecat[] = array("catid"=>0,"catname"=>"","sorder"=>0);
         $data = array_merge($ecat,$data);
@@ -2072,7 +2063,7 @@ function getTermincat($empty=false,$lang=false) {
  * @return TODO
  */
 function saveTermincat($data) {
-    global $db;
+    
     foreach($data["tcat"] as $row) {
         if ($row["del"]==1) {
             $sql="delete from termincat where catid=".$row["catid"];
@@ -2087,7 +2078,7 @@ function saveTermincat($data) {
             $sql="update termincat set sorder=".$row["sorder"].", catname='".$row["catname"]."', ccolor='".$row["ccolor"]."' where catid = ".$row["catid"];
         }
         if ($sql)
-            $rc = $db->query($sql);
+            $rc = $_SESSION['db']->query($sql);
     }
 }
 
@@ -2221,20 +2212,20 @@ function feiertage($jahr) {
 * 
 *****************************************************/
 function getCustMsg($id,$all=false) {
-global $db;
+
     if (!$all) { $where="fid=$id and akt='t'"; }
     else {
         if ($id) {$where="fid=$id"; }
         else { return false; }
     }
     $sql="select * from custmsg where $where ";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if(!$rs) {
         $sql = "select id,cause,coalesce(finishdate,'9999-12-31 00:00:00') as finishdate  ";
         $sql.= "from wiedervorlage where status > '0' and (kontaktid = $id or ";
         $sql.= "kontaktid in (select cp_id from contacts where cp_cv_id = $id)) ";
         $sql.=" order by finishdate,initdate";
-        $rs=$db->getAll($sql);
+        $rs=$_SESSION['db']->getAll($sql);
         if ($rs) {
             $cnt = count($rs);
             $msg = "<font color='red'>.:wv:. ($cnt) ".$rs[0]["cause"];
@@ -2270,15 +2261,15 @@ global $db;
 * 
 *****************************************************/
 function saveCustMsg($data) {
-global $db;
+
     if (!$data["cp_cv_id"]) return false;
     $sql="delete from custmsg where fid=".$data["cp_cv_id"];
-    $rc=$db->query($sql);
+    $rc=$_SESSION['db']->query($sql);
     if ($rc) for($i=1; $i<=3; $i++) {
         if ($data["message$i"]) { 
             $sql="insert into custmsg (msg,prio,fid,uid,akt) values (";
             $sql.="'".$data["message$i"]."',$i,".$data["cp_cv_id"].",".$_SESSION["loginCRM"].",".(($data["prio"]==$i)?"'t'":"'f'").")";
-            $rc=$db->query($sql);
+            $rc=$_SESSION['db']->query($sql);
         }
     }
 }
@@ -2290,13 +2281,13 @@ global $db;
 * 
 *****************************************************/
 function getOneLable($format) {
-    global $db;
+    
     $lab=false;
     $sql="select * from labels where id=".$format;
-    $rs=$db->getOne($sql);
+    $rs=$_SESSION['db']->getOne($sql);
     if ($rs) {
         $sql="select * from labeltxt where lid=".$rs["id"];
-        $rs2=$db->getAll($sql);
+        $rs2=$_SESSION['db']->getAll($sql);
         $rs["Text"]=$rs2;
     }
     return $rs;
@@ -2309,9 +2300,9 @@ function getOneLable($format) {
 * 
 *****************************************************/
 function getLableNames() {
-    global $db;
+    
     $sql="select id,name from labels order by name";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if (!$rs) $rs[] = array('id'=>0,'name'=>'------');
     return $rs;
 }
@@ -2323,13 +2314,13 @@ function getLableNames() {
 * 
 *****************************************************/
 function mknewLable($id=0) {
-    global $db;
+    
     $newID=uniqid (rand());
     $sql="insert into labels (name) values ('$newID')";
-    $rc=$db->query($sql);
+    $rc=$_SESSION['db']->query($sql);
     if ($rc) {
         $sql="select id from labels where name = '$newID'";
-        $rs=$db->getAll($sql);
+        $rs=$_SESSION['db']->getAll($sql);
         if ($rs) {
             $id=$rs[0]["id"];
         } else {
@@ -2361,7 +2352,7 @@ function insLable($data) {
 * 
 *****************************************************/
 function updLable($data) {
-    global $db;
+    
     $data["fontsize"]="10";
     $felder=array("name","cust","papersize","metric","marginleft","margintop","nx","ny","spacex","spacey","width","height","fontsize");
     $tmp="update labels set ";
@@ -2370,12 +2361,12 @@ function updLable($data) {
     }
     $sql=substr($tmp,0,-1)." where id=".$data["id"];
     if ($data["cust"]=="C") {
-        $rc=$db->query($sql);
+        $rc=$_SESSION['db']->query($sql);
         $i=0;
-        $db->query("delete from labeltxt where lid=".$data["id"]);
+        $_SESSION['db']->query("delete from labeltxt where lid=".$data["id"]);
         if($data["Text"]) foreach($data["Text"] as $row) {
             $sql=sprintf("insert into labeltxt (lid,font,zeile) values (%d,%d,'%s')",$data["id"],$data["Schrift"][$i],$row);
-            $db->query($sql);
+            $_SESSION['db']->query($sql);
             $i++;
         }
     } else {
@@ -2391,16 +2382,16 @@ function updLable($data) {
 * 
 *****************************************************/
 function getWPath($id) {
-global $db;
+
     $sql="select * from wissencategorie where id = $id";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if ($rs) {
         $pfad=$rs[0]["id"];
         if ($rs[0]["hauptgruppe"]==0) return $pfad;
     }
     while ($rs and $rs[0]["hauptgruppe"]>0) {
         $sql="select * from wissencategorie where id = ".$rs[0]["hauptgruppe"];
-        $rs=$db->getAll($sql);
+        $rs=$_SESSION['db']->getAll($sql);
         if ($rs) $pfad.=",".$rs[0]["id"];
     }
     return $pfad;
@@ -2413,13 +2404,13 @@ global $db;
 * 
 *****************************************************/
 function getWCategorie($kdhelp=false) {
-global $db;
+
     if ($kdhelp) { 
         $sql="select * from wissencategorie where kdhelp is true order by name";
     } else {
         $sql="select * from wissencategorie order by hauptgruppe,name";
     }
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     $data=array();
     if ($rs) { 
         if ($kdhelp) if (count($rs)>0) { return $rs;} else { return false; };
@@ -2439,13 +2430,13 @@ global $db;
 * 
 *****************************************************/
 function insWCategorie($data) {
-global $db;
+
     if ( !$data["cid"] ) {
         $newID = uniqid (rand());
         $sql = "insert into wissencategorie (name,kdhelp) values ('$newID','".(($data["kdhelp"]==1)?'true':'false')."')";
-        $rc = $db->query($sql);
+        $rc = $_SESSION['db']->query($sql);
         $sql = "select * from wissencategorie where name='$newID'";
-        $rs = $db->getOne($sql);
+        $rs = $_SESSION['db']->getOne($sql);
         if( !$rs ) {
             return false;
         } else {
@@ -2458,7 +2449,7 @@ global $db;
             $kat = 0;
     } 
     $name = html_entity_decode( $data["catname"] );
-    if ( $db->update('wissencategorie',
+    if ( $_SESSION['db']->update('wissencategorie',
                       array( 'name', 'hauptgruppe', 'kdhelp' ),
                       array( $name, $data['hg'], (($data["kdhelp"]==1)?'true':'false') ),
                      'id='.$id ) ) {
@@ -2473,9 +2464,9 @@ global $db;
 * 
 *****************************************************/
 function getOneWCategorie($id) {
-global $db;
+
     $sql="select * from  wissencategorie where id = $id";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     return $rs[0];
 }
 
@@ -2486,12 +2477,12 @@ global $db;
 * 
 *****************************************************/
 function getWContent($id) {
-global $db;
+
     $rechte = berechtigung();
     $sql="select O.*,A.name,E.login from wissencontent O left join wissencategorie A on A.id=O.categorie ";
     $sql.="left join employee E on O.employee=E.id where categorie = $id and $rechte order by initdate desc limit 1";
     //$sql.="left join employee E on O.employee=E.id where categorie = $id order by initdate desc limit 1";
-    $rs = $db->getOne($sql);
+    $rs = $_SESSION['db']->getOne($sql);
     if ( $rs ) {
         return $rs;
     } else {
@@ -2506,12 +2497,12 @@ global $db;
 * 
 *****************************************************/
 function insWContent($data) {
-global $db;
+
     $kat = $data['kat'];
     $own = ($data['owener'] > 0)?$data['owener']:'';
     $vers = "(SELECT max(version) FROM wissencontent WHERE categorie = $kat)+1";
     $prep = "INSERT INTO wissencontent (initdate, content, employee, version, categorie, owener) VALUES (now(), ?, ?, $vers, ?, ?)";
-    $rc = $db->insert('wissencontent',
+    $rc = $_SESSION['db']->insert('wissencontent',
                       array('content','employee','categorie','owener'),
                       array(trim($data['content']),$_SESSION["loginCRM"],$kat,$own),
                       $prep);
@@ -2526,10 +2517,10 @@ global $db;
 * 
 *****************************************************/
 function getWHistory($id) {
-global $db;
+
     $rechte = berechtigung();
     $sql="select W.*,E.login from  wissencontent W left join employee E on W.employee=E.id where  $rechte and categorie = $id order by initdate";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     return $rs;
 }
 /**
@@ -2548,7 +2539,7 @@ global $db;
 * 
 *****************************************************/
 function suchWDB($wort,$kat) {
-global $db;
+
     $rechte = berechtigung();
     $sql = "SELECT distinct WK.* as cid from wissencontent WC left join wissencategorie WK on WC.categorie=WK.id where $rechte and ";
     if ( $wort != '' ) {
@@ -2558,7 +2549,7 @@ global $db;
     } else {
         return false;
     }
-    $rs = $db->getAll($sql);
+    $rs = $_SESSION['db']->getAll($sql);
     return $rs;
 }
 /****************************************************
@@ -3198,7 +3189,6 @@ function getPart($part) {
     return $rs;
 }
 function getIOQ($fid,$Q,$type,$close){
-global $db;
     //ToDo Option "Nur offene IOQ anzeigen"
     //if ($_SESSION["sales_edit_all"] == "f") $sea = sprintf(" and (employee_id = %d or salesman_id = %d) ", $_SESSION["loginCRM"], $_SESSION["loginCRM"]);
     //$closed_sql = $close?"AND closed = 'f' ":" ";
@@ -3217,7 +3207,7 @@ global $db;
             $sql = "SELECT DISTINCT ON (oe.id) to_char(oe.transdate, 'DD.MM.YYYY') as date, description, COALESCE(ROUND(amount,2))||' '||COALESCE(C.name) as amount, ";
             $sql.= "oe.quonumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id=trans_id LEFT JOIN currencies C on currency_id=C.id WHERE quotation = TRUE AND $cust_vend = $fid ORDER BY oe.id, orderitems.id";
     } 
-    $rs = $db->getAll($sql);
+    $rs = $_SESSION['db']->getAll($sql);
     return $rs;
 }
 

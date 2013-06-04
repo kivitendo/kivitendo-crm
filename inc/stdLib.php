@@ -891,7 +891,7 @@ function makeMenu($sess,$token){
 /*******************************************************************************************************************************************************
 *** History wird mit Parameter schreibend benutzt, ohne Paramter gibt Sie die History zurück ***********************************************************
 *******************************************************************************************************************************************************/
-function history($data=false) {
+function accessHistory($data=false) {
     if ( $_SESSION['loginok'] == 'ok' ){
         $sql = "select val from crmemployee where uid = '" . $_SESSION["loginCRM"] .  "' AND key = 'search_history'";
         $rs =   $_SESSION['db']->getOne($sql);

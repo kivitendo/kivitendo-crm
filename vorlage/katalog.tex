@@ -44,18 +44,15 @@
 \font\xlix=wlc39 scaled 1200
 \newcommand{\barcode}[1]{{\xlix@#1@}}
 \newcommand\WG[1]{%
+    \\
     & \multicolumn{2}{c}{\textbf{#1}} & \\
     \hline
 }
-\newcommand\Zeile[6]{%
-                 \ifthenelse{\equal{#5}{}}{}{\barcode{#5}} & 
-                 #2 (#6)&
+\newcommand\Zeile[4]{%
+                 #2 &
                  \multicolumn{1}{r}{\small #3} &
                  \multirow{2}{50px}{\includegraphics*[height=55px]{#1}} \\
-		 \small #5 &
-                 \multicolumn{3}{l}{\raggedright\small #4} & \\ 
-   \\
-   \\
+                 \multicolumn{2}{X}{\raggedright\small #4} & \\ 
 }
 
 
@@ -79,7 +76,7 @@
 
 %\begin{longtable}{@{}p{100px}lllp{100px}@{ }@{}} % Definition der Spalten
 %\begin{longtable}{@{}lXll@{ }@{}} % Definition der Spalten
-\begin{longtable}{@{}p{100px}XXp{100px}@{}} % Definition der Spalten
+\begin{longtable}{@{}XXp{100px}@{}} % Definition der Spalten
 	% Spaltenueberschriften
 
 	\hline % Trennlinie
@@ -89,7 +86,7 @@
     \endhead
 
     % Fuss der Teiltabellen
-    %\multicolumn{5}{r}{Fortsetzung n\"achste Seite. Seite: \thepage{} von \pageref{LastPage}} \\
+    %\multicolumn{3}{r}{Fortsetzung n\"achste Seite. Seite: \thepage{} von \pageref{LastPage}} \\
   \endfoot
 
   % Das Ende der Tabelle
@@ -99,7 +96,7 @@
 	% Artikel-Positionen:
 	<%foreach_part%>   
             \ifthenelse{\equal{<%newpg%>}{new}}{ \WG{<%partsgroup%>} } 
-            { \Zeile{<%image%>}{<%partnumber%>}{<%sellprice%>}{<%description%>}{<%ean%>}{<%onhand%>} }
+            { \Zeile{<%image%>}{<%partnumber%>}{<%sellprice%>}{<%description%>} }
 	<%end_part%>
 
 	\hline

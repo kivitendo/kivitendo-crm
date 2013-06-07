@@ -46,12 +46,13 @@ CREATE TABLE wiedervorlage (
 	initdate timestamp without time zone NOT NULL,
 	changedate timestamp without time zone,
 	finishdate timestamp without time zone,
-	cause character varying(60),
+	cause text,
 	descript text,
 	document integer,
-	status character(1),
+	status integer,
 	kontakt character(1),
 	employee integer,
+        gruppe boolean DEFAULT false,
 	initemployee integer,
 	kontaktid integer,
 	kontakttab character(1),
@@ -532,3 +533,4 @@ INSERT INTO schema_info (tag,login) VALUES ('crm_wvhistory','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_CRMemployee','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_UserFolder','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_UserMailssl','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_WiedervorlageGrp','install');

@@ -130,8 +130,8 @@ function getmenu( ) {
     }
     echo $menu;
 }
-$f = fopen("/tmp/x","w"); 
-fputs($f,print_r($_GET,true));
+#$f = fopen("/tmp/x","w"); 
+#fputs($f,print_r($_GET,true));
 switch ($_GET['task']) {
     case 'getmenu'           : getmenu( );
                                break;

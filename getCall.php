@@ -18,7 +18,7 @@
     $daten["Datum"]=date("d.m.Y");
     $daten["Zeit"]=date("H:i");
     $daten["Kontakt"]="T";
-    $daten["LangTxt"]="";
+    $daten["c_long"]="";
     $daten["Files"]=false;
     $daten["Anzeige"]=0;
     $daten["Datei"]="";
@@ -207,7 +207,7 @@
         wvldate => $daten["wvldate"],
         WVLID => $daten["wvlid"],
         NZeit => $daten["Zeit"],
-        LangTxt => $daten["LangTxt"],
+        c_long => $daten["c_long"],
         CID => $cid,
         FID => $fid,
         PID => $pid,

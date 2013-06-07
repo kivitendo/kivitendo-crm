@@ -86,7 +86,7 @@ function mail_expunge($conn) {
     return(@imap_expunge($conn));
 }
 
-function mail_seen($conn,$mail) {
+function mail_seen($conn,$mail,$clear=false) {
     return mail_flag($conn,$mail,'Seen');
 }
 
@@ -100,6 +100,26 @@ function mail_flag($conn,$mailuid,$flag) {
 
 function mail_answered($conn,$message) {
     return(@imap_setflag_full($conn,$message,"\\Answered"));
+}
+
+function mail_SetFlag($conn,$mail,$flag) {
+    switch ( $flag ) {
+        case 'Seen'      : return(@imap_setflag_full($conn,$mail,"\\Seen",SE_UID));
+                           break;
+        case 'Unseen'    : return(@imap_clearflag_full($conn,$mail,"\\Seen",SE_UID));
+                           break;
+        case 'Flagged'   : return(@imap_setflag_full($conn,$mail,"\\Flagged",SE_UID));
+                           break;
+        case 'Unflagged' : return(@imap_clearflag_full($conn,$mail,"\\Flagged",SE_UID));
+                           break;
+        case 'Delete'    : mail_dele($conn,$mail);
+                           break;
+        case 'Draft'     : return(@imap_setflag_full($conn,$mail,"\\Draft",SE_UID));
+                           break;
+        case 'Answerd'   : return(@imap_setflag_full($conn,$mail,"\\Answered",SE_UID));
+                           break;
+        default          : return false;
+    }
 }
 
 function mail_parse_headers($headers) {

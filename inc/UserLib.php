@@ -124,8 +124,12 @@ function getUserStamm($id, $login=false) {
     }
 }
 
-function getGruppen() {
-    $sql = "select * from gruppenname order by grpname";
+function getGruppen($user=false) {
+    if ( $user ) {
+        $sql = "select 'G'||grpid as id, grpname as name from gruppenname order by grpname";
+    } else {
+        $sql = "select * from gruppenname order by grpname";
+    }
     $rs  = $_SESSION['db']->getAll($sql);
     if( !$rs ) {
         return false;

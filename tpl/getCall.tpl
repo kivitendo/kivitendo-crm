@@ -90,7 +90,7 @@
 WV<input type="checkbox" name="wvl" value="1" onClick="showwv()" {wvl}> <span id="wv" style="visibility:hidden"><input type="text" size="8" name="wvldate" value="{wvldate}" id="wvldate" maxlength="10"></span>
 <!--input type="reset" value="reset" onClick="javascript:location.href='getCall.php?fid={FID}&id={ID}'"--><br>
 <span class="klein">Betreff</span><br>
-<textarea name="c_cause" cols="80" rows="10" wrap="physical" >{LangTxt}</textarea><br>
+<textarea name="c_cause" cols="80" rows="10" wrap="physical" >{c_long}</textarea><br>
 <span class="klein">Bemerkung &nbsp; &nbsp; &nbsp;<!--a href="#" onClick="artikel()">Artikelliste</a--></span><br>
 <table>
 <tr><td><input type="file" name="Datei[]" value="{Datei}" size="35" maxlength="125"><br>

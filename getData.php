@@ -71,13 +71,13 @@ if ($_SESSION['feature_ac']) { //funktioniert wegen der Ersetzungen für minLeng
     table.tablesorter {
 	   width: 900;
     }  
-    #jui_dropdown_demo {
+    #jui_dropdown {
         height: 400px;
     }
-    #jui_dropdown_demo button {
+    #jui_dropdown button {
         padding: 3px !important;
     }
-    #jui_dropdown_demo ul li {
+    #jui_dropdown ul li {
         background: none;
         display: inline-block;
         list-style: none;

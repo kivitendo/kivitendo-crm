@@ -212,7 +212,8 @@ $texts  = array(
   '.:contact history:.' => 'Kontaktverlauf',
   '.:search keyword:.'  => 'Suchbegriff',
   '.:users:.'           => 'Benutzer',
-  '.:employee:.'        => 'Bearbeiter'
-  
+  '.:employee:.'        => 'Bearbeiter',
+  '.:history tracking:.'=> 'Verlauf',
+  '.:delivery order:.'  => 'Lieferschein',
 ); 
 ?>

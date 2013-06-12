@@ -213,5 +213,7 @@ $texts  = array(
   '.:search keyword:.'  => 'Search Keyword',
   '.:users:.'           => 'Users',
   '.:employee:.'        => 'Employee'
+  '.:history tracking:.'=> 'History Tracking',
+  '.:delivery order:.'  => 'Delivery Order',
 );
 ?>

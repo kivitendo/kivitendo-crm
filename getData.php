@@ -96,14 +96,11 @@ if ($_SESSION['feature_ac']) { //funktioniert wegen der Ersetzungen für minLeng
 <script>
      $(function() {
         $("#dialog").dialog();
-    });
-    $(function() {
+        $( "input[type=submit]" )
+            .button();
         $("#treffer")
             .tablesorter({widthFixed: true, widgets: ['zebra']})
             .tablesorterPager({container: $("#pager"), size: 20, positionFixed: false})
-    }); 
-
-    $(function() {
         $.ajax({
             url: "jqhelp/getHistory.php",
             context: $('#menu'),
@@ -132,7 +129,7 @@ echo $menu['pre_content'];
 echo $menu['start_content'];
 echo '<p class="listtop">'.translate('.:fast search customer/vendor/contacts and contact history:.','firma').'</p>
 <form name="suche" action="getData.php" method="get">
-    <input type="text" name="swort" size="25" id="ac0" autocomplete="off"> '.translate('.:Search:.','firma').' 
+    <input type="text" name="swort" size="25" id="ac0" autocomplete="off">  
     <input type="submit" name="adress" value="'.translate('.:adress:.','firma').'" id="adress">
     <input type="submit" name="kontakt" value="'.translate('.:contact history:.','firma').'"> <br>
     <span class="liste">'.translate('.:search keyword:.','firma').'</span>

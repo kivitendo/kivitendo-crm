@@ -12,7 +12,7 @@ CREATE TABLE crmdefaults (
 echo 'Variablen in DB schreiben<br>';
 $keys = array('ttpart','tttime','ttround','ttclearown','GEODB','BLZDB','CallDel','CallEdit','Expunge','MailFlag','logmail','dir_group','dir_mode','sep_cust_vendor','listLimit','stadtplan','planspace','showErr','logfile','kicktel_API','google_API');
 $sql = "insert into crmdefaults (key,val,grp,employee) values ('%s','%s','mandant',".$_SESSION['loginCRM'].")";
-if ( !isset($GLOBALS['listLimit']) or $GLOBALS['listLimit']) < 100 ) $GLOBALS['listLimit'] = 200; 
+if ( !isset($GLOBALS['listLimit']) or $GLOBALS['listLimit'] < 100 ) $GLOBALS['listLimit'] = 200; 
 if ( !isset($GLOBALS['dir_mode']) ) $GLOBALS['dir_mode'] = '0755'; 
 if ( !isset($GLOBALS['dir_group']) ) $GLOBALS['dir_group'] = 'users'; 
 foreach ($keys as $row ) {

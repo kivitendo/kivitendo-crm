@@ -167,11 +167,11 @@ function anmelden() {
         }
         if ( $dbsec && preg_match("!\[.+]!",$tmp) ) $dbsec = false;
         if ( $dbsec ) {
-	        if ( preg_match("/db[ ]*= (.+)/",$tmp,$hits) )       $dbname = $hits[1];
-	        if ( preg_match("/password[ ]*= (.+)/",$tmp,$hits) ) $dbpasswd = $hits[1];
-	        if ( preg_match("/user[ ]*= (.+)/",$tmp,$hits) )     $dbuser = $hits[1];
-	        if ( preg_match("/host[ ]*= (.+)/",$tmp,$hits) )     $dbhost = ($hits[1])?$hits[1]:"localhost";
-	        if ( preg_match("/port[ ]*= ([0-9]+)/",$tmp,$hits) ) $dbport = ($hits[1])?$hits[1]:"5432";
+	        if ( preg_match("/db[ ]*=[ ]*(.+)/",$tmp,$hits) )       $dbname = $hits[1];
+	        if ( preg_match("/password[ ]*=[ ]*(.+)/",$tmp,$hits) ) $dbpasswd = $hits[1];
+	        if ( preg_match("/user[ ]*=[ ]*(.+)/",$tmp,$hits) )     $dbuser = $hits[1];
+	        if ( preg_match("/host[ ]*=[ ]*(.+)/",$tmp,$hits) )     $dbhost = ($hits[1])?$hits[1]:"localhost";
+	        if ( preg_match("/port[ ]*=[ ]*([0-9]+)/",$tmp,$hits) ) $dbport = ($hits[1])?$hits[1]:"5432";
             if ( preg_match("/\[[a-z]+/",$tmp) ) $dbsec = false;
     	    $tmp = fgets($lxo,512);
 	        continue;

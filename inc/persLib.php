@@ -444,14 +444,14 @@ global $db;
     return $rs;
 }
 
-function leertplP (&$t,$fid,$msg,$tab,$suche=false,$Quelle="") {
+function leertplP (&$t,$fid,$msg,$tab,$suche=false,$Quelle="",$ui="") {
 global $laender;
 //cp_greeting raus hli
         if ($fid && $Quelle) {
             $fa=getFirmenstamm($fid,false,$Quelle);
             $nummer=($Quelle=="C")?$fa["customernumber"]:$fa["vendornumber"];
         }
-        $t->set_file(array("pers1" => "personen".$tab.".tpl"));
+        $t->set_file(array("pers1" => "personen".$tab.$ui.".tpl"));
         $t->set_var(array(
             ERPCSS          => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
             Fld             => "cp_title",

@@ -1062,12 +1062,12 @@ function cvar_edit($id,$new=false) {
     return $output;
 }
 
-function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false) {
+function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false,$ui="") {
         $jscal ="<style type='text/css'>@import url(../js/jscalendar/calendar-win2k-1.css);</style>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar.js'></script>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar-setup.js'></script>\n";
-        $t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
+        $t->set_file(array("fa1" => "firmen".$tpl.$ui.".tpl"));
         $menu =  $_SESSION['menu'];
         $t->set_var(array(
             JAVASCRIPTS   => $menu['javascripts'],

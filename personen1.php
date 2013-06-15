@@ -149,7 +149,7 @@
             vartplP($t,$_POST,$msg,$btn1,$btn1,$btn1,"Anrede","white",$_POST["FID1"],1);
         }
     } else {
-        leertplP($t,$_GET["fid"],"",1,false,$Quelle);
+        leertplP($t,$_GET["fid"],"",1,false,$Quelle,$_GET['ui']);
     }
     $t->Lpparse("out",array("pers1"),$_SESSION["lang"],"firma");
 ?>

@@ -65,7 +65,7 @@ if ($_SESSION['feature_ac']) { //funktioniert wegen der Ersetzungen für minLeng
             });
         });
     </script>';  
-   }//end feature_ac 
+}//end feature_ac 
 ?>  
 <style>
     table.tablesorter {
@@ -94,7 +94,14 @@ if ($_SESSION['feature_ac']) { //funktioniert wegen der Ersetzungen für minLeng
     }     
 </style>
 <script>
-     $(function() {
+    $(function() {
+        $( "#tabs" ).tabs({
+            beforeLoad: function( event, ui ) {
+                ui.jqXHR.error(function() {
+                    ui.panel.html(".:Couldn't load this tab. We'll try to fix this as soon as possible.:." );
+                });
+            }       
+        });
         $("#dialog").dialog();
         $( "input[type=submit]" )
             .button();
@@ -127,7 +134,18 @@ if ($_SESSION['feature_ac']) { //funktioniert wegen der Ersetzungen für minLeng
 <?php 
 echo $menu['pre_content'];
 echo $menu['start_content'];
-echo '<p class="listtop">'.translate('.:fast search customer/vendor/contacts and contact history:.','firma').'</p>
+echo '
+<div id="tabs">
+    <ul>
+        <li><a href="#tabs-1">Schnellsuche</a></li>
+        <li><a href="firmen1.php?Q=C&ui=ui">Kundensuche</a></li>
+        <li><a href="firmen1.php?Q=V&ui=ui">Lieferantensuche</a></li>
+        <li><a href="personen1.php?ui=ui">Personensuche</a></li>
+    </ul>
+    <div id="tabs-1">';
+        
+
+echo '<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">'.translate('.:fast search customer/vendor/contacts and contact history:.','firma').'</p>
 <form name="suche" action="getData.php" method="get">
     <input type="text" name="swort" size="25" id="ac0" autocomplete="off">  
     <input type="submit" name="adress" value="'.translate('.:adress:.','firma').'" id="adress">
@@ -278,6 +296,9 @@ else if ($_GET["adress"]) {
 
 
 <?php } 
+    echo '    
+    </div>
+</div>';
     echo $menu['end_content'];
     ob_end_flush(); 
 ?>

@@ -103,7 +103,7 @@
             vartpl ($t,$_POST,$Q,$msg,"","",1,true);
         }
     } else {
-        leertpl($t,1,$Q,"",true);
+        leertpl($t,1,$Q,"",true,$_GET['ui']);
     }
 
     $t->Lpparse("out",array("fa1"),$_SESSION["lang"],"firma");

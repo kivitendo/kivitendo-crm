@@ -132,7 +132,8 @@ function getGruppen($user=false) {
     }
     $rs  = $_SESSION['db']->getAll($sql);
     if( !$rs ) {
-        return false;
+        if ( $user ) { return array(); }
+        else { return false; }
     } else {
         return $rs;
     }

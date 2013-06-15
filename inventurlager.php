@@ -1,19 +1,18 @@
 <?php
     require_once("inc/stdLib.php");
     include('inc/katalog.php');
-    $menu =  $_SESSION['menu'];
+    $menu = $_SESSION['menu'];
+    $head = mkHeader();
 ?>
 <html>
-    <head><title></title>
-    <?php echo $menu['stylesheets']; ?>
-    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'] ?>crm/css/<?php echo $_SESSION["stylesheet"]; ?>/main.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/themes/base/jquery-ui.css">
-    <?php echo $_SESSION['theme']; ?>
-
-    <script type="text/javascript" src="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/jquery.js"></script>
-    <script type="text/javascript" src="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/ui/jquery-ui.js"></script>
-    <script type="text/javascript" src="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/ui/i18n/jquery.ui.datepicker-de.js"></script>
-    <?php echo $menu['javascripts']; ?>
+<head><title></title>
+<?php echo $menu['stylesheets']; ?>
+<?php echo $head['CRMCSS']; ?>
+<?php echo $head['JQUERY']; ?>
+<?php echo $head['JQUERYUI']; ?>
+<?php echo $head['THEME']; ?>
+<?php echo $head['JQDATE']; ?>
+<?php echo $menu['javascripts']; ?>
     <script type='text/javascript'>
          function getData() {
              document.inventurs.comment.value = document.inventur.comment.value;

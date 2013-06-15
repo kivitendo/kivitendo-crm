@@ -177,11 +177,11 @@
             'KARTE_BUTTON'   => ($_SESSION['zeige_karte']=='t')?
                                 '<a class="firmabutton" href="'.$karte1.'" name="karte" target="_blank"><img src="image/karte.png" title=".:city map:." border="0"></a>&nbsp;':'',
             'ETIKETT_BUTTON' => ($_SESSION['zeige_etikett']=='t')?
-                                '<a class="firmabutton" href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0" /></a>&nbsp;':'',  
+                                '<a class="firmabutton" href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0"></a>&nbsp;':'',  
             'DHL_BUTTON'     => ($_SESSION['zeige_dhl']=='t')?
-                                '<a class="firmabutton" href="#" onCLick="dhl();" title="DHL"><img src="image/dhl.png" alt="DHL" border="0" /></a>&nbsp;':'', 
+                                '<a class="firmabutton" href="#" onCLick="dhl();" title="DHL"><img src="image/dhl.png" alt="DHL" border="0"></a>&nbsp;':'', 
             'LxCars_BUTTON'  => ($_SESSION['zeige_lxcars']=='t'&&$Q=="C")?
-                               '<a class="firmabutton" href="#" onCLick="doLxCars();" title="KFZ-Daten"><img src="image/auto.png" alt="LxCars" /></a>&nbsp;':'',
+                               '<a class="firmabutton" href="#" onCLick="doLxCars();" title="KFZ-Daten"><img src="image/auto.png" alt="LxCars"></a>&nbsp;':'',
             'zeige_bearbeiter' => ($_SESSION['zeige_bearbeiter']=='t')?"visible":"hidden",      
             'zeige_tools' => ($_SESSION['zeige_tools']=='t')?"visible":"hidden",
             'login' => $_SESSION["employee"],

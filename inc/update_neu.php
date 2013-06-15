@@ -11,7 +11,7 @@
 	    function updatever($db,$VERSION) {
 		    $sql = "INSERT INTO crm (uid,datum,version) values (".$_SESSION["loginCRM"].",now(),'".$VERSION."')";
 		    $rc = $_SESSION["db"]->query($sql);
-	    	$db->commit();
+	    	$_SESSION['db']->commit();
 		    echo "Versionsnummer gesetzt<br>";
 		    if (is_file("update/update$VERSION.txt")) {
 		        echo "<h2>Wichtig!</h2>";
@@ -55,7 +55,7 @@
 		    $todonew = sorttodo($todo);
     	}
 	    $todo = $todonew;	
-        $rc = $db->begin();
+        $rc = $_SESSION['db']->begin();
         foreach ( $todo as $upd ) {
             $f = fopen("update/".$upd,"r");
             while (!feof($f) ) {

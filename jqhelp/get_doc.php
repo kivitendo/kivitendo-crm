@@ -1,3 +1,5 @@
+<?php
+echo '
 <script language="JavaScript" type="text/javascript">
 	function OpenIOQ (src,id,type) {
 		if 	     (src=="C"&&type=="inv") { uri="../is.pl?action=edit&id=" + id }
@@ -10,20 +12,20 @@
 	}
     $(document).ready(
        	$(function() {
-      	    $(".tablesorter")
-            .tablesorter({widthFixed: true, widgets: ['zebra']})
+      	    $("#table'.$_GET['type'].'")
+            .tablesorter({widthFixed: true, widgets: ["zebra"]})
             .tablesorterPager({container: $(".pager"), size: 15, positionFixed: false})
         })
 	);  
 </script>
-<?php
+';
 /****************************************************************************************
 *** Erzeugt eine Tabelle mit offenen bzw. allen Aufträgen, Angeboten oder Rechungen   ***
 ****************************************************************************************/
 include ("../inc/crmLib.php");
 include ("../inc/stdLib.php");
 $rs = getIOQ($_GET['fid'],$_GET['Q'],$_GET["type"],false);
-echo "<div><table  class='tablesorter'>\n"; 
+echo '<div><table id="table'.$_GET['type'].'" class="tablesorter" width="100%" style="margin:0px;">'; 
 echo "<thead><tr><th>".translate('.:date:.','firma')."</th><th>".translate('.:first position:.','firma')."</th><th>"
       .translate('.:amount:.','firma')."</th><th>".translate('.:number:.','firma')." </th></tr></thead>\n<tbody>\n"; 
 if ($rs) 

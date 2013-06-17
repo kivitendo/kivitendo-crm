@@ -742,7 +742,7 @@ function mkHeader() {
     $head = array(
         'JQUERY'        => $SV.$_SESSION['basepath'].'crm/jquery-ui/jquery.js'.$SN,
         'JQUERYUI'      => $LV.$_SESSION['basepath'].'crm/jquery-ui/themes/base/jquery-ui.css'.$LN.
-                           $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery-ui.js'.$SN,
+                           $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/minified/jquery-ui.min.js'.$SN,
         'JQTABLE'       => $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/Table/jquery.tablesorter.js'.$SN.
                            $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/Table/addons/pager/jquery.tablesorter.pager.js'.$SN.
                            $LV.$_SESSION['basepath'].'crm/jquery-ui/plugin/Table/themes/blue/style.css'.$LN,
@@ -751,9 +751,9 @@ function mkHeader() {
                                                              'i18n/jquery.ui.datepicker-'.$_SESSION['lang']).
                                                              '.js'.$SN,
         'JQFILEUP'      => $LV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/css/jquery.fileupload-ui.css'.$LN.
-                           $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.iframe-transport.js'.$SN.
-                           $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.fileupload.js'.$SN,
-        'JQWIDGET'      => $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery.ui.widget.js'.$SN,
+                           $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.iframe-transport.min.js'.$SN.
+                           $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.fileupload.min.js'.$SN,
+        'JQWIDGET'      => $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/minified/jquery.ui.widget.min.js'.$SN,
         'THEME'         => ($_SESSION['theme']!='')? $LVID  .$_SESSION['basepath'].'crm/jquery-ui/themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN:'',
         'CRMCSS'        => $LV.$_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"].'/main.css'.$LN,
         'JUI-DROPDOWN'  => $LV.$_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"].'/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.css'.$LN.

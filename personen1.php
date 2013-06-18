@@ -3,7 +3,7 @@
     include("inc/template.inc");
     include("inc/persLib.php");
     include("inc/laender.php");
-    include("inc/UserLib.php");
+    include_once("inc/UserLib.php");
     include("inc/FirmenLib.php");
     $t = new Template($base);
     $menu =  $_SESSION['menu'];

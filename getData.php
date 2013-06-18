@@ -197,7 +197,7 @@ if ($_GET["kontakt"] && $_GET['swort'] != '') {
 else if ($_GET["adress"]) {
 	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
-	include("inc/UserLib.php");
+	include_once("inc/UserLib.php");
 	//ToDo Dialogtexte verbessern?
 	$msg='<div id="dialog" title="Kein Suchbegriff eingegeben">
 	            <p>Bitte geben Sie mindestens ein Zeichen ein.</p>

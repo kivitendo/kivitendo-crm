@@ -1,7 +1,7 @@
 <?php
     require_once("inc/stdLib.php");
     include("inc/crmLib.php");
-    include("inc/UserLib.php");    
+    include_once("inc/UserLib.php");    
     $usr=getUserStamm($_SESSION["loginCRM"]);
     $ALabels=getLableNames();
     $freitext=$_POST["freitext"];

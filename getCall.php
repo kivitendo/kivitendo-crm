@@ -4,7 +4,7 @@
     include("inc/crmLib.php");
     include("inc/FirmenLib.php");
     include("inc/persLib.php");
-    include("inc/UserLib.php");
+    include_once("inc/UserLib.php");
     $fid=($_POST["fid"])?$_POST["fid"]:$_GET["fid"];
     $pid=($_POST["pid"])?$_POST["pid"]:$_GET["pid"];
     $INIT=($_POST["INIT"])?$_POST["INIT"]:$_GET["INIT"];

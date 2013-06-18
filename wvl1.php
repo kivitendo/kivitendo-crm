@@ -2,7 +2,7 @@
     require_once("inc/stdLib.php");
     include("inc/template.inc");
     include("inc/crmLib.php");
-    include("inc/UserLib.php");
+    include_once("inc/UserLib.php");
     $data["id"]=0;
     $templ="wvln.tpl";
     $showmail = false;

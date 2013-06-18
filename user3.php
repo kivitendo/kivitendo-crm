@@ -3,7 +3,7 @@
     require_once("inc/stdLib.php");
     include("inc/template.inc");
     include("inc/crmLib.php");
-    include("inc/UserLib.php");
+    include_once("inc/UserLib.php");
     if ($_POST["holen"]) {
         $msg=getCustMsg($_POST["cp_cv_id"],true);
     } else if ($_POST["reset"]) {

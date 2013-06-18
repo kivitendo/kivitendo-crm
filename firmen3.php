@@ -2,7 +2,7 @@
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/FirmenLib.php");
-	include("inc/UserLib.php");
+	include_once("inc/UserLib.php");
 	$Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
 	$t = new Template($base);
     doHeader($t);

@@ -3,7 +3,7 @@
 	require_once("inc/stdLib.php");
 	include("inc/template.inc");
 	include("inc/crmLib.php");
-	include("inc/UserLib.php");
+	include_once("inc/UserLib.php");
 	$start=$_GET["start"];
 	$id=$_GET["id"];
 	$items=getAllTelCallUser($id,$start,"M");

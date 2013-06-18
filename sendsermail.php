@@ -1,7 +1,7 @@
 <?php
 //mb_internal_encoding("UTF-8");
 require_once("inc/stdLib.php");
-include("inc/UserLib.php");
+include_once("inc/UserLib.php");
 require_once("inc/crmLib.php");
 include_once("Mail.php");
 include_once("Mail/mime.php");

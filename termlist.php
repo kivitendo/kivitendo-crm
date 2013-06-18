@@ -5,7 +5,7 @@
     $menu = $_SESSION['menu'];
     include("inc/template.inc");
     include("inc/crmLib.php");
-    include("inc/UserLib.php");
+    include_once("inc/UserLib.php");
     $ansicht=$_GET["ansicht"];
     $datum=$_GET["datum"];
     if ($datum=="") $datum=date("d.m.Y");

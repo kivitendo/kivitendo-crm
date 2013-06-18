@@ -4,7 +4,7 @@
     include("inc/FirmenLib.php");
     include("inc/persLib.php");
     include("inc/crmLib.php");
-    include("inc/UserLib.php");
+    include_once("inc/UserLib.php");
     $menu = $_SESSION['menu'];
     $ALabels=getLableNames();
     $freitext=$_POST["freitext"];

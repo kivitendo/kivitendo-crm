@@ -3,7 +3,7 @@
     require_once("inc/stdLib.php");
     include("inc/template.inc");
     include("inc/crmLib.php");
-    include("inc/UserLib.php");
+    include_once("inc/UserLib.php");
     include_once("Mail.php");
     include_once("Mail/mime.php");
     if ( isset($_GET['popup']) or isset($_POST['popup']) ) {

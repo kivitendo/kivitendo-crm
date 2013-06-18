@@ -1,7 +1,7 @@
 <?php
     require_once("inc/stdLib.php");
     include("inc/crmLib.php");
-    include("inc/UserLib.php");
+    include_once("inc/UserLib.php");
     include('inc/phpOpenOffice.php');
     $kalterm=array("datum"=>"","txt"=>"");
     $kaldrk=array("MO"=>$kalterm,"DI"=>$kalterm,"MI"=>$kalterm,"DO"=>$kalterm,"FR"=>$kalterm,"SA"=>$kalterm,"SO"=>$kalterm);

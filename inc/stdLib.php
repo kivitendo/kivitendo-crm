@@ -206,7 +206,7 @@ function anmelden() {
         if ( $charset == "" ) $charset = $dbcharset;
         $_SESSION["charset"] = $charset;
         $tmp = $rs[0];
-        include("inc/UserLib.php");
+        include_once("inc/UserLib.php");
         $user_data=getUserStamm($_SESSION["uid"]);
         $BaseUrl  = (empty( $_SERVER['HTTPS'] )) ? 'http://' : 'https://';
         $BaseUrl .= $_SERVER['HTTP_HOST'];

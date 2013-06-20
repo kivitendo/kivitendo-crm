@@ -35,7 +35,8 @@ function getShipStamm($id,$tab="C",$complete=false) {
 * hole alle Kunden
 *****************************************************/
 function getAllFirmen($sw,$usePre=true,$tab='C') {
-    if ($usePre) $Pre=$_SESSION["pre"];
+    if ( $usePre ) { $Pre = $_SESSION["pre"]; }
+    else { $Pre = ''; };
     $rechte=berechtigung();
     if (!$sw[0]) {
          $where="phone like '$Pre".$sw[1]."%' "; 
@@ -258,8 +259,8 @@ function getFirmaCVars($id,$search=false) {
                 case "textfield":
                 case "select"   : $daten["vc_cvar_".$row["name"]] = $row["text_value"];
                                   break;
-		case "customer"	: $daten["vc_cvar_".$row["name"]] = abs($row["number_value"]);
-				  break;
+                case "customer"    : $daten["vc_cvar_".$row["name"]] = abs($row["number_value"]);
+                                  break;
                 case "number"   : $daten["vc_cvar_".$row["name"]] = $row["number_value"];
                                   break;
                 case "bool"     : $daten["vc_cvar_".$row["name"]] = $row["bool_value"];
@@ -281,7 +282,7 @@ function getCvars() {
 }
 
 function getCvarName($id) {
-	$sql = "SELECT name,'C' as tab from customer where id = %d union select name,'V' as tab from vendor where id = %d";
+    $sql = "SELECT name,'C' as tab from customer where id = %d union select name,'V' as tab from vendor where id = %d";
     $rs = $_SESSION['db']->getOne(sprintf($sql,$id,$id));
     return $rs['name'];
 }
@@ -322,121 +323,121 @@ function getPayment() {
 * Suchstring über customer,shipto zusamensetzen
 *****************************************************/
 function suchstr($muster,$typ="C") {
-    $kenz=array("C" => "K","V" => "L");
-    $tab=array("C" => "customer","V" => "vendor");
+    $kenz = array("C" => "K","V" => "L");
+    $tab  = array("C" => "customer","V" => "vendor");
     //Suche in den CVars:
-    $cvartemp = "EXISTS ( SELECT cvar.id FROM custom_variables cvar ";
-    $cvartemp.= "LEFT JOIN custom_variable_configs cvarcfg ON (cvar.config_id = cvarcfg.id) ";
-    $cvartemp.= "WHERE (cvarcfg.module = 'CT') AND (cvarcfg.name  = '%s') AND ";
-    $cvartemp.= "(cvar.trans_id  = %s.id) AND (%s)"; 
-    $cvartemp.= "AND (cvar.sub_module = 'CT' or cvar.sub_module is null or cvar.sub_module = '') )"; 
+    $cvartemp  = 'EXISTS ( SELECT cvar.id FROM custom_variables cvar ';
+    $cvartemp .= 'LEFT JOIN custom_variable_configs cvarcfg ON (cvar.config_id = cvarcfg.id) ';
+    $cvartemp .= "WHERE (cvarcfg.module = 'CT') AND (cvarcfg.name  = '%s') AND ";
+    $cvartemp .= '(cvar.trans_id  = %s.id) AND (%s)'; 
+    $cvartemp .= "AND (cvar.sub_module = 'CT' or cvar.sub_module is null or cvar.sub_module = '') )"; 
     // Array zu jedem Formularfed: 0=String,2=Int
-    $dbfld=array(name => 0, street => 0, zipcode => 1,
-            city => 0, phone => 1, fax => 1,
-            homepage => 0, email => 0, notes => 0,
-            department_1 => 0, department_2 => 0,
-            country => 0, sw => 0,
-            language_id => 2, business_id => 2,
-            ustid => 1, taxnumber => 1, lead => 2, leadsrc => 0,
-            bank => 0, bank_code => 1, account_number => 1,
-            vendornumber => 0, v_customer_id => 0,
-            kundennummer => 0, customernumber => 0, contact => 0,
-            employee => 2, branche => 0, headcount => 2);
-    $dbfld2=array(name => "shiptoname", street=>"shiptostreet",zipcode=>"shiptozipcode",
-            city=>"shiptocity",phone=>"shiptophone",fax=>"shiptofax",
-            email=>"shiptoemail",department_1=>"shiptodepartment_1",
-            department_2=>"shiptodepartment_2",country=>"shiptocountry");
-    $fuzzy2=$muster["fuzzy"];
-    $fuzzy1=($muster["pre"])?$_SESSION["pre"]:"";
+    $dbfld = array('name' => 0, 'street' => 0, 'zipcode' => 1,
+            'city' => 0, 'phone' => 1, 'fax' => 1,
+            'homepage' => 0, 'email' => 0, 'notes' => 0,
+            'department_1' => 0, 'department_2' => 0,
+            'country' => 0, 'sw' => 0,
+            'language_id' => 2, 'business_id' => 2,
+            'ustid' => 1, 'taxnumber' => 1, 'lead' => 2, 'leadsrc' => 0,
+            'bank' => 0, 'bank_code' => 1, 'account_number' => 1,
+            'vendornumber' => 0, 'v_customer_id' => 0,
+            'kundennummer' => 0, 'customernumber' => 0, 'contact' => 0,
+            'employee' => 2, 'branche' => 0, 'headcount' => 2);
+    $dbfld2 = array('name' => 'shiptoname', 'street' => 'shiptostreet','zipcode' => 'shiptozipcode',
+            'city' => 'shiptocity', 'phone' => 'shiptophone','fax' => 'shiptofax',
+            'email' => 'shiptoemail', 'department_1' => 'shiptodepartment_1',
+            'department_2' => 'shiptodepartment_2', 'country' => 'shiptocountry');
+    $fuzzy2 = $muster["fuzzy"];
+    $fuzzy1 = ( isset($muster['pre']) and $muster['pre'] != '' )?$_SESSION["pre"]:"";
     $andor = $muster["andor"];
-    $keys=array_keys($muster);
-    $suchfld=array_keys($dbfld);
-    $anzahl=count($keys);
-    $tbl0=false;
-    $tbl2=false;
-    $cols="";
+    $keys = array_keys($muster);
+    $suchfld = array_keys($dbfld);
+    $anzahl = count($keys);
+    $tbl0 = false;
+    $tbl2 = false;
+    $cols = '';
     $cvcnt = 0;
     $cvars = getAlleVariablen();
-    if ($cvars) foreach ($cvars as $row) {
-         $cvar[$row['name']]=$row['type'];
+    if ( $cvars ) foreach ($cvars as $row) {
+         $cvar[$row['name']] = $row['type'];
     };
-    if ($muster["shipto"]){$tbl1=true;} else {$tbl1=false;}
-    $tmp1=""; $tmp2="";
-    for ($i=0; $i<$anzahl; $i++) {
-        if (in_array($keys[$i],$suchfld) and $muster[$keys[$i]]<>"") {
-            $suchwort=trim($muster[$keys[$i]]);
-            $suchwort=strtr($suchwort,"*?","%_");
-            if ($dbfld[$keys[$i]]==1) {
-                if ($suchwort[0] == "<" ||
-                    $suchwort[0] == ">" ||
-                    $suchwort[0] == "=" ) $dbfld[$keys[$i]]=2;
+    if ( $muster["shipto"] ) { $tbl1 = true; } else { $tbl1 = false; }
+    $tmp1 = ""; $tmp2 = "";
+    for ( $i=0; $i<$anzahl; $i++ ) {
+        if ( in_array($keys[$i],$suchfld) and $muster[$keys[$i]]<>"" ) {
+            $suchwort = trim($muster[$keys[$i]]);
+            $suchwort = strtr($suchwort,"*?","%_");
+            if ( $dbfld[$keys[$i]] == 1 ) {
+                if ($suchwort[0] == '<' ||
+                    $suchwort[0] == '>' ||
+                    $suchwort[0] == '=' ) $dbfld[$keys[$i]] = 2;
             }
-            if ($dbfld[$keys[$i]]==2) {
-                $search=array();
-                preg_match_all("/([<=>]?[\d]+)/",$suchwort,$treffer);
-                if ($treffer[0]) {
-                    foreach ($treffer[0] as $val) {
-                        if ($val[0] == ">" || $val[0] == "<" || $val[0] == "=") {
-                            $search[] = $kenz[$typ].".".$keys[$i]." ".$val[0]." '".substr($val,1)."'";
+            if ( $dbfld[$keys[$i]] == 2 ) {
+                $search = array();
+                preg_match_all( "/([<=>]?[\d]+)/", $suchwort, $treffer );
+                if ( $treffer[0] ) {
+                    foreach ( $treffer[0] as $val ) {
+                        if ($val[0] == '>' || $val[0] == '<' || $val[0] == '=') {
+                            $search[] = $kenz[$typ].'.'.$keys[$i].' '.$val[0]." '".substr($val,1)."'";
                         } else {
                             //Dropdown-Boxen liefern kein "=" mit.
-                            $search[] = $kenz[$typ].".".$keys[$i]." = '".$val."'";
+                            $search[] = $kenz[$typ].'.'.$keys[$i]." = '".$val."'";
                         }
                     }
-                    $suchwort = "( ".implode(" $andor ",$search)." )";
-                    $tmp1.="$andor ".$suchwort." ";
+                    $suchwort = '( '.implode(" $andor ",$search).' )';
+                    $tmp1    .= $andor.' '.$suchwort.' ';
                 }
             } else {
-                if ($tbl1 && $dbfld2[$keys[$i]]) {
-                    $tmp1.="$andor (S.".$dbfld2[$keys[$i]]." ilike '$fuzzy1".$suchwort."$fuzzy2' ";
-                    $tmp1.="or ".$kenz[$typ].".".$keys[$i]." ilike '$fuzzy1".$suchwort."$fuzzy2' ) ";
+                if ( $tbl1 && $dbfld2[$keys[$i]] ) {
+                    $tmp1 .= "$andor (S.".$dbfld2[$keys[$i]]." ilike '$fuzzy1".$suchwort."$fuzzy2' ";
+                    $tmp1 .= 'or '.$kenz[$typ].'.'.$keys[$i]." ilike '$fuzzy1".$suchwort."$fuzzy2' ) ";
                 } else {
-                    $tmp1.="$andor ".$kenz[$typ].".".$keys[$i]." ilike '$fuzzy1".$suchwort."$fuzzy2' ";
+                    $tmp1 .= "$andor ".$kenz[$typ].".".$keys[$i]." ilike '$fuzzy1".$suchwort."$fuzzy2' ";
                 }
             }
-        } else if (substr($keys[$i],0,4)=="vc_c") {
-                $suchwort=trim($muster[$keys[$i]]);
-                $suchwort=strtr($suchwort,"*?","%_");
-                if ($suchwort != "") {
-			$tbl2 = true;
+        } else if ( substr($keys[$i],0,4) == "vc_c" ) {
+                $suchwort = trim($muster[$keys[$i]]);
+                $suchwort = strtr($suchwort,"*?","%_");
+                if ( $suchwort != "" ) {
+            $tbl2 = true;
                         $cvcnt ++;
                         preg_match("/vc_cvar_([a-z0-9]+)/",$keys[$i],$hits);
                         $n = $hits[1];
                         switch  ($cvar[$n]) {
-                       	   case "bool"	:  $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.bool_value, false) = TRUE ");
-					   break;
-                           case "number":  $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.number_value, '') = '$suchwort' ");
-					   break;
-                           case 'customer': $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.number_value, '') = '$suchwort' ");
-					   break;
+                              case "bool"    :    $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.bool_value, false) = TRUE ");
+                                             break;
+                           case "number":    $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.number_value, '') = '$suchwort' ");
+                                             break;
+                           case 'customer':  $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.number_value, '') = '$suchwort' ");
+                                             break;
                            case 'timestamp': $suchwort = date2db($suchwort);
- 		                           $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.timestamp_value, '') = '$suchwort' ");
-					   break;
-			   default	:  $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.text_value, '') ilike '$fuzzy1$suchwort$fuzzy2' ");
+                                              $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.timestamp_value, '') = '$suchwort' ");
+                                             break;
+                           default           : $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.text_value, '') ilike '$fuzzy1$suchwort$fuzzy2' ");
                         }
                 }
-	}
+    }
     }
     $cols = "distinct ".$kenz[$typ].".*";
-    if ($tbl1) {
-        $tabs=$tab[$typ]." ".$kenz[$typ]." left join shipto S on ".$kenz[$typ].".id=S.trans_id";
+    if ( $tbl1 ) {
+        $tabs = $tab[$typ]." ".$kenz[$typ]." left join shipto S on ".$kenz[$typ].".id=S.trans_id";
     } else {
-        $tabs=$tab[$typ]." ".$kenz[$typ];
+        $tabs = $tab[$typ]." ".$kenz[$typ];
     }
-    if ($tbl2) {
-       if ($cvcnt>1) { 
+    if ( $tbl2 ) {
+       if ( $cvcnt > 1 ) { 
            $tmp2 = join(" $andor ",$tmp2); 
        } else {
            $tmp2 = $tmp2[0]; 
        };
-       if ($tmp1) {
+       if ( $tmp1 ) {
            $tmp1 .= " $andor (".$tmp2.")";
        } else {
            $tmp1 = "   ".$tmp2;
        }
     }
-    if ($tmp1) $where=substr($tmp1,3);
-    return array("where"=>$where,"tabs"=>$tabs,"cols"=>$cols); 
+    if ( $tmp1 ) $where = substr($tmp1,3);
+    return array("where" => $where, "tabs" => $tabs, "cols" => $cols); 
 }
 
 /****************************************************
@@ -449,6 +450,7 @@ function suchFirma($muster,$tab="C") {
     $rechte=berechtigung();
     $tmp=suchstr($muster,$tab);
     $andor = $muster["andor"];
+    $umsatz = '';
     if ($muster["umsatz"]) {
         if ($muster["year"]) $year = " and  transdate between '".$muster["year"]."-01-01' and '".$muster["year"]."-12-31'";
         preg_match_all("/([<=>]?[\d]+)/",$muster["umsatz"],$treffer);
@@ -471,7 +473,7 @@ function suchFirma($muster,$tab="C") {
     $tabs=$tmp["tabs"];
     $cols=$tmp["cols"];
     if ($where<>"") {
-        if ($umsatz) {
+        if ( $umsatz != '' ) {
             $sql="select $cols,$umstpl as umsatz from $tabs where ($where $umsatz) and $rechte";
         } else {
             $sql="select $cols from $tabs where ($where) and $rechte";
@@ -553,7 +555,7 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
         bank => array(0,0,1,"Bankname",50),                 bank_code => array(0,0,6,"Bankleitzahl",15),
         iban => array(0,0,1,"IBAN",24),                     bic => array(0,0,1,"BIC",15),
         account_number => array(0,0,6,"Kontonummer",15),    language_id =>  array(0,0,6,"Sprache",0),
-        payment_id => array(0,0,6,"Zahlungsbedingungen",0), employee => array(0,0,6,"Bearbeiter",0),	
+        payment_id => array(0,0,6,"Zahlungsbedingungen",0), employee => array(0,0,6,"Bearbeiter",0),    
         branche => array(0,0,1,"Branche",25),               business_id => array(0,0,6,"Kundentyp",0),
         owener => array(0,0,6,"CRM-User",0),                grafik => array(0,0,9,"Grafik",4),
         lead => array(0,0,6,"Leadquelle",0),                leadsrc => array(0,0,1,"Leadquelle",15),
@@ -650,25 +652,25 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
             }
         }
         include("links.php");
-		if (!is_dir($dir_abs."/".$DIR)) {
-			mkdir($dir_abs."/".$DIR);  
-		}
-		chmod($dir_abs."/".$DIR,$_SESSION['dir_mode']); 
-		if ( $_SESSION['dir_group'] ) chgrp($dir_abs."/".$DIR,$_SESSION['dir_group']); 
-		$link_dir_cv=$typ=="C"?$link_dir_cust:$link_dir_vend;
- 		if (!$dir_abs.$link_dir_cv."/".mkDirName($daten['name'])."_".$DIR) {
-			if (is_dir($dir_abs.$link_dir_cv)) {
-            	if ($dh = opendir($dir_abs.$link_dir_cv)) {
-                	while (($link = readdir($dh)) !== false) {
-   		           		$split = preg_split("/(_".$typ.")([\d]{1,})/",$link, 2, PREG_SPLIT_DELIM_CAPTURE);
-     			 		if ($split[1].$split[2] == "_".$DIR) {
-     			    		unlink($dir_abs.$link_dir_cv."/".$link);
-                    	}
-                    }	
-   		       	}
-    		   	closedir($dh);
+        if (!is_dir($dir_abs."/".$DIR)) {
+            mkdir($dir_abs."/".$DIR);  
+        }
+        chmod($dir_abs."/".$DIR,$_SESSION['dir_mode']); 
+        if ( $_SESSION['dir_group'] ) chgrp($dir_abs."/".$DIR,$_SESSION['dir_group']); 
+        $link_dir_cv=$typ=="C"?$link_dir_cust:$link_dir_vend;
+         if (!$dir_abs.$link_dir_cv."/".mkDirName($daten['name'])."_".$DIR) {
+            if (is_dir($dir_abs.$link_dir_cv)) {
+                if ($dh = opendir($dir_abs.$link_dir_cv)) {
+                    while (($link = readdir($dh)) !== false) {
+                              $split = preg_split("/(_".$typ.")([\d]{1,})/",$link, 2, PREG_SPLIT_DELIM_CAPTURE);
+                          if ($split[1].$split[2] == "_".$DIR) {
+                             unlink($dir_abs.$link_dir_cv."/".$link);
+                        }
+                    }    
+                      }
+                   closedir($dh);
             }      
-        	symlink($dir_abs."/".$DIR, $dir_abs.$link_dir_cv."/".mkDirName($daten['name'])."_".$DIR);
+            symlink($dir_abs."/".$DIR, $dir_abs.$link_dir_cv."/".mkDirName($daten['name'])."_".$DIR);
         }
         $query1=substr($query1,0,-1)." ";
         $sql0="update ".$tab[$typ]." set $query0 where id=$fid";
@@ -724,7 +726,7 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
                         case "customer" : $num  = $val; break;
                         case "date"     : $date = "'".date2db($val)."'"; break;
                         case "bool"     : $bool = ($val=='t')?"'t'":"'f'"; break;
-                        default		: $text = "'$val'"; break;
+                        default        : $text = "'$val'"; break;
                     };
                     $sql = sprintf($sqltpl,$vartype[$name]["id"],$daten["id"],$bool,$date,$text,$num);
                     $rcc = $_SESSION['db']->query($sql);
@@ -1013,11 +1015,12 @@ function cvar_edit($id,$new=false) {
                               break;
             case "bool"     : ${$row["name"]} = ($row["bool_value"]=='t')?'checked':' ';
                               break;
-	    case "customer" : ${$row["name"]} = abs($row["number_value"]);
+        case "customer" : ${$row["name"]} = abs($row["number_value"]);
         }
     }
     $cvar = getAlleVariablen();
     $output = '';
+    $kal = '';
     if ($cvar) foreach ($cvar as $row) {
         $input = "";
         switch ($row["type"]) {
@@ -1037,11 +1040,12 @@ function cvar_edit($id,$new=false) {
                                   $kal.= 'align      : "BL",';
                                   $kal.= 'button     : "cvar_'.$row["name"].'_trigger"});';
                                   $kal.= "\n".'--></script>'."\n";
-		case "customer" : 
+                case "customer" : 
                 case "number"   : 
                 case "text"     : $input = "<input type='text' name='cvar_".$row["name"]."' id='cvar_".$row["name"]."'  value='";
                                   if ($new) {
-                                     $input.= ((${$row["name"]})?${$row["name"]}:$row["default_value"])."'>".$kal;
+                                     $input .= ( isset(${$row["name"]}) ) ? ${$row["name"]} : $row["default_value"];
+                                     $input .= "'>".$kal;
                                   } else {
                                      $input.= ${$row["name"]}."'>".$kal;
                                   }
@@ -1051,9 +1055,9 @@ function cvar_edit($id,$new=false) {
                                   preg_match("/height[ ]*=[ ]*(\d+)/i",$row["option"],$hit); $h = ($hit[1]>1)?$hit[1]:3; 
                                   $input = "<textarea cols='$w' rows='$h' name='cvar_".$row["name"]."'>".${$row["name"]}."</textarea>";
                                   break;
-                case "bool"     : if (${$row["name"]}=='' && $new) ${$row["name"]}=($row["default_value"])?"checked":"";
+                case "bool"     : if ( (isset(${$row["name"]}) and ${$row["name"]} == '') && $new) ${$row["name"]}=($row["default_value"])?"checked":"";
                                   $input = "<input type='checkbox' name='cvar_".$row["name"]."' value='t' ";
-                                  $input .= ${$row["name"]}.'>';
+                                  $input .= ( isset(${$row["name"]}) ) ? ${$row["name"]}.'>' : '>';
                                   break;
             }
             $output .= "<div class='zeile2'><span class='label klein'>";
@@ -1070,76 +1074,70 @@ function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false) {
         $t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
         $menu =  $_SESSION['menu'];
         $t->set_var(array(
-            JAVASCRIPTS   => $menu['javascripts'],
-            STYLESHEETS   => $menu['stylesheets'],
-            PRE_CONTENT   => $menu['pre_content'],
-            START_CONTENT => $menu['start_content'],
-            END_CONTENT   => $menu['end_content'],
-            FAART       => ($typ=="C")?".:Customer:.":".:Vendor:.",
-            FAART2      => ($typ=="C")?".:Customer Name:.":".:Vendor Name:.",
-            ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-            Q           => $typ,
-            Btn1        => "",
-            Btn2        => "",
-            Msg         =>    $msg,
-            action      => "firmen".$tpl.".php?Q=$typ",
-            id          => "",
-            name        => "",
-            department_1    => "",
-            department_2    => "",
-            street      => "",
-            country     => "",
-            zipcode     => "",
-            city        => "",
-            phone       => "",
-            fax         => "",
-            email       => "",
-            homepage    => "",
-            sw          => "",
-            branche_    => "",
-            vendornumber    => "",
-            customernumber  => "",
-            kdnr        => "",
-            v_customer_id   => "",
-            ustid       => "",
-            taxnumber   => "",
-            contact     => "",
-            leadsrc     => "",
-            notes       => "",
-            bank        => "",
-            bank_code   => "",
-            iban        => "",
-            bic         => "",
-            headcount   => "",
-            account_number  => "",
-            direct_debitf   => "checked",
-            preon       => ($_SESSION["preon"])?"checked":"",
-            terms       => "",
-            kreditlim   => "",
-            op          => "",
-            preisgrp    => "",
-            shiptoname      => "",
-            shiptodepartment_1    => "",
-            shiptodepartment_2    => "",
-            shiptostreet    => "",
-            shiptocountry   => "",
-            shiptozipcode   => "",
-            shiptocity  => "",
-            shiptophone => "",
-            shiptofax   => "",
-            shiptoemail     => "",
-            shiptocontact   => "",
-            GEODB       => ($_SESSION['GEODB']=='t')?'1==1':'1>2',
-            GEOS        => ($_SESSION['GEODB']=='t')?"visible":"hidden",
-            GEO1        => ($_SESSION['GEODB']=='t')?"":"!--",
-            GEO2        => ($_SESSION['GEODB']=='t')?"":"--",
-            BLZ1        => ($_SESSION['BLZDB']=='t')?"":"!--",
-            BLZ2        => ($_SESSION['BLZDB']=='t')?"":"--",
-            employee => $_SESSION["loginCRM"],
-            init    => $_SESSION["employee"],
-            txid0 => "selected",
-            cvars       => cvar_edit(0,TRUE),
-            variablen => "" 
+            'FAART'         => ($typ=="C")?".:Customer:.":".:Vendor:.",
+            'FAART2'        => ($typ=="C")?".:Customer Name:.":".:Vendor Name:.",
+            'Q'             => $typ,
+            'Btn1'          => "",
+            'Btn2'          => "",
+            'Msg'           =>    $msg,
+            'action'        => "firmen".$tpl.".php?Q=$typ",
+            'id'            => "",
+            'name'          => "",
+            'department_1'  => "",
+            'department_2'  => "",
+            'street'        => "",
+            'country'       => "",
+            'zipcode'       => "",
+            'city'          => "",
+            'phone'         => "",
+            'fax'           => "",
+            'email'         => "",
+            'homepage'      => "",
+            'sw'            => "",
+            'branche_'      => "",
+            'vendornumber'  => "",
+            'customernumber'  => "",
+            'kdnr'          => "",
+            'v_customer_id' => "",
+            'ustid'         => "",
+            'taxnumber'     => "",
+            'contact'       => "",
+            'leadsrc'       => "",
+            'notes'         => "",
+            'bank'          => "",
+            'bank_code'     => "",
+            'iban'          => "",
+            'bic'           => "",
+            'headcount'     => "",
+            'account_number' => "",
+            'direct_debitf'  => "checked",
+            'preon'         => ($_SESSION["preon"])?"checked":"",
+            'terms'         => "",
+            'kreditlim'     => "",
+            'op'            => "",
+            'preisgrp'      => "",
+            'shiptoname'    => "",
+            'shiptodepartment_1' => "",
+            'shiptodepartment_2' => "",
+            'shiptostreet'   => "",
+            'shiptocountry'  => "",
+            'shiptozipcode'  => "",
+            'shiptocity'     => "",
+            'shiptophone'    => "",
+            'shiptofax'      => "",
+            'shiptoemail'    => "",
+            'shiptocontact'  => "",
+            'GEODB'          => ($_SESSION['GEODB']=='t')?'1==1':'1>2',
+            'GEOS'           => ($_SESSION['GEODB']=='t')?"visible":"hidden",
+            'GEO1'           => ($_SESSION['GEODB']=='t')?"":"!--",
+            'GEO2'           => ($_SESSION['GEODB']=='t')?"":"--",
+            'BLZ1'           => ($_SESSION['BLZDB']=='t')?"":"!--",
+            'BLZ2'           => ($_SESSION['BLZDB']=='t')?"":"--",
+            'employee'       => $_SESSION["loginCRM"],
+            'init'           => $_SESSION["employee"],
+            'txid0'          => "selected",
+            'cvars'          => cvar_edit(0,TRUE),
+            'variablen'      => "" 
             ));
         $jahre = getUmsatzJahre(($typ=="C")?"ar":"ap");
         doBlock($t,"fa1","YearListe","YL",$jahre,"year","year",false);
@@ -1148,24 +1146,24 @@ function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false) {
         $kdtyp=getBusiness();
         doBlock($t,"fa1","TypListe","BT",$kdtyp,"id","description",false);
         $anreden=getAnreden();
-        doBlock($t,"fa1","anreden","A",$anreden,"greeting","greeting",$daten["greeting"]);
+        doBlock($t,"fa1","anreden","A",$anreden,"greeting","greeting",''); 
         $payment=getPayment();
-        doBlock($t,"fa1","payment","P",$payment,"id","description",$daten["payment_id"]);
+        doBlock($t,"fa1","payment","P",$payment,"id","description",''); 
         $branchen=getBranchen();
-        doBlock($t,"fa1","branchen","BR",$branchen,"branche","branche",$daten["branche"]);
+        doBlock($t,"fa1","branchen","BR",$branchen,"branche","branche",''); 
         $lead=getLeads();
-        doBlock($t,"fa1","LeadListe","LL",$lead,"id","lead",$daten["lead"]);
+        doBlock($t,"fa1","LeadListe","LL",$lead,"id","lead",''); 
         $curr=getCurrencies();
-        doBlock($t,"fa1","curr","C",$curr,"id","name",$daten["currency_id"]);
+        doBlock($t,"fa1","curr","C",$curr,"id","name",''); 
         if (!$suchmaske) {
             doBlock($t,"fa1","shiptos","ST",$shiptos,"shipto_id",array("shiptoname","shiptodepartment_1"),false);
         }
         $bundesland=getBundesland(false);
-        doBlock($t,"fa1","buland","BL",$bundesland,"id","bundesland",$daten["bland"]);
+        doBlock($t,"fa1","buland","BL",$bundesland,"id","bundesland",''); 
         if (!$suchmaske) {
-            doBlock($t,"fa1","buland2","BS",$bundesland,"id","bundesland",$daten["shiptobland"]);
+            doBlock($t,"fa1","buland2","BS",$bundesland,"id","bundesland",'');
             $employees=getAllUser(array(0=>true,1=>"%"));
-            doBlock($t,"fa1","SalesmanListe","SM",$employees,"id","name",$daten["salesman_id"]);
+            doBlock($t,"fa1","SalesmanListe","SM",$employees,"id","name",'');
         }
         $cvars = getCvars();
         $t->set_block('fa1','cvarListe','BlockCV');
@@ -1192,10 +1190,10 @@ function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false) {
                                    }
                                    $fld .= "</select>";
                                    break;
-		   case "customer" : 
-       				    $fld = "<input type='hidden' name='vc_cvar_".$cvar["name"]."' value=''>";
-				   break;
-                   default	 : $fld = "<input type='text' name='vc_cvar_".$cvar["name"]."' value=''>";
+                   case "customer" : 
+                                   $fld = "<input type='hidden' name='vc_cvar_".$cvar["name"]."' value=''>";
+                                   break;
+                   default       : $fld = "<input type='text' name='vc_cvar_".$cvar["name"]."' value=''>";
                }
                $t->set_var(array( 
                   'varlable'.$i => $cvar["description"],
@@ -1219,12 +1217,12 @@ function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false) {
         doBlock($t,"fa1","OwenerListe","OL",$user,"grpid","grpname",false);
 } // leertpl
 
-function vartpl (&$t,$daten,$typ,$msg,$btn1,$btn2,$tpl,$suchmaske=false) {
+function vartpl( &$t, $daten, $typ, $msg, $btn1, $btn2, $tpl, $suchmaske=false ) {
         $jscal ="<style type='text/css'>@import url(../js/jscalendar/calendar-win2k-1.css);</style>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar.js'></script>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar-setup.js'></script>\n";
-        if ($daten["grafik"]) {
+        if ( isset($daten["grafik"]) ) {
             if ($typ=="C") { $DIR="C".$daten["customernumber"]; }
             else { $DIR="V".$daten["vendornumber"]; };
             if (file_exists("dokumente/".$_SESSION["mansel"]."/$DIR/logo.".$daten["grafik"])) {
@@ -1232,80 +1230,83 @@ function vartpl (&$t,$daten,$typ,$msg,$btn1,$btn2,$tpl,$suchmaske=false) {
             } else {
                 $Image="Bild ($DIR/logo.".$daten["grafik"].") nicht<br>im Verzeichnis";
             }
-        }
-        if (!$suchmaske) $tmp=getVariablen($daten["id"]);
+        } else {
+           $Image = '';
+        };
+        $tmp = false;
+        if ( !$suchmaske ) $tmp = getVariablen($daten["id"]);
         $varablen=($tmp>0)?count($tmp)." Variablen":"";
         $t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
-        $menu =  $_SESSION['menu'];
+        if ( isset($daten["employee"]) and $daten['employee'] > 0 ) {
+            $employee = $daten["employee"];
+        } else if ( isset($daten["modemployee"]) ) {
+            $employee = "ERP ".$daten["modemployee"];
+        } else {
+            $employee = '';
+        };
         $t->set_var(array(
-                JAVASCRIPTS   => $menu['javascripts'],
-                STYLESHEETS   => $menu['stylesheets'],
-                PRE_CONTENT   => $menu['pre_content'],
-                START_CONTENT => $menu['start_content'],
-                END_CONTENT   => $menu['end_content'],
-                FAART       => ($typ=="C")?".:Customer:.":".:Vendor:.",
-                FAART2      => ($typ=="C")?".:Customer Name:.":".:Vendor Name:.",
-                ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-                mtime       => $daten["mtime"],
-                Q           => $typ,
-                Btn1        => $btn1,
-                Btn2        => $btn2,
-                Msg         => $msg,
-                preon       => ($daten["pre"])?"checked":"",
-                action      => "firmen".$tpl.".php?Q=$typ",
-                id          => $daten["id"],
-                customernumber  => $daten["customernumber"],
-                vendornumber    => $daten["vendornumber"],
-                kdnr        =>  $daten["nummer"],
-                v_customer_id   => $daten["v_customer_id"],
-                name        => $daten["name"],
-                greeting_   => $daten["greeting_"],
-                department_1    => $daten["department_1"],
-                department_2    => $daten["department_2"],
-                street      => $daten["street"],
-                country     => $daten["country"],
-                zipcode     => $daten["zipcode"],
-                city        => $daten["city"],
-                phone       => $daten["phone"],
-                fax         => $daten["fax"],
-                email       => $daten["email"],
-                homepage    => $daten["homepage"],
-                sw          => $daten["sw"],
-                konzern     => $daten["konzern"],
-                konzernname => $daten["konzernname"],
-                branche_    => $daten["branche_"],
-                ustid       => $daten["ustid"],
-                taxnumber   => $daten["taxnumber"],
-                contact     => $daten["contact"],
-                leadsrc     => $daten["leadsrc"],
-                notes       => $daten["notes"],
-                bank        => $daten["bank"],
-                bank_code   => $daten["bank_code"],
-                iban        => $daten["iban"],
-                bic         => $daten["bic"],
-                headcount   => $daten["headcount"],
-                direct_debit.$daten["direct_debit"] => "checked",
-                account_number    => $daten["account_number"],
-                terms       => $daten["terms"],
-                kreditlim   => $daten["creditlimit"],
-                umsatz      => $daten["umsatz"],
-                op          => $daten["op"],
-                preisgrp    => $daten["preisgroup"],
-                IMG         => $Image,
-                grafik      => $daten["grafik"],
-                init        => ($daten["employee"])?$daten["employee"]:"ERP ".$daten["modemployee"],
-                login       => $_SESSION{"login"},
-                employee    => $_SESSION["loginCRM"],
-                password    => $_SESSION["password"],
-                txid.$daten["taxzone_id"] => "selected",
-                GEODB       => ($_SESSION['GEODB']=='t')?'1==1':'1>2',
-                GEOS        => ($_SESSION['GEODB']=='t')?"visible":"hidden",
-                GEO1        => ($_SESSION['GEODB']=='t')?"":"!--",
-                GEO2        => ($_SESSION['GEODB']=='t')?"":"--",
-                BLZ1        => ($_SESSION['BLZDB']=='t')?"":"!--",
-                BLZ2        => ($_SESSION['BLZDB']=='t')?"":"--",
-                cvars       => cvar_edit($daten["id"]), 
-                variablen => $varablen
+                'FAART'         => ($typ=="C")?".:Customer:.":".:Vendor:.",
+                'FAART2'        => ($typ=="C")?".:Customer Name:.":".:Vendor Name:.",
+                'mtime'         => ( isset($daten["mtime"]) )         ? $daten['mtime'] : '' ,
+                'Q'             => $typ,
+                'Btn1'          => $btn1,
+                'Btn2'          => $btn2,
+                'Msg'           => $msg,
+                'preon'         => ( isset($daten["pre"]) )            ? "checked":'',
+                'action'        => "firmen".$tpl.".php?Q=$typ",
+                'id'            => ( isset($daten["id"]) )             ? $daten['id']:'',
+                'customernumber'=> ( isset($daten["customernumber"]) ) ? $daten["customernumber"]:'',
+                'vendornumber'  => ( isset($daten["vendornumber"]) )   ? $daten["vendornumber"]:'',
+                'kdnr'          => ( isset($daten["nummer"]) )         ? $daten["nummer"]:'',
+                'v_customer_id' => ( isset($daten["v_customer_id"]) )  ? $daten["v_customer_id"]:'',
+                'name'          => ( isset($daten["name"]) )           ? $daten["name"]:'',
+                'greeting_'     => ( isset($daten["greeting_"]) )      ? $daten["greeting_"]:'',
+                'department_1'  => ( isset($daten["department_1"]) )   ? $daten["department_1"]:'',
+                'department_2'  => ( isset($daten["department_2"]) )   ? $daten["department_2"]:'',
+                'street'        => ( isset($daten["street"]) )         ? $daten["street"]:'',
+                'country'       => ( isset($daten["country"]) )        ? $daten["country"]:'',
+                'zipcode'       => ( isset($daten["zipcode"]) )        ? $daten["zipcode"]:'',
+                'city'          => ( isset($daten["city"]) )           ? $daten["city"]:'',
+                'phone'         => ( isset($daten["phone"]) )          ? $daten["phone"]:'',
+                'fax'           => ( isset($daten["fax"]) )            ? $daten["fax"]:'',
+                'email'         => ( isset($daten["email"]) )          ? $daten["email"]:'',
+                'homepage'      => ( isset($daten["homepage"]) )       ? $daten["homepage"]:'',
+                'sw'            => ( isset($daten["sw"]) )             ? $daten["sw"]:'',
+                'konzern'       => ( isset($daten["konzern"]) )        ? $daten["konzern"]:'',
+                'konzernname'   => ( isset($daten["konzernname"]) )    ? $daten["konzernname"]:'',
+                'branche_'      => ( isset($daten["branche_"]) )       ? $daten["branche_"]:'',
+                'ustid'         => ( isset($daten["ustid"]) )          ? $daten["ustid"]:'',
+                'taxnumber'     => ( isset($daten["taxnumber"]) )      ? $daten["taxnumber"]:'',
+                'contact'       => ( isset($daten["contact"]) )        ? $daten["contact"]:'',
+                'leadsrc'       => ( isset($daten["leadsrc"]) )        ? $daten["leadsrc"]:'',
+                'notes'         => ( isset($daten["notes"]) )          ? $daten["notes"]:'',
+                'bank'          => ( isset($daten["bank"]) )           ? $daten["bank"]:'',
+                'bank_code'     => ( isset($daten["bank_code"]) )      ? $daten["bank_code"]:'',
+                'iban'          => ( isset($daten["iban"]) )           ? $daten["iban"]:'',
+                'bic'           => ( isset($daten["bic"]) )            ? $daten["bic"]:'',
+                'headcount'     => ( isset($daten["headcount"]) )      ? $daten["headcount"]:'',
+                'direct_debit'.(( isset($daten['direct_debit']) )?$daten['direct_debit']:'') => "checked",
+                'account_number' => ( isset($daten["account_number"]) )? $daten["account_number"]:'',
+                'terms'         => ( isset($daten["terms"]) )          ? $daten["terms"]:'',
+                'kreditlim'     => ( isset($daten["creditlimit"]) )    ? $daten["creditlimit"]:'',
+                'umsatz'        => ( isset($daten["umsatz"]) )         ? $daten["umsatz"]:'',
+                'op'            => ( isset($daten["op"]) )             ? $daten["op"]:'',
+                'preisgrp'      => ( isset($daten["preisgroup"]) )     ? $daten["preisgroup"]:'',
+                'IMG'           => $Image,                            
+                'grafik'        => ( isset($daten["grafik"]) )         ? $daten["grafik"]:'',
+                'init'          => $employee,
+                'login'         => $_SESSION{"login"},
+                'employee'      => $_SESSION["loginCRM"],
+                'password'      => ( isset($_SESSION["password"]) )    ? $_SESSION["password"]:'',
+                'txid'.(( isset($daten["taxzone_id"]) )?$daten["taxzone_id"]:'') => "selected",
+                'GEODB'         => ($_SESSION['GEODB']=='t')?'1==1':'1>2',
+                'GEOS'          => ($_SESSION['GEODB']=='t')?"visible":"hidden",
+                'GEO1'          => ($_SESSION['GEODB']=='t')?'':"!--",
+                'GEO2'          => ($_SESSION['GEODB']=='t')?'':"--",
+                'BLZ1'          => ($_SESSION['BLZDB']=='t')?'':"!--",
+                'BLZ2'          => ($_SESSION['BLZDB']=='t')?'':"--",
+                'cvars'         => ( isset($daten['id']) )?cvar_edit($daten["id"]):'', 
+                'variablen'     => $varablen
         ));
         $jahre = getUmsatzJahre(($typ=="C")?"ar":"ap");
         doBlock($t,"fa1","YearListe","YL",$jahre,"year","year",$daten["year"]);
@@ -1315,18 +1316,20 @@ function vartpl (&$t,$daten,$typ,$msg,$btn1,$btn2,$tpl,$suchmaske=false) {
         doBlock($t,"fa1","TypListe","BT",$kdtyp,"id","description",$daten["business_id"]);
         $lead=getLeads();
         doBlock($t,"fa1","LeadListe","LL",$lead,"id","lead",$daten["lead"]);
-        $shiptos=getAllShipto($daten["id"],$typ);
-        doBlock($t,"fa1","shiptos","ST",$shiptos,"shipto_id",array("shiptoname","shiptostreet","shiptocity"),false);
+        if ( isset($daten['id']) ) {
+            $shiptos=getAllShipto($daten["id"],$typ);
+            doBlock($t,"fa1","shiptos","ST",$shiptos,"shipto_id",array("shiptoname","shiptostreet","shiptocity"),false);
+        };
         $anreden=getAnreden();
-        doBlock($t,"fa1","anreden","A",$anreden,"greeting","greeting",$daten["greeting"]);
+        doBlock($t,"fa1","anreden","A",$anreden,"greeting","greeting",( isset($daten["greeting"]) )?$daten["greeting"]:'');
         $payment=getPayment();
-        doBlock($t,"fa1","payment","P",$payment,"id","description",$daten["payment_id"]);
+        doBlock($t,"fa1","payment","P",$payment,"id","description",( isset($daten["payment_id"]) )?$daten["payment_id"]:'');
         $branchen=getBranchen();
-        doBlock($t,"fa1","branchen","BR",$branchen,"branche","branche",$daten["branche"]);
+        doBlock($t,"fa1","branchen","BR",$branchen,"branche","branche",( isset($daten["branche"]) )?$daten["branche"]:'');
         $bundesland=getBundesland(strtoupper($daten["country"]));
-        doBlock($t,"fa1","buland","BL",$bundesland,"id","bundesland",$daten["bland"]);
+        doBlock($t,"fa1","buland","BL",$bundesland,"id","bundesland",( isset($daten["bland"]) )?$daten["bland"]:'');
         $curr=getCurrencies();
-        doBlock($t,"fa1","currency","C",$curr,"id","name",$daten["currency_id"]);
+        doBlock($t,"fa1","currency","C",$curr,"id","name",( isset($daten["currency_id"]) )?$daten["currency_id"]:'');
         $cvars = getCvars();
         $t->set_block('fa1','cvarListe','BlockCV');
         if ($cvars) {
@@ -1334,7 +1337,7 @@ function vartpl (&$t,$daten,$typ,$msg,$btn1,$btn2,$tpl,$suchmaske=false) {
             foreach ($cvars as $cvar) {
                switch ($cvar["type"]) {
                    case "bool"   : $fld = "<input type='checkbox' name='vc_cvar_".$cvar["name"]."' value='t'";
-                                   if ($daten["vc_cvar_".$cvar["name"]]=="t") $fld .= " checked";
+                                   if ( isset($daten["vc_cvar_".$cvar["name"]]) and $daten["vc_cvar_".$cvar["name"]]=="t") $fld .= " checked";
                                    $fld.= ">";
                                    break;
                    case "date"   : $fld = "<input type='text' name='vc_cvar_".$cvar["name"]."' size='10' value='";
@@ -1356,13 +1359,13 @@ function vartpl (&$t,$daten,$typ,$msg,$btn1,$btn2,$tpl,$suchmaske=false) {
                                    }
                                    $fld .= "</select>";
                                    break;
-		   case "customer" : $name = getCvarName($daten['vc_cvar_'.$cvar['name']]);
-       				   $fld = "<input type='hidden' name='vc_cvar_".$cvar["name"]."' value='";
-                                   $fld.= $daten['vc_cvar_'.$cvar['name']]."'>";
-				    $fld .= $name.' ('.$daten['vc_cvar_'.$cvar['name']].')';
-				   break;
-                   default	 : 
-				   $fld = '<input type="text" name="vc_cvar_'.$cvar['name'].'" value="';
+                   case "customer" : $name = getCvarName($daten['vc_cvar_'.$cvar['name']]);
+                                     $fld = "<input type='hidden' name='vc_cvar_".$cvar["name"]."' value='";
+                                     $fld.= $daten['vc_cvar_'.$cvar['name']]."'>";
+                                     $fld .= $name.' ('.$daten['vc_cvar_'.$cvar['name']].')';
+                                     break;
+                   default     : 
+                   $fld = '<input type="text" name="vc_cvar_'.$cvar['name'].'" value="';
                                    $fld.= $daten['vc_cvar_'.$cvar['name']].'">';
                }
                $t->set_var(array( 

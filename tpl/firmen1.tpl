@@ -1,11 +1,10 @@
 <html>
     <head><title></title>
 {STYLESHEETS}
-    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
-    {THEME}        
-    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
+{CRMCSS}
+{JQUERY}
+{JQUERYUI}
+{THEME}        
 {JAVASCRIPTS}
         <script language="JavaScript" type="text/javascript">
   		function report() {
@@ -32,8 +31,8 @@
 <input type="hidden" name="Q" value="{Q}">
 <p class="listtop" onClick="help('SuchFirma');">.:Companys:. .:search:. {FAART} (?)</p>
 <span id='contentbox2'>
-<!-- Beginn Code ------------------------------------------->
-<p class="listheading"{JQUERY}>| 
+<!-- Beginn Code ------------------------------------------>
+<p class="listheading"| 
 <a href="{action}&first=A" class="fett">A</a> |
 <a href="{action}&first=B" class="fett">B</a> |
 <a href="{action}&first=C" class="fett">C</a> |

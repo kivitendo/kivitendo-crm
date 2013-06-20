@@ -127,13 +127,9 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
          }
     }
     // Ist der User ein CRM-Supervisor?
-    print_r($rs);
     $sql = "SELECT count(*) as cnt from auth.user_group left join auth.group on id=group_id where name = 'CRMTL' and user_id = ".$rs[0]["id"];
-    echo "SQL: ".$sql."</ br>";
     $rs  = $db->getAll($sql);
     $auth['CRMTL'] = $rs[0]['cnt'];
-    echo "SessionID ist: ".$rs[0]["session_id"]."</ br>";
-    print_r($rs);
     $sql = "update auth.session set mtime = '".date("Y-M-d H:i:s.100001")."' where id = '".$rs[0]["session_id"]."'"; 
     $db->query($sql,"authuser_3");
     $sql = "SELECT * FROM auth.session WHERE id = '".$cookie."'";

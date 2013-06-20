@@ -3,12 +3,15 @@
     include("inc/template.inc");
     include("inc/FirmenLib.php");
     include_once("inc/UserLib.php");
-    $Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
+    if ( isset($_GET['Q']) and $_GET['Q'] != '') { $Q = $_GET['Q']; }
+    else if ( isset($_POST['Q']) and $_POST['Q'] != '') { $Q = $_POST['Q']; }
+    else { $Q = 'C'; };
     $t = new Template($base);
-    if ($_POST["reset"]) {
+    doHeader($t);
+    if ( isset($_POST["reset"]) ) {
         leertpl($t,1,$Q,"",true);
-    } else if ($_POST["felder"]) {
-        $rc=doReport($_POST,$Q);
+    } else if ( isset($_POST["felder"]) && $_POST["felder"] != '' ) {
+        $rc = doReport($_POST,$Q);
         $t->set_file(array("fa1" => "firmen1.tpl"));
         if ($rc) { 
             $tmp="<div style='width:300px'>[<a href='tmp/report_".$_SESSION["loginCRM"].".csv'>download Report</a>]</div>";
@@ -16,29 +19,28 @@
             $tmp="Sorry, not found";
         }
         $t->set_var(array( 
-                report => $tmp
+                'report' => $tmp
         ));
         leertpl($t,1,$Q,"",true);
-    } else if ($_POST["suche"]!="" || $_GET["first"]) {
-        if ($_GET["first"]) {
-            $daten=getAllFirmen(array(1,$_GET["first"]),false,$Q);
+    } else if ( (isset($_POST["suche"]) and $_POST["suche"] !="") || isset($_GET["first"]) ) {
+        if ( isset($_GET["first"]) ) {
+            $daten = getAllFirmen(array(1,$_GET["first"]),false,$Q);
         } else {
-            $daten=suchFirma($_POST,$Q);
+            $daten = suchFirma($_POST,$Q);
         };
-        if (count($daten)==1 && $daten<>false) {
+        if (count($daten) == 1 && $daten <> false) {
             header ("location:firma1.php?Q=$Q&id=".$daten[0]["id"]);
-        } else if (count($daten)>1) {
+        } else if ( count($daten)>1 ) {
             $t->set_file(array("fa1" => "firmen1L.tpl"));
-            doHeader($t);
             $t->set_block("fa1","Liste","Block");
             $t->set_var(array(
-                FAART => ($Q=="C")?"Customer":"Vendor", 
+                'FAART' => ($Q=="C")?"Customer":"Vendor", 
             ));
             $i=0;
             $rc = clearCSVData();
-            $header = array("ANREDE","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","KONTAKT","ID",
-                        "KDNR","USTID","STEUERNR","KTONR","BANK","BLZ","LANG","KDTYP");
-            if ($_POST["umsatz"]) $header[]="UMSATZ";
+            $header = array('ANREDE', 'NAME1', 'NAME2', 'LAND', 'PLZ', 'ORT', 'STRASSE', 'TEL', 'FAX', 'EMAIL', 'KONTAKT', 'ID',
+                            'KDNR', 'USTID', 'STEUERNR', 'KTONR', 'BANK', 'BLZ', 'LANG', 'KDTYP');
+            if ( isset($_POST['umsatz']) and $_POST['umsatz'] != '' ) $header[] = "UMSATZ";
             $sql = "select name from custom_variable_configs where module = 'CT'";
             $rs = $db->getAll($sql);
             if ($rs) {
@@ -60,12 +62,16 @@
                         $zeile["ustid"],$zeile["taxnumber"],
                         $zeile["account_number"],$zeile["bank"],$zeile["bank_code"],
                         $zeile["language_id"],$zeile["business_id"]);    
-                if ($_POST["umsatz"]) $data[]=$zeile["umsatz"];
+                if ( isset($_POST["umsatz"]) and $_POST['umsatz'] != '' ) $data[]=$zeile["umsatz"];
                 if ($cvar>0) {
                     $rs = getFirmaCVars($zeile["id"]);
                     if ($rs) {
                         foreach($cvheader as $cvh) {
-                            $data[] = $rs[$cvh];
+                            if ( isset($rs[$cvh]) and $rs[$cvh] != '' ) {
+                                $data[] = $rs[$cvh];
+                            } else {
+                                $data[] = '';
+                            }
                         }
                     } else {
                         for ($j=0; $j<$cvar; $j++) $data[] = false;
@@ -74,33 +80,33 @@
                 insertCSVData($data,$zeile["id"]);
                 if ( $i < $_SESSION['listLimit'] ) {
                     $t->set_var(array(
-                        Q => $Q,
-                        ID => $zeile["id"],
-                        LineCol => ($i%2)+1,
-                        KdNr => ($Q=="C")?$zeile["customernumber"]:$zeile["vendornumber"],
-                        Name => $zeile["name"],
-                        Plz => $zeile["zipcode"],
-                        Ort => $zeile["city"],
-                        Strasse => $zeile["street"],
-                        Telefon => $zeile["phone"],
-                        eMail => $zeile["email"],
-                        obsolete => ($zeile['obsolete']=='t')?'.:yes:.':''
+                        'Q' => $Q,
+                        'ID' => $zeile["id"],
+                        'LineCol' => ($i%2)+1,
+                        'KdNr' => ($Q=="C")?$zeile["customernumber"]:$zeile["vendornumber"],
+                        'Name' => $zeile["name"],
+                        'Plz' => $zeile["zipcode"],
+                        'Ort' => $zeile["city"],
+                        'Strasse' => $zeile["street"],
+                        'Telefon' => $zeile["phone"],
+                        'eMail' => $zeile["email"],
+                        'obsolete' => ($zeile['obsolete']=='t')?'.:yes:.':''
                     ));
                     $t->parse("Block","Liste",true);
                     $i++;
                     if ( $i >= $_SESSION['listLimit'] ) {
                         $t->set_var(array(
-                            report => $_SESSION['listlimit'].' von '.count($daten).' Treffer',
+                            'report' => $_SESSION['listlimit'].' von '.count($daten).' Treffer',
                         ));
                     }
                     $t->set_var(array(
-                        CRMTL => ($_SESSION['CRMTL'] == 1)?'visible':'hidden'
+                        'CRMTL' => ($_SESSION['CRMTL'] == 1)?'visible':'hidden'
                     ));
                 }
             }
         } else {
-            $msg="Sorry, not found.";
-            vartpl ($t,$_POST,$Q,$msg,"","",1,true);
+            $msg = "Sorry, not found.";
+            vartpl($t, $_POST, $Q, $msg, "", "", 1, true);
         }
     } else {
         leertpl($t,1,$Q,"",true);

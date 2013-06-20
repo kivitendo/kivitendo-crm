@@ -47,19 +47,19 @@ class myDB extends MDB2 {
     * IN: $txt - SQL-Statement oder Text
     * OUT: NONE
     **********************************************/
-    function writeLog($txt,$all=true) {
-        if ($this->lfh===false)
-            $this->lfh=fopen($this->logfile,"a");
-        fputs($this->lfh,date("Y-m-d H:i:s ->"));
-        fputs($this->lfh,$txt."\n");
-        if (!$all) return;
-        if (!empty($this->rc->backtrace[0])) {
-            fputs($this->lfh,'Fehler: '."\n");
-            fputs($this->lfh,print_r($this->rc->backtrace[0],true)."\n");
-            $cnt=count($this->rc->backtrace);
-            fputs($this->lfh,$this->rc->backtrace[$cnt]['line'].':'.$this->rc->backtrace[$cnt]['file']."\n");
+    function writeLog($txt, $all=true) {
+        if ( $this->lfh === false )
+            $this->lfh = fopen($this->logfile,"a");
+        fputs($this->lfh, date("Y-m-d H:i:s ->") );
+        fputs($this->lfh, $txt."\n" );
+        if ( !$all ) return;
+        if ( !empty($this->rc->backtrace[0] )) {
+            fputs($this->lfh, 'Fehler: '."\n" );
+            fputs($this->lfh, print_r($this->rc->backtrace[0],true)."\n" );
+            $cnt = count($this->rc->backtrace) - 1;
+            fputs($this->lfh, $this->rc->backtrace[$cnt]['line'].':'.$this->rc->backtrace[$cnt]['file']."\n" );
         } else {
-            fputs($this->lfh,print_r($this->rc,true));
+            fputs($this->lfh, print_r($this->rc,true) );
         }
         fputs($this->lfh,"\n");
     }

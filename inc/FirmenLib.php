@@ -182,7 +182,7 @@ function getFirmenStamm($id,$ws=true,$tab='C',$cvar=true) {
         } else {
             $shipids="";
         }
-        if (!$rs3[0]) {  // es ist keine abweichende Anschrift da
+        if ( empty($rs3) ) {  // es ist keine abweichende Anschrift da
             if ($ws) {    // soll dann aber mit Re-Anschrift gefüllt werden
                 $row2=Array(
                     'shiptoname' => $row["name"],

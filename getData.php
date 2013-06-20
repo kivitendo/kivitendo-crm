@@ -140,7 +140,7 @@ echo '<div id="drop">
   </div>
   <ul id="menu"> </ul>';
 
-if ($_GET["kontakt"] && $_GET['swort'] != '') { 
+if (isset($_GET["kontakt"]) && $_GET['swort'] != '') { 
 	$sw = strtoupper( $_GET["suchwort"] );
 	$sw = strtr( $sw, "*?", "%_" );
 	$sql  = "select calldate,cause,t.id,caller_id,bezug,V.name as lname,C.name as kname,P.cp_name as pname ";
@@ -176,7 +176,7 @@ if ($_GET["kontakt"] && $_GET['swort'] != '') {
 		echo "Keine Treffer!";
 	}
 } 
-else if ($_GET["adress"]) {
+else if (isset($_GET["adress"])) {
 	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
 	include_once("inc/UserLib.php");
@@ -269,7 +269,7 @@ else if ($_GET["adress"]) {
         echo $msg; 
     }; 
 } //END ELSEIF adress
-    if ($_GET['kontakt'] || $_GET['adress']) {
+    if (isset($_GET['kontakt']) || isset($_GET['adress'])) {
 ?>
 
   

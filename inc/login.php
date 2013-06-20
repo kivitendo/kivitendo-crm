@@ -30,7 +30,8 @@ $conffile = '';
 if ( substr(getcwd(),-3) == "inc" || substr(getcwd(),-6) == "jqhelp" || substr(getcwd(),-6) == "lxcars" ) {
     $conffile = "../";
 }
-$conffile .= "../".$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf";
+if ( empty($_SESSION['crmname']) ) $_SESSION['crmname'] = getcwd();
+$conffile .= $_SESSION['crmname']."../".$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf";
 
 //$conf = array('ERPNAME','erpConfigFile');
 //while( list($key,$val) = each($_SESSION) ) {

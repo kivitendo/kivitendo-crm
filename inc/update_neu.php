@@ -1,11 +1,6 @@
 <?php
-    $wiam = getCwd();
-    if (substr($wiam,-3) == "inc") {
-        chdir("..");
-        require_once("inc/stdLib.php");
-    } else {
-        require_once("stdLib.php");
-    };
+    chdir($_SESSION['crmdir']);
+    require_once("inc/stdLib.php");
 
     if (!function_exists('updatever')) {
 	    function updatever($db,$VERSION) {

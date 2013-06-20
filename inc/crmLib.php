@@ -790,7 +790,7 @@ function getOneERP($id) {
 * out: pfad = String
 * einen Dokumentenpfad erstellen
 *****************************************************/
-function mkPfad($wer,$alt) {
+function mkPfad($wer,$alternate) {
     $pfad="";
     if (substr($wer,0,1)=="P") {
         $tmp=substr($wer,1);
@@ -815,7 +815,7 @@ function mkPfad($wer,$alt) {
         }
         $pfad=$ttmp.$rs[0]["number"];
     } else  {
-        $pfad=$alt;
+        $pfad=$alternate;
     }
     return $pfad;
 }
@@ -842,7 +842,53 @@ function insWvl($data,$datei="") {
     }
     return $rs;
 }
-
+function updWvlERP($data) {
+    if ( substr($data["CRMUSER"],0,1) == 'G' || $data["CRMUSER"] == '' ) { 
+        return -1; 
+    };
+    if ( !$data['WVLID'] ) $data = array_merge($data,mknewWVL(true));
+    $finish = ($data["Finish"]<>"")?", finishdate='".date2db($data["Finish"])." 0:0:00'":"";
+    $descript = addslashes($data["c_long"]);
+    $descript = nl2br($descript);    
+    $sql ="update notes set subject='".$data["cause"]."',body='$descript', created_by=".$_SESSION["loginCRM"];
+    if ( $data["cp_cv_id"] ) {
+        $sql .= ",trans_id=".substr($data["cp_cv_id"],1);
+        $sql .= ",trans_module='ct'";
+    } else {
+        $sql .= ",trans_id=".$data["WVLID"];
+        $sql .= ",trans_module='fu'";
+    }
+    $sql .= " where id=".$data["noteid"];
+    $rc = $_SESSION['db']->query($sql);
+    if ( !$rc ) { $_SESSION['db']->query("ROLLBACK"); return -3; };
+    $sql  = "update follow_ups set created_for_user=".$data["CRMUSER"].",done='".$data["status"]."', ";
+    $sql .= "follow_up_date ='".date2db($data["Finish"])."' where id = ".$data["WVLID"];
+    $rc = $_SESSION['db']->query($sql);
+    if ( !$rc ) { $_SESSION['db']->query("ROLLBACK"); return -4; };
+    if ( $data["cp_cv_id"] ) {
+        $sql = "select id from follow_up_links where follow_up_id = ".$data["WVLID"];
+        $rs = $_SESSION['db']->getOne($sql);
+        $rc = $_SESSION['db']->query("BEGIN");
+        if ( !$rs ) {
+            $sql  = "insert into follow_up_links (follow_up_id,trans_id,trans_type,trans_info) values (";
+            $sql .= $data["WVLID"].",".substr($data["cp_cv_id"],1).",'".((substr($data["cp_cv_id"],0,1)=="C")?"customer":"vendor");
+            $sql .= "','".$data["name"]."')";
+            $rc = $_SESSION['db']->query($sql);
+            $rs = 1;
+        } else {
+            $sql  ="update follow_up_links set trans_id=".substr($data["cp_cv_id"],1);
+            $sql .=",trans_type='".((substr($data["cp_cv_id"],0,1)=="V")?"vendor":"customer");
+            $sql .="',trans_info='".$data["name"]."' where follow_up_id = ".$data["WVLID"];
+            $rc = $_SESSION['db']->query($sql);
+        }
+        if ( !$rc ) { $_SESSION['db']->query("ROLLBACK"); return -5; };
+        $rs = $_SESSION['db']->query("COMMIT");
+        $rs = 1;
+    } else {
+       $rs = 1;
+    }
+    return $rs;
+}
 /****************************************************
 * updWvl
 * in: data = array(Formularfelder), datei = übergebene Datei
@@ -851,7 +897,7 @@ function insWvl($data,$datei="") {
 *****************************************************/
 function updWvl($data,$datei="") {
     $nun = date("Y-m-d H:i:00");
-    $anz = 0;
+    /*$anz = 0;
     $pfad = "";
     if ( $datei ) $anz = ($datei["Datei"]["name"][0]<>"")?count($datei["Datei"]["name"]):0;
     if ( $anz > 0 ) {  // ein neues Dokument
@@ -872,52 +918,14 @@ function updWvl($data,$datei="") {
         if ($anz>1) $dateiID=1;
     } else {
         $dateiID=$data["DateiID"];
-    }
+    }*/
+        $dateiID=$data["DateiID"];
     if ( empty($dateiID) ) $dateiID = 0;
     $finish = ($data["Finish"]<>"")?", finishdate='".date2db($data["Finish"])." 0:0:00'":"";
     $descript = addslashes($data["c_long"]);
     $descript = nl2br($descript);
     if ( $data["kontakt"]=="F" ) {
-        if ( substr($data["CRMUSER"],0,1) == 'G' || $data["CRMUSER"] == '' ) { 
-            return -1; 
-        };
-        $sql ="update notes set subject='".$data["cause"]."',body='$descript', created_by=".$_SESSION["loginCRM"];
-        if ( $data["cp_cv_id"] ) {
-            $sql .= ",trans_id=".substr($data["cp_cv_id"],1);
-            $sql .= ",trans_module='ct'";
-        } else {
-            $sql .= ",trans_id=".$data["WVLID"];
-            $sql .= ",trans_module='fu'";
-        }
-        $sql .= " where id=".$data["noteid"];
-        $rc = $_SESSION['db']->query($sql);
-        if ( !$rc ) { $_SESSION['db']->query("ROLLBACK"); return -3; };
-        $sql  = "update follow_ups set created_for_user=".$data["CRMUSER"].",done='".(($data["status"]!=1)?"t":"f")."', ";
-        $sql .= "follow_up_date ='".date2db($data["Finish"])."' where id = ".$data["WVLID"];
-        $rc = $_SESSION['db']->query($sql);
-        if ( !$rc ) { $_SESSION['db']->query("ROLLBACK"); return -4; };
-        if ( $data["cp_cv_id"] ) {
-            $sql = "select id from follow_up_links where follow_up_id = ".$data["WVLID"];
-            $rs = $_SESSION['db']->getOne($sql);
-            $rc = $_SESSION['db']->query("BEGIN");
-            if ( !$rs ) {
-                $sql  = "insert into follow_up_links (follow_up_id,trans_id,trans_type,trans_info) values (";
-                $sql .= $data["WVLID"].",".substr($data["cp_cv_id"],1).",'".((substr($data["cp_cv_id"],0,1)=="C")?"customer":"vendor");
-                $sql .= "','".$data["name"]."')";
-                $rc = $_SESSION['db']->query($sql);
-                $rs = 1;
-            } else {
-                $sql  ="update follow_up_links set trans_id=".substr($data["cp_cv_id"],1);
-                $sql .=",trans_type='".((substr($data["cp_cv_id"],0,1)=="V")?"vendor":"customer");
-                $sql .="',trans_info='".$data["name"]."' where follow_up_id = ".$data["WVLID"];
-                $rc = $_SESSION['db']->query($sql);
-            }
-            if ( !$rc ) { $_SESSION['db']->query("ROLLBACK"); return -5; };
-            $rs = $_SESSION['db']->query("COMMIT");
-            $rs = 1;
-        } else {
-           $rs = 1;
-        }
+        $rs = updWvlERP($data);
     } else {
         if ( !$data['status'] ) $data['status'] = 1;
         $sql  = "update wiedervorlage set  cause='".$data["cause"]."', descript='$descript', ";
@@ -928,10 +936,10 @@ function updWvl($data,$datei="") {
         }
         if ( $data['CRMUSER'] ) {
             if ( substr($data["CRMUSER"],0,1) == 'G' ) {
-                $sql .= "gruppe=true, ";
+                $sql .= ",gruppe=true, ";
                 $data["CRMUSER"] = substr($data["CRMUSER"],1);
             }
-            $sql .= "employee=".$data["CRMUSER"];
+            $sql .= ",employee=".$data["CRMUSER"];
         }
         $sql .= " where id=".$data["WVLID"];
         $rs = $_SESSION['db']->query($sql);
@@ -983,7 +991,7 @@ function documenttotc_($newID,$tid) {
 *****************************************************/
 function insWvlM($data,$Flag,$Expunge) {
 
-    if(empty($data["cp_cv_id"]) && $data["status"]<1) {
+    if(empty($data["cp_cv_id"])  && $data['status'] < 1) {
         $kontaktID=$data["CRMUSER"];
         //$data["cp_cv_id"]=$data["CRMUSER"];
     } else {  
@@ -991,48 +999,48 @@ function insWvlM($data,$Flag,$Expunge) {
         $kontaktTAB=substr($data["cp_cv_id"],0,1);
     }
     if(!empty($kontaktID)) {
-        $data["status"]=0;
+        $data["status"] = 0;
         $nun=date("Y-m-d H:i:00");
-        $data["kontakt"]="M";
+        $data["kontakt"] = "M";
         $did=false;
-        $data["c_cause"]=$data["c_long"];
-        $data["cause"]=$data["cause"];
-        $data["Bezug"]=0;
-        $data["Kontakt"]="M";
-        $data["Datum"]=date("d.m.Y");
-        $data["Zeit"]=date("H:i");
-        $CID=$data["CID"];
-        $data["CID"]=$kontaktID;
-        $tid=insCall($data,false);
-        if (!$tid) return false;
-        if (!empty($data["dateien"])) {
-            $data["DateiID"]=true;
-            foreach($data["dateien"] as $mail){
+        $data["c_cause"] = $data["c_long"];
+        $data["cause"] = $data["cause"];
+        $data["Bezug"] = 0;
+        $data["Kontakt"] = "M";
+        $data["Datum"] = date("d.m.Y");
+        $data["Zeit"] = date("H:i");
+        $CID = $_SESSION["loginCRM"];
+        $data["CID"] = $kontaktID;
+        $tid = insCall($data,false);
+        if ( !$tid ) return -6;
+        if ( !empty($data["dateien"]) ) {
+            $data["DateiID"] = true;
+            foreach( $data["dateien"] as $mail ){
                 //trenne Anhang und speichere in tmp
-                $file=explode(",",$mail);
-                $Datei["Datei"]["name"]=$file[0];
-                   $Datei["Datei"]["tmp_name"]='tmp/'.$file[0];
-                $Datei["Datei"]["size"]=$file[1];
-                $dbfile=new document();
+                $file = explode(",",$mail);
+                $Datei["Datei"]["name"] = $file[0];
+                $Datei["Datei"]["tmp_name"] = $file[0];
+                $Datei["Datei"]["size"] = $file[1];
+                $dbfile = new document();
                 $dbfile->setDocData("descript",$data["DCaption"]);
-                $pfad=mkPfad($data["cp_cv_id"],$data["CRMUSER"]);
-                $rc=$dbfile->uploadDocument($Datei,$pfad);
-                $did=$dbfile->id;     
+                $pfad = mkPfad($data["cp_cv_id"],$data["CRMUSER"]);
+                $rc = $dbfile->uploadDocument($Datei,$pfad);
+                if ( !$rc ) return -8;
+                $did = $dbfile->id;     
                 documenttotc($tid,$did);
             }
             moveMail($data["muid"],$CID,$Flag,$Expunge);
-            $sql="update telcall set dokument=1 where id = $tid";
-            $rc=$_SESSION['db']->query($sql);
+            $sql = "update telcall set dokument=1 where id = $tid";
+            $rc = $_SESSION['db']->query($sql);
             return $rc;
         } else {
-            $data["DateiID"]=false;
+            $data["DateiID"] = false;
             moveMail($data["muid"],$CID,$Flag,$Expunge);
         }
         // bis hier ok
         $rs = 1;
     } else { 
-        //$rs=false; 
-        $rs = -2;
+        $rs = -7;
     };
     return $rs;
 }
@@ -1162,7 +1170,6 @@ function holeMailHeader($usr,$Flag) {
                 $m=false;
                 if (is_array ($overview )) {
                     foreach ($overview as $mail) {
-                        fputs($f,print_r($mail,true));
                         if (!$mail["deleted"] && !$mail[strtolower($Flag)]) {
                             $gelesen=($mail["seen"])?"-":"+";
                             $m[]=array("Nr"     =>  $mail["msgno"],
@@ -1377,9 +1384,10 @@ function moveMail($mail,$id,$Flag,$Expunge) {
 function delMail($mail,$id,$Expunge) {
     $srv = getUsrMailData($id);
     $mbox = mail_login($srv["msrv"],$srv["port"],$srv["postf"],$srv["mailuser"],$srv["kennw"],$srv["pop"],$srv["ssl"]);
-    mail_dele($mbox,$mail);
-    if ($Expunge)  mail_expunge($mbox); 
+    $rc = mail_dele($mbox,$mail);
+    if ($Expunge) $rc = mail_expunge($mbox); 
     mail_close($mbox);
+    return $rc;
 }
 
 /****************************************************
@@ -1864,11 +1872,8 @@ function checkTermin($start,$stop,$von,$bis,$TID=0) {
     $sql.="(stoptag||stopzeit between '$start' and '$stop'))";
     if ($TID>0) $sql.=" and id<>$TID";
     if ($grp) $sql.=" and (M.member in $grp)";
-    //folgendes tut irgendwie nicht
-    //$rs=$_SESSION['db']->getAll($sql);
-    //dann erst einmal so
-    $rs=$_SESSION['db']->query($sql);
-    while ($row = $rs->fetchRow(DB_FETCHMODE_ASSOC)) {
+    $rs=$_SESSION['db']->getAll($sql);
+    foreach ( $rs as $row ) {
         $ids[]=array("id"=>$row["id"]);
     }
     return $ids;

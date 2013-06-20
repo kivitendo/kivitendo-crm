@@ -3,7 +3,7 @@
     require_once("inc/stdLib.php");
     include("inc/template.inc");
     include("inc/crmLib.php");
-    include("inc/UserLib.php");
+    include_once("inc/UserLib.php");
     $menu =  $_SESSION['menu'];
     $t = new Template($base);
     if ( $_GET['src'] == 'F' ) {

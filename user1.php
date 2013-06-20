@@ -3,7 +3,7 @@
     include("inc/grafik1.php");
     include("inc/template.inc");
     include("inc/crmLib.php");
-    include("inc/UserLib.php");
+    include_once("inc/UserLib.php");
     if ($_POST["ok"] and $_POST["termseq"]<61) {
         if ($_POST["proto"]==1) { $_POST["proto"] = 't';
         } else { $_POST["proto"] = 'f';}

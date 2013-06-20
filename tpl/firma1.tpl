@@ -8,7 +8,6 @@
 {JQTABLE}
 {JAVASCRIPTS}
 <script language="JavaScript" type="text/javascript">
-<!--
     function showCall() {
         $('#calls tr[group="tc"]').remove();
         $.ajax({
@@ -66,7 +65,7 @@
     }
     function notes() {
             F1=open("showNote.php?fid={FID}","Notes","width=400, height=400, left=100, top=50, scrollbars=yes");
-        }
+    }
     function doLink() {
         if ( document.getElementById('actionmenu').selectedIndex > 0 ) {
             link = $('#actionmenu option:selected').val();
@@ -182,9 +181,6 @@
             alert("GEO-Datenbank nicht aktiviert");
         }
     }
-//-->
-</script>
-<script>
     $(document).ready(
         function(){
             $("#shipleft").click(function(){ nextshipto('-'); })
@@ -208,6 +204,7 @@
             $("#fasubmenu").tabs("option", "active",  index);
             $(function() {
                 $( "#right_tabs" ).tabs({
+                    cache: true, //helpful?
                     beforeLoad: function( event, ui ) {
                         ui.jqXHR.error(function() {
                         ui.panel.html(
@@ -253,7 +250,7 @@
     <span style="float:left; vertical-alig:bottom">
         <select style="visibility:{chelp}" name="kdhelp" id="kdhelp" style="margin-top:0.5em;" onChange="KdHelp()">
 <!-- BEGIN kdhelp -->
-             <option value="{cid}">{cname}</option>
+        <option value="{cid}">{cname}</option>
 <!-- END kdhelp -->
         </select>
         <select id="actionmenu" onchange="doLink();" style="margin-top:0.5em;">
@@ -267,7 +264,6 @@
             <option value='onClick:{sales}_order'>.:order:. .:develop:.</option>
             <option value='onClick:delivery_order'>.:delivery order:. .:develop:.</option>
             <option value='onClick:invoice'>.:invoice:. .:develop:.</option>
-           
         </select>
     </span>
     <span style="float:left; padding-left:3em; visibility:{zeige_tools};" >
@@ -280,14 +276,13 @@
 </div>
 
 <form action="../oe.pl" id="oe" method="post" name="oe">
-<input type="hidden" name="action" value="add">
-<input type="hidden" name="vc" value="{CuVe}">
-<input type="hidden" name="type" value="">
-<input type="hidden" name="action_update" value="Erneuern" id="update_button">
-<input type="hidden" name="{CuVe}_id" value="{FID}">
+	<input type="hidden" name="action" value="add">
+	<input type="hidden" name="vc" value="{CuVe}">
+	<input type="hidden" name="type" value="">
+	<input type="hidden" name="action_update" value="Erneuern" id="update_button">
+	<input type="hidden" name="{CuVe}_id" value="{FID}">
 </form>
-
-<span id='contentbox' style="padding-top:2em;" >
+<div id='contentbox' style="padding-top:2em;" >
     <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid lightgray;" >
         <div class="gross" style="float:left; width:55%; height:25em; text-align:left; border: 0px solid black; padding:0.2em;" >
             <span class="fett">{Fname1}</span><br />
@@ -303,7 +298,7 @@
             <font color="#444444"> .:fax:.:</font> {Fax}<br />
             <span class="mini">&nbsp;<br /></span>
             &nbsp;[<a href="mail.php?TO={eMail}&KontaktTO=C{FID}">{eMail}</a>]<br />
-            &nbsp;<a href="{Internet}" target="_blank">{Internet}</a></span>
+            &nbsp;<a href="{Internet}" target="_blank">{Internet}</a>
         </div>
         <div style="float:left; width:43%; height:25em; text-align:right; border: 0px solid black; padding:0.2em;">
             <span valign='top'><span class="fett">{kdnr}</span> <img src="image/kreuzchen.gif" title=".:locked address:." style="visibility:{verstecke};" > {verkaeufer}
@@ -326,24 +321,20 @@
         </div>
         <br />
     </div>
-
     <div id="fasubmenu" >
         <ul>
-        <li><a href="#lie">.:shipto:. </a></li>
-        <li><a href="#not">.:notes:. </a></li>
-        <li><a href="#var">.:variablen:. </a></li>
-        <li><a href="#fin">.:FinanzInfo:.</a></li>
-        <li><a href="#inf">.:miscInfo:. </a></li>
+            <li><a href="#lie">.:shipto:. </a></li>
+            <li><a href="#not">.:notes:. </a></li>
+            <li><a href="#var">.:variablen:. </a></li>
+            <li><a href="#fin">.:FinanzInfo:.</a></li>
+            <li><a href="#inf">.:miscInfo:. </a></li>
         </ul>
-
         <div id="lie" class="klein">
             <span class="fett" id="shiptoname"></span> &nbsp;&nbsp;&nbsp;&nbsp;
             .:shipto count:.:{Scnt} <img src="image/leftarrow.png" id='shipleft' border="0">
             <span id="SID"></span> <img src="image/rightarrow.png" id='shipright' border="0">&nbsp; &nbsp;
-           
-            <a href="#" onCLick="anschr();" align="right"><img src="image/brief.png" alt=".:print label:." border="0"/></a>&nbsp; &nbsp;
-            <a href="" id='karte2' target="_blank" align="right"><img src="image/karte.gif" title=".:city map:." border="0"></a><br />
-           
+            <a href="#" onCLick="anschr();"><img src="image/brief.png" alt=".:print label:." border="0"/></a>&nbsp; &nbsp;
+            <a href="" id='karte2' target="_blank"><img src="image/karte.gif" alt="karte" title=".:city map:." border="0"></a><br />
             <span id="shiptodepartment_1"></span> &nbsp; &nbsp; <span id="shiptodepartment_2"></span> <br />
             <span id="shiptostreet"></span><br />
             <span class="mini">&nbsp;<br /></span>
@@ -355,14 +346,12 @@
             .:fax:.: <span id="shiptofax"></span><br />
             <span id="shiptoemail"></span>
         </div>
- 
         <div id="not">
             <table width="100%"><tr><td>
             <span class="labelLe ">.:Catchword:.</span><span class="value">{sw} </span><br />
             <span class="labelLe " valign="top">.:Remarks:.</span><span class="value">{notiz}</span>
             </td></tr></table>
         </div>
-       
         <div id="var" >
             <div class="zeile klein">
             <table width="100%"><tr><td>
@@ -372,7 +361,6 @@
             </td></tr></table>
             </div>
         </div>
-       
         <div id="inf">
             <table width="100%"><tr><td>
             <span class="labelLe">.:Concern:.:</span>
@@ -391,7 +379,6 @@
             </td></tr></table>
             <br />
         </div>
- 
         <div id="fin" >
             <table width="100%"><tr><td>
             <span class="labelLe">.:Source:.:</span> <span class="value">{lead} {leadsrc}</span><br />
@@ -414,50 +401,50 @@
             <span class="labelLe">- .:items:.:</span>
             <span class="value" onClick="showOP('{apr}');">{op}</span><br />
             <span class="labelLe">- .:orders:.:</span>
-            <span class="value" onClick="showOP('oe');">{oa}</span></br />
+            <span class="value" onClick="showOP('oe');">{oa}</span><br />
             </td></tr></table>
         </div>
-</div>
+	</div>
 
-<div style="float:left; width:45%; height:37em; text-align:left; border: 1px solid lightgrey; border-left:0px;">
-    <div id="right_tabs">
-        <ul>
-            <li><a href="#contact">.:contact:.</a></li>
-            <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=quo">.:Quotation:.</a></li>
-            <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=ord">.:orders:.</a></li>
-            <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=inv">.:Invoice:.</a></li>
-        </ul>
-    <div id="contact">
+	<div style="float:left; width:45%; height:37em; text-align:left; border: 1px solid lightgrey; border-left:0px;">
+    	<div id="right_tabs">
+        	<ul>
+                <li><a href="#contact">.:contact:.</a></li>
+                <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=inv">.:Invoice:.</a></li>	
+                <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=quo">.:Quotation:.</a></li>
+                <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=ord">.:orders:.</a></li>
+            </ul>
+    		<div id="contact">
             <table id="calls" class="tablesorter" width="100%" style='margin:0px;'>
-    <thead><tr><th>Datum</th><th>id</th><th class="{ sorter: false }"></th><th>Betreff</th><th>.:contact:.</th></tr></thead>
-    <tbody>
-    <tr onClick="showItem(0)" class='verlauf'><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
-    </tbody>
-    </table><br>
-    <div id="pager" class="pager" style='position:absolute;'>
-        <form name="ksearch" onSubmit="false ks();"> &nbsp;
-        <img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first"/>
-        <img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev"/>
-        <input type="text" id='suchwort' name="suchwort" size="20"><input type="hidden" name="Q" value="{Q}">
-        <button id='ks' name='ks'>.:search:.</button>
-        <button id='reload' name='reload'>reload</button>
-        <img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
-        <img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
-        <select class="pagesize" id='pagesize'>
-        <option value="10">10</option>
-        <option value="15" selected>15</option>
-        <option value="20">20</option>
-        <option value="25">25</option>
-        <option value="30">30</option>
-        </select>
-        </form>
-    </div>
-    </div>
-</div>
-
+    				<thead><tr><th>Datum</th><th>id</th><th class="{ sorter: false }"></th><th>Betreff</th><th>.:contact:.</th></tr></thead>
+    				<tbody>
+    				<tr onClick="showItem(0)" class='verlauf'><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
+    				</tbody>
+    			</table><br>
+    			<div id="pager" class="pager" style='position:absolute;'>
+        			<form name="ksearch" onSubmit="false ks();"> &nbsp;
+        				<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first">
+        				<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev">
+        				<input type="text" id='suchwort' name="suchwort" size="20"><input type="hidden" name="Q" value="{Q}">
+        				<button id='ks' name='ks'>.:search:.</button>
+        				<button id='reload' name='reload'>reload</button>
+        				<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next">
+        				<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last">
+        				<select class="pagesize" id='pagesize'>
+        					<option value="10">10</option>
+        					<option value="15" selected>15</option>
+        					<option value="20">20</option>
+        					<option value="25">25</option>
+        					<option value="30">30</option>
+        				</select>
+        			</form>
+    			</div>
+    		</div>
+		</div>
+	</div>
 </div>
 <div id="dialogwin"></div>
-</span>
 {END_CONTENT}
 </body>
 </html>
+    

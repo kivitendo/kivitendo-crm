@@ -3,7 +3,7 @@
     if ( $_SESSION['CRMTL'] != 1 ) header("location:no.html");
     include("inc/template.inc");
     include("inc/crmLib.php");
-    include("inc/UserLib.php");
+    include_once("inc/UserLib.php");
     if ($_POST["newgrp"]) {
         $msg=saveGruppe($_POST);
     } else if ($_POST["delgrp"] && $_POST["gruppe"]>0) {

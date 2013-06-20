@@ -1,7 +1,7 @@
 <?php
     require_once("inc/stdLib.php");
     include("inc/template.inc");
-    include("inc/UserLib.php");
+    include_once("inc/UserLib.php");
 
     $tpl = new Template($base);
     $tpl->set_file(array("wi" => "wissen.tpl"));

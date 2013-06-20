@@ -77,7 +77,7 @@ class document {
  var $debug = false;
 
 	function document($id=false,$fname="",$fpath="",$descript="") {
-		if ($this->debug) $this->f = fopen('tmp/doc.log',"w");
+		if ($this->debug) $this->f = fopen($_SESSION['crmdir'].'/tmp/doc.log',"w");
 		$this->log("newDoc");
 		$this->db=$_SESSION["db"];
 		if ($id>0) {
@@ -97,7 +97,7 @@ class document {
 	}
 	function logvar() {
 		if (!$this->debug) return;
-		$this->log("File: ".$this->pfad." : ".$this->name." : ".$this->size);
+		$this->log("File: ".$this->pfad." / ".$this->name." : ".$this->size);
 		$this->log("ID: ".$this->id." Dest: ".$dest);
 		$this->log($this->descript);
 		$this->log("Lock: ".$this->lock." : ".$this->lockname);
@@ -205,22 +205,23 @@ class document {
 		$this->pfad=$pfad;
 		//Gibt es das Dokument so schon in der db
 		$this->id=$this->searchDocument($this->name,$pfad);
-		$dest="./dokumente/".$_SESSION["mansel"]."/".$pfad."/".$this->name;
+		$dest=$_SESSION['crmdir']."/dokumente/".$_SESSION["mansel"]."/".$pfad."/".$this->name;
 		$this->logvar();
 		if (chkdir($pfad)) {
 			//Zielpfad vorhanden
-			if (! copy($file["Datei"]["tmp_name"],$dest)) {
-				$this->error="Datei '$dest' wurde nicht hochgeladen!";
-				echo $this->error;
+			if (! copy($_SESSION['crmdir'].'/tmp/'.$file["Datei"]["tmp_name"],$dest)) {
+				$this->error = "Datei '$dest' wurde nicht hochgeladen!";
+				$this->log($this->error);
                 unlink($file["Datei"]["tmp_name"]);
 				return false;
 			} 
-                unlink($file["Datei"]["tmp_name"]);
+                unlink($_SESSION['crmdir'].'/tmp/'.$file["Datei"]["tmp_name"]);
                 //chmod($dest,decoct($_SESSION['dir_mode'])); 
                 chmod($dest,$_SESSION['dir_mode']); 
                 if ( $_SESSION['dir_group'] ) chgrp($dest,$_SESSION['dir_group']); 
 		} else {
-			$this->error="Verzeichnis '$pfad' konte nicht angelegt werden!";
+			$this->error = "Verzeichnis '$pfad' konte nicht angelegt werden!";
+			$this->log($this->error);
             unlink($file["Datei"]["tmp_name"]);
 			return false;
 		}
@@ -258,8 +259,8 @@ class document {
 	function deleteDocument($p="") {
 		$this->log("deleteDocument: ".$p);
 		// $p=="" Aufruf aus Docroot, $p=="." Aufruf aus crmajax
-        $f = fopen('/tmp/d','w'); fputs($f,"$p./dokumente/".$_SESSION["mansel"].$this->pfad."/".$this->name); fclose($f);
-		$dest="$p./dokumente/".$_SESSION["mansel"].$this->pfad."/".$this->name;
+        $f = fopen('/tmp/d','w'); fputs($f,$_SESSION['crmdir']."/dokumente/".$_SESSION["mansel"].$this->pfad."/".$this->name); fclose($f);
+		$dest=$_SESSION['crmdir']."/dokumente/".$_SESSION["mansel"].$this->pfad."/".$this->name;
 		$rc=unlink($dest);
 		if (!$rc) {
 			$this->error=$this->pfad."/".$this->name." kann nicht gelöscht werden.";

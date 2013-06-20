@@ -236,20 +236,22 @@ function anmelden() {
 * prueft, ob Verzeichnis besteht und legt es bei Bedarf an
 *****************************************************/
 function chkdir($dir,$p="") {
-    if ( file_exists("$p./dokumente/".$_SESSION["mansel"]."/".$dir) ) { 
-        return getcwd()."$p./dokumente/".$_SESSION["mansel"]."/".$dir;
+    if ( file_exists($_SESSION['crmdir']."/dokumente/".$_SESSION["mansel"]."/".$dir) ) { 
+        return $_SESSION['crmdir']."/dokumente/".$_SESSION["mansel"]."/".$dir;
     } else {
         $dirs = explode("/",$dir);
         $tmp  = $_SESSION["mansel"]."/";
         foreach ( $dirs as $dir ) {
-            if ( !file_exists("$p./dokumente/$tmp".$dir) ) {
-                $ok = @mkdir("$p./dokumente/$tmp".$dir);
-                if ( $_SESSION['dir_group'] ) @chgrp("$p./dokumente/$tmp".$dir,$_SESSION['dir_group']); 
-                if ( !$ok ) return false;
+            if ( !file_exists($_SESSION['crmdir']."/dokumente/$tmp".$dir) ) {
+                $ok = @mkdir($_SESSION['crmdir']."$/dokumente/$tmp".$dir);
+                if ( $_SESSION['dir_group'] ) @chgrp($_SESSION['crmdir']."/dokumente/$tmp".$dir,$_SESSION['dir_group']); 
+                if ( !$ok ) {
+                    return false;
+                }
             };
             $tmp .= $dir."/";
         };
-        return getcwd()."$p./dokumente/".$_SESSION["mansel"]."/".$dir;
+        return $_SESSION['crmdir']."/dokumente/".$_SESSION["mansel"]."/".$dir;
     }
 }
 
@@ -260,7 +262,7 @@ function chkdir($dir,$p="") {
 * liest die Dateien eines Verzeichnisses
 *****************************************************/
 function liesdir($dir) {
-    $dir = "./dokumente/$dir/";
+    $dir = $_SESSION['crmdir']."/dokumente/$dir/";
     if ( !file_exists($dir) ) return false;
     $cdir = dir($dir);
     while ( $entry = $cdir->read() ) {

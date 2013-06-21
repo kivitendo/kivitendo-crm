@@ -134,9 +134,9 @@
     }
 
 
-    $f=fopen('/tmp/wvl','a');
-    fputs($f,print_r($_POST,true));
-    fputs($f,print_r($_GET,true));
+    //$f=fopen('/tmp/wvl','a');
+    //fputs($f,print_r($_POST,true));
+    //fputs($f,print_r($_GET,true));
     //fclose($f);
 if ( isset($_POST['task']) and $_POST['task'] == 'erp' ) {
     if ( $_POST['kontakt'] == 'F' ) {

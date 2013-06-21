@@ -10,14 +10,14 @@
 function saveUserStamm($val) {
     if ( !$val["interv"] )  $val["interv"] = 60;
     if ( !$val["ssl"] )     $val["ssl"] = 'f';
-    if ( !$val["proto"] )   $val["proto"] = '1';
-    if ( !$val["port"] )    $val["port"] = ( $val["proto"] == '1' )?'143':'110';
+    if ( !$val["proto"] )   $val["proto"] = 't';
+    if ( !$val["port"] )    $val["port"] = ( $val["proto"] == 't' )?'143':'110';
     if ( !$val["termseq"] ) $val["termseq"] = 30;
     if ( $val["vertreter"] == $val["uid"] ) { $vertreter = "null"; } else { $vertreter = $val["vertreter"]; };
     //print_r($val);
     
     $std = array('name','addr1','addr2','addr3','workphone','homephone','notes');
-    $fld = array('msrv' => 't', 'postf' => 't', 'kennw' => 't', 'postf2' => 't','mailsign' => 't','email' => 't','mailuser' => 't','port' => 'i','proto' => 'b','ssl' => 't',
+    $fld = array('msrv' => 't', 'postf' => 't', 'kennw' => 't', 'postf2' => 't','mailsign' => 't','email' => 't','mailuser' => 't','port' => 'i','proto' => 't','ssl' => 't',
                  'abteilung' => 't','position' => 't','interv' => 'i','pre' => 't','preon' => 'b','vertreter' => 'i',
                  'etikett' => 'i','termbegin' => 'i','termend' => 'i','termseq' => 'i','kdview' => 'i','icalart' => 't','icaldest' => 't','icalext' => 't',
                  'deleted' => 'b','streetview' => 't','planspace' => 't','theme' => 't','helpmode' => 'b','listen_theme'=>'t',

@@ -4,27 +4,32 @@
     include("inc/template.inc");
     include("inc/crmLib.php");
     include_once("inc/UserLib.php");
-    $menu =  $_SESSION['menu'];
+    $menu = $_SESSION['menu'];
+    $head = mkHeader();
     $t = new Template($base);
     if ( $_GET['src'] == 'F' ) {
         $t->set_var(array(
-            JAVASCRIPTS   => '',
-            STYLESHEETS   => $menu['stylesheets'],
-            PRE_CONTENT   => '',
-            START_CONTENT => '',
-            END_CONTENT   => '',
-            'JQUERY'        => $_SESSION['basepath'].'crm/',
-            'THEME'         => $_SESSION['theme'],
+            'STYLESHEETS'   => $menu['stylesheets'],
+            'CRMCSS'        => $head['CRMCSS'],
+            'JAVASCRIPTS'   => '',
+            'PRE_CONTENT'   => '',
+            'START_CONTENT' => '',
+            'END_CONTENT'   => '',
+            'JQUERY'        => $head['JQUERY'],
+            'THEME'         => $head['theme'],
+            'JQDATE'        => $head['JQDATE'],
         ));
     } else {
         $t->set_var(array(
-            JAVASCRIPTS   => $menu['javascripts'],
-            STYLESHEETS   => $menu['stylesheets'],
-            PRE_CONTENT   => $menu['pre_content'],
-            START_CONTENT => $menu['start_content'],
-            END_CONTENT   => $menu['end_content'],
-            'JQUERY'        => $_SESSION['basepath'].'crm/',
-            'THEME'         => $_SESSION['theme'],
+            'STYLESHEETS'   => $menu['stylesheets'],
+            'CRMCSS'        => $head['CRMCSS'],
+            'JAVASCRIPTS'   => $menu['javascripts'],
+            'PRE_CONTENT'   => $menu['pre_content'],
+            'START_CONTENT' => $menu['start_content'],
+            'END_CONTENT'   => $menu['end_content'],
+            'JQUERY'        => $head['JQUERY'],
+            'THEME'         => $head['theme'],
+            'JQDATE'        => $head['JQDATE'],
         ));
     }
     $user=getUserStamm($_SESSION["loginCRM"]);
@@ -101,7 +106,6 @@
     
         $t->set_file(array("mail" => "sermail.tpl"));
         $t->set_var(array(
-                ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
                 Msg     => $msg,
                 CC     => $CC,
                 Subject  => $Subject,

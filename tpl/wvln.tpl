@@ -7,9 +7,9 @@
 {THEME}
 {JQTABLE}
 {JQDATE}
-{JAVASCRIPTS}   
 {JQFILEUP}
 {JQWIDGET}
+{JAVASCRIPTS}   
     <script language="JavaScript">
     <!--
         var WVLID = 0;
@@ -89,30 +89,35 @@
             });
         }
         function showMail(id) {
+            console.log('Mail-ID:'+id);
             $.ajax({
                 url: 'jqhelp/wvll.php?task=mail&id='+id,
                 dataType: 'json',
                 success: function(data){
-                    console.log(JSON.stringify(data));
-                    $('.mail').show();
-                    $('.hideK').hide();
-                    $('.hideD').hide();
-                    $('.hideE').hide();
-                    WVLID = data.id;
-                    MailID = data.muid;
-                    $('#cause').val(data.cause);
-                    $('#c_long').val(data.c_long);
-                    $('#kontaktE').prop('checked',true);
-                    $('#status'+data.status).prop('checked',true);
-                    $.each(data.flags, function(index, item) {
-                        if ( item > 0 ) $('#'+index).prop('checked',true) 
-                        else $('#'+index).prop('checked', false) 
-                    });
-                    files = '';
-                    $.each(data.Anhang, function(index, item) {
-                        files += "<input type='checkbox' class='dateien' name='dateien[]' value='"+item.name+","+item.size+","+item.type+"' checked> [<a href='tmp/"+item.name+"'>"+item.name+"</a>]</br>"
-                    });
-                    $('#files').html(files);
+                    //console.log(JSON.stringify(data));
+                    if ( data.rc == -9 ) {
+                         Fehler(-9);
+                    } else {
+                        $('.mail').show();
+                        $('.hideK').hide();
+                        $('.hideD').hide();
+                        $('.hideE').hide();
+                        WVLID = data.id;
+                        MailID = data.muid;
+                        $('#cause').val(data.cause);
+                        $('#c_long').val(data.c_long);
+                        $('#kontaktE').prop('checked',true);
+                        $('#status'+data.status).prop('checked',true);
+                        $.each(data.flags, function(index, item) {
+                            if ( item > 0 ) $('#'+index).prop('checked',true) 
+                            else $('#'+index).prop('checked', false) 
+                        });
+                        files = '';
+                        $.each(data.Anhang, function(index, item) {
+                            files += "<input type='checkbox' class='dateien' name='dateien[]' value='"+item.name+","+item.size+","+item.type+"' checked> [<a href='tmp/"+item.name+"'>"+item.name+"</a>]</br>"
+                        });
+                        $('#files').html(files);
+                    }
                 }
             });
         }
@@ -163,6 +168,7 @@
             else if ( nr == -6 ) { msg = 'Zuweisung fehlheschlagen!'; }
             else if ( nr == -7 ) { msg = 'Mail nicht zugewiesen!'; }
             else if ( nr == -8 ) { msg = 'Fileupload fehlgeschlagen!'; }
+            else if ( nr == -9 ) { msg = 'Mail konnte nich abgeholt werden'; }
             else                 { msg = "Fehler beim Sichern";};
             alert("Error: "+nr+"\n"+msg);
         }
@@ -223,7 +229,6 @@
                              'CRMUSER':crmuser, 'kontakt':'E', 
                              'dateien[]':dateien, 'task':'mail' },
                     success: function(rc){
-                        console.log(JSON.stringify(rc));
                         if ( rc == 1 ) {
                             resetShow();
                         } else {
@@ -259,6 +264,7 @@
                 url: 'jqhelp/wvll.php?task=wvl',
                 dataType: 'json',
                 success: function(data){
+                    //console.log(JSON.stringify(data));
                     $('#wvliste tr[group="tc"]').remove();
                     $("#wvliste").trigger('update');
                     var content = '';
@@ -297,11 +303,9 @@
     //-->
     </script>
     <script>
-        $(function() {
-            $( "#Finish" ).datepicker($.datepicker.regional[ "de" ]);
-        });
         $(document).ready(
             $(function () {
+                $( "#Finish" ).datepicker($.datepicker.regional[ "de" ]);
                 resetShow();
                 doInit();
                 $('#fileupload').fileupload({

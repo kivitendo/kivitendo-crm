@@ -11,7 +11,7 @@
             'timeout'     => $_SESSION['interv']*1000,
             ));
     $sel=$_SESSION["loginCRM"];
-    $usr = getAllUser("%");
+    $usr = getAllUser(array(0=>true,1=>"%"));
     $gruppen = getGruppen(true);
     $nouser[0] = array("login" => "-----", "id"=>0 );
     $user = array_merge($nouser,$usr);
@@ -19,9 +19,9 @@
     $t->set_block("wvl","Selectbox","Block1");
     if ($user) foreach($user as $zeile) {
         $t->set_var(array(
-            Sel     => ($sel==$zeile["id"])?" selected":"",
-            UID     => $zeile["id"],
-            Login   => ( $zeile['name'] != '' )?$zeile['name']:$zeile["login"],
+            'Sel'     => ($sel==$zeile["id"])?" selected":"",
+            'UID'     => $zeile["id"],
+            'Login'   => ( isset($zeile['name']) and $zeile['name'] != '' )?$zeile['name']:$zeile["login"],
         ));
         $t->parse("Block1","Selectbox",true);
     }

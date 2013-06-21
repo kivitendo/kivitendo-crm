@@ -11,8 +11,8 @@
     </style>
 <?php echo $head['JQUERY']; ?>
 <?php echo $head['JQUERYUI']; ?>
-<?php echo $head['JQFILEUP']; ?>
 <?php echo $head['JQWIDGET']; ?>
+<?php echo $head['JQFILEUP']; ?>
 <?php echo $head['JQDATE']; ?>
 <script>
 $(document).ready(

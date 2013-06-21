@@ -22,7 +22,7 @@
                 Initdate => $col["Datum"],
                 ID       => $col["Nr"],
                 IniUser  => htmlspecialchars($col["Abs"]),
-                Art      => "M",
+                Art      => "E",
                 End      => 0
             );
             $mailcnt++;
@@ -69,9 +69,103 @@
         echo json_encode( $ret );
     }
 
-switch ($_GET['task']) {
-    case 'wvl'    : getWvListe();
-                    break;
-    default       : echo $_GET['task'].' nicht erlaubt';          
+    function _getOneWvl($id) {
+        $data = getOneWvl($id);
+        echo json_encode( $data );
+    }
+    function _getOneERP($id) {
+        $data = getOneERP($id);
+        echo json_encode( $data );
+    }
+    function _getOneMail($id) {
+        $data = getOneMail($_SESSION["loginCRM"],$id);
+        echo json_encode( $data );
+    }
+    function _delMail($id) {
+       $rc = delMail($id,$_SESSION["loginCRM"],$_SESSION["Expunge"]);
+       echo $rc;
+    }
+    function _saveMail($data) {
+        $data['DCaption'] = $data['cause'];
+        $rc = insWvlM($data,$_SESSION['MailFlag'],$_SESSION['Expunge']);
+        echo $rc;
+    }
+    function _saveWvl($data) {
+        if ( $data['WVLID'] < 1 ) {
+            $data = array_merge($data,mknewWVL(false));
+            if ( $data['WVLID'] < 1 ) {
+                echo "-3";
+                return;
+            }
+        } ;
+        if (!$data["DCaption"]) $data["DCaption"] = $data["cause"];
+        if ( $data['newfile'] == 1 and $data['filename'] != '' ) {
+            $rc = file_exists("../dokumente/".$_SESSION["mansel"]."/tmp/".$data['filename']);
+            if ( $rc ) {
+                if ( $data["DateiID"] ) delDokument($data["DateiID"]); // ein altes löschen
+                require_once("documents.php");
+                $dest = "./dokumente/".$_SESSION["mansel"]."/".$_SESSION["loginCRM"]."/";
+                copy("../dokumente/".$_SESSION["mansel"]."/tmp/".$data['filename'],'.'.$dest.$data['filename']);
+                unlink ("../dokumente/".$_SESSION["mansel"]."/tmp/".$data['filename']);
+                //Dokument in db speichern
+                $dbfile=new document();
+                $dbfile->setDocData("descript",$data["subject"]);
+                $dbfile->setDocData("pfad",$_SESSION["loginCRM"]);
+                $dbfile->setDocData("name",$data['filename']);
+                $dbfile->setDocData("descript",$data["DCaption"]);
+                $rc = $dbfile->newDocument();
+                $dbfile->saveDocument();
+                if ( ! $dbfile->id > 0 ) {
+                    echo "-4";
+                    return;
+                }
+                $data["DateiID"] = $dbfile->id;
+            } else {
+                echo "-5";
+                return;
+            }
+        }
+        $rc = updWvl($data);
+        echo $rc;
+    }
+
+
+    //$f=fopen('/tmp/wvl','w');
+    //fputs($f,print_r($_POST,true));
+    //fputs($f,print_r($_GET,true));
+    //fclose($f);
+if ( $_POST['task'] == 'erp' ) {
+    if ( $_POST['kontakt'] == 'F' ) {
+        echo updWvlERP($_POST);
+        return;
+    } else {
+        if ($_POST["WVLID"]>0) {
+            $ok = updWvl($_POST,$f);
+        } else {
+            if ($_POST["mail"]) { 
+                $ok = insWvlM($_POST,$_SESSION['MailFlag'],$_SESSION['Expunge']);
+            } else {
+                $ok = insWvl($_POST,$f);
+            }
+        }
+    }
+} else if ( $_POST['task'] == 'wvl' ) {
+    _saveWvl($_POST);
+} else if ( $_POST['task'] == 'delmail' ) {
+    _delMail($_POST['WVLID']);
+} else if ( $_POST['task'] == 'mail' ) {
+    _saveMail($_POST);
+} else {
+    switch ($_GET['task']) {
+        case 'wvl'    : getWvListe();
+                        break;
+        case 'show'   : _getOneWvl($_GET['id']);
+                        break;
+        case 'erp'    : _getOneERP($_GET['id']);
+                        break;
+        case 'mail'   : _getOneMail($_GET['id']);
+                        break;
+        default       : echo $_GET['task'].' nicht erlaubt';          
+    };
 };
 ?>

@@ -3,7 +3,7 @@ session_start();
 require_once("inc/version.php");
 require_once("inc/stdLib.php");
 $rc = false;
-if ($_GET["test"]=="ja") {
+if ( isset($_GET['test']) and $_GET['test'] == 'ja' ) {
     $rc = $db->getAll("select * from crm order by version","Status");
 }
 $menu =  $_SESSION['menu'];

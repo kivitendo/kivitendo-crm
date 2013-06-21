@@ -5,7 +5,7 @@
                   'Expunge','MailFlag','logmail',
                   'dir_group','dir_mode','sep_cust_vendor',
                   'listLimit','showErr','logfile',
-                  'stadtplan','planspace'
+                  'stadtplan','planspace','crmdir'
                   );
     foreach($keys as $value) {
         $_SESSION[$value] = $_POST[$value];
@@ -86,6 +86,7 @@ if ( $_POST['save'] ) {
             'listLimit'   => $data['listLimit'],
             'showErr'     => ($data['showErr'] == 't')?'checked':'',
             'logfile'     => ($data['logfile'] == 't')?'checked':'',
+            'crmdir'      => ($data['crmdir'] == '')?getcwd():$data['crmdir'],
             'msg'         => $msg,
         )); 
     }

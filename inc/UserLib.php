@@ -70,13 +70,16 @@ function saveUserStamm($val) {
 * hole alle Anwender
 *****************************************************/
 function getAllUser($sw) {
-        if (!$sw[0]) { $where = "workphone like '".$_SESSION['Pre'].$sw[1]."%' or homephone like '".$_SESSION['Pre'].$sw[1]."%' "; }
-        else         { $where = "(name ilike '$Pre".$sw[1]."%') or (login  ilike '$Pre".$sw[1]."%')"; }
+        
+       // print_r($sw);
+        $Pre = $_SESSION['pre'];
+        if (!$sw[0]) { $where = "workphone like '".$_SESSION['pre'].$sw[1]."%' or homephone like '".$_SESSION['pre'].$sw[1]."%' "; }
+        else         { $where = "(name ilike '".$sw[1]."%') or (login  ilike '".$sw[1]."%')"; }
         $sql = "select * from employee where $where and employee.deleted = false";
         $rs = $_SESSION['db']->getAll($sql);
         if( !$rs ) {
             $rs = false;
-        };
+        } 
         return $rs;
 }
 

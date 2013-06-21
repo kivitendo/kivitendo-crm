@@ -149,7 +149,8 @@ class Template {
     $reg = "/<!--\s+BEGIN $varname\s+-->(.*)\s*<!--\s+END $varname\s+-->/sm";
     preg_match_all($reg, $str, $m);
     $str = preg_replace($reg, "{" . "$name}", $str);
-    $this->set_var($varname, $m[1][0]);
+    if ( isset($m[1][0]) ) { $this->set_var($varname, $m[1][0]); }
+    else  { $this->set_var($varname,''); };
     $this->set_var($parent, $str);
     return true;
   }

@@ -1,14 +1,11 @@
 <html>
 	<head><title></title>
 {STYLESHEETS}
-    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
-    {THEME}
-    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
-    <script type="text/javascript" src="{JQUERY}jquery-ui/plugin/Table/jquery.tablesorter.js"></script>
-    <script type="text/javascript" src="{JQUERY}jquery-ui/plugin/Table/addons/pager/jquery.tablesorter.pager.js"></script>
-    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/plugin/Table/themes/blue/style.css">    
+{CRMCSS}
+{JQUERY}
+{JQUERYUI}
+{THEME}
+{JQTABLE}
 {JAVASCRIPTS}
 
 	<script language="JavaScript">
@@ -91,11 +88,11 @@
 </table>
 <span id="pager" class="pager">
 	<form>
-		<img src="{JQUERY}jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first"/>
-		<img src="{JQUERY}jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev"/>
+		<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first"/>
+		<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev"/>
 		<input type="text" class="pagedisplay"/>
-		<img src="{JQUERY}jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
-		<img src="{JQUERY}jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
+		<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
+		<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
 		<select class="pagesize" id='pagesize'>
 			<option value="10">10</option>
 			<option value="20" selected>20</option>

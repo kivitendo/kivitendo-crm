@@ -6,16 +6,7 @@
     include_once("inc/UserLib.php");
     include("inc/FirmenLib.php");
     $t = new Template($base);
-    $menu =  $_SESSION['menu'];
-    $t->set_var(array(
-        JAVASCRIPTS   => $menu['javascripts'],
-        STYLESHEETS   => $menu['stylesheets'],
-        PRE_CONTENT   => $menu['pre_content'],
-        START_CONTENT => $menu['start_content'],
-        END_CONTENT   => $menu['end_content'],
-        'JQUERY'        => $_SESSION['basepath'].'crm/',
-        'THEME'         => $_SESSION['theme'],
-    ));
+    doHeader($t);
     $Quelle=($_POST["Quelle"])?$_POST["Quelle"]:$_GET["Quelle"];
     if (!$Quelle) $Quelle="C";
     if ($_GET["first"]) {

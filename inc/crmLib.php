@@ -1284,7 +1284,7 @@ function getOneMail($usr,$nr) {
     $data["cause"]=$subject;
     $data["c_long"]=$mybody.$body; 
     $data["Datei"]=$anhang;
-    $data["status"]="2";
+    $data["status"]="1";
     $data["InitCrm"]=$_SESSION["loginCRM"];    //$head[""];
     $data["CRMUSER"]=$_SESSION["employee"];    //$head[""];
     $data["DCaption"]=($files)?$data["cause"]:"";

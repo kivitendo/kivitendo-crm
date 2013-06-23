@@ -898,11 +898,11 @@ function accessHistory($data=false) {
         $sql = "select val from crmemployee where uid = '" . $_SESSION["loginCRM"] .  "' AND key = 'search_history'";
         $rs =   $_SESSION['db']->getOne($sql);
         $array_of_data = json_decode($rs['val'],true);
-        if ( !$data ) {
+        if ( !$data && $array_of_data) {
              return array_reverse($array_of_data);
         }
         else {
-            if ( in_array($data, $array_of_data) ) unset( $array_of_data[array_search($data, $array_of_data)]);
+            if ( $array_of_data && in_array($data, $array_of_data) ) unset( $array_of_data[array_search($data, $array_of_data)]);
             $array_of_data[] = $data;
             if ( count($array_of_data) > 8 ) array_shift($array_of_data); 
             $sql = "UPDATE crmemployee SET val = '".addslashes(json_encode($array_of_data))."' WHERE uid = ".$_SESSION['uid']." AND key = 'search_history'";

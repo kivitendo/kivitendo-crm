@@ -26,12 +26,12 @@ if ($_POST["erpname"]) {
     $_SESSION['erpConfigFile'] = $_POST['erpConfigFile'];
 }
 
-#$conffile = '';
-#if ( substr(getcwd(),-3) == "inc" || substr(getcwd(),-6) == "jqhelp" || substr(getcwd(),-6) == "lxcars" ) {
-#    $conffile = "../";
-#}
-if ( empty($_SESSION['crmname']) ) $_SESSION['crmname'] = getcwd();
-$conffile = $_SESSION['crmname']."/../".$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf";
+// Beim Setzen von crmpath muss zwingend darauf geachtet werden, dass man sich nicht in einem Unterverzeichnis befindet.
+// Bem.: Da am Ende des von getcwd() zurück gegeben Strings kein Slash steht funktioniert dirname() hier.
+// aus /root/kivitendo/inc wird /root/kivitendo 
+if ( empty($_SESSION['crmpath']) ) $_SESSION['crmpath'] = ( substr(getcwd(),-3) == "inc" || substr(getcwd(),-6) == "jqhelp" || substr(getcwd(),-6) == "lxcars" ) ? dirname(getcwd()) : getcwd();
+$conffile = $_SESSION['crmpath']."/../".$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf";
+
 
 //$conf = array('ERPNAME','erpConfigFile');
 //while( list($key,$val) = each($_SESSION) ) {

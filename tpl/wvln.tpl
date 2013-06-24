@@ -108,6 +108,9 @@
                         MailID = data.muid;
                         $('#cause').val(data.cause);
                         $('#c_long').val(data.c_long);
+                        $('#name').val(data.kontaktname);
+                        KontaktTab = data.kontakttab;
+                        KontaktID = data.kontaktid;
                         $('#kontaktE').prop('checked',true);
                         $('#status'+data.status).prop('checked',true);
                         $('#Sradio').buttonset('refresh');
@@ -301,8 +304,8 @@
             var to = setTimeout(function(){ doInit(); },{timeout});
         }
         function suchDst() {
-            val=document.formular.name.value;
-            f1=open("suchFa.php?pers=1&name="+val,"suche","width=350,height=200,left=100,top=100");
+            val = document.formular.name.value;
+            f1  = open("suchFa.php?pers=1&name="+val+"&tab="+KontaktTab+"&id="+KontaktID,"suche","width=350,height=200,left=100,top=100");
         }
     //-->
     </script>
@@ -315,7 +318,6 @@
                     function(event) {
                         event.preventDefault();
                         name = this.getAttribute('name');
-                        alert(name);
                         if ( name == 'saveWV' ) {
                            saveWV();
                         } else if ( name == 'delWV' ) {
@@ -366,11 +368,12 @@
             })
         );
    </script>
+   <script type='text/javascript' src='inc/help.js'></script>
                     
 <body >
 {PRE_CONTENT}
 {START_CONTENT}
-<p class="listtop">Wiedervorlage</p>
+<p class="listtop" onClick="help('Wiedervorlage');" >Wiedervorlage (?)</p>
 <div style="float:left; width:45em; height:40em; text-align:center; border: 1px solid lightgray;" >
 <form name="formular" action="wvl1.php" enctype='multipart/form-data' method="post" onSubmit='return false;'>
 <INPUT TYPE="hidden" name="MAX_FILE_SIZE" value="2000000">

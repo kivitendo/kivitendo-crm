@@ -449,7 +449,7 @@
                <input type="radio" name="kontakt" id="kontaktF" value="F" tabindex="16"><label for="kontaktF">ERP</label>
            </span>
        </div> 
-        <span style="visibility:hidden"><input type="radio" name="kontakt" id="kontaktE" value="E" tabindex="16"><label for="kontaktE">E-Mail &nbsp;</label></span><!-- vom Mailserver -->
+        <span style="visibility:hidden"><input type="radio" name="kontaktE" id="kontaktE" value="E" tabindex="16"><label for="kontaktE">E-Mail &nbsp;</label></span><!-- vom Mailserver -->
         <br>
         <span class="klein">Kontaktart</span> 
     </td>

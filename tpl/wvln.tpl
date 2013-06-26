@@ -314,7 +314,7 @@
             $(function () {
                 $( "#Kradio" ).buttonset();
                 $( "#Sradio" ).buttonset();
-                $('button').button().click( 
+                $("button").button().click( 
                     function(event) {
                         event.preventDefault();
                         name = this.getAttribute('name');
@@ -332,13 +332,13 @@
                 $( "#Finish" ).datepicker($.datepicker.regional[ "de" ]);
                 resetShow();
                 doInit();
-                $('#fileupload').fileupload({
+                $("#fileupload").fileupload({
                     dataType: 'json',
                     add: function (e, data) {
-                        $('#uplfile').empty().append(data.files[0].name+' ');
-                        $('#uplfile').append(data.files[0].size+' ');
-                        $('#progress .bar').css('width','0%');
-                        $('#uplfile').append($('<button/>').text('Upload + Save')
+                        $("#uplfile").empty().append(data.files[0].name+' ');
+                        $("#uplfile").append(data.files[0].size+' ');
+                        $("#progress .bar").css('width','0%');
+                        $("#uplfile").append($('<button/>').text('Upload + Save')
                                                .click(function () {
                                                    $('#msg').empty().append('Uploading...');
                                                    data.submit();
@@ -348,8 +348,8 @@
                     done: function (e, data) {
                         $.each(data.result.files, function (index, file) {
                             if ( file.error != undefined ) { alert(file.error); return; };
-                            $('#uplfile').empty().append(file.name+' done');
-                            $('#msg').empty();
+                            $("#uplfile").empty().append(file.name+' done');
+                            $("#msg").empty();
                             DName = file.name;
                             newfile = 1;
                             saveWV();
@@ -357,7 +357,7 @@
                     },
                     progressall: function (e, data) {
                         var progress = parseInt(data.loaded / data.total * 100, 10);
-                        $('#progress .bar').css(
+                        $("#progress .bar").css(
                             'width',
                             progress + '%'
                         );

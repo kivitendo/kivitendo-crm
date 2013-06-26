@@ -67,7 +67,7 @@ if ($db) { echo "<a href='log/install.log'>Datenbankinstallation</a><br>"; } els
 <?php
 	if ($rc) {
 		echo 'Datenbankzugriff erfolgreich!<br>';
-print_r($rc);
+//print_r($rc);
 		foreach ($rc as $row) {
 			echo 'Installierte Version: '.$row["version"].' vom: '.$row["datum"].' durch: '.$row["uid"].'<br>';
 		}

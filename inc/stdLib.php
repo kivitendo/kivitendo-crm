@@ -81,28 +81,25 @@ function translate($word,$file) {
     }
 }
 function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
-    $db = new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
-    $sql  = "select sc.session_id,u.id from auth.session_content sc left join auth.\"user\" u on ";
+    $db   = new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
+    $sql  = "select sc.session_id,u.id,u.login from auth.session_content sc left join auth.\"user\" u on ";
     $sql .= "('--- ' || u.login || E'\\n')=sc.sess_value left join auth.session s on s.id=sc.session_id ";
-    $sql .= "where session_id = '$cookie' and sc.sess_key='login'";// order by s.mtime desc";
-    $rs = $db->getAll($sql,"authuser_0");
-    if ( count($rs) == 0 ) return false; // Garnicht mit ERP angemeldet
-    $stmp = "";
-    if ( count($rs) > 1 ) {   // zu viele Sessions, sollte die ERP drauf achten
+    $sql .= "where session_id = '$cookie' and sc.sess_key='login'";
+    $rs   = $db->getAll($sql,"authuser_0");
+    if ( count($rs) != 1 ) { // Garnicht mit ERP angemeldet oder zu viele Sessions, sollte die ERP drauf achten
         unset($_SESSION);
         $Url = preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
-        header( "location:".$Url."login.pl?action=logout" );
+        header( "location:".$Url."login.pl?action=logout" );        
     }
-    $sql = "select * from auth.\"user\" where id=".$rs[0]["id"];
-    $rs1 = $db->getAll($sql,"authuser_1");
-    if ( count($rs1) == 0 ) return false;
+    $stmp = "";
     $auth = array();
-    $auth["login"] = $rs1[0]["login"];
-    $sql = "select * from auth.user_config where user_id=".$rs[0]["id"];
-    $rs1 = $db->getAll($sql,"authuser_2");
+    $uid = $rs[0]["id"];
+    $auth["login"] = $rs[0]["login"];
+    $sql = "select * from auth.user_config where user_id=".$uid;
+    $rs = $db->getAll($sql,"authuser_2");
     $keys = array("dbname","dbpasswd","dbhost","dbport","dbuser","countrycode","stylesheet",
                   "company","address","vclimit","signature","email","tel");
-    foreach ( $rs1 as $row ) {
+    foreach ( $rs as $row ) {
         if ( in_array($row["cfg_key"],$keys) ) {
             $auth[$row["cfg_key"]] = $row["cfg_value"];
         }
@@ -112,10 +109,10 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     $auth["mansel"]     = $auth["dbname"];
     $auth["employee"]   = $auth["login"];
     $auth["lang"]       = ($auth["countrycode"] != '')?$auth["countrycode"]:'en';
-    //$auth["stylesheet"] = substr($auth["stylesheet"],0,-4).'/main.css';
     $auth["stylesheet"] = substr($auth["stylesheet"],0,-4);
+    //Eine der Gruppen des Users darf sales_all_edit
     $sql  = "SELECT granted from auth.group_rights G where G.right = 'sales_all_edit' ";
-    $sql .= "and G.group_id in (select group_id from auth.user_group where user_id = ".$rs[0]["id"].")";
+    $sql .= "and G.group_id in (select group_id from auth.user_group where user_id = ".$uid.")";
     $rs3 = $db->getAll($sql,"authuser_3");
     $auth["sales_edit_all"] = 'f';
     if ( $rs3 ) {
@@ -127,11 +124,13 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
          }
     }
     // Ist der User ein CRM-Supervisor?
-    $sql = "SELECT count(*) as cnt from auth.user_group left join auth.group on id=group_id where name = 'CRMTL' and user_id = ".$rs[0]["id"];
+    $sql = "SELECT count(*) as cnt from auth.user_group left join auth.group on id=group_id where name = 'CRMTL' and user_id = ".$uid;
     $rs  = $db->getAll($sql);
     $auth['CRMTL'] = $rs[0]['cnt'];
-    $sql = "update auth.session set mtime = '".date("Y-M-d H:i:s.100001")."' where id = '".$rs[0]["session_id"]."'"; 
+    //Session update
+    $sql = "update auth.session set mtime = '".date("Y-M-d H:i:s.100001")."' where id = '".$cookie."'"; 
     $db->query($sql,"authuser_3");
+    //Token lesen
     $sql = "SELECT * FROM auth.session WHERE id = '".$cookie."'";
     $rsa =  $db->getOne($sql);
     $auth['token'] = $rsa['api_token'];
@@ -748,13 +747,14 @@ function mkHeader() {
         'JQTABLE'       => $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/Table/jquery.tablesorter.js'.$SN.
                            $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/Table/addons/pager/jquery.tablesorter.pager.js'.$SN.
                            $LV.$_SESSION['basepath'].'crm/jquery-ui/plugin/Table/themes/blue/style.css'.$LN,
+        //'JQDATE'        => $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery.ui.datepicker.js'.$SN,
         'JQDATE'        => $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/'.(($_SESSION['lang']=='en')?
-                                                             'jquery.ui.datepicker':
+                                                             'jquery.ui.datepicker.js':
                                                              'i18n/jquery.ui.datepicker-'.$_SESSION['lang']).
                                                              '.js'.$SN,
         'JQFILEUP'      => $LV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/css/jquery.fileupload-ui.css'.$LN.
-                           $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.iframe-transport.min.js'.$SN.
-                           $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.fileupload.min.js'.$SN,
+                           $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.iframe-transport.js'.$SN.
+                           $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.fileupload.js'.$SN,
         'JQWIDGET'      => $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/minified/jquery.ui.widget.min.js'.$SN,
         'THEME'         => ($_SESSION['theme']!='')? $LVID  .$_SESSION['basepath'].'crm/jquery-ui/themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN:'',
         'CRMCSS'        => $LV.$_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"].'/main.css'.$LN,
@@ -898,11 +898,11 @@ function accessHistory($data=false) {
         $sql = "select val from crmemployee where uid = '" . $_SESSION["loginCRM"] .  "' AND key = 'search_history'";
         $rs =   $_SESSION['db']->getOne($sql);
         $array_of_data = json_decode($rs['val'],true);
-        if ( !$data ) {
+        if ( !$data && $array_of_data) {
              return array_reverse($array_of_data);
         }
         else {
-            if ( in_array($data, $array_of_data) ) unset( $array_of_data[array_search($data, $array_of_data)]);
+            if ( $array_of_data && in_array($data, $array_of_data) ) unset( $array_of_data[array_search($data, $array_of_data)]);
             $array_of_data[] = $data;
             if ( count($array_of_data) > 8 ) array_shift($array_of_data); 
             $sql = "UPDATE crmemployee SET val = '".addslashes(json_encode($array_of_data))."' WHERE uid = ".$_SESSION['uid']." AND key = 'search_history'";

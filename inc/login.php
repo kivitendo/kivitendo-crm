@@ -26,12 +26,12 @@ if ($_POST["erpname"]) {
     $_SESSION['erpConfigFile'] = $_POST['erpConfigFile'];
 }
 
-#$conffile = '';
-#if ( substr(getcwd(),-3) == "inc" || substr(getcwd(),-6) == "jqhelp" || substr(getcwd(),-6) == "lxcars" ) {
-#    $conffile = "../";
-#}
-if ( empty($_SESSION['crmname']) ) $_SESSION['crmname'] = getcwd();
-$conffile = $_SESSION['crmname']."/../".$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf";
+// Beim Setzen von crmpath muss zwingend darauf geachtet werden, dass man sich nicht in einem Unterverzeichnis befindet.
+// Bem.: Da am Ende des von getcwd() zurück gegeben Strings kein Slash steht funktioniert dirname() hier.
+// aus /root/kivitendo/inc wird /root/kivitendo 
+if ( empty($_SESSION['crmpath']) ) $_SESSION['crmpath'] = ( substr(getcwd(),-3) == "inc" || substr(getcwd(),-6) == "jqhelp" || substr(getcwd(),-6) == "lxcars" ) ? dirname(getcwd()) : getcwd();
+$conffile = $_SESSION['crmpath']."/../".$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf";
+
 
 //$conf = array('ERPNAME','erpConfigFile');
 //while( list($key,$val) = each($_SESSION) ) {
@@ -42,12 +42,8 @@ if ( is_file($conffile) ) {
     $tmp = anmelden();
     if ( $tmp ) {
         $rs = $_SESSION['db']->getOne('SELECT * FROM crm ORDER BY version DESC LIMIT 1');
-        if ( is_object($rs) ) {
-            echo "DebugInfo: MDB2 hat statt einem Array ein Objekt zurückgeben,  
-                  PHP Fatal error:  Cannot use object of type MDB2_Error as array";           
-            print_r($rs);
-        }    
-        if ( !$rs || $rs["version"]=="" || $rs["version"]==false ) {
+        // Existiert crm nicht so kann auch ein Fehler-Objekt zurückgegeben werden
+        if ( is_object($rs) || !$rs || $rs["version"]=="" || $rs["version"]==false ) {
             echo "CRM-Tabellen sind nicht (vollst&auml;ndig) installiert"; 
             flush(); 
             require("install.php");

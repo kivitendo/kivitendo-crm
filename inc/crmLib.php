@@ -644,7 +644,7 @@ function getCallHistory($id,$bezug=false) {
 * alle wiedervorlagen eines Users auslesen
 *****************************************************/
 function getWvl($crmuser) {
-    $sql  = "select *,(select name from employee where id= employee) as ename ";
+    $sql  = "select *,(select name from employee where id= employee) as ename,'' as starttag,'' as stopzeit,'' as stoptag ";
     $sql .= "from wiedervorlage where (employee=$crmuser or employee is null) and status > '0' order by  finishdate asc ,initdate asc";
     $rs1 = $_SESSION['db']->getAll($sql);
     if( !$rs1 ) {
@@ -652,7 +652,7 @@ function getWvl($crmuser) {
     } else {
         if (count($rs1)==0) $rs1=array(array("id"=>0,"initdate"=>date("Y-m-d H:i:00"),"cause"=>"Keine Eintr&auml;ge"));
     }
-    $sql  = "SELECT follow_ups.id,follow_up_date,created_for_user,subject,body,trans_id,note_id,trans_module,E.name as ename from ";
+    $sql  = "SELECT follow_ups.id,follow_up_date,created_for_user,created_by,subject,body,trans_id,note_id,trans_module,E.name as ename from ";
     $sql .= "follow_ups left join notes on note_id=notes.id left join employee E on E.id=follow_ups.created_for_user ";
     $sql .= "where done='f' and created_for_user=$crmuser";
     $rs2 = $_SESSION['db']->getAll($sql);
@@ -670,6 +670,10 @@ function getWvl($crmuser) {
                 "employee"  => $row["created_for_user"],
                 "ename"     => $row["ename"],
                 "initdate"  => $row["follow_up_date"]." 00:00",
+                'finishdate' => '',
+                'stoptag'   => '',
+                'stopzeit'  => '',
+                'starttag'  => '',
                 "note_id"   => $row["note_id"]);
         }
     }
@@ -1161,7 +1165,7 @@ function holeMailHeader($usr,$Flag) {
     $srv = getUsrMailData($usr);
     $m=array();
     if ($srv["msrv"] && $srv["postf"]) {  // Mailserver/Postfach eingetragen
-        $mbox = mail_login($srv["msrv"],$srv["port"],$srv["postf"],$srv["mailuser"],$srv["kennw"],$srv["pop"],$srv["ssl"]);
+        $mbox = mail_login($srv["msrv"],$srv["port"],$srv["postf"],$srv["mailuser"],$srv["kennw"],$srv["proto"],$srv["ssl"]);
         if ($mbox) {
             $status = mail_stat($mbox);
             $anzahl= $status["Nmsgs"] - $status["Deleted"];
@@ -1177,7 +1181,7 @@ function holeMailHeader($usr,$Flag) {
                                     "Betreff"   =>  $mail["subject"],
                                     "Abs"       =>  $mail["from"],
                                     "Gelesen"   =>  $gelesen,
-                                    "sel"       =>  $mail["flaged"]);
+                                    "sel"       =>  $mail["flagged"]);
                         }
                     }
                     if (empty($m)) $m[]=array("Nr"=>0,"Datum"=>"","Betreff"=>"Keine Mails","Abs"=>"","Gelesen"=>"");
@@ -1242,7 +1246,7 @@ function getOneMail($usr,$nr) {
     $files=array();
     mb_internal_encoding($_SESSION["charset"]);
     $srv=getUsrMailData($usr);
-    $mbox = mail_login($srv["msrv"],$srv["port"],$srv["postf"],$srv["mailuser"],$srv["kennw"],$srv["pop"],$srv["ssl"]);
+    $mbox = mail_login($srv["msrv"],$srv["port"],$srv["postf"],$srv["mailuser"],$srv["kennw"],$srv["proto"],$srv["ssl"]);
     $head = mail_parse_headers(mail_retr($mbox,$nr));
     if (!$head) return;
     $info = mail_fetch_overview($mbox,$nr);
@@ -1280,7 +1284,7 @@ function getOneMail($usr,$nr) {
     $data["cause"]=$subject;
     $data["c_long"]=$mybody.$body; 
     $data["Datei"]=$anhang;
-    $data["status"]="2";
+    $data["status"]="1";
     $data["InitCrm"]=$_SESSION["loginCRM"];    //$head[""];
     $data["CRMUSER"]=$_SESSION["employee"];    //$head[""];
     $data["DCaption"]=($files)?$data["cause"]:"";
@@ -1301,7 +1305,8 @@ function getUsrMailData($id) {
     if( !$rs ) {
         $data = false;
     } else {
-        $mail = array('msrv','port','mailuser','postf','ssl','kennw','postf2');
+        $data = array('msrv'=>'','port'=>'','mailuser'=>'','postf'=>'','ssl'=>'','kennw'=>'','postf2'=>'', 'proto'=>'');
+        $mail = array_keys($data);
         foreach ( $rs as $row ) {
             if ( in_array($row['key'],$mail) ) {
                 $data[$row['key']] = $row['val'];
@@ -1321,7 +1326,7 @@ function getUsrMailData($id) {
 *****************************************************/
 function createMailBox($name,$id) {
     $srv=getUsrMailData($id);
-    $mbox = mail_login($srv["msrv"],$srv["port"],$srv["postf"],$srv["mailuser"],$srv["kennw"],$srv["pop"],$srv["ssl"]);
+    $mbox = mail_login($srv["msrv"],$srv["port"],$srv["postf"],$srv["mailuser"],$srv["kennw"],$srv["proto"],$srv["ssl"]);
     $name1 = $name;
     $name2 = imap_utf7_encode ($name);
     $newname = $name1;
@@ -1369,7 +1374,7 @@ function createMailBox($name,$id) {
 *****************************************************/
 function moveMail($mail,$id,$Flag,$Expunge) {
     $srv=getUsrMailData($id);
-    $mbox = mail_login($srv["msrv"],$srv["port"],$srv["postf"],$srv["mailuser"],$srv["kennw"],$srv["pop"],$srv["ssl"]);
+    $mbox = mail_login($srv["msrv"],$srv["port"],$srv["postf"],$srv["mailuser"],$srv["kennw"],$srv["proto"],$srv["ssl"]);
     mail_flag($mbox,$mail,$Flag);
     if ($Expunge && $Flag=='Delete')  mail_expunge($mbox); 
     mail_close($mbox);
@@ -1383,7 +1388,7 @@ function moveMail($mail,$id,$Flag,$Expunge) {
 *****************************************************/
 function delMail($mail,$id,$Expunge) {
     $srv = getUsrMailData($id);
-    $mbox = mail_login($srv["msrv"],$srv["port"],$srv["postf"],$srv["mailuser"],$srv["kennw"],$srv["pop"],$srv["ssl"]);
+    $mbox = mail_login($srv["msrv"],$srv["port"],$srv["postf"],$srv["mailuser"],$srv["kennw"],$srv["proto"],$srv["ssl"]);
     $rc = mail_dele($mbox,$mail);
     if ($Expunge) $rc = mail_expunge($mbox); 
     mail_close($mbox);

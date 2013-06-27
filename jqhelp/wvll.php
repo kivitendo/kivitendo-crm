@@ -16,14 +16,14 @@
         $mail = holeMailHeader($_SESSION["loginCRM"],$_SESSION['MailFlag']);
         if ($mail) foreach($mail as $col){
             $ret[] = array(
-                Type     => "M",
-                Status   => $col["Gelesen"],
-                cause    => $col["Betreff"],
-                Initdate => $col["Datum"],
-                ID       => $col["Nr"],
-                IniUser  => htmlspecialchars($col["Abs"]),
-                Art      => "E",
-                End      => 0
+                'Type'     => "M",
+                'Status'   => $col["Gelesen"],
+                'cause'    => $col["Betreff"],
+                'Initdate' => $col["Datum"],
+                'ID'       => $col["Nr"],
+                'IniUser'  => htmlspecialchars($col["Abs"]),
+                'Art'      => "E",
+                'End'      => 0
             );
             $mailcnt++;
         }
@@ -56,14 +56,14 @@
             else if ($col["starttag"]) { $Art="T"; }
             else { $Art="D"; };
             $ret[] = array(
-                Type     => ($col["kontakt"])?$col["kontakt"]:"X",
-                Status   => ($col["status"])?$col["status"]:"-",
-                cause    => $col["cause"],
-                Initdate => $datum,
-                ID       => $col["id"],
-                IniUser  => ($col["ename"])?$col["ename"]:$col["employee"],
-                Art      => $Art,
-                End      => $end
+                'Type'     => ($col["kontakt"])?$col["kontakt"]:"X",
+                'Status'   => ($col["status"])?$col["status"]:"-",
+                'cause'    => $col["cause"],
+                'Initdate' => $datum,
+                'ID'       => $col["id"],
+                'IniUser'  => ($col["ename"])?$col["ename"]:$col["employee"],
+                'Art'      => $Art,
+                'End'      => $end
             );
         };
         echo json_encode( $ret );
@@ -79,7 +79,11 @@
     }
     function _getOneMail($id) {
         $data = getOneMail($_SESSION["loginCRM"],$id);
-        echo json_encode( $data );
+        if ( $data ) {
+            echo json_encode( $data );
+        } else {
+            echo json_encode( array('rc'=>-9) );
+        }
     }
     function _delMail($id) {
        $rc = delMail($id,$_SESSION["loginCRM"],$_SESSION["Expunge"]);
@@ -130,11 +134,11 @@
     }
 
 
-    //$f=fopen('/tmp/wvl','w');
+    //$f=fopen('/tmp/wvl','a');
     //fputs($f,print_r($_POST,true));
     //fputs($f,print_r($_GET,true));
     //fclose($f);
-if ( $_POST['task'] == 'erp' ) {
+if ( isset($_POST['task']) and $_POST['task'] == 'erp' ) {
     if ( $_POST['kontakt'] == 'F' ) {
         echo updWvlERP($_POST);
         return;
@@ -149,11 +153,11 @@ if ( $_POST['task'] == 'erp' ) {
             }
         }
     }
-} else if ( $_POST['task'] == 'wvl' ) {
+} else if ( isset($_POST['task']) and $_POST['task'] == 'wvl' ) {
     _saveWvl($_POST);
-} else if ( $_POST['task'] == 'delmail' ) {
+} else if ( isset($_POST['task']) and $_POST['task'] == 'delmail' ) {
     _delMail($_POST['WVLID']);
-} else if ( $_POST['task'] == 'mail' ) {
+} else if ( isset($_POST['task']) and $_POST['task'] == 'mail' ) {
     _saveMail($_POST);
 } else {
     switch ($_GET['task']) {

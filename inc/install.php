@@ -1,24 +1,21 @@
 <?php
-if ($_GET['check']==1) {
-	$p='../';
+if (isset($_GET['check'])&&$_GET['check']==1) {
 	$check=true;
     $inclpa=ini_get('include_path');
     ini_set('include_path',$inclpa.":../:./inc:../inc");
 } else {	
-   	$p='';
    	$check=false;
 }
-$p=($_GET['check']==1)?'../':'';
 include_once("inc/stdLib.php");
-include($p.'inc/conf.php');
-include($p.'inc/version.php');
+include($_SESSION['crmpath'].'/inc/conf.php');
+include($_SESSION['crmpath'].'/inc/version.php');
 if (ob_get_level() == 0) ob_start();
 echo "<br>Installation der Version $VERSION";
 echo " der Datenbankinstanz: ".$_SESSION["dbname"]."<br>";
 ob_flush();
 flush();
-if ($log=@fopen($p.'log/install.log',"a")) {
-	$logfile=$p."log/install.log";
+if ($log=@fopen($_SESSION['crmpath'].'/log/install.log',"a")) {
+	$logfile=$_SESSION['crmpath']."/log/install.log";
 	echo 'Logfile in '.$logfile.'<br>';
 } else {
 	$logfile="";
@@ -27,8 +24,8 @@ if ($log=@fopen($p.'log/install.log',"a")) {
 	exit (1);
 }
 echo "Schreibrechte im CRM-Verzeichnis pr&uuml;fen<br>";
-if (!file_exists($p."dokumente/".$_SESSION["dbname"]))  {
-	$rc=mkdir ($p."dokumente/".$_SESSION["dbname"], $_SESSION['dir_mode']);
+if (!file_exists($_SESSION['crmpath']."/dokumente/".$_SESSION["dbname"]))  {
+	$rc=mkdir ($_SESSION['crmpath']."/dokumente/".$_SESSION["dbname"], $_SESSION['dir_mode']);
 	if ($rc) { 
         if ( $_SESSION["dir_group"] ) chgrp($p."dokumente/".$_SESSION["dbname"], $_SESSION['dir_group']);
         echo "Verzeichnis: dokumente/".$_SESSION["dbname"]." erfolgreich erstellt.<br>"; 
@@ -38,28 +35,28 @@ if (!file_exists($p."dokumente/".$_SESSION["dbname"]))  {
 }
 $ok="<b>ok</b>";
 $fehler="<font color='red'>Fehler!</font>";
-if (is_writable($p."dokumente")) { 
+if (is_writable($_SESSION['crmpath']."/dokumente")) { 
 	echo "dokumente/ : $ok<br>"; 
 	fputs($log,"dokumente/ : ok\n");
 } else { 
 	echo "dokumente/ : $fehler kein Schreibrecht<br>"; 
 	fputs($log,"dokumente/ : fehler\n");
 }
-if (is_writable($p."dokumente/".$_SESSION["dbname"])) { 
+if (is_writable($_SESSION['crmpath']."/dokumente/".$_SESSION["dbname"])) { 
 	echo "dokumente/".$_SESSION["dbname"]." : $ok<br>"; 
 	fputs($log,"dokumente/".$_SESSION["dbname"]." : ok\n");
 } else { 
 	echo "dokumente/".$_SESSION["dbname"]." : $fehler kein Schreibrecht<br>"; 
 	fputs($log,"dokumente/".$_SESSION["dbname"]." : fehler\n");
 }
-if (is_writable($p."vorlage")) { 
+if (is_writable($_SESSION['crmpath']."/vorlage")) { 
 	echo "vorlage/ : $ok<br>"; 
 	fputs($log,"vorlage/ : ok\n");
 } else { 
 	echo "vorlage/ : $fehler kein Schreibrecht<br>"; 
 	fputs($log,"vorlage/ : fehler\n");
 }
-if (is_writable($p."inc/conf.php")) { 
+if (is_writable($_SESSION['crmpath']."/inc/conf.php")) { 
 	echo "inc/conf.php : $ok<br>"; 
 	fputs($log,"inc/conf.php : ok\n");
 } else { 
@@ -82,11 +79,9 @@ echo "<br>Voraussetzungen pr&uuml;fen:<br>";
 	      fputs($log,"Curl : Fehler\n");
         }	
         $chkfile=array("DB"=>"MDB2","Driver"=>"MDB2/Driver/pgsql",
-                        "fpdf","fpdi","Mail","Mail/mime",
-                        "jpgraph",
-		        "Contact_Vcard_Build","Contact_Vcard_Parse",
-                        "jQuery-UI"=>array("jquery-ui/jquery","jquery-ui/ui/jquery-ui"));
-        $chkstat=array(1,1,0,0,0,0,0,0,0,1);
+                        "fpdf","fpdi","Mail","Mail/mime","jpgraph",
+	                    "Contact_Vcard_Build","Contact_Vcard_Parse");
+        $chkstat=array(1,1,0,0,0,0,0,0,0);
         $OK=true;
 	$pos=0;
 	$dbok=true;
@@ -168,7 +163,7 @@ if ($dbok) {
 	if ($_GET['check']==2 || $_GET['check']=='') {
 		//$sql="select * from defaults";
 		$sql="SELECT * from schema_info  where tag like 'release_%' order by tag desc limit 1";
-		$rs=$db->getAll($sql);
+		$rs=$_SESSION['db']->getAll($sql);
 		if (substr($rs[0]["tag"],0,11)>="release_2_6") {  
 			fputs($log,$rs[0]["version"]." als Basis\n");
 			echo "$ok. ERP-DB gefunden<br>";
@@ -204,7 +199,7 @@ while (!feof($f)) {
 		$query.=$zeile;
 	} else {
 		$query.=$zeile;
-		$rc=$db->query(substr($query,0,-1));
+		$rc=$_SESSION['db']->query(substr($query,0,-1));
 		if ($rc) { $OK++; echo ".";}
 		else { 
 			$fehl++; 

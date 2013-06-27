@@ -1,7 +1,7 @@
 <?php
 
 function mail_login($host,$port,$folder,$user,$pass,$pop,$ssl) {
-    if ($pop) {
+    if (!$pop) {
         if ($ssl=='n') {
             $ssl = "/notls";
             if (empty($port)) $port = '110';

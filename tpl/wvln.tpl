@@ -7,9 +7,9 @@
 {THEME}
 {JQTABLE}
 {JQDATE}
-{JAVASCRIPTS}   
 {JQFILEUP}
 {JQWIDGET}
+{JAVASCRIPTS}   
     <script language="JavaScript">
     <!--
         var WVLID = 0;
@@ -58,7 +58,9 @@
                     $('#Finish').val(data.Finish);
                     $('#DCaption').val(data.DCaption);
                     $('#status'+data.status).prop('checked',true);
+                    $('#Sradio').buttonset('refresh');
                     $('#kontakt'+data.kontakt).prop('checked',true);
+                    $('#Kradio').buttonset('refresh');
                     $('#DLink').prop('href','dokumente/'+data.DPath+data.DName);
                     $('#DLink').text(data.DName);
                     DName = data.DName;
@@ -89,30 +91,39 @@
             });
         }
         function showMail(id) {
+            console.log('Mail-ID:'+id);
             $.ajax({
                 url: 'jqhelp/wvll.php?task=mail&id='+id,
                 dataType: 'json',
                 success: function(data){
                     console.log(JSON.stringify(data));
-                    $('.mail').show();
-                    $('.hideK').hide();
-                    $('.hideD').hide();
-                    $('.hideE').hide();
-                    WVLID = data.id;
-                    MailID = data.muid;
-                    $('#cause').val(data.cause);
-                    $('#c_long').val(data.c_long);
-                    $('#kontaktE').prop('checked',true);
-                    $('#status'+data.status).prop('checked',true);
-                    $.each(data.flags, function(index, item) {
-                        if ( item > 0 ) $('#'+index).prop('checked',true) 
-                        else $('#'+index).prop('checked', false) 
-                    });
-                    files = '';
-                    $.each(data.Anhang, function(index, item) {
-                        files += "<input type='checkbox' class='dateien' name='dateien[]' value='"+item.name+","+item.size+","+item.type+"' checked> [<a href='tmp/"+item.name+"'>"+item.name+"</a>]</br>"
-                    });
-                    $('#files').html(files);
+                    if ( data.rc == -9 ) {
+                         Fehler(-9);
+                    } else {
+                        $('.mail').show();
+                        $('.hideK').hide();
+                        $('.hideD').hide();
+                        $('.hideE').hide();
+                        WVLID = data.id;
+                        MailID = data.muid;
+                        $('#cause').val(data.cause);
+                        $('#c_long').val(data.c_long);
+                        $('#name').val(data.kontaktname);
+                        KontaktTab = data.kontakttab;
+                        KontaktID = data.kontaktid;
+                        $('#kontaktE').prop('checked',true);
+                        $('#status'+data.status).prop('checked',true);
+                        $('#Sradio').buttonset('refresh');
+                        $.each(data.flags, function(index, item) {
+                            if ( item > 0 ) $('#'+index).prop('checked',true) 
+                            else $('#'+index).prop('checked', false) 
+                        });
+                        files = '';
+                        $.each(data.Anhang, function(index, item) {
+                            files += "<input type='checkbox' class='dateien' name='dateien[]' value='"+item.name+","+item.size+","+item.type+"' checked> [<a href='tmp/"+item.name+"'>"+item.name+"</a>]</br>"
+                        });
+                        $('#files').html(files);
+                    }
                 }
             });
         }
@@ -147,6 +158,7 @@
             $('#Finish').val('');
             $('#status1').prop('checked',true);
             $('#kontaktT').prop('checked',true);
+            //$('#Kradio').buttonset("refresh");
             $('#DLink').prop('href','');
             $('#DLink').text('');
             $('#cp_cv_id').val('');
@@ -163,6 +175,7 @@
             else if ( nr == -6 ) { msg = 'Zuweisung fehlheschlagen!'; }
             else if ( nr == -7 ) { msg = 'Mail nicht zugewiesen!'; }
             else if ( nr == -8 ) { msg = 'Fileupload fehlgeschlagen!'; }
+            else if ( nr == -9 ) { msg = 'Mail konnte nich abgeholt werden'; }
             else                 { msg = "Fehler beim Sichern";};
             alert("Error: "+nr+"\n"+msg);
         }
@@ -223,7 +236,6 @@
                              'CRMUSER':crmuser, 'kontakt':'E', 
                              'dateien[]':dateien, 'task':'mail' },
                     success: function(rc){
-                        console.log(JSON.stringify(rc));
                         if ( rc == 1 ) {
                             resetShow();
                         } else {
@@ -259,6 +271,7 @@
                 url: 'jqhelp/wvll.php?task=wvl',
                 dataType: 'json',
                 success: function(data){
+                    //console.log(JSON.stringify(data));
                     $('#wvliste tr[group="tc"]').remove();
                     $("#wvliste").trigger('update');
                     var content = '';
@@ -291,26 +304,41 @@
             var to = setTimeout(function(){ doInit(); },{timeout});
         }
         function suchDst() {
-            val=document.formular.name.value;
-            f1=open("suchFa.php?pers=1&name="+val,"suche","width=350,height=200,left=100,top=100");
+            val = document.formular.name.value;
+            f1  = open("suchFa.php?pers=1&name="+val+"&tab="+KontaktTab+"&id="+KontaktID,"suche","width=350,height=200,left=100,top=100");
         }
     //-->
     </script>
     <script>
-        $(function() {
-            $( "#Finish" ).datepicker($.datepicker.regional[ "de" ]);
-        });
         $(document).ready(
             $(function () {
+                $( "#Kradio" ).buttonset();
+                $( "#Sradio" ).buttonset();
+                $("button").button().click( 
+                    function(event) {
+                        event.preventDefault();
+                        name = this.getAttribute('name');
+                        if ( name == 'saveWV' ) {
+                           saveWV();
+                        } else if ( name == 'delWV' ) {
+                            delWV();
+                        } else if ( name == 'resetShow' ) {
+                            resetShow();
+                        } else if ( name == 'dst' ) {
+                            suchDst();
+                        }
+                 });
+
+                $( "#Finish" ).datepicker($.datepicker.regional[ "de" ]);
                 resetShow();
                 doInit();
-                $('#fileupload').fileupload({
+                $("#fileupload").fileupload({
                     dataType: 'json',
                     add: function (e, data) {
-                        $('#uplfile').empty().append(data.files[0].name+' ');
-                        $('#uplfile').append(data.files[0].size+' ');
-                        $('#progress .bar').css('width','0%');
-                        $('#uplfile').append($('<button/>').text('Upload + Save')
+                        $("#uplfile").empty().append(data.files[0].name+' ');
+                        $("#uplfile").append(data.files[0].size+' ');
+                        $("#progress .bar").css('width','0%');
+                        $("#uplfile").append($('<button/>').text('Upload + Save')
                                                .click(function () {
                                                    $('#msg').empty().append('Uploading...');
                                                    data.submit();
@@ -320,8 +348,8 @@
                     done: function (e, data) {
                         $.each(data.result.files, function (index, file) {
                             if ( file.error != undefined ) { alert(file.error); return; };
-                            $('#uplfile').empty().append(file.name+' done');
-                            $('#msg').empty();
+                            $("#uplfile").empty().append(file.name+' done');
+                            $("#msg").empty();
                             DName = file.name;
                             newfile = 1;
                             saveWV();
@@ -329,7 +357,7 @@
                     },
                     progressall: function (e, data) {
                         var progress = parseInt(data.loaded / data.total * 100, 10);
-                        $('#progress .bar').css(
+                        $("#progress .bar").css(
                             'width',
                             progress + '%'
                         );
@@ -340,11 +368,12 @@
             })
         );
    </script>
+   <script type='text/javascript' src='inc/help.js'></script>
                     
 <body >
 {PRE_CONTENT}
 {START_CONTENT}
-<p class="listtop">Wiedervorlage</p>
+<p class="listtop" onClick="help('Wiedervorlage');" >Wiedervorlage (?)</p>
 <div style="float:left; width:45em; height:40em; text-align:center; border: 1px solid lightgray;" >
 <form name="formular" action="wvl1.php" enctype='multipart/form-data' method="post" onSubmit='return false;'>
 <INPUT TYPE="hidden" name="MAX_FILE_SIZE" value="2000000">
@@ -361,7 +390,7 @@
     </td><td width='*'>
         <span>
             <input type="text" id="name" name="name" size="25" maxlength="75"  value="" tabindex="2"> 
-            <input type="button" name="dst" value=" ? " onClick="suchDst();" tabindex="99"> 
+            <button name="dst" id="dst"> ? </button> 
         </span>
         <br>
         <span class="klein" >Zugewiesen an &nbsp;[<a href="" id="addresse" name="addresse"></a>]</span>
@@ -371,12 +400,14 @@
         <input type="text" name="Finish" id="Finish" size="11" maxlength="10" value="" tabindex="3">
         <br><span class="klein">Zu Erledigen bis</span>
     </td><td class="klein" width='*'>
-        <span class='hideK' >
-        <input type="radio" name="status" id="status1" value="1" tabindex="5" checked>1&nbsp;
-        <input type="radio" name="status" id="status2" value="2" tabindex="6">2&nbsp;
-        <input type="radio" name="status" id="status3" value="3" tabindex="7">3&nbsp;
-        </span>
-        <input type="radio" name="status" id="status0" value="0" tabindex="8" >Erledigt
+        <div id="Sradio">
+            <input type="radio" name="status" id="status1" value="1" tabindex="5" checked><label for="status1">1&nbsp;</label>
+            <span class='hideK' >
+                <input type="radio" name="status" id="status2" value="2" tabindex="6"><label for="status2">2&nbsp;</label>
+                <input type="radio" name="status" id="status3" value="3" tabindex="7"><label for="status3">3&nbsp;</label>
+            </span>
+            <input type="radio" name="status" id="status0" value="0" tabindex="8" ><label for="status0">Erledigt</label>
+        </div>
         <br><span class="klein">Priorit&auml;t</span>
     </td>
 </tr><tr>
@@ -406,13 +437,19 @@
     </td>
 </tr><tr style="width:100%">
     <td class="klein" colspan="2">
-        <span class='hideK'><input type="radio" name="kontakt" id="kontaktT" value="T" tabindex="12" checked>Telefon &nbsp;</span>
-        <span class='hideK'><input type="radio" name="kontakt" id="kontaktM" value="M" tabindex="13">E-Mail &nbsp;</span>
-        <span class='hideK'><input type="radio" name="kontakt" id="kontaktS" value="S" tabindex="14">Fax/Brief &nbsp;</span>
-        <span class='hideK'><input type="radio" name="kontakt" id="kontaktP" value="P" tabindex="15">Pers&ouml;nlich &nbsp;</span>
-        <span class='hideK'><input type="radio" name="kontakt" id="kontaktD" value="D" tabindex="16">Datei &nbsp;</span>
-        <span class='hideE'><input type="radio" name="kontakt" id="kontaktF" value="F" tabindex="16">ERP</span>
-        <span style="visibility:hidden"><input type="radio" name="kontakt" id="kontaktE" value="E" tabindex="16">E-Mail &nbsp;</span><!-- vom Mailserver -->
+       <div id="Kradio">
+           <span class='hideK'>
+               <input type="radio" name="kontakt" id="kontaktT" value="T" tabindex="12" checked><label for="kontaktT">Telefon &nbsp;</label>
+               <input type="radio" name="kontakt" id="kontaktM" value="M" tabindex="13"><label for="kontaktM">E-Mail &nbsp;</label>
+               <input type="radio" name="kontakt" id="kontaktS" value="S" tabindex="14"><label for="kontaktS">Fax/Brief &nbsp;</label>
+               <input type="radio" name="kontakt" id="kontaktP" value="P" tabindex="15"><label for="kontaktP">Pers&ouml;nlich &nbsp;</label>
+               <input type="radio" name="kontakt" id="kontaktD" value="D" tabindex="16"><label for="kontaktD">Datei &nbsp;</label>
+           </span>
+           <span class='hideE'>
+               <input type="radio" name="kontakt" id="kontaktF" value="F" tabindex="16"><label for="kontaktF">ERP</label>
+           </span>
+       </div> 
+        <span style="visibility:hidden"><input type="radio" name="kontaktE" id="kontaktE" value="E" tabindex="16"><label for="kontaktE">E-Mail &nbsp;</label></span><!-- vom Mailserver -->
         <br>
         <span class="klein">Kontaktart</span> 
     </td>
@@ -422,8 +459,9 @@
     </td>
 </tr><tr width="100%">
 	<td colspan="2">
-        <input type="submit" value="reset" onClick='resetShow();' tabindex="18"> &nbsp; <input type="submit" onClick='saveWV();' name="save" value="sichern" tabindex="17"> &nbsp; 
-        <input type="submit" name="delete" onClick='delWV();' value="l&ouml;schen" tabindex="17" class='mail'>
+        <button id='reset' name='resetShow'>.:reset:.</button>
+        <button id='save'  name='saveWV'>.:save:.</button>
+        <button id='del'  class='mail' name='delWV'>.:delete:.</button>
     </td>
 </tr><tr class='mail' style="width:100%;">
     <td colspan="2">
@@ -471,4 +509,3 @@
 {END_CONTENT}
 </body>
 </html>
-

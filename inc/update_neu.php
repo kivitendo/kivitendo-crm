@@ -1,6 +1,6 @@
 <?php
-    chdir($_SESSION['crmdir']);
-    require_once("inc/stdLib.php");
+    require_once("stdLib.php");
+    chdir($_SESSION['crmpath']);
 
     if (!function_exists('updatever')) {
 	    function updatever($db,$VERSION) {

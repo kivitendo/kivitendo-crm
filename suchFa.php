@@ -4,9 +4,34 @@
 	include("inc/FirmenLib.php");
 	include("inc/persLib.php");
 
-	$pers=$_GET["pers"];
-	$op=$_GET["op"];
-	$nq=$_GET["nq"];
+    if ( isset($_GET) ) {
+        foreach ($_GET as $key=>$val) {
+            ${$key} = $val;
+        };
+    };
+    if ( $id > 0 ) {
+        $txt = '';
+        if ( $tab == 'P' ) {
+            $rs = getKontaktStamm($id);
+            if ( $rs ) {
+                $txt = $rs['cp_givenname'].' '.$rs['cp_name'].' '.$rs['name'];
+            }
+        } else {
+            $rs = getFirmenStamm($id,false,$tab,false);
+            if ( $rs ) {
+                $txt = $rs['name'].' - '.$rs['city'];
+            }
+        }
+        if ( $txt != '' ) {
+            $txt .= ' (zugeordnet)';
+            echo "<html><script language='JavaScript'>";
+            echo "opener.document.formular.cp_cv_id.value='$tab$id';";
+            echo "opener.document.formular.name.value='$txt';";
+            echo "self.close();";
+            echo "</script></html>";
+            exit(1);
+        }
+    }
 ?>
 <html>
 	<script language="JavaScript">
@@ -24,7 +49,7 @@
 			opener.document.formular.fid.value=fid;
 			opener.document.formular.name.value=txt;
 			opener.document.formular.tab.value=val.substr(0,1);
-<?php } else if ($_GET["konzernname"]) {?>
+<?php } else if ($konzernname) {?>
 			opener.document.neueintrag.konzern.value=fid;
 			opener.document.neueintrag.konzernname.value=txt;
 <?php } else {?>
@@ -43,31 +68,30 @@
 <select name="Alle" >
 	<option value=''>nichts markiert</option>
 <?php
-	$name=($_GET["name"])?strtoupper($_GET["name"]):strtoupper($_GET["konzernname"]);
-	if ($name=="EINZELPERSON") $name="";
-	if ($_GET["tab"]) {
-		$tmp="daten".$_GET["tab"];
-		$datenC=getAllFirmen(array(1,$name),true,$_GET["tab"]);
+	if ( $konzenname != '' ) $name = $konzernname;
+	if ( $name=="EINZELPERSON" ) $name="";
+	if ( $tab ) {
+		$datenC = getAllFirmen(array(1,$name),true,$tab);
 	} else {
-		$datenC=getAllFirmen(array(1,$name),true,"C");
-		$datenL=getAllFirmen(array(1,$name),true,"V");
+		$datenC = getAllFirmen(array(1,$name),true,"C");
+		$datenL = getAllFirmen(array(1,$name),true,"V");
 	}
-	if ($pers) {
+	if ( $pers ) {
 		$datenP=getAllPerson(array(1,$name));
-		if ($datenP) foreach ($datenP as $zeile) {
+		if ( $datenP ) foreach ( $datenP as $zeile ) {
 			echo "\t<option value='P".$zeile["cp_id"]."'>".$zeile["cp_name"].", ".$zeile["cp_givenname"].", ".$zeile["cp_city"]." P</option>\n";
 		}
 	}
-	if ($datenC) {
-        if ($_GET["tab"]=="V")
-            $tab="L";
+	if ( $datenC ) {
+        if ( $tab == "V" )
+            $tab = "L";
         else
-            $tab="K";
-        foreach ($datenC as $zeile) {
+            $tab = "K";
+        foreach ( $datenC as $zeile ) {
 	    	echo "\t<option value='C".$zeile["id"]."'>".$zeile["customernumber"]." ".$zeile["name"].", ".$zeile["city"]." $tab</option>\n";
         }
 	}
-	if ($datenL) foreach ($datenL as $zeile) {
+	if ( $datenL ) foreach ( $datenL as $zeile ) {
 		echo "\t<option value='V".$zeile["id"]."'>".$zeile["vendornumber"]." ".$zeile["name"].", ".$zeile["city"]." L</option>\n";
 	}
 

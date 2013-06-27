@@ -6,13 +6,12 @@
 * ist das ein Kunde oder Lieferant
 *****************************************************/
 function chkTable($fid){
-global $db;
     $file="C";
     $sql="select count(*) from customer where id=$fid";
-    $row=$db->getAll($sql);
+    $row=$_SESSION['db']->getAll($sql);
     if ($row[0]["count"]<1) {
         $sql="select count(*) from vendor where id=$fid";
-        $row=$db->getAll($sql);
+        $row=$_SESSION['db']->getAll($sql);
         if ($row[0]["count"]==1) $file="V";
     }
     return $file;
@@ -28,9 +27,8 @@ global $db;
 * !! da auch von Lieferant und Person gebraucht wird
 *****************************************************/
 function getKontaktStamm($id,$pfad="") {
-global $db;
     $sql="select C.*,E.login from contacts C left join employee E on C.cp_employee=E.id where C.cp_id=$id";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if(!$rs) {
         $daten=false;
     } else {
@@ -39,10 +37,10 @@ global $db;
         $cnr="";
         if (!empty($rs[0]["cp_cv_id"])) {  // gehört zu einem Kunden oder Lieferanten
             $sql="select id,name,department_1,customernumber,language_id from customer where id=".$rs[0]["cp_cv_id"];
-            $rs1=$db->getAll($sql);
+            $rs1=$_SESSION['db']->getAll($sql);
             if (empty($rs1[0]["name"])) {  // nicht zu Kunde sondern zu Lieferant
                 $sql="select id,name,department_1,vendornumber,language_id from vendor   where id=".$rs[0]["cp_cv_id"];
-                $rs1=$db->getAll($sql);
+                $rs1=$_SESSION['db']->getAll($sql);
                 $tab="V";
                 $cnr=$rs1[0]["vendornumber"];
                 $firma=$rs1[0]["name"]; 
@@ -89,13 +87,12 @@ global $db;
 * hole Liste der Kontaktpersonen
 *****************************************************/
 function getAllPerson($sw,$usePre=true) {
-global $db;
     if ($usePre) $Pre=$_SESSION["pre"];
     $rechte=berechtigung("cp_");
     if (!$sw[0]) { $where="cp_phone1 like '$Pre".$sw[1]."%' or cp_mobile1 like '$Pre".$sw[1]."%' "; }
     else { $where="cp_name ilike '$Pre".$sw[1]."%' or cp_givenname ilike '$Pre".$sw[1]."%'"; }
     $sql="select *,'P' as tab,cp_id as id,cp_name as name  from contacts where ($where) and $rechte";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if($rs) return $rs;
     //Was geschieht wenn nach einer Person mit Vor- und Zuname gesucht wird??
     //Fall 1: Nachname wird zuerst eingeben "Byron Augusta Ada"
@@ -105,7 +102,7 @@ global $db;
     $givenname=implode(" ",$sw_array);   
     $where="cp_name ilike '$Pre".$name."%' and cp_givenname ilike '$Pre".$givenname."%'"; 
     $sql="select *,'P' as tab,cp_id as id,cp_name as name  from contacts where ($where) and $rechte";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if ($rs) return $rs;
     //Fall 2: Vorname wird zuerst eingegeben "Augusta Ada Byron"
     $sw_array=explode(" ",$sw[1],9);
@@ -113,7 +110,7 @@ global $db;
     $givenname=implode(" ", $sw_array);    
     $where="cp_name ilike '$Pre".$name."%' and cp_givenname ilike '$Pre".$givenname."%'"; 
     $sql="select *,'P' as tab,cp_id as id,cp_name as name  from contacts where ($where) and $rechte";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     if ($rs) return $rs;
     return false;
 }
@@ -125,10 +122,9 @@ global $db;
 * alle Kontakte eines Kunden/Lieferanten holen
 *****************************************************/
 function getAllKontakt($id) {
-global $db;
     $rechte=berechtigung("cp_");
     $sql="select * from contacts where cp_cv_id=$id  and $rechte order by cp_name,cp_givenname";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     return $rs;
 }
 
@@ -139,7 +135,6 @@ global $db;
 * out: daten = array
 *****************************************************/
 function suchPerson($muster) {
-global $db;
     $pre = ($_SESSION["preon"])?"%":"";
     $pre = ($muster["pre"])?$_SESSION["pre"]:"";
     $fuzzy=$muster["fuzzy"];
@@ -225,14 +220,14 @@ global $db;
     if ($muster["customer"]){     //auf checkbox customer mit Titel Kunden prüfen
         $sql0="select $felderContact, $felderContcatOrCustomerVendor, K.name as name, K.language_id as language_id, 
                  'C' as tbl from contacts C$joinCustomer where C.cp_cv_id=K.id and ($whereCustomer $andor $where) and $rechte order by cp_name";
-        $rs0=$db->getAll($sql0);
+        $rs0=$_SESSION['db']->getAll($sql0);
         if (!$rs0) $rs0=array();
     }
     $rs1=array(); //s.o.
     if ($muster["vendor"]){ //auf checkbox vendor mit Titel Lieferant prüfen
         $sql0="select $felderContact, $felderContcatOrCustomerVendor, V.name as name, V.language_id as language_id, 'V' as tbl 
                  from contacts C$joinVendor where C.cp_cv_id=V.id and ($whereVendor $andor $where) and $rechte order by cp_name";
-        $rs1=$db->getAll($sql0);
+        $rs1=$_SESSION['db']->getAll($sql0);
         if (!$rs1) $rs1=array();
     }
     /*Hinweis: Diese Abfrage sucht nur nach nicht zugeordneten Ansprechpartner (gelöscht). 
@@ -245,7 +240,7 @@ global $db;
                             // es gibt nicht nur gelöschte Personen, sonder auch Personen ohne Zuordnung zu Firmen, z.B. private Adressen
         $sql0="select $felderContact, C.cp_country, C.cp_zipcode, C.cp_city, C.cp_street, C.cp_phone1, 
                  '' as name,'P' as tbl from contacts C where $rechte and (".$where.") and C.cp_cv_id is null order by cp_name";
-        $rs2=$db->getAll($sql0);
+        $rs2=$_SESSION['db']->getAll($sql0);
         if (!$rs2) $rs2=array();
     }
     return array_merge($rs0,$rs1,$rs2);    //alle ergebnisse zusammenziehen und zurückgeben
@@ -258,7 +253,6 @@ global $db;
 * KontaktDaten sichern ( update )
 *****************************************************/
 function savePersonStamm($daten,$datei) {
-global $db;
     $tmp=0;
     $pid=$daten["PID"];
     // Array zu jedem Formularfed: Tabelle (0=contact,1=cust/vend),  require(0=nein,1=ja), Regel
@@ -302,8 +296,8 @@ global $db;
             if ($dbfld[$keys[$i]][0]==1) { // Daten nicht für contacts
                 continue;
             } else {
-                if (!chkFld($tmpval,$dbfld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) {  
-                            $fehler=$dbfld[$keys[$i]][3]; $fehler.="::".$keys[$i]; 
+                if (!chkFld($tmpval,$fld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) {  
+                            $fehler=$fld[$keys[$i]][3]; $fehler.="::".$keys[$i]; 
                             $i=$anzahl+1;
                 }
                 if ($keys[$i]=="cp_phone1"||$keys[$i]=="cp_phone2"||$keys[$i]=="cp_fax") $tels[]=$tmpval;
@@ -357,7 +351,7 @@ global $db;
         }
         mkTelNummer($pid,"P",$tels);
         $sql0="update contacts set ".$query0."cp_employee=".$_SESSION["loginCRM"]." where cp_id=$pid";
-        if($db->query($sql0)) {  //Erfolgreich gesichert
+        if($_SESSION['db']->query($sql0)) {  //Erfolgreich gesichert
             return $pid;            
         } else {
             return "unbekannt";
@@ -372,11 +366,10 @@ global $db;
 * eine Auswahl Kontakte einer Firma zuordnen
 *****************************************************/
 function insFaKont($data) {
-global $db;
     $fa=$data["fid"];
     foreach ($data["kontid"] as $row) {
         $sql="update contacts set cp_cv_id=".$fa." where cp_id=".$row;
-        $rc=$db->query($sql);
+        $rc=$_SESSION['db']->query($sql);
     }
 }
 
@@ -387,15 +380,14 @@ global $db;
 * Personensatz erzeugen ( insert )
 *****************************************************/
 function mknewPerson($id) {
-global $db;
     $newID=uniqid (rand());
     //Wird zur Zeit nicht verwendet
     //if (!$id) {$uid='null';} else {$uid=$id;};
     $sql="insert into contacts (cp_name,cp_employee) values ('$newID',$id)";
-    $rc=$db->query($sql);
+    $rc=$_SESSION['db']->query($sql);
     if ($rc) {
         $sql="select cp_id from contacts where cp_name = '$newID'";
-        $rs=$db->getAll($sql);
+        $rs=$_SESSION['db']->getAll($sql);
         if ($rs) {
             $id=$rs[0]["cp_id"];
         } else {
@@ -413,9 +405,8 @@ global $db;
 * Gespeicherte Anreden von Personen holen
 *****************************************************/
 function getCpAnreden() {
-global $db;
     $sql="select translation from generic_translations where translation_type ILIKE '%greeting%'";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     return $rs;
 }
 /****************************************************
@@ -426,9 +417,8 @@ global $db;
 * return mixed
 *****************************************************/
 function getCpAnredenGeneric($gender) {
-    global $db;
     $sql = "select language_id,translation from generic_translations where translation_type ILIKE 'greetings::$gender%'";
-    $rs=$db->getAssoc($sql);
+    $rs=$_SESSION['db']->getAssoc($sql);
     return $rs;
 }
 /****************************************************
@@ -438,9 +428,8 @@ function getCpAnredenGeneric($gender) {
 * Gespeicherte Briefanreden von Personen holen
 *****************************************************/
 function getCpBriefAnreden() {
-global $db;
     $sql="select distinct (cp_salutation) from contacts";
-    $rs=$db->getAll($sql);
+    $rs=$_SESSION['db']->getAll($sql);
     return $rs;
 }
 

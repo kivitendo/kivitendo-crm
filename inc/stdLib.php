@@ -39,6 +39,8 @@ if ( !isset($_SESSION['dbhost']) ) {
 };
 
 require_once "login".$_SESSION["loginok"].".php";
+$db = $_SESSION['db']; // Das muß noch raus!!!
+
 
 /****************************************************
 * db2date
@@ -337,18 +339,6 @@ function berechtigung($tab="") {
     $rechte = "( ".$tab."owener=".$_SESSION["loginCRM"]." or ".$tab."owener is null";
     if ( $grp ) $rechte .= " or ".$tab."owener in $grp";
     return $rechte.")";
-}
-
-function chkAnzahl(&$data,&$anzahl) {    
-    if ( $data ) { $cnt = count($data);
-    } else { $cnt = 0; }
-    if ( ($cnt+$anzahl) > $_SESSION['listLimit'] ) {
-        $anzahl = 0;
-        return false;
-     } else {
-        $anzahl += $cnt;
-        return true;
-    }
 }
 
 /****************************************************
@@ -759,7 +749,7 @@ function mkHeader() {
         'JQWIDGET'      => $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/minified/jquery.ui.widget.min.js'.$SN,
         'THEME'         => ($_SESSION['theme']!='')? $LVID  .$_SESSION['basepath'].'crm/jquery-ui/themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN:'',
         'CRMCSS'        => $LV.$_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"].'/main.css'.$LN,
-        'JUI-DROPDOWN'  => $LV.$_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"].'/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.css'.$LN.
+        'JUI-DROPDOWN'  => $LV.$_SESSION['basepath'].'crm/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.css'.$LN.
                            $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.min.js'.$SN,
         'CRMPATH'       => $_SESSION['basepath'].'crm/' );
         

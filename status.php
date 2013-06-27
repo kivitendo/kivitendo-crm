@@ -51,7 +51,7 @@ if ($db) { echo "<a href='log/install.log'>Datenbankinstallation</a><br>"; } els
 	<tr><td>ProgrammVersion</td><td>[<?php echo  $VERSION." ".$SUBVER ?>]</td></tr>
 	<tr><td>Datenbank:</td><td> [<?php echo  $_SESSION["dbname"] ?>]</td></tr>
 	<tr><td>db-Server:</td><td>[<?php echo  $_SESSION["dbhost"] ?>]</td></tr>
-	<tr><td>Benutzer:</td><td>[<?php echo  $_SESSION["employee"] ?>:<?php echo  $_SESSION["loginCRM"] ?>]</td></tr>
+	<tr><td>Benutzer:</td><td>[<?php echo  $_SESSION["login"] ?>:<?php echo  $_SESSION["loginCRM"] ?>]</td></tr>
 	<tr><td>Session-ID:</td><td>[<?php echo  session_id() ?>]</td></tr>
 	<tr><td>PHP-Umgebung:</td><td>[<a href="info.php">anzeigen</a>]</td></tr>
 	<tr><td>Session<a href="showsess.php?ok=show">:</a></td><td>[<a href="showsess.php">l&ouml;schen</a>]</td></tr>

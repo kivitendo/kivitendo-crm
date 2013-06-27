@@ -652,7 +652,7 @@ function getWvl($crmuser) {
     } else {
         if (count($rs1)==0) $rs1=array(array("id"=>0,"initdate"=>date("Y-m-d H:i:00"),"cause"=>"Keine Eintr&auml;ge"));
     }
-    $sql  = "SELECT follow_ups.id,follow_up_date,created_for_user,created_by,subject,body,trans_id,note_id,trans_module,E.name as ename from ";
+    $sql  = "SELECT follow_ups.id,follow_up_date,created_for_user,follow_ups.created_by,subject,body,trans_id,note_id,trans_module,E.name as ename from ";
     $sql .= "follow_ups left join notes on note_id=notes.id left join employee E on E.id=follow_ups.created_for_user ";
     $sql .= "where done='f' and created_for_user=$crmuser";
     $rs2 = $_SESSION['db']->getAll($sql);
@@ -1286,7 +1286,7 @@ function getOneMail($usr,$nr) {
     $data["Datei"]=$anhang;
     $data["status"]="1";
     $data["InitCrm"]=$_SESSION["loginCRM"];    //$head[""];
-    $data["CRMUSER"]=$_SESSION["employee"];    //$head[""];
+    $data["CRMUSER"]=$_SESSION["login"];       //$head[""];
     $data["DCaption"]=($files)?$data["cause"]:"";
     $data["Anhang"]=$files;
     $data['flags'] = array("flagged"=>$info[0]->flagged,'answered'=>$info[0]->answered,'deleted'=>$info[0]->deleted,'seen'=>$info[0]->seen,'draft'=>$info[0]->draft,'recend'=>$info[0]->recend);

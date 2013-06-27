@@ -497,7 +497,7 @@ global $laender;
             IMG             => "",
             IMG_            => "",
             employee        => $_SESSION["loginCRM"],
-            init            => $_SESSION["employee"]
+            init            => $_SESSION["login"]
         ));
         $first[]=array("grpid"=>"","rechte"=>"w","grpname"=>".:public:.");
         $first[]=array("grpid"=>$daten["cp_employee"],"rechte"=>"w","grpname"=>".:personal:.");

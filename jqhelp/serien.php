@@ -11,7 +11,7 @@ function doVcards($single,$extension,$targetcode,$zip) {
     if ($csvdata) {
         $pfad = $_SESSION["loginCRM"]."/vcard";
         chkdir($pfad,'.');
-        $pfad = "../dokumente/".$_SESSION["mansel"]."/".$pfad."/";
+        $pfad = "../dokumente/".$_SESSION["dbname"]."/".$pfad."/";
         $felder=explode(":",$csvdata[0]["csvdaten"]);
         $personen = False;
         if (in_array("TITEL",$felder)) $personen = True;
@@ -126,13 +126,13 @@ function doVcards($single,$extension,$targetcode,$zip) {
 }
 
 function serbrief($data) {
-        $rc = file_exists("../dokumente/".$_SESSION["mansel"]."/tmp/".$data['filename']);
+        $rc = file_exists("../dokumente/".$_SESSION["dbname"]."/tmp/".$data['filename']);
         if ( $rc ) {
             require_once("documents.php");
-            $dest = "./dokumente/".$_SESSION["mansel"]."/serbrief/";
+            $dest = "./dokumente/".$_SESSION["dbname"]."/serbrief/";
             $ok = chkdir("serbrief");
-            copy("../dokumente/".$_SESSION["mansel"]."/tmp/".$data['filename'],'.'.$dest.$data['filename']);
-            unlink ("../dokumente/".$_SESSION["mansel"]."/tmp/".$data['filename']);
+            copy("../dokumente/".$_SESSION["dbname"]."/tmp/".$data['filename'],'.'.$dest.$data['filename']);
+            unlink ("../dokumente/".$_SESSION["dbname"]."/tmp/".$data['filename']);
 
             //Verzeichnis anlegen für die Serienbriefe
             @mkdir(".".$dest.substr($_POST['filename'],0,-4));

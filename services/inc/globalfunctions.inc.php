@@ -202,7 +202,7 @@ global $ERPNAME;
         }
         if (empty($_SESSION["dbhost"])) $_SESSION["dbhost"]="localhost";
         if (empty($_SESSION["dbport"])) $_SESSION["dbport"]="5432";
-        $_SESSION["mansel"]=$_SESSION["dbname"];
+        $_SESSION["dbname"]=$_SESSION["dbname"];
         $_SESSION["employee"]=$user;
         $_SESSION["password"]=$pwd;
         return true;

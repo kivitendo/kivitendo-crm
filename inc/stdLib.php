@@ -236,11 +236,11 @@ function anmelden() {
 * prueft, ob Verzeichnis besteht und legt es bei Bedarf an
 *****************************************************/
 function chkdir($dir,$p="") {
-    if ( file_exists($_SESSION['crmdir']."/dokumente/".$_SESSION["mansel"]."/".$dir) ) { 
-        return $_SESSION['crmdir']."/dokumente/".$_SESSION["mansel"]."/".$dir;
+    if ( file_exists($_SESSION['crmdir']."/dokumente/".$_SESSION["dbname"]."/".$dir) ) { 
+        return $_SESSION['crmdir']."/dokumente/".$_SESSION["dbname"]."/".$dir;
     } else {
         $dirs = explode("/",$dir);
-        $tmp  = $_SESSION["mansel"]."/";
+        $tmp  = $_SESSION["dbname"]."/";
         foreach ( $dirs as $dir ) {
             if ( !file_exists($_SESSION['crmdir']."/dokumente/$tmp".$dir) ) {
                 $ok = @mkdir($_SESSION['crmdir']."$/dokumente/$tmp".$dir);
@@ -251,7 +251,7 @@ function chkdir($dir,$p="") {
             };
             $tmp .= $dir."/";
         };
-        return $_SESSION['crmdir']."/dokumente/".$_SESSION["mansel"]."/".$dir;
+        return $_SESSION['crmdir']."/dokumente/".$_SESSION["dbname"]."/".$dir;
     }
 }
 

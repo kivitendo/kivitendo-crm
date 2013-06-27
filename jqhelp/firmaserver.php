@@ -96,7 +96,7 @@
             if (strpos($data["cp_birthday"],"-")) { $data["cp_birthday"]=db2date($data["cp_birthday"]); };
             if ($data["cp_gender"]=='m') { $data["cp_greeting"]=translate('.:greetmale:.','firma'); 
             } else { $data["cp_greeting"]=translate('.:greetfemale:.','firma'); };
-            $root="dokumente/".$_SESSION["mansel"]."/".$data["tabelle"].$data["nummer"]."/".$data["cp_id"];
+            $root="dokumente/".$_SESSION["dbname"]."/".$data["tabelle"].$data["nummer"]."/".$data["cp_id"];
             if (!empty($data["cp_grafik"]) && $data["cp_grafik"]<>"     ") {
                 $img="<img src='$root/kopf$id.".$data["cp_grafik"]."' ".$data["icon"]." border='0'>";
                 $data["cp_grafik"]="<a href='$root/kopf$id.".$data["cp_grafik"]."' target='_blank'>$img</a>";
@@ -210,8 +210,8 @@
          if ($directory != '/')
             $directory = trim( rtrim( $directory, " /\\" ) ); //entferne rechts Leezeichen und Slash bzw Backslash
         chkdir($directory,".");
-        if ( is_dir("../dokumente/".$_SESSION["mansel"]."/".$directory)) {
-            $dir_object = dir( "../dokumente/".$_SESSION["mansel"]."/".$directory );
+        if ( is_dir("../dokumente/".$_SESSION["dbname"]."/".$directory)) {
+            $dir_object = dir( "../dokumente/".$_SESSION["dbname"]."/".$directory );
             // Gibt neues Verzeichnis aus
             $inhalt="<ul>";
             $dir="<li class='ptr' onClick='dateibaum(\"$id\",\"%s\")'>%s";
@@ -228,7 +228,7 @@
                                 $tmp=substr($directory,0,strrpos($directory,"/"));
                                 $Eintrag[]=sprintf($dir,$tmp,"[ .. ]");
                             }
-                        } else if (is_dir("../dokumente/".$_SESSION["mansel"]."/".$directory."/".$entry)) {
+                        } else if (is_dir("../dokumente/".$_SESSION["dbname"]."/".$directory."/".$entry)) {
                             $Eintrag[]=sprintf($dir,$directory."/".$entry,"[ $entry ]");
                         } else {
                             $Eintrag[]=sprintf($datei,$entry,"$entry");
@@ -246,8 +246,8 @@
         if (substr($pfad,-1)=="/" and $pfad != "/") $pfad=substr($pfad,0,-1);
         if (substr($pfad,0,2) == "//" ) $pfad = substr($pfad,1);
         clearstatcache();
-        $zeit=date("d.m.Y H:i:s",filemtime("../dokumente/".$_SESSION["mansel"]."/$pfad/$file"));
-        $size=filesize("../dokumente/".$_SESSION["mansel"]."/$pfad/$file");
+        $zeit=date("d.m.Y H:i:s",filemtime("../dokumente/".$_SESSION["dbname"]."/$pfad/$file"));
+        $size=filesize("../dokumente/".$_SESSION["dbname"]."/$pfad/$file");
         $ext=strtoupper(substr($file,strrpos($file,".")+1));
         $pic="file.gif";
         if ($ext=="PDF") { $type="PDF-File"; $pic="pdf.png"; }
@@ -317,7 +317,7 @@
         $oldpath=substr($file,0,strrpos($file,"/"));
         $file=substr($file,strrpos($file,"/")+1);
         if ($oldpath<>$pfadleft) {
-            $pre="../dokumente/".$_SESSION["mansel"];
+            $pre="../dokumente/".$_SESSION["dbname"];
             $dbfile=new document();
             $tmp = explode("/",$oldpath);
             $opath = "/".implode("/",array_slice($tmp,2));
@@ -346,7 +346,7 @@
             $dbfile->setDocData("pfad",$pfad);
         };
         if ($oldname<>$name) {
-            $path="../dokumente/".$_SESSION["mansel"].$pfad.'/';
+            $path="../dokumente/".$_SESSION["dbname"].$pfad.'/';
             $dbfile->setDocData("name",$name);
             rename($path.$oldname,$path.$name);
             $oldname=$name;
@@ -362,7 +362,7 @@
         }
     }
     function newDir($pfad,$newdir) {
-        chdir("../dokumente/".$_SESSION["mansel"]."/$pfad");
+        chdir("../dokumente/".$_SESSION["dbname"]."/$pfad");
         $rc = mkdir($newdir);
         if ($rc) {
             chmod($newdir,$_SESSION['dir_mode']);

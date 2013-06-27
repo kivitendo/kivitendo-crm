@@ -54,7 +54,7 @@ function getKontaktStamm($id,$pfad="") {
         }
         $daten=$rs[0];
         if ($daten["cp_grafik"]) {
-            $image="$pfad./dokumente/".$_SESSION["mansel"]."/$tab$cnr/$id/kopf$id.".$daten["cp_grafik"];
+            $image="$pfad./dokumente/".$_SESSION["dbname"]."/$tab$cnr/$id/kopf$id.".$daten["cp_grafik"];
             clearstatcache();
             if (file_exists($image)) {
                 $size=@getimagesize($image);
@@ -507,9 +507,9 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
         }
         if (trim($daten["cp_grafik"])<>"") {
             if ($nummer) {
-                $root="dokumente/".$_SESSION["mansel"]."/".$daten["Quelle"].$nummer."/".$daten["cp_id"];
+                $root="dokumente/".$_SESSION["dbname"]."/".$daten["Quelle"].$nummer."/".$daten["cp_id"];
             } else {
-                $root="dokumente/".$_SESSION["mansel"]."/".$daten["cp_id"];
+                $root="dokumente/".$_SESSION["dbname"]."/".$daten["cp_id"];
             };
             $Image="<img src='$root/kopf".$daten["cp_id"].".".$daten["cp_grafik"]."' ".$daten["icon"].">";
             $tmp=glob("$root/vcard".$daten["cp_id"].".*");

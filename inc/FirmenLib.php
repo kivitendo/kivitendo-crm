@@ -156,7 +156,7 @@ function getFirmenStamm($id,$ws=true,$tab='C',$cvar=true) {
         else { $nummer=$row["vendornumber"]; };
         if ($row["grafik"]) {
             $DIR=$tab.$nummer;
-            $image="./dokumente/".$_SESSION["mansel"]."/$DIR/logo.".$row["grafik"];
+            $image="./dokumente/".$_SESSION["dbname"]."/$DIR/logo.".$row["grafik"];
             if (file_exists($image)) {
                 $size=@getimagesize($image);
                 $row["size"]=$size[3];
@@ -1225,8 +1225,8 @@ function vartpl( &$t, $daten, $typ, $msg, $btn1, $btn2, $tpl, $suchmaske=false )
         if ( isset($daten["grafik"]) ) {
             if ($typ=="C") { $DIR="C".$daten["customernumber"]; }
             else { $DIR="V".$daten["vendornumber"]; };
-            if (file_exists("dokumente/".$_SESSION["mansel"]."/$DIR/logo.".$daten["grafik"])) {
-                $Image="<img src='dokumente/".$_SESSION["mansel"]."/$DIR/logo.".$daten["grafik"]."' ".$daten["icon"].">";
+            if (file_exists("dokumente/".$_SESSION["dbname"]."/$DIR/logo.".$daten["grafik"])) {
+                $Image="<img src='dokumente/".$_SESSION["dbname"]."/$DIR/logo.".$daten["grafik"]."' ".$daten["icon"].">";
             } else {
                 $Image="Bild ($DIR/logo.".$daten["grafik"].") nicht<br>im Verzeichnis";
             }

@@ -712,7 +712,7 @@ function getOneWvl($id) {
                 $pre=($datei["kunde"]>0)?$datei["kunde"]:$datei["employee"];
                 $pre=$datei["pfad"];
                 $name=$datei["filename"];
-                $path=$_SESSION["mansel"]."/".$pre."/";
+                $path=$_SESSION["dbname"]."/".$pre."/";
             } else {
                 $name="";
                 $path="";
@@ -1091,14 +1091,14 @@ function kontaktWvl($id,$fid,$pfad) {
         if ( $rs[0]["document"] && $rs[0]["kontakt"]<>"M" ) {
             $sql = "select * from documents where id=".$rs[0]["document"];
             $rsD = $_SESSION['db']->getAll($sql);
-            $von = "dokumente/".$_SESSION["mansel"]."/".$rsD[0]["employee"]."/".$rsD[0]["filename"];
+            $von = "dokumente/".$_SESSION["dbname"]."/".$rsD[0]["employee"]."/".$rsD[0]["filename"];
             if ( !$pfad ) {
-                //$pfad=$_SESSION["mansel"]."/".$pfad;
+                //$pfad=$_SESSION["dbname"]."/".$pfad;
             //} else {
                 $pfad = mkPfad($tab.$fid,$fid);
             }
             $ok = chkdir($pfad);
-            $nach = "dokumente/".$_SESSION["mansel"]."/".$pfad."/".$rsD[0]["filename"];
+            $nach = "dokumente/".$_SESSION["dbname"]."/".$pfad."/".$rsD[0]["filename"];
             if ( file_exists($von) ) {
                 $rc = rename($von,$nach);
                 if ($rc) {

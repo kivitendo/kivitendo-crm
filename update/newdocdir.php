@@ -57,7 +57,7 @@ function newname($root,$old,$new) {
 	return $ok;
 }
 //Verzeichnisse umbenennen
-$root="dokumente/".$_SESSION["mansel"];
+$root="dokumente/".$_SESSION["dbname"];
 if (!$updatefile) $updatefile="chk";
 $docfile=$updatefile."_doc";
 if ($doclog=@fopen("tmp/".$docfile.".log","a") ) {

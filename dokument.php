@@ -4,7 +4,7 @@
     include("inc/crmLib.php");
     $t = new Template($base);
     $menu =  $_SESSION['menu'];
-    if ($_GET['P']==1) {
+    if ( isset($_GET['P']) && $_GET['P']==1 ) {
         $head = mkHeader();
         $t->set_var(array(
             'JAVASCRIPTS'   => '',
@@ -23,9 +23,9 @@
     }
     $t->set_file(array("doc" => "dokument.tpl"));
     $t->set_var(array(
-            PICUP   => ($_GET['P']==1)?'true':'false',
-            mandant => $_SESSION['mansel'],
-            tiny    => ($_SESSION['tinymce'])?'true':'false'
+            'PICUP'   => ($_GET['P']==1)?'true':'false',
+            'mandant' => $_SESSION['dbname'],
+            'tiny'    => ($_SESSION['tinymce'])?'true':'false'
     ));
     $t->Lpparse("out",array("doc"),$_SESSION["lang"],"firma");
 ?>

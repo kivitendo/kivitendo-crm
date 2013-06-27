@@ -104,13 +104,13 @@
         } ;
         if (!$data["DCaption"]) $data["DCaption"] = $data["cause"];
         if ( $data['newfile'] == 1 and $data['filename'] != '' ) {
-            $rc = file_exists("../dokumente/".$_SESSION["mansel"]."/tmp/".$data['filename']);
+            $rc = file_exists("../dokumente/".$_SESSION["dbname"]."/tmp/".$data['filename']);
             if ( $rc ) {
                 if ( $data["DateiID"] ) delDokument($data["DateiID"]); // ein altes löschen
                 require_once("documents.php");
-                $dest = "./dokumente/".$_SESSION["mansel"]."/".$_SESSION["loginCRM"]."/";
-                copy("../dokumente/".$_SESSION["mansel"]."/tmp/".$data['filename'],'.'.$dest.$data['filename']);
-                unlink ("../dokumente/".$_SESSION["mansel"]."/tmp/".$data['filename']);
+                $dest = "./dokumente/".$_SESSION["dbname"]."/".$_SESSION["loginCRM"]."/";
+                copy("../dokumente/".$_SESSION["dbname"]."/tmp/".$data['filename'],'.'.$dest.$data['filename']);
+                unlink ("../dokumente/".$_SESSION["dbname"]."/tmp/".$data['filename']);
                 //Dokument in db speichern
                 $dbfile=new document();
                 $dbfile->setDocData("descript",$data["subject"]);

@@ -223,7 +223,7 @@
 
         Start => $telcall*-1,
         Datei => $daten["Datei"],
-        ODatei => (empty($daten["Datei"]))?"":("<a href='dokumente/".$_SESSION["mansel"]."/".$daten["Dpfad"]."/".$daten["Datei"]."' target='_blank'>".$daten["Datei"]."</a>"),
+        ODatei => (empty($daten["Datei"]))?"":("<a href='dokumente/".$_SESSION["dbname"]."/".$daten["Dpfad"]."/".$daten["Datei"]."' target='_blank'>".$daten["Datei"]."</a>"),
         DateiID => $daten["DateiID"],
         Dcaption => $daten["DCaption"],
         ID => $daten["ID"],
@@ -232,7 +232,7 @@
      if ($daten["Files"]){
         $t->set_block("cont","Files","Block1");
         if ($daten["Files"]) foreach($daten["Files"] as $zeile) {
-            $filelink="<a href='dokumente/".$_SESSION["mansel"]."/".$zeile["pfad"]."/".$zeile["filename"]."' target='_blank'>".$zeile["filename"]."</a>";
+            $filelink="<a href='dokumente/".$_SESSION["dbname"]."/".$zeile["pfad"]."/".$zeile["filename"]."' target='_blank'>".$zeile["filename"]."</a>";
             $t->set_var(array(
                 Anhang    => $filelink,
                 DCaption => $zeile["descript"]

@@ -80,7 +80,7 @@
 
         $_SESSION["employee"]= $user;
         $_SESSION["password"]= $pwd;
-        $_SESSION["mansel"]=$dbname;
+        $_SESSION["dbname"]=$dbname;
         $_SESSION["dbname"]=$dbname;
         $_SESSION["dbhost"]=$dbhost;
         $_SESSION["dbport"]=(empty($dbport))?5432:$dbport;

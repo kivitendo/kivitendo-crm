@@ -43,7 +43,7 @@
         $name=date("YmdHi").$fname;
         $doc->prepsave("$name");
         $pfad = $_POST['pfad'];
-        copy('tmp/'.$name,"dokumente/".$_SESSION["mansel"]."$pfad/$name");
+        copy('tmp/'.$name,"dokumente/".$_SESSION["dbname"]."$pfad/$name");
         $dbfile=new document();
         $dbfile->setDocData("descript","Dokumentvorlage: ".$docdata["document"]["vorlage"]."\n".$docdata["document"]["beschreibung"]);
         $dbfile->setDocData("name",$name);

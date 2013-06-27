@@ -42,7 +42,7 @@ switch ($typ) {
 }
 
 
-$doc->loadDocument("./dokumente/".$_SESSION["mansel"]."/serbrief/".$_SESSION["datei"]);
+$doc->loadDocument("./dokumente/".$_SESSION["dbname"]."/serbrief/".$_SESSION["datei"]);
 $doc->savecontent();
 $sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' AND id = -255";
 $data=$db->getAll($sql);

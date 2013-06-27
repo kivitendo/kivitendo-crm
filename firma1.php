@@ -54,9 +54,9 @@
         }
     }
     if ($fa["grafik"]) {
-        if (file_exists("dokumente/".$_SESSION["mansel"]."/$Q".$fa["nummer"]."/logo.".$fa["grafik"])) {
-        $Image="<a href='dokumente/".$_SESSION["mansel"]."/$Q".$fa["nummer"]."/logo.".$fa["grafik"]."' target='_blank'>";
-        $Image.="<img src='dokumente/".$_SESSION["mansel"]."/$Q".$fa["nummer"]."/logo.".$fa["grafik"]."' ".$fa["icon"]." border='0'></a>";
+        if (file_exists("dokumente/".$_SESSION["dbname"]."/$Q".$fa["nummer"]."/logo.".$fa["grafik"])) {
+        $Image="<a href='dokumente/".$_SESSION["dbname"]."/$Q".$fa["nummer"]."/logo.".$fa["grafik"]."' target='_blank'>";
+        $Image.="<img src='dokumente/".$_SESSION["dbname"]."/$Q".$fa["nummer"]."/logo.".$fa["grafik"]."' ".$fa["icon"]." border='0'></a>";
         } else {
             $Image="Bild nicht<br>im Verzeichnis";
         }

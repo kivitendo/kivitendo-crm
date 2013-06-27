@@ -82,38 +82,41 @@ function translate($word,$file) {
 }
 function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     $db   = new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
+    //Hat sich ein User angemeldet
     $sql  = "select sc.session_id,u.id,u.login from auth.session_content sc left join auth.\"user\" u on ";
-    $sql .= "('--- ' || u.login || E'\\n')=sc.sess_value left join auth.session s on s.id=sc.session_id ";
+    $sql .= "(E'--- ' || u.login || '\\n')=sc.sess_value left join auth.session s on s.id=sc.session_id ";
     $sql .= "where session_id = '$cookie' and sc.sess_key='login'";
-    $rs   = $db->getAll($sql,"authuser_0");
+    $rs   = $db->getAll($sql);
     if ( count($rs) != 1 ) { // Garnicht mit ERP angemeldet oder zu viele Sessions, sollte die ERP drauf achten
         unset($_SESSION);
         $Url = preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
-        header( "location:".$Url."login.pl?action=logout" );        
+        header( "location:".$Url."controller.pl?action=LoginScreen/user_login" );        
     }
-    $stmp = "";
     $auth = array();
     $uid = $rs[0]["id"];
-    $auth["login"] = $rs[0]["login"];
+    $auth["employee"]   = $rs[0]["login"];
+    $auth["login"]      = $rs[0]["login"];
     $sql = "select * from auth.user_config where user_id=".$uid;
-    $rs = $db->getAll($sql,"authuser_2");
-    $keys = array("dbname","dbpasswd","dbhost","dbport","dbuser","countrycode","stylesheet",
-                  "company","address","vclimit","signature","email","tel");
+    $rs = $db->getAll($sql);
+    $keys = array("countrycode","stylesheet","company","address","vclimit","signature","email","tel");
     foreach ( $rs as $row ) {
         if ( in_array($row["cfg_key"],$keys) ) {
             $auth[$row["cfg_key"]] = $row["cfg_value"];
         }
     }
-    $auth["dbhost"]     = ( !$auth["dbhost"] ) ? "localhost" : $auth["dbhost"];
-    $auth["dbport"]     = ( !$auth["dbport"] ) ? "5432" : $auth["dbport"];
-    $auth["mansel"]     = $auth["dbname"];
-    $auth["employee"]   = $auth["login"];
     $auth["lang"]       = ($auth["countrycode"] != '')?$auth["countrycode"]:'en';
     $auth["stylesheet"] = substr($auth["stylesheet"],0,-4);
+    //Welcer Mandant ist verbunden
+    $sql  = "SELECT sess_value FROM auth.session_content WHERE session_id = '$cookie' and sess_key='client_id'";
+    $rs   = $db->getOne($sql);
+    $mandant = substr($rs['sess_value'],4);
+    $sql  = 'SELECT  name as mandant,dbhost,dbport,dbname,dbuser,dbpasswd FROM auth.clients WHERE id = '.$mandant;
+    $rs   = $db->getOne($sql);
+    $auth = array_merge($auth,$rs);
     //Eine der Gruppen des Users darf sales_all_edit
     $sql  = "SELECT granted from auth.group_rights G where G.right = 'sales_all_edit' ";
     $sql .= "and G.group_id in (select group_id from auth.user_group where user_id = ".$uid.")";
-    $rs3 = $db->getAll($sql,"authuser_3");
+    $rs3 = $db->getAll($sql);
     $auth["sales_edit_all"] = 'f';
     if ( $rs3 ) {
         foreach ( $rs3 as $row ) {
@@ -195,10 +198,7 @@ function anmelden() {
     $_SESSION["cookie"] = $cookiename;
     // Mit der Mandanten-DB verbinden
     $_SESSION["db"]     = new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
-    $sql = "select * from employee where login='".$_SESSION["login"]."'";
-    $rs = $_SESSION["db"]->getAll($sql);
-    $_SESSION['uid']=$rs[0]['id'];//
-    if( !$rs ) {
+    if( !$_SESSION["db"] ) {
         return false;
     } else {
         $charset = ini_get("default_charset");
@@ -206,24 +206,21 @@ function anmelden() {
         $_SESSION["charset"] = $charset;
         $tmp = $rs[0];
         include_once("inc/UserLib.php");
-        $user_data=getUserStamm($_SESSION["uid"]);
+        $user_data=getUserStamm(0,$_SESSION["login"]);
         $BaseUrl  = (empty( $_SERVER['HTTPS'] )) ? 'http://' : 'https://';
         $BaseUrl .= $_SERVER['HTTP_HOST'];
         $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
         //reset($user_data); Bei while( list(..) ) = each; muss immer erst der Array-Pointer zurückgesetzt werden! 
         //if ($user_data) while (list($key,$val) = each($user_data)) $_SESSION[$key] = $val;
         if ($user_data) foreach ($user_data as $key => $val) $_SESSION[$key] = $val;// foreach ist kürzer + schneller
-        $_SESSION["loginCRM"]               = $user_data["id"];
-        $_SESSION['theme']  = ($user_data['theme']=='' || $user_data['theme']=='base')?'':$user_data['theme'];
+        $_SESSION["loginCRM"] = $user_data["id"];
+        $_SESSION['theme']    = ($user_data['theme']=='' || $user_data['theme']=='base')?'':$user_data['theme'];
         $sql = "select * from defaults";
         $rs = $_SESSION["db"]->getAll($sql);
-        $_SESSION["ERPver"]     = $rs[0]["version"];
-        $_SESSION["menu"]       = makeMenu($_SESSION["sessid"],$_SESSION["token"]);
-        $_SESSION["basepath"]   = $BaseUrl;
-        $_SESSION['token']      = False;
-        $sql = "select * from crmdefaults where grp = 'mandant'";
-        $rs = $_SESSION["db"]->getAll($sql);  //Vor dem Update crm_defauts gibt es einen Fehler
-        if ($rs) foreach ($rs as $row) $_SESSION[$row['key']] = $row['val'];
+        $_SESSION["ERPver"]   = $rs[0]["version"];
+        $_SESSION["menu"]     = makeMenu($_SESSION["sessid"],$_SESSION["token"]);
+        $_SESSION["basepath"] = $BaseUrl;
+        $_SESSION['token']    = False;
         return true;
     }
 }
@@ -905,7 +902,7 @@ function accessHistory($data=false) {
             if ( $array_of_data && in_array($data, $array_of_data) ) unset( $array_of_data[array_search($data, $array_of_data)]);
             $array_of_data[] = $data;
             if ( count($array_of_data) > 8 ) array_shift($array_of_data); 
-            $sql = "UPDATE crmemployee SET val = '".addslashes(json_encode($array_of_data))."' WHERE uid = ".$_SESSION['uid']." AND key = 'search_history'";
+            $sql = "UPDATE crmemployee SET val = '".addslashes(json_encode($array_of_data))."' WHERE uid = ".$_SESSION['loginCRM']." AND key = 'search_history'";
             $_SESSION['db']->query($sql);
         }
     }

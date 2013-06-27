@@ -32,7 +32,7 @@
 <p class="listtop" onClick="help('SuchFirma');">.:Companys:. .:search:. {FAART} (?)</p>
 <span id='contentbox2'>
 <!-- Beginn Code ------------------------------------------>
-<p class="listheading"| 
+<p class="listheading">|  
 <a href="{action}&first=A" class="fett">A</a> |
 <a href="{action}&first=B" class="fett">B</a> |
 <a href="{action}&first=C" class="fett">C</a> |

@@ -15,7 +15,7 @@
     }
     if ($_POST["suche"]=="suchen" || $_POST["first"]=="1") {
         $daten=suchPerson($_POST);
-        if (!chkAnzahl($daten,$tmp)) {
+        if ( count($daten) > $_SESSION['listLimit'] ) {
             $msg="Trefferanzahl zu gro&szlig;. Bitte einschr&auml;nken.";
             $btn1="";
             vartplP($t,$_POST,$msg,$btn1,$btn1,$btn1,"Anrede","white",$_POST["FID1"],1);

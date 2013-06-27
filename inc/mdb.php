@@ -82,6 +82,7 @@ class myDB extends MDB2 {
                     'database' => $db,
                     'port'     => $port
                 );
+        if ($this->log) $this->writeLog(print_r($dsn,true));
         $options = array(
             'result_buffering' => false,
         );
@@ -247,10 +248,12 @@ class myDB extends MDB2 {
   }
 
     function getOne($sql) {
+        if ($this->log) $this->writeLog($sql);
         $rs = $this->db->queryRow($sql);
         if ($rs) {
             return $rs;
         } else {
+            $this->dbFehler($sql,$this->rs->getMessage());
             return false;
         }
     }

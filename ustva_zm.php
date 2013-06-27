@@ -79,9 +79,9 @@ if ($_POST["ok"]=="erzeugen") {
 	$brutto1=0;
 	$netto2=0;
 	$brutto2=0;
-	//$linkR="../is.pl?login=".$_SESSION["employee"]."&password=".$_SESSION["password"]."&action=edit&id=";
+	//$linkR="../is.pl?login=".$_SESSION["login"]."&password=".$_SESSION["password"]."&action=edit&id=";
 	$linkR="../is.pl?action=edit&id=";
-	//$linkC="../ct.pl?login=".$_SESSION["employee"]."&password=".$_SESSION["password"]."&action=edit&db=customer&id=";
+	//$linkC="../ct.pl?login=".$_SESSION["login"]."&password=".$_SESSION["password"]."&action=edit&db=customer&id=";
 	$linkC="../ct.pl?action=edit&db=customer&id=";
 	if ($rs) foreach ($rs as $row) {
 		if ($row["amount"]==$row["netamount"]) {

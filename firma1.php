@@ -184,7 +184,7 @@
                                '<a class="firmabutton" href="#" onCLick="doLxCars();" title="KFZ-Daten"><img src="image/auto.png" alt="LxCars"></a>&nbsp;':'',
             'zeige_bearbeiter' => ($_SESSION['zeige_bearbeiter']=='t')?"visible":"hidden",      
             'zeige_tools' => ($_SESSION['zeige_tools']=='t')?"visible":"hidden",
-            'login' => $_SESSION["employee"],
+            'login' => $_SESSION["login"],
             'password' => $_SESSION["password"],
             'leadsrc' => $fa["leadsrc"],
             'variablen' => $variablen,

@@ -22,7 +22,7 @@
 
 die Software unterliegt der <a href="hilfe/artistic.html" target="_blank">Artistic License</a><br><br>
 Verwendete Datenbank: [<?php echo  $_SESSION["dbname"] ?>] Version [<?php echo  $v ?>]  auf Server [<?php echo  $_SESSION["dbhost"] ?>]<br>
-Benutzer [<?php echo  $_SESSION["employee"] ?>:<?php echo  $_SESSION["loginCRM"] ?>] [<?php echo  session_id() ?>]
+Benutzer [<?php echo  $_SESSION["login"] ?>:<?php echo  $_SESSION["loginCRM"] ?>] [<?php echo  session_id() ?>]
 <br><br><br>
 &gt;<a href="hilfe/index.html">Online-Hilfe</a>&lt;<br>
 </center>

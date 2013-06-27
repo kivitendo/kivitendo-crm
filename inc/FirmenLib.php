@@ -1134,7 +1134,7 @@ function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false) {
             'BLZ1'           => ($_SESSION['BLZDB']=='t')?"":"!--",
             'BLZ2'           => ($_SESSION['BLZDB']=='t')?"":"--",
             'employee'       => $_SESSION["loginCRM"],
-            'init'           => $_SESSION["employee"],
+            'init'           => $_SESSION["login"],
             'txid0'          => "selected",
             'cvars'          => cvar_edit(0,TRUE),
             'variablen'      => "" 

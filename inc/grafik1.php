@@ -16,7 +16,7 @@ define("FONTSTYLE","1");
 *****************************************************/
 function  getLastYearPlot($re,$an,$art=false) {
 
-	$employee=$_SESSION["employee"];
+	$employee=$_SESSION["login"];
 	$keys=array_keys($re);
 	$sum=array(); $avg=array(); $monate=array(); $gut=array();
 	if ($re) foreach($re as $month) {

@@ -93,7 +93,7 @@
                 }
             } 
             $sql = "insert into schema_info (tag,login) values ('crm_%s','%s')";
-            $rc = $_SESSION["db"]->query(sprintf($sql,trim($tag),$_SESSION["employee"]));
+            $rc = $_SESSION["db"]->query(sprintf($sql,trim($tag),$_SESSION["login"]));
             if ( !$rc ) {
             $ok = false;
                 $db->rollback();

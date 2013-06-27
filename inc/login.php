@@ -1,7 +1,7 @@
 <?php
 clearstatcache();
 session_start();
-if ($_POST["erpname"]) {
+if ( isset($_POST["erpname"]) ) {
     if ( is_file("../".$_POST["erpname"]."/config/".$_SESSION['erpConfigFile'].".conf") ) {
         if ( is_writable("inc/conf.php") ) {
             $name = false;
@@ -50,7 +50,7 @@ if ( is_file($conffile) ) {
             require("inc/update_neu.php");
         } else if (  $rs["version"] <> $_SESSION['VERSION'] ) {
             echo "Istversion: ".$rc[0]["version"]." Sollversion: ".$_SESSION['VERSION']."<br>";
-            $oldver=$rc[0]["version"];
+            $oldver = $rc[0]["version"];
             require("inc/update_neu.php");
         } else {
             $db = $_SESSION["db"];

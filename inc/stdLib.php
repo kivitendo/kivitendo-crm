@@ -5,7 +5,7 @@ ini_set('session.bug_compat_42', 0);  // Das ist natürlich lediglich eine Provi
 session_set_cookie_params(1800); // 30 minuten.
 session_start();
 //print_r($_SESSION);
-if ( $_SESSION['php_error'] ) {
+if ( isset($_SESSION['php_error']) && $_SESSION['php_error'] ) {
     error_reporting (E_ALL & ~E_DEPRECATED);
     ini_set ('display_errors',1);
 }
@@ -15,7 +15,7 @@ ini_set('include_path',$inclpa.":../:./inc:../inc");
 include_once "mdb.php";
 require_once "conf.php";
 
-if ( ! isset($_SESSION['dbhost']) ) {
+if ( !isset($_SESSION['dbhost']) ) {
     $_SESSION['ERPNAME'] = $ERPNAME;
     $_SESSION['ERP_BASE_URL'] = $ERP_BASE_URL;
     $_SESSION['erpConfigFile'] = $erpConfigFile;
@@ -24,13 +24,18 @@ if ( ! isset($_SESSION['dbhost']) ) {
     require_once "login.php";
     //exit();
 } else {
-    if ( !$_SESSION["cookie"] || 
-         ( $_SESSION["cookie"] && !$_COOKIE[$_SESSION["cookie"]] ) ) {
-         //Sollte nicht vorkommen
-         header("location: ups.html");
+    if ( !isset($_SESSION["cookie"]) || 
+         ( $_SESSION["sessid"] != $_COOKIE[$_SESSION["cookie"]] ) ) {
+             while( list($key,$val) = each($_SESSION) ) {
+			     unset($_SESSION[$key]);
+		     };
+             $_SESSION['ERPNAME'] = $ERPNAME;
+             $_SESSION['ERP_BASE_URL'] = $ERP_BASE_URL;
+             $_SESSION['erpConfigFile'] = $erpConfigFile;
+             require_once "version.php";
+             $_SESSION['VERSION'] = $VERSION;
+             if ( !anmelden() ) header("location: ups.html");
     };
-    $_SESSION['db']     = new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
-    $db = $_SESSION['db']; // Der muss später weg.
 };
 
 require_once "login".$_SESSION["loginok"].".php";
@@ -94,7 +99,6 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     }
     $auth = array();
     $uid = $rs[0]["id"];
-    $auth["employee"]   = $rs[0]["login"];
     $auth["login"]      = $rs[0]["login"];
     $sql = "select * from auth.user_config where user_id=".$uid;
     $rs = $db->getAll($sql);

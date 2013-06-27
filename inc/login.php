@@ -37,7 +37,6 @@ $conffile = $_SESSION['crmpath']."/../".$_SESSION['ERPNAME']."/config/".$_SESSIO
 //while( list($key,$val) = each($_SESSION) ) {
 //    if ( ! in_array($key,$conf) ) unset($_SESSION[$key]);
 //};
-
 if ( is_file($conffile) ) {
     $tmp = anmelden();
     if ( $tmp ) {

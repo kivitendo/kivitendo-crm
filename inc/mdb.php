@@ -14,7 +14,7 @@ class myDB extends MDB2 {
  var $db = false;
  var $rc = false;
  var $showErr = false; // Browserausgabe
- var $log = true;     // Alle Abfragen mitloggen
+ var $log = false;     // Alle Abfragen mitloggen
  var $errfile = "/tmp/lxcrm.err";
  var $logfile = "/tmp/lxcrm.log";
  var $lfh = false;
@@ -86,7 +86,8 @@ class myDB extends MDB2 {
         $options = array(
             'result_buffering' => false,
         );
-        $this->db=& MDB2::factory($dsn,$options);
+        //$this->db=& MDB2::factory($dsn,$options);
+        $this->db=& MDB2::connect($dsn,$options);
         if (!$this->db || PEAR::isError($this->db)) {
             if ($this->log) $this->writeLog('Connect Error: '.$dns);
             $this->dbFehler('Connect '.print_r($dsn,true),$this->db->getMessage());
@@ -103,6 +104,7 @@ class myDB extends MDB2 {
     * OUT: true/false
     **********************************************/
     function query($sql, $force = False) {
+        if ($this->log) $this->writeLog($sql);
         if (strpos($sql,";")>0 and !$force) {
             //Sql-Injection? HTML-Sonderzeichen zulassen
             if (!preg_match("/&[a-zA-Z]+$/",substr($sql,0,strpos($sql,";"))))
@@ -110,7 +112,6 @@ class myDB extends MDB2 {
                 return false;
         }
         $this->rc=@$this->db->query($sql);
-        if ($this->log) $this->writeLog($sql);
         if(PEAR::isError($this->rc)) {
             $this->dbFehler($sql,$this->rc->getMessage());
             $this->rollback();
@@ -219,9 +220,9 @@ class myDB extends MDB2 {
     }
 
     function getAll($sql) {
+        if ($this->log) $this->writeLog('getAll: '.$sql);
         if (strpos($sql,";")>0) return false;
         $this->rc=$this->db->queryAll($sql);
-        if ($this->log) $this->writeLog($sql);
         if(PEAR::isError($this->rc)) {
             $this->dbFehler($sql,$this->rc->getMessage());
             return false;
@@ -235,26 +236,25 @@ class myDB extends MDB2 {
      * return mixed, false
      */
   function getAssoc($sql){
-        $this->db->loadModule('Extended');
-
+    if ($this->log) $this->writeLog('getAssoc: '.$sql);
+    $this->db->loadModule('Extended');
     $this->rc=$this->db->getAssoc($sql);
-    if ($this->log) $this->writeLog($sql);
     if(PEAR::isError($this->rc)) {
-                $this->dbFehler($sql,$this->rc->getMessage());
+           $this->dbFehler($sql,$this->rc->getMessage());
           return false;
     } else {
-                return $this->rc;
+          return $this->rc;
     }
   }
 
     function getOne($sql) {
-        if ($this->log) $this->writeLog($sql);
+        if ($this->log) $this->writeLog('getOne: '.$sql);
         $rs = $this->db->queryRow($sql);
-        if ($rs) {
-            return $rs;
-        } else {
-            $this->dbFehler($sql,$this->rs->getMessage());
+        if(PEAR::isError($rs)) {
+            $this->dbFehler($sql,$rs->getMessage());
             return false;
+        } else {
+            return $rs;
         }
     }
     function saveData($txt) {
@@ -277,19 +277,14 @@ class myDB extends MDB2 {
      * @return boolean
      */
     function executeMultiple($statement, $data){
-        $this->db->loadModule('Extended');
-        if (!$this->db->supports('transactions')){
-            exit();
-        }
-
         if ($this->log) {                            //Logging
             $this->writeLog("executeMultiple: $statement");
             $this->writeLog("mit den Werten:" . print_r($data,true));
-            /*foreach($data as $key2=>$value2){
-                    foreach($value2 as $key=>$value){
-                            $this->writeLog("hier:" . $key . "wert:" . $value);
-                    }
-            }*/
+        }
+        $this->db->loadModule('Extended');
+        if (!$this->db->supports('transactions')){
+            $this->writeLog("No Transaction");
+            exit();
         }
 
         $sth = $this->db->prepare($statement);                        //Prepare

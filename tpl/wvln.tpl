@@ -158,7 +158,7 @@
             $('#Finish').val('');
             $('#status1').prop('checked',true);
             $('#kontaktT').prop('checked',true);
-            //$('#Kradio').buttonset("refresh");
+            $('#Kradio').buttonset("refresh");
             $('#DLink').prop('href','');
             $('#DLink').text('');
             $('#cp_cv_id').val('');

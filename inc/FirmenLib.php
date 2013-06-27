@@ -1051,9 +1051,9 @@ function cvar_edit($id,$new=false) {
                                   }
                                   $kal = "";
                                   break;
-                case "textfield": preg_match("/width[ ]*=[ ]*(\d+)/i",$row["option"],$hit); $w = ($hit[1]>5)?$hit[1]:30;
-                                  preg_match("/height[ ]*=[ ]*(\d+)/i",$row["option"],$hit); $h = ($hit[1]>1)?$hit[1]:3; 
-                                  $input = "<textarea cols='$w' rows='$h' name='cvar_".$row["name"]."'>".${$row["name"]}."</textarea>";
+                case "textfield": preg_match("/width[ ]*=[ ]*(\d+)/i",$row["options"],$hit); $w = (isset($hit[1])&&$hit[1]>5)?$hit[1]:30;
+                                  preg_match("/height[ ]*=[ ]*(\d+)/i",$row["options"],$hit); $h = (isset($hit[1])&&$hit[1]>1)?$hit[1]:3; 
+                                  $input = "<textarea cols='$w' rows='$h' name='cvar_".$row["name"]."'>".${c_var.$row["name"]}."</textarea>";
                                   break;
                 case "bool"     : if ( (isset(${$row["name"]}) and ${$row["name"]} == '') && $new) ${$row["name"]}=($row["default_value"])?"checked":"";
                                   $input = "<input type='checkbox' name='cvar_".$row["name"]."' value='t' ";

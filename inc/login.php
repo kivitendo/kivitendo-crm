@@ -48,8 +48,7 @@ if ( is_file($conffile) ) {
             require("install.php");
             require("inc/update_neu.php");
         } else if (  $rs["version"] <> $_SESSION['VERSION'] ) {
-            echo "Istversion: ".$rc[0]["version"]." Sollversion: ".$_SESSION['VERSION']."<br>";
-            $oldver = $rc[0]["version"];
+            echo "Istversion: ".$rs["version"]." Sollversion: ".$_SESSION['VERSION']."<br>";
             require("inc/update_neu.php");
         } else {
             $db = $_SESSION["db"];

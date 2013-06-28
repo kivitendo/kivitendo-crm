@@ -23,7 +23,6 @@ if ( $_POST['save'] ) {
             $save = false;
         }
     }
-    if ( $_POST['dir_mode'] != '' ) $_POST['dir_mode'] = octdec($_POST['dir_mode']);
     if ( $save ) {
         $last = $_SESSION['db']->getOne('SELECT max(id) as id FROM crmdefaults');
         $insert = "INSERT INTO crmdefaults (key,val,grp,employee) VALUES (?,?,'mandant',".$_SESSION['loginCRM'].")";
@@ -81,7 +80,7 @@ if ( $_POST['save'] ) {
             'ttround'     => $data['ttround'],
             'ttclearown'  => ($data['clearown'] == 't')?'checked':'',
             'dir_group'   => $data['dir_group'],
-            'dir_mode'    => decoct($data['dir_mode']),
+            'dir_mode'    => $data['dir_mode'],
             'sep_cust_vendor'     => ($data['sep_cust_vendor'] == 't')?'checked':'',
             'listLimit'   => $data['listLimit'],
             'showErr'     => ($data['showErr'] == 't')?'checked':'',

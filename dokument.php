@@ -23,7 +23,7 @@
     }
     $t->set_file(array("doc" => "dokument.tpl"));
     $t->set_var(array(
-            'PICUP'   => ($_GET['P']==1)?'true':'false',
+            'PICUP'   => ( isset($_GET['P']) )?'true':'false',
             'mandant' => $_SESSION['dbname'],
             'tiny'    => ($_SESSION['tinymce'])?'true':'false'
     ));

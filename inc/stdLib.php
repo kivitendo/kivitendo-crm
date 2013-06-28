@@ -216,9 +216,8 @@ function anmelden() {
         $BaseUrl  = (empty( $_SERVER['HTTPS'] )) ? 'http://' : 'https://';
         $BaseUrl .= $_SERVER['HTTP_HOST'];
         $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
-        //reset($user_data); Bei while( list(..) ) = each; muss immer erst der Array-Pointer zurückgesetzt werden! 
-        //if ($user_data) while (list($key,$val) = each($user_data)) $_SESSION[$key] = $val;
-        if ($user_data) foreach ($user_data as $key => $val) $_SESSION[$key] = $val;// foreach ist kürzer + schneller
+        if ($user_data) foreach ($user_data as $key => $val) $_SESSION[$key] = $val;
+        $_SESSION['dir_mode']  = ( $user_data['dir_mode'] != '' )?octdec($user_data['dir_mode']):493; // 0755
         $_SESSION["loginCRM"] = $user_data["id"];
         $_SESSION['theme']    = ($user_data['theme']=='' || $user_data['theme']=='base')?'':$user_data['theme'];
         $sql = "select * from defaults";
@@ -245,8 +244,12 @@ function chkdir($dir,$p="") {
         $tmp  = $_SESSION["dbname"]."/";
         foreach ( $dirs as $dir ) {
             if ( !file_exists($_SESSION['crmdir']."/dokumente/$tmp".$dir) ) {
-                $ok = @mkdir($_SESSION['crmdir']."$/dokumente/$tmp".$dir);
-                if ( $_SESSION['dir_group'] ) @chgrp($_SESSION['crmdir']."/dokumente/$tmp".$dir,$_SESSION['dir_group']); 
+                if ( isset($_SESSION['dir_mode']) && $_SESSION['dir_mode'] != ''  ) {
+                    $ok = @mkdir($_SESSION['crmdir']."/dokumente/$tmp".$dir, $_SESSION['dir_mode']);
+                } else {
+                    $ok = @mkdir($_SESSION['crmdir']."/dokumente/$tmp".$dir);
+                }
+                if ( $_SESSION['dir_group'] && $ok ) @chgrp($_SESSION['crmdir']."/dokumente/$tmp".$dir,$_SESSION['dir_group']); 
                 if ( !$ok ) {
                     return false;
                 }

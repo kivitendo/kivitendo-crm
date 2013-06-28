@@ -654,7 +654,7 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
             }
         }
         include("links.php");
-        if (!is_dir($dir_abs."/".$DIR)) {
+        if (!is_dir($dir_abs."/".$DIR)) { // Wird wo definiert???
             mkdir($dir_abs."/".$DIR);  
         }
         chmod($dir_abs."/".$DIR,$_SESSION['dir_mode']); 

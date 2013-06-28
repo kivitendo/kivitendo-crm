@@ -5,7 +5,7 @@
     include('inc/FirmenLib.php');
     include('inc/persLib.php');
     $ep = '';
-    $cp_id = '';
+    $cp_id = $id = false;
     if ( isset($_GET['fid']) ) {
         $fid = $_GET['fid'];
         $Q   = $_GET['Q'];
@@ -22,7 +22,7 @@
         $rc = Ldap_add_Customer($_GET['fid']);
     }
     // Einen Kontakt anzeigen lassen
-    if (!$fid and isset($_GET['id']) ) {				// Kommt nicht von firma1.php
+    if (isset($_GET['id']) ) {				// Kommt nicht von firma1.php
         $co=getKontaktStamm($_GET['id']);
         if (empty($co['cp_cv_id'])) {
             // Ist keiner Firma zugeordnet

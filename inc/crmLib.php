@@ -1483,6 +1483,7 @@ function chkMailAdr ($mailadr) {
 function getReJahr($fid,$jahr,$liefer=false,$user=false) {
     $lastYearV=date("Y-m-d",mktime(0, 0, 0, date("m")+1, 1, $jahr-1));
     $lastYearB=date("Y-m-d",mktime(0, 0, 0, date("m"), 31, $jahr));
+    $sea = '';
     if ($user) {
         $sea = " and salesman_id = ".$fid." ";
     } else if ($_SESSION["sales_edit_all"] == "f") {
@@ -1531,6 +1532,7 @@ function getReJahr($fid,$jahr,$liefer=false,$user=false) {
 function getAngebJahr($fid,$jahr,$liefer=false,$user=false) {
     $lastYearV=date("Y-m-d",mktime(0, 0, 0, date("m"), 1, $jahr-1));
     $lastYearB=date("Y-m-d",mktime(0, 0, 0, date("m")+1, -1, $jahr));
+    $sea = '';
     if ($user) {
         $sea = " and salesman_id = ".$fid." ";
     } else if ($_SESSION["sales_edit_all"] == "f") {

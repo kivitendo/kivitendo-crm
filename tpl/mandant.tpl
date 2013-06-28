@@ -30,7 +30,7 @@
     <tr><td>Mailordner bereinigen</td>          <td><input type='checkbox' name='Expunge' id='Expunge' value='t' {Expunge}> -Expunge- </td></tr>
     <tr><td>versendete Mails loggen</td>        <td><input type='checkbox' name='logmail' id='logmail' value='t' {logmail}></td></tr>
     <tr><td colspan='2'><b>Vorgabe Map</b></td></tr>
-    <tr><td>Map-URL</td>            <td><input type='text' name='stadtplan' id='stadtplan' value='{stadtplan}' size='60'></td></tr>
+    <tr><td>Map-URL</td>            <td><input type='text' name='streetview' id='streetview' value='{streetview}' size='60'></td></tr>
     <tr><td colspan='2'>Platzhalter: %TOSTREET% %TOZIPCODE% %TOCITY% %FROMSTREET% %FROMZIPCODE% %FROMCITY%</td></tr>
     <tr><td>Leerzeichenersatz</td>  <td><input type='text' name='planspace' id='planspace' value='{planspace}' size='1' maxlength='1'> (GoYellow: '-', Viamichelin, Google: '+')</td></tr>
     <tr><td colspan='2'><b>Zeiterfassung</b></td></tr>

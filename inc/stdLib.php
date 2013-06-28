@@ -39,7 +39,7 @@ if ( !isset($_SESSION['dbhost']) ) {
 };
 
 require_once "login".$_SESSION["loginok"].".php";
-$db = $_SESSION['db']; // Das muß noch raus!!!
+//$db = $_SESSION['db']; // Das muß noch raus!!!
 
 
 /****************************************************

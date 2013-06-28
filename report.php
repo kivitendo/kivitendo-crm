@@ -15,7 +15,7 @@ if ($_GET["tab"]) {
 	foreach($tabellen as $key=>$val) {
 		$sql="SELECT a.attname FROM pg_attribute a, pg_class c WHERE ";
 		$sql.="c.relname = '$key' AND a.attnum > 0 AND a.attrelid = c.oid ORDER BY a.attnum";
-		$rs=$db->getAll($sql);
+		$rs=$_SESSION['db']->getAll($sql);
 		if ($rs) { 
 			foreach ($rs as $row) {
 				if (!in_array($row["attname"],$noshow))

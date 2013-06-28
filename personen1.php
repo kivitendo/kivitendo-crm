@@ -34,7 +34,7 @@
             clearCSVData();
             $header = array("ANREDE","TITEL","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","FIRMA","FaID","GESCHLECHT","ID");
             $sql = "select name from custom_variable_configs where module = 'CT'";
-            $rs = $db->getAll($sql);
+            $rs = $_SESSION['db']->getAll($sql);
             if ($rs) {
                 $cvar = 0;
                 foreach ($rs as $row) {

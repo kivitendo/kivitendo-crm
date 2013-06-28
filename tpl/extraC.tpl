@@ -1,7 +1,7 @@
 <html>
 <head><title>Zusatzdaten</title>
         {STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
+        {CRMCSS}
 	<script langage="JavaScript">
 		// sind in den Funktionen geschweifte Klammern drin, dann Leerzeichen nach und vor die Klammer 
 		// da die sonst von der TemplateEngie gelöscht werden

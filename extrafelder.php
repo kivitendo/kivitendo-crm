@@ -18,10 +18,10 @@ CREATE INDEX extrafld_key ON extra_felder USING btree (owner);
 require_once("inc/stdLib.php");
 include("inc/template.inc");
 $menu = $_SESSION['menu'];
+$head = mkHeader();
 $owner=($_GET["owner"])?$_GET["owner"]:$_POST["owner"];
 
 function suchFelder($data) {
-global $db;
     $tab = substr($data['owner'],0,1);
     foreach ($data as $key=>$val) { 
         if ($key == "suche") continue;
@@ -39,36 +39,34 @@ global $db;
         $sql.= "from contacts left join customer C on C.id=cp_cv_id ";
         $sql.= "left join vendor V on V.id=cp_cv_id where cp_id in ($sqle)";
     }
-    $rs = $db->getAll($sql);
+    $rs = $_SESSION['db']->getAll($sql);
     return $rs;
 }
 
 function saveFelder($data) {
-global $db;
 	$nosave=array("save","owner","suche");
 	$owner=$data["owner"];
-	$rc=$db->query("BEGIN");
+	$rc=$_SESSION['db']->query("BEGIN");
         $tab = substr($owner,0,1);
         $owner = substr($owner,1);
 	$sql="delete from extra_felder where tab = '$tab' and owner = '$owner'";
-	$rc=$db->query($sql);
+	$rc=$_SESSION['db']->query($sql);
 	foreach ($data as $key=>$val) {
 		if (in_array($key,$nosave)) continue;
 		$val=trim($val);
-		$rc=$db->insert('extra_felder',array('tab','owner','fkey','fval'),array($tab,$owner,$key,$val));
-		if (!$rc) { $db->query("ROLLBACK"); return false; };
+		$rc=$_SESSION['db']->insert('extra_felder',array('tab','owner','fkey','fval'),array($tab,$owner,$key,$val));
+		if (!$rc) { $_SESSION['db']->query("ROLLBACK"); return false; };
 	}
-	$rc=$db->query("COMMIT");
+	$rc=$_SESSION['db']->query("COMMIT");
 	return true;
 }
 
 function getFelder($owner,&$t) {
-global $db;
 	$t->set_var(array(owner => $owner));
     $tab = substr($owner,0,1);
     $owner = substr($owner,1);
 	$sql="select * from extra_felder where tab = '$tab' and owner='$owner'";
-	$rs=$db->getAll($sql);
+	$rs=$_SESSION['db']->getAll($sql);
 	if ($rs) {
 		foreach($rs as $row) {
 			$key=$row["fkey"];
@@ -106,9 +104,9 @@ if ($_POST["suche"]) {
         }
         $t->set_block("fa1","Liste","Block");
         $t->set_var(array(
-            ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-            FAART => ($Q=="C")?"Customer":"Vendor",
-            msg => $msg,
+            'CRMCSS' => $head['CRMCSS'], 
+            'FAART'  => ($Q=="C")?"Customer":"Vendor",
+            'msg'    => $msg,
         ));
         $i=0;
         if ($maske=="P") {
@@ -143,18 +141,18 @@ if ($_POST["suche"]) {
                     $insk="";
                 };
                 $t->set_var(array(
-                        js => $js,
-                        LineCol => ($i%2+1),
-                        Name => $zeile["cp_name"].", ".$zeile["cp_givenname"],
-                        Plz => $zeile["cp_zipcode"],
-                        Ort => $zeile["cp_city"],
-                        Telefon => $zeile["cp_phone1"],
-                        eMail => $zeile["cp_email"],
-                        Firma => ($zeile["cfirma"])?$zeile["cfirma"]:$zeile["vfirma"],
-                        insk => $insk,
-                        DEST => "",
-                        QUELLE => $Quelle,
-                        Q => $Quelle,
+                        'js' => $js,
+                        'LineCol' => ($i%2+1),
+                        'Name' => $zeile["cp_name"].", ".$zeile["cp_givenname"],
+                        'Plz' => $zeile["cp_zipcode"],
+                        'Ort' => $zeile["cp_city"],
+                        'Telefon' => $zeile["cp_phone1"],
+                        'eMail' => $zeile["cp_email"],
+                        'Firma' => ($zeile["cfirma"])?$zeile["cfirma"]:$zeile["vfirma"],
+                        'insk' => $insk,
+                        'DEST' => "",
+                        'QUELLE' => $Quelle,
+                        'Q' => $Quelle,
                     ));
                $t->parse("Block","Liste",true);
 	       $i++;
@@ -169,15 +167,15 @@ if ($_POST["suche"]) {
                             $zeile["account_number"],$zeile["bank"],$zeile["bank_code"],
                             $zeile["language"],$zeile["business_id"]),$zeile["id"]);
                 $t->set_var(array(
-                        Q => $maske,
-                        ID => $zeile["id"],
-                        LineCol => ($i%2+1),
-                        KdNr => ($maske=="C")?$zeile["customernumber"]:$zeile["vendornumber"],
-                        Name => $zeile["name"],
-                        Plz => $zeile["zipcode"],
-                        Ort => $zeile["city"],
-                        Telefon => $zeile["phone"],
-                        eMail => $zeile["email"]
+                        'Q' => $maske,
+                        'ID' => $zeile["id"],
+                        'LineCol' => ($i%2+1),
+                        'KdNr' => ($maske=="C")?$zeile["customernumber"]:$zeile["vendornumber"],
+                        'Name' => $zeile["name"],
+                        'Plz' => $zeile["zipcode"],
+                        'Ort' => $zeile["city"],
+                        'Telefon' => $zeile["phone"],
+                        'eMail' => $zeile["email"]
                     ));
                     $t->parse("Block","Liste",true);
             }
@@ -192,10 +190,11 @@ $t->set_file(array("extra" => "extra$maske.tpl"));
 $visible = 'style="visibility:visible"';
 $hidden = 'style="visibility:hidden"';
 $t->set_var(array(
-    STYLESHEETS   => $menu['stylesheets'],
-    JQUERY        => $_SESSION['basepath'].'crm/',
-    "visiblesichern" => ($owner=='P0')?$hidden:$visible,
-    "visiblesuchen"  => ($owner=='P0')?$visible:$hidden,
+    'CRMCSS'         => $head['CRMCSS'], 
+    'STYLESHEETS'    => $menu['stylesheets'],
+    'JQUERY'         => $_SESSION['basepath'].'crm/',
+    'visiblesichern' => ($owner=='P0')?$hidden:$visible,
+    'visiblesuchen'  => ($owner=='P0')?$visible:$hidden,
 ));
 getFelder($owner,$t);
 $t->pparse("out",array("extra"));

@@ -105,7 +105,7 @@
             echo "update ok<br>";
         }
     } else {
-        if ( isset($oldver) and $oldver <> $_SESSION['VERSION'] ) updatever($db,$_SESSION['VERSION']);
+        if ( isset($dbver) and $dbver <> $_SESSION['VERSION'] ) updatever($db,$_SESSION['VERSION']);
         if ( !$LOGIN ) echo "System uptodate<br />";
     };
     if ( !$LOGIN ) {

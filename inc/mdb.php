@@ -14,7 +14,7 @@ class myDB extends MDB2 {
  var $db = false;
  var $rc = false;
  var $showErr = false; // Browserausgabe
- var $log = false;     // Alle Abfragen mitloggen
+ var $log = true;     // Alle Abfragen mitloggen
  var $errfile = "/tmp/lxcrm.err";
  var $logfile = "/tmp/lxcrm.log";
  var $lfh = false;
@@ -86,8 +86,8 @@ class myDB extends MDB2 {
         $options = array(
             'result_buffering' => false,
         );
-        //$this->db=& MDB2::factory($dsn,$options);
-        $this->db=& MDB2::connect($dsn,$options);
+        $this->db=& MDB2::factory($dsn,$options);
+        //$this->db=& MDB2::connect($dsn,$options);
         if (!$this->db || PEAR::isError($this->db)) {
             if ($this->log) $this->writeLog('Connect Error: '.$dns);
             $this->dbFehler('Connect '.print_r($dsn,true),$this->db->getMessage());

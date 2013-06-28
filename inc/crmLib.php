@@ -2441,17 +2441,17 @@ function getWPath($id) {
 *****************************************************/
 function getWCategorie($kdhelp=false) {
 
-    if ($kdhelp) { 
-        $sql="select * from wissencategorie where kdhelp is true order by name";
+    if ( $kdhelp ) { 
+        $sql = "select * from wissencategorie where kdhelp is true order by name";
     } else {
-        $sql="select * from wissencategorie order by hauptgruppe,name";
+        $sql = "select * from wissencategorie order by hauptgruppe,name";
     }
-    $rs=$_SESSION['db']->getAll($sql);
-    $data=array();
-    if ($rs) { 
-        if ($kdhelp) if (count($rs)>0) { return $rs;} else { return false; };
+    $rs = $_SESSION['db']->getAll($sql);
+    $data = array();
+    if ( $rs ) { 
+        if ( $kdhelp ) if ( count($rs)>0 ) { return $rs; } else { return false; };
         foreach ($rs as $row) {
-            $data[$row["hauptgruppe"]][]=array("name"=>$row["name"],"id"=>$row["id"],"kdhelp"=>$row["kdhelp"]);
+            $data[$row["hauptgruppe"]][] = array("name"=>$row["name"],"id"=>$row["id"],"kdhelp"=>$row["kdhelp"]);
         }
         return $data;
     } else {

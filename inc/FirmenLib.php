@@ -144,6 +144,8 @@ function getFirmenStamm($id,$ws=true,$tab='C',$cvar=true) {
                 $krs=$_SESSION['db']->getOne(sprintf($sql,"vendor",$row["konzern"]));
             }
             if ($krs) $row["konzernname"]=$krs["name"];
+        } else {
+            $row["konzernname"] = '';
         }
         if ($tab=="C") {
             $sql="select count(*) from customer where konzern = ".$id;

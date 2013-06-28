@@ -3,14 +3,16 @@
     include("inc/template.inc");
     include("inc/FirmenLib.php");
     include("inc/crmLib.php");
-    $Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
-    $kdhelp=getWCategorie(true);
-    $id=$_GET["id"];
-    $fa=getFirmenStamm($id,true,$Q);
-    $start=(isset($_GET["start"]))?($_GET["start"]):0;
-    $cmsg=getCustMsg($id);
-    $tmp=getVariablen($id);
-    $variablem="";
+    $Vars   = false;
+    $fid    = ( isset($_GET['fid']) )?$_GET['fid']:false;
+    $Q      = ( isset($_GET['Q']) )?$_GET['Q']:'';
+    $id     = ( isset($_GET['id']) )?$_GET['id']:false;
+    $kdhelp = getWCategorie(true);
+    $fa     = getFirmenStamm($id,true,$Q);
+    $start  = ( isset($_GET["start"]) )?($_GET["start"]):0;
+    $cmsg   = getCustMsg($id);
+    $tmp    = getVariablen($id);
+    $variablen = '';
     $t = new Template($base);
     doHeader($t);
     $t->set_file(array("fa1" => "firma1.tpl"));
@@ -65,6 +67,8 @@
     };
     if ($fa["homepage"]<>"") {
         $internet=(preg_match("^://^",$fa["homepage"]))?$fa["homepage"]:"http://".$fa["homepage"];
+    } else {
+        $internet = '';
     };
     if ($fa["discount"]) {
         $rab=($fa["discount"]*100)."%";
@@ -75,14 +79,12 @@
     }
     $karte1=str_replace(array("%TOSTREET%","%TOZIPCODE%","%TOCITY%"),array(strtr($fa["street"]," ",$_SESSION['planspace']),$fa["zipcode"],$fa["city"]),$_SESSION['streetview']);
     $karte2=str_replace(array("%TOSTREET%","%TOZIPCODE%","%TOCITY%"),array(strtr($fa["shiptostreet"]," ",$_SESSION['planspace']),$fa["shiptozipcode"],$fa["shiptocity"]),$_SESSION['streetview']);
-    if (preg_match("/%FROM/",$karte)) { //ToDo? Wo wird $karte definiert??
+    if (preg_match("/%FROM/",$karte1)) { //ToDo? Wo wird $karte definiert??
         include "inc/UserLib.php";
         $user=getUserStamm($_SESSION["loginCRM"]);
         if ($user["addr1"]<>"" and $user["addr3"]<>"" and $user["addr2"]) {
             $karte1=str_replace(array("%FROMSTREET%","%FROMZIPCODE%","%FROMCITY%"),array(strtr($user["addr1"]," ",$_SESSION['planspace']),$user["addr2"],$user["addr3"]),$karte1);
             $karte2=str_replace(array("%FROMSTREET%","%FROMZIPCODE%","%FROMCITY%"),array(strtr($user["addr1"]," ",$_SESSION['planspace']),$user["addr2"],$user["addr3"]),$karte2);
-        } else {
-            $karte="";
         };
     }
     $views=array(""=> "lie",1=>"lie",2=>"not",3=>"var",4=>"fin",5=>"inf");
@@ -156,9 +158,6 @@
             'Sids' => $fa["shiptoids"],
             'Cmsg' => $cmsg,
             'IMG' => $Image,
-            'PAGER' => $pager,
-            'NEXT' => $next,
-            'PREV' => $prev,
             'KARTE1' => $karte1,
             'KARTE2' => $karte2,
             'sales'	=> ($Q=="C")?"sales":"purchase",
@@ -184,8 +183,6 @@
                                '<a class="firmabutton" href="#" onCLick="doLxCars();" title="KFZ-Daten"><img src="image/auto.png" alt="LxCars"></a>&nbsp;':'',
             'zeige_bearbeiter' => ($_SESSION['zeige_bearbeiter']=='t')?"visible":"hidden",      
             'zeige_tools' => ($_SESSION['zeige_tools']=='t')?"visible":"hidden",
-            'login' => $_SESSION["login"],
-            'password' => $_SESSION["password"],
             'leadsrc' => $fa["leadsrc"],
             'variablen' => $variablen,
             'Vars' => $Vars,

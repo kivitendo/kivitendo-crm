@@ -735,26 +735,26 @@ function mkHeader() {
     $LVID = '<link id="'.$_SESSION['theme'].'" rel="stylesheet" type="text/css" href="';
     $LN = '">'."\n";
     $head = array(
-        'JQUERY'        => $SV.$_SESSION['basepath'].'crm/jquery-ui/jquery.js'.$SN,
-        'JQUERYUI'      => $LV.$_SESSION['basepath'].'crm/jquery-ui/themes/base/jquery-ui.css'.$LN.
-                           $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/minified/jquery-ui.min.js'.$SN,
-        'JQTABLE'       => $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/Table/jquery.tablesorter.js'.$SN.
-                           $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/Table/addons/pager/jquery.tablesorter.pager.js'.$SN.
-                           $LV.$_SESSION['basepath'].'crm/jquery-ui/plugin/Table/themes/blue/style.css'.$LN,
-        //'JQDATE'        => $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery.ui.datepicker.js'.$SN,
-        'JQDATE'        => $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/'.(($_SESSION['lang']=='en')?
+        'JQUERY'        => $SV.$_SESSION['baseurl'].'crm/jquery-ui/jquery.js'.$SN,
+        'JQUERYUI'      => $LV.$_SESSION['baseurl'].'crm/jquery-ui/themes/base/jquery-ui.css'.$LN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/minified/jquery-ui.min.js'.$SN,
+        'JQTABLE'       => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/jquery.tablesorter.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/addons/pager/jquery.tablesorter.pager.js'.$SN.
+                           $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/themes/blue/style.css'.$LN,
+        //'JQDATE'        => $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/jquery.ui.datepicker.js'.$SN,
+        'JQDATE'        => $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/'.(($_SESSION['lang']=='en')?
                                                              'jquery.ui.datepicker.js':
                                                              'i18n/jquery.ui.datepicker-'.$_SESSION['lang']).
                                                              '.js'.$SN,
-        'JQFILEUP'      => $LV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/css/jquery.fileupload-ui.css'.$LN.
-                           $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.iframe-transport.js'.$SN.
-                           $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.fileupload.js'.$SN,
-        'JQWIDGET'      => $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/minified/jquery.ui.widget.min.js'.$SN,
+        'JQFILEUP'      => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/FileUpload/css/jquery.fileupload-ui.css'.$LN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/FileUpload/js/jquery.iframe-transport.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/FileUpload/js/jquery.fileupload.js'.$SN,
+        'JQWIDGET'      => $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/minified/jquery.ui.widget.min.js'.$SN,
         'THEME'         => ($_SESSION['theme']!='')? $LVID  .$_SESSION['basepath'].'crm/jquery-ui/themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN:'',
-        'CRMCSS'        => $LV.$_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"].'/main.css'.$LN,
-        'JUI-DROPDOWN'  => $LV.$_SESSION['basepath'].'crm/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.css'.$LN.
-                           $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.min.js'.$SN,
-        'CRMPATH'       => $_SESSION['basepath'].'crm/' );
+        'CRMCSS'        => $LV.$_SESSION['baseurl'].'crm/css/'.$_SESSION["stylesheet"].'/main.css'.$LN,
+        'JUI-DROPDOWN'  => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.css'.$LN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.min.js'.$SN,
+        'CRMPATH'       => $_SESSION['baseurl'].'crm/' );
         
     return $head;
 
@@ -832,19 +832,24 @@ function makeMenu($sess,$token){
         $BaseUrl .= $_SERVER['HTTP_HOST'];
         $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
     } else {
-        $BaseUrl = $_SESSION['ERP_BASE_URL'];
+        $BaseUrl = $_SESSION['ERP_BASE_URL']; 
     }
     $_SESSION['baseurl'] = $BaseUrl;
     $Url = $BaseUrl.'controller.pl?action=Layout/empty&format=json';
     $ch = curl_init();
     curl_setopt( $ch, CURLOPT_URL, $Url );
+    curl_setopt( $ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
     curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
+    curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, false );
     curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
     curl_setopt( $ch, CURLOPT_ENCODING, 'gzip,deflate' );
     curl_setopt( $ch, CURLOPT_HTTPHEADER, array (
                 "Connection: keep-alive",
                 "Cookie: ".$_SESSION["cookie"]."=".$sess."; ".$_SESSION["cookie"]."_api_token=".$token
                 ));
+    if ( curl_errno($ch) ) {   
+        echo 'Curl error: '.curl_error( $ch );
+    }
     $result = curl_exec( $ch );
     curl_close( $ch );
     $objResult = json_decode( $result );

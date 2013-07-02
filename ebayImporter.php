@@ -62,14 +62,20 @@ $menu['start_content'].
 if ( !$_POST['select_file'] ) echo $form_select_file; // in Phase 3 $_POST['select_file'] = true;
 
 if ($_FILES['file']['type'] != 'text/csv') exit();
-move_uploaded_file($_FILES['file']['tmp_name'], "upload/import-src.csv"); 
+move_uploaded_file($_FILES['file']['tmp_name'], "upload/import-src.csv");
+
 
 //Datei nach UTF8 konvertieren
-//$command = "iconv -f ISO-8859-15 -t UTF8 -c -o upload/import-utf8.csv upload/import-src.csv";
-//system($command);
+
+//sollte es nicht so sein? :
+$command = "iconv -f ISO-8859-15 -t UTF8 -c -o upload/import-utf8.csv upload/import-src.csv";
+
+#$command = "iconv -f ISO-8859-15 -t UTF8 -c -o upload/import-src.csv upload/import-utf8.csv";
+
+system($command);
 //$data = array();
 $row = 1;
-if (($handle = fopen("upload/import-src.csv", "r")) !== FALSE) {
+if (($handle = fopen("upload/import-utf8.csv", "r")) !== FALSE) {
  
     while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
         //$num = count($data);

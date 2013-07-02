@@ -56,8 +56,9 @@
         echo json_encode($data);
     }
     function showCalls($id,$fa=false) {
-        $nun=date("d.m.Y h:i");
-        $items=getAllTelCall($id,$fa,$start,200);
+        $nun   = date("d.m.Y h:i");
+        $items = getAllTelCall($id,$fa); //,$start,200);
+        $item = array();
         if ($items) {
             foreach ($items as $row) {
                 $row['calldate'] = db2date(substr($row["calldate"],0,10))." ".substr($row["calldate"],11,5);
@@ -70,8 +71,9 @@
     }
     function showShipadress($id,$tab){
         $data=getShipStamm($id,$tab);
+        $htmllink = '';
         $karte=str_replace(array("%TOSTREET%","%TOZIPCODE%","%TOCITY%"),
-                           array(strtr($data["shiptostreet"]," ",$_SESSION['planspace']),$dataa["shiptozipcode"],$data["shiptocity"]),$_SESSION['streetview']);
+                           array(strtr($data["shiptostreet"]," ",$_SESSION['planspace']),$data["shiptozipcode"],$data["shiptocity"]),$_SESSION['streetview']);
         if (preg_match("/%FROM/",$karte)) {
             include "inc/UserLib.php";
             $user=getUserStamm($_SESSION["loginCRM"]);
@@ -210,6 +212,7 @@
          if ($directory != '/')
             $directory = trim( rtrim( $directory, " /\\" ) ); //entferne rechts Leezeichen und Slash bzw Backslash
         chkdir($directory,".");
+        $inhalt = false;
         if ( is_dir("../dokumente/".$_SESSION["dbname"]."/".$directory)) {
             $dir_object = dir( "../dokumente/".$_SESSION["dbname"]."/".$directory );
             // Gibt neues Verzeichnis aus

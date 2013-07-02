@@ -1483,6 +1483,7 @@ function chkMailAdr ($mailadr) {
 function getReJahr($fid,$jahr,$liefer=false,$user=false) {
     $lastYearV=date("Y-m-d",mktime(0, 0, 0, date("m")+1, 1, $jahr-1));
     $lastYearB=date("Y-m-d",mktime(0, 0, 0, date("m"), 31, $jahr));
+    $sea = '';
     if ($user) {
         $sea = " and salesman_id = ".$fid." ";
     } else if ($_SESSION["sales_edit_all"] == "f") {
@@ -1531,6 +1532,7 @@ function getReJahr($fid,$jahr,$liefer=false,$user=false) {
 function getAngebJahr($fid,$jahr,$liefer=false,$user=false) {
     $lastYearV=date("Y-m-d",mktime(0, 0, 0, date("m"), 1, $jahr-1));
     $lastYearB=date("Y-m-d",mktime(0, 0, 0, date("m")+1, -1, $jahr));
+    $sea = '';
     if ($user) {
         $sea = " and salesman_id = ".$fid." ";
     } else if ($_SESSION["sales_edit_all"] == "f") {
@@ -2441,17 +2443,17 @@ function getWPath($id) {
 *****************************************************/
 function getWCategorie($kdhelp=false) {
 
-    if ($kdhelp) { 
-        $sql="select * from wissencategorie where kdhelp is true order by name";
+    if ( $kdhelp ) { 
+        $sql = "select * from wissencategorie where kdhelp is true order by name";
     } else {
-        $sql="select * from wissencategorie order by hauptgruppe,name";
+        $sql = "select * from wissencategorie order by hauptgruppe,name";
     }
-    $rs=$_SESSION['db']->getAll($sql);
-    $data=array();
-    if ($rs) { 
-        if ($kdhelp) if (count($rs)>0) { return $rs;} else { return false; };
+    $rs = $_SESSION['db']->getAll($sql);
+    $data = array();
+    if ( $rs ) { 
+        if ( $kdhelp ) if ( count($rs)>0 ) { return $rs; } else { return false; };
         foreach ($rs as $row) {
-            $data[$row["hauptgruppe"]][]=array("name"=>$row["name"],"id"=>$row["id"],"kdhelp"=>$row["kdhelp"]);
+            $data[$row["hauptgruppe"]][] = array("name"=>$row["name"],"id"=>$row["id"],"kdhelp"=>$row["kdhelp"]);
         }
         return $data;
     } else {

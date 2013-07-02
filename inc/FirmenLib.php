@@ -144,6 +144,8 @@ function getFirmenStamm($id,$ws=true,$tab='C',$cvar=true) {
                 $krs=$_SESSION['db']->getOne(sprintf($sql,"vendor",$row["konzern"]));
             }
             if ($krs) $row["konzernname"]=$krs["name"];
+        } else {
+            $row["konzernname"] = '';
         }
         if ($tab=="C") {
             $sql="select count(*) from customer where konzern = ".$id;
@@ -652,7 +654,7 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
             }
         }
         include("links.php");
-        if (!is_dir($dir_abs."/".$DIR)) {
+        if (!is_dir($dir_abs."/".$DIR)) { // Wird wo definiert???
             mkdir($dir_abs."/".$DIR);  
         }
         chmod($dir_abs."/".$DIR,$_SESSION['dir_mode']); 

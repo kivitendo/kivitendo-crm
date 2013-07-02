@@ -92,27 +92,26 @@ if (($handle = fopen("upload/import-utf8.csv", "r")) !== FALSE) {
     fclose($handle);
 }
 //BusinessIds ermitteln
-global $db;
 $end = "Endverbraucher"; //ANPASSEN
 
 
 $sql = "SELECT id FROM business WHERE description ILIKE '$end'";
-$rs = $db->getOne($sql);
+$rs = $_SESSION['db']->getOne($sql);
 $end_id = $rs['id'];
 
 
 $sql = "SELECT id FROM leads WHERE lead ILIKE 'ebay'";
-$rs = $db->getOne($sql);
+$rs = $_SESSION['db']->getOne($sql);
 $ebayLeadId = $rs['id'];  
 
 //SELECT id FROM payment_terms WHERE description ILIKE 'paypal' OR description_long ILIKE '%paypal%';
 
 $sql = "SELECT id FROM payment_terms WHERE description ILIKE 'paypal' OR description_long ILIKE '%paypal%'";
-$rs = $db->getOne($sql);
+$rs = $_SESSION['db']->getOne($sql);
 $paypalId = $rs['id']; 
 
 $sql = "SELECT id FROM payment_terms WHERE description ILIKE 'vorkasse' OR description_long ILIKE '%vorkasse%'";
-$rs = $db->getOne($sql);
+$rs = $_SESSION['db']->getOne($sql);
 $payotherId =  $rs['id'];
 
 array_shift($csvArray);//Erste Zeile löschen
@@ -155,7 +154,7 @@ if ($csvArray) foreach($csvArray as $key => $row) {
     if ($ok) { 
         $i++;
         $sql = "SELECT * FROM customer WHERE name ILIKE '".$row["2"]."' AND zipcode = '".$row["8"]."' OR department_1 ILIKE '".$row["1"]."' OR email ILIKE '".$row["3"]."'";
-        $rs=$db->getAll($sql);
+        $rs=$_SESSION['db']->getAll($sql);
         echo "Vorhanden??: ".$rs[0]['name']."<br />";
         echo "<tr class='bgcol2'>". 
              "<td class=\"liste\">".$row["1"]."</td><td class=\"liste\">".$row["2"]."</td>". 
@@ -169,7 +168,7 @@ if ($csvArray) foreach($csvArray as $key => $row) {
             $sql = "INSERT INTO customer (email, name, department_1, street, zipcode, city, country, business_id, customernumber, lead, payment_id, currency_id  ) VALUES ";
             $sql.= "('".$row['3']."', '".$row["2"]."', '".$row["1"]."', '".$row["4"].$row["5"]."', '".$row["8"]."','".$row["6"]."', '".$row['9']."', ".$end_id.", '".$CustNb."', ".$ebayLeadId.", ".$paypalId." , 1 )";
             echo "SQL: ".$sql;            
-            $rcc = $db->query($sql);
+            $rcc = $_SESSION['db']->query($sql);
         }
     }
   //$row['3']  

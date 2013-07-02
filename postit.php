@@ -4,15 +4,13 @@ require_once("inc/stdLib.php");
 $popup=($_GET["popup"])?$_GET["popup"]:0;
 
 function getAllPostIt($id) {
-global $db;
-	$sql="select * from postit where employee=$id order by date";
-	$rs=$db->getAll($sql);
+	$sql = "select * from postit where employee=$id order by date";
+	$rs  = $_SESSION['db']->getAll($sql);
 	return $rs;
 }
 function getOnePostIt($id) {
-global $db;
-	$sql="select * from postit where id=$id";
-	$rs=$db->getAll($sql);
+	$sql = "select * from postit where id=$id";
+	$rs  = $_SESSION['db']->getAll($sql);
 	if ($rs) {
 		$data=$rs[0];
 		$data["notes"]=stripslashes($data["notes"]);
@@ -22,31 +20,29 @@ global $db;
 	}
 }
 function savePostIt($data) {
-global $db;
 	if (!$data["id"]) {
-		$newID=uniqid (rand());
-		$rc=$db->insert(postit,array('employee','date','cause'),array($_SESSION["loginCRM"],'now()',$newID));
+		$newID = uniqid (rand());
+		$rc    = $_SESSION['db']->insert(postit,array('employee','date','cause'),array($_SESSION["loginCRM"],'now()',$newID));
 		if ($rc) {
-                	$sql="select id from postit where cause = '$newID'";
-	                $rs=$db->getOne($sql);
+                	$sql = "select id from postit where cause = '$newID'";
+	                $rs  = $_SESSION['db']->getOne($sql);
 		} else {
 			return false;
 		}
                 if ($rs) {
-                        $data["id"]=$rs["id"];
-                        $rc = $db->commit();
+                        $data["id"] = $rs["id"];
+                        $rc = $_SESSION['db']->commit();
                 } else {
                         return false;
                 }
 	};
         $sql = "UPDATE postit SET notes = '".$data["notes"]."',cause='".substr($data["cause"],0,100)."' WHERE id = ".$data['id'];
-        $rc = $db->query($sql);
+        $rc = $_SESSION['db']->query($sql);
 	return $rc;
 }
 function DelPostIt($id) {
-global $db;
-	$sql="delete from postit where id=$id";
-	$rc=$db->query($sql);
+	$sql = "delete from postit where id=$id";
+	$rc  = $_SESSION['db']->query($sql);
 	return $rc;
 }
 if ($_POST["save"]) {

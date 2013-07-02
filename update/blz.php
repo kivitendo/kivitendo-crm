@@ -73,15 +73,15 @@ if ($_POST["ok"]=="Hilfe") {
 	if ($test) echo "Testdurchlauf <br><table>\n";
 	$i=0;
 	$start=time();
-	$rs = $db->getAll("SELECT current_setting('server_encoding')");
+	$rs = $_SESSION['db']->getAll("SELECT current_setting('server_encoding')");
 	$srvencoding = $rs[0]['current_setting'];
-	$rs = $db->getAll("SELECT current_setting('client_encoding')");
+	$rs = $_SESSION['db']->getAll("SELECT current_setting('client_encoding')");
 	$cliencoding = $rs[0]['current_setting'];
 	echo "SRV: $srvencoding - - CLI: $cliencoding<br>";
 	if ($f) {
 		//Cliententcoding auf Latin:
-		if (!$test) { $rc=$db->query("BEGIN"); if ($cliencoding=="UTF8") $db->query("SET CLIENT_ENCODING TO 'latin-9'"); };
-		if (!$test) $rc=$db->query($sqldel);
+		if (!$test) { $rc=$_SESSION['db']->query("BEGIN"); if ($cliencoding=="UTF8") $_SESSION['db']->query("SET CLIENT_ENCODING TO 'latin-9'"); };
+		if (!$test) $rc=$_SESSION['db']->query($sqldel);
 		while (($zeile=fgets($f,256)) != FALSE) {
 			$cnt++;
 			if (!$test){
@@ -97,7 +97,7 @@ if ($_POST["ok"]=="Hilfe") {
 						substr($zeile,72,35),substr($zeile,107,27),substr($zeile,134,5),substr($zeile,139,11),
 						substr($zeile,150,2),substr($zeile,152,6),substr($zeile,158,1),substr($zeile,159,1),
 						substr($zeile,160,8));
-				$rc=$db->query($sql);
+				$rc=$_SESSION['db']->query($sql);
 				if(DB::isError($rc)) {
 					echo $sql."<br><pre>";
 					echo $rc->getMessage()."</pre><br>";
@@ -124,13 +124,13 @@ if ($_POST["ok"]=="Hilfe") {
 			$i++;
 		}
 		if ($ok) {
-			if (!$test) $rc=$db->query("COMMIT");
+			if (!$test) $rc=$_SESSION['db']->query("COMMIT");
 			echo "<br>$i Daten erfolgreich importierti<br>";
-			if ($cliencoding=="UTF8") $db->query("SET CLIENT_ENCODING TO 'UTF8'");
+			if ($cliencoding=="UTF8") $_SESSION['db']->query("SET CLIENT_ENCODING TO 'UTF8'");
 			$stop=time();
 			echo $stop-$start." Sekunden";
 		} else {
-			if (!$test) $rc=$db->query("ROLLBACK");
+			if (!$test) $rc=$_SESSION['db']->query("ROLLBACK");
 			echo "Fehler in Zeile: ".$i."<br>";
 			echo $sql."<br>";
 			ende(6);

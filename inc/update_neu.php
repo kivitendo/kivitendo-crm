@@ -3,7 +3,7 @@
     chdir($_SESSION['crmpath']);
 
     if (!function_exists('updatever')) {
-	    function updatever($db,$VERSION) {
+	    function updatever($VERSION) {
 		    $sql = "INSERT INTO crm (uid,datum,version) values (".$_SESSION["loginCRM"].",now(),'".$VERSION."')";
 		    $rc = $_SESSION["db"]->query($sql);
 	    	$_SESSION['db']->commit();
@@ -66,7 +66,7 @@
                         $query = "";
                         if ( $rc < 0 ) {
                            echo "Probleme beim Update, alle &Auml;nderungen werden zur&uuml;ck genommen";
-                           $db->rollback();
+                           $_SESSION['db']->rollback();
                            exit(1); 
                         }
                     } else {
@@ -85,7 +85,7 @@
                     $rc = $_SESSION["db"]->query($query, True);
                     if ( !$rc ) {
                         echo "Probleme beim Update, alle &Auml;nderungen werden zur&uuml;ck genommen";
-                        $db->rollback();
+                        $_SESSION['db']->rollback();
                         exit(1);
                     }
                     $zeile = trim(fgets($f,1000));
@@ -96,16 +96,16 @@
             $rc = $_SESSION["db"]->query(sprintf($sql,trim($tag),$_SESSION["login"]));
             if ( !$rc ) {
             $ok = false;
-                $db->rollback();
+                $_SESSION['db']->rollback();
                 exit(2);
             } 
         }
         if ( $ok ) {
-            updatever($db,$VERSION);
+            updatever($VERSION);
             echo "update ok<br>";
         }
     } else {
-        if ( isset($dbver) and $dbver <> $_SESSION['VERSION'] ) updatever($db,$_SESSION['VERSION']);
+        if ( isset($dbver) and $dbver <> $_SESSION['VERSION'] ) updatever($_SESSION['VERSION']);
         if ( !$LOGIN ) echo "System uptodate<br />";
     };
     if ( !$LOGIN ) {

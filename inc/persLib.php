@@ -97,7 +97,7 @@ function getAllPerson($sw,$usePre=true) {
     //Was geschieht wenn nach einer Person mit Vor- und Zuname gesucht wird??
     //Fall 1: Nachname wird zuerst eingeben "Byron Augusta Ada"
     $sw_array=explode(" ",$sw[1],9);
-    if (!$sw_array[1]) return false;
+    if (!isset($sw_array[1])) return false;
     $name=array_shift($sw_array);
     $givenname=implode(" ",$sw_array);   
     $where="cp_name ilike '$Pre".$name."%' and cp_givenname ilike '$Pre".$givenname."%'"; 

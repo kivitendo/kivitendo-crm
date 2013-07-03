@@ -203,7 +203,7 @@ else if (isset($_GET["adress"])) {
                 if ( $anzahl <= $_SESSION['listLimit'] ) {
                     $rsE = getAllUser($suchwort);
                     if ( $rsE ) $anzahl += count($rsE);
-                    if ( $anzahl <= $_SESSION['listLimit'] ) {
+                    if ( $anzahl >= $_SESSION['listLimit'] ) {
                         $msg = $viele;
                     } else {
                         if ($anzahl === 0) $msg = $keine;

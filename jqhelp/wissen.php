@@ -102,25 +102,29 @@ function neucontent() {
         echo $content;  
 }
 function Thread($HauptGrp,$data,&$menu)    { 
-    $result=$data[$HauptGrp];
-    if (count($result) > 0) {
-        $x = 0;
-        if ( $HauptGrp != 0 ) {
-             $hide = 'submenu';
-        } else {
-             $hide = '';
-        }
-        $menu.="<ul name='$hide' class='sub".$HauptGrp."'>\n";
-        $ul = "sub".$HauptGrp;
-        while($thread[$HauptGrp]=array_shift($result)) {
-            //$dbg = "ul: $ul ID: ".$thread[$HauptGrp]["id"]." class: sub".$HauptGrp;
-            $kdh=($thread[$HauptGrp]["kdhelp"]=='t')?" +":"";
-            $menu.= "<li><a href='#' id='".$thread[$HauptGrp]["id"]."' name='$kdh' class='sub".$HauptGrp."' onClick='toggleMenu(".$HauptGrp.','.$thread[$HauptGrp]["id"].")'>";
-            $menu.=$thread[$HauptGrp]["name"]."</a>$kdh $dbg</li>\n"; 
-            Thread($thread[$HauptGrp]["id"],$data,$menu);
-        }
-        $menu.="</ul>\n";
-    } ;
+    if ( isset($data[$HauptGrp]) ) {
+        $result=$data[$HauptGrp];
+        if (count($result) > 0) {
+            $x = 0;
+        	   if ( $HauptGrp != 0 ) {
+                $hide = 'submenu';
+            } 
+            else {
+                $hide = '';
+            }
+            $menu.="<ul name='$hide' class='sub".$HauptGrp."'>\n";
+            $ul = "sub".$HauptGrp;
+            while($thread[$HauptGrp]=array_shift($result)) {
+                //$dbg = "ul: $ul ID: ".$thread[$HauptGrp]["id"]." class: sub".$HauptGrp;
+                $kdh=($thread[$HauptGrp]["kdhelp"]=='t')?" +":"";
+                $menu.= "<li><a href='#' id='".$thread[$HauptGrp]["id"]."' name='$kdh' class='sub".$HauptGrp."' onClick='toggleMenu(".$HauptGrp.','.$thread[$HauptGrp]["id"].")'>";
+                //$menu.=$thread[$HauptGrp]["name"]."</a>$kdh $dbg</li>\n"; 
+                $menu.=$thread[$HauptGrp]["name"]."</a>$kdh </li>\n"; 
+                Thread($thread[$HauptGrp]["id"],$data,$menu);
+            }
+            $menu.="</ul>\n";
+        }   
+    }
 }
 function getmenu( ) {
     $menu="";

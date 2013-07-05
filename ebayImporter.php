@@ -67,12 +67,37 @@ move_uploaded_file($_FILES['file']['tmp_name'], "upload/import-src.csv");
 
 //Datei nach UTF8 konvertieren
 
-//sollte es nicht so sein? :
+
+system("file upload/import-src.csv | grep 'UTF-8'; echo $?>test_utf8");
+$dateihandle = fopen("test_utf8","r");
+$zeichen = fgetc($dateihandle);
+fclose($dateihandle);
+
+
+echo "*****************************************";
+echo $zeichen;
+//readfile("test_utf8");
+echo "*****************************************";
+
+// Uploaded file is UTF-8 encoded? i know, it's ugly, but it's working.
+if("$zeichen"!="0"){
+   echo "NOT UTF-8";
+// die daten sind anscheinend ISO-8859-2 (laut chardet)
+
 $command = "iconv -f ISO-8859-15 -t UTF8 -c -o upload/import-utf8.csv upload/import-src.csv";
-
 #$command = "iconv -f ISO-8859-15 -t UTF8 -c -o upload/import-src.csv upload/import-utf8.csv";
-
 system($command);
+
+}
+else {
+  echo "UTF-8";
+  system("cp upload/import-src.csv upload/import-utf8.csv");
+}
+
+//Testkommentar
+//Ausführen:
+system($command);
+
 //$data = array();
 $row = 1;
 if (($handle = fopen("upload/import-utf8.csv", "r")) !== FALSE) {

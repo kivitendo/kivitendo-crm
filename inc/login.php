@@ -1,7 +1,7 @@
 <?php
 clearstatcache();
 session_start();
-if ($_POST["erpname"]) {
+if ( isset($_POST["erpname"]) ) {
     if ( is_file("../".$_POST["erpname"]."/config/".$_SESSION['erpConfigFile'].".conf") ) {
         if ( is_writable("inc/conf.php") ) {
             $name = false;
@@ -37,20 +37,19 @@ $conffile = $_SESSION['crmpath']."/../".$_SESSION['ERPNAME']."/config/".$_SESSIO
 //while( list($key,$val) = each($_SESSION) ) {
 //    if ( ! in_array($key,$conf) ) unset($_SESSION[$key]);
 //};
-
 if ( is_file($conffile) ) {
     $tmp = anmelden();
     if ( $tmp ) {
         $rs = $_SESSION['db']->getOne('SELECT * FROM crm ORDER BY version DESC LIMIT 1');
+        $dbver  = $rs['version'];
         // Existiert crm nicht so kann auch ein Fehler-Objekt zurückgegeben werden
-        if ( is_object($rs) || !$rs || $rs["version"]=="" || $rs["version"]==false ) {
+        if ( is_object($rs) || !$rs || $dbver=="" || $dbver==false ) {
             echo "CRM-Tabellen sind nicht (vollst&auml;ndig) installiert"; 
             flush(); 
             require("install.php");
             require("inc/update_neu.php");
-        } else if (  $rs["version"] <> $_SESSION['VERSION'] ) {
-            echo "Istversion: ".$rc[0]["version"]." Sollversion: ".$_SESSION['VERSION']."<br>";
-            $oldver=$rc[0]["version"];
+        } else if (  $dbver <> $_SESSION['VERSION'] ) {
+            echo "Istversion: $dbver Sollversion: ".$_SESSION['VERSION']."<br>";
             require("inc/update_neu.php");
         } else {
             $db = $_SESSION["db"];

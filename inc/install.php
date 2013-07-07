@@ -1,170 +1,160 @@
 <?php
-if (isset($_GET['check'])&&$_GET['check']==1) {
-	$check=true;
-    $inclpa=ini_get('include_path');
+if ( isset($_GET['check']) && $_GET['check']==1 ) {
+	$check = true;
+    $inclpa = ini_get('include_path');
     ini_set('include_path',$inclpa.":../:./inc:../inc");
 } else {	
-   	$check=false;
+   	$check = false;
 }
 include_once("inc/stdLib.php");
 include($_SESSION['crmpath'].'/inc/conf.php');
 include($_SESSION['crmpath'].'/inc/version.php');
-if (ob_get_level() == 0) ob_start();
+if ( ob_get_level() == 0 ) ob_start();
 echo "<br>Installation der Version $VERSION";
 echo " der Datenbankinstanz: ".$_SESSION["dbname"]."<br>";
 ob_flush();
 flush();
-if ($log=@fopen($_SESSION['crmpath'].'/log/install.log',"a")) {
-	$logfile=$_SESSION['crmpath']."/log/install.log";
+if ( $log = @fopen($_SESSION['crmpath'].'/log/install.log',"a") ) {
+	$logfile = $_SESSION['crmpath']."/log/install.log";
 	echo 'Logfile in '.$logfile.'<br>';
 } else {
-	$logfile="";
 	echo "Keine Schreibrechte f&uuml;r Logfile in log.<br>";
 	echo "Installation abgebrochen";
 	exit (1);
 }
-echo "Schreibrechte im CRM-Verzeichnis pr&uuml;fen<br>";
-if (!file_exists($_SESSION['crmpath']."/dokumente/".$_SESSION["dbname"]))  {
-	$rc=mkdir ($_SESSION['crmpath']."/dokumente/".$_SESSION["dbname"], $_SESSION['dir_mode']);
-	if ($rc) { 
-        if ( $_SESSION["dir_group"] ) chgrp($p."dokumente/".$_SESSION["dbname"], $_SESSION['dir_group']);
-        echo "Verzeichnis: dokumente/".$_SESSION["dbname"]." erfolgreich erstellt.<br>"; 
-    } else { echo "Konte Verzeichnis: dokumente/".$_SESSION["dbname"]." nicht erstellen.<br>"; }
-} else {
-	echo "Verzeichnis 'dokumente/".$_SESSION["dbname"]."' existiert.<br>";
-}
-$ok="<b>ok</b>";
-$fehler="<font color='red'>Fehler!</font>";
-if (is_writable($_SESSION['crmpath']."/dokumente")) { 
-	echo "dokumente/ : $ok<br>"; 
-	fputs($log,"dokumente/ : ok\n");
-} else { 
-	echo "dokumente/ : $fehler kein Schreibrecht<br>"; 
-	fputs($log,"dokumente/ : fehler\n");
-}
-if (is_writable($_SESSION['crmpath']."/dokumente/".$_SESSION["dbname"])) { 
-	echo "dokumente/".$_SESSION["dbname"]." : $ok<br>"; 
-	fputs($log,"dokumente/".$_SESSION["dbname"]." : ok\n");
-} else { 
-	echo "dokumente/".$_SESSION["dbname"]." : $fehler kein Schreibrecht<br>"; 
-	fputs($log,"dokumente/".$_SESSION["dbname"]." : fehler\n");
-}
-if (is_writable($_SESSION['crmpath']."/vorlage")) { 
-	echo "vorlage/ : $ok<br>"; 
-	fputs($log,"vorlage/ : ok\n");
-} else { 
-	echo "vorlage/ : $fehler kein Schreibrecht<br>"; 
-	fputs($log,"vorlage/ : fehler\n");
-}
-if (is_writable($_SESSION['crmpath']."/inc/conf.php")) { 
-	echo "inc/conf.php : $ok<br>"; 
-	fputs($log,"inc/conf.php : ok\n");
-} else { 
-	echo "inc/conf.php : $fehler kein Schreibrecht<br>"; 
-	fputs($log,"inc/conf.php : fehler\n");
-}
 
 fputs($log,date("d.m.Y H:i:s")."\n");
-fputs($log,$VERSION."\n");
+fputs($log,'Installation: '.$VERSION."\n");
+
+echo "Verzeichnisse und Schreibrechte im CRM-Verzeichnis pr&uuml;fen<br>";
+$ok        = "<b>ok</b>";
+$fehler    = "<font color='red'>Fehler!</font>";
+$mkdir     = array('dokumente','dokumente/'.$_SESSION["dbname"],'tmp');
+$writeable = array('dokumente','dokumente/'.$_SESSION["dbname"],'vorlage','inc/conf.php','tmp');
+foreach ( $mkdir as $chk ) {
+    if ( !file_exists($_SESSION['crmpath'].'/'.$chk) )  {
+        $rc = mkdir($_SESSION['crmpath'].'/'.$chk, $_SESSION['dir_mode']);
+        if ( $rc ) { 
+            if ( $_SESSION["dir_group"] ) chgrp($_SESSION['crmpath'].'/'.$chk, $_SESSION['dir_group']);
+            echo 'Verzeichnis: '.$chk.' erfolgreich erstellt.<br>'; 
+            fputs($log,"Verzeichnis $chk : erstellt\n");
+        } else { 
+            echo 'Konte Verzeichnis: '.$chk.' nicht erstellen.<br>'; 
+            fputs($log,"Verzeichnis $chk : nicht erstellt!!\n");
+        }
+    } else {
+        echo 'Verzeichnis: '.$chk.' existiert.<br>';
+        fputs($log,"Verzeichnis $chk : vorhanden\n");
+    }
+};
+
+foreach ( $writeable as $chk ) {
+    if ( is_writable($_SESSION['crmpath'].'/'.$chk) ) {
+	    echo "$chk : $ok<br>"; 
+        fputs($log,"$chk : ok\n");
+    } else {
+	    echo "$chk : $fehler kein Schreibrecht<br>"; 
+        fputs($log,"$chk : fehler\n");
+    }
+}
 
 echo "<br>Voraussetzungen pr&uuml;fen:<br>";
-        $path=ini_get("include_path");
-        fputs($log,"Suchpfad: $path\n");
-        $pfade=explode(":",$path);
-        if( function_exists('curl_init')){
-            echo "Curl: $ok<br>";
-            fputs($log,"Curl : ok\n");
-        } else {
-	      echo "Curl: $fehler<br>";
-	      fputs($log,"Curl : Fehler\n");
-        }	
-        $chkfile=array("DB"=>"MDB2","Driver"=>"MDB2/Driver/pgsql",
-                        "fpdf","fpdi","Mail","Mail/mime","jpgraph",
-	                    "Contact_Vcard_Build","Contact_Vcard_Parse");
-        $chkstat=array(1,1,0,0,0,0,0,0,0);
-        $OK=true;
+    $path = ini_get("include_path");
+    fputs($log,"Suchpfad: $path\n");
+    $pfade = explode(":",$path);
+    if( function_exists('curl_init')){
+        echo "Curl: $ok<br>";
+        fputs($log,"Curl : ok\n");
+    } else {
+	  echo "Curl: $fehler<br>";
+	  fputs($log,"Curl : Fehler\n");
+    }	
+    $chkfile=array("DB"=>"MDB2","Driver"=>"MDB2/Driver/pgsql",
+                    "fpdf","fpdi","Mail","Mail/mime","jpgraph",
+	                "Contact_Vcard_Build","Contact_Vcard_Parse");
+    $chkstat=array(1,1,0,0,0,0,0,0,0);
+    $OK=true;
 	$pos=0;
 	$dbok=true;
-        foreach($chkfile as $key=>$file) {
-                $ook=false;
-                if (is_array($file)) {
-                    foreach ($file as $altfile) {
-                        echo "$altfile: ";
-                        fputs($log,"$altfile: ");
-                        $aok=false;
-                        foreach($pfade as $path) {
-                            $path = ((substr($path,0,1)=="/")?"":$p).$path;
-                            if (is_readable($path."/".$altfile.".php") || is_readable($path."/".$altfile.".js")) {
-                                $aok=true;
-                                $ook=true;
-                                break;
-                            }
-                        }
-                        if ($aok) {
-                            echo "ok<br>";
-                            fputs($log,"ok\n");
-                        } else {
-                            echo "fehlt<br>";
-                            fputs($log,"fehlt\n");
-                        }
+    foreach($chkfile as $key=>$file) {
+        $ook = false;
+        if ( is_array($file) ) {
+            foreach ( $file as $altfile ) {
+                echo "$altfile: ";
+                fputs($log,"$altfile: ");
+                $aok = false;
+                foreach( $pfade as $path ) {
+                    $path = ((substr($path,0,1)=="/")?"":$p).$path;
+                    if ( is_readable($path."/".$altfile.".php" ) || is_readable($path."/".$altfile.".js")) {
+                        $aok = true;
+                        $ook = true;
+                        break;
                     }
-                    echo "$key: ";
-                    fputs($log,"$key ");
-                    if ($ook) {
-                        echo "$ok<br>";
-                        fputs($log,"ok\n");
-                    }
+                }
+                if ( $aok ) {
+                    echo "ok<br>";
+                    fputs($log,"ok\n");
                 } else {
-                    echo "$file: ";
-                    fputs($log,"$file: ");
-                    foreach($pfade as $path) {
-                        if (is_readable($path."/".$file.".php")) {
-                                $ook=true;
-                                break;
-                        }
-                    }
-                    if ($ook) {
-                        echo "$ok<br>";
-                        fputs($log,"ok\n");
-                    };
+                    echo "fehlt<br>";
+                    fputs($log,"fehlt\n");
                 }
-                if (!$ook) {
-                    $OK=false;
-                    if ($chkstat[$pos]==0) {
-                        echo "<font color='red'>dieses Paket fehlt oder kann nicht geladen werden.</font><br>";
-                                    fputs($log,"Fehler\n");
-                    } else {
-                        $dbok=false;
-                        echo "<font color='red'><b>unbedingt erforderlich!!</b></font><br>";
-                                    fputs($log,"Fehler: erforderlich\n");
-                    }
+            }
+            echo "$key: ";
+            fputs($log,"$key ");
+            if ( $ook ) {
+                echo "$ok<br>";
+                fputs($log,"ok\n");
+            }
+        } else {
+            echo "$file: ";
+            fputs($log,"$file: ");
+            foreach( $pfade as $path ) {
+                if ( is_readable($path."/".$file.".php") ) {
+                    $ook=true;
+                    break;
                 }
-		$pos++;
+            }
+            if ( $ook ) {
+                echo "$ok<br>";
+                fputs($log,"ok\n");
+            };
         }
-        if (!$OK) {
-                echo "Einige Voraussetzungen sind nicht erf&uuml;llt.<br>&Uuml;berpr&uuml;fen Sie die die Variable 'include_path' in der 'php.ini'.<br>";
-                echo "Andernfalls installieren Sie die noch fehlenden Pakete.<br>";
-		echo "Aktueller include_path: ".ini_get('include_path').'<br>';
+        if ( !$ook ) {
+            $OK = false;
+            if ( $chkstat[$pos]==0 ) {
+                echo "<font color='red'>dieses Paket fehlt oder kann nicht geladen werden.</font><br>";
+                fputs($log,"Fehler\n");
+            } else {
+                $dbok = false;
+                echo "<font color='red'><b>unbedingt erforderlich!!</b></font><br>";
+                fputs($log,"Fehler: erforderlich\n");
+            }
+        }
+        $pos++;
+    }
+        if ( !$OK ) {
+            echo "Einige Voraussetzungen sind nicht erf&uuml;llt.<br>&Uuml;berpr&uuml;fen Sie die die Variable 'include_path' in der 'php.ini'.<br>";
+            echo "Andernfalls installieren Sie die noch fehlenden Pakete.<br>";
+		    echo "Aktueller include_path: ".ini_get('include_path').'<br>';
         }
         fputs($log,"\n");
 
 //ERP da?
-	$OK=is_file($p."../$ERPNAME/config/$erpConfigFile.conf");
+	$OK = is_file($_SESSION['crmpath']."/../$ERPNAME/config/$erpConfigFile.conf");
 	fputs($log,"$ERPNAME : ");
 	fputs($log,(($OK)?"gefunden":"fehler")."\n");
-	if ($OK) {
+	if ( $OK ) {
 		echo "ERP $erpConfigFile.conf gefunden<br>";
 	} else {
 		echo "ERP ($erpConfigFile.conf) nicht gefunden. Abbruch.<br>";
 		exit(1);
 	}
 
-if ($dbok) {
-	if ($_GET['check']==2 || $_GET['check']=='') {
-		//$sql="select * from defaults";
-		$sql="SELECT * from schema_info  where tag like 'release_%' order by tag desc limit 1";
-		$rs=$_SESSION['db']->getAll($sql);
-		if (substr($rs[0]["tag"],0,11)>="release_2_6") {  
+if ( $dbok ) {
+	if ( $_GET['check']==2 || $_GET['check']=='' ) {
+		$sql = "SELECT * from schema_info  where tag like 'release_%' order by tag desc limit 1";
+		$rs  = $_SESSION['db']->getAll($sql);
+		if ( substr($rs[0]["tag"],0,11)>="release_2_6" ) {  
 			fputs($log,$rs[0]["version"]." als Basis\n");
 			echo "$ok. ERP-DB gefunden<br>";
 		} else {
@@ -178,44 +168,44 @@ if ($dbok) {
 	fputs($log,"Abbruch\n");
 	exit(1);
 }
-if ($check) exit(0);
+if ( $check ) exit(0);
 echo "Datenbank einrichten<br>";
-$f=fopen("update/installcrmi.sql","r");
-if (!$f) { 
+$f = fopen("update/installcrmi.sql","r");
+if ( !$f ) { 
 	echo "Kann Datei installcrmi.sql nicht &ouml;ffnen.";
 	fputs($log,"Kann Datei installcrmi.sql nicht oeffnen.\n");
 	exit();
 }
-$zeile=trim(fgets($f,1000));
-$query="";
-$OK=0;
-$fehl=0;
-$pos=0;
+$zeile = trim(fgets($f,1000));
+$query = "";
+$OK    = 0;
+$fehl  = 0;
+$pos   = 0;
 
-while (!feof($f)) {
-	if (empty($zeile)) { $zeile=trim(fgets($f,1000)); continue; };
-	if (preg_match("/^--/",$zeile)) { $zeile=trim(fgets($f,1000)); continue; };
-	if (!preg_match("/;$/",$zeile)) { 
-		$query.=$zeile;
+while ( !feof($f) ) {
+	if ( empty($zeile) ) { $zeile = trim(fgets($f,1000)); continue; };
+	if ( preg_match("/^--/",$zeile) ) { $zeile = trim(fgets($f,1000)); continue; };
+	if ( !preg_match("/;$/",$zeile) ) { 
+		$query .= $zeile;
 	} else {
-		$query.=$zeile;
-		$rc=$_SESSION['db']->query(substr($query,0,-1));
-		if ($rc) { $OK++; echo ".";}
+		$query .= $zeile;
+		$rc = $_SESSION['db']->query(substr($query,0,-1));
+		if ( $rc ) { $OK++; echo ".";}
 		else { 
 			$fehl++; 
 			echo "!"; 
 			fputs($log,$query."\n");
 		};
 		$pos++;
-		if ($pos % 10 == 0) echo " ";
+		if ( $pos % 10 == 0 ) echo " ";
 		ob_flush();
 		flush();
-		$query="";
+		$query = "";
 	};
-	$zeile=trim(fgets($f,1000));
+	$zeile = trim(fgets($f,1000));
 };
 
-if ($fehl>0) { 
+if ( $fehl>0 ) { 
 	echo "<br>Es sind $fehl Fehler aufgetreten. Das mu&szlig; nicht zu Problemen f&uuml;hren. <br>";  
 	echo "Kontrollieren Sie dazu bitte das <a href='$logfile'>Logfile</a><br>";
 	fputs($log,"Es sind $fehl Fehler aufgetreten\n");

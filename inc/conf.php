@@ -1,5 +1,7 @@
 <?php
 $ERPNAME="kivitendo-erp";
-$ERP_BASE_URL="";
 $erpConfigFile="kivitendo";
+
+/* +++ NUR mit Reverseproxy verwenden +++ */
+$ERP_BASE_URL="";// https://demo.kivitendo.de/ 
 ?>

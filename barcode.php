@@ -32,7 +32,7 @@ preg_match_all("/<%([^%]+)%>/",$template,$treffer);
 if ($treffer[1]) foreach ($treffer[1] as $key) {
 	$template = preg_replace("/<%".$key."%>/",$data[$key],$template);
 }
-$file = "barcode_".$_SESSION["employee"];
+$file = "barcode_".$_SESSION["login"];
 $dir = "tmp/";
 $f = fopen("$dir$file.tex","w");
 fputs($f,$template);

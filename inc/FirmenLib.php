@@ -144,6 +144,8 @@ function getFirmenStamm($id,$ws=true,$tab='C',$cvar=true) {
                 $krs=$_SESSION['db']->getOne(sprintf($sql,"vendor",$row["konzern"]));
             }
             if ($krs) $row["konzernname"]=$krs["name"];
+        } else {
+            $row["konzernname"] = '';
         }
         if ($tab=="C") {
             $sql="select count(*) from customer where konzern = ".$id;
@@ -156,7 +158,7 @@ function getFirmenStamm($id,$ws=true,$tab='C',$cvar=true) {
         else { $nummer=$row["vendornumber"]; };
         if ($row["grafik"]) {
             $DIR=$tab.$nummer;
-            $image="./dokumente/".$_SESSION["mansel"]."/$DIR/logo.".$row["grafik"];
+            $image="./dokumente/".$_SESSION["dbname"]."/$DIR/logo.".$row["grafik"];
             if (file_exists($image)) {
                 $size=@getimagesize($image);
                 $row["size"]=$size[3];
@@ -652,7 +654,7 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
             }
         }
         include("links.php");
-        if (!is_dir($dir_abs."/".$DIR)) {
+        if (!is_dir($dir_abs."/".$DIR)) { // Wird wo definiert???
             mkdir($dir_abs."/".$DIR);  
         }
         chmod($dir_abs."/".$DIR,$_SESSION['dir_mode']); 
@@ -1051,9 +1053,9 @@ function cvar_edit($id,$new=false) {
                                   }
                                   $kal = "";
                                   break;
-                case "textfield": preg_match("/width[ ]*=[ ]*(\d+)/i",$row["option"],$hit); $w = ($hit[1]>5)?$hit[1]:30;
-                                  preg_match("/height[ ]*=[ ]*(\d+)/i",$row["option"],$hit); $h = ($hit[1]>1)?$hit[1]:3; 
-                                  $input = "<textarea cols='$w' rows='$h' name='cvar_".$row["name"]."'>".${$row["name"]}."</textarea>";
+                case "textfield": preg_match("/width[ ]*=[ ]*(\d+)/i",$row["options"],$hit); $w = (isset($hit[1])&&$hit[1]>5)?$hit[1]:30;
+                                  preg_match("/height[ ]*=[ ]*(\d+)/i",$row["options"],$hit); $h = (isset($hit[1])&&$hit[1]>1)?$hit[1]:3; 
+                                  $input = "<textarea cols='$w' rows='$h' name='cvar_".$row["name"]."'>".${c_var.$row["name"]}."</textarea>";
                                   break;
                 case "bool"     : if ( (isset(${$row["name"]}) and ${$row["name"]} == '') && $new) ${$row["name"]}=($row["default_value"])?"checked":"";
                                   $input = "<input type='checkbox' name='cvar_".$row["name"]."' value='t' ";
@@ -1134,7 +1136,7 @@ function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false,$ui="") {
             'BLZ1'           => ($_SESSION['BLZDB']=='t')?"":"!--",
             'BLZ2'           => ($_SESSION['BLZDB']=='t')?"":"--",
             'employee'       => $_SESSION["loginCRM"],
-            'init'           => $_SESSION["employee"],
+            'init'           => $_SESSION["login"],
             'txid0'          => "selected",
             'cvars'          => cvar_edit(0,TRUE),
             'variablen'      => "" 
@@ -1225,8 +1227,8 @@ function vartpl( &$t, $daten, $typ, $msg, $btn1, $btn2, $tpl, $suchmaske=false )
         if ( isset($daten["grafik"]) ) {
             if ($typ=="C") { $DIR="C".$daten["customernumber"]; }
             else { $DIR="V".$daten["vendornumber"]; };
-            if (file_exists("dokumente/".$_SESSION["mansel"]."/$DIR/logo.".$daten["grafik"])) {
-                $Image="<img src='dokumente/".$_SESSION["mansel"]."/$DIR/logo.".$daten["grafik"]."' ".$daten["icon"].">";
+            if (file_exists("dokumente/".$_SESSION["dbname"]."/$DIR/logo.".$daten["grafik"])) {
+                $Image="<img src='dokumente/".$_SESSION["dbname"]."/$DIR/logo.".$daten["grafik"]."' ".$daten["icon"].">";
             } else {
                 $Image="Bild ($DIR/logo.".$daten["grafik"].") nicht<br>im Verzeichnis";
             }

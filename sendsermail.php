@@ -20,20 +20,20 @@ $abs=$headers["Return-Path"];
 if ($_SESSION['logmail']) $f=fopen("log/maillog.txt","a");
 $dateiname=$_SESSION["dateiname"];
 if ($dateiname) {
-	$ftmp=fopen("./dokumente/".$_SESSION["mansel"]."/".$_SESSION["loginCRM"]."/SerMail/".$dateiname,"rb");
-	$filedata=fread($ftmp,filesize("./dokumente/".$_SESSION["mansel"]."/".$_SESSION["loginCRM"]."/SerMail/".$dateiname));
+	$ftmp=fopen("./dokumente/".$_SESSION["dbname"]."/".$_SESSION["loginCRM"]."/SerMail/".$dateiname,"rb");
+	$filedata=fread($ftmp,filesize("./dokumente/".$_SESSION["dbname"]."/".$_SESSION["loginCRM"]."/SerMail/".$dateiname));
 	fclose($ftmp);
 	$mime->addAttachment($filedata, $_SESSION["type"],$_SESSION["dateiname"], false );
 }
 
 $sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' and id < 1";
-$data=$db->getAll($sql);
+$data=$_SESSION['db']->getAll($sql);
 $felder=explode(":",$data[0]["csvdaten"]);
 $pemail=array_search("EMAIL",$felder);
 $cid=array_search("ID",$felder);
 $pkont=array_search("KONTAKT",$felder);
 $sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' order by id offset ".$offset." limit ".$limit;
-$data=$db->getAll($sql);
+$data=$_SESSION['db']->getAll($sql);
 if ($data) {
 	$bodytxt=strip_tags($bodytxt);
 	foreach ($data as $row) {
@@ -102,7 +102,7 @@ if ($data) {
     /* Was soll das??
 	if ($dateiname) {
 		$ok=chkdir($_SESSION["loginCRM"]);
-       	copy("./dokumente/".$_SESSION["mansel"]."/".$_SESSION["loginCRM"]."/SerMail/$dateiname","./dokumente/".$_SESSION["mansel"]."/".$_SESSION["loginCRM"]."/".$dateiname);
+       	copy("./dokumente/".$_SESSION["dbname"]."/".$_SESSION["loginCRM"]."/SerMail/$dateiname","./dokumente/".$_SESSION["dbname"]."/".$_SESSION["loginCRM"]."/".$dateiname);
 	}; */
 ?>
 	<center>

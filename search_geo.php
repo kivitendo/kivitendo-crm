@@ -26,7 +26,7 @@
 	  $sql.="SELECT loc_id FROM geodb_textdata where text_val like '%".$ort."%' and text_type = 500100002) ";
 	  $sql.="order by loc_id";
 	}
-	$rs=$db->getAll($sql);
+	$rs=$_SESSION['db']->getAll($sql);
 	$ort="";
 	if ($rs) foreach ($rs as $zeile) {
 		if ($zeile["text_type"]==500100000) {

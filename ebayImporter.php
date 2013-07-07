@@ -62,14 +62,45 @@ $menu['start_content'].
 if ( !$_POST['select_file'] ) echo $form_select_file; // in Phase 3 $_POST['select_file'] = true;
 
 if ($_FILES['file']['type'] != 'text/csv') exit();
-move_uploaded_file($_FILES['file']['tmp_name'], "upload/import-src.csv"); 
+move_uploaded_file($_FILES['file']['tmp_name'], "upload/import-src.csv");
+
 
 //Datei nach UTF8 konvertieren
-//$command = "iconv -f ISO-8859-15 -t UTF8 -c -o upload/import-utf8.csv upload/import-src.csv";
-//system($command);
+
+
+system("file upload/import-src.csv | grep 'UTF-8'; echo $?>test_utf8");
+$dateihandle = fopen("test_utf8","r");
+$zeichen = fgetc($dateihandle);
+fclose($dateihandle);
+
+
+echo "*****************************************";
+echo $zeichen;
+//readfile("test_utf8");
+echo "*****************************************";
+
+// Uploaded file is UTF-8 encoded? i know, it's ugly, but it's working.
+if("$zeichen"!="0"){
+   echo "NOT UTF-8";
+// die daten sind anscheinend ISO-8859-2 (laut chardet)
+
+$command = "iconv -f ISO-8859-15 -t UTF8 -c -o upload/import-utf8.csv upload/import-src.csv";
+#$command = "iconv -f ISO-8859-15 -t UTF8 -c -o upload/import-src.csv upload/import-utf8.csv";
+system($command);
+
+}
+else {
+  echo "UTF-8";
+  system("cp upload/import-src.csv upload/import-utf8.csv");
+}
+
+//Testkommentar
+//Ausführen:
+system($command);
+
 //$data = array();
 $row = 1;
-if (($handle = fopen("upload/import-src.csv", "r")) !== FALSE) {
+if (($handle = fopen("upload/import-utf8.csv", "r")) !== FALSE) {
  
     while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
         //$num = count($data);
@@ -86,27 +117,26 @@ if (($handle = fopen("upload/import-src.csv", "r")) !== FALSE) {
     fclose($handle);
 }
 //BusinessIds ermitteln
-global $db;
 $end = "Endverbraucher"; //ANPASSEN
 
 
 $sql = "SELECT id FROM business WHERE description ILIKE '$end'";
-$rs = $db->getOne($sql);
+$rs = $_SESSION['db']->getOne($sql);
 $end_id = $rs['id'];
 
 
 $sql = "SELECT id FROM leads WHERE lead ILIKE 'ebay'";
-$rs = $db->getOne($sql);
+$rs = $_SESSION['db']->getOne($sql);
 $ebayLeadId = $rs['id'];  
 
 //SELECT id FROM payment_terms WHERE description ILIKE 'paypal' OR description_long ILIKE '%paypal%';
 
 $sql = "SELECT id FROM payment_terms WHERE description ILIKE 'paypal' OR description_long ILIKE '%paypal%'";
-$rs = $db->getOne($sql);
+$rs = $_SESSION['db']->getOne($sql);
 $paypalId = $rs['id']; 
 
 $sql = "SELECT id FROM payment_terms WHERE description ILIKE 'vorkasse' OR description_long ILIKE '%vorkasse%'";
-$rs = $db->getOne($sql);
+$rs = $_SESSION['db']->getOne($sql);
 $payotherId =  $rs['id'];
 
 array_shift($csvArray);//Erste Zeile löschen
@@ -149,7 +179,7 @@ if ($csvArray) foreach($csvArray as $key => $row) {
     if ($ok) { 
         $i++;
         $sql = "SELECT * FROM customer WHERE name ILIKE '".$row["2"]."' AND zipcode = '".$row["8"]."' OR department_1 ILIKE '".$row["1"]."' OR email ILIKE '".$row["3"]."'";
-        $rs=$db->getAll($sql);
+        $rs=$_SESSION['db']->getAll($sql);
         echo "Vorhanden??: ".$rs[0]['name']."<br />";
         echo "<tr class='bgcol2'>". 
              "<td class=\"liste\">".$row["1"]."</td><td class=\"liste\">".$row["2"]."</td>". 
@@ -163,7 +193,7 @@ if ($csvArray) foreach($csvArray as $key => $row) {
             $sql = "INSERT INTO customer (email, name, department_1, street, zipcode, city, country, business_id, customernumber, lead, payment_id, currency_id  ) VALUES ";
             $sql.= "('".$row['3']."', '".$row["2"]."', '".$row["1"]."', '".$row["4"].$row["5"]."', '".$row["8"]."','".$row["6"]."', '".$row['9']."', ".$end_id.", '".$CustNb."', ".$ebayLeadId.", ".$paypalId." , 1 )";
             echo "SQL: ".$sql;            
-            $rcc = $db->query($sql);
+            $rcc = $_SESSION['db']->query($sql);
         }
     }
   //$row['3']  

@@ -46,17 +46,5 @@
         'tiny'     => $tiny,
         ));
 
-    if ( ( $content["owner"] == $_SESSION["loginCRM"] ) || ( $content['owner'] == '' ) ) {
-            $first[]=array("grpid"=>"","rechte"=>"w","grpname"=>translate('.:public:.','firma'));
-            $first[]=array("grpid"=>$_SESSION['loginCRM'],"rechte"=>"w","grpname"=>translate('.:personal:.','firma'));
-            $grp=getGruppen();
-            if ($grp) {  $user=array_merge($first,$grp); 
-            } else    {  $user=$first; };
-            doBlock($tpl,"wi","OwenerListe","OL",$user,"grpid","grpname",$content["owener"]);
-    } else {
-            $user[0] = array("grpid"=>$daten["cp_owener"],"grpname"=>($daten["cp_owener"])?getOneGrp($daten["cp_owener"]):translate('.:public:.','firma'));
-            doBlock($tpl,"wi1","OwenerListe","OL",$user,"grpid","grpname",$daten["cp_owener"]);
-    }
-
     $tpl->Lpparse("out",array("wi"),$_SESSION["lang"],"work");
 ?>

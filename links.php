@@ -5,7 +5,7 @@
 **********************************************************************/  
 require_once("inc/stdLib.php");
 
-$dir_abs = getcwd()."/dokumente/$_SESSION[dbname]";
+$dir_abs = $_SESSION['crmdir']."/dokumente/$_SESSION[dbname]";
 $link_dir_cust = $_SESSION['sep_cust_vendor'] ? "/link_dir_cust" : "/link_dir";
 $link_dir_vend = $_SESSION['sep_cust_vendor'] ? "/link_dir_vend" : "/link_dir";
 

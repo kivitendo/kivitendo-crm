@@ -4,16 +4,16 @@ require_once("inc/version.php");
 require_once("inc/stdLib.php");
 $rc = false;
 if ( isset($_GET['test']) and $_GET['test'] == 'ja' ) {
-    $rc = $db->getAll("select * from crm order by version","Status");
+    $rc = $_SESSION['db']->getAll("select * from crm order by version","Status");
 }
 $menu =  $_SESSION['menu'];
 ?>
 <html>
 <head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/themes/base/jquery-ui.css">
-    <script type="text/javascript" src="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/jquery.js"></script>
-    <script type="text/javascript" src="<?php echo $_SESSION['basepath'] ?>crm/jquery-ui/ui/jquery-ui.js"></script>
+    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['baseurl'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $_SESSION['baseurl'] ?>crm/jquery-ui/themes/base/jquery-ui.css">
+    <script type="text/javascript" src="<?php echo $_SESSION['baseurl'] ?>crm/jquery-ui/jquery.js"></script>
+    <script type="text/javascript" src="<?php echo $_SESSION['baseurl'] ?>crm/jquery-ui/ui/jquery-ui.js"></script>
 
     <!-- ERP Stylesheet -->
     <?php echo $menu['stylesheets']; ?>
@@ -51,7 +51,7 @@ if ($db) { echo "<a href='log/install.log'>Datenbankinstallation</a><br>"; } els
 	<tr><td>ProgrammVersion</td><td>[<?php echo  $VERSION." ".$SUBVER ?>]</td></tr>
 	<tr><td>Datenbank:</td><td> [<?php echo  $_SESSION["dbname"] ?>]</td></tr>
 	<tr><td>db-Server:</td><td>[<?php echo  $_SESSION["dbhost"] ?>]</td></tr>
-	<tr><td>Benutzer:</td><td>[<?php echo  $_SESSION["employee"] ?>:<?php echo  $_SESSION["loginCRM"] ?>]</td></tr>
+	<tr><td>Benutzer:</td><td>[<?php echo  $_SESSION["login"] ?>:<?php echo  $_SESSION["loginCRM"] ?>]</td></tr>
 	<tr><td>Session-ID:</td><td>[<?php echo  session_id() ?>]</td></tr>
 	<tr><td>PHP-Umgebung:</td><td>[<a href="info.php">anzeigen</a>]</td></tr>
 	<tr><td>Session<a href="showsess.php?ok=show">:</a></td><td>[<a href="showsess.php">l&ouml;schen</a>]</td></tr>

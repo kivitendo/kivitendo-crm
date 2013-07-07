@@ -42,7 +42,7 @@
                             'KDNR', 'USTID', 'STEUERNR', 'KTONR', 'BANK', 'BLZ', 'LANG', 'KDTYP');
             if ( isset($_POST['umsatz']) and $_POST['umsatz'] != '' ) $header[] = "UMSATZ";
             $sql = "select name from custom_variable_configs where module = 'CT'";
-            $rs = $db->getAll($sql);
+            $rs = $_SESSION['db']->getAll($sql);
             if ($rs) {
                 $cvar = 0;
                 foreach ($rs as $row) {
@@ -78,7 +78,7 @@
                     }
                 }
                 insertCSVData($data,$zeile["id"]);
-                if ( $i < $_SESSION['listLimit'] ) {
+                if ( $i <= $_SESSION['listLimit'] ) {
                     $t->set_var(array(
                         'Q' => $Q,
                         'ID' => $zeile["id"],

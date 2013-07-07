@@ -15,7 +15,7 @@
     }
     if ($_POST["suche"]=="suchen" || $_POST["first"]=="1") {
         $daten=suchPerson($_POST);
-        if (!chkAnzahl($daten,$tmp)) {
+        if ( count($daten) > $_SESSION['listLimit'] ) {
             $msg="Trefferanzahl zu gro&szlig;. Bitte einschr&auml;nken.";
             $btn1="";
             vartplP($t,$_POST,$msg,$btn1,$btn1,$btn1,"Anrede","white",$_POST["FID1"],1);
@@ -34,7 +34,7 @@
             clearCSVData();
             $header = array("ANREDE","TITEL","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","FIRMA","FaID","GESCHLECHT","ID");
             $sql = "select name from custom_variable_configs where module = 'CT'";
-            $rs = $db->getAll($sql);
+            $rs = $_SESSION['db']->getAll($sql);
             if ($rs) {
                 $cvar = 0;
                 foreach ($rs as $row) {

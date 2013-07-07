@@ -186,7 +186,8 @@
               } else if ( name == 'reload' ) {
                   showCall();
               } else {
-                  document.location.href = name; 
+                  var pid = $('#liste option:selected').val();
+                  document.location.href = name + pid; 
               }
           });
          $( "input[type=submit]")
@@ -206,7 +207,7 @@
     <button name="{Link1}">.:Custombase:.</button>
     <button name="{Link2}">.:Contacts:.</button>
     <button name="{Link3}">.:Sales:.</button>
-    <button name="firma4.php?Q={Q}&id={FID}">.:Documents:.</button>
+    <button name="firma4.php?Q={Q}&fid={FID}&pid=">.:Documents:.</button>
     <select style="visibility:{chelp}" id='kdhelp' name="kdhelp" onChange="KdHelp()">
 <!-- BEGIN kdhelp -->
         <option value="{cid}">{cname}</option>

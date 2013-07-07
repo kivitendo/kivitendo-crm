@@ -205,7 +205,7 @@ class document {
 		$this->pfad=$pfad;
 		//Gibt es das Dokument so schon in der db
 		$this->id=$this->searchDocument($this->name,$pfad);
-		$dest=$_SESSION['crmdir']."/dokumente/".$_SESSION["mansel"]."/".$pfad."/".$this->name;
+		$dest=$_SESSION['crmdir']."/dokumente/".$_SESSION["dbname"]."/".$pfad."/".$this->name;
 		$this->logvar();
 		if (chkdir($pfad)) {
 			//Zielpfad vorhanden
@@ -259,8 +259,8 @@ class document {
 	function deleteDocument($p="") {
 		$this->log("deleteDocument: ".$p);
 		// $p=="" Aufruf aus Docroot, $p=="." Aufruf aus crmajax
-        $f = fopen('/tmp/d','w'); fputs($f,$_SESSION['crmdir']."/dokumente/".$_SESSION["mansel"].$this->pfad."/".$this->name); fclose($f);
-		$dest=$_SESSION['crmdir']."/dokumente/".$_SESSION["mansel"].$this->pfad."/".$this->name;
+        $f = fopen('/tmp/d','w'); fputs($f,$_SESSION['crmdir']."/dokumente/".$_SESSION["dbname"].$this->pfad."/".$this->name); fclose($f);
+		$dest=$_SESSION['crmdir']."/dokumente/".$_SESSION["dbname"].$this->pfad."/".$this->name;
 		$rc=unlink($dest);
 		if (!$rc) {
 			$this->error=$this->pfad."/".$this->name." kann nicht gelöscht werden.";

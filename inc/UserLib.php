@@ -105,6 +105,13 @@ function getUserStamm($id, $login=false) {
         $sql = "select  * from gruppenname N left join grpusr G on G.grpid=N.grpid  where usrid=$id";
         $rs2 = $_SESSION['db']->getAll($sql);
         $daten["gruppen"] = $rs2;
+        //Mandanteneinstellungen
+        $sql = "SELECT key,val FROM crmdefaults WHERE grp = 'mandant'";
+        $rs = $_SESSION['db']->getAll($sql);
+        if ( $rs ) foreach ( $rs as $row ) {
+            $daten[$row['key']] = $row['val'];
+        }
+        //Usereinstellungen
         $sql = "SELECT * from crmemployee WHERE uid = $id";
         $rs = $_SESSION['db']->getAll($sql);
         if ( $rs ) foreach ( $rs as $row ) {
@@ -122,7 +129,7 @@ function getUserStamm($id, $login=false) {
             $sql = "select * from employee where id=".$daten["vertreter"];
             $rs3 = $_SESSION['db']->getOne($sql);
             $daten["vname"] = ( $rs3['name'] != '' )?$rs3["name"]:$rs3["login"];
-        }
+        };
         return $daten;
     }
 }

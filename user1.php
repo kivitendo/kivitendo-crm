@@ -37,7 +37,7 @@
         $own = true;
     };
     if ( empty($fa['streetview']) ) {
-        $sql = "SELECT val FROM crmdefaults WHERE grp = 'mandant' AND key = 'stadtplan'";
+        $sql = "SELECT val FROM crmdefaults WHERE grp = 'mandant' AND key = 'streetview'";
         $rs = $_SESSION['db']->getOne($sql);
         $fa['streetview'] = $rs['val'];
         $sql = "SELECT val FROM crmdefaults WHERE grp = 'mandant' AND key = 'planspace'";

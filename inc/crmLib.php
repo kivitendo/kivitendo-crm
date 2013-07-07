@@ -13,7 +13,7 @@ include ("mailLib.php");
 function mkSuchwort($suchwort) {
     $suchwort=str_replace("*","%",$suchwort);
     $suchwort=str_replace("?","_",$suchwort);
-    if (preg_match('!^[0-9+%_]+[0-9 -/%]*$!',$suchwort)) {   // Telefonnummer?
+    if ( $suchwort != '%' and preg_match('!^[0-9+%_]+[0-9 -/%]*$!',$suchwort) ) {   // Telefonnummer?
         $sw[0]=0;
     } else {                                 // nein Name
         if (empty($suchwort)) $suchwort=" ";
@@ -652,7 +652,7 @@ function getWvl($crmuser) {
     } else {
         if (count($rs1)==0) $rs1=array(array("id"=>0,"initdate"=>date("Y-m-d H:i:00"),"cause"=>"Keine Eintr&auml;ge"));
     }
-    $sql  = "SELECT follow_ups.id,follow_up_date,created_for_user,created_by,subject,body,trans_id,note_id,trans_module,E.name as ename from ";
+    $sql  = "SELECT follow_ups.id,follow_up_date,created_for_user,follow_ups.created_by,subject,body,trans_id,note_id,trans_module,E.name as ename from ";
     $sql .= "follow_ups left join notes on note_id=notes.id left join employee E on E.id=follow_ups.created_for_user ";
     $sql .= "where done='f' and created_for_user=$crmuser";
     $rs2 = $_SESSION['db']->getAll($sql);
@@ -712,7 +712,7 @@ function getOneWvl($id) {
                 $pre=($datei["kunde"]>0)?$datei["kunde"]:$datei["employee"];
                 $pre=$datei["pfad"];
                 $name=$datei["filename"];
-                $path=$_SESSION["mansel"]."/".$pre."/";
+                $path=$_SESSION["dbname"]."/".$pre."/";
             } else {
                 $name="";
                 $path="";
@@ -1091,14 +1091,14 @@ function kontaktWvl($id,$fid,$pfad) {
         if ( $rs[0]["document"] && $rs[0]["kontakt"]<>"M" ) {
             $sql = "select * from documents where id=".$rs[0]["document"];
             $rsD = $_SESSION['db']->getAll($sql);
-            $von = "dokumente/".$_SESSION["mansel"]."/".$rsD[0]["employee"]."/".$rsD[0]["filename"];
+            $von = "dokumente/".$_SESSION["dbname"]."/".$rsD[0]["employee"]."/".$rsD[0]["filename"];
             if ( !$pfad ) {
-                //$pfad=$_SESSION["mansel"]."/".$pfad;
+                //$pfad=$_SESSION["dbname"]."/".$pfad;
             //} else {
                 $pfad = mkPfad($tab.$fid,$fid);
             }
             $ok = chkdir($pfad);
-            $nach = "dokumente/".$_SESSION["mansel"]."/".$pfad."/".$rsD[0]["filename"];
+            $nach = "dokumente/".$_SESSION["dbname"]."/".$pfad."/".$rsD[0]["filename"];
             if ( file_exists($von) ) {
                 $rc = rename($von,$nach);
                 if ($rc) {
@@ -1286,7 +1286,7 @@ function getOneMail($usr,$nr) {
     $data["Datei"]=$anhang;
     $data["status"]="1";
     $data["InitCrm"]=$_SESSION["loginCRM"];    //$head[""];
-    $data["CRMUSER"]=$_SESSION["employee"];    //$head[""];
+    $data["CRMUSER"]=$_SESSION["login"];       //$head[""];
     $data["DCaption"]=($files)?$data["cause"]:"";
     $data["Anhang"]=$files;
     $data['flags'] = array("flagged"=>$info[0]->flagged,'answered'=>$info[0]->answered,'deleted'=>$info[0]->deleted,'seen'=>$info[0]->seen,'draft'=>$info[0]->draft,'recend'=>$info[0]->recend);
@@ -1483,6 +1483,7 @@ function chkMailAdr ($mailadr) {
 function getReJahr($fid,$jahr,$liefer=false,$user=false) {
     $lastYearV=date("Y-m-d",mktime(0, 0, 0, date("m")+1, 1, $jahr-1));
     $lastYearB=date("Y-m-d",mktime(0, 0, 0, date("m"), 31, $jahr));
+    $sea = '';
     if ($user) {
         $sea = " and salesman_id = ".$fid." ";
     } else if ($_SESSION["sales_edit_all"] == "f") {
@@ -1531,6 +1532,7 @@ function getReJahr($fid,$jahr,$liefer=false,$user=false) {
 function getAngebJahr($fid,$jahr,$liefer=false,$user=false) {
     $lastYearV=date("Y-m-d",mktime(0, 0, 0, date("m"), 1, $jahr-1));
     $lastYearB=date("Y-m-d",mktime(0, 0, 0, date("m")+1, -1, $jahr));
+    $sea = '';
     if ($user) {
         $sea = " and salesman_id = ".$fid." ";
     } else if ($_SESSION["sales_edit_all"] == "f") {
@@ -2441,17 +2443,17 @@ function getWPath($id) {
 *****************************************************/
 function getWCategorie($kdhelp=false) {
 
-    if ($kdhelp) { 
-        $sql="select * from wissencategorie where kdhelp is true order by name";
+    if ( $kdhelp ) { 
+        $sql = "select * from wissencategorie where kdhelp is true order by name";
     } else {
-        $sql="select * from wissencategorie order by hauptgruppe,name";
+        $sql = "select * from wissencategorie order by hauptgruppe,name";
     }
-    $rs=$_SESSION['db']->getAll($sql);
-    $data=array();
-    if ($rs) { 
-        if ($kdhelp) if (count($rs)>0) { return $rs;} else { return false; };
+    $rs = $_SESSION['db']->getAll($sql);
+    $data = array();
+    if ( $rs ) { 
+        if ( $kdhelp ) if ( count($rs)>0 ) { return $rs; } else { return false; };
         foreach ($rs as $row) {
-            $data[$row["hauptgruppe"]][]=array("name"=>$row["name"],"id"=>$row["id"],"kdhelp"=>$row["kdhelp"]);
+            $data[$row["hauptgruppe"]][] = array("name"=>$row["name"],"id"=>$row["id"],"kdhelp"=>$row["kdhelp"]);
         }
         return $data;
     } else {

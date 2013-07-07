@@ -42,10 +42,10 @@ switch ($typ) {
 }
 
 
-$doc->loadDocument("./dokumente/".$_SESSION["mansel"]."/serbrief/".$_SESSION["datei"]);
+$doc->loadDocument("./dokumente/".$_SESSION["dbname"]."/serbrief/".$_SESSION["datei"]);
 $doc->savecontent();
 $sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' AND id = -255";
-$data=$db->getAll($sql);
+$data=$_SESSION['db']->getAll($sql);
 $felder=explode(":",$data[0]["csvdaten"]);
 $tmpfile=substr($_SESSION["datei"],0,-4);
 $i=0;
@@ -76,7 +76,7 @@ function decoder($txt) {
 
 //Daten holen 
 $sql="select * from tempcsvdata where uid = ".$_SESSION["loginCRM"]." and id >0"; //offset 1";
-$data=$db->getAll($sql);
+$data=$_SESSION['db']->getAll($sql);
 $cnt=1;
 $_SESSION["src"]=($_GET["src"]<>"")?$_GET["src"]:"P";
 if ($data) {

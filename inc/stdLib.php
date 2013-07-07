@@ -5,7 +5,7 @@ ini_set('session.bug_compat_42', 0);  // Das ist natürlich lediglich eine Provi
 session_set_cookie_params(1800); // 30 minuten.
 session_start();
 //print_r($_SESSION);
-if ( $_SESSION['php_error'] ) {
+if ( isset($_SESSION['php_error']) && $_SESSION['php_error'] ) {
     error_reporting (E_ALL & ~E_DEPRECATED);
     ini_set ('display_errors',1);
 }
@@ -15,7 +15,7 @@ ini_set('include_path',$inclpa.":../:./inc:../inc");
 include_once "mdb.php";
 require_once "conf.php";
 
-if ( ! isset($_SESSION['dbhost']) ) {
+if ( !isset($_SESSION['dbhost']) ) {
     $_SESSION['ERPNAME'] = $ERPNAME;
     $_SESSION['ERP_BASE_URL'] = $ERP_BASE_URL;
     $_SESSION['erpConfigFile'] = $erpConfigFile;
@@ -24,16 +24,23 @@ if ( ! isset($_SESSION['dbhost']) ) {
     require_once "login.php";
     //exit();
 } else {
-    if ( !$_SESSION["cookie"] || 
-         ( $_SESSION["cookie"] && !$_COOKIE[$_SESSION["cookie"]] ) ) {
-         //Sollte nicht vorkommen
-         header("location: ups.html");
+    if ( !isset($_SESSION["cookie"]) || 
+         ( $_SESSION["sessid"] != $_COOKIE[$_SESSION["cookie"]] ) ) {
+             while( list($key,$val) = each($_SESSION) ) {
+			     unset($_SESSION[$key]);
+		     };
+             $_SESSION['ERPNAME'] = $ERPNAME;
+             $_SESSION['ERP_BASE_URL'] = $ERP_BASE_URL;
+             $_SESSION['erpConfigFile'] = $erpConfigFile;
+             require_once "version.php";
+             $_SESSION['VERSION'] = $VERSION;
+             if ( !anmelden() ) header("location: ups.html");
     };
-    $_SESSION['db']     = new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
-    $db = $_SESSION['db']; // Der muss später weg.
 };
 
 require_once "login".$_SESSION["loginok"].".php";
+//$db = $_SESSION['db']; // Das muß noch raus!!!
+
 
 /****************************************************
 * db2date
@@ -82,38 +89,40 @@ function translate($word,$file) {
 }
 function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     $db   = new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
+    //Hat sich ein User angemeldet
     $sql  = "select sc.session_id,u.id,u.login from auth.session_content sc left join auth.\"user\" u on ";
-    $sql .= "('--- ' || u.login || E'\\n')=sc.sess_value left join auth.session s on s.id=sc.session_id ";
+    $sql .= "(E'--- ' || u.login || '\\n')=sc.sess_value left join auth.session s on s.id=sc.session_id ";
     $sql .= "where session_id = '$cookie' and sc.sess_key='login'";
-    $rs   = $db->getAll($sql,"authuser_0");
+    $rs   = $db->getAll($sql);
     if ( count($rs) != 1 ) { // Garnicht mit ERP angemeldet oder zu viele Sessions, sollte die ERP drauf achten
         unset($_SESSION);
         $Url = preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
-        header( "location:".$Url."login.pl?action=logout" );        
+        header( "location:".$Url."controller.pl?action=LoginScreen/user_login" );        
     }
-    $stmp = "";
     $auth = array();
     $uid = $rs[0]["id"];
-    $auth["login"] = $rs[0]["login"];
+    $auth["login"]      = $rs[0]["login"];
     $sql = "select * from auth.user_config where user_id=".$uid;
-    $rs = $db->getAll($sql,"authuser_2");
-    $keys = array("dbname","dbpasswd","dbhost","dbport","dbuser","countrycode","stylesheet",
-                  "company","address","vclimit","signature","email","tel");
+    $rs = $db->getAll($sql);
+    $keys = array("countrycode","stylesheet","company","address","vclimit","signature","email","tel");
     foreach ( $rs as $row ) {
         if ( in_array($row["cfg_key"],$keys) ) {
             $auth[$row["cfg_key"]] = $row["cfg_value"];
         }
     }
-    $auth["dbhost"]     = ( !$auth["dbhost"] ) ? "localhost" : $auth["dbhost"];
-    $auth["dbport"]     = ( !$auth["dbport"] ) ? "5432" : $auth["dbport"];
-    $auth["mansel"]     = $auth["dbname"];
-    $auth["employee"]   = $auth["login"];
     $auth["lang"]       = ($auth["countrycode"] != '')?$auth["countrycode"]:'en';
     $auth["stylesheet"] = substr($auth["stylesheet"],0,-4);
+    //Welcer Mandant ist verbunden
+    $sql  = "SELECT sess_value FROM auth.session_content WHERE session_id = '$cookie' and sess_key='client_id'";
+    $rs   = $db->getOne($sql);
+    $mandant = substr($rs['sess_value'],4);
+    $sql  = 'SELECT  name as mandant,dbhost,dbport,dbname,dbuser,dbpasswd FROM auth.clients WHERE id = '.$mandant;
+    $rs   = $db->getOne($sql);
+    $auth = array_merge($auth,$rs);
     //Eine der Gruppen des Users darf sales_all_edit
     $sql  = "SELECT granted from auth.group_rights G where G.right = 'sales_all_edit' ";
     $sql .= "and G.group_id in (select group_id from auth.user_group where user_id = ".$uid.")";
-    $rs3 = $db->getAll($sql,"authuser_3");
+    $rs3 = $db->getAll($sql);
     $auth["sales_edit_all"] = 'f';
     if ( $rs3 ) {
         foreach ( $rs3 as $row ) {
@@ -195,10 +204,7 @@ function anmelden() {
     $_SESSION["cookie"] = $cookiename;
     // Mit der Mandanten-DB verbinden
     $_SESSION["db"]     = new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
-    $sql = "select * from employee where login='".$_SESSION["login"]."'";
-    $rs = $_SESSION["db"]->getAll($sql);
-    $_SESSION['uid']=$rs[0]['id'];//
-    if( !$rs ) {
+    if( !$_SESSION["db"] ) {
         return false;
     } else {
         $charset = ini_get("default_charset");
@@ -206,24 +212,20 @@ function anmelden() {
         $_SESSION["charset"] = $charset;
         $tmp = $rs[0];
         include_once("inc/UserLib.php");
-        $user_data=getUserStamm($_SESSION["uid"]);
+        $user_data=getUserStamm(0,$_SESSION["login"]);
         $BaseUrl  = (empty( $_SERVER['HTTPS'] )) ? 'http://' : 'https://';
         $BaseUrl .= $_SERVER['HTTP_HOST'];
         $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
-        //reset($user_data); Bei while( list(..) ) = each; muss immer erst der Array-Pointer zurückgesetzt werden! 
-        //if ($user_data) while (list($key,$val) = each($user_data)) $_SESSION[$key] = $val;
-        if ($user_data) foreach ($user_data as $key => $val) $_SESSION[$key] = $val;// foreach ist kürzer + schneller
-        $_SESSION["loginCRM"]               = $user_data["id"];
-        $_SESSION['theme']  = ($user_data['theme']=='' || $user_data['theme']=='base')?'':$user_data['theme'];
+        if ($user_data) foreach ($user_data as $key => $val) $_SESSION[$key] = $val;
+        $_SESSION['dir_mode']  = ( $user_data['dir_mode'] != '' )?octdec($user_data['dir_mode']):493; // 0755
+        $_SESSION["loginCRM"] = $user_data["id"];
+        $_SESSION['theme']    = ($user_data['theme']=='' || $user_data['theme']=='base')?'':$user_data['theme'];
         $sql = "select * from defaults";
         $rs = $_SESSION["db"]->getAll($sql);
-        $_SESSION["ERPver"]     = $rs[0]["version"];
-        $_SESSION["menu"]       = makeMenu($_SESSION["sessid"],$_SESSION["token"]);
-        $_SESSION["basepath"]   = $BaseUrl;
-        $_SESSION['token']      = False;
-        $sql = "select * from crmdefaults where grp = 'mandant'";
-        $rs = $_SESSION["db"]->getAll($sql);  //Vor dem Update crm_defauts gibt es einen Fehler
-        if ($rs) foreach ($rs as $row) $_SESSION[$row['key']] = $row['val'];
+        $_SESSION["ERPver"]   = $rs[0]["version"];
+        $_SESSION["menu"]     = makeMenu($_SESSION["sessid"],$_SESSION["token"]);
+        $_SESSION["basepath"] = $BaseUrl;
+        $_SESSION['token']    = False;
         return true;
     }
 }
@@ -235,22 +237,26 @@ function anmelden() {
 * prueft, ob Verzeichnis besteht und legt es bei Bedarf an
 *****************************************************/
 function chkdir($dir,$p="") {
-    if ( file_exists($_SESSION['crmdir']."/dokumente/".$_SESSION["mansel"]."/".$dir) ) { 
-        return $_SESSION['crmdir']."/dokumente/".$_SESSION["mansel"]."/".$dir;
+    if ( file_exists($_SESSION['crmdir']."/dokumente/".$_SESSION["dbname"]."/".$dir) ) { 
+        return $_SESSION['crmdir']."/dokumente/".$_SESSION["dbname"]."/".$dir;
     } else {
         $dirs = explode("/",$dir);
-        $tmp  = $_SESSION["mansel"]."/";
+        $tmp  = $_SESSION["dbname"]."/";
         foreach ( $dirs as $dir ) {
             if ( !file_exists($_SESSION['crmdir']."/dokumente/$tmp".$dir) ) {
-                $ok = @mkdir($_SESSION['crmdir']."$/dokumente/$tmp".$dir);
-                if ( $_SESSION['dir_group'] ) @chgrp($_SESSION['crmdir']."/dokumente/$tmp".$dir,$_SESSION['dir_group']); 
+                if ( isset($_SESSION['dir_mode']) && $_SESSION['dir_mode'] != ''  ) {
+                    $ok = @mkdir($_SESSION['crmdir']."/dokumente/$tmp".$dir, $_SESSION['dir_mode']);
+                } else {
+                    $ok = @mkdir($_SESSION['crmdir']."/dokumente/$tmp".$dir);
+                }
+                if ( $_SESSION['dir_group'] && $ok ) @chgrp($_SESSION['crmdir']."/dokumente/$tmp".$dir,$_SESSION['dir_group']); 
                 if ( !$ok ) {
                     return false;
                 }
             };
             $tmp .= $dir."/";
         };
-        return $_SESSION['crmdir']."/dokumente/".$_SESSION["mansel"]."/".$dir;
+        return $_SESSION['crmdir']."/dokumente/".$_SESSION["dbname"]."/".$dir;
     }
 }
 
@@ -336,18 +342,6 @@ function berechtigung($tab="") {
     $rechte = "( ".$tab."owener=".$_SESSION["loginCRM"]." or ".$tab."owener is null";
     if ( $grp ) $rechte .= " or ".$tab."owener in $grp";
     return $rechte.")";
-}
-
-function chkAnzahl(&$data,&$anzahl) {    
-    if ( $data ) { $cnt = count($data);
-    } else { $cnt = 0; }
-    if ( ($cnt+$anzahl) > $_SESSION['listLimit'] ) {
-        $anzahl = 0;
-        return false;
-     } else {
-        $anzahl += $cnt;
-        return true;
-    }
 }
 
 /****************************************************
@@ -741,26 +735,26 @@ function mkHeader() {
     $LVID = '<link id="'.$_SESSION['theme'].'" rel="stylesheet" type="text/css" href="';
     $LN = '">'."\n";
     $head = array(
-        'JQUERY'        => $SV.$_SESSION['basepath'].'crm/jquery-ui/jquery.js'.$SN,
-        'JQUERYUI'      => $LV.$_SESSION['basepath'].'crm/jquery-ui/themes/base/jquery-ui.css'.$LN.
-                           $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/minified/jquery-ui.min.js'.$SN,
-        'JQTABLE'       => $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/Table/jquery.tablesorter.js'.$SN.
-                           $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/Table/addons/pager/jquery.tablesorter.pager.js'.$SN.
-                           $LV.$_SESSION['basepath'].'crm/jquery-ui/plugin/Table/themes/blue/style.css'.$LN,
-        //'JQDATE'        => $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery.ui.datepicker.js'.$SN,
-        'JQDATE'        => $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/'.(($_SESSION['lang']=='en')?
+        'JQUERY'        => $SV.$_SESSION['baseurl'].'crm/jquery-ui/jquery.js'.$SN,
+        'JQUERYUI'      => $LV.$_SESSION['baseurl'].'crm/jquery-ui/themes/base/jquery-ui.css'.$LN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/minified/jquery-ui.min.js'.$SN,
+        'JQTABLE'       => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/jquery.tablesorter.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/addons/pager/jquery.tablesorter.pager.js'.$SN.
+                           $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/themes/blue/style.css'.$LN,
+        //'JQDATE'        => $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/jquery.ui.datepicker.js'.$SN,
+        'JQDATE'        => $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/'.(($_SESSION['lang']=='en')?
                                                              'jquery.ui.datepicker.js':
                                                              'i18n/jquery.ui.datepicker-'.$_SESSION['lang']).
                                                              '.js'.$SN,
-        'JQFILEUP'      => $LV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/css/jquery.fileupload-ui.css'.$LN.
-                           $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.iframe-transport.js'.$SN.
-                           $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/FileUpload/js/jquery.fileupload.js'.$SN,
-        'JQWIDGET'      => $SV.$_SESSION['basepath'].'crm/jquery-ui/ui/minified/jquery.ui.widget.min.js'.$SN,
+        'JQFILEUP'      => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/FileUpload/css/jquery.fileupload-ui.css'.$LN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/FileUpload/js/jquery.iframe-transport.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/FileUpload/js/jquery.fileupload.js'.$SN,
+        'JQWIDGET'      => $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/minified/jquery.ui.widget.min.js'.$SN,
         'THEME'         => ($_SESSION['theme']!='')? $LVID  .$_SESSION['basepath'].'crm/jquery-ui/themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN:'',
-        'CRMCSS'        => $LV.$_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"].'/main.css'.$LN,
-        'JUI-DROPDOWN'  => $LV.$_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"].'/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.css'.$LN.
-                           $SV.$_SESSION['basepath'].'crm/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.min.js'.$SN,
-        'CRMPATH'       => $_SESSION['basepath'].'crm/' );
+        'CRMCSS'        => $LV.$_SESSION['baseurl'].'crm/css/'.$_SESSION["stylesheet"].'/main.css'.$LN,
+        'JUI-DROPDOWN'  => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.css'.$LN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.min.js'.$SN,
+        'CRMPATH'       => $_SESSION['baseurl'].'crm/' );
         
     return $head;
 
@@ -838,19 +832,24 @@ function makeMenu($sess,$token){
         $BaseUrl .= $_SERVER['HTTP_HOST'];
         $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
     } else {
-        $BaseUrl = $_SESSION['ERP_BASE_URL'];
+        $BaseUrl = $_SESSION['ERP_BASE_URL']; 
     }
     $_SESSION['baseurl'] = $BaseUrl;
     $Url = $BaseUrl.'controller.pl?action=Layout/empty&format=json';
     $ch = curl_init();
     curl_setopt( $ch, CURLOPT_URL, $Url );
+    curl_setopt( $ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
     curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
+    curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, false );
     curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
     curl_setopt( $ch, CURLOPT_ENCODING, 'gzip,deflate' );
     curl_setopt( $ch, CURLOPT_HTTPHEADER, array (
                 "Connection: keep-alive",
                 "Cookie: ".$_SESSION["cookie"]."=".$sess."; ".$_SESSION["cookie"]."_api_token=".$token
                 ));
+    if ( curl_errno($ch) ) {   
+        echo 'Curl error: '.curl_error( $ch );
+    }
     $result = curl_exec( $ch );
     curl_close( $ch );
     $objResult = json_decode( $result );
@@ -905,7 +904,7 @@ function accessHistory($data=false) {
             if ( $array_of_data && in_array($data, $array_of_data) ) unset( $array_of_data[array_search($data, $array_of_data)]);
             $array_of_data[] = $data;
             if ( count($array_of_data) > 8 ) array_shift($array_of_data); 
-            $sql = "UPDATE crmemployee SET val = '".addslashes(json_encode($array_of_data))."' WHERE uid = ".$_SESSION['uid']." AND key = 'search_history'";
+            $sql = "UPDATE crmemployee SET val = '".addslashes(json_encode($array_of_data))."' WHERE uid = ".$_SESSION['loginCRM']." AND key = 'search_history'";
             $_SESSION['db']->query($sql);
         }
     }

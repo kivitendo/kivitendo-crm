@@ -12,7 +12,6 @@ ob_start();
 <?php echo $head['JQUERY']; ?>
 <?php echo $head['JQUERYUI']; ?>
 <?php echo $head['THEME']; ?>
-<?php echo $head['JQTABLE']; ?>
 <?php echo $head['JUI-DROPDOWN']; ?>
     <script language="JavaScript">
         function showD (src,id) {
@@ -26,9 +25,9 @@ ob_start();
             F1=open("<?php echo $_SESSION["basepath"]; ?>crm/getCall.php?Q="+Q+"&fid="+FID+"&hole="+id,"Caller","width=610, height=600, left=100, top=50, scrollbars=yes");
         }        
     </script> 
-<?php    
-if ($_SESSION['feature_ac']) { //funktioniert wegen der Ersetzungen für minLength und delay nur mit echo
-    echo '
+<?php  
+ //funktioniert wegen der Ersetzungen für minLength und delay nur mit echo
+echo '
     <style>
         .ui-autocomplete-category {
             font-weight: bold;
@@ -58,18 +57,38 @@ if ($_SESSION['feature_ac']) { //funktioniert wegen der Ersetzungen für minLeng
                 source: "jqhelp/autocompletion.php?case=name",                            
                 minLength: '.$_SESSION['feature_ac_minlength'].',                            
                 delay: '.$_SESSION['feature_ac_delay'].',
+                disabled:'.($_SESSION['feature_ac']?'false':'true').', 
                 select: function(e,ui) {                    
                     showD(ui.item.src,ui.item.id);
                 }
             });
         });
     </script>';  
-}//end feature_ac 
+    echo '
+    <div id="dialog_no_sw" title="Kein Suchbegriff eingegeben">
+            <p>Bitte geben Sie mindestens ein Zeichen ein.</p>
+    </div>
+    <div id="dialog_viele" title="Zu viele Suchergebnisse">
+            <p>Die Suche ergibt zu viele Resultate.</br> Bitte geben Sie mehr Zeichen ein.</p>
+          </div>
+    <div id="dialog_keine" title="Nichts gefunden">
+            <p>Dieser Suchbegriff ergibt kein Resultat.</br>Bitte überprüfen Sie die Schreibweise!</p>
+    </div>';
+echo '
+<script> 
+    $("#dialog_no_sw").dialog({ autoOpen: false });   
+    $("#dialog_viele").dialog({ autoOpen: false }); 
+    $("#dialog_keine").dialog({ autoOpen: false }); 
+    $("#treffer")
+        .tablesorter({widthFixed: true, widgets: ["zebra"]})
+        .tablesorterPager({container: $("#pager"), size: 20, positionFixed: false})
+</script>
+<style>
+    table.tablesorter { width: 900;} 
+</style>';
 ?>  
 <style>
-    table.tablesorter {
-       width: 900;
-    }  
+ 
     #jui_dropdown {
         height: 400px;
     }
@@ -100,12 +119,10 @@ if ($_SESSION['feature_ac']) { //funktioniert wegen der Ersetzungen für minLeng
                 });
             }       
         });
-        $("#dialog").dialog();
+        $("#results").css('height',300);
         $( "input[type=submit]" )
             .button();
-        $("#treffer")
-            .tablesorter({widthFixed: true, widgets: ['zebra']})
-            .tablesorterPager({container: $("#pager"), size: 20, positionFixed: false})
+        
         $.ajax({
             url: "jqhelp/getHistory.php",
             context: $('#menu'),
@@ -124,180 +141,66 @@ if ($_SESSION['feature_ac']) { //funktioniert wegen der Ersetzungen für minLeng
                 });
             }
         });
-          
+
+		  $("#adress").click(function() {
+            $.ajax({
+                type: "POST",
+                url: "jqhelp/getDataResult.php",
+                data: "swort=" + $("#ac0").val() + "&submit=adress",
+                success: function(res) {
+                    $('#ac0').catcomplete('close');                    
+                    $("#results").html(res).focus();
+                    }
+            });
+            return false;
+        });
+        $("#kontakt").click(function() {
+            $.ajax({
+                type: "POST",
+                url: "jqhelp/getDataResult.php",
+                data: "swort=" + $("#ac0").val() + "&submit=kontakt",
+                success: function(res) {
+                    $('#ac0').catcomplete('close');
+                    $("#results").html(res);
+                }
+            });
+         return false;   
+        });
     });
 </script>
 </head>
-<body onload="$('#ac0').focus().val('<?php echo preg_replace("#[ ].*#",'',$_GET['swort']);?>');">
+<body onload="$('#ac0').focus().val('<?php echo preg_replace("#[ ].*#",'',$_SESSION['swort']);?>').select();">
 <?php 
 echo $menu['pre_content'];
 echo $menu['start_content'];
 echo '
-<div id="tabs">
-    <ul>
-        <li><a href="#tabs-1">Schnellsuche</a></li>
-        <li><a href="firmen1.php?Q=C&ui=ui">Kundensuche</a></li>
-        <li><a href="firmen1.php?Q=V&ui=ui">Lieferantensuche</a></li>
-        <li><a href="personen1.php?ui=ui">Personensuche</a></li>
-    </ul>
-    <div id="tabs-1">';
-        
-
-echo '<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">'.translate('.:fast search customer/vendor/contacts and contact history:.','firma').'</p>
-<form name="suche" action="getData.php" method="get">
-    <input type="text" name="swort" size="25" id="ac0" autocomplete="off">  
-    <input type="submit" name="adress" value="'.translate('.:adress:.','firma').'" id="adress">
-    <input type="submit" name="kontakt" value="'.translate('.:contact history:.','firma').'"> <br>
-    <span class="liste">'.translate('.:search keyword:.','firma').'</span>
-</form>';
-echo '<div id="drop">
-  <div id="launcher_container">
-    <button id="launcher">'.translate('.:history tracking:.','firma').'</button>
-  </div>
-  <ul id="menu"> </ul>';
-
-if (isset($_GET["kontakt"]) && $_GET['swort'] != '') { 
-    $sw = strtoupper( $_GET["swort"] );
-    $sw = strtr( $sw, "*?", "%_" );
-    $sql  = "select calldate,cause,t.id,caller_id,bezug,V.name as lname,C.name as kname,P.cp_name as pname ";
-    $sql .= "from telcall t left join customer C on C.id=caller_id left join vendor V on V.id=caller_id ";
-    $sql .= "left join contacts P on caller_id=P.cp_id where UPPER(cause) like '%$sw%' or UPPER(c_long) like '%$sw%' ";
-    $sql .= 'order by bezug,calldate desc limit '.$_SESSION['listLimit'];
-    $rs = $_SESSION['db']->getAll( $sql );
-    $used = Array();
-    if( $rs ) {    
-        echo "<table id='treffer' class='tablesorter'>\n"; 
-        echo "<thead><tr ><th>Datum</th><th>Grund</th><th>Name</th>\n<tbody>\n"; 
-        $i = 0;
-        foreach ( $rs as $row ) {
-            if ( $row["bezug"] > 0 and in_array($row["bezug"], $used) ) continue;
-            if ( $row["bezug"]==0 ) $used[]=$row["id"];
-            if ( strlen($row["cause"]) > 30 ) { $cause = substr($row["cause"], 0, 30).".."; }
-            else { $cause = $row["cause"]; };
-            if      ( $row["kname"] ) { $name = $row["kname"]; $src="C"; }
-            else if ( $row["lname"] ) { $name = $row["lname"]; $src="V";  }
-            else if ( $row["pname"] ) { $name = $row["pname"]; $src="CC"; }
-            else { $name = ""; $src='S'; }
-            echo "<tr onClick='showItem(".$row["id"].",\"$src\",".$row["caller_id"].");'>";
-            echo "<td>".db2date($row["calldate"])."&nbsp;</td><td> ".$cause."</td><td>";
-            echo "$name</td></tr>\n";
-            $i++;
-            if ($i>=$_SESSION['listLimit']) {
-                echo $_SESSION['listLimit']." von ".count($rs)." Treffern";
-                break;
-            }
-        }
-        echo "</tbody></table>\n<br>";
-    } else {
-        echo "Keine Treffer!";
-    }
-} 
-else if (isset($_GET["adress"])) {
-    include("inc/FirmenLib.php");
-    include("inc/persLib.php");
-    include_once("inc/UserLib.php");
-    //ToDo Dialogtexte verbessern?
-    $msg   = '<div id="dialog" title="Kein Suchbegriff eingegeben">
-                <p>Bitte geben Sie mindestens ein Zeichen ein.</p>
-           </div>';
-    $viele = '<div id="dialog" title="Zu viele Suchergebnisse">
-                <p>Die Suche ergibt zu viele Resultate.</br> Bitte geben Sie mehr Zeichen ein.</p>
-           </div>';
-    $keine = '<div id="dialog" title="Nichts gefunden">
-                <p>Dieser Suchbegriff ergibt kein Resultat.</br>Bitte überprüfen Sie die Schreibweise!</p>
-            </div>';
-    $suchwort = mkSuchwort($_GET["swort"]);
-    $anzahl = 0;
-    #$rsE = $rsV = $rsC = $rsK = false;
-    if ( $_GET['swort'] != '') {
-        $rsC = getAllFirmen($suchwort,true,"C");
-        if ( $rsC ) $anzahl = count($rsC);
-        if ( $anzahl <= $_SESSION['listLimit'] ) {
-            $rsV = getAllFirmen($suchwort,true,"V");    
-            if ( $rsV ) $anzahl += count($rsV);
-            if ( $anzahl <= $_SESSION['listLimit'] ) {
-                $rsK = getAllPerson($suchwort);
-                if ( $rsK ) $anzahl += count($rsK);
-                if ( $anzahl <= $_SESSION['listLimit'] ) {
-                    $rsE = getAllUser($suchwort);
-                    if ( $rsE ) $anzahl += count($rsE);
-                    if ( $anzahl >= $_SESSION['listLimit'] ) {
-                        $msg = $viele;
-                    } else {
-                        if ($anzahl === 0) $msg = $keine;
-                    } 
-                } else {
-                    $msg = $viele;
-                }
-            } else {
-                $msg = $viele;
-            }
-        } else {
-                $msg = $viele;
-        }
-    }
-    if ($anzahl>0) {
-        if ($anzahl==1 && $rsC) header("Location: firma1.php?Q=C&id=".$rsC[0]['id']); 
-        if ($anzahl==1 && $rsV) header("Location: firma1.php?Q=V&id=".$rsV[0]['id']); 
-        if ($anzahl==1 && $rsK) header("Location: kontakt.php?id=".$rsK[0]['id']); 
-        if ($anzahl==1 && $rsE) header("Location: user1.php?id=".$rsE[0]['id']); 
-        echo "<table id='treffer' class='tablesorter'>\n"; 
-        echo "<thead><tr ><th>KD-Nr</th><th>Name</th><th>Anschrift</th><th>Telefon</th><th></th></tr></thead>\n<tbody>\n"; 
-        $i=0; 
-        if ($rsC) foreach($rsC as $row) { 
-            echo "<tr onClick='showD(\"C\",".$row["id"].");'>". 
-                 "<td>".$row["customernumber"]."</td><td class=\"liste\">".$row["name"]."</td>". 
-                 "<td>".$row["city"].(($row["street"])?", ":"").$row["street"]."</td><td class=\"liste\">".$row["phone"]."</td><td class=\"liste\">K</td></tr>\n"; 
-            $i++; 
-        }  
-        if ($rsV) foreach($rsV as $row) { 
-            echo "<tr onClick='showD(\"V\",".$row["id"].");'>". 
-                 "<td>".$row["vendornumber"]."</td><td class=\"liste\">".$row["name"]."</td>". 
-                 "<td>".$row["city"].(($row["street"])?", ":"").$row["street"]."</td><td class=\"liste\">".$row["phone"]."</td><td class=\"liste\">L</td></tr>\n"; 
-            $i++; 
-        } 
-        if ($rsK) foreach($rsK as $row) { 
-            echo "<tr onClick='showD(\"K\",".$row["cp_id"].");'>". 
-                 "<td>".$row["cp_id"]."</td><td class=\"liste\">".$row["cp_name"].", ".$row["cp_givenname"]."</td>". 
-                 "<td>".$row["cp_city"].(($row["cp_street"])?", ":"").$row["cp_street"]."</td><td class=\"liste\">".$row["cp_phone1"]."</td><td class=\"liste\">P</td></tr>\n"; 
-            $i++; 
-        } 
-        if ($rsE) foreach($rsE as $row) { 
-            echo "<tr onClick='showD(\"E\",".$row["id"].");'>". 
-                 "<td>".$row["id"]."</td><td class=\"liste\">".$row["name"]."</td>". 
-                 "<td>".$row["addr2"].(($row["addr1"])?", ":"").$row["addr1"]."</td><td class=\"liste\">".$row["workphone"]."</td><td class=\"liste\">U</td></tr>\n"; 
-            $i++; 
-        } 
-        echo "</tbody></table>\n"; 
-        echo '
-        <span id="pager" class="pager">
-            <form>
-                <img src="'.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first"/>
-                <img src="'.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev"/>
-                <img src="'.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
-                <img src="'.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/> '.$anzahl.'
-                <select class="pagesize" id="pagesize">
-                    <option value="10">10</option>
-                    <option value="20" selected>20</option>
-                    <option value="30">30</option>
-                    <option value="40">40</option>
-                </select>
-            </form> 
-        </span>';
-   
-    } else { 
-        echo $msg; 
-    }; 
-} //END ELSEIF adress
-    if (isset($_GET['kontakt']) || isset($_GET['adress'])) {
-?>
-       <br>
-<?php } 
-    echo '    
+    <div id="tabs">
+        <ul>
+            <li><a href="#tabs-1">Schnellsuche</a></li>
+            <li><a href="firmen1.php?Q=C&ui=ui">Kundensuche</a></li>
+            <li><a href="firmen1.php?Q=V&ui=ui">Lieferantensuche</a></li>
+            <li><a href="personen1.php?ui=ui">Personensuche</a></li>
+        </ul>
+        <div id="tabs-1">
+            <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">'.translate('.:fast search customer/vendor/contacts and contact history:.','firma').'</p>
+            <form name="suche" id="suche" action="" method="get">
+                <input type="text" name="swort" size="25" id="ac0" autocomplete="off">  
+                <input type="submit" name="adress" id="adress" value="'.translate('.:adress:.','firma').'">
+                <input type="submit" name="kontakt" id="kontakt" value="'.translate('.:contact history:.','firma').'"> <br>
+                <span class="liste">'.translate('.:search keyword:.','firma').'</span>
+            </form>
+            <div id="drop">
+                <div id="launcher_container">
+                    <button id="launcher">'.translate('.:history tracking:.','firma').'</button>
+                </div>
+                <ul id="menu"> </ul>
+            </div>
+            <div id="results"></div>
+        </div>
     </div>
-</div>';
-    echo $menu['end_content'];
-    ob_end_flush(); 
+';
+echo $menu['end_content'];
+ob_end_flush(); 
 ?>
 </body>
 </html>

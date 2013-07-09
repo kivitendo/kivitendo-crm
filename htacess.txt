@@ -1,0 +1,1 @@
+php_value include_path ".:/usr/share/php:/usr/share/php/fpdf:/usr/share/php/fpdi:/usr/share/jpgraph"

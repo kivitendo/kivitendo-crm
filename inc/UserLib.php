@@ -8,13 +8,13 @@
 * !! in eine andere Lib verschieben
 *****************************************************/
 function saveUserStamm($val) {
+
     if ( !$val["interv"] )  $val["interv"] = 60;
     if ( !$val["ssl"] )     $val["ssl"] = 'f';
     if ( !$val["proto"] )   $val["proto"] = 't';
     if ( !$val["port"] )    $val["port"] = ( $val["proto"] == 't' )?'143':'110';
     if ( !$val["termseq"] ) $val["termseq"] = 30;
     if ( $val["vertreter"] == $val["uid"] ) { $vertreter = "null"; } else { $vertreter = $val["vertreter"]; };
-    //print_r($val);
     
     $std = array('name','addr1','addr2','addr3','workphone','homephone','notes');
     $fld = array('msrv' => 't', 'postf' => 't', 'kennw' => 't', 'postf2' => 't','mailsign' => 't','email' => 't','mailuser' => 't','port' => 'i','proto' => 't','ssl' => 't',
@@ -26,7 +26,7 @@ function saveUserStamm($val) {
                  'feature_ac' => 'b','feature_ac_minlength' => 'i','feature_ac_delay' => 'i','feature_unique_name_plz' => 'b',
                  'showErr' => 'b', 'php_error' => 'b','zeige_dhl' => 'b',
                  'data_from_tel' => 'b','tinymce' => 'b','search_history' => 't');
-    foreach ($val as $key => $value) $_SESSION[$key] = $val[$key]; //Einstellungen nach dem Sichern gleich übernehmen (ohne neues Login)
+    foreach ($fld as $key => $value) $_SESSION[$key] = isset($val[$key])?$val[$key]:''; //Einstellungen nach dem Sichern gleich übernehmen (ohne neues Login)
     $sql  = "update employee set ";
     foreach ($std as $key) {
         if ($val[$key]<>"") {

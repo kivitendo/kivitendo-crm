@@ -18,12 +18,26 @@
 				alert(".:noGEOdb:.");
 			}
 		}
+	   $("#suche").click(function() {
+            $.ajax({
+                type: "POST",
+                url: "jqhelp/getCompanies.php",
+                //data: "swort=" + $("#ac0").val() + "&submit=adress",
+                success: function(res) {
+                    //$('#ac0').catcomplete('close');                    
+                    $( "#suchfelder" ).hide();                        
+                    //$("#results").html(res).focus();
+                    }
+            });
+            return false;
+    });	
 	</script>
     <script type='text/javascript' src='inc/help.js'></script>
+    {action}
 <body onLoad="document.erwsuche.name.focus();">
 
-
-<form name="erwsuche" enctype='multipart/form-data' action="{action}" method="post">
+<div id="suchfelder" >
+<form name="erwsuche" id="erwsuche" enctype='multipart/form-data' action="#" method="post">
 <input type="hidden" name="felder" value="">
 <input type="hidden" name="Q" value="{Q}">
 
@@ -169,7 +183,7 @@
 			<input type="checkbox" name="employee" value="{employee}" tabindex="42">.:only by own:.<br>
 			.:obsolete:. <input type="radio" name="obsolete" value="t" >.:yes:. <input type="radio" name="obsolete" value="f" checked >.:no:.  <input type="radio" name="obsolete" value="" checked >.:equal:.<br>
 			<input type="submit" class="anzeige" name="suche" value=".:search:." tabindex="43">&nbsp;
-			<input type="submit" class="clear" name="reset" value=".:clear:." tabindex="44"> &nbsp;
+			<input type="submit" class="clear" name="reset" id="suche" value=".:clear:." tabindex="44"> &nbsp;
 			<input type="button" name="rep" value="Report" onClick="report()" tabindex="45"> &nbsp;
 			<input type="button" name="geo" value="GeoDB" onClick="surfgeo()" tabindex="46" style="visibility:{GEOS}"> &nbsp;
             <a href="extrafelder.php?owner={Q}0"><img src="image/extra.png" alt="Extras" title="Extras" border="0" /></a>
@@ -177,9 +191,9 @@
 			{report}
 	</div>
 </form>
-<!-- End Code ------------------------------------------->
+
 </span>
-	
+</div>	
 </body>
 </html>
 

@@ -7,12 +7,15 @@ ob_start();
 ?>
 <html>
 <head><title></title>
-<?php echo $menu['stylesheets']; ?>
-<?php echo $head['CRMCSS']; ?>
-<?php echo $head['JQUERY']; ?>
-<?php echo $head['JQUERYUI']; ?>
-<?php echo $head['THEME']; ?>
-<?php echo $head['JUI-DROPDOWN']; ?>
+<?php 
+echo $menu['stylesheets'];
+echo $head['CRMCSS']; 
+echo $head['JQUERY']; 
+echo $head['JQUERYUI']; 
+echo $head['JQTABLE'];
+echo $head['THEME']; 
+echo $head['JUI-DROPDOWN']; 
+?>
     <script language="JavaScript">
         function showD (src,id) {
            if      (src=="C") { uri="firma1.php?Q=C&id=" + id }
@@ -26,8 +29,16 @@ ob_start();
         }        
     </script> 
 <?php  
- //funktioniert wegen der Ersetzungen für minLength und delay nur mit echo
 echo '
+    <div id="dialog_no_sw" title="Kein Suchbegriff eingegeben">
+        <p>Bitte geben Sie mindestens ein Zeichen ein.</p>
+    </div>
+    <div id="dialog_viele" title="Zu viele Suchergebnisse">
+        <p>Die Suche ergibt zu viele Resultate.</br> Bitte geben Sie mehr Zeichen ein.</p>
+    </div>
+    <div id="dialog_keine" title="Nichts gefunden">
+        <p>Dieser Suchbegriff ergibt kein Resultat.</br>Bitte überprüfen Sie die Schreibweise!</p>
+    </div>
     <style>
         .ui-autocomplete-category {
             font-weight: bold;
@@ -48,10 +59,8 @@ echo '
                     }
                     that._renderItemData(ul,item);
                 });
-             }
-         });     
-    </script>            
-    <script language="JavaScript"> 
+            }
+        });      
         $(function() {
             $("#ac0").catcomplete({                          
                 source: "jqhelp/autocompletion.php?case=name",                            
@@ -63,32 +72,11 @@ echo '
                 }
             });
         });
-    </script>';  
-    echo '
-    <div id="dialog_no_sw" title="Kein Suchbegriff eingegeben">
-            <p>Bitte geben Sie mindestens ein Zeichen ein.</p>
-    </div>
-    <div id="dialog_viele" title="Zu viele Suchergebnisse">
-            <p>Die Suche ergibt zu viele Resultate.</br> Bitte geben Sie mehr Zeichen ein.</p>
-          </div>
-    <div id="dialog_keine" title="Nichts gefunden">
-            <p>Dieser Suchbegriff ergibt kein Resultat.</br>Bitte überprüfen Sie die Schreibweise!</p>
-    </div>';
-echo '
-<script> 
-    $("#dialog_no_sw").dialog({ autoOpen: false });   
-    $("#dialog_viele").dialog({ autoOpen: false }); 
-    $("#dialog_keine").dialog({ autoOpen: false }); 
-    $("#treffer")
-        .tablesorter({widthFixed: true, widgets: ["zebra"]})
-        .tablesorterPager({container: $("#pager"), size: 20, positionFixed: false})
-</script>
-<style>
-    table.tablesorter { width: 900;} 
-</style>';
+        $("#dialog_no_sw,#dialog_viele,#dialog_keine").dialog({ autoOpen: false });   
+    </script>
+';
 ?>  
 <style>
- 
     #jui_dropdown {
         height: 400px;
     }
@@ -169,8 +157,9 @@ echo '
     });
 </script>
 </head>
-<body onload="$('#ac0').focus().val('<?php echo preg_replace("#[ ].*#",'',$_SESSION['swort']);?>').select();">
+<body onload="$('#ac0').focus().val('<?php echo preg_replace("#[ ].*#",'',($_SESSION['swort']?$_SESSION['swort']:'' ));?>').select();">
 <?php 
+echo '<body onload="$(\'#ac0\').focus().val(\''.(isset($_SESSION['swort'])?preg_replace("#[ ].*#",'',$_SESSION['swort']):"").'.select();">';
 echo $menu['pre_content'];
 echo $menu['start_content'];
 echo '
@@ -200,6 +189,7 @@ echo '
     </div>
 ';
 echo $menu['end_content'];
+
 ob_end_flush(); 
 ?>
 </body>

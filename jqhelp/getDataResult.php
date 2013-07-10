@@ -74,10 +74,22 @@ else if ($_POST["submit"] == "adress") {
         else $d = "dialog_viele";
     }
     if ( $anzahl > 0 ) {
-        if ( $anzahl == 1 && $rsC ) header("Location: firma1.php?Q=C&id=".$rsC[0]['id']); 
-        if ( $anzahl == 1 && $rsV ) header("Location: firma1.php?Q=V&id=".$rsV[0]['id']); 
-        if ( $anzahl == 1 && $rsK ) header("Location: kontakt.php?id=".$rsK[0]['id']); 
-        if ( $anzahl == 1 && $rsE ) header("Location: user1.php?id=".$rsE[0]['id']); 
+        if ( $anzahl == 1 && $rsC ){
+            echo '<script> showD("C","'.($rsC[0]["id"]).'");</script>';
+            exit();
+        }
+        if ( $anzahl == 1 && $rsV ) {
+            echo '<script> showD("V","'.($rsV[0]["id"]).'");</script>';
+            exit();
+        }
+        if ( $anzahl == 1 && $rsK ) {
+            echo '<script> showD("K","'.($rsK[0]["id"]).'");</script>';
+            exit();
+        }
+        if ( $anzahl == 1 && $rsE ) {
+            echo '<script> showD("E","'.($rsE[0]["id"]).'");</script>';
+            exit();
+        } 
         echo "<table id='treffer' class='tablesorter'>\n"; 
         echo "<thead><tr ><th>KD-Nr</th><th>Name</th><th>Anschrift</th><th>Telefon</th><th></th></tr></thead>\n<tbody>\n"; 
         $i=0; 
@@ -116,7 +128,15 @@ echo '
         '.($d?'$( "#'.$d.'" ).dialog( "open" );':'').'
         $("#ac0").focus();
     </script>';
-    
+ echo '     
+<script>
+    $("#treffer")
+        .tablesorter({widthFixed: true, widgets: ["zebra"]})
+        .tablesorterPager({container: $("#pager"), size: 20, positionFixed: false})
+</script>
+<style>
+    table.tablesorter { width: 900;} 
+</style>';   
 if ( $anzahl > 10 ) 
     echo '
         <span id="pager" class="pager">

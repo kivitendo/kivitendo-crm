@@ -123,16 +123,13 @@ else if ($_POST["submit"] == "adress") {
 
 if ( $anzahl >= $_SESSION['listLimit'] ) $d = "dialog_viele";
 echo '
-    <script>
-        $( "#dialog_no_sw,#dialog_viele,#dialog_keine" ).dialog( "close" );
-        '.($d?'$( "#'.$d.'" ).dialog( "open" );':'').'
-        $("#ac0").focus();
-    </script>';
- echo '     
 <script>
+    $( "#dialog_no_sw,#dialog_viele,#dialog_keine" ).dialog( "close" );
+    '.($d?'$( "#'.$d.'" ).dialog( "open" );':'').'
+    $("#ac0").focus();
     $("#treffer")
         .tablesorter({widthFixed: true, widgets: ["zebra"]})
-        .tablesorterPager({container: $("#pager"), size: 20, positionFixed: false})
+        .tablesorterPager({container: $("#pager"), size: 20, positionFixed: false});
 </script>
 <style>
     table.tablesorter { width: 900;} 

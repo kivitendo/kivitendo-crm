@@ -28,7 +28,8 @@ echo $head['JUI-DROPDOWN'];
             F1=open("<?php echo $_SESSION["basepath"]; ?>crm/getCall.php?Q="+Q+"&fid="+FID+"&hole="+id,"Caller","width=610, height=600, left=100, top=50, scrollbars=yes");
         }        
     </script> 
-<?php  
+<?php 
+//ToDo: Dialoge übersetzen!!!!!! 
 echo '
     <div id="dialog_no_sw" title="Kein Suchbegriff eingegeben">
         <p>Bitte geben Sie mindestens ein Zeichen ein.</p>
@@ -71,8 +72,12 @@ echo '
                     showD(ui.item.src,ui.item.id);
                 }
             });
+
         });
-        $("#dialog_no_sw,#dialog_viele,#dialog_keine").dialog({ autoOpen: false });   
+        $("#dialog_no_sw,#dialog_viele,#dialog_keine").dialog({ autoOpen: false });  
+        $( "#tabs, #tabs-1" ).tabs({
+            select: function( event, ui ) {alert("Aktiviert Tab1");}
+        }); 
     </script>
 ';
 ?>  
@@ -108,6 +113,7 @@ echo '
             }       
         });
         $("#results").css('height',300);
+       
         $( "input[type=submit]" )
             .button();
         
@@ -138,7 +144,7 @@ echo '
                 success: function(res) {
                     $('#ac0').catcomplete('close');                    
                     $("#results").html(res).focus();
-                    }
+                }
             });
             return false;
         });
@@ -157,17 +163,16 @@ echo '
     });
 </script>
 </head>
-<body onload="$('#ac0').focus().val('<?php echo preg_replace("#[ ].*#",'',($_SESSION['swort']?$_SESSION['swort']:'' ));?>').select();">
 <?php 
-echo '<body onload="$(\'#ac0\').focus().val(\''.(isset($_SESSION['swort'])?preg_replace("#[ ].*#",'',$_SESSION['swort']):"").'.select();">';
+echo '<body onload="$(\'#ac0\').focus().val(\''.(isset($_SESSION['swort'])?preg_replace("#[ ].*#",'',$_SESSION['swort']):"").'\').select();">';
 echo $menu['pre_content'];
 echo $menu['start_content'];
 echo '
     <div id="tabs">
         <ul>
             <li><a href="#tabs-1">Schnellsuche</a></li>
-            <li><a href="firmen1.php?Q=C&ui=ui">Kundensuche</a></li>
-            <li><a href="firmen1.php?Q=V&ui=ui">Lieferantensuche</a></li>
+            <li><a href="jqhelp/getCompanies1.php?Q=C">Kundensuche</a></li>
+            <li><a href="jqhelp/getCompanies1.php?Q=V">Lieferantensuche</a></li>
             <li><a href="personen1.php?ui=ui">Personensuche</a></li>
         </ul>
         <div id="tabs-1">

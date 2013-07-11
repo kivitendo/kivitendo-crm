@@ -1,79 +1,120 @@
-       
 <script language="JavaScript" type="text/javascript">
-  		function report() {
-  			f1=open("report.php?tab={Q}","Report","width=600; height=300; left=100; top=100");
-  		}
-		function surfgeo() {
-			if ({GEODB}) {
-				fuzzy=(document.erwsuche.fuzzy.checked==true)?1:0;
-				plz=document.erwsuche.zipcode.value;
-				ort=document.erwsuche.city.value;
-				tel=document.erwsuche.phone.value;
-				F1=open("surfgeodb.php?ao=and&plz="+plz+"&ort="+ort+"&tel="+tel+"&fuzzy="+fuzzy,"GEO","width=550, height=350, left=100, top=50, scrollbars=yes");
-			} else {
-				alert(".:noGEOdb:.");
-			}
-		}
-		$(function() {
-            $("#suchbutton_{Q}").click(function() {
-                //alert('TETZGUZEGUZ');
-                $.ajax({
-                    type: "POST",
-                    data: $("#erwsuche_{Q}").serialize(), 
-                    url: "jqhelp/getCompanyResults.php",
-                    success: function(res) {
+    function report() {
+        f1=open("report.php?tab={Q}","Report","width=600; height=300; left=100; top=100");
+  	}
+	function surfgeo() {
+        if ({GEODB}) {
+            fuzzy=(document.erwsuche.fuzzy.checked==true)?1:0;
+            plz=document.erwsuche.zipcode.value;
+            ort=document.erwsuche.city.value;
+            tel=document.erwsuche.phone.value;
+            F1=open("surfgeodb.php?ao=and&plz="+plz+"&ort="+ort+"&tel="+tel+"&fuzzy="+fuzzy,"GEO","width=550, height=350, left=100, top=50, scrollbars=yes");
+	   } 
+	   else alert(".:noGEOdb:.");
+    }
+    
+    $(document).ready(function() {
+        $( "input[type=button],input[type=submit]" ).button();
+        $( ".fett" ).click(function() {
+            if ( $(this).html() == '#' ) my = '~';
+            else my = $(this).html(); 
+            $.ajax({
+                type: "POST",
+                data: 'first=' + my + '&Q={Q}', 
+                url: "jqhelp/getCompanies1.php",
+                success: function(res) {
+                    $("#dialog_no_results{Q}").dialog( "close" );
+                    $( "#suchfelder_{Q}" ).hide();
+                    $( "#companyResults_{Q}").html(res); 
+                    $( "#companyResults_{Q}").show();                       
+                }
+            });
+            return false;
+        });
+        $( "#suchbutton_{Q}" ).click(function() {
+            $.ajax({
+                type: "POST",
+                data: $("#erwsuche_{Q}").serialize() + '&suche=suche', 
+                url: "jqhelp/getCompanies1.php",
+                success: function(res) {
+                    if( res ) {
+                        $( "#dialog_no_results{Q}" ).dialog( "close" );
                         $( "#suchfelder_{Q}" ).hide();
-                        //alert('Results' + res)
-                        $("#companyResults_{Q}").html(res);                        
-                        }
-                });
-                return false;
+                        $( "#companyResults_{Q}" ).html(res); 
+                        $( "#companyResults_{Q}" ).show();
+                    }
+                    else {
+                        $("#dialog_no_results{Q}").dialog( "open"); 
+                        $( "#name{Q}" ).focus();
+                    }                                              
+                }
             });
-            $("#reset_{Q}").click(function() {
-                alert('Reset wurde gedrückt');
-                return false;
+            return false;
+        });
+        $( "#reset_{Q}" ).click(function() {
+        //Kein leeres Template laden, da sonst die IDs doppelt vergeben werden!
+            $( "#dialog_no_results{Q}" ).dialog( "close" );
+            $( "#erwsuche_{Q}" ).find(':input').each(function() {
+                switch(this.type) {
+                    case 'text':
+                        $(this).val('');
+                    break;
+                    case 'checkbox':
+                    case 'radio':
+                        this.checked = false
+                }
             });
-        });	
-	</script>
-    <script type='text/javascript' src='inc/help.js'></script>
+            $( "#andor{Q}, #shipto{Q}, #fuzzy{Q}, #pre{Q}, #obsolete{Q}" ).click();
+            $( "#name{Q}" ).focus();
+            return false;
+        });
+        $( "#name{Q}" ).focus();
+        $( "#dialog_no_results{Q}" ).dialog({ autoOpen: false });  
+    });	
+</script>
+<script type='text/javascript' src='inc/help.js'></script>
 
-
+<div id="dialog_no_results{Q}" title="Nichts gefunden.">
+    <p>Ihre Suche ergab leider keine Treffer.</p>
+</div>
 
 <div id="suchfelder_{Q}" >
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">  
+<button class="fett">A</button> 
+<button class="fett">B</button> 
+<button class="fett">C</button> 
+<button class="fett">D</button> 
+<button class="fett">E</button> 
+<button class="fett">F</button> 
+<button class="fett">G</button> 
+<button class="fett">H</button> 
+<button class="fett">I</button> 
+<button class="fett">J</button> 
+<button class="fett">K</button> 
+<button class="fett">L</button> 
+<button class="fett">M</button> 
+<button class="fett">N</button> 
+<button class="fett">O</button> 
+<button class="fett">P</button> 
+<button class="fett">Q</button> 
+<button class="fett">R</button> 
+<button class="fett">S</button> 
+<button class="fett">T</button> 
+<button class="fett">U</button> 
+<button class="fett">V</button> 
+<button class="fett">W</button> 
+<button class="fett">X</button> 
+<button class="fett">Y</button> 
+<button class="fett">Z</button> 
+<button class="fett">#</button> 
+</p>
+
 <form name="erwsuche" id="erwsuche_{Q}" enctype='multipart/form-data' action="#" method="post">
 <input type="hidden" name="felder" value="">
 <input type="hidden" name="Q" value="{Q}">
 
- 
 <!-- Beginn Code ------------------------------------------>
-<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">|  
-<a href="{action}&first=A" class="fett">A</a> |
-<a href="{action}&first=B" class="fett">B</a> |
-<a href="{action}&first=C" class="fett">C</a> |
-<a href="{action}&first=D" class="fett">D</a> |
-<a href="{action}&first=E" class="fett">E</a> |
-<a href="{action}&first=F" class="fett">F</a> |
-<a href="{action}&first=G" class="fett">G</a> |
-<a href="{action}&first=H" class="fett">H</a> |
-<a href="{action}&first=I" class="fett">I</a> |
-<a href="{action}&first=J" class="fett">J</a> |
-<a href="{action}&first=K" class="fett">K</a> |
-<a href="{action}&first=L" class="fett">L</a> |
-<a href="{action}&first=M" class="fett">M</a> |
-<a href="{action}&first=N" class="fett">N</a> |
-<a href="{action}&first=O" class="fett">O</a> |
-<a href="{action}&first=P" class="fett">P</a> |
-<a href="{action}&first=Q" class="fett">Q</a> |
-<a href="{action}&first=R" class="fett">R</a> |
-<a href="{action}&first=S" class="fett">S</a> |
-<a href="{action}&first=T" class="fett">T</a> |
-<a href="{action}&first=U" class="fett">U</a> |
-<a href="{action}&first=V" class="fett">V</a> |
-<a href="{action}&first=W" class="fett">W</a> |
-<a href="{action}&first=X" class="fett">X</a> |
-<a href="{action}&first=Y" class="fett">Y</a> |
-<a href="{action}&first=Z" class="fett">Z</a> |
-<a href="{action}&first=~" class="fett">*</a> |</p>
+
 	<div class="zeile">
 		<span class="label">.:KdNr:.</span>
 		<span class="leftfeld"><input type="text" name="customernumber" size="27" maxlength="15" value="{customernumber}" tabindex="1"></span>
@@ -82,7 +123,7 @@
 	</div>
 	<div class="zeile">
 		<span class="label">{FAART2}</span>
-		<span class="leftfeld"><input type="text" name="name" size="27" maxlength="75" value="{name}" tabindex="1"></span>
+		<span class="leftfeld"><input type="text" name="name" id="name{Q}" size="27" maxlength="75" value="{name}" tabindex="1"></span>
 		<span class="label">.:Industry:.</span>
 		<span class="leftfeld"><input type="text" name="branche" size="27" maxlength="25" value="{branche}" tabindex="21"></span>
 	</div>
@@ -179,12 +220,12 @@
 <!-- END cvarListe -->	
 	<div class="zeile">
                         <br>
-			<b>{Msg}</b><br>
-			.:search:. <input type="radio" name="andor" value="and" checked tabindex="40">.:all:. <input type="radio" name="andor" value="or" tabindex="40">.:some:.<br>
-			<input type="checkbox" name="shipto" value="1" checked tabindex="40">.:also in:. .:shipto:.<br>
-			<input type="checkbox" name="fuzzy" value="%" checked tabindex="41">.:fuzzy search:. <input type="checkbox" name="pre" value="1" {preon}>.:with prefix:.<br>
+			<b>{Msg}</b><br>  
+			.:search:. <input type="radio" name="andor"  id="andor{Q}" value="and" checked tabindex="40">.:all:. <input type="radio" name="andor" value="or" tabindex="40">.:some:.<br>
+			<input type="checkbox" name="shipto" id="shipto{Q}" value="1" checked tabindex="40">.:also in:. .:shipto:.<br>
+			<input type="checkbox" name="fuzzy" id="fuzzy{Q}" value="%" checked tabindex="41">.:fuzzy search:. <input type="checkbox" name="pre" id="pre{Q}" value="1" {preon}>.:with prefix:.<br>
 			<input type="checkbox" name="employee" value="{employee}" tabindex="42">.:only by own:.<br>
-			.:obsolete:. <input type="radio" name="obsolete" value="t" >.:yes:. <input type="radio" name="obsolete" value="f" checked >.:no:.  <input type="radio" name="obsolete" value="" checked >.:equal:.<br>
+			.:obsolete:. <input type="radio" name="obsolete" value="t" >.:yes:. <input type="radio" name="obsolete" value="f" >.:no:.  <input type="radio" name="obsolete" id="obsolete{Q}" value="" checked >.:equal:.<br>
 			<input type="submit" class="anzeige" name="suchbutton" id="suchbutton_{Q}" value=".:search:." tabindex="43">&nbsp;
 			<input type="submit" class="clear" name="reset" id="reset_{Q}" value=".:clear:." tabindex="44"> &nbsp;
 			<input type="button" name="rep" value="Report" onClick="report()" tabindex="45"> &nbsp;
@@ -195,5 +236,5 @@
 	</div>
 </form>
 </div>
-<div id="companyResults_{Q}">Results::::{Q}</div>
+<div id="companyResults_{Q}"></div>
 

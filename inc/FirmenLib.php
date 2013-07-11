@@ -1068,12 +1068,13 @@ function cvar_edit($id,$new=false) {
     return $output;
 }
 
-function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false,$ui="") {
+function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false,$ui=false) {
         $jscal ="<style type='text/css'>@import url(../js/jscalendar/calendar-win2k-1.css);</style>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar.js'></script>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar-setup.js'></script>\n";
-        $t->set_file(array("fa1" => "firmen".$tpl.$ui.".tpl"));
+        if ( $ui ) $t->set_file(array("fa1" => "companies".$tpl.".tpl"));
+        else       $t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
         $menu =  $_SESSION['menu'];
         $t->set_var(array(
             'FAART'         => ($typ=="C")?".:Customer:.":".:Vendor:.",
@@ -1081,8 +1082,8 @@ function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false,$ui="") {
             'Q'             => $typ,
             'Btn1'          => "",
             'Btn2'          => "",
-            'Msg'           =>    $msg,
-            'action'        => "firmen".$tpl.".php?Q=$typ",
+            'Msg'           => $msg,
+            'action'        => $ui?"":"firmen".$tpl.".php?Q=$typ",
             'id'            => "",
             'name'          => "",
             'department_1'  => "",
@@ -1219,7 +1220,7 @@ function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false,$ui="") {
         doBlock($t,"fa1","OwenerListe","OL",$user,"grpid","grpname",false);
 } // leertpl
 
-function vartpl( &$t, $daten, $typ, $msg, $btn1, $btn2, $tpl, $suchmaske=false ) {
+function vartpl( &$t, $daten, $typ, $msg, $btn1, $btn2, $tpl, $suchmaske=false, $ui=false ) {
         $jscal ="<style type='text/css'>@import url(../js/jscalendar/calendar-win2k-1.css);</style>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar.js'></script>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
@@ -1238,7 +1239,8 @@ function vartpl( &$t, $daten, $typ, $msg, $btn1, $btn2, $tpl, $suchmaske=false )
         $tmp = false;
         if ( !$suchmaske ) $tmp = getVariablen($daten["id"]);
         $varablen=($tmp>0)?count($tmp)." Variablen":"";
-        $t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
+        if ( $ui ) $t->set_file(array("fa1" => "companies".$tpl.".tpl")); 
+        else       $t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
         if ( isset($daten["employee"]) and $daten['employee'] > 0 ) {
             $employee = $daten["employee"];
         } else if ( isset($daten["modemployee"]) ) {
@@ -1255,7 +1257,7 @@ function vartpl( &$t, $daten, $typ, $msg, $btn1, $btn2, $tpl, $suchmaske=false )
                 'Btn2'          => $btn2,
                 'Msg'           => $msg,
                 'preon'         => ( isset($daten["pre"]) )            ? "checked":'',
-                'action'        => "firmen".$tpl.".php?Q=$typ",
+                'action'        => $ui?"":"firmen".$tpl.".php?Q=$typ",
                 'id'            => ( isset($daten["id"]) )             ? $daten['id']:'',
                 'customernumber'=> ( isset($daten["customernumber"]) ) ? $daten["customernumber"]:'',
                 'vendornumber'  => ( isset($daten["vendornumber"]) )   ? $daten["vendornumber"]:'',

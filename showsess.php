@@ -12,7 +12,7 @@
 <?php
 echo $menu['pre_content'];
 echo $menu['start_content']; 
-if ($_GET["ok"]) {
+if ( isset($_GET['ok']) && $_GET["ok"]) {
 	$x = $_SESSION['menu'];
         $y = preg_replace( "^>^","&gt;",$x);
         $y = preg_replace( "^<^","&lt;",$y);

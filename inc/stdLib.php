@@ -194,6 +194,7 @@ function anmelden() {
     $cookie = $_COOKIE[$cookiename];
     if ( !$cookie ) header("location: ups.html");
     // Benutzer anmelden
+    error_log("!$ERPNAME!$dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie!",0);
     $auth = authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie);
     if ( !$auth ) {  return false; };
     chkdir($auth["dbname"]);
@@ -210,7 +211,6 @@ function anmelden() {
         $charset = ini_get("default_charset");
         if ( $charset == "" ) $charset = $dbcharset;
         $_SESSION["charset"] = $charset;
-        $tmp = $rs[0];
         include_once("inc/UserLib.php");
         $user_data=getUserStamm(0,$_SESSION["login"]);
         $BaseUrl  = (empty( $_SERVER['HTTPS'] )) ? 'http://' : 'https://';
@@ -237,9 +237,10 @@ function anmelden() {
 * prueft, ob Verzeichnis besteht und legt es bei Bedarf an
 *****************************************************/
 function chkdir($dir,$p="") {
-    if ( file_exists($_SESSION['crmdir']."/dokumente/".$_SESSION["dbname"]."/".$dir) ) { 
+    if ( isset($_SESSION['crmdir']) && file_exists($_SESSION['crmdir']."/dokumente/".$_SESSION["dbname"]."/".$dir) ) { 
         return $_SESSION['crmdir']."/dokumente/".$_SESSION["dbname"]."/".$dir;
     } else {
+        if ( ! isset($_SESSION["dbname"]) ) return false;
         $dirs = explode("/",$dir);
         $tmp  = $_SESSION["dbname"]."/";
         foreach ( $dirs as $dir ) {
@@ -249,7 +250,7 @@ function chkdir($dir,$p="") {
                 } else {
                     $ok = @mkdir($_SESSION['crmdir']."/dokumente/$tmp".$dir);
                 }
-                if ( $_SESSION['dir_group'] && $ok ) @chgrp($_SESSION['crmdir']."/dokumente/$tmp".$dir,$_SESSION['dir_group']); 
+                if ( isset($_SESSION['dir_group']) && $_SESSION['dir_group'] && $ok ) @chgrp($_SESSION['crmdir']."/dokumente/$tmp".$dir,$_SESSION['dir_group']); 
                 if ( !$ok ) {
                     return false;
                 }

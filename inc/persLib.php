@@ -140,24 +140,13 @@ function suchPerson($muster) {
     $fuzzy=$muster["fuzzy"];
     $andor = $muster["andor"];
     $rechte=berechtigung("cp_");
-    /*
-        Die join-Abfrage die  über die Tabelle customer geht, muss entsprechend vorher vorbereitet werden
-        Analog dann die Erweiterung für Kundentyp. Falls keine Personensuche über customer.name gewünscht ist,
-        wird entsprechend die Tabelle customer vorbelegt
-        @Jan, auch wenn über Anfangsbuchstabe gesucht wird, muß das berücksichtigt werden
-    */
-    $joinCustomer = " left join customer K on C.cp_cv_id=K.id";    // das ist etwas fies,
-                                                                // aber falls kein join über customer,
-                                                                // müssen wir entsprechend hier die werte setzen
-    $joinVendor        = " left join vendor V on C.cp_cv_id=V.id"; //LEERZEICHEN AM ANFANG!! Nerv
-    if ($muster["cp_name"]=="~") {    //ist dies nur der sonderfall falls einer eine tilde eingibt? ein undokumentiertes ei? @holgi jb 10.6.09
-                                    // Nein, das ist der Stern in der oberen Zeile. Hätte auch ein anderes Zeichen sein können. hli
+
+    $joinCustomer = " left join customer K on C.cp_cv_id=K.id";    
+    $joinVendor        = " left join vendor V on C.cp_cv_id=V.id";
+    if ($muster["cp_name"]=="~") {   
         $where="and upper(cp_name) ~ '^\[^A-Z\].*$'";
     } else {
-        // Array zu jedem Formularfed: 1 == toUpper
-        /* Änderung 29.6.2009 cp_greeting rausgeworfen und cp_gender eingefügt. Hinweis für Holger cp_gender kommt aus Tabelle 0 ;-)  jb
-        'Tabelle 0/1' brauche ich nicht mehr 8=) */
-           $dbf = array("cp_name",     "cp_givenname", "cp_gender",    "cp_title" ,
+        $dbf = array("cp_name",     "cp_givenname", "cp_gender",    "cp_title" ,
                     "cp_street",    "cp_zipcode",   "cp_city",      "cp_country",   "country",
                     "cp_phone1",    "cp_fax",       "cp_homepage",  "cp_email",
                     "cp_notes",     "cp_stichwort1","cp_birthday",  "cp_beziehung",
@@ -165,17 +154,8 @@ function suchPerson($muster) {
         $keys=array_keys($muster);
         $anzahl=count($keys);
         $where="";
-        if ($muster["customer_name"]){    // Falls das Feld Firmenname gefüllt ist
-//          $joinCustomer     = " left join customer K on C.cp_cv_id=K.id";    //hier jetzt der left join und die werte oben überschreiben 
-                                                                            //WICHTIG Leerzeichen am Anfang für ',' (s.a. Vorbelegung)a
-            $whereCustomer    = "K.name ilike '$pre" . $muster["customer_name"] . "$fuzzy'"; 
-            /* weil die maske sowohl in Lieferant als auch Kunde sucht, hier auch die Lieferanten-Einschränkung.
-             * @holgi Warum heisst es hier wieder vendor V??? und nicht vendor L (Lieferant)
-               @JAN: weil das in den Firmenmasken so ist, daher sollte K auch zu C werden ;=) . 
-               @JAN: Ich will die Suche nach Daten gezielt steuern. 'Maier' soll 'Maier' finden und nicht 'Meine Maierei'!
-                    durch die Schalter $pre und $fuzzy kann das nun jeder für sich entscheiden!
-            */
-//          $joinVendor     = " left join vendor V on C.cp_cv_id=V.id";    //hier jetzt der left join und die werte oben überschreiben 
+        if ($muster["customer_name"]){
+            $whereCustomer    = "K.name ilike '$pre" . $muster["customer_name"] . "$fuzzy'";  
             $whereVendor    = "V.name ilike '$pre" . $muster["customer_name"] . "$fuzzy'"; 
         } else {
 		$whereCustomer = '1=1';
@@ -208,9 +188,6 @@ function suchPerson($muster) {
         $x=0;
     }
     $felderContact="C.cp_id, C.cp_cv_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_gender as cp_gender";
-
-    /*    Nehme entweder die Adressdaten des Ansprechpartners oder die der Rechnungsadresse. Da cp_phone etc mit einer leeren
-            Zeichenkette gefüllt wird, das NULLIF-Hilfskonstrukt (s.a. http://www.postgresql.org/docs/8.1/static/functions-conditional.html) */
     $felderContcatOrCustomerVendor="COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
                                                                     COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
                                                                     COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1";
@@ -219,7 +196,7 @@ function suchPerson($muster) {
     $rs0=array(); //leere arrays initialisieren, damit es keinen fehler bei der funktion array_merge gibt
     if ($muster["customer"]){     //auf checkbox customer mit Titel Kunden prüfen
         $sql0="select $felderContact, $felderContcatOrCustomerVendor, K.name as name, K.language_id as language_id, 
-                 'C' as tbl from contacts C$joinCustomer where C.cp_cv_id=K.id and ($whereCustomer $andor $where) and $rechte order by cp_name";
+                 'C' as tbl from contacts C$joinCustomer where C.cp_cv_id=K.id and ($whereCustomer $andor $where) and $rechte order by cp_name";       
         $rs0=$_SESSION['db']->getAll($sql0);
         if (!$rs0) $rs0=array();
     }
@@ -230,11 +207,6 @@ function suchPerson($muster) {
         $rs1=$_SESSION['db']->getAll($sql0);
         if (!$rs1) $rs1=array();
     }
-    /*Hinweis: Diese Abfrage sucht nur nach nicht zugeordneten Ansprechpartner (gelöscht). 
-    @JAN: nicht nur gelöscht, sind auch Personen ohne Zuordnung zu Firmen, z.B. priv. Kontakte
-      Ferner wäre es schön die Auswahl an der Oberfläche kenntlich zu machen jb 9.6.2009 
-        Und auch so umgesetzt jb 10.6.2009                                                                                                    */
-    
     $rs2=array(); //s.o.
     if ($muster["deleted"]){ //auf checkbox deleted mit Titel "gelöschte Ansprechpartner (Kunden und Lieferanten)" prüfen
                             // es gibt nicht nur gelöschte Personen, sonder auch Personen ohne Zuordnung zu Firmen, z.B. private Adressen
@@ -433,14 +405,15 @@ function getCpBriefAnreden() {
     return $rs;
 }
 
-function leertplP (&$t,$fid,$msg,$tab,$suche=false,$Quelle="",$ui="") {
+function leertplP (&$t,$fid,$msg,$tab,$suche=false,$Quelle="",$ui=false) {
 global $laender;
 //cp_greeting raus hli
         if ($fid && $Quelle) {
             $fa=getFirmenstamm($fid,false,$Quelle);
             $nummer=($Quelle=="C")?$fa["customernumber"]:$fa["vendornumber"];
         }
-        $t->set_file(array("pers1" => "personen".$tab.$ui.".tpl"));
+        if ( $ui ) $t->set_file(array("pers1" => "persons".$tab.".tpl"));
+        else       $t->set_file(array("pers1" => "personen".$tab.".tpl"));
         $t->set_var(array(
             ERPCSS          => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
             Fld             => "cp_title",
@@ -498,13 +471,14 @@ global $laender;
             doBlock($t,"pers1","briefanred","BA",$anreden,"cp_salutation","cp_salutation",$daten["cp_salutation"]); 
 }
 
-function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
+function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab,$ui=false) {
     global $laender;
 //cp_greeting raus hli
         if ($daten["cp_cv_id"] && $daten["Quelle"]) {
             $fa=getFirmenstamm($daten["cp_cv_id"],false,$daten["Quelle"]);
             $nummer=($daten["Quelle"]=="C")?$fa["customernumber"]:$fa["vendornumber"];
         }
+        print_r($daten); 
         if (trim($daten["cp_grafik"])<>"") {
             if ($nummer) {
                 $root="dokumente/".$_SESSION["dbname"]."/".$daten["Quelle"].$nummer."/".$daten["cp_id"];
@@ -522,7 +496,8 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab) {
                 }
             }
         }
-        $t->set_file(array("pers1" => "personen".$tab.".tpl"));
+        if ( $ui ) $t->set_file(array("pers1" => "persons1Result.tpl"));
+        else       $t->set_file(array("pers1" => "personen".$tab.".tpl"));
         $t->set_var(array(
             ERPCSS          => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
             Fld             => $fld,

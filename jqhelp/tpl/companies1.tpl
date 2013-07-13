@@ -16,14 +16,16 @@
     $(document).ready(function() {
         $( "input[type=button],input[type=submit]" ).button();
         $( ".fett" ).click(function() {
-            if ( $(this).html() == '#' ) my = '~';
-            else my = $(this).html(); 
+            if ( $(this).html() == '#' ) first = '~';
+            else first = $(this).html(); 
             $.ajax({
                 type: "POST",
-                data: 'first=' + my + '&Q={Q}', 
+                data: 'first=' + first + '&Q={Q}', 
                 url: "jqhelp/getCompanies1.php",
                 success: function(res) {
-                    $("#dialog_no_results{Q}").dialog( "close" );
+                    $( "#dialog_keine #dialog_viele #dialog_no_sw" ).dialog( "close" );
+                    //ToDo: if ( res == 'keine' )
+                    //if ( !res ) in der nächten Pension....
                     $( "#suchfelder_{Q}" ).hide();
                     $( "#companyResults_{Q}").html(res); 
                     $( "#companyResults_{Q}").show();                       
@@ -37,14 +39,15 @@
                 data: $("#erwsuche_{Q}").serialize() + '&suche=suche', 
                 url: "jqhelp/getCompanies1.php",
                 success: function(res) {
+                    $( "#dialog_keine #dialog_viele #dialog_no_sw" ).dialog( "close" );
                     if( res ) {
-                        $( "#dialog_no_results{Q}" ).dialog( "close" );
+                        $( "#dialog_keine" ).dialog( "close" );
                         $( "#suchfelder_{Q}" ).hide();
                         $( "#companyResults_{Q}" ).html(res); 
                         $( "#companyResults_{Q}" ).show();
                     }
                     else {
-                        $("#dialog_no_results{Q}").dialog( "open"); 
+                        $("#dialog_keine").dialog( "open"); 
                         $( "#name{Q}" ).focus();
                     }                                              
                 }
@@ -53,7 +56,7 @@
         });
         $( "#reset_{Q}" ).click(function() {
         //Kein leeres Template laden, da sonst die IDs doppelt vergeben werden!
-            $( "#dialog_no_results{Q}" ).dialog( "close" );
+            $( "#dialog_keine #dialog_viele #dialog_no_sw" ).dialog( "close" );
             $( "#erwsuche_{Q}" ).find(':input').each(function() {
                 switch(this.type) {
                     case 'text':
@@ -69,14 +72,12 @@
             return false;
         });
         $( "#name{Q}" ).focus();
-        $( "#dialog_no_results{Q}" ).dialog({ autoOpen: false });  
+        
     });	
 </script>
 <script type='text/javascript' src='inc/help.js'></script>
 
-<div id="dialog_no_results{Q}" title="Nichts gefunden.">
-    <p>Ihre Suche ergab leider keine Treffer.</p>
-</div>
+
 
 <div id="suchfelder_{Q}" >
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">  

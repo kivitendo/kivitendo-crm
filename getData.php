@@ -35,10 +35,10 @@ echo '
         <p>Bitte geben Sie mindestens ein Zeichen ein.</p>
     </div>
     <div id="dialog_viele" title="Zu viele Suchergebnisse">
-        <p>Die Suche ergibt zu viele Resultate.</br> Bitte geben Sie mehr Zeichen ein.</p>
+        <p>Die Anzahl der Suchergebnisse überschreitet das Listenlimit.</br>Bitte verändern Sie das Suchkriterium.</p>
     </div>
     <div id="dialog_keine" title="Nichts gefunden">
-        <p>Dieser Suchbegriff ergibt kein Resultat.</br>Bitte überprüfen Sie die Schreibweise!</p>
+        <p>Dieser Suchbegriff ergibt kein Resultat.</br>Bitte verändern Sie das Suchkriterium.</p>
     </div>
     <style>
         .ui-autocomplete-category {
@@ -173,7 +173,7 @@ echo '
             <li><a href="#tabs-1">Schnellsuche</a></li>
             <li><a href="jqhelp/getCompanies1.php?Q=C">Kundensuche</a></li>
             <li><a href="jqhelp/getCompanies1.php?Q=V">Lieferantensuche</a></li>
-            <li><a href="personen1.php?ui=ui">Personensuche</a></li>
+            <li><a href="jqhelp/getPersons1.php">Personensuche</a></li>
         </ul>
         <div id="tabs-1">
             <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">'.translate('.:fast search customer/vendor/contacts and contact history:.','firma').'</p>

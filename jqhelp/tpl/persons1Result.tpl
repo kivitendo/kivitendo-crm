@@ -1,5 +1,5 @@
 <script language="JavaScript">
-	<!--
+
 	function showK (id,tbl) {
 		{no}
 		uri="firma2.php?Q="+tbl+"&id=" + id;
@@ -10,10 +10,7 @@
 		uri="kontakt.php?id=" + id;
 		location.href=uri;
 	}
-	//-->
-	</script>
-<script>
-	$(function() {
+    $(function() {
 		$("#treffer")
 			.tablesorter({widthFixed: true, widgets: ['zebra']})
 			.tablesorterPager({container: $("#pager"), size: 20});
@@ -32,7 +29,6 @@
         });
         $( "input[type=button]" ).button();
         $( "#modify_search_pers" ).click(function() {
-            //alert( "Modify Serr´arch ");
             $( "#suchfelder_pers").show();
             $( "#results_pers").hide();
             $( "#name_pers" ).focus();
@@ -86,7 +82,7 @@
 		<input type="text" class="pagedisplay"/>
 		<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
 		<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
-		<select class="pagesize" id='pagesize'>
+		<select class="pagesize" id="pagesize">
 			<option value="10">10</option>
 			<option value="20" selected>20</option>
 			<option value="30">30</option>

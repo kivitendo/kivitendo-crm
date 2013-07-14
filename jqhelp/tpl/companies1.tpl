@@ -23,12 +23,14 @@
                 data: 'first=' + first + '&Q={Q}', 
                 url: "jqhelp/getCompanies1.php",
                 success: function(res) {
-                    $( "#dialog_keine #dialog_viele #dialog_no_sw" ).dialog( "close" );
-                    //ToDo: if ( res == 'keine' )
-                    //if ( !res ) in der nächten Pension....
-                    $( "#suchfelder_{Q}" ).hide();
-                    $( "#companyResults_{Q}").html(res); 
-                    $( "#companyResults_{Q}").show();                       
+                    $( "#dialog_keine, #dialog_viele, #dialog_no_sw" ).dialog( "close" );
+                    //if ( res == 'viele' )  $( "#dialog_viele" ).dialog( "open" );
+                    if ( !res ) $( "#dialog_keine" ).dialog( "open" );                    
+                    else {
+                        $( "#suchfelder_{Q}" ).hide();
+                        $( "#companyResults_{Q}").html(res); 
+                        $( "#companyResults_{Q}").show();
+                    }                       
                 }
             });
             return false;
@@ -39,16 +41,13 @@
                 data: $("#erwsuche_{Q}").serialize() + '&suche=suche', 
                 url: "jqhelp/getCompanies1.php",
                 success: function(res) {
-                    $( "#dialog_keine #dialog_viele #dialog_no_sw" ).dialog( "close" );
-                    if( res ) {
-                        $( "#dialog_keine" ).dialog( "close" );
+                    $( "#dialog_keine, #dialog_viele, #dialog_no_sw" ).dialog( "close" );
+                    if ( res == 'viele' )  $( "#dialog_viele" ).dialog( "open" );
+                    if ( !res ) $( "#dialog_keine" ).dialog( "open" );                    
+                    else {
                         $( "#suchfelder_{Q}" ).hide();
                         $( "#companyResults_{Q}" ).html(res); 
                         $( "#companyResults_{Q}" ).show();
-                    }
-                    else {
-                        $("#dialog_keine").dialog( "open"); 
-                        $( "#name{Q}" ).focus();
                     }                                              
                 }
             });
@@ -56,7 +55,7 @@
         });
         $( "#reset_{Q}" ).click(function() {
         //Kein leeres Template laden, da sonst die IDs doppelt vergeben werden!
-            $( "#dialog_keine #dialog_viele #dialog_no_sw" ).dialog( "close" );
+            $( "#dialog_keine, #dialog_viele, #dialog_no_sw" ).dialog( "close" );
             $( "#erwsuche_{Q}" ).find(':input').each(function() {
                 switch(this.type) {
                     case 'text':
@@ -72,7 +71,6 @@
             return false;
         });
         $( "#name{Q}" ).focus();
-        
     });	
 </script>
 <script type='text/javascript' src='inc/help.js'></script>
@@ -221,7 +219,7 @@
 <!-- END cvarListe -->	
 	<div class="zeile">
                         <br>
-			<b>{Msg}</b><br>  
+
 			.:search:. <input type="radio" name="andor"  id="andor{Q}" value="and" checked tabindex="40">.:all:. <input type="radio" name="andor" value="or" tabindex="40">.:some:.<br>
 			<input type="checkbox" name="shipto" id="shipto{Q}" value="1" checked tabindex="40">.:also in:. .:shipto:.<br>
 			<input type="checkbox" name="fuzzy" id="fuzzy{Q}" value="%" checked tabindex="41">.:fuzzy search:. <input type="checkbox" name="pre" id="pre{Q}" value="1" {preon}>.:with prefix:.<br>

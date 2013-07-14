@@ -15,8 +15,9 @@
     }
     if ($_POST["suche"]=="suchen" || isset($_POST["first"])) {
         $daten=suchPerson($_POST);
+        //print_r( $daten );
         if ( count($daten) > $_SESSION['listLimit'] ) {
-            echo "limit";
+            echo '<script>$( "#dialog_viele" ).dialog( "open" );</script>';
         } if (count($daten)==1 && $daten<>false && !$_POST["FID1"]) { 
             echo '<script> showK__("'.($daten[0]["cp_id"]).'");</script>';
         } else if (count($daten) > 1) {
@@ -46,8 +47,7 @@
             $anredenFrau = getCpAnredenGeneric('female');
             $anredenHerr = getCpAnredenGeneric('male');
 
-            if ($daten) foreach ($daten as $zeile) { //Diese Algorithmus macht die Suche bei einer großen Trefferzahl langsam ...
-                                                     // TODO executeMultiple ... ;-) jb 16.6.2009
+            if ($daten) foreach ($daten as $zeile) { 
                 if ($zeile["cp_gender"] =="f"){
                     if ($zeile["language_id"]) {
                         $zeile["cp_greeting"]= $anredenFrau[$zeile["language_id"]];

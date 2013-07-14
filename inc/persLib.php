@@ -478,7 +478,7 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab,$ui=fa
             $fa=getFirmenstamm($daten["cp_cv_id"],false,$daten["Quelle"]);
             $nummer=($daten["Quelle"]=="C")?$fa["customernumber"]:$fa["vendornumber"];
         }
-        print_r($daten); 
+        //print_r($daten); 
         if (trim($daten["cp_grafik"])<>"") {
             if ($nummer) {
                 $root="dokumente/".$_SESSION["dbname"]."/".$daten["Quelle"].$nummer."/".$daten["cp_id"];

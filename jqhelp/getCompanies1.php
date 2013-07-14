@@ -9,10 +9,7 @@
     else { $Q = 'C'; };
     $t = new Template($base);
     //doHeader($t);
-    if ( isset($_POST["reset"]) ) {
-        echo "reset";
-        leertpl($t,1,$Q,"",true,true);
-    } else if ( isset($_POST["felder"]) && $_POST["felder"] != '' ) {
+    if ( isset($_POST["felder"]) && $_POST["felder"] != '' ) {
         $rc = doReport($_POST,$Q);
         $t->set_file(array("fa1" => "companies1.tpl"));
         if ($rc) { 
@@ -107,11 +104,10 @@
                 }
             }
         } else {
-            //$msg = "Sorry, not found.";
-            //vartpl($t, $_POST, $Q, $msg, "", "", 1, true, true);
-            //echo "false";
-            ;//ToDo
+            ;//Nichts gefunden
         }
+        if ( $i > $_SESSION['listLimit'] ) 
+             echo '<script>$( "#dialog_viele" ).dialog( "open" );</script>';
     } else {
         leertpl($t,1,$Q,"",true,true);
     }

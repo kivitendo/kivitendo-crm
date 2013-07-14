@@ -1,4 +1,4 @@
-<script language="JavaScript">
+    <script language="JavaScript">
 	function showK (id) {
 		if (id) {
 			uri="firma1.php?Q={Q}&id=" + id;

@@ -18,7 +18,7 @@
     <tr><td>Blz-DB</td>                             <td><input type='checkbox' name='BLZDB' id='BLZDB' value='t' {BLZDB}> siehe install.txt</td></tr>
     <tr><td colspan='2'><b>Kontakthred</b></td></tr>
     <tr><td>Editieren</td>                          <td><input type='checkbox' name='CallEdit' id='CallEdit' value='t' {CallEdit}></td></tr>
-    <tr><td>L&ouml;schen</td>                       <td><input type='checkbox' name='CallDel' id='CallDel' value='t' {CallDel}></td></tr>
+    <tr><td>Löschen</td>                            <td><input type='checkbox' name='CallDel' id='CallDel' value='t' {CallDel}></td></tr>
     <tr><td colspan='2'><b>E-Mail</b></td></tr>
     <tr><td>Gesehen markieren als</td><td><select name='MailFlag'>
                                              <option value='Flagged' {Flagged}>Flagged
@@ -37,9 +37,9 @@
     <tr><td>Artikelnummer für Arbeitszeit</td>  <td><input type='text' name='ttpart' id='ttpart' value='{ttpart}' size='10'></td></tr>
     <tr><td>Minuten je Einheit</td>             <td><input type='text' name='tttime' id='tttime' value='{tttime}' size='5'></td></tr>
     <tr><td>Ab hier eine Einheit</td>           <td><input type='text' name='ttround' id='ttround' value='{ttround}' size='5'>min.</td></tr>
-    <tr><td>Nur eigene Aufträge abrechen</td>   <td><input type='checkbox' name='ttclearown' id='ttclearown' {ttclearown} value='t'></td></tr>
+    <tr><td>Nur eigene Aufträge abrechnen</td>  <td><input type='checkbox' name='ttclearown' id='ttclearown' {ttclearown} value='t'></td></tr>
     <tr><td colspan='2'><b>Benutzerfreundliche Links</b></td></tr>
-    <tr><td>Links zu Verzeichenissen</td><td>
+    <tr><td>Links zu Verzeichnissen</td><td>
              Gruppe: <input type="text" name="dir_group" size="12" value='{dir_group}'>
              &nbsp;&nbsp; Rechte: <input type="text" name="dir_mode" size="4" value='{dir_mode}'>
              <input type="checkbox" name="sep_cust_vendor"  value='t' {sep_cust_vendor}>Kunden/Lieferanten trennen</td>
@@ -48,7 +48,7 @@
     <tr><td>Show-Error</td>                 <td><input type='checkbox' name='showErr' id='showErr' {showErr} value='t'></td></tr>
     <tr><td>Logfile (/tmp/lxcrm.err)</td>   <td><input type='checkbox' name='logfile' id='logfile' {logfile} value='t'></td></tr>
     <tr><td>Listenlimit</td>                <td><input type='text' name='listLimit' id='listLimit' value='{listLimit}' size='8'></td></tr>
-    <tr><td><input type="submit" name="save" id="save" value="sicher"></td><td></td></tr>
+    <tr><td><input type="submit" name="save" id="save" value="sichern"></td><td></td></tr>
 </table>
 </form>
 {END_CONTENT}

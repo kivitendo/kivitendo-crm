@@ -61,7 +61,7 @@ if ( $_POST['save'] ) {
     $t->set_file(array("mand" => "mandant.tpl"));
     if ( $_SESSION['CRMTL'] != 1 ) {
         $t->set_var(array(
-            msg => 'Nicht erlaubt',
+            msg => 'Diese Aktion ist nicht erlaubt. </ br>Sie sind nicht Mitglied der Gruppe CRMTL.',
             hide => 'hidden'
         ));
     } else {

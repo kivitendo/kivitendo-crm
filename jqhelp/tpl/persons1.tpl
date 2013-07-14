@@ -59,6 +59,7 @@
             $( "#cp_name" ).focus();
             return false;
         });
+        $( "#cp_name" ).focus();
     });
 </script>
 

@@ -13,7 +13,7 @@
 <p class="listtop">DHL {msg}</p>
 <table style='visibility:{hide}'>
     <form name="dhl" id="dhl" action="dhladm.php" method="post">
-    <tr><td colspan='2'><b>Absenderdatem</b></td></tr>
+    <tr><td colspan='2'><b>Absenderdaten</b></td></tr>
     <tr><td>Absendername 1</td>                     <td><input type='text' name='SEND_NAME1'   id='SEND_NAME1'   value='{SEND_NAME1}'   size='20' maxlength='50'></td></tr>
     <tr><td>Absendername 2</td>                     <td><input type='text' name='SEND_NAME2'   id='SEND_NAME2'   value='{SEND_NAME2}'   size='20' maxlength='50'></td></tr>
     <tr><td>Strasse</td>                            <td><input type='text' name='SEND_STREET'  id='SEND_STREET'  value='{SEND_STREET}'  size='20' maxlength='50'></td></tr>
@@ -27,7 +27,7 @@
     <tr><td><input type='text' name='prodname[]' value='{prodname}'>    </td><td valign='top'><input type='text' name='produkt[]' value='{produkt}'></td></tr>
 <!-- END produkte -->    
     <tr><td><input type='text' name='prodname[]' value=''>    </td><td><input type='text' name='produkt[]' value=''></td></tr>
-    <tr><td><input type="submit" name="save" id="save" value="sicher"></td><td></td></tr>
+    <tr><td><input type="submit" name="save" id="save" value="sichern"></td><td></td></tr>
 </table>
 </form>
 {END_CONTENT}

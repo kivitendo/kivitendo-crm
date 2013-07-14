@@ -51,7 +51,7 @@
 	<br><br>
 		<input type="hidden" name="cp_cv_id" value="{FID}">
 	<table>	
-	<tr><td>Priotit&auml;t </td><td> Mitteilung</td></tr>
+	<tr><td>Priorität </td><td> Mitteilung</td></tr>
 	<tr><td><input type="radio" name="prio" value="3" {R3}> 3 <input type="hidden" name="mid3" value="{mid3}"></td>
 		<td><input type="text" name="message3" size="60" maxlength="60" value="{MSG3}" maxlength="60"></td>
 	</tr>

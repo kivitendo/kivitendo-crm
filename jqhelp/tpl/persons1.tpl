@@ -1,9 +1,4 @@
 <script language="JavaScript">
-    function setLetter(letter) {//kann weg??
-        document.formular.cp_name.value=letter;
-        document.formular.first.value="1";
-        document.formular.submit();
-    }
     $(document).ready(function() {
         $( "input[type=button],input[type=submit]" ).button(); 
         $( ".fett" ).click(function() {
@@ -110,53 +105,53 @@
                     <option value="f" {cp_genderf}>.:female:.
                 </select>
             </span>
-            <span class="label">Abteilung</span>
+            <span class="label">.:department:.</span>
             <span class="leftfeld">
                 <input type="text" name="cp_abteilung" size="20" maxlength="25" value="{cp_abteilung}" tabindex="12">
             </span>
         </div>
         <div class="zeile">
-            <span class="label">Titel</span>
+            <span class="label">.:title:.</span>
             <span class="leftfeld">
                 <input type="text" name="cp_title" size="27" maxlength="75" value="{cp_title}" tabindex="2">
             </span>
-            <span class="label">Position</span>
+            <span class="label">.:position:.</span>
 	        <span class="leftfeld">
                 <input type="text" name="cp_position" size="20" maxlength="25" value="{cp_position}" tabindex="13">
             </span>
         </div>
         <div class="zeile">
-            <span class="label">Vorname</span>
+            <span class="label">.:givenname:.</span>
             <span class="leftfeld">
                 <input type="text" name="cp_givenname" size="27" maxlength="75" value="{cp_givenname}" tabindex="3">
             </span>
-            <span class="label">Stichwort</span>
+            <span class="label">.:Catchword:.</span>
             <span class="leftfeld">
                 <input type="text" name="cp_stichwort1" size="25" maxlength="50" value="{cp_stichwort1}" tabindex="14">
             </span>
         </div>
         <div class="zeile">
-            <span class="label">Nachname</span>
+            <span class="label">.:lastname:.</span>
             <span class="leftfeld">
                 <input type="text" name="cp_name" id="cp_name" size="27" maxlength="75" value="{cp_name}" tabindex="4">
             </span>
-            <span class="label">Bemerkung</span>
+            <span class="label">.:remark:.</span>
             <span class="leftfeld">
                 <input type="text" name="cp_notes" size="25" maxlength="50" value="{cp_notes}" tabindex="15">
             </span>
         </div>
         <div class="zeile">
-            <span class="label">Strasse</span>
+            <span class="label">.:street:.</span>
             <span class="leftfeld">
                 <input type="text" name="cp_street" size="27" maxlength="75" value="{cp_street}" tabindex="5">
             </span>
-            <span class="label">Geb.-Datum</span>
+            <span class="label">.:birthday:.</span>
             <span class="leftfeld">
                 <input type="text" name="cp_gebdatum" size="12" maxlength="10" value="{cp_gebdatum}" tabindex="16">
             <span class="klein">TT.MM.JJJJ</span></span>
         </div>
         <div class="zeile">
-            <span class="label">Länder-Kode / Plz</span>
+            <span class="label">.:country:. / .:zipcode:.</span>
 			<span class="leftfeld">
                 <input type="text" name="cp_country" size="2" maxlength="3" value="{cp_country}" tabindex="6">
 				<input type="text" name="cp_zipcode" size="7" maxlength="7" value="{cp_zipcode}" tabindex="7">

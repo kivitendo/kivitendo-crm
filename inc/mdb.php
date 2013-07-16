@@ -9,15 +9,14 @@ if (! @include_once('MDB2.php') ) {
     exit (1);
 };
 
-class myDB extends MDB2 {
-
- var $db = false;
- var $rc = false;
- var $showErr = false; // Browserausgabe
- var $log = true;     // Alle Abfragen mitloggen
- var $errfile = "/tmp/lxcrm.err";
- var $logfile = "/tmp/lxcrm.log";
- var $lfh = false;
+final class myDB extends MDB2 {
+    private $db = false;
+    private $rc = false;
+    private $showErr = false; // Browserausgabe
+    private $log = true;     // Alle Abfragen mitloggen
+    private $errfile = "/tmp/lxcrm.err";
+    private $logfile = "/tmp/lxcrm.log";
+    private $lfh = false;
 
     /**********************************************
     * dbFehler - Fehler in ein Log-File ausgeben
@@ -25,7 +24,7 @@ class myDB extends MDB2 {
     * IN: $err - Fehlermeldung
     * OUT: NONE
     **********************************************/
-    function dbFehler($sql,$err) {
+    public function dbFehler($sql,$err) {
         $efh=fopen($this->errfile,"a");
         fputs($efh,date("Y-m-d H:i:s \n"));
         fputs($efh,'SQL:'.$sql."\n");
@@ -47,7 +46,7 @@ class myDB extends MDB2 {
     * IN: $txt - SQL-Statement oder Text
     * OUT: NONE
     **********************************************/
-    function writeLog($txt, $all=true) {
+    public function writeLog($txt, $all=true) {
         if ( $this->lfh === false )
             $this->lfh = fopen($this->logfile,"a");
         fputs($this->lfh, date("Y-m-d H:i:s ->") );
@@ -64,16 +63,12 @@ class myDB extends MDB2 {
         fputs($this->lfh,"\n");
     }
 
-    function closeLogfile() {
-        fclose($this->lfh);
-    }
-
     /**********************************************
     * myDB - Konstruktor
     * IN: $host,$user,$pwd,$db,$port - Parameter der Datenbank
     * OUT: DB-Objekt
     **********************************************/
-    function myDB($host,$user,$pwd,$db,$port) {
+    public function myDB($host,$user,$pwd,$db,$port) {
         $dsn = array(
                     'phptype'  => 'pgsql',
                     'username' => $user,
@@ -103,7 +98,7 @@ class myDB extends MDB2 {
     * IN: $sql - Statement
     * OUT: true/false
     **********************************************/
-    function query($sql, $force = False) {
+    public function query($sql, $force = False) {
         if ($this->log) $this->writeLog($sql);
         if (strpos($sql,";")>0 and !$force) {
             //Sql-Injection? HTML-Sonderzeichen zulassen
@@ -129,7 +124,7 @@ class myDB extends MDB2 {
     * IN: $where - welcher Datensatz
     * OUT: true/false
     **********************************************/
-    function update($table,$fields,$values,$where) {
+    public function update($table,$fields,$values,$where) {
         if (strpos($where,"=")<1) {
             $this->dbFehler('Update','Where missing or wrong: '.$where);
             $this->dbFehler('Update',print_r(debug_backtrace(),true));
@@ -174,7 +169,7 @@ class myDB extends MDB2 {
     * IN: $values - dazugehörige Werte
     * OUT: true/false
     **********************************************/
-    function insert($table,$fields,$values,$prepstatement='') {
+    public function insert($table,$fields,$values,$prepstatement='') {
         if ($this->log) {
             $this->writeLog('Insert in: '.$table,false);
             $this->writeLog(print_r($fields,true),false);
@@ -206,48 +201,49 @@ class myDB extends MDB2 {
         }
     }
 
-    function begin() {
+    public function begin() {
         if ($this->log) $this->writeLog('BEGIN');
         return $this->db->beginTransaction();
     }
-    function commit() {
+    
+    public function commit() {
         if ($this->log) $this->writeLog('COMMIT');
         return $this->db->commit();
     }
-    function rollback() {
+    
+    public function rollback() {
         if ($this->log) $this->writeLog('ROLLBACK');
         return $this->db->rollback();
     }
-
-    function getAll($sql) {
+    
+    public function getAll($sql) {
         if ($this->log) $this->writeLog('getAll: '.$sql);
         if (strpos($sql,";")>0) return false;
         $this->rc=$this->db->queryAll($sql);
         if(PEAR::isError($this->rc)) {
             $this->dbFehler($sql,$this->rc->getMessage());
             return false;
-        } else {
-            return $this->rc;
-        }
+        } 
+        else return $this->rc;
     }
+  
     /**
      * Holt die Daten als assoziatives Array aus der DB.
      * S.a. PEAR::getAssoc
      * return mixed, false
      */
-  function getAssoc($sql){
-    if ($this->log) $this->writeLog('getAssoc: '.$sql);
-    $this->db->loadModule('Extended');
-    $this->rc=$this->db->getAssoc($sql);
-    if(PEAR::isError($this->rc)) {
-           $this->dbFehler($sql,$this->rc->getMessage());
-          return false;
-    } else {
-          return $this->rc;
+    public function getAssoc($sql){
+        if ($this->log) $this->writeLog('getAssoc: '.$sql);
+        $this->db->loadModule('Extended');
+        $this->rc=$this->db->getAssoc($sql);
+        if(PEAR::isError($this->rc)) {
+            $this->dbFehler($sql,$this->rc->getMessage());
+            return false;
+        } 
+        else return $this->rc;
     }
-  }
-
-    function getOne($sql) {
+    
+    public function getOne($sql) {
         if ($this->log) $this->writeLog('getOne: '.$sql);
         $rs = $this->db->queryRow($sql);
         if(PEAR::isError($rs)) {
@@ -257,7 +253,7 @@ class myDB extends MDB2 {
             return $rs;
         }
     }
-    function saveData($txt) {
+    public function saveData($txt) {
         //if (get_magic_quotes_gpc()) {
         if (get_magic_quotes_runtime()) {
             return $txt;
@@ -265,8 +261,8 @@ class myDB extends MDB2 {
             return $this->db->escape($txt);
         }
     }
-    /**
-     *
+    
+    /*
      * Benutzt PEAR::executeMultiple. Erwartet als
      * Zeichenkette das PreparedStatement
      * und die entsprechenden Werte für das Statement
@@ -276,7 +272,7 @@ class myDB extends MDB2 {
      *
      * @return boolean
      */
-    function executeMultiple($statement, $data){
+    public function executeMultiple($statement, $data){
         if ($this->log) {                            //Logging
             $this->writeLog("executeMultiple: $statement");
             $this->writeLog("mit den Werten:" . print_r($data,true));
@@ -311,5 +307,9 @@ class myDB extends MDB2 {
         }
         return true;
     }
+    
+    public function setShowError( $value ){
+        $this->showErr = $value;
+    }    
 }
 ?>

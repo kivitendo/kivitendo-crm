@@ -7,7 +7,7 @@
 {JQTABLE}
 {THEME}    
 {JAVASCRIPTS}
-    <script language="JavaScript">
+<script language="JavaScript">
     function showItem(Q,id) {
 	    F1=open("getCall.php?hole="+id+Q,"Caller","width=800, height=650, left=100, top=50, scrollbars=yes");
     }
@@ -78,20 +78,16 @@
         po = document.user.selport.selectedIndex;
         document.user.port.value=document.user.selport.options[po].value;
     }
-    </script>
-    <script type='text/javascript' src='inc/help.js'></script>
-    <script>
-    $(document).ready(
-    function(){
+    $(document).ready(function(){
         $( "#mailwin" ).dialog({
             autoOpen: false,
             show: {
-               effect: "blind",
-               duration: 300
+                effect: "blind",
+                duration: 300
             },
             hide: {
-               effect: "explode",
-               duration: 300
+                effect: "explode",
+                duration: 300
             },
             minWidth: 600,
             minHeight: 550,
@@ -108,12 +104,13 @@
                     if( result == "noThemeFile" ) alert("Kein Themefile gefunden! ")
                     else if( result == "base" ) alert("Base kann nicht bearbeitet werden!")                    
                     else window.open(result);
-                }
+                }   
             })
         });
+        $( "input[type='submit']" ).button();
     });
-    </script>
-   
+</script>
+<script type='text/javascript' src='inc/help.js'></script>   
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
@@ -224,7 +221,7 @@
              <input type="checkbox" name="feature_unique_name_plz" value='t' {feature_unique_name_plz}>verbieten</td>
    </tr>
   <tr><td class="norm">Fehler anzeigen</td><td colspan="4">
-            <input type="checkbox" name="showErr"  value='t' {showErr}>DB&nbsp;&nbsp; <input type="checkbox" name="php_error"  value='t' {php_error}>Php &nbsp;&nbsp;
+            <input type="checkbox" name="sql_error"  value='t' {sql_error}>SQL-Fehler&nbsp;&nbsp; <input type="checkbox" name="php_error"  value='t' {php_error}>Php-Fehler &nbsp;&nbsp;
    </tr>
        <tr><td>&nbsp;</td><td><input type="submit" name="ok" value="sichern"></td></tr>
 

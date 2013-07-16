@@ -4,16 +4,18 @@ ini_set('session.bug_compat_42', 0);  // Das ist natürlich lediglich eine Provi
 //Warning: Unknown: Your script possibly relies on a session side-effect which existed until PHP 4.2.3. ....
 session_set_cookie_params(1800); // 30 minuten.
 session_start();
-//print_r($_SESSION);
-if ( isset($_SESSION['php_error']) && $_SESSION['php_error'] ) {
-    error_reporting (E_ALL & ~E_DEPRECATED);
-    ini_set ('display_errors',1);
-}
+
 $inclpa = ini_get('include_path');
 ini_set('include_path',$inclpa.":../:./inc:../inc");
 
+if ( isset($_SESSION['php_error']) && $_SESSION['php_error'] ) {
+    error_reporting (E_ALL & ~E_DEPRECATED);
+    ini_set ('display_errors',1);
+} 
+
 include_once "mdb.php";
 require_once "conf.php";
+
 
 if ( !isset($_SESSION['dbhost']) ) {
     $_SESSION['ERPNAME'] = $ERPNAME;
@@ -217,6 +219,8 @@ function anmelden() {
         $BaseUrl .= $_SERVER['HTTP_HOST'];
         $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
         if ($user_data) foreach ($user_data as $key => $val) $_SESSION[$key] = $val;
+        if ( isset($_SESSION['sql_error']) && $_SESSION['sql_error'] ) $_SESSION['db']->setShowError(true);
+        else $_SESSION['db']->setShowError(false); 
         $_SESSION['dir_mode']  = ( $user_data['dir_mode'] != '' )?octdec($user_data['dir_mode']):493; // 0755
         $_SESSION["loginCRM"] = $user_data["id"];
         $_SESSION['theme']    = ($user_data['theme']=='' || $user_data['theme']=='base')?'':$user_data['theme'];
@@ -916,5 +920,4 @@ function getCurrencies() {
     $rs = $_SESSION['db']->getAll($sql);
     return $rs;
 }
-
 ?>

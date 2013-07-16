@@ -1,1 +1,1 @@
---space_after_comma --space_around_assignment --space_around_comparison --space_around_arithmetic --space_around_logical --space_around_colon_question --vertical_array --align_array_assignment --space_around_double_arrow --vertical_concat --indent_size 4 
+--space_inside_parentheses --space_after_comma --space_around_assignment --space_around_comparison --space_around_arithmetic --space_around_logical --space_around_colon_question --space_after_if --vertical_array --align_array_assignment --space_around_double_arrow --indent_size 4 

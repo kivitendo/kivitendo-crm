@@ -1,5 +1,5 @@
 <?php
-$ERPNAME="kivitendo-erp";
+$ERPNAME="kivitendo-erp.130625";
 $erpConfigFile="kivitendo";
 
 /* +++ NUR mit Reverseproxy verwenden +++ */

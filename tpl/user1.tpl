@@ -117,7 +117,7 @@
 <p class="listtop" onClick="help('User');">Benutzer Stammdaten (?)</p>
 <form name="user" action="user1.php" method="post" onSubmit="return getical();">
 <div id="user">
-<input type="reset" name="mails" value="Mails zeigen" onClick="Mailonoff(false)">
+<input type="reset" name="mails" value="Mails zeigen" onClick="Mailonoff(false)"> {login} : {uid}
 
 <table border="0">
     <input type="hidden" name="icalart" value="{icalart}">
@@ -125,7 +125,13 @@
     <input type="hidden" name="icalext" value="{icalext}">
     <input type="hidden" name="uid" value="{uid}">
     <input type="hidden" name="login" value="{login}">
-    <tr><td class="norm">Login</td><td>{login} : {uid}</td>
+    <tr><td class="norm">Default-Suchmaske</td><td class="norm"><select name='smask'>
+                        <option value="quick" {squick}>Schnellsuche</option>
+                        <option value="customer" {scustomer}>Kunden</option>
+                        <option value="vendor" {svendor}>Lieferanten</option>
+                        <option value="person" {sperson}>Personen</option>
+                        </select>
+        </td>
         <td class="norm">Vertreter</td><td class="norm"><select name="vertreter">
                         <option value=""></option>
 <!-- BEGIN Selectbox -->

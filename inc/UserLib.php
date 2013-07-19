@@ -61,6 +61,7 @@ function saveUserStamm( $val ) {
         'streetview'              => 't',
         'planspace'               => 't',
         'theme'                   => 't',
+        'smask'                   => 't',
         'helpmode'                => 'b',
         'listen_theme'            => 't',
         'auftrag_button'          => 'b',

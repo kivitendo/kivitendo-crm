@@ -133,13 +133,13 @@
 <!-- END Selectbox -->
                         </select>
         </td></tr>
-    <tr><td class="norm">Kd-Ansicht</td><td>
-        <select name="kdview">
-        <option value="1"{kdview1}>Lieferanschrift
-        <option value="2"{kdview2}>Bemerkungen
-        <option value="3"{kdview3}>Variablen
-        <option value="4"{kdview4}>FinanzInfos
-        <option value="5"{kdview5}>sonst.Infos
+    <tr><td class="norm">Kd-Ansicht links</td><td>
+        <select name="kdviewli">
+        <option value="1"{kdviewli1}>Lieferanschrift
+        <option value="2"{kdviewli2}>Bemerkungen
+        <option value="3"{kdviewli3}>Variablen
+        <option value="4"{kdviewli4}>FinanzInfos
+        <option value="5"{kdviewli5}>sonst.Infos
         </select>
         </td>
         <td class="norm">Etikett</td><td class="norm"><select name="etikett">
@@ -147,6 +147,24 @@
                         <option value="{LID}"{FSel}>{FTXT}</option>
 <!-- END SelectboxB -->
                         </select>
+        </td></tr>
+        <tr>
+        <td class="norm">Kd-Ansicht rechts</td><td>
+        <select name="kdviewre">
+        <option value="1"{kdviewre1}>.:contact:.
+        <option value="2"{kdviewre2}>.::Quotation::.
+        <option value="3"{kdviewre3}>.:orders:
+        <option value="4"{kdviewre4}>.:Invoice:.
+        <option value="5"{kdviewre5}>.:remember:.
+        </select>
+        </td><td class="norm">.:search tab:.</td><td>
+        <select name="searchtab">
+        <option value="1"{searchtab1}>.:fastsearch:.
+        <option value="2"{searchtab2}>.:customers:.
+        <option value="3"{searchtab3}>.:vendors:.
+        <option value="4"{searchtab4}>.:persons:.
+        <option value="5"{searchtab5}>.:remember:.
+        </select>
         </td></tr>
     <tr><td class="norm">Name</td><td><input type="text" name="name" value="{name}" maxlength="75"></td>
         <td class="norm">Abteilung</td>    <td><input type="text" name="abteilung" value="{abteilung}" maxlength="75"></td></tr>

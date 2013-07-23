@@ -87,7 +87,6 @@
             $karte2=str_replace(array("%FROMSTREET%","%FROMZIPCODE%","%FROMCITY%"),array(strtr($user["addr1"]," ",$_SESSION['planspace']),$user["addr2"],$user["addr3"]),$karte2);
         };
     }
-    $views=array(""=> "lie",1=>"lie",2=>"not",3=>"var",4=>"fin",5=>"inf");
     $taxzone=array("Inland","EU mit UStId","EU ohne UStId","Ausland");
     $sales=($Q=="C")?"sales":"purchase";
     $request=($Q=="C")?"sales":"request";
@@ -188,7 +187,8 @@
             'Vars' => $Vars,
             'erstellt' => db2date($fa["itime"]),
             'modify' => db2date($fa["mtime"]),
-            'kdview' => $views[$_SESSION["kdview"]],
+            'kdviewli' => $_SESSION["kdviewli"] - 1,
+            'kdviewre' => $_SESSION["kdviewre"] - 1,
             'zeige' => ($fa["obsolete"]=="f")?"visible":"hidden",
             'verstecke' => ($fa["obsolete"]=="t")?"visible":"hidden",
             'chelp' => ($kdhelp)?"visible":"hidden",

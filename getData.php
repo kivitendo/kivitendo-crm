@@ -75,9 +75,7 @@ echo '
 
         });
         $("#dialog_no_sw,#dialog_viele,#dialog_keine").dialog({ autoOpen: false });  
-        $( "#tabs, #tabs-1" ).tabs({
-            select: function( event, ui ) {alert("Aktiviert Tab1");}
-        }); 
+
     </script>
 ';
 ?>  
@@ -106,16 +104,18 @@ echo '
 <script>
     $(function() {
         $( "#tabs" ).tabs({
+            active: <?php echo $_SESSION["searchtab"] - 1;?>,
             beforeLoad: function( event, ui ) {
+                //alert( $( "#tabs" ).tabs( "option", "active" )); für die Memfunction, in SESSION schreiben    
                 ui.jqXHR.error(function() {
-                    ui.panel.html(".:Couldn't load this tab. We'll try to fix this as soon as possible.:." );
+                    ui.panel.html(".:Couldn't load this tab.:." );
                 });
             }       
         });
+        
         $("#results").css('height',300);
        
-        $( "input[type=submit]" )
-            .button();
+        $( "input[type=submit]" ).button();
         
         $.ajax({
             url: "jqhelp/getHistory.php",

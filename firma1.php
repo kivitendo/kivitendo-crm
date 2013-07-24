@@ -22,27 +22,33 @@
         $Vars = "<table>\n";
         foreach ($tmp as $row) {
             switch ($row["type"]) {
-                case "textfield": preg_match("/width[ ]*=[ ]*(\d+)/i",$row["option"],$hit); $w = ($hit[1]>5)?$hit[1]:30;
-                  $txt = '';
-                  while (strlen($row["text_value"])>$w) {
-                      $txt .= substr($row["text_value"],0,$w)."<br>";
-                    $row["text_value"] = substr($row["text_value"],$w);
-                  };
-                  $txt .= $row["text_value"];
-                  break;
-                case "select" :
-                case "text" : $txt = $row["text_value"];
-                                  break;
-                case "number" : preg_match("/PRECISION[ ]*=[ ]*([0-9]+)/i",$row["options"],$pos);
-                                  if ($pos[1]) { $txt = sprintf("%0.".$pos[1]."f",$row["number_value"]); }
-                                  else {$txt = $row["number_value"];}
-                                  break;
-                case "date" : $txt = ($row["timestamp_value"])?db2date(substr($row["timestamp_value"],0,10)):"";
-                                  break;
-                case "bool" : $txt = ($row["bool_value"]=='f')?'.:no:.':'.:yes:.';
-                                  break;
-                case "customer" : $txt = getCvarName($row["number_value"]);
-                                  break;
+                case "textfield":         //ToDo:  Es sollte dann natürlich auch ein Textfeld zu sehen sein .... 
+                    preg_match("/width[ ]*=[ ]*(\d+)/i",$row["options"],$hit); $w = (isset($hit[1])&&$hit[1]>5)?$hit[1]:30;
+                    $txt = '';
+                    while (strlen($row["text_value"])>$w) {
+                        $txt .= substr($row["text_value"],0,$w)."<br>";
+                        $row["text_value"] = substr($row["text_value"],$w);
+                    };
+                    $txt .= $row["text_value"];
+                break;
+                case "select" :  // ToDo: Implementieren!!!
+                case "text" : 
+                    $txt = $row["text_value"];
+                break;
+                case "number" : 
+                    preg_match("/PRECISION[ ]*=[ ]*([0-9]+)/i",$row["options"],$pos);
+                    if ($pos[1]) { $txt = sprintf("%0.".$pos[1]."f",$row["number_value"]); }
+                    else {$txt = $row["number_value"];}
+                break;
+                case "date" : 
+                    $txt = ($row["timestamp_value"])?db2date(substr($row["timestamp_value"],0,10)):"";
+                break;
+                case "bool" : 
+                    $txt = ($row["bool_value"]=='f')?'.:no:.':'.:yes:.';
+                break;
+                case "customer" : 
+                    $txt = getCvarName($row["number_value"]);
+                break;
                 default	: $txt = $row["text_value"];
             }
             if (strpos($txt , "http://") === 0 || strpos($txt , "www.") === 0){ 

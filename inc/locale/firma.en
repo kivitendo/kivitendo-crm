@@ -219,6 +219,6 @@ $texts = array(
     '.:history tracking:.'                                         => 'History Tracking',
     '.:delivery order:.'                                           => 'Delivery Order',
     '.:modify search:.'                                            => 'Modify Search',
-    '.:.:remark:.'                                                 => 'Remark'.,
+    '.:.:remark:.'                                                 => 'Remark',
     );
 ?>

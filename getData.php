@@ -136,7 +136,7 @@ echo '
             }
         });
 
-		  $("#adress").click(function() {
+        $("#adress").click(function() {
             $.ajax({
                 type: "POST",
                 url: "jqhelp/getDataResult.php",
@@ -160,7 +160,12 @@ echo '
             });
          return false;   
         });
+        
+        $("#suchfelder_C").load('jqhelp/getCompanies1.php?Q=C');    
+        $("#suchfelder_V").load('jqhelp/getCompanies1.php?Q=V');
+        $("#suchfelder_P").load('jqhelp/getPersons1.php');   
     });
+    
 </script>
 </head>
 <?php 
@@ -170,12 +175,12 @@ echo $menu['start_content'];
 echo '
     <div id="tabs">
         <ul>
-            <li><a href="#tabs-1">Schnellsuche</a></li>
-            <li><a href="jqhelp/getCompanies1.php?Q=C">Kundensuche</a></li>
-            <li><a href="jqhelp/getCompanies1.php?Q=V">Lieferantensuche</a></li>
-            <li><a href="jqhelp/getPersons1.php">Personensuche</a></li>
+            <li><a href="#tab-1">Schnellsuche</a></li>
+            <li><a href="#tab-2">Kundensuche</a></li>
+            <li><a href="#tab-3">Lieferantensuche</a></li>
+            <li><a href="#tab-4">Personensuche</a></li>
         </ul>
-        <div id="tabs-1">
+        <div id="tab-1">
             <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">'.translate('.:fast search customer/vendor/contacts and contact history:.','firma').'</p>
             <form name="suche" id="suche" action="" method="get">
                 <input type="text" name="swort" size="25" id="ac0" autocomplete="off">  
@@ -191,8 +196,22 @@ echo '
             </div>
             <div id="results"></div>
         </div>
+        
+        <div id="tab-2">
+            <div id="suchfelder_C"></div>
+            <div id="companyResults_C"></div>
+        </div>
+        <div id="tab-3">
+            <div id="suchfelder_V"></div>
+            <div id="companyResults_V"></div>
+        </div>
+        <div id="tab-4">
+            <div id="suchfelder_P"></div>
+            <div id="results_pers"></div>
+        </div>
     </div>
 ';
+
 echo $menu['end_content'];
 
 ob_end_flush(); 

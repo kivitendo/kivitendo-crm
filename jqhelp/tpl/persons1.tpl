@@ -219,16 +219,16 @@
 			<input type="submit" class="clear" name="reset" id="reset_pers" value="clear">
 			<a href="extrafelder.php?owner=P0"><img src="image/extra.png" alt="Extras" title="Extras" border="0" /></a>
         </div>
-		<div style="margin-left:2.5em; float:left;   margin-top:3em; border: 0px solid black;">
+		<div style="margin-left:2.5em; float:left; border: 0px solid black;">
         <!-- Gibt es hier die Möglichkeit eine Fallentscheidung zu machen?  Falls sonder dann einblenden:-->
-            Attribute: <br>
+            Attribute:
             <!-- BEGIN sonder -->
 	        <input class="klein" type="checkbox" name="cp_sonder[]" value="{sonder_id}"><span class="klein">{sonder_key}</span><br>
             <!-- END sonder -->		
         </div>	
     </form>
 </div>
-<div id="results_pers"></div>
+
 
 
 

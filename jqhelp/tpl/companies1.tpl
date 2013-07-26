@@ -77,7 +77,7 @@
 
 
 
-<div id="suchfelder_{Q}" >
+
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">  
 <button class="fett">A</button> 
 <button class="fett">B</button> 
@@ -234,6 +234,6 @@
 			{report}
 	</div>
 </form>
-</div>
-<div id="companyResults_{Q}"></div>
+
+
 

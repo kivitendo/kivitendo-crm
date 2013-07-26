@@ -159,7 +159,8 @@ if ( $dbok ) {
 			echo "$ok. ERP-DB gefunden<br>";
 		} else {
 			fputs($log,"Keine gueltige ERP-DB gefunden\n");
-			echo "$fehler Keine g&uuml;ltige ERP-DB gefunden (".$rs[0]["version"].")<br>";
+			echo "$fehler Keine gültige ERP-DB gefunden (".$rs[0]["version"].")</ br>";
+			echo "Diese Version arbeitet nur mit ERP-Versionen >= 3.0.1 oder der aktuellen Git-Version zusammen";
 			exit;
 		}
 	}

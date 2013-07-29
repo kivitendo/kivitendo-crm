@@ -169,7 +169,16 @@ if ( $dbok ) {
 	fputs($log,"Abbruch\n");
 	exit(1);
 }
-if ( $check ) exit(0);
+
+if ( $check ) {
+    echo '
+      <form action="#">
+        <p>
+          <input type="button" name="Next" value="Next" onclick="window.location.href = \''.$_SERVER["HTTP_REFERER"].'\'">
+        </p>
+      </form>';
+    exit(0);
+}
 echo "Datenbank einrichten<br>";
 $f = fopen("update/installcrmi.sql","r");
 if ( !$f ) { 
@@ -217,5 +226,11 @@ if ( $fehl>0 ) {
 
 fclose($f);
 fclose($log);
+echo '
+  <form action="#">
+    <p>
+      <input type="button" name="Next" value="Next" onclick="window.location.href = \''.$_SERVER["HTTP_REFERER"].'\'">
+    </p>
+  </form>';
 ob_end_flush();
 ?>

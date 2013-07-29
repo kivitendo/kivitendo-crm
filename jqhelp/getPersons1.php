@@ -27,7 +27,7 @@
             if ( isset( $_POST["FID1"] ) ) { 
                 $snd="<input type='submit' name='insk' value='.:allocate:.'><br>[<a href='firma2.php?Q=$Quelle&fid=".$_POST["FID1"]."'>.:back:.</a>]";  
             } else { 
-                $snd=""; $dest=""; 
+                $snd=""; //$dest=""; 
             };
             clearCSVData();
             $header = array("ANREDE","TITEL","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","FIRMA","FaID","GESCHLECHT","ID");
@@ -96,7 +96,7 @@
                         'eMail'     => $zeile["cp_email"],
                         'Firma'     => $zeile["name"],
                         'insk'      => $insk,
-                        'DEST'      => $dest,
+                        //'DEST'      => $dest,
                         'QUELLE'    => $Quelle, //zwei mal??
                         'Q'         => $Quelle,
                     ));

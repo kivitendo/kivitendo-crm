@@ -70,6 +70,7 @@ if ($_GET['all']) {
     		if ( $_SESSION['dir_group'] ) chgrp($dir_abs."/C".$rs[$key]['customernumber'],$_SESSION['dir_group']);
     		echo "Erzeuge Symlink: ".$dir_abs.$link_dir_cust."/".mkDirName($rs[$key]['name'])."_C".$rs[$key]['customernumber']."</br>";
     	 	symlink($dir_abs."/C".$rs[$key]['customernumber'], $dir_abs.$link_dir_cust."/".mkDirName($rs[$key]['name'])."_C".$rs[$key]['customernumber']);
+    	   //lchgrp( $dir_abs.$link_dir_cust."/".mkDirName($rs[$key]['name'])."_C".$rs[$key]['customernumber'], $_SESSION['dir_group']);  //funktioniert nicht.. warum???
 		}
     }
     $sql = "SELECT  name, vendornumber FROM vendor ORDER BY vendornumber"; //::INT ";

@@ -13,7 +13,7 @@
     $(function() {
 		$("#treffer_pers")
 			.tablesorter({widthFixed: true, widgets: ['zebra']})
-			.tablesorterPager({container: $("#pager_pers"), size: 20});
+			.tablesorterPager({container: $("#pager_pers"), size: 20, positionFixed: false});
 
         $( "#sercontent" ).dialog({
             autoOpen: false,

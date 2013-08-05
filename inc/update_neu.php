@@ -1,7 +1,9 @@
 <?php
     require_once("stdLib.php");
     chdir($_SESSION['crmpath']);
-    $LOGIN = false;// wofür war / ist das gedacht??
+    //$LOGIN = true;// wofür war / ist das gedacht??
+    // Wann ist $LOGIN gesetzt
+    // Ist $_SESSION['loginCRM'] gemeint??
     if (!function_exists('updatever')) {
 	    function updatever($VERSION) {
 		    $sql = "INSERT INTO crm (uid,datum,version) values (".$_SESSION["loginCRM"].",now(),'".$VERSION."')";
@@ -116,14 +118,15 @@
         if ( $liste ) foreach ( $liste as $line ) {
             echo sprintf($zeile,$line["tag"],$line["login"],$line["itime"]);
         };
-        echo "</table>";     
+        echo "</table>";  
+        echo '
+     	  	<form action="#">
+  			  <p>
+    		    <input type="button" name="Text 1" value="Next"
+               onclick="window.location.href = \''.$_SERVER["HTTP_REFERER"].'\' ">
+          </p>
+        </form>';   
     }
-   
 ?>
-<form action="#">
-  <p>
-    <input type="button" name="Text 1" value="Next"
-      onclick="window.location.href = '<?php echo $_SERVER["HTTP_REFERER"]; ?> ' ">
-  </p>
-</form>
+
 

@@ -199,16 +199,20 @@
                     document.location.href = name;
                 }
             });
-            $("#fasubmenu").tabs({ heightStyle: "auto" });
-            var index = $('#fasubmenu a[href="#{kdview}"]').parent().index();
-            $("#fasubmenu").tabs("option", "active",  index);
+            $("#fasubmenu").tabs({ 
+                heightStyle: "auto",
+                active: {kdviewli}
+                });
+            //var index = $('#fasubmenu a[href="#{kdviewli}"]').parent().index();
+            //$("#fasubmenu").tabs("option", "active",  index);
             $(function() {
                 $( "#right_tabs" ).tabs({
                     cache: true, //helpful?
+                    active: {kdviewre},
                     beforeLoad: function( event, ui ) {
                         ui.jqXHR.error(function() {
                         ui.panel.html(
-                            ".:Couldn't load this tab. We'll try to fix this as soon as possible.:." );
+                            ".:Couldn't load this tab.:." );
                         });
                     }
                 });
@@ -410,9 +414,9 @@
     	<div id="right_tabs">
         	<ul>
                 <li><a href="#contact">.:contact:.</a></li>
-                <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=inv">.:Invoice:.</a></li>	
                 <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=quo">.:Quotation:.</a></li>
                 <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=ord">.:orders:.</a></li>
+                <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=inv">.:Invoice:.</a></li>	
             </ul>
     		<div id="contact">
             <table id="calls" class="tablesorter" width="100%" style='margin:0px;'>

@@ -15,7 +15,7 @@
     
     $(document).ready(function() {
         $( "input[type=button],input[type=submit]" ).button();
-        $( ".fett" ).click(function() {
+        $( ".fett_{Q}" ).click(function() {
             if ( $(this).html() == '#' ) first = '~';
             else first = $(this).html(); 
             $.ajax({
@@ -24,7 +24,6 @@
                 url: "jqhelp/getCompanies1.php",
                 success: function(res) {
                     $( "#dialog_keine, #dialog_viele, #dialog_no_sw" ).dialog( "close" );
-                    //if ( res == 'viele' )  $( "#dialog_viele" ).dialog( "open" );
                     if ( !res ) $( "#dialog_keine" ).dialog( "open" );                    
                     else {
                         $( "#suchfelder_{Q}" ).hide();
@@ -42,7 +41,6 @@
                 url: "jqhelp/getCompanies1.php",
                 success: function(res) {
                     $( "#dialog_keine, #dialog_viele, #dialog_no_sw" ).dialog( "close" );
-                    if ( res == 'viele' )  $( "#dialog_viele" ).dialog( "open" );
                     if ( !res ) $( "#dialog_keine" ).dialog( "open" );                    
                     else {
                         $( "#suchfelder_{Q}" ).hide();
@@ -77,35 +75,35 @@
 
 
 
-<div id="suchfelder_{Q}" >
+
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">  
-<button class="fett">A</button> 
-<button class="fett">B</button> 
-<button class="fett">C</button> 
-<button class="fett">D</button> 
-<button class="fett">E</button> 
-<button class="fett">F</button> 
-<button class="fett">G</button> 
-<button class="fett">H</button> 
-<button class="fett">I</button> 
-<button class="fett">J</button> 
-<button class="fett">K</button> 
-<button class="fett">L</button> 
-<button class="fett">M</button> 
-<button class="fett">N</button> 
-<button class="fett">O</button> 
-<button class="fett">P</button> 
-<button class="fett">Q</button> 
-<button class="fett">R</button> 
-<button class="fett">S</button> 
-<button class="fett">T</button> 
-<button class="fett">U</button> 
-<button class="fett">V</button> 
-<button class="fett">W</button> 
-<button class="fett">X</button> 
-<button class="fett">Y</button> 
-<button class="fett">Z</button> 
-<button class="fett">#</button> 
+<button class="fett_{Q}">A</button> 
+<button class="fett_{Q}">B</button> 
+<button class="fett_{Q}">C</button> 
+<button class="fett_{Q}">D</button> 
+<button class="fett_{Q}">E</button> 
+<button class="fett_{Q}">F</button> 
+<button class="fett_{Q}">G</button> 
+<button class="fett_{Q}">H</button> 
+<button class="fett_{Q}">I</button> 
+<button class="fett_{Q}">J</button> 
+<button class="fett_{Q}">K</button> 
+<button class="fett_{Q}">L</button> 
+<button class="fett_{Q}">M</button> 
+<button class="fett_{Q}">N</button> 
+<button class="fett_{Q}">O</button> 
+<button class="fett_{Q}">P</button> 
+<button class="fett_{Q}">Q</button> 
+<button class="fett_{Q}">R</button> 
+<button class="fett_{Q}">S</button> 
+<button class="fett_{Q}">T</button> 
+<button class="fett_{Q}">U</button> 
+<button class="fett_{Q}">V</button> 
+<button class="fett_{Q}">W</button> 
+<button class="fett_{Q}">X</button> 
+<button class="fett_{Q}">Y</button> 
+<button class="fett_{Q}">Z</button> 
+<button class="fett_{Q}">#</button> 
 </p>
 
 <form name="erwsuche" id="erwsuche_{Q}" enctype='multipart/form-data' action="#" method="post">
@@ -234,6 +232,6 @@
 			{report}
 	</div>
 </form>
-</div>
-<div id="companyResults_{Q}"></div>
+
+
 

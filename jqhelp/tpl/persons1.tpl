@@ -1,7 +1,7 @@
 <script language="JavaScript">
     $(document).ready(function() {
         $( "input[type=button],input[type=submit]" ).button(); 
-        $( ".fett" ).click(function() {
+        $( ".fett_pers" ).click(function() {
             if ( $(this).html() == '#' ) first = '~';
             else first = $(this).html(); 
             $.ajax({
@@ -61,33 +61,33 @@
 <div id="suchfelder_pers">
 
     <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;"> 
-        <button class="fett">A</button> 
-        <button class="fett">B</button>     
-        <button class="fett">C</button> 
-        <button class="fett">D</button> 
-        <button class="fett">E</button> 
-        <button class="fett">F</button> 
-        <button class="fett">G</button> 
-        <button class="fett">H</button> 
-        <button class="fett">I</button> 
-        <button class="fett">J</button> 
-        <button class="fett">K</button> 
-        <button class="fett">L</button> 
-        <button class="fett">M</button> 
-        <button class="fett">N</button> 
-        <button class="fett">O</button> 
-        <button class="fett">P</button> 
-        <button class="fett">Q</button> 
-        <button class="fett">R</button> 
-        <button class="fett">S</button> 
-        <button class="fett">T</button> 
-        <button class="fett">U</button> 
-        <button class="fett">V</button> 
-        <button class="fett">W</button> 
-        <button class="fett">X</button> 
-        <button class="fett">Y</button> 
-        <button class="fett">Z</button> 
-        <button class="fett">#</button> 
+        <button class="fett_pers">A</button> 
+        <button class="fett_pers">B</button>     
+        <button class="fett_pers">C</button> 
+        <button class="fett_pers">D</button> 
+        <button class="fett_pers">E</button> 
+        <button class="fett_pers">F</button> 
+        <button class="fett_pers">G</button> 
+        <button class="fett_pers">H</button> 
+        <button class="fett_pers">I</button> 
+        <button class="fett_pers">J</button> 
+        <button class="fett_pers">K</button> 
+        <button class="fett_pers">L</button> 
+        <button class="fett_pers">M</button> 
+        <button class="fett_pers">N</button> 
+        <button class="fett_pers">O</button> 
+        <button class="fett_pers">P</button> 
+        <button class="fett_pers">Q</button> 
+        <button class="fett_pers">R</button> 
+        <button class="fett_pers">S</button> 
+        <button class="fett_pers">T</button> 
+        <button class="fett_pers">U</button> 
+        <button class="fett_pers">V</button> 
+        <button class="fett_pers">W</button> 
+        <button class="fett_pers">X</button> 
+        <button class="fett_pers">Y</button> 
+        <button class="fett_pers">Z</button> 
+        <button class="fett_pers">#</button> 
     </p>
 
     <form name="formular" id="formular_pers" enctype='multipart/form-data' action="#" method="post">
@@ -219,16 +219,16 @@
 			<input type="submit" class="clear" name="reset" id="reset_pers" value="clear">
 			<a href="extrafelder.php?owner=P0"><img src="image/extra.png" alt="Extras" title="Extras" border="0" /></a>
         </div>
-		<div style="margin-left:2.5em; float:left;   margin-top:3em; border: 0px solid black;">
+		<div style="margin-left:2.5em; float:left; border: 0px solid black;">
         <!-- Gibt es hier die Möglichkeit eine Fallentscheidung zu machen?  Falls sonder dann einblenden:-->
-            Attribute: <br>
+            Attribute:
             <!-- BEGIN sonder -->
 	        <input class="klein" type="checkbox" name="cp_sonder[]" value="{sonder_id}"><span class="klein">{sonder_key}</span><br>
             <!-- END sonder -->		
         </div>	
     </form>
 </div>
-<div id="results_pers"></div>
+
 
 
 

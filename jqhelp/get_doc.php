@@ -33,7 +33,6 @@ if ($rs)
         echo "<tr onClick='OpenIOQ(\"".$_GET['Q']."\",".$row["id"].",\"".$_GET['type']."\");'>". 
               "<td>".$row["date"]."</td><td>".$row["description"]."</td>". 
               "<td align='right'>".$row["amount"]."</td><td>".$row["number"]."</td></tr>\n"; 
-        $i++; 
     } 
 echo "</tbody></table>\n</div>"; 
 ?>

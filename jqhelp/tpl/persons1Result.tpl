@@ -13,7 +13,7 @@
     $(function() {
 		$("#treffer_pers")
 			.tablesorter({widthFixed: true, widgets: ['zebra']})
-			.tablesorterPager({container: $("#pager_pers"), size: 20});
+			.tablesorterPager({container: $("#pager_pers"), size: 20, positionFixed: false});
 
         $( "#sercontent" ).dialog({
             autoOpen: false,
@@ -59,12 +59,12 @@
 <table id="treffer_pers" class="tablesorter">  
     <thead>
 		<tr>
-			<th>Name</th>
-			<th>Plz</th>
-			<th>Ort</th>
-			<th>Telefon</th>
-			<th>E-Mail</th>
-			<th>Firma</th>
+			<th>.:name:.</th>
+			<th>.:zipcode:.</th>
+			<th>.:city:.</th>
+			<th>.:phone:.</th>
+			<th>.:email:.</th>
+			<th>.:company:.</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -82,7 +82,7 @@
 		<input type="text" class="pagedisplay"/>
 		<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
 		<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
-		<select class="pagesize" id="pagesize_pers">
+		<select class="pagesize">
 			<option value="10">10</option>
 			<option value="20" selected>20</option>
 			<option value="30">30</option>
@@ -95,5 +95,5 @@
 	<a href="sermail.php"><input type="button" name="email" value=".:sermail:."></a>
 	</form>
 </span>
-<div id="sercontent"></div>
+
     

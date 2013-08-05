@@ -83,7 +83,7 @@
 		<input type="text" class="pagedisplay"/>
 		<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
 		<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
-		<select class="pagesize" id='pagesize'>
+		<select class="pagesize">
 			<option value="10">10</option>
 			<option value="20" selected>20</option>
 			<option value="30">30</option>
@@ -98,4 +98,4 @@
 </span>
 {report}
 <!-- Hier endet die Karte ------------------------------------------->
-<div id="sercontent"></div>
+

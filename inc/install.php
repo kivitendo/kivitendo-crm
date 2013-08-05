@@ -159,7 +159,8 @@ if ( $dbok ) {
 			echo "$ok. ERP-DB gefunden<br>";
 		} else {
 			fputs($log,"Keine gueltige ERP-DB gefunden\n");
-			echo "$fehler Keine g&uuml;ltige ERP-DB gefunden (".$rs[0]["version"].")<br>";
+			echo "$fehler Keine gültige ERP-DB gefunden (".$rs[0]["version"].")</ br>";
+			echo "Diese Version arbeitet nur mit ERP-Versionen >= 3.0.1 oder der aktuellen Git-Version zusammen";
 			exit;
 		}
 	}
@@ -168,7 +169,16 @@ if ( $dbok ) {
 	fputs($log,"Abbruch\n");
 	exit(1);
 }
-if ( $check ) exit(0);
+
+if ( $check ) {
+    echo '
+      <form action="#">
+        <p>
+          <input type="button" name="Next" value="Next" onclick="window.location.href = \''.$_SERVER["HTTP_REFERER"].'\'">
+        </p>
+      </form>';
+    exit(0);
+}
 echo "Datenbank einrichten<br>";
 $f = fopen("update/installcrmi.sql","r");
 if ( !$f ) { 
@@ -216,5 +226,11 @@ if ( $fehl>0 ) {
 
 fclose($f);
 fclose($log);
+echo '
+  <form action="#">
+    <p>
+      <input type="button" name="Next" value="Next" onclick="window.location.href = \''.$_SERVER["HTTP_REFERER"].'\'">
+    </p>
+  </form>';
 ob_end_flush();
 ?>

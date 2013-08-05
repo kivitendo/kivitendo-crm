@@ -135,8 +135,8 @@ function getAllKontakt($id) {
 * out: daten = array
 *****************************************************/
 function suchPerson($muster) {
-    $pre = ($_SESSION["preon"])?"%":"";
-    $pre = ($muster["pre"])?$_SESSION["pre"]:"";
+    //$pre = ($_SESSION["preon"])?"%":""; //wiederspricht sich mit der Zeile danach
+    $pre = isset($muster["pre"])?$_SESSION["pre"]:"";
     $fuzzy=$muster["fuzzy"];
     $andor = $muster["andor"];
     $rechte=berechtigung("cp_");
@@ -154,7 +154,7 @@ function suchPerson($muster) {
         $keys=array_keys($muster);
         $anzahl=count($keys);
         $where="";
-        if ($muster["customer_name"]){
+        if ( isset( $muster["customer_name"] ) ) {
             $whereCustomer    = "K.name ilike '$pre" . $muster["customer_name"] . "$fuzzy'";  
             $whereVendor    = "V.name ilike '$pre" . $muster["customer_name"] . "$fuzzy'"; 
         } else {
@@ -208,7 +208,7 @@ function suchPerson($muster) {
         if (!$rs1) $rs1=array();
     }
     $rs2=array(); //s.o.
-    if ($muster["deleted"]){ //auf checkbox deleted mit Titel "gelöschte Ansprechpartner (Kunden und Lieferanten)" prüfen
+    if ( isset( $muster["deleted"] ) ) { //auf checkbox deleted mit Titel "gelöschte Ansprechpartner (Kunden und Lieferanten)" prüfen
                             // es gibt nicht nur gelöschte Personen, sonder auch Personen ohne Zuordnung zu Firmen, z.B. private Adressen
         $sql0="select $felderContact, C.cp_country, C.cp_zipcode, C.cp_city, C.cp_street, C.cp_phone1, 
                  '' as name,'P' as tbl from contacts C where $rechte and (".$where.") and C.cp_cv_id is null order by cp_name";
@@ -406,7 +406,7 @@ function getCpBriefAnreden() {
 }
 
 function leertplP (&$t,$fid,$msg,$tab,$suche=false,$Quelle="",$ui=false) {
-global $laender;
+//global $laender;
 //cp_greeting raus hli
         if ($fid && $Quelle) {
             $fa=getFirmenstamm($fid,false,$Quelle);
@@ -415,64 +415,66 @@ global $laender;
         if ( $ui ) $t->set_file(array("pers1" => "persons".$tab.".tpl"));
         else       $t->set_file(array("pers1" => "personen".$tab.".tpl"));
         $t->set_var(array(
-            ERPCSS          => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-            Fld             => "cp_title",
-            JS              => "goFld();",
-            color           => "white",
-            BgC             => 0,
-            Btn1            => "",
-            Btn3            => "",
-            Msg             => $msg,
-            action          => "personen".$tab.".php",
-            PID             => "",
-            preon           => ($_SESSION["preon"])?"checked":"",
-            cp_salutation_  => "",
-            cp_title        => "",
-            cp_givenname    => "",
-            cp_name         => "",
-            cp_gender       => ($suche)?"":"selected",
-            cp_genderm      => ($suche)?"selected":"",
-            cp_street       => "",
-            cp_country      => "",
-            cp_zipcode      => "",
-            cp_city         => "",
-            cp_phone1       => "",
-            cp_phone2       => "",
-            cp_fax          => "",
-            cp_privatphone  => "",
-            cp_mobile1      => "",
-            cp_mobile2      => "",
-            cp_email        => "",
-            cp_privatemail  => "",
-            cp_homepage     => "",
-            cp_birthday     => "",
-            cp_beziehung    => "",
-            cp_abteilung    => "",
-            cp_position     => "",
-            Firma           => $fa["name"],
-            FID             => ($suche)?$fid:"",
-            FID1            => $fid,
-            cp_stichwort1   => "",
-            cp_notes        => "",
-            nummer          => $nummer,
-            Quelle          => $Quelle,
-            IMG             => "",
-            IMG_            => "",
-            employee        => $_SESSION["loginCRM"],
-            init            => $_SESSION["login"]
+            'ERPCSS'          => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+            'Fld'             => "cp_title",
+            'JS'              => "goFld();",
+            'color'           => "white",
+            'BgC'             => 0,
+            'Btn1'            => "",
+            'Btn3'            => "",
+            'Msg'             => $msg,
+            'action'          => "personen".$tab.".php",
+            'PID'             => "",
+            'preon'           => ($_SESSION["preon"])?"checked":"",
+            'cp_salutation_'  => "",
+            'cp_title'        => "",
+            'cp_givenname'    => "",
+            'cp_name'         => "",
+            'cp_gender'       => ($suche)?"":"selected",
+            'cp_genderm'      => ($suche)?"selected":"",
+            'cp_street'       => "",
+            'cp_country'      => "",
+            'cp_zipcode'      => "",
+            'cp_city'         => "",
+            'cp_phone1'       => "",
+            'cp_phone2'       => "",
+            'cp_fax'          => "",
+            'cp_privatphone'  => "",
+            'cp_mobile1'      => "",
+            'cp_mobile2'      => "",
+            'cp_email'        => "",
+            'cp_privatemail'  => "",
+            'cp_homepage'     => "",
+            'cp_birthday'     => "",
+            'cp_beziehung'    => "",
+            'cp_abteilung'    => "",
+            'cp_position'     => "",
+            'Firma'           => isset( $fa ) ? $fa["name"] : '',
+            'FID'             => ($suche)?$fid:"",
+            'FID1'            => $fid,
+            'cp_stichwort1'   => "",
+            'cp_notes'        => "",
+            'nummer'          => isset( $nummer ) ? $nummer : '',
+            'Quelle'          => $Quelle,
+            'IMG'             => "",
+            'IMG_'            => "",
+            'employee'        => $_SESSION["loginCRM"],
+            'init'            => $_SESSION["login"]
         ));
-        $first[]=array("grpid"=>"","rechte"=>"w","grpname"=>".:public:.");
-        $first[]=array("grpid"=>$daten["cp_employee"],"rechte"=>"w","grpname"=>".:personal:.");
-        $grp=getGruppen();
-        if ($grp) {    $user=array_merge($first,$grp); }
-        else { $user=$first; };
-            doBlock($t,"pers1","OwenerListe","OL",$user,"grpid","grpname","1");
-        $anreden=getCpBriefAnreden();
-            doBlock($t,"pers1","briefanred","BA",$anreden,"cp_salutation","cp_salutation",$daten["cp_salutation"]); 
+        //$first[]=array("grpid"=>"","rechte"=>"w","grpname"=>".:public:.");
+        //$first[]=array("grpid"=>$daten["cp_employee"],"rechte"=>"w","grpname"=>".:personal:.");
+        //$grp=getGruppen();
+        //if ($grp) {    $user=array_merge($first,$grp); }
+        //else { $user=$first; };
+        //doBlock($t,"pers1","OwenerListe","OL",$user,"grpid","grpname","1");
+        //$anreden=getCpBriefAnreden();
+        //doBlock($t,"pers1","briefanred","BA",$anreden,"cp_salutation","cp_salutation"); 
+        
+        /*** Wird doch im leerem Template gar nicht verwendet... ***/
 }
 
 function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab,$ui=false) {
-    global $laender;
+    //global $laender;
 //cp_greeting raus hli
         if ($daten["cp_cv_id"] && $daten["Quelle"]) {
             $fa=getFirmenstamm($daten["cp_cv_id"],false,$daten["Quelle"]);
@@ -499,53 +501,53 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab,$ui=fa
         if ( $ui ) $t->set_file(array("pers1" => "persons1Result.tpl"));
         else       $t->set_file(array("pers1" => "personen".$tab.".tpl"));
         $t->set_var(array(
-            ERPCSS          => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-            Fld             => $fld,
-            JS              => "goFld();",
-            color           => $bgcol,
-            BgC             =>  $fid,
-            Btn1            => $btn1,
-            Btn3            => $btn3,
-            Msg             => $msg,
-            preon           => ($daten["pre"])?"checked":"",
-            action          => "personen".$tab.".php",
-            mtime           => $daten["mtime"],
-            PID             => $daten["cp_id"],
-            tabelle         => $daten["tabelle"],
-            nummer          => $nummer,
-            cp_title        => $daten["cp_title"],
-            cp_givenname    => $daten["cp_givenname"],
-            cp_name         => $daten["cp_name"],
-            cp_gender.$daten["cp_gender"] => "selected",
-            cp_salutation_  => $daten["cp_salutation_"],
-            cp_street       => $daten["cp_street"],
-            cp_country      => $daten["cp_country"],
-            cp_zipcode      => $daten["cp_zipcode"],
-            cp_city         => $daten["cp_city"],
-            cp_phone1       => $daten["cp_phone1"],
-            cp_phone2       => $daten["cp_phone2"],
-            cp_privatphone  => $daten["cp_privatphone"],
-            cp_mobile1      => $daten["cp_mobile1"],
-            cp_mobile2      => $daten["cp_mobile2"],
-            cp_fax          => $daten["cp_fax"],
-            cp_email        => $daten["cp_email"],
-            cp_privatemail  => $daten["cp_privatemail"],
-            cp_homepage     => $daten["cp_homepage"],
-            cp_birthday     => ($daten["cp_birthday"])?db2date($daten["cp_birthday"]):"",
-            cp_beziehung    => $daten["cp_beziehung"],
-            cp_abteilung    => $daten["cp_abteilung"],
-            cp_position     => $daten["cp_position"],
-            Firma           => $daten["Firma"],
-            FID             => $daten["cp_cv_id"],
-            FID1            => $fid,
-            cp_stichwort1   => $daten["cp_stichwort1"],
-            cp_notes        => $daten["cp_notes"],
-            Quelle          => $daten["Quelle"],
-            IMG             => $Image,
-            IMG_            => $daten["cp_grafik"],
-            visitenkarte    => $VCARD,
-            init            => ($daten["cp_employee"])?$daten["cp_employee"]:"ERP",
-            employee        => $_SESSION["loginCRM"]
+            'ERPCSS'          => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+            'Fld'             => $fld,
+            'JS'              => "goFld();",
+            'color'           => $bgcol,
+            'BgC'             =>  $fid,
+            'Btn1'            => $btn1,
+            'Btn3'            => $btn3,
+            'Msg'             => $msg,
+            'preon'           => ($daten["pre"])?"checked":"",
+            'action'          => "personen".$tab.".php",
+            'mtime'           => $daten["mtime"],
+            'PID'             => $daten["cp_id"],
+            'tabelle'         => $daten["tabelle"],
+            'nummer'          => $nummer,
+            'cp_title'        => $daten["cp_title"],
+            'cp_givenname'    => $daten["cp_givenname"],
+            'cp_name'         => $daten["cp_name"],
+            'cp_gender'.$daten["cp_gender"] => "selected",
+            'cp_salutation_'  => $daten["cp_salutation_"],
+            'cp_street'       => $daten["cp_street"],
+            'cp_country'      => $daten["cp_country"],
+            'cp_zipcode'      => $daten["cp_zipcode"],
+            'cp_city'         => $daten["cp_city"],
+            'cp_phone1'       => $daten["cp_phone1"],
+            'cp_phone2'       => $daten["cp_phone2"],
+            'cp_privatphone'  => $daten["cp_privatphone"],
+            'cp_mobile1'      => $daten["cp_mobile1"],
+            'cp_mobile2'      => $daten["cp_mobile2"],
+            'cp_fax'          => $daten["cp_fax"],
+            'cp_email'        => $daten["cp_email"],
+            'cp_privatemail'  => $daten["cp_privatemail"],
+            'cp_homepage'     => $daten["cp_homepage"],
+            'cp_birthday'     => ($daten["cp_birthday"])?db2date($daten["cp_birthday"]):"",
+            'cp_beziehung'    => $daten["cp_beziehung"],
+            'cp_abteilung'    => $daten["cp_abteilung"],
+            'cp_position'     => $daten["cp_position"],
+            'Firma'           => $daten["Firma"],
+            'FID'             => $daten["cp_cv_id"],
+            'FID1'            => $fid,
+            'cp_stichwort1'   => $daten["cp_stichwort1"],
+            'cp_notes'        => $daten["cp_notes"],
+            'Quelle'          => $daten["Quelle"],
+            'IMG'             => $Image,
+            'IMG_'            => $daten["cp_grafik"],
+            'visitenkarte'    => $VCARD,
+            'init'            => ($daten["cp_employee"])?$daten["cp_employee"]:"ERP",
+            'employee'        => $_SESSION["loginCRM"]
         ));
         if ($daten["cp_employee"]==$_SESSION["loginCRM"]) {
             $first[]=array("grpid"=>"","rechte"=>"w","grpname"=>".:public:.");

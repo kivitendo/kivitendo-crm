@@ -5,7 +5,7 @@
 **********************************************************************/  
 require_once("inc/stdLib.php");
 
-$dir_abs = $_SESSION['crmdir']."/dokumente/$_SESSION[dbname]";
+$dir_abs = $_SESSION['crmpath']."/dokumente/$_SESSION[dbname]";
 $link_dir_cust = $_SESSION['sep_cust_vendor'] ? "/link_dir_cust" : "/link_dir";
 $link_dir_vend = $_SESSION['sep_cust_vendor'] ? "/link_dir_vend" : "/link_dir";
 
@@ -16,12 +16,14 @@ if (!is_dir($dir_abs)) {
 }
 chmod($dir_abs,$_SESSION['dir_mode']);
 
+
 //Verzeichnis für Links:
 if (!is_dir($dir_abs.$link_dir_cust)) {
     mkdir($dir_abs.$link_dir_cust);
     if ( $_SESSION['dir_group'] ) chgrp($dir_abs.$link_dir_cust, $_SESSION['dir_group']);
 }
 chmod($dir_abs.$link_dir_cust, $_SESSION['dir_mode']);
+
 
 if (!is_dir($dir_abs.$link_dir_vend)) {
     mkdir($dir_abs.$link_dir_vend);
@@ -68,6 +70,7 @@ if ($_GET['all']) {
     		if ( $_SESSION['dir_group'] ) chgrp($dir_abs."/C".$rs[$key]['customernumber'],$_SESSION['dir_group']);
     		echo "Erzeuge Symlink: ".$dir_abs.$link_dir_cust."/".mkDirName($rs[$key]['name'])."_C".$rs[$key]['customernumber']."</br>";
     	 	symlink($dir_abs."/C".$rs[$key]['customernumber'], $dir_abs.$link_dir_cust."/".mkDirName($rs[$key]['name'])."_C".$rs[$key]['customernumber']);
+    	   //lchgrp( $dir_abs.$link_dir_cust."/".mkDirName($rs[$key]['name'])."_C".$rs[$key]['customernumber'], $_SESSION['dir_group']);  //funktioniert nicht.. warum???
 		}
     }
     $sql = "SELECT  name, vendornumber FROM vendor ORDER BY vendornumber"; //::INT ";
@@ -85,6 +88,12 @@ if ($_GET['all']) {
 		}
     }
 	echo "...done"; 
+    echo '
+      <form action="#">
+        <p>
+          <input type="button" name="Next" value="Next" onclick="window.location.href = \''.$_SERVER["HTTP_REFERER"].'\'">
+       </p>
+     </form>';
 }
        
 ?>

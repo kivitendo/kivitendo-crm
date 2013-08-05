@@ -7,13 +7,13 @@
     include("../inc/FirmenLib.php");
     $t = new Template($base);
     doHeader($t);   
-    $Quelle=($_POST["Quelle"])?$_POST["Quelle"]:$_GET["Quelle"];
+    $Quelle=(isset($_POST["Quelle"]))?$_POST["Quelle"]:'';
     if (!$Quelle) $Quelle="C";
-    if ($_POST["first"]) {
+    if (isset($_POST["first"])) {
         $_POST["cp_name"] = $_POST["first"];
         $_POST["fuzzy"]="%";
     }
-    if ($_POST["suche"]=="suchen" || isset($_POST["first"])) {
+    if (isset($_POST["suche"]) || isset($_POST["first"])) {
         $daten=suchPerson($_POST);
         //print_r( $daten );
         if ( count($daten) > $_SESSION['listLimit'] ) {
@@ -24,10 +24,10 @@
             $t->set_file(array("pers1" => "persons1Result.tpl"));
             $t->set_block("pers1","Liste","Block");
             $i=0;
-            if ($_POST["FID1"]) { 
+            if ( isset( $_POST["FID1"] ) ) { 
                 $snd="<input type='submit' name='insk' value='.:allocate:.'><br>[<a href='firma2.php?Q=$Quelle&fid=".$_POST["FID1"]."'>.:back:.</a>]";  
             } else { 
-                $snd=""; $dest=""; 
+                $snd=""; //$dest=""; 
             };
             clearCSVData();
             $header = array("ANREDE","TITEL","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","FIRMA","FaID","GESCHLECHT","ID");
@@ -71,14 +71,14 @@
                     $rs = getFirmaCVars($zeile["cp_cv_id"]);
                     if ($rs) {
                         foreach($cvheader as $cvh) {
-                            $save[] = $rs[$cvh];
+                            $save[] = ( isset($rs[$cvh]) ) ? $rs[$cvh] : false;
                         }
                     } else {
                         for ($i=0; $i<$cvar; $i++) $save[] = false;
                     }
                 }
                 insertCSVData($save,$zeile["cp_id"]);
-                if ($_POST["FID1"]) {
+                if ( isset( $_POST["FID1"] ) ) {
                     $insk="<input type='checkbox' name='kontid[]' value='".$zeile["cp_id"]."'>"; 
                     $js="";
                 } else { 
@@ -87,18 +87,18 @@
                 };
                 if ($i<$_SESSION['listLimit']) {
                     $t->set_var(array(
-                        js => $js,
-                        LineCol => ($i%2+1),
-                        Name => $zeile["cp_name"].", ".$zeile["cp_givenname"],
-                        Plz => $zeile["cp_zipcode"],
-                        Ort => $zeile["cp_city"],
-                        Telefon => $zeile["cp_phone1"],
-                        eMail => $zeile["cp_email"],
-                        Firma => $zeile["name"],
-                        insk => $insk,
-                        DEST => $dest,
-                        QUELLE => $Quelle,
-                        Q => $Quelle,
+                        'js'        => $js,
+                        'LineCol'   => ($i%2+1),
+                        'Name'      => $zeile["cp_name"].", ".$zeile["cp_givenname"],
+                        'Plz'       => $zeile["cp_zipcode"],
+                        'Ort'       => $zeile["cp_city"],
+                        'Telefon'   => $zeile["cp_phone1"],
+                        'eMail'     => $zeile["cp_email"],
+                        'Firma'     => $zeile["name"],
+                        'insk'      => $insk,
+                        //'DEST'      => $dest,
+                        'QUELLE'    => $Quelle, //zwei mal??
+                        'Q'         => $Quelle,
                     ));
                     $t->parse("Block","Liste",true);
                     $i++;
@@ -108,20 +108,20 @@
                         ));
                     }
                     $t->set_var(array(
-                        ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+                        'ERPCSS' => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
                     ));
 
                 }
             }
             $t->set_var(array(
-                snd => $snd,
-                FID => $_POST["FID1"]
+                'snd' => $snd,
+                'FID' => isset($_POST["FID1"]) ? $_POST["FID1"] : '',
             ));
         } else {
             ;//nichts gefunden
         }
     } else {
-        leertplP($t,$_GET["fid"],"",1,false,$Quelle,true);
+        leertplP($t,"","",1,false,$Quelle,true);
     }
     $t->Lpparse("out",array("pers1"),$_SESSION["lang"],"firma");
 ?>

@@ -4,7 +4,7 @@ ini_set('session.bug_compat_42', 0);  // Das ist natürlich lediglich eine Provi
 //Warning: Unknown: Your script possibly relies on a session side-effect which existed until PHP 4.2.3. ....
 session_set_cookie_params(1800); // 30 minuten.
 session_start();
-
+//print_r( $_SESSION );
 $inclpa = ini_get('include_path');
 ini_set('include_path',$inclpa.":../:./inc:../inc");
 

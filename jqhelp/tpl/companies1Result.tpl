@@ -1,4 +1,4 @@
-    <script language="JavaScript">
+<script language="JavaScript">
 	function showK (id) {
 		if (id) {
 			uri="firma1.php?Q={Q}&id=" + id;
@@ -48,15 +48,15 @@
             $( "#sercontent" ).load("sermail.php?src=F");
         });
         $( "input[type=button]" ).button();
-        $("#treffer{Q}")
+        $("#treffer_{Q}")
             .tablesorter({widthFixed: true, widgets: ["zebra"]})
-            .tablesorterPager({container: $("#pager{Q}"), size: 20, positionFixed: false});
+            .tablesorterPager({container: $("#pager_{Q}"), size: 20, positionFixed: false});
     });
 </script>
 
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:search result:. .:{FAART}:.</p>
 
-<table id="treffer{Q}" class="tablesorter">  
+<table id="treffer_{Q}" class="tablesorter">  
     <thead>
 		<tr>
 			<th>Kd-Nr</th>
@@ -76,7 +76,7 @@
 <!-- END Liste -->
 	</tbody>
 </table>
-<span id="pager{Q}" class="pager">
+<span id="pager_{Q}" class="pager">
 	<form>
 		<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first"/>
 		<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev"/>

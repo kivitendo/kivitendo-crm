@@ -227,6 +227,7 @@ function suchPerson($muster) {
 function savePersonStamm($daten,$datei) {
     $tmp=0;
     $pid=$daten["PID"];
+    $bildok=false;
     // Array zu jedem Formularfed: Tabelle (0=contact,1=cust/vend),  require(0=nein,1=ja), Regel
     // cp_greeting ist raus hli
     $dbfld=array("cp_name" => array(0,1,1,"Name",75),           "cp_givenname" => array(0,1,1,"Vorname",75),        
@@ -258,18 +259,19 @@ function savePersonStamm($daten,$datei) {
     if ($daten["cp_salutation_"]) $daten["cp_salutation"]=$daten["cp_salutation_"];
     $keys=array_keys($daten);
     $dbf=array_keys($dbfld);
-    $fid=$daten["fid"];
+    //$fid=$daten["fid"];
     $anzahl=count($keys);
     $fehler=-1;
     $tels=array();
+    $query0=''; 
     for ($i=0; $i<$anzahl; $i++) {
         if (in_array($keys[$i],$dbf)) {
             $tmpval=trim($daten[$keys[$i]]);
             if ($dbfld[$keys[$i]][0]==1) { // Daten nicht für contacts
                 continue;
             } else {
-                if (!chkFld($tmpval,$fld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) {  
-                            $fehler=$fld[$keys[$i]][3]; $fehler.="::".$keys[$i]; 
+                if (!chkFld($tmpval,$dbfld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) {  
+                            $fehler=$dbfld[$keys[$i]][3]; $fehler.="::".$keys[$i]; 
                             $i=$anzahl+1;
                 }
                 if ($keys[$i]=="cp_phone1"||$keys[$i]=="cp_phone2"||$keys[$i]=="cp_fax") $tels[]=$tmpval;
@@ -480,7 +482,6 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab,$ui=fa
             $fa=getFirmenstamm($daten["cp_cv_id"],false,$daten["Quelle"]);
             $nummer=($daten["Quelle"]=="C")?$fa["customernumber"]:$fa["vendornumber"];
         }
-        //print_r($daten); 
         if (trim($daten["cp_grafik"])<>"") {
             if ($nummer) {
                 $root="dokumente/".$_SESSION["dbname"]."/".$daten["Quelle"].$nummer."/".$daten["cp_id"];
@@ -509,17 +510,17 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab,$ui=fa
             'Btn1'            => $btn1,
             'Btn3'            => $btn3,
             'Msg'             => $msg,
-            'preon'           => ($daten["pre"])?"checked":"",
+            'preon'           => (isset($daten["pre"]))?"checked":"",
             'action'          => "personen".$tab.".php",
             'mtime'           => $daten["mtime"],
             'PID'             => $daten["cp_id"],
             'tabelle'         => $daten["tabelle"],
-            'nummer'          => $nummer,
+            'nummer'          => isset( $nummer ) ? $nummer : '',
             'cp_title'        => $daten["cp_title"],
             'cp_givenname'    => $daten["cp_givenname"],
             'cp_name'         => $daten["cp_name"],
             'cp_gender'.$daten["cp_gender"] => "selected",
-            'cp_salutation_'  => $daten["cp_salutation_"],
+            'cp_salutation_'  => isset($daten["cp_salutation_"])?$daten["cp_salutation_"]:'',
             'cp_street'       => $daten["cp_street"],
             'cp_country'      => $daten["cp_country"],
             'cp_zipcode'      => $daten["cp_zipcode"],
@@ -543,9 +544,9 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab,$ui=fa
             'cp_stichwort1'   => $daten["cp_stichwort1"],
             'cp_notes'        => $daten["cp_notes"],
             'Quelle'          => $daten["Quelle"],
-            'IMG'             => $Image,
+            'IMG'             => isset($Image)?$Image:'',
             'IMG_'            => $daten["cp_grafik"],
-            'visitenkarte'    => $VCARD,
+            'visitenkarte'    => isset($VCARD)?$VCARD:'',
             'init'            => ($daten["cp_employee"])?$daten["cp_employee"]:"ERP",
             'employee'        => $_SESSION["loginCRM"]
         ));

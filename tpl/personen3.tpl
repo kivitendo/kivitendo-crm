@@ -1,13 +1,11 @@
 <html>
 <head><title></title>
-    {STYLESHEETS}
-    <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-    <link rel="stylesheet" type="text/css" href="{JQUERY}/jquery-ui/themes/base/jquery-ui.css">
-    {THEME}
-    <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
-    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/jquery-ui.js"></script>
-    <script type="text/javascript" src="{JQUERY}jquery-ui/ui/i18n/jquery.ui.datepicker-de.js"></script>
-    {JAVASCRIPTS}
+{STYLESHEETS}
+{CRMCSS}
+{JQUERY}
+{JQUERYUI}
+{THEME}
+{JAVASCRIPTS}
 
     <script language="JavaScript">
     <!--
@@ -41,7 +39,7 @@
 <body onLoad="goFld();">
 {PRE_CONTENT}
 {START_CONTENT}
-<p class="listtop">.:personen:. .:keyin:./.:edit:.</p>
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:personen:. .:keyin:./.:edit:.</p>
 
 <!-- Beginn Code ------------------------------------------->
 <div id="maintab">

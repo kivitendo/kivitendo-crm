@@ -185,6 +185,12 @@
                   F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
               } else if ( name == 'reload' ) {
                   showCall();
+              } else if ( name == 'Link1' ) {
+                  document.location.href = '{Link1}';
+              } else if ( name == 'Link2' ) {
+                  document.location.href = '{Link2}';
+              } else if ( name == 'Link3' ) {
+ 					   document.location.href = '{Link3}'; 
               } else {
                   var pid = $('#liste option:selected').val();
                   document.location.href = name + pid; 
@@ -204,9 +210,9 @@
 <p class="listtop" >.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}</span></p>
 <div id="menubox1">
     <span style="float:left;" class="top1">
-    <button name="{Link1}">.:Custombase:.</button>
-    <button name="{Link2}">.:Contacts:.</button>
-    <button name="{Link3}">.:Sales:.</button>
+    <button name="Link1">.:Custombase:.</button>
+    <button name="Link2">.:Contacts:.</button>
+    <button name="Link3">.:Sales:.</button>
     <button name="firma4.php?Q={Q}&fid={FID}&pid=">.:Documents:.</button>
     <select style="visibility:{chelp}" id='kdhelp' name="kdhelp" onChange="KdHelp()">
 <!-- BEGIN kdhelp -->

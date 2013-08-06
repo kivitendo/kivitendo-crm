@@ -78,7 +78,8 @@
                     }
                 }
                 insertCSVData($save,$zeile["cp_id"]);
-                if ( isset( $_POST["FID1"] ) ) {
+               
+                if ( isset( $_POST["FID1"] ) && $_POST["FID1"] ) {
                     $insk="<input type='checkbox' name='kontid[]' value='".$zeile["cp_id"]."'>"; 
                     $js="";
                 } else { 

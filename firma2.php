@@ -45,6 +45,7 @@
             $fid      = $co['cp_cv_id'];
             $fa['id'] = 0;
             $ep       = '';
+            $Q        = $co['tabelle'];
         }
     } 
     if ( $fid>0 ){ 

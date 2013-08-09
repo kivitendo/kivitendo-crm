@@ -13,43 +13,11 @@ if ( isset( $_POST["ok"] ) && $_POST["ok"] and $_POST["termseq"] < 61 ) {
     }
     $rc = saveUserStamm( $_POST );
     //$id=$_POST["UID"];
-    $no = array(
-        'save',
-        'uid',
-        'login',
-        'ok',
-    );
-    $chkbox = array(
-        'tinymce',
-        'preon',
-        'feature_ac',
-        'angebot_button',
-        'auftrag_button',
-        'rechnung_button',
-        'liefer_button',
-        'zeige_extra',
-        'zeige_lxcars',
-        'zeige_etikett',
-        'zeige_tools',
-        'zeige_bearbeiter',
-        'zeige_dhl',
-        'sql_error',
-        'php_error',
-    );
-    while ( list( $key, $val ) = each( $_POST ) ) {
-        if ( !in_array( $key, $no ) ) 
-            if ( in_array( $key, $chkbox ) ) {
-                $_SESSION[$key] = ( $val == 't' ) ? 't' : 'f';
-        }
-        else {
-            $_SESSION[$key] = $val;
-        }
-    }
-    $_SESSION['theme'] = ( $_POST['theme'] != 'base' ) ? $_POST['theme'] : '';
+
 }
-elseif ( isset( $_POST["mkmbx"] ) ) {
-    $rc = createMailBox( $_POST["Postf2"], $_POST["Login"] );
-}
+//if ( isset( $_POST["mkmbx"] ) ) {
+//    $rc = createMailBox( $_POST["Postf2"], $_POST["Login"] );
+//}
 $t = new Template( $base );
 doHeader( $t );
 if ( isset( $_GET["id"] ) && $_GET["id"] && $_GET["id"] <> $_SESSION["loginCRM"] ) {

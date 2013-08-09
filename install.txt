@@ -37,7 +37,7 @@ Vorrausetzungen:
     php5-curl 
 
 Fast alle Pakete können unter debianoiden Systemen in der Konsole mit folgendem Behfehl installiert werden.
-apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-mdb2 php5-mdb2-pgsql php-fpdf imagemagick ttf-freefont php5-curl tinymce libphp-jpgraph
+apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-mdb2 php-mdb2-driver-pgsql php-fpdf imagemagick ttf-freefont php5-curl tinymce libphp-jpgraph
 
 Die restlichen Pearpaket installieren:
     pear install  Contact_Vcard_Build Contact_Vcard_Parse

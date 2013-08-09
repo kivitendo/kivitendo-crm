@@ -49,6 +49,9 @@ if ( isset( $_POST["ok"] ) && $_POST["ok"] and $_POST["termseq"] < 61 ) {
 } elseif ( isset( $_POST["mkmbx"] ) ) {
     $rc = createMailBox( $_POST["Postf2"], $_POST["Login"] );
 }
+//if ( isset( $_POST["mkmbx"] ) ) {
+//    $rc = createMailBox( $_POST["Postf2"], $_POST["Login"] );
+//}
 $t = new Template( $base );
 doHeader( $t );
 

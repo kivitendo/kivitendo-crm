@@ -79,6 +79,13 @@
         document.user.port.value=document.user.selport.options[po].value;
     }
     $(document).ready(function(){
+        $("#dialog_saved, #noThemeFile, #cantEditBase" ).dialog({ 
+            autoOpen: false,
+            modal: true,
+            width: 400,
+            position: [200,400]
+        });          
+
         $( "#mailwin" ).dialog({
             autoOpen: false,
             show: {
@@ -101,21 +108,44 @@
                 url:  "jqhelp/getThemeUrl.php",
                 data: {theme: theme},
                 success: function(result){ 
-                    if( result == "noThemeFile" ) alert("Kein Themefile gefunden! ")
-                    else if( result == "base" ) alert("Base kann nicht bearbeitet werden!")                    
+                    if( result == "noThemeFile" ) $("#noThemeFile").dialog( "open" );
+                    else if( result == "base" ) $("#cantEditBase").dialog( "open" );                
                     else window.open(result);
                 }   
             })
+            return false; 
         });
         $( "input[type='submit']" ).button();
+        $( "#save" ).button().click(function() {
+            $.ajax({
+                type: "POST",
+                url: "jqhelp/saveUserData.php",
+                data: $("#userform").serialize() ,
+                success: function(res) {
+                    $("#dialog_saved").dialog( "open" );
+                    setTimeout("$('#dialog_saved').dialog('close')",2000);
+                }
+            });
+            //$( "#angebot_button" ).focus(); //dass der Save-Button nicht gedrückt (klein) bleibt, ToDo: verbessern...
+            return false;
+        });
     });
 </script>
 <script type='text/javascript' src='inc/help.js'></script>   
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
+<div id="dialog_saved" title="Benutzer Stammdaten CRM">
+    <p>Benutzereinstellungen wurden gesichert.</p>
+</div>
+<div id="noThemeFile" title="Theme wechseln">
+    <p>Kein Themefile gefunden.</p>
+</div>
+ <div id="cantEditBase" title="Theme bearbeiten">
+    <p>Base kann nicht bearbeitet werde!</p>
+</div>   
 <p class="listtop" onClick="help('User');">Benutzer Stammdaten (?)</p>
-<form name="user" action="user1.php" method="post" onSubmit="return getical();">
+<form name="user" id="userform"  action="user1.php" method="post" onSubmit="return getical();">
 <div id="user">
 <input type="reset" name="mails" value="Mails zeigen" onClick="Mailonoff(false)"> {login} : {uid}
 
@@ -234,7 +264,7 @@
              &nbsp;&nbsp; Verzögerung: <input type="text" name="feature_ac_delay" size="3" value='{feature_ac_delay}'>ms</td>
    </tr>
    <tr><td class="norm">Firma Buttons</td><td colspan="4">
-             <input type="checkbox" name="angebot_button"  value='t' {angebot_button}>Angebot&nbsp;&nbsp; <input type="checkbox" name="auftrag_button"  value='t' {auftrag_button}>Auftrag&nbsp;&nbsp;  
+             <input type="checkbox" name="angebot_button" id="angebot_button"  value='t' {angebot_button}>Angebot&nbsp;&nbsp; <input type="checkbox" name="auftrag_button"  value='t' {auftrag_button}>Auftrag&nbsp;&nbsp;  
              <input type="checkbox" name="rechnung_button" value='t' {rechnung_button}>Rechnung&nbsp;&nbsp; <input type="checkbox" name="liefer_button" value='t' {liefer_button}>Lieferschein&nbsp;&nbsp;
              <input type="checkbox" name="zeige_extra" value='t' {zeige_extra}>Extra&nbsp;&nbsp;<input type="checkbox" name="zeige_karte" value='t' {zeige_karte}>Karte&nbsp;&nbsp;
              <input type="checkbox" name="zeige_bearbeiter" value='t' {zeige_bearbeiter}>Bearbeiter&nbsp;&nbsp;<input type="checkbox" name="zeige_etikett" value='t' {zeige_etikett}>Etikett&nbsp;&nbsp;
@@ -247,9 +277,10 @@
   <tr><td class="norm">Fehler anzeigen</td><td colspan="4">
             <input type="checkbox" name="sql_error"  value='t' {sql_error}>SQL-Fehler&nbsp;&nbsp; <input type="checkbox" name="php_error"  value='t' {php_error}>Php-Fehler &nbsp;&nbsp;
    </tr>
-       <tr><td>&nbsp;</td><td><input type="submit" name="ok" value="sichern"></td></tr>
+       <tr><td>&nbsp;</td><td><button id="save">sichern</button></td></tr>
 
     </form>
+    
 </table>
 Kalenderexport: 
 <form name="termedit" method="post" action="mkics.php" onSubmit="return false;">

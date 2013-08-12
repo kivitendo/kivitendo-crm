@@ -18,19 +18,7 @@
             f1=open("report.php?tab={Q}","Report","width=600; height=300; left=100; top=100");
             return false;
   	    });
-  	    $( "#sercontent_{Q}" ).dialog({
-            autoOpen: false,
-            show: {
-                effect: "blind",
-                duration: 300
-            },
-            hide: {
-                effect: "explode",
-                duration: 300
-            },
-            //position: { my: "center top", at: "center", of: null } 
-        });
-        $( ".fett_{Q}" ).click(function() {
+  	    $( ".fett_{Q}" ).click(function() {
             if ( $(this).html() == '#' ) first = '~';
             else first = $(this).html(); 
             $.ajax({

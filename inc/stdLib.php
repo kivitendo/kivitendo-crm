@@ -93,7 +93,7 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     $db   = new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
     //Hat sich ein User angemeldet
     $sql  = "select sc.session_id,u.id,u.login from auth.session_content sc left join auth.\"user\" u on ";
-    $sql .= "(E'--- ' || u.login || '\\n')=sc.sess_value left join auth.session s on s.id=sc.session_id ";
+    $sql .= "(E'--- ' || u.login || chr(10) )=sc.sess_value left join auth.session s on s.id=sc.session_id ";
     $sql .= "where session_id = '$cookie' and sc.sess_key='login'";
     $rs   = $db->getAll($sql);
     if ( count($rs) != 1 ) { // Garnicht mit ERP angemeldet oder zu viele Sessions, sollte die ERP drauf achten

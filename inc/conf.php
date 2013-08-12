@@ -1,5 +1,5 @@
 <?php
-$ERPNAME="kivitendo-erp.130625";
+$ERPNAME="kivitendo-erp";
 $ERP_BASE_URL="";
 $erpConfigFile="kivitendo";
 ?>

@@ -482,7 +482,7 @@ ALTER TABLE contacts ADD COLUMN cp_country character varying(3);
 ALTER TABLE contacts ADD COLUMN cp_salutation text;
 ALTER TABLE defaults ADD COLUMN contnumber text;
 
-INSERT INTO crm (uid,datum,version) VALUES (0,now(),'1.6.0');
+INSERT INTO crm (uid,datum,version) VALUES (0,now(),'1.9.0');
 
 CREATE INDEX td_termin_key ON termdate USING btree (termid);
 CREATE INDEX td_jahr_key ON termdate USING btree (jahr);

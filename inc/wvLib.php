@@ -202,7 +202,11 @@ function updateVertrag($data) {
 	}
 }
 function insHistory($mid,$art,$beschreibung,$bezug) {
-	$sql="insert into history (mid,art,beschreibung,bezug) values ($mid,'$art','$beschreibung',$bezug)";
+        if ( $bezug ) {
+	    $sql="insert into history (mid,art,beschreibung,bezug) values ($mid,'$art','$beschreibung',$bezug)";
+        } else {
+	    $sql="insert into history (mid,art,beschreibung,bezug) values ($mid,'$art','$beschreibung',null)";
+        }
 	$rc=$_SESSION['db']->query($sql);
 	return $rc;
 }

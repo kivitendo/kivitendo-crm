@@ -31,7 +31,6 @@ Vorrausetzungen:
 		
 	jpgraph3
 	fpdf (http://www.fpdf.de/downloads/)
-	fpdi (http://www.setasign.de/products/pdf-php-solutions/fpdi/downloads/)
 	ttf-freefont
 	php-gd,php-imap
     php5-curl 
@@ -45,10 +44,6 @@ Die restlichen Pearpaket installieren:
 Installierte Pearpakete anzeigen:
     pear list
   
-FPDI installieren:
-    mkdir /usr/share/php/fpdi && cd /usr/share/php/fpdi
-    wget http://www.setasign.de/supra/kon2_dl/55450/FPDI-1.4.3.zip && unzip FPDI-1.4.3.zip
-    ln -s /usr/share/php/fpdi/fpdi.php /usr/share/php/fpdi.php
     
 Die Pfade können entweder in der php.ini oder durch umbenennen der htaccess.txt in .htaccess angepasst werden.
     mv htaccess.txt .htaccess

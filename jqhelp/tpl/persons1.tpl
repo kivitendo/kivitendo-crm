@@ -1,6 +1,6 @@
 <script language="JavaScript">
     $(document).ready(function() {
-        $( "input[type=button],input[type=submit]" ).button(); 
+        //$( "input[type=button],input[type=submit]" ).button(); 
         $( ".fett_pers" ).click(function() {
             if ( $(this).html() == '#' ) first = '~';
             else first = $(this).html(); 
@@ -20,7 +20,7 @@
             });
             return false;
         });           
-        $( "#suche_pers" ).click(function() {
+        $( "#suche_pers" ).button().click(function() {
             $.ajax({
                 type: "POST",
                 data: $("#formular_pers").serialize() + '&suche=suchen', 
@@ -37,8 +37,7 @@
             });
             return false;
         });
-        $( "#reset_pers" ).click(function() {
-        //Kein leeres Template laden, da sonst die IDs doppelt vergeben werden!
+        $( "#reset_pers" ).button().click(function() {
             $( "#dialog_keine, #dialog_viele, #dialog_no_sw" ).dialog( "close" );
             $( "#formular_pers" ).find(':input').each(function() {
                 switch(this.type) {
@@ -215,8 +214,8 @@
             <span class="klein">Kunden</span><br><input type="checkbox" name="deleted">
             <span class="klein">.:deletetcontact:.</span><br>
 			{Btn1} {Btn3} 
-			<input type="submit" class="anzeige" name="suche" id="suche_pers" value="suchen"> 
-			<input type="submit" class="clear" name="reset" id="reset_pers" value="clear">
+			<button id="suche_pers" >suchen</button> 
+			<button id="reset_pers" >clear</button>
 			<a href="extrafelder.php?owner=P0"><img src="image/extra.png" alt="Extras" title="Extras" border="0" /></a>
         </div>
 		<div style="margin-left:2.5em; float:left; border: 0px solid black;">

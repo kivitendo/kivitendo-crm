@@ -1,20 +1,35 @@
 <script language="JavaScript" type="text/javascript">
-    function report() {
-        f1=open("report.php?tab={Q}","Report","width=600; height=300; left=100; top=100");
-  	}
-	function surfgeo() {
-        if ({GEODB}) {
-            fuzzy=(document.erwsuche.fuzzy.checked==true)?1:0;
-            plz=document.erwsuche.zipcode.value;
-            ort=document.erwsuche.city.value;
-            tel=document.erwsuche.phone.value;
-            F1=open("surfgeodb.php?ao=and&plz="+plz+"&ort="+ort+"&tel="+tel+"&fuzzy="+fuzzy,"GEO","width=550, height=350, left=100, top=50, scrollbars=yes");
-	   } 
-	   else alert(".:noGEOdb:.");
-    }
+
     
     $(document).ready(function() {
-        $( "input[type=button],input[type=submit]" ).button();
+        $( "#geo_{Q}" ).button().click(function() {
+            if ({GEODB}) {
+                fuzzy=(document.erwsuche.fuzzy.checked==true)?1:0;
+                plz=document.erwsuche.zipcode.value;
+                ort=document.erwsuche.city.value;
+                tel=document.erwsuche.phone.value;
+                F1=open("surfgeodb.php?ao=and&plz="+plz+"&ort="+ort+"&tel="+tel+"&fuzzy="+fuzzy,"GEO","width=550, height=350, left=100, top=50, scrollbars=yes");
+	       } 
+	       else alert(".:noGEOdb:.");
+	       return false;
+        });
+        
+        $( "#report_{Q}" ).button().click(function() {
+            f1=open("report.php?tab={Q}","Report","width=600; height=300; left=100; top=100");
+            return false;
+  	    });
+  	    $( "#sercontent_{Q}" ).dialog({
+            autoOpen: false,
+            show: {
+                effect: "blind",
+                duration: 300
+            },
+            hide: {
+                effect: "explode",
+                duration: 300
+            },
+            //position: { my: "center top", at: "center", of: null } 
+        });
         $( ".fett_{Q}" ).click(function() {
             if ( $(this).html() == '#' ) first = '~';
             else first = $(this).html(); 
@@ -34,7 +49,7 @@
             });
             return false;
         });
-        $( "#suchbutton_{Q}" ).click(function() {
+        $( "#suchbutton_{Q}" ).button().click(function() {
             $.ajax({
                 type: "POST",
                 data: $("#erwsuche_{Q}").serialize() + '&suche=suche', 
@@ -51,8 +66,7 @@
             });
             return false;
         });
-        $( "#reset_{Q}" ).click(function() {
-        //Kein leeres Template laden, da sonst die IDs doppelt vergeben werden!
+        $( "#reset_{Q}" ).button().click(function() {
             $( "#dialog_keine, #dialog_viele, #dialog_no_sw" ).dialog( "close" );
             $( "#erwsuche_{Q}" ).find(':input').each(function() {
                 switch(this.type) {
@@ -223,10 +237,10 @@
 			<input type="checkbox" name="fuzzy" id="fuzzy{Q}" value="%" checked tabindex="41">.:fuzzy search:. <input type="checkbox" name="pre" id="pre{Q}" value="1" {preon}>.:with prefix:.<br>
 			<input type="checkbox" name="employee" value="{employee}" tabindex="42">.:only by own:.<br>
 			.:obsolete:. <input type="radio" name="obsolete" value="t" >.:yes:. <input type="radio" name="obsolete" value="f" >.:no:.  <input type="radio" name="obsolete" id="obsolete{Q}" value="" checked >.:equal:.<br>
-			<input type="submit" class="anzeige" name="suchbutton" id="suchbutton_{Q}" value=".:search:." tabindex="43">&nbsp;
-			<input type="submit" class="clear" name="reset" id="reset_{Q}" value=".:clear:." tabindex="44"> &nbsp;
-			<input type="button" name="rep" value="Report" onClick="report()" tabindex="45"> &nbsp;
-			<input type="button" name="geo" value="GeoDB" onClick="surfgeo()" tabindex="46" style="visibility:{GEOS}"> &nbsp;
+			<button id="suchbutton_{Q}" tabindex="43">.:search:.</button>&nbsp;
+			<button id="reset_{Q}" tabindex="44">.:clear:.</button> &nbsp;
+			<button id="report_{Q}"  tabindex="45">Report</button> &nbsp;
+			<button id="geo_{Q}"  tabindex="46" {showGeo}>GeoDB</button> &nbsp;
             <a href="extrafelder.php?owner={Q}0"><img src="image/extra.png" alt="Extras" title="Extras" border="0" /></a>
 			<br>
 			{report}

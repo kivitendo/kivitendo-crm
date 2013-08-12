@@ -1,16 +1,3 @@
-<html>
-	<head><title></title>
-{STYLESHEETS}
-<!-- CRMCSS -->
-{CRMCSS}
-<!-- JQ -->
-{JQUERY}
-{THEME}
-<!-- Date -->
-{JQDATE}
-<!-- JS -->
-{JAVASCRIPTS}
-
 	<script language="JavaScript">
 	<!--
 		function sende() {
@@ -42,9 +29,8 @@
 		}
 	//-->
 	</script>
-<body onLoad="document.mailform.Subject.focus();">
-{PRE_CONTENT}
-{START_CONTENT}
+
+
 <!-- Beginn Code ------------------------------------------->
 <p class="listtop">Serienmail versenden <font color="red">{Msg}</font></p>
 <center>
@@ -82,6 +68,3 @@
 {SENDTXT}
 </center>
 <!-- End Code ------------------------------------------->
-{END_CONTENT}
-</body>
-</html>

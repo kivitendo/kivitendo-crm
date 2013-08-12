@@ -1897,11 +1897,14 @@ function searchTermin($suche,$cat,$von,$bis,$TID=0) {
     if ($bis) $sql .= " and stop <= '".date2db($bis)."%'";
     if ($TID>0) $sql.=" and member=$TID";
     //if ($grp) $sql.=" and (M.member in $grp)";
-    $rs=$_SESSION['db']->query($sql);
-    while ($row = $rs->fetchRow(DB_FETCHMODE_ASSOC)) {
-        $ids[]=array("id"=>$row["id"]);
-    }
-    return $ids;
+    //echo "</ br>".$sql;
+    $rc=$_SESSION['db']->query($sql);
+    $rs=$_SESSION['db']->getAll($sql);
+    //print_r($rs);
+    //while ($row = $rs->fetchRow(DB_FETCHMODE_ASSOC)) {
+    //    $ids[]=array("id"=>$row["id"]);
+    //}
+    return $rs;
 }
 
 /****************************************************

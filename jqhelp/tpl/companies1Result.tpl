@@ -6,12 +6,13 @@
 		}
 	}
     $(document).ready(function() {
-        $( "#modify_search{Q}" ).click(function() {
+        $( "#modify_search_{Q}" ).button().click(function() {
             $( "#suchfelder_{Q}").show();
             $( "#companyResults_{Q}").hide();
             $( "#name{Q}" ).focus();
+            return false;
         });
-        $( "#sercontent" ).dialog({
+        $( "#sercontent_{Q}" ).dialog({
             autoOpen: false,
             show: {
                 effect: "blind",
@@ -24,30 +25,34 @@
             //position: { my: "center top", at: "center", of: null } 
         });
 
-        $( "#butetikett" ).click(function() {
-            $( "#sercontent" ).dialog( "option", "maxWidth", 400 );
-            $( "#sercontent" ).dialog( "open" );
-            $( "#sercontent" ).dialog( { title: "Etiketten" } );
-            $( "#sercontent" ).load("etiketten.php?src=F");
+        $( "#butetikett_{Q}" ).button().click(function() {
+            $( "#sercontent_{Q}" ).dialog( "option", "maxWidth", 400 );
+            $( "#sercontent_{Q}" ).dialog( "open" );
+            $( "#sercontent_{Q}" ).dialog( { title: "Etiketten" } );
+            $( "#sercontent_{Q}" ).load("etiketten.php?src=F");
+            return false;
         });
-        $( "#butvcard" ).click(function() {
-            $( "#sercontent" ).dialog( "option", "maxWidth", 400 );
-            $( "#sercontent" ).dialog( "open" );
-            $( "#sercontent" ).dialog( { title: "V-Cards" } );
-            $( "#sercontent" ).load("servcard.php?src=F");
+        $( "#butvcard_{Q}" ).button().click(function() {
+            $( "#sercontent_{Q}" ).dialog( "option", "maxWidth", 400 );
+            $( "#sercontent_{Q}" ).dialog( "open" );
+            $( "#sercontent_{Q}" ).dialog( { title: "V-Cards" } );
+            $( "#sercontent_{Q}" ).load("servcard.php?src=F");
+            return false;
         });
-        $( "#butbrief" ).click(function() {
-            $( "#sercontent" ).dialog( "option", "minWidth", 600 );
-            $( "#sercontent" ).dialog( "open" );
-            $( "#sercontent" ).dialog( { title: "Serienbrief" } );
-            $( "#sercontent" ).load("serdoc.php?src=F");
+        $( "#butbrief_{Q}" ).button().click(function() {
+            $( "#sercontent_{Q}" ).dialog( "option", "minWidth", 600 );
+            $( "#sercontent_{Q}" ).dialog( "open" );
+            $( "#sercontent_{Q}" ).dialog( { title: "Serienbrief" } );
+            $( "#sercontent_{Q}" ).load("serdoc.php?src=F");
+            return false;
         });
-        $( "#butsermail" ).click(function() {
-            $( "#sercontent" ).dialog( "option", "minWidth", 800 );
-            $( "#sercontent" ).dialog( "open" );
-            $( "#sercontent" ).load("sermail.php?src=F");
+        $( "#butsermail_{Q}" ).button().click(function() {
+            $( "#sercontent_{Q}" ).dialog( "option", "minWidth", 800 );
+            $( "#sercontent_{Q}" ).dialog( "open" );
+            $( "#sercontent_{Q}" ).load("sermail.php?src=F");
+            return false;
         });
-        $( "input[type=button]" ).button();
+        //$( "input[type=button]" ).button();
         $("#treffer_{Q}")
             .tablesorter({widthFixed: true, widgets: ["zebra"]})
             .tablesorterPager({container: $("#pager_{Q}"), size: 20, positionFixed: false});
@@ -89,13 +94,14 @@
 			<option value="30">30</option>
 			<option value="40">40</option>
 		</select>
-    <input type="button" name="modify_search" id="modify_search{Q}" value=".:modify search:." >&nbsp;
-	<input type="button" name="etikett" id="butetikett" value=".:label:." >&nbsp;
-	<input type="button" name="brief"   id="butbrief"   value=".:serdoc:." >&nbsp;
-	<input type="button" name="vcard"   id="butvcard"   value=".:servcard:." >&nbsp;
-	<a href="sermail.php"><input type="button" name="email" value=".:sermail:."></a>&nbsp;
+    <button id="modify_search_{Q}" >.:modify search:.</button>&nbsp;
+	<button id="butetikett_{Q}" >.:label:.</button>&nbsp;
+	<button id="butbrief_{Q}" >.:serdoc:.</button>&nbsp;
+	<button id="butvcard_{Q}" >.:servcard:.</button>&nbsp;
+	<button id="butsermail_{Q}" >.:sermail:.</button>&nbsp;
 	</form>
 </span>
 {report}
+<div id="sercontent_{Q}"> 
 <!-- Hier endet die Karte ------------------------------------------->
 

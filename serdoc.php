@@ -1,19 +1,14 @@
 <?php
     require_once("inc/stdLib.php");
-    $head = mkHeader();
+    //$head = mkHeader();
 ?>
-<html>
-<head><title></title>
+
     <style>
     .progress { position:relative; width:400px; border: 1px solid #bbb; padding: 1px; border-radius: 3px; }
     .bar { background-color: #B4F5B4; width:0%; height:20px; border-radius: 3px; }
     .percent { position:absolute; display:inline-block; top:3px; left:48%; }
     </style>
-<?php echo $head['JQUERY']; ?>
-<?php echo $head['JQUERYUI']; ?>
-<?php echo $head['JQWIDGET']; ?>
-<?php echo $head['JQFILEUP']; ?>
-<?php echo $head['JQDATE']; ?>
+
 <script>
 $(document).ready(
 $(function () {
@@ -74,8 +69,7 @@ $(function () {
             $( "#formdate" ).datepicker($.datepicker.regional[ "de" ]);
         });
 </script>    
-</head>
-<body>
+
 Daten f&uuml;r den Serienbrief:<br />
 <form name="serdoc" method="post">
 <input type="hidden" name="src" id="src" value='<?php echo $_GET["src"]; ?>'>
@@ -91,6 +85,5 @@ Datei: <input id="fileupload" type="file" name="files[]" data-url="jqhelp/upload
 </div>
 <div id="uplfile"><div>
 <div id="msg"><div>
-</body>
-</html>
+
 

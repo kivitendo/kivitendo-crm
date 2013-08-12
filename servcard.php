@@ -5,8 +5,7 @@ require_once("inc/stdLib.php");
     $p = sprintf("sel%d",array_search($srvcode,$codecs));
     ${$p} = "selected";
 ?>
-<html>
-<head><title></title>
+
     <script>
     $(document).ready(
         $('#send').click(function(event) {
@@ -19,8 +18,7 @@ require_once("inc/stdLib.php");
         })
     );
     </script>
-</head>
-<body>
+
 <form name="vcard" method="post" action="servcard.php">
    Serverkodierung: <?php echo $srvcode ?>
    Zielkodierung:  <select name="targetcode" id="targetcode">
@@ -35,6 +33,6 @@ require_once("inc/stdLib.php");
    Zip-Komprimierung <input type="radio" name="zip" value="0" checked>Nein <input type="radio" name="zip" value="1">Ja<br />
    Singel-File <input type="radio" name="single" value="1" checked><br /> Je Adresse ein File  <input type="radio" name="single" value="0"><br />
    <button id="send" name="send">erstellen</button><br />
-</form>
+
 <div id="ergebnis"></div>
-</body>
+

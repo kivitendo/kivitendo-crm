@@ -15,7 +15,7 @@
 			.tablesorter({widthFixed: true, widgets: ['zebra']})
 			.tablesorterPager({container: $("#pager_pers"), size: 20, positionFixed: false});
 
-        $( "#sercontent" ).dialog({
+        $( "#sercontent_pers" ).dialog({
             autoOpen: false,
             show: {
                 effect: "blind",
@@ -27,29 +27,39 @@
             },
             //position: { my: "center top", at: "center", of: null } 
         });
-        $( "input[type=button]" ).button();
-        $( "#modify_search_pers" ).click(function() {
+        //$( "input[type=button]" ).button();
+        $( "#modify_search_pers" ).button().click(function() {
             $( "#suchfelder_pers").show();
             $( "#results_pers").hide();
             $( "#name_pers" ).focus();
+            return false;
         });
-        $( "#butetikett" ).click(function() {
-            $( "#sercontent" ).dialog( "option", "maxWidth", 400 );
-            $( "#sercontent" ).dialog( "open" );
-            $( "#sercontent" ).dialog( { title: "Etiketten" } );
-            $( "#sercontent" ).load("etiketten.php?src=P");
+        $( "#butetikett_pers" ).button().click(function() {
+            $( "#sercontent_pers" ).dialog( "option", "maxWidth", 400 );
+            $( "#sercontent_pers" ).dialog( "open" );
+            $( "#sercontent_pers" ).dialog( { title: "Etiketten" } );
+            $( "#sercontent_pers" ).load("etiketten.php?src=P");
+            return false;
         });
-        $( "#butvcard" ).click(function() {
-            $( "#sercontent" ).dialog( "option", "maxWidth", 400 );
-            $( "#sercontent" ).dialog( "open" );
-            $( "#sercontent" ).dialog( { title: "V-Cards" } );
-            $( "#sercontent" ).load("servcard.php?src=P");
+        $( "#butvcard_pers" ).button().click(function() {
+            $( "#sercontent_pers" ).dialog( "option", "maxWidth", 400 );
+            $( "#sercontent_pers" ).dialog( "open" );
+            $( "#sercontent_pers" ).dialog( { title: "V-Cards" } );
+            $( "#sercontent_pers" ).load("servcard.php?src=P");
+            return false;
         });
-        $( "#butbrief" ).click(function() {
-            $( "#sercontent" ).dialog( "option", "minWidth", 600 );
-            $( "#sercontent" ).dialog( "open" );
-            $( "#sercontent" ).dialog( { title: "Serienbrief" } );
-            $( "#sercontent" ).load("serdoc.php?src=P");
+        $( "#butbrief_pers" ).button().click(function() {
+            $( "#sercontent_pers" ).dialog( "option", "minWidth", 600 );
+            $( "#sercontent_pers" ).dialog( "open" );
+            $( "#sercontent_pers" ).dialog( { title: "Serienbrief" } );
+            $( "#sercontent_pers" ).load("serdoc.php?src=P");
+            return false;
+        });
+        $( "#email_pers" ).button().click(function() {
+            $( "#sercontent_pers" ).dialog( "option", "minWidth", 800 );
+            $( "#sercontent_pers" ).dialog( "open" );
+            $( "#sercontent_pers" ).load("sermail.php?src=F");
+            return false;
         });
     });
 </script>
@@ -88,12 +98,12 @@
 			<option value="30">30</option>
 			<option value="40">40</option>
 		</select>
-    <input type="button" name="modify_search" id="modify_search_pers" value=".:modify search:." >&nbsp;
-	<input type="button" name="etikett" id="butetikett" value=".:label:." >&nbsp;
-	<input type="button" name="brief"   id="butbrief"   value=".:serdoc:." >&nbsp;
-	<input type="button" name="vcard"   id="butvcard"   value=".:servcard:." >&nbsp;
-	<a href="sermail.php"><input type="button" name="email" value=".:sermail:."></a>
+    <button id="modify_search_pers"  >.:modify search:.</button>&nbsp;
+	<button id="butetikett_pers" >.:label:.</button>&nbsp;
+	<button id="butbrief_pers" >.:serdoc:.</button> &nbsp;
+	<button id="butvcard_pers" >.:servcard:.</button>&nbsp;
+	<button id="email_pers" >.:sermail:.</button>
 	</form>
 </span>
-
+<div id="sercontent_pers"> 
     

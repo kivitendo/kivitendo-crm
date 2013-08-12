@@ -114,8 +114,6 @@ echo '
         });
         
         $("#results").css('height',300);
-       
-        $( "input[type=submit]" ).button();
         
         $.ajax({
             url: "jqhelp/getHistory.php",
@@ -136,7 +134,7 @@ echo '
             }
         });
 
-        $("#adress").click(function() {
+        $("#adress").button().click(function() {
             $.ajax({
                 type: "POST",
                 url: "jqhelp/getDataResult.php",
@@ -148,7 +146,7 @@ echo '
             });
             return false;
         });
-        $("#kontakt").click(function() {
+        $("#kontakt").button().click(function() {
             $.ajax({
                 type: "POST",
                 url: "jqhelp/getDataResult.php",
@@ -184,8 +182,8 @@ echo '
             <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">'.translate('.:fast search customer/vendor/contacts and contact history:.','firma').'</p>
             <form name="suche" id="suche" action="" method="get">
                 <input type="text" name="swort" size="25" id="ac0" autocomplete="off">  
-                <input type="submit" name="adress" id="adress" value="'.translate('.:adress:.','firma').'">
-                <input type="submit" name="kontakt" id="kontakt" value="'.translate('.:contact history:.','firma').'"> <br>
+                <button id="adress"> '.translate('.:adress:.','firma').'</button>
+                <button id="kontakt">'.translate('.:contact history:.','firma').'</button> <br>
                 <span class="liste">'.translate('.:search keyword:.','firma').'</span>
             </form>
             <div id="drop">

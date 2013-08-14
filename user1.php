@@ -103,7 +103,6 @@ $t->set_var( array( 'IMG'                       => $IMG,
                     'uid'                       => $fa["id"], 
                     'homephone'                 => $fa["homephone"], 
                     'workphone'                 => $fa["workphone"], 
-                  //'role'                      => $fa["role"], 
                     'notes'                     => $fa["notes"], 
                     'mailsign'                  => $fa["mailsign"], 
                     'email'                     => $fa["email"], 
@@ -196,5 +195,5 @@ if ( $own ) {
 } else {
     $t->set_var( array( 'vertreter' => $fa["vertreter"]." ".$fa["vname"], ) );
 };
-$t->pparse( "out", array( "usr1" ) );
+$t->Lpparse( "out", array( "usr1" ) ,$_SESSION["lang"],"firma");
 ?>

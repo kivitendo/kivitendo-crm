@@ -39,7 +39,7 @@
 <body onLoad="goFld();">
 {PRE_CONTENT}
 {START_CONTENT}
-<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:personen:. .:keyin:./.:edit:.</p>
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:persons:. .:keyin:./.:edit:.</p>
 
 <!-- Beginn Code ------------------------------------------->
 <div id="maintab">

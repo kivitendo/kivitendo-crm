@@ -155,12 +155,14 @@
     <input type="hidden" name="icalext" value="{icalext}">
     <input type="hidden" name="uid" value="{uid}">
     <input type="hidden" name="login" value="{login}">
-    <tr><td class="norm">Default-Suchmaske</td><td class="norm"><select name='smask'>
-                        <option value="quick" {squick}>Schnellsuche</option>
-                        <option value="customer" {scustomer}>Kunden</option>
-                        <option value="vendor" {svendor}>Lieferanten</option>
-                        <option value="person" {sperson}>Personen</option>
-                        </select>
+    <tr><td class="norm">.:search tab:.</td><td>
+        <select name="searchtab">
+        <option value="1"{searchtab1}>.:fastsearch:.
+        <option value="2"{searchtab2}>.:customers:.
+        <option value="3"{searchtab3}>.:vendors:.
+        <option value="4"{searchtab4}>.:persons:.
+        <option value="5"{searchtab5}>.:remember:.
+        </select>
         </td>
         <td class="norm">Vertreter</td><td class="norm"><select name="vertreter">
                         <option value=""></option>
@@ -171,11 +173,11 @@
         </td></tr>
     <tr><td class="norm">Kd-Ansicht links</td><td>
         <select name="kdviewli">
-        <option value="1"{kdviewli1}>Lieferanschrift
-        <option value="2"{kdviewli2}>Bemerkungen
-        <option value="3"{kdviewli3}>Variablen
-        <option value="4"{kdviewli4}>FinanzInfos
-        <option value="5"{kdviewli5}>sonst.Infos
+        <option value="1"{kdviewli1}>.:shipto:.
+        <option value="2"{kdviewli2}>.:remarks:.
+        <option value="3"{kdviewli3}>.:variablen:.
+        <option value="4"{kdviewli4}>.:financial:.
+        <option value="5"{kdviewli5}>.:miscInfo:.
         </select>
         </td>
         <td class="norm">Etikett</td><td class="norm"><select name="etikett">
@@ -188,19 +190,13 @@
         <td class="norm">Kd-Ansicht rechts</td><td>
         <select name="kdviewre">
         <option value="1"{kdviewre1}>.:contact:.
-        <option value="2"{kdviewre2}>.::Quotation::.
-        <option value="3"{kdviewre3}>.:orders:
-        <option value="4"{kdviewre4}>.:Invoice:.
+        <option value="2"{kdviewre2}>.:quotations:.
+        <option value="3"{kdviewre3}>.:orders:.
+        <option value="4"{kdviewre4}>.:invoices:.
         <option value="5"{kdviewre5}>.:remember:.
         </select>
-        </td><td class="norm">.:search tab:.</td><td>
-        <select name="searchtab">
-        <option value="1"{searchtab1}>.:fastsearch:.
-        <option value="2"{searchtab2}>.:customers:.
-        <option value="3"{searchtab3}>.:vendors:.
-        <option value="4"{searchtab4}>.:persons:.
-        <option value="5"{searchtab5}>.:remember:.
-        </select>
+        </td>
+        <td class="norm"></td><td>
         </td></tr>
     <tr><td class="norm">Name</td><td><input type="text" name="name" value="{name}" maxlength="75"></td>
         <td class="norm">Abteilung</td>    <td><input type="text" name="abteilung" value="{abteilung}" maxlength="75"></td></tr>
@@ -212,7 +208,7 @@
         <td class="norm">gesch&auml;ftl.</td><td><input type="text" name="workphone" value="{workphone}" maxlength="30"></td></tr>
     <tr><td class="norm">Bemerkung</td><td><textarea name="notes" cols="37" rows="3">{notes}</textarea></td>
         <td class="norm">Mail-<br>unterschrift</td><td><textarea name="mailsign" cols="37" rows="3">{mailsign}</textarea></td></tr>
-    <tr><td class="norm">Regel</td><td>{role}</td>
+    <tr><td class="norm"></td><td></td>
         <td>&nbsp;</td><td>{GRUPPE}</td></tr>
     <tr><td class="norm">Mailserver</td><td><input type="text" name="msrv" value="{msrv}" size="25" maxlength="75"></td>
         <td class="norm">Mailuser</td>

@@ -46,7 +46,7 @@ Installierte Pearpakete anzeigen:
   
     
 Die Pfade können entweder in der php.ini oder durch umbenennen der htaccess.txt in .htaccess angepasst werden.
-    mv htaccess.txt .htaccess
+    cp htaccess.txt .htaccess
    
 Die conf.php:
 Drei Variablen bestimmen die Grundsätzliche Konfiguration der CRM.

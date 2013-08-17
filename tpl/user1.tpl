@@ -161,10 +161,9 @@
         <option value="2"{searchtab2}>.:customers:.
         <option value="3"{searchtab3}>.:vendors:.
         <option value="4"{searchtab4}>.:persons:.
-        <option value="5"{searchtab5}>.:remember:.
         </select>
         </td>
-        <td class="norm">.:vice:.</td><td class="norm"><select name="vertreter">
+        <td class="norm">.:substitute:.</td><td class="norm"><select name="vertreter">
                         <option value=""></option>
 <!-- BEGIN Selectbox -->
                         <option value="{vertreter}"{Sel}>{vname}</option>
@@ -193,7 +192,6 @@
         <option value="2"{kdviewre2}>.:quotations:.
         <option value="3"{kdviewre3}>.:orders:.
         <option value="4"{kdviewre4}>.:invoices:.
-        <option value="5"{kdviewre5}>.:remember:.
         </select>
         </td>
         <td class="norm"></td><td>

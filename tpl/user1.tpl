@@ -1,5 +1,5 @@
 <html>
-    <head><title>User Stamm</title>
+    <head><title>.:usersettings:.</title>
 {STYLESHEETS}
 {CRMCSS}
 {JQUERY}
@@ -15,7 +15,7 @@
     function Mailonoff( reload ) {
         if ( $('#mailwin').dialog( "isOpen" ) && !reload) {
              $('#mailwin').dialog('close');
-            document.user.mails.value="Mails zeigen";
+            document.user.mails.value=".:show emails:.";
         } else {
             if ( !MailOn) {
                 var Q, p, email;
@@ -57,7 +57,7 @@
                 MailOn = true;
             };
             $( "#mailwin" ).dialog( "open" )
-            document.user.mails.value="Mails verstecken";
+            document.user.mails.value=".:hide emails:.";
         }
     }
     function kal(fld) {
@@ -135,7 +135,7 @@
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
-<div id="dialog_saved" title="Benutzer Stammdaten CRM">
+<div id="dialog_saved" title=".:usersettingscrm:.">
     <p>.:usersettingssaved:.</p>
 </div>
 <div id="noThemeFile" title="Theme wechseln">
@@ -147,7 +147,7 @@
 <p class="listtop" onClick="help('User');">.:usersettings:.</p>
 <form name="user" id="userform"  action="user1.php" method="post" onSubmit="return getical();">
 <div id="user">
-<input type="reset" name="mails" value="Mails zeigen" onClick="Mailonoff(false)"> {login} : {uid}
+<input type="reset" name="mails" value=".:show emails:." onClick="Mailonoff(false)"> {login} : {uid}
 
 <table border="0">
     <input type="hidden" name="icalart" value="{icalart}">
@@ -244,7 +244,7 @@
             .:to_t:. <select name="termend">{termend}</select> .:uhr:.</td>
         <td class="norm">.:deadlinespacing:.</td><td><input type="text" name="termseq" value="{termseq}" size="3"> .:minutes:.</td></tr>
     <tr><td class="norm">.:interval:.</td><td>
-            <input type="text" name="interv" value="{interv}" size="4" maxlength="5">.:sec:. &nbsp;&nbsp; .:presearch:. <input type="text" name="pre" value="{pre}" size="10"></td>
+            <input type="text" name="interv" value="{interv}" size="4" maxlength="5">.:sec.:. &nbsp;&nbsp; .:presearch:. <input type="text" name="pre" value="{pre}" size="10"></td>
         <td class="norm">.:awpre:.</td><td><input type="checkbox" value='t' name="preon" {preon}>.:yes:.</td></tr>
     <!--tr><td colspan="4"><input type="submit" name="mkmbx" value=".:createmailbox:."></td><td></td><td></td></tr-->
     <tr><td class="norm">.:mapservice:.</td><td colspan="4">

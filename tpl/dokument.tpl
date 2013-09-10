@@ -10,7 +10,7 @@
 <body onLoad="dateibaum('left','/'), hidelinks(0); pickup = {PICUP}; tiny = {tiny};">
 {PRE_CONTENT}
 {START_CONTENT}
-<p class="listtop">.:documents:. </p>
+<p class="listtop">.:Documents:. </p>
 <form name="dokument.php" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" id="mandant" value="{mandant}">
 <span id='contentbox2'>

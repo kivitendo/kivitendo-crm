@@ -95,25 +95,25 @@ echo FreeSans,FreeSans.ttf >> fontmap.txt
 
 Das TAR-File entpacken, dabei an HFS halten.
 z.B. RPM-Systeme
-	cd /srv/; tar xzf lx-office-crm-{version}.tgz
+	cd /srv/; tar xzf kivitendo-crm-{version}.tgz
 z.B. Debian
-	cd /usr/lib/; tar xzf lx-office-crm-{version}.tgz
+	cd /var/www; tar xzf kivitendo-crm-{version}.tgz
 
 Crm in die ERP verlinken :
 z.B. RPM-Systeme
-	cd /srv/lx-office-erp && ln -s ../lx-office-crm crm
+	cd /srv/kivitendo-erp && ln -s ../kivitendo-crm crm
 z.B. Debian
-	cd /usr/lib/lx-office-erp && ln -s ../lx-office-crm crm
+	cd /var/www/kivitendo-erp && ln -s ../kivitendo-crm crm
 
-ERP-Menu erweitern:
-	cd lx-office-erp
+ERP-Menu erweitern (an Kivi > 3.0 nicht mehr nötig):
+	cd kivitendo-erp
 	mv menu.ini menu.ini.crm
 	cat crm/update/menu.ini menu.ini.crm > menu.ini
 Alternativ mit patch:
-    patch -p1 -b ../lx-office-erp/menu.ini < update/menu.ini.patch 
+    patch -p1 -b ../kivitendo-erp/menu.ini < update/menu.ini.patch 
 
 Menuicon kopieren
-	cd lx-office-erp && cp crm/image/CRM.png image/
+	cd kivitendo-erp && cp crm/image/CRM.png image/
 
 Eigentümer der Datei auf Webserver setzen
 z.B. Debian / Ubuntu:
@@ -127,7 +127,14 @@ Im Browser die ERP aufrufen und anmelden
 Melden Sie sich nun an Kivitendo-ERP an und wählen Sie einen CRM-Menüeintrag aus.
 Die Datenbankinstallation wird nun durchgeführt.
 
-Update auf Version 1.6.0
+Als nächstes dir Mandanteneinstellungen vornehmen:
+CRM -> Administration -> Mandant
+
+danach die Einstellungen für den Benutzer:
+CRM -> Administration -> Benutzer
+
+
+Update auf Version 1.9.0
 ------------------------
 Die Einstellungen in der inc/conf.php sind auf ein Minimum reduziert worden.
 Diese Einstellungen können nun für jeden Mandenten über die Oberfläche eingestellt werden.

@@ -222,8 +222,6 @@ if ( $fehl>0 ) {
 	fputs($log,"Es sind $fehl Fehler aufgetreten\n");
 } else { 
 	echo "<br>Alle Datenbankupdates erfolgreich durchgef&uuml;hrt.<br><br>"; 
-        echo "<b>Richten Sie nun zunächst den <a href='mandant.php'>Mandenten</a> in der CRM ein,<br>";
-        echo "danach den Benutzer.</b><br>";
 	fputs($log,"Alle Datenbankupdates erfolgreich\n");
 }
 

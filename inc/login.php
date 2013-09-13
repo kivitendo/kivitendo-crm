@@ -48,9 +48,13 @@ if ( is_file($conffile) ) {
             flush(); 
             require("install.php");
             require("inc/update_neu.php");
+            echo "<b>Richten Sie nun zunächst den [<a href='mandant.php'>Mandenten</a>] in der CRM ein,<br>";
+            echo "danach den Benutzer.</b><br>"
         } else if (  $dbver <> $_SESSION['VERSION'] ) {
             echo "Istversion: $dbver Sollversion: ".$_SESSION['VERSION']."<br>";
             require("inc/update_neu.php");
+            echo "<b>Richten Sie nun zunächst den [<a href='mandant.php'>Mandenten</a>] in der CRM ein,<br>";
+            echo "danach den Benutzer.</b><br>"
         } else {
             $db = $_SESSION["db"];
             $_SESSION["loginok"] = "ok";

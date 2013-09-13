@@ -14,11 +14,12 @@ echo "<br>Installation der Version $VERSION";
 echo " der Datenbankinstanz: ".$_SESSION["dbname"]."<br>";
 ob_flush();
 flush();
+if ( !file_exists($_SESSION['crmpath'].'/log') ) @mkdir($_SESSION['crmpath'].'/log');
 if ( $log = @fopen($_SESSION['crmpath'].'/log/install.log',"a") ) {
 	$logfile = $_SESSION['crmpath']."/log/install.log";
 	echo 'Logfile in '.$logfile.'<br>';
 } else {
-	echo "Keine Schreibrechte f&uuml;r Logfile in log.<br>";
+	echo "Keine Schreibrechte f&uuml;r Logfile in ".$_SESSION['crmpath']."/log.<br>";
 	echo "Installation abgebrochen";
 	exit (1);
 }
@@ -220,7 +221,9 @@ if ( $fehl>0 ) {
 	echo "Kontrollieren Sie dazu bitte das <a href='$logfile'>Logfile</a><br>";
 	fputs($log,"Es sind $fehl Fehler aufgetreten\n");
 } else { 
-	echo "<br>Alle Datenbankupdates erfolgreich durchgef&uuml;hrt.<br>"; 
+	echo "<br>Alle Datenbankupdates erfolgreich durchgef&uuml;hrt.<br><br>"; 
+        echo "<b>Richten Sie nun zunächst den <a href='mandant.php'>Mandenten</a> in der CRM ein,<br>";
+        echo "danach den Benutzer.</b><br>";
 	fputs($log,"Alle Datenbankupdates erfolgreich\n");
 }
 

@@ -18,6 +18,7 @@ require_once "conf.php";
 
 
 if ( !isset($_SESSION['dbhost']) ) {
+    if ( !isset($erpConfigFile) ) $erpConfigFile = $erp;
     $_SESSION['ERPNAME'] = $ERPNAME;
     $_SESSION['ERP_BASE_URL'] = $ERP_BASE_URL;
     $_SESSION['erpConfigFile'] = $erpConfigFile;

@@ -14,6 +14,7 @@ echo "<br>Installation der Version $VERSION";
 echo " der Datenbankinstanz: ".$_SESSION["dbname"]."<br>";
 ob_flush();
 flush();
+if ( !file_exists($_SESSION['crmpath'].'/log') ) mkdir($_SESSION['crmpath'].'/log',0755);
 if ( $log = @fopen($_SESSION['crmpath'].'/log/install.log',"a") ) {
 	$logfile = $_SESSION['crmpath']."/log/install.log";
 	echo 'Logfile in '.$logfile.'<br>';
@@ -31,6 +32,7 @@ $ok        = "<b>ok</b>";
 $fehler    = "<font color='red'>Fehler!</font>";
 $mkdir     = array('dokumente','dokumente/'.$_SESSION["dbname"],'tmp');
 $writeable = array('dokumente','dokumente/'.$_SESSION["dbname"],'vorlage','inc/conf.php','tmp');
+if ( !isset($_SESSION['dir_mode']) ) $_SESSION['dir_mode'] = 0755;
 foreach ( $mkdir as $chk ) {
     if ( !file_exists($_SESSION['crmpath'].'/'.$chk) )  {
         $rc = mkdir($_SESSION['crmpath'].'/'.$chk, $_SESSION['dir_mode']);

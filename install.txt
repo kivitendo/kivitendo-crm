@@ -33,7 +33,7 @@ Vorrausetzungen:
 	fpdf (http://www.fpdf.de/downloads/)
 	ttf-freefont
 	php-gd,php-imap
-    php5-curl 
+    	php5-curl 
 
 Fast alle Pakete können unter debianoiden Systemen in der Konsole mit folgendem Behfehl installiert werden.
 apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-mdb2 php-mdb2-driver-pgsql php-fpdf imagemagick ttf-freefont php5-curl tinymce libphp-jpgraph
@@ -44,10 +44,28 @@ Die restlichen Pearpaket installieren:
 Installierte Pearpakete anzeigen:
     pear list
   
-    
 Die Pfade können entweder in der php.ini oder durch umbenennen der htaccess.txt in .htaccess angepasst werden.
     cp htaccess.txt .htaccess
-   
+
+Crm in die ERP verlinken
+    cd /var/www/kivitendo-erp && ln -s ../kivitendo-crm crm
+
+Eigentümer der Datei auf Webserver setzen
+z.B. Debian / Ubuntu:
+    chown -R www-data: crm/
+
+Webserver neu starten
+z.B. Debian / Ubuntu:
+    /etc/init.d/apache2 restart
+         
+Kivitendo im Browser aufrufen und anmelden.
+Nach dem Klick auf einen der neu entstandenen CRM-Menü-Punke werden einige Tabellen angelegt.
+Mandanten und Benutzereinstellungen sichern und die CRM kann verwendet werdern. 
+CRM -> Administration -> Mandant
+CRM -> Administration -> Benutzer
+
+Weite Informationen und Lösungsansätze bei Problemen:   
+
 Die conf.php:
 Drei Variablen bestimmen die Grundsätzliche Konfiguration der CRM.
 ERPNAME		: Verzeichnisname der ERP, Default "kivitendo-erp" 
@@ -99,40 +117,9 @@ z.B. RPM-Systeme
 z.B. Debian
 	cd /var/www; tar xzf kivitendo-crm-{version}.tgz
 
-Crm in die ERP verlinken :
-z.B. RPM-Systeme
-	cd /srv/kivitendo-erp && ln -s ../kivitendo-crm crm
-z.B. Debian
-	cd /var/www/kivitendo-erp && ln -s ../kivitendo-crm crm
 
-ERP-Menu erweitern (an Kivi > 3.0 nicht mehr nötig):
-	cd kivitendo-erp
-	mv menu.ini menu.ini.crm
-	cat crm/update/menu.ini menu.ini.crm > menu.ini
-Alternativ mit patch:
-    patch -p1 -b ../kivitendo-erp/menu.ini < update/menu.ini.patch 
-
-Menuicon kopieren
-	cd kivitendo-erp && cp crm/image/CRM.png image/
-
-Eigentümer der Datei auf Webserver setzen
-z.B. Debian / Ubuntu:
-	chown -R www-data: crm/
-Andere:
-	apache, apache2, httpd, www-run
-
-Im Browser die ERP aufrufen und anmelden
 	 http://localhost/kivitendo/login.pl
-
-Melden Sie sich nun an Kivitendo-ERP an und wählen Sie einen CRM-Menüeintrag aus.
-Die Datenbankinstallation wird nun durchgeführt.
-
-Als nächstes dir Mandanteneinstellungen vornehmen:
-CRM -> Administration -> Mandant
-
-danach die Einstellungen für den Benutzer:
-CRM -> Administration -> Benutzer
-
+ 
 
 Update auf Version 1.9.0
 ------------------------
@@ -247,12 +234,8 @@ chgrp -R users dokumente
 
 Zusatzprogramme:
 ----------------
-Einige Zusatzprogramme (EuR, ZM, Inventur, Katalog, DHL-Adress CSV,Artikelmassenänderung), 
-die ich für mich geschrieben habe. Werden vielleicht ja mal
-von jemanden in Perl umgesetzt, dann kommt das in die ERP.
-
-Installation:
-Menü um update/listen_menu.ini erweitern. Evtl. Bilderverzeichnis verlinken
+Einige Zusatzprogramme (EuR, ZM, Inventur, Katalog, DHL-Adress CSV, Artikelmassenänderung, eBay-Importer), 
+die ich für mich geschrieben habe, sind unter dem Menü-Punkt 'Sonstiges' zu finden.
 
 Wenn Barcode im Tex erzeugt werden soll, muss der Webserver in seinem Homeverzeichnis, idR. /var/www, 
 Schreibrechte besitzen. Oder aber es muss das Fontverzeichnis dort abgelegt werden.

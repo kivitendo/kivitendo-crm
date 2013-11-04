@@ -106,8 +106,8 @@
     <span id='tab1'>
         <br />
         <div class="zeile2">
-            <span class="label klein">Anrede </span>
-            <span class="feldxx"> <input type="text" name=".:greeting:." size="15" maxlength="75" value="{greeting_}" tabindex="1">
+            <span class="label klein">.:greeting:.</span>
+            <span class="feldxx"> <input type="text" name="greeting_" size="15" maxlength="75" value="{greeting_}" tabindex="1">
                     <select name="greeting" id="greeting" tabindex="2">
                         <option value="">
 <!-- BEGIN anreden -->

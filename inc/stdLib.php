@@ -90,6 +90,14 @@ function translate($word,$file) {
         return $word;
     }
 }
+function chksesstime($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$session,$sesstime) {
+    $db   = new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
+    $sql  = "SELECT * FROM auth.session WHERE = '$session'";
+    $rs   = $db->getOne($sql);
+    
+    return true;
+}
+
 function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     $db   = new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
     //Hat sich ein User angemeldet
@@ -170,7 +178,7 @@ function anmelden() {
     }
     $dbsec = false;
     $tmp = fgets($lxo,512);
-    //Parameter für die Auth-DB finden
+    //Parameter für die Auth-DB in der ERP-Konfiguration finden
     while ( !feof($lxo) ) {
         if ( preg_match("/^[\s]*#/",$tmp) || $tmp == "\n" ) { //Kommentar, ueberlesen
             $tmp = fgets($lxo,512);
@@ -189,23 +197,25 @@ function anmelden() {
         }
         if ( preg_match("/cookie_name[ ]*=[ ]*(.+)/",$tmp,$hits) ) $cookiename = $hits[1];
         if ( preg_match("/dbcharset[ ]*=[ ]*(.+)/",$tmp,$hits) )   $dbcharset = $hits[1];
+        if ( preg_match("/session_timeout[ ]*=[ ]*(.+)/",$tmp,$hits) )   $sesstime = $hits[1];
         if ( preg_match("!\[authentication/database\]!",$tmp) )    $dbsec = true;
         $tmp = fgets($lxo,512);
     }
     if ( !$cookiename ) $cookiename = $_SESSION['erpConfigFile'].'_session_id';
+    if ( !$sesstime ) $sesstime = 480;
     fclose($lxo);
     $cookie = $_COOKIE[$cookiename];
     if ( !$cookie ) header("location: ups.html");
     // Benutzer anmelden
     error_log("!$ERPNAME!$dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie!",0);
     $auth = authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie);
-    if ( !$auth ) {  return false; };
-    chkdir($auth["dbname"]);
+    if ( !$auth ) {  return false; };   				 // Anmeldung des Users fehlgeschlagen
+    chkdir($auth["dbname"]);						 // gibt es unter dokumente ein Verzeichnis mit dem Instanznamen
     chkdir($auth["dbname"].'/tmp/');
-    foreach ($auth as $key=>$val) $_SESSION[$key] = $val;
-    //$_SESSION = $auth;
+    foreach ($auth as $key=>$val) $_SESSION[$key] = $val;                // Mandanten + Userdaten in Session speichern
     $_SESSION["sessid"] = $cookie;
     $_SESSION["cookie"] = $cookiename;
+    $_SESSION["sesstime"] = $sesstime;
     // Mit der Mandanten-DB verbinden
     $_SESSION["db"]     = new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
     if( !$_SESSION["db"] ) {

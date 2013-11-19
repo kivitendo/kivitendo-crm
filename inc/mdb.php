@@ -218,13 +218,15 @@ final class myDB extends MDB2 {
     
     public function getAll($sql) {
         if ($this->log) $this->writeLog('getAll: '.$sql);
-        if (strpos($sql,";")>0) return false;
-        $this->rc=$this->db->queryAll($sql);
-        if(PEAR::isError($this->rc)) {
-            $this->dbFehler($sql,$this->rc->getMessage());
+        if (strpos($sql,";")>0) { $this->dbFehler('Achtung','Semikolon'); return false;};
+        $rs = $this->db->queryAll($sql);
+        if(PEAR::isError($rs)) {
+            $this->dbFehler($sql,$rs->getMessage());
             return false;
-        } 
-        else return $this->rc;
+        } else {
+            if ($this->log) $this->writeLog('getAll: '.print_r($rs,true));
+            return $rs;
+        }
     }
   
     /**
@@ -248,8 +250,11 @@ final class myDB extends MDB2 {
         $rs = $this->db->queryRow($sql);
         if(PEAR::isError($rs)) {
             $this->dbFehler($sql,$rs->getMessage());
+            if ($this->log) $this->writeLog('getOne: '.$rs->getMessage());
+            if ($this->log) $this->writeLog('getOne: '.print_r($rs,true));
             return false;
         } else {
+            if ($this->log) $this->writeLog('getOne: '.print_r($rs,true));
             return $rs;
         }
     }

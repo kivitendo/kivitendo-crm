@@ -934,7 +934,7 @@ function doReport($data,$typ="C") {
     } 
 }
 function getAnreden() {
-    $sql="select distinct (greeting) from customer";
+    $sql="SELECT distinct (greeting) FROM customer WHERE greeting != '' UNION SELECT distinct (greeting) FROM vendor WHERE greeting != ''";
     $rs=$_SESSION['db']->getAll($sql);
     return $rs;
 }

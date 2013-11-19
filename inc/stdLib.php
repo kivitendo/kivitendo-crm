@@ -909,20 +909,21 @@ function makeMenu($sess,$token){
 /*******************************************************************************************************************************************************
 *** History wird mit Parameter schreibend benutzt, ohne Paramter gibt Sie die History zurück ***********************************************************
 *******************************************************************************************************************************************************/
-function accessHistory($data=false) {
+function accessHistory( $data=false ) {
     if ( $_SESSION['loginok'] == 'ok' ){
         $sql = "select val from crmemployee where uid = '" . $_SESSION["loginCRM"] .  "' AND key = 'search_history'";
-        $rs =   $_SESSION['db']->getOne($sql);
-        $array_of_data = json_decode($rs['val'],true);
-        if ( !$data && $array_of_data) {
-             return array_reverse($array_of_data);
+        $rs =   $_SESSION['db']->getOne( $sql );
+        $array_of_data = json_decode( $rs['val'], true );
+        if( !is_array ( $array_of_data[0] ) ) unset( $array_of_data[0] );
+        if ( !$data && $array_of_data ) {
+             return array_reverse( $array_of_data );
         }
         else {
-            if ( $array_of_data && in_array($data, $array_of_data) ) unset( $array_of_data[array_search($data, $array_of_data)]);
+            if ( $array_of_data && in_array( $data, $array_of_data ) ) unset( $array_of_data[array_search( $data, $array_of_data )] );
             $array_of_data[] = $data;
-            if ( count($array_of_data) > 8 ) array_shift($array_of_data); 
-            $sql = "UPDATE crmemployee SET val = '".addslashes(json_encode($array_of_data))."' WHERE uid = ".$_SESSION['loginCRM']." AND key = 'search_history'";
-            $_SESSION['db']->query($sql);
+            if ( count( $array_of_data ) > 8 ) array_shift( $array_of_data ); 
+            $sql = "UPDATE crmemployee SET val = '".json_encode( $array_of_data )."' WHERE uid = ".$_SESSION['loginCRM']." AND key = 'search_history'";
+            $_SESSION['db']->query( $sql );
         }
     }
 }

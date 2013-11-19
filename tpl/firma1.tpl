@@ -330,7 +330,7 @@
             <li><a href="#lie">.:shipto:. </a></li>
             <li><a href="#not">.:notes:. </a></li>
             <li><a href="#var">.:variablen:. </a></li>
-            <li><a href="#fin">.:FinanzInfo:.</a></li>
+            <li><a href="#fin">.:financial:.</a></li>
             <li><a href="#inf">.:miscInfo:. </a></li>
         </ul>
         <div id="lie" class="klein">
@@ -386,7 +386,7 @@
         <div id="fin" >
             <table width="100%"><tr><td>
             <span class="labelLe">.:Source:.:</span> <span class="value">{lead} {leadsrc}</span><br />
-            <span class="labelLe">.:Business:.:</span> <span class="value">{kdtyp}</span><br />
+            <span class="labelLe">.:{Q}Business:.:</span> <span class="value">{kdtyp}</span><br />
             <span class="labelLe">.:taxnumber:.:</span> <span class="value">{Taxnumber}</span><br />
             <span class="labelLe">UStId:</span> <span class="value">{USTID}</span><br />
             <span class="labelLe">.:taxzone:.:</span> <span class="value">{Steuerzone}</span><br />

@@ -87,7 +87,7 @@
 <!-- END cvarListe -->
 </td></tr>
 </table>
-<input type="submit" name="ok" value="erstellen"> <a href='{link}'>{link}</a>  <a href='{linklog}'>{linklog}</a><br>
+<input type="submit" name="ok" value="erstellen"> {link} {linklog} {linktex}<br>
 {msg}
 
 </form>

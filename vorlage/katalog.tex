@@ -34,9 +34,6 @@
 \setlength{\parindent}{0pt}
 \renewcommand{\baselinestretch}{1}
 
-%\input{fancy.tex}
-%\input{deutsch.tex}
-
 % ------------------------------------------------------------
 % Der eigtl. Dokumenten-Inhalt beginnt hier:
 % ------------------------------------------------------------
@@ -44,59 +41,68 @@
 \font\xlix=wlc39 scaled 1200
 \newcommand{\barcode}[1]{{\xlix@#1@}}
 \newcommand\WG[1]{%
-    \\
-    & \multicolumn{2}{c}{\textbf{#1}} & \\
-    \hline
-}
-\newcommand\Zeile[4]{%
-                 #2 &
-                 \multicolumn{1}{r}{\small #3} &
-                 \multirow{2}{50px}{\includegraphics*[height=55px]{#1}} \\
-                 \multicolumn{2}{X}{\raggedright\small #4} & \\ 
+    \\ \pagebreak
+    & \multicolumn{2}{c}{\underline{\textbf{#1}}} & \\
 }
 
+\newcommand\Zeile[5]{%
+     %\multirow{2}{25mm}{ \begin{figure}[ht] \includegraphics*[height=35px]{#1} \end{figure} }& 
+     \multirow{2}{25mm}{ \begin{picture}(25,40)(0,-12) \includegraphics*[height=40px]{#1} \end{picture} }& 
+     %\multirow{2}{25mm}{ \includegraphics*[height=35px]{#1} }& 
+           \multicolumn{2}{p{115mm}}{\small #4} & \small #5 \\
+     \nopagebreak & \small #2 & \multicolumn{1}{r}{\small #3 €}   &
+            \ifthenelse{\equal{#5}{}}{}{\barcode{#5}}\\
+     \\ 
+}
 
 \begin{document}
 % Schrift-Stil festlegen:
 \fontfamily{cmss}\fontsize{12}{15pt plus 0.15pt minus 0.1pt}\selectfont
 
-% Erste Seite
-%\thispagestyle{briefkopf}
+\centering
+\LARGE Katalog \\
+\normal
+\vspace{3cm}
+\parbox{14cm}{
+Meine Firma \\
+Überholspur 1\\
+\\
+12345 Sonstwo\\
+\\
+Tel.: +49 1234 567890\\
+info@meine-firma.false\\
+}
+\\
+\vspace{1cm}
+Erstelldatum: <%datum%>
 
-% ------------------------------------------------------------
-% Dokument-Info, Bemerkungen, Datum, Bearbeiter, ...
-% ------------------------------------------------------------
-
-%\vspace{4mm}
 
 % ------------------------------------------------------------
 % Die Positionen-Tabelle
 % ------------------------------------------------------------
 \begin{filecontents}{tabelle.tex}
 
-%\begin{longtable}{@{}p{100px}lllp{100px}@{ }@{}} % Definition der Spalten
-%\begin{longtable}{@{}lXll@{ }@{}} % Definition der Spalten
-\begin{longtable}{@{}XXp{100px}@{}} % Definition der Spalten
-	% Spaltenueberschriften
+\begin{longtable}{@{}p{25mm}p{52mm}p{53mm}p{45mm}@{}} % Definition der Spalten
 
-	\hline % Trennlinie
+	% Spaltenueberschriften
+	%\hline % Trennlinie
     \endfirsthead
 
-	\hline % Trennlinie
+	%\hline % Trennlinie
     \endhead
 
     % Fuss der Teiltabellen
     %\multicolumn{3}{r}{Fortsetzung n\"achste Seite. Seite: \thepage{} von \pageref{LastPage}} \\
   \endfoot
 
-  % Das Ende der Tabelle
-	\hline % Trennlinie
+    % Das Ende der Tabelle
+    % \hline % Trennlinie
   \endlastfoot
 
 	% Artikel-Positionen:
 	<%foreach_part%>   
             \ifthenelse{\equal{<%newpg%>}{new}}{ \WG{<%partsgroup%>} } 
-            { \Zeile{<%image%>}{<%partnumber%>}{<%sellprice%>}{<%description%>} }
+            { \Zeile{<%image%>}{<%partnumber%>}{<%sellprice%>}{<%description%>}{<%ean%>} }
 	<%end_part%>
 
 	\hline
@@ -104,7 +110,4 @@
 \end{filecontents}
 \LTXtable{\textwidth}{tabelle.tex}
 
-\vspace{5mm}
-
-\label{LastPage}
 \end{document}

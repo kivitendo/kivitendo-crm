@@ -37,6 +37,9 @@ function saveMAIL($dest,$value,&$container) {
 		reset($cardinfo[0]);
 		while (list($key,$line) = each($cardinfo[0]))  {
 			switch ($key) {
+			case "UID":	$adress["UID"]=$line[0]["value"][0][0]; break;
+			case "REV":	$adress["REV"]=$line[0]["value"][0][0]; break;
+			case "KEY":	$adress["KEY"]=$line[0]["value"][0][0]; break;
 			case "ADR":	foreach ($line as $row) {
 						if ($row[param][TYPE])	foreach ($row[param][TYPE] as $typ) {
 							saveADR($typ,$row["value"],$adress);
@@ -100,6 +103,12 @@ function saveMAIL($dest,$value,&$container) {
 		opener.document.formular.cp_abteilung.value="<?php echo  $adress["ORG"]["ABTLG"]; ?>";
 		opener.document.formular.cp_birthday.value="<?php echo  db2date($adress["N"]["BDAY"]); ?>";
 		opener.document.formular.cp_notes.value="<?php echo  $adress["NOTE"]; ?>";
+		opener.document.formular.key.value="<?php echo  $adress["KEY"]; ?>";
+		opener.document.formular.revision.value="<?php echo  $adress["REV"]; ?>";
+		opener.document.formular.uid.value="<?php echo  $adress["UID"]; ?>";
+		opener.document.getElementById('REV').style.visibility='visible';
+		opener.document.getElementById('UID').style.visibility='visible';
+		opener.document.getElementById('KEY').style.visibility='visible';
 		self.close();
 <?php } else if ($adress and $_POST["src"]=="F") { 
 		if ($adress["EMAIL"]["PREF"]) {
@@ -121,6 +130,12 @@ function saveMAIL($dest,$value,&$container) {
 		opener.document.neueintrag.homepage.value="<?php echo  $adress["URL"]; ?>";
 		opener.document.neueintrag.sw.value="";
 		opener.document.neueintrag.notes.value="<?php echo  $adress["NOTE"]; ?>";
+		opener.document.neueintrag.revision.value="<?php echo  $adress["REV"]; ?>";
+		opener.document.neueintrag.uid.value="<?php echo  $adress["UID"]; ?>";
+		opener.document.neueintrag.key.value="<?php echo  $adress["KEY"]; ?>";
+		opener.document.getElementById('REV').style.visibility='visible';
+		opener.document.getElementById('UID').style.visibility='visible';
+		opener.document.getElementById('KEY').style.visibility='visible';
 		self.close();
 <?php } ?>
 	//-->

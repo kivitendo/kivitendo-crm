@@ -174,7 +174,26 @@
                 <span class="labelxx klein">Logo</span>
                 <span class="feldxx">
                     <input type="file" name="Datei" size="20" maxlength="125" accept="Image/*" tabindex="16">
-                </span><br><br>
+                </span>
+            </div>
+            <div class="zeile2" id='KEY' style='visibility:hidden;'>
+                <span class="labelxx klein">Key</span>
+                <span class="feldxx">
+                    <input type="text" name="key" size="20" maxlength="125" tabindex="16">
+                </span>
+            </div>
+            <div class="zeile2" id='REV' style='visibility:hidden;'>
+                <span class="labelxx klein">REV</span>
+                <span class="feldxx">
+                    <input type="text" name="revision" size="20" maxlength="125" tabindex="16">
+                </span>
+            </div>
+            <div class="zeile2" id='UID' style='visibility:hidden;'>
+                <span class="labelxx klein">UID</span>
+                <span class="feldxx">
+                    <input type="text" name="uid" size="20" maxlength="125" tabindex="16">
+                </span>
+		<br><br>
                 <span class="feldxx">
                 {IMG}
                 </span>

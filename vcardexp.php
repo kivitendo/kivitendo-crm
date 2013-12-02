@@ -8,8 +8,11 @@
 	if ($_GET["pid"]) {
 		include("inc/persLib.php");
 		$data=getKontaktStamm($_GET["pid"]);
-        //UID
-        $vcard->setKey($_GET["pid"]);
+                //UID
+                $UID='P'.$_GET["pid"].'@'.$_SESSION['mandant'];
+                $vcard->setKey($_GET["pid"]);
+                $vcard->setUniqueID($UID);
+                $vcard->setRevision(date('c'));
 		// set a formatted name
 		$vcard->setFormattedName($data["cp_givenname"]." ".$data["cp_name"]);
 		// set the structured name parts
@@ -42,10 +45,10 @@
 			$fa=getFirmenStamm($data["cp_cv_id"]);
 			$vcard->addAddress('', '', $fa["street"], $fa["city"], '', $fa["zipcode"], $fa["country"]);
 			$vcard->addParam('TYPE', 'DOM');
-            if ($fa["phone"]) {
-                $vcard->addTelephone($fa["phone"]);
-                $vcard->addParam('TYPE', 'DOM');
-            }
+                        if ($fa["phone"]) {
+                            $vcard->addTelephone($fa["phone"]);
+                            $vcard->addParam('TYPE', 'DOM');
+                        }
 			if ($data["cp_abteilung"]) {
 				$vcard->addOrganization(array($fa["name"],$data["cp_abteilung"]));
 			} else {
@@ -56,16 +59,19 @@
 			$fa=getFirmenStamm($data["cp_cv_id"],true,"V");
 			$vcard->addAddress('', '', $fa["street"], $fa["city"], '', $fa["zipcode"], $fa["country"]);
 			$vcard->addParam('TYPE', 'DOM');
-            if ($fa["phone"]) {
-                $vcard->addTelephone($fa["phone"]);
-                $vcard->addParam('TYPE', 'DOM');
-            }
+                        if ($fa["phone"]) {
+                            $vcard->addTelephone($fa["phone"]);
+                            $vcard->addParam('TYPE', 'DOM');
+                        }
 			$vcard->addOrganization($fa["name"]);
 		}
 	} else if ($_GET["fid"]) {
 		$data=getFirmenStamm($_GET["fid"],true,$Q);
-        //UID
-        $vcard->setKey($Q.$data["nummer"]);
+                //UID
+                $UID=$Q.$_GET["fid"].'@'.$_SESSION['mandant'];
+                $vcard->setKey($Q.$data["nummer"]);
+                $vcard->setUniqueID($UID);
+                $vcard->setRevision(date('c'));
 		$vcard->setFormattedName($data["name"]);
 		if ($data["department_1"]) { 
 			$vcard->setName($data["name"],$data["department_1"],"","","");	
@@ -105,6 +111,6 @@
 	header("Pragma: no-cache");    
 	header("Content-type: application/octetstream");
 	header("Content-Disposition: attachment; filename=lxo-vcard.vcf");
-	header("Content-Disposition: filename=lxo-vcard.vcf");
+	header("Content-Disposition: filename=".$Q.$data["nummer"]."-vcard.vcf");
 	echo $text;
 ?>

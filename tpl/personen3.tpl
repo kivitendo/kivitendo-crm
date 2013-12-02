@@ -129,6 +129,14 @@
             <span class="label klein">.:email:. </span>
             <span class="feld"><input type="text" name="cp_email" size="25" maxlength="125" value="{cp_email}" tabindex="15"></span>
         </div>
+        <div class="zeile2" style='visibility:hidden' id='REV'>
+            <span class="label2 klein">REV</span>
+            <span class="feld"><input type="text" name="revision" size="25" maxlength="125" value="" tabindex="16"></span>
+            <span class="label klein">UID </span>
+            <span class="feld"><input type="text" name="uid" size="25" maxlength="125" value="" tabindex="15"></span>
+            <span class="label klein">KEY </span>
+            <span class="feld"><input type="text" name="key" size="25" maxlength="125" value="" tabindex="15"></span>
+        </div>
         <br />
     </span>
 

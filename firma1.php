@@ -199,7 +199,8 @@
             'verstecke' => ($fa["obsolete"]=="t")?"visible":"hidden",
             'chelp' => ($kdhelp)?"visible":"hidden",
             'none' => "visible",
-            'mail' => ($_SESSION['angebot_button']=='t')?'mailto:':'mail.php?TO='
+            'mail_pre'      => ($_SESSION['external_mail']=='t')?'mailto:':'mail.php?TO=',
+            'mail_after'    => ($_SESSION['external_mail']=='t')?'':'&KontaktTO=C{FID}'
     ));
     $t->set_block("fa1","Liste","Block");
     $i=0;

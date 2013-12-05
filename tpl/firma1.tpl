@@ -301,7 +301,7 @@
             <font color="#444444"> .:tel:.:</font> {Telefon}<br />
             <font color="#444444"> .:fax:.:</font> {Fax}<br />
             <span class="mini">&nbsp;<br /></span>
-            &nbsp;[<a href="mail.php?TO={eMail}&KontaktTO=C{FID}">{eMail}</a>]<br />
+            &nbsp;[<a href="{mail}{eMail}&KontaktTO=C{FID}">{eMail}</a>]<br />
             &nbsp;<a href="{Internet}" target="_blank">{Internet}</a>
         </div>
         <div style="float:left; width:43%; height:25em; text-align:right; border: 0px solid black; padding:0.2em;">

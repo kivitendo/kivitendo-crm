@@ -262,8 +262,8 @@
              <input type="checkbox" name="rechnung_button" value='t' {rechnung_button}>.:invoice:.&nbsp;&nbsp; <input type="checkbox" name="liefer_button" value='t' {liefer_button}>.:delivery order:.&nbsp;&nbsp;
              <input type="checkbox" name="zeige_extra" value='t' {zeige_extra}>.:extra:.&nbsp;&nbsp;<input type="checkbox" name="zeige_karte" value='t' {zeige_karte}>.:map:.&nbsp;&nbsp;
              <input type="checkbox" name="zeige_bearbeiter" value='t' {zeige_bearbeiter}>.:employee:.&nbsp;&nbsp;<input type="checkbox" name="zeige_etikett" value='t' {zeige_etikett}>.:label:.&nbsp;&nbsp;
-             <input type="checkbox" name="zeige_dhl" value='t' {zeige_dhl}>.:DHL:.&nbsp;&nbsp;<input type="checkbox" name="zeige_tools" value='t' {zeige_tools}>.:tools:.&nbsp;&nbsp;
-             <input type="checkbox" name="zeige_lxcars"    value='t' {zeige_lxcars}>.:lxcars:.&nbsp;&nbsp;</td>
+             <input type="checkbox" name="zeige_dhl" value='t' {zeige_dhl}>.:DHL:.&nbsp;&nbsp; <input type="checkbox" name="external_mail" value='t' {external_mail}>.:external_mail:.&nbsp;&nbsp;
+             <input type="checkbox" name="zeige_tools" value='t' {zeige_tools}>.:tools:.&nbsp;&nbsp;<input type="checkbox" name="zeige_lxcars"    value='t' {zeige_lxcars}>.:lxcars:.&nbsp;&nbsp;</td>
    </tr>
    <tr><td class="norm">.:createmultiuser:.</td><td colspan="4">
              <input type="checkbox" name="feature_unique_name_plz" value='t' {feature_unique_name_plz}>.:disallow:.</td>

@@ -198,7 +198,8 @@
             'zeige' => ($fa["obsolete"]=="f")?"visible":"hidden",
             'verstecke' => ($fa["obsolete"]=="t")?"visible":"hidden",
             'chelp' => ($kdhelp)?"visible":"hidden",
-            'none' => "visible"
+            'none' => "visible",
+            'mail' => ($_SESSION['angebot_button']=='t')?'mailto:':'mail.php?TO='
     ));
     $t->set_block("fa1","Liste","Block");
     $i=0;

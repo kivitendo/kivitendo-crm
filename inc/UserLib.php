@@ -82,6 +82,7 @@ function saveUserStamm( $val ) {
         'feature_unique_name_plz' => 'b',
         'sql_error'               => 'b',
         'php_error'               => 'b',
+        'external_mail'           => 'b',
         'zeige_dhl'               => 'b',
         'data_from_tel'           => 'b',
         'tinymce'                 => 'b',
@@ -315,8 +316,10 @@ function getOneGrp( $id ) {
         return $rs["grpname"];
     }
 }
+/*******************************************************************************************************
+*** Lädt die Benutzerdaten wenn noch keine Daten in crmemployee existieren. Alte DB oder neuer User. ***
+*******************************************************************************************************/  
 function loadUserDefaults($id){
-    echo "loadUserDefaults() ".$_SESSION["id"]." ";
     $val = array(
         "streetview"                => "https://maps.google.de/maps?f=d&hl=de&saddr=Ensingerstrasse+19,89073+Ulm&daddr=%TOSTREET%,%TOZIPCODE%+%TOCITY%",
         "planspace"                 => "+", 

@@ -188,21 +188,25 @@ function getUserStamm( $id, $login = false ) {
         //Usereinstellungen
         $sql = "SELECT * from crmemployee WHERE uid = $id";
         $rs = $_SESSION['db']->getAll( $sql );
-        if ( $rs ) 
+        if ( $rs ) {
             foreach ( $rs as $row ) {
                 if ( $row['typ'] == 'i' ) {
                     $daten[$row['key']] = (int) $row['val'];
+                }
+                elseif ( $row['typ'] == 'f' ) {
+                    $daten[$row['key']] = (float) $row['val'];
+                }   
+                elseif ( $row['typ'] == 'b' ) {
+                    $daten[$row['key']] = ( $row['val'] == 't' ) ? true : false;
+                }
+                else {
+                    $daten[$row['key']] = $row['val'];
+                }
             }
-            elseif ( $row['typ'] == 'f' ) {
-                $daten[$row['key']] = (float) $row['val'];
-            }
-            elseif ( $row['typ'] == 'b' ) {
-                $daten[$row['key']] = ( $row['val'] == 't' ) ? true : false;
-            }
-            else {
-                $daten[$row['key']] = $row['val'];
-            }
-        };
+        } 
+        else { //neuer Benutzer hat ja noch keine Einträge in crmemployee
+            loadUserDefaults($id);
+        }  
         if ( $daten["vertreter"] ) {
             $sql = "select * from employee where id=".$daten["vertreter"];
             $rs3 = $_SESSION['db']->getOne( $sql );
@@ -311,4 +315,45 @@ function getOneGrp( $id ) {
         return $rs["grpname"];
     }
 }
+function loadUserDefaults($id){
+    echo "loadUserDefaults() ".$_SESSION["id"]." ";
+    $val = array(
+        "streetview"                => "https://maps.google.de/maps?f=d&hl=de&saddr=Ensingerstrasse+19,89073+Ulm&daddr=%TOSTREET%,%TOZIPCODE%+%TOCITY%",
+        "planspace"                 => "+", 
+        "msrv"                      => "your_mail_server",
+        "mailsign"                  => "--Your Signature",
+        "mailuser"                  => "your_mail_login",
+        "port"                      => "143", 
+        "proto"                     => "t",
+        "ssl"                       => "f",
+        "interv"                    => "60",
+        "pre"                       => "%",
+        "preon"                     => "t",
+        "termbegin"                 => "8",
+        "termend"                   => "20",
+        "termseq"                   => "30",
+        "kdviewli"                  => "3",
+        "kdviewre"                  => "3",
+        "searchtab"                 => "1",
+        "theme"                     => "blue-style", 
+        "auftrag_button"            => "t",
+        "angebot_button"            => "t",
+        "rechnung_button"           => "t",
+        "liefer_button"             => "t",
+        "zeige_extra"               => "t",
+        "zeige_lxcars"              => "f",
+        "zeige_karte"               => "t",
+        "zeige_tools"               => "t", 
+        "zeige_etikett"             => "t",
+        "zeige_bearbeiter"          => "t",
+        "feature_ac"                => "t",
+        "feature_ac_minlength"      => "2",
+        "feature_ac_delay"          => "100",
+        "feature_unique_name_plz"   => "t",
+        "sql_error"                 => "f",
+        "tinymce"                   => "t",
+        "uid"                       => $id
+    );  
+    saveUserStamm( $val );  
+}   
 ?>

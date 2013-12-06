@@ -107,6 +107,7 @@
                                    $('#cp_mobile2').empty().append(data.cp_mobile2);
                                    $('#cp_fax').empty().append(data.cp_fax);
                                    $('#cp_email').empty().append(data.cp_email);
+                                   $('#cp_privatemail').empty().append(data.cp_privatemail);
                                    $('#cp_homepage').empty().append(data.cp_homepage);
                                    $('#cp_grafik').empty().append(data.cp_grafik);
                                    $('#cp_birthday').empty().append(data.cp_birthday);
@@ -130,6 +131,7 @@
                                   $('#cp_mobile2').empty();
                                   $('#cp_fax').empty();
                                   $('#cp_email').empty();
+                                  $('#cp_privatemail').empty();
                                   $('#cp_homepage').empty();
                                   $('#cp_grafik').empty();
                                   $('#cp_birthday').empty();

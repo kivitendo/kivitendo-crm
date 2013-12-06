@@ -84,7 +84,9 @@
                 $karte="";
             };
         }
-        $maillink="<a href='mail.php?TO=".$data["shiptoemail"]."&KontaktTO=$tab".$data["trans_id"]."'>".$data["shiptoemail"]."</a>";
+        $maillink=$_SESSION['external_mail']?
+            "<a href='mailto:".$data["shiptoemail"]."'>".$data["shiptoemail"]."</a>":
+            "<a href='mail.php?TO=".$data["shiptoemail"]."&KontaktTO=$tab".$data["trans_id"]."'>".$data["shiptoemail"]."</a>";
         echo json_encode(array('karte'=>$karte,'mail'=>$maillink,'www'=>$htmllink,'adr'=>$data));
     }
     function showContactadress($id){
@@ -92,8 +94,12 @@
         if ( !$data ) { 
             $data = array('cp_id'=>-1,'cp_name'=> translate('.:no contact:.','firma'));
         } else {
-            $data["cp_email"]="<a href='mail.php?TO=".$data["cp_email"]."&KontaktTO=P".$data["cp_id"]."'>".$data["cp_email"]."</a>";
-            if ($data["cp_privatemail"]) $data["cp_privatemail"]="Privat: <a href='mail.php?TO=".$data["cp_privatemail"]."&KontaktTO=P".$data["cp_id"]."'>".$data["cp_privatemail"]."</a>";;
+            $data["cp_email"]=$_SESSION['external_mail']?
+                "<a href='mailto:".$data["cp_email"]."'>".$data["cp_email"]."</a>":
+                "<a href='mail.php?TO=".$data["cp_email"]."&KontaktTO=P".$data["cp_id"]."'>".$data["cp_email"]."</a>";
+             if ($data["cp_privatemail"]) $data["cp_privatemail"]=$_SESSION['external_mail']?
+                "Privat: <a href='maito:=".$data["cp_privatemail"]."'>".$data["cp_privatemail"]."</a>":
+                "Privat: <a href='mail.php?TO=".$data["cp_privatemail"]."&KontaktTO=P".$data["cp_id"]."'>".$data["cp_privatemail"]."</a>";
             $data["cp_homepage"]="<a href='".$data["cp_homepage"]."' target='_blank'>".$data["cp_homepage"]."</a>";
             if (strpos($data["cp_birthday"],"-")) { $data["cp_birthday"]=db2date($data["cp_birthday"]); };
             if ($data["cp_gender"]=='m') { $data["cp_greeting"]=translate('.:greetmale:.','firma'); 

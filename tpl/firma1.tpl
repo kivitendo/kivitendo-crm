@@ -298,8 +298,8 @@
             <span class="mini"><br />&nbsp;<br /></span>
             {Fcontact}
             <span class="mini"><br />&nbsp;<br /></span>
-            <font color="#444444"> .:tel:.:</font> {Telefon}<br />
-            <font color="#444444"> .:fax:.:</font> {Fax}<br />
+            <font color="#444444"> .:tel:.:</font> <a href="tel:{Telefon}">{Telefon}</a><br />
+            <font color="#444444"> .:fax:.:</font> <a href="tel:{Fax}">{Fax}</a><br />
             <span class="mini">&nbsp;<br /></span>
             &nbsp;[<a href="{mail_pre}{eMail}{mail_after}">{eMail}</a>]<br />
             &nbsp;<a href="{Internet}" target="_blank">{Internet}</a>

@@ -12,10 +12,9 @@ if ($_POST['ok']) {
     if (file_exists('tmp/katalog.tex')) unlink('tmp/katalog.tex');
     if (file_exists('tmp/tabelle.tex')) unlink('tmp/tabelle.tex');
     $f = fopen('tmp/katalog.tex','w');
-    $pre = preg_replace("/<%datum%>/i",date('d.m.Y'),$vorlage['pre']);
-    $rc = fputs($f,$pre);
-    $suche = array('&','_','"','!','#','%','(',')','<','>','§','$','~','{','}'); //chr(92),
-    $ersetze = array('\&','\_','\"',' : ','\#','\%','\{','\}','\textless','\textgreater','\S','\$','\textasciitilde','\{','\}'); //'\textbackslash',
+    $rc = fputs($f,$vorlage['pre']);
+    $suche = array('&','_','"','!','#','%','(',')');
+    $ersetze = array('\&','\_','\"',' : ','\#','\%','\{','\}');
     if ($artikel) foreach($artikel as $part) {
         $line = $vorlage['artikel'];
         if ($lastPG != $part['partsgroup']) {
@@ -36,7 +35,6 @@ if ($_POST['ok']) {
         }
         if ($_POST['addtax']) $preis = $preis * (1 + $tax[$part['bugru']]['rate']);
         foreach ($part as $key=>$val) {
-            if ($key == 'partnumber') $val = str_replace($suche,$ersetze,$val);
             if ($key == 'description') $val = str_replace($suche,$ersetze,$val);
             if ($key == 'notes') $val = str_replace($suche,$ersetze,$val);
             //if ($key == 'image') $val = str_replace($suche,$ersetze,$val);
@@ -56,29 +54,26 @@ if ($_POST['ok']) {
     }
     $rc = fputs($f,$vorlage['post']);
     fclose($f);
-    if (file_exists('tmp/katalog.tex'))   {  
-            $linktex = '<a href="tmp/katalog.tex">TeX</a>';
-    };
     $rc = @exec('pdflatex -interaction=batchmode -output-directory=tmp/ tmp/katalog.tex',$out,$ret);
     if ( $ret == 0 ) {
         $rc = @exec('pdflatex -interaction=batchmode -output-directory=tmp/ tmp/katalog.tex',$out,$ret);
         if (file_exists('tmp/katalog.pdf'))   {  
-            $link = '<a href="tmp/katalog.pdf">PDF</a>';
+            $link = 'tmp/katalog.pdf'; 
             $msg = "RC:$rc Ret:$ret Out:".$out[0];
      	} else { 
             $link = '';
             if (file_exists('tmp/katalog.log'))   { 
-                $linklog = '<a href="tmp/katalog.log">Logfile</a>';
+                $linklog = 'tmp/katalog.log';
             }
             $msg = "Kein PDF erstellt<br>RC:$rc Ret:$ret Out:".$out[0]; 
         };
     } else {
         if (file_exists('tmp/katalog.pdf'))   {
-            $link = '<a href="tmp/katalog.pdf">PDF</a>';
+            $link = 'tmp/katalog.pdf'; 
             $msg  = 'Evlt nicht korrekt<br>';
         }
         $msg .= "Fehler beim Erstellen<br>RC:$rc Ret:$ret Out:".$out[0];
-        $linklog = '<a href="tmp/katalog.log">Logfile</a>';
+        $linklog = 'tmp/katalog.log';
     }
 } else {
     $_POST['pm']='-';
@@ -148,7 +143,6 @@ if ($_POST['ok']) {
         pglist          => $pglist,
         addtax	        => ($_POST['addtax'])?"checked":"",
         linklog	        => $linklog,
-        linktex         => $linktex,
         link	        => $link,
         msg	            => $msg
     ));

@@ -14,28 +14,31 @@
 <body>
 <?php
  echo $menu['pre_content'];
- echo $menu['start_content'];
+ echo $menu['start_content'];        
 if ($_POST["erstellen"]=="erstellen") {
    $artikel = getLager($_POST);
-   $vorlage = prepTex(false);
-   if (file_exists('tmp/inventur.pdf')) unlink('tmp/inventur.pdf');
-   if (file_exists('tmp/inventur.tex')) unlink('tmp/inventur.tex');
-   if (file_exists('tmp/tabelle.tex'))  unlink('tmp/tabelle.tex');
+   $art = $_POST['art'];
+   $vorlage = prepTex($art,false);
+   if (file_exists('tmp/'.$art.'.pdf')) unlink('tmp/'.$art.'.pdf');
+   if (file_exists('tmp/'.$art.'.tex')) unlink('tmp/'.$art.'.tex');
+   if (file_exists('tmp/tabelle.tex')) unlink('tmp/tabelle.tex');
    $suche = array('&','_','"','!','#','%');
    $ersetze = array('\&','\_','\"',' : ','\#','\%');
    if ($artikel)  {
         $pg = $artikel[0]['partsgroup_id'];
         $qty = 0;
         if ($_POST['wg'] == 1) {
-            $fname = 'tmp/inventur_'.$pg.'.pdf';
-            $link = "<a href='$fname'>WG $pg</a> <br />";
+            $fname = "$art_$pg";
+            $link = "<a href='tmp/$fname.pdf'>WG $pg</a> <br />";
         } else {
-            $fname = false;
-            $link = '<a href="tmp/inventur.pdf">Liste</a>';
+            $fname = $art;
+            $link = '<a href="tmp/'.$art.'.pdf">Liste</a>';
         }    
-        $f = fopen('tmp/inventur.tex','w');
+        $f = fopen('tmp/'.$art.'.tex','w');
         $pre = preg_replace("/<%partsgroup%>/i",$artikel[0]['partsgroup'],$vorlage['pre']);
+        $pre = preg_replace("/<%datum%>/i",date('d.m.Y'),$pre);
         $rc = fputs($f,$pre);
+	$gesamtsumme = 0;
         foreach($artikel as $part) {
             //print_r($part); echo "<br>";
             if ($pg != $part['partsgroup_id'] AND $_POST['wg'] == 1) {
@@ -43,30 +46,45 @@ if ($_POST["erstellen"]=="erstellen") {
                 fclose($f);
                 closeinventur($fname);
                 $pg = $part['partsgroup_id'];
-                $fname = 'tmp/inventur_'.$pg.'.pdf';
-                $link .= "<a href='$fname'>".$part['partsgroup']."</a><br />";
-                $f = fopen('tmp/inventur.tex','w');
+                $fname = "tmp/$art_$pg.pdf";
+                $link .= "<a href='tmp/$fname'>".$part['partsgroup']."</a><br />";
+                $f = fopen('tmp/'.$art.'.tex','w');
                 $pre = preg_replace("/<%partsgroup%>/i",$part['partsgroup'],$vorlage['pre']);
                 $rc = fputs($f,$pre);
             }
             $line = $vorlage['artikel'];
+            $ep = 1;
+            $qty = 0;
             foreach ($part as $key=>$val) {
                 if ($key == 'description') $val = str_replace($suche,$ersetze,$val);
                 if ($key == 'partnumber') $val = str_replace($suche,$ersetze,$val);
                 if ($key == 'bestand') {
-                   if ($_POST['bestand'] == '1') {
-                       if (val == '')  $val = '?';
-                   } else {
-                      $val = '';
-                   }
-                }
+                };
+                if ( $key == 'ep' ) {
+			$ep = $val;
+			$val = sprintf('%0.2f',$val);
+		}
+                if ( $key == 'bestand' ) {
+   		     	$qty = $val * 1;
+			if ( floor($qty) == $qty ) {
+				$val = sprintf('%7d',$qty);
+			} else {
+				while (substr($val,-1) == '0') { $val = substr($val,0,-1); }
+				while (strlen($val) < 7 ) { $val = ' '.$val; };
+			}
+                        if ($_POST['bestand'] != '1' and $art == 'inventur') $val = '';
+		};
                 $line = preg_replace("/<%$key%>/i",$val,$line);
             }
+            $summe = sprintf('%0.2f',$qty*$ep);
+            $gesamtsumme += $qty*$ep;
+            $line = preg_replace("/<%summe%>/i",$summe,$line);
             $qty ++;
             $rc = fputs($f,$line);
         }
-        $rc = fputs($f,$vorlage['post']);
-        fclose($f);
+        $line = preg_replace("/<%gesamtsumme%>/i",sprintf('%0.2f',$gesamtsumme),$vorlage['post']);
+        $rc = fputs($f,$line);
+        fclose($f); 
         closeinventur($fname);
         echo $link;
    } else {
@@ -84,8 +102,8 @@ if ($_POST["erstellen"]=="erstellen") {
       $options .= '<option value="'.$row['id'].'">'.$row['ort'].' '.$row['platz'];
 }
 ?>
-Inventurliste<br />
 <form name="inventur" action="inventur.php" method="post">
+<input type='radio' name='art' value='inventur' checked>Inventurliste <input type='radio' name='art' value='bestand'>Bestandsliste<br />
 Sortierung nach <input type="radio" name="sort" value="partnumber" checked>Artikelnummer <input type="radio" name="sort" value="description">Artikelname<br />
 Jede Warengruppe auf ein neue Seite <input type="checkbox" name="wg" value="1"><br />
 Dienstleistungen ausgeben <input type="checkbox" name="dienstl" value="1"><br />
@@ -96,7 +114,6 @@ Ist-Bestand ausgeben <input type="checkbox" name="bestand" value="1"><br />
 </select><br />
 <input type="submit" name="erstellen" value="erstellen">
 </form>
-<?php echo $menu['end_content']; ?>
-<?php } ?>
+<?php }; echo $menu['end_content']; ?>
 </body>
 </html>

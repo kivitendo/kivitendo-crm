@@ -47,7 +47,7 @@ if ($_POST['ok'] == 'sichern') {
     $tmp = explode(':',$_POST['lager']);
     $wh = $tmp[0];
     $bin = $tmp[1];
-    $artikel = getPartBin($_POST['pg'],$_POST['obsolete'],$bin);
+    $artikel = getPartBin($_POST['pg'],$_POST['partnumber'],$_POST['obsolete'],$bin);
     echo getLagername($wh,$bin);
     if ($artikel) {
 ?>
@@ -62,13 +62,13 @@ if ($_POST['ok'] == 'sichern') {
       <input type="radio" name="transtype" value="2">Einlagern / Entnahme
       <input type="radio" name="transtype" value="3">Gefunden / Fehlbestand
       <table>
-      <tr><td>Nummer</td><td>Artikel</td><td>Chargenumber</td><td>Bestbefore JJJJ-MM-DD</td><td>Menge</td></tr>
+      <tr><td>Nummer</td><td>Artikel</td><td>Menge</td><td>Chargenumber</td><td>Bestbefore JJJJ-MM-DD</td></tr>
 <?php $last = 0; foreach ($artikel as $part) { 
          if ( $last == $part['parts_id'] ) {
              continue;
          }
          $last = $part['parts_id'];
-         echo "<tr><td>".$part['partnumber']."</td><td>".$part['partdescription']."</td><td>"; 
+         echo "<tr><td>".$part['partnumber']."</td><td>".$part['partdescription']."</td><td nowrap>"; 
          if ($part['qty'] == '') {
              $qty = '';
          } else {
@@ -80,17 +80,18 @@ if ($_POST['ok'] == 'sichern') {
          if ($part['bin_id']) $lager=' *';
          echo '<input type="hidden" name="parts_id[]"     value="'.$part['parts_id'].'">';
          echo '<input type="hidden" name="oldqty[]"       value="'.$part['qty'].'">';
+         echo '<input type="text"   name="qty[]"          value="'.$qty.'" size="5">'.$part['partunit'].' ('.$onhand.')</td><td>';
          if ($lager=='') {
             echo '<input type="type" name="chargenumber[]" value=""></td><td>';
          } else { 
             echo '<input type="hidden" name="chargenumber[]" value="'.$part['chargenumber'].'">'.$part['chargenumber'].'</td><td>';
          }
          if ($lager=='') {
-             echo '<input type="text" name="bestfefore[]"   value=""></td><td>';
+             echo '<input type="text" name="bestfefore[]"   value=""></td>';
          } else { 
-             echo '<input type="hidden" name="bestfefore[]"   value="'.$part['bestbefore'].'">'.$part['bestbefore'].'</td><td>';
+             echo '<input type="hidden" name="bestfefore[]"   value="'.$part['bestbefore'].'">'.$part['bestbefore'].'</td>';
          };
-         echo '<input type="text"   name="qty[]"          value="'.$qty.'">'.$part['partunit'].' ('.$onhand.')</td></tr>';
+         echo "<tr>";
       };
 ?>
       </table>
@@ -116,6 +117,7 @@ Inventurbuchung<br />
 <form name="inventurs" action="inventurlager.php" method="post" <?php echo $js ?>>
     <input type="hidden" name="comment" value="<?php echo $comment ?>">
     <input type="hidden" name="budatum" value="<?php echo $now ?>">
+    Artikelnummer: <input type="text" size="20" name="partnumber"><br>
     Warengruppe:
     <select name="pg">
     <option value="">Artikel ohne Warengruppe

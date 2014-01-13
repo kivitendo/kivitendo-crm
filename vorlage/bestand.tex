@@ -20,16 +20,16 @@
 \usepackage{lastpage}
 \usepackage{multirow} 
 \usepackage{color}
-\setlength{\voffset}{-0.8cm} 
+\setlength{\voffset}{-2.8cm} 
 \setlength{\hoffset}{-1.5cm}
 \setlength{\topmargin}{0cm}
 \setlength{\headheight}{0.5cm}
-\setlength{\headsep}{0.1cm}
+\setlength{\headsep}{1cm}
 \setlength{\topskip}{0pt}
 \setlength{\oddsidemargin}{1.0cm}
 \setlength{\evensidemargin}{1.0cm}
 \setlength{\textwidth}{18.1cm}
-\setlength{\textheight}{24.3cm}
+\setlength{\textheight}{26.5cm}
 \setlength{\footskip}{1.8cm} 
 \setlength{\parindent}{0pt}
 \renewcommand{\baselinestretch}{1}
@@ -39,75 +39,45 @@
 % ------------------------------------------------------------
 % Font für Code 39
 \font\xlix=wlc39 scaled 1200
-\newcommand{\barcode}[1]{{\xlix@#1@}}
-\newcommand\WG[1]{%
-    \\ \pagebreak
-    & \multicolumn{2}{c}{\underline{\textbf{#1}}} & \\
-}
-
-\newcommand\Zeile[5]{%
-     %\multirow{2}{25mm}{ \begin{figure}[ht] \includegraphics*[height=35px]{#1} \end{figure} }& 
-     \multirow{2}{25mm}{ \begin{picture}(25,40)(0,-12) \includegraphics*[height=40px]{#1} \end{picture} }& 
-     %\multirow{2}{25mm}{ \includegraphics*[height=35px]{#1} }& 
-           \multicolumn{2}{p{115mm}}{\small #4} & \small #5 \\
-     \nopagebreak & \small #2 & \multicolumn{1}{r}{\small #3 €}   &
-            \ifthenelse{\equal{#5}{}}{}{\barcode{#5}}\\
-     \\ 
-}
-
 \begin{document}
 % Schrift-Stil festlegen:
 \fontfamily{cmss}\fontsize{12}{15pt plus 0.15pt minus 0.1pt}\selectfont
-
-\centering
-\LARGE Katalog \\
-%\normal
-\vspace{3cm}
-\parbox{14cm}{
-Meine Firma \\
-Überholspur 1\\
-\\
-12345 Sonstwo\\
-\\
-Tel.: +49 1234 567890\\
-info@meine-firma.false\\
-}
-\\
-\vspace{1cm}
-Erstelldatum: <%datum%>
-
+Bestandsliste <%partsgroup%>  Datum: <%datum%> \\
 
 % ------------------------------------------------------------
 % Die Positionen-Tabelle
 % ------------------------------------------------------------
 \begin{filecontents}{tabelle.tex}
 
-\begin{longtable}{@{}p{25mm}p{52mm}p{53mm}p{45mm}@{}} % Definition der Spalten
-
+\begin{longtable}{@{}lXp{70px}rr@{}} % Definition der Spalten
 	% Spaltenueberschriften
-	%\hline % Trennlinie
+        Nummer & Artikel & Istbestand & EP & Wert \\
+	\hline % Trennlinie
     \endfirsthead
 
-	%\hline % Trennlinie
+        Nummer & Artikel & Istbestand & EP & Wert \\
+	\hline % Trennlinie
     \endhead
 
     % Fuss der Teiltabellen
-    %\multicolumn{3}{r}{Fortsetzung n\"achste Seite. Seite: \thepage{} von \pageref{LastPage}} \\
+    %\multicolumn{5}{r}{Fortsetzung n\"achste Seite. Seite: \thepage{} von \pageref{LastPage}} \\
   \endfoot
 
-    % Das Ende der Tabelle
-    % \hline % Trennlinie
+  % Das Ende der Tabelle
+	\hline % Trennlinie
   \endlastfoot
 
 	% Artikel-Positionen:
 	<%foreach_part%>   
-            \ifthenelse{\equal{<%newpg%>}{new}}{ \WG{<%partsgroup%>} } 
-            { \Zeile{<%image%>}{<%partnumber%>}{<%sellprice%>}{<%description%>}{<%ean%>} }
+            <%partnumber%> & <%description%> & <%bestand%>  <%unit%> & <%ep%> & <%summe%> \\
 	<%end_part%>
 
 	\hline
 \end{longtable}
 \end{filecontents}
 \LTXtable{\textwidth}{tabelle.tex}
+Warenwert: <%gesamtsumme%>
+\vspace{5mm}
 
+\label{LastPage}
 \end{document}

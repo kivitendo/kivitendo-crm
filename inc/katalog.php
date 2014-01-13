@@ -94,20 +94,16 @@ function getArtikel($data) {
     return $rs;
 }
 
-function prepTex($katalog=true,$upload=false) {
+function prepTex($tex='katalog',$upload=false) {
     $pre = '';
     $post = '';
     $artikel = '';
     $postline = false;
     $artline = false;
-    if ($katalog) {
-        if ($upload) {
-            $vorlage = fopen('tmp/katalog.org','r');
-        } else {
-            $vorlage = fopen('vorlage/katalog.tex','r');
-        }
+    if ($upload) {
+            $vorlage = fopen('tmp/'.$tex.'.org','r');
     } else {
-	    $vorlage = fopen('vorlage/inventur.tex','r');
+            $vorlage = fopen('vorlage/'.$tex.'.tex','r');
     }
     $line = fgets($vorlage,1024);
     while (!feof($vorlage)) {
@@ -137,6 +133,7 @@ function prepTex($katalog=true,$upload=false) {
     return array("pre"=>$pre,"artikel"=>$artikel,"post"=>$post);
 }
 
+
 function getLagerOrte() {
     $sql = "SELECT w.description as ort,b.description as platz,warehouse_id,b.id from bin b left join warehouse w on w.id=warehouse_id order by warehouse_id,b.id";
     $rs = $_SESSION["db"]->getAll($sql,DB_FETCHMODE_ASSOC);
@@ -162,7 +159,7 @@ function getLager($data) {
    $order = 'p.';
    if ($data['wg'] == '1') $order .= 'partsgroup_id,p.';
    $order .= $data['sort'];
-   $sql  = 'SELECT p.partsgroup_id,pg.partsgroup,p.partnumber,p.description,p.unit,';
+   $sql  = 'SELECT p.partsgroup_id,pg.partsgroup,p.partnumber,p.description,p.unit,p.lastcost as ep,';
    $sql .= '(select sum(qty) from inventory where '.$lager.' AND parts_id=p.id) as bestand ';
    $sql .= 'from parts p left join partsgroup pg on pg.id = p.partsgroup_id ';
    $sql .= 'where 1=1 ';
@@ -178,15 +175,19 @@ function getPartsgroup() {
    return $pg;
 }
 function closeinventur($name) {
-    $rc = @exec("pdflatex -interaction=batchmode -output-directory=tmp/ tmp/inventur.tex",$out,$ret);
-    $rc = @exec("pdflatex -interaction=batchmode -output-directory=tmp/ tmp/inventur.tex",$out,$ret);
-    if ($name) {
+    $rc = @exec("pdflatex -interaction=batchmode -output-directory=tmp/ tmp/$name.tex",$out,$ret);
+    $rc = @exec("pdflatex -interaction=batchmode -output-directory=tmp/ tmp/$name.tex",$out,$ret);
+    /*if ($name) {
         $rc = @exec("mv tmp/inventur.pdf $name");
-    }
+    }*/
 }
-function getPartBin($pg,$obsolete,$bin) {
-    if ($pg == '') {
+function getPartBin($pg,$partnumber,$obsolete,$bin) {
+    if ($pg == '' and $partnumber == '') {
 	$pg = "(partsgroup_id is NULL or partsgroup_id = 0) ";
+    } else if ($pg == '' and $partnumber != '') {
+        $pg = "partnumber like '$partnumber' ";
+    } else if ($pg != '' and $partnumber != '') {
+       $pg = "partsgroup_id = $pg and partnumber like '$partnumber' ";
     } else { 
        $pg = "partsgroup_id = $pg ";
     };
@@ -203,8 +204,8 @@ function getPartBin($pg,$obsolete,$bin) {
     $sql .= 'order by  partnumber asc, bin_id asc';
     $pg = $_SESSION['db']->getAll($sql,DB_FETCHMODE_ASSOC);
     return $pg;
-    $sql  = "SELECT id from parts where partnumber ilike '$part'" ;
-    /*$rs  = $_SESSION['db']->getOne($sql);
+    /*$sql  = "SELECT id from parts where partnumber ilike '$part'" ;
+    $rs  = $_SESSION['db']->getOne($sql);
     if ($rs) {
         $sql  = "SELECT DISTINCT chargenumber,";
         $sql .= "(select sum(qty) from inventory where bin_id = $bin and parts_id = $part and chargenumber = i.chargenumber) as bestand";

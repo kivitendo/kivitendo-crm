@@ -196,7 +196,7 @@ function anmelden() {
 	        continue;
         }
         if ( preg_match("/cookie_name[ ]*=[ ]*(.+)/",$tmp,$hits) ) $cookiename = $hits[1];
-        if ( preg_match("/dbcharset[ ]*=[ ]*(.+)/",$tmp,$hits) )   $dbcharset = $hits[1];
+        //if ( preg_match("/dbcharset[ ]*=[ ]*(.+)/",$tmp,$hits) )   $dbcharset = $hits[1];
         if ( preg_match("/session_timeout[ ]*=[ ]*(.+)/",$tmp,$hits) )   $sesstime = $hits[1];
         if ( preg_match("!\[authentication/database\]!",$tmp) )    $dbsec = true;
         $tmp = fgets($lxo,512);
@@ -223,7 +223,8 @@ function anmelden() {
     } else {
         $_SESSION['CRMTL'] = $auth['CRMTL'];
         $charset = ini_get("default_charset");
-        if ( $charset == "" ) $charset = $dbcharset;
+        //if ( $charset == "" ) $charset = $dbcharset;
+        if ( $charset == "" ) $charset = 'UTF8';
         $_SESSION["charset"] = $charset;
         include_once("inc/UserLib.php");
         $user_data=getUserStamm(0,$_SESSION["login"]);

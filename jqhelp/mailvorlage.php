@@ -15,8 +15,9 @@
                 $empf=getKontaktStamm(substr($KontaktTO,1));
                 $tmp = getFirmaCVars($empf["cp_cv_id"]);
                 if ($tmp) foreach($tmp as $key=>$val) { $empf[$key]=$val; };
-            } else if (substr($KontaktTO,0,1)=="C") {
+            //} else if (substr($KontaktTO,0,1)=="C") {
             } else if (substr($KontaktTO,0,1)=="S") {
+                $empf= getShipStamm(substr($KontaktTO,1),'C',True) // <- Da noch mal ran. Hart Kundenstamm
             } else if ($KontaktTO) {
                 $empf=getFirmenStamm(substr($KontaktTO,1),true,substr($KontaktTO,0,1));
             };
@@ -71,7 +72,6 @@
         }
         echo json_encode($rs);
     }
-
 if ($_GET['case'] == 'get') {
     getMailTpl($_GET['template'],$_GET['to']);
 } else if ($_POST['case'] == 'save') {

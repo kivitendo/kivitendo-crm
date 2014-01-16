@@ -98,7 +98,7 @@
             $("#vorlagen").change(function(){
                 var mid = $("#vorlagen option:selected").val();
                 if (mid > 0) {
-                    KontaktTO=$("#KontaktTO").value;
+                    KontaktTO=$("#KontaktTO").val();
     	            $.ajax({
     	                url: "jqhelp/mailvorlage.php?case=get&template="+mid+"&to="+KontaktTO,
     	                dataType: 'json',

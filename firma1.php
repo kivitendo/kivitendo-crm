@@ -200,7 +200,7 @@
             'chelp' => ($kdhelp)?"visible":"hidden",
             'none' => "visible",
             'mail_pre'      => ($_SESSION['external_mail']=='t')?'mailto:':'mail.php?TO=',
-            'mail_after'    => ($_SESSION['external_mail']=='t')?'':'&KontaktTO=C{FID}'
+            'mail_after'    => ($_SESSION['external_mail']=='t')?'':'&KontaktTO=C'.$id
     ));
     $t->set_block("fa1","Liste","Block");
     $i=0;

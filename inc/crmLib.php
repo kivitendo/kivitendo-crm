@@ -901,29 +901,7 @@ function updWvlERP($data) {
 *****************************************************/
 function updWvl($data,$datei="") {
     $nun = date("Y-m-d H:i:00");
-    /*$anz = 0;
-    $pfad = "";
-    if ( $datei ) $anz = ($datei["Datei"]["name"][0]<>"")?count($datei["Datei"]["name"]):0;
-    if ( $anz > 0 ) {  // ein neues Dokument
-        if ( $data["DateiID"] ) delDokument($data["DateiID"]); // ein altes löschen
-        for ($o=0; $o<$anz; $o++) {
-            $dat["Datei"]["name"]=$datei["Datei"]["name"][$o];
-            $dat["Datei"]["tmp_name"]=$datei["Datei"]["tmp_name"][$o];
-            $dat["Datei"]["type"]=$datei["Datei"]["type"][$o];
-            $dat["Datei"]["size"]=$datei["Datei"]["size"][$o];
-            if (!$data["DCaption"]) $data["DCaption"]=$data["cause"];
-            $dbfile=new document();
-            $dbfile->setDocData("descript",$data["DCaption"]);
-            $pfad=mkPfad($data["cp_cv_id"],$data["CRMUSER"]);
-            $rc=$dbfile->uploadDocument($dat,$pfad);
-            $dateiID=$dbfile->id;       
-            //$dateiID=saveDokument($dat,$data["DCaption"],$nun,0,$data["CRMUSER"],"");
-        }
-        if ($anz>1) $dateiID=1;
-    } else {
-        $dateiID=$data["DateiID"];
-    }*/
-        $dateiID=$data["DateiID"];
+    $dateiID=$data["DateiID"];
     if ( empty($dateiID) ) $dateiID = 0;
     $finish = ($data["Finish"]<>"")?", finishdate='".date2db($data["Finish"])." 0:0:00'":"";
     $descript = addslashes($data["c_long"]);
@@ -931,7 +909,7 @@ function updWvl($data,$datei="") {
     if ( $data["kontakt"]=="F" ) {
         $rs = updWvlERP($data);
     } else {
-        if ( !$data['status'] ) $data['status'] = 1;
+        if ( $data['status'] == '' || $data['status'] < 0 || $data['status'] > 3 ) $data['status'] = 1;
         $sql  = "update wiedervorlage set  cause='".$data["cause"]."', descript='$descript', ";
         $sql .= "document=$dateiID, status=".$data["status"].",kontakt='".$data["kontakt"]."',changedate='$nun'".$finish;
         if ( $data["tellid"] ) {

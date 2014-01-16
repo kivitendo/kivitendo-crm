@@ -17,7 +17,7 @@
                 if ($tmp) foreach($tmp as $key=>$val) { $empf[$key]=$val; };
             //} else if (substr($KontaktTO,0,1)=="C") {
             } else if (substr($KontaktTO,0,1)=="S") {
-                $empf= getShipStamm(substr($KontaktTO,1),'C',True) // <- Da noch mal ran. Hart Kundenstamm
+                $empf= getShipStamm(substr($KontaktTO,1),'C',True); // <- Da noch mal ran. Hart Kundenstamm
             } else if ($KontaktTO) {
                 $empf=getFirmenStamm(substr($KontaktTO,1),true,substr($KontaktTO,0,1));
             };

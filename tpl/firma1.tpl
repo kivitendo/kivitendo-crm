@@ -56,11 +56,11 @@
         $( "#dialogwin" ).dialog( { title: "Adresse" } );
         $( "#dialogwin" ).dialog( "open" );
         if (A==1) {
-            $( "#dialogwin" ).load("showAdr.php?Q={Q}&fid={FID}");
+            $( "#dialogwin" ).load("showAdr.php?Q={Q}&fid={FID}&nojs=1");
         } else {
             sid = document.getElementById('SID').firstChild.nodeValue;
             if ( sid )
-                $( "#dialogwin" ).load("showAdr.php?Q={Q}&sid="+sid);
+                $( "#dialogwin" ).load("showAdr.php?Q={Q}&sid="+sid+"&nojs=1");
         }
     }
     function notes() {

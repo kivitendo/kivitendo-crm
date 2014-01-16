@@ -216,6 +216,8 @@ Anschrift<br><hr>
         </tr>
     </table>
     <br>
-    <a href="JavaScript:self.close()">schließen</a>
+<?php  if ( !$_GET['nojs'] ) { ?>
+    <a  href="JavaScript:self.close()">schließen</a>
+<?php } ?>
 </body>
 </html>

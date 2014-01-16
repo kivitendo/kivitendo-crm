@@ -8,6 +8,7 @@
 * hole die abweichenden Lieferdaten
 *****************************************************/
 function getShipStamm($id,$tab="C",$complete=false) {
+    if ( $id < 1 ) return false;
     if ($complete) {
         $sql ="select trans_id,shiptoname,COALESCE(shiptostreet,street) as shiptostreet,COALESCE(shiptocity,city) as shiptocity,";
         $sql.="COALESCE(shiptocountry,country) as shiptocountry,";
@@ -183,7 +184,7 @@ function getFirmenStamm($id,$ws=true,$tab='C',$cvar=true) {
             }
             $shipids=implode(",",$shipids);
         } else {
-            $shipids="";
+            $shipids="0";
         }
         if ( empty($rs3) ) {  // es ist keine abweichende Anschrift da
             if ($ws) {    // soll dann aber mit Re-Anschrift gefüllt werden

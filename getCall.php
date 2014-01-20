@@ -24,6 +24,7 @@
     $daten["Datei"]="";
     $daten["DCaption"]="";
     $daten["Q"]=$Q;
+    $daten["id"]=0;
     $daten["CID"]=($pid>0)?$pid:$fid;
     $daten["Kunde"]=0;
     $daten["Anzeige"]=0;                           
@@ -93,8 +94,8 @@
                     $daten["Ort"]=$co["cp_city"];
                     $daten["nummer"]=$co["nummer"];
                     break;
-        default      : $daten["Firma"]="xxxxxxxxxxxxxx";
-                $daten["nummer"]="";    
+        default   : $daten["Firma"]="xxxxxxxxxxxxxx";
+                    $daten["nummer"]="";    
     } 
 
     //------------------------------------------- Beginn Ausgabe
@@ -149,7 +150,7 @@
     if ($Q<>"XX")    {
         $thread=getAllTelCall(($pid)?$pid:$fid,($Q=="C" || $Q=="V"),0,-1); // Liste Verschieben
         if ($thread) {
-            $thread=array_merge(array("id"=>"0"),$thread);
+            $thread=array_merge(array(array("id"=>"0")) ,$thread);
         } else {
             $thread=array(array("id"=>"0"),array("id"=>"$id"));
         }

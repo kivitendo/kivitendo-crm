@@ -324,7 +324,8 @@ function insCall($data,$datei) {
         $dbfile = new document();
         $dbfile->setDocData("descript",$text);
         $rc = $dbfile->uploadDocument($dat,"/".$pfad);
-        $val['dokument'] = $dbfile->id;
+        //$val['dokument'] = $dbfile->id;
+        $dateiID = $dbfile->id;
         $did = documenttotc($id,$dateiID);
         $fields[] = 'dokument';
     };
@@ -337,6 +338,7 @@ function insCall($data,$datei) {
     $val[5] = $data['Bezug'];
     $val[6] = $data["CRMUSER"];
     $val[7] = ($data['inout'])?$data['inout']:'';
+    $val[8] = $dateiID;
     $rc = $_SESSION['db']->update('telcall',$fields,$val,'id='.$id);
     if( !$rc ) {
         $id=false;

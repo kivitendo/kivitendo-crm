@@ -149,7 +149,7 @@
             DName = '';
             DateiID = 0;
             noteid = 0;
-            newFile = false;
+            newfile = 0;
             $('.mail').hide();
             $('.hideK').show();
             $('#name').val('');
@@ -412,7 +412,7 @@
     </td>
 </tr><tr>
     <td class="klein" colspan="2">
-        <input type="text" name="cause" id="cause" size="60" maxlength="60" value="" tabindex="4">
+        <input type="text" name="cause" id="cause" size="55" maxlength="60" value="" tabindex="4">
         <br><span class="klein">Betreff</span>
     </td>
 </tr><tr>
@@ -431,7 +431,7 @@
     </td>
 </tr><tr>
     <td class="klein hideD" colspan="2">
-        <input type="text" name="DCaption" id="DCaption" size="60" maxlength="75" value="" tabindex="11">
+        <input type="text" name="DCaption" id="DCaption" size="55" maxlength="75" value="" tabindex="11">
         <br><span class="klein">Dokumentbeschreibung</span>
     </td>
     </td>

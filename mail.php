@@ -6,12 +6,11 @@
     include_once("inc/UserLib.php");
     include_once("Mail.php");
     include_once("Mail/mime.php");
-    if ( isset($_GET['popup']) or isset($_POST['popup']) ) {
+    if ( (isset($_GET['popup']) && $_GET['popup'] == 1) or (isset($_POST['popup']) && $_POST['popup'] == 1) ) {
         $popup = true;
     } else {
         $popup = false;
     }
-
     if ($_POST["QUELLE"] != '') { 
         $referer=$_POST["QUELLE"]; 
         $TO=$_POST["TO"];
@@ -211,7 +210,7 @@
                     }
                 }
                 if (!$stamm) {
-                    $data["CID"]=$_SESSION["loginCRM"];        // Dann halt beim Absender in den Thread eintragen
+                    $data["CID"]=$_SESSION["login"];        // Dann halt beim Absender in den Thread eintragen
                     $data["cause"]=$Subject."|".$_POST["TO"];
                     insCall($data,$_FILES);
                 }

@@ -184,7 +184,7 @@ function RecallMemory() {
 function init() {
 	klammer=0;
 	anzeige=document.rechner.display;
-	window.resizeTo(181, 290);
+	window.resizeTo(172, 295);
 	window.focus();
     document.rechner.display.focus();
 }
@@ -195,7 +195,7 @@ document.onkeyup = TasteLosgelassen;
 //-->
 </script>
 </head>
-<body onLoad="init();" style="padding:0px; margin:0px;">
+<body onLoad="init();" style="padding:0px; margin:0px;"><center>
 <img src="Rechner.png" width="169" height="227" border="0" usemap="#map" />
 <map name="map">
 <!-- #$-:Image Map file created by GIMP Imagemap Plugin -->
@@ -227,10 +227,12 @@ document.onkeyup = TasteLosgelassen;
 <area shape="rect" coords="44,101,68,124"   alt="7"    onClick="addChar('7')" />
 <area shape="rect" coords="71,101,97,124"   alt="8"    onClick="addChar('8')" />
 <area shape="rect" coords="99,101,124,124"  alt="9"    onClick="addChar('9')" />
+<area shape="rect" coords="71,207,97,228"   alt="Quit" onClick="self.close()" />
 </map>
 <div id="display" style="position:absolute; left:28px; z-index:1; top:24px; height:30px; width:100px;">
 <form name="rechner" onSubmit="return Rechnen();"><input style="text-align:right; font-size:13px;" type="text"   size="13" name="display" value="0" readonly="readonly"></form>
 </div> 
 <script language="JavaScript">self.focus()</script>
+</center>
 </body>
 </html>

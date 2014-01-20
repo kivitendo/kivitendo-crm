@@ -209,13 +209,16 @@ class document {
 		$this->logvar();
 		if (chkdir($pfad)) {
 			//Zielpfad vorhanden
-			if (! copy($_SESSION['crmdir'].'/tmp/'.$file["Datei"]["tmp_name"],$dest)) {
+			//if (! copy($_SESSION['crmdir'].'/tmp/'.$file["Datei"]["tmp_name"],$dest)) {
+			if (! copy($file["Datei"]["tmp_name"],$dest)) {
 				$this->error = "Datei '$dest' wurde nicht hochgeladen!";
 				$this->log($this->error);
-                unlink($file["Datei"]["tmp_name"]);
+				$this->log('Tmp_name: '.$file["Datei"]["tmp_name"]);
+                @unlink($file["Datei"]["tmp_name"]);
 				return false;
 			} 
-                unlink($_SESSION['crmdir'].'/tmp/'.$file["Datei"]["tmp_name"]);
+                //unlink($_SESSION['crmdir'].'/tmp/'.$file["Datei"]["tmp_name"]);
+                @unlink($file["Datei"]["tmp_name"]);
                 //chmod($dest,decoct($_SESSION['dir_mode'])); 
                 chmod($dest,$_SESSION['dir_mode']); 
                 if ( $_SESSION['dir_group'] ) chgrp($dest,$_SESSION['dir_group']); 

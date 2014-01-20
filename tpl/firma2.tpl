@@ -222,7 +222,7 @@
 <!-- END kdhelp -->
     </select>
     </span>
-    <span style="float:left; padding-left:12em;  visibility:{tools};">
+    <span style="float:left; padding-left:12em; padding-top:2em; visibility:{tools};">
     <img src="tools/rechner.png"  onClick="toolwin('tools/Rechner.html',0)" title=".:simple calculator:."> &nbsp;
     <img src="tools/notiz.png"  onClick="toolwin('postit.php?popup=1',0)" title=".:postit notes:."> &nbsp;
     <img src="tools/kalender.png"  onClick="toolwin('tools/kalender.php?Q=P&id=',1)" title=".:calender:."> &nbsp;

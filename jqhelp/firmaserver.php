@@ -98,7 +98,7 @@
                 "<a href='mailto:".$data["cp_email"]."'>".$data["cp_email"]."</a>":
                 "<a href='mail.php?TO=".$data["cp_email"]."&KontaktTO=P".$data["cp_id"]."'>".$data["cp_email"]."</a>";
              if ($data["cp_privatemail"]) $data["cp_privatemail"]=$_SESSION['external_mail']?
-                "Privat: <a href='maito:=".$data["cp_privatemail"]."'>".$data["cp_privatemail"]."</a>":
+                "Privat: <a href='mailto:".$data["cp_privatemail"]."'>".$data["cp_privatemail"]."</a>":
                 "Privat: <a href='mail.php?TO=".$data["cp_privatemail"]."&KontaktTO=P".$data["cp_id"]."'>".$data["cp_privatemail"]."</a>";
             $data["cp_homepage"]="<a href='".$data["cp_homepage"]."' target='_blank'>".$data["cp_homepage"]."</a>";
             if (strpos($data["cp_birthday"],"-")) { $data["cp_birthday"]=db2date($data["cp_birthday"]); };

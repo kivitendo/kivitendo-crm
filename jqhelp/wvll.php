@@ -104,17 +104,18 @@
         } ;
         if (!$data["DCaption"]) $data["DCaption"] = $data["cause"];
         if ( $data['newfile'] == 1 and $data['filename'] != '' ) {
-            $rc = file_exists("../dokumente/".$_SESSION["dbname"]."/tmp/".$data['filename']);
+            $src  = $_SESSION['crmdir'].'/dokumente/'.$_SESSION["dbname"].'/'.$_SESSION['login'].'/tmp/';
+            $rc   = file_exists($src.$data['filename']);
             if ( $rc ) {
                 if ( $data["DateiID"] ) delDokument($data["DateiID"]); // ein altes löschen
                 require_once("documents.php");
-                $dest = "./dokumente/".$_SESSION["dbname"]."/".$_SESSION["loginCRM"]."/";
-                copy("../dokumente/".$_SESSION["dbname"]."/tmp/".$data['filename'],'.'.$dest.$data['filename']);
-                unlink ("../dokumente/".$_SESSION["dbname"]."/tmp/".$data['filename']);
+                $dest = $_SESSION['crmdir'].'/dokumente/'.$_SESSION["dbname"].'/'.$_SESSION["login"].'/';
+                copy($src.$data['filename'],$dest.$data['filename']);
+                unlink ($src.$data['filename']);
                 //Dokument in db speichern
                 $dbfile=new document();
                 $dbfile->setDocData("descript",$data["subject"]);
-                $dbfile->setDocData("pfad",$_SESSION["loginCRM"]);
+                $dbfile->setDocData("pfad",$_SESSION["login"]);
                 $dbfile->setDocData("name",$data['filename']);
                 $dbfile->setDocData("descript",$data["DCaption"]);
                 $rc = $dbfile->newDocument();
@@ -134,10 +135,10 @@
     }
 
 
-    //$f=fopen('/tmp/wvl','a');
-    //fputs($f,print_r($_POST,true));
-    //fputs($f,print_r($_GET,true));
-    //fclose($f);
+   // $f=fopen('/tmp/wvl','a');
+   // fputs($f,print_r($_POST,true));
+   // fputs($f,print_r($_GET,true));
+   // fclose($f);
 if ( isset($_POST['task']) and $_POST['task'] == 'erp' ) {
     if ( $_POST['kontakt'] == 'F' ) {
         echo updWvlERP($_POST);

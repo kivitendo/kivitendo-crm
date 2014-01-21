@@ -181,12 +181,12 @@ function getPartsgroup() {
    $pg = $_SESSION['db']->getAll($sql,DB_FETCHMODE_ASSOC);
    return $pg;
 }
-function closeinventur($name) {
-    $rc = @exec("pdflatex -interaction=batchmode -output-directory=tmp/ tmp/$name.tex",$out,$ret);
-    $rc = @exec("pdflatex -interaction=batchmode -output-directory=tmp/ tmp/$name.tex",$out,$ret);
-    /*if ($name) {
-        $rc = @exec("mv tmp/inventur.pdf $name");
-    }*/
+function closeinventur($art,$name) {
+    $rc = @exec("pdflatex -interaction=batchmode -output-directory=tmp/ tmp/$art.tex",$out,$ret);
+    $rc = @exec("pdflatex -interaction=batchmode -output-directory=tmp/ tmp/$art.tex",$out,$ret);
+    if ($name != $art) {
+        $rc = @exec("mv tmp/$art.pdf tmp/$name.pdf");
+    }
 }
 function getPartBin($pg,$partnumber,$obsolete,$bin) {
     if ($pg == '' and $partnumber == '') {

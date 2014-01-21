@@ -38,7 +38,7 @@ if ($_POST["erstellen"]=="erstellen") {
         $pg = $artikel[0]['partsgroup_id'];
         $qty = 0;
         if ($_POST['wg'] == 1) {
-            $fname = "$art_$pg";
+            $fname = $art.'_'.$pg;
             $link = "<a href='tmp/$fname.pdf'>WG $pg</a> <br />";
         } else {
             $fname = $art;
@@ -49,15 +49,18 @@ if ($_POST["erstellen"]=="erstellen") {
         $pre = preg_replace("/<%datum%>/i",date('d.m.Y'),$pre);
         $rc = fputs($f,$pre);
 	$gesamtsumme = 0;
+        $pgsumme = 0;
         foreach($artikel as $part) {
             //print_r($part); echo "<br>";
             if ($pg != $part['partsgroup_id'] AND $_POST['wg'] == 1) {
-                $rc = fputs($f,$vorlage['post']);
+                $line = preg_replace("/<%gesamtsumme%>/i",sprintf('%0.2f',$pgsumme),$vorlage['post']);
+                $rc = fputs($f,$line);
+                $pgsumme = 0;
                 fclose($f);
-                closeinventur($fname);
+                closeinventur($art,$fname);
                 $pg = $part['partsgroup_id'];
-                $fname = "tmp/$art_$pg.pdf";
-                $link .= "<a href='tmp/$fname'>".$part['partsgroup']."</a><br />";
+                $fname = $art.'_'.$pg;
+                $link .= "<a href='tmp/$fname.pdf'>".$part['partsgroup']."</a><br />";
                 $f = fopen('tmp/'.$art.'.tex','w');
                 $pre = preg_replace("/<%partsgroup%>/i",$part['partsgroup'],$vorlage['pre']);
                 $rc = fputs($f,$pre);
@@ -88,6 +91,7 @@ if ($_POST["erstellen"]=="erstellen") {
             }
             $summe = sprintf('%0.2f',$qty*$ep);
             $gesamtsumme += $qty*$ep;
+            $pgsumme += $qty*$ep;
             $line = preg_replace("/<%summe%>/i",$summe,$line);
             $qty ++;
             $rc = fputs($f,$line);
@@ -95,7 +99,7 @@ if ($_POST["erstellen"]=="erstellen") {
         $line = preg_replace("/<%gesamtsumme%>/i",sprintf('%0.2f',$gesamtsumme),$vorlage['post']);
         $rc = fputs($f,$line);
         fclose($f); 
-        closeinventur($fname);
+        closeinventur($art,$fname);
         echo $link;
    } else {
       echo "Kein Artikel gefunden";

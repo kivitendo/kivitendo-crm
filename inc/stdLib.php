@@ -115,7 +115,7 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     $auth["login"]      = $rs[0]["login"];
     $sql = "select * from auth.user_config where user_id=".$uid;
     $rs = $db->getAll($sql);
-    $keys = array("countrycode","stylesheet","company","address","vclimit","signature","email","tel");
+    $keys = array("countrycode","vclimit","signature","email","tel","fax","name");
     foreach ( $rs as $row ) {
         if ( in_array($row["cfg_key"],$keys) ) {
             $auth[$row["cfg_key"]] = $row["cfg_value"];
@@ -237,9 +237,10 @@ function anmelden() {
         $_SESSION['dir_mode']  = ( $user_data['dir_mode'] != '' )?octdec($user_data['dir_mode']):493; // 0755
         $_SESSION["loginCRM"] = $user_data["id"];
         $_SESSION['theme']    = ($user_data['theme']=='' || $user_data['theme']=='base')?'':$user_data['theme'];
-        $sql = "select * from defaults";
-        $rs = $_SESSION["db"]->getAll($sql);
-        $_SESSION["ERPver"]   = $rs[0]["version"];
+        $sql = "SELECT  * from schema_info where tag like 'relea%' order by itime desc limit 1";
+        $rs = $_SESSION["db"]->getOne($sql);
+        $tmp = substr($rs['tag'],8); 
+        $_SESSION["ERPver"]   = strtr($tmp,'_','.');
         $_SESSION["menu"]     = makeMenu($_SESSION["sessid"],$_SESSION["token"]);
         $_SESSION["basepath"] = $BaseUrl;
         $_SESSION['token']    = False;

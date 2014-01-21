@@ -3,14 +3,24 @@
     include ('inc/katalog.php');
     $link = "";
     $menu =  $_SESSION['menu'];
-
+    $head = mkHeader();
 ?>
 <html>
     <head><title></title>
-    <?php echo $menu['stylesheets']; ?>
-    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
-    <script type="text/javascript" src="<?php echo $_SESSION['basepath']; ?>crm/jquery-ui/jquery.js"></script>
-    <?php echo $menu['javascripts']; ?>
+<?php
+echo $menu['stylesheets'];
+echo $head['CRMCSS'];
+echo $head['JQUERY'];
+echo $head['JQUERYUI'];
+echo $head['JQDATE'];
+echo $head['THEME'];
+?>
+    <script type='text/javascript' src='inc/help.js'></script>
+    <script>
+        $(function() {
+            $( "#datum" ).datepicker($.datepicker.regional[ "de" ]);
+        });
+    </script>
 <body>
 <?php
  echo $menu['pre_content'];
@@ -103,7 +113,8 @@ if ($_POST["erstellen"]=="erstellen") {
 }
 ?>
 <form name="inventur" action="inventur.php" method="post">
-<input type='radio' name='art' value='inventur' checked>Inventurliste <input type='radio' name='art' value='bestand'>Bestandsliste<br />
+<input type='radio' name='art' value='inventur' checked>Inventurliste <br>
+<input type='radio' name='art' value='bestand'>Bestandsliste ab: <input type='text' name='datum' size='10' id='datum'><br />
 Sortierung nach <input type="radio" name="sort" value="partnumber" checked>Artikelnummer <input type="radio" name="sort" value="description">Artikelname<br />
 Jede Warengruppe auf ein neue Seite <input type="checkbox" name="wg" value="1"><br />
 Dienstleistungen ausgeben <input type="checkbox" name="dienstl" value="1"><br />

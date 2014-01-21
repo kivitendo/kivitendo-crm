@@ -160,12 +160,19 @@ function getLager($data) {
    if ($data['wg'] == '1') $order .= 'partsgroup_id,p.';
    $order .= $data['sort'];
    $sql  = 'SELECT p.partsgroup_id,pg.partsgroup,p.partnumber,p.description,p.unit,p.lastcost as ep,';
-   $sql .= '(select sum(qty) from inventory where '.$lager.' AND parts_id=p.id) as bestand ';
+   $sql .= '(select sum(qty) from inventory where '.$lager.' AND parts_id=p.id %s) as bestand ';
    $sql .= 'from parts p left join partsgroup pg on pg.id = p.partsgroup_id ';
    $sql .= 'where 1=1 ';
    if ($data['dienstl'] != 1) $sql .= 'AND inventory_accno_id is not NULL ';
    if ($data['erzeugn'] != 1) $sql .= 'AND expense_accno_id is not NULL ';
-   $sql .= 'order by '.$order;
+   if ($data['datum'] != '') {
+      $tmp = split('\.',$data['datum']);
+      $date = $tmp[2].'-'.$tmp[1].'-'.$tmp[0];
+      $and = "AND shippingdate <= '$date' ";
+   } else {
+      $and = '';
+   }
+   $sql = sprintf($sql,$and).' order by '.$order;
    $artikel = $_SESSION['db']->getAll($sql,DB_FETCHMODE_ASSOC);
    return $artikel;
 }

@@ -80,7 +80,7 @@
                 };
                 if ( preg_match("/^--/",$zeile) ) { $zeile = trim(fgets($f,1000)); continue; };
                 if ( !preg_match("/;$/",$zeile) or $code ) {
-                    $query .= $zeile;
+                    if ( !preg_match("#\\s?//#",$zeile) )  $query .= $zeile;
                     $zeile = trim(fgets($f,1000));
                 } else {
                     $query .= substr($zeile,0,-1);

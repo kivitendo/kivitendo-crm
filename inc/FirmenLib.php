@@ -916,7 +916,7 @@ function doReport($data,$typ="C") {
         }
     }
     $rc=$_SESSION['db']->getAll($sql);
-    $f=fopen('tmp/report_'.$loginCRM.'.csv',"w");
+    $f=fopen('tmp/report_'.$login.'.csv',"w");
     fputs($f,$felder."\n");
     if ($rc) {
         foreach ($rc as $row) {

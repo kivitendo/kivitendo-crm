@@ -71,8 +71,8 @@
                 $dat["Datei"]["size"]=$_FILES["Datei"]["size"];
                 $dbfile=new document();
                 $dbfile->setDocData("descript",$Subject);
-                $ok=chkdir($_SESSION["loginCRM"].'/SerMail');
-                $pfad=$_SESSION["loginCRM"].'/SerMail';
+                $ok=chkdir($_SESSION["login"].'/SerMail');
+                $pfad=$_SESSION["login"].'/SerMail';
                 $rc=$dbfile->uploadDocument($_FILES,$pfad);
                 $dateiID=$dbfile->id;
                 $dateiname=$_FILES["Datei"]["name"];

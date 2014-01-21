@@ -9,7 +9,7 @@ function doVcards($single,$extension,$targetcode,$zip) {
     $sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' order by id";
     $csvdata=$_SESSION['db']->getAll($sql);
     if ($csvdata) {
-        $pfad = $_SESSION["loginCRM"]."/vcard";
+        $pfad = $_SESSION["login"]."/vcard";
         chkdir($pfad,'.');
         $pfad = "../dokumente/".$_SESSION["dbname"]."/".$pfad."/";
         $felder=explode(":",$csvdata[0]["csvdaten"]);
@@ -100,7 +100,7 @@ function doVcards($single,$extension,$targetcode,$zip) {
             }
             $filename= "vcard.".$extension.".zip";
             $archive = new PclZip($pfad.$filename);
-            $v_list = $archive->create($pfad.$_SESSION["loginCRM"], '', $pfad.$_SESSION["loginCRM"], '', "vcardPreAdd");
+            $v_list = $archive->create($pfad.$_SESSION["login"], '', $pfad.$_SESSION["login"], '', "vcardPreAdd");
             $zip = new zipfile();
             for($i = 0; $i < count($archiveFiles); $i++) {
                 $file = $archiveFiles[$i];

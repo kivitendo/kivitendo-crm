@@ -20,8 +20,8 @@ $abs=$headers["Return-Path"];
 if ($_SESSION['logmail']) $f=fopen("log/maillog.txt","a");
 $dateiname=$_SESSION["dateiname"];
 if ($dateiname) {
-	$ftmp=fopen("./dokumente/".$_SESSION["dbname"]."/".$_SESSION["loginCRM"]."/SerMail/".$dateiname,"rb");
-	$filedata=fread($ftmp,filesize("./dokumente/".$_SESSION["dbname"]."/".$_SESSION["loginCRM"]."/SerMail/".$dateiname));
+	$ftmp=fopen("./dokumente/".$_SESSION["dbname"]."/".$_SESSION["login"]."/SerMail/".$dateiname,"rb");
+	$filedata=fread($ftmp,filesize("./dokumente/".$_SESSION["dbname"]."/".$_SESSION["login"]."/SerMail/".$dateiname));
 	fclose($ftmp);
 	$mime->addAttachment($filedata, $_SESSION["type"],$_SESSION["dateiname"], false );
 }

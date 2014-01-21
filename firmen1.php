@@ -14,7 +14,7 @@
         $rc = doReport($_POST,$Q);
         $t->set_file(array("fa1" => "firmen1.tpl"));
         if ($rc) { 
-            $tmp="<div style='width:300px'>[<a href='tmp/report_".$_SESSION["loginCRM"].".csv'>download Report</a>]</div>";
+            $tmp="<div style='width:300px'>[<a href='tmp/report_".$_SESSION["login"].".csv'>download Report</a>]</div>";
         } else {
             $tmp="Sorry, not found";
         }

@@ -360,7 +360,7 @@ CREATE TABLE crmdefaults (
     modify timestamp without time zone DEFAULT NOW()
 );
 CREATE TABLE crmemployee (
-    ceid integer DEFAULT nextval('crmid'::text) NOT NULL,
+    manid integer NOT NULL,
     uid int,
     key text,
     val text,
@@ -531,6 +531,7 @@ INSERT INTO schema_info (tag,login) VALUES ('crm_timetracker_parts','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_wissen_own','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_wvhistory','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_CRMemployee','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_CRMemployeeMID','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_UserFolder','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_UserMailssl','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_WiedervorlageGrp','install');

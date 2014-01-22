@@ -105,21 +105,21 @@ function saveUserStamm( $val ) {
         }
     }
     $sql = substr( $sql, 0, - 1 );
-    $sql .= " where id=".$val["uid"];
+    $sql .= ' where id='.$val['uid'];
     $rc = $_SESSION['db']->query( $sql );
     if ( $val["homephone"] ) 
         mkTelNummer( $val["uid"], "E", array( $val["homephone"] ) );
     if ( $val["workphone"] ) 
         mkTelNummer( $val["uid"], "E", array( $val["workphone"] ) );
     $rc = $_SESSION['db']->begin( );
-    $rc = $_SESSION['db']->query( 'DELETE FROM crmemployee WHERE uid = '.$val["uid"] );
+    $rc = $_SESSION['db']->query( 'DELETE FROM crmemployee WHERE uid = '.$val["uid"].' AND manid = '.$_SESSION['manid'] );
     if ( $rc ) 
         foreach ( $fld as $key => $typ ) {
             if ( array_key_exists( $key, $val ) ) {
-                $sql = 'INSERT INTO crmemployee (uid,key,val,typ) VALUES ('.$val['uid'].",'$key','".$val[$key]."','$typ')";
+                $sql = 'INSERT INTO crmemployee (manid,uid,key,val,typ) VALUES ('.$_SESSION['manid'].','.$val['uid'].",'$key','".$val[$key]."','$typ')";
         }
         else {
-            $sql = 'INSERT INTO crmemployee (uid,key,val,typ) VALUES ('.$val['uid'].",'$key',null,'$typ')";
+            $sql = 'INSERT INTO crmemployee (manid,uid,key,val,typ) VALUES ('.$_SESSION['manid'].','.$val['uid'].",'$key',null,'$typ')";
         }
         $rc = $_SESSION['db']->query( $sql );
         if ( !$rc ) {
@@ -187,7 +187,7 @@ function getUserStamm( $id, $login = false ) {
                 $daten[$row['key']] = $row['val'];
         }
         //Usereinstellungen
-        $sql = "SELECT * from crmemployee WHERE uid = $id";
+        $sql = "SELECT * FROM crmemployee WHERE uid = $id AND manid = ".$_SESSION['manid'];
         $rs = $_SESSION['db']->getAll( $sql );
         if ( $rs ) {
             foreach ( $rs as $row ) {

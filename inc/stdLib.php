@@ -115,7 +115,7 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     $auth["login"]      = $rs[0]["login"];
     $sql = "select * from auth.user_config where user_id=".$uid;
     $rs = $db->getAll($sql);
-    $keys = array("countrycode","vclimit","signature","email","tel","fax","name");
+    $keys = array("countrycode","stylesheet","vclimit","signature","email","tel","fax","name");
     foreach ( $rs as $row ) {
         if ( in_array($row["cfg_key"],$keys) ) {
             $auth[$row["cfg_key"]] = $row["cfg_value"];
@@ -127,7 +127,7 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     $sql  = "SELECT sess_value FROM auth.session_content WHERE session_id = '$cookie' and sess_key='client_id'";
     $rs   = $db->getOne($sql);
     $mandant = substr($rs['sess_value'],4);
-    $sql  = 'SELECT  name as mandant,dbhost,dbport,dbname,dbuser,dbpasswd FROM auth.clients WHERE id = '.$mandant;
+    $sql  = 'SELECT id as manid,name as mandant,dbhost,dbport,dbname,dbuser,dbpasswd FROM auth.clients WHERE id = '.$mandant;
     $rs   = $db->getOne($sql);
     $auth = array_merge($auth,$rs);
     //Eine der Gruppen des Users darf sales_all_edit
@@ -227,7 +227,7 @@ function anmelden() {
         if ( $charset == "" ) $charset = 'UTF8';
         $_SESSION["charset"] = $charset;
         include_once("inc/UserLib.php");
-        $user_data=getUserStamm(0,$_SESSION["login"]);
+        $user_data = getUserStamm(0,$_SESSION["login"]);
         $BaseUrl  = (empty( $_SERVER['HTTPS'] )) ? 'http://' : 'https://';
         $BaseUrl .= $_SERVER['HTTP_HOST'];
         $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
@@ -913,7 +913,8 @@ function makeMenu($sess,$token){
 *******************************************************************************************************************************************************/
 function accessHistory( $data=false ) {
     if ( $_SESSION['loginok'] == 'ok' ){
-        $sql = "select val from crmemployee where uid = '" . $_SESSION["loginCRM"] .  "' AND key = 'search_history'";
+        $sql  = "select val from crmemployee where uid = '" . $_SESSION["loginCRM"];
+        $sql .= "' AND manid = ".$_SESSION['manid']." AND key = 'search_history'";
         $rs =   $_SESSION['db']->getOne( $sql );
         $array_of_data = json_decode( $rs['val'], true );
         if( !is_array ( $array_of_data[0] ) ) unset( $array_of_data[0] );
@@ -924,7 +925,8 @@ function accessHistory( $data=false ) {
             if ( $array_of_data && in_array( $data, $array_of_data ) ) unset( $array_of_data[array_search( $data, $array_of_data )] );
             $array_of_data[] = $data;
             if ( count( $array_of_data ) > 8 ) array_shift( $array_of_data ); 
-            $sql = "UPDATE crmemployee SET val = '".json_encode( $array_of_data )."' WHERE uid = ".$_SESSION['loginCRM']." AND key = 'search_history'";
+            $sql =  "UPDATE crmemployee SET val = '".json_encode( $array_of_data )."' WHERE uid = ".$_SESSION['loginCRM'];
+            $sql .= " AND manid = ".$_SESSION['manid']." AND key = 'search_history'";
             $_SESSION['db']->query( $sql );
         }
     }

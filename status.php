@@ -2,6 +2,13 @@
 session_start();
 require_once("inc/version.php");
 require_once("inc/stdLib.php");
+$git = @exec('git log -1',$out,$rc);
+if ( $rc > 0 ) {
+    $commit = '';
+} else {
+    $commit  = '<tr><td>Git: </td><td>'.substr($out[0],7).'</td></tr>';
+    $commit .= '<tr><td>Datum: </td><td>'.substr($out[2],6).'</td></tr>';
+}
 $rc = false;
 if ( isset($_GET['test']) and $_GET['test'] == 'ja' ) {
     $rc = $_SESSION['db']->getAll("select * from crm order by version","Status");
@@ -49,6 +56,7 @@ if ($db) { echo "<a href='log/install.log'>Datenbankinstallation</a><br>"; } els
 ?>
 <table>
 	<tr><td>ProgrammVersion</td><td>[<?php echo  $VERSION." ".$SUBVER ?>]</td></tr>
+<?php echo $commit; ?>
 	<tr><td>Datenbank:</td><td> [<?php echo  $_SESSION["dbname"] ?>]</td></tr>
 	<tr><td>db-Server:</td><td>[<?php echo  $_SESSION["dbhost"] ?>]</td></tr>
 	<tr><td>Benutzer:</td><td>[<?php echo  $_SESSION["login"] ?>:<?php echo  $_SESSION["loginCRM"] ?>]</td></tr>

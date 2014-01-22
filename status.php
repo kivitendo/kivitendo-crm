@@ -6,8 +6,11 @@ $git = @exec('git log -1',$out,$rc);
 if ( $rc > 0 ) {
     $commit = '';
 } else {
+    foreach( $out as $row ) {
+        if ( substr($row,0,1) == 'D' ) $date = substr($row,6);
+    }
     $commit  = '<tr><td>Git: </td><td>'.substr($out[0],7).'</td></tr>';
-    $commit .= '<tr><td>Datum: </td><td>'.substr($out[2],6).'</td></tr>';
+    $commit .= '<tr><td>Datum: </td><td>'.$date.'</td></tr>';
 }
 $rc = false;
 if ( isset($_GET['test']) and $_GET['test'] == 'ja' ) {

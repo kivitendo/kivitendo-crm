@@ -25,12 +25,6 @@ function saveUserStamm( $val ) {
     };
     $std = array(
         'name',
-        'addr1',
-        'addr2',
-        'addr3',
-        'workphone',
-        'homephone',
-        'notes',
     );
     $fld = array(
         'msrv'                    => 't',
@@ -43,6 +37,12 @@ function saveUserStamm( $val ) {
         'port'                    => 'i',
         'proto'                   => 't',
         'ssl'                     => 't',
+        'addr1'                   => 't',
+        'addr2'                   => 't',
+        'addr3'                   => 't',
+        'workphone'               => 't',
+        'homephone'               => 't',
+        'notes'                   => 't',
         'abteilung'               => 't',
         'position'                => 't',
         'interv'                  => 'i',

@@ -14,7 +14,8 @@
 		document.getElementById(nr).style.display="none";
 	}
     function show(nr) {
-		document.getElementById(nr).style.display="inline";
+        var elStyle = document.getElementById(nr).style;
+        elStyle.display = (elStyle.display == "inline")?'none':'inline'
 	}
 	function toggle(was1,was2) {
 		document.getElementById(was1).style.display="none";
@@ -173,7 +174,7 @@
     <table id='history' class="tablesorter" width="100%">
     <thead>
 	<tr><td>.:subject:.</td><td>.:ordersum:.</td><td>.:targetdate:.</td><td>.:chance:.</td><td>.:status:.</td><td>.:quotation:.</td><td>.:nextstep:.</td><td>.:employee:.</td><td>.:changed:.</td></tr>
-    </thead><tbody>
+    </thead><tbody style='cursor:pointer'>
 <!-- BEGIN Liste --> 
         <tr onClick="show('n{nr}');">
         <td> {histtitle}</td>
@@ -187,7 +188,7 @@
 		<td style="width:6em;text-align:left">&nbsp;{chgdate}</td></tr>
         <tr onClick="hide('n{nr}');" >
         <!-- Der blöde Firefox kann das nicht mehr ordentlich darstellen -->
-        <td style="display:none"  id='n{nr}'  colspan="9">{histnotiz}</td></tr>
+        <td style="display:none; font-size:80%; background-color:transparent;"  id='n{nr}'  colspan="9">{histnotiz}</td></tr>
 <!-- END Liste -->
     </tbody></table>
 </div>

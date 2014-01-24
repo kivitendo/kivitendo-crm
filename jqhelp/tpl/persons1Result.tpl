@@ -78,7 +78,7 @@
 			<th></th>
 		</tr>
 	</thead>
-	<tbody>
+	<tbody style='cursor:pointer'>
 <!-- BEGIN Liste -->
 	<tr onClick='{js}'>
 		<td>{Name}</td><td>&nbsp;{Plz}</td><td>{Ort}</td><td>&nbsp;{Telefon}</td><td>&nbsp;{eMail}</td><td>&nbsp;{Firma}</td><td>&nbsp;{insk}</td></tr>

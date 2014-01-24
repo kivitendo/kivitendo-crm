@@ -419,10 +419,10 @@
                 <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=inv">.:invoice:.</a></li>	
             </ul>
     		<div id="contact">
-            <table id="calls" class="tablesorter" width="100%" style='margin:0px;'>
+                <table id="calls" class="tablesorter" width="100%" style='margin:0px; cursor:pointer;'>
     				<thead><tr><th>Datum</th><th>id</th><th class="{ sorter: false }"></th><th>Betreff</th><th>.:contact:.</th></tr></thead>
     				<tbody>
-    				<tr onClick="showItem(0)" class='verlauf'><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
+    				    <tr onClick="showItem(0)" class='verlauf'><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
     				</tbody>
     			</table><br>
     			<div id="pager" class="pager" style='position:absolute;'>

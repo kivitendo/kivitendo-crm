@@ -59,7 +59,7 @@
 			<th width="4em"></th>
 			<th>.:art:.</th>
 			<th>.:OP:.</th>
-		</tr></thead><tbody>
+		</tr></thead><tbody style='cursor:pointer'>
 <!-- BEGIN Liste -->
 		<tr class="klein bgcol{LineCol}" onClick="showP('{Typ}{RNid}','{RNr}');">
 			<td >{Datum}</td>

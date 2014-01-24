@@ -69,7 +69,7 @@
 {PRE_CONTENT}
 {START_CONTENT}
 <p class="listtop">.:search result:. {FAART}</p>
-<table id="treffer" class="tablesorter" width="90%">  
+<table id="treffer" class="tablesorter" width="90%" >  
     <thead>
 		<tr>
 			<th>Kd-Nr</th>
@@ -84,7 +84,7 @@
 	</thead>
 	<tbody>
 <!-- BEGIN Liste -->
-    <tr onClick="showK({ID});">
+    <tr onClick="showK({ID});" style='cursor:pointer;'>
 		<td>{KdNr}</td><td>{Name}</td><td>{Plz}</td><td>{Ort}</td><td>{Strasse}</td><td>{Telefon}</td><td>{eMail}</td><td>{obsolete}</td></tr>
 <!-- END Liste -->
 	</tbody>

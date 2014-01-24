@@ -25,7 +25,7 @@ echo '
 include ("../inc/crmLib.php");
 include ("../inc/stdLib.php");
 $rs = getIOQ($_GET['fid'],$_GET['Q'],$_GET["type"],false);
-echo '<div><table id="table'.$_GET['type'].'" class="tablesorter" width="100%" style="margin:0px;">'; 
+echo '<div><table id="table'.$_GET['type'].'" class="tablesorter" width="100%" style="margin:0px; cursor:pointer;">'; 
 echo "<thead><tr><th>".translate('.:date:.','firma')."</th><th>".translate('.:first position:.','firma')."</th><th>"
       .translate('.:amount:.','firma')."</th><th>".translate('.:number:.','firma')." </th></tr></thead>\n<tbody>\n"; 
 if ($rs) 

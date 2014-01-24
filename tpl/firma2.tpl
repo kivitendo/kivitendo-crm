@@ -282,7 +282,7 @@
 <div style="float:left; width:46%; height:37em; text-align:left; border: 1px solid lightgray; border-left:0px;">
         <table id="calls" class="tablesorter" width="100%" style='margin:0px;'>
         <thead><tr><th>Datum</th><th>id</th><th class="{ sorter: false }"></th><th>Betreff</th><th>.:contakt:.</th></tr></thead>
-        <tbody>
+        <tbody style='cursor:pointer'>
         <tr onClick="showItem(0)"><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
         </tbody>
         </table><br>

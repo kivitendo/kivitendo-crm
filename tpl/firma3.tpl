@@ -55,7 +55,7 @@
 				<th >.:Month:.</th>
 				<th></th><th>.:Sales:.</th>
 				<th>.:Quotation:.</th><th></th>
-			</tr></thead><tbody>
+			</tr></thead><tbody style='cursor:pointer'>
 <!-- BEGIN Liste -->
 			<tr onClick="showM('{Month}');">
 				<td >{Month}</td>

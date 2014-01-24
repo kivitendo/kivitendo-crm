@@ -74,7 +74,7 @@
 			<th>.:obsolete:.</th>
 		</tr>
 	</thead>
-	<tbody>
+	<tbody style='cursor:pointer'>
 <!-- BEGIN Liste -->
     <tr onClick="showK({ID});">
 		<td>{KdNr}</td><td>{Name}</td><td>{Plz}</td><td>{Ort}</td><td>{Strasse}</td><td>{Telefon}</td><td>{eMail}</td><td>{obsolete}</td></tr>

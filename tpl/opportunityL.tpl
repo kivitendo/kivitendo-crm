@@ -36,7 +36,7 @@
         <td>.:employee:.</td>
         <td>.:changed:.</td>
     </tr>
-    </thead><tbody>
+    </thead><tbody style='cursor:pointer'>
 <!-- BEGIN Liste -->
     <tr onClick="showO({id});">
         <td>{firma}</td>

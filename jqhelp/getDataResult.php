@@ -20,7 +20,7 @@ if ($_POST["submit"] =="kontakt" && $_POST['swort'] != '') {
     $used = Array();
     if( $anzahl = count($rs) ) {    
         echo "<table id='treffer' class='tablesorter'>\n"; 
-        echo "<thead><tr ><th>Datum</th><th>Grund</th><th>Name</th>\n<tbody>\n"; 
+        echo "<thead><tr ><th>Datum</th><th>Grund</th><th>Name</th>\n<tbody style='cursor:pointer'>\n"; 
         $i = 0;
         foreach ( $rs as $row ) {
             if ( $row["bezug"] > 0 and in_array($row["bezug"], $used) ) continue;
@@ -91,7 +91,8 @@ else if ($_POST["submit"] == "adress") {
             exit();
         } 
         echo "<table id='treffer' class='tablesorter'>\n"; 
-        echo "<thead><tr ><th>KD-Nr</th><th>Name</th><th>Anschrift</th><th>Telefon</th><th></th></tr></thead>\n<tbody>\n"; 
+        echo "<thead><tr ><th>KD-Nr</th><th>Name</th><th>Anschrift</th><th>Telefon</th><th></th></tr></thead>\n";
+        echo "<tbody style='cursor:pointer'>\n"; 
         $i=0; 
         if ( $rsC && $i < $_SESSION['listLimit'] ) foreach($rsC as $row) { 
             echo "<tr onClick='showD(\"C\",".$row["id"].");'>". 

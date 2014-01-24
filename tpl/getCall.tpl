@@ -128,7 +128,7 @@ WV<input type="checkbox" name="wvl" value="1" onClick="showwv()" {wvl}> <span id
 </form>
 </table>
 <table id='calls' class="tablesorter" width="100%">
-<thead><tr><th></th><th></th><th></th></tr></thead><tbody>
+<thead><tr><th></th><th></th><th></th></tr></thead><tbody style='cursor:pointer'>
 <!-- BEGIN Liste -->
 	<tr  class='bgcol{LineCol}' onClick="showCall({IID});">
 		<td width="118px">{Datum}</td><td>{Betreff}</td><td class='typcol{Type}'>{Kontakt}{inout}</td></tr>
@@ -147,8 +147,7 @@ WV<input type="checkbox" name="wvl" value="1" onClick="showwv()" {wvl}> <span id
 <option value="25">25</option>
 <option value="30">30</option>
 </select>
-</div>
-
+<button onClick='self.close();'> close </button>
 <!-- Hier endet die Karte ------------------------------------------->
 </body>
 </html>

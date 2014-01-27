@@ -77,7 +77,7 @@ class document {
  var $debug = false;
 
 	function document($id=false,$fname="",$fpath="",$descript="") {
-		if ($this->debug) $this->f = fopen($_SESSION['crmdir'].'/tmp/doc.log',"w");
+		if ($this->debug) $this->f = fopen($_SESSION['crmpath'].'/tmp/doc.log',"w");
 		$this->log("newDoc");
 		$this->db=$_SESSION["db"];
 		if ($id>0) {
@@ -205,11 +205,11 @@ class document {
 		$this->pfad=$pfad;
 		//Gibt es das Dokument so schon in der db
 		$this->id=$this->searchDocument($this->name,$pfad);
-		$dest=$_SESSION['crmdir']."/dokumente/".$_SESSION["dbname"]."/".$pfad."/".$this->name;
+		$dest=$_SESSION['crmpath']."/dokumente/".$_SESSION["dbname"]."/".$pfad."/".$this->name;
 		$this->logvar();
 		if (chkdir($pfad)) {
 			//Zielpfad vorhanden
-			//if (! copy($_SESSION['crmdir'].'/tmp/'.$file["Datei"]["tmp_name"],$dest)) {
+			//if (! copy($_SESSION['crmpath'].'/tmp/'.$file["Datei"]["tmp_name"],$dest)) {
 			if (! copy($file["Datei"]["tmp_name"],$dest)) {
 				$this->error = "Datei '$dest' wurde nicht hochgeladen!";
 				$this->log($this->error);
@@ -217,7 +217,7 @@ class document {
                 @unlink($file["Datei"]["tmp_name"]);
 				return false;
 			} 
-                //unlink($_SESSION['crmdir'].'/tmp/'.$file["Datei"]["tmp_name"]);
+                //unlink($_SESSION['crmpath'].'/tmp/'.$file["Datei"]["tmp_name"]);
                 @unlink($file["Datei"]["tmp_name"]);
                 //chmod($dest,decoct($_SESSION['dir_mode'])); 
                 chmod($dest,$_SESSION['dir_mode']); 
@@ -262,8 +262,7 @@ class document {
 	function deleteDocument($p="") {
 		$this->log("deleteDocument: ".$p);
 		// $p=="" Aufruf aus Docroot, $p=="." Aufruf aus crmajax
-        $f = fopen('/tmp/d','w'); fputs($f,$_SESSION['crmdir']."/dokumente/".$_SESSION["dbname"].$this->pfad."/".$this->name); fclose($f);
-		$dest=$_SESSION['crmdir']."/dokumente/".$_SESSION["dbname"].$this->pfad."/".$this->name;
+		$dest=$_SESSION['crmpath']."/dokumente/".$_SESSION["dbname"].$this->pfad."/".$this->name;
 		$rc=unlink($dest);
 		if (!$rc) {
 			$this->error=$this->pfad."/".$this->name." kann nicht gelöscht werden.";

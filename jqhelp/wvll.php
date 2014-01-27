@@ -104,12 +104,12 @@
         } ;
         if (!$data["DCaption"]) $data["DCaption"] = $data["cause"];
         if ( $data['newfile'] == 1 and $data['filename'] != '' ) {
-            $src  = $_SESSION['crmdir'].'/dokumente/'.$_SESSION["dbname"].'/'.$_SESSION['login'].'/tmp/';
+            $src  = $_SESSION['crmpath'].'/dokumente/'.$_SESSION["dbname"].'/'.$_SESSION['login'].'/tmp/';
             $rc   = file_exists($src.$data['filename']);
             if ( $rc ) {
                 if ( $data["DateiID"] ) delDokument($data["DateiID"]); // ein altes löschen
                 require_once("documents.php");
-                $dest = $_SESSION['crmdir'].'/dokumente/'.$_SESSION["dbname"].'/'.$_SESSION["login"].'/';
+                $dest = $_SESSION['crmpath'].'/dokumente/'.$_SESSION["dbname"].'/'.$_SESSION["login"].'/';
                 copy($src.$data['filename'],$dest.$data['filename']);
                 unlink ($src.$data['filename']);
                 //Dokument in db speichern

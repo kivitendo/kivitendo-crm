@@ -19,7 +19,6 @@ $keys = array(
     'logfile',
     'streetview',
     'planspace',
-    'crmdir',
 );
 foreach ( $keys as $value ) {
     $_SESSION[$value] = $_POST[$value];
@@ -87,7 +86,26 @@ if ( $_SESSION['CRMTL'] != 1 ) {
     $t->set_var( array( msg => 'Diese Aktion ist nicht erlaubt. </ br>Sie sind nicht Mitglied der Gruppe CRMTL.', hide => 'hidden' ) );
 }
 else {
-    $t->set_var( array( 'GEODB' => ( $data['GEODB'] == 't' ) ? 'checked' : '', 'BLZDB' => ( $data['BLZDB'] == 't' ) ? 'checked' : '', 'CallEdit' => ( $data['CallEdit'] == 't' ) ? 'checked' : '', 'CallDel' => ( $data['CallDel'] == 't' ) ? 'checked' : '', $data['MailFlag'] => 'selected', 'Expunge' => ( $data['Expunge'] == 't' ) ? 'checked' : '', 'logmail' => ( $data['logmail'] == 't' ) ? 'checked' : '', 'streetview' => $data['streetview'], 'planspace' => $data['planspace'], 'ttpart' => $data['ttpart'], 'tttime' => $data['tttime'], 'ttround' => $data['ttround'], 'ttclearown' => ( $data['clearown'] == 't' ) ? 'checked' : '', 'dir_group' => $data['dir_group'], 'dir_mode' => $data['dir_mode'], 'sep_cust_vendor' => ( $data['sep_cust_vendor'] == 't' ) ? 'checked' : '', 'listLimit' => $data['listLimit'], 'showErr' => ( $data['showErr'] == 't' ) ? 'checked' : '', 'logfile' => ( $data['logfile'] == 't' ) ? 'checked' : '', 'crmdir' => ( $data['crmdir'] == '' ) ? getcwd( ) : $data['crmdir'], 'msg' => $msg, ) );
+    $t->set_var( array( 'GEODB' => ( $data['GEODB'] == 't' ) ? 'checked' : '', 
+                        'BLZDB' => ( $data['BLZDB'] == 't' ) ? 'checked' : '', 
+                        'CallEdit' => ( $data['CallEdit'] == 't' ) ? 'checked' : '', 
+                        'CallDel' => ( $data['CallDel'] == 't' ) ? 'checked' : '', $data['MailFlag'] => 'selected', 
+                        'Expunge' => ( $data['Expunge'] == 't' ) ? 'checked' : '', 
+                        'logmail' => ( $data['logmail'] == 't' ) ? 'checked' : '', 
+                        'streetview' => $data['streetview'], 
+                        'planspace' => $data['planspace'], 
+                        'ttpart' => $data['ttpart'], 
+                        'tttime' => $data['tttime'], 
+                        'ttround' => $data['ttround'], 
+                        'ttclearown' => ( $data['clearown'] == 't' ) ? 'checked' : '', 
+                        'dir_group' => $data['dir_group'], 
+                        'dir_mode' => $data['dir_mode'], 
+                        'sep_cust_vendor' => ( $data['sep_cust_vendor'] == 't' ) ? 'checked' : '', 
+                        'listLimit' => $data['listLimit'], 
+                        'showErr' => ( $data['showErr'] == 't' ) ? 'checked' : '', 
+                        'logfile' => ( $data['logfile'] == 't' ) ? 'checked' : '', 
+                        'crmpath' => $_SESSION['crmpath'], 
+                        'msg' => $msg, ) );
 }
 $t->pparse( "out", array( "mand" ) );
 ?>

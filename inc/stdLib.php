@@ -255,27 +255,27 @@ function anmelden() {
 * prueft, ob Verzeichnis besteht und legt es bei Bedarf an
 *****************************************************/
 function chkdir($dir,$p="") {
-    if ( isset($_SESSION['crmdir']) && file_exists($_SESSION['crmdir']."/dokumente/".$_SESSION["dbname"]."/".$dir) ) { 
-        return $_SESSION['crmdir']."/dokumente/".$_SESSION["dbname"]."/".$dir;
+    if ( isset($_SESSION['crmpath']) && file_exists($_SESSION['crmpath']."/dokumente/".$_SESSION["dbname"]."/".$dir) ) { 
+        return $_SESSION['crmpath']."/dokumente/".$_SESSION["dbname"]."/".$dir;
     } else {
         if ( ! isset($_SESSION["dbname"]) ) return false;
         $dirs = explode("/",$dir);
         $tmp  = $_SESSION["dbname"]."/";
         foreach ( $dirs as $dir ) {
-            if ( !file_exists($_SESSION['crmdir']."/dokumente/$tmp".$dir) ) {
+            if ( !file_exists($_SESSION['crmpath']."/dokumente/$tmp".$dir) ) {
                 if ( isset($_SESSION['dir_mode']) && $_SESSION['dir_mode'] != ''  ) {
-                    $ok = @mkdir($_SESSION['crmdir']."/dokumente/$tmp".$dir, $_SESSION['dir_mode']);
+                    $ok = @mkdir($_SESSION['crmpath']."/dokumente/$tmp".$dir, $_SESSION['dir_mode']);
                 } else {
-                    $ok = @mkdir($_SESSION['crmdir']."/dokumente/$tmp".$dir);
+                    $ok = @mkdir($_SESSION['crmpath']."/dokumente/$tmp".$dir);
                 }
-                if ( isset($_SESSION['dir_group']) && $_SESSION['dir_group'] && $ok ) @chgrp($_SESSION['crmdir']."/dokumente/$tmp".$dir,$_SESSION['dir_group']); 
+                if ( isset($_SESSION['dir_group']) && $_SESSION['dir_group'] && $ok ) @chgrp($_SESSION['crmpath']."/dokumente/$tmp".$dir,$_SESSION['dir_group']); 
                 if ( !$ok ) {
                     return false;
                 }
             };
             $tmp .= $dir."/";
         };
-        return $_SESSION['crmdir']."/dokumente/".$_SESSION["dbname"]."/".$dir;
+        return $_SESSION['crmpath']."/dokumente/".$_SESSION["dbname"]."/".$dir;
     }
 }
 
@@ -286,7 +286,7 @@ function chkdir($dir,$p="") {
 * liest die Dateien eines Verzeichnisses
 *****************************************************/
 function liesdir($dir) {
-    $dir = $_SESSION['crmdir']."/dokumente/$dir/";
+    $dir = $_SESSION['crmpath']."/dokumente/$dir/";
     if ( !file_exists($dir) ) return false;
     $cdir = dir($dir);
     while ( $entry = $cdir->read() ) {

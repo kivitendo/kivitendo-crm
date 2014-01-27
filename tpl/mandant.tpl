@@ -44,8 +44,8 @@
              &nbsp;&nbsp; Rechte: <input type="text" name="dir_mode" size="4" value='{dir_mode}'>
              <input type="checkbox" name="sep_cust_vendor"  value='t' {sep_cust_vendor}>Kunden/Lieferanten trennen</td>
     <tr><td colspan='2'><b>Diverse</b></td></tr>
-    <tr><td>CRM-Pfad</td>                   <td><input type='text' name='crmdir' id='crmdir' value='{crmdir}' size='40'></td></tr>
-    <tr><td>Logfile (/tmp/lxcrm.err)</td>   <td><input type='checkbox' name='logfile' id='logfile' {logfile} value='t'></td></tr>
+    <tr><td>CRM-Pfad</td>                   <td>{crmpath}</td></tr>
+    <tr><td>Logfile (tmp/lxcrm.err)</td>    <td><input type='checkbox' name='logfile' id='logfile' {logfile} value='t'></td></tr>
     <tr><td>Listenlimit</td>                <td><input type='text' name='listLimit' id='listLimit' value='{listLimit}' size='8'></td></tr>
     <tr><td><input type="submit" name="save" id="save" value="sichern"></td><td></td></tr>
 </table>

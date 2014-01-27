@@ -247,7 +247,7 @@ function mail_get_file($conn,$mail,$part) {
     } else if ($part["part_object"]->encoding == 4) { // 4 = QUOTED-PRINTABLE
         $file = quoted_printable_decode($file);
     }
-    $f = fopen($_SESSION['crmdir']."/tmp/".$filename,"w");
+    $f = fopen($_SESSION['crmpath']."/tmp/".$filename,"w");
 	fwrite($f,$file);
 	fclose($f);
     $data =  array("size"=>$part["part_object"]->bytes,"name"=>$filename,"nummer"=>$partno,"type"=>$type);

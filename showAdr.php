@@ -160,7 +160,6 @@
 <html>
 <head><title></title>
     <?php echo $menu['stylesheets'] ?>
-    <link type="text/css" REL="stylesheet" HREF="'.$_SESSION["basepath"].'crm/css/'.$_SESSION["stylesheet"].'/main.css">
     <link type="text/css" REL="stylesheet" HREF="../css/<?php echo $_SESSION["stylesheet"]; ?>">
 </head>
 <body>

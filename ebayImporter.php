@@ -38,7 +38,6 @@ background-color: #e3e3e3;
     }); 
 </script>
 <?php
-print_r($_POST);
 
 $form_select_file = '
 </head>

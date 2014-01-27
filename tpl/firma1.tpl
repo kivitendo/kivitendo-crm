@@ -263,6 +263,7 @@
             <option value='timetrack.php?tab={Q}&fid={FID}&name={Fname1}'>.:timetrack:.</option>
             <option value='open:extrafelder.php?owner={Q}{FID}'>.:extra data:.</option>
             <option value='vcardexp.php?Q={Q}&fid={FID}'>VCard</option>
+            <option value='vcardexp.php?qr=1&Q={Q}&fid={FID}'>QR-Code</option>
             <option value='karte.php?Q={Q}&fid={FID}'>.:register:. .:develop:.</option>
             <option value='onClick:{request}_quotation'>.:quotation:. .:develop:.</option>
             <option value='onClick:{sales}_order'>.:order:. .:develop:.</option>

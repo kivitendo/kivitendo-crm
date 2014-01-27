@@ -110,7 +110,18 @@
 	header("Cache-Control: post-check=0, pre-check=0", false);
 	header("Pragma: no-cache");    
 	header("Content-type: application/octetstream");
-	header("Content-Disposition: attachment; filename=lxo-vcard.vcf");
-	header("Content-Disposition: filename=".$Q.$data["nummer"]."-vcard.vcf");
-	echo $text;
+        if ( isset($_GET['qr']) && $_GET['qr'] == 1 ) {
+            include('inc/phpqrcode.php');
+            QRcode::png($text,'tmp/qr_'.$_SESSION['login'].'.png',QR_ECLEVEL_L, 3);
+            header('Content-Transfer-Encoding: binary'); 
+   	    header("Content-Disposition: attachment; filename=qr-vcard.png");
+	    header("Content-Disposition: filename=qr_".$_SESSION['login'].'.png');
+            header('Content-Length: ' . filesize('tmp/qr_'.$_SESSION['login'].'.png'));
+            echo readfile('tmp/qr_'.$_SESSION['login'].'.png'); 
+
+        } else {
+		header("Content-Disposition: attachment; filename=lxo-vcard.vcf");
+		header("Content-Disposition: filename=".$Q.$data["nummer"]."-vcard.vcf");
+		echo $text;
+        } 
 ?>

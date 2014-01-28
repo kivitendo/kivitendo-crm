@@ -36,6 +36,7 @@ if ( isset( $_POST["ok"] ) && $_POST["ok"] and $_POST["termseq"] < 61 ) {
         'external_mail',
         'sql_error',
         'php_error',
+        'streetview_default',
     );
     while ( list( $key, $val ) = each( $_POST ) ) {
         if ( !in_array( $key, $no ) ) 
@@ -66,13 +67,9 @@ if ( isset( $_GET["id"] ) && $_GET["id"] && $_GET["id"] <> $_SESSION["loginCRM"]
     $t->set_file( array( "usr1" => "user1.tpl" ) );
     $own = true;
 };
-if ( empty( $fa['streetview'] ) ) {
-    $sql = "SELECT val FROM crmdefaults WHERE grp = 'mandant' AND key = 'streetview'";
-    $rs = $_SESSION['db']->getOne( $sql );
-    $fa['streetview'] = $rs['val'];
-    $sql = "SELECT val FROM crmdefaults WHERE grp = 'mandant' AND key = 'planspace'";
-    $rs = $_SESSION['db']->getOne( $sql );
-    $fa['planspace'] = $rs['val'];
+if ( $fa['streetview_default'] == 't' ) {
+    $_SESSION['streetview'] = $fa['streetview'] = $_SESSION['streetview_man'];
+    $_SESSION['planspace'] = $fa['planspace'] = $_SESSION['planspace_man'];
 }
 if ( empty( $fa["ssl"] ) ) 
     $fa["ssl"] = "n";
@@ -107,7 +104,6 @@ $t->set_var( array( 'IMG'                       => $IMG,
                     'notes'                     => $fa["notes"], 
                     'mailsign'                  => $fa["mailsign"], 
                     'email'                     => $fa["email"], 
-                    'emailauth'                 => $_SESSION["email"], 
                     'msrv'                      => $fa["msrv"], 
                     'port'                      => $fa["port"], 
                     'mailuser'                  => $fa["mailuser"], 
@@ -140,20 +136,21 @@ $t->set_var( array( 'IMG'                       => $IMG,
                     'feature_ac'                => ( $fa['feature_ac'] == 't' ) ? 'checked' : '', 
                     'feature_ac_minlength'      => $fa['feature_ac_minlength'], 
                     'feature_ac_delay'          => $fa['feature_ac_delay'], 
-                    'auftrag_button'            => ( $fa['auftrag_button'] == 't' )   ? 'checked' : '', 
-                    'angebot_button'            => ( $fa['angebot_button'] == 't' )   ? 'checked' : '', 
-                    'rechnung_button'           => ( $fa['rechnung_button'] == 't' )  ? 'checked' : '', 
-                    'liefer_button'             => ( $fa['liefer_button'] == 't' )    ? 'checked' : '', 
-                    'zeige_extra'               => ( $fa['zeige_extra'] == 't' )      ? 'checked' : '', 
-                    'zeige_dhl'                 => ( $fa['zeige_dhl'] == 't' )        ? 'checked' : '', 
-                    'external_mail'             => ( $fa['external_mail'] == 't' )    ? 'checked' : '', 
-                    'zeige_karte'               => ( $fa['zeige_karte'] == 't' )      ? 'checked' : '', 
-                    'zeige_etikett'             => ( $fa['zeige_etikett'] == 't' )    ? 'checked' : '', 
-                    'zeige_tools'               => ( $fa['zeige_tools'] == 't' )      ? 'checked' : '', 
-                    'zeige_bearbeiter'          => ( $fa['zeige_bearbeiter'] == 't' ) ? 'checked' : '', 
+                    'auftrag_button'            => ( $fa['auftrag_button'] == 't' )         ? 'checked' : '', 
+                    'angebot_button'            => ( $fa['angebot_button'] == 't' )         ? 'checked' : '', 
+                    'rechnung_button'           => ( $fa['rechnung_button'] == 't' )        ? 'checked' : '', 
+                    'liefer_button'             => ( $fa['liefer_button'] == 't' )          ? 'checked' : '', 
+                    'zeige_extra'               => ( $fa['zeige_extra'] == 't' )            ? 'checked' : '', 
+                    'zeige_dhl'                 => ( $fa['zeige_dhl'] == 't' )              ? 'checked' : '', 
+                    'external_mail'             => ( $fa['external_mail'] == 't' )          ? 'checked' : '', 
+                    'zeige_karte'               => ( $fa['zeige_karte'] == 't' )            ? 'checked' : '', 
+                    'zeige_etikett'             => ( $fa['zeige_etikett'] == 't' )          ? 'checked' : '', 
+                    'zeige_tools'               => ( $fa['zeige_tools'] == 't' )            ? 'checked' : '', 
+                    'zeige_bearbeiter'          => ( $fa['zeige_bearbeiter'] == 't' )       ? 'checked' : '', 
                     'feature_unique_name_plz'   => ( $fa['feature_unique_name_plz'] == 't' )? 'checked' : '', 
-                    'zeige_lxcars'              => ( $fa['zeige_lxcars'] == 't' )     ? 'checked' : '', 
-                    'tinymce'                   => ( $fa['tinymce'] == 't' )          ? 'checked' : '', 
+                    'zeige_lxcars'              => ( $fa['zeige_lxcars'] == 't' )           ? 'checked' : '', 
+                    'tinymce'                   => ( $fa['tinymce'] == 't' )                ? 'checked' : '', 
+                    'streetview_default'        => ( $fa['streetview_default'] == 't' )     ? 'checked' : '',
                     'search_history'            => $fa['search_history'] ) );
 if ( $own ) {
     $t->set_block( "usr1", "Selectbox", "Block" );

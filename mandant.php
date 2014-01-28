@@ -17,8 +17,8 @@ $keys = array(
     'sep_cust_vendor',
     'listLimit',
     'logfile',
-    'streetview',
-    'planspace',
+    'streetview_man',
+    'planspace_man',
 );
 foreach ( $keys as $value ) {
     $_SESSION[$value] = $_POST[$value];
@@ -92,8 +92,8 @@ else {
                         'CallDel' => ( $data['CallDel'] == 't' ) ? 'checked' : '', $data['MailFlag'] => 'selected', 
                         'Expunge' => ( $data['Expunge'] == 't' ) ? 'checked' : '', 
                         'logmail' => ( $data['logmail'] == 't' ) ? 'checked' : '', 
-                        'streetview' => $data['streetview'], 
-                        'planspace' => $data['planspace'], 
+                        'streetview_man' => $data['streetview_man'], 
+                        'planspace_man' => $data['planspace_man'], 
                         'ttpart' => $data['ttpart'], 
                         'tttime' => $data['tttime'], 
                         'ttround' => $data['ttround'], 

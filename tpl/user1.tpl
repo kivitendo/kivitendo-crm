@@ -129,6 +129,18 @@
             //$( "#angebot_button" ).focus(); //dass der Save-Button nicht gedrückt (klein) bleibt, ToDo: verbessern...
             return false;
         });
+        $('#streetview_default').click(function() {
+            var $this = $(this);
+            if ($this.is(':checked') ) {
+                $("#streetview,#planspace").hide()  
+            } else {
+                $("#streetview,#planspace").show()           
+            }
+        });
+        if( $('#streetview_default').is(':checked') ){
+           $("#streetview,#planspace").hide()   
+        }
+        
     });
 </script>
 <script type='text/javascript' src='inc/help.js'></script>   
@@ -201,7 +213,7 @@
     <tr><td class="norm">.:street:.</td><td><input type="text" name="addr1" value="{addr1}" maxlength="75"></td>
         <td class="norm">.:position:.</td><td><input type="text" name="position" value="{position}" maxlength="75"></td></tr>
     <tr><td class="norm">.:zipcode:. .:city:.</td><td><input type="text" name="addr2" value="{addr2}" size="6" maxlength="10"> <input type="text" name="addr3" value="{addr3}"  maxlength="75"></td>
-        <td class="norm">.:email:.</td><td><input type="text" name="email" value="{email}" size="30" maxlength="125">{emailauth}</td></tr>
+        <td class="norm">.:email:.</td><td><input type="text" name="email" value="{email}" size="30" maxlength="125"></td></tr>
     <tr><td class="norm">.:privatephone:.</td><td><input type="text" name="homephone" value="{homephone}" maxlength="30"></td>
         <td class="norm">.:officephone:.</td><td><input type="text" name="workphone" value="{workphone}" maxlength="30"></td></tr>
     <tr><td class="norm">.:remark:.</td><td><textarea name="notes" cols="37" rows="3">{notes}</textarea></td>
@@ -231,27 +243,28 @@
         </td></tr>
     <tr><td class="norm">.:theme:.</td><td>
         <select name="theme" id="theme">
-<!-- BEGIN Theme -->
+        <!-- BEGIN Theme -->
             <option value="{themefile}" {TSel}>{themename}
-<!-- END Theme -->
+        <!-- END Theme -->
        </select>
        <button id="edit_theme">.:edit:.</button>
-        </td>
-       <td>.:tinymce:.</td><td><input type='checkbox' name='tinymce' id='tinymce' {tinymce} value='t'></td>
-        </tr>
+       </td>
+       <td class="norm">.:tinymce:.</td><td><input type='checkbox' name='tinymce' id='tinymce' {tinymce} value='t'></td>
+    </tr>
     <tr><td class="norm">.:deadlines:.</td><td>
             .:from_t:. <select name="termbegin">{termbegin}</select> 
             .:to_t:. <select name="termend">{termend}</select> .:uhr:.</td>
         <td class="norm">.:deadlinespacing:.</td><td><input type="text" name="termseq" value="{termseq}" size="3"> .:minutes:.</td></tr>
     <tr><td class="norm">.:interval:.</td><td>
-            <input type="text" name="interv" value="{interv}" size="4" maxlength="5">.:sec.:. &nbsp;&nbsp; .:presearch:. <input type="text" name="pre" value="{pre}" size="10"></td>
+            <input type="text" name="interv" value="{interv}" size="4" maxlength="5">.:sec.:. &nbsp;&nbsp; </td></tr>
+    <tr><td class="normal">.:presearch:. </td><td><input type="text" name="pre" value="{pre}" size="10"></td>
         <td class="norm">.:awpre:.</td><td><input type="checkbox" value='t' name="preon" {preon}>.:yes:.</td></tr>
     <!--tr><td colspan="4"><input type="submit" name="mkmbx" value=".:createmailbox:."></td><td></td><td></td></tr-->
     <tr><td class="norm">.:mapservice:.</td><td colspan="4">
-             <input type="text" name="streetview" size="80" value='{streetview}'>
+             <input type="text" name="streetview" id="streetview" size="80" value='{streetview}'><input type="checkbox" name="streetview_default" id="streetview_default"  value='t' {streetview_default}>.:mandant:.
         </td></tr>
     <tr><td class="norm">.:spacecharsubst:.</td><td colspan="4">
-             <input type="text" name="planspace" size="3" value='{planspace}'>
+             <input type="text" name="planspace" id="planspace"size="3" value='{planspace}'>
     </td></tr>
     <tr><td class="norm">.:autocompletion:.</td><td colspan="4">
              <input type="checkbox" name="feature_ac" value='t' {feature_ac}>&nbsp;&nbsp; .:minentry:.: <input type="text" name="feature_ac_minlength" size="1" value='{feature_ac_minlength}'>
@@ -262,7 +275,7 @@
              <input type="checkbox" name="rechnung_button" value='t' {rechnung_button}>.:invoice:.&nbsp;&nbsp; <input type="checkbox" name="liefer_button" value='t' {liefer_button}>.:delivery order:.&nbsp;&nbsp;
              <input type="checkbox" name="zeige_extra" value='t' {zeige_extra}>.:extra:.&nbsp;&nbsp;<input type="checkbox" name="zeige_karte" value='t' {zeige_karte}>.:map:.&nbsp;&nbsp;
              <input type="checkbox" name="zeige_bearbeiter" value='t' {zeige_bearbeiter}>.:employee:.&nbsp;&nbsp;<input type="checkbox" name="zeige_etikett" value='t' {zeige_etikett}>.:label:.&nbsp;&nbsp;
-             <input type="checkbox" name="zeige_dhl" value='t' {zeige_dhl}>.:DHL:.&nbsp;&nbsp;<input type="checkbox" name="zeige_tools" value='t' {zeige_tools}>.:tools:.&nbsp;&nbsp;<input type="checkbox" name="zeige_lxcars"    value='t' {zeige_lxcars}>.:lxcars:.&nbsp;&nbsp;</td>
+             <input type="checkbox" name="zeige_dhl" value='t' {zeige_dhl}>.:DHL:.&nbsp;&nbsp;<input type="checkbox" name="zeige_tools" value='t' {zeige_tools}>.:tools:.&nbsp;&nbsp;<input type="checkbox" name="zeige_lxcars"    value='t' {zeige_lxcars}>LxCars&nbsp;&nbsp;</td>
    </tr>
    <tr><td class="norm">.:createmultiuser:.</td><td >
              <input type="checkbox" name="feature_unique_name_plz" value='t' {feature_unique_name_plz}>.:disallow:.</td>

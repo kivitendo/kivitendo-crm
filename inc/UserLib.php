@@ -62,6 +62,7 @@ function saveUserStamm( $val ) {
         'deleted'                 => 'b',
         'streetview'              => 't',
         'planspace'               => 't',
+        'streetview_default'      => 'b',
         'theme'                   => 't',
         'smask'                   => 't',
         'helpmode'                => 'b',
@@ -323,6 +324,7 @@ function loadUserDefaults($id){
     $val = array(
         "streetview"                => "https://maps.google.de/maps?f=d&hl=de&saddr=Ensingerstrasse+19,89073+Ulm&daddr=%TOSTREET%,%TOZIPCODE%+%TOCITY%",
         "planspace"                 => "+", 
+        "streetview_default"        => "t",
         "msrv"                      => "your_mail_server",
         "mailsign"                  => "--Your Signature",
         "mailuser"                  => "your_mail_login",

@@ -39,8 +39,12 @@ $conffile = $_SESSION['crmpath']."/../".$_SESSION['ERPNAME']."/config/".$_SESSIO
 //};
 if ( is_file($conffile) ) {
     $tmp = anmelden();
+    $crm_exist = $_SESSION['db']->getOne( "SELECT count(*) FROM information_schema.tables WHERE table_name = 'crm'");
+
     if ( $tmp ) {
-        $rs = $_SESSION['db']->getOne('SELECT * FROM crm ORDER BY version DESC LIMIT 1');
+        //SQL-Fehler vermeiden wenn crm noch nicht existiert (neue DB), besser wäre es die Tabelle crm zuerst erstellen ToDo!
+        $crm_exist = $_SESSION['db']->getOne( "SELECT count(*) FROM information_schema.tables WHERE table_name = 'crm'"); 
+        if ( (bool) $crm_exist['count']) $rs = $_SESSION['db']->getOne('SELECT * FROM crm ORDER BY version DESC LIMIT 1');
         $dbver  = $rs['version'];
         // Existiert crm nicht so kann auch ein Fehler-Objekt zurückgegeben werden
         if ( is_object($rs) || !$rs || $dbver=="" || $dbver==false ) {

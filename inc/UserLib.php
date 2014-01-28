@@ -7,6 +7,10 @@
 * !! in eine andere Lib verschieben
 *****************************************************/
 function saveUserStamm( $val ) {
+    // Prüfen ob crmemployee schon existiert, sonst wird bei einer frischen DB ein unschöner Fehler ausgegeben. 
+    // Besser: crmemployee vordem Aufruf von saveUserStamm() erstellen ToDo!   
+    $crm_exist = $_SESSION['db']->getOne( "SELECT count(*) FROM information_schema.tables WHERE table_name = 'crmemployee'"); 
+    if ( !(bool) $crm_exist['count']) return false;
     if ( !$val["interv"] ) 
         $val["interv"] = 60;
     if ( !$val["ssl"] ) 

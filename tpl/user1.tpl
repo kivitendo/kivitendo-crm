@@ -98,7 +98,10 @@
             },
             minWidth: 600,
             minHeight: 550,
-            title: "Mails"
+            title: "Mails",
+            close: function() {
+                document.user.mails.value=".:show emails:.";
+            }
         });
         $( "#edit_theme" ).button().click(function( event ) {
             event.preventDefault();

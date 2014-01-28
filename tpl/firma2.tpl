@@ -13,6 +13,10 @@
             pid = $('#liste option:selected').val();
             F1=open("getCall.php?Q={Q}C&pid="+pid+"&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
         }
+        function qrcode() {
+            pid = $('#liste option:selected').val();
+            document.location.href="vcardexp.php?qr=1&Q={Q}&pid="+pid;
+        }
         function anschr() {
             pid = $('#liste option:selected').val();
             $( "#dialogwin" ).dialog( "option", "maxWidth",  400 );
@@ -259,7 +263,9 @@
         </div>
         <div style="float:left; width:29%; height:13em; text-align:right; border-bottom: 0px ;" id="cpinhalt2">
             <span id="extraF"></span>
-            <a href="#" onCLick="anschr();"><img src="image/brief.png" border="0" style="visibility:{none};" id="cpbrief"></a><br />
+            <a href="#" onCLick="vcard();"><img src="image/vcard.png" border="0" style="visibility:{none};" id="cpvcard" height='30'></a> &nbsp; 
+            <a href="#" onCLick="qrcode();"><img src="image/qr.png" border="0" style="visibility:{none};" id="cpqr" height='30'></a> &nbsp; 
+            <a href="#" onCLick="anschr();"><img src="image/brief.png" border="0" style="visibility:{none};" id="cpbrief" height='30'></a><br />
             <span id="cp_grafik" style="padding-right:1px;"></span></br >
             <span id="cp_birthday" style="padding-right:1px;"></span></br />
             <span id="cp_position" style="padding-right:1px;"></span><br />
@@ -269,7 +275,7 @@
         <div style="position:absolute;top:20em; left:0em; width:45em;  text-align:left; border-bottom: 0px;">
             &nbsp;<span id="cp_privatphone"></span> <span id="cp_privatemail"></span><br />
              <hr width="100%">
-                &nbsp;<input type='submit' value='VCard' onClick="vcard()" >
+                &nbsp;<!--input type='submit' value='VCard' onClick="vcard()" -->
                 <b>.:Contacts:.:</b> 
                 <input type='submit' value='{Edit}' onClick="cedit(1)" >
                 <input type='submit' value='.:keyin:.' onClick="cedit(0)" >

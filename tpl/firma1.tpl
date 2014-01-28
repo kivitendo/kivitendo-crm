@@ -86,6 +86,7 @@
                     window.location.href = lnk;
                 }
             }
+            document.getElementById('actionmenu').selectedIndex = 0;
        }
     }
     function doOe(typ) {

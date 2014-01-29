@@ -21,7 +21,7 @@ der Variblen $erpConfigFile zugewiesen werden. Achtung, die Dateiendung (.conf) 
 Voreingestellt ist kivitendo.
 
 Vorrausetzungen:
-	Kivitendo ERP >= 3.0.0
+	Kivitendo ERP >= 3.1.0
 	PHP >= 4.2x
 	PEAR::MDB2
 	PEAR::MDB2#pgsql

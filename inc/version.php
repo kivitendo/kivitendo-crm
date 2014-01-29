@@ -1,4 +1,4 @@
 <?php
-$VERSION='1.9.0';
-$SUBVER='beta';
+$VERSION='2.0.0';
+$SUBVER='';
 ?>

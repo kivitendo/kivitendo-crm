@@ -1,11 +1,11 @@
-Kivitendo CRM 1.9.0  
+Kivitendo CRM 2.0.0  
 
-Installtion Kivitendo CRM
+Installation Kivitendo CRM
 -------------------------
 Die Installation der CRM kann von jedem Administrator mit Linux-Grundkenntnissen 
 durchgeführt werden und beansprucht einen Zeitaufwand von fünf bis zehn Minuten. 
 
-Das Installationsscript erzeugt die notwendigen Verzeichnisse und Tabellen
+Das Installationsskript erzeugt die notwendigen Verzeichnisse und Tabellen
 für die CRM und erweitert einige Tabellen der ERP. Die Funktionstüchtigkeit 
 der ERP wird dadurch natürlich nicht beeinträchtigt.
 
@@ -30,13 +30,13 @@ Vorrausetzungen:
 	PEAR::Mail_Mime oder php-mail-mime
 		
 	jpgraph3
-	fpdf (http://www.fpdf.de/downloads/)
+	fpdf,fpdi 
 	ttf-freefont
 	php-gd,php-imap
-    	php5-curl 
+    php5-curl 
 
-Fast alle Pakete können unter debianoiden Systemen in der Konsole mit folgendem Behfehl installiert werden.
-apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-mdb2 php-mdb2-driver-pgsql php-fpdf imagemagick ttf-freefont php5-curl tinymce libphp-jpgraph
+Fast alle Pakete können unter debianoiden Systemen in der Konsole mit folgendem Befehl installiert werden.
+apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-mdb2 php-mdb2-driver-pgsql php-fpdf libfpdi-php imagemagick ttf-freefont php5-curl tinymce libphp-jpgraph
 
 Die restlichen Pearpaket installieren:
     pear install  Contact_Vcard_Build Contact_Vcard_Parse
@@ -56,11 +56,13 @@ z.B. Debian / Ubuntu:
 
 Webserver neu starten
 z.B. Debian / Ubuntu:
-    /etc/init.d/apache2 restart
+    /etc/init.d/apache2 restart 
          
+Administration der ERP aufrufen und die Gruppe CRMTL hinzufügen.
+Nur ihr zugewiesene Benutzer können die Mandanten-Konfiguration der CRM anpassen. 
 Kivitendo im Browser aufrufen und anmelden.
-Nach dem Klick auf einen der neu entstandenen CRM-Menü-Punke werden einige Tabellen angelegt.
-Mandanten und Benutzereinstellungen sichern und die CRM kann verwendet werdern. 
+Nach dem Klick auf einen der neu entstandenen CRM-Menü-Punkte werden einige Tabellen angelegt.
+Mandanten und Benutzereinstellungen sichern und die CRM kann verwendet werden. 
 CRM -> Administration -> Mandant
 CRM -> Administration -> Benutzer
 
@@ -68,7 +70,7 @@ Weite Informationen und Lösungsansätze bei Problemen:
 
 Die conf.php:
 Drei Variablen bestimmen die Grundsätzliche Konfiguration der CRM.
-ERPNAME		: Verzeichnisname der ERP, Default "kivitendo-erp" 
+ERPNAME		    : Verzeichnisname der ERP, Default "kivitendo-erp" 
 erpConfigFile	: Name des Konfigfiles der ERP, Default "kivitendo"
 ERP_BASE_URL	: Kommt nur bei (Reverse)-Proxy zum Zuge. Default ""
                   Hier ist die URL des Proxy einzutragen. Beispiel:
@@ -124,9 +126,9 @@ z.B. Debian
 Update auf Version 1.9.0
 ------------------------
 Die Einstellungen in der inc/conf.php sind auf ein Minimum reduziert worden.
-Diese Einstellungen können nun für jeden Mandenten über die Oberfläche eingestellt werden.
-Dazu muß mind. ein Benutzer besondere Rechte bekommen. Bitte dazu admin.pl aufrufen.
-Legen Sie eine neuen Gruppe CRMTL an. Das einzige Recht das hier unter CRM gesetzt sein muß ist 
+Diese Einstellungen können nun für jeden Mandanten über die Oberfläche eingestellt werden.
+Dazu muss mindestens ein Benutzer besondere Rechte bekommen. Bitte dazu admin.pl aufrufen.
+Legen Sie eine neuen Gruppe CRMTL an. Das einzige Recht das hier unter CRM gesetzt sein muss ist 
 'Admin Status'.
 Ordnen Sie einen Benutzer dieser Gruppe zu. 
 Dieser Benutzer wir in kommenden Versionen mehr Aufgaben bekommen, daher "sparsam" vergeben.
@@ -145,7 +147,7 @@ der Datei update/crm_defaults.sql "CREATE .... );" auf der Datenbankkonsole ausf
 Geo-Datenbank:
 --------------
 In der Adressdatenmaske können einige Daten aus einer Geodatenbank gefüllt werden.
-Dazu muß zuvor die Datenbank angelegt werden.
+Dazu muss zuvor die Datenbank angelegt werden.
 
 Dazu ein Terminalfenster öffnen oder per Fernzugriff auf dem Server auf der Konsole 
 anmelden. In das Unterverzeichnis 'update' der CRM wechseln.
@@ -162,7 +164,7 @@ In der PostgreSQL-Konsole folgendes eingeben:
 Es rasseln eine Menge Meldungen durch, es sollten keine Fehler auftreten.
 Die Konsole mit '\q' verlassen.
 
-Jetzt noch die Mandantenkonfiguration öffnen und die Checkbox hinter 'GEODB' setzen.
+Jetzt noch die Mandanten-Konfiguration öffnen und die Checkbox hinter 'GEODB' setzen.
 
 Jetzt erscheint in den Eingabemasken ein Knopf 'suche Ort'. Geben Sie in Plz, Ort oder
 Vorwahl einen (Teil-)Begriff ein und klicken Sie auf den Knopf. In einem Pop-Up werden

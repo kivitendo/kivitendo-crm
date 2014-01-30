@@ -222,6 +222,13 @@
     <tr><td class="norm">.:remark:.</td><td><textarea name="notes" cols="37" rows="3">{notes}</textarea></td>
         <td class="norm">.:email:.<br>.:signature:.</td><td><textarea name="mailsign" cols="37" rows="3">{mailsign}</textarea></td></tr>
     <tr><td class="norm"></td><td></td>
+        <td>Mandantensignatur</td><td>
+                <input type="radio" name="mandsig" value='0' {mandsig0}>ignorieren
+                <input type="radio" name="mandsig" value='1' {mandsig1}>nur diese
+                <input type="radio" name="mandsig" value='2' {mandsig2}>voran stellen
+                <input type="radio" name="mandsig" value='3' {mandsig3}>anhängen
+        </td></tr>
+    <tr><td class="norm"></td><td></td>
         <td>&nbsp;</td><td>{GRUPPE}</td></tr>
     <tr><td class="norm">.:emailserver:.</td><td><input type="text" name="msrv" value="{msrv}" size="25" maxlength="75"></td>
         <td class="norm">.:emailuser:.</td>

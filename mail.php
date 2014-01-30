@@ -228,12 +228,23 @@
         }
     } else {    
         $user=getUserStamm($_SESSION["loginCRM"]);
-        $MailSign=str_replace("\r","",$user["mailsign"]);
         $BodyText="";// \n".$MailSign;
-        $MailSign=str_replace("\n","<br>",$user["mailsign"]);
-        $MailSign=str_replace("\r","",$MailSign);
     }
-
+    switch ($_SESSION['mandsig']) {
+        case '0' :  $MailSign  = $_SESSION["mailsign"];
+                    break;
+        case '1' :  $MailSign  = $_SESSION["msignature"];
+                    break;
+        case '2' :  $MailSign  = $_SESSION["msignature"];
+                    $MailSign .= "\n".$_SESSION["mailsign"];
+                    break;
+        case '3' :  $MailSign  = $_SESSION["mailsign"];
+                    $MailSign .= "\n".$_SESSION["msignature"];
+                    break;
+        default  :  $MailSign  = $_SESSION["mailsign"];
+    }
+    $MailSign=str_replace("\n","<br>",$MailSign);
+    $MailSign=str_replace("\r","",$MailSign);
     $t = new Template($base);
     $menu =  $_SESSION['menu'];
     $head = mkHeader();

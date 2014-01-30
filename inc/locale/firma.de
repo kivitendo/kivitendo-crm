@@ -155,6 +155,7 @@ $texts = array(
     '.:map:.'                                                      => 'Karte',
     '.:mapservice:.'                                               => 'Kartendienst',
     '.:minentry:.'                                                 => 'minimale Eingabe',
+    '.:member:.'                                                   => 'Mitglied',
     '.:minutes:.'                                                  => 'Minuten',
     '.:miscInfo:.'                                                 => 'sonst. Infos',
     '.:miscInfo:.'                                                 => 'zus. Infos',

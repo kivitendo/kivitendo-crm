@@ -7,6 +7,10 @@
 {JQTABLE}
 {THEME}    
 {JAVASCRIPTS}
+<style type="text/css">
+   input.b0 { width:50px; }
+   input.b1, select.b1 { width:200px; }
+</style>
 <script language="JavaScript">
     function showItem(Q,id) {
 	    F1=open("getCall.php?hole="+id+Q,"Caller","width=800, height=650, left=100, top=50, scrollbars=yes");
@@ -187,14 +191,14 @@
     <input type="hidden" name="uid" value="{uid}">
     <input type="hidden" name="login" value="{login}">
     <tr><td class="norm">.:searchtab:.</td><td>
-        <select name="searchtab">
+        <select class="b1" name="searchtab">
         <option value="1"{searchtab1}>.:fastsearch:.
         <option value="2"{searchtab2}>.:customers:.
         <option value="3"{searchtab3}>.:vendors:.
         <option value="4"{searchtab4}>.:persons:.
         </select>
         </td>
-        <td class="norm">.:substitute:.</td><td class="norm"><select name="vertreter">
+        <td class="norm">.:substitute:.</td><td class="norm"><select class="b1" name="vertreter">
                         <option value=""></option>
 <!-- BEGIN Selectbox -->
                         <option value="{vertreter}"{Sel}>{vname}</option>
@@ -202,7 +206,7 @@
                         </select>
         </td></tr>
     <tr><td class="norm">.:kdviewli:.</td><td>
-        <select name="kdviewli">
+        <select class="b1" name="kdviewli">
         <option value="1"{kdviewli1}>.:shipto:.
         <option value="2"{kdviewli2}>.:remarks:.
         <option value="3"{kdviewli3}>.:variablen:.
@@ -210,7 +214,7 @@
         <option value="5"{kdviewli5}>.:miscInfo:.
         </select>
         </td>
-        <td class="norm">.:label:.</td><td class="norm"><select name="etikett">
+        <td class="norm">.:label:.</td><td class="norm"><select class="b1" name="etikett">
 <!-- BEGIN SelectboxB -->
                         <option value="{LID}"{FSel}>{FTXT}</option>
 <!-- END SelectboxB -->
@@ -218,7 +222,7 @@
         </td></tr>
         <tr>
         <td class="norm">.:kdviewre:.</td><td>
-        <select name="kdviewre">
+        <select class="b1" name="kdviewre">
         <option value="1"{kdviewre1}>.:contact:.
         <option value="2"{kdviewre2}>.:quotations:.
         <option value="3"{kdviewre3}>.:orders:.
@@ -227,41 +231,43 @@
         </td>
         <td class="norm"></td><td>
         </td></tr>
-    <tr><td class="norm">.:name:.</td><td><input type="text" name="name" value="{name}" maxlength="75"></td>
-        <td class="norm">.:department:.</td>    <td><input type="text" name="abteilung" value="{abteilung}" maxlength="75"></td></tr>
-    <tr><td class="norm">.:street:.</td><td><input type="text" name="addr1" value="{addr1}" maxlength="75"></td>
-        <td class="norm">.:position:.</td><td><input type="text" name="position" value="{position}" maxlength="75"></td></tr>
-    <tr><td class="norm">.:zipcode:. .:city:.</td><td><input type="text" name="addr2" value="{addr2}" size="6" maxlength="10"> <input type="text" name="addr3" value="{addr3}"  maxlength="75"></td>
-        <td class="norm">.:email:.</td><td><input type="text" name="email" value="{email}" size="30" maxlength="125"></td></tr>
-    <tr><td class="norm">.:privatephone:.</td><td><input type="text" name="homephone" value="{homephone}" maxlength="30"></td>
-        <td class="norm">.:officephone:.</td><td><input type="text" name="workphone" value="{workphone}" maxlength="30"></td></tr>
+    <tr><td class="norm">.:name:.</td><td><input class="b1" type="text" name="name" value="{name}" maxlength="75"></td>
+        <td class="norm">.:department:.</td>    <td ><input class="b1" type="text" name="abteilung" value="{abteilung}" maxlength="75"></td></tr>
+    <tr><td class="norm">.:street:.</td><td><input class="b1" type="text" name="addr1" value="{addr1}" maxlength="75"></td>
+        <td class="norm">.:position:.</td><td><input class="b1" type="text" name="position" value="{position}" maxlength="75"></td></tr>
+    <tr><td class="norm">.:zipcode:. .:city:.</td><td><input class="b0" type="text" name="addr2" value="{addr2}" size="6" maxlength="10"> <input style="width:145px;" type="text" name="addr3" value="{addr3}"  maxlength="75"></td>
+        <td class="norm">.:email:.</td><td><input class="b1" type="text" name="email" value="{email}" size="30" maxlength="125"></td></tr>
+    <tr><td class="norm">.:privatephone:.</td><td><input class="b1" type="text" name="homephone" value="{homephone}" maxlength="30"></td>
+        <td class="norm">.:officephone:.</td><td><input class="b1" type="text" name="workphone" value="{workphone}" maxlength="30"></td></tr>
     <tr><td class="norm">.:remark:.</td><td><textarea name="notes" cols="37" rows="3">{notes}</textarea></td>
         <td class="norm">.:email:.<br>.:signature:.</td><td><textarea name="mailsign" cols="37" rows="3">{mailsign}</textarea></td></tr>
-    <tr><td class="norm"></td><td></td>
-        <td>&nbsp;</td><td>{GRUPPE}</td></tr>
-    <tr><td class="norm">.:emailserver:.</td><td><input type="text" name="msrv" value="{msrv}" size="25" maxlength="75"></td>
+    <tr><td class="norm">.:member:.</td><td><a href="user2.php" >{GRUPPE}</a></td>
+        <td></td><td></td></tr>
+    <tr><td class="norm">.:emailserver:.</td><td><input class="b1" type="text" name="msrv" value="{msrv}"  maxlength="75"></td>
         <td class="norm">.:emailuser:.</td>
-        <td class="norm"><input type="text" name="mailuser" value="{mailuser}" size="25" maxlength="75">
+        <td class="norm"><input class="b1" type="text" name="mailuser" value="{mailuser}" size="25" maxlength="75">
         </td></tr>
-    <tr><td class="norm">.:emailbox:.</td><td class="norm"><input type="text" name="postf" value="{postf}" size="10" maxlength="75"> .:port:. <input type="text" name="port" value="{port}" size="4" maxlength="6">
+    <tr><td class="norm">.:emailbox:.</td><td class="norm"><input class="b1" type="text" name="postf" value="{postf}" size="10" maxlength="75">
+        </td>
+        <td class="norm">.:password:.</td>
+        <td class="norm"><input class="b1" type="password" name="kennw" value="{kennw}" maxlength="75">
+    <!--tr><td>Backup-Pf</td><td><input type="text" name="Postf2" value="{Postf2}" size="10"> </td><td></td></tr-->
+        </td></tr>
+    <tr><td class="norm">.:protocol:.</td><td><input type="radio" name="proto" value="0" {protopop}>.:POP:. <input type="radio" name="proto" value="1" {protoimap}>.:IMAP:.
+         .:port:. <input style="width:28px;" type="text" name="port" value="{port}" size="4" maxlength="6">
         <select name="selport" onChange="selPort();">
             <option value=""></option>
             <option value="110">110</option>
             <option value="143">143</option>
             <option value="993">993</option>
             <option value="995">995</option>
-        </select>
+        </select>        
         </td>
-        <td class="norm">.:password:.</td>
-        <td class="norm"><input type="password" name="kennw" value="{kennw}" maxlength="75">
-    <!--tr><td>Backup-Pf</td><td><input type="text" name="Postf2" value="{Postf2}" size="10"> </td><td></td></tr-->
-        </td></tr>
-    <tr><td class="norm">.:protocol:.</td><td><input type="radio" name="proto" value="0" {protopop}>.:POP:. <input type="radio" name="proto" value="1" {protoimap}>.:IMAP:.</td>
         <td class="norm">SSL</td>
         <td class="norm"><input type="radio" name="ssl" value="n" {ssln}>.:notls:. <input type="radio" name="ssl" value="t" {sslt}>ssl <input type="radio" name="ssl" value="f" {sslf}>tls
         </td></tr>
     <tr><td class="norm">.:theme:.</td><td>
-        <select name="theme" id="theme">
+        <select style="width:115px;" name="theme" id="theme">
         <!-- BEGIN Theme -->
             <option value="{themefile}" {TSel}>{themename}
         <!-- END Theme -->
@@ -271,23 +277,23 @@
        <td class="norm">.:tinymce:.</td><td><input type='checkbox' name='tinymce' id='tinymce' {tinymce} value='t'></td>
     </tr>
     <tr><td class="norm">.:deadlines:.</td><td>
-            .:from_t:. <select name="termbegin">{termbegin}</select> 
-            .:to_t:. <select name="termend">{termend}</select> .:uhr:.</td>
-        <td class="norm">.:deadlinespacing:.</td><td><input type="text" name="termseq" value="{termseq}" size="3"> .:minutes:.</td></tr>
+            .:from_t:. <select style="width:40px;" name="termbegin">{termbegin}</select> 
+            .:to_t:. <select style="width:40px;" name="termend">{termend}</select> .:uhr:.</td>
+        <td class="norm">.:deadlinespacing:.</td><td><input style="width:30px;" type="text" name="termseq" value="{termseq}" size="3"> .:minutes:.</td></tr>
     <tr><td class="norm">.:interval:.</td><td>
-            <input type="text" name="interv" value="{interv}" size="4" maxlength="5">.:sec.:. &nbsp;&nbsp; </td></tr>
-    <tr><td class="normal">.:presearch:. </td><td><input type="text" name="pre" value="{pre}" size="10"></td>
+            <input style="width:30px;" type="text" name="interv" value="{interv}" size="4" maxlength="5">.:sec.:. &nbsp;&nbsp; </td></tr>
+    <tr><td class="normal">.:presearch:. </td><td><input style="width:30px;" type="text" name="pre" value="{pre}" size="10"></td>
         <td class="norm">.:awpre:.</td><td><input type="checkbox" value='t' name="preon" {preon}>.:yes:.</td></tr>
     <!--tr><td colspan="4"><input type="submit" name="mkmbx" value=".:createmailbox:."></td><td></td><td></td></tr-->
     <tr><td class="norm">.:mapservice:.</td><td colspan="4">
-             <input type="text" name="streetview" id="streetview" size="80" value='{streetview}'><input type="checkbox" name="streetview_default" id="streetview_default"  value='t' {streetview_default}>.:mandant:.
+             <input style="width:750px;" type="text" name="streetview" id="streetview" size="80" value='{streetview}'><input type="checkbox" name="streetview_default" id="streetview_default"  value='t' {streetview_default}>.:mandant:.
         </td></tr>
     <tr><td class="norm">.:spacecharsubst:.</td><td colspan="4">
-             <input type="text" name="planspace" id="planspace"size="3" value='{planspace}'>
+             <input style="width:30px;" type="text" name="planspace" id="planspace"size="3" value='{planspace}'>
     </td></tr>
     <tr><td class="norm">.:autocompletion:.</td><td colspan="4">
-             <input type="checkbox" name="feature_ac" value='t' {feature_ac}>&nbsp;&nbsp; .:minentry:.: <input type="text" name="feature_ac_minlength" size="1" value='{feature_ac_minlength}'>
-             &nbsp;&nbsp; .:delay:.: <input type="text" name="feature_ac_delay" size="3" value='{feature_ac_delay}'>.:ms:.</td>
+             <input type="checkbox" name="feature_ac" value='t' {feature_ac}>&nbsp;&nbsp; .:minentry:.: <input style="width:20px;" type="text" name="feature_ac_minlength"  value='{feature_ac_minlength}'>
+             &nbsp;&nbsp; .:delay:.: <input style="width:40px;" type="text" name="feature_ac_delay" size="3" value='{feature_ac_delay}'>.:ms:.</td>
    </tr>
    <tr><td class="norm">.:firmabuttons:.</td><td colspan="4">
              <input type="checkbox" name="angebot_button" id="angebot_button"  value='t' {angebot_button}>.:quotation:.&nbsp;&nbsp; <input type="checkbox" name="auftrag_button"  value='t' {auftrag_button}>.:order:.&nbsp;&nbsp;  

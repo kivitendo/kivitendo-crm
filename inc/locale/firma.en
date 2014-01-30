@@ -166,6 +166,7 @@ $texts=array(
     '.:male:.'                                                     => 'male',
     '.:map:.'                                                      => 'map',
     '.:mapservice:.'                                               => 'map service',
+    '.:member:.'                                                   => 'Member',
     '.:minentry:.'                                                 => 'min entry',
     '.:minutes:.'                                                  => 'minutes',
     '.:miscInfo:.'                                                 => 'misc. info',

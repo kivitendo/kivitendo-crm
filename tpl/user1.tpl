@@ -14,8 +14,7 @@
     var MailOn = false;
     function Mailonoff( reload ) {
         if ( $('#mailwin').dialog( "isOpen" ) && !reload) {
-             $('#mailwin').dialog('close');
-            document.user.mails.value=".:show emails:.";
+            $('#mailwin').dialog('close');
         } else {
             if ( !MailOn) {
                 var Q, p, email;
@@ -57,8 +56,9 @@
                 MailOn = true;
             };
             $( "#mailwin" ).dialog( "open" )
-            document.user.mails.value=".:hide emails:.";
+            $("#mails_button").button( "option", "label", ".:hide emails:." );
         }
+        
     }
     function kal(fld) {
         f=open("terminmonat.php?datum={DATUM}&fld="+fld,"Name","width=410,height=390,left=200,top=100");
@@ -85,7 +85,6 @@
             width: 400,
             position: [200,400]
         });          
-
         $( "#mailwin" ).dialog({
             autoOpen: false,
             show: {
@@ -100,7 +99,7 @@
             minHeight: 550,
             title: "Mails",
             close: function() {
-                document.user.mails.value=".:show emails:.";
+                $("#mails_button").button( "option", "label", ".:show emails:." );
             }
         });
         $( "#edit_theme" ).button().click(function( event ) {
@@ -129,7 +128,6 @@
                     setTimeout("$('#dialog_saved').dialog('close')",1100);
                 }
             });
-            //$( "#angebot_button" ).focus(); //dass der Save-Button nicht gedrückt (klein) bleibt, ToDo: verbessern...
             return false;
         });
         $('#streetview_default').click(function() {
@@ -141,8 +139,25 @@
             }
         });
         if( $('#streetview_default').is(':checked') ){
-           $("#streetview,#planspace").hide()   
+            $("#streetview,#planspace").hide()   
         }
+        $('#external_mail').click(function() {
+            var $this = $(this);
+            if ($this.is(':checked') ) {
+                $("#mails_button").hide()  
+            } else {
+                $("#mails_button").show()           
+            }
+        });
+        if( $('#external_mail').is(':checked') ){
+            $("#mails_button").hide()   
+        }
+        $( "#mails_button" ).button().css({  width: '171px'}).click(function() {
+            $("#mails_button").button( "option", "label", ".:hide emails:." );
+            Mailonoff(false) ;
+            return false  ;
+        })
+
         
     });
 </script>
@@ -159,11 +174,12 @@
  <div id="cantEditBase" title="Theme bearbeiten">
     <p>.:basecannotbechanged:.</p>
 </div>   
-<p class="listtop" onClick="help('User');">.:usersettings:.</p>
+<p class="listtop" onClick="help('User');">.:usersettings:.  {login} : {uid}</p>
 <form name="user" id="userform"  action="user1.php" method="post" onSubmit="return getical();">
 <div id="user">
-<input type="reset" name="mails" value=".:show emails:." onClick="Mailonoff(false)"> {login} : {uid}
-
+<div style="height:30px;">
+    <button id="mails_button">.:show emails:.</button> 
+</div>
 <table border="0">
     <input type="hidden" name="icalart" value="{icalart}">
     <input type="hidden" name="icaldest" value="{icaldest}">
@@ -283,7 +299,7 @@
    <tr><td class="norm">.:createmultiuser:.</td><td >
              <input type="checkbox" name="feature_unique_name_plz" value='t' {feature_unique_name_plz}>.:disallow:.</td>
         <td class="norm">.:external_mail:.</td><td colspan="4">
-             <input type="checkbox" name="external_mail" value='t' {external_mail}>.:use:.</td>
+             <input type="checkbox" id="external_mail" name="external_mail" value='t' {external_mail}>.:use:.</td>
    </tr>
   <tr><td class="norm">.:show errors:.</td><td colspan="4">
             <input type="checkbox" name="sql_error"  value='t' {sql_error}>.:sqlerror:.&nbsp;&nbsp; <input type="checkbox" name="php_error"  value='t' {php_error}>.:phperror:. &nbsp;&nbsp;

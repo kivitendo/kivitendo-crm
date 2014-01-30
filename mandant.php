@@ -21,7 +21,7 @@ $keys = array(
     'planspace_man',
 );
 foreach ( $keys as $value ) {
-    $_SESSION[$value] = $_POST[$value];
+    $_SESSION[$value] = $value == 'dir_mode' ? octdec( $_POST[$value] ) : $_POST[$value]; 
 }
 if ( $_POST['save'] ) {
     $save = true;

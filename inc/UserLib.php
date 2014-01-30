@@ -92,6 +92,7 @@ function saveUserStamm( $val ) {
         'data_from_tel'           => 'b',
         'tinymce'                 => 'b',
         'search_history'          => 't',
+        'mandsig'                 => 't'
     );
     foreach ( $fld as $key => $value ) 
         $_SESSION[$key] = isset( $val[$key] ) ? $val[$key] : '';
@@ -218,6 +219,9 @@ function getUserStamm( $id, $login = false ) {
             $rs3 = $_SESSION['db']->getOne( $sql );
             $daten["vname"] = ( $rs3['name'] != '' ) ? $rs3["name"] : $rs3["login"];
         };
+        $sql = "SELECT signature FROM defaults";
+        $rs = $_SESSION['db']->getOne($sql);
+        if ( $rs ) $daten['msignature'] = $rs['signature'];
         return $daten;
     }
 }
@@ -335,6 +339,7 @@ function loadUserDefaults($id){
         "port"                      => "143", 
         "proto"                     => "t",
         "ssl"                       => "f",
+        'mandsig'                   => '0',
         "interv"                    => "60",
         "pre"                       => "%",
         "preon"                     => "t",

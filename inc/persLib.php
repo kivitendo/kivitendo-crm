@@ -391,7 +391,8 @@ function getCpAnreden() {
 * return mixed
 *****************************************************/
 function getCpAnredenGeneric($gender) {
-    $sql = "select language_id,translation from generic_translations where translation_type ILIKE 'greetings::$gender%'";
+    $greet = array('male'=>'Herr','female'=>'Frau');
+    $sql = "select language_id,COALESCE(translation,'".$greet[$gender]."') from generic_translations where translation_type ILIKE 'greetings::$gender%'";
     $rs=$_SESSION['db']->getAssoc($sql);
     return $rs;
 }

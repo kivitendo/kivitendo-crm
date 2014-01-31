@@ -67,6 +67,9 @@
 {PRE_CONTENT}
 {START_CONTENT}
 <p class="listtop">.:search result:. .:Contacts:.</p>
+<form name="personen" action="firma2.php" method="post">
+<input type="hidden" name="fid" value="{FID}">
+<input type="hidden" name="Q" value="{Q}">
 <table id="treffer" class="tablesorter" width="90%">  
     <thead>
 		<tr>
@@ -84,6 +87,7 @@
 	<tr onClick='{js}'>
 		<td>{Name}</td><td>&nbsp;{Plz}</td><td>{Ort}</td><td>&nbsp;{Telefon}</td><td>&nbsp;{eMail}</td><td>&nbsp;{Firma}</td><td>&nbsp;{insk}</td></tr>
 <!-- END Liste -->
+      <tr><td class="re" colspan="6">{snd}</td><td></td></tr>
    </tbody>
 </table>
 <span id="pager" class="pager">

@@ -54,58 +54,40 @@
             $anredenFrau = getCpAnredenGeneric('female');
             $anredenHerr = getCpAnredenGeneric('male');
 
-            if ($daten) foreach ($daten as $zeile) { //Diese Algorithmus macht die Suche bei einer großen Trefferzahl langsam ...
+            foreach ($daten as $zeile) { //Diese Algorithmus macht die Suche bei einer großen Trefferzahl langsam ...
                                                      // TODO executeMultiple ... ;-) jb 16.6.2009
-                if ($zeile["cp_gender"] =="f"){
-                    if ($zeile["language_id"]) {
-                        $zeile["cp_greeting"]= $anredenFrau[$zeile["language_id"]];
-                    } else {
-                        $zeile["cp_greeting"]="Frau";
-                    }
-                } else if ($zeile["cp_gender"] =="m"){
-                    if ($zeile["language_id"]) {
-                        $zeile["cp_greeting"]= $anredenHerr[$zeile["language_id"]];
-                    } else {
-                        $zeile["cp_greeting"]="Herr";
-                    }
+                if ($zeile["cp_gender"] == 'f'){
+                    $zeile["cp_greeting"] = $anredenFrau[$zeile["language_id"]];
+                } else if ($zeile["cp_gender"] == 'm'){
+                    $zeile["cp_greeting"]= $anredenHerr[$zeile["language_id"]];
                 } else {
-                        $zeile["cp_greeting"]="KEIN GESCHLECHT";
+                    $zeile["cp_greeting"] = 'KEIN GESCHLECHT';
                 }
-                /*if ($zeile["cp_country"] == 'Deutschland'){ //Schnellanpassung für xplace. Kann wieder raus, da dies in der Druckvorlage gesetzt wird
-                                                              //@Jan: Des war ja nun wohl erst recht Nonsens
-                $zeile["cp_country"]='';
-                }*/
-
-                /* 
-                 * Der Blog ist sowieso gut und sollte mal hier angemerkt werden 'google: "mokka mit schlag"
-                 * http://cafe.elharo.com/optimization/how-to-write-network-backup-software-a-lesson-in-practical-optimization/
-                */
                 $save = array($zeile["cp_greeting"],$zeile["cp_title"],$zeile["cp_name"],$zeile["cp_givenname"],
                         $zeile["cp_country"],$zeile["cp_zipcode"],$zeile["cp_city"],$zeile["cp_street"],
                         $zeile["cp_phone1"],$zeile["cp_fax"],$zeile["cp_email"],$zeile["name"],$zeile["cp_cv_id"],
                         $zeile["cp_gender"],$zeile["cp_id"]); 
-                if ($cvar>0) {
+                if ( $cvar > 0 ) {
                     $rs = getFirmaCVars($zeile["cp_cv_id"]);
-                    if ($rs) {
-                        foreach($cvheader as $cvh) {
+                    if ( $rs ) {
+                        foreach( $cvheader as $cvh ) {
                             $save[] = $rs[$cvh];
                         }
                     } else {
-                        for ($i=0; $i<$cvar; $i++) $save[] = false;
+                        for ( $i = 0; $i < $cvar; $i++ ) $save[] = false;
                     }
                 }
                 insertCSVData($save,$zeile["cp_id"]);
-                if ($_POST["FID1"]) {
-                    $insk="<input type='checkbox' name='kontid[]' value='".$zeile["cp_id"]."'>"; 
-                    $js="";
+                if ( $_POST["FID1"] ) {
+                    $insk = "<input type='checkbox' name='kontid[]' value='".$zeile["cp_id"]."'>"; 
+                    $js   = '';
                 } else { 
-                    $js='showK('.$zeile["cp_id"].',"'.$zeile["tbl"].'");'; //showK({PID},'{TBL}')
-                    $insk=""; 
+                    $js   = 'showK('.$zeile["cp_id"].',"'.$zeile["tbl"].'");'; //showK({PID},'{TBL}')
+                    $insk = ''; 
                 };
-                if ($i<$_SESSION['listLimit']) {
+                if ( $i < $_SESSION['listLimit'] ) {
                     $t->set_var(array(
                         js => $js,
-                        LineCol => ($i%2+1),
                         Name => $zeile["cp_name"].", ".$zeile["cp_givenname"],
                         Plz => $zeile["cp_zipcode"],
                         Ort => $zeile["cp_city"],
@@ -113,9 +95,6 @@
                         eMail => $zeile["cp_email"],
                         Firma => $zeile["name"],
                         insk => $insk,
-                        DEST => $dest,
-                        QUELLE => $Quelle,
-                        Q => $Quelle,
                     ));
                     $t->parse("Block","Liste",true);
                     $i++;
@@ -124,15 +103,16 @@
                             report => $_SESSION['listLimit']." von ".count($daten)." Treffern",
                         ));
                     }
-                    $t->set_var(array(
-                        ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
-                    ));
-
                 }
+                echo ".";
             }
+            echo "x";
             $t->set_var(array(
-                snd => $snd,
-                FID => $_POST["FID1"]
+                DEST   => $dest,
+                QUELLE => $Quelle,
+                Q      => $Quelle,
+                snd    => $snd,
+                FID    => $_POST["FID1"]
             ));
         } else {
             $msg="Sorry, not found.";

@@ -144,6 +144,7 @@
         <div class="zeile2">
             <span class="label klein">.:Company:.</span>
             <span class="feld"><input type="text" name="name" id="company_name" size="25" maxlength="75" value="{Firma}" tabindex="18">
+                               <!--input type="button" name="dst" value=" ? " onClick="suchFa();" tabindex="99"--> </span>
         </div>
         <div class="zeile2">
             <span class="label klein">.:department:.</span>

@@ -153,7 +153,7 @@
 <INPUT TYPE="hidden" name="KontaktCC" id="KontaktCC" value="{KontaktCC}">
 <INPUT TYPE="hidden" name="MID" value="{vorlage}">
 <INPUT TYPE="hidden" name="aktion" id="aktion" value="">
-<INPUT TYPE="hidden" name="popup" value="{popup}">
+<INPUT TYPE="hidden" name="popup" id='popup' value="{popup}">
 <tr>
 	<td class=" re" width="3em"></td>
 	<td class=" re" width="*"></td>

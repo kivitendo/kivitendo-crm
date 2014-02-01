@@ -6,13 +6,15 @@
     include_once("inc/UserLib.php");
     include_once("Mail.php");
     include_once("Mail/mime.php");
-    if ( (isset($_GET['popup']) && $_GET['popup'] == 1) or (isset($_POST['popup']) && $_POST['popup'] == 1) ) {
+    if ( (isset($_GET['popup']) && $_GET['popup'] == 1) ) {
+        $popup = true;
+    } else if ( (isset($_POST['popup']) && $_POST['popup'] == 1) ) {
         $popup = true;
     } else {
         $popup = false;
     }
     if ($_POST["QUELLE"] != '') { 
-        $referer=$_POST["QUELLE"]; 
+        $referer=$_POST["QUELLE"]."?popup=".$_POST['popup']; 
         $TO=$_POST["TO"];
         $KontaktTO=$_POST["KontaktTO"];
     } else if ($_GET["TO"] != '') { 
@@ -33,6 +35,7 @@
             $btn='<a href="mail.php"><image src="image/new.png" alt=".:new:." title=".:new:." border="0" ></a>';
             $hide="visible";
         };
+        $referer .= "?popup=".$_POST['popup'];
     } else { 
         $referer = ''; 
         $btn='<a href="mail.php"><image src="image/new.png" alt=".:new:." title=".:new:." border="0" ></a>';
@@ -216,7 +219,7 @@
                 }
                 $TO=""; $CC=""; $msg="Mail versendet";
                 $Subject=""; $BodyText="";
-                if ($_POST["QUELLE"]) header("Location: ".$_POST["QUELLE"]);
+                if ($_POST["QUELLE"]) header("Location: ".$referer);
             } else {
                 $msg="Fehler beim Versenden ".PEAR_Error::getMessage ();
                 //$TO=$_POST["TO"]; $CC=$_POST["CC"]; $msg="Fehler beim Versenden ".PEAR_Error::getMessage ();

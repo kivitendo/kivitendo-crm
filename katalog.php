@@ -54,9 +54,13 @@ if ($_POST['ok']) {
     }
     $rc = fputs($f,$vorlage['post']);
     fclose($f);
-    $rc = @exec('pdflatex -interaction=batchmode -output-directory=tmp/ tmp/katalog.tex',$out,$ret);
+    $home = getenv('HOME');
+    $openin_any = getenv('openin_any');
+    putenv('HOME='.getcwd().'/tmp');
+    putenv('openin_any=p');
+    $rc = @exec('pdflatex -interaction=nonstopmode -output-directory=tmp/ tmp/katalog.tex',$out,$ret);
     if ( $ret == 0 ) {
-        $rc = @exec('pdflatex -interaction=batchmode -output-directory=tmp/ tmp/katalog.tex',$out,$ret);
+        $rc = @exec('pdflatex -interaction=nonstopmode -output-directory=tmp/ tmp/katalog.tex',$out,$ret);
         if (file_exists('tmp/katalog.pdf'))   {  
             $link = 'tmp/katalog.pdf'; 
             $msg = "RC:$rc Ret:$ret Out:".$out[0];
@@ -75,6 +79,8 @@ if ($_POST['ok']) {
         $msg .= "Fehler beim Erstellen<br>RC:$rc Ret:$ret Out:".$out[0];
         $linklog = 'tmp/katalog.log';
     }
+    putenv('HOME='.$home);
+    putenv('openin_any='.$openin_any);
 } else {
     $_POST['pm']='-';
 }

@@ -3,9 +3,9 @@
 	include("inc/FirmenLib.php");	
 	include("inc/wvLib.php");
 	include("inc/pdfpos.php");
-    #define("FPDF_FONTPATH","/usr/share/fpdf/font/");
-    #define("FONTART","2");
-    #define("FONTSTYLE","1");
+    define("FPDF_FONTPATH","/usr/share/fpdf/font/");
+    define("FONTART","2");
+    define("FONTSTYLE","1");
 
 	$rep=suchVertrag($_GET["aid"]);
 	$rep=$rep[0];

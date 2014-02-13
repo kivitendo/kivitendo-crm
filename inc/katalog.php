@@ -182,11 +182,17 @@ function getPartsgroup() {
    return $pg;
 }
 function closeinventur($art,$name) {
-    $rc = @exec("pdflatex -interaction=batchmode -output-directory=tmp/ tmp/$art.tex",$out,$ret);
-    $rc = @exec("pdflatex -interaction=batchmode -output-directory=tmp/ tmp/$art.tex",$out,$ret);
+    $home = getenv('HOME');
+    $openin_any = getenv('openin_any');
+    putenv('HOME='.getcwd().'/tmp');
+    putenv('openin_any=p');
+    $rc = @exec("pdflatex -interaction=nonstopmode -output-directory=tmp/ tmp/$art.tex",$out,$ret);
+    $rc = @exec("pdflatex -interaction=nonstopmode -output-directory=tmp/ tmp/$art.tex",$out,$ret);
     if ($name != $art) {
         $rc = @exec("mv tmp/$art.pdf tmp/$name.pdf");
     }
+    putenv('HOME='.$home);
+    putenv('openin_any='.$openin_any);
 }
 function getPartBin($pg,$partnumber,$obsolete,$bin) {
     if ($pg == '' and $partnumber == '') {

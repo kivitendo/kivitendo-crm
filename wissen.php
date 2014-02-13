@@ -33,7 +33,7 @@
     }
 
     if ($_SESSION['tinymce']) {
-        $tiny  =  "<script language='javascript' type='text/javascript' src='inc/tiny_mce/tiny_mce.js'></script>\n";
+        $tiny  =  "<script language='javascript' type='text/javascript' src='".$_SESSION['baseurl']."crm/inc/tiny_mce/tiny_mce.js'></script>\n";
         $init  .= "\tvar tiny = true;\n";
     } else {
         $init  .= "\tvar tiny = false;\n";

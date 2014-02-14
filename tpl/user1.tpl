@@ -2,14 +2,27 @@
     <head><title>.:usersettings:.</title>
 {STYLESHEETS}
 {CRMCSS}
+{BOXCSS}
 {JQUERY}
 {JQUERYUI}
 {JQTABLE}
 {THEME}    
 {JAVASCRIPTS}
+{JQBOX}
 <style type="text/css">
-   input.b0 { width:50px; }
-   input.b1, select.b1 { width:200px; }
+    input.b0 { width:50px; }
+    input.b1, select.b1 { width: 200px;  }
+    .selectboxit-container .selectboxit-options {width: 170px;}
+    #selportSelectBoxItContainer.selectboxit-container .selectboxit-options {width: 10px;}
+    #termbeginSelectBoxItContainer.selectboxit-container .selectboxit-options {width: 10px;}
+    #termendSelectBoxItContainer.selectboxit-container .selectboxit-options {width: 10px;}
+    .selectboxit-container span, .selectboxit-container .selectboxit-options a {height: 22px; line-height: 22px;}
+    .inp-checkbox+label {
+        margin: .5em;
+        width:16px; 
+        height:16px; 
+        vertical-align:middle;
+    }   
 </style>
 <script language="JavaScript">
     function showItem(Q,id) {
@@ -60,7 +73,7 @@
                 MailOn = true;
             };
             $( "#mailwin" ).dialog( "open" )
-            $("#mails_button").button( "option", "label", ".:hide emails:." );
+            $( "#mails_button" ).button( "option", "label", ".:hide emails:." );
         }
         
     }
@@ -82,6 +95,8 @@
         po = document.user.selport.selectedIndex;
         document.user.port.value=document.user.selport.options[po].value;
     }
+    
+       
     $(document).ready(function(){
         $("#dialog_saved, #noThemeFile, #cantEditBase" ).dialog({ 
             autoOpen: false,
@@ -161,14 +176,33 @@
             Mailonoff(false) ;
             return false  ;
         })
-
-        
+        $("select").selectBoxIt({
+            theme:       "jqueryui",
+            autoWidth:   true,
+            //hideCurrent:  true,
+            
+        })
+        $( "td#mansig,span#proto,td#ssl" ).buttonset();
+        $(".inp-checkbox").button({ text: false})
+            .click(function(e) {
+                $(this).button("option", {
+                    icons: {
+                        primary: $(this)[0].checked ? "ui-icon-check" : ""
+                    }
+                });
+           
+            });
+        $( "#p1{feature_ac}{streetview_default}{preon}{tinymce}{angebot_button}{auftrag_button}{rechnung_button}"
+         + "{liefer_button}{zeige_extra}{zeige_karte}{zeige_bearbeiter}{zeige_etikett}{zeige_dhl}{zeige_tools}"
+         + "{zeige_lxcars}{feature_unique_name_plz}{external_mail}{sql_error}{php_error}" ).click();
     });
+
 </script>
 <script type='text/javascript' src='inc/help.js'></script>   
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
+<div class="ui-widget-content">
 <div id="dialog_saved" title=".:usersettingscrm:.">
     <p>.:usersettingssaved:.</p>
 </div>
@@ -178,9 +212,9 @@
  <div id="cantEditBase" title="Theme bearbeiten">
     <p>.:basecannotbechanged:.</p>
 </div>   
-<p class="listtop" onClick="help('User');">.:usersettings:.  {login} : {uid}</p>
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;" onClick="help('User');">.:usersettings:.  {login} : {uid}</p>
 <form name="user" id="userform"  action="user1.php" method="post" onSubmit="return getical();">
-<div id="user">
+
 <div style="height:30px;">
     <button id="mails_button">.:show emails:.</button> 
 </div>
@@ -191,11 +225,11 @@
     <input type="hidden" name="uid" value="{uid}">
     <input type="hidden" name="login" value="{login}">
     <tr><td class="norm">.:searchtab:.</td><td>
-        <select class="b1" name="searchtab">
-        <option value="1"{searchtab1}>.:fastsearch:.
-        <option value="2"{searchtab2}>.:customers:.
-        <option value="3"{searchtab3}>.:vendors:.
-        <option value="4"{searchtab4}>.:persons:.
+        <select class="b1" name="searchtab" data-size="39">
+            <option value="1"{searchtab1}>.:fastsearch:.
+            <option value="2"{searchtab2}>.:customers:.
+            <option value="3"{searchtab3}>.:vendors:.
+            <option value="4"{searchtab4}>.:persons:.
         </select>
         </td>
         <td class="norm">.:substitute:.</td><td class="norm"><select class="b1" name="vertreter">
@@ -241,11 +275,11 @@
         <td class="norm">.:officephone:.</td><td><input class="b1" type="text" name="workphone" value="{workphone}" maxlength="30"></td></tr>
     <tr><td class="norm">.:remark:.</td><td><textarea name="notes" cols="37" rows="3">{notes}</textarea></td>
         <td class="norm">.:email:.<br>.:signature:.</td><td><textarea name="mailsign" cols="37" rows="3">{mailsign}</textarea></td></tr>
-    <tr><td class="norm">Mandantensignatur</td><td>
-               <input type="radio" name="mandsig" value='0' {mandsig0}>ignorieren
-               <input type="radio" name="mandsig" value='1' {mandsig1}>nur diese
-               <input type="radio" name="mandsig" value='2' {mandsig2}>voran stellen
-               <input type="radio" name="mandsig" value='3' {mandsig3}>anhängen</td>
+    <tr><td class="norm">Mandantensignatur</td><td id="mansig"><form>
+              <input type="radio" id="mandsig0" name="mandsig" value='0' {mandsig0}><label for="mandsig0">ignorieren</label>
+              <input type="radio" id="mandsig1" name="mandsig" value='1' {mandsig1}><label for="mandsig1">nur diese</label>
+              <input type="radio" id="mandsig2" name="mandsig" value='2' {mandsig2}><label for="mandsig2">voran stellen</label>
+              <input type="radio" id="mandsig3" name="mandsig" value='3' {mandsig3}><label for="mandsig3">anhängen</label></form></td>
         <td class="norm">.:member:.</td><td><a href="user2.php" >{GRUPPE}</a></td>
     </tr>
     <tr><td class="norm">.:emailserver:.</td><td><input class="b1" type="text" name="msrv" value="{msrv}"  maxlength="75"></td>
@@ -258,20 +292,24 @@
         <td class="norm"><input class="b1" type="password" name="kennw" value="{kennw}" maxlength="75">
     <!--tr><td>Backup-Pf</td><td><input type="text" name="Postf2" value="{Postf2}" size="10"> </td><td></td></tr-->
         </td></tr>
-    <tr><td class="norm">.:protocol:.</td><td><input type="radio" name="proto" value="0" {protopop}>.:POP:. <input type="radio" name="proto" value="1" {protoimap}>.:IMAP:.
+    <tr><td class="norm">.:protocol:.</td><td><span id="proto">
+            <input type="radio" id="proto0" name="proto" value="0" {protopop}><label for="proto0">.:POP:.</label> 
+            <input type="radio" id="proto1" name="proto" value="1" {protoimap}><label for="proto1">.:IMAP:.</label></span>
          .:port:. <input style="width:28px;" type="text" name="port" value="{port}" size="4" maxlength="6">
-        <select name="selport" onChange="selPort();">
+        <select name="selport" id="selport" onChange="selPort();">
             <option value=""></option>
-            <option value="110">110</option>
-            <option value="143">143</option>
-            <option value="993">993</option>
-            <option value="995">995</option>
-        </select>        
+            <option data-selectedtext=" " value="110">110</option>
+            <option data-selectedtext=" " value="143">143</option>
+            <option data-selectedtext=" " value="993">993</option>
+            <option data-selectedtext=" " value="995">995</option>
+        </select> 
         </td>
-        <td class="norm">SSL</td>
-        <td class="norm"><input type="radio" name="ssl" value="n" {ssln}>.:notls:. <input type="radio" name="ssl" value="t" {sslt}>ssl <input type="radio" name="ssl" value="f" {sslf}>tls
+        <td class="norm">SSL</td><td id="ssl">
+            <input type="radio" id="ssln" name="ssl" value="n" {ssln}><label for="ssln">.:notls:.</label> 
+            <input type="radio" id="sslt" name="ssl" value="t" {sslt}><label for="sslt">ssl</label> 
+            <input type="radio" id="sslf" name="ssl" value="f" {sslf}><label for="sslf">tls</label>
         </td></tr>
-    <tr><td class="norm">.:theme:.</td><td>
+        <tr><td class="norm">.:theme:.</td><td>
         <select style="width:115px;" name="theme" id="theme">
         <!-- BEGIN Theme -->
             <option value="{themefile}" {TSel}>{themename}
@@ -279,43 +317,51 @@
        </select>
        <button id="edit_theme">.:edit:.</button>
        </td>
-       <td class="norm">.:tinymce:.</td><td><input type='checkbox' name='tinymce' id='tinymce' {tinymce} value='t'></td>
+       <td class="norm">.:tinymce:.</td><td><input class="inp-checkbox" type='checkbox' name='tinymce' id='tinymce'  value='t'><label for="tinymce"></label></td>
     </tr>
     <tr><td class="norm">.:deadlines:.</td><td>
-            .:from_t:. <select style="width:40px;" name="termbegin">{termbegin}</select> 
-            .:to_t:. <select style="width:40px;" name="termend">{termend}</select> .:uhr:.</td>
+            .:from_t:. <select id="termbegin" name="termbegin">{termbegin}</select> 
+            .:to_t:. <select  id="termend" name="termend">{termend}</select> .:uhr:.</td>
         <td class="norm">.:deadlinespacing:.</td><td><input style="width:30px;" type="text" name="termseq" value="{termseq}" size="3"> .:minutes:.</td></tr>
     <tr><td class="norm">.:interval:.</td><td>
             <input style="width:30px;" type="text" name="interv" value="{interv}" size="4" maxlength="5">.:sec.:. &nbsp;&nbsp; </td></tr>
     <tr><td class="normal">.:presearch:. </td><td><input style="width:30px;" type="text" name="pre" value="{pre}" size="10"></td>
-        <td class="norm">.:awpre:.</td><td><input type="checkbox" value='t' name="preon" {preon}>.:yes:.</td></tr>
+        <td class="norm">.:awpre:.</td><td><input class="inp-checkbox" type="checkbox" value='t' name="preon" id="preon"><label for="preon"></label>.:yes:.</td></tr>
     <!--tr><td colspan="4"><input type="submit" name="mkmbx" value=".:createmailbox:."></td><td></td><td></td></tr-->
     <tr><td class="norm">.:mapservice:.</td><td colspan="4">
-             <input style="width:750px;" type="text" name="streetview" id="streetview" size="80" value='{streetview}'><input type="checkbox" name="streetview_default" id="streetview_default"  value='t' {streetview_default}>.:mandant:.
+             <input style="width:750px;" type="text" name="streetview" id="streetview" size="80" value='{streetview}'><input class="inp-checkbox" type="checkbox" name="streetview_default" id="streetview_default"  value='t'><label for="streetview_default"></label>.:mandant:.
         </td></tr>
     <tr><td class="norm">.:spacecharsubst:.</td><td colspan="4">
              <input style="width:30px;" type="text" name="planspace" id="planspace"size="3" value='{planspace}'>
     </td></tr>
     <tr><td class="norm">.:autocompletion:.</td><td colspan="4">
-             <input type="checkbox" name="feature_ac" value='t' {feature_ac}>&nbsp;&nbsp; .:minentry:.: <input style="width:20px;" type="text" name="feature_ac_minlength"  value='{feature_ac_minlength}'>
+             <input class="inp-checkbox" type="checkbox" name="feature_ac" id="feature_ac" value='t' ><label for="feature_ac"></label>&nbsp;&nbsp; .:minentry:.: <input style="width:20px;" type="text" name="feature_ac_minlength"  value='{feature_ac_minlength}'>
              &nbsp;&nbsp; .:delay:.: <input style="width:40px;" type="text" name="feature_ac_delay" size="3" value='{feature_ac_delay}'>.:ms:.</td>
    </tr>
    <tr><td class="norm">.:firmabuttons:.</td><td colspan="4">
-             <input type="checkbox" name="angebot_button" id="angebot_button"  value='t' {angebot_button}>.:quotation:.&nbsp;&nbsp; <input type="checkbox" name="auftrag_button"  value='t' {auftrag_button}>.:order:.&nbsp;&nbsp;  
-             <input type="checkbox" name="rechnung_button" value='t' {rechnung_button}>.:invoice:.&nbsp;&nbsp; <input type="checkbox" name="liefer_button" value='t' {liefer_button}>.:delivery order:.&nbsp;&nbsp;
-             <input type="checkbox" name="zeige_extra" value='t' {zeige_extra}>.:extra:.&nbsp;&nbsp;<input type="checkbox" name="zeige_karte" value='t' {zeige_karte}>.:map:.&nbsp;&nbsp;
-             <input type="checkbox" name="zeige_bearbeiter" value='t' {zeige_bearbeiter}>.:employee:.&nbsp;&nbsp;<input type="checkbox" name="zeige_etikett" value='t' {zeige_etikett}>.:label:.&nbsp;&nbsp;
-             <input type="checkbox" name="zeige_dhl" value='t' {zeige_dhl}>.:DHL:.&nbsp;&nbsp;<input type="checkbox" name="zeige_tools" value='t' {zeige_tools}>.:tools:.&nbsp;&nbsp;<input type="checkbox" name="zeige_lxcars"    value='t' {zeige_lxcars}>LxCars&nbsp;&nbsp;</td>
-   </tr>
-   <tr><td class="norm">.:createmultiuser:.</td><td >
-             <input type="checkbox" name="feature_unique_name_plz" value='t' {feature_unique_name_plz}>.:disallow:.</td>
+        <input class="inp-checkbox" type="checkbox" name="angebot_button" id="angebot_button" value='t'><label for="angebot_button"></label>.:quotation:.&nbsp;&nbsp; 
+        <input class="inp-checkbox" type="checkbox" name="auftrag_button" id="auftrag_button" value='t'><label for="auftrag_button"></label>.:order:.&nbsp;&nbsp;  
+        <input class="inp-checkbox" type="checkbox" name="rechnung_button"id="rechnung_button"value='t'><label for="rechnung_button"></label>.:invoice:.&nbsp;&nbsp; 
+        <input class="inp-checkbox" type="checkbox" name="liefer_button"  id="liefer_button"  value='t'><label for="liefer_button"></label>.:delivery order:.&nbsp;&nbsp;
+        <input class="inp-checkbox" type="checkbox" name="zeige_extra"    id="zeige_extra"    value='t'><label for="zeige_extra"></label>.:extra:.&nbsp;&nbsp;
+        <input class="inp-checkbox" type="checkbox" name="zeige_karte"    id="zeige_karte"    value='t'><label for="zeige_karte"></label>.:map:.&nbsp;&nbsp;
+        <input class="inp-checkbox" type="checkbox" name="zeige_bearbeiter" id="zeige_bearbeiter" value='t'><label for="zeige_karte"></label>.:employee:.&nbsp;&nbsp;
+        <input class="inp-checkbox" type="checkbox" name="zeige_etikett"  id="zeige_etikett"  value='t'><label for="zeige_etikett"></label>.:label:.&nbsp;&nbsp;
+        <input class="inp-checkbox" type="checkbox" name="zeige_dhl"      id="zeige_dhl"      value='t'><label for="zeige_dhl"></label>.:DHL:.&nbsp;&nbsp;
+        <input class="inp-checkbox" type="checkbox" name="zeige_tools"    id="zeige_tools"    value='t'><label for="zeige_tools"></label>.:tools:.&nbsp;&nbsp;
+        <input class="inp-checkbox" type="checkbox" name="zeige_lxcars"   id="zeige_lxcars"   value='t'><label for="zeige_lxcars"></label>LxCars&nbsp;&nbsp;
+        <div id="p1"></div>
+        </td>
+    </tr>
+    <tr><td class="norm">.:createmultiuser:.</td><td >
+             <input class="inp-checkbox" type="checkbox" name="feature_unique_name_plz" id="feature_unique_name_plz" value='t'><label for="feature_unique_name_plz"></label>.:disallow:.</td>
         <td class="norm">.:external_mail:.</td><td colspan="4">
-             <input type="checkbox" id="external_mail" name="external_mail" value='t' {external_mail}>.:use:.</td>
-   </tr>
-  <tr><td class="norm">.:show errors:.</td><td colspan="4">
-            <input type="checkbox" name="sql_error"  value='t' {sql_error}>.:sqlerror:.&nbsp;&nbsp; <input type="checkbox" name="php_error"  value='t' {php_error}>.:phperror:. &nbsp;&nbsp;
-   </tr>
-       <tr><td>&nbsp;</td><td><button id="save">.:save:.</button></td></tr>
+             <input class="inp-checkbox"type="checkbox" id="external_mail" name="external_mail" value='t'><label for="external_mail"></label>.:use:.</td>
+    </tr>
+    <tr><td class="norm">.:show errors:.</td><td colspan="4">
+            <input class="inp-checkbox" type="checkbox" name="sql_error" id="sql_error" value='t'><label for="sql_error"></label>.:sqlerror:.&nbsp;&nbsp; <input class="inp-checkbox"type="checkbox" name="php_error" id="php_error"  value='t'><label for="php_error"></label>.:phperror:. &nbsp;&nbsp;
+    </tr>
+    <tr><td>&nbsp;</td><td><button id="save">.:save:.</button></td></tr>
 
     </form>
     
@@ -369,6 +415,7 @@
         </form>
      </div>
 </div>
+
 {END_CONTENT}
 </body>
 </html>

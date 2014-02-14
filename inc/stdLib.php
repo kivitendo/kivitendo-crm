@@ -760,7 +760,7 @@ function mkHeader() {
         'JQTABLE'       => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/jquery.tablesorter.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/addons/pager/jquery.tablesorter.pager.js'.$SN.
                            $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/themes/blue/style.css'.$LN,
-        //'JQDATE'        => $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/jquery.ui.datepicker.js'.$SN,
+        'JQBOX'         => $SV.$_SESSION['baseurl'].'/crm/jquery-ui/plugin/selectBoxIt/selectBoxIt.js'.$SN,
         'JQDATE'        => $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/'.(($_SESSION['lang']=='en')?
                                                              'jquery.ui.datepicker.js':
                                                              'i18n/jquery.ui.datepicker-'.$_SESSION['lang']).
@@ -771,6 +771,7 @@ function mkHeader() {
         'JQWIDGET'      => $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/minified/jquery.ui.widget.min.js'.$SN,
         'THEME'         => ($_SESSION['theme']!='')? $LVID  .$_SESSION['basepath'].'crm/jquery-ui/themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN:'',
         'CRMCSS'        => $LV.$_SESSION['baseurl'].'crm/css/'.$_SESSION["stylesheet"].'/main.css'.$LN,
+        'BOXCSS'        => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/selectBoxIt/selectBoxIt.css'.$LN,
         'JUI-DROPDOWN'  => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.css'.$LN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.min.js'.$SN,
         'CRMPATH'       => $_SESSION['baseurl'].'crm/' );
@@ -795,7 +796,9 @@ function doHeader(&$t) {
         'JQFILEUP'      => $head['JQFILEUP'],
         'THEME'         => $head['THEME'],
         'CRMCSS'        => $head['CRMCSS'],
-        'CRMPATH'       => $head['CRMPATH']
+        'CRMPATH'       => $head['CRMPATH'],
+        'BOXCSS'        => $head['BOXCSS'],
+        'JQBOX'         => $head['JQBOX']
     ));
 }
 /**

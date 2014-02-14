@@ -176,6 +176,20 @@
                     <input type="file" name="Datei" size="20" maxlength="125" accept="Image/*" tabindex="16">
                 </span>
             </div>
+            <div class="zeile2" id='sync'>
+                <span class="labelxx klein"></span>
+                <span class="feldxx klein">
+                     Adresse synchronisieren
+                </span>
+            </div>
+            <div class="zeile2" id='sync'>
+                <span class="labelxx klein"></span>
+                <span class="feldxx klein">
+                     <input type="radio" name="sync" value='0' {sync0} tabindex="16">nie
+                     <input type="radio" name="sync" value='1' {sync1} tabindex="16">nur senden
+                     <input type="radio" name="sync" value='2' {sync2} tabindex="16">beide Richtungen
+                </span>
+            </div>
             <div class="zeile2" id='KEY' style='visibility:hidden;'>
                 <span class="labelxx klein">Key</span>
                 <span class="feldxx">
@@ -341,7 +355,7 @@
             </span>
         </div>
         <div class="zeile2">
-            <span class="label klein">.:Business:.</span>
+            <span class="label klein">.:{Q}Business:.</span>
             <span class="feldxx">
                 <select name="business_id" id="business_id"  tabindex="12">
 <!-- BEGIN TypListe -->

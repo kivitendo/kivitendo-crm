@@ -1,6 +1,7 @@
 <?php
 //Opportunity, Mail
 $texts  = array(
+  '.:authority:.'     => 'Berechtigung',
   '.:opportunity:.'	 => 'Auftragschance',
   '.:opportunitys:.' => 'Auftragschancen',
   '.:order:.'	     => 'Auftrag',

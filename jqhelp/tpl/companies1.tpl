@@ -170,7 +170,7 @@
 		<span class="leftfeld"><input type="text" name="homepage" size="27" maxlength="125" value="{homepage}" tabindex="29"></span>
 	</div>
 	<div class="zeile">
-		<span class="label">.:Business:.</span>
+		<span class="label">.:{Q}Business:.</span>
 		<span class="leftfeld">
 			<select name="business_id" tabindex="10">
 <!-- BEGIN TypListe -->	

@@ -326,7 +326,8 @@ function getPayment() {
 * Suchstring über customer,shipto zusamensetzen
 *****************************************************/
 function suchstr($muster,$typ="C") {
-    $kenz = array("C" => "K","V" => "L");
+    //$kenz = array("C" => "K","V" => "L");
+    $kenz = array("C" => "C","V" => "V");
     $tab  = array("C" => "customer","V" => "vendor");
     //Suche in den CVars:
     $cvartemp  = 'EXISTS ( SELECT cvar.id FROM custom_variables cvar ';
@@ -381,10 +382,10 @@ function suchstr($muster,$typ="C") {
                 if ( $treffer[0] ) {
                     foreach ( $treffer[0] as $val ) {
                         if ($val[0] == '>' || $val[0] == '<' || $val[0] == '=') {
-                            $search[] = $kenz[$typ].'.'.$keys[$i].' '.$val[0]." '".substr($val,1)."'";
+                            $search[] = $typ.'.'.$keys[$i].' '.$val[0]." '".substr($val,1)."'";
                         } else {
                             //Dropdown-Boxen liefern kein "=" mit.
-                            $search[] = $kenz[$typ].'.'.$keys[$i]." = '".$val."'";
+                            $search[] = $typ.'.'.$keys[$i]." = '".$val."'";
                         }
                     }
                     $suchwort = '( '.implode(" $andor ",$search).' )';
@@ -393,9 +394,9 @@ function suchstr($muster,$typ="C") {
             } else {
                 if ( $tbl1 && $dbfld2[$keys[$i]] ) {
                     $tmp1 .= "$andor (S.".$dbfld2[$keys[$i]]." ilike '$fuzzy1".$suchwort."$fuzzy2' ";
-                    $tmp1 .= 'or '.$kenz[$typ].'.'.$keys[$i]." ilike '$fuzzy1".$suchwort."$fuzzy2' ) ";
+                    $tmp1 .= 'or '.$typ.'.'.$keys[$i]." ilike '$fuzzy1".$suchwort."$fuzzy2' ) ";
                 } else {
-                    $tmp1 .= "$andor ".$kenz[$typ].".".$keys[$i]." ilike '$fuzzy1".$suchwort."$fuzzy2' ";
+                    $tmp1 .= "$andor ".$typ.".".$keys[$i]." ilike '$fuzzy1".$suchwort."$fuzzy2' ";
                 }
             }
         } else if ( substr($keys[$i],0,4) == "vc_c" ) {
@@ -407,25 +408,25 @@ function suchstr($muster,$typ="C") {
                         preg_match("/vc_cvar_([a-z0-9]+)/",$keys[$i],$hits);
                         $n = $hits[1];
                         switch  ($cvar[$n]) {
-                              case "bool"    :    $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.bool_value, false) = TRUE ");
+                              case "bool"    :    $tmp2[] = sprintf($cvartemp,$n,$typ,"COALESCE(cvar.bool_value, false) = TRUE ");
                                              break;
-                           case "number":    $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.number_value, '') = '$suchwort' ");
+                           case "number":    $tmp2[] = sprintf($cvartemp,$n,$typ,"COALESCE(cvar.number_value, '') = '$suchwort' ");
                                              break;
-                           case 'customer':  $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.number_value, '') = '$suchwort' ");
+                           case 'customer':  $tmp2[] = sprintf($cvartemp,$n,$typ,"COALESCE(cvar.number_value, '') = '$suchwort' ");
                                              break;
                            case 'timestamp': $suchwort = date2db($suchwort);
-                                              $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.timestamp_value, '') = '$suchwort' ");
+                                              $tmp2[] = sprintf($cvartemp,$n,$typ,"COALESCE(cvar.timestamp_value, '') = '$suchwort' ");
                                              break;
-                           default           : $tmp2[] = sprintf($cvartemp,$n,$kenz[$typ],"COALESCE(cvar.text_value, '') ilike '$fuzzy1$suchwort$fuzzy2' ");
+                           default           : $tmp2[] = sprintf($cvartemp,$n,$typ,"COALESCE(cvar.text_value, '') ilike '$fuzzy1$suchwort$fuzzy2' ");
                         }
                 }
     }
     }
-    $cols = "distinct ".$kenz[$typ].".*";
+    $cols = "distinct ".$typ.".*";
     if ( $tbl1 ) {
-        $tabs = $tab[$typ]." ".$kenz[$typ]." left join shipto S on ".$kenz[$typ].".id=S.trans_id";
+        $tabs = $tab[$typ]." ".$typ." left join shipto S on ".$typ.".id=S.trans_id";
     } else {
-        $tabs = $tab[$typ]." ".$kenz[$typ];
+        $tabs = $tab[$typ]." ".$typ;
     }
     if ( $tbl2 ) {
        if ( $cvcnt > 1 ) { 
@@ -884,39 +885,38 @@ function getCustTermin($id,$tab,$day,$month,$year) {
 * und Kontakte erzeugen
 *****************************************************/
 function doReport($data,$typ="C") {
-    $kenz=array("C" => "K","V" => "L");
-    $tab=array("C" => "customer","V" => "vendor");
-    $loginCRM=$_SESSION["loginCRM"];
-    $felder=substr($data['felder'],0,-1);
-    $tmp=suchstr($data,$typ);
-    $where=$tmp["where"]; $tabs=$tmp["tabs"]; 
+    $tab      = array("C" => "customer","V" => "vendor");
+    $login    = $_SESSION["login"];
+    $felder   = substr($data['felder'],0,-1);
+    $tmp      = suchstr($data,$typ);
+    $where    = $tmp["where"]; $tabs = $tmp["tabs"]; 
     if ($typ=="C") {
-        $rechte="(".berechtigung("K.").")";
+        $rechte="(".berechtigung("C.").")";
     } else {
         $rechte="true";
     }
     if (!preg_match('/P./',$felder)) {
         $where=($where=="")?"":"and $where";
         if (preg_match('/shipto/i',$tabs) or preg_match('/S./',$felder)) {
-            $sql="select $felder from ".$tab[$typ]." ".$kenz[$typ]." left join shipto S ";
-            $sql.="on S.trans_id=".$kenz[$typ].".id where (S.module='CT' or S.module is null or S.module='') and $rechte $where order by ".$kenz[$typ].".name";
+            $sql="select $felder from ".$tab[$typ]." ".$typ." left join shipto S ";
+            $sql.="on S.trans_id=".$typ.".id where (S.module='CT' or S.module is null or S.module='') and $rechte $where order by ".$typ.".name";
         } else {
-            $sql="select $felder from ".$tab[$typ]." ".$kenz[$typ]." where $rechte $where order by ".$kenz[$typ].".name";
+            $sql="select $felder from ".$tab[$typ]." ".$typ." where $rechte $where order by ".$typ.".name";
         }
     } else {
         $rechte.=(($rechte)?" and (":"(").berechtigung("P.cp_").")";
         $where=($where=="")?"":"and $where";
         if (preg_match('/shipto/i',$tabs) or preg_match('/S./',$felder)) {
-            $sql="select $felder from ".$tab[$typ]." ".$kenz[$typ]." left join shipto S ";
-            $sql.="on S.trans_id=".$kenz[$typ].".id left join contacts P on ".$kenz[$typ].".id=P.cp_cv_id ";
-            $sql.="where (S.module='CT' or S.module is null or S.module='')  and $rechte $where order by ".$kenz[$typ].".name,P.cp_name";
+            $sql="select $felder from ".$tab[$typ]." ".$typ." left join shipto S ";
+            $sql.="on S.trans_id=".$typ.".id left join contacts P on ".$typ.".id=P.cp_cv_id ";
+            $sql.="where (S.module='CT' or S.module is null or S.module='')  and $rechte $where order by ".$typ.".name,P.cp_name";
         } else {
-            $sql="select $felder from  ".$tab[$typ]." ".$kenz[$typ]." left join contacts P ";
-            $sql.="on ".$kenz[$typ].".id=P.cp_cv_id where $rechte $where order by ".$kenz[$typ].".name,P.cp_name";
+            $sql="select $felder from  ".$typ." ".$typ." left join contacts P ";
+            $sql.="on ".$typ.".id=P.cp_cv_id where $rechte $where order by ".$typ.".name,P.cp_name";
         }
     }
     $rc=$_SESSION['db']->getAll($sql);
-    $f=fopen('tmp/report_'.$login.'.csv',"w");
+    $f=fopen('../tmp/report_'.$login.'.csv',"w");
     fputs($f,$felder."\n");
     if ($rc) {
         foreach ($rc as $row) {

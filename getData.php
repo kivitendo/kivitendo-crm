@@ -17,6 +17,10 @@ echo $head['THEME'];
 echo $head['JUI-DROPDOWN']; 
 ?>
     <script language="JavaScript">
+        var first = false;
+        function chgTab() {
+            first = false;
+        };
         function showD (src,id) {
            if      (src=="C") { uri="firma1.php?Q=C&id=" + id }
            else if (src=="V") { uri="firma1.php?Q=V&id=" + id; }
@@ -110,8 +114,10 @@ echo '
                 ui.jqXHR.error(function() {
                     ui.panel.html(".:Couldn't load this tab.:." );
                 });
-            }       
+            }
         });
+        var tabOpts = { select:chgTab };
+        $( "#tabs" ).tabs(tabOpts);
         
         $("#results").css('height',300);
         

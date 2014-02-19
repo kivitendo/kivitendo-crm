@@ -1,7 +1,58 @@
 <script language="JavaScript" type="text/javascript">
 
+    var tabs = Array('C','V');
+
+    function sende() {
+        var tab = tabs[$( '#tabs' ).tabs('option','active')-1];
+        var felder = '';
+        $( '#firma option:selected' ).each(function() {
+            felder += tab +'.' + $(this).val() + ',';
+        });
+        $( '#shipto option:selected' ).each(function() {
+            felder += 'S.' + $(this).val() + ',';
+        });
+        $( '#contacts option:selected' ).each(function() {
+            felder += 'P.' + $(this).val() + ',';
+        });
+        $( '#felder' ).val(felder);
+        alert(felder);
+        dialog_report();
+        $( 'suchbutton_{Q}' ).click();
+    }
+    function holeTabellen() {
+        var tab = tabs[$( '#tabs' ).tabs('option','active')-1];
+        $.ajax({
+            type : 'GET',
+            url  : 'jqhelp/getReportTables.php?tab='+tab,
+            dataType: 'json',
+            success: function(data){
+                 $.each(data.tables, function(k , v) {
+                      $.each( data.tables[k] , function( key, value ) {
+                         $("<option/>").val(value).text(value).appendTo("#" + k);
+                      });
+                 })
+            }
+        });
+    }
     
+    function dialog_report() {
+            if ( !first ) {
+                holeTabellen();
+                //first = true;
+            }
+            if ( $( '#dialog_report' ).dialog('isOpen') ) {
+                $( '#dialog_report' ).dialog('close');
+            } else {
+                $( '#dialog_report' ).dialog('open');
+            }
+    }
     $(document).ready(function() {
+        $("#dialog_report" ).dialog({
+            autoOpen: false,
+            modal: true,
+            width: 800,
+            position: [100,300]
+        });         
         $( "#geo_{Q}" ).button().click(function() {
             if ({GEODB}) {
                 fuzzy=(document.erwsuche.fuzzy.checked==true)?1:0;
@@ -14,9 +65,9 @@
 	       return false;
         });
         
-        $( "#report_{Q}" ).button().click(function() {
-            f1=open("report.php?tab={Q}","Report","width=600; height=300; left=100; top=100");
-            return false;
+        $( "#report_{Q}" ).button().click(function(event) {
+            event.preventDefault();
+            dialog_report();
   	    });
   	    $( ".fett_{Q}" ).click(function() {
             if ( $(this).html() == '#' ) first = '~';
@@ -70,11 +121,24 @@
             $( "#name{Q}" ).focus();
             return false;
         });
+
         $( "#name{Q}" ).focus();
     });	
 </script>
 <script type='text/javascript' src='inc/help.js'></script>
 
+<body>
+
+<div id="dialog_report" title="Report">
+    <form name="report" id="formreport" onSubmit='return false;'>
+    <table width='300'><tr><th>Firma</th><th>Shipto</th><th>Kontakte</th></tr><tr>
+    <td><select id='firma'    name='firma'    size='10' multiple width='90'></select></td>
+    <td><select id='shipto'   name='shipto'   size='10' multiple width='90'></select></td>
+    <td><select id='contacts' name='contacts' size='10' multiple width='90'></select></td>
+    </tr></table>
+    <button onClick='sende();'>ok</button>  <button onClick='dialog_report();'>.:close:.</button>
+    </form>
+</div>
 
 
 
@@ -109,8 +173,8 @@
 </p>
 
 <form name="erwsuche" id="erwsuche_{Q}" enctype='multipart/form-data' action="#" method="post">
-<input type="hidden" name="felder" value="">
-<input type="hidden" name="Q" value="{Q}">
+<input type="hidden" id='felder' name="felder" value="">
+<input type="hidden" id='Q' name="Q" value="{Q}">
 
 <!-- Beginn Code ------------------------------------------>
 

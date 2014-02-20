@@ -9,7 +9,7 @@
     doHeader($t);   
     $Quelle=(isset($_POST["Quelle"]))?$_POST["Quelle"]:'';
     if (!$Quelle) $Quelle="C";
-    if (isset($_POST["first"])) {
+    if ( isset($_POST["first"]) && $_POST['first'] != '') {
         $_POST["cp_name"] = $_POST["first"];
         $_POST["fuzzy"]="%";
     }

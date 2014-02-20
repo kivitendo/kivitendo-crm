@@ -1,4 +1,9 @@
 <script language="JavaScript">
+	function showK__ (id) {
+		{no}
+		uri="kontakt.php?id=" + id;
+		location.href=uri;
+	}
     $(document).ready(function() {
         //$( "input[type=button],input[type=submit]" ).button(); 
         $( ".fett_pers" ).click(function() {

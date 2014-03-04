@@ -47,7 +47,7 @@
         fid = document.formular.fid.value
         if ( fid < 0 ) fid=0;
         $.ajax({
-               url:  'jqhelp/firmaserver.php?task=geteventlist&fid='+fid+'&id='+id,
+               url:  'jqhelp/firmaserver.php?task=geteventlist&tab={tab}&fid='+fid+'&id='+id,
                dataType: 'json',
                success: function(data){
                   $('#eventliste').empty().append(data.liste);

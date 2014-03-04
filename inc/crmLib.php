@@ -13,7 +13,9 @@ include ("mailLib.php");
 function mkSuchwort($suchwort) {
     $suchwort=str_replace("*","%",$suchwort);
     $suchwort=str_replace("?","_",$suchwort);
-    if ( $suchwort != '%' and preg_match('!^[0-9+%_]+[0-9 -/%]*$!',$suchwort) ) {   // Telefonnummer?
+    if ( preg_match('!^[0-9]+$!',$suchwort) ) {  //PLZ?
+        $sw[0]=2;
+    } else if ( $suchwort != '%' and preg_match('!^[0-9+%_]+[0-9 -/%]*$!',$suchwort) ) {   // Telefonnummer?
         $sw[0]=0;
     } else {                                 // nein Name
         if (empty($suchwort)) $suchwort=" ";
@@ -1476,15 +1478,18 @@ function getReJahr($fid,$jahr,$liefer=false,$user=false) {
         $bezug = ($user)?"employee_id":"vendor_id";
         $rs2=$_SESSION['db']->getAll(sprintf($sql,'A','oe',$bezug,$fid,$lastYearV,$lastYearB,$sea));
         $sql=sprintf($sql,'R','ap',$bezug,$fid,$lastYearV,$lastYearB,$sea);
+        $curr = getCurrCompany($fid,'V');
+        $curr = $curr['name'];
     } else {
         $bezug = ($user)?"employee_id":"customer_id";
         $rs2=$_SESSION['db']->getAll(sprintf($sql,'A','oe',$bezug,$fid,$lastYearV,$lastYearB,$sea));
         $sql=sprintf($sql,'R','ar',$bezug,$fid,$lastYearV,$lastYearB,$sea);
+        $curr = getCurrCompany($fid,'C');
+        $curr = $curr['name'];
     };
     $rs1=$_SESSION['db']->getAll($sql);
     $rs=array_merge($rs1,$rs2);
     $rechng=array();
-    $curr = getCurr();
     for ($i=11; $i>=0; $i--) {
         $dat=date("Ym",mktime(0, 0, 0, date("m")-$i, 1 , $jahr));
         $rechng[$dat]=array("summe"=>0,"count"=>0,"curr"=>$curr);
@@ -1522,12 +1527,15 @@ function getAngebJahr($fid,$jahr,$liefer=false,$user=false) {
     $sql .= "where %s=%d and quotation = 't' and transdate >= '%s' and transdate <= '%s' %s group by month ";
     if ($liefer) {
         $bezug = ($user)?"employee_id":"vendor_id";
+        $curr = getCurrCompany($fid,'V');
+        $curr = $curr['name'];
     } else {
         $bezug = ($user)?"employee_id":"customer_id";
+        $curr = getCurrCompany($fid,'C');
+        $curr = $curr['name'];
     }
     $rs=$_SESSION['db']->getAll(sprintf($sql,$bezug,$fid,$lastYearV,$lastYearB,$sea));
     $rechng=array();
-    $curr = getCurr();
     for ($i=11; $i>=0; $i--) {
         $dat=date("Ym",mktime(0, 0, 0, date("m")-$i, 1, date("Y")));
         $rechng[$dat]=array("summe"=>0,"count"=>0,"curr"=>$curr);
@@ -1547,15 +1555,31 @@ function getAngebJahr($fid,$jahr,$liefer=false,$user=false) {
 * getCurr
 * out: curr = String
 *****************************************************/
-function getCurr() {
-    $sql="SELECT name FROM currencies WHERE id = (SELECT currency_id FROM defaults)";
+function getCurr($ID=False) {
+    $sql="SELECT name,id FROM currencies WHERE id = (SELECT currency_id FROM defaults)";
     $rsc=$_SESSION['db']->getOne($sql);
-    if ($rsc['name']) {
-       $curr = $rsc['name'];
+    if ($ID) {
+       return  $rsc['id'];
     } else {
-        $curr = "Eur";
+       return  $rsc['name'];
     }
-    return $curr;
+}
+function getCurrCompany($ID,$Q='C') {
+    $sql  = "SELECT name,id FROM currencies WHERE id = (SELECT currency_id FROM ";
+    if ( $Q == 'C' ) {
+        $src = 'customer';
+    } else if ( $Q == 'V' ) {
+        $src = 'vendor';
+    } else if ( $Q == 'I' ) {
+        $src = 'ar';
+    } else if ( $Q == 'E' ) {
+        $src = 'ap';
+    } else if ( $Q == 'O' ) {
+        $src = 'oe';
+    };
+    $sql .= "$src WHERE id = $ID)";
+    $rs  = $_SESSION['db']->getOne($sql);
+    return $rs;
 }
 
 /****************************************************
@@ -1613,14 +1637,14 @@ function getRechParts($id,$tab) {
         $sql="select *,I.sellprice as endprice,I.fxsellprice as orgprice,I.discount,I.description as artikel ";
         $sql.="from invoice I left join parts P on P.id=I.parts_id where trans_id=$id";
         if ($tab=="V") {
-            $sql1="select amount as brutto, netamount as netto,transdate, intnotes, notes,quonumber,ordnumber from ap where id=$id";
+            $sql1="select amount as brutto, netamount as netto,transdate, intnotes, notes,quonumber,ordnumber,currency_id from ap where id=$id";
         } else {
-            $sql1="select amount as brutto, netamount as netto,transdate, intnotes, notes,quonumber,ordnumber from ar where id=$id";
+            $sql1="select amount as brutto, netamount as netto,transdate, intnotes, notes,quonumber,ordnumber,currency_id from ar where id=$id";
         }
     } else {
         $sql="select *,O.sellprice as endprice,O.sellprice as orgprice,O.discount,O.description as artikel ";
         $sql.="from orderitems O left join parts P on P.id=O.parts_id where trans_id=$id";
-        $sql1="select amount as brutto, netamount as netto,transdate, intnotes, notes, quotation,quonumber,ordnumber from oe where id=$id";
+        $sql1="select amount as brutto, netamount as netto,transdate, intnotes, notes, quotation,quonumber,ordnumber,currency_id from oe where id=$id";
     }
     $rs=$_SESSION['db']->getAll($sql);
     if(!$rs) {
@@ -2880,7 +2904,8 @@ function saveTT($data) {
     } else {
         $data["msg"] = ".:error:. .:saving:.";
     }
-    $data['cur'] = getCurr();
+    $curr = getCurrCompany($fid,$data['tab']);
+    $data['curr'] = $curr['name'];
     $data["uid"] = $_SESSION["loginCRM"];
     return $data;
 }
@@ -2922,7 +2947,8 @@ function getOneTT($id,$event=true) {
     $rs["name"] = ( $rs["tab"] == "C" )?$rs["cname"]:$rs["vname"];
     $rs["startdate"] = db2date($rs["startdate"]);
     $rs["stopdate"] = db2date($rs["stopdate"]);
-    $rs['cur'] = getCurr();
+    $curr = getCurrCompany($rs['fid'],$rs['tab']);
+    $rs['cur'] = $curr['name'];
     if ($event) $rs["events"] = getTTEvents($id,"o",false);
     return $rs;
 }
@@ -3089,8 +3115,9 @@ function getTax($tzid) {
 *****************************************************/
 function mkTTorder($id,$evids,$trans_id) {
     $tt = getOneTT($id,$false);
+    $vendcust = ($tt['tab']=='C')?'customer':'vendor';
     //Steuerzone ermitteln (0-3)
-    $sql = "SELECT taxzone_id FROM customer WHERE id = ".$tt["fid"];
+    $sql = "SELECT taxzone_id FROM ".$vendcust." WHERE id = ".$tt["fid"];
     $rs = $_SESSION['db']->getOne($sql);
     $tzid = $rs["taxzone_id"];
     $TAX = getTax($tzid);
@@ -3102,7 +3129,7 @@ function mkTTorder($id,$evids,$trans_id) {
     $unit = $part["unit"];
     //Steuersatz ermitteln
     $tax = $TAX[$part["buchungsgruppen_id"]];
-    $curr = getCurr();
+    $curr = getCurr(True);
     //Events holen
     $events = getTTEvents($id,false,$evids,True);
     if ( !$events ) { 
@@ -3118,10 +3145,11 @@ function mkTTorder($id,$evids,$trans_id) {
     $_SESSION['db']->begin();
     if ( $trans_id < 1 ) {
         //Auftrag erzeugen
-        $sonumber = nextNumber("sonumber");
+        $sonumber = ($tt['tab']=='C')?nextNumber("sonumber"):nextNumber("ponumber");
         if ( !$sonumber ) return ".:error:.";
-        $sql  = "INSERT INTO oe (notes,transaction_description,ordnumber,customer_id,taxincluded) ";
-        $sql .= "VALUES ('".$tt["ttdescription"]."','".$tt["ttname"]."',$sonumber,'".$tt["fid"]."','f')";
+        $sql  = "INSERT INTO oe (notes,transaction_description,ordnumber,".$vendcust."_id,taxincluded,currency_id) ";
+        $sql .= "VALUES ('".$tt["ttdescription"]."','".$tt["ttname"]."',$sonumber,'".$tt["fid"]."','f',";
+        $sql .= "coalesce((SELECT currency_id FROM ".$vendcust." WHERE id = ".$tt['fid']."),$curr))";
         $rc = $_SESSION['db']->query($sql,"newOE");
         if (!$rc) {
             $sql = "DELETE FROM oe WHERE ordnumber = '$sonumber'";
@@ -3190,8 +3218,8 @@ function mkTTorder($id,$evids,$trans_id) {
     //OE-Eintrag updaten
     $nun = date('Y-m-d');
     //$amount = $netamount + $mwst; 
-    $fields = array('transdate','customer_id','amount','netamount','reqdate','notes','curr','employee_id');
-    $values = array($nun,$tt["fid"],$amount,$netamount,$nun,$tt["ttdescription"],$curr,$_SESSION["loginCRM"]);
+    $fields = array('transdate','amount','netamount','reqdate','notes','employee_id');
+    $values = array($nun,$amount,$netamount,$nun,$tt["ttdescription"],$_SESSION["loginCRM"]);
     $rc = $_SESSION['db']->update('oe',$fields,$values,'id = '.$trans_id);
     if ( !$rc ) {
         $_SESSION['db']->rollback();

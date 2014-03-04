@@ -100,7 +100,7 @@
         $i = 0;
         if ( $reM ) foreach( $reM as $col ){
             if ( array_key_exists('invnumber',$col) ){
-                $typ = 'R';
+                $typ = ($Q=='C')?'R':'V';
                 $renr  = $col['invnumber'];
                 $offen = ( $col['amount']==$col['paid'] )?'+':'-';
             } else {

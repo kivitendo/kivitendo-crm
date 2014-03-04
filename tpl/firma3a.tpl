@@ -12,7 +12,7 @@
 	function showP (id,nr) {
 		if (id!='') {
 			Frame=eval("parent.main_window");
-			f1=open("rechng.php?id="+id+"&nr="+nr,"rechng","width=700,height=420,left=10,top=10,scrollbars=yes");
+            f1=open("rechng.php?Q={Q}&id="+id+"&nr="+nr,"rechng","width=700,height=420,left=10,top=10,scrollbars=yes");
 		}
 	}
     $(function(){

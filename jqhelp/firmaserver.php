@@ -124,9 +124,13 @@
         echo json_encode($data);
     }
 
-    function listTevents($id,$fid=0) {
+    function listTevents($id,$fid=0,$tab) {
         $events = getTTEvents($id,"a",false);
-        $link = "<a href='../oe.pl?action=edit&type=sales_order&vc=customer&id=%d&callback=crm/timetrack.php%%3ffid=$fid'>";
+        if ( $tab == 'C' ) {
+            $link = "<a href='../oe.pl?action=edit&type=sales_order&vc=customer&id=%d&callback=crm/timetrack.php%%3ffid=$fid'>";
+        } else {
+            $link = "<a href='../oe.pl?action=edit&type=purchase_order&vc=vendor&id=%d&callback=crm/timetrack.php%%3ffid=$fid'>";
+        }
         if (!$events) echo json_encode(array('ok'=>0));
         $tt = getOneTT($events[0]["ttid"]);
         $liste = "<form name='cleared' method='post' action='timetrack.php'>";
@@ -417,7 +421,7 @@ switch ($_GET['task']) {
                                break;
     case 'editTevent'        : editTevent( $_GET['id'] );
                                break;
-    case 'geteventlist'      : listTevents( $_GET['id'], $_GET['fid'] );
+    case 'geteventlist'      : listTevents( $_GET['id'], $_GET['fid'] , $_GET['tab']);
                                break;
     case 'getCustomTermin'   : getCustomTermin( $_GET['id'], $_GET['tab'], $_GET['day'], $_GET['month'], $_GET['year'] );
                                break;

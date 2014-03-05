@@ -309,6 +309,7 @@ function chkFld(&$val,$empty,$rule,$len) {
     switch ($rule) {
         case 1 : $ok = preg_match('/[\w\s\d]'.$leer.'/i',$val,$hit); //String
                  if ( strlen($val)>$len && $len>0 ) $val = substr($val,0,$len);
+                 $val = strtr($val,array("'"=>"''"));
                  break;
         case 2 : if ( $empty===0 && empty($val) ) { $ok = true; $val = ""; }
                  else { $ok=preg_match('/^[0-9]{2,3}[-]{0,1}[0-9A-Z]{2,4}$/',$val,$hit); }; // Plz: PL=dd-ddd, NL=ddwwww, A=dddd 

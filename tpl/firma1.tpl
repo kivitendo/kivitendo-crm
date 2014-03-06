@@ -54,14 +54,16 @@
         $( "#dialogwin" ).dialog( "option", "maxWidth", 400 );
         $( "#dialogwin" ).dialog( "option", "maxHeight", 600 );
         $( "#dialogwin" ).dialog( { title: "Adresse" } );
-        $( "#dialogwin" ).dialog( "open" );
         if (A==1) {
-            $( "#dialogwin" ).load("showAdr.php?Q={Q}&fid={FID}&nojs=1");
+            //$( "#dialogwin" ).load("showAdr.php?Q={Q}&fid={FID}&nojs=1");
+            $('#iframe1').attr('src', 'showAdr.php?Q={Q}&fid={FID}&nojs=1');
         } else {
             sid = document.getElementById('SID').firstChild.nodeValue;
             if ( sid )
-                $( "#dialogwin" ).load("showAdr.php?Q={Q}&sid="+sid+"&nojs=1");
+                //$( "#dialogwin" ).load("showAdr.php?Q={Q}&sid="+sid+"&nojs=1");
+                $('#iframe1').attr('src', 'showAdr.php?Q={Q}&sid='+sid+'&nojs=1');
         }
+        $( "#dialogwin" ).dialog( "open" );
     }
     function notes() {
             F1=open("showNote.php?fid={FID}","Notes","width=400, height=400, left=100, top=50, scrollbars=yes");
@@ -449,7 +451,9 @@
 		</div>
 	</div>
 </div>
-<div id="dialogwin"></div>
+<div id="dialogwin">
+<iframe id="iframe1" width='100%' height='450'  scrolling="auto" border="0" frameborder="0"><img src='image/wait.gif'></iframe>
+</div>
 {END_CONTENT}
 </body>
 </html>

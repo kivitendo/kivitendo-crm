@@ -19,12 +19,12 @@
         }
         function anschr() {
             pid = $('#liste option:selected').val();
-            $( "#dialogwin" ).dialog( "option", "maxWidth",  400 );
-            $( "#dialogwin" ).dialog( "option", "maxHeight", 600 );
-            $( "#dialogwin" ).dialog( { title: "Adresse" } );
-            $( "#dialogwin" ).dialog( "open" );
-            $( "#dialogwin" ).load("showAdr.php?Q={Q}&pid="+pid+"{ep}");
-            //F1=open("showAdr.php?Q={Q}&pid="+pid+"{ep}","Adresse","width=350, height=400, left=100, top=50, scrollbars=yes");
+            $( "#etikett" ).dialog( "option", "maxWidth",  400 );
+            $( "#etikett" ).dialog( "option", "maxHeight", 600 );
+            $( "#etikett" ).dialog( { title: "Adresse" } );
+            $('#iframe1').attr('src', 'showAdr.php?Q={Q}&pid='+pid+'&nojs=1'+'{ep}');
+            $( "#etikett" ).dialog( "open" );
+            //$( "#etikett" ).load("showAdr.php?Q={Q}&nojs=1&pid="+pid+"{ep}");
         }
         function notes() {
             pid = $('#liste option:selected').val();
@@ -167,7 +167,7 @@
     <script>
     $(document).ready(
         function(){
-        $( "#dialogwin" ).dialog({
+        $( "#etikett" ).dialog({
           autoOpen: false,
           show: {
             effect: "blind",
@@ -197,9 +197,15 @@
                   document.location.href = '{Link2}';
               } else if ( name == 'Link3' ) {
  					   document.location.href = '{Link3}'; 
-              } else {
+              } else if ( name == 'close' ) {
+                  event.preventDefault();
+              } else if ( name == 'null' ) {
+                  event.preventDefault();
+              } else if ( name ){
                   var pid = $('#liste option:selected').val();
                   document.location.href = name + pid; 
+              } else {
+                  event.preventDefault();
               }
           });
          $( "input[type=submit]")
@@ -311,9 +317,11 @@
         </form>
         </div>
 </div>
-<div id="dialogwin"></div>
 <!-- End Code ------------------------------------------->
 </span>
+<div id="etikett">
+<iframe id="iframe1" width='100%' height='450'  scrolling="auto" border="0" frameborder="0"><img src='image/wait.gif'></iframe>
+</div>
 {END_CONTENT}
 </body>
 </html>

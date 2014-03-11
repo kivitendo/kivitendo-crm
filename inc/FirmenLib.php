@@ -533,7 +533,7 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
     $kenz=array("C" => "K","V" => "L");
     $tab=array("C" => "customer","V" => "vendor");
     if ($neu && $_SESSION['feature_unique_name_plz']=='t') {
-        $sql="SELECT id FROM ".$tab[$typ]." WHERE name = '".$daten['name']."' AND zipcode = '".$daten['zipcode']."'";
+        $sql="SELECT id FROM ".$tab[$typ]." WHERE name = '".strtr($daten['name'],array("'"=>"''"))."' AND zipcode = '".$daten['zipcode']."'";
         $rs=$_SESSION['db']->getAll($sql);
         if ($rs[0]['id']) return array(-1,".:Customer / Vendor exist with same zipcode:.");
     } 

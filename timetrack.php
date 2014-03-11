@@ -90,8 +90,13 @@
             }
     } else {
         unset($data);
-        $data["cur"] = getCurr();
-        $data["active"] = "t";
+        if ( $data['fid'] ) {
+            $curr = getCurrCompany($data['fid'],$data['tab']);
+            $data["cur"] = $curr['name'];
+        } else {
+            $data["cur"] = getCurr();
+        }        
+        $data["active"] = "t";        
     }
     if ($data["events"]) {
 	    $delete = False;

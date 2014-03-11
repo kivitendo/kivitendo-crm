@@ -195,15 +195,15 @@ Anschrift<br><hr>
             </td>
         </tr>
         <tr>
-            <td><br> 
+            <td nowrap><br> 
 <?php $sel="checked";
     for ($y=1; $y<=$label["ny"];$y++) {
-        echo "\t\t\t\t";
+        echo "\t\t\t\t<p>";
         for ($x=1; $x<=$label["nx"];$x++) {
             echo "<input type='radio' name='xy' value='x$x:y$y' $sel>";
             $sel="";
         }
-        echo "<br>\n";
+        echo "</p>\n";
     }
 ?>
             </td>

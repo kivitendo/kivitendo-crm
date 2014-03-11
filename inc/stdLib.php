@@ -774,7 +774,13 @@ function mkHeader() {
         'BOXCSS'        => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/selectBoxIt/selectBoxIt.css'.$LN,
         'JUI-DROPDOWN'  => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.css'.$LN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.min.js'.$SN,
-        'CRMPATH'       => $_SESSION['baseurl'].'crm/' );
+        'CRMPATH'       => $_SESSION['baseurl'].'crm/',
+        'FULLCALCSS'    => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.css'.$LN.
+                           $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.print.css media="print"'.$LN,
+        'FULLCALJS'     => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/lib/moment.min.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.min.js'.$SN. 
+                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/lang/'.$_SESSION['lang'].'.js'.$SN,                        
+        );
         
     return $head;
 

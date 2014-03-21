@@ -25,5 +25,5 @@
         ));
         $t->parse("Block1","Selectbox",true);
     }
-    $t->Lpparse("out",array("wvl"),$_SESSION["lang"],"work");
+    $t->Lpparse("out",array("wvl"),$_SESSION['countrycode'],"work");
 ?>

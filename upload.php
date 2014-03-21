@@ -33,7 +33,7 @@ if ($_POST) {
             return true;
         }
 	</script>
-    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
+    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['baseurl'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
 </head>
 <body class="docfrm" style="padding:0em; margin:0em; width:100%; height:100%;" >
 <form name="iform" action="upload.php" method="post" enctype="multipart/form-data" onSubmit="return getpath();">

@@ -63,9 +63,9 @@
             }
             $stamm="block";
             $t->set_var(array(
-                ERPCSS      =>  $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+                ERPCSS      =>  $_SESSION['baseurl'].'crm/css/'.$_SESSION["stylesheet"],
             ));
-            $t->Lpparse("out",array("op"),$_SESSION["lang"],"work");
+            $t->Lpparse("out",array("op"),$_SESSION['countrycode'],"work");
             exit;
         } else if (count($data)==0 || !$data){
             if ($_POST["fid"]) {
@@ -158,7 +158,7 @@
     }
     if ($daten["fid"]) $backlink = "firma1.php?Q=".$daten["tab"]."&id=".$daten["fid"];
     $t->set_var(array(
-        ERPCSS  => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+        ERPCSS  => $_SESSION['baseurl'].'crm/css/'.$_SESSION["stylesheet"],
         id      => $daten["id"],
         oppid   => $daten["oppid"],
         auftrag => ($daten["auftrag"]>0)?$daten["auftrag"]:"0",
@@ -208,5 +208,5 @@
         $i++;
     }
 
-    $t->Lpparse("out",array("op"),$_SESSION["lang"],"work");
+    $t->Lpparse("out",array("op"),$_SESSION['countrycode'],"work");
 ?>

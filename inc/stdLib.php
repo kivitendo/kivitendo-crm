@@ -83,7 +83,7 @@ function date2db($Datum) {
 }
 
 function translate($word,$file) {
-    include("locale/$file.".$_SESSION['lang']);
+    include("locale/$file.".$_SESSION['countrycode']);
     if ( $texts[$word] ) {
             return $texts[$word];
     } else {
@@ -121,7 +121,6 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
             $auth[$row["cfg_key"]] = $row["cfg_value"];
         }
     }
-    $auth["lang"]       = ($auth["countrycode"] != '')?$auth["countrycode"]:'en';
     $auth["stylesheet"] = substr($auth["stylesheet"],0,-4);
     //Welcer Mandant ist verbunden
     $sql  = "SELECT sess_value FROM auth.session_content WHERE session_id = '$cookie' and sess_key='client_id'";
@@ -762,15 +761,15 @@ function mkHeader() {
                            $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/addons/pager/jquery.tablesorter.pager.js'.$SN.
                            $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/themes/blue/style.css'.$LN,
         'JQBOX'         => $SV.$_SESSION['baseurl'].'/crm/jquery-ui/plugin/selectBoxIt/selectBoxIt.js'.$SN,
-        'JQDATE'        => $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/'.(($_SESSION['lang']=='en')?
+        'JQDATE'        => $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/'.(($_SESSION['countrycode']=='en')?
                                                              'jquery.ui.datepicker.js':
-                                                             'i18n/jquery.ui.datepicker-'.$_SESSION['lang']).
+                                                             'i18n/jquery.ui.datepicker-'.$_SESSION['countrycode']).
                                                              '.js'.$SN,
         'JQFILEUP'      => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/FileUpload/css/jquery.fileupload-ui.css'.$LN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/FileUpload/js/jquery.iframe-transport.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/FileUpload/js/jquery.fileupload.js'.$SN,
         'JQWIDGET'      => $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/minified/jquery.ui.widget.min.js'.$SN,
-        'THEME'         => ($_SESSION['theme']!='')? $LVID  .$_SESSION['basepath'].'crm/jquery-ui/themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN:'',
+        'THEME'         => ($_SESSION['theme']!='')? $LVID  .$_SESSION['baseurl'].'crm/jquery-ui/themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN:'',
         'CRMCSS'        => $LV.$_SESSION['baseurl'].'crm/css/'.$_SESSION["stylesheet"].'/main.css'.$LN,
         'BOXCSS'        => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/selectBoxIt/selectBoxIt.css'.$LN,
         'JUI-DROPDOWN'  => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.css'.$LN.
@@ -780,7 +779,7 @@ function mkHeader() {
                            $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.print.css media="print"'.$LN,
         'FULLCALJS'     => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/lib/moment.min.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.min.js'.$SN. 
-                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/lang/'.$_SESSION['lang'].'.js'.$SN,                        
+                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/lang/'.$_SESSION['countrycode'].'.js'.$SN,                        
         );
         
     return $head;

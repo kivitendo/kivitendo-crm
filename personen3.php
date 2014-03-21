@@ -57,7 +57,7 @@
         } else {
             $id = $_GET["id"];
         }
-        if (!$id) header("location:".$_SESSION['basepath']."crm/personen1.php?Q=$Q");
+        if (!$id) header("location:".$_SESSION['baseurl']."crm/personen1.php?Q=$Q");
         $daten = getKontaktStamm($id);
         $daten["Quelle"] = $Q;
         $msg  = "Edit: <b>$id</b>";
@@ -69,5 +69,5 @@
         $msg = ".:person:. .:new:.";
         leertplP($t,$_GET["fid"],$msg,3,true,$Q);
     }
-    $t->Lpparse("out",array("pers1"),$_SESSION["lang"],"firma");
+    $t->Lpparse("out",array("pers1"),$_SESSION['countrycode'],"firma");
 ?>

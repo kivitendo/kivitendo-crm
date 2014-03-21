@@ -6,8 +6,8 @@
 <html>
 	<head><title>LX - CRM - Partsedit</title>
     <?php echo $menu['stylesheets']; ?>
-    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
-    <script type="text/javascript" src="<?php echo $_SESSION['basepath']; ?>crm/jquery-ui/jquery.js"></script>
+    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['baseurl'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
+    <script type="text/javascript" src="<?php echo $_SESSION['baseurl']; ?>crm/jquery-ui/jquery.js"></script>
     <?php echo $menu['javascripts']; ?>
 	</head>
 <body>

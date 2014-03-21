@@ -109,7 +109,7 @@
                         ));
                     }
                     $t->set_var(array(
-                        'ERPCSS' => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+                        'ERPCSS' => $_SESSION['baseurl'].'crm/css/'.$_SESSION["stylesheet"],
                     ));
 
                 }
@@ -124,5 +124,5 @@
     } else {
         leertplP($t,"","",1,false,$Quelle,true);
     }
-    $t->Lpparse("out",array("pers1"),$_SESSION["lang"],"firma");
+    $t->Lpparse("out",array("pers1"),$_SESSION['countrycode'],"firma");
 ?>

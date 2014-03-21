@@ -46,5 +46,5 @@
         'tiny'     => $tiny,
         ));
 
-    $tpl->Lpparse("out",array("wi"),$_SESSION["lang"],"work");
+    $tpl->Lpparse("out",array("wi"),$_SESSION['countrycode'],"work");
 ?>

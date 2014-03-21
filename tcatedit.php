@@ -29,7 +29,7 @@
         if ($row["catid"]>$max) $max=$row["catid"];
     };
     $t->set_var(array(
-        ERPCSS =>  $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+        ERPCSS =>  $_SESSION['baseurl'].'crm/css/'.$_SESSION["stylesheet"],
         idx => $i,
         neu => 1,
         cid => $max+1,
@@ -38,5 +38,5 @@
         ccolor => 'ffffff'
     ));
     $t->parse("Block0","TKat",true);
-    $t->Lpparse("out",array("cat"),$_SESSION["lang"],"work");
+    $t->Lpparse("out",array("cat"),$_SESSION['countrycode'],"work");
 ?>

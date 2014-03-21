@@ -304,5 +304,5 @@
             closelink => ($popup)?'<a href="JavaScript:self.close()">.:close:.</a>':'',
             vorlage  => ($_GET["MID"])?$_GET["MID"]:$_POST["MID"]
             ));
-    $t->Lpparse("out",array("mail"),$_SESSION["lang"],"work");
+    $t->Lpparse("out",array("mail"),$_SESSION['countrycode'],"work");
 ?>

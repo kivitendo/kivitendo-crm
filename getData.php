@@ -29,7 +29,7 @@ echo $head['JUI-DROPDOWN'];
            window.location.href=uri;
         }
         function showItem(id,Q,FID) {
-            F1=open("<?php echo $_SESSION["basepath"]; ?>crm/getCall.php?Q="+Q+"&fid="+FID+"&hole="+id,"Caller","width=670, height=600, left=100, top=50, scrollbars=yes");
+            F1=open("<?php echo $_SESSION["baseurl"]; ?>crm/getCall.php?Q="+Q+"&fid="+FID+"&hole="+id,"Caller","width=670, height=600, left=100, top=50, scrollbars=yes");
         }        
     </script> 
 <?php 

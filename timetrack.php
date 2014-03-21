@@ -127,5 +127,5 @@
         chkevent => ($data["id"]>0)?"onLoad='getEventListe();'":"",
     ));
 
-    $t->Lpparse("out",array("tt"),$_SESSION["lang"],"work");
+    $t->Lpparse("out",array("tt"),$_SESSION['countrycode'],"work");
 ?>

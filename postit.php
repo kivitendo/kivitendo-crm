@@ -58,10 +58,10 @@ $menu = $_SESSION['menu'];
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head><title><?php echo  translate(".:LxO:.","work"); ?> <?php echo  translate(".:postit:.","work"); ?></title>
     <?php echo $menu['stylesheets'].'
-    <link type="text/css" REL="stylesheet" HREF="'.$_SESSION["basepath"].'crm/css/'.$_SESSION["stylesheet"].'/main.css">
-    <link rel="stylesheet" type="text/css" href="'.$_SESSION['basepath'].'crm/jquery-ui/themes/base/jquery-ui.css"> 
-    <script type="text/javascript" src="'.$_SESSION['basepath'].'crm/jquery-ui/jquery.js"></script> 
-    <script type="text/javascript" src="'.$_SESSION['basepath'].'crm/jquery-ui/ui/jquery-ui.js"></script>'.
+    <link type="text/css" REL="stylesheet" HREF="'.$_SESSION["baseurl"].'crm/css/'.$_SESSION["stylesheet"].'/main.css">
+    <link rel="stylesheet" type="text/css" href="'.$_SESSION['baseurl'].'crm/jquery-ui/themes/base/jquery-ui.css"> 
+    <script type="text/javascript" src="'.$_SESSION['baseurl'].'crm/jquery-ui/jquery.js"></script> 
+    <script type="text/javascript" src="'.$_SESSION['baseurl'].'crm/jquery-ui/ui/jquery-ui.js"></script>'.
 	$menu['javascripts']; ?>
 	<script language="JavaScript">
 	<!--

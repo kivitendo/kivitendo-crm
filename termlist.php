@@ -99,7 +99,7 @@
             }
         }
         $t->set_var(array(
-            ERPCSS  => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+            ERPCSS  => $_SESSION['baseurl'].'crm/css/'.$_SESSION["stylesheet"],
             tag     => $day.".".$month.".".$year,
             dat1    => $t1,
             dat2    => $t2,
@@ -122,7 +122,7 @@
             $t->parse("Block","Liste",true);
         }
         $t->set_var(array(
-            ERPCSS      => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+            ERPCSS      => $_SESSION['baseurl'].'crm/css/'.$_SESSION["stylesheet"],
             HEADLINE => (substr($ansicht,0,1)=="S")?".:search result:.":".:conflict with termin:."
         ));
     } else if ($ansicht=="W") {
@@ -224,7 +224,7 @@
             $x+=60*60*24;
         }
         $t->set_var(array(
-                    ERPCSS => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+                    ERPCSS => $_SESSION['baseurl'].'crm/css/'.$_SESSION["stylesheet"],
                     tag    => $tag,
                     kw     => $kw,
                     kw1    => $kw1,
@@ -241,5 +241,5 @@
         $t->set_file(array("term" => "termintag.tpl"));
     }
 
-    $t->Lpparse("out",array("term"),$_SESSION["lang"],"work");
+    $t->Lpparse("out",array("term"),$_SESSION['countrycode'],"work");
 ?>

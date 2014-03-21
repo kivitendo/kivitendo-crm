@@ -106,6 +106,6 @@
           ));
           $t->parse('Block3','Vertrag',true);
      }     
-     $t->Lpparse('out',array('doc'),$_SESSION['lang'],'firma');
+     $t->Lpparse('out',array('doc'),$_SESSION['countrycode'],'firma');
 
 ?>

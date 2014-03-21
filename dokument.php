@@ -27,5 +27,5 @@
             'mandant' => $_SESSION['dbname'],
             'tiny'    => ($_SESSION['tinymce'])?'true':'false'
     ));
-    $t->Lpparse("out",array("doc"),$_SESSION["lang"],"firma");
+    $t->Lpparse("out",array("doc"),$_SESSION['countrycode'],"firma");
 ?>

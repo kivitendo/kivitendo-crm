@@ -180,7 +180,7 @@ if ($_POST["suche"]) {
                     $t->parse("Block","Liste",true);
             }
         }
-        $t->Lpparse("out",array("fa1"),$_SESSION["lang"],"firma");
+        $t->Lpparse("out",array("fa1"),$_SESSION['countrycode'],"firma");
         exit();
     } else {
         $msg="Sorry, not found.";
@@ -192,7 +192,7 @@ $hidden = 'style="visibility:hidden"';
 $t->set_var(array(
     'CRMCSS'         => $head['CRMCSS'], 
     'STYLESHEETS'    => $menu['stylesheets'],
-    'JQUERY'         => $_SESSION['basepath'].'crm/',
+    'JQUERY'         => $_SESSION['baseurl'].'crm/',
     'visiblesichern' => ($owner=='P0')?$hidden:$visible,
     'visiblesuchen'  => ($owner=='P0')?$visible:$hidden,
 ));

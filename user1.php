@@ -195,5 +195,5 @@ if ( $own ) {
 } else {
     $t->set_var( array( 'vertreter' => $fa["vertreter"]." ".$fa["vname"], ) );
 };
-$t->Lpparse( "out", array( "usr1" ) ,$_SESSION["lang"],"firma");
+$t->Lpparse( "out", array( "usr1" ) ,$_SESSION['countrycode'],"firma");
 ?>

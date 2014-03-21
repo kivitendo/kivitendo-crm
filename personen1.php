@@ -122,5 +122,5 @@
     } else {
         leertplP($t,$_GET["fid"],"",1,false,$Quelle,$_GET['ui']);
     }
-    $t->Lpparse("out",array("pers1"),$_SESSION["lang"],"firma");
+    $t->Lpparse("out",array("pers1"),$_SESSION['countrycode'],"firma");
 ?>

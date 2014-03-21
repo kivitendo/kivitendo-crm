@@ -17,10 +17,10 @@
 ?>
 <html>
 <head><title>Suche im Kontaktverlauf</title>
-<link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION["basepath"].'crm/css/'.$_SESSION["stylesheet"] ?>/main.css">
+<link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION["baseurl"].'crm/css/'.$_SESSION["stylesheet"] ?>/main.css">
 <script language="JavaScript">
 	function showItem(id,Q,FID) {
-		F1=open("<?php echo $_SESSION["basepath"]; ?>crm/getCall.php?Q="+Q+"&fid="+FID+"&hole="+id,"Caller","width=610, height=600, left=100, top=50, scrollbars=yes");
+		F1=open("<?php echo $_SESSION["baseurl"]; ?>crm/getCall.php?Q="+Q+"&fid="+FID+"&hole="+id,"Caller","width=610, height=600, left=100, top=50, scrollbars=yes");
 	}
 </script>
 </head>

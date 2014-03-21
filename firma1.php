@@ -217,5 +217,5 @@
             $t->parse("Block1","kdhelp",true);
         };
     }
-    $t->Lpparse("out",array("fa1"),$_SESSION["lang"],"firma");
+    $t->Lpparse("out",array("fa1"),$_SESSION['countrycode'],"firma");
 ?>

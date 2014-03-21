@@ -197,7 +197,7 @@
         $t->parse("Block3","repeat",true);
     }
     $t->set_var(array(
-        ERPCSS  => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+        ERPCSS  => $_SESSION['baseurl'].'crm/css/'.$_SESSION["stylesheet"],
         uid 	=> $_SESSION["loginCRM"],
         TID 	=> $data["tid"],
         TT 	=> $Tag,
@@ -216,5 +216,5 @@
         ANSICHT => $ANSICHT,
         DATUM 	=> ($DATUM=="")?date('d.m.Y'):$DATUM
     ));
-    $t->Lpparse("out",array("term"),$_SESSION["lang"],"work");
+    $t->Lpparse("out",array("term"),$_SESSION['countrycode'],"work");
 ?>

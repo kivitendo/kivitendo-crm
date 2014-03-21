@@ -81,7 +81,7 @@
 ?>
 <html>
 <head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['basepath'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
+    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['baseurl'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
 <body>
 
 <form name='form' method='post' action='etiketten.php'>

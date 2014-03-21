@@ -418,7 +418,7 @@ function leertplP (&$t,$fid,$msg,$tab,$suche=false,$Quelle="",$ui=false) {
         if ( $ui ) $t->set_file(array("pers1" => "persons".$tab.".tpl"));
         else       $t->set_file(array("pers1" => "personen".$tab.".tpl"));
         $t->set_var(array(
-            'ERPCSS'          => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+            'ERPCSS'          => $_SESSION['baseurl'].'crm/css/'.$_SESSION["stylesheet"],
             'Fld'             => "cp_title",
             'JS'              => "goFld();",
             'color'           => "white",
@@ -503,7 +503,7 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab,$ui=fa
         if ( $ui ) $t->set_file(array("pers1" => "persons1Result.tpl"));
         else       $t->set_file(array("pers1" => "personen".$tab.".tpl"));
         $t->set_var(array(
-            'ERPCSS'          => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+            'ERPCSS'          => $_SESSION['baseurl'].'crm/css/'.$_SESSION["stylesheet"],
             'Fld'             => $fld,
             'JS'              => "goFld();",
             'color'           => $bgcol,

@@ -131,14 +131,14 @@ if ($_POST['ok']) {
            $t->parse('BlockPr','Preise',true); 
     }
     $t->set_var(array(
-        ERPCSS          => $_SESSION['basepath'].'crm/css/'.$_SESSION["stylesheet"],
+        ERPCSS          => $_SESSION['baseurl'].'crm/css/'.$_SESSION["stylesheet"],
         JAVASCRIPTS     => $menu['javascripts'],
         STYLESHEETS     => $menu['stylesheets'],
         PRE_CONTENT     => $menu['pre_content'],
         START_CONTENT   => $menu['start_content'],
         END_CONTENT     => $menu['end_content'],
         'THEME'         => $_SESSION['theme'],
-        'JQUERY'        => $_SESSION['basepath'].'crm/',
+        'JQUERY'        => $_SESSION['baseurl'].'crm/',
         partnumber	    => $_POST['partnumber'],
         description     => $_POST['description'],
         ean             => $_POST['ean'],
@@ -153,6 +153,6 @@ if ($_POST['ok']) {
         msg	            => $msg
     ));
     $t->set_block("kat","Liste","Block");
-    $t->Lpparse("out",array("kat"),$_SESSION["lang"],"firma");
+    $t->Lpparse("out",array("kat"),$_SESSION['countrycode'],"firma");
 
 ?>

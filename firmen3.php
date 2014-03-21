@@ -47,5 +47,5 @@
 	} else {
 		leertpl($t,3,$Q,"Neueingabe");
 	}
-        $t->Lpparse("out",array("fa1"),$_SESSION["lang"],"firma");
+        $t->Lpparse("out",array("fa1"),$_SESSION['countrycode'],"firma");
 ?>

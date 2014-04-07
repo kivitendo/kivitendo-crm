@@ -61,13 +61,13 @@ $menu['start_content'].
 if ( !$_POST['select_file'] ) echo $form_select_file; // in Phase 3 $_POST['select_file'] = true;
 
 if ($_FILES['file']['type'] != 'text/csv') exit();
-move_uploaded_file($_FILES['file']['tmp_name'], "upload/import-src.csv");
+move_uploaded_file($_FILES['file']['tmp_name'], "tmp/import-src.csv");
 
 
 //Datei nach UTF8 konvertieren
 
 
-system("file upload/import-src.csv | grep 'UTF-8'; echo $?>test_utf8");
+system("file tmp/import-src.csv | grep 'UTF-8'; echo $?>test_utf8");
 $dateihandle = fopen("test_utf8","r");
 $zeichen = fgetc($dateihandle);
 fclose($dateihandle);
@@ -83,24 +83,21 @@ if("$zeichen"!="0"){
    echo "NOT UTF-8";
 // die daten sind anscheinend ISO-8859-2 (laut chardet)
 
-$command = "iconv -f ISO-8859-15 -t UTF8 -c -o upload/import-utf8.csv upload/import-src.csv";
+$command = "iconv -f ISO-8859-15 -t UTF8 -c -o tmp/import-utf8.csv tmp/import-src.csv";
 #$command = "iconv -f ISO-8859-15 -t UTF8 -c -o upload/import-src.csv upload/import-utf8.csv";
 system($command);
-
 }
 else {
   echo "UTF-8";
-  system("cp upload/import-src.csv upload/import-utf8.csv");
+  system("cp tmp/import-src.csv tmp/import-utf8.csv");
 }
 
 //Testkommentar
 //Ausführen:
 system($command);
-
 //$data = array();
 $row = 1;
-if (($handle = fopen("upload/import-utf8.csv", "r")) !== FALSE) {
- 
+if (($handle = fopen("tmp/import-utf8.csv", "r")) !== FALSE) {
     while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
         //$num = count($data);
         //echo "<p> $num Felder in Zeile $row: <br /></p>\n";
@@ -115,6 +112,7 @@ if (($handle = fopen("upload/import-utf8.csv", "r")) !== FALSE) {
    
     fclose($handle);
 }
+
 //BusinessIds ermitteln
 $end = "Endverbraucher"; //ANPASSEN
 
@@ -143,7 +141,12 @@ array_shift($csvArray);//Erste Zeile löschen
 echo "<table id='treffer' class='tablesorter'>\n"; 
 echo "<thead><tr ><th>Ebayname</th><th>Name</th><th>Anschrift</th><th>Email</th><th>1.Artikel</th></tr></thead>\n<tbody>\n"; 
 $i = 0;
+/*
+echo "<pre>";
+print_r ($csvArray);
+echo "</pre>";
 
+*/
 if ($csvArray) foreach($csvArray as $key => $row) {
     $ok = true;
     if( $row['4'] == $row['2'] ){
@@ -152,7 +155,7 @@ if ($csvArray) foreach($csvArray as $key => $row) {
         $row['attention'] = "!!!changed by Importer!!!";
     }
     if ($row['5'] != '') {
-        $row['2'] .= " ".$row['5'];
+        $row['6'] .= " ".$row['5'];
         $row['5'] = '';
         $row['attention'] = "!!!changed by Importer!!!";
     }
@@ -202,7 +205,6 @@ echo "</tbody></table>\n";
 echo 
 $menu['end_content'].
 '</body>';
-
 
 
 

@@ -778,6 +778,7 @@ function mkHeader() {
         'FULLCALCSS'    => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.css'.$LN.
                            $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.print.css media="print"'.$LN,
         'FULLCALJS'     => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/lib/moment.min.js'.$SN.
+                           //$SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.js'.$SN.//aktuelle 
                            $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.min.js'.$SN. 
                            $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/lang/'.$_SESSION['countrycode'].'.js'.$SN,                        
         );

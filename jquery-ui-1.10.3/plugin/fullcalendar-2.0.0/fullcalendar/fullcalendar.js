@@ -391,7 +391,7 @@ function Calendar(element, instanceOptions) {
 	if (options.dayNamesShort) {
 		langData._weekdaysShort = options.dayNamesShort;
 	}
-	if (options.firstDay) {
+	if (options.firstDay != null) {
 		var _week = createObject(langData._week); // _week: { dow: # }
 		_week.dow = options.firstDay;
 		langData._week = _week;
@@ -2197,7 +2197,7 @@ var ambigTimeOrZoneRegex = /^\s*\d{4}-(?:(\d\d-\d\d)|(W\d\d$)|(W\d\d-\d)|(\d\d\d
 // Creates a moment in the local timezone, similar to the vanilla moment(...) constructor,
 // but with extra features:
 // - ambiguous times
-// - enhanced formatting (TODO)
+// - enhanced formatting
 fc.moment = function() {
 	return makeMoment(arguments);
 };
@@ -2285,7 +2285,7 @@ function FCMoment(config) {
 // chain the prototype to Moment's
 FCMoment.prototype = createObject(moment.fn);
 
-// we need this because Moment's implementation will not copy of the ambig flags
+// we need this because Moment's implementation will not copy over the ambig flags
 FCMoment.prototype.clone = function() {
 	return makeMoment([ this ]);
 };
@@ -2337,7 +2337,7 @@ FCMoment.prototype.stripTime = function() {
 	this._ambigTime = true;
 	this._ambigZone = true; // if ambiguous time, also ambiguous timezone offset
 
-	this.year(a[0])
+	this.year(a[0]) // TODO: find a way to do this in one shot
 		.month(a[1])
 		.date(a[2])
 		.hours(0)
@@ -2368,7 +2368,7 @@ FCMoment.prototype.stripZone = function() {
 
 	this._ambigZone = true;
 
-	this.year(a[0])
+	this.year(a[0]) // TODO: find a way to do this in one shot
 		.month(a[1])
 		.date(a[2])
 		.hours(a[3])
@@ -2701,7 +2701,7 @@ function chunkFormatString(formatStr) {
 	var match;
 
 	while ((match = chunker.exec(formatStr))) {
-		if (match[1]) { // a literal string instead [ ... ]
+		if (match[1]) { // a literal string inside [ ... ]
 			chunks.push(match[1]);
 		}
 		else if (match[2]) { // non-zero formatting inside ( ... )

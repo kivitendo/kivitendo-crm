@@ -7,18 +7,40 @@
     include("inc/crmLib.php");
     $menu = $_SESSION['menu'];
     $head = mkHeader();
+    echo $head['FULLCALCSS'];
+    echo $head['JQUERY'];   
+    echo $head['JQUERYUI'];
+    echo $head['THEME'];  
+    echo $head['FULLCALJS'];
 
-
-echo $head['FULLCALCSS'];
-echo $head['JQUERY'];
-echo $head['JQUERYUI'];
-echo $head['THEME'];  
-echo $head['FULLCALJS'];?>
+?>
 
 <script>
 
 	$(document).ready(function() {
-		
+        
+        $( "#dialogForm" ).dialog({
+            autoOpen: false,
+            height: 300,
+            width: 550,
+            modal: true,
+            buttons: {
+                "Save": function() {
+                    //submit();
+                    var test = $('#calendar').fullCalendar( "option", "eventData.title" ); //var minWidth = $( ".selector" ).dialog( "option", "minWidth" );
+                    alert( "Save! " + test );
+                    $( this ).dialog( "close" );
+                },
+                Cancel: function() {                         
+                    $( this ).dialog( "close" );
+                }
+            },
+            close: function() {                       
+                $( this ).dialog( "close" );
+            }
+
+        });
+	
 		$('#calendar').fullCalendar({
 		    theme: true,
 			header: {
@@ -26,30 +48,122 @@ echo $head['FULLCALJS'];?>
 				center: 'title',
 				right: 'month,agendaWeek,agendaDay'
 			},
+			minTime: '07:00',
+			maxTime: '20:00',
+			weekNumbers: true,
+			editable: true,
 		    eventClick: function(event) {
-			 //opens events in a popup window
-			     window.open(event.url, 'gcalevent', 'width=700,height=600');
+			     $( "#dialogForm" ).dialog( "open" );
 				 return false;
 			},
-			selectable: true,
+			defaultView: 'agendaWeek',
+			dragble: true,
+			selectable: true,    
 			selectHelper: true,
 			select: function(start, end) {
-				var title = prompt('Event Title:');
+				var title = prompt('Titel eingeben.');
 				var eventData;
 				if (title) {
-					eventData = {
+				    eventData = {
 						title: title,
 						start: start,
 						end: end
 					};
-					$('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+					$('#calendar').fullCalendar('renderEvent', eventData, true)
+					var start = moment(start).format( "YYYY-MM-DD HH:mm:ss");
+                    var end = moment(end).format( "YYYY-MM-DD HH:mm:ss");
+					$.ajax({
+                        url: 'jqhelp/calendar.php',
+                        data: {
+                            task:  'newEvent', 
+                            title: title,
+                            start: start,
+                            end: end
+                        },
+                        type: "POST",
+                        success: function(json) {
+                            //alert('Event hinzugefügt');
+                        },
+                        error: function () {
+                            alert('Ajax Error');
+                        }
+                    })
 				}
 				$('#calendar').fullCalendar('unselect');
 			},
-			editable: true,
-			events: 'jqhelp/getEvents.php'
+			//Triggered when dragging stops and the event has moved to a different day/time.
+			eventDrop: function(event, delta) {
+			    //alert("Drop! " + event);
+                var start = moment(event.start).format( "YYYY-MM-DD HH:mm:ss");
+                var end   = moment(event.end).format( "YYYY-MM-DD HH:mm:ss");
+                $.ajax({
+                    url: 'jqhelp/calendar.php',
+                    data: {
+                        task:  'updateEvent', 
+                        start:  start,
+                        end:    end,
+                        id:     event.id
+                        },
+                    type: "POST",
+                    success: function(json) {
+                         //alert('Event verschoben');
+                    },
+                    error: function () {
+                        alert('Ajax Error');
+                    }
+                });
+            },
+            //Triggered when resizing stops and the event has changed in duration. Dauer
+            eventResize: function(event) {
+                var start = moment(event.start).format( "YYYY-MM-DD HH:mm:ss");
+                var end   = moment(event.end).format( "YYYY-MM-DD HH:mm:ss");
+                $.ajax({
+                    url: 'jqhelp/calendar.php',
+                    data: {
+                        task:  'updateEvent', 
+                        start: start,
+                        end: end,
+                        id: event.id
+                    },
+                    type: "POST",
+                    success: function(json) {
+                        //alert('Zeit geändert');
+                    },
+                    error: function () {
+                        alert('Ajax Error');
+                    }
+                });
+            },
+			
+			events: 'jqhelp/calendar.php',
+			data: { task:  'getEvents' },
+			type: "POST",    
+			
 		});
-		
+        /*		
+        $('#calendar').fullCalendar({
+            theme: true,
+            header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,agendaWeek,agendaDay'
+			},
+            editable: true,
+            selectable: true,
+            dragble: true,
+            select: function(start, end) {
+				var title = prompt('Titel eingeben.');
+				var eventData;
+				if (title) {
+				    eventData = {
+						title: title,
+						start: start,
+						end: end
+					};
+					$('#calendar').fullCalendar('renderEvent', eventData, true);
+				}
+		    }
+        })*/
 	});
 
 </script>
@@ -63,14 +177,16 @@ echo $head['FULLCALJS'];?>
 	}
 
 	#calendar {
-		width: 900px;
+		width: 1700px;
 		margin: 40px auto;
 	}
 
 </style>
 </head>
 <body>
-
+    <div id="dialogForm" title="Basic dialog">
+        <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+    </div>
 	<div id='calendar'></div>
 
 </body>

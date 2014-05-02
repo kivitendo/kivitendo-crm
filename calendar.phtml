@@ -10,25 +10,97 @@
     echo $head['FULLCALCSS'];
     echo $head['JQUERY'];   
     echo $head['JQUERYUI'];
-    echo $head['THEME'];  
+    echo $head['THEME'];
     echo $head['FULLCALJS'];
+     
 
 ?>
+
 
 <script>
 
 	$(document).ready(function() {
-        
-        $( "#dialogForm" ).dialog({
+        var id = 0;
+        $( "#dialog" ).dialog({
             autoOpen: false,
-            height: 300,
-            width: 550,
+            height: 500 ,
+            width: 680,
             modal: true,
             buttons: {
                 "Save": function() {
-                    //submit();
-                    var test = $('#calendar').fullCalendar( "option", "eventData.title" ); //var minWidth = $( ".selector" ).dialog( "option", "minWidth" );
-                    alert( "Save! " + test );
+                    var start = moment($( "#startDate" ).val() + ' ' + $( "#startTime" ).val(),'L LT');
+                    var end = moment($( "#endDate" ).val() + ' ' + $( "#endTime" ).val(),'L LT');
+                    var start_cur = moment($( "#startDate" ).val() + ' ' + $( "#startTime" ).val(),'L LT').add('h', 2);
+                    var end_cur = moment($( "#endDate" ).val() + ' ' + $( "#endTime" ).val(),'L LT').add('h', 2);
+                    var title = $( "#title" ).val();
+                    var desc = $( "#desc" ).val();
+                    var id = $( "#id" ).val();
+                    if ( title ) {
+				    event = {
+						title: title,
+						start: start_cur,
+						end: end_cur,
+						id : id,
+						desc: desc
+					} 
+                    start = moment(start).format( "YYYY-MM-DD HH:mm:ss");
+                    end = moment(end).format( "YYYY-MM-DD HH:mm:ss");
+                    $.ajax({
+                        url: 'jqhelp/calendar.php',
+                        data: {
+                            task:  $("#id").val() ? 'updateEvent' : 'newEvent', 
+                            title: $("#title").val(),
+                            desc: $("#desc").val(),
+                            id:   $("#id").val(),
+                            start: start,
+                            end: end
+                        },
+                        type: "POST",
+                        success: function(lastid) {
+                            //var text = id ? 'Event updated' : 'Event added';
+                            //alert( text + "LastID: " + lastid );
+                            if( !$("#id").val() ){
+                                $( "#id" ).val(lastid);
+                                id = lastid;
+                                //event.id = lastid;
+                            }
+                            //$('#calendar').fullCalendar('rerenderEvents')
+                        },
+                        error: function () {
+                            alert('Ajax Error');
+                        }
+                    })
+                    
+                    //if( event.id ) $('#calendar').fullCalendar('removeEvents', event.id);// Wenn keine id dann hier letzte id holen
+                    ///$('#calendar').fullCalendar('renderEvent', event)
+                    $('#calendar').fullCalendar("refetchEvents");//!!!doof ist dass alle Events neu geholt werden!!!!
+                
+                //$('#calendar').fullCalendar('unselect');
+                
+				}
+			    else alert('Title is empty');                  
+                $( this ).dialog( "close" );
+                },
+                Delete: function() { 
+                    var id = $( "#id" ).val(); 
+                       
+                    if( id ) $('#calendar').fullCalendar('removeEvents', id);                
+                    $.ajax({
+                        url: 'jqhelp/calendar.php',
+                        data: {
+                            task:  'deleteEvent',
+                            id: $("#id").val() 
+                        },
+                        type: "POST",
+                        success: function() {
+                            //alert( "Event gelöscht"  );
+                        },
+                        error: function () {
+                            alert('Ajax Error');
+                        }
+                    }) 
+                    //$('#calendar').fullCalendar('rerenderEvents')  
+                    //$('#calendar').fullCalendar('renderEvent', event)          
                     $( this ).dialog( "close" );
                 },
                 Cancel: function() {                         
@@ -40,20 +112,31 @@
             }
 
         });
-	
+
 		$('#calendar').fullCalendar({
 		    theme: true,
 			header: {
 				left: 'prev,next today',
-				center: 'title',
+				center: 'title, test',
 				right: 'month,agendaWeek,agendaDay'
 			},
-			minTime: '07:00',
-			maxTime: '20:00',
+			minTime: '<?php echo $_SESSION['termbegin'] ? $_SESSION['termbegin'] : 7;echo ":00"; ?>',
+			maxTime: '<?php echo $_SESSION['termend'] ? $_SESSION['termend'] : 19; echo ":00"; ?>',
 			weekNumbers: true,
 			editable: true,
 		    eventClick: function(event) {
-			     $( "#dialogForm" ).dialog( "open" );
+		        
+		        $("#title").val(event.title);
+		        $("#desc").val(event.desc);
+		        if( event.id ) $( "#id" ).val( event.id );//$( "#id" ).val()
+		        //moment.lang('en');
+		        $( "#startDate" ).val( moment( event.start ).format( "L") );
+		        $( "#startTime" ).val( moment( event.start ).format( "LT") );
+		        $( "#endDate" ).val( moment( event.end ).format( "L") );
+		        $( "#endTime" ).val( moment( event.end ).format( "LT") );
+		        
+		        //alert(  " ID: " +  event.id );
+			     $( "#dialog" ).dialog( "open" );
 				 return false;
 			},
 			defaultView: 'agendaWeek',
@@ -61,35 +144,15 @@
 			selectable: true,    
 			selectHelper: true,
 			select: function(start, end) {
-				var title = prompt('Titel eingeben.');
-				var eventData;
-				if (title) {
-				    eventData = {
-						title: title,
-						start: start,
-						end: end
-					};
-					$('#calendar').fullCalendar('renderEvent', eventData, true)
-					var start = moment(start).format( "YYYY-MM-DD HH:mm:ss");
-                    var end = moment(end).format( "YYYY-MM-DD HH:mm:ss");
-					$.ajax({
-                        url: 'jqhelp/calendar.php',
-                        data: {
-                            task:  'newEvent', 
-                            title: title,
-                            start: start,
-                            end: end
-                        },
-                        type: "POST",
-                        success: function(json) {
-                            //alert('Event hinzugefügt');
-                        },
-                        error: function () {
-                            alert('Ajax Error');
-                        }
-                    })
-				}
-				$('#calendar').fullCalendar('unselect');
+				$( "#title" ).val('');
+				$( "#desc" ).val('');
+				$( "#id" ).val('');
+		        $( "#startDate" ).val( moment( start ).format( "L") );
+		        $( "#startTime" ).val( moment( start ).format( "LT") );
+		        $( "#endDate" ).val( moment( end ).format( "L") );
+		        $( "#endTime" ).val( moment( end ).format( "LT") );
+			    $( "#dialog" ).dialog( "open" );
+  
 			},
 			//Triggered when dragging stops and the event has moved to a different day/time.
 			eventDrop: function(event, delta) {
@@ -99,10 +162,10 @@
                 $.ajax({
                     url: 'jqhelp/calendar.php',
                     data: {
-                        task:  'updateEvent', 
+                        task:  'updateTimestamp', 
                         start:  start,
                         end:    end,
-                        id:     event.id
+                        id:     event.id ? event.id : $( "#id" ).val()
                         },
                     type: "POST",
                     success: function(json) {
@@ -120,7 +183,7 @@
                 $.ajax({
                     url: 'jqhelp/calendar.php',
                     data: {
-                        task:  'updateEvent', 
+                        task:  'updateTimestamp', 
                         start: start,
                         end: end,
                         id: event.id
@@ -140,30 +203,7 @@
 			type: "POST",    
 			
 		});
-        /*		
-        $('#calendar').fullCalendar({
-            theme: true,
-            header: {
-				left: 'prev,next today',
-				center: 'title',
-				right: 'month,agendaWeek,agendaDay'
-			},
-            editable: true,
-            selectable: true,
-            dragble: true,
-            select: function(start, end) {
-				var title = prompt('Titel eingeben.');
-				var eventData;
-				if (title) {
-				    eventData = {
-						title: title,
-						start: start,
-						end: end
-					};
-					$('#calendar').fullCalendar('renderEvent', eventData, true);
-				}
-		    }
-        })*/
+
 	});
 
 </script>
@@ -181,13 +221,74 @@
 		margin: 40px auto;
 	}
 
+
+    #termin         { position:absolute; top:20px; left:25px; }
+    #terminInp      { position:absolute; top:20px; left:95px;}
+    #chkbox         { position:absolute; top:20px; left:495px; }
+    #start          { position:absolute; top:50px; left:25px; }
+    #startDateInp  { position:absolute; top:50px; left:95px; }
+    #startTimeInp  { position:absolute; top:50px; left:195px; }
+    #end            { position:absolute; top:80px; left:25px; }
+    #endDateInp    { position:absolute; top:80px; left:95px; }
+    #endTimeInp    { position:absolute; top:80px; left:195px; }
+    #descTitle     {position:absolute; top:150px; left:30px;}
+    
+    #desc   {position:absolute; top:150px; left:30px;}
+    .title{
+         width: 370px;
+    }    
+    .date{
+         width: 90px;
+    }
+    .time{
+         width: 80px;
+    }
+    .test{
+         width: 60px;
+    }
+    
+        
+</style>
+
 </style>
 </head>
 <body>
-    <div id="dialogForm" title="Basic dialog">
-        <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
-    </div>
-	<div id='calendar'></div>
+    <div id="dialog" class="event-dialog" title="Event">
+        <div id="dialog-inner">
+            <div id="termin">
+              <b>Title: </b> 
+            </div> 
+               
+            <div id="terminInp">
+                <input type="text"  name="date-start" id="title" class=" ui-widget-content ui-corner-all title">
+                <input type="text"  name="id" id="id"  style="visibility: hidden" class="ui-widget-content ui-corner-all test">
+            </div>
+            <div id="chkbox">All day <input id="all-day" type="checkbox"></div> 
+            <div id="start">
+              <b>Start: </b> 
+            </div>    
+            <div id="startDateInp">
+                <input type="text"  name="date-start" id="startDate" class="text ui-widget-content ui-corner-all date">
+            </div>
+            <div id="startTimeInp">
+                <input type="text"  name="date-start" id="startTime" class="text ui-widget-content ui-corner-all time">
+            </div>
+            <div id="end">
+              <b>Ende: </b> 
+            </div>    
+            <div id="endDateInp">
+                <input type="text"  name="date-start" id="endDate" class="text ui-widget-content ui-corner-all date">
+            </div>
+            <div id="endTimeInp">
+                <input type="text"  name="date-start" id="endTime" class="text ui-widget-content ui-corner-all time">
+            </div>
+            <textarea name="desc" id="desc" class="text ui-widget-content ui-corner-all" rows="10" cols="64"></textarea>
+        </div>               
+
+        </div>
+    </div>    
+    
+    <div id='calendar'></div>
 
 </body>
 </html>

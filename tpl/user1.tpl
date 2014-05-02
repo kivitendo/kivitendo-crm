@@ -265,16 +265,16 @@
         </td>
         <td class="norm"></td><td>
         </td></tr>
-    <tr><td class="norm">.:name:.</td><td><input class="b1" type="text" name="name" value="{name}" maxlength="75"></td>
-        <td class="norm">.:department:.</td>    <td ><input class="b1" type="text" name="abteilung" value="{abteilung}" maxlength="75"></td></tr>
-    <tr><td class="norm">.:street:.</td><td><input class="b1" type="text" name="addr1" value="{addr1}" maxlength="75"></td>
-        <td class="norm">.:position:.</td><td><input class="b1" type="text" name="position" value="{position}" maxlength="75"></td></tr>
-    <tr><td class="norm">.:zipcode:. .:city:.</td><td><input class="b0" type="text" name="addr2" value="{addr2}" size="6" maxlength="10"> <input style="width:145px;" type="text" name="addr3" value="{addr3}"  maxlength="75"></td>
-        <td class="norm">.:email:.</td><td><input class="b1" type="text" name="email" value="{email}" size="30" maxlength="125"></td></tr>
-    <tr><td class="norm">.:privatephone:.</td><td><input class="b1" type="text" name="homephone" value="{homephone}" maxlength="30"></td>
-        <td class="norm">.:officephone:.</td><td><input class="b1" type="text" name="workphone" value="{workphone}" maxlength="30"></td></tr>
-    <tr><td class="norm">.:remark:.</td><td><textarea name="notes" cols="37" rows="3">{notes}</textarea></td>
-        <td class="norm">.:email:.<br>.:signature:.</td><td><textarea name="mailsign" cols="37" rows="3">{mailsign}</textarea></td></tr>
+    <tr><td class="norm">.:name:.</td><td><input class="b1 ui-widget-content ui-corner-all" type="text" name="name" value="{name}" maxlength="75"></td>
+        <td class="norm">.:department:.</td>    <td ><input class="b1 ui-widget-content ui-corner-all" type="text" name="abteilung" value="{abteilung}" maxlength="75"></td></tr>
+    <tr><td class="norm">.:street:.</td><td><input class="b1 ui-widget-content ui-corner-all" type="text" name="addr1" value="{addr1}" maxlength="75"></td>
+        <td class="norm">.:position:.</td><td><input class="b1 ui-widget-content ui-corner-all" type="text" name="position" value="{position}" maxlength="75"></td></tr>
+    <tr><td class="norm">.:zipcode:. .:city:.</td><td><input class="b0 ui-widget-content ui-corner-all" type="text" name="addr2" value="{addr2}" size="6" maxlength="10"> <input style="width:145px;" class="ui-widget-content ui-corner-all" type="text" name="addr3" value="{addr3}"  maxlength="75"></td>
+        <td class="norm">.:email:.</td><td><input class="b1 ui-widget-content ui-corner-all" type="text" name="email" value="{email}" size="30" maxlength="125"></td></tr>
+    <tr><td class="norm">.:privatephone:.</td><td><input class="b1 ui-widget-content ui-corner-all" type="text" name="homephone" value="{homephone}" maxlength="30"></td>
+        <td class="norm">.:officephone:.</td><td><input class="b1 ui-widget-content ui-corner-all" type="text" name="workphone" value="{workphone}" maxlength="30"></td></tr>
+    <tr><td class="norm">.:remark:.</td><td><textarea class="ui-widget-content ui-corner-all" name="notes" cols="37" rows="3">{notes}</textarea></td>
+        <td class="norm">.:email:.<br>.:signature:.</td><td><textarea class="ui-widget-content ui-corner-all" name="mailsign" cols="37" rows="3">{mailsign}</textarea></td></tr>
     <tr><td class="norm">Mandantensignatur</td><td id="mansig"><form>
               <input type="radio" id="mandsig0" name="mandsig" value='0' {mandsig0}><label for="mandsig0">ignorieren</label>
               <input type="radio" id="mandsig1" name="mandsig" value='1' {mandsig1}><label for="mandsig1">nur diese</label>
@@ -282,20 +282,20 @@
               <input type="radio" id="mandsig3" name="mandsig" value='3' {mandsig3}><label for="mandsig3">anhängen</label></form></td>
         <td class="norm">.:member:.</td><td><a href="user2.php" >{GRUPPE}</a></td>
     </tr>
-    <tr><td class="norm">.:emailserver:.</td><td><input class="b1" type="text" name="msrv" value="{msrv}"  maxlength="75"></td>
+    <tr><td class="norm">.:emailserver:.</td><td><input class="b1 ui-widget-content ui-corner-all" type="text" name="msrv" value="{msrv}"  maxlength="75"></td>
         <td class="norm">.:emailuser:.</td>
-        <td class="norm"><input class="b1" type="text" name="mailuser" value="{mailuser}" size="25" maxlength="75">
+        <td class="norm"><input class="b1 ui-widget-content ui-corner-all" type="text" name="mailuser" value="{mailuser}" size="25" maxlength="75">
         </td></tr>
-    <tr><td class="norm">.:emailbox:.</td><td class="norm"><input class="b1" type="text" name="postf" value="{postf}" size="10" maxlength="75">
+    <tr><td class="norm">.:emailbox:.</td><td class="norm"><input class="b1 ui-widget-content ui-corner-all" type="text" name="postf" value="{postf}" size="10" maxlength="75">
         </td>
         <td class="norm">.:password:.</td>
-        <td class="norm"><input class="b1" type="password" name="kennw" value="{kennw}" maxlength="75">
+        <td class="norm"><input class="b1 ui-widget-content ui-corner-all" type="password" name="kennw" value="{kennw}" maxlength="75">
     <!--tr><td>Backup-Pf</td><td><input type="text" name="Postf2" value="{Postf2}" size="10"> </td><td></td></tr-->
         </td></tr>
     <tr><td class="norm">.:protocol:.</td><td><span id="proto">
             <input type="radio" id="proto0" name="proto" value="0" {protopop}><label for="proto0">.:POP:.</label> 
             <input type="radio" id="proto1" name="proto" value="1" {protoimap}><label for="proto1">.:IMAP:.</label></span>
-         .:port:. <input style="width:28px;" type="text" name="port" value="{port}" size="4" maxlength="6">
+         .:port:. <input class="ui-widget-content ui-corner-all" style="width:28px;" type="text" name="port" value="{port}" size="4" maxlength="6">
         <select name="selport" id="selport" onChange="selPort();">
             <option value=""></option>
             <option data-selectedtext=" " value="110">110</option>
@@ -322,17 +322,17 @@
     <tr><td class="norm">.:deadlines:.</td><td>
             .:from_t:. <select id="termbegin" name="termbegin">{termbegin}</select> 
             .:to_t:. <select  id="termend" name="termend">{termend}</select> .:uhr:.</td>
-        <td class="norm">.:deadlinespacing:.</td><td><input style="width:30px;" type="text" name="termseq" value="{termseq}" size="3"> .:minutes:.</td></tr>
+        <td class="norm">.:deadlinespacing:.</td><td><input class="ui-widget-content ui-corner-all" style="width:30px;" type="text" name="termseq" value="{termseq}" size="3"> .:minutes:.</td></tr>
     <tr><td class="norm">.:interval:.</td><td>
-            <input style="width:30px;" type="text" name="interv" value="{interv}" size="4" maxlength="5">.:sec.:. &nbsp;&nbsp; </td></tr>
-    <tr><td class="normal">.:presearch:. </td><td><input style="width:30px;" type="text" name="pre" value="{pre}" size="10"></td>
+            <input class="ui-widget-content ui-corner-all" style="width:30px;" type="text" name="interv" value="{interv}" size="4" maxlength="5">.:sec.:. &nbsp;&nbsp; </td></tr>
+    <tr><td class="normal">.:presearch:. </td><td><input class="ui-widget-content ui-corner-all" style="width:30px;" type="text" name="pre" value="{pre}" size="10"></td>
         <td class="norm">.:awpre:.</td><td><input class="inp-checkbox" type="checkbox" value='t' name="preon" id="preon"><label for="preon"></label>.:yes:.</td></tr>
     <!--tr><td colspan="4"><input type="submit" name="mkmbx" value=".:createmailbox:."></td><td></td><td></td></tr-->
     <tr><td class="norm">.:mapservice:.</td><td colspan="4">
-             <input style="width:750px;" type="text" name="streetview" id="streetview" size="80" value='{streetview}'><input class="inp-checkbox" type="checkbox" name="streetview_default" id="streetview_default"  value='t'><label for="streetview_default"></label>.:mandant:.
+             <input class="ui-widget-content ui-corner-all" style="width:750px;" type="text" name="streetview" id="streetview" size="80" value='{streetview}'><input class="inp-checkbox" type="checkbox" name="streetview_default" id="streetview_default"  value='t'><label for="streetview_default"></label>.:mandant:.
         </td></tr>
     <tr><td class="norm">.:spacecharsubst:.</td><td colspan="4">
-             <input style="width:30px;" type="text" name="planspace" id="planspace"size="3" value='{planspace}'>
+             <input class="ui-widget-content ui-corner-all" style="width:30px;" type="text" name="planspace" id="planspace"size="3" value='{planspace}'>
     </td></tr>
     <tr><td class="norm">.:autocompletion:.</td><td colspan="4">
              <input class="inp-checkbox" type="checkbox" name="feature_ac" id="feature_ac" value='t' ><label for="feature_ac"></label>&nbsp;&nbsp; .:minentry:.: <input style="width:20px;" type="text" name="feature_ac_minlength"  value='{feature_ac_minlength}'>
@@ -369,16 +369,16 @@
 .:exportcal:.: 
 <form name="termedit" method="post" action="mkics.php" onSubmit="return false;">
 <table><tr>
-    <td><input type="text" size="10" id="start" name="start"><img src='image/date.png' border='0' align='middle' onClick="kal('start')";></td>
-    <td><input type="text" size="10" id="stop" name="stop"><img src='image/date.png' border='0' align='middle' id='triggerStop' onClick="kal('stop')";></td>
+    <td><input class="ui-widget-content ui-corner-all" type="text" size="10" id="start" name="start"><img src='image/date.png' border='0' align='middle' onClick="kal('start')";></td>
+    <td><input class="ui-widget-content ui-corner-all" type="text" size="10" id="stop" name="stop"><img src='image/date.png' border='0' align='middle' id='triggerStop' onClick="kal('stop')";></td>
     <td><select name="icalart">
         <option value="file" {icalartfile}>.:fileserver:.
         <option value="mail" {icalartmail}>.:email:.
         <option value="client" {icalartclient}>.:browser:.
         </select>
     </td>
-    <td><input type="text" size="4"  id="ext"  name="icalext" value="{icalext}"></td>
-    <td><input type="text" size="40"  id="dest"  name="icaldest" value="{icaldest}"></td>
+    <td><input class="ui-widget-content ui-corner-all" type="text" size="4"  id="ext"  name="icalext" value="{icalext}"></td>
+    <td><input class="ui-widget-content ui-corner-all" type="text" size="40"  id="dest"  name="icaldest" value="{icaldest}"></td>
     <td><a href="#" onClick="go('mkics')">.:go:.</a></td>
     </tr><tr>
     <td class="klein">.:from_t:.</td>

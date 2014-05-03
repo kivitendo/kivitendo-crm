@@ -202,7 +202,6 @@
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
-<div class="ui-widget-content">
 <div id="dialog_saved" title=".:usersettingscrm:.">
     <p>.:usersettingssaved:.</p>
 </div>
@@ -390,7 +389,7 @@
 </tr></table>
 </form>
 <img src="{IMG}" width="500" height="280" title="Netto sales over 12 Month">
-</div>
+
 <div id="mailwin"> 
     <table id="mailtable" class="tablesorter">
     <thead>

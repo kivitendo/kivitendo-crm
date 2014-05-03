@@ -776,7 +776,7 @@ function mkHeader() {
                            $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.min.js'.$SN,
         'CRMPATH'       => $_SESSION['baseurl'].'crm/',
         'FULLCALCSS'    => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.css'.$LN.
-                           $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.print.css media="print"'.$LN,
+                           $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.print.css media=\'print\''.$LN,
         'FULLCALJS'     => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/lib/moment.min.js'.$SN.
                            //$SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.js'.$SN.//aktuelle 
                            $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.min.js'.$SN. 
@@ -913,8 +913,10 @@ function makeMenu($sess,$token){
         $tmp = preg_replace($suche, $ersetze, $objResult->{'pre_content'} );
         $tmp = str_replace( 'itemIcon="', 'itemIcon="'.$BaseUrl, $tmp );
         $rs['pre_content']   = str_replace( 'src="', 'src="'.$BaseUrl, $tmp );
-        $rs['start_content'] = $objResult->{'start_content'};
-        $rs['end_content']   = $objResult->{'end_content'};
+      //$rs['start_content'] = $objResult->{'start_content'};
+        $rs['start_content'] = '<div class="ui-widget-content">';//Begin UI-Look
+      //$rs['end_content']   = $objResult->{'end_content'};
+        $rs['end_content']   = '</div>'; //End UI-Look
     }
     return $rs;
 }

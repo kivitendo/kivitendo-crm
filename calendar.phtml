@@ -7,12 +7,13 @@
     include("inc/crmLib.php");
     $menu = $_SESSION['menu'];
     $head = mkHeader();
+    echo $menu['stylesheets'];
     echo $head['FULLCALCSS'];
     echo $head['JQUERY'];   
     echo $head['JQUERYUI'];
     echo $head['THEME'];
     echo $head['FULLCALJS'];
-     
+    //print_r( $_SESSION );
 
 ?>
 
@@ -122,6 +123,7 @@
 			},
 			minTime: '<?php echo $_SESSION['termbegin'] ? $_SESSION['termbegin'] : 7;echo ":00"; ?>',
 			maxTime: '<?php echo $_SESSION['termend'] ? $_SESSION['termend'] : 19; echo ":00"; ?>',
+			slotDuration: '<?php echo "00:";echo $_SESSION['termseq'] ? $_SESSION['termseq'] : 30; echo ":00"; ?>', //termseq
 			weekNumbers: true,
 			editable: true,
 		    eventClick: function(event) {
@@ -245,14 +247,19 @@
     }
     .test{
          width: 60px;
-    }
-    
+    }    
         
 </style>
 
-</style>
+
 </head>
 <body>
+<?php 
+    echo $menu['pre_content'];
+    echo $menu['start_content'];
+    //echo '<div class="ui-widget-content">';
+?>
+
     <div id="dialog" class="event-dialog" title="Event">
         <div id="dialog-inner">
             <div id="termin">
@@ -285,10 +292,12 @@
             <textarea name="desc" id="desc" class="text ui-widget-content ui-corner-all" rows="10" cols="64"></textarea>
         </div>               
 
-        </div>
+        
     </div>    
     
     <div id='calendar'></div>
-
+<?php 
+    $menu['end_content'];
+?>
 </body>
 </html>

@@ -9,10 +9,12 @@
     $head = mkHeader();
     echo $menu['stylesheets'];
     echo $head['FULLCALCSS'];
+    echo $head['BOXCSS'];
     echo $head['JQUERY'];   
     echo $head['JQUERYUI'];
     echo $head['THEME'];
     echo $head['FULLCALJS'];
+    echo $head['JQBOX'];
     //print_r( $_SESSION );
 
 ?>
@@ -205,6 +207,23 @@
 			type: "POST",    
 			
 		});
+		$("select").selectBoxIt({
+            theme:       "jqueryui",
+            autoWidth:   true,
+            height: "12"
+            //hideCurrent:  true,
+            
+        })
+		$( "div#radioTermin,div#radioPrio" ).buttonset();//.find('label').height(28);;
+		$(".inp-checkbox").button({ text: false})
+            .click(function(e) {
+                $(this).button("option", {
+                    icons: {
+                        primary: $(this)[0].checked ? "ui-icon-check" : ""
+                    }
+                });
+           
+            });
 
 	});
 
@@ -219,25 +238,31 @@
 	}
 
 	#calendar {
-		width: 1700px;
+		/*width: 98%;*/
 		margin: 40px auto;
 	}
 
 
-    #termin         { position:absolute; top:20px; left:25px; }
-    #terminInp      { position:absolute; top:20px; left:95px;}
-    #chkbox         { position:absolute; top:20px; left:495px; }
-    #start          { position:absolute; top:50px; left:25px; }
-    #startDateInp  { position:absolute; top:50px; left:95px; }
-    #startTimeInp  { position:absolute; top:50px; left:195px; }
-    #end            { position:absolute; top:80px; left:25px; }
-    #endDateInp    { position:absolute; top:80px; left:95px; }
-    #endTimeInp    { position:absolute; top:80px; left:195px; }
-    #descTitle     {position:absolute; top:150px; left:30px;}
-    
-    #desc   {position:absolute; top:150px; left:30px;}
+    #titleDesig     { position:absolute; top:20px; left:32px; }
+    #titleInp       { position:absolute; top:20px; left:95px;}
+    #radioTermin    { position:absolute; top:10px; left:465px;}
+    #start          { position:absolute; top:50px; left:32px; }
+    #startDateInp   { position:absolute; top:50px; left:95px;}
+    #startTimeInp   { position:absolute; top:50px; left:195px; }
+    #chkboxAllDay   { position:absolute; top:45px; left:295px; }
+    #end            { position:absolute; top:80px; left:32px; }
+    #endDateInp     { position:absolute; top:80px; left:95px; }
+    #endTimeInp     { position:absolute; top:80px; left:195px;}
+    #kategorie      { position:absolute; top:120px; left:34px; }
+    #kategorieDrop  { position:absolute; top:140px; left:32px;}
+    #user           { position:absolute; top:120px; left:220px; }
+    #userDrop       { position:absolute; top:140px; left:218px;}
+    #prio           { position:absolute; top:120px; left:400px; }
+    #radioPrio      { position:absolute; top:140px; left:398px;}
+    #descTitle      { position:absolute; top:180px; left:30px;}
+    #desc           { position:absolute; top:180px; left:30px;}
     .title{
-         width: 370px;
+         width: 350px;
     }    
     .date{
          width: 90px;
@@ -247,7 +272,19 @@
     }
     .test{
          width: 60px;
-    }    
+    } 
+    .inp-checkbox+label {
+        margin: .5em;
+        width:16px; 
+        height:16px; 
+        vertical-align:middle;
+    }
+    .selectboxit-container .selectboxit-options {width: 125px;}      
+    .selectboxit-container span, .selectboxit-container .selectboxit-options a {height: 25px; line-height: 25px;}
+    .radio+label{ 
+       /* height: 25px;/*ToDo Buttonhöhe verringern*/
+    }​
+
         
 </style>
 
@@ -257,26 +294,32 @@
 <?php 
     echo $menu['pre_content'];
     echo $menu['start_content'];
-    //echo '<div class="ui-widget-content">';
+    echo '<div class="ui-widget-content">';
 ?>
 
     <div id="dialog" class="event-dialog" title="Event">
         <div id="dialog-inner">
-            <div id="termin">
+            <div id="titleDesig">
               <b>Title: </b> 
             </div> 
                
-            <div id="terminInp">
-                <input type="text"  name="date-start" id="title" class=" ui-widget-content ui-corner-all title">
+            <div id="titleInp">
+                <input type="text"  id="title" class=" ui-widget-content ui-corner-all title">
                 <input type="text"  name="id" id="id"  style="visibility: hidden" class="ui-widget-content ui-corner-all test">
             </div>
-            <div id="chkbox">All day <input id="all-day" type="checkbox"></div> 
+            <div id="radioTermin">
+                <form>
+                    <input type="radio" id="termin" class="radio" name="radioTermin" checked="checked" value='0' ><label for="termin"    >Termin </label>
+                    <input type="radio" id="assignment" class="radio" name="radioTermin" value='1' ><label for="assignment">Aufgabe</label>
+                </form>
+            </div>            
             <div id="start">
               <b>Start: </b> 
             </div>    
             <div id="startDateInp">
                 <input type="text"  name="date-start" id="startDate" class="text ui-widget-content ui-corner-all date">
             </div>
+            <div id="chkboxAllDay"><input class="inp-checkbox" id="allDay" value='t' type="checkbox"><label for="allDay"></label> ganztags </div> 
             <div id="startTimeInp">
                 <input type="text"  name="date-start" id="startTime" class="text ui-widget-content ui-corner-all time">
             </div>
@@ -289,6 +332,40 @@
             <div id="endTimeInp">
                 <input type="text"  name="date-start" id="endTime" class="text ui-widget-content ui-corner-all time">
             </div>
+            <div id="kategorie">
+                Kategorie:
+            </div> 
+            <div id="kategorieDrop">
+                <select class="b1" name="kdviewre">
+                    <option value="1" checked >beruflich
+                    <option value="2" >privat
+                    <option value="3" >Geburtstag
+                    <option value="4" >Sontige
+                </select> 
+            </div>
+            <div id="user">
+                Benutzer:
+            </div> 
+            <div id="userDrop">
+                <select class="b1" name="user">
+                    <option value="1" checked >Ronny kumke
+                    <option value="2" >Dennis Sonnwald
+                    <option value="3" >Martin Gröni
+                    <option value="4" >Maria Carry
+                </select> 
+            </div>
+            <div id="prio">
+                Priorität:
+            </div>
+            <div id="radioPrio">
+                <form>
+                    <input type="radio" id="prioLow"  name="radioPrio" value='0' ><label for="prioLow">gering</label>
+                    <input type="radio" id="prioNorm" name="radioPrio" checked="checked" value='1' ><label for="prioNorm">normal</label>
+                    <input type="radio" id="prioHigh" name="radioPrio" value='1' ><label for="prioHigh">hoch</label>
+                </form>                
+            </div>           
+                       
+
             <textarea name="desc" id="desc" class="text ui-widget-content ui-corner-all" rows="10" cols="64"></textarea>
         </div>               
 
@@ -298,6 +375,7 @@
     <div id='calendar'></div>
 <?php 
     $menu['end_content'];
+    echo "</div>"
 ?>
 </body>
 </html>

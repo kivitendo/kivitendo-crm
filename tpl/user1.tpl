@@ -344,7 +344,7 @@
         <input class="inp-checkbox" type="checkbox" name="liefer_button"  id="liefer_button"  value='t'><label for="liefer_button"></label>.:delivery order:.&nbsp;&nbsp;
         <input class="inp-checkbox" type="checkbox" name="zeige_extra"    id="zeige_extra"    value='t'><label for="zeige_extra"></label>.:extra:.&nbsp;&nbsp;
         <input class="inp-checkbox" type="checkbox" name="zeige_karte"    id="zeige_karte"    value='t'><label for="zeige_karte"></label>.:map:.&nbsp;&nbsp;
-        <input class="inp-checkbox" type="checkbox" name="zeige_bearbeiter" id="zeige_bearbeiter" value='t'><label for="zeige_karte"></label>.:employee:.&nbsp;&nbsp;
+        <input class="inp-checkbox" type="checkbox" name="zeige_bearbeiter" id="zeige_bearbeiter" value='t'><label for="zeige_bearbeiter"></label>.:employee:.&nbsp;&nbsp;
         <input class="inp-checkbox" type="checkbox" name="zeige_etikett"  id="zeige_etikett"  value='t'><label for="zeige_etikett"></label>.:label:.&nbsp;&nbsp;
         <input class="inp-checkbox" type="checkbox" name="zeige_dhl"      id="zeige_dhl"      value='t'><label for="zeige_dhl"></label>.:DHL:.&nbsp;&nbsp;
         <input class="inp-checkbox" type="checkbox" name="zeige_tools"    id="zeige_tools"    value='t'><label for="zeige_tools"></label>.:tools:.&nbsp;&nbsp;

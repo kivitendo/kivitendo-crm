@@ -38,14 +38,16 @@
                     var title = $( "#title" ).val();
                     var desc = $( "#desc" ).val();
                     var id = $( "#id" ).val();
+                    var allDay = $( "#allDay" ).is( ":checked" );
                     if ( title ) {
-				    event = {
-						title: title,
-						start: start_cur,
-						end: end_cur,
-						id : id,
-						desc: desc
-					} 
+				        event = { //wird benötigt???
+						  title: title,
+						  start: start_cur,
+						  end: end_cur,
+						  id : id,
+						  desc: desc,
+						  allDay: allDay
+					   } 
                     start = moment(start).format( "YYYY-MM-DD HH:mm:ss");
                     end = moment(end).format( "YYYY-MM-DD HH:mm:ss");
                     $.ajax({
@@ -55,6 +57,7 @@
                             title: $("#title").val(),
                             desc: $("#desc").val(),
                             id:   $("#id").val(),
+                            allDay: $( "#allDay" ).is( ":checked" ),
                             start: start,
                             end: end
                         },
@@ -128,12 +131,13 @@
 			slotDuration: '<?php echo "00:";echo $_SESSION['termseq'] ? $_SESSION['termseq'] : 30; echo ":00"; ?>', //termseq
 			weekNumbers: true,
 			editable: true,
-		    eventClick: function(event) {
-		        
+		    eventClick: function(event) {//edit Event
+		        alert( "allDay: " + event.allDay );
 		        $("#title").val(event.title);
 		        $("#desc").val(event.desc);
 		        if( event.id ) $( "#id" ).val( event.id );//$( "#id" ).val()
-		        //moment.lang('en');
+		        if( event.allDay && !$( "#allDay" ).is( ":checked" ) ) $( "#allDay" ).click();
+		        if( !event.allDay && $( "#allDay" ).is( ":checked" ) ) $( "#allDay" ).click();
 		        $( "#startDate" ).val( moment( event.start ).format( "L") );
 		        $( "#startTime" ).val( moment( event.start ).format( "LT") );
 		        $( "#endDate" ).val( moment( event.end ).format( "L") );
@@ -147,7 +151,7 @@
 			dragble: true,
 			selectable: true,    
 			selectHelper: true,
-			select: function(start, end) {
+			select: function(start, end) {//new Event
 				$( "#title" ).val('');
 				$( "#desc" ).val('');
 				$( "#id" ).val('');

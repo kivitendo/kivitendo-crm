@@ -132,7 +132,8 @@
 			weekNumbers: true,
 			editable: true,
 		    eventClick: function(event) {//edit Event
-		        alert( "allDay: " + event.allDay );
+		        //alert( "allDay: " + event.allDay );
+		        console.log( "Event: %o ", event );
 		        $("#title").val(event.title);
 		        $("#desc").val(event.desc);
 		        if( event.id ) $( "#id" ).val( event.id );//$( "#id" ).val()
@@ -140,8 +141,8 @@
 		        if( !event.allDay && $( "#allDay" ).is( ":checked" ) ) $( "#allDay" ).click();
 		        $( "#startDate" ).val( moment( event.start ).format( "L") );
 		        $( "#startTime" ).val( moment( event.start ).format( "LT") );
-		        $( "#endDate" ).val( moment( event.end ).format( "L") );
-		        $( "#endTime" ).val( moment( event.end ).format( "LT") );
+		        $( "#endDate" ).val( moment( event.end ? event.end : event.start ).format( "L") );
+		        $( "#endTime" ).val( moment( event.end ? event.end : event.start ).format( "LT") );
 		        
 		        //alert(  " ID: " +  event.id );
 			     $( "#dialog" ).dialog( "open" );
@@ -155,6 +156,7 @@
 				$( "#title" ).val('');
 				$( "#desc" ).val('');
 				$( "#id" ).val('');
+				if( $( "#allDay" ).is( ":checked" ) ) $( "#allDay" ).click();
 		        $( "#startDate" ).val( moment( start ).format( "L") );
 		        $( "#startTime" ).val( moment( start ).format( "LT") );
 		        $( "#endDate" ).val( moment( end ).format( "L") );
@@ -163,17 +165,22 @@
   
 			},
 			//Triggered when dragging stops and the event has moved to a different day/time.
-			eventDrop: function(event, delta) {
-			    //alert("Drop! " + event);
+			eventDrop: function(event, testxx, dayDelta) {
+			    alert("Drop! "  + event.end)
+			    console.log("Drop! %o" ,event);
                 var start = moment(event.start).format( "YYYY-MM-DD HH:mm:ss");
-                var end   = moment(event.end).format( "YYYY-MM-DD HH:mm:ss");
+                alert(start);
+                var end   = event.end ? moment(event.end).format( "YYYY-MM-DD HH:mm:ss") : moment(dayDelta).format( "YYYY-MM-DD HH:mm:ss");
+                //var delta = moment(dayDelta).format( "YYYY-MM-DD HH:mm:ss");
+                //alert( "Delta: " +delta );
                 $.ajax({
                     url: 'jqhelp/calendar.php',
                     data: {
                         task:  'updateTimestamp', 
                         start:  start,
                         end:    end,
-                        id:     event.id ? event.id : $( "#id" ).val()
+                        id:     event.id ? event.id : $( "#id" ).val(),
+                        allDay: event.allDay
                         },
                     type: "POST",
                     success: function(json) {
@@ -194,7 +201,8 @@
                         task:  'updateTimestamp', 
                         start: start,
                         end: end,
-                        id: event.id
+                        id: event.id,
+                        allDay: event.allDay
                     },
                     type: "POST",
                     success: function(json) {

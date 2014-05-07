@@ -22,7 +22,7 @@
             $rc=$_SESSION['db']->query($sql);   
         break;
         case "updateTimestamp":
-            $sql="UPDATE termine SET  start = '$start'::TIMESTAMP, stop = '$end'::TIMESTAMP WHERE id = $id";
+            $sql="UPDATE termine SET  start = '$start'::TIMESTAMP, stop = '$end'::TIMESTAMP, allday = $allDay WHERE id = $id";
             $rc=$_SESSION['db']->query($sql);   
         break;
         case "deleteEvent":

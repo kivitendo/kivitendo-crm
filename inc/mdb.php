@@ -13,7 +13,7 @@ final class myDB extends MDB2 {
     private $db = false;
     private $rc = false;
     private $showErr = false; // Browserausgabe
-    private $log = true;     // Alle Abfragen mitloggen
+    var $log = true;     // Alle Abfragen mitloggen
     private $errfile = "/tmp/lxcrm.err";
     private $logfile = "/tmp/lxcrm.log";
     private $lfh = false;

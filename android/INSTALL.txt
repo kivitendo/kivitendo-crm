@@ -1,0 +1,24 @@
+Lx-Office Android
+
+Dateien in ein Unterverzeichnis der "crm" kopieren,
+z.B.: android
+
+androidLib.php
+android.php
+get_adressdata.php
+get_adress.php
+logging.php
+mdb.php
+
+Wird in der androidLib.php die Konstante debug auf true gesetzt, i
+wird ein Logfile wird mitgeschrieben: /tmp/android.log
+
+ 
+lxoffice.apk auf dem Androis installieren und aufrufen.
+Als erstes das Menü aufrufen und den Server mit Pfad festlegen:
+
+https://<meinserver.lxo>/lx-office/crm/android
+
+Bei neueren Version von Lx-Office, bzw. deren Abkömmlinge, wird hier auch der Mandand eingestellt.
+
+Der Wechsel der IP auf dem Phone ist noch nicht abgefangen.

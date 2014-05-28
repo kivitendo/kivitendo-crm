@@ -23,7 +23,11 @@
 <script>
 
 	$(document).ready(function() {
-        var id = 0;
+        
+
+        
+     
+        var id = 0;//delete
         $( "#dialog" ).dialog({
             autoOpen: false,
             height: 500 ,
@@ -39,6 +43,7 @@
                     var desc = $( "#desc" ).val();
                     var id = $( "#id" ).val();
                     var allDay = $( "#allDay" ).is( ":checked" );
+                    
                     if ( title ) {
 				        event = { //wird benötigt???
 						  title: title,
@@ -133,16 +138,46 @@
 			editable: true,
 		    eventClick: function(event) {//edit Event
 		        //alert( "allDay: " + event.allDay );
-		        console.log( "Event: %o ", event );
+		        //console.log( "Event: %o ", event );
 		        $("#title").val(event.title);
 		        $("#desc").val(event.desc);
 		        if( event.id ) $( "#id" ).val( event.id );//$( "#id" ).val()
-		        if( event.allDay && !$( "#allDay" ).is( ":checked" ) ) $( "#allDay" ).click();
-		        if( !event.allDay && $( "#allDay" ).is( ":checked" ) ) $( "#allDay" ).click();
+		        if( event.allDay ) $("#allDay").prop( 'checked',true );
+		       
+		        
+	           //alert( "event.allDay: " + event.allDay );
+		        //    console.log( "allDay %o", $("#allDay" ))
 		        $( "#startDate" ).val( moment( event.start ).format( "L") );
 		        $( "#startTime" ).val( moment( event.start ).format( "LT") );
 		        $( "#endDate" ).val( moment( event.end ? event.end : event.start ).format( "L") );
 		        $( "#endTime" ).val( moment( event.end ? event.end : event.start ).format( "LT") );
+		         /*
+		        //DropDown:
+		        $.getJSON("jqhelp/calendar.php", function(data){
+                    $.each(data, function(index, text) {
+                        $('#user').append(
+                            $('<option></option>').val(index).html(text)
+                        );
+                    });
+                });
+		        */
+                $.ajax({
+                    url: 'jqhelp/calendar.php',
+                    data: {
+                        task:  'getUsers', 
+                    },
+                    format: "json",
+                    type: "POST",
+                    success: function(json) {
+                        alert('getUsers' + json);
+                        console.log("Drop! %o" , json);
+                    },
+                    error: function () {
+                        alert('Ajax Error');
+                    }
+                })		        
+		        
+		        
 		        
 		        //alert(  " ID: " +  event.id );
 			     $( "#dialog" ).dialog( "open" );
@@ -161,6 +196,21 @@
 		        $( "#startTime" ).val( moment( start ).format( "LT") );
 		        $( "#endDate" ).val( moment( end ).format( "L") );
 		        $( "#endTime" ).val( moment( end ).format( "LT") );
+		        $.ajax({
+                    url: 'jqhelp/calendar.php',
+                    data: {
+                        task:  'getUsers', 
+                    },
+                    format: "json",
+                    type: "POST",
+                    success: function(json) {
+                         alert('getUsers' + json);
+                         console.log("Drop! %o" , json);
+                    },
+                    error: function () {
+                        alert('Ajax Error');
+                    }
+                })	
 			    $( "#dialog" ).dialog( "open" );
   
 			},
@@ -169,8 +219,10 @@
 			    alert("Drop! "  + event.end)
 			    console.log("Drop! %o" ,event);
                 var start = moment(event.start).format( "YYYY-MM-DD HH:mm:ss");
-                alert(start);
-                var end   = event.end ? moment(event.end).format( "YYYY-MM-DD HH:mm:ss") : moment(dayDelta).format( "YYYY-MM-DD HH:mm:ss");
+                //alert(start);
+                var tst = moment(event.start).add('h', 1);
+                var end   = event.end ? moment(event.end).format( "YYYY-MM-DD HH:mm:ss") : moment(event.tst).format( "YYYY-MM-DD HH:mm:ss");//.add('h', 1);;//xxx
+                
                 //var delta = moment(dayDelta).format( "YYYY-MM-DD HH:mm:ss");
                 //alert( "Delta: " +delta );
                 $.ajax({
@@ -227,16 +279,23 @@
             
         })
 		$( "div#radioTermin,div#radioPrio" ).buttonset();//.find('label').height(28);;
-		$(".inp-checkbox").button({ text: false})
+		
+		$(".inp-checkboxx").button({ text: false})
             .click(function(e) {
                 $(this).button("option", {
                     icons: {
                         primary: $(this)[0].checked ? "ui-icon-check" : ""
                     }
-                });
-           
-            });
-
+                })
+            })
+            .prop(function(f){
+                $(this).button("option", {
+                    icons: {
+                        primary: $(this)[0].checked ? "ui-icon-check" : ""
+                    }
+                })
+            }); 
+		
 	});
 
 </script>
@@ -331,7 +390,7 @@
             <div id="startDateInp">
                 <input type="text"  name="date-start" id="startDate" class="text ui-widget-content ui-corner-all date">
             </div>
-            <div id="chkboxAllDay"><input class="inp-checkbox" id="allDay" value='t' type="checkbox"><label for="allDay"></label> ganztags </div> 
+            <div id="chkboxAllDay"><input class="inp-checkbox" id="allDay"  type="checkbox"><label for="allDay"></label> ganztags </div> 
             <div id="startTimeInp">
                 <input type="text"  name="date-start" id="startTime" class="text ui-widget-content ui-corner-all time">
             </div>
@@ -359,7 +418,7 @@
                 Benutzer:
             </div> 
             <div id="userDrop">
-                <select class="b1" name="user">
+                <select id="user" class="b1" name="user">
                     <option value="1" checked >Ronny kumke
                     <option value="2" >Dennis Sonnwald
                     <option value="3" >Martin Gröni

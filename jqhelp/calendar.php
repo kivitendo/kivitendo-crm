@@ -39,6 +39,12 @@
             //print_r( $rs ); 
             echo json_encode($rs);  
         break; 
+        case "getUsers":
+            $sql="SELECT id, login, name FROM employee WHERE deleted = FALSE;";
+            $rs=$_SESSION['db']->getAll($sql);
+            //print_r( $rs ); 
+            echo json_encode($rs);  
+        break;
        
      }    
    

@@ -1,13 +1,15 @@
 <?php
     require_once("../inc/stdLib.php"); 
     require_once("../inc/crmLib.php");  
-    $task  = $_POST['task'] ? $_POST['task'] : "getEvents";
+    $task  = $_POST['task'] ? $_POST['task'] : $_GET['task'];
+    if( !$task ) $task = 'getEvents';
     $title = $_POST['title'];
     $start = $_POST['start'];
     $end   = $_POST['end'];
     $desc  = $_POST['desc'];
     $id    = $_POST['id'];
     $allDay = $_POST['allDay'];
+    $uid    = $_POST['uid'];
     //$url = $_POST['url'];
     switch( $task ){
         case "newEvent":
@@ -18,7 +20,7 @@
             echo $rs['max'];  
         break;
         case "updateEvent":
-            $sql="UPDATE termine SET cause = '$title', start = '$start'::TIMESTAMP, stop = '$end'::TIMESTAMP, c_cause = '$desc', allday = $allDay WHERE id = $id";
+            $sql="UPDATE termine SET cause = '$title', start = '$start'::TIMESTAMP, stop = '$end'::TIMESTAMP, c_cause = '$desc', allday = $allDay, uid = '$uid' WHERE id = $id";
             $rc=$_SESSION['db']->query($sql);   
         break;
         case "updateTimestamp":
@@ -30,7 +32,7 @@
             $rc=$_SESSION['db']->query($sql);   
         break;
         case "getEvents":
-            $sql="SELECT cause AS title, start, stop AS end, c_cause AS desc, id, allday FROM termine";
+            $sql="SELECT cause AS title, start, stop AS end, c_cause AS desc, id, allday, uid FROM termine";
             $rs=$_SESSION['db']->getAll($sql);
             foreach( $rs as $key => $value ){
                 $rs[$key]['allDay'] = $rs[$key]['allday'] == 't' ? true : false;
@@ -40,10 +42,10 @@
             echo json_encode($rs);  
         break; 
         case "getUsers":
-            $sql="SELECT id, login, name FROM employee WHERE deleted = FALSE;";
-            $rs=$_SESSION['db']->getAll($sql);
+            $sql="SELECT id AS value, name AS text FROM employee WHERE deleted = FALSE"; //login
+            $rs=$_SESSION['db']->getAll( $sql );
             //print_r( $rs ); 
-            echo json_encode($rs);  
+            echo json_encode( $rs ) ;  
         break;
        
      }    

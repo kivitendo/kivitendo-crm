@@ -15,19 +15,12 @@
     echo $head['THEME'];
     echo $head['FULLCALJS'];
     echo $head['JQBOX'];
-    //print_r( $_SESSION );
+  //print_r( $_SESSION );
 
 ?>
-
-
 <script>
-
-	$(document).ready(function() {
-        
-
-        
-     
-        var id = 0;//delete
+    $(document).ready(function() {
+        //var id = 0;//delete
         $( "#dialog" ).dialog({
             autoOpen: false,
             height: 500 ,
@@ -43,58 +36,55 @@
                     var desc = $( "#desc" ).val();
                     var id = $( "#id" ).val();
                     var allDay = $( "#allDay" ).is( ":checked" );
+                    var uid = $("#user option:selected").val();
                     
                     if ( title ) {
-				        event = { //wird benötigt???
-						  title: title,
-						  start: start_cur,
-						  end: end_cur,
-						  id : id,
-						  desc: desc,
-						  allDay: allDay
-					   } 
-                    start = moment(start).format( "YYYY-MM-DD HH:mm:ss");
-                    end = moment(end).format( "YYYY-MM-DD HH:mm:ss");
-                    $.ajax({
-                        url: 'jqhelp/calendar.php',
-                        data: {
-                            task:  $("#id").val() ? 'updateEvent' : 'newEvent', 
-                            title: $("#title").val(),
-                            desc: $("#desc").val(),
-                            id:   $("#id").val(),
-                            allDay: $( "#allDay" ).is( ":checked" ),
-                            start: start,
-                            end: end
-                        },
-                        type: "POST",
-                        success: function(lastid) {
-                            //var text = id ? 'Event updated' : 'Event added';
-                            //alert( text + "LastID: " + lastid );
-                            if( !$("#id").val() ){
-                                $( "#id" ).val(lastid);
-                                id = lastid;
-                                //event.id = lastid;
+                        event = { //wird benötigt???
+	                           title: title,
+                            start: start_cur,
+                            end: end_cur,
+                            id : id,
+                            desc: desc,
+                            allDay: allDay,
+                            uid : uid
+                        } 
+                        start = moment(start).format( "YYYY-MM-DD HH:mm:ss");
+                        end = moment(end).format( "YYYY-MM-DD HH:mm:ss");
+                        $.ajax({
+                            url: 'jqhelp/calendar.php',
+                            data: {
+                                task:  $("#id").val() ? 'updateEvent' : 'newEvent', 
+                                title: $("#title").val(),
+                                desc: $("#desc").val(),
+                                id:   $("#id").val(),
+                                allDay: $( "#allDay" ).is( ":checked" ),
+                                uid : $("#user option:selected").val(),
+                                start: start,
+                                end: end
+                            },
+                            type: "POST",
+                            success: function(lastid) {
+                                if( !$("#id").val() ){
+                                    $( "#id" ).val(lastid);
+                                    id = lastid;
+                                }
+                                //$('#calendar').fullCalendar('rerenderEvents')
+                            },
+                            error: function () {
+                                alert('Ajax Error');
                             }
-                            //$('#calendar').fullCalendar('rerenderEvents')
-                        },
-                        error: function () {
-                            alert('Ajax Error');
-                        }
-                    })
-                    
-                    //if( event.id ) $('#calendar').fullCalendar('removeEvents', event.id);// Wenn keine id dann hier letzte id holen
-                    ///$('#calendar').fullCalendar('renderEvent', event)
-                    $('#calendar').fullCalendar("refetchEvents");//!!!doof ist dass alle Events neu geholt werden!!!!
+                        })
+                        //if( event.id ) $('#calendar').fullCalendar('removeEvents', event.id);// Wenn keine id dann hier letzte id holen
+                        ///$('#calendar').fullCalendar('renderEvent', event)
+                        $('#calendar').fullCalendar("refetchEvents");//!!!doof ist dass alle Events neu geholt werden!!!!
+                        //$('#calendar').fullCalendar('unselect');
                 
-                //$('#calendar').fullCalendar('unselect');
-                
-				}
-			    else alert('Title is empty');                  
-                $( this ).dialog( "close" );
+                    }
+                    else alert('Title is empty');                  
+                    $( this ).dialog( "close" );
                 },
                 Delete: function() { 
                     var id = $( "#id" ).val(); 
-                       
                     if( id ) $('#calendar').fullCalendar('removeEvents', id);                
                     $.ajax({
                         url: 'jqhelp/calendar.php',
@@ -121,110 +111,71 @@
             close: function() {                       
                 $( this ).dialog( "close" );
             }
-
         });
 
-		$('#calendar').fullCalendar({
-		    theme: true,
-			header: {
-				left: 'prev,next today',
-				center: 'title, test',
-				right: 'month,agendaWeek,agendaDay'
-			},
-			minTime: '<?php echo $_SESSION['termbegin'] ? $_SESSION['termbegin'] : 7;echo ":00"; ?>',
-			maxTime: '<?php echo $_SESSION['termend'] ? $_SESSION['termend'] : 19; echo ":00"; ?>',
-			slotDuration: '<?php echo "00:";echo $_SESSION['termseq'] ? $_SESSION['termseq'] : 30; echo ":00"; ?>', //termseq
-			weekNumbers: true,
-			editable: true,
-		    eventClick: function(event) {//edit Event
-		        //alert( "allDay: " + event.allDay );
-		        //console.log( "Event: %o ", event );
-		        $("#title").val(event.title);
-		        $("#desc").val(event.desc);
-		        if( event.id ) $( "#id" ).val( event.id );//$( "#id" ).val()
-		        if( event.allDay ) $("#allDay").prop( 'checked',true );
-		       
-		        
-	           //alert( "event.allDay: " + event.allDay );
-		        //    console.log( "allDay %o", $("#allDay" ))
-		        $( "#startDate" ).val( moment( event.start ).format( "L") );
-		        $( "#startTime" ).val( moment( event.start ).format( "LT") );
-		        $( "#endDate" ).val( moment( event.end ? event.end : event.start ).format( "L") );
-		        $( "#endTime" ).val( moment( event.end ? event.end : event.start ).format( "LT") );
-		         /*
-		        //DropDown:
-		        $.getJSON("jqhelp/calendar.php", function(data){
-                    $.each(data, function(index, text) {
-                        $('#user').append(
-                            $('<option></option>').val(index).html(text)
-                        );
-                    });
-                });
-		        */
-                $.ajax({
-                    url: 'jqhelp/calendar.php',
-                    data: {
-                        task:  'getUsers', 
-                    },
-                    format: "json",
-                    type: "POST",
-                    success: function(json) {
-                        alert('getUsers' + json);
-                        console.log("Drop! %o" , json);
-                    },
-                    error: function () {
-                        alert('Ajax Error');
-                    }
-                })		        
-		        
-		        
-		        
-		        //alert(  " ID: " +  event.id );
-			     $( "#dialog" ).dialog( "open" );
-				 return false;
-			},
-			defaultView: 'agendaWeek',
-			dragble: true,
-			selectable: true,    
-			selectHelper: true,
-			select: function(start, end) {//new Event
-				$( "#title" ).val('');
-				$( "#desc" ).val('');
-				$( "#id" ).val('');
-				if( $( "#allDay" ).is( ":checked" ) ) $( "#allDay" ).click();
-		        $( "#startDate" ).val( moment( start ).format( "L") );
-		        $( "#startTime" ).val( moment( start ).format( "LT") );
-		        $( "#endDate" ).val( moment( end ).format( "L") );
-		        $( "#endTime" ).val( moment( end ).format( "LT") );
-		        $.ajax({
-                    url: 'jqhelp/calendar.php',
-                    data: {
-                        task:  'getUsers', 
-                    },
-                    format: "json",
-                    type: "POST",
-                    success: function(json) {
-                         alert('getUsers' + json);
-                         console.log("Drop! %o" , json);
-                    },
-                    error: function () {
-                        alert('Ajax Error');
-                    }
-                })	
-			    $( "#dialog" ).dialog( "open" );
-  
-			},
-			//Triggered when dragging stops and the event has moved to a different day/time.
-			eventDrop: function(event, testxx, dayDelta) {
-			    alert("Drop! "  + event.end)
-			    console.log("Drop! %o" ,event);
+        $('#calendar').fullCalendar({
+            theme: true,
+            header: {
+                left: 'prev,next today',
+                center: 'title, test',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            minTime: '<?php echo $_SESSION['termbegin'] ? $_SESSION['termbegin'] : 7;echo ":00"; ?>',
+            maxTime: '<?php echo $_SESSION['termend'] ? $_SESSION['termend'] : 19; echo ":00"; ?>',
+            slotDuration: '<?php echo "00:";echo $_SESSION['termseq'] ? $_SESSION['termseq'] : 30; echo ":00"; ?>', //termseq
+            weekNumbers: true,
+            editable: true,
+            defaultView: 'agendaWeek',
+            dragble: true,
+            selectable: true,    
+            selectHelper: true,
+            events: 'jqhelp/calendar.php',
+			        //data: { task:  'getEvents' },
+			        type: "POST",
+            /*** New Event ************************************************************************************/
+            select: function( start, end ) {
+                $( "#title" ).val('');
+				           $( "#desc" ).val('');
+				           $( "#id" ).val('');
+				           if( $( "#allDay" ).is( ":checked" ) )  $("#allDay").prop( 'checked', false );
+				           $("#allDay").button({ text: false}).click(function(e) { //ins UI-Kleid
+                    $(this).button("option", {
+                        icons: { primary: $(this)[0].checked ? "ui-icon-check" : "" }
+                    })
+                })
+                $( "#startDate" ).val( moment( start ).format( "L") );
+                $( "#startTime" ).val( moment( start ).format( "LT") );
+                $( "#endDate" ).val( moment( end ).format( "L") );
+                $( "#endTime" ).val( moment( end ).format( "LT") );
+                $( "#user" ).data("selectBox-selectBoxIt").selectOption("<?php echo $_SESSION['loginCRM']; ?>");
+                $( "#dialog" ).dialog( "open" );
+            },
+            /*** Edit Event *************************************************************************************/
+            eventClick: function( event ){        
+                $( "#title" ).val( event.title );
+                $( "#desc" ).val( event.desc );
+                //if( event.id ) delete.me 
+                $( "#id" ).val( event.id );
+                if( event.allDay ) $("#allDay").prop( 'checked',true );
+                $("#allDay").button({ text: false}).click(function(e) {
+                    $(this).button("option", {
+                        icons: { primary: $(this)[0].checked ? "ui-icon-check" : "" }
+                    })
+                })
+                $( "#startDate" ).val( moment( event.start ).format( "L") );
+                $( "#startTime" ).val( moment( event.start ).format( "LT") );
+                $( "#endDate" ).val( moment( event.end ? event.end : event.start ).format( "L") );
+                $( "#endTime" ).val( moment( event.end ? event.end : event.start ).format( "LT") );
+                $( "#user" ).data("selectBox-selectBoxIt").selectOption(event.uid);
+                $( "#dialog" ).dialog( "open" );
+				           return false;
+            },
+            /*** Move Event *************************************************************************************/
+            eventDrop: function(event, testxx, dayDelta) {
                 var start = moment(event.start).format( "YYYY-MM-DD HH:mm:ss");
-                //alert(start);
-                var tst = moment(event.start).add('h', 1);
-                var end   = event.end ? moment(event.end).format( "YYYY-MM-DD HH:mm:ss") : moment(event.tst).format( "YYYY-MM-DD HH:mm:ss");//.add('h', 1);;//xxx
-                
-                //var delta = moment(dayDelta).format( "YYYY-MM-DD HH:mm:ss");
-                //alert( "Delta: " +delta );
+                //var tst = moment(event.start).add('h', 1);
+                //var end  = event.end ? moment(event.end).format( "YYYY-MM-DD HH:mm:ss") : moment(event.tst).format( "YYYY-MM-DD HH:mm:ss");//.add('h', 1);;//
+                var end  = moment(event.end).format( "YYYY-MM-DD HH:mm:ss");
                 $.ajax({
                     url: 'jqhelp/calendar.php',
                     data: {
@@ -243,7 +194,7 @@
                     }
                 });
             },
-            //Triggered when resizing stops and the event has changed in duration. Dauer
+            /*** Rezize Time ********************************************************************************************/
             eventResize: function(event) {
                 var start = moment(event.start).format( "YYYY-MM-DD HH:mm:ss");
                 var end   = moment(event.end).format( "YYYY-MM-DD HH:mm:ss");
@@ -265,36 +216,30 @@
                     }
                 });
             },
-			
-			events: 'jqhelp/calendar.php',
-			data: { task:  'getEvents' },
-			type: "POST",    
-			
-		});
-		$("select").selectBoxIt({
+        });
+        /*** SelectBox User **********************************************************************************************/
+        $("#user").selectBoxIt({
             theme:       "jqueryui",
             autoWidth:   true,
-            height: "12"
-            //hideCurrent:  true,
-            
+            height: "12",
+            populate: function() {
+                var deferred = $.Deferred()
+                $.ajax({
+                    url: 'jqhelp/calendar.php',
+                    data: { task:  'getUsers'},
+                }).done(function(json) {
+                    var obj = $.parseJSON( json.trim() );
+                    deferred.resolve(obj);
+                });
+                return deferred;
+            }
         })
-		$( "div#radioTermin,div#radioPrio" ).buttonset();//.find('label').height(28);;
+        
+        $( "div#radioTermin,div#radioPrio" ).buttonset();//.find('label').height(28);;
 		
-		$(".inp-checkboxx").button({ text: false})
-            .click(function(e) {
-                $(this).button("option", {
-                    icons: {
-                        primary: $(this)[0].checked ? "ui-icon-check" : ""
-                    }
-                })
-            })
-            .prop(function(f){
-                $(this).button("option", {
-                    icons: {
-                        primary: $(this)[0].checked ? "ui-icon-check" : ""
-                    }
-                })
-            }); 
+
+            
+  // }); 
 		
 	});
 
@@ -326,7 +271,7 @@
     #endTimeInp     { position:absolute; top:80px; left:195px;}
     #kategorie      { position:absolute; top:120px; left:34px; }
     #kategorieDrop  { position:absolute; top:140px; left:32px;}
-    #user           { position:absolute; top:120px; left:220px; }
+    #userLabel      { position:absolute; top:120px; left:220px; }
     #userDrop       { position:absolute; top:140px; left:218px;}
     #prio           { position:absolute; top:120px; left:400px; }
     #radioPrio      { position:absolute; top:140px; left:398px;}
@@ -414,15 +359,12 @@
                     <option value="4" >Sontige
                 </select> 
             </div>
-            <div id="user">
+            <div id="userLabel">
                 Benutzer:
             </div> 
             <div id="userDrop">
-                <select id="user" class="b1" name="user">
-                    <option value="1" checked >Ronny kumke
-                    <option value="2" >Dennis Sonnwald
-                    <option value="3" >Martin Gröni
-                    <option value="4" >Maria Carry
+                <select id="user" >
+                
                 </select> 
             </div>
             <div id="prio">

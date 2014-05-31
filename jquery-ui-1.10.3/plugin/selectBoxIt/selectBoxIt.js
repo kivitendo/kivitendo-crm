@@ -1800,6 +1800,124 @@
 
     // Stores the plugin prototype object in a local variable
     var selectBoxIt = $.selectBox.selectBoxIt.prototype;
+
+    // Accessibility Module
+    // ====================
+
+    // _ARIA Accessibility
+    // ------------------
+    //      Adds ARIA (Accessible Rich Internet Applications)
+    //      Accessibility Tags to the Select Box
+
+    selectBoxIt._ariaAccessibility = function() {
+
+        var self = this,
+            dropdownLabel = $("label[for='" + self.originalElem.id + "']");
+
+        // Adds `ARIA attributes` to the dropdown list
+        self.dropdownContainer.attr({
+
+            // W3C `combobox` description: A presentation of a select; usually similar to a textbox where users can type ahead to select an option.
+            "role": "combobox",
+
+            //W3C `aria-autocomplete` description: Indicates whether user input completion suggestions are provided.
+            "aria-autocomplete": "list",
+
+            "aria-haspopup": "true",
+
+            // W3C `aria-expanded` description: Indicates whether the element, or another grouping element it controls, is currently expanded or collapsed.
+            "aria-expanded": "false",
+
+            // W3C `aria-owns` description: The value of the aria-owns attribute is a space-separated list of IDREFS that reference one or more elements in the document by ID. The reason for adding aria-owns is to expose a parent/child contextual relationship to assistive technologies that is otherwise impossible to infer from the DOM.
+            "aria-owns": self.list[0].id
+
+        });
+
+        self.dropdownText.attr({
+
+            "aria-live": "polite"
+
+        });
+
+        // Dynamically adds `ARIA attributes` if the new dropdown list is enabled or disabled
+        self.dropdown.on({
+
+            //Select box custom `disable` event with the `selectBoxIt` namespace
+            "disable.selectBoxIt" : function() {
+
+                // W3C `aria-disabled` description: Indicates that the element is perceivable but disabled, so it is not editable or otherwise operable.
+                self.dropdownContainer.attr("aria-disabled", "true");
+
+            },
+
+            // Select box custom `enable` event with the `selectBoxIt` namespace
+            "enable.selectBoxIt" : function() {
+
+                // W3C `aria-disabled` description: Indicates that the element is perceivable but disabled, so it is not editable or otherwise operable.
+                self.dropdownContainer.attr("aria-disabled", "false");
+
+            }
+
+        });
+
+        if(dropdownLabel.length) {
+
+            // MDN `aria-labelledby` description:  Indicates the IDs of the elements that are the labels for the object.
+            self.dropdownContainer.attr("aria-labelledby", dropdownLabel[0].id);
+
+        }
+
+        // Adds ARIA attributes to the dropdown list options list
+        self.list.attr({
+
+            // W3C `listbox` description: A widget that allows the user to select one or more items from a list of choices.
+            "role": "listbox",
+
+            // Indicates that the dropdown list options list is currently hidden
+            "aria-hidden": "true"
+
+        });
+
+        // Adds `ARIA attributes` to the dropdown list options
+        self.listItems.attr({
+
+            // This must be set for each element when the container element role is set to `listbox`
+            "role": "option"
+
+        });
+
+        // Dynamically updates the new dropdown list `aria-label` attribute after the original dropdown list value changes
+        self.selectBox.on({
+
+            // Custom `open` event with the `selectBoxIt` namespace
+            "open.selectBoxIt": function() {
+
+                // Indicates that the dropdown list options list is currently visible
+                self.list.attr("aria-hidden", "false");
+
+                // Indicates that the dropdown list is currently expanded
+                self.dropdownContainer.attr("aria-expanded", "true");
+
+            },
+
+            // Custom `close` event with the `selectBoxIt` namespace
+            "close.selectBoxIt": function() {
+
+                // Indicates that the dropdown list options list is currently hidden
+                self.list.attr("aria-hidden", "true");
+
+                // Indicates that the dropdown list is currently collapsed
+                self.dropdownContainer.attr("aria-expanded", "false");
+
+            }
+
+        });
+
+        // Maintains chainability
+        return self;
+
+    };
+
     // Copy Attributes Module
     // ======================
 
@@ -1862,6 +1980,523 @@
         return self;
 
     };
+// Destroy Module
+// ==============
+
+// Destroy
+// -------
+//    Removes the plugin from the page
+
+selectBoxIt.destroy = function(callback) {
+
+    // Stores the plugin context inside of the self variable
+    var self = this;
+
+    self._destroySelectBoxIt();
+
+    // Calls the jQueryUI Widget Factory destroy method
+    self.widgetProto.destroy.call(self);
+
+    // Provides callback function support
+    self._callbackSupport(callback);
+
+    // Maintains chainability
+    return self;
+
+};
+
+// Internal Destroy Method
+// -----------------------
+//    Removes the plugin from the page
+
+selectBoxIt._destroySelectBoxIt = function() {
+
+    // Stores the plugin context inside of the self variable
+    var self = this;
+
+    // Unbinds all of the dropdown list event handlers with the `selectBoxIt` namespace
+    self.dropdown.off(".selectBoxIt");
+
+    // If the original select box has been placed inside of the new drop down container
+    if ($.contains(self.dropdownContainer[0], self.originalElem)) {
+
+        // Moves the original select box before the drop down container
+        self.dropdownContainer.before(self.selectBox);
+
+    }
+
+    // Remove all of the `selectBoxIt` DOM elements from the page
+    self.dropdownContainer.remove();
+
+    // Resets the style attributes for the original select box
+    self.selectBox.removeAttr("style").attr("style", self.selectBoxStyles);
+
+    // Triggers the custom `destroy` event on the original select box
+    self.triggerEvent("destroy");
+
+    // Maintains chainability
+    return self;
+
+};
+
+    // Disable Module
+    // ==============
+
+    // Disable
+    // -------
+    //      Disables the new dropdown list
+
+    selectBoxIt.disable = function(callback) {
+
+        var self = this;
+
+        if(!self.options["disabled"]) {
+
+            // Makes sure the dropdown list is closed
+            self.close();
+
+            // Sets the `disabled` attribute on the original select box
+            self.selectBox.attr("disabled", "disabled");
+
+            // Makes the dropdown list not focusable by removing the `tabindex` attribute
+            self.dropdown.removeAttr("tabindex").
+
+            // Disables styling for enabled state
+            removeClass(self.theme["enabled"]).
+
+            // Enabled styling for disabled state
+            addClass(self.theme["disabled"]);
+
+            self.setOption("disabled", true);
+
+            // Triggers a `disable` custom event on the original select box
+            self.triggerEvent("disable");
+
+        }
+
+        // Provides callback function support
+        self._callbackSupport(callback);
+
+        // Maintains chainability
+        return self;
+
+    };
+
+    // Disable Option
+    // --------------
+    //      Disables a single drop down option
+
+    selectBoxIt.disableOption = function(index, callback) {
+
+        var self = this, currentSelectBoxOption, hasNextEnabled, hasPreviousEnabled, type = $.type(index);
+
+        // If an index is passed to target an indropdownidual drop down option
+        if(type === "number") {
+
+            // Makes sure the dropdown list is closed
+            self.close();
+
+            // The select box option being targeted
+            currentSelectBoxOption = self.selectBox.find("option").eq(index);
+
+            // Triggers a `disable-option` custom event on the original select box and passes the disabled option
+            self.triggerEvent("disable-option");
+
+            // Disables the targeted select box option
+            currentSelectBoxOption.attr("disabled", "disabled");
+
+            // Disables the drop down option
+            self.listItems.eq(index).attr("data-disabled", "true").
+
+            // Applies disabled styling for the drop down option
+            addClass(self.theme["disabled"]);
+
+            // If the currently selected drop down option is the item being disabled
+            if(self.currentFocus === index) {
+
+                hasNextEnabled = self.listItems.eq(self.currentFocus).nextAll("li").not("[data-disabled='true']").first().length;
+
+                hasPreviousEnabled = self.listItems.eq(self.currentFocus).prevAll("li").not("[data-disabled='true']").first().length;
+
+                // If there is a currently enabled option beneath the currently selected option
+                if(hasNextEnabled) {
+
+                    // Selects the option beneath the currently selected option
+                    self.moveDown();
+
+                }
+
+                // If there is a currently enabled option above the currently selected option
+                else if(hasPreviousEnabled) {
+
+                    // Selects the option above the currently selected option
+                    self.moveUp();
+
+                }
+
+                // If there is not a currently enabled option
+                else {
+
+                    // Disables the entire drop down list
+                    self.disable();
+
+                }
+
+            }
+
+        }
+
+        // Provides callback function support
+        self._callbackSupport(callback);
+
+        // Maintains chainability
+        return self;
+
+    };
+
+    // _Is Disabled
+    // -----------
+    //      Checks the original select box for the
+    //    disabled attribute
+
+    selectBoxIt._isDisabled = function(callback) {
+
+        var self = this;
+
+        // If the original select box is disabled
+        if (self.originalElem.disabled) {
+
+            // Disables the dropdown list
+            self.disable();
+
+        }
+
+        // Maintains chainability
+        return self;
+
+    };
+
+    // Dynamic Positioning Module
+    // ==========================
+
+    // _Dynamic positioning
+    // --------------------
+    //      Dynamically positions the dropdown list options list
+
+    selectBoxIt._dynamicPositioning = function() {
+
+        var self = this;
+
+        // If the `size` option is a number
+        if($.type(self.listSize) === "number") {
+
+            // Set's the max-height of the drop down list
+            self.list.css("max-height", self.maxHeight || "none");
+
+        }
+
+        // If the `size` option is not a number
+        else {
+
+            // Returns the x and y coordinates of the dropdown list options list relative to the document
+            var listOffsetTop = self.dropdown.offset().top,
+
+                // The height of the dropdown list options list
+                listHeight = self.list.data("max-height") || self.list.outerHeight(),
+
+                // The height of the dropdown list DOM element
+                selectBoxHeight = self.dropdown.outerHeight(),
+
+                viewport = self.options["viewport"],
+
+                viewportHeight = viewport.height(),
+
+                viewportScrollTop = $.isWindow(viewport.get(0)) ? viewport.scrollTop() : viewport.offset().top,
+
+                topToBottom = (listOffsetTop + selectBoxHeight + listHeight <= viewportHeight + viewportScrollTop),
+
+                bottomReached = !topToBottom;
+
+            if(!self.list.data("max-height")) {
+
+              self.list.data("max-height", self.list.outerHeight());
+
+            }
+
+            // If there is room on the bottom of the viewport to display the drop down options
+            if (!bottomReached) {
+
+                self.list.css("max-height", listHeight);
+
+                // Sets custom CSS properties to place the dropdown list options directly below the dropdown list
+                self.list.css("top", "auto");
+
+            }
+
+            // If there is room on the top of the viewport
+            else if((self.dropdown.offset().top - viewportScrollTop) >= listHeight) {
+
+                self.list.css("max-height", listHeight);
+
+                // Sets custom CSS properties to place the dropdown list options directly above the dropdown list
+                self.list.css("top", (self.dropdown.position().top - self.list.outerHeight()));
+
+            }
+
+            // If there is not enough room on the top or the bottom
+            else {
+
+                var outsideBottomViewport = Math.abs((listOffsetTop + selectBoxHeight + listHeight) - (viewportHeight + viewportScrollTop)),
+
+                    outsideTopViewport = Math.abs((self.dropdown.offset().top - viewportScrollTop) - listHeight);
+
+                // If there is more room on the bottom
+                if(outsideBottomViewport < outsideTopViewport) {
+
+                    self.list.css("max-height", listHeight - outsideBottomViewport - (selectBoxHeight/2));
+
+                    self.list.css("top", "auto");
+
+                }
+
+                // If there is more room on the top
+                else {
+
+                    self.list.css("max-height", listHeight - outsideTopViewport - (selectBoxHeight/2));
+
+                    // Sets custom CSS properties to place the dropdown list options directly above the dropdown list
+                    self.list.css("top", (self.dropdown.position().top - self.list.outerHeight()));
+
+                }
+
+            }
+
+        }
+
+        // Maintains chainability
+        return self;
+
+    };
+
+    // Enable Module
+    // =============
+
+    // Enable
+    // ------
+    //      Enables the new dropdown list
+
+    selectBoxIt.enable = function(callback) {
+
+        var self = this;
+
+        if(self.options["disabled"]) {
+
+            // Triggers a `enable` custom event on the original select box
+            self.triggerEvent("enable");
+
+            // Removes the `disabled` attribute from the original dropdown list
+            self.selectBox.removeAttr("disabled");
+
+            // Make the dropdown list focusable
+            self.dropdown.attr("tabindex", 0).
+
+            // Disable styling for disabled state
+            removeClass(self.theme["disabled"]).
+
+            // Enables styling for enabled state
+            addClass(self.theme["enabled"]);
+
+            self.setOption("disabled", false);
+
+            // Provide callback function support
+            self._callbackSupport(callback);
+
+        }
+
+        // Maintains chainability
+        return self;
+
+    };
+
+    // Enable Option
+    // -------------
+    //      Disables a single drop down option
+
+    selectBoxIt.enableOption = function(index, callback) {
+
+        var self = this, currentSelectBoxOption, currentIndex = 0, hasNextEnabled, hasPreviousEnabled, type = $.type(index);
+
+        // If an index is passed to target an indropdownidual drop down option
+        if(type === "number") {
+
+            // The select box option being targeted
+            currentSelectBoxOption = self.selectBox.find("option").eq(index);
+
+            // Triggers a `enable-option` custom event on the original select box and passes the enabled option
+            self.triggerEvent("enable-option");
+
+            // Disables the targeted select box option
+            currentSelectBoxOption.removeAttr("disabled");
+
+            // Disables the drop down option
+            self.listItems.eq(index).attr("data-disabled", "false").
+
+            // Applies disabled styling for the drop down option
+            removeClass(self.theme["disabled"]);
+
+        }
+
+        // Provides callback function support
+        self._callbackSupport(callback);
+
+        // Maintains chainability
+        return self;
+
+    };
+
+    // Keyboard Navigation Module
+    // ==========================
+
+    // Move Down
+    // ---------
+    //      Handles the down keyboard navigation logic
+
+    selectBoxIt.moveDown = function(callback) {
+
+        var self = this;
+
+        // Increments `currentFocus`, which represents the currently focused list item `id` attribute.
+        self.currentFocus += 1;
+
+        // Determines whether the dropdown option the user is trying to go to is currently disabled
+        var disabled = self.listItems.eq(self.currentFocus).attr("data-disabled") === "true" ? true: false,
+
+            hasNextEnabled = self.listItems.eq(self.currentFocus).nextAll("li").not("[data-disabled='true']").first().length;
+
+        // If the user has reached the top of the list
+        if (self.currentFocus === self.listItems.length) {
+
+            // Does not allow the user to continue to go up the list
+            self.currentFocus -= 1;
+
+        }
+
+        // If the option the user is trying to go to is disabled, but there is another enabled option
+        else if (disabled && hasNextEnabled) {
+
+            // Blur the previously selected option
+            self.listItems.eq(self.currentFocus - 1).blur();
+
+           // Call the `moveDown` method again
+            self.moveDown();
+
+            // Exit the method
+            return;
+
+        }
+
+        // If the option the user is trying to go to is disabled, but there is not another enabled option
+        else if (disabled && !hasNextEnabled) {
+
+            self.currentFocus -= 1;
+
+        }
+
+        // If the user has not reached the bottom of the unordered list
+        else {
+
+            // Blurs the previously focused list item
+            // The jQuery `end()` method allows you to continue chaining while also using a different selector
+            self.listItems.eq(self.currentFocus - 1).blur().end().
+
+            // Focuses the currently focused list item
+            eq(self.currentFocus).focusin();
+
+            // Calls `scrollToView` to make sure the `scrollTop` is correctly updated. The `down` user action
+            self._scrollToView("down");
+
+            // Triggers the custom `moveDown` event on the original select box
+            self.triggerEvent("moveDown");
+
+        }
+
+        // Provide callback function support
+        self._callbackSupport(callback);
+
+        // Maintains chainability
+        return self;
+
+    };
+
+    // Move Up
+    // ------
+    //      Handles the up keyboard navigation logic
+    selectBoxIt.moveUp = function(callback) {
+
+        var self = this;
+
+        // Increments `currentFocus`, which represents the currently focused list item `id` attribute.
+        self.currentFocus -= 1;
+
+        // Determines whether the dropdown option the user is trying to go to is currently disabled
+        var disabled = self.listItems.eq(self.currentFocus).attr("data-disabled") === "true" ? true: false,
+
+            hasPreviousEnabled = self.listItems.eq(self.currentFocus).prevAll("li").not("[data-disabled='true']").first().length;
+
+        // If the user has reached the top of the list
+        if (self.currentFocus === -1) {
+
+            // Does not allow the user to continue to go up the list
+            self.currentFocus += 1;
+
+        }
+
+        // If the option the user is trying to go to is disabled and the user is not trying to go up after the user has reached the top of the list
+        else if (disabled && hasPreviousEnabled) {
+
+            // Blur the previously selected option
+            self.listItems.eq(self.currentFocus + 1).blur();
+
+            // Call the `moveUp` method again
+            self.moveUp();
+
+            // Exits the method
+            return;
+
+        }
+
+        else if (disabled && !hasPreviousEnabled) {
+
+            self.currentFocus += 1;
+
+        }
+
+        // If the user has not reached the top of the unordered list
+        else {
+
+            // Blurs the previously focused list item
+            // The jQuery `end()` method allows you to continue chaining while also using a different selector
+            self.listItems.eq(this.currentFocus + 1).blur().end().
+
+            // Focuses the currently focused list item
+            eq(self.currentFocus).focusin();
+
+            // Calls `scrollToView` to make sure the `scrollTop` is correctly updated. The `down` user action
+            self._scrollToView("up");
+
+            // Triggers the custom `moveDown` event on the original select box
+            self.triggerEvent("moveUp");
+
+        }
+
+        // Provide callback function support
+        self._callbackSupport(callback);
+
+        // Maintains chainability
+        return self;
+
+    };
+
     // Keyboard Search Module
     // ======================
 
@@ -2069,4 +2704,556 @@
         // Maintains chainability
         return self;
 
-    };})); // End of all modules
+    };
+
+    // Mobile Module
+    // =============
+
+    // Set Mobile Text
+    // ---------------
+    //      Updates the text of the drop down
+    selectBoxIt._updateMobileText = function() {
+
+        var self = this,
+            currentOption,
+            currentDataText,
+            currentText;
+
+        currentOption = self.selectBox.find("option").filter(":selected");
+
+        currentDataText = currentOption.attr("data-text");
+
+        currentText = currentDataText ? currentDataText: currentOption.text();
+
+        // Sets the new dropdown list text to the value of the original dropdown list
+        self._setText(self.dropdownText, currentText);
+
+        if(self.list.find('li[data-val="' + currentOption.val() + '"]').find("i").attr("class")) {
+
+           self.dropdownImage.attr("class", self.list.find('li[data-val="' + currentOption.val() + '"]').find("i").attr("class")).addClass("selectboxit-default-icon");
+
+        }
+
+    };
+
+    // Apply Native Select
+    // -------------------
+    //      Applies the original select box directly over the new drop down
+
+    selectBoxIt._applyNativeSelect = function() {
+
+        // Stores the plugin context inside of the self variable
+        var self = this;
+
+        // Appends the native select box to the drop down (allows for relative positioning using the position() method)
+        self.dropdownContainer.append(self.selectBox);
+
+        self.dropdown.attr("tabindex", "-1");
+
+        // Positions the original select box directly over top the new dropdown list using position absolute and "hides" the original select box using an opacity of 0.  This allows the mobile browser "wheel" interface for better usability.
+        self.selectBox.css({
+
+            "display": "block",
+
+            "visibility": "visible",
+
+            "width": self._realOuterWidth(self.dropdown),
+
+            "height": self.dropdown.outerHeight(),
+
+            "opacity": "0",
+
+            "position": "absolute",
+
+            "top": "0",
+
+            "left": "0",
+
+            "cursor": "pointer",
+
+            "z-index": "999999",
+
+            "margin": self.dropdown.css("margin"),
+
+            "padding": "0",
+
+            "-webkit-appearance": "menulist-button"
+
+        });
+
+        if(self.originalElem.disabled) {
+
+            self.triggerEvent("disable");
+
+        }
+
+        return this;
+
+    };
+
+    // Mobile Events
+    // -------------
+    //      Listens to mobile-specific events
+    selectBoxIt._mobileEvents = function() {
+
+        var self = this;
+
+        self.selectBox.on({
+
+            "changed.selectBoxIt": function() {
+
+                self.hasChanged = true;
+
+                self._updateMobileText();
+
+                // Triggers the `option-click` event on mobile
+                self.triggerEvent("option-click");
+
+            },
+
+            "mousedown.selectBoxIt": function() {
+
+                // If the select box has not been changed, the defaultText option is being used
+                if(!self.hasChanged && self.options.defaultText && !self.originalElem.disabled) {
+
+                    self._updateMobileText();
+
+                    self.triggerEvent("option-click");
+
+                }
+
+            },
+
+            "enable.selectBoxIt": function() {
+
+                // Moves SelectBoxIt onto the page
+                self.selectBox.removeClass('selectboxit-rendering');
+
+            },
+
+            "disable.selectBoxIt": function() {
+
+                // Moves SelectBoxIt off the page
+                self.selectBox.addClass('selectboxit-rendering');
+
+            }
+
+        });
+
+    };
+
+    // Mobile
+    // ------
+    //      Applies the native "wheel" interface when a mobile user is interacting with the dropdown
+
+    selectBoxIt._mobile = function(callback) {
+
+        // Stores the plugin context inside of the self variable
+        var self = this;
+
+            if(self.isMobile) {
+
+                self._applyNativeSelect();
+
+                self._mobileEvents();
+
+            }
+
+            // Maintains chainability
+            return this;
+
+    };
+
+    // Select Option Module
+    // ====================
+
+    // Select Option
+    // -------------
+    //      Programatically selects a drop down option by either index or value
+
+    selectBoxIt.selectOption = function(val, callback) {
+
+        // Stores the plugin context inside of the self variable
+        var self = this,
+            type = $.type(val);
+
+        // Makes sure the passed in position is a number
+        if(type === "number") {
+
+            // Set's the original select box value and triggers the change event (which SelectBoxIt listens for)
+            self.selectBox.val(self.selectItems.eq(val).val()).change();
+
+        }
+
+        else if(type === "string") {
+
+            // Set's the original select box value and triggers the change event (which SelectBoxIt listens for)
+            self.selectBox.val(val).change();
+
+        }
+
+        // Calls the callback function
+        self._callbackSupport(callback);
+
+        // Maintains chainability
+        return self;
+
+    };
+
+    // Set Option Module
+    // =================
+
+    // Set Option
+    // ----------
+    //      Accepts an string key, a value, and a callback function to replace a single
+    //      property of the plugin options object
+
+    selectBoxIt.setOption = function(key, value, callback) {
+
+        var self = this;
+
+        //Makes sure a string is passed in
+        if($.type(key) === "string") {
+
+            // Sets the plugin option to the new value provided by the user
+            self.options[key] = value;
+
+        }
+
+        // Rebuilds the dropdown
+        self.refresh(function() {
+
+            // Provide callback function support
+            self._callbackSupport(callback);
+
+        }, true);
+
+        // Maintains chainability
+        return self;
+
+    };
+
+    // Set Options Module
+    // ==================
+
+    // Set Options
+    // ----------
+    //      Accepts an object to replace plugin options
+    //      properties of the plugin options object
+
+    selectBoxIt.setOptions = function(newOptions, callback) {
+
+        var self = this;
+
+        // If the passed in parameter is an object literal
+        if($.isPlainObject(newOptions)) {
+
+            self.options = $.extend({}, self.options, newOptions);
+
+        }
+
+        // Rebuilds the dropdown
+        self.refresh(function() {
+
+            // Provide callback function support
+            self._callbackSupport(callback);
+
+        }, true);
+
+        // Maintains chainability
+        return self;
+
+    };
+
+    // Wait Module
+    // ===========
+
+    // Wait
+    // ----
+    //    Delays execution by the amount of time
+    //    specified by the parameter
+
+    selectBoxIt.wait = function(time, callback) {
+
+        var self = this;
+
+        self.widgetProto._delay.call(self, callback, time);
+
+        // Maintains chainability
+        return self;
+
+    };
+
+    // Add Options Module
+    // ==================
+
+    // add
+    // ---
+    //    Adds drop down options
+    //    using JSON data, an array,
+    //    a single object, or valid HTML string
+
+    selectBoxIt.add = function(data, callback) {
+
+        this._populate(data, function(data) {
+
+            var self = this,
+                dataType = $.type(data),
+                value,
+                x = 0,
+                dataLength,
+                elems = [],
+                isJSON = self._isJSON(data),
+                parsedJSON = isJSON && self._parseJSON(data);
+
+            // If the passed data is a local or JSON array
+            if(data && (dataType === "array" || (isJSON && parsedJSON.data && $.type(parsedJSON.data) === "array")) || (dataType === "object" && data.data && $.type(data.data) === "array")) {
+
+                // If the data is JSON
+                if(self._isJSON(data)) {
+
+                    // Parses the JSON and stores it in the data local variable
+                    data = parsedJSON;
+
+                }
+
+                // If there is an inner `data` property stored in the first level of the JSON array
+                if(data.data) {
+
+                    // Set's the data to the inner `data` property
+                    data = data.data;
+
+                }
+
+                // Loops through the array
+                for(dataLength = data.length; x <= dataLength - 1; x += 1) {
+
+                    // Stores the currently traversed array item in the local `value` variable
+                    value = data[x];
+
+                    // If the currently traversed array item is an object literal
+                    if($.isPlainObject(value)) {
+
+                        // Adds an option to the elems array
+                        elems.push($("<option/>", value));
+
+                    }
+
+                    // If the currently traversed array item is a string
+                    else if($.type(value) === "string") {
+
+                        // Adds an option to the elems array
+                        elems.push($("<option/>", { text: value, value: value }));
+
+                    }
+
+                }
+
+                // Appends all options to the drop down (with the correct object configurations)
+                self.selectBox.append(elems);
+
+            }
+
+            // if the passed data is an html string and not a JSON string
+            else if(data && dataType === "string" && !self._isJSON(data)) {
+
+                // Appends the html string options to the original select box
+                self.selectBox.append(data);
+
+            }
+
+            else if(data && dataType === "object") {
+
+                // Appends an option to the original select box (with the object configurations)
+                self.selectBox.append($("<option/>", data));
+
+            }
+
+            else if(data && self._isJSON(data) && $.isPlainObject(self._parseJSON(data))) {
+
+                // Appends an option to the original select box (with the object configurations)
+                self.selectBox.append($("<option/>", self._parseJSON(data)));
+
+            }
+
+            // If the dropdown property exists
+            if(self.dropdown) {
+
+                // Rebuilds the dropdown
+                self.refresh(function() {
+
+                    // Provide callback function support
+                    self._callbackSupport(callback);
+
+                }, true);
+
+            } else {
+
+                // Provide callback function support
+                self._callbackSupport(callback);
+
+            }
+
+            // Maintains chainability
+            return self;
+
+        });
+
+    };
+
+    // parseJSON
+    // ---------
+    //      Detects JSON support and parses JSON data
+    selectBoxIt._parseJSON = function(data) {
+
+        return (JSON && JSON.parse && JSON.parse(data)) || $.parseJSON(data);
+
+    };
+
+    // isjSON
+    // ------
+    //    Determines if a string is valid JSON
+
+    selectBoxIt._isJSON = function(data) {
+
+        var self = this,
+            json;
+
+        try {
+
+            json = self._parseJSON(data);
+
+            // Valid JSON
+            return true;
+
+        } catch (e) {
+
+            // Invalid JSON
+            return false;
+
+        }
+
+    };
+
+    // _populate
+    // --------
+    //    Handles asynchronous and synchronous data
+    //    to populate the select box
+
+    selectBoxIt._populate = function(data, callback) {
+
+        var self = this;
+
+        data = $.isFunction(data) ? data.call() : data;
+
+        if(self.isDeferred(data)) {
+
+            data.done(function(returnedData) {
+
+                callback.call(self, returnedData);
+
+            });
+
+        }
+
+        else {
+
+            callback.call(self, data);
+
+        }
+
+        // Maintains chainability
+        return self;
+
+    };
+
+    // Remove Options Module
+    // =====================
+
+    // remove
+    // ------
+    //    Removes drop down list options
+    //    using an index
+
+    selectBoxIt.remove = function(indexes, callback) {
+
+        var self = this,
+            dataType = $.type(indexes),
+            value,
+            x = 0,
+            dataLength,
+            elems = "";
+
+        // If an array is passed in
+        if(dataType === "array") {
+
+            // Loops through the array
+            for(dataLength = indexes.length; x <= dataLength - 1; x += 1) {
+
+                // Stores the currently traversed array item in the local `value` variable
+                value = indexes[x];
+
+                // If the currently traversed array item is an object literal
+                if($.type(value) === "number") {
+
+                    if(elems.length) {
+
+                        // Adds an element to the removal string
+                        elems += ", option:eq(" + value + ")";
+
+                    }
+
+                    else {
+
+                        // Adds an element to the removal string
+                        elems += "option:eq(" + value + ")";
+
+                    }
+
+                }
+
+            }
+
+            // Removes all of the appropriate options from the select box
+            self.selectBox.find(elems).remove();
+
+        }
+
+        // If a number is passed in
+        else if(dataType === "number") {
+
+            self.selectBox.find("option").eq(indexes).remove();
+
+        }
+
+        // If anything besides a number or array is passed in
+        else {
+
+            // Removes all of the options from the original select box
+            self.selectBox.find("option").remove();
+
+        }
+
+        // If the dropdown property exists
+        if(self.dropdown) {
+
+            // Rebuilds the dropdown
+            self.refresh(function() {
+
+                // Provide callback function support
+                self._callbackSupport(callback);
+
+            }, true);
+
+        } else {
+
+            // Provide callback function support
+            self._callbackSupport(callback);
+
+        }
+
+        // Maintains chainability
+        return self;
+
+    };
+})); // End of all modules

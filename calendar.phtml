@@ -36,7 +36,8 @@
                     var desc = $( "#desc" ).val();
                     var id = $( "#id" ).val();
                     var allDay = $( "#allDay" ).is( ":checked" );
-                    var uid = $("#user option:selected").val();
+                    var uid = $( "#user option:selected" ).val();
+                    var prio = $( "input:radio:checked[name='radioPrio']" ).val()
                     
                     if ( title ) {
                         event = { //wird benötigt???
@@ -47,6 +48,7 @@
                             desc: desc,
                             allDay: allDay,
                             uid : uid
+                            //prio: prio
                         } 
                         start = moment(start).format( "YYYY-MM-DD HH:mm:ss");
                         end = moment(end).format( "YYYY-MM-DD HH:mm:ss");
@@ -60,7 +62,8 @@
                                 allDay: $( "#allDay" ).is( ":checked" ),
                                 uid : $("#user option:selected").val(),
                                 start: start,
-                                end: end
+                                end: end, 
+                                prio: prio
                             },
                             type: "POST",
                             success: function(lastid) {
@@ -148,6 +151,7 @@
                 $( "#endDate" ).val( moment( end ).format( "L") );
                 $( "#endTime" ).val( moment( end ).format( "LT") );
                 $( "#user" ).data("selectBox-selectBoxIt").selectOption("<?php echo $_SESSION['loginCRM']; ?>");
+                $( "#radio_1" ).click();
                 $( "#dialog" ).dialog( "open" );
             },
             /*** Edit Event *************************************************************************************/
@@ -167,8 +171,9 @@
                 $( "#endDate" ).val( moment( event.end ? event.end : event.start ).format( "L") );
                 $( "#endTime" ).val( moment( event.end ? event.end : event.start ).format( "LT") );
                 $( "#user" ).data("selectBox-selectBoxIt").selectOption(event.uid);
+                $( "#prio_" + event.prio ).click(); 
                 $( "#dialog" ).dialog( "open" );
-				           return false;
+				return false;
             },
             /*** Move Event *************************************************************************************/
             eventDrop: function(event, testxx, dayDelta) {
@@ -367,9 +372,9 @@
             </div>
             <div id="radioPrio">
                 <form>
-                    <input type="radio" id="prioLow"  name="radioPrio" value='0' ><label for="prioLow">gering</label>
-                    <input type="radio" id="prioNorm" name="radioPrio" checked="checked" value='1' ><label for="prioNorm">normal</label>
-                    <input type="radio" id="prioHigh" name="radioPrio" value='1' ><label for="prioHigh">hoch</label>
+                    <input type="radio" id="prio_0" name="radioPrio" value='0' ><label for="prio_0">gering</label>
+                    <input type="radio" id="prio_1" name="radioPrio" value='1' ><label for="prio_1">normal</label>
+                    <input type="radio" id="prio_2" name="radioPrio" value='2' ><label for="prio_2">hoch</label>
                 </form>                
             </div>           
                        

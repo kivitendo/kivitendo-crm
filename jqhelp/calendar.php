@@ -47,6 +47,12 @@
             //print_r( $rs ); 
             echo json_encode( $rs ) ;  
         break;
+        case "getKategorie":
+            $sql="SELECT sorder AS value, catname AS text FROM termincat ORDER BY sorder"; //login
+            $rs=$_SESSION['db']->getAll( $sql );
+            //print_r( $rs ); 
+            echo json_encode( $rs ) ;  
+        break;
        
      }    
    

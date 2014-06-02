@@ -173,9 +173,9 @@
             /*** Move Event *************************************************************************************/
             eventDrop: function(event, testxx, dayDelta) {
                 var start = moment(event.start).format( "YYYY-MM-DD HH:mm:ss");
-                //var tst = moment(event.start).add('h', 1);
-                //var end  = event.end ? moment(event.end).format( "YYYY-MM-DD HH:mm:ss") : moment(event.tst).format( "YYYY-MM-DD HH:mm:ss");//.add('h', 1);;//
-                var end  = moment(event.end).format( "YYYY-MM-DD HH:mm:ss");
+                var tst = moment(event.start).add('h', 1);//move from allday 
+                var end  = event.end ? moment(event.end).format( "YYYY-MM-DD HH:mm:ss") : moment(event.tst).format( "YYYY-MM-DD HH:mm:ss");//.add('h', 1);;//
+                //var end  = moment(event.end).format( "YYYY-MM-DD HH:mm:ss");
                 $.ajax({
                     url: 'jqhelp/calendar.php',
                     data: {
@@ -224,9 +224,12 @@
             height: "12",
             populate: function() {
                 var deferred = $.Deferred()
+                //alert(  $(this).attr('id') );
+                //console.log($(this).attr('id'));
                 $.ajax({
                     url: 'jqhelp/calendar.php',
-                    data: { task:  'getUsers'},
+                    //data: { task:  $(this).attr('id') == '#user' ? 'getUsers': 'getKategorie'},
+                    data: { task: 'getUsers' }
                 }).done(function(json) {
                     var obj = $.parseJSON( json.trim() );
                     deferred.resolve(obj);
@@ -234,6 +237,26 @@
                 return deferred;
             }
         })
+        $("#kategorieBox").selectBoxIt({
+            theme:       "jqueryui",
+            autoWidth:   true,
+            height: "12",
+            populate: function() {
+                var deferred = $.Deferred()
+               alert(  $(this).attr('id') );
+                console.log($(this).attr('id'));
+                $.ajax({
+                    url: 'jqhelp/calendar.php',
+                    //data: { task:  $(this).attr('id') == '#user' ? 'getUsers': 'getKategorie'},
+                    data: { task: 'getKategorie' }
+                }).done(function(json) {
+                    var obj = $.parseJSON( json.trim() );
+                    deferred.resolve(obj);
+                });
+                return deferred;
+            }
+        })        
+        
         
         $( "div#radioTermin,div#radioPrio" ).buttonset();//.find('label').height(28);;
 		
@@ -352,11 +375,7 @@
                 Kategorie:
             </div> 
             <div id="kategorieDrop">
-                <select class="b1" name="kdviewre">
-                    <option value="1" checked >beruflich
-                    <option value="2" >privat
-                    <option value="3" >Geburtstag
-                    <option value="4" >Sontige
+                <select class="b1" id="kategorieBox">
                 </select> 
             </div>
             <div id="userLabel">

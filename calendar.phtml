@@ -217,54 +217,30 @@
                 });
             },
         });
-        /*** SelectBox User **********************************************************************************************/
-        $("#user").selectBoxIt({
-            theme:       "jqueryui",
-            autoWidth:   true,
-            height: "12",
-            populate: function() {
-                var deferred = $.Deferred()
-                //alert(  $(this).attr('id') );
-                //console.log($(this).attr('id'));
-                $.ajax({
-                    url: 'jqhelp/calendar.php',
-                    //data: { task:  $(this).attr('id') == '#user' ? 'getUsers': 'getKategorie'},
-                    data: { task: 'getUsers' }
-                }).done(function(json) {
-                    var obj = $.parseJSON( json.trim() );
-                    deferred.resolve(obj);
-                });
-                return deferred;
-            }
+        /*** SelectBox User, Kategorie **********************************************************************************************/
+        $("#user, #kategorieBox").each(function(){
+            var ajaxTask = this.id == 'user' ? 'getUsers': 'getKategorie'; 
+            $(this).selectBoxIt({
+                theme:       "jqueryui",
+                autoWidth:   true,
+                height: "12",
+                populate: function() {
+                    var deferred = $.Deferred()
+                    $.ajax({
+                        url: 'jqhelp/calendar.php',
+                        data: { task: ajaxTask }
+                    }).done(function(json) {
+                        var obj = $.parseJSON( json.trim() );
+                        deferred.resolve(obj);
+                    });
+                    return deferred;
+                }
+            })
         })
-        $("#kategorieBox").selectBoxIt({
-            theme:       "jqueryui",
-            autoWidth:   true,
-            height: "12",
-            populate: function() {
-                var deferred = $.Deferred()
-               alert(  $(this).attr('id') );
-                console.log($(this).attr('id'));
-                $.ajax({
-                    url: 'jqhelp/calendar.php',
-                    //data: { task:  $(this).attr('id') == '#user' ? 'getUsers': 'getKategorie'},
-                    data: { task: 'getKategorie' }
-                }).done(function(json) {
-                    var obj = $.parseJSON( json.trim() );
-                    deferred.resolve(obj);
-                });
-                return deferred;
-            }
-        })        
-        
         
         $( "div#radioTermin,div#radioPrio" ).buttonset();//.find('label').height(28);;
-		
-
-            
-  // }); 
-		
-	});
+				
+    });
 
 </script>
 <style>
@@ -375,7 +351,7 @@
                 Kategorie:
             </div> 
             <div id="kategorieDrop">
-                <select class="b1" id="kategorieBox">
+                <select  id="kategorieBox">
                 </select> 
             </div>
             <div id="userLabel">

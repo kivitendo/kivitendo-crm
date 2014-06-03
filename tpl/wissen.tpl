@@ -38,8 +38,8 @@
     function newContent() { 
         $.get('jqhelp/wissen.php?task=neu', function( content ) {
             $('#headline').empty().append('[<b>'+$('#catname').text()+'</b>] Neu');
-            $('#wissencontent').empty().append(content);
             showEdit();
+            $('#wissencontent').empty().append(content);
         } );
     }
     function saveContent() {

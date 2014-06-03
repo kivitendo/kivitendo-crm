@@ -16,7 +16,10 @@
     echo $head['FULLCALJS'];
     echo $head['JQBOX'];
   //print_r( $_SESSION );
-
+/*************************************************** +++ ToDo ++++*******************************************************
+1. wenn Aufgabe dann allDay & EndDate + 1Jahr
+2. Kategorien in Tabs darstellen
+************************************************************************************************************************/
 ?>
 <script>
     $(document).ready(function() {
@@ -37,11 +40,13 @@
                     var id = $( "#id" ).val();
                     var allDay = $( "#allDay" ).is( ":checked" );
                     var uid = $( "#user option:selected" ).val();
-                    var prio = $( "input:radio:checked[name='radioPrio']" ).val()
+                    var prio = $( "input:radio:checked[name='radioJob']" ).val()
+                    var job  = $( "input:radio:checked[name='radioJob']" ).val()
+                    alert( job );
                     
                     if ( title ) {
                         event = { //wird benötigt???
-	                           title: title,
+	                        title: title,
                             start: start_cur,
                             end: end_cur,
                             id : id,
@@ -63,7 +68,8 @@
                                 uid : $("#user option:selected").val(),
                                 start: start,
                                 end: end, 
-                                prio: prio
+                                prio: prio,
+                                job : job
                             },
                             type: "POST",
                             success: function(lastid) {
@@ -152,6 +158,7 @@
                 $( "#endTime" ).val( moment( end ).format( "LT") );
                 $( "#user" ).data("selectBox-selectBoxIt").selectOption("<?php echo $_SESSION['loginCRM']; ?>");
                 $( "#radio_1" ).click();
+                $( "#job_f" ).click();
                 $( "#dialog" ).dialog( "open" );
             },
             /*** Edit Event *************************************************************************************/
@@ -171,7 +178,8 @@
                 $( "#endDate" ).val( moment( event.end ? event.end : event.start ).format( "L") );
                 $( "#endTime" ).val( moment( event.end ? event.end : event.start ).format( "LT") );
                 $( "#user" ).data("selectBox-selectBoxIt").selectOption(event.uid);
-                $( "#prio_" + event.prio ).click(); 
+                $( "#prio_" + event.prio ).click();
+                $( "#job_" + event.job ).click(); 
                 $( "#dialog" ).dialog( "open" );
 				return false;
             },
@@ -243,7 +251,7 @@
             })
         })
         
-        $( "div#radioTermin,div#radioPrio" ).buttonset();//.find('label').height(28);;
+        $( "div#radioJob,div#radioPrio" ).buttonset();//.find('label').height(28);;
 				
     });
 
@@ -265,7 +273,7 @@
 
     #titleDesig     { position:absolute; top:20px; left:32px; }
     #titleInp       { position:absolute; top:20px; left:95px;}
-    #radioTermin    { position:absolute; top:10px; left:465px;}
+    #radioJob        { position:absolute; top:10px; left:465px;}
     #start          { position:absolute; top:50px; left:32px; }
     #startDateInp   { position:absolute; top:50px; left:95px;}
     #startTimeInp   { position:absolute; top:50px; left:195px; }
@@ -327,10 +335,10 @@
                 <input type="text"  id="title" class=" ui-widget-content ui-corner-all title">
                 <input type="text"  name="id" id="id"  style="visibility: hidden" class="ui-widget-content ui-corner-all test">
             </div>
-            <div id="radioTermin">
+            <div id="radioJob">
                 <form>
-                    <input type="radio" id="termin" class="radio" name="radioTermin" checked="checked" value='0' ><label for="termin"    >Termin </label>
-                    <input type="radio" id="assignment" class="radio" name="radioTermin" value='1' ><label for="assignment">Aufgabe</label>
+                    <input type="radio" id="job_f" class="radio" name="radioJob" value='0' ><label for="job_f">Termin </label>
+                    <input type="radio" id="job_t" class="radio" name="radioJob" value='1' ><label for="job_t">Aufgabe</label>
                 </form>
             </div>            
             <div id="start">

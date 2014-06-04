@@ -15,9 +15,9 @@
     //$url = $_POST['url'];
     switch( $task ){
         case "newEvent":
-            $sql="INSERT INTO termine (start, stop, cause, c_cause, allDay, prio, job) VALUES ( '$start'::TIMESTAMP, '$end'::TIMESTAMP,'$title','$desc', $allDay, $prio, $job )";
+            $sql="INSERT INTO termine (start, stop, cause, c_cause, allDay, prio, job) VALUES ( '$start'::TIMESTAMP, '$end'::TIMESTAMP,'$title','$desc', $allDay, $prio, '$job' )";
             $rc=$_SESSION['db']->query($sql); 
-            $sql = "SELECT MAX(id) FROM termine";
+            $sql = "SELECT MAX(id) FROM termine";//!!!!!!!!!!!!!!!!!!!!
             $rs = $_SESSION['db']->getOne($sql);
             echo $rs['max'];  
         break;

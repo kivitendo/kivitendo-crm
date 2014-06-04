@@ -147,11 +147,11 @@
 				    $( "#desc" ).val('');
 				    $( "#id" ).val('');
 				    if( $( "#allDay" ).is( ":checked" ) )  $("#allDay").prop( 'checked', false );
-				    $("#allDay").button({ text: false}).click(function(e) { //ins UI-Kleid
+				    /*$("#allDay").button({ text: false}).click(function(e) { //ins UI-Kleid
                         $(this).button("option", {
                         icons: { primary: $(this)[0].checked ? "ui-icon-check" : "" }
                     })
-                })
+                })*/
                 $( "#startDate" ).val( moment( start ).format( "L") );
                 $( "#startTime" ).val( moment( start ).format( "LT") );
                 $( "#endDate" ).val( moment( end ).format( "L") );
@@ -160,7 +160,7 @@
                 $( "#prio_1" ).prop( 'checked',true );
                 $( "div#radioJob,div#radioPrio" ).buttonset("refresh");
                 //$( "#prio_1" ).click();                
-                $( "#job_f" ).click();
+                //$( "#job_f" ).prop( 'checked',true );
                 
                 $( "#dialog" ).dialog( "open" );
             },
@@ -171,18 +171,21 @@
                 //if( event.id ) delete.me 
                 $( "#id" ).val( event.id );
                 if( event.allDay ) $("#allDay").prop( 'checked',true );
-                $("#allDay").button({ text: false}).click(function(e) {
+                /*$("#allDay").button({ text: false}).click(function(e) {
                     $(this).button("option", {
                         icons: { primary: $(this)[0].checked ? "ui-icon-check" : "" }
                     })
-                })
+                })*/
                 $( "#startDate" ).val( moment( event.start ).format( "L") );
                 $( "#startTime" ).val( moment( event.start ).format( "LT") );
                 $( "#endDate" ).val( moment( event.end ? event.end : event.start ).format( "L") );
                 $( "#endTime" ).val( moment( event.end ? event.end : event.start ).format( "LT") );
                 $( "#user" ).data("selectBox-selectBoxIt").selectOption(event.uid);
                 $( "#prio_" + event.prio ).click();
-                $( "#job_" + event.job ).click(); 
+                //$( "#job_" + event.job ).click();
+                if( event.job == 't' ) $( "#job_t" ).prop( 'checked',true ); 
+                else $( "#job_f" ).prop( 'checked',true );
+                $( "div#radioJob,div#radioPrio" ).buttonset("refresh");
                 $( "#dialog" ).dialog( "open" );
 				return false;
             },
@@ -256,7 +259,14 @@
         
         $( "div#radioJob,div#radioPrio" ).buttonset();//.find('label').height(28);;
         $( "#job_t" ).click(function() {
-            alert( "Job eingeschaltet ." );
+            //alert( "Job eingeschaltet ." );
+            $( "#endDate" ).val( moment( $( "#endDate" ) ).add( 'years', 1 ).format( "L") );
+            $( "#allDay" ).prop( 'checked',true );
+            /*$("#allDay").button({ text: false}).click(function(e) {
+                    $(this).button("option", {
+                        icons: { primary: $(this)[0].checked ? "ui-icon-check" : "" }
+                    })
+                })*/
         });
 				
     });

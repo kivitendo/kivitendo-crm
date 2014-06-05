@@ -157,18 +157,15 @@
                 $( "#endDate" ).val( moment( end ).format( "L") );
                 $( "#endTime" ).val( moment( end ).format( "LT") );
                 $( "#user" ).data("selectBox-selectBoxIt").selectOption("<?php echo $_SESSION['loginCRM']; ?>");
-                $( "#prio_1" ).prop( 'checked',true );
-                $( "div#radioJob,div#radioPrio" ).buttonset("refresh");
-                //$( "#prio_1" ).click();                
-                //$( "#job_f" ).prop( 'checked',true );
-                
+                $( "#prio_1" ).prop( 'checked', true );            
+                $( "#job_f" ).prop( 'checked', true );
+                $( "div#radioJob,div#radioPrio" ).buttonset( "refresh" );
                 $( "#dialog" ).dialog( "open" );
             },
             /*** Edit Event *************************************************************************************/
             eventClick: function( event ){        
                 $( "#title" ).val( event.title );
-                $( "#desc" ).val( event.desc );
-                //if( event.id ) delete.me 
+                $( "#desc" ).val( event.desc ); 
                 $( "#id" ).val( event.id );
                 if( event.allDay ) $("#allDay").prop( 'checked',true );
                 /*$("#allDay").button({ text: false}).click(function(e) {
@@ -181,7 +178,7 @@
                 $( "#endDate" ).val( moment( event.end ? event.end : event.start ).format( "L") );
                 $( "#endTime" ).val( moment( event.end ? event.end : event.start ).format( "LT") );
                 $( "#user" ).data("selectBox-selectBoxIt").selectOption(event.uid);
-                $( "#prio_" + event.prio ).click();
+                $( "#prio_" + event.prio ).prop( 'checked', true );
                 //$( "#job_" + event.job ).click();
                 if( event.job == 't' ) $( "#job_t" ).prop( 'checked',true ); 
                 else $( "#job_f" ).prop( 'checked',true );
@@ -289,12 +286,12 @@
 
     #titleDesig     { position:absolute; top:20px; left:32px; }
     #titleInp       { position:absolute; top:20px; left:95px;}
-    #radioJob        { position:absolute; top:10px; left:465px;}
+    #radioJob       { position:absolute; top:10px; left:465px;}
     #start          { position:absolute; top:50px; left:32px; }
     #startDateInp   { position:absolute; top:50px; left:95px;}
     #startTimeInp   { position:absolute; top:50px; left:195px; }
     #chkboxAllDay   { position:absolute; top:45px; left:295px; }
-    #end            { position:absolute; top:80px; left:32px; }
+    #end             { position:absolute; top:80px; left:32px; }
     #endDateInp     { position:absolute; top:80px; left:95px; }
     #endTimeInp     { position:absolute; top:80px; left:195px;}
     #kategorie      { position:absolute; top:120px; left:34px; }

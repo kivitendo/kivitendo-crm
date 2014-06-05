@@ -33,11 +33,129 @@ background-color: #e3e3e3;
 <script>
     $(function() {
         $('#treffer')
-            .tablesorter({widthFixed: true, widgets: ['zebra']})
+            .tablesorter( {widthFixed: true, widgets: ['zebra']})
             .tablesorterPager({container: $("#pager"), size: 120, positionFixed: false})
     }); 
 </script>
 <?php
+
+
+//String aufspalten
+function mehrfachexplode ($trenner,$string) {
+   
+    $temp = str_replace($trenner, $trenner[0], $string);
+    $getrennt = explode($trenner[0], $temp);
+    return  $getrennt;
+}
+
+//Straßennamen korrigieren
+function korrektur ($street){
+    // Status gibt die Formatierung der Straße an,  ob mit Trennzeichen oder ohne etc
+    $tempstreet = "";
+    $korrekt = "";
+    $sfeld = array();
+    
+    //Hausnummern separieren
+    $streetarray = str_split($street);
+    for($i = 0; $i < count($streetarray); $i++) { 
+       //Ist Arrayelement eine Zahl  
+       if(ctype_digit($streetarray[$i])){
+           //Ist vorherige Arrayelement eine Zahl
+           if(ctype_digit($streetarray[$i-1])){
+               //Ist das Arrayelement dannach eine Zahl
+               if(ctype_digit($streetarray[$i+1])){
+                   $tempstreet.=$streetarray[$i];
+               }
+               //Das Arrayelement dannach ist keine Zahl
+               else{
+                   $tempstreet.=$streetarray[$i]." ";
+               }
+           }
+           //Ist das Arrayelement dannach eine Zahl
+           elseif(ctype_digit($streetarray[$i+1])) {
+               $tempstreet.=" ".$streetarray[$i];
+           }
+           //Das Arrayelement dananch ist keine Zahl
+           else{
+               $tempstreet.=" ".$streetarray[$i]." ";
+           }
+        }
+        //Arrayelement ist keine Zahl
+        else{
+            $tempstreet.=$streetarray[$i];   
+        }  
+    }
+
+    //Straßenstring aufspalten
+    //echo $tempstreet;
+    $sfeld = mehrfachexplode(array("-"," "), $tempstreet);
+    $last = count($sfeld)-1;
+    //Leerzeichen am Ende entfernen
+    if(empty($sfeld[$last])){
+        array_pop($sfeld);
+    }
+    //print_r($sfeld);
+
+    //  - Trenner erkennen.. Straßennamen mit - Trenner
+    if(strpos($tempstreet,'-')){
+        //Straßenstring zusammensetzen
+      for($i = 0; $i < count($sfeld); $i++) { 
+            //Haunummer + mögliches Leerzeichen für Buchstabe
+            if(ctype_digit($sfeld[$i])){
+                $korrekt.=$sfeld[$i]." ";              
+            }            
+            elseif(empty($sfeld[$i+1]) || ctype_digit($sfeld[$i+1])){
+                $korrekt.=ucwords(strtolower($sfeld[$i]))." ";
+            }
+            elseif(!(empty($sfeld[$i]))){
+                $korrekt.=ucwords(strtolower($sfeld[$i]))."-";
+            }
+        }  
+    }
+    // Straßennamen ohne "-"
+    else{
+        $zaehler = 0;
+        $lastword;
+        $hausnummerpos;
+        $letzteszeichen = (count($sfeld)-1);
+        //Position der Hausnummer bestimmen
+        foreach($sfeld as $adressteil){
+            if(ctype_digit($adressteil)){
+                $hausnummerpos = $zaehler;
+            }
+            $zaehler++;
+        }
+        //Letztes Wort bestimmten
+         for($i = 0; $i < $hausnummerpos; $i++) { 
+            if(!empty($sfeld[$i])){
+                $lastword = $i;
+            }
+         } 
+  //echo "LetztesZeichen: ".$letzteszeichen."</br>";
+  //echo "Hausnummerposition: ".$hausnummerpos."</br>"; 
+  //echo "LEtzteswortposition: ".$lastword."</br>";
+  //print_r($sfeld);
+        //Straßenstring zusammensetzen
+        for($i = 0; $i < count($sfeld); $i++) { 
+            //erstes Adresswort
+            if($i == 0){
+                $korrekt.=ucwords(strtolower($sfeld[$i]))." ";
+            }
+            //letzes Adresswort / möglicher Hausnummerbuchstabe
+            elseif($i == $letzteszeichen){
+                $korrekt.=ucwords(strtolower($sfeld[$i]));
+            }
+            //Test ob Adressteil vor der Hausnummer erreicht wurde
+            elseif($i == $lastword){
+                $korrekt.=ucwords(strtolower($sfeld[$i]))." ";
+            }
+            else{
+                $korrekt.=strtolower($sfeld[$i])." ";
+            }
+        }
+    }
+    return $korrekt;  
+}
 
 $form_select_file = '
 </head>
@@ -141,12 +259,13 @@ array_shift($csvArray);//Erste Zeile löschen
 echo "<table id='treffer' class='tablesorter'>\n"; 
 echo "<thead><tr ><th>Ebayname</th><th>Name</th><th>Anschrift</th><th>Email</th><th>1.Artikel</th></tr></thead>\n<tbody>\n"; 
 $i = 0;
+
 /*
 echo "<pre>";
 print_r ($csvArray);
 echo "</pre>";
-
 */
+
 if ($csvArray) foreach($csvArray as $key => $row) {
     $ok = true;
     if( $row['4'] == $row['2'] ){
@@ -160,7 +279,9 @@ if ($csvArray) foreach($csvArray as $key => $row) {
         $row['attention'] = "!!!changed by Importer!!!";
     }
     $row['2'] = ucwords($row['2']);
-    $row['4'] = ucwords($row['4']);
+    //Straßennamen formatieren
+    //Am Berg 8,  Wilhelm-Leuchner-Straße,  An der kleinen Gasse usw..
+    $row['4'] = korrektur($row['4']);
     $row['6'] = ucwords($row['6']);
     $row['9'] = $row['9'][0]; //Deutschland to D
     
@@ -201,6 +322,7 @@ if ($csvArray) foreach($csvArray as $key => $row) {
   //$row['3']  
 
 }
+
 echo "</tbody></table>\n";
 echo 
 $menu['end_content'].

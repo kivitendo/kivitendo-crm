@@ -10,17 +10,19 @@
     $id    = $_POST['id'];
     $allDay = $_POST['allDay'];
     $uid    = $_POST['uid'];
+    $prio   = $_POST['prio'];
+    $job    = $_POST['job'];
     //$url = $_POST['url'];
     switch( $task ){
         case "newEvent":
-            $sql="INSERT INTO termine (start, stop, cause, c_cause, allDay) VALUES ( '$start'::TIMESTAMP, '$end'::TIMESTAMP,'$title','$desc', $allDay )";
+            $sql="INSERT INTO termine (start, stop, cause, c_cause, allDay, prio, job) VALUES ( '$start'::TIMESTAMP, '$end'::TIMESTAMP,'$title','$desc', $allDay, $prio, '$job' )";
             $rc=$_SESSION['db']->query($sql); 
-            $sql = "SELECT MAX(id) FROM termine";
+            $sql = "SELECT MAX(id) FROM termine";//!!!!!!!!!!!!!!!!!!!!
             $rs = $_SESSION['db']->getOne($sql);
             echo $rs['max'];  
         break;
         case "updateEvent":
-            $sql="UPDATE termine SET cause = '$title', start = '$start'::TIMESTAMP, stop = '$end'::TIMESTAMP, c_cause = '$desc', allday = $allDay, uid = '$uid' WHERE id = $id";
+            $sql="UPDATE termine SET cause = '$title', start = '$start'::TIMESTAMP, stop = '$end'::TIMESTAMP, c_cause = '$desc', allday = $allDay, uid = '$uid', prio = '$prio', job = '$job' WHERE id = $id";
             $rc=$_SESSION['db']->query($sql);   
         break;
         case "updateTimestamp":
@@ -32,7 +34,7 @@
             $rc=$_SESSION['db']->query($sql);   
         break;
         case "getEvents":
-            $sql="SELECT cause AS title, start, stop AS end, c_cause AS desc, id, allday, uid FROM termine";
+            $sql="SELECT cause AS title, start, stop AS end, c_cause AS desc, id, allday, uid, prio, job FROM termine";
             $rs=$_SESSION['db']->getAll($sql);
             foreach( $rs as $key => $value ){
                 $rs[$key]['allDay'] = $rs[$key]['allday'] == 't' ? true : false;
@@ -48,7 +50,7 @@
             echo json_encode( $rs ) ;  
         break;
         case "getKategorie":
-            $sql="SELECT sorder AS value, catname AS text FROM termincat ORDER BY sorder"; //login
+            $sql="SELECT sorder AS value, catname AS text FROM termincat ORDER BY sorder"; 
             $rs=$_SESSION['db']->getAll( $sql );
             //print_r( $rs ); 
             echo json_encode( $rs ) ;  

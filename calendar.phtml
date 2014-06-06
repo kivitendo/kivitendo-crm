@@ -10,15 +10,17 @@
     echo $menu['stylesheets'];
     echo $head['FULLCALCSS'];
     echo $head['BOXCSS'];
+    echo $head['COLORPICKERCSS'];
     echo $head['JQUERY'];   
     echo $head['JQUERYUI'];
     echo $head['THEME'];
     echo $head['FULLCALJS'];
     echo $head['JQBOX'];
+    echo $head['COLORPICKERJS'];
   //print_r( $_SESSION );
 /*************************************************** +++ ToDo ++++*******************************************************
-1. wenn Aufgabe dann allDay & EndDate + 1Jahr
-2. Kategorien in Tabs darstellen
+Kategorien in Tabs darstellen!!!!
+Wenn Aufgabe erledigt, dann end = now() & color = green
 ************************************************************************************************************************/
 ?>
 <script>
@@ -40,8 +42,9 @@
                     var id = $( "#id" ).val();
                     var allDay = $( "#allDay" ).is( ":checked" );
                     var uid = $( "#user option:selected" ).val();
-                    var prio = $( "input:radio:checked[name='radioPrio']" ).val()
-                    var job  = $( "input:radio:checked[name='radioJob']" ).val()
+                    var prio = $( "input:radio:checked[name='radioPrio']" ).val();
+                    var job  = $( "input:radio:checked[name='radioJob']" ).val();
+                    var color = $( "#color" ).val();
                     
                     
                     if ( title ) {
@@ -52,8 +55,9 @@
                             id : id,
                             desc: desc,
                             allDay: allDay,
-                            uid : uid
+                            uid : uid,
                             //prio: prio
+                            color:color
                         } 
                         start = moment(start).format( "YYYY-MM-DD HH:mm:ss");
                         end = moment(end).format( "YYYY-MM-DD HH:mm:ss");
@@ -69,7 +73,8 @@
                                 start: start,
                                 end: end, 
                                 prio: prio,
-                                job : job
+                                job : job,
+                                color: color
                             },
                             type: "POST",
                             success: function(lastid) {
@@ -160,6 +165,7 @@
                 $( "#prio_1" ).prop( 'checked', true );            
                 $( "#job_f" ).prop( 'checked', true );
                 $( "div#radioJob,div#radioPrio" ).buttonset( "refresh" );
+                $( "#colorPick" ).hide();
                 $( "#dialog" ).dialog( "open" );
             },
             /*** Edit Event *************************************************************************************/
@@ -183,6 +189,7 @@
                 if( event.job == 't' ) $( "#job_t" ).prop( 'checked',true ); 
                 else $( "#job_f" ).prop( 'checked',true );
                 $( "div#radioJob,div#radioPrio" ).buttonset("refresh");
+                $( "#colorPick" ).hide();
                 $( "#dialog" ).dialog( "open" );
 				return false;
             },
@@ -265,6 +272,21 @@
                     })
                 })*/
         });
+       /* $( "#colorButton" ).button().click( function(){
+            $( "#colorPick" ).toggle();
+            //alert( "ColorButton" );
+        });*/
+        $( "#color" ).click( function(){
+            $( "#colorPick" ).toggle();
+        });
+            
+        $('#colorPick').colorPicker({			
+            defaultColor: 0, // index of the default color (optional)
+            columns: 13,     // number of columns (optional)  
+            color: ['#FF7400', '#CDEB8B','#6BBA70','#006E2E','#C3D9FF','#0101DF','#4096EE','#356AA0','#FF0096','#DF0101','#B02B2C','#112211','#000000'], // list of colors (optional)
+            // click event - selected color is passed as arg.
+            click: function(color){$('#color').val(color);}, 
+});
 				
     });
 
@@ -291,8 +313,10 @@
     #startDateInp   { position:absolute; top:50px; left:95px;}
     #startTimeInp   { position:absolute; top:50px; left:195px; }
     #chkboxAllDay   { position:absolute; top:45px; left:295px; }
-    #colorInpLabel { position:absolute; top:50px; left:468px; }
-    #colorInp       { position:absolute; top:50px; left:548px; }
+    #colorLabel    { position:absolute; top:50px; left:475px; }
+    
+    #colorInp       { position:absolute; top:50px; left:550px; }
+    #colorPick      { position:absolute; top:80px; left:450px; }
     #end             { position:absolute; top:80px; left:32px; }
     #endDateInp     { position:absolute; top:80px; left:95px; }
     #endTimeInp     { position:absolute; top:80px; left:195px;}
@@ -342,7 +366,7 @@
 
     <div id="dialog" class="event-dialog" title="Event">
         <div id="dialog-inner">
-            <div id="titleDesig">
+            <div id="titleDesign">
               <b>Title: </b> 
             </div> 
                
@@ -363,10 +387,11 @@
                 <input type="text"  name="date-start" id="startDate" class="text ui-widget-content ui-corner-all date">
             </div>
             <div id="chkboxAllDay"><input class="inp-checkbox" id="allDay"  type="checkbox"><label for="allDay"></label>ganztags</div> 
-            <div id="colorInpLabel">Farbe: </div>  
+            <div id="colorLabel">Farbe: </div>  
             <div id="colorInp">
                 <input type="text"  id="color" class="text ui-widget-content ui-corner-all date">
             </div>
+            <div id="colorPick" style="display: none"></div>
             <div id="startTimeInp">
                 <input type="text"  name="date-start" id="startTime" class="text ui-widget-content ui-corner-all time">
             </div>

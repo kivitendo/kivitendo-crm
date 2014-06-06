@@ -780,7 +780,10 @@ function mkHeader() {
         'FULLCALJS'     => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/lib/moment.min.js'.$SN.
                            //$SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.js'.$SN.//aktuelle 
                            $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.min.js'.$SN. 
-                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/lang/'.$_SESSION['countrycode'].'.js'.$SN,                        
+                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/lang/'.$_SESSION['countrycode'].'.js'.$SN,  
+        'COLORPICKERCSS'=> $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/colorPicker/syronex-colorpicker.css'.$LN,
+        'COLORPICKERJS' => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/colorPicker/syronex-colorpicker.js'.$SN,
+                              
         );
         
     return $head;

@@ -165,6 +165,7 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
                 $( "#prio_1" ).prop( 'checked', true );            
                 $( "#job_f" ).prop( 'checked', true );
                 $( "div#radioJob,div#radioPrio" ).buttonset( "refresh" );
+                $( "#color" ).val( "" );
                 $( "#colorPick" ).hide();
                 $( "#dialog" ).dialog( "open" );
             },
@@ -263,25 +264,24 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
         
         $( "div#radioJob,div#radioPrio" ).buttonset();//.find('label').height(28);;
         $( "#job_t" ).click(function() {
-            //alert( "Job eingeschaltet ." );
             $( "#endDate" ).val( moment( $( "#endDate" ) ).add( 'years', 1 ).format( "L") );
             $( "#allDay" ).prop( 'checked',true );
-            /*$("#allDay").button({ text: false}).click(function(e) {
-                    $(this).button("option", {
-                        icons: { primary: $(this)[0].checked ? "ui-icon-check" : "" }
-                    })
-                })*/
         });
-       /* $( "#colorButton" ).button().click( function(){
-            $( "#colorPick" ).toggle();
-            //alert( "ColorButton" );
-        });*/
+        $( "#prio_0" ).click( function(){           
+            $( "#color" ).val( 'green' );
+        });
+        $( "#prio_1" ).click( function(){           
+            $( "#color" ).val( '' );
+        });   
+        $( "#prio_2" ).click( function(){           
+            $( "#color" ).val( 'red' );
+        });
         $( "#color" ).click( function(){
             $( "#colorPick" ).toggle();
         });
             
         $('#colorPick').colorPicker({			
-            defaultColor: 0, // index of the default color (optional)
+            //defaultColor: 1, // index of the default color (optional)
             columns: 13,     // number of columns (optional)  
             color: ['#FF7400', '#CDEB8B','#6BBA70','#006E2E','#C3D9FF','#0101DF','#4096EE','#356AA0','#FF0096','#DF0101','#B02B2C','#112211','#000000'], // list of colors (optional)
             // click event - selected color is passed as arg.

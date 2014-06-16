@@ -191,6 +191,9 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
                 $( "#colorPick" ).hide();
                 $("#done").prop( 'checked', event.done );
                 $( "#chkboxDone" )[event.job == 't' ? 'show' : 'hide']();
+                $( ":input[type!='button'][id!='done']" ).attr( "disabled", false ).css( "background","#FFF" );
+                $( "div#radioJob,div#radioPrio" ).buttonset("refresh");
+                //else  $(":input[type!='button'][id!='done']").attr("disabled", true).css("background","#F8F8F3");
                 $( "#dialog" ).dialog( "open" );
 				return false;
             },

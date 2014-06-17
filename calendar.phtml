@@ -165,6 +165,7 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
                 $( "#colorPick" ).hide();
                 $("#done").prop( 'checked', false );
                 $( ":input[type!='button'][id!='done']" ).attr( "disabled", false ).css( "background","#FFF" );
+                $( "div#radioJob,div#radioPrio" ).buttonset("refresh");
                 $( "#dialog" ).dialog( "open" );
             },
             /*** Edit Event *************************************************************************************/
@@ -191,11 +192,11 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
                 $( "#colorPick" ).hide();
                 $("#done").prop( 'checked', event.done );
                 $( "#chkboxDone" )[event.job == 't' ? 'show' : 'hide']();
-                $( ":input[type!='button'][id!='done']" ).attr( "disabled", false ).css( "background","#FFF" );
+                if( !event.done ) $( ":input[type!='button'][id!='done']" ).attr( "disabled", false ).css( "background","#FFF" );
+                else $(":input[type!='button'][id!='done']").attr("disabled", true).css("background","#F8F8F3");
                 $( "div#radioJob,div#radioPrio" ).buttonset("refresh");
-                //else  $(":input[type!='button'][id!='done']").attr("disabled", true).css("background","#F8F8F3");
+                $( "#color" ).val( event.color );
                 $( "#dialog" ).dialog( "open" );
-				return false;
             },
             /*** Move Event *************************************************************************************/
             eventDrop: function(event, testxx, dayDelta) {

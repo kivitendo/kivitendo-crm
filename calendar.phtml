@@ -42,15 +42,17 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
                     var id = $( "#id" ).val();
                     var allDay = $( "#allDay" ).is( ":checked" );
                     var uid = $( "#user option:selected" ).val();
-                    var prio = $( "input:radio:checked[name='radioPrio']" ).val();
-                    var job  = $( "input:radio:checked[name='radioJob']" ).val();
+                    var prio = $( "input:radio:checked[name='prioRadio']" ).val();
+                    var job  = $( "input:radio:checked[name='jobRadio']" ).val();
                     var color = $( "#color" ).val();
-                    var allDay = $( "#done" ).is( ":checked" );
+                    var done = $( "#done" ).is( ":checked" );
+                    var location = $( "#location" ).val();
+                    alert( location );
                     
                     
                     if ( title ) {
                         event = { //wird benötigt???
-	                        title: title,
+                            title: title,
                             start: start_cur,
                             end: end_cur,
                             id : id,
@@ -59,7 +61,8 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
                             uid : uid,
                             //prio: prio
                             color: color,
-                            done:  done
+                            done:  done,
+                            location:location
                         } 
                         start = moment(start).format( "YYYY-MM-DD HH:mm:ss");
                         end = moment(end).format( "YYYY-MM-DD HH:mm:ss");
@@ -77,7 +80,9 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
                                 prio: prio,
                                 job : job,
                                 color: color,
-                                done: $( "#done" ).is( ":checked" ),
+                                done: done,
+                                location:location,
+                                
                             },
                             type: "POST",
                             success: function(lastid) {
@@ -160,12 +165,13 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
                 $( "#user" ).data("selectBox-selectBoxIt").selectOption("<?php echo $_SESSION['loginCRM']; ?>");
                 $( "#prio_1" ).prop( 'checked', true );            
                 $( "#job_f" ).prop( 'checked', true );
-                $( "div#radioJob,div#radioPrio" ).buttonset( "refresh" );
+                $( "div#jobRadio,div#prioRadio" ).buttonset( "refresh" );
                 $( "#color" ).val( "" );
                 $( "#colorPick" ).hide();
-                $("#done").prop( 'checked', false );
+                $( "#done" ).prop( 'checked', false );
+                $( "#title" ).val('');
                 $( ":input[type!='button'][id!='done']" ).attr( "disabled", false ).css( "background","#FFF" );
-                $( "div#radioJob,div#radioPrio" ).buttonset("refresh");
+                $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");
                 $( "#dialog" ).dialog( "open" );
             },
             /*** Edit Event *************************************************************************************/
@@ -188,14 +194,16 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
                 //$( "#job_" + event.job ).click();
                 if( event.job == 't' ) $( "#job_t" ).prop( 'checked',true ); 
                 else $( "#job_f" ).prop( 'checked',true );
-                $( "div#radioJob,div#radioPrio" ).buttonset("refresh");
+                $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");
                 $( "#colorPick" ).hide();
+                $( "#color" ).val( event.color );
+                $( "#location" ).val( event.location );
                 $("#done").prop( 'checked', event.done );
                 $( "#chkboxDone" )[event.job == 't' ? 'show' : 'hide']();
                 if( !event.done ) $( ":input[type!='button'][id!='done']" ).attr( "disabled", false ).css( "background","#FFF" );
                 else $(":input[type!='button'][id!='done']").attr("disabled", true).css("background","#F8F8F3");
-                $( "div#radioJob,div#radioPrio" ).buttonset("refresh");
-                $( "#color" ).val( event.color );
+                $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");
+                
                 $( "#dialog" ).dialog( "open" );
             },
             /*** Move Event *************************************************************************************/
@@ -266,7 +274,7 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
             })
         })
         
-        $( "#radioJob,#radioPrio" ).buttonset();//.find('label').height(28);;
+        $( "#jobRadio,#prioRadio" ).buttonset();//.find('label').height(28);;
         $( "#job_t" ).click(function() {
             $( "#endDate" ).val( moment( $( "#endDate" ).val(), 'DD.MM.YYYY' ).add( 'years', 1 ).format( "L") );
             $( "#allDay" ).prop( 'checked', true );
@@ -300,13 +308,13 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
                 $( "#endDate" ).val( moment().format( "L") );
                 $( "#color" ).val( 'green' );
                 $(":input[type!='button'][id!='done']").attr("disabled", true).css("background","#F8F8F3");
-                $( "div#radioJob,div#radioPrio" ).buttonset("refresh");
+                $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");
             }
             else{
                 $( "#endDate" ).val( $( "#tmp" ).data( "endDate" ) ? $( "#tmp" ).data( "endDate" ) : moment( $( "#endDate" ) ).add( 'years', 1 ).format( "L") );
                 $( "#color" ).val( $( "#tmp" ).data( "color" ) ? $( "#tmp" ).data( "color" ) : color );
                 $( ":input[type!='button'][id!='done']" ).attr( "disabled", false ).css( "background","#FFF" );
-                $( "div#radioJob,div#radioPrio" ).buttonset("refresh");
+                $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");
             }
                 
         });
@@ -339,7 +347,7 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
 
     #titleDesig     { position:absolute; top:20px; left:32px; }
     #titleInp       { position:absolute; top:20px; left:95px;}
-    #radioJob       { position:absolute; top:10px; left:465px;}
+    #jobRadio       { position:absolute; top:10px; left:465px;}
     #start          { position:absolute; top:50px; left:32px; }
     #startDateInp   { position:absolute; top:50px; left:95px;}
     #startTimeInp   { position:absolute; top:50px; left:195px; }
@@ -356,8 +364,10 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
     #kategorieDrop  { position:absolute; top:140px; left:32px;}
     #userLabel      { position:absolute; top:120px; left:220px; }
     #userDrop       { position:absolute; top:140px; left:218px;}
-    #prio           { position:absolute; top:120px; left:400px; }
-    #radioPrio      { position:absolute; top:140px; left:398px;}
+    #prioLabel      { position:absolute; top:90px; left:350px; }
+    #prioRadio      { position:absolute; top:80px; left:412px;}
+    #locationLabel  { position:absolute; top:120px; left:400px;}
+    #locationInput  { position:absolute; top:145px; left:400px;}
     #descTitle      { position:absolute; top:180px; left:30px;}
     #desc           { position:absolute; top:180px; left:30px;}
     .title{
@@ -406,10 +416,10 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
                 <input type="text"  id="title" class=" ui-widget-content ui-corner-all title">
                 <input type="text"  name="id" id="id"  style="visibility: hidden" class="ui-widget-content ui-corner-all test">
             </div>
-            <div id="radioJob">
+            <div id="jobRadio">
                 <form>
-                    <input type="radio" id="job_f" class="radio" name="radioJob" value='0' ><label for="job_f">Termin </label>
-                    <input type="radio" id="job_t" class="radio" name="radioJob" value='1' ><label for="job_t">Aufgabe</label>
+                    <input type="radio" id="job_f" class="radio" name="jobRadio" value='0' ><label for="job_f">Termin </label>
+                    <input type="radio" id="job_t" class="radio" name="jobRadio" value='1' ><label for="job_t">Aufgabe</label>
                 </form>
             </div>            
             <div id="start">
@@ -452,16 +462,22 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
                 
                 </select> 
             </div>
-            <div id="prio">
+            <div id="prioLabel">
                 Priorität:
             </div>
-            <div id="radioPrio">
+            <div id="prioRadio">
                 <form>
-                    <input type="radio" id="prio_0" name="radioPrio" value='0' ><label for="prio_0">gering</label>
-                    <input type="radio" id="prio_1" name="radioPrio" value='1' ><label for="prio_1">normal</label>
-                    <input type="radio" id="prio_2" name="radioPrio" value='2' ><label for="prio_2">hoch</label>
+                    <input type="radio" id="prio_0" name="prioRadio" value='0' ><label for="prio_0">gering</label>
+                    <input type="radio" id="prio_1" name="prioRadio" value='1' ><label for="prio_1">normal</label>
+                    <input type="radio" id="prio_2" name="prioRadio" value='2' ><label for="prio_2">hoch</label>
                 </form>                
-            </div>           
+            </div> 
+            <div id="locationLabel">Lokation:</div>
+            <div id="locationInput">
+                <form>
+                    <input type="text"  id="location" class=" ui-widget-content ui-corner-all">   
+                </form>    
+            </div>          
                        
 
             <textarea name="desc" id="desc" class="text ui-widget-content ui-corner-all" rows="10" cols="64"></textarea>

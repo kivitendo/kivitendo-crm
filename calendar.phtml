@@ -19,8 +19,8 @@
     echo $head['COLORPICKERJS'];
   //print_r( $_SESSION );
 /*************************************************** +++ ToDo ++++*******************************************************
-Kategorien in Tabs darstellen!!!!
-Wenn Aufgabe erledigt, dann end = now() & color = green
+Kategorien und User + All in Tabs darstellen!!!!
+Location: Autocompletion Customer, Vendor, Person danach google?? 
 ************************************************************************************************************************/
 ?>
 <script>
@@ -47,6 +47,8 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
                     var color = $( "#color" ).val();
                     var done = $( "#done" ).is( ":checked" );
                     var location = $( "#location" ).val();
+                    var cust_vend_pers = $( "#tmp" ).data( "cust_vend_pers" );
+                   // alert( cust_vend_pers );
                     
                     if ( title ) {
                         event = { //wird benötigt???
@@ -80,6 +82,7 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
                                 color: color,
                                 done: done,
                                 location:location,
+                                cust_vend_pers:cust_vend_pers,
                                 
                             },
                             type: "POST",
@@ -167,7 +170,8 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
                 $( "#color" ).val( "" );
                 $( "#colorPick" ).hide();
                 $( "#done" ).prop( 'checked', false );
-                $( "#title" ).val('');
+                $( "#location" ).val('');
+                $( "#tmp" ).data( "srcId", '' );
                 $( ":input[type!='button'][id!='done']" ).attr( "disabled", false ).css( "background","#FFF" );
                 $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");
                 $( "#dialog" ).dialog( "open" );
@@ -300,7 +304,7 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
             var color = $( "#prio_0" ).is( ':checked' ) ? 'green' : '';
                 color = $( "#prio_2" ).is( ':checked' ) ? 'red' : '';
             if( $( "#done" ).is( ':checked' ) ) {
-                $( "#tmp" ).data( "endDate", $( "#endDate" ).val() );
+                $( "#tmp" ).data( "endDate", $( "#endDate" ).val() );   
                 $( "#tmp" ).data( "color", $( "#color" ).val() )
                 //color = $( "#color" ).val();
                 $( "#endDate" ).val( moment().format( "L") );
@@ -321,26 +325,59 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
             //defaultColor: 1, 
             columns: 13,     // number of columns (optional)  
             color: ['#FF7400', '#CDEB8B','#6BBA70','#006E2E','#C3D9FF','#0101DF','#4096EE','#356AA0','#FF0096','#DF0101','#B02B2C','#112211','#000000'], // list of colors (optional)
-
             click: function(color){$('#color').val(color);}, 
-});
+        });
+        
+        $.widget("custom.catcomplete", $.ui.autocomplete, {
+            _renderMenu: function(ul,items) {
+                var that = this,
+                currentCategory = "";
+                $.each( items, function( index, item ) {
+                    if ( item.category != currentCategory ) {
+                        ul.append( "<li class=\'ui-autocomplete-category\'>" + item.category + "</li>" );
+                        currentCategory = item.category;
+                    }
+                    that._renderItemData(ul,item);
+                });
+            }
+        });      
+        $( "#location" ).catcomplete({                          
+            source: "jqhelp/autocompletion.php?case=name",                            
+            minLength: '<?php echo $_SESSION['feature_ac_minlength']; ?>', //<?php echo $_SESSION['termbegin'] ? $_SESSION['termbegin'] : 7;echo ":00"; ?>                            
+            delay: '<?php echo $_SESSION['feature_ac_delay']; ?>',
+            disabled: false,//<?php echo ($_SESSION['feature_ac']?'true':'true'); ?>,ToDo 
+            select: function( e, ui ) {                    
+                //showD(ui.item.src,ui.item.id);
+                
+                $( "#tmp" ).data( "cust_vend_pers", ui.item.src+ui.item.id );
+                //alert( "Selected" + $( "#tmp" ).data( "srcId") );
+            }
+        });
+
+   
 				
     });
 
 </script>
 <style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+        font-size: 14px;
+    }
 
-	body {
-		margin: 0;
-		padding: 0;
-		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
-		font-size: 14px;
-	}
+    #calendar {
+        /*width: 98%;*/
+        margin: 40px auto;
+    }
+    .ui-autocomplete-category {
+        font-weight: bold;
+        padding: .2em .4em;
+        margin: .8em 0 .2em;
+        line-height: 1.5;
+    }
 
-	#calendar {
-		/*width: 98%;*/
-		margin: 40px auto;
-	}
 
 
     #titleDesig     { position:absolute; top:20px; left:32px; }
@@ -366,6 +403,7 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
     #prioRadio      { position:absolute; top:80px; left:412px;}
     #locationLabel  { position:absolute; top:120px; left:400px;}
     #locationInput  { position:absolute; top:145px; left:400px;}
+    #locationInfo   { position:absolute; top:145px; left:500px;}
     #descTitle      { position:absolute; top:180px; left:30px;}
     #desc           { position:absolute; top:180px; left:30px;}
     .title{
@@ -473,7 +511,7 @@ Wenn Aufgabe erledigt, dann end = now() & color = green
             <div id="locationLabel">Lokation:</div>
             <div id="locationInput">
                 <form>
-                    <input type="text"  id="location" class=" ui-widget-content ui-corner-all">   
+                    <input type="text"  id="location" class=" ui-widget-content ui-corner-all" autocomplete="off">    
                 </form>    
             </div>          
                        

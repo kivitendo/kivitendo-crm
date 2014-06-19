@@ -197,6 +197,7 @@ Location: Autocompletion Customer, Vendor, Person danach google??
                 $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");
                 $( "#colorPick" ).hide();
                 $( "#color" ).val( event.color );
+                $( "#tmp" ).data( "cust_vend_pers", event.cust_vend_pers ); 
                 $( "#location" ).val( event.location );
                 $( "#done" ).prop( 'checked', event.done );
                 $( "#chkboxDone" )[event.job == 't' ? 'show' : 'hide']();
@@ -336,18 +337,22 @@ Location: Autocompletion Customer, Vendor, Person danach google??
                 });
             }
         });      
-        $( "#location" ).catcomplete({                          
+        $( "#location" ).change(function(){
+                 $( "#tmp" ).data( "cust_vend_pers", false );
+            }).catcomplete({                         
             source: "jqhelp/autocompletion.php?case=name",                            
             minLength: '<?php echo $_SESSION['feature_ac_minlength']; ?>', //<?php echo $_SESSION['termbegin'] ? $_SESSION['termbegin'] : 7;echo ":00"; ?>                            
             delay: '<?php echo $_SESSION['feature_ac_delay']; ?>',
             disabled: false,//<?php echo ($_SESSION['feature_ac']?'true':'true'); ?>,ToDo 
-            select: function( e, ui ) {                    
-                //showD(ui.item.src,ui.item.id);
-                
+            select: function( e, ui ) {                                    
                 $( "#tmp" ).data( "cust_vend_pers", ui.item.src+ui.item.id );
-                //alert( "Selected" + $( "#tmp" ).data( "srcId") );
             }
-        });
+        }).dblclick(function() {
+            var cust_vend_pers = $( "#tmp" ).data( "cust_vend_pers" );
+            var Q  = cust_vend_pers.charAt( 0 );
+            if( cust_vend_pers != 'false' ) window.open( "firma" + (Q=='K' ? '2' : '1') + ".php?Q=" + Q + "&id=" + cust_vend_pers.slice(1) );
+            else window.open( "http://maps.google.de/maps/place/" + $( "#location" ).val() );
+        }).tooltip();
         $( "#allDay" ).change( function(){
             if( !$(this).is( ":checked" ) ){
                 $( "#startTime" ).val( moment( "<?php echo $_SESSION['termbegin'] ? $_SESSION['termbegin'] : 7;echo ":00"; ?>", "HH:mm" ).format( "LT") );
@@ -511,7 +516,7 @@ Location: Autocompletion Customer, Vendor, Person danach google??
             <div id="locationLabel">Lokation:</div>
             <div id="locationInput">
                 <form>
-                    <input type="text"  id="location" class=" ui-widget-content ui-corner-all" autocomplete="off">    
+                    <input type="text"  id="location" class=" ui-widget-content ui-corner-all" autocomplete="off" title="Doppelklick für weitere Info.">    
                 </form>    
             </div>          
                        

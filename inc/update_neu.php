@@ -1,5 +1,6 @@
 <?php
     require_once("stdLib.php");
+    include_once("version.php");
     chdir($_SESSION['crmpath']);
     //$LOGIN = true;// wofür war / ist das gedacht??
     // Wann ist $LOGIN gesetzt

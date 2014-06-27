@@ -12,6 +12,7 @@
     $id         = $_POST['id'];
     $allDay     = $_POST['allDay'];
     $uid        = $_POST['uid'];
+    $category   = $_POST['category'];
     $prio       = $_POST['prio'];
     $job        = $_POST['job'];
     $color      = $_POST['color'];
@@ -21,26 +22,27 @@
     //$url = $_POST['url'];
     switch( $task ){
         case "newEvent":
-            $sql="INSERT INTO termine (start, stop, cause, c_cause, allDay, prio, job, color, done, location, cust_vend_pers ) VALUES ( '$start'::TIMESTAMP, '$end'::TIMESTAMP,'$title','$desc', $allDay, $prio, '$job', '$color', '$done', '$location', '$cust_vend_pers' )";
+            $sql="INSERT INTO events (start, stop, title, description, allDay, uid, category, prio, job, color, done, location, cust_vend_pers ) VALUES ( '$start'::TIMESTAMP, '$end'::TIMESTAMP,'$title','$desc', $allDay, $uid, $category, $prio, '$job', '$color', '$done', '$location', '$cust_vend_pers' )";
             $rc=$_SESSION['db']->query($sql); 
-            //$sql = "SELECT MAX(id) FROM termine";//!!!!!!!!!!!!!!!!!!!!
+            echo "SQL: ".$sql;
+            //$sql = "SELECT MAX(id) FROM events";//!!!!!!!!!!!!!!!!!!!!
             //$rs = $_SESSION['db']->getOne($sql);
             //echo $rs['max'];  
         break;
         case "updateEvent":
-            $sql="UPDATE termine SET cause = '$title', start = '$start'::TIMESTAMP, stop = '$end'::TIMESTAMP, c_cause = '$desc', allday = $allDay, uid = '$uid', prio = '$prio', job = '$job', color = '$color', done = '$done', location = '$location', cust_vend_pers = '$cust_vend_pers' WHERE id = $id";
+            $sql="UPDATE events SET title = '$title', start = '$start'::TIMESTAMP, stop = '$end'::TIMESTAMP, description = '$desc', allday = $allDay, uid = '$uid', category = '$category', prio = '$prio', job = '$job', color = '$color', done = '$done', location = '$location', cust_vend_pers = '$cust_vend_pers' WHERE id = $id";
             $rc=$_SESSION['db']->query($sql);   
         break;
         case "updateTimestamp":
-            $sql="UPDATE termine SET  start = '$start'::TIMESTAMP, stop = '$end'::TIMESTAMP, allday = $allDay WHERE id = $id";
+            $sql="UPDATE events SET  start = '$start'::TIMESTAMP, stop = '$end'::TIMESTAMP, allday = $allDay WHERE id = $id";
             $rc=$_SESSION['db']->query($sql);   
         break;
         case "deleteEvent":
-            $sql="DELETE FROM termine WHERE id = $id";
+            $sql="DELETE FROM events WHERE id = $id";
             $rc=$_SESSION['db']->query($sql);   
         break;
         case "getEvents":
-            $sql="SELECT cause AS title, start, stop AS end, c_cause AS desc, id, allday, uid, prio, job, color, done, location, cust_vend_pers FROM termine WHERE start <= '$endGet' AND stop >= '$startGet'";
+            $sql="SELECT title, start, stop AS end, description AS desc, id, allday, uid, category, prio, job, color, done, location, cust_vend_pers FROM events WHERE start <= '$endGet' AND stop >= '$startGet'";
             $rs=$_SESSION['db']->getAll($sql);
             foreach( $rs as $key => $value ){
                 $rs[$key]['allDay'] = $rs[$key]['allday'] == 't' ? true : false;
@@ -56,8 +58,8 @@
             //print_r( $rs ); 
             echo json_encode( $rs ) ;  
         break;
-        case "getKategorie":
-            $sql="SELECT sorder AS value, catname AS text FROM termincat ORDER BY sorder"; 
+        case "getCategory":
+            $sql="SELECT id AS value, label AS text FROM event_category ORDER BY id"; 
             $rs=$_SESSION['db']->getAll( $sql );
             //print_r( $rs ); 
             echo json_encode( $rs ) ;  

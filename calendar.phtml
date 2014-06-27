@@ -20,7 +20,7 @@
   //print_r( $_SESSION );
 /*************************************************** +++ ToDo ++++*******************************************************
 Kategorien und User + All in Tabs darstellen!!!!
-Location: Autocompletion Customer, Vendor, Person danach google?? 
+Visibility, Repeat implementieren
 ************************************************************************************************************************/
 ?>
 <script>
@@ -42,6 +42,7 @@ Location: Autocompletion Customer, Vendor, Person danach google??
                     var id = $( "#id" ).val();
                     var allDay = $( "#allDay" ).is( ":checked" );
                     var uid = $( "#user option:selected" ).val();
+                    var category = $( "#category option:selected" ).val();
                     var prio = $( "input:radio:checked[name='prioRadio']" ).val();
                     var job  = $( "input:radio:checked[name='jobRadio']" ).val();
                     var color = $( "#color" ).val();
@@ -75,6 +76,7 @@ Location: Autocompletion Customer, Vendor, Person danach google??
                                 id:   $("#id").val(),
                                 allDay: $( "#allDay" ).is( ":checked" ),
                                 uid : $("#user option:selected").val(),
+                                category : $( "#category option:selected" ).val(),  
                                 start: start,
                                 end: end, 
                                 prio: prio,
@@ -158,12 +160,15 @@ Location: Autocompletion Customer, Vendor, Person danach google??
                 $( "#title" ).val('');
                 $( "#desc" ).val('');
                 $( "#id" ).val('');
-                $("#allDay").prop( 'checked', false );//ToDo abfragen ob es allDay ist
+                $( "#allDay ").prop( 'checked', false );//ToDo abfragen ob es allDay ist
                 $( "#startDate" ).val( moment( start ).format( "L") );
                 $( "#startTime" ).val( moment( start ).format( "LT") );
                 $( "#endDate" ).val( moment( end ).format( "L") );
                 $( "#endTime" ).val( moment( end ).format( "LT") );
                 $( "#user" ).data("selectBox-selectBoxIt").selectOption("<?php echo $_SESSION['loginCRM']; ?>");
+                $( "#category" ).val( "0" );
+                $( "#visibility" ).val( "0" );
+                
                 $( "#prio_1" ).prop( 'checked', true );            
                 $( "#job_f" ).prop( 'checked', true );
                 $( "div#jobRadio,div#prioRadio" ).buttonset( "refresh" );
@@ -192,6 +197,8 @@ Location: Autocompletion Customer, Vendor, Person danach google??
                 $( "#endDate" ).val( moment( event.end ? event.end : event.start ).format( "L") );
                 $( "#endTime" ).val( moment( event.end ? event.end : event.start ).format( "LT") );
                 $( "#user" ).data("selectBox-selectBoxIt").selectOption(event.uid);
+                $( "#category" ).data("selectBox-selectBoxIt").selectOption(event.category);
+                $( "#visibility" ).data("selectBox-selectBoxIt").selectOption(event.visibility);
                 $( "#prio_" + event.prio ).prop( 'checked', true );
                 $( "#job_" + event.job ).prop( 'checked',true ); 
                 $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");
@@ -252,12 +259,12 @@ Location: Autocompletion Customer, Vendor, Person danach google??
             },
         });
         /*** SelectBox User, Kategorie **********************************************************************************************/
-        $("#user, #kategorieBox").each(function(){
-            var ajaxTask = this.id == 'user' ? 'getUsers': 'getKategorie'; 
+        $("#user, #category").each(function(){
+            var ajaxTask = this.id == 'user' ? 'getUsers': 'getCategory'; 
             $(this).selectBoxIt({
-                theme:       "jqueryui",
-                autoWidth:   true,
-                height: "12",
+                theme:      "jqueryui",
+                autoWidth:  true,
+                height:     "12",
                 populate: function() {
                     var deferred = $.Deferred()
                     $.ajax({
@@ -271,7 +278,16 @@ Location: Autocompletion Customer, Vendor, Person danach google??
                 }
             })
         })
-        
+        $( "#visibility" ).selectBoxIt({
+            theme:      "jqueryui",
+            autoWidth:  true,
+            height: "12",
+            populate: [
+                { value: "0", text: "Alle" },
+                { value: "1", text: "Gruppe" },
+                { value: "2", text: "Benutzer" },
+            ]   
+        });
         $( "#jobRadio,#prioRadio" ).buttonset();//.find('label').height(28);;
         $( "#job_t" ).click( function() {
             $( "#endDate" ).val( moment( $( "#endDate" ).val(), 'DD.MM.YYYY' ).add( 'years', 1 ).format( "L") );
@@ -321,7 +337,10 @@ Location: Autocompletion Customer, Vendor, Person danach google??
             //defaultColor: 1, 
             columns: 13,     // number of columns (optional)  
             color: ['#FF7400', '#CDEB8B','#6BBA70','#006E2E','#C3D9FF','#0101DF','#4096EE','#356AA0','#FF0096','#DF0101','#B02B2C','#112211','#000000'], // list of colors (optional)
-            click: function(color){$('#color').val(color);}, 
+            click: function(color){
+                $('#color').val(color);
+                $( "#colorPick" ).toggle();
+            }, 
         });
         
         $.widget("custom.catcomplete", $.ui.autocomplete, {
@@ -396,21 +415,23 @@ Location: Autocompletion Customer, Vendor, Person danach google??
     #colorLabel    { position:absolute; top:50px; left:475px; }
     
     #colorInp       { position:absolute; top:50px; left:550px; }
-    #colorPick      { position:absolute; top:80px; left:450px; }
+    #colorPick      { position:absolute; top:80px; left:450px; z-index: 1; }
     #end             { position:absolute; top:80px; left:32px; }
     #endDateInp     { position:absolute; top:80px; left:95px; }
     #endTimeInp     { position:absolute; top:80px; left:195px;}
-    #kategorie      { position:absolute; top:120px; left:34px; }
-    #kategorieDrop  { position:absolute; top:140px; left:32px;}
+    #categoryLabel { position:absolute; top:120px; left:34px; }
+    #categoryDrop  { position:absolute; top:140px; left:32px;}
     #userLabel      { position:absolute; top:120px; left:220px; }
     #userDrop       { position:absolute; top:140px; left:218px;}
+    #visibilityLabel{ position:absolute; top:120px; left:400px; }
+    #visibilityDrop { position:absolute; top:140px; left:400px;}
     #prioLabel      { position:absolute; top:90px; left:350px; }
     #prioRadio      { position:absolute; top:80px; left:412px;}
-    #locationLabel  { position:absolute; top:120px; left:400px;}
-    #locationInput  { position:absolute; top:145px; left:400px;}
-    #locationInfo   { position:absolute; top:145px; left:500px;}
-    #descTitle      { position:absolute; top:180px; left:30px;}
-    #desc           { position:absolute; top:180px; left:30px;}
+    #locationLabel  { position:absolute; top:170px; left:30px;}
+    #locationInput  { position:absolute; top:190px; left:30px;}
+    #locationInfo   { position:absolute; top:200px; left:500px;}
+    #descTitle      { position:absolute; top:220px; left:30px;}
+    #desc           { position:absolute; top:220px; left:30px;}
     .title{
          width: 350px;
     }    
@@ -488,11 +509,11 @@ Location: Autocompletion Customer, Vendor, Person danach google??
             <div id="endTimeInp">
                 <input type="text"   id="endTime" class="text ui-widget-content ui-corner-all time">
             </div>
-            <div id="kategorie">
+            <div id="categoryLabel">
                 Kategorie:
             </div> 
-            <div id="kategorieDrop">
-                <select  id="kategorieBox">
+            <div id="categoryDrop">
+                <select  id="category">
                 </select> 
             </div>
             <div id="userLabel">
@@ -500,6 +521,14 @@ Location: Autocompletion Customer, Vendor, Person danach google??
             </div> 
             <div id="userDrop">
                 <select id="user" >
+                
+                </select> 
+            </div>
+            <div id="visibilityLabel">
+                Sichtbarkeit:
+            </div>
+            <div id="visibilityDrop">
+                <select id="visibility">
                 
                 </select> 
             </div>

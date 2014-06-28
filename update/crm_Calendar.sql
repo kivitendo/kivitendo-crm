@@ -19,7 +19,7 @@ CREATE TABLE events(
     repeat_factor  	smallint,
     repeat_quantity	smallint,
     repeat_end		    timestamp without time zone,
-    uid             smallint,
+    uid             int,
     prio            smallint,
     category 		     smallint,
     visibility		    smallint,

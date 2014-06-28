@@ -4,7 +4,7 @@
 <meta charset='utf-8' />
 <?php
     require_once("inc/stdLib.php");
-    include("inc/crmLib.php");
+    //include("inc/crmLib.php");
     $menu = $_SESSION['menu'];
     $head = mkHeader();
     echo $menu['stylesheets'];
@@ -17,10 +17,10 @@
     echo $head['FULLCALJS'];
     echo $head['JQBOX'];
     echo $head['COLORPICKERJS'];
-  //print_r( $_SESSION );
+  ///print_r( $_SESSION );
 /*************************************************** +++ ToDo ++++*******************************************************
 Kategorien und User + All in Tabs darstellen!!!!
-Visibility, Repeat implementieren
+Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
 ************************************************************************************************************************/
 ?>
 <script>
@@ -42,6 +42,7 @@ Visibility, Repeat implementieren
                     var id = $( "#id" ).val();
                     var allDay = $( "#allDay" ).is( ":checked" );
                     var uid = $( "#user option:selected" ).val();
+                    var visibility = $( "#visibility option:selected" ).val();
                     var category = $( "#category option:selected" ).val();
                     var prio = $( "input:radio:checked[name='prioRadio']" ).val();
                     var job  = $( "input:radio:checked[name='jobRadio']" ).val();
@@ -76,6 +77,7 @@ Visibility, Repeat implementieren
                                 id:   $("#id").val(),
                                 allDay: $( "#allDay" ).is( ":checked" ),
                                 uid : $("#user option:selected").val(),
+                                visibility : visibility,
                                 category : $( "#category option:selected" ).val(),  
                                 start: start,
                                 end: end, 
@@ -142,7 +144,7 @@ Visibility, Repeat implementieren
             theme: true,
             header: {
                 left: 'prev,next today',
-                center: 'title, test',
+                center: 'title',
                 right: 'month,agendaWeek,agendaDay'
             },
             minTime: '<?php echo $_SESSION['termbegin'] ? $_SESSION['termbegin'] : 7;echo ":00"; ?>',
@@ -154,7 +156,10 @@ Visibility, Repeat implementieren
             dragble: true,
             selectable: true,    
             selectHelper: true,
-            events: 'jqhelp/calendar.php',
+            events: {
+                url: 'jqhelp/calendar.php',
+                data: { myuid: "<?php echo $_SESSION['loginCRM']; ?>" }
+            },
             /*** New Event ************************************************************************************/
             select: function( start, end ) {
                 $( "#title" ).val('');
@@ -166,8 +171,8 @@ Visibility, Repeat implementieren
                 $( "#endDate" ).val( moment( end ).format( "L") );
                 $( "#endTime" ).val( moment( end ).format( "LT") );
                 $( "#user" ).data("selectBox-selectBoxIt").selectOption("<?php echo $_SESSION['loginCRM']; ?>");
-                $( "#category" ).val( "0" );
-                $( "#visibility" ).val( "0" );
+                $( "#category" ).data("selectBox-selectBoxIt").selectOption('0');
+                $( "#visibility" ).data("selectBox-selectBoxIt").selectOption('0');
                 
                 $( "#prio_1" ).prop( 'checked', true );            
                 $( "#job_f" ).prop( 'checked', true );
@@ -213,7 +218,7 @@ Visibility, Repeat implementieren
                 $( "#dialog" ).dialog( "open" );
             },
             /*** Move Event *************************************************************************************/
-            eventDrop: function(event, testxx, dayDelta) {
+            eventDrop: function(event) {
                 var start = moment(event.start).format( "YYYY-MM-DD HH:mm:ss");
                 // var tst = moment(event.start).add('h', 1);//move from allday 
                 var end  = event.end ? moment(event.end).format( "YYYY-MM-DD HH:mm:ss") : moment(event.start).add('h', 1).format( "YYYY-MM-DD HH:mm:ss");//.add('h', 1);;//
@@ -427,7 +432,7 @@ Visibility, Repeat implementieren
     #visibilityDrop { position:absolute; top:140px; left:400px;}
     #prioLabel      { position:absolute; top:90px; left:350px; }
     #prioRadio      { position:absolute; top:80px; left:412px;}
-    #locationLabel  { position:absolute; top:170px; left:30px;}
+    #locationLabel  { position:absolute; top:173px; left:32px;}
     #locationInput  { position:absolute; top:190px; left:30px;}
     #locationInfo   { position:absolute; top:200px; left:500px;}
     #descTitle      { position:absolute; top:220px; left:30px;}
@@ -441,8 +446,8 @@ Visibility, Repeat implementieren
     .time{
          width: 80px;
     }
-    .test{
-         width: 60px;
+    .location{
+         width: 155px;
     } 
     .inp-checkbox+label {
         margin: .5em;
@@ -476,7 +481,7 @@ Visibility, Repeat implementieren
                
             <div id="titleInp">
                 <input type="text"  id="title" class=" ui-widget-content ui-corner-all title">
-                <input type="text"  name="id" id="id"  style="visibility: hidden" class="ui-widget-content ui-corner-all test">
+                <input type="text"  name="id" id="id"  style="visibility: hidden" class="ui-widget-content ui-corner-all">
             </div>
             <div id="jobRadio">
                 <form>
@@ -545,7 +550,7 @@ Visibility, Repeat implementieren
             <div id="locationLabel">Lokation:</div>
             <div id="locationInput">
                 <form>
-                    <input type="text"  id="location" class=" ui-widget-content ui-corner-all" autocomplete="off" title="Doppelklick für weitere Info.">    
+                    <input type="text"  id="location" class=" ui-widget-content ui-corner-all location" autocomplete="off" title="Doppelklick für weitere Info.">    
                 </form>    
             </div>          
                        

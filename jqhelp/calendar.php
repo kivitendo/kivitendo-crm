@@ -4,24 +4,13 @@
     $task  = $_POST['task'] ? $_POST['task'] : $_GET['task'];
     //ToDo Funktion AjaxSql schreiben. Diese werten $_POST oder $_GET aus, erster Parameter ist Tabelle, zeiter P ist task (insert, select, update) folgende sind die serialisierten Daten 
     if( !$task ) $task = 'getEvents';
-    $startGet   = $_GET['start'];
-    $endGet     = $_GET['end'];
-    $myuid      = $_GET['myuid'];
-    $title      = $_POST['title'];
-    $start      = $_POST['start'];
-    $end        = $_POST['end'];
-    $desc       = $_POST['desc'];
-    $id         = $_POST['id'];
-    $allDay     = $_POST['allDay'];
-    $uid        = $_POST['uid'];
-    $visibility = $_POST['visibility'];
-    $category   = $_POST['category'];
-    $prio       = $_POST['prio'];
-    $job        = $_POST['job'];
-    $color      = $_POST['color'];
-    $done       = $_POST['done'];
-    $location    = $_POST['location'];
-    $cust_vend_pers = $_POST['cust_vend_pers'];
+    $startGet       = $_GET['start'];
+    $endGet         = $_GET['end'];
+    $myuid          = $_GET['myuid'];
+    foreach( $_POST as $key => $value ){
+        $$key = $value;
+    }
+    //echo "location: ".$location;
     //$url = $_POST['url'];
     switch( $task ){
         case "newEvent":
@@ -66,6 +55,15 @@
             $sql="SELECT id AS value, label AS text FROM event_category ORDER BY id"; 
             $rs=$_SESSION['db']->getAll( $sql );
             //print_r( $rs ); 
+            echo json_encode( $rs ) ;  
+        break;
+        case "getGroups":
+            $sql = "SELECT grpid AS value, grpname AS text FROM gruppenname  ORDER BY grpid"; 
+            $rs = $_SESSION['db']->getAll( $sql );
+            //$arr = ;
+            //  $arr = array( "value" => "bar" );
+            array_push( $rs, array( 'value' => 0, 'text' => 'Besitzer' ) );            
+            print_r( $rs ); 
             echo json_encode( $rs ) ;  
         break;
        

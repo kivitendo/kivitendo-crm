@@ -2,9 +2,6 @@
     require_once("stdLib.php");
     include_once("version.php");
     chdir($_SESSION['crmpath']);
-    //$LOGIN = true;// wofür war / ist das gedacht??
-    // Wann ist $LOGIN gesetzt
-    // Ist $_SESSION['loginCRM'] gemeint??
     if (!function_exists('updatever')) {
 	    function updatever($VERSION) {
 		    $sql = "INSERT INTO crm (uid,datum,version) values (".$_SESSION["loginCRM"].",now(),'".$VERSION."')";

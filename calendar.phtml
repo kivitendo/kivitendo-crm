@@ -174,16 +174,18 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                 $( "#category" ).data("selectBox-selectBoxIt").selectOption('0');
                 $( "#visibility" ).data("selectBox-selectBoxIt").selectOption('0');
                 
-                $( "#prio_1" ).prop( 'checked', true );            
-                $( "#job_f" ).prop( 'checked', true );
+                $( "#prio_1,#job_f" ).prop( 'checked', true );            
+                //$( "#job_f" ).prop( 'checked', true );
                 $( "div#jobRadio,div#prioRadio" ).buttonset( "refresh" );
-                $( "#color" ).val( "" );
+                $( "#color, #repeat_quantity, #repeat_end" ).val( "" );
+                $( "#repeat_factor" ).val( '0' );
                 $( "#colorPick" ).hide();
                 $( "#done" ).prop( 'checked', false );
                 $( "#location" ).val('');
                 $( "#tmp" ).data( "srcId", '' );
                 $( ":input[type!='button'][id!='done']" ).attr( "disabled", false ).css( "background","#FFF" );
                 $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");
+                
                 $( "#dialog" ).dialog( "open" );
             },
             /*** Edit Event *************************************************************************************/
@@ -291,6 +293,17 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                 { value: "0", text: "Alle" },
                 { value: "1", text: "Gruppe" },
                 { value: "2", text: "Benutzer" },
+            ]   
+        });
+        $( "#repeat" ).selectBoxIt({
+            theme:      "jqueryui",
+            autoWidth:  true,
+            height: "12",
+            populate: [
+                { value: "day",  text: "tägig" },
+                { value: "week", text: "wöchig" },
+                { value: "month",text: "monatig" },
+                { value: "year", text: "jahrig" }
             ]   
         });
         $( "#jobRadio,#prioRadio" ).buttonset();//.find('label').height(28);;
@@ -409,34 +422,39 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
 
 
 
-    #titleDesig     { position:absolute; top:20px; left:32px; }
-    #titleInp       { position:absolute; top:20px; left:95px;}
-    #jobRadio       { position:absolute; top:10px; left:465px;}
-    #start          { position:absolute; top:50px; left:32px; }
-    #startDateInp   { position:absolute; top:50px; left:95px;}
-    #startTimeInp   { position:absolute; top:50px; left:195px; }
-    #chkboxAllDay   { position:absolute; top:48px; left:295px; }
-    #chkboxDone     { position:absolute; top:78px; left:295px; }
-    #colorLabel    { position:absolute; top:50px; left:475px; }
+    #titleDesig         { position:absolute; top:20px; left:32px; }
+    #titleInp           { position:absolute; top:20px; left:95px;}
+    #jobRadio           { position:absolute; top:10px; left:465px;}
+    #start              { position:absolute; top:50px; left:32px; }
+    #startDateInp       { position:absolute; top:50px; left:95px;}
+    #startTimeInp       { position:absolute; top:50px; left:195px; }
+    #chkboxAllDay       {  position:absolute; top:48px; left:295px; }
+    #chkboxDone         { position:absolute; top:78px; left:295px; }
+    #colorLabel         { position:absolute; top:50px; left:475px; }
     
-    #colorInp       { position:absolute; top:50px; left:550px; }
-    #colorPick      { position:absolute; top:80px; left:450px; z-index: 1; }
-    #end             { position:absolute; top:80px; left:32px; }
-    #endDateInp     { position:absolute; top:80px; left:95px; }
-    #endTimeInp     { position:absolute; top:80px; left:195px;}
-    #categoryLabel { position:absolute; top:120px; left:34px; }
-    #categoryDrop  { position:absolute; top:140px; left:32px;}
-    #userLabel      { position:absolute; top:120px; left:220px; }
-    #userDrop       { position:absolute; top:140px; left:218px;}
-    #visibilityLabel{ position:absolute; top:120px; left:400px; }
-    #visibilityDrop { position:absolute; top:140px; left:400px;}
-    #prioLabel      { position:absolute; top:90px; left:350px; }
-    #prioRadio      { position:absolute; top:80px; left:412px;}
-    #locationLabel  { position:absolute; top:173px; left:32px;}
-    #locationInput  { position:absolute; top:190px; left:30px;}
-    #locationInfo   { position:absolute; top:200px; left:500px;}
-    #descTitle      { position:absolute; top:220px; left:30px;}
-    #desc           { position:absolute; top:220px; left:30px;}
+    #colorInp           { position:absolute; top:50px; left:550px; }
+    #colorPick          { position:absolute; top:80px; left:450px; z-index: 1; }
+    #end                { position:absolute; top:80px; left:32px; }
+    #endDateInp         { position:absolute; top:80px; left:95px; }
+    #endTimeInp         { position:absolute; top:80px; left:195px;}
+    #categoryLabel      { position:absolute; top:120px; left:34px; }
+    #categoryDrop       { position:absolute; top:140px; left:32px;}
+    #userLabel          { position:absolute; top:120px; left:220px; }
+    #userDrop           { position:absolute; top:140px; left:218px;}
+    #visibilityLabel    { position:absolute; top:120px; left:400px; }
+    #visibilityDrop     { position:absolute; top:140px; left:400px;}
+    #prioLabel          { position:absolute; top:90px; left:350px; }
+    #prioRadio          { position:absolute; top:80px; left:412px;}
+    #locationLabel      { position:absolute; top:173px; left:32px;}
+    #locationInput      { position:absolute; top:190px; left:30px;}
+    #locationInfo       { position:absolute; top:200px; left:500px;}
+    #repeatLabel        { position:absolute; top:173px; left:220px;}
+    #repeatFactorInput  { position:absolute; top:190px; left:220px;}
+    #repeatSelect       { position:absolute; top:190px; left:270px;}
+    #repeatQuantityInput{ position:absolute; top:190px; left:400px;}
+    #repeatEndInput     { position:absolute; top:190px; left:480px;}
+    #descTitle          { position:absolute; top:220px; left:30px;}
+    #desc               { position:absolute; top:220px; left:30px;}
     .title{
          width: 350px;
     }    
@@ -449,6 +467,10 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
     .location{
          width: 155px;
     } 
+    .repeatfactor{
+         width: 30px;
+         text-align: right;
+    }
     .inp-checkbox+label {
         margin: .5em;
         width:16px; 
@@ -457,6 +479,7 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
     }
     .selectboxit-container .selectboxit-options {width: 125px;}      
     .selectboxit-container span, .selectboxit-container .selectboxit-options a {height: 25px; line-height: 25px;}
+    #repeatSelectBoxItContainer.selectboxit-container .selectboxit-options {width: 70px;}
     .radio+label{ 
        /* height: 25px;/*ToDo Buttonhöhe verringern*/
     }​
@@ -553,8 +576,25 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                     <input type="text"  id="location" class=" ui-widget-content ui-corner-all location" autocomplete="off" title="Doppelklick für weitere Info.">    
                 </form>    
             </div>          
-                       
-
+            <div id="repeatLabel">Wiederholungen:</div>          
+            <div id="repeatFactorInput">
+                <form>
+                    <input type="text"  id="repeat_factor" class=" ui-widget-content ui-corner-all repeatfactor " > -     
+                </form>
+            </div> 
+            <div id="repeatSelect">   
+                <select id="repeat" ></select> 
+            </div>  
+            <div id="repeatQuantityInput">
+                <form>
+                    <input type="text"  id="repeat_quantity" class=" ui-widget-content ui-corner-all repeatfactor" > x bis:  
+                </form>
+            </div> 
+            <div id="repeatEndInput">
+                <form>
+                    <input type="text"  id="repeat_end" class=" ui-widget-content ui-corner-all date" >    
+                </form>
+            </div> 
             <textarea name="desc" id="desc" class="text ui-widget-content ui-corner-all" rows="10" cols="64"></textarea>
         </div>               
 

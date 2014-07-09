@@ -917,9 +917,9 @@ function makeMenu($sess,$token){
         $tmp = str_replace( 'itemIcon="', 'itemIcon="'.$BaseUrl, $tmp );
         $rs['pre_content']   = str_replace( 'src="', 'src="'.$BaseUrl, $tmp );
         $rs['start_content'] = $objResult->{'start_content'};
-        //$rs['start_content'] = '<div class="ui-widget-content">';//Begin UI-Look
+        $rs['start_content_ui'] = '<div class="ui-widget-content">';//Begin UI-Look
         $rs['end_content']   = $objResult->{'end_content'};
-        //$rs['end_content']   = '</div>'; //End UI-Look
+        $rs['end_content_ui']   = '</div>'; //End UI-Look
     }
     return $rs;
 }

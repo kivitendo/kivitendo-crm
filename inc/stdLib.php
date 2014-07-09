@@ -883,7 +883,7 @@ function makeMenu($sess,$token){
     
     $result = curl_exec( $ch );
     if( $result === false || curl_errno( $ch )){
-        die( 'Curl-Error: ' .curl_error($ch).' < /br> $ERP_BASE_URL richtig gesetzt??' );
+        die( 'Curl-Error: ' .curl_error($ch).' </br> $ERP_BASE_URL in "inc/conf.php" richtig gesetzt??' );
     }
     curl_close( $ch );
     $objResult = json_decode( $result );

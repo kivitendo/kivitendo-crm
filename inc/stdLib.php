@@ -874,15 +874,17 @@ function makeMenu($sess,$token){
     curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
     curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, false );
     curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+    curl_setopt( $ch, CURLOPT_TIMEOUT, 1 );
     curl_setopt( $ch, CURLOPT_ENCODING, 'gzip,deflate' );
     curl_setopt( $ch, CURLOPT_HTTPHEADER, array (
                 "Connection: keep-alive",
                 "Cookie: ".$_SESSION["cookie"]."=".$sess."; ".$_SESSION["cookie"]."_api_token=".$token
                 ));
-    if ( curl_errno($ch) ) {   
-        echo 'Curl error: '.curl_error( $ch );
-    }
+    
     $result = curl_exec( $ch );
+    if( $result === false || curl_errno( $ch )){
+        die( 'Curl-Error: ' .curl_error($ch).' < /br> $ERP_BASE_URL richtig gesetzt??' );
+    }
     curl_close( $ch );
     $objResult = json_decode( $result );
     if (!is_object($objResult)) anmelden();

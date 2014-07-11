@@ -35,7 +35,7 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                 "Save": function() {
                     var start = moment($( "#startDate" ).val() + ' ' + $( "#startTime" ).val(),'L LT');
                     var end = moment($( "#endDate" ).val() + ' ' + $( "#endTime" ).val(),'L LT');
-                    var start_cur = moment($( "#startDate" ).val() + ' ' + $( "#startTime" ).val(),'L LT').add('h', 2);
+                    var start_cur = moment($( "#startDate" ).val() + ' ' + $( "#startTime" ).val(),'L LT').add('h', 2); 
                     var end_cur = moment($( "#endDate" ).val() + ' ' + $( "#endTime" ).val(),'L LT').add('h', 2);
                     var title = $( "#title" ).val();
                     var desc = $( "#desc" ).val();
@@ -50,7 +50,11 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                     var done = $( "#done" ).is( ":checked" );
                     var location = $( "#location" ).val();
                     var cust_vend_pers = $( "#tmp" ).data( "cust_vend_pers" );
-                   // alert( cust_vend_pers );
+                    var repeat = $( "#repeat" ).val();
+                    var repeat_factor = $( "#repeat_factor" ).val();
+                    var repeat_quantity = $( "#repeat_quantity" ).val();
+                    var repeat_end =  moment($( "#repeat_end" ).val() + ' 23:59:59' ,'L LT');
+                    
                     
                     if ( title ) {
                         event = { //wird benötigt???
@@ -68,6 +72,7 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                         } 
                         start = moment(start).format( "YYYY-MM-DD HH:mm:ss");
                         end = moment(end).format( "YYYY-MM-DD HH:mm:ss");
+                        repeat_end = moment(repeat_end).format( "YYYY-MM-DD HH:mm:ss");
                         $.ajax({
                             url: 'jqhelp/calendar.php',
                             data: {
@@ -87,6 +92,11 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                                 done: done,
                                 location:location,
                                 cust_vend_pers:cust_vend_pers,
+                                repeat:repeat,
+                                repeat_factor:repeat_factor,
+                                repeat_quantity:repeat_quantity,
+                                repeat_end:repeat_end,
+                                
                                 
                             },
                             type: "POST",
@@ -172,7 +182,7 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                 $( "#endTime" ).val( moment( end ).format( "LT") );
                 $( "#user" ).data("selectBox-selectBoxIt").selectOption("<?php echo $_SESSION['loginCRM']; ?>");
                 $( "#category" ).data("selectBox-selectBoxIt").selectOption('0');
-                $( "#visibility" ).data("selectBox-selectBoxIt").selectOption('0');
+                $( "#visibility" ).data("selectBox-selectBoxIt").selectOption('-1');
                 
                 $( "#prio_1,#job_f" ).prop( 'checked', true );            
                 //$( "#job_f" ).prop( 'checked', true );
@@ -214,6 +224,7 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                 $( "#tmp" ).data( "cust_vend_pers", event.cust_vend_pers ); 
                 $( "#location" ).val( event.location );
                 $( "#done" ).prop( 'checked', event.done );
+                $( "#repeat" ).val( event.repeat );
                 $( "#chkboxDone" )[event.job == 't' ? 'show' : 'hide']();
                 $( ":input[type!='button'][id!='done']" ).attr( "disabled", event.done ).css( "background", event.done ? "#F8F8F3" : "#FFF" );
                 $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");

@@ -34,7 +34,7 @@
             $rc=$_SESSION['db']->query($sql);   
         break;
         case "getEvents":
-            $sql="SELECT title, start, stop AS end, description AS desc, id, allday, uid, visibility, category, prio, job, color, done, location, cust_vend_pers FROM events WHERE start <= '$endGet' AND stop >= '$startGet' AND CASE WHEN visibility = 2 THEN uid = $myuid ELSE TRUE END";
+            $sql="SELECT title, start, stop AS end, description AS desc, id, allday, uid, visibility, category, prio, job, color, done, location, cust_vend_pers FROM events WHERE start <= '$endGet' AND stop >= '$startGet' AND CASE WHEN visibility = 0 THEN uid = $myuid ELSE TRUE END";
             //echo $sql;            
             $rs=$_SESSION['db']->getAll($sql);
             foreach( $rs as $key => $value ){
@@ -57,15 +57,7 @@
             //print_r( $rs ); 
             echo json_encode( $rs ) ;  
         break;
-        case "getGroups":
-            $sql = "SELECT grpid AS value, grpname AS text FROM gruppenname  ORDER BY grpid"; 
-            $rs = $_SESSION['db']->getAll( $sql );
-            //$arr = ;
-            //  $arr = array( "value" => "bar" );
-            array_push( $rs, array( 'value' => 0, 'text' => 'Besitzer' ) );            
-            print_r( $rs ); 
-            echo json_encode( $rs ) ;  
-        break;
+        
        
      }    
    

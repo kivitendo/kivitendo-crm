@@ -285,15 +285,17 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                 }
             })
         })
+       
         $( "#visibility" ).selectBoxIt({
             theme:      "jqueryui",
             autoWidth:  true,
             height: "12",
-            populate: [
-                { value: "0", text: "Alle" },
-                { value: "1", text: "Gruppe" },
-                { value: "2", text: "Benutzer" },
-            ]   
+            populate:   <?php  
+                            $grps = $_SESSION['grp'];
+                            array_unshift( $grps, array( 'value' => '0', 'text' => 'Benutzer' ) );
+                            array_unshift( $grps, array( 'value' => '-1', 'text' => 'Alle' ) );
+                            echo json_encode( $grps ); 
+                        ?>
         });
         $( "#repeat" ).selectBoxIt({
             theme:      "jqueryui",
@@ -495,6 +497,7 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
     echo $menu['start_content_ui'];
     echo '<div class="ui-widget-content">';
 ?>
+
     <div id="tmp"></div>
     <div id="dialog" class="event-dialog" title="Event">
         <div id="dialog-inner">

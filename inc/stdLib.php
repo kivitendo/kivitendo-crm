@@ -129,6 +129,10 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     $sql  = 'SELECT id as manid,name as mandant,dbhost,dbport,dbname,dbuser,dbpasswd FROM auth.clients WHERE id = '.$mandant;
     $rs   = $db->getOne($sql);
     $auth = array_merge($auth,$rs);
+    //ERP-Gruppen holen
+    $sql  = "SELECT id AS value, name AS text FROM auth.group";
+    $rs_grp = $db->getAll( $sql );
+    $auth['grp'] = $rs_grp;
     //Eine der Gruppen des Users darf sales_all_edit
     $sql  = "SELECT granted from auth.group_rights G where G.right = 'sales_all_edit' ";
     $sql .= "and G.group_id in (select group_id from auth.user_group where user_id = ".$uid.")";

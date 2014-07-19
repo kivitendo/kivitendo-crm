@@ -187,8 +187,9 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                 $( "#prio_1,#job_f" ).prop( 'checked', true );            
                 //$( "#job_f" ).prop( 'checked', true );
                 $( "div#jobRadio,div#prioRadio" ).buttonset( "refresh" );
-                $( "#color, #repeat_quantity, #repeat_end" ).val( "" );
-                $( "#repeat_factor" ).val( '0' );
+                $( "#color, #repeat_quantity" ).val( "" );
+                $( "#repeat_factor,#repeat_quantity" ).val( '0' );
+                $( "#repeat_end" ).val('');
                 $( "#colorPick" ).hide();
                 $( "#done" ).prop( 'checked', false );
                 $( "#location" ).val('');
@@ -225,6 +226,9 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                 $( "#location" ).val( event.location );
                 $( "#done" ).prop( 'checked', event.done );
                 $( "#repeat" ).val( event.repeat );
+                $( "#repeat_factor" ).val( event.repeat_factor );
+                $( "#repeat_quantity" ).val( event.repeat_quantity );
+                $( "#repeat_end" ).val( moment( event.repeat_end ).format( "L") == 'Invalid date' ? '' : moment( event.repeat_end ).format( "L")  );
                 $( "#chkboxDone" )[event.job == 't' ? 'show' : 'hide']();
                 $( ":input[type!='button'][id!='done']" ).attr( "disabled", event.done ).css( "background", event.done ? "#F8F8F3" : "#FFF" );
                 $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");

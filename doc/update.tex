@@ -1,0 +1,64 @@
+%% Kivitendo-CRM Update-Anleitung auf PostgreSQL 9.3
+\documentclass{scrartcl}
+ 
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath}
+  
+\usepackage{listings}
+ 
+\title{Anleitung Postgresql-Update auf 9.3}
+\author{Ronny Kumke}
+\date{19.07.2004}
+\begin{document}
+ 
+\maketitle
+%%\tableofcontents
+\section{Einleitung}
+ 
+Ab der Kivitendo-CRM-Version 2.0.2 ist durch die Verwendung der PostgreSQL-Typen TSRANGE und der Benutzung von Lateral Joins die PostgreSQL-Version 9.3 erforderlich. 
+Im nächstem Abschnitt wird die Umstellung auf PotgreSQL 9.3 beschrieben.    
+ 
+\section{Update auf PostgreSQL 9.3}
+Der Umstieg auf PostgreSQL 9.3 erfolgt in vier Schritten.\\
+\begin{enumerate}
+\item Datenbanken sichern\\
+\begin{lstlisting}
+sudo su postgres -c "pg_dumpall > Sicherung.sql"
+\end{lstlisting}
+\item Alte PostgreSQL-Version deinstallieren
+\begin{lstlisting}
+sudo apt-get purge postgresql-9.1 postgresql-client-9.1 pgadmin3 
+\end{lstlisting}
+\item PostgreSQL 9.3 installieren\\
+Version des Betriebssytems ermitteln
+\begin{lstlisting}
+lsb_release -c
+\end{lstlisting}
+Die Datei /etc/apt/sources.list mit Editor öffnen und die folgende Zeile hinzufügen:\\
+Die Fragezeichen sind dabei durch die Betriebssystemversion zu ersetzen.
+\begin{lstlisting}
+deb http://apt.postgresql.org/pub/repos/apt/ ??????-pgdg main
+\end{lstlisting}
+Installation starten:
+\begin{lstlisting}
+sudo apt-get install wget ca-certificates
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install postgresql-9.3 pgadmin3 postgresql-contrib-9.3
+\end{lstlisting}
+Letztere Schritte können automatisch mit dem Script update/install-postgresql-9.3.sh durchgeführt werden.
+\item Datenbanken erstellen.
+\begin{lstlisting}
+sudo -u postgres psql -f Sicherung.sql postgres 
+\end{lstlisting}
+\end{enumerate}
+\section{Dokumentation erstellen}
+Diese Dokumente wurden mit folgendem Befehl erstellt:\\
+\begin{lstlisting}
+tth update.tex \&\& pdflatex update.tex
+\end{lstlisting}
+\end{document}

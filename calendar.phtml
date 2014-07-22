@@ -168,7 +168,7 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
             selectHelper: true,
             events: {
                 url: 'jqhelp/calendar.php',
-                data: { myuid: "<?php echo $_SESSION['loginCRM']; ?>" }
+                data: { myuid: "<?php echo $_SESSION['loginCRM']; ?>"  }
             },
             /*** New Event ************************************************************************************/
             select: function( start, end ) {
@@ -225,7 +225,8 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                 $( "#tmp" ).data( "cust_vend_pers", event.cust_vend_pers ); 
                 $( "#location" ).val( event.location );
                 $( "#done" ).prop( 'checked', event.done );
-                $( "#repeat" ).val( event.repeat );
+                $( "#repeat" ).data("selectBox-selectBoxIt").selectOption( event.repeat );
+                //alert("<?php echo $_SESSION['loginCRM']; ?>")
                 $( "#repeat_factor" ).val( event.repeat_factor );
                 $( "#repeat_quantity" ).val( event.repeat_quantity );
                 $( "#repeat_end" ).val( moment( event.repeat_end ).format( "L") == 'Invalid date' ? '' : moment( event.repeat_end ).format( "L")  );

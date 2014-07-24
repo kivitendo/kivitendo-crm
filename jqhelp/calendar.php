@@ -15,15 +15,15 @@
     $repeat_end_sql = $repeat_end == 'Invalid date' ? 'NULL' : "'$repeat_end'::TIMESTAMP"; 
     switch( $task ){
         case "newEvent":
-            $sql="INSERT INTO events ( duration, title, description, allDay, uid, visibility, category, prio, job, color, done, location, cust_vend_pers, repeat, repeat_factor, repeat_quantity, repeat_end ) VALUES ( '[$start, $end)','$title','$desc', $allDay, $uid, $visibility, $category, $prio, '$job', '$color', '$done', '$location', '$cust_vend_pers', '$repeat', '$repeat_factor', '$repeat_quantity', $repeat_end_sql )";
+            $sql="INSERT INTO events ( duration, title, description, \"allDay\", uid, visibility, category, prio, job, color, done, location, cust_vend_pers, repeat, repeat_factor, repeat_quantity, repeat_end ) VALUES ( '[$start, $end)','$title','$desc', $allDay, $uid, $visibility, $category, $prio, '$job', '$color', '$done', '$location', '$cust_vend_pers', '$repeat', '$repeat_factor', '$repeat_quantity', $repeat_end_sql )";
             $rc=$_SESSION['db']->query($sql); 
         break;
         case "updateEvent":
-            $sql="UPDATE events SET title = '$title', duration = '[$start, $end)', description = '$desc', allday = $allDay, uid = '$uid', visibility = '$visibility', category = '$category', prio = '$prio', job = '$job', color = '$color', done = '$done', location = '$location', cust_vend_pers = '$cust_vend_pers', repeat = '$repeat', repeat_factor = '$repeat_factor', repeat_quantity = '$repeat_quantity', repeat_end = $repeat_end_sql  WHERE id = $id";
+            $sql="UPDATE events SET title = '$title', duration = '[$start, $end)', description = '$desc', \"allDay\" = $allDay, uid = '$uid', visibility = '$visibility', category = '$category', prio = '$prio', job = '$job', color = '$color', done = '$done', location = '$location', cust_vend_pers = '$cust_vend_pers', repeat = '$repeat', repeat_factor = '$repeat_factor', repeat_quantity = '$repeat_quantity', repeat_end = $repeat_end_sql  WHERE id = $id";
             $rc=$_SESSION['db']->query($sql);   
         break;
         case "updateTimestamp":
-            $sql="UPDATE events SET  duration = '[$start, $end)', allday = $allDay WHERE id = $id";
+            $sql="UPDATE events SET  duration = '[$start, $end)', \"allday\" = $allDay WHERE id = $id";
             $rc=$_SESSION['db']->query($sql);   
         break;
         case "deleteEvent":
@@ -32,8 +32,8 @@
         break;
         case "getEvents":
             //$sql="SELECT title, start, stop AS end, description AS desc, id, allday, uid, visibility, category, prio, job, color, done, location, cust_vend_pers, repeat, repeat_factor, repeat_quantity, repeat_end FROM events WHERE start <= '$endGet' AND stop >= '$startGet' AND CASE WHEN visibility = 0 THEN uid = $myuid ELSE TRUE END";
-            $sql = "select *, lower(tsrange) AS start, upper(tsrange) AS end  FROM (select id, title, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, visibility,  prio, category, allday, color, job, done, job_planned_end, cust_vend_pers, row_number - 1 AS repeat_num, tsrange(lower(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval, upper(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval) from (select t.*, row_number() over (partition by id) from events t cross join lateral (select generate_series(0, t.repeat_quantity ) i) x) foo) alle_termine where '[$startGet, $endGet)'::tsrange @> tsrange AND CASE WHEN visibility = 0 THEN uid = $myuid ELSE TRUE END";
-            // ToDo: Visibility für Gruppen implementieren.            
+            $sql = "select *, lower(tsrange) AS start, upper(tsrange) AS end  FROM (select id, title, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, visibility,  prio, category, \"allDay\", color, job, done, job_planned_end, cust_vend_pers, row_number - 1 AS repeat_num, tsrange(lower(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval, upper(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval) from (select t.*, row_number() over (partition by id) from events t cross join lateral (select generate_series(0, t.repeat_quantity ) i) x) foo) alle_termine where '[$startGet, $endGet)'::tsrange @> tsrange AND CASE WHEN visibility = 0 THEN uid = $myuid ELSE TRUE END";
+          // " // ToDo: Visibility für Gruppen implementieren.            
             //echo $sql;            
             $rs=$_SESSION['db']->getAll($sql);
             foreach( $rs as $key => $value ){

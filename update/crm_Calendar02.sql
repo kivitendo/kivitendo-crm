@@ -18,14 +18,14 @@ CREATE TABLE events_tmp(
     prio            SMALLINT,
     category 		SMALLINT,
     visibility		SMALLINT,
-    allday          BOOLEAN,
+    "allDay"        BOOLEAN,
     color 		    CHAR(7),
     job             BOOLEAN,
     done            BOOLEAN,
     job_planned_end TIMESTAMP WITHOUT TIME ZONE,
     cust_vend_pers  TEXT		
 );
-
+--ALTER TABLE events RENAME COLUMN allday TO "allDay";
 INSERT INTO events_tmp ( title, duration, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, prio, category, visibility, allday, color, job, done, job_planned_end, cust_vend_pers ) SELECT title, ('('||(start)::text || ' , ' || (stop)::text || ']')::TSRANGE  AS duration, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, prio, category, visibility, allday, color, job, done, job_planned_end, cust_vend_pers  FROM events;
 DROP TABLE IF EXISTS events CASCADE;
 ALTER TABLE events_tmp RENAME TO events;

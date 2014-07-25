@@ -23,7 +23,7 @@
             $rc=$_SESSION['db']->query($sql);   
         break;
         case "updateTimestamp":
-            $sql="UPDATE events SET  duration = '[$start, $end)', \"allday\" = $allDay WHERE id = $id";
+            $sql="UPDATE events SET  duration = '[$start, $end)', \"allDay\" = $allDay WHERE id = $id";
             $rc=$_SESSION['db']->query($sql);   
         break;
         case "deleteEvent":

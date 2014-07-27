@@ -214,9 +214,9 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                 $( "#startTime" ).val( moment( event.start ).format( "LT") );
                 $( "#endDate" ).val( moment( event.end ? event.end : event.start ).format( "L") );
                 $( "#endTime" ).val( moment( event.end ? event.end : event.start ).format( "LT") );
-                $( "#user" ).data("selectBox-selectBoxIt").selectOption(event.uid);
-                $( "#category" ).data("selectBox-selectBoxIt").selectOption(event.category);
-                $( "#visibility" ).data("selectBox-selectBoxIt").selectOption(event.visibility);
+                $( "#user" ).data("selectBox-selectBoxIt").selectOption(String(event.uid));
+                $( "#category" ).data("selectBox-selectBoxIt").selectOption(String(event.category));
+                $( "#visibility" ).data("selectBox-selectBoxIt").selectOption(String(event.visibility));
                 $( "#prio_" + event.prio ).prop( 'checked', true );
                 $( "#job_" + event.job ).prop( 'checked',true ); 
                 $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");

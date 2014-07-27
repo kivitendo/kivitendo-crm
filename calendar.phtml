@@ -230,7 +230,7 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                 $( "#repeat_factor" ).val( event.repeat_factor );
                 $( "#repeat_quantity" ).val( event.repeat_quantity );
                 $( "#repeat_end" ).val( moment( event.repeat_end ).format( "L") == 'Invalid date' ? '' : moment( event.repeat_end ).format( "L")  );
-                $( "#chkboxDone" )[event.job == 't' ? 'show' : 'hide']();
+                $( "#chkboxDone" )[event.job ? 'show' : 'hide']();
                 $( ":input[type!='button'][id!='done']" ).attr( "disabled", event.done ).css( "background", event.done ? "#F8F8F3" : "#FFF" );
                 $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");
                 $( "#dialog" ).dialog( "open" );
@@ -293,7 +293,7 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                     $.ajax({
                         url: 'jqhelp/calendar.php',
                         data: { task: ajaxTask }
-                    }).done(function(json) {
+                    }).done(function(json) {  //( "#tabs" ).tabs( "add", "http://mysite.com/details.php", "New Tab" );
                         var obj = $.parseJSON( json.trim() );
                         deferred.resolve(obj);
                     });
@@ -313,6 +313,7 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                             echo json_encode( $grps ); 
                         ?>
         });
+        ////foreach( j$grps ) $( "#tabs" ).tabs( "add", "http://mysite.com/details.php", "New Tab" );
         $( "#repeat" ).selectBoxIt({
             theme:      "jqueryui",
             autoWidth:  true,
@@ -414,6 +415,9 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                 $( "#endTime" ).val( moment( "<?php echo $_SESSION['termbegin'] ? $_SESSION['termbegin'] : 7;echo ":00"; ?>", "HH:mm" ).add( "minutes", '<?php echo $_SESSION['termseq'] ? $_SESSION['termseq'] : 30; ?>' ).format( "LT") );                
             }
         });
+        $( "#tabs" ).tabs({
+            event: "mouseover"
+        });
    
 				
     });
@@ -440,7 +444,7 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
 
 
 
-    #titleDesig         { position:absolute; top:20px; left:32px; }
+    #titleLabel         { position:absolute; top:20px; left:32px; }
     #titleInp           { position:absolute; top:20px; left:95px;}
     #jobRadio           { position:absolute; top:10px; left:465px;}
     #start              { position:absolute; top:50px; left:32px; }
@@ -517,7 +521,7 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
     <div id="tmp"></div>
     <div id="dialog" class="event-dialog" title="Event">
         <div id="dialog-inner">
-            <div id="titleDesign">
+            <div id="titleLabel">
               <b>Title: </b> 
             </div> 
                
@@ -619,7 +623,22 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
 
         
     </div>    
-    
+    <div id="tabs">
+<ul>
+<li><a href="#tabs-1">Alle</a></li>
+<li><a href="#tabs-2">Kategorien</a></li>
+<li><a href="#tabs-3">Benutzer / Gruppen</a></li>
+</ul>
+<div id="tabs-1">
+ <div id='calendar'></div>
+</div>
+<div id="tabs-2">
+<p>Nach Kategorien</p>
+</div>
+<div id="tabs-3">
+<p>Nach Gruppen und Benutzern</p>
+</div>
+</div>
     <div id='calendar'></div>
 <?php 
     $menu['end_content_ui'];

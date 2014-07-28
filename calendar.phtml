@@ -184,7 +184,7 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                 $( "#category" ).data("selectBox-selectBoxIt").selectOption('0');
                 $( "#visibility" ).data("selectBox-selectBoxIt").selectOption('-1');
                 
-                $( "#prio_1,#job_f" ).prop( 'checked', true );            
+                $( "#prio_1,#job_false" ).prop( 'checked', true );            
                 //$( "#job_f" ).prop( 'checked', true );
                 $( "div#jobRadio,div#prioRadio" ).buttonset( "refresh" );
                 $( "#color, #repeat_quantity" ).val( "" );
@@ -226,6 +226,12 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                 $( "#location" ).val( event.location );
                 $( "#done" ).prop( 'checked', event.done );
                 $( "#repeat" ).data("selectBox-selectBoxIt").selectOption( event.repeat );
+                $( "#repeat,#repeat_factor,#repeat_quantity").change(function() {
+                    $( "#repeat_end" ).val( moment( event.end ).add( $( "#repeat" ).val(), $( "#repeat_factor" ).val() * $( "#repeat_quantity" ).val() ).format( "L" ) ); 
+                });
+                $( "#repeat_end").change(function() {
+                    alert( $( "#repeat_end" ).subtract( $( "#endDate" ).val()));;
+                });
                 //alert("<?php echo $_SESSION['loginCRM']; ?>")
                 $( "#repeat_factor" ).val( event.repeat_factor );
                 $( "#repeat_quantity" ).val( event.repeat_quantity );
@@ -326,12 +332,12 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
             ]   
         });
         $( "#jobRadio,#prioRadio" ).buttonset();//.find('label').height(28);;
-        $( "#job_t" ).click( function() {
+        $( "#job_true" ).click( function() {
             $( "#endDate" ).val( moment( $( "#endDate" ).val(), 'DD.MM.YYYY' ).add( 'years', 1 ).format( "L") );
             $( "#allDay" ).prop( 'checked', true );
             $( "#chkboxDone" ).show( "fast" );
         });
-        $( "#job_f" ).click( function() {
+        $( "#job_false" ).click( function() {
             $( "#endDate" ).val( moment().format( "L") );
             $( "#allDay" ).prop( 'checked', false ).change();
             $( "#chkboxDone" ).hide( "fast" );
@@ -531,8 +537,8 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
             </div>
             <div id="jobRadio">
                 <form>
-                    <input type="radio" id="job_f" class="radio" name="jobRadio" value='0' ><label for="job_f">Termin </label>
-                    <input type="radio" id="job_t" class="radio" name="jobRadio" value='1' ><label for="job_t">Aufgabe</label>
+                    <input type="radio" id="job_false" class="radio" name="jobRadio" value='0' ><label for="job_false">Termin </label>
+                    <input type="radio" id="job_true" class="radio" name="jobRadio" value='1' ><label for="job_true">Aufgabe</label>
                 </form>
             </div>            
             <div id="start">

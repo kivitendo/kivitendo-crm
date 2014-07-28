@@ -20,7 +20,7 @@
   ///print_r( $_SESSION );
 /*************************************************** +++ ToDo ++++*******************************************************
 Kategorien und User + All in Tabs darstellen!!!!
-Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
+Visibility für Gruppen
 ************************************************************************************************************************/
 ?>
 <script>
@@ -28,7 +28,7 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
         //var id = 0;//delete
         $( "#dialog" ).dialog({
             autoOpen: false,
-            height: 500 ,
+            height: 540,
             width: 680,
             modal: true,
             buttons: {
@@ -183,7 +183,6 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                 $( "#user" ).data("selectBox-selectBoxIt").selectOption("<?php echo $_SESSION['loginCRM']; ?>");
                 $( "#category" ).data("selectBox-selectBoxIt").selectOption('0');
                 $( "#visibility" ).data("selectBox-selectBoxIt").selectOption('-1');
-                
                 $( "#prio_1,#job_false" ).prop( 'checked', true );            
                 //$( "#job_f" ).prop( 'checked', true );
                 $( "div#jobRadio,div#prioRadio" ).buttonset( "refresh" );
@@ -214,9 +213,9 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                 $( "#startTime" ).val( moment( event.start ).format( "LT") );
                 $( "#endDate" ).val( moment( event.end ? event.end : event.start ).format( "L") );
                 $( "#endTime" ).val( moment( event.end ? event.end : event.start ).format( "LT") );
-                $( "#user" ).data("selectBox-selectBoxIt").selectOption(String(event.uid));
-                $( "#category" ).data("selectBox-selectBoxIt").selectOption(String(event.category));
-                $( "#visibility" ).data("selectBox-selectBoxIt").selectOption(String(event.visibility));
+                $( "#user" ).data( "selectBox-selectBoxIt" ).selectOption( String( event.uid ) );
+                $( "#category" ).data("selectBox-selectBoxIt").selectOption( String( event.category ) );
+                $( "#visibility" ).data("selectBox-selectBoxIt").selectOption( String( event.visibility ) );
                 $( "#prio_" + event.prio ).prop( 'checked', true );
                 $( "#job_" + event.job ).prop( 'checked',true ); 
                 $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");
@@ -227,12 +226,14 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
                 $( "#done" ).prop( 'checked', event.done );
                 $( "#repeat" ).data("selectBox-selectBoxIt").selectOption( event.repeat );
                 $( "#repeat,#repeat_factor,#repeat_quantity").change(function() {
-                    $( "#repeat_end" ).val( moment( event.end ).add( $( "#repeat" ).val(), $( "#repeat_factor" ).val() * $( "#repeat_quantity" ).val() ).format( "L" ) ); 
+                    $( "#repeat_end" ).val( moment( $( "#endDate" ).val(), "L" ).add( $( "#repeat" ).val(), $( "#repeat_factor" ).val() * $( "#repeat_quantity" ).val() ).format( "L" ) ); 
                 });
                 $( "#repeat_end").change(function() {
-                    alert( $( "#repeat_end" ).subtract( $( "#endDate" ).val()));;
+                    var a = moment( $( "#endDate" ).val(), 'L' );
+                    var b = moment( $( "#repeat_end" ).val(), 'L' );
+                    var erg = Math.floor( ( b.diff( a, $( "#repeat" ).val() ) ) / $( "#repeat_factor" ).val() );
+                    $( "#repeat_quantity" ).val( erg < 0 ? 0 : erg );                 
                 });
-                //alert("<?php echo $_SESSION['loginCRM']; ?>")
                 $( "#repeat_factor" ).val( event.repeat_factor );
                 $( "#repeat_quantity" ).val( event.repeat_quantity );
                 $( "#repeat_end" ).val( moment( event.repeat_end ).format( "L") == 'Invalid date' ? '' : moment( event.repeat_end ).format( "L")  );
@@ -338,7 +339,7 @@ Visibility, Repeat implementieren <?php echo $_SESSION['loginCRM']; ?>
             $( "#chkboxDone" ).show( "fast" );
         });
         $( "#job_false" ).click( function() {
-            $( "#endDate" ).val( moment().format( "L") );
+            $( "#endDate" ).val( moment().format( "L" ) );
             $( "#allDay" ).prop( 'checked', false ).change();
             $( "#chkboxDone" ).hide( "fast" );
         });

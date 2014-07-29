@@ -149,7 +149,15 @@ Visibility für Gruppen
                 $( this ).dialog( "close" );
             }
         });
-
+        var calculate_end = function(){ 
+            $( "#repeat_end" ).val( moment( $( "#endDate" ).val(), "L" ).add( $( "#repeat" ).val(), $( "#repeat_factor" ).val() * $( "#repeat_quantity" ).val() ).format( "L" ) ); 
+        };
+        var calculate_repeat_quantity = function() {
+            var a = moment( $( "#endDate" ).val(), 'L' );
+            var b = moment( $( "#repeat_end" ).val(), 'L' );
+            var erg = Math.floor( ( b.diff( a, $( "#repeat" ).val() ) ) / $( "#repeat_factor" ).val() );
+            $( "#repeat_quantity" ).val( erg < 0 ? 0 : erg );                   
+        };
         $('#calendar').fullCalendar({
             theme: true,
             header: {
@@ -170,6 +178,7 @@ Visibility für Gruppen
                 url: 'jqhelp/calendar.php',
                 data: { myuid: "<?php echo $_SESSION['loginCRM']; ?>"  }
             },
+                
             /*** New Event ************************************************************************************/
             select: function( start, end ) {
                 $( "#title" ).val('');
@@ -181,8 +190,9 @@ Visibility für Gruppen
                 $( "#endDate" ).val( moment( end ).format( "L") );
                 $( "#endTime" ).val( moment( end ).format( "LT") );
                 $( "#user" ).data("selectBox-selectBoxIt").selectOption("<?php echo $_SESSION['loginCRM']; ?>");
-                $( "#category" ).data("selectBox-selectBoxIt").selectOption('0');
-                $( "#visibility" ).data("selectBox-selectBoxIt").selectOption('-1');
+                $( "#category" ).data("selectBox-selectBoxIt").selectOption( '0' );
+                $( "#visibility" ).data( "selectBox-selectBoxIt" ).selectOption( '-1' );
+                 $( "#repeat" ).data( "selectBox-selectBoxIt" ).selectOption( 'day' );
                 $( "#prio_1,#job_false" ).prop( 'checked', true );            
                 //$( "#job_f" ).prop( 'checked', true );
                 $( "div#jobRadio,div#prioRadio" ).buttonset( "refresh" );
@@ -193,6 +203,8 @@ Visibility für Gruppen
                 $( "#done" ).prop( 'checked', false );
                 $( "#location" ).val('');
                 $( "#tmp" ).data( "srcId", '' );
+                $( "#repeat,#repeat_factor,#repeat_quantity" ).change( calculate_end );
+                $( "#repeat_end" ).change( calculate_repeat_quantity );
                 $( ":input[type!='button'][id!='done']" ).attr( "disabled", false ).css( "background","#FFF" );
                 $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");
                 
@@ -225,15 +237,8 @@ Visibility für Gruppen
                 $( "#location" ).val( event.location );
                 $( "#done" ).prop( 'checked', event.done );
                 $( "#repeat" ).data("selectBox-selectBoxIt").selectOption( event.repeat );
-                $( "#repeat,#repeat_factor,#repeat_quantity").change(function() {
-                    $( "#repeat_end" ).val( moment( $( "#endDate" ).val(), "L" ).add( $( "#repeat" ).val(), $( "#repeat_factor" ).val() * $( "#repeat_quantity" ).val() ).format( "L" ) ); 
-                });
-                $( "#repeat_end").change(function() {
-                    var a = moment( $( "#endDate" ).val(), 'L' );
-                    var b = moment( $( "#repeat_end" ).val(), 'L' );
-                    var erg = Math.floor( ( b.diff( a, $( "#repeat" ).val() ) ) / $( "#repeat_factor" ).val() );
-                    $( "#repeat_quantity" ).val( erg < 0 ? 0 : erg );                 
-                });
+                $( "#repeat,#repeat_factor,#repeat_quantity" ).change( calculate_end );
+                $( "#repeat_end").change( calculate_repeat_quantity );
                 $( "#repeat_factor" ).val( event.repeat_factor );
                 $( "#repeat_quantity" ).val( event.repeat_quantity );
                 $( "#repeat_end" ).val( moment( event.repeat_end ).format( "L") == 'Invalid date' ? '' : moment( event.repeat_end ).format( "L")  );
@@ -600,7 +605,7 @@ Visibility für Gruppen
                     <input type="radio" id="prio_2" name="prioRadio" value='2' ><label for="prio_2">hoch</label>
                 </form>                
             </div> 
-            <div id="locationLabel">Lokation:</div>
+            <div id="locationLabel">Lokation / Kunde:</div>
             <div id="locationInput">
                 <form>
                     <input type="text"  id="location" class=" ui-widget-content ui-corner-all location" autocomplete="off" title="Doppelklick für weitere Info.">    

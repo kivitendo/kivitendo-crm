@@ -91,28 +91,17 @@
             document.getElementById('actionmenu').selectedIndex = 0;
        }
     }
-    function doOe(typ) {
-      document.oe.type.value=typ;
-      document.oe.submit();
+    function doOe(type) {//Angebot / Auftrag
+      window.location.href = '../oe.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + type;
     }
-    function doDo() {
-      document.oe.action='../do.pl';
-      if ( '{Q}' == 'C' ) {      
-        document.oe.type.value='sales_delivery_order';
-      }
-      else{
-        document.oe.type.value='purchase_delivery_order';
-      }
-      document.oe.submit();
+
+    function doDo() { //neuer Lieferschein
+      var type = '{Q}' == 'C' ? 'sales_delivery_order' : 'purchase_delivery_order';
+      window.location.href = '../do.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + type;
     }
-    function doIr() {
-        if ( '{Q}' == 'C' ) {
-            document.oe.action='../is.pl';
-        } else {
-            document.oe.action='../ir.pl';
-        }
-        document.oe.type.value='invoice';
-        document.oe.submit();
+    function doIr() { //neue Rechnung 
+      var file = '{Q}' == 'C' ? '../is.pl' : '../ir.pl';
+      window.location.href = file + '?action=add&vc={CuVe}&{CuVe}_id={FID}';
     }
     function doLxCars() {
         uri='lxcars/lxcmain.php?owner={FID}&task=1' 
@@ -283,13 +272,7 @@
     </form>
 </div>
 
-<form action="../oe.pl" id="oe" method="post" name="oe">
-	<input type="hidden" name="action" value="add">
-	<input type="hidden" name="vc" value="{CuVe}">
-	<input type="hidden" name="type" value="">
-	<input type="hidden" name="action_update" value="Erneuern" id="update_button">
-	<input type="hidden" name="{CuVe}_id" value="{FID}">
-</form>
+
 <div id='contentbox' style="padding-top:2em;" >
     <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid lightgray;" >
         <div class="gross" style="float:left; width:55%; height:25em; text-align:left; border: 0px solid black; padding:0.2em;" >

@@ -38,7 +38,7 @@ Visibility für Gruppen
                     var start_cur = moment($( "#startDate" ).val() + ' ' + $( "#startTime" ).val(),'L LT').add('h', 2); 
                     var end_cur = moment($( "#endDate" ).val() + ' ' + $( "#endTime" ).val(),'L LT').add('h', 2);
                     var title = $( "#title" ).val();
-                    var desc = $( "#desc" ).val();
+                    var description = $( "#description" ).val();
                     var id = $( "#id" ).val();
                     var allDay = $( "#allDay" ).is( ":checked" );
                     var uid = $( "#user option:selected" ).val();
@@ -62,7 +62,7 @@ Visibility für Gruppen
                             start: start_cur,
                             end: end_cur,
                             id : id,
-                            desc: desc,
+                            description: description,
                             allDay: allDay,
                             uid : uid,
                             //prio: prio
@@ -78,7 +78,7 @@ Visibility für Gruppen
                             data: {
                                 task:  $("#id").val() ? 'updateEvent' : 'newEvent', 
                                 title: $("#title").val(),
-                                desc: $("#desc").val(),
+                                description: $("#description").val(),
                                 id:   $("#id").val(),
                                 allDay: $( "#allDay" ).is( ":checked" ),
                                 uid : $("#user option:selected").val(),
@@ -117,7 +117,7 @@ Visibility für Gruppen
                         //$('#calendar').fullCalendar('unselect');
                 
                     }
-                    else alert('Title is empty');                  
+                    else alert('Title is empty'); //ToDo                 
                     $( this ).dialog( "close" );
                 },
                 Delete: function() { 
@@ -182,7 +182,7 @@ Visibility für Gruppen
             /*** New Event ************************************************************************************/
             select: function( start, end ) {
                 $( "#title" ).val('');
-                $( "#desc" ).val('');
+                $( "#description" ).val('');
                 $( "#id" ).val('');
                 $( "#allDay ").prop( 'checked', false );//ToDo abfragen ob es allDay ist
                 $( "#startDate" ).val( moment( start ).format( "L") );
@@ -213,7 +213,7 @@ Visibility für Gruppen
             /*** Edit Event *************************************************************************************/
             eventClick: function( event ){        
                 $( "#title" ).val( event.title );
-                $( "#desc" ).val( event.desc ); 
+                $( "#description" ).val( event.description ); 
                 $( "#id" ).val( event.id );
                 $( "#allDay" ).prop( 'checked', event.allDay );
                 /*$("#allDay").button({ text: false}).click(function(e) {
@@ -251,7 +251,7 @@ Visibility für Gruppen
             eventDrop: function(event) {
                 var start = moment(event.start).format( "YYYY-MM-DD HH:mm:ss");
                 // var tst = moment(event.start).add('h', 1);//move from allday 
-                var end  = event.end ? moment(event.end).format( "YYYY-MM-DD HH:mm:ss") : moment(event.start).add('h', 1).format( "YYYY-MM-DD HH:mm:ss");//.add('h', 1);;//
+                var end  = event.end ? moment(event.end).format( "YYYY-MM-DD HH:mm:ss") : moment(event.start).add('h', 1).format( "YYYY-MM-DD HH:mm:ss");
                 $.ajax({
                     url: 'jqhelp/calendar.php',
                     data: {
@@ -262,9 +262,9 @@ Visibility für Gruppen
                         allDay: event.allDay
                         },
                     type: "POST",
-                    success: function(json) {
+                    //success: function(json) {
                          //alert('Event verschoben');
-                    },
+                    //},
                     error: function () {
                         alert('Ajax Error');
                     }
@@ -307,6 +307,13 @@ Visibility für Gruppen
                         data: { task: ajaxTask }
                     }).done(function(json) {  //( "#tabs" ).tabs( "add", "http://mysite.com/details.php", "New Tab" );
                         var obj = $.parseJSON( json.trim() );
+                        jQuery.each(obj, function(i, val) {
+                            //alert( "i: " + i + "Value: " + val.text )
+                            //console.log( val );
+                            $( "<li><a href='" + val.text + "'>" + val.text + "</a></li>" ).appendTo( ul );
+                            $( "<div id='" + val.text + "'><p>New Content</p></div>" ).appendTo( tabs );
+                        });
+                        tabs.tabs( "refresh" );
                         deferred.resolve(obj);
                     });
                     return deferred;
@@ -427,9 +434,10 @@ Visibility für Gruppen
                 $( "#endTime" ).val( moment( "<?php echo $_SESSION['termbegin'] ? $_SESSION['termbegin'] : 7;echo ":00"; ?>", "HH:mm" ).add( "minutes", '<?php echo $_SESSION['termseq'] ? $_SESSION['termseq'] : 30; ?>' ).format( "LT") );                
             }
         });
-        $( "#tabs" ).tabs({
-            event: "mouseover"
+        var tabs = $( "#tabs" ).tabs({
+            //event: "mouseover"
         });
+        var ul = tabs.find( "ul" );
    
 				
     });
@@ -488,7 +496,7 @@ Visibility für Gruppen
     #repeatQuantityInput{ position:absolute; top:190px; left:400px;}
     #repeatEndInput     { position:absolute; top:190px; left:480px;}
     #descTitle          { position:absolute; top:220px; left:30px;}
-    #desc               { position:absolute; top:220px; left:30px;}
+    #description              { position:absolute; top:220px; left:30px;}
     .title{
          width: 350px;
     }    
@@ -630,7 +638,7 @@ Visibility für Gruppen
                     <input type="text"  id="repeat_end" class=" ui-widget-content ui-corner-all date" >    
                 </form>
             </div> 
-            <textarea name="desc" id="desc" class="text ui-widget-content ui-corner-all" rows="10" cols="64"></textarea>
+            <textarea name="description" id="description" class="text ui-widget-content ui-corner-all" rows="10" cols="64"></textarea>
         </div>               
 
         
@@ -638,20 +646,12 @@ Visibility für Gruppen
     <div id="tabs">
 <ul>
 <li><a href="#tabs-1">Alle</a></li>
-<li><a href="#tabs-2">Kategorien</a></li>
-<li><a href="#tabs-3">Benutzer / Gruppen</a></li>
+
 </ul>
 <div id="tabs-1">
  <div id='calendar'></div>
 </div>
-<div id="tabs-2">
-<p>Nach Kategorien</p>
-</div>
-<div id="tabs-3">
-<p>Nach Gruppen und Benutzern</p>
-</div>
-</div>
-    <div id='calendar'></div>
+
 <?php 
     $menu['end_content_ui'];
     echo "</div>"

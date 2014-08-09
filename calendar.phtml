@@ -158,7 +158,15 @@ Visibility für Gruppen
             var erg = Math.floor( ( b.diff( a, $( "#repeat" ).val() ) ) / $( "#repeat_factor" ).val() );
             $( "#repeat_quantity" ).val( erg < 0 ? 0 : erg );                   
         };
-        $('#calendar').fullCalendar({
+        /*** Begin Calendar **************************************************************************************/
+        
+        
+        
+        
+        
+        
+        //var test = "#calendar";
+        var test = $('#calendar').fullCalendar({
             theme: true,
             header: {
                 left: 'prev,next today',
@@ -305,15 +313,19 @@ Visibility für Gruppen
                     $.ajax({
                         url: 'jqhelp/calendar.php',
                         data: { task: ajaxTask }
-                    }).done(function(json) {  //( "#tabs" ).tabs( "add", "http://mysite.com/details.php", "New Tab" );
+                    }).done(function(json) {  
                         var obj = $.parseJSON( json.trim() );
                         jQuery.each(obj, function(i, val) {
                             //alert( "i: " + i + "Value: " + val.text )
-                            //console.log( val );
-                            $( "<li><a href='" + val.text + "'>" + val.text + "</a></li>" ).appendTo( ul );
-                            $( "<div id='" + val.text + "'><p>New Content</p></div>" ).appendTo( tabs );
+                            console.log( val );
+                            //$( "<li><a href='" + val.text + "'>" + val.text + "</a></li>" ).appendTo( ul );
+                            //$( "<div id='" + val.text + "'><p>" + val.text + "</p></div>" ).appendTo( tabs );
+                            $("div#tabs ul").append("<li><a href='#tab" + val.value + "'>" + val.text + "</a></li>");                            
+                            $("div#tabs").append("<div id='tab"+val.value+"'>" + val.text + "</div>");
+                            //$( "#Calendar" ).clone().prependTo( "#tab"+ val.value );
+                            
                         });
-                        tabs.tabs( "refresh" );
+                        $("div#tabs").tabs("refresh")
                         deferred.resolve(obj);
                     });
                     return deferred;

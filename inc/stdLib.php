@@ -779,12 +779,12 @@ function mkHeader() {
         'JUI-DROPDOWN'  => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.css'.$LN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.min.js'.$SN,
         'CRMPATH'       => $_SESSION['baseurl'].'crm/',
-        'FULLCALCSS'    => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.css'.$LN.
-                           $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.print.css media=\'print\''.$LN,
-        'FULLCALJS'     => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/lib/moment.min.js'.$SN.
+        'FULLCALCSS'    => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar2/fullcalendar.css'.$LN.
+                           $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar2/fullcalendar.print.css media=\'print\''.$LN,
+        'FULLCALJS'     => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar2/lib/moment.min.js'.$SN.
                            //$SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.js'.$SN.//aktuelle 
-                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.min.js'.$SN. 
-                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/lang/'.$_SESSION['countrycode'].'.js'.$SN,  
+                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar2/fullcalendar.min.js'.$SN. 
+                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar2/lang/'.$_SESSION['countrycode'].'.js'.$SN,  
         'COLORPICKERCSS'=> $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/colorPicker/syronex-colorpicker.css'.$LN,
         'COLORPICKERJS' => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/colorPicker/syronex-colorpicker.js'.$SN,
                               

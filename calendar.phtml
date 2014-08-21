@@ -315,18 +315,15 @@ Visibility für Gruppen
                         data: { task: ajaxTask }
                     }).done(function(json) {  
                         var obj = $.parseJSON( json.trim() );
-                        jQuery.each(obj, function(i, val) {
-                            //alert( "i: " + i + "Value: " + val.text )
-                            console.log( val );
-                            //$( "<li><a href='" + val.text + "'>" + val.text + "</a></li>" ).appendTo( ul );
-                            //$( "<div id='" + val.text + "'><p>" + val.text + "</p></div>" ).appendTo( tabs );
-                            $("div#tabs ul").append("<li><a href='#tab" + val.value + "'>" + val.text + "</a></li>");                            
-                            $("div#tabs").append("<div id='tab"+val.value+"'>" + val.text + "</div>");
-                            //$( "#Calendar" ).clone().prependTo( "#tab"+ val.value );
-                            
+                        jQuery.each( obj, function( i, val ){
+                            //Neuen Tab erzeugen
+                            //$("div#tabs ul").append("<li><a href='#tab" + val.value + "'>" + val.text + "</a></li>"); //Ok                           
+                            //$("div#tabs").append("<div id='tab"+val.value+"'></div>"); //Ok
+                            //Verhadenen Calendar clonen, Id ändern und 
+                            //$( "#calendar" ).clone( true, true ).attr('id', 'calendar' + ajaxTask + val.value ).appendTo( "#tab"+val.value );
                         });
-                        $("div#tabs").tabs("refresh")
-                        deferred.resolve(obj);
+                        $( "div#tabs" ).tabs( "refresh" )
+                        deferred.resolve( obj );
                     });
                     return deferred;
                 }
@@ -449,7 +446,8 @@ Visibility für Gruppen
         var tabs = $( "#tabs" ).tabs({
             //event: "mouseover"
         });
-        var ul = tabs.find( "ul" );
+        //var ul = tabs.find( "ul" );
+        //test.clone( true ).attr('id', 'calendar_clonex' ).appendTo( "#tabs-2" );
    
 				
     });
@@ -656,13 +654,15 @@ Visibility für Gruppen
         
     </div>    
     <div id="tabs">
-<ul>
-<li><a href="#tabs-1">Alle</a></li>
+        <ul>
+            <li><a href="#tabs-1">Alle</a></li>
+            
+        </ul>
+        <div id="tabs-1">
+            <div id='calendar'></div>
+        </div>
 
-</ul>
-<div id="tabs-1">
- <div id='calendar'></div>
-</div>
+    </div>
 
 <?php 
     $menu['end_content_ui'];

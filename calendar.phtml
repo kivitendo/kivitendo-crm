@@ -158,149 +158,13 @@ Visibility für Gruppen
             var erg = Math.floor( ( b.diff( a, $( "#repeat" ).val() ) ) / $( "#repeat_factor" ).val() );
             $( "#repeat_quantity" ).val( erg < 0 ? 0 : erg );                   
         };
-        /*** Begin Calendar **************************************************************************************/
+
         
+                    
+
         
+
         
-        
-        
-        
-        //var test = "#calendar";
-        var test = $('#calendar').fullCalendar({
-            theme: true,
-            header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay'
-            },
-            minTime: '<?php echo $_SESSION['termbegin'] ? $_SESSION['termbegin'] : 7;echo ":00"; ?>',
-            maxTime: '<?php echo $_SESSION['termend'] ? $_SESSION['termend'] : 19; echo ":00"; ?>',
-            slotDuration: '<?php echo "00:";echo $_SESSION['termseq'] ? $_SESSION['termseq'] : 30; echo ":00"; ?>', //termseq
-            weekNumbers: true,
-            editable: true,
-            defaultView: 'agendaWeek',
-            dragble: true,
-            selectable: true,    
-            selectHelper: true,
-            events: {
-                url: 'jqhelp/calendar.php',
-                data: { myuid: "<?php echo $_SESSION['loginCRM']; ?>"  }
-            },
-                
-            /*** New Event ************************************************************************************/
-            select: function( start, end ) {
-                $( "#title" ).val('');
-                $( "#description" ).val('');
-                $( "#id" ).val('');
-                $( "#allDay ").prop( 'checked', false );//ToDo abfragen ob es allDay ist
-                $( "#startDate" ).val( moment( start ).format( "L") );
-                $( "#startTime" ).val( moment( start ).format( "LT") );
-                $( "#endDate" ).val( moment( end ).format( "L") );
-                $( "#endTime" ).val( moment( end ).format( "LT") );
-                $( "#user" ).data("selectBox-selectBoxIt").selectOption("<?php echo $_SESSION['loginCRM']; ?>");
-                $( "#category" ).data("selectBox-selectBoxIt").selectOption( '0' );
-                $( "#visibility" ).data( "selectBox-selectBoxIt" ).selectOption( '-1' );
-                 $( "#repeat" ).data( "selectBox-selectBoxIt" ).selectOption( 'day' );
-                $( "#prio_1,#job_false" ).prop( 'checked', true );            
-                //$( "#job_f" ).prop( 'checked', true );
-                $( "div#jobRadio,div#prioRadio" ).buttonset( "refresh" );
-                $( "#color, #repeat_quantity" ).val( "" );
-                $( "#repeat_factor,#repeat_quantity" ).val( '0' );
-                $( "#repeat_end" ).val('');
-                $( "#colorPick" ).hide();
-                $( "#done" ).prop( 'checked', false );
-                $( "#location" ).val('');
-                $( "#tmp" ).data( "srcId", '' );
-                $( "#repeat,#repeat_factor,#repeat_quantity" ).change( calculate_end );
-                $( "#repeat_end" ).change( calculate_repeat_quantity );
-                $( ":input[type!='button'][id!='done']" ).attr( "disabled", false ).css( "background","#FFF" );
-                $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");
-                
-                $( "#dialog" ).dialog( "open" );
-            },
-            /*** Edit Event *************************************************************************************/
-            eventClick: function( event ){        
-                $( "#title" ).val( event.title );
-                $( "#description" ).val( event.description ); 
-                $( "#id" ).val( event.id );
-                $( "#allDay" ).prop( 'checked', event.allDay );
-                /*$("#allDay").button({ text: false}).click(function(e) {
-                    $(this).button("option", {
-                        icons: { primary: $(this)[0].checked ? "ui-icon-check" : "" }
-                    })
-                })*/
-                $( "#startDate" ).val( moment( event.start ).format( "L") );
-                $( "#startTime" ).val( moment( event.start ).format( "LT") );
-                $( "#endDate" ).val( moment( event.end ? event.end : event.start ).format( "L") );
-                $( "#endTime" ).val( moment( event.end ? event.end : event.start ).format( "LT") );
-                $( "#user" ).data( "selectBox-selectBoxIt" ).selectOption( String( event.uid ) );
-                $( "#category" ).data("selectBox-selectBoxIt").selectOption( String( event.category ) );
-                $( "#visibility" ).data("selectBox-selectBoxIt").selectOption( String( event.visibility ) );
-                $( "#prio_" + event.prio ).prop( 'checked', true );
-                $( "#job_" + event.job ).prop( 'checked',true ); 
-                $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");
-                $( "#colorPick" ).hide();
-                $( "#color" ).val( event.color );
-                $( "#tmp" ).data( "cust_vend_pers", event.cust_vend_pers ); 
-                $( "#location" ).val( event.location );
-                $( "#done" ).prop( 'checked', event.done );
-                $( "#repeat" ).data("selectBox-selectBoxIt").selectOption( event.repeat );
-                $( "#repeat,#repeat_factor,#repeat_quantity" ).change( calculate_end );
-                $( "#repeat_end").change( calculate_repeat_quantity );
-                $( "#repeat_factor" ).val( event.repeat_factor );
-                $( "#repeat_quantity" ).val( event.repeat_quantity );
-                $( "#repeat_end" ).val( moment( event.repeat_end ).format( "L") == 'Invalid date' ? '' : moment( event.repeat_end ).format( "L")  );
-                $( "#chkboxDone" )[event.job ? 'show' : 'hide']();
-                $( ":input[type!='button'][id!='done']" ).attr( "disabled", event.done ).css( "background", event.done ? "#F8F8F3" : "#FFF" );
-                $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");
-                $( "#dialog" ).dialog( "open" );
-            },
-            /*** Move Event *************************************************************************************/
-            eventDrop: function(event) {
-                var start = moment(event.start).format( "YYYY-MM-DD HH:mm:ss");
-                // var tst = moment(event.start).add('h', 1);//move from allday 
-                var end  = event.end ? moment(event.end).format( "YYYY-MM-DD HH:mm:ss") : moment(event.start).add('h', 1).format( "YYYY-MM-DD HH:mm:ss");
-                $.ajax({
-                    url: 'jqhelp/calendar.php',
-                    data: {
-                        task:  'updateTimestamp', 
-                        start:  start,
-                        end:    end,
-                        id:     event.id ? event.id : $( "#id" ).val(),
-                        allDay: event.allDay
-                        },
-                    type: "POST",
-                    //success: function(json) {
-                         //alert('Event verschoben');
-                    //},
-                    error: function () {
-                        alert('Ajax Error');
-                    }
-                });
-            },
-            /*** Rezize Time ********************************************************************************************/
-            eventResize: function(event) {
-                var start = moment(event.start).format( "YYYY-MM-DD HH:mm:ss");
-                var end   = moment(event.end).format( "YYYY-MM-DD HH:mm:ss");
-                $.ajax({
-                    url: 'jqhelp/calendar.php',
-                    data: {
-                        task:  'updateTimestamp', 
-                        start: start,
-                        end: end,
-                        id: event.id,
-                        allDay: event.allDay
-                    },
-                    type: "POST",
-                    success: function(json) {
-                        //alert('Zeit geändert');
-                    },
-                    error: function () {
-                        alert('Ajax Error');
-                    }
-                });
-            },
-        });
         /*** SelectBox User, Kategorie **********************************************************************************************/
         $("#user, #category").each(function(){
             var ajaxTask = this.id == 'user' ? 'getUsers': 'getCategory'; 
@@ -314,24 +178,174 @@ Visibility für Gruppen
                         url: 'jqhelp/calendar.php',
                         data: { task: ajaxTask }
                     }).done(function(json) {  
-                        var obj = $.parseJSON( json.trim() );
-                        jQuery.each(obj, function(i, val) {
-                            //alert( "i: " + i + "Value: " + val.text )
-                            console.log( val );
-                            //$( "<li><a href='" + val.text + "'>" + val.text + "</a></li>" ).appendTo( ul );
-                            //$( "<div id='" + val.text + "'><p>" + val.text + "</p></div>" ).appendTo( tabs );
-                            $("div#tabs ul").append("<li><a href='#tab" + val.value + "'>" + val.text + "</a></li>");                            
-                            $("div#tabs").append("<div id='tab"+val.value+"'>" + val.text + "</div>");
-                            //$( "#Calendar" ).clone().prependTo( "#tab"+ val.value );
-                            
-                        });
-                        $("div#tabs").tabs("refresh")
-                        deferred.resolve(obj);
+                        //json.push(value = "-1", text = "All")
+                        //var obj =  {value : "-1", text : "All"};
+                        //var obj  = tst;
+                        //json.push({value: -1, text: "ALLE"});
+                        obj =  $.parseJSON( json.trim() ) ;
+                        if( ajaxTask == 'getCategory' ) obj.unshift( {value: 0, text: "ALLE"} );
+
+                        //console.log( obj );
+                        
+                        $.each( obj, function( i, val ){
+                            //Neuen Tab erzeugen
+                            if( val.value != 0 ){
+                                $("div#tabs ul").append("<li><a href='#tab" + ajaxTask+ val.value + "'>" + val.text + "</a></li>"); //Ok                           
+                                $("div#tabs").append("<div id='tab" + ajaxTask + val.value + "'><div id='calendar" + ajaxTask + val.value + "'></div></div>"); //Ok
+                            }
+                            //alert( '#calendar' + ajaxTask + val.value );
+                            //Calendar für Tabs erzeugen   
+                            /*** Begin Calendar *********************************************************************************************************************/                         
+                            $('#calendar' + ajaxTask + val.value  ).fullCalendar({
+                                theme: true,
+                                header: {
+                                    left: 'prev,next today',
+                                    center: 'title',
+                                    right: 'month, agendaWeek, agendaDay'
+                                },
+                                minTime: '<?php echo $_SESSION['termbegin'] ? $_SESSION['termbegin'] : 7;echo ":00"; ?>',//ToDo via Ajax holen
+                                maxTime: '<?php echo $_SESSION['termend'] ? $_SESSION['termend'] : 19; echo ":00"; ?>',
+                                slotDuration: '<?php echo "00:";echo $_SESSION['termseq'] ? $_SESSION['termseq'] : 30; echo ":00"; ?>', //termseq
+                                weekNumbers: true,
+                                editable: true,
+                                defaultView: 'agendaWeek',
+                                dragble: true,
+                                selectable: true,    
+                                selectHelper: true,
+                                events: {
+                                    url: 'jqhelp/calendar.php',
+                                    data: { myuid: "<?php echo $_SESSION['loginCRM']; ?>", where: ajaxTask == "getUsers" ? "uid = " + val.value + " AND" : "category = " + val.value + " AND" }
+                                },
+                
+                                /*** New Event ************************************************************************************/
+                                select: function( start, end ){
+                                    $( "#title" ).val('');
+                                    $( "#description" ).val('');
+                                    $( "#id" ).val('');
+                                    $( "#allDay ").prop( 'checked', false );//ToDo abfragen ob es allDay ist
+                                    $( "#startDate" ).val( moment( start ).format( "L") );
+                                    $( "#startTime" ).val( moment( start ).format( "LT") );
+                                    $( "#endDate" ).val( moment( end ).format( "L") );
+                                    $( "#endTime" ).val( moment( end ).format( "LT") );
+                                    $( "#user" ).data("selectBox-selectBoxIt").selectOption("<?php echo $_SESSION['loginCRM']; ?>");
+                                    $( "#category" ).data("selectBox-selectBoxIt").selectOption( '0' );
+                                    $( "#visibility" ).data( "selectBox-selectBoxIt" ).selectOption( '-1' );
+                                    $( "#repeat" ).data( "selectBox-selectBoxIt" ).selectOption( 'day' );
+                                    $( "#prio_1,#job_false" ).prop( 'checked', true );            
+                                    $( "div#jobRadio,div#prioRadio" ).buttonset( "refresh" );
+                                    $( "#color, #repeat_quantity" ).val( "" );
+                                    $( "#repeat_factor,#repeat_quantity" ).val( '0' );
+                                    $( "#colorPick" ).hide();
+                                    $( "#done" ).prop( 'checked', false );
+                                    $( "#location,#repeat_end" ).val('');
+                                    $( "#tmp" ).data( "srcId", '' );
+                                    $( "#repeat,#repeat_factor,#repeat_quantity" ).change( calculate_end );
+                                    $( "#repeat_end" ).change( calculate_repeat_quantity );
+                                    $( ":input[type!='button'][id!='done']" ).attr( "disabled", false ).css( "background","#FFF" );
+                                    $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");
+                
+                                    $( "#dialog" ).dialog( "open" );
+                                },
+                                /*** Edit Event *************************************************************************************/
+                                eventClick: function( event ){        
+                                    $( "#title" ).val( event.title );
+                                    $( "#description" ).val( event.description ); 
+                                    $( "#id" ).val( event.id );
+                                    $( "#allDay" ).prop( 'checked', event.allDay );
+                                    /*$("#allDay").button({ text: false}).click(function(e) {
+                                        $(this).button("option", {
+                                            icons: { primary: $(this)[0].checked ? "ui-icon-check" : "" }
+                                        })
+                                    })*/
+                                    $( "#startDate" ).val( moment( event.start ).format( "L") );
+                                    $( "#startTime" ).val( moment( event.start ).format( "LT") );
+                                    $( "#endDate" ).val( moment( event.end ? event.end : event.start ).format( "L") );
+                                    $( "#endTime" ).val( moment( event.end ? event.end : event.start ).format( "LT") );
+                                    $( "#user" ).data( "selectBox-selectBoxIt" ).selectOption( String( event.uid ) );
+                                    $( "#category" ).data("selectBox-selectBoxIt").selectOption( String( event.category ) );
+                                    $( "#visibility" ).data("selectBox-selectBoxIt").selectOption( String( event.visibility ) );
+                                    $( "#prio_" + event.prio ).prop( 'checked', true );
+                                    $( "#job_" + event.job ).prop( 'checked',true ); 
+                                    $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");
+                                    $( "#colorPick" ).hide();
+                                    $( "#color" ).val( event.color );
+                                    $( "#tmp" ).data( "cust_vend_pers", event.cust_vend_pers ); 
+                                    $( "#location" ).val( event.location );
+                                    $( "#done" ).prop( 'checked', event.done );
+                                    $( "#repeat" ).data("selectBox-selectBoxIt").selectOption( event.repeat );
+                                    $( "#repeat,#repeat_factor,#repeat_quantity" ).change( calculate_end );
+                                    $( "#repeat_end").change( calculate_repeat_quantity );
+                                    $( "#repeat_factor" ).val( event.repeat_factor );
+                                    $( "#repeat_quantity" ).val( event.repeat_quantity );
+                                    $( "#repeat_end" ).val( moment( event.repeat_end ).format( "L") == 'Invalid date' ? '' : moment( event.repeat_end ).format( "L")  );
+                                    $( "#chkboxDone" )[event.job ? 'show' : 'hide']();
+                                    $( ":input[type!='button'][id!='done']" ).attr( "disabled", event.done ).css( "background", event.done ? "#F8F8F3" : "#FFF" );
+                                    $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");
+                                    $( "#dialog" ).dialog( "open" );
+                                },
+                                /*** Move Event *************************************************************************************/
+                                eventDrop: function(event) {
+                                    var start = moment(event.start).format( "YYYY-MM-DD HH:mm:ss");
+                                    var end  = event.end ? moment(event.end).format( "YYYY-MM-DD HH:mm:ss") : moment(event.start).add('h', 1).format( "YYYY-MM-DD HH:mm:ss"); //Warum eine Stunde addieren??
+                                    $.ajax({
+                                        url: 'jqhelp/calendar.php',
+                                        data: {
+                                            task:  'updateTimestamp', 
+                                            start:  start,
+                                            end:    end,
+                                            id:     event.id ? event.id : $( "#id" ).val(),
+                                            allDay: event.allDay
+                                        },
+                                        type: "POST",
+                                        //success: function(json) {
+                                        //alert('Event verschoben');
+                                        //},
+                                        error: function () {
+                                            alert('Ajax Error');
+                                        }
+                                    });
+                                },
+                                /*** Rezize Time ********************************************************************************************/
+                                eventResize: function(event) {
+                                    var start = moment(event.start).format( "YYYY-MM-DD HH:mm:ss");
+                                    var end   = moment(event.end).format( "YYYY-MM-DD HH:mm:ss");
+                                    $.ajax({
+                                        url: 'jqhelp/calendar.php',
+                                        data: {
+                                            task:  'updateTimestamp', 
+                                            start:  start,
+                                            end:    end,
+                                            id:     event.id,
+                                            allDay: event.allDay
+                                        },
+                                        type: "POST",
+                                        //success: function(json) {
+                                            //alert('Zeit geändert');
+                                        //},
+                                        error: function () {
+                                            alert('Ajax Error');
+                                        }
+                                    });
+                                },
+                            });
+                            /*** End Calendar *****************************************************************************************************/
+                        });//$.each()
+                        $( "div#tabs" ).tabs( "refresh" );
+                        deferred.resolve( obj );
                     });
                     return deferred;
                 }
             })
         })
+        
+        
+                
+        var tabs = $( "#tabs" ).tabs({
+             activate: function( event, ui ){
+                //den angeklickten Calendar rendern
+                $( "#" + ui.newPanel.attr( 'id' ) + " div:first-child" ).fullCalendar( 'render' );
+             }
+        });
        
         $( "#visibility" ).selectBoxIt({
             theme:      "jqueryui",
@@ -344,7 +358,6 @@ Visibility für Gruppen
                             echo json_encode( $grps ); 
                         ?>
         });
-        ////foreach( j$grps ) $( "#tabs" ).tabs( "add", "http://mysite.com/details.php", "New Tab" );
         $( "#repeat" ).selectBoxIt({
             theme:      "jqueryui",
             autoWidth:  true,
@@ -428,9 +441,9 @@ Visibility für Gruppen
                  $( "#tmp" ).data( "cust_vend_pers", false );
             }).catcomplete({                         
             source: "jqhelp/autocompletion.php?case=name",                            
-            minLength: '<?php echo $_SESSION['feature_ac_minlength']; ?>', //<?php echo $_SESSION['termbegin'] ? $_SESSION['termbegin'] : 7;echo ":00"; ?>                            
+            minLength: '<?php echo $_SESSION['feature_ac_minlength']; ?>',                       
             delay: '<?php echo $_SESSION['feature_ac_delay']; ?>',
-            disabled: false,//<?php echo ($_SESSION['feature_ac']?'true':'true'); ?>,ToDo 
+            disabled: false,//<?php echo ($_SESSION['feature_ac']?'true':'false'); ?>,ToDo BESSER: Einstellungen via Ajax laden
             select: function( e, ui ) {                                    
                 $( "#tmp" ).data( "cust_vend_pers", ui.item.src+ui.item.id );
             }
@@ -446,10 +459,9 @@ Visibility für Gruppen
                 $( "#endTime" ).val( moment( "<?php echo $_SESSION['termbegin'] ? $_SESSION['termbegin'] : 7;echo ":00"; ?>", "HH:mm" ).add( "minutes", '<?php echo $_SESSION['termseq'] ? $_SESSION['termseq'] : 30; ?>' ).format( "LT") );                
             }
         });
-        var tabs = $( "#tabs" ).tabs({
-            //event: "mouseover"
-        });
-        var ul = tabs.find( "ul" );
+        
+        //var ul = tabs.find( "ul" );
+        //test.clone( true ).attr('id', 'calendar_clonex' ).appendTo( "#tabs-2" );
    
 				
     });
@@ -656,13 +668,15 @@ Visibility für Gruppen
         
     </div>    
     <div id="tabs">
-<ul>
-<li><a href="#tabs-1">Alle</a></li>
+        <ul>
+            <li><a href="#tabs-1">Alle</a></li>
+            
+        </ul>
+        <div id="tabs-1">
+            <div id="calendargetCategory0"></div>    
+        </div>
 
-</ul>
-<div id="tabs-1">
- <div id='calendar'></div>
-</div>
+    </div>
 
 <?php 
     $menu['end_content_ui'];

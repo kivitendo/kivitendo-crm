@@ -7,10 +7,11 @@
     $startGet       = $_GET['start'];
     $endGet         = $_GET['end'];
     $repeat_end_GET= $_GET['repeat_end'] == 'Invalid date' ? 'NULL' : $_GET['repeat_end'];
+    $where          = '';//$_GET['where'];
     $myuid          = $_GET['myuid'];
     
     foreach( $_POST as $key => $value ){
-        $$key = $value;
+        $$key = htmlspecialchars($value);
     }
     $repeat_end_sql = $repeat_end == 'Invalid date' ? 'NULL' : "'$repeat_end'::TIMESTAMP"; 
     switch( $task ){
@@ -31,7 +32,8 @@
             $rc=$_SESSION['db']->query($sql);   
         break;
         case "getEvents":
-            $sql = "SELECT json_agg(json_event) FROM ( select *, lower( tsrange ) AS start, upper( tsrange ) AS end  FROM ( select id, title, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, visibility,  prio, category, \"allDay\", color, job, done, job_planned_end, cust_vend_pers, row_number - 1 AS repeat_num, tsrange(lower(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval, upper(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval) from (select t.*, row_number() over (partition by id) from events t cross join lateral (select generate_series(0, t.repeat_quantity ) i) x) foo) alle_termine where '[$startGet, $endGet)'::tsrange && tsrange AND CASE WHEN visibility = 0 THEN uid = $myuid ELSE TRUE END ) json_event";
+            $sql = "SELECT json_agg(json_event) FROM ( select *, lower( tsrange ) AS start, upper( tsrange ) AS end  FROM ( select id, title, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, visibility,  prio, category, \"allDay\", color, job, done, job_planned_end, cust_vend_pers, row_number - 1 AS repeat_num, tsrange(lower(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval, upper(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval) from (select t.*, row_number() over (partition by id) from events t cross join lateral (select generate_series(0, t.repeat_quantity ) i) x) foo) alle_termine where '[$startGet, $endGet)'::tsrange && tsrange AND $where CASE WHEN visibility = 0 THEN uid = $myuid ELSE TRUE END ) json_event";
+            //echo $sql;            
             // " // ToDo: Visibility für Gruppen implementieren.            
             $rs = $_SESSION['db']->getOne( $sql );
             echo $rs['json_agg'];   

@@ -100,29 +100,21 @@ Visibility für Gruppen
                                 
                             },
                             type: "POST",
-                            success: function(lastid) {
-                                if( !$("#id").val() ){
-                                    $( "#id" ).val(lastid);
-                                    id = lastid;
-                                }
-                                //$('#calendar').fullCalendar('rerenderEvents')
-                            },
                             error: function () {
                                 alert('Ajax Error');
                             }
                         })
-                        //if( event.id ) $('#calendar').fullCalendar('removeEvents', event.id);// Wenn keine id dann hier letzte id holen
-                        ///$('#calendar').fullCalendar('renderEvent', event)
-                        $('#calendar').fullCalendar("refetchEvents");//!!!doof ist dass alle Events neu geholt werden!!!!
-                        //$('#calendar').fullCalendar('unselect');
-                
+                        //Aktiven Tab suchen und Calendar aktualisieren
+                        var activeTab = $("#tabs .ui-tabs-panel:visible").attr("id");
+                        $( "#" + activeTab + " div:first-child" ).fullCalendar( 'refetchEvents' );
                     }
                     else alert('Title is empty'); //ToDo                 
                     $( this ).dialog( "close" );
                 },
                 Delete: function() { 
                     var id = $( "#id" ).val(); 
-                    if( id ) $('#calendar').fullCalendar('removeEvents', id);                
+                    var activeTab = $("#tabs .ui-tabs-panel:visible").attr("id");
+                    if( id ) $( "#" + activeTab + " div:first-child" ).fullCalendar( 'removeEvents', id );                
                     $.ajax({
                         url: 'jqhelp/calendar.php',
                         data: {
@@ -137,8 +129,7 @@ Visibility für Gruppen
                             alert('Ajax Error');
                         }
                     }) 
-                    //$('#calendar').fullCalendar('rerenderEvents')  
-                    //$('#calendar').fullCalendar('renderEvent', event)          
+         
                     $( this ).dialog( "close" );
                 },
                 Cancel: function() {                         
@@ -462,7 +453,7 @@ Visibility für Gruppen
         });
         
         //var ul = tabs.find( "ul" );
-        //test.clone( true ).attr('id', 'calendar_clonex' ).appendTo( "#tabs-2" );
+
    
 				
     });
@@ -476,10 +467,7 @@ Visibility für Gruppen
         font-size: 14px;
     }
 
-    #calendar {
-        /*width: 98%;*/
-        margin: 40px auto;
-    }
+
     .ui-autocomplete-category {
         font-weight: bold;
         padding: .2em .4em;

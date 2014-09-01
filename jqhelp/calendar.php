@@ -7,7 +7,7 @@
     $startGet       = $_GET['start'];
     $endGet         = $_GET['end'];
     $repeat_end_GET= $_GET['repeat_end'] == 'Invalid date' ? 'NULL' : $_GET['repeat_end'];
-    $where          = '';//$_GET['where'];
+    $where          = $_GET['where'];
     $myuid          = $_GET['myuid'];
     
     foreach( $_POST as $key => $value ){

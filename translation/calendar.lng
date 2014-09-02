@@ -1,0 +1,13 @@
+var langData = {
+        de: {
+            HELLO_WORLD: "Hallo Welt!",
+            GERMAN: "Deutsch",
+            ENGLISH: "Englisch",
+            TERMIN: "Termin"
+            },
+        en: {
+            HELLO_WORLD: "Hello world!",
+            GERMAN: "German",
+            ENGLISH: "English"
+        }
+    };

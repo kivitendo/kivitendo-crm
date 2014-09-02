@@ -17,14 +17,25 @@
     echo $head['FULLCALJS'];
     echo $head['JQBOX'];
     echo $head['COLORPICKERJS'];
-  ///print_r( $_SESSION );
+  print_r( $_SESSION );
 /*************************************************** +++ ToDo ++++*******************************************************
 Kategorien und User + All in Tabs darstellen!!!!
 Visibility für Gruppen
 ************************************************************************************************************************/
 ?>
+<script language="javascript" type="text/javascript" src="translation/calendar.lng"></script>
 <script>
     $(document).ready(function() {
+            
+        var language="de"; // current language
+        
+
+ 
+        
+        $(".lang").each(function() {
+            var key = $(this).attr("data-lang");
+                $(this).text( langData[language][key] );
+        });
         //var id = 0;//delete
         $( "#dialog" ).dialog({
             autoOpen: false,
@@ -452,10 +463,8 @@ Visibility für Gruppen
             }
         });
         
-        //var ul = tabs.find( "ul" );
 
-   
-				
+        
     });
 
 </script>
@@ -564,7 +573,7 @@ Visibility für Gruppen
             </div>
             <div id="jobRadio">
                 <form>
-                    <input type="radio" id="job_false" class="radio" name="jobRadio" value='0' ><label for="job_false">Termin </label>
+                    <input type="radio" id="job_false" class="radio" name="jobRadio" value='0'><label for="job_false" data-lang='TERMIN' class='lang'></label>
                     <input type="radio" id="job_true" class="radio" name="jobRadio" value='1' ><label for="job_true">Aufgabe</label>
                 </form>
             </div>            

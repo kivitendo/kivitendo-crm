@@ -1,13 +1,16 @@
 var langData = {
         de: {
-            HELLO_WORLD: "Hallo Welt!",
-            GERMAN: "Deutsch",
-            ENGLISH: "Englisch",
-            TERMIN: "Termin"
-            },
+            TERM:       "Termin",
+            JOB:        "Aufgabe",
+            COLOR:      "Farbe:",
+            END:        "Ende:",
+            TITLE:      "Titel",
+        },
         en: {
-            HELLO_WORLD: "Hello world!",
-            GERMAN: "German",
-            ENGLISH: "English"
+            TERM:       "Term",
+            JOB:        "Job",
+            COLOR:      "Color:",
+            END:        "End:",
+            TITLE:      "Title",
         }
     };

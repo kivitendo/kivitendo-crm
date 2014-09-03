@@ -17,7 +17,7 @@
     echo $head['FULLCALJS'];
     echo $head['JQBOX'];
     echo $head['COLORPICKERJS'];
-  print_r( $_SESSION );
+  //print_r( $_SESSION );
 /*************************************************** +++ ToDo ++++*******************************************************
 Kategorien und User + All in Tabs darstellen!!!!
 Visibility für Gruppen
@@ -27,14 +27,10 @@ Visibility für Gruppen
 <script>
     $(document).ready(function() {
             
-        var language="de"; // current language
-        
-
- 
-        
-        $(".lang").each(function() {
-            var key = $(this).attr("data-lang");
-                $(this).text( langData[language][key] );
+        var language = "<?php echo $_SESSION['countrycode'] ? $_SESSION['countrycode'] : 'en';?>"; 
+        $( ".lang" ).each( function(){
+            var key = $( this ).attr( "data-lang" );
+                $( this ).text( typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
         });
         //var id = 0;//delete
         $( "#dialog" ).dialog({
@@ -564,7 +560,7 @@ Visibility für Gruppen
     <div id="dialog" class="event-dialog" title="Event">
         <div id="dialog-inner">
             <div id="titleLabel">
-              <b>Title: </b> 
+              <b data-lang='TITLE' class='lang'></b> 
             </div> 
                
             <div id="titleInp">
@@ -573,8 +569,8 @@ Visibility für Gruppen
             </div>
             <div id="jobRadio">
                 <form>
-                    <input type="radio" id="job_false" class="radio" name="jobRadio" value='0'><label for="job_false" data-lang='TERMIN' class='lang'></label>
-                    <input type="radio" id="job_true" class="radio" name="jobRadio" value='1' ><label for="job_true">Aufgabe</label>
+                    <input type="radio" id="job_false" class="radio" name="jobRadio" value='0'><label for="job_false" data-lang='TERM' class='lang'></label>
+                    <input type="radio" id="job_true" class="radio" name="jobRadio" value='1' ><label for="job_true" data-lang='JOB' class='lang'></label>
                 </form>
             </div>            
             <div id="start">
@@ -585,7 +581,7 @@ Visibility für Gruppen
             </div>
             <div id="chkboxAllDay"><input class="inp-checkbox" id="allDay"  type="checkbox"><label for="allDay"></label>ganztags</div>
             <div id="chkboxDone" style="display: none"><input class="inp-checkbox" id="done"  type="checkbox"><label for="done"></label>fertig</div> 
-                <div id="colorLabel">Farbe: </div>  
+                <div id="colorLabel" data-lang='COLOR' class='lang' ></div>  
             <div id="colorInp">
                 <input type="text"  id="color" class="text ui-widget-content ui-corner-all date">
             </div>
@@ -594,7 +590,7 @@ Visibility für Gruppen
                 <input type="text"   id="startTime" class="text ui-widget-content ui-corner-all time">
             </div>
             <div id="end">
-              <b>Ende: </b> 
+              <b data-lang='END' class='lang'></b> 
             </div>    
             <div id="endDateInp">
                 <input type="text"   id="endDate" class="text ui-widget-content ui-corner-all date">

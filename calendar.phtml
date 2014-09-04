@@ -29,11 +29,12 @@ Visibility für Gruppen
             
         var language = "<?php echo $_SESSION['countrycode'] ? $_SESSION['countrycode'] : 'en';?>"; 
         $( ".lang" ).each( function(){
+  
             var key = $( this ).attr( "data-lang" );
-                $( this ).text( typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
+            if( $( this ).is( ":input" ) ) $( this ).attr( 'title',  typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
+            else $( this ).text( typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
         });
-        //var id = 0;//delete
-        $( "#dialog" ).dialog({
+         $( "#dialog" ).dialog({
             autoOpen: false,
             height: 540,
             width: 680,
@@ -176,16 +177,13 @@ Visibility für Gruppen
                         url: 'jqhelp/calendar.php',
                         data: { task: ajaxTask }
                     }).done(function(json) {  
-                        //json.push(value = "-1", text = "All")
-                        //var obj =  {value : "-1", text : "All"};
-                        //var obj  = tst;
-                        //json.push({value: -1, text: "ALLE"});
-                        obj =  $.parseJSON( json.trim() ) ;
-                        if( ajaxTask == 'getCategory' ) obj.unshift( {value: 0, text: "ALLE"} );
+                        var obj = $.parseJSON( json.trim() ) ; 
+                        var objCalendar = $.parseJSON( json.trim() ) ;
+                        if( ajaxTask == 'getCategory' ) objCalendar.unshift( {value: 0, text: "ALLE"} );
 
                         //console.log( obj );
                         
-                        $.each( obj, function( i, val ){
+                        $.each( objCalendar, function( i, val ){
                             //Neuen Tab erzeugen
                             if( val.value != 0 ){
                                 $("div#tabs ul").append("<li><a href='#tab" + ajaxTask+ val.value + "'>" + val.text + "</a></li>"); //Ok                           
@@ -195,6 +193,7 @@ Visibility für Gruppen
                             //Calendar für Tabs erzeugen   
                             /*** Begin Calendar *********************************************************************************************************************/                         
                             $('#calendar' + ajaxTask + val.value  ).fullCalendar({
+                                lang: language,
                                 theme: true,
                                 header: {
                                     left: 'prev,next today',
@@ -350,7 +349,7 @@ Visibility für Gruppen
             theme:      "jqueryui",
             autoWidth:  true,
             height: "12",
-            populate:   <?php  
+            populate:   <?php  //ToDo via Ajax aus  DB holen 
                             $grps = $_SESSION['grp'];
                             array_unshift( $grps, array( 'value' => '0', 'text' => 'Benutzer' ) );
                             array_unshift( $grps, array( 'value' => '-1', 'text' => 'Alle' ) );
@@ -362,10 +361,10 @@ Visibility für Gruppen
             autoWidth:  true,
             height: "12",
             populate: [
-                { value: "day",  text: "tägig" },
-                { value: "week", text: "wöchig" },
-                { value: "month",text: "monatig" },
-                { value: "year", text: "jahrig" }
+                { value: "day",  text: langData[language]['DAY'] },
+                { value: "week", text: langData[language]['WEEK'] },
+                { value: "month",text: langData[language]['MONTH'] },
+                { value: "year", text: langData[language]['YEAR'] }
             ]   
         });
         $( "#jobRadio,#prioRadio" ).buttonset();//.find('label').height(28);;
@@ -512,7 +511,7 @@ Visibility für Gruppen
     #repeatFactorInput  { position:absolute; top:190px; left:220px;}
     #repeatSelect       { position:absolute; top:190px; left:270px;}
     #repeatQuantityInput{ position:absolute; top:190px; left:400px;}
-    #repeatEndInput     { position:absolute; top:190px; left:480px;}
+    #repeatEndInput     { position:absolute; top:190px; left:500px;}
     #descTitle          { position:absolute; top:220px; left:30px;}
     #description              { position:absolute; top:220px; left:30px;}
     .title{
@@ -579,8 +578,8 @@ Visibility für Gruppen
             <div id="startDateInp">
                 <input type="text"   id="startDate" class="text ui-widget-content ui-corner-all date">
             </div>
-            <div id="chkboxAllDay"><input class="inp-checkbox" id="allDay"  type="checkbox"><label for="allDay"></label>ganztags</div>
-            <div id="chkboxDone" style="display: none"><input class="inp-checkbox" id="done"  type="checkbox"><label for="done"></label>fertig</div> 
+            <div id="chkboxAllDay"><input class="inp-checkbox" id="allDay"  type="checkbox"><label for="allDay" data-lang='ALLDAY' class='lang' ></label></div>
+            <div id="chkboxDone" style="display: none"><input class="inp-checkbox" id="done"  type="checkbox"><label for="done" data-lang='DONE' class='lang'></label></div> 
                 <div id="colorLabel" data-lang='COLOR' class='lang' ></div>  
             <div id="colorInp">
                 <input type="text"  id="color" class="text ui-widget-content ui-corner-all date">
@@ -598,46 +597,42 @@ Visibility für Gruppen
             <div id="endTimeInp">
                 <input type="text"   id="endTime" class="text ui-widget-content ui-corner-all time">
             </div>
-            <div id="categoryLabel">
-                Kategorie:
+            <div id="categoryLabel" data-lang='CATEGORY' class='lang'>
             </div> 
             <div id="categoryDrop">
                 <select  id="category">
                 </select> 
             </div>
-            <div id="userLabel">
-                Benutzer:
+            <div id="userLabel" data-lang='USER' class='lang'>
             </div> 
             <div id="userDrop">
                 <select id="user" >
                 
                 </select> 
             </div>
-            <div id="visibilityLabel">
-                Sichtbarkeit:
+            <div id="visibilityLabel" data-lang='VISIBILITY' class='lang'>
             </div>
             <div id="visibilityDrop">
                 <select id="visibility">
                 
                 </select> 
             </div>
-            <div id="prioLabel">
-                Priorität:
+            <div id="prioLabel" data-lang='PRIORITY' class='lang' >
             </div>
             <div id="prioRadio">
                 <form>
-                    <input type="radio" id="prio_0" name="prioRadio" value='0' ><label for="prio_0">gering</label>
-                    <input type="radio" id="prio_1" name="prioRadio" value='1' ><label for="prio_1">normal</label>
-                    <input type="radio" id="prio_2" name="prioRadio" value='2' ><label for="prio_2">hoch</label>
+                    <input type="radio" id="prio_0" name="prioRadio" value='0' ><label for="prio_0" data-lang='MINOR'  class='lang'></label>
+                    <input type="radio" id="prio_1" name="prioRadio" value='1' ><label for="prio_1" data-lang='NORMAL' class='lang'></label>
+                    <input type="radio" id="prio_2" name="prioRadio" value='2' ><label for="prio_2" data-lang='MAJOR'  class='lang'></label>
                 </form>                
             </div> 
-            <div id="locationLabel">Lokation / Kunde:</div>
+            <div id="locationLabel" data-lang='CUSTOMER_LOCATION' class='lang'></div>
             <div id="locationInput">
                 <form>
-                    <input type="text"  id="location" class=" ui-widget-content ui-corner-all location" autocomplete="off" title="Doppelklick für weitere Info.">    
+                    <input type="text"  id="location" class="ui-widget-content ui-corner-all location lang" autocomplete="off" data-lang='DOUBLE_KLICK'>    
                 </form>    
             </div>          
-            <div id="repeatLabel">Wiederholungen:</div>          
+            <div id="repeatLabel" data-lang='REPS' class='lang'></div>          
             <div id="repeatFactorInput">
                 <form>
                     <input type="text"  id="repeat_factor" class=" ui-widget-content ui-corner-all repeatfactor " > -     
@@ -648,7 +643,7 @@ Visibility für Gruppen
             </div>  
             <div id="repeatQuantityInput">
                 <form>
-                    <input type="text"  id="repeat_quantity" class=" ui-widget-content ui-corner-all repeatfactor" > x bis:  
+                    <input type="text"  id="repeat_quantity" class=" ui-widget-content ui-corner-all repeatfactor lang"><span data-lang="BY_UNTIL" class="lang"></span> 
                 </form>
             </div> 
             <div id="repeatEndInput">
@@ -663,7 +658,7 @@ Visibility für Gruppen
     </div>    
     <div id="tabs">
         <ul>
-            <li><a href="#tabs-1">Alle</a></li>
+            <li><a href="#tabs-1" data-lang='ALL'  class='lang'></a></li>
             
         </ul>
         <div id="tabs-1">

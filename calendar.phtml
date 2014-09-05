@@ -270,7 +270,7 @@ Visibility für Gruppen
                                     $( "#tmp" ).data( "cust_vend_pers", event.cust_vend_pers ); 
                                     $( "#location" ).val( event.location );
                                     $( "#done" ).prop( 'checked', event.done );
-                                    $( "#repeat" ).data("selectBox-selectBoxIt").selectOption( event.repeat );
+                                    $( "#repeat" ).data("selectBox-selectBoxIt").selectOption( event.repeat.trim() );
                                     $( "#repeat,#repeat_factor,#repeat_quantity" ).change( calculate_end );
                                     $( "#repeat_end").change( calculate_repeat_quantity );
                                     $( "#repeat_factor" ).val( event.repeat_factor );

@@ -22,12 +22,59 @@
 ?>
 <script>
 
-    $(document).ready(function() {
+    $(document).ready(function(){
+         $( "#save" ).button().click(function( event ) {
+            var dataArr  = $("#myform").serializeArray()
+            var newColor = dataArr.pop();
+            var newCat   = dataArr.pop(); 
+            var merge = newCat + newColor ; 
+            console.log( merge );          
+            //alert( newColor.value )
+            if( newCat.value ){
+                $.ajax({
+                    url: 'jqhelp/event_category.php',
+                    data: { task:  'newCategory', newCat: newCat.value, newColor: newColor.value  },
+                    type: "POST",
+                 });
+                 $("#sortable").append("<li class='ui-state-default'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' data-lang='DOUBLE_KLICKx' name='newCat'>"
+                                         + "<input type='text' class='ui-widget-content ui-corner-all rigth lang' autocomplete='off' data-lang='DOUBLE_KLICKxx'  name='newColor'></li>");
+                 
+            }
+            
+            
+         });
+
+        var sortable = $( "#sortable" ).sortable();
+        $.ajax({
+            url: 'jqhelp/event_category.php',
+            data: { task:  'getCategories'  },
+            type: "POST",
+            success: function( json ) {
+                var obj = $.parseJSON( json.trim() ) ; 
+                //alert( "getCategories" + obj  );
+                 $.each( obj, function( i, val ){
+                    //alert( val.id );
+                    $("#sortable").prepend("<li class='ui-state-default'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' data-lang='DOUBLE_KLICKx' value='" + val.label + "' name='cat" + val.id + "'>"
+                                         + "<input type='text' class='ui-widget-content ui-corner-all rigth lang' autocomplete='off' data-lang='DOUBLE_KLICKxx' value='" + val.color + "' name='color" + val.id + "'></li>");
+
+                 });
+                // $("#sortable").sortable('refresh');
+                //console.log( $(this) )
+            },
+            error: function () {
+                alert('Ajax Error');
+            }
+        }); 
         
     });
 </script>
 <style>
-    #example    { position:absolute; top:130px; left:87px; }
+    #sortable, #head { list-style-type: none; margin: 0; padding: 0;padding-left: 2.5em; width: 400px; }
+    #sortable li, #head li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
+    #sortable li span { position: absolute; margin-left: -1.3em; }
+    .rigth {  position:absolute;  left:280px; width: 90px; color: 666;}
+    .left {  position:absolute;   width: 180px;}
+      
 </style>
 </head>
 <body>
@@ -35,8 +82,35 @@
     echo $menu['pre_content'];
     echo $menu['start_content'];
 ?>
-<div class="ui-widget-content" style="height:600px">
-<div id="example"></div>
+<div class="ui-widget-content" >
+    <div>
+        <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Add, Edit, Move Calendar Categories</p>
+    </div>
+    <div id="locationLabel" data-lang='CUSTOMER_LOCATION' class='lang'></div>
+    <div id="locationInput">
+           
+    </div> 
+    <ul id="head">
+        <li class="ui-state-active"><span class="left">CATEGORY</span><span class="rigth">COLOR</span></li>
+    </ul>
+    
+    <form id="myform">
+    <ul id="sortable">
+        <li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+        
+            <input type="text" class="ui-widget-content ui-corner-all left lang" autocomplete="off" data-lang='DOUBLE_KLICKx' name="new_cat"> 
+            <input type="text" class="ui-widget-content ui-corner-all rigth lang" autocomplete="off" data-lang='DOUBLE_KLICKxx'  name="new_color">   
+         
+        
+         </li>
+        
+       
+          
+
+</ul>
+   </form>
+<button id="save">SAVE</button>    
+
 <!--
 Hier stehen die vielen Div-Container    
 -->  

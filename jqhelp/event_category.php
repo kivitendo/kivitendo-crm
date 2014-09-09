@@ -14,9 +14,14 @@
         case "getCategories":
             $sql = "SELECT json_agg( json_category ) FROM ( SELECT id, label, color FROM event_category ORDER BY cat_order DESC ) AS json_category ;";
             //echo $sql;            
-           
             $rs = $_SESSION['db']->getOne( $sql );
             echo $rs['json_agg'];   
         break; 
+        case "updateCategories":
+            $sql = "     ";
+            //echo $sql;            
+            $rs = $_SESSION['db']->getOne( $sql );
+            echo $rs['json_agg'];   
+        break;
      }
  ?>

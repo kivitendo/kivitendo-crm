@@ -28,7 +28,7 @@
             var newColor = dataArr.pop();
             var newCat   = dataArr.pop(); 
             var merge = newCat + newColor ; 
-            console.log( merge );          
+            //console.log( merge );          
             //alert( newColor.value )
             if( newCat.value ){
                 $.ajax({
@@ -40,6 +40,16 @@
                                          + "<input type='text' class='ui-widget-content ui-corner-all rigth lang' autocomplete='off' data-lang='DOUBLE_KLICKxx'  name='newColor'></li>");
                  
             }
+            delete dataArr[0].name;
+            $.each( dataArr, function( index, value ){
+                delete dataArr[index].name;
+            });
+            console.log( JSON.stringify( dataArr ) );
+            $.ajax({
+                url: 'jqhelp/event_category.php',
+                data: { task:  'updateCategory', updateData: dataArr },
+                type: "POST",
+            });
             
             
          });

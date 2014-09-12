@@ -27,34 +27,30 @@
             var dataArr  = $("#myform").serializeArray()
             var newColor = dataArr.pop();
             var newCat   = dataArr.pop(); 
-            var merge = newCat + newColor ; 
-            //console.log( merge );          
-            //alert( newColor.value )
             if( newCat.value ){
                 $.ajax({
                     url: 'jqhelp/event_category.php',
                     data: { task:  'newCategory', newCat: newCat.value, newColor: newColor.value  },
                     type: "POST",
                  });
-                 $("#sortable").append("<li class='ui-state-default'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' data-lang='DOUBLE_KLICKx' name='newCat'>"
-                                         + "<input type='text' class='ui-widget-content ui-corner-all rigth lang' autocomplete='off' data-lang='DOUBLE_KLICKxx'  name='newColor'></li>");
+                 $( ".test" ).remove();
+                 $("#sortable").append("<li class='ui-state-default test'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' data-lang='DOUBLE_KLICKx' name='newCat'>"
+                                     + "<input type='text' class='ui-widget-content ui-corner-all rigth lang' autocomplete='off' data-lang='DOUBLE_KLICKxx'  name='newColor'></li>");
                  
             }
-            delete dataArr[0].name;
-            $.each( dataArr, function( index, value ){
-                delete dataArr[index].name;
-            });
+            
             console.log( JSON.stringify( dataArr ) );
             $.ajax({
                 url: 'jqhelp/event_category.php',
-                data: { task:  'updateCategory', updateData: dataArr },
+                data: { task:  'updateCategories', updateData: dataArr },
                 type: "POST",
             });
-            
-            
+            $( ".remove" ).remove();
+            getData();
          });
 
         var sortable = $( "#sortable" ).sortable();
+        getData = function () {
         $.ajax({
             url: 'jqhelp/event_category.php',
             data: { task:  'getCategories'  },
@@ -64,8 +60,8 @@
                 //alert( "getCategories" + obj  );
                  $.each( obj, function( i, val ){
                     //alert( val.id );
-                    $("#sortable").prepend("<li class='ui-state-default'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' data-lang='DOUBLE_KLICKx' value='" + val.label + "' name='cat" + val.id + "'>"
-                                         + "<input type='text' class='ui-widget-content ui-corner-all rigth lang' autocomplete='off' data-lang='DOUBLE_KLICKxx' value='" + val.color + "' name='color" + val.id + "'></li>");
+                    $("#sortable").prepend("<li class='ui-state-default remove'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' data-lang='DOUBLE_KLICKx' value='" + val.label + "' name='cat_" + val.id + "'>"
+                                         + "<input type='text' class='ui-widget-content ui-corner-all rigth lang' autocomplete='off' data-lang='DOUBLE_KLICKxx' value='" + val.color + "' name='color_" + val.id + "'></li>");
 
                  });
                 // $("#sortable").sortable('refresh');
@@ -75,6 +71,8 @@
                 alert('Ajax Error');
             }
         }); 
+        }
+        getData();
         
     });
 </script>
@@ -106,7 +104,7 @@
     
     <form id="myform">
     <ul id="sortable">
-        <li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+        <li class="ui-state-default test"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
         
             <input type="text" class="ui-widget-content ui-corner-all left lang" autocomplete="off" data-lang='DOUBLE_KLICKx' name="new_cat"> 
             <input type="text" class="ui-widget-content ui-corner-all rigth lang" autocomplete="off" data-lang='DOUBLE_KLICKxx'  name="new_color">   

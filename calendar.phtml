@@ -115,6 +115,7 @@ Visibility für Gruppen
                         //Aktiven Tab suchen und Calendar aktualisieren
                         var activeTab = $("#tabs .ui-tabs-panel:visible").attr("id");
                         $( "#" + activeTab + " div:first-child" ).fullCalendar( 'refetchEvents' );
+                        //ToDo Hier müssen noch die Tabs vom User und der Category aktualisiert werden
                     }
                     else alert('Title is empty'); //ToDo                 
                     $( this ).dialog( "close" );
@@ -179,7 +180,10 @@ Visibility für Gruppen
                     }).done(function(json) {  
                         var obj = $.parseJSON( json.trim() ) ; 
                         var objCalendar = $.parseJSON( json.trim() ) ;
-                        if( ajaxTask == 'getCategory' ) objCalendar.unshift( {value: 0, text: "ALLE"} );
+                        if( ajaxTask == 'getCategory' ){
+                            objCalendar.unshift( {value: 0, text: "ALLE"} );
+                            obj.unshift( {value: 0, text: ""} );
+                        }
 
                         //console.log( obj );
                         

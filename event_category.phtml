@@ -7,82 +7,82 @@
     $menu = $_SESSION['menu'];
     $head = mkHeader();
     echo $menu['stylesheets'];
-    echo $head['FULLCALCSS'];
-    echo $head['BOXCSS'];
-    echo $head['COLORPICKERCSS'];
     echo $head['JQUERY'];   
     echo $head['JQUERYUI'];
     echo $head['THEME'];
-    echo $head['FULLCALJS'];
-    echo $head['JQBOX'];
-    echo $head['COLORPICKERJS'];
     //print_r( $_SESSION );
-
 
 ?>
 <script>
-
-    $(document).ready(function(){
-         $( "#save" ).button().click(function( event ) {
+    $( document ).ready( function(){
+         $( "#save" ).button().click(function( event ){
             var dataArr  = $("#myform").serializeArray()
             var newColor = dataArr.pop();
             var newCat   = dataArr.pop(); 
             if( newCat.value ){
                 $.ajax({
                     url: 'jqhelp/event_category.php',
-                    data: { task:  'newCategory', newCat: newCat.value, newColor: newColor.value  },
+                    data: { task:  'newCategory', newCat: newCat.value, newColor: newColor.value },
                     type: "POST",
-                 });
-                 $( ".test" ).remove();
-                 $("#sortable").append("<li class='ui-state-default test'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' data-lang='DOUBLE_KLICKx' name='newCat'>"
-                                     + "<input type='text' class='ui-widget-content ui-corner-all rigth lang' autocomplete='off' data-lang='DOUBLE_KLICKxx'  name='newColor'></li>");
-                 
+                });
+                var newMax = parseInt( $( "#tmp" ).data( "max" ) ) + 1;
+                $( "#tmp" ).data( "max", newMax );
+                $( "input[name='new_color']" ).attr( "name", "color_" + newMax ); 
+                $( "input[name='new_cat']" ).attr( "name", "cat_" + newMax ); 
+                $( "input:last[name='del']" ).attr( "value",  newMax );
+                $( ".new" ).toggleClass( "new remove_" + newMax ); 
+                $( "#sortable" ).append("<li class='ui-state-default new'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' data-lang='DOUBLE_KLICKx' name='new_cat'>"
+                                      + "<input type='text' class='ui-widget-content ui-corner-all middle lang' autocomplete='off' data-lang='xxx'  name='new_color'><input type='checkbox' class='right' name='del'> </li>");
             }
-            
             console.log( JSON.stringify( dataArr ) );
+            $.each( dataArr, function(i, v) {
+                if( v.name == "del" ){ 
+                    $.ajax({
+                        url: 'jqhelp/event_category.php',
+                        data: { task:  'deleteCategory', delCat: v.value },
+                        type: "POST",
+                        success: function(){
+                            $(".remove_" + v.value ).remove();        
+                       }                                
+                    });
+                                    
+                }    
+            });
             $.ajax({
                 url: 'jqhelp/event_category.php',
                 data: { task:  'updateCategories', updateData: dataArr },
                 type: "POST",
             });
-            $( ".remove" ).remove();
-            getData();
-         });
-
-        var sortable = $( "#sortable" ).sortable();
-        getData = function () {
+        });
+        $( "#sortable" ).sortable();
+        
         $.ajax({
             url: 'jqhelp/event_category.php',
             data: { task:  'getCategories'  },
             type: "POST",
             success: function( json ) {
                 var obj = $.parseJSON( json.trim() ) ; 
-                //alert( "getCategories" + obj  );
-                 $.each( obj, function( i, val ){
-                    //alert( val.id );
-                    $("#sortable").prepend("<li class='ui-state-default remove'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' data-lang='DOUBLE_KLICKx' value='" + val.label + "' name='cat_" + val.id + "'>"
-                                         + "<input type='text' class='ui-widget-content ui-corner-all rigth lang' autocomplete='off' data-lang='DOUBLE_KLICKxx' value='" + val.color + "' name='color_" + val.id + "'></li>");
-
-                 });
-                // $("#sortable").sortable('refresh');
-                //console.log( $(this) )
+                var max = 0; 
+                $.each( obj, function( i, val ){
+                    if( val.id > max ) max = val.id;
+                    $( "#sortable" ).prepend("<li class='ui-state-default remove_" + val.id + "'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' data-lang='DOUBLE_KLICKx' value='" + val.label + "' name='cat_" + val.id + "'>"
+                                         + "<input type='text' class='ui-widget-content ui-corner-all middle lang' autocomplete='off' data-lang='xxx' value='" + val.color + "' name='color_" + val.id + "'><input type='checkbox' class='right' name='del' value='" + val.id + "'></li>");
+                });
+                $( "#tmp" ).data( "max", max );    
             },
             error: function () {
                 alert('Ajax Error');
             }
         }); 
-        }
-        getData();
-        
     });
 </script>
 <style>
     #sortable, #head { list-style-type: none; margin: 0; padding: 0;padding-left: 2.5em; width: 400px; }
     #sortable li, #head li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
     #sortable li span { position: absolute; margin-left: -1.3em; }
-    .rigth {  position:absolute;  left:280px; width: 90px; color: 666;}
-    .left {  position:absolute;   width: 180px;}
-      
+    .left {  position:absolute;   width: 180px;}   
+    .middle {  position:absolute;  left:280px; width: 90px; color: 666;}
+    .right {  position:absolute;  left:350px; width: 90px; color: 666;}
 </style>
 </head>
 <body>
@@ -91,42 +91,26 @@
     echo $menu['start_content'];
 ?>
 <div class="ui-widget-content" >
+    <div id="tmp"></div>
     <div>
         <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Add, Edit, Move Calendar Categories</p>
     </div>
     <div id="locationLabel" data-lang='CUSTOMER_LOCATION' class='lang'></div>
-    <div id="locationInput">
-           
-    </div> 
+
     <ul id="head">
-        <li class="ui-state-active"><span class="left">CATEGORY</span><span class="rigth">COLOR</span></li>
+        <li class="ui-state-active"><span class="left">CATEGORY</span><span class="middle">COLOR</span></li>
     </ul>
     
     <form id="myform">
-    <ul id="sortable">
-        <li class="ui-state-default test"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-        
-            <input type="text" class="ui-widget-content ui-corner-all left lang" autocomplete="off" data-lang='DOUBLE_KLICKx' name="new_cat"> 
-            <input type="text" class="ui-widget-content ui-corner-all rigth lang" autocomplete="off" data-lang='DOUBLE_KLICKxx'  name="new_color">   
-         
-        
-         </li>
-        
-       
-          
-
-</ul>
-   </form>
-<button id="save">SAVE</button>    
-
-<!--
-Hier stehen die vielen Div-Container    
--->  
-            
-
-
-
-
+        <ul id="sortable">
+            <li class="ui-state-default new"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+                <input type="text" class="ui-widget-content ui-corner-all left lang"  autocomplete="off" name="new_cat"> 
+                <input type="text" class="ui-widget-content ui-corner-all middle lang" autocomplete="off" name="new_color"> 
+                <input type="checkbox" class='right' name="del" >  
+            </li>
+        </ul>
+    </form>
+    <button id="save">SAVE</button>    
 </div>
 <?php $menu['end_content']; ?>
 </body>

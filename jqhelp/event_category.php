@@ -1,9 +1,10 @@
 <?php
     require_once("../inc/stdLib.php"); 
     require_once("../inc/crmLib.php");  
-    $task  = array_shift( $_POST );
-    $newCat = $_POST['newCat'];
+    $task     = array_shift( $_POST );
+    $newCat   = $_POST['newCat'];
     $newColor = $_POST['newColor'];
+    $delCat   = $_POST['delCat'];   
    // echo "Task: ".$task;
   
     
@@ -12,7 +13,6 @@
             $sql="INSERT INTO event_category ( label, color, cat_order ) VALUES ( '$newCat', '$newColor', ( SELECT max( cat_order ) + 1 AS cat_order FROM event_category) )";
             $rc=$_SESSION['db']->query($sql); 
         break;
-        
         case "getCategories":
             $sql = "SELECT json_agg( json_category ) FROM ( SELECT id, label, TRIM( color ) AS color FROM event_category ORDER BY cat_order DESC ) AS json_category ;";
             //echo $sql;            
@@ -33,6 +33,11 @@
             //echo $sql;          
             $rs = $_SESSION['db']->getOne( $sql );
               
+        break;
+        case "deleteCategory":
+            $sql="DELETE FROM event_category WHERE id = $delCat";
+            //echo $sql;            
+            $rc=$_SESSION['db']->query($sql); 
         break;
      }
  ?>

@@ -73,6 +73,7 @@ Visibility für Gruppen
                             description: description,
                             allDay: allDay,
                             uid : uid,
+                            //category : category,
                             //prio: prio
                             color: color,
                             done:  done,
@@ -115,6 +116,9 @@ Visibility für Gruppen
                         //Aktiven Tab suchen und Calendar aktualisieren
                         var activeTab = $("#tabs .ui-tabs-panel:visible").attr("id");
                         $( "#" + activeTab + " div:first-child" ).fullCalendar( 'refetchEvents' );
+                        //Tabs vom User und der Category aktualisieren wenn diese sich ändern
+                        if( uid != $( "#tmp" ).data( "uid" ) ) $( "#calendargetUsers" + uid ).fullCalendar( 'refetchEvents' );
+                        if( category != $( "#tmp" ).data( "category" ) ) $( "#calendargetCategory" + category ).fullCalendar( 'refetchEvents' );
                     }
                     else alert('Title is empty'); //ToDo                 
                     $( this ).dialog( "close" );
@@ -179,7 +183,10 @@ Visibility für Gruppen
                     }).done(function(json) {  
                         var obj = $.parseJSON( json.trim() ) ; 
                         var objCalendar = $.parseJSON( json.trim() ) ;
-                        if( ajaxTask == 'getCategory' ) objCalendar.unshift( {value: 0, text: "ALLE"} );
+                        if( ajaxTask == 'getCategory' ){
+                            objCalendar.unshift( {value: 0, text: "ALLE"} );
+                            obj.unshift( {value: 0, text: ""} );
+                        }
 
                         //console.log( obj );
                         
@@ -241,7 +248,6 @@ Visibility für Gruppen
                                     $( "#repeat_end" ).change( calculate_repeat_quantity );
                                     $( ":input[type!='button'][id!='done']" ).attr( "disabled", false ).css( "background","#FFF" );
                                     $( "div#jobRadio,div#prioRadio" ).buttonset("refresh");
-                
                                     $( "#dialog" ).dialog( "open" );
                                 },
                                 /*** Edit Event *************************************************************************************/
@@ -268,6 +274,8 @@ Visibility für Gruppen
                                     $( "#colorPick" ).hide();
                                     $( "#color" ).val( event.color );
                                     $( "#tmp" ).data( "cust_vend_pers", event.cust_vend_pers ); 
+                                    $( "#tmp" ).data( "uid", event.uid ); 
+                                    $( "#tmp" ).data( "category", event.category );
                                     $( "#location" ).val( event.location );
                                     $( "#done" ).prop( 'checked', event.done );
                                     $( "#repeat" ).data("selectBox-selectBoxIt").selectOption( event.repeat.trim() );

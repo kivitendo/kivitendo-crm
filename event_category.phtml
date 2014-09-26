@@ -15,7 +15,7 @@
 ?>
 <script>
     $( document ).ready( function(){
-         $( "#save" ).button().click(function( event ){
+         $( "#save" ).button().click( function(){
             var dataArr  = $("#myform").serializeArray()
             var newColor = dataArr.pop();
             var newCat   = dataArr.pop(); 
@@ -32,7 +32,9 @@
                 $( "input:last[name='del']" ).attr( "value",  newMax );
                 $( ".new" ).toggleClass( "new remove_" + newMax ); 
                 $( "#sortable" ).append("<li class='ui-state-default new'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' data-lang='DOUBLE_KLICKx' name='new_cat'>"
-                                      + "<input type='text' class='ui-widget-content ui-corner-all middle lang' autocomplete='off' data-lang='xxx'  name='new_color'><input type='checkbox' class='right' name='del'> </li>");
+                                      + "<input type='text' class='ui-widget-content ui-corner-all middle lang' autocomplete='off' data-lang='xxx'  name='new_color' maxlength='7'> </li>");
+                $( ".remove_" + newMax ).append( "<input type='checkbox' class='right' value='" + newMax + "' name='del' title='Delete me' tabindex='-1'>");
+                focusOut();
             }
             console.log( JSON.stringify( dataArr ) );
             $.each( dataArr, function(i, v) {
@@ -54,7 +56,21 @@
                 type: "POST",
             });
         });
-        $( "#sortable" ).sortable();
+        $( "#calendar" ).button().click( function(){
+            window.location.href = "calendar.phtml";
+        });
+        var focusOut = function(){
+            $( ".left, .middle" ).focusout( function(){
+                $( "#save" ).click();
+            })
+        };
+        focusOut(); //ToDo: vereinfachen??
+        $( "#sortable" ).sortable({
+            update: function(){                
+                $( "#save" ).click();
+            }
+        });
+       
         
         $.ajax({
             url: 'jqhelp/event_category.php',
@@ -66,7 +82,7 @@
                 $.each( obj, function( i, val ){
                     if( val.id > max ) max = val.id;
                     $( "#sortable" ).prepend("<li class='ui-state-default remove_" + val.id + "'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' data-lang='DOUBLE_KLICKx' value='" + val.label + "' name='cat_" + val.id + "'>"
-                                         + "<input type='text' class='ui-widget-content ui-corner-all middle lang' autocomplete='off' data-lang='xxx' value='" + val.color + "' name='color_" + val.id + "'><input type='checkbox' class='right' name='del' value='" + val.id + "'></li>");
+                                         + "<input type='text' class='ui-widget-content ui-corner-all middle lang' autocomplete='off' data-lang='xxx' value='" + val.color + "' name='color_" + val.id + "' maxlength='7'><input type='checkbox' class='right' name='del' value='" + val.id + "' title='Delete me' tabindex='-1'></li>");
                     
                 });
                 $( "#tmp" ).data( "max", max );    
@@ -74,7 +90,9 @@
             error: function () {
                 alert('Ajax Error');
             }
-        }); 
+        });
+        $( document ).tooltip({ position: { my: "center bottom-10", at: "center top" } } )
+         
     });
 </script>
 <style>
@@ -84,6 +102,7 @@
     .left {  position:absolute;   width: 180px;}   
     .middle {  position:absolute;  left:280px; width: 90px; color: 666;}
     .right {  position:absolute;  left:350px; width: 90px; color: 666;}
+    #buttons { padding-left: 2.5em; padding-top: 1em;    }
 </style>
 </head>
 <body>
@@ -106,12 +125,15 @@
         <ul id="sortable">
             <li class="ui-state-default new"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
                 <input type="text" class="ui-widget-content ui-corner-all left lang"  autocomplete="off" name="new_cat"> 
-                <input type="text" class="ui-widget-content ui-corner-all middle lang" autocomplete="off" name="new_color"> 
-                <input type="checkbox" class='right' name="del" >  
+                <input type="text" class="ui-widget-content ui-corner-all middle lang" autocomplete="off" name="new_color" maxlength="7"> 
+                  
             </li>
         </ul>
     </form>
-    <button id="save">SAVE</button>    
+    <div id="buttons">
+        <button id="save">SAVE</button>    
+        <button id="calendar">CALENDAR</button> 
+   </div> 
 </div>
 <?php $menu['end_content']; ?>
 </body>

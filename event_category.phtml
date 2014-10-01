@@ -11,11 +11,17 @@
     echo $head['JQUERYUI'];
     echo $head['THEME'];
     //print_r( $_SESSION );
-
+    
 ?>
+<script language="javascript" type="text/javascript" src="translation/event_category.lng"></script>
 <script>
     $( document ).ready( function(){
-         $( "#save" ).button().click( function(){
+        var language = "<?php echo $_SESSION['countrycode'] ? $_SESSION['countrycode'] : 'en';?>"; 
+        $( ".lang" ).each( function(){
+            var key = $( this ).attr( "data-lang" );
+            $( this ).text( typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
+        });
+        $( "#save" ).button().click( function(){
             var dataArr  = $("#myform").serializeArray()
             var newColor = dataArr.pop();
             var newCat   = dataArr.pop(); 
@@ -31,9 +37,9 @@
                 $( "input[name='new_cat']" ).attr( "name", "cat_" + newMax ); 
                 $( "input:last[name='del']" ).attr( "value",  newMax );
                 $( ".new" ).toggleClass( "new remove_" + newMax ); 
-                $( "#sortable" ).append("<li class='ui-state-default new'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' data-lang='DOUBLE_KLICKx' name='new_cat'>"
-                                      + "<input type='text' class='ui-widget-content ui-corner-all middle lang' autocomplete='off' data-lang='xxx'  name='new_color' maxlength='7'> </li>");
-                $( ".remove_" + newMax ).append( "<input type='checkbox' class='right' value='" + newMax + "' name='del' title='Delete me' tabindex='-1'>");
+                $( "#sortable" ).append("<li class='ui-state-default new'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' name='new_cat'>"
+                                      + "<input type='text' class='ui-widget-content ui-corner-all middle lang' autocomplete='off' name='new_color' maxlength='7'> </li>");
+                $( ".remove_" + newMax ).append( "<input type='checkbox' class='right' value='" + newMax + "' name='del' data-lang='DELETE' title='" + langData[language]['DELETE'] + "' tabindex='-1'>");
                 focusOut();
             }
             console.log( JSON.stringify( dataArr ) );
@@ -82,7 +88,7 @@
                 $.each( obj, function( i, val ){
                     if( val.id > max ) max = val.id;
                     $( "#sortable" ).prepend("<li class='ui-state-default remove_" + val.id + "'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' data-lang='DOUBLE_KLICKx' value='" + val.label + "' name='cat_" + val.id + "'>"
-                                         + "<input type='text' class='ui-widget-content ui-corner-all middle lang' autocomplete='off' data-lang='xxx' value='" + val.color + "' name='color_" + val.id + "' maxlength='7'><input type='checkbox' class='right' name='del' value='" + val.id + "' title='Delete me' tabindex='-1'></li>");
+                                         + "<input type='text' class='ui-widget-content ui-corner-all middle lang' autocomplete='off' value='" + val.color + "' name='color_" + val.id + "' maxlength='7'><input type='checkbox' class='right' name='del' value='" + val.id + "' title='" + langData[language]['DELETE'] + "' tabindex='-1'></li>");
                     
                 });
                 $( "#tmp" ).data( "max", max );    
@@ -92,6 +98,7 @@
             }
         });
         $( document ).tooltip({ position: { my: "center bottom-10", at: "center top" } } )
+       
          
     });
 </script>
@@ -113,12 +120,10 @@
 <div class="ui-widget-content" >
     <div id="tmp"></div>
     <div>
-        <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Add, Edit, Move Calendar Categories</p>
+        <p class="ui-state-highlight ui-corner-all lang" style="margin-top: 20px; padding: 0.6em;" data-lang='HEADLINE'></p>
     </div>
-    <div id="locationLabel" data-lang='CUSTOMER_LOCATION' class='lang'></div>
-
     <ul id="head">
-        <li class="ui-state-active"><span class="left">CATEGORY</span><span class="middle">COLOR</span></li>
+        <li class="ui-state-active"><span class="left lang" data-lang="CATEGORY"></span><span class="middle lang" data-lang="COLOR"></span></li>
     </ul>
     
     <form id="myform">
@@ -131,8 +136,8 @@
         </ul>
     </form>
     <div id="buttons">
-        <button id="save">SAVE</button>    
-        <button id="calendar">CALENDAR</button> 
+        <button id="save" class="lang" data-lang="SAVE"></button>    
+        <button id="calendar" class="lang" data-lang="CALENDAR"></button> 
    </div> 
 </div>
 <?php $menu['end_content']; ?>

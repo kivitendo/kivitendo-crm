@@ -22,13 +22,22 @@
                 Daten werden ohne Reload einfach via Ajax gespeichtert.
                 Fürs Holen und Schreiben von Daten befindet sich unter jqhelp eine gleichnamige Datei mit der Extension ".php"
                 Auf das Benutzen der Variable $_SESSION sollte weitestgehend verzichtet werden.  
-                Statt JS einzusetzen sollte auf die jQuery-Methoden zurückgegriffen werden.        
+                Statt JS einzusetzen sollte auf die jQuery-Methoden zurückgegriffen werden.    
+                Url-Parameter können mit $.urlParam( 'ParameterName' ) gelesen werden.    
     ******************************************************************************************************************************/
 
 ?>
 <script>
 
-    $(document).ready(function() {
+    $(document).ready(function(){
+        $.urlParam = function( name ){
+            var results = new RegExp( '[\?&]' + name + '=([^&#]*)' ).exec( window.location.href );
+            if( results == null ) alert( 'Parameter: "' + name + '" does not exist in "' + window.location.href + '"!' );               
+            else return decodeURIComponent( results[1] || 0 );
+        }
+
+        //alert( $.urlParam( 'param2' ) );
+        
         $( "#example" ).html( "Hello World" ).css({
             fontSize: "36px",
             fontWeight: "bold",

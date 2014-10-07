@@ -787,6 +787,8 @@ function mkHeader() {
                            $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar2/lang/'.$_SESSION['countrycode'].'.js'.$SN,  
         'COLORPICKERCSS'=> $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/colorPicker/syronex-colorpicker.css'.$LN,
         'COLORPICKERJS' => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/colorPicker/syronex-colorpicker.js'.$SN,
+        'JTABLECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jtable/themes/jqueryui/jtable_jqueryui.min.css'.$LN,
+        'JTABLEJS'      => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jtable/jquery.jtable.min.js.js'.$SN,
                               
         );
         

@@ -218,7 +218,7 @@ Visibility für Gruppen
                                 selectHelper: true,
                                 events: {
                                     url: 'jqhelp/calendar.php',
-                                    data: { myuid: "<?php echo $_SESSION['loginCRM']; ?>", where: val.value == 0 ? '' : (ajaxTask == "getUsers" ? "uid = " + val.value + " AND" : "category = " + val.value + " AND") }
+                                    data: { myuid: val.value != 0 ? "<?php echo $_SESSION['loginCRM']; ?>" : '', where: val.value == 0 ? '' : (ajaxTask == "getUsers" ? "uid = " + val.value + " AND" : "category = " + val.value + " AND") }
                                     
                                 },
                 

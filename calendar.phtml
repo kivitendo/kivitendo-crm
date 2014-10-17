@@ -11,6 +11,7 @@
     echo $head['FULLCALCSS'];
     echo $head['BOXCSS'];
     echo $head['COLORPICKERCSS'];
+    echo $head['JQTIMECSS'];
     echo $head['JQUERY'];   
     echo $head['JQUERYUI'];
     echo $head['THEME'];
@@ -18,6 +19,8 @@
     echo $head['JQBOX'];
     echo $head['COLORPICKERJS'];
     echo $head['JQCOOKIE'];
+    echo $head['JQDATE']; 
+    echo $head['JQTIME']; 
   //print_r( $_SESSION );
 /*************************************************** +++ ToDo ++++*******************************************************
 Kategorien und User + All in Tabs darstellen!!!!
@@ -461,6 +464,8 @@ Visibility für Gruppen
                 $( "#endTime" ).val( moment( "<?php echo $_SESSION['termbegin'] ? $_SESSION['termbegin'] : 7;echo ":00"; ?>", "HH:mm" ).add( "minutes", '<?php echo $_SESSION['termseq'] ? $_SESSION['termseq'] : 30; ?>' ).format( "LT") );                
             }
         });
+        $( "#startDate,#endDate" ).datepicker();
+        $( "#startTime,#endTime" ).timepicker();
     });//ready
 
 </script>

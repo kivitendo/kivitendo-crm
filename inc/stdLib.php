@@ -789,6 +789,7 @@ function mkHeader() {
         'COLORPICKERJS' => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/colorPicker/syronex-colorpicker.js'.$SN,
         'JTABLECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jtable/themes/jqueryui/jtable_jqueryui.min.css'.$LN,
         'JTABLEJS'      => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jtable/jquery.jtable.min.js'.$SN,
+        'JQCOOKIE'      => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jquery-cookie/jquery.cookie.js'.$SN
                               
         );
         

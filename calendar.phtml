@@ -17,6 +17,7 @@
     echo $head['FULLCALJS'];
     echo $head['JQBOX'];
     echo $head['COLORPICKERJS'];
+    echo $head['JQCOOKIE'];
   //print_r( $_SESSION );
 /*************************************************** +++ ToDo ++++*******************************************************
 Kategorien und User + All in Tabs darstellen!!!!
@@ -162,12 +163,6 @@ Visibility für Gruppen
             $( "#repeat_quantity" ).val( erg < 0 ? 0 : erg );                   
         };
 
-        
-                    
-
-        
-
-        
         /*** SelectBox User, Kategorie **********************************************************************************************/
         $("#user, #category").each(function(){
             var ajaxTask = this.id == 'user' ? 'getUsers': 'getCategory'; 
@@ -337,6 +332,7 @@ Visibility für Gruppen
                             /*** End Calendar *****************************************************************************************************/
                         });//$.each()
                         $( "div#tabs" ).tabs( "refresh" );
+                        $( "#tabs" ).tabs({ active: $.cookie( 'active_tab' ) });
                         deferred.resolve( obj );
                     });
                     return deferred;
@@ -344,15 +340,15 @@ Visibility für Gruppen
             })
         })
         
-        
-                
         var tabs = $( "#tabs" ).tabs({
-             activate: function( event, ui ){
+            activate: function( event, ui ){
                 //den angeklickten Calendar rendern
                 $( "#" + ui.newPanel.attr( 'id' ) + " div:first-child" ).fullCalendar( 'render' );
+                //Cookie setzen
+                $.cookie( 'active_tab', $( "#tabs" ).tabs( "option", "active" ) );
              }
         });
-       
+        
         $( "#visibility" ).selectBoxIt({
             theme:      "jqueryui",
             autoWidth:  true,
@@ -465,10 +461,7 @@ Visibility für Gruppen
                 $( "#endTime" ).val( moment( "<?php echo $_SESSION['termbegin'] ? $_SESSION['termbegin'] : 7;echo ":00"; ?>", "HH:mm" ).add( "minutes", '<?php echo $_SESSION['termseq'] ? $_SESSION['termseq'] : 30; ?>' ).format( "LT") );                
             }
         });
-        
-
-        
-    });
+    });//ready
 
 </script>
 <style>

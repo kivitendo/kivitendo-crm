@@ -227,8 +227,8 @@ Visibility für Gruppen
                                     $( "#startTime" ).val( moment( start ).format( "LT") );
                                     $( "#endDate" ).val( moment( end ).format( "L") );
                                     $( "#endTime" ).val( moment( end ).format( "LT") );
-                                    $( "#user" ).data("selectBox-selectBoxIt").selectOption("<?php echo $_SESSION['loginCRM']; ?>");
-                                    $( "#category" ).data("selectBox-selectBoxIt").selectOption( '0' );
+                                    $( "#user" ).data("selectBox-selectBoxIt").selectOption( ajaxTask == 'getUsers' && $( "#tabs" ).tabs( "option", "active" ) != 0  ?  val.value.toString() : "<?php echo $_SESSION['loginCRM']; ?>" );
+                                    $( "#category" ).data("selectBox-selectBoxIt").selectOption( ajaxTask == 'getCategory' && $( "#tabs" ).tabs( "option", "active" ) != 0 ? val.value.toString() : '0' );
                                     $( "#visibility" ).data( "selectBox-selectBoxIt" ).selectOption( '-1' );
                                     $( "#repeat" ).data( "selectBox-selectBoxIt" ).selectOption( 'day' );
                                     $( "#prio_1,#job_false" ).prop( 'checked', true );            

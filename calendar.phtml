@@ -11,12 +11,16 @@
     echo $head['FULLCALCSS'];
     echo $head['BOXCSS'];
     echo $head['COLORPICKERCSS'];
+    echo $head['JQTIMECSS'];
     echo $head['JQUERY'];   
     echo $head['JQUERYUI'];
     echo $head['THEME'];
     echo $head['FULLCALJS'];
     echo $head['JQBOX'];
     echo $head['COLORPICKERJS'];
+    echo $head['JQCOOKIE'];
+    echo $head['JQDATE']; 
+    echo $head['JQTIME']; 
   //print_r( $_SESSION );
 /*************************************************** +++ ToDo ++++*******************************************************
 Kategorien und User + All in Tabs darstellen!!!!
@@ -162,12 +166,6 @@ Visibility für Gruppen
             $( "#repeat_quantity" ).val( erg < 0 ? 0 : erg );                   
         };
 
-        
-                    
-
-        
-
-        
         /*** SelectBox User, Kategorie **********************************************************************************************/
         $("#user, #category").each(function(){
             var ajaxTask = this.id == 'user' ? 'getUsers': 'getCategory'; 
@@ -218,7 +216,7 @@ Visibility für Gruppen
                                 selectHelper: true,
                                 events: {
                                     url: 'jqhelp/calendar.php',
-                                    data: { myuid: "<?php echo $_SESSION['loginCRM']; ?>", where: val.value == 0 ? '' : (ajaxTask == "getUsers" ? "uid = " + val.value + " AND" : "category = " + val.value + " AND") }
+                                    data: { myuid: val.value != 0 ? "<?php echo $_SESSION['loginCRM']; ?>" : '0', where: val.value == 0 ? '' : (ajaxTask == "getUsers" ? "uid = " + val.value + " AND" : "category = " + val.value + " AND") }
                                     
                                 },
                 
@@ -232,8 +230,8 @@ Visibility für Gruppen
                                     $( "#startTime" ).val( moment( start ).format( "LT") );
                                     $( "#endDate" ).val( moment( end ).format( "L") );
                                     $( "#endTime" ).val( moment( end ).format( "LT") );
-                                    $( "#user" ).data("selectBox-selectBoxIt").selectOption("<?php echo $_SESSION['loginCRM']; ?>");
-                                    $( "#category" ).data("selectBox-selectBoxIt").selectOption( '0' );
+                                    $( "#user" ).data("selectBox-selectBoxIt").selectOption( ajaxTask == 'getUsers' && $( "#tabs" ).tabs( "option", "active" ) != 0  ?  val.value.toString() : "<?php echo $_SESSION['loginCRM']; ?>" );
+                                    $( "#category" ).data("selectBox-selectBoxIt").selectOption( ajaxTask == 'getCategory' && $( "#tabs" ).tabs( "option", "active" ) != 0 ? val.value.toString() : '0' );
                                     $( "#visibility" ).data( "selectBox-selectBoxIt" ).selectOption( '-1' );
                                     $( "#repeat" ).data( "selectBox-selectBoxIt" ).selectOption( 'day' );
                                     $( "#prio_1,#job_false" ).prop( 'checked', true );            
@@ -337,6 +335,7 @@ Visibility für Gruppen
                             /*** End Calendar *****************************************************************************************************/
                         });//$.each()
                         $( "div#tabs" ).tabs( "refresh" );
+                        $( "#tabs" ).tabs({ active: $.cookie( 'active_tab' ) });
                         deferred.resolve( obj );
                     });
                     return deferred;
@@ -344,15 +343,15 @@ Visibility für Gruppen
             })
         })
         
-        
-                
         var tabs = $( "#tabs" ).tabs({
-             activate: function( event, ui ){
+            activate: function( event, ui ){
                 //den angeklickten Calendar rendern
                 $( "#" + ui.newPanel.attr( 'id' ) + " div:first-child" ).fullCalendar( 'render' );
+                //Cookie setzen
+                $.cookie( 'active_tab', $( "#tabs" ).tabs( "option", "active" ) );
              }
         });
-       
+        
         $( "#visibility" ).selectBoxIt({
             theme:      "jqueryui",
             autoWidth:  true,
@@ -465,10 +464,9 @@ Visibility für Gruppen
                 $( "#endTime" ).val( moment( "<?php echo $_SESSION['termbegin'] ? $_SESSION['termbegin'] : 7;echo ":00"; ?>", "HH:mm" ).add( "minutes", '<?php echo $_SESSION['termseq'] ? $_SESSION['termseq'] : 30; ?>' ).format( "LT") );                
             }
         });
-        
-
-        
-    });
+        $( "#startDate,#endDate" ).datepicker();
+        $( "#startTime,#endTime" ).timepicker();
+    });//ready
 
 </script>
 <style>

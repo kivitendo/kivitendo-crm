@@ -769,6 +769,8 @@ function mkHeader() {
                                                              'jquery.ui.datepicker.js':
                                                              'i18n/jquery.ui.datepicker-'.$_SESSION['countrycode']).
                                                              '.js'.$SN,
+        'JQTIMECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jquery-timepicker/jquery.timepicker.css'.$LN,
+        'JQTIME'        => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jquery-timepicker/jquery.timepicker.min.js'.$SN,
         'JQFILEUP'      => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/FileUpload/css/jquery.fileupload-ui.css'.$LN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/FileUpload/js/jquery.iframe-transport.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/FileUpload/js/jquery.fileupload.js'.$SN,
@@ -788,7 +790,8 @@ function mkHeader() {
         'COLORPICKERCSS'=> $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/colorPicker/syronex-colorpicker.css'.$LN,
         'COLORPICKERJS' => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/colorPicker/syronex-colorpicker.js'.$SN,
         'JTABLECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jtable/themes/jqueryui/jtable_jqueryui.min.css'.$LN,
-        'JTABLEJS'      => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jtable/jquery.jtable.min.js.js'.$SN,
+        'JTABLEJS'      => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jtable/jquery.jtable.min.js'.$SN,
+        'JQCOOKIE'      => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jquery-cookie/jquery.cookie.js'.$SN
                               
         );
         

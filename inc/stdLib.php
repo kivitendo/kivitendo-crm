@@ -769,8 +769,9 @@ function mkHeader() {
                                                              'jquery.ui.datepicker.js':
                                                              'i18n/jquery.ui.datepicker-'.$_SESSION['countrycode']).
                                                              '.js'.$SN,
-        'JQTIMECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jquery-timepicker/jquery.timepicker.css'.$LN,
-        'JQTIME'        => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jquery-timepicker/jquery.timepicker.min.js'.$SN,
+        'JQTIMECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/timepicker-master/jquery.ui.timepicker.css'.$LN,
+        'JQTIME'        => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/timepicker-master/jquery.ui.timepicker.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/timepicker-master/i18n/jquery.ui.timepicker-'.$_SESSION['countrycode'].'.js'.$SN,
         'JQFILEUP'      => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/FileUpload/css/jquery.fileupload-ui.css'.$LN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/FileUpload/js/jquery.iframe-transport.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/FileUpload/js/jquery.fileupload.js'.$SN,

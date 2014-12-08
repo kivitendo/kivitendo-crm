@@ -299,16 +299,7 @@ function liesdir($dir) {
     }
     return $files;
 }
-function getUserEmployee($keys) {
-    $sql  = 'SELECT key,val FROM crmemployee WHERE uid ='.$_SESSION['loginCRM'].' AND manid = '.$_SESSION['manid'];
-    $sql .= ' AND key in (\''.join("','",$keys).'\')';
-    $sql .= 'UNION ';
-    $sql .= 'SELECT key,val FROM crmdefaults';
-    $rs   = $_SESSION['db']->getAll($sql);
-    $tmp = array();
-    if ( $rs ) foreach ($rs as $row) $tmp[$row['key']] = $row['val'];
-    return $tmp;
-}
+
 /****************************************************
 * chkFld
 * in: val = mixed, empty = boolean, rule = int

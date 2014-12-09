@@ -1,6 +1,6 @@
 <?php
+    require_once("../inc/crmLib.php"); 
     require_once("../inc/stdLib.php"); 
-    require_once("../inc/crmLib.php");  
     $task  = $_POST['task'] ? $_POST['task'] : $_GET['task'];
     //ToDo Funktion AjaxSql schreiben. Diese werten $_POST oder $_GET aus, erster Parameter ist Tabelle, zeiter P ist task (insert, select, update) folgende sind die serialisierten Daten 
     if( !$task ) $task = 'getEvents';
@@ -15,6 +15,12 @@
     }
     $repeat_end_sql = $repeat_end == 'Invalid date' ? 'NULL' : "'$repeat_end'::TIMESTAMP"; 
     switch( $task ){
+        case "getUserdata":
+            //$sql = "SELECT BLA";
+            //$rs = $_SESSION['db']->getOne( $sql );    
+            //echo $rs['json_agg'];
+            //Kann gleich aus der SESSION genommen werden  
+        break;
         case "newEvent":
             $sql = "INSERT INTO events ( duration, title, description, \"allDay\", uid, visibility, category, prio, job, color, done, location, cust_vend_pers, repeat, repeat_factor, repeat_quantity, repeat_end ) VALUES ( '[$start, $end)','$title','$description', $allDay, $uid, $visibility, $category, $prio, '$job', '$color', '$done', '$location', '$cust_vend_pers', '$repeat', '$repeat_factor', '$repeat_quantity', $repeat_end_sql )";
             $rc = $_SESSION['db']->query( $sql ); 

@@ -2,7 +2,7 @@
 ini_set('session.bug_compat_warn', 0);// Warnung für Sessionbug in neueren Php-Versionen abschalten. 
 ini_set('session.bug_compat_42', 0);  // Das ist natürlich lediglich eine Provirorische Lösung.
 //Warning: Unknown: Your script possibly relies on a session side-effect which existed until PHP 4.2.3. ....
-session_set_cookie_params(1800); // 30 minuten.
+//session_set_cookie_params(480*60); //480*60
 session_start();
 //print_r( $_SESSION );
 $inclpa = ini_get('include_path');

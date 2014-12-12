@@ -4,7 +4,7 @@ jQuery(function($){
     $.timepicker.regional['de'] = {
                 hourText: 'Stunde',
                 minuteText: 'Minuten',
-                amPmText: ['AM', 'PM'] ,
+                amPmText: ['Uhr'] ,
                 closeButtonText: 'Beenden',
                 nowButtonText: 'Aktuelle Zeit',
                 deselectButtonText: 'Wischen' }

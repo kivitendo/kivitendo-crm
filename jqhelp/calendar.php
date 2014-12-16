@@ -54,5 +54,27 @@
             $rs = $_SESSION['db']->getOne( $sql ); 
             echo $rs['json_agg'];  
         break;
-     }    
+     } 
+     /*
+     ToDo: getUsers, getCategory und getEvents in einem JSON zusammenfassen:
+     Bsp.:
+        DROP TABLE IF EXISTS users;
+            CREATE TABLE users (
+            id 	serial,
+            login 	text,
+            name 	text
+        );
+        INSERT INTO users ( login, name ) VALUES ( 'emmy', 'Emmy Noether' );
+        INSERT INTO users ( login, name ) VALUES ( 'ada', 'Augusta Ada Byron King' );
+        INSERT INTO users ( login, name ) VALUES ( 'eu', 'Euklid von Alexandria' );
+        DROP TABLE IF EXISTS groups;
+        CREATE TABLE groups (
+    	   id 	serial,
+    	   name 	text
+        );
+        INSERT INTO groups ( name ) VALUES ( 'Mathematiker' );
+        INSERT INTO groups ( name ) VALUES ( 'Informatiker' );
+    
+        select json_agg (my_json) from (select row_to_json(x0) as my_json from (SELECT json_agg( i0 ) as groups FROM ( SELECT * FROM groups ) i0) x0 union all select row_to_json(x1) from (SELECT json_agg( i1 ) as users FROM ( SELECT * FROM users ) i1) x1) bla;
+    */
 ?>		

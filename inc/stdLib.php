@@ -758,41 +758,41 @@ function mkHeader() {
     $LVID = '<link id="'.$_SESSION['theme'].'" rel="stylesheet" type="text/css" href="';
     $LN = '">'."\n";
     $head = array(
-        'JQUERY'        => $SV.$_SESSION['baseurl'].'crm/jquery-ui/jquery.js'.$SN,
-        'JQUERYUI'      => $LV.$_SESSION['baseurl'].'crm/jquery-ui/themes/base/jquery-ui.css'.$LN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/minified/jquery-ui.min.js'.$SN,
-        'JQTABLE'       => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/jquery.tablesorter.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/addons/pager/jquery.tablesorter.pager.js'.$SN.
-                           $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/themes/blue/style.css'.$LN,
-        'JQBOX'         => $SV.$_SESSION['baseurl'].'/crm/jquery-ui/plugin/selectBoxIt/selectBoxIt.js'.$SN,
-        'JQDATE'        => $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/'.(($_SESSION['countrycode']=='en')?
+        'JQUERY'        => $SV.$_SESSION['baseurl'].'crm/jquery/jquery.min.js'.$SN,
+        'JQUERYUI'      => $LV.$_SESSION['baseurl'].'crm/jquery-themes/base/jquery-ui.css'.$LN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery/jquery-ui.min.js'.$SN,
+        'JQTABLE'       => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/Table/jquery.tablesorter.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/Table/addons/pager/jquery.tablesorter.pager.js'.$SN.
+                           $LV.$_SESSION['baseurl'].'crm/jquery-plugins/Table/themes/blue/style.css'.$LN,
+        'JQBOX'         => $SV.$_SESSION['baseurl'].'/crm/jquery-plugins/selectBoxIt/selectBoxIt.js'.$SN,
+        /*'JQDATE'        => $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/'.(($_SESSION['countrycode']=='en')?
                                                              'jquery.ui.datepicker.js':
                                                              'i18n/jquery.ui.datepicker-'.$_SESSION['countrycode']).
-                                                             '.js'.$SN,
-        'JQTIMECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/timepicker-master/jquery.ui.timepicker.css'.$LN,
-        'JQTIME'        => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/timepicker-master/jquery.ui.timepicker.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/timepicker-master/i18n/jquery.ui.timepicker-'.$_SESSION['countrycode'].'.js'.$SN,
-        'JQFILEUP'      => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/FileUpload/css/jquery.fileupload-ui.css'.$LN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/FileUpload/js/jquery.iframe-transport.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/FileUpload/js/jquery.fileupload.js'.$SN,
+                                                             '.js'.$SN,*/
+        'JQTIMECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/timepicker-master/jquery.ui.timepicker.css'.$LN,
+        'JQTIME'        => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/timepicker-master/jquery.ui.timepicker.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/timepicker-master/i18n/jquery.ui.timepicker-'.$_SESSION['countrycode'].'.js'.$SN,
+        'JQFILEUP'      => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/FileUpload/css/jquery.fileupload-ui.css'.$LN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/FileUpload/js/jquery.iframe-transport.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/FileUpload/js/jquery.fileupload.js'.$SN,
         'JQWIDGET'      => $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/minified/jquery.ui.widget.min.js'.$SN,
-        'THEME'         => ($_SESSION['theme']!='')? $LVID  .$_SESSION['baseurl'].'crm/jquery-ui/themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN:'',
+        'THEME'         => ($_SESSION['theme']!='')? $LVID  .$_SESSION['baseurl'].'crm/jquery-themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN:'',
         'CRMCSS'        => $LV.$_SESSION['baseurl'].'crm/css/'.$_SESSION["stylesheet"].'/main.css'.$LN,
-        'BOXCSS'        => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/selectBoxIt/selectBoxIt.css'.$LN,
-        'JUI-DROPDOWN'  => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.css'.$LN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jui_dropdown-master/jquery.jui_dropdown.min.js'.$SN,
+        'BOXCSS'        => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/selectBoxIt/selectBoxIt.css'.$LN,
+        'JUI-DROPDOWN'  => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/jui_dropdown-master/jquery.jui_dropdown.css'.$LN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jui_dropdown-master/jquery.jui_dropdown.min.js'.$SN,
         'CRMPATH'       => $_SESSION['baseurl'].'crm/',
-        'FULLCALCSS'    => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar2/fullcalendar.css'.$LN.
-                           $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar2/fullcalendar.print.css" media="print'.$LN,
-        'FULLCALJS'     => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar2/lib/moment.min.js'.$SN.
-                           //$SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar-2.0.0/fullcalendar/fullcalendar.js'.$SN.//aktuelle 
-                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar2/fullcalendar.min.js'.$SN. 
-                           $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/fullcalendar2/lang/'.$_SESSION['countrycode'].'.js'.$SN,  
-        'COLORPICKERCSS'=> $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/colorPicker/syronex-colorpicker.css'.$LN,
-        'COLORPICKERJS' => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/colorPicker/syronex-colorpicker.js'.$SN,
-        'JTABLECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jtable/themes/jqueryui/jtable_jqueryui.min.css'.$LN,
-        'JTABLEJS'      => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jtable/jquery.jtable.min.js'.$SN,
-        'JQCOOKIE'      => $SV.$_SESSION['baseurl'].'crm/jquery-ui/plugin/jquery-cookie/jquery.cookie.js'.$SN
+        'FULLCALCSS'    => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/fullcalendar.css'.$LN.
+                           $LV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/fullcalendar.print.css" media="print'.$LN,
+        'FULLCALJS'     => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/lib/moment.min.js'.$SN.
+                           //$SV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar-2.0.0/fullcalendar/fullcalendar.js'.$SN.//aktuelle 
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/fullcalendar.min.js'.$SN. 
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/lang/'.$_SESSION['countrycode'].'.js'.$SN,  
+        'COLORPICKERCSS'=> $LV.$_SESSION['baseurl'].'crm/jquery-plugins/colorPicker/syronex-colorpicker.css'.$LN,
+        'COLORPICKERJS' => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/colorPicker/syronex-colorpicker.js'.$SN,
+        'JTABLECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/jtable/themes/jqueryui/jtable_jqueryui.min.css'.$LN,
+        'JTABLEJS'      => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jtable/jquery.jtable.min.js'.$SN,
+        'JQCOOKIE'      => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-cookie/jquery.cookie.js'.$SN
                               
         );
         

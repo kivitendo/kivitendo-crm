@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset='utf-8' />
+
 <?php
     require_once("inc/stdLib.php");
     $menu = $_SESSION['menu'];
@@ -27,19 +28,24 @@
     ******************************************************************************************************************************/
 
 ?>
+
 <script>
 
     $(document).ready(function(){
+        $( "#menu" ).menu();        
         
 
 
         
         
     });
+
 </script>
 <style>
-    
-</style>
+
+.ui-menu { width: 150px; }
+</style>    
+
 </head>
 <body>
 <?php 
@@ -51,7 +57,40 @@
 <!--
 Hier stehen die vielen Div-Container    
 -->  
-            
+<ul id="menu">
+<li class="ui-state-disabled">Aberdeen</li>
+<li>Ada</li>
+<li>Adamsville</li>
+<li>Addyston</li>
+<li>Delphi
+<ul>
+<li class="ui-state-disabled">Ada</li>
+<li>Saarland</li>
+<li>Salzburg an der schönen Donau</li>
+</ul>
+</li>
+<li>Saarland</li>
+<li>Salzburg
+<ul>
+<li>Delphi
+<ul>
+<li>Ada</li>
+<li>Saarland</li>
+<li>Salzburg</li>
+</ul>
+</li>
+<li>Delphi
+<ul>
+<li>Ada</li>
+<li>Saarland</li>
+<li>Salzburg</li>
+</ul>
+</li>
+<li>Perch</li>
+</ul>
+</li>
+<li class="ui-state-disabled">Amesville</li>
+</ul>           
 
 
 

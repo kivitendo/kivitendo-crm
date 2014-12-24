@@ -179,7 +179,7 @@ if ( $own ) {
             ) );
         $t->parse( "BlockB", "SelectboxB", true );
     }
-    chdir( "jquery-ui/themes" );
+    chdir( "jquery-themes" );
     $theme = glob( "*" );
     $t->set_block( 'usr1', 'Theme', 'BlockT' );
     if ( $theme ) 

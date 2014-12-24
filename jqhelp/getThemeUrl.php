@@ -3,11 +3,11 @@ if ( $_POST['theme'] == "base" ) {
     echo "base";
     exit();
 }
-if(file_exists("../jquery-ui/themes/".$_POST['theme']."/jquery-ui.css") ) {
-    $themefile = fopen("../jquery-ui/themes/".$_POST['theme']."/jquery-ui.css","r");
+if(file_exists("../jquery-themes/".$_POST['theme']."/jquery-ui.css") ) {
+    $themefile = fopen("../jquery-themes/".$_POST['theme']."/jquery-ui.css","r");
 } 
-else if ( file_exists("../jquery-ui/themes/".$_POST['theme']."/jquery-ui-1.9.2.custom.css") ) {
-    $themefile = fopen("../jquery-ui/themes/".$_POST['theme']."/jquery-ui-1.9.2.custom.css","r");
+else if ( file_exists("../jquery-themes/".$_POST['theme']."/jquery-ui-1.9.2.custom.css") ) {
+    $themefile = fopen("../jquery-themes/".$_POST['theme']."/jquery-ui-1.9.2.custom.css","r");
 }
 else {   
     echo "noThemeFile";

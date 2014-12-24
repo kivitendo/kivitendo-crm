@@ -2,13 +2,16 @@
     require_once("../inc/stdLib.php"); 
     require_once("../inc/crmLib.php");  
     $task     = array_shift( $_POST );
-    $newCat   = $_POST['newCat'];
-    $newColor = $_POST['newColor'];
-    $delCat   = $_POST['delCat'];   
+      
    // echo "Task: ".$task;
   
     
     switch( $task ){
+        case "getCategories":
+            $sql = " select json_agg (my_json) from (select row_to_json(x0) as my_json from (SELECT json_agg( i0 ) as maingroup FROM ( SELECT * FROM knowledge_category WHERE maingroup = 0 ) i0) x0 union all select row_to_json(x1) from (SELECT json_agg( i1 ) as undergroup FROM ( SELECT * FROM knowledge_category WHERE maingroup > 0 ) i1) x1) xxx";
+            //$sql = "select json_agg (my_json) from (select row_to_json(x0) as my_json from (SELECT json_agg( i0 ) as maingroup FROM ( SELECT * FROM knowledge_category WHERE maingroup = 0 AND (id = 5 OR id = 4)  ) i0) x0 union all select row_to_json(x1) from (SELECT json_agg( i1 ) as undergroup FROM ( SELECT * FROM knowledge_category WHERE maingroup = 5 OR maingroup = 4 ) i1) x1) xxx";
+            $rs = $_SESSION['db']->getOne( $sql );
+            echo $rs['json_agg'];
         case "newCategory":
             $sql="INSERT INTO event_category ( label, color, cat_order ) VALUES ( '$newCat', '$newColor', ( SELECT max( cat_order ) + 1 AS cat_order FROM event_category) )";
             $rc=$_SESSION['db']->query($sql); 

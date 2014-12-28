@@ -14,24 +14,21 @@
     echo $head['JQUERY'];   
     echo $head['JQUERYUI'];
     echo $head['THEME'];
-    //echo $head['FULLCALJS'];
+    echo $head['TINYMCE'];
     //echo $head['JQBOX'];
     //echo $head['COLORPICKERJS'];
     //print_r( $_SESSION );
-    /*****************************************************************************************************************************
-    Grunds�tze: Content wird via Ajax im Json-Format geholt und an die entsprechenden Container verteilt
-                Daten werden ohne Reload einfach via Ajax gespeichtert.
-                Fürs Holen und Schreiben von Daten befindet sich unter jqhelp eine gleichnamige Datei mit der Extension ".php"
-                Auf das Benutzen der Variable $_SESSION sollte weitestgehend verzichtet werden.  
-                Statt JS einzusetzen sollte auf die jQuery-Methoden zurückgegriffen werden.    
-                Url-Parameter können mit $.urlParam( 'ParameterName' ) gelesen werden.    
-    ******************************************************************************************************************************/
+
 
 ?>
 
 <script>
 
     $(document).ready(function(){
+        tinymce.init({
+            selector: "#content",
+        });
+
          
         $.ajax({
             url: 'jqhelp/knowledge.php',
@@ -39,18 +36,38 @@
             type: "POST",
             success: function( json ) {
                 var obj = JSON.parse( json.trim() );
-                console.log( JSON.stringify( obj ) );
+                //console.log( JSON.stringify( obj ) );
                 $.each( obj[0].maingroup, function( i, val ){
 
-                    $( "#menu" ).append("<li id='" + val.id + "'>" + val.labeltext + "<ul class='' id='ul" + val.id + "'></ul></li>"  );
+                    $( "#menu" ).append("<li id='main_" + val.id + "'>" + val.labeltext + "</li>"  );
      
                 });
                 $.each( obj[1].undergroup, function( i, val ){
-                    //console.log( JSON.stringify( val.maingroup ) );
-                    $( "#ul" + val.maingroup  ).append("<li id='" + val.id + "'>" + val.labeltext + "</li>" );
+                    if( !$('#main_'  + val.maingroup + ' ul').length > 0 ){
+                        $( '#main_' + val.maingroup ).append( "<ul id='ul" + val.maingroup + "'></ul>" );
+                    }   
+                    $( "#ul" + val.maingroup  ).append("<li id='msub_" + val.id + "'>" + val.labeltext + "</li>" );
      
                 });
-                $( "#menu" ).menu();    
+                $( '#menu' ).menu(); 
+                $( '[id^=main_]' ).on( 'click', function(event) {
+                    console.log( event.target.id.substring( 5 ) );                    
+                    //alert(event.target.id.substring( 5 ))
+                    $.ajax({
+                        url: 'jqhelp/knowledge.php',
+                        data: { task:  'getArticle' , category: event.target.id.substring( 5 ) }, 
+                        type: "POST",
+                        success: function( json ) {
+                            var obj = JSON.parse( json.trim() );
+                            //alert(JSON.stringify( obj[0].content )  );
+                            //console.log( JSON.stringify( obj ) );
+                            $( '#content' ).html( obj[0].content );
+                            $( "#menu" ).refresh();
+                       }
+                    })
+                });
+
+ 
                 
             },
             error: function () {
@@ -77,12 +94,14 @@
     echo $menu['pre_content'];
     echo $menu['start_content'];
 ?>
+<div class="ui-widget-content" style="height:600px">
+
+<ul id="menu"></ul>        
 
 
-<ul id="menu">
+    <div class="ui-widget-content" style="height:600px" id='content'></div>
 
-
-</ul>           
+   
 
 
 

@@ -792,7 +792,8 @@ function mkHeader() {
         'COLORPICKERJS' => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/colorPicker/syronex-colorpicker.js'.$SN,
         'JTABLECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/jtable/themes/jqueryui/jtable_jqueryui.min.css'.$LN,
         'JTABLEJS'      => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jtable/jquery.jtable.min.js'.$SN,
-        'JQCOOKIE'      => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-cookie/jquery.cookie.js'.$SN
+        'JQCOOKIE'      => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-cookie/jquery.cookie.js'.$SN,
+        'TINYMCE'       => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tinymce/tinymce.min.js'.$SN
                               
         );
         

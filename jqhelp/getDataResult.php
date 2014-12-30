@@ -139,10 +139,10 @@ if ( $anzahl > 10 )
     echo '
         <span id="pager" class="pager">
             <form>
-                <img src="'.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first"/>
-                <img src="'.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev"/>
-                <img src="'.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
-                <img src="'.$_SESSION['baseurl'].'crm/jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/> '.($anzahl < $_SESSION['listLimit'] ? $anzahl : $_SESSION['listLimit']).'
+                <img src="'.$_SESSION['baseurl'].'crm/jquery-plugins/Table/addons/pager/icons/first.png" class="first"/>
+                <img src="'.$_SESSION['baseurl'].'crm/jquery-plugins/Table/addons/pager/icons/prev.png" class="prev"/>
+                <img src="'.$_SESSION['baseurl'].'crm/jquery-plugins/Table/addons/pager/icons/next.png" class="next"/>
+                <img src="'.$_SESSION['baseurl'].'crm/jquery-plugins/Table/addons/pager/icons/last.png" class="last"/> '.($anzahl < $_SESSION['listLimit'] ? $anzahl : $_SESSION['listLimit']).'
                 <select class="pagesize" id="pagesize">
                     <option value="10">10</option>
                     <option value="20" selected>20</option>

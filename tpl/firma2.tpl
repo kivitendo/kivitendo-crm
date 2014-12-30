@@ -300,13 +300,13 @@
         </table><br>
         <div id="pager" class="pager" style='position:absolute;'>
         <form name="ksearch" onSubmit="return ks();"> &nbsp; 
- 	   	<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first"/>
- 	   	<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev"/>
+ 	   	<img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/first.png" class="first"/>
+ 	   	<img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/prev.png" class="prev"/>
             <input type="text" id="suchwort" name="suchwort" size="20"><input type="hidden" name="Q" value="{Q}">
             <button id='ks' name='ks'>.:search:.</button> 
             <button id='reload' name='reload'>reload</button>             
- 	   	<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
- 	   	<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
+ 	   	<img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/next.png" class="next"/>
+ 	   	<img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/last.png" class="last"/>
  	   	<select class="pagesize" id='pagesize'>
  	   		<option value="10">10</option>
  	   		<option value="15" selected>15</option>

@@ -491,10 +491,10 @@
         </tbody>
     </table>
       <div id="pager" class="pager" style='position:absolute;'>
-        <img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first"/>
-        <img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev"/>
-        <img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
-        <img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
+        <img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/first.png" class="first"/>
+        <img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/prev.png" class="prev"/>
+        <img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/next.png" class="next"/>
+        <img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/last.png" class="last"/>
         <select class="pagesize" id='pagesize'>
         <option value="10">10</option>
         <option value="15" selected>15</option>

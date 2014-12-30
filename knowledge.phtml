@@ -25,9 +25,29 @@
 <script>
 
     $(document).ready(function(){
+        //tinymce.init({
+        //    selector: "#content",
+        //});
+        
         tinymce.init({
-            selector: "#content",
+        selector: "textarea",
+        statusbar: false,
+        setup: function (editor) {
+            editor.on('change', function () {
+                tinymce.triggerSave();
+            });
+        }
+    });
+
+    $('#showValues').click(function () {
+        var msg = '';
+        $('textarea').each(function (index, ta) {
+            var $ta = $(ta);
+            msg += '<div><strong>Textarea "' + $ta.attr('name') + '" value:</strong><br />' + $ta.val() + '</div>';
         });
+        $('#values').html(msg);
+    });
+
 
          
         $.ajax({
@@ -61,8 +81,9 @@
                             var obj = JSON.parse( json.trim() );
                             //alert(JSON.stringify( obj[0].content )  );
                             //console.log( JSON.stringify( obj ) );
-                            $( '#content' ).html( obj[0].content );
-                            $( "#menu" ).refresh();
+                            $( 'textarea' ).html( obj[0].content );
+                            $('#values').html(obj[0].content);
+                            
                        }
                     })
                 });
@@ -97,9 +118,18 @@
 <div class="ui-widget-content" style="height:600px">
 
 <ul id="menu"></ul>        
-
-
-    <div class="ui-widget-content" style="height:600px" id='content'></div>
+<!--div class="ui-widget-content" style="height:600px" id='content'></div-->
+<div style="width:50%;float:left">
+    <label>Text 1</label>
+    <textarea name="text1">
+        <p>Some text 1</p>
+    </textarea>
+</div>
+ <hr />
+<p>Click the button below to display the current values of the hidden textareas</p>
+<p><button id="showValues" text="">Show textarea values</button></p>
+<div id="values"></div>   
+    
 
    
 

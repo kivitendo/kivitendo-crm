@@ -83,11 +83,11 @@
 </table>
 <span id="pager_{Q}" class="pager">
 	<form>
-		<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/first.png" class="first"/>
-		<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/prev.png" class="prev"/>
+		<img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/first.png" class="first"/>
+		<img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/prev.png" class="prev"/>
 		<input type="text" class="pagedisplay"/>
-		<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/next.png" class="next"/>
-		<img src="{CRMPATH}jquery-ui/plugin/Table/addons/pager/icons/last.png" class="last"/>
+		<img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/next.png" class="next"/>
+		<img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/last.png" class="last"/>
 		<select class="pagesize">
 			<option value="10">10</option>
 			<option value="20" selected>20</option>

@@ -47,6 +47,7 @@ $menu =  $_SESSION['menu'];
 <?php
 $db=false;
 $prog=false;
+if ( !file_exists('log') ) @mkdir('log');
 $d = dir("log/");
 while (false !== ($entry = $d->read())) {
 	if (preg_match('/upd.*log/',$entry)) echo "<a href='log/$entry'>$entry</a><br>\n";

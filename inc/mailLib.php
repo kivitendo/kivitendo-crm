@@ -1,7 +1,7 @@
 <?php
 
 function mail_login($host,$port,$folder,$user,$pass,$pop,$ssl) {
-    if (!$pop) {
+    if ($pop == 'f') {
         if ($ssl=='n') {
             $ssl = "/notls";
             if (empty($port)) $port = '110';
@@ -12,7 +12,7 @@ function mail_login($host,$port,$folder,$user,$pass,$pop,$ssl) {
             $ssl = "/ssl/novalidate-cert";
             if (empty($port)) $port = '995';
         }
-        $server = "{"."$host:$port/pop3$ssl"."}$folder";
+        $server = "{"."$host:$port/pop3$ssl"."}";
     } else {
         if ($ssl=='n') {
             $ssl="/notls";

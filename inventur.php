@@ -9,6 +9,7 @@
     <head><title></title>
 <?php
 echo $menu['stylesheets'];
+echo $menu['javascripts'];
 echo $head['CRMCSS'];
 echo $head['JQUERY'];
 echo $head['JQUERYUI'];

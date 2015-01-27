@@ -1,8 +1,13 @@
 <html>
 	<head><title></title>
-        {STYLESHEETS}
-        <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-        <script type="text/javascript" src="{JQUERY}jquery-ui/jquery.js"></script>
+      {STYLESHEETS}
+              <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
+		{CRMCSS}
+		{JQUERY}
+		{JQUERYUI}
+		{JAVASCRIPTS}
+
+       
     <script language="javascript">
         function pgselect() {
              txt = document.katalog.pglist.options[document.katalog.pglist.selectedIndex].value;
@@ -10,7 +15,7 @@
         }
     </script>
         
-        {JAVASCRIPTS}
+
 
 <body >
 {PRE_CONTENT}

@@ -7,6 +7,7 @@
     $menu = $_SESSION['menu'];
     $head = mkHeader();
     echo $menu['stylesheets'];
+    echo $menu['javascripts'];
     echo $head['FULLCALCSS'];
     echo $head['BOXCSS'];
     echo $head['COLORPICKERCSS'];
@@ -30,6 +31,8 @@
 <script>
 
     $(document).ready(function(){
+    	
+    	  //URL-Parameter lesen
         $.urlParam = function( name ){
             var results = new RegExp( '[\?&]' + name + '=([^&#]*)' ).exec( window.location.href );
             if( results == null ) alert( 'Parameter: "' + name + '" does not exist in "' + window.location.href + '"!' );               

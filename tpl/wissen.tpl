@@ -1,12 +1,16 @@
 <html>
 	<head><title></title>
+
 {STYLESHEETS}
 {CRMCSS}
 {JQUERY}
-<script type="text/javascript" src="{baseurl}crm/jquery-ui/jquery-migrate-1.2.1.js"></script>
 {JQUERYUI}
 {THEME}
+{JQTABLE}
 {JAVASCRIPTS}
+
+
+
     {tiny}
     <script language="JavaScript">
 {init}

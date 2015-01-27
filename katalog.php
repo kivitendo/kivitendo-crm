@@ -89,6 +89,7 @@ if ($_POST['ok']) {
     $pglist = getPgList();
     include("inc/template.inc");
     $t = new Template($base);
+     doHeader($t);
     $t->set_file(array("kat" => "katalog.tpl"));
     $t->set_block('kat','cvarListe','BlockCV');
     if ($cvars) {
@@ -131,14 +132,6 @@ if ($_POST['ok']) {
            $t->parse('BlockPr','Preise',true); 
     }
     $t->set_var(array(
-        ERPCSS          => $_SESSION['baseurl'].'crm/css/'.$_SESSION["stylesheet"],
-        JAVASCRIPTS     => $menu['javascripts'],
-        STYLESHEETS     => $menu['stylesheets'],
-        PRE_CONTENT     => $menu['pre_content'],
-        START_CONTENT   => $menu['start_content'],
-        END_CONTENT     => $menu['end_content'],
-        'THEME'         => $_SESSION['theme'],
-        'JQUERY'        => $_SESSION['baseurl'].'crm/',
         partnumber	    => $_POST['partnumber'],
         description     => $_POST['description'],
         ean             => $_POST['ean'],

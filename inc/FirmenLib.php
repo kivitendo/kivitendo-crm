@@ -812,7 +812,7 @@ function mknewFirma($id,$typ) {
     $sql="DELETE FROM ".$tab[$typ]." WHERE name LIKE '".$tmpName_0."%'";
    // $rc=$_SESSION['db']->query($sql); Kommentiert bis ERP-Bug #2201 gefixt ist
     if (!$id) {$uid='null';} else {$uid=$id;};
-    $sql="insert into ".$tab[$typ]." (name,employee,currency_id) values ('$tmpName_0$tmpName_1',$uid,1)";
+    $sql="insert into ".$tab[$typ]." (name,employee,currency_id,taxzone_id) values ('$tmpName_0$tmpName_1',$uid,1,4)";
     $rc=$_SESSION['db']->query($sql);
     if ($rc) {
         $sql="select id from ".$tab[$typ]." where name = '$tmpName_0$tmpName_1'";
@@ -1141,7 +1141,7 @@ function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false,$ui=false) {
             'BLZ2'           => ($_SESSION['BLZDB']=='t')?"":"--",
             'employee'       => $_SESSION["loginCRM"],
             'init'           => $_SESSION["login"],
-            'txid0'          => "selected",
+            'txid4'          => "selected",
             'cvars'          => cvar_edit(0,TRUE),
             'variablen'      => "" 
             ));

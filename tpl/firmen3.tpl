@@ -368,10 +368,10 @@
             <span class="label klein">.:taxzone:.</span>
             <span class="feldxx">
                 <select name="taxzone_id" id="taxzone_id"  tabindex="13">
-                    <option value="0" {txid0}>Inland
                     <option value="1" {txid1}>EU mit UStID
                     <option value="2" {txid2}>EU ohne UStID
                     <option value="3" {txid3}>Ausland
+                    <option value="4" {txid4}>Inland
                 </select> 
             </span>
         </div>

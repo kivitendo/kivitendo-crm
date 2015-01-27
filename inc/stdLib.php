@@ -807,12 +807,12 @@ function doHeader(&$t) {
         'JAVASCRIPTS'   => $menu['javascripts'],
         'STYLESHEETS'   => $menu['stylesheets'],
         'PRE_CONTENT'   => $menu['pre_content'],
-        'START_CONTENT' => $menu['start_content'],
-        'END_CONTENT'   => $menu['end_content'],
+        'START_CONTENT' => "<div id='content'>\n",
+        'END_CONTENT'   => "</div>\n",
         'JQUERY'        => $head['JQUERY'],
         'JQUERYUI'      => $head['JQUERYUI'],
         'JQTABLE'       => $head['JQTABLE'],
-        'JQDATE'        => $head['JQDATE'],
+       // 'JQDATE'        => $head['JQDATE'],
         'JQWIDGET'      => $head['JQWIDGET'],
         'JQFILEUP'      => $head['JQFILEUP'],
         'THEME'         => $head['THEME'],
@@ -945,7 +945,7 @@ function accessHistory( $data=false ) {
         $sql .= "' AND manid = ".$_SESSION['manid']." AND key = 'search_history'";
         $rs =   $_SESSION['db']->getOne( $sql );
         $array_of_data = json_decode( $rs['val'], true );
-        if( !is_array ( $array_of_data[0] ) ) unset( $array_of_data[0] );
+        if( !is_array ( $array_of_data[0] ) ) unset( $array_of_data[0] );//ToDo
         if ( !$data && $array_of_data ) {
              return array_reverse( $array_of_data );
         }

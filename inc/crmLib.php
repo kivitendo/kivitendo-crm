@@ -1282,7 +1282,7 @@ function getOneMail($usr,$nr) {
 * die Maildaten des Users holen
 *****************************************************/
 function getUsrMailData($id) {
-    $sql="select * from crmemployee where uid=$id and typ = 't' AND manid = ".$_SESSION['manid'];
+    $sql="select * from crmemployee where uid=$id and (typ = 't' or typ = 'i') AND manid = ".$_SESSION['manid'];
     $rs = $_SESSION['db']->getAll($sql);
     if( !$rs ) {
         $data = false;

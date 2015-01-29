@@ -17,19 +17,19 @@ if ( isset($_GET['test']) and $_GET['test'] == 'ja' ) {
     $rc = $_SESSION['db']->getAll("select * from crm order by version","Status");
 }
 $menu =  $_SESSION['menu'];
+$head = mkHeader();
 ?>
 <html>
 <head><title></title>
-    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['baseurl'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo $_SESSION['baseurl'] ?>crm/jquery-ui/themes/base/jquery-ui.css">
-    <script type="text/javascript" src="<?php echo $_SESSION['baseurl'] ?>crm/jquery-ui/jquery.js"></script>
-    <script type="text/javascript" src="<?php echo $_SESSION['baseurl'] ?>crm/jquery-ui/ui/jquery-ui.js"></script>
+<?php 
+	echo $menu['stylesheets'];
+	echo $menu['javascripts'];
+	echo $head['CRMCSS']; 
+	echo $head['JQUERY']; 
+	echo $head['JQUERYUI']; 
+	echo $head['THEME']; 
 
-    <!-- ERP Stylesheet -->
-    <?php echo $menu['stylesheets']; ?>
-    <!-- ERP JavaScripts -->
-    <?php echo $menu['javascripts']; ?>
-    <!-- Ende ERP -->
+?>
     <script language="JavaScript" type="text/javascript">
         function chksrv() {
             $.get("jqhelp/logserver.php",function(data) {

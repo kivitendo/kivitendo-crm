@@ -1,14 +1,20 @@
 <?php
     require_once("inc/stdLib.php");
     require_once('inc/wvLib.php');
-    $menu =  $_SESSION['menu'];
+    $menu = $_SESSION['menu'];
+    $head = mkHeader();
 ?>
 <html>
 	<head><title>LX - CRM - Partsedit</title>
-    <?php echo $menu['stylesheets']; ?>
-    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['baseurl'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
-    <script type="text/javascript" src="<?php echo $_SESSION['baseurl']; ?>crm/jquery-ui/jquery.js"></script>
-    <?php echo $menu['javascripts']; ?>
+	<?php 
+		echo $menu['stylesheets'];
+		echo $menu['javascripts'];
+		echo $head['CRMCSS']; 
+		echo $head['JQUERY']; 
+		echo $head['JQUERYUI']; 
+		echo $head['THEME']; 
+
+?>
 	</head>
 <body>
 <?php 

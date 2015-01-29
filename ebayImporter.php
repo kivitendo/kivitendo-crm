@@ -18,6 +18,7 @@ $head = mkHeader();
 echo '<html>
 <head><title></title>';
 echo $menu['stylesheets'];
+echo $menu['javascripts'];
 echo $head['CRMCSS'];
 echo $head['JQUERY'];
 echo $head['JQUERYUI'];

@@ -82,8 +82,8 @@ include( "inc/template.inc" );
 $t = new Template( $base );
 doHeader( $t );
 $t->set_file( array( "mand" => "mandant.tpl" ) );
-if ( $_SESSION['CRMTL'] != 1 ) {
-    $t->set_var( array( msg => 'Diese Aktion ist nicht erlaubt. </ br>Sie sind nicht Mitglied der Gruppe CRMTL.', hide => 'hidden' ) );
+if ( $_SESSION['Admin'] != 1 ) {
+    $t->set_var( array( msg => 'Diese Aktion ist nicht erlaubt. </ br>Sie sind nicht Mitglied der Gruppe Admin.', hide => 'hidden' ) );
 }
 else {
     $t->set_var( array( 'GEODB' => ( $data['GEODB'] == 't' ) ? 'checked' : '', 

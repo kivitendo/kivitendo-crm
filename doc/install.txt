@@ -1,4 +1,4 @@
-Kivitendo CRM 2.0.0  
+Kivitendo CRM 2.0.2
 
 Installation Kivitendo CRM
 -------------------------
@@ -21,6 +21,7 @@ der Variblen $erpConfigFile zugewiesen werden. Achtung, die Dateiendung (.conf) 
 Voreingestellt ist kivitendo.
 
 Vorrausetzungen:
+	PostgreSQL >= 9.3
 	Kivitendo ERP >= 3.1.0
 	PHP >= 4.2x
 	PEAR::MDB2
@@ -58,7 +59,7 @@ Webserver neu starten
 z.B. Debian / Ubuntu:
     /etc/init.d/apache2 restart 
          
-Administration der ERP aufrufen und die Gruppe CRMTL hinzufügen.
+Administration der ERP aufrufen und die Gruppe Admin hinzufügen.
 Nur ihr zugewiesene Benutzer können die Mandanten-Konfiguration der CRM anpassen. 
 Kivitendo im Browser aufrufen und anmelden.
 Nach dem Klick auf einen der neu entstandenen CRM-Menü-Punkte werden einige Tabellen angelegt.
@@ -128,7 +129,7 @@ Update auf Version 1.9.0
 Die Einstellungen in der inc/conf.php sind auf ein Minimum reduziert worden.
 Diese Einstellungen können nun für jeden Mandanten über die Oberfläche eingestellt werden.
 Dazu muss mindestens ein Benutzer besondere Rechte bekommen. Bitte dazu admin.pl aufrufen.
-Legen Sie eine neuen Gruppe CRMTL an. Das einzige Recht das hier unter CRM gesetzt sein muss ist 
+Legen Sie eine neuen Gruppe Admin an. Das einzige Recht das hier unter CRM gesetzt sein muss ist 
 'Admin Status'.
 Ordnen Sie einen Benutzer dieser Gruppe zu. 
 Dieser Benutzer wir in kommenden Versionen mehr Aufgaben bekommen, daher "sparsam" vergeben.

@@ -82,7 +82,7 @@
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
-<p class="listtop"> {FAART} .:keyin:./.:edit:.</p>
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;"> {FAART} .:keyin:./.:edit:.</p>
 
 <!-- Beginn Code ------------------------------------------->
 <div id="maintab">

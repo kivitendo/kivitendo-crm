@@ -10,7 +10,8 @@ apt-get install make gcc apache2 libapache2-mod-fastcgi libarchive-zip-perl libc
 cpan HTML::Restrict
 pear install  Contact_Vcard_Build Contact_Vcard_Parse
 
-dialog --title "Latex installieren"  --yesno "Möchten Sie Latex installieren?" 7 60
+
+dialog --title "Latex installieren" --backtitle "Kivtendo installieren" --yesno "Möchten Sie Latex installieren?" 7 60
 
 response=$?
 case $response in
@@ -21,14 +22,13 @@ case $response in
       ;;
 esac
 
-
 ##Dialog Passwd
-dialog --clear --title "Dialog Password" --inputbox "Password eingeben" 10 50 2>/tmp/kivitendo_passwd.$$ kivitendo
+dialog --clear --title "Dialog Password" --backtitle "Kivtendo installieren" --inputbox "Achtung, Password in Beispieldatenbank bleibt unverändert. (kivitendo)" 10 50 2>/tmp/kivitendo_passwd.$$ kivitendo
 PASSWD=`cat /tmp/kivitendo_passwd.$$`
 
 ##Dialog Directory
 DIR=/var/www
-dialog --clear --title "Dialog Installationsverzeichnis" --inputbox "Pfad ohne abschließenden Slash eingenben" 10 50 2>/tmp/kivitendo_dir.$$ /var/www
+dialog --clear --title "Dialog Installationsverzeichnis" --backtitle "Kivtendo installieren" --inputbox "Pfad ohne abschließenden Slash eingenben" 10 50 2>/tmp/kivitendo_dir.$$ /var/www
 DIR=`cat /tmp/kivitendo_dir.$$`
 rm -f /tmp/kivitendo*
 
@@ -69,24 +69,30 @@ echo "config/kivitendo.conf erzeugen"
 cp -f $DIR/kivitendo-erp/config/kivitendo.conf.default $DIR/kivitendo-erp/config/kivitendo.conf
 
 echo "kivitendo.conf bearbeiten"
-sed -i 's/admin_password.*$/admin_password = kivitendo/' $DIR/kivitendo-erp/config/kivitendo.conf
-sed -i 's/password =$/password = kivitendo/' $DIR/kivitendo-erp/config/kivitendo.conf
+sed -i "s/admin_password.*$/admin_password = $PASSWD/" $DIR/kivitendo-erp/config/kivitendo.conf
+sed -i "s/password =$/password = $PASSWD/" $DIR/kivitendo-erp/config/kivitendo.conf
 
 
 chown -R www-data: *
 cd kivitendo-erp/
 ln -s ../kivitendo-crm/ crm
 
-dialog --title "Datenbank installieren" --backtitle "Linux Shell Script Tutorial Example" --yesno "Möchten Sie die Beispiel-Datenbank installieren?" 7 60
-
+dialog --title "Datenbank installieren" --backtitle "Kivtendo installieren" --yesno "Möchten Sie die Beispiel-Datenbank installieren?" 7 60
 response=$?
 case $response in
-   0) echo "Datenbank wird installiert."
-      sudo -u postgres -H -- createdb kivitendo_auth
-      sudo -u postgres -H -- createdb demo-db
-      sudo -u postgres -H -- psql kivitendo_auth < $DIR/kivitendo-crm/install/kivitendo_auth.sql
-      sudo -u postgres -H -- psql demo-db < $DIR/kivitendo-crm/install/demo-db.sql
-      ;;
-   1) echo "Datenbank wird nicht installiert."
-      ;;
+    0) echo "Datenbank wird installiert."
+	sudo -u postgres -H -- createdb kivitendo_auth
+	sudo -u postgres -H -- createdb demo-db
+	sudo -u postgres -H -- psql kivitendo_auth < $DIR/kivitendo-crm/install/kivitendo_auth.sql
+	sudo -u postgres -H -- psql demo-db < $DIR/kivitendo-crm/install/demo-db.sql
+	echo "Beim Login: Benutzername: demo, Password: kivitendo"
+	;;
+    1) echo "Datenbank wird nicht installiert."
+       ;;
 esac
+
+
+echo "......Installation beendet"
+echo ""
+echo "Kivitendo kann jetzt im Browser unter http://localhost/kivitendo/ aufgerufen werden"
+

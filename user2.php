@@ -1,6 +1,6 @@
 <?php
     require_once("inc/stdLib.php");
-    if ( $_SESSION['CRMTL'] != 1 ) header("location:no.html");
+    if ( $_SESSION['Admin'] != 1 ) header("location:no.html");
     include("inc/template.inc");
     include("inc/crmLib.php");
     include_once("inc/UserLib.php");

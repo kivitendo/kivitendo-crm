@@ -99,7 +99,7 @@
                         ));
                     }
                     $t->set_var(array(
-                        'CRMTL' => ($_SESSION['CRMTL'] == 1)?'visible':'hidden'
+                        'Admin' => ($_SESSION['Admin'] == 1)?'visible':'hidden'
                     ));
                 }
             }

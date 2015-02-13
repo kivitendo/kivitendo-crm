@@ -147,9 +147,9 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
          }
     }
     // Ist der User ein CRM-Supervisor?
-    $sql = "SELECT count(*) as cnt from auth.user_group left join auth.group on id=group_id where name = 'CRMTL' and user_id = ".$uid;
+    $sql = "SELECT count(*) as cnt from auth.user_group left join auth.group on id=group_id where name = 'Admin' and user_id = ".$uid;
     $rs  = $db->getOne($sql);
-    $auth['CRMTL'] = $rs['cnt'];
+    $auth['Admin'] = $rs['cnt'];
     //Session update
     $sql = "update auth.session set mtime = '".date("Y-M-d H:i:s.100001")."' where id = '".$cookie."'"; 
     $db->query($sql,"authuser_3");
@@ -224,7 +224,7 @@ function anmelden() {
     if( !$_SESSION["db"] ) {
         return false;
     } else {
-        $_SESSION['CRMTL'] = $auth['CRMTL'];
+        $_SESSION['Admin'] = $auth['Admin'];
         $charset = ini_get("default_charset");
         //if ( $charset == "" ) $charset = $dbcharset;
         if ( $charset == "" ) $charset = 'UTF8';

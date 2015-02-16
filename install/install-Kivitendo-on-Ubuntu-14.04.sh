@@ -106,3 +106,15 @@ echo "......Installation beendet"
 echo ""
 echo "kivitendo kann jetzt im Browser unter http://localhost/kivitendo/ aufgerufen werden"
 
+var=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort | awk '{print $4,v++}' | tail -n 10)
+
+
+
+_temp="/tmp/answer.$$"
+#dialog --backtitle "Version wählen" --radiolist "Wähle Tag der ausgecheckt werden soll" 15 50 8  2>$_temp
+#    result=`cat $_temp`
+
+dialog --menu "Please choose a mounted Partition" 15 50 8 $var 2>$_temp
+result=`cat $_temp`
+dialog --title "Ausgewählter Tag" --msgbox "$result wird ausgecheckt" 6 44
+git checkout $result

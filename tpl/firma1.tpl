@@ -101,7 +101,7 @@
     }
     function doIr() { //neue Rechnung 
       var file = '{Q}' == 'C' ? '../is.pl' : '../ir.pl';
-      window.location.href = file + '?action=add&vc={CuVe}&{CuVe}_id={FID}';
+      window.location.href = file + '?action=add&type=invoice&vc={CuVe}&{CuVe}_id={FID}'; 
     }
     function doLxCars() {
         uri='lxcars/lxcmain.php?owner={FID}&task=1' 

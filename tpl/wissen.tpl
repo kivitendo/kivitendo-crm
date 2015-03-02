@@ -253,11 +253,6 @@
                   history();
               }
          });
-        if ($.browser.mozilla) {
-            $('#wort').keypress(checkForEnterSuche);
-        } else {
-            $('#wort').keydown(checkForEnterSuche);
-        }
     });
     function showNew() {
         $('#edit').hide();

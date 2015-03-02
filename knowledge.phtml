@@ -8,6 +8,7 @@
     $menu = $_SESSION['menu'];
     $head = mkHeader();
     echo $menu['stylesheets'];
+    echo $menu['javascripts'];
     //echo $head['FULLCALCSS'];
     //echo $head['BOXCSS'];
     //echo $head['COLORPICKERCSS'];
@@ -25,28 +26,28 @@
 <script>
 
     $(document).ready(function(){
-        //tinymce.init({
-        //    selector: "#content",
-        //});
-        
         tinymce.init({
-        selector: "textarea",
-        statusbar: false,
-        setup: function (editor) {
-            editor.on('change', function () {
-                tinymce.triggerSave();
-            });
-        }
-    });
-
-    $('#showValues').click(function () {
-        var msg = '';
-        $('textarea').each(function (index, ta) {
-            var $ta = $(ta);
-            msg += '<div><strong>Textarea "' + $ta.attr('name') + '" value:</strong><br />' + $ta.val() + '</div>';
+            selector: "#write",
         });
-        $('#values').html(msg);
-    });
+        
+//        tinymce.init({
+//        selector: "textarea",
+//        statusbar: false,
+//        setup: function (editor) {
+//            editor.on('change', function () {
+//                tinymce.triggerSave();
+//            });
+//        }
+//    });
+
+//    $('#showValues').click(function () {
+//        var msg = '';
+//        $('textarea').each(function (index, ta) {
+//            var $ta = $(ta);
+//            msg += '<div><strong>Textarea "' + $ta.attr('name') + '" value:</strong><br />' + $ta.val() + '</div>';
+//        });
+//        $('#values').html(msg);
+//    });
 
 
          
@@ -71,7 +72,7 @@
                 });
                 $( '#menu' ).menu(); 
                 $( '[id^=main_]' ).on( 'click', function(event) {
-                    console.log( event.target.id.substring( 5 ) );                    
+                    //console.log( event.target.id.substring( 5 ) );                    
                     //alert(event.target.id.substring( 5 ))
                     $.ajax({
                         url: 'jqhelp/knowledge.php',
@@ -81,8 +82,9 @@
                             var obj = JSON.parse( json.trim() );
                             //alert(JSON.stringify( obj[0].content )  );
                             //console.log( JSON.stringify( obj ) );
-                            $( 'textarea' ).html( obj[0].content );
-                            $('#values').html(obj[0].content);
+                           
+                            $('#read').html(obj[0].content);
+                            $( '#write' ).html( obj[0].content );
                             
                        }
                     })
@@ -95,8 +97,20 @@
                 alert('Ajax Error');
             }
         });
-           
-        
+$( "#write" ).hide();           
+$("#mode").button({label:"write"}).click(function () {
+	$( "#read, #write" ).toggle("fast");
+    if( $(this).button( "option", "label" ) === "write" ){
+        $( this ).button( "option", "label", "read" );
+        //$( "#read" ).hide("fast");
+    }
+    else{ 
+        $( this ).button( "option", "label", "write" );
+        //$( "#read" ).show("fast");
+    }
+})
+
+
 
 
         
@@ -105,8 +119,10 @@
 
 </script>
 <style>
+.ui-menu { width: 180px; }
 
-.ui-menu { width: 220px; }
+#read{   position:absolute; top:55px; left:220px; width: 80%; background-color:#dfd; border:1px solid #888; }
+#write{  position:absolute; top:60px; left:220px; width: 80%; background-color:#dfe; border:1px solid #666; }
 </style>    
 
 </head>
@@ -119,17 +135,14 @@
 
 <ul id="menu"></ul>        
 <!--div class="ui-widget-content" style="height:600px" id='content'></div-->
-<div style="width:50%;float:left">
-    <label>Text 1</label>
-    <textarea name="text1">
-        <p>Some text 1</p>
-    </textarea>
-</div>
- <hr />
-<p>Click the button below to display the current values of the hidden textareas</p>
-<p><button id="showValues" text="">Show textarea values</button></p>
-<div id="values"></div>   
-    
+
+
+
+<p><button id="mode"></button></p>
+
+  
+<div id="read"></div>  
+<div id="write"></div> 
 
    
 

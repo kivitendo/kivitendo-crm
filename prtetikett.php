@@ -63,18 +63,26 @@
 <head><title></title>
 <?php
     echo $menu['stylesheets'];
+    echo $menu['javascripts'];
     echo $head['CRMCSS'];
+    echo $head['JQUERY']; 
+    echo $head['JQUERYUI']; 
 ?>
 </head>
-<body onLoad="window.resizeTo(400,550);">
+<body>
+<?php
+echo $menu['pre_content'];
+echo $menu['start_content']; ?>
+<h1 onClick="help('Etikett');">Etikett</h1>
 <form name='prt' method='post' action='prtetikett.php'>
 <input type='hidden' name='etikett' value='<?php echo $etikett; ?>'>
-Etikett: <select name='etikett' >
+<table><tr><td>
+<table>
+<tr><td>Etikett:</td><td><select name='etikett' >
 <?php foreach ($ALabels as $data) { ?>
     <option value='<?php echo  $data["id"]?>'<?php echo  ($data["id"]==$etikett)?" selected":"" ?>><?php echo  $data["name"] ?>
 <?php } ?>
-</select>&nbsp;<input type='submit' name='chfrm' value='Ansicht erneuern'>
-<table>
+</select>&nbsp;<input type='submit' name='chfrm' value='Ansicht erneuern'></td></tr>
 <?php
 $line = '<tr><td>%s</td><td><input type="text" name="%s" size="20"></td></tr>';
 if ( $label ) foreach ( $label['Text'] as $row ) {
@@ -82,7 +90,7 @@ if ( $label ) foreach ( $label['Text'] as $row ) {
         foreach ( $hits[0] as $fld ) echo sprintf($line,substr($fld,1,-1),substr($fld,1,-1));
     }
 }
-echo '</table><br>';
+echo '</table></td><td>';
     $sel="checked";
     for ($y=1; $y<=$label["ny"];$y++) {
         for ($x=1; $x<=$label["nx"];$x++) {
@@ -93,7 +101,7 @@ echo '</table><br>';
     }
 ?>
 <input type='submit' name='prt' value='drucken'>
-</form>
-<center><a  href="JavaScript:self.close()">schließen</a></center>
+</form></td></tr></table>
+<?php echo $menu['end_content']; ?>
 </body>
 </html>

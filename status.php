@@ -47,7 +47,6 @@ $head = mkHeader();
 <?php
 $db=false;
 $prog=false;
-if ( !file_exists('log') ) @mkdir('log');
 $d = dir("log/");
 print_r($d);
 /*while (false !== ($entry = $d->read())) {

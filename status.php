@@ -49,12 +49,13 @@ $db=false;
 $prog=false;
 if ( !file_exists('log') ) @mkdir('log');
 $d = dir("log/");
-while (false !== ($entry = $d->read())) {
+print_r($d);
+/*while (false !== ($entry = $d->read())) {
 	if (preg_match('/upd.*log/',$entry)) echo "<a href='log/$entry'>$entry</a><br>\n";
 	if (preg_match('/instprog.log/',$entry)) $prog=true;
 	if (preg_match('/install.log/',$entry)) $db=true;
 }
-$d->close();
+$d->close();*/
 if ($prog) { echo "<a href='log/instprog.log'>Programminstallation</a><br>"; } else { echo "Kein Logfile f&uuml;r Programminstallation<br>"; }
 if ($db) { echo "<a href='log/install.log'>Datenbankinstallation</a><br>"; } else { echo "Kein Logfile f&uuml;r Datenbankinstallation<br>"; }
 ?>

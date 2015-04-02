@@ -26,10 +26,10 @@
 <script>
 
     $(document).ready(function(){
-        tinymce.init({
-            selector: "#write",
-        });
-        
+			
+       tinymce.init({selector:'textarea',
+        forced_root_block : 'div'});
+
 //        tinymce.init({
 //        selector: "textarea",
 //        statusbar: false,
@@ -141,10 +141,11 @@ $("#mode").button({label:"write"}).click(function () {
 <p><button id="mode"></button></p>
 
   
-<div id="read"></div>  
-<div id="write"></div> 
+<div id="read">
+</div>  <div id="write"><textarea></textarea></div>
 
-   
+
+  
 
 
 

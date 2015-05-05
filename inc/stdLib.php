@@ -129,8 +129,14 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     $sql  = 'SELECT id as manid,name as mandant,dbhost,dbport,dbname,dbuser,dbpasswd FROM auth.clients WHERE id = '.$mandant;
     $rs   = $db->getOne($sql);
     $auth = array_merge($auth,$rs);
-    //ERP-Gruppen holen
-    $sql  = "SELECT id AS value, name AS text FROM auth.group";
+    //$sql  = "SELECT id AS value, name AS text FROM auth.group";
+    //Nur die Gruppen die den angemeldete Benutzer zugeordnet sind hinzufügen
+    $sql="SELECT grp.id AS value, name AS text FROM auth.group AS grp 
+	               INNER JOIN auth.user_group
+	                 ON grp.id = group_id
+	               INNER JOIN auth.user AS usr
+	                 ON user_id = usr.id
+	               WHERE usr.id = $uid";
     $rs_grp = $db->getAll( $sql );
     $auth['grp'] = $rs_grp;
     //Eine der Gruppen des Users darf sales_all_edit

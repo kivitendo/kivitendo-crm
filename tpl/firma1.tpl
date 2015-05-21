@@ -7,6 +7,10 @@
 {THEME}
 {JQTABLE}
 {JAVASCRIPTS}
+
+<link rel="stylesheet" href="jquery-plugins/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+<script type="text/javascript" src="jquery-plugins/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
 <script language="JavaScript" type="text/javascript">
     function showCall() {
         $('#calls tr[group="tc"]').remove();
@@ -226,6 +230,18 @@
                     event.preventDefault();
                 };
             });
+            
+            $("#qrbutt").button().click(
+            function( event ) {
+				$.ajax({
+   					type: "GET",
+  					url: "vcardexp.php?qr=1&Q={Q}&fid={FID}",
+   					success: function(strResponse){
+     					$(".fancybox").trigger('click');
+   					}
+ 				});  
+            });
+            $(".fancybox").fancybox();
         }
     );
 </script>
@@ -238,6 +254,7 @@
 <div id='menubox1' >
     <form>
     <span style="float:left;" valign="bottom">
+         <div class="fancybox" rel="group" href="tmp/qr_kevin.png"><img src="" alt="" /></div>
         <button name="firma1.php?Q={Q}&id={FID}">.:Custombase:.</button>
         <button name="firma2.php?Q={Q}&fid={FID}">.:Contacts:.</button>
         <button name="firma3.php?Q={Q}&fid={FID}">.:Sales:.</button>
@@ -301,6 +318,7 @@
                {RECHNUNG_BUTTON}<br />
             <br class='mini'>
                {EXTRA_BUTTON}
+               {QR_BUTTON}
                {KARTE_BUTTON}
                {ETIKETT_BUTTON}
             <br />

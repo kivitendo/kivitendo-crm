@@ -182,6 +182,8 @@
                                 '<a class="firmabutton" href="'.$karte1.'" name="karte" target="_blank"><img src="image/karte.png" title=".:city map:." border="0"></a>&nbsp;':'',
             'ETIKETT_BUTTON' => ($_SESSION['zeige_etikett']=='t')?
                                 '<a class="firmabutton" href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0"></a>&nbsp;':'',  
+            'QR_BUTTON' 	 => ($_SESSION['zeige_etikett']=='t')?
+                                '<a class="firmabutton" id="qrbutt" href="#" title=".:print label:."><img src="image/qrn.png" alt=".:print label:." border="0"></a>&nbsp;':'',  
             'DHL_BUTTON'     => ($_SESSION['zeige_dhl']=='t')?
                                 '<a class="firmabutton" href="#" onCLick="dhl();" title="DHL"><img src="image/dhl.png" alt="DHL" border="0"></a>&nbsp;':'', 
             'LxCars_BUTTON'  => ($_SESSION['zeige_lxcars']=='t'&&$Q=="C")?

@@ -168,6 +168,7 @@
             'sales'	=> ($Q=="C")?"sales":"purchase",
             'request' => ($Q=="C")?"sales":"request",
             'apr' => ($Q=="C")?"ar":"ap",
+            'loginname' => $_SESSION['login'],
             'ANGEBOT_BUTTON' => ($_SESSION['angebot_button']=='t')?
                                 '<a class="firmabutton" href="#" onClick="doOe(\''.$sales.'_quotation\');"><img src="image/angebot.png" title="Angebot/Anfrage erstellen" border="0"></a>&nbsp;':'',
             'AUFTRAG_BUTTON' => ($_SESSION['auftrag_button']=='t')?

@@ -254,7 +254,7 @@
 <div id='menubox1' >
     <form>
     <span style="float:left;" valign="bottom">
-         <div class="fancybox" rel="group" href="tmp/qr_kevin.png"><img src="" alt="" /></div>
+        <div class="fancybox" rel="group" href="tmp/qr_{loginname}.png"><img src="" alt="" /></div>
         <button name="firma1.php?Q={Q}&id={FID}">.:Custombase:.</button>
         <button name="firma2.php?Q={Q}&fid={FID}">.:Contacts:.</button>
         <button name="firma3.php?Q={Q}&fid={FID}">.:Sales:.</button>

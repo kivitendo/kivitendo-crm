@@ -7,6 +7,8 @@
 {THEME}
 {JQTABLE}
 {JAVASCRIPTS}
+	<link rel="stylesheet" href="jquery-plugins/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+	<script type="text/javascript" src="jquery-plugins/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script> 
     <script language="JavaScript">
     <!--
         function showItem(id) {
@@ -15,7 +17,14 @@
         }
         function qrcode() {
             pid = $('#liste option:selected').val();
-            document.location.href="vcardexp.php?qr=1&Q={Q}&pid="+pid;
+          	//  document.location.href="vcardexp.php?qr=1&Q={Q}&pid="+pid; 
+			$.ajax({
+               url: 'vcardexp.php?qr=1&Q={Q}&pid='+pid,
+               type: 'GET',
+               success: function(data){
+               		$(".fancybox").trigger('click');
+               }
+             })                        
         }
         function anschr() {
             pid = $('#liste option:selected').val();
@@ -213,7 +222,15 @@
          .click(function( event ) {
               event.preventDefault();
          });
+         
+         $(".fancybox").fancybox();
+         
+         $("#cpqr").click(function( event ) {
+         	qrcode();
+         });
+         
     });
+
 
     </script>
 <body>
@@ -221,6 +238,7 @@
 {START_CONTENT}
 <p class="listtop" >.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}</span></p>
 <div id="menubox1">
+    <div class="fancybox" rel="group" href="tmp/qr_{loginname}.png"><img src="" alt="" /></div> 
     <span style="float:left;" class="top1">
     <button name="Link1">.:Custombase:.</button>
     <button name="Link2">.:Contacts:.</button>
@@ -270,7 +288,7 @@
         <div style="float:left; width:29%; height:13em; text-align:right; border-bottom: 0px ;" id="cpinhalt2">
             <span id="extraF"></span>
             <a href="#" onCLick="vcard();"><img src="image/vcard.png" border="0" style="visibility:{none};" id="cpvcard" height='30'></a> &nbsp; 
-            <a href="#" onCLick="qrcode();"><img src="image/qr.png" border="0" style="visibility:{none};" id="cpqr" height='30'></a> &nbsp; 
+            <a href="#"><img src="image/qr.png" border="0" style="visibility:{none};" id="cpqr" height='30'></a> &nbsp; 
             <a href="#" onCLick="anschr();"><img src="image/brief.png" border="0" style="visibility:{none};" id="cpbrief" height='30'></a><br />
             <span id="cp_grafik" style="padding-right:1px;"></span></br >
             <span id="cp_birthday" style="padding-right:1px;"></span></br />

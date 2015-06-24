@@ -88,6 +88,7 @@
     doHeader($t);
     $t->set_var(array(
             'FAART'    => ($Q=='C')?'.:Customer:.':'.:Vendor:.',   //"Kunde":"Lieferant",
+            'loginname' => $_SESSION['login'],
             'interv'   => $_SESSION["interv"]*1000,
             'Q'        => $Q,
             'Link1'    => $link1,

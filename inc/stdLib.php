@@ -764,9 +764,9 @@ function mkHeader() {
     $LVID = '<link id="'.$_SESSION['theme'].'" rel="stylesheet" type="text/css" href="';
     $LN = '">'."\n";
     $head = array(
-        'JQUERY'        => $SV.$_SESSION['baseurl'].'crm/jquery/jquery.min.js'.$SN,
-        'JQUERYUI'      => $LV.$_SESSION['baseurl'].'crm/jquery-themes/base/jquery-ui.css'.$LN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery/jquery-ui.min.js'.$SN,
+        //'JQUERY'        => $SV.$_SESSION['baseurl'].'crm/jquery/jquery.min.js'.$SN,
+       // 'JQUERYUI'      => $LV.$_SESSION['baseurl'].'crm/jquery-themes/base/jquery-ui.css'.$LN.
+       //                    $SV.$_SESSION['baseurl'].'crm/jquery/jquery-ui.min.js'.$SN,
         'JQTABLE'       => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/Table/jquery.tablesorter.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/Table/addons/pager/jquery.tablesorter.pager.js'.$SN.
                            $LV.$_SESSION['baseurl'].'crm/jquery-plugins/Table/themes/blue/style.css'.$LN,
@@ -815,8 +815,6 @@ function doHeader(&$t) {
         'PRE_CONTENT'   => $menu['pre_content'],
         'START_CONTENT' => $menu['start_content'],
         'END_CONTENT'   => $menu['end_content'],
-        'JQUERY'        => $head['JQUERY'],
-        'JQUERYUI'      => $head['JQUERYUI'],
         'JQTABLE'       => $head['JQTABLE'],
        // 'JQDATE'        => $head['JQDATE'],
         'JQWIDGET'      => $head['JQWIDGET'],
@@ -912,18 +910,11 @@ function makeMenu($sess,$token){
     $rs['start_content'] = '';
     $rs['end_content']   = '';
     if ($objResult) {
-        foreach($objResult->{'javascripts'} as $js) {
-            if ( preg_match('/jquery/',$js)) continue;
+        foreach($objResult->{'javascripts'} as $js) {//<script type="text/javascript" src="http://localhost/kivitendo-dev/crm/jquery/jquery-ui.min.js"></script>
+            //jQuery und UI der ERP benützen
             $rs['javascripts'] .= '<script type="text/javascript" src="'.$BaseUrl.$js.'"></script>'."\n".'   ';
         }
-        $rs['javascripts'] .= '<script type="text/javascript">';
-        $suche = '^,"([/a-zA-Z_0-9]+)\.(pl|php)^';
-        $ersetze = ',"'.$BaseUrl.'${1}.${2}';
-        foreach($objResult->{'javascripts_inline'} as $js) {
-            $js = preg_replace($suche, $ersetze,$js); 
-            $rs['javascripts'] .= $js; //'<script type="text/javascript" src="'.$BaseUrl.$js.'"></script>'."\n".'   ';
-        }
-        $rs['javascripts'] .= '</script>'."\n";
+		  $rs['javascripts'] .= '<script type="text/javascript" src="'.$BaseUrl.'js/jquery-ui.js"></script>';
         foreach($objResult->{'stylesheets'} as $style) {
             if ($style) $rs['stylesheets'] .= '<link rel="stylesheet" href="'.$BaseUrl.$style.'" type="text/css">'."\n".'   ';
         }
@@ -938,6 +929,15 @@ function makeMenu($sess,$token){
         $rs['start_content'] = $objResult->{'start_content'};
         $rs['start_content_ui'] = '<div class="ui-widget-content">';//Begin UI-Look
         $rs['end_content']   = $objResult->{'end_content'};
+        $rs['end_content']  .= '<script type="text/javascript">';
+        //Inline-JS der ERP in den Footer (nach end_content)
+        $suche = '^,"([/a-zA-Z_0-9]+)\.(pl|php)^';
+        $ersetze = ',"'.$BaseUrl.'${1}.${2}';
+        foreach($objResult->{'javascripts_inline'} as $js) {
+            $js = preg_replace($suche, $ersetze,$js);
+            $rs['end_content'] .= $js; //'<script type="text/javascript" src="'.$BaseUrl.$js.'"></script>'."\n".'   ';
+        }
+        $rs['end_content'] .= '</script>'."\n";
         $rs['end_content_ui']   = '</div>'; //End UI-Look
     }
     return $rs;

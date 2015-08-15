@@ -921,8 +921,6 @@ function makeMenu($sess,$token){
         foreach($objResult->{'stylesheets_inline'} as $style) {
             if ($style) $rs['stylesheets'] .= '<link rel="stylesheet" href="'.$BaseUrl.$style.'" type="text/css">'."\n".'   ';
         }
-        $suche = '^([/a-zA-Z_0-9]+)\.(pl|php)^';
-        $ersetze = $BaseUrl.'${1}.${2}';
         $tmp = preg_replace($suche, $ersetze, $objResult->{'pre_content'} );
         $tmp = str_replace( 'itemIcon="', 'itemIcon="'.$BaseUrl, $tmp );
         $rs['pre_content']   = str_replace( 'src="', 'src="'.$BaseUrl, $tmp );
@@ -931,7 +929,7 @@ function makeMenu($sess,$token){
         $rs['end_content']   = $objResult->{'end_content'};
         $rs['end_content']  .= '<script type="text/javascript">';
         //Inline-JS der ERP in den Footer (nach end_content)
-        $suche = '^,"([/a-zA-Z_0-9]+)\.(pl|php)^';
+        $suche = '^,"([/a-zA-Z_0-9]+)\.(pl|php|phtml)^';
         $ersetze = ',"'.$BaseUrl.'${1}.${2}';
         foreach($objResult->{'javascripts_inline'} as $js) {
             $js = preg_replace($suche, $ersetze,$js);

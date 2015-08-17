@@ -1,0 +1,22 @@
+#!/usr/bin/perl
+# -*- coding: utf-8; -*-
+# vim: fenc=utf-8
+
+use utf8;
+
+# add the missing texts and run locales.pl to rebuild
+
+$missing = {
+  'Add new Addresses'           => 'Neue Adressen erfassen',
+  'Admin: Label, Category, Messages, Status, KnowHow write' => 'Admin für Etikett, Kategorien, Meldungen, Status, Schreibrecht Wissens-DB',
+  'Documens'                    => 'Dokumente',
+  'Finance'                     => 'Finanzen',
+  'Master: Client, Groups'      => 'Masterrecht für Mandant und Gruppen',
+  'Other: Follow Up,E-Mail,Appointment' => 'Sonstiges: Wiedervorlage, E-Mail, Termine',
+  'Parts: Edit, Warehouse'      => 'Artikel bearbeiten, Lager',
+  'Sales: Opporunity,Catalog, Packlist, ebay' => 'Verkauf: Auftragschance, Katalog, Packliste',
+  'Searchmask'                  => 'Suchmaske',
+  'Service: Contract, Machine'  => 'Service: WV, Maschinen',
+};
+
+1;

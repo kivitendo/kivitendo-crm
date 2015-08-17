@@ -22,7 +22,7 @@ Voreingestellt ist kivitendo.
 
 Vorrausetzungen:
 	PostgreSQL >= 9.3
-	Kivitendo ERP >= 3.1.0
+	Kivitendo ERP >= 3.3.0
 	PHP >= 4.2x
 	PEAR::MDB2
 	PEAR::MDB2#pgsql
@@ -45,15 +45,24 @@ Die restlichen Pearpaket installieren:
 Installierte Pearpakete anzeigen:
     pear list
   
-Die Pfade können entweder in der php.ini oder durch umbenennen der htaccess.txt in .htaccess angepasst werden.
-    cp htaccess.txt .htaccess
-
 Crm in die ERP verlinken
     cd /var/www/kivitendo-erp && ln -s ../kivitendo-crm crm
 
 Eigentümer der Datei auf Webserver setzen
 z.B. Debian / Ubuntu:
     chown -R www-data: crm/
+
+Menü verlinken oder kopieren:
+cd kivitendo-erp/menus/users
+ln -s /var/www/kivitendo-crm/menu/10-crm-menu.yaml
+
+Rechte für CRM ermöglichen:
+cp /var/www/kivitendo-crm/add_crm_master_rights.sql /var/www/kivitendo-erp/sql/Pg-upgrade2-auth/
+
+Übersetzungen anlegen:
+cp /var/www/kivitendo-crm/missing /var/www/kivitendo-erp/locale/de/
+cd kivitendo-erp
+scritps/locales.pl de
 
 Webserver neu starten
 z.B. Debian / Ubuntu:

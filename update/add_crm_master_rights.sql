@@ -1,6 +1,5 @@
 -- @tag: add_crm_master_rights
 -- @description: Rechte für CRM in die Datenbank migrieren
--- @depends: release_3_3_0
 -- @charset: utf-8
 -- @locales: CRM
 -- @locales: Searchmask

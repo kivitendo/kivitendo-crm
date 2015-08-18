@@ -54,13 +54,15 @@ z.B. Debian / Ubuntu:
 
 Menü verlinken oder kopieren:
 cd kivitendo-erp/menus/users
-ln -s /var/www/kivitendo-crm/menu/10-crm-menu.yaml
+ln -s ../../../kivitendo-crm/menu/10-crm-menu.yaml 10-crm-menu.yaml
 
 Rechte für CRM ermöglichen:
-cp /var/www/kivitendo-crm/add_crm_master_rights.sql /var/www/kivitendo-erp/sql/Pg-upgrade2-auth/
+cd kivitendo-erp/sql/Pg-upgrade2-auth
+ln -s  ../../../kivitendo-crm/update/add_crm_master_rights.sql add_crm_master_rights.sql
 
 Übersetzungen anlegen:
-cp /var/www/kivitendo-crm/missing /var/www/kivitendo-erp/locale/de/
+cd kivitendo-erp/locale/de
+ln -s ../../../kivitendo-crm/update/missing missing
 cd kivitendo-erp
 scritps/locales.pl de
 

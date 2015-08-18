@@ -914,7 +914,6 @@ function makeMenu($sess,$token){
             //jQuery und UI der ERP benützen
             $rs['javascripts'] .= '<script type="text/javascript" src="'.$BaseUrl.$js.'"></script>'."\n".'   ';
         }
-		  $rs['javascripts'] .= '<script type="text/javascript" src="'.$BaseUrl.'js/jquery-ui.js"></script>';
         foreach($objResult->{'stylesheets'} as $style) {
             if ($style) $rs['stylesheets'] .= '<link rel="stylesheet" href="'.$BaseUrl.$style.'" type="text/css">'."\n".'   ';
         }

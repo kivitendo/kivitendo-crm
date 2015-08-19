@@ -12,6 +12,7 @@
 
 require_once("inc/stdLib.php");
 require_once("inc/crmLib.php");
+include("inc/template.inc");
 require_once("inc/FirmenLib.php");
 $menu = $_SESSION['menu'];
 $head = mkHeader();
@@ -178,8 +179,10 @@ $menu['start_content'].
 <td><input type="submit" name="select_file" /></td>
 </tr>
 </form>
-</table>
-';
+</table>'.
+$menu['end_content'];
+;
+
 
 if ( !$_POST['select_file'] ) echo $form_select_file; // in Phase 3 $_POST['select_file'] = true;
 
@@ -196,14 +199,14 @@ $zeichen = fgetc($dateihandle);
 fclose($dateihandle);
 
 
-echo "*****************************************";
-echo $zeichen;
+//echo "*****************************************";
+//echo $zeichen;
 //readfile("test_utf8");
-echo "*****************************************";
+//echo "*****************************************";
 
 // Uploaded file is UTF-8 encoded? i know, it's ugly, but it's working.
 if("$zeichen"!="0"){
-   echo "NOT UTF-8";
+   //echo "NOT UTF-8";
 // die daten sind anscheinend ISO-8859-2 (laut chardet)
 
 $command = "iconv -f ISO-8859-15 -t UTF8 -c -o tmp/import-utf8.csv tmp/import-src.csv";
@@ -261,6 +264,7 @@ $payotherId =  $rs['id'];
 
 array_shift($csvArray);//Erste Zeile löschen
  //print_r($csvArray);
+echo "</head><body>".$menu['pre_content'].$menu['start_content'];
 echo "<table id='treffer' class='tablesorter'>\n"; 
 echo "<thead><tr ><th>Ebayname</th><th>Name</th><th>Anschrift</th><th>Email</th><th>1.Artikel</th></tr></thead>\n<tbody>\n"; 
 $i = 0;
@@ -329,9 +333,9 @@ if ($csvArray) foreach($csvArray as $key => $row) {
 }
 
 echo "</tbody></table>\n";
-echo 
-$menu['end_content'].
-'</body>';
+echo  $menu['end_content'];
+echo '</body>';
+echo '</html>';
 
 
 

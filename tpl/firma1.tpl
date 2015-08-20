@@ -107,6 +107,9 @@
       var file = '{Q}' == 'C' ? '../is.pl' : '../ir.pl';
       window.location.href = file + '?action=add&type=invoice&vc={CuVe}&{CuVe}_id={FID}'; 
     }
+    function doIb() { //neuer Brief
+      window.location.href = '../letter.pl?action=add';
+    }
     function doLxCars() {
         uri='lxcars/lxcmain.php?owner={FID}&task=1' 
         window.location.href=uri;
@@ -230,9 +233,12 @@
                     event.preventDefault();
                 };
             });
-            
-            $("#qrbutt").button().click(
+           
+     /*    
+         // ------- QR Code wird durch PHP erstellt -------   derzeit so auch live im Produktiv-System
+         $("#qrbutt").button().click(
             function( event ) {
+            	//F1=open("vcardexp.php?qr=1&Q={Q}&fid={FID}","QR","width=400, height=400, left=100, top=50, scrollbars=yes");
 				$.ajax({
    					type: "GET",
   					url: "vcardexp.php?qr=1&Q={Q}&fid={FID}",
@@ -240,7 +246,29 @@
      					$(".fancybox").trigger('click');
    					}
  				});  
-            });
+            });  
+
+			*/
+			
+		   // --------   QR Code wird durch Jquery erstellt   --------  nur im Entwicklungssystem aktiv			
+		   $("#qrbutt").button().click(
+              function( event ) {
+				$.ajax({
+   					type: "GET",
+  					url: "vcardexp.php?qr=1&Q={Q}&fid={FID}",
+   					success: function(strResponse){
+     					$("#qrcode").qrcode({
+				 			"mode": 0,
+  							"size": 250,
+    			  			"color": "#3a3",
+    			  			"text": strResponse
+						});
+   					}
+ 				});  
+ 				$(".fancybox").trigger('click');
+ 				$(".fancybox").empty();
+            }); 
+	
             $(".fancybox").fancybox();
         }
     );
@@ -254,7 +282,8 @@
 <div id='menubox1' >
     <form>
     <span style="float:left;" valign="bottom">
-        <div class="fancybox" rel="group" href="tmp/qr_{loginname}.png"><img src="" alt="" /></div>
+        <!-- <div class="fancybox" rel="group" href="tmp/qr_{loginname}.png"><img src="" alt="" /></div> -->
+        <div id="qrcode" class="fancybox" rel="group"><img src="" alt="" /></div>
         <button name="firma1.php?Q={Q}&id={FID}">.:Custombase:.</button>
         <button name="firma2.php?Q={Q}&fid={FID}">.:Contacts:.</button>
         <button name="firma3.php?Q={Q}&fid={FID}">.:Sales:.</button>
@@ -322,6 +351,7 @@
             <br />
             <br class='mini'>
                {DHL_BUTTON}
+               {BRIEF_BUTTON}
                {LxCars_BUTTON}
             <br /><br />
             <span style="visibility:{zeige_bearbeiter};">.:employee:.: {bearbeiter}</span>

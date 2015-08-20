@@ -10,6 +10,8 @@
 
 <link rel="stylesheet" href="jquery-plugins/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
 <script type="text/javascript" src="jquery-plugins/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+<script type="text/javascript" src="jquery-plugins/qrcode/jquery.qrcode-0.12.0.js"></script>
+
 
 <script language="JavaScript" type="text/javascript">
     function showCall() {
@@ -233,24 +235,7 @@
                     event.preventDefault();
                 };
             });
-           
-     /*    
-         // ------- QR Code wird durch PHP erstellt -------   derzeit so auch live im Produktiv-System
-         $("#qrbutt").button().click(
-            function( event ) {
-            	//F1=open("vcardexp.php?qr=1&Q={Q}&fid={FID}","QR","width=400, height=400, left=100, top=50, scrollbars=yes");
-				$.ajax({
-   					type: "GET",
-  					url: "vcardexp.php?qr=1&Q={Q}&fid={FID}",
-   					success: function(strResponse){
-     					$(".fancybox").trigger('click');
-   					}
- 				});  
-            });  
-
-			*/
-			
-		   // --------   QR Code wird durch Jquery erstellt   --------  nur im Entwicklungssystem aktiv			
+		   // --------   QR Code wird durch Jquery erstellt
 		   $("#qrbutt").button().click(
               function( event ) {
 				$.ajax({
@@ -264,11 +249,10 @@
     			  			"text": strResponse
 						});
    					}
- 				});  
+ 				});
  				$(".fancybox").trigger('click');
  				$(".fancybox").empty();
             }); 
-	
             $(".fancybox").fancybox();
         }
     );

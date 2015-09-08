@@ -105,12 +105,6 @@
   module: crm/prtetikett.php
   target: _blank
 - parent: crm_other
-  id: crm_other_dhl
-  name: DHL
-  order: 200
-  access: crm_other
-  module: crm/dhl.php
-- parent: crm_other
   id: crm_other_ebayimporter
   name: eBayImporter
   order: 300
@@ -239,12 +233,6 @@
   order: 700
   access: crm_adminuser
   module: crm/user1.php
-- parent: crm_admin
-  id: crm_admin_dhl
-  name: DHL
-  order: 800
-  access: crm_admin
-  module: crm/dhladm.php
 - parent: crm_admin
   id: crm_admin_status
   name: Status

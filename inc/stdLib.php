@@ -782,7 +782,7 @@ function mkHeader() {
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/FileUpload/js/jquery.iframe-transport.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/FileUpload/js/jquery.fileupload.js'.$SN,
         'JQWIDGET'      => $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/minified/jquery.ui.widget.min.js'.$SN,
-        'THEME'         => ($_SESSION['theme']!='')? $LVID  .$_SESSION['baseurl'].'crm/jquery-themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN:'<link id="blue-style" rel="stylesheet" type="text/css" href="'.$_SESSION['baseurl'].'crm/jquery-themes/blue-style/jquery-ui.css'.$LN,
+        'THEME'         => ($_SESSION['theme']!='')? $LVID .$_SESSION['baseurl'].'crm/jquery-themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN:'<link id="blue-style" rel="stylesheet" type="text/css" href="'.$_SESSION['baseurl'].'crm/jquery-themes/blue-style/jquery-ui.css'.$LN,
         'CRMCSS'        => $LV.$_SESSION['baseurl'].'crm/css/'.$_SESSION["stylesheet"].'/main.css'.$LN,
         'BOXCSS'        => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/selectBoxIt/selectBoxIt.css'.$LN,
         'JUI-DROPDOWN'  => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/jui_dropdown-master/jquery.jui_dropdown.css'.$LN.

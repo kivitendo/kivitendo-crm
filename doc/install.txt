@@ -34,7 +34,7 @@ Vorrausetzungen:
 	fpdf,fpdi 
 	ttf-freefont
 	php-gd,php-imap
-    php5-curl 
+    	php5-curl 
 
 Fast alle Pakete können unter debianoiden Systemen in der Konsole mit folgendem Befehl installiert werden.
 apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-mdb2 php-mdb2-driver-pgsql php-fpdf libfpdi-php imagemagick ttf-freefont php5-curl tinymce libphp-jpgraph
@@ -62,9 +62,10 @@ ln -s  ../../../kivitendo-crm/update/add_crm_master_rights.sql add_crm_master_ri
 
 Übersetzungen anlegen:
 cd kivitendo-erp/locale/de
-ln -s ../../../kivitendo-crm/update/missing missing
-cd kivitendo-erp
-scritps/locales.pl de
+mkdir more
+ln -s ../../../../kivitendo-crm/menu/t8e/menu.de crm-menu.de
+ln -s ../../../../kivitendo-crm/menu/t8e/menu-admin.de crm-menu-admin.de
+
 
 Webserver neu starten
 z.B. Debian / Ubuntu:
@@ -270,4 +271,4 @@ patch -p1 -b templates/webpages/is/form_footer.html < crm/update/is_form_footer.
 
 Weitere Informationen, professioneller Support:
 http://www.lx-system.de
-
+http://lxcars.de

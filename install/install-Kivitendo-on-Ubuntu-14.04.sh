@@ -77,8 +77,22 @@ sed -i "s/password =$/password = $PASSWD/" $DIR/kivitendo-erp/config/kivitendo.c
 
 
 chown -R www-data: *
-cd kivitendo-erp/
+cd $DIR/kivitendo-erp/
 ln -s ../kivitendo-crm/ crm
+
+##Menü verlinken oder kopieren:
+cd $DIR/kivitendo-erp/menus/users
+ln -s ../../../kivitendo-crm/menu/10-crm-menu.yaml 10-crm-menu.yaml
+
+##Rechte für CRM ermöglichen:
+cd $DIR/kivitendo-erp/sql/Pg-upgrade2-auth
+ln -s  ../../../kivitendo-crm/update/add_crm_master_rights.sql add_crm_master_rights.sql
+
+##Übersetzungen anlegen:
+cd $DIR/kivitendo-erp/locale/de
+mkdir more
+ln -s ../../../../kivitendo-crm/menu/t8e/menu.de crm-menu.de
+ln -s ../../../../kivitendo-crm/menu/t8e/menu-admin.de crm-menu-admin.de
 
 var=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort | awk '{print $4,v++,"off"}' | tail -n 8)
 _temp="/tmp/answer.$$"

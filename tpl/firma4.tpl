@@ -5,7 +5,6 @@
 {JQUERY}
 {JQUERYUI}
 {THEME} 
-    <script type="text/javascript" src="{CRMURL}inc/dokument.js"></script>
 {JAVASCRIPTS}
     <script language="JavaScript">
     <!--
@@ -176,5 +175,6 @@
 <!-- Hier endet die Karte ------------------------------------------->
 </span>
 {END_CONTENT}
+<script type="text/javascript" src="{CRMURL}inc/dokument.js"></script>
 </body>
 </html>

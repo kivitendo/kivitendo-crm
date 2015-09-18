@@ -3283,7 +3283,7 @@ function ERPNutzerVonGruppe($grp_name) {
 			$user_id = $zuordnung['user_id'];
 			foreach ( $_SESSION['erp_nutzer'] as $key => $nutzer ) {
 					if($nutzer['user_id'] == $user_id) {
-						$rueck[$i] = array("id"=>$user_id,"login"=>$nutzer['login'],"name"=>$nutzer['login']);
+						$rueck[$i] = array("id"=>$user_id,"login"=>$nutzer['login'],"name"=>$nutzer['name']);
 						$i++;
 					}
 			}

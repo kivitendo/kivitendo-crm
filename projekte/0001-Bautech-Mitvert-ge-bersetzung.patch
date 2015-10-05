@@ -1,0 +1,32 @@
+From d7cceb74ab89964fbb1397d4f950cc64cc98edba Mon Sep 17 00:00:00 2001
+From: Ronny Kumke <ronny@lxcars.de>
+Date: Mon, 5 Oct 2015 13:20:42 +0200
+Subject: [PATCH] =?UTF-8?q?Bautech=20Mitvert=C3=A4ge=20=C3=BCbersetzung?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ inc/locale/firma.de | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/inc/locale/firma.de b/inc/locale/firma.de
+index 90abc1d..804a424 100644
+--- a/inc/locale/firma.de
++++ b/inc/locale/firma.de
+@@ -190,9 +190,9 @@ $texts = array(
+     '.:open:.'                                                     => 'offen',
+     '.:OP:.'                                                       => 'OP',
+     '.:Opportunitys:.'                                             => 'Auftragschancen',
+-    '.:order:.'                                                    => 'Auftrag',
+-    '.:orders:.'                                                   => 'Auftrag',
+-    '.:orders:.'                                                   => 'Aufträge',
++    '.:order:.'                                                    => 'Mietvertrag',
++    '.:orders:.'                                                   => 'Mietvertrag',
++    '.:orders:.'                                                   => 'Mietverträge',
+     '.:outstanding:.'                                              => 'offene',
+     '.:paid:.'                                                     => 'bezahlt',
+     '.:part:.'                                                     => 'Artikel',
+-- 
+1.9.1
+

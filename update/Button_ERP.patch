@@ -1,0 +1,42 @@
+From 31283fe02535e163601ce22906fd73c409db2241 Mon Sep 17 00:00:00 2001
+From: Ronny Kumke <ronny@lxcars.de>
+Date: Tue, 6 Oct 2015 09:56:55 +0200
+Subject: [PATCH] =?UTF-8?q?CRM=20Button=20f=C3=BCr=20Rechnungen,=20Angebot?=
+ =?UTF-8?q?e=20und=20Auftaege?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ templates/webpages/is/form_footer.html | 2 +-
+ templates/webpages/oe/form_footer.html | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/templates/webpages/is/form_footer.html b/templates/webpages/is/form_footer.html
+index 2c271dd..3cfea64 100644
+--- a/templates/webpages/is/form_footer.html
++++ b/templates/webpages/is/form_footer.html
+@@ -150,7 +150,7 @@
+ <p>[% print_options %]</p>
+ 
+   [% IF id %]
+-
++	<input class="submit" type="button" name="crm" id="crm" value="CRM" onClick="window.location.href='crm/firma1.php?Q=C&id=[% customer_id %]'">
+     <input class="submit" type="submit" accesskey="u" name="action" id="update_button" value="[% 'Update' | $T8 %]">
+     <input class="submit" type="submit" name="action" value="[% 'Ship to' | $T8 %]">
+     <input class="submit" type="submit" name="action" value="[% 'Print' | $T8 %]" data-require-transaction-description="[% INSTANCE_CONF.get_require_transaction_description_ps %]">
+diff --git a/templates/webpages/oe/form_footer.html b/templates/webpages/oe/form_footer.html
+index 0956f20..d498c40 100644
+--- a/templates/webpages/oe/form_footer.html
++++ b/templates/webpages/oe/form_footer.html
+@@ -136,6 +136,7 @@
+ <p>[% print_options %]</p>
+ 
+ [% label_edit %]<br>
++<input class="submit" type="button" name="crm" id="crm" value="CRM" onClick="window.location.href='crm/firma1.php?Q=C&id=[% customer_id %]'">
+ <input class="submit" type="submit" name="action_update" id="update_button" value="[% 'Update' | $T8 %]">
+ <input class="submit" type="submit" name="action_ship_to" value="[% 'Ship to' | $T8 %]">
+ <input class="submit" type="submit" name="action_print" value="[% 'Print' | $T8 %]" data-require-transaction-description="[% INSTANCE_CONF.get_require_transaction_description_ps %]">
+-- 
+1.9.1
+

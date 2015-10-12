@@ -63,6 +63,7 @@ ln -s  ../../../kivitendo-crm/update/add_crm_master_rights.sql add_crm_master_ri
 Übersetzungen anlegen:
 cd kivitendo-erp/locale/de
 mkdir more
+cd kivitendo-erp/locale/de/more
 ln -s ../../../../kivitendo-crm/menu/t8e/menu.de crm-menu.de
 ln -s ../../../../kivitendo-crm/menu/t8e/menu-admin.de crm-menu-admin.de
 

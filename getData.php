@@ -11,8 +11,6 @@ ob_start();
 echo $menu['stylesheets'];
 echo $menu['javascripts'];
 echo $head['CRMCSS']; 
-echo $head['JQUERY']; 
-echo $head['JQUERYUI']; 
 echo $head['JQTABLE'];
 echo $head['THEME']; 
 echo $head['JUI-DROPDOWN']; 

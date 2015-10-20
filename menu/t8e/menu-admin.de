@@ -6,7 +6,7 @@ use utf8;
 
 # add the missing texts and run locales.pl to rebuild
 
-$missing = {
+$self->{more_texts} = {
   'Add new Addresses'           => 'Neue Adressen erfassen',
   'Admin: Label, Category, Messages, Status, KnowHow write' => 'Admin für Etikett, Kategorien, Meldungen, Status, Schreibrecht Wissens-DB',
   'Documens'                    => 'Dokumente',

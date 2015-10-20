@@ -231,7 +231,7 @@
   name: User
   icon: user
   order: 700
-  access: crm_adminuser
+  access: crm_user
   module: crm/user1.php
 - parent: crm_admin
   id: crm_admin_status

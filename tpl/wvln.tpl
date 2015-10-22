@@ -2,14 +2,11 @@
     <head><title></title>
 {STYLESHEETS}
 {CRMCSS}
-{JQUERY}
-{JQUERYUI}
+{JAVASCRIPTS}   
 {THEME}
 {JQTABLE}
-{JQDATE}
 {JQFILEUP}
 {JQWIDGET}
-{JAVASCRIPTS}   
     <script language="JavaScript">
     <!--
         var WVLID = 0;

@@ -2,11 +2,9 @@
     <head><title></title>
 {STYLESHEETS}
 {CRMCSS}
-{JQUERY}
-{JQUERYUI}
+{JAVASCRIPTS}
 {THEME}
     <script type="text/javascript" src="{CRMPATH}inc/dokument.js"></script>
-{JAVASCRIPTS}
 <body onLoad="dateibaum('left','/'), hidelinks(0); pickup = {PICUP}; tiny = {tiny};">
 {PRE_CONTENT}
 {START_CONTENT}

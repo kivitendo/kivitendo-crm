@@ -8,11 +8,8 @@
 <head><title></title>
 <?php echo $menu['stylesheets']; ?>
 <?php echo $head['CRMCSS']; ?>
-<?php echo $head['JQUERY']; ?>
-<?php echo $head['JQUERYUI']; ?>
-<?php echo $head['THEME']; ?>
-<?php echo $head['JQDATE']; ?>
 <?php echo $menu['javascripts']; ?>
+<?php echo $head['THEME']; ?>
     <script type='text/javascript'>
          function getData() {
              document.inventurs.comment.value = document.inventur.comment.value;

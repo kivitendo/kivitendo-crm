@@ -2,10 +2,8 @@
     <head><title>Mandanten Stamm</title>
 {STYLESHEETS}
 {CRMCSS}
-{JQUERY}
-{JQUERYUI}
-{THEME}
 {JAVASCRIPTS}
+{THEME}
 </head>
 <body>
 {PRE_CONTENT}

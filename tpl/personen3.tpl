@@ -2,10 +2,8 @@
 <head><title></title>
 {STYLESHEETS}
 {CRMCSS}
-{JQUERY}
-{JQUERYUI}
-{THEME}
 {JAVASCRIPTS}
+{THEME}
 
     <script language="JavaScript">
     <!--

@@ -2,11 +2,9 @@
     <head><title></title>
 {STYLESHEETS}
 {CRMCSS}
-{JQUERY}
-{JQUERYUI}
+{JAVASCRIPTS}
 {THEME}    
 {JQTABLE}    
-{JAVASCRIPTS}
     <script language="JavaScript">
     <!--
         function showO(id) {

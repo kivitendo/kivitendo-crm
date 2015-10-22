@@ -3,12 +3,9 @@
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 {STYLESHEETS}
 {CRMCSS}
-{JQUERY}
-{JQUERYUI}
-{THEME}
-{JQDATE}
-{JQTABLE}
 {JAVASCRIPTS}
+{THEME}
+{JQTABLE}
 	<script language="JavaScript">
 	<!--
 		function suchMa() {

@@ -11,9 +11,6 @@
 echo $menu['stylesheets'];
 echo $menu['javascripts'];
 echo $head['CRMCSS'];
-echo $head['JQUERY'];
-echo $head['JQUERYUI'];
-echo $head['JQDATE'];
 echo $head['THEME'];
 ?>
     <script type='text/javascript' src='inc/help.js'></script>

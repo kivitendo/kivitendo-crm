@@ -2,10 +2,8 @@
 	<head><title></title>
 {STYLESHEETS}
 {CRMCSS}
-{THEME} 
-{JQUERY}
-{JQUERYUI}
 {JAVASCRIPTS}    
+{THEME} 
 	<script language="JavaScript">
 	<!--
 		function showH() {

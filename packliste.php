@@ -133,11 +133,8 @@
 <?php 
       echo $menu['stylesheets']; 
       echo $head['CRMCSS'];
-      echo $head['JQUERY'];
-      echo $head['JQUERYUI'];
-      echo $head['JQDATE'];
-      echo $head['THEME'];
-      echo $menu['javascripts'];?> 
+      echo $menu['javascripts']; 
+      echo $head['THEME']; ?>
 <script language="JavaScript">
         $(function() {
             $( "#datum" ).datepicker($.datepicker.regional[ "de" ]);
@@ -154,5 +151,6 @@ Packliste erstellen ab:<br>
 <input type="text" size="10" name="datum" id="datum" value="" > tt.mm.jjjj <br>
 <input type="submit" name="read" value="erstellen">
 </form>
+<?php echo $menu['end_content']; ?>
 </body>
 </html>

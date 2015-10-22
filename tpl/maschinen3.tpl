@@ -3,11 +3,8 @@
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 {STYLESHEETS}
 {CRMCSS}
-{JQUERY}
-{JQUERYUI}
-{THEME}
-{JQDATE}
 {JAVASCRIPTS}
+{THEME}
 	<script language="JavaScript">
 	<!--
 		function suchMa() {

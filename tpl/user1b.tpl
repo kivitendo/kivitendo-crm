@@ -2,7 +2,6 @@
 	<head><title>User Stamm</title>
 {STYLESHEETS}
 {CRMCSS}
-{JQUERY}
 {JAVASCRIPTS}
     </head>
 <body>

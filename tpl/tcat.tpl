@@ -2,10 +2,8 @@
     <head><title></title>
     {STYLESHEETS}
     {CRMCSS}
-    {JQUERY}
-    {JQUERYUI}
-    {THEME}
     {JAVASCRIPTS}
+    {THEME}
     <script language="JavaScript">
         function getColor(idx) {
             f1=open('farbwahl.html?idx='+idx,'farbe','width=500,height=350');

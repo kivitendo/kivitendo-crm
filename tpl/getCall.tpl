@@ -2,10 +2,8 @@
 	<head><title>LX - CRM</title>
 {STYLESHEETS}
 {CRMCSS}
-{JQUERY}
-{JQUERYUI}
+{JAVASCRIPTS}
 {THEME}
-{JQDATE}
 {JQTABLE}
 	<script language="JavaScript">
 	<!--
@@ -48,7 +46,6 @@
 
 <body onLoad="focus(), showwv()">
 
-<!-- Hier beginnt die Karte  ------------------------------------------->
 <form name="call" action="getCall.php" enctype='multipart/form-data' method="post">
 <INPUT TYPE="hidden" name="MAX_FILE_SIZE" value="2000000">
 <table width="100%">
@@ -148,6 +145,5 @@ WV<input type="checkbox" name="wvl" value="1" onClick="showwv()" {wvl}> <span id
 <option value="30">30</option>
 </select>
 <button onClick='self.close();'> close </button>
-<!-- Hier endet die Karte ------------------------------------------->
 </body>
 </html>

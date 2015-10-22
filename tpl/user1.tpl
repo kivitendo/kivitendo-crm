@@ -2,12 +2,10 @@
     <head><title>.:usersettings:.</title>
 {STYLESHEETS}
 {CRMCSS}
+{JAVASCRIPTS}
 {BOXCSS}
-{JQUERY}
-{JQUERYUI}
 {JQTABLE}
 {THEME}    
-{JAVASCRIPTS}
 {JQBOX}
 <style type="text/css">
     input.b0 { width:50px; }

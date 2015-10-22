@@ -2,12 +2,9 @@
     <head><title></title>
 {STYLESHEETS}
 {CRMCSS}
-{JQUERY}
-{JQUERYUI}
-{THEME}
-{JQDATE}
-{JQTABLE}
 {JAVASCRIPTS}
+{THEME}
+{JQTABLE}
 	<script language="JavaScript">
 	<!--
     function hide(nr) {

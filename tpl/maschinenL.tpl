@@ -3,8 +3,6 @@
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 {STYLESHEETS}
 {CRMCSS}
-{JQUERY}
-{JQUERYUI}
 {JAVASCRIPTS}
 <body >
 {PRE_CONTENT}

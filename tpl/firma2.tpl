@@ -2,11 +2,9 @@
         <head><title></title>
 {STYLESHEETS}
 {CRMCSS}
-{JQUERY}
-{JQUERYUI}
+{JAVASCRIPTS}
 {THEME}
 {JQTABLE}
-{JAVASCRIPTS}
 	<link rel="stylesheet" href="jquery-plugins/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
 	<script type="text/javascript" src="jquery-plugins/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script> 
     <script language="JavaScript">

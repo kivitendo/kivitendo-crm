@@ -2,10 +2,8 @@
 	<head><title>User Stamm</title>
     {STYLESHEETS}
     {CRMCSS}
-    {JQUERY}
-    {JQUERYUI}
-    {THEME}
     {JAVASCRIPTS}    
+    {THEME}
 	<script language="JavaScript">
 	<!--
 		function suchFa() {

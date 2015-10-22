@@ -2,11 +2,8 @@
 <head><title></title>
 {STYLESHEETS}
 {CRMCSS}
-{JQUERY}
-{JQUERYUI}
-{JQDATE}
-{THEME}
 {JAVASCRIPTS}
+{THEME}
     <script language="JavaScript">
     <!--
     function suchFa() {

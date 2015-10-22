@@ -3,8 +3,6 @@
       {STYLESHEETS}
               <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
 		{CRMCSS}
-		{JQUERY}
-		{JQUERYUI}
 		{JAVASCRIPTS}
 
        

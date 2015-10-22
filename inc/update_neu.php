@@ -35,7 +35,7 @@
     $rs  = $_SESSION["db"]->getAll($sql);
     if ( !$rs ) { $isnow = array(); } 
     else { foreach ( $rs as $row ) { $isnow[] = $row["tag"];} };
-    chdir("update");
+    chdir($_SESSION['crmpath']."/update");
     $update = glob("crm_*.sql");
     chdir("..");
     $code = false;

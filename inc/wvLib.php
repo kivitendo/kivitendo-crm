@@ -201,8 +201,12 @@ function updateVertrag($data) {
 		return $data["vid"];
 	}
 }
-function insHistory($mid,$art,$beschreibung) {
-	$sql="insert into history (mid,datum,art,beschreibung) values ($mid,'".date("Y-m-d")."','$art','$beschreibung')";
+function insHistory($mid,$art,$beschreibung,$bezug=false) {
+    if ( $bezug ) {
+         $sql="insert into history (mid,itime,art,beschreibung,bezug) values ($mid,now(),'$art','$beschreibung',$bezug)";
+    } else {
+         $sql="insert into history (mid,itime,art,beschreibung) values ($mid,now(),'$art','$beschreibung')";
+    }
 	$rc=$_SESSION['db']->query($sql);
 	return $rc;
 }

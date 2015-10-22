@@ -163,8 +163,17 @@ function getLager($data) {
    $sql .= '(select sum(qty) from inventory where '.$lager.' AND parts_id=p.id %s) as bestand ';
    $sql .= 'from parts p left join partsgroup pg on pg.id = p.partsgroup_id ';
    $sql .= 'where 1=1 ';
-   if ($data['dienstl'] != 1) $sql .= 'AND inventory_accno_id is not NULL ';
-   if ($data['erzeugn'] != 1) $sql .= 'AND expense_accno_id is not NULL ';
+   if ( $data['erzeugnis']== 1 AND $data['dienstl'] != 1) { 
+        $where = "AND inventory_accno_id is NULL AND assembly = 't' or inventory_accno_id is not NULL AND assembly = 'f'  ";
+   } else if ( $data['erzeugnis']!= 1 AND $data['dienstl'] == 1)  { 
+        $where = "AND assembly = 'f'  ";
+   } else if ( $data['erzeugnis']== 1 AND $data['dienstl'] == 1)  { 
+        $where = '';
+   } else {
+        $where = "AND inventory_accno_id is not NULL  ";
+   };
+   $sql .= $where;
+   //if ( $data['erzeugnis']!=1 or $data['dienstl'] != 1 ) $where .= "AND inventory_accno_id is not NULL  ";
    if ($data['datum'] != '') {
       $tmp = split('\.',$data['datum']);
       $date = $tmp[2].'-'.$tmp[1].'-'.$tmp[0];
@@ -173,6 +182,7 @@ function getLager($data) {
       $and = '';
    }
    $sql = sprintf($sql,$and).' order by '.$order;
+   echo $sql."<br>";
    $artikel = $_SESSION['db']->getAll($sql,DB_FETCHMODE_ASSOC);
    return $artikel;
 }

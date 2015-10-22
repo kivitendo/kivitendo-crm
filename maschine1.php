@@ -3,7 +3,6 @@
     include("inc/template.inc");
     include("inc/wvLib.php");    
     $t = new Template($base);
-
     $disp="style='display:none'";
     if ($_POST["search"] or $_GET["sernr"]) {
         if ($_POST["serialnumber"]) {
@@ -43,22 +42,22 @@
         $rc=saveNewStandort($_POST["standort"],$_POST["mid"]);
         $data=getSernumber($_POST["serialnumber"]);
         $data=$data[0];
-        $hist=getHistory($data["mid"]);
+        $hist=getHistory($data["id"]);
         $disp="";
     } else if ($_POST["cnt"] && $_POST["mid"]) {
         $rc=updateCounter($_POST["counter"],$_POST["mid"]);
         $data=getSernumber($_POST["serialnumber"]);
         $data=$data[0];
-        $hist=getHistory($data["mid"]);
+        $hist=getHistory($data["id"]);
         $disp="";
     } else if ($_POST["idat"] && $_POST["mid"]) {
         $rc=updateIdat($_POST["inspdatum"],$_POST["mid"]);
         $data=getSernumber($_POST["serialnumber"]);
         $data=$data[0];
-        $hist=getHistory($data["mid"]);
+        $hist=getHistory($data["id"]);
         $disp="";
     }
-    $cnt=($data["mid"])?getCounter($data["mid"]):"";
+    //$cnt=($data["mid"])?getCounter($data["mid"]):"";
     $t->set_file(array("masch" => "maschinen1.tpl"));
     doHeader($t);
     $t->set_var(array(
@@ -73,9 +72,9 @@
         serialnumber => $data["serialnumber"],
         contractnumber => $data["contractnumber"],
         inspdatum => db2date($data["inspdatum"]),
-        counter     => $cnt,
+        counter     => $data['counter'],
         cid => $data["cid"],
-        mid => $data["mid"],                        
+        mid => ($data["mid"])?$data["mid"]:$data["id"],
         customer => $data["name"],
         custid => $data["customer_id"]
     ));

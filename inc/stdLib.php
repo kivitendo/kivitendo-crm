@@ -779,17 +779,10 @@ function mkHeader() {
     $LVID = '<link id="'.$_SESSION['theme'].'" rel="stylesheet" type="text/css" href="';
     $LN = '">'."\n";
     $head = array(
-        //'JQUERY'        => $SV.$_SESSION['baseurl'].'crm/jquery/jquery.min.js'.$SN,
-       // 'JQUERYUI'      => $LV.$_SESSION['baseurl'].'crm/jquery-themes/base/jquery-ui.css'.$LN.
-       //                    $SV.$_SESSION['baseurl'].'crm/jquery/jquery-ui.min.js'.$SN,
         'JQTABLE'       => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/Table/jquery.tablesorter.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/Table/addons/pager/jquery.tablesorter.pager.js'.$SN.
                            $LV.$_SESSION['baseurl'].'crm/jquery-plugins/Table/themes/blue/style.css'.$LN,
         'JQBOX'         => $SV.$_SESSION['baseurl'].'/crm/jquery-plugins/selectBoxIt/selectBoxIt.js'.$SN,
-        /*'JQDATE'        => $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/'.(($_SESSION['countrycode']=='en')?
-                                                             'jquery.ui.datepicker.js':
-                                                             'i18n/jquery.ui.datepicker-'.$_SESSION['countrycode']).
-                                                             '.js'.$SN,*/
         'JQTIMECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/timepicker-master/jquery.ui.timepicker.css'.$LN,
         'JQTIME'        => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/timepicker-master/jquery.ui.timepicker.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/timepicker-master/i18n/jquery.ui.timepicker-'.$_SESSION['countrycode'].'.js'.$SN,
@@ -806,7 +799,6 @@ function mkHeader() {
         'FULLCALCSS'    => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/fullcalendar.css'.$LN.
                            $LV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/fullcalendar.print.css" media="print'.$LN,
         'FULLCALJS'     => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/lib/moment.min.js'.$SN.
-                           //$SV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar-2.0.0/fullcalendar/fullcalendar.js'.$SN.//aktuelle 
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/fullcalendar.min.js'.$SN. 
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/lang/'.$_SESSION['countrycode'].'.js'.$SN,  
         'COLORPICKERCSS'=> $LV.$_SESSION['baseurl'].'crm/jquery-plugins/colorPicker/syronex-colorpicker.css'.$LN,
@@ -831,7 +823,6 @@ function doHeader(&$t) {
         'START_CONTENT' => $menu['start_content'],
         'END_CONTENT'   => $menu['end_content'],
         'JQTABLE'       => $head['JQTABLE'],
-       // 'JQDATE'        => $head['JQDATE'],
         'JQWIDGET'      => $head['JQWIDGET'],
         'JQFILEUP'      => $head['JQFILEUP'],
         'THEME'         => $head['THEME'],

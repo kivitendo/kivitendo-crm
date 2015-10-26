@@ -92,6 +92,7 @@
             success: function( json ) {
                 var obj = $.parseJSON( json.trim() ) ; 
                 var max = 0; 
+                console.log(json);
                 $.each( obj, function( i, val ){
                     if( val.id > max ) max = val.id;
                     $( "#sortable" ).prepend("<li class='ui-state-default remove_" + val.id + "'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' data-lang='DOUBLE_KLICKx' value='" + val.label + "' name='cat_" + val.id + "'>"

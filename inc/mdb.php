@@ -17,6 +17,7 @@ final class myDB extends MDB2 {
     private $errfile = "/tmp/lxcrm.err";
     private $logfile = "/tmp/lxcrm.log";
     private $lfh = false;
+    var $JVer = false;
 
     /**********************************************
     * dbFehler - Fehler in ein Log-File ausgeben
@@ -90,6 +91,12 @@ final class myDB extends MDB2 {
         }
         $this->db->setFetchMode(MDB2_FETCHMODE_ASSOC);
         if ($this->log) $this->writeLog('Connect: ok ');
+        $sql = 'SELECT version()';
+        $rs  = $this->getOne($sql);
+        if ($this->log) $this->writeLog(print_r($rs,true));
+        preg_match('/PostgreSQL\s*([\d]+)\.([\d]+)\..*/',$rs['version'],$ver);
+        if ( ($ver[1] == '9' and $ver[2] >= '3') or $ver[1] >= '10' ) $this->JVer = true;
+        if ($this->log) $this->writeLog(print_r($ver,true)."!".$this->JVer.'!');
         return $this->db;
     }
 
@@ -312,7 +319,19 @@ final class myDB extends MDB2 {
         }
         return true;
     }
-    
+    public function getJson($sql,$pre = false) {
+        if ($this->log) $this->writeLog('getJson: '.$sql);
+        $rs = $this->getAll($sql);
+        if ($this->log) $this->writeLog('rs: '.print_r($rs,true));
+        if ( $pre ) {
+            array_unshift($rs,$pre);
+            //$rs = $pre + $rs;
+            if ($this->log) $this->writeLog('pre: '.print_r($rs,true));
+        }
+        $rs = json_encode($rs);
+        if ($this->log) $this->writeLog('json: '.print_r($rs,true));
+        return $rs;
+    }    
     public function setShowError( $value ){
         $this->showErr = $value;
     }    

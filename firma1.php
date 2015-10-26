@@ -185,7 +185,7 @@
                                 '<a class="firmabutton" href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0"></a>&nbsp;':'',  
             'DHL_BUTTON'     => ($_SESSION['zeige_dhl']=='t')?
                                 '<a class="firmabutton" href="#" onCLick="dhl();" title="DHL"><img src="image/dhl.png" alt="DHL" border="0"></a>&nbsp;':'', 
-            'QR_BUTTON' 	 => '<a class="firmabutton" id="qrbutt" href="#" title="QR Code erstellen"><img src="image/qrn.png" alt=".:print label:." border="0"></a>&nbsp;',  
+            'QR_BUTTON' 	 => '<a class="firmabutton" id="qrbutt" href="#" title="QR Code erstellen"><img src="image/qrn.png" alt=".:print qr:." border="0"></a>&nbsp;',  
             'BRIEF_BUTTON'   => '<a class="firmabutton" href="#" onClick="doIb();"><img src="image/mail.png" title="neuen Brief erstellen" border="0"></a>&nbsp;',
             'LxCars_BUTTON'  => ($_SESSION['zeige_lxcars']=='t'&&$Q=="C")?
                                '<a class="firmabutton" href="#" onCLick="doLxCars();" title="KFZ-Daten"><img src="image/auto.png" alt="LxCars"></a>&nbsp;':'',

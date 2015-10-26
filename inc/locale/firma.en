@@ -225,6 +225,7 @@ $texts=array(
     '.:presearch:.'                                                => 'presearch',
     '.:Price group:.'                                              => 'Price group',
     '.:print label:.'                                              => 'Print Label',
+    '.:print qr:.'                                                 => 'QR-Code',
     '.:privatephone:.'                                             => 'private phone',
     '.:privat:.'                                                   => 'Private',
     '.:protocol:.'                                                 => 'protocol',

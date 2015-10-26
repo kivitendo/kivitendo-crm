@@ -82,7 +82,6 @@
 {START_CONTENT}
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;"> {FAART} .:keyin:./.:edit:.</p>
 
-<!-- Beginn Code ------------------------------------------->
 <div id="maintab">
     <ul>
     <li><a href="#tab1">.:address:.</a></li>
@@ -91,7 +90,7 @@
     <li><a href="#tab4">.:misc:.</a></li>
     <li><a href="#tab5">.:variablen:.</a></li>
     </ul>
-    <form name="neueintrag" enctype='multipart/form-data' action="{action}" method="post">
+    <form name="neueintrag" enctype='multipart/form-data' action="{action}" method="post" onSubmit='return chkPflicht();'>
     <input type="hidden" name="id" value="{id}">
     <input type="hidden" name="Q" id="Q" value="{Q}">
     <input type="hidden" id="shipto_id" name="shipto_id" value="{shipto_id}">
@@ -378,7 +377,7 @@
             <span class="feldxx">
                 <select name="currency_id" id="currency_id" tabindex="13">
 <!-- BEGIN currency -->
-                    <option value="{Cid}" {Psel}>{Ctext}</option>
+                    <option value="{Cid}" {Csel}>{Ctext}</option>
 <!-- END currency -->
                 </select>
             </span>

@@ -185,7 +185,8 @@
     }
     function hidelinks(lock) {
         if ( lock < 1 ) {
-            $('#subdownload').hide();
+            $('#subdownload').hide(); 
+            $('#showFile').hide();
             $('#lock').hide();
         }
         $('#subdelete').hide();
@@ -196,6 +197,7 @@
     function showlinks() {
         $('#subfilebrowser').show();
         $('#subdownload').show();
+		$('#showFile').show();
         $('#subdelete').show();
         $('#subedit').show();
         $('#lock').show();

@@ -4,6 +4,8 @@
 {CRMCSS}
 {JAVASCRIPTS}
 {THEME} 
+	<link rel="stylesheet" href="jquery-plugins/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+    <script type="text/javascript" src="jquery-plugins/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
     <script language="JavaScript">
     <!--
     var serreg;
@@ -43,6 +45,20 @@
             duration: 300
           },
         });
+       $(".fancybox").fancybox();
+       $("#showFile").button().click(
+            function( event ) {
+				$.ajax({
+					type: "GET",
+					url: "download.php?showdl=1",
+					success: function(strResponse){
+						$(".fancybox").attr("href", strResponse + aktfile);
+						$(".fancybox").trigger('click');
+						$(".fancybox").empty();
+						$(".fancybox").attr("href", "");
+					}
+			});
+		});
     });
 
     //-->
@@ -57,6 +73,7 @@
 <input type="hidden" name="Q" value="{Q}">
 <!--div style="position:absolute; top:5.4em; left:0.2em;  width:42em;"-->
 <div id='menubox2'>
+	<div class="fancybox" data-fancybox-type="iframe" href=""></div>
     <button name="{Link1}">.:Custombase:.</button>
     <button name="{Link2}">.:Contacts:.  </button>
     <button name="{Link3}">.:Sales:.     </button>
@@ -105,6 +122,7 @@
     <div style="float:left; width:100%;min-height:300px;   text-align:left; border-bottom: 0px;" class="normal">
         <button id="subfilebrowser" name="onClick=dateibaum('right',pfadleft)">.:Filebrowser:.</button>
         <button id="subdownload"    name="onClick=download();">.:download:.                   </button>
+		<button id="showFile"   >.:view:.                   </button>
         <button id="subdelete"      name="onClick=deletefile();">.:delete:.                   </button>
         <button id="submove"        name="onClick=movefile();">.:move:.                       </button> 
         <button id="subedit"        name="onClick=editattribut();">.:edit attribute:.         </button>

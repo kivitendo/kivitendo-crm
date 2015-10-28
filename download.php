@@ -1,6 +1,12 @@
 <?php
     require_once("inc/stdLib.php");
-    $file = "dokumente/".$_SESSION["dbname"].$_GET['file'];
+    if($_GET['showdl']){
+		echo "dokumente/".$_SESSION["dbname"];
+		return;
+    }
+    else {
+		$file = "dokumente/".$_SESSION["dbname"].$_GET['file'];
+    }
 ?>
 <html>
 <head><title>Download</title>

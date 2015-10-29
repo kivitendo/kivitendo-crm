@@ -47,7 +47,7 @@
         });
         $("#subdownload").button().click(
 			function( event ) {
-				window.open("download_new.php?file="+aktfile);
+				window.open("download.php?file="+aktfile);
 		});
 	   $(".fancybox").fancybox();
        $("#showFile").button().click(

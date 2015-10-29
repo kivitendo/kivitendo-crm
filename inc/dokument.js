@@ -204,7 +204,7 @@
         $('#submove').show();
     }
     function dateibaum(seite,start) {
-        console.log('Seite: '+seite+" Start: "+start)
+        //console.log('Seite: '+seite+" Start: "+start)
         if(seite=="left") { pfadleft=start; }
         else { 
             aktfile = '';
@@ -219,7 +219,7 @@
                url: "jqhelp/firmaserver.php?task=showDir&id="+seite+"&dir="+start,
     	       dataType: 'json',
     	       success: function(data){
-                   console.log(JSON.stringify(data))
+                   //console.log(JSON.stringify(data))
                    if (data.rc == 1) {
                        $('#path').empty().append(data.path);
                        $('#fb'+seite).empty().append(data.fb);

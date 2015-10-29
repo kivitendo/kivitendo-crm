@@ -5,18 +5,37 @@
 		return;
     }
     else {
-		$file = "dokumente/".$_SESSION["dbname"].$_GET['file'];
+		$pfad = 'dokumente/'.$_SESSION["dbname"].$_GET['file'];
+        if (isset($pfad)) {
+            $fullPath = $pfad;
+            if($fullPath) {
+                $fsize = filesize($fullPath);
+                $path_parts = pathinfo($fullPath);
+                $ext = strtolower($path_parts["extension"]);
+                switch ($ext) {
+                    case "pdf":
+                    header("Content-Disposition: attachment; filename=\"".$path_parts["basename"]."\"");
+                    header("Content-type: application/pdf");
+                    break;
+					case "png":
+                    header("Content-Disposition: attachment; filename=\"".$path_parts["basename"]."\"");
+                    header("Content-type: image/png");
+                    break;
+                    case "jpg":
+                    header("Content-Disposition: attachment; filename=\"".$path_parts["basename"]."\"");
+                    header("Content-type: image/jpeg");
+                    break;
+                    default;
+                    header("Content-type: application/octet-stream");
+                    header("Content-Disposition: filename=\"".$path_parts["basename"]."\"");
+                }
+                if($fsize) {
+                  header("Content-length: $fsize");
+                }
+                ob_clean();
+                readfile($fullPath);
+                exit;
+            }
+        }
     }
 ?>
-<html>
-<head><title>Download</title>
-<link type="text/css" REL="stylesheet" HREF="css/main.css"></link>
-<meta http-equiv="refresh" content="1; URL='<?php echo  $file ?>'">
-</head>
-<body onLoad="self.focus();">
-<div align="center"><a href="<?php echo  "dokumente/".$_SESSION["dbname"].$_GET['file'] ?>">Der Download startet sofort.<br \> 
-Falls Ihr Browser die automatische Weiterleitung nicht unterst&uuml;tzt klicken Sie hier!</a><br><br>
-<a href="JavaScript:self.close();">close</a>
-</div>
-</body>
-</html>

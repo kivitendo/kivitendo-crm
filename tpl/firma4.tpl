@@ -45,7 +45,11 @@
             duration: 300
           },
         });
-       $(".fancybox").fancybox();
+        $("#subdownload").button().click(
+			function( event ) {
+				window.open("download_new.php?file="+aktfile);
+		});
+	   $(".fancybox").fancybox();
        $("#showFile").button().click(
             function( event ) {
 				$.ajax({
@@ -121,7 +125,7 @@
     </div>
     <div style="float:left; width:100%;min-height:300px;   text-align:left; border-bottom: 0px;" class="normal">
         <button id="subfilebrowser" name="onClick=dateibaum('right',pfadleft)">.:Filebrowser:.</button>
-        <button id="subdownload"    name="onClick=download();">.:download:.                   </button>
+        <button id="subdownload">.:download:.               </button>
 		<button id="showFile"   >.:view:.                   </button>
         <button id="subdelete"      name="onClick=deletefile();">.:delete:.                   </button>
         <button id="submove"        name="onClick=movefile();">.:move:.                       </button> 

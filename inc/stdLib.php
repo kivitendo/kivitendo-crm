@@ -974,4 +974,17 @@ function getCurrencies() {
     $rs = $_SESSION['db']->getAll($sql);
     return $rs;
 }
+
+function ts2gerdate( $myts ){//Timestamp to German Date
+	$german_weekdays = array( "Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag" );
+	$german_months = array( "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" );
+	//Datumsbestandteile ermitteln
+	$wd   = $german_weekdays[date("w",$myts)];
+	$day  = date( "d", $myts );
+	$m    = $german_months[date("m",$myts)-1];
+	$year = date("Y",$myts);
+	$hour = date("H",$myts);
+	$min  = date("i",$myts);
+	return $wd.", ".$day.". ".$m." ".$year." ".$hour.":".$min;
+}
 ?>

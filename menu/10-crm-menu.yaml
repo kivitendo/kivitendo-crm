@@ -40,10 +40,17 @@
   access: crm_new
   module: crm/personen3.php
 - parent: crm
+  id: crm_call
+  name: Call
+  icon: phone
+  order: 340
+  access: crm_other
+  module: crm/crmti/call.phtml
+- parent: crm
   id: crm_appointments
   name: Appointments
   icon: appointment
-  order: 300
+  order: 350
   access: crm_other
   module: crm/calendar.phtml
 - parent: crm

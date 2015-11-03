@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<?php
+    require_once("../inc/stdLib.php");
+    $menu = $_SESSION['menu'];
+    $head = mkHeader();
+    echo $menu['stylesheets'];
+    echo $menu['javascripts'];
+    echo $head['FULLCALCSS'];
+    echo $head['BOXCSS'];
+    echo $head['COLORPICKERCSS'];
+ 
+
+    echo $head['THEME'];
+    echo $head['FULLCALJS'];
+    echo $head['JQBOX'];
+    echo $head['COLORPICKERJS'];
+    //print_r( $_SESSION );
+  
+?>
+<script>
+
+    $(document).ready(function(){
+    	$( "#calllist" ).html( "CallList" ).css({
+            color: "red"
+        })
+    });
+</script>
+<style>
+    #calllist    { position:absolute; top:130px; left:87px; }
+</style>
+</head>
+<body>
+<?php 
+    echo $menu['pre_content'];
+    echo $menu['start_content'];
+?>
+<div class="ui-widget-content" style="height:600px">
+<div id="calllist"></div>
+<!--
+Hier stehen die vielen Div-Container    
+-->  
+            
+
+
+
+
+</div>
+<?php echo $menu['end_content']; ?>
+</body>
+</html>

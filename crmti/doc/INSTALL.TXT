@@ -1,0 +1,108 @@
+INSTALL.TXT
+
+Paket installieren
+dpkg -i crmti_1.4.3.deb
+
+
+Paket konfiguriren
+/*******************************************************************************************************************
+*** Asterisk anpassen !!! ++++ Vorlagen aus /usr/lib/lx-office-crm/crmti/asterisk nach /etc/asterisk kopieren!!! ***
+*******************************************************************************************************************/
+
+/etc/asterisk/extensions.conf umbenennen oder löschen
+
+/etc/asterisk/sip.conf
+Hier sind die Zugangsdaten zum VoIP-Provider und Rufnummern einzutragen
+
+/etc/asterisk/extensions.ael
+Der Wählplan.. Hier wird festgelegt was bei ein- oder ausgehenden Gesprächen passiert.
+An sip.conf anpassen!!!
+
+/etc/asterisk/res_odbc.conf
+allgemeines Passwd eintagen
+
+/etc/asterisk/res_pgsql.conf
+LxOffice Datenbankname und Passwd eintagen
+
+/etc/asterisk/func_odbc.conf 
+Nicht modifizieren!
+
+Bei Unklarheiten:
+http://www.das-asterisk-buch.de, http://www.ip-phone-forum.de/forumdisplay.php?f=359
+
+
+/****************************************************************************************************************
+*** ODBC konfigurieren +++++ ************************************************************************************
+****************************************************************************************************************/
+http://asteriskdocs.org/en/3rd_Edition/asterisk-book-html-chunk/installing_configuring_odbc.html
+Treiber installieren und  registrieren
+Download: http://packages.ubuntu.com/de/trusty/amd64/odbcinst/download
+dpkg -i odbcinst.deb  
+apt-get install unixODBC unixODBC-dev odbc-postgresql
+odbcinst -i -d -f /usr/share/psqlodbc/odbcinst.ini.template 
+less /etc/odbcinst.ini sollte nun gefüllt sein
+Muß idR nicht modifiziert werden
+
+/etc/odbc.ini mit den Vorgaben aus /usr/lib/lx-office-crm/crmti/etc/odbc.ini füllen bzw. kopieren
+Datenbankname, Passdw und Pfad zu odbc anpassen 
+find / -name 'lib*odbc*.so'
+
+
+/****************************************************************************************************************
+*** Testen +++ Testen ++++ **************************************************************************************
+****************************************************************************************************************/
+
+Asterisk neustarten
+/etc/init.d/asterisk restart
+
+Asteriskkonsole starten
+asterisk -vvvvvvr
+
+ODBC-Verbindung prüfen
+odbc show
+
+Ergebnis:
+ODBC DSN Settings
+-----------------
+
+  Name:   crmti
+  DSN:    crmti
+  Pooled: No
+  Connected: Yes
+
+
+Hilfreiche Asteriskbefehle:
+
+SIP-Verbindungen anzeigen
+sip show peers
+
+Sip-Verbindungen neu einlesen
+sip reload 
+
+Wählplan neu einlesen
+ael reload
+
+
+
+/******************************************************************************************************************
+*** Hardware einrichten *******************************************************************************************
+******************************************************************************************************************/
+
+Hier ein Auszug aus meiner Fritzbox Fon
+Achtung die FritzBox Fon kann die aus der Kivitendo-Datenbank ermittelten Kundennamen nicht auf dem Display darstellen!!!
+
+
+Internetnummer 2000
+Benutzername   2000
+Kennwort       StrengGemeim
+Registrar      IPdesLxOfficeServers:5070
+Proxyserver    IPdesLxOfficeServers:5070
+
+
+Falls keine Hardware zur Hand ist hilt ein: 
+apt-get twinkle
+
+Fehler oder Ergänzugen bitte an ronny@lxcars.de posten.
+
+
+

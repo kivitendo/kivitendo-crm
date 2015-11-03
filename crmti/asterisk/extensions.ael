@@ -1,0 +1,48 @@
+//CRMTI extensions.ael 
+//Geschriebebn April 2011 von Ronny Kumke LxCars ronny@lxcars.de
+
+
+
+context buro {
+	_0. => {
+		Set(test=${ODBC_CALLOUT(Büro,${EXTEN})});//ruft CALLOUT in func_odbc.conf auf
+		Dial(SIP/${EXTEN}@xxxxxx-ext-sip);
+		
+	}
+}
+context werkstatt {
+	_0. => {
+		Set(test=${ODBC_CALLOUT(Werkstatt,${EXTEN})});
+		Dial(SIP/${EXTEN}@yyyyyy-ext-sip);
+	}
+}
+
+context von-voip-providerxxxxxx {
+	493341xxxxxx => {
+		Set(ARRAY(kdname)=${ODBC_CALLIN(${CALLERID(num)},Büro)});
+		Verbose(1,### DEBUGDEBUGDEBUG ODBC-Ergebnis: ${kdname});
+		Set(CALLERID(name)=${kdname});
+		Verbose(1, ***+++ Variable CALLERNAME: ${CALLERID(all)});
+		Dial(SIP/2000&SIP/2001);
+	}
+}
+context von-voip-provideryyyyyy {
+	493341yyyyyy => {
+		Set(ARRAY(kdname)=${ODBC_CALLIN(${CALLERID(num)},Werkstatt)});
+		Verbose(1,***+++ Variable kdname: ${kdname});
+		Set(CALLERID(name)=${kdname});
+		Verbose(1, ***+++ Variable CALLERID: ${CALLERID(all)});
+		Dial(SIP/2001&SIP/2000);
+	}
+}	
+
+
+context default {
+	includes {
+		buro;
+		werkstatt;
+		von-voip-providerxxxx;
+		von-voip-provideryyyy;
+			
+	}
+}

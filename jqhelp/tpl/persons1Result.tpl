@@ -1,4 +1,5 @@
 <script language="JavaScript">
+$( document ).ready(function() {
 
 	function showK (id,tbl) {
 		{no}
@@ -12,8 +13,21 @@
 	}
     $(function() {
 		$("#treffer_pers")
-			.tablesorter({widthFixed: true, widgets: ['zebra']})
-			.tablesorterPager({container: $("#pager_pers"), size: 20, positionFixed: false});
+		  .tablesorter({
+                widthFixed: true, 
+                widgets: ["zebra"],
+                theme : "jui",
+                headerTemplate : "{content} {icon}",
+                widgets : ["uitheme", "zebra"],
+                widgetOptions : {
+                zebra   : ["even", "odd"]}
+            }).tablesorterPager({
+                container: $("#pager_{Q}"), 
+                size: 20, 
+                positionFixed: false
+            });
+			//.tablesorter({widthFixed: true, widgets: ['zebra']})
+			//.tablesorterPager({container: $("#pager_pers"), size: 20, positionFixed: false});
 
         $( "#sercontent_pers" ).dialog({
             autoOpen: false,
@@ -62,6 +76,7 @@
             return false;
         });
     });
+});
 </script>
     
 
@@ -87,11 +102,11 @@
 </table>
 <span id="pager_pers" class="pager">
 	<form>
-		<img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/first.png" class="first"/>
-		<img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/prev.png" class="prev"/>
+		<img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/first.png" class="first"/>
+		<img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/prev.png" class="prev"/>
 		<input type="text" class="pagedisplay"/>
-		<img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/next.png" class="next"/>
-		<img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/last.png" class="last"/>
+		<img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/next.png" class="next"/>
+		<img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/last.png" class="last"/>
 		<select class="pagesize">
 			<option value="10">10</option>
 			<option value="20" selected>20</option>

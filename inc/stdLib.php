@@ -336,7 +336,7 @@ function chkFld(&$val,$empty,$rule,$len) {
                  $val = strtr($val,array("'"=>"''"));
                  break;
         case 2 : if ( $empty===0 && empty($val) ) { $ok = true; $val = ""; }
-                 else { $ok=preg_match('/^[0-9]{2,3}[-]{0,1}[0-9A-Z]{2,4}$/',$val,$hit); }; // Plz: PL=dd-ddd, NL=ddwwww, A=dddd 
+                 else { $ok=preg_match('/^[0-9A-Z]{2,4}[-]{0,1}[0-9A-Z]{0,5}$/',$val,$hit); }; // Plz: PL=dd-ddd, NL=ddwwww, A=dddd 
                  if ( strlen($val)>$len && $len>0 ) $val = substr($val,0,$len);
                  break;
         case 3 : if ( $empty===0 && empty($val) ) { $ok=true; $val=""; }
@@ -779,9 +779,11 @@ function mkHeader() {
     $LVID = '<link id="'.$_SESSION['theme'].'" rel="stylesheet" type="text/css" href="';
     $LN = '">'."\n";
     $head = array(
-        'JQTABLE'       => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/js/jquery.tablesorter.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/addons/pager/jquery.tablesorter.pager.js'.$SN.
-                           $LV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/addons/pager/jquery.tablesorter.pager.css'.$LN,
+        'JQTABLE'       => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/css/theme.jui.css'.$LN.
+                           $LV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/addons/pager/jquery.tablesorter.pager.css'.$LN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/js/jquery.tablesorter.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/js/jquery.tablesorter.widgets.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/addons/pager/jquery.tablesorter.pager.js'.$SN,
         'JQBOX'         => $SV.$_SESSION['baseurl'].'/crm/jquery-plugins/selectBoxIt/selectBoxIt.js'.$SN,
         'JQTIMECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/timepicker-master/jquery.ui.timepicker.css'.$LN,
         'JQTIME'        => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/timepicker-master/jquery.ui.timepicker.js'.$SN.

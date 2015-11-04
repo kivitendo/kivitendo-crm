@@ -128,9 +128,14 @@ echo '
     $( "#dialog_no_sw,#dialog_viele,#dialog_keine" ).dialog( "close" );
     '.($d?'$( "#'.$d.'" ).dialog( "open" );':'').'
     $("#ac0").focus();
-    $("#treffer")
-        .tablesorter({widthFixed: true, widgets: ["zebra"]})
-        .tablesorterPager({container: $("#pager"), size: 20, positionFixed: false});
+    $("#treffer").tablesorter({widthFixed: true, 
+        widgets: ["zebra"],
+        theme : "jui",
+        headerTemplate : "{content} {icon}",
+        widgets : ["uitheme", "zebra"],
+        widgetOptions : {
+        zebra   : ["even", "odd"]}                          
+    }).tablesorterPager({container: $(".pager"), size: 15, positionFixed: false});
 </script>
 <style>
     table.tablesorter { width: 900;} 
@@ -139,15 +144,16 @@ if ( $anzahl > 10 )
     echo '
         <span id="pager" class="pager">
             <form>
-                <img src="'.$_SESSION['baseurl'].'crm/jquery-plugins/Table/addons/pager/icons/first.png" class="first"/>
-                <img src="'.$_SESSION['baseurl'].'crm/jquery-plugins/Table/addons/pager/icons/prev.png" class="prev"/>
-                <img src="'.$_SESSION['baseurl'].'crm/jquery-plugins/Table/addons/pager/icons/next.png" class="next"/>
-                <img src="'.$_SESSION['baseurl'].'crm/jquery-plugins/Table/addons/pager/icons/last.png" class="last"/> '.($anzahl < $_SESSION['listLimit'] ? $anzahl : $_SESSION['listLimit']).'
+                <img src="'.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/addons/pager/icons/first.png" class="first"/>
+                <img src="'.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/addons/pager/icons/prev.png" class="prev"/>
+                <img src="'.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/addons/pager/icons/next.png" class="next"/>
+                <img src="'.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/addons/pager/icons/last.png" class="last"/> '.($anzahl < $_SESSION['listLimit'] ? $anzahl : $_SESSION['listLimit']).'
                 <select class="pagesize" id="pagesize">
                     <option value="10">10</option>
                     <option value="20" selected>20</option>
                     <option value="30">30</option>
                     <option value="40">40</option>
+                    <option value="all">All Rows</option>
                 </select>
             </form> 
         </span>';

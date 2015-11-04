@@ -779,9 +779,9 @@ function mkHeader() {
     $LVID = '<link id="'.$_SESSION['theme'].'" rel="stylesheet" type="text/css" href="';
     $LN = '">'."\n";
     $head = array(
-        'JQTABLE'       => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/Table/jquery.tablesorter.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/Table/addons/pager/jquery.tablesorter.pager.js'.$SN.
-                           $LV.$_SESSION['baseurl'].'crm/jquery-plugins/Table/themes/blue/style.css'.$LN,
+        'JQTABLE'       => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/js/jquery.tablesorter.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/addons/pager/jquery.tablesorter.pager.js'.$SN.
+                           $LV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/addons/pager/jquery.tablesorter.pager.css'.$LN,
         'JQBOX'         => $SV.$_SESSION['baseurl'].'/crm/jquery-plugins/selectBoxIt/selectBoxIt.js'.$SN,
         'JQTIMECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/timepicker-master/jquery.ui.timepicker.css'.$LN,
         'JQTIME'        => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/timepicker-master/jquery.ui.timepicker.js'.$SN.

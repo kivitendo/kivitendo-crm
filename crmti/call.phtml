@@ -8,21 +8,42 @@
     $head = mkHeader();
     echo $menu['stylesheets'];
     echo $menu['javascripts'];
-    echo $head['FULLCALCSS'];
+    //echo $head['FULLCALCSS'];
     echo $head['BOXCSS'];
-    echo $head['COLORPICKERCSS'];
+    //echo $head['COLORPICKERCSS'];
  
-
+    echo $head['JQTABLE'];
     echo $head['THEME'];
-    echo $head['FULLCALJS'];
-    echo $head['JQBOX'];
-    echo $head['COLORPICKERJS'];
+    //echo $head['FULLCALJS'];
+    //echo $head['JQBOX'];
+    //echo $head['COLORPICKERJS'];
     //print_r( $_SESSION );
   
 ?>
 <script>
 
     $(document).ready(function(){
+        $.ajax({
+            dataType: "json",
+            url: "../jqhelp/getCallList.php?action=complete",
+            method: "GET",
+            success : function (data){
+                console.log(data)
+            }
+        });        
+        
+        var opts = { debug: true,
+            "theme": "blue",
+            "widgetOptions": {
+                "build_type": "json",
+                "build_source": {
+                    "url": "../jqhelp/getCallList.php?action=complete",
+                    "dataType": "json"
+                }   
+            }
+        };
+        $('#object2Table2').tablesorter(opts); 
+        
     	$( "#calllist" ).html( "CallList" ).css({
             color: "red"
         })
@@ -39,6 +60,7 @@
 ?>
 <div class="ui-widget-content" style="height:600px">
 <div id="calllist"></div>
+<div id="object2Table2"></div>
 <!--
 Hier stehen die vielen Div-Container    
 -->  

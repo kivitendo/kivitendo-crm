@@ -18,6 +18,8 @@ switch( $action ){
     case 'last':
         getLastItem();
         break;
+    default:
+        echo "Error: action not defined!";
 }
  
 function CreateFunctionsAndTable(){ //Legt beim ersten Aufruf der Datenbank die benötigten Tabellen und Funktionen an.

@@ -1,35 +1,38 @@
 <script language="JavaScript">
-$( document ).ready(function() {
+$(document).ready(function() {
+    function showK(id, tbl) {
+        {
+            no
+        }
+        uri = "firma2.php?Q=" + tbl + "&id=" + id;
+        location.href = uri;
+    }
 
-	function showK (id,tbl) {
-		{no}
-		uri="firma2.php?Q="+tbl+"&id=" + id;
-		location.href=uri;
-	}
-	function showK__ (id) {
-		{no}
-		uri="kontakt.php?id=" + id;
-		location.href=uri;
-	}
+    function showK__(id) {
+        {
+            no
+        }
+        uri = "kontakt.php?id=" + id;
+        location.href = uri;
+    }
     $(function() {
-		$("#treffer_pers")
-		  .tablesorter({
-                widthFixed: true, 
-                widgets: ["zebra"],
-                theme : "jui",
-                headerTemplate : "{content} {icon}",
-                widgets : ["uitheme", "zebra"],
-                widgetOptions : {
-                zebra   : ["even", "odd"]}
+        $("#treffer_pers")
+            .tablesorter({
+                theme: "jui",
+                //headerTemplate : "{content} {icon}", //Wird von der Templateengine zerstört       
+                widgets: ["uitheme", "zebra"],
+                widgetOptions: {
+                    zebra: ["even", "odd"]
+                }
             }).tablesorterPager({
-                container: $("#pager_{Q}"), 
-                size: 20, 
+                container: $("#pager_{Q}"),
+                size: 20,
                 positionFixed: false
             });
-			//.tablesorter({widthFixed: true, widgets: ['zebra']})
-			//.tablesorterPager({container: $("#pager_pers"), size: 20, positionFixed: false});
+        //.tablesorter({widthFixed: true, widgets: ['zebra']})
+        //.tablesorterPager({container: $("#pager_pers"), size: 20, positionFixed: false});
 
-        $( "#sercontent_pers" ).dialog({
+        $("#sercontent_pers").dialog({
             autoOpen: false,
             show: {
                 effect: "blind",
@@ -42,37 +45,43 @@ $( document ).ready(function() {
             //position: { my: "center top", at: "center", of: null } 
         });
         //$( "input[type=button]" ).button();
-        $( "#modify_search_pers" ).button().click(function() {
-            $( "#suchfelder_pers").show();
-            $( "#results_pers").hide();
-            $( "#name_pers" ).focus();
+        $("#modify_search_pers").button().click(function() {
+            $("#suchfelder_pers").show();
+            $("#results_pers").hide();
+            $("#name_pers").focus();
             return false;
         });
-        $( "#butetikett_pers" ).button().click(function() {
-            $( "#sercontent_pers" ).dialog( "option", "maxWidth", 400 );
-            $( "#sercontent_pers" ).dialog( "open" );
-            $( "#sercontent_pers" ).dialog( { title: "Etiketten" } );
-            $( "#sercontent_pers" ).load("etiketten.php?src=P");
+        $("#butetikett_pers").button().click(function() {
+            $("#sercontent_pers").dialog("option", "maxWidth", 400);
+            $("#sercontent_pers").dialog("open");
+            $("#sercontent_pers").dialog({
+                title: "Etiketten"
+            });
+            $("#sercontent_pers").load("etiketten.php?src=P");
             return false;
         });
-        $( "#butvcard_pers" ).button().click(function() {
-            $( "#sercontent_pers" ).dialog( "option", "maxWidth", 400 );
-            $( "#sercontent_pers" ).dialog( "open" );
-            $( "#sercontent_pers" ).dialog( { title: "V-Cards" } );
-            $( "#sercontent_pers" ).load("servcard.php?src=P");
+        $("#butvcard_pers").button().click(function() {
+            $("#sercontent_pers").dialog("option", "maxWidth", 400);
+            $("#sercontent_pers").dialog("open");
+            $("#sercontent_pers").dialog({
+                title: "V-Cards"
+            });
+            $("#sercontent_pers").load("servcard.php?src=P");
             return false;
         });
-        $( "#butbrief_pers" ).button().click(function() {
-            $( "#sercontent_pers" ).dialog( "option", "minWidth", 600 );
-            $( "#sercontent_pers" ).dialog( "open" );
-            $( "#sercontent_pers" ).dialog( { title: "Serienbrief" } );
-            $( "#sercontent_pers" ).load("serdoc.php?src=P");
+        $("#butbrief_pers").button().click(function() {
+            $("#sercontent_pers").dialog("option", "minWidth", 600);
+            $("#sercontent_pers").dialog("open");
+            $("#sercontent_pers").dialog({
+                title: "Serienbrief"
+            });
+            $("#sercontent_pers").load("serdoc.php?src=P");
             return false;
         });
-        $( "#email_pers" ).button().click(function() {
-            $( "#sercontent_pers" ).dialog( "option", "minWidth", 800 );
-            $( "#sercontent_pers" ).dialog( "open" );
-            $( "#sercontent_pers" ).load("sermail.php?src=F");
+        $("#email_pers").button().click(function() {
+            $("#sercontent_pers").dialog("option", "minWidth", 800);
+            $("#sercontent_pers").dialog("open");
+            $("#sercontent_pers").load("sermail.php?src=F");
             return false;
         });
     });

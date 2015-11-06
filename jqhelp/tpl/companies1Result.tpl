@@ -55,16 +55,15 @@
         //$( "input[type=button]" ).button();
         $("#treffer_{Q}")
             .tablesorter({
-                widthFixed: true, 
-                widgets: ["zebra"],
-                theme : "jui",
-                headerTemplate : "{content} {icon}",
-                widgets : ["uitheme", "zebra"],
-                widgetOptions : {
-                zebra   : ["even", "odd"]}
+		        theme : "jui",
+		        //headerTemplate : "{content} {icon}", //Wird von der Templateengine zerstört
+		        widgets : ["uitheme", "zebra"],
+		        widgetOptions : {
+		            zebra   : ["even", "odd"]
+		        }
             }).tablesorterPager({
                 container: $("#pager_{Q}"), 
-                size: 20, 
+                size: 20,
                 positionFixed: false
             });
     });

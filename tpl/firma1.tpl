@@ -12,39 +12,49 @@
 
 
 <script language="JavaScript" type="text/javascript">
+$(document).ready(function() {
+    $("#calls").tablesorter({
+        theme: "jui",
+        //headerTemplate : "{content} {icon}", //Wird von der Templateengine zerstört
+        widgets: ["uitheme", "zebra"],
+        widgetOptions: {
+            zebra: ["even", "odd"]
+        }
+    }).tablesorterPager({
+        container: $("#pager"),
+        size: 20,
+        positionFixed: false
+    });
     function showCall() {
         $('#calls tr[group="tc"]').remove();
         $.ajax({
-           url: 'jqhelp/firmaserver.php?task=showCalls&firma=1&id={FID}',
-           dataType: 'json',
-           success: function(data){
-                        var content;
-                        $.each(data.items, function(i) {
-                             content = '';
-                             content += '<tr class="verlauf" group="tc" onClick="showItem('+data.items[i].id+');">'
-                             content += '<td>' + data.items[i].calldate + '</td>';
-                             content += '<td>' + data.items[i].id + '</td>';
-                             content += '<td nowrap>' + data.items[i].kontakt;
-                             if (data.items[i].inout == 'o') {
-                                  content += ' &gt;</td>';
-                             } else if (data.items[i].inout == 'i') {
-                                  content += ' &lt;</td>';
-                             } else {
-                                  content += ' -</td>';
-                             }
-                             if ( data.items[i].new == 1 ) {
-                                 content += '<td><b>' + data.items[i].cause + '</b></td>';
-                             } else {
-                                 content += '<td>' + data.items[i].cause + '</td>';
-                             }
-                             content += '<td>' + data.items[i].cp_name + '</td></tr>';
-                             $('#calls tr:last').after(content);
-                        })
-                        $("#calls").trigger('update');
-                        $("#calls")
-                             .tablesorter({widthFixed: true, widgets: ['zebra'], headers: { 2: { sorter: false } } })
-                             .tablesorterPager({container: $("#pager"), size: 15, positionFixed: false})
+            url: 'jqhelp/firmaserver.php?task=showCalls&firma=1&id={FID}',
+            dataType: 'json',
+            success: function(data){
+                var content;
+                $.each(data.items, function(i) {
+                    content = '';
+                    content += '<tr class="verlauf" group="tc" onClick="showItem('+data.items[i].id+');">'
+                    content += '<td>' + data.items[i].calldate + '</td>';
+                    content += '<td>' + data.items[i].id + '</td>';
+                    content += '<td nowrap>' + data.items[i].kontakt;
+                    if (data.items[i].inout == 'o') {
+                        content += ' &gt;</td>';
+                    } else if (data.items[i].inout == 'i') {
+                          content += ' &lt;</td>';
+                    } else {
+                          content += ' -</td>';
                     }
+                    if ( data.items[i].new == 1 ) {
+                        content += '<td><b>' + data.items[i].cause + '</b></td>';
+                    } else {
+                          content += '<td>' + data.items[i].cause + '</td>';
+                    }
+                    content += '<td>' + data.items[i].cp_name + '</td></tr>';
+                    $('#calls tr:last').after(content);
+               })
+               $("#calls").trigger('update');
+            }
         });
         return false;
     }
@@ -79,7 +89,7 @@
                 if ( link.substr(8) == 'invoice' ) {
                     doIr();
                 } else if ( link.substr(8) == 'delivery_order'){
-                    doDo();  
+                    doDo();
                 }
                 else {
                     doOe(link.substr(8));
@@ -103,15 +113,15 @@
       var type = '{Q}' == 'C' ? 'sales_delivery_order' : 'purchase_delivery_order';
       window.location.href = '../do.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + type;
     }
-    function doIr() { //neue Rechnung 
+    function doIr() { //neue Rechnung
       var file = '{Q}' == 'C' ? '../is.pl' : '../ir.pl';
-      window.location.href = file + '?action=add&type=invoice&vc={CuVe}&{CuVe}_id={FID}'; 
+      window.location.href = file + '?action=add&type=invoice&vc={CuVe}&{CuVe}_id={FID}';
     }
     function doIb() { //neuer Brief
       window.location.href = '../letter.pl?action=add';
     }
     function doLxCars() {
-        uri='lxcars/lxcmain.php?owner={FID}&task=1' 
+        uri='lxcars/lxcmain.php?owner={FID}&task=1'
         window.location.href=uri;
     }
     function KdHelp() {
@@ -184,8 +194,8 @@
         function(){
             $("#shipleft").click(function(){ nextshipto('-'); })
             $("#shipright").click(function(){ nextshipto('+'); })
-            nextshipto('o'); 
-            $('button').button().click( 
+            nextshipto('o');
+            $('button').button().click(
             function(event) {
                 event.preventDefault();
                 name = this.getAttribute('name');
@@ -198,7 +208,7 @@
                     document.location.href = name;
                 }
             });
-            $("#fasubmenu").tabs({ 
+            $("#fasubmenu").tabs({
                 heightStyle: "auto",
                 active: {kdviewli}
                 });
@@ -233,27 +243,28 @@
                     event.preventDefault();
                 };
             });
-		   // --------   QR Code wird durch Jquery erstellt
-		   $("#qrbutt").button().click(
+           // --------   QR Code wird durch Jquery erstellt
+           $("#qrbutt").button().click(
               function( event ) {
-				$.ajax({
-   					type: "GET",
-  					url: "vcardexp.php?qr=1&Q={Q}&fid={FID}",
-   					success: function(strResponse){
-     					$("#qrcode").qrcode({
-				 			"mode": 0,
-  							"size": 250,
-    			  			"color": "#3a3",
-    			  			"text": strResponse
-						});
-   					}
- 				});
- 				$(".fancybox").trigger('click');
- 				$(".fancybox").empty();
-            }); 
+                $.ajax({
+                       type: "GET",
+                      url: "vcardexp.php?qr=1&Q={Q}&fid={FID}",
+                       success: function(strResponse){
+                         $("#qrcode").qrcode({
+                             "mode": 0,
+                              "size": 250,
+                              "color": "#3a3",
+                              "text": strResponse
+                        });
+                       }
+                 });
+                 $(".fancybox").trigger('click');
+                 $(".fancybox").empty();
+            });
             $(".fancybox").fancybox();
         }
     );
+    });
 </script>
 </head>
 <body onLoad=" showCall(0);">
@@ -423,44 +434,44 @@
             <span class="value" onClick="showOP('oe');">{oa}</span><br />
             </td></tr></table>
         </div>
-	</div>
+    </div>
 
-	<div style="float:left; width:45%; height:37em; text-align:left; border: 1px solid lightgrey; border-left:0px;">
-    	<div id="right_tabs">
-        	<ul>
+    <div style="float:left; width:45%; height:37em; text-align:left; border: 1px solid lightgrey; border-left:0px;">
+        <div id="right_tabs">
+            <ul>
                 <li><a href="#contact">.:contact:.</a></li>
                 <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=quo">.:Quotation:.</a></li>
                 <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=ord">.:orders:.</a></li>
-                <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=inv">.:invoice:.</a></li>	
+                <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=inv">.:invoice:.</a></li>
             </ul>
-    		<div id="contact">
+            <div id="contact">
                 <table id="calls" class="tablesorter" width="100%" style='margin:0px; cursor:pointer;'>
-    				<thead><tr><th>Datum</th><th>id</th><th class="{ sorter: false }"></th><th>Betreff</th><th>.:contact:.</th></tr></thead>
-    				<tbody>
-    				    <tr onClick="showItem(0)" class='verlauf'><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
-    				</tbody>
-    			</table><br>
-    			<div id="pager" class="pager" style='position:absolute;'>
-        			<form name="ksearch" onSubmit="false ks();"> &nbsp;
-        				<img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/first.png" class="first">
-        				<img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/prev.png" class="prev">
-        				<input type="text" id='suchwort' name="suchwort" size="20"><input type="hidden" name="Q" value="{Q}">
-        				<button id='ks' name='ks'>.:search:.</button>
-        				<button id='reload' name='reload'>reload</button>
-        				<img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/next.png" class="next">
-        				<img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/last.png" class="last">
-        				<select class="pagesize" id='pagesize'>
-        					<option value="10">10</option>
-        					<option value="15" selected>15</option>
-        					<option value="20">20</option>
-        					<option value="25">25</option>
-        					<option value="30">30</option>
-        				</select>
-        			</form>
-    			</div>
-    		</div>
-		</div>
-	</div>
+                    <thead><tr><th>Datum</th><th>id</th><th class="{ sorter: false }"></th><th>Betreff</th><th>.:contact:.</th></tr></thead>
+                    <tbody>
+                        <tr onClick="showItem(0)" class='verlauf'><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
+                    </tbody>
+                </table><br>
+                <div id="pager" class="pager" style='position:absolute;'>
+                    <form name="ksearch" onSubmit="false ks();"> &nbsp;
+                        <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/first.png" class="first">
+                        <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/prev.png" class="prev">
+                        <input type="text" id='suchwort' name="suchwort" size="20"><input type="hidden" name="Q" value="{Q}">
+                        <button id='ks' name='ks'>.:search:.</button>
+                        <button id='reload' name='reload'>reload</button>
+                        <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/next.png" class="next">
+                        <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/last.png" class="last">
+                        <select class="pagesize" id='pagesize'>
+                            <option value="10">10</option>
+                            <option value="15" selected>15</option>
+                            <option value="20">20</option>
+                            <option value="25">25</option>
+                            <option value="30">30</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div id="dialogwin">
 <iframe id="iframe1" width='100%' height='450'  scrolling="auto" border="0" frameborder="0"><img src='image/wait.gif'></iframe>
@@ -468,4 +479,3 @@
 {END_CONTENT}
 </body>
 </html>
-    

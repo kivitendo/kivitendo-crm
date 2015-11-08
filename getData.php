@@ -1,5 +1,5 @@
 <?php
-ob_start(); 
+ob_start();
     require_once("inc/stdLib.php");
     include("inc/crmLib.php");
     $menu = $_SESSION['menu'];
@@ -7,13 +7,13 @@ ob_start();
 ?>
 <html>
 <head><title></title>
-<?php 
+<?php
 echo $menu['stylesheets'];
 echo $menu['javascripts'];
-echo $head['CRMCSS']; 
+echo $head['CRMCSS'];
 echo $head['JQTABLE'];
-echo $head['THEME']; 
-echo $head['JUI-DROPDOWN']; 
+echo $head['THEME'];
+echo $head['JUI-DROPDOWN'];
 ?>
     <script language="JavaScript">
         var first = false;
@@ -29,10 +29,10 @@ echo $head['JUI-DROPDOWN'];
         }
         function showItem(id,Q,FID) {
             F1=open("<?php echo $_SESSION["baseurl"]; ?>crm/getCall.php?Q="+Q+"&fid="+FID+"&hole="+id,"Caller","width=670, height=600, left=100, top=50, scrollbars=yes");
-        }        
-    </script> 
-<?php 
-//ToDo: Dialoge übersetzen!!!!!! 
+        }
+    </script>
+<?php
+//ToDo: Dialoge übersetzen!!!!!!
 echo '
     <div id="dialog_no_sw" title="Kein Suchbegriff eingegeben">
         <p>Bitte geben Sie mindestens ein Zeichen ein.</p>
@@ -64,24 +64,24 @@ echo '
                     that._renderItemData(ul,item);
                 });
             }
-        });      
+        });
         $(function() {
-            $("#ac0").catcomplete({                          
-                source: "jqhelp/autocompletion.php?case=name",                            
-                minLength: '.$_SESSION['feature_ac_minlength'].',                            
+            $("#ac0").catcomplete({
+                source: "jqhelp/autocompletion.php?case=name",
+                minLength: '.$_SESSION['feature_ac_minlength'].',
                 delay: '.$_SESSION['feature_ac_delay'].',
-                disabled:'.($_SESSION['feature_ac']?'false':'true').', 
-                select: function(e,ui) {                    
+                disabled:'.($_SESSION['feature_ac']?'false':'true').',
+                select: function(e,ui) {
                     showD(ui.item.src,ui.item.id);
                 }
             });
 
         });
-        $("#dialog_no_sw,#dialog_viele,#dialog_keine").dialog({ autoOpen: false });  
+        $("#dialog_no_sw,#dialog_viele,#dialog_keine").dialog({ autoOpen: false });
 
     </script>
 ';
-?>  
+?>
 <style>
     #jui_dropdown {
         height: 400px;
@@ -93,23 +93,23 @@ echo '
         background: none;
         display: inline-block;
         list-style: none;
-    }   
+    }
     .drop_container {
         margin: 10px 10px 10px 10px ;
         display: inline-block;
-    }   
+    }
     .menu {
         position: absolute;
         width: 240px !important;
         margin-top: 3px !important;
-    }     
+    }
 </style>
 <script>
     $(function() {
         $( "#tabs" ).tabs({
             active: <?php echo $_SESSION["searchtab"] - 1;?>,
             beforeLoad: function( event, ui ) {
-                //alert( $( "#tabs" ).tabs( "option", "active" )); für die Memfunction, in SESSION schreiben    
+                //alert( $( "#tabs" ).tabs( "option", "active" )); für die Memfunction, in SESSION schreiben
                 ui.jqXHR.error(function() {
                     ui.panel.html(".:Couldn't load this tab.:." );
                 });
@@ -117,9 +117,9 @@ echo '
         });
         var tabOpts = { select:chgTab };
         $( "#tabs" ).tabs(tabOpts);
-        
+
         $("#results").css('height',300);
-        
+
         $.ajax({
             url: "jqhelp/getHistory.php",
             context: $('#menu'),
@@ -145,7 +145,7 @@ echo '
                 url: "jqhelp/getDataResult.php",
                 data: "swort=" + $("#ac0").val() + "&submit=adress",
                 success: function(res) {
-                    $('#ac0').catcomplete('close');                    
+                    $('#ac0').catcomplete('close');
                     $("#results").html(res).focus();
                 }
             });
@@ -161,17 +161,17 @@ echo '
                     $("#results").html(res);
                 }
             });
-         return false;   
+         return false;
         });
-        
-        $("#suchfelder_C").load('jqhelp/getCompanies1.php?Q=C');    
+
+        $("#suchfelder_C").load('jqhelp/getCompanies1.php?Q=C');
         $("#suchfelder_V").load('jqhelp/getCompanies1.php?Q=V');
-        $("#suchfelder_P").load('jqhelp/getPersons1.php');   
+        $("#suchfelder_P").load('jqhelp/getPersons1.php');
     });
-    
+
 </script>
 </head>
-<?php 
+<?php
 echo '<body onload="$(\'#ac0\').focus().val(\''.(isset($_SESSION['swort'])?preg_replace("#[ ].*#",'',$_SESSION['swort']):"").'\').select();">';
 echo $menu['pre_content'];
 echo $menu['start_content'];
@@ -186,7 +186,7 @@ echo '
         <div id="tab-1">
             <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">'.translate('.:fast search customer/vendor/contacts and contact history:.','firma').'</p>
             <form name="suche" id="suche" action="" method="get">
-                <input type="text" name="swort" size="25" id="ac0" autocomplete="off">  
+                <input type="text" name="swort" size="25" id="ac0" autocomplete="off">
                 <button id="adress"> '.translate('.:adress:.','firma').'</button>
                 <button id="kontakt">'.translate('.:contact history:.','firma').'</button> <br>
                 <span class="liste">'.translate('.:search keyword:.','firma').'</span>
@@ -199,7 +199,7 @@ echo '
             </div>
             <div id="results"></div>
         </div>
-        
+
         <div id="tab-2">
             <div id="suchfelder_C"></div>
             <div id="companyResults_C"></div>
@@ -217,7 +217,7 @@ echo '
 
 echo $menu['end_content'];
 
-ob_end_flush(); 
+ob_end_flush();
 ?>
 </body>
 </html>

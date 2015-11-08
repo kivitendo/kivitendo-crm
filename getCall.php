@@ -27,7 +27,7 @@
     $daten["id"]=0;
     $daten["CID"]=($pid>0)?$pid:$fid;
     $daten["Kunde"]=0;
-    $daten["Anzeige"]=0;                           
+    $daten["Anzeige"]=0;
     $daten["wvldate"]="";
     $daten["wvlid"]=false;
     if ($_POST["verschiebe"]) {
@@ -60,7 +60,7 @@
         $rc=updCall($_POST,$_FILES);
         if ($rc) {
             $daten["Betreff"]=$_POST["cause"];
-        } else {    
+        } else {
             $daten=$_POST;
         }                                            // if ($rc)
     } else if ($_POST["sichern"]) {
@@ -69,7 +69,7 @@
         if ($rc) {
             $daten["Betreff"]=$_POST["cause"];
             if ($Bezug==0) $Bezug=$rc;
-        } else {    
+        } else {
             $daten=$_POST;
         }                                            // if ($rc)
     }                                //  end sichern
@@ -86,8 +86,8 @@
                     $daten["Ort"]=$fa["city"];
                     $daten["nummer"]=$fa["nummer"];
                     break;
-        case "XC" : 
-        case "CC" : 
+        case "XC" :
+        case "CC" :
         case "VC" : $co=getKontaktStamm($pid);
                     $daten["Firma"]=$co["cp_givenname"]." ".$co["cp_name"];
                     $daten["Plz"]=$co["cp_zipcode"];
@@ -95,8 +95,8 @@
                     $daten["nummer"]=$co["nummer"];
                     break;
         default   : $daten["Firma"]="xxxxxxxxxxxxxx";
-                    $daten["nummer"]="";    
-    } 
+                    $daten["nummer"]="";
+    }
 
     //------------------------------------------- Beginn Ausgabe
     $t = new Template($base);

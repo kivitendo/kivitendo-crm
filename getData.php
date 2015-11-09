@@ -197,7 +197,7 @@ echo '
                 </div>
                 <ul id="menu"> </ul>
             </div>
-            <div id="results"></div>
+            <div id="results" class="tablesorter"></div>
         </div>
 
         <div id="tab-2">

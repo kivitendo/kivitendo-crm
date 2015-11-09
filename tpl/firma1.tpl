@@ -25,6 +25,7 @@ $(document).ready(function() {
         size: 20,
         positionFixed: false
     });
+});
     function showCall() {
         $('#calls tr[group="tc"]').remove();
         $.ajax({
@@ -264,10 +265,9 @@ $(document).ready(function() {
             $(".fancybox").fancybox();
         }
     );
-    });
 </script>
 </head>
-<body onLoad=" showCall(0);">
+<body onLoad="showCall(0);">
 {PRE_CONTENT}
 {START_CONTENT}
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>

@@ -2,14 +2,14 @@
 require_once("../inc/stdLib.php");
 include_once("../inc/crmLib.php");
 $head = mkHeader();
-echo $head['JQTABLE']; 
+echo $head['JQTABLE'];
 
 $_SESSION['swort'] = $_POST['swort'];
 $d = '';//dialog
 if ( $_POST['swort'] == "" ) $d = "dialog_no_sw";
 
 $anzahl = 0;
-if ($_POST["submit"] =="kontakt" && $_POST['swort'] != '') { 
+if ($_POST["submit"] =="kontakt" && $_POST['swort'] != '') {
     $sw = strtoupper( $_POST["swort"] );
     $sw = strtr( $sw, "*?", "%_" );
     $sql  = "select calldate,cause,t.id,caller_id,bezug,V.name as lname,C.name as kname,P.cp_name as pname ";
@@ -18,9 +18,9 @@ if ($_POST["submit"] =="kontakt" && $_POST['swort'] != '') {
     $sql .= 'order by bezug,calldate desc limit '.$_SESSION['listLimit'];
     $rs = $_SESSION['db']->getAll( $sql );
     $used = Array();
-    if( $anzahl = count($rs) ) {    
-        echo "<table id='treffer' class='tablesorter'>\n"; 
-        echo "<thead><tr ><th>Datum</th><th>Grund</th><th>Name</th>\n<tbody style='cursor:pointer'>\n"; 
+    if( $anzahl = count($rs) ) {
+        echo "<table id='treffer' class='tablesorter'>\n";
+        echo "<thead><tr ><th>Datum</th><th>Grund</th><th>Name</th>\n<tbody style='cursor:pointer'>\n";
         $i = 0;
         foreach ( $rs as $row ) {
             if ( $row["bezug"] > 0 and in_array($row["bezug"], $used) ) continue;
@@ -36,14 +36,14 @@ if ($_POST["submit"] =="kontakt" && $_POST['swort'] != '') {
             echo "$name</td></tr>\n";
             $i++;
             if ($i>=$_SESSION['listLimit']) {
-                $d = "dialog_viele";                
+                $d = "dialog_viele";
                 break;
             }
         }
         echo "</tbody></table>\n<br>";
-    } 
+    }
     else $d = "dialog_keine";
-} 
+}
 else if ($_POST["submit"] == "adress") {
     include("../inc/FirmenLib.php");
     include("../inc/persLib.php");
@@ -54,7 +54,7 @@ else if ($_POST["submit"] == "adress") {
         $rsC = getAllFirmen($suchwort,true,"C");
         if ( $rsC ) $anzahl = count($rsC);
         if ( $anzahl <= $_SESSION['listLimit'] ) {
-            $rsV = getAllFirmen($suchwort,true,"V");    
+            $rsV = getAllFirmen($suchwort,true,"V");
             if ( $rsV ) $anzahl += count($rsV);
             if ( $anzahl <= $_SESSION['listLimit'] ) {
                 $rsK = getAllPerson($suchwort);
@@ -64,13 +64,13 @@ else if ($_POST["submit"] == "adress") {
                     if ( $rsE ) $anzahl += count($rsE);
                     if ( $anzahl >= $_SESSION['listLimit'] ) {
                         $d = "dialog_viele";
-                    } 
+                    }
                     else if ($anzahl === 0) $d = "dialog_keine";
-                } 
+                }
                 else $d = "dialog_viele";
-            } 
+            }
             else $d = "dialog_viele";
-        } 
+        }
         else $d = "dialog_viele";
     }
     if ( $anzahl > 0 ) {
@@ -89,58 +89,51 @@ else if ($_POST["submit"] == "adress") {
         if ( $anzahl == 1 && $rsE ) {
             echo '<script> showD("E","'.($rsE[0]["id"]).'");</script>';
             exit();
-        } 
-        echo "<table id='treffer' class='tablesorter'>\n"; 
+        }
+        echo "<table id='treffer' class='tablesorter'>\n";
         echo "<thead><tr ><th>KD-Nr</th><th>Name</th><th>Anschrift</th><th>Telefon</th><th></th></tr></thead>\n";
-        echo "<tbody style='cursor:pointer'>\n"; 
-        $i=0; 
-        if ( $rsC && $i < $_SESSION['listLimit'] ) foreach($rsC as $row) { 
-            echo "<tr onClick='showD(\"C\",".$row["id"].");'>". 
-                 "<td>".$row["customernumber"]."</td><td class=\"liste\">".$row["name"]."</td>". 
-                 "<td>".$row["city"].(($row["street"])?", ":"").$row["street"]."</td><td class=\"liste\">".$row["phone"]."</td><td class=\"liste\">K</td></tr>\n"; 
-            $i++; 
-        }  
-        if ( $rsV && $i < $_SESSION['listLimit'] ) foreach($rsV as $row) { 
-            echo "<tr onClick='showD(\"V\",".$row["id"].");'>". 
-                 "<td>".$row["vendornumber"]."</td><td class=\"liste\">".$row["name"]."</td>". 
-                 "<td>".$row["city"].(($row["street"])?", ":"").$row["street"]."</td><td class=\"liste\">".$row["phone"]."</td><td class=\"liste\">L</td></tr>\n"; 
-            $i++; 
-        } 
-        if ( $rsK && $i < $_SESSION['listLimit'] ) foreach($rsK as $row) { 
-            echo "<tr onClick='showD(\"K\",".$row["cp_id"].");'>". 
-                 "<td>".$row["cp_id"]."</td><td class=\"liste\">".$row["cp_name"].", ".$row["cp_givenname"]."</td>". 
-                 "<td>".$row["cp_city"].(($row["cp_street"])?", ":"").$row["cp_street"]."</td><td class=\"liste\">".$row["cp_phone1"]."</td><td class=\"liste\">P</td></tr>\n"; 
-            $i++; 
-        } 
-        if ( $rsE && $i < $_SESSION['listLimit']) foreach($rsE as $row) { 
-            echo "<tr onClick='showD(\"E\",".$row["id"].");'>". 
-                 "<td>".$row["id"]."</td><td class=\"liste\">".$row["name"]."</td>". 
-                 "<td>".$row["addr2"].(($row["addr1"])?", ":"").$row["addr1"]."</td><td class=\"liste\">".$row["workphone"]."</td><td class=\"liste\">U</td></tr>\n"; 
-            $i++; 
-        } 
-        echo "</tbody></table>\n"; 
-    }  
+        echo "<tbody style='cursor:pointer'>\n";
+        $i=0;
+        if ( $rsC && $i < $_SESSION['listLimit'] ) foreach($rsC as $row) {
+            echo "<tr onClick='showD(\"C\",".$row["id"].");'>".
+                 "<td>".$row["customernumber"]."</td><td class=\"liste\">".$row["name"]."</td>".
+                 "<td>".$row["city"].(($row["street"])?", ":"").$row["street"]."</td><td class=\"liste\">".$row["phone"]."</td><td class=\"liste\">K</td></tr>\n";
+            $i++;
+        }
+        if ( $rsV && $i < $_SESSION['listLimit'] ) foreach($rsV as $row) {
+            echo "<tr onClick='showD(\"V\",".$row["id"].");'>".
+                 "<td>".$row["vendornumber"]."</td><td class=\"liste\">".$row["name"]."</td>".
+                 "<td>".$row["city"].(($row["street"])?", ":"").$row["street"]."</td><td class=\"liste\">".$row["phone"]."</td><td class=\"liste\">L</td></tr>\n";
+            $i++;
+        }
+        if ( $rsK && $i < $_SESSION['listLimit'] ) foreach($rsK as $row) {
+            echo "<tr onClick='showD(\"K\",".$row["cp_id"].");'>".
+                 "<td>".$row["cp_id"]."</td><td class=\"liste\">".$row["cp_name"].", ".$row["cp_givenname"]."</td>".
+                 "<td>".$row["cp_city"].(($row["cp_street"])?", ":"").$row["cp_street"]."</td><td class=\"liste\">".$row["cp_phone1"]."</td><td class=\"liste\">P</td></tr>\n";
+            $i++;
+        }
+        if ( $rsE && $i < $_SESSION['listLimit']) foreach($rsE as $row) {
+            echo "<tr onClick='showD(\"E\",".$row["id"].");'>".
+                 "<td>".$row["id"]."</td><td class=\"liste\">".$row["name"]."</td>".
+                 "<td>".$row["addr2"].(($row["addr1"])?", ":"").$row["addr1"]."</td><td class=\"liste\">".$row["workphone"]."</td><td class=\"liste\">U</td></tr>\n";
+            $i++;
+        }
+        echo "</tbody></table>\n";
+    }
 } //END ELSEIF adress
 
 if ( $anzahl >= $_SESSION['listLimit'] ) $d = "dialog_viele";
 echo '
+<script type="text/javascript" src="js/tablesorter.js"></script>
 <script>
     $( "#dialog_no_sw,#dialog_viele,#dialog_keine" ).dialog( "close" );
     '.($d?'$( "#'.$d.'" ).dialog( "open" );':'').'
     $("#ac0").focus();
-    $("#treffer").tablesorter({widthFixed: true, 
-        widgets: ["zebra"],
-        theme : "jui",
-        headerTemplate : "{content} {icon}",
-        widgets : ["uitheme", "zebra"],
-        widgetOptions : {
-        zebra   : ["even", "odd"]}                          
-    }).tablesorterPager({container: $(".pager"), size: 15, positionFixed: false});
 </script>
 <style>
-    table.tablesorter { width: 900;} 
-</style>';   
-if ( $anzahl > 10 ) 
+    table.tablesorter { width: 900;}
+</style>';
+if ( $anzahl > 10 )
     echo '
         <span id="pager" class="pager">
             <form>
@@ -155,6 +148,6 @@ if ( $anzahl > 10 )
                     <option value="40">40</option>
                     <option value="all">All Rows</option>
                 </select>
-            </form> 
+            </form>
         </span>';
 ?>

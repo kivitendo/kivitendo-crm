@@ -1,3 +1,4 @@
+<script type="text/javascript" src="{CRMPATH}js/tablesorter.js"></script>
 <script language="JavaScript">
 $(document).ready(function() {
     function showK(id, tbl) {
@@ -16,22 +17,6 @@ $(document).ready(function() {
         location.href = uri;
     }
     $(function() {
-        $("#treffer_pers")
-            .tablesorter({
-                theme: "jui",
-                //headerTemplate : "{content} {icon}", //Wird von der Templateengine zerstört       
-                widgets: ["uitheme", "zebra"],
-                widgetOptions: {
-                    zebra: ["even", "odd"]
-                }
-            }).tablesorterPager({
-                container: $("#pager_{Q}"),
-                size: 20,
-                positionFixed: false
-            });
-        //.tablesorter({widthFixed: true, widgets: ['zebra']})
-        //.tablesorterPager({container: $("#pager_pers"), size: 20, positionFixed: false});
-
         $("#sercontent_pers").dialog({
             autoOpen: false,
             show: {
@@ -42,12 +27,13 @@ $(document).ready(function() {
                 effect: "explode",
                 duration: 300
             },
-            //position: { my: "center top", at: "center", of: null } 
+            //position: { my: "center top", at: "center", of: null }
         });
         //$( "input[type=button]" ).button();
         $("#modify_search_pers").button().click(function() {
             $("#suchfelder_pers").show();
             $("#results_pers").hide();
+            //$(".tablesorter").tablesorter();
             $("#name_pers").focus();
             return false;
         });
@@ -87,47 +73,46 @@ $(document).ready(function() {
     });
 });
 </script>
-    
+
 
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:search result:. .:Contacts:.</p>
-<table id="treffer_pers" class="tablesorter">  
+<table id="treffer_pers" class="tablesorter">
     <thead>
-		<tr>
-			<th>.:name:.</th>
-			<th>.:zipcode:.</th>
-			<th>.:city:.</th>
-			<th>.:phone:.</th>
-			<th>.:email:.</th>
-			<th>.:company:.</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody style='cursor:pointer'>
+        <tr>
+            <th>.:name:.</th>
+            <th>.:zipcode:.</th>
+            <th>.:city:.</th>
+            <th>.:phone:.</th>
+            <th>.:email:.</th>
+            <th>.:company:.</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody style='cursor:pointer'>
 <!-- BEGIN Liste -->
-	<tr onClick='{js}'>
-		<td>{Name}</td><td>&nbsp;{Plz}</td><td>{Ort}</td><td>&nbsp;{Telefon}</td><td>&nbsp;{eMail}</td><td>&nbsp;{Firma}</td><td>&nbsp;{insk}</td></tr>
+    <tr onClick='{js}'>
+        <td>{Name}</td><td>&nbsp;{Plz}</td><td>{Ort}</td><td>&nbsp;{Telefon}</td><td>&nbsp;{eMail}</td><td>&nbsp;{Firma}</td><td>&nbsp;{insk}</td></tr>
 <!-- END Liste -->
    </tbody>
 </table>
 <span id="pager_pers" class="pager">
-	<form>
-		<img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/first.png" class="first"/>
-		<img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/prev.png" class="prev"/>
-		<input type="text" class="pagedisplay"/>
-		<img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/next.png" class="next"/>
-		<img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/last.png" class="last"/>
-		<select class="pagesize">
-			<option value="10">10</option>
-			<option value="20" selected>20</option>
-			<option value="30">30</option>
-			<option value="40">40</option>
-		</select>
+    <form>
+        <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/first.png" class="first"/>
+        <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/prev.png" class="prev"/>
+        <input type="text" class="pagedisplay"/>
+        <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/next.png" class="next"/>
+        <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/last.png" class="last"/>
+        <select class="pagesize">
+            <option value="10">10</option>
+            <option value="20" selected>20</option>
+            <option value="30">30</option>
+            <option value="40">40</option>
+        </select>
     <button id="modify_search_pers"  >.:modify search:.</button>&nbsp;
-	<button id="butetikett_pers" >.:label:.</button>&nbsp;
-	<button id="butbrief_pers" >.:serdoc:.</button> &nbsp;
-	<button id="butvcard_pers" >.:servcard:.</button>&nbsp;
-	<button id="email_pers" >.:sermail:.</button>
-	</form>
+    <button id="butetikett_pers" >.:label:.</button>&nbsp;
+    <button id="butbrief_pers" >.:serdoc:.</button> &nbsp;
+    <button id="butvcard_pers" >.:servcard:.</button>&nbsp;
+    <button id="email_pers" >.:sermail:.</button>
+    </form>
 </span>
-<div id="sercontent_pers"> 
-    
+<div id="sercontent_pers" class="tablesorter">

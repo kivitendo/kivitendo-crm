@@ -10,22 +10,8 @@
 <script type="text/javascript" src="jquery-plugins/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 <script type="text/javascript" src="jquery-plugins/qrcode/jquery.qrcode-0.12.0.js"></script>
 
-
+<script type="text/javascript" src="{CRMPATH}js/tablesorter.js"></script>
 <script language="JavaScript" type="text/javascript">
-$(document).ready(function() {
-    $("#calls").tablesorter({
-        theme: "jui",
-        //headerTemplate : "{content} {icon}", //Wird von der Templateengine zerstört
-        widgets: ["uitheme", "zebra"],
-        widgetOptions: {
-            zebra: ["even", "odd"]
-        }
-    }).tablesorterPager({
-        container: $("#pager"),
-        size: 20,
-        positionFixed: false
-    });
-});
     function showCall() {
         $('#calls tr[group="tc"]').remove();
         $.ajax({

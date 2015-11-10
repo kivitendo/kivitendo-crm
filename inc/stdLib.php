@@ -1,5 +1,5 @@
 <?php
-ini_set('session.bug_compat_warn', 0);// Warnung für Sessionbug in neueren Php-Versionen abschalten. 
+ini_set('session.bug_compat_warn', 0);// Warnung für Sessionbug in neueren Php-Versionen abschalten.
 ini_set('session.bug_compat_42', 0);  // Das ist natürlich lediglich eine Provirorische Lösung.
 //Warning: Unknown: Your script possibly relies on a session side-effect which existed until PHP 4.2.3. ....
 //session_set_cookie_params(480*60); //480*60
@@ -11,7 +11,7 @@ ini_set('include_path',$inclpa.":../:./inc:../inc");
 if ( isset($_SESSION['php_error']) && $_SESSION['php_error'] ) {
     error_reporting (E_ALL & ~E_DEPRECATED);
     ini_set ('display_errors',1);
-} 
+}
 
 include_once "mdb.php";
 require_once "conf.php";
@@ -27,11 +27,11 @@ if ( !isset($_SESSION['dbhost']) ) {
     require_once "login.php";
     //exit();
 } else {
-    if ( !isset($_SESSION["cookie"]) || 
+    if ( !isset($_SESSION["cookie"]) ||
          ( $_SESSION["sessid"] != $_COOKIE[$_SESSION["cookie"]] ) ) {
              while( list($key,$val) = each($_SESSION) ) {
-			     unset($_SESSION[$key]);
-		     };
+                 unset($_SESSION[$key]);
+             };
              $_SESSION['ERPNAME'] = $ERPNAME;
              $_SESSION['ERP_BASE_URL'] = $ERP_BASE_URL;
              $_SESSION['erpConfigFile'] = $erpConfigFile;
@@ -94,7 +94,7 @@ function chksesstime($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$session,$sesstim
     $db   = new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
     $sql  = "SELECT * FROM auth.session WHERE = '$session'";
     $rs   = $db->getOne($sql);
-    
+
     return true;
 }
 
@@ -108,7 +108,7 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     if ( count($rs) != 1 ) { // Garnicht mit ERP angemeldet oder zu viele Sessions, sollte die ERP drauf achten
         unset($_SESSION);
         $Url = preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
-        header( "location:".$Url."controller.pl?action=LoginScreen/user_login" );        
+        header( "location:".$Url."controller.pl?action=LoginScreen/user_login" );
     }
     $auth = array();
     $uid = $rs[0]["id"];
@@ -131,12 +131,12 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     $auth = array_merge($auth,$rs);
     //$sql  = "SELECT id AS value, name AS text FROM auth.group";
     //Nur die Gruppen die den angemeldete Benutzer zugeordnet sind hinzufügen
-    $sql="SELECT grp.id AS value, name AS text FROM auth.group AS grp 
-	               INNER JOIN auth.user_group
-	                 ON grp.id = group_id
-	               INNER JOIN auth.user AS usr
-	                 ON user_id = usr.id
-	               WHERE usr.id = $uid";
+    $sql="SELECT grp.id AS value, name AS text FROM auth.group AS grp
+                   INNER JOIN auth.user_group
+                     ON grp.id = group_id
+                   INNER JOIN auth.user AS usr
+                     ON user_id = usr.id
+                   WHERE usr.id = $uid";
     $rs_grp = $db->getAll( $sql );
     $auth['grp'] = $rs_grp;
     //Eine der Gruppen des Users darf sales_all_edit
@@ -157,7 +157,7 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     $rs  = $db->getOne($sql);
     $auth['Admin'] = $rs['cnt'];
     //Session update
-    $sql = "update auth.session set mtime = '".date("Y-M-d H:i:s.100001")."' where id = '".$cookie."'"; 
+    $sql = "update auth.session set mtime = '".date("Y-M-d H:i:s.100001")."' where id = '".$cookie."'";
     $db->query($sql,"authuser_3");
     //Token lesen
     $sql = "SELECT * FROM auth.session WHERE id = '".$cookie."'";
@@ -178,10 +178,10 @@ function anmelden() {
     global $erpConfigFile;
     //Konfigurationsfile der ERP einlesen
     $deep = is_dir("../".$ERPNAME) ? "../" : "../../";                // anmelden() aus einem Unterverzeichnis
-    if ( file_exists($deep.$ERPNAME."/config/".$erpConfigFile.".conf") ) {  
-	    $lxo = fopen($deep.$ERPNAME."/config/".$erpConfigFile.".conf","r");  
+    if ( file_exists($deep.$ERPNAME."/config/".$erpConfigFile.".conf") ) {
+        $lxo = fopen($deep.$ERPNAME."/config/".$erpConfigFile.".conf","r");
     } else if ( file_exists($deep.$ERPNAME."/config/".$erpConfigFile.".conf.default") ) {
-	    $lxo = fopen($deep.$ERPNAME."/config/".$erpConfigFile.".conf.default","r");
+        $lxo = fopen($deep.$ERPNAME."/config/".$erpConfigFile.".conf.default","r");
     } else {
         return false;
     }
@@ -191,18 +191,18 @@ function anmelden() {
     while ( !feof($lxo) ) {
         if ( preg_match("/^[\s]*#/",$tmp) || $tmp == "\n" ) { //Kommentar, ueberlesen
             $tmp = fgets($lxo,512);
-	        continue;
+            continue;
         }
         if ( $dbsec && preg_match("!\[.+]!",$tmp) ) $dbsec = false;
         if ( $dbsec ) {
-	        if ( preg_match("/db[ ]*=[ ]*(.+)/",$tmp,$hits) )       $dbname = $hits[1];
-	        if ( preg_match("/password[ ]*=[ ]*(.+)/",$tmp,$hits) ) $dbpasswd = $hits[1];
-	        if ( preg_match("/user[ ]*=[ ]*(.+)/",$tmp,$hits) )     $dbuser = $hits[1];
-	        if ( preg_match("/host[ ]*=[ ]*(.+)/",$tmp,$hits) )     $dbhost = ($hits[1])?$hits[1]:"localhost";
-	        if ( preg_match("/port[ ]*=[ ]*([0-9]+)/",$tmp,$hits) ) $dbport = ($hits[1])?$hits[1]:"5432";
+            if ( preg_match("/db[ ]*=[ ]*(.+)/",$tmp,$hits) )       $dbname = $hits[1];
+            if ( preg_match("/password[ ]*=[ ]*(.+)/",$tmp,$hits) ) $dbpasswd = $hits[1];
+            if ( preg_match("/user[ ]*=[ ]*(.+)/",$tmp,$hits) )     $dbuser = $hits[1];
+            if ( preg_match("/host[ ]*=[ ]*(.+)/",$tmp,$hits) )     $dbhost = ($hits[1])?$hits[1]:"localhost";
+            if ( preg_match("/port[ ]*=[ ]*([0-9]+)/",$tmp,$hits) ) $dbport = ($hits[1])?$hits[1]:"5432";
             if ( preg_match("/\[[a-z]+/",$tmp) ) $dbsec = false;
-    	    $tmp = fgets($lxo,512);
-	        continue;
+            $tmp = fgets($lxo,512);
+            continue;
         }
         if ( preg_match("/cookie_name[ ]*=[ ]*(.+)/",$tmp,$hits) ) $cookiename = $hits[1];
         //if ( preg_match("/dbcharset[ ]*=[ ]*(.+)/",$tmp,$hits) )   $dbcharset = $hits[1];
@@ -218,8 +218,8 @@ function anmelden() {
     // Benutzer anmelden
     error_log("!$ERPNAME!$dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie!",0);
     $auth = authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie);
-    if ( !$auth ) {  return false; };   				 // Anmeldung des Users fehlgeschlagen
-    chkdir($auth["dbname"]);						 // gibt es unter dokumente ein Verzeichnis mit dem Instanznamen
+    if ( !$auth ) {  return false; };                    // Anmeldung des Users fehlgeschlagen
+    chkdir($auth["dbname"]);                         // gibt es unter dokumente ein Verzeichnis mit dem Instanznamen
     chkdir($auth["dbname"].'/tmp/');
     foreach ($auth as $key=>$val) $_SESSION[$key] = $val;                // Mandanten + Userdaten in Session speichern
     $_SESSION["sessid"] = $cookie;
@@ -229,17 +229,17 @@ function anmelden() {
     $db_new   = new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
     $sql_alle_nutzer = "SELECT usr.id AS user_id, usr.login, usrc.cfg_value AS name FROM auth.user AS usr INNER JOIN auth.user_config AS usrc ON usr.id = usrc.user_id WHERE usrc.cfg_key = 'name' ORDER by usr.id";
     $sql_alle_gruppen = "SELECT grp.id AS grp_id, grp.name AS grp_name FROM auth.group AS grp ORDER by grp.id";
-	$sql_alle_zuordnung = "SELECT usrg.user_id AS user_id, usrg.group_id AS group_id FROM auth.user_group AS usrg ORDER by usrg.user_id";
+    $sql_alle_zuordnung = "SELECT usrg.user_id AS user_id, usrg.group_id AS group_id FROM auth.user_group AS usrg ORDER by usrg.user_id";
     $alle_nutzer = $db_new->getAll( $sql_alle_nutzer);
-	$alle_gruppen = $db_new->getAll( $sql_alle_gruppen);
-	$alle_zuordnung = $db_new->getAll( $sql_alle_zuordnung);
-	// $_SESSSION['ok'] da anmelden 2x durchlaufen wird ?? Bessere Lösung ?
+    $alle_gruppen = $db_new->getAll( $sql_alle_gruppen);
+    $alle_zuordnung = $db_new->getAll( $sql_alle_zuordnung);
+    // $_SESSSION['ok'] da anmelden 2x durchlaufen wird ?? Bessere Lösung ?
     if(!$_SESSION['ok']) {
-    	$_SESSION['erp_nutzer'] = $alle_nutzer;
-    	$_SESSION['erp_gruppen'] = $alle_gruppen;
-    	$_SESSION['erp_zuordnung'] = $alle_zuordnung;
-	}
-	$_SESSION['ok'] = "1";
+        $_SESSION['erp_nutzer'] = $alle_nutzer;
+        $_SESSION['erp_gruppen'] = $alle_gruppen;
+        $_SESSION['erp_zuordnung'] = $alle_zuordnung;
+    }
+    $_SESSION['ok'] = "1";
     // Mit der Mandanten-DB verbinden
     $_SESSION["db"]     = new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
     if( !$_SESSION["db"] ) {
@@ -257,13 +257,13 @@ function anmelden() {
         $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
         if ($user_data) foreach ($user_data as $key => $val) $_SESSION[$key] = $val;
         if ( isset($_SESSION['sql_error']) && $_SESSION['sql_error'] ) $_SESSION['db']->setShowError(true);
-        else $_SESSION['db']->setShowError(false); 
+        else $_SESSION['db']->setShowError(false);
         $_SESSION['dir_mode']  = ( $user_data['dir_mode'] != '' )?octdec($user_data['dir_mode']):493; // 0755
         $_SESSION["loginCRM"] = $user_data["id"];
         $_SESSION['theme']    = ($user_data['theme']=='' || $user_data['theme']=='base')?'':$user_data['theme'];
         $sql = "SELECT  * from schema_info where tag like 'relea%' order by itime desc limit 1";
         $rs = $_SESSION["db"]->getOne($sql);
-        $tmp = substr($rs['tag'],8); 
+        $tmp = substr($rs['tag'],8);
         $_SESSION["ERPver"]   = strtr($tmp,'_','.');
         $_SESSION["menu"]     = makeMenu($_SESSION["sessid"],$_SESSION["token"]);
         $_SESSION["basepath"] = $BaseUrl;
@@ -279,7 +279,7 @@ function anmelden() {
 * prueft, ob Verzeichnis besteht und legt es bei Bedarf an
 *****************************************************/
 function chkdir($dir,$p="") {
-    if ( isset($_SESSION['crmpath']) && file_exists($_SESSION['crmpath']."/dokumente/".$_SESSION["dbname"]."/".$dir) ) { 
+    if ( isset($_SESSION['crmpath']) && file_exists($_SESSION['crmpath']."/dokumente/".$_SESSION["dbname"]."/".$dir) ) {
         return $_SESSION['crmpath']."/dokumente/".$_SESSION["dbname"]."/".$dir;
     } else {
         if ( ! isset($_SESSION["dbname"]) ) return false;
@@ -292,7 +292,7 @@ function chkdir($dir,$p="") {
                 } else {
                     $ok = @mkdir($_SESSION['crmpath']."/dokumente/$tmp".$dir);
                 }
-                if ( isset($_SESSION['dir_group']) && $_SESSION['dir_group'] && $ok ) @chgrp($_SESSION['crmpath']."/dokumente/$tmp".$dir,$_SESSION['dir_group']); 
+                if ( isset($_SESSION['dir_group']) && $_SESSION['dir_group'] && $ok ) @chgrp($_SESSION['crmpath']."/dokumente/$tmp".$dir,$_SESSION['dir_group']);
                 if ( !$ok ) {
                     return false;
                 }
@@ -336,7 +336,7 @@ function chkFld(&$val,$empty,$rule,$len) {
                  $val = strtr($val,array("'"=>"''"));
                  break;
         case 2 : if ( $empty===0 && empty($val) ) { $ok = true; $val = ""; }
-                 else { $ok=preg_match('/^[0-9A-Z]{2,4}[-]{0,1}[0-9A-Z]{0,5}$/',$val,$hit); }; // Plz: PL=dd-ddd, NL=ddwwww, A=dddd 
+                 else { $ok=preg_match('/^[0-9A-Z]{2,4}[-]{0,1}[0-9A-Z]{0,5}$/',$val,$hit); }; // Plz: PL=dd-ddd, NL=ddwwww, A=dddd
                  if ( strlen($val)>$len && $len>0 ) $val = substr($val,0,$len);
                  break;
         case 3 : if ( $empty===0 && empty($val) ) { $ok=true; $val=""; }
@@ -353,7 +353,7 @@ function chkFld(&$val,$empty,$rule,$len) {
                  else { $ok = preg_match('/^[0-9]+$/',$val,$hit); } // Ganzzahlen
                  break;
         case 7 : if ( $empty===0 && empty($val) ) { $ok = true; $val = null;} // Datum
-                 else if ( $val == '00.00.0000' ) { $ok = true; $val = null;} 
+                 else if ( $val == '00.00.0000' ) { $ok = true; $val = null;}
                  else {
                      $t = explode(".",$val);
                      if ( $ok = checkdate($t[1],$t[0],$t[2]) ) {
@@ -374,7 +374,7 @@ function chkFld(&$val,$empty,$rule,$len) {
     }
     return $ok;
 }
-     
+
 function getVersiondb() {
     $rs = $_SESSION['db']->getOne("select * from crm order by datum desc limit 1");
     if ( !$rs["version"] ) return "V n.n.n";
@@ -685,25 +685,25 @@ function clearCSVData() {
 
 /**
  * Schreibt eine :-separierte Zeichenkette in die Tabelle tempcsvdata unter csvdaten
- * Die Eintraege sind ueber die Benutzer-Session wieder auffindbar und werden immer 
+ * Die Eintraege sind ueber die Benutzer-Session wieder auffindbar und werden immer
  * wieder geloescht. TODO: Soll das immer so sein?, dann vielleicht das Loeschen in diese
  * Funktion integrieren?
  * Der erste Eintrag soll immer der INDEX sein, d.h. die entsprechenden Spaltennamen
- * TODO Ist es moeglich den ersten Eintrag zu pruefen, um somit weniger Fehler beim 
+ * TODO Ist es moeglich den ersten Eintrag zu pruefen, um somit weniger Fehler beim
  * Aufrufen zu erzeugen? jb 16.6.2009
  *
- * @param string $data 
+ * @param string $data
  *
  * @return $rc TODO auf boolean setzen und korrekte Fehlerbehandlung umsetzen
  */
 function insertCSVData($data,$id){
     $tmpstr = implode(":",$data);                                               // ANREDE:NAME:STRASSE (...)
     $sql = "insert into tempcsvdata (uid,csvdaten,id) values ('"
-            . $_SESSION["loginCRM"] . "','" . $_SESSION['db']->saveData($tmpstr) . "','" 
+            . $_SESSION["loginCRM"] . "','" . $_SESSION['db']->saveData($tmpstr) . "','"
             . $_SESSION['db']->saveData($id) . "')";                                        // saveData escapt die Zeichenkette
     $rc = $_SESSION['db']->query($sql);
     return $rc;     //Fehlerbehandlung? Wie sieht es aus mit exceptions? Muessen wir php4-kompatibel sein?
-                    //Sollte eigentlich schon immer in den Funktionen direkt passieren 
+                    //Sollte eigentlich schon immer in den Funktionen direkt passieren
                     // http://pear.php.net/manual/de/standars.errors.php
 }
 
@@ -711,7 +711,7 @@ function insertCSVData($data,$id){
  * Liest die entsprechenden Daten der :-separierte Zeichenkette aus der Tabelle tempcsvdata.
  * Ruft selber nur getAll auf und schiebt die Fehlermeldung dann nach oben. Frage:
  * Kann man das eleganter gestalten?
- * 
+ *
  * @return false, mixed
  */
 function getCSVData(){
@@ -723,7 +723,7 @@ function getCSVData(){
  * Liefert die aktuell in der CRM-Session gespeicherte IDs.
  * Klammert die CSV-Kopfzeile aus, da nur ids groesser 0 aus der DB gelesen werden
  * False bei Misserfolg. Leider ansonsten Kopie von getCSVData. Ideen?
- * 
+ *
  * @return false, mixed
  */
 function getCSVDataID(){
@@ -735,7 +735,7 @@ function startTime() {
     $zeittemp    = explode(" ",$zeitmessung);
     $zeitmessung = $zeittemp[0]+$zeittemp[1];
     return $zeitmessung;
-}    
+}
 function stopTime($start) {
     $stop = startTime();
     $zeit = $stop - $start;
@@ -783,6 +783,7 @@ function mkHeader() {
                            $LV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/addons/pager/jquery.tablesorter.pager.css'.$LN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/js/jquery.tablesorter.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/js/jquery.tablesorter.widgets.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/js/tablesorter.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/addons/pager/jquery.tablesorter.pager.js'.$SN,
         'JQBOX'         => $SV.$_SESSION['baseurl'].'/crm/jquery-plugins/selectBoxIt/selectBoxIt.js'.$SN,
         'JQTIMECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/timepicker-master/jquery.ui.timepicker.css'.$LN,
@@ -801,17 +802,30 @@ function mkHeader() {
         'FULLCALCSS'    => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/fullcalendar.css'.$LN.
                            $LV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/fullcalendar.print.css" media="print'.$LN,
         'FULLCALJS'     => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/lib/moment.min.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/fullcalendar.min.js'.$SN. 
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/lang/'.$_SESSION['countrycode'].'.js'.$SN,  
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/fullcalendar.min.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/lang/'.$_SESSION['countrycode'].'.js'.$SN,
         'COLORPICKERCSS'=> $LV.$_SESSION['baseurl'].'crm/jquery-plugins/colorPicker/syronex-colorpicker.css'.$LN,
         'COLORPICKERJS' => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/colorPicker/syronex-colorpicker.js'.$SN,
         'JTABLECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/jtable/themes/jqueryui/jtable_jqueryui.min.css'.$LN,
         'JTABLEJS'      => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jtable/jquery.jtable.min.js'.$SN,
         'JQCOOKIE'      => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-cookie/jquery.cookie.js'.$SN,
-        'TINYMCE'       => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tinymce/tinymce.min.js'.$SN
-                              
+        'TINYMCE'       => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tinymce/tinymce.min.js'.$SN,
+        'JQTABLE-PAGER' => '<span id="pager" class="pager">
+                                <form>
+                                    <img src="'.$_SESSION["baseurl"].'crm/jquery-plugins/tablesorter-master/addons/pager/icons/first.png" class="first"/>
+                                    <img src="'.$_SESSION["baseurl"].'crm/jquery-plugins/tablesorter-master/addons/pager/icons/prev.png" class="prev"/>
+                                    <img src="'.$_SESSION["baseurl"].'crm/jquery-plugins/tablesorter-master/addons/pager/icons/next.png" class="next"/>
+                                    <img src="'.$_SESSION["baseurl"].'crm/jquery-plugins/tablesorter-master/addons/pager/icons/last.png" class="last"/>
+                                    <select class="pagesize" id="pagesize">
+                                        <option value="10">10</option>
+                                        <option value="20" selected>20</option>
+                                        <option value="30">30</option>
+                                        <option value="all">Alle</option>
+                                    </select>
+                                </form>
+                            </span>'
         );
-        
+
     return $head;
 
 }
@@ -836,7 +850,7 @@ function doHeader(&$t) {
 }
 /**
  * TODO: short description.
- * 
+ *
  * @return TODO
  */
 function getLanguage() {
@@ -865,7 +879,7 @@ function nextNumber($number) {
 *** invalide Zeichen sind: Umlaute  \ / : * ? " < > |        ***
 ***************************************************************/
 function mkDirName($name) {
-//sollte eigentlich in stdLib, diese müsste dann jedoch utf-8 codiert sein! 
+//sollte eigentlich in stdLib, diese müsste dann jedoch utf-8 codiert sein!
     $ers = array(
         ' ' => '_',  'ä' => 'ae', 'â' => 'ae', 'ã' => 'ae', 'à' => 'ae', 'á' => 'ae', 'ç' => 'c',
         'ï' => 'i',  'í' => 'i',  'ì' => 'i',  'î' => 'i',  'ö' => 'oe', 'ó' => 'oe', 'ò' => 'oe',
@@ -887,7 +901,7 @@ function makeMenu($sess,$token){
         $BaseUrl .= $_SERVER['HTTP_HOST'];
         $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
     } else {
-        $BaseUrl = $_SESSION['ERP_BASE_URL']; 
+        $BaseUrl = $_SESSION['ERP_BASE_URL'];
     }
     $_SESSION['baseurl'] = $BaseUrl;
     $Url = $BaseUrl.'controller.pl?action=Layout/empty&format=json';
@@ -903,7 +917,7 @@ function makeMenu($sess,$token){
                 "Connection: keep-alive",
                 "Cookie: ".$_SESSION["cookie"]."=".$sess."; ".$_SESSION["cookie"]."_api_token=".$token
                 ));
-    
+
     $result = curl_exec( $ch );
     if( $result === false || curl_errno( $ch )){
         die( 'Curl-Error: ' .curl_error($ch).' </br> $ERP_BASE_URL in "inc/conf.php" richtig gesetzt??' );
@@ -963,7 +977,7 @@ function accessHistory( $data=false ) {
         else {
             if ( $array_of_data && in_array( $data, $array_of_data ) ) unset( $array_of_data[array_search( $data, $array_of_data )] );
             $array_of_data[] = $data;
-            if ( count( $array_of_data ) > 8 ) array_shift( $array_of_data ); 
+            if ( count( $array_of_data ) > 8 ) array_shift( $array_of_data );
             $sql =  "UPDATE crmemployee SET val = '".json_encode( $array_of_data )."' WHERE uid = ".$_SESSION['loginCRM'];
             $sql .= " AND manid = ".$_SESSION['manid']." AND key = 'search_history'";
             $_SESSION['db']->query( $sql );
@@ -978,15 +992,15 @@ function getCurrencies() {
 }
 
 function ts2gerdate( $myts ){//Timestamp to German Date
-	$german_weekdays = array( "Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag" );
-	$german_months = array( "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" );
-	//Datumsbestandteile ermitteln
-	$wd   = $german_weekdays[date("w",$myts)];
-	$day  = date( "d", $myts );
-	$m    = $german_months[date("m",$myts)-1];
-	$year = date("Y",$myts);
-	$hour = date("H",$myts);
-	$min  = date("i",$myts);
-	return $wd.", ".$day.". ".$m." ".$year." ".$hour.":".$min;
+    $german_weekdays = array( "Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag" );
+    $german_months = array( "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" );
+    //Datumsbestandteile ermitteln
+    $wd   = $german_weekdays[date("w",$myts)];
+    $day  = date( "d", $myts );
+    $m    = $german_months[date("m",$myts)-1];
+    $year = date("Y",$myts);
+    $hour = date("H",$myts);
+    $min  = date("i",$myts);
+    return $wd.", ".$day.". ".$m." ".$year." ".$hour.":".$min;
 }
 ?>

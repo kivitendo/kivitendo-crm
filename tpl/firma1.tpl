@@ -9,8 +9,6 @@
 <link rel="stylesheet" href="jquery-plugins/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
 <script type="text/javascript" src="jquery-plugins/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 <script type="text/javascript" src="jquery-plugins/qrcode/jquery.qrcode-0.12.0.js"></script>
-
-<script type="text/javascript" src="{CRMPATH}js/tablesorter.js"></script>
 <script language="JavaScript" type="text/javascript">
     function showCall() {
         $('#calls tr[group="tc"]').remove();

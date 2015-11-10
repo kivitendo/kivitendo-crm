@@ -5,8 +5,9 @@
 {JAVASCRIPTS}
 {THEME}
 {JQTABLE}
-	<link rel="stylesheet" href="jquery-plugins/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
-	<script type="text/javascript" src="jquery-plugins/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script> 
+    <link rel="stylesheet" href="jquery-plugins/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+    <script type="text/javascript" src="jquery-plugins/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+    <script type="text/javascript" src="{CRMPATH}js/tablesorter.js"></script>
     <script language="JavaScript">
     <!--
         function showItem(id) {
@@ -15,14 +16,14 @@
         }
         function qrcode() {
             pid = $('#liste option:selected').val();
-          	//  document.location.href="vcardexp.php?qr=1&Q={Q}&pid="+pid; 
-			$.ajax({
+              //  document.location.href="vcardexp.php?qr=1&Q={Q}&pid="+pid;
+            $.ajax({
                url: 'vcardexp.php?qr=1&Q={Q}&pid='+pid,
                type: 'GET',
                success: function(data){
-               		$(".fancybox").trigger('click');
+                       $(".fancybox").trigger('click');
                }
-             })                        
+             })
         }
         function anschr() {
             pid = $('#liste option:selected').val();
@@ -40,17 +41,17 @@
         function vcard(){
             pid = $('#liste option:selected').val();
             document.location.href="vcardexp.php?Q={Q}&pid="+pid;
-        }        
-        function cedit(ed){                
+        }
+        function cedit(ed){
             pid=false;
             if (ed) pid = $('#liste option:selected').val();
             document.location.href="personen3.php?id="+pid+"&edit="+ed+"&Quelle={Q}&fid={FID}";
         }
-        function sellist(){                
+        function sellist(){
             pid = $('#liste option:selected').val();
             document.location.href="personen1.php?fid={FID}&Quelle={Q}";
         }
-        function doclink(){                
+        function doclink(){
             pid = $('#liste option:selected').val();
             document.location.href="firma4.php?Q={Q}&fid={FID}&pid="+pid;
         }
@@ -109,12 +110,12 @@
                                    $('#cp_givenname').empty().append(data.cp_givenname);
                                    $('#cp_name').empty().append(data.cp_name);
                                    $('#cp_street').empty().append(data.cp_street);
-                                   $('#cp_country').empty().append(data.cp_country); 
+                                   $('#cp_country').empty().append(data.cp_country);
                                    $('#cp_zipcode').empty().append(data.cp_zipcode);
                                    $('#cp_city').empty().append(data.cp_city);
-                                   $('#cp_phone1').empty().append(data.cp_phone1); 
+                                   $('#cp_phone1').empty().append(data.cp_phone1);
                                    $('#cp_phone2').empty().append(data.cp_phone2);
-                                   $('#cp_mobile1').empty().append(data.cp_mobile1); 
+                                   $('#cp_mobile1').empty().append(data.cp_mobile1);
                                    $('#cp_mobile2').empty().append(data.cp_mobile2);
                                    $('#cp_fax').empty().append(data.cp_fax);
                                    $('#cp_email').empty().append(data.cp_email);
@@ -133,12 +134,12 @@
                                   $('#cp_title').empty();
                                   $('#cp_givenname').empty();
                                   $('#cp_street').empty();
-                                  $('#cp_country').empty(); 
+                                  $('#cp_country').empty();
                                   $('#cp_zipcode').empty();
                                   $('#cp_city').empty();
-                                  $('#cp_phone1').empty(); 
+                                  $('#cp_phone1').empty();
                                   $('#cp_phone2').empty();
-                                  $('#cp_mobile1').empty(); 
+                                  $('#cp_mobile1').empty();
                                   $('#cp_mobile2').empty();
                                   $('#cp_fax').empty();
                                   $('#cp_email').empty();
@@ -162,7 +163,7 @@
                 f1=open("wissen.php?kdhelp="+link,"Wissen","width=750, height=600, left=50, top=50, scrollbars=yes");
                 $('#kdhelp option')[0].selected = true;
             }
-        }        
+        }
     var f1 = null;
     function toolwin(tool,_pid) {
         leftpos=Math.floor(screen.width/2);
@@ -190,8 +191,8 @@
     $(function(){
          $('button')
           .button()
-          .click( function(event) { 
-              event.preventDefault();  
+          .click( function(event) {
+              event.preventDefault();
               name = this.getAttribute('name');
               if ( name == 'ks' ) {
                   var sw = $('#suchwort').val();
@@ -203,14 +204,14 @@
               } else if ( name == 'Link2' ) {
                   document.location.href = '{Link2}';
               } else if ( name == 'Link3' ) {
- 					   document.location.href = '{Link3}'; 
+                        document.location.href = '{Link3}';
               } else if ( name == 'close' ) {
                   event.preventDefault();
               } else if ( name == 'null' ) {
                   event.preventDefault();
               } else if ( name ){
                   var pid = $('#liste option:selected').val();
-                  document.location.href = name + pid; 
+                  document.location.href = name + pid;
               } else {
                   event.preventDefault();
               }
@@ -220,13 +221,13 @@
          .click(function( event ) {
               event.preventDefault();
          });
-         
+
          $(".fancybox").fancybox();
-         
+
          $("#cpqr").click(function( event ) {
-         	qrcode();
+             qrcode();
          });
-         
+
     });
 
 
@@ -234,16 +235,17 @@
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
-<p class="listtop" >.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}</span></p>
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
+
 <div id="menubox1">
-    <div class="fancybox" rel="group" href="tmp/qr_{loginname}.png"><img src="" alt="" /></div> 
+    <div class="fancybox" rel="group" href="tmp/qr_{loginname}.png"><img src="" alt="" /></div>
     <span style="float:left;" class="top1">
     <button name="Link1">.:Custombase:.</button>
     <button name="Link2">.:Contacts:.</button>
     <button name="Link3">.:Sales:.</button>
     <button name="firma4.php?Q={Q}&fid={FID}&pid=">.:Documents:.</button>
     <select style="visibility:{chelp}" id='kdhelp' name="kdhelp" onChange="KdHelp()">
-<!-- BEGIN kdhelp -->
+    <!-- BEGIN kdhelp -->
         <option value="{cid}">{cname}</option>
 <!-- END kdhelp -->
     </select>
@@ -285,8 +287,8 @@
         </div>
         <div style="float:left; width:29%; height:13em; text-align:right; border-bottom: 0px ;" id="cpinhalt2">
             <span id="extraF"></span>
-            <a href="#" onCLick="vcard();"><img src="image/vcard.png" border="0" style="visibility:{none};" id="cpvcard" height='30'></a> &nbsp; 
-            <a href="#"><img src="image/qr.png" border="0" style="visibility:{none};" id="cpqr" height='30'></a> &nbsp; 
+            <a href="#" onCLick="vcard();"><img src="image/vcard.png" border="0" style="visibility:{none};" id="cpvcard" height='30'></a> &nbsp;
+            <a href="#"><img src="image/qr.png" border="0" style="visibility:{none};" id="cpqr" height='30'></a> &nbsp;
             <a href="#" onCLick="anschr();"><img src="image/brief.png" border="0" style="visibility:{none};" id="cpbrief" height='30'></a><br />
             <span id="cp_grafik" style="padding-right:1px;"></span></br >
             <span id="cp_birthday" style="padding-right:1px;"></span></br />
@@ -298,7 +300,7 @@
             &nbsp;<span id="cp_privatphone"></span> <span id="cp_privatemail"></span><br />
              <hr width="100%">
                 &nbsp;<!--input type='submit' value='VCard' onClick="vcard()" -->
-                <b>.:Contacts:.:</b> 
+                <b>.:Contacts:.:</b>
                 <input type='submit' value='{Edit}' onClick="cedit(1)" >
                 <input type='submit' value='.:keyin:.' onClick="cedit(0)" >
                 <input type='submit' value='.:fromList:.' onClick="sellist()">
@@ -315,21 +317,21 @@
         </tbody>
         </table><br>
         <div id="pager" class="pager" style='position:absolute;'>
-        <form name="ksearch" onSubmit="return ks();"> &nbsp; 
- 	   	<img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/first.png" class="first"/>
- 	   	<img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/prev.png" class="prev"/>
+        <form name="ksearch" onSubmit="return ks();"> &nbsp;
+            <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/first.png" class="first"/>
+            <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/prev.png" class="prev"/>
             <input type="text" id="suchwort" name="suchwort" size="20"><input type="hidden" name="Q" value="{Q}">
-            <button id='ks' name='ks'>.:search:.</button> 
-            <button id='reload' name='reload'>reload</button>             
- 	   	<img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/next.png" class="next"/>
- 	   	<img src="{CRMPATH}jquery-plugins/Table/addons/pager/icons/last.png" class="last"/>
- 	   	<select class="pagesize" id='pagesize'>
- 	   		<option value="10">10</option>
- 	   		<option value="15" selected>15</option>
- 	   		<option value="20">20</option>
- 	   		<option value="25">25</option>
- 	   		<option value="30">30</option>
- 	   	</select>
+            <button id='ks' name='ks'>.:search:.</button>
+            <button id='reload' name='reload'>reload</button>
+            <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/next.png" class="next"/>
+            <img src="{CRMPATH}jquery-plugins/tablesorter-master  /addons/pager/icons/last.png" class="last"/>
+            <select class="pagesize" id='pagesize'>
+                <option value="10">10</option>
+                <option value="15" selected>15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="all">Alle</option>
+            </select>
         </form>
         </div>
 </div>

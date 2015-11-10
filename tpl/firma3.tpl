@@ -5,7 +5,6 @@
 {JAVASCRIPTS}
 {THEME}
 {JQTABLE}
-    <script type="text/javascript" src="{CRMPATH}js/tablesorter.js"></script>
     <script language="JavaScript">
     <!--
     function showM (month) {

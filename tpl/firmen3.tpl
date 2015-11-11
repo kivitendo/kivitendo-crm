@@ -17,38 +17,63 @@
     //-->
     </script>
     <script>
-    $(document).ready(
-        function(){
-            $("#country").blur(function(){
-               var country = $("#country").val();
-               $.ajax({
-                   url: "jqhelp/firmaserver.php?task=bland&land="+country,
-                   dataType: 'json',
-                   success: function(items){
-                       $("#bland").empty();
-                       $.each(items, function( index, item ) {
-                           $("<option/>").val(item.id).text(item.val).appendTo("#bland");
-                       })
-                   }
-               })
+    $(document).ready( function(){
+
+    //dialog A
+        $("#dialogmsg")
+        .dialog({
+            autoOpen: false,
+            title: "Fehler Anrede",
+            text: "Textfeld Bitte die Anrede angeben.",
+            buttons: {
+                Ok: function() {
+                    $(this).dialog("close");
+                }
+            }
+        })
+        $("#myname")
+        .focus(function() {
+            if($("#greeting").val() == "" && $("#greeting_").val() == "") {
+                $(function() {
+                    //alert("Beide Felder der Anrede sind leer. Bitte die entsprechende Anrede eintippen oder aus dem Drop-Down-Menü wählen.");
+                    //.dialog("open");
+                    //$("#dialogmsg")
+                    //$('#dialogmsg').text('Click on the link to download the file:');
+                    $('#dialogmsg').dialog("open");
+                })
+            }
+            return false;
+        })
+
+    //dialog E
+
+        $("#country").blur(function(){
+            var country = $("#country").val();
+            $.ajax({
+                url: "jqhelp/firmaserver.php?task=bland&land="+country,
+                dataType: 'json',
+                success: function(items){
+                    $("#bland").empty();
+                    $.each(items, function (index, item ) {
+                        $("<option/>").val(item.id).text(item.val).appendTo("#bland");
+                    })
+                }
             })
-        });
-    $(document).ready(
-        function(){
-            $("#shiptocountry").blur(function(){
-               var country = $("#shiptocountry").val();
-               $.ajax({
-                   url: "jqhelp/firmaserver.php?task=bland&land="+country,
-                   dataType: 'json',
-                   success: function(items){
-                       $("#shiptobland").empty();
-                       $.each(items, function( index, item ) {
-                           $("<option/>").val(item.id).text(item.val).appendTo("#shiptobland");
-                       })
-                   }
-               })
+        })
+        $("#shiptocountry").blur(function(){
+            var country = $("#shiptocountry").val();
+            $.ajax({
+                url: "jqhelp/firmaserver.php?task=bland&land="+country,
+                dataType: 'json',
+                success: function (items) {
+                    $("#shiptobland").empty();
+                    $.each(items, function(index, item) {
+                        $("<option/>").val(item.id).text(item.val).appendTo("#shiptobland");
+                    })
+                 }
             })
-        });
+        })
+    });
     $(document).ready(
         function(){
             $("#shiptoadress").change(function(){
@@ -81,7 +106,7 @@
 {PRE_CONTENT}
 {START_CONTENT}
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;"> {FAART} .:keyin:./.:edit:.</p>
-
+<div id="dialogmsg">Bitte die Anrede angeben.</div>
 <div id="maintab">
     <ul>
     <li><a href="#tab1">.:address:.</a></li>
@@ -104,7 +129,7 @@
         <br />
         <div class="zeile2">
             <span class="label klein">.:greeting:.</span>
-            <span class="feldxx"> <input type="text" name="greeting_" size="15" maxlength="75" value="{greeting_}" tabindex="1">
+            <span class="feldxx"> <input type="text" name="greeting_" id="greeting_" size="15" maxlength="75" value="{greeting_}" tabindex="1">
                     <select name="greeting" id="greeting" tabindex="2">
                         <option value="">
 <!-- BEGIN anreden -->
@@ -115,7 +140,7 @@
         </div>
         <div class="zeile2">
             <span class="label klein">.:name:. </span>
-            <span class="feldxx"> <input type="text" name="name" size="35" maxlength="75" value="{name}" tabindex="3"></span>
+            <span class="feldxx"> <input type="text" name="name" id="myname" size="35" maxlength="75" value="{name}" tabindex="3"></span>
         </div>
         <div class="zeile2">
             <span class="label klein">.:department:. 1</span>
@@ -204,7 +229,7 @@
                 <span class="feldxx">
                     <input type="text" name="uid" size="20" maxlength="125" tabindex="16">
                 </span>
-		<br><br>
+        <br><br>
                 <span class="feldxx">
                 {IMG}
                 </span>
@@ -369,7 +394,7 @@
                     <option value="2" {txid2}>EU ohne UStID
                     <option value="3" {txid3}>Ausland
                     <option value="4" {txid4}>Inland
-                </select> 
+                </select>
             </span>
         </div>
         <div class="zeile2">
@@ -401,7 +426,7 @@
             <input type="hidden" name="konzern" value="{konzern}">
             <span class="feldxx"><input type="text" name="konzernname" size="30" value="{konzernname}" maxlength="50" tabindex="14">{konzern}<input type="button" name="suche" value="suchen" onClick="suchFa();"></span>
         </div>
- 
+
         <div class="zeile2">
             <span class="label klein">.:salesman:.</span>
             <span class="feldxx">
@@ -447,7 +472,7 @@
     </span>
 </span>
 <span id="buttonrow" style="position:absolute; text-align:left;width:48%; left:0.8em; top:39em;">
-        {Btn1} &nbsp;{Btn2} &nbsp; 
+        {Btn1} &nbsp;{Btn2} &nbsp;
         <input type="submit" class="sichernneu" name="saveneu" value=".:save:. .:new:." tabindex="97"> &nbsp;
         <input type="submit" class="clear" name="reset" value=".:clear:." tabindex="98"> &nbsp;
         <input type="button" name="" value="VCard" onClick="vcard()" tabindex="99">
@@ -461,4 +486,3 @@
 {END_CONTENT}
 </body>
 </html>
-            

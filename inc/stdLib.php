@@ -783,8 +783,9 @@ function mkHeader() {
                            $LV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/addons/pager/jquery.tablesorter.pager.css'.$LN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/js/jquery.tablesorter.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/js/jquery.tablesorter.widgets.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/js/tablesorter.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/addons/pager/jquery.tablesorter.pager.js'.$SN,
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/addons/pager/jquery.tablesorter.pager.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/js/widgets/widget-build-table.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/js/tablesorter.js'.$SN,
         'JQBOX'         => $SV.$_SESSION['baseurl'].'/crm/jquery-plugins/selectBoxIt/selectBoxIt.js'.$SN,
         'JQTIMECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/timepicker-master/jquery.ui.timepicker.css'.$LN,
         'JQTIME'        => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/timepicker-master/jquery.ui.timepicker.js'.$SN.

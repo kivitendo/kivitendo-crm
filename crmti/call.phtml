@@ -11,18 +11,67 @@
     //echo $head['FULLCALCSS'];
     echo $head['BOXCSS'];
     //echo $head['COLORPICKERCSS'];
- 
+
     echo $head['JQTABLE'];
     echo $head['THEME'];
     //echo $head['FULLCALJS'];
     //echo $head['JQBOX'];
     //echo $head['COLORPICKERJS'];
     //print_r( $_SESSION );
-  
+
 ?>
-<script>
+
+
+<script type="text/javascript">
 
     $(document).ready(function(){
+
+  // object or JSON
+  var dataObject = {
+    headers : [
+      [
+        // each object/string is a cell
+        { text: 'First Name', class: 'fname', width: '10%' }, // row 0 cell 1
+        'Last Name',                                          // row 0 cell 2
+        { text: 'Age', class: 'age', 'data-sorter' : false }, // row 0 cell 3
+        'Total',                                              // row 0 cell 4
+        { text: 'Discount', class : 'sorter-false' },         // row 0 cell 5
+        { text: 'Date', class : 'date' }                      // row 0 cell 6
+      ]
+    ],
+    footers : 'clone', // clone headers or assign array like headers
+    rows : [
+      // TBODY 1
+      [ 'Peter', 'Parker', 28, '$9.99',  '20%', 'Jul 6, 2006 8:14 AM'   ], // row 1
+      [ 'John',  'Hood',   33, '$19.99', '25%', 'Dec 10, 2002 5:14 AM'  ], // row 2
+      [ 'Clark', 'Kent',   18, '$15.89', '44%', 'Jan 12, 2003 11:14 AM' ], // row 3
+
+      // TBODY 2
+      { newTbody: true, class: 'tablesorter-infoOnly' },
+      { cells : [ { html: '<strong>Info Row</strong>', colSpan: 6 } ] }, // row 4
+
+      // TBODY 3
+      { newTbody: true },
+      [ 'Bruce', 'Evans',    22, '$13.19',  '11%', 'Jan 18, 2007 9:12 AM'  ], // row 5
+      [ 'Bruce', 'Almighty', 45, '$153.19', '44%', 'Jan 18, 2001 9:12 AM'  ], // row 6
+
+      { class: 'specialRow', // row 7
+        cells: [
+          // each object/string is a cell
+          { text: 'Fred', class: 'fname' },                                  // row 7 cell 1
+          { text: 'Smith', class: 'lname' },                                 // row 7 cell 2
+          { text: 18, class: 'age', 'data-info': "fake ID!, he's only 16" }, // row 7 cell 3
+          { text: '$22.44', class: 'total' },                                // row 7 cell 4
+          '8%',                                                              // row 7 cell 5
+          { text: 'Aug 20, 2012 10:15 AM', class: 'date' }                   // row 7 cell 6
+        ],
+        'data-info' : 'This row likes turtles'
+      }
+    ]
+  };
+
+
+
         $.ajax({
             dataType: "json",
             url: "../jqhelp/getCallList.php?action=complete",
@@ -30,21 +79,28 @@
             success : function (data){
                 console.log(data)
             }
-        });        
-        
-        var opts = { debug: true,
-            "theme": "blue",
-            "widgetOptions": {
-                "build_type": "json",
-                "build_source": {
-                    "url": "../jqhelp/getCallList.php?action=complete",
-                    "dataType": "json"
-                }   
-            }
-        };
-        $('#object2Table2').tablesorter(opts); 
-        
-    	$( "#calllist" ).html( "CallList" ).css({
+        });
+
+
+ $('#table').tablesorter({
+    theme: 'blue',
+    widgets: ['zebra'],
+    //data : dataObject, // same as using build_source (build_source would override this)
+    //widgetOptions : {
+
+      // *** build object options ***
+     // build_objectRowKey    : 'rows',    // object key containing table rows
+     // build_objectCellKey   : 'cells',   // object key containing table cells (within the rows object)
+     // build_objectHeaderKey : 'headers', // object key containing table headers
+    //  build_objectFooterKey : 'footers'  // object key containing table footers
+    //}
+    widgetOptions: {
+      build_type   : 'json',
+      build_source : { url: '../jqhelp/getCallList.php?action=complete', dataType: 'json' }
+    }
+  });
+
+        $( "#calllist" ).html( "CallList" ).css({
             color: "red"
         })
     });
@@ -54,19 +110,15 @@
 </style>
 </head>
 <body>
-<?php 
+<?php
     echo $menu['pre_content'];
     echo $menu['start_content'];
 ?>
 <div class="ui-widget-content" style="height:600px">
-<div id="calllist"></div>
-<div id="object2Table2"></div>
+<div id="table"></div>
 <!--
-Hier stehen die vielen Div-Container    
--->  
-            
-
-
+Hier stehen die vielen Div-Container
+-->
 
 
 </div>

@@ -25,25 +25,32 @@
                 //alert("test" + JSON.stringify(data));
                 //console.log(data)
                  drawTable(data);
+                 $(".tablesorter").tablesorter({
+                         sortReset      : true,
+                         sortRestart    : true})
 
             }
         });
+
         function drawTable(data) {
             for (var i = 0; i < data.length; i++) {
+                if (i==0) {
+                //$("#tbody").append("")
+                }
                 drawRow(data[i]);
             }
         }
 
         function drawRow( rowData ) {
-            var row = $("<tr />")
-            $("#DataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
+            var row = $("<tr>")
+            $("#tbody").append(row);
             row.append($("<td>" + rowData.call_date  + "</td>"));
             row.append($("<td>" + rowData.crmti_status + "</td>"));
             row.append($("<td>" + rowData.crmti_src + "</td>"));
             row.append($("<td>" + rowData.crmti_dst + "</td>"))
             row.append($("<td>" + rowData.crmti_caller_id + "</td>"))
             row.append($("<td>" + rowData.crmti_caller_typ + "</td>"))
-            row.append($("<td>" + rowData.crmti_caller_direction + "</td>"))
+            row.append($("<td>" + rowData.crmti_direction + "</td></tr>"))
             }
 
 
@@ -66,16 +73,23 @@
 <div class="ui-widget-content" style="height:600px">
 
 <table id="DataTable" class="tablesorter">
-    <tr>
-        <th>date</th>
-        <th>status</th>
-        <th>source</th>
-        <th>destination</th>
-        <th>caller_id</th>
-        <th>direction</th>
-    </tr>
+<thead>
+  <tr>
+    <th>date</th>
+    <th>status</th>
+    <th>source</th>
+    <th>destination</th>
+    <th>caller_id</th>
+    <th>caller_typ</th>
+    <th>direction</th>
+  </tr>
+</thead>
+<tbody id="tbody">
+</tbody>
 </table>
 
+
+<div id="pager"></div>
 
 </div>
 <?php echo $menu['end_content']; ?>

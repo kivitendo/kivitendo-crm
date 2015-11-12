@@ -2,6 +2,8 @@
 $texts = array(
     '.:account:.'                                                  => 'Konto',
     '.:address:.'                                                  => 'Rechnungsadresse',
+    '.:address error:.'                                            => 'Fehler: Anrede',
+    '.:address msg:.'                                              => 'Bitte die Anrede angeben.',
     '.:adress:.'                                                   => 'Adresse',
     '.:all:.'                                                      => 'alle (und)',
     '.:allocate:.'                                                 => 'Zuordnen',
@@ -92,7 +94,7 @@ $texts = array(
     '.:equal:.'                                                    => 'Egal',
     '.:error:.'                                                    => 'Fehler',
     '.:exportcal:.'                                                => 'Kalenderexport',
-    '.:external_mail:.'                                            => 'Externer Mailclient',  
+    '.:external_mail:.'                                            => 'Externer Mailclient',
     '.:extra data:.'                                               => 'Extra Daten',
     '.:extra:.'                                                    => 'Extra',
     '.:fast search customer/vendor/contacts and contact history:.' => 'Schnellsuche Kunde/Lieferant/Kontakte und Kontaktverlauf',

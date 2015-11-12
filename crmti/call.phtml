@@ -8,8 +8,8 @@
     $head = mkHeader();
     echo $menu['stylesheets'];
     echo $menu['javascripts'];
-    echo $head['THEME'];
     echo $head['JQTABLE'];
+    echo $head['THEME'];
 
 
 ?>
@@ -22,21 +22,13 @@
             url: "../jqhelp/getCallList.php?action=complete",
             method: "GET",
             success : function (data){
-                //alert("test" + JSON.stringify(data));
-                //console.log(data)
-                 drawTable(data);
-                 $(".tablesorter").tablesorter({
-                         sortReset      : true,
-                         sortRestart    : true})
-
+                drawTable(data);
+                $("#DataTable").trigger("update");
+                $("#DataTable").trigger("appendCache");
             }
         });
-
         function drawTable(data) {
             for (var i = 0; i < data.length; i++) {
-                if (i==0) {
-                //$("#tbody").append("")
-                }
                 drawRow(data[i]);
             }
         }
@@ -44,53 +36,47 @@
         function drawRow( rowData ) {
             var row = $("<tr>")
             $("#tbody").append(row);
-            row.append($("<td>" + rowData.call_date  + "</td>"));
-            row.append($("<td>" + rowData.crmti_status + "</td>"));
-            row.append($("<td>" + rowData.crmti_src + "</td>"));
-            row.append($("<td>" + rowData.crmti_dst + "</td>"))
-            row.append($("<td>" + rowData.crmti_caller_id + "</td>"))
-            row.append($("<td>" + rowData.crmti_caller_typ + "</td>"))
-            row.append($("<td>" + rowData.crmti_direction + "</td></tr>"))
-            }
-
-
-
-        $( "#calllist" ).html( "CallList" ).css({
-            color: "red"
-        })
-
+            row.append($("<td>" + $.trim(rowData.call_date)  + "</td>"));
+            row.append($("<td>" + $.trim(rowData.crmti_status) + "</td>"));
+            row.append($("<td>" + $.trim(rowData.crmti_src) + "</td>"));
+            row.append($("<td>" + $.trim(rowData.crmti_dst) + "</td>"))
+            row.append($("<td>" + $.trim(rowData.crmti_caller_id) + "</td>"))
+            row.append($("<td>" + $.trim(rowData.crmti_caller_typ) + "</td>"))
+            row.append($("<td>" + $.trim(rowData.crmti_direction) + "</td></tr>"))
+        }
     });
 </script>
 <style>
-    #calllist    { position:absolute; top:130px; left:87px; }
+  table.tablesorter { width:auto; cursor:pointer; }
+  th.date { width: 100px }
+  th.status, th.id{ width: 70px }
+  th.source, th.dest { width: 200px; }
+  th.typ, th.dir { width: 50px; }
 </style>
 </head>
+
 <body>
 <?php
     echo $menu['pre_content'];
     echo $menu['start_content'];
 ?>
 <div class="ui-widget-content" style="height:600px">
-
-<table id="DataTable" class="tablesorter">
-<thead>
-  <tr>
-    <th>date</th>
-    <th>status</th>
-    <th>source</th>
-    <th>destination</th>
-    <th>caller_id</th>
-    <th>caller_typ</th>
-    <th>direction</th>
-  </tr>
-</thead>
-<tbody id="tbody">
-</tbody>
-</table>
-
-
-<div id="pager"></div>
-
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;"><b>Anrufliste</b></p>
+  <table id="DataTable" class="tablesorter">
+    <thead>
+      <tr>
+        <th class="date">date</th>
+        <th class="status">status</th>
+        <th class="source">source</th>
+        <th class="dest">destination</th>
+        <th class="id">caller_id</th>
+        <th class="typ">caller_typ</th>
+        <th class="dir"> direction</th>
+      </tr>
+    </thead>
+    <tbody id="tbody">
+    </tbody>
+  </table>
 </div>
 <?php echo $menu['end_content']; ?>
 </body>

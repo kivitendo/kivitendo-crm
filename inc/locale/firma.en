@@ -2,6 +2,8 @@
 $texts=array(
     '.:account:.'                                                  => 'Account',
     '.:address:.'                                                  => 'Invoice Address',
+    '.:address error:.'                                            => 'Error: Form of Address',
+    '.:address msg:.'                                              => 'Bitte die Anrede angeben.',
     '.:adress:.'                                                   => 'Adress',
     '.:all:.'                                                      => 'all (and)',
     '.:allocate:.'                                                 => 'allocate',
@@ -101,7 +103,7 @@ $texts=array(
     '.:equal:.'                                                    => 'Equal',
     '.:error:.'                                                    => 'Error',
     '.:exportcal:.'                                                => 'export calendar',
-    '.:external_mail:.'                                            => 'Extern Mailclient',  
+    '.:external_mail:.'                                            => 'Extern Mailclient',
     '.:extra data:.'                                               => 'extra Data',
     '.:extra:.'                                                    => 'extra',
     '.:fast search customer/vendor/contacts and contact history:.' => 'Fast Search Customer/Vendor/Contacts and Contact History',

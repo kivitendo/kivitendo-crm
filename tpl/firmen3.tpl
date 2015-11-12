@@ -23,8 +23,7 @@
         $("#dialogmsg")
         .dialog({
             autoOpen: false,
-            title: "Fehler Anrede",
-            text: "Textfeld Bitte die Anrede angeben.",
+            title: ".:address error:.",
             buttons: {
                 Ok: function() {
                     $(this).dialog("close");
@@ -35,11 +34,7 @@
         .focus(function() {
             if($("#greeting").val() == "" && $("#greeting_").val() == "") {
                 $(function() {
-                    //alert("Beide Felder der Anrede sind leer. Bitte die entsprechende Anrede eintippen oder aus dem Drop-Down-Menü wählen.");
-                    //.dialog("open");
-                    //$("#dialogmsg")
-                    //$('#dialogmsg').text('Click on the link to download the file:');
-                    $('#dialogmsg').dialog("open");
+                    $('#dialogmsg').dialog("open").text(".:address msg:.");
                 })
             }
             return false;
@@ -106,7 +101,7 @@
 {PRE_CONTENT}
 {START_CONTENT}
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;"> {FAART} .:keyin:./.:edit:.</p>
-<div id="dialogmsg">Bitte die Anrede angeben.</div>
+<div id="dialogmsg"></div>
 <div id="maintab">
     <ul>
     <li><a href="#tab1">.:address:.</a></li>

@@ -3,7 +3,7 @@
 <head>
 <meta charset='utf-8'/>
 <?php
-    require_once("../inc/stdLib.php");
+    require_once("inc/stdLib.php");
     $menu = $_SESSION['menu'];
     $head = mkHeader();
     echo $menu['stylesheets'];
@@ -19,7 +19,7 @@
     $(document).ready(function(){
         $.ajax({
             dataType: "json",
-            url: "../jqhelp/getCallList.php?action=complete",
+            url: "jqhelp/getCallList.php?action=complete",
             method: "GET",
             success : function (data){
                 drawTable(data);

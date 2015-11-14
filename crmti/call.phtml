@@ -26,8 +26,9 @@
             }
         });
         $(document).on("click", "#DataTable tr", function(e) {
-            alert("test");
-            console.log(this);
+            var id = $(this).closest('tr').children().eq(4).text();
+            var q = $(this).closest('tr').children().eq(5).text();
+            window.location.href = "../firma1.php?Q=" + q +"&id=" + id;
         });
         function drawTable(data) {
             for (var i = 0; i < data.length; i++) {

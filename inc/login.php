@@ -28,8 +28,8 @@ if ( isset($_POST["erpname"]) ) {
 
 // Beim Setzen von crmpath muss zwingend darauf geachtet werden, dass man sich nicht in einem Unterverzeichnis befindet.
 // Bem.: Da am Ende des von getcwd() zurück gegeben Strings kein Slash steht funktioniert dirname() hier.
-// aus /root/kivitendo/inc wird /root/kivitendo 
-if ( empty($_SESSION['crmpath']) ) $_SESSION['crmpath'] = ( substr(getcwd(),-3) == "inc" || substr(getcwd(),-6) == "jqhelp" || substr(getcwd(),-6) == "lxcars" ) ? dirname(getcwd()) : getcwd();
+// aus /root/kivitendo/inc wird /root/kivitendo
+if ( empty($_SESSION['crmpath']) ) $_SESSION['crmpath'] = ( substr(getcwd(),-3) == "inc" || substr(getcwd(),-6) == "jqhelp" || substr(getcwd(),-6) == "lxcars" || substr(getcwd(),-5) == "crmti"  ) ? dirname(getcwd()) : getcwd();
 $conffile = $_SESSION['crmpath']."/../".$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf";
 
 
@@ -43,13 +43,13 @@ if ( is_file($conffile) ) {
 
     if ( $tmp ) {
         //SQL-Fehler vermeiden wenn crm noch nicht existiert (neue DB), besser wäre es die Tabelle crm zuerst erstellen ToDo!
-        $crm_exist = $_SESSION['db']->getOne( "SELECT count(*) FROM information_schema.tables WHERE table_name = 'crm'"); 
+        $crm_exist = $_SESSION['db']->getOne( "SELECT count(*) FROM information_schema.tables WHERE table_name = 'crm'");
         if ( (bool) $crm_exist['count']) $rs = $_SESSION['db']->getOne('SELECT * FROM crm ORDER BY version DESC LIMIT 1');
         $dbver  = $rs['version'];
         // Existiert crm nicht so kann auch ein Fehler-Objekt zurückgegeben werden
         if ( is_object($rs) || !$rs || $dbver=="" || $dbver==false ) {
-            echo "CRM-Tabellen sind nicht (vollst&auml;ndig) installiert"; 
-            flush(); 
+            echo "CRM-Tabellen sind nicht (vollst&auml;ndig) installiert";
+            flush();
             require("install.php");
             require("inc/update_neu.php");
             echo "<b>Richten Sie nun zun&auml;chst den [<a href='mandant.php'>Mandenten</a>] in der CRM ein,<br>";

@@ -3,7 +3,7 @@
 <head>
 <meta charset='utf-8'/>
 <?php
-    require_once("inc/stdLib.php");
+    require_once("../inc/stdLib.php");
     $menu = $_SESSION['menu'];
     $head = mkHeader();
     echo $menu['stylesheets'];
@@ -13,13 +13,11 @@
 
 
 ?>
-
-
 <script type="text/javascript">
     $(document).ready(function(){
         $.ajax({
             dataType: "json",
-            url: "jqhelp/getCallList.php?action=complete",
+            url: "../jqhelp/getCallList.php?action=complete",
             method: "GET",
             success : function (data){
                 drawTable(data);
@@ -27,28 +25,35 @@
                 $("#DataTable").trigger("appendCache");
             }
         });
+        $(document).on("click", "#DataTable tr", function(e) {
+            alert("test");
+            console.log(this);
+        });
         function drawTable(data) {
             for (var i = 0; i < data.length; i++) {
                 drawRow(data[i]);
             }
         }
-
+        var options = { weekday: 'short', year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
         function drawRow( rowData ) {
-            var row = $("<tr>")
+            var row = $("<tr>");
+            //var row = $("<tr onclick='showD(rowData.crmti_caller_id,rowData.crmti_caller_typ)'>");
+            var callDate = new Date( rowData.call_date * 1000 );
             $("#tbody").append(row);
-            row.append($("<td>" + $.trim(rowData.call_date)  + "</td>"));
-            row.append($("<td>" + $.trim(rowData.crmti_status) + "</td>"));
-            row.append($("<td>" + $.trim(rowData.crmti_src) + "</td>"));
-            row.append($("<td>" + $.trim(rowData.crmti_dst) + "</td>"))
-            row.append($("<td>" + $.trim(rowData.crmti_caller_id) + "</td>"))
-            row.append($("<td>" + $.trim(rowData.crmti_caller_typ) + "</td>"))
-            row.append($("<td>" + $.trim(rowData.crmti_direction) + "</td></tr>"))
+            row.append($("<td>" + callDate.toLocaleDateString('de-DE', options)  + "</td>"));
+            row.append($("<td class=>" + rowData.crmti_status + "</td>"));
+            row.append($("<td>" + rowData.crmti_src + "</td>"));
+            row.append($("<td>" + rowData.crmti_dst + "</td>"))
+            row.append($("<td>" + rowData.crmti_caller_id + "</td>"))
+            row.append($("<td>" + rowData.crmti_caller_typ + "</td>"))
+            row.append($("<td>" + rowData.crmti_direction + "</td></tr>"))
         }
     });
+
 </script>
 <style>
   table.tablesorter { width:auto; cursor:pointer; }
-  th.date { width: 100px }
+  th.date { width: 140px }
   th.status, th.id{ width: 70px }
   th.source, th.dest { width: 200px; }
   th.typ, th.dir { width: 50px; }

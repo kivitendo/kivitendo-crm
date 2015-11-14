@@ -21,7 +21,7 @@
   order: 100
   access: crm_new
   module: crm/firmen3.php
-  params: 
+  params:
     Q: C
 - parent: crm_add
   id: crm_add_vendor
@@ -30,7 +30,7 @@
   order: 200
   access: crm_new
   module: crm/firmen3.php
-  params: 
+  params:
     Q: V
 - parent: crm_add
   id: crm_add_person
@@ -45,7 +45,7 @@
   icon: phone
   order: 340
   access: crm_other
-  module: crm/call.phtml
+  module: crm/crmti/call.phtml
 - parent: crm
   id: crm_appointments
   name: Appointments

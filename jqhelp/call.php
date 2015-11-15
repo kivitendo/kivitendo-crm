@@ -9,18 +9,10 @@ require_once("../inc/conf.php");
 //require_once("../inc/db.php");
 require_once("../inc/stdLib.php");
 
-$action = $_GET['action'];
 
-switch( $action ){
-    case 'complete':
-        getCompleteList();
-        break;
-    case 'last':
-        getLastItem();
-        break;
-    default:
-        echo "Error: action not defined!";
-}
+$_GET['action']($_GET['data']); //Funktion aufrufen
+
+//array_shift( $_GET )();  
 
 function CreateFunctionsAndTable(){ //Legt beim ersten Aufruf der Datenbank die benötigten Tabellen und Funktionen an.
     global $db;
@@ -37,9 +29,7 @@ function CreateFunctionsAndTable(){ //Legt beim ersten Aufruf der Datenbank die 
     $rc=$_SESSION['db']->query($sql);
 }
 
-function getCompleteList(){
-    global $bgcol;
-    //global $db;
+function getCallListComplete(){
     $sql = "SELECT json_agg( json_calls ) FROM ( SELECT EXTRACT(EPOCH FROM TIMESTAMPTZ(crmti_init_time)) AS call_date, crmti_status, crmti_src, crmti_dst, crmti_caller_id, crmti_caller_typ, crmti_direction  FROM crmti ORDER BY crmti_init_time DESC) AS json_calls";
     $rs = $_SESSION['db']->getone( $sql );
     if( !$rs ){
@@ -50,8 +40,47 @@ function getCompleteList(){
     return 1;
 }
 
-function getLastItem(){
+function getLastCall(){
     return 'lastItem';
+}
+$number = $_GET['number'];
+function numberToAdress( $number  ){
+    //$number = "03343515230";
+    //$number = "03343515279";
+    $klicktelKey = "95d5a5f8d8ef062920518592da992cba"; 
+    $url = "http://openapi.klicktel.de/searchapi/invers?key=";
+    $url .= $klicktelKey;
+    $url .= "&number=";
+    $url .= $number;
+
+    $ch = curl_init();
+    curl_setopt( $ch, CURLOPT_URL, $url );
+    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+    $result = curl_exec( $ch );
+    if( $result === false || curl_errno( $ch ) ){
+        die( 'Curl-Error: ' .curl_error( $ch ) );
+    }
+    curl_close( $ch );
+    $objResult = json_decode( $result, true );
+    $first_entry = $objResult['response']['results']['0']['entries']['0'];
+
+    if( $first_entry['entrytype'] == 'business' ){
+        $entry['salutation'] = 'Firma';    
+    }   
+    else {
+        $entry['salutation'] = $first_entry['salutation'];
+        $entry['firstname']  = $first_entry['firstname'];
+        $entry['lastname']   = $first_entry['lastname'];
+    }   
+
+    $entry['fullName']     = $first_entry['displayname'];
+    $entry['backlink']     = $first_entry['backlink'];
+    $entry['street']       = $first_entry['location']['street'];
+    $entry['streetnumber'] = $first_entry['location']['streetnumber'];
+    $entry['zipcode']      = $first_entry['location']['zipcode'];
+    $entry['city']         = $first_entry['location']['city'];
+
+    echo json_encode( $entry );
 }
 
 ?>

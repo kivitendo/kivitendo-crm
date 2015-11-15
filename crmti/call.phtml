@@ -17,7 +17,7 @@
     $(document).ready(function(){
         $.ajax({
             dataType: "json",
-            url: "../jqhelp/getCallList.php?action=complete",
+            url: "../jqhelp/call.php?action=getCallListComplete",
             method: "GET",
             success : function (data){
                 drawTable(data);
@@ -26,9 +26,23 @@
             }
         });
         $(document).on("click", "#DataTable tr", function(e) {
-            var id = $(this).closest('tr').children().eq(4).text();
-            var q = $(this).closest('tr').children().eq(5).text();
-            window.location.href = "../firma1.php?Q=" + q +"&id=" + id;
+            var src = $(this).closest('tr').children().eq(2).text();
+            var dst = $(this).closest('tr').children().eq(3).text();
+            var id  = $(this).closest('tr').children().eq(4).text();
+            var typ = $(this).closest('tr').children().eq(5).text();
+            if ( typ == 'X' ){ //Number is not in database
+                var number = $.isNumeric( src ) ? src : dst;
+                $.ajax({
+                    dataType: "json",
+                    url: "../jqhelp/call.php?action=numberToAdress&data=" + number,
+                    method: "GET",
+                    success : function (data){
+                        alert("Data: " + JSON.stringify(data));
+                    }
+               });
+            }
+            else if( typ == 'K' ) window.location.href = "../kontakt.php?id=" + id;
+            else window.location.href = "../firma1.php?Q=" + typ +"&id=" + id;
         });
         function drawTable(data) {
             for (var i = 0; i < data.length; i++) {

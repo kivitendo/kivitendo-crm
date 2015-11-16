@@ -15,20 +15,29 @@
 ?>
 <script type="text/javascript">
     $(document).ready(function(){
-         $("#dialogmsg")
+         $("#dialogFound")
         .dialog({
             autoOpen: false,
-            title: 'Telefonverzeichnis',
+            title: 'Telefonverzeichnis-Eintrag',
             modal: true,
-            //buttons: {
-            //    Ok: function() {
-            //        $(this).dialog("close");
-            //    }
+            width:'auto',
             buttons: [
                    {
-                       text: "Save",
+                       text: "Neue Person",
+                       click: function(data){
+                           alert('Neue Person');
+                       }
+                    },
+                   {
+                       text: "Neuer Liefrerant",
                        click: function(){
-                           alert('Save');
+                           alert('Neuer Liefrerant');
+                       }
+                   },
+                   {
+                       text: "Neuer Kunde",
+                       click: function(data){
+                           alert('Neuer Kunde');
                        }
                    },
                    {
@@ -40,6 +49,18 @@
                ]
 
         })
+        $("#dialogNotFound")
+        .dialog({
+            autoOpen: false,
+            title: 'Telefonverzeichnis-Eintrag',
+            modal: true,
+            width:'auto',
+            buttons: {
+                Ok: function() {
+                    $(this).dialog("close");
+                }
+            }
+        });
         $.ajax({
             dataType: "json",
             url: "../jqhelp/call.php?action=getCallListComplete",
@@ -63,15 +84,23 @@
                     method: "GET",
                     success : function (data){
                         //alert("Data: " + JSON.stringify(data));
-                        $('#dialogmsg').dialog("open").text("hallo <br> welt" +JSON.stringify(data));
+                        $('#dialogFound').dialog("open")
+                        .html('<table id="myTable">' +
+                                '<tr><td>Anrede: </td><td>' + data.salutation + '</td></tr>' +
+                                '<tr><td>Name: </td><td>' + data.fullName + '</td></tr>' +
+                                '<tr><td>Straße Nr.: </td><td>' + data.street + ' ' + data.streetnumber + '</td></tr>' +
+                                '<tr><td>PLZ Ort: </td><td>' + data.zipcode + ' ' + data.city + '</td></tr>' +
+                                '<tr><td colspan="2" align=center ><a target="_blank" href="' + data.backlink + '">Telefonverzeichnis ansehen</a></td></tr>' +
+                              '</table>');
                     },
                     error: function(data){
-                        $('#dialogmsg').dialog("open").text("Zu dieser Telefonnummer gibt es keinen Eintrag im Telefonverzeichnis.");
+                        $('#dialogNotFound').dialog("open").text("Zu dieser Telefonnummer gibt es keinen Eintrag im Telefonverzeichnis.");
                     }
                });
             }
             else if( typ == 'K' ) window.location.href = "../kontakt.php?id=" + id;
             else if( typ == 'C' || typ == 'V' ) window.location.href = "../firma1.php?Q=" + typ +"&id=" + id;
+            // if 'Y' anomynous (string statt nummer)
         });
         function drawTable(data) {
             for (var i = 0; i < data.length; i++) {
@@ -81,7 +110,6 @@
         var options = { weekday: 'short', year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
         function drawRow( rowData ) {
             var row = $("<tr>");
-            //var row = $("<tr onclick='showD(rowData.crmti_caller_id,rowData.crmti_caller_typ)'>");
             var callDate = new Date( rowData.call_date * 1000 );
             $("#tbody").append(row);
             row.append($("<td>" + callDate.toLocaleDateString('de-DE', options)  + "</td>"));
@@ -101,6 +129,8 @@
   th.status, th.id{ width: 70px }
   th.source, th.dest { width: 200px; }
   th.typ, th.dir { width: 50px; }
+  #myTable tr td { font-size: 1em !IMPORTANT; }
+
 </style>
 </head>
 
@@ -109,10 +139,11 @@
     echo $menu['pre_content'];
     echo $menu['start_content'];
 ?>
-<div class="ui-widget-content" style="height:600px">
+<div class="ui-widget-content" style="height:800px">
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;"><b>Anrufliste</b></p>
   <table id="DataTable" class="tablesorter">
-  <div id="dialogmsg"></div>
+  <div id="dialogFound"></div>
+  <div id="dialogNotFound"></div>
     <thead>
       <tr>
         <th class="date">date</th>

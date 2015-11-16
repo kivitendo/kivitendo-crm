@@ -34,7 +34,7 @@
         .focus(function() {
             if($("#greeting").val() == "" && $("#greeting_").val() == "") {
                 $(function() {
-                    $('#dialogmsg').dialog("open").text(".:address msg:.");
+                    $('#dialogmsg').dialog("open").html(".:address msg:.");
                 })
             }
             return false;

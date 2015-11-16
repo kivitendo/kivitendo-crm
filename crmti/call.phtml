@@ -15,6 +15,7 @@
 ?>
 <script type="text/javascript">
     $(document).ready(function(){
+        var  test;
          $("#dialogFound")
         .dialog({
             autoOpen: false,
@@ -25,7 +26,7 @@
                    {
                        text: "Neue Person",
                        click: function(data){
-                           alert('Neue Person');
+                           alert('Neue Person' + JSON.stringify(test));
                        }
                     },
                    {
@@ -84,6 +85,7 @@
                     method: "GET",
                     success : function (data){
                         //alert("Data: " + JSON.stringify(data));
+                        test = data;
                         $('#dialogFound').dialog("open")
                         .html('<table id="myTable">' +
                                 '<tr><td>Anrede: </td><td>' + data.salutation + '</td></tr>' +

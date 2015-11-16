@@ -12,7 +12,7 @@ require_once("../inc/stdLib.php");
 
 $_GET['action']($_GET['data']); //Funktion aufrufen
 
-//array_shift( $_GET )();  
+//array_shift( $_GET )();
 
 function CreateFunctionsAndTable(){ //Legt beim ersten Aufruf der Datenbank die benötigten Tabellen und Funktionen an.
     global $db;
@@ -47,7 +47,7 @@ $number = $_GET['number'];
 function numberToAdress( $number  ){
     //$number = "03343515230";
     //$number = "03343515279";
-    $klicktelKey = "95d5a5f8d8ef062920518592da992cba"; 
+    $klicktelKey = "95d5a5f8d8ef062920518592da992cba";
     $url = "http://openapi.klicktel.de/searchapi/invers?key=";
     $url .= $klicktelKey;
     $url .= "&number=";
@@ -65,13 +65,13 @@ function numberToAdress( $number  ){
     $first_entry = $objResult['response']['results']['0']['entries']['0'];
 
     if( $first_entry['entrytype'] == 'business' ){
-        $entry['salutation'] = 'Firma';    
-    }   
+        $entry['salutation'] = 'Firma';
+    }
     else {
         $entry['salutation'] = $first_entry['salutation'];
         $entry['firstname']  = $first_entry['firstname'];
         $entry['lastname']   = $first_entry['lastname'];
-    }   
+    }
 
     $entry['fullName']     = $first_entry['displayname'];
     $entry['backlink']     = $first_entry['backlink'];
@@ -80,7 +80,7 @@ function numberToAdress( $number  ){
     $entry['zipcode']      = $first_entry['location']['zipcode'];
     $entry['city']         = $first_entry['location']['city'];
 
-    echo json_encode( $entry );
+    if( $objResult['response']['results']['0'] ) echo json_encode( $entry );
 }
 
 ?>

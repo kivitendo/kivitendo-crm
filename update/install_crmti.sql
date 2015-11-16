@@ -28,7 +28,7 @@ BEGIN
 END; $$ LANGUAGE 'plpgsql' WITH (iscachable);;;
 
 
-CREATE OR REPLACE FUNCTION SucheNummer( varchar(75) )
+CREATE OR REPLACE FUNCTION SucheNummer( text )
      RETURNS record AS $$
 -- Sucht die Telefonnummer in den Kivitendo-Tabellen und gibt Namen (falls gefunden) sonst Nummer zurück
 -- ToDo Dynamische SQL-Abfrage mit EXECUTE statt des riesigen SELECT-Blocks verwenden
@@ -157,6 +157,6 @@ END; $$ LANGUAGE 'plpgsql';;;
 DROP TRIGGER IF EXISTS TriggerCrmtiUpdateCaller ON customer;;
 DROP TRIGGER IF EXISTS TriggerCrmtiUpdateCaller ON vendor;;
 DROP TRIGGER IF EXISTS TriggerCrmtiUpdateCaller ON contacts;;
-CREATE TRIGGER TriggerCrmtiUpdateCaller AFTER INSERT OR UPDATE ON customer FOR EACH ROW EXECUTE PROCEDURE CrmtiUpdateCaller();;
-CREATE TRIGGER TriggerCrmtiUpdateCaller AFTER INSERT OR UPDATE ON vendor   FOR EACH ROW EXECUTE PROCEDURE CrmtiUpdateCaller();;
-CREATE TRIGGER TriggerCrmtiUpdateCaller AFTER INSERT OR UPDATE ON contacts FOR EACH ROW EXECUTE PROCEDURE CrmtiUpdateCaller();;
+--CREATE TRIGGER TriggerCrmtiUpdateCaller AFTER INSERT OR UPDATE ON customer FOR EACH ROW EXECUTE PROCEDURE CrmtiUpdateCaller();;
+--CREATE TRIGGER TriggerCrmtiUpdateCaller AFTER INSERT OR UPDATE ON vendor   FOR EACH ROW EXECUTE PROCEDURE CrmtiUpdateCaller();;
+--CREATE TRIGGER TriggerCrmtiUpdateCaller AFTER INSERT OR UPDATE ON contacts FOR EACH ROW EXECUTE PROCEDURE CrmtiUpdateCaller();;

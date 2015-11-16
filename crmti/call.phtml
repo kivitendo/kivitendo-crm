@@ -15,6 +15,31 @@
 ?>
 <script type="text/javascript">
     $(document).ready(function(){
+         $("#dialogmsg")
+        .dialog({
+            autoOpen: false,
+            title: 'Telefonverzeichnis',
+            modal: true,
+            //buttons: {
+            //    Ok: function() {
+            //        $(this).dialog("close");
+            //    }
+            buttons: [
+                   {
+                       text: "Save",
+                       click: function(){
+                           alert('Save');
+                       }
+                   },
+                   {
+                       text: "Close",
+                       click: function(){
+                           $(this).dialog('close');
+                         }
+                   }
+               ]
+
+        })
         $.ajax({
             dataType: "json",
             url: "../jqhelp/call.php?action=getCallListComplete",
@@ -37,12 +62,16 @@
                     url: "../jqhelp/call.php?action=numberToAdress&data=" + number,
                     method: "GET",
                     success : function (data){
-                        alert("Data: " + JSON.stringify(data));
+                        //alert("Data: " + JSON.stringify(data));
+                        $('#dialogmsg').dialog("open").text("hallo <br> welt" +JSON.stringify(data));
+                    },
+                    error: function(data){
+                        $('#dialogmsg').dialog("open").text("Zu dieser Telefonnummer gibt es keinen Eintrag im Telefonverzeichnis.");
                     }
                });
             }
             else if( typ == 'K' ) window.location.href = "../kontakt.php?id=" + id;
-            else window.location.href = "../firma1.php?Q=" + typ +"&id=" + id;
+            else if( typ == 'C' || typ == 'V' ) window.location.href = "../firma1.php?Q=" + typ +"&id=" + id;
         });
         function drawTable(data) {
             for (var i = 0; i < data.length; i++) {
@@ -83,6 +112,7 @@
 <div class="ui-widget-content" style="height:600px">
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;"><b>Anrufliste</b></p>
   <table id="DataTable" class="tablesorter">
+  <div id="dialogmsg"></div>
     <thead>
       <tr>
         <th class="date">date</th>

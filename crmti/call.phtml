@@ -15,40 +15,36 @@
 ?>
 <script type="text/javascript">
     $(document).ready(function(){
-        var  test;
-         $("#dialogFound")
-        .dialog({
+        var entryData;
+        $("#dialogFound").dialog({
             autoOpen: false,
             title: 'Telefonverzeichnis-Eintrag',
             modal: true,
             width:'auto',
-            buttons: [
-                   {
-                       text: "Neue Person",
-                       click: function(data){
-                           alert('Neue Person' + JSON.stringify(test));
-                       }
-                    },
-                   {
-                       text: "Neuer Liefrerant",
-                       click: function(){
-                           alert('Neuer Liefrerant');
-                       }
-                   },
-                   {
-                       text: "Neuer Kunde",
-                       click: function(data){
-                           alert('Neuer Kunde');
-                       }
-                   },
-                   {
-                       text: "Close",
-                       click: function(){
-                           $(this).dialog('close');
-                         }
-                   }
-               ]
-
+            buttons: [{
+                text: "Neuer Kunde",
+                click: function(data){
+                    window.location.href = "../firmen3.php?Q=C&" + $.param( entryData );
+                }
+            },
+            {
+                text: "Neuer Liefrerant",
+                click: function(){
+                    window.location.href = "../firmen3.php?Q=V&" + $.param( entryData );
+                }
+            },
+            {
+                text: "Neue Person",
+                click: function(data){
+                    window.location.href = '../personen3.php?' + $.param( entryData );
+                }
+            },
+            {
+                text: "Close",
+                click: function(){
+                    $(this).dialog('close');
+                }
+            }]
         })
         $("#dialogNotFound")
         .dialog({
@@ -85,15 +81,17 @@
                     method: "GET",
                     success : function (data){
                         //alert("Data: " + JSON.stringify(data));
-                        test = data;
+                        entryData = data;
+                        //delete entryData['backlink'];
                         $('#dialogFound').dialog("open")
                         .html('<table id="myTable">' +
-                                '<tr><td>Anrede: </td><td>' + data.salutation + '</td></tr>' +
-                                '<tr><td>Name: </td><td>' + data.fullName + '</td></tr>' +
-                                '<tr><td>Straße Nr.: </td><td>' + data.street + ' ' + data.streetnumber + '</td></tr>' +
+                                '<tr><td>Anrede: </td><td>' + data.greeting + '</td></tr>' +
+                                '<tr><td>Name: </td><td>' + data.name + '</td></tr>' +
+                                '<tr><td>Straße Nr.: </td><td>' + data.street + '</td></tr>' +
                                 '<tr><td>PLZ Ort: </td><td>' + data.zipcode + ' ' + data.city + '</td></tr>' +
                                 '<tr><td colspan="2" align=center ><a target="_blank" href="' + data.backlink + '">Telefonverzeichnis ansehen</a></td></tr>' +
                               '</table>');
+                        delete entryData['backlink'];
                     },
                     error: function(data){
                         $('#dialogNotFound').dialog("open").text("Zu dieser Telefonnummer gibt es keinen Eintrag im Telefonverzeichnis.");

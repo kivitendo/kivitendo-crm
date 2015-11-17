@@ -40,16 +40,16 @@ function getAllFirmen($sw,$usePre=true,$tab='C') {
     else { $Pre = ''; };
     $rechte=berechtigung();
     if (!$sw[0]) {
-         $where="phone like '$Pre".$sw[1]."%' "; 
-    } else { 
+         $where="phone like '$Pre".$sw[1]."%' ";
+    } else {
         if ($sw[1]=="~") { //Firmenname beginnt nicht mit einem Buchstaben
             $where="upper(name) ~ '^\[^A-Z\].*$' or ";
             $where.="upper(department_1) ~ '^\[^A-Z\].*$' or ";
-            $where.="upper(department_2) ~ '^\[^A-Z\].*$' "; 
+            $where.="upper(department_2) ~ '^\[^A-Z\].*$' ";
         } else  {
             $where="name ilike '$Pre".$sw[1]."%' or ";
             $where.="department_1 ilike '$Pre".$sw[1]."%' or ";
-            $where.="department_2 ilike '$Pre".$sw[1]."%'"; 
+            $where.="department_2 ilike '$Pre".$sw[1]."%'";
         }
     }
     if ($tab=="C") {
@@ -243,9 +243,9 @@ function getFirmenStamm($id,$ws=true,$tab='C',$cvar=true) {
 
 /**
  * getFirmaCVars: benutzerdefinierte Variablen zurückgeben
- * 
- * @param int $id 
- * 
+ *
+ * @param int $id
+ *
  * @return array
  */
 function getFirmaCVars($id,$search=false) {
@@ -255,7 +255,7 @@ function getFirmaCVars($id,$search=false) {
     //if ($sql) $sql .= " and C.searchable='t' ";
     $sql .= "order by C.sortkey";
     $rs = $_SESSION['db']->getAll($sql);
-    if ($rs) { 
+    if ($rs) {
         foreach ($rs as $row) {
             switch ($row["type"]) {
                 case "text"     :
@@ -302,7 +302,7 @@ function getAllShipto($id,$tab="C") {
     //$sql="select (module<>'CT') as vkdoc,* from shipto where trans_id=$id";
     $sql="select s.*,b.bundesland as shiptobundesland from shipto s left join bundesland b on s.shiptobland=b.id ";
     $sql.=" where trans_id=$id and module='CT' order by itime";
-    $rs=$_SESSION['db']->getAll($sql);  
+    $rs=$_SESSION['db']->getAll($sql);
     return $rs;
 }
 
@@ -333,8 +333,8 @@ function suchstr($muster,$typ="C") {
     $cvartemp  = 'EXISTS ( SELECT cvar.id FROM custom_variables cvar ';
     $cvartemp .= 'LEFT JOIN custom_variable_configs cvarcfg ON (cvar.config_id = cvarcfg.id) ';
     $cvartemp .= "WHERE (cvarcfg.module = 'CT') AND (cvarcfg.name  = '%s') AND ";
-    $cvartemp .= '(cvar.trans_id  = %s.id) AND (%s)'; 
-    $cvartemp .= "AND (cvar.sub_module = 'CT' or cvar.sub_module is null or cvar.sub_module = '') )"; 
+    $cvartemp .= '(cvar.trans_id  = %s.id) AND (%s)';
+    $cvartemp .= "AND (cvar.sub_module = 'CT' or cvar.sub_module is null or cvar.sub_module = '') )";
     // Array zu jedem Formularfed: 0=String,2=Int
     $dbfld = array('name' => 0, 'street' => 0, 'zipcode' => 1,
             'city' => 0, 'phone' => 1, 'fax' => 1,
@@ -429,10 +429,10 @@ function suchstr($muster,$typ="C") {
         $tabs = $tab[$typ]." ".$typ;
     }
     if ( $tbl2 ) {
-       if ( $cvcnt > 1 ) { 
-           $tmp2 = join(" $andor ",$tmp2); 
+       if ( $cvcnt > 1 ) {
+           $tmp2 = join(" $andor ",$tmp2);
        } else {
-           $tmp2 = $tmp2[0]; 
+           $tmp2 = $tmp2[0];
        };
        if ( $tmp1 ) {
            $tmp1 .= " $andor (".$tmp2.")";
@@ -441,7 +441,7 @@ function suchstr($muster,$typ="C") {
        }
     }
     if ( $tmp1 ) $where = substr($tmp1,3);
-    return array("where" => $where, "tabs" => $tabs, "cols" => $cols); 
+    return array("where" => $where, "tabs" => $tabs, "cols" => $cols);
 }
 
 /****************************************************
@@ -472,7 +472,7 @@ function suchFirma($muster,$tab="C") {
             $umsatz= " $andor (".implode(" and ",$ums).") ";
         }
     }
-    $where=$tmp["where"]; 
+    $where=$tmp["where"];
     if ($muster['obsolete']) $where .= " and obsolete = '".$muster['obsolete']."' ";
     $tabs=$tmp["tabs"];
     $cols=$tmp["cols"];
@@ -536,7 +536,7 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
         $sql="SELECT id FROM ".$tab[$typ]." WHERE name = '".strtr($daten['name'],array("'"=>"''"))."' AND zipcode = '".$daten['zipcode']."'";
         $rs=$_SESSION['db']->getAll($sql);
         if ($rs[0]['id']) return array(-1,".:Customer / Vendor exist with same zipcode:.");
-    } 
+    }
     if (!empty($datei["Datei"]["name"])) {          // eine Datei wird mitgeliefert
             $pictyp=array("gif","jpeg","png","jpg");
             $ext=substr($datei["Datei"]["name"],strrpos($datei["Datei"]["name"],".")+1);
@@ -559,7 +559,7 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
         bank => array(0,0,1,"Bankname",50),                 bank_code => array(0,0,6,"Bankleitzahl",15),
         iban => array(0,0,1,"IBAN",24),                     bic => array(0,0,1,"BIC",15),
         account_number => array(0,0,6,"Kontonummer",15),    language_id =>  array(0,0,6,"Sprache",0),
-        payment_id => array(0,0,6,"Zahlungsbedingungen",0), employee => array(0,0,6,"Bearbeiter",0),    
+        payment_id => array(0,0,6,"Zahlungsbedingungen",0), employee => array(0,0,6,"Bearbeiter",0),
         branche => array(0,0,1,"Branche",25),               business_id => array(0,0,6,"Kundentyp",0),
         owener => array(0,0,6,"CRM-User",0),                grafik => array(0,0,9,"Grafik",4),
         lead => array(0,0,6,"Leadquelle",0),                leadsrc => array(0,0,1,"Leadquelle",15),
@@ -587,9 +587,9 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
             $tmpval=trim($daten[$keys[$i]]);
             if ($dbfld[$keys[$i]][0]==1) {  // select für Lieferanschrift bilden
                 if ($tmpval) $ala=true;
-                if (!chkFld($tmpval,$dbfld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) { 
-                    $fehler=$dbfld[$keys[$i]][3]; 
-                    $i=$anzahl; 
+                if (!chkFld($tmpval,$dbfld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) {
+                    $fehler=$dbfld[$keys[$i]][3];
+                    $i=$anzahl;
                 } else {
                     if (in_array($dbfld[$keys[$i]][2],array(0,1,2,3,4,5,7,8,9))) { //Daten == Zeichenkette
                         if (empty($tmpval)) {
@@ -607,9 +607,9 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
                     if ($keys[$i]=="shiptophone"||$keys[$i]=="shiptofax") $tels2[]=$tmpval;
                 }
             } else {            // select für Rechnungsanschrift bilden
-                if (!chkFld($tmpval,$dbfld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) { 
-                    $fehler=$dbfld[$keys[$i]][3]; 
-                    $i=$anzahl; 
+                if (!chkFld($tmpval,$dbfld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) {
+                    $fehler=$dbfld[$keys[$i]][3];
+                    $i=$anzahl;
                 } else {
                     if (in_array($dbfld[$keys[$i]][2],array(0,1,2,3,4,5,7,8,9))) {
                         if (empty($tmpval)) {
@@ -637,7 +637,7 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
         }
     } else {
             $query0.="direct_debit='f',";
-    }    
+    }
     if ($fehler=="ok") {
         if ($daten["customernumber"]) {
             $query0=substr($query0,0,-1);
@@ -657,10 +657,10 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
         }
         include("links.php");
         if (!is_dir($dir_abs."/".$DIR)) { // Wird wo definiert???
-            mkdir($dir_abs."/".$DIR);  
+            mkdir($dir_abs."/".$DIR);
         }
-        chmod($dir_abs."/".$DIR,$_SESSION['dir_mode']); 
-        if ( $_SESSION['dir_group'] ) chgrp($dir_abs."/".$DIR,$_SESSION['dir_group']); 
+        chmod($dir_abs."/".$DIR,$_SESSION['dir_mode']);
+        if ( $_SESSION['dir_group'] ) chgrp($dir_abs."/".$DIR,$_SESSION['dir_group']);
         $link_dir_cv=$typ=="C"?$link_dir_cust:$link_dir_vend;
          if (!$dir_abs.$link_dir_cv."/".mkDirName($daten['name'])."_".$DIR) {
             if (is_dir($dir_abs.$link_dir_cv)) {
@@ -670,10 +670,10 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
                           if ($split[1].$split[2] == "_".$DIR) {
                              unlink($dir_abs.$link_dir_cv."/".$link);
                         }
-                    }    
+                    }
                       }
                    closedir($dh);
-            }      
+            }
             symlink($dir_abs."/".$DIR, $dir_abs.$link_dir_cv."/".mkDirName($daten['name'])."_".$DIR);
         }
         $query1=substr($query1,0,-1)." ";
@@ -684,7 +684,7 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
             $dbfile=new document();
             $dbfile->setDocData("descript","Firmenlogo von ".$daten["name"]);
             $dbfile->uploadDocument($datei,"/$DIR");
-        }    
+        }
         $rc1=true;
         if ($ala) {
             if ($daten["shipto_id"]>0) {
@@ -700,8 +700,8 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
             if ($rc1) mkTelNummer($fid,"S",$tels2);
         }
         $rc0=$_SESSION['db']->query($sql0);
-        if ($rc0 and $rc1) { 
-            $rc=$fid; 
+        if ($rc0 and $rc1) {
+            $rc=$fid;
             //ab hier CVARS
             //Alle möglichen Vars holen
             $sql = "SELECT id,name,type from custom_variable_configs where module = 'CT'";
@@ -723,8 +723,8 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
                     $bool = "null";
                     $text = "null";
                     switch ($vartype[$name]["type"]) {
-                        case "select"   : 
-                        case "textfield": 
+                        case "select"   :
+                        case "textfield":
                         case "text"     : $text = "'$val'"; break;
                         case "number"   : $num  = sprintf("%0.2f",$val); break;
                         case "customer" : $num  = $val; break;
@@ -741,7 +741,7 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
     } else {
         if ($daten["saveneu"]){
             $sql="delete from ".$tab[$typ]." where id=".$daten["id"];
-            $rc0=$_SESSION['db']->query($sql); 
+            $rc0=$_SESSION['db']->query($sql);
         };
         return array(-1,$fehler);
     };
@@ -754,7 +754,7 @@ function newShipto($fid) {
     $rc=$_SESSION['db']->query($sql);
     $sql="select shipto_id from shipto where shiptoname='$newID'";
     $rs=$_SESSION['db']->getOne($sql);
-    if ($rs["shipto_id"]) { 
+    if ($rs["shipto_id"]) {
         $_SESSION['db']->query("COMMIT");
         return $rs["shipto_id"];
     } else {
@@ -766,7 +766,7 @@ function newShipto($fid) {
 /****************************************************
 * newcustnr
 * out: id = string
-* eine Kundennummer erzeugen 
+* eine Kundennummer erzeugen
 *****************************************************/
 function newnr($typ,$bid=0) {
     $rc=$_SESSION['db']->query("BEGIN");
@@ -807,7 +807,7 @@ function newnr($typ,$bid=0) {
 *****************************************************/
 function mknewFirma($id,$typ) {
     $tab=array("C" => "customer","V" => "vendor");
-    $tmpName_0="01010101";    
+    $tmpName_0="01010101";
     $tmpName_1=uniqid (rand());
     $sql="DELETE FROM ".$tab[$typ]." WHERE name LIKE '".$tmpName_0."%'";
    // $rc=$_SESSION['db']->query($sql); Kommentiert bis ERP-Bug #2201 gefixt ist
@@ -868,7 +868,7 @@ function getCustTermin($id,$tab,$day,$month,$year) {
         $sql.=" and start = '$year-$month-$day 00:00:00'";
     } else if ($month>0 and $year>0) {
         if  ( $month < 12 ) { $month2 = $month+1; $year2 = $year; }
-        else { $month2 = '01'; $year2 = $year + 1; }; 
+        else { $month2 = '01'; $year2 = $year + 1; };
         $sql .= " and  ( start between '$year-$month-01 00:00:00' and '$year2-$month2-01 00:00:00' ) ";
     } else {
         $day=date("Y-m-d 00:00:00");
@@ -889,7 +889,7 @@ function doReport($data,$typ="C") {
     $login    = $_SESSION["login"];
     $felder   = substr($data['felder'],0,-1);
     $tmp      = suchstr($data,$typ);
-    $where    = $tmp["where"]; $tabs = $tmp["tabs"]; 
+    $where    = $tmp["where"]; $tabs = $tmp["tabs"];
     if ($typ=="C") {
         $rechte="(".berechtigung("C.").")";
     } else {
@@ -922,7 +922,7 @@ function doReport($data,$typ="C") {
         foreach ($rc as $row) {
             $tmp="";
             foreach($row as $fld) {
-                $tmp.="$fld,";    
+                $tmp.="$fld,";
             }
             fputs($f,substr($tmp,0,-1)."\n");
         };
@@ -932,7 +932,7 @@ function doReport($data,$typ="C") {
         fputs($f,"Keine Treffer.\n");
         fclose($f);
           return false;
-    } 
+    }
 }
 function getAnreden() {
     $sql="SELECT distinct (greeting) FROM customer WHERE greeting != '' UNION SELECT distinct (greeting) FROM vendor WHERE greeting != ''";
@@ -1043,8 +1043,8 @@ function cvar_edit($id,$new=false) {
                                   $kal.= 'align      : "BL",';
                                   $kal.= 'button     : "cvar_'.$row["name"].'_trigger"});';
                                   $kal.= "\n".'--></script>'."\n";
-                case "customer" : 
-                case "number"   : 
+                case "customer" :
+                case "number"   :
                 case "text"     : $input = "<input type='text' name='cvar_".$row["name"]."' id='cvar_".$row["name"]."'  value='";
                                   if ($new) {
                                      $input .= ( isset(${$row["name"]}) ) ? ${$row["name"]} : $row["default_value"];
@@ -1055,7 +1055,7 @@ function cvar_edit($id,$new=false) {
                                   $kal = "";
                                   break;
                 case "textfield": preg_match("/width[ ]*=[ ]*(\d+)/i",$row["options"],$hit); $w = (isset($hit[1])&&$hit[1]>5)?$hit[1]:30;
-                                  preg_match("/height[ ]*=[ ]*(\d+)/i",$row["options"],$hit); $h = (isset($hit[1])&&$hit[1]>1)?$hit[1]:3; 
+                                  preg_match("/height[ ]*=[ ]*(\d+)/i",$row["options"],$hit); $h = (isset($hit[1])&&$hit[1]>1)?$hit[1]:3;
                                   //$input = "<textarea cols='$w' rows='$h' name='cvar_".$row["name"]."'>".${c_var.$row["name"]}."</textarea>";
                                   $input = "<textarea cols='$w' rows='$h' name='cvar_".$row["name"]."'>".$row["name"]."</textarea>";
                                   break;
@@ -1070,7 +1070,7 @@ function cvar_edit($id,$new=false) {
     return $output;
 }
 
-function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false,$ui=false) {
+function leertpl (&$t,$tpl,$param,$msg="",$suchmaske=false,$ui=false ) { //$param = Array mit den Get- oder PostWerten
         $jscal ="<style type='text/css'>@import url(../js/jscalendar/calendar-win2k-1.css);</style>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/calendar.js'></script>\n";
         $jscal.="<script type='text/javascript' src='../js/jscalendar/lang/calendar-de.js'></script>\n";
@@ -1079,22 +1079,23 @@ function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false,$ui=false) {
         else       $t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
         $menu =  $_SESSION['menu'];
         $t->set_var(array(
-            'FAART'         => ($typ=="C")?".:Customer:.":".:Vendor:.",
-            'FAART2'        => ($typ=="C")?".:Customer Name:.":".:Vendor Name:.",
-            'Q'             => $typ,
+            'FAART'         => ($param['Q']=="C")?".:Customer:.":".:Vendor:.",
+            'FAART2'        => ($param['Q']=="C")?".:Customer Name:.":".:Vendor Name:.",
+            'Q'             => $param['Q'],
             'Btn1'          => "",
             'Btn2'          => "",
             'Msg'           => $msg,
             'action'        => $ui?"":"firmen".$tpl.".php?Q=$typ",
             'id'            => "",
-            'name'          => "",
+            'greeting_'     => $param['greeting'],
+            'name'          => $param['name'],
             'department_1'  => "",
             'department_2'  => "",
-            'street'        => "",
-            'country'       => "",
-            'zipcode'       => "",
-            'city'          => "",
-            'phone'         => "",
+            'street'        => $param['street'],
+            'country'       => "D",
+            'zipcode'       => $param['zipcode'],
+            'city'          => $param['city'],
+            'phone'         => $param['phone'],
             'fax'           => "",
             'email'         => "",
             'homepage'      => "",
@@ -1143,29 +1144,29 @@ function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false,$ui=false) {
             'init'           => $_SESSION["login"],
             'txid4'          => "selected",
             'cvars'          => cvar_edit(0,TRUE),
-            'variablen'      => "" 
+            'variablen'      => ""
             ));
-        $jahre = getUmsatzJahre(($typ=="C")?"ar":"ap");
+        $jahre = getUmsatzJahre(($param['Q']=="C")?"ar":"ap");
         doBlock($t,"fa1","YearListe","YL",$jahre,"year","year",false);
         $lang = getLanguage();
         doBlock($t,"fa1","LAnguage","LA",$lang,"id","description",false);
         $kdtyp=getBusiness();
         doBlock($t,"fa1","TypListe","BT",$kdtyp,"id","description",false);
         $anreden=getAnreden();
-        doBlock($t,"fa1","anreden","A",$anreden,"greeting","greeting",''); 
+        doBlock($t,"fa1","anreden","A",$anreden,"greeting","greeting",'');
         $payment=getPayment();
-        doBlock($t,"fa1","payment","P",$payment,"id","description",''); 
+        doBlock($t,"fa1","payment","P",$payment,"id","description",'');
         $branchen=getBranchen();
-        doBlock($t,"fa1","branchen","BR",$branchen,"branche","branche",''); 
+        doBlock($t,"fa1","branchen","BR",$branchen,"branche","branche",'');
         $lead=getLeads();
-        doBlock($t,"fa1","LeadListe","LL",$lead,"id","lead",''); 
+        doBlock($t,"fa1","LeadListe","LL",$lead,"id","lead",'');
         $curr=getCurrencies();
-        doBlock($t,"fa1","curr","C",$curr,"id","name",''); 
+        doBlock($t,"fa1","curr","C",$curr,"id","name",'');
         if (!$suchmaske) {
             doBlock($t,"fa1","shiptos","ST",$shiptos,"shipto_id",array("shiptoname","shiptodepartment_1"),false);
         }
         $bundesland=getBundesland(false);
-        doBlock($t,"fa1","buland","BL",$bundesland,"id","bundesland",''); 
+        doBlock($t,"fa1","buland","BL",$bundesland,"id","bundesland",'');
         if (!$suchmaske) {
             doBlock($t,"fa1","buland2","BS",$bundesland,"id","bundesland",'');
             $employees=getAllUser(array(0=>true,1=>"%"));
@@ -1196,19 +1197,19 @@ function leertpl (&$t,$tpl,$typ,$msg="",$suchmaske=false,$ui=false) {
                                    }
                                    $fld .= "</select>";
                                    break;
-                   case "customer" : 
+                   case "customer" :
                                    $fld = "<input type='hidden' name='vc_cvar_".$cvar["name"]."' value=''>";
                                    break;
                    default       : $fld = "<input type='text' name='vc_cvar_".$cvar["name"]."' value=''>";
                }
-               $t->set_var(array( 
+               $t->set_var(array(
                   'varlable'.$i => $cvar["description"],
                   'varfld'.$i   => $fld,
                ));
                if ($i==1) { $i = 2; }
                else { $i = 1;  $t->parse('BlockCV','cvarListe',true); }
-            } 
-           if ($i==2) { 
+            }
+           if ($i==2) {
                $t->set_var(array(
                   'varlable2' => "",
                   'varfld2'   => "",
@@ -1242,7 +1243,7 @@ function vartpl( &$t, $daten, $typ, $msg, $btn1, $btn2, $tpl, $suchmaske=false, 
         $tmp = false;
         if ( !$suchmaske ) $tmp = getVariablen($daten["id"]);
         $varablen=($tmp>0)?count($tmp)." Variablen":"";
-        if ( $ui ) $t->set_file(array("fa1" => "companies".$tpl.".tpl")); 
+        if ( $ui ) $t->set_file(array("fa1" => "companies".$tpl.".tpl"));
         else       $t->set_file(array("fa1" => "firmen".$tpl.".tpl"));
         if ( isset($daten["employee"]) and $daten['employee'] > 0 ) {
             $employee = $daten["employee"];
@@ -1299,7 +1300,7 @@ function vartpl( &$t, $daten, $typ, $msg, $btn1, $btn2, $tpl, $suchmaske=false, 
                 'umsatz'        => ( isset($daten["umsatz"]) )         ? $daten["umsatz"]:'',
                 'op'            => ( isset($daten["op"]) )             ? $daten["op"]:'',
                 'preisgrp'      => ( isset($daten["preisgroup"]) )     ? $daten["preisgroup"]:'',
-                'IMG'           => $Image,                            
+                'IMG'           => $Image,
                 'grafik'        => ( isset($daten["grafik"]) )         ? $daten["grafik"]:'',
                 'init'          => $employee,
                 'login'         => $_SESSION{"login"},
@@ -1312,7 +1313,7 @@ function vartpl( &$t, $daten, $typ, $msg, $btn1, $btn2, $tpl, $suchmaske=false, 
                 'GEO2'          => ($_SESSION['GEODB']=='t')?'':"--",
                 'BLZ1'          => ($_SESSION['BLZDB']=='t')?'':"!--",
                 'BLZ2'          => ($_SESSION['BLZDB']=='t')?'':"--",
-                'cvars'         => ( isset($daten['id']) )?cvar_edit($daten["id"]):'', 
+                'cvars'         => ( isset($daten['id']) )?cvar_edit($daten["id"]):'',
                 'variablen'     => $varablen
         ));
         $jahre = getUmsatzJahre(($typ=="C")?"ar":"ap");
@@ -1371,18 +1372,18 @@ function vartpl( &$t, $daten, $typ, $msg, $btn1, $btn2, $tpl, $suchmaske=false, 
                                      $fld.= $daten['vc_cvar_'.$cvar['name']]."'>";
                                      $fld .= $name.' ('.$daten['vc_cvar_'.$cvar['name']].')';
                                      break;
-                   default     : 
+                   default     :
                    $fld = '<input type="text" name="vc_cvar_'.$cvar['name'].'" value="';
                                    $fld.= $daten['vc_cvar_'.$cvar['name']].'">';
                }
-               $t->set_var(array( 
+               $t->set_var(array(
                   'varlable'.$i => $cvar["description"],
                   'varfld'.$i   => $fld,
                ));
                if ($i==1) { $i = 2; }
                else { $i = 1;  $t->parse('BlockCV','cvarListe',true); }
-            } 
-           if ($i==2) { 
+            }
+           if ($i==2) {
                $t->set_var(array(
                   'varlable2' => "",
                   'varfld2'   => "",
@@ -1394,7 +1395,7 @@ function vartpl( &$t, $daten, $typ, $msg, $btn1, $btn2, $tpl, $suchmaske=false, 
             doBlock($t,"fa1","buland2","BS",$bundesland,"id","bundesland",$daten["shiptobland"]);
             $employees=getAllUser(array(0=>true,1=>"%"));
             doBlock($t,"fa1","SalesmanListe","SM",$employees,"id","name",$daten["salesman_id"]);
-            /* Check if the user is allowed to change the access group - Behaviour changed by DO: 
+            /* Check if the user is allowed to change the access group - Behaviour changed by DO:
                 Let (all) users change the group if none is set yet */
             if (!isset($daten["employee"]) || $daten["employee"]==$_SESSION["loginCRM"] || $daten["modemployee"]==$_SESSION["loginCRM"] ) {
                     $first[]=array("grpid"=>"","rechte"=>"w","grpname"=>".:public:.");

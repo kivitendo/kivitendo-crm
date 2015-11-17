@@ -6,13 +6,9 @@
 *********************************************************************/
 
 require_once("../inc/conf.php");
-//require_once("../inc/db.php");
 require_once("../inc/stdLib.php");
 
-
-$_GET['action']($_GET['data']); //Funktion aufrufen
-
-//array_shift( $_GET )();
+$_GET['action']( $_GET['data'] ); //Funktion aufrufen
 
 function CreateFunctionsAndTable(){ //Legt beim ersten Aufruf der Datenbank die benötigten Tabellen und Funktionen an.
     global $db;
@@ -43,11 +39,9 @@ function getCallListComplete(){
 function getLastCall(){
     return 'lastItem';
 }
-$number = $_GET['number'];
-function numberToAdress( $number  ){
-    //$number = "03343515230";
-    //$number = "03343515279";
-    $klicktelKey = "95d5a5f8d8ef062920518592da992cba";
+
+function numberToAdress( $number  ){ //Holt mit $nummer Daten aus dem öffentlichem Telefonverzeichnis
+    $klicktelKey = "95d5a5f8d8ef062920518592da992cba"; //in globale Variable packen und in Mandanten konfigurierbar machen
     $url = "http://openapi.klicktel.de/searchapi/invers?key=";
     $url .= $klicktelKey;
     $url .= "&number=";
@@ -65,21 +59,23 @@ function numberToAdress( $number  ){
     $first_entry = $objResult['response']['results']['0']['entries']['0'];
 
     if( $first_entry['entrytype'] == 'business' ){
-        $entry['salutation'] = 'Firma';
+        $entry['greeting'] = 'Firma';
+        $entry['name']     = $first_entry['displayname'];
     }
     else {
-        $entry['salutation'] = $first_entry['salutation'];
-        $entry['firstname']  = $first_entry['firstname'];
-        $entry['lastname']   = $first_entry['lastname'];
+        $space_name = ( $first_entry['firstname'] && $first_entry['lastname'] ) ? ' ' : '';
+        $entry['greeting'] = $first_entry['salutation'];
+        $entry['name']  = $first_entry['firstname'].$space_name.$first_entry['lastname'];
     }
-
-    $entry['fullName']     = $first_entry['displayname'];
+    $entry['firstname']    = $first_entry['firstname'];
+    $entry['lastname']     = $first_entry['lastname'];
+    $space_street          = $first_entry['location']['streetnumber'] ? ' ' : '';
     $entry['backlink']     = $first_entry['backlink'];
-    $entry['street']       = $first_entry['location']['street'];
+    $entry['street']       = $first_entry['location']['street'].$space_street.$first_entry['location']['streetnumber'] ;
     $entry['streetnumber'] = $first_entry['location']['streetnumber'];
     $entry['zipcode']      = $first_entry['location']['zipcode'];
     $entry['city']         = $first_entry['location']['city'];
-
+    $entry['phone']        = $_GET['data'];
     if( $objResult['response']['results']['0'] ) echo json_encode( $entry );
 }
 

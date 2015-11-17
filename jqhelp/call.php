@@ -71,8 +71,7 @@ function numberToAdress( $number  ){ //Holt mit $nummer Daten aus dem öffentlic
     $entry['lastname']     = $first_entry['lastname'];
     $space_street          = $first_entry['location']['streetnumber'] ? ' ' : '';
     $entry['backlink']     = $first_entry['backlink'];
-    $entry['street']       = $first_entry['location']['street'].$space_street.$first_entry['location']['streetnumber'] ;
-    $entry['streetnumber'] = $first_entry['location']['streetnumber'];
+    $entry['street']       = $first_entry['location']['street'].$space_street.$first_entry['location']['streetnumber'];
     $entry['zipcode']      = $first_entry['location']['zipcode'];
     $entry['city']         = $first_entry['location']['city'];
     $entry['phone']        = $_GET['data'];

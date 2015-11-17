@@ -43,12 +43,12 @@ function getKontaktStamm($id,$pfad="") {
                 $rs1=$_SESSION['db']->getAll($sql);
                 $tab="V";
                 $cnr=$rs1[0]["vendornumber"];
-                $firma=$rs1[0]["name"]; 
+                $firma=$rs1[0]["name"];
                 $language_id=$rs1[0]["language_id"];
             } else {
                 $tab="C";
                 $cnr=$rs1[0]["customernumber"];
-                $firma=$rs1[0]["name"]; 
+                $firma=$rs1[0]["name"];
                 $language_id=$rs1[0]["language_id"];
             }
         }
@@ -99,16 +99,16 @@ function getAllPerson($sw,$usePre=true) {
     $sw_array=explode(" ",$sw[1],9);
     if (!isset($sw_array[1])) return false;
     $name=array_shift($sw_array);
-    $givenname=implode(" ",$sw_array);   
-    $where="cp_name ilike '$Pre".$name."%' and cp_givenname ilike '$Pre".$givenname."%'"; 
+    $givenname=implode(" ",$sw_array);
+    $where="cp_name ilike '$Pre".$name."%' and cp_givenname ilike '$Pre".$givenname."%'";
     $sql="select *,'P' as tab,cp_id as id,cp_name as name  from contacts where ($where) and $rechte";
     $rs=$_SESSION['db']->getAll($sql);
     if ($rs) return $rs;
     //Fall 2: Vorname wird zuerst eingegeben "Augusta Ada Byron"
     $sw_array=explode(" ",$sw[1],9);
     $name=array_pop($sw_array);
-    $givenname=implode(" ", $sw_array);    
-    $where="cp_name ilike '$Pre".$name."%' and cp_givenname ilike '$Pre".$givenname."%'"; 
+    $givenname=implode(" ", $sw_array);
+    $where="cp_name ilike '$Pre".$name."%' and cp_givenname ilike '$Pre".$givenname."%'";
     $sql="select *,'P' as tab,cp_id as id,cp_name as name  from contacts where ($where) and $rechte";
     $rs=$_SESSION['db']->getAll($sql);
     if ($rs) return $rs;
@@ -141,9 +141,9 @@ function suchPerson($muster) {
     $andor = $muster["andor"];
     $rechte=berechtigung("cp_");
 
-    $joinCustomer = " left join customer K on C.cp_cv_id=K.id";    
+    $joinCustomer = " left join customer K on C.cp_cv_id=K.id";
     $joinVendor        = " left join vendor V on C.cp_cv_id=V.id";
-    if ($muster["cp_name"]=="~") {   
+    if ($muster["cp_name"]=="~") {
         $where="and upper(cp_name) ~ '^\[^A-Z\].*$'";
     } else {
         $dbf = array("cp_name",     "cp_givenname", "cp_gender",    "cp_title" ,
@@ -155,17 +155,17 @@ function suchPerson($muster) {
         $anzahl=count($keys);
         $where="";
         if ( isset( $muster["customer_name"] ) ) {
-            $whereCustomer    = "K.name ilike '$pre" . $muster["customer_name"] . "$fuzzy'";  
-            $whereVendor    = "V.name ilike '$pre" . $muster["customer_name"] . "$fuzzy'"; 
+            $whereCustomer    = "K.name ilike '$pre" . $muster["customer_name"] . "$fuzzy'";
+            $whereVendor    = "V.name ilike '$pre" . $muster["customer_name"] . "$fuzzy'";
         } else {
-		$whereCustomer = '1=1';
-		$whereVendor   = '1=1';
-	}
+        $whereCustomer = '1=1';
+        $whereVendor   = '1=1';
+    }
 
         $daten=false;
         $tbl0=false;
 
-	$where = array();
+    $where = array();
         for ($i=0; $i<$anzahl; $i++) {
             if (in_array($keys[$i],$dbf) && $muster[$keys[$i]]) {
                 $suchwort=trim($muster[$keys[$i]]);
@@ -178,31 +178,31 @@ function suchPerson($muster) {
                     $tmp .="or cp_mobile1 like '".$pre.$suchwort."$fuzzy' ";
                     $tmp .="or cp_mobile2 like '".$pre.$suchwort."$fuzzy' ";
                     $tmp .="or cp_satphone like '".$pre.$suchwort."$fuzzy')";
-		    $where[] = $tmp;
+            $where[] = $tmp;
                 } else {
                     $where[].=$keys[$i]." ilike '".$pre.$suchwort."$fuzzy'";
                 }
             }
         }
-	$where = implode (" $andor ",$where);
+    $where = implode (" $andor ",$where);
         $x=0;
     }
     $felderContact="C.cp_id, C.cp_cv_id, C.cp_title, C.cp_name, C.cp_givenname, C.cp_fax, C.cp_email, C.cp_gender as cp_gender";
-    $felderContcatOrCustomerVendor="COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode, 
-                                                                    COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street, 
+    $felderContcatOrCustomerVendor="COALESCE (C.cp_country, country) as cp_country,COALESCE (C.cp_zipcode, zipcode) as cp_zipcode,
+                                                                    COALESCE (C.cp_city, city) as cp_city, COALESCE (C.cp_street, street) as cp_street,
                                                                     COALESCE (NULLIF (C.cp_phone1, ''), NULLIF (C.cp_mobile1, ''), phone) as cp_phone1";
-    
+
 
     $rs0=array(); //leere arrays initialisieren, damit es keinen fehler bei der funktion array_merge gibt
     if ($muster["customer"]){     //auf checkbox customer mit Titel Kunden prüfen
-        $sql0="select $felderContact, $felderContcatOrCustomerVendor, K.name as name, K.language_id as language_id, 
-                 'C' as tbl from contacts C$joinCustomer where C.cp_cv_id=K.id and ($whereCustomer $andor $where) and $rechte order by cp_name";       
+        $sql0="select $felderContact, $felderContcatOrCustomerVendor, K.name as name, K.language_id as language_id,
+                 'C' as tbl from contacts C$joinCustomer where C.cp_cv_id=K.id and ($whereCustomer $andor $where) and $rechte order by cp_name";
         $rs0=$_SESSION['db']->getAll($sql0);
         if (!$rs0) $rs0=array();
     }
     $rs1=array(); //s.o.
     if ($muster["vendor"]){ //auf checkbox vendor mit Titel Lieferant prüfen
-        $sql0="select $felderContact, $felderContcatOrCustomerVendor, V.name as name, V.language_id as language_id, 'V' as tbl 
+        $sql0="select $felderContact, $felderContcatOrCustomerVendor, V.name as name, V.language_id as language_id, 'V' as tbl
                  from contacts C$joinVendor where C.cp_cv_id=V.id and ($whereVendor $andor $where) and $rechte order by cp_name";
         $rs1=$_SESSION['db']->getAll($sql0);
         if (!$rs1) $rs1=array();
@@ -210,7 +210,7 @@ function suchPerson($muster) {
     $rs2=array(); //s.o.
     if ( isset( $muster["deleted"] ) ) { //auf checkbox deleted mit Titel "gelöschte Ansprechpartner (Kunden und Lieferanten)" prüfen
                             // es gibt nicht nur gelöschte Personen, sonder auch Personen ohne Zuordnung zu Firmen, z.B. private Adressen
-        $sql0="select $felderContact, C.cp_country, C.cp_zipcode, C.cp_city, C.cp_street, C.cp_phone1, 
+        $sql0="select $felderContact, C.cp_country, C.cp_zipcode, C.cp_city, C.cp_street, C.cp_phone1,
                  '' as name,'P' as tbl from contacts C where $rechte and (".$where.") and C.cp_cv_id is null order by cp_name";
         $rs2=$_SESSION['db']->getAll($sql0);
         if (!$rs2) $rs2=array();
@@ -230,21 +230,21 @@ function savePersonStamm($daten,$datei) {
     $bildok=false;
     // Array zu jedem Formularfed: Tabelle (0=contact,1=cust/vend),  require(0=nein,1=ja), Regel
     // cp_greeting ist raus hli
-    $dbfld=array("cp_name" => array(0,1,1,"Name",75),           "cp_givenname" => array(0,1,1,"Vorname",75),        
+    $dbfld=array("cp_name" => array(0,1,1,"Name",75),           "cp_givenname" => array(0,1,1,"Vorname",75),
             "cp_gender" => array(0,0,1,"Geschlecht",1),
-            "cp_title" => array(0,0,1,"Titel",75),              "cp_street" => array(0,0,1,"Strasse",75),           
+            "cp_title" => array(0,0,1,"Titel",75),              "cp_street" => array(0,0,1,"Strasse",75),
             "cp_zipcode" => array(0,0,2,"Plz",10),
-            "cp_city" => array(0,0,1,"Ort",75),                 "cp_country" => array(0,0,8,"Land",3),     
-            "cp_phone1" => array(0,0,3,"Telefon 1",30),         "cp_phone2" => array(0,0,3,"Telefon 2",30),    
-            "cp_mobile1" => array(0,0,3,"Mobiletelefon 1",30),  "cp_mobile2" => array(0,0,3,"Mobiletelefon 2",30),    
+            "cp_city" => array(0,0,1,"Ort",75),                 "cp_country" => array(0,0,8,"Land",3),
+            "cp_phone1" => array(0,0,3,"Telefon 1",30),         "cp_phone2" => array(0,0,3,"Telefon 2",30),
+            "cp_mobile1" => array(0,0,3,"Mobiletelefon 1",30),  "cp_mobile2" => array(0,0,3,"Mobiletelefon 2",30),
             "cp_homepage" =>array(0,0,4,"Homepage",0),          "cp_fax" => array(0,0,3,"Fax",30),
             "cp_email" => array(0,0,5,"eMail",0),               "cp_privatemail" => array(0,0,5,"Private eMail",0),
             "cp_notes" => array(0,0,1,"Bemerkungen",0),         "cp_stichwort1" => array(0,0,1,"Stichworte",50),
             "cp_salutation" => array(0,0,1,"Briefanrede",125),  "cp_privatphone" => array(0,0,3,"Privattelefon 1",30),
             "cp_birthday" => array(0,0,7,"Geb-Datum",0),        "cp_beziehung" => array(0,0,6,"Beziehung",0),
             "cp_abteilung" => array(0,0,1,"Abteilung",25),      "cp_position" => array(0,0,1,"Position",25),
-            "cp_cv_id" => array(0,0,6,"FID",0),                 "name" => array(1,0,1,"Firma",75),        
-            "cp_owener" => array(0,0,6,"CRM-User",0),           "cp_grafik" => array(0,0,9,"Grafik",4),);                
+            "cp_cv_id" => array(0,0,6,"FID",0),                 "name" => array(1,0,1,"Firma",75),
+            "cp_owener" => array(0,0,6,"CRM-User",0),           "cp_grafik" => array(0,0,9,"Grafik",4),);
     if (!empty($datei["Datei"]["name"]["bild"])) {          // eine Datei wird mitgeliefert
             $pictyp=array("gif","jpeg","png","jpg");
             $ext=strtolower(substr($datei["Datei"]["name"]["bild"],strrpos($datei["Datei"]["name"]["bild"],".")+1));
@@ -263,19 +263,19 @@ function savePersonStamm($daten,$datei) {
     $anzahl=count($keys);
     $fehler=-1;
     $tels=array();
-    $query0=''; 
+    $query0='';
     for ($i=0; $i<$anzahl; $i++) {
         if (in_array($keys[$i],$dbf)) {
             $tmpval=trim($daten[$keys[$i]]);
             if ($dbfld[$keys[$i]][0]==1) { // Daten nicht für contacts
                 continue;
             } else {
-                if (!chkFld($tmpval,$dbfld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) {  
-                            $fehler=$dbfld[$keys[$i]][3]; $fehler.="::".$keys[$i]; 
+                if (!chkFld($tmpval,$dbfld[$keys[$i]][1],$dbfld[$keys[$i]][2],$dbfld[$keys[$i]][4])) {
+                            $fehler=$dbfld[$keys[$i]][3]; $fehler.="::".$keys[$i];
                             $i=$anzahl+1;
                 }
                 if ($keys[$i]=="cp_phone1"||$keys[$i]=="cp_phone2"||$keys[$i]=="cp_fax") $tels[]=$tmpval;
-                $query0.=$keys[$i]."="; 
+                $query0.=$keys[$i]."=";
                 if (in_array($dbfld[$keys[$i]][2],array(0,1,2,3,4,5,7,8,9))) {  //Stringwert
                         if (empty($tmpval)) {
                             $query0.="null,";
@@ -311,7 +311,7 @@ function savePersonStamm($daten,$datei) {
             $bild["Datei"]["type"]=$datei["Datei"]["type"]["bild"];
             $bild["Datei"]["error"]=$datei["Datei"]["error"]["bild"];
             $dbfile->uploadDocument($bild,"/$dir");
-        }    
+        }
         if ($datei["Datei"]["name"]["visit"]) {
             $bild["Datei"]["name"]="vcard$pid.".
                 strtolower(substr($datei["Datei"]["name"]["visit"],strrpos($datei["Datei"]["name"]["visit"],".")+1));
@@ -326,7 +326,7 @@ function savePersonStamm($daten,$datei) {
         mkTelNummer($pid,"P",$tels);
         $sql0="update contacts set ".$query0."cp_employee=".$_SESSION["loginCRM"]." where cp_id=$pid";
         if($_SESSION['db']->query($sql0)) {  //Erfolgreich gesichert
-            return $pid;            
+            return $pid;
         } else {
             return "unbekannt";
         }
@@ -408,7 +408,7 @@ function getCpBriefAnreden() {
     return $rs;
 }
 
-function leertplP (&$t,$fid,$msg,$tab,$suche=false,$Quelle="",$ui=false) {
+function leertplP (&$t,$data,$msg,$tab,$suche=false,$Quelle="",$ui=false ) {
 //global $laender;
 //cp_greeting raus hli
         if ($fid && $Quelle) {
@@ -430,16 +430,16 @@ function leertplP (&$t,$fid,$msg,$tab,$suche=false,$Quelle="",$ui=false) {
             'PID'             => "",
             'preon'           => ($_SESSION["preon"])?"checked":"",
             'cp_salutation_'  => "",
-            'cp_title'        => "",
-            'cp_givenname'    => "",
-            'cp_name'         => "",
+            'cp_title'        => $data['greeting'],
+            'cp_givenname'    => $data['firstname'],
+            'cp_name'         => $data['lastname'],
             'cp_gender'       => ($suche)?"":"selected",
             'cp_genderm'      => ($suche)?"selected":"",
-            'cp_street'       => "",
-            'cp_country'      => "",
-            'cp_zipcode'      => "",
-            'cp_city'         => "",
-            'cp_phone1'       => "",
+            'cp_street'       => $data['street'],
+            'cp_country'      => "D",
+            'cp_zipcode'      => $data['zipcode'],
+            'cp_city'         => $data['city'],
+            'cp_phone1'       => $data['phone'],
             'cp_phone2'       => "",
             'cp_fax'          => "",
             'cp_privatphone'  => "",
@@ -453,7 +453,7 @@ function leertplP (&$t,$fid,$msg,$tab,$suche=false,$Quelle="",$ui=false) {
             'cp_abteilung'    => "",
             'cp_position'     => "",
             'Firma'           => isset( $fa ) ? $fa["name"] : '',
-            'FID'             => ($suche)?$fid:"",
+            'FID'             => ($suche)?$data['fid']:"",
             'FID1'            => $fid,
             'cp_stichwort1'   => "",
             'cp_notes'        => "",
@@ -471,8 +471,8 @@ function leertplP (&$t,$fid,$msg,$tab,$suche=false,$Quelle="",$ui=false) {
         //else { $user=$first; };
         //doBlock($t,"pers1","OwenerListe","OL",$user,"grpid","grpname","1");
         //$anreden=getCpBriefAnreden();
-        //doBlock($t,"pers1","briefanred","BA",$anreden,"cp_salutation","cp_salutation"); 
-        
+        //doBlock($t,"pers1","briefanred","BA",$anreden,"cp_salutation","cp_salutation");
+
         /*** Wird doch im leerem Template gar nicht verwendet... ***/
 }
 
@@ -563,6 +563,6 @@ function vartplP (&$t,$daten,$msg,$btn1,$btn2,$btn3,$fld,$bgcol,$fid,$tab,$ui=fa
             doBlock($t,"pers1","OwenerListe","OL",$user,"grpid","grpname",$daten["cp_owener"]);
         }
         $anreden=getCpBriefAnreden();
-        doBlock($t,"pers1","briefanred","BA",$anreden,"cp_salutation","cp_salutation",$daten["cp_salutation"]); 
+        doBlock($t,"pers1","briefanred","BA",$anreden,"cp_salutation","cp_salutation",$daten["cp_salutation"]);
 }
 ?>

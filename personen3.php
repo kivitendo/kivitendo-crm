@@ -9,12 +9,12 @@
     $t = new Template($base);
     $menu = $_SESSION['menu'];
     doHeader($t);
-    $Q = (isset($_GET["Quelle"]))?$_GET["Quelle"]:$_POST["Quelle"];    
-    
+    $Q = (isset($_GET["Quelle"]))?$_GET["Quelle"]:$_POST["Quelle"];
+
     if ( isset( $_POST["show"] ) ) {
         header("location:firma2.php?Q=$Q&id=".$_POST["PID"]);
     } else if ( $_POST["save"]||$_POST["neu"] ) {
-        if ( isset( $_POST["neu"] ) ) { 
+        if ( isset( $_POST["neu"] ) ) {
             $_POST["PID"] = 0;
             $rc = savePersonStamm($_POST,$_FILES);
         } else {
@@ -48,7 +48,7 @@
                 $rc = $msgtmp[1];
                 $msg = ".:error:. .:save:. ($msgtmp[0])";
             };
-            $btn2 = "<input type='submit' class='sichernneu' name='neu' value='.:save:. .:new:.'>";            
+            $btn2 = "<input type='submit' class='sichernneu' name='neu' value='.:save:. .:new:.'>";
             vartplP ($t,$_POST,$msg,$btn1,$btn2,$btn3,$rc,"red",1,3);
         }
     } else if ( $_POST["edit"] > 0 || $_GET["edit"] > 0 ) {
@@ -67,7 +67,7 @@
         vartplP ($t,$daten,$msg,$btn1,$btn2,$btn3,"cp_givenname","white",0,3);
     } else {
         $msg = ".:person:. .:new:.";
-        leertplP($t,$_GET["fid"],$msg,3,true,$Q);
+        leertplP($t,$_GET,$msg,3,true,$Q);
     }
     $t->Lpparse("out",array("pers1"),$_SESSION['countrycode'],"firma");
 ?>

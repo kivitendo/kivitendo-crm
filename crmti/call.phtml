@@ -112,7 +112,7 @@
             var row = $("<tr>");
             var callDate = new Date( rowData.call_date * 1000 );
             $("#tbody").append(row);
-            row.append($("<td>" + callDate.toLocaleDateString('de-DE', options)  + "</td>"));
+            row.append($("<td>" + callDate.toLocaleDateString(kivi.myconfig.countrycode, options)  + "</td>"));
             row.append($("<td class=>" + rowData.crmti_status + "</td>"));
             row.append($("<td>" + rowData.crmti_src + "</td>"));
             row.append($("<td>" + rowData.crmti_dst + "</td>"))
@@ -125,7 +125,7 @@
 </script>
 <style>
   table.tablesorter { width:auto; cursor:pointer; }
-  th.date { width: 140px }
+  th.date { width: 155px }
   th.status, th.id{ width: 70px }
   th.source, th.dest { width: 200px; }
   th.typ, th.dir { width: 50px; }

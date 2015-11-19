@@ -8,13 +8,13 @@
     $head = mkHeader();
     echo $menu['stylesheets'];
     echo $menu['javascripts'];
-    echo $head['FULLCALCSS'];
-    echo $head['BOXCSS'];
-    echo $head['COLORPICKERCSS'];
+    //echo $head['FULLCALCSS'];
+    //echo $head['BOXCSS'];
+    //echo $head['COLORPICKERCSS'];
     echo $head['THEME'];
-    echo $head['FULLCALJS'];
-    echo $head['JQBOX'];
-    echo $head['COLORPICKERJS'];
+    //echo $head['FULLCALJS'];
+    //echo $head['JQBOX'];
+    //echo $head['COLORPICKERJS'];
     //print_r( $_SESSION );
     /*****************************************************************************************************************************
     Grundsätze: Content wird via Ajax im Json-Format geholt und an die entsprechenden Container verteilt
@@ -44,7 +44,12 @@
             fontWeight: "bold",
             color: "red",
         }).delay( 1000 ).fadeOut( 6000 ).delay( 1000 ).fadeIn( 10000 );
+        //Konfigurations-Variablen der ERP benutzen:
+        alert( "Sprache: " + kivi.myconfig.countrycode );
+        console.log( kivi.myconfig );
+
     });
+
 </script>
 <style>
     #example    { position:absolute; top:130px; left:87px; }
@@ -54,13 +59,18 @@
 <?php
     echo $menu['pre_content'];
     echo $menu['start_content'];
+    print_r( $_SESSION['klicktel_key'] );
 ?>
 <div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Headline</p>
 <div id="example"></div>
 <!--
 Hier stehen die vielen Div-Container
 -->
-
 </div>
+<?php
+    echo $menu['end_content'];
+?>
+
 </body>
 </html>

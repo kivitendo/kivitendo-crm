@@ -1,6 +1,7 @@
 <?php
 require_once( "inc/stdLib.php" );
 $keys = array(
+    'klicktel_key',
     'ttpart',
     'tttime',
     'ttround',
@@ -21,7 +22,7 @@ $keys = array(
     'planspace_man',
 );
 foreach ( $keys as $value ) {
-    $_SESSION[$value] = $value == 'dir_mode' ? octdec( $_POST[$value] ) : $_POST[$value]; 
+    $_SESSION[$value] = $value == 'dir_mode' ? octdec( $_POST[$value] ) : $_POST[$value];
 }
 if ( $_POST['save'] ) {
     $save = true;
@@ -65,8 +66,8 @@ if ( $_POST['save'] ) {
 $sql = "SELECT * FROM crmdefaults WHERE grp = 'mandant'";
 $rs = $_SESSION['db']->getAll( $sql );
 $data = array( );
-if ( $rs ) 
-    foreach ( $rs as $row ) 
+if ( $rs )
+    foreach ( $rs as $row )
         $data[$row['key']] = $row['val'];
 foreach ( $keys as $row ) {
     if ( !isset( $data[$row] ) ) {
@@ -86,25 +87,26 @@ if ( $_SESSION['Admin'] != 1 ) {
     $t->set_var( array( msg => 'Diese Aktion ist nicht erlaubt. </ br>Sie sind nicht Mitglied der Gruppe Admin.', hide => 'hidden' ) );
 }
 else {
-    $t->set_var( array( 'GEODB' => ( $data['GEODB'] == 't' ) ? 'checked' : '', 
-                        'BLZDB' => ( $data['BLZDB'] == 't' ) ? 'checked' : '', 
-                        'CallEdit' => ( $data['CallEdit'] == 't' ) ? 'checked' : '', 
-                        'CallDel' => ( $data['CallDel'] == 't' ) ? 'checked' : '', $data['MailFlag'] => 'selected', 
-                        'Expunge' => ( $data['Expunge'] == 't' ) ? 'checked' : '', 
-                        'logmail' => ( $data['logmail'] == 't' ) ? 'checked' : '', 
-                        'streetview_man' => $data['streetview_man'], 
-                        'planspace_man' => $data['planspace_man'], 
-                        'ttpart' => $data['ttpart'], 
-                        'tttime' => $data['tttime'], 
-                        'ttround' => $data['ttround'], 
-                        'ttclearown' => ( $data['clearown'] == 't' ) ? 'checked' : '', 
-                        'dir_group' => $data['dir_group'], 
-                        'dir_mode' => $data['dir_mode'], 
-                        'sep_cust_vendor' => ( $data['sep_cust_vendor'] == 't' ) ? 'checked' : '', 
-                        'listLimit' => $data['listLimit'], 
-                        'showErr' => ( $data['showErr'] == 't' ) ? 'checked' : '', 
-                        'logfile' => ( $data['logfile'] == 't' ) ? 'checked' : '', 
-                        'crmpath' => $_SESSION['crmpath'], 
+    $t->set_var( array( 'klicktel_key' => $data['klicktel_key'] ? $data['klicktel_key'] : '95d5a5f8d8ef062920518592da992cba',
+                        'GEODB' => ( $data['GEODB'] == 't' ) ? 'checked' : '',
+                        'BLZDB' => ( $data['BLZDB'] == 't' ) ? 'checked' : '',
+                        'CallEdit' => ( $data['CallEdit'] == 't' ) ? 'checked' : '',
+                        'CallDel' => ( $data['CallDel'] == 't' ) ? 'checked' : '', $data['MailFlag'] => 'selected',
+                        'Expunge' => ( $data['Expunge'] == 't' ) ? 'checked' : '',
+                        'logmail' => ( $data['logmail'] == 't' ) ? 'checked' : '',
+                        'streetview_man' => $data['streetview_man'],
+                        'planspace_man' => $data['planspace_man'],
+                        'ttpart' => $data['ttpart'],
+                        'tttime' => $data['tttime'],
+                        'ttround' => $data['ttround'],
+                        'ttclearown' => ( $data['clearown'] == 't' ) ? 'checked' : '',
+                        'dir_group' => $data['dir_group'],
+                        'dir_mode' => $data['dir_mode'],
+                        'sep_cust_vendor' => ( $data['sep_cust_vendor'] == 't' ) ? 'checked' : '',
+                        'listLimit' => $data['listLimit'],
+                        'showErr' => ( $data['showErr'] == 't' ) ? 'checked' : '',
+                        'logfile' => ( $data['logfile'] == 't' ) ? 'checked' : '',
+                        'crmpath' => $_SESSION['crmpath'],
                         'msg' => $msg, ) );
 }
 $t->pparse( "out", array( "mand" ) );

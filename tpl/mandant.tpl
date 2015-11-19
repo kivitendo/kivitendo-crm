@@ -1,16 +1,53 @@
 <html>
-    <head><title>Mandanten Stamm</title>
+    <head><title>.:Mandanten Stamm:.</title>
 {STYLESHEETS}
-{CRMCSS}
 {JAVASCRIPTS}
 {THEME}
+<script>
+
+    $(document).ready(function(){
+         $("#dialogKlicktelInfo")
+        .dialog({
+            autoOpen: false,
+            title: 'Wichtige Info',
+            modal: true,
+            width:'auto',
+            buttons: {
+                Ok: function() {
+                    $(this).dialog("close");
+                }
+            }
+        });
+        $("#klicktelInfo").button().click(function() {
+            $('#dialogKlicktelInfo').dialog("open").html("Achtung! Aus Datenschutzgründen empfehlen wir einen eigene API Key zu benutzen!< /br> URL");
+            return false;
+
+        });
+        $("input:text").button().addClass('ui-textfield');
+        //$("#mailFlag").selectmenu(); ToDo: neue jQuerx-UI version in ERP einfügen
+    });
+</script>
+<style>
+    .ui-textfield {
+        font: inherit;
+        color: inherit;
+        background: #FFFFEF !important;
+        text-align: inherit;
+        outline: none;
+    }
+</style>
 </head>
 <body>
+<div class="ui-widget-content">
 {PRE_CONTENT}
 {START_CONTENT}
-<p class="listtop">Mandanteneinstellungen {msg}</p>
-<table style='visibility:{hide}'>
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:Mandanteneinstellungen:. {msg}</p>
+<table style="visibility:{hide}">
+    <div id="dialogKlicktelInfo"></div>
     <form name="mandant" id="mandant" action="mandant.php" method="post">
+    <tr><td colspan='2'><b>.:Telefonintegration:.</b></td></tr>
+    <tr><td>Klicktel API Key</td>            <td><input type='text' name='klicktel_key' id='klicktel_key' value='{klicktel_key}' size='28'> <button id="klicktelInfo">Info</button></td></tr>
+
     <tr><td colspan='2'><b>externe DBs</b></td></tr>
     <tr><td>Geo-DB</td>                             <td><input type='checkbox' name='GEODB' id='GEODB' value='t' {GEODB}> siehe install.txt</td></tr>
     <tr><td>Blz-DB</td>                             <td><input type='checkbox' name='BLZDB' id='BLZDB' value='t' {BLZDB}> siehe install.txt</td></tr>
@@ -18,7 +55,7 @@
     <tr><td>Editieren</td>                          <td><input type='checkbox' name='CallEdit' id='CallEdit' value='t' {CallEdit}></td></tr>
     <tr><td>Löschen</td>                            <td><input type='checkbox' name='CallDel' id='CallDel' value='t' {CallDel}></td></tr>
     <tr><td colspan='2'><b>E-Mail</b></td></tr>
-    <tr><td>Gesehen markieren als</td><td><select name='MailFlag'>
+    <tr><td>Gesehen markieren als</td><td><select name='MailFlag' id='mailFlag'>
                                              <option value='Flagged' {Flagged}>Flagged
                                              <option value='Answered' {Answered}>Answered
                                              <option value='Seen' {Seen}>Seen
@@ -49,6 +86,6 @@
 </table>
 </form>
 {END_CONTENT}
+</div>
 </body>
 </html>
-

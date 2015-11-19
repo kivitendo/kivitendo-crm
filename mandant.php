@@ -1,6 +1,7 @@
 <?php
 require_once( "inc/stdLib.php" );
 $keys = array(
+    'klicktel_key_db',
     'klicktel_key',
     'ttpart',
     'tttime',
@@ -88,6 +89,7 @@ if ( $_SESSION['Admin'] != 1 ) {
 }
 else {
     $t->set_var( array( 'klicktel_key' => $data['klicktel_key'] ? $data['klicktel_key'] : '95d5a5f8d8ef062920518592da992cba',
+                        'klicktel_key_db' => $data['klicktel_key'],
                         'GEODB' => ( $data['GEODB'] == 't' ) ? 'checked' : '',
                         'BLZDB' => ( $data['BLZDB'] == 't' ) ? 'checked' : '',
                         'CallEdit' => ( $data['CallEdit'] == 't' ) ? 'checked' : '',

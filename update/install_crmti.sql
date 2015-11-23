@@ -99,7 +99,7 @@ DECLARE
 BEGIN
     result := SucheNummer( dst );
     INSERT INTO crmti ( crmti_src, crmti_dst, crmti_caller_typ, crmti_caller_id, crmti_direction  ) VALUES ( src, result.name, result.typ, result.id, 'A' ) RETURNING crmti_id INTO lastid;
-    DELETE FROM crmti WHERE crmti_id  < lastid -25;
+    DELETE FROM crmti WHERE crmti_id  < lastid -512;
     IF result.typ != 'X' THEN
         INSERT INTO telcall ( calldate, bezug, cause, caller_id, kontakt, inout ) values ( CURRENT_TIMESTAMP, 0, 'Ausgehender Anruf vo[n|m] '||src, result.id, 'T', 'o' );
     END IF;

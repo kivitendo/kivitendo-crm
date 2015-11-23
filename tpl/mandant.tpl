@@ -4,12 +4,10 @@
 {JAVASCRIPTS}
 {THEME}
 <script>
-
     $(document).ready(function(){
-         $("#dialogKlicktelInfo")
-        .dialog({
+         $("#dialogKlicktelInfo").dialog({
             autoOpen: false,
-            title: 'Wichtige Info',
+            title: 'Achtung! Wichtige Information.',
             modal: true,
             width:'auto',
             buttons: {
@@ -19,12 +17,14 @@
             }
         });
         $("#klicktelInfo").button().click(function() {
-            $('#dialogKlicktelInfo').dialog("open").html("Achtung! Aus Datenschutzgründen empfehlen wir einen eigene API Key zu benutzen!< /br> URL");
+            $('#dialogKlicktelInfo').dialog("open").html('Wir empfehlen aus Datenschutzgründen einen eigenen API Key zu benutzen!<br> <a target="_blank" href="http://openapi.klicktel.de/login">Key anfordern: http://openapi.klicktel.de/login</a>');
             return false;
 
         });
         $("input:text").button().addClass('ui-textfield');
+        $("#save").button();
         //$("#mailFlag").selectmenu(); ToDo: neue jQuerx-UI version in ERP einfügen
+        if( '{klicktel_key_db}' != '95d5a5f8d8ef062920518592da992cba' ) $("#klicktelInfo").hide();
     });
 </script>
 <style>
@@ -46,7 +46,7 @@
     <div id="dialogKlicktelInfo"></div>
     <form name="mandant" id="mandant" action="mandant.php" method="post">
     <tr><td colspan='2'><b>.:Telefonintegration:.</b></td></tr>
-    <tr><td>Klicktel API Key</td>            <td><input type='text' name='klicktel_key' id='klicktel_key' value='{klicktel_key}' size='28'> <button id="klicktelInfo">Info</button></td></tr>
+    <tr><td>Klicktel API Key</td>            <td><input type='text' name='klicktel_key' id='klicktel_key' value='{klicktel_key}' size='35'> <button id="klicktelInfo">Info</button></td></tr>
 
     <tr><td colspan='2'><b>externe DBs</b></td></tr>
     <tr><td>Geo-DB</td>                             <td><input type='checkbox' name='GEODB' id='GEODB' value='t' {GEODB}> siehe install.txt</td></tr>

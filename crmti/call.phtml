@@ -139,7 +139,7 @@
     echo $menu['pre_content'];
     echo $menu['start_content'];
 ?>
-<div class="ui-widget-content" style="height:800px">
+<div class="ui-widget-content">
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;"><b>Anrufliste</b></p>
   <table id="DataTable" class="tablesorter">
   <div id="dialogFound"></div>
@@ -158,6 +158,7 @@
     <tbody id="tbody">
     </tbody>
   </table>
+<?php echo $head['JQTABLE-PAGER']; ?>
 </div>
 <?php echo $menu['end_content']; ?>
 </body>

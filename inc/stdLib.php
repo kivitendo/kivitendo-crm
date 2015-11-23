@@ -933,9 +933,16 @@ function makeMenu($sess,$token){
     $rs['start_content'] = '';
     $rs['end_content']   = '';
     if ($objResult) {
+        echo "<pre>";
+        print_r($objResult->{'javascripts'});
+        echo "</pre";
         foreach($objResult->{'javascripts'} as $js) {//<script type="text/javascript" src="http://localhost/kivitendo-dev/crm/jquery/jquery-ui.min.js"></script>
             //jQuery und UI der ERP benützen
-            $rs['javascripts'] .= '<script type="text/javascript" src="'.$BaseUrl.$js.'"></script>'."\n".'   ';
+            //$rs['javascripts'] .= '<script type="text/javascript" src="'.$BaseUrl.$js.'"></script>'."\n".'   ';
+            //Da die ERP eine veraltete JUI benützt, aktuelle JUI aus CRM laden
+            //ToDo: JUI aus ERP laden wenn diese >= Version 11.4 wird
+            if( strpos( $js, "jquery-ui")  === false ) $rs['javascripts'] .= '<script type="text/javascript" src="'.$BaseUrl.$js.'"></script>'."\n".'   ';
+            else $rs['javascripts'] .= '<script type="text/javascript" src="http://localhost/kivitendo-dev/crm/jquery/jquery-ui.min.js"></script>'."\n".'   ';;
         }
         foreach($objResult->{'stylesheets'} as $style) {
             if ($style) $rs['stylesheets'] .= '<link rel="stylesheet" href="'.$BaseUrl.$style.'" type="text/css">'."\n".'   ';

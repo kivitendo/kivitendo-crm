@@ -15,6 +15,7 @@
 ?>
 <script type="text/javascript">
     $(document).ready(function(){
+        var number;
         var entryData;
         $("#dialogFound").dialog({
             autoOpen: false,
@@ -52,11 +53,24 @@
             title: 'Telefonverzeichnis-Eintrag',
             modal: true,
             width:'auto',
-            buttons: {
-                Ok: function() {
-                    $(this).dialog("close");
+            buttons: [{
+                text: "Nummer hinzufügen",
+                click: function(data){
+                    $('#dialogNotFound').append('<input type="text" id="tmp" value="' + number + '">');
+                    $( '#tmp' ).select();
+                    document.execCommand( "cut" );
+                    $( '#tmp' ).remove();
+                    window.location.href = "../getData.php?action=edit&number=" + number;
                 }
-            }
+            },
+            {
+                text: "Close",
+                click: function(){
+                    $(this).dialog('close');
+                }
+            }]
+
+
         });
         $.ajax({
             dataType: "json",
@@ -74,7 +88,7 @@
             var id  = $(this).closest('tr').children().eq(4).text();
             var typ = $(this).closest('tr').children().eq(5).text();
             if ( typ == 'X' ){ //Number is not in database
-                var number = $.isNumeric( src ) ? src : dst;
+                number = $.isNumeric( src ) ? src : dst;
                 $.ajax({
                     dataType: "json",
                     url: "../jqhelp/call.php?action=numberToAdress&data=" + number,
@@ -94,7 +108,8 @@
                         delete entryData['backlink'];
                     },
                     error: function(data){
-                        $('#dialogNotFound').dialog("open").text("Zu dieser Telefonnummer gibt es keinen Eintrag im Telefonverzeichnis.");
+
+                        $('#dialogNotFound').dialog("open").html("Zur Telefonnummer: " + number + " gibt es keinen Eintrag im Telefonverzeichnis. <p> nummer zuordnen [STRG+V] </p>");
                     }
                });
             }

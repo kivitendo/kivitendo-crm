@@ -54,7 +54,7 @@
             modal: true,
             width:'auto',
             buttons: [{
-                text: "Nummer hinzufügen",
+                text: "Nummer zuordnen",
                 click: function(data){
                     $('#dialogNotFound').append('<input type="text" id="tmp" value="' + number + '">');
                     $( '#tmp' ).select();
@@ -109,7 +109,7 @@
                     },
                     error: function(data){
 
-                        $('#dialogNotFound').dialog("open").html("Zur Telefonnummer: " + number + " gibt es keinen Eintrag im Telefonverzeichnis. <p> nummer zuordnen [STRG+V] </p>");
+                        $('#dialogNotFound').dialog("open").html("Zur Telefonnummer: " + number + " gibt es keinen Eintrag im Telefonverzeichnis. <p> Nummer einfügen mit [STRG+V] </p>");
                     }
                });
             }

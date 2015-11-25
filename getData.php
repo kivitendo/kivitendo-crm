@@ -16,16 +16,22 @@ echo $head['THEME'];
 echo $head['JUI-DROPDOWN'];
 ?>
     <script language="JavaScript">
-        var first = false;
+        $.urlParam = function( name ){
+            var results = new RegExp( '[\?&]' + name + '=([^&#]*)' ).exec( window.location.href );
+            if( results == null ) alert( 'Parameter: "' + name + '" does not exist in "' + window.location.href + '"!' );
+            else return decodeURIComponent( results[1] || 0 );
+        }
+        var number = $.urlParam( 'number' )
         function chgTab() {
             first = false;
         };
-        function showD (src,id) {
-           if      (src=="C") { uri="firma1.php?Q=C&id=" + id }
-           else if (src=="V") { uri="firma1.php?Q=V&id=" + id; }
-           else if (src=="E") { uri="user1.php?id=" + id; }
-           else if (src=="K") { uri="kontakt.php?id=" + id; }
-           window.location.href=uri;
+        function showD( src, id, number ) {
+
+           if      ( src=="C" ) uri = number ? "firmen3.php?edit=1&number=" + number + "&Q=C&id=" + id : "firma1.php?Q=C&id=" + id;
+           else if ( src=="V" ) uri = number ? "firmen3.php?edit=1&number=" + number + "&Q=V&id=" + id : "firma1.php?Q=V&id=" + id;
+           else if ( src=="E" ) uri = "user1.php?id=" + id;
+           else if ( src=="K" ) uri = number ? "personen3.php?&edit=1&number=" + number + "&id=" + id : "kontakt.php?id=" + id;
+           window.location.href = uri;
         }
         function showItem(id,Q,FID) {
             F1=open("<?php echo $_SESSION["baseurl"]; ?>crm/getCall.php?Q="+Q+"&fid="+FID+"&hole="+id,"Caller","width=670, height=600, left=100, top=50, scrollbars=yes");
@@ -72,7 +78,7 @@ echo '
                 delay: '.$_SESSION['feature_ac_delay'].',
                 disabled:'.($_SESSION['feature_ac']?'false':'true').',
                 select: function(e,ui) {
-                    showD(ui.item.src,ui.item.id);
+                    showD(ui.item.src,ui.item.id, number);
                 }
             });
 
@@ -133,7 +139,7 @@ echo '
                     menuClass: 'menu',
                     launchOnMouseEnter:true,
                     onSelect: function(event, data) {
-                        showD(data.id.substring(0,1), data.id.substring(1));
+                        showD(data.id.substring(0,1), data.id.substring(1), number);
                     }
                 });
             }

@@ -21,6 +21,9 @@ function printArray( $array ){
     print_r( $array );
     echo '</pre>';
 }
+if ( isset ($_SESSION['db']) ) 
+    $GLOBALS['db'] = $_SESSION['db']; // Das muß noch raus!!! Aber erst wenn alles auf GLOBALS umgestellt ist
+
 if ( !isset($_SESSION['dbhost']) ) {
     if ( !isset($erpConfigFile) ) $erpConfigFile = $erp;
     $_SESSION['ERPNAME'] = $ERPNAME;
@@ -46,7 +49,6 @@ if ( !isset($_SESSION['dbhost']) ) {
 };
 
 require_once "login".$_SESSION["loginok"].".php";
-//$db = $_SESSION['db']; // Das muß noch raus!!!
 
 
 /****************************************************
@@ -223,8 +225,6 @@ function anmelden() {
     error_log("!$ERPNAME!$dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie!",0);
     $auth = authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie);
     if ( !$auth ) {  return false; };                    // Anmeldung des Users fehlgeschlagen
-    chkdir($auth["dbname"]);                         // gibt es unter dokumente ein Verzeichnis mit dem Instanznamen
-    chkdir($auth["dbname"].'/tmp/');
     foreach ($auth as $key=>$val) $_SESSION[$key] = $val;                // Mandanten + Userdaten in Session speichern
     $_SESSION["sessid"] = $cookie;
     $_SESSION["cookie"] = $cookiename;
@@ -245,10 +245,13 @@ function anmelden() {
     }
     $_SESSION['ok'] = "1";
     // Mit der Mandanten-DB verbinden
-    $_SESSION["db"]     = new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
-    if( !$_SESSION["db"] ) {
+    $GLOBALS['db']  = new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
+    $_SESSION["db"] = $GLOBALS['db'];  //Nur solange, bis ALLE DB-Aufrufe auf $GLOBALS['db'] umgestellt sind.
+    if( !$GLOBALS['db'] ) {
         return false;
     } else {
+        chkdir($auth["dbname"]);                         // gibt es unter dokumente ein Verzeichnis mit dem Instanznamen
+        chkdir($auth["dbname"].'/tmp/');
         $_SESSION['Admin'] = $auth['Admin'];
         $charset = ini_get("default_charset");
         //if ( $charset == "" ) $charset = $dbcharset;
@@ -266,7 +269,7 @@ function anmelden() {
         $_SESSION["loginCRM"] = $user_data["id"];
         $_SESSION['theme']    = ($user_data['theme']=='' || $user_data['theme']=='base')?'':$user_data['theme'];
         $sql = "SELECT  * from schema_info where tag like 'relea%' order by itime desc limit 1";
-        $rs = $_SESSION["db"]->getOne($sql);
+        $rs = $GLOBALS['db']->getOne($sql);
         $tmp = substr($rs['tag'],8);
         $_SESSION["ERPver"]   = strtr($tmp,'_','.');
         $_SESSION["menu"]     = makeMenu($_SESSION["sessid"],$_SESSION["token"]);
@@ -283,6 +286,12 @@ function anmelden() {
 * prueft, ob Verzeichnis besteht und legt es bei Bedarf an
 *****************************************************/
 function chkdir($dir,$p="") {
+    $tmpdata = getUserEmployee(array('dir_mode','dir_group'));
+    if ( !isset($tmpdata['dir_mode']) ) {
+        $dir_mode = '0755';
+    } else {
+        $dir_mode = $tmpdata['dir_mode'];
+    };    
     if ( isset($_SESSION['crmpath']) && file_exists($_SESSION['crmpath']."/dokumente/".$_SESSION["dbname"]."/".$dir) ) {
         return $_SESSION['crmpath']."/dokumente/".$_SESSION["dbname"]."/".$dir;
     } else {
@@ -291,12 +300,12 @@ function chkdir($dir,$p="") {
         $tmp  = $_SESSION["dbname"]."/";
         foreach ( $dirs as $dir ) {
             if ( !file_exists($_SESSION['crmpath']."/dokumente/$tmp".$dir) ) {
-                if ( isset($_SESSION['dir_mode']) && $_SESSION['dir_mode'] != ''  ) {
-                    $ok = @mkdir($_SESSION['crmpath']."/dokumente/$tmp".$dir, $_SESSION['dir_mode']);
-                } else {
-                    $ok = @mkdir($_SESSION['crmpath']."/dokumente/$tmp".$dir);
-                }
-                if ( isset($_SESSION['dir_group']) && $_SESSION['dir_group'] && $ok ) @chgrp($_SESSION['crmpath']."/dokumente/$tmp".$dir,$_SESSION['dir_group']);
+                $ok = false;
+                if ( is_writeable($_SESSION['crmpath'].$tmp.$dir) )
+                    $ok = @mkdir($_SESSION['crmpath']."/dokumente/$tmp".$dir, $dir_mode);
+                if ( is_writeable($_SESSION['crmpath'].$tmp.$dir) )
+                    if ( isset($tmpdata['dir_group']) && $tmpdata['dir_group'] && $ok ) 
+                        @chgrp($_SESSION['crmpath']."/dokumente/$tmp".$dir,$tmpdata['dir_group']);
                 if ( !$ok ) {
                     return false;
                 }
@@ -324,6 +333,29 @@ function liesdir($dir) {
     }
     return $files;
 }
+
+
+//SESSION nicht mehr so aufblasen, sonderen ggf Daten nachladen.
+function getUserEmployee($keys) {
+    $sql  = 'SELECT key,val FROM crmemployee WHERE uid ='.$_SESSION['loginCRM'].' AND manid = '.$_SESSION['manid'];
+    $sql .= ' AND key in (\''.join("','",$keys).'\') ';
+    $sql .= 'UNION ';
+    $sql .= 'SELECT key,val FROM crmdefaults ';
+    $sql .= 'UNION ';
+    $sql .= 'SELECT \'msignature\' as key, signature as val FROM defaults';
+    $rs   = $GLOBALS['db']->getAll($sql);
+    $tmp = array();
+    if ( $rs ) foreach ($rs as $row) $tmp[$row['key']] = $row['val'];
+    return $tmp;
+}
+function getCRMdefault() {
+    $sql = "SELECT key,val FROM crmdefaults WHERE grp = 'mandant'";
+    $rs   = $GLOBALS['db']->getAll($sql);
+    $tmp = array();
+    if ( $rs ) foreach ($rs as $row) $tmp[$row['key']] = $row['val'];
+    return $tmp;
+}
+
 
 /****************************************************
 * chkFld

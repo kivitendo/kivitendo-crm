@@ -67,6 +67,7 @@ $texts = array(
     '.:Delete a File:.'                                            => 'eine Datei löschen',
     '.:delete:.'                                                   => 'löschen',
     '.:deletetcontact:.'                                           => 'nicht zugeordnete Ansprechpartner (Kunden und Lieferanten) z.B. private Adressen',
+    '.:delivery date:.'                                            => 'Lieferdatum',
     '.:delivery order:.'                                           => 'Lieferauftrag',
     '.:delivery order:.'                                           => 'Lieferschein',
     '.:department:.'                                               => 'Abteilung',

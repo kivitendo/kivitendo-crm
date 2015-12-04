@@ -3255,7 +3255,12 @@ function getIOQ($fid,$Q,$type,$close){
         case "quo": //Angebote
             $sql = "SELECT DISTINCT ON (oe.id) to_char(oe.transdate, 'DD.MM.YYYY') as date, description, COALESCE(ROUND(amount,2))||' '||COALESCE(C.name) as amount, ";
             $sql.= "oe.quonumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id=trans_id LEFT JOIN currencies C on currency_id=C.id WHERE quotation = TRUE AND $cust_vend = $fid ORDER BY oe.id DESC, orderitems.id";
-    } 
+            break;
+        case "del": //Lieferscheine
+            $sql = "SELECT DISTINCT ON (delivery_orders.id) delivery_orders.id, to_char(delivery_orders.transdate, 'DD.MM.YYYY') as date, description, to_char(delivery_orders.reqdate, 'DD.MM.YYYY') as deldate, donumber ";
+            $sql.= "FROM delivery_orders LEFT JOIN delivery_order_items ON delivery_orders.id = delivery_order_id WHERE $cust_vend = $fid AND closed = FALSE ORDER BY delivery_orders.id DESC";
+            break;
+    }
     $rs = $_SESSION['db']->getAll($sql);
     return $rs;
 }

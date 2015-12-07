@@ -34,7 +34,7 @@ if($_GET['type'] != 'del') {
     echo "</tbody></table>\n</div>";
 }
 else {
-    echo '<div><table id="table'.$_GET['type'].'" class="tablesorter" width="100%" style="margin:0px; cursor:pointer;">';
+    echo '<div><table id="table'.$_GET['type'].'" class="tablesorter" width="100%" style="margin:0px;">';
     echo "<thead><tr><th>".translate('.:date:.','firma')."</th><th>".translate('.:first position:.','firma')."</th><th>"
        .translate('.:delivery date:.','firma')."</th><th>".translate('.:number:.','firma')." </th></tr></thead>\n<tbody>\n";
     if ($rs)

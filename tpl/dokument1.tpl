@@ -31,7 +31,8 @@
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
-<p class="listtop">Dokumentvorlagen</p>
+<div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Dokumentvorlagen</p>
 <form>
 	<input type="reset" name="dokument1.php" value='Dokumente'>
 	<input type="reset" name="dokument2.php" value='neue Vorlage'>
@@ -45,6 +46,7 @@
 	</tr>
 <!-- END Liste -->
 </tbody></table>
+</div>
 {END_CONTENT}
 </body>
 </html>

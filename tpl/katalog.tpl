@@ -1,9 +1,11 @@
 <html>
 	<head><title></title>
-      {STYLESHEETS}
-              <link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
-		{CRMCSS}
-		{JAVASCRIPTS}
+{STYLESHEETS}
+<link type="text/css" REL="stylesheet" HREF="{ERPCSS}/main.css">
+{STYLESHEETS}
+{CRMCSS}
+{JAVASCRIPTS}
+{THEME}
 
        
     <script language="javascript">
@@ -19,7 +21,8 @@
 {PRE_CONTENT}
 {START_CONTENT}
 <!-- Beginn Code ------------------------------------------->
-<p class="listtop">.:catalog:.</p>
+<div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:catalog:.</p>
 <table >
 <tr><td valign='top'>
 <form name="katalog" action="katalog.php" method="post">
@@ -95,6 +98,7 @@
 
 </form>
 </table>
+</div>
 <!-- End Code ------------------------------------------->
 {END_CONTENT}
 </body>

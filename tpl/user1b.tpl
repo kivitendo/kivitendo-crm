@@ -7,7 +7,8 @@
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
-<p class="listtop">Stammdaten</p>
+<div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Stammdaten</p>
 <br>
 <table>
 	<tr><td class="norm">User ID</td>	<td class="norm">: {uid}</td></tr>
@@ -22,6 +23,7 @@
 	<tr><td class="norm">Vertreter</td>	<td class="norm">: {vertreter}</td></tr>
 	<tr><td class="norm">Bemerkung</td>	<td class="norm">: {notes}</td></tr>
 </table>
+</div>
 {END_CONTENT}
 </body>
 </html>

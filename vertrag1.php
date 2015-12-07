@@ -32,7 +32,8 @@
 <body >
 <?php echo $menu['pre_content'];?>
 <?php echo $menu['start_content'];?>
-<p class="listtop">Wartungsvertr&auml;ge suchen</p>
+ <div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Wartungsvertr&auml;ge suchen</p>
 <form name="formular" enctype='multipart/form-data' action="vertrag1.php" method="post">
 <input type="text" name="vid" size="20" value="" tabindex="1"> &nbsp; 
 <input type="submit" name="ok" value="suchen"><br>Vertragsnummer
@@ -50,6 +51,7 @@
 ?>
 </tbody>
 </table>
+</div>
 <?php echo $menu['end_content'];?>
 </body>
 </html>

@@ -139,8 +139,10 @@
 <body onLoad="sign();">
 {PRE_CONTENT}
 {START_CONTENT}
+
 <!-- Beginn Code ------------------------------------------->
-<p class="listtop">.:email:. .:send:. <font color="red">{Msg}</font></p>
+<div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:email:. .:send:. </p>
 <div id='contentbox2'>
 <center>
 <form name="mailform" id="mailform" action="mail.php" enctype='multipart/form-data' method="post" >
@@ -206,6 +208,7 @@
 </table>
 {closelink}
 </center>
+</div>
 </div>
 <!-- End Code ------------------------------------------->
 {END_CONTENT}

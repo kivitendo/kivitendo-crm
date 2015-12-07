@@ -114,6 +114,8 @@ if ($_POST["erstellen"]=="erstellen") {
       $options .= '<option value="'.$row['id'].'">'.$row['ort'].' '.$row['platz'];
 }
 ?>
+<div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Inventur</p>
 <form name="inventur" action="inventur.php" method="post">
 <input type='radio' name='art' value='inventur' checked>Inventurliste <br>
 <input type='radio' name='art' value='bestand'>Bestandsliste ab: <input type='text' name='datum' size='10' id='datum'><br />
@@ -127,6 +129,7 @@ Ist-Bestand ausgeben <input type="checkbox" name="bestand" value="1"><br />
 </select><br />
 <input type="submit" name="erstellen" value="erstellen">
 </form>
+</div>
 <?php }; echo $menu['end_content']; ?>
 </body>
 </html>

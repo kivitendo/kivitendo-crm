@@ -34,7 +34,8 @@
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
-<p class="listtop">Gruppen</p>
+<div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Gruppe</p>
 <!-- Beginn Code ----------------------------------------------->
 {msg}<br>
 Zugriffbeschr&auml;nkungen f&uuml;r Kunden und Personen durch Gruppen einrichten<br><br>
@@ -86,6 +87,7 @@ Zugriffbeschr&auml;nkungen f&uuml;r Kunden und Personen durch Gruppen einrichten
 </form>
 <!-- End Code ----------------------------------------------->
 <!--/td></tr></table-->
+</div>
 {END_CONTENT}
 </body>
 </html>

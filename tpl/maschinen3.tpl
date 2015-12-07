@@ -31,7 +31,8 @@
 <body >
 {PRE_CONTENT}
 {START_CONTENT}
-<p class="listtop" onClick="help('MaschinenEingebenEditieren');">Maschinen eingeben/editieren (?)<b>{msg}</b></p>
+<div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;" onClick="help('MaschinenEingebenEditieren');">Maschinen eingeben/editieren (?)<b>{msg}</p>
 <form name="formular" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="parts_id" value="{parts_id}">
 <input type="hidden" name="mid" value="{mid}">
@@ -81,7 +82,7 @@
 
 </table>
 </form>
-
+</div>
 {END_CONTENT}
 </body>
 </html>

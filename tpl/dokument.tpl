@@ -8,7 +8,8 @@
 <body onLoad="dateibaum('left','/'), hidelinks(0); pickup = {PICUP}; tiny = {tiny};">
 {PRE_CONTENT}
 {START_CONTENT}
-<p class="listtop">.:Documents:. </p>
+<div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:Documents:. </p>
 <form name="dokument.php" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" id="mandant" value="{mandant}">
 <span id='contentbox2'>
@@ -89,6 +90,7 @@
 
 <!-- Hier endet die Karte ------------------------------------------->
 </span>
+</div>
 {END_CONTENT}
 </body>
 </html>

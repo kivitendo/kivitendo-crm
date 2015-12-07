@@ -25,7 +25,8 @@
 <body >
 {PRE_CONTENT}
 {START_CONTENT}
-<p class="listtop" onClick="help('WVEingebenEditieren');">Wartungsvertr&auml;ge eingeben (?)</p>
+<div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;" onClick="help('WVEingebenEditieren');">Wartungsvertr&auml;ge eingeben (?)</p>
 <form name="formular" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="Quelle" value="">
 <table>
@@ -76,7 +77,7 @@
 
 </table>
 </form>
-
+</div>
 {END_CONTENT}
 </body>
 </html>

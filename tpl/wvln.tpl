@@ -370,7 +370,8 @@
 <body >
 {PRE_CONTENT}
 {START_CONTENT}
-<p class="listtop" onClick="help('Wiedervorlage');" >Wiedervorlage (?)</p>
+<div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;" onClick="help('Wiedervorlage');" >Wiedervorlage (?)</p>
 <div style="float:left; width:45em; height:40em; text-align:center; border: 1px solid lightgray;" >
 <form name="formular" action="wvl1.php" enctype='multipart/form-data' method="post" onSubmit='return false;'>
 <INPUT TYPE="hidden" name="MAX_FILE_SIZE" value="2000000">
@@ -502,6 +503,7 @@
     [<a href='javascript:doInit();'>reload</a>] Mails:<span id='mails'> </span> ungelesen: <span id='unread'></span>
     </div>
   
+</div>
 </div>
 {END_CONTENT}
 </body>

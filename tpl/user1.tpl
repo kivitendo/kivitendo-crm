@@ -208,7 +208,8 @@
 </div>
  <div id="cantEditBase" title="Theme bearbeiten">
     <p>.:basecannotbechanged:.</p>
-</div>   
+</div>
+<div class="ui-widget-content" style="height:600px">
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;" onClick="help('User');">.:usersettings:.  {login} : {uid}</p>
 <form name="user" id="userform"  action="user1.php" method="post" onSubmit="return getical();">
 
@@ -412,7 +413,7 @@
         </form>
      </div>
 </div>
-
+</div>
 {END_CONTENT}
 </body>
 </html>

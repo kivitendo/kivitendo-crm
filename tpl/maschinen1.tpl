@@ -30,7 +30,8 @@
 <body >
 {PRE_CONTENT}
 {START_CONTENT}
-<p class="listtop" onClick="help('MaschinenEingebenEditieren');">Maschine info/edit (?)<b>{msg}</b></p>
+<div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;" onClick="help('MaschinenEingebenEditieren');">Maschine info/edit (?)<b>{msg}</p>
 <form name="formular" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="mid" value="{mid}">
 <table cellpadding="2">
@@ -108,6 +109,7 @@
 		</select>
 	</form>
 </span>
+</div>
 {END_CONTENT}
 </body>
 </html>

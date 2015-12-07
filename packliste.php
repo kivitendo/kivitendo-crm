@@ -146,11 +146,14 @@
  echo $menu['pre_content'];
  echo $menu['start_content'];
  echo $output; ?>
+ <div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Packliste</p>
 <form name="pl" method='post' action='packliste.php'>
 Packliste erstellen ab:<br>
 <input type="text" size="10" name="datum" id="datum" value="" > tt.mm.jjjj <br>
 <input type="submit" name="read" value="erstellen">
 </form>
+</div>
 <?php echo $menu['end_content']; ?>
 </body>
 </html>

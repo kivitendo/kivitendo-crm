@@ -250,29 +250,7 @@
     $MailSign=str_replace("\r","",$MailSign);
     $t = new Template($base);
     $menu =  $_SESSION['menu'];
-    $head = mkHeader();
-
-    if ( $popup ) {
-        $t->set_var(array(
-            'STYLESHEETS' => $menu['stylesheets'],
-            'CRMCSS'      => $head['CRMCSS'],
-            'THEME'       => $head['theme'],
-            'JQUERY'      => $head['JQUERY'],
-        ));
-        $hide = 'hidden';
-    } else {
-        $t->set_var(array(
-            'JAVASCRIPTS'   => $menu['javascripts'],
-            'STYLESHEETS'   => $menu['stylesheets'],
-            'PRE_CONTENT'   => $menu['pre_content'],
-            'START_CONTENT' => $menu['start_content'],
-            'END_CONTENT'   => $menu['end_content'],
-            'CRMCSS'        => $head['CRMCSS'],
-            'THEME'         => $head['theme'],
-            'JQUERY'        => $head['JQUERY'],
-            'JQUERYUI'      => $head['JQUERYUI']
-        ));
-    }
+    doheader($t);
     $t->set_file(array("mail" => "mail.tpl"));
     $t->set_block("mail","Betreff","Block");
     $mailvorlagen=getMailVorlage();

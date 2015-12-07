@@ -1,10 +1,14 @@
 <?php
 	require_once("inc/stdLib.php");
     $menu = $_SESSION['menu'];
+    $head = mkHeader();
 ?>
 <html>
 	<head><title></title>
-    <?php echo $menu['stylesheets']; ?>
+    <?php echo $menu['stylesheets']; 
+          echo $head['CRMCSS'];
+          echo $menu['javascripts']; 
+          echo $head['THEME'];?>
 	<link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['baseurl'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
     <script type="text/javascript" src="<?php echo $_SESSION['baseurl']; ?>crm/jquery-ui/jquery.js"></script>
     <?php echo $menu['javascript']; ?>
@@ -216,6 +220,8 @@ if ($_POST["ok"]=="erzeugen") {
    }
 } else {
 ?>
+<div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">EuR</p>
 <form name="ustva" action="eur.php" method="post">
 <table>
 <tr><td>Jahr</td><td><select name="jahr"><option value="2007">2007<option value="2008">2008<option value="2009">2009<option value="2010">2010<option value="2011">2011</select></td></tr>
@@ -237,6 +243,7 @@ if ($_POST["ok"]=="erzeugen") {
 </table>
 <input type="submit" name="ok" value="erzeugen">
 </form>
+</div>
 <?php };
 echo $menu['end_content'];
 ?>

@@ -254,6 +254,7 @@
 <body onLoad="showCall(0);">
 {PRE_CONTENT}
 {START_CONTENT}
+<div class="ui-widget-content" style="height:600px">
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
 <br>
 <div id='menubox1' >
@@ -460,6 +461,7 @@
 </div>
 <div id="dialogwin">
 <iframe id="iframe1" width='100%' height='450'  scrolling="auto" border="0" frameborder="0"><img src='image/wait.gif'></iframe>
+</div>
 </div>
 {END_CONTENT}
 </body>

@@ -7,7 +7,8 @@
 <body >
 {PRE_CONTENT}
 {START_CONTENT}
-<p class="listtop">Maschinen Trefferliste</p>
+<div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Maschinen Trefferliste</p>
 <form name="formular"  action="{action}" method="post">
 <input type="hidden" name="MID" value="{MID}">
 <select name="{fldname}" size="25">
@@ -16,6 +17,7 @@
 <!-- END Sernumber -->
 </select>
 <input type="submit" name="search" value="sichern">
+</div>
 {END_CONTENT}
 </body>
 </html>

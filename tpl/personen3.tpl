@@ -37,6 +37,7 @@
 <body onLoad="goFld();">
 {PRE_CONTENT}
 {START_CONTENT}
+<div class="ui-widget-content" style="height:600px">
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:persons:. .:keyin:./.:edit:.</p>
 
 <!-- Beginn Code ------------------------------------------->
@@ -199,6 +200,7 @@
 </span>
 
 </form>
+</div>
 <!-- End Code ------------------------------------------->
     <script type='text/javascript' src='inc/geosearchP.js'></script>
     <script type='text/javascript' src='inc/geosearch.js'></script>

@@ -84,8 +84,9 @@ $menu = $_SESSION['menu'];
 <body onLoad="if (1==<?php echo  $popup ?>) window.resizeTo(600,400);">
 <?php echo $menu['pre_content'];
       echo $menu['start_content'];?>
+<div class="ui-widget-content" style="height:600px">
 <br />
-<p class="listtop"><?php echo  translate(".:notes:.","work"); ?></p>
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;"><?php echo  translate(".:notes:.","work"); ?></p>
 <table >
 <?php
 $liste=getAllPostIt($_SESSION["loginCRM"]);
@@ -109,6 +110,7 @@ if ($liste) foreach($liste as $row) {
 <input type="button" name="ppp" value="<?php echo  translate(".:popup:.","work"); ?>" onCLick="PopUp();">
 <?php } ?>
 </form>
+</div>
 <?php echo $menu['end_content']; ?>
 </body>
 </html>

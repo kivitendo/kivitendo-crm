@@ -133,7 +133,8 @@
 <body>
 <?php echo $menu['pre_content'];?>
 <?php echo $menu['start_content'];?>
-<p class=listtop>Etiketten-Editor</p>
+<div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Etiketten-Editor</p>
 <table><tr><td class="norm" style="width:280px">
 <form name="defaufkleber" action="aufkleber_def.php" method="post">
 <input type="hidden" name="id" value="<?php echo  $id ?>">
@@ -144,7 +145,7 @@
 		<th colspan="4" class="listelement norm">Seitendefinition</th>
 	</tr>
 	<tr>
-		<th colspan="4" class="listtop">Seitengr&ouml;&szlig;e</th>
+		<th colspan="4" class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Seitengr&ouml;&szlig;e</th>
 	</tr>
 	<tr>
 		<td>Format</td>
@@ -166,28 +167,28 @@
 		</td>
 	</tr>
 	<tr>
-		<th colspan="4" class="listtop">Seitenr&auml;nder</th>
+		<th colspan="4" class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Seitenr&auml;nder</th>
 	</tr>
 	<tr>
 		<td>oben</td><td><input type="text" name="margintop" size="6" value="<?php echo  $margintop ?>"></td>
 		<td>links</td><td><input type="text" name="marginleft" size="6" value="<?php echo   $marginleft ?>"></td>
 	</tr>	
 	<tr>
-		<th colspan="4" class="listtop">Abst&auml;nde</th>
+		<th colspan="4" class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Abst&auml;nde</th>
 	</tr>
 	<tr>
 		<td>Spalten</td><td><input type="text" name="spacex" size="6" value="<?php echo  $spacex ?>"></td>
 		<td>Zeilen</td><td><input type="text" name="spacey" size="6" value="<?php echo  $spacey ?>"></td>
 	</tr>
 	<tr>
-		<th colspan="4" class="listtop">Gr&ouml;&szlig;e der Aufkleber</th>
+		<th colspan="4" class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Gr&ouml;&szlig;e der Aufkleber</th>
 	</tr>
 	<tr>
 		<td>Breite</td><td><input type="text" name="width" size="6" value="<?php echo  $width ?>"></td>
 		<td>H&ouml;he</td><td><input type="text" name="height" size="6" value="<?php echo  $height ?>"></td>
 	</tr>
 	<tr>
-		<th colspan="4" class="listtop">Anzahl der Aufkleber</th>
+		<th colspan="4" class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Anzahl der Aufkleber</th>
 	</tr>
 	<tr>
 		<td>Spalten</td>
@@ -226,7 +227,7 @@
 	<tr>
 		<th class="listelement norm">Aktionen</th>
 	</tr>
-	<tr><td class="listtop">gespeicherte Labels</td></tr>
+	<tr><td class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">gespeicherte Labels</td></tr>
 	<tr><td class="ce">
 			<select name="format">
 				<option></option>
@@ -255,8 +256,8 @@
 		<th colspan="3" class="listelement norm">Texte f&uuml;r  Aufkleber</th>
 	</tr>
 	<tr>
-		<th colspan="2" class="listtop">Font</th>
-		<th class="listtop">Text</th>
+		<th colspan="2" class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Font</th>
+		<th class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Text</th>
 	</tr>
 <?php	for ($i=0; $i<$Textzeilen;$i++) { ?>
 		<tr><td width="50px"><select name="Schrift[]">
@@ -281,6 +282,7 @@
 </table>
 
 </form>
+</div>
 <?php echo $menu['end_content']; ?>
 </body>
 </html>

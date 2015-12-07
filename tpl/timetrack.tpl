@@ -124,7 +124,8 @@
 <body {chkevent}>
 {PRE_CONTENT}
 {START_CONTENT}
-<p class="listtop" onClick="help('TimeTrack');">.:timetracker:. (?)</p>
+<div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;" onClick="help('TimeTrack');">.:timetracker:. (?)</p>
 <span style="position:absolute; left:1em; top:4.4em; width:95%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <form name="formular" action="timetrack.php" method="post">
@@ -228,6 +229,7 @@
 </table>
 <!-- Hier endet die Karte ------------------------------------------->
 </span>
+</div>
 {END_CONTENT}
 </body>
 </html>

@@ -168,7 +168,9 @@ $form_select_file = '
 <body>'.
 $menu['pre_content'].
 $menu['start_content'].
-'<table width="600">
+'<div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">EbayImporter</p>
+<table width="600">
 <form action="ebayImporter.php" method="post" enctype="multipart/form-data">
 <tr>
 <td width="20%">.:Select file:.</td>
@@ -179,7 +181,8 @@ $menu['start_content'].
 <td><input type="submit" name="select_file" /></td>
 </tr>
 </form>
-</table>'.
+</table>
+</div>'.
 $menu['end_content'];
 ;
 

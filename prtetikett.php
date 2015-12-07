@@ -62,16 +62,22 @@
 <html>
 <head><title></title>
 <?php
+    $menu = $_SESSION['menu'];
+    $head = mkHeader();
     echo $menu['stylesheets'];
-    echo $head['CRMCSS'];
     echo $menu['javascripts'];
+    echo $head['FULLCALCSS'];
+	echo $head['JQUERY'];
+    echo $head['JQUERYUI'];
+    echo $head['THEME'];
 ?>
 </head>
 <body>
 <?php
 echo $menu['pre_content'];
 echo $menu['start_content']; ?>
-<h1 onClick="help('Etikett');">Etikett</h1>
+<div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;" onClick="help('Etikett');">Etikett</p>
 <form name='prt' method='post' action='prtetikett.php'>
 <input type='hidden' name='etikett' value='<?php echo $etikett; ?>'>
 <table><tr><td>
@@ -100,6 +106,7 @@ echo '</table></td><td>';
 ?>
 <input type='submit' name='prt' value='drucken'>
 </form></td></tr></table>
+</div>
 <?php echo $menu['end_content']; ?>
 </body>
 </html>

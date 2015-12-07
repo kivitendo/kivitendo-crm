@@ -45,7 +45,8 @@
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
-<p class="listtop">.:opportunity:.</p>
+<div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:opportunity:.</p>
 <span style="position:absolute; left:1em; top:3.3em; width:95%;">
 <!-- Hier beginnt die Karte  ------------------------------------------->
 <form name="formular" action="opportunity.php" method="post">
@@ -191,6 +192,7 @@
 </div>
 <!-- Hier endet die Karte ------------------------------------------->
 </span>
+</div>
 {END_CONTENT}
 </body>
 </html>

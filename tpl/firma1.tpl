@@ -362,62 +362,53 @@
             <span id="shiptoemail"></span>
         </div>
         <div id="not">
-            <table width="100%"><tr><td>
-            <span class="labelLe ">.:Catchword:.</span><span class="value">{sw} </span><br />
-            <span class="labelLe " valign="top">.:Remarks:.</span><span class="value">{notiz}</span>
-            </td></tr></table>
+            <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
+            <thead></thead>
+            <tbody>
+           <tr><td width="20%" >.:Catchword:.</td><td>{sw}</td></tr>
+           <tr><td width="20%" >.:Remarks:.</td><td>{notiz}</td></tr>
+            </tbody>
+            </table>
         </div>
         <div id="var" >
             <div class="zeile klein">
-            <table width="100%"><tr><td>
+            <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
+            <thead></thead>
 <!-- BEGIN vars -->
-            <span class="labelLe">{varname}</span><span class="value">{varvalue}</span><br />
+           <tr><td width="20%" >{varname}</td><td>{varvalue}</td></tr>
 <!-- END vars -->
-            </td></tr></table>
+            </table>
             </div>
         </div>
         <div id="inf">
-            <table width="100%"><tr><td>
-            <span class="labelLe">.:Concern:.:</span>
-            <span class="value"><a href="firma1.php?Q={Q}&id={konzern}">{konzernname}</a></span>
-            <span> &nbsp; <a href="konzern.php?Q={Q}&fid={FID}">{konzernmember}</a></span><br />
-            <br />
-            <span class="labelLe">.:Industry:. </span> <span class="value">{branche} </span><br />
-            <br />
-            <span class="labelLe">.:headcount:.:</span> <br /><span class="value">{headcount}</span><br />
-            <br />
-            <span class="labelLe">.:language:.: </span> <span class="value">{language} </span><br />
-            <br />
-            <span class="labelLe">.:Init date:.:</span> <span class="value">{erstellt} </span>
-            <span class="space"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
-            <span class="labelLe">.:update:.: </span> <span class="value">{modify} </span><br />
-            </td></tr></table>
-            <br />
+          <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
+          <thead></thead>
+          <tbody>
+           <tr><td width="20%">.:Concern:.:</td><td width="25%"><a href="firma1.php?Q={Q}&id={konzern}">{konzernname}</td><td width="25%"><a href="konzern.php?Q={Q}&fid={FID}">{konzernmember}</a></td><td></td></tr>
+           <tr><td width="20%">.:Industry:. </td><td width="25%">{branche}</td><td width="25%"></td><td></td></tr>
+           <tr><td width="20%">.:headcount:.:</td><td width="25%">{headcount}</td><td width="25%"></td><td></td></tr>
+           <tr><td width="20%">.:language:.:</td><td width="25%">{language} </td><td width="25%"></td><td></td></tr>
+           <tr><td width="20%">.:Init date:.:</td><td width="25%">{erstellt} </td><td width="25%">.:update:.: </td><td>{modify} </td></tr>
+          </tbody>
+         </table>
         </div>
         <div id="fin" >
-            <table width="100%"><tr><td>
-            <span class="labelLe">.:Source:.:</span> <span class="value">{lead} {leadsrc}</span><br />
-            <span class="labelLe">.:{Q}Business:.:</span> <span class="value">{kdtyp}</span><br />
-            <span class="labelLe">.:taxnumber:.:</span> <span class="value">{Taxnumber}</span><br />
-            <span class="labelLe">UStId:</span> <span class="value">{USTID}</span><br />
-            <span class="labelLe">.:taxzone:.:</span> <span class="value">{Steuerzone}</span><br />
-            <span class="labelLe">.:bankname:.:</span> <span class="value">{bank}</span><br />
-            <span class="labelLe">.:directdebit:.:</span> <span class="value">{directdebit}</span><br />
-            <span class="labelLe">.:bankcode:.:</span> <span class="value">{blz}</span><br />
-            <span class="labelLe">.:bic:.:</span> <span class="value">{bic}</span><br />
-            <span class="labelLe">.:account:.:</span> <span class="value">{konto}</span><br />
-            <span class="labelLe">.:iban:.:</span> <span class="value">{iban}</span><br />
-            </td><td valign="top">
-            <span class="labelLe">.:Discount:.:</span> <span class="value">{rabatt}</span><br />
-            <span class="labelLe">.:Price group:.:</span> <span class="value">{preisgrp}</span><br />
-            <span class="labelLe">.:terms:.:</span> <span class="value">{terms} .:days:.</span><br />
-            <span class="labelLe">.:creditlimit:.:</span> <span class="value">{kreditlim}</span><br />
-            <span class="space">.:outstanding:. :</span><br />
-            <span class="labelLe">- .:items:.:</span>
-            <span class="value" onClick="showOP('{apr}');">{op}</span><br />
-            <span class="labelLe">- .:orders:.:</span>
-            <span class="value" onClick="showOP('oe');">{oa}</span><br />
-            </td></tr></table>
+         <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
+          <thead></thead>
+          <tbody>
+           <tr><td width="20%">.:Source:.:</td><td width="35%">{lead} {leadsrc}</td><td width="21%">.:Discount:.:</td><td>{rabatt}</td></tr>
+           <tr><td width="20%">.:{Q}Business:.:</td><td width="35%">{kdtyp}</td><td width="21%">.:Price group:.:</td><td>{preisgrp}</td></tr>
+           <tr><td width="20%">.:taxnumber:.:</td><td width="35%">{Taxnumber}</td><td width="21%">.:terms:.:</td><td>{terms} .:days:.</td></tr>
+           <tr><td width="20%">UStId:</td><td width="35%">{USTID}</td><td width="21%">.:creditlimit:.:</td><td>{kreditlim}</td></tr>
+           <tr><td width="20%">.:taxzone:.:</td><td width="35%">{Steuerzone}</td><td width="21%">.:outstanding:. :</td><td></td></tr>
+           <tr><td width="20%">.:bankname:.:</td><td width="35%">{bank}</td><td width="21%">- .:items:.:</td><td>{op}</td></tr>
+           <tr><td width="20%">.:directdebit:.:</td><td width="35%">{directdebit}</td><td width="21%">- .:orders:.:</td><td>{oa}</td></tr>
+           <tr><td width="20%">.:bankcode:.:</td><td width="35%">{blz}</td><td></td><td></td></tr>
+           <tr><td width="20%">.:bic:.:</td><td width="35%">{bic}</td><td></td><td></td></tr>
+           <tr><td width="20%">.:account:.:</td><td width="35%">{konto}</td><td></td><td></td></tr>
+           <tr><td width="20%">.:iban:.:</td><td width="35%">{iban}</td><td></td><td></td></tr>
+          </tbody>
+         </table>
         </div>
     </div>
 

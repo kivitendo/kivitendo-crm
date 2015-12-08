@@ -18,7 +18,7 @@ echo $head['JUI-DROPDOWN'];
     <script language="JavaScript">
         $.urlParam = function( name ){
             var results = new RegExp( '[\?&]' + name + '=([^&#]*)' ).exec( window.location.href );
-            if( results == null ) alert( 'Parameter: "' + name + '" does not exist in "' + window.location.href + '"!' );
+            if( results == null ) return//alert( 'Parameter: "' + name + '" does not exist in "' + window.location.href + '"!' );
             else return decodeURIComponent( results[1] || 0 );
         }
         var number = $.urlParam( 'number' )

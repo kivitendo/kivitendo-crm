@@ -1,1 +1,3 @@
 php_value include_path ".:/usr/share/php:/usr/share/php/fpdf:/usr/share/php/fpdi:/usr/share/jpgraph"
+## Error-Reporting: http://php.net/manual/en/errorfunc.constants.php
+##php_value error_reporting 1

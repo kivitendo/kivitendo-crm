@@ -2,24 +2,24 @@
 /*********************************************************************
 *** CRMTI - Customer Relationship Management Telephone Integration ***
 *** geschrieben von Ronny Kumke ronny@lxcars.de Artistic License 2 ***
-*** begonnen im April 2011, liest crmti aus, Version 1.1.0         ***
+*** begonnen im April 2011, Version 1.1.0                          ***
 *********************************************************************/
 
 require_once("../inc/conf.php");
 require_once("../inc/stdLib.php");
 
-$_GET['action']( $_GET['data'] ); //Funktion aufrufen
+$_GET['action']( isset( $_GET['data'] ) ? $_GET['data'] : '' ); //Funktion aufrufen
 
 function CreateFunctionsAndTable(){ //Legt beim ersten Aufruf der Datenbank die benötigten Tabellen und Funktionen an.
     global $db;
-    $sql = file_get_contents("update/install_crmti.sql");
+    $sql = file_get_contents("../update/install_crmti.sql");
     $statement = explode(";;", $sql );//zum Erzeugen von Funktionen sind Semikola notwendig, fertiges sql-Statement = ;;
     $sm0 = '/\/\*.{0,}\*\//';// SuchMuster ' /* bla */ '
     $sm1 = '/--.{0,}\n/';    // SuchMuster ' --bla \n '
     foreach( $statement as $key=>$value ){
         $sok0 = preg_replace( $sm0, '',$statement[$key] );
         $sok1 = preg_replace( $sm1, '',$sok0 );
-        $rc=$db->query( $sok1 );
+        $rc=$_SESSION['db']->query( $sok1 );
     }
     $sql="insert into schema_info (tag, login) values ('crm_telefon_integration', '".$_SESSION['login'].")'";
     $rc=$_SESSION['db']->query($sql);
@@ -31,7 +31,6 @@ function getCallListComplete(){
     if( !$rs ){
         CreateFunctionsAndTable();
     }
-    //print_r( $rs );
     echo $rs['json_agg'];
     return 1;
 }

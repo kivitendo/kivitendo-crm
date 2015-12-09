@@ -254,7 +254,7 @@
 <body onLoad="showCall(0);">
 {PRE_CONTENT}
 {START_CONTENT}
-<div class="ui-widget-content" style="height:600px">
+<div class="ui-widget-content" style="height:722px">
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
 <br>
 <div id='menubox1' >

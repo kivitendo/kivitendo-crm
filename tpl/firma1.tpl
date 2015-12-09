@@ -209,7 +209,10 @@
             });
             $("#calculator_img").on("click", function () {
                 $( "#calculator_dialog" ).dialog( "open" );
-            })
+            });
+            $("#calendar").on("click", function () {
+                window.location.href = "calendar.phtml";
+            });
             $(function() {
                 $( "#right_tabs" ).tabs({
                     cache: true, //helpful?
@@ -300,7 +303,7 @@
         <div id="calculator_dialog"><div id="calculator"></div></div>
         <img src="tools/rechner.png" id="calculator_img" title=".:simple calculator:." style="margin-bottom:1.3em;"> &nbsp;
         <img src="tools/notiz.png" onClick="toolwin('postit.php?popup=1')" title=".:postit notes:." style="margin-bottom:1.3em;"> &nbsp;
-        <img src="tools/kalender.png" onClick="toolwin('tools/kalender.php?Q={Q}&id={FID}')" title=".:calender:." style="margin-bottom:1.3em;"> &nbsp;
+        <img src="tools/kalender.png" id="calendar" title=".:calendar:." style="margin-bottom:1.3em;"> &nbsp;
         <a href="javascript:void(s=prompt('.:ask leo:.',''));if(s)leow=open('http://dict.leo.org/?lp=ende&search='+escape(s),'LEODict','width=750,height=550,scrollbars=yes,resizeable=yes');if(leow)leow.focus();"><img src="tools/leo.png" title="LEO .:english/german:." border="0" style="margin-bottom:1.3em;"></a> &nbsp;
     </span>
     </form>

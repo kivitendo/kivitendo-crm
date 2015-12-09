@@ -5,7 +5,7 @@
 {JAVASCRIPTS}
 {THEME}
 {JQTABLE}
-
+{JQCALCULATOR}
 <link rel="stylesheet" href="jquery-plugins/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
 <script type="text/javascript" src="jquery-plugins/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 <script type="text/javascript" src="jquery-plugins/qrcode/jquery.qrcode-0.12.0.js"></script>
@@ -196,9 +196,20 @@
             $("#fasubmenu").tabs({
                 heightStyle: "auto",
                 active: {kdviewli}
-                });
-            //var index = $('#fasubmenu a[href="#{kdviewli}"]').parent().index();
-            //$("#fasubmenu").tabs("option", "active",  index);
+            });
+            $("#calculator").calculator({
+                useThemeRoller: true,
+                layout: $.calculator.scientificLayout,
+            });
+            $("#calculator_dialog").dialog({
+                autoOpen: false,
+                title: 'Calcutator',
+                width:'auto',
+                resizable: false
+            });
+            $("#calculator_img").on("click", function () {
+                $( "#calculator_dialog" ).dialog( "open" );
+            })
             $(function() {
                 $( "#right_tabs" ).tabs({
                     cache: true, //helpful?
@@ -286,7 +297,8 @@
         </select>
     </span>
     <span style="float:left; padding-left:3em; visibility:{zeige_tools};" >
-        <img src="tools/rechner.png" onClick="toolwin('tools/Rechner.html')" title=".:simple calculator:." style="margin-bottom:1.3em;"> &nbsp;
+        <div id="calculator_dialog"><div id="calculator"></div></div>
+        <img src="tools/rechner.png" id="calculator_img" title=".:simple calculator:." style="margin-bottom:1.3em;"> &nbsp;
         <img src="tools/notiz.png" onClick="toolwin('postit.php?popup=1')" title=".:postit notes:." style="margin-bottom:1.3em;"> &nbsp;
         <img src="tools/kalender.png" onClick="toolwin('tools/kalender.php?Q={Q}&id={FID}')" title=".:calender:." style="margin-bottom:1.3em;"> &nbsp;
         <a href="javascript:void(s=prompt('.:ask leo:.',''));if(s)leow=open('http://dict.leo.org/?lp=ende&search='+escape(s),'LEODict','width=750,height=550,scrollbars=yes,resizeable=yes');if(leow)leow.focus();"><img src="tools/leo.png" title="LEO .:english/german:." border="0" style="margin-bottom:1.3em;"></a> &nbsp;
@@ -419,7 +431,7 @@
                 <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=quo">.:Quotation:.</a></li>
                 <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=ord">.:orders:.</a></li>
                 <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=del">.:delivery order:.</a></li>
-                <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=inv">.:invoice:.</a></li> 
+                <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=inv">.:invoice:.</a></li>
             </ul>
             <div id="contact">
                 <table id="calls" class="tablesorter" width="100%" style='margin:0px; cursor:pointer;'>

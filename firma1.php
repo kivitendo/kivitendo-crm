@@ -22,7 +22,7 @@
         $Vars = "<table>\n";
         foreach ($tmp as $row) {
             switch ($row["type"]) {
-                case "textfield":         //ToDo:  Es sollte dann natürlich auch ein Textfeld zu sehen sein .... 
+                case "textfield":         //ToDo:  Es sollte dann natürlich auch ein Textfeld zu sehen sein ....
                     preg_match("/width[ ]*=[ ]*(\d+)/i",$row["options"],$hit); $w = (isset($hit[1])&&$hit[1]>5)?$hit[1]:30;
                     $txt = '';
                     while (strlen($row["text_value"])>$w) {
@@ -32,26 +32,26 @@
                     $txt .= $row["text_value"];
                 break;
                 case "select" :  // ToDo: Implementieren!!!
-                case "text" : 
+                case "text" :
                     $txt = $row["text_value"];
                 break;
-                case "number" : 
+                case "number" :
                     preg_match("/PRECISION[ ]*=[ ]*([0-9]+)/i",$row["options"],$pos);
                     if ($pos[1]) { $txt = sprintf("%0.".$pos[1]."f",$row["number_value"]); }
                     else {$txt = $row["number_value"];}
                 break;
-                case "date" : 
+                case "date" :
                     $txt = ($row["timestamp_value"])?db2date(substr($row["timestamp_value"],0,10)):"";
                 break;
-                case "bool" : 
+                case "bool" :
                     $txt = ($row["bool_value"]=='f')?'.:no:.':'.:yes:.';
                 break;
-                case "customer" : 
+                case "customer" :
                     $txt = getCvarName($row["number_value"]);
                 break;
-                default	: $txt = $row["text_value"];
+                default    : $txt = $row["text_value"];
             }
-            if ( strpos( $txt, "http://" ) === 0 || strpos( $txt, "https://" ) === 0 || strpos( $txt ,"www." ) === 0 ){ 
+            if ( strpos( $txt, "http://" ) === 0 || strpos( $txt, "https://" ) === 0 || strpos( $txt ,"www." ) === 0 ){
                 $txt = "<a href=\"".$txt."\" target=\"_blank\">".$txt."</a>";
             }
             $t->set_var(array(
@@ -165,7 +165,7 @@
             'IMG' => $Image,
             'KARTE1' => $karte1,
             'KARTE2' => $karte2,
-            'sales'	=> ($Q=="C")?"sales":"purchase",
+            'sales'    => ($Q=="C")?"sales":"purchase",
             'request' => ($Q=="C")?"sales":"request",
             'apr' => ($Q=="C")?"ar":"ap",
             'loginname' => $_SESSION['login'],
@@ -173,23 +173,23 @@
                                 '<a class="firmabutton" href="#" onClick="doOe(\''.$sales.'_quotation\');"><img src="image/angebot.png" title="Angebot/Anfrage erstellen" border="0"></a>&nbsp;':'',
             'AUFTRAG_BUTTON' => ($_SESSION['auftrag_button']=='t')?
                                 '<a class="firmabutton" href="#" onClick="doOe(\''.$request.'_order\');"><img src="image/auftrag.png" title="neuen Auftrag eingeben" border="0"></a>&nbsp;':'',
-            'LIEFER_BUTTON'  => ($_SESSION['liefer_button']=='t')? 
+            'LIEFER_BUTTON'  => ($_SESSION['liefer_button']=='t')?
                                 '<a class="firmabutton" href="#" onClick="doDo();"><img src="image/lieferschein.png" title="neuen Lieferschein erstellen" border="0"></a>&nbsp;':'',
             'RECHNUNG_BUTTON'=> ($_SESSION['rechnung_button']=='t')?
                                 '<a class="firmabutton" href="#" onClick="doIr();"><img src="image/rechnung.png" title="neue Rechnung erstellen" border="0"></a>&nbsp;':'',
             'EXTRA_BUTTON'   => ($_SESSION['zeige_extra']=='t')?
-                                '<a class="firmabutton" href="extrafelder.php?owner='.$Q.$id.'" name="extra" target="_blank"><img src="image/extra.png" title="Extrafelder" border="0"></a>&nbsp;':'',                   
+                                '<a class="firmabutton" href="extrafelder.php?owner='.$Q.$id.'" name="extra" target="_blank"><img src="image/extra.png" title="Extrafelder" border="0"></a>&nbsp;':'',
             'KARTE_BUTTON'   => ($_SESSION['zeige_karte']=='t')?
                                 '<a class="firmabutton" href="'.$karte1.'" name="karte" target="_blank"><img src="image/karte.png" title=".:city map:." border="0"></a>&nbsp;':'',
             'ETIKETT_BUTTON' => ($_SESSION['zeige_etikett']=='t')?
-                                '<a class="firmabutton" href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0"></a>&nbsp;':'',  
+                                '<a class="firmabutton" href="#" onCLick="anschr(1);" title=".:print label:."><img src="image/brief.png" alt=".:print label:." border="0"></a>&nbsp;':'',
             'DHL_BUTTON'     => ($_SESSION['zeige_dhl']=='t')?
-                                '<a class="firmabutton" href="#" onCLick="dhl();" title="DHL"><img src="image/dhl.png" alt="DHL" border="0"></a>&nbsp;':'', 
-            'QR_BUTTON' 	 => '<a class="firmabutton" id="qrbutt" href="#" title="QR Code erstellen"><img src="image/qrn.png" alt=".:print qr:." border="0"></a>&nbsp;',  
+                                '<a class="firmabutton" href="#" onCLick="dhl();" title="DHL"><img src="image/dhl.png" alt="DHL" border="0"></a>&nbsp;':'',
+            'QR_BUTTON'      => '<a class="firmabutton" id="qrbutt" href="#" title="QR Code erstellen"><img src="image/qrn.png" alt=".:print qr:." border="0"></a>&nbsp;',
             'BRIEF_BUTTON'   => '<a class="firmabutton" href="#" onClick="doIb();"><img src="image/mail.png" title="neuen Brief erstellen" border="0"></a>&nbsp;',
             'LxCars_BUTTON'  => ($_SESSION['zeige_lxcars']=='t'&&$Q=="C")?
                                '<a class="firmabutton" href="#" onCLick="doLxCars();" title="KFZ-Daten"><img src="image/auto.png" alt="LxCars"></a>&nbsp;':'',
-            'zeige_bearbeiter' => ($_SESSION['zeige_bearbeiter']=='t')?"visible":"hidden",      
+            'zeige_bearbeiter' => ($_SESSION['zeige_bearbeiter']=='t')?"visible":"hidden",
             'zeige_tools' => ($_SESSION['zeige_tools']=='t')?"visible":"hidden",
             'leadsrc' => $fa["leadsrc"],
             'variablen' => $variablen,

@@ -811,6 +811,11 @@ function mkHeader() {
         'JTABLEJS'      => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jtable/jquery.jtable.min.js'.$SN,
         'JQCOOKIE'      => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-cookie/jquery.cookie.js'.$SN,
         'TINYMCE'       => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tinymce/tinymce.min.js'.$SN,
+        'DATEPICKER'    => $_SESSION['countrycode'] == 'de' ? $SV.$_SESSION['baseurl'].'js/jquery/ui/i18n/jquery.ui.datepicker-de.js'.$SN : '',
+        'JQCALCULATOR'  => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.css'.$LN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.plugin.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator-'.$_SESSION['countrycode'].'.js'.$SN,
         'JQTABLE-PAGER' => '<span id="pager" class="pager">
                                 <form>
                                     <img src="'.$_SESSION["baseurl"].'crm/jquery-plugins/tablesorter-master/addons/pager/icons/first.png" class="first"/>
@@ -846,7 +851,9 @@ function doHeader(&$t) {
         'CRMCSS'        => $head['CRMCSS'],
         'CRMPATH'       => $head['CRMPATH'],
         'BOXCSS'        => $head['BOXCSS'],
-        'JQBOX'         => $head['JQBOX']
+        'JQBOX'         => $head['JQBOX'],
+        'DATEPICKER'    => $head['DATEPICKER'],
+        'JQCALCULATOR'  => $head['JQCALCULATOR']
     ));
 }
 /**

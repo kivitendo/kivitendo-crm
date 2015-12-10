@@ -2,121 +2,121 @@
 CREATE SEQUENCE "crmid" start 1 increment 1 maxvalue 9223372036854775807 minvalue 1 cache 1;
 
 CREATE TABLE telcall (
-	id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    id integer DEFAULT nextval('crmid'::text) NOT NULL,
     termin_id integer,
-	cause text,
-	caller_id integer NOT NULL,
-	calldate timestamp without time zone NOT NULL,
-	c_long text,
-	employee integer,
-	kontakt character(1),
+    cause text,
+    caller_id integer NOT NULL,
+    calldate timestamp without time zone NOT NULL,
+    c_long text,
+    employee integer,
+    kontakt character(1),
     inout char(1) DEFAULT 'i',
-	bezug integer,
-	dokument integer);
+    bezug integer,
+    dokument integer);
 
 CREATE TABLE telcallhistory (
-	id integer DEFAULT nextval('crmid'::text) NOT NULL,
-	orgid integer,
-	cause text,
-	caller_id integer NOT NULL,
-	calldate timestamp without time zone NOT NULL,
-	c_long text,
-	employee integer,
-	kontakt character(1),
-	bezug integer,
-	dokument integer,
-	chgid integer,
-	grund char(1),
-	datum timestamp without time zone NOT NULL);
-	
+    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    orgid integer,
+    cause text,
+    caller_id integer NOT NULL,
+    calldate timestamp without time zone NOT NULL,
+    c_long text,
+    employee integer,
+    kontakt character(1),
+    bezug integer,
+    dokument integer,
+    chgid integer,
+    grund char(1),
+    datum timestamp without time zone NOT NULL);
+
 CREATE TABLE documents (
-	filename text,
-	descript text,
-	datum date,
-	zeit time,
-	size integer,
-	pfad text,
-	kunde integer,
+    filename text,
+    descript text,
+    datum date,
+    zeit time,
+    size integer,
+    pfad text,
+    kunde integer,
     lock integer DEFAULT 0,
-	employee integer,
-	id integer DEFAULT nextval('id'::text));
-	
+    employee integer,
+    id integer DEFAULT nextval('id'::text));
+
 CREATE TABLE wiedervorlage (
-	id integer DEFAULT nextval('crmid'::text) NOT NULL,
-	initdate timestamp without time zone NOT NULL,
-	changedate timestamp without time zone,
-	finishdate timestamp without time zone,
-	cause text,
-	descript text,
-	document integer,
-	status integer,
-	kontakt character(1),
-	employee integer,
+    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    initdate timestamp without time zone NOT NULL,
+    changedate timestamp without time zone,
+    finishdate timestamp without time zone,
+    cause text,
+    descript text,
+    document integer,
+    status integer,
+    kontakt character(1),
+    employee integer,
         gruppe boolean DEFAULT false,
-	initemployee integer,
-	kontaktid integer,
-	kontakttab character(1),
-	tellid integer);
-	
+    initemployee integer,
+    kontaktid integer,
+    kontakttab character(1),
+    tellid integer);
+
 CREATE TABLE documenttotc (
-	id integer DEFAULT nextval('crmid'::text),
-	telcall integer,
-	documents integer);
-	
+    id integer DEFAULT nextval('crmid'::text),
+    telcall integer,
+    documents integer);
+
 CREATE TABLE telnr (
-	id integer,
-	tabelle character(1),
-	nummer character varying(20));
-	
+    id integer,
+    tabelle character(1),
+    nummer character varying(20));
+
 CREATE TABLE docvorlage (
-	docid integer DEFAULT nextval('crmid'::text) NOT NULL,
-	vorlage character varying(60),
-	beschreibung character varying(255),
-	file character varying(40),
-	applikation character(1));
-	
+    docid integer DEFAULT nextval('crmid'::text) NOT NULL,
+    vorlage character varying(60),
+    beschreibung character varying(255),
+    file character varying(40),
+    applikation character(1));
+
 CREATE TABLE docfelder (
-	fid integer DEFAULT nextval('crmid'::text) NOT NULL,
-	docid   integer,
-	feldname    character varying(20),
-	platzhalter character varying(20),
-	beschreibung character varying(200),
-	laenge  integer,
-	zeichen character varying(20),
-	position    integer);
-	
+    fid integer DEFAULT nextval('crmid'::text) NOT NULL,
+    docid   integer,
+    feldname    character varying(20),
+    platzhalter character varying(20),
+    beschreibung character varying(200),
+    laenge  integer,
+    zeichen character varying(20),
+    position    integer);
+
 CREATE TABLE gruppenname (
-	grpid  integer DEFAULT nextval('crmid'::text) NOT NULL,
-	grpname  character varying(40),
-	rechte       char(1) DEFAULT 'w');
-	
+    grpid  integer DEFAULT nextval('crmid'::text) NOT NULL,
+    grpname  character varying(40),
+    rechte       char(1) DEFAULT 'w');
+
 CREATE TABLE grpusr (
-	gid  integer DEFAULT nextval('crmid'::text) NOT NULL,
-	grpid integer,
-	usrid integer);
-	
+    gid  integer DEFAULT nextval('crmid'::text) NOT NULL,
+    grpid integer,
+    usrid integer);
+
 CREATE TABLE termine (
-	id integer DEFAULT nextval('crmid'::text) NOT NULL,
-	cause character varying(45),
-	c_cause text,
-	start timestamp without time zone,
-	stop timestamp without time zone,
-	repeat integer,
-	ft char(1),
-	starttag date,
-	stoptag date,
-	startzeit char(5),
-	stopzeit char(5),
+    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    cause character varying(45),
+    c_cause text,
+    start timestamp without time zone,
+    stop timestamp without time zone,
+    repeat integer,
+    ft char(1),
+    starttag date,
+    stoptag date,
+    startzeit char(5),
+    stopzeit char(5),
     privat boolean default false,
-	uid integer,
+    uid integer,
     kategorie integer DEFAULT 0,
     location text,
     syncid text);
-	
+
 CREATE TABLE terminmember (
-	termin integer,
-	member integer,
-	tabelle char(1));
+    termin integer,
+    member integer,
+    tabelle char(1));
 CREATE TABLE termincat (
     catid int NOT NULL,
     catname text,
@@ -125,56 +125,56 @@ CREATE TABLE termincat (
 );
 ALTER TABLE termincat ADD  primary key (catid);
 CREATE TABLE termdate (
-	id integer DEFAULT nextval('crmid'::text) NOT NULL,
-	termid integer,
-	datum integer,
-	jahr integer,
-	kw integer,
-	tag character(2),
-	monat character(2),
+    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    termid integer,
+    datum integer,
+    jahr integer,
+    kw integer,
+    tag character(2),
+    monat character(2),
     idx integer
 );
 
 CREATE TABLE custmsg (
-	id integer DEFAULT nextval('crmid'::text) NOT NULL,
-	fid integer,
-	prio integer DEFAULT 3,
-	msg char varying(60),
-	uid integer,
-	akt boolean);
-	
+    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    fid integer,
+    prio integer DEFAULT 3,
+    msg char varying(60),
+    uid integer,
+    akt boolean);
+
 CREATE TABLE crm (
-	id integer DEFAULT nextval('crmid'::text) NOT NULL,
-	uid integer,
-	datum timestamp without time zone,
-	version char(5));
-	
+    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    uid integer,
+    datum timestamp without time zone,
+    version char(5));
+
 CREATE TABLE labels (
-	id integer DEFAULT nextval('crmid'::text),
-	name char varying(32),
-	cust char(1),
-	papersize char varying(10),
-	metric char(2),
-	marginleft double precision,
-	margintop double precision,
-	nx integer,
-	ny integer,
-	spacex double precision,
-	spacey double precision,
-	width double precision,
-	height double precision,
-	fontsize integer,
-	employee integer);
-	
-INSERT INTO labels (name, cust, papersize, metric, marginleft, margintop, nx, ny, spacex, spacey, width, height, fontsize, employee) 
+    id integer DEFAULT nextval('crmid'::text),
+    name char varying(32),
+    cust char(1),
+    papersize char varying(10),
+    metric char(2),
+    marginleft double precision,
+    margintop double precision,
+    nx integer,
+    ny integer,
+    spacex double precision,
+    spacey double precision,
+    width double precision,
+    height double precision,
+    fontsize integer,
+    employee integer);
+
+INSERT INTO labels (name, cust, papersize, metric, marginleft, margintop, nx, ny, spacex, spacey, width, height, fontsize, employee)
 VALUES ('Firma', 'C', 'A4', 'mm', 2, 2, 2, 3, 4, 2, 66, 38, 10, NULL);
 
 
 CREATE TABLE labeltxt (
-	id integer DEFAULT nextval('crmid'::text),
-	lid integer,
-	font integer,
-	zeile text);
+    id integer DEFAULT nextval('crmid'::text),
+    lid integer,
+    font integer,
+    zeile text);
 
 INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1), 6, '');
 INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1), 8, 'Lx-System, Unser Weg 1, 12345 Woanders');
@@ -187,93 +187,93 @@ INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1),
 INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1), 10,'%PLZ% %ORT%');
 
 CREATE TABLE  contmasch(
-	mid integer,
-	cid integer);	
-	
+    mid integer,
+    cid integer);
+
 CREATE TABLE history (
-	mid integer,
-	itime timestamp without time zone default now(),
-	art character varying(20),
-	beschreibung text);
-	
+    mid integer,
+    itime timestamp without time zone default now(),
+    art character varying(20),
+    beschreibung text);
+
 CREATE TABLE repauftrag (
-	aid integer,
-	mid integer,
-	cause text,
-	schaden text,
-	reparatur text,
-	bearbdate timestamp without time zone,
-	employee integer,
-	bearbeiter integer,
-	anlagedatum timestamp without time zone,
-	status integer,
-	kdnr integer,
-	counter bigint);
-	
+    aid integer,
+    mid integer,
+    cause text,
+    schaden text,
+    reparatur text,
+    bearbdate timestamp without time zone,
+    employee integer,
+    bearbeiter integer,
+    anlagedatum timestamp without time zone,
+    status integer,
+    kdnr integer,
+    counter bigint);
+
 CREATE TABLE  maschmat (
-	mid integer,
-	aid integer,
-	parts_id integer,
-	betrag numeric(15,5),
-	menge numeric(10,3));
-	
+    mid integer,
+    aid integer,
+    parts_id integer,
+    betrag numeric(15,5),
+    menge numeric(10,3));
+
 CREATE TABLE contract (
-	cid integer DEFAULT nextval('crmid'::text),
-	contractnumber text,
-	template text,
-	bemerkung text,
-	customer_id integer,
-	anfangdatum date,
-	betrag numeric(15,5),
-	endedatum date);
-	
+    cid integer DEFAULT nextval('crmid'::text),
+    contractnumber text,
+    template text,
+    bemerkung text,
+    customer_id integer,
+    anfangdatum date,
+    betrag numeric(15,5),
+    endedatum date);
+
 CREATE TABLE maschine (
-	id integer DEFAULT nextval('crmid'::text),
-	parts_id integer,
-	serialnumber text,
-	standort text,
-	inspdatum DATE,
-	counter BIGINT);
+    id integer DEFAULT nextval('crmid'::text),
+    parts_id integer,
+    serialnumber text,
+    standort text,
+    inspdatum DATE,
+    counter BIGINT);
 
 
 CREATE TABLE wissencategorie(
-	id integer DEFAULT nextval('crmid'::text) NOT NULL,
-	name character varying(60),
-	hauptgruppe integer,
-	kdhelp boolean
+    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    name character varying(60),
+    hauptgruppe integer,
+    kdhelp boolean
 );
 
 CREATE TABLE wissencontent(
-	id integer DEFAULT nextval('crmid'::text) NOT NULL,
-	initdate timestamp without time zone NOT NULL,
-	content text,
-	employee integer,
+    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    initdate timestamp without time zone NOT NULL,
+    content text,
+    employee integer,
     owener integer,
-	version integer,
-	categorie integer
+    version integer,
+    categorie integer
 );
 CREATE TABLE opportunity(
-	id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    id integer DEFAULT nextval('crmid'::text) NOT NULL,
     oppid integer DEFAULT 0 NOT NULL,
-	fid integer,
-	tab char(1),
-	title character varying(100),
-	betrag numeric (15,5),
-	zieldatum date,
-	chance integer,
-	status integer,
-	salesman int,
-	next character varying(100),
-	notiz text,
+    fid integer,
+    tab char(1),
+    title character varying(100),
+    betrag numeric (15,5),
+    zieldatum date,
+    chance integer,
+    status integer,
+    salesman int,
+    next character varying(100),
+    notiz text,
     auftrag integer DEFAULT 0,
-	itime timestamp DEFAULT now(),
-	iemployee integer,
-	memployee integer
+    itime timestamp DEFAULT now(),
+    iemployee integer,
+    memployee integer
 );
 CREATE TABLE opport_status (
     id integer DEFAULT nextval('crmid'::text) NOT NULL,
-	statusname character varying(50),
-	sort integer
+    statusname character varying(50),
+    sort integer
 );
 
 INSERT INTO  opport_status (statusname,sort) VALUES ('Neu',1);
@@ -286,11 +286,11 @@ INSERT INTO  opport_status (statusname,sort) VALUES ('wieder offen',7);
 INSERT INTO  opport_status (statusname,sort) VALUES ('Verloren',8);
 
 CREATE TABLE postit (
-	id integer DEFAULT nextval('crmid'::text) NOT NULL,
-	cause character varying(100),
-	notes text,
-	employee integer,
-	date timestamp without time zone NOT NULL
+    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    cause character varying(100),
+    notes text,
+    employee integer,
+    date timestamp without time zone NOT NULL
 );
 
 CREATE TABLE tempcsvdata (
@@ -336,9 +336,9 @@ CREATE TABLE tt_event (
 );
 
 CREATE TABLE bundesland (
-	id integer DEFAULT nextval('crmid'::text) NOT NULL,
-	country character (3),
-	bundesland character varying(50)
+    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    country character (3),
+    bundesland character varying(50)
 );
 
 CREATE SEQUENCE extraid INCREMENT BY 1 MAXVALUE 2147483647 CACHE 1;
@@ -378,11 +378,12 @@ INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('Expunge','','mandant',-1
 INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('MailFlag','Flagged','mandant',-1);
 INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('logmail','t','mandant',-1);
 INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('dir_group','users','mandant',-1);
-INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('dir_mode','493','mandant',-1);
+INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('dir_mode','0755','mandant',-1);
 INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('sep_cust_vendor','t','mandant',-1);
 INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('listLimit','500','mandant',-1);
 INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('showErr','','mandant',-1);
 INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('logfile','','mandant',-1);
+INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('http://maps.google.de/maps?f=d&hl=de&saddr=Alexanderplatz+7,10178+Berlin&daddr=%TOSTREET%,%TOZIPCODE%+%TOCITY%','','mandant',-1);
 
 INSERT INTO bundesland (country,bundesland) VALUES ('D','Baden-Württemberg');
 INSERT INTO bundesland (country,bundesland) VALUES ('D','Bayern');

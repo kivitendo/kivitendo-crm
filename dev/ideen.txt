@@ -1,0 +1,3 @@
+Ideen:
+Email durch roundcube ablösen. Für roundcube gibt es ein UI-Plugin. roundcube arbeitet mit Postgresql.
+Kalender soll Events bei Google Calendar speichern.

@@ -22,9 +22,9 @@ $keys = array(
     'streetview_man',
     'planspace_man',
 );
-foreach ( $keys as $value ) {
-    $_SESSION[$value] = $value == 'dir_mode' ? octdec( $_POST[$value] ) : $_POST[$value];
-}
+//foreach ( $keys as $value ) {
+    //$_SESSION[$value] = $value == 'dir_mode' ? octdec( $_POST[$value] ) : $_POST[$value];
+//}
 if ( $_POST['save'] ) {
     $save = true;
     if ( isset( $_POST['ttpart'] ) && $_POST['ttpart'] != '' ) {

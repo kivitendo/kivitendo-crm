@@ -7,19 +7,19 @@
 * !! in eine andere Lib verschieben
 *****************************************************/
 function saveUserStamm( $val ) {
-    // Prüfen ob crmemployee schon existiert, sonst wird bei einer frischen DB ein unschöner Fehler ausgegeben. 
-    // Besser: crmemployee vordem Aufruf von saveUserStamm() erstellen ToDo!   
-    $crm_exist = $_SESSION['db']->getOne( "SELECT count(*) FROM information_schema.tables WHERE table_name = 'crmemployee'"); 
+    // Prüfen ob crmemployee schon existiert, sonst wird bei einer frischen DB ein unschöner Fehler ausgegeben.
+    // Besser: crmemployee vordem Aufruf von saveUserStamm() erstellen ToDo!
+    $crm_exist = $_SESSION['db']->getOne( "SELECT count(*) FROM information_schema.tables WHERE table_name = 'crmemployee'");
     if ( !(bool) $crm_exist['count']) return false;
-    if ( !$val["interv"] ) 
+    if ( !$val["interv"] )
         $val["interv"] = 60;
-    if ( !$val["ssl"] ) 
+    if ( !$val["ssl"] )
         $val["ssl"] = 'f';
-    if ( !$val["proto"] ) 
+    if ( !$val["proto"] )
         $val["proto"] = 't';
-    if ( !$val["port"] ) 
+    if ( !$val["port"] )
         $val["port"] = ( $val["proto"] == 't' ) ? '143' : '110';
-    if ( !$val["termseq"] ) 
+    if ( !$val["termseq"] )
         $val["termseq"] = 30;
     if ( $val["vertreter"] == $val["uid"] ) {
         $vertreter = "null";
@@ -94,12 +94,18 @@ function saveUserStamm( $val ) {
         'search_history'          => 't',
         'mandsig'                 => 't'
     );
-    foreach ( $fld as $key => $value ) 
+    foreach ( $fld as $key => $value )
         $_SESSION[$key] = isset( $val[$key] ) ? $val[$key] : '';
     //Einstellungen nach dem Sichern gleich übernehmen (ohne neues Login)
-    if ( isset( $_SESSION['sql_error'] ) && $_SESSION['sql_error'] ) 
+
+    //Sollte besser clientseitig abgefragt werden! etwa so wenn streetview_default dann nehme streetview_man sonst streetview
+    /*if( $_SESSION['streetview_default'] ){
+        $client_data = getClientData();
+        $_SESSION['streetview'] = $client_data['streetview_man'] ? $client_data['streetview_man'] : 'http://maps.google.de/maps?f=d&hl=de&saddr=Alexanderplatz+7,10178+Berlin&daddr=%TOSTREET%,%TOZIPCODE%+%TOCITY%';
+    }*/
+    if ( isset( $_SESSION['sql_error'] ) && $_SESSION['sql_error'] )
         $_SESSION['db']->setShowError( true );
-    else 
+    else
         $_SESSION['db']->setShowError( false );
     $sql = "update employee set ";
     foreach ( $std as $key ) {
@@ -113,13 +119,13 @@ function saveUserStamm( $val ) {
     $sql = substr( $sql, 0, - 1 );
     $sql .= ' where id='.$val['uid'];
     $rc = $_SESSION['db']->query( $sql );
-    if ( $val["homephone"] ) 
+    if ( $val["homephone"] )
         mkTelNummer( $val["uid"], "E", array( $val["homephone"] ) );
-    if ( $val["workphone"] ) 
+    if ( $val["workphone"] )
         mkTelNummer( $val["uid"], "E", array( $val["workphone"] ) );
     $rc = $_SESSION['db']->begin( );
     $rc = $_SESSION['db']->query( 'DELETE FROM crmemployee WHERE uid = '.$val["uid"].' AND manid = '.$_SESSION['manid'] );
-    if ( $rc ) 
+    if ( $rc )
         foreach ( $fld as $key => $typ ) {
             if ( array_key_exists( $key, $val ) ) {
                 $sql = 'INSERT INTO crmemployee (manid,uid,key,val,typ) VALUES ('.$_SESSION['manid'].','.$val['uid'].",'$key','".$val[$key]."','$typ')";
@@ -188,7 +194,7 @@ function getUserStamm( $id, $login = false ) {
         //Mandanteneinstellungen
         $sql = "SELECT key,val FROM crmdefaults WHERE grp = 'mandant'";
         $rs = $_SESSION['db']->getAll( $sql );
-        if ( $rs ) 
+        if ( $rs )
             foreach ( $rs as $row ) {
                 $daten[$row['key']] = $row['val'];
         }
@@ -202,7 +208,7 @@ function getUserStamm( $id, $login = false ) {
                 }
                 elseif ( $row['typ'] == 'f' ) {
                     $daten[$row['key']] = (float) $row['val'];
-                }   
+                }
                 elseif ( $row['typ'] == 'b' ) {
                     $daten[$row['key']] = ( $row['val'] == 't' ) ? true : false;
                 }
@@ -210,10 +216,10 @@ function getUserStamm( $id, $login = false ) {
                     $daten[$row['key']] = $row['val'];
                 }
             }
-        } 
+        }
         else { //neuer Benutzer hat ja noch keine Einträge in crmemployee
             loadUserDefaults($id);
-        }  
+        }
         if ( $daten["vertreter"] ) {
             $sql = "select * from employee where id=".$daten["vertreter"];
             $rs3 = $_SESSION['db']->getOne( $sql );
@@ -258,11 +264,11 @@ function delGruppe( $id ) {
     if ( $cnt === 0 ) {
         $sql = "delete from grpusr where grpid=$id";
         $rc = $_SESSION['db']->query( $sql );
-        if ( !$rc ) 
+        if ( !$rc )
             return "Mitglieder konnten nicht gel&ouml;scht werden";
         $sql = "delete from gruppenname where grpid=$id";
         $rc = $_SESSION['db']->query( $sql );
-        if ( !$rc ) 
+        if ( !$rc )
             return "Gruppe konnte nicht gel&ouml;scht werden";
         return "Gruppe gel&ouml;scht";
     }
@@ -271,7 +277,7 @@ function delGruppe( $id ) {
     }
 }
 function saveGruppe( $data ) {
-    if ( strlen( $data["name"] ) < 2 ) 
+    if ( strlen( $data["name"] ) < 2 )
         return "Name zu kurz";
     $newID = uniqid( rand( ) );
     $sql = "insert into gruppenname (grpname,rechte) values ('$newID','".$data["rechte"]."')";
@@ -327,16 +333,16 @@ function getOneGrp( $id ) {
 }
 /*******************************************************************************************************
 *** Lädt die Benutzerdaten wenn noch keine Daten in crmemployee existieren. Alte DB oder neuer User. ***
-*******************************************************************************************************/  
+*******************************************************************************************************/
 function loadUserDefaults($id){
     $val = array(
         "streetview"                => "https://maps.google.de/maps?f=d&hl=de&saddr=Ensingerstrasse+19,89073+Ulm&daddr=%TOSTREET%,%TOZIPCODE%+%TOCITY%",
-        "planspace"                 => "+", 
+        "planspace"                 => "+",
         "streetview_default"        => "t",
         "msrv"                      => "your_mail_server",
         "mailsign"                  => "--Your Signature",
         "mailuser"                  => "your_mail_login",
-        "port"                      => "143", 
+        "port"                      => "143",
         "proto"                     => "t",
         "ssl"                       => "f",
         'mandsig'                   => '0',
@@ -349,7 +355,7 @@ function loadUserDefaults($id){
         "kdviewli"                  => "3",
         "kdviewre"                  => "3",
         "searchtab"                 => "1",
-        "theme"                     => "blue-style", 
+        "theme"                     => "blue-style",
         "auftrag_button"            => "t",
         "angebot_button"            => "t",
         "rechnung_button"           => "t",
@@ -357,7 +363,7 @@ function loadUserDefaults($id){
         "zeige_extra"               => "t",
         "zeige_lxcars"              => "f",
         "zeige_karte"               => "t",
-        "zeige_tools"               => "t", 
+        "zeige_tools"               => "t",
         "zeige_etikett"             => "t",
         "zeige_bearbeiter"          => "t",
         "feature_ac"                => "t",
@@ -367,7 +373,17 @@ function loadUserDefaults($id){
         "sql_error"                 => "f",
         "tinymce"                   => "t",
         "uid"                       => $id
-    );  
-    saveUserStamm( $val );  
-}   
+    );
+    saveUserStamm( $val );
+}
+/* überflüssig
+function getClientData(){
+    $sql = "SELECT * FROM crmdefaults WHERE grp = 'mandant'";
+    $rs = $_SESSION['db']->getAll( $sql );
+    $data = array();
+    if ( $rs ) foreach ( $rs as $row ) $data[$row['key']] = $row['val'];
+    //printArray( $data );
+}
+*/
+
 ?>

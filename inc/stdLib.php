@@ -4,7 +4,7 @@ ini_set('session.bug_compat_42', 0);  // Das ist natürlich lediglich eine Provi
 //Warning: Unknown: Your script possibly relies on a session side-effect which existed until PHP 4.2.3. ....
 //session_set_cookie_params(480*60); //480*60
 session_start();
-//print_r( $_SESSION );
+//printArray( $_SESSION );
 $inclpa = ini_get('include_path');
 ini_set('include_path',$inclpa.":../:./inc:../inc");
 
@@ -16,7 +16,11 @@ if ( isset($_SESSION['php_error']) && $_SESSION['php_error'] ) {
 include_once "mdb.php";
 require_once "conf.php";
 
-
+function printArray( $array ){
+    echo '<pre>';
+    print_r( $array );
+    echo '</pre>';
+}
 if ( !isset($_SESSION['dbhost']) ) {
     if ( !isset($erpConfigFile) ) $erpConfigFile = $erp;
     $_SESSION['ERPNAME'] = $ERPNAME;

@@ -310,7 +310,7 @@
 </div>
 
 
-<div id='contentbox' style="padding-top:2em;" >
+<div id='contentbox'>
     <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid lightgray;" >
         <div class="gross" style="float:left; width:55%; height:25em; text-align:left; border: 0px solid black; padding:0.2em;" >
             <span class="fett">{Fname1}</span><br />

@@ -49,6 +49,11 @@ if ( $_POST['save'] ) {
                 $_POST[$row],
             );
         };
+        //Werte in SESSION spreichern
+        unset( $_POST['save'] );
+        foreach( $_POST as $key => $value ){
+            $_SESSION[$key] = $value;
+        }
         $rc = $_SESSION['db']->executeMultiple( $insert, $data );
         if ( $rc ) {
             $msg = 'Sichern erfolgt';

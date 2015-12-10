@@ -83,9 +83,11 @@
     } else {
         $rab="";
     }
-    $karte1=str_replace(array("%TOSTREET%","%TOZIPCODE%","%TOCITY%"),array(strtr($fa["street"]," ",$_SESSION['planspace']),$fa["zipcode"],$fa["city"]),$_SESSION['streetview']);
-    $karte2=str_replace(array("%TOSTREET%","%TOZIPCODE%","%TOCITY%"),array(strtr($fa["shiptostreet"]," ",$_SESSION['planspace']),$fa["shiptozipcode"],$fa["shiptocity"]),$_SESSION['streetview']);
-    if (preg_match("/%FROM/",$karte1)) { //ToDo? Wo wird $karte definiert??
+    $streetview = $_SESSION['streetview_default'] ? $_SESSION['streetview_man'] : $_SESSION['streetview'];
+    $streetview = $streetview ? $streetview : 'http://maps.google.de/maps?f=d&hl=de&saddr=Alexanderplatz+7,10178+Berlin&daddr=%TOSTREET%,%TOZIPCODE%+%TOCITY%';//gibt es da nichts kürzeres ||=
+    $karte1=str_replace(array("%TOSTREET%","%TOZIPCODE%","%TOCITY%"),array(strtr($fa["street"]," ",$_SESSION['planspace']),$fa["zipcode"],$fa["city"]),$streetview );
+    $karte2=str_replace(array("%TOSTREET%","%TOZIPCODE%","%TOCITY%"),array(strtr($fa["shiptostreet"]," ",$_SESSION['planspace']),$fa["shiptozipcode"],$fa["shiptocity"]),$streetview );
+    if (preg_match("/%FROM/",$karte1)) {
         include "inc/UserLib.php";
         $user=getUserStamm($_SESSION["loginCRM"]);
         if ($user["addr1"]<>"" and $user["addr3"]<>"" and $user["addr2"]) {

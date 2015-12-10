@@ -7,20 +7,22 @@
     if ( isset($_GET['Q']) and $_GET['Q'] != '') { $Q = $_GET['Q']; }
     else if ( isset($_POST['Q']) and $_POST['Q'] != '') { $Q = $_POST['Q']; }
     else { $Q = 'C'; };
+    $Q_Array['Q'] = $Q;
     $t = new Template($base);
     //doHeader($t);
     if ( isset($_POST["felder"]) && $_POST["felder"] != '' ) {
         $rc = doReport($_POST,$Q);
         $t->set_file(array("fa1" => "companies1.tpl"));
-        if ($rc) { 
+        if ($rc) {
             $tmp="<div style='width:300px'>[<a href='tmp/report_".$_SESSION["login"].".csv'>download Report</a>]</div>";
         } else {
             $tmp="Sorry, not found";
         }
-        $t->set_var(array( 
+        $t->set_var(array(
                 'report' => $tmp
         ));
-        leertpl($t,1,$Q,"",true,true);
+
+        leertpl($t,1,$Q_Array,"",true,true);
     } else if ( (isset($_POST["suche"]) and $_POST["suche"] !="") || isset($_POST["first"]) ) {
         if ( isset($_POST["first"]) ) {
             $daten = getAllFirmen(array(1,$_POST["first"]),false,$Q);
@@ -33,7 +35,7 @@
             $t->set_file(array("fa1" => "companies1Result.tpl"));
             $t->set_block("fa1","Liste","Block");
             $t->set_var(array(
-                'FAART' => ($Q=="C")?"Customer":"Vendor", 
+                'FAART' => ($Q=="C")?"Customer":"Vendor",
             ));
             $i=0;
             $rc = clearCSVData();
@@ -60,7 +62,7 @@
                         ($Q=="C")?$zeile["customernumber"]:$zeile["vendornumber"],
                         $zeile["ustid"],$zeile["taxnumber"],
                         $zeile["account_number"],$zeile["bank"],$zeile["bank_code"],
-                        $zeile["language_id"],$zeile["business_id"]);    
+                        $zeile["language_id"],$zeile["business_id"]);
                 if ( isset($_POST["umsatz"]) and $_POST['umsatz'] != '' ) $data[]=$zeile["umsatz"];
                 if ($cvar>0) {
                     $rs = getFirmaCVars($zeile["id"]);
@@ -98,18 +100,18 @@
                             'report' => $_SESSION['listlimit'].' von '.count($daten).' Treffer',
                         ));
                     }
-                    $t->set_var(array(
+                   /* $t->set_var(array( //ToDo: wofür???
                         'Admin' => ($_SESSION['Admin'] == 1)?'visible':'hidden'
-                    ));
+                    ));*/
                 }
             }
         } else {
             ;//Nichts gefunden
         }
-        if ( $i > $_SESSION['listLimit'] ) 
+        if ( $i > $_SESSION['listLimit'] )
              echo '<script>$( "#dialog_viele" ).dialog( "open" );</script>';
     } else {
-        leertpl($t,1,$Q,"",true,true);
+        leertpl($t,1,$Q_Array,"",true,true);
     }
 
     $t->Lpparse("out",array("fa1"),$_SESSION['countrycode'],"firma");

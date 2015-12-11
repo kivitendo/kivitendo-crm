@@ -252,11 +252,23 @@
         }
     );
 </script>
+<style>
+
+
+</style>
 </head>
 <body onLoad="showCall(0);">
 {PRE_CONTENT}
 {START_CONTENT}
 <div class="ui-widget-content" style="height:722px">
+
+<div id="tools" style="position:absolute; top: +20; left:900;">
+    <div id="calculator_dialog"><div id="calculator"></div></div>
+    <img src="tools/rechner.png" id="calculator_img" title=".:simple calculator:.">
+    <img src="tools/notiz.png" onClick="toolwin('postit.php?popup=1')" title=".:postit notes:." style="margin-left: 20;">
+    <img src="tools/kalender.png" id="calendar" title=".:calendar:." style="margin-left: 20;">
+    <img src="tools/leo.png" id="leo" title="LEO .:english/german:." style="margin-left: 20;">
+</div>
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
 <br>
 <div id='menubox1' >
@@ -286,13 +298,6 @@
             <option id= '7' value='delivery_order'>.:delivery order:. .:develop:.</option>
             <option id= '8' value='invoice'>.:invoice:. .:develop:.</option>
         </select>
-    </span>
-    <span style="float:left; padding-left:3em; visibility:{zeige_tools};" >
-        <div id="calculator_dialog"><div id="calculator"></div></div>
-        <img src="tools/rechner.png" id="calculator_img" title=".:simple calculator:." style="margin-bottom:1.3em;"> &nbsp;
-        <img src="tools/notiz.png" onClick="toolwin('postit.php?popup=1')" title=".:postit notes:." style="margin-bottom:1.3em;"> &nbsp;
-        <img src="tools/kalender.png" id="calendar" title=".:calendar:." style="margin-bottom:1.3em;"> &nbsp;
-        <a href="javascript:void(s=prompt('.:ask leo:.',''));if(s)leow=open('http://dict.leo.org/?lp=ende&search='+escape(s),'LEODict','width=750,height=550,scrollbars=yes,resizeable=yes');if(leow)leow.focus();"><img src="tools/leo.png" title="LEO .:english/german:." border="0" style="margin-bottom:1.3em;"></a> &nbsp;
     </span>
     </form>
 </div>

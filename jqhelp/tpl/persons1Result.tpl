@@ -1,75 +1,55 @@
 <script type="text/javascript" src="{CRMPATH}js/tablesorter.js"></script>
 <script language="JavaScript">
 $(document).ready(function() {
-    function showK(id, tbl) {
-        {
-            no
-        }
-        uri = "firma2.php?Q=" + tbl + "&id=" + id;
-        location.href = uri;
-    }
-
-    function showK__(id) {
-        {
-            no
-        }
-        uri = "kontakt.php?id=" + id;
-        location.href = uri;
-    }
-    $(function() {
+    $("#sercontent_pers").dialog({
+        autoOpen: false,
+        show: {
+            effect: "blind",
+            duration: 300
+        },
+        hide: {
+            effect: "explode",
+            duration: 300
+        },
+    });
+    $("#modify_search_pers").button().click(function() {
+        $("#suchfelder_pers").show();
+        $("#results_pers").hide();
+        $("#name_pers").focus();
+        return false;
+    });
+    $("#butetikett_pers").button().click(function() {
+        $("#sercontent_pers").dialog("option", "maxWidth", 400);
+        $("#sercontent_pers").dialog("open");
         $("#sercontent_pers").dialog({
-            autoOpen: false,
-            show: {
-                effect: "blind",
-                duration: 300
-            },
-            hide: {
-                effect: "explode",
-                duration: 300
-            },
-            //position: { my: "center top", at: "center", of: null }
+            title: "Etiketten"
         });
-        //$( "input[type=button]" ).button();
-        $("#modify_search_pers").button().click(function() {
-            $("#suchfelder_pers").show();
-            $("#results_pers").hide();
-            //$(".tablesorter").tablesorter();
-            $("#name_pers").focus();
-            return false;
+        $("#sercontent_pers").load("etiketten.php?src=P");
+        return false;
+    });
+    $("#butvcard_pers").button().click(function() {
+        $("#sercontent_pers").dialog("option", "maxWidth", 400);
+        $("#sercontent_pers").dialog("open");
+        $("#sercontent_pers").dialog({
+            title: "V-Cards"
         });
-        $("#butetikett_pers").button().click(function() {
-            $("#sercontent_pers").dialog("option", "maxWidth", 400);
-            $("#sercontent_pers").dialog("open");
-            $("#sercontent_pers").dialog({
-                title: "Etiketten"
-            });
-            $("#sercontent_pers").load("etiketten.php?src=P");
-            return false;
+        $("#sercontent_pers").load("servcard.php?src=P");
+        return false;
+    });
+    $("#butbrief_pers").button().click(function() {
+        $("#sercontent_pers").dialog("option", "minWidth", 600);
+        $("#sercontent_pers").dialog("open");
+        $("#sercontent_pers").dialog({
+            title: "Serienbrief"
         });
-        $("#butvcard_pers").button().click(function() {
-            $("#sercontent_pers").dialog("option", "maxWidth", 400);
-            $("#sercontent_pers").dialog("open");
-            $("#sercontent_pers").dialog({
-                title: "V-Cards"
-            });
-            $("#sercontent_pers").load("servcard.php?src=P");
-            return false;
-        });
-        $("#butbrief_pers").button().click(function() {
-            $("#sercontent_pers").dialog("option", "minWidth", 600);
-            $("#sercontent_pers").dialog("open");
-            $("#sercontent_pers").dialog({
-                title: "Serienbrief"
-            });
-            $("#sercontent_pers").load("serdoc.php?src=P");
-            return false;
-        });
-        $("#email_pers").button().click(function() {
-            $("#sercontent_pers").dialog("option", "minWidth", 800);
-            $("#sercontent_pers").dialog("open");
-            $("#sercontent_pers").load("sermail.php?src=F");
-            return false;
-        });
+        $("#sercontent_pers").load("serdoc.php?src=P");
+        return false;
+    });
+    $("#email_pers").button().click(function() {
+        $("#sercontent_pers").dialog("option", "minWidth", 800);
+        $("#sercontent_pers").dialog("open");
+        $("#sercontent_pers").load("sermail.php?src=F");
+        return false;
     });
 });
 </script>

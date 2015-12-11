@@ -132,6 +132,24 @@
             alert("GEO-Datenbank nicht aktiviert");
         }
     }
+    function doOe(type) {//Angebot / Auftrag
+      window.location.href = '../oe.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + type;
+    }
+    function doDo() { //neuer Lieferschein
+      var type = '{Q}' == 'C' ? 'sales_delivery_order' : 'purchase_delivery_order';
+      window.location.href = '../do.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + type;
+    }
+    function doIr() { //neue Rechnung
+      var file = '{Q}' == 'C' ? '../is.pl' : '../ir.pl';
+      window.location.href = file + '?action=add&type=invoice&vc={CuVe}&{CuVe}_id={FID}';
+    }
+    function doIb() { //neuer Brief
+      window.location.href = '../letter.pl?action=add';
+    }
+    function doLxCars() {
+        uri='lxcars/lxcmain.php?owner={FID}&task=1'
+        window.location.href=uri;
+    }
     $(document).ready(
         function(){
             $("#shipleft").click(function(){ nextshipto('-'); })

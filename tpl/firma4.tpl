@@ -4,8 +4,7 @@
 {CRMCSS}
 {JAVASCRIPTS}
 {THEME}
-    <link rel="stylesheet" href="jquery-plugins/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
-    <script type="text/javascript" src="jquery-plugins/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+{FANCYBOX}
     <script language="JavaScript">
     <!--
     var serreg;
@@ -70,6 +69,7 @@
 <body onLoad="dateibaum('left','/{Q}{customernumber}/{PID}'), hidelinks(0) ;">
 {PRE_CONTENT}
 {START_CONTENT}
+<div class="ui-widget-content" style="height:600px">
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
 <form name="firma4" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="pid" value="{PID}">
@@ -194,6 +194,7 @@
 
 <!-- Hier endet die Karte ------------------------------------------->
 </span>
+</div>
 {END_CONTENT}
 <script type="text/javascript" src="{CRMURL}inc/dokument.js"></script>
 </body>

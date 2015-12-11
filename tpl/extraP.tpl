@@ -2,6 +2,7 @@
 <head><title>Zusatzdaten</title>
         {STYLESHEETS}
         {CRMCSS}
+        {THEME}
 	<script langage="JavaScript">
 		// sind in den Funktionen geschweifte Klammern drin, dann als extra File laden
 		// da die sonst von der TemplateEngie gelöscht werden
@@ -16,8 +17,9 @@
 	</script>
 </head>
 <body onLoad="window.resizeTo(1024, 768)">
+<div class="ui-widget-content" style="height:600px">
 <center>
-<h2>Weitere Kontaktdaten</h2>
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;"><b>Weitere Kontaktdaten</b></p>
 <form name="test" action="extrafelder.php" method="post">
 <input type="hidden" name="owner" value="{owner}">
 <input type="hidden" name="suche" value="">
@@ -51,5 +53,6 @@ sonstige Herkunft<input type="text" name="sonst_herkunft" size="30" value="{sons
 <input type="button" name="search" value="suchen" onClick="doSubmit();" {visiblesuchen}>
 </form>
 </center>
+</div>
 </body>
 </html>

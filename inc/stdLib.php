@@ -820,6 +820,9 @@ function mkHeader() {
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.plugin.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator-'.$_SESSION['countrycode'].'.js'.$SN,
+        'FANCYBOX'      => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/fancybox/source/jquery.fancybox.css'.$LN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fancybox/source/jquery.fancybox.pack.js'.$SN,
+        'QRCODE'        => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/qrcode/jquery.qrcode-0.12.0.js'.$SN,
         'JQTABLE-PAGER' => '<span id="pager" class="pager">
                                 <form>
                                     <img src="'.$_SESSION["baseurl"].'crm/jquery-plugins/tablesorter-master/addons/pager/icons/first.png" class="first"/>
@@ -857,7 +860,9 @@ function doHeader(&$t) {
         'BOXCSS'        => $head['BOXCSS'],
         'JQBOX'         => $head['JQBOX'],
         'DATEPICKER'    => $head['DATEPICKER'],
-        'JQCALCULATOR'  => $head['JQCALCULATOR']
+        'JQCALCULATOR'  => $head['JQCALCULATOR'],
+        'FANCYBOX'      => $head['FANCYBOX'],
+        'QRCODE'        => $head['QRCODE']
     ));
 }
 /**

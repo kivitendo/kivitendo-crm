@@ -2,6 +2,7 @@
 <head><title>Zusatzdaten</title>
         {STYLESHEETS}
         {CRMCSS}
+        {THEME}
 	<script langage="JavaScript">
 		// sind in den Funktionen geschweifte Klammern drin, dann Leerzeichen nach und vor die Klammer 
 		// da die sonst von der TemplateEngie gelöscht werden
@@ -12,8 +13,9 @@
 	</script>
 </head>
 <body onLoad="window.resizeTo(850, 520)">
+<div class="ui-widget-content" style="height:600px">
 <center>
-<h2>Bauvorhaben</h2>{msg}
+<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;"><b>Bauvorhaben</b></p>{msg}
 <h4>Informationen &uuml;ber einen Interessenten der ein Haus bauen m&ouml;chte</h4>
 <form name="extra" action="extrafelder.php" method="post" onSubmit="return checkfelder();">
 <input type="hidden" name="owner" value="{owner}">
@@ -47,5 +49,6 @@
 <input type="submit" name="suche" value="suchen">
 </form>
 </center>
+</div>
 </body>
 </html>

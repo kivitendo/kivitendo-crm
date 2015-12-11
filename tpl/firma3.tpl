@@ -32,6 +32,7 @@
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
+<div class="ui-widget-content" style="height:600px">
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
 <div id="menubox2">
     <button name="{Link1}">.:Custombase:.</button>
@@ -83,6 +84,7 @@
 </div>
 <!-- Hier endet die Karte ------------------------------------------->
 </span>
+</div>
 {END_CONTENT}
 </body>
 </html>

@@ -5,8 +5,9 @@
 {JAVASCRIPTS}
 {THEME}
 {JQTABLE}
-    <link rel="stylesheet" href="jquery-plugins/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
-    <script type="text/javascript" src="jquery-plugins/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+{JQCALCULATOR}
+{FANCYBOX}
+{QRCODE}
     <script language="JavaScript">
     <!--
         function showItem(id) {
@@ -234,6 +235,7 @@
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
+<div class="ui-widget-content" style="height:600px">
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
 
 <div id="menubox1">
@@ -338,6 +340,7 @@
 </span>
 <div id="etikett">
 <iframe id="iframe1" width='100%' height='450'  scrolling="auto" border="0" frameborder="0"><img src='image/wait.gif'></iframe>
+</div>
 </div>
 {END_CONTENT}
 </body>

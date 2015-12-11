@@ -6,9 +6,8 @@
 {THEME}
 {JQTABLE}
 {JQCALCULATOR}
-<link rel="stylesheet" href="jquery-plugins/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
-<script type="text/javascript" src="jquery-plugins/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-<script type="text/javascript" src="jquery-plugins/qrcode/jquery.qrcode-0.12.0.js"></script>
+{FANCYBOX}
+{QRCODE}
 <script language="JavaScript" type="text/javascript">
     function showCall() {
         $('#calls tr[group="tc"]').remove();
@@ -66,48 +65,6 @@
     }
     function notes() {
             F1=open("showNote.php?fid={FID}","Notes","width=400, height=400, left=100, top=50, scrollbars=yes");
-    }
-    function doLink() {
-        if ( document.getElementById('actionmenu').selectedIndex > 0 ) {
-            link = $('#actionmenu option:selected').val();
-            if (link.substr(0,7) =='onClick') {
-                if ( link.substr(8) == 'invoice' ) {
-                    doIr();
-                } else if ( link.substr(8) == 'delivery_order'){
-                    doDo();
-                }
-                else {
-                    doOe(link.substr(8));
-                }
-            } else {
-                lnk = document.getElementById('actionmenu').options[document.getElementById('actionmenu').selectedIndex].value;
-                if (link.substr(0,4) =='open') {
-                    F1=open(link.substr(5),"CRM","width=350, height=400, left=100, top=50, scrollbars=yes");
-                } else {
-                    window.location.href = lnk;
-                }
-            }
-            document.getElementById('actionmenu').selectedIndex = 0;
-       }
-    }
-    function doOe(type) {//Angebot / Auftrag
-      window.location.href = '../oe.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + type;
-    }
-
-    function doDo() { //neuer Lieferschein
-      var type = '{Q}' == 'C' ? 'sales_delivery_order' : 'purchase_delivery_order';
-      window.location.href = '../do.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + type;
-    }
-    function doIr() { //neue Rechnung
-      var file = '{Q}' == 'C' ? '../is.pl' : '../ir.pl';
-      window.location.href = file + '?action=add&type=invoice&vc={CuVe}&{CuVe}_id={FID}';
-    }
-    function doIb() { //neuer Brief
-      window.location.href = '../letter.pl?action=add';
-    }
-    function doLxCars() {
-        uri='lxcars/lxcmain.php?owner={FID}&task=1'
-        window.location.href=uri;
     }
     function KdHelp() {
         link = $('#kdhelp option:selected').val();
@@ -242,6 +199,37 @@
                     event.preventDefault();
                 };
             });
+
+           $("#actionmenu").selectmenu({
+                change: function( event, ui ) {
+                             if ($('#actionmenu option:selected').attr('id') == 1) {
+                                 window.location.href = 'firmen3.php?Q={Q}&id={FID}&edit=1';
+                             }
+                             else if ($('#actionmenu option:selected').attr('id') == 2) {
+                                 window.location.href = 'timetrack.php?tab={Q}&fid={FID}&name={Fname1}';
+                             }
+                             else if ($('#actionmenu option:selected').attr('id') == 3) {
+                                 F1=open('extrafelder.php?owner={Q}{FID}',"CRM","width=350, height=400, left=100, top=50, scrollbars=yes");
+                             }
+                             else if ($('#actionmenu option:selected').attr('id') == 4) {
+                                 window.location.href = 'karte.php?Q={Q}&fid={FID}';
+                             }
+                             else if ($('#actionmenu option:selected').attr('id') == 5) {
+                                 window.location.href = '../oe.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + $('#actionmenu option:selected').val();
+                             }
+                             else if ($('#actionmenu option:selected').attr('id') == 6) {
+                                 window.location.href = '../oe.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + $('#actionmenu option:selected').val();
+                             }
+                             else if ($('#actionmenu option:selected').attr('id') == 7) {
+                                 var type = '{Q}' == 'C' ? 'sales_delivery_order' : 'purchase_delivery_order';
+                                 window.location.href = '../do.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + type;
+                             }
+                             else if ($('#actionmenu option:selected').attr('id') == 8) {
+                                 var file = '{Q}' == 'C' ? '../is.pl' : '../ir.pl';
+                                 window.location.href = file + '?action=add&type=invoice&vc={CuVe}&{CuVe}_id={FID}';
+                             }
+                        }
+           });
            // --------   QR Code wird durch Jquery erstellt
            $("#qrbutt").button().click(
               function( event ) {
@@ -281,22 +269,22 @@
         <button name="firma3.php?Q={Q}&fid={FID}">.:Sales:.</button>
         <button name="firma4.php?Q={Q}&fid={FID}">.:Documents:.</button>
     </span>
-    <span style="float:left; vertical-alig:bottom">
-        <select style="visibility:{chelp}" name="kdhelp" id="kdhelp" style="margin-top:0.5em;" onChange="KdHelp()">
+    <span style="float:left; vertical-alig:bottom; padding-left:8em">
+<!--         <select style="visibility:{chelp}" name="kdhelp" id="kdhelp" style="margin-top:0.5em;" onChange="KdHelp()"> -->
 <!-- BEGIN kdhelp -->
-        <option value="{cid}">{cname}</option>
+<!--         <option value="{cid}">{cname}</option> -->
 <!-- END kdhelp -->
         </select>
-        <select id="actionmenu" onchange="doLink();" style="margin-top:0.5em;">
+        <select id="actionmenu" style="margin-top:0.5em;">
             <option>Aktionen</option>
-            <option value='firmen3.php?Q={Q}&id={FID}&edit=1'>.:edit:.</option>
-            <option value='timetrack.php?tab={Q}&fid={FID}&name={Fname1}'>.:timetrack:.</option>
-            <option value='open:extrafelder.php?owner={Q}{FID}'>.:extra data:.</option>
-            <option value='karte.php?Q={Q}&fid={FID}'>.:register:. .:develop:.</option>
-            <option value='onClick:{request}_quotation'>.:quotation:. .:develop:.</option>
-            <option value='onClick:{sales}_order'>.:order:. .:develop:.</option>
-            <option value='onClick:delivery_order'>.:delivery order:. .:develop:.</option>
-            <option value='onClick:invoice'>.:invoice:. .:develop:.</option>
+            <option id= '1' value='firmen3.php?Q={Q}&id={FID}&edit=1'>.:edit:.</option>
+            <option id= '2' value='timetrack.php?tab={Q}&fid={FID}&name={Fname1}'>.:timetrack:.</option>
+            <option id= '3' value='extrafelder.php?owner={Q}{FID}'>.:extra data:.</option>
+            <option id= '4' value='karte.php?Q={Q}&fid={FID}'>.:register:. .:develop:.</option>
+            <option id= '5' value='{request}_quotation'>.:quotation:. .:develop:.</option>
+            <option id= '6' value='{sales}_order'>.:order:. .:develop:.</option>
+            <option id= '7' value='delivery_order'>.:delivery order:. .:develop:.</option>
+            <option id= '8' value='invoice'>.:invoice:. .:develop:.</option>
         </select>
     </span>
     <span style="float:left; padding-left:3em; visibility:{zeige_tools};" >

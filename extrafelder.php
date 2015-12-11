@@ -192,6 +192,7 @@ $hidden = 'style="visibility:hidden"';
 $t->set_var(array(
     'CRMCSS'         => $head['CRMCSS'], 
     'STYLESHEETS'    => $menu['stylesheets'],
+    'THEME'          => $head['THEME'],
     'JQUERY'         => $_SESSION['baseurl'].'crm/',
     'visiblesichern' => ($owner=='P0')?$hidden:$visible,
     'visiblesuchen'  => ($owner=='P0')?$visible:$hidden,

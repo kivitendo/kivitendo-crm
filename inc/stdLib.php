@@ -845,12 +845,24 @@ function mkHeader() {
 function doHeader(&$t) {
     $head = mkHeader();
     $menu =  $_SESSION['menu'];
+
     $t->set_var(array(
         'JAVASCRIPTS'   => $menu['javascripts'],
         'STYLESHEETS'   => $menu['stylesheets'],
         'PRE_CONTENT'   => $menu['pre_content'],
         'START_CONTENT' => $menu['start_content'],
-        'END_CONTENT'   => $menu['end_content'],
+        'END_CONTENT'   => '</div>
+        <div id="javascripts_inline"></div>
+         <script language="JavaScript" type="text/javascript">
+            $(document).ready(function(){
+                $.ajax({url: "jqhelp/getJsInline.php",
+                    success: function(result){
+                        //alert( result );
+                        $("#javascripts_inline").html(result)
+                    }
+                });
+            });
+         </script>',
         'JQTABLE'       => $head['JQTABLE'],
         'JQWIDGET'      => $head['JQWIDGET'],
         'JQFILEUP'      => $head['JQFILEUP'],
@@ -864,6 +876,8 @@ function doHeader(&$t) {
         'FANCYBOX'      => $head['FANCYBOX'],
         'QRCODE'        => $head['QRCODE']
     ));
+
+
 }
 /**
  * TODO: short description.
@@ -944,6 +958,7 @@ function makeMenu($sess,$token){
     if (!is_object($objResult)) anmelden();
     $_arr = get_object_vars($objResult);
     $rs['javascripts']   = '';
+    $rs['javascripts_inline'] = '';
     $rs['stylesheets']   = '';
     $rs['pre_content']   = '';
     $rs['start_content'] = '';
@@ -977,8 +992,8 @@ function makeMenu($sess,$token){
         $rs['end_content']  .= '<script type="text/javascript">';
         //Inline-JS der ERP in den Footer (nach end_content)
         foreach($objResult->{'javascripts_inline'} as $js) {
-            $js = preg_replace($suche, $ersetze,$js);
-            $rs['end_content'] .= $js; //'<script type="text/javascript" src="'.$BaseUrl.$js.'"></script>'."\n".'   ';
+            $rs['end_content'] .= $js;
+            $rs['javascripts_inline'] .= '<script type="text/javascript">'.$js.'</script>';
         }
         $rs['end_content'] .= '</script>'."\n";
         $rs['end_content_ui']   = '</div>'; //End UI-Look

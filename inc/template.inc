@@ -72,7 +72,7 @@ class Template {
    * root:     template directory.
    * unknowns: how to handle unknown variables.
    */
-  function Template($root = "./tpl", $unknowns = "keep") {
+  function Template($root = "./tpl", $unknowns = "remove") {
     $this->set_root($root);
     $this->set_unknowns($unknowns);
   }
@@ -343,11 +343,11 @@ class Template {
       break;
 
       case "remove":
-        $str = preg_replace('/{[^ \t\r\n}]+}/', "", $str);
+        $str = preg_replace('/{[^ \t\r\n}"\']+}/', "", $str);
       break;
 
       case "comment":
-        $str = preg_replace('/{([^ \t\r\n}]+)}/', "<!-- Template variable \\1 undefined -->", $str);
+        $str = preg_replace('/{([^ \t\r\n}"\']+)}/', "<!-- Template variable \\1 undefined -->", $str);
       break;
     }
 

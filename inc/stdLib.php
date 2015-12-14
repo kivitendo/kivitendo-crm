@@ -1010,7 +1010,7 @@ function makeMenu($sess,$token){
             //$rs['javascripts'] .= '<script type="text/javascript" src="'.$BaseUrl.$js.'"></script>'."\n".'   ';
             //Da die ERP eine veraltete JUI benützt, aktuelle JUI aus CRM laden
             //ToDo: JUI aus ERP laden wenn diese >= Version 11.4 wird
-            Achtung!: JUI wird von der ERP nur geliefert wenn fast alle Module aktiviert sind (Menü)
+            //Achtung!: JUI wird von der ERP nur geliefert wenn fast alle Module aktiviert sind (Menü)
             if( strpos( $js, "jquery-ui")  === false ) $rs['javascripts'] .= '<script type="text/javascript" src="'.$BaseUrl.$js.'"></script>'."\n".'   ';
             $rs['javascripts'] .= '<script type="text/javascript" src="'.$BaseUrl.'crm/jquery/jquery-ui.min.js"></script>'."\n".'   ';;
         }

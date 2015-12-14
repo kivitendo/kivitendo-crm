@@ -95,6 +95,11 @@
                 })
             })
             $( "#maintab" ).tabs({ heightStyle: "auto" });
+            $("#bneu").button();
+            $("#bclr").button();
+            $("#bcard").button();
+            $("#bsav").button();
+            $("#banz").button();
         });
     </script>
 <body>
@@ -468,10 +473,11 @@
     </span>
 </span>
 <span id="buttonrow" style="position:absolute; text-align:left;width:48%; left:0.8em; top:39em;">
-        {Btn1} &nbsp;{Btn2} &nbsp;
-        <input type="submit" class="sichernneu" name="saveneu" value=".:save:. .:new:." tabindex="97"> &nbsp;
-        <input type="submit" class="clear" name="reset" value=".:clear:." tabindex="98"> &nbsp;
-        <input type="button" name="" value="VCard" onClick="vcard()" tabindex="99">
+        <input id='bsav' type='submit' class='sichern' name='save' value='sichern' tabindex='90'>
+        <input id='banz' type='submit' class='anzeige' name='show' value='zur Anzeige' tabindex='91'>
+        <input id= "bneu" type="submit" class="sichernneu" name="saveneu" value=".:save:. .:new:." tabindex="97"> &nbsp;
+        <input id= "bclr" type="submit" class="clear" name="reset" value=".:clear:." tabindex="98"> &nbsp;
+        <input id= "bcard" type="button" name="" value="VCard" onClick="vcard()" tabindex="99">
         <span>{Msg}</span>
 </span>
 <!-- End Code ------------------------------------------->

@@ -777,6 +777,70 @@ function  doBlock(&$t,$tpl,$liste,$pre,$data,$id,$text,$selid) {
     }
 }
 function mkHeader() {
+    $tools = <<<'EOT'
+        $( ".tools" ).before(
+            '<div class="calculator_dialog"><div class="calculator"></div></div>' +
+            '<div class="postit_dialog"><div class="postit">Notizblock</div></div>' +
+            '<div class="translator_dialog"><div class="translator"> <input id="vname" name="vname"><button>test</button>Übersetzer</div></div>' +
+            '<div class="tools" style="position:absolute; top: +20; left:900;">' +
+            '<img src="tools/rechner.png" class="calculator_img" title=".:simple calculator:.">' +
+            '<img src="tools/notiz.png" class="postit_img" title=".:postit notes:." style="margin-left: 20;">' +
+            '<img src="tools/kalender.png" class="calendar_img" title=".:calendar:." style="margin-left: 20;">' +
+            '<img src="tools/leo.png" class="translator_img" title="LEO .:english/german:." style="margin-left: 20;"></div>'
+            );
+            $('input').addClass("ui-widget ui-widget-content ui-corner-all");
+            $('button').button();
+            $(".calculator").calculator({
+                useThemeRoller: true,
+                layout: $.calculator.scientificLayout,
+            });
+            $(".calculator_dialog").dialog({
+                autoOpen: false,
+                title: 'Calcutator',
+                width:'auto',
+                resizable: false
+            });
+            $(".postit_dialog").dialog({
+                autoOpen: false,
+                title: 'Post it!',
+                width:'auto',
+                resizable: false
+            });
+            $(".translator_dialog").dialog({
+                autoOpen: false,
+                title: 'Translator!',
+                width:'auto',
+                resizable: false
+            });
+            $(".calculator_img").on("click", function () {
+                $( ".calculator_dialog" ).dialog( "open" );
+            });
+            $(".postit_img").on("click", function () {
+                $( ".postit_dialog" ).dialog( "open" );
+            });
+            $(".calendar_img").on("click", function () {
+                window.location.href = "calendar.phtml";
+            });
+            $(".translator_img").on("click", function () {
+                $( ".translator_dialog" ).dialog( "open" );
+            });
+EOT;
+    //'
+    $pager = '<span id="pager" class="pager">
+                                <form>
+                                    <img src="'.$_SESSION["baseurl"].'crm/jquery-plugins/tablesorter-master/addons/pager/icons/first.png" class="first"/>
+                                    <img src="'.$_SESSION["baseurl"].'crm/jquery-plugins/tablesorter-master/addons/pager/icons/prev.png" class="prev"/>
+                                    <img src="'.$_SESSION["baseurl"].'crm/jquery-plugins/tablesorter-master/addons/pager/icons/next.png" class="next"/>
+                                    <img src="'.$_SESSION["baseurl"].'crm/jquery-plugins/tablesorter-master/addons/pager/icons/last.png" class="last"/>
+                                    <select class="pagesize" id="pagesize">
+                                        <option value="10">10</option>
+                                        <option value="20" selected>20</option>
+                                        <option value="30">30</option>
+                                        <option value="all">Alle</option>
+                                    </select>
+                                </form>
+                            </span>';
+
     $SV = '<script type="text/javascript" src="';
     $SN = '"></script>'."\n";
     $LV = '<link rel="stylesheet" type="text/css" href="';
@@ -823,20 +887,8 @@ function mkHeader() {
         'FANCYBOX'      => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/fancybox/source/jquery.fancybox.css'.$LN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fancybox/source/jquery.fancybox.pack.js'.$SN,
         'QRCODE'        => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/qrcode/jquery.qrcode-0.12.0.js'.$SN,
-        'JQTABLE-PAGER' => '<span id="pager" class="pager">
-                                <form>
-                                    <img src="'.$_SESSION["baseurl"].'crm/jquery-plugins/tablesorter-master/addons/pager/icons/first.png" class="first"/>
-                                    <img src="'.$_SESSION["baseurl"].'crm/jquery-plugins/tablesorter-master/addons/pager/icons/prev.png" class="prev"/>
-                                    <img src="'.$_SESSION["baseurl"].'crm/jquery-plugins/tablesorter-master/addons/pager/icons/next.png" class="next"/>
-                                    <img src="'.$_SESSION["baseurl"].'crm/jquery-plugins/tablesorter-master/addons/pager/icons/last.png" class="last"/>
-                                    <select class="pagesize" id="pagesize">
-                                        <option value="10">10</option>
-                                        <option value="20" selected>20</option>
-                                        <option value="30">30</option>
-                                        <option value="all">Alle</option>
-                                    </select>
-                                </form>
-                            </span>'
+        'TOOLS'         =>  $tools,
+        'JQTABLE-PAGER' => $pager
         );
 
     return $head;
@@ -862,7 +914,8 @@ function doHeader(&$t) {
         'DATEPICKER'    => $head['DATEPICKER'],
         'JQCALCULATOR'  => $head['JQCALCULATOR'],
         'FANCYBOX'      => $head['FANCYBOX'],
-        'QRCODE'        => $head['QRCODE']
+        'QRCODE'        => $head['QRCODE'],
+        'TOOLS'         => $head['TOOLS']
     ));
 }
 /**
@@ -957,8 +1010,9 @@ function makeMenu($sess,$token){
             //$rs['javascripts'] .= '<script type="text/javascript" src="'.$BaseUrl.$js.'"></script>'."\n".'   ';
             //Da die ERP eine veraltete JUI benützt, aktuelle JUI aus CRM laden
             //ToDo: JUI aus ERP laden wenn diese >= Version 11.4 wird
+            //Achtung!: JUI wird von der ERP nur geliefert wenn fast alle Module aktiviert sind (Menü)
             if( strpos( $js, "jquery-ui")  === false ) $rs['javascripts'] .= '<script type="text/javascript" src="'.$BaseUrl.$js.'"></script>'."\n".'   ';
-            else $rs['javascripts'] .= '<script type="text/javascript" src="'.$BaseUrl.'crm/jquery/jquery-ui.min.js"></script>'."\n".'   ';;
+            $rs['javascripts'] .= '<script type="text/javascript" src="'.$BaseUrl.'crm/jquery/jquery-ui.min.js"></script>'."\n".'   ';;
         }
         foreach($objResult->{'stylesheets'} as $style) {
             if ($style) $rs['stylesheets'] .= '<link rel="stylesheet" href="'.$BaseUrl.$style.'" type="text/css">'."\n".'   ';

@@ -8,6 +8,7 @@
 {JQCALCULATOR}
 {FANCYBOX}
 {QRCODE}
+
 <script language="JavaScript" type="text/javascript">
     function showCall() {
         $('#calls tr[group="tc"]').remove();
@@ -172,22 +173,8 @@
                 heightStyle: "auto",
                 active: {kdviewli}
             });
-            $("#calculator").calculator({
-                useThemeRoller: true,
-                layout: $.calculator.scientificLayout,
-            });
-            $("#calculator_dialog").dialog({
-                autoOpen: false,
-                title: 'Calcutator',
-                width:'auto',
-                resizable: false
-            });
-            $("#calculator_img").on("click", function () {
-                $( "#calculator_dialog" ).dialog( "open" );
-            });
-            $("#calendar").on("click", function () {
-                window.location.href = "calendar.phtml";
-            });
+           {TOOLS}
+
             $(function() {
                 $( "#right_tabs" ).tabs({
                     cache: true, //helpful?
@@ -280,14 +267,8 @@
 {START_CONTENT}
 <div class="ui-widget-content" style="height:722px">
 
-<div id="tools" style="position:absolute; top: +20; left:900;">
-    <div id="calculator_dialog"><div id="calculator"></div></div>
-    <img src="tools/rechner.png" id="calculator_img" title=".:simple calculator:.">
-    <img src="tools/notiz.png" onClick="toolwin('postit.php?popup=1')" title=".:postit notes:." style="margin-left: 20;">
-    <img src="tools/kalender.png" id="calendar" title=".:calendar:." style="margin-left: 20;">
-    <img src="tools/leo.png" id="leo" title="LEO .:english/german:." style="margin-left: 20;">
-</div>
-<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
+
+<p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
 <br>
 <div id='menubox1' >
     <form>

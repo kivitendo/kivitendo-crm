@@ -1,5 +1,5 @@
 <?php
-// $Id: template.inc,v 1.1.1.1 2005/06/23 09:30:26 hli Exp $ 
+// $Id: template.inc,v 1.1.1.1 2005/06/23 09:30:26 hli Exp $
 /*
  * Session Management for PHP3
  *
@@ -248,14 +248,14 @@ class Template {
 
   /***************************************************************************/
   function Lpparse($target, $varname, $lang, $file, $append = false) {
-  	$x=$this->finish($this->parse($target, $varname, $append));
-  	if ($lang) {
-	  	include("locale/$file.$lang");
-		$arrayTmpl=array_keys($texts);
-		$arrayShow=array_values($texts);
-		$x=str_replace($arrayTmpl, $arrayShow, $x);
-	}
-	print $x;
+      $x=$this->finish($this->parse($target, $varname, $append));
+      if ($lang) {
+          include("locale/$file.$lang");
+        $arrayTmpl=array_keys($texts);
+        $arrayShow=array_values($texts);
+        $x=str_replace($arrayTmpl, $arrayShow, $x);
+    }
+    print $x;
     return false;
   }
 
@@ -343,11 +343,11 @@ class Template {
       break;
 
       case "remove":
-        $str = preg_replace('/{[^ \t\r\n}]+}/', "", $str);
+        $str = preg_replace('/{[^ \t\r\n}"\']+}/', "", $str);
       break;
 
       case "comment":
-        $str = preg_replace('/{([^ \t\r\n}]+)}/', "<!-- Template variable \\1 undefined -->", $str);
+        $str = preg_replace('/{([^ \t\r\n}"\']+)}/', "<!-- Template variable \\1 undefined -->", $str);
       break;
     }
 

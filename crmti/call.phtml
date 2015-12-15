@@ -23,6 +23,16 @@
             modal: true,
             width:'auto',
             buttons: [{
+                text: "Nummer zuordnen",
+                click: function(data){
+                    $('#dialogFound').append('<input type="text" id="tmp" value="' + number + '">');
+                    $( '#tmp' ).select();
+                    document.execCommand( "cut" );
+                    $( '#tmp' ).remove();
+                    window.location.href = "../getData.php?action=edit&number=" + number;
+                }
+            },
+            {
                 text: "Neuer Kunde",
                 click: function(data){
                     window.location.href = "../firmen3.php?Q=C&" + $.param( entryData );
@@ -128,7 +138,7 @@
             var callDate = new Date( rowData.call_date * 1000 );
             $("#tbody").append(row);
             row.append($("<td>" + callDate.toLocaleDateString(kivi.myconfig.countrycode, options)  + "</td>"));
-            row.append($("<td class=>" + rowData.crmti_status + "</td>"));
+            row.append($("<td>" + rowData.crmti_status + "</td>"));
             row.append($("<td>" + rowData.crmti_src + "</td>"));
             row.append($("<td>" + rowData.crmti_dst + "</td>"))
             row.append($("<td>" + rowData.crmti_caller_id + "</td>"))

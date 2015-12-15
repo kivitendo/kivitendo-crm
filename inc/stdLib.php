@@ -781,15 +781,31 @@ function mkHeader() {
         $( ".tools" ).before(
             '<div class="calculator_dialog"><div class="calculator"></div></div>' +
             '<div class="postit_dialog"><div class="postit">Notizblock</div></div>' +
-            '<div class="translator_dialog"><div class="translator"> <input id="vname" name="vname"><button>test</button>Übersetzer</div></div>' +
+            '<div class="translator_dialog"><div class="translator"><input class="translator_input">' +
+            '<button class="translator_button">translate</button><div><table class="result_table tablesorter"></table></div></div></div>' +
             '<div class="tools" style="position:absolute; top: +20; left:900;">' +
             '<img src="tools/rechner.png" class="calculator_img" title=".:simple calculator:.">' +
             '<img src="tools/notiz.png" class="postit_img" title=".:postit notes:." style="margin-left: 20;">' +
             '<img src="tools/kalender.png" class="calendar_img" title=".:calendar:." style="margin-left: 20;">' +
             '<img src="tools/leo.png" class="translator_img" title="LEO .:english/german:." style="margin-left: 20;"></div>'
             );
-            $('input').addClass("ui-widget ui-widget-content ui-corner-all");
-            $('button').button();
+
+            $('.translator_input').addClass("ui-widget ui-widget-content ui-corner-all");
+            $('.translator_button').button().on( 'click', function(){
+                $.getJSON( 'http://mymemory.translated.net/api/get?q=' + $('.translator_input').val() + '&langpair=en|' + kivi.myconfig.countrycode, function( data ) {
+                    //console.log( JSON.stringify(data.matches) );
+                    //var result = '<table class="myTable">';
+                   // var row = $("<tr>");
+                    $.each( data.matches, function( index, value ) {
+                        //result += '<tr><td>' + value.segment + '</td><td>' + value.translation + '</td></tr>';
+                         $(".result_table").append("<tr><td>" +  value.segment + "</td><td>" + value.translation + "</td></tr>");
+                    });
+                    //result += '</table>';
+                    $( '.translator_result' ).html( result );
+
+                    //alert('http://mymemory.translated.net/api/get?q=Cat&langpair=en|de' + $('.translator_input').val() );
+                });
+            });
             $(".calculator").calculator({
                 useThemeRoller: true,
                 layout: $.calculator.scientificLayout,

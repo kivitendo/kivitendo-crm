@@ -71,7 +71,7 @@ function db2date($datum) {
 * out: Datum = String
 * wandelt ein "normales" Datum in ein db-Datum um
 *****************************************************/
-function date2db($Datum) {
+function date2db($Datum = '') {
    if ( empty($Datum) ) return date("Y-m-d");
    $repl = array ("/","-",","," ");
    $date = str_replace($repl,".",$Datum);

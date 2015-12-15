@@ -100,12 +100,24 @@
             $("#bcard").button();
             $("#bsav").button();
             $("#banz").button();
+            $("#greeting").selectmenu({ width: 80 });
+            $("#bland").selectmenu({ width: 130 });
+            $('form input:text').button().addClass( 'ui-textfield' ).css({
+                'background' : '#FFFFFF',
+                'text-align' : 'inherit'
+            });
         });
     </script>
+    <style type="text/css">
+    .ui-selectmenu-button {
+            vertical-align : middle;
+            margin-left: 1em;
+        }
+    </style>
 <body>
 {PRE_CONTENT}
 {START_CONTENT}
-<div class="ui-widget-content" style="height:600px">
+<div class="ui-widget-content" style="height:615px">
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;"> {FAART} .:keyin:./.:edit:.</p>
 <div id="dialogmsg"></div>
 <div id="maintab">
@@ -130,7 +142,7 @@
         <br />
         <div class="zeile2">
             <span class="label klein">.:greeting:.</span>
-            <span class="feldxx"> <input type="text" name="greeting_" id="greeting_" size="15" maxlength="75" value="{greeting_}" tabindex="1">
+            <span class="feldxx"> <input type="text" name="greeting_" id="greeting_" size="15" maxlength="75" value="{greeting_}" tabindex="1" >
                     <select name="greeting" id="greeting" tabindex="2">
                         <option value="">
 <!-- BEGIN anreden -->

@@ -9,6 +9,8 @@ if (! @include_once('MDB2.php') ) {
     exit (1);
 };
 
+require_once ('PEAR.php');
+
 final class myDB extends MDB2 {
     private $db = false;
     private $rc = false;
@@ -17,7 +19,41 @@ final class myDB extends MDB2 {
     private $errfile = "/tmp/lxcrm.err";
     private $logfile = "/tmp/lxcrm.log";
     private $lfh = false;
-    var $JVer = false;
+
+    /**********************************************
+    * myDB - Konstruktor
+    * IN: $host,$user,$pwd,$db,$port - Parameter der Datenbank
+    * OUT: DB-Objekt
+    **********************************************/
+    //public function myDB($host,$user,$pwd,$db,$port) {
+    public function myDB($conn) {
+        $dsn = array(
+                    'phptype'  => 'pgsql',
+                    'hostspec' => $conn['dbhost'],
+                    'port'     => $conn['dbport'],
+                    'username' => $conn['dbuser'],
+                    'password' => $conn['dbpasswd'],
+                    'database' => $conn['dbname'],
+                    'persistent' => true,
+                    'debug'    => true
+                );
+        if ($this->log) $this->writeLog(print_r($dsn,true));
+        $options = array(
+            'result_buffering' => false,
+        );
+        //$this->db=& MDB2::factory($dsn,$options);
+        $this->db = @MDB2::connect($dsn,$options);
+        //if ( !$this->db  || PEAR::isError($this->db)) {
+        if( !$this->db || (new PEAR)->isError($this->db) ) {
+            if ($this->log) $this->writeLog('Connect Error: '.print_r($dsn,true));
+            $this->dbFehler('Connect '.print_r($dsn,true),$this->db->getMessage());
+            die ($this->db->getMessage());
+        }
+        $this->writeLog('DB',print_r($this->db,true));
+        $this->db->setFetchMode(MDB2_FETCHMODE_ASSOC);
+        if ($this->log) $this->writeLog('Connect: ok ');
+        return $this->db;
+    }
 
     /**********************************************
     * dbFehler - Fehler in ein Log-File ausgeben
@@ -64,41 +100,6 @@ final class myDB extends MDB2 {
         fputs($this->lfh,"\n");
     }
 
-    /**********************************************
-    * myDB - Konstruktor
-    * IN: $host,$user,$pwd,$db,$port - Parameter der Datenbank
-    * OUT: DB-Objekt
-    **********************************************/
-    public function myDB($host,$user,$pwd,$db,$port) {
-        $dsn = array(
-                    'phptype'  => 'pgsql',
-                    'username' => $user,
-                    'password' => $pwd,
-                    'hostspec' => $host,
-                    'database' => $db,
-                    'port'     => $port
-                );
-        if ($this->log) $this->writeLog(print_r($dsn,true));
-        $options = array(
-            'result_buffering' => false,
-        );
-        $this->db=& MDB2::factory($dsn,$options);
-        //$this->db=& MDB2::connect($dsn,$options);
-        if (!$this->db || PEAR::isError($this->db)) {
-            if ($this->log) $this->writeLog('Connect Error: '.$dns);
-            $this->dbFehler('Connect '.print_r($dsn,true),$this->db->getMessage());
-            die ($this->db->getMessage());
-        }
-        $this->db->setFetchMode(MDB2_FETCHMODE_ASSOC);
-        if ($this->log) $this->writeLog('Connect: ok ');
-        $sql = 'SELECT version()';
-        $rs  = $this->getOne($sql);
-        if ($this->log) $this->writeLog(print_r($rs,true));
-        preg_match('/PostgreSQL\s*([\d]+)\.([\d]+)\..*/',$rs['version'],$ver);
-        if ( ($ver[1] == '9' and $ver[2] >= '3') or $ver[1] >= '10' ) $this->JVer = true;
-        if ($this->log) $this->writeLog(print_r($ver,true)."!".$this->JVer.'!');
-        return $this->db;
-    }
 
     /**********************************************
     * query - beliebiges SQL-Statement absetzen
@@ -114,7 +115,8 @@ final class myDB extends MDB2 {
                 return false;
         }
         $this->rc=@$this->db->query($sql);
-        if(PEAR::isError($this->rc)) {
+        //if(PEAR::isError($this->rc)) {
+        if((new PEAR)->isError($this->rc)) {
             $this->dbFehler($sql,$this->rc->getMessage());
             $this->rollback();
             return false;
@@ -145,7 +147,8 @@ final class myDB extends MDB2 {
         }
         //SQL-Statement vorbereiten
         $sth = $this->db->prepare("UPDATE $table set ".implode('= ?, ',$fields)." = ? WHERE ".$where);
-        if (PEAR::isError($sth)) {
+        //if (PEAR::isError($sth)) {
+        if((new PEAR)->isError($sth)) {
             if ($this->log) {
                 $this->writeLog('prepare',false);
                 $this->writeLog($sth->getMessage(),false);
@@ -156,7 +159,8 @@ final class myDB extends MDB2 {
         }
         //wenn ok, ausführen
         $this->rc=@$sth->execute( $values);
-        if(PEAR::isError($this->rc)) {
+        //if(PEAR::isError($this->rc)) {
+        if((new PEAR)->isError($this->rc)) {
             if ($this->log) {
                 $this->writeLog('execute',false);
                 $this->writeLog($this->rc->getMessage(),false);
@@ -189,21 +193,26 @@ final class myDB extends MDB2 {
         } else {
             $sth = $this->db->prepare("INSERT INTO $table (".implode(',',$fields).") VALUES (".str_repeat("?,",count($fields)-1)."?)");
         }
-        if (PEAR::isError($sth)) {
+        //if (PEAR::isError($sth)) {
+        if((new PEAR)->isError($sth)) {
             $this->writeLog("Prepare: ".$sth->getMessage(),false);
             $this->dbFehler($sql,$sth->getMessage());
+            $this->dbFehler('',$sth->userinfo);
+            $this->dbFehler('SQL',"INSERT INTO $table (".implode(',',$fields).") VALUES (".str_repeat("?,",count($fields)-1)."?)");
             $this->dbFehler(print_r($fields,true),print_r($values,true));
             $this->rollback();
             return false;
         }
         //wenn ok, ausführen
-        $this->rc=@$sth->execute( $values);
-        if(PEAR::isError($this->rc)) {
+        $this->rc = @$sth->execute( $values);
+        //if(PEAR::isError($this->rc)) {
+        if((new PEAR)->isError($this->rc)) {
             $this->writeLog("Execute: ".$this->rc->getMessage(),false);
             $this->dbFehler($sql,$this->rc->getMessage());
             $this->rollback();
             return false;
         } else {
+            if ($this->log) $this->writeLog('InsertID:'.$this->db->lastInsertID(),true);
             return $this->db->lastInsertID();
         }
     }
@@ -227,7 +236,8 @@ final class myDB extends MDB2 {
         if ($this->log) $this->writeLog('getAll: '.$sql);
         if (strpos($sql,";")>0) { $this->dbFehler('Achtung','Semikolon'); return false;};
         $rs = $this->db->queryAll($sql);
-        if(PEAR::isError($rs)) {
+        //if(PEAR::isError($rs)) {
+        if((new PEAR)->isError($rs)) {
             $this->dbFehler($sql,$rs->getMessage());
             return false;
         } else {
@@ -245,17 +255,31 @@ final class myDB extends MDB2 {
         if ($this->log) $this->writeLog('getAssoc: '.$sql);
         $this->db->loadModule('Extended');
         $this->rc=$this->db->getAssoc($sql);
-        if(PEAR::isError($this->rc)) {
+        //if(PEAR::isError($this->rc)) {
+        if((new PEAR)->isError($this->rc)) {
             $this->dbFehler($sql,$this->rc->getMessage());
             return false;
         } 
         else return $this->rc;
     }
-    
+    public function getJson($sql,$pre = false) {
+        if ($this->log) $this->writeLog('getJson: '.$sql);
+        $rs = $this->getAll($sql);
+        if ($this->log) $this->writeLog('rs: '.print_r($rs,true));
+        if ( $pre ) {
+            array_unshift($rs,$pre);
+            //$rs = $pre + $rs;
+            if ($this->log) $this->writeLog('pre: '.print_r($rs,true));
+        }
+        $rs = json_encode($rs);
+        if ($this->log) $this->writeLog('json: '.print_r($rs,true));
+        return $rs;
+    }    
     public function getOne($sql) {
         if ($this->log) $this->writeLog('getOne: '.$sql);
         $rs = $this->db->queryRow($sql);
-        if(PEAR::isError($rs)) {
+        //if(PEAR::isError($rs)) {
+        if((new PEAR)->isError($rs)) {
             $this->dbFehler($sql,$rs->getMessage());
             if ($this->log) $this->writeLog('getOne: '.$rs->getMessage());
             if ($this->log) $this->writeLog('getOne: '.print_r($rs,true));
@@ -296,7 +320,8 @@ final class myDB extends MDB2 {
         }
 
         $sth = $this->db->prepare($statement);                        //Prepare
-        if (PEAR::isError($sth)) {
+        //if (PEAR::isError($sth)) {
+        if((new PEAR)->isError($sth)) {
             $this->dbFehler($sql,$sth->getMessage());
             $this->rollback();
             return false;
@@ -307,7 +332,8 @@ final class myDB extends MDB2 {
         if ($this->log){
                 $this->writeLog($res);
         }
-        if (PEAR::isError($res)) {
+        //if (PEAR::isError($res)) {
+        if((new PEAR)->isError($res)) {
                 $this->dbFehler($sql,$sth->getMessage());
                 $this->rollback();
                 return false;
@@ -319,19 +345,7 @@ final class myDB extends MDB2 {
         }
         return true;
     }
-    public function getJson($sql,$pre = false) {
-        if ($this->log) $this->writeLog('getJson: '.$sql);
-        $rs = $this->getAll($sql);
-        if ($this->log) $this->writeLog('rs: '.print_r($rs,true));
-        if ( $pre ) {
-            array_unshift($rs,$pre);
-            //$rs = $pre + $rs;
-            if ($this->log) $this->writeLog('pre: '.print_r($rs,true));
-        }
-        $rs = json_encode($rs);
-        if ($this->log) $this->writeLog('json: '.print_r($rs,true));
-        return $rs;
-    }    
+    
     public function setShowError( $value ){
         $this->showErr = $value;
     }    

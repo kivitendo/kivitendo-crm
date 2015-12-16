@@ -1,54 +1,32 @@
 <?php
+$basepath = substr(__DIR__,0,-7);  // solte /var/www/openkonto liefern
+$inclpath = ini_get('include_path');
+ini_set('include_path',$inclpath.":".$basepath.'crm/inc'.":".$basepath.'crm/jqhelp');
+
+require 'mdb.php';
+
 ini_set('session.bug_compat_warn', 0);// Warnung für Sessionbug in neueren Php-Versionen abschalten.
 ini_set('session.bug_compat_42', 0);  // Das ist natürlich lediglich eine Provirorische Lösung.
 //Warning: Unknown: Your script possibly relies on a session side-effect which existed until PHP 4.2.3. ....
-//session_set_cookie_params(480*60); //480*60
-session_start();
-//printArray( $_SESSION );
-$inclpa = ini_get('include_path');
-ini_set('include_path',$inclpa.":../:./inc:../inc");
+session_set_cookie_params(480*60); //480*60
+
+if(!isset($_SESSION)) session_start();
 
 if ( isset($_SESSION['php_error']) && $_SESSION['php_error'] ) {
     error_reporting (E_ALL & ~E_DEPRECATED);
     ini_set ('display_errors',1);
-}
+} 
+$_SESSION['crmpath'] = $basepath;
 
-include_once "mdb.php";
-require_once "conf.php";
-
-function printArray( $array ){
-    echo '<pre>';
-    print_r( $array );
-    echo '</pre>';
-}
-if ( isset ($_SESSION['db']) ) 
-    $GLOBALS['db'] = $_SESSION['db']; // Das muß noch raus!!! Aber erst wenn alles auf GLOBALS umgestellt ist
-
-if ( !isset($_SESSION['dbhost']) ) {
-    if ( !isset($erpConfigFile) ) $erpConfigFile = $erp;
-    $_SESSION['ERPNAME'] = $ERPNAME;
-    $_SESSION['ERP_BASE_URL'] = $ERP_BASE_URL;
-    $_SESSION['erpConfigFile'] = $erpConfigFile;
-    require_once "version.php";
-    $_SESSION['VERSION'] = $VERSION;
-    require_once "login.php";
-    //exit();
+//if ( isset ($_SESSION['db']) ) 
+//    $GLOBALS['db'] = $_SESSION['db']; // Das muß noch raus!!! Aber erst wenn alles auf GLOBALS umgestellt ist
+if ( isset($_SESSION['connect']) && $_SESSION['connect'] != '' ) {
+    $db = new myDB(unserialize(base64_decode($_SESSION['connect'])));
+    $_SESSION['db'] = $db;  // Nur bis alles auf $GLOBALS['db'] umgestellt is.
+    if ( !$db ) require_once "login.php";
 } else {
-    if ( !isset($_SESSION["cookie"]) ||
-         ( $_SESSION["sessid"] != $_COOKIE[$_SESSION["cookie"]] ) ) {
-             while( list($key,$val) = each($_SESSION) ) {
-                 unset($_SESSION[$key]);
-             };
-             $_SESSION['ERPNAME'] = $ERPNAME;
-             $_SESSION['ERP_BASE_URL'] = $ERP_BASE_URL;
-             $_SESSION['erpConfigFile'] = $erpConfigFile;
-             require_once "version.php";
-             $_SESSION['VERSION'] = $VERSION;
-             if ( !anmelden() ) header("location: ups.html");
-    };
-};
-
-require_once "login".$_SESSION["loginok"].".php";
+    require_once "login.php";
+}
 
 
 /****************************************************
@@ -96,16 +74,17 @@ function translate($word,$file) {
         return $word;
     }
 }
-function chksesstime($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$session,$sesstime) {
-    $db   = new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
+//function chksesstime($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$session,$sesstime) {
+function chksesstime($dbcon) { 
+    $db   = new myDB($dbcon);
     $sql  = "SELECT * FROM auth.session WHERE = '$session'";
     $rs   = $db->getOne($sql);
-
     return true;
 }
 
-function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
-    $db   = new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
+//function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
+function authuser($dbcon,$cookie) {
+    $db   = new myDB($dbcon);
     //Hat sich ein User angemeldet
     $sql  = "select sc.session_id,u.id,u.login from auth.session_content sc left join auth.\"user\" u on ";
     $sql .= "(E'--- ' || u.login || chr(10) )=sc.sess_value left join auth.session s on s.id=sc.session_id ";
@@ -134,8 +113,11 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     $mandant = substr($rs['sess_value'],4);
     $sql  = 'SELECT id as manid,name as mandant,dbhost,dbport,dbname,dbuser,dbpasswd FROM auth.clients WHERE id = '.$mandant;
     $rs   = $db->getOne($sql);
-    $auth = array_merge($auth,$rs);
-    //$sql  = "SELECT id AS value, name AS text FROM auth.group";
+    if ( $rs ) {
+        $auth = array_merge($auth,$rs);
+    } else {
+        return false;
+    }    
     //Nur die Gruppen die den angemeldete Benutzer zugeordnet sind hinzufügen
     $sql="SELECT grp.id AS value, name AS text FROM auth.group AS grp
                    INNER JOIN auth.user_group
@@ -169,6 +151,15 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     $sql = "SELECT * FROM auth.session WHERE id = '".$cookie."'";
     $rsa =  $db->getOne($sql);
     $auth['token'] = $rsa['api_token'];
+    // Benutzer/Gruppen/Gruppenzuordnung aus der ERP als Arrays in Session schreiben
+    $sql_alle_nutzer  = "SELECT usr.id AS user_id, usr.login, usrc.cfg_value AS name FROM auth.user AS usr ";
+    $sql_alle_nutzer .= "INNER JOIN auth.user_config AS usrc ON usr.id = usrc.user_id WHERE usrc.cfg_key = 'name' ORDER by usr.id";
+    $sql_alle_gruppen = "SELECT grp.id AS grp_id, grp.name AS grp_name FROM auth.group AS grp ORDER by grp.id";
+    $sql_alle_zuordnung = "SELECT usrg.user_id AS user_id, usrg.group_id AS group_id FROM auth.user_group AS usrg ORDER by usrg.user_id";
+    $auth['alle_nutzer']    = $db->getAll( $sql_alle_nutzer);
+    $auth['alle_gruppen']   = $db->getAll( $sql_alle_gruppen);
+    $auth['alle_zuordnung'] = $db->getAll( $sql_alle_zuordnung);
+    unset($db);
     return $auth;
 }
 
@@ -180,14 +171,14 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
 *****************************************************/
 function anmelden() {
     ini_set("gc_maxlifetime","3600");
-    global $ERPNAME; // ! das funzt nicht mit $_SESSION[ERPNAME] weil die Session in loginok.php zerstört wird...
-    global $erpConfigFile;
+    //global $ERPNAME; // ! das funzt nicht mit $_SESSION[ERPNAME] weil die Session in loginok.php zerstört wird...
+    //global $erpConfigFile;
     //Konfigurationsfile der ERP einlesen
-    $deep = is_dir("../".$ERPNAME) ? "../" : "../../";                // anmelden() aus einem Unterverzeichnis
-    if ( file_exists($deep.$ERPNAME."/config/".$erpConfigFile.".conf") ) {
-        $lxo = fopen($deep.$ERPNAME."/config/".$erpConfigFile.".conf","r");
-    } else if ( file_exists($deep.$ERPNAME."/config/".$erpConfigFile.".conf.default") ) {
-        $lxo = fopen($deep.$ERPNAME."/config/".$erpConfigFile.".conf.default","r");
+    $deep = is_dir("../".$_SESSION['ERPNAME']) ? "../" : "../../";                // anmelden() aus einem Unterverzeichnis
+    if ( file_exists($deep.$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf") ) {
+        $lxo = fopen($deep.$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf","r");
+    } else if ( file_exists($deep.$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf.default") ) {
+        $lxo = fopen($deep.$_SESSION['ERPNAME']."/config/".$_SESSION['erpConfigFile'].".conf.default","r");
     } else {
         return false;
     }
@@ -222,37 +213,35 @@ function anmelden() {
     $cookie = $_COOKIE[$cookiename];
     if ( !$cookie ) header("location: ups.html");
     // Benutzer anmelden
-    error_log("!$ERPNAME!$dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie!",0);
-    $auth = authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie);
+    $dbcon['dbhost']   = $dbhost;
+    $dbcon['dbport']   = $dbport;
+    $dbcon['dbuser']   = $dbuser;
+    $dbcon['dbpasswd'] = $dbpasswd;
+    $dbcon['dbname']   = $dbname;
+    $auth = authuser($dbcon,$cookie);    
     if ( !$auth ) {  return false; };                    // Anmeldung des Users fehlgeschlagen
     foreach ($auth as $key=>$val) $_SESSION[$key] = $val;                // Mandanten + Userdaten in Session speichern
     $_SESSION["sessid"] = $cookie;
     $_SESSION["cookie"] = $cookiename;
     $_SESSION["sesstime"] = $sesstime;
-    // Benutzer/Gruppen/Gruppenzuordnung aus der ERP als Arrays in Session schreiben
-    $db_new   = new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
-    $sql_alle_nutzer = "SELECT usr.id AS user_id, usr.login, usrc.cfg_value AS name FROM auth.user AS usr INNER JOIN auth.user_config AS usrc ON usr.id = usrc.user_id WHERE usrc.cfg_key = 'name' ORDER by usr.id";
-    $sql_alle_gruppen = "SELECT grp.id AS grp_id, grp.name AS grp_name FROM auth.group AS grp ORDER by grp.id";
-    $sql_alle_zuordnung = "SELECT usrg.user_id AS user_id, usrg.group_id AS group_id FROM auth.user_group AS usrg ORDER by usrg.user_id";
-    $alle_nutzer = $db_new->getAll( $sql_alle_nutzer);
-    $alle_gruppen = $db_new->getAll( $sql_alle_gruppen);
-    $alle_zuordnung = $db_new->getAll( $sql_alle_zuordnung);
-    // $_SESSSION['ok'] da anmelden 2x durchlaufen wird ?? Bessere Lösung ?
-    if(!$_SESSION['ok']) {
-        $_SESSION['erp_nutzer'] = $alle_nutzer;
-        $_SESSION['erp_gruppen'] = $alle_gruppen;
-        $_SESSION['erp_zuordnung'] = $alle_zuordnung;
-    }
-    $_SESSION['ok'] = "1";
+    $_SESSION['ok']     = "1";
     // Mit der Mandanten-DB verbinden
-    $GLOBALS['db']  = new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
-    $_SESSION["db"] = $GLOBALS['db'];  //Nur solange, bis ALLE DB-Aufrufe auf $GLOBALS['db'] umgestellt sind.
+    unset($dbcon);    $dbcon = array();
+    $dbcon['dbhost']         = $auth['dbhost'];
+    $dbcon['dbport']         = $auth['dbport'];
+    $dbcon['dbuser']         = $auth['dbuser'];
+    $dbcon['dbpasswd']       = $auth['dbpasswd'];
+    $dbcon['dbname']         = $auth['dbname'];
+    $GLOBALS['db']           = new myDB($dbcon);    
     if( !$GLOBALS['db'] ) {
+        echo "Fehler";
         return false;
     } else {
+        $_SESSION["db"]          = $GLOBALS['db'];  //Nur solange, bis ALLE DB-Aufrufe auf $GLOBALS['db'] umgestellt sind.
         chkdir($auth["dbname"]);                         // gibt es unter dokumente ein Verzeichnis mit dem Instanznamen
         chkdir($auth["dbname"].'/tmp/');
-        $_SESSION['Admin'] = $auth['Admin'];
+        $_SESSION['connect']   = base64_encode(serialize($dbcon));
+        $_SESSION['Admin']     = $auth['Admin'];
         $charset = ini_get("default_charset");
         //if ( $charset == "" ) $charset = $dbcharset;
         if ( $charset == "" ) $charset = 'UTF8';
@@ -263,8 +252,8 @@ function anmelden() {
         $BaseUrl .= $_SERVER['HTTP_HOST'];
         $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
         if ($user_data) foreach ($user_data as $key => $val) $_SESSION[$key] = $val;
-        if ( isset($_SESSION['sql_error']) && $_SESSION['sql_error'] ) $_SESSION['db']->setShowError(true);
-        else $_SESSION['db']->setShowError(false);
+        if ( isset($_SESSION['sql_error']) && $_SESSION['sql_error'] ) $GLOBALS['db']->setShowError(true);
+        else $GLOBALS['db']->setShowError(false);
         $_SESSION['dir_mode']  = ( $user_data['dir_mode'] != '' )?octdec($user_data['dir_mode']):493; // 0755
         $_SESSION["loginCRM"] = $user_data["id"];
         $_SESSION['theme']    = ($user_data['theme']=='' || $user_data['theme']=='base')?'':$user_data['theme'];
@@ -410,9 +399,12 @@ function chkFld(&$val,$empty,$rule,$len) {
     }
     return $ok;
 }
-
+function chkcrm() {
+    $crm_exist = $GLOBALS['db']->getOne( "SELECT count(*) FROM information_schema.tables WHERE table_name = 'crm'");
+    return (bool) $crm_exist['count'];
+}
 function getVersiondb() {
-    $rs = $_SESSION['db']->getOne("select * from crm order by datum desc limit 1");
+    $rs = $GLOBALS['db']->getOne("select * from crm order by datum desc limit 1");
     if ( !$rs["version"] ) return "V n.n.n";
     return $rs["version"];
 }
@@ -440,7 +432,7 @@ function getBundesland($land) {
     } else {
         $sql = "select * from bundesland order by country,bundesland";
     }
-    $rs = $_SESSION['db']->getAll($sql);
+    $rs = $GLOBALS['db']->getAll($sql);
     return $rs;
 }
 
@@ -453,7 +445,7 @@ function getBundesland($land) {
 function mkTelNummer($id,$tab,$tels,$delete=true) {
     if ( $delete ) {
         $sql = "delete from telnr where id=$id and tabelle='$tab'";
-        $rs = $_SESSION['db']->query($sql);
+        $rs = $GLOBALS['db']->query($sql);
     }
     foreach( $tels as $tel ) {
         $tel = strtr($tel,array(" "=>"","-"=>"","/"=>"","\\"=>"","("=>"",")"=>""));
@@ -462,7 +454,7 @@ function mkTelNummer($id,$tab,$tels,$delete=true) {
         if ( trim($tel) <> "" ) {
             $sql = "insert into telnr (id,tabelle,nummer) values (%d,'%s','%s')";
             $sql = sprintf($sql,$id,$tab,$tel);
-            $rs = $_SESSION['db']->query($sql);
+            $rs = $GLOBALS['db']->query($sql);
         }
     }
 }
@@ -471,7 +463,7 @@ function getAnruf($nr) {
     $nun = date("H:i");
     $name = "_0;$nun $nr unbekannt";
     $sql = "select * from telnr where nummer = '$nr'";
-    $rs  = $_SESSION['db']->getAll($sql);
+    $rs  = $GLOBALS['db']->getAll($sql);
     if( !$rs ) {
         return false;
     } else {
@@ -479,7 +471,7 @@ function getAnruf($nr) {
         $more = "";
         while ( count($rs) == 0 && $i < 5 ) {
             $sql = "select * from telnr where nummer like '".substr($nr,0,-$i)."%'";
-            $rs  = $_SESSION['db']->getAll($sql);
+            $rs  = $GLOBALS['db']->getAll($sql);
             $i++;
             $more = "?";
         };
@@ -497,7 +489,7 @@ function getAnruf($nr) {
             } else {
                 $name = "_0;".$nun." ".$nr." unbekannt"; return $name;
             }
-            $rs1 = $_SESSION['db']->getAll($sql);
+            $rs1 = $GLOBALS['db']->getAll($sql);
             $name = $rs[0]["tabelle"].$rs[0]["id"].$nun." ".$rs1[0]["name1"]." ".$rs1[0]["name2"].$more;
         } else {
             $name = "_00000".$nun." ".$nr." unbekannt";
@@ -508,14 +500,14 @@ function getAnruf($nr) {
 
 function getVertretung($user) {
     $sql = "select workphone from employee where vertreter=(select id from employee where workphone='$user')";
-    $rs  = $_SESSION['db']->getAll($sql);
+    $rs  = $GLOBALS['db']->getAll($sql);
     if ( count($rs) > 0 ) { return $rs; }
     else { return false; };
 }
 
 function getVorlagen() {
     $sql = "select * from docvorlage";
-    $rs  = $_SESSION['db']->getAll($sql);
+    $rs  = $GLOBALS['db']->getAll($sql);
     if ( count($rs) > 0 ) { return $rs; }
     else { return false; };
 }
@@ -523,10 +515,10 @@ function getVorlagen() {
 function getDocVorlage($did) {
     if ( !$did ) return false;
     $sql = "select * from docvorlage where docid=$did";
-    $rs1 = $_SESSION['db']->getOne($sql);
+    $rs1 = $GLOBALS['db']->getOne($sql);
     if ( !$rs1 ) return false;
     $sql = "select * from docfelder where docid=$did order by position";
-    $rs2 = $_SESSION['db']->getAll($sql);
+    $rs2 = $GLOBALS['db']->getAll($sql);
     $rs["document"] = $rs1;
     $rs["felder"]   = $rs2;
     if ( count($rs) > 0 ) { return $rs; }
@@ -535,7 +527,7 @@ function getDocVorlage($did) {
 
 function getDOCvar($did) {
     $sql = "select * from docvorlage where docid=$did";
-    $rs1 = $_SESSION['db']->getOne($sql);
+    $rs1 = $GLOBALS['db']->getOne($sql);
     return $rs1;
 }
 
@@ -543,7 +535,7 @@ function updDocFld($data) {
     $sql  = "update docfelder set feldname='".$data["feldname"]."', platzhalter='".strtoupper($data["platzhalter"]);
     $sql .= "', beschreibung='".$data["beschreibung"]."',laenge=".$data["laenge"].",zeichen='".$data["zeichen"];
     $sql .= "',position=".$data["position"].",docid=".$data["docid"]." where fid=".$data["fid"];
-    $rs  = $_SESSION['db']->query($sql);
+    $rs  = $GLOBALS['db']->query($sql);
     if( !$rs ) {
         return false;
     }
@@ -560,7 +552,7 @@ function insDocFld($data) {
 
 function delDocFld($data) {
     $sql = "delete from docfelder where fid=".$data["fid"];
-    $rs = $_SESSION['db']->query($sql);
+    $rs = $GLOBALS['db']->query($sql);
 }
 
 /****************************************************
@@ -572,10 +564,10 @@ function delDocFld($data) {
 function mknewDocFeld() {
     $newID = uniqid (rand());
     $sql = "insert into docfelder (beschreibung) values ('$newID')";
-    $rc = $_SESSION['db']->query($sql);
+    $rc = $GLOBALS['db']->query($sql);
     if ( $rc ) {
         $sql = "select fid from docfelder where beschreibung = '$newID'";
-        $rs = $_SESSION['db']->getOne($sql);
+        $rs = $GLOBALS['db']->getOne($sql);
         if ( $rs ) {
             $id = $rs["fid"];
         } else {
@@ -596,10 +588,10 @@ function mknewDocFeld() {
 function mknewDocVorlage() {
     $newID = uniqid (rand());
     $sql = "insert into docvorlage (vorlage) values ('$newID')";
-    $rc = $_SESSION['db']->query($sql);
+    $rc = $GLOBALS['db']->query($sql);
     if ( $rc ) {
         $sql = "select docid from docvorlage where vorlage = '$newID'";
-        $rs  = $_SESSION['db']->getOne($sql);
+        $rs  = $GLOBALS['db']->getOne($sql);
         if ( $rs ) {
             $id = $rs["docid"];
         } else {
@@ -613,10 +605,10 @@ function mknewDocVorlage() {
 
 function delDocVorlage($data) {
     $sql = "delete from docfelder where docid=".$data["did"];
-    $rs = $_SESSION['db']->query($sql);
+    $rs = $GLOBALS['db']->query($sql);
     if ( $rs ) {
         $sql = "delete from docvorlage where docid=".$data["did"];
-        $rs  = $_SESSION['db']->query($sql);
+        $rs  = $GLOBALS['db']->query($sql);
     }
 }
 
@@ -634,7 +626,7 @@ function saveDocVorlage($data,$files) {
     if ( !$data["vorlage"] ) $data["vorlage"] = "Kein Titel ".datum("d.m.Y");
     $sql  = "update docvorlage set vorlage='".$data["vorlage"]."', beschreibung='".$data["beschreibung"];
     $sql .= "', file='".$file."', applikation='".$data["applikation"]."' where docid=".$data["did"];
-    $rs = $_SESSION['db']->query($sql);
+    $rs = $GLOBALS['db']->query($sql);
     if( !$rs ) {
         return false;
     } else {
@@ -647,7 +639,7 @@ function shopartikel() {
     $sql .= "chart c left join partstax pt on pt.chart_id = c.id,";
     $sql .= "tax t, parts P left join partsgroup PG on PG.id=P.partsgroup_id ";
     $sql .= "where c.category='I' AND t.taxnumber=c.accno  and pt.parts_id = P.id and P.shop=1";
-    $rs = $_SESSION['db']->getAll($sql);
+    $rs = $GLOBALS['db']->getAll($sql);
     if( !$rs ) {
         return false;
     } else {
@@ -661,7 +653,7 @@ function getAllArtikel($art="A") {
     else if ($art == "D") { $where = "where inventory_accno_id is null and expense_accno_id is not null"; }
     else if ($art == "E") { $where = "where inventory_accno_id is null and expense_accno_id is null"; };
     $sql = "SELECT * from parts $where order by description";
-    $rs = $_SESSION['db']->getAll($sql);
+    $rs = $GLOBALS['db']->getAll($sql);
     if(!$rs) {
         return false;
     } else {
@@ -671,7 +663,7 @@ function getAllArtikel($art="A") {
 
 function getGrp($usrid,$inkluid=false){
     $sql = "select distinct(grpid) from grpusr where usrid=$usrid";
-    $rs  = $_SESSION['db']->getAll($sql);
+    $rs  = $GLOBALS['db']->getAll($sql);
     if( !$rs ) {
         if ( $inkluid ) { return "($usrid)"; }
         else { $data = false; };
@@ -715,7 +707,7 @@ function mondaykw($kw,$jahr) {
 
 }
 function clearCSVData() {
-    return $_SESSION['db']->query("delete from tempcsvdata where uid = '".$_SESSION["loginCRM"]."'");
+    return $GLOBALS['db']->query("delete from tempcsvdata where uid = '".$_SESSION["loginCRM"]."'");
 }
 
 
@@ -735,9 +727,9 @@ function clearCSVData() {
 function insertCSVData($data,$id){
     $tmpstr = implode(":",$data);                                               // ANREDE:NAME:STRASSE (...)
     $sql = "insert into tempcsvdata (uid,csvdaten,id) values ('"
-            . $_SESSION["loginCRM"] . "','" . $_SESSION['db']->saveData($tmpstr) . "','"
-            . $_SESSION['db']->saveData($id) . "')";                                        // saveData escapt die Zeichenkette
-    $rc = $_SESSION['db']->query($sql);
+            . $_SESSION["loginCRM"] . "','" . $GLOBALS['db']->saveData($tmpstr) . "','"
+            . $GLOBALS['db']->saveData($id) . "')";                                        // saveData escapt die Zeichenkette
+    $rc = $GLOBALS['db']->query($sql);
     return $rc;     //Fehlerbehandlung? Wie sieht es aus mit exceptions? Muessen wir php4-kompatibel sein?
                     //Sollte eigentlich schon immer in den Funktionen direkt passieren
                     // http://pear.php.net/manual/de/standars.errors.php
@@ -752,7 +744,7 @@ function insertCSVData($data,$id){
  */
 function getCSVData(){
     $sql = "select * from tempcsvdata where uid = '" . $_SESSION["loginCRM"] .  "' ORDER BY id";
-    return $_SESSION['db']->getAll($sql);   //liefert false bei misserfolg
+    return $GLOBALS['db']->getAll($sql);   //liefert false bei misserfolg
 }
 
 /**
@@ -764,7 +756,7 @@ function getCSVData(){
  */
 function getCSVDataID(){
     $sql = "select id from tempcsvdata where uid = '" . $_SESSION["loginCRM"] .  "' and id > 0";
-    return $_SESSION['db']->getAll($sql);   //liefert false bei misserfolg
+    return $GLOBALS['db']->getAll($sql);   //liefert false bei misserfolg
 }
 function startTime() {
     $zeitmessung = microtime();
@@ -973,21 +965,21 @@ function doHeader(&$t) {
  */
 function getLanguage() {
     $sql = "select id,description from language";
-    return $_SESSION['db']->getAll($sql);
+    return $GLOBALS['db']->getAll($sql);
 }
 function nextNumber($number) {
-    $_SESSION['db']->begin();
+    $GLOBALS['db']->begin();
     $sql = "select $number from defaults";
-    $rs  = $_SESSION['db']->getOne($sql);
+    $rs  = $GLOBALS['db']->getOne($sql);
     preg_match("/([^\d]*)([\d]+)([^\d]*)/",$rs[$number],$hit);
     $nr  = $hit[1].($hit[2]+1).$hit[3];
     $sql = "update defaults set $number = '$nr'";
-    $rc  = $_SESSION['db']->query($sql,"nextnumber");
+    $rc  = $GLOBALS['db']->query($sql,"nextnumber");
     if ( !$rc ) {
-        $_SESSION['db']->rollback();
+        $GLOBALS['db']->rollback();
         return false;
     } else {
-        $_SESSION['db']->commit();
+        $GLOBALS['db']->commit();
         return $nr;
     }
 }
@@ -1094,7 +1086,7 @@ function accessHistory( $data=false ) {
     if ( $_SESSION['loginok'] == 'ok' ){
         $sql  = "select val from crmemployee where uid = '" . $_SESSION["loginCRM"];
         $sql .= "' AND manid = ".$_SESSION['manid']." AND key = 'search_history'";
-        $rs =   $_SESSION['db']->getOne( $sql );
+        $rs =   $GLOBALS['db']->getOne( $sql );
         $array_of_data = json_decode( $rs['val'], true );
         if( !is_array ( $array_of_data[0] ) ) unset( $array_of_data[0] );//ToDo
         if ( !$data && $array_of_data ) {
@@ -1106,14 +1098,14 @@ function accessHistory( $data=false ) {
             if ( count( $array_of_data ) > 8 ) array_shift( $array_of_data );
             $sql =  "UPDATE crmemployee SET val = '".json_encode( $array_of_data )."' WHERE uid = ".$_SESSION['loginCRM'];
             $sql .= " AND manid = ".$_SESSION['manid']." AND key = 'search_history'";
-            $_SESSION['db']->query( $sql );
+            $GLOBALS['db']->query( $sql );
         }
     }
 }
 
 function getCurrencies() {
     $sql = "SELECT * from currencies";
-    $rs = $_SESSION['db']->getAll($sql);
+    $rs = $GLOBALS['db']->getAll($sql);
     return $rs;
 }
 

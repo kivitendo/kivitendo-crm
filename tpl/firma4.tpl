@@ -6,7 +6,6 @@
 {THEME}
 {FANCYBOX}
     <script language="JavaScript">
-    <!--
     var serreg;
     function showD () {
         did = $('#vorlage option:selected').val();
@@ -63,14 +62,12 @@
             });
         });
     });
-
-    //-->
     </script>
 <body onLoad="dateibaum('left','/{Q}{customernumber}/{PID}'), hidelinks(0) ;">
 {PRE_CONTENT}
 {START_CONTENT}
 <div class="ui-widget-content" style="height:600px">
-<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
+<p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
 <form name="firma4" enctype='multipart/form-data' action="{action}" method="post">
 <input type="hidden" name="pid" value="{PID}">
 <input type="hidden" name="fid" value="{FID}">
@@ -197,5 +194,6 @@
 </div>
 {END_CONTENT}
 <script type="text/javascript" src="{CRMURL}inc/dokument.js"></script>
+{TOOLS}
 </body>
 </html>

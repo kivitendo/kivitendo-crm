@@ -9,7 +9,6 @@
 {FANCYBOX}
 {QRCODE}
     <script language="JavaScript">
-    <!--
         function showItem(id) {
             pid = $('#liste option:selected').val();
             F1=open("getCall.php?Q={Q}C&pid="+pid+"&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
@@ -95,9 +94,6 @@
                });
             return false;
         }
-        function showOne(id) {
-            //was wollte ich hier?
-        }
         function showContact() {
             pid = $('#liste option:selected').val();
             $.ajax({
@@ -170,7 +166,7 @@
         if ( _pid>0 ) tool = tool + $('#liste option:selected').val();
         f1=open(tool,"Adresse","width=350, height=200, left="+leftpos+", top=50, status=no,toolbar=no,menubar=no,location=no,titlebar=no,scrollbars=no,fullscreen=no");
     }
-    //-->
+
     </script>
     <script>
     $(document).ready(
@@ -187,8 +183,7 @@
           },
         });
         showContact();
-    });
-    $(function(){
+
          $('button')
           .button()
           .click( function(event) {
@@ -236,7 +231,7 @@
 {PRE_CONTENT}
 {START_CONTENT}
 <div class="ui-widget-content" style="height:600px">
-<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
+<p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
 
 <div id="menubox1">
     <div class="fancybox" rel="group" href="tmp/qr_{loginname}.png"><img src="" alt="" /></div>
@@ -250,12 +245,6 @@
         <option value="{cid}">{cname}</option>
 <!-- END kdhelp -->
     </select>
-    </span>
-    <span style="float:left; padding-left:12em; padding-top:2em; visibility:{tools};">
-    <img src="tools/rechner.png"  onClick="toolwin('tools/Rechner.html',0)" title=".:simple calculator:."> &nbsp;
-    <img src="tools/notiz.png"  onClick="toolwin('postit.php?popup=1',0)" title=".:postit notes:."> &nbsp;
-    <img src="tools/kalender.png"  onClick="toolwin('tools/kalender.php?Q=P&id=',1)" title=".:calender:."> &nbsp;
-    <a href="javascript:void(s=prompt('.:ask leo:.',''));if(s)leow=open('http://dict.leo.org/?lp=ende&search='+escape(s),'LEODict','width=750,height=550,scrollbars=yes,resizeable=yes');if(leow)leow.focus();"><img src="tools/leo.png"  title="LEO .:english/german:." border="0"></a> &nbsp;
     </span>
 </div>
 <!--span style="position:absolute; left:0.2em; top:7.2em; width:99%;" -->
@@ -343,5 +332,6 @@
 </div>
 </div>
 {END_CONTENT}
+{TOOLS}
 </body>
 </html>

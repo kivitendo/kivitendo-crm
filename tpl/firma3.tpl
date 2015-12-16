@@ -6,7 +6,6 @@
 {THEME}
 {JQTABLE}
     <script language="JavaScript">
-    <!--
     function showM (month) {
         uri="firma3.php?Q={Q}&jahr={JAHR}&monat=" + month + "&fid=" + {FID};
         location.href=uri;
@@ -16,9 +15,6 @@
           .button()
           .click( function(event) { event.preventDefault();  document.location.href=this.getAttribute('name'); });
     });
-    //-->
-    </script>
-    <script>
     $(document).ready(
         function(){
             $("#ums").tablesorter({widthFixed: true, widgets: ['zebra'], headers: {
@@ -33,7 +29,7 @@
 {PRE_CONTENT}
 {START_CONTENT}
 <div class="ui-widget-content" style="height:600px">
-<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
+<p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
 <div id="menubox2">
     <button name="{Link1}">.:Custombase:.</button>
     <button name="{Link2}">.:Contacts:.</button>
@@ -86,5 +82,6 @@
 </span>
 </div>
 {END_CONTENT}
+{TOOLS}
 </body>
 </html>

@@ -26,7 +26,6 @@ echo $head['JUI-DROPDOWN'];
             first = false;
         };
         function showD( src, id, number ) {
-
            if      ( src=="C" ) uri = number ? "firmen3.php?edit=1&number=" + number + "&Q=C&id=" + id : "firma1.php?Q=C&id=" + id;
            else if ( src=="V" ) uri = number ? "firmen3.php?edit=1&number=" + number + "&Q=V&id=" + id : "firma1.php?Q=V&id=" + id;
            else if ( src=="E" ) uri = "user1.php?id=" + id;
@@ -38,25 +37,7 @@ echo $head['JUI-DROPDOWN'];
         }
     </script>
 <?php
-//ToDo: Dialoge übersetzen!!!!!!
 echo '
-    <div id="dialog_no_sw" title="Kein Suchbegriff eingegeben">
-        <p>Bitte geben Sie mindestens ein Zeichen ein.</p>
-    </div>
-    <div id="dialog_viele" title="Zu viele Suchergebnisse">
-        <p>Die Anzahl der Suchergebnisse überschreitet das Listenlimit.</br>Bitte verändern Sie das Suchkriterium.</p>
-    </div>
-    <div id="dialog_keine" title="Nichts gefunden">
-        <p>Dieser Suchbegriff ergibt kein Resultat.</br>Bitte verändern Sie das Suchkriterium.</p>
-    </div>
-    <style>
-        .ui-autocomplete-category {
-            font-weight: bold;
-            padding: .2em .4em;
-            margin: .8em 0 .2em;
-            line-height: 1.5;
-        }
-    </style>
     <script>
         $.widget("custom.catcomplete", $.ui.autocomplete, {
             _renderMenu: function(ul,items) {
@@ -83,8 +64,6 @@ echo '
             });
 
         });
-        $("#dialog_no_sw,#dialog_viele,#dialog_keine").dialog({ autoOpen: false });
-
     </script>
 ';
 ?>
@@ -109,21 +88,37 @@ echo '
         width: 240px !important;
         margin-top: 3px !important;
     }
+    .ui-autocomplete-category {
+        font-weight: bold;
+        padding: .2em .4em;
+        margin: .8em 0 .2em;
+        line-height: 1.5;
+    }
 </style>
 <script>
     $(function() {
+        //ToDo: Dialoge übersetzen!!!!!!
+        $( "#dialog_no_sw" ).dialog({
+            autoOpen: false,
+            title : "Kein Suchbegriff eingegeben"
+        }).html( "<p>Bitte geben Sie mindestens ein Zeichen ein.</p>" );
+        $( "#dialog_viele" ).dialog({
+            autoOpen: false,
+            title : "Zu viele Suchergebnisse"
+        }).html( "Die Anzahl der Suchergebnisse überschreitet das Listenlimit.</br>Bitte verändern Sie das Suchkriterium." );
+        $( "#dialog_keine" ).dialog({
+            autoOpen: false,
+            title : "Nichts gefunden"
+        }).html( "Dieser Suchbegriff ergibt kein Resultat.</br>Bitte verändern Sie das Suchkriterium." );
         $( "#tabs" ).tabs({
             active: <?php echo $_SESSION["searchtab"] - 1;?>,
             beforeLoad: function( event, ui ) {
-                //alert( $( "#tabs" ).tabs( "option", "active" )); für die Memfunction, in SESSION schreiben
-                ui.jqXHR.error(function() {
+                ui.jqXHR.error( function() {
                     ui.panel.html(".:Couldn't load this tab.:." );
                 });
             }
         });
-        var tabOpts = { select:chgTab };
-        $( "#tabs" ).tabs(tabOpts);
-
+        $( "#tabs" ).tabs({ select:chgTab });
         $("#results").css('height',300);
 
         $.ajax({
@@ -182,6 +177,9 @@ echo '<body onload="$(\'#ac0\').focus().val(\''.(isset($_SESSION['swort'])?preg_
 echo $menu['pre_content'];
 echo $menu['start_content'];
 echo '
+    <div id="dialog_no_sw"></div>
+    <div id="dialog_viele"></div>
+    <div id="dialog_keine"></div>
     <div id="tabs">
         <ul>
             <li><a href="#tab-1">Schnellsuche</a></li>
@@ -190,7 +188,7 @@ echo '
             <li><a href="#tab-4">Personensuche</a></li>
         </ul>
         <div id="tab-1">
-            <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">'.translate('.:fast search customer/vendor/contacts and contact history:.','firma').'</p>
+            <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">'.translate('.:fast search customer/vendor/contacts and contact history:.','firma').'</p>
             <form name="suche" id="suche" action="" method="get">
                 <input type="text" name="swort" size="25" id="ac0" autocomplete="off">
                 <button id="adress"> '.translate('.:adress:.','firma').'</button>
@@ -222,7 +220,7 @@ echo '
 ';
 
 echo $menu['end_content'];
-
+echo $head['TOOLS'];
 ob_end_flush();
 ?>
 </body>

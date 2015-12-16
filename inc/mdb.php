@@ -19,6 +19,7 @@ final class myDB extends MDB2 {
     private $errfile = "/tmp/lxcrm.err";
     private $logfile = "/tmp/lxcrm.log";
     private $lfh = false;
+    var $JVer = false;
 
     /**********************************************
     * myDB - Konstruktor

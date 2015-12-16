@@ -1,11 +1,12 @@
 <?php
 // $Id$
     require_once("inc/stdLib.php");
-    include("inc/template.inc");
-    include("inc/crmLib.php");
-    include_once("inc/UserLib.php");
+    include_once("template.inc");
+    include_once("crmLib.php");
+    include_once("UserLib.php");
     include_once("Mail.php");
     include_once("Mail/mime.php");
+    $USER = getUserEmployee(array('mailsign','mandsig'));
     if ( (isset($_GET['popup']) && $_GET['popup'] == 1) ) {
         $popup = true;
     } else if ( (isset($_POST['popup']) && $_POST['popup'] == 1) ) {
@@ -35,45 +36,14 @@
             $btn='<a href="mail.php"><image src="image/new.png" alt=".:new:." title=".:new:." border="0" ></a>';
             $hide="visible";
         };
-        $referer .= "?popup=".$_POST['popup'];
+        $referer .= "&popup=".$_POST['popup'];
     } else { 
         $referer = ''; 
         $btn='<a href="mail.php"><image src="image/new.png" alt=".:new:." title=".:new:." border="0" ></a>';
         $hide="visible";
     };
-
     if ($_POST["aktion"]=="tplsave") {
         $rc=saveMailVorlage($_POST);
-    } else     if ($_POST["MID"]) {
-        $KontaktTO=$_POST["KontaktTO"];
-        $data=getOneMailVorlage($_POST["MID"]);
-        $Subject=$data["cause"];
-        $BodyText=$data["c_long"];
-        if (substr($KontaktTO,0,1)=="K") {
-            include("inc/persLib.php");
-            $empf=getKontaktStamm(substr($KontaktTO,1));
-            $tmp = getFirmaCVars($empf["cp_cv_id"]);
-            if ($tmp) foreach($tmp as $key=>$val) { $empf[$key]=$val; };
-            $TO=$empf["cp_email"];
-        } else if ($KontaktTO) {
-            include("inc/FirmenLib.php");
-            $empf=getFirmenStamm(substr($KontaktTO,1),true,substr($KontaktTO,0,1));
-            $TO=$empf["email"];
-        }
-        if ($KontaktTO) {
-            preg_match_all("/%([A-Z0-9_]+)%/iU",$BodyText,$ph, PREG_PATTERN_ORDER);
-            $ph=array_slice($ph,1);
-            if ($ph[0]) {
-                $anrede=false;
-                foreach ($ph[0] as $x) {
-                    $y=$empf[strtolower($x)];
-                    if ($x=="cp_greeting") $anrede=$y;
-                    $BodyText=preg_replace("/%".$x."%/i",$y,$BodyText);
-                }
-                if ($anrede=="Herr") { $BodyText=preg_replace("/%cp_anrede%/","r",$BodyText); }
-                else if ($anrede) { $BodyText=preg_replace("/%cp_anrede%/","",$BodyText); }
-            }
-        }
     } else if ($_POST["aktion"]=="sendmail") {
         $okT=true; $okC=true; $okA=true; $msg="";
         if ($_POST["TO"]) {
@@ -213,7 +183,7 @@
                     }
                 }
                 if (!$stamm) {
-                    $data["CID"]=$_SESSION["login"];        // Dann halt beim Absender in den Thread eintragen
+                    $data["CID"]=$_SESSION["loginCRM"];        // Dann halt beim Absender in den Thread eintragen
                     $data["cause"]=$Subject."|".$_POST["TO"];
                     insCall($data,$_FILES);
                 }
@@ -233,24 +203,46 @@
         $user=getUserStamm($_SESSION["loginCRM"]);
         $BodyText="";// \n".$MailSign;
     }
-    switch ($_SESSION['mandsig']) {
-        case '0' :  $MailSign  = $_SESSION["mailsign"];
+    switch ($USER['mandsig']) {
+        case '0' :  $MailSign  = $USER["mailsign"];
                     break;
-        case '1' :  $MailSign  = $_SESSION["msignature"];
+        case '1' :  $MailSign  = $USER["msignature"];
                     break;
-        case '2' :  $MailSign  = $_SESSION["msignature"];
-                    $MailSign .= "\n".$_SESSION["mailsign"];
+        case '2' :  $MailSign  = $USER["msignature"];
+                    $MailSign .= "\n".$USER["mailsign"];
                     break;
-        case '3' :  $MailSign  = $_SESSION["mailsign"];
-                    $MailSign .= "\n".$_SESSION["msignature"];
+        case '3' :  $MailSign  = $USER["mailsign"];
+                    $MailSign .= "\n".$USER["msignature"];
                     break;
-        default  :  $MailSign  = $_SESSION["mailsign"];
+        default  :  $MailSign  = $USER["mailsign"];
     }
     $MailSign=str_replace("\n","<br>",$MailSign);
     $MailSign=str_replace("\r","",$MailSign);
     $t = new Template($base);
     $menu =  $_SESSION['menu'];
-    doheader($t);
+    $head = mkHeader();
+
+    if ( $popup ) {
+        $t->set_var(array(
+            'STYLESHEETS'   => $menu['stylesheets'],
+            'JAVASCRIPTS'   => $menu['javascripts'],
+            'CRMCSS'        => $head['CRMCSS'],
+            'THEME'         => $head['THEME'],
+            'AUTOCOMPLETE'  => $head['AUTOCOMPLETE'],
+        ));
+        $hide = 'hidden';
+    } else {
+        $t->set_var(array(
+            'STYLESHEETS'   => $menu['stylesheets'],
+            'JAVASCRIPTS'   => $menu['javascripts'],
+            'PRE_CONTENT'   => $menu['pre_content'],
+            'START_CONTENT' => $menu['start_content'],
+            'END_CONTENT'   => $menu['end_content'],
+            'CRMCSS'        => $head['CRMCSS'],
+            'THEME'         => $head['THEME'],
+            'AUTOCOMPLETE'  => $head['AUTOCOMPLETE'],
+        ));
+    }
     $t->set_file(array("mail" => "mail.tpl"));
     $t->set_block("mail","Betreff","Block");
     $mailvorlagen=getMailVorlage();
@@ -262,10 +254,11 @@
         ));
         $t->parse("Block","Betreff",true);
     }
+    $tmpdata = getUserEmployee(array('feature_ac_minlength','feature_ac_delay'));
     $t->set_var(array(
             HEADER   => $header,
-            acminlen => $feature_ac_minLength,
-            acdelay  => $feature_ac_delay,
+            acminlen => ($tmpdata['feature_ac_minLength']!='')?$tmpdata['feature_ac_minLength']:2,
+            acdelay  => ($tmpdata['feature_ac_delay']!='')?    $tmpdata['feature_ac_delay']:100,
             Msg      => $msg,
             btn      => $btn,
             Subject  => $Subject,

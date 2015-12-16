@@ -13,15 +13,12 @@
     echo $head['BOXCSS'];
     echo $head['COLORPICKERCSS'];
     echo $head['JQTIMECSS'];
-    echo $head['JQUERY'];   
-    echo $head['JQUERYUI'];
     echo $head['THEME'];
     echo $head['FULLCALJS'];
     echo $head['JQBOX'];
     echo $head['JQTIME'];
     echo $head['COLORPICKERJS'];
     echo $head['JQCOOKIE'];
-    echo $head['JQDATE'];  
   //print_r( $_SESSION );
 /*************************************************** +++ ToDo ++++*******************************************************
 Kategorien und User + All in Tabs darstellen!!!!
@@ -175,6 +172,7 @@ Visibility für Gruppen
                 autoWidth:  true,
                 height:     "12",
                 populate: function() {
+console.log('vor ajaxTask');
                     var deferred = $.Deferred()
                     $.ajax({
                         url: 'jqhelp/calendar.php',
@@ -187,7 +185,7 @@ Visibility für Gruppen
                             obj.unshift( {value: 0, text: ""} );
                         }
 
-                        //console.log( obj );
+                        console.log( obj );
                         
                         $.each( objCalendar, function( i, val ){
                             //Neuen Tab erzeugen
@@ -555,7 +553,7 @@ Visibility für Gruppen
     #repeatSelectBoxItContainer.selectboxit-container .selectboxit-options {width: 70px;}
     .radio+label{ 
        /* height: 25px;/*ToDo Buttonhöhe verringern*/
-    }​
+    }
 
         
 </style>
@@ -628,7 +626,7 @@ Visibility für Gruppen
             </div>
             <div id="visibilityDrop">
                 <select id="visibility">
-                
+               
                 </select> 
             </div>
             <div id="prioLabel" data-lang='PRIORITY' class='lang' >

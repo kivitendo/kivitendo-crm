@@ -887,46 +887,46 @@ EOT;
     $LVID = '<link id="'.$_SESSION['theme'].'" rel="stylesheet" type="text/css" href="';
     $LN = '">'."\n";
     $head = array(
-        'JQTABLE'       => $LV.$_SESSION['baseurl'].'crm/jquery-plugin/tablesorter-master/css/theme.jui.css'.$LN.
-                           $LV.$_SESSION['baseurl'].'crm/jquery-plugin/tablesorter-master/addons/pager/jquery.tablesorter.pager.css'.$LN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugin/tablesorter-master/js/jquery.tablesorter.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugin/tablesorter-master/js/jquery.tablesorter.widgets.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugin/tablesorter-master/addons/pager/jquery.tablesorter.pager.js'.$SN.
+        'JQTABLE'       => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/css/theme.jui.css'.$LN.
+                           $LV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/addons/pager/jquery.tablesorter.pager.css'.$LN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/js/jquery.tablesorter.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/js/jquery.tablesorter.widgets.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/addons/pager/jquery.tablesorter.pager.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/js/tablesorter.js'.$SN,
-        'JQTABLE-BUILD' => $SV.$_SESSION['baseurl'].'crm/jquery-plugin/tablesorter-master/js/widgets/widget-build-table.js'.$SN, // Achtung class="tablesorter" nicht verwenden
-        'JQBOX'         => $SV.$_SESSION['baseurl'].'/crm/jquery-plugin/selectBoxIt/selectBoxIt.js'.$SN,
-        'JQTIMECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-plugin/timepicker-master/jquery.ui.timepicker.css'.$LN,
-        'JQTIME'        => $SV.$_SESSION['baseurl'].'crm/jquery-plugin/timepicker-master/jquery.ui.timepicker.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugin/timepicker-master/i18n/jquery.ui.timepicker-'.$_SESSION['countrycode'].'.js'.$SN,
-        'JQFILEUP'      => $LV.$_SESSION['baseurl'].'crm/jquery-plugin/FileUpload/css/jquery.fileupload-ui.css'.$LN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugin/FileUpload/js/jquery.iframe-transport.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugin/FileUpload/js/jquery.fileupload.js'.$SN,
+        'JQTABLE-BUILD' => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tablesorter-master/js/widgets/widget-build-table.js'.$SN, // Achtung class="tablesorter" nicht verwenden
+        'JQBOX'         => $SV.$_SESSION['baseurl'].'/crm/jquery-plugins/selectBoxIt/selectBoxIt.js'.$SN,
+        'JQTIMECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/timepicker-master/jquery.ui.timepicker.css'.$LN,
+        'JQTIME'        => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/timepicker-master/jquery.ui.timepicker.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/timepicker-master/i18n/jquery.ui.timepicker-'.$_SESSION['countrycode'].'.js'.$SN,
+        'JQFILEUP'      => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/FileUpload/css/jquery.fileupload-ui.css'.$LN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/FileUpload/js/jquery.iframe-transport.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/FileUpload/js/jquery.fileupload.js'.$SN,
         'JQWIDGET'      => $SV.$_SESSION['baseurl'].'crm/jquery-ui/ui/minified/jquery.ui.widget.min.js'.$SN,
         'THEME'         => ($_SESSION['theme']!='')? $LVID .$_SESSION['baseurl'].'crm/jquery-themes/'.$_SESSION['theme'].'/jquery-ui.css'.$LN:'<link id="blue-style" rel="stylesheet" type="text/css" href="'.$_SESSION['baseurl'].'crm/jquery-themes/blue-style/jquery-ui.css'.$LN,
         'CRMCSS'        => $LV.$_SESSION['baseurl'].'crm/css/'.$_SESSION["stylesheet"].'/main.css'.$LN,
-        'BOXCSS'        => $LV.$_SESSION['baseurl'].'crm/jquery-plugin/selectBoxIt/selectBoxIt.css'.$LN,
-        'JUI-DROPDOWN'  => $LV.$_SESSION['baseurl'].'crm/jquery-plugin/jui_dropdown-master/jquery.jui_dropdown.css'.$LN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugin/jui_dropdown-master/jquery.jui_dropdown.min.js'.$SN,
+        'BOXCSS'        => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/selectBoxIt/selectBoxIt.css'.$LN,
+        'JUI-DROPDOWN'  => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/jui_dropdown-master/jquery.jui_dropdown.css'.$LN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jui_dropdown-master/jquery.jui_dropdown.min.js'.$SN,
         'CRMPATH'       => $_SESSION['baseurl'].'crm/',
-        'FULLCALCSS'    => $LV.$_SESSION['baseurl'].'crm/jquery-plugin/fullcalendar2/fullcalendar.css'.$LN.
-                           $LV.$_SESSION['baseurl'].'crm/jquery-plugin/fullcalendar2/fullcalendar.print.css" media="print'.$LN,
-        'FULLCALJS'     => $SV.$_SESSION['baseurl'].'crm/jquery-plugin/fullcalendar2/lib/moment.min.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugin/fullcalendar2/fullcalendar.min.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugin/fullcalendar2/lang/'.$_SESSION['countrycode'].'.js'.$SN,
-        'COLORPICKERCSS'=> $LV.$_SESSION['baseurl'].'crm/jquery-plugin/colorPicker/syronex-colorpicker.css'.$LN,
-        'COLORPICKERJS' => $SV.$_SESSION['baseurl'].'crm/jquery-plugin/colorPicker/syronex-colorpicker.js'.$SN,
-        'JTABLECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-plugin/jtable/themes/jqueryui/jtable_jqueryui.min.css'.$LN,
-        'JTABLEJS'      => $SV.$_SESSION['baseurl'].'crm/jquery-plugin/jtable/jquery.jtable.min.js'.$SN,
-        'JQCOOKIE'      => $SV.$_SESSION['baseurl'].'crm/jquery-plugin/jquery-cookie/jquery.cookie.js'.$SN,
-        'TINYMCE'       => $SV.$_SESSION['baseurl'].'crm/jquery-plugin/tinymce/tinymce.min.js'.$SN,
+        'FULLCALCSS'    => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/fullcalendar.css'.$LN.
+                           $LV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/fullcalendar.print.css" media="print'.$LN,
+        'FULLCALJS'     => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/lib/moment.min.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/fullcalendar.min.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fullcalendar2/lang/'.$_SESSION['countrycode'].'.js'.$SN,
+        'COLORPICKERCSS'=> $LV.$_SESSION['baseurl'].'crm/jquery-plugins/colorPicker/syronex-colorpicker.css'.$LN,
+        'COLORPICKERJS' => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/colorPicker/syronex-colorpicker.js'.$SN,
+        'JTABLECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/jtable/themes/jqueryui/jtable_jqueryui.min.css'.$LN,
+        'JTABLEJS'      => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jtable/jquery.jtable.min.js'.$SN,
+        'JQCOOKIE'      => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-cookie/jquery.cookie.js'.$SN,
+        'TINYMCE'       => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tinymce/tinymce.min.js'.$SN,
         'DATEPICKER'    => $_SESSION['countrycode'] == 'de' ? $SV.$_SESSION['baseurl'].'js/jquery/ui/i18n/jquery.ui.datepicker-de.js'.$SN : '',
-        'JQCALCULATOR'  => $LV.$_SESSION['baseurl'].'crm/jquery-plugin/jquery-calculator/jquery.calculator.css'.$LN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugin/jquery-calculator/jquery.plugin.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugin/jquery-calculator/jquery.calculator.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugin/jquery-calculator/jquery.calculator-'.$_SESSION['countrycode'].'.js'.$SN,
-        'FANCYBOX'      => $LV.$_SESSION['baseurl'].'crm/jquery-plugin/fancybox/source/jquery.fancybox.css'.$LN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugin/fancybox/source/jquery.fancybox.pack.js'.$SN,
-        'QRCODE'        => $SV.$_SESSION['baseurl'].'crm/jquery-plugin/qrcode/jquery.qrcode-0.12.0.js'.$SN,
+        'JQCALCULATOR'  => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.css'.$LN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.plugin.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator-'.$_SESSION['countrycode'].'.js'.$SN,
+        'FANCYBOX'      => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/fancybox/source/jquery.fancybox.css'.$LN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fancybox/source/jquery.fancybox.pack.js'.$SN,
+        'QRCODE'        => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/qrcode/jquery.qrcode-0.12.0.js'.$SN,
         'TOOLS'         =>  $tools,
         'JQTABLE-PAGER' => $pager
         );

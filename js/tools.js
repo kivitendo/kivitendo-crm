@@ -1,11 +1,14 @@
 $( document ).ready( function(){
+    var headline = $(".tools");
+    var myposition = headline.position();
+    myposition.top += 21;
     $( ".tools" ).before(
         '<div class="calculator_dialog"><div class="calculator"></div></div>' +
         '<div class="postit_dialog"><div class="postit">Notizblock</div></div>' +
         '<div class="translator_dialog"><div class="translator"><input class="translator_input" style="margin-right: 10";>' +
         '<button class="translator_button">translate</button><button class="translator_swap"></button>' +
         '<div><table class="result_table tablesorter" style="visibility: hidden"><thead></thead><tbody class="tbody"></tbody></table></div></div></div>' +
-        '<div class="tools" style="position:absolute; top: +20; left:900;">' +
+        '<div class="tools" style="position:absolute; top:' + myposition.top + '; left:900;">' +
         '<img src="tools/rechner.png" class="calculator_img" title=".:simple calculator:.">' +
         '<img src="tools/notiz.png" class="postit_img" title=".:postit notes:." style="margin-left: 20;">' +
         '<img src="tools/kalender.png" class="calendar_img" title=".:calendar:." style="margin-left: 20;">' +

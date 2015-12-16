@@ -188,7 +188,7 @@ echo '
             <li><a href="#tab-4">Personensuche</a></li>
         </ul>
         <div id="tab-1">
-            <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">'.translate('.:fast search customer/vendor/contacts and contact history:.','firma').'</p>
+            <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">'.translate('.:fast search customer/vendor/contacts and contact history:.','firma').'</p>
             <form name="suche" id="suche" action="" method="get">
                 <input type="text" name="swort" size="25" id="ac0" autocomplete="off">
                 <button id="adress"> '.translate('.:adress:.','firma').'</button>
@@ -220,7 +220,7 @@ echo '
 ';
 
 echo $menu['end_content'];
-
+echo $head['TOOLS'];
 ob_end_flush();
 ?>
 </body>

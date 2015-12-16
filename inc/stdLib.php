@@ -343,14 +343,16 @@ function getUserEmployee($keys) {
     $sql .= 'SELECT key,val FROM crmdefaults ';
     $sql .= 'UNION ';
     $sql .= 'SELECT \'msignature\' as key, signature as val FROM defaults';
-    $rs   = $GLOBALS['db']->getAll($sql);
+    //$rs   = $GLOBALS['db']->getAll($sql); //ToDo funktioniert leider nicht
+    $rs   = $_SESSION['db']->getAll($sql);
     $tmp = array();
     if ( $rs ) foreach ($rs as $row) $tmp[$row['key']] = $row['val'];
     return $tmp;
 }
 function getCRMdefault() {
     $sql = "SELECT key,val FROM crmdefaults WHERE grp = 'mandant'";
-    $rs   = $GLOBALS['db']->getAll($sql);
+    //$rs   = $GLOBALS['db']->getAll($sql); //ToDo funktioniert leider nicht
+    $rs   = $_SESSION['db']->getAll($sql);
     $tmp = array();
     if ( $rs ) foreach ($rs as $row) $tmp[$row['key']] = $row['val'];
     return $tmp;
@@ -863,14 +865,14 @@ function mkHeader(){
         'JQCOOKIE'      => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-cookie/jquery.cookie.js'.$SN,
         'TINYMCE'       => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tinymce/tinymce.min.js'.$SN,
         'DATEPICKER'    => $_SESSION['countrycode'] == 'de' ? $SV.$_SESSION['baseurl'].'js/jquery/ui/i18n/jquery.ui.datepicker-de.js'.$SN : '',
-        'JQCALCULATOR'  => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.css'.$LN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.plugin.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator-'.$_SESSION['countrycode'].'.js'.$SN,
         'FANCYBOX'      => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/fancybox/source/jquery.fancybox.css'.$LN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fancybox/source/jquery.fancybox.pack.js'.$SN,
         'QRCODE'        => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/qrcode/jquery.qrcode-0.12.0.js'.$SN,
-        'TOOLS'         => $SV.$_SESSION['baseurl'].'crm/js/tools.js'.$SN,
+        'TOOLS'         => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.css'.$LN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.plugin.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator-'.$_SESSION['countrycode'].'.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/js/tools.js'.$SN,
         'JQTABLE-PAGER' => $pager
         );
 
@@ -895,7 +897,6 @@ function doHeader(&$t) {
         'BOXCSS'        => $head['BOXCSS'],
         'JQBOX'         => $head['JQBOX'],
         'DATEPICKER'    => $head['DATEPICKER'],
-        'JQCALCULATOR'  => $head['JQCALCULATOR'],
         'FANCYBOX'      => $head['FANCYBOX'],
         'QRCODE'        => $head['QRCODE'],
         'TOOLS'         => $head['TOOLS']

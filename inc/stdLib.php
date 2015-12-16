@@ -21,7 +21,7 @@ function printArray( $array ){
     print_r( $array );
     echo '</pre>';
 }
-if ( isset ($_SESSION['db']) ) 
+if ( isset ($_SESSION['db']) )
     $GLOBALS['db'] = $_SESSION['db']; // Das muß noch raus!!! Aber erst wenn alles auf GLOBALS umgestellt ist
 
 if ( !isset($_SESSION['dbhost']) ) {
@@ -291,7 +291,7 @@ function chkdir($dir,$p="") {
         $dir_mode = '0755';
     } else {
         $dir_mode = $tmpdata['dir_mode'];
-    };    
+    };
     if ( isset($_SESSION['crmpath']) && file_exists($_SESSION['crmpath']."/dokumente/".$_SESSION["dbname"]."/".$dir) ) {
         return $_SESSION['crmpath']."/dokumente/".$_SESSION["dbname"]."/".$dir;
     } else {
@@ -304,7 +304,7 @@ function chkdir($dir,$p="") {
                 if ( is_writeable($_SESSION['crmpath'].$tmp.$dir) )
                     $ok = @mkdir($_SESSION['crmpath']."/dokumente/$tmp".$dir, $dir_mode);
                 if ( is_writeable($_SESSION['crmpath'].$tmp.$dir) )
-                    if ( isset($tmpdata['dir_group']) && $tmpdata['dir_group'] && $ok ) 
+                    if ( isset($tmpdata['dir_group']) && $tmpdata['dir_group'] && $ok )
                         @chgrp($_SESSION['crmpath']."/dokumente/$tmp".$dir,$tmpdata['dir_group']);
                 if ( !$ok ) {
                     return false;
@@ -808,68 +808,70 @@ function  doBlock(&$t,$tpl,$liste,$pre,$data,$id,$text,$selid) {
         $t->parse('Block'.$pre,$liste,true);
     }
 }
-function mkHeader() {
+function mkHeader(){ //ToDo in separate Datei tools.js auslagern
     $tools = <<<'EOT'
         $( ".tools" ).before(
             '<div class="calculator_dialog"><div class="calculator"></div></div>' +
             '<div class="postit_dialog"><div class="postit">Notizblock</div></div>' +
-            '<div class="translator_dialog"><div class="translator"><input class="translator_input">' +
-            '<button class="translator_button">translate</button><div><table class="result_table tablesorter"></table></div></div></div>' +
+            '<div class="translator_dialog"><div class="translator"><input class="translator_input" style="margin-right: 10";>' +
+            '<button class="translator_button">translate</button><button class="translator_swap"></button>' +
+            '<div><table class="result_table tablesorter" style="visibility: hidden"><thead></thead><tbody class="tbody"></tbody></table></div></div></div>' +
             '<div class="tools" style="position:absolute; top: +20; left:900;">' +
             '<img src="tools/rechner.png" class="calculator_img" title=".:simple calculator:.">' +
             '<img src="tools/notiz.png" class="postit_img" title=".:postit notes:." style="margin-left: 20;">' +
             '<img src="tools/kalender.png" class="calendar_img" title=".:calendar:." style="margin-left: 20;">' +
             '<img src="tools/leo.png" class="translator_img" title="LEO .:english/german:." style="margin-left: 20;"></div>'
             );
+            var langpair = 'en|de';
+            $( ".translator_swap" ).append('<img  src="image/swap.gif" />').button().on( 'click', function(){
+               var title = $( ".translator_dialog" ).dialog( "option", "title"  );
+               $( ".translator_dialog" ).dialog( "option", "title", title ==  'Übersetzer en -> de' ? 'Translator de -> en' : 'Übersetzer en -> de');
+               langpair = langpair == 'en|de' ? 'de|en' : 'en|de';
+            }) ;
 
-            $('.translator_input').addClass("ui-widget ui-widget-content ui-corner-all");
-            $('.translator_button').button().on( 'click', function(){
-                $.getJSON( 'http://mymemory.translated.net/api/get?q=' + $('.translator_input').val() + '&langpair=en|' + kivi.myconfig.countrycode, function( data ) {
-                    //console.log( JSON.stringify(data.matches) );
-                    //var result = '<table class="myTable">';
-                   // var row = $("<tr>");
-                    $.each( data.matches, function( index, value ) {
-                        //result += '<tr><td>' + value.segment + '</td><td>' + value.translation + '</td></tr>';
-                         $(".result_table").append("<tr><td>" +  value.segment + "</td><td>" + value.translation + "</td></tr>");
-                    });
-                    //result += '</table>';
-                    $( '.translator_result' ).html( result );
-
-                    //alert('http://mymemory.translated.net/api/get?q=Cat&langpair=en|de' + $('.translator_input').val() );
-                });
+            $( '.translator_input' ).addClass( "ui-widget ui-widget-content ui-corner-all" ).keypress( function( e ){
+                if( e.which == 13 ) $( '.translator_button' ).click();
             });
-            $(".calculator").calculator({
+            $( '.translator_button' ).button().on( 'click', function(){
+                $( ".tbody" ).empty();
+                $.getJSON( 'http://mymemory.translated.net/api/get?q=' + $( '.translator_input' ).val() + '&langpair=' + langpair, function( data ) {
+                    $.each( data.matches, function( index, value ){
+                        $( ".tbody" ).append( "<tr><td style='font-size: 0.88em';background-color: #abc; >" +  value.segment + "</td><td style='font-size: 0.88em'>" + value.translation + "</td></tr>" );
+                    });
+                }).done( function(){ $( '.result_table' ).css('visibility', 'visible').tablesorter().trigger( 'update' ) });
+            });
+            $( ".calculator" ).calculator({
                 useThemeRoller: true,
                 layout: $.calculator.scientificLayout,
             });
-            $(".calculator_dialog").dialog({
+            $( ".calculator_dialog" ).dialog({
                 autoOpen: false,
                 title: 'Calcutator',
-                width:'auto',
+                width: "360px",
                 resizable: false
             });
-            $(".postit_dialog").dialog({
+            $( ".postit_dialog" ).dialog({
                 autoOpen: false,
                 title: 'Post it!',
                 width:'auto',
                 resizable: false
             });
-            $(".translator_dialog").dialog({
+            $( ".translator_dialog" ).dialog({
                 autoOpen: false,
-                title: 'Translator!',
-                width:'auto',
+                title: 'Übersetzer en -> de',
+                width:'390px',
                 resizable: false
             });
-            $(".calculator_img").on("click", function () {
+            $( ".calculator_img" ).on("click", function(){
                 $( ".calculator_dialog" ).dialog( "open" );
             });
-            $(".postit_img").on("click", function () {
+            $( ".postit_img" ).on( "click", function(){
                 $( ".postit_dialog" ).dialog( "open" );
             });
-            $(".calendar_img").on("click", function () {
+            $( ".calendar_img" ).on("click", function(){
                 window.location.href = "calendar.phtml";
             });
-            $(".translator_img").on("click", function () {
+            $( ".translator_img" ).on("click", function(){
                 $( ".translator_dialog" ).dialog( "open" );
             });
 EOT;

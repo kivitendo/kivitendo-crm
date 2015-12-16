@@ -173,7 +173,7 @@
                 heightStyle: "auto",
                 active: {kdviewli}
             });
-           {TOOLS}
+
 
             $(function() {
                 $( "#right_tabs" ).tabs({
@@ -462,5 +462,6 @@
 </div>
 </div>
 {END_CONTENT}
+{TOOLS}
 </body>
 </html>

@@ -11,13 +11,13 @@ while( list($key,$val) = each($_SESSION) ) {
 
 $_SESSION['ERP_BASE_URL']  = $ERP_BASE_URL;
 $_SESSION['erpConfigFile'] = $erpConfigFile;
-$_SESSION['ERPNAME']       = $ERPNAME;
+$path_parts = pathinfo($_SERVER['CONTEXT_DOCUMENT_ROOT']);
+$_SESSION['ERPNAME'] = $path_parts[basename];
 
 // Beim Setzen von crmpath muss zwingend darauf geachtet werden, dass man sich nicht in einem Unterverzeichnis befindet.
 // Bem.: Da am Ende des von getcwd() zurück gegeben Strings kein Slash steht funktioniert dirname() hier.
 // aus /root/kivitendo/inc wird /root/kivitendo 
-$basepath = substr(__DIR__,0,-3).'../'.$_SESSION['ERPNAME'];
-$_SESSION['crmpath'] = $basepath;
+$_SESSION['crmpath'] = $_SERVER['CONTEXT_DOCUMENT_ROOT'];
 $conffile = $_SESSION['crmpath'].'/config/'.$erpConfigFile.'.conf';
 if ( is_file($conffile) ) {
     $tmp = anmelden();

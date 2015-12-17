@@ -1,6 +1,7 @@
 <?php
 if(!isset($_SESSION)) session_start();
-$basepath = substr(__DIR__,0,-17).$_SESSION['ERPNAME'];  //ACHTUNG fuktioniert nicht nach dem die SESSION gelöscht wurde (delsess.php)
+$basepath = $_SERVER['CONTEXT_DOCUMENT_ROOT'];
+$_SESSION['crmpath'] = $basepath;
 $inclpath = ini_get('include_path');
 ini_set('include_path',$inclpath.":".$basepath.'crm/inc'.":".$basepath.'crm/jqhelp');
 
@@ -17,7 +18,6 @@ if ( isset($_SESSION['php_error']) && $_SESSION['php_error'] ) {
     error_reporting (E_ALL & ~E_DEPRECATED);
     ini_set ('display_errors',1);
 }
-$_SESSION['crmpath'] = $basepath;
 
 //if ( isset ($_SESSION['db']) )
 //    $GLOBALS['db'] = $_SESSION['db']; // Das muß noch raus!!! Aber erst wenn alles auf GLOBALS umgestellt ist

@@ -15,10 +15,10 @@ if(!isset($_SESSION)) session_start();
 if ( isset($_SESSION['php_error']) && $_SESSION['php_error'] ) {
     error_reporting (E_ALL & ~E_DEPRECATED);
     ini_set ('display_errors',1);
-} 
+}
 $_SESSION['crmpath'] = $basepath;
 
-//if ( isset ($_SESSION['db']) ) 
+//if ( isset ($_SESSION['db']) )
 //    $GLOBALS['db'] = $_SESSION['db']; // Das muß noch raus!!! Aber erst wenn alles auf GLOBALS umgestellt ist
 if ( isset($_SESSION['connect']) && $_SESSION['connect'] != '' ) {
     $db = new myDB(unserialize(base64_decode($_SESSION['connect'])));
@@ -27,8 +27,12 @@ if ( isset($_SESSION['connect']) && $_SESSION['connect'] != '' ) {
 } else {
     require_once "login.php";
 }
-
-
+/*** zum debuggen Arrays schön formatiert ausgeben ***/
+function printArray( $array ){
+    echo '<pre>';
+    print_r( $array );
+    echo '</pre>';
+}
 /****************************************************
 * db2date
 * in: Datum = String
@@ -75,7 +79,7 @@ function translate($word,$file) {
     }
 }
 //function chksesstime($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$session,$sesstime) {
-function chksesstime($dbcon) { 
+function chksesstime($dbcon) {
     $db   = new myDB($dbcon);
     $sql  = "SELECT * FROM auth.session WHERE = '$session'";
     $rs   = $db->getOne($sql);
@@ -117,7 +121,7 @@ function authuser($dbcon,$cookie) {
         $auth = array_merge($auth,$rs);
     } else {
         return false;
-    }    
+    }
     //Nur die Gruppen die den angemeldete Benutzer zugeordnet sind hinzufügen
     $sql="SELECT grp.id AS value, name AS text FROM auth.group AS grp
                    INNER JOIN auth.user_group
@@ -218,7 +222,7 @@ function anmelden() {
     $dbcon['dbuser']   = $dbuser;
     $dbcon['dbpasswd'] = $dbpasswd;
     $dbcon['dbname']   = $dbname;
-    $auth = authuser($dbcon,$cookie);    
+    $auth = authuser($dbcon,$cookie);
     if ( !$auth ) {  return false; };                    // Anmeldung des Users fehlgeschlagen
     foreach ($auth as $key=>$val) $_SESSION[$key] = $val;                // Mandanten + Userdaten in Session speichern
     $_SESSION["sessid"] = $cookie;
@@ -232,7 +236,7 @@ function anmelden() {
     $dbcon['dbuser']         = $auth['dbuser'];
     $dbcon['dbpasswd']       = $auth['dbpasswd'];
     $dbcon['dbname']         = $auth['dbname'];
-    $GLOBALS['db']           = new myDB($dbcon);    
+    $GLOBALS['db']           = new myDB($dbcon);
     if( !$GLOBALS['db'] ) {
         echo "Fehler";
         return false;
@@ -280,7 +284,7 @@ function chkdir($dir,$p="") {
         $dir_mode = '0755';
     } else {
         $dir_mode = $tmpdata['dir_mode'];
-    };    
+    };
     if ( isset($_SESSION['crmpath']) && file_exists($_SESSION['crmpath']."/dokumente/".$_SESSION["dbname"]."/".$dir) ) {
         return $_SESSION['crmpath']."/dokumente/".$_SESSION["dbname"]."/".$dir;
     } else {
@@ -293,7 +297,7 @@ function chkdir($dir,$p="") {
                 if ( is_writeable($_SESSION['crmpath'].$tmp.$dir) )
                     $ok = @mkdir($_SESSION['crmpath']."/dokumente/$tmp".$dir, $dir_mode);
                 if ( is_writeable($_SESSION['crmpath'].$tmp.$dir) )
-                    if ( isset($tmpdata['dir_group']) && $tmpdata['dir_group'] && $ok ) 
+                    if ( isset($tmpdata['dir_group']) && $tmpdata['dir_group'] && $ok )
                         @chgrp($_SESSION['crmpath']."/dokumente/$tmp".$dir,$tmpdata['dir_group']);
                 if ( !$ok ) {
                     return false;
@@ -920,14 +924,14 @@ EOT;
         'JQCOOKIE'      => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-cookie/jquery.cookie.js'.$SN,
         'TINYMCE'       => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/tinymce/tinymce.min.js'.$SN,
         'DATEPICKER'    => $_SESSION['countrycode'] == 'de' ? $SV.$_SESSION['baseurl'].'js/jquery/ui/i18n/jquery.ui.datepicker-de.js'.$SN : '',
-        'JQCALCULATOR'  => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.css'.$LN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.plugin.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator-'.$_SESSION['countrycode'].'.js'.$SN,
         'FANCYBOX'      => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/fancybox/source/jquery.fancybox.css'.$LN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fancybox/source/jquery.fancybox.pack.js'.$SN,
         'QRCODE'        => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/qrcode/jquery.qrcode-0.12.0.js'.$SN,
-        'TOOLS'         =>  $tools,
+        'TOOLS'         => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.css'.$LN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.plugin.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator-'.$_SESSION['countrycode'].'.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/js/tools.js'.$SN,
         'JQTABLE-PAGER' => $pager
         );
 

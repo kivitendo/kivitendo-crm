@@ -5,21 +5,15 @@
 {JAVASCRIPTS}
 {THEME}
     <script language="JavaScript">
-    <!--
     function vcard() {
             f1=open("vcard.php?src=F","vcard","width=350,height=200,left=100,top=100");
-        }
+    }
     function suchFa() {
             val=document.neueintrag.konzernname.value;
             if (val=="") val="%";
             f1=open("suchFa.php?tab={Q}&konzernname="+val,"suche","width=350,height=200,left=100,top=100");
-        }
-    //-->
-    </script>
-    <script>
+    }
     $(document).ready( function(){
-
-    //dialog A
         $("#dialogmsg")
         .dialog({
             autoOpen: false,
@@ -39,9 +33,6 @@
             }
             return false;
         })
-
-    //dialog E
-
         $("#country").blur(function(){
             var country = $("#country").val();
             $.ajax({
@@ -68,45 +59,42 @@
                  }
             })
         })
-    });
-    $(document).ready(
-        function(){
-            $("#shiptoadress").change(function(){
-                id = $("#shiptoadress option:selected").val();
-                Q = $("#Q").val();
-                $.ajax({
-                    url: "jqhelp/firmaserver.php?task=shipto&id="+id+"&Q="+Q,
-                    dataType: 'json',
-                    success: function(data){
-                        $('#shipto_id').val(data.trans_id);
-                        $('#shiptoname').val(data.shiptoname);
-                        $('#shiptodepartment_1').val(data.shiptodepartment_1);
-                        $('#shiptodepartment_2').val(data.shiptodepartment_2);
-                        $('#shiptostreet').val(data.shiptostreet);
-                        $('#shiptocountry').val(data.shiptocountry);
-                        $('#shiptozipcode').val(data.shiptozipcode);
-                        $('#shiptocity').val(data.shiptocity);
-                        $('#shiptophone').val(data.shiptophone);
-                        $('#shiptofax').val(data.shiptofax);
-                        $('#shiptoemail').val(data.shiptoemail);
-                        $('#shiptocontact').val(data.shiptocontact);
-                        $('#shiptobland').val(data.shiptobland);
-                    }
-                })
+        $("#shiptoadress").change(function(){
+            id = $("#shiptoadress option:selected").val();
+            Q = $("#Q").val();
+            $.ajax({
+                url: "jqhelp/firmaserver.php?task=shipto&id="+id+"&Q="+Q,
+                dataType: 'json',
+                success: function(data){
+                    $('#shipto_id').val(data.trans_id);
+                    $('#shiptoname').val(data.shiptoname);
+                    $('#shiptodepartment_1').val(data.shiptodepartment_1);
+                    $('#shiptodepartment_2').val(data.shiptodepartment_2);
+                    $('#shiptostreet').val(data.shiptostreet);
+                    $('#shiptocountry').val(data.shiptocountry);
+                    $('#shiptozipcode').val(data.shiptozipcode);
+                    $('#shiptocity').val(data.shiptocity);
+                    $('#shiptophone').val(data.shiptophone);
+                    $('#shiptofax').val(data.shiptofax);
+                    $('#shiptoemail').val(data.shiptoemail);
+                    $('#shiptocontact').val(data.shiptocontact);
+                    $('#shiptobland').val(data.shiptobland);
+                }
             })
-            $( "#maintab" ).tabs({ heightStyle: "auto" });
-            $("#bneu").button();
-            $("#bclr").button();
-            $("#bcard").button();
-            $("#bsav").button();
-            $("#banz").button();
-            $("#greeting").selectmenu({ width: 80 });
-            $("#bland").selectmenu({ width: 130 });
-            $('form input:text').button().addClass( 'ui-textfield' ).css({
-                'background' : '#FFFFFF',
-                'text-align' : 'inherit'
-            });
+        })
+        $( "#maintab" ).tabs({ heightStyle: "auto" });
+        $("#bneu").button();
+        $("#bclr").button();
+        $("#bcard").button();
+        $("#bsav").button();
+        $("#banz").button();
+        $("#greeting").selectmenu({ width: 80 });
+        $("#bland").selectmenu({ width: 130 });
+        $('form input:text').button().addClass( 'ui-textfield' ).css({
+            'background' : '#FFFFFF',
+            'text-align' : 'inherit'
         });
+    });
     </script>
     <style type="text/css">
     .ui-selectmenu-button {
@@ -118,7 +106,7 @@
 {PRE_CONTENT}
 {START_CONTENT}
 <div class="ui-widget-content" style="height:615px">
-<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;"> {FAART} .:keyin:./.:edit:.</p>
+<p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;"> {FAART} .:keyin:./.:edit:.</p>
 <div id="dialogmsg"></div>
 <div id="maintab">
     <ul>
@@ -498,6 +486,8 @@
     <{GEO1}script type='text/javascript' src='inc/geosearchF.js'></script>
     <script type='text/javascript' src='inc/geosearch.js'></script{GEO2}>
     <{BLZ1}script type='text/javascript' src='inc/blzsearch.js'></script{BLZ2}>
+
 {END_CONTENT}
+{TOOLS}
 </body>
 </html>

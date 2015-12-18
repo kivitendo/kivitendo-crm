@@ -1,7 +1,7 @@
 <?php
 if(!isset($_SESSION)) session_start();
 $inclpath = ini_get('include_path');
-ini_set('include_path',$inclpath.":".$_SESSION['crmpath'].'inc'.":".$_SESSION['crmpath'].'jqhelp');
+ini_set('include_path',$inclpath.":".$_SESSION['crmpath'].'/inc'.":".$_SESSION['crmpath'].'/jqhelp');
 //echo $_SESSION['crmpath'];
 //echo "</br>";
 //echo $_SESSION['erppath'];

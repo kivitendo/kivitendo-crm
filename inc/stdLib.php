@@ -1,5 +1,6 @@
 <?php
-$basepath = substr(__DIR__,0,-7);  // solte /var/www/openkonto liefern
+if(!isset($_SESSION)) session_start();
+$basepath = substr(__DIR__,0,-17).$_SESSION['ERPNAME'];  //ACHTUNG fuktioniert nicht nach dem die SESSION gelöscht wurde (delsess.php)
 $inclpath = ini_get('include_path');
 ini_set('include_path',$inclpath.":".$basepath.'crm/inc'.":".$basepath.'crm/jqhelp');
 
@@ -10,7 +11,7 @@ ini_set('session.bug_compat_42', 0);  // Das ist natürlich lediglich eine Provi
 //Warning: Unknown: Your script possibly relies on a session side-effect which existed until PHP 4.2.3. ....
 session_set_cookie_params(480*60); //480*60
 
-if(!isset($_SESSION)) session_start();
+
 
 if ( isset($_SESSION['php_error']) && $_SESSION['php_error'] ) {
     error_reporting (E_ALL & ~E_DEPRECATED);

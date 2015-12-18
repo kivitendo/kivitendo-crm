@@ -1,18 +1,16 @@
 <?php
 if(!isset($_SESSION)) session_start();
-$basepath = $_SERVER['CONTEXT_DOCUMENT_ROOT'];
-$_SESSION['crmpath'] = $basepath;
 $inclpath = ini_get('include_path');
-ini_set('include_path',$inclpath.":".$basepath.'crm/inc'.":".$basepath.'crm/jqhelp');
-
+ini_set('include_path',$inclpath.":".$_SESSION['crmpath'].'inc'.":".$_SESSION['crmpath'].'jqhelp');
+//echo $_SESSION['crmpath'];
+//echo "</br>";
+//echo $_SESSION['erppath'];
 require 'mdb.php';
 
 ini_set('session.bug_compat_warn', 0);// Warnung für Sessionbug in neueren Php-Versionen abschalten.
 ini_set('session.bug_compat_42', 0);  // Das ist natürlich lediglich eine Provirorische Lösung.
 //Warning: Unknown: Your script possibly relies on a session side-effect which existed until PHP 4.2.3. ....
 session_set_cookie_params(480*60); //480*60
-
-
 
 if ( isset($_SESSION['php_error']) && $_SESSION['php_error'] ) {
     error_reporting (E_ALL & ~E_DEPRECATED);

@@ -3266,27 +3266,27 @@ function getIOQ($fid,$Q,$type,$close){
 }
 
 //TODO
-function ERPUser() {
+function ERPNutzer() {
 }
 //TODO
-function ERPGroup() {
+function ERPGruppe() {
 }
 // Gibt ein Array mit allen Nutzern einer angegebenen Grupppe zurück
-function ERPUsersfromGroup($grp_name) {
+function ERPNutzerVonGruppe($grp_name) {
 	$rueck;
 	$i = 0;
 	$grp_id = '';
 	//Gruppen ID herausfiltern
-	foreach ( $_SESSION['all_groups'] as $key => $gruppe ) {
+	foreach ( $_SESSION['erp_gruppen'] as $key => $gruppe ) {
         if($gruppe['grp_name'] == $grp_name) {
         	$grp_id = $gruppe['grp_id'];
         }
     }
     //Rückgabe-Array zusammensetzen
-	foreach ( $_SESSION['all_assignments'] as $key => $zuordnung ) {
+	foreach ( $_SESSION['erp_zuordnung'] as $key => $zuordnung ) {
 		if($zuordnung['group_id'] == $grp_id) {
 			$user_id = $zuordnung['user_id'];
-			foreach ( $_SESSION['all_users'] as $key => $nutzer ) {
+			foreach ( $_SESSION['erp_nutzer'] as $key => $nutzer ) {
 					if($nutzer['user_id'] == $user_id) {
 						$rueck[$i] = array("id"=>$user_id,"login"=>$nutzer['login'],"name"=>$nutzer['name']);
 						$i++;

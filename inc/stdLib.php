@@ -155,13 +155,13 @@ function authuser($dbcon,$cookie) {
     $rsa =  $db->getOne($sql);
     $auth['token'] = $rsa['api_token'];
     // Benutzer/Gruppen/Gruppenzuordnung aus der ERP als Arrays in Session schreiben
-    $sql_alle_nutzer  = "SELECT usr.id AS user_id, usr.login, usrc.cfg_value AS name FROM auth.user AS usr ";
-    $sql_alle_nutzer .= "INNER JOIN auth.user_config AS usrc ON usr.id = usrc.user_id WHERE usrc.cfg_key = 'name' ORDER by usr.id";
-    $sql_alle_gruppen = "SELECT grp.id AS grp_id, grp.name AS grp_name FROM auth.group AS grp ORDER by grp.id";
-    $sql_alle_zuordnung = "SELECT usrg.user_id AS user_id, usrg.group_id AS group_id FROM auth.user_group AS usrg ORDER by usrg.user_id";
-    $auth['alle_nutzer']    = $db->getAll( $sql_alle_nutzer);
-    $auth['alle_gruppen']   = $db->getAll( $sql_alle_gruppen);
-    $auth['alle_zuordnung'] = $db->getAll( $sql_alle_zuordnung);
+    $sql_all_users  = "SELECT usr.id AS user_id, usr.login, usrc.cfg_value AS name FROM auth.user AS usr ";
+    $sql_all_users .= "INNER JOIN auth.user_config AS usrc ON usr.id = usrc.user_id WHERE usrc.cfg_key = 'name' ORDER by usr.id";
+    $sql_all_groups = "SELECT grp.id AS grp_id, grp.name AS grp_name FROM auth.group AS grp ORDER by grp.id";
+    $sql_all_assignments = "SELECT usrg.user_id AS user_id, usrg.group_id AS group_id FROM auth.user_group AS usrg ORDER by usrg.user_id";
+    $auth['all_users']    = $db->getAll( $sql_all_users);
+    $auth['all_groups']   = $db->getAll( $sql_all_groups);
+    $auth['all_assignments'] = $db->getAll( $sql_all_assignments);
     unset($db);
     return $auth;
 }

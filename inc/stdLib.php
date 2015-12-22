@@ -231,17 +231,17 @@ function anmelden() {
     $_SESSION["sesstime"] = $sesstime;
     // Benutzer/Gruppen/Gruppenzuordnung aus der ERP als Arrays in Session schreiben
     $db_new   = new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
-    $sql_alle_nutzer = "SELECT usr.id AS user_id, usr.login, usrc.cfg_value AS name FROM auth.user AS usr INNER JOIN auth.user_config AS usrc ON usr.id = usrc.user_id WHERE usrc.cfg_key = 'name' ORDER by usr.id";
-    $sql_alle_gruppen = "SELECT grp.id AS grp_id, grp.name AS grp_name FROM auth.group AS grp ORDER by grp.id";
-    $sql_alle_zuordnung = "SELECT usrg.user_id AS user_id, usrg.group_id AS group_id FROM auth.user_group AS usrg ORDER by usrg.user_id";
-    $alle_nutzer = $db_new->getAll( $sql_alle_nutzer);
-    $alle_gruppen = $db_new->getAll( $sql_alle_gruppen);
-    $alle_zuordnung = $db_new->getAll( $sql_alle_zuordnung);
+    $sql_all_users = "SELECT usr.id AS user_id, usr.login, usrc.cfg_value AS name FROM auth.user AS usr INNER JOIN auth.user_config AS usrc ON usr.id = usrc.user_id WHERE usrc.cfg_key = 'name' ORDER by usr.id";
+    $sql_all_groups = "SELECT grp.id AS grp_id, grp.name AS grp_name FROM auth.group AS grp ORDER by grp.id";
+    $sql_all_assignments = "SELECT usrg.user_id AS user_id, usrg.group_id AS group_id FROM auth.user_group AS usrg ORDER by usrg.user_id";
+    $all_users = $db_new->getAll( $sql_all_users);
+    $all_groups = $db_new->getAll( $sql_all_groups);
+    $all_assignments = $db_new->getAll( $sql_all_assignments);
     // $_SESSSION['ok'] da anmelden 2x durchlaufen wird ?? Bessere Lösung ?
     if(!$_SESSION['ok']) {
-        $_SESSION['erp_nutzer'] = $alle_nutzer;
-        $_SESSION['erp_gruppen'] = $alle_gruppen;
-        $_SESSION['erp_zuordnung'] = $alle_zuordnung;
+        $_SESSION['all_erp_users'] = $all_users;
+        $_SESSION['all_erp_groups'] = $all_groups;
+        $_SESSION['all_erp_assignments'] = $all_assignments;
     }
     $_SESSION['ok'] = "1";
     // Mit der Mandanten-DB verbinden

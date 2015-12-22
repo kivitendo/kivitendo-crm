@@ -33,16 +33,16 @@
         } else {
             $rc[0]=-1; $rc[1]="Kein Bestandskunde";
         }
-        $btn1="<input id='bsav' type='submit' class='sichern' name='save' value='sichern' tabindex='90'>";
-        $btn2="<input id='banz' type='submit' class='anzeige' name='show' value='zur Anzeige' tabindex='91'>";
+        $btn1="<input id='bsav' type='submit' class='sichern' name='save' value='sichern' tabindex='90'>&nbsp;";
+        $btn2="<input id='banz' type='submit' class='anzeige' name='show' value='zur Anzeige' tabindex='91'>&nbsp;";
         vartpl ($t,$_POST,$Q,$msg,$btn1,$btn2,3);
     } else if ($_POST["show"]) {
         header("location:firma1.php?Q=$Q&id=".$_POST["id"]);
     } else if ($_GET["edit"]) {
         $daten=getFirmenStamm($_GET["id"],false,$Q);
         $msg="Edit: <b>".$_GET["id"]."</b>";
-        $btn1="<input type='submit' class='sichern' name='save' value='sichern' tabindex='90'>";
-        $btn2="<input type='submit' class='anzeige' name='show' value='zur Anzeige' tabindex='91'>";
+        $btn1="<input id='bsav' type='submit' class='sichern' name='save' value='sichern' tabindex='90'>&nbsp;";
+        $btn2="<input id='banz' type='submit' class='anzeige' name='show' value='zur Anzeige' tabindex='91'>&nbsp;";
         vartpl ($t,$daten,$Q,$msg,$btn1,$btn2,3);
     } else {
         leertpl($t,3,$_GET,"Neueingabe");

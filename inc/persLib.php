@@ -90,7 +90,7 @@ function getAllPerson($sw,$usePre=true) {
     if ($usePre) $Pre=$_SESSION["pre"];
     $rechte=berechtigung("cp_");
     if (!$sw[0]) { $where="cp_phone1 like '$Pre".$sw[1]."%' or cp_mobile1 like '$Pre".$sw[1]."%' "; }
-    else { $where="cp_name ilike '$Pre".$sw[1]."%' or cp_givenname ilike '$Pre".$sw[1]."%'"; }
+    else { $where="cp_name ilike '$Pre".$sw[1]."%' or cp_givenname ilike '$Pre".$sw[1]."%' or cp_stichwort1 ilike '$Pre".$sw[1]."%'"; }
     $sql="select *,'P' as tab,cp_id as id,cp_name as name  from contacts where ($where) and $rechte";
     $rs=$_SESSION['db']->getAll($sql);
     if($rs) return $rs;

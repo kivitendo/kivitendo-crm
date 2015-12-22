@@ -45,11 +45,14 @@ function getAllFirmen($sw,$usePre=true,$tab='C') {
         if ($sw[1]=="~") { //Firmenname beginnt nicht mit einem Buchstaben
             $where="upper(name) ~ '^\[^A-Z\].*$' or ";
             $where.="upper(department_1) ~ '^\[^A-Z\].*$' or ";
-            $where.="upper(department_2) ~ '^\[^A-Z\].*$' ";
+            $where.="upper(department_2) ~ '^\[^A-Z\].*$' or ";
+            $where.="upper(sw) ~ '^\[^A-Z\].*$' ";
+
         } else  {
             $where="name ilike '$Pre".$sw[1]."%' or ";
             $where.="department_1 ilike '$Pre".$sw[1]."%' or ";
-            $where.="department_2 ilike '$Pre".$sw[1]."%'";
+            $where.="department_2 ilike '$Pre".$sw[1]."%' or ";
+            $where.="sw ilike '$Pre".$sw[1]."%'";
         }
     }
     if ($tab=="C") {

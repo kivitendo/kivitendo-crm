@@ -360,7 +360,7 @@
         </div>
         <div class="zeile2">
             <span class="label klein">.:Catchword:.</span>
-            <span class="feldxx"><input type="text" name="sw" size="35" value="{sw}" maxlength="50" tabindex="3"></span>
+            <span class="feldxx"><input type="text" name="sw" size="35" value="{sw}" maxlength="100" tabindex="3"></span>
         </div>
         <div class="zeile2">
             <span class="label klein">.:homepage:.</span>

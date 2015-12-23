@@ -88,8 +88,8 @@
         $("#bcard").button();
         $("#bsav").button();
         $("#banz").button();
-        $("#greeting").selectmenu({ width: 80 });
-        $("#bland").selectmenu({ width: 130 });
+        $("#greeting").selectmenu({ width: 120});
+        $("#bland").selectmenu({ width: 200 });
         $('form input:text').button().addClass( 'ui-textfield' ).css({
             'background' : '#FFFFFF',
             'text-align' : 'inherit'
@@ -99,7 +99,6 @@
     <style type="text/css">
     .ui-selectmenu-button {
             vertical-align : middle;
-            margin-left: 1em;
         }
     </style>
 <body>
@@ -130,30 +129,31 @@
         <br />
         <div class="zeile2">
             <span class="label klein">.:greeting:.</span>
-            <span class="feldxx"> <input type="text" name="greeting_" id="greeting_" size="15" maxlength="75" value="{greeting_}" tabindex="1" >
+            <span class="feldxx">
                     <select name="greeting" id="greeting" tabindex="2">
-                        <option value="">
+                        <option value="">.:greeting:.
 <!-- BEGIN anreden -->
                         <option value="{Aid}" {Asel}>{Atext}
 <!-- END anreden -->
                     </select>
+                    <input type="text" name="greeting_" id="greeting_" size="15" maxlength="75" value="{greeting_}" tabindex="1" >
             </span>
         </div>
         <div class="zeile2">
             <span class="label klein">.:name:. </span>
-            <span class="feldxx"> <input type="text" name="name" id="myname" size="35" maxlength="75" value="{name}" tabindex="3"></span>
+            <span class="feldxx"> <input type="text" name="name" id="myname" size="42" maxlength="75" value="{name}" tabindex="3"></span>
         </div>
         <div class="zeile2">
             <span class="label klein">.:department:. 1</span>
-            <span class="feldxx"><input type="text" name="department_1" size="35" maxlength="75" value="{department_1}" tabindex="4"></span>
+            <span class="feldxx"><input type="text" name="department_1" size="42" maxlength="75" value="{department_1}" tabindex="4"></span>
         </div>
         <div class="zeile2">
             <span class="label klein">.:department:. 2</span>
-            <span class="feldxx"><input type="text" name="department_2" size="35" maxlength="75" value="{department_2}" tabindex="5"></span>
+            <span class="feldxx"><input type="text" name="department_2" size="42" maxlength="75" value="{department_2}" tabindex="5"></span>
         </div>
         <div class="zeile2">
             <span class="label klein">.:street:.</span>
-            <span class="feldxx"><input type="text" name="street" size="35" maxlength="75" value="{street}" tabindex="6"></span>
+            <span class="feldxx"><input type="text" name="street" size="42" maxlength="75" value="{street}" tabindex="6"></span>
         </div>
         <div class="zeile2">
             <span class="label klein">.:country:. / .:zipcode:.</span>
@@ -170,29 +170,29 @@
         </div>
         <div class="zeile2">
             <span class="label klein">.:city:.</span>
-            <span class="feldxx"><input type="text" id="city" name="city" size="35" maxlength="75" value="{city}" tabindex="10"></span>
+            <span class="feldxx"><input type="text" id="city" name="city" size="42" maxlength="75" value="{city}" tabindex="10"></span>
         </div>
         <div class="zeile2">
             <span class="label klein">.:phone:.</span>
-            <span class="feldxx"><input type="text" id="phone" name="phone" size="35" maxlength="30" value="{phone}" tabindex="11"></span>
+            <span class="feldxx"><input type="text" id="phone" name="phone" size="42" maxlength="30" value="{phone}" tabindex="11"></span>
         </div>
         <div class="zeile2">
             <span class="label klein">.:fax:.</span>
-            <span class="feldxx"><input type="text" name="fax" size="35" maxlength="30" value="{fax}" tabindex="12"></span>
+            <span class="feldxx"><input type="text" name="fax" size="42" maxlength="30" value="{fax}" tabindex="12"></span>
         </div>
         <div class="zeile2">
             <span class="label klein">.:email:.</span>
-            <span class="feldxx"><input type="text" name="email" size="35" maxlength="125" value="{email}" tabindex="13"></span>
+            <span class="feldxx"><input type="text" name="email" size="42" maxlength="125" value="{email}" tabindex="13"></span>
         </div>
         <div class="zeile2">
             <span class="label klein">.:Contacts:.</span>
-            <span class="feldxx"><input type="text" name="contact" size="35" maxlength="125" value="{contact}" tabindex="14"></span>
+            <span class="feldxx"><input type="text" name="contact" size="42" maxlength="125" value="{contact}" tabindex="14"></span>
         </div>
         <div class="zeile2">
             <span class="klein">.:Remarks:.</span><br>
             <textarea name="notes" cols="70" rows="3" tabindex="15">{notes}</textarea><br />
         </div>
-        <span style="position:absolute; left:35em; top:5em;text-align:left;">
+        <span style="position:absolute; left:40em; top:5em;text-align:left;">
             <div class="zeile2">
                 <span class="labelxx klein">Logo</span>
                 <span class="feldxx">

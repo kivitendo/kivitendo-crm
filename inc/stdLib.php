@@ -21,6 +21,11 @@ function printArray( $array ){
     print_r( $array );
     echo '</pre>';
 }
+//in terminal: tail -f tmp/log.txt
+function writeLog( $log ){
+    file_put_contents( '../tmp/log.txt', date("Y-m-d H:i:s -> " ).print_r( $log, TRUE )."\n", FILE_APPEND );
+}
+
 if ( !isset($_SESSION['dbhost']) ) {
     if ( !isset($erpConfigFile) ) $erpConfigFile = $erp;
     $_SESSION['ERPNAME'] = $ERPNAME;
@@ -844,6 +849,7 @@ function mkHeader() {
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator-'.$_SESSION['countrycode'].'.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/node_modules/postitall/dist/jquery.postitall.js'.$SN.
+                           //$SV.$_SESSION['baseurl'].'crm/node_modules/postitall/dist/jquery.postitall.ajax.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/js/tools.js'.$SN,
         'JQTABLE-PAGER' => $pager
         );

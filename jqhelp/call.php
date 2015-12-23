@@ -5,10 +5,7 @@
 *** begonnen im April 2011, Version 1.1.0                          ***
 *********************************************************************/
 
-require_once("../inc/conf.php");
-require_once("../inc/stdLib.php");
-
-$_GET['action']( isset( $_GET['data'] ) ? $_GET['data'] : '' ); //Funktion aufrufen
+require_once("../inc/ajax2function.php");
 
 function CreateFunctionsAndTable(){ //Legt beim ersten Aufruf der Datenbank die benötigten Tabellen und Funktionen an.
     global $db;

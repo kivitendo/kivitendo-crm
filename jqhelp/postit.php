@@ -1,12 +1,5 @@
 <?php
-
-require_once("../inc/conf.php");
-require_once("../inc/stdLib.php");
-
-( isset( $_GET['action'] ) and function_exists( $_GET['action'] ) ) or die( 'Param action or funtion: "'.array_shift( $_GET ).'" not defined' );
-$_GET['action']( isset( $_GET['data'] ) ? $_GET['data'] : '' ); //Funktion aufrufen
-
-
+require_once("../inc/ajax2function.php");
 
 function getPostits(){
     $sql = "SELECT json_agg( json_postits ) FROM (SELECT * FROM postit WHERE employee = ".$_SESSION['id']." ) AS json_postits";

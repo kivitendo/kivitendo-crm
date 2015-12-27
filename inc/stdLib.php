@@ -5,6 +5,10 @@ ini_set('session.bug_compat_42', 0);  // Das ist natürlich lediglich eine Provi
 //session_set_cookie_params(480*60); //480*60
 session_start();
 //printArray( $_SESSION );
+//writeLog( $_SESSION );
+
+$_SESSION['erppath'] = substr($_SERVER['CONTEXT_DOCUMENT_ROOT'], 0, -1);//Pfade haben am Ende kein Slash
+$_SESSION['crmpath'] = $_SESSION['erppath'] .'/crm';
 $inclpa = ini_get('include_path');
 ini_set('include_path',$inclpa.":../:./inc:../inc");
 
@@ -23,7 +27,7 @@ function printArray( $array ){
 }
 //in terminal: tail -f tmp/log.txt
 function writeLog( $log ){
-    file_put_contents( '../tmp/log.txt', date("Y-m-d H:i:s -> " ).print_r( $log, TRUE )."\n", FILE_APPEND );
+    file_put_contents( $_SESSION['crmpath'].'/tmp/log.txt', date("Y-m-d H:i:s -> " ).print_r( $log, TRUE )."\n", FILE_APPEND );
 }
 
 if ( !isset($_SESSION['dbhost']) ) {
@@ -849,7 +853,7 @@ function mkHeader() {
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator-'.$_SESSION['countrycode'].'.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/node_modules/postitall/dist/jquery.postitall.js'.$SN.
-                           //$SV.$_SESSION['baseurl'].'crm/node_modules/postitall/dist/jquery.postitall.ajax.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/js/jquery.postitall.ajax.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/js/tools.js'.$SN,
         'JQTABLE-PAGER' => $pager
         );
@@ -1044,4 +1048,5 @@ function ts2gerdate( $myts ){//Timestamp to German Date
     $min  = date("i",$myts);
     return $wd.", ".$day.". ".$m." ".$year." ".$hour.":".$min;
 }
+
 ?>

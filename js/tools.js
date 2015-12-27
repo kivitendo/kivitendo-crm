@@ -1,10 +1,10 @@
 $( document ).ready( function(){
     var headline = $(".tools");
     var myposition = headline.position();
+    console.log( "test" );
     myposition.top += 21;
     $( ".tools" ).before(
         '<div class="calculator_dialog"><div class="calculator"></div></div>' +
-        '<div class="postit_dialog"><div class="postit"><button class="postit_new_button"></button></div></div>' +
         '<div class="translator_dialog"><div class="translator"><input class="translator_input" style="margin-right: 10";>' +
         '<button class="translator_button">translate</button><button class="translator_swap"></button>' +
         '<div><table class="result_table tablesorter" style="visibility: hidden"><thead></thead><tbody class="tbody"></tbody></table></div></div></div>' +
@@ -31,9 +31,13 @@ $( document ).ready( function(){
             });
         }).done( function(){ $( '.result_table' ).css('visibility', 'visible').tablesorter().trigger( 'update' ) });
     });
-    $( '.postit_new_button' ).button().on( 'click', function(){
-        $.PostItAll.new();
-    })
+    $( '.postit_img' ).on( 'click', function(){
+        $.PostItAll.new({
+            features: {
+                savable : true
+            }
+        });
+    });
     $( ".calculator" ).calculator({
         useThemeRoller: true,
         layout: $.calculator.scientificLayout,
@@ -68,11 +72,12 @@ $( document ).ready( function(){
     $( ".translator_img" ).on("click", function(){
         $( ".translator_dialog" ).dialog( "open" );
     });
+
     $.fn.postitall.globals = {
     prefix          : '#PIApostit_',//Id note prefixe
     filter          : 'domain',     //Options: domain, page, all
     savable         : true,        //Save postit in storage
-    randomColor     : 0,         //Random color in new postits
+    randomColor     : 1,         //Random color in new postits
     toolbar         : true,         //Show or hide toolbar
     autoHideToolBar : true,         //Animation efect on hover over postit shoing/hiding toolbar options
     removable       : true,         //Set removable feature on or off
@@ -139,7 +144,7 @@ $( document ).ready( function(){
     },
     // Callbacks / Event Handlers
     onCreated: function(id, options, obj) {
-        //console.log( obj );
+        console.log( obj );
         //alert(JSON.stringify(obj))
         return undefined;
     },    //Triggered after note creation
@@ -152,4 +157,5 @@ $( document ).ready( function(){
     onRelease: function (id) { return undefined; },                 //Triggered on the end of dragging and resizing of a note
     onDelete: function (id) { return undefined; }                   //Triggered when a note is deleted
 };
+
 });

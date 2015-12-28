@@ -75,7 +75,7 @@ $( document ).ready( function(){
 
     $.fn.postitall.globals = {
     prefix          : '#PIApostit_',//Id note prefixe
-    filter          : 'domain',     //Options: domain, page, all
+    filter          : 'all',     //Options: domain, page, all
     savable         : true,        //Save postit in storage
     randomColor     : 1,         //Random color in new postits
     toolbar         : true,         //Show or hide toolbar

@@ -33,7 +33,7 @@ class PostItAll{
         //Content
         $this->content = "";
         if(isset($_REQUEST["content"]) && $_REQUEST["content"]) {
-            $this->content = addslashes( $_REQUEST["content"]);
+            $this->content = addslashes( str_replace( ';', ',', $_REQUEST["content"]));
         }
         //writeLog("Content: ".$this->content );
     }
@@ -134,6 +134,7 @@ class PostItAll{
     }
 
     private function insertNote( $idUser, $idNote, $content ){
+        //$content = str_replace( ';', ',', $content );
         $sql = "insert into postitall (iduser, idnote, content) values ('".$idUser."','".$idNote."','".$content."')";
         //writeLog( $sql );
         return $_SESSION['db']->query( $sql );

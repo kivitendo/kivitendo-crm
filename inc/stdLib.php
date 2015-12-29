@@ -854,6 +854,7 @@ function mkHeader() {
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator-'.$_SESSION['countrycode'].'.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/node_modules/postitall/dist/jquery.postitall.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/js/jquery.postitall.ajax.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/js/jquery.postitall.init.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/js/tools.js'.$SN,
         'JQTABLE-PAGER' => $pager
         );

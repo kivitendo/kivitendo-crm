@@ -1,3 +1,10 @@
+function rgb2hex( rgb ){
+    rgb = rgb.match( /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/ );
+    function hex( x ){
+        return( "0" + parseInt( x ).toString( 16 ) ).slice( -2 );
+    }
+    return "#" + hex( rgb[1] ) + hex( rgb[2] ) + hex( rgb[3] );
+}
 
 $.fn.postitall.globals = {
     prefix          : '#PIApostit_',//Id note prefixe
@@ -17,10 +24,10 @@ $.fn.postitall.globals = {
     expand          : true,         //Expand note
     fixed           : true,         //Allow to fix the note in page
     addNew          : true,         //Create a new postit
-    showInfo        : 0,         //Show info icon
-    pasteHtml       : 1,         //Allow paste html in contenteditor
-    htmlEditor      : 0,         //Html editor (trumbowyg)
-    autoPosition    : 1,         //Automatic reposition of the notes when user resize screen
+    showInfo        : 0,            //Show info icon
+    pasteHtml       : 1,            //Allow paste html in contenteditor
+    htmlEditor      : 0,            //Html editor (trumbowyg) doesn't work! css-error
+    autoPosition    : 1,            //Automatic reposition of the notes when user resize screen
     addArrow        : 'back'        //Add arrow to notes : none, front, back, all
 };
 
@@ -29,14 +36,14 @@ $.fn.postitall.defaults = {
     //Note properties
     id              : "",                       //Note id
     created         : Date.now(),               //Creation date
-    domain          : '',   //Domain in the url
-    page            : '', //Page in the url
-    osname          : '',     //Browser informtion & OS name,
+    domain          : '',                       //Domain in the url
+    page            : '',                       //Page in the url
+    osname          : '',                       //Browser informtion & OS name,
     content         : '',                       //Content of the note (text or html)
     position        : 'absolute',               //Position absolute or fixed
-    posX            : '10px',                   //x coordinate (from left)
-    posY            : '120px',                   //y coordinate (from top)
-    right           : '15px',                       //x coordinate (from right). This property invalidate posX
+    posX            : '',                       //x coordinate (from left)
+    posY            : '',                       //y coordinate (from top)
+    right           : '',                       //x coordinate (from right). This property invalidate posX
     height          : 240,                      //Note total height
     width           : 180,                      //Note total width
     minHeight       : 240,                      //Note resizable min-width
@@ -45,11 +52,11 @@ $.fn.postitall.defaults = {
     //Config note style
     style : {
         tresd           : true,                 //General style in 3d format
-        backgroundcolor : $('.ui-state-highlight').css('background-color'),        //Background color in new postits when randomColor = false
-        textcolor       : '#000',//$('.ui-widget-header').css('background-color'),              //Text color   //<p class="ui-state-highlight ui-corner-all
-        textshadow      : 0,                 //Shadow in the text
+        backgroundcolor : rgb2hex( $('.ui-state-highlight').css('background-color') ), //Background color in new postits when randomColor = false
+        textcolor       : '#0a0e87',            //Text color
+        textshadow      : 0,                    //Shadow in the text
         fontfamily      : 'verdana',            //Default font
-        fontsize        : '13px',              //Default font size
+        fontsize        : '13px',               //Default font size
         arrow           : 'none',               //Default arrow : none, top, right, bottom, left
     },
     //Enable / Disable features
@@ -64,21 +71,16 @@ $.fn.postitall.defaults = {
     },
     //Attach the note to al html element
     attachedTo : {
-        element         : '.tools',                   //Where to attach
-        position        : 'bottom',              //Position relative to elemente : top, right, bottom or left
+        element         : '.tools',             //Where to attach
+        position        : 'bottom',             //Position relative to elemente : top, right, bottom or left
         fixed           : true,                 //Fix note to element when resize screen
         arrow           : true,                 //Show an arrow in the inverse position
     },
     // Callbacks / Event Handlers
-    onCreated: function(id, options, obj) {
-        return undefined;
-    },
-    //Triggered after note creation
-    onChange: function (id, options, obj) {
-        return undefined;
-     },                  //Triggered on each change
-    onSelect: function (id) { return undefined; },                  //Triggered when note is clicked, dragged or resized
-    onDblClick: function (id) { return undefined; },                //Triggered on double click
-    onRelease: function (id) { return undefined; },                 //Triggered on the end of dragging and resizing of a note
-    onDelete: function (id) { return undefined; }                   //Triggered when a note is deleted
+    onCreated: function( id, options, obj ) { return undefined; }, //Triggered after note creation
+    onChange:  function( id, options, obj ) { return undefined; }, //Triggered on each change
+    onSelect:  function( id ) { return undefined; },               //Triggered when note is clicked, dragged or resized
+    onDblClick:function( id ) { return undefined; },               //Triggered on double click
+    onRelease: function( id ) { return undefined; },               //Triggered on the end of dragging and resizing of a note
+    onDelete:  function( id ) { return undefined; }                //Triggered when a note is deleted
 };

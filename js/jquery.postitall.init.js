@@ -1,3 +1,4 @@
+
 $.fn.postitall.globals = {
     prefix          : '#PIApostit_',//Id note prefixe
     filter          : 'all',     //Options: domain, page, all
@@ -17,19 +18,20 @@ $.fn.postitall.globals = {
     fixed           : true,         //Allow to fix the note in page
     addNew          : true,         //Create a new postit
     showInfo        : 0,         //Show info icon
-    pasteHtml       : 0,         //Allow paste html in contenteditor
+    pasteHtml       : 1,         //Allow paste html in contenteditor
     htmlEditor      : 0,         //Html editor (trumbowyg)
-    autoPosition    : 0,         //Automatic reposition of the notes when user resize screen
+    autoPosition    : 1,         //Automatic reposition of the notes when user resize screen
     addArrow        : 'back'        //Add arrow to notes : none, front, back, all
 };
 
-    $.fn.postitall.defaults = {
+
+$.fn.postitall.defaults = {
     //Note properties
     id              : "",                       //Note id
     created         : Date.now(),               //Creation date
-    domain          : window.location.origin,   //Domain in the url
-    page            : window.location.pathname, //Page in the url
-    osname          : navigator.appVersion,     //Browser informtion & OS name,
+    domain          : '',   //Domain in the url
+    page            : '', //Page in the url
+    osname          : '',     //Browser informtion & OS name,
     content         : '',                       //Content of the note (text or html)
     position        : 'absolute',               //Position absolute or fixed
     posX            : '10px',                   //x coordinate (from left)
@@ -69,12 +71,10 @@ $.fn.postitall.globals = {
     },
     // Callbacks / Event Handlers
     onCreated: function(id, options, obj) {
-        console.log( obj );
-        //alert(JSON.stringify(obj))
         return undefined;
-    },    //Triggered after note creation
+    },
+    //Triggered after note creation
     onChange: function (id, options, obj) {
-        //alert(JSON.stringify(id))
         return undefined;
      },                  //Triggered on each change
     onSelect: function (id) { return undefined; },                  //Triggered when note is clicked, dragged or resized

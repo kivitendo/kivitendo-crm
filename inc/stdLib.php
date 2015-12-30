@@ -848,13 +848,17 @@ function mkHeader() {
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fancybox/source/jquery.fancybox.pack.js'.$SN,
         'QRCODE'        => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/qrcode/jquery.qrcode-0.12.0.js'.$SN,
         'TOOLS'         => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.css'.$LN.
+                           $LV.$_SESSION['baseurl'].'crm/node_modules/trumbowyg/dist/ui/trumbowyg.css'.$LN.
+                           $LV.$_SESSION['baseurl'].'crm/node_modules/jquery-minicolors/jquery.minicolors.css'.$LN.
                            $LV.$_SESSION['baseurl'].'crm/node_modules/postitall/dist/jquery.postitall.css'.$LN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.plugin.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator-'.$_SESSION['countrycode'].'.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/node_modules/postitall/dist/jquery.postitall.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/js/jquery.postitall.ajax.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/js/jquery.postitall.init.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/node_modules/trumbowyg/dist/trumbowyg.min.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/node_modules/jquery-minicolors/jquery.minicolors.min.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/js/jquery.postitall.ajax.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/js/tools.js'.$SN,
         'JQTABLE-PAGER' => $pager
         );

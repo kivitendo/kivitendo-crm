@@ -1,6 +1,6 @@
 const SERVER_URL = "jqhelp/postitall.php";
-//console.log( "ajaxyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy" );
- 
+
+
 
 var getJsonRequest = function(params, callback) {
 
@@ -41,7 +41,7 @@ var externalManager = {
         var testPrefs = JSON.stringify(obj);
         var jsonfile = {};
         jsonfile[varname] = testPrefs;
-        console.log('add', varname, testPrefs);
+        //console.log('add', varname, testPrefs);
         getJsonRequest("option=add&key=" + varname + "&content=" + testPrefs, callback);
     },
     get: function(id, callback) {
@@ -142,7 +142,7 @@ var externalManager = {
     key: function (i, callback) {
         i--;
         getJsonRequest("option=key&key="+i, function(retVal) {
-            console.log('chromeManager.key ' + i, retVal);
+            //console.log('chromeManager.key ' + i, retVal);
             if(retVal)
                 callback(retVal);
             else
@@ -150,9 +150,9 @@ var externalManager = {
         });
     },
     view: function () {
-        console.log('view chrome');
+        //console.log('view chrome');
         getJsonRequest("option=getByKey&key="+key, function(retVal) {
-            console.log(retVal);
+            //console.log(retVal);
         });
     },
     getByKey: function (key, callback) {

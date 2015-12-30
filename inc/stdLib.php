@@ -1003,9 +1003,12 @@ function makeMenu($sess,$token){
         $rs['end_content']   = $objResult->{'end_content'};
         $rs['end_content']  .= '<script type="text/javascript">';
         $rs['end_content']  .= " \n";
-        $users_groups = array_merge($_SESSION['all_erp_users'], $_SESSION['all_erp_groups']);
+        $users_groups = [
+            "erp_all_users" => $_SESSION['all_erp_users'],
+            "erp_all_groups" => $_SESSION['all_erp_groups']
+        ];
         $myglobal = json_encode($users_groups, JSON_UNESCAPED_UNICODE);
-        $rs['end_content'] .= 'kivi.myglobal = '.$myglobal.";";
+        $rs['end_content'] .= 'kivi.global = '.$myglobal.";";
         //Inline-JS der ERP in den Footer (nach end_content)
         foreach($objResult->{'javascripts_inline'} as $js) {
             $js = preg_replace($suche, $ersetze,$js);

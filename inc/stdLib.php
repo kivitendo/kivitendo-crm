@@ -241,8 +241,8 @@ function anmelden() {
     $_SESSION["sesstime"] = $sesstime;
     // Benutzer/Gruppen/Gruppenzuordnung aus der ERP als Arrays in Session schreiben
     $db_new   = new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
-    $sql_all_users = "SELECT usr.id AS user_id, usr.login, usrc.cfg_value AS name FROM auth.user AS usr INNER JOIN auth.user_config AS usrc ON usr.id = usrc.user_id INNER JOIN auth.clients_users AS cliusr ON usr.id = cliusr.user_id WHERE usrc.cfg_key = 'name' AND cliusr.client_id = '".$auth['client_id']."' ORDER by usr.id";
-    $sql_all_groups = "SELECT grp.id AS grp_id, grp.name AS grp_name FROM auth.group AS grp INNER JOIN auth.clients_groups AS cligrp ON grp.id = cligrp.group_id WHERE cligrp.client_id = '".$auth['client_id']."' ORDER by grp.id";
+    $sql_all_users = "SELECT usr.id AS id, usr.login, usrc.cfg_value AS name FROM auth.user AS usr INNER JOIN auth.user_config AS usrc ON usr.id = usrc.user_id INNER JOIN auth.clients_users AS cliusr ON usr.id = cliusr.user_id WHERE usrc.cfg_key = 'name' AND cliusr.client_id = '".$auth['client_id']."' ORDER by usr.id";
+    $sql_all_groups = "SELECT grp.id AS id, grp.name AS name FROM auth.group AS grp INNER JOIN auth.clients_groups AS cligrp ON grp.id = cligrp.group_id WHERE cligrp.client_id = '".$auth['client_id']."' ORDER by grp.id";
     $sql_all_assignments = "SELECT usrg.user_id AS user_id, usrg.group_id AS group_id FROM auth.user_group AS usrg ORDER by usrg.user_id";
     $all_users = $db_new->getAll( $sql_all_users);
     $all_groups = $db_new->getAll( $sql_all_groups);
@@ -855,8 +855,7 @@ function mkHeader() {
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.plugin.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator-'.$_SESSION['countrycode'].'.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/node_modules/postitall/dist/jquery.postitall.js'.$SN.
-                           $SV.$_SESSION['baseurl'].'crm/js/jquery.postitall.init.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/js/jquery.postitall.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/node_modules/trumbowyg/dist/trumbowyg.min.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/node_modules/jquery-minicolors/jquery.minicolors.min.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/js/jquery.postitall.ajax.js'.$SN.

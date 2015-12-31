@@ -1,10 +1,7 @@
 const SERVER_URL = "jqhelp/postitall.php";
 
-
-
 var getJsonRequest = function(params, callback) {
-
-    iduser = kivi.myconfig.id;
+    iduser = otherid ? otherid : kivi.myconfig.id; //otherid is for share postits
     $.ajax({
         url: SERVER_URL + "?iduser=" + iduser, // + "&format=json",
         data: params,

@@ -153,6 +153,12 @@
     }
     $(document).ready(
         function(){
+            // Aus Tabelle kopieren,  weiter verbessern!
+            $("td").click(function() {
+                //alert($(this).text());
+                $(this).select();
+                document.execCommand("copy");
+            });
             $("#shipleft").click(function(){ nextshipto('-'); })
             $("#shipright").click(function(){ nextshipto('+'); })
             nextshipto('o');

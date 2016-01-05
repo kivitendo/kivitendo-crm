@@ -37,7 +37,7 @@ if ( isset($_SESSION['php_error']) && $_SESSION['php_error'] ) {
     ini_set ('display_errors',1);
 }
 
-include_once "mdb.php";
+require_once "phpDataObjects.php";
 require_once "conf.php";
 
 function printArray( $array ){
@@ -132,7 +132,7 @@ function chksesstime($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$session,$sesstim
 }
 
 function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
-    $db   = new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
+    $db   = new myPDO($dbhost,$dbport,$dbname,$dbuser,$dbpasswd);
     //Hat sich ein User angemeldet
     $sql  = "select sc.session_id,u.id,u.login from auth.session_content sc left join auth.\"user\" u on ";
     $sql .= "(E'--- ' || u.login || chr(10) )=sc.sess_value left join auth.session s on s.id=sc.session_id ";
@@ -260,7 +260,7 @@ function anmelden() {
     $_SESSION["cookie"] = $cookiename;
     $_SESSION["sesstime"] = $sesstime;
     // Benutzer/Gruppen/Gruppenzuordnung aus der ERP als Arrays in Session schreiben
-    $db_new   = new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
+    $db_new = new myPDO($dbhost,$dbport,$dbname,$dbuser,$dbpasswd);
     $sql_all_users = "SELECT usr.id AS id, usr.login, usrc.cfg_value AS name FROM auth.user AS usr INNER JOIN auth.user_config AS usrc ON usr.id = usrc.user_id INNER JOIN auth.clients_users AS cliusr ON usr.id = cliusr.user_id WHERE usrc.cfg_key = 'name' AND cliusr.client_id = '".$auth['client_id']."' ORDER by usr.id";
     $sql_all_groups = "SELECT grp.id AS id, grp.name AS name FROM auth.group AS grp INNER JOIN auth.clients_groups AS cligrp ON grp.id = cligrp.group_id WHERE cligrp.client_id = '".$auth['client_id']."' ORDER by grp.id";
     $sql_all_assignments = "SELECT usrg.user_id AS user_id, usrg.group_id AS group_id FROM auth.user_group AS usrg ORDER by usrg.user_id";
@@ -275,7 +275,7 @@ function anmelden() {
     }
     $_SESSION['ok'] = "1";
     // Mit der Mandanten-DB verbinden
-    $_SESSION["db"]     = new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
+    $_SESSION["db"] = new myPDO( $_SESSION["dbhost"], $_SESSION["dbport"], $_SESSION["dbname"] ,$_SESSION["dbuser"],$_SESSION["dbpasswd"] );
     if( !$_SESSION["db"] ) {
         return false;
     } else {
@@ -290,8 +290,8 @@ function anmelden() {
         $BaseUrl .= $_SERVER['HTTP_HOST'];
         $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
         if ($user_data) foreach ($user_data as $key => $val) $_SESSION[$key] = $val;
-        if ( isset($_SESSION['sql_error']) && $_SESSION['sql_error'] ) $_SESSION['db']->setShowError(true);
-        else $_SESSION['db']->setShowError(false);
+        //if ( isset($_SESSION['sql_error']) && $_SESSION['sql_error'] ) $_SESSION['db']->setShowError(true);
+        //else $_SESSION['db']->setShowError(false);
         $_SESSION['dir_mode']  = ( $user_data['dir_mode'] != '' )?octdec($user_data['dir_mode']):493; // 0755
         $_SESSION["loginCRM"] = $user_data["id"];
         $_SESSION['theme']    = ($user_data['theme']=='' || $user_data['theme']=='base')?'':$user_data['theme'];

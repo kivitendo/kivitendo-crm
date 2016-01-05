@@ -232,9 +232,9 @@ var otherid = 0;
         page            : '',                       //Page in the url
         osname          : '',                       //Browser informtion & OS name,
         content         : '',                       //Content of the note (text or html)
-        position        : 'absolute',               //Position relative, fixed or absolute
-        posX            : '',                   //x coordinate (from left)
-        posY            : '',                   //y coordinate (from top)
+        position        : 'fixed',                  //Position relative, fixed or absolute
+        posX            : '',                       //x coordinate (from left)
+        posY            : '',                       //y coordinate (from top)
         right           : '',                       //x coordinate (from right). This property invalidate posX
         height          : 240,                      //Note total height
         width           : 180,                      //Note total width

@@ -17,23 +17,23 @@ class PostItAll{
         if( !isset( $_REQUEST["option"] ) || !$_REQUEST["option"] ){
             die( "No option" );
         }
-        $this->option = addslashes( $_REQUEST["option"] );
+        $this->option = $_REQUEST["option"];
         //writeLog( "Option: ".$this->option );
         //Iduser
         $this->iduser = -1;
-        if(isset($_REQUEST["iduser"]) && $_REQUEST["iduser"]) {
-            $this->iduser = addslashes( $_REQUEST["iduser"]);
+        if( isset( $_REQUEST["iduser"] ) && $_REQUEST["iduser"] ){
+            $this->iduser = $_REQUEST["iduser"];
         }
         //writeLog( "IdUser: ".$this->iduser );
         //Key
         $this->key = "";
-        if(isset($_REQUEST["key"]) && $_REQUEST["key"]) {
-            $this->key = addslashes( $_REQUEST["key"]);
+        if( isset( $_REQUEST["key"] ) && $_REQUEST["key"] ){
+            $this->key = $_REQUEST["key"];
         }
         //Content
         $this->content = "";
-        if(isset($_REQUEST["content"]) && $_REQUEST["content"]) {
-            $this->content = addslashes( str_replace( ';', ',', $_REQUEST["content"]));
+        if( isset( $_REQUEST["content"] ) && $_REQUEST["content"] ){
+            $this->content = $_REQUEST["content"];
         }
         //writeLog("Content: ".$this->content );
     }

@@ -13,19 +13,11 @@ Die neuste Entwicklerversion kann mit "git clone https://github.com/kivitendo/ki
 direkt aus dem Repository kopiert werden. Voraussetzung hierfür ist das Programmpaket Git
 (apt-get install git)
 
-Kivitendo hieß früher Lx-Office. Dadurch heißen einige Pfade noch lx-office.
-Die Konfigurationsdatei der ERP wurde von lx_office.conf in kivitendo.conf umbenannt.
-Aus Gründen der Kompatibilität zu älteren Installationen wird die lx_office.conf in der ERP weiterhin ausgewertet.
-Welche ERP-Konfigurationsdatei in der CRM ausgewertet wird, kann in der CRM-Konfigurationsdatei inc/conf.php
-der Variblen $erpConfigFile zugewiesen werden. Achtung, die Dateiendung (.conf) darf nicht mit angeben werden.
-Voreingestellt ist kivitendo.
 
 Vorrausetzungen:
     PostgreSQL >= 9.3
     Kivitendo ERP >= 3.3.0
-    PHP >= 4.2x
-    PEAR::MDB2
-    PEAR::MDB2#pgsql
+    PHP >= 5.1
     PEAR::Contact_Vcard_Build
     PEAR::Contact_Vcard_Parse
     PEAR::Mail_Mime oder php-mail-mime
@@ -34,15 +26,17 @@ Vorrausetzungen:
     fpdf,fpdi
     ttf-freefont
     php-gd,php-imap
-        php5-curl
+    php5-curl
+    php5-pgsql
     node.js
-    socket.io
 
 Fast alle Pakete können unter debianoiden Systemen in der Konsole mit folgendem Befehl installiert werden.
-apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-mdb2 php-mdb2-driver-pgsql php-fpdf libfpdi-php imagemagick ttf-freefont php5-curl tinymce libphp-jpgraph nodejs nodejs-legacy npm
+apt-get install php5-pgsql libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-fpdf libfpdi-php imagemagick ttf-freefont php5-curl tinymce libphp-jpgraph nodejs nodejs-legacy npm
 
-Socket-IO installieren:
-npm install socket.io
+Postgres-Password ändern:
+    sudo -u postgres psql
+    \password
+    \q
 
 Die restlichen Pearpaket installieren:
     pear install  Contact_Vcard_Build Contact_Vcard_Parse
@@ -84,6 +78,30 @@ Nach dem Klick auf einen der neu entstandenen CRM-Menü-Punkte werden einige Tab
 Mandanten und Benutzereinstellungen sichern und die CRM kann verwendet werden.
 CRM -> Administration -> Mandant
 CRM -> Administration -> Benutzer
+
+
+Fertig...
+
+Benutzerfreundliche Links:
+--------------------------
+ermöglichen einfacheres Speichern von Dateien vom Server bzw aus dem Netzwerk
+und befinden sich in PfadZurCRM/Datenbankname/link_dir.
+Die Links werden beim Speichern des Kunden nach dem Format "Kundenname_Kundennummer"
+automatisch oder manuell unter CRM->Admin->Status erzeugt.
+Link ins Home-Verzeichnis erstellen:
+ln -s PfadZurCRM/Datenbankname/link_dir_cust /home/username/Kundendaten
+
+Jetzt noch die Mandantenkonfiguration öffnen und folgende Parameter setzen:
+dir_mode=0775;  Owner + Gruppe Schreibrecht, andere Leserecht
+dir_group=users; Mitglieder dieser Gruppe dürfen gesetzte Rechte
+sep_cust_vendor=true; Kunden und Lieferanten in unterschiedliche Verzeichnisse
+
+Der Webserver muss Mitglied in der Gruppe "users" sein.
+Das Verzeichnis "dokumente" sollte manuell auf Gruppe gesetzt werden.
+Bei einer Migration auch alle Unterverzeichnisse und Dateien:
+chmod 775 -R dokumente
+chgrp -R users dokumente
+
 
 Weite Informationen und Lösungsansätze bei Problemen:
 
@@ -151,11 +169,6 @@ Legen Sie eine neuen Gruppe Admin an. Das einzige Recht das hier unter CRM geset
 'Admin Status'.
 Ordnen Sie einen Benutzer dieser Gruppe zu.
 Dieser Benutzer wir in kommenden Versionen mehr Aufgaben bekommen, daher "sparsam" vergeben.
-Wenn noch nicht geschehen, die menu.ini nach CRM--Admin--Status ergänzen:
-
-[CRM--Admin--Mandant]
-ACCESS=crm_adminstatus
-module=crm/mandant.php
 
 Sollte die Migration der inc/conf.php fehlschlagen, prüfen Sie ob die Tabelle 'crmdefaults'
 angelegt wurde. Wenn ja, können die Einstellungen über die Oberfläche nachgeholt werden.
@@ -233,25 +246,7 @@ Die Daten dürfen auf keinen Fall in UTF-8 gewandelt werden !!!
 
 In der Bearbeitungsmaske der Firmen bekommen Sie nun unter "Sonstiges" einen neuen Knopf.
 
-Benutzerfreundliche Links:
---------------------------
-ermöglichen einfacheres Speichern von Dateien vom Server bzw aus dem Netzwerk
-und befinden sich in PfadZurCRM/Datenbankname/link_dir.
-Die Links werden beim Speichern des Kunden nach dem Format "Kundenname_Kundennummer"
-automatisch oder manuell unter CRM->Admin->Status erzeugt.
-Link ins Home-Verzeichnis erstellen:
-ln -s PfadZurCRM/Datenbankname/link_dir_cust /home/username/Kundendaten
 
-Jetzt noch die Mandantenkonfiguration öffnen und folgende Parameter setzen:
-dir_mode=0775;  Owner + Gruppe Schreibrecht, andere Leserecht
-dir_group=users; Mitglieder dieser Gruppe dürfen gesetzte Rechte
-sep_cust_vendor=true; Kunden und Lieferanten in unterschiedliche Verzeichnisse
-
-Der Webserver muss Mitglied in der Gruppe "dir_group" sein.
-Das Verzeichnis "dokumente" sollte manuell auf Gruppe gesetzt werden.
-Bei einer Migration auch alle Unterverzeichnisse und Dateien:
-chmod 775 -R dokumente
-chgrp -R users dokumente
 
 Zusatzprogramme:
 ----------------

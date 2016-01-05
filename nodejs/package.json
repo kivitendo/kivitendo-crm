@@ -1,0 +1,14 @@
+{
+    "name": "App",
+    "version": "0.0.1",
+    "description": "App",
+    "dependencies": {
+        "socket.io": "latest",
+	"jquery-minicolors": "latest",
+	"postitall": "latest",
+	"trumbowyg": "latest",
+	"jquery-ui": "latest",
+	"pg": "latest"
+    },
+    "author": "developer"
+}

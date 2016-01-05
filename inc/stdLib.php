@@ -7,7 +7,27 @@ session_start();
 //printArray( $_SESSION );
 //writeLog( $_SESSION );
 
-$_SESSION['erppath'] = substr($_SERVER['CONTEXT_DOCUMENT_ROOT'], 0, -1);//Pfade haben am Ende kein Slash
+if ( isset($_SERVER['CONTEXT_DOCUMENT_ROOT']) ) {
+    $basepath = $_SERVER['CONTEXT_DOCUMENT_ROOT'];
+} else if ( isset($_SERVER['SCRIPT_FILENAME']) ) {
+    $tmp = explode('crm',$_SERVER['SCRIPT_FILENAME']);
+    $basepath = substr($tmp[0],0,-1);
+} else if ( isset($_SERVER['DOCUMENT_ROOT']) ) {
+    $basepath = $_SERVER['DOCUMENT_ROOT'];
+} else if ( substr($ERPNAME,0,1) == '/' ) {
+    $basepath = $ERPNAME;
+    $ERPNAME = '';
+} else {
+    echo "Basispfad konnte nicht ermittelt werden.<br>";
+    echo 'Bitte in "$ERPNAME" in inc/conf.php den absoluten Pfad eintragen.';
+    exit();
+}
+if ( substr($basepath) == '/' ) {//Pfade haben am Ende kein Slash
+    $_SESSION['erppath'] = substr($basepath,0,-1);
+} else {
+    $_SESSION['erppath'] = $basepath;
+}
+
 $_SESSION['crmpath'] = $_SESSION['erppath'] .'/crm';
 $inclpa = ini_get('include_path');
 ini_set('include_path',$inclpa.":../:./inc:../inc");

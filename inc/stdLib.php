@@ -3,8 +3,8 @@ ini_set('session.bug_compat_warn', 0);// Warnung für Sessionbug in neueren Php-
 ini_set('session.bug_compat_42', 0);  // Das ist natürlich lediglich eine Provirorische Lösung.
 //Warning: Unknown: Your script possibly relies on a session side-effect which existed until PHP 4.2.3. ....
 //session_set_cookie_params(480*60); //480*60
-session_start();
-//printArray( $_SESSION );
+if( ( !$_SESSION['ok']  ) ) session_start();
+
 //writeLog( $_SESSION );
 
 if ( isset($_SERVER['CONTEXT_DOCUMENT_ROOT']) ) {
@@ -22,12 +22,9 @@ if ( isset($_SERVER['CONTEXT_DOCUMENT_ROOT']) ) {
     echo 'Bitte in "$ERPNAME" in inc/conf.php den absoluten Pfad eintragen.';
     exit();
 }
-if ( substr($basepath) == '/' ) {//Pfade haben am Ende kein Slash
-    $_SESSION['erppath'] = substr($basepath,0,-1);
-} else {
-    $_SESSION['erppath'] = $basepath;
-}
-
+$basepath = substr($basepath, -1) == '/' ? substr($basepath,0,-1) : $basepath;
+//echo $basepath; //Pfade dürfen kein Slash am Ende haben
+$_SESSION['erppath'] = $basepath;
 $_SESSION['crmpath'] = $_SESSION['erppath'] .'/crm';
 $inclpa = ini_get('include_path');
 ini_set('include_path',$inclpa.":../:./inc:../inc");
@@ -1080,5 +1077,5 @@ function ts2gerdate( $myts ){//Timestamp to German Date
     $min  = date("i",$myts);
     return $wd.", ".$day.". ".$m." ".$year." ".$hour.":".$min;
 }
-
+ //printArray($_SESSION);
 ?>

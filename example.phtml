@@ -6,16 +6,12 @@
     require_once("inc/stdLib.php");
     $menu = $_SESSION['menu'];
     $head = mkHeader();
-    echo $menu['stylesheets'];
-    echo $menu['javascripts'];
-    //echo $head['FULLCALCSS'];
-    //echo $head['BOXCSS'];
-    //echo $head['COLORPICKERCSS'];
-    echo $head['THEME'];
-    //echo $head['FULLCALJS'];
-    //echo $head['JQBOX'];
-    //echo $head['COLORPICKERJS'];
-    //print_r( $_SESSION );
+echo $menu['stylesheets'];
+echo $menu['javascripts'];
+echo $head['CRMCSS'];
+echo $head['JQTABLE'];
+echo $head['THEME'];
+echo $head['JUI-DROPDOWN'];
     /*****************************************************************************************************************************
     Grundsätze: Content wird via Ajax im Json-Format geholt und an die entsprechenden Container verteilt
                 Daten werden ohne Reload einfach via Ajax gespeichtert.
@@ -28,48 +24,24 @@
 ?>
 <script>
 
-    $(document).ready(function(){
-
-          //URL-Parameter lesen
-        $.urlParam = function( name ){
-            var results = new RegExp( '[\?&]' + name + '=([^&#]*)' ).exec( window.location.href );
-            if( results == null ) alert( 'Parameter: "' + name + '" does not exist in "' + window.location.href + '"!' );
-            else return decodeURIComponent( results[1] || 0 );
-        }
-
-        //alert( $.urlParam( 'param2' ) );
-
-        $( "#example" ).html( "Hello World" ).css({
-            fontSize: "36px",
-            fontWeight: "bold",
-            color: "red",
-        }).delay( 1000 ).fadeOut( 6000 ).delay( 1000 ).fadeIn( 10000 );
-        //Konfigurations-Variablen der ERP benutzen:
-        alert( "Sprache: " + kivi.myconfig.countrycode );
-        console.log( kivi.myconfig );
-
-    });
-
+  
 </script>
-<style>
-    #example    { position:absolute; top:130px; left:87px; }
-</style>
+
 </head>
 <body>
 <?php
     echo $menu['pre_content'];
     echo $menu['start_content'];
-    print_r( $_SESSION['klicktel_key'] );
+
+
 ?>
-<div class="ui-widget-content" style="height:600px">
-<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Headline</p>
-<div id="example"></div>
-<!--
-Hier stehen die vielen Div-Container
--->
-</div>
+
+ <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">'.translate('.:fast search customer/vendor/contacts and contact history:.','firma').'</p>
+
+
 <?php
     echo $menu['end_content'];
+    echo $head['TOOLS'];
 ?>
 
 </body>

@@ -71,7 +71,7 @@
 
 <div id="suchfelder_pers">
 
-    <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">
+    <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">
         <button class="fett_pers">A</button>
         <button class="fett_pers">B</button>
         <button class="fett_pers">C</button>

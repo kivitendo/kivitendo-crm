@@ -59,7 +59,7 @@
     });
 </script>
 
-<p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">.:search result:. .:{FAART}:.</p>
+<p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">.:search result:. .:{FAART}:.</p>
 
 <table id="treffer_{Q}" class="tablesorter">
     <thead>

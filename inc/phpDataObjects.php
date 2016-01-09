@@ -1,10 +1,11 @@
 <?php
     class myPDO extends PDO{
         private $showErr = TRUE;  //show errors in browser
-        private $logAll  = FALSE; //log all sql queries
+        private $logAll  = TRUE; //log all sql queries
 
         private function writeLog( $log ){
             file_put_contents( $_SESSION['crmpath'].'/tmp/sqlerror.log', date("Y-m-d H:i:s -> " ).print_r( $log, TRUE )."\n", FILE_APPEND );
+            
         }
         private function error( $error ){
             if( $this->showErr ){
@@ -26,7 +27,7 @@
 
         public function query( $sql ){
             $stmt = parent::prepare( $sql );
-            if( $this->logAll ) $this->writeLog( $stmt->queryString );
+            if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString );
             if( !$result = $stmt->execute() ) $this->error( $stmt->errorInfo() );
             return $result;
 
@@ -34,7 +35,7 @@
 
         public function getOne( $sql, $json = FALSE ){
             $stmt = parent::prepare( $sql );
-            if( $this->logAll ) $this->writeLog( $stmt->queryString );
+            if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString );
             if( !$result = $stmt->execute() ) $this->error( $stmt->errorInfo() );
             return  $json ? json_encode( $stmt->fetch( PDO::FETCH_ASSOC ) ) : $stmt->fetch( PDO::FETCH_ASSOC );
 
@@ -43,7 +44,7 @@
         public function getAll( $sql, $json = FALSE  ){
             if( $json ) $sql = "SELECT json_agg( json ) FROM (".$sql.") AS json";
             $stmt = parent::prepare( $sql );
-            if( $this->logAll ) $this->writeLog( $stmt->queryString );
+            if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString );
             if( !$result = $stmt->execute() ) $this->error( $stmt->errorInfo() );
             return  $stmt->fetchAll( PDO::FETCH_ASSOC );
         }
@@ -58,7 +59,7 @@
         **********************************************/
         public function insert( $table, $fields, $values, $lastInsertId = FALSE ){
             $stmt = parent::prepare("INSERT INTO $table (".implode(',',$fields).") VALUES (".str_repeat("?,",count($fields)-1)."?) ".( $lastInsertId ? "returning $lastInsertId" : "") );
-            if( $this->logAll ) $this->writeLog( $stmt->queryString );
+            if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString );
             if( !$result = $stmt->execute( $values ) ) $this->error( $stmt->errorInfo() );
             return $lastInsertId ? $stmt->fetch(PDO::FETCH_ASSOC)[$lastInsertId] : $result; //parent::lastInsertId('id'); doesn't work
         }
@@ -73,7 +74,7 @@
         **********************************************/
         public function update( $table, $fields, $values, $where ){
             $stmt = parent::prepare( "UPDATE $table set ".implode( '= ?, ',$fields )." = ? WHERE ".$where );
-            if( $this->logAll ) $this->writeLog( $stmt->queryString );
+            if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString );
             if( !$result = $stmt->execute( $values ) ) $this->error( $stmt->errorInfo() );
             return $result;
         }
@@ -87,8 +88,8 @@
             $result = parent::beginTransaction();
             $stmt = parent::prepare( $statement );
             if( $this->logAll ){
-                $this->writeLog( "executeMultiple()" );
-                $this->writeLog( $stmt->queryString );
+                
+                $this->writeLog( __FUNCTION__.': '.$stmt->queryString );
                 $this->writeLog( $data );
             }
             foreach( $data as $key => $value ){

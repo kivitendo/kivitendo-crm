@@ -1,6 +1,6 @@
 <?php
 clearstatcache();
-session_start();
+if( !isset($_SESSION) ) session_start();  
 if ( isset($_POST["erpname"]) ) {
     if ( is_file("../".$_POST["erpname"]."/config/".$_SESSION['erpConfigFile'].".conf") ) {
         if ( is_writable("inc/conf.php") ) {

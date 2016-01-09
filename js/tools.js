@@ -1,21 +1,24 @@
 $( document ).ready( function(){
+    
     var headline = $(".tools");
     var myposition = headline.position();
-    console.log( "test" );
     myposition.top += 21;
+    //var localStorage = <?php print_r( $_global );?>;
+    //alert(JSON.stringify(kivi.global.baseurl));
+    //alert('<img src="' + kivi.global.baseurl + 'crm/tools/rechner.png" class="calculator_img" title=".:simple calculator:.">');
     $( ".tools" ).before(
         '<div class="calculator_dialog"><div class="calculator"></div></div>' +
         '<div class="translator_dialog"><div class="translator"><input class="translator_input" style="margin-right: 10";>' +
         '<button class="translator_button">translate</button><button class="translator_swap"></button>' +
         '<div><table class="result_table tablesorter" style="visibility: hidden"><thead></thead><tbody class="tbody"></tbody></table></div></div></div>' +
-        '<div class="tools" style="position:absolute; top:' + myposition.top + '; left:900;">' +
-        '<img src="tools/rechner.png" class="calculator_img" title=".:simple calculator:.">' +
-        '<img src="tools/notiz.png" class="postit_img" title=".:postit notes:." style="margin-left: 20;">' +
-        '<img src="tools/kalender.png" class="calendar_img" title=".:calendar:." style="margin-left: 20;">' +
-        '<img src="tools/leo.png" class="translator_img" title="LEO .:english/german:." style="margin-left: 20;"></div>'
+        '<div class="toolsbuttons" style="position:absolute; top:' + myposition.top + '; left:900;">' +
+        '<img src="' + kivi.global.baseurl + 'crm/tools/rechner.png" class="calculator_img" title=".:simple calculator:.">' +
+        '<img src="' + kivi.global.baseurl + 'crm/tools/notiz.png" class="postit_img" title=".:postit notes:." style="margin-left: 20;">' +
+        '<img src="' + kivi.global.baseurl + 'crm/tools/kalender.png" class="calendar_img" title=".:calendar:." style="margin-left: 20;">' +
+        '<img src="' + kivi.global.baseurl + 'crm/tools/leo.png" class="translator_img " title="LEO .:english/german:." style="margin-left: 20;"></div>'
     );
     var langpair = 'en|de';
-    $( ".translator_swap" ).append('<img  src="image/swap.gif" />').button().on( 'click', function(){
+    $( ".translator_swap" ).append('<img  src="' + kivi.global.baseurl + '/crm/image/swap.gif" />').button().on( 'click', function(){
         var title = $( ".translator_dialog" ).dialog( "option", "title"  );
         $( ".translator_dialog" ).dialog( "option", "title", title ==  'Übersetzer en -> de' ? 'Translator de -> en' : 'Übersetzer en -> de');
         langpair = langpair == 'en|de' ? 'de|en' : 'en|de';
@@ -67,7 +70,8 @@ $( document ).ready( function(){
         $( ".postit_dialog" ).dialog( "open" );
     });
     $( ".calendar_img" ).on("click", function(){
-        window.location.href = "calendar.phtml";
+        alert( kivi.global.baseurl + "crm/calendar.phtml" );
+        window.location.href = kivi.global.baseurl + "crm/calendar.phtml";
     });
     $( ".translator_img" ).on("click", function(){
         $( ".translator_dialog" ).dialog( "open" );

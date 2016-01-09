@@ -263,8 +263,8 @@ var otherid = 0;
         },
         //Attach the note to al html element
         attachedTo : {
-            element         : '.tools',                   //Where to attach
-            position        : 'bottom',              //Position relative to elemente : top, right, bottom or left
+            element         : '.toolsbuttons',       //Where to attach
+            position        : 'bottom',             //Position relative to elemente : top, right, bottom or left
             fixed           : true,                 //Fix note to element when resize screen
             arrow           : true,                 //Show an arrow in the inverse position
         },

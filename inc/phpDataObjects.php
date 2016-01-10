@@ -19,7 +19,7 @@
 
         public function __construct( $host, $port, $dbname, $user, $password ){
             try {
-                parent::__construct("pgsql:host=$host;port=$port;dbname=$dbname;user=$user;password=$password");
+                parent::__construct( "pgsql:host=$host;port=$port;dbname=$dbname;", $user, $password, array( PDO::ATTR_PERSISTENT => true ) );
             } catch(PDOException $e) {
                 echo    $e->getMessage();
             }

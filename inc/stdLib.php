@@ -272,9 +272,9 @@ function anmelden() {
     $_SESSION['ok'] = "1";
     // Mit der Mandanten-DB verbinden
     //$db   = new myPDO($dbhost,$dbport,$dbname,$dbuser,$dbpasswd);    
-    $_SESSION["db"]     = new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
+    $_SESSION["db"] = new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
     //$_SESSION["db"] = new myPDO( $_SESSION["dbhost"],$_SESSION["dbport"],$_SESSION["dbname"],$_SESSION["dbuser"],$_SESSION["dbpasswd"]);
-    $_SESSION["dbPDO"] = new myPDO( $_SESSION["dbhost"],$_SESSION["dbport"],$_SESSION["dbname"],$_SESSION["dbuser"],$_SESSION["dbpasswd"]);
+    //$_SESSION["dbPDO"] = new myPDO( $_SESSION["dbhost"],$_SESSION["dbport"],$_SESSION["dbname"],$_SESSION["dbuser"],$_SESSION["dbpasswd"]);
     //$db_new = new myPDO($dbhost,$dbport,$dbname,$dbuser,$dbpasswd);
     if( !$_SESSION["db"] ) {
         return false;

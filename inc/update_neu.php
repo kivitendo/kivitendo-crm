@@ -1,129 +1,155 @@
 <?php
-    require_once("stdLib.php");
-    require_once("updateHelpFunctions.php");
-    include_once("version.php");
-    chdir($_SESSION['crmpath']);
+    $menu = false;
+    if ( isset($_GET['menu']) && $_GET['menu'] == '1' ) {
+        require_once('stdLib.php');
+        $menu = $_SESSION['menu'];
+        $head = mkHeader();
+        echo '<html><head><title></title>';
+        echo $menu['stylesheets'];
+        echo $menu['javascripts'];
+        echo $head['CRMCSS']; 
+        echo $head['THEME'];
+        echo '</head><body>';
+        echo $menu['pre_content'];
+        echo $menu['start_content']; 
+        echo '<h1>Updatecheck</h1>';
+    }
     if (!function_exists('updatever')) {
-        function updatever($VERSION) {
-            $sql = "INSERT INTO crm (uid,datum,version) values (".$_SESSION["loginCRM"].",now(),'".$VERSION."')";
-            $rc = $_SESSION["db"]->query($sql);
-            $_SESSION['db']->commit();
-            echo "Versionsnummer gesetzt<br>";
-            if (is_file("update/update$VERSION.txt")) {
-                echo "<h2>Wichtig!</h2>";
-                echo readfile("update/update$VERSION.txt");
-            }
-        }
+	    function updatever($VERSION) {
+		    $sql = "INSERT INTO crm (uid,datum,version) values (".$_SESSION["loginCRM"].",now(),'".$VERSION."')";
+		    $rc = $GLOBALS['db']->query($sql);
+                    $GLOBALS['db']->commit();
+		    echo "Versionsnummer gesetzt<br>";
+		    if (is_file("update/update$VERSION.txt")) {
+		        echo "<h2>Wichtig!</h2>";
+		        echo readfile("update/update$VERSION.txt");
+		    }
+	    }
     };
 
-    if (!function_exists('sorttodo')) {
-        function sorttodo($todo) {
-            $todonew = array();
-            foreach ($todo as $sql) {
-                $file = file_get_contents("update/".$sql);
-                if (preg_match("/@depends: ([^\n;]+)/",$file,$hit)) {
-                    if (in_array("crm_".$hit[1].".sql",$todo) && !in_array("crm_".$hit[1].".sql",$todonew)) {
-                        $todonew[] = "crm_".$hit[1].".sql";
-                    }
-                }
-                if (!in_array($sql,$todonew)) $todonew[] = $sql;
-            }
-            return $todonew;
+
+    if (!function_exists('schemainfo')) {
+	    function schemainfo() {
+            $sql = "SELECT tag || '.sql' as tag  from schema_info where tag like 'crm_%' order by tag";
+            $rs  = $GLOBALS['db']->getAll($sql);
+            if ( !$rs ) { $isnow = array(); } 
+            else { foreach ( $rs as $row ) { $isnow[] = $row["tag"];} };
+            return $isnow;
         }
     }
-
-    $sql = "SELECT tag || '.sql' as tag  from schema_info where tag like 'crm_%' order by tag";
-    $rs  = $_SESSION["db"]->getAll($sql);
-    if ( !$rs ) { $isnow = array(); }
-    else { foreach ( $rs as $row ) { $isnow[] = $row["tag"];} };
-    chdir($_SESSION['crmpath']."/update");
+    chdir($_SESSION['erppath'].'crm/');
+    chdir("update");
     $update = glob("crm_*.sql");
     chdir("..");
+    $isnow = schemainfo();
     $code = false;
     $ok = true;
     if ( !is_array($update) ) $update = array();
     $todo = array_diff($update,$isnow);
-    if ( $todo ) {
-        $todonew = sorttodo($todo);
-        echo "<br>";
-        while ( array_diff($todo,$todonew) ) {
-            $todo = $todonew;
-            $todonew = sorttodo($todo);
-        }
-        $todo = $todonew;
-        $rc = $_SESSION['db']->begin();
-        foreach ( $todo as $upd ) {
+    if ( count($todo) > 0 ) {
+        $skip = false;
+    	echo "<br>";
+        $rc = $GLOBALS['db']->begin();
+        //foreach ( $todo as $upd ) {
+        while ( count($todo) > 0 ) {
+            $upd = array_shift($todo);
             $f = fopen("update/".$upd,"r");
             while (!feof($f) ) {
                 if ( empty($zeile)) { $zeile=trim(fgets($f,1000) ); continue; };
-                if ( preg_match("/^-- @([^:]+):(.+)/",$zeile,$treffer) ) {
-                    $tmp = $treffer[1];
-                    if ( $tmp == "php" ) {
+                $key = ''; $val = '';
+                if ( preg_match("/^-- @([^:]+):(.+)/",$zeile,$treffer) ) { 
+                    $key = $treffer[1]; 
+                    $val = trim($treffer[2]);
+                    if ( $key == "php" ) {
+                        //echo "PHP<br>\n";
                         $query = "";
                         $code = true;
-                    } else if ( $tmp == "exec" ) {
+                    } else if ( $key == "depends" ) {
+                        $sql = "SELECT tag  from schema_info where tag = '".$val."' order by tag";
+                        $rs  = $GLOBALS['db']->getAll($sql); 
+                        if ( count($rs) == 0 ) {
+                           echo "Probleme beim Update, alle &Auml;nderungen werden zur&uuml;ck genommen<br>";
+                           echo "Abhängigkeit: <b>'$val'</b> nicht erfüllt<br>";
+                           $GLOBALS['db']->rollback();
+                           exit(1); 
+                        } else {
+                            $zeile = trim(fgets($f,1000)); 
+                            continue;
+                        }
+                    } else if ( $key == "check" ) {
+                       echo 'Check: '.$val."<br>\n";
+                    } else if ( $key == "exec" ) {
+                        //echo "Exec:".$val."<br>\n";
                         $code = false;
                         $rc = eval($query);
                         $query = "";
                         if ( $rc < 0 ) {
                            echo "Probleme beim Update, alle &Auml;nderungen werden zur&uuml;ck genommen";
-                           $_SESSION['db']->rollback();
-                           exit(1);
+                           $GLOBALS['db']->rollback();
+                           exit(1); 
+                        }
+                    } else if ( $key == "require" ) {
+                        //echo "Require:".'crm_'.$val.'.sql'."<br>\n";
+                        if ( in_array('crm_'.$val.'.sql',$todo) and ($val != '*') ) { // Dir Abhängigkeit soll auch noch installiert werden
+                            array_push($todo,$upd);          // also hinten anhängen 
+                            fseek($f,-1,SEEK_END);           // und abbrechen
+                            $skip = true;
+                            $zeile = trim(fgets($f,1000)); 
+                            continue; 
                         }
                     } else {
-                        ${$tmp} = $treffer[2];
-                        echo $tmp.":".${$tmp}."<br>"; flush();
+                        ${$key} = $treffer[2];
+                        echo $key.":".${$key}."<br>"; flush();
                     }
-                    $zeile = trim(fgets($f,1000));
-                    continue;
+                    $zeile = trim(fgets($f,1000)); 
+                    continue; 
                 };
-                if ( preg_match("/^--/",$zeile) ) { $zeile = trim(fgets($f,1000)); continue; };
+                if ( preg_match("/^--/",$zeile) ) { $zeile = trim(fgets($f,1000)); continue; }; //Kommentare
                 if ( !preg_match("/;$/",$zeile) or $code ) {
                     if ( !preg_match("#\\s?//#",$zeile) )  $query .= $zeile;
-                    $zeile = trim(fgets($f,1000));
                 } else {
                     $query .= substr($zeile,0,-1);
-                    $rc = $_SESSION["db"]->query($query, True);
+                    $rc = $GLOBALS['db']->query($query, True);
                     if ( !$rc ) {
                         echo "Probleme beim Update, alle &Auml;nderungen werden zur&uuml;ck genommen";
-                        $_SESSION['db']->rollback();
+                        $GLOBALS['db']->rollback();
                         exit(1);
                     }
-                    $zeile = trim(fgets($f,1000));
-                    $query = "";
+                    $query = ""; 
                 }
+                $zeile = trim(fgets($f,1000));
             }
-            $sql = "insert into schema_info (tag,login) values ('crm_%s','%s')";
-            $rc = $_SESSION["db"]->query(sprintf($sql,trim($tag),$_SESSION["login"]));
-            if ( !$rc ) {
-            $ok = false;
-                $_SESSION['db']->rollback();
-                exit(2);
+            if ( !$skip ) {
+                 $sql = "insert into schema_info (tag,login) values ('crm_%s','%s')";
+                 $rc = $GLOBALS['db']->query(sprintf($sql,trim($tag),$_SESSION["login"]));
+                 if ( !$rc ) {
+                     $ok = false;
+                     $GLOBALS['db']->rollback();
+                     exit(2);
+                 } else {
+                     echo "ok<br>";
+                 }
+                 $GLOBALS['db']->commit();
+                 $isnow = schemainfo(); // Neu einlesen, da evtl. Inserts in Schema durch Updatefile gemacht wurde.
+                 $todo = array_diff($update,$isnow);
+            } else {
+                 $skip = false;
             }
         }
         if ( $ok ) {
-            updatever($VERSION);
-            echo "update ok<br>";
+            //require ('version.php');
+            //updatever($VERSION);
+            echo "<br>update ok<br>";
         }
     } else {
-        if ( isset($dbver) and $dbver <> $_SESSION['VERSION'] ) updatever($_SESSION['VERSION']);
-        if ( !$LOGIN ) echo "System uptodate<br />";//wofür ist $LOGIN gedacht??
+        if ( $menu ) {
+            if ( $isnow ) foreach ( $isnow as $row ) echo $row.'<br>';
+            echo 'Keine Updates notwendig';
+        }
+        if ( isset($dbver) and $dbver <> $VERSION ) updatever($VERSION);
     };
-    if ( !$LOGIN ) {
-        $sql = "select tag,login,itime  from schema_info where tag ilike 'crm_%' order by itime";
-        $liste = $_SESSION["db"]->getAll($sql);
-        echo "<br /><table>\n";
-        $zeile = "<tr><td>%s</td><td>%s</td><td>%s</td></tr>\n";
-        if ( $liste ) foreach ( $liste as $line ) {
-            echo sprintf($zeile,$line["tag"],$line["login"],$line["itime"]);
-        };
-        echo "</table>";
-        echo '
-               <form action="#">
-                <p>
-                <input type="button" name="Text 1" value="Next"
-               onclick="window.location.href = \''.$_SERVER["HTTP_REFERER"].'\' ">
-          </p>
-        </form>';
+    if ( $menu ) {
+        echo $menu['end_content'];
+        echo '</body></html>';
     }
 ?>

@@ -1,7 +1,5 @@
 <?php
-if( !varExist( $_SESSION['ok'] ) ) anmelden();
-global $dbh;
-if( varExist( $_SESSION['dbhost'] ) ) $dbh = new myPDO( $_SESSION["dbhost"], $_SESSION["dbport"], $_SESSION["dbname"], $_SESSION["dbuser"], $_SESSION["dbpasswdcrypt"], $_SESSION["sessid"] );
+
 //else
 
 class myPDO extends PDO{
@@ -26,7 +24,7 @@ class myPDO extends PDO{
         try{
             parent::__construct( "pgsql:host=$host;port=$port;dbname=$dbname;", $user, $id ? @openssl_decrypt( base64_decode( $passwd ), 'AES128', $id ) : $passwd );
         }
-        catch( PDOException $e ) {
+        catch( PDOException $e ){
             echo $e->getMessage();
         }
     }

@@ -5,6 +5,7 @@ ini_set('session.bug_compat_42', 0);  // Das ist natürlich lediglich eine Provi
 //session_set_cookie_params(480*60); //480*60
 if( !isset($_SESSION) ) session_start();
 require_once "phpDataObjects.php";
+require_once "connection.php";
 include_once "mdb.php"; //ToDo remove
 require_once "conf.php";
 
@@ -167,7 +168,7 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
     $auth['client_id'] = $mandant;
     $sql  = 'SELECT id as manid,name as mandant,dbhost,dbport,dbname,dbuser,dbpasswd FROM auth.clients WHERE id = '.$mandant;
     $rs   = $db->getOne($sql);
-    $rs['dbpasswdcrypt'] = base64_encode( @openssl_encrypt( $rs['dbpasswd'], 'AES128', $cookie));//ToDo change in dbpasswd
+    $rs['dbpasswdcrypt'] = base64_encode( @openssl_encrypt( $rs['dbpasswd'], 'AES128', $cookie))    ;//ToDo change in dbpasswd
     $auth = array_merge($auth,$rs);
     //printArray( $auth );
     //$sql  = "SELECT id AS value, name AS text FROM auth.group";
@@ -255,7 +256,7 @@ function anmelden() {
     if ( !$cookiename ) $cookiename = $_SESSION['erpConfigFile'].'_session_id';
     if ( !$sesstime ) $sesstime = 480;
     fclose($lxo);
-    $cookie = $_COOKIE[$cookiename];
+    $cookie = $_COOKIE[$cookiename] ;
     if ( !$cookie ) header("location: ups.html");
     // Benutzer anmelden
     //error_log("!$ERPNAME!$dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie!",0);

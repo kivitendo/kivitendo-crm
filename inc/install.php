@@ -153,7 +153,7 @@ echo "<br>Voraussetzungen pr&uuml;fen:<br>";
 if ( $dbok ) {
     if ( $_GET['check']==2 || $_GET['check']=='' ) {
         $sql = "SELECT * from schema_info  where tag like 'release_%' order by tag desc limit 1";
-        $rs  = $_SESSION['db']->getAll($sql);
+        $rs  = $GLOBALS['dbh']->getAll($sql);
         if ( substr($rs[0]["tag"],0,11)>="release_2_6" ) {
             fputs($log,$rs[0]["version"]." als Basis\n");
             echo "$ok. ERP-DB gefunden<br>";
@@ -199,7 +199,7 @@ while ( !feof($f) ) {
         $query .= $zeile;
     } else {
         $query .= $zeile;
-        $rc = $_SESSION['db']->query(substr($query,0,-1));
+        $rc = $GLOBALS['dbh']->query(substr($query,0,-1));
         if ( $rc ) { $OK++; echo ".";}
         else {
             $fehl++;

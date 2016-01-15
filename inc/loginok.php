@@ -1,5 +1,5 @@
 <?php
-if ( !isset($_SESSION["db"])     ||
+if ( !isset($GLOBALS['dbh'])     ||
      !isset($_SESSION["cookie"]) ||
      !isset($_COOKIE[$_SESSION["cookie"]]) ||
      ( $_SESSION["sessid"] <> $_COOKIE[$_SESSION["cookie"]]) ) {
@@ -12,7 +12,7 @@ if ( !isset($_SESSION["db"])     ||
 } else {
     //global $dbh;
     if( varExist( $_SESSION['dbhost'] ) ) $dbh = new myPDO( $_SESSION["dbhost"], $_SESSION["dbport"], $_SESSION["dbname"], $_SESSION["dbuser"], $_SESSION["dbpasswdcrypt"], $_SESSION["sessid"] );
-    $_SESSION["db"] = new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
+    $GLOBALS['dbh'] = new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
     $_SESSION["loginok"] = "ok";
 }
 

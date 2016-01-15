@@ -30,7 +30,7 @@ if ($_POST["ok"]=="erzeugen") {
             $sql.="left join taxkeys TK  on TK.chart_id=C.id left join tax T on T.id=TK.tax_id ";
             $sql.="where  TK.startdate <= now() and C.taxkey_id=0 and category = 'I' and datevautomatik = 'f' ";
             $sql.="order by C.id, TK.startdate ";
-            $rs=$_SESSION["db"]->getAll($sql,DB_FETCHMODE_ASSOC);
+            $rs=$GLOBALS['dbh']->getAll($sql,DB_FETCHMODE_ASSOC);
             if ($rs) foreach ($rs as $row) {
                 $tax[$row["id"]]=sprintf("%0.2f",$row["rate"]);
         }
@@ -41,7 +41,7 @@ if ($_POST["ok"]=="erzeugen") {
         $sql = "select trans_id,chart_id,amount from acc_trans acc left join chart c on acc.chart_id=c.id ";
         $sql.= "where trans_id in (select id from ar) and c.taxkey_id=0 and c.category='I' ";
         $sql.= "and trans_id in (select id from ar where ".$sqlar.") order by trans_id";
-        $rs = $_SESSION["db"]->getAll($sql,DB_FETCHMODE_ASSOC);
+        $rs = $GLOBALS['dbh']->getAll($sql,DB_FETCHMODE_ASSOC);
         return $rs;
     }
 
@@ -71,8 +71,8 @@ if ($_POST["ok"]=="erzeugen") {
         $sqlar.=$bezug." between '".$von."' and '".$bis."'";
         //echo $sqlar;
         $steuern = getSteuern($sqlar);
-        //$rs = $_SESSION["db"]->getAll($sql.$sqlar." order by invnumber",DB_FETCHMODE_ASSOC);
-        $rs = $_SESSION["db"]->getAll($sql.$sqlar." order by transdate",DB_FETCHMODE_ASSOC);
+        //$rs = $GLOBALS['dbh']->getAll($sql.$sqlar." order by invnumber",DB_FETCHMODE_ASSOC);
+        $rs = $GLOBALS['dbh']->getAll($sql.$sqlar." order by transdate",DB_FETCHMODE_ASSOC);
         if ( !$rs ) return false;
         foreach ($rs as $row) {
             $rechng[$row["id"]] = $row;

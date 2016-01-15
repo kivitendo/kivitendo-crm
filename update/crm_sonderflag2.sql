@@ -3,15 +3,15 @@
 
 -- @php: *
 $sql = "select * from sonderflag"; 
-$sf = $_SESSION['db']->getAll($sql);
+$sf = $GLOBALS['dbh']->getAll($sql);
 $sql = "insert into custom_variable_configs (name,description,type,module,searchable,includeable,sortkey) ";
 $sql.= "values ('%s','%s','bool','CT','t','t',(select max(sortkey)+1 from custom_variable_configs))";
 if ($sf) {
   foreach ($sf as $r) {
     $key = strtolower(preg_replace("/[^a-zA-Z_\d]+/","",$r["skey"]));
     $sql2 = sprintf($sql,$key,$r["skey"]);
-    $rc=$_SESSION['db']->query($sql2);
-    $rs = $_SESSION['db']->getOne("select id from custom_variable_configs where name = '$key'");
+    $rc=$GLOBALS['dbh']->query($sql2);
+    $rs = $GLOBALS['dbh']->getOne("select id from custom_variable_configs where name = '$key'");
     $val[$r["svalue"]] = $rs["id"];
     $sflag .= $r["skey"].":".$r["svalue"]." ";
   };
@@ -19,21 +19,21 @@ if ($sf) {
   $tabs = array("customer","vendor");
   foreach ($tabs as $t) {
       $sql = "select id,sonder from ".$t." where sonder > 0";
-      $crs = $_SESSION['db']->getAll($sql);
+      $crs = $GLOBALS['dbh']->getAll($sql);
       if ($crs) foreach ($crs as $r) {
          foreach ($val as $k=>$v) {
            if (($r["sonder"] & $k) == $k) {
               $sql = "insert into custom_variables (config_id,trans_id,bool_value) ";
               $sql.= "values ($v,".$r["id"].",'t')";
-              $rc = $_SESSION['db']->query($sql);
+              $rc = $GLOBALS['dbh']->query($sql);
            };
          };
       };
   };
   $sql = "select cp_id,cp_sonder from contacts where cp_sonder > 0";
-  $rs = $_SESSION['db']->getAll($sql);
+  $rs = $GLOBALS['dbh']->getAll($sql);
   if ($rs) foreach ($rs as $r) {
-    $rc = $_SESSION['db']->query("update contacts set cp_notes = cp_notes || ' $sflag = ".$r["cp_sonder"]."' where cp_id = ".$r["cp_id"]);
+    $rc = $GLOBALS['dbh']->query("update contacts set cp_notes = cp_notes || ' $sflag = ".$r["cp_sonder"]."' where cp_id = ".$r["cp_id"]);
   }
 }
 -- @exec: *

@@ -60,7 +60,7 @@ if ( !isset($_SESSION['dbhost']) ) {
     $_SESSION['erpConfigFile'] = $erpConfigFile;
     require_once "version.php";
     $_SESSION['VERSION'] = $VERSION;
-    require_once "login.php";
+    //require_once "login.php";
     //exit();
 } else {
     if ( !isset($_SESSION["cookie"]) ||
@@ -77,7 +77,7 @@ if ( !isset($_SESSION['dbhost']) ) {
     };
 };
 
-require_once "login".$_SESSION["loginok"].".php";
+//require_once "login".$_SESSION["loginok"].".php";
 
 
 
@@ -271,32 +271,32 @@ function anmelden() {
     $_SESSION["sesstime"] = $sesstime;
     // Benutzer/Gruppen/Gruppenzuordnung aus der ERP als Arrays in Session schreiben
     //$db_new = new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
-    $db_new = new myPDO($dbhost,$dbport,$dbname,$dbuser,$dbpasswd);//ToDo: Kevin das gehört besser in authuser()??
-    $sql_all_users = "SELECT usr.id AS id, usr.login, usrc.cfg_value AS name FROM auth.user AS usr INNER JOIN auth.user_config AS usrc ON usr.id = usrc.user_id INNER JOIN auth.clients_users AS cliusr ON usr.id = cliusr.user_id WHERE usrc.cfg_key = 'name' AND cliusr.client_id = '".$auth['client_id']."' ORDER by usr.id";
-    $sql_all_groups = "SELECT grp.id AS id, grp.name AS name FROM auth.group AS grp INNER JOIN auth.clients_groups AS cligrp ON grp.id = cligrp.group_id WHERE cligrp.client_id = '".$auth['client_id']."' ORDER by grp.id";
-    $sql_all_assignments = "SELECT usrg.user_id AS user_id, usrg.group_id AS group_id FROM auth.user_group AS usrg ORDER by usrg.user_id";
-    $all_users = $db_new->getAll( $sql_all_users);
-    $all_groups = $db_new->getAll( $sql_all_groups);
-    $all_assignments = $db_new->getAll( $sql_all_assignments);
-    unset( $db_new );
+    //$db_new = new myPDO($dbhost,$dbport,$dbname,$dbuser,$dbpasswd);//ToDo: Kevin das gehört besser in authuser()??
+    //$sql_all_users = "SELECT usr.id AS id, usr.login, usrc.cfg_value AS name FROM auth.user AS usr INNER JOIN auth.user_config AS usrc ON usr.id = usrc.user_id INNER JOIN auth.clients_users AS cliusr ON usr.id = cliusr.user_id WHERE usrc.cfg_key = 'name' AND cliusr.client_id = '".$auth['client_id']."' ORDER by usr.id";
+    //$sql_all_groups = "SELECT grp.id AS id, grp.name AS name FROM auth.group AS grp INNER JOIN auth.clients_groups AS cligrp ON grp.id = cligrp.group_id WHERE cligrp.client_id = '".$auth['client_id']."' ORDER by grp.id";
+    //$sql_all_assignments = "SELECT usrg.user_id AS user_id, usrg.group_id AS group_id FROM auth.user_group AS usrg ORDER by usrg.user_id";
+    //$all_users = $db_new->getAll( $sql_all_users);
+    //$all_groups = $db_new->getAll( $sql_all_groups);
+    //$all_assignments = $db_new->getAll( $sql_all_assignments);
+    //unset( $db_new );
     // $_SESSSION['ok'] da anmelden 2x durchlaufen wird ?? Bessere Lösung ?
-    if(!$_SESSION['ok']) {
-        $_SESSION['all_erp_users'] = $all_users;
-        $_SESSION['all_erp_groups'] = $all_groups;
-        $_SESSION['all_erp_assignments'] = $all_assignments;
-    }
-    $_SESSION['ok'] = "1";
+    //if(!$_SESSION['ok']) {
+    //    $_SESSION['all_erp_users'] = $all_users;
+    //    $_SESSION['all_erp_groups'] = $all_groups;
+    //    $_SESSION['all_erp_assignments'] = $all_assignments;
+   // }
+    //$_SESSION['ok'] = "1";
     // Mit der Mandanten-DB verbinden
     //$db   = new myPDO($dbhost,$dbport,$dbname,$dbuser,$dbpasswd);
     global $dbData;
-    $_SESSION["db"] = new myPDO( $dbData["dbhost"], $dbData["dbport"], $dbData["dbname"], $dbData["dbuser"], $dbData["dbpasswd"], $_SESSION["sessid"] );
-    //$_SESSION["db"] = new myPDO( $_SESSION["dbhost"],$_SESSION["dbport"],$_SESSION["dbname"],$_SESSION["dbuser"],$_SESSION["dbpasswd"]);
+    //$GLOBALS['dbh'] = new myPDO( $dbData["dbhost"], $dbData["dbport"], $dbData["dbname"], $dbData["dbuser"], $dbData["dbpasswd"], $_SESSION["sessid"] );
+    //$GLOBALS['dbh'] = new myPDO( $_SESSION["dbhost"],$_SESSION["dbport"],$_SESSION["dbname"],$_SESSION["dbuser"],$_SESSION["dbpasswd"]);
     //$_SESSION['test']
     global $test;
 
     //$_SESSION["dbPDO"] = new myPDO( $_SESSION["dbhost"],$_SESSION["dbport"],$_SESSION["dbname"],$_SESSION["dbuser"],$_SESSION["dbpasswd"]);
     //$db_new = new myPDO($dbhost,$dbport,$dbname,$dbuser,$dbpasswd);
-    if( !$_SESSION["db"] ) {
+    if( !$GLOBALS['dbh'] ) {
         return false;
     } else {
         $_SESSION['Admin'] = $auth['Admin'];
@@ -316,7 +316,7 @@ function anmelden() {
         $_SESSION["loginCRM"] = $user_data["id"];
         $_SESSION['theme']    = ($user_data['theme']=='' || $user_data['theme']=='base')?'':$user_data['theme'];
         $sql = "SELECT  * from schema_info where tag like 'relea%' order by itime desc limit 1";
-        $rs = $_SESSION["db"]->getOne($sql);
+        $rs = $GLOBALS['dbh']->getOne($sql);
         $tmp = substr($rs['tag'],8);
         $_SESSION["ERPver"]   = strtr($tmp,'_','.');
         $_SESSION["menu"]     = makeMenu($_SESSION["sessid"],$_SESSION["token"]);
@@ -772,9 +772,9 @@ function clearCSVData() {
 function insertCSVData($data,$id){ //ToDo:
     $tmpstr = implode(":",$data);                                               // ANREDE:NAME:STRASSE (...)
     $sql = "insert into tempcsvdata (uid,csvdaten,id) values ('"
-            . $_SESSION["loginCRM"] . "','" . $_SESSION['db']->saveData($tmpstr) . "','"
-            . $_SESSION['db']->saveData($id) . "')";                                        // saveData escapt die Zeichenkette
-    $rc = $_SESSION['db']->query($sql);
+            . $_SESSION["loginCRM"] . "','" . $GLOBALS['dbh']->saveData($tmpstr) . "','"
+            . $GLOBALS['dbh']->saveData($id) . "')";                                        // saveData escapt die Zeichenkette
+    $rc = $GLOBALS['dbh']->query($sql);
     return $rc;     //Fehlerbehandlung? Wie sieht es aus mit exceptions? Muessen wir php4-kompatibel sein?
                     //Sollte eigentlich schon immer in den Funktionen direkt passieren
                     // http://pear.php.net/manual/de/standars.errors.php

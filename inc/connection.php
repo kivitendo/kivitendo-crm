@@ -21,6 +21,8 @@ if( TRUE ){
 }
 
 $_SESSION['sessid'] =& $_COOKIE[$_SESSION['erpConfig']['authentication']['cookie_name']];
+//$_SESSION['cookie'] =& $_SESSION['erpConfig']['authentication']['cookie_name'];
+//$_SESSION['sesstime'] =& $_SESSION['erpConfig']['authentication']['session_timeout'];
 //printArray( $_SESSION);
 
 $conf_auth_db = $_SESSION['erpConfig']['authentication/database'];
@@ -28,6 +30,7 @@ $dbh_auth = new myPDO ($conf_auth_db['host'], $conf_auth_db['port'], $conf_auth_
 
 
 if( !varExist( $_SESSION['userConfig'] ) )   $_SESSION['userConfig']   = getUserConfig(); //printArray( getUserConfig());
+$_SESSION['token'] =& $_SESSION['userConfig']['token'];//ToDO: delete
 $_SESSION['login'] =& $_SESSION['userConfig']['login'];//ToDO: delete
 $_SESSION['fax'] =& $_SESSION['userConfig']['fax'];//ToDO: delete
 $_SESSION['email'] =& $_SESSION['userConfig']['email'];//ToDO: delete
@@ -42,17 +45,20 @@ $_SESSION['all_erp_users'] =& $_SESSION['userConfig']['all_erp_users'];//ToDO: d
 $_SESSION['all_erp_groups'] =& $_SESSION['userConfig']['all_erp_groups'];//ToDO: delete
 $_SESSION['all_erp_assingments'] =& $_SESSION['userConfig']['all_erp_assignments'];//ToDO: delete
 
-//if( !varExist( $_SESSION['menu'] ) )       $_SESSION['menu']       = getMenu();   //printArray( getDbData());
 
 if( !varExist( $_SESSION['dbData'] ) )       $_SESSION['dbData']       = getDbData();   //printArray( getDbData());
 $_SESSION['manid'] =& $_SESSION['dbData']['manid'];//ToDO: delete
 $_SESSION['mandant'] =& $_SESSION['dbData']['mandant'];//ToDO: delete
+$_SESSION['dbhost'] =& $_SESSION['dbData']['dbhost'];// Das muss weg !
+
 $dbData = $_SESSION['dbData'];
 
 //printArray($dbh_auth->getAll( 'select * from auth.user_config' ));
 
 //if( varExist( $_SESSION['sessid'] ) ) $dbh = new myPDO( $_SESSION["dbhost"], $_SESSION["dbport"], $_SESSION["dbname"], $_SESSION["dbuser"], $_SESSION["dbpasswdcrypt"], $_SESSION["sessid"] );
 if( varExist( $_SESSION['sessid'] ) ) $dbh = new myPDO( $dbData["dbhost"], $dbData["dbport"], $dbData["dbname"], $dbData["dbuser"], $dbData["dbpasswd"], $_SESSION["sessid"] );
+
+//$_SESSION["menu"]     = makeMenu($_SESSION["sessid"],$_SESSION["token"]);
 
 //printArray( $_SESSION );
 
@@ -139,6 +145,10 @@ function getUserConfig(){
     $rs = $GLOBALS['dbh_auth']->getAll( $sql );
     foreach ( $rs as $row ) $userConfig[$row["cfg_key"]] = $row["cfg_value"];
     $userConfig["stylesheet"] = substr( $userConfig["stylesheet"], 0, -4 );
+    //Token lesen
+    $sql = "SELECT * FROM auth.session WHERE id = '".$_SESSION['sessid']."'";
+    $rs =  $GLOBALS['dbh_auth']->getOne($sql);
+    $userConfig['token'] = $rs;
     //Welcer Mandant ist verbunden
     $sql  = "SELECT sess_value FROM auth.session_content WHERE session_id = '".$_SESSION['sessid']."' and sess_key='client_id'";
     $rs   = $GLOBALS['dbh_auth']->getOne( $sql );

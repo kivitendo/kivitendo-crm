@@ -68,7 +68,7 @@ if ($_POST["ok"]=="erzeugen") {
 		$sqlar.=$bezug." between '".$_POST["jahr"]."-01-01' and '".$_POST["jahr"]."-12-31'";
 	}
 	//echo $sqlar;
-	$rs=$_SESSION["db"]->getAll($sqlar);
+	$rs=$GLOBALS['dbh']->getAll($sqlar);
 	echo "<table>\n";
 	echo "<tr><td>TransID</td><td>Re-Nr.</td><td>Brutto</td><td>Netto</td><td>MwSt</td><td>Tax<br>Zone</td><td>Kunde</td><td>Land</td><td>UST-ID</td></tr>";
 	$netto0=0;

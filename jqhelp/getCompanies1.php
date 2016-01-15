@@ -43,7 +43,7 @@
                             'KDNR', 'USTID', 'STEUERNR', 'KTONR', 'BANK', 'BLZ', 'LANG', 'KDTYP');
             if ( isset($_POST['umsatz']) and $_POST['umsatz'] != '' ) $header[] = "UMSATZ";
             $sql = "select name from custom_variable_configs where module = 'CT'";
-            $rs = $_SESSION['db']->getAll($sql);
+            $rs = $GLOBALS['dbh']->getAll($sql);
             if ($rs) {
                 $cvar = 0;
                 foreach ($rs as $row) {

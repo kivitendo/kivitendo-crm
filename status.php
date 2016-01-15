@@ -14,7 +14,7 @@ if ( $rc > 0 ) {
 }
 $rc = false;
 if ( isset($_GET['test']) and $_GET['test'] == 'ja' ) {
-    $rc = $_SESSION['db']->getAll("select * from crm order by version","Status");
+    $rc = $GLOBALS['dbh']->getAll("select * from crm order by version","Status");
 }
 $menu =  $_SESSION['menu'];
 $head = mkHeader();

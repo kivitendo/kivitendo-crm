@@ -56,7 +56,7 @@
             $sql .= 'where trans_id in ';
             $sql .= '(SELECT id from ar where  amount > 0 and transdate between \''.$date.'\' and now() ) '; //= \''.$date.'\') ';
             $sql .= 'group by partnumber,parts.description order by qty desc'; //partnumber';
-            $rs = $_SESSION['db']->getAll($sql);
+            $rs = $GLOBALS['dbh']->getAll($sql);
             $line  = "<tr><td><input type='text' size='3'  name='data[qty][]' value='%s'></td>";
             $line .=     "<td><input type='text' size='10' name='data[partnumber][]' value='%s'></td>";
             $line .=     "<td><input type='text' size='70' name='data[description][]' value='%s'></td></tr>\n";

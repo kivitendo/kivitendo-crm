@@ -25,7 +25,7 @@
  	foreach($tabellen as $key=>$val) {
 		$sql="SELECT a.attname FROM pg_attribute a, pg_class c WHERE ";
 		$sql.="c.relname = '$val' AND a.attnum > 0 AND a.attrelid = c.oid ORDER BY a.attnum";
-		$rs=$_SESSION['db']->getAll($sql);
+		$rs=$GLOBALS['dbh']->getAll($sql);
 		if ($rs) { 
             $pre =  substr($key,0,1);
 			foreach ($rs as $row) {

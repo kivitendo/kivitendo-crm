@@ -59,7 +59,7 @@ if ($_GET['all']) {
         }
     }
 	$sql = "SELECT  name, customernumber FROM customer ORDER BY customernumber"; //::INT ";
-    $rs = $_SESSION['db']->getall($sql);
+    $rs = $GLOBALS['dbh']->getall($sql);
     if ($rs) { 
     	foreach ($rs as $key => $value) {
 			if (!is_dir($dir_abs."/C".$rs[$key]['customernumber'])) {
@@ -74,7 +74,7 @@ if ($_GET['all']) {
 		}
     }
     $sql = "SELECT  name, vendornumber FROM vendor ORDER BY vendornumber"; //::INT ";
-    $rs = $_SESSION['db']->getall($sql);
+    $rs = $GLOBALS['dbh']->getall($sql);
     if ($rs) { 
     	foreach ($rs as $key => $value) {
 			if (!is_dir($dir_abs."/V".$rs[$key]['vendornumber'])) {

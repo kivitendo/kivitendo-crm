@@ -89,13 +89,13 @@ class PostItAll{
     protected function getLength( $idUser ){
         $sql = "select count(*) as total from postitall where iduser='" . $idUser . "'";
         writeLog( "getLength. ".$sql );
-        $rs = $_SESSION['db']->getOne( $sql );
+        $rs = $GLOBALS['dbh']->getOne( $sql );
         return intval( $rs["total"] );
     }
 
     protected function get( $idUser, $idNote ){
         $sql = "select content from postitall where iduser='" . $idUser . "' and idnote='" . $idNote . "'";
-        $rs = $_SESSION['db']->getOne( $sql );
+        $rs = $GLOBALS['dbh']->getOne( $sql );
         return $rs['content'];
     }
 
@@ -111,7 +111,7 @@ class PostItAll{
     protected function key( $idUser, $key ){
         if( !$key ) $key = "0";
         $sql = "select idnote from postitall where iduser='" . $idUser . "' limit 1 OFFSET ".$key;
-        $array = $_SESSION['db']->getOne( $sql );
+        $array = $GLOBALS['dbh']->getOne( $sql );
         //writeLog( $array );
         if( $array ){
             writeLog( $array["idnote"] );
@@ -123,7 +123,7 @@ class PostItAll{
     public function getData( $idUser ){
         //writeLog( "getData" );
         $sql = "select content from postitall where iduser = " . $idUser;
-        $rs = $_SESSION['db']->getAll( $sql );
+        $rs = $GLOBALS['dbh']->getAll( $sql );
         writeLog( $rs );
         return $rs["content"];
     }
@@ -137,18 +137,18 @@ class PostItAll{
         //$content = str_replace( ';', ',', $content );
         $sql = "insert into postitall (iduser, idnote, content) values ('".$idUser."','".$idNote."','".$content."')";
         //writeLog( $sql );
-        return $_SESSION['db']->query( $sql );
+        return $GLOBALS['dbh']->query( $sql );
     }
 
     private function updateNote( $idUser, $idNote, $content ){
         $sql = "update postitall set content='".$content."' where iduser='".$idUser."' and idNote='".$idNote."'";
         //writeLog($sql );
-        return  $_SESSION['db']->query( $sql );
+        return  $GLOBALS['dbh']->query( $sql );
     }
 
     private function removeNote( $idUser, $idNote ){
         $sql = "delete from postitall where iduser='".$idUser."' and idNote='".$idNote."'";
-        return  $_SESSION['db']->query( $sql );
+        return  $GLOBALS['dbh']->query( $sql );
     }
 }
 

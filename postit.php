@@ -5,12 +5,12 @@ $popup=($_GET["popup"])?$_GET["popup"]:0;
 
 function getAllPostIt($id) {
 	$sql = "select * from postit where employee=$id order by date";
-	$rs  = $_SESSION['db']->getAll($sql);
+	$rs  = $GLOBALS['dbh']->getAll($sql);
 	return $rs;
 }
 function getOnePostIt($id) {
 	$sql = "select * from postit where id=$id";
-	$rs  = $_SESSION['db']->getAll($sql);
+	$rs  = $GLOBALS['dbh']->getAll($sql);
 	if ($rs) {
 		$data=$rs[0];
 		$data["notes"]=stripslashes($data["notes"]);
@@ -22,27 +22,27 @@ function getOnePostIt($id) {
 function savePostIt($data) {
 	if (!$data["id"]) {
 		$newID = uniqid (rand());
-		$rc    = $_SESSION['db']->insert(postit,array('employee','date','cause'),array($_SESSION["loginCRM"],'now()',$newID));
+		$rc    = $GLOBALS['dbh']->insert(postit,array('employee','date','cause'),array($_SESSION["loginCRM"],'now()',$newID));
 		if ($rc) {
                 	$sql = "select id from postit where cause = '$newID'";
-	                $rs  = $_SESSION['db']->getOne($sql);
+	                $rs  = $GLOBALS['dbh']->getOne($sql);
 		} else {
 			return false;
 		}
                 if ($rs) {
                         $data["id"] = $rs["id"];
-                        $rc = $_SESSION['db']->commit();
+                        $rc = $GLOBALS['dbh']->commit();
                 } else {
                         return false;
                 }
 	};
         $sql = "UPDATE postit SET notes = '".$data["notes"]."',cause='".substr($data["cause"],0,100)."' WHERE id = ".$data['id'];
-        $rc = $_SESSION['db']->query($sql);
+        $rc = $GLOBALS['dbh']->query($sql);
 	return $rc;
 }
 function DelPostIt($id) {
 	$sql = "delete from postit where id=$id";
-	$rc  = $_SESSION['db']->query($sql);
+	$rc  = $GLOBALS['dbh']->query($sql);
 	return $rc;
 }
 if ($_POST["save"]) {

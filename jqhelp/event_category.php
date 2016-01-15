@@ -9,16 +9,16 @@
     switch( $task ){
         case "newCategory":
             $sql="INSERT INTO event_category ( label, color, cat_order ) VALUES ( '$newCat', '$newColor', ( SELECT max( cat_order ) + 1 AS cat_order FROM event_category) )";
-            $rc=$_SESSION['db']->query($sql); 
+            $rc=$GLOBALS['dbh']->query($sql); 
         break;
         case "getCategories":
-            if ( $_SESSION['db']->JVer ) {
+            if ( $GLOBALS['dbh']->JVer ) {
                 $sql = "SELECT json_agg( json_category ) FROM ( SELECT id, label, TRIM( color ) AS color FROM event_category ORDER BY cat_order DESC ) AS json_category ;";
-                $rs = $_SESSION['db']->getOne( $sql );
+                $rs = $GLOBALS['dbh']->getOne( $sql );
                 echo $rs['json_agg'];   
             } else {
                 $sql = "SELECT id , label, TRIM( color ) AS color FROM event_category ORDER BY cat_order DESC";
-                $rs = $_SESSION['db']->getJson( $sql );
+                $rs = $GLOBALS['dbh']->getJson( $sql );
                 echo $rs;  
             }
         break; 
@@ -31,12 +31,12 @@
                     else $sql .= ($key ? ',' :'' )."( ".substr($value['name'], 4).", '".$value['value']."'";        
                 }
                 $sql .= " ) UPDATE event_category SET label = d.label, color = d.color, cat_order = d.cat_order FROM new_data d WHERE d.id = event_category.id";
-                $rs = $_SESSION['db']->getOne( $sql );
+                $rs = $GLOBALS['dbh']->getOne( $sql );
             }      
         break;
         case "deleteCategory":
             $sql="DELETE FROM event_category WHERE id = $delCat";
-            $rc=$_SESSION['db']->query($sql); 
+            $rc=$GLOBALS['dbh']->query($sql); 
         break;
      }
  ?>

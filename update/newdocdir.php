@@ -2,14 +2,14 @@
 if ($_GET["chk"]==1) include("../inc/stdLib.php");
 function suchPerson($nummer) {
 	$sql="select * from contacts where cp_id=$nummer";
-	$rs=$_SESSION['db']->getAll($sql);
+	$rs=$GLOBALS['dbh']->getAll($sql);
 	if (!empty($rs) && $rs[0]["cp_id"]==$nummer) { // Person gefunden
 		if (!$rs[0]["cp_cv_id"]) return false; // Einzelperson
 		$sql="select * from customer where id=".$rs[0]["cp_cv_id"];
-		$rs2=$_SESSION['db']->getAll($sql);
+		$rs2=$GLOBALS['dbh']->getAll($sql);
 		if (count($rs2)<1) { // Kein Customer, suche bei Vendor
 			$sql="select * from vendor where id=".$rs[0]["cp_cv_id"];
-			$rs2=$_SESSION['db']->getAll($sql);
+			$rs2=$GLOBALS['dbh']->getAll($sql);
 			if (!empty($rs2) && $rs2[0]["id"]==$rs[0]["cp_cv_id"]) {
 				$Q="V".$rs2[0]["vendornumber"];
 			} else {
@@ -26,10 +26,10 @@ function suchPerson($nummer) {
 
 function suchtabelle($nummer)   {
 	$sql="select * from customer where id=$nummer";
-	$rs=$_SESSION['db']->getAll($sql);
+	$rs=$GLOBALS['dbh']->getAll($sql);
 	if (empty($rs) || !$rs) { // Kein Kunde
 		$sql="select * from vendor where id=$nummer";
-		$rs=$_SESSION['db']->getAll($sql);
+		$rs=$GLOBALS['dbh']->getAll($sql);
 		if (!empty($rs) && $rs[0]["id"]==$nummer) { // Lieferant gefunden
 			return "V".$rs[0]["vendornumber"];
 		} else { 
@@ -46,7 +46,7 @@ function newname($root,$old,$new) {
          $ok=rename($root."/".$old,$root."/".$new);
          if ($ok) {
             $sql="update documents set path='$new' where kunde = $old";
-            $ok = $_SESSION['db']->query($sql);
+            $ok = $GLOBALS['dbh']->query($sql);
             if (!$ok) {
                 rename($root."/".$new,$root."/".$old);
             }
@@ -100,7 +100,7 @@ if ($personen) foreach ($personen as $filename) {
 		echo "$ok<br>\n";
 	} else {
         $sql="update documents set path='$filename' where kunde = $filename";
-        $ok = $_SESSION['db']->query($sql);
+        $ok = $GLOBALS['dbh']->query($sql);
        	echo 'Verzeichnis '.$filename." nicht verschoben<br>\n";
 		if ($doclog) fputs($doclog,$filename.' nicht verschoben '."\n");
         }

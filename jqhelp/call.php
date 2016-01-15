@@ -16,15 +16,15 @@ function CreateFunctionsAndTable(){ //Legt beim ersten Aufruf der Datenbank die 
     foreach( $statement as $key=>$value ){
         $sok0 = preg_replace( $sm0, '',$statement[$key] );
         $sok1 = preg_replace( $sm1, '',$sok0 );
-        $rc=$_SESSION['db']->query( $sok1 );
+        $rc=$GLOBALS['dbh']->query( $sok1 );
     }
     $sql="insert into schema_info (tag, login) values ('crm_telefon_integration', '".$_SESSION['login'].")'";
-    $rc=$_SESSION['db']->query($sql);
+    $rc=$GLOBALS['dbh']->query($sql);
 }
 
 function getCallListComplete(){
     $sql = "SELECT json_agg( json_calls ) FROM ( SELECT EXTRACT(EPOCH FROM TIMESTAMPTZ(crmti_init_time)) AS call_date, crmti_status, crmti_src, crmti_dst, crmti_caller_id, crmti_caller_typ, crmti_direction  FROM crmti ORDER BY crmti_init_time DESC) AS json_calls";
-    $rs = $_SESSION['db']->getone( $sql );
+    $rs = $GLOBALS['dbh']->getone( $sql );
     if( !$rs ){
         CreateFunctionsAndTable();
     }

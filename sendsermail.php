@@ -27,13 +27,13 @@ if ($dateiname) {
 }
 
 $sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' and id < 1";
-$data=$_SESSION['db']->getAll($sql);
+$data=$GLOBALS['dbh']->getAll($sql);
 $felder=explode(":",$data[0]["csvdaten"]);
 $pemail=array_search("EMAIL",$felder);
 $cid=array_search("ID",$felder);
 $pkont=array_search("KONTAKT",$felder);
 $sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' order by id offset ".$offset." limit ".$limit;
-$data=$_SESSION['db']->getAll($sql);
+$data=$GLOBALS['dbh']->getAll($sql);
 if ($data) {
 	$bodytxt=strip_tags($bodytxt);
 	foreach ($data as $row) {

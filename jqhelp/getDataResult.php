@@ -16,7 +16,7 @@ if ($_POST["submit"] =="kontakt" && $_POST['swort'] != '') {
     $sql .= "from telcall t left join customer C on C.id=caller_id left join vendor V on V.id=caller_id ";
     $sql .= "left join contacts P on caller_id=P.cp_id where UPPER(cause) like '%$sw%' or UPPER(c_long) like '%$sw%' ";
     $sql .= 'order by bezug,calldate desc limit '.$_SESSION['listLimit'];
-    $rs = $_SESSION['db']->getAll( $sql );
+    $rs = $GLOBALS['dbh']->getAll( $sql );
     $used = Array();
     if( $anzahl = count($rs) ) {
         echo "<table id='treffer' class='tablesorter'>\n";

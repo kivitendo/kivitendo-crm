@@ -14,7 +14,7 @@ $i=1;
 foreach ($cp_sonder as $key=>$val) {
     $sql = "insert into sonderflag (svalue,skey,sorder) values ($key,'$val',$i)";
     echo $sql;
-    $rc=$_SESSION['db']->query($sql);
+    $rc=$GLOBALS['dbh']->query($sql);
     echo "$key:$val:$i:$rc<br>";
     $i++;
 }

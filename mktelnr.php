@@ -11,24 +11,24 @@
 	$sql9="select cp_id as id,cp_fax as phone from contacts where cp_fax <> ''";
 	$sql10="select cp_id as id,cp_homephone as phone from contacts where cp_homephone <> ''";
 
-	$rs=$_SESSION['db']->getAll($sql1,DB_FETCHMODE_ASSOC);
+	$rs=$GLOBALS['dbh']->getAll($sql1,DB_FETCHMODE_ASSOC);
 	foreach($rs as $eintrag) {
 		mkTelNummer($eintrag["id"],"C",array($eintrag["phone"]));
 	}
-	$rs=$_SESSION['db']->getAll($sql3,DB_FETCHMODE_ASSOC);
+	$rs=$GLOBALS['dbh']->getAll($sql3,DB_FETCHMODE_ASSOC);
 	foreach($rs as $eintrag) {
 		mkTelNummer($eintrag["id"],"V",array($eintrag["phone"]));
 	}
-	$rs=$_SESSION['db']->getAll($sql4,DB_FETCHMODE_ASSOC);
+	$rs=$GLOBALS['dbh']->getAll($sql4,DB_FETCHMODE_ASSOC);
 	foreach($rs as $eintrag) {
 		mkTelNummer($eintrag["id"],"E",array($eintrag["phone"]));
 	}
-	$rs1=$_SESSION['db']->getAll($sql5,DB_FETCHMODE_ASSOC);
-	$rs2=$_SESSION['db']->getAll($sql6,DB_FETCHMODE_ASSOC);
-	$rs3=$_SESSION['db']->getAll($sql7,DB_FETCHMODE_ASSOC);
-	$rs4=$_SESSION['db']->getAll($sql8,DB_FETCHMODE_ASSOC);
-	$rs5=$_SESSION['db']->getAll($sql9,DB_FETCHMODE_ASSOC);
-	$rs6=$_SESSION['db']->getAll($sql10,DB_FETCHMODE_ASSOC);
+	$rs1=$GLOBALS['dbh']->getAll($sql5,DB_FETCHMODE_ASSOC);
+	$rs2=$GLOBALS['dbh']->getAll($sql6,DB_FETCHMODE_ASSOC);
+	$rs3=$GLOBALS['dbh']->getAll($sql7,DB_FETCHMODE_ASSOC);
+	$rs4=$GLOBALS['dbh']->getAll($sql8,DB_FETCHMODE_ASSOC);
+	$rs5=$GLOBALS['dbh']->getAll($sql9,DB_FETCHMODE_ASSOC);
+	$rs6=$GLOBALS['dbh']->getAll($sql10,DB_FETCHMODE_ASSOC);
 	$rs=array_merge($rs1,$rs2);
 	foreach($rs as $eintrag) {
 		mkTelNummer($eintrag["id"],"P",array($eintrag["phone"]),false);

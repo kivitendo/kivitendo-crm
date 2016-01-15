@@ -62,7 +62,7 @@ if ( is_file($conffile) ) {
             echo "<b>Richten Sie nun zun&auml;chst den [<a href='mandant.php'>Mandenten</a>] in der CRM ein,<br>";
             echo "danach den Benutzer.</b><br>";
         } else {
-            $db = $_SESSION["db"];
+            $db = $GLOBALS['dbh'];
             $_SESSION["loginok"] = "ok";
             $LOGIN = True;
             require ("update_neu.php");

@@ -5,12 +5,12 @@
 ALTER TABLE telcall ADD COLUMN termin_id integer;
 
 -- @php: *
-    $rs=$_SESSION['db']->getAll("SELECT id,cause,calldate FROM telcall where kontakt = 'X'");
+    $rs=$GLOBALS['dbh']->getAll("SELECT id,cause,calldate FROM telcall where kontakt = 'X'");
     $i=1;
     if ($rs) foreach ($rs as $row) {
         $day = substr($row["calldate"],0,10);
         $time = substr($row["calldate"],11,5);
-        $rc=$_SESSION['db']->query("UPDATE telcall SET termin_id = (select id from termine where starttag = '$day' and startzeit = '$time') where id = ".$row["id"]);
+        $rc=$GLOBALS['dbh']->query("UPDATE telcall SET termin_id = (select id from termine where starttag = '$day' and startzeit = '$time') where id = ".$row["id"]);
         echo ".";
         $i++;
     };

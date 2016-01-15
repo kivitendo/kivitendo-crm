@@ -79,7 +79,7 @@ class document {
 	function document($id=false,$fname="",$fpath="",$descript="") {
 		if ($this->debug) $this->f = fopen($_SESSION['crmpath'].'/tmp/doc.log',"w");
 		$this->log("newDoc");
-		$this->db=$_SESSION["db"];
+		$this->db=$GLOBALS['dbh'];
 		if ($id>0) {
 			//Variablen mit db-Eintrag vorbelegen
 			getDokument($id);

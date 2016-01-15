@@ -27,7 +27,7 @@
 	  	$sql.="plz like '$plz%' ";
 	} 
 	$sql.="order by plz,kurzbez";
-	$rs=$_SESSION['db']->getAll($sql);
+	$rs=$GLOBALS['dbh']->getAll($sql);
         $menu =  $_SESSION['menu'];
 ?>
 <html>

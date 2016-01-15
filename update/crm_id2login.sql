@@ -1,7 +1,7 @@
 -- @tag: id2login
 -- @description: Pfadnamen von ID auf Login umstellen
 -- @php: *
-$db =  $_SESSION['db']->getAll('SELECT id,login FROM employee');
+$db =  $GLOBALS['dbh']->getAll('SELECT id,login FROM employee');
 $return = 1;
 if ( $db ) foreach( $db as $row ) {
     echo $_SESSION['crmpath'].'/dokumente/'.$_SESSION['dbname'].'/'.$row['id']." ";
@@ -30,7 +30,7 @@ if ( $db ) foreach( $db as $row ) {
                          $_SESSION['crmpath'].'/dokumente/'.$_SESSION['dbname'].'/'.$row['login']);
             if ( !$rc ) echo "Verzeichnist konnte nicht angelegt werden<br>";
         }
-        $rc = $_SESSION['db']->query("UPDATE documents SET pfad = '".$row['login']."' WHERE pfad = '".$row['id']."'");
+        $rc = $GLOBALS['dbh']->query("UPDATE documents SET pfad = '".$row['login']."' WHERE pfad = '".$row['id']."'");
         if ( !$rc ) echo "Probleme beim Update der Pfadnamen<br>";
     } else {
         if ( !file_exists($_SESSION['crmpath'].'/dokumente/'.$_SESSION['dbname'].'/'.$row['login']) ) { 

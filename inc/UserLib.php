@@ -9,7 +9,7 @@
 function saveUserStamm( $val ) {
     // Prüfen ob crmemployee schon existiert, sonst wird bei einer frischen DB ein unschöner Fehler ausgegeben.
     // Besser: crmemployee vordem Aufruf von saveUserStamm() erstellen ToDo!
-    $crm_exist = $_SESSION['db']->getOne( "SELECT count(*) FROM information_schema.tables WHERE table_name = 'crmemployee'");
+    $crm_exist = $GLOBALS['dbh']->getOne( "SELECT count(*) FROM information_schema.tables WHERE table_name = 'crmemployee'");
     if ( !(bool) $crm_exist['count']) return false;
     if ( !$val["interv"] )
         $val["interv"] = 60;
@@ -104,9 +104,9 @@ function saveUserStamm( $val ) {
         $_SESSION['streetview'] = $client_data['streetview_man'] ? $client_data['streetview_man'] : 'http://maps.google.de/maps?f=d&hl=de&saddr=Alexanderplatz+7,10178+Berlin&daddr=%TOSTREET%,%TOZIPCODE%+%TOCITY%';
     }*/
     if ( isset( $_SESSION['sql_error'] ) && $_SESSION['sql_error'] )
-        $_SESSION['db']->setShowError( true );
+        $GLOBALS['dbh']->setShowError( true );
     else
-        $_SESSION['db']->setShowError( false );
+        $GLOBALS['dbh']->setShowError( false );
     $sql = "update employee set ";
     foreach ( $std as $key ) {
         if ( $val[$key] <> "" ) {
@@ -118,13 +118,13 @@ function saveUserStamm( $val ) {
     }
     $sql = substr( $sql, 0, - 1 );
     $sql .= ' where id='.$val['uid'];
-    $rc = $_SESSION['db']->query( $sql );
+    $rc = $GLOBALS['dbh']->query( $sql );
     if ( $val["homephone"] )
         mkTelNummer( $val["uid"], "E", array( $val["homephone"] ) );
     if ( $val["workphone"] )
         mkTelNummer( $val["uid"], "E", array( $val["workphone"] ) );
-    $rc = $_SESSION['db']->begin( );
-    $rc = $_SESSION['db']->query( 'DELETE FROM crmemployee WHERE uid = '.$val["uid"].' AND manid = '.$_SESSION['manid'] );
+    $rc = $GLOBALS['dbh']->begin( );
+    $rc = $GLOBALS['dbh']->query( 'DELETE FROM crmemployee WHERE uid = '.$val["uid"].' AND manid = '.$_SESSION['manid'] );
     if ( $rc )
         foreach ( $fld as $key => $typ ) {
             if ( array_key_exists( $key, $val ) ) {
@@ -133,15 +133,15 @@ function saveUserStamm( $val ) {
         else {
             $sql = 'INSERT INTO crmemployee (manid,uid,key,val,typ) VALUES ('.$_SESSION['manid'].','.$val['uid'].",'$key',null,'$typ')";
         }
-        $rc = $_SESSION['db']->query( $sql );
+        $rc = $GLOBALS['dbh']->query( $sql );
         if ( !$rc ) {
-            $_SESSION['db']->rollback( );
+            $GLOBALS['dbh']->rollback( );
             $rc = false;
             break;
         }
     }
     if ( $rc ) {
-        $rc = $_SESSION['db']->commit( );
+        $rc = $GLOBALS['dbh']->commit( );
         return true;
     }
     return false;
@@ -162,7 +162,7 @@ function getAllUser( $sw ) {
         $where = "(name ilike '".$sw[1]."%') or (login  ilike '".$sw[1]."%')";
     }
     $sql = "select * from employee where $where and employee.deleted = false";
-    $rs = $_SESSION['db']->getAll( $sql );
+    $rs = $GLOBALS['dbh']->getAll( $sql );
     if ( !$rs ) {
         $rs = false;
     }
@@ -182,25 +182,25 @@ function getUserStamm( $id, $login = false ) {
     else {
         $sql = "select * from employee where id=$id";
     }
-    $daten = $_SESSION['db']->getOne( $sql );
+    $daten = $GLOBALS['dbh']->getOne( $sql );
     $id = $daten['id'];
     if ( !$daten ) {
         return false;
     }
     else {
         $sql = "select  * from gruppenname N left join grpusr G on G.grpid=N.grpid  where usrid=$id";
-        $rs2 = $_SESSION['db']->getAll( $sql );
+        $rs2 = $GLOBALS['dbh']->getAll( $sql );
         $daten["gruppen"] = $rs2;
         //Mandanteneinstellungen
         $sql = "SELECT key,val FROM crmdefaults WHERE grp = 'mandant'";
-        $rs = $_SESSION['db']->getAll( $sql );
+        $rs = $GLOBALS['dbh']->getAll( $sql );
         if ( $rs )
             foreach ( $rs as $row ) {
                 $daten[$row['key']] = $row['val'];
         }
         //Usereinstellungen
         $sql = "SELECT * FROM crmemployee WHERE uid = $id AND manid = ".$_SESSION['manid'];
-        $rs = $_SESSION['db']->getAll( $sql );
+        $rs = $GLOBALS['dbh']->getAll( $sql );
         if ( $rs ) {
             foreach ( $rs as $row ) {
                 if ( $row['typ'] == 'i' ) {
@@ -222,11 +222,11 @@ function getUserStamm( $id, $login = false ) {
         }
         if ( $daten["vertreter"] ) {
             $sql = "select * from employee where id=".$daten["vertreter"];
-            $rs3 = $_SESSION['db']->getOne( $sql );
+            $rs3 = $GLOBALS['dbh']->getOne( $sql );
             $daten["vname"] = ( $rs3['name'] != '' ) ? $rs3["name"] : $rs3["login"];
         };
         $sql = "SELECT signature FROM defaults";
-        $rs = $_SESSION['db']->getOne($sql);
+        $rs = $GLOBALS['dbh']->getOne($sql);
         if ( $rs ) $daten['msignature'] = $rs['signature'];
         return $daten;
     }
@@ -238,7 +238,7 @@ function getGruppen( $user = false ) {
     else {
         $sql = "select * from gruppenname order by grpname";
     }
-    $rs = $_SESSION['db']->getAll( $sql );
+    $rs = $GLOBALS['dbh']->getAll( $sql );
     if ( !$rs ) {
         if ( $user ) {
             return array( );
@@ -253,21 +253,21 @@ function getGruppen( $user = false ) {
 }
 function delGruppe( $id ) {
     $sql = "select count(*) as cnt from customer where owener = $id";
-    $rs = $_SESSION['db']->getOne( $sql );
+    $rs = $GLOBALS['dbh']->getOne( $sql );
     $cnt = $rs["cnt"];
     $sql = "select count(*) as cnt from vendor   where owener = $id";
-    $rs = $_SESSION['db']->getOne( $sql );
+    $rs = $GLOBALS['dbh']->getOne( $sql );
     $cnt += $rs["cnt"];
     $sql = "select count(*) as cnt from contacts where cp_owener = $id";
-    $rs = $_SESSION['db']->getOne( $sql );
+    $rs = $GLOBALS['dbh']->getOne( $sql );
     $cnt += $rs["cnt"];
     if ( $cnt === 0 ) {
         $sql = "delete from grpusr where grpid=$id";
-        $rc = $_SESSION['db']->query( $sql );
+        $rc = $GLOBALS['dbh']->query( $sql );
         if ( !$rc )
             return "Mitglieder konnten nicht gel&ouml;scht werden";
         $sql = "delete from gruppenname where grpid=$id";
-        $rc = $_SESSION['db']->query( $sql );
+        $rc = $GLOBALS['dbh']->query( $sql );
         if ( !$rc )
             return "Gruppe konnte nicht gel&ouml;scht werden";
         return "Gruppe gel&ouml;scht";
@@ -281,16 +281,16 @@ function saveGruppe( $data ) {
         return "Name zu kurz";
     $newID = uniqid( rand( ) );
     $sql = "insert into gruppenname (grpname,rechte) values ('$newID','".$data["rechte"]."')";
-    $rc = $_SESSION['db']->query( $sql );
+    $rc = $GLOBALS['dbh']->query( $sql );
     if ( $rc ) {
         $sql = "select * from gruppenname where grpname = '$newID'";
-        $rs = $_SESSION['db']->getOne( $sql );
+        $rs = $GLOBALS['dbh']->getOne( $sql );
         if ( !$rs ) {
             return "Fehler beim Anlegen";
         }
         else {
             $sql = "update gruppenname set grpname='".$data["name"]."' where grpid=".$rs["grpid"];
-            $rc = $_SESSION['db']->query( $sql );
+            $rc = $GLOBALS['dbh']->query( $sql );
             if ( !$rc ) {
                 return "Fehler beim Anlegen";
             }
@@ -303,7 +303,7 @@ function saveGruppe( $data ) {
 }
 function getMitglieder( $gruppe ) {
     $sql = "select * from employee left join grpusr on usrid=id where grpid=$gruppe and employee.deleted = false ORDER BY employee.id";
-    $rs = $_SESSION['db']->getAll( $sql );
+    $rs = $GLOBALS['dbh']->getAll( $sql );
     if ( !$rs ) {
         return false;
     }
@@ -313,17 +313,17 @@ function getMitglieder( $gruppe ) {
 }
 function saveMitglieder( $mitgl, $gruppe ) {
     $sql = "delete from grpusr where grpid=$gruppe";
-    $rc = $_SESSION['db']->query( $sql );
+    $rc = $GLOBALS['dbh']->query( $sql );
     if ( $mitgl ) {
         foreach ( $mitgl as $row ) {
             $sql = "insert into grpusr (grpid,usrid) values ($gruppe,$row)";
-            $rc = $_SESSION['db']->query( $sql );
+            $rc = $GLOBALS['dbh']->query( $sql );
         }
     }
 }
 function getOneGrp( $id ) {
     $sql = "select grpname from gruppenname where grpid=$id";
-    $rs = $_SESSION['db']->getOne( $sql );
+    $rs = $GLOBALS['dbh']->getOne( $sql );
     if ( !$rs ) {
         return false;
     }
@@ -379,7 +379,7 @@ function loadUserDefaults($id){
 /* überflüssig
 function getClientData(){
     $sql = "SELECT * FROM crmdefaults WHERE grp = 'mandant'";
-    $rs = $_SESSION['db']->getAll( $sql );
+    $rs = $GLOBALS['dbh']->getAll( $sql );
     $data = array();
     if ( $rs ) foreach ( $rs as $row ) $data[$row['key']] = $row['val'];
     //printArray( $data );

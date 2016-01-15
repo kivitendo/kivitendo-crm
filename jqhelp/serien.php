@@ -7,7 +7,7 @@ require_once 'Contact_Vcard_Build.php';
 function doVcards($single,$extension,$targetcode,$zip) {
 
     $sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' order by id";
-    $csvdata=$_SESSION['db']->getAll($sql);
+    $csvdata=$GLOBALS['dbh']->getAll($sql);
     if ($csvdata) {
         $pfad = $_SESSION["login"]."/vcard";
         chkdir($pfad,'.');

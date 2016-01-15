@@ -29,7 +29,7 @@ if ( $_POST['save'] ) {
     $save = true;
     if ( isset( $_POST['ttpart'] ) && $_POST['ttpart'] != '' ) {
         $sql = "SELECT count(*) as cnt FROM parts WHERE partnumber = '".$_POST['ttpart']."'";
-        $rs = $_SESSION['db']->getOne( $sql );
+        $rs = $GLOBALS['dbh']->getOne( $sql );
         if ( $rs['cnt'] == 0 ) {
             $msg = "Artikel nicht gefunden";
             $save = false;
@@ -40,7 +40,7 @@ if ( $_POST['save'] ) {
         }
     }
     if ( $save ) {
-        $last = $_SESSION['db']->getOne( 'SELECT max(id) as id FROM crmdefaults' );
+        $last = $GLOBALS['dbh']->getOne( 'SELECT max(id) as id FROM crmdefaults' );
         $insert = "INSERT INTO crmdefaults (key,val,grp,employee) VALUES (?,?,'mandant',".$_SESSION['loginCRM'].")";
         $data = array( );
         foreach ( $keys as $row ) {
@@ -54,23 +54,23 @@ if ( $_POST['save'] ) {
         foreach( $_POST as $key => $value ){
             $_SESSION[$key] = $value;
         }
-        $rc = $_SESSION['db']->executeMultiple( $insert, $data );
+        $rc = $GLOBALS['dbh']->executeMultiple( $insert, $data );
         if ( $rc ) {
             $msg = 'Sichern erfolgt';
             if ( $last['id'] ) {
                 $sql = "DELETE FROM crmdefaults WHERE grp = 'mandant' and id <= ".$last['id'];
-                $rc = $_SESSION['db']->query( $sql );
+                $rc = $GLOBALS['dbh']->query( $sql );
             }
-            $_SESSION['db']->commit( );
+            $GLOBALS['dbh']->commit( );
         }
         else {
-            $_SESSION['db']->rollback( );
+            $GLOBALS['dbh']->rollback( );
             $msg = 'Sichern fehlgeschlagen';
         }
     }
 }
 $sql = "SELECT * FROM crmdefaults WHERE grp = 'mandant'";
-$rs = $_SESSION['db']->getAll( $sql );
+$rs = $GLOBALS['dbh']->getAll( $sql );
 $data = array( );
 if ( $rs )
     foreach ( $rs as $row )

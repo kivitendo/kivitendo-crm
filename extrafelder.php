@@ -39,25 +39,25 @@ function suchFelder($data) {
         $sql.= "from contacts left join customer C on C.id=cp_cv_id ";
         $sql.= "left join vendor V on V.id=cp_cv_id where cp_id in ($sqle)";
     }
-    $rs = $_SESSION['db']->getAll($sql);
+    $rs = $GLOBALS['dbh']->getAll($sql);
     return $rs;
 }
 
 function saveFelder($data) {
 	$nosave=array("save","owner","suche");
 	$owner=$data["owner"];
-	$rc=$_SESSION['db']->query("BEGIN");
+	$rc=$GLOBALS['dbh']->query("BEGIN");
         $tab = substr($owner,0,1);
         $owner = substr($owner,1);
 	$sql="delete from extra_felder where tab = '$tab' and owner = '$owner'";
-	$rc=$_SESSION['db']->query($sql);
+	$rc=$GLOBALS['dbh']->query($sql);
 	foreach ($data as $key=>$val) {
 		if (in_array($key,$nosave)) continue;
 		$val=trim($val);
-		$rc=$_SESSION['db']->insert('extra_felder',array('tab','owner','fkey','fval'),array($tab,$owner,$key,$val));
-		if (!$rc) { $_SESSION['db']->query("ROLLBACK"); return false; };
+		$rc=$GLOBALS['dbh']->insert('extra_felder',array('tab','owner','fkey','fval'),array($tab,$owner,$key,$val));
+		if (!$rc) { $GLOBALS['dbh']->query("ROLLBACK"); return false; };
 	}
-	$rc=$_SESSION['db']->query("COMMIT");
+	$rc=$GLOBALS['dbh']->query("COMMIT");
 	return true;
 }
 
@@ -66,7 +66,7 @@ function getFelder($owner,&$t) {
     $tab = substr($owner,0,1);
     $owner = substr($owner,1);
 	$sql="select * from extra_felder where tab = '$tab' and owner='$owner'";
-	$rs=$_SESSION['db']->getAll($sql);
+	$rs=$GLOBALS['dbh']->getAll($sql);
 	if ($rs) {
 		foreach($rs as $row) {
 			$key=$row["fkey"];

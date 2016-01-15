@@ -25,7 +25,7 @@
 				$query.=$zeile;
 			} else {
 				$query.=$zeile;
-				$rc=$_SESSION['db']->query(substr($query,0,-1));
+				$rc=$GLOBALS['dbh']->query(substr($query,0,-1));
 				if ($rc) { $ok++; echo ".";}
 				else { $fehl++; echo "!"; };
 				ob_flush();

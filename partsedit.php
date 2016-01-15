@@ -22,7 +22,7 @@
  echo $menu['start_content']; 
 	if ( isset( $_POST["sichern"] ) ) {
         $sql = "SELECT * FROM pricegroup ORDER by id";
-        $prgr = $_SESSION['db']->getAll($sql);
+        $prgr = $GLOBALS['dbh']->getAll($sql);
         $sqlparts = "UPDATE parts SET partnumber = '%s', description = '%s', lastcost = %0.5f, listprice = %0.5f, sellprice = %0.5f WHERE id = %d";
         $chkparts = "SELECT id FROM parts WHERE partnumber = '%s'";
         $delprice = "DELETE FROM prices WHERE parts_id = %d";
@@ -30,7 +30,7 @@
         if ($_POST) while( list($key,$val) = each( $_POST['partnumber'] ) ) {
             $ok = true;
             if ( $_POST['oldpnr'][$key] != $val ) {
-                $rs = $_SESSION['db']->getAll(sprintf($chkparts,$val));
+                $rs = $GLOBALS['dbh']->getAll(sprintf($chkparts,$val));
                 if ( count($rs) > 0 ) {
                     echo "$val doppelt <br>";
                     $ok = false;
@@ -42,21 +42,21 @@
                                               strtr($_POST['lastcost'][$key] ,",","."),
                                               strtr($_POST['listprice'][$key],",","."),
                                               strtr($_POST['sellprice'][$key],",","."),$key);
-                $rc = $_SESSION['db']->query($sql);
+                $rc = $GLOBALS['dbh']->query($sql);
                 if ( $rc and $prgr ) {
-                    $rc = $_SESSION['db']->begin();
-                    $rc = $_SESSION['db']->query(sprintf($delprice,$key));
+                    $rc = $GLOBALS['dbh']->begin();
+                    $rc = $GLOBALS['dbh']->query(sprintf($delprice,$key));
                     foreach( $prgr as $price ) {
                         if ( $_POST[$price['id']][$key] ) {
-                            $rc = $_SESSION['db']->query(sprintf($insprice,$key,$price['id'],strtr($_POST[$price['id']][$key],",",".") ) );
+                            $rc = $GLOBALS['dbh']->query(sprintf($insprice,$key,$price['id'],strtr($_POST[$price['id']][$key],",",".") ) );
                             if ( !$rc ) {
-                                $_SESSION['db']->rollback();
+                                $GLOBALS['dbh']->rollback();
                                 echo "Error Preisgruppe (".$price['pricegroup'].")<br>";
                                 break;
                             }
                         }
                     }
-                    $_SESSION['db']->commit();
+                    $GLOBALS['dbh']->commit();
                     echo "update ok<br>";
                };
            };
@@ -70,11 +70,11 @@
         if ( isset($_POST['description'] ) and  $_POST['description'] != '' )     $where[] = "description ilike '".strtr($_POST['description'],"*?","%_")."%'";
         if ( isset($_POST['partsgroup_id'] ) and  $_POST['partsgroup_id'] != '' ) $where[] = "partsgroup_id = ".$_POST['partsgroup_id'];
         $sql .= implode(' and ',$where)." ORDER BY P.partnumber,PC.pricegroup_id";
-        $rs = $_SESSION['db']->getAll($sql);
+        $rs = $GLOBALS['dbh']->getAll($sql);
         $lastid = 0;
         if ( $rs ) {
             $sql = "SELECT * FROM pricegroup ORDER by id";
-            $prgr = $_SESSION['db']->getAll($sql);
+            $prgr = $GLOBALS['dbh']->getAll($sql);
             $prices = array();
             if ( $prgr ) foreach ($prgr as $row ) { $prices[$row['id']] = '';};
             foreach ( $rs as $row ) {

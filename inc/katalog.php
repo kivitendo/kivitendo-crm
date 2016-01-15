@@ -1,12 +1,12 @@
 <?php
 function getCustoms() {
     $sql = "SELECT * FROM custom_variable_configs WHERE module = 'IC' ORDER BY sortkey";
-    $rs=$_SESSION['db']->getAll($sql);
+    $rs=$GLOBALS['dbh']->getAll($sql);
     return $rs;
 }
 function getPreise() {
     $sql = "SELECT * FROM pricegroup";
-    $rs=$_SESSION['db']->getAll($sql);
+    $rs=$GLOBALS['dbh']->getAll($sql);
     $tmp[1] = "Verkaufspreis";
     $tmp[2] = "Listenpreis";
     if ($rs) foreach($rs as $row) {
@@ -21,7 +21,7 @@ function getTax() {
     $sql .= "FROM buchungsgruppen BG LEFT JOIN chart C ON BG.income_accno_id_0=C.id ";
     $sql .= "LEFT JOIN taxkeys TK ON TK.chart_id=C.id ";
     $sql .= "LEFT JOIN tax T ON T.id=TK.tax_id WHERE TK.startdate <= now()";
-    $rs = $_SESSION['db']->getAll($sql);
+    $rs = $GLOBALS['dbh']->getAll($sql);
     if ($rs) foreach ($rs as $row) {
         $nr = $row['bugru'];
         if (!$TAX[$nr]) {
@@ -90,7 +90,7 @@ function getArtikel($data) {
         $sql .= " order by ".$data['order'];
     }
     //echo $sql;
-    $rs=$_SESSION['db']->getAll($sql);
+    $rs=$GLOBALS['dbh']->getAll($sql);
     return $rs;
 }
 
@@ -136,12 +136,12 @@ function prepTex($tex='katalog',$upload=false) {
 
 function getLagerOrte() {
     $sql = "SELECT w.description as ort,b.description as platz,warehouse_id,b.id from bin b left join warehouse w on w.id=warehouse_id order by warehouse_id,b.id";
-    $rs = $_SESSION["db"]->getAll($sql,DB_FETCHMODE_ASSOC);
+    $rs = $GLOBALS['dbh']->getAll($sql,DB_FETCHMODE_ASSOC);
     return $rs;
 }
 function getPgList() {
     $sql = "SELECT partsgroup from partsgroup order by partsgroup";
-    $rs = $_SESSION["db"]->getAll($sql,DB_FETCHMODE_ASSOC);
+    $rs = $GLOBALS['dbh']->getAll($sql,DB_FETCHMODE_ASSOC);
     $list = "<option value=''></option>\n";
     if ($rs) foreach ($rs as $pg) {
         $list .= "<option value='".$pg['partsgroup']."'>".$pg['partsgroup']."</option>\n";
@@ -183,12 +183,12 @@ function getLager($data) {
    }
    $sql = sprintf($sql,$and).' order by '.$order;
    echo $sql."<br>";
-   $artikel = $_SESSION['db']->getAll($sql,DB_FETCHMODE_ASSOC);
+   $artikel = $GLOBALS['dbh']->getAll($sql,DB_FETCHMODE_ASSOC);
    return $artikel;
 }
 function getPartsgroup() {
    $sql = "SELECT * FROM partsgroup order by partsgroup";
-   $pg = $_SESSION['db']->getAll($sql,DB_FETCHMODE_ASSOC);
+   $pg = $GLOBALS['dbh']->getAll($sql,DB_FETCHMODE_ASSOC);
    return $pg;
 }
 function closeinventur($art,$name) {
@@ -225,17 +225,17 @@ function getPartBin($pg,$partnumber,$obsolete,$bin) {
     $sql .= 'p.id AS parts_id, null, 0 as qty, p.unit AS partunit, p.onhand FROM parts p WHERE '.$pg;
     if ( $obsolete != '' ) $sql .= " AND obsolete ='$obsolete' ";
     $sql .= 'order by  partnumber asc, bin_id asc';
-    $pg = $_SESSION['db']->getAll($sql,DB_FETCHMODE_ASSOC);
+    $pg = $GLOBALS['dbh']->getAll($sql,DB_FETCHMODE_ASSOC);
     return $pg;
     /*$sql  = "SELECT id from parts where partnumber ilike '$part'" ;
-    $rs  = $_SESSION['db']->getOne($sql);
+    $rs  = $GLOBALS['dbh']->getOne($sql);
     if ($rs) {
         $sql  = "SELECT DISTINCT chargenumber,";
         $sql .= "(select sum(qty) from inventory where bin_id = $bin and parts_id = $part and chargenumber = i.chargenumber) as bestand";
         $sql .= ",p.description,p.id as parts_id from inventory i left join parts p ";
         $sql .= "on p.id=i.parts_id where bin_id = $bin and parts_id = $part ";
         $sql .= "group by chargenumber,qty,description,p.id";
-        $rs =  $_SESSION['db']->getAll($sql);
+        $rs =  $GLOBALS['dbh']->getAll($sql);
         echo $sql;
         return $rs;
     } else {
@@ -245,22 +245,22 @@ function getPartBin($pg,$partnumber,$obsolete,$bin) {
 function getLagername($wh,$bin) {
     $sql  = "SELECT w.description||' '||bin.description as name ";
     $sql .= "FROM bin left join warehouse w on warehouse_id = w.id WHERE bin.id = $bin";
-    $rs = $_SESSION['db']->getOne($sql);
+    $rs = $GLOBALS['dbh']->getOne($sql);
     return $rs['name'];
 } 
 function getTransType() {
    $sql = "SELECT * from transfer_type order by direction";
-   $rs = $_SESSION['db']->getAll($sql,DB_FETCHMODE_ASSOC);
+   $rs = $GLOBALS['dbh']->getAll($sql,DB_FETCHMODE_ASSOC);
    return $rs; 
 }
 function updatePartBin($row) {
     $in = array('','correction','stock','fount');
     $out = array('','correction','used','missing');
     $sql = "SELECT id from transfer_type WHERE direction = 'in' and description = '".$in[$row['transtype']]."'";
-    $rs = $_SESSION['db']->getOne($sql);
+    $rs = $GLOBALS['dbh']->getOne($sql);
     $in = $rs['id'];
     $sql = "SELECT * from transfer_type WHERE direction = 'out' and description = '".$out[$row['transtype']]."'";
-    $rs = $_SESSION['db']->getOne($sql);
+    $rs = $GLOBALS['dbh']->getOne($sql);
     $out = $rs['id'];
     $len = count($row['parts_id']);
     if ($row['budatum']) {
@@ -294,7 +294,7 @@ function updatePartBin($row) {
        $sql =  "INSERT INTO inventory (warehouse_id,bin_id,parts_id,employee_id,qty, trans_id,trans_type_id,shippingdate,comment,chargenumber,bestbefore)";
        $sql .= " VALUES (".$row['warehouse'].",".$row['bin'].",".$row['parts_id'][$i].",".$_SESSION['loginCRM'];
        $sql .= ",$diff,nextval(('id'::text)::regclass),$tt,'".$now."','".$row["comment"]."',$charge,$best)";
-       $rc = $_SESSION['db']->query($sql);
+       $rc = $GLOBALS['dbh']->query($sql);
        echo $row[$i]["part_id"].$x;
        if ($rc) { echo "ok<br>";} else { echo "error<br>"; };
     };

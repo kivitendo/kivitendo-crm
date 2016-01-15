@@ -4,11 +4,7 @@ ini_set('session.bug_compat_42', 0);  // Das ist natürlich lediglich eine Provi
 //Warning: Unknown: Your script possibly relies on a session side-effect which existed until PHP 4.2.3. ....
 //session_set_cookie_params(480*60); //480*60
 if( !isset($_SESSION) ) session_start();
-require_once "phpDataObjects.php";
-require_once "connection.php";
-include_once "mdb.php"; //ToDo remove
-require_once "conf.php";
-
+/*
 if ( isset($_SERVER['CONTEXT_DOCUMENT_ROOT']) ) {
     $basepath = $_SERVER['CONTEXT_DOCUMENT_ROOT'];
 } else if ( isset($_SERVER['SCRIPT_FILENAME']) ) {
@@ -34,7 +30,11 @@ ini_set('include_path',$inclpa.":../:./inc:../inc");//ToDo kann doch raus?? Ist 
 if ( isset($_SESSION['php_error']) && $_SESSION['php_error'] ) {
     error_reporting (E_ALL & ~E_DEPRECATED);
     ini_set ('display_errors',1);
-}
+}*/
+require_once "phpDataObjects.php";
+require_once "connection.php";
+include_once "mdb.php"; //ToDo remove
+require_once "conf.php";
 
 // Prüft ob eine Variable existiert und gibt deren Wert zurück.
 function varExist( $var ){
@@ -215,6 +215,7 @@ function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
 * prueft ob name und kennwort in db sind und liefer die UserID
 *****************************************************/
 function anmelden() {
+    //return;
     echo "anmelden";
     ini_set("gc_maxlifetime","3600");
     global $ERPNAME; // ! das funzt nicht mit $_SESSION[ERPNAME] weil die Session in loginok.php zerstört wird...
@@ -287,7 +288,8 @@ function anmelden() {
     $_SESSION['ok'] = "1";
     // Mit der Mandanten-DB verbinden
     //$db   = new myPDO($dbhost,$dbport,$dbname,$dbuser,$dbpasswd);
-    $_SESSION["db"] = new myDB($_SESSION["dbhost"],$_SESSION["dbuser"],$_SESSION["dbpasswd"],$_SESSION["dbname"],$_SESSION["dbport"]);
+    global $dbData;
+    $_SESSION["db"] = new myPDO( $dbData["dbhost"], $dbData["dbport"], $dbData["dbname"], $dbData["dbuser"], $dbData["dbpasswd"], $_SESSION["sessid"] );
     //$_SESSION["db"] = new myPDO( $_SESSION["dbhost"],$_SESSION["dbport"],$_SESSION["dbname"],$_SESSION["dbuser"],$_SESSION["dbpasswd"]);
     //$_SESSION['test']
     global $test;
@@ -308,8 +310,8 @@ function anmelden() {
         $BaseUrl .= $_SERVER['HTTP_HOST'];
         $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
         if ($user_data) foreach ($user_data as $key => $val) $_SESSION[$key] = $val;
-        //if ( isset($_SESSION['sql_error']) && $_SESSION['sql_error'] ) $dbh->setShowError(true);
-        //else $dbh->setShowError(false);
+        //if ( isset($_SESSION['sql_error']) && $_SESSION['sql_error'] ) $GLOBALS['dbh']->setShowError(true);
+        //else $GLOBALS['dbh']->setShowError(false);
         $_SESSION['dir_mode']  = ( $user_data['dir_mode'] != '' )?octdec($user_data['dir_mode']):493; // 0755
         $_SESSION["loginCRM"] = $user_data["id"];
         $_SESSION['theme']    = ($user_data['theme']=='' || $user_data['theme']=='base')?'':$user_data['theme'];
@@ -428,8 +430,8 @@ function chkFld(&$val,$empty,$rule,$len) {
 }
 
 function getVersiondb() {
-    global $dbh;
-    $rs = $dbh->getOne("select * from crm order by datum desc limit 1");
+
+    $rs = $GLOBALS['dbh']->getOne("select * from crm order by datum desc limit 1");
     if ( !$rs["version"] ) return "V n.n.n";
     return $rs["version"];
 }
@@ -447,7 +449,7 @@ function berechtigung($tab="") {
 * Bundeslaender holen
 *****************************************************/
 function getBundesland($land) {
-    global $dbh;
+
     $land = mb_strtolower($land,'utf-8');
     if (in_array($land,array('deutschland','germany','allemagne','d'))) {
         $sql = "select * from bundesland where country = 'D' order by country,bundesland";
@@ -458,7 +460,7 @@ function getBundesland($land) {
     } else {
         $sql = "select * from bundesland order by country,bundesland";
     }
-    $rs = $dbh->getAll($sql);
+    $rs = $GLOBALS['dbh']->getAll($sql);
     return $rs;
 }
 
@@ -469,10 +471,10 @@ function getBundesland($land) {
 * Telefonnummern genormt speichern
 *****************************************************/
 function mkTelNummer($id,$tab,$tels,$delete=true) {
-    global $dbh;
+
     if ( $delete ) {
         $sql = "delete from telnr where id=$id and tabelle='$tab'";
-        $rs = $dbh->query($sql);
+        $rs = $GLOBALS['dbh']->query($sql);
     }
     foreach( $tels as $tel ) {
         $tel = strtr($tel,array(" "=>"","-"=>"","/"=>"","\\"=>"","("=>"",")"=>""));
@@ -481,17 +483,17 @@ function mkTelNummer($id,$tab,$tels,$delete=true) {
         if ( trim($tel) <> "" ) {
             $sql = "insert into telnr (id,tabelle,nummer) values (%d,'%s','%s')";
             $sql = sprintf($sql,$id,$tab,$tel);
-            $rs = $dbh->query($sql);
+            $rs = $GLOBALS['dbh']->query($sql);
         }
     }
 }
 
 function getAnruf($nr) {
-    global $dbh;
+
     $nun = date("H:i");
     $name = "_0;$nun $nr unbekannt";
     $sql = "select * from telnr where nummer = '$nr'";
-    $rs  = $dbh->getAll($sql);
+    $rs  = $GLOBALS['dbh']->getAll($sql);
     if( !$rs ) {
         return false;
     } else {
@@ -499,7 +501,7 @@ function getAnruf($nr) {
         $more = "";
         while ( count($rs) == 0 && $i < 5 ) {
             $sql = "select * from telnr where nummer like '".substr($nr,0,-$i)."%'";
-            $rs  = $dbh->getAll($sql);
+            $rs  = $GLOBALS['dbh']->getAll($sql);
             $i++;
             $more = "?";
         };
@@ -517,7 +519,7 @@ function getAnruf($nr) {
             } else {
                 $name = "_0;".$nun." ".$nr." unbekannt"; return $name;
             }
-            $rs1 = $dbh->getAll($sql);
+            $rs1 = $GLOBALS['dbh']->getAll($sql);
             $name = $rs[0]["tabelle"].$rs[0]["id"].$nun." ".$rs1[0]["name1"]." ".$rs1[0]["name2"].$more;
         } else {
             $name = "_00000".$nun." ".$nr." unbekannt";
@@ -527,29 +529,29 @@ function getAnruf($nr) {
 }
 
 function getVertretung($user) {
-    global $dbh;
+
     $sql = "select workphone from employee where vertreter=(select id from employee where workphone='$user')";
-    $rs  = $dbh->getAll($sql);
+    $rs  = $GLOBALS['dbh']->getAll($sql);
     if ( count($rs) > 0 ) { return $rs; }
     else { return false; };
 }
 
 function getVorlagen() {
-    global $dbh;
+
     $sql = "select * from docvorlage";
-    $rs  = $dbh->getAll($sql);
+    $rs  = $GLOBALS['dbh']->getAll($sql);
     if ( count($rs) > 0 ) { return $rs; }
     else { return false; };
 }
 
 function getDocVorlage($did) {
-    global $dbh;
+
     if ( !$did ) return false;
     $sql = "select * from docvorlage where docid=$did";
-    $rs1 = $dbh->getOne($sql);
+    $rs1 = $GLOBALS['dbh']->getOne($sql);
     if ( !$rs1 ) return false;
     $sql = "select * from docfelder where docid=$did order by position";
-    $rs2 = $dbh->getAll($sql);
+    $rs2 = $GLOBALS['dbh']->getAll($sql);
     $rs["document"] = $rs1;
     $rs["felder"]   = $rs2;
     if ( count($rs) > 0 ) { return $rs; }
@@ -557,18 +559,18 @@ function getDocVorlage($did) {
 }
 
 function getDOCvar($did) {
-    global $dbh;
+
     $sql = "select * from docvorlage where docid=$did";
-    $rs1 = $dbh->getOne($sql);
+    $rs1 = $GLOBALS['dbh']->getOne($sql);
     return $rs1;
 }
 
 function updDocFld($data) {
-    global $dbh;
+
     $sql  = "update docfelder set feldname='".$data["feldname"]."', platzhalter='".strtoupper($data["platzhalter"]);
     $sql .= "', beschreibung='".$data["beschreibung"]."',laenge=".$data["laenge"].",zeichen='".$data["zeichen"];
     $sql .= "',position=".$data["position"].",docid=".$data["docid"]." where fid=".$data["fid"];
-    $rs  = $dbh->query($sql);
+    $rs  = $GLOBALS['dbh']->query($sql);
     if( !$rs ) {
         return false;
     }
@@ -584,9 +586,9 @@ function insDocFld($data) {
 }
 
 function delDocFld($data) {
-    global $dbh;
+
     $sql = "delete from docfelder where fid=".$data["fid"];
-    $rs = $dbh->query($sql);
+    $rs = $GLOBALS['dbh']->query($sql);
 }
 
 /****************************************************
@@ -596,13 +598,13 @@ function delDocFld($data) {
 * Dokumentsatz erzeugen ( insert )
 *****************************************************/
 function mknewDocFeld() {
-    global $dbh;
+
     $newID = uniqid (rand());
     $sql = "insert into docfelder (beschreibung) values ('$newID')";
-    $rc = $dbh->query($sql);
+    $rc = $GLOBALS['dbh']->query($sql);
     if ( $rc ) {
         $sql = "select fid from docfelder where beschreibung = '$newID'";
-        $rs = $dbh->getOne($sql);
+        $rs = $GLOBALS['dbh']->getOne($sql);
         if ( $rs ) {
             $id = $rs["fid"];
         } else {
@@ -621,13 +623,13 @@ function mknewDocFeld() {
 * Dokumentsatz erzeugen ( insert )
 *****************************************************/
 function mknewDocVorlage() {
-    global $dbh;
+
     $newID = uniqid (rand());
     $sql = "insert into docvorlage (vorlage) values ('$newID')";
-    $rc = $dbh->query($sql);
+    $rc = $GLOBALS['dbh']->query($sql);
     if ( $rc ) {
         $sql = "select docid from docvorlage where vorlage = '$newID'";
-        $rs  = $dbh->getOne($sql);
+        $rs  = $GLOBALS['dbh']->getOne($sql);
         if ( $rs ) {
             $id = $rs["docid"];
         } else {
@@ -640,17 +642,17 @@ function mknewDocVorlage() {
 }
 
 function delDocVorlage($data) {
-    global $dbh;
+
     $sql = "delete from docfelder where docid=".$data["did"];
-    $rs = $dbh->query($sql);
+    $rs = $GLOBALS['dbh']->query($sql);
     if ( $rs ) {
         $sql = "delete from docvorlage where docid=".$data["did"];
-        $rs  = $dbh->query($sql);
+        $rs  = $GLOBALS['dbh']->query($sql);
     }
 }
 
 function saveDocVorlage($data,$files) {
-    global $dbh;
+
     if ( !$data["did"] ) {
         $data["did"] = mknewDocVorlage();
         if ( !$data["did"] ) { return false; };
@@ -664,7 +666,7 @@ function saveDocVorlage($data,$files) {
     if ( !$data["vorlage"] ) $data["vorlage"] = "Kein Titel ".datum("d.m.Y");
     $sql  = "update docvorlage set vorlage='".$data["vorlage"]."', beschreibung='".$data["beschreibung"];
     $sql .= "', file='".$file."', applikation='".$data["applikation"]."' where docid=".$data["did"];
-    $rs = $dbh->query($sql);
+    $rs = $GLOBALS['dbh']->query($sql);
     if( !$rs ) {
         return false;
     } else {
@@ -673,12 +675,12 @@ function saveDocVorlage($data,$files) {
 }
 
 function shopartikel() {
-    global $dbh;
+
     $sql  = "SELECT t.rate,PG.partsgroup,P.partnumber,P.description,P.notes,P.sellprice,P.priceupdate FROM ";
     $sql .= "chart c left join partstax pt on pt.chart_id = c.id,";
     $sql .= "tax t, parts P left join partsgroup PG on PG.id=P.partsgroup_id ";
     $sql .= "where c.category='I' AND t.taxnumber=c.accno  and pt.parts_id = P.id and P.shop=1";
-    $rs = $dbh->getAll($sql);
+    $rs = $GLOBALS['dbh']->getAll($sql);
     if( !$rs ) {
         return false;
     } else {
@@ -687,13 +689,13 @@ function shopartikel() {
 }
 
 function getAllArtikel($art="A") {
-    global $dbh;
+
     if ($art == "A") { $where = ""; }
     else if ($art == "W") { $where = "where inventory_accno_id is not null and expense_accno_id is not null"; }
     else if ($art == "D") { $where = "where inventory_accno_id is null and expense_accno_id is not null"; }
     else if ($art == "E") { $where = "where inventory_accno_id is null and expense_accno_id is null"; };
     $sql = "SELECT * from parts $where order by description";
-    $rs = $dbh->getAll($sql);
+    $rs = $GLOBALS['dbh']->getAll($sql);
     if(!$rs) {
         return false;
     } else {
@@ -702,9 +704,9 @@ function getAllArtikel($art="A") {
 }
 
 function getGrp($usrid,$inkluid=false){
-    global $dbh;
+
     $sql = "select distinct(grpid) from grpusr where usrid=$usrid";
-    $rs  = $dbh->getAll($sql);
+    $rs  = $GLOBALS['dbh']->getAll($sql);
     if( !$rs ) {
         if ( $inkluid ) { return "($usrid)"; }
         else { $data = false; };
@@ -749,8 +751,8 @@ function mondaykw($kw,$jahr) {
 }
 //ToDo: klären ob CSV-Data noch benutzt wird
 function clearCSVData() {
-    global $dbh;
-    return $dbh->query("delete from tempcsvdata where uid = '".$_SESSION["loginCRM"]."'");
+
+    return $GLOBALS['dbh']->query("delete from tempcsvdata where uid = '".$_SESSION["loginCRM"]."'");
 }
 
 
@@ -786,9 +788,9 @@ function insertCSVData($data,$id){ //ToDo:
  * @return false, mixed
  */
 function getCSVData(){
-    global $dbh;
+
     $sql = "select * from tempcsvdata where uid = '" . $_SESSION["loginCRM"] .  "' ORDER BY id";
-    return $dbh->getAll($sql);   //liefert false bei misserfolg
+    return $GLOBALS['dbh']->getAll($sql);   //liefert false bei misserfolg
 }
 
 /**
@@ -799,9 +801,9 @@ function getCSVData(){
  * @return false, mixed
  */
 function getCSVDataID(){
-    global $dbh;
+
     $sql = "select id from tempcsvdata where uid = '" . $_SESSION["loginCRM"] .  "' and id > 0";
-    return $dbh->getAll($sql);   //liefert false bei misserfolg
+    return $GLOBALS['dbh']->getAll($sql);   //liefert false bei misserfolg
 }
 function startTime() {
     $zeitmessung = microtime();
@@ -956,24 +958,24 @@ function doHeader(&$t) {
  * @return TODO
  */
 function getLanguage() {
-    global $dbh;
+
     $sql = "select id,description from language";
-    return $dbh->getAll($sql);
+    return $GLOBALS['dbh']->getAll($sql);
 }
 function nextNumber($number) {
-    global $dbh;
-    $dbh->begin();
+
+    $GLOBALS['dbh']->begin();
     $sql = "select $number from defaults";
-    $rs  = $dbh->getOne($sql);
+    $rs  = $GLOBALS['dbh']->getOne($sql);
     preg_match("/([^\d]*)([\d]+)([^\d]*)/",$rs[$number],$hit);
     $nr  = $hit[1].($hit[2]+1).$hit[3];
     $sql = "update defaults set $number = '$nr'";
-    $rc  = $dbh->query($sql,"nextnumber");
+    $rc  = $GLOBALS['dbh']->query($sql,"nextnumber");
     if ( !$rc ) {
-        $dbh->rollback();
+        $GLOBALS['dbh']->rollback();
         return false;
     } else {
-        $dbh->commit();
+        $GLOBALS['dbh']->commit();
         return $nr;
     }
 }
@@ -1087,11 +1089,11 @@ function makeMenu($sess,$token){
 *** History wird mit Parameter schreibend benutzt, ohne Paramter gibt Sie die History zurück ***********************************************************
 *******************************************************************************************************************************************************/
 function accessHistory( $data=false ) {
-    global $dbh;
+
     if ( $_SESSION['loginok'] == 'ok' ){
         $sql  = "select val from crmemployee where uid = '" . $_SESSION["loginCRM"];
         $sql .= "' AND manid = ".$_SESSION['manid']." AND key = 'search_history'";
-        $rs =   $dbh->getOne( $sql );
+        $rs =   $GLOBALS['dbh']->getOne( $sql );
         $array_of_data = json_decode( $rs['val'], true );
         if( !is_array ( $array_of_data[0] ) ) unset( $array_of_data[0] );//ToDo
         if ( !$data && $array_of_data ) {
@@ -1103,15 +1105,15 @@ function accessHistory( $data=false ) {
             if ( count( $array_of_data ) > 8 ) array_shift( $array_of_data );
             $sql =  "UPDATE crmemployee SET val = '".json_encode( $array_of_data )."' WHERE uid = ".$_SESSION['loginCRM'];
             $sql .= " AND manid = ".$_SESSION['manid']." AND key = 'search_history'";
-            $dbh->query( $sql );
+            $GLOBALS['dbh']->query( $sql );
         }
     }
 }
 
 function getCurrencies() {
-    global $dbh;
+
     $sql = "SELECT * from currencies";
-    $rs = $dbh->getAll($sql);
+    $rs = $GLOBALS['dbh']->getAll($sql);
     return $rs;
 }
 

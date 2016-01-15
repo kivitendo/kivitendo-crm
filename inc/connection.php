@@ -125,7 +125,22 @@ function getUserConfig(){
     //Welcer Mandant ist verbunden
     $sql  = "SELECT sess_value FROM auth.session_content WHERE session_id = '".$_SESSION['sessid']."' and sess_key='client_id'";
     $rs   = $GLOBALS['dbh_auth']->getOne( $sql );
-    $userConfig['client_id'] = substr( $rs['sess_value'], 4 );
+    $userConfig['client_id'] = substr( $rs['sess_value'], 4 ); 
+    //ERP users
+    $sql = "SELECT usr.id AS id, usr.login, usrc.cfg_value AS name FROM auth.user AS usr ";
+    $sql .= "INNER JOIN auth.user_config AS usrc ON usr.id = usrc.user_id INNER JOIN auth.clients_users AS cliusr ON usr.id = cliusr.user_id ";
+    $sql .= "WHERE usrc.cfg_key = 'name' AND cliusr.client_id = '".$userConfig['client_id']."' ORDER by usr.id";
+    $rs = $GLOBALS['dbh_auth']->getAll( $sql );
+    $userConfig['all_erp_users'] = $rs;
+    //ERP groups
+    $sql = "SELECT grp.id AS id, grp.name AS name FROM auth.group AS grp ";
+    $sql .= "INNER JOIN auth.clients_groups AS cligrp ON grp.id = cligrp.group_id WHERE cligrp.client_id = '".$userConfig['client_id']."' ORDER by grp.id";
+    $rs = $GLOBALS['dbh_auth']->getAll( $sql );
+    $userConfig['all_erp_groups'] = $rs;
+    //ERP assignments
+    $sql= "SELECT usrg.user_id AS user_id, usrg.group_id AS group_id FROM auth.user_group AS usrg ORDER by usrg.user_id";
+    $rs = $GLOBALS['dbh_auth']->getAll( $sql );
+    $userConfig['all_erp_assignments'] = $rs;
 
     //printArray( $rs );
     //$user

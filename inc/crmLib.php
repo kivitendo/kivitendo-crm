@@ -3277,16 +3277,16 @@ function ERPUsersfromGroup($grp_name) {
 	$i = 0;
 	$grp_id = '';
 	//Gruppen ID herausfiltern
-	foreach ( $_SESSION['all_erp_groups'] as $key => $gruppe ) {
+	foreach ( $_SESSION['userConfig']['all_erp_groups'] as $key => $gruppe ) {
         if($gruppe['name'] == $grp_name) {
             $grp_id = $gruppe['id'];
         }
     }
     //Rückgabe-Array zusammensetzeng
-	foreach ( $_SESSION['all_erp_assignments'] as $key => $zuordnung ) {
+	foreach ( $_SESSION['userConfig']['all_erp_assignments'] as $key => $zuordnung ) {
 		if($zuordnung['group_id'] == $grp_id) {
 			$user_id = $zuordnung['user_id'];
-			foreach ( $_SESSION['all_erp_users'] as $key => $nutzer ) {
+			foreach ( $_SESSION['userConfig']['all_erp_users'] as $key => $nutzer ) {
 					if($nutzer['id'] == $user_id) {
 						$rueck[$i] = array("id"=>$user_id,"login"=>$nutzer['login'],"name"=>$nutzer['name']);
 						$i++;

@@ -19,15 +19,19 @@ if( TRUE ){
     if( $erpConfigFile ) $_SESSION['erpConfig'] = configFile2array( $erpConfigFile );
 }
 
-$_SESSION['sessid'] = $_COOKIE[$_SESSION['erpConfig']['authentication']['cookie_name']];
+$_SESSION['sessid'] =& $_COOKIE[$_SESSION['erpConfig']['authentication']['cookie_name']];
 //printArray( $_SESSION);
 
 $conf_auth_db = $_SESSION['erpConfig']['authentication/database'];
 $dbh_auth = new myPDO ($conf_auth_db['host'], $conf_auth_db['port'], $conf_auth_db['db'], $conf_auth_db['user'], $conf_auth_db['password'], $_SESSION["sessid"] );
 
 
-
 if( !varExist( $_SESSION['userConfig'] ) )   $_SESSION['userConfig']   = getUserConfig(); //printArray( getUserConfig());
+$_SESSION['all_erp_users'] =& $_SESSION['userConfig']['all_erp_users'];
+$_SESSION['all_erp_groups'] =& $_SESSION['userConfig']['all_erp_groups'];
+$_SESSION['all_erp_assingments'] =& $_SESSION['userConfig']['all_erp_assignments'];
+
+//if( !varExist( $_SESSION['menu'] ) )       $_SESSION['menu']       = getMenu();   //printArray( getDbData());
 
 if( !varExist( $_SESSION['dbData'] ) )       $_SESSION['dbData']       = getDbData();   //printArray( getDbData());
 $dbData = $_SESSION['dbData'];

@@ -10,7 +10,8 @@
 
 if( !varExist( $_SESSION['globalConfig'] ) ) $_SESSION['globalConfig'] = getGlobalConfig(); //printArray(getGlobalConfig());
 $_SESSION['erppath'] =& $_SESSION['globalConfig']['erppath'];//ToDO: delete
-
+$_SESSION['crmpath'] =& $_SESSION['globalConfig']['crmpath'];//ToDO: delete
+$_SESSION['baseurl'] =& $_SESSION['globalConfig']['baseUrl'];//ToDO: delete
 
 
 //if( !varExist( $_SESSION['erpConfig'] ) ){
@@ -27,13 +28,25 @@ $dbh_auth = new myPDO ($conf_auth_db['host'], $conf_auth_db['port'], $conf_auth_
 
 
 if( !varExist( $_SESSION['userConfig'] ) )   $_SESSION['userConfig']   = getUserConfig(); //printArray( getUserConfig());
-$_SESSION['all_erp_users'] =& $_SESSION['userConfig']['all_erp_users'];
-$_SESSION['all_erp_groups'] =& $_SESSION['userConfig']['all_erp_groups'];
-$_SESSION['all_erp_assingments'] =& $_SESSION['userConfig']['all_erp_assignments'];
+$_SESSION['login'] =& $_SESSION['userConfig']['login'];//ToDO: delete
+$_SESSION['fax'] =& $_SESSION['userConfig']['fax'];//ToDO: delete
+$_SESSION['email'] =& $_SESSION['userConfig']['email'];//ToDO: delete
+$_SESSION['signature'] =& $_SESSION['userConfig']['signature'];//ToDO: delete
+$_SESSION['name'] =& $_SESSION['userConfig']['name'];//ToDO: delete
+$_SESSION['vclimit'] =& $_SESSION['userConfig']['vclimit'];//ToDO: delete
+$_SESSION['countrycode'] =& $_SESSION['userConfig']['countrycode'];//ToDO: delete
+$_SESSION['stylesheet'] =& $_SESSION['userConfig']['stylesheet'];//ToDO: delete
+$_SESSION['tel'] =& $_SESSION['userConfig']['tel'];//ToDO: delete
+$_SESSION['client_id'] =& $_SESSION['userConfig']['client_id'];//ToDO: delete
+$_SESSION['all_erp_users'] =& $_SESSION['userConfig']['all_erp_users'];//ToDO: delete
+$_SESSION['all_erp_groups'] =& $_SESSION['userConfig']['all_erp_groups'];//ToDO: delete
+$_SESSION['all_erp_assingments'] =& $_SESSION['userConfig']['all_erp_assignments'];//ToDO: delete
 
 //if( !varExist( $_SESSION['menu'] ) )       $_SESSION['menu']       = getMenu();   //printArray( getDbData());
 
 if( !varExist( $_SESSION['dbData'] ) )       $_SESSION['dbData']       = getDbData();   //printArray( getDbData());
+$_SESSION['manid'] =& $_SESSION['dbData']['manid'];//ToDO: delete
+$_SESSION['mandant'] =& $_SESSION['dbData']['mandant'];//ToDO: delete
 $dbData = $_SESSION['dbData'];
 
 //printArray($dbh_auth->getAll( 'select * from auth.user_config' ));

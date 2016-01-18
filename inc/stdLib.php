@@ -4,37 +4,11 @@ ini_set('session.bug_compat_42', 0);  // Das ist natürlich lediglich eine Provi
 //Warning: Unknown: Your script possibly relies on a session side-effect which existed until PHP 4.2.3. ....
 //session_set_cookie_params(480*60); //480*60
 if( !isset($_SESSION) ) session_start();
-/*
-if ( isset($_SERVER['CONTEXT_DOCUMENT_ROOT']) ) {
-    $basepath = $_SERVER['CONTEXT_DOCUMENT_ROOT'];
-} else if ( isset($_SERVER['SCRIPT_FILENAME']) ) {
-    $tmp = explode('crm',$_SERVER['SCRIPT_FILENAME']);
-    $basepath = substr($tmp[0],0,-1);
-} else if ( isset($_SERVER['DOCUMENT_ROOT']) ) {
-    $basepath = $_SERVER['DOCUMENT_ROOT'];
-} else if ( substr($ERPNAME,0,1) == '/' ) {
-    $basepath = $ERPNAME;
-    $ERPNAME = '';
-} else {
-    echo "Basispfad konnte nicht ermittelt werden.<br>";
-    echo 'Bitte in "$ERPNAME" in inc/conf.php den absoluten Pfad eintragen.';
-    exit();
-}
-$basepath = substr($basepath, -1) == '/' ? substr($basepath,0,-1) : $basepath;
-//echo $basepath; //Pfade dürfen kein Slash am Ende haben
-$_SESSION['erppath'] = $basepath;
-$_SESSION['crmpath'] = $_SESSION['erppath'] .'/crm';
-$inclpa = ini_get('include_path');
-ini_set('include_path',$inclpa.":../:./inc:../inc");//ToDo kann doch raus?? Ist es nicht besser $_SESSION['crmpath'] zu benützen??
 
-if ( isset($_SESSION['php_error']) && $_SESSION['php_error'] ) {
-    error_reporting (E_ALL & ~E_DEPRECATED);
-    ini_set ('display_errors',1);
-}*/
 require_once "phpDataObjects.php";
 require_once "connection.php";
-include_once "mdb.php"; //ToDo remove
-require_once "conf.php";
+//include_once "mdb.php"; //ToDo remove
+//require_once "conf.php";
 
 // Prüft ob eine Variable existiert und gibt deren Wert zurück.
 function varExist( $var ){
@@ -52,34 +26,6 @@ function printArray( $array ){
 function writeLog( $log ){
     file_put_contents( $_SESSION['crmpath'].'/tmp/log.txt', date("Y-m-d H:i:s -> " ).print_r( $log, TRUE )."\n", FILE_APPEND );
 }
-
-if ( !isset($_SESSION['dbhost']) ) {
-    if ( !isset($erpConfigFile) ) $erpConfigFile = $erp;
-    $_SESSION['ERPNAME'] = $ERPNAME;
-    $_SESSION['ERP_BASE_URL'] = $ERP_BASE_URL;//
-    $_SESSION['erpConfigFile'] = $erpConfigFile;
-    require_once "version.php";
-    $_SESSION['VERSION'] = $VERSION;
-    //require_once "login.php";
-    //exit();
-} else {
-    if ( !isset($_SESSION["cookie"]) ||
-         ( $_SESSION["sessid"] != $_COOKIE[$_SESSION["cookie"]] ) ) {
-             while( list($key,$val) = each($_SESSION) ) {
-                 unset($_SESSION[$key]);
-             };
-             $_SESSION['ERPNAME'] = $ERPNAME;
-             $_SESSION['ERP_BASE_URL'] = $ERP_BASE_URL;
-             $_SESSION['erpConfigFile'] = $erpConfigFile;
-             require_once "version.php";
-             $_SESSION['VERSION'] = $VERSION;
-             if ( !anmelden() ) header("location: ups.html");
-    };
-};
-
-//require_once "login".$_SESSION["loginok"].".php";
-
-
 
 /****************************************************
 * db2date
@@ -126,204 +72,13 @@ function translate($word,$file) {
         return $word;
     }
 }
+
 function chksesstime($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$session,$sesstime) {
     $db   = new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
     $sql  = "SELECT * FROM auth.session WHERE = '$session'";
     $rs   = $db->getOne($sql);
 
     return true;
-}
-
-function authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie) {
-    //$db   = new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
-    $db   = new myPDO($dbhost,$dbport,$dbname,$dbuser,$dbpasswd);
-    //Hat sich ein User angemeldet
-    $sql  = "select sc.session_id,u.id,u.login from auth.session_content sc left join auth.\"user\" u on ";
-    $sql .= "(E'--- ' || u.login || chr(10) )=sc.sess_value left join auth.session s on s.id=sc.session_id ";
-    $sql .= "where session_id = '$cookie' and sc.sess_key='login'";
-    $rs   = $db->getAll($sql);
-    //printArray( $rs );
-    if ( count($rs) != 1 ) { // Garnicht mit ERP angemeldet oder zu viele Sessions, sollte die ERP drauf achten
-        unset($_SESSION);
-        $Url = preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
-        header( "location:".$Url."controller.pl?action=LoginScreen/user_login" );
-    }
-    $auth = array();
-    $uid = $rs[0]["id"];
-    $auth["login"]      = $rs[0]["login"];
-    $sql = "select * from auth.user_config where user_id=".$uid;
-    $rs = $db->getAll($sql);
-    //printArray( $rs );
-    $keys = array("countrycode","stylesheet","vclimit","signature","email","tel","fax","name");
-    foreach ( $rs as $row ) {
-        if ( in_array($row["cfg_key"],$keys) ) {
-            $auth[$row["cfg_key"]] = $row["cfg_value"];
-        }
-    }
-    $auth["stylesheet"] = substr($auth["stylesheet"],0,-4);
-    //Welcer Mandant ist verbunden
-    $sql  = "SELECT sess_value FROM auth.session_content WHERE session_id = '$cookie' and sess_key='client_id'";
-    $rs   = $db->getOne($sql);
-    $mandant = substr($rs['sess_value'],4);
-    $auth['client_id'] = $mandant;
-    $sql  = 'SELECT id as manid,name as mandant,dbhost,dbport,dbname,dbuser,dbpasswd FROM auth.clients WHERE id = '.$mandant;
-    $rs   = $db->getOne($sql);
-    $rs['dbpasswdcrypt'] = base64_encode( @openssl_encrypt( $rs['dbpasswd'], 'AES128', $cookie))    ;//ToDo change in dbpasswd
-    $auth = array_merge($auth,$rs);
-    //printArray( $auth );
-    //$sql  = "SELECT id AS value, name AS text FROM auth.group";
-    //Nur die Gruppen die den angemeldete Benutzer zugeordnet sind hinzufügen
-    $sql="SELECT grp.id AS value, name AS text FROM auth.group AS grp
-                   INNER JOIN auth.user_group
-                     ON grp.id = group_id
-                   INNER JOIN auth.user AS usr
-                     ON user_id = usr.id
-                   WHERE usr.id = $uid";
-    $rs_grp = $db->getAll( $sql );
-    $auth['grp'] = $rs_grp;
-    //Eine der Gruppen des Users darf sales_all_edit
-    $sql  = "SELECT granted from auth.group_rights G where G.right = 'sales_all_edit' ";
-    $sql .= "and G.group_id in (select group_id from auth.user_group where user_id = ".$uid.")";
-    $rs3 = $db->getAll($sql);
-    $auth["sales_edit_all"] = 'f';
-    if ( $rs3 ) {
-        foreach ( $rs3 as $row ) {
-             if ( $row["granted"] == 't' ) {
-                   $auth["sales_edit_all"] = 't';
-                   break;
-              }
-         }
-    }
-    // Ist der User ein CRM-Supervisor?
-    $sql = "SELECT count(*) as cnt from auth.user_group left join auth.group on id=group_id where name = 'Admin' and user_id = ".$uid;
-    $rs  = $db->getOne($sql);
-    $auth['Admin'] = $rs['cnt'];
-    //Session update
-    $sql = "update auth.session set mtime = '".date("Y-M-d H:i:s.100001")."' where id = '".$cookie."'";
-    $db->query($sql,"authuser_3");
-    //Token lesen
-    $sql = "SELECT * FROM auth.session WHERE id = '".$cookie."'";
-    $rsa =  $db->getOne($sql);
-    $auth['token'] = $rsa['api_token'];
-    return $auth;
-}
-
-/****************************************************
-* anmelden
-* in: name,pwd = String
-* out: rs = integer
-* prueft ob name und kennwort in db sind und liefer die UserID
-*****************************************************/
-function anmelden() {
-    //return;
-    echo "anmelden";
-    ini_set("gc_maxlifetime","3600");
-    global $ERPNAME; // ! das funzt nicht mit $_SESSION[ERPNAME] weil die Session in loginok.php zerstört wird...
-    global $erpConfigFile;
-    //Konfigurationsfile der ERP einlesen
-    $deep = is_dir("../".$ERPNAME) ? "../" : "../../";                // anmelden() aus einem Unterverzeichnis
-    if ( file_exists($deep.$ERPNAME."/config/".$erpConfigFile.".conf") ) {
-        $lxo = fopen($deep.$ERPNAME."/config/".$erpConfigFile.".conf","r");
-    } else if ( file_exists($deep.$ERPNAME."/config/".$erpConfigFile.".conf.default") ) {
-        $lxo = fopen($deep.$ERPNAME."/config/".$erpConfigFile.".conf.default","r");
-    } else {
-        return false;
-    }
-    $dbsec = false;
-    $tmp = fgets($lxo,512);
-    //Parameter für die Auth-DB in der ERP-Konfiguration finden
-    while ( !feof($lxo) ) {
-        if ( preg_match("/^[\s]*#/",$tmp) || $tmp == "\n" ) { //Kommentar, ueberlesen
-            $tmp = fgets($lxo,512);
-            continue;
-        }
-        if ( $dbsec && preg_match("!\[.+]!",$tmp) ) $dbsec = false;
-        if ( $dbsec ) {
-            if ( preg_match("/db[ ]*=[ ]*(.+)/",$tmp,$hits) )       $dbname = $hits[1];
-            if ( preg_match("/password[ ]*=[ ]*(.+)/",$tmp,$hits) ) $dbpasswd = $hits[1];
-            if ( preg_match("/user[ ]*=[ ]*(.+)/",$tmp,$hits) )     $dbuser = $hits[1];
-            if ( preg_match("/host[ ]*=[ ]*(.+)/",$tmp,$hits) )     $dbhost = ($hits[1])?$hits[1]:"localhost";
-            if ( preg_match("/port[ ]*=[ ]*([0-9]+)/",$tmp,$hits) ) $dbport = ($hits[1])?$hits[1]:"5432";
-            if ( preg_match("/\[[a-z]+/",$tmp) ) $dbsec = false;
-            $tmp = fgets($lxo,512);
-            continue;
-        }
-        if ( preg_match("/cookie_name[ ]*=[ ]*(.+)/",$tmp,$hits) ) $cookiename = $hits[1];
-        //if ( preg_match("/dbcharset[ ]*=[ ]*(.+)/",$tmp,$hits) )   $dbcharset = $hits[1];
-        if ( preg_match("/session_timeout[ ]*=[ ]*(.+)/",$tmp,$hits) )   $sesstime = $hits[1];
-        if ( preg_match("!\[authentication/database\]!",$tmp) )    $dbsec = true;
-        $tmp = fgets($lxo,512);
-    }
-    if ( !$cookiename ) $cookiename = $_SESSION['erpConfigFile'].'_session_id';
-    if ( !$sesstime ) $sesstime = 480;
-    fclose($lxo);
-    $cookie = $_COOKIE[$cookiename] ;
-    if ( !$cookie ) header("location: ups.html");
-    // Benutzer anmelden
-    //error_log("!$ERPNAME!$dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie!",0);
-    $auth = authuser($dbhost,$dbport,$dbuser,$dbpasswd,$dbname,$cookie);
-    if ( !$auth ) {  return false; };                    // Anmeldung des Users fehlgeschlagen
-    chkdir($auth["dbname"]);                         // gibt es unter dokumente ein Verzeichnis mit dem Instanznamen
-    chkdir($auth["dbname"].'/tmp/');
-    foreach ($auth as $key=>$val) $_SESSION[$key] = $val;                // Mandanten + Userdaten in Session speichern
-    $_SESSION["sessid"] = $cookie;
-    $_SESSION["cookie"] = $cookiename;
-    $_SESSION["sesstime"] = $sesstime;
-    // Benutzer/Gruppen/Gruppenzuordnung aus der ERP als Arrays in Session schreiben
-    //$db_new = new myDB($dbhost,$dbuser,$dbpasswd,$dbname,$dbport);
-    //$db_new = new myPDO($dbhost,$dbport,$dbname,$dbuser,$dbpasswd);//ToDo: Kevin das gehört besser in authuser()??
-    //$sql_all_users = "SELECT usr.id AS id, usr.login, usrc.cfg_value AS name FROM auth.user AS usr INNER JOIN auth.user_config AS usrc ON usr.id = usrc.user_id INNER JOIN auth.clients_users AS cliusr ON usr.id = cliusr.user_id WHERE usrc.cfg_key = 'name' AND cliusr.client_id = '".$auth['client_id']."' ORDER by usr.id";
-    //$sql_all_groups = "SELECT grp.id AS id, grp.name AS name FROM auth.group AS grp INNER JOIN auth.clients_groups AS cligrp ON grp.id = cligrp.group_id WHERE cligrp.client_id = '".$auth['client_id']."' ORDER by grp.id";
-    //$sql_all_assignments = "SELECT usrg.user_id AS user_id, usrg.group_id AS group_id FROM auth.user_group AS usrg ORDER by usrg.user_id";
-    //$all_users = $db_new->getAll( $sql_all_users);
-    //$all_groups = $db_new->getAll( $sql_all_groups);
-    //$all_assignments = $db_new->getAll( $sql_all_assignments);
-    //unset( $db_new );
-    // $_SESSSION['ok'] da anmelden 2x durchlaufen wird ?? Bessere Lösung ?
-    //if(!$_SESSION['ok']) {
-    //    $_SESSION['all_erp_users'] = $all_users;
-    //    $_SESSION['all_erp_groups'] = $all_groups;
-    //    $_SESSION['all_erp_assignments'] = $all_assignments;
-   // }
-    //$_SESSION['ok'] = "1";
-    // Mit der Mandanten-DB verbinden
-    //$db   = new myPDO($dbhost,$dbport,$dbname,$dbuser,$dbpasswd);
-    global $dbData;
-    //$GLOBALS['dbh'] = new myPDO( $dbData["dbhost"], $dbData["dbport"], $dbData["dbname"], $dbData["dbuser"], $dbData["dbpasswd"], $_SESSION["sessid"] );
-    //$GLOBALS['dbh'] = new myPDO( $_SESSION["dbhost"],$_SESSION["dbport"],$_SESSION["dbname"],$_SESSION["dbuser"],$_SESSION["dbpasswd"]);
-    //$_SESSION['test']
-    global $test;
-
-    //$_SESSION["dbPDO"] = new myPDO( $_SESSION["dbhost"],$_SESSION["dbport"],$_SESSION["dbname"],$_SESSION["dbuser"],$_SESSION["dbpasswd"]);
-    //$db_new = new myPDO($dbhost,$dbport,$dbname,$dbuser,$dbpasswd);
-    if( !$GLOBALS['dbh'] ) {
-        return false;
-    } else {
-        $_SESSION['Admin'] = $auth['Admin'];
-        $charset = ini_get("default_charset");
-        //if ( $charset == "" ) $charset = $dbcharset;
-        if ( $charset == "" ) $charset = 'UTF8';
-        $_SESSION["charset"] = $charset;
-        include_once("inc/UserLib.php");
-        $user_data = getUserStamm(0,$_SESSION["login"]);
-        $BaseUrl  = (empty( $_SERVER['HTTPS'] )) ? 'http://' : 'https://';
-        $BaseUrl .= $_SERVER['HTTP_HOST'];
-        $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
-        if ($user_data) foreach ($user_data as $key => $val) $_SESSION[$key] = $val;
-        //if ( isset($_SESSION['sql_error']) && $_SESSION['sql_error'] ) $GLOBALS['dbh']->setShowError(true);
-        //else $GLOBALS['dbh']->setShowError(false);
-        $_SESSION['dir_mode']  = ( $user_data['dir_mode'] != '' )?octdec($user_data['dir_mode']):493; // 0755
-        $_SESSION["loginCRM"] = $user_data["id"];
-        $_SESSION['theme']    = ($user_data['theme']=='' || $user_data['theme']=='base')?'':$user_data['theme'];
-        $sql = "SELECT  * from schema_info where tag like 'relea%' order by itime desc limit 1";
-        $rs = $GLOBALS['dbh']->getOne($sql);
-        $tmp = substr($rs['tag'],8);
-        $_SESSION["ERPver"]   = strtr($tmp,'_','.');
-        $_SESSION["menu"]     = makeMenu($_SESSION["sessid"],$_SESSION["token"]);
-        $_SESSION["basepath"] = $BaseUrl;
-        $_SESSION['token']    = False;
-        return true;
-    }
 }
 
 /****************************************************
@@ -847,6 +602,23 @@ function  doBlock(&$t,$tpl,$liste,$pre,$data,$id,$text,$selid) {
         $t->parse('Block'.$pre,$liste,true);
     }
 }
+
+function getAllERPusers() {
+    //ERP users
+    $sql = "SELECT usr.id AS id, usr.login, usrc.cfg_value AS name FROM auth.user AS usr ";
+    $sql .= "INNER JOIN auth.user_config AS usrc ON usr.id = usrc.user_id INNER JOIN auth.clients_users AS cliusr ON usr.id = cliusr.user_id ";
+    $sql .= "WHERE usrc.cfg_key = 'name' AND cliusr.client_id = '".$_SESSION['client_id']."' ORDER by usr.id";
+    $rs = $GLOBALS['dbh_auth']->getAll( $sql );
+    return $rs;
+}
+
+function getAllERPgroups() {
+    //ERP groups
+    $sql = "SELECT grp.id AS id, grp.name AS name FROM auth.group AS grp ";
+    $sql .= "INNER JOIN auth.clients_groups AS cligrp ON grp.id = cligrp.group_id WHERE cligrp.client_id = '".$_SESSION['client_id']."' ORDER by grp.id";
+    $rs = $GLOBALS['dbh_auth']->getAll( $sql );
+    return $rs;
+}
 function mkHeader() {
     $pager = '<span id="pager" class="pager">
                                 <form>
@@ -952,11 +724,7 @@ function doHeader(&$t) {
         'TOOLS'         => $head['TOOLS']
     ));
 }
-/**
- * TODO: short description.
- *
- * @return TODO
- */
+
 function getLanguage() {
 
     $sql = "select id,description from language";
@@ -997,100 +765,9 @@ function mkDirName($name) {
         '<' => '_',  '>' => '_',  '|' => '_' , ',' => '' );
     return strtr($name,$ers);
 }
-
-function makeMenu($sess,$token){
-    if( !function_exists( 'curl_init' ) ){
-        die( 'Curl (php5-curl) ist nicht installiert!' );
-    }
-    if ( !isset($_SESSION['ERP_BASE_URL']) || $_SESSION['ERP_BASE_URL'] == '' ){
-        $BaseUrl  = (empty( $_SERVER['HTTPS'] )) ? 'http://' : 'https://';
-        $BaseUrl .= $_SERVER['HTTP_HOST'];
-        $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
-    } else {
-        $BaseUrl = $_SESSION['ERP_BASE_URL'];
-    }
-    $_SESSION['baseurl'] = $BaseUrl;
-    $Url = $BaseUrl.'controller.pl?action=Layout/empty&format=json';
-    $ch = curl_init();
-    curl_setopt( $ch, CURLOPT_URL, $Url );
-    curl_setopt( $ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-    curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
-    curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, false );
-    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-    curl_setopt( $ch, CURLOPT_TIMEOUT, 1 );
-    curl_setopt( $ch, CURLOPT_ENCODING, 'gzip,deflate' );
-    curl_setopt( $ch, CURLOPT_HTTPHEADER, array (
-                "Connection: keep-alive",
-                "Cookie: ".$_SESSION["cookie"]."=".$sess."; ".$_SESSION["cookie"]."_api_token=".$token
-                ));
-
-    $result = curl_exec( $ch );
-    if( $result === false || curl_errno( $ch )){
-        die( 'Curl-Error: ' .curl_error($ch).' </br> $ERP_BASE_URL in "inc/conf.php" richtig gesetzt??' );
-    }
-    curl_close( $ch );
-    $objResult = json_decode( $result );
-    if (!is_object($objResult)) anmelden();
-    $_arr = get_object_vars($objResult);
-    $rs['javascripts']   = '';
-    $rs['stylesheets']   = '';
-    $rs['pre_content']   = '';
-    $rs['start_content'] = '';
-    $rs['end_content']   = '';
-    if ($objResult) {
-        //echo "<pre>";
-        //print_r($objResult->{'javascripts'});
-        //echo "</pre";
-        foreach($objResult->{'javascripts'} as $js) {//<script type="text/javascript" src="http://localhost/kivitendo-dev/crm/jquery/jquery-ui.min.js"></script>
-            //jQuery und UI der ERP benützen
-            //$rs['javascripts'] .= '<script type="text/javascript" src="'.$BaseUrl.$js.'"></script>'."\n".'   ';
-            //Da die ERP eine veraltete JUI benützt, aktuelle JUI aus CRM laden
-            //ToDo: JUI aus ERP laden wenn diese >= Version 11.4 wird
-            //Achtung!: JUI wird von der ERP nur geliefert wenn fast alle Module aktiviert sind (Menü)
-            if( strpos( $js, "jquery-ui")  === false ) $rs['javascripts'] .= '<script type="text/javascript" src="'.$BaseUrl.$js.'"></script>'."\n".'   ';
-            $rs['javascripts'] .= '<script type="text/javascript" src="'.$BaseUrl.'crm/jquery/jquery-ui.min.js"></script>'."\n".'   ';;
-        }
-        foreach($objResult->{'stylesheets'} as $style) {
-            if ($style) $rs['stylesheets'] .= '<link rel="stylesheet" href="'.$BaseUrl.$style.'" type="text/css">'."\n".'   ';
-        }
-        foreach($objResult->{'stylesheets_inline'} as $style) {
-            if ($style) $rs['stylesheets'] .= '<link rel="stylesheet" href="'.$BaseUrl.$style.'" type="text/css">'."\n".'   ';
-        }
-        $suche = '^([/a-zA-Z_0-9]+)\.(pl|php|phtml)^';
-        $ersetze = $BaseUrl.'${1}.${2}';
-        $tmp = preg_replace($suche, $ersetze, $objResult->{'pre_content'} );
-        $tmp = str_replace( 'itemIcon="', 'itemIcon="'.$BaseUrl, $tmp );
-        $rs['pre_content']   = str_replace( 'src="', 'src="'.$BaseUrl, $tmp );
-        $rs['start_content'] = $objResult->{'start_content'};
-        $rs['start_content_ui'] = '<div class="ui-widget-content">';//Begin UI-Look
-        $rs['end_content']   = $objResult->{'end_content'};
-        $rs['end_content']  .= '<script type="text/javascript">';
-        $rs['end_content']  .= " \n";
-        $users_groups = [
-            "erp_all_users" => $_SESSION['all_erp_users'],
-            "erp_all_groups" => $_SESSION['all_erp_groups']
-        ];
-        $myglobal = $users_groups;
-        $myglobal['baseurl'] = $_SESSION['baseurl'];//foreach( $elem, ...
-        $myglobalJson = json_encode($myglobal, JSON_UNESCAPED_UNICODE);
-        $rs['end_content'] .= 'kivi.global = '.$myglobalJson.";";
-
-        //Inline-JS der ERP in den Footer (nach end_content)
-        foreach($objResult->{'javascripts_inline'} as $js) {
-            $js = preg_replace($suche, $ersetze,$js);
-            $rs['end_content'] .= $js; //'<script type="text/javascript" src="'.$BaseUrl.$js.'"></script>'."\n".'   ';
-        }
-        $rs['end_content'] .= '</script>'."\n";
-        $rs['end_content_ui']   = '</div>'; //End UI-Look
-    }
-    return $rs;
-}
-/*******************************************************************************************************************************************************
-*** History wird mit Parameter schreibend benutzt, ohne Paramter gibt Sie die History zurück ***********************************************************
-*******************************************************************************************************************************************************/
 function accessHistory( $data=false ) {
 
-    if ( $_SESSION['loginok'] == 'ok' ){
+
         $sql  = "select val from crmemployee where uid = '" . $_SESSION["loginCRM"];
         $sql .= "' AND manid = ".$_SESSION['manid']." AND key = 'search_history'";
         $rs =   $GLOBALS['dbh']->getOne( $sql );
@@ -1107,7 +784,7 @@ function accessHistory( $data=false ) {
             $sql .= " AND manid = ".$_SESSION['manid']." AND key = 'search_history'";
             $GLOBALS['dbh']->query( $sql );
         }
-    }
+
 }
 
 function getCurrencies() {
@@ -1117,7 +794,7 @@ function getCurrencies() {
     return $rs;
 }
 
-function ts2gerdate( $myts ){//Timestamp to German Date
+function ts2gerdate( $myts ){//Timestamp to German Date   Gibt es da nichts fertiges???? ToDo: raus??
     $german_weekdays = array( "Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag" );
     $german_months = array( "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember" );
     //Datumsbestandteile ermitteln
@@ -1129,5 +806,5 @@ function ts2gerdate( $myts ){//Timestamp to German Date
     $min  = date("i",$myts);
     return $wd.", ".$day.". ".$m." ".$year." ".$hour.":".$min;
 }
- //printArray($_SESSION);
+//printArray($_SESSION);
 ?>

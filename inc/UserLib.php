@@ -1,4 +1,5 @@
 <?php
+require_once "connection.php";
 /****************************************************
 * saveUserStamm
 * in: val = array

@@ -18,7 +18,7 @@ $_SESSION['baseurl'] =& $_SESSION['globalConfig']['baseurl'];//ToDO: delete
 //printArray( "Baseurl: ".$_SESSION['baseurl']);
 
 //printArray( $_SESSION['erpConfig'] );
-//if( !varExist( $_SESSION['erpConfig'] ) ){ //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Funktioniert nicht
+//if( !varExist( $_SESSION['erpConfig'] ) ){ //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Funktioniert nicht is_empty verwenden???
 if( TRUE ){
     $erpConfigFile = file_exists( $_SESSION['erppath'].'/config/kivitendo.conf' ) ? $_SESSION['erppath'].'/config/kivitendo.conf' : $_SESSION['erppath'].'/config/kivitendo.conf.default';
     if( $erpConfigFile ) $_SESSION['erpConfig'] = configFile2array( $erpConfigFile );
@@ -26,7 +26,7 @@ if( TRUE ){
 //printArray( "name: ".$_SESSION['erpConfig']['authentication']['cookie_name'] );
 $_SESSION['sessid'] = $_COOKIE[$_SESSION['erpConfig']['authentication']['cookie_name']];
 //printArray( $_SESSION['sessid'] );
-//$_SESSION['cookie'] =& $_SESSION['erpConfig']['authentication']['cookie_name'];
+$_SESSION['cookie'] =& $_SESSION['erpConfig']['authentication']['cookie_name'];
 $_SESSION['sesstime'] =& $_SESSION['erpConfig']['authentication']['session_timeout'];
 
 
@@ -66,9 +66,11 @@ $dbData = $_SESSION['dbData'];
 //printArray($_SESSION["sessid"]);
 $dbh = new myPDO( $dbData["dbhost"], $dbData["dbport"], $dbData["dbname"], $dbData["dbuser"], $dbData["dbpasswd"], $_SESSION["sessid"] );
 
-if( !varExist( $_SESSION['menu'] ) ) $_SESSION["menu"]  = makeMenu();
+if( !varExist( $_SESSION['menu'] ) );
+$_SESSION["menu"]  = makeMenu();
 
-if( !varExist( $_SESSION['crmUserData'] ) ) $_SESSION["crmUserData"] = getCrmUserData();//ToDo: deprecated!
+if( !varExist( $_SESSION['crmUserData'] ) );
+$_SESSION["crmUserData"] = getCrmUserData();//ToDo: deprecated!
 
 //printArray( $_SESSION );
 
@@ -204,13 +206,6 @@ function makeMenu(){
     if( !function_exists( 'curl_init' ) ){
         die( 'Curl (php5-curl) ist nicht installiert!' );
     }
-    if ( !isset($_SESSION['ERP_BASE_URL']) || $_SESSION['ERP_BASE_URL'] == '' ){
-        $BaseUrl  = (empty( $_SERVER['HTTPS'] )) ? 'http://' : 'https://';
-        $BaseUrl .= $_SERVER['HTTP_HOST'];
-        $BaseUrl .= preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
-    } else {
-        $BaseUrl = $_SESSION['ERP_BASE_URL'];
-    }
     $url = $_SESSION['baseurl'].'controller.pl?action=Layout/empty&format=json';
     $ch = curl_init();
     //printArray( $url);
@@ -225,7 +220,6 @@ function makeMenu(){
                 "Connection: keep-alive",
                 "Cookie: ".$_SESSION["cookie"]."=".$_SESSION['sessid']."; ".$_SESSION["cookie"]."_api_token=".$_SESSION["token"]['api_token']
                 ));
-
     $result = curl_exec( $ch );
 
 

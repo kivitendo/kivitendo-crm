@@ -1,43 +1,40 @@
 <?php
 /*************************************************************************************************
-*** connection.php:
-*** 1. liest die ERP-Config aus readERPConfig() und speichert die Variablen und deren Werte in einem
-***    assziativen Array erpConfig in der Session (nur wenn der Array erpConfig nicht vorhanden ist)
-*** 2. erzeugt zwei DB-Handle dbh und authdbh
-*** 3.
-*** 4.
+*** Konfigurationsdatei -> Session, Db-handle erstellen, User-Date -> Session, Menu -> Session ***
 **************************************************************************************************/
 require_once "phpDataObjects.php";
 require_once "stdLib.php";
-if( !varExist( $_SESSION ) ) session_start();
-//printArray( $_SESSION );
-if( !varExist( $_SESSION['globalConfig'] ) ) $_SESSION['globalConfig'] = getGlobalConfig(); //printArray(getGlobalConfig());
-$_SESSION['erppath'] =& $_SESSION['globalConfig']['erppath'];//ToDO: delete
-$_SESSION['crmpath'] =& $_SESSION['globalConfig']['crmpath'];//ToDO: delete
-$_SESSION['baseurl'] =& $_SESSION['globalConfig']['baseurl'];//ToDO: delete
-//printArray( "Baseurl: ".$_SESSION['baseurl']);
+require_once "conf.php";
 
-//printArray( $_SESSION['erpConfig'] );
-//if( !varExist( $_SESSION['erpConfig'] ) ){ //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Funktioniert nicht is_empty verwenden???
-if( TRUE ){
+if( !varExist( $_SESSION ) ) session_start();
+if( !varExist( $_SESSION['globalConfig'] ) ) $_SESSION['globalConfig'] = getGlobalConfig(); //printArray(getGlobalConfig());
+
+//Prüfen ob es sich um eine neu Session handelt oder die Elemente von $_SESSION gelöscht wurden
+$newSession = ( $_SESSION['sessid'] != $_COOKIE[$_SESSION['erpConfig']['authentication']['cookie_name']] ) || $_SESSION['clear'];
+
+$_SESSION['erppath'] =& $_SESSION['globalConfig']['erppath'];//ToDO: delete??
+$_SESSION['crmpath'] =& $_SESSION['globalConfig']['crmpath'];//ToDO: delete??
+$_SESSION['baseurl'] =& $_SESSION['globalConfig']['baseurl'];//ToDO: delete??
+
+//Kivitendo Configfile in Array erpConfig speichern
+if( $newSession ){
     $erpConfigFile = file_exists( $_SESSION['erppath'].'/config/kivitendo.conf' ) ? $_SESSION['erppath'].'/config/kivitendo.conf' : $_SESSION['erppath'].'/config/kivitendo.conf.default';
     if( $erpConfigFile ) $_SESSION['erpConfig'] = configFile2array( $erpConfigFile );
+    else die( 'kivitendo configfile not found!' );
 }
-//printArray( "name: ".$_SESSION['erpConfig']['authentication']['cookie_name'] );
-$_SESSION['sessid'] = $_COOKIE[$_SESSION['erpConfig']['authentication']['cookie_name']];
-//printArray( $_SESSION['sessid'] );
+
+//Neue Session-Id speichern
+if( $newSession ) $_SESSION['sessid'] = $_COOKIE[$_SESSION['erpConfig']['authentication']['cookie_name']];
+
 $_SESSION['cookie'] =& $_SESSION['erpConfig']['authentication']['cookie_name'];
 $_SESSION['sesstime'] =& $_SESSION['erpConfig']['authentication']['session_timeout'];
 
-
+//DB-handle auth erzeugen
 $conf_auth_db = $_SESSION['erpConfig']['authentication/database'];
 $dbh_auth = new myPDO ($conf_auth_db['host'], $conf_auth_db['port'], $conf_auth_db['db'], $conf_auth_db['user'], $conf_auth_db['password'], $_SESSION["sessid"] );
 
-
-if( !varExist( $_SESSION['userConfig'] ) );// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Funktioniert nicht
-$_SESSION['userConfig'] = getUserConfig(); //printArray( getUserConfig());
-
-
+//(ERP)-Userdaten in Session speichern
+if( $newSession ) $_SESSION['userConfig'] = getUserConfig(); //printArray( getUserConfig());
 
 $_SESSION['token'] =& $_SESSION['userConfig']['token'];//ToDO: delete
 $_SESSION['login'] =& $_SESSION['userConfig']['login'];//ToDO: delete
@@ -54,27 +51,29 @@ $_SESSION['all_erp_users'] =& $_SESSION['userConfig']['all_erp_users'];//ToDO: d
 $_SESSION['all_erp_groups'] =& $_SESSION['userConfig']['all_erp_groups'];//ToDO: delete
 $_SESSION['all_erp_assingments'] =& $_SESSION['userConfig']['all_erp_assignments'];//ToDO: delete
 
+//Daten fürs DB-handle in Session
+if( $newSession ) $_SESSION['dbData'] = getDbData();   //printArray( getDbData());
 
-if( !varExist( $_SESSION['dbData'] ) ); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Funktioniert nicht
-$_SESSION['dbData'] = getDbData();   //printArray( getDbData());
 $_SESSION['manid'] =& $_SESSION['dbData']['manid'];//ToDO: delete
 $_SESSION['mandant'] =& $_SESSION['dbData']['mandant'];//ToDO: delete
-$_SESSION['dbhost'] =& $_SESSION['dbData']['dbhost'];// Das muss weg !
+//$_SESSION['dbhost'] =& $_SESSION['dbData']['dbhost'];// Das muss weg!
 
+//Db-handle erzeugen
 $dbData = $_SESSION['dbData'];
-//printArray( $dbData );
-//printArray($_SESSION["sessid"]);
 $dbh = new myPDO( $dbData["dbhost"], $dbData["dbport"], $dbData["dbname"], $dbData["dbuser"], $dbData["dbpasswd"], $_SESSION["sessid"] );
 
-if( !varExist( $_SESSION['menu'] ) );
-$_SESSION["menu"]  = makeMenu();
+//Menu und Javascript-Sachen in Session speichern
+if( $newSession ) $_SESSION["menu"]  = makeMenu();
 
-if( !varExist( $_SESSION['crmUserData'] ) );
-$_SESSION["crmUserData"] = getCrmUserData();//ToDo: deprecated!
+//Vorerst Userdaten der CRM in crmUserData speichern !!besser in userConfig speichern
+if( $newSession ) $_SESSION["crmUserData"] = getCrmUserData();//ToDo: deprecated!
+
+//Die Session-Variable ist nun gefüllt
+$_SESSION['clear'] = FALSE;
 
 //printArray( $_SESSION );
 
-function configFile2array( $file ) {
+function configFile2array( $file ){
     $str = file_get_contents( $file );
     if( empty( $str ) ) return false;
     $lines = explode( "\n", $str );
@@ -124,8 +123,8 @@ function getGlobalConfig(){
     if ( isset($_SERVER['CONTEXT_DOCUMENT_ROOT']) ) {
         $basepath = $_SERVER['CONTEXT_DOCUMENT_ROOT'];
     } else if ( isset($_SERVER['SCRIPT_FILENAME']) ) {
-        $tmp = explode('crm',$_SERVER['SCRIPT_FILENAME']);
-        $basepath = substr($tmp[0],0,-1);
+        $tmp = explode('/crm',$_SERVER['SCRIPT_FILENAME']);
+        $basepath = $tmp[0];
     } else if ( isset($_SERVER['DOCUMENT_ROOT']) ) {
     $basepath = $_SERVER['DOCUMENT_ROOT'];
     } else if ( substr($ERPNAME,0,1) == '/' ) {
@@ -135,7 +134,7 @@ function getGlobalConfig(){
     echo 'Bitte in "$ERPNAME" in inc/conf.php den absoluten Pfad eintragen.';
 
     }
-    $basepath = substr($basepath, -1) == '/' ? substr($basepath,0,-1) : $basepath;
+    $basepath = substr($basepath, -1) == '/' ? substr($basepath,0,-1) : $basepath; //
     //echo $basepath; //Pfade dürfen kein Slash am Ende haben
     $rs['erppath'] = $basepath;
     $rs['crmpath'] = $rs['erppath'] .'/crm';
@@ -171,24 +170,6 @@ function getUserConfig(){
     $sql  = "SELECT sess_value FROM auth.session_content WHERE session_id = '".$_SESSION['sessid']."' and sess_key='client_id'";
     $rs   = $GLOBALS['dbh_auth']->getOne( $sql );
     $userConfig['client_id'] = substr( $rs['sess_value'], 4 );
-    //ERP users !!!!!!kann alles in Funktionen gepackt werden. muus nicht mit der Session rumgeschleppt werden
-    //$sql = "SELECT usr.id AS id, usr.login, usrc.cfg_value AS name FROM auth.user AS usr ";
-    //$sql .= "INNER JOIN auth.user_config AS usrc ON usr.id = usrc.user_id INNER JOIN auth.clients_users AS cliusr ON usr.id = cliusr.user_id ";
-    //$sql .= "WHERE usrc.cfg_key = 'name' AND cliusr.client_id = '".$userConfig['client_id']."' ORDER by usr.id";
-    //$rs = $GLOBALS['dbh_auth']->getAll( $sql );
-    //$userConfig['all_erp_users'] = $rs;
-    //ERP groups
-    //$sql = "SELECT grp.id AS id, grp.name AS name FROM auth.group AS grp ";
-    //$sql .= "INNER JOIN auth.clients_groups AS cligrp ON grp.id = cligrp.group_id WHERE cligrp.client_id = '".$userConfig['client_id']."' ORDER by grp.id";
-    //$rs = $GLOBALS['dbh_auth']->getAll( $sql );
-    //$userConfig['all_erp_groups'] = $rs;
-    //ERP assignments
-    //$sql= "SELECT usrg.user_id AS user_id, usrg.group_id AS group_id FROM auth.user_group AS usrg ORDER by usrg.user_id";
-    //$rs = $GLOBALS['dbh_auth']->getAll( $sql );
-    //$userConfig['all_erp_assignments'] = $rs;
-
-    //printArray( $userConfig );
-    //$user
     return $userConfig;
 }
 
@@ -202,7 +183,6 @@ function getDbData(){
 }
 
 function makeMenu(){
-    //echo "MakeMenueX";
     if( !function_exists( 'curl_init' ) ){
         die( 'Curl (php5-curl) ist nicht installiert!' );
     }
@@ -265,8 +245,8 @@ function makeMenu(){
         $rs['end_content']  .= '<script type="text/javascript">';
         $rs['end_content']  .= " \n";
         $users_groups = [
-            "erp_all_users" => $_SESSION['all_erp_users'],
-            "erp_all_groups" => $_SESSION['all_erp_groups']
+            "erp_all_users" => getAllERPusers(),
+            "erp_all_groups" => getAllERPgroups()
         ];
         $myglobal = $users_groups;
         $myglobal['baseurl'] = $_SESSION['baseurl'];//foreach( $elem, ...

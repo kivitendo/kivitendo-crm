@@ -11,7 +11,8 @@ require_once "connection.php";
 //require_once "conf.php";
 
 // Prüft ob eine Variable existiert und gibt deren Wert zurück.
-function varExist( $var ){
+function varExist( $var, $key = FALSE ){
+    if( $key ) return array_key_exists( $key, $var ) ? $var[$key] : FALSE;
     if( !isset( $var ) ) return FALSE;
     return $var;
 }
@@ -772,7 +773,7 @@ function accessHistory( $data=false ) {
         $sql .= "' AND manid = ".$_SESSION['manid']." AND key = 'search_history'";
         $rs =   $GLOBALS['dbh']->getOne( $sql );
         $array_of_data = json_decode( $rs['val'], true );
-        if( !is_array ( $array_of_data[0] ) ) unset( $array_of_data[0] );//ToDo
+       // if( !is_array ( $array_of_data[0] ) ) unset( $array_of_data[0] );//ToDo
         if ( !$data && $array_of_data ) {
              return array_reverse( $array_of_data );
         }

@@ -1,8 +1,10 @@
 <?php
-    require_once("../inc/stdLib.php");
-    include_once("FirmenLib.php");
-    include_once("crmLib.php");
-    include_once("persLib.php");
+    session_start();
+    echo $_SESSION['basepath'];
+    require_once( $_SESSION['basepath']."/inc/stdLib.php");
+    require_once($_SESSION['basepath']."/inc/FirmenLib.php");
+    require_once($_SESSION['basepath']."/inc/crmLib.php");
+    require_once($_SESSION['basepath']."inc/persLib.php");
 
     function getCustomTermin($id,$tab,$day,$month,$year) {
         $termine = getCustTermin($id,$tab,$day,$month,$year);
@@ -65,7 +67,7 @@
                 if ( !$row['cp_name'] ) $row['cp_name'] = '';
                 $item[] = $row;
             }
-        } 
+        }
         $data = array('items'=>$item);
         echo json_encode($data);
     }
@@ -91,7 +93,7 @@
     }
     function showContactadress($id){
         $data=getKontaktStamm($id,".");
-        if ( !$data ) { 
+        if ( !$data ) {
             $data = array('cp_id'=>-1,'cp_name'=> translate('.:no contact:.','firma'));
         } else {
             $data["cp_email"]=$_SESSION['external_mail']?
@@ -102,7 +104,7 @@
                 "Privat: <a href='mail.php?TO=".$data["cp_privatemail"]."&KontaktTO=P".$data["cp_id"]."'>".$data["cp_privatemail"]."</a>";
             $data["cp_homepage"]="<a href='".$data["cp_homepage"]."' target='_blank'>".$data["cp_homepage"]."</a>";
             if (strpos($data["cp_birthday"],"-")) { $data["cp_birthday"]=db2date($data["cp_birthday"]); };
-            if ($data["cp_gender"]=='m') { $data["cp_greeting"]=translate('.:greetmale:.','firma'); 
+            if ($data["cp_gender"]=='m') { $data["cp_greeting"]=translate('.:greetmale:.','firma');
             } else { $data["cp_greeting"]=translate('.:greetfemale:.','firma'); };
             $root="dokumente/".$_SESSION["dbname"]."/".$data["tabelle"].$data["nummer"]."/".$data["cp_id"];
             if (!empty($data["cp_grafik"]) && $data["cp_grafik"]<>"     ") {
@@ -118,7 +120,7 @@
                     $data["cp_vcard"]="<a href='$root/vcard$id.$ext' target='_blank'>Visitenkarte</a>";
                     break;
                 }
-            } 
+            }
             $data["extraF"] = '<a href="extrafelder.php?owner=P'.$id.'" target="_blank" title="'.translate('.:extra data:.','firma').'"><img src="image/extra.png" alt="Extras" border="0" /></a>';
         }
         echo json_encode($data);
@@ -144,7 +146,7 @@
             $a = explode(" ",$row["ttstart"]);
             $t1 = strtotime($row["ttstart"]);
             if ($row["ttstop"]) {
-                $b = explode(" ",$row["ttstop"]);   
+                $b = explode(" ",$row["ttstop"]);
                 $stop = db2date($b[0])." ".substr($b[1],0,5);
                 $t2 = strtotime($row["ttstop"]);
             } else {
@@ -155,12 +157,12 @@
                 }
                 $stop = "<a href='timetrack.php?tid=".$row["ttid"]."&eventid=".$row["id"]."&stop=now'><b>".translate('.:stop now:.','work')."</b></a>";
             };
-	        $min = $t2 - $t1;
+            $min = $t2 - $t1;
             $diff += $min;
-            $i++; 
+            $i++;
             if ($row["cleared"] > 0) {
                 $clear = "<td class='klein'>-</td>";
-                if ( $row['cleared'] > $lastcleared )  $lastcleared  = $row['cleared']; 
+                if ( $row['cleared'] > $lastcleared )  $lastcleared  = $row['cleared'];
             } else {
                 if ($row["uid"] == $_SESSION["loginCRM"]) {
                     $clear = "<td><input type='checkbox' name='clear[]' value='".$row["id"]."'></td>";
@@ -175,7 +177,7 @@
             } else {
                 $liste .= $row["ttevent"]."</td><td>";
             }
-	        $liste .= sprintf($link,$row['cleared']).$row["ordnumber"]."</a>";
+            $liste .= sprintf($link,$row['cleared']).$row["ordnumber"]."</a>";
             if ( $row['closed'] == 't' ) $liste .= "*";
             $liste .= "</td></tr>";
         };
@@ -192,7 +194,7 @@
             $min = sprintf("%02d",($diff % 60));
             $std = floor($diff/60);
             $use = "$std:$min ".translate('.:hours:.','work');
-        } else {    
+        } else {
             $use = $diff." ".translate('.:minutes:.','work');
         }
         $liste .= "</table><input type='checkbox' name='clrok' value='1'>".translate(".:all:.",'work')." ";
@@ -200,7 +202,7 @@
             $liste .= "<input type='radio' name='order' value='0' checked>".translate('.:new Order:.','work').' ';
             $liste .= "<input type='radio' name='order' value='$lastcleared'>".translate('.:add to last Order:.','work').' ';
         };
-     	$liste .= "<input type='submit' name='clr' value='".translate(".:clearing:.","work")."'></form>";
+         $liste .= "<input type='submit' name='clr' value='".translate(".:clearing:.","work")."'></form>";
         echo json_encode(array('liste'=>$liste,'used'=>$use,'rest'=>$rest,'ok'=>1));
     }
     function editTevent($id) {
@@ -291,15 +293,15 @@
             $info.=translate('.:Description:.','firma').": ".nl2br($rs["descript"])."<br>";
             $id=$rs["id"];
         }
-        echo json_encode( array( 
-                'docname'=> $file, 
+        echo json_encode( array(
+                'docname'=> $file,
                 'docoldname'=>$file,
                 'docpfad'=>$pfad,
-                'docid'=>$id, 
+                'docid'=>$id,
                 'docdescript'=>$rs["descript"],
-                'fbright'=>$info, 
+                'fbright'=>$info,
                 'lock'=>$rs["lock"]
-             ) ); 
+             ) );
     }
     function lockFile($file,$path,$id=0) {
         $dbfile=new document();
@@ -379,7 +381,7 @@
         $rc = mkdir($newdir);
         if ($rc) {
             chmod($newdir,$_SESSION['dir_mode']);
-            chgrp($newdir,$_SESSION['dir_group']);    
+            chgrp($newdir,$_SESSION['dir_group']);
             echo 'ok';
         } else {
             echo 'Error';

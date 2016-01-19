@@ -60,7 +60,8 @@ $_SESSION['mandant'] =& $_SESSION['dbData']['mandant'];//ToDO: delete
 
 //Db-handle erzeugen
 $dbData = $_SESSION['dbData'];
-$dbh = new myPDO( $dbData["dbhost"], $dbData["dbport"], $dbData["dbname"], $dbData["dbuser"], $dbData["dbpasswd"], $_SESSION["sessid"] );
+if( $dbData["dbhost"] ) $dbh = new myPDO( $dbData["dbhost"], $dbData["dbport"], $dbData["dbname"], $dbData["dbuser"], $dbData["dbpasswd"], $_SESSION["sessid"] );
+else echo 'No $_SESSION[dbData][dbhost]';
 
 //Menu und Javascript-Sachen in Session speichern
 if( $newSession ) $_SESSION["menu"]  = makeMenu();

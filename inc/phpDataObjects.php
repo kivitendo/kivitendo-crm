@@ -124,17 +124,5 @@ class myPDO extends PDO{
     public function setShowError( $value ){
          $this->showErr = $value;
     }
-
-    public function saveData($txt) {
-        if (get_magic_quotes_runtime()) {
-            return $txt;
-        } else {
-            return addslashes($txt);
-        }
-    }
-
-    public function getAssoc($sql){
-        return;
-    }
 }
 ?>

@@ -527,8 +527,8 @@ function clearCSVData() {
 function insertCSVData($data,$id){ //ToDo:
     $tmpstr = implode(":",$data);                                               // ANREDE:NAME:STRASSE (...)
     $sql = "insert into tempcsvdata (uid,csvdaten,id) values ('"
-            . $_SESSION["loginCRM"] . "','" . $GLOBALS['dbh']->saveData($tmpstr) . "','"
-            . $GLOBALS['dbh']->saveData($id) . "')";                                        // saveData escapt die Zeichenkette
+            . $_SESSION["loginCRM"] . "','" . $tmpstr . "','"
+            . $id. "')";
     $rc = $GLOBALS['dbh']->query($sql);
     return $rc;     //Fehlerbehandlung? Wie sieht es aus mit exceptions? Muessen wir php4-kompatibel sein?
                     //Sollte eigentlich schon immer in den Funktionen direkt passieren

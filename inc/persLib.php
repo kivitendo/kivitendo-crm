@@ -393,7 +393,7 @@ function getCpAnreden() {
 function getCpAnredenGeneric($gender) {
     $greet = array('male'=>'Herr','female'=>'Frau');
     $sql = "select language_id,COALESCE(translation,'".$greet[$gender]."') from generic_translations where translation_type ILIKE 'greetings::$gender%'";
-    $rs=$GLOBALS['dbh']->getAssoc($sql);
+    $rs=$GLOBALS['dbh']->getAll($sql);
     return $rs;
 }
 /****************************************************

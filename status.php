@@ -38,7 +38,7 @@ $head = mkHeader();
                 $("#SRV").append(data);
             });
         }
-        $(document).ready(function() { 
+        $(document).ready(function() {
           $('#dbwrapper').dialog({
                     autoOpen: false,
                     title: 'Db-Test'
@@ -48,16 +48,16 @@ $head = mkHeader();
                     dataType: "json",
                     url: "ajax/testDB.php?action=showDB",
                     method: "GET",
-                    success : function (data){  
+                    success : function (data){
                         $("#dbwrapper").empty();
-                        $("#dbwrapper").append('Installierte Version: ' +data.version +'</br></br> vom: ' +data.datum+ '</br></br> durch: ' +data.uid); 
-                        $("#dbwrapper").dialog('open');       
+                        $("#dbwrapper").append('Installierte Version: ' +data.version +'</br></br> vom: ' +data.datum+ '</br></br> durch: ' +data.uid);
+                        $("#dbwrapper").dialog('open');
                     },
                      error: function(){
                         alert("Fehler beim Test der Datenbankverbindung aufgetreten!");
-                    }       
-                 }); 
-          });     
+                    }
+                 });
+          });
           $("#info").tablesorter();
         });
     </script>

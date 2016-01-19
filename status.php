@@ -13,8 +13,9 @@ if ( $rc > 0 ) {
     $commit .= '<tr><td>Datum: </td><td>'.$date.'</td></tr>';
 }
 $rc = false;
-if ( isset($_GET['test']) and $_GET['test'] == 'ja' ) {
-    $rc = $GLOBALS['dbh']->getAll("select * from crm order by version","Status");
+if( varExist( $_GET['test'] == 'ja' ) ){
+    $rs = $GLOBALS['dbh']->getOne("select * from crm order by  version DESC, datum DESC");
+    printArray( $rs );
 }
 $menu =  $_SESSION['menu'];
 $head = mkHeader();
@@ -22,12 +23,12 @@ $head = mkHeader();
 <html>
 <head><title></title>
 <?php
-    echo $menu['stylesheets'];
-    echo $menu['javascripts'];
-    echo $head['CRMCSS'];
-    echo $head['JQUERY'];
-    echo $head['JQUERYUI'];
-    echo $head['THEME'];
+    echo varExist( $menu['stylesheets'] );
+    echo varExist( $menu['javascripts'] );
+    echo varExist( $head['CRMCSS'] );
+    echo varExist( $head['JQUERY'] );
+    echo varExist( $head['JQUERYUI'] );
+    echo varExist( $head['THEME'] ) ;
 
 ?>
     <script language="JavaScript" type="text/javascript">
@@ -61,9 +62,11 @@ if ($db) { echo "<a href='log/install.log'>Datenbankinstallation</a><br>"; } els
 <table>
     <tr><td>ProgrammVersion</td><td>[<?php echo  $VERSION." ".$SUBVER ?>]</td></tr>
 <?php echo $commit; ?>
-    <tr><td>Datenbank:</td><td> [<?php echo  $_SESSION["dbname"] ?>]</td></tr>
-    <tr><td>db-Server:</td><td>[<?php echo  $_SESSION["dbhost"] ?>]</td></tr>
-    <tr><td>Benutzer:</td><td>[<?php echo  $_SESSION["login"] ?>:<?php echo  $_SESSION["loginCRM"] ?>]</td></tr>
+    <tr><td>Auth-Datenbank:</td><td> [<?php echo  varExist( $_SESSION['erpConfig']['authentication/database']['db'] )?>]</td></tr>
+    <tr><td>Datenbank:</td><td> [<?php echo  varExist( $_SESSION['dbData']['dbname'] )?>]</td></tr>
+    <tr><td>db-Server:</td><td>[<?php echo  varExist( $_SESSION['dbData']['dbhost'] )?>]</td></tr>
+    <tr><td>Mandant:</td><td>[<?php echo  varExist( $_SESSION['dbData']['mandant'] )?>:<?php echo  $_SESSION['dbData']['manid']?>]</td></tr>
+    <tr><td>Benutzer:</td><td>[<?php echo  varExist( $_SESSION['userConfig']['name'] )?>:<?php echo  $_SESSION['userConfig']['id'] ?>]</td></tr>
     <tr><td>Session-ID:</td><td>[<?php echo  session_id() ?>]</td></tr>
     <tr><td>PHP-Umgebung:</td><td>[<a href="info.php">anzeigen</a>]</td></tr>
     <tr><td>Session:</td><td>[<a href="delsess.php">löschen</a>]</td></tr>
@@ -78,12 +81,12 @@ if ($db) { echo "<a href='log/install.log'>Datenbankinstallation</a><br>"; } els
 </table>
 
 <?php
-    if ($rc) {
+    if ($rs) {
         echo 'Datenbankzugriff erfolgreich!<br>';
-//print_r($rc);
-        foreach ($rc as $row) {
-            echo 'Installierte Version: '.$row["version"].' vom: '.$row["datum"].' durch: '.$row["uid"].'<br>';
-        }
+
+        //foreach ($rc as $row) {
+            echo 'Installierte Version: '.$rs["version"].' vom: '.$rs["datum"].' durch: '.$rs["uid"].'<br>';
+        //}
     }
 ?>
 </center>

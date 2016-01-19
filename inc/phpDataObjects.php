@@ -120,5 +120,17 @@ class myPDO extends PDO{
         if( $this->logAll ) $this->writeLog( "PDO::rollback() returns: ".$result );
         return $result;
     }
+
+    public function setShowError( $value ){
+        return;
+    }
+
+    public function saveData($txt) {
+        if (get_magic_quotes_runtime()) {
+            return $txt;
+        } else {
+            return addslashes($txt);
+        }
+    }
 }
 ?>

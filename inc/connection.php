@@ -67,6 +67,7 @@ if( $newSession ) $_SESSION["menu"]  = makeMenu();
 
 //Vorerst Userdaten der CRM in crmUserData speichern !!besser in userConfig speichern
 if( $newSession ) $_SESSION["crmUserData"] = getCrmUserData();//ToDo: deprecated!
+$_SESSION['loginCRM'] =& $_SESSION['crmUserData']['loginCRM'];//ToDO: delete
 
 //Die Session-Variable ist nun gefüllt
 $_SESSION['clear'] = FALSE;

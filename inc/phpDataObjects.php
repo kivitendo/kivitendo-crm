@@ -122,7 +122,7 @@ class myPDO extends PDO{
     }
 
     public function setShowError( $value ){
-        return;
+         $this->showErr = $value;
     }
 
     public function saveData($txt) {
@@ -131,6 +131,10 @@ class myPDO extends PDO{
         } else {
             return addslashes($txt);
         }
+    }
+
+    public function getAssoc($sql){
+        return;
     }
 }
 ?>

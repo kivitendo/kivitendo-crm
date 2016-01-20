@@ -246,7 +246,7 @@
               function( event ) {
                 $.ajax({
                        type: "GET",
-                      url: "vcardexp.php?qr=1&Q={Q}&fid={FID}",
+                      url: "vcardexp.php?Q={Q}&fid={FID}",
                        success: function(strResponse){
                          $("#qrcode").qrcode({
                              "mode": 0,

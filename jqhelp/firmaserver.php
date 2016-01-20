@@ -1,10 +1,9 @@
 <?php
     session_start();
-    echo $_SESSION['basepath'];
-    require_once( $_SESSION['basepath']."/inc/stdLib.php");
-    require_once($_SESSION['basepath']."/inc/FirmenLib.php");
-    require_once($_SESSION['basepath']."/inc/crmLib.php");
-    require_once($_SESSION['basepath']."inc/persLib.php");
+    require_once( $_SESSION['crmpath']."/inc/stdLib.php");
+    require_once($_SESSION['crmpath']."/inc/FirmenLib.php");
+    require_once($_SESSION['crmpath']."/inc/crmLib.php");
+    require_once($_SESSION['crmpath']."/inc/persLib.php");
 
     function getCustomTermin($id,$tab,$day,$month,$year) {
         $termine = getCustTermin($id,$tab,$day,$month,$year);

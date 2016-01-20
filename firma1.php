@@ -95,7 +95,7 @@
             $karte2=str_replace(array("%FROMSTREET%","%FROMZIPCODE%","%FROMCITY%"),array(strtr($user["addr1"]," ",$_SESSION['planspace']),$user["addr2"],$user["addr3"]),$karte2);
         };
     }
-    $taxzone=array("Inland","EU mit UStId","EU ohne UStId","Ausland");
+    $taxzone=array(1 => "Inland",1 => "EU mit UStId",3 => "EU ohne UStId",4 => "Ausland");
     $sales=($Q=="C")?"sales":"purchase";
     $request=($Q=="C")?"sales":"request";
     $t->set_var(array(

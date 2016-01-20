@@ -8,7 +8,7 @@
     //echo "test".$_SESSION['crmpath'];
     $vcard = new Contact_Vcard_Build();
     //printArray( $vcard );
-    if ($_GET["pid"]) {
+    if (varExist($_GET, "pid")) {
         include( $_SESSION['crmpath'].'/inc/persLib.php');
         $data=getKontaktStamm($_GET["pid"]);
         //printArray( $data );
@@ -69,7 +69,7 @@
                         }
             $vcard->addOrganization($fa["name"]);
         }
-    } else if ($_GET["fid"]) {
+    } else if (varExist($_GET, "fid")) {
         $data=getFirmenStamm($_GET["fid"],true,$Q);
                 //UID
                 $UID=$Q.$_GET["fid"].'@'.$_SESSION['mandant'];

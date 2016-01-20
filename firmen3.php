@@ -7,7 +7,7 @@
     $t = new Template($base);
     doHeader($t);
     $t->set_file(array("fa1" => "firmen3.tpl"));
-    if ($_POST["saveneu"]) {
+    if (varExist($_POST, "saveneu")) {
             $_POST["customernumber"]=false;
             $_POST["vendornumber"]=false;
         $rc=saveNeuFirmaStamm($_POST,$_FILES,$Q);
@@ -15,7 +15,7 @@
         else { $msg="Fehler beim Sichern (".($rc[1]).")"; };
         $btn1=""; $btn2=""; $_POST["id"]="";
         vartpl ($t,$_POST,$Q,$msg,$btn1,$btn2,3);
-    } else if ($_POST["save"]) {
+    } else if (varExist($_POST, "save")) {
         if ($_POST["id"]) {
             $tabelle=($Q=="C")?"customer":"vendor";
             if (chkTimeStamp($tabelle,$_POST["id"],$_POST["mtime"])) {

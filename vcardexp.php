@@ -8,7 +8,7 @@
     //echo "test".$_SESSION['crmpath'];
     $vcard = new Contact_Vcard_Build();
     //printArray( $vcard );
-    if ($_GET["pid"]) {
+    if (varExist($_GET, "pid")) {
         include( $_SESSION['crmpath'].'/inc/persLib.php');
         $data=getKontaktStamm($_GET["pid"]);
         //printArray( $data );
@@ -69,7 +69,7 @@
                         }
             $vcard->addOrganization($fa["name"]);
         }
-    } else if ($_GET["fid"]) {
+    } else if (varExist($_GET, "fid")) {
         $data=getFirmenStamm($_GET["fid"],true,$Q);
                 //UID
                 $UID=$Q.$_GET["fid"].'@'.$_SESSION['mandant'];
@@ -109,36 +109,8 @@
 
     // get back the vCard and print it
     $text = $vcard->fetch();
-    if ( varExist( $_GET['qr'] ) == 1 ) {
-        require_once($_SESSION['crmpath'].'inc/phpqrcode.php');
-        QRcode::png($text,'tmp/qr_'.$_SESSION['sessid'].'.png',QR_ECLEVEL_L, 3);
+    header("Content-type:text/x-vCard; charset=utf-8");
+    header("Content-Disposition: attachment; filename=vcardexport.vcf");
+    echo $text;
 
-    }
-    else {
-        header("Content-type:text/x-vCard; charset=utf-8");
-        header("Content-Disposition: attachment; filename=vcardexport.vcf");
-        echo $text;
-    }
-
-    // Vorerst auskommentiert
-    /*header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");    // Datum aus Vergangenheit
-    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-    header("Cache-Control: no-store, no-cache, must-revalidate");  // HTTP/1.1
-    header("Cache-Control: post-check=0, pre-check=0", false);
-    header("Pragma: no-cache");
-    header("Content-type: application/octetstream");
-        if ( isset($_GET['qr']) && $_GET['qr'] == 1 ) {
-            include('inc/phpqrcode.php');
-            QRcode::png($text,'tmp/qr_'.$_SESSION['login'].'.png',QR_ECLEVEL_L, 3);
-            header('Content-Transfer-Encoding: binary');
-           header("Content-Disposition: attachment; filename=qr-vcard.png");
-        header("Content-Disposition: filename=qr_".$_SESSION['login'].'.png');
-            header('Content-Length: ' . filesize('tmp/qr_'.$_SESSION['login'].'.png'));
-            echo readfile('tmp/qr_'.$_SESSION['login'].'.png');
-
-        } else {
-        header("Content-Disposition: attachment; filename=lxo-vcard.vcf");
-        header("Content-Disposition: filename=".$Q.$data["nummer"]."-vcard.vcf");
-        echo $text;
-        }  */
 ?>

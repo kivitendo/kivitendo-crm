@@ -13,17 +13,6 @@
             pid = $('#liste option:selected').val();
             F1=open("getCall.php?Q={Q}C&pid="+pid+"&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
         }
-        function qrcode() {
-            pid = $('#liste option:selected').val();
-              //  document.location.href="vcardexp.php?qr=1&Q={Q}&pid="+pid;
-            $.ajax({
-               url: 'vcardexp.php?qr=1&Q={Q}&pid='+pid,
-               type: 'GET',
-               success: function(data){
-                       $(".fancybox").trigger('click');
-               }
-             })
-        }
         function anschr() {
             pid = $('#liste option:selected').val();
             $( "#etikett" ).dialog( "option", "maxWidth",  400 );
@@ -219,8 +208,22 @@
 
          $(".fancybox").fancybox();
 
-         $("#cpqr").click(function( event ) {
-             qrcode();
+         $("#cpqr").click(
+            function( event ) {
+                $.ajax({
+                       type: "GET",
+                      url: "vcardexp.php?Q={Q}&fid={FID}",
+                       success: function(strResponse){
+                         $("#qrcode").qrcode({
+                             "mode": 0,
+                              "size": 250,
+                              "color": "#3a3",
+                              "text": strResponse
+                        });
+                       }
+                 });
+                 $(".fancybox").trigger('click');
+                 $(".fancybox").empty();
          });
 
     });
@@ -234,7 +237,7 @@
 <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
 
 <div id="menubox1">
-    <div class="fancybox" rel="group" href="tmp/qr_{loginname}.png"><img src="" alt="" /></div>
+   <div id="qrcode" class="fancybox" rel="group"><img src="" alt="" /></div>
     <span style="float:left;" class="top1">
     <button name="Link1">.:Custombase:.</button>
     <button name="Link2">.:Contacts:.</button>

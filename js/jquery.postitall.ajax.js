@@ -1,6 +1,6 @@
 
 const SERVER_URL = kivi.global.baseurl + '/crm/jqhelp/postitall.php';
-
+//alert( kivi.myconfig.id );
 var getJsonRequest = function(params, callback) {
     iduser = otherid ? otherid : kivi.myconfig.id; //otherid is for share postits
     $.ajax({

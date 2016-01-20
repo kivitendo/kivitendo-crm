@@ -18,13 +18,13 @@ class PostItAll{
             die( "No option" );
         }
         $this->option = $_REQUEST["option"] ;
-        writeLog( "Option: ".$this->option );
+        //writeLog( "Option: ".$this->option );
         //Iduser
         $this->iduser = -1;
         if(isset($_REQUEST["iduser"]) && $_REQUEST["iduser"]) {
             $this->iduser = $_REQUEST["iduser"];
         }
-        writeLog( "IdUser: ".$this->iduser );
+        //writeLog( "IdUser: ".$this->iduser );
         //Key
         $this->key = "";
         if(isset($_REQUEST["key"]) && $_REQUEST["key"]) {
@@ -134,13 +134,14 @@ class PostItAll{
     }
 
     private function insertNote( $idUser, $idNote, $content ){
-        //$content = str_replace( ';', ',', $content );
+        //$content = $GLOBALS['dbh']->quoteString( $content );
         $sql = "insert into postitall (iduser, idnote, content) values ('".$idUser."','".$idNote."','".$content."')";
         //writeLog( $sql );
         return $GLOBALS['dbh']->query( $sql );
     }
 
     private function updateNote( $idUser, $idNote, $content ){
+        //$content = $GLOBALS['dbh']->quoteString( $content );
         $sql = "update postitall set content='".$content."' where iduser='".$idUser."' and idNote='".$idNote."'";
         //writeLog($sql );
         return  $GLOBALS['dbh']->query( $sql );

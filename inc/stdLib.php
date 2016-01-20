@@ -9,7 +9,7 @@ require_once "phpDataObjects.php";
 require_once "connection.php";
 //include_once "mdb.php"; //ToDo remove
 //require_once "conf.php";
-
+//  printArray( session_get_cookie_params () );
 // Prüft ob eine Variable existiert und gibt deren Wert zurück.
 function varExist( $var, $key = FALSE ){
     if( $key ) return array_key_exists( $key, $var ) ? $var[$key] : FALSE;

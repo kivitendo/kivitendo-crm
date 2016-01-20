@@ -28,6 +28,7 @@
 *
 */
 
+
 function rgb2hex( rgb ){
     rgb = rgb.match( /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/ );
     function hex( x ){
@@ -35,14 +36,23 @@ function rgb2hex( rgb ){
     }
     return "#" + hex( rgb[1] ) + hex( rgb[2] ) + hex( rgb[3] );
 }
-
+ 
 var otherid = 0;
+
+//Delay repetitive actions
+var delay = (function(){
+  var timer = 0;
+  return function(callback, ms){
+    clearTimeout (timer);
+    timer = setTimeout(callback, ms);
+  };
+})();
 
 (function ($, $localStorage) {
     "use strict";
 
     // Debug
-    var debugging = true; // or true
+    var debugging = false; // or true
     if (typeof console === "undefined") {
         console = {
             log: function () { return undefined; }
@@ -196,28 +206,29 @@ var otherid = 0;
     //Global vars : enable and disable features and change the notes behaviour
     $.fn.postitall.globals = {
         prefix          : '#PIApostit_',//Id note prefixe
-        filter          : 'all',     //Options: domain, page, all
-        savable         : 1,        //Save postit in storage
-        randomColor     : 0,         //Random color in new postits
+        filter          : 'all',        //Options: domain, page, all
+        savable         : true,         //Save postit in storage
+        randomColor     : false,        //Random color in new postits
         toolbar         : true,         //Show or hide toolbar
         autoHideToolBar : true,         //Animation efect on hover over postit shoing/hiding toolbar options
         removable       : true,         //Set removable feature on or off
-        askOnDelete     : 0,         //Confirmation before note remove
+        askOnDelete     : false,        //Confirmation before note remove
         draggable       : true,         //Set draggable feature on or off
         resizable       : true,         //Set resizable feature on or off
         editable        : true,         //Set contenteditable and enable changing note content
         changeoptions   : true,         //Set options feature on or off
         blocked         : true,         //Postit can not be modified
+        hidden          : true,         //The note can be hidden
         minimized       : true,         //true = minimized, false = maximixed
         expand          : true,         //Expand note
         fixed           : true,         //Allow to fix the note in page
         addNew          : true,         //Create a new postit
-        showInfo        : 0,            //Show info icon
-        pasteHtml       : 1,            //Allow paste html in contenteditor
-        htmlEditor      : 0,            //Html editor (trumbowyg)
+        showInfo        : false,        //Show info icon
+        pasteHtml       : true,         //Allow paste html in contenteditor
+        htmlEditor      : false,        //Html editor (trumbowyg)
         autoPosition    : true,         //Automatic reposition of the notes when user resize screen
         addArrow        : 'back',       //Add arrow to notes : none, front, back, all
-        changeUserId    : 1
+        changeUserId    : 1             //for kivi
     };
 
     //Copy of the original global configuration
@@ -233,8 +244,8 @@ var otherid = 0;
         osname          : '',                       //Browser informtion & OS name,
         content         : '',                       //Content of the note (text or html)
         position        : 'absolute',               //Position relative, fixed or absolute
-        posX            : '',                   //x coordinate (from left)
-        posY            : '',                   //y coordinate (from top)
+        posX            : '',                       //x coordinate (from left)
+        posY            : '',                       //y coordinate (from top)
         right           : '',                       //x coordinate (from right). This property invalidate posX
         height          : 240,                      //Note total height
         width           : 180,                      //Note total width
@@ -246,9 +257,9 @@ var otherid = 0;
             tresd           : true,                 //General style in 3d format
             backgroundcolor : rgb2hex( $('.ui-state-highlight').css('background-color') ), //Background color in new postits when randomColor = false
             textcolor       : '#0a0e87',            //Text color
-            textshadow      : 0,                 //Shadow in the text
-            fontfamily      : 'verdana',            //Default font verdana
-            fontsize        : '13',              //Default font size
+            textshadow      : false,                //Shadow in the text
+            fontfamily      : 'Open Sans',          //Default font verdana
+            fontsize        : '13',                 //Default font size: medium
             arrow           : 'none',               //Default arrow : none, top, right, bottom, left
         },
         //Enable / Disable features
@@ -260,11 +271,12 @@ var otherid = 0;
             expand          : false,                //true = Expanded note / false = normal
             fixed           : false,                //Set position fixed
             highlight       : false,                //Higlight note
+            hidden          : false,                //Hidden note
         },
         //Attach the note to al html element
         attachedTo : {
-            element         : '.toolsbuttons',       //Where to attach
-            position        : 'bottom',             //Position relative to elemente : top, right, bottom or left
+            element         : '.toolsbuttons',      //Where to attach
+            position        : 'bottom',              //Position relative to elemente : top, right, bottom or left
             fixed           : true,                 //Fix note to element when resize screen
             arrow           : true,                 //Show an arrow in the inverse position
         },
@@ -537,53 +549,56 @@ var otherid = 0;
                     return;
                 }
                 for (var i = 1; i <= len; i++) {
-                  storageManager.key(i, function(key) {
-                    storageManager.getByKey(key, function(o) {
-                      if (o != null && $('#id' + key).length <= 0) {
-                        //console.log('o', key, o);
-                        if($.fn.postitall.globals.filter == "domain")
-                          finded = (o.domain === window.location.origin);
-                        else if($.fn.postitall.globals.filter == "page")
-                          finded = (o.domain === window.location.origin && o.page === window.location.pathname);
-                        else
-                          finded = true;
-                        if(finded) {
-                            if(typeof callbacks === 'object') {
-                                console.log(callbacks);
-                                if(callbacks.onCreated !== undefined) {
-                                    o.onCreated = callbacks.onCreated;
-                                }
-                                if(callbacks.onChange !== undefined) {
-                                    o.onChange = callbacks.onChange;
-                                }
-                                if(callbacks.onSelect !== undefined) {
-                                    o.onSelect = callbacks.onSelect;
-                                }
-                                if(callbacks.onDblClick !== undefined) {
-                                    o.onDblClick = callbacks.onDblClick;
-                                }
-                                if(callbacks.onRelease !== undefined) {
-                                    o.onRelease = callbacks.onRelease;
-                                }
-                                if(callbacks.onDelete !== undefined) {
-                                    o.onDelete = callbacks.onDelete;
+                    storageManager.key(i, function(key) {
+                        storageManager.getByKey(key, function(o) {
+                            if (o != null && $('#id' + key).length <= 0) {
+                                //console.log($.fn.postitall.globals.filter, o.domain, window.location.origin, window.location.pathname);
+                                //console.log('o', key, o);
+                                if($.fn.postitall.globals.filter == "domain")
+                                    finded = (o.domain === window.location.origin);
+                                else if($.fn.postitall.globals.filter == "page")
+                                    finded = (o.domain === window.location.origin && o.page === window.location.pathname);
+                                else
+                                    finded = true;
+                                if(finded) {
+                                    if(typeof callbacks === 'object') {
+                                        //console.log(callbacks);
+                                        if(callbacks.onCreated !== undefined) {
+                                            o.onCreated = callbacks.onCreated;
+                                        }
+                                        if(callbacks.onChange !== undefined) {
+                                            o.onChange = callbacks.onChange;
+                                        }
+                                        if(callbacks.onSelect !== undefined) {
+                                            o.onSelect = callbacks.onSelect;
+                                        }
+                                        if(callbacks.onDblClick !== undefined) {
+                                            o.onDblClick = callbacks.onDblClick;
+                                        }
+                                        if(callbacks.onRelease !== undefined) {
+                                            o.onRelease = callbacks.onRelease;
+                                        }
+                                        if(callbacks.onDelete !== undefined) {
+                                            o.onDelete = callbacks.onDelete;
+                                        }
+                                    }
+                                    if(o.flags !== undefined) {
+                                        o.flags.highlight = false;
+                                        if(highlight !== undefined && o.id == highlight) {
+                                            console.log('highlight note', highlight);
+                                            o.flags.highlight = true;
+                                        }
+                                    }
+                                    $.PostItAll.new(o);
                                 }
                             }
-                            o.flags.highlight = false;
-                            if(highlight !== undefined && o.id == highlight) {
-                                //console.log('highlight note', highlight);
-                                o.flags.highlight = true;
+                            if(iteration == (len - 1) && callback != null) {
+                                if(typeof callback === 'function') callback();
+                                callback = null;
                             }
-                            $.PostItAll.new(o);
-                        }
-                      }
-                      if(iteration == (len - 1) && callback != null) {
-                          if(typeof callback === 'function') callback();
-                          callback = null;
-                      }
-                      iteration++;
+                            iteration++;
+                        });
                     });
-                  });
                 }
             });
         },
@@ -675,8 +690,9 @@ var otherid = 0;
                 }
             }
             //TODO : Revisar
-            if(delStorage && $.fn.postitall.globals.savable) {
+            if(delStorage && delDomain !== "" && delDomain !== undefined) { //&& $.fn.postitall.globals.savable
                 //Storage notes
+                console.log('clearStorage',delDomain);
                 $.PostItAll.clearStorage(delDomain);
             }
         },
@@ -854,7 +870,7 @@ var otherid = 0;
                 }
             }
         },
-
+        
         //Save object
         save : function(obj, callback) {
             var options = obj.data('PIA-options');
@@ -869,7 +885,7 @@ var otherid = 0;
         saveOptions : function(options, callback) {
             if(options === undefined)
                 options = this.options;
-            //console.log('saveOptions', options.posX, options.posY);
+            console.log('saveOptions', options.posX, options.posY, options.width, options.height);
             if ($.fn.postitall.globals.savable || options.features.savable) {
                 //console.log(options);
                 storageManager.add(options, function(error) {
@@ -947,14 +963,20 @@ var otherid = 0;
         hide : function(id) {
             //hide object
             if($($.fn.postitall.globals.prefix + id).length) {
+                var options = $($.fn.postitall.globals.prefix + id).data('PIA-options');
+                options.flags.hidden = true;
                 $($.fn.postitall.globals.prefix + id).slideUp();
+                this.saveOptions(options);
             }
         },
 
         show : function(id) {
             //show object
             if($($.fn.postitall.globals.prefix + id).length) {
+                var options = $($.fn.postitall.globals.prefix + id).data('PIA-options');
+                options.flags.hidden = false;
                 $($.fn.postitall.globals.prefix + id).slideDown();
+                this.saveOptions(options);
             }
         },
 
@@ -986,9 +1008,10 @@ var otherid = 0;
             this.saveOptions(options);
             return options;
         },
-        // Save Userid
+        //Save Userid kivi 
         changeUserId : function() {
             this.saveOptions();
+            otherid = 0;
         },
         //Hide arrow & icons
         hideArrow : function() {
@@ -1039,7 +1062,7 @@ var otherid = 0;
             var contentHeight = parseInt(obj.find('.PIAeditable').height(), 10) + toolBarHeight,
                 posX = obj.css('left'),
                 posY = obj.css('top'),
-                divWidth = parseInt(obj.width(), 10) + parseInt(obj.css('padding-left'),10) + parseInt(obj.css('padding-right'),10) + 2,
+                divWidth = parseInt(obj.css('width'), 10),//parseInt(obj.width(), 10) + parseInt(obj.css('padding-left'),10) + parseInt(obj.css('padding-right'),10) + 2,
                 divHeight = parseInt(obj.css('height'), 10),
                 minDivHeight = options.minHeight;
             var htmlEditorBarHeight = parseInt(obj.find('.trumbowyg-button-pane').height(), 10);
@@ -1082,9 +1105,9 @@ var otherid = 0;
                 for(var i = 1; i <= items; i++) {
                     (function(i) {
                         storageManager.get(i, function(content) {
-                            console.log('getIndex.get', paso, i, content);
+                            //console.log('getIndex.get', paso, i, content);
                             if(!paso && content == "" && $( "#idPostIt_" + i ).length <= 0) {
-                                console.log('nou index', i);
+                                //console.log('nou index', i);
                                 paso = true;
                             }
                             if(callback != null && (paso || i >= items)) {
@@ -1219,23 +1242,25 @@ var otherid = 0;
                     'border': '1px solid rgb(236, 236, 0)',
                     'box-shadow': 'rgb(192, 195, 155) 1px 1px 10px 3px',
                 });
-                //t.hideArrow();
             }
-            $("#the_lights").fadeTo("fast", 0.6, function() {
-                $("#the_lights").css('display','block');
-                $("#the_lights").css({'height':($(document).height())+'px'});
-                $("#the_lights").data('highlightedId', id);
-                // lock scroll position, but retain settings for later
-                var scrollPosition = [
-                    self.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
-                    self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop
-                ];
-                $('html').data('scroll-position', scrollPosition);
-                $('html').data('previous-overflow', $('html').css('overflow'));
-                $('html').css('overflow', 'hidden');
-                window.scrollTo(scrollPosition[0], scrollPosition[1]);
-                $(window).on('resize', $.proxy(t.resizeAction, t));
-            });
+            setTimeout(function() {
+              $("#the_lights").fadeTo("fast", 0.6, function() {
+                  $("#the_lights").css('display','block');
+                  $("#the_lights").css({'height':($(document).height())+'px'});
+                  $("#the_lights").css({'width':($(document).width())+'px'});
+                  $("#the_lights").data('highlightedId', id);
+                  // lock scroll position, but retain settings for later
+                  var scrollPosition = [
+                      self.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
+                      self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop
+                  ];
+                  $('html').data('scroll-position', scrollPosition);
+                  $('html').data('previous-overflow', $('html').css('overflow'));
+                  $('html').css('overflow', 'hidden');
+                  $(window).on('resize', $.proxy(t.resizeAction, t));
+                  window.scrollTo(scrollPosition[0], scrollPosition[1]);
+              });
+            }, 500);
         },
 
         //Switch lights on & remove highlighted note
@@ -1245,8 +1270,10 @@ var otherid = 0;
             var t = this;
             if(id !== "" && options !== null && options !== undefined) {
                 $("#the_lights").data('highlightedId', '');
-                $($.fn.postitall.globals.prefix + id).css({'z-index': 999995,
+                $($.fn.postitall.globals.prefix + id).css({
+                    'z-index': 999995,
                     'border': '1px solid ' + $($.fn.postitall.globals.prefix + id).css('background-color'),
+                    'box-shadow': '',
                 });
                 if(options.flags.expand) {
                     $('#pia_expand_'+id).click();
@@ -1398,6 +1425,29 @@ var otherid = 0;
             this.setOptions(this.options, true);
         },
 
+        //Scroll to note position
+        scrollToNotePosition : function(tmpTop, tmpHeight, tmpLeft, tmpWidth, callback) {
+            var scrollTop1 = self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop;
+            var scrollBottom1 = scrollTop1 + $(window).height();
+            var scrollTop2 = parseInt(tmpTop, 10);
+            var scrollBottom2 = scrollTop2 + parseInt(tmpHeight,10);
+            var scrollLeft1 = self.pageXOffset || document.documentElement.scrollLeft  || document.body.scrollLeft;
+            var scrollRight1 = scrollLeft1 + $(window).width();
+            var scrollLeft2 = parseInt(tmpLeft, 10);
+            var scrollRight2 = scrollLeft2 + parseInt(tmpWidth,10);
+            //console.log(scrollTop2,scrollTop1,scrollBottom2,scrollBottom1);
+            if(scrollTop2 > scrollTop1 && scrollBottom2 < scrollBottom1 && scrollLeft2 > scrollLeft1 && scrollRight2 < scrollRight1) {
+                if(callback !== undefined) callback();
+            } else {
+                $('html, body').animate({
+                    scrollTop: scrollTop2 - parseInt(tmpHeight,10),
+                    scrollLeft: scrollLeft2 - parseInt(tmpWidth,10)
+                }, 800, function() {
+                    if(callback !== undefined) callback();
+                });
+            }
+        },
+
         //Restore note with options.oldPosition
         restoreOldPosition : function(scrollToNote) {
             if(scrollToNote === undefined)
@@ -1415,17 +1465,7 @@ var otherid = 0;
             }, 500, function() {
                 if(scrollToNote) {
                     if(options.position != "fixed") {
-                        var scrollTop1 = self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop;
-                        var scrollBottom1 = scrollTop1 + $(window).height();
-                        var scrollTop2 = parseInt(options.oldPosition.top, 10);
-                        var scrollBottom2 = scrollTop2 + parseInt(options.height,10);
-                        if(scrollTop2 > scrollTop1 && scrollBottom2 < scrollBottom1) {
-                            ;
-                        } else {
-                            $('html, body').animate({
-                                scrollTop: scrollTop2 - parseInt(options.height,10)
-                            }, 1000);
-                        }
+                        t.scrollToNotePosition(options.oldPosition.top, options.height, options.oldPosition.left, options.width);
                     }
                 }
                 t.showArrow();
@@ -1503,7 +1543,7 @@ var otherid = 0;
             $('#pia_expand_' + index).removeClass('PIAexpand').addClass('PIAmaximize');
             t.hoverOptions(index, false);
             t.saveOldPosition();
-            t.toogleToolbar('hide', ['idPIAIconBottom_', 'idInfo_', 'pia_config_', 'pia_fixed_', 'pia_delete_', 'pia_blocked_', 'pia_minimize_', 'pia_new_']);
+            t.toogleToolbar('hide', ['idPIAIconBottom_', 'idInfo_', 'pia_config_', 'pia_fixed_', 'pia_delete_', 'pia_blocked_', 'pia_minimize_', 'pia_new_', 'pia_hidden_']);
             t.hideArrow();
             t.switchTrasparentNoteOn();
             t.switchOffLights();
@@ -1537,7 +1577,7 @@ var otherid = 0;
             $('#pia_expand_' + index).removeClass('PIAmaximize').addClass('PIAexpand');
             $($.fn.postitall.globals.prefix + index).css('position', options.position);
             // show toolbar
-            t.toogleToolbar('show', ['idPIAIconBottom_', 'idInfo_', 'pia_config_', 'pia_fixed_', 'pia_delete_', 'pia_blocked_', 'pia_minimize_', 'pia_new_']);
+            t.toogleToolbar('show', ['idPIAIconBottom_', 'idInfo_', 'pia_config_', 'pia_fixed_', 'pia_delete_', 'pia_blocked_', 'pia_minimize_', 'pia_new_', 'pia_hidden_']);
             //restore oldposition
             t.restoreOldPosition();
             //newstate
@@ -1568,7 +1608,7 @@ var otherid = 0;
                 var smallText = $('<div id="pia_minimized_text_'+index+'" class="PIAminimizedText" />').text(txtContent);
                 $('#pia_toolbar_'+index).append(smallText);
                 //hide toolbar
-                t.toogleToolbar('hide', ['idPIAIconBottom_', 'idInfo_', 'pia_config_', 'pia_fixed_', 'pia_delete_', 'pia_blocked_', 'pia_expand_', 'pia_new_']);
+                t.toogleToolbar('hide', ['idPIAIconBottom_', 'idInfo_', 'pia_config_', 'pia_fixed_', 'pia_delete_', 'pia_blocked_', 'pia_expand_', 'pia_new_', 'pia_hidden_']);
 
                 //Enable draggable x axis
                 if ($.fn.postitall.globals.draggable && options.features.draggable) {
@@ -1597,7 +1637,7 @@ var otherid = 0;
                 $('#pia_minimize_'+index).removeClass('PIAmaximize').addClass('PIAminimize');
                 options.flags.minimized = false;
                 // show toolbar
-                t.toogleToolbar('show', ['idPIAIconBottom_', 'idInfo_', 'pia_config_', 'pia_fixed_', 'pia_delete_', 'pia_blocked_', 'pia_expand_', 'pia_new_']);
+                t.toogleToolbar('show', ['idPIAIconBottom_', 'idInfo_', 'pia_config_', 'pia_fixed_', 'pia_delete_', 'pia_blocked_', 'pia_expand_', 'pia_new_', 'pia_hidden_']);
                 $('#pia_minimized_text_'+index).remove();
                 //Remove draggable axis
                 if ($.fn.postitall.globals.draggable && options.features.draggable) {
@@ -1677,7 +1717,7 @@ var otherid = 0;
                 options.flags.fixed = true;
             }
             obj.css('position', options.position);
-            obj.css('left', parseInt(options.posX, 10) + "px");
+            //obj.css('left', parseInt(options.posX, 10) + "px");
             obj.css('top', parseInt(options.posY, 10) + "px");
             //Save features
             t.setOptions(options);
@@ -1821,12 +1861,7 @@ var otherid = 0;
             var options = t.options;
             var index = options.id.toString();
 
-            //Highlight note
-            if(options.flags.highlight) {
-                t.switchOffLights();
-                t.enableKeyboardNav();
-            }
-
+            //Add data to object
             obj.data('PIA-id', index)
                 .data('PIA-initialized', true)
                 .data('PIA-options', options);
@@ -1913,6 +1948,7 @@ var otherid = 0;
             }
 
             //Fixed
+            //console.log($.fn.postitall.globals.fixed, options.features.fixed);
             if($.fn.postitall.globals.fixed) {
                 if(options.features.fixed) {
                     toolbar.append(
@@ -1929,6 +1965,25 @@ var otherid = 0;
                         })
                     );
                 }
+            }
+
+            //Hide
+            if($.fn.postitall.globals.hidden && options.features.hidden) {
+                toolbar.append(
+                    $('<div />', {
+                        'id': 'pia_hidden_' + index,
+                        'class': 'PIAhide PIAicon'
+                    }).click(function(e) {
+                        if(obj.hasClass('PIAdragged')) {
+                            obj.removeClass('PIAdragged');
+                        } else {
+                            t.hide(index);
+                        }
+                        e.preventDefault();
+                    })
+                );
+            } else {
+                options.flags.hidden = false;
             }
 
             //MINIMIZE
@@ -1996,7 +2051,7 @@ var otherid = 0;
                 'class': 'PIAeditable PIAcontent',
                 //Reset herisated contenteditable styles
                 //color:'+options.style.textcolor+';min-width:99%;
-                'style': 'width: auto;height: auto;padding: auto;border-color: transparent;min-width:' + (options.width) + 'px;box-shadow:none;min-height:' + (options.minHeight - 100) + 'px;'
+                'style': 'width: auto;height: auto;padding: 10px;border-color: transparent;min-width:' + (options.minWidth) + 'px;box-shadow:none;min-height:' + (options.minHeight - 100) + 'px;'
             }).change(function (e) {
                 if(!$.fn.postitall.globals.editable || !options.features.editable) {
                     return;
@@ -2131,7 +2186,6 @@ var otherid = 0;
                 })
                 .click(function (e) {
                     //var id = $(this).closest('.PIApostit').children().attr('data-id');
-                    console.log('aki');
                     t.switchBackNoteOff('PIAflip2');
                     t.switchOnLights();
                     //t.showArrow();
@@ -2221,16 +2275,16 @@ var otherid = 0;
                     e.preventDefault();
                 });
             }
-
-            //Add User selection in options
+            
+            //Add User selection in options kivi begin
             var uString = "";
             if( $.fn.postitall.globals.changeUserId || options.features.changeUserId ) {
                 uString = $('<select />', {
                     'id': 'idChangeUserId' + index,
                     'style': 'margin-top: 5px;',
                 });
-                $.each(kivi.global.erp_all_users, function( index, value ) {
-                    uString.append( '<option value="' + value.id + '" ' + (kivi.myconfig.id == value.id ? 'selected' : '') + '>' + value.name + '</option>' );
+                $.each( kivi.global.erp_all_users, function( index, value ) {
+                       uString.append( '<option value="' + value.id + '" ' + (kivi.myconfig.id == value.id ? 'selected' : '') + '>' + value.name + '</option>' );
                 });
 
                 uString.change(function(e) {
@@ -2239,7 +2293,7 @@ var otherid = 0;
                     e.preventDefault();
                 });
             }
-
+            // kivi end
             //Back 1: config
             content = "";
             if($.fn.postitall.globals.changeoptions) {
@@ -2257,9 +2311,9 @@ var otherid = 0;
                     .append(gsLabel)  // 3d or plain style
                     .append(tcLabel).append(tcString) // Text color
                     .append(tsLabel) // Text shadow
-                    .append(aaString) //Arrow selection
-                    .append("<div class='small'>Share with:</div>")
-                    .append(uString) //User selection
+                    .append(aaString) //Ar
+                    .append("<div class='small'>Share with:</div>") //kivi
+                    .append(uString) //User selection kivirow selection kivi
                 );
             }
 
@@ -2500,7 +2554,7 @@ var otherid = 0;
                 var objeto = $(this);
                 return objeto;
             })*/
-            .on('blur keyup paste input', '[contenteditable]', function () {
+            .on('blur keyup paste input', '[contenteditable]', function (e) {
                 var objeto = $(this);
                 if (objeto.data('before') !== objeto.html()) {
                     delay(function() {
@@ -2511,6 +2565,8 @@ var otherid = 0;
                         objeto.data('before', content);
                         objeto.trigger('change');
                         options.onChange($.fn.postitall.globals.prefix + index);
+                        //TODO : Validar que no es propaguen les tecles a l'aplicacio nativa
+                        e.preventDefault();
                     }, 100);
                 }
                 return objeto;
@@ -2633,7 +2689,7 @@ var otherid = 0;
                 $('#pia_expand_' + options.id).click();
                 delay(function() {
                     $('#pia_editable_' + options.id).focus();
-                },500);
+                }, 500);
             }
             //Postit bloqued?
             if(($.fn.postitall.globals.blocked || options.features.blocked) && options.flags.blocked) {
@@ -2647,8 +2703,8 @@ var otherid = 0;
             }
 
             //Select arrow in front
-            if( ($.fn.postitall.globals.addArrow == "front" && (options.features.addArrow == "all" || options.features.addArrow == "front"))
-            || ($.fn.postitall.globals.addArrow == "all" && (options.features.addArrow == "all" || options.features.addArrow == "front")) ) {
+            if( ($.fn.postitall.globals.addArrow == "front" || $.fn.postitall.globals.addArrow == "all")
+            || (options.features.addArrow == "all" || options.features.addArrow == "front") ) {
                 var checks = "<div class='PIAicon icon_box icon_box_top selectedArrow_"+index+"' data-index='"+index+"' data-value='top'><span class='ui-icon ui-icon-triangle-1-n'></span></div>";
                 checks += "<div class='PIAicon icon_box icon_box_right selectedArrow_"+index+"' data-index='"+index+"' data-value='right'><span class='ui-icon ui-icon-triangle-1-e'></span></div>";
                 checks += "<div class='PIAicon icon_box icon_box_bottom selectedArrow_"+index+"' data-index='"+index+"' data-value='bottom'><span class='ui-icon ui-icon-triangle-1-s'></span></div>";
@@ -2673,69 +2729,75 @@ var otherid = 0;
                 //console.log('aki?', arrowPaso, index, options.style.arrow);
             }
 
+            //Change hidden state if note is higlighted
+            if(options.flags.highlight)
+                options.flags.hidden = false;
+
             //Show postit
-            obj.slideDown(function () {
-                //Rest of actions
-                //Config: text shadow
-                $('#textshadow_' + index).click(function () {
+            if(!options.flags.hidden) {
+                obj.slideDown(function () {
+                    //Rest of actions
+                    //Config: text shadow
+                    $('#textshadow_' + index).click(function () {
 
-                    if ($(this).is(':checked')) {
-                        $(this).closest('.PIApostit').find('.PIAcontent').addClass(t.getTextShadowStyle($('#minicolors_text_' + index).val())).removeClass('dosd');
-                        options.style.textshadow = true;
-                    } else {
-                        $(this).closest('.PIApostit').find('.PIAcontent').addClass('dosd').removeClass('tresd').removeClass('tresdblack');
-                        options.style.textshadow = false;
-                    }
-                    t.setOptions(options, true);
-                });
-                //3d or plain
-                $('#generalstyle_' + index).click(function () {
-                    if ($(this).is(':checked')) {
-                        $($.fn.postitall.globals.prefix + index).removeClass('PIAplainpanel').addClass('PIApanel');
-                        options.style.tresd = true;
-                    } else {
-                        $($.fn.postitall.globals.prefix + index).removeClass('PIApanel').addClass('PIAplainpanel');
-                        options.style.tresd = false;
-                    }
-                    t.setOptions(options, true);
-                });
-                //Background and text color
-                if ($.minicolors) {
-                    //Config: change background-color
-                    $('#minicolors_bg_' + index).minicolors({
-                        //opacity: true,
-                        change: function (hex, rgb) {
-                            console.log(hex, rgb);
-                            $($.fn.postitall.globals.prefix + index).css('background-color', hex);
-                            //$($.fn.postitall.globals.prefix + index).css('opacity', rgb);
-                            options.style.backgroundcolor = hex;
-                            t.setOptions(options, true);
+                        if ($(this).is(':checked')) {
+                            $(this).closest('.PIApostit').find('.PIAcontent').addClass(t.getTextShadowStyle($('#minicolors_text_' + index).val())).removeClass('dosd');
+                            options.style.textshadow = true;
+                        } else {
+                            $(this).closest('.PIApostit').find('.PIAcontent').addClass('dosd').removeClass('tresd').removeClass('tresdblack');
+                            options.style.textshadow = false;
                         }
-                    });
-                    //Config: text color
-                    $('#minicolors_text_' + index).minicolors({
-                        change: function (hex) {
-                            $($.fn.postitall.globals.prefix + index).css('color', hex);
-                            options.style.textcolor = hex;
-                            t.setOptions(options, true);
-                        }
-                    });
-                } else {
-                    $('#minicolors_bg_' + index).change(function () {
-                        $(this).closest('.PIApostit').css('background-color', $(this).val());
-                        options.style.backgroundcolor = $(this).val();
                         t.setOptions(options, true);
                     });
-                    $('#minicolors_text_' + index).change(function () {
-                        $(this).closest('.PIApostit').css('color', $(this).val());
-                        options.style.textcolor = $(this).val();
+                    //3d or plain
+                    $('#generalstyle_' + index).click(function () {
+                        if ($(this).is(':checked')) {
+                            $($.fn.postitall.globals.prefix + index).removeClass('PIAplainpanel').addClass('PIApanel');
+                            options.style.tresd = true;
+                        } else {
+                            $($.fn.postitall.globals.prefix + index).removeClass('PIApanel').addClass('PIAplainpanel');
+                            options.style.tresd = false;
+                        }
                         t.setOptions(options, true);
                     });
-                }
+                    //Background and text color
+                    if ($.minicolors) {
+                        //Config: change background-color
+                        $('#minicolors_bg_' + index).minicolors({
+                            //opacity: true,
+                            change: function (hex, rgb) {
+                                console.log(hex, rgb);
+                                $($.fn.postitall.globals.prefix + index).css('background-color', hex);
+                                //$($.fn.postitall.globals.prefix + index).css('opacity', rgb);
+                                options.style.backgroundcolor = hex;
+                                t.setOptions(options, true);
+                            }
+                        });
+                        //Config: text color
+                        $('#minicolors_text_' + index).minicolors({
+                            change: function (hex) {
+                                $($.fn.postitall.globals.prefix + index).css('color', hex);
+                                options.style.textcolor = hex;
+                                t.setOptions(options, true);
+                            }
+                        });
+                    } else {
+                        $('#minicolors_bg_' + index).change(function () {
+                            $(this).closest('.PIApostit').css('background-color', $(this).val());
+                            options.style.backgroundcolor = $(this).val();
+                            t.setOptions(options, true);
+                        });
+                        $('#minicolors_text_' + index).change(function () {
+                            $(this).closest('.PIApostit').css('color', $(this).val());
+                            options.style.textcolor = $(this).val();
+                            t.setOptions(options, true);
+                        });
+                    }
 
-                //Autoresize to fit content when content load is done
-                t.autoresize();
-            });
+                    //Autoresize to fit content when content load is done
+                    t.autoresize();
+                });
+            }
 
             //Hover options
             if(!options.flags.minimized && !options.flags.expand && !options.flags.blocked) {
@@ -2757,7 +2819,7 @@ var otherid = 0;
             $("#pia_editable_" + index).bind('paste', function (e){
                 var element = this;
                 $("#pia_editable_" + index).css("opacity", "0");
-                delay(function(){
+                setTimeout(function(){
                     var text = "";
                     if (!$.fn.postitall.globals.pasteHtml || !options.features.pasteHtml) {
                         //Text format
@@ -2802,6 +2864,13 @@ var otherid = 0;
                 t.saveOptions(options);
                 //OnCreated event (id, options, obj)
                 options.onCreated($.fn.postitall.globals.prefix + index, options, obj);
+                //Highlight note
+                if(options.flags.highlight) {
+                    t.scrollToNotePosition(options.posY, options.height, options.posX, options.width, function() {
+                        t.switchOffLights();
+                        t.enableKeyboardNav();
+                    });
+                }
             },200);
 
             //chaining
@@ -2877,15 +2946,6 @@ var otherid = 0;
         }
         return $el.css('cursor', opt.cursor).on("mousedown", onMouseDown).on("mouseup", onMouseUp);
     };
-
-    //Delay repetitive actions
-    var delay = (function(){
-      var timer = 0;
-      return function(callback, ms){
-        clearTimeout (timer);
-        timer = setTimeout(callback, ms);
-      };
-    })();
 
     /********* STORAGE ************/
 

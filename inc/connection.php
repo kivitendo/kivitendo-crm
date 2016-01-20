@@ -30,9 +30,9 @@ $_SESSION['cookie'] =& $_SESSION['erpConfig']['authentication']['cookie_name'];
 $_SESSION['sesstime'] =& $_SESSION['erpConfig']['authentication']['session_timeout'];
 
 //DB-handle auth erzeugen
-$conf_auth_db = $_SESSION['erpConfig']['authentication/database'];
-$dbh_auth = new myPDO ($conf_auth_db['host'], $conf_auth_db['port'], $conf_auth_db['db'], $conf_auth_db['user'], $conf_auth_db['password'], $_SESSION["sessid"] );
-
+$conf_auth_db =& $_SESSION['erpConfig']['authentication/database'];
+if( $conf_auth_db['host'] ) $dbh_auth = new myPDO ($conf_auth_db['host'], $conf_auth_db['port'], $conf_auth_db['db'], $conf_auth_db['user'], $conf_auth_db['password'], $_SESSION["sessid"] );
+else printArray( '$conf_auth_db[host] is empty!!!!' );
 //(ERP)-Userdaten in Session speichern
 if( $newSession ) $_SESSION['userConfig'] = getUserConfig(); //printArray( getUserConfig());
 
@@ -59,7 +59,7 @@ $_SESSION['mandant'] =& $_SESSION['dbData']['mandant'];//ToDO: delete
 //$_SESSION['dbhost'] =& $_SESSION['dbData']['dbhost'];// Das muss weg!
 
 //Db-handle erzeugen
-$dbData = $_SESSION['dbData'];
+$dbData =& $_SESSION['dbData'];
 if( $dbData["dbhost"] ) $dbh = new myPDO( $dbData["dbhost"], $dbData["dbport"], $dbData["dbname"], $dbData["dbuser"], $dbData["dbpasswd"], $_SESSION["sessid"] );
 else echo 'No $_SESSION[dbData][dbhost]';
 

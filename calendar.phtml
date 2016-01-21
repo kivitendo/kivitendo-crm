@@ -355,8 +355,8 @@ console.log('vor ajaxTask');
             theme:      "jqueryui",
             autoWidth:  true,
             height: "12",
-            populate:   <?php  //ToDo via Ajax aus  DB holen 
-                            $grps = $_SESSION['grp'];
+            populate:   <?php  //ToDo via Ajax aus  DB holen
+                            $grps = getAllERPgroups(1);
                             array_unshift( $grps, array( 'value' => '0', 'text' => 'Benutzer' ) );
                             array_unshift( $grps, array( 'value' => '-1', 'text' => 'Alle' ) );
                             echo json_encode( $grps ); 

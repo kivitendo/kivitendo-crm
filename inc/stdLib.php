@@ -612,13 +612,16 @@ function getAllERPusers() {
     $rs = $GLOBALS['dbh_auth']->getAll( $sql );
     return $rs;
 }
-
-function getAllERPgroups() {
+function getAllERPgroups($test = false) {
     //ERP groups
-    $sql = "SELECT grp.id AS id, grp.name AS name FROM auth.group AS grp ";
+    $v1 = 'id';
+    $v2 = 'name';
+    if ($test) { $v1 = 'value'; $v2 = 'text';};
+    $sql = "SELECT grp.id AS $v1, grp.name AS $v2 FROM auth.group AS grp ";
     $sql .= "INNER JOIN auth.clients_groups AS cligrp ON grp.id = cligrp.group_id WHERE cligrp.client_id = '".$_SESSION['client_id']."' ORDER by grp.id";
     $rs = $GLOBALS['dbh_auth']->getAll( $sql );
     return $rs;
+
 }
 function mkHeader() {
     $pager = '<span id="pager" class="pager">

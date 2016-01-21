@@ -47,9 +47,6 @@ $_SESSION['countrycode'] =& $_SESSION['userConfig']['countrycode'];//ToDO: delet
 $_SESSION['stylesheet'] =& $_SESSION['userConfig']['stylesheet'];//ToDO: delete
 $_SESSION['tel'] =& $_SESSION['userConfig']['tel'];//ToDO: delete
 $_SESSION['client_id'] =& $_SESSION['userConfig']['client_id'];//ToDO: delete
-$_SESSION['all_erp_users'] =& $_SESSION['userConfig']['all_erp_users'];//ToDO: delete
-$_SESSION['all_erp_groups'] =& $_SESSION['userConfig']['all_erp_groups'];//ToDO: delete
-$_SESSION['all_erp_assingments'] =& $_SESSION['userConfig']['all_erp_assignments'];//ToDO: delete
 
 //Daten fürs DB-handle in Session
 if( $newSession ) $_SESSION['dbData'] = getDbData();   //printArray( getDbData());

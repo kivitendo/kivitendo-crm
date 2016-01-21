@@ -32,7 +32,12 @@ $_SESSION['sesstime'] =& $_SESSION['erpConfig']['authentication']['session_timeo
 //DB-handle auth erzeugen
 $conf_auth_db =& $_SESSION['erpConfig']['authentication/database'];
 if( $conf_auth_db['host'] ) $dbh_auth = new myPDO ($conf_auth_db['host'], $conf_auth_db['port'], $conf_auth_db['db'], $conf_auth_db['user'], $conf_auth_db['password'], $_SESSION["sessid"] );
-else printArray( '$conf_auth_db[host] is empty!!!!' );
+else {
+    /*printArray( '$conf_auth_db[host] is empty!!!!' ); */
+    $url = $_SERVER['REQUEST_URI'];
+    echo '<script type="text/javascript">window.location.href="delsess.php?url='.$url.'";</script>';
+}
+
 //(ERP)-Userdaten in Session speichern
 if( $newSession ) $_SESSION['userConfig'] = getUserConfig(); //printArray( getUserConfig());
 

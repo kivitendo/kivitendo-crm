@@ -100,7 +100,6 @@ $( document ).ready( function(){
     });
 
     $( ".calendar_img" ).on("click", function(){
-        alert( kivi.global.baseurl + "crm/calendar.phtml" );
         window.location.href = kivi.global.baseurl + "crm/calendar.phtml";
     });
 

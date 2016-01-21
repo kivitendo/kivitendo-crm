@@ -36,7 +36,7 @@ function rgb2hex( rgb ){
     }
     return "#" + hex( rgb[1] ) + hex( rgb[2] ) + hex( rgb[3] );
 }
- 
+
 var otherid = 0;
 
 //Delay repetitive actions
@@ -218,7 +218,7 @@ var delay = (function(){
         editable        : true,         //Set contenteditable and enable changing note content
         changeoptions   : true,         //Set options feature on or off
         blocked         : true,         //Postit can not be modified
-        hidden          : true,         //The note can be hidden
+        hidden          : false,        //The note can be hidden
         minimized       : true,         //true = minimized, false = maximixed
         expand          : true,         //Expand note
         fixed           : true,         //Allow to fix the note in page
@@ -228,7 +228,7 @@ var delay = (function(){
         htmlEditor      : false,        //Html editor (trumbowyg)
         autoPosition    : true,         //Automatic reposition of the notes when user resize screen
         addArrow        : 'back',       //Add arrow to notes : none, front, back, all
-        changeUserId    : 1             //for kivi
+        changeUserId    : true             //for kivi
     };
 
     //Copy of the original global configuration
@@ -259,7 +259,7 @@ var delay = (function(){
             textcolor       : '#0a0e87',            //Text color
             textshadow      : false,                //Shadow in the text
             fontfamily      : 'Open Sans',          //Default font verdana
-            fontsize        : '13',                 //Default font size: medium
+            fontsize        : '15',                 //Default font size: medium
             arrow           : 'none',               //Default arrow : none, top, right, bottom, left
         },
         //Enable / Disable features
@@ -870,7 +870,7 @@ var delay = (function(){
                 }
             }
         },
-        
+
         //Save object
         save : function(obj, callback) {
             var options = obj.data('PIA-options');
@@ -1008,7 +1008,7 @@ var delay = (function(){
             this.saveOptions(options);
             return options;
         },
-        //Save Userid kivi 
+        //Save Userid kivi
         changeUserId : function() {
             this.saveOptions();
             otherid = 0;
@@ -2275,7 +2275,7 @@ var delay = (function(){
                     e.preventDefault();
                 });
             }
-            
+
             //Add User selection in options kivi begin
             var uString = "";
             if( $.fn.postitall.globals.changeUserId || options.features.changeUserId ) {

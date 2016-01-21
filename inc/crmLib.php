@@ -3265,28 +3265,26 @@ function getIOQ($fid,$Q,$type,$close){
     return $rs;
 }
 
-//TODO
-function ERPUser() {
-}
-//TODO
-function ERPGroup() {
-}
 // Gibt ein Array mit allen Nutzern einer angegebenen Grupppe zurück
 function ERPUsersfromGroup($grp_name) {
 	$rueck;
 	$i = 0;
 	$grp_id = '';
 	//Gruppen ID herausfiltern
-	foreach ( $_SESSION['all_erp_groups'] as $key => $gruppe ) {
+	$allERPusers = getAllERPusers();
+	$allERPgroups = getAllERPgroups();
+    $sql = "SELECT usrg.user_id AS user_id, usrg.group_id AS group_id FROM auth.user_group AS usrg ORDER by usrg.user_id";
+    $allAssignments = $GLOBALS['dbh_auth']->getAll( $sql );
+	foreach ( $allERPgroups as $key => $gruppe ) {
         if($gruppe['name'] == $grp_name) {
             $grp_id = $gruppe['id'];
         }
     }
     //Rückgabe-Array zusammensetzeng
-	foreach ( $_SESSION['all_erp_assignments'] as $key => $zuordnung ) {
+	foreach ( $allAssignments as $key => $zuordnung ) {
 		if($zuordnung['group_id'] == $grp_id) {
 			$user_id = $zuordnung['user_id'];
-			foreach ( $_SESSION['all_erp_users'] as $key => $nutzer ) {
+			foreach ( $allERPusers as $key => $nutzer ) {
 					if($nutzer['id'] == $user_id) {
 						$rueck[$i] = array("id"=>$user_id,"login"=>$nutzer['login'],"name"=>$nutzer['name']);
 						$i++;

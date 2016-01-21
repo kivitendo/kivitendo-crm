@@ -3,8 +3,8 @@
 Wissens-DB Helper-Klassen
 */
     require_once("../inc/stdLib.php");
-    include_once("inc/UserLib.php");
-    include("inc/crmLib.php");
+    include_once("../inc/UserLib.php");
+    include("../inc/crmLib.php");
 
 function suche ( $wort, $kat ) {
     if ( $kat == '' ) { 

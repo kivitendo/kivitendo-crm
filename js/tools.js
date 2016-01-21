@@ -1,11 +1,11 @@
 $( document ).ready( function(){
-    
+
     var headline = $(".tools");
     var myposition = headline.position();
     myposition.top += 21;
     //var localStorage = <?php print_r( $_global );?>;
     //alert(JSON.stringify(kivi.global.baseurl));
-    //alert('<img src="' + kivi.global.baseurl + 'crm/tools/rechner.png" class="calculator_img" title=".:simple calculator:.">');
+
     $( ".tools" ).before(
         '<div class="calculator_dialog"><div class="calculator"></div></div>' +
         '<div class="translator_dialog"><div class="translator"><input class="translator_input" style="margin-right: 10";>' +
@@ -17,15 +17,18 @@ $( document ).ready( function(){
         '<img src="' + kivi.global.baseurl + 'crm/tools/kalender.png" class="calendar_img" title=".:calendar:." style="margin-left: 20;">' +
         '<img src="' + kivi.global.baseurl + 'crm/tools/leo.png" class="translator_img " title="LEO .:english/german:." style="margin-left: 20;"></div>'
     );
+
     var langpair = 'en|de';
     $( ".translator_swap" ).append('<img  src="' + kivi.global.baseurl + '/crm/image/swap.gif" />').button().on( 'click', function(){
         var title = $( ".translator_dialog" ).dialog( "option", "title"  );
         $( ".translator_dialog" ).dialog( "option", "title", title ==  'Übersetzer en -> de' ? 'Translator de -> en' : 'Übersetzer en -> de');
         langpair = langpair == 'en|de' ? 'de|en' : 'en|de';
     }) ;
+
     $( '.translator_input' ).addClass( "ui-widget ui-widget-content ui-corner-all" ).keypress( function( e ){
         if( e.which == 13 ) $( '.translator_button' ).click();
     });
+
     $( '.translator_button' ).button().on( 'click', function(){
         $( ".tbody" ).empty();
         $.getJSON( 'http://mymemory.translated.net/api/get?q=' + $( '.translator_input' ).val() + '&langpair=' + langpair, function( data ) {
@@ -34,45 +37,73 @@ $( document ).ready( function(){
             });
         }).done( function(){ $( '.result_table' ).css('visibility', 'visible').tablesorter().trigger( 'update' ) });
     });
-    $( '.postit_img' ).on( 'click', function(){
-        $.PostItAll.new({
-            features: {
-                savable : true
-            }
-        });
+
+    //one Note on dblclick
+    var clicks = 0, timer = null;
+    $( '.postit_img' ).on( "click", function( e ){
+        clicks++;
+        if( clicks === 1 ){
+            timer = setTimeout( function(){
+                $.PostItAll.new({
+                    features: {
+                        savable : true
+                    }
+                });
+                clicks = 0;
+            }, 200 );
+        }
+        else{
+            clearTimeout( timer );
+            $.PostItAll.new({
+                features: {
+                    savable : true
+                }
+            });
+            clicks = 0;
+        }
+    }).on("dblclick", function(e){
+        e.preventDefault();  //cancel system double-click event
     });
+
     $( ".calculator" ).calculator({
         useThemeRoller: true,
         layout: $.calculator.scientificLayout,
     });
+
     $( ".calculator_dialog" ).dialog({
         autoOpen: false,
         title: 'Calcutator',
         width: "360px",
         resizable: false
     });
+
     $( ".postit_dialog" ).dialog({
         autoOpen: false,
         title: 'Post it!',
         width:'auto',
         resizable: false
     });
+
     $( ".translator_dialog" ).dialog({
         autoOpen: false,
         title: 'Übersetzer en -> de',
         width:'390px',
         resizable: false
     });
+
     $( ".calculator_img" ).on("click", function(){
         $( ".calculator_dialog" ).dialog( "open" );
     });
+
     $( ".postit_img" ).on( "click", function(){
         $( ".postit_dialog" ).dialog( "open" );
     });
+
     $( ".calendar_img" ).on("click", function(){
         alert( kivi.global.baseurl + "crm/calendar.phtml" );
         window.location.href = kivi.global.baseurl + "crm/calendar.phtml";
     });
+
     $( ".translator_img" ).on("click", function(){
         $( ".translator_dialog" ).dialog( "open" );
     });

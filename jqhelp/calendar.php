@@ -8,19 +8,19 @@ https://developers.google.com/google-apps/calendar/recurringevents
 
     require_once("../inc/crmLib.php");
     require_once("../inc/stdLib.php");
-    $task  = $_POST['task'] ? $_POST['task'] : $_GET['task'];
+    $task  = varExist( $_GET, 'task' );
     //ToDo Funktion AjaxSql schreiben. Diese werten $_POST oder $_GET aus, erster Parameter ist Tabelle, zeiter P ist task (insert, select, update) folgende sind die serialisierten Daten
-    if( !$task ) $task = 'getEvents';
+    if( !varExist( $task ) ) $task = 'getEvents';
     $startGet       = $_GET['start'];
     $endGet         = $_GET['end'];
-    $repeat_end_GET= $_GET['repeat_end'] == 'Invalid date' ? 'NULL' : $_GET['repeat_end'];
+    $repeat_end_GET= varExist( $_GET, 'repeat_end' ) == 'Invalid date' ? 'NULL' : varExist( $_GET, 'repeat_end' );
     $where          = $_GET['where'];
     $myuid          = $_GET['myuid'];
 
     foreach( $_POST as $key => $value ){
         $$key = htmlspecialchars($value);
     }
-    $repeat_end_sql = $repeat_end == 'Invalid date' ? 'NULL' : "'$repeat_end'::TIMESTAMP";
+    $repeat_end_sql = varExist( $repeat_end )   == 'Invalid date' ? 'NULL' : "'varExist( $repeat_end  )'::TIMESTAMP";
     switch( $task ){
         case "getUserdata":
             //$sql = "SELECT BLA";

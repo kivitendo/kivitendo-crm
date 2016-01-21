@@ -28,7 +28,7 @@ Visibility für Gruppen
 <script language="javascript" type="text/javascript" src="translation/calendar.lng"></script>
 <script>
     $(document).ready(function() {
-
+        var cust_vend_pers;
         var language = "<?php echo $_SESSION['countrycode'] ? $_SESSION['countrycode'] : 'en';?>";
         $( ".lang" ).each( function(){
 
@@ -92,7 +92,7 @@ Visibility für Gruppen
                                 description: $("#description").val(),
                                 id:   $("#id").val(),
                                 allDay: $( "#allDay" ).is( ":checked" ),
-                                uid : $("#user option:selected").val(),
+                                uid : 0, //$("#user option:selected").val(),
                                 visibility : visibility,
                                 category : $( "#category option:selected" ).val(),
                                 start: start,
@@ -229,7 +229,7 @@ console.log('vor ajaxTask');
                                     $( "#startTime" ).val( moment( start ).format( "LT") );
                                     $( "#endDate" ).val( moment( end ).format( "L") );
                                     $( "#endTime" ).val( moment( end ).format( "LT") );
-                                    $( "#user" ).data("selectBox-selectBoxIt").selectOption( ajaxTask == 'getUsers' && $( "#tabs" ).tabs( "option", "active" ) != 0  ?  val.value.toString() : "<?php echo $_SESSION['loginCRM']; ?>" );
+                                    //$( "#user" ).data("selectBox-selectBoxIt").selectOption( ajaxTask == 'getUsers' && $( "#tabs" ).tabs( "option", "active" ) != 0  ?  val.value.toString() : "<?php echo $_SESSION['loginCRM']; ?>" );
                                     $( "#category" ).data("selectBox-selectBoxIt").selectOption( ajaxTask == 'getCategory' && $( "#tabs" ).tabs( "option", "active" ) != 0 ? val.value.toString() : '0' );
                                     $( "#visibility" ).data( "selectBox-selectBoxIt" ).selectOption( '-1' );
                                     $( "#repeat" ).data( "selectBox-selectBoxIt" ).selectOption( 'day' );
@@ -442,14 +442,14 @@ console.log('vor ajaxTask');
             }
         });
         $( "#location" ).change(function(){
-                 $( "#tmp" ).data( "cust_vend_pers", false );
+               //  $( "#tmp" ).data( "cust_vend_pers", false );
             }).catcomplete({
             source: "jqhelp/autocompletion.php?case=name",
             minLength: '<?php echo $_SESSION['feature_ac_minlength']; ?>',
             delay: '<?php echo $_SESSION['feature_ac_delay']; ?>',
             disabled: false,//<?php echo ($_SESSION['feature_ac']?'true':'false'); ?>,ToDo BESSER: Einstellungen via Ajax laden
             select: function( e, ui ) {
-                $( "#tmp" ).data( "cust_vend_pers", ui.item.src+ui.item.id );
+                cust_vend_pers = ui.item.src+ui.item.id;
             }
         }).dblclick(function() {
             var cust_vend_pers = $( "#tmp" ).data( "cust_vend_pers" );
@@ -668,6 +668,7 @@ console.log('vor ajaxTask');
 
 
     </div>
+    <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Calendar</p>
     <div id="tabs">
         <ul>
             <li><a href="#tabs-1" data-lang='ALL'  class='lang'></a></li>
@@ -681,6 +682,7 @@ console.log('vor ajaxTask');
 
 <?php
     echo $menu['end_content'];
+    echo $head['TOOLS'];
     echo "</div>"
 ?>
 </body>

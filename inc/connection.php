@@ -35,7 +35,7 @@ if( $conf_auth_db['host'] ) $dbh_auth = new myPDO ($conf_auth_db['host'], $conf_
 else {
     /*printArray( '$conf_auth_db[host] is empty!!!!' ); */
     $url = $_SERVER['REQUEST_URI'];
-    echo '<script type="text/javascript">window.location.href="delsess.php?url='.$url.'";</script>';
+    echo '<script type="text/javascript">window.location.href="'.$_SESSION['baseurl'].'crm/delsess.php?url='.$url.'";</script>';
 }
 
 //(ERP)-Userdaten in Session speichern

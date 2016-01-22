@@ -7,6 +7,7 @@ require_once "stdLib.php";
 require_once "conf.php";
 
 if( !varExist( $_SESSION ) ) session_start();
+
 if( !varExist( $_SESSION['globalConfig'] ) ) $_SESSION['globalConfig'] = getGlobalConfig(); //printArray(getGlobalConfig());
 
 //Prüfen ob es sich um eine neu Session handelt oder die Elemente von $_SESSION gelöscht wurden
@@ -15,6 +16,16 @@ $newSession = ( $_SESSION['sessid'] != $_COOKIE[$_SESSION['erpConfig']['authenti
 $_SESSION['erppath'] =& $_SESSION['globalConfig']['erppath'];//ToDO: delete??
 $_SESSION['crmpath'] =& $_SESSION['globalConfig']['crmpath'];//ToDO: delete??
 $_SESSION['baseurl'] =& $_SESSION['globalConfig']['baseurl'];//ToDO: delete??
+
+
+/*****************************************
+*
+* Bugfix Menue verschwindet aus Session
+*
+*
+*******************************************/
+// geht so nicht
+//if( !varExist( $_SESSION, 'menu' ) ) delcurrentSess();
 
 //Kivitendo Configfile in Array erpConfig speichern
 if( $newSession ){
@@ -34,8 +45,7 @@ $conf_auth_db =& $_SESSION['erpConfig']['authentication/database'];
 if( $conf_auth_db['host'] ) $dbh_auth = new myPDO ($conf_auth_db['host'], $conf_auth_db['port'], $conf_auth_db['db'], $conf_auth_db['user'], $conf_auth_db['password'], $_SESSION["sessid"] );
 else {
     /*printArray( '$conf_auth_db[host] is empty!!!!' ); */
-    $url = $_SERVER['REQUEST_URI'];
-    echo '<script type="text/javascript">window.location.href="'.$_SESSION['baseurl'].'crm/delsess.php?url='.$url.'";</script>';
+    delcurrentSess();
 }
 
 //(ERP)-Userdaten in Session speichern
@@ -279,4 +289,9 @@ function getCrmUserData(){
     return $user_data;
 }
 
+function delcurrentSess(){
+    $url = $_SERVER['REQUEST_URI'];
+    echo '<script type="text/javascript">window.location.href="'.$_SESSION['baseurl'].'crm/delsess.php?url='.$url.'";</script>';
+    return;
+}
 //echo "connections";

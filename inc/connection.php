@@ -66,7 +66,8 @@ if( $dbData["dbhost"] ) $dbh = new myPDO( $dbData["dbhost"], $dbData["dbport"], 
 else echo 'No $_SESSION[dbData][dbhost]';
 
 //Menu und Javascript-Sachen in Session speichern
-if( $newSession ) $_SESSION["menu"]  = makeMenu();
+if( $newSession OR !varExist( $_SESSION, 'menu' ) ) $_SESSION["menu"]  = makeMenu();//warum geht das menu verloren?? warum MUSS "OR !varExist( $_SESSION, 'menu'" )
+//$_SESSION["menu"]  = makeMenu();
 
 //Vorerst Userdaten der CRM in crmUserData speichern !!besser in userConfig speichern
 if( $newSession ) $_SESSION["crmUserData"] = getCrmUserData();//ToDo: deprecated!

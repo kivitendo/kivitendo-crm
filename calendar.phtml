@@ -442,7 +442,7 @@ console.log('vor ajaxTask');
             }
         });
         $( "#location" ).change(function(){
-               //  $( "#tmp" ).data( "cust_vend_pers", false );
+            //$( "#tmp" ).data( "cust_vend_pers", false );
             }).catcomplete({
             source: "jqhelp/autocompletion.php?case=name",
             minLength: '<?php echo $_SESSION['feature_ac_minlength']; ?>',
@@ -450,12 +450,13 @@ console.log('vor ajaxTask');
             disabled: false,//<?php echo ($_SESSION['feature_ac']?'true':'false'); ?>,ToDo BESSER: Einstellungen via Ajax laden
             select: function( e, ui ) {
                 cust_vend_pers = ui.item.src+ui.item.id;
+                $( "#tmp" ).data( "cust_vend_pers" , cust_vend_pers);
             }
         }).dblclick(function() {
             var cust_vend_pers = $( "#tmp" ).data( "cust_vend_pers" );
             var Q  = cust_vend_pers.charAt( 0 );
             if( cust_vend_pers != 'false' ) window.open( "firma" + (Q=='K' ? '2' : '1') + ".php?Q=" + Q + "&id=" + cust_vend_pers.slice(1) );
-            else window.open( "http://maps.google.de/maps/place/" + $( "#location" ).val() );
+           // else window.open( "http://maps.google.de/maps/place/" + $( "#location" ).val() );
         }).tooltip( { position: { my: "center bottom-10", at: "center top" } } );
         $( "#allDay" ).change( function(){
             if( !$(this).is( ":checked" ) ){
@@ -638,7 +639,7 @@ console.log('vor ajaxTask');
                     <input type="radio" id="prio_2" name="prioRadio" value='2' ><label for="prio_2" data-lang='MAJOR'  class='lang'></label>
                 </form>
             </div>
-            <div id="locationLabel" data-lang='CUSTOMER_LOCATION' class='lang'></div>
+            <div id="locationLabel" data-lang='CUSTOMER_LABLE' class='lang'></div>
             <div id="locationInput">
                 <form>
                     <input type="text"  id="location" class="ui-widget-content ui-corner-all location lang" autocomplete="off" data-lang='DOUBLE_KLICK'>

@@ -50,7 +50,7 @@ $( document ).ready( function(){
                     }
                 });
                 clicks = 0;
-            }, 200 );
+            }, 500 );
         }
         else{
             clearTimeout( timer );

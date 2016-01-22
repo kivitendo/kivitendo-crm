@@ -153,9 +153,11 @@ Visibility für Gruppen
                 $( this ).dialog( "close" );
             }
         });
+
         var calculate_end = function(){
             $( "#repeat_end" ).val( moment( $( "#endDate" ).val(), "L" ).add( $( "#repeat" ).val(), $( "#repeat_factor" ).val() * $( "#repeat_quantity" ).val() ).format( "L" ) );
         };
+
         var calculate_repeat_quantity = function() {
             var a = moment( $( "#endDate" ).val(), 'L' );
             var b = moment( $( "#repeat_end" ).val(), 'L' );
@@ -372,29 +374,37 @@ console.log('vor ajaxTask');
                 { value: "year", text: langData[language]['YEAR'] }
             ]
         });
+
         $( "#jobRadio,#prioRadio" ).buttonset();//.find('label').height(28);;
+
         $( "#job_true" ).click( function() {
             $( "#endDate" ).val( moment( $( "#endDate" ).val(), 'DD.MM.YYYY' ).add( 'years', 1 ).format( "L") );
             $( "#allDay" ).prop( 'checked', true );
             $( "#chkboxDone" ).show( "fast" );
         });
+
         $( "#job_false" ).click( function() {
             $( "#endDate" ).val( moment().format( "L" ) );
             $( "#allDay" ).prop( 'checked', false ).change();
             $( "#chkboxDone" ).hide( "fast" );
         });
+
         $( "#prio_0" ).click( function(){
             $( "#color" ).val( 'green' );
         });
+
         $( "#prio_1" ).click( function(){
             $( "#color" ).val( '' );
         });
+
         $( "#prio_2" ).click( function(){
             $( "#color" ).val( 'red' );
         });
+
         $( "#color" ).click( function(){
             $( "#colorPick" ).toggle();
         });
+
         $( "#done" ).click( function(){//
 
             var color = $( "#prio_0" ).is( ':checked' ) ? 'green' : '';
@@ -440,6 +450,7 @@ console.log('vor ajaxTask');
                 });
             }
         });
+
         $( "#location" ).change(function(){
             //$( "#tmp" ).data( "cust_vend_pers", false );
             }).catcomplete({
@@ -456,7 +467,17 @@ console.log('vor ajaxTask');
             var Q  = cust_vend_pers.charAt( 0 );
             if( cust_vend_pers != 'false' ) window.open( "firma" + (Q=='K' ? '2' : '1') + ".php?Q=" + Q + "&id=" + cust_vend_pers.slice(1) );
            // else window.open( "http://maps.google.de/maps/place/" + $( "#location" ).val() );
-        }).tooltip( { position: { my: "center bottom-10", at: "center top" } } );
+        }).tooltip( {
+            show: {
+            effect: 'slideDown'
+        },
+        open: function (event, ui) {
+            setTimeout(function () {
+                $(ui.tooltip).hide('slow');
+            }, 2500);
+        },
+        position: { my: "center bottom-10", at: "center top" } });
+
         $( "#allDay" ).change( function(){
             if( !$(this).is( ":checked" ) ){
                 $( "#startTime" ).val( moment( "<?php echo $_SESSION['termbegin'] ? $_SESSION['termbegin'] : 7;echo ":00"; ?>", "HH:mm" ).format( "LT") );

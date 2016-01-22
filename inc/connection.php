@@ -10,7 +10,7 @@ if( !varExist( $_SESSION ) ) session_start();
 if( !varExist( $_SESSION['globalConfig'] ) ) $_SESSION['globalConfig'] = getGlobalConfig(); //printArray(getGlobalConfig());
 
 //Prüfen ob es sich um eine neu Session handelt oder die Elemente von $_SESSION gelöscht wurden
-$newSession = ( $_SESSION['sessid'] != $_COOKIE[$_SESSION['erpConfig']['authentication']['cookie_name']] ) || $_SESSION['clear'];
+$newSession = ( $_SESSION['sessid'] != $_COOKIE[$_SESSION['erpConfig']['authentication']['cookie_name']] ) || $_SESSION['clear'] || !$_SESSION['menu']['javascripts'];//wo wird menu.javascripts zerstört??
 
 $_SESSION['erppath'] =& $_SESSION['globalConfig']['erppath'];//ToDO: delete??
 $_SESSION['crmpath'] =& $_SESSION['globalConfig']['crmpath'];//ToDO: delete??
@@ -66,7 +66,7 @@ if( $dbData["dbhost"] ) $dbh = new myPDO( $dbData["dbhost"], $dbData["dbport"], 
 else echo 'No $_SESSION[dbData][dbhost]';
 
 //Menu und Javascript-Sachen in Session speichern
-if( $newSession OR !varExist( $_SESSION, 'menu' ) ) $_SESSION["menu"]  = makeMenu();//warum geht das menu verloren?? warum MUSS "OR !varExist( $_SESSION, 'menu'" )
+if( $newSession ) $_SESSION["menu"]  = makeMenu();//warum geht das menu verloren?? warum MUSS "OR !varExist( $_SESSION, 'menu'" )
 //$_SESSION["menu"]  = makeMenu();
 
 //Vorerst Userdaten der CRM in crmUserData speichern !!besser in userConfig speichern

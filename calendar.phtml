@@ -18,17 +18,18 @@
     echo $head['JQTIME'];
     echo $head['COLORPICKERJS'];
     echo $head['JQCOOKIE'];
+    echo $head['TRANSLATION'];
   //print_r( $_SESSION );
 /*************************************************** +++ ToDo ++++*******************************************************
 Kategorien und User + All in Tabs darstellen!!!!
 Visibility für Gruppen
 ************************************************************************************************************************/
 ?>
-<script language="javascript" type="text/javascript" src="translation/calendar.lng"></script>
 <script>
     $(document).ready(function() {
         var cust_vend_pers;
-        var language = "<?php echo $_SESSION['countrycode'] ? $_SESSION['countrycode'] : 'en';?>";
+        var language = kivi.myconfig.countrycode;
+        //alert( myconfig.kivi.countrycode );
         $( ".lang" ).each( function(){
 
             var key = $( this ).attr( "data-lang" );
@@ -659,7 +660,7 @@ console.log('vor ajaxTask');
                     <input type="radio" id="prio_2" name="prioRadio" value='2' ><label for="prio_2" data-lang='MAJOR'  class='lang'></label>
                 </form>
             </div>
-            <div id="locationLabel" data-lang='CUSTOMER_LABLE' class='lang'></div>
+            <div id="locationLabel" data-lang='CUSTOMER_LABEL' class='lang'></div>
             <div id="locationInput">
                 <form>
                     <input type="text"  id="location" class="ui-widget-content ui-corner-all location lang" autocomplete="off" data-lang='DOUBLE_KLICK'>
@@ -689,7 +690,7 @@ console.log('vor ajaxTask');
 
 
     </div>
-    <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Calendar</p>
+    <p class="ui-state-highlight ui-corner-all tools lang" style="margin-top: 20px; padding: 0.6em;" data-lang="CALENDAR"></p>
     <div id="tabs">
         <ul>
             <li><a href="#tabs-1" data-lang='ALL'  class='lang'></a></li>

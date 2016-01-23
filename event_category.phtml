@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html>
 <head>
 <meta charset='utf-8' />
@@ -17,10 +17,11 @@
     echo $head['FULLCALJS'];
     echo $head['JQBOX'];
     echo $head['COLORPICKERJS'];
+    echo $head['TRANSLATION'];
     //print_r( $_SESSION );
 
 ?>
-<script language="javascript" type="text/javascript" src="translation/event_category.lng"></script>
+<script language="javascript" type="text/javascript" src="translation/all.lng"></script>
 <script>
     $( document ).ready( function(){
         var language = "<?php echo $_SESSION['countrycode'] ? $_SESSION['countrycode'] : 'en';?>";

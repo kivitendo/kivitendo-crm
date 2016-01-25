@@ -1,5 +1,6 @@
 <?php
 require_once( "inc/stdLib.php" );
+require_once( "inc/crmLib.php" );
 $keys = array(
     'klicktel_key_db',
     'klicktel_key',
@@ -89,7 +90,15 @@ include( "inc/template.inc" );
 $t = new Template( $base );
 doHeader( $t );
 $t->set_file( array( "mand" => "mandant.tpl" ) );
-if ( $_SESSION['Admin'] != 1 ) {
+//Benutzer in Gruppe Spezial ?
+$admin = false;
+$tempass = ERPUsersfromGroup("Admin");
+foreach ($tempass as $value) {
+    if( $value['login'] == $_SESSION['userConfig']['login'] ) {
+      $admin = true;
+    }
+}
+if ( !$admin ) {
     $t->set_var( array( msg => 'Diese Aktion ist nicht erlaubt. </ br>Sie sind nicht Mitglied der Gruppe Admin.', hide => 'hidden' ) );
 }
 else {

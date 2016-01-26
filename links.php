@@ -14,7 +14,7 @@ if (!is_dir($dir_abs)) {
     mkdir($dir_abs);
     if ( $_SESSION['dir_group'] ) chgrp($dir_abs, $_SESSION['dir_group']);
 }
-chmod($dir_abs,$_SESSION['dir_mode']);
+chmod($dir_abs,octdec($_SESSION['dir_mode']));
 
 
 //Verzeichnis für Links:
@@ -22,14 +22,14 @@ if (!is_dir($dir_abs.$link_dir_cust)) {
     mkdir($dir_abs.$link_dir_cust);
     if ( $_SESSION['dir_group'] ) chgrp($dir_abs.$link_dir_cust, $_SESSION['dir_group']);
 }
-chmod($dir_abs.$link_dir_cust, $_SESSION['dir_mode']);
+chmod($dir_abs.$link_dir_cust, octdec($_SESSION['dir_mode']));
 
 
 if (!is_dir($dir_abs.$link_dir_vend)) {
     mkdir($dir_abs.$link_dir_vend);
     if ( $_SESSION['dir_group'] ) chgrp($dir_abs.$link_dir_vend, $_SESSION['dir_group']);
 }
-chmod($dir_abs.$link_dir_vend, $_SESSION['dir_mode']);
+chmod($dir_abs.$link_dir_vend, octdec($_SESSION['dir_mode']));
 
 //Alle Links erzeugen (wird von status.php ausgelöst)
 if ($_GET['all']) { 
@@ -66,7 +66,7 @@ if ($_GET['all']) {
     			echo "Erzeuge Verzeichnis: ".$dir_abs."/C".$rs[$key]['customernumber']." </br>";
     			mkdir($dir_abs."/C".$rs[$key]['customernumber']);
     		}
-    		chmod($dir_abs."/C".$rs[$key]['customernumber'],$_SESSION['dir_mode']);
+    		chmod($dir_abs."/C".$rs[$key]['customernumber'],octdec($_SESSION['dir_mode']));
     		if ( $_SESSION['dir_group'] ) chgrp($dir_abs."/C".$rs[$key]['customernumber'],$_SESSION['dir_group']);
     		echo "Erzeuge Symlink: ".$dir_abs.$link_dir_cust."/".mkDirName($rs[$key]['name'])."_C".$rs[$key]['customernumber']."</br>";
     	 	symlink($dir_abs."/C".$rs[$key]['customernumber'], $dir_abs.$link_dir_cust."/".mkDirName($rs[$key]['name'])."_C".$rs[$key]['customernumber']);
@@ -81,7 +81,7 @@ if ($_GET['all']) {
     			echo "Erzeuge Verzeichnis: ".$dir_abs."/V".$rs[$key]['vendornumber']." </br>";
     			mkdir($dir_abs."/V".$rs[$key]['vendornumber']);
     		}
-    		chmod($dir_abs."/V".$rs[$key]['vendornumber'],$_SESSION['dir_mode']);
+    		chmod($dir_abs."/V".$rs[$key]['vendornumber'],octdec($_SESSION['dir_mode']));
     		if ( $_SESSION['dir_group'] ) chgrp($dir_abs."/V".$rs[$key]['vendornumber'],$_SESSION['dir_group']);
     		echo "Erzeuge Symlink: ".$dir_abs.$link_dir_vend."/".mkDirName($rs[$key]['name'])."_V".$rs[$key]['vendornumber']."</br>";
     	 	symlink($dir_abs."/V".$rs[$key]['vendornumber'], $dir_abs.$link_dir_vend."/".mkDirName($rs[$key]['name'])."_V".$rs[$key]['vendornumber']);
@@ -95,5 +95,5 @@ if ($_GET['all']) {
        </p>
      </form>';
 }
-       
+
 ?>

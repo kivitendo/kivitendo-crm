@@ -662,7 +662,7 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
         if (!is_dir($dir_abs."/".$DIR)) { // Wird wo definiert???
             mkdir($dir_abs."/".$DIR);
         }
-        chmod($dir_abs."/".$DIR,$_SESSION['dir_mode']);
+        chmod($dir_abs."/".$DIR,octdec($_SESSION['dir_mode']));
         if ( $_SESSION['dir_group'] ) chgrp($dir_abs."/".$DIR,$_SESSION['dir_group']);
         $link_dir_cv=$typ=="C"?$link_dir_cust:$link_dir_vend;
          if (!$dir_abs.$link_dir_cv."/".mkDirName($daten['name'])."_".$DIR) {

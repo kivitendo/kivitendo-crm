@@ -8,7 +8,7 @@
     else if ( isset($_POST['Q']) and $_POST['Q'] != '') { $Q = $_POST['Q']; }
     else { $Q = 'C'; };
     $Q_Array['Q'] = $Q;
-    $t = new Template($base);
+    $t = new Template();
     //doHeader($t);
     if ( isset($_POST["felder"]) && $_POST["felder"] != '' ) {
         $rc = doReport($_POST,$Q);

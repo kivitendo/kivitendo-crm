@@ -1,11 +1,11 @@
 <?php
-    require_once("inc/stdLib.php");
+    require_once($_SESSION['crmpath']."inc/stdLib.php");
     if($_GET['showdl']){
-		echo "dokumente/".$_SESSION["dbname"];
+		echo "dokumente/".$_SESSION["dbData"]["dbname"];
 		return;
     }
     else {
-		$pfad = 'dokumente/'.$_SESSION["dbname"].$_GET['file'];
+		$pfad = 'dokumente/'.$_SESSION["dbData"]["dbname"].$_GET['file'];
         if (isset($pfad)) {
             $fullPath = $pfad;
             if($fullPath) {

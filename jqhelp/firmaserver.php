@@ -224,8 +224,8 @@
             $directory = trim( rtrim( $directory, " /\\" ) ); //entferne rechts Leezeichen und Slash bzw Backslash
         chkdir($directory,".");
         $inhalt = false;
-        if ( is_dir("../dokumente/".$_SESSION["dbname"]."/".$directory)) {
-            $dir_object = dir( "../dokumente/".$_SESSION["dbname"]."/".$directory );
+        if ( is_dir("../dokumente/".$_SESSION["dbData"]["dbname"]."/".$directory)) {
+            $dir_object = dir( "../dokumente/".$_SESSION["dbData"]["dbname"]."/".$directory );
             // Gibt neues Verzeichnis aus
             $inhalt="<ul>";
             $dir="<li class='ptr' onClick='dateibaum(\"$id\",\"%s\")'>%s";
@@ -242,7 +242,7 @@
                                 $tmp=substr($directory,0,strrpos($directory,"/"));
                                 $Eintrag[]=sprintf($dir,$tmp,"[ .. ]");
                             }
-                        } else if (is_dir("../dokumente/".$_SESSION["dbname"]."/".$directory."/".$entry)) {
+                        } else if (is_dir("../dokumente/".$_SESSION["dbData"]["dbname"]."/".$directory."/".$entry)) {
                             $Eintrag[]=sprintf($dir,$directory."/".$entry,"[ $entry ]");
                         } else {
                             $Eintrag[]=sprintf($datei,$entry,"$entry");

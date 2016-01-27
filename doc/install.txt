@@ -253,6 +253,13 @@ Bei einer Migration auch alle Unterverzeichnisse und Dateien:
 chmod 775 -R dokumente
 chgrp -R users dokumente
 
+ERP-Plugins:
+----------------
+cd kivitendo-erp/js/
+kivi.js
+Am Ende folgendes einfügen:
+document.write("<script type='text/javascript' src='crm/js/ERPplugins.js'></script>");
+
 Zusatzprogramme:
 ----------------
 Einige Zusatzprogramme (EuR, ZM, Inventur, Katalog, DHL-Adress CSV, Artikelmassenänderung, eBay-Importer),

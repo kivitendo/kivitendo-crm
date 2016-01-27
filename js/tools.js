@@ -12,14 +12,14 @@ $( document ).ready( function(){
 
     $( ".tools" ).before(
         '<div class="calculator_dialog"><div class="calculator"></div></div>' +
-        '<div class="translator_dialog"><div class="translator"><input class="translator_input" style="margin-right: 10";>' +
+        '<div class="translator_dialog"><div class="translator"><input class="translator_input" style="margin-right: 10px";>' +
         '<button class="translator_button">translate</button><button class="translator_swap"></button>' +
         '<div><table class="result_table tablesorter" style="visibility: hidden"><thead></thead><tbody class="tbody"></tbody></table></div></div></div>' +
-        '<div class="toolsbuttons" style="position:absolute; top:' + myposition.top + '; left:900;">' +
+        '<div class="toolsbuttons" style="position:absolute; top:' + myposition.top + 'px; left:900px;">' +
         '<img src="' + baseUrl + 'crm/tools/rechner.png" class="calculator_img" title=".:simple calculator:.">' +
-        '<img src="' + baseUrl + 'crm/tools/notiz.png" class="postit_img" title=".:postit notes:." style="margin-left: 20;">' +
-        '<img src="' + baseUrl + 'crm/tools/kalender.png" class="calendar_img" title=".:calendar:." style="margin-left: 20;">' +
-        '<img src="' + baseUrl + 'crm/tools/leo.png" class="translator_img " title="LEO .:english/german:." style="margin-left: 20;"></div>'
+        '<img src="' + baseUrl + 'crm/tools/notiz.png" class="postit_img" title=".:postit notes:." style="margin-left: 20px;">' +
+        '<img src="' + baseUrl + 'crm/tools/kalender.png" class="calendar_img" title=".:calendar:." style="margin-left: 20px;">' +
+        '<img src="' + baseUrl + 'crm/tools/leo.png" class="translator_img " title="LEO .:english/german:." style="margin-left: 20px;"></div>'
     );
 
     var langpair = 'en|de';

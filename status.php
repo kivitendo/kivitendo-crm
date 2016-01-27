@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once("inc/version.php");
-require_once("inc/stdLib.php");
+require_once __DIR__.'/inc/version.php';
+require_once __DIR__.'/inc/stdLib.php';
 $git = @exec('git log -1',$out,$rc);
 if ( $rc > 0 ) {
     $commit = '';

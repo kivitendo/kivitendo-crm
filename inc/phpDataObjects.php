@@ -7,7 +7,7 @@ class myPDO extends PDO{
     private $logAll  = TRUE;  //log all sql queries
 
     private function writeLog( $log ){
-        file_put_contents( $_SESSION['crmpath'].'/tmp/sqlerror.log', date("Y-m-d H:i:s -> " ).print_r( $log, TRUE )."\n", FILE_APPEND );
+        file_put_contents( __DIR__.'/../tmp/sqlerror.log', date("Y-m-d H:i:s -> " ).print_r( $log, TRUE )."\n", FILE_APPEND );
     }
 
     private function error( $error ){

@@ -1,15 +1,15 @@
 <?php
     @session_start();
-    require_once( 'Contact_Vcard_Build.php' );
-    require_once( $_SESSION['crmpath'].'/inc/stdLib.php');
-    require_once( $_SESSION['crmpath'].'/inc/FirmenLib.php');
+    require_once 'Contact_Vcard_Build.php';
+    require_once __DIR__.'/inc/stdLib.php';
+    require_once __DIR__.'/inc/FirmenLib.php';
     $Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];
     // instantiate a builder object (defaults to version 3.0)
     //echo "test".$_SESSION['crmpath'];
     $vcard = new Contact_Vcard_Build();
     //printArray( $vcard );
     if (varExist($_GET, "pid")) {
-        include( $_SESSION['crmpath'].'/inc/persLib.php');
+        include( __DIR__.'/inc/persLib.php');
         $data=getKontaktStamm($_GET["pid"]);
         //printArray( $data );
                 //UID

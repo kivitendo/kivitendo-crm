@@ -2,9 +2,10 @@
 /*************************************************************************************************
 *** Konfigurationsdatei -> Session, Db-handle erstellen, User-Date -> Session, Menu -> Session ***
 **************************************************************************************************/
-require_once "phpDataObjects.php";
-require_once "stdLib.php";
-require_once "conf.php";
+
+require_once __DIR__.'/phpDataObjects.php';
+require_once __DIR__.'/stdLib.php';
+require_once __DIR__.'/conf.php';
 
 if( !varExist( $_SESSION ) ) session_start();
 
@@ -154,7 +155,7 @@ function getGlobalConfig(){
     $rs['erppath'] = $basepath;
     $rs['crmpath'] = $rs['erppath'] .'/crm';
     $inclpa = ini_get('include_path');
-    ini_set('include_path',$inclpa.":../:./inc:../inc");//ToDo kann doch raus?? Ist es nicht besser $_SESSION['crmpath'] zu benützen??
+    ini_set('include_path',$inclpa.":../:./inc:../inc");//ToDo kann doch raus?? Ist es nicht besser __DIR__ zu benützen??
     return $rs;
 }
 
@@ -280,7 +281,7 @@ function makeMenu(){
 }
 
 function getCrmUserData(){
-    require_once "UserLib.php";
+    require_once __DIR__.'/UserLib.php';
     $user_data = getUserStamm(0,$_SESSION["login"]);
     if ($user_data) foreach ($user_data as $key => $val) $_SESSION[$key] = $val;
     $user_data['dir_mode']  = ( $user_data['dir_mode'] != '' )?octdec($user_data['dir_mode']):493; // 0755

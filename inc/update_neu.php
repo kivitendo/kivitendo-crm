@@ -1,38 +1,38 @@
 <?php
     $menu = false;
     if ( isset($_GET['menu']) && $_GET['menu'] == '1' ) {
-        require_once('stdLib.php');
+        require_once __DIR__.'/stdLib.php';
         $menu = $_SESSION['menu'];
         $head = mkHeader();
         echo '<html><head><title></title>';
         echo $menu['stylesheets'];
         echo $menu['javascripts'];
-        echo $head['CRMCSS']; 
+        echo $head['CRMCSS'];
         echo $head['THEME'];
         echo '</head><body>';
         echo $menu['pre_content'];
-        echo $menu['start_content']; 
+        echo $menu['start_content'];
         echo '<h1>Updatecheck</h1>';
     }
     if (!function_exists('updatever')) {
-	    function updatever($VERSION) {
-		    $sql = "INSERT INTO crm (uid,datum,version) values (".$_SESSION["loginCRM"].",now(),'".$VERSION."')";
-		    $rc = $GLOBALS['db']->query($sql);
+        function updatever($VERSION) {
+            $sql = "INSERT INTO crm (uid,datum,version) values (".$_SESSION["loginCRM"].",now(),'".$VERSION."')";
+            $rc = $GLOBALS['db']->query($sql);
                     $GLOBALS['db']->commit();
-		    echo "Versionsnummer gesetzt<br>";
-		    if (is_file("update/update$VERSION.txt")) {
-		        echo "<h2>Wichtig!</h2>";
-		        echo readfile("update/update$VERSION.txt");
-		    }
-	    }
+            echo "Versionsnummer gesetzt<br>";
+            if (is_file("update/update$VERSION.txt")) {
+                echo "<h2>Wichtig!</h2>";
+                echo readfile("update/update$VERSION.txt");
+            }
+        }
     };
 
 
     if (!function_exists('schemainfo')) {
-	    function schemainfo() {
+        function schemainfo() {
             $sql = "SELECT tag || '.sql' as tag  from schema_info where tag like 'crm_%' order by tag";
             $rs  = $GLOBALS['db']->getAll($sql);
-            if ( !$rs ) { $isnow = array(); } 
+            if ( !$rs ) { $isnow = array(); }
             else { foreach ( $rs as $row ) { $isnow[] = $row["tag"];} };
             return $isnow;
         }
@@ -48,7 +48,7 @@
     $todo = array_diff($update,$isnow);
     if ( count($todo) > 0 ) {
         $skip = false;
-    	echo "<br>";
+        echo "<br>";
         $rc = $GLOBALS['db']->begin();
         //foreach ( $todo as $upd ) {
         while ( count($todo) > 0 ) {
@@ -57,8 +57,8 @@
             while (!feof($f) ) {
                 if ( empty($zeile)) { $zeile=trim(fgets($f,1000) ); continue; };
                 $key = ''; $val = '';
-                if ( preg_match("/^-- @([^:]+):(.+)/",$zeile,$treffer) ) { 
-                    $key = $treffer[1]; 
+                if ( preg_match("/^-- @([^:]+):(.+)/",$zeile,$treffer) ) {
+                    $key = $treffer[1];
                     $val = trim($treffer[2]);
                     if ( $key == "php" ) {
                         //echo "PHP<br>\n";
@@ -66,14 +66,14 @@
                         $code = true;
                     } else if ( $key == "depends" ) {
                         $sql = "SELECT tag  from schema_info where tag = '".$val."' order by tag";
-                        $rs  = $GLOBALS['db']->getAll($sql); 
+                        $rs  = $GLOBALS['db']->getAll($sql);
                         if ( count($rs) == 0 ) {
                            echo "Probleme beim Update, alle &Auml;nderungen werden zur&uuml;ck genommen<br>";
                            echo "Abhängigkeit: <b>'$val'</b> nicht erfüllt<br>";
                            $GLOBALS['db']->rollback();
-                           exit(1); 
+                           exit(1);
                         } else {
-                            $zeile = trim(fgets($f,1000)); 
+                            $zeile = trim(fgets($f,1000));
                             continue;
                         }
                     } else if ( $key == "check" ) {
@@ -86,23 +86,23 @@
                         if ( $rc < 0 ) {
                            echo "Probleme beim Update, alle &Auml;nderungen werden zur&uuml;ck genommen";
                            $GLOBALS['db']->rollback();
-                           exit(1); 
+                           exit(1);
                         }
                     } else if ( $key == "require" ) {
                         //echo "Require:".'crm_'.$val.'.sql'."<br>\n";
                         if ( in_array('crm_'.$val.'.sql',$todo) and ($val != '*') ) { // Dir Abhängigkeit soll auch noch installiert werden
-                            array_push($todo,$upd);          // also hinten anhängen 
+                            array_push($todo,$upd);          // also hinten anhängen
                             fseek($f,-1,SEEK_END);           // und abbrechen
                             $skip = true;
-                            $zeile = trim(fgets($f,1000)); 
-                            continue; 
+                            $zeile = trim(fgets($f,1000));
+                            continue;
                         }
                     } else {
                         ${$key} = $treffer[2];
                         echo $key.":".${$key}."<br>"; flush();
                     }
-                    $zeile = trim(fgets($f,1000)); 
-                    continue; 
+                    $zeile = trim(fgets($f,1000));
+                    continue;
                 };
                 if ( preg_match("/^--/",$zeile) ) { $zeile = trim(fgets($f,1000)); continue; }; //Kommentare
                 if ( !preg_match("/;$/",$zeile) or $code ) {
@@ -115,7 +115,7 @@
                         $GLOBALS['db']->rollback();
                         exit(1);
                     }
-                    $query = ""; 
+                    $query = "";
                 }
                 $zeile = trim(fgets($f,1000));
             }

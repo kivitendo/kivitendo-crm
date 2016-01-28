@@ -18,16 +18,6 @@ $_SESSION['erppath'] =& $_SESSION['globalConfig']['erppath'];//ToDO: delete??
 $_SESSION['crmpath'] =& $_SESSION['globalConfig']['crmpath'];//ToDO: delete??
 $_SESSION['baseurl'] =& $_SESSION['globalConfig']['baseurl'];//ToDO: delete??
 
-
-/*****************************************
-*
-* Bugfix Menue verschwindet aus Session
-*
-*
-*******************************************/
-// geht so nicht
-//if( !varExist( $_SESSION, 'menu' ) ) delcurrentSess();
-
 //Kivitendo Configfile in Array erpConfig speichern
 if( $newSession ){
     $erpConfigFile = file_exists( $_SESSION['erppath'].'/config/kivitendo.conf' ) ? $_SESSION['erppath'].'/config/kivitendo.conf' : $_SESSION['erppath'].'/config/kivitendo.conf.default';
@@ -204,7 +194,7 @@ function makeMenu(){
     }
     $url = $_SESSION['baseurl'].'controller.pl?action=Layout/empty&format=json';
     $ch = curl_init();
-    //printArray( $url);
+    //printArray( $url);;
     curl_setopt( $ch, CURLOPT_URL, $url );
     curl_setopt( $ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
     curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
@@ -218,13 +208,11 @@ function makeMenu(){
                 ));
     $result = curl_exec( $ch );
 
-
     if( $result === false || curl_errno( $ch )){
         die( 'Curl-Error: ' .curl_error($ch).' </br> $ERP_BASE_URL in "inc/conf.php" richtig gesetzt??' );
     }
     curl_close( $ch );
     $objResult = json_decode( $result );
-    //if (!is_object($objResult)) anmelden();
     $_arr = get_object_vars($objResult);
     $rs['javascripts']   = '';
     $rs['stylesheets']   = '';
@@ -277,6 +265,13 @@ function makeMenu(){
         $rs['end_content'] .= '</script>'."\n";
         $rs['end_content_ui']   = '</div>'; //End UI-Look
     }
+    /*****************************************
+   *
+   * Bugfix Menue verschwindet aus Session
+   *
+   *
+   *******************************************/
+    if ( $rs['javascripts'] == '' ) delcurrentSess();
     return $rs;
 }
 
@@ -292,7 +287,8 @@ function getCrmUserData(){
 
 function delcurrentSess(){
     $url = $_SERVER['REQUEST_URI'];
-    echo '<script type="text/javascript">window.location.href="'.$_SESSION['baseurl'].'crm/delsess.php?url='.$url.'";</script>';
+    $baseurl = substr($_SESSION['baseurl'], 0, -1);
+    echo '<script type="text/javascript">window.location.href="'.$baseurl.'crm/delsess.php?url='.$url.'";</script>';
     return;
 }
 //echo "connections";

@@ -67,12 +67,36 @@ if( $dbData["dbhost"] ) $dbh = new myPDO( $dbData["dbhost"], $dbData["dbport"], 
 else echo 'No $_SESSION[dbData][dbhost]';
 
 //Menu und Javascript-Sachen in Session speichern
-if( $newSession ) $_SESSION["menu"]  = makeMenu();//warum geht das menu verloren?? warum MUSS "OR !varExist( $_SESSION, 'menu'" )
-//$_SESSION["menu"]  = makeMenu();
+if( $newSession ) {
+    // global - ERP users, groups in kivi.myconfig laden
+    $users_groups = [
+            "erp_all_users" => getAllERPusers(),
+            "erp_all_groups" => getAllERPgroups()
+        ];
+    $myglobal = $users_groups;
+    $myglobal['baseurl'] = substr($_SESSION['baseurl'], 0, -1);
+    $myglobalJson = json_encode($myglobal, JSON_UNESCAPED_UNICODE);
+    $id = $_SESSION['userConfig']['id'];
+    $sql  = "select * from auth.user_config where user_id = '".$id."' and cfg_key = 'global_conf'";
+    $rs   = $GLOBALS['dbh_auth']->getAll( $sql );
+    if(empty($rs)) {
+        $sql = "insert into auth.user_config (user_id,cfg_key,cfg_value) values ('".$id."','global_conf','".$myglobalJson."')";
+        $rs = $GLOBALS['dbh_auth']->query ( $sql );
+    }
+    else {
+        $sql="update auth.user_config set cfg_value = '".$myglobalJson."' where user_id = '".$id."' and cfg_key = 'global_conf'";
+        $rs=$GLOBALS['dbh_auth']->query ( $sql );
+    }
+    $_SESSION["menu"]  = makeMenu();//warum geht das menu verloren?? warum MUSS "OR !varExist( $_SESSION, 'menu'" )
+}
 
 //Vorerst Userdaten der CRM in crmUserData speichern !!besser in userConfig speichern
 if( $newSession ) $_SESSION["crmUserData"] = getCrmUserData();//ToDo: deprecated!
 $_SESSION['loginCRM'] =& $_SESSION['crmUserData']['loginCRM'];//ToDO: delete
+
+//ERP Users in die auth.user_config eintragen als JSON
+// Extra Funktion anlegen ?
+
 
 //Die Session-Variable ist nun gefüllt
 $_SESSION['clear'] = FALSE;
@@ -248,7 +272,8 @@ function makeMenu(){
         $rs['end_content']   = $objResult->{'end_content'};
         $rs['end_content']  .= '<script type="text/javascript">';
         $rs['end_content']  .= " \n";
-        $users_groups = [
+        // Kann der Teil raus? da global jetzt in kivi.myconfig steht ?
+        /*$users_groups = [
             "erp_all_users" => getAllERPusers(),
             "erp_all_groups" => getAllERPgroups()
         ];
@@ -256,7 +281,7 @@ function makeMenu(){
         $myglobal['baseurl'] = $_SESSION['baseurl'];//foreach( $elem, ...
         $myglobalJson = json_encode($myglobal, JSON_UNESCAPED_UNICODE);
         $rs['end_content'] .= 'kivi.global = '.$myglobalJson.";";
-
+        */
         //Inline-JS der ERP in den Footer (nach end_content)
         foreach($objResult->{'javascripts_inline'} as $js) {
             $js = preg_replace($suche, $ersetze,$js);
@@ -265,6 +290,7 @@ function makeMenu(){
         $rs['end_content'] .= '</script>'."\n";
         $rs['end_content_ui']   = '</div>'; //End UI-Look
     }
+
     /*****************************************
    *
    * Bugfix Menue verschwindet aus Session

@@ -28,6 +28,10 @@
 *
 */
 
+//var getUrl = window.location;
+//var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+var kivi_global = jQuery.parseJSON( kivi.myconfig.global_conf );
+var baseUrl = kivi_global.baseurl;
 
 function rgb2hex( rgb ){
     rgb = rgb.match( /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/ );
@@ -255,7 +259,7 @@ var delay = (function(){
         //Config note style
         style : {
             tresd           : true,                 //General style in 3d format
-            backgroundcolor : rgb2hex( $('.ui-state-highlight').css('background-color') ), //Background color in new postits when randomColor = false
+            backgroundcolor : '#fbec88',//rgb2hex( $('.ui-state-highlight').css('background-color') ), //Background color in new postits when randomColor = false
             textcolor       : '#0a0e87',            //Text color
             textshadow      : false,                //Shadow in the text
             fontfamily      : 'Open Sans',          //Default font verdana
@@ -2283,7 +2287,7 @@ var delay = (function(){
                     'id': 'idChangeUserId' + index,
                     'style': 'margin-top: 5px;',
                 });
-                $.each( kivi.global.erp_all_users, function( index, value ) {
+                $.each( kivi_global.erp_all_users, function( index, value ) {
                        uString.append( '<option value="' + value.id + '" ' + (kivi.myconfig.id == value.id ? 'selected' : '') + '>' + value.name + '</option>' );
                 });
 

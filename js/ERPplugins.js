@@ -6,13 +6,13 @@ $(document).ready(function() {
             $('body').append("<script type=\'text/javascript\' src='\crm/js/jquery.postitall.js\'><\/script>");
             $('body').append("<script type=\'text/javascript\' src='\crm/js/jquery.postitall.ajax.js\'><\/script>");
         }
-        $('body').append("<script type=\'text/javascript\' src='\crm/js/tools.js\'><\/script>");
-        $('body').append("<script type=\'text/javascript\' src='\crm/jquery-plugins/jquery-calculator/jquery.plugin.js\'><\/script>");
-        $('body').append("<script type=\'text/javascript\' src='\crm/jquery-plugins/jquery-calculator/jquery.calculator.js\'><\/script>");
-        $('body').append("<script type=\'text/javascript\' src='\crm/jquery-plugins/jquery-calculator/jquery.calculator-de.js\'><\/script>");
+        $('body').append("<script type=\'text/javascript\' src=\'crm/js/tools.js\'><\/script>");
+        $('body').append("<script type=\'text/javascript\' src=\'crm/jquery-plugins/jquery-calculator/jquery.plugin.js\'><\/script>");
+        $('body').append("<script type=\'text/javascript\' src=\'crm/jquery-plugins/jquery-calculator/jquery.calculator.js\'><\/script>");
+        $('body').append("<script type=\'text/javascript\' src=\'crm/jquery-plugins/jquery-calculator/jquery.calculator-de.js\'><\/script>");
         $('body').append("<script type=\'text/javascript\' src=\'crm/nodejs/node_modules/trumbowyg/dist/trumbowyg.min.js\'></script>");
-        $('body').append("<script type=\'text/javascript\' src=\'crm/nodejs/node_modules/jquery-minicolors/jquery.minicolors.min.js\'></script>");
-        $('body').append("<script type=\'text/javascript\' src='\crm/jquery-plugins/fancybox/source/jquery.fancybox.pack.js\'><\/script>");
+        $('body').append("<script type=\'text/javascript\' src=\'crm/nodejs/node_modules/jquery-minicolors/jquery.minicolors.min.js'\></script>");
+        $('body').append("<script type=\'text/javascript\' src=\'crm/jquery-plugins/fancybox/source/jquery.fancybox.pack.js\'><\/script>");
         $('body').append("<link rel=\'stylesheet\' type=\'text/css\' href=\'crm/jquery-plugins/fancybox/source/jquery.fancybox.css\'>");
         $('body').append("<link rel=\'stylesheet\' type=\'text/css\' href=\'crm/nodejs/node_modules/postitall/dist/jquery.postitall.css\'>");
         $('body').append("<link rel=\'stylesheet\' type=\'text/css\' href=\'crm/nodejs/node_modules/trumbowyg/dist/ui/trumbowyg.css\'>");

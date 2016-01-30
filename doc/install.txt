@@ -1,4 +1,4 @@
-Kivitendo CRM 2.1.0
+Kivitendo CRM 2.1.1
 
 Installation Kivitendo CRM
 -------------------------
@@ -23,9 +23,7 @@ Voreingestellt ist kivitendo.
 Vorrausetzungen:
     PostgreSQL >= 9.3
     Kivitendo ERP >= 3.3.0
-    PHP >= 4.2x
-    PEAR::MDB2
-    PEAR::MDB2#pgsql
+    PHP >= 5.3
     PEAR::Contact_Vcard_Build
     PEAR::Contact_Vcard_Parse
     PEAR::Mail_Mime oder php-mail-mime
@@ -34,15 +32,14 @@ Vorrausetzungen:
     fpdf,fpdi
     ttf-freefont
     php-gd,php-imap
-        php5-curl
-    node.js
-    socket.io
+    php5-curl
 
 Fast alle Pakete können unter debianoiden Systemen in der Konsole mit folgendem Befehl installiert werden.
-apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-mdb2 php-mdb2-driver-pgsql php-fpdf libfpdi-php imagemagick ttf-freefont php5-curl tinymce libphp-jpgraph nodejs nodejs-legacy npm
+apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-mdb2 php-mdb2-driver-pgsql php-fpdf libfpdi-php imagemagick ttf-freefont php5-curl tinymce libphp-jpgraph
 
-Socket-IO installieren:
-npm install socket.io
+Entwickler benötigen zusätzlich:
+apt-get install nodejs nodejs-legacy npm
+
 
 Die restlichen Pearpaket installieren:
     pear install  Contact_Vcard_Build Contact_Vcard_Parse
@@ -71,6 +68,11 @@ mkdir more
 cd kivitendo-erp/locale/de/more
 ln -s ../../../../kivitendo-crm/menu/t8e/menu.de crm-menu.de
 ln -s ../../../../kivitendo-crm/menu/t8e/menu-admin.de crm-menu-admin.de
+
+Plugins installieren: ToDo mit sed erledigen
+folgenden String
+document.write("<script type='text/javascript' src='crm/js/ERPplugins.js'></script>");
+an die kivitendo-erp/js/kivi.js anhängen
 
 
 Webserver neu starten

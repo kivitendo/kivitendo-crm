@@ -8,7 +8,7 @@ const SERVER_URL = baseUrl + '/crm/jqhelp/postitall.php';
 var getJsonRequest = function(params, callback) {
     iduser = otherid ? otherid : kivi.myconfig.id; //otherid is for share postits
     $.ajax({
-        url: SERVER_URL + "?iduser=" + iduser, // + "&format=json",
+        url: SERVER_URL + "?iduser=" + iduser, //+ "&format=json",
         data: params,
         //cache: true,
         error: function(data) {
@@ -43,6 +43,7 @@ var externalManager = {
         //alert( "add ");
         console.log( obj );
         var varname = 'PostIt_' + parseInt(obj.id, 10);
+        //alert( varname );
         var testPrefs = encodeURIComponent(JSON.stringify(obj));
         //alert( testPrefs );
         var jsonfile = {};

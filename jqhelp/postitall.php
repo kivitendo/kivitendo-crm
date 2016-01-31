@@ -18,13 +18,11 @@ class PostItAll{
             die( "No option" );
         }
         $this->option = $_REQUEST["option"] ;
-        //writeLog( "Option: ".$this->option );
         //Iduser
         $this->iduser = -1;
         if(isset($_REQUEST["iduser"]) && $_REQUEST["iduser"]) {
             $this->iduser = $_REQUEST["iduser"];
         }
-        //writeLog( "IdUser: ".$this->iduser );
         //Key
         $this->key = "";
         if(isset($_REQUEST["key"]) && $_REQUEST["key"]) {
@@ -35,12 +33,10 @@ class PostItAll{
         if(isset($_REQUEST["content"]) && $_REQUEST["content"]) {
             $this->content = $_REQUEST["content"]   ;
         }
-        writeLog("Content: ".$this->content );
     }
 
     //Main method
     public function main(){
-        //writeLog( "main" );
         $error = false;
         $ret = "";
         //Get Request
@@ -48,15 +44,6 @@ class PostItAll{
         header('Content-Type: application/json');
 
         switch( $this->option ){
-            case 'test':
-                if( $this->mysqli != null ){
-                    $ret = "test ok";
-                }
-                else{
-                    $error = true;
-                    $ret = "test ko";
-                }
-                break;
             case 'getlength':
                 $ret = $this->getLength( $this->iduser );
                 break;
@@ -88,7 +75,6 @@ class PostItAll{
 
     protected function getLength( $idUser ){
         $sql = "select count(*) as total from postitall where iduser='" . $idUser . "'";
-        writeLog( "getLength. ".$sql );
         $rs = $GLOBALS['dbh']->getOne( $sql );
         return intval( $rs["total"] );
     }
@@ -112,19 +98,13 @@ class PostItAll{
         if( !$key ) $key = "0";
         $sql = "select idnote from postitall where iduser='" . $idUser . "' limit 1 OFFSET ".$key;
         $array = $GLOBALS['dbh']->getOne( $sql );
-        writeLog( $array );
-        if( $array ){
-            writeLog( $array["idnote"] );
-            return $array["idnote"];
-        }
+        if( $array ) return $array["idnote"];
         return "";
     }
 
     public function getData( $idUser ){
-        //writeLog( "getData" );
         $sql = "select content from postitall where iduser = " . $idUser;
         $rs = $GLOBALS['dbh']->getAll( $sql );
-        writeLog( $rs );
         return $rs["content"];
     }
 
@@ -134,16 +114,12 @@ class PostItAll{
     }
 
     private function insertNote( $idUser, $idNote, $content ){
-        //$content = $GLOBALS['dbh']->quoteString( $content );
         $sql = "insert into postitall (iduser, idnote, content) values ('".$idUser."','".$idNote."','".$content."')";
-        //writeLog( $sql );
         return $GLOBALS['dbh']->query( $sql );
     }
 
     private function updateNote( $idUser, $idNote, $content ){
-        //$content = $GLOBALS['dbh']->quoteString( $content );
         $sql = "update postitall set content='".$content."' where iduser='".$idUser."' and idNote='".$idNote."'";
-        //writeLog($sql );
         return  $GLOBALS['dbh']->query( $sql );
     }
 

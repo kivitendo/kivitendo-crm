@@ -17,7 +17,8 @@ $( document ).ready( function(){
         '<img src="' + baseUrl + 'crm/tools/rechner.png" class="calculator_img" title=".:simple calculator:.">' +
         '<img src="' + baseUrl + 'crm/tools/notiz.png" class="postit_img" title=".:postit notes:." style="margin-left: 20px;">' +
         '<img src="' + baseUrl + 'crm/tools/kalender.png" class="calendar_img" title=".:calendar:." style="margin-left: 20px;">' +
-        '<img src="' + baseUrl + 'crm/tools/leo.png" class="translator_img " title="LEO .:english/german:." style="margin-left: 20px;"></div>'
+        '<img src="' + baseUrl + 'crm/tools/leo.png" class="translator_img " title="LEO .:english/german:." style="margin-left: 20px;">'
+        // + '<button class="test">test</button></div>'
     );
 
     var langpair = 'en|de';
@@ -40,32 +41,20 @@ $( document ).ready( function(){
         }).done( function(){ $( '.result_table' ).css('visibility', 'visible').tablesorter().trigger( 'update' ) });
     });
 
-    //one Note on dblclick
-    var clicks = 0, timer = null;
-    $( '.postit_img' ).on( "click", function( e ){
-        clicks++;
-        if( clicks === 1 ){
-            timer = setTimeout( function(){
-                $.PostItAll.new({
-                    features: {
-                        savable : true
-                    }
-                });
-                clicks = 0;
-            }, 500 );
-        }
-        else{
-            clearTimeout( timer );
+    function postitNew(){
+        $( '.postit_img' ).on( 'click', function(){
             $.PostItAll.new({
                 features: {
                     savable : true
                 }
             });
-            clicks = 0;
-        }
-    }).on("dblclick", function(e){
-        e.preventDefault();  //cancel system double-click event
-    });
+            $('.postit_img').off('click');
+            timer = setTimeout( function(){
+                postitNew();
+            }, 4000 );
+        });
+    }
+    postitNew();
 
     $( ".calculator" ).calculator({
         useThemeRoller: true,

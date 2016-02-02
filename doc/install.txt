@@ -37,7 +37,7 @@ Vorrausetzungen:
 Fast alle Pakete können unter debianoiden Systemen in der Konsole mit folgendem Befehl installiert werden.
 apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-mdb2 php-mdb2-driver-pgsql php-fpdf libfpdi-php imagemagick ttf-freefont php5-curl tinymce libphp-jpgraph
 
-Entwickler benötigen zusätzlich:
+Entwickler benötigen zusätzlich einige Pakete:
 apt-get install nodejs nodejs-legacy npm
 
 
@@ -74,10 +74,14 @@ folgenden String
 document.write("<script type='text/javascript' src='crm/js/ERPplugins.js'></script>");
 an die kivitendo-erp/js/kivi.js anhängen
 
+Webserver-User PostgreSQL hinzufügen:
+(bei nicht-debianoide Systemen www-data durch entsprechenden Webserver-Besitzer ersetzen)
+su postgres -c 'createuser www-data'
+
 
 Webserver neu starten
 z.B. Debian / Ubuntu:
-    /etc/init.d/apache2 restart
+    /etc/init.d/apache2 restart oder service apache2 restart
 
 Administration der ERP aufrufen und die Gruppe Admin hinzufügen.
 Nur ihr zugewiesene Benutzer können die Mandanten-Konfiguration der CRM anpassen.

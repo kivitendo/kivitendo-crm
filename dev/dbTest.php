@@ -1,5 +1,5 @@
 <?php
-require_once "inc/stdLib.php";
+require_once __DIR__.'/../inc/stdLib.php';
 
 
 //printArray( $GLOBALS['dbh']->query( 'DELETE FROM postitall' ) );

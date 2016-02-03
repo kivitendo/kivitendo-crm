@@ -18,7 +18,6 @@ $rc = false;
     printArray( $rs );
 }*/
 
-
 ?>
 <html>
 <head><title>Kivitendo CRM Status</title>
@@ -39,7 +38,7 @@ $rc = false;
 
         var statusDialog = $( '#statusDialog' ).dialog({
             autoOpen: false,
-            position: { my: 'top', at: 'top+180' },
+
             buttons: [{
                 text: "Ok",
                 click: function() {
@@ -52,9 +51,42 @@ $rc = false;
                     disabled: false,
                     label: "testen"
                 });
+                showDbFiles.button( "option", {
+                    disabled: false,
+                    label: "zeigen"
+                });
 
             }
         });
+
+        var showDbFiles = $( '#showDbFiles' ).click( function () {
+            statusDialog.dialog({
+                title: 'Datenbank Sicherungen',
+                position: { },
+                width: '450px',
+            });
+            $( this ).button( "option", {
+                disabled: true,
+                label: "Zeige..."
+            });
+            $.ajax({
+                dataType: "json",
+                url: "ajax/ajaxStatus.php?action=showDbFiles",
+                method: "GET",
+                success : function (data){
+                    var files = '';
+                    $.each( data, function( key ){
+                        files += data[key] + '<br>';
+                    })
+                    $("#statusDialog").html(files)
+                    $("#statusDialog").dialog('open');
+                },
+                error: function() {
+                    $("#statusDialog").html('Sicherungsdateien anzeigen fehlgeschlagen');
+                    $("#statusDialog").dialog('open');
+                }
+            });
+        })
 
         var testDB = $("#testDB").click(function() {
             statusDialog.dialog({
@@ -109,7 +141,6 @@ $rc = false;
             }
         }),
         saveDB = $( "#saveDB" ).on( "click", function() {
-
             $( this ).button( "option", {
                 disabled: true,
                 label: "Sichere..."
@@ -214,7 +245,7 @@ $d->close();
     <tr><td>Updatecheck<a href="update/newdocdir.php?chk=1">:</a></td><td><button onclick="window.location.href='inc/update_neu.php'">durchführen</button></td></tr>
     <tr><td>Installationscheck:</td><td><button onclick="window.location.href='inc/install.php?check=1'">durchführen</button></td></tr>
     <tr><td>Benutzerfreundliche Links:</td><td><button onclick="window.location.href='links.php?all=1'">erzeugen</button></td></tr>
-    <tr><td>Datenbanken:</td><td><button id="saveDB">Sichern</button><button id="showDB">Zeigen</button></td></tr>
+    <tr><td>Datenbanken:</td><td><button id="saveDB">Sichern</button><button id="showDbFiles">Zeigen</button></td></tr>
     <tr><td>Logfiles:</td><td><button id="showErrorLog">Error Log</button><button id="showPgLog">PgSQL Log</button></td></tr>
 
 </tbody>

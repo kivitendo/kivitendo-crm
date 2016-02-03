@@ -7,7 +7,6 @@ function showVersion(){
 }
 
 function saveDBs(){
-    //$error = 0;
     $date = date( 'Y-m-d\TH-i-s' );
     $dbAuthName = $_SESSION['erpConfig']['authentication/database']['db'];
     $dbName     = $_SESSION['dbData']['dbname'];
@@ -15,5 +14,12 @@ function saveDBs(){
     $fileName[$dbName]     = $dbName.'-'.$date.'.sql';
     exec( 'pg_dump '.$dbAuthName.' > '.__DIR__.'/../db_dumps/'.$fileName[$dbAuthName].' && pg_dump '.$dbName.' > '.__DIR__.'/../db_dumps/'.$fileName[$dbName], $output, $error );
     echo !$error ? json_encode( $fileName ) : '';
+}
+
+function showDbFiles(){
+    $fileArray = scandir( __DIR__.'/../db_dumps' );
+    $remove = array( '.', '..', '.gitignore' );
+    foreach( $remove as $remValue ) unset( $fileArray[array_search( $remValue, $fileArray )] );
+    echo json_encode( $fileArray );
 }
 ?>

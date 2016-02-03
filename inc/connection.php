@@ -248,21 +248,18 @@ function makeMenu(){
         //echo "<pre>";
         //print_r($objResult->{'javascripts'});
         //echo "</pre";
-        foreach($objResult->{'javascripts'} as $js) {//<script type="text/javascript" src="http://localhost/kivitendo-dev/crm/jquery/jquery-ui.min.js"></script>
-            //jQuery und UI der ERP benützen
-            //$rs['javascripts'] .= '<script type="text/javascript" src="'.$_SESSION['baseurl'].$js.'"></script>'."\n".'   ';
-            //Da die ERP eine veraltete JUI benützt, aktuelle JUI aus CRM laden
-            //ToDo: JUI aus ERP laden wenn diese >= Version 11.4 wird
-            //Achtung!: JUI wird von der ERP nur geliefert wenn fast alle Module aktiviert sind (Menü)
-            if( strpos( $js, "jquery-ui")  === false ) $rs['javascripts'] .= '<script type="text/javascript" src="'.$_SESSION['baseurl'].$js.'"></script>'."\n".'   ';
-            $rs['javascripts'] .= '<script type="text/javascript" src="'.$_SESSION['baseurl'].'crm/jquery/jquery-ui.min.js"></script>'."\n".'   ';;
-        }
-        foreach($objResult->{'stylesheets'} as $style) {
+        $rs['javascripts'] .= '<script type="text/javascript" src="'.$_SESSION['baseurl'].'crm/nodejs/node_modules/jquery/dist/jquery.min.js"></script>'."\n".'   ';
+        $rs['javascripts'] .= '<script type="text/javascript" src="'.$_SESSION['baseurl'].'crm/jquery/jquery-ui.min.js"></script>'."\n".'   ';
+
+        foreach($objResult->{'javascripts'} as $js)
+            if( strpos( $js, "jquery")  === false ) $rs['javascripts'] .= '<script type="text/javascript" src="'.$_SESSION['baseurl'].$js.'"></script>'."\n".'   ';
+
+        foreach($objResult->{'stylesheets'} as $style)
             if ($style) $rs['stylesheets'] .= '<link rel="stylesheet" href="'.$_SESSION['baseurl'].$style.'" type="text/css">'."\n".'   ';
-        }
-        foreach($objResult->{'stylesheets_inline'} as $style) {
+
+        foreach($objResult->{'stylesheets_inline'} as $style)
             if ($style) $rs['stylesheets'] .= '<link rel="stylesheet" href="'.$_SESSION['baseurl'].$style.'" type="text/css">'."\n".'   ';
-        }
+
         $suche = '^([/a-zA-Z_0-9]+)\.(pl|php|phtml)^';
         $ersetze = $_SESSION['baseurl'].'${1}.${2}';
         $tmp = preg_replace($suche, $ersetze, $objResult->{'pre_content'} );

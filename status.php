@@ -36,36 +36,33 @@ $rc = false;
     }
     $(document).ready(function() {
         $( 'button' ).button().css({ 'width': '130px', 'padding-left': '5px' });
-        /*$( '#saveDB' ).click(function() {
-            $( '#statusDialog' ).dialog({
-                title: 'Datenbank sichern'
-            });
-            $("#statusDialog").html('sichern erfolgt, <br> bitte warten');
-            $("#statusDialog").dialog('open');
-            $.ajax({
-                dataType: "json",
-                url: "ajax/ajaxStatus.php?action=saveDBs",
-                method: "GET",
-                success : function (data){
-                    $("#statusDialog").html(data);
-                    $("#statusDialog").dialog('open');
-                },
-                error: function() {
-                    $("#statusDialog").html('Datenbank sichern fehlgeschlagen');
-                    $("#statusDialog").dialog('open');
-                }
-            });
-        });;*/
-        //$( '#showDB' ).button();
-        //$( '#showErrorLog' ).button();
-        //$( '#showPgLog' ).button();
-        $( '#statusDialog' ).dialog({
-            autoOpen: false,
 
+        var statusDialog = $( '#statusDialog' ).dialog({
+            autoOpen: false,
+            position: { my: 'top', at: 'top+180' },
+            buttons: [{
+                text: "Ok",
+                click: function() {
+                    $( this ).dialog( "close" );
+
+                }
+            }],
+            close: function () {
+                testDB.button( "option", {
+                    disabled: false,
+                    label: "testen"
+                });
+
+            }
         });
-        $("#testDB").click(function() {
-            $( '#statusDialog' ).dialog({
+
+        var testDB = $("#testDB").click(function() {
+            statusDialog.dialog({
                 title: 'Datenbank Test'
+            });
+            $( this ).button( "option", {
+                disabled: true,
+                label: "Teste..."
             });
             $.ajax({
                 dataType: "json",
@@ -176,9 +173,6 @@ $rc = false;
     text-shadow: 1px 1px 0 #fff;
   }
 
-  .ui-dialog-titlebar-close {
-    display: none;
-  }
   </style>
 </head>
 <body>

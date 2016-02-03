@@ -36,7 +36,7 @@ $rc = false;
     }
     $(document).ready(function() {
         $( 'button' ).button().css({ 'width': '130px', 'padding-left': '5px' });
-        $( '#saveDB' ).click(function() {
+        /*$( '#saveDB' ).click(function() {
             $( '#statusDialog' ).dialog({
                 title: 'Datenbank sichern'
             });
@@ -55,7 +55,7 @@ $rc = false;
                     $("#statusDialog").dialog('open');
                 }
             });
-        });;
+        });;*/
         //$( '#showDB' ).button();
         //$( '#showErrorLog' ).button();
         //$( '#showPgLog' ).button();
@@ -82,9 +82,104 @@ $rc = false;
             });
         });
         $("#info").tablesorter();
+
+        var
+        progressTimer,
+        progressbar = $( "#progressbar" ),
+        progressLabel = $( ".progress-label" ),
+        dialogButtons = [{
+                text: "abrechen",
+                click: closeDownload
+        }],
+        dialog = $( "#dialog" ).dialog({
+            width: '550px',
+            position: { my: 'top', at: 'top+250' },
+            data: 'Datenbank sichern fehlgeschlagen',
+            autoOpen: false,
+            closeOnEscape: false,
+            resizable: false,
+            buttons: dialogButtons,
+            title:  'Datenbanken sichern',
+            open: function() {
+                progressLabel.text('Starte Sicherung...');
+                progressTimer = setTimeout( progress, 1000 );
+            },
+            beforeClose: function() {
+                saveDB.button( "option", {
+                    disabled: false,
+                    label: "Sichern"
+                });
+            }
+        }),
+        saveDB = $( "#saveDB" ).on( "click", function() {
+
+            $( this ).button( "option", {
+                disabled: true,
+                label: "Sichere..."
+            });
+            dialog.dialog( "open" );
+             $.ajax({
+                dataType: "json",
+                url: "ajax/ajaxStatus.php?action=saveDBs",
+                method: "GET",
+                success : function (data){
+                    dialog.data = '';
+                    i = 0;
+                    $.each( data , function( key, value ){
+                        dialog.data += 'DB ' + key + ' in "' + value + ( i++ ? '' : ', ') + '<br>';
+                    })
+                    dialog.data += 'gesichert';
+                },
+                error: function() {
+                    dialog.data = 'Ajax Fehler! Datenbank sichern fehlgeschlagen!';
+                }
+            });
+
+        });
+        progressbar.progressbar({
+            value: false,
+            change: function() {
+                progressLabel.text( "Status: " + progressbar.progressbar( "value" ) + "%" );
+            },
+            complete: function() {
+                progressLabel.html( dialog.data );
+                dialog.dialog( "option", "buttons", [{
+                    text: "Schließen",
+                    click: closeDownload
+                }]);
+                $(".ui-dialog button").last().focus();
+            }
+        });
+
+        function progress() {
+            var val = progressbar.progressbar( "value" ) || 0;
+            progressbar.progressbar( "value", val + 2 );
+            if ( val <= 99 ) progressTimer = setTimeout( progress, 70 );
+        }
+
+        function closeDownload() {
+            clearTimeout( progressTimer );
+            dialog.dialog( "option", "buttons", dialogButtons ).dialog( "close" );
+            progressbar.progressbar( "value", false );
+            progressLabel.text( "Starte Sicherung..." );
+            saveDB.focus();
+        }
     });
 </script>
+<style>
+  #progressbar {
+    margin-top: 20px;
+  }
 
+  .progress-label {
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #fff;
+  }
+
+  .ui-dialog-titlebar-close {
+    display: none;
+  }
+  </style>
 </head>
 <body>
 <?php
@@ -105,7 +200,6 @@ while (false !== ($entry = $d->read())) {
 }
 $d->close();
 
-printArray( $_SESSION['dbData']['dbname'    ]);
 //if ($prog) { echo "<a href='log/instprog.log'>Programminstallation</a><br>"; } else { echo "Kein Logfile f&uuml;r Programminstallation<br>"; }
 //if ($db) { echo "<a href='log/install.log'>Datenbankinstallation</a><br>"; } else { echo "Kein Logfile f&uuml;r Datenbankinstallation<br>"; }
 ?>
@@ -131,7 +225,10 @@ printArray( $_SESSION['dbData']['dbname'    ]);
 
 </tbody>
 </table>
-<div id="statusDialog">
+<div id="statusDialog"></div>
+<div id="dialog">
+  <div class="progress-label"></div>
+  <div id="progressbar"></div>
 </div>
 
 <?php

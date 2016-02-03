@@ -12,6 +12,7 @@ function saveDBs(){
     $dbName     = $_SESSION['dbData']['dbname'];
     $fileName[$dbAuthName] = $dbAuthName.'-'.$date.'.sql';
     $fileName[$dbName]     = $dbName.'-'.$date.'.sql';
+    exec( "ls -t ".__DIR__."/../db_dumps/*  | sed '1,12d' | xargs rm -r" );
     exec( 'pg_dump '.$dbAuthName.' > '.__DIR__.'/../db_dumps/'.$fileName[$dbAuthName].' && pg_dump '.$dbName.' > '.__DIR__.'/../db_dumps/'.$fileName[$dbName], $output, $error );
     echo !$error ? json_encode( $fileName ) : '';
 }

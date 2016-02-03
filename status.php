@@ -154,7 +154,7 @@ $rc = false;
                     dialog.data = '';
                     i = 0;
                     $.each( data , function( key, value ){
-                        dialog.data += 'DB ' + key + ' in "' + value + ( i++ ? '' : ', ') + '<br>';
+                        dialog.data += 'DB <em>' + key + '</em> in "' + value + ( i++ ? '' : ', ') + '<br>';
                     })
                     dialog.data += 'gesichert';
                 },

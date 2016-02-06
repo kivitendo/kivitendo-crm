@@ -23,4 +23,11 @@ function showDbFiles(){
     foreach( $remove as $remValue ) unset( $fileArray[array_search( $remValue, $fileArray )] );
     echo json_encode( $fileArray );
 }
+
+function updateDB(){
+    require_once __DIR__.'/../inc/version.php';
+     require_once __DIR__.'/../inc/connections.php';
+    $rs = $GLOBALS['dbh']->getAll( "select * from crm order by  version DESC, datum DESC" );
+    echo json_encode( array('test', ( int )str_replace( '.', '', $VERSION ), $rs['version'] ) );
+}
 ?>

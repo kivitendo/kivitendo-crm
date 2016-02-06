@@ -813,5 +813,15 @@ function ts2gerdate( $myts ){//Timestamp to German Date   Gibt es da nichts fert
     $min  = date("i",$myts);
     return $wd.", ".$day.". ".$m." ".$year." ".$hour.":".$min;
 }
+
+require_once __DIR__.'/connection.php';
+function isDBupToDate(){ //*** Prüft ob die Datenbank aktualisiert werden muss 
+    require_once __DIR__.'/version.php';
+    $rs = $GLOBALS['dbh']->getOne( "select * from crm order by  version DESC, datum DESC" );
+    //$rs = $GLOBALS['db']->getAll( "select * from crm order by  version DESC, datum DESC" );
+    //$crmVersionDB     = (int)str_replace( '.', '', $rs['version'] );printArray( 'DB: '.$crmVersionDB );
+    $crmVersionConfig = (int)str_replace( '.', '', $VERSION );printArray( 'Config: '.$crmVersionConfig );
+    return $crmVersionConfig > $crmVersionDB; 
+}
 //printArray($_SESSION);
 ?>

@@ -55,6 +55,11 @@ $rc = false;
                     disabled: false,
                     label: "zeigen"
                 });
+                updateDB.button( "option", {
+                    disabled: false,
+                    label: "durchführen"
+                });
+                
 
             }
         });
@@ -83,6 +88,35 @@ $rc = false;
                 },
                 error: function() {
                     $("#statusDialog").html('Sicherungsdateien anzeigen fehlgeschlagen');
+                    $("#statusDialog").dialog('open');
+                }
+            });
+        })
+        
+        var updateDB = $( '#updateDB' ).click( function () {
+            statusDialog.dialog({
+                title: 'Datenbank Update',
+                position: { },
+                width: '450px',
+            });
+            $( this ).button( "option", {
+                disabled: true,
+                label: "Update..."
+            });
+            $.ajax({
+                dataType: "json",
+                url: "ajax/ajaxStatus.php?action=updateDB",
+                method: "GET",
+                success : function (data){
+                    var files = '';
+                    $.each( data, function( key ){
+                        files += data[key] + '<br>';
+                    })
+                    $("#statusDialog").html(files)
+                    $("#statusDialog").dialog('open');
+                },
+                error: function() {
+                    $("#statusDialog").html('Datenbank Update fehlgeschlagen');
                     $("#statusDialog").dialog('open');
                 }
             });
@@ -223,26 +257,26 @@ while (false !== ($entry = $d->read())) {
     if (preg_match('/instprog.log/',$entry)) $prog=true;
     if (preg_match('/install.log/',$entry)) $db=true;
 }
-$d->close();
-
+$d->close();    
+//echo getAllArtikel();
 //if ($prog) { echo "<a href='log/instprog.log'>Programminstallation</a><br>"; } else { echo "Kein Logfile f&uuml;r Programminstallation<br>"; }
 //if ($db) { echo "<a href='log/install.log'>Datenbankinstallation</a><br>"; } else { echo "Kein Logfile f&uuml;r Datenbankinstallation<br>"; }
 ?>
 <table id="info" class="tablesorter" style="width:auto; font-size:1pt">
     <thead></thead>
     <tbody>
-    <tr><td>ProgrammVersion</td><td><?php echo  $VERSION." ".$SUBVER ?></td></tr>
-<?php echo $commit; ?>
-    <tr><td>Auth-Datenbank:</td><td> <?php echo  varExist( $_SESSION['erpConfig']['authentication/database']['db'] )?></td></tr>
-    <tr><td>Datenbank:</td><td> <?php echo  varExist( $_SESSION['dbData']['dbname'] )?></td></tr>
-    <tr><td>db-Server:</td><td><?php echo  varExist( $_SESSION['dbData']['dbhost'] )?></td></tr>
-    <tr><td>Mandant:</td><td><?php echo  varExist( $_SESSION['dbData']['mandant'] )?>:<?php echo  $_SESSION['dbData']['manid']?></td></tr>
-    <tr><td>Benutzer:</td><td><?php echo  varExist( $_SESSION['userConfig']['name'] ).':'.varExist( $_SESSION['userConfig']['id'] )?></td></tr>
+    <tr><td>CRM Version</td><td><?php echo  VERSION." ".SUBVER.' up-to-date:'/*.isDBupToDate();*/?></td></tr>
+    <?php echo $commit; ?>
+    <tr><td>Auth-Datenbank:</td><td> <?php echo $_SESSION['erpConfig']['authentication/database']['db']?></td></tr>
+    <tr><td>Datenbank:</td><td> <?php echo $_SESSION['dbData']['dbname']?></td></tr>
+    <tr><td>db-Server:</td><td><?php echo $_SESSION['dbData']['dbhost']?></td></tr>
+    <tr><td>Mandant:</td><td><?php echo $_SESSION['dbData']['mandant']?>:<?php echo  $_SESSION['dbData']['manid']?></td></tr>
+    <tr><td>Benutzer:</td><td><?php echo $_SESSION['userConfig']['name'].':'.$_SESSION['userConfig']['id']?></td></tr>
     <tr><td>Session-ID:</td><td><?php echo  session_id() ?></td></tr>
     <tr><td>PHP-Umgebung:</td><td><button onclick="window.location.href='info.php'">anzeigen</button></td></tr>
     <tr><td>Session:</td><td><button onclick="window.location.href='showsess.php'">anzeigen</button><button onclick="window.location.href='delsess.php'">löschen</button></td></tr>
     <tr><td>db-Zugriff:</td><td><button id="testDB">testen</button></td></tr>
-    <tr><td>Updatecheck<a href="update/newdocdir.php?chk=1">:</a></td><td><button onclick="window.location.href='inc/update_neu.php'">durchführen</button></td></tr>
+    <tr><td>Updatecheck</td><td><button id="updateDB">durchführen</button></td></tr>
     <tr><td>Installationscheck:</td><td><button onclick="window.location.href='inc/install.php?check=1'">durchführen</button></td></tr>
     <tr><td>Benutzerfreundliche Links:</td><td><button onclick="window.location.href='links.php?all=1'">erzeugen</button></td></tr>
     <tr><td>Datenbanken:</td><td><button id="saveDB">Sichern</button><button id="showDbFiles">Zeigen</button></td></tr>

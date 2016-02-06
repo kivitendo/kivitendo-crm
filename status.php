@@ -92,7 +92,7 @@ $rc = false;
                 }
             });
         })
-        
+
         var updateDB = $( '#updateDB' ).click( function () {
             statusDialog.dialog({
                 title: 'Datenbank Update',
@@ -193,7 +193,7 @@ $rc = false;
                     dialog.data += 'gesichert';
                 },
                 error: function() {
-                    dialog.data = 'Ajax Fehler! Datenbank sichern fehlgeschlagen!';
+                    dialog.data = 'Datenbank sichern fehlgeschlagen! Rechte prüfen! doc/install.txt lesen';
                 }
             });
 
@@ -244,6 +244,7 @@ $rc = false;
 <?php
  echo $menu['pre_content'];
  echo $menu['start_content'];
+// printArray( $_SESSION['userConfig']);
 ?>
 <div class="ui-widget-content" style="height:600px">
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Status</p>
@@ -257,21 +258,21 @@ while (false !== ($entry = $d->read())) {
     if (preg_match('/instprog.log/',$entry)) $prog=true;
     if (preg_match('/install.log/',$entry)) $db=true;
 }
-$d->close();    
-//echo getAllArtikel();
+$d->close();
+echo needUpdate();
 //if ($prog) { echo "<a href='log/instprog.log'>Programminstallation</a><br>"; } else { echo "Kein Logfile f&uuml;r Programminstallation<br>"; }
 //if ($db) { echo "<a href='log/install.log'>Datenbankinstallation</a><br>"; } else { echo "Kein Logfile f&uuml;r Datenbankinstallation<br>"; }
 ?>
 <table id="info" class="tablesorter" style="width:auto; font-size:1pt">
     <thead></thead>
     <tbody>
-    <tr><td>CRM Version</td><td><?php echo  VERSION." ".SUBVER.' up-to-date:'/*.isDBupToDate();*/?></td></tr>
+    <tr><td>CRM Version</td><td><?php echo  VERSION." ".SUBVER  ?></td></tr>
     <?php echo $commit; ?>
     <tr><td>Auth-Datenbank:</td><td> <?php echo $_SESSION['erpConfig']['authentication/database']['db']?></td></tr>
     <tr><td>Datenbank:</td><td> <?php echo $_SESSION['dbData']['dbname']?></td></tr>
     <tr><td>db-Server:</td><td><?php echo $_SESSION['dbData']['dbhost']?></td></tr>
     <tr><td>Mandant:</td><td><?php echo $_SESSION['dbData']['mandant']?>:<?php echo  $_SESSION['dbData']['manid']?></td></tr>
-    <tr><td>Benutzer:</td><td><?php echo $_SESSION['userConfig']['name'].':'.$_SESSION['userConfig']['id']?></td></tr>
+    <tr><td>Benutzer:</td><td><?php echo $_SESSION['userConfig']['login'].':'.$_SESSION['userConfig']['id']?></td></tr>
     <tr><td>Session-ID:</td><td><?php echo  session_id() ?></td></tr>
     <tr><td>PHP-Umgebung:</td><td><button onclick="window.location.href='info.php'">anzeigen</button></td></tr>
     <tr><td>Session:</td><td><button onclick="window.location.href='showsess.php'">anzeigen</button><button onclick="window.location.href='delsess.php'">löschen</button></td></tr>

@@ -63,9 +63,10 @@ $_SESSION['mandant'] =& $_SESSION['dbData']['mandant'];//ToDO: delete
 
 //Db-handle erzeugen
 $dbData =& $_SESSION['dbData'];
-if( $dbData["dbhost"] ) $dbh = new myPDO( $dbData["dbhost"], $dbData["dbport"], $dbData["dbname"], $dbData["dbuser"], $dbData["dbpasswd"], $_SESSION["sessid"] );
+if( $dbData["dbhost"] )
+$dbh = new myPDO( $dbData["dbhost"], $dbData["dbport"], $dbData["dbname"], $dbData["dbuser"], $dbData["dbpasswd"], $_SESSION["sessid"] );
 else echo 'No $_SESSION[dbData][dbhost]';
-$db = &$dbh; //Open Konto kompatibel bleiben
+//$db = &$dbh; //Open Konto kompatibel bleiben  wo wird $db zerstört?????
 
 //Menu und Javascript-Sachen in Session speichern
 if( $newSession ) {

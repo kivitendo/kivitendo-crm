@@ -7,8 +7,16 @@ require_once __DIR__.'/../inc/stdLib.php';
 //printArray( $GLOBALS['dbh']->getAll( "SELECT *  FROM postitall ORDER BY iduser, split_part(idnote, '_', 2)::int " ) );
 //printArray( $GLOBALS['dbh']->getAll( "SELECT * FROM version " ) );
 //printArray( $GLOBALS['dbh']->getAll( "select count(*) as total from postitall where iduser='1'" ) );
-$rs = $GLOBALS['dbh']->getOne( "select * from crm order by  version DESC, datum DESC" );
-printArray( $rs );
+
+$rs = $GLOBALS['dbh']->getAll( "select * FROM schema_info" );
+foreach( $rs as $key => $value ){
+    //printArray( $key );
+    //printArray( $value['tag'] );
+    $test[$key] = $value['tag'];
+    //printArray( $test );
+    //$value['tag' );
+}
+printArray( $test );
 
 
 //printArray( $dbh_auth->getAll( 'select * from auth.user_config' ) );

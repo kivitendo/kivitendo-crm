@@ -294,7 +294,7 @@
              <hr width="100%">
                 &nbsp;<!--input type='submit' value='VCard' onClick="vcard()" -->
                 <b>.:Contacts:.:</b>
-                <input type='submit' value='{Edit}' onClick="cedit(1)" >
+                <input type='submit' value='{Edit}' style="visibility:{none}" onClick="cedit(1)" >
                 <input type='submit' value='.:keyin:.' onClick="cedit(0)" >
                 <input type='submit' value='.:fromList:.' onClick="sellist()">
             <hr>

@@ -2525,7 +2525,7 @@ function getWContent($id) {
 
     $rechte = berechtigung();
     $sql="select O.*,A.name,E.login from wissencontent O left join wissencategorie A on A.id=O.categorie ";
-    $sql.="left join employee E on O.employee=E.id where categorie = $id and $rechte order by initdate desc limit 1";
+    $sql.="left join employee E on O.employee=E.id where categorie = $id order by initdate desc limit 1";
     //$sql.="left join employee E on O.employee=E.id where categorie = $id order by initdate desc limit 1";
     $rs = $GLOBALS['dbh']->getOne($sql);
     if ( $rs ) {
@@ -2543,7 +2543,7 @@ function getWContent($id) {
 *****************************************************/
 function insWContent($data) {
 
-    $kat = $data['kat'];
+  /*  $kat = $data['kat'];
     $own = ($data['owener'] > 0)?$data['owener']:'';
     $vers = "(SELECT max(version) FROM wissencontent WHERE categorie = $kat)+1";
     $prep = "INSERT INTO wissencontent (initdate, content, employee, version, categorie, owener) VALUES (now(), ?, ?, $vers, ?, ?)";
@@ -2551,6 +2551,15 @@ function insWContent($data) {
                       array('content','employee','categorie','owener'),
                       array(trim($data['content']),$_SESSION["loginCRM"],$kat,$own),
                       $prep);
+    return $rc;*/
+    $kat = $data['kat'];
+    $own = ($data['owener'] > 0)?$data['owener']:0;
+    $vers = "SELECT max(version) FROM wissencontent WHERE categorie = $kat";
+    $rv = $GLOBALS['dbh']->getOne($vers);
+    $versi = $rv['max']+1;
+    $rc = $GLOBALS['dbh']->insert('wissencontent',
+                      array('content','initdate','employee','version','categorie','owener'),
+                      array(trim($data['content']),'now()',$_SESSION["loginCRM"],$versi,$kat,$own));
     return $rc;
 }
 

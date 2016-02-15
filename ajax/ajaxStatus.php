@@ -31,12 +31,11 @@ function updateDB(){
         return;
     }
     //Datenbanken sichern
-    //saveDBs( $output = FALSE );
-    //Alle Dateien in db_update in einen Array laden
+    saveDBs( $output = FALSE ); //ToDo: uncomment
+    //Alle Dateien in ./db_update in einen Array laden
     $fileNameArray = scandir( __DIR__.'/../db_update' );
     $remove = preg_grep("/^\.{1,2}|.{1,}~|.{1,}#|\.gitignore$/", $fileNameArray);
-    //$remove = array( '.', '..', '~' );
-    foreach( $remove as $remValue ) unset( $fileNameArray[array_search( $remValue, $fileNameArray )] );
+    foreach( $remove as $remValue ) unset( $fileNameArray[array_search( $remValue, $fileNameArray )] ); //Sicherheitskopien enfernen
     //Inhalt der Dateien in Array laden
     $dbSchema = $GLOBALS['dbh']->getAll( "select * FROM schema_info" );
     foreach( $dbSchema as $key => $value ) $dbSchemaTags[$key] = $value['tag'];//alle Tags in einem flachen Array
@@ -46,22 +45,19 @@ function updateDB(){
         foreach( $update[$fileName] as $line ){
             if( $tag =  trim( varExist( explode( '@tag:', $line ), 1 ) ) ){ //Tags extraieren
                 $nTag++;
-                if( in_array( 'crm_'.$tag, $dbSchemaTags ) ) unset( $fileNameArray[$key] );
+                if( in_array( 'crm_'.$tag, $dbSchemaTags ) ) unset( $fileNameArray[$key] ); //schon vorhandene Tags löschen
             }
             if( $fileVersion = trim( varExist( explode( '@version:', $line ),1 ) ) ){ //Version extraieren
                 $nVersion++;
                 $currentVersion = (int)str_replace( '.', '', $fileVersion );
                 if( $lastVersion == $currentVersion ){
-                    echo json_encode( array('Versionsnummer doppelt in  file: '.$fileName.' !') );
+                    echo json_encode( array('Doppelte Versionsnummer in  file: '.$fileName.' !') );
                     return;
                 }
-
-                if( $currentVersion  <= (int)str_replace( '.', '', VERSION ) ) $fileNameArray[$currentVersion] = $fileNameArray[$key];//kein Update wenn fileversion > VERSION
+                if( $currentVersion  <= (int)str_replace( '.', '', VERSION ) && $fileNameArray[$key] ) $fileNameArray[$currentVersion] = $fileNameArray[$key];//kein Update wenn fileversion > VERSION
                 unset( $fileNameArray[$key] );
-
             }
             $lastVersion = $currentVersion;
-
         }
         if( $nTag != 1 || $nVersion > 1 ){
             echo json_encode( array('Error in file: '.$fileName.' !') );
@@ -89,33 +85,33 @@ function updateDB(){
                 if( !$execPhp ){ //SQL-Code
                     $sql .= $line;
                     if( strpos( $line, ';' ) !== FALSE ){
-                        $sql = preg_replace( $comment_patterns, "", $sql );//Kommentare löschen
-                        writeLog( 'exec'.$GLOBALS['dbh']->exec( $sql ));
-                        writeLog( 'exec-SQL: '.$sql );
+                        $sql = preg_replace( $comment_patterns, "", $sql );
+                        if( $GLOBALS['dbh']->exec( $sql ) === FALSE ){
+                            echo json_encode( array( 'SQL-Error in '.$fileName.'<br> SQL-Code: '.$sql ) );
+                            return;
+                        }
+                        //writeLog( 'exec-SQL: '.$sql );
                         $sql = '';
                     }
                 }
-                else{ //Php-Code
-                    $code .= $line;
-                }
-
-
+                else $code .= $line; //Php-Code
             }
             else $execPhp = TRUE;
-
         }
         //Tag in Schema_info inserten
+        $GLOBALS['dbh']->exec( "INSERT INTO schema_info ( tag, login ) VALUES ( 'crm_".$tag."', '".$_SESSION['userConfig']['login']."')" );
+        //Versionsnummer der CRM setzen
+        $GLOBALS['dbh']->exec( "INSERT INTO  crm ( uid, datum, version ) VALUES ( ".$_SESSION['userConfig']['id'].", now(), '".$ver."' )" );
         $GLOBALS['dbh']->commit();
         if( $code ){ //ist Php-Code vorhanden
-
             $code = preg_replace( $comment_patterns, "", $code ); // -- exec * entfernen
-            writeLog( 'Codeyyy: '.$code );
+            //writeLog( 'Php-Code: '.$code );
             if( eval( $code ) === FALSE ){
                 echo json_encode( array( 'Php-Error in '.$fileName.' code: '.$code ) );
                 return;
             }
         }
     }
-    echo json_encode( $fileNameArray );
+    echo json_encode( count( $fileNameArray ) ? $fileNameArray : array( 'Database is up to date!' ) );
 }
 ?>

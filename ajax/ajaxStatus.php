@@ -41,22 +41,23 @@ function updateDB(){
     $dbSchema = $GLOBALS['dbh']->getAll( "select * FROM schema_info" );
     foreach( $dbSchema as $key => $value ) $dbSchemaTags[$key] = $value['tag'];//alle Tags in einem flachen Array
     foreach( $fileNameArray as $key => $fileName ){
-        $nTag = $nVersion = $lastVersion = 0;//Anzahl von  @tag
-        $update[$fileName] = file( __DIR__.'/../db_update/'.$fileName );//Array mit Lines in update[fileName] laden
+        $nTag = $nVersion = $lastVersion = $currentVersion = 0;
+        $update[$fileName] = file( __DIR__.'/../db_update/'.$fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );//Array mit Lines in update[fileName] laden
         foreach( $update[$fileName] as $line ){
-
-            if( $tag = trim( explode( '@tag:', $line )[1] ) ){ //Tags extraieren
+            if( $tag =  trim( varExist( explode( '@tag:', $line ), 1 ) ) ){ //Tags extraieren
                 $nTag++;
                 if( in_array( 'crm_'.$tag, $dbSchemaTags ) ) unset( $fileNameArray[$key] );
             }
-            if( $fileVersion = trim( explode( '@version:', $line )[1] ) ){ //Version extraieren
+            if( $fileVersion = trim( varExist( explode( '@version:', $line ),1 ) ) ){ //Version extraieren
                 $nVersion++;
                 $currentVersion = (int)str_replace( '.', '', $fileVersion );
                 if( $lastVersion == $currentVersion ){
                     echo json_encode( array('Versionsnummer doppelt in  file: '.$fileName.' !') );
                     return;
                 }
-                if( $currentVersion  > (int)str_replace( '.', '', VERSION ) ) unset( $fileNameArray[$key] );//kein Update wenn fileversion > VERSION
+
+                if( $currentVersion  <= (int)str_replace( '.', '', VERSION ) ) $fileNameArray[$currentVersion] = $fileNameArray[$key];//kein Update wenn fileversion > VERSION
+                unset( $fileNameArray[$key] );
 
             }
             $lastVersion = $currentVersion;
@@ -67,9 +68,52 @@ function updateDB(){
             return;
         }
     }
-    //in $fileNameArray stehen nun die
-    //foreach( $fileNameArray as $key => $fileName ){ //Dateien die zum Db-Update benutzt werden
-    //    $update[$fileName] = file( __DIR__.'/../db_update/'.$fileName );//Array mit Lines in update[fileName] laden
+    ksort( $fileNameArray ); //nach Version sortieren
+    //in $fileNameArray stehen nun, die Dateien die zum Update benötigt werden, sortiert
+    $comment_patterns = array(
+        '/\/\*.*(\n)*.*(\*\/)?/', //C comments
+        '/\s*--.*\n/',            //inline comments start with --
+        '/\s*#.*\n/',             //inline comments start with #
+    );
+    foreach( $fileNameArray as $key => $fileName ){ //Dateien die zum Db-Update benutzt werden
+        $update[$fileName] = file( __DIR__.'/../db_update/'.$fileName,  FILE_SKIP_EMPTY_LINES  );//Array mit Lines in update[fileName] laden
+        $tag = $des = $ver = 0;
+        $execPhp = FALSE;
+        $sql = $code = '';
+        $GLOBALS['dbh']->begin();
+        foreach( $update[$fileName] as $key => $line ){
+            if( !$tag ) $tag = trim( varExist( explode( '@tag:', $line ), 1 ) );
+            if( !$des ) $des = trim( varExist( explode( '@description:', $line ), 1 ) );
+            if( !$ver ) $ver = trim( varExist( explode( '@version:', $line ), 1 ) );
+            if( strpos( $line, '@php:' ) === FALSE  ){ //vor und nach Zeile @php
+                if( !$execPhp ){ //SQL-Code
+                    $sql .= $line;
+                    if( strpos( $line, ';' ) !== FALSE ){
+                        $sql = preg_replace( $comment_patterns, "", $sql );//Kommentare löschen
+                        $GLOBALS['dbh']->exec( $sql );
+                        writeLog( $sql );
+                        $sql = '';
+                    }
+                }
+                else{ //Php-Code
+                    $code .= $line;
+                }
+
+
+            }
+            else{ //wir sind in der Zeile mir @php
+                //hier muss tag und desc noch in schema_info eingefügt werden
+                $GLOBALS['dbh']->commit();
+                $execPhp = TRUE;
+           }
+        }
+        if( $code ){ //ist Php-Code vorhanden
+            if( eval( $code ) === FALSE ){
+                echo json_encode( array( 'Php-Error in'.$fileName ) );
+                return;
+            }
+        }
+    }
     echo json_encode( $fileNameArray );
 }
 ?>

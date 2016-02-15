@@ -110,6 +110,11 @@ class myPDO extends PDO{
             return $result;
     }
 
+    public function exec( $sql ){
+        if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$sql );
+        $result = parent::exec( $sql );
+        return $result;
+    }
     public function commit(){
         $result = parent::commit();
         if( $this->logAll ) $this->writeLog( "PDO::commit() returns: ".$result );

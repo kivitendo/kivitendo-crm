@@ -8,15 +8,45 @@ require_once __DIR__.'/../inc/stdLib.php';
 //printArray( $GLOBALS['dbh']->getAll( "SELECT * FROM version " ) );
 //printArray( $GLOBALS['dbh']->getAll( "select count(*) as total from postitall where iduser='1'" ) );
 
-$rs = $GLOBALS['dbh']->getAll( "select * FROM schema_info" );
-foreach( $rs as $key => $value ){
+
+$GLOBALS['dbh']->begin();
+$sql = "CREATE TABLE test(
+    id      serial NOT NULL PRIMARY KEY,
+    label   text,
+    color      char(7)
+);";
+
+//printArray( $GLOBALS['dbh']->exec( $sql ) );
+
+$sql = "
+INSERT INTO test ( label, color ) VALUES ( 'test_label', 'rot' );
+
+";
+
+
+
+
+
+
+printArray( $GLOBALS['dbh']->exec( $sql ) );
+
+$sql = "
+INSERT INTO test ( label, color ) VALUES ( 'test_label1', 'blue' );
+
+";
+printArray( $GLOBALS['dbh']->exec( $sql ) );
+$GLOBALS['dbh']->commit();
+
+$rs = $GLOBALS['dbh']->getAll( 'select * from test' );
+//foreach( $rs as $key => $value ){
     //printArray( $key );
     //printArray( $value['tag'] );
-    $test[$key] = $value['tag'];
+  //  $test[$key] = $value['tag'];
     //printArray( $test );
     //$value['tag' );
-}
-printArray( $test );
+//}
+
+printArray( $rs );
 
 
 //printArray( $dbh_auth->getAll( 'select * from auth.user_config' ) );

@@ -1,0 +1,17 @@
+-- @tag: test2.1.2
+-- @description: DEsc von test2.1.2
+-- @require: test9
+-- @version: 2.1.3
+
+CREATE TABLE test( 
+    id      serial NOT NULL PRIMARY KEY,
+    label   text,
+	color 	 char(7)
+);
+
+INSERT INTO test ( label, color ) VALUES ( 'test_label', 'rot' );
+
+-- @php: *
+writelog( 'tets2.1.3 );
+return true;
+-- @exec: *

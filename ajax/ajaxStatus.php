@@ -90,8 +90,8 @@ function updateDB(){
                     $sql .= $line;
                     if( strpos( $line, ';' ) !== FALSE ){
                         $sql = preg_replace( $comment_patterns, "", $sql );//Kommentare löschen
-                        $GLOBALS['dbh']->exec( $sql );
-                        writeLog( $sql );
+                        writeLog( 'exec'.$GLOBALS['dbh']->exec( $sql ));
+                        writeLog( 'exec-SQL: '.$sql );
                         $sql = '';
                     }
                 }
@@ -101,15 +101,17 @@ function updateDB(){
 
 
             }
-            else{ //wir sind in der Zeile mir @php
-                //hier muss tag und desc noch in schema_info eingefügt werden
-                $GLOBALS['dbh']->commit();
-                $execPhp = TRUE;
-           }
+            else $execPhp = TRUE;
+
         }
+        //Tag in Schema_info inserten
+        $GLOBALS['dbh']->commit();
         if( $code ){ //ist Php-Code vorhanden
+
+            $code = preg_replace( $comment_patterns, "", $code ); // -- exec * entfernen
+            writeLog( 'Codeyyy: '.$code );
             if( eval( $code ) === FALSE ){
-                echo json_encode( array( 'Php-Error in'.$fileName ) );
+                echo json_encode( array( 'Php-Error in '.$fileName.' code: '.$code ) );
                 return;
             }
         }

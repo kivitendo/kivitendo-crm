@@ -2,6 +2,7 @@
 session_start();
 require_once __DIR__.'/inc/version.php';
 require_once __DIR__.'/inc/stdLib.php';
+//require_once __DIR__.'/inc/test.php';
 $git = @exec('git log -1',$out,$rc);
 if ( $rc > 0 ) {
     $commit = '';
@@ -59,7 +60,7 @@ $rc = false;
                     disabled: false,
                     label: "durchführen"
                 });
-                
+
 
             }
         });

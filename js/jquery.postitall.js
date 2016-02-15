@@ -216,7 +216,7 @@ var delay = (function(){
         toolbar         : true,         //Show or hide toolbar
         autoHideToolBar : true,         //Animation efect on hover over postit shoing/hiding toolbar options
         removable       : true,         //Set removable feature on or off
-        askOnDelete     : false,        //Confirmation before note remove
+        askOnDelete     : true,         //Confirmation before note remove
         draggable       : true,         //Set draggable feature on or off
         resizable       : true,         //Set resizable feature on or off
         editable        : true,         //Set contenteditable and enable changing note content
@@ -2369,7 +2369,7 @@ var delay = (function(){
                         //'width': options.width - 10,
                         //'width': 'auto',
                         'height': options.height - 40
-                    }).append("<div class='PIAtitle'>Delete note!</div>")
+                    }).append("<div class='PIAtitle'>Lösche Notiz!</div>")
                         .append($('<span />', {
                                 'style': 'line-height:10px;font-size:10px;',
                                 'class': 'PIAdelwar float-left'
@@ -2381,14 +2381,14 @@ var delay = (function(){
                                         var id = obj.data('PIA-id');
                                         t.destroy();
                                         e.preventDefault();
-                                    }).append($('<span />', { 'class': 'PIAdelyes' }).append("Delete this"))))
+                                    }).append($('<span />', { 'class': 'PIAdelyes' }).append("Löschen"))))
                             .append($('<div />', { 'class': 'PIAconfirmOpt' }).append(
                                     $('<a />', { 'id': 'all_' + index, 'href': '#' })
                                     .click(function(e) {
                                         t.switchOnLights();
                                         $.PostItAll.destroy();
                                         e.preventDefault();
-                                    }).append($('<span />', { 'class': 'PIAdelyes' }).append("Delete all"))))
+                                    })))
                             .append($('<div />', { 'class': 'PIAconfirmOpt' }).append(
                                     $('<a />', { 'id': 'cancel_' + index, 'href': '#' })
                                     .click(function(e) {
@@ -2396,8 +2396,8 @@ var delay = (function(){
                                         $('#pia_editable_' + index).show();
                                         t.switchBackNoteOff('PIAflip2');
                                         e.preventDefault();
-                                    }).append($('<span />', { 'class': 'PIAdelno' }).append("Cancel"))))
-                            .append($('<div />', { 'class': 'clear', 'style': 'line-height:10px;font-size:10px;font-weight: bold;' }).append("*This action cannot be undone"))
+                                    }).append($('<span />', { 'class': 'PIAdelno' }).append("Beenden"))))//ToDo: übersetzen
+                            .append($('<div />', { 'class': 'clear', 'style': 'line-height:10px;font-size:10px;font-weight: bold;' }).append("Diese Aktion kann nicht rückgängig gemacht werden!"))
                 );
             }
 

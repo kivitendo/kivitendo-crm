@@ -6,7 +6,7 @@ function showVersion(){
      echo json_encode( $rs );
 }
 
-function saveDBs( $output = TRUE ){
+function saveDBs( $showResult = TRUE ){
     $date = date( 'Y-m-d\TH-i-s' );
     $dbAuthName = $_SESSION['erpConfig']['authentication/database']['db'];
     $dbName     = $_SESSION['dbData']['dbname'];
@@ -14,7 +14,7 @@ function saveDBs( $output = TRUE ){
     $fileName[$dbName]     = $dbName.'-'.$date.'.sql';
     exec( "ls -t ".__DIR__."/../db_dumps/*  | sed '1,12d' | xargs rm -r" );
     exec( 'pg_dump '.$dbAuthName.' > '.__DIR__.'/../db_dumps/'.$fileName[$dbAuthName].' && pg_dump '.$dbName.' > '.__DIR__.'/../db_dumps/'.$fileName[$dbName], $output, $error );
-    if( $output ) echo !$error ? json_encode( $fileName ) : '';
+    if( $showResult ) echo !$error ? json_encode( $fileName ) : '';
 }
 
 function showDbFiles(){

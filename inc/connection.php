@@ -9,7 +9,7 @@ require_once __DIR__.'/conf.php';
 
 if( !varExist( $_SESSION ) ) session_start();
 
-if( !varExist( $_SESSION['globalConfig'] ) ) $_SESSION['globalConfig'] = getGlobalConfig(); //printArray(getGlobalConfig());
+if( !varExist( $_SESSION, 'globalConfig' ) ) $_SESSION['globalConfig'] = getGlobalConfig(); //printArray(getGlobalConfig());
 
 //Prüfen ob es sich um eine neu Session handelt oder die Elemente von $_SESSION gelöscht wurden
 $newSession = ( $_SESSION['sessid'] != $_COOKIE[$_SESSION['erpConfig']['authentication']['cookie_name']] ) || $_SESSION['clear'] || !$_SESSION['menu']['javascripts'];//wo wird menu.javascripts zerstört??
@@ -76,7 +76,7 @@ if( $newSession ) {
             "erp_all_groups" => getAllERPgroups()
         ];
     $myglobal = $users_groups;
-    $myglobal['baseurl'] = substr($_SESSION['baseurl'], 0, -1);
+    $myglobal['baseurl'] = substr($_SESSION['baseurl'], 0, -1);//warum -1 Url darf doch Slash am Ende Kevin oder was steht in Session.baseurl
     $myglobalJson = json_encode($myglobal, JSON_UNESCAPED_UNICODE);
     $id = $_SESSION['userConfig']['id'];
     $sql  = "select * from auth.user_config where user_id = '".$id."' and cfg_key = 'global_conf'";
@@ -98,7 +98,7 @@ $_SESSION['loginCRM'] =& $_SESSION['crmUserData']['loginCRM'];//ToDO: delete
 
 //ERP Users in die auth.user_config eintragen als JSON
 // Extra Funktion anlegen ?
-
+if( $newSession && needUpdate() ) header( 'Location:'.$_SESSION['baseurl'].'crm/status.php?action=needUpdate' );
 
 //Die Session-Variable ist nun gefüllt
 $_SESSION['clear'] = FALSE;

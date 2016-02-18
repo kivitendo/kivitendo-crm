@@ -98,7 +98,7 @@ $_SESSION['loginCRM'] =& $_SESSION['crmUserData']['loginCRM'];//ToDO: delete
 
 //ERP Users in die auth.user_config eintragen als JSON
 // Extra Funktion anlegen ?
-if( $newSession && needUpdate() ) header( 'Location:'.$_SESSION['baseurl'].'crm/status.php?action=needUpdate' );
+if( $newSession && needUpdate() );// header( 'Location:'.$_SESSION['baseurl'].'crm/status.php?action=needUpdate' );
 
 //Die Session-Variable ist nun gefüllt
 $_SESSION['clear'] = FALSE;

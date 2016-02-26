@@ -78,6 +78,14 @@ Webserver-User PostgreSQL hinzufügen:
 (bei nicht-debianoide Systemen www-data durch entsprechenden Webserver-Besitzer ersetzen)
 su postgres -c 'createuser www-data'
 
+Verzeichnisse der CRM schützen:
+in /etc/apache2/sites-available/kivitendo.apache2.conf
+
+<Directory /var/www/kivitendo-crm>
+  Require all denied
+</Directory>
+
+hinzufügen
 
 Webserver neu starten
 z.B. Debian / Ubuntu:

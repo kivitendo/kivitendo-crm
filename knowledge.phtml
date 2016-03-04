@@ -12,6 +12,8 @@
     //echo $head['FULLCALCSS'];
     //echo $head['BOXCSS'];
     //echo $head['COLORPICKERCSS'];
+    echo $head['JQUERY'];
+    echo $head['JQUERYUI'];
     echo $head['THEME'];
     echo $head['TINYMCE'];
     //echo $head['JQBOX'];
@@ -23,8 +25,8 @@
 
 <script>
 
-$(document).ready(function(){
-        
+  $(document).ready(function(){
+
   tinymce.init({
   selector: 'h2.editable',
   inline: true,
@@ -40,12 +42,8 @@ tinymce.init({
     'searchreplace visualblocks code fullscreen',
     'insertdatetime media table contextmenu paste'
   ],
-  toolbar: 'save insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
+  toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
 });
-			
-      // tinymce.init({selector:'textarea',
-      //  forced_root_block : 'div'});
-
 //        tinymce.init({
 //        selector: "textarea",
 //        statusbar: false,
@@ -65,14 +63,14 @@ tinymce.init({
 //        $('#values').html(msg);
 //    });
 
-
+      var category_id;
          
-        $.ajax({
-            url: 'jqhelp/knowledge.php',
-            data: { task:  'getCategories'  },
-            type: "POST",
+      $.ajax({
+            dataType: "json",
+            url: "ajax/knowledge.php?action=getCategories",
+            method: "GET",
             success: function( json ) {
-                var obj = JSON.parse( json.trim() );
+               var obj = JSON.parse( json.trim() );
                 //console.log( JSON.stringify( obj ) );
                 $.each( obj[0].maingroup, function( i, val ){
 
@@ -86,93 +84,72 @@ tinymce.init({
                     $( "#ul" + val.maingroup  ).append("<li id='msub_" + val.id + "'>" + val.labeltext + "</li>" );
      
                 });
-                $( '#menu' ).menu(); 
+                $( '#menu' ).menu();
                 $( '[id^=main_]' ).on( 'click', function(event) {
                     //console.log( event.target.id.substring( 5 ) );                    
                     //alert(event.target.id.substring( 5 ))
+                    category_id = event.target.id.substring( 5 );
                     $.ajax({
-                        url: 'jqhelp/knowledge.php',
-                        data: { task:  'getArticle' , category: event.target.id.substring( 5 ) }, 
-                        type: "POST",
+                        dataType: "json",
+                        url: "ajax/knowledge.php?action=getArticle&data=" + category_id,
+                        method: "GET",
                         success: function( json ) {
                             var obj = JSON.parse( json.trim() );
                             //alert(JSON.stringify( obj[0].content )  );
                             //console.log( JSON.stringify( obj ) );
-                           
                             $('#read').html(obj[0].content);
-                            $( '#write' ).html( obj[0].content );
                             
-                       }
+                        }
                     })
                 });
-
- 
-                
             },
             error: function () {
                 alert('Ajax Error');
             }
-        });
-$( "#write" ).hide();           
-$("#mode").button({label:"write"}).click(function () {
-	$( "#read, #write" ).toggle("fast");
-    if( $(this).button( "option", "label" ) === "write" ){
-        $( this ).button( "option", "label", "read" );
-        //$( "#read" ).hide("fast");
-    }
-    else{ 
-        $( this ).button( "option", "label", "write" );
-        //$( "#read" ).show("fast");
-    }
-})
-
-
-
-
-        
-        
     });
 
+    $("#last").button({label:"last"});
+
+    $("#save").button({label:"save"}).click(function (event) {
+        $.ajax({
+           url: 'jqhelp/knowledge.php',
+           data: { task:  'updateContent' , cat_id: category_id, content: $('#read').html() },
+           type: "POST",
+           success: function( json ) {
+                   alert(JSON.stringify(json));
+           },
+           error: function () {
+                alert('Ajax Error');
+           }
+
+        })
+    });
+
+    $("#nextvers").button({label:"nextversion"});
+
+});
+
 </script>
-  <script src="nodejs/node_modules/webodf.js-0.5.9/webodf.js" type="text/javascript" charset="utf-8"></script>
-  <script src="nodejs/node_modules/wodotexteditor-0.5.9/wodotexteditor/wodotexteditor.js" type="text/javascript" charset="utf-8"></script>
-<script src="nodejs/node_modules/wodotexteditor-0.5.9/localfileeditor.js" type="text/javascript" charset="utf-8"></script>
-<script src="nodejs/node_modules/wodotexteditor-0.5.9/FileSaver.js" type="text/javascript" charset="utf-8"></script>
 <style>
 .ui-menu { width: 180px; }
 
 #read{   position:absolute; top:55px; left:220px; width: 80%; background-color:#dfd; border:1px solid #888; }
 #write{  position:absolute; top:60px; left:220px; width: 80%; background-color:#dfe; border:1px solid #666; }
-
 </style>    
 
 </head>
-<body style="width:100%; height:100%; margin:0px; padding:0px" onload="createEditor();">
+<body>
 <?php 
     echo $menu['pre_content'];
     echo $menu['start_content'];
-    
 ?>
-
 <div class="ui-widget-content" style="height:600px">
 
-<ul id="menu"></ul>        
-<!--div class="ui-widget-content" style="height:600px" id='content'></div-->
-
-<div id="editorContainer" style="width:100%; height:100%; margin:0px; padding:0px">
-</div>
-
-<p><button id="mode"></button></p>
-
-
-<!-- <div id="read" class="editable">
-</div>  <div id="write"><textarea></textarea></div>  -->
-
-
-  
-
-
-
+    <ul id="menu"></ul>
+    <p><button id="last"></button></p>
+    <p><button id="save"></button></p>
+    <p><button id="nextvers"></button></p>
+    <div id="read" class="editable"></div>
 
 </div>
 <?php echo $menu['end_content']; ?>

@@ -111,10 +111,12 @@ tinymce.init({
     $("#last").button({label:"last"});
 
     $("#save").button({label:"save"}).click(function (event) {
+        var artContent = $("#read").html();
+        var data = category_id + "___" + artContent;
         $.ajax({
-           url: 'jqhelp/knowledge.php',
-           data: { task:  'updateContent' , cat_id: category_id, content: $('#read').html() },
-           type: "POST",
+           dataType: "json",
+           url: "ajax/knowledge.php?action=updateContent&data=" + data,
+           method: "GET",
            success: function( json ) {
                    alert(JSON.stringify(json));
            },

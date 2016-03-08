@@ -23,7 +23,19 @@ function updateContent( $data ){
    $sql = "UPDATE knowledge_content SET initdate = now(), employee = ".$_SESSION['id'].", content = '".$parts[1]."' WHERE id = ".$rs['id'];
    $rs = $GLOBALS['dbh']->query( $sql );
    echo json_encode("ok");
+}
 
+function nextVersion( $data ){
+    $parts = explode("___", $data);
+    $vers = "SELECT max(version) FROM knowledge_content WHERE category = ".$parts[0];
+    $rs = $GLOBALS['dbh']->getOne($vers);
+    $versi = $rs['max']+1;
+    $sql = "INSERT INTO (initdate, employee, content, version, category) VALUES ()";
+    echo json_encode("ok");
+}
+
+function newCategory( $data ){
+   echo json_encode("ok");
 }
 
 ?>

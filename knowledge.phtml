@@ -44,24 +44,6 @@ tinymce.init({
   ],
   toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
 });
-//        tinymce.init({
-//        selector: "textarea",
-//        statusbar: false,
-//        setup: function (editor) {
-//            editor.on('change', function () {
-//                tinymce.triggerSave();
-//            });
-//        }
-//    });
-
-//    $('#showValues').click(function () {
-//        var msg = '';
-//        $('textarea').each(function (index, ta) {
-//            var $ta = $(ta);
-//            msg += '<div><strong>Textarea "' + $ta.attr('name') + '" value:</strong><br />' + $ta.val() + '</div>';
-//        });
-//        $('#values').html(msg);
-//    });
 
       var category_id;
          
@@ -111,11 +93,28 @@ tinymce.init({
     $("#last").button({label:"last"});
 
     $("#save").button({label:"save"}).click(function (event) {
-        var artContent = $("#read").html();
+        var artContent = encodeURIComponent( $("#read").html() );
         var data = category_id + "___" + artContent;
         $.ajax({
            dataType: "json",
            url: "ajax/knowledge.php?action=updateContent&data=" + data,
+           method: "GET",
+           success: function( json ) {
+                   //alert(JSON.stringify(json));
+           },
+           error: function () {
+                alert('Ajax Error');
+           }
+
+        })
+    });
+
+    $("#nextvers").button({label:"nextversion"}).click(function (event) {
+        var artContent = encodeURIComponent( $("#read").html() );
+        var data = category_id + "___" + artContent;
+        $.ajax({
+           dataType: "json",
+           url: "ajax/knowledge.php?action=nextVersion&data=" + data,
            method: "GET",
            success: function( json ) {
                    alert(JSON.stringify(json));
@@ -126,8 +125,6 @@ tinymce.init({
 
         })
     });
-
-    $("#nextvers").button({label:"nextversion"});
 
 });
 

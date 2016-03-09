@@ -8,25 +8,35 @@ function getCategories(){
      echo json_encode( $rs['json_agg'] );
 }
 
-function getArticle($cat_id){
+function getArticle( $cat_id ){
      $sql = " SELECT json_agg (xxx) from (SELECT * FROM knowledge_content WHERE category = $cat_id ORDER BY version DESC ) xxx";
      $rs = $GLOBALS['dbh']->getOne( $sql );
      echo json_encode( $rs['json_agg'] ); 
 }
 
 function updateContent( $data ){
-   $parts = explode("___", $data);
+    //$parts = explode( "___", $data );
+   $vars = json_decode( $data );
+   //echo $vars->cat_id;
+   //echo $vars->content;
+   //$cat_id = $vars->cat_id;
+   //$content = $vars->content;
    //Letzten Eintrag
-   $sql = "SELECT * FROM knowledge_content WHERE category = ".$parts[0]." ORDER BY id DESC LIMIT 1";
+   $sql = "SELECT * FROM knowledge_content WHERE category = ".$vars->cat_id." ORDER BY id DESC LIMIT 1";
    $rs = $GLOBALS['dbh']->getOne( $sql );
    //UPDATE SQL
-   $sql = "UPDATE knowledge_content SET initdate = now(), employee = ".$_SESSION['id'].", content = '".$parts[1]."' WHERE id = ".$rs['id'];
+   $sql = "UPDATE knowledge_content SET initdate = now(), employee = ".$_SESSION['id'].", content = '".$vars->content."' WHERE id = ".$rs['id'];
    $rs = $GLOBALS['dbh']->query( $sql );
    echo json_encode("ok");
 }
 
+function updateContentneu(){
+    writeLog("etwas");
+   writeLog($_POST);
+}
+
 function nextVersion( $data ){
-    $parts = explode("___", $data);
+    $parts = explode( "___", $data );
     $vers = "SELECT max(version) FROM knowledge_content WHERE category = ".$parts[0];
     $rs = $GLOBALS['dbh']->getOne($vers);
     $versi = $rs['max']+1;
@@ -35,7 +45,7 @@ function nextVersion( $data ){
 }
 
 function newCategory( $data ){
-   echo json_encode("ok");
+   echo json_encode( "ok" );
 }
 
 ?>

@@ -93,8 +93,11 @@ tinymce.init({
     $("#last").button({label:"last"});
 
     $("#save").button({label:"save"}).click(function (event) {
-        var artContent = encodeURIComponent( $("#read").html() );
-        var data = category_id + "___" + artContent;
+       // var artContent = encodeURIComponent( tinyMCE.get('read').getContent() );
+        var artContent =  $("#read").html();
+        //var data = category_id + "___" + artContent;
+        var data = '{"cat_id":"' + category_id + '","content":"' + artContent + '"}';
+        data = encodeURIComponent(data);
         $.ajax({
            dataType: "json",
            url: "ajax/knowledge.php?action=updateContent&data=" + data,
@@ -107,6 +110,19 @@ tinymce.init({
            }
 
         })
+    });
+
+    $("#save_post").button({label:"save_post"}).click(function (event) {
+        var artContent = $("#read").html();
+         //$.post( "ajax/knowledge.php", {action:"updateContentneu", cat_id: category_id , data: artContent } );
+         $.ajax( {
+            url: 'ajax/knowledge.php',
+            data: {action:"updateContentneu", cat_id: category_id , data: artContent },
+            dataType: 'json',
+            type: 'post',
+            success: function(rc) {
+            }
+        } );
     });
 
     $("#nextvers").button({label:"nextversion"}).click(function (event) {
@@ -147,6 +163,7 @@ tinymce.init({
     <ul id="menu"></ul>
     <p><button id="last"></button></p>
     <p><button id="save"></button></p>
+    <p><button id="save_post"></button></p>
     <p><button id="nextvers"></button></p>
     <div id="read" class="editable"></div>
 

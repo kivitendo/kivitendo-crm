@@ -1,8 +1,5 @@
--- $Id: install141.sql $
-CREATE SEQUENCE "crmid" start 1 increment 1 maxvalue 9223372036854775807 minvalue 1 cache 1;
-
 CREATE TABLE telcall (
-    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    id serial,
     termin_id integer,
     cause text,
     caller_id integer NOT NULL,
@@ -15,7 +12,7 @@ CREATE TABLE telcall (
     dokument integer);
 
 CREATE TABLE telcallhistory (
-    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    id serial,
     orgid integer,
     cause text,
     caller_id integer NOT NULL,
@@ -39,10 +36,10 @@ CREATE TABLE documents (
     kunde integer,
     lock integer DEFAULT 0,
     employee integer,
-    id integer DEFAULT nextval('id'::text));
+    id serial);
 
 CREATE TABLE wiedervorlage (
-    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    id serial,
     initdate timestamp without time zone NOT NULL,
     changedate timestamp without time zone,
     finishdate timestamp without time zone,
@@ -52,14 +49,14 @@ CREATE TABLE wiedervorlage (
     status integer,
     kontakt character(1),
     employee integer,
-        gruppe boolean DEFAULT false,
+    gruppe boolean DEFAULT false,
     initemployee integer,
     kontaktid integer,
     kontakttab character(1),
     tellid integer);
 
 CREATE TABLE documenttotc (
-    id integer DEFAULT nextval('crmid'::text),
+    id serial,
     telcall integer,
     documents integer);
 
@@ -69,14 +66,14 @@ CREATE TABLE telnr (
     nummer character varying(20));
 
 CREATE TABLE docvorlage (
-    docid integer DEFAULT nextval('crmid'::text) NOT NULL,
+    docid serial,
     vorlage character varying(60),
     beschreibung character varying(255),
     file character varying(40),
     applikation character(1));
 
 CREATE TABLE docfelder (
-    fid integer DEFAULT nextval('crmid'::text) NOT NULL,
+    fid serial,
     docid   integer,
     feldname    character varying(20),
     platzhalter character varying(20),
@@ -86,17 +83,17 @@ CREATE TABLE docfelder (
     position    integer);
 
 CREATE TABLE gruppenname (
-    grpid  integer DEFAULT nextval('crmid'::text) NOT NULL,
+    grpid  serial,
     grpname  character varying(40),
     rechte       char(1) DEFAULT 'w');
 
 CREATE TABLE grpusr (
-    gid  integer DEFAULT nextval('crmid'::text) NOT NULL,
+    gid  serial,
     grpid integer,
     usrid integer);
 
 CREATE TABLE termine (
-    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    id serial,
     cause character varying(45),
     c_cause text,
     start timestamp without time zone,
@@ -113,27 +110,8 @@ CREATE TABLE termine (
     location text,
     syncid text);
 
-CREATE TABLE terminmember (
-    termin integer,
-    member integer,
-    tabelle char(1));
-CREATE TABLE termincat (
-    catid int NOT NULL,
-    catname text,
-    sorder integer,
-    ccolor char(6)
-);
-ALTER TABLE termincat ADD  primary key (catid);
-CREATE TABLE termdate (
-    id integer DEFAULT nextval('crmid'::text) NOT NULL,
-    termid integer,
-    datum integer,
-    jahr integer,
-    kw integer,
-    tag character(2),
-    monat character(2),
-    idx integer
-);
+
+
 
 CREATE TABLE custmsg (
     id integer DEFAULT nextval('crmid'::text) NOT NULL,
@@ -144,13 +122,13 @@ CREATE TABLE custmsg (
     akt boolean);
 
 CREATE TABLE crm (
-    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    id serial,
     uid integer,
     datum timestamp without time zone,
     version char(5));
 
 CREATE TABLE labels (
-    id integer DEFAULT nextval('crmid'::text),
+    id serial,
     name char varying(32),
     cust char(1),
     papersize char varying(10),
@@ -218,7 +196,7 @@ CREATE TABLE  maschmat (
     menge numeric(10,3));
 
 CREATE TABLE contract (
-    cid integer DEFAULT nextval('crmid'::text),
+    cid serial,
     contractnumber text,
     template text,
     bemerkung text,
@@ -228,7 +206,7 @@ CREATE TABLE contract (
     endedatum date);
 
 CREATE TABLE maschine (
-    id integer DEFAULT nextval('crmid'::text),
+    id serial,
     parts_id integer,
     serialnumber text,
     standort text,
@@ -237,14 +215,14 @@ CREATE TABLE maschine (
 
 
 CREATE TABLE wissencategorie(
-    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    id serial NOT NULL,
     name character varying(60),
     hauptgruppe integer,
     kdhelp boolean
 );
 
 CREATE TABLE wissencontent(
-    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    id serial,
     initdate timestamp without time zone NOT NULL,
     content text,
     employee integer,
@@ -253,7 +231,7 @@ CREATE TABLE wissencontent(
     categorie integer
 );
 CREATE TABLE opportunity(
-    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    id serial,
     oppid integer DEFAULT 0 NOT NULL,
     fid integer,
     tab char(1),
@@ -285,13 +263,7 @@ INSERT INTO  opport_status (statusname,sort) VALUES ('Aufgeschoben',6);
 INSERT INTO  opport_status (statusname,sort) VALUES ('wieder offen',7);
 INSERT INTO  opport_status (statusname,sort) VALUES ('Verloren',8);
 
-CREATE TABLE postit (
-    id integer DEFAULT nextval('crmid'::text) NOT NULL,
-    cause character varying(100),
-    notes text,
-    employee integer,
-    date timestamp without time zone NOT NULL
-);
+
 
 CREATE TABLE tempcsvdata (
     uid  integer,
@@ -307,7 +279,7 @@ CREATE TABLE mailvorlage (
 );
 
 CREATE TABLE timetrack (
-    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    id serial,
     fid integer,
     tab char(1),
     ttname text NOT NULL,
@@ -326,7 +298,7 @@ CREATE TABLE tt_parts(
     parts_txt text
 );
 CREATE TABLE tt_event (
-    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    id serial,
     ttid integer NOT NULL,
     uid integer NOT NULL,
     ttevent text NOT NULL,
@@ -336,14 +308,14 @@ CREATE TABLE tt_event (
 );
 
 CREATE TABLE bundesland (
-    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    id serial,
     country character (3),
     bundesland character varying(50)
 );
 
-CREATE SEQUENCE extraid INCREMENT BY 1 MAXVALUE 2147483647 CACHE 1;
+
 CREATE table extra_felder (
-    id       integer DEFAULT nextval('extraid'::text) NOT NULL,
+    id       serial,
     owner    integer,
     tab      char(1),
     fkey     text,
@@ -352,7 +324,7 @@ CREATE table extra_felder (
 CREATE INDEX extrafld_key ON extra_felder USING btree (owner);
 
 CREATE TABLE crmdefaults (
-    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    id serial,
     employee integer NOT NULL DEFAULT -1,
     key text,
     val text,
@@ -360,7 +332,7 @@ CREATE TABLE crmdefaults (
     modify timestamp without time zone DEFAULT NOW()
 );
 CREATE TABLE crmemployee (
-    manid integer NOT NULL,
+    manid serial,
     uid int,
     key text,
     val text,
@@ -503,36 +475,4 @@ CREATE INDEX telcall_id_key ON telcall USING btree (id);
 CREATE INDEX telcall_bezug_key ON telcall USING btree (bezug);
 CREATE INDEX mid_key ON contmasch USING btree (mid);
 
-INSERT INTO schema_info (tag,login) VALUES ('crm_defaults','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_defaults_gruppe','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_bundeslaender','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_CleanContact','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_employeeFeldLaenge','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_PrivatTermin','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_sonderflag','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_sonderflag2','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_bundeslaenderutf','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_CallDirekt','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_employeeIcal','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_extrafelder','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_headcount','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_lockfile','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_OpportunityQuotation','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_Stichwort','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_streetview','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_TerminSequenz','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_TerminDate','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_TelCallTermin','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_termincat','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_TerminCatCol','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_TerminLocation','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_timetracker','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_timetracker_budget','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_timetracker_parts','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_wissen_own','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_wvhistory','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_CRMemployee','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_CRMemployeeMID','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_UserFolder','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_UserMailssl','install');
-INSERT INTO schema_info (tag,login) VALUES ('crm_WiedervorlageGrp','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_Installation','install');

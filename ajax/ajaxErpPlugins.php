@@ -2,7 +2,7 @@
 /*
 Lieferantenrechnung - Pfad zum Dokument erstellen und zurück geben
 */
-require_once("../inc/ajax2function.php");
+require_once __DIR__.'../inc/ajax2function.php';
 
 // Rekursives Durchsuchen der Unterordner nach Dateien
 function rglob($pattern, $flags = 0) {

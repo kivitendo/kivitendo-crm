@@ -9,35 +9,8 @@ require_once __DIR__.'/../inc/stdLib.php';
 //printArray( $GLOBALS['dbh']->getAll( "select count(*) as total from postitall where iduser='1'" ) );
 
 
-$GLOBALS['dbh']->begin();
-$sql = "CREATE TABLE test(
-    id      serial NOT NULL PRIMARY KEY,
-    label   text,
-    color      char(7)
-);";
 
-//printArray( $GLOBALS['dbh']->exec( $sql ) );
-
-$sql = "
-INSERT INTO test ( label, color ) VALUES ( 'test_label', 'rot' );
-
-";
-
-
-
-
-
-
-printArray( $GLOBALS['dbh']->exec( $sql ) );
-
-$sql = "
-INSERT INTO test ( label, color ) VALUES ( 'test_label1', 'blue' );
-
-";
-printArray( $GLOBALS['dbh']->exec( $sql ) );
-$GLOBALS['dbh']->commit();
-
-$rs = $GLOBALS['dbh']->getAll( 'select * from test' );
+printArray( $GLOBALS['dbh']->getAll( 'select * from employee ' ) );
 //foreach( $rs as $key => $value ){
     //printArray( $key );
     //printArray( $value['tag'] );
@@ -46,7 +19,6 @@ $rs = $GLOBALS['dbh']->getAll( 'select * from test' );
     //$value['tag' );
 //}
 
-printArray( $rs );
 
 
 //printArray( $dbh_auth->getAll( 'select * from auth.user_config' ) );

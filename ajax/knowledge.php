@@ -14,33 +14,28 @@ function getArticle( $cat_id ){
      echo json_encode( $rs['json_agg'] ); 
 }
 
+function getLastArticle( $cat_id ){
+     $sql = " SELECT json_agg (xxx) from (SELECT * FROM knowledge_content WHERE category = $cat_id AND version = ( (SELECT max(version) FROM knowledge_content WHERE category = ".$cat_id." )-1 ) ) xxx";
+     $rs = $GLOBALS['dbh']->getOne( $sql );
+     echo json_encode( $rs['json_agg'] );
+}
+
 function updateContent( $data ){
-    //$parts = explode( "___", $data );
-   $vars = json_decode( $data );
-   //echo $vars->cat_id;
-   //echo $vars->content;
-   //$cat_id = $vars->cat_id;
-   //$content = $vars->content;
    //Letzten Eintrag
-   $sql = "SELECT * FROM knowledge_content WHERE category = ".$vars->cat_id." ORDER BY id DESC LIMIT 1";
+   $sql = "SELECT * FROM knowledge_content WHERE category = ".$data['cat_id']." ORDER BY id DESC LIMIT 1";
    $rs = $GLOBALS['dbh']->getOne( $sql );
    //UPDATE SQL
-   $sql = "UPDATE knowledge_content SET initdate = now(), employee = ".$_SESSION['id'].", content = '".$vars->content."' WHERE id = ".$rs['id'];
+   $sql = "UPDATE knowledge_content SET initdate = now(), employee = ".$_SESSION['id'].", content = '".$data['content']."' WHERE id = ".$rs['id'];
    $rs = $GLOBALS['dbh']->query( $sql );
    echo json_encode("ok");
 }
 
-function updateContentneu(){
-    writeLog("etwas");
-   writeLog($_POST);
-}
-
 function nextVersion( $data ){
-    $parts = explode( "___", $data );
-    $vers = "SELECT max(version) FROM knowledge_content WHERE category = ".$parts[0];
+    $vers = "SELECT max(version) FROM knowledge_content WHERE category = ".$data['cat_id'];
     $rs = $GLOBALS['dbh']->getOne($vers);
-    $versi = $rs['max']+1;
-    $sql = "INSERT INTO (initdate, employee, content, version, category) VALUES ()";
+    $version = $rs['max']+1;
+    $sql = "INSERT INTO knowledge_content (initdate, employee, content, version, category) VALUES (now() , ".$_SESSION['id']." , '".$data['content']."' , ".$version." , ".$data['cat_id']." )";
+    $rs = $GLOBALS['dbh']->query( $sql );
     echo json_encode("ok");
 }
 

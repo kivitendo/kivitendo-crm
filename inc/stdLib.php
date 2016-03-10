@@ -816,5 +816,13 @@ function needUpdate(){ //*** Prüft ob die Datenbank aktualisiert werden muss
     return $crmVersionConfig > $crmVersionDB;
 }
 
+function checkInstallation(){  //*** Prüft ob die Tabelle crm installiert ist und installiert ggf alle nötigen Tabellen
+    $rs = $GLOBALS['dbh']->getOne( "SELECT EXISTS  ( SELECT 1 FROM   information_schema.tables WHERE  table_schema = 'public' AND  table_name = 'crm') AS crm_exist " );
+    if( !$rs['crm_exist'] ){//Installation beginnt
+        //
+    }
+}
+
+
 //printArray($_SESSION);*/
 ?>

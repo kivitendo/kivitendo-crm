@@ -338,6 +338,38 @@ CREATE TABLE crmemployee (
     val text,
     typ char(1) DEFAULT 't'
 );
+
+CREATE TABLE events(
+    id              SERIAL NOT NULL PRIMARY KEY,
+    title           TEXT,
+    duration        TSRANGE,
+    repeat          CHAR(5),
+    repeat_factor   SMALLINT,
+    repeat_quantity SMALLINT,
+    repeat_end      TIMESTAMP WITHOUT TIME ZONE,
+    description     TEXT,
+    location        TEXT,
+    uid             INT,
+    prio            SMALLINT,
+    category         SMALLINT,
+    visibility        SMALLINT,
+    "allDay"        BOOLEAN,
+    color             CHAR(7),
+    job             BOOLEAN,
+    done            BOOLEAN,
+    job_planned_end TIMESTAMP WITHOUT TIME ZONE,
+    cust_vend_pers  TEXT
+);
+
+CREATE TABLE postitall (
+    id          SERIAL NOT NULL PRIMARY KEY,
+    iduser      TEXT,
+    idnote      TEXT,
+    content     TEXT
+);
+
+
+
 INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('ttpart','','mandant',-1);
 INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('tttime','60','mandant',-1);
 INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('ttround','15','mandant',-1);
@@ -475,4 +507,38 @@ CREATE INDEX telcall_id_key ON telcall USING btree (id);
 CREATE INDEX telcall_bezug_key ON telcall USING btree (bezug);
 CREATE INDEX mid_key ON contmasch USING btree (mid);
 
-INSERT INTO schema_info (tag,login) VALUES ('crm_Installation','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_defaults','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_defaults_gruppe','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_bundeslaender','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_CleanContact','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_employeeFeldLaenge','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_PrivatTermin','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_sonderflag','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_sonderflag2','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_bundeslaenderutf','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_CallDirekt','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_employeeIcal','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_extrafelder','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_headcount','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_lockfile','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_OpportunityQuotation','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_Stichwort','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_streetview','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_TerminSequenz','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_TerminDate','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_TelCallTermin','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_termincat','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_TerminCatCol','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_TerminLocation','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_timetracker','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_timetracker_budget','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_timetracker_parts','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_wissen_own','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_wvhistory','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_CRMemployee','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_CRMemployeeMID','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_UserFolder','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_UserMailssl','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_Calendar','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_Calendar02','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_Postitall','install');

@@ -114,13 +114,11 @@ class PostItAll{
     }
 
     private function insertNote( $idUser, $idNote, $content ){
-        $sql = "insert into postitall (iduser, idnote, content) values ('".$idUser."','".$idNote."','".$content."')";
-        return $GLOBALS['dbh']->query( $sql );
+        return $GLOBALS['dbh']->insert( 'postitall', array( 'iduser', 'idnote', 'content' ), array( $idUser, $idNote, $content ) );
     }
 
     private function updateNote( $idUser, $idNote, $content ){
-        $sql = "update postitall set content='".$content."' where iduser='".$idUser."' and idNote='".$idNote."'";
-        return  $GLOBALS['dbh']->query( $sql );
+        return $GLOBALS['dbh']->update( 'postitall', array( 'content' ), array( $content ), "iduser = '".$idUser."' and idNote = '".$idNote."'" );
     }
 
     private function removeNote( $idUser, $idNote ){

@@ -25,8 +25,7 @@ function updateContent( $data ){
    $sql = "SELECT * FROM knowledge_content WHERE category = ".$data['cat_id']." ORDER BY id DESC LIMIT 1";
    $rs = $GLOBALS['dbh']->getOne( $sql );
    //UPDATE SQL
-   $sql = "UPDATE knowledge_content SET initdate = now(), employee = ".$_SESSION['id'].", content = '".$data['content']."' WHERE id = ".$rs['id'];
-   $rs = $GLOBALS['dbh']->query( $sql );
+   $rs = $GLOBALS['dbh']->update( 'knowledge_content', array( 'modifydate', 'employee', 'content' ), array( 'now()', $_SESSION['id'] , $data['content'] ), "id = ".$rs['id'] );
    echo json_encode("ok");
 }
 
@@ -34,13 +33,19 @@ function nextVersion( $data ){
     $vers = "SELECT max(version) FROM knowledge_content WHERE category = ".$data['cat_id'];
     $rs = $GLOBALS['dbh']->getOne($vers);
     $version = $rs['max']+1;
-    $sql = "INSERT INTO knowledge_content (initdate, employee, content, version, category) VALUES (now() , ".$_SESSION['id']." , '".$data['content']."' , ".$version." , ".$data['cat_id']." )";
-    $rs = $GLOBALS['dbh']->query( $sql );
+    $rs = $GLOBALS['dbh']->insert( 'knowledge_content', array( 'modifydate', 'employee', 'content', 'version', 'category' ), array( 'now()', $_SESSION['id'], $data['content'], $version, $data['cat_id'] ) );
     echo json_encode("ok");
 }
 
 function newCategory( $data ){
    echo json_encode( "ok" );
+}
+
+function searchArt( $data ){
+    $sql = "SELECT distinct KCA.* as cid from knowledge_content KCO left join knowledge_category KCA on KCO.category=KCA.id where content ilike '%".$data."%'";
+    $founds = $GLOBALS['dbh']->getAll($sql);
+    //writeLog(json_encode($rs));
+    echo json_encode($founds);
 }
 
 ?>

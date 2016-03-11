@@ -25,7 +25,7 @@
 
 <script>
 
-  $(document).ready(function(){
+$(document).ready(function(){
 
   tinymce.init({
   selector: 'h2.editable',
@@ -136,13 +136,27 @@ tinymce.init({
         })
     });
 
+    $("#wortsuche").click(function (event) {
+          var searchword = $('#searchfield').val();
+          $.ajax({
+              dataType: "json",
+              url: "ajax/knowledge.php?action=searchArt&data=" + searchword,
+              method: "GET",
+              success: function( rc ) {
+                    alert(JSON.stringify(rc));
+                    $('#treffer').append('test');
+              }
+        })
+    });
+
 });
 
 </script>
 <style>
 .ui-menu { width: 180px; }
 
-#read{   position:absolute; top:55px; left:220px; width: 80%; background-color:#dfd; border:1px solid #888; }
+#read{   position:absolute; top:55px; left:225px; width: 80%; background-color:#dfd; border:1px solid #888; }
+#treffer{   position:absolute; top:55px; left:225px; width: 80%; background-color:#dfd; border:1px solid #888; }
 #write{  position:absolute; top:60px; left:220px; width: 80%; background-color:#dfe; border:1px solid #666; }
 </style>    
 
@@ -155,10 +169,15 @@ tinymce.init({
 <div class="ui-widget-content" style="height:600px">
 
     <ul id="menu"></ul>
+    <p>
+    <input type="text" name="searchfield" id="searchfield" value="">
+	<img src="image/search.png" border="0" title=".:search:." align="middle" id='wortsuche'><br>
+	</p>
     <p><button id="last"></button></p>
     <p><button id="save"></button></p>
     <p><button id="nextvers"></button></p>
     <div id="read" class="editable"></div>
+    <div id="treffer"></div>
 
 </div>
 <?php echo $menu['end_content']; ?>

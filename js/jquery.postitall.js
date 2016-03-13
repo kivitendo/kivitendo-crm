@@ -3020,8 +3020,8 @@ var delay = (function(){
                 var textInfo = "<div class='PIAtitle'>Hide note</div>";
                 var normalForm = "<div id='PIAhideUntilNormal_"+index+"'>";
                 normalForm += "<div>For how long do you want to hide this note?</div>";
-                normalForm += "<input type='text' id='numericIncrement_" + index + "' size=3 maxlength=2 value='30'>"
-                normalForm += "&nbsp;<select id='selectedIncrement_"+index+"'><option>Seconds</option><option>Minutes</option><option>Hours</option><option>Days</option></select>";
+                normalForm += "<input type='text' id='numericIncrement_" + index + "' size=3 maxlength=2 value='1'>"
+                normalForm += "&nbsp;<select id='selectedIncrement_"+index+"'><option>Days</option><option>Hours</option><option>Minutes</option><option>Seconds</option></select>";
                 normalForm += "</div>";
                 var formContent = $('<div />');
                 var datePickerForm = "";

@@ -229,9 +229,9 @@ var delay = (function(){
     //Global vars : enable and disable features and change the notes behaviour
     $.fn.postitall.globals = {
         prefix          : '#PIApostit_',//Id note prefixe
-        filter          : 'all',     //Options: domain, page, all
-        savable         : true,        //Save postit in storage
-        randomColor     : false,         //Random color in new postits
+        filter          : 'all',        //Options: domain, page, all
+        savable         : true,         //Save postit in storage
+        randomColor     : false,        //Random color in new postits
         toolbar         : true,         //Show or hide toolbar
         autoHideToolBar : true,         //Animation efect on hover over postit shoing/hiding toolbar options
         removable       : true,         //Set removable feature on or off
@@ -246,15 +246,15 @@ var delay = (function(){
         expand          : true,         //Expand note
         fixed           : true,         //Allow to fix the note in page
         addNew          : true,         //Create a new postit
-        showInfo        : false,         //Show info icon (info tab)
-        showMeta        : true,         //Show info icon (meta tab)
+        showInfo        : false,        //Show info icon (info tab)
+        showMeta        : false,        //Show info icon (meta tab)
         pasteHtml       : true,         //Allow paste html in contenteditor
-        htmlEditor      : false,         //Html editor (trumbowyg)
-        autoPosition    : false,         //Automatic reposition of the notes when user resize screen
+        htmlEditor      : false,        //Html editor (trumbowyg)
+        autoPosition    : false,        //Automatic reposition of the notes when user resize screen
         addArrow        : 'back',       //Add arrow to notes : none, front, back, all
         askOnHide       : true,         //Show configuration hideUntil back-panel (getBackPanelHideUntil)
         hideUntil       : null,         //Note will be hidden since that datetime
-        changeUserId    : true             //for kivi
+        changeUserId    : true          //for kivi
     };
 
     //Copy of the original global configuration
@@ -2977,7 +2977,7 @@ var delay = (function(){
                         //'width': options.width - 10,
                         //'width': 'auto',
                         'height': options.height - 40
-                    }).append("<div class='PIAtitle'>Delete note!</div>")
+                    }).append("<div class='PIAtitle'>Lösche Notitz!</div>")
                         .append($('<span />', {
                                 'style': 'line-height:10px;font-size:10px;',
                                 'class': 'PIAdelwar float-left'
@@ -2989,14 +2989,7 @@ var delay = (function(){
                                         var id = obj.data('PIA-id');
                                         t.destroy();
                                         e.preventDefault();
-                                    }).append($('<span />', { 'class': 'PIAdelyes' }).append("Delete this"))))
-                            .append($('<div />', { 'class': 'PIAconfirmOpt' }).append(
-                                    $('<a />', { 'id': 'all_' + index, 'href': '#' })
-                                    .click(function(e) {
-                                        t.switchOnLights();
-                                        $.PostItAll.destroy();
-                                        e.preventDefault();
-                                    }).append($('<span />', { 'class': 'PIAdelyes' }).append("Delete all"))))
+                                    }).append($('<span />', { 'class': 'PIAdelyes' }).append("Lösche"))))
                             .append($('<div />', { 'class': 'PIAconfirmOpt' }).append(
                                     $('<a />', { 'id': 'cancel_' + index, 'href': '#' })
                                     .click(function(e) {
@@ -3004,8 +2997,8 @@ var delay = (function(){
                                         $('#pia_editable_' + index).show();
                                         t.switchBackNoteOff('PIAflip2');
                                         e.preventDefault();
-                                    }).append($('<span />', { 'class': 'PIAdelno' }).append("Cancel"))))
-                            .append($('<div />', { 'class': 'clear', 'style': 'line-height:10px;font-size:10px;font-weight: bold;' }).append("*This action cannot be undone"))
+                                    }).append($('<span />', { 'class': 'PIAdelno' }).append("Abrechen"))))
+                            .append($('<div />', { 'class': 'clear', 'style': 'line-height:10px;font-size:10px;font-weight: bold;' }).append("Diese Aktion kann nicht rückgängig gemacht werden"))
                 );
             }
             return deleteInfo;

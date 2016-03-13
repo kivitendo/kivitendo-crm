@@ -29,18 +29,38 @@ $(document).ready(function(){
 
 
 tinymce.init({
-    //selector: 'h2.editable',
-    inline: true,
-    toolbar: 'undo redo',
-    //menubar: false,
     selector: 'div.editable',
     inline: true,
     plugins: [
-        'save advlist autolink lists link image charmap print preview anchor',
+        'advlist autolink lists link image charmap print preview anchor',
         'searchreplace visualblocks code fullscreen',
         'insertdatetime media table contextmenu paste'
     ],
-    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | table'
+    toolbar: 'mybutton | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | table',
+    setup: function(editor) {
+    editor.addButton('mybutton', {
+      type: 'menubutton',
+      text: 'Version',
+      icon: false,
+      menu: [{
+        text: 'save',
+        onclick: function() {
+          editor.insertContent('saved ');
+        }
+      }, {
+        text: 'next/new',
+        onclick: function() {
+          editor.insertContent('&nbsp;<em>Menu item 2 here!</em>&nbsp;');
+        }
+      },
+       {
+        text: 'previous',
+        onclick: function() {
+          editor.insertContent('Previous Version was loaded');
+        }
+      }]
+    });
+  },
 
 });
 
@@ -104,6 +124,26 @@ tinymce.init({
                         $(".contex_sub_menu").hide(100);
                     }
                 });
+                $( '[id^=main_]' ).bind("contextmenu", function (event) {
+                    //Avoid the real one
+                    event.preventDefault();
+
+                    // Show contextmenu
+                    $(".contex_main_menu").finish().toggle(100).
+
+                    // In the right position (the mouse)
+                    css({
+                        top: event.pageY + "px",
+                        left: event.pageX + "px"
+                    });
+                }).bind("mousedown", function (event) {
+                category_id = event.target.id.substring( 5 )
+                // If the clicked element is not the menu
+                    if (!$(event.target).parents(".contex_main_menu").length > 0) {
+                        // Hide it
+                        $(".contex_main_menu").hide(100);
+                    }
+                });
             },
             error: function () {
                 alert('Ajax Error');
@@ -121,6 +161,20 @@ tinymce.init({
         }
         // Hide it AFTER the action was triggered
         $(".contex_sub_menu").hide(100);
+    });
+    // If the menu element is clicked
+    $(".contex_main_menu li").click(function(event){
+        // This is the triggered action name
+        switch($(this).attr("data-action")) {
+            // A case for each action. Your actions here
+            case "new": alert('Category: ' + category_id + ' neue Kategorie wird erzeugt'); break;
+            case "edit":  alert('Category: ' + category_id + ' wird editiert' ) ; break;
+            case "delete": alert('Category: ' + category_id + ' wird gelöscht'); break;
+            
+
+        }
+        // Hide it AFTER the action was triggered
+        $(".contex_main_menu").hide(100);
     });
 
     $("#last").button({label:"last"}).click(function (event) {
@@ -191,7 +245,7 @@ tinymce.init({
 #read{   position:absolute; top:120px; left:225px; width: 80%; background-color:#dfd; border:1px solid #888; }
 #treffer{   position:absolute; top:55px; left:225px; width: 80%;  }
 
-.contex_sub_menu {
+.contex_sub_menu, .contex_main_menu {
     display: none;
     z-index: 1000;
     position: absolute;
@@ -206,14 +260,14 @@ tinymce.init({
 }
 
 /* Each of the items in the list */
-.contex_sub_menu li {
+.contex_sub_menu li, .contex_main_menu li {
     padding: 8px 12px;
     cursor: pointer;
     list-style-type: none;
     transition: all .3s ease;
 }
 
-.contex_sub_menu li:hover {
+.contex_sub_menu li:hover, .contex_main_menu li:hover {
     background-color: #DEF;
 }
 </style>
@@ -239,6 +293,11 @@ tinymce.init({
 
 </div>
 <ul class='contex_sub_menu'>
+  <li data-action="edit">Edit</li>
+  <li data-action="delete">Delete </li>
+</ul>
+<ul class='contex_main_menu'>
+  <li data-action="new">New</li>
   <li data-action="edit">Edit</li>
   <li data-action="delete">Delete </li>
 </ul>

@@ -61,6 +61,12 @@ Alias       /kivitendo/          $DIR/kivitendo-erp/
 <Directory $DIR/kivitendo-erp/users>
   Require all denied
 </Directory>
+
+<Directory $DIR/kivitendo-crm>
+  AddDefaultCharset UTF-8
+  Require all denied
+</Directory>
+
 " >>  /etc/apache2/sites-available/kivitendeo.apache2.conf
 ln -sf /etc/apache2/sites-available/kivitendeo.apache2.conf /etc/apache2/sites-enabled/kivitendeo.apache2.conf
 service apache2 restart
@@ -114,18 +120,18 @@ dialog --title "Datenbank installieren" --backtitle "kivitendo installieren" --y
 response=$?
 case $response in
     0) echo "Datenbank wird installiert."
-	sudo -u postgres -H -- createdb kivitendo_auth
-	sudo -u postgres -H -- createdb demo-db
-	sudo -u postgres -H -- psql kivitendo_auth < $DIR/kivitendo-crm/install/kivitendo_auth.sql
-	sudo -u postgres -H -- psql demo-db < $DIR/kivitendo-crm/install/demo-db.sql
-	echo "Beim Login: Benutzername: demo, Password: kivitendo"
-	echo "***************************************************"
-	if [ "$PASSWD" != "kivitendo" ]; then
-	    echo "Es wurde ein eigenes Passwort vergeben."
-	    echo "Dieses Passwort muss in der Mandantenkonfiguration eingetragen werden!"
-	    echo "(http://localhost/kivitendo/admin.pl)"
-	fi
-	;;
+    sudo -u postgres -H -- createdb kivitendo_auth
+    sudo -u postgres -H -- createdb demo-db
+    sudo -u postgres -H -- psql kivitendo_auth < $DIR/kivitendo-crm/install/kivitendo_auth.sql
+    sudo -u postgres -H -- psql demo-db < $DIR/kivitendo-crm/install/demo-db.sql
+    echo "Beim Login: Benutzername: demo, Password: kivitendo"
+    echo "***************************************************"
+    if [ "$PASSWD" != "kivitendo" ]; then
+        echo "Es wurde ein eigenes Passwort vergeben."
+        echo "Dieses Passwort muss in der Mandantenkonfiguration eingetragen werden!"
+        echo "(http://localhost/kivitendo/admin.pl)"
+    fi
+    ;;
     1) echo "Datenbank wird nicht installiert."
        ;;
 esac

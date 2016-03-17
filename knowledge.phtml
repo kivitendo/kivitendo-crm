@@ -133,11 +133,11 @@ tinymce.init({
                 // If the clicked element is not the menu
                     if (!$(event.target).parents(".contex_main_menu").length > 0) {
                         // Hide it
-                        $(".contex_main_menu, .context_sub_menu").hide(100);
+                        $(".contex_main_menu, .contex_sub_menu").hide(100);
                     }
                     if (!$(event.target).parents(".contex_sub_menu").length > 0) {
                         // Hide it
-                        $(".contex_main_menu, .context_sub_menu").hide(100);
+                        $(".contex_main_menu, .contex_sub_menu").hide(100);
                     }
                 });
             },
@@ -188,6 +188,7 @@ tinymce.init({
 
     $("#save").button({label:"save"}).click(function (event) {
         var artContent = $("#read").html();
+        alert(artContent);
         $.ajax( {
             url: 'ajax/knowledge.php',
             data: {action: "updateContent",  data: { content : artContent,  cat_id: category_id } },

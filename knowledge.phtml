@@ -45,18 +45,50 @@ tinymce.init({
       menu: [{
         text: 'save',
         onclick: function() {
-          editor.insertContent('saved ');
+          var artContent = $("#read").html();
+          $.ajax( {
+            url: 'ajax/knowledge.php',
+            data: {action: "updateContent",  data: { content : artContent,  cat_id: category_id } },
+            dataType: 'json',
+            type: 'post',
+            success: function(json) {
+                //alert(JSON.stringify(json));
+            },
+            error: function () {
+                alert('Ajax Error');
+            }
+          });
         }
       }, {
         text: 'next/new',
         onclick: function() {
-          editor.insertContent('&nbsp;<em>Menu item 2 here!</em>&nbsp;');
+          var artContent = $("#read").html();
+           $.ajax({
+              url: 'ajax/knowledge.php',
+              data: {action: "nextVersion",  data: { content : artContent,  cat_id: category_id } },
+              dataType: 'json',
+              type: 'post',
+              success: function( json ) {
+                 //alert(JSON.stringify(json));
+              },
+              error: function () {
+                alert('Ajax Error');
+              }
+          })
         }
       },
        {
         text: 'previous',
         onclick: function() {
-          editor.insertContent('Previous Version was loaded');
+          $.ajax({
+              dataType: "json",
+              url: "ajax/knowledge.php?action=getLastArticle&data=" + category_id,
+              method: "GET",
+              success: function( json ) {
+                    var obj = JSON.parse( json.trim() );
+                    $('#read').html(obj[0].content);
+             }
+          })
         }
       }]
     });
@@ -163,7 +195,7 @@ tinymce.init({
         // This is the triggered action name
         switch($(this).attr("data-action")) {
             // A case for each action. Your actions here
-            case "new": alert('Category: ' + category_id + ' neue Kategorie wird erzeugt'); break;
+            case "new": $('#newCat').dialog("open"); break;
             case "edit":  alert('Category: ' + category_id + ' wird editiert' ) ; break;
             case "delete": alert('Category: ' + category_id + ' wird gelöscht'); break;
             
@@ -188,7 +220,7 @@ tinymce.init({
 
     $("#save").button({label:"save"}).click(function (event) {
         var artContent = $("#read").html();
-        alert(artContent);
+        //alert(artContent);
         $.ajax( {
             url: 'ajax/knowledge.php',
             data: {action: "updateContent",  data: { content : artContent,  cat_id: category_id } },
@@ -232,7 +264,27 @@ tinymce.init({
               }
         })
     });
-
+    
+    $("#newCat")
+        .dialog({
+            autoOpen: false,
+            title: "Neu Kategorie",
+            buttons: {
+                Anlegen: function() {
+                    var newCat = $('#catName').val();
+                    //alert($('#mainCat').is(':checked'));
+                    $.ajax({
+                        dataType: "json",
+                        url: "ajax/knowledge.php?action=newCategory&data=" + newCat,
+                        method: "GET",
+                        success: function( json ) {
+                             //alert(JSON.stringify(json));
+                        }
+                    })
+                    $(this).dialog("close");
+                }
+            }
+     });
 });
 
 </script>
@@ -282,9 +334,6 @@ tinymce.init({
     <input type="text" name="searchfield" id="searchfield" value="">
     <img src="image/search.png" border="0" title=".:search:." align="middle" id='wortsuche'><br>
     </p>
-    <p><button id="last"></button></p>
-    <p><button id="save"></button></p>
-    <p><button id="nextvers"></button></p>
     <div id="read" class="editable"></div>
     <div id="treffer"></div>
 
@@ -298,6 +347,12 @@ tinymce.init({
   <li data-action="edit">Edit</li>
   <li data-action="delete">Delete </li>
 </ul>
+<div id="newCat">
+Neuer Kategoriename:
+<input type="text" id="catName" name=""></br>
+<input type="checkbox" id="mainCat" name="maincategory" value="1">
+Hauptkategorie
+</div>
 <?php echo $menu['end_content']; ?>
 </body>
 </html>

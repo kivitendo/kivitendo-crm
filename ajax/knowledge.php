@@ -11,7 +11,7 @@ function getCategories(){
 function getArticle( $cat_id ){
      $sql = " SELECT json_agg (xxx) from (SELECT * FROM knowledge_content WHERE category = $cat_id ORDER BY version DESC ) xxx";
      $rs = $GLOBALS['dbh']->getOne( $sql );
-     echo json_encode( $rs['json_agg'] ); 
+     echo json_encode( $rs['json_agg'] );
 }
 
 function getLastArticle( $cat_id ){
@@ -38,7 +38,8 @@ function nextVersion( $data ){
 }
 
 function newCategory( $data ){
-   echo json_encode( "ok" );
+    $rs = $GLOBALS['dbh']->insert( 'knowledge_category', array('labeltext', 'maingroup', 'help' ), array($data, 0, "FALSE") );
+   //echo json_encode( "ok" );
 }
 
 function searchArt( $data ){

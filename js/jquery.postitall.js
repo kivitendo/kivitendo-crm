@@ -54,7 +54,7 @@ var delay = (function(){
     "use strict";
 
     // Debug
-    var debugging = true; // or true
+    var debugging = false; // or true
     if (typeof console === "undefined") {
         console = {
             log: function () { return undefined; }
@@ -3027,16 +3027,16 @@ var delay = (function(){
                         datePickerForm += "<input type='text' id='datepicker_"+index+"' placeholder='dd/mm/yyyy hh:mm'>";
                     } else {
                         datePickerForm += "<input type='text' id='datepicker_"+index+"' size=11 placeholder='dd/mm/yyyy'>";
-                        datePickerForm += "&nbsp;<input type='textbox' placeholder='hh:mm' id='timepicker_" + index + "' size=6>";
+                        datePickerForm += "&nbsp;<input type='textbox' value='7:00' id='timepicker_" + index + "' size=6>";
                     }
                     datePickerForm +="</div>";
                     formContent.append(datePickerForm)
                     .append($('<label />').append($('<input />', { 'id': 'PIAhideUntilCB_' + index, 'type': 'checkbox' }).click(function(e) {
                             if ($(this).is(':checked')) {
                                 if($.ui.timepicker) {
-                                    $('#datepicker_'+index).datetimepicker({ minDate: 0, dateFormat: "yy-mm-dd", timeFormat: "HH:mm" });
+                                    $('#datepicker_'+index).datetimepicker({ minDate: 0, dateFormat: "yy/mm/dd", timeFormat: "HH:mm" });
                                 } else {
-                                    $('#datepicker_'+index).datepicker({ minDate: 0, dateFormat: "yy-mm-dd" });
+                                    $('#datepicker_'+index).datepicker({ minDate: 0, dateFormat: "yy/mm/dd" });
                                 }
                                 $('#PIAhideUntilDatePicker_'+index).show();
                                 $('#PIAhideUntilNormal_'+index).hide();
@@ -3066,15 +3066,8 @@ var delay = (function(){
                             if($.ui) {
                                 if($('#PIAhideUntilCB_' + index).is(':checked')) {
                                     paso = true;
-                                    var gmt = new Date().toString().match(/([-\+][0-9]+)\s/)[1];
-                                    var datestr = "";
-                                    //With timepicker
-                                    datestr = $('#datepicker_'+index).val();
-                                    //With datepicker
-                                    datestr = $('#datepicker_' + index).val() + " " + $('#timepicker_' + index).val();
-                                    //datestr += " " + gmt;
+                                    var datestr = $('#datepicker_' + index).val() + " " + $('#timepicker_' + index).val();
                                     dat = new Date(datestr);
-                                    //alert(dat);
                                 }
                             }
                             if(!paso) {

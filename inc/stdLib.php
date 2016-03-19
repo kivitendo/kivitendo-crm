@@ -672,7 +672,8 @@ function mkHeader() {
         'JTABLECSS'     => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/jtable/themes/jqueryui/jtable_jqueryui.min.css'.$LN,
         'JTABLEJS'      => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jtable/jquery.jtable.min.js'.$SN,
         'JQCOOKIE'      => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-cookie/jquery.cookie.js'.$SN,
-        'TINYMCE'       => $SV.$_SESSION['baseurl'].'crm/nodejs/node_modules/tinymce/tinymce.min.js'.$SN,
+        'TINYMCE'       => $SV.$_SESSION['baseurl'].'crm/nodejs/node_modules/tinymce/tinymce.min.js'.$SN.
+                           $SV.$_SESSION['baseurl'].'crm/nodejs/node_modules/tinymce/js/langs/de.js'.$SN,//todo Lang EN
         'DATEPICKER'    => $_SESSION['countrycode'] == 'de' ? $SV.$_SESSION['baseurl'].'js/jquery/ui/i18n/jquery.ui.datepicker-de.js'.$SN : '',
         'TRANSLATION'   => $SV.$_SESSION['baseurl'].'crm/translation/all.lng'.$SN,
         'JQCALCULATOR'  => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.css'.$LN.

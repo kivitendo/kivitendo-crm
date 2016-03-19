@@ -9,23 +9,25 @@ function getCategories(){
 }
 
 function getArticle( $cat_id ){
-     $sql = " SELECT json_agg (xxx) from (SELECT * FROM knowledge_content WHERE category = $cat_id ORDER BY version DESC ) xxx";
+     $rs = $GLOBALS['dbh']->query( 'UPDATE knowledge_content SET modifydate = now() WHERE category = '.$cat_id.' AND version = (SELECT max(version) FROM knowledge_content WHERE category = '.$cat_id.')'  );
+     $sql = "SELECT json_agg (xxx) from (SELECT * FROM knowledge_content WHERE category = $cat_id ORDER BY version DESC ) xxx";
      $rs = $GLOBALS['dbh']->getOne( $sql );
      echo json_encode( $rs['json_agg'] ); 
 }
 
-function getLastArticle( $cat_id ){
-     $sql = " SELECT json_agg (xxx) from (SELECT * FROM knowledge_content WHERE category = $cat_id AND version = ( (SELECT max(version) FROM knowledge_content WHERE category = ".$cat_id." )-1 ) ) xxx";
+function getLastArticle(){
+     $sql = "SELECT json_agg (xxx) from (SELECT * FROM knowledge_content WHERE  modifydate = (SELECT max(modifydate) FROM knowledge_content ) ) xxx";
      $rs = $GLOBALS['dbh']->getOne( $sql );
      echo json_encode( $rs['json_agg'] );
 }
 
 function updateContent( $data ){
    //Letzten Eintrag
-   $sql = "SELECT * FROM knowledge_content WHERE category = ".$data['cat_id']." ORDER BY id DESC LIMIT 1";
-   $rs = $GLOBALS['dbh']->getOne( $sql );
+   //$sql = "SELECT * FROM knowledge_content WHERE category = ".$data['cat_id']." ORDER BY id DESC LIMIT 1";
+   //$rs = $GLOBALS['dbh']->getOne( $sql );
    //UPDATE SQL
-   $rs = $GLOBALS['dbh']->update( 'knowledge_content', array( 'modifydate', 'employee', 'content' ), array( 'now()', $_SESSION['id'] , $data['content'] ), "id = ".$rs['id'] );
+   writeLog($data);
+   $rs = $GLOBALS['dbh']->update( 'knowledge_content', array( 'modifydate', 'employee', 'content' ), array( 'now()', $_SESSION['id'] , $data['content'] ), "category = ".$data['cat_id'] );
    echo json_encode("ok");
 }
 

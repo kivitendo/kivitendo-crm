@@ -19,13 +19,13 @@ CREATE TABLE tmp (
 );
 DROP TABLE IF EXISTS knowledge_content;
 CREATE TABLE knowledge_content (
-    id SERIAL,
-    initdate TIMESTAMP,
-    content    TEXT,
-    employee INT,
-    version INT,
-    category INT,
-    owner    INT
+    id          SERIAL,
+    modifydate  TIMESTAMP,
+    content     TEXT,
+    employee    INT,
+    version     INT,
+    category    INT,
+    owner       INT
 );
 
 INSERT INTO knowledge_category (labeltext, maingroup, help) SELECT name, hauptgruppe, kdhelp FROM wissencategorie;

@@ -6,19 +6,13 @@
 <?php
     require_once("inc/stdLib.php");
     $menu = $_SESSION['menu'];
-    $head = mkHeader();
     echo $menu['stylesheets'];
     echo $menu['javascripts'];
-    //echo $head['FULLCALCSS'];
-    //echo $head['BOXCSS'];
-    //echo $head['COLORPICKERCSS'];
     echo $head['JQUERY'];
     echo $head['JQUERYUI'];
     echo $head['THEME'];
     echo $head['TINYMCE'];
-    //echo $head['JQBOX'];
-    //echo $head['COLORPICKERJS'];
-    //print_r( $_SESSION );
+
 
 
 ?>
@@ -26,28 +20,48 @@
 <script>
 
 $(document).ready(function(){
-
-
-tinymce.init({
-    selector: 'div.editable',
-    inline: true,
-    plugins: [
-        'advlist autolink lists link image charmap print preview anchor',
-        'searchreplace visualblocks code fullscreen',
-        'insertdatetime media table contextmenu paste'
-    ],
-    toolbar: 'mybutton | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | table',
-    setup: function(editor) {
-    editor.addButton('mybutton', {
-      type: 'menubutton',
-      text: 'Version',
-      icon: false,
-      menu: [{
-        text: 'save',
-        onclick: function() {
-          editor.insertContent('saved ');
+    var category_id;
+    $.ajax({
+        dataType: 'json',
+        url: 'ajax/knowledge.php?action=getLastArticle',
+        method: "GET",
+        success: function( json ) {
+            var obj = JSON.parse( json.trim() );
+            $('#read').html( obj[0].content);
+            category_id = obj[0].category;
         }
-      }, {
+    })
+    tinymce.init({
+        
+        //language: 'de',
+        selector: 'div.editable',
+        inline: true,
+        plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table contextmenu paste'
+        ],
+        toolbar: 'mybutton | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | table',
+        setup: function(editor) {
+        editor.addButton('mybutton', {
+        type: 'menubutton',
+        text: 'Version',
+        icon: false,
+        menu: [{
+            text: 'save',
+            onclick: function() {
+                var artContent = $("#read").html();
+                $.ajax( {
+                    url: 'ajax/knowledge.php',
+                    data: {action: "updateContent",  data: { content : artContent,  cat_id: category_id } },
+                    dataType: 'json',
+                    type: 'post',
+                    error: function () {
+                        alert('Ajax Error');
+                    }
+                }); 
+            }
+    }, {
         text: 'next/new',
         onclick: function() {
           editor.insertContent('&nbsp;<em>Menu item 2 here!</em>&nbsp;');
@@ -57,17 +71,15 @@ tinymce.init({
         text: 'previous',
         onclick: function() {
           editor.insertContent('Previous Version was loaded');
-        }
-      }]
+            }
+         }]
+        });
+    } ,
+
     });
-  },
 
-});
-
-      var category_id;
-
-      $.ajax({
-            dataType: "json",
+    $.ajax({
+    dataType: "json",
             url: "ajax/knowledge.php?action=getCategories",
             method: "GET",
             success: function( json ) {
@@ -173,36 +185,7 @@ tinymce.init({
         $(".contex_main_menu").hide(100);
     });
 
-    $("#last").button({label:"last"}).click(function (event) {
-           $.ajax({
-              dataType: "json",
-              url: "ajax/knowledge.php?action=getLastArticle&data=" + category_id,
-              method: "GET",
-              success: function( json ) {
-                    var obj = JSON.parse( json.trim() );
-                    $('#read').html(obj[0].content);
-
-             }
-        })
-    });
-
-    $("#save").button({label:"save"}).click(function (event) {
-        var artContent = $("#read").html();
-        alert(artContent);
-        $.ajax( {
-            url: 'ajax/knowledge.php',
-            data: {action: "updateContent",  data: { content : artContent,  cat_id: category_id } },
-            dataType: 'json',
-            type: 'post',
-            success: function(json) {
-                //alert(JSON.stringify(json));
-            },
-            error: function () {
-                alert('Ajax Error');
-           }
-        });
-    });
-
+   
     $("#nextvers").button({label:"nextversion"}).click(function (event) {
         var artContent = $("#read").html();
         $.ajax({
@@ -282,8 +265,7 @@ tinymce.init({
     <input type="text" name="searchfield" id="searchfield" value="">
     <img src="image/search.png" border="0" title=".:search:." align="middle" id='wortsuche'><br>
     </p>
-    <p><button id="last"></button></p>
-    <p><button id="save"></button></p>
+
     <p><button id="nextvers"></button></p>
     <div id="read" class="editable"></div>
     <div id="treffer"></div>

@@ -12,7 +12,7 @@ function getArticle( $cat_id ){
      $rs = $GLOBALS['dbh']->query( 'UPDATE knowledge_content SET modifydate = now() WHERE category = '.$cat_id.' AND version = (SELECT max(version) FROM knowledge_content WHERE category = '.$cat_id.')'  );
      $sql = "SELECT json_agg (xxx) from (SELECT * FROM knowledge_content WHERE category = $cat_id ORDER BY version DESC ) xxx";
      $rs = $GLOBALS['dbh']->getOne( $sql );
-     echo json_encode( $rs['json_agg'] ); 
+     echo json_encode( $rs['json_agg'] );
 }
 
 function getLastArticle(){
@@ -40,13 +40,36 @@ function nextVersion( $data ){
 }
 
 function newCategory( $data ){
+   //Hauptkategorie
+   if( $data['mainCheck'] == "true") {
+        $rs = $GLOBALS['dbh']->insert( 'knowledge_category', array('labeltext', 'maingroup', 'help' ), array($data['catName'], 0, "FALSE") );
+        $sql = "SELECT MAX(id) FROM knowledge_category";
+        $rc = $GLOBALS['dbh']->getOne( $sql );
+        $rs = $GLOBALS['dbh']->insert( 'knowledge_content', array( 'modifydate', 'employee', 'content', 'version', 'category' ), array( 'now()', $_SESSION['id'], 'neue Kategorie', 1, $rc['max'] ) );
+   }
+   //Unterkategorie
+   else {
+        $rs = $GLOBALS['dbh']->insert( 'knowledge_category', array('labeltext', 'maingroup', 'help' ), array($data['catName'], $data['cat_id'], "FALSE") );
+        $sql = "SELECT MAX(id) FROM knowledge_category";
+        $rc = $GLOBALS['dbh']->getOne( $sql );
+        $rs = $GLOBALS['dbh']->insert( 'knowledge_content', array( 'modifydate', 'employee', 'content', 'version', 'category' ), array( 'now()', $_SESSION['id'], 'neue Kategorie', 1, $rc['max'] ) );
+   }
    echo json_encode( "ok" );
+}
+
+function editCategory( $data ){
+    $rs = $GLOBALS['dbh']->update( 'knowledge_category', array( 'labeltext'), array( $data['catName'] ), "id = ".$data['cat_id'] );
+    echo json_encode( "ok" );
+}
+
+function delCategory( $data ){
+
 }
 
 function searchArt( $data ){
     $sql = "SELECT distinct KCA.* as cid from knowledge_content KCO left join knowledge_category KCA on KCO.category=KCA.id where content ilike '%".$data."%'";
     $founds = $GLOBALS['dbh']->getAll($sql);
-    //writeLog(json_encode($rs));
+    //writeLog("test");
     echo json_encode($founds);
 }
 

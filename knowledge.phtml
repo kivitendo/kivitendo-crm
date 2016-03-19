@@ -27,6 +27,22 @@
 
 $(document).ready(function(){
 
+function sortAlpha(a,b){
+    return a.innerHTML.toLowerCase() > b.innerHTML.toLowerCase() ? 1 : -1;
+}
+
+function sortList(list) {
+    var items = $(list).children('li').get();
+    items.sort(function(a, b) {
+        var aText = $('a:first', a).text();
+        var bText = $('a:first', b).text();
+        return (aText < bText ? -1 : (aText > bText ? +1 : 0));
+    });
+    $(items).each(function() {
+        list.append(this);
+        sortList($(this).children('ul'));
+    });
+}
 
 tinymce.init({
     selector: 'div.editable',
@@ -108,7 +124,6 @@ tinymce.init({
                 $.each( obj[0].maingroup, function( i, val ){
 
                     $( "#menu" ).append("<li id='main_" + val.id + "'>" + val.labeltext + "</li>"  );
-
                 });
                 $.each( obj[1].undergroup, function( i, val ){
                     if( !$('#main_'  + val.maingroup + ' ul').length > 0 ){
@@ -142,23 +157,23 @@ tinymce.init({
 
                     // Show contextmenu
                    // alert(event.target.id.substring( 0, 4 ));
-               if ( event.target.id.substring( 0, 4 ) == "main" ) {                
+               if ( event.target.id.substring( 0, 4 ) == "main" ) {
                    $(".contex_main_menu").finish().toggle(100).
 
                     // In the right position (the mouse)
                     css({
                         top: event.pageY + "px",
                         left: event.pageX + "px"
-                    }); 
+                    });
                 }
-                else{                
+                else{
                    $(".contex_sub_menu").finish().toggle(100).
 
                     // In the right position (the mouse)
                     css({
                         top: event.pageY + "px",
                         left: event.pageX + "px"
-                    }); 
+                    });
                 }
                 }).bind("mousedown", function (event) {
                 category_id = event.target.id.substring( 5 );
@@ -183,7 +198,7 @@ tinymce.init({
         // This is the triggered action name
         switch($(this).attr("data-action")) {
             // A case for each action. Your actions here
-            case "edit":  alert('Category: ' + category_id + ' wird editiert' ) ; break;
+            case "edit":  $('#editCat').dialog("open").html('Kategorienamen ändern:<input type="text" id="editName" name="" value="">'); break;
             case "delete": alert('Category: ' + category_id + ' wird gelöscht'); break;
 
         }
@@ -195,61 +210,28 @@ tinymce.init({
         // This is the triggered action name
         switch($(this).attr("data-action")) {
             // A case for each action. Your actions here
-            case "new": $('#newCat').dialog("open"); break;
-            case "edit":  alert('Category: ' + category_id + ' wird editiert' ) ; break;
+            case "new": $('#newCat').dialog("open").html('Kategoriename:<input type="text" id="catName" name=""></br><input type="checkbox" id="mainCat" name="maincategory" value="1">Hauptkategorie'); break;
+            case "edit":  $('#editCat').dialog("open").html('Kategorienamen ändern:<input type="text" id="editName" name="">'); break;
             case "delete": alert('Category: ' + category_id + ' wird gelöscht'); break;
-            
+
 
         }
         // Hide it AFTER the action was triggered
         $(".contex_main_menu").hide(100);
     });
 
-    $("#last").button({label:"last"}).click(function (event) {
-           $.ajax({
-              dataType: "json",
-              url: "ajax/knowledge.php?action=getLastArticle&data=" + category_id,
-              method: "GET",
-              success: function( json ) {
-                    var obj = JSON.parse( json.trim() );
-                    $('#read').html(obj[0].content);
-
-             }
-        })
-    });
-
-    $("#save").button({label:"save"}).click(function (event) {
-        var artContent = $("#read").html();
-        //alert(artContent);
-        $.ajax( {
-            url: 'ajax/knowledge.php',
-            data: {action: "updateContent",  data: { content : artContent,  cat_id: category_id } },
-            dataType: 'json',
-            type: 'post',
-            success: function(json) {
-                //alert(JSON.stringify(json));
-            },
-            error: function () {
-                alert('Ajax Error');
-           }
-        });
-    });
-
-    $("#nextvers").button({label:"nextversion"}).click(function (event) {
-        var artContent = $("#read").html();
-        $.ajax({
-           url: 'ajax/knowledge.php',
-           data: {action: "nextVersion",  data: { content : artContent,  cat_id: category_id } },
-           dataType: 'json',
-           type: 'post',
-           success: function( json ) {
-                 //alert(JSON.stringify(json));
-           },
-           error: function () {
-                alert('Ajax Error');
-           }
-
-        })
+    $("#sort").button({label:"sort"}).click(function (event) {
+     /*  var sortList = $('#menu ul');
+       var sortItems = sortList.children("li").get();
+        sortItems.sort(function(a,b) {
+        var compA = $(a).text().toUpperCase();
+        var compB = $(b).text().toUpperCase();
+        return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+        }); // END sort()
+        $.each(sortItems, function(idx, itm) { sortList.append(itm); }); */
+        var newLi = $("<li>Teeeest</li>").hide();
+        $('li', 'ul').add(newLi.fadeIn(500)).sort(sortAlpha).appendTo('#menu');
+       // sortList($( '#menu' )).menu( "refresh" );
     });
 
     $("#wortsuche").click(function (event) {
@@ -264,21 +246,46 @@ tinymce.init({
               }
         })
     });
-    
+
     $("#newCat")
         .dialog({
             autoOpen: false,
-            title: "Neu Kategorie",
+            title: "New Category",
             buttons: {
-                Anlegen: function() {
+                New: function() {
                     var newCat = $('#catName').val();
-                    //alert($('#mainCat').is(':checked'));
+                    var mainCat = $('#mainCat').is(':checked');
                     $.ajax({
-                        dataType: "json",
-                        url: "ajax/knowledge.php?action=newCategory&data=" + newCat,
-                        method: "GET",
+                        data: {action: "newCategory",  data: { catName : newCat,  cat_id: category_id, mainCheck: mainCat } },
+                        dataType: 'json',
+                        type: 'post',
+                        url: "ajax/knowledge.php",
                         success: function( json ) {
                              //alert(JSON.stringify(json));
+                             //$( "#menu" ).append("<li id='main_'>testcat</li>"  );
+                             //$( "#menu" ).menu( "refresh" );
+                        }
+                    })
+                    $(this).dialog("close");
+                }
+            }
+     });
+     $("#editCat")
+        .dialog({
+            autoOpen: false,
+            title: "Edit Category",
+            buttons: {
+                Edit: function() {
+                    var newCat = $('#editName').val();
+                    $.ajax({
+                        data: {action: "editCategory",  data: { catName : newCat,  cat_id: category_id } },
+                        dataType: 'json',
+                        type: 'post',
+                        url: "ajax/knowledge.php",
+                        success: function( json ) {
+                             //alert(JSON.stringify(json));
+                             //$( "#menu" ).append("<li id='main_'>testcat</li>"  );
+                             //$( "#menu" ).menu( "refresh" );
                         }
                     })
                     $(this).dialog("close");
@@ -334,6 +341,7 @@ tinymce.init({
     <input type="text" name="searchfield" id="searchfield" value="">
     <img src="image/search.png" border="0" title=".:search:." align="middle" id='wortsuche'><br>
     </p>
+    <p><button id="sort"></button></p>
     <div id="read" class="editable"></div>
     <div id="treffer"></div>
 
@@ -348,10 +356,8 @@ tinymce.init({
   <li data-action="delete">Delete </li>
 </ul>
 <div id="newCat">
-Neuer Kategoriename:
-<input type="text" id="catName" name=""></br>
-<input type="checkbox" id="mainCat" name="maincategory" value="1">
-Hauptkategorie
+</div>
+<div id="editCat">
 </div>
 <?php echo $menu['end_content']; ?>
 </body>

@@ -70,13 +70,13 @@ function getArtikel($data) {
              $where .= " and ".implode(" and ",$cvar);
              $cvarjoin = ",custom_variable_configs CVC LEFT JOIN custom_variables CV on CV.config_id=CVC.id ";
         }
-    } 
-    if ($data['preise']>2) { 
-	$prices = ',PR.price '; 
+    }
+    if ($data['preise']>2) {
+    $prices = ',PR.price ';
         $pricejoin = ' LEFT JOIN prices PR on PR.parts_id=P.id';
         $pricewhere = ' and (PR.pricegroup_id='.$data['preise'].' or PR.pricegroup_id is null)';
-    } else { 
-	$prices = ''; 
+    } else {
+    $prices = '';
         $pricejoin = '';
         $pricewhere = '';
     };

@@ -30,19 +30,37 @@ $(document).ready(function(){
     })
     tinymce.init({
         //language: 'de',
+        //plugins: "autosave",
+
+        spellchecker_language: 'de',
+        spellchecker_rpc_url: 'http://localhost/kivitendo-dev/crm/nodejs/node_modules/tinymce/spellchecker/spellchecker.php',
+        browser_spellcheck : true,
+        contextmenu: false,
         selector: 'div.editable',
         inline: true,
         plugins: [
             'advlist autolink lists link image charmap print preview anchor',
             'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table contextmenu paste'
+            'insertdatetime media table contextmenu paste spellchecker '
         ],
-        toolbar: 'mybutton | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | table',
+        toolbar: 'mybutton | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | table | code | spellchecker',
         setup: function(editor) {
-        editor.addButton('mybutton', {
-        type: 'menubutton',
-        text: 'Version',
-        icon: false,
+            editor.on('keyup', function (e) {
+                var artContent = $("#read").html();
+                $.ajax( {
+                    url: 'ajax/knowledge.php',
+                    data: {action: "updateContent",  data: { content : artContent,  cat_id: category_id } },
+                    dataType: 'json',
+                type: 'post',
+                error: function () {
+                    alert('Ajax Error');
+                }
+            });
+            });
+            editor.addButton('mybutton', {
+            type: 'menubutton',
+            text: 'Version',
+            icon: false,
         menu: [{
             text: 'save',
             onclick: function() {
@@ -58,7 +76,7 @@ $(document).ready(function(){
             });
         }
     }, {
-        text: 'next/new',
+        text: 'next',
         onclick: function() {
           editor.insertContent('&nbsp;<em>Menu item 2 here!</em>&nbsp;');
         }

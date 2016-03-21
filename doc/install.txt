@@ -35,7 +35,7 @@ Vorrausetzungen:
     php5-curl
 
 Fast alle Pakete können unter debianoiden Systemen in der Konsole mit folgendem Befehl installiert werden.
-apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-mdb2 php-mdb2-driver-pgsql php-fpdf libfpdi-php imagemagick ttf-freefont php5-curl tinymce libphp-jpgraph
+apt-get install libapache2-mod-php5 php5-gd php5-imap php-mail php-mail-mime php-pear php-mdb2 php-mdb2-driver-pgsql php-fpdf libfpdi-php imagemagick ttf-freefont php5-curl libphp-jpgraph php5-enchant aspell-de
 
 Entwickler benötigen zusätzlich einige Pakete:
 apt-get install nodejs nodejs-legacy npm

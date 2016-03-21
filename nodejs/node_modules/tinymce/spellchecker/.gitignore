@@ -1,0 +1,13 @@
+bin
+obj
+tmp
+docs
+.settings
+*~
+*.diff
+*.patch
+*.bak
+*.log
+node_modules
+.DS_Store
+editor_plugin.js

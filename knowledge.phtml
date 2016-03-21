@@ -18,6 +18,19 @@
 
 $(document).ready(function(){
     var category_id;
+    var timer;
+    function updateContent () {
+                var artContent = $("#read").html();
+                $.ajax( {
+                    url: 'ajax/knowledge.php',
+                    data: {action: "updateContent",  data: { content : artContent,  cat_id: category_id } },
+                    dataType: 'json',
+                type: 'post',
+                error: function () {
+                    alert('Ajax Error');
+                }
+            })
+        }
     $.ajax({
         dataType: 'json',
         url: 'ajax/knowledge.php?action=getLastArticle',
@@ -31,9 +44,12 @@ $(document).ready(function(){
     tinymce.init({
         //language: 'de',
         //plugins: "autosave",
-
-        spellchecker_language: 'de',
-        spellchecker_rpc_url: 'http://localhost/kivitendo-dev/crm/nodejs/node_modules/tinymce/spellchecker/spellchecker.php',
+        //external_plugins: {"nanospell": "../nanospell/plugin.js"},
+        //snanospell_server: "php",
+        //code_dialog_height: 200,
+        //apply_source_formatting : true,
+        spellchecker_language: kivi.myconfig.countrycode,
+        spellchecker_rpc_url: '../../spellchecker/spellchecker.php',
         browser_spellcheck : true,
         contextmenu: false,
         selector: 'div.editable',
@@ -41,22 +57,19 @@ $(document).ready(function(){
         plugins: [
             'advlist autolink lists link image charmap print preview anchor',
             'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table contextmenu paste spellchecker '
+            'insertdatetime media table contextmenu paste spellchecker textcolor'
         ],
         toolbar: 'mybutton | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | table | code | spellchecker',
         setup: function(editor) {
-            editor.on('keyup', function (e) {
-                var artContent = $("#read").html();
-                $.ajax( {
-                    url: 'ajax/knowledge.php',
-                    data: {action: "updateContent",  data: { content : artContent,  cat_id: category_id } },
-                    dataType: 'json',
-                type: 'post',
-                error: function () {
-                    alert('Ajax Error');
-                }
+            editor.on('keyup',function () {
+                clearTimeout(timer);
+                timer = setTimeout(function() {   //calls click event after a certain time
+                    updateContent();
+                }, 1000);
+
             });
-            });
+
+            //});
             editor.addButton('mybutton', {
             type: 'menubutton',
             text: 'Version',

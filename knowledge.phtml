@@ -42,15 +42,10 @@ $(document).ready(function(){
         }
     })
     tinymce.init({
-        //language: 'de',
-        //plugins: "autosave",
-        //external_plugins: {"nanospell": "../nanospell/plugin.js"},
-        //snanospell_server: "php",
-        //code_dialog_height: 200,
-        //apply_source_formatting : true,
+        language: kivi.myconfig.countrycode,
         spellchecker_language: kivi.myconfig.countrycode,
         spellchecker_rpc_url: '../../spellchecker/spellchecker.php',
-        browser_spellcheck : true,
+        browser_spellcheck : false,
         contextmenu: false,
         selector: 'div.editable',
         inline: true,
@@ -60,49 +55,31 @@ $(document).ready(function(){
             'insertdatetime media table contextmenu paste spellchecker textcolor'
         ],
         toolbar: 'mybutton | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | table | code | spellchecker',
-        setup: function(editor) {
-            editor.on('keyup',function () {
-                clearTimeout(timer);
-                timer = setTimeout(function() {   //calls click event after a certain time
+        setup: function( editor ){
+            editor.on( 'keyup', function(){
+                clearTimeout( timer );
+                timer = setTimeout( function(){   //calls click event after a certain time
                     updateContent();
-                }, 1000);
-
+                }, 1000 );
             });
-
-            //});
-            editor.addButton('mybutton', {
-            type: 'menubutton',
-            text: 'Version',
-            icon: false,
-        menu: [{
-            text: 'save',
-            onclick: function() {
-                var artContent = $("#read").html();
-                $.ajax( {
-                    url: 'ajax/knowledge.php',
-                    data: {action: "updateContent",  data: { content : artContent,  cat_id: category_id } },
-                    dataType: 'json',
-                type: 'post',
-                error: function () {
-                    alert('Ajax Error');
-                }
+            editor.addButton( 'mybutton', {
+                type: 'menubutton',
+                text: 'Version',
+                icon: false,
+                menu: [{
+                    text: 'next',
+                    onclick: function() {
+                        editor.insertContent('&nbsp;<em>Menu item 2 here!</em>&nbsp;');
+                    }
+                },
+                {
+                    text: 'previous',
+                    onclick: function() {
+                        editor.insertContent('Previous Version was loaded');
+                    }
+                }]
             });
-        }
-    }, {
-        text: 'next',
-        onclick: function() {
-          editor.insertContent('&nbsp;<em>Menu item 2 here!</em>&nbsp;');
-        }
-      },
-       {
-        text: 'previous',
-        onclick: function() {
-          editor.insertContent('Previous Version was loaded');
-            }
-         }]
-        });
-    } ,
-
+        },
     });
 
     $.ajax({

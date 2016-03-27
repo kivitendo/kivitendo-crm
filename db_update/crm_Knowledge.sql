@@ -1,4 +1,4 @@
--- @tag: knowledge
+-- @tag: Knowledge
 -- @description: creates table for kowledge
 -- @version: 2.1.3
 

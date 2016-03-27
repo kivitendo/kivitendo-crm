@@ -536,3 +536,4 @@ INSERT INTO schema_info (tag,login) VALUES ('crm_Calendar','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_Calendar02','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_EventCategory','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_Postitall','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_Knowledge','install');

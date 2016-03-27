@@ -92,29 +92,9 @@ CREATE TABLE grpusr (
     grpid integer,
     usrid integer);
 
-CREATE TABLE termine (
-    id serial,
-    cause character varying(45),
-    c_cause text,
-    start timestamp without time zone,
-    stop timestamp without time zone,
-    repeat integer,
-    ft char(1),
-    starttag date,
-    stoptag date,
-    startzeit char(5),
-    stopzeit char(5),
-    privat boolean default false,
-    uid integer,
-    kategorie integer DEFAULT 0,
-    location text,
-    syncid text);
-
-
-
 
 CREATE TABLE custmsg (
-    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    id serial,
     fid integer,
     prio integer DEFAULT 3,
     msg char varying(60),
@@ -149,7 +129,7 @@ VALUES ('Firma', 'C', 'A4', 'mm', 2, 2, 2, 3, 4, 2, 66, 38, 10, NULL);
 
 
 CREATE TABLE labeltxt (
-    id integer DEFAULT nextval('crmid'::text),
+    id serial,
     lid integer,
     font integer,
     zeile text);
@@ -249,7 +229,7 @@ CREATE TABLE opportunity(
     memployee integer
 );
 CREATE TABLE opport_status (
-    id integer DEFAULT nextval('crmid'::text) NOT NULL,
+    id serial,
     statusname character varying(50),
     sort integer
 );
@@ -272,7 +252,7 @@ CREATE TABLE tempcsvdata (
 );
 
 CREATE TABLE mailvorlage (
-        id integer DEFAULT nextval('crmid'::text) NOT NULL,
+        id serial,
         cause char varying(120),
         c_long text,
         employee integer
@@ -339,6 +319,15 @@ CREATE TABLE crmemployee (
     typ char(1) DEFAULT 't'
 );
 
+CREATE TABLE event_category(
+    id      serial NOT NULL PRIMARY KEY,
+    label   text,
+    color      char(7),
+    cat_order INT DEFAULT 1
+);
+
+INSERT INTO event_category ( label, color ) VALUEs ( 'Default-Category', '' );
+
 CREATE TABLE events(
     id              SERIAL NOT NULL PRIMARY KEY,
     title           TEXT,
@@ -368,7 +357,25 @@ CREATE TABLE postitall (
     content     TEXT
 );
 
+CREATE TABLE knowledge_category (
+    id       SERIAL,
+    labeltext text,
+    maingroup int,
+    help    bool
+);
+INSERT INTO knowledge_category ( labeltext, maingroup ) VALUES ( 'kivitendo', 0 );
 
+CREATE TABLE knowledge_content (
+    id          SERIAL,
+    modifydate  TIMESTAMP,
+    content     TEXT,
+    employee    INT,
+    version     INT,
+    category    INT,
+    owner       INT,
+    rights      TEXT
+);
+INSERT INTO knowledge_content ( modifydate, content, employee, version, category, owner ) VALUES ( now(), 'right click for new category', 0, 1, 1, 0 );
 
 INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('ttpart','','mandant',-1);
 INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('tttime','60','mandant',-1);
@@ -470,16 +477,11 @@ ALTER TABLE vendor ADD COLUMN headcount int;
 ALTER TABLE shipto ADD COLUMN shiptoowener int4;
 ALTER TABLE shipto ADD COLUMN shiptoemployee int4;
 ALTER TABLE shipto ADD COLUMN shiptobland int4;
---ALTER TABLE contacts ADD COLUMN cp_street character varying(75);
---ALTER TABLE contacts ADD COLUMN cp_zipcode character varying(10);
---ALTER TABLE contacts ADD COLUMN cp_city character varying(75);
 ALTER TABLE contacts ADD COLUMN cp_homepage text;
 ALTER TABLE contacts ADD COLUMN cp_notes text;
 ALTER TABLE contacts ADD COLUMN cp_beziehung integer;
 ALTER TABLE contacts ADD COLUMN cp_sonder integer;
---ALTER TABLE contacts ADD COLUMN cp_position character varying(75);
 ALTER TABLE contacts ADD COLUMN cp_stichwort1 text;
---ALTER TABLE contacts ADD COLUMN cp_gebdatum character varying(10);
 ALTER TABLE contacts ADD COLUMN cp_owener integer;
 ALTER TABLE contacts ADD COLUMN cp_employee integer;
 ALTER TABLE contacts ADD COLUMN cp_grafik character varying(5);
@@ -487,27 +489,17 @@ ALTER TABLE contacts ADD COLUMN cp_country character varying(3);
 ALTER TABLE contacts ADD COLUMN cp_salutation text;
 ALTER TABLE defaults ADD COLUMN contnumber text;
 
-INSERT INTO crm (uid,datum,version) VALUES (0,now(),'1.9.0');
 
-CREATE INDEX td_termin_key ON termdate USING btree (termid);
-CREATE INDEX td_jahr_key ON termdate USING btree (jahr);
-CREATE INDEX td_monat_key ON termdate USING btree (monat);
-CREATE INDEX td_tag_key ON termdate USING btree (tag);
-CREATE INDEX t_starttag_key ON termine USING btree (starttag);
-CREATE INDEX t_stoptag_key ON termine USING btree (stoptag);
-CREATE INDEX t_stopzeit_key ON termine USING btree (stopzeit);
-CREATE INDEX t_startzeit_key ON termine USING btree (startzeit);
-CREATE INDEX t_termin_key ON termine USING btree (id);
-CREATE INDEX tm_member_key ON terminmember USING btree (member);
-CREATE INDEX tm_termin_key ON terminmember USING btree (termin);
 CREATE INDEX contacts_id_key ON contacts USING btree (cp_id);
 CREATE INDEX contacts_name_key ON contacts USING btree (cp_name);
---CREATE INDEX contacts_firma_key ON contacts USING btree (cp_firma);
 CREATE INDEX telcall_id_key ON telcall USING btree (id);
 CREATE INDEX telcall_bezug_key ON telcall USING btree (bezug);
 CREATE INDEX mid_key ON contmasch USING btree (mid);
 
 INSERT INTO schema_info (tag,login) VALUES ('crm_defaults','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_wvhistory2','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_id2login','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_katalogsortpart','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_defaults_gruppe','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_bundeslaender','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_CleanContact','install');
@@ -534,6 +526,7 @@ INSERT INTO schema_info (tag,login) VALUES ('crm_timetracker','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_timetracker_budget','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_timetracker_parts','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_wissen_own','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_WiedervorlageGrp','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_wvhistory','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_CRMemployee','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_CRMemployeeMID','install');
@@ -541,4 +534,5 @@ INSERT INTO schema_info (tag,login) VALUES ('crm_UserFolder','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_UserMailssl','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_Calendar','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_Calendar02','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_EventCategory','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_Postitall','install');

@@ -1,8 +1,10 @@
 <?php
+require_once __DIR__.'/stdLib.php';
 function convertPostits(){
+    $allErpUser = getAllERPusers();
     $pid = 0;
-    $content = '{"id":xxxidxxx,"created":1451038148498,"domain":"http://localhost","page":"/kivitendo-dev/crm/firma1.php","osname":"5.0 (X11)","content":"<b>xxxcausexxx</b><br>xxxcontentxxx","position":"absolute","posX":"1287px","posY":"309px","right":"","height":240,"width":200,"minHeight":240,"minWidth":180,"oldPosition":{},"style":{"tresd":true,"backgroundcolor":"#FBEC88","textcolor":"#000","textshadow":false,"fontfamily":"verdana","fontsize":"small","arrow":"none"},"features":{"prefix":"#PIApostit_","filter":"domain","savable":true,"randomColor":false,"toolbar":true,"autoHideToolBar":true,"removable":true,"askOnDelete":0,"draggable":true,"resizable":true,"editable":true,"changeoptions":true,"blocked":true,"minimized":true,"expand":true,"fixed":true,"addNew":true,"showInfo":0,"pasteHtml":0,"htmlEditor":0,"autoPosition":0,"addArrow":"back"},"flags":{"blocked":false,"minimized":false,"expand":false,"fixed":false,"highlight":false},"attachedTo":{"element":"","position":"right","fixed":true,"arrow":true}}';
-    foreach( $_SESSION['all_erp_users'] as  $value ){
+    $content = '{"id":xxxidxxx,"created":1451038148498,"domain":"","page":"","osname":"5.0 (X11)","content":"<b>xxxcausexxx</b><br>xxxcontentxxx","position":"absolute","posX":"1287px","posY":"309px","right":"","height":240,"width":200,"minHeight":240,"minWidth":180,"oldPosition":{},"style":{"tresd":true,"backgroundcolor":"#FBEC88","textcolor":"#000","textshadow":false,"fontfamily":"verdana","fontsize":"small","arrow":"none"},"features":{"prefix":"#PIApostit_","filter":"domain","savable":true,"randomColor":false,"toolbar":true,"autoHideToolBar":true,"removable":true,"askOnDelete":0,"draggable":true,"resizable":true,"editable":true,"changeoptions":true,"blocked":true,"minimized":true,"expand":true,"fixed":true,"addNew":true,"showInfo":0,"pasteHtml":0,"htmlEditor":0,"autoPosition":0,"addArrow":"back"},"flags":{"blocked":false,"minimized":false,"expand":false,"fixed":false,"highlight":false},"attachedTo":{"element":"","position":"right","fixed":true,"arrow":true}}';
+    foreach( $allErpUser as  $value ){
         $sql = "SELECT id FROM employee WHERE login = '".$value['login']."'";
         $rs = $GLOBALS['dbh']->getOne( $sql );
         $value['crmuid'] = $rs['id'];
@@ -18,4 +20,14 @@ function convertPostits(){
         }
     }
 }
+function convertKnowledge(){
+    $allErpUser = getAllERPusers();
+    foreach( $allErpUser as $value ){
+        $sql = "SELECT id FROM employee WHERE login = '".$value['login']."'";
+        $rs = $GLOBALS['dbh']->getOne( $sql );
+        $value['crmuid'] = $rs['id'];
+        $rs = $GLOBALS['dbh']->update( 'knowledge_content', array( 'employee', 'owner' ), array( $value['crmuid'], $value['crmuid'] ), "employee = ".$value['crmuid'] );
+    }
+}
+
 ?>

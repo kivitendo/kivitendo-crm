@@ -6,6 +6,7 @@
 require_once __DIR__.'/phpDataObjects.php';
 require_once __DIR__.'/stdLib.php';
 require_once __DIR__.'/conf.php';
+require_once __DIR__.'/version.php';
 
 if( !varExist( $_SESSION ) ) session_start();
 
@@ -90,6 +91,8 @@ if( $newSession ) {
         $rs=$GLOBALS['dbh_auth']->query ( $sql );
     }
     $_SESSION["menu"]  = makeMenu();//warum geht das menu verloren?? warum MUSS "OR !varExist( $_SESSION, 'menu'" )
+
+    checkInstallation();
 }
 
 //Vorerst Userdaten der CRM in crmUserData speichern !!besser in userConfig speichern
@@ -316,4 +319,33 @@ function delcurrentSess(){
     echo '<script type="text/javascript">window.location.href="'.$baseurl.'crm/delsess.php?url='.$url.'";</script>';
     return;
 }
-//echo "connections";
+
+function checkInstallation(){  //*** Prüft ob die Tabelle crm installiert ist und installiert ggf alle nötigen Tabellen
+    $rs = $GLOBALS['dbh']->getOne( "SELECT EXISTS  ( SELECT 1 FROM   information_schema.tables WHERE  table_schema = 'public' AND  table_name = 'crm') AS crm_exist " );
+    if( !$rs['crm_exist'] ){  //Installation beginnt
+        $instFileArray = file( __DIR__.'/../db_install/installation_01.sql',  FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES  );//Array mit Lines aus Installations-SQL-File laden
+        $sql = '';
+        $comment_patterns = array(
+        '/\/\*.*(\n)*.*(\*\/)?/', //C comments
+        '/\s*--.*\n/',            //inline comments start with --
+        '/\s*#.*\n/',             //inline comments start with #
+        );
+         $GLOBALS['dbh']->begin();
+        foreach( $instFileArray as $key => $line ){
+            $line = preg_replace( $comment_patterns, "", $line ); //remove comments
+            $sql .= $line;
+            if( strpos( $line, ';' ) !== FALSE ){
+                //$sql = preg_replace( $comment_patterns, "", $sql );
+                //printArray( $sql );
+                if( $GLOBALS['dbh']->exec( $sql ) === FALSE ){
+                    writeLog( $sql );
+                    echo "SQL-Error in installation_01.sql";
+                    return;
+                }
+                $sql = '';
+            }
+        }
+        $GLOBALS['dbh']->exec( "INSERT INTO crm (uid,datum,version) VALUES (0,now(), '".VERSION."')" );
+        $GLOBALS['dbh']->commit();
+    }
+}

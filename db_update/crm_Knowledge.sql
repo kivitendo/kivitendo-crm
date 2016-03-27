@@ -1,6 +1,7 @@
 -- @tag: knowledge
--- @description: creates Table for kowledge
--- @version: 2.1.0
+-- @description: creates table for kowledge
+-- @version: 2.1.3
+
 DROP TABLE IF EXISTS knowledge_category;
 CREATE TABLE knowledge_category (
     id       SERIAL,
@@ -38,3 +39,5 @@ DELETE FROM knowledge_content WHERE category IS NULL;
 
 
 DROP TABLE tmp;
+
+-- @exec

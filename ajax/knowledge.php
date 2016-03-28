@@ -10,31 +10,35 @@ function getCategories(){
 
 function getArticle( $cat_id ){
      $rs = $GLOBALS['dbh']->query( 'UPDATE knowledge_content SET modifydate = now() WHERE category = '.$cat_id.' AND version = (SELECT max(version) FROM knowledge_content WHERE category = '.$cat_id.')'  );
-     $sql = "SELECT json_agg (xxx) from (SELECT * FROM knowledge_content WHERE category = $cat_id ORDER BY version DESC ) xxx";
+     $sql = "SELECT json_agg (json) from (SELECT * FROM knowledge_content WHERE category = $cat_id ORDER BY version DESC ) json";
      $rs = $GLOBALS['dbh']->getOne( $sql );
      echo json_encode( $rs['json_agg'] );
 }
 
-function getLastArticle(){
-     $sql = "SELECT json_agg (xxx) from (SELECT * FROM knowledge_content WHERE  modifydate = (SELECT max(modifydate) FROM knowledge_content ) ) xxx";
+function getLastArticle(){ //Holt den zuletzt gelesenen Artikel
+     $sql = "SELECT json_agg (json) from (SELECT * FROM knowledge_content WHERE  modifydate = (SELECT max(modifydate) FROM knowledge_content ) ) json";
      $rs = $GLOBALS['dbh']->getOne( $sql );
      echo json_encode( $rs['json_agg'] );
 }
 
 function updateContent( $data ){
-   //Letzten Eintrag
-   //$sql = "SELECT * FROM knowledge_content WHERE category = ".$data['cat_id']." ORDER BY id DESC LIMIT 1";
-   //$rs = $GLOBALS['dbh']->getOne( $sql );
-   //UPDATE SQL
-   writeLog($data);
-   $rs = $GLOBALS['dbh']->update( 'knowledge_content', array( 'modifydate', 'employee', 'content' ), array( 'now()', $_SESSION['id'] , $data['content'] ), "category = ".$data['cat_id'] );
-   echo json_encode("ok");
+    $version = getLastVersionNumber( $data['cat_id'] );
+    if( $version == $data['version']) $rs = $GLOBALS['dbh']->update( 'knowledge_content', array( 'modifydate', 'employee', 'content' ), array( 'now()', $_SESSION['id'] , $data['content'] ), "category = ".$data['cat_id']." AND version = ".$version );
+    else  $rs = $GLOBALS['dbh']->insert( 'knowledge_content', array( 'modifydate', 'employee', 'content', 'version', 'category' ), array( 'now()', $_SESSION['id'], $data['content'], $version + 1, $data['cat_id'] ) );
+    echo json_encode("ok");
 }
 
-function nextVersion( $data ){
-    $vers = "SELECT max(version) FROM knowledge_content WHERE category = ".$data['cat_id'];
-    $rs = $GLOBALS['dbh']->getOne($vers);
-    $version = $rs['max']+1;
+function getOtherVersion( $data ){ // holt voherige oder nachfolgende Version eines Artikels
+    $lastVersion = getLastVersionNumber( $data['cat_id'] );
+    $version = $data['version'] >=  $lastVersion ? $lastVersion : $data['version'];
+    $version = $version < 1 ? 1 : $version;
+    $sql = "SELECT json_agg (json) from (SELECT * FROM knowledge_content WHERE category = ".$data['cat_id']." AND version = ".$version." ) json";
+    $rs = $GLOBALS['dbh']->getOne( $sql );
+    echo json_encode( $rs['json_agg'] );
+}
+
+function createNewVersion( $data ){ // erstellt eine neue Version
+    $version = getLastVersionNumber( $data['cat_id'] ) + 1; writeLog( $version );
     $rs = $GLOBALS['dbh']->insert( 'knowledge_content', array( 'modifydate', 'employee', 'content', 'version', 'category' ), array( 'now()', $_SESSION['id'], $data['content'], $version, $data['cat_id'] ) );
     echo json_encode("ok");
 }
@@ -73,4 +77,8 @@ function searchArt( $data ){
     echo json_encode($founds);
 }
 
+function getLastVersionNumber( $category ){
+    $rs = $GLOBALS['dbh']->getOne( "SELECT max(version) FROM knowledge_content WHERE category = ".$category );
+    return $rs['max'];
+}
 ?>

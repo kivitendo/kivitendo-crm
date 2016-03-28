@@ -17,20 +17,10 @@
 <script>
 
 $(document).ready(function(){
-    var category_id;
-    var timer;
-    function updateContent () {
-                var artContent = $("#read").html();
-                $.ajax( {
-                    url: 'ajax/knowledge.php',
-                    data: {action: "updateContent",  data: { content : artContent,  cat_id: category_id } },
-                    dataType: 'json',
-                type: 'post',
-                error: function () {
-                    alert('Ajax Error');
-                }
-            })
-        }
+    var category_id, timer, version;
+    function updateContent(){
+
+    }
     $.ajax({
         dataType: 'json',
         url: 'ajax/knowledge.php?action=getLastArticle',
@@ -39,6 +29,7 @@ $(document).ready(function(){
             var obj = JSON.parse( json.trim() );
             $('#read').html( obj[0].content);
             category_id = obj[0].category;
+            version     = obj[0].version;
         }
     })
     tinymce.init({
@@ -59,7 +50,16 @@ $(document).ready(function(){
             editor.on( 'keyup', function(){
                 clearTimeout( timer );
                 timer = setTimeout( function(){   //calls click event after a certain time
-                    updateContent();
+                    var artContent = $("#read").html();
+                    $.ajax({
+                        url: 'ajax/knowledge.php',
+                        data: { action: "updateContent",  data: { content : artContent,  cat_id: category_id, version: version } },
+                        dataType: 'json',
+                        type: 'post',
+                        error: function () {
+                            alert('Ajax Error in upateContent()');
+                        }
+                    })
                 }, 1000 );
             });
             editor.addButton( 'mybutton', {
@@ -69,13 +69,63 @@ $(document).ready(function(){
                 menu: [{
                     text: 'next',
                     onclick: function() {
-                        editor.insertContent('&nbsp;<em>Menu item 2 here!</em>&nbsp;');
+                        $.ajax({
+                            url: 'ajax/knowledge.php',
+                            data: { action: "getOtherVersion",  data: {  cat_id: category_id, version: version + 1 } },
+                            dataType: 'json',
+                            method: "POST",
+                            success: function( json ) {
+                                var obj = JSON.parse( json.trim() );
+                                $( '#read' ).html( obj[0].content );
+                                version = obj[0].version;
+                                //alert( version );
+                                //Version sollte sichtbar im Editor gemacht werden
+                            },
+                            error: function () {
+                                alert('Ajax Error');
+                            }
+                        });
                     }
                 },
                 {
                     text: 'previous',
                     onclick: function() {
-                        editor.insertContent('Previous Version was loaded');
+
+                        $.ajax({
+                            dataType: "json",
+                            url: 'ajax/knowledge.php',
+                            method: "POST",
+                            data: { action: "getOtherVersion",  data: {  cat_id: category_id, version: version - 1 } },
+                            success: function( json ) {
+                                var obj = JSON.parse( json.trim() );
+                                $('#read').html(obj[0].content);
+                                version = obj[0].version;
+                                //alert( version );
+                                //Version sollte sichtbar im Editor gemacht werden
+                            },
+                            error: function () {
+                                alert('Ajax Error');
+                            }
+                        })
+                    }
+                },
+                {
+                    text: 'new',
+                    onclick: function() {
+                        var artContent = $("#read").html();
+                       // alert( 'new cate' );
+                        $.ajax({
+                            url: 'ajax/knowledge.php',
+                            data: {action: "createNewVersion",  data: { content : artContent,  cat_id: category_id } },
+                            dataType: 'json',
+                            method: "POST",
+                            success: function( json ) {
+                                //alert(JSON.stringify(json));
+                            },
+                            error: function () {
+                                alert('Ajax Error');
+                            }
+                        });
                     }
                 }]
             });
@@ -115,6 +165,8 @@ $(document).ready(function(){
                             //alert(JSON.stringify( obj[0].content )  );
                             //console.log( JSON.stringify( obj ) );
                             $('#read').html(obj[0].content);
+                            version = obj[0].version;
+                            alert( version );
 
                         }
                     })
@@ -167,7 +219,8 @@ $(document).ready(function(){
         // This is the triggered action name
         switch($(this).attr("data-action")) {
             // A case for each action. Your actions here
-            case "edit":  alert('Category: ' + category_id + ' wird editiert' ) ; break;
+            case "edit": alert( 'testxx' ); $('#editCat').dialog("open").html('Kategorienamen ändern:<input type="text" id="editName" name="" value="">'); break;
+
             case "delete": alert('Category: ' + category_id + ' wird gelöscht'); break;
 
         }
@@ -179,8 +232,9 @@ $(document).ready(function(){
         // This is the triggered action name
         switch($(this).attr("data-action")) {
             // A case for each action. Your actions here
-            case "new": alert('Category: ' + category_id + ' neue Kategorie wird erzeugt'); break;
-            case "edit":  alert('Category: ' + category_id + ' wird editiert' ) ; break;
+             case "new": alert( 'testyy' ); $('#newCat').dialog("open"); break;
+             case "edit":  $('#editCat').dialog("open").html('Kategorienamen ändern:<input type="text" id="editName" name="">'); break;
+
             case "delete": alert('Category: ' + category_id + ' wird gelöscht'); break;
 
 
@@ -189,23 +243,6 @@ $(document).ready(function(){
         $(".contex_main_menu").hide(100);
     });
 
-
-    $("#nextvers").button({label:"nextversion"}).click(function (event) {
-        var artContent = $("#read").html();
-        $.ajax({
-           url: 'ajax/knowledge.php',
-           data: {action: "nextVersion",  data: { content : artContent,  cat_id: category_id } },
-           dataType: 'json',
-           type: 'post',
-           success: function( json ) {
-                 //alert(JSON.stringify(json));
-           },
-           error: function () {
-                alert('Ajax Error');
-           }
-
-        })
-    });
 
     $("#wortsuche").click(function (event) {
           var searchword = $('#searchfield').val();
@@ -220,6 +257,30 @@ $(document).ready(function(){
         })
     });
 
+});
+
+$("#newCat").dialog({
+    autoOpen: false,
+    title: "New Category",
+    buttons: {
+        New: function() {
+            var newCat = $('#catName').val();
+            //alert($('#mainCat').is(':checked'));
+            var mainCat = $('#mainCat').is(':checked');
+            $.ajax({
+                data: { action: "newCategory",  data: { catName : newCat,  cat_id: category_id, mainCheck: mainCat } },
+                dataType: 'json',
+                type: 'post',
+                url: "ajax/knowledge.php",
+                success: function( json ) {
+                    //alert(JSON.stringify(json));
+                    //$( "#menu" ).append("<li id='main_'>testcat</li>"  );
+                    //$( "#menu" ).menu( "refresh" );
+                }
+            })
+            //$(this).dialog("close");
+       }
+    }
 });
 
 </script>
@@ -263,7 +324,7 @@ $(document).ready(function(){
     echo $menu['start_content'];
 ?>
 <div class="ui-widget-content" style="height:600px">
-
+    <div id="editCat"></div>
     <ul id="menu"></ul>
     <p>
     <input type="text" name="searchfield" id="searchfield" value="">

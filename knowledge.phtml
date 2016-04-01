@@ -132,8 +132,9 @@ $(document).ready(function(){
         },
     });
 
-    $.ajax({
-    dataType: "json",
+    function makeMenu() {
+       $.ajax({
+        dataType: "json",
             url: "ajax/knowledge.php?action=getCategories",
             method: "GET",
             success: function( json ) {
@@ -152,6 +153,7 @@ $(document).ready(function(){
 
                 });
                 $( '#menu' ).menu();
+
                 $( '[id^=main_]' ).on( 'click', function(event) {
                     //console.log( event.target.id.substring( 5 ) );
                     //alert(event.target.id.substring( 5 ))
@@ -212,17 +214,18 @@ $(document).ready(function(){
             error: function () {
                 alert('Ajax Error');
             }
-    });
+      });
+    }
+
+    makeMenu();
 
     // If the menu element is clicked
     $(".contex_sub_menu li").click(function(event){
         // This is the triggered action name
         switch($(this).attr("data-action")) {
             // A case for each action. Your actions here
-            case "edit": alert( 'testxx' ); $('#editCat').dialog("open").html('Kategorienamen ändern:<input type="text" id="editName" name="" value="">'); break;
-
+            case "edit":  $('#editCat').dialog("open").html('Kategorienamen ändern:<input type="text" id="editName" name="" value="">'); break;
             case "delete": alert('Category: ' + category_id + ' wird gelöscht'); break;
-
         }
         // Hide it AFTER the action was triggered
         $(".contex_sub_menu").hide(100);
@@ -232,17 +235,13 @@ $(document).ready(function(){
         // This is the triggered action name
         switch($(this).attr("data-action")) {
             // A case for each action. Your actions here
-             case "new": alert( 'testyy' ); $('#newCat').dialog("open"); break;
-             case "edit":  $('#editCat').dialog("open").html('Kategorienamen ändern:<input type="text" id="editName" name="">'); break;
-
+            case "new": $('#newCat').dialog("open").html('Kategoriename:<input type="text" id="catName" name=""></br><input type="checkbox" id="mainCat" name="maincategory" value="1">Hauptkategorie'); break;
+            case "edit":  $('#editCat').dialog("open").html('Kategorienamen ändern:<input type="text" id="editName" name="">'); break;
             case "delete": alert('Category: ' + category_id + ' wird gelöscht'); break;
-
-
         }
         // Hide it AFTER the action was triggered
         $(".contex_main_menu").hide(100);
     });
-
 
     $("#wortsuche").click(function (event) {
           var searchword = $('#searchfield').val();
@@ -257,32 +256,48 @@ $(document).ready(function(){
         })
     });
 
-});
-
-$("#newCat").dialog({
-    autoOpen: false,
-    title: "New Category",
-    buttons: {
-        New: function() {
-            var newCat = $('#catName').val();
-            //alert($('#mainCat').is(':checked'));
-            var mainCat = $('#mainCat').is(':checked');
-            $.ajax({
-                data: { action: "newCategory",  data: { catName : newCat,  cat_id: category_id, mainCheck: mainCat } },
-                dataType: 'json',
-                type: 'post',
-                url: "ajax/knowledge.php",
-                success: function( json ) {
-                    //alert(JSON.stringify(json));
-                    //$( "#menu" ).append("<li id='main_'>testcat</li>"  );
-                    //$( "#menu" ).menu( "refresh" );
+  $("#newCat")
+        .dialog({
+            autoOpen: false,
+            title: "New Category",
+            buttons: {
+                New: function() {
+                    var newCat = $('#catName').val();
+                    var mainCat = $('#mainCat').is(':checked');
+                    $.ajax({
+                        data: {action: "newCategory",  data: { catName : newCat,  cat_id: category_id, mainCheck: mainCat } },
+                        dataType: 'json',
+                        type: 'post',
+                        url: "ajax/knowledge.php",
+                        success: function( json ) {
+                        }
+                    })
+                    $(this).dialog("close");
                 }
-            })
-            //$(this).dialog("close");
-       }
-    }
-});
+            }
+  });
 
+  $("#editCat")
+        .dialog({
+            autoOpen: false,
+            title: "Edit Category",
+            buttons: {
+                Edit: function() {
+                    var newCat = $('#editName').val();
+                    $.ajax({
+                        data: {action: "editCategory",  data: { catName : newCat,  cat_id: category_id } },
+                        dataType: 'json',
+                        type: 'post',
+                        url: "ajax/knowledge.php",
+                        success: function( json ) {
+                        }
+                    })
+                    $(this).dialog("close");
+                }
+            }
+   });
+
+});
 </script>
 <style>
 .ui-menu { width: 180px; }
@@ -324,7 +339,6 @@ $("#newCat").dialog({
     echo $menu['start_content'];
 ?>
 <div class="ui-widget-content" style="height:600px">
-    <div id="editCat"></div>
     <ul id="menu"></ul>
     <p>
     <input type="text" name="searchfield" id="searchfield" value="">
@@ -345,6 +359,10 @@ $("#newCat").dialog({
   <li data-action="edit">Edit</li>
   <li data-action="delete">Delete </li>
 </ul>
+<div id="newCat">
+</div>
+<div id="editCat">
+</div>
 <?php echo $menu['end_content']; ?>
 </body>
 </html><!DOCTYPE html>

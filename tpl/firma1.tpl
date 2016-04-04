@@ -47,7 +47,8 @@
         F1=open("dhl.php?Q={Q}&fid={FID}&popup=1","Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
     }
     function showItem(id) {
-        F1=open("getCall.php?Q={Q}&fid={FID}&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
+        $('#mess').dialog("open").html('This feature is currently deactivated. It will be new implemented with the next CRM version..');
+        //F1=open("getCall.php?Q={Q}&fid={FID}&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
     }
     function anschr(A) {
         $( "#dialogwin" ).dialog( "option", "maxWidth", 400 );
@@ -203,6 +204,10 @@
                     effect: "explode",
                     duration: 300
                 },
+            });
+            $("#mess").dialog({
+                autoOpen: false,
+                title: "Message"
             });
             $(".firmabutton").button().click(
             function( event ) {
@@ -466,6 +471,8 @@
 <div id="dialogwin">
 <iframe id="iframe1" width='100%' height='450'  scrolling="auto" border="0" frameborder="0"><img src='image/wait.gif'></iframe>
 </div>
+</div>
+<div id="mess">
 </div>
 {END_CONTENT}
 {TOOLS}

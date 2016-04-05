@@ -10,7 +10,7 @@
     echo $menu['javascripts'];
     echo $head['JQUERY'];
     echo $head['JQUERYUI'];
-    echo $head['THEME'];
+    echo $head['JQTABLE'];    echo $head['THEME'];
     echo $head['TINYMCE'];
 ?>
 
@@ -132,6 +132,19 @@ $(document).ready(function(){
         },
     });
 
+    function drawTable(data) {
+            for (var i = 0; i < data.length; i++) {
+                drawRow(data[i]);
+            }
+     }
+
+    function drawRow( rowData ) {
+          var row = $("<tr>");
+          $("#tbody").append(row);
+          row.append($("<td>" + rowData.id  + "</td>"));
+          row.append($("<td>" + rowData.labeltext + "</td></tr>"));
+     }
+
     function makeMenu() {
        $.ajax({
         dataType: "json",
@@ -152,6 +165,7 @@ $(document).ready(function(){
                     $( "#ul" + val.maingroup  ).append("<li id='msub_" + val.id + "'>" + val.labeltext + "</li>" );
 
                 });
+
                 $( '#menu' ).menu();
 
                 $( '[id^=main_]' ).on( 'click', function(event) {
@@ -168,8 +182,6 @@ $(document).ready(function(){
                             //console.log( JSON.stringify( obj ) );
                             $('#read').html(obj[0].content);
                             version = obj[0].version;
-                            alert( version );
-
                         }
                     })
                 });
@@ -243,15 +255,19 @@ $(document).ready(function(){
         $(".contex_main_menu").hide(100);
     });
 
-    $("#wortsuche").click(function (event) {
-          var searchword = $('#searchfield').val();
+    $( "#search" ).click(function (event) {
+          var searchword = $( '#searchfield' ).val();
+          $("#tbody").empty();
           $.ajax({
               dataType: "json",
               url: "ajax/knowledge.php?action=searchArt&data=" + searchword,
               method: "GET",
               success: function( rc ) {
-                    alert(JSON.stringify(rc));
-                    $('#treffer').append('test');
+                    //alert(JSON.stringify(rc));
+                    drawTable(rc);
+                    $( "#resTable" ).trigger( "update" );
+                    $( "#read" ).hide( "fast" );
+                    $( "#results" ).show( "fast" );
               }
         })
     });
@@ -270,6 +286,8 @@ $(document).ready(function(){
                         type: 'post',
                         url: "ajax/knowledge.php",
                         success: function( json ) {
+                            $("#menu").empty().menu( "destroy" );
+                            makeMenu();
                         }
                     })
                     $(this).dialog("close");
@@ -290,11 +308,30 @@ $(document).ready(function(){
                         type: 'post',
                         url: "ajax/knowledge.php",
                         success: function( json ) {
+                            $("#menu").empty().menu( "destroy" );
+                            makeMenu();
                         }
                     })
                     $(this).dialog("close");
                 }
             }
+   });
+
+   $(document).on("click", "#resTable tr", function(e) {
+       category_id = $(this).closest('tr').children().eq(0).text();
+       $.ajax({
+           dataType: "json",
+           url: "ajax/knowledge.php?action=getArticle&data=" + category_id,
+           method: "GET",
+           success: function( json ) {
+                 var obj = JSON.parse( json.trim() );
+                 //alert(JSON.stringify( obj[0].content )  );
+                 $('#read').html(obj[0].content);
+                 version = obj[0].version;
+                 $( "#results" ).hide( "fast" );
+                 $( "#read" ).show( "fast" );
+           }
+        })
    });
 
 });
@@ -303,7 +340,7 @@ $(document).ready(function(){
 .ui-menu { width: 180px; }
 
 #read{   position:absolute; top:120px; left:225px; width: 80%; background-color:#dfd; border:1px solid #888; }
-#treffer{   position:absolute; top:55px; left:225px; width: 80%;  }
+#results{   position:absolute; top:40px; left:235px; width: 80%;  }
 
 .contex_sub_menu, .contex_main_menu {
     display: none;
@@ -330,6 +367,9 @@ $(document).ready(function(){
 .contex_sub_menu li:hover, .contex_main_menu li:hover {
     background-color: #DEF;
 }
+
+table.tablesorter { width:auto; cursor:pointer; }
+
 </style>
 
 </head>
@@ -338,17 +378,25 @@ $(document).ready(function(){
     echo $menu['pre_content'];
     echo $menu['start_content'];
 ?>
-<div class="ui-widget-content" style="height:600px">
+<div class="ui-widget-content" style="height:700px">
     <ul id="menu"></ul>
     <p>
     <input type="text" name="searchfield" id="searchfield" value="">
-    <img src="image/search.png" border="0" title=".:search:." align="middle" id='wortsuche'><br>
+    <img src="image/search.png" border="0" title=".:search:." align="middle" id='search'><br>
     </p>
-
-    <p><button id="nextvers"></button></p>
     <div id="read" class="editable"></div>
-    <div id="treffer"></div>
-
+    <div id="results" style="display:none;">
+       <table id="resTable" class="tablesorter">
+         <thead>
+          <tr>
+            <th class="res_id">ID</th>
+            <th class="res_name">Name</th>
+          </tr>
+         </thead>
+         <tbody id="tbody">
+         </tbody>
+       </table>
+     </div>
 </div>
 <ul class='contex_sub_menu'>
   <li data-action="edit">Edit</li>

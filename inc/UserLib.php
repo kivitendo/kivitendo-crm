@@ -350,7 +350,7 @@ function loadUserDefaults($id){
         "interv"                    => "60",
         "pre"                       => "%",
         "preon"                     => "t",
-        "termbegin"                 => "8",
+        "termbegin"                 => "7",
         "termend"                   => "20",
         "termseq"                   => "30",
         "kdviewli"                  => "3",

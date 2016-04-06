@@ -10,7 +10,8 @@
     echo $menu['javascripts'];
     echo $head['JQUERY'];
     echo $head['JQUERYUI'];
-    echo $head['JQTABLE'];    echo $head['THEME'];
+    echo $head['JQTABLE'];
+    echo $head['THEME'];
     echo $head['TINYMCE'];
 ?>
 
@@ -18,9 +19,7 @@
 
 $(document).ready(function(){
     var category_id, timer, version;
-    function updateContent(){
-
-    }
+    makeMenu();
     $.ajax({
         dataType: 'json',
         url: 'ajax/knowledge.php?action=getLastArticle',
@@ -142,7 +141,9 @@ $(document).ready(function(){
           var row = $("<tr>");
           $("#tbody").append(row);
           row.append($("<td>" + rowData.id  + "</td>"));
-          row.append($("<td>" + rowData.labeltext + "</td></tr>"));
+          row.append($("<td>" + rowData.labeltext  + "</td>"));
+          row.append($("<td>" + rowData.version  + "</td>"));
+          row.append($("<td>" + rowData.content + "</td></tr>"));
      }
 
     function makeMenu() {
@@ -229,8 +230,6 @@ $(document).ready(function(){
       });
     }
 
-    makeMenu();
-
     // If the menu element is clicked
     $(".contex_sub_menu li").click(function(event){
         // This is the triggered action name
@@ -266,9 +265,9 @@ $(document).ready(function(){
               dataType: "json",
               url: "ajax/knowledge.php?action=searchArt&data=" + this.value,
               method: "GET",
-              success: function( rc ) {
-                    //alert(JSON.stringify(rc));
-                    drawTable(rc);
+              success: function( result ) {
+                    //alert(JSON.stringify(result));
+                    drawTable( result );
                     $( "#resTable" ).trigger( "update" );
                     $( "#read" ).hide( "fast" );
                     $( "#results" ).show( "fast" );
@@ -398,7 +397,9 @@ table.tablesorter { width:auto; cursor:pointer; }
          <thead>
           <tr>
             <th class="res_id">ID</th>
-            <th class="res_name">Name</th>
+            <th class="res_category">Category</th>
+            <th class="res_version">Version</th>
+            <th class="res_content">Row</th>
           </tr>
          </thead>
          <tbody id="tbody">

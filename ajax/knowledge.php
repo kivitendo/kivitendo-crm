@@ -71,10 +71,19 @@ function delCategory( $data ){
 }
 
 function searchArt( $data ){
-    $sql = "SELECT distinct KCA.* as cid from knowledge_content KCO left join knowledge_category KCA on KCO.category=KCA.id where content ilike '%".$data."%'";
-    $founds = $GLOBALS['dbh']->getAll($sql);
-    //writeLog("test");
-    echo json_encode($founds);
+    $sql = "SELECT distinct KCA.id, KCA.labeltext, KCO.version, KCO.content from knowledge_content KCO left join knowledge_category KCA on KCO.category=KCA.id where content ilike '%".$data."%'";
+    $rs = $GLOBALS['dbh']->getAll( $sql );
+    //writeLog($rs);
+    if( $rs ) foreach( $rs as $key => $value ){
+        // es soll nur die Zeile mit dem Such-String zurückgegeben werden
+        // es sollen in dieser Zeile alle Tags entfernt werden
+        // der Suchstring soll fett  oder kursiv markiert werden
+        $pos = stripos( $value['content'], $data );
+        $test = strip_tags( $value['content'] );
+        $pos = stripos( $test, $data );
+        $rs[$key]['content'] = $test.' '.$pos;
+    }
+    echo json_encode( $rs );
 }
 
 function getLastVersionNumber( $category ){

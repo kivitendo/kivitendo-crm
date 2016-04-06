@@ -178,10 +178,10 @@ $(document).ready(function(){
                         method: "GET",
                         success: function( json ) {
                             var obj = JSON.parse( json.trim() );
-                            //alert(JSON.stringify( obj[0].content )  );
-                            //console.log( JSON.stringify( obj ) );
                             $('#read').html(obj[0].content);
                             version = obj[0].version;
+                            $( "#read" ).show( "fast" );
+                            $( "#results" ).hide( "fast" );
                         }
                     })
                 });
@@ -255,12 +255,16 @@ $(document).ready(function(){
         $(".contex_main_menu").hide(100);
     });
 
-    $( "#search" ).click(function (event) {
-          var searchword = $( '#searchfield' ).val();
-          $("#tbody").empty();
-          $.ajax({
+
+
+
+
+    $('#searchfield').keypress(function (e) {
+        if( e.which == 13 ){
+            $("#tbody").empty();
+            $.ajax({
               dataType: "json",
-              url: "ajax/knowledge.php?action=searchArt&data=" + searchword,
+              url: "ajax/knowledge.php?action=searchArt&data=" + this.value,
               method: "GET",
               success: function( rc ) {
                     //alert(JSON.stringify(rc));
@@ -269,10 +273,12 @@ $(document).ready(function(){
                     $( "#read" ).hide( "fast" );
                     $( "#results" ).show( "fast" );
               }
-        })
+            })
+            return false;
+        }
     });
 
-  $("#newCat")
+    $("#newCat")
         .dialog({
             autoOpen: false,
             title: "New Category",
@@ -337,7 +343,7 @@ $(document).ready(function(){
 });
 </script>
 <style>
-.ui-menu { width: 180px; }
+.ui-menu, #searchfield { width: 180px; }
 
 #read{   position:absolute; top:120px; left:225px; width: 80%; background-color:#dfd; border:1px solid #888; }
 #results{   position:absolute; top:40px; left:235px; width: 80%;  }
@@ -370,6 +376,8 @@ $(document).ready(function(){
 
 table.tablesorter { width:auto; cursor:pointer; }
 
+
+
 </style>
 
 </head>
@@ -381,8 +389,8 @@ table.tablesorter { width:auto; cursor:pointer; }
 <div class="ui-widget-content" style="height:700px">
     <ul id="menu"></ul>
     <p>
-    <input type="text" name="searchfield" id="searchfield" value="">
-    <img src="image/search.png" border="0" title=".:search:." align="middle" id='search'><br>
+    <input type="text" id="searchfield"  placeholder="Enter Searchstring">
+
     </p>
     <div id="read" class="editable"></div>
     <div id="results" style="display:none;">

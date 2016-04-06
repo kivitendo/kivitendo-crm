@@ -79,9 +79,15 @@ function searchArt( $data ){
         // es sollen in dieser Zeile alle Tags entfernt werden
         // der Suchstring soll fett  oder kursiv markiert werden
         $pos = stripos( $value['content'], $data );
-        $test = strip_tags( $value['content'] );
-        $pos = stripos( $test, $data );
-        $rs[$key]['content'] = $test.' '.$pos;
+        $str_before = substr( $value['content'], 0, $pos );
+        $str_after = substr( $value['content'], ( $pos+strlen($data) ) );
+        $pos_before = strpos_all( $str_before, "<br" );
+        $pos_after = strpos( $str_after, "<br" );
+        $tmp = $pos_before[count($pos_before) - 1];
+        $tmp1 = strip_tags( substr( $str_before, $tmp ) );
+        $tmp2 = strip_tags( substr( $str_after, 0, $pos_after ) );
+        // $rs[$key]['content'] = "... ".substr($test, $pos-40, strlen($data)+80).' ... '.$pos;
+         $rs[$key]['content'] = $tmp1."<b>".$data."</b>".$tmp2;
     }
     echo json_encode( $rs );
 }

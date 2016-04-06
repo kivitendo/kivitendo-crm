@@ -30,6 +30,16 @@ function writeLog( $log ){
     file_put_contents( $_SESSION['crmpath'].'/tmp/log.txt', date("Y-m-d H:i:s -> " ).print_r( $log, TRUE )."\n", FILE_APPEND );
 }
 
+function strpos_all($text, $search) {
+    $offset = 0;
+    $allpos = array();
+    while (($pos = strpos($text, $search, $offset)) !== FALSE) {
+        $offset   = $pos + 1;
+        $allpos[] = $pos;
+    }
+    return $allpos;
+}
+
 /****************************************************
 * db2date
 * in: Datum = String

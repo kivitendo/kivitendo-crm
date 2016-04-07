@@ -67,7 +67,9 @@ function editCategory( $data ){
 }
 
 function delCategory( $data ){
-
+    //Löschen oder deaktivieren der Kategorie ?
+    //Unterkategorie löschen ?
+    //Inhalte löschen - alle Versionen oder Deaktivierung ?
 }
 
 function searchArt( $data ){

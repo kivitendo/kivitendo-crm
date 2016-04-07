@@ -236,7 +236,7 @@ $(document).ready(function(){
         switch($(this).attr("data-action")) {
             // A case for each action. Your actions here
             case "edit":  $('#editCat').dialog("open").html('Kategorienamen ändern:<input type="text" id="editName" name="" value="">'); break;
-            case "delete": alert('Category: ' + category_id + ' wird gelöscht'); break;
+            case "delete": $('#delCat').dialog("open").html('Kategorie löschen'); break;
         }
         // Hide it AFTER the action was triggered
         $(".contex_sub_menu").hide(100);
@@ -248,7 +248,7 @@ $(document).ready(function(){
             // A case for each action. Your actions here
             case "new": $('#newCat').dialog("open").html('Kategoriename:<input type="text" id="catName" name=""></br><input type="checkbox" id="mainCat" name="maincategory" value="1">Hauptkategorie'); break;
             case "edit":  $('#editCat').dialog("open").html('Kategorienamen ändern:<input type="text" id="editName" name="">'); break;
-            case "delete": alert('Category: ' + category_id + ' wird gelöscht'); break;
+            case "delete": $('#delCat').dialog("open").html('Kategorie wirklich löschen?'); break;
         }
         // Hide it AFTER the action was triggered
         $(".contex_main_menu").hide(100);
@@ -320,6 +320,22 @@ $(document).ready(function(){
                     $(this).dialog("close");
                 }
             }
+   });
+
+   $("#delCat")
+        .dialog({
+            autoOpen: false,
+            title: "Delete Category",
+            buttons: {
+                Okay: function() {
+                    $.ajax({
+                        success: function( json ) {
+                        }
+                    })
+                    $(this).dialog("close");
+                }
+            }
+
    });
 
    $(document).on("click", "#resTable tr", function(e) {
@@ -419,6 +435,8 @@ table.tablesorter { width:auto; cursor:pointer; }
 <div id="newCat">
 </div>
 <div id="editCat">
+</div>
+<div id="delCat">
 </div>
 <?php echo $menu['end_content']; ?>
 </body>

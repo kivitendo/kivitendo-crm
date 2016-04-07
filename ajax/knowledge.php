@@ -71,13 +71,11 @@ function delCategory( $data ){
 }
 
 function searchArt( $data ){
-    $sql = "SELECT distinct KCA.id, KCA.labeltext, KCO.version, KCO.content from knowledge_content KCO left join knowledge_category KCA on KCO.category=KCA.id where content ilike '%".$data."%'";
+    $sql = "SELECT KCA.id, KCA.labeltext, KCO.version, KCO.content from knowledge_content KCO left join knowledge_category KCA on KCO.category=KCA.id where content ilike '%".$data."%' ORDER BY id,version DESC";
     $rs = $GLOBALS['dbh']->getAll( $sql );
+    if( $rs ) $rs = array_values(unique_multidim_array($rs,'id'));
     //writeLog($rs);
     if( $rs ) foreach( $rs as $key => $value ){
-        // es soll nur die Zeile mit dem Such-String zurückgegeben werden
-        // es sollen in dieser Zeile alle Tags entfernt werden
-        // der Suchstring soll fett  oder kursiv markiert werden
         $pos = stripos( $value['content'], $data );
         $str_before = substr( $value['content'], 0, $pos );
         $str_after = substr( $value['content'], ( $pos+strlen($data) ) );
@@ -86,8 +84,7 @@ function searchArt( $data ){
         $tmp = $pos_before[count($pos_before) - 1];
         $tmp1 = strip_tags( substr( $str_before, $tmp ) );
         $tmp2 = strip_tags( substr( $str_after, 0, $pos_after ) );
-        // $rs[$key]['content'] = "... ".substr($test, $pos-40, strlen($data)+80).' ... '.$pos;
-         $rs[$key]['content'] = $tmp1."<b>".$data."</b>".$tmp2;
+        $rs[$key]['content'] = $tmp1."<b>".$data."</b>".$tmp2;
     }
     echo json_encode( $rs );
 }

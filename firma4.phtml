@@ -1,0 +1,35 @@
+<!DOCTYPE phtml>
+<html>
+<head>
+<meta charset='utf-8'/>
+<?php
+    require_once __DIR__.'/inc/stdLib.php';
+    $menu = $_SESSION['menu'];
+    $head = mkHeader();
+    echo $menu['stylesheets'];
+    echo $menu['javascripts'];
+    echo $head['THEME'];
+
+
+?>
+<script type="text/javascript">
+</script>
+<style>
+</style>
+</head>
+
+<body>
+<?php
+    echo $menu['pre_content'];
+    echo $menu['start_content'];
+?>
+<div class="ui-widget-content" style="height:600px">
+<p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;"><b>Detailansicht Kunde</b></p>
+
+<div id="elfinder"></div>
+
+</div>
+<?php echo $menu['end_content']; ?>
+<?php echo $head['TOOLS']; ?>
+</body>
+</html>

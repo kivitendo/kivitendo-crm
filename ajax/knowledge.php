@@ -67,9 +67,11 @@ function editCategory( $data ){
 }
 
 function delCategory( $data ){
-    //Löschen oder deaktivieren der Kategorie ?
-    //Unterkategorie löschen ?
-    //Inhalte löschen - alle Versionen oder Deaktivierung ?
+    $sql = "DELETE FROM knowledge_category WHERE id = '".$data."'";
+    $rs = $GLOBALS['dbh']->query( $sql );
+    $sql = "DELETE FROM knowledge_content WHERE category = '".$data."'";
+    $rs = $GLOBALS['dbh']->query( $sql );
+    echo json_encode( "ok" );
 }
 
 function searchArt( $data ){
@@ -79,13 +81,15 @@ function searchArt( $data ){
     //writeLog($rs);
     if( $rs ) foreach( $rs as $key => $value ){
         $pos = stripos( $value['content'], $data );
-        $str_before = substr( $value['content'], 0, $pos );
-        $str_after = substr( $value['content'], ( $pos+strlen($data) ) );
-        $pos_before = strpos_all( $str_before, "<br" );
-        $pos_after = strpos( $str_after, "<br" );
-        $tmp = $pos_before[count($pos_before) - 1];
-        $tmp1 = strip_tags( substr( $str_before, $tmp ) );
-        $tmp2 = strip_tags( substr( $str_after, 0, $pos_after ) );
+        $test = strip_tags( $value['content'] );
+        $str_before = strip_tags( substr( $value['content'], 0, $pos ) );
+        $str_after = strip_tags( substr( $value['content'], ( $pos+strlen($data) ) ) );
+        $leng1 = strlen($str_before);
+        $leng2 = strlen($str_after);
+        $pos1 = ( $leng1 <= 60) ? $leng1 : 60;
+        $pos2 = ($leng2 <= 60) ? $leng2 : 60;
+        $tmp1 = substr( $str_before, ($leng1-$pos1) );
+        $tmp2 = substr( $str_after, 0, $pos2 );
         $rs[$key]['content'] = $tmp1."<b>".$data."</b>".$tmp2;
     }
     echo json_encode( $rs );

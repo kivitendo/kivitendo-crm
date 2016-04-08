@@ -18,7 +18,7 @@
 <script>
 
 $(document).ready(function(){
-    var category_id, timer, version;
+    var category_id, tag_id, timer, version;
     makeMenu();
     $.ajax({
         dataType: 'json',
@@ -213,6 +213,7 @@ $(document).ready(function(){
                 }
                 }).bind("mousedown", function (event) {
                 category_id = event.target.id.substring( 5 );
+                tag_id= event.target.id;
                 // If the clicked element is not the menu
                     if (!$(event.target).parents(".contex_main_menu").length > 0) {
                         // Hide it
@@ -235,8 +236,8 @@ $(document).ready(function(){
         // This is the triggered action name
         switch($(this).attr("data-action")) {
             // A case for each action. Your actions here
-            case "edit":  $('#editCat').dialog("open").html('Kategorienamen ändern:<input type="text" id="editName" name="" value="">'); break;
-            case "delete": $('#delCat').dialog("open").html('Kategorie löschen'); break;
+            case "edit":  $('#editCat').dialog("open").html('Change category name: <input type="text" id="editName" name="" value="">'); break;
+            case "delete": $('#delCat').dialog("open").html('Delete category?'); break;
         }
         // Hide it AFTER the action was triggered
         $(".contex_sub_menu").hide(100);
@@ -244,19 +245,17 @@ $(document).ready(function(){
     // If the menu element is clicked
     $(".contex_main_menu li").click(function(event){
         // This is the triggered action name
-        switch($(this).attr("data-action")) {
+        switch($(this).attr( "data-action" )) {
             // A case for each action. Your actions here
-            case "new": $('#newCat').dialog("open").html('Kategoriename:<input type="text" id="catName" name=""></br><input type="checkbox" id="mainCat" name="maincategory" value="1">Hauptkategorie'); break;
-            case "edit":  $('#editCat').dialog("open").html('Kategorienamen ändern:<input type="text" id="editName" name="">'); break;
-            case "delete": $('#delCat').dialog("open").html('Kategorie wirklich löschen?'); break;
+            case "new": $( '#newCat' ).dialog( "open" ).html('Kategoriename:<input type="text" id="catName" name=""></br><input type="checkbox" id="mainCat" name="maincategory" value="1">Hauptkategorie'); break;
+            case "edit":  $( '#editCat' ).dialog( "open" ).html('Change category name: <input type="text" id="editName" name="">'); break;
+           // case "delete": $('#'+tag_id+':has(> ul)').css("color","red"); break;
+            case "delete": if ( $( '#'+tag_id ).has( "ul" ).length == 1 ) { $( '#delNote' ).dialog( "open" ).html( 'Category has Subcategories, delete them first!' ); break; }
+                           else { $( '#delCat' ).dialog( "open" ).html( 'Delete category?' ); break; };
         }
         // Hide it AFTER the action was triggered
-        $(".contex_main_menu").hide(100);
+        $( ".contex_main_menu" ).hide(100);
     });
-
-
-
-
 
     $('#searchfield').keypress(function (e) {
         if( e.which == 13 ){
@@ -281,6 +280,7 @@ $(document).ready(function(){
         .dialog({
             autoOpen: false,
             title: "New Category",
+            modal: true,
             buttons: {
                 New: function() {
                     var newCat = $('#catName').val();
@@ -304,6 +304,7 @@ $(document).ready(function(){
         .dialog({
             autoOpen: false,
             title: "Edit Category",
+            modal: true,
             buttons: {
                 Edit: function() {
                     var newCat = $('#editName').val();
@@ -326,16 +327,36 @@ $(document).ready(function(){
         .dialog({
             autoOpen: false,
             title: "Delete Category",
+            modal: true,
             buttons: {
-                Okay: function() {
+               'Yes': function() {
                     $.ajax({
+                        dataType: "json",
+                        url: "ajax/knowledge.php?action=delCategory&data=" + category_id,
+                        method: "GET",
                         success: function( json ) {
+                            $("#menu").empty().menu( "destroy" );
+                            makeMenu();
                         }
                     })
                     $(this).dialog("close");
+                },
+                'No': function() {
+                   $(this).dialog('close');
                 }
             }
+   });
 
+   $("#delNote")
+        .dialog({
+            autoOpen: false,
+            title: "Delete Category",
+            modal: true,
+            buttons: {
+                'OK': function() {
+                   $(this).dialog('close');
+                }
+            }
    });
 
    $(document).on("click", "#resTable tr", function(e) {
@@ -437,6 +458,8 @@ table.tablesorter { width:auto; cursor:pointer; }
 <div id="editCat">
 </div>
 <div id="delCat">
+</div>
+<div id="delNote">
 </div>
 <?php echo $menu['end_content']; ?>
 </body>

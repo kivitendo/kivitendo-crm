@@ -61,10 +61,15 @@ class myPDO extends PDO{
     * OUT: last id or TRUE
     **********************************************/
     public function insert( $table, $fields, $values, $lastInsertId = FALSE ){
-        $stmt = parent::prepare("INSERT INTO $table (".implode(',',$fields).") VALUES (".str_repeat("?,",count($fields)-1)."?) ".( $lastInsertId ? "returning $lastInsertId" : "") );
+
+        $stmt = parent::prepare("INSERT INTO $table (".implode(',',$fields).") VALUES (".str_repeat("?,",count($fields)-1)."?) " );
         if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString );
         if( !$result = $stmt->execute( $values ) ) $this->error( $stmt->errorInfo() );
-        return $lastInsertId ? $stmt->fetch(PDO::FETCH_ASSOC)[$lastInsertId] : $result; //parent::lastInsertId('id'); doesn't work
+        $stmt = parent::prepare("select * from currval('".$table."_id_seq')");
+
+        if( !$result = $stmt->execute() ) $this->error( $stmt->errorInfo() );
+        $lastId = $stmt->fetch(PDO::FETCH_NUM);
+        return $lastId['0'];// $lastInsertId ? $stmt->fetch(PDO::FETCH_ASSOC)[$lastInsertId] : $result; //parent::lastInsertId('id'); doesn't work
     }
 
     /**********************************************

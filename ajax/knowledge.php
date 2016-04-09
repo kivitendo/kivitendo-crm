@@ -38,32 +38,20 @@ function getOtherVersion( $data ){ // holt voherige oder nachfolgende Version ei
 }
 
 function createNewVersion( $data ){ // erstellt eine neue Version
-    $version = getLastVersionNumber( $data['cat_id'] ) + 1; writeLog( $version );
+    $version = getLastVersionNumber( $data['cat_id'] ) + 1;
     $rs = $GLOBALS['dbh']->insert( 'knowledge_content', array( 'modifydate', 'employee', 'content', 'version', 'category' ), array( 'now()', $_SESSION['id'], $data['content'], $version, $data['cat_id'] ) );
-    echo json_encode("ok");
+    echo 1;
 }
 
 function newCategory( $data ){
-   //Hauptkategorie
-   if( $data['mainCheck'] == "true") {
-        $rs = $GLOBALS['dbh']->insert( 'knowledge_category', array('labeltext', 'maingroup', 'help' ), array($data['catName'], 0, "FALSE") );
-        $sql = "SELECT MAX(id) FROM knowledge_category";
-        $rc = $GLOBALS['dbh']->getOne( $sql );
-        $rs = $GLOBALS['dbh']->insert( 'knowledge_content', array( 'modifydate', 'employee', 'content', 'version', 'category' ), array( 'now()', $_SESSION['id'], 'neue Kategorie', 1, $rc['max'] ) );
-   }
-   //Unterkategorie
-   else {
-        $rs = $GLOBALS['dbh']->insert( 'knowledge_category', array('labeltext', 'maingroup', 'help' ), array($data['catName'], $data['cat_id'], "FALSE") );
-        $sql = "SELECT MAX(id) FROM knowledge_category";
-        $rc = $GLOBALS['dbh']->getOne( $sql );
-        $rs = $GLOBALS['dbh']->insert( 'knowledge_content', array( 'modifydate', 'employee', 'content', 'version', 'category' ), array( 'now()', $_SESSION['id'], 'neue Kategorie', 1, $rc['max'] ) );
-   }
-   echo json_encode( "ok" );
+    $rc = $GLOBALS['dbh']->insert( 'knowledge_category', array( 'labeltext', 'maingroup', 'help' ), array( $data['catName'], $data['mainCheck'] == 'true' ? 0 : $data['cat_id'], 'FALSE' ) );
+    $rs = $GLOBALS['dbh']->insert( 'knowledge_content', array( 'modifydate', 'employee', 'content', 'version', 'category' ), array( 'now()', $_SESSION['id'], $data['catName'], 1, $rc ) );
+    echo 1;
 }
 
 function editCategory( $data ){
     $rs = $GLOBALS['dbh']->update( 'knowledge_category', array( 'labeltext'), array( $data['catName'] ), "id = ".$data['cat_id'] );
-    echo json_encode( "ok" );
+    echo 1;
 }
 
 function delCategory( $data ){
@@ -71,7 +59,7 @@ function delCategory( $data ){
     $rs = $GLOBALS['dbh']->query( $sql );
     $sql = "DELETE FROM knowledge_content WHERE category = '".$data."'";
     $rs = $GLOBALS['dbh']->query( $sql );
-    echo json_encode( "ok" );
+    echo 1;
 }
 
 function searchArt( $data ){

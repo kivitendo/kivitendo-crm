@@ -60,11 +60,14 @@ class myPDO extends PDO{
     * IN: $lastInsertId  - string returning last id
     * OUT: last id or TRUE
     **********************************************/
-    public function insert( $table, $fields, $values, $lastInsertId = FALSE ){
+    public function insert( $table, $fields, $values ){
 
         $stmt = parent::prepare("INSERT INTO $table (".implode(',',$fields).") VALUES (".str_repeat("?,",count($fields)-1)."?) " );
         if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString );
-        if( !$result = $stmt->execute( $values ) ) $this->error( $stmt->errorInfo() );
+        if( !$result = $stmt->execute( $values ) ){
+            $this->error( $stmt->errorInfo() );
+            return FALSE;
+        }
         $stmt = parent::prepare("select * from currval('".$table."_id_seq')");
 
         if( !$result = $stmt->execute() ) $this->error( $stmt->errorInfo() );

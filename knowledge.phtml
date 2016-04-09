@@ -66,6 +66,25 @@ $(document).ready(function(){
                 text: 'Version',
                 icon: false,
                 menu: [{
+                    text: 'new',
+                    onclick: function() {
+                        var artContent = $("#read").html();
+                       // alert( 'new cate' );
+                        $.ajax({
+                            url: 'ajax/knowledge.php',
+                            data: {action: "createNewVersion",  data: { content : artContent,  cat_id: category_id } },
+                            dataType: 'json',
+                            method: "POST",
+                            success: function( json ) {
+                                //alert(JSON.stringify(json));
+                            },
+                            error: function () {
+                                alert('Ajax Error');
+                            }
+                        });
+                    }
+                },
+                {
                     text: 'next',
                     onclick: function() {
                         $.ajax({
@@ -106,25 +125,6 @@ $(document).ready(function(){
                                 alert('Ajax Error');
                             }
                         })
-                    }
-                },
-                {
-                    text: 'new',
-                    onclick: function() {
-                        var artContent = $("#read").html();
-                       // alert( 'new cate' );
-                        $.ajax({
-                            url: 'ajax/knowledge.php',
-                            data: {action: "createNewVersion",  data: { content : artContent,  cat_id: category_id } },
-                            dataType: 'json',
-                            method: "POST",
-                            success: function( json ) {
-                                //alert(JSON.stringify(json));
-                            },
-                            error: function () {
-                                alert('Ajax Error');
-                            }
-                        });
                     }
                 }]
             });
@@ -337,7 +337,7 @@ $(document).ready(function(){
             }
         },
         {
-            text: 'cancel',
+            text: 'Cancel',
             click: function(){
                 $(this).dialog('close');
             }

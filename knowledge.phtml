@@ -214,7 +214,9 @@ $(document).ready(function(){
         // This is the triggered action name
         switch( $( this ).attr( "data-action" ) ){
             // A case for each action. Your actions here
-            case "edit":  $('#editCat').dialog( "open" ).html( 'Change category name: <input type="text" id="editName" name="" value="' + labeltext + '">' );
+            case "edit":
+                $('#editCat').dialog( "open" ).html( 'Change category name: <input type="text" id="editName" name="" value="' + labeltext + '">' );
+                $( '#editName' ).focus().select();
             break;
             case "delete": $('#delCat').dialog( "open" ).html( 'Delete category?'); break;
         }
@@ -227,7 +229,10 @@ $(document).ready(function(){
         switch( $( this ).attr( "data-action" ) ){
             // A case for each action. Your actions here
             case "new": $( '#newCat' ).dialog( "open" ).html( 'Category name:<input type="text" id="catName" name=""></br><input type="checkbox" id="mainCat" name="maincategory" value="1">Maincategory'); break;
-            case "edit":  $( '#editCat' ).dialog( "open" ).html('Change category name: <input type="text" id="editName" value="' + labeltext + '">' ); break;
+            case "edit":
+                $( '#editCat' ).dialog( "open" ).html('Change category name: <input type="text" id="editName" value="' + labeltext + '">' );
+                $( '#editName' ).focus().select();
+            break;
             case "delete": if ( $( '#'+tag_id ).has( "ul" ).length == 1 ) { $( '#delNote' ).dialog( "open" ).html( 'Category has Subcategories, delete them first!' ); break; }
                            else { $( '#delCat' ).dialog( "open" ).html( 'Delete category?' ); break; };
         }

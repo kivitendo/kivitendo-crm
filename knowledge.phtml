@@ -44,7 +44,7 @@ $(document).ready(function(){
             'searchreplace visualblocks code fullscreen',
             'insertdatetime media table contextmenu paste spellchecker textcolor'
         ],
-        toolbar: 'mybutton | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | table | code | spellchecker',
+        toolbar: 'rights | version | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | table | code | spellchecker',
         setup: function( editor ){
             editor.on( 'keyup', function(){
                 clearTimeout( timer );
@@ -61,7 +61,7 @@ $(document).ready(function(){
                     })
                 }, 1000 );
             });
-            editor.addButton( 'mybutton', {
+            editor.addButton( 'version', {
                 type: 'menubutton',
                 text: 'Version',
                 icon: false,
@@ -128,7 +128,15 @@ $(document).ready(function(){
                     }
                 }]
             });
-        },
+
+            editor.addButton('rights', {
+                text: 'Rights',
+                icon: false,
+                onclick: function () {
+                    alert( 'Featue rights is currently not implemented.' );
+                }
+            });
+        }
     });
 
     function drawTable( data ){
@@ -323,7 +331,7 @@ $(document).ready(function(){
             }
         },
         {
-            text: 'CLLOSE',
+            text: 'cancel',
             click: function(){
                 $(this).dialog('close');
             }

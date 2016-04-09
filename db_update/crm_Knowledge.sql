@@ -24,7 +24,7 @@ CREATE TABLE knowledge_content (
     modifydate  TIMESTAMP,
     content     TEXT,
     employee    INT,
-    version     INT,
+    version     INT DEFAULT 1,
     category    INT,
     owner       INT
 );

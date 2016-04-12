@@ -1,4 +1,5 @@
 <html>
+<html>
 <head><title>CRM Firma:{Fname1}</title>
 {STYLESHEETS}
 {CRMCSS}
@@ -290,6 +291,7 @@
         <button name="firma2.php?Q={Q}&fid={FID}">.:Contacts:.</button>
         <button name="firma3.php?Q={Q}&fid={FID}">.:Sales:.</button>
         <button name="firma4.php?Q={Q}&fid={FID}">.:Documents:.</button>
+        <button name="firma4.phtml?Q={Q}&kdnr={kdnr}">.:Files:.</button>
     </span>
     <span style="float:left; vertical-alig:bottom; padding-left:8em">
 <!--         <select style="visibility:{chelp}" name="kdhelp" id="kdhelp" style="margin-top:0.5em;" onChange="KdHelp()"> -->

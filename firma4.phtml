@@ -9,10 +9,19 @@
     echo $menu['stylesheets'];
     echo $menu['javascripts'];
     echo $head['THEME'];
-
+    echo $head['ELFINDER'];
 
 ?>
 <script type="text/javascript">
+    $(document).ready(function() {
+        // nur testweise!
+        var customer = '<?php echo $_GET['Q'].$_GET['kdnr']?>';
+        var path_test = '<?php echo $_SESSION['crmpath']?>' + '/dokumente/' + '<?php echo $_SESSION['dbData']['dbname']?>' + '/' + customer;
+        $('#elfinder').elfinder({
+            url : 'jquery-plugins/elFinder/php/connector.minimal.php',
+            customData  : {path:path_test}
+        });
+    });
 </script>
 <style>
 </style>

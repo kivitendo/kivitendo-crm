@@ -707,6 +707,9 @@ function mkHeader() {
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator-'.$_SESSION['countrycode'].'.js'.$SN,
         'FANCYBOX'      => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/fancybox/source/jquery.fancybox.css'.$LN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fancybox/source/jquery.fancybox.pack.js'.$SN,
+        'ELFINDER'      => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/elFinder/css/elfinder.min.css'.$LN.
+                           $LV.$_SESSION['baseurl'].'crm/jquery-plugins/elFinder/css/theme.css'.$LN.
+                           $SV.$_SESSION['baseurl'].'crm/jquery-plugins/elFinder/js/elfinder.min.js'.$SN,
         'QRCODE'        => $SV.$_SESSION['baseurl'].'crm/jquery-plugins/qrcode/jquery.qrcode-0.12.0.js'.$SN,
         'TOOLS'         => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.css'.$LN.
                            $LV.$_SESSION['baseurl'].'crm/nodejs/node_modules/trumbowyg/dist/ui/trumbowyg.css'.$LN.
@@ -747,6 +750,7 @@ function doHeader(&$t) {
         'DATEPICKER'    => $head['DATEPICKER'],
         'JQCALCULATOR'  => $head['JQCALCULATOR'],
         'FANCYBOX'      => $head['FANCYBOX'],
+        'ELFINDER'      => $head['ELFINDER'],
         'QRCODE'        => $head['QRCODE'],
         'TOOLS'         => $head['TOOLS']
     ));

@@ -104,6 +104,7 @@ $texts = array(
     '.:fax:.'                                                      => 'Tel2',
     '.:female:.'                                                   => 'weiblich',
     '.:Filebrowser:.'                                              => 'Filebrowser',
+    '.:Files:.'                                                    => 'Dateien',
     '.:fileextention:.'                                            => 'Endung',
     '.:file locked:.'                                              => 'Datei gesperrt',
     '.:Filename:.'                                                 => 'Dateiname',

@@ -1,7 +1,7 @@
 <?php
 
 error_reporting(0); // Set E_ALL for debuging
-
+require_once __DIR__.'../../../inc/stdLib.php'; //only for debuging
 include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderConnector.class.php';
 include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinder.class.php';
 include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderVolumeDriver.class.php';
@@ -54,7 +54,7 @@ include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderVolumeLocalFileSyste
  * @param  string  $path  file path relative to volume root directory started with directory separator
  * @return bool|null
  **/
-$path = $_GET['path'];
+
 
 function access($attr, $path, $data, $volume) {
     return strpos(basename($path), '.') === 0       // if file/folder begins with '.' (dot)
@@ -64,13 +64,16 @@ function access($attr, $path, $data, $volume) {
 
 // Documentation for connector options:
 // https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
+
+writeLog( __DIR__.'../../dokumente/'.$_SESSION['dbData']['dbname'].$_GET['Q'].$_GET['NUMMER'].'/');
+writeLog('tets');
 $opts = array(
     // 'debug' => true,
     'roots' => array(
         array(
             'driver'        => 'LocalFileSystem',           // driver for accessing file system (REQUIRED)
-            'path'          => $path.'/',                 // path to files (REQUIRED)
-            'URL'           => dirname($_SERVER['PHP_SELF']) . $path.'/', // URL to files (REQUIRED)
+            'path'          => __DIR__.'../../dokumente/'.$_SESSION['dbData']['dbname'].$_GET['Q'].$_GET['NUMMER'].'/',//UNGETESTET
+            'URL'           => dirname( $_SERVER['PHP_SELF'] ).'../../dokumente/'.$_SESSION['dbData']['dbname'].$_GET['Q'].$_GET['NUMMER'].'/', // SIEHE OBEN
             'uploadDeny'    => array('all'),                // All Mimetypes not allowed to upload
             'uploadAllow'   => array('all'),// Mimetype `image` and `text/plain` allowed to upload
             'uploadOrder'   => array('deny', 'allow'),      // allowed Mimetype `image` and `text/plain` only

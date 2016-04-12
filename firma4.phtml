@@ -5,7 +5,7 @@
 <?php
     require_once __DIR__.'/inc/stdLib.php';
     $menu = $_SESSION['menu'];
-    $head = mkHeader();
+    //$head = mkHeader();//wird nicht mehr benötigt, weil Aufruf in stdlib
     echo $menu['stylesheets'];
     echo $menu['javascripts'];
     echo $head['THEME'];
@@ -15,11 +15,11 @@
 <script type="text/javascript">
     $(document).ready(function() {
         // nur testweise!
-        var customer = '<?php echo $_GET['Q'].$_GET['kdnr']?>';
-        var path_test = '<?php echo $_SESSION['crmpath']?>' + '/dokumente/' + '<?php echo $_SESSION['dbData']['dbname']?>' + '/' + customer;
+        var customer = '<?php echo $_GET['Q'].$_GET['kdnr']?>';//Lies doch einfach die URL aus, siehe example.phtml oben
+        var path_test = '<?php echo $_SESSION['crmpath']?>' + '/dokumente/' + '<?php echo $_SESSION['dbData']['dbname']?>' + '/' + customer;//das kann in der connector.minimal.php erledigt werden
         $('#elfinder').elfinder({
-            url : 'jquery-plugins/elFinder/php/connector.minimal.php',
-            customData  : {path:path_test}
+            url : 'jquery-plugins/elFinder/php/connector.minimal.php?Q=C&number=12345',
+            //customData  : {path:path_test}
         });
     });
 </script>
@@ -34,7 +34,7 @@
 ?>
 <div class="ui-widget-content" style="height:600px">
 <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;"><b>Detailansicht Kunde</b></p>
-
+solange keine echten Reiter vorhanden sind, bitte wieder die Button (mit JUI) implementieren
 <div id="elfinder"></div>
 
 </div>

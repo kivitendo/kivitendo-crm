@@ -24,6 +24,27 @@ echo $head['JUI-DROPDOWN'];
 ?>
 <script>
 
+    $(document).ready(function(){
+
+        //URL-Parameter lesen
+        $.urlParam = function( name ){
+            var results = new RegExp( '[\?&]' + name + '=([^&#]*)' ).exec( window.location.href );
+            if( results == null ) alert( 'Parameter: "' + name + '" does not exist in "' + window.location.href + '"!' );
+            else decodeURIComponent( results[1] || 0 );        }
+
+        //alert( $.urlParam( 'param2' ) );
+
+        $( "#example" ).html( "Hello World" ).css({
+            fontSize: "36px",
+            fontWeight: "bold",
+            color: "red",
+        }).delay( 1000 ).fadeOut( 6000 ).delay( 1000 ).fadeIn( 10000 );
+        //Konfigurations-Variablen der ERP benutzen:
+        alert( "Sprache: " + kivi.myconfig.countrycode );
+        console.log( kivi.myconfig );
+
+    });
+
 
 </script>
 
@@ -32,7 +53,6 @@ echo $head['JUI-DROPDOWN'];
 <?php
     echo $menu['pre_content'];
     echo $menu['start_content'];
-
 ?>
 
  <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">'.translate('.:fast search customer/vendor/contacts and contact history:.','firma').'</p>

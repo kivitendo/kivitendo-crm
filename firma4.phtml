@@ -10,16 +10,44 @@
     echo $menu['javascripts'];
     echo $head['THEME'];
     echo $head['ELFINDER'];
-
+    echo $head['TRANSLATION'];
 ?>
 <script type="text/javascript">
     $(document).ready(function() {
-        // nur testweise!
-        var customer = '<?php echo $_GET['Q'].$_GET['kdnr']?>';//Lies doch einfach die URL aus, siehe example.phtml oben
-        var path_test = '<?php echo $_SESSION['crmpath']?>' + '/dokumente/' + '<?php echo $_SESSION['dbData']['dbname']?>' + '/' + customer;//das kann in der connector.minimal.php erledigt werden
+        var language = kivi.myconfig.countrycode;
+        $( ".lang" ).each( function(){
+            var key = $( this ).attr( "data-lang" );
+            if( $( this ).is( ":input" ) ) $( this ).attr( 'title',  typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
+            else $( this ).text( typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
+        });
+        $.urlParam = function( name ){
+            var results = new RegExp( '[\?&]' + name + '=([^&#]*)' ).exec( window.location.href );
+            if( results == null ) alert( 'Parameter: "' + name + '" does not exist in "' + window.location.href + '"!' );
+            else return decodeURIComponent( results[1] || 0 );
+        }
+
+        var cu_type = $.urlParam( 'Q' ) ;
+        var cu_number = $.urlParam( 'kdnr' ) ;
+        var cu_id = $.urlParam( 'fid' ) ;
+
         $('#elfinder').elfinder({
-            url : 'jquery-plugins/elFinder/php/connector.minimal.php?Q=C&number=12345',
-            //customData  : {path:path_test}
+            url : 'jquery-plugins/elFinder/php/connector.minimal.php?Q='+cu_type+'&number='+cu_number,
+            height : 600,
+            defaultView: 'list',
+            rememberLastDir : true
+        });
+
+        $('#btn1').button().click(function() {
+            window.location.replace("firma1.php?Q=" + cu_type + "&id= " + cu_id);
+        });
+        $('#btn2').button().click(function() {
+            window.location.replace("firma2.php?Q=" + cu_type + "&fid=" + cu_id + "&id=" + cu_id);
+        });
+        $('#btn3').button().click(function() {
+            window.location.replace("firma3.php?Q=" + cu_type + "&fid=" + cu_id);
+        });
+        $('#btn4').button().click(function() {
+            window.location.replace("firma4.php?Q=" + cu_type + "&fid=" + cu_id);
         });
     });
 </script>
@@ -32,9 +60,16 @@
     echo $menu['pre_content'];
     echo $menu['start_content'];
 ?>
-<div class="ui-widget-content" style="height:600px">
+<div class="ui-widget-content" style="height:700px">
 <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;"><b>Detailansicht Kunde</b></p>
-solange keine echten Reiter vorhanden sind, bitte wieder die Button (mit JUI) implementieren
+
+<div id='menubox'>
+    <button id="btn1"><label data-lang='CUSTOMBASE' class='lang' ></label></button>
+    <button id="btn2"><label data-lang='CONTACTS' class='lang' ></label></button>
+    <button id="btn3"><label data-lang='SALES' class='lang' ></label></button>
+    <button id="btn4"><label data-lang='DOCUMENTS' class='lang' ></label></button>
+</div>
+<br>
 <div id="elfinder"></div>
 
 </div>

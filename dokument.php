@@ -17,6 +17,7 @@
             'THEME'         => $head['THEME'],
             'CRMCSS'        => $head['CRMCSS'],
             'JQUERY'        => $head['JQUERY'],
+            'ELFINDER'        => $head['ELFINDER'],
         ));
     } else {
         doHeader($t);

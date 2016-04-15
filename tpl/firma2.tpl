@@ -221,11 +221,11 @@
     <button name="{Link2}">.:Contacts:.</button>
     <button name="{Link3}">.:Sales:.</button>
     <button name="{Link4}">.:Documents:.</button>
-    <select style="visibility:{chelp}" id='kdhelp' name="kdhelp" onChange="KdHelp()">
+    <!-- <select style="visibility:{chelp}" id='kdhelp' name="kdhelp" onChange="KdHelp()">
     <!-- BEGIN kdhelp -->
-        <option value="{cid}">{cname}</option>
+      <!--   <option value="{cid}">{cname}</option> -->
 <!-- END kdhelp -->
-    </select>
+   <!--  </select>  -->
     </span>
 </div>
 <!--span style="position:absolute; left:0.2em; top:7.2em; width:99%;" -->

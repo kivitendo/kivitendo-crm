@@ -10,6 +10,7 @@ $self->{more_texts} = {
   'Admin'                       => 'Administration',
   'Appointment Category'        => 'Termin Kategorie',
   'Appointments'                => 'Termine',
+  'Calender'                => 'Kalender',
   'CRM admin'                   => '',
   'CRM create customers, vendors and contacts' => '',
   'CRM follow up'               => '',

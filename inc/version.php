@@ -1,4 +1,4 @@
 <?php
-const VERSION = '2.1.2';
-const SUBVER = 'unstable';
+const VERSION = '2.2.0';
+const SUBVER = 'rc1';
 ?>

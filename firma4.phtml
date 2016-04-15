@@ -30,12 +30,28 @@
         var cu_number = $.urlParam( 'kdnr' ) ;
         var cu_id = $.urlParam( 'fid' ) ;
 
-        $('#elfinder').elfinder({
-            url : 'jquery-plugins/elFinder/php/connector.minimal.php?Q='+cu_type+'&number='+cu_number,
-            height : 600,
-            defaultView: 'list',
-            rememberLastDir : true
-        });
+        start = function( lng ){
+            $('#elfinder').elfinder({
+                url : 'jquery-plugins/elFinder/php/connector.minimal.php?Q=' + cu_type + '&number=' + cu_number,
+                height : 600,
+                defaultView: 'list',
+                rememberLastDir : true,
+                lang : lng
+            });
+        }
+        if( language != 'en' ){
+            $.ajax({
+                url : 'jquery-plugins/elFinder/js/i18n/elfinder.' + language + '.js',
+                cache : true,
+                dataType : 'script'
+            }).done( function(){
+                start( language );
+            }).fail( function(){
+                start( 'en' );
+            });
+        }
+        else start( language );
+
 
         $('#btn1').button().click(function() {
             window.location.replace("firma1.php?Q=" + cu_type + "&id= " + cu_id);

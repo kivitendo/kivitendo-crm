@@ -26,13 +26,13 @@
             else return decodeURIComponent( results[1] || 0 );
         }
 
-        var cu_type = $.urlParam( 'Q' ) ;
-        var cu_number = $.urlParam( 'kdnr' ) ;
-        var cu_id = $.urlParam( 'fid' ) ;
+        var source_type = $.urlParam( 'Q' ) ;
+        var number = $.urlParam( 'kdnr' ) ;
+        var id = $.urlParam( 'fid' ) ;
 
         start = function( lng ){
             $('#elfinder').elfinder({
-                url : 'jquery-plugins/elFinder/php/connector.minimal.php?Q=' + cu_type + '&number=' + cu_number,
+                url : 'jquery-plugins/elFinder/php/connector.minimal.php?Q=' + source_type + '&number=' + number,
                 height : 600,
                 defaultView: 'list',
                 rememberLastDir : true,
@@ -54,16 +54,16 @@
 
 
         $('#btn1').button().click(function() {
-            window.location.replace("firma1.php?Q=" + cu_type + "&id= " + cu_id);
+            window.location.replace("firma1.php?Q=" + source_type + "&id= " + id);
         });
         $('#btn2').button().click(function() {
-            window.location.replace("firma2.php?Q=" + cu_type + "&fid=" + cu_id + "&id=" + cu_id);
+            window.location.replace("firma2.php?Q=" + source_type + "&fid=" + id + "&id=" + id);
         });
         $('#btn3').button().click(function() {
-            window.location.replace("firma3.php?Q=" + cu_type + "&fid=" + cu_id);
+            window.location.replace("firma3.php?Q=" + source_type + "&fid=" + id);
         });
         $('#btn4').button().click(function() {
-            window.location.replace("firma4.php?Q=" + cu_type + "&fid=" + cu_id);
+            window.location.replace("firma4.php?Q=" + source_type + "&fid=" + id);
         });
     });
 </script>

@@ -11,14 +11,15 @@
     $fa  = getFirmenStamm($fid,true,$Q);
     if ( isset($_GET['linlog']) ) { $linlog = '&linlog=0'; $ll = true; }
     else { $linlog = '&linlog=1'; $ll = false; }
+    $kdnr = $fa["nummer"];;
     $link1 = "firma1.php?Q=$Q&id=$fid";
     $link2 = "firma2.php?Q=$Q&fid=$fid";
     $link3 = "firma3.php?Q=$Q&fid=$fid".$linlog;
-    $link4 = "firma4.php?Q=$Q&fid=$fid";
+    $link4 = "firma4.phtml?Q=$Q&kdnr=$kdnr&fid=".$fid;
     $name  = $fa['name'];
     $plz   = $fa['zipcode'];
     $ort   = $fa['city'];
-    $jahr = ( isset($_GET['jahr']) )?$_GET['jahr']:date('Y'); 
+    $jahr = ( isset($_GET['jahr']) )?$_GET['jahr']:date('Y');
     if ( $jahr==date('Y') )  {
         $JahrV = '';
     } else {

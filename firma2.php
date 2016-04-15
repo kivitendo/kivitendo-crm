@@ -10,8 +10,8 @@
         $fid = $_GET['fid'];
         $Q   = $_GET['Q'];
     } else {
-        $fid = $_POST['fid'];  
-        $Q   = $_POST['Q'];    
+        $fid = $_POST['fid'];
+        $Q   = $_POST['Q'];
     }
     $kdhelp = getWCategorie(true);
     if ( isset($_POST['insk']) ) {
@@ -22,7 +22,7 @@
         $rc = Ldap_add_Customer($_GET['fid']);
     }
     // Einen Kontakt anzeigen lassen
-    if (isset($_GET['id']) ) {				// Kommt nicht von firma1.php
+    if (isset($_GET['id']) ) {                // Kommt nicht von firma1.php
         $co=getKontaktStamm($_GET['id']);
         if (empty($co['cp_cv_id'])) {
             // Ist keiner Firma zugeordnet
@@ -47,8 +47,8 @@
             $ep       = '';
             $Q        = $co['tabelle'];
         }
-    } 
-    if ( $fid>0 ){ 
+    }
+    if ( $fid>0 ){
         // Aufruf mit einer Firmen-ID
         $co = getAllKontakt($fid);
         $liste = "";
@@ -71,10 +71,11 @@
         }
         $fa = getFirmenStamm($fid,true,$Q);
         $KDNR = ( $Q=="C" )?$fa['customernumber']:$fa['vendornumber'];
+        $kdnr = $fa["nummer"];
         $link1 = "firma1.php?Q=$Q&id=$fid";
         $link2 = "firma2.php?Q=$Q&fid=$fid";
         $link3 = "firma3.php?Q=$Q&fid=$fid";
-        $link4 = "firma4.php?Q=$Q&fid=$fid&pid=".$id;
+        $link4 = "firma4.phtml?Q=$Q&kdnr=$kdnr&fid=".$fid;
     } else if ( $ep=='' ) {
         $co['cp_name'] = 'Fehlerhafter Aufruf';
         $init          = '';
@@ -110,15 +111,15 @@
             'none'    => ( $ep=="" && $init=="" )?'hidden':'visible',
             'chelp'   => ( $kdhelp )?'visible':'hidden'
     ));
-    if ( $kdhelp ) { 
+    if ( $kdhelp ) {
         $t->set_block('co1','kdhelp','Block1');
         $tmp[]  = array('id'=>-1,'name'=>'Online Kundenhilfe');
-        $kdhelp = array_merge($tmp,$kdhelp); 
+        $kdhelp = array_merge($tmp,$kdhelp);
         foreach( $kdhelp as $col ) {
             $t->set_var(array(
                 'cid'   => $col['id'],
                 'cname' => $col['name']
-            ));    
+            ));
             $t->parse('Block1','kdhelp',true);
         };
     }

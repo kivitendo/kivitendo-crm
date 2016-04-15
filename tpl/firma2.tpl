@@ -173,33 +173,11 @@
         });
         showContact();
 
-         $('button')
+        $('button')
           .button()
-          .click( function(event) {
-              event.preventDefault();
-              name = this.getAttribute('name');
-              if ( name == 'ks' ) {
-                  var sw = $('#suchwort').val();
-                  F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
-              } else if ( name == 'reload' ) {
-                  showCall();
-              } else if ( name == 'Link1' ) {
-                  document.location.href = '{Link1}';
-              } else if ( name == 'Link2' ) {
-                  document.location.href = '{Link2}';
-              } else if ( name == 'Link3' ) {
-                        document.location.href = '{Link3}';
-              } else if ( name == 'close' ) {
-                  event.preventDefault();
-              } else if ( name == 'null' ) {
-                  event.preventDefault();
-              } else if ( name ){
-                  var pid = $('#liste option:selected').val();
-                  document.location.href = name + pid;
-              } else {
-                  event.preventDefault();
-              }
-          });
+          .click( function(event) { event.preventDefault();  document.location.href=this.getAttribute('name');
+        });
+
          $( "input[type=submit]")
           .button()
          .click(function( event ) {
@@ -239,10 +217,10 @@
 <div id="menubox1">
    <div id="qrcode" class="fancybox" rel="group"><img src="" alt="" /></div>
     <span style="float:left;" class="top1">
-    <button name="Link1">.:Custombase:.</button>
-    <button name="Link2">.:Contacts:.</button>
-    <button name="Link3">.:Sales:.</button>
-    <button name="firma4.php?Q={Q}&fid={FID}&pid=">.:Documents:.</button>
+    <button name="{Link1}">.:Custombase:.</button>
+    <button name="{Link2}">.:Contacts:.</button>
+    <button name="{Link3}">.:Sales:.</button>
+    <button name="{Link4}">.:Documents:.</button>
     <select style="visibility:{chelp}" id='kdhelp' name="kdhelp" onChange="KdHelp()">
     <!-- BEGIN kdhelp -->
         <option value="{cid}">{cname}</option>

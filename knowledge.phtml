@@ -42,9 +42,9 @@ $(document).ready(function(){
         plugins: [
             'advlist autolink lists link image charmap print preview anchor',
             'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table contextmenu paste spellchecker textcolor'
+            'insertdatetime media table contextmenu paste spellchecker textcolor emoticons textcolor colorpicker codesample'
         ],
-        toolbar: 'rights | version | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | table | code | spellchecker',
+        toolbar: 'rights | version | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | table | code | spellchecker | emoticons | forecolor backcolor | codesample',
         setup: function( editor ){
             editor.on( 'keyup', function(){
                 clearTimeout( timer );
@@ -56,7 +56,7 @@ $(document).ready(function(){
                         dataType: 'json',
                         type: 'post',
                         error: function () {
-                            alert('Ajax Error in upateContent()');
+                            alert('Ajax Error in updateContent()');
                         }
                     })
                 }, 1000 );
@@ -69,7 +69,6 @@ $(document).ready(function(){
                     text: 'new',
                     onclick: function() {
                         var artContent = $("#read").html();
-                       // alert( 'new cate' );
                         $.ajax({
                             url: 'ajax/knowledge.php',
                             data: {action: "createNewVersion",  data: { content : artContent,  cat_id: category_id } },

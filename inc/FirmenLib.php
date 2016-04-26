@@ -1164,7 +1164,7 @@ function leertpl (&$t,$tpl,$param,$msg="",$suchmaske=false,$ui=false ) { //$para
         $lead=getLeads();
         doBlock($t,"fa1","LeadListe","LL",$lead,"id","lead",'');
         $curr=getCurrencies();
-        doBlock($t,"fa1","curr","C",$curr,"id","name",'');
+        doBlock($t,"fa1","currency","C",$curr,"id","name",( isset($daten["currency_id"]) )?$daten["currency_id"]:'');
         if (!$suchmaske) {
             doBlock($t,"fa1","shiptos","ST",$shiptos,"shipto_id",array("shiptoname","shiptodepartment_1"),false);
         }

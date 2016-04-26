@@ -210,22 +210,7 @@ CREATE TABLE wissencontent(
     version integer,
     categorie integer
 );
-CREATE TABLE knowledge_category (
-    id       SERIAL,
-    labeltext text,
-    maingroup int,
-    help    bool
 
-);
-CREATE TABLE knowledge_content (
-    id          SERIAL,
-    modifydate  TIMESTAMP,
-    content     TEXT,
-    employee    INT,
-    version     INT DEFAULT 1,
-    category    INT,
-    owner       INT
-);
 CREATE TABLE opportunity(
     id serial,
     oppid integer DEFAULT 0 NOT NULL,

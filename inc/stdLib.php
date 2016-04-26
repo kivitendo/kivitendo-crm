@@ -818,11 +818,8 @@ function accessHistory( $data=false ) {
 
 }
 
-function getCurrencies() {
-
-    $sql = "SELECT * from currencies";
-    $rs = $GLOBALS['dbh']->getAll($sql);
-    return $rs;
+function getCurrencies(){
+    return $GLOBALS['dbh']->getAll( 'SELECT * from currencies ORDER BY id = ( SELECT currency_id FROM DEFAULTS ) DESC' );
 }
 
 function ts2gerdate( $myts ){//Timestamp to German Date   Gibt es da nichts fertiges???? ToDo: raus??

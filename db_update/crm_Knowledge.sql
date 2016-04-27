@@ -1,6 +1,6 @@
 -- @tag: Knowledge
 -- @description: creates table for kowledge
--- @version: 2.1.3
+-- @version: 2.2.0
 
 DROP TABLE IF EXISTS knowledge_category;
 CREATE TABLE knowledge_category (

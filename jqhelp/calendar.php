@@ -13,14 +13,14 @@ https://developers.google.com/google-apps/calendar/recurringevents
     if( !varExist( $task ) ) $task = 'getEvents';
     $startGet       = $_GET['start'];
     $endGet         = $_GET['end'];
-    $repeat_end_GET= varExist( $_GET, 'repeat_end' ) == 'Invalid date' ? 'NULL' : varExist( $_GET, 'repeat_end' );
+    $repeat_end_GET= varExist( $_GET, 'repeat_end' ) == 'Invalid date' ? 'NULL' : $_GET['repeat_end'];
     $where          = $_GET['where'];
     $myuid          = $_GET['myuid'];
 
     foreach( $_POST as $key => $value ){
         $$key = htmlspecialchars($value);
     }
-    $repeat_end_sql = varExist( $repeat_end )   == 'Invalid date' ? 'NULL' : "'varExist( $repeat_end  )'::TIMESTAMP";
+    $repeat_end_sql = varExist( $repeat_end ) == 'Invalid date' ? 'NULL' : "'$repeat_end'::TIMESTAMP";
     switch( $task ){
         case "getUserdata":
             //$sql = "SELECT BLA";

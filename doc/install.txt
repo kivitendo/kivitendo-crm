@@ -272,7 +272,8 @@ ERP-Plugins:
 cd kivitendo-erp/js/
 kivi.js
 Am Ende folgendes einfügen:
-document.write("<script type='text/javascript' src='crm/js/ERPplugins.js'></script>");
+var getUrl = window.location;
+if (!getUrl.toString().match('crm')) window.document.write("<script type='text/javascript' src='crm/js/ERPplugins.js'></script>");
 
 Zusatzprogramme:
 ----------------

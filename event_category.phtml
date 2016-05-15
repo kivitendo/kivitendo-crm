@@ -98,17 +98,14 @@
                     if( val.id > max ) max = val.id;
                     $( "#sortable" ).prepend("<li class='ui-state-default remove_" + val.id + "'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' data-lang='DOUBLE_KLICKx' value='" + val.label + "' name='cat_" + val.id + "'>"
                                          + "<input type='text' class='ui-widget-content ui-corner-all middle lang' autocomplete='off' value='" + val.color + "' name='color_" + val.id + "' maxlength='7'><input type='checkbox' class='right' name='del' value='" + val.id + "' title='" + langData[language]['DELETE'] + "' tabindex='-1'></li>");
-
                 });
+                $(".right").tooltip({ position: { my: "center bottom-10", at: "center top" } } );
                 $( "#tmp" ).data( "max", max );
             },
             error: function () {
                 alert('Ajax Error');
             }
         });
-        $( document ).tooltip({ position: { my: "center bottom-10", at: "center top" } } )
-
-
     });
 </script>
 <style>

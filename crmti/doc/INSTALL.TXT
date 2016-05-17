@@ -1,12 +1,9 @@
 INSTALL.TXT
 
-Paket installieren
-dpkg -i crmti_1.4.3.deb
 
-
-Paket konfiguriren
+CRMTI konfiguriren
 /*******************************************************************************************************************
-*** Asterisk anpassen !!! ++++ Vorlagen aus /usr/lib/lx-office-crm/crmti/asterisk nach /etc/asterisk kopieren!!! ***
+*** Asterisk anpassen !!! ++++ Vorlagen aus crmti/asterisk nach /etc/asterisk kopieren!!! ***
 *******************************************************************************************************************/
 
 /etc/asterisk/extensions.conf umbenennen oder löschen
@@ -22,9 +19,9 @@ An sip.conf anpassen!!!
 allgemeines Passwd eintagen
 
 /etc/asterisk/res_pgsql.conf
-LxOffice Datenbankname und Passwd eintagen
+kivitendo Datenbankname und Passwd eintagen
 
-/etc/asterisk/func_odbc.conf 
+/etc/asterisk/func_odbc.conf
 Nicht modifizieren!
 
 Bei Unklarheiten:
@@ -37,14 +34,14 @@ http://www.das-asterisk-buch.de, http://www.ip-phone-forum.de/forumdisplay.php?f
 http://asteriskdocs.org/en/3rd_Edition/asterisk-book-html-chunk/installing_configuring_odbc.html
 Treiber installieren und  registrieren
 Download: http://packages.ubuntu.com/de/trusty/amd64/odbcinst/download
-dpkg -i odbcinst.deb  
+dpkg -i odbcinst.deb
 apt-get install unixODBC unixODBC-dev odbc-postgresql
-odbcinst -i -d -f /usr/share/psqlodbc/odbcinst.ini.template 
+odbcinst -i -d -f /usr/share/psqlodbc/odbcinst.ini.template
 less /etc/odbcinst.ini sollte nun gefüllt sein
 Muß idR nicht modifiziert werden
 
 /etc/odbc.ini mit den Vorgaben aus /usr/lib/lx-office-crm/crmti/etc/odbc.ini füllen bzw. kopieren
-Datenbankname, Passdw und Pfad zu odbc anpassen 
+Datenbankname, Passdw und Pfad zu odbc anpassen
 find / -name 'lib*odbc*.so'
 
 
@@ -77,7 +74,7 @@ SIP-Verbindungen anzeigen
 sip show peers
 
 Sip-Verbindungen neu einlesen
-sip reload 
+sip reload
 
 Wählplan neu einlesen
 ael reload
@@ -95,14 +92,11 @@ Achtung die FritzBox Fon kann die aus der Kivitendo-Datenbank ermittelten Kunden
 Internetnummer 2000
 Benutzername   2000
 Kennwort       StrengGemeim
-Registrar      IPdesLxOfficeServers:5070
-Proxyserver    IPdesLxOfficeServers:5070
+Registrar      IPdesKivitendoServers:5070
+Proxyserver    IPdesKivitendoServers:5070
 
 
-Falls keine Hardware zur Hand ist hilt ein: 
+Falls keine Hardware zur Hand ist hilt ein:
 apt-get twinkle
 
 Fehler oder Ergänzugen bitte an ronny@lxcars.de posten.
-
-
-

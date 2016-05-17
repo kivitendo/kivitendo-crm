@@ -1,96 +1,137 @@
+###################################
+# Veränderungen von kivitendo-crm #
+###################################
+
+Version 2.2.0 2016-05-03
+
+    Datenbankmanagement auf PDO umgestellt
+    Wissen-Datenbank komplett neu implementiert
+        + automatisches Speichern
+        + Versionsmanagement
+        + Kategorienamen ändern
+        + Kategorien löschen
+    Notizen komplett neu
+        + Notiz verstecken bis Datum
+        + Notiz mit anderen Benutzer(n) teilen
+        + Notizen minimieren
+    Rechner neu
+        + rechnet ohne Mausbenutzung
+    Terminplanung mit Kalender
+        + wiederkehrende Termine
+        + Aufgaben
+        + Terminkategorien erstellen
+    Übersetzer erneuert
+    Anrufliste
+        + Kundenname aus kivitendo wird auf dem Telefon angezeigt
+        + Anruferliste
+        + Daten unbekannter Anrufer aus dem Telefonbuch holen und als Kunden anlegen
+    Kunden/Lieferanten Dokumente neu
+        + Vorschau
+        + Dateimanagement via 'Drag and Drop'
+        + Dateiinformationen
+        + optisch ansprechend
+        + Text-Dateien bearbeiten
+        + Pdf-Dateien anzeigen
+        + Dateien packen und entpacken
+        + Dateien suchen (nach Name, Typ, Ort)
+    Status
+        + Update mit Version neu implementiert
+        + Datenbanken sichern
+
+
 Version 1.4.1:
-	leeres Datum bei date2db wird aktuelles Datum
-	VCard Serienexport für Kunden + Personen
-	Bug 1371
-	Verbesserungen beim Update
-	Bug 1365
-	Fenster für Mail vergrössert
-	Bug 1092 Umlautdarstellung von eingehenden e-Mails
-	Knopf "Mails" wieder anzeigen
-	Aufräumen nach dem Upload
-	Mail: Absender und Betreff richtig Quoten
-	SQL:Syntax für Escape-Zeichenketten für Backslashes
-	WVL:Adresslink korrigiert.
-	Fehlendes ergänzt, überflüssiges weg.
-	Bug 814 Dokumente in Wissens DB 
-	Bug 1319
-	Feature: sales_edit_all
-	listLimit soll nur Anzeige, nicht aber CSV Daten betreffen.
-	User:Icalexport konfigurationsdaten speichern
-	User: Umsatzanzeige der letzten 12 Monate
-	Neues Updatefile, neuer Mechanismus
-	Multilingual, Dateisperre berücksichtigen
-	Users:Variablenname == Datenbankname, keine unnötige Übersetzung
-	Users,ical:Alternative Zielorte für Exportfile,Kalendereinträge eines Benutzers für einen best. Zeitraum exportieren
-	Lib:iCalcreator 2.4.3
-	Veranstaltungsort für Termine
-	Bug 1345
-	Taschenrechner:Fenster vergrössert
-	Unabhängige Dokumentenverwaltung (keine Kundenzuordnung)
-	showDir aufgeräumt, Tabs durch Leerzeichen ersetzt
-	Kategorien für Termine, Datenbankupdate fehlte noch
-	Firma:Anzahl Mitarbeiter
-	Bug 1313
-	Kategorien für Termine, noch nicht suchbar
-	Komma zuviel (Termdate)
-	TextIndizies zu Stings,
-	Bug 1315
-	Beim Neuanlegen von Kunden oder Lieferanten keine abweichenden Lieferadressen raussuchen
-	Suche über wissensdb
-	Suche in Terminen Zeitlich eingrenzen.
-	Terminauswahl mit Kalender
-	Suche auch in Extrafelder, Datenbank ändern
-	Bug 1306. Enter löst keine Aktion mehr aus.
-	Erste Währung ermitteln und verwenden in der Umsatzanzeige
-	Personensuche um Auswahlfeld Land erweitert
-	beginTransactio, um ein n erweitert.
-	Constraints für Tabelle sonderflag
-	Sonderflag editieren
-	Beim Speichern von Stammdaten leere Felder mit "null" belegen, da sonst	coalese nicht greift
-	Bug 679 Ausgehende/Eingehende Anrufe trennen
-	Aufruf offener Posten/Aufträge geändert
-	Preisanfrage fehlerhaft
-	Keine Pflicht für Zahlungsbedingungen
-	Falscher Aufruf der Firmenstammdaten
-	Probleme mit Mailanhängen und Textencoding
-	Bug 1274
-	Bug 1273
-	Fehlendes "e" im Templateblock ergänzt
-	Bug 1068 mails  charset
-	Bug 1218 Featurerequest "Terminsuche"
-	Überflüssige Zeile entfernt
-	Bug 1217 Zeitliche Einteilung der Termine
-	Bug 1216 Termine-Jahreszahlenauswahl 
-	Doppelter Funktionsaufruf
-	Nur eigene Termine anzeigen
-	Fehler bei Terminabfrage aus Wiedervorlage
-	Ausblenden was nicht gebraucht wird
-	div. Bugs
-	Wenn kein Ansprechpartner vorhanden, dann auch nicht danach suchen
-	Spalte Termin_id in telcall für Bezug auf Termine
-	Tools in der Stammdatenmaske abschaltbar
-	Zahlungsbedingungen bearbeiten
-	Minikalender:Pfad zur ERP aus URL
-	BUG 1203 
-	Coutrycode auf en geändert
-	Platzhaltername korrigiert
-	IBAN/BIC anzeige + eingabe
-	Pfade "relativiert"
-	Serienbrief mit OOo Vorlagen.
-	Bug 1163
-	Onlinehilfe für Firmensuche
-	Onlinehilfe, aufrufbar aus der Kopfzeile (Seitenname) der Seite 
-	Termine von anderen Benutzern einsehen
-	Die letzten 5 Zeilen der Apchelogs ausgeben.
-	Charset der ERP auslesen. Wird an verschiedenen Stellen benötigt
-	Bug 1142
-	Bug 570
-	Bug 1062
-	Ohne Historyeintrag kommt es zu Problemem beim Speichern 
-	mtime wird nicht immer oder mehr getriggert. Datum nun aus History
-	Privatmarker in termine
-	Auch bei Gruppenmidgliedschaft die Termine als eigene anzeigen
-	Termine können nur von den Benutzern editiert werden, Sekretärinmode
+    leeres Datum bei date2db wird aktuelles Datum
+    VCard Serienexport für Kunden + Personen
+    Bug 1371
+    Verbesserungen beim Update
+    Bug 1365
+    Fenster für Mail vergrössert
+    Bug 1092 Umlautdarstellung von eingehenden e-Mails
+    Knopf "Mails" wieder anzeigen
+    Aufräumen nach dem Upload
+    Mail: Absender und Betreff richtig Quoten
+    SQL:Syntax für Escape-Zeichenketten für Backslashes
+    WVL:Adresslink korrigiert.
+    Fehlendes ergänzt, überflüssiges weg.
+    Bug 814 Dokumente in Wissens DB
+    Bug 1319
+    Feature: sales_edit_all
+    listLimit soll nur Anzeige, nicht aber CSV Daten betreffen.
+    User:Icalexport konfigurationsdaten speichern
+    User: Umsatzanzeige der letzten 12 Monate
+    Neues Updatefile, neuer Mechanismus
+    Multilingual, Dateisperre berücksichtigen
+    Users:Variablenname == Datenbankname, keine unnötige Übersetzung
+    Users,ical:Alternative Zielorte für Exportfile,Kalendereinträge eines Benutzers für einen best. Zeitraum exportieren
+    Lib:iCalcreator 2.4.3
+    Veranstaltungsort für Termine
+    Bug 1345
+    Taschenrechner:Fenster vergrössert
+    Unabhängige Dokumentenverwaltung (keine Kundenzuordnung)
+    showDir aufgeräumt, Tabs durch Leerzeichen ersetzt
+    Kategorien für Termine, Datenbankupdate fehlte noch
+    Firma:Anzahl Mitarbeiter
+    Bug 1313
+    Kategorien für Termine, noch nicht suchbar
+    Komma zuviel (Termdate)
+    TextIndizies zu Stings,
+    Bug 1315
+    Beim Neuanlegen von Kunden oder Lieferanten keine abweichenden Lieferadressen raussuchen
+    Suche über wissensdb
+    Suche in Terminen Zeitlich eingrenzen.
+    Terminauswahl mit Kalender
+    Suche auch in Extrafelder, Datenbank ändern
+    Bug 1306. Enter löst keine Aktion mehr aus.
+    Erste Währung ermitteln und verwenden in der Umsatzanzeige
+    Personensuche um Auswahlfeld Land erweitert
+    beginTransactio, um ein n erweitert.
+    Constraints für Tabelle sonderflag
+    Sonderflag editieren
+    Beim Speichern von Stammdaten leere Felder mit "null" belegen, da sonst    coalese nicht greift
+    Bug 679 Ausgehende/Eingehende Anrufe trennen
+    Aufruf offener Posten/Aufträge geändert
+    Preisanfrage fehlerhaft
+    Keine Pflicht für Zahlungsbedingungen
+    Falscher Aufruf der Firmenstammdaten
+    Probleme mit Mailanhängen und Textencoding
+    Bug 1274
+    Bug 1273
+    Fehlendes "e" im Templateblock ergänzt
+    Bug 1068 mails  charset
+    Bug 1218 Featurerequest "Terminsuche"
+    Überflüssige Zeile entfernt
+    Bug 1217 Zeitliche Einteilung der Termine
+    Bug 1216 Termine-Jahreszahlenauswahl
+    Doppelter Funktionsaufruf
+    Nur eigene Termine anzeigen
+    Fehler bei Terminabfrage aus Wiedervorlage
+    Ausblenden was nicht gebraucht wird
+    div. Bugs
+    Wenn kein Ansprechpartner vorhanden, dann auch nicht danach suchen
+    Spalte Termin_id in telcall für Bezug auf Termine
+    Tools in der Stammdatenmaske abschaltbar
+    Zahlungsbedingungen bearbeiten
+    Minikalender:Pfad zur ERP aus URL
+    BUG 1203
+    Coutrycode auf en geändert
+    Platzhaltername korrigiert
+    IBAN/BIC anzeige + eingabe
+    Pfade "relativiert"
+    Serienbrief mit OOo Vorlagen.
+    Bug 1163
+    Onlinehilfe für Firmensuche
+    Onlinehilfe, aufrufbar aus der Kopfzeile (Seitenname) der Seite
+    Termine von anderen Benutzern einsehen
+    Die letzten 5 Zeilen der Apchelogs ausgeben.
+    Charset der ERP auslesen. Wird an verschiedenen Stellen benötigt
+    Bug 1142
+    Bug 570
+    Bug 1062
+    Ohne Historyeintrag kommt es zu Problemem beim Speichern
+    mtime wird nicht immer oder mehr getriggert. Datum nun aus History
+    Privatmarker in termine
+    Auch bei Gruppenmidgliedschaft die Termine als eigene anzeigen
+    Termine können nur von den Benutzern editiert werden, Sekretärinmode
     Dokumente:Size nicht mit False initialisieren
     Doppelte Extention im Filenamen
     Schnellsuche mit Anfangsbuchstaben tut wieder
@@ -108,7 +149,7 @@ Version 1.4.1:
     vorhandene Sonderflags in DB migrieren
     Platzhalternamen für Sonderflag geändert
     Sonderflags bearbeiten
-    Xajax in der Version 0.23 und 0.50 sind nicht kompatibel 
+    Xajax in der Version 0.23 und 0.50 sind nicht kompatibel
     Firma:Überflüssige Zeichen entfernt
     Weitere Übersetzungen
     Kommadline Hilfs-Tool für Übersetzungen
@@ -121,14 +162,14 @@ Version 1.4.1:
     Erweiterung der Datenbank Backend-Routine um getAssoc
     Texvorlagen:Texplatzhalter
     persLib um getCpAnredenGeneric erweitert
-    Beim Schreiben der tmpcsvdaten entsprechend die korrekte Anrede holen 
-    leere Platzhalter löschen, BODY,SUBJECT,DATE,TMPFILE... 
-    Serienbrief 
-    ID muß nun auch hier mit an insertCSVData übergeben werden 
+    Beim Schreiben der tmpcsvdaten entsprechend die korrekte Anrede holen
+    leere Platzhalter löschen, BODY,SUBJECT,DATE,TMPFILE...
+    Serienbrief
+    ID muß nun auch hier mit an insertCSVData übergeben werden
     Bug 1061
     Firma:Richtige Lieferanschrift drucken
     KdNr in Auswahl anzeigen
-    Zusammenführen von cp_birthday und cp_gebdatum.  
+    Zusammenführen von cp_birthday und cp_gebdatum.
     Die ausgelagerte Funktion getCSVData zum Etiketten generieren
     Die stdLib um getCSVData erweitert
     Programmierrichtlinien
@@ -136,7 +177,7 @@ Version 1.4.1:
     db.php um eine Funktion executeMultiple erweitert
     Wahlweises laden der Datenbankschicht (db / mdb2)
     Erweiterung der Suche auch um Lieferantenfirmenname
-    Die Suchabfrage für Personen etwas performanter gestaltet 
+    Die Suchabfrage für Personen etwas performanter gestaltet
     Probleme mit Charset
     Kundennummer nicht ID ausgeben
     Falscher Bezug bei Abfrage 2.Stelle

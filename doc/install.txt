@@ -23,7 +23,7 @@ Voreingestellt ist kivitendo.
 Vorrausetzungen:
     PostgreSQL >= 9.3
     Kivitendo ERP >= 3.3.0
-    PHP >= 5.3
+    PHP >= 5.4
     PEAR::Contact_Vcard_Build
     PEAR::Contact_Vcard_Parse
     PEAR::Mail_Mime oder php-mail-mime

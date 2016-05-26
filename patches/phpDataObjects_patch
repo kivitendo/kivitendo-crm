@@ -1,0 +1,12 @@
+--- phpDataObjects_org.php	2016-05-25 15:04:39.530204544 +0200
++++ phpDataObjects.php	2016-05-25 15:04:46.574204697 +0200
+@@ -41,7 +41,8 @@
+         $stmt = parent::prepare( $sql );
+         if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString );
+         if( !$result = $stmt->execute() ) $this->error( $stmt->errorInfo() );
+-        return  $json ? $stmt->fetch( PDO::FETCH_ASSOC )[json_agg] : $stmt->fetch( PDO::FETCH_ASSOC );
++        $rs = $stmt->fetch( PDO::FETCH_ASSOC );
++        return  $json ? $rs[json_agg] : $rs;
+     }
+ 
+     public function getAll( $sql, $json = FALSE  ){

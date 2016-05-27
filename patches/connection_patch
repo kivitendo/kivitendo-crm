@@ -1,0 +1,15 @@
+--- connection_org.php	2016-05-27 15:12:02.625791603 +0200
++++ connection.php	2016-05-27 15:23:39.313780771 +0200
+@@ -72,10 +72,10 @@
+ //Menu und Javascript-Sachen in Session speichern
+ if( $newSession ) {
+     // global - ERP users, groups in kivi.myconfig laden
+-    $users_groups = [
++    $users_groups = array(
+             "erp_all_users" => getAllERPusers(),
+             "erp_all_groups" => getAllERPgroups()
+-        ];
++        );
+     $myglobal = $users_groups;
+     $myglobal['baseurl'] = substr($_SESSION['baseurl'], 0, -1);//warum -1 Url darf doch Slash am Ende Kevin oder was steht in Session.baseurl
+     $myglobalJson = json_encode($myglobal, JSON_UNESCAPED_UNICODE);

@@ -121,10 +121,6 @@
         })
     }
     var f1 = null;
-    function toolwin(tool) {
-        leftpos=Math.floor(screen.width/2);
-        f1=open(tool,"Adresse","width=350, height=200, left="+leftpos+", top=50, status=no,toolbar=no,menubar=no,location=no,titlebar=no,scrollbars=yes,fullscreen=no");
-    }
     function showOP(was) {
                 F1=open("op_.php?Q={Q}&fa={Fname1}&op="+was,"OP","width=950, height=450, left=100, top=50, scrollbars=yes");
         }
@@ -135,8 +131,11 @@
             alert("GEO-Datenbank nicht aktiviert");
         }
     }
-    function doOe(type) {//Angebot / Auftrag
+    function doOe(type) { //Auftrag
       window.location.href = '../oe.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + type;
+    }
+    function newOrder( href ){ // Auftrag
+        window.location.href = href;
     }
     function doDo() { //neuer Lieferschein
       var type = '{Q}' == 'C' ? 'sales_delivery_order' : 'purchase_delivery_order';

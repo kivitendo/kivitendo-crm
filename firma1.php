@@ -98,9 +98,10 @@
     $taxzone=array(1 => "Inland",1 => "EU mit UStId",3 => "EU ohne UStId",4 => "Ausland");
     $sales=($Q=="C")?"sales":"purchase";
     $request=($Q=="C")?"sales":"request";
+    $CuVe =  $Q == 'C' ? 'customer' : 'vendor';
     $t->set_var(array(
             'FAART' => ($Q=="C")?".:Customer:.":".:Vendor:.",
-            'CuVe' => ($Q=="C")?"customer":"vendor",
+            'CuVe' => $CuVe,
             'Q' => $Q,
             'FID' => $id,
             'INID' => db2date(substr($fa["itime"],0,10)),
@@ -174,7 +175,7 @@
             'ANGEBOT_BUTTON' => ($_SESSION['angebot_button']=='t')?
                                 '<a class="firmabutton" href="#" onClick="doOe(\''.$sales.'_quotation\');"><img src="image/angebot.png" title="Angebot/Anfrage erstellen" border="0"></a>&nbsp;':'',
             'AUFTRAG_BUTTON' => ($_SESSION['auftrag_button']=='t')?
-                                '<a class="firmabutton" href="#" onClick="doOe(\''.$request.'_order\');"><img src="image/auftrag.png" title="neuen Auftrag eingeben" border="0"></a>&nbsp;':'',
+                                '<a class="firmabutton" href="#" onClick="newOrder(\'../controller.pl?type='.$sales.'_order&action=Order%2fadd&order.'.$CuVe.'_id='.$id.'\');"><img src="image/auftrag.png" title="neuen Auftrag eingeben"></a>&nbsp;':'',
             'LIEFER_BUTTON'  => ($_SESSION['liefer_button']=='t')?
                                 '<a class="firmabutton" href="#" onClick="doDo();"><img src="image/lieferschein.png" title="neuen Lieferschein erstellen" border="0"></a>&nbsp;':'',
             'RECHNUNG_BUTTON'=> ($_SESSION['rechnung_button']=='t')?

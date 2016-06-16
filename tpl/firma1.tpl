@@ -148,7 +148,7 @@
       window.location.href = file + '?action=add&type=invoice&vc={CuVe}&{CuVe}_id={FID}';
     }
     function doIb() { //neuer Brief
-      window.location.href = '../controller.pl?action=Letter%2fadd';
+      window.location.href = '../controller.pl?action=Letter%2fadd&letter.customer_id={FID}';
     }
     function doLxCars() {
         uri='lxcars/lxcmain.php?owner={FID}&task=1'

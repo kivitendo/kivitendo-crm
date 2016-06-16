@@ -52,6 +52,8 @@
         //F1=open("getCall.php?Q={Q}&fid={FID}&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
     }
     function anschr(A) {
+        $( "#dialogwin" ).dialog( "option", "width", 400 );
+        $( "#dialogwin" ).dialog( "option", "minWidth", 300 );
         $( "#dialogwin" ).dialog( "option", "maxWidth", 400 );
         $( "#dialogwin" ).dialog( "option", "maxHeight", 600 );
         $( "#dialogwin" ).dialog( { title: "Adresse" } );

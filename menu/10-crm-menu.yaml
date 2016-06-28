@@ -82,6 +82,18 @@
   order: 800
   access: crm_sales
   module: crm/packliste.php
+- parent: crm_other
+  id: crm_other_partsedit
+  name: Partsedit
+  order: 900
+  access: crm_sales
+  module: crm/partsedit.php
+- parent: crm_other
+  id: crm_other_warehouse_correction
+  name: Warehouse correction
+  order: 1000
+  access: crm_sales
+  module: crm/inventurlager.php
 - parent: crm
   id: crm_service
   name: Service

@@ -2,7 +2,7 @@ $(document).ready(function() {
     //Rechnungen in Fancybox anzeigen
     var getUrl = window.location;
     if (!getUrl.toString().match('LoginScreen') && !getUrl.toString().match('Admin') ){ //Plugins nicht bei login und Admin anzeigen
-        if (kivi.myconfig.global_conf != undefined) {
+       if (kivi.myconfig.global_conf != undefined) {
             $('body')
             .append("<script type='text/javascript' src='crm/js/jquery.postitall.js'></script>")
             .append("<script type='text/javascript' src='crm/js/jquery.postitall.ajax.js'></script>");
@@ -20,8 +20,6 @@ $(document).ready(function() {
         .append("<div class='fancybox' data-fancybox-type='iframe' href='\'></div>")
         .append("<div class='pluginDialog'></div>");
         if( kivi.myconfig.countrycode == 'de' )  $('body').append("<script type='text/javascript' src='crm/jquery-plugins/jquery-calculator/jquery.calculator-de.js'></script>");
-
-
 
         var pluginDialog = $( '.pluginDialog' ).dialog({
             autoOpen: false,
@@ -65,5 +63,16 @@ $(document).ready(function() {
             marginTop: "20px",
             height: "20px"
         });
+        var cust_vend_id;
+        var cust_vend_tmp;
+        if ($("input[name='customer_id']").val()) {
+            cust_vend_tmp = "C";
+            cust_vend_id = $("input[name='customer_id']").val();
+        }
+        else {
+            cust_vend_tmp = "V";
+            cust_vend_id = $("input[name='vendor_id']").val();
+        }
+        $("<input style='margin-right: 5px;' class='submit' type='button' name='crm' id='crm' value='CRM' onClick=\"window.location.href='crm/firma1.php?Q="+ cust_vend_tmp +"&id="+ cust_vend_id +"'\">" ).insertBefore( "#update_button" );
     }//endif
 });

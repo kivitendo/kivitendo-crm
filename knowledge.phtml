@@ -160,6 +160,9 @@ $(document).ready(function(){
             method: "GET",
             success: function( json ) {
                 var obj = JSON.parse( json.trim() );
+                if( !obj[0].maingroup )
+                    $( '#newCat' ).dialog( "open" ).html( 'Category name:<input type="text" id="catName" value="my first category"></br><input type="checkbox" id="mainCat" name="maincategory" value="1" checked>Maincategory');
+
                 $.each( obj[0].maingroup, function( i, val ){
                     $( "#menu" ).append("<li id='main_" + val.id + "'>" + val.labeltext + "</li>"  );
                 });

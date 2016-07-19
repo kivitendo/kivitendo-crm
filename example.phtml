@@ -25,27 +25,31 @@ echo $head['JUI-DROPDOWN'];
 <script>
 
 
-
   $(document).ready(function() {
-        $( "#dialog" ).dialog({
-            width:200,
-            height:200,
-            minWidth:200,
-            minHeight:100,
-            maxWidth:400,
-            maxHeight:300
+        $("#dialog").dialog({
+            width:800,
+            height:800,
+            minWidth:600,
+            minHeight:600,
+            maxWidth:800,
+            maxHeight:800
         });
-        $("#btn1").click(function(){
-        alert($("#somename").val());
+
+  });
+
+  $( function() {
+       $("input").checkboxradio({
+            icon: false
        });
 
-       $("#btn2").click(function(){
-        $("#somename").val().dialog();
-       });
-    });
+  });
 
-
-
+//  $( function() {
+//    $("#enterbutton").button();
+//    $("#enterbutton").click(function () {
+//        alert("Enter geklickt");
+//    });
+//  });
 
 </script>
 
@@ -56,24 +60,58 @@ echo $head['JUI-DROPDOWN'];
     echo $menu['start_content'];
 ?>
 
- <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">.'translate('.:fast search customer/vendor/contacts and contact history:.','firma')'.</p>
-<div id="example" style="position:absolute"></div>
+<p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Hier steht irgendwas drin</p>
 
-<div id="dialog" title="Ein Dialog">
-  <p>Dies ist ein Dialog mit minimal 200, maximal 400 Pixeln Breite und minimal 100, maximal 300 Pixeln Höhe.<br>
-  Ausgangsgröße ist 200 x 200 Pixel.</p>
+
+<div id="dialog" title="Kontakte">
+  <p><label>Betreff</label>
+     <input type="text" name="subject">
+     <label>Datum</label>
+     <input type="date" name="date">
+     <label>Uhrzeit</label>
+     <input type="time" name="time" >
+  </p>
+
+  <p><label>Bemerkungen</label>
+  <textarea name="comments" rows="10" cols="60" wrap="hard"></textarea>
+  </p>
+
+
+  <p>
+  <fieldset>
+    <legend>Kontaktart: </legend>
+    <input type="radio" name="radio-1" id="radio-1" checked="checked">
+    <label for="radio-1">Telefon</label>
+    <input type="radio" name="radio-1" id="radio-2">
+    <label for="radio-2">eMail</label>
+    <input type="radio" name="radio-1" id="radio-3">
+    <label for="radio-3">Fax/Brief</label>
+    <input type="radio" name="radio-1" id="radio-4">
+    <label for="radio-4">Persönlich</label>
+    <input type="radio" name="radio-1" id="radio-5">
+    <label for="radio-5">Datei</label>
+    <input type="radio" name="radio-1" id="radio-6">
+    <label for="radio-6">Termin</label>
+  </fieldset>
+  </p>
+
+   <p>
+  <fieldset>
+    <legend>Richtung: </legend>
+    <input type="radio" name="radio-2" id="radio-7">
+    <label for="radio-7">von Kunde</label>
+    <input type="radio" name="radio-2" id="radio-8">
+    <label for="radio-8">an Kunde</label>
+    <input type="radio" name="radio-2" id="radio-9" checked="checked">
+    <label for="radio-9">unbestimmt</label>
+   </fieldset>
+  </p>
+
+  <button id="enterbutton">Enter</button>
+
 </div>
 
-<!--<div id="dialog1" title="Ein Dialog">
-  <p>Dies ist ein Test-Dialog</p>
-</div>-->
-<button id="btn1">Klick!</button><button id="btn2">Auch Klick!</button><br>
- <input id="somename" value="Ein Name">Name</input>
 
-<?php
-    echo $menu['end_content'];
-    echo $head['TOOLS'];
-?>
 
 </body>
 </html>

@@ -5,8 +5,7 @@ require_once __DIR__.'/../inc/ajax2function.php';
 function getCategories(){
      $sql = " SELECT json_agg (my_json) from (select row_to_json(x0) as my_json from (SELECT json_agg( i0 ) as maingroup FROM ( SELECT * FROM knowledge_category WHERE maingroup = 0 ORDER BY labeltext ) i0) x0 union all select row_to_json(x1) from (SELECT json_agg( i1 ) as undergroup FROM ( SELECT * FROM knowledge_category WHERE maingroup > 0 ORDER BY labeltext  ) i1) x1) xxx";
      $rs = $GLOBALS['dbh']->getOne( $sql );
-     //Falls es keine Hauptkategorie gibt, so wird ein Rechtsklick ermöglicht,  SEHR VERBESSERUNGSWÜRDIG, wird besser mit jQuery gemacht
-     echo !json_decode( $rs['json_agg']  )['0']->maingroup ? '"[{\"maingroup\":[{\"id\":1,\"labeltext\":\"right-klick and new category!\",\"maingroup\":0,\"help\":false}]}, {\"undergroup\":null}]"' : json_encode( $rs['json_agg'] ); ;
+     echo json_encode( $rs['json_agg'] );
 }
 
 function getArticle( $cat_id ){

@@ -2,7 +2,7 @@
 session_start();
 require_once __DIR__.'/inc/version.php';
 require_once __DIR__.'/inc/stdLib.php';
-//require_once __DIR__.'/inc/test.php';
+
 $git = @exec('git log -1',$out,$rc);
 if ( $rc > 0 ) {
     $commit = '';
@@ -14,10 +14,6 @@ if ( $rc > 0 ) {
     $commit .= '<tr><td>Datum: </td><td>'.$date.'</td></tr>';
 }
 $rc = false;
-/*if( varExist( $_GET['test'] == 'ja' ) ){
-    $rs = $GLOBALS['dbh']->getOne("select * from crm order by  version DESC, datum DESC");
-    printArray( $rs );
-}*/
 
 ?>
 <html>
@@ -260,11 +256,10 @@ while (false !== ($entry = $d->read())) {
     if (preg_match('/install.log/',$entry)) $db=true;
 }
 $d->close();
-echo needUpdate();
-//if ($prog) { echo "<a href='log/instprog.log'>Programminstallation</a><br>"; } else { echo "Kein Logfile f&uuml;r Programminstallation<br>"; }
-//if ($db) { echo "<a href='log/install.log'>Datenbankinstallation</a><br>"; } else { echo "Kein Logfile f&uuml;r Datenbankinstallation<br>"; }
+echo 'Need update = '.needUpdate();
+
 ?>
-<table id="info" class="tablesorter" style="width:auto; font-size:1pt">
+<table id="info" class="tablesorter" style="width:auto">
     <thead></thead>
     <tbody>
     <tr><td>CRM Version</td><td><?php echo  VERSION." ".SUBVER  ?></td></tr>
@@ -286,22 +281,15 @@ echo needUpdate();
 
 </tbody>
 </table>
+
 <div id="statusDialog"></div>
 <div id="dialog">
   <div class="progress-label"></div>
   <div id="progressbar"></div>
 </div>
 
-<?php
-   /* if ($rs) {
-        echo 'Datenbankzugriff erfolgreich!<br>';
-
-        //foreach ($rc as $row) {
-            echo 'Installierte Version: '.$rs["version"].' vom: '.$rs["datum"].' durch: '.$rs["uid"].'<br>';
-        //}
-    } */
-?>
 </center>
+
 <?php echo $menu['end_content']; ?>
 </body>
 

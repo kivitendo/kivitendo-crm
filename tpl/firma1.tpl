@@ -11,6 +11,48 @@
 {QRCODE}
 
 <script language="JavaScript" type="text/javascript">
+
+// aus example.phtml - Anfang
+
+    $(document).ready(function() {
+        $("#contactsdialog").dialog({
+            width:800,
+            height:500,
+            minWidth:600,
+            minHeight:600,
+            maxWidth:800,
+            maxHeight:800
+        });
+
+
+
+ // Funktion für die Radiobuttons
+/*    $( function() {
+        $("input").checkboxradio({
+            icon: false
+        });
+    });
+*/
+
+ // Funktion für die Radiobuttons - 2. Versuch
+/*    $( function() {
+        $("input[type='radio']").checkboxradio({
+            icon: false
+        });
+    })
+*/
+ // Funktion für das Datumsfeld
+        $( function() {
+            $("#date").datepicker();
+        });
+
+ // Funktion für den Enterbutton
+        $("#save").button().click(function () {
+            alert("Save geklickt");
+         });
+    });
+// aus example.phtml - Ende
+
     function showCall() {
         $('#calls tr[group="tc"]').remove();
         $.ajax({
@@ -41,15 +83,16 @@
                })
                $("#calls").trigger('update');
             }
-        });
+       });
         return false;
-    }
+   }
     function dhl() {
         F1=open("dhl.php?Q={Q}&fid={FID}&popup=1","Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
     }
     function showItem(id) {
-        $('#mess').dialog("open").html('This feature is currently deactivated. It will be new implemented with the next CRM version..');
+        //$('#mess').dialog("open").html('This feature is currently deactivated. It will be new implemented with the next CRM version..');
         //F1=open("getCall.php?Q={Q}&fid={FID}&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
+        $("#contactsdialog").dialog("open");
     }
     function anschr(A) {
         $( "#dialogwin" ).dialog( "option", "width", 400 );
@@ -207,10 +250,10 @@
                     duration: 300
                 },
             });
-            $("#mess").dialog({
-                autoOpen: false,
-                title: "Message"
-            });
+            //$("#mess").dialog({
+            //    autoOpen: false,
+            //    title: "Message"
+            //});
             $(".firmabutton").button().click(
             function( event ) {
                 if ( this.getAttribute('name') != 'extra' && this.getAttribute('name') != 'karte' && this.getAttribute('name') != 'lxcars') {
@@ -269,6 +312,7 @@
             $(".fancybox").fancybox();
         }
     );
+
 </script>
 <style>
 
@@ -313,6 +357,58 @@
     </span>
     </form>
 </div>
+
+<!-- aus example.phtml - Anfang -->
+<div id="contactsdialog" title="Contacts">
+  <p><label>Betreff</label>
+     <input type="text" name="subject">
+     <label>Datum</label>
+     <input type="date" name="date" id="date">
+     <label>Uhrzeit</label>
+     <input type="time" name="time" >
+  </p>
+
+  <p><label>Bemerkungen</label>
+  <textarea name="comments" rows="10" cols="60" wrap="hard"></textarea>
+  </p>
+
+
+  <p>
+  <fieldset>
+    <legend>Kontaktart: </legend>
+    <input type="radio" name="radio-1" id="radio-1" checked="checked">
+    <label for="radio-1">Telefon</label>
+    <input type="radio" name="radio-1" id="radio-2">
+    <label for="radio-2">eMail</label>
+    <input type="radio" name="radio-1" id="radio-3">
+    <label for="radio-3">Fax/Brief</label>
+    <input type="radio" name="radio-1" id="radio-4">
+    <label for="radio-4">Persönlich</label>
+    <input type="radio" name="radio-1" id="radio-5">
+    <label for="radio-5">Datei</label>
+    <input type="radio" name="radio-1" id="radio-6">
+    <label for="radio-6">Termin</label>
+  </fieldset>
+  </p>
+
+   <p>
+  <fieldset>
+    <legend>Richtung: </legend>
+    <input type="radio" name="radio-2" id="radio-7">
+    <label for="radio-7">von Kunde</label>
+    <input type="radio" name="radio-2" id="radio-8">
+    <label for="radio-8">an Kunde</label>
+    <input type="radio" name="radio-2" id="radio-9" checked="checked">
+    <label for="radio-9">unbestimmt</label>
+   </fieldset>
+  </p>
+
+  <button id="save">Save</button>
+
+</div>
+
+<!-- aus example.phtml - Ende -->
+
 
 
 <div id='contentbox'>
@@ -474,8 +570,8 @@
 <iframe id="iframe1" width='100%' height='450'  scrolling="auto" border="0" frameborder="0"><img src='image/wait.gif'></iframe>
 </div>
 </div>
-<div id="mess">
-</div>
+//<div id="mess">
+//</div>
 {END_CONTENT}
 {TOOLS}
 </body>

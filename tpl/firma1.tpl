@@ -14,7 +14,7 @@
 
     $(document).ready(function() {
         $("#contactsdialog").dialog({
-				autoOpen: false,            
+            autoOpen: false,            
             width:800,
             height:500,
             minWidth:600,
@@ -22,19 +22,29 @@
             maxWidth:800,
             maxHeight:800,
             buttons: [{
-            	text: 'Save', //translate
-            	click: function() {
-						$( this ).serialize();						
-						alert("Serialized!");						
-						//$(this).dialog("close");
-                	//return false;
-            	}
+                text: 'Save', //translate
+                click: function() {
+                    $.ajax({
+                        data: { action: "newContact", data: $("#contacts").serialize()},
+                        //data: { action: "newContact", data: "Testtext"}, 
+                        type: 'POST',
+                        url: "ajax/contact.php",
+                        success: function(){
+                            alert(data);
+                            //alert("OK");
+                        }
+                    })
+                    //alert($("#contacts").serialize());
+                    //  $(this).dialog("close");
+                    //return false;
+                }
         		},
             {
-            text: 'Cancel',//translate
-            click: function(){
-                //$(this).dialog('close');
-                //return false;	
+                text: 'Cancel',//translate
+                click: function(){
+                    alert("Cancelled");                
+                    //$(this).dialog('close');
+                    //return false;	
                 }
             }]
         });
@@ -72,38 +82,39 @@
             }
        });
         return false;
-   }
+    }
     function dhl() {
         F1=open("dhl.php?Q={Q}&fid={FID}&popup=1","Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
     }
     function showItem(id) {
         //$('#mess').dialog("open").html('This feature is currently deactivated. It will be new implemented with the next CRM version..');
         //F1=open("getCall.php?Q={Q}&fid={FID}&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
-        $("#contactsdialog").dialog("open").html('<p><label>Betreff</label> <input type="text" name="subject">'+
-            '<label>Datum</label> <input type="date" name="date" id="date">'+
-            '<label>Uhrzeit</label> <input type="time" name="time"> </p>'+
-            '<p><label>Bemerkungen</label> <textarea name="comments" rows="10" cols="60" wrap="hard"></textarea> </p>'+
-            '<p> <fieldset> <legend>Kontaktart: </legend> <input type="radio" name="radio-1" id="radio-1" checked="checked">'+
-            '<label for="radio-1">Telefon</label> <input type="radio" name="radio-1" id="radio-2">'+
-            '<label for="radio-2">eMail</label> <input type="radio" name="radio-1" id="radio-3">'+
-            '<label for="radio-3">Fax/Brief</label> <input type="radio" name="radio-1" id="radio-4">'+
-            '<label for="radio-4">Persönlich</label> <input type="radio" name="radio-1" id="radio-5">'+
-            '<label for="radio-5">Datei</label> <input type="radio" name="radio-1" id="radio-6">'+
-            '<label for="radio-6">Termin</label> </fieldset> </p>'+
-   			'<p> <fieldset> <legend>Richtung: </legend>'+
-    			'<input type="radio" name="radio-2" id="radio-7"> <label for="radio-7">von Kunde</label>'+
-    			'<input type="radio" name="radio-2" id="radio-8"> <label for="radio-8">an Kunde</label>'+
-			   '<input type="radio" name="radio-2" id="radio-9" checked="checked">'+
-			   '<label for="radio-9">unbestimmt</label> </fieldset> </p>');
+        $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>Subject</label> <input type="text" name="subject"> '+
+            '<label>Date</label> <input type="date" name="date" id="date"> '+
+            '<label>Time</label> <input type="text" name="time" id="time">  </p>'+
+            '<p><label>Comments</label> <textarea name="comments" rows="10" cols="60" wrap="hard"></textarea> </p>'+
+            '<p> <fieldset> <legend>Type of Contact: </legend>'+ 
+            '<input type="radio" name="type_of_contact" id="radio-1" value="telephone" checked="checked">  <label for="radio-1">telephone</label>'+ 
+            '<input type="radio" name="type_of_contact" id="radio-2" value="email">  <label for="radio-2">email</label>'+ 
+            '<input type="radio" name="type_of_contact" id="radio-3" value="fax_letter">  <label for="radio-3">fax/letter</label>'+ 
+            '<input type="radio" name="type_of_contact" id="radio-4" value="personal">  <label for="radio-4">personal</label>'+ 
+            '<input type="radio" name="type_of_contact" id="radio-5" value="file">  <label for="radio-5">File</label>'+
+            '<input type="radio" name="type_of_contact" id="radio-6" value="appointment">  <label for="radio-6">appointment</label> </fieldset> </p>'+
+   			'<p> <fieldset> <legend>Direction of Contact: </legend>'+
+    			'<input type="radio" name="direction_of_contact" id="radio-7" value="from_customer">  <label for="radio-7">from customer</label>'+
+    			'<input type="radio" name="direction_of_contact" id="radio-8" value="to_customer" >  <label for="radio-8">to customer</label>'+
+			   '<input type="radio" name="direction_of_contact" id="radio-9" value="undecided" checked="checked">  <label for="radio-9">undecided</label>'+
+			   '</fieldset> </form> </p>');
             $( function() {
                 $("#date").datepicker();
-            });			   
-/*			   $( function() {
-                $("input[type='radio']").checkboxradio({
-                    icon: false
-                });
             });
-*/    }
+            			   
+  /*          $( function() {
+                $("#time").timepicker();
+            });*/
+            return false;      
+    }
+    
     function anschr(A) {
         $( "#dialogwin" ).dialog( "option", "width", 400 );
         $( "#dialogwin" ).dialog( "option", "minWidth", 300 );

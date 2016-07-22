@@ -14,7 +14,7 @@ echo $head['THEME'];
 echo $head['JUI-DROPDOWN'];
     /*****************************************************************************************************************************
     Grundsätze: Content wird via Ajax im Json-Format geholt und an die entsprechenden Container verteilt
-                Daten werden ohne Reload einfach via Ajax gespeichtert.
+                Daten werden ohne Reload einfach via Ajax gespeichert.
                 Fürs Holen und Schreiben von Daten befindet sich unter jqhelp eine gleichnamige Datei mit der Extension ".php"
                 Auf das Benutzen der Variable $_SESSION sollte weitestgehend verzichtet werden.
                 Statt JS einzusetzen sollte auf die jQuery-Methoden zurückgegriffen werden.
@@ -25,31 +25,44 @@ echo $head['JUI-DROPDOWN'];
 <script>
 
 
-  $(document).ready(function() {
-        $("#dialog").dialog({
-            width:800,
-            height:800,
-            minWidth:600,
-            minHeight:600,
+    $(document).ready(function() {
+        $("#senddialog").dialog({
+            width:400,
+            height:200,
+            minWidth:300,
+            minHeight:200,
             maxWidth:800,
-            maxHeight:800
+            maxHeight:800,
+            buttons: [{
+                text: 'Save', //translate
+                click: function() {
+                    $.ajax({
+                        data: { action: "newEntry", data: $("#fsend").serialize()},
+                        //data: { action: "newContact", data: "Testtext"}, 
+                        type: 'POST',
+                        url: "ajax/example.php",
+                        success: function(){
+                            //alert(data);
+                            alert("OK");
+                        }
+                    })
+                    //alert($("#contacts").serialize());
+                    //  $(this).dialog("close");
+                    //return false;
+                }
+        		},
+            {
+                text: 'Cancel',//translate
+                click: function(){
+                    alert("Cancelled");                
+                    //$(this).dialog('close');
+                    //return false;	
+                }
+            }]
         });
+    });
 
-  });
 
-  $( function() {
-       $("input").checkboxradio({
-            icon: false
-       });
-
-  });
-
-//  $( function() {
-//    $("#enterbutton").button();
-//    $("#enterbutton").click(function () {
-//        alert("Enter geklickt");
-//    });
-//  });
 
 </script>
 
@@ -60,55 +73,19 @@ echo $head['JUI-DROPDOWN'];
     echo $menu['start_content'];
 ?>
 
-<p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Hier steht irgendwas drin</p>
+ <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">.'translate('.:fast search customer/vendor/contacts and contact history:.','firma')'.</p>
+ <div id="example" style="position:absolute"></div>
+
+<!-- <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Hier steht irgendwas drin</p> -->
 
 
-<div id="dialog" title="Kontakte">
-  <p><label>Betreff</label>
-     <input type="text" name="subject">
-     <label>Datum</label>
-     <input type="date" name="date">
-     <label>Uhrzeit</label>
-     <input type="time" name="time" >
-  </p>
-
-  <p><label>Bemerkungen</label>
-  <textarea name="comments" rows="10" cols="60" wrap="hard"></textarea>
-  </p>
-
-
+<div id="senddialog" title="Daten an Server Schicken">
   <p>
-  <fieldset>
-    <legend>Kontaktart: </legend>
-    <input type="radio" name="radio-1" id="radio-1" checked="checked">
-    <label for="radio-1">Telefon</label>
-    <input type="radio" name="radio-1" id="radio-2">
-    <label for="radio-2">eMail</label>
-    <input type="radio" name="radio-1" id="radio-3">
-    <label for="radio-3">Fax/Brief</label>
-    <input type="radio" name="radio-1" id="radio-4">
-    <label for="radio-4">Persönlich</label>
-    <input type="radio" name="radio-1" id="radio-5">
-    <label for="radio-5">Datei</label>
-    <input type="radio" name="radio-1" id="radio-6">
-    <label for="radio-6">Termin</label>
-  </fieldset>
+   <form id="fsend">
+    <label>Betreff</label>
+    <input type="text" name="subject" id="subject">
+   </form>
   </p>
-
-   <p>
-  <fieldset>
-    <legend>Richtung: </legend>
-    <input type="radio" name="radio-2" id="radio-7">
-    <label for="radio-7">von Kunde</label>
-    <input type="radio" name="radio-2" id="radio-8">
-    <label for="radio-8">an Kunde</label>
-    <input type="radio" name="radio-2" id="radio-9" checked="checked">
-    <label for="radio-9">unbestimmt</label>
-   </fieldset>
-  </p>
-
-  <button id="enterbutton">Enter</button>
-
 </div>
 
 

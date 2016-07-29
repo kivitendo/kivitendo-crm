@@ -2,16 +2,18 @@
 <html>
 <head>
 <meta charset='utf-8' />
+
 <?php
     require_once("inc/stdLib.php");
     $menu = $_SESSION['menu'];
-    $head = mkHeader();
-echo $menu['stylesheets'];
-echo $menu['javascripts'];
-echo $head['CRMCSS'];
-echo $head['JQTABLE'];
-echo $head['THEME'];
-echo $head['JUI-DROPDOWN'];
+    echo $menu['stylesheets'];
+    echo $menu['javascripts'];
+    echo $head['JQUERY'];
+    echo $head['JQUERYUI'];
+    echo $head['JQTABLE'];
+    echo $head['THEME'];
+    echo $head['JUI-DROPDOWN'];
+
     /*****************************************************************************************************************************
     Grundsätze: Content wird via Ajax im Json-Format geholt und an die entsprechenden Container verteilt
                 Daten werden ohne Reload einfach via Ajax gespeichert.
@@ -22,6 +24,7 @@ echo $head['JUI-DROPDOWN'];
     ******************************************************************************************************************************/
 
 ?>
+
 <script>
 
 
@@ -36,54 +39,372 @@ echo $head['JUI-DROPDOWN'];
             buttons: [{
                 text: 'Save', //translate
                 click: function() {
-                    $.ajax({
-                        data: { action: "newEntry", data: $("#fsend").serialize()},
-                        //data: { action: "newContact", data: "Testtext"}, 
+                        var object = {};
+                        // Put form inputs into an array
+                        var array = $('#fsend').serializeArray();
+                        // Make an object out of the array
+                        $.each(array, function(index, item) {
+                        object[item.name] = item.value;
+                        });
+                        $.ajax({
+                        data: { action: "newEntry", data: JSON.stringify(object)},
+                        dataType: 'json',
                         type: 'POST',
                         url: "ajax/example.php",
                         success: function(){
-                            //alert(data);
-                            alert("OK");
+                            alert("Gesendet");
                         }
                     })
-                    //alert($("#contacts").serialize());
-                    //  $(this).dialog("close");
                     //return false;
                 }
-        		},
+                },
             {
-                text: 'Cancel',//translate
+                text: 'Get',//translate
                 click: function(){
-                    alert("Cancelled");                
+                    $.ajax({
+                        dataType: 'json',
+                        url: 'ajax/example.php?action=getData',
+                        method: "GET",
+                        success: function( json ) {
+                            //var obj = JSON.parse( json.trim() );
+                            //alert(json.name + " " + json.age);
+                            //alert(json.id + " " + json.name);
+
+                        }
+                    })
+
                     //$(this).dialog('close');
-                    //return false;	
+                    //return false;
                 }
             }]
         });
     });
 
 
+    function makeMenu() {
+        $.ajax({
+            dataType: "json",
+            url: "ajax/knowledge.php?action=getCategories",
+            method: "GET",
+            success: function( json ) {
+                var obj = JSON.parse( json.trim() );
+                if( !obj[0].maingroup )
+                    $( '#newCat' ).dialog( "open" ).html( 'Category name:<input type="text" id="catName" value="my first category"></br><input type="checkbox" id="mainCat" name="maincategory" value="1" checked>Maincategory');
+
+                $.each( obj[0].maingroup, function( i, val ){
+                    $( "#menu" ).append("<li id='main_" + val.id + "'>" + val.labeltext + "</li>"  );
+                });
+                $.each( obj[1].undergroup, function( i, val ){
+                    if( !$('#main_'  + val.maingroup + ' ul' ).length > 0 ){
+                        $( '#main_' + val.maingroup ).append( "<ul id='ul" + val.maingroup + "'></ul>" );
+                    }
+                    $( "#ul" + val.maingroup  ).append("<li id='msub_" + val.id + "'>" + val.labeltext + "</li>" );
+                });
+
+                $( '#menu' ).menu();
+
+                $( '[id^=main_]' ).on( 'click', function( event ){
+                    category_id = event.target.id.substring( 5 );
+                    $.ajax({
+                        url: "ajax/knowledge.php?action=getArticle&data=" + category_id,
+                        method: "GET",
+                        success: function( json ) {
+                            var obj = JSON.parse( json.trim() );
+                            $( '#read' ).html(obj[0].content);
+                            version = obj[0].version;
+                            $( "#read" ).show( "fast" );
+                            $( "#results" ).hide( "fast" );
+                        }
+                    })
+                });
+
+                $( '[id^=main_]' ).bind( "contextmenu", function( event ){
+                    event.preventDefault();
+                    if ( event.target.id.substring( 0, 4 ) == "main" ){
+                        $(".contex_main_menu").finish().toggle(100).css({
+                            top: event.pageY + "px",
+                            left: event.pageX + "px"
+                        });
+                    }
+                    else{
+                        $(".contex_sub_menu").finish().toggle(100).css({
+                            top: event.pageY + "px",
+                            left: event.pageX + "px"
+                        });
+                    }
+                }).bind( "mousedown", function( event ){
+                    category_id = event.target.id.substring( 5 );
+                    tag_id = event.target.id;
+                    labeltext = $(event.target).clone().children().remove().end().text();
+                    // If the clicked element is not the menu
+                    if( !$( event.target ).parents( ".contex_main_menu" ).length > 0 || !$(event.target).parents(".contex_sub_menu").length > 0 ) $(".contex_main_menu, .contex_sub_menu").hide( 100 );
+
+                });
+            },
+            error: function () {
+                alert('Ajax Error');
+            }
+        });
+    }
+    // If the menu element is clicked
+    $( ".contex_sub_menu li" ).click( function( event ){
+        // This is the triggered action name
+        switch( $( this ).attr( "data-action" ) ){
+            // A case for each action. Your actions here
+            case "edit":
+                $('#editCat').dialog( "open" ).html( 'Change category name: <input type="text" id="editName" name="" value="' + labeltext + '">' );
+                $( '#editName' ).focus().select();
+            break;
+            case "delete": $('#delCat').dialog( "open" ).html( 'Delete category?'); break;
+        }
+        // Hide it AFTER the action was triggered
+        $( ".contex_sub_menu" ).hide( 100 );
+    });
+    // If the menu element is clicked
+    $( ".contex_main_menu li" ).click( function( event ){
+        // This is the triggered action name
+        switch( $( this ).attr( "data-action" ) ){
+            // A case for each action. Your actions here
+            case "new": $( '#newCat' ).dialog( "open" ).html( 'Category name:<input type="text" id="catName" name=""></br><input type="checkbox" id="mainCat" name="maincategory" value="1">Maincategory'); break;
+            case "edit":
+                $( '#editCat' ).dialog( "open" ).html('Change category name: <input type="text" id="editName" value="' + labeltext + '">' );
+                $( '#editName' ).focus().select();
+            break;
+            case "delete": if ( $( '#'+tag_id ).has( "ul" ).length == 1 ) { $( '#delNote' ).dialog( "open" ).html( 'Category has Subcategories, delete them first!' ); break; }
+                           else { $( '#delCat' ).dialog( "open" ).html( 'Delete category?' ); break; };
+        }
+        // Hide it AFTER the action was triggered
+        $( ".contex_main_menu" ).hide(100);
+    });
+
+    $( '#searchfield' ).keypress( function( e ){
+        if( e.which == 13 ){
+            $("#tbody").empty();
+            $.ajax({
+                dataType: 'json',
+                url: 'ajax/knowledge.php?action=searchArt&data=' + this.value,
+                method: 'GET',
+                success: function( result ){
+                    drawTable( result );
+                    $( "#resTable" ).trigger( "update" );
+                    $( "#read" ).hide( "fast" );
+                    $( "#results" ).show( "fast" );
+                }
+            })
+            return false;
+        }
+    });
+
+    $( "#newCat" ).dialog({
+        autoOpen: false,
+        title: 'New Category',
+        modal: true,
+        buttons: [{
+            text: 'New', //translate
+            click: function(){
+                var newCat = $('#catName').val();
+                var mainCat = $('#mainCat').is(':checked');
+                $.ajax({
+                    data: { action: "newCategory", data: { catName : newCat, cat_id: category_id, mainCheck: mainCat } },
+                    type: 'post',
+                    url: "ajax/knowledge.php",
+                    success: function(){
+                        $( "#menu" ).empty().menu( "destroy" );
+                        makeMenu();
+                    }
+                })
+                $(this).dialog("close");
+            }
+        }]
+    });
+
+    $( "#editCat" ).dialog({
+        autoOpen: false,
+        title: "Edit Category",
+        modal: true,
+        buttons: [{
+            text: 'Save', //translate
+            click: function() {
+                //var newCat = $('#editName').val();
+                $.ajax({
+                    data: { action: "editCategory", data: { catName : newCat, cat_id: category_id } },
+                    type: 'post',
+                    url: "ajax/knowledge.php",
+                    success: function(){
+                        $(  "#menu" ).empty().menu( "destroy" );
+                        makeMenu();
+                    }
+                })
+                $(this).dialog("close");
+            }
+        },
+        {
+            text: 'Cancel',//translate
+            click: function(){
+                $(this).dialog('close');
+            }
+        }]
+    });
+
+    $("#delCat").dialog({
+        autoOpen: false,
+        title: "Delete Category",
+        modal: true,
+        buttons: [{
+            text: 'Yes',//translate
+            click: function(){
+                $.ajax({
+                    dataType: "json",
+                    url: "ajax/knowledge.php?action=delCategory&data=" + category_id,
+                    method: "GET",
+                    success: function( json ) {
+                        $("#menu").empty().menu( "destroy" );
+                        makeMenu();
+                    }
+                })
+                $(this).dialog("close");
+            }
+        },
+        {
+            text: 'Cancel',
+            click: function(){
+                $(this).dialog('close');
+            }
+        }]
+    });
+
+    $( "#delNote" ).dialog({
+        autoOpen: false,
+        title: "Delete Category", //translate
+        modal: true,
+        buttons: [{
+            text: 'Ok',//translate
+            click: function(){
+                $( this ).dialog( 'close' );
+            }
+        }]
+    });
+
+    $( document ).on( "click", "#resTable tr", function( e ){
+        category_id = $( this ).closest( 'tr' ).children().eq( 0 ).text();
+        $.ajax({
+           dataType: "json",
+           url: "ajax/knowledge.php?action=getArticle&data=" + category_id,
+           method: "GET",
+           success: function( json ){
+                var obj = JSON.parse( json.trim() );
+                $( '#read' ).html( obj[0].content );
+                version = obj[0].version;
+                $( "#results" ).hide( "fast" );
+                $( "#read" ).show( "fast" );
+            }
+        })
+    });
+
+//});
 
 </script>
+<style>
+.ui-menu, #searchfield { width: 180px; }
 
+#read{   position:absolute; top:120px; left:225px; width: 80%; background-color:#dfd; border:1px solid #888; }
+#results{   position:absolute; top:40px; left:235px; width: 80%;  }
+
+.contex_sub_menu, .contex_main_menu {
+    display: none;
+    z-index: 1000;
+    position: absolute;
+    overflow: hidden;
+    border: 1px solid #CCC;
+    white-space: nowrap;
+    font-family: sans-serif;
+    background: #FFF;
+    color: #333;
+    border-radius: 5px;
+    padding: 0;
+}
+
+/* Each of the items in the list */
+.contex_sub_menu li, .contex_main_menu li {
+    padding: 8px 12px;
+    cursor: pointer;
+    list-style-type: none;
+    transition: all .3s ease;
+}
+
+.contex_sub_menu li:hover, .contex_main_menu li:hover {
+    background-color: #DEF;
+}
+
+table.tablesorter { width:auto; cursor:pointer; }
+
+
+
+</style>
 </head>
+
 <body>
 <?php
     echo $menu['pre_content'];
     echo $menu['start_content'];
 ?>
+<div class="ui-widget-content" style="height:700px">
+    <ul id="menu"></ul>
+    <p>
+    <input type="text" id="searchfield"  placeholder="Enter Searchstring">
 
- <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">.'translate('.:fast search customer/vendor/contacts and contact history:.','firma')'.</p>
+    </p>
+    <div id="read" class="editable"></div>
+    <div id="results" style="display:none;">
+       <table id="resTable" class="tablesorter">
+         <thead>
+          <tr>
+            <th class="res_id">ID</th>
+            <th class="res_category">Category</th>
+            <th class="res_version">Version</th>
+            <th class="res_content">Row</th>
+          </tr>
+         </thead>
+         <tbody id="tbody">
+         </tbody>
+       </table>
+     </div>
+</div>
+<ul class='contex_sub_menu'>
+  <li data-action="edit">Edit</li>
+  <li data-action="delete">Delete </li>
+</ul>
+<ul class='contex_main_menu'>
+  <li data-action="new">New</li>
+  <li data-action="edit">Edit</li>
+  <li data-action="delete">Delete </li>
+</ul>
+<div id="newCat">
+</div>
+<div id="editCat">
+</div>
+<div id="delCat">
+</div>
+<div id="delNote">
+</div>
+<?php echo $menu['end_content']; ?>
+
+ <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Testfile</p>
  <div id="example" style="position:absolute"></div>
 
-<!-- <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Hier steht irgendwas drin</p> -->
 
 
-<div id="senddialog" title="Daten an Server Schicken">
+<div id="senddialog" title="Daten an Server schicken und vom Server holen">
   <p>
    <form id="fsend">
-    <label>Betreff</label>
-    <input type="text" name="subject" id="subject">
+    <label>Datum / Uhrzeit</label>
+    <input type="text" name="datetime" id="datetime"><br>
+    <label>Name</label>
+    <input type="text" name="name" id="name"><br>
+    <label>Alter</label>
+    <input type="text" name="age" id="age"><br>
+    <label>Bemerkungen</label>
+    <input type="text" name="comments" id="comments">
    </form>
   </p>
 </div>

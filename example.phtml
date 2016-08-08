@@ -28,286 +28,127 @@
 <script>
 
 
-    $(document).ready(function() {
-        $("#senddialog").dialog({
-            width:400,
-            height:200,
-            minWidth:300,
-            minHeight:200,
-            maxWidth:800,
-            maxHeight:800,
-            buttons: [{
-                text: 'Save', //translate
-                click: function() {
-                        var object = {};
-                        // Put form inputs into an array
-                        var array = $('#fsend').serializeArray();
-                        // Make an object out of the array
-                        $.each(array, function(index, item) {
-                        object[item.name] = item.value;
-                        });
-                        $.ajax({
-                        data: { action: "newEntry", data: JSON.stringify(object)},
-                        dataType: 'json',
-                        type: 'POST',
-                        url: "ajax/example.php",
-                        success: function(){
-                            alert("Gesendet");
-                        }
-                    })
-                    //return false;
-                }
-                },
-            {
-                text: 'Get',//translate
-                click: function(){
-                    $.ajax({
-                        dataType: 'json',
-                        url: 'ajax/example.php?action=getData',
-                        method: "GET",
-                        success: function( json ) {
-                            //var obj = JSON.parse( json.trim() );
-                            //alert(json.name + " " + json.age);
-                            //alert(json.id + " " + json.name);
-
-                        }
-                    })
-
-                    //$(this).dialog('close');
-                    //return false;
-                }
-            }]
-        });
-    });
-
-
-    function makeMenu() {
-        $.ajax({
-            dataType: "json",
-            url: "ajax/knowledge.php?action=getCategories",
-            method: "GET",
-            success: function( json ) {
-                var obj = JSON.parse( json.trim() );
-                if( !obj[0].maingroup )
-                    $( '#newCat' ).dialog( "open" ).html( 'Category name:<input type="text" id="catName" value="my first category"></br><input type="checkbox" id="mainCat" name="maincategory" value="1" checked>Maincategory');
-
-                $.each( obj[0].maingroup, function( i, val ){
-                    $( "#menu" ).append("<li id='main_" + val.id + "'>" + val.labeltext + "</li>"  );
-                });
-                $.each( obj[1].undergroup, function( i, val ){
-                    if( !$('#main_'  + val.maingroup + ' ul' ).length > 0 ){
-                        $( '#main_' + val.maingroup ).append( "<ul id='ul" + val.maingroup + "'></ul>" );
-                    }
-                    $( "#ul" + val.maingroup  ).append("<li id='msub_" + val.id + "'>" + val.labeltext + "</li>" );
-                });
-
-                $( '#menu' ).menu();
-
-                $( '[id^=main_]' ).on( 'click', function( event ){
-                    category_id = event.target.id.substring( 5 );
-                    $.ajax({
-                        url: "ajax/knowledge.php?action=getArticle&data=" + category_id,
-                        method: "GET",
-                        success: function( json ) {
-                            var obj = JSON.parse( json.trim() );
-                            $( '#read' ).html(obj[0].content);
-                            version = obj[0].version;
-                            $( "#read" ).show( "fast" );
-                            $( "#results" ).hide( "fast" );
-                        }
-                    })
-                });
-
-                $( '[id^=main_]' ).bind( "contextmenu", function( event ){
-                    event.preventDefault();
-                    if ( event.target.id.substring( 0, 4 ) == "main" ){
-                        $(".contex_main_menu").finish().toggle(100).css({
-                            top: event.pageY + "px",
-                            left: event.pageX + "px"
-                        });
-                    }
-                    else{
-                        $(".contex_sub_menu").finish().toggle(100).css({
-                            top: event.pageY + "px",
-                            left: event.pageX + "px"
-                        });
-                    }
-                }).bind( "mousedown", function( event ){
-                    category_id = event.target.id.substring( 5 );
-                    tag_id = event.target.id;
-                    labeltext = $(event.target).clone().children().remove().end().text();
-                    // If the clicked element is not the menu
-                    if( !$( event.target ).parents( ".contex_main_menu" ).length > 0 || !$(event.target).parents(".contex_sub_menu").length > 0 ) $(".contex_main_menu, .contex_sub_menu").hide( 100 );
-
-                });
-            },
-            error: function () {
-                alert('Ajax Error');
-            }
-        });
-    }
-    // If the menu element is clicked
-    $( ".contex_sub_menu li" ).click( function( event ){
-        // This is the triggered action name
-        switch( $( this ).attr( "data-action" ) ){
-            // A case for each action. Your actions here
-            case "edit":
-                $('#editCat').dialog( "open" ).html( 'Change category name: <input type="text" id="editName" name="" value="' + labeltext + '">' );
-                $( '#editName' ).focus().select();
-            break;
-            case "delete": $('#delCat').dialog( "open" ).html( 'Delete category?'); break;
-        }
-        // Hide it AFTER the action was triggered
-        $( ".contex_sub_menu" ).hide( 100 );
-    });
-    // If the menu element is clicked
-    $( ".contex_main_menu li" ).click( function( event ){
-        // This is the triggered action name
-        switch( $( this ).attr( "data-action" ) ){
-            // A case for each action. Your actions here
-            case "new": $( '#newCat' ).dialog( "open" ).html( 'Category name:<input type="text" id="catName" name=""></br><input type="checkbox" id="mainCat" name="maincategory" value="1">Maincategory'); break;
-            case "edit":
-                $( '#editCat' ).dialog( "open" ).html('Change category name: <input type="text" id="editName" value="' + labeltext + '">' );
-                $( '#editName' ).focus().select();
-            break;
-            case "delete": if ( $( '#'+tag_id ).has( "ul" ).length == 1 ) { $( '#delNote' ).dialog( "open" ).html( 'Category has Subcategories, delete them first!' ); break; }
-                           else { $( '#delCat' ).dialog( "open" ).html( 'Delete category?' ); break; };
-        }
-        // Hide it AFTER the action was triggered
-        $( ".contex_main_menu" ).hide(100);
-    });
-
-    $( '#searchfield' ).keypress( function( e ){
-        if( e.which == 13 ){
-            $("#tbody").empty();
-            $.ajax({
-                dataType: 'json',
-                url: 'ajax/knowledge.php?action=searchArt&data=' + this.value,
-                method: 'GET',
-                success: function( result ){
-                    drawTable( result );
-                    $( "#resTable" ).trigger( "update" );
-                    $( "#read" ).hide( "fast" );
-                    $( "#results" ).show( "fast" );
-                }
-            })
-            return false;
-        }
-    });
-
-    $( "#newCat" ).dialog({
-        autoOpen: false,
-        title: 'New Category',
-        modal: true,
-        buttons: [{
-            text: 'New', //translate
-            click: function(){
-                var newCat = $('#catName').val();
-                var mainCat = $('#mainCat').is(':checked');
-                $.ajax({
-                    data: { action: "newCategory", data: { catName : newCat, cat_id: category_id, mainCheck: mainCat } },
-                    type: 'post',
-                    url: "ajax/knowledge.php",
-                    success: function(){
-                        $( "#menu" ).empty().menu( "destroy" );
-                        makeMenu();
-                    }
-                })
-                $(this).dialog("close");
-            }
-        }]
-    });
-
-    $( "#editCat" ).dialog({
-        autoOpen: false,
-        title: "Edit Category",
-        modal: true,
+$(document).ready(function() {
+    $("#senddialog").dialog({
+        width:'auto',
+//      width: 400,
+//        height:250,
+//        minWidth:300,
+//        minHeight:200,
+//        maxWidth:800,
+//        maxHeight:800,
         buttons: [{
             text: 'Save', //translate
             click: function() {
-                //var newCat = $('#editName').val();
+//                //Datumsstring mit aktuellem Datum / aktueller Uhrzeit bauen
+//                // einzelne Daten holen
+//                var date = new Date();
+//                var year = date.getFullYear();
+//                var month = date.getMonth();
+//                var day = date.getDate();
+//                var hour = date.getHours();
+//                var minute = date.getMinutes();
+//                var second = date.getSeconds();
+//
+//                // Monate gehen von 0 bis 11, darum:
+//                month += 1;
+//
+//                // bei Werten unter 10 "0" voranstellen
+//                if (month < 10) month = "0" + month;
+//                if (day < 10) day = "0" + day;
+//                if (hour < 10) hour = "0" + hour;
+//                if (minute < 10) minute = "0" + minute;
+//                if (second < 10) second = "0" + second;
+//
+//                // Datumsstring zusammenbauen
+//                var datum = year + "/" + month + "/" + day + " " + hour + ":" + minute + ":" + second;
+//                $("#datetime").val(datum);
+
+
+                var object = {};
+                // Formular-inputs in ein array
+                var array = $('#fsend').serializeArray();
+                // Ein object aus dem array machen
+                $.each(array, function(index, item) {
+                    object[item.name] = item.value;
+                });
+                //mit ajax als JSON verschicken
                 $.ajax({
-                    data: { action: "editCategory", data: { catName : newCat, cat_id: category_id } },
-                    type: 'post',
-                    url: "ajax/knowledge.php",
+                    data: { action: "newEntry", data: JSON.stringify(object)},
+                    dataType: 'json',
+                    type: 'POST',
+                    url: "ajax/example.php",
                     success: function(){
-                        $(  "#menu" ).empty().menu( "destroy" );
-                        makeMenu();
+                        alert("Gesendet");
+                    },
+                    error:  function(){
+                        alert("Senden der Daten fehlgeschlagen!");
                     }
                 })
-                $(this).dialog("close");
             }
-        },
-        {
-            text: 'Cancel',//translate
-            click: function(){
-                $(this).dialog('close');
-            }
-        }]
-    });
-
-    $("#delCat").dialog({
-        autoOpen: false,
-        title: "Delete Category",
-        modal: true,
-        buttons: [{
-            text: 'Yes',//translate
+        }, //Ende Button "Save"
+        {  text: 'Get',//translate
             click: function(){
                 $.ajax({
-                    dataType: "json",
-                    url: "ajax/knowledge.php?action=delCategory&data=" + category_id,
+                    dataType: 'json',
+                    url: 'ajax/example.php?action=getData',
                     method: "GET",
                     success: function( json ) {
-                        $("#menu").empty().menu( "destroy" );
-                        makeMenu();
+                        var obj = JSON.parse(json);
+                        $("#getdialog").dialog({
+                            width:500,
+                            height:200
+                        }).dialog("open").html( '<table border="1">' +
+                            '<tr> <th>ID</th><th>Name</th><th>Alter</th><th>Bemerkungen</th><th>Datum</th></tr>' +
+                            '<tr> <td>' + obj.id + '</td> <td>' + obj.c_name + '</td> <td>' + obj.c_age + '</td>' +
+                            '<td>' + obj.c_comments + '</td> <td>' + obj.date_time + '</td> </tr> </table> <br>');
+                    },
+                    error:  function(){
+                         alert("Holen der Daten fehlgeschlagen!");
                     }
                 })
-                $(this).dialog("close");
             }
-        },
+        }, //Ende Button "Get"
         {
-            text: 'Cancel',
+               text: 'Get Last',//translate
             click: function(){
-                $(this).dialog('close');
+                $.ajax({
+                    dataType: 'json',
+                    url: 'ajax/example.php?action=getLastData',
+                    method: "GET",
+                    success: function( json ) {
+                        //$("#getdialog").html(json);
+                        var obj = JSON.parse(json);
+                        $("#getdialog").dialog({
+                            width:500,
+                            height:200})
+                            .dialog("open").html( '<table border="1" class="tablesorter">' +
+                                '<tr> <th>ID</th><th>Name</th><th>Alter</th><th>Bemerkungen</th><th>Datum</th></tr>' +
+                                '<tr> <td>' + obj.id + '</td> <td>' + obj.c_name + '</td> <td>' + obj.c_age + '</td>' +
+                                '<td>' + obj.c_comments + '</td> <td>' + obj.date_time + '</td> </tr> </table>');
+                    },
+                    error:  function(){
+                        alert("Holen der Daten fehlgeschlagen!");
+                    }
+                })
             }
-        }]
+        }] //Ende buttons[]
+    }); //Ende dialog()
+    $( function() {
+        $( "#datetime" ).datepicker();
     });
+}); //Ende $(document).ready()
 
-    $( "#delNote" ).dialog({
-        autoOpen: false,
-        title: "Delete Category", //translate
-        modal: true,
-        buttons: [{
-            text: 'Ok',//translate
-            click: function(){
-                $( this ).dialog( 'close' );
-            }
-        }]
-    });
 
-    $( document ).on( "click", "#resTable tr", function( e ){
-        category_id = $( this ).closest( 'tr' ).children().eq( 0 ).text();
-        $.ajax({
-           dataType: "json",
-           url: "ajax/knowledge.php?action=getArticle&data=" + category_id,
-           method: "GET",
-           success: function( json ){
-                var obj = JSON.parse( json.trim() );
-                $( '#read' ).html( obj[0].content );
-                version = obj[0].version;
-                $( "#results" ).hide( "fast" );
-                $( "#read" ).show( "fast" );
-            }
-        })
-    });
 
-//});
+
+
 
 </script>
 <style>
 .ui-menu, #searchfield { width: 180px; }
 
-#read{   position:absolute; top:120px; left:225px; width: 80%; background-color:#dfd; border:1px solid #888; }
+/*#read{   position:absolute; top:120px; left:225px; width: 80%; background-color:#dfd; border:1px solid #888; }
 #results{   position:absolute; top:40px; left:235px; width: 80%;  }
 
 .contex_sub_menu, .contex_main_menu {
@@ -324,7 +165,7 @@
     padding: 0;
 }
 
-/* Each of the items in the list */
+// Each of the items in the list
 .contex_sub_menu li, .contex_main_menu li {
     padding: 8px 12px;
     cursor: pointer;
@@ -335,9 +176,10 @@
 .contex_sub_menu li:hover, .contex_main_menu li:hover {
     background-color: #DEF;
 }
+*/
+
 
 table.tablesorter { width:auto; cursor:pointer; }
-
 
 
 </style>
@@ -348,7 +190,7 @@ table.tablesorter { width:auto; cursor:pointer; }
     echo $menu['pre_content'];
     echo $menu['start_content'];
 ?>
-<div class="ui-widget-content" style="height:700px">
+<!--<div class="ui-widget-content" style="height:700px">
     <ul id="menu"></ul>
     <p>
     <input type="text" id="searchfield"  placeholder="Enter Searchstring">
@@ -386,12 +228,12 @@ table.tablesorter { width:auto; cursor:pointer; }
 <div id="delCat">
 </div>
 <div id="delNote">
-</div>
+</div>-->
 <?php echo $menu['end_content']; ?>
 
  <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Testfile</p>
- <div id="example" style="position:absolute"></div>
-
+<!-- <div id="example" style="position:absolute"></div>
+-->
 
 
 <div id="senddialog" title="Daten an Server schicken und vom Server holen">

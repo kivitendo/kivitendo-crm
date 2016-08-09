@@ -42,6 +42,21 @@ $(document).ready(function() {
             text: 'Save', //translate
             click: function() {
                 var object = {};
+
+//                var date = new Date();
+//                var hour = date.getHours();
+//                var minute = date.getMinutes();
+//                var second = date.getSeconds();
+//
+//                // bei Werten unter 10 "0" voranstellen
+//                if (hour < 10) hour = "0" + hour;
+//                if (minute < 10) minute = "0" + minute;
+//                if (second < 10) second = "0" + second;
+//
+//                // Zeit-String zusammenbauen
+//                var dtime = hour + ":" + minute + ":" + second;
+//                $("#datetime").appendString(dtime);
+
                 // Formular-inputs in ein array
                 var array = $('#fsend').serializeArray();
                 // Ein object aus dem array machen
@@ -61,6 +76,8 @@ $(document).ready(function() {
                         alert("Senden der Daten fehlgeschlagen!");
                     }
                 })
+                 $(this).dialog("close");
+
             }
         }, //Ende Button "Save"
         {
@@ -78,6 +95,7 @@ $(document).ready(function() {
                     error:  function(){
                         alert("Holen der Daten fehlgeschlagen!");
                     }
+
                 })
                 $(this).dialog("close");
 
@@ -108,10 +126,10 @@ $(document).ready(function() {
     var options = { weekday: 'short', year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
     function drawRow( rowData ) {
         var row = $("<tr>");
-        var callDate = new Date( rowData.call_date * 1000 );
+//        var dateTime = new Date( rowData.date_time * 1000 );
         $("#tbody").append(row);
         row.append($("<td>" + rowData.id + "</td>"));
-//        row.append($("<td>" + callDate.toLocaleDateString(kivi.myconfig.countrycode, options)  + "</td>"));
+//        row.append($("<td>" + dateTime.toLocaleDateString(kivi.myconfig.countrycode, options)  + "</td>"));
         row.append($("<td>" + rowData.date_time + "</td>"));
         row.append($("<td>" + rowData.c_name + "</td>"));
         row.append($("<td>" + rowData.c_age + "</td>"));
@@ -123,8 +141,8 @@ $(document).ready(function() {
     $(window).resize(function (){
         $("#gdtable").css({
             position:'absolute',
-            left: ($(window).width() - $('.className').outerWidth())/2,
-            top: ($(window).height() - $('.className').outerHeight())/2
+            left: ($(window).width() - $('#myTable').outerWidth())/2,
+            top: ($(window).height() - $('#myTable').outerHeight())/2
         });
     });
     $(window).resize();
@@ -137,6 +155,8 @@ $(document).ready(function() {
 
 <style>
 .ui-menu { width: 180px; }
+
+#gdtable { border: 1px solid #BBBBBB; }
 
 
 table.tablesorter { width:auto; cursor:pointer; }
@@ -159,7 +179,7 @@ table.tablesorter { width:auto; cursor:pointer; }
 
  <div id="senddialog" title="Daten an Server schicken und vom Server holen"> </div>
 
- <div id="gdtable"><table id="myTable">
+ <div id="gdtable" class="gdtable"><table id="myTable">
   <table class="tablesorter">
    <tr><th>ID</th><th>Birth</th><th>Name</th><th>Age</th><th>Comments</th></tr>
    <tbody id="tbody">

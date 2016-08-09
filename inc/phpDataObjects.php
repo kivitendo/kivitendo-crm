@@ -41,7 +41,7 @@ class myPDO extends PDO{
         $stmt = parent::prepare( $sql );
         if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString );
         if( !$result = $stmt->execute() ) $this->error( $stmt->errorInfo() );
-        return  $json ? $stmt->fetch( PDO::FETCH_ASSOC )[json_agg] : $stmt->fetch( PDO::FETCH_ASSOC );
+        return  $json ? $stmt->fetch( PDO::FETCH_ASSOC )['json_agg'] : $stmt->fetch( PDO::FETCH_ASSOC );
     }
 
     public function getAll( $sql, $json = FALSE  ){
@@ -49,7 +49,8 @@ class myPDO extends PDO{
         $stmt = parent::prepare( $sql );
         if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString );
         if( !$result = $stmt->execute() ) $this->error( $stmt->errorInfo() );
-        return  $stmt->fetchAll( PDO::FETCH_ASSOC );
+        return $json ? $stmt->fetchAll( PDO::FETCH_ASSOC )['0']['json_agg'] : $stmt->fetchAll( PDO::FETCH_ASSOC );
+        //return $json ? json_encode( $stmt->fetchAll( PDO::FETCH_ASSOC )[0][json_agg] ) : $stmt->fetchAll( PDO::FETCH_ASSOC );
     }
 
     /**********************************************

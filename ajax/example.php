@@ -26,15 +26,17 @@ function getData(){
     //TODO: alle Datensätze bereitstellen
     //$sql = "SELECT json_agg (json) from (SELECT * FROM example WHERE  id = (SELECT max(id) FROM example ) ) json";
     //$sql = "SELECT json_agg (json) from (SELECT * FROM example ) json";
-    $sql = "select (json) from (select * from example) json;";
-    $rs = $GLOBALS['dbh']->getAll( $sql );
-    //$rs = $GLOBALS['dbh']->getAll( 'example' );
-    writeLog('---- rs ----');
-    writeLog($rs);
-    writeLog('----    json_encode( rs )    -----');
-    writeLog( json_encode( $rs ) );
-    echo json_encode($rs);
-
+    //$sql = "select (json) from (select * from example) json;";
+    //$rs = $GLOBALS['dbh']->getAll( $sql );
+    $rs = $GLOBALS['dbh']->getAll( 'SELECT * FROM example', true );
+    //$rs = $GLOBALS['dbh']->getAll( 'example', 1 );
+    //writeLog( $rs );
+    //$rs = trim( $rs );
+    writeLog( $rs );
+    //writeLog( json_encode( $rs ) );
+    //echo json_encode( $rs );
+    //echo json_encode(json_decode(json_encode($rs)))
+    echo $rs;
 
 }
 

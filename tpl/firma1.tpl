@@ -1,6 +1,6 @@
 <html>
 <html>
-<head><title>CRM Firma:{Fname1}</title>
+<head><title>CRM Firma: {Fname1}</title>
 {STYLESHEETS}
 {CRMCSS}
 {JAVASCRIPTS}
@@ -10,11 +10,14 @@
 {FANCYBOX}
 {QRCODE}
 
+<script type="text/javascript" src="{BASEPATH}/lxcars/jQueryAddOns/date-time-picker.js"></script>
+<script type="text/javascript" src="{BASEPATH}/lxcars/jQueryAddOns/german-date-time-picker.js"></script>
 <script language="JavaScript" type="text/javascript">
 
     $(document).ready(function() {
         $("#contactsdialog").dialog({
-            autoOpen: false,            
+            autoOpen: false,
+            modal: true,            
             width:800,
             height:500,
             minWidth:600,
@@ -38,7 +41,7 @@
                         type: 'POST',
                         url: "ajax/contact.php",
                         success: function(){
-                            alert("Gesendet");
+                            alert("Sent");
                             $("#contactsdialog").dialog("close");     
                         }
                     })
@@ -52,12 +55,13 @@
                 text: 'Cancel',//translate
                 click: function(){
                     alert("Cancelled");                
-                    $(this).dialog('close');
+                    $(this).dialog('close');                                
                     //return false;
                     //event.stopPropagation();	
                 }
             }]
         });
+        
     });
 
     function showCall() {
@@ -98,10 +102,10 @@
     }
     function showItem(id) {
         //$('#mess').dialog("open").html('This feature is currently deactivated. It will be new implemented with the next CRM version..');
-        //F1=open("getCall.php?Q={Q}&fid={FID}&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
+        //F1=open("getCall.php?Q={Q}&fid={FID}&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");             
         $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>Subject</label> <input type="text" name="subject"> '+
-            '<label>Date</label> <input type="date" name="date" id="date"> ' +
-            '<label>Time</label> <input type="text" name="time" id="time"> </p>'+
+            '<label>Date</label> <input type="text" name="date" id="datetime"> ' +
+            '<label>Time</label> <input type="text" name="time" id="timepicker" > <button type="button" id="set_time">Set Time</button> </p>'+
             '<p><label>Comments</label> <textarea name="comments" rows="10" cols="60" wrap="hard"></textarea> </p>'+
             '<p> <fieldset> <legend>Type of Contact: </legend>'+ 
             '<input type="radio" name="type_of_contact" id="radio-1" value="T" checked="checked">  <label for="radio-1">telephone</label>'+ 
@@ -115,18 +119,17 @@
     			'<input type="radio" name="direction_of_contact" id="radio-8" value="o" >  <label for="radio-8">to customer</label>'+
 			   '<input type="radio" name="direction_of_contact" id="radio-9" value="-" checked="checked">  <label for="radio-9">undecided</label>'+
 			   '</fieldset> </form> </p>');
-            $( function() {
-                $("#date").datepicker();
-            });
-            			   
- /*         $( function() {
-                var dt = new Date();
-                var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();                 
-                $("#time").value(time);
-            });
-*/           //return false;      
+
+            $("#datetime").datetimepicker();
+/*            $("#datetime").datepicker();
+            $("#timepicker").timepicker();                    
+            $('#set_time').on('click', function (){
+                $('#timepicker').timepicker('setTime', new Date());
+            });*/
     }
-    
+
+
+     
     function anschr(A) {
         $( "#dialogwin" ).dialog( "option", "width", 400 );
         $( "#dialogwin" ).dialog( "option", "minWidth", 300 );
@@ -199,6 +202,7 @@
         })
     }
     var f1 = null;
+           
     function showOP(was) {
                 F1=open("op_.php?Q={Q}&fa={Fname1}&op="+was,"OP","width=950, height=450, left=100, top=50, scrollbars=yes");
         }
@@ -552,8 +556,8 @@
 <iframe id="iframe1" width='100%' height='450'  scrolling="auto" border="0" frameborder="0"><img src='image/wait.gif'></iframe>
 </div>
 </div>
-//<div id="mess">
-//</div>
+<!-- <div id="mess">
+</div> -->
 {END_CONTENT}
 {TOOLS}
 </body>

@@ -35,4 +35,3 @@ require_once("inc/stdLib.php");
    <button id="send" name="send">erstellen</button><br />
 
 <div id="ergebnis"></div>
-

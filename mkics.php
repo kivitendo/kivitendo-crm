@@ -20,16 +20,16 @@
         foreach ($data as $term) {
             $cnt++;
             $vevent = new vevent(); // create an event calendar component
-            $vevent->setProperty( 'dtstart', array( 'year'=>substr($term["starttag"],0,4), 
-                                                    'month'=>substr($term["starttag"],5,2), 
-                                                    'day'=>substr($term["starttag"],8,2), 
-                                                    'hour'=>substr($term["startzeit"],0,2), 
+            $vevent->setProperty( 'dtstart', array( 'year'=>substr($term["starttag"],0,4),
+                                                    'month'=>substr($term["starttag"],5,2),
+                                                    'day'=>substr($term["starttag"],8,2),
+                                                    'hour'=>substr($term["startzeit"],0,2),
                                                     'min'=>substr($term["startzeit"],3,2),
                                                     'sec'=>0 ));
-            $vevent->setProperty( 'dtend', array(   'year'=>substr($term["stoptag"],0,4), 
-                                                    'month'=>substr($term["stoptag"],5,2), 
-                                                    'day'=>substr($term["stoptag"],8,2), 
-                                                    'hour'=>substr($term["stopzeit"],0,2), 
+            $vevent->setProperty( 'dtend', array(   'year'=>substr($term["stoptag"],0,4),
+                                                    'month'=>substr($term["stoptag"],5,2),
+                                                    'day'=>substr($term["stoptag"],8,2),
+                                                    'hour'=>substr($term["stopzeit"],0,2),
                                                     'min'=>substr($term["stopzeit"],3,2),
                                                     'sec'=>0 ));
             $vevent->setProperty( 'LOCATION', $term["location"]  ); // property name - case independent
@@ -46,7 +46,7 @@
         $v->returnCalendar();
     } else if ($_POST["icalart"]=="mail") {
         $user=getUserStamm($_SESSION["loginCRM"]);
-        $abs=sprintf("%s <%s>",$user["name"],$user["email"]);        
+        $abs=sprintf("%s <%s>",$user["name"],$user["email"]);
         $Subject="LxO-Kalender";
         $v->setConfig( 'directory', "/tmp/" ); // identify directory
         $v->saveCalendar(); // save calendar to file
@@ -66,7 +66,7 @@
         $hdr = $mime->headers($headers);
         $mail =& Mail::factory("mail");
         $mail->_params="-f ".$user["email"];
-        $rc=$mail->send($_POST["icaldest"], $hdr, $body);                
+        $rc=$mail->send($_POST["icaldest"], $hdr, $body);
     } else {
         if (strtoupper($_POST["icaldest"]) == "HOME")  $_POST["icaldest"] = "dokumente/".$_SESSION["dbname"]."/".$_SESSION["login"]."/";
         $v->setConfig( 'directory', $_POST["icaldest"] ); // identify directory

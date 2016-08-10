@@ -10,7 +10,7 @@
     if ($templates) foreach ($templates as $file) {
         echo "$file: ";
         $text = file_get_contents($file);
-        preg_match_all("/\.:[a-z0-0 _]+:\./i",$text,$matches); 
+        preg_match_all("/\.:[a-z0-0 _]+:\./i",$text,$matches);
         if ($matches[0]) {
             $f=fopen("inc/locale/".basename($file,".tpl"),"w");
             fputs($f,"<?php\n");
@@ -24,6 +24,6 @@
             echo count($matches[0]);
         }
         echo "\n";
-    } 
+    }
 
 ?>

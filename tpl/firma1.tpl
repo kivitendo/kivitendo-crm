@@ -24,27 +24,37 @@
             buttons: [{
                 text: 'Save', //translate
                 click: function() {
+                    var object = {};
+                    // Put form inputs into an array
+                    var array = $('#contacts').serializeArray();
+                    // Make an object out of the array
+                    $.each(array, function(index, item) {
+                        object[item.name] = item.value;
+                    });
                     $.ajax({
-                        data: { action: "newContact", data: $("#contacts").serialize()},
-                        //data: { action: "newContact", data: "Testtext"}, 
+                        //data: { action: "newEntry", data: $("#fsend").serialize()},
+                        data: { action: "newContact", data: JSON.stringify(object)}, 
+                        dataType: 'json',                         
                         type: 'POST',
                         url: "ajax/contact.php",
                         success: function(){
-                            alert(data);
-                            //alert("OK");
+                            alert("Gesendet");
+                            $("#contactsdialog").dialog("close");     
                         }
                     })
-                    //alert($("#contacts").serialize());
-                    //  $(this).dialog("close");
-                    //return false;
+                    
+                        //$(this).dialog("close");
+                        //return false;
+                        //event.stopPropagation();
                 }
-        		},
+            },
             {
                 text: 'Cancel',//translate
                 click: function(){
                     alert("Cancelled");                
-                    //$(this).dialog('close');
-                    //return false;	
+                    $(this).dialog('close');
+                    //return false;
+                    //event.stopPropagation();	
                 }
             }]
         });
@@ -90,29 +100,31 @@
         //$('#mess').dialog("open").html('This feature is currently deactivated. It will be new implemented with the next CRM version..');
         //F1=open("getCall.php?Q={Q}&fid={FID}&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
         $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>Subject</label> <input type="text" name="subject"> '+
-            '<label>Date</label> <input type="date" name="date" id="date"> '+
-            '<label>Time</label> <input type="text" name="time" id="time">  </p>'+
+            '<label>Date</label> <input type="date" name="date" id="date"> ' +
+            '<label>Time</label> <input type="text" name="time" id="time"> </p>'+
             '<p><label>Comments</label> <textarea name="comments" rows="10" cols="60" wrap="hard"></textarea> </p>'+
             '<p> <fieldset> <legend>Type of Contact: </legend>'+ 
-            '<input type="radio" name="type_of_contact" id="radio-1" value="telephone" checked="checked">  <label for="radio-1">telephone</label>'+ 
-            '<input type="radio" name="type_of_contact" id="radio-2" value="email">  <label for="radio-2">email</label>'+ 
-            '<input type="radio" name="type_of_contact" id="radio-3" value="fax_letter">  <label for="radio-3">fax/letter</label>'+ 
-            '<input type="radio" name="type_of_contact" id="radio-4" value="personal">  <label for="radio-4">personal</label>'+ 
-            '<input type="radio" name="type_of_contact" id="radio-5" value="file">  <label for="radio-5">File</label>'+
-            '<input type="radio" name="type_of_contact" id="radio-6" value="appointment">  <label for="radio-6">appointment</label> </fieldset> </p>'+
+            '<input type="radio" name="type_of_contact" id="radio-1" value="T" checked="checked">  <label for="radio-1">telephone</label>'+ 
+            '<input type="radio" name="type_of_contact" id="radio-2" value="E">  <label for="radio-2">email</label>'+ 
+            '<input type="radio" name="type_of_contact" id="radio-3" value="L">  <label for="radio-3">fax/letter</label>'+ 
+            '<input type="radio" name="type_of_contact" id="radio-4" value="P">  <label for="radio-4">personal</label>'+ 
+            '<input type="radio" name="type_of_contact" id="radio-5" value="F">  <label for="radio-5">File</label>'+
+            '<input type="radio" name="type_of_contact" id="radio-6" value="A">  <label for="radio-6">appointment</label> </fieldset> </p>'+
    			'<p> <fieldset> <legend>Direction of Contact: </legend>'+
-    			'<input type="radio" name="direction_of_contact" id="radio-7" value="from_customer">  <label for="radio-7">from customer</label>'+
-    			'<input type="radio" name="direction_of_contact" id="radio-8" value="to_customer" >  <label for="radio-8">to customer</label>'+
-			   '<input type="radio" name="direction_of_contact" id="radio-9" value="undecided" checked="checked">  <label for="radio-9">undecided</label>'+
+    			'<input type="radio" name="direction_of_contact" id="radio-7" value="i">  <label for="radio-7">from customer</label>'+
+    			'<input type="radio" name="direction_of_contact" id="radio-8" value="o" >  <label for="radio-8">to customer</label>'+
+			   '<input type="radio" name="direction_of_contact" id="radio-9" value="-" checked="checked">  <label for="radio-9">undecided</label>'+
 			   '</fieldset> </form> </p>');
             $( function() {
                 $("#date").datepicker();
             });
             			   
-  /*          $( function() {
-                $("#time").timepicker();
-            });*/
-            return false;      
+ /*         $( function() {
+                var dt = new Date();
+                var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();                 
+                $("#time").value(time);
+            });
+*/           //return false;      
     }
     
     function anschr(A) {
@@ -379,7 +391,7 @@
     </form>
 </div>
 
-<div id="contactsdialog"></div>
+<div id="contactsdialog" title="New Contact"></div>
 
 <div id='contentbox'>
     <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid lightgray;" >

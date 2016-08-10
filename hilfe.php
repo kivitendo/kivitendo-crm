@@ -1,13 +1,13 @@
 <?php
-	require_once("inc/stdLib.php");
+    require_once("inc/stdLib.php");
         $menu =  $_SESSION['menu'];
-	if ($_SESSION["loginCRM"])  {
-		$v=($_SESSION["dbname"])?getVersiondb():"";
-	}
-	
+    if ($_SESSION["loginCRM"])  {
+        $v=($_SESSION["dbname"])?getVersiondb():"";
+    }
+
 ?>
 <html>
-	<head><title></title>
+    <head><title></title>
         <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['baseurl'].'css/'.$_SESSION["stylesheet"]; ?>/main.css"></link>
         <?php echo $menu['stylesheets']; ?>
 <body>

@@ -61,19 +61,19 @@ if ($_POST['ok']) {
     $rc = @exec('pdflatex -interaction=nonstopmode -output-directory=tmp/ tmp/katalog.tex',$out,$ret);
     if ( $ret == 0 ) {
         $rc = @exec('pdflatex -interaction=nonstopmode -output-directory=tmp/ tmp/katalog.tex',$out,$ret);
-        if (file_exists('tmp/katalog.pdf'))   {  
-            $link = 'tmp/katalog.pdf'; 
+        if (file_exists('tmp/katalog.pdf'))   {
+            $link = 'tmp/katalog.pdf';
             $msg = "RC:$rc Ret:$ret Out:".$out[0];
-     	} else { 
+         } else {
             $link = '';
-            if (file_exists('tmp/katalog.log'))   { 
+            if (file_exists('tmp/katalog.log'))   {
                 $linklog = 'tmp/katalog.log';
             }
-            $msg = "Kein PDF erstellt<br>RC:$rc Ret:$ret Out:".$out[0]; 
+            $msg = "Kein PDF erstellt<br>RC:$rc Ret:$ret Out:".$out[0];
         };
     } else {
         if (file_exists('tmp/katalog.pdf'))   {
-            $link = 'tmp/katalog.pdf'; 
+            $link = 'tmp/katalog.pdf';
             $msg  = 'Evlt nicht korrekt<br>';
         }
         $msg .= "Fehler beim Erstellen<br>RC:$rc Ret:$ret Out:".$out[0];
@@ -119,7 +119,7 @@ if ($_POST['ok']) {
               'varlable' => $cvar["description"],
               'varfld'   => $fld,
            ));
-           $t->parse('BlockCV','cvarListe',true); 
+           $t->parse('BlockCV','cvarListe',true);
         }
     }
     $t->set_block('kat','Preise','BlockPr');
@@ -129,10 +129,10 @@ if ($_POST['ok']) {
               'preis' => $preis,
               'select' => ($id==$_POST["preise"])?"selected":"",
            ));
-           $t->parse('BlockPr','Preise',true); 
+           $t->parse('BlockPr','Preise',true);
     }
     $t->set_var(array(
-        partnumber	    => $_POST['partnumber'],
+        partnumber        => $_POST['partnumber'],
         description     => $_POST['description'],
         ean             => $_POST['ean'],
         prozent         => $_POST['prozent'],
@@ -140,10 +140,10 @@ if ($_POST['ok']) {
         $_POST['order'] => 'selected',
         partsgroup      => $_POST['partsgroup'],
         pglist          => $pglist,
-        addtax	        => ($_POST['addtax'])?"checked":"",
-        linklog	        => $linklog,
-        link	        => $link,
-        msg	            => $msg
+        addtax            => ($_POST['addtax'])?"checked":"",
+        linklog            => $linklog,
+        link            => $link,
+        msg                => $msg
     ));
     $t->set_block("kat","Liste","Block");
     $t->Lpparse("out",array("kat"),$_SESSION['countrycode'],"firma");

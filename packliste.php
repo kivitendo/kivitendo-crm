@@ -5,7 +5,7 @@
     define('FPDF_FONTPATH','font/');
     require('fpdf.php');
     $menu =  $_SESSION['menu'];
-    $head = mkHeader();    
+    $head = mkHeader();
     class PDF extends FPDF {
         //Load data
         function LoadData($file)  {
@@ -60,7 +60,7 @@
             $line  = "<tr><td><input type='text' size='3'  name='data[qty][]' value='%s'></td>";
             $line .=     "<td><input type='text' size='10' name='data[partnumber][]' value='%s'></td>";
             $line .=     "<td><input type='text' size='70' name='data[description][]' value='%s'></td></tr>\n";
-            if ( $rs ) { 
+            if ( $rs ) {
                 $output .= '<form name="packliste" action="packliste.php" method="post"><table id="tabelle">'."\n";
                 $output .= "<input type='hidden' name='datum' value='$datum'>\n";
                 $output .= '<tr><th>Menge</th><th>Art-Nr.</th><th>Bezeichnung</th></tr>';
@@ -130,10 +130,10 @@
 ?>
 <html>
 <head>
-<?php 
-      echo $menu['stylesheets']; 
+<?php
+      echo $menu['stylesheets'];
       echo $head['CRMCSS'];
-      echo $menu['javascripts']; 
+      echo $menu['javascripts'];
       echo $head['THEME']; ?>
 <script language="JavaScript">
         $(function() {

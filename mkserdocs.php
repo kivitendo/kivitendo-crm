@@ -29,13 +29,13 @@ switch ($typ) {
                 require('inc/phpTex.php');
                 $doc = new phpTex();
                 break;
-    case "swf" : 
-    case "sxw" : 
+    case "swf" :
+    case "sxw" :
                 define('POO_TMP_PATH', $_SESSION["savefiledir"]);
                 require("inc/phpOpenOffice.php");
                 $doc = new phpOpenOffice();
                 break;
-    case "rtf" : 
+    case "rtf" :
                  require('inc/phpRtf.php');
                  $doc = new phpRTF();
                  break;
@@ -53,7 +53,7 @@ foreach($felder as $value) {
     $name=strtoupper($value);
     $vars[$name]="";
     $pos[$name]=$i++;
-}; 
+};
 
 //incCall vorbereiten
 $tdata["CRMUSER"]=$_SESSION["loginCRM"];
@@ -74,7 +74,7 @@ function decoder($txt) {
     }
 }
 
-//Daten holen 
+//Daten holen
 $sql="select * from tempcsvdata where uid = ".$_SESSION["loginCRM"]." and id >0"; //offset 1";
 $data=$GLOBALS['dbh']->getAll($sql);
 $cnt=1;
@@ -104,7 +104,7 @@ if ($data) {
         if ($cnt++ % 10 == 0) echo "."; flush();
         $doc->getoriginal();
         foreach ($vars as $key=>$val) { $vars[$key]=""; };
-        empty($tmp); 
+        empty($tmp);
     }
 }
 //$doc->clean();

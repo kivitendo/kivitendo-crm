@@ -1,8 +1,8 @@
 <?php
     require_once("inc/stdLib.php");
     include("inc/template.inc");
-    include("inc/FirmenLib.php");    
-    include("inc/wvLib.php");    
+    include("inc/FirmenLib.php");
+    include("inc/wvLib.php");
     $mid=($_GET["mid"])?$_GET["mid"]:$_POST["mid"];
     if ($_POST["ok"]) {
         if ($_POST["cause"]) {
@@ -24,21 +24,21 @@
     $kdnr=($rep["kdnr"])?$rep["kdnr"]:$masch["customer_id"];
     $firma=getFirmenStamm($kdnr);
     $hist=getHistory($mid);
-    
+
     $t = new Template($base);
     $t->set_file(array("masch" => "repauftrag.tpl"));
     doHeader($t);
 
     if (!$rep["datum"]) $rep["datum"]=date("d.m.Y");
 
-    $t->set_block("masch","History","Block1");    
+    $t->set_block("masch","History","Block1");
     if($hist) {
         if ($rep['aid']) {
             $t->set_var(array(
                 date   =>   '',
                 art   =>    '',
                 open  =>    ' ',
-                beschreibung =>  "<a href='repauftrag.php?mid=$mid'>Neuer Auftrag</a>" 
+                beschreibung =>  "<a href='repauftrag.php?mid=$mid'>Neuer Auftrag</a>"
             ));
             $t->parse("Block1","History",true);
         };
@@ -57,11 +57,11 @@
                 date   =>    db2date(substr($zeile["itime"],0,10)),
                 art   =>    $art,
                 open  =>    $open,
-                beschreibung =>  $zeile["beschreibung"] 
+                beschreibung =>  $zeile["beschreibung"]
             ));
             $t->parse("Block1","History",true);
         }
-    }        
+    }
     if (!$rep["aid"]) {
         $disp2="style='display:none'";
         $disp3=$disp2;
@@ -79,7 +79,7 @@
         $disp1="style='display:none'";
         $sel3="checked";
         $sel1=""; $sel2="";
-    } 
+    }
     $t->set_var(array(
         action => "repauftrag.php",
         msg => $msg,
@@ -96,12 +96,12 @@
         description => $masch["description"],
         serialnumber => $masch["serialnumber"],
         contractnumber => $masch["contractnumber"],
-        cid => $masch["cid"],        
+        cid => $masch["cid"],
         schaden => $rep["schaden"],
         behebung => $rep["reparatur"],
         bearbdate => db2date(substr($rep["bearbdate"],0,10)),
         cause => $rep["cause"],
-        counter => $rep["counter"],        
+        counter => $rep["counter"],
         datum => $rep["datum"],
         anlagedatum => db2date(substr($rep["anlagedatum"],0,10)),
         sel1 => $sel1,

@@ -2,7 +2,7 @@
     require_once("inc/stdLib.php");
     include("inc/template.inc");
     include("inc/persLib.php");
-    
+
     if ($_POST["ok"]) {
         $fid=updDocFld($_POST);
         $docid=$_POST["docid"];

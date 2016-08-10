@@ -67,7 +67,7 @@
     echo $menu['stylesheets'];
     echo $menu['javascripts'];
     echo $head['FULLCALCSS'];
-	echo $head['JQUERY'];
+    echo $head['JQUERY'];
     echo $head['JQUERYUI'];
     echo $head['THEME'];
 ?>

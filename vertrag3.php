@@ -15,19 +15,19 @@
         $vertrag=getVertrag($vid);
         $SM=substr($vertrag["anfangdatum"],5,2);
         $SJ=substr($vertrag["anfangdatum"],0,4);
-        if ($SJ<$jahr) { $einnahme=$vertrag["betrag"]*12; } 
+        if ($SJ<$jahr) { $einnahme=$vertrag["betrag"]*12; }
         else { $EM=date("m"); $einnahme=$vertrag["betrag"]*($EM-$SM+1); };
-        $template="vertragS.tpl";    
+        $template="vertragS.tpl";
         $t->set_file(array("vert" => $template));
         $t->set_block("vert","Liste","Block1");
-        //$m=$data[0]["mid"]; 
+        //$m=$data[0]["mid"];
         $first=true;
         $m=false;
         if($data) foreach($data as $zeile) {
-            if ($zeile["mid"]<>$m) { 
+            if ($zeile["mid"]<>$m) {
                 if (!$first) {
                     $t->set_var(array(
-                        MID        => "",     RID        => "",     BETRAG    => "", 
+                        MID        => "",     RID        => "",     BETRAG    => "",
                         SUMME    => sprintf("%0.2f",$zsum)
                     ));
                     $t->parse("Block1","Liste",true);
@@ -56,7 +56,7 @@
             }
         }
         $t->set_var(array(
-            MID        => "",     RID        => "",     BETRAG    => "", 
+            MID        => "",     RID        => "",     BETRAG    => "",
             SUMME    => sprintf("%0.2f",$zsum)
         ));
         $t->parse("Block1","Liste",true);
@@ -70,13 +70,13 @@
             FID => $vertrag["customer_id"],
             KDNR => $vertrag["customernumber"],
             Firma => $vertrag["name"],
-            betrag => sprintf("%0.2f",$vertrag["betrag"]),        
+            betrag => sprintf("%0.2f",$vertrag["betrag"]),
             anfangdatum => db2date($vertrag["anfangdatum"]),
-            endedatum => db2date($vertrag["endedatum"]),            
+            endedatum => db2date($vertrag["endedatum"]),
             kosten => sprintf("%0.2f",$gt),
             einnahme => sprintf("%0.2f",$einnahme),
             diff => $diff
-        ));        
+        ));
         $t->pparse("out",array("vert"));
         exit;
     }
@@ -87,7 +87,7 @@
         } else  {
             if (!empty($_POST["maschinen"][0][0])) $vid=saveNewVertrag($_POST);
         }
-    }    
+    }
     $vorlagen=getWVorlagen();
     if ($vid) {
 
@@ -107,9 +107,9 @@
         FID => $vertrag["customer_id"],
         KDNR => $vertrag["customernumber"],
         Firma => $vertrag["name"],
-        betrag => sprintf("%0.2f",$vertrag["betrag"]),        
+        betrag => sprintf("%0.2f",$vertrag["betrag"]),
         anfangdatum => db2date($vertrag["anfangdatum"]),
-        endedatum => db2date($vertrag["endedatum"]),                        
+        endedatum => db2date($vertrag["endedatum"]),
         VertragNr => $vertrag["contractnumber"]
     ));
 
@@ -122,7 +122,7 @@
         ));
         $t->parse("Block1","Vorlage",true);
     }
-    $t->set_block("vert","Maschinen","Block2");    
+    $t->set_block("vert","Maschinen","Block2");
     $i=0;
 
     if($maschinen) foreach($maschinen as $zeile) {

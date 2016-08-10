@@ -9,7 +9,7 @@
     $ALabels=getLableNames();
     $freitext=$_POST["freitext"];
     if ($_GET["vc"]=="customer") { $Q="C";}
-    elseif ($_GET["vc"]=="vendor") { $Q="V";} 
+    elseif ($_GET["vc"]=="vendor") { $Q="V";}
     else { $Q=($_GET["Q"])?$_GET["Q"]:$_POST["Q"];}
     $complete=($_POST["complete"])?"checked":"";
     if (!$_POST["format"] || empty($_POST["format"])) {
@@ -18,7 +18,7 @@
     } else {
         $tmp=explode("=",$_POST["src"]);
         $_GET[$tmp[0]]=$tmp[1];
-        if ($tmp[2]=="ep") $_GET["ep"]=$tmp[3];  
+        if ($tmp[2]=="ep") $_GET["ep"]=$tmp[3];
         $etikett=$_POST["format"];
     }
     if ($_GET["pid"]) {
@@ -37,9 +37,9 @@
         }
         if ($data["language_id"]) {
             if ($data["cp_gender"]=="m") {
-                $anrede = $anredenHerr[$data["language_id"]]; 
-            } else { 
-                $anrede = $anredenFrau[$data["language_id"]]; 
+                $anrede = $anredenHerr[$data["language_id"]];
+            } else {
+                $anrede = $anredenFrau[$data["language_id"]];
             }
         } else {
             $anrede = ($data["cp_gender"]=="m")?"Herr":"Frau";
@@ -74,7 +74,7 @@
             $telefon=$data["shiptophone"];
             $fax=$data["shiptofax"];
             $email=$data["shiptoemail"];
-        } 
+        }
         $data=getFirmaCVars($data["trans_id"]);
         $name1=$name;
     } else {
@@ -109,8 +109,8 @@
                 ${$key} = $val;
             }
         }
-        $lableformat=array("paper-size"=>$label["papersize"],'name'=>$label["name"], 'metric'=>$label["metric"], 
-                            'marginLeft'=>$label["marginleft"], 'marginTop'=>$label["margintop"], 
+        $lableformat=array("paper-size"=>$label["papersize"],'name'=>$label["name"], 'metric'=>$label["metric"],
+                            'marginLeft'=>$label["marginleft"], 'marginTop'=>$label["margintop"],
                             'NX'=>$label["nx"], 'NY'=>$label["ny"], 'SpaceX'=>$label["spacex"], 'SpaceY'=>$label["spacey"],
                             'width'=>$label["width"], 'height'=>$label["height"], 'font-size'=>6);
         require_once('inc/PDF_Label.php');
@@ -118,7 +118,7 @@
         $SX=substr($tmp[0],1);
         $SY=substr($tmp[1],1);
         $pdf = new PDF_Label($lableformat, $label["metric"], $SX, $SY);
-        $pdf->Open(); 
+        $pdf->Open();
         unset($tmp);
         if ($SX<>1 or $SY<>1)    $pdf->AddPage();
         foreach ($label["Text"] as $row) {
@@ -195,7 +195,7 @@ Anschrift<br><hr>
             </td>
         </tr>
         <tr>
-            <td nowrap><br> 
+            <td nowrap><br>
 <?php $sel="checked";
     for ($y=1; $y<=$label["ny"];$y++) {
         echo "\t\t\t\t<p>";

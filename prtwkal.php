@@ -42,7 +42,7 @@
     } else {
         $doc->loadDocument("vorlage/kalwoche.sxw");
     }
-    
+
     $doc->parse($vars);
     $doc->download("");
     $doc->clean();

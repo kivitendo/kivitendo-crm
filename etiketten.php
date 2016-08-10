@@ -1,7 +1,7 @@
 <?php
     require_once("inc/stdLib.php");
     include("inc/crmLib.php");
-    include_once("inc/UserLib.php");    
+    include_once("inc/UserLib.php");
     $usr=getUserStamm($_SESSION["loginCRM"]);
     $ALabels=getLableNames();
     $freitext=$_POST["freitext"];
@@ -11,13 +11,13 @@
     if (!$_POST["format"]) {
         $form=$ALabels[0]["id"];
     } else {
-        $form=$_POST["format"]; 
+        $form=$_POST["format"];
     }
     $label=getOneLable($form);
     if ($_POST["print"] ) {
-        $lableformat=array("paper-size"=>$label["papersize"],'name'=>$label["name"], 'metric'=>$label["metric"], 
-                            'marginLeft'=>$label["marginleft"], 'marginTop'=>$label["margintop"], 
-                            'NX'=>$label["nx"], 'NY'=>$label["ny"], 'SpaceX'=>$label["spacex"], 
+        $lableformat=array("paper-size"=>$label["papersize"],'name'=>$label["name"], 'metric'=>$label["metric"],
+                            'marginLeft'=>$label["marginleft"], 'marginTop'=>$label["margintop"],
+                            'NX'=>$label["nx"], 'NY'=>$label["ny"], 'SpaceX'=>$label["spacex"],
                             'SpaceY'=>$label["spacey"],
                             'width'=>$label["width"], 'height'=>$label["height"], 'font-size'=>6);
         require_once('inc/PDF_Label.php');
@@ -25,7 +25,7 @@
         $SX=substr($tmp[0],1);
         $SY=substr($tmp[1],1);
         $pdf = new PDF_Label($lableformat, $label["metric"], $SX, $SY);
-        $pdf->Open(); 
+        $pdf->Open();
         unset($tmp);
         if ($SX<>1 or $SY<>1)    $pdf->AddPage();
         $daten = getCSVData();

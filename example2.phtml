@@ -8,8 +8,8 @@
     $menu = $_SESSION['menu'];
     echo $menu['stylesheets'];
     echo $menu['javascripts'];
-    //echo $head['JQUERY'];
-    //echo $head['JQUERYUI'];
+    echo $head['JQUERY'];
+    echo $head['JQUERYUI'];
     echo $head['JQTABLE'];
     echo $head['THEME'];
     echo $head['JUI-DROPDOWN'];
@@ -29,34 +29,43 @@
 
 
 $(document).ready(function() {
-
     $("#senddialog").dialog({
-        autoOpen: false,
-        width:400,
-        height:250,
-        minWidth:300,
-        minHeight:200,
-        maxWidth:800,
-        maxHeight:800,
+        width:'auto',
+//      width: 400,
+//        height:250,
+//        minWidth:300,
+//        minHeight:200,
+//        maxWidth:800,
+//        maxHeight:800,
         buttons: [{
             text: 'Save', //translate
             click: function() {
-                var object = {};
-
+//                //Datumsstring mit aktuellem Datum / aktueller Uhrzeit bauen
+//                // einzelne Daten holen
 //                var date = new Date();
+//                var year = date.getFullYear();
+//                var month = date.getMonth();
+//                var day = date.getDate();
 //                var hour = date.getHours();
 //                var minute = date.getMinutes();
 //                var second = date.getSeconds();
 //
+//                // Monate gehen von 0 bis 11, darum:
+//                month += 1;
+//
 //                // bei Werten unter 10 "0" voranstellen
+//                if (month < 10) month = "0" + month;
+//                if (day < 10) day = "0" + day;
 //                if (hour < 10) hour = "0" + hour;
 //                if (minute < 10) minute = "0" + minute;
 //                if (second < 10) second = "0" + second;
 //
-//                // Zeit-String zusammenbauen
-//                var dtime = hour + ":" + minute + ":" + second;
-//                $("#datetime").appendString(dtime);
+//                // Datumsstring zusammenbauen
+//                var datum = year + "/" + month + "/" + day + " " + hour + ":" + minute + ":" + second;
+//                $("#datetime").val(datum);
 
+
+                var object = {};
                 // Formular-inputs in ein array
                 var array = $('#fsend').serializeArray();
                 // Ein object aus dem array machen
@@ -76,90 +85,102 @@ $(document).ready(function() {
                         alert("Senden der Daten fehlgeschlagen!");
                     }
                 })
-                 $(this).dialog("close");
-
             }
         }, //Ende Button "Save"
-        {
-            id: 'getButton',
-            text: 'Get',//translate
+        {  text: 'Get',//translate
             click: function(){
                 $.ajax({
                     dataType: 'json',
                     url: 'ajax/example.php?action=getData',
                     method: "GET",
                     success: function( json ) {
-                            //alert( JSON.stringify( json ) );
-                            drawTable(json);
-                        },
+                        var obj = JSON.parse(json);
+                        $("#getdialog").dialog({
+                            width:500,
+                            height:200
+                        }).dialog("open").html( '<table border="1">' +
+                            '<tr> <th>ID</th><th>Name</th><th>Alter</th><th>Bemerkungen</th><th>Datum</th></tr>' +
+                            '<tr> <td>' + obj.id + '</td> <td>' + obj.c_name + '</td> <td>' + obj.c_age + '</td>' +
+                            '<td>' + obj.c_comments + '</td> <td>' + obj.date_time + '</td> </tr> </table> <br>');
+                    },
+                    error:  function(){
+                         alert("Holen der Daten fehlgeschlagen!");
+                    }
+                })
+            }
+        }, //Ende Button "Get"
+        {
+               text: 'Get Last',//translate
+            click: function(){
+                $.ajax({
+                    dataType: 'json',
+                    url: 'ajax/example.php?action=getLastData',
+                    method: "GET",
+                    success: function( json ) {
+                        //$("#getdialog").html(json);
+                        var obj = JSON.parse(json);
+                        $("#getdialog").dialog({
+                            width:500,
+                            height:200})
+                            .dialog("open").html( '<table border="1" class="tablesorter">' +
+                                '<tr> <th>ID</th><th>Name</th><th>Alter</th><th>Bemerkungen</th><th>Datum</th></tr>' +
+                                '<tr> <td>' + obj.id + '</td> <td>' + obj.c_name + '</td> <td>' + obj.c_age + '</td>' +
+                                '<td>' + obj.c_comments + '</td> <td>' + obj.date_time + '</td> </tr> </table>');
+                    },
                     error:  function(){
                         alert("Holen der Daten fehlgeschlagen!");
                     }
-
                 })
-                $(this).dialog("close");
-
             }
         }] //Ende buttons[]
-    }); //Ende senddialog()
-
-
-    $( "#newbtn" ).button().html("New").click(function() {
-        $("#senddialog").dialog("open")
-            .html('<p> <form id="fsend">' +
-                '<table> <tr> <td><label>Date of Birth</label></td>' +
-                '<td><input type="text" name="datetime" id="datetime"></td> </tr>' +
-                '<tr> <td><label>Name</label></td> <td><input type="text" name="name" id="name"></td> </tr>' +
-                '<tr> <td><label>Age</label></td> <td><input type="text" name="age" id="age"></td> </tr>' +
-                '<tr> <td><label>Comments</label></td> <td><input type="text" name="comments" id="comments"></td>' +
-                '</tr> </table> </form> </p>');
+    }); //Ende dialog()
+    $( function() {
         $( "#datetime" ).datepicker();
     });
-
-    function drawTable(data) {
-        $("#tbody").empty();
-        for (var i = 0; i < data.length; i++) {
-            drawRow(data[i]);
-        }
-    }
-
-    var options = { weekday: 'short', year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
-    function drawRow( rowData ) {
-        var row = $("<tr>");
-//        var dateTime = new Date( rowData.date_time * 1000 );
-        $("#tbody").append(row);
-        row.append($("<td>" + rowData.id + "</td>"));
-//        row.append($("<td>" + dateTime.toLocaleDateString(kivi.myconfig.countrycode, options)  + "</td>"));
-        row.append($("<td>" + rowData.date_time + "</td>"));
-        row.append($("<td>" + rowData.c_name + "</td>"));
-        row.append($("<td>" + rowData.c_age + "</td>"));
-        row.append($("<td>" + rowData.c_comments + "</td></tr>"));
-    }
-
-    $("#getButton").click();
-
-    $(window).resize(function (){
-        $("#gdtable").css({
-            position:'absolute',
-            left: ($(window).width() - $('#myTable').outerWidth())/2,
-            top: ($(window).height() - $('#myTable').outerHeight())/2
-        });
-    });
-    $(window).resize();
-
 }); //Ende $(document).ready()
 
 
 
+
+
+
 </script>
-
 <style>
-.ui-menu { width: 180px; }
+.ui-menu, #searchfield { width: 180px; }
 
-#gdtable { border: 1px solid #BBBBBB; }
+/*#read{   position:absolute; top:120px; left:225px; width: 80%; background-color:#dfd; border:1px solid #888; }
+#results{   position:absolute; top:40px; left:235px; width: 80%;  }
+
+.contex_sub_menu, .contex_main_menu {
+    display: none;
+    z-index: 1000;
+    position: absolute;
+    overflow: hidden;
+    border: 1px solid #CCC;
+    white-space: nowrap;
+    font-family: sans-serif;
+    background: #FFF;
+    color: #333;
+    border-radius: 5px;
+    padding: 0;
+}
+
+// Each of the items in the list
+.contex_sub_menu li, .contex_main_menu li {
+    padding: 8px 12px;
+    cursor: pointer;
+    list-style-type: none;
+    transition: all .3s ease;
+}
+
+.contex_sub_menu li:hover, .contex_main_menu li:hover {
+    background-color: #DEF;
+}
+*/
 
 
 table.tablesorter { width:auto; cursor:pointer; }
+
 
 </style>
 </head>
@@ -169,7 +190,45 @@ table.tablesorter { width:auto; cursor:pointer; }
     echo $menu['pre_content'];
     echo $menu['start_content'];
 ?>
+<!--<div class="ui-widget-content" style="height:700px">
+    <ul id="menu"></ul>
+    <p>
+    <input type="text" id="searchfield"  placeholder="Enter Searchstring">
 
+    </p>
+    <div id="read" class="editable"></div>
+    <div id="results" style="display:none;">
+       <table id="resTable" class="tablesorter">
+         <thead>
+          <tr>
+            <th class="res_id">ID</th>
+            <th class="res_category">Category</th>
+            <th class="res_version">Version</th>
+            <th class="res_content">Row</th>
+          </tr>
+         </thead>
+         <tbody id="tbody">
+         </tbody>
+       </table>
+     </div>
+</div>
+<ul class='contex_sub_menu'>
+  <li data-action="edit">Edit</li>
+  <li data-action="delete">Delete </li>
+</ul>
+<ul class='contex_main_menu'>
+  <li data-action="new">New</li>
+  <li data-action="edit">Edit</li>
+  <li data-action="delete">Delete </li>
+</ul>
+<div id="newCat">
+</div>
+<div id="editCat">
+</div>
+<div id="delCat">
+</div>
+<div id="delNote">
+</div>-->
 <?php echo $menu['end_content']; ?>
 
  <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Testfile</p>
@@ -177,18 +236,20 @@ table.tablesorter { width:auto; cursor:pointer; }
 -->
 
 
- <div id="senddialog" title="Daten an Server schicken und vom Server holen"> </div>
-
- <div id="gdtable" class="gdtable"><table id="myTable">
-  <table class="tablesorter">
-   <tr><th>ID</th><th>Birth</th><th>Name</th><th>Age</th><th>Comments</th></tr>
-   <tbody id="tbody">
-
-   </tbody>
-  </table> <br>
- </div>
-
- <div id="newbtn"></div>
+<div id="senddialog" title="Daten an Server schicken und vom Server holen">
+  <p>
+   <form id="fsend">
+    <label>Datum / Uhrzeit</label>
+    <input type="text" name="datetime" id="datetime"><br>
+    <label>Name</label>
+    <input type="text" name="name" id="name"><br>
+    <label>Alter</label>
+    <input type="text" name="age" id="age"><br>
+    <label>Bemerkungen</label>
+    <input type="text" name="comments" id="comments">
+   </form>
+  </p>
+</div>
 
 
 

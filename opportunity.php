@@ -24,7 +24,7 @@
         $save="visible";
         $none="block";
         $stamm="block";
-        $block="none";            
+        $block="none";
     } else if ($_GET["history"]) {
             $history = true;
             $show = "hidden";
@@ -44,13 +44,13 @@
                 if ($last <> $row["oppid"] || $history) {
                     $t->set_var(array(
                         LineCol  => ($i%2+1),
-                        id       => $row["id"], 
-                        firma    => ($last==$row["oppid"])?"":$row["firma"], 
+                        id       => $row["id"],
+                        firma    => ($last==$row["oppid"])?"":$row["firma"],
                         oppid    => $row["oppid"],
                         show     => $show,
                         title    => $row["title"],
-                        chance   => $row["chance"]*10, 
-                        betrag   => sprintf("%0.2f",$row["betrag"]), 
+                        chance   => $row["chance"]*10,
+                        betrag   => sprintf("%0.2f",$row["betrag"]),
                         status   => $row["statusname"],
                         datum    => db2date($row["zieldatum"]),
                         user => $row["user"],
@@ -58,7 +58,7 @@
                     ));
                     $t->parse("Block","Liste",true);
                     $i++;
-                } 
+                }
                 $last = $row["oppid"];
             }
             $stamm="block";
@@ -91,11 +91,11 @@
         }
     } else if ($_POST["action"] == "save") {
         $rc=saveOpportunity($_POST);
-        if (!$rc) { 
+        if (!$rc) {
             $msg=".:error:. .:save:.";
             $daten=$_POST;
             if ($_POST["id"]) {
-                $data = getOneOpportunity($_POST["id"]);    
+                $data = getOneOpportunity($_POST["id"]);
                 $daten["orders"]=$data["orders"];
             };
             $daten["zieldatum"]=date2db($daten["zieldatum"]);

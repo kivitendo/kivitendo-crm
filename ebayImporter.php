@@ -4,7 +4,7 @@
 ***************************************************************************************************/
 //Script im Alpha-Stadium
 //ToDo0: Nur Mitglieder der Gruppe Admin erlauben, naxFilesize beschränken
-//ToDo1: 3 Phasen realisieren: Upload+Einstellung, Darstellung+Korrektur, Datenimport  
+//ToDo1: 3 Phasen realisieren: Upload+Einstellung, Darstellung+Korrektur, Datenimport
 //ToDo2: Rechnungen importieren
 
 // ID tax_zones für Inland holen und ersetzen
@@ -24,7 +24,7 @@ echo $head['CRMCSS'];
 echo $head['JQUERY'];
 echo $head['JQUERYUI'];
 echo $head['THEME'];
-echo $head['JQTABLE'];  
+echo $head['JQTABLE'];
 ?>
 <style type="text/css">
 tr.bgcol1 {background-color:#efd; }
@@ -34,21 +34,21 @@ table.bgcol1 th {
 background-color: #e3e3e3;
 }
 
-</style>  
+</style>
 
 <script>
     $(function() {
         $('#treffer')
             .tablesorter( {widthFixed: true, widgets: ['zebra']})
             .tablesorterPager({container: $("#pager"), size: 120, positionFixed: false})
-    }); 
+    });
 </script>
 <?php
 
 
 //String aufspalten
 function mehrfachexplode ($trenner,$string) {
-   
+
     $temp = str_replace($trenner, $trenner[0], $string);
     $getrennt = explode($trenner[0], $temp);
     return  $getrennt;
@@ -60,11 +60,11 @@ function korrektur ($street){
     $tempstreet = "";
     $korrekt = "";
     $sfeld = array();
-    
+
     //Hausnummern separieren
     $streetarray = str_split($street);
-    for($i = 0; $i < count($streetarray); $i++) { 
-       //Ist Arrayelement eine Zahl  
+    for($i = 0; $i < count($streetarray); $i++) {
+       //Ist Arrayelement eine Zahl
        if(ctype_digit($streetarray[$i])){
            //Ist vorherige Arrayelement eine Zahl
            if(ctype_digit($streetarray[$i-1])){
@@ -88,8 +88,8 @@ function korrektur ($street){
         }
         //Arrayelement ist keine Zahl
         else{
-            $tempstreet.=$streetarray[$i];   
-        }  
+            $tempstreet.=$streetarray[$i];
+        }
     }
 
     //Straßenstring aufspalten
@@ -105,18 +105,18 @@ function korrektur ($street){
     //  - Trenner erkennen.. Straßennamen mit - Trenner
     if(strpos($tempstreet,'-')){
         //Straßenstring zusammensetzen
-      for($i = 0; $i < count($sfeld); $i++) { 
+      for($i = 0; $i < count($sfeld); $i++) {
             //Haunummer + mögliches Leerzeichen für Buchstabe
             if(ctype_digit($sfeld[$i])){
-                $korrekt.=$sfeld[$i]." ";              
-            }            
+                $korrekt.=$sfeld[$i]." ";
+            }
             elseif(empty($sfeld[$i+1]) || ctype_digit($sfeld[$i+1])){
                 $korrekt.=ucwords(strtolower($sfeld[$i]))." ";
             }
             elseif(!(empty($sfeld[$i]))){
                 $korrekt.=ucwords(strtolower($sfeld[$i]))."-";
             }
-        }  
+        }
     }
     // Straßennamen ohne "-"
     else{
@@ -132,17 +132,17 @@ function korrektur ($street){
             $zaehler++;
         }
         //Letztes Wort bestimmten
-         for($i = 0; $i < $hausnummerpos; $i++) { 
+         for($i = 0; $i < $hausnummerpos; $i++) {
             if(!empty($sfeld[$i])){
                 $lastword = $i;
             }
-         } 
+         }
   //echo "LetztesZeichen: ".$letzteszeichen."</br>";
-  //echo "Hausnummerposition: ".$hausnummerpos."</br>"; 
+  //echo "Hausnummerposition: ".$hausnummerpos."</br>";
   //echo "LEtzteswortposition: ".$lastword."</br>";
   //print_r($sfeld);
         //Straßenstring zusammensetzen
-        for($i = 0; $i < count($sfeld); $i++) { 
+        for($i = 0; $i < count($sfeld); $i++) {
             //erstes Adresswort
             if($i == 0){
                 $korrekt.=ucwords(strtolower($sfeld[$i]))." ";
@@ -160,7 +160,7 @@ function korrektur ($street){
             }
         }
     }
-    return $korrekt;  
+    return $korrekt;
 }
 
 $form_select_file = '
@@ -234,11 +234,11 @@ if (($handle = fopen("tmp/import-utf8.csv", "r")) !== FALSE) {
         //for ($c=0; $c < $num; $c++) {
             //echo $data[$c] . "<br />\n";
         //}
-        $csvArray[$row] = $data;    
+        $csvArray[$row] = $data;
 
     }
-    
-   
+
+
     fclose($handle);
 }
 
@@ -253,13 +253,13 @@ $end_id = $rs['id'];
 
 $sql = "SELECT id FROM leads WHERE lead ILIKE 'ebay'";
 $rs = $GLOBALS['dbh']->getOne($sql);
-$ebayLeadId = $rs['id'];  
+$ebayLeadId = $rs['id'];
 
 //SELECT id FROM payment_terms WHERE description ILIKE 'paypal' OR description_long ILIKE '%paypal%';
 
 $sql = "SELECT id FROM payment_terms WHERE description ILIKE 'paypal' OR description_long ILIKE '%paypal%'";
 $rs = $GLOBALS['dbh']->getOne($sql);
-$paypalId = $rs['id']; 
+$paypalId = $rs['id'];
 
 $sql = "SELECT id FROM payment_terms WHERE description ILIKE 'vorkasse' OR description_long ILIKE '%vorkasse%'";
 $rs = $GLOBALS['dbh']->getOne($sql);
@@ -268,8 +268,8 @@ $payotherId =  $rs['id'];
 array_shift($csvArray);//Erste Zeile löschen
  //print_r($csvArray);
 echo "</head><body>".$menu['pre_content'].$menu['start_content'];
-echo "<table id='treffer' class='tablesorter'>\n"; 
-echo "<thead><tr ><th>Ebayname</th><th>Name</th><th>Anschrift</th><th>Email</th><th>1.Artikel</th></tr></thead>\n<tbody>\n"; 
+echo "<table id='treffer' class='tablesorter'>\n";
+echo "<thead><tr ><th>Ebayname</th><th>Name</th><th>Anschrift</th><th>Email</th><th>1.Artikel</th></tr></thead>\n<tbody>\n";
 $i = 0;
 
 /*
@@ -296,42 +296,42 @@ if ($csvArray) foreach($csvArray as $key => $row) {
     $row['4'] = korrektur($row['4']);
     $row['6'] = ucwords($row['6']);
     $row['9'] = $row['9'][0]; //Deutschland to D
-    
-    
+
+
     $del = false;
     //Dublikate entsorgen
     if (!$row['1'] && !$row['2']) {
         unset($csvArray[$row]);
         //break -1;
         $ok = false;
-                
+
     }
     echo "row: ".$csvArray[$key - 1]['1'];
     if ( $csvArray[$key ]['1'] == $csvArray[$key + 1]['1'] ){
          unset($csvArray[$key]);
          $ok = false;
     }
-    if ($ok) { 
+    if ($ok) {
         $i++;
         $sql = "SELECT * FROM customer WHERE name ILIKE '".$row["2"]."' AND zipcode = '".$row["8"]."' OR department_1 ILIKE '".$row["1"]."' OR email ILIKE '".$row["3"]."'";
         $rs=$GLOBALS['dbh']->getAll($sql);
         echo "Vorhanden??: ".$rs[0]['name']."<br />";
-        echo "<tr class='bgcol2'>". 
-             "<td class=\"liste\">".$row["1"]."</td><td class=\"liste\">".$row["2"]."</td>". 
+        echo "<tr class='bgcol2'>".
+             "<td class=\"liste\">".$row["1"]."</td><td class=\"liste\">".$row["2"]."</td>".
              "<td class=\"liste\">".$row["4"].$row["5"].", ".$row["8"]." ".$row["6"]."</td><td class=\"liste\">".$row["3"]."</td><td class=\"liste\">".$row["13"]."</td>
-             <td class=\"liste\">".$row['attention']."</td><td class=\"liste\">".$row['9']."</td><td class=\"liste\">".$row['20']."</td></tr>\n"; 
+             <td class=\"liste\">".$row['attention']."</td><td class=\"liste\">".$row['9']."</td><td class=\"liste\">".$row['20']."</td></tr>\n";
         $i++;
         if (!$rs['0']) {
-            $CustNb = newnr('customer',$end_id); 
-            echo "Nummer: ".$CustNb; 
-            $payment = $row['20']=='PayPal'?$paypalId:$payotherId;         
+            $CustNb = newnr('customer',$end_id);
+            echo "Nummer: ".$CustNb;
+            $payment = $row['20']=='PayPal'?$paypalId:$payotherId;
             $sql = "INSERT INTO customer (email, name, department_1, street, zipcode, city, country, business_id, customernumber, lead, payment_id, currency_id, taxzone_id  ) VALUES ";
             $sql.= "('".$row['3']."', '".$row["2"]."', '".$row["1"]."', '".$row["4"].$row["5"]."', '".$row["8"]."','".$row["6"]."', '".$row['9']."', ".$end_id.", '".$CustNb."', ".$ebayLeadId.", ".$paypalId." , 1 , 4)";
-            echo "SQL: ".$sql;            
+            echo "SQL: ".$sql;
             $rcc = $GLOBALS['dbh']->query($sql);
         }
     }
-  //$row['3']  
+  //$row['3']
 
 }
 

@@ -4,54 +4,54 @@ require_once("inc/stdLib.php");
 $popup=($_GET["popup"])?$_GET["popup"]:0;
 
 function getAllPostIt($id) {
-	$sql = "select * from postit where employee=$id order by date";
-	$rs  = $GLOBALS['dbh']->getAll($sql);
-	return $rs;
+    $sql = "select * from postit where employee=$id order by date";
+    $rs  = $GLOBALS['dbh']->getAll($sql);
+    return $rs;
 }
 function getOnePostIt($id) {
-	$sql = "select * from postit where id=$id";
-	$rs  = $GLOBALS['dbh']->getAll($sql);
-	if ($rs) {
-		$data=$rs[0];
-		$data["notes"]=stripslashes($data["notes"]);
-		return $data;
-	} else {
-		return false;
-	}
+    $sql = "select * from postit where id=$id";
+    $rs  = $GLOBALS['dbh']->getAll($sql);
+    if ($rs) {
+        $data=$rs[0];
+        $data["notes"]=stripslashes($data["notes"]);
+        return $data;
+    } else {
+        return false;
+    }
 }
 function savePostIt($data) {
-	if (!$data["id"]) {
-		$newID = uniqid (rand());
-		$rc    = $GLOBALS['dbh']->insert(postit,array('employee','date','cause'),array($_SESSION["loginCRM"],'now()',$newID));
-		if ($rc) {
-                	$sql = "select id from postit where cause = '$newID'";
-	                $rs  = $GLOBALS['dbh']->getOne($sql);
-		} else {
-			return false;
-		}
+    if (!$data["id"]) {
+        $newID = uniqid (rand());
+        $rc    = $GLOBALS['dbh']->insert(postit,array('employee','date','cause'),array($_SESSION["loginCRM"],'now()',$newID));
+        if ($rc) {
+                    $sql = "select id from postit where cause = '$newID'";
+                    $rs  = $GLOBALS['dbh']->getOne($sql);
+        } else {
+            return false;
+        }
                 if ($rs) {
                         $data["id"] = $rs["id"];
                         $rc = $GLOBALS['dbh']->commit();
                 } else {
                         return false;
                 }
-	};
+    };
         $sql = "UPDATE postit SET notes = '".$data["notes"]."',cause='".substr($data["cause"],0,100)."' WHERE id = ".$data['id'];
         $rc = $GLOBALS['dbh']->query($sql);
-	return $rc;
+    return $rc;
 }
 function DelPostIt($id) {
-	$sql = "delete from postit where id=$id";
-	$rc  = $GLOBALS['dbh']->query($sql);
-	return $rc;
+    $sql = "delete from postit where id=$id";
+    $rc  = $GLOBALS['dbh']->query($sql);
+    return $rc;
 }
 if ($_POST["save"]) {
-	if ($_POST["cause"]) $rc=savePostIt($_POST);
-	if (!$rc) $data=$_POST;
+    if ($_POST["cause"]) $rc=savePostIt($_POST);
+    if (!$rc) $data=$_POST;
 } else if ($_GET["hole"]) {
-	$data=getOnePostIt($_GET["hole"]);
+    $data=getOnePostIt($_GET["hole"]);
 } else if ($_POST["delete"]) {
-	if ($_POST["id"]) $rc=delPostIt($_POST["id"]);
+    if ($_POST["id"]) $rc=delPostIt($_POST["id"]);
 }
 $menu = $_SESSION['menu'];
 ?>
@@ -60,27 +60,27 @@ $menu = $_SESSION['menu'];
 <head>
 <meta charset='utf-8' />
 <title>
-<?php echo  translate(".:LxO:.","work"); 
-		echo  translate(".:postit:.","work"); ?>
+<?php echo  translate(".:LxO:.","work");
+        echo  translate(".:postit:.","work"); ?>
 </title>
-<?php 
+<?php
     $menu = $_SESSION['menu'];
-    $head = mkHeader();	
+    $head = mkHeader();
     echo $menu['stylesheets'];
     echo $menu['javascripts'];
     echo $head['FULLCALCSS'];
-	 echo $head['JQUERY'];   
+     echo $head['JQUERY'];
     echo $head['JQUERYUI'];
     echo $head['THEME'];
 ?>
-	<script language="JavaScript">
-	<!--
-	function PopUp() {
-		f1=open("postit.php?popup=1","PostIt","width=600,height=400");
-	}
-	//-->
-	</script>
-	</head>
+    <script language="JavaScript">
+    <!--
+    function PopUp() {
+        f1=open("postit.php?popup=1","PostIt","width=600,height=400");
+    }
+    //-->
+    </script>
+    </head>
 <body onLoad="if (1==<?php echo  $popup ?>) window.resizeTo(600,400);">
 <?php echo $menu['pre_content'];
       echo $menu['start_content'];?>
@@ -91,9 +91,9 @@ $menu = $_SESSION['menu'];
 <?php
 $liste=getAllPostIt($_SESSION["loginCRM"]);
 if ($liste) foreach($liste as $row) {
-	echo "<tr class='klein'><td>";
-	echo db2date(substr($row["date"],0,10))." ".substr($row["date"],11,5);
-	echo "</td><td>&nbsp;[<a href='postit.php?hole=".$row["id"]."'>".$row["cause"]."</a>]</td></tr>\n";
+    echo "<tr class='klein'><td>";
+    echo db2date(substr($row["date"],0,10))." ".substr($row["date"],11,5);
+    echo "</td><td>&nbsp;[<a href='postit.php?hole=".$row["id"]."'>".$row["cause"]."</a>]</td></tr>\n";
 };
 ?>
 </table>

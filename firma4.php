@@ -39,7 +39,7 @@
           $link2 = "firma2.php?Q=$Q&fid=$fid&id=$id";
           $link3 = "firma3.php?Q=$Q&fid=$fid";
           $link4 = "firma4.php?Q=$Q&fid=$fid&pid=$pid";
-     } else {    
+     } else {
           $fid   = 0;
           $co    = getKontaktStamm($pid);
           $name  = $co['cp_givenname'].' '.$co['cp_name'];
@@ -105,7 +105,7 @@
                     'cid'     => $row['cid']
           ));
           $t->parse('Block3','Vertrag',true);
-     }     
+     }
      $t->Lpparse('out',array('doc'),$_SESSION['countrycode'],'firma');
 
 ?>

@@ -1,11 +1,11 @@
 <?php
     require_once($_SESSION['crmpath']."inc/stdLib.php");
     if($_GET['showdl']){
-		echo "dokumente/".$_SESSION["dbData"]["dbname"];
-		return;
+        echo "dokumente/".$_SESSION["dbData"]["dbname"];
+        return;
     }
     else {
-		$pfad = 'dokumente/'.$_SESSION["dbData"]["dbname"].$_GET['file'];
+        $pfad = 'dokumente/'.$_SESSION["dbData"]["dbname"].$_GET['file'];
         if (isset($pfad)) {
             $fullPath = $pfad;
             if($fullPath) {
@@ -17,7 +17,7 @@
                     header("Content-Disposition: attachment; filename=\"".$path_parts["basename"]."\"");
                     header("Content-type: application/pdf");
                     break;
-					case "png":
+                    case "png":
                     header("Content-Disposition: attachment; filename=\"".$path_parts["basename"]."\"");
                     header("Content-type: image/png");
                     break;

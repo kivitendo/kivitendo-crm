@@ -13,7 +13,7 @@
     <!--
         function auswahl() {
             nr = document.parts.Alle.selectedIndex;
-            if ( nr == 0 ) return; 
+            if ( nr == 0 ) return;
             val = document.parts.Alle.options[nr].value;
             txt = document.parts.parttext.value;
             if ( txt == '' ) txt=document.parts.Alle.options[nr].text;
@@ -25,7 +25,7 @@
         };
         function chgtxt() {
             nr = document.parts.Alle.selectedIndex;
-            if ( nr == 0 ) return; 
+            if ( nr == 0 ) return;
             txt = document.parts.Alle.options[nr].text;
             document.parts.parttext.value = txt;
         };

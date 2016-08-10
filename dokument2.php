@@ -36,8 +36,8 @@
                 $data['docid'] = $did;
                 $p = 1;
                 foreach($vars as $hit) {
-                     $data['feldname'] = $hit; 
-                     $data['platzhalter'] = $hit; 
+                     $data['feldname'] = $hit;
+                     $data['platzhalter'] = $hit;
                      $data['position'] = $p;
                      insDocFld($data);
                      $p++;

@@ -10,7 +10,7 @@ if ($_POST) {
         $rc = $dbfile->getDokument($id);
     }
     if ($dbfile->lock>0) {
-        echo translate('.:file locked:.','firma')."!";    
+        echo translate('.:file locked:.','firma')."!";
         $rc = False;
     } else {
         $dbfile->setDocData("descript",$_POST["descript"]);
@@ -18,21 +18,21 @@ if ($_POST) {
     }
     if ($rc) {
 ?>
-	<script language="JavaScript">
-		top.dateibaum('left','<?php echo  $_POST["upldpath"] ?>');
+    <script language="JavaScript">
+        top.dateibaum('left','<?php echo  $_POST["upldpath"] ?>');
         top.document.getElementById("uploadfr").style.visibility = "hidden";
-	</script>
-<?php  }; 
+    </script>
+<?php  };
 } ?>
 <html><head>
 <title></title>
-	<script language="JavaScript">
+    <script language="JavaScript">
         function getpath() {
             var p = top.document.getElementById('path').innerHTML;
             document.getElementById('upldpath').value = p;
             return true;
         }
-	</script>
+    </script>
     <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['baseurl'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
 </head>
 <body class="docfrm" style="padding:0em; margin:0em; width:100%; height:100%;" >

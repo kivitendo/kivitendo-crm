@@ -24,7 +24,7 @@
             if (substr($row["id"],0,1)=="C") { $tmp="firma1.php?Q=C&id=".substr($row["id"],1); }
             else if (substr($row["id"],0,1)=="V") { $tmp="firma1.php?Q=V&id=".substr($row["id"],1); }
             else if (substr($row["id"],0,1)=="P") { $tmp="kontakt.php?id=".substr($row["id"],1); }
-            if (substr($row["id"],0,1)=="G") {  
+            if (substr($row["id"],0,1)=="G") {
                 $links.="(".$row["name"].")&nbsp;";
             } else {
                 $links.="[<a href='#' onClick='openstamm(\"$tmp\")'>".(($row["name"])?$row["name"]:$row["login"])."</a>] &nbsp; \n";

@@ -20,8 +20,8 @@
         if ($_POST["fid"] != '' && $_POST['clear'] < 2) {
             unset($data);
             $data['name'] = $_POST['name'];
-	        $data['fid']  = $_POST['fid'];
-	        $data['tab']  = $_POST['tab'];
+            $data['fid']  = $_POST['fid'];
+            $data['tab']  = $_POST['tab'];
             $data["active"] = "t";
             $data['clear'] = 2;
         }
@@ -31,15 +31,15 @@
         if ($rc) {
             $msg = ".:deleted:.";
             $data['name'] = $_POST['name'];
-	        $data['fid']  = $_POST['fid'];
-	        $data['tab']  = $_POST['tab'];
+            $data['fid']  = $_POST['fid'];
+            $data['tab']  = $_POST['tab'];
         } else {
             $data = getOneTT($_POST["id"]);
             $msg = ".:not posible:.";
         };
     } else if ($_POST["action"] == "search" || $_GET["fid"]) {
         //Suchen eines Zeiteintrages, obere Maske
-    	if ($_GET["fid"]) $_POST = $_GET;
+        if ($_GET["fid"]) $_POST = $_GET;
         $data = searchTT($_POST);
         if (count($data)>1) {
             $t->set_block("tt","Liste","Block");
@@ -52,14 +52,14 @@
             }
             $visible = true;
             $data = $_POST;
-	    if ($_GET["fid"])	$data["backlink"] = "firma1.php?Q=".$_GET["Q"]."&id=".$_GET["fid"];
+        if ($_GET["fid"])    $data["backlink"] = "firma1.php?Q=".$_GET["Q"]."&id=".$_GET["fid"];
         } else if (count($data)==0) {
             $data = $_POST;
             $data["msg"] = ".:not found:.";
-	    if ($_GET["fid"])	$data["backlink"] = "firma1.php?Q=".$_GET["Q"]."&id=".$_GET["fid"];
+        if ($_GET["fid"])    $data["backlink"] = "firma1.php?Q=".$_GET["Q"]."&id=".$_GET["fid"];
         } else {
             $data = getOneTT($data[0]["id"]);
-	    $delete = ($data["uid"]==$_SESSION["loginCRM"])?True:False;
+        $delete = ($data["uid"]==$_SESSION["loginCRM"])?True:False;
         }
     } else if ($_POST["getone"]) {
         //Eintrag der Auswahlliste der Zeiteinträge einer Firma holen
@@ -95,11 +95,11 @@
             $data["cur"] = $curr['name'];
         } else {
             $data["cur"] = getCurr();
-        }        
-        $data["active"] = "t";        
+        }
+        $data["active"] = "t";
     }
     if ($data["events"]) {
-	    $delete = False;
+        $delete = False;
     }
 
     if ($data["fid"]) $data["backlink"] = "firma1.php?Q=".$data["tab"]."&id=".$data["fid"];

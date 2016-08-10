@@ -5,22 +5,22 @@
     $head = mkHeader();
 ?>
 <html>
-	<head><title>LX - CRM - Partsedit</title>
-	<?php 
-		echo $menu['stylesheets'];
-		echo $menu['javascripts'];
-		echo $head['CRMCSS']; 
-		echo $head['JQUERY']; 
-		echo $head['JQUERYUI']; 
-		echo $head['THEME']; 
+    <head><title>LX - CRM - Partsedit</title>
+    <?php
+        echo $menu['stylesheets'];
+        echo $menu['javascripts'];
+        echo $head['CRMCSS'];
+        echo $head['JQUERY'];
+        echo $head['JQUERYUI'];
+        echo $head['THEME'];
 
 ?>
-	</head>
+    </head>
 <body>
-<?php 
+<?php
  echo $menu['pre_content'];
- echo $menu['start_content']; 
-	if ( isset( $_POST["sichern"] ) ) {
+ echo $menu['start_content'];
+    if ( isset( $_POST["sichern"] ) ) {
         $sql = "SELECT * FROM pricegroup ORDER by id";
         $prgr = $GLOBALS['dbh']->getAll($sql);
         $sqlparts = "UPDATE parts SET partnumber = '%s', description = '%s', lastcost = %0.5f, listprice = %0.5f, sellprice = %0.5f WHERE id = %d";
@@ -62,7 +62,7 @@
            };
         };
     };
-	if ( isset( $_POST["such"] ) ) {
+    if ( isset( $_POST["such"] ) ) {
         $where = array('1=1');
         $sql  = "SELECT P.id as pid,P.partnumber,P.description,P.lastcost,P.listprice,P.sellprice,";
         $sql .= "PC.pricegroup_id,PC.price,PC.id FROM parts P left join prices PC on P.id=PC.parts_id WHERE ";
@@ -83,15 +83,15 @@
                     //tut nicht wie es soll. Keine Ahnung warum.
                     $parts[$row['pid']] = array_slice($row,0,6);
                     if ( $prgr ) foreach ($prgr as $price ) { $parts[$row['pid']][$price['id']] = '';};
-                    if ( $row['pricegroup_id'] ) $parts[$row['pid']][$row['pricegroup_id']] = $row['price']; 
+                    if ( $row['pricegroup_id'] ) $parts[$row['pid']][$row['pricegroup_id']] = $row['price'];
                     $lastid = $row['pid'];
                 } else {
-                    $parts[$lastid][$row['pricegroup_id']] = $row['price']; 
+                    $parts[$lastid][$row['pricegroup_id']] = $row['price'];
                 }
             };
         }
-	};
-	$partsgrp=getAllPG();
+    };
+    $partsgrp=getAllPG();
 ?>
 
 <form name="parts" method="post" action="partsedit.php">
@@ -123,22 +123,22 @@
 ?>
 <form name="artikel" method="post" action="partsedit.php">
 <table class="karte" width="100%">
-	<tr><td>Artikelnummer</td>
-	    <td><input type="text" name="partnumber" value=""></td></tr>
-	<tr><td>Artikel:</td>
-	    <td><input type="text" name="description" value="" size="30"></td></tr>
-	<tr><td>Warengruppe:</td>
-	    <td>
-			<select name="partsgroup_id" Style="width:450px" >
-			<option value=''>Artikel ohne Warengruppe</option>
+    <tr><td>Artikelnummer</td>
+        <td><input type="text" name="partnumber" value=""></td></tr>
+    <tr><td>Artikel:</td>
+        <td><input type="text" name="description" value="" size="30"></td></tr>
+    <tr><td>Warengruppe:</td>
+        <td>
+            <select name="partsgroup_id" Style="width:450px" >
+            <option value=''>Artikel ohne Warengruppe</option>
 <?php
-	if ($partsgrp) foreach ($partsgrp as $zeile) {
- 		echo "\t<option value='".$zeile["id"]."'>".$zeile["partsgroup"]."</option>\n";
-	}
+    if ($partsgrp) foreach ($partsgrp as $zeile) {
+         echo "\t<option value='".$zeile["id"]."'>".$zeile["partsgroup"]."</option>\n";
+    }
 ?>
-			</select>
-		</td></tr>
-		<tr><td><input type="submit" name="such" value="suchen" ></td><td></td></tr>
+            </select>
+        </td></tr>
+        <tr><td><input type="submit" name="such" value="suchen" ></td><td></td></tr>
 </table>
 <?php }; echo "</form>"; echo $menu['end_content']; ?>
 </body>

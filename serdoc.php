@@ -15,7 +15,7 @@ $(function () {
     $('#fileupload').fileupload({
         dataType: 'json',
         add: function (e, data) {
-            if( !data.files[0].name.match(/\.(tex)|(rtf)|(swf)|(sxw)$/) ) {  
+            if( !data.files[0].name.match(/\.(tex)|(rtf)|(swf)|(sxw)$/) ) {
                 alert ('Falsches Dateiformat');
                 return false;
             }
@@ -37,8 +37,8 @@ $(function () {
                     url: 'jqhelp/serien.php',
                     dataType: 'json',
                     type: 'post',
-                    data : { 'datum': $('#formdate').val(), 'subject': $('#subject').val(), 
-                             'body': $('#body').val(), 'src': $('#src').val(), 
+                    data : { 'datum': $('#formdate').val(), 'subject': $('#subject').val(),
+                             'body': $('#body').val(), 'src': $('#src').val(),
                              'filename':file.name, 'task': 'brief' },
                     success: function(rc){
                             if ( !rc.rc ) {
@@ -58,17 +58,17 @@ $(function () {
                 progress + '%'
             );
             //$('#percent').replaceWith(progress+' %');
-            
+
         },
     });
 })
 );
 </script>
-<script>    
+<script>
         $(function() {
             $( "#formdate" ).datepicker($.datepicker.regional[ "de" ]);
         });
-</script>    
+</script>
 
 Daten f&uuml;r den Serienbrief:<br />
 <form name="serdoc" method="post">
@@ -85,5 +85,3 @@ Datei: <input id="fileupload" type="file" name="files[]" data-url="jqhelp/upload
 </div>
 <div id="uplfile"><div>
 <div id="msg"><div>
-
-

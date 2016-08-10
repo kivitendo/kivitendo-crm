@@ -1,7 +1,7 @@
 <?php
     require_once("inc/stdLib.php");
     include("inc/template.inc");
-    include("inc/wvLib.php");    
+    include("inc/wvLib.php");
     $t = new Template($base);
     $disp="style='display:none'";
     if ($_POST["search"] or $_GET["sernr"]) {
@@ -14,21 +14,21 @@
             $data=getArtnumber($_POST["partnumber"]."%");
         }
         if (count($data)>1) {
-            $t->set_file(array("vert" => "maschinenL.tpl"));        
+            $t->set_file(array("vert" => "maschinenL.tpl"));
             doHeader($t);
             $t->set_var(array(
                 action => "maschine1.php",
                 fldname => "serialnumber"
             ));
             $t->set_block("vert","Sernumber","Block1");
-            foreach($data as $zeile) {    
+            foreach($data as $zeile) {
                 $t->set_var(array(
                     number => $zeile["serialnumber"]."|".$zeile["parts_id"],
                     description    =>    $zeile["serialnumber"]." - ".$zeile["description"]." - ".$zeile["contractnumber"]." - ".$zeile["name"]
                 ));
                 $t->parse("Block1","Sernumber",true);
             }
-            $t->pparse("out",array("vert"));            
+            $t->pparse("out",array("vert"));
             exit;
         } else if (!$data) {
             $data["serialnumber"]="";
@@ -78,7 +78,7 @@
         customer => $data["name"],
         custid => $data["customer_id"]
     ));
-    $t->set_block("masch","History","Block1");    
+    $t->set_block("masch","History","Block1");
     if($hist) { foreach($hist as $zeile) {
         $open = ' ';
         if ($zeile["art"]=="RepAuftr") {

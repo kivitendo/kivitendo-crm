@@ -11,7 +11,7 @@
         } else if (count($vid)==1) {
             header("location:vertrag3.php?vid=".$vid[0]["cid"]);
         }
-    }    
+    }
 ?>
 <html>
     <head><title></title>
@@ -26,7 +26,7 @@
     $(function() {
         $("#treffer")
             .tablesorter({widthFixed: true, widgets: ['zebra']})
-    });    
+    });
     </script>
 
 <body >
@@ -35,7 +35,7 @@
  <div class="ui-widget-content" style="height:600px">
 <p class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0.6em;">Wartungsvertr&auml;ge suchen</p>
 <form name="formular" enctype='multipart/form-data' action="vertrag1.php" method="post">
-<input type="text" name="vid" size="20" value="" tabindex="1"> &nbsp; 
+<input type="text" name="vid" size="20" value="" tabindex="1"> &nbsp;
 <input type="submit" name="ok" value="suchen"><br>Vertragsnummer
 </form>
 <?php  echo $msg; ?><br>

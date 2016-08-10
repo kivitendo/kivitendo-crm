@@ -87,7 +87,7 @@
                     $t->set_var(array(
                         col => "we",
                         zeit => sprintf("%02d:$sq",$i),
-                        text => $termdata["$i:$sq"],      
+                        text => $termdata["$i:$sq"],
                         /* hier habe ich ein Problem!!!
                          * Wenn die Benutzer unterschiedliche Squenzen (Zeitabstände) haben,
                          * werden nicht alle Termine angezeigt
@@ -108,7 +108,7 @@
             year    => $year,
             CUID    => $_GET["cuid"],
         ));
-    } else if (substr($ansicht,0,1)=="K" or substr($ansicht,0,1)=="S") {    
+    } else if (substr($ansicht,0,1)=="K" or substr($ansicht,0,1)=="S") {
         $data=getTerminList(substr($ansicht,1,-1));
         $t->set_file(array("term" => "terminlist.tpl"));
         $t->set_block("term","Liste","Block");
@@ -140,7 +140,7 @@
         $ft=feiertage($year);
         $ftk=array_keys($ft);
         $x=mondaykw($kw,$year);
-        $kw=date("W",$x); 
+        $kw=date("W",$x);
         $kw1=date("W",$x-604800);
         $kw2=date("W",$x+604800);
         $year1=date("Y",$x-604800);
@@ -159,10 +159,10 @@
         if ($data) foreach($data as $row) {
             if ($row["termin"]<>$lastt || $lastd<>$row["tag"]) {
                 $w=date("w",mktime(0,0,0,$row["monat"],$row["tag"],$row["jahr"]))-1;
-                if ($row["member"]!=$_SESSION["loginCRM"]) { $rcol="<font color='#44ff44'>"; } 
-                else { 
+                if ($row["member"]!=$_SESSION["loginCRM"]) { $rcol="<font color='#44ff44'>"; }
+                else {
                     if ($row["ccolor"]) $rcol="<font color='".$row["ccolor"]."'>";
-                    else                $rcol="<font color='#4444ff'>"; 
+                    else                $rcol="<font color='#4444ff'>";
                 }
                 $termdate[$w][]=array(
                     "txt"=>$rcol.(($row["idx"]>0)?" ^^^ ":$row["startzeit"])." ".(($row["privat"]=='t' && $row["member"]!=$_SESSION["loginCRM"])?"Privat":$row["cause"]),"</font>","id"=>$row["termin"],

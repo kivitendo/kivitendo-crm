@@ -64,7 +64,7 @@
         $cdata["CRMUSER"]=$_SESSION["loginCRM"];
         updCall($cdata);
         documenttotc($cdata["id"],$dbfile->id);
-        echo "Dokument erstellt"; 
+        echo "Dokument erstellt";
         exit();
     };
     if ($fid) {

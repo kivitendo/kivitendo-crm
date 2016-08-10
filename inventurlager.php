@@ -54,18 +54,18 @@ if ($_POST['ok'] == 'sichern') {
       Kommentar: <input type="text"   name="comment" value="<?php echo $comment ?>">
       Datum der Buchung: <input type="text"   name="budatum" id="budatum" value="<?php echo $now; ?>" size="10" >
       <br />
-      Transfertype: 
+      Transfertype:
       <input type="radio" name="transtype" value="1" checked>Korrektur
       <input type="radio" name="transtype" value="2">Einlagern / Entnahme
       <input type="radio" name="transtype" value="3">Gefunden / Fehlbestand
       <table>
       <tr><td>Nummer</td><td>Artikel</td><td>Menge</td><td>Chargenumber</td><td>Bestbefore JJJJ-MM-DD</td></tr>
-<?php $last = 0; foreach ($artikel as $part) { 
+<?php $last = 0; foreach ($artikel as $part) {
          if ( $last == $part['parts_id'] ) {
              continue;
          }
          $last = $part['parts_id'];
-         echo "<tr><td>".$part['partnumber']."</td><td>".$part['partdescription']."</td><td nowrap>"; 
+         echo "<tr><td>".$part['partnumber']."</td><td>".$part['partdescription']."</td><td nowrap>";
          if ($part['qty'] == '') {
              $qty = '';
          } else {
@@ -80,12 +80,12 @@ if ($_POST['ok'] == 'sichern') {
          echo '<input type="text"   name="qty[]"          value="'.$qty.'" size="5">'.$part['partunit'].' ('.$onhand.')</td><td>';
          if ($lager=='') {
             echo '<input type="type" name="chargenumber[]" value=""></td><td>';
-         } else { 
+         } else {
             echo '<input type="hidden" name="chargenumber[]" value="'.$part['chargenumber'].'">'.$part['chargenumber'].'</td><td>';
          }
          if ($lager=='') {
              echo '<input type="text" name="bestfefore[]"   value=""></td>';
-         } else { 
+         } else {
              echo '<input type="hidden" name="bestfefore[]"   value="'.$part['bestbefore'].'">'.$part['bestbefore'].'</td>';
          };
          echo "<tr>";
@@ -94,11 +94,11 @@ if ($_POST['ok'] == 'sichern') {
       </table>
       <input type="submit" name="ok" value="sichern">
       </form>
-<?php   
+<?php
    } else {
-      echo "Artikel nicht gefunden: ".$_POST['partnumber']; 
+      echo "Artikel nicht gefunden: ".$_POST['partnumber'];
    }
-}  // endif suche 
+}  // endif suche
    $orte = getLagerOrte();
    $pg = getPartsGroup();
    $Ooptions = "";
@@ -127,7 +127,7 @@ Inventurbuchung<br />
     <input type='radio' name='obsolete' value='f' checked>Nur gültige <input type='radio' name='obsolete' value='t'>Nur ungültige <input type='radio' name='obsolete' value=''>Alle Artikel<br/>
     <input type="submit" name="ok" value="suchen">
 </form>
-<?php 
+<?php
 echo $menu['end_content'];
  ?>
 </body>

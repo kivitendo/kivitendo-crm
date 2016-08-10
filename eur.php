@@ -1,15 +1,15 @@
 <?php
-	require_once("inc/stdLib.php");
+    require_once("inc/stdLib.php");
     $menu = $_SESSION['menu'];
     $head = mkHeader();
 ?>
 <html>
-	<head><title></title>
-    <?php echo $menu['stylesheets']; 
+    <head><title></title>
+    <?php echo $menu['stylesheets'];
           echo $head['CRMCSS'];
-          echo $menu['javascripts']; 
+          echo $menu['javascripts'];
           echo $head['THEME'];?>
-	<link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['baseurl'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
+    <link type="text/css" REL="stylesheet" HREF="<?php echo $_SESSION['baseurl'].'css/'.$_SESSION["stylesheet"]; ?>/main.css">
     <script type="text/javascript" src="<?php echo $_SESSION['baseurl']; ?>crm/jquery-ui/jquery.js"></script>
     <?php echo $menu['javascript']; ?>
 
@@ -22,7 +22,7 @@ if ($_POST["ok"]=="erzeugen") {
 
     /**
      * getBugru: Buchungsgruppen holen
-     * 
+     *
      * @return Array
      */
     function getTax() {
@@ -47,7 +47,7 @@ if ($_POST["ok"]=="erzeugen") {
 
     /**
      * getRechnungen: Rechnungen auslesen
-     * 
+     *
      * @return Array()
      */
     function getRechnungen($von,$bis,$tz,$istsoll) {
@@ -62,7 +62,7 @@ if ($_POST["ok"]=="erzeugen") {
             $sqlar ="ar.taxzone_id=3 and ";
         } else if ($tz=="0") {
             $sqlar ="ar.taxzone_id=0 and ";
-        }      
+        }
         if ($istsoll==1) {
             $bezug='datepaid';
         } else {
@@ -87,22 +87,22 @@ if ($_POST["ok"]=="erzeugen") {
         return array($rechng,$steuersatz);
     }
 
-	function schaltjahr($jahr) {
-		// Funktion noch verbessern?
-		if ($jahr % 4 <> 0) return false;
-		if ($jahr % 400 == 0 ) return true;
-		if ($jahr % 100 <> 0 ) return false;
-		return true;
-	}
+    function schaltjahr($jahr) {
+        // Funktion noch verbessern?
+        if ($jahr % 4 <> 0) return false;
+        if ($jahr % 400 == 0 ) return true;
+        if ($jahr % 100 <> 0 ) return false;
+        return true;
+    }
 
-	$Day=array(0,"31","28","31","30","31","30","31","31","30","31","30","31");
-	if ($_POST["quartal"]<>"") {  
-		$start=array(0,"01","04","07","10");
-		$stopM=array(0,"03","06","09","12");
-		$stopD=array(0,"31","30","30","31");
-		$von = $_POST["jahr"]."-".$start[$_POST["quartal"]]."-01";
-		$bis = $_POST["jahr"]."-".$stopM[$_POST["quartal"]]."-".$stopD[$_POST["quartal"]];
-	} else if ($_POST["monatbis"]<>"" or $_POST["monatvon"]<>"") {
+    $Day=array(0,"31","28","31","30","31","30","31","31","30","31","30","31");
+    if ($_POST["quartal"]<>"") {
+        $start=array(0,"01","04","07","10");
+        $stopM=array(0,"03","06","09","12");
+        $stopD=array(0,"31","30","30","31");
+        $von = $_POST["jahr"]."-".$start[$_POST["quartal"]]."-01";
+        $bis = $_POST["jahr"]."-".$stopM[$_POST["quartal"]]."-".$stopD[$_POST["quartal"]];
+    } else if ($_POST["monatbis"]<>"" or $_POST["monatvon"]<>"") {
         if ($_POST["monatvon"]<>"") {
             $von = $_POST["jahr"]."-".$_POST["monatvon"]."-01";
         } else {
@@ -110,14 +110,14 @@ if ($_POST["ok"]=="erzeugen") {
         }
         if ($_POST["monatbis"]=="" or $_POST["monatbis"]<$_POST["monatvon"]) $_POST["monatbis"] = $_POST["monatvon"];
         if ($_POST["monatbis"]=="2") {
-			if (schaltjahr($_POST["jahr"])) {
-				$day=29;
-			} else {
-				$day=28;
-			}
-		} else {
-			$day=$Day[$_POST["monatbis"]];
-		} 
+            if (schaltjahr($_POST["jahr"])) {
+                $day=29;
+            } else {
+                $day=28;
+            }
+        } else {
+            $day=$Day[$_POST["monatbis"]];
+        }
         $bis = $_POST["jahr"]."-".$_POST["monatbis"]."-".$day;
     } else {
         $von = $_POST["jahr"]."-01-01";
@@ -125,7 +125,7 @@ if ($_POST["ok"]=="erzeugen") {
     }
     $rechnungen = getRechnungen($von,$bis,$_POST["tz"],$_POST["istsoll"]);
     if ( $rechnungen ) {
-        //echo "<pre>";print_r($rechnungen); echo "</pre>";	
+        //echo "<pre>";print_r($rechnungen); echo "</pre>";
         $zeile = "<tr><td><a href='../is.pl?action=edit&id=%s' target='_blank'>%s</a></td>";
         $zeile.= "<td>%s</td>";
         $zeile.= "<td><a href='../ct.pl?action=edit&db=customer&id=%s' target='_blank'>%s</a></td>";
@@ -149,9 +149,9 @@ if ($_POST["ok"]=="erzeugen") {
             $transdate = split("-",$row["transdate"]);
             $transdate = $transdate[2].".".$transdate[1].".";
             $mwst = $row["amount"]- $row["netamount"];
-            if ($mwst<>0) { 
+            if ($mwst<>0) {
                 $mwst = sprintf("%0.2f",$mwst) ;
-            } else { 
+            } else {
                 $mwst = "";
                 if ($row["taxzone_id"]==1) {
                     $nettobrutto1 += $row["netamount"];
@@ -171,10 +171,10 @@ if ($_POST["ok"]=="erzeugen") {
             foreach ($rechnungen[1] as $rate) {
                     $tax[$row["taxzone_id"]][$rate]['rate'] += $row[$rate];
                     $m1 += $row[$rate];
-                    if ($row[$rate]) { 
-                        $tax[$row["taxzone_id"]][$rate]['amount'] += $row[$rate]/$rate*100; 
-                        echo "<td align='right'>".sprintf("%0.2f",$row[$rate])."</td>"; 
- 	   	    $m2 = sprintf("$tz%0.2f",$row[$rate]);
+                    if ($row[$rate]) {
+                        $tax[$row["taxzone_id"]][$rate]['amount'] += $row[$rate]/$rate*100;
+                        echo "<td align='right'>".sprintf("%0.2f",$row[$rate])."</td>";
+                $m2 = sprintf("$tz%0.2f",$row[$rate]);
                     } else {
                         if ($row["taxzone_id"]==1 or $row["taxzone_id"]==3)  $tax[$row["taxzone_id"]][$rate]['amount'] += $row["netamount"];
                         echo "<td></td>";
@@ -185,7 +185,7 @@ if ($_POST["ok"]=="erzeugen") {
             $netto += $row["netamount"];
             echo "<td>$m1 ".round($mwst-$m1,3)."</td></tr>\n";
             $mwstsum += $m1;
-            $line = sprintf($zeilec,$row["invnumber"],$transdate,$row["name"],$row["ustid"],sprintf("%0.2f",$row["amount"]),sprintf("%0.2f",$row["netamount"]),$mwst,$m2); 
+            $line = sprintf($zeilec,$row["invnumber"],$transdate,$row["name"],$row["ustid"],sprintf("%0.2f",$row["amount"]),sprintf("%0.2f",$row["netamount"]),$mwst,$m2);
             fputs($f,$line);
         }
         echo "<tr><td colspan='$colsp'><hr></td></tr>";

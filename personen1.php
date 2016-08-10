@@ -26,10 +26,10 @@
             $t->set_file(array("pers1" => "personen1L.tpl"));
             $t->set_block("pers1","Liste","Block");
             $i=0;
-            if ($_POST["FID1"]) { 
-                $snd="<input type='submit' name='insk' value='.:allocate:.'><br>[<a href='firma2.php?Q=$Quelle&fid=".$_POST["FID1"]."'>.:back:.</a>]";  
-            } else { 
-                $snd=""; $dest=""; 
+            if ($_POST["FID1"]) {
+                $snd="<input type='submit' name='insk' value='.:allocate:.'><br>[<a href='firma2.php?Q=$Quelle&fid=".$_POST["FID1"]."'>.:back:.</a>]";
+            } else {
+                $snd=""; $dest="";
             };
             clearCSVData();
             $header = array("ANREDE","TITEL","NAME1","NAME2","LAND","PLZ","ORT","STRASSE","TEL","FAX","EMAIL","FIRMA","FaID","GESCHLECHT","ID");
@@ -66,7 +66,7 @@
                 $save = array($zeile["cp_greeting"],$zeile["cp_title"],$zeile["cp_name"],$zeile["cp_givenname"],
                         $zeile["cp_country"],$zeile["cp_zipcode"],$zeile["cp_city"],$zeile["cp_street"],
                         $zeile["cp_phone1"],$zeile["cp_fax"],$zeile["cp_email"],$zeile["name"],$zeile["cp_cv_id"],
-                        $zeile["cp_gender"],$zeile["cp_id"]); 
+                        $zeile["cp_gender"],$zeile["cp_id"]);
                 if ( $cvar > 0 ) {
                     $rs = getFirmaCVars($zeile["cp_cv_id"]);
                     if ( $rs ) {
@@ -79,11 +79,11 @@
                 }
                 insertCSVData($save,$zeile["cp_id"]);
                 if ( $_POST["FID1"] ) {
-                    $insk = "<input type='checkbox' name='kontid[]' value='".$zeile["cp_id"]."'>"; 
+                    $insk = "<input type='checkbox' name='kontid[]' value='".$zeile["cp_id"]."'>";
                     $js   = '';
-                } else { 
+                } else {
                     $js   = 'showK('.$zeile["cp_id"].',"'.$zeile["tbl"].'");'; //showK({PID},'{TBL}')
-                    $insk = ''; 
+                    $insk = '';
                 };
                 if ( $i < $_SESSION['listLimit'] ) {
                     $t->set_var(array(

@@ -8,21 +8,21 @@ if ( isset($_GET) ) while ( list($key,$val) = each ($_GET) ) {
     if ( $key == 'action' ) {
         if ( $val != 'section_menu' ) $link = $val;
     } else if ( $key == 'level' ) {
-		continue;
+        continue;
     } else if ( $key == 'dir' ) {
         $dir  = 'crm/'.$val.'/';
-	} else {
+    } else {
         $parameter[] = $key.'='.$val;
-	};
+    };
 } else {
-	exit(1);
-} 
+    exit(1);
+}
 if ( $dir == '' ) $dir = 'peppershop';
 if ( $link == '' ) $error = true;
 $parameter = join("&",$parameter);
 
 if ( substr($link,-5) != '.html' ) $link .= '.php';
-    
+
 $menu = $_SESSION['menu'];
 $head = mkHeader();
 echo '<html>
@@ -38,7 +38,7 @@ echo '</head>
 <body>';
 echo $menu['pre_content'];
 echo $menu['start_content'];
-if ( $error ) { echo "Ungültige Parameter !$dir!$link!"; } 
+if ( $error ) { echo "Ungültige Parameter !$dir!$link!"; }
 else {
 ?>
 

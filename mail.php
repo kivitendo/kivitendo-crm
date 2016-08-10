@@ -14,11 +14,11 @@
     } else {
         $popup = false;
     }
-    if ($_POST["QUELLE"] != '') { 
-        $referer=$_POST["QUELLE"]."?popup=".$_POST['popup']; 
+    if ($_POST["QUELLE"] != '') {
+        $referer=$_POST["QUELLE"]."?popup=".$_POST['popup'];
         $TO=$_POST["TO"];
         $KontaktTO=$_POST["KontaktTO"];
-    } else if ($_GET["TO"] != '') { 
+    } else if ($_GET["TO"] != '') {
         $referer=getenv("HTTP_REFERER");
         $TO=$_GET["TO"];
         $KontaktTO=$_GET["KontaktTO"];
@@ -31,14 +31,14 @@
                 $btn='<a href="mail.php"><image src="image/new.png" alt=".:new:." title=".:new:." border="0" ></a>';
                 $hide="visible";
             }
-        } else { 
+        } else {
             $referer = $_SESSION['baseurl'].'/crm/mail.php';
             $btn='<a href="mail.php"><image src="image/new.png" alt=".:new:." title=".:new:." border="0" ></a>';
             $hide="visible";
         };
         $referer .= "&popup=".$_POST['popup'];
-    } else { 
-        $referer = ''; 
+    } else {
+        $referer = '';
         $btn='<a href="mail.php"><image src="image/new.png" alt=".:new:." title=".:new:." border="0" ></a>';
         $hide="visible";
     };
@@ -48,11 +48,11 @@
         $okT=true; $okC=true; $okA=true; $msg="";
         if ($_POST["TO"]) {
             $TO=preg_replace( "/[^a-z0-9 !?:;,.\/_\-=+@#$&\*\(\)<>]/im", "", $_POST["TO"]);
-            $rc=chkMailAdr($TO); if($rc<>"ok") { $okT=false; $msg="TO:".$rc; }; 
+            $rc=chkMailAdr($TO); if($rc<>"ok") { $okT=false; $msg="TO:".$rc; };
         };
-        if ($_POST["CC"]) { 
+        if ($_POST["CC"]) {
             $CC=preg_replace( "/[^a-z0-9 !?:;,.\/_\-=+@#$&\*\(\)<>]/im", "", $_POST["CC"]);
-            $rc=chkMailAdr($CC); if($rc<>"ok") { $okC=false; $msg.=" CC:".$rc; }; 
+            $rc=chkMailAdr($CC); if($rc<>"ok") { $okC=false; $msg.=" CC:".$rc; };
         };
         if (!$_POST["TO"] && !$_POST["CC"]) {$okT=false; $msg="Kein Empf&auml;nger";};
         $user=getUserStamm($_SESSION["loginCRM"]);
@@ -75,7 +75,7 @@
             $mail =& Mail::factory("mail");
             $Subject = preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["Subject"]);
             $SubjectMail = mb_encode_mimeheader($Subject, $_SESSION["charset"] , 'Q', '');
-            $headers=array( 
+            $headers=array(
                     "Return-Path"    => $abs,
                     "Reply-To"    => $abs,
                     "From"        => $abs,
@@ -112,7 +112,7 @@
             } else {
                 $headers["Content-Type"] = "text/plain; charset=".$_SESSION["charset"];
             }
-            
+
             $body = $mime->get(array("text_encoding"=>"quoted-printable","text_charset"=>$_SESSION["charset"]));
             $hdr = $mime->headers($headers);
             $mail->_params="-f ".$user["email"];
@@ -169,7 +169,7 @@
                         $data["fid"]=$empf["cp_cv_id"];
                         $data["CID"]==$empf["cp_id"];
                         $data["nummer"]=$empf["nummer"];
-                    };        
+                    };
                     // Einträge in den Kontaktverlauf
                     if ($_POST["KontaktTO"] && substr($_POST["KontaktTO"],0,1)<>"E"){
                         $data["CID"]=substr($_POST["KontaktTO"],1);
@@ -197,9 +197,9 @@
             }
         } else {
             $Subject=preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["Subject"]);
-            $BodyText=preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["BodyText"]);    
+            $BodyText=preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["BodyText"]);
         }
-    } else {    
+    } else {
         $user=getUserStamm($_SESSION["loginCRM"]);
         $BodyText="";// \n".$MailSign;
     }

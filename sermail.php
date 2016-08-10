@@ -40,12 +40,12 @@
         $Subject=preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["Subject"]);
         $BodyText=preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["BodyText"]);
         $okC=true; $okA = true;
-        if ($_POST["CC"]<>"") { 
+        if ($_POST["CC"]<>"") {
             $CC=preg_replace( "/[^a-z0-9 !?:;,.\/_\-=+@#$&\*\(\)]/im", "", $_POST["CC"]);
             $CC=preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $CC);
-            $rc=chkMailAdr($CC); 
-            if($rc<>"ok") { 
-                $okC=false; $msg.=" CC:".$rc; 
+            $rc=chkMailAdr($CC);
+            if($rc<>"ok") {
+                $okC=false; $msg.=" CC:".$rc;
             } else {
                 insertCSVData(array('CC',$CC,'','','','','','','',$CC,'',-1,'','','','','','','','',''),-1);
             }
@@ -103,7 +103,7 @@
     }  else {
         $BodyText=" \n".str_replace("\r","",$user["mailsign"]);
     }
-    
+
         $t->set_file(array("mail" => "sermail.tpl"));
         $t->set_var(array(
                 Msg     => $msg,
@@ -114,5 +114,5 @@
                 SENDTXT  => $sendtxt
         ));
         $t->pparse("out",array("mail"));
-            
+
 ?>

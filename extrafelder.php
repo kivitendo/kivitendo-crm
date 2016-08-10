@@ -8,10 +8,10 @@ CREATE SEQUENCE extraid
     NO MINVALUE
     CACHE 1;
 create table extra_felder (
-id	 integer DEFAULT nextval('extraid'::text) NOT NULL,
-owner	 char(10),	-> [CVP]id
-fkey	 text,		-> Feldname
-fval	 text		-> Wert zum Feld
+id     integer DEFAULT nextval('extraid'::text) NOT NULL,
+owner     char(10),    -> [CVP]id
+fkey     text,        -> Feldname
+fval     text        -> Wert zum Feld
 );
 CREATE INDEX extrafld_key ON extra_felder USING btree (owner);
 */
@@ -23,14 +23,14 @@ $owner=($_GET["owner"])?$_GET["owner"]:$_POST["owner"];
 
 function suchFelder($data) {
     $tab = substr($data['owner'],0,1);
-    foreach ($data as $key=>$val) { 
+    foreach ($data as $key=>$val) {
         if ($key == "suche") continue;
         if ($key == "owner") continue;
         if ($val) $where .= "(fkey = '$key' and  fval ilike '$val%' and tab = '$tab') or ";
     }
     $where = substr($where,0,-3) ;
     $sqle="select owner from extra_felder where ".$where;
-    if ($tab == "C") { 
+    if ($tab == "C") {
         $sql = "select * from customer where id in ($sqle)";
     } else if ($tab == "V") {
         $sql = "select * from vendor where id in ($sqle)";
@@ -44,40 +44,40 @@ function suchFelder($data) {
 }
 
 function saveFelder($data) {
-	$nosave=array("save","owner","suche");
-	$owner=$data["owner"];
-	$rc=$GLOBALS['dbh']->query("BEGIN");
+    $nosave=array("save","owner","suche");
+    $owner=$data["owner"];
+    $rc=$GLOBALS['dbh']->query("BEGIN");
         $tab = substr($owner,0,1);
         $owner = substr($owner,1);
-	$sql="delete from extra_felder where tab = '$tab' and owner = '$owner'";
-	$rc=$GLOBALS['dbh']->query($sql);
-	foreach ($data as $key=>$val) {
-		if (in_array($key,$nosave)) continue;
-		$val=trim($val);
-		$rc=$GLOBALS['dbh']->insert('extra_felder',array('tab','owner','fkey','fval'),array($tab,$owner,$key,$val));
-		if (!$rc) { $GLOBALS['dbh']->query("ROLLBACK"); return false; };
-	}
-	$rc=$GLOBALS['dbh']->query("COMMIT");
-	return true;
+    $sql="delete from extra_felder where tab = '$tab' and owner = '$owner'";
+    $rc=$GLOBALS['dbh']->query($sql);
+    foreach ($data as $key=>$val) {
+        if (in_array($key,$nosave)) continue;
+        $val=trim($val);
+        $rc=$GLOBALS['dbh']->insert('extra_felder',array('tab','owner','fkey','fval'),array($tab,$owner,$key,$val));
+        if (!$rc) { $GLOBALS['dbh']->query("ROLLBACK"); return false; };
+    }
+    $rc=$GLOBALS['dbh']->query("COMMIT");
+    return true;
 }
 
 function getFelder($owner,&$t) {
-	$t->set_var(array(owner => $owner));
+    $t->set_var(array(owner => $owner));
     $tab = substr($owner,0,1);
     $owner = substr($owner,1);
-	$sql="select * from extra_felder where tab = '$tab' and owner='$owner'";
-	$rs=$GLOBALS['dbh']->getAll($sql);
-	if ($rs) {
-		foreach($rs as $row) {
-			$key=$row["fkey"];
-			$val=$row["fval"];
-			$t->set_var(array(
-				$key => $val,
-				$key.$val => ($val)?"selected":"",
-				$key."_".$val => ($val)?"checked":""
-			));
-		}
-	}
+    $sql="select * from extra_felder where tab = '$tab' and owner='$owner'";
+    $rs=$GLOBALS['dbh']->getAll($sql);
+    if ($rs) {
+        foreach($rs as $row) {
+            $key=$row["fkey"];
+            $val=$row["fval"];
+            $t->set_var(array(
+                $key => $val,
+                $key.$val => ($val)?"selected":"",
+                $key."_".$val => ($val)?"checked":""
+            ));
+        }
+    }
 }
 $maske=substr($owner,0,1);
 
@@ -86,11 +86,11 @@ if ($_POST["save"]) saveFelder($_POST);
 if ($_POST["suche"]) {
     $daten = suchFelder($_POST);
     if (count($daten)==1 && $daten<>false) {
-	    if ($maske=="P") {
-            	header ("location:kontakt.php?id=".$daten[0]["cp_id"]);
-	    } else {
-            	header ("location:firma1.php?Q=$maske&id=".$daten[0]["id"]);
-	    }
+        if ($maske=="P") {
+                header ("location:kontakt.php?id=".$daten[0]["cp_id"]);
+        } else {
+                header ("location:firma1.php?Q=$maske&id=".$daten[0]["id"]);
+        }
     } else if (count($daten)>1) {
         clearCSVData();
         if ($maske=="P") {
@@ -104,7 +104,7 @@ if ($_POST["suche"]) {
         }
         $t->set_block("fa1","Liste","Block");
         $t->set_var(array(
-            'CRMCSS' => $head['CRMCSS'], 
+            'CRMCSS' => $head['CRMCSS'],
             'FAART'  => ($Q=="C")?"Customer":"Vendor",
             'msg'    => $msg,
         ));
@@ -155,7 +155,7 @@ if ($_POST["suche"]) {
                         'Q' => $Quelle,
                     ));
                $t->parse("Block","Liste",true);
-	       $i++;
+           $i++;
             }
         } else {
             foreach ($daten as $zeile) {
@@ -190,7 +190,7 @@ $t->set_file(array("extra" => "extra$maske.tpl"));
 $visible = 'style="visibility:visible"';
 $hidden = 'style="visibility:hidden"';
 $t->set_var(array(
-    'CRMCSS'         => $head['CRMCSS'], 
+    'CRMCSS'         => $head['CRMCSS'],
     'STYLESHEETS'    => $menu['stylesheets'],
     'THEME'          => $head['THEME'],
     'JQUERY'         => $_SESSION['baseurl'].'crm/',

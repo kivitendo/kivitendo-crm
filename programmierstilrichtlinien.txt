@@ -10,7 +10,7 @@ Diese Regeln sind keine Schikane, sondern erleichtern allen das Leben!
 
 --------------------------------------------------------------------------
 
-0. Falls nicht anders definiert, gelten im Zweifel die Konvention für die 
+0. Falls nicht anders definiert, gelten im Zweifel die Konvention für die
    PEAR-Coding-Standards (s.a. http://pear.php.net/manual/de/standards.php)
 
 1. Es werden keine "echten" TAB-Zeichen sondern Leerzeichen verwendet.
@@ -103,11 +103,11 @@ Diese Regeln sind keine Schikane, sondern erleichtern allen das Leben!
   9.2 Seitliche hängende Kommentare sollten einheitlich formatiert werden.
 
   9.3 Die Kommentare sollten phpdoc-konform sein (Siehe auch: http://www.phpdoc.org/)
- 
-  9.4 Warum man das tun sollte: 
+
+  9.4 Warum man das tun sollte:
       http://manual.phpdoc.org/HTMLSmartyConverter/HandS/phpDocumentor/tutorial_phpDocumentor.pkg.html
 
-10. Die Maximale Zeilenlänge ist nicht bescränkt. Zeilenlängen <= 80 
+10. Die Maximale Zeilenlänge ist nicht bescränkt. Zeilenlängen <= 80
     helfen, weil sie dann im Textmodus / per SSH deutlich besser lesbar
     sind. Oft genug ist es aber nicht möglich oder nur unter großen
     Verrenkungen, diese Vorgabe einzuhalten.
@@ -116,14 +116,14 @@ Diese Regeln sind keine Schikane, sondern erleichtern allen das Leben!
 
 11. Dateien sollten im UTF-8 Format gespeichert werden.
 
-12. Zeilenumbrüche bitte UNIX - Style (\n) 
+12. Zeilenumbrüche bitte UNIX - Style (\n)
 
 
-    
+
 --------------------------------------------------------------------------
 
 
-A.1 Einstellung für vim 
+A.1 Einstellung für vim
 Folgende Einstellungen für vim-Benutzer
 .vimrc:
 set fileencodings=utf-8
@@ -139,4 +139,3 @@ A.3 Zum Überprüfen von Leerzeichen oder Tabstops folgende Ergänzungen
 .vimrc
 set list listchars=trail:.
 highlight SpecialKey ctermfg=DarkGray
-

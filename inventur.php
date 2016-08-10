@@ -22,7 +22,7 @@ echo $head['THEME'];
 <body>
 <?php
  echo $menu['pre_content'];
- echo $menu['start_content'];        
+ echo $menu['start_content'];
 if ($_POST["erstellen"]=="erstellen") {
    $artikel = getLager($_POST);
    $art = $_POST['art'];
@@ -41,12 +41,12 @@ if ($_POST["erstellen"]=="erstellen") {
         } else {
             $fname = $art;
             $link = '<a href="tmp/'.$art.'.pdf">Liste</a>';
-        }    
+        }
         $f = fopen('tmp/'.$art.'.tex','w');
         $pre = preg_replace("/<%partsgroup%>/i",$artikel[0]['partsgroup'],$vorlage['pre']);
         $pre = preg_replace("/<%datum%>/i",date('d.m.Y'),$pre);
         $rc = fputs($f,$pre);
-	$gesamtsumme = 0;
+    $gesamtsumme = 0;
         $pgsumme = 0;
         foreach($artikel as $part) {
             //print_r($part); echo "<br>";
@@ -72,19 +72,19 @@ if ($_POST["erstellen"]=="erstellen") {
                 if ($key == 'bestand') {
                 };
                 if ( $key == 'ep' ) {
-			$ep = $val;
-			$val = sprintf('%0.2f',$val);
-		}
+            $ep = $val;
+            $val = sprintf('%0.2f',$val);
+        }
                 if ( $key == 'bestand' ) {
-   		     	$qty = $val * 1;
-			if ( floor($qty) == $qty ) {
-				$val = sprintf('%7d',$qty);
-			} else {
-				while (substr($val,-1) == '0') { $val = substr($val,0,-1); }
-				while (strlen($val) < 7 ) { $val = ' '.$val; };
-			}
+                    $qty = $val * 1;
+            if ( floor($qty) == $qty ) {
+                $val = sprintf('%7d',$qty);
+            } else {
+                while (substr($val,-1) == '0') { $val = substr($val,0,-1); }
+                while (strlen($val) < 7 ) { $val = ' '.$val; };
+            }
                         if ($_POST['bestand'] != '1' and $art == 'inventur') $val = '';
-		};
+        };
                 $line = preg_replace("/<%$key%>/i",$val,$line);
             }
             $summe = sprintf('%0.2f',$qty*$ep);
@@ -96,7 +96,7 @@ if ($_POST["erstellen"]=="erstellen") {
         }
         $line = preg_replace("/<%gesamtsumme%>/i",sprintf('%0.2f',$gesamtsumme),$vorlage['post']);
         $rc = fputs($f,$line);
-        fclose($f); 
+        fclose($f);
         closeinventur($art,$fname);
         echo $link;
    } else {

@@ -9,9 +9,20 @@
 {JQCALCULATOR}
 {FANCYBOX}
 {QRCODE}
+{JQUERY}
+{JQUERYUI}
 
-<script type="text/javascript" src="{BASEPATH}/lxcars/jQueryAddOns/date-time-picker.js"></script>
-<script type="text/javascript" src="{BASEPATH}/lxcars/jQueryAddOns/german-date-time-picker.js"></script>
+{BASEPATH}
+
+<script type="text/javascript" src="{BASEPATH}crm/jquery-ui/jquery.js"></script> 
+<script type="text/javascript" src="{BASEPATH}crm/jquery-ui/ui/jquery-ui.js"></script>
+<script type="text/javascript" src="{BASEPATH}lxcars/jQueryAddOns/date-time-picker.js"></script>
+<script type="text/javascript" src="{BASEPATH}lxcars/jQueryAddOns/german-date-time-picker.js"></script>
+<link type="text/css" REL="stylesheet" HREF="../../css/{ERPCSS}"></link>
+<link rel="stylesheet" type="text/css" href="{BASEPATH}crm/jquery-ui/themes/base/jquery-ui.css"> 
+
+
+
 <script language="JavaScript" type="text/javascript">
 
     $(document).ready(function() {
@@ -43,19 +54,19 @@
                         success: function(){
                             alert("Sent");
                             $("#contactsdialog").dialog("close");     
+                        },
+                        error:  function(){
+                            alert("Sending of data failed!");
                         }
                     })
-                    
-                        //$(this).dialog("close");
-                        //return false;
-                        //event.stopPropagation();
+ 
                 }
             },
             {
                 text: 'Cancel',//translate
                 click: function(){
                     alert("Cancelled");                
-                    $(this).dialog('close');                                
+                    $("#contactsdialog").dialog("close");                                
                     //return false;
                     //event.stopPropagation();	
                 }
@@ -104,8 +115,8 @@
         //$('#mess').dialog("open").html('This feature is currently deactivated. It will be new implemented with the next CRM version..');
         //F1=open("getCall.php?Q={Q}&fid={FID}&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");             
         $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>Subject</label> <input type="text" name="subject"> '+
-            '<label>Date</label> <input type="text" name="date" id="datetime"> ' +
-            '<label>Time</label> <input type="text" name="time" id="timepicker" > <button type="button" id="set_time">Set Time</button> </p>'+
+            '<label>Date / Time</label> <input type="text" name="date" id="datetime" > ' +
+            //'<label>Time</label> <input type="text" name="time" id="timepicker" > <button type="button" id="set_time">Set Time</button> </p>'+
             '<p><label>Comments</label> <textarea name="comments" rows="10" cols="60" wrap="hard"></textarea> </p>'+
             '<p> <fieldset> <legend>Type of Contact: </legend>'+ 
             '<input type="radio" name="type_of_contact" id="radio-1" value="T" checked="checked">  <label for="radio-1">telephone</label>'+ 
@@ -120,12 +131,37 @@
 			   '<input type="radio" name="direction_of_contact" id="radio-9" value="-" checked="checked">  <label for="radio-9">undecided</label>'+
 			   '</fieldset> </form> </p>');
 
-            $("#datetime").datetimepicker();
-/*            $("#datetime").datepicker();
-            $("#timepicker").timepicker();                    
-            $('#set_time').on('click', function (){
-                $('#timepicker').timepicker('setTime', new Date());
-            });*/
+/*        function AddButton(input){
+            setTimeout(function(){
+                var buttonPane = $(input).datepicker("widget").find( ".ui-datepicker-buttonpane" );  
+                var btn = $('<button class="ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all" type="button"> Wartet</button>');
+                btn.appendTo( buttonPane );                
+                btn.bind("click", function () { 
+                    document.getElementById("lxc_a_finish_time").value = "Kunde wartet! SOFORT anfangen!!!";
+                }); 
+                 
+            }, 1 ); 
+        }*/
+
+            $("#datetime").datetimepicker({
+                /*beforeShow: function(input){
+                    AddButton(input);
+                 },
+                 onChangeMonthYear:function( year, month, inst ) {                    
+                       AddButton(inst.input);
+                },*/
+                stepMinute: 5,                
+                hour: 1,                
+                hourMin: 6,            
+                hourMax: 19,
+                timeSuffix: ' Uhr',
+                timeText: 'Zeit',
+			    hourText: 'Stunde',
+			    closeText: 'Fertig',
+                currentText: 'Jetzt'
+            });
+
+
     }
 
 

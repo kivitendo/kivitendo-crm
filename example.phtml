@@ -25,6 +25,9 @@
 
 ?>
 
+<script type="text/javascript" src="lxcars/jQueryAddOns/date-time-picker.js"></script>
+<script type="text/javascript" src="lxcars/jQueryAddOns/german-date-time-picker.js"></script>
+
 <script>
 
 
@@ -68,7 +71,21 @@ $(document).ready(function() {
                 '<tr> <td><label>Age</label></td> <td><input type="text" name="age" id="age"></td> </tr>' +
                 '<tr> <td><label>Comments</label></td> <td><input type="text" name="comments" id="comments"></td>' +
                 '</tr> </table> </form> </p>');
-        $( "#datetime" ).datepicker();
+//        $( "#datetime" ).datepicker();
+            $("#datetime").datetimepicker({
+                dateFormat: 'yy-mm-dd',
+                stepMinute: 5,
+                hour: 1,
+                hourMin: 6,
+                hourMax: 19,
+                //timeSuffix: ' Uhr',
+                timeSuffix: '',
+                timeText: 'Zeit',
+                hourText: 'Stunde',
+                closeText: 'Fertig',
+                currentText: 'Jetzt'
+            });
+
     });
 
     function drawTable(data) {
@@ -96,10 +113,10 @@ $(document).ready(function() {
             type: 'POST',
             url: "ajax/example.php",
             success: function(){
-                alert("Daten an Server gesendet");
+                alert("Data successfully sent to server");
             },
             error:  function(){
-                alert("Senden der Daten fehlgeschlagen!");
+                alert("Sending of data failed!");
             }
         })
     }

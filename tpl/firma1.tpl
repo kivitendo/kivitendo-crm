@@ -22,58 +22,29 @@
 <link rel="stylesheet" type="text/css" href="{BASEPATH}crm/jquery-ui/themes/base/jquery-ui.css"> 
 
 
-
 <script language="JavaScript" type="text/javascript">
 
-    $(document).ready(function() {
-        $("#contactsdialog").dialog({
-            autoOpen: false,
-            modal: true,            
-            width:800,
-            height:500,
-            minWidth:600,
-            minHeight:500,
-            maxWidth:800,
-            maxHeight:800,
-            buttons: [{
-                text: 'Save', //translate
-                click: function() {
-                    var object = {};
-                    // Put form inputs into an array
-                    var array = $('#contacts').serializeArray();
-                    // Make an object out of the array
-                    $.each(array, function(index, item) {
-                        object[item.name] = item.value;
-                    });
-                    $.ajax({
-                        //data: { action: "newEntry", data: $("#fsend").serialize()},
-                        data: { action: "newContact", data: JSON.stringify(object)}, 
-                        dataType: 'json',                         
-                        type: 'POST',
-                        url: "ajax/contact.php",
-                        success: function(){
-                            alert("Sent");
-                            $("#contactsdialog").dialog("close");     
-                        },
-                        error:  function(){
-                            alert("Sending of data failed!");
-                        }
-                    })
- 
-                }
-            },
-            {
-                text: 'Cancel',//translate
-                click: function(){
-                    alert("Cancelled");                
-                    $("#contactsdialog").dialog("close");                                
-                    //return false;
-                    //event.stopPropagation();	
-                }
-            }]
+    function saveData() {
+        var obj = {};
+        // Put form inputs into an array
+        var array = $('#contacts').serializeArray();
+        // Make an object out of the array
+        $.each(array, function(index, item) {
+            obj[item.name] = item.value;
         });
-        
-    });
+        $.ajax({
+            data: { action: "newContact", data: JSON.stringify(obj)},
+            dataType: 'json',
+            type: 'POST',
+            url: "ajax/contact.php",
+            success: function(){
+                alert("Data sent to Server");
+            },
+            error:  function(){
+                alert("Sending of data failed!");
+            }
+        });
+    }
 
     function showCall() {
         $('#calls tr[group="tc"]').remove();
@@ -84,87 +55,66 @@
                 var content;
                 $.each(data.items, function(i) {
                     content = '';
-                    content += '<tr class="verlauf" group="tc" onClick="showItem('+data.items[i].id+');">'
+                    //content += '<tr class="verlauf" group="tc" onClick="showItem('+data.items[i].id+');">'
+                    content += '<tr class="verlauf" group="tc" >';
                     content += '<td>' + data.items[i].calldate + '</td>';
                     content += '<td>' + data.items[i].id + '</td>';
                     content += '<td nowrap>' + data.items[i].kontakt;
                     if (data.items[i].inout == 'o') {
                         content += ' &gt;</td>';
                     } else if (data.items[i].inout == 'i') {
-                          content += ' &lt;</td>';
+                        content += ' &lt;</td>';
                     } else {
-                          content += ' -</td>';
+                        content += ' -</td>';
                     }
                     if ( data.items[i].new == 1 ) {
                         content += '<td><b>' + data.items[i].cause + '</b></td>';
                     } else {
-                          content += '<td>' + data.items[i].cause + '</td>';
+                        content += '<td>' + data.items[i].cause + '</td>';
                     }
                     content += '<td>' + data.items[i].cp_name + '</td></tr>';
                     $('#calls tr:last').after(content);
-               })
-               $("#calls").trigger('update');
+                })
+                $("#calls").trigger('update');
             }
-       });
+        });
         return false;
     }
     function dhl() {
         F1=open("dhl.php?Q={Q}&fid={FID}&popup=1","Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
     }
+
     function showItem(id) {
-        //$('#mess').dialog("open").html('This feature is currently deactivated. It will be new implemented with the next CRM version..');
         //F1=open("getCall.php?Q={Q}&fid={FID}&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");             
-        $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>Subject</label> <input type="text" name="subject"> '+
-            '<label>Date / Time</label> <input type="text" name="date" id="datetime" > ' +
-            //'<label>Time</label> <input type="text" name="time" id="timepicker" > <button type="button" id="set_time">Set Time</button> </p>'+
+        $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>Subject</label> <input type="text" name="subject">'+
+            '<label>Date / Time</label> <input type="text" name="date" id="datetime" >' +
             '<p><label>Comments</label> <textarea name="comments" rows="10" cols="60" wrap="hard"></textarea> </p>'+
             '<p> <fieldset> <legend>Type of Contact: </legend>'+ 
-            '<input type="radio" name="type_of_contact" id="radio-1" value="T" checked="checked">  <label for="radio-1">telephone</label>'+ 
-            '<input type="radio" name="type_of_contact" id="radio-2" value="E">  <label for="radio-2">email</label>'+ 
-            '<input type="radio" name="type_of_contact" id="radio-3" value="L">  <label for="radio-3">fax/letter</label>'+ 
-            '<input type="radio" name="type_of_contact" id="radio-4" value="P">  <label for="radio-4">personal</label>'+ 
-            '<input type="radio" name="type_of_contact" id="radio-5" value="F">  <label for="radio-5">File</label>'+
-            '<input type="radio" name="type_of_contact" id="radio-6" value="A">  <label for="radio-6">appointment</label> </fieldset> </p>'+
+                '<input type="radio" name="type_of_contact" id="radio-1" value="T" checked="checked">  <label for="radio-1">telephone</label>'+ 
+                '<input type="radio" name="type_of_contact" id="radio-2" value="E">  <label for="radio-2">email</label>'+ 
+                '<input type="radio" name="type_of_contact" id="radio-3" value="L">  <label for="radio-3">fax/letter</label>'+ 
+                '<input type="radio" name="type_of_contact" id="radio-4" value="P">  <label for="radio-4">personal</label>'+ 
+                '<input type="radio" name="type_of_contact" id="radio-5" value="F">  <label for="radio-5">File</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-6" value="A">  <label for="radio-6">appointment</label> </fieldset> </p>'+
    			'<p> <fieldset> <legend>Direction of Contact: </legend>'+
-    			'<input type="radio" name="direction_of_contact" id="radio-7" value="i">  <label for="radio-7">from customer</label>'+
+    		    '<input type="radio" name="direction_of_contact" id="radio-7" value="i">  <label for="radio-7">from customer</label>'+
     			'<input type="radio" name="direction_of_contact" id="radio-8" value="o" >  <label for="radio-8">to customer</label>'+
-			   '<input type="radio" name="direction_of_contact" id="radio-9" value="-" checked="checked">  <label for="radio-9">undecided</label>'+
-			   '</fieldset> </form> </p>');
-
-/*        function AddButton(input){
-            setTimeout(function(){
-                var buttonPane = $(input).datepicker("widget").find( ".ui-datepicker-buttonpane" );  
-                var btn = $('<button class="ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all" type="button"> Wartet</button>');
-                btn.appendTo( buttonPane );                
-                btn.bind("click", function () { 
-                    document.getElementById("lxc_a_finish_time").value = "Kunde wartet! SOFORT anfangen!!!";
-                }); 
-                 
-            }, 1 ); 
-        }*/
-
-            $("#datetime").datetimepicker({
-                /*beforeShow: function(input){
-                    AddButton(input);
-                 },
-                 onChangeMonthYear:function( year, month, inst ) {                    
-                       AddButton(inst.input);
-                },*/
-                stepMinute: 5,                
-                hour: 1,                
-                hourMin: 6,            
-                hourMax: 19,
-                timeSuffix: ' Uhr',
-                timeText: 'Zeit',
-			    hourText: 'Stunde',
-			    closeText: 'Fertig',
-                currentText: 'Jetzt'
-            });
-
-
+			    '<input type="radio" name="direction_of_contact" id="radio-9" value="-" checked="checked">  <label for="radio-9">undecided</label>'+
+			'</fieldset> </form> </p>');
+        $("#datetime").datetimepicker({
+            dateFormat: 'yy-mm-dd',
+            stepMinute: 5,                
+            hour: 1,                
+            hourMin: 6,            
+            hourMax: 19,
+            //timeSuffix: ' Uhr',
+            timeText: 'Zeit',
+			hourText: 'Stunde',
+			closeText: 'Fertig',
+            currentText: 'Jetzt'
+        });
+        return false;
     }
-
-
      
     function anschr(A) {
         $( "#dialogwin" ).dialog( "option", "width", 400 );
@@ -183,9 +133,11 @@
         }
         $( "#dialogwin" ).dialog( "open" );
     }
+
     function notes() {
-            F1=open("showNote.php?fid={FID}","Notes","width=400, height=400, left=100, top=50, scrollbars=yes");
+        F1=open("showNote.php?fid={FID}","Notes","width=400, height=400, left=100, top=50, scrollbars=yes");
     }
+
     function KdHelp() {
         link = $('#kdhelp option:selected').val();
         if ( $('#kdhelp').prop("selectedIndex") > 0 ) {
@@ -193,9 +145,11 @@
             $('#kdhelp option')[0].selected = true;
         }
     }
+
     var shiptoids = new Array({Sids});
     var sil = shiptoids.length;
     var sid = 0;
+
     function nextshipto(dir) {
         if ( dir == 'o' ) {
             sid = 0;
@@ -216,32 +170,34 @@
             }
         }
         $.ajax({
-           url: "jqhelp/firmaserver.php?task=showShipadress&id="+shiptoids[sid]+"&Q={Q}",
-           dataType: 'json',
-           success: function(data){
-                        var adr = data.adr;
-                        $('#SID').empty().append(adr.shipto_id);
-                        $('#shiptoname').empty().append(adr.shiptoname);
-                        $('#shiptodepartment_1').empty().append(adr.shiptodepartment_1);
-                        $('#shiptodepartment_2').empty().append(adr.shiptodepartment_2);
-                        $('#shiptostreet').empty().append(adr.shiptostreet);
-                        $('#shiptocountry').empty().append(adr.shiptocountry);
-                        $('#shiptobland').empty().append(adr.shiptobland);
-                        $('#shiptozipcode').empty().append(adr.shiptozipcode);
-                        $('#shiptocity').empty().append(adr.shiptocity);
-                        $('#shiptocontact').empty().append(adr.shiptocontact);
-                        $('#shiptophone').empty().append(adr.shiptophone);
-                        $('#shiptofax').empty().append(adr.shiptofax);
-                        $('#shiptoemail').empty().append(data.mail);
-                        $('#karte2').attr("href",data.karte);
-                    }
+            url: "jqhelp/firmaserver.php?task=showShipadress&id="+shiptoids[sid]+"&Q={Q}",
+            dataType: 'json',
+            success: function(data){
+                var adr = data.adr;
+                $('#SID').empty().append(adr.shipto_id);
+                $('#shiptoname').empty().append(adr.shiptoname);
+                $('#shiptodepartment_1').empty().append(adr.shiptodepartment_1);
+                $('#shiptodepartment_2').empty().append(adr.shiptodepartment_2);
+                $('#shiptostreet').empty().append(adr.shiptostreet);
+                $('#shiptocountry').empty().append(adr.shiptocountry);
+                $('#shiptobland').empty().append(adr.shiptobland);
+                $('#shiptozipcode').empty().append(adr.shiptozipcode);
+                $('#shiptocity').empty().append(adr.shiptocity);
+                $('#shiptocontact').empty().append(adr.shiptocontact);
+                $('#shiptophone').empty().append(adr.shiptophone);
+                $('#shiptofax').empty().append(adr.shiptofax);
+                $('#shiptoemail').empty().append(data.mail);
+                $('#karte2').attr("href",data.karte);
+            }
         })
     }
+    
     var f1 = null;
            
     function showOP(was) {
-                F1=open("op_.php?Q={Q}&fa={Fname1}&op="+was,"OP","width=950, height=450, left=100, top=50, scrollbars=yes");
-        }
+        F1=open("op_.php?Q={Q}&fa={Fname1}&op="+was,"OP","width=950, height=450, left=100, top=50, scrollbars=yes");
+    }
+    
     function surfgeo() {
         if ({GEODB}) {
             F1=open("surfgeodb.php?plz={Plz}&ort={Ort}","GEO","width=550, height=350, left=100, top=50, scrollbars=yes");
@@ -249,142 +205,169 @@
             alert("GEO-Datenbank nicht aktiviert");
         }
     }
+    
     function doOe(type) { //Auftrag
-      window.location.href = '../oe.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + type;
+        window.location.href = '../oe.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + type;
     }
+    
     function newOrder( href ){ // Auftrag
         window.location.href = href;
     }
+    
     function doDo() { //neuer Lieferschein
-      var type = '{Q}' == 'C' ? 'sales_delivery_order' : 'purchase_delivery_order';
-      window.location.href = '../do.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + type;
+        var type = '{Q}' == 'C' ? 'sales_delivery_order' : 'purchase_delivery_order';
+        window.location.href = '../do.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + type;
     }
+    
     function doIr() { //neue Rechnung
-      var file = '{Q}' == 'C' ? '../is.pl' : '../ir.pl';
-      window.location.href = file + '?action=add&type=invoice&vc={CuVe}&{CuVe}_id={FID}';
+        var file = '{Q}' == 'C' ? '../is.pl' : '../ir.pl';
+        window.location.href = file + '?action=add&type=invoice&vc={CuVe}&{CuVe}_id={FID}';
     }
+    
     function doIb() { //neuer Brief
-      window.location.href = '../controller.pl?action=Letter%2fadd&letter.customer_id={FID}';
+        window.location.href = '../controller.pl?action=Letter%2fadd&letter.customer_id={FID}';
     }
+    
     function doLxCars() {
         uri='lxcars/lxcmain.php?owner={FID}&task=1'
         window.location.href=uri;
     }
-    $(document).ready(
-        function(){
-            // Aus Tabelle kopieren,  weiter verbessern!
-            $("td").click(function() {
-                //alert($(this).text());
-                $(this).select();
-                document.execCommand("copy");
-            });
-            $("#shipleft").click(function(){ nextshipto('-'); })
-            $("#shipright").click(function(){ nextshipto('+'); })
-            nextshipto('o');
-            $('button').button().click(
-            function(event) {
-                event.preventDefault();
-                name = this.getAttribute('name');
-                if ( name == 'ks' ) {
-                    var sw = $('#suchwort').val();
-                    F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
-                } else if ( name == 'reload' ) {
-                    showCall();
-                } else {
-                    document.location.href = name;
+    
+    $(document).ready(function(){
+        // Aus Tabelle kopieren,  weiter verbessern!
+        $("td").click(function() {
+            $(this).select();
+            document.execCommand("copy");
+        });
+        $("#shipleft").click(function(){ nextshipto('-'); });
+        $("#shipright").click(function(){ nextshipto('+'); });
+        nextshipto('o');
+        $('button').button().click(function(event) {
+            event.preventDefault();
+            name = this.getAttribute('name');
+            if ( name == 'ks' ) {
+                var sw = $('#suchwort').val();
+                F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
+            } else if ( name == 'reload' ) {
+                showCall();
+            } else {
+                document.location.href = name;
+            }
+        });
+        $("#fasubmenu").tabs({
+            heightStyle: "auto",
+            active: {kdviewli}
+        });
+        $(function() {
+            $( "#right_tabs" ).tabs({
+                cache: true, //helpful?
+                active: {kdviewre},
+                beforeLoad: function( event, ui ) {
+                    ui.jqXHR.error(function() {
+                        ui.panel.html(".:Couldn't load this tab.:." );
+                    });
                 }
             });
-            $("#fasubmenu").tabs({
-                heightStyle: "auto",
-                active: {kdviewli}
-            });
+        });
+        $("#dialogwin").dialog({
+            autoOpen: false,
+            show: {
+                effect: "blind",
+                duration: 300
+            },
+            hide: {
+                effect: "explode",
+                duration: 300
+            },
+        });
+        //$("#mess").dialog({
+        //    autoOpen: false,
+        //    title: "Message"
+        //});
+        $(".firmabutton").button().click(function( event ){
+            if ( this.getAttribute('name') != 'extra' && this.getAttribute('name') != 'karte' && this.getAttribute('name') != 'lxcars') {
+                event.preventDefault();
+            };
+        });
 
+        $("#actionmenu").selectmenu({
+            change: function( event, ui ) {
+                if ($('#actionmenu option:selected').attr('id') == 1) {
+                    window.location.href = 'firmen3.php?Q={Q}&id={FID}&edit=1';
+                }
+                else if ($('#actionmenu option:selected').attr('id') == 2) {
+                    window.location.href = 'timetrack.php?tab={Q}&fid={FID}&name={Fname1}';
+                }
+                else if ($('#actionmenu option:selected').attr('id') == 3) {
+                    F1=open('extrafelder.php?owner={Q}{FID}',"CRM","width=350, height=400, left=100, top=50, scrollbars=yes");
+                }
+                else if ($('#actionmenu option:selected').attr('id') == 4) {
+                    window.location.href = 'karte.php?Q={Q}&fid={FID}';
+                }
+                else if ($('#actionmenu option:selected').attr('id') == 5) {
+                    window.location.href = '../oe.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + $('#actionmenu option:selected').val();
+                }
+                else if ($('#actionmenu option:selected').attr('id') == 6) {
+                    window.location.href = '../oe.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + $('#actionmenu option:selected').val();
+                }
+                else if ($('#actionmenu option:selected').attr('id') == 7) {
+                    var type = '{Q}' == 'C' ? 'sales_delivery_order' : 'purchase_delivery_order';
+                    window.location.href = '../do.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + type;
+                }
+                else if ($('#actionmenu option:selected').attr('id') == 8) {
+                    var file = '{Q}' == 'C' ? '../is.pl' : '../ir.pl';
+                    window.location.href = file + '?action=add&type=invoice&vc={CuVe}&{CuVe}_id={FID}';
+                }
+            }
+        });
+        
+        // --------   QR Code wird durch Jquery erstellt
+        $("#qrbutt").button().click(function( event ) {
+            $.ajax({
+                type: "GET",
+                url: "vcardexp.php?Q={Q}&fid={FID}",
+                success: function(strResponse){
+                    $("#qrcode").qrcode({
+                        "mode": 0,
+                        "size": 250,
+                        "color": "#3a3",
+                        "text": strResponse
+                    });
+                }
+            });
+            $(".fancybox").trigger('click');
+            $(".fancybox").empty();
+        });
+        
+        $(".fancybox").fancybox();
+                     
+        $("#contactsdialog").dialog({
+            autoOpen: false,
+            modal: true,            
+            width:800,
+            height:500,
+            minWidth:600,
+            minHeight:500,
+            maxWidth:800,
+            maxHeight:800,
+            buttons: [{
+                text: 'Save', //translate
+                click: function(){
+                   //saveData();
+                   return false;
+                }
+            },
+            {
+                text: 'Cancel',//translate
+                click: function(){
+                    alert("Cancelled");                
+                    $("#contactsdialog").dialog("close");  
+                    return false;                              
 
-            $(function() {
-                $( "#right_tabs" ).tabs({
-                    cache: true, //helpful?
-                    active: {kdviewre},
-                    beforeLoad: function( event, ui ) {
-                        ui.jqXHR.error(function() {
-                        ui.panel.html(
-                            ".:Couldn't load this tab.:." );
-                        });
-                    }
-                });
-            });
-            $("#dialogwin").dialog({
-                autoOpen: false,
-                show: {
-                    effect: "blind",
-                    duration: 300
-                },
-                hide: {
-                    effect: "explode",
-                    duration: 300
-                },
-            });
-            //$("#mess").dialog({
-            //    autoOpen: false,
-            //    title: "Message"
-            //});
-            $(".firmabutton").button().click(
-            function( event ) {
-                if ( this.getAttribute('name') != 'extra' && this.getAttribute('name') != 'karte' && this.getAttribute('name') != 'lxcars') {
-                    event.preventDefault();
-                };
-            });
-
-           $("#actionmenu").selectmenu({
-                change: function( event, ui ) {
-                             if ($('#actionmenu option:selected').attr('id') == 1) {
-                                 window.location.href = 'firmen3.php?Q={Q}&id={FID}&edit=1';
-                             }
-                             else if ($('#actionmenu option:selected').attr('id') == 2) {
-                                 window.location.href = 'timetrack.php?tab={Q}&fid={FID}&name={Fname1}';
-                             }
-                             else if ($('#actionmenu option:selected').attr('id') == 3) {
-                                 F1=open('extrafelder.php?owner={Q}{FID}',"CRM","width=350, height=400, left=100, top=50, scrollbars=yes");
-                             }
-                             else if ($('#actionmenu option:selected').attr('id') == 4) {
-                                 window.location.href = 'karte.php?Q={Q}&fid={FID}';
-                             }
-                             else if ($('#actionmenu option:selected').attr('id') == 5) {
-                                 window.location.href = '../oe.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + $('#actionmenu option:selected').val();
-                             }
-                             else if ($('#actionmenu option:selected').attr('id') == 6) {
-                                 window.location.href = '../oe.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + $('#actionmenu option:selected').val();
-                             }
-                             else if ($('#actionmenu option:selected').attr('id') == 7) {
-                                 var type = '{Q}' == 'C' ? 'sales_delivery_order' : 'purchase_delivery_order';
-                                 window.location.href = '../do.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + type;
-                             }
-                             else if ($('#actionmenu option:selected').attr('id') == 8) {
-                                 var file = '{Q}' == 'C' ? '../is.pl' : '../ir.pl';
-                                 window.location.href = file + '?action=add&type=invoice&vc={CuVe}&{CuVe}_id={FID}';
-                             }
-                        }
-           });
-           // --------   QR Code wird durch Jquery erstellt
-           $("#qrbutt").button().click(
-              function( event ) {
-                $.ajax({
-                       type: "GET",
-                      url: "vcardexp.php?Q={Q}&fid={FID}",
-                       success: function(strResponse){
-                         $("#qrcode").qrcode({
-                             "mode": 0,
-                              "size": 250,
-                              "color": "#3a3",
-                              "text": strResponse
-                        });
-                       }
-                 });
-                 $(".fancybox").trigger('click');
-                 $(".fancybox").empty();
-            });
-            $(".fancybox").fancybox();
-        }
-    );
+                }
+            }]
+        });
+    });
 
 </script>
 <style>
@@ -398,78 +381,80 @@
 <div class="ui-widget-content" style="height:722px">
 
 
-<p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
-<br>
-<div id='menubox1' >
-    <form>
-    <span style="float:left;" valign="bottom">
-        <!-- <div class="fancybox" rel="group" href="tmp/qr_{loginname}.png"><img src="" alt="" /></div> -->
-        <div id="qrcode" class="fancybox" rel="group"><img src="" alt="" /></div>
-        <button name="firma1.php?Q={Q}&id={FID}">.:Custombase:.</button>
-        <button name="firma2.php?Q={Q}&fid={FID}">.:Contacts:.</button>
-        <button name="firma3.php?Q={Q}&fid={FID}">.:Sales:.</button>
-        <button name="firma4.phtml?Q={Q}&kdnr={kdnr}&fid={FID}">.:Documents:.</button>
-    </span>
-    <span style="float:left; vertical-alig:bottom; padding-left:8em">
+ <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
+ <br>
+  <div id='menubox1' >
+   <form>
+     <span style="float:left;" valign="bottom">
+       <!-- <div class="fancybox" rel="group" href="tmp/qr_{loginname}.png"><img src="" alt="" /></div> -->
+       <div id="qrcode" class="fancybox" rel="group"><img src="" alt="" /></div>
+       <button name="firma1.php?Q={Q}&id={FID}">.:Custombase:.</button>
+       <button name="firma2.php?Q={Q}&fid={FID}">.:Contacts:.</button>
+       <button name="firma3.php?Q={Q}&fid={FID}">.:Sales:.</button>
+       <button name="firma4.phtml?Q={Q}&kdnr={kdnr}&fid={FID}">.:Documents:.</button>
+     </span>
+     <span style="float:left; vertical-alig:bottom; padding-left:8em">
 <!--         <select style="visibility:{chelp}" name="kdhelp" id="kdhelp" style="margin-top:0.5em;" onChange="KdHelp()"> -->
 <!-- BEGIN kdhelp -->
 <!--         <option value="{cid}">{cname}</option> -->
 <!-- END kdhelp -->
+       </select>
+       <select id="actionmenu" style="margin-top:0.5em;">
+         <option>Aktionen</option>
+         <option id= '1' value='firmen3.php?Q={Q}&id={FID}&edit=1'>.:edit:.</option>
+         <option id= '2' value='timetrack.php?tab={Q}&fid={FID}&name={Fname1}'>.:timetrack:.</option>
+         <option id= '3' value='extrafelder.php?owner={Q}{FID}'>.:extra data:.</option>
+         <option id= '4' value='karte.php?Q={Q}&fid={FID}'>.:register:. .:develop:.</option>
+         <option id= '5' value='{request}_quotation'>.:quotation:. .:develop:.</option>
+         <option id= '6' value='{sales}_order'>.:order:. .:develop:.</option>
+         <option id= '7' value='delivery_order'>.:delivery order:. .:develop:.</option>
+         <option id= '8' value='invoice'>.:invoice:. .:develop:.</option>
         </select>
-        <select id="actionmenu" style="margin-top:0.5em;">
-            <option>Aktionen</option>
-            <option id= '1' value='firmen3.php?Q={Q}&id={FID}&edit=1'>.:edit:.</option>
-            <option id= '2' value='timetrack.php?tab={Q}&fid={FID}&name={Fname1}'>.:timetrack:.</option>
-            <option id= '3' value='extrafelder.php?owner={Q}{FID}'>.:extra data:.</option>
-            <option id= '4' value='karte.php?Q={Q}&fid={FID}'>.:register:. .:develop:.</option>
-            <option id= '5' value='{request}_quotation'>.:quotation:. .:develop:.</option>
-            <option id= '6' value='{sales}_order'>.:order:. .:develop:.</option>
-            <option id= '7' value='delivery_order'>.:delivery order:. .:develop:.</option>
-            <option id= '8' value='invoice'>.:invoice:. .:develop:.</option>
-        </select>
-    </span>
+      </span>
     </form>
-</div>
+  </div>
 
-<div id="contactsdialog" title="New Contact"></div>
+  <div id="contactsdialog" title="New Contact"></div>
 
-<div id='contentbox'>
+  <div id='contentbox'>
     <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid lightgray;" >
-        <div class="gross" style="float:left; width:55%; height:25em; text-align:left; border: 0px solid black; padding:0.2em;" >
-            <span class="fett">{Fname1}</span><br />
-            {Fdepartment_1} {Fdepartment_2}<br />
-            {Strasse}<br />
-            <span class="mini">&nbsp;<br /></span>
-            <span onClick="surfgeo()">{Land}-{Plz} {Ort}</span><br />
-            <span class="klein">{Bundesland}</span>
-            <span class="mini"><br />&nbsp;<br /></span>
-            {Fcontact}
-            <span class="mini"><br />&nbsp;<br /></span>
-            <font color="#444444"> .:tel:.:</font> <a href="tel:{Telefon}">{Telefon}</a><br />
-            <font color="#444444"> .:fax:.:</font> <a href="tel:{Fax}">{Fax}</a><br />
-            <span class="mini">&nbsp;<br /></span>
-            &nbsp;[<a href="{mail_pre}{eMail}{mail_after}">{eMail}</a>]<br />
-            &nbsp;<a href="{Internet}" target="_blank">{Internet}</a>
-        </div>
-        <div style="float:left; width:43%; height:25em; text-align:right; border: 0px solid black; padding:0.2em;">
-            <span valign='top'><span class="fett">{kdnr}</span> <img src="image/kreuzchen.gif" title=".:locked address:." style="visibility:{verstecke};" > {verkaeufer}
-            {IMG}<br /></span>
-            <br class='mini'>
-               {ANGEBOT_BUTTON}
-               {AUFTRAG_BUTTON}
-               {LIEFER_BUTTON}
-               {RECHNUNG_BUTTON}<br />
-            <br class='mini'>
-               {EXTRA_BUTTON}
-               {QR_BUTTON}
-               {KARTE_BUTTON}
-               {ETIKETT_BUTTON}
-            <br />
-            <br class='mini'>
-               {DHL_BUTTON}
-               {BRIEF_BUTTON}
-               {LxCars_BUTTON}
-            <br /><br />
+      <div class="gross" style="float:left; width:55%; height:25em; text-align:left; border: 0px solid black; padding:0.2em;" >
+        <span class="fett">{Fname1}</span><br />
+        {Fdepartment_1} {Fdepartment_2}<br />
+        {Strasse}<br />
+        <span class="mini">&nbsp;<br /></span>
+        <span onClick="surfgeo()">{Land}-{Plz} {Ort}</span><br />
+        <span class="klein">{Bundesland}</span>
+        <span class="mini"><br />&nbsp;<br /></span>
+        {Fcontact}
+        <span class="mini"><br />&nbsp;<br /></span>
+        <font color="#444444"> .:tel:.:</font> <a href="tel:{Telefon}">{Telefon}</a><br />
+        <font color="#444444"> .:fax:.:</font> <a href="tel:{Fax}">{Fax}</a><br />
+        <span class="mini">&nbsp;<br /></span>
+        &nbsp;[<a href="{mail_pre}{eMail}{mail_after}">{eMail}</a>]<br />
+        &nbsp;<a href="{Internet}" target="_blank">{Internet}</a>
+      </div>
+      <div style="float:left; width:43%; height:25em; text-align:right; border: 0px solid black; padding:0.2em;">
+        <span valign='top'><span class="fett">{kdnr}</span> <img src="image/kreuzchen.gif" title=".:locked address:." style="visibility:{verstecke};" > {verkaeufer}
+          {IMG}<br /></span>
+          <br class='mini'>
+            {ANGEBOT_BUTTON}
+            {AUFTRAG_BUTTON}
+            {LIEFER_BUTTON}
+            {RECHNUNG_BUTTON}
+          <br />
+          <br class='mini'>
+            {EXTRA_BUTTON}
+            {QR_BUTTON}
+            {KARTE_BUTTON}
+            {ETIKETT_BUTTON}
+          <br />
+          <br class='mini'>
+            {DHL_BUTTON}
+            {BRIEF_BUTTON}
+            {LxCars_BUTTON}
+          <br />
+          <br />
             <span style="visibility:{zeige_bearbeiter};">.:employee:.: {bearbeiter}</span>
         </div>
         <br />
@@ -563,7 +548,7 @@
                 <table id="calls" class="tablesorter" width="100%" style='margin:0px; cursor:pointer;'>
                     <thead><tr><th>Datum</th><th>id</th><th class="{ sorter: false }"></th><th>Betreff</th><th>.:contact:.</th></tr></thead>
                     <tbody>
-                        <tr onClick="showItem(0)" class='verlauf'><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
+<                     <tr onClick="showItem(0)" class='verlauf'><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
                     </tbody>
                 </table><br>
                 <div id="pager" class="pager" style='position:absolute;'>

@@ -24,27 +24,6 @@
 
 <script language="JavaScript" type="text/javascript">
 
-    function saveData() {
-        var obj = {};
-        // Put form inputs into an array
-        var array = $('#contacts').serializeArray();
-        // Make an object out of the array
-        $.each(array, function(index, item) {
-            obj[item.name] = item.value;
-        });
-        $.ajax({
-            data: { action: "newContact", data: JSON.stringify(obj)},
-            dataType: 'json',
-            type: 'POST',
-            url: "ajax/contact.php",
-            success: function(){
-                alert("Data sent to Server");
-            },
-            error:  function(){
-                alert("Sending of data failed!");
-            }
-        });
-    }
 
     function showCall() {
         $('#calls tr[group="tc"]').remove();
@@ -74,12 +53,13 @@
                     }
                     content += '<td>' + data.items[i].cp_name + '</td></tr>';
                     $('#calls tr:last').after(content);
-                })
+                });
                 $("#calls").trigger('update');
             }
         });
         return false;
     }
+    
     function dhl() {
         F1=open("dhl.php?Q={Q}&fid={FID}&popup=1","Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
     }
@@ -102,7 +82,7 @@
 			    '<input type="radio" name="direction_of_contact" id="radio-9" value="-" checked="checked">  <label for="radio-9">undecided</label>'+
 			'</fieldset> </form> </p>');
         $("#datetime").datetimepicker({
-            dateFormat: 'yy-mm-dd',
+            //dateFormat: 'yy-mm-dd',
             stepMinute: 5,                
             hour: 1,                
             hourMin: 6,            
@@ -113,7 +93,7 @@
 			closeText: 'Fertig',
             currentText: 'Jetzt'
         });
-        return false;
+        //return false;
     }
      
     function anschr(A) {
@@ -234,6 +214,27 @@
     }
     
     $(document).ready(function(){
+    
+    function saveData() {
+        var obj = {};
+        var array = $('#contacts').serializeArray();
+        // Ein object aus dem array machen
+        $.each(array, function(index, item) {
+            obj[item.name] = item.value;
+        });        
+        $.ajax({
+            data: { action: "newEntry", data: JSON.stringify(obj)},
+            dataType: 'json',
+            type: 'POST',
+            url: "ajax/contact.php",
+            success: function(){
+                alert("Data successfully sent to server");
+            },
+            error:  function(){
+                alert("Sending of data failed!");
+            }
+        })
+    }
         // Aus Tabelle kopieren,  weiter verbessern!
         $("td").click(function() {
             $(this).select();
@@ -280,10 +281,7 @@
                 duration: 300
             },
         });
-        //$("#mess").dialog({
-        //    autoOpen: false,
-        //    title: "Message"
-        //});
+
         $(".firmabutton").button().click(function( event ){
             if ( this.getAttribute('name') != 'extra' && this.getAttribute('name') != 'karte' && this.getAttribute('name') != 'lxcars') {
                 event.preventDefault();
@@ -352,16 +350,19 @@
             maxHeight:800,
             buttons: [{
                 text: 'Save', //translate
+                id: 'saveBtn',                
                 click: function(){
-                   //saveData();
+                   saveData();
+                   $(this).dialog("close");
                    return false;
                 }
             },
             {
                 text: 'Cancel',//translate
+                id: 'cancelBtn',
                 click: function(){
                     alert("Cancelled");                
-                    $("#contactsdialog").dialog("close");  
+                    $(this).dialog("close");  
                     return false;                              
 
                 }
@@ -385,126 +386,126 @@
  <br>
   <div id='menubox1' >
    <form>
-     <span style="float:left;" valign="bottom">
-       <!-- <div class="fancybox" rel="group" href="tmp/qr_{loginname}.png"><img src="" alt="" /></div> -->
-       <div id="qrcode" class="fancybox" rel="group"><img src="" alt="" /></div>
-       <button name="firma1.php?Q={Q}&id={FID}">.:Custombase:.</button>
-       <button name="firma2.php?Q={Q}&fid={FID}">.:Contacts:.</button>
-       <button name="firma3.php?Q={Q}&fid={FID}">.:Sales:.</button>
-       <button name="firma4.phtml?Q={Q}&kdnr={kdnr}&fid={FID}">.:Documents:.</button>
-     </span>
-     <span style="float:left; vertical-alig:bottom; padding-left:8em">
+    <span style="float:left;" valign="bottom">
+     <!-- <div class="fancybox" rel="group" href="tmp/qr_{loginname}.png"><img src="" alt="" /></div> -->
+     <div id="qrcode" class="fancybox" rel="group"><img src="" alt="" /></div>
+     <button name="firma1.php?Q={Q}&id={FID}">.:Custombase:.</button>
+     <button name="firma2.php?Q={Q}&fid={FID}">.:Contacts:.</button>
+     <button name="firma3.php?Q={Q}&fid={FID}">.:Sales:.</button>
+     <button name="firma4.phtml?Q={Q}&kdnr={kdnr}&fid={FID}">.:Documents:.</button>
+    </span>
+    <span style="float:left; vertical-alig:bottom; padding-left:8em">
 <!--         <select style="visibility:{chelp}" name="kdhelp" id="kdhelp" style="margin-top:0.5em;" onChange="KdHelp()"> -->
 <!-- BEGIN kdhelp -->
 <!--         <option value="{cid}">{cname}</option> -->
 <!-- END kdhelp -->
-       </select>
-       <select id="actionmenu" style="margin-top:0.5em;">
-         <option>Aktionen</option>
-         <option id= '1' value='firmen3.php?Q={Q}&id={FID}&edit=1'>.:edit:.</option>
-         <option id= '2' value='timetrack.php?tab={Q}&fid={FID}&name={Fname1}'>.:timetrack:.</option>
-         <option id= '3' value='extrafelder.php?owner={Q}{FID}'>.:extra data:.</option>
-         <option id= '4' value='karte.php?Q={Q}&fid={FID}'>.:register:. .:develop:.</option>
-         <option id= '5' value='{request}_quotation'>.:quotation:. .:develop:.</option>
-         <option id= '6' value='{sales}_order'>.:order:. .:develop:.</option>
-         <option id= '7' value='delivery_order'>.:delivery order:. .:develop:.</option>
-         <option id= '8' value='invoice'>.:invoice:. .:develop:.</option>
-        </select>
-      </span>
-    </form>
+<!--     </select> -->
+     <select id="actionmenu" style="margin-top:0.5em;">
+      <option>Aktionen</option>
+      <option id= '1' value='firmen3.php?Q={Q}&id={FID}&edit=1'>.:edit:.</option>
+      <option id= '2' value='timetrack.php?tab={Q}&fid={FID}&name={Fname1}'>.:timetrack:.</option>
+      <option id= '3' value='extrafelder.php?owner={Q}{FID}'>.:extra data:.</option>
+      <option id= '4' value='karte.php?Q={Q}&fid={FID}'>.:register:. .:develop:.</option>
+      <option id= '5' value='{request}_quotation'>.:quotation:. .:develop:.</option>
+      <option id= '6' value='{sales}_order'>.:order:. .:develop:.</option>
+      <option id= '7' value='delivery_order'>.:delivery order:. .:develop:.</option>
+      <option id= '8' value='invoice'>.:invoice:. .:develop:.</option>
+     </select>
+    </span>
+   </form>
   </div>
 
   <div id="contactsdialog" title="New Contact"></div>
 
   <div id='contentbox'>
-    <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid lightgray;" >
-      <div class="gross" style="float:left; width:55%; height:25em; text-align:left; border: 0px solid black; padding:0.2em;" >
-        <span class="fett">{Fname1}</span><br />
-        {Fdepartment_1} {Fdepartment_2}<br />
-        {Strasse}<br />
-        <span class="mini">&nbsp;<br /></span>
-        <span onClick="surfgeo()">{Land}-{Plz} {Ort}</span><br />
-        <span class="klein">{Bundesland}</span>
-        <span class="mini"><br />&nbsp;<br /></span>
-        {Fcontact}
-        <span class="mini"><br />&nbsp;<br /></span>
-        <font color="#444444"> .:tel:.:</font> <a href="tel:{Telefon}">{Telefon}</a><br />
-        <font color="#444444"> .:fax:.:</font> <a href="tel:{Fax}">{Fax}</a><br />
-        <span class="mini">&nbsp;<br /></span>
-        &nbsp;[<a href="{mail_pre}{eMail}{mail_after}">{eMail}</a>]<br />
-        &nbsp;<a href="{Internet}" target="_blank">{Internet}</a>
-      </div>
-      <div style="float:left; width:43%; height:25em; text-align:right; border: 0px solid black; padding:0.2em;">
-        <span valign='top'><span class="fett">{kdnr}</span> <img src="image/kreuzchen.gif" title=".:locked address:." style="visibility:{verstecke};" > {verkaeufer}
-          {IMG}<br /></span>
-          <br class='mini'>
-            {ANGEBOT_BUTTON}
-            {AUFTRAG_BUTTON}
-            {LIEFER_BUTTON}
-            {RECHNUNG_BUTTON}
-          <br />
-          <br class='mini'>
-            {EXTRA_BUTTON}
-            {QR_BUTTON}
-            {KARTE_BUTTON}
-            {ETIKETT_BUTTON}
-          <br />
-          <br class='mini'>
-            {DHL_BUTTON}
-            {BRIEF_BUTTON}
-            {LxCars_BUTTON}
-          <br />
-          <br />
-            <span style="visibility:{zeige_bearbeiter};">.:employee:.: {bearbeiter}</span>
-        </div>
-        <br />
+   <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid lightgray;" >
+    <div class="gross" style="float:left; width:55%; height:25em; text-align:left; border: 0px solid black; padding:0.2em;" >
+     <span class="fett">{Fname1}</span><br />
+     {Fdepartment_1} {Fdepartment_2}<br />
+     {Strasse}<br />
+     <span class="mini">&nbsp;<br /></span>
+     <span onClick="surfgeo()">{Land}-{Plz} {Ort}</span><br />
+     <span class="klein">{Bundesland}</span>
+     <span class="mini"><br />&nbsp;<br /></span>
+     {Fcontact}
+     <span class="mini"><br />&nbsp;<br /></span>
+     <font color="#444444"> .:tel:.:</font> <a href="tel:{Telefon}">{Telefon}</a><br />
+     <font color="#444444"> .:fax:.:</font> <a href="tel:{Fax}">{Fax}</a><br />
+     <span class="mini">&nbsp;<br /></span>
+     &nbsp;[<a href="{mail_pre}{eMail}{mail_after}">{eMail}</a>]<br />
+     &nbsp;<a href="{Internet}" target="_blank">{Internet}</a>
     </div>
-    <div id="fasubmenu" >
-        <ul>
-            <li><a href="#lie">.:shipto:. </a></li>
-            <li><a href="#not">.:notes:. </a></li>
-            <li><a href="#var">.:variablen:. </a></li>
-            <li><a href="#fin">.:financial:.</a></li>
-            <li><a href="#inf">.:miscInfo:. </a></li>
-        </ul>
-        <div id="lie" class="klein">
-            <span class="fett" id="shiptoname"></span> &nbsp;&nbsp;&nbsp;&nbsp;
-            .:shipto count:.:{Scnt} <img src="image/leftarrow.png" id='shipleft' border="0">
-            <span id="SID"></span> <img src="image/rightarrow.png" id='shipright' border="0">&nbsp; &nbsp;
-            <a href="#" onCLick="anschr();"><img src="image/brief.png" alt=".:print label:." border="0"/></a>&nbsp; &nbsp;
-            <a href="" id='karte2' target="_blank"><img src="image/karte.gif" alt="karte" title=".:city map:." border="0"></a><br />
-            <span id="shiptodepartment_1"></span> &nbsp; &nbsp; <span id="shiptodepartment_2"></span> <br />
-            <span id="shiptostreet"></span><br />
-            <span class="mini">&nbsp;<br /></span>
-            <span id="shiptocountry"></span>-<span id="shiptozipcode"></span> <span id="shiptocity"></span><br />
-            <span id="shiptobundesland"></span><br />
-            <span class="mini">&nbsp;<br /></span>
-            <span id="shiptocontact"></span><br />
-            .:tel:.: <span id="shiptophone"></span><br />
-            .:fax:.: <span id="shiptofax"></span><br />
-            <span id="shiptoemail"></span>
+    <div style="float:left; width:43%; height:25em; text-align:right; border: 0px solid black; padding:0.2em;">
+     <span valign='top'><span class="fett">{kdnr}</span> <img src="image/kreuzchen.gif" title=".:locked address:." style="visibility:{verstecke};" > {verkaeufer}
+      {IMG}<br /></span>
+     <br class='mini'>
+      {ANGEBOT_BUTTON}
+      {AUFTRAG_BUTTON}
+      {LIEFER_BUTTON}
+      {RECHNUNG_BUTTON}
+     <br />
+     <br class='mini'>
+      {EXTRA_BUTTON}
+      {QR_BUTTON}
+      {KARTE_BUTTON}
+      {ETIKETT_BUTTON}
+     <br />
+     <br class='mini'>
+      {DHL_BUTTON}
+      {BRIEF_BUTTON}
+      {LxCars_BUTTON}
+     <br />
+     <br />
+     <span style="visibility:{zeige_bearbeiter};">.:employee:.: {bearbeiter}</span>
+    </div>
+    <br />
+   </div>
+   <div id="fasubmenu" >
+    <ul>
+     <li><a href="#lie">.:shipto:. </a></li>
+     <li><a href="#not">.:notes:. </a></li>
+     <li><a href="#var">.:variablen:. </a></li>
+     <li><a href="#fin">.:financial:.</a></li>
+     <li><a href="#inf">.:miscInfo:. </a></li>
+    </ul>
+    <div id="lie" class="klein">
+     <span class="fett" id="shiptoname"></span> &nbsp;&nbsp;&nbsp;&nbsp;
+      .:shipto count:.:{Scnt} <img src="image/leftarrow.png" id='shipleft' border="0">
+       <span id="SID"></span> <img src="image/rightarrow.png" id='shipright' border="0">&nbsp; &nbsp;
+        <a href="#" onCLick="anschr();"><img src="image/brief.png" alt=".:print label:." border="0"/></a>&nbsp; &nbsp;
+        <a href="" id='karte2' target="_blank"><img src="image/karte.gif" alt="karte" title=".:city map:." border="0"></a><br />
+        <span id="shiptodepartment_1"></span> &nbsp; &nbsp; <span id="shiptodepartment_2"></span> <br />
+        <span id="shiptostreet"></span><br />
+        <span class="mini">&nbsp;<br /></span>
+        <span id="shiptocountry"></span>-<span id="shiptozipcode"></span> <span id="shiptocity"></span><br />
+        <span id="shiptobundesland"></span><br />
+        <span class="mini">&nbsp;<br /></span>
+        <span id="shiptocontact"></span><br />
+         .:tel:.: <span id="shiptophone"></span><br />
+         .:fax:.: <span id="shiptofax"></span><br />
+         <span id="shiptoemail"></span>
         </div>
         <div id="not">
-            <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
-            <thead></thead>
-            <tbody>
+         <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
+          <thead></thead>
+          <tbody>
            <tr><td width="20%" >.:Catchword:.</td><td>{sw}</td></tr>
            <tr><td width="20%" >.:Remarks:.</td><td>{notiz}</td></tr>
-            </tbody>
-            </table>
+          </tbody>
+         </table>
         </div>
         <div id="var" >
-            <div class="zeile klein">
-            <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
-            <thead></thead>
+         <div class="zeile klein">
+          <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
+           <thead></thead>
 <!-- BEGIN vars -->
            <tr><td width="20%" >{varname}</td><td>{varvalue}</td></tr>
 <!-- END vars -->
-            </table>
-            </div>
+          </table>
+         </div>
         </div>
         <div id="inf">
-          <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
+         <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
           <thead></thead>
           <tbody>
            <tr><td width="20%">.:Concern:.:</td><td width="25%"><a href="firma1.php?Q={Q}&id={konzern}">{konzernname}</td><td width="25%"><a href="konzern.php?Q={Q}&fid={FID}">{konzernmember}</a></td><td></td></tr>
@@ -533,53 +534,53 @@
           </tbody>
          </table>
         </div>
-    </div>
+       </div>
 
-    <div style="float:left; width:45%; height:37em; text-align:left; border: 1px solid lightgrey; border-left:0px;">
+       <div style="float:left; width:45%; height:37em; text-align:left; border: 1px solid lightgrey; border-left:0px;">
         <div id="right_tabs">
-            <ul>
-                <li><a href="#contact">.:contact:.</a></li>
-                <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=quo">.:Quotation:.</a></li>
-                <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=ord">.:orders:.</a></li>
-                <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=del">.:delivery order:.</a></li>
-                <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=inv">.:invoice:.</a></li>
-            </ul>
-            <div id="contact">
-                <table id="calls" class="tablesorter" width="100%" style='margin:0px; cursor:pointer;'>
-                    <thead><tr><th>Datum</th><th>id</th><th class="{ sorter: false }"></th><th>Betreff</th><th>.:contact:.</th></tr></thead>
-                    <tbody>
-<                     <tr onClick="showItem(0)" class='verlauf'><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
-                    </tbody>
-                </table><br>
-                <div id="pager" class="pager" style='position:absolute;'>
-                    <form name="ksearch" onSubmit="false ks();"> &nbsp;
-                        <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/first.png" class="first">
-                        <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/prev.png" class="prev">
-                        <input type="text" id='suchwort' name="suchwort" size="20"><input type="hidden" name="Q" value="{Q}">
-                        <button id='ks' name='ks'>.:search:.</button>
-                        <button id='reload' name='reload'>reload</button>
-                        <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/next.png" class="next">
-                        <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/last.png" class="last">
-                        <select class="pagesize" id='pagesize'>
-                            <option value="10">10</option>
-                            <option value="15" selected>15</option>
-                            <option value="20">20</option>
-                            <option value="25">25</option>
-                            <option value="30">30</option>
-                        </select>
-                    </form>
-                </div>
-            </div>
+         <ul>
+          <li><a href="#contact">.:contact:.</a></li>
+          <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=quo">.:Quotation:.</a></li>
+          <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=ord">.:orders:.</a></li>
+          <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=del">.:delivery order:.</a></li>
+          <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=inv">.:invoice:.</a></li>
+         </ul>
+         <div id="contact">
+          <table id="calls" class="tablesorter" width="100%" style='margin:0px; cursor:pointer;'>
+           <thead><tr><th>Datum</th><th>id</th><th class="{ sorter: false }"></th><th>Betreff</th><th>.:contact:.</th></tr></thead>
+           <tbody>
+            <tr onClick="showItem(0)" class='verlauf'><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
+           </tbody>
+          </table><br>
+          <div id="pager" class="pager" style='position:absolute;'>
+           <form name="ksearch" onSubmit="false ks();"> &nbsp;
+            <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/first.png" class="first">
+            <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/prev.png" class="prev">
+            <input type="text" id='suchwort' name="suchwort" size="20"><input type="hidden" name="Q" value="{Q}">
+            <button id='ks' name='ks'>.:search:.</button>
+            <button id='reload' name='reload'>reload</button>
+            <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/next.png" class="next">
+            <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/last.png" class="last">
+            <select class="pagesize" id='pagesize'>
+             <option value="10">10</option>
+             <option value="15" selected>15</option>
+             <option value="20">20</option>
+             <option value="25">25</option>
+             <option value="30">30</option>
+            </select>
+           </form>
+          </div>
+         </div>
         </div>
-    </div>
-</div>
-<div id="dialogwin">
-<iframe id="iframe1" width='100%' height='450'  scrolling="auto" border="0" frameborder="0"><img src='image/wait.gif'></iframe>
-</div>
-</div>
-<!-- <div id="mess">
-</div> -->
-{END_CONTENT}
-{TOOLS}
-</body>
+       </div>
+      </div>
+      <div id="dialogwin">
+       <iframe id="iframe1" width='100%' height='450'  scrolling="auto" border="0" frameborder="0"><img src='image/wait.gif'></iframe>
+      </div>
+     </div>
+     <!-- <div id="mess">
+     </div> -->
+   {END_CONTENT}
+   {TOOLS}
+ </body>
 </html>

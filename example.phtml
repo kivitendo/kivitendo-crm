@@ -45,15 +45,7 @@ $(document).ready(function() {
             text: 'Save', //translate
             id: 'saveButton',
             click: function() {
-                var obj = {};
-
-                // Formular-inputs in ein array
-                var array = $('#fsend').serializeArray();
-                // Ein object aus dem array machen
-                $.each(array, function(index, item) {
-                    obj[item.name] = item.value;
-                });
-                saveData(obj);
+                saveData();
                 getData();
                 $(this).dialog("close");
 
@@ -105,8 +97,13 @@ $(document).ready(function() {
         row.append($("<td>" + rowData.c_comments + "</td></tr>"));
     }
 
-    function saveData(obj) {
-        var obj = obj;
+    function saveData() {
+        var obj = {};
+        var array = $('#fsend').serializeArray();
+        // Ein object aus dem array machen
+        $.each(array, function(index, item) {
+            obj[item.name] = item.value;
+        });
         $.ajax({
             data: { action: "newEntry", data: JSON.stringify(obj)},
             dataType: 'json',

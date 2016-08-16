@@ -6,25 +6,20 @@ function newContact( $data ){
     //writeLog('-----sent data:-----');        
     writeLog($data);
     $data = ( array ) json_decode( $data );
-    //$data = ( array ) $data;
     writeLog('-----Array for DB:-----');        
     writeLog($data);
-    $rs = $GLOBALS['dbh']->insert( 'telcall', array( 'caller_id',  'cause', 'calldate', 'c_long', 'employee', 'kontakt', 'inout', 'bezug'), array( 891, $data['subject'], $data['date'], $data['comments'], 890, $data['type_of_contact'], $data['direction_of_contact'], 0) );
-    writeLog( $rs );
+//    $rs = $GLOBALS['dbh']->insert( 'telcall', array( 'caller_id',  'cause', 'calldate', 'c_long', 'employee', 'kontakt', '"inout"', 'bezug'), array( $data['caller_id'], $data['cause'], $data['calldate'], $data['c_long'], $data['employee'], $data['type_of_contact'], $data['direction_of_contact'], 0) );
+//    $rs = $GLOBALS['dbh']->insert( 'telcall', array( 'caller_id',  'calldate'), array( $data['callerid'],  'now()'  ) );
+
+    // in neue Tabelle tnew01
+    $rs = $GLOBALS['dbh']->insert( 'tnew01', array( 'calldate', 'cause', 'bezug' ), array( 'now()', $data['cause'], 0 ) );
+    writeLog('Anzahl Datensätze: ' .$rs );
+//    echo json_encode($rs);
     echo 1;
     //echo true;
     //echo $rs;
     //echo json_encode('1');
     
 }
-/*function newEntry( $data ){
-    //writeLog( $data );
-    $data = json_decode( $data );
-    $data = ( array ) $data;
-    //writeLog($data);
-    $rs = $GLOBALS[ 'dbh' ]->insert( 'example', array( 'date_time', 'c_name', 'c_age', 'c_comments' ), array( $data['datetime'], $data['name'],$data['age'], $data['comments']) );
-    //writelog( $rs );
-    echo 1;
-}*/
 
 ?>

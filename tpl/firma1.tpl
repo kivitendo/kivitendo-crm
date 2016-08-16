@@ -66,9 +66,12 @@
 
     function showItem(id) {
         //F1=open("getCall.php?Q={Q}&fid={FID}&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");             
-        $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>Subject</label> <input type="text" name="subject">'+
-            '<label>Date / Time</label> <input type="text" name="date" id="datetime" >' +
-            '<p><label>Comments</label> <textarea name="comments" rows="10" cols="60" wrap="hard"></textarea> </p>'+
+
+        $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>Subject</label> <input type="text" name="cause" id="cause">'+
+            '<label>Date / Time</label> <input type="text" name="calldate" id="calldate" >' +
+            //'<label> &nbsp;Caller ID</label> <input type="text" name="caller_id" id="caller_id" maxlength="3" size="3" value="891">' +
+            '<label> &nbsp;Employee</label> <input type="text" name="employee" id="employee" maxlength="3" size="3" value="890">' +
+           '<p><label>Comments</label> <textarea name="c_long" rows="10" cols="60" wrap="hard"></textarea> </p>'+
             '<p> <fieldset> <legend>Type of Contact: </legend>'+ 
                 '<input type="radio" name="type_of_contact" id="radio-1" value="T" checked="checked">  <label for="radio-1">telephone</label>'+ 
                 '<input type="radio" name="type_of_contact" id="radio-2" value="E">  <label for="radio-2">email</label>'+ 
@@ -81,7 +84,8 @@
     			'<input type="radio" name="direction_of_contact" id="radio-8" value="o" >  <label for="radio-8">to customer</label>'+
 			    '<input type="radio" name="direction_of_contact" id="radio-9" value="-" checked="checked">  <label for="radio-9">undecided</label>'+
 			'</fieldset> </form> </p>');
-        $("#datetime").datetimepicker({
+
+        $("#calldate").datetimepicker({
             //dateFormat: 'yy-mm-dd',
             stepMinute: 5,                
             hour: 1,                
@@ -215,27 +219,27 @@
     
     $(document).ready(function(){
     
-    function saveData() {
-        var obj = {};
-        var array = $('#contacts').serializeArray();
-        // Ein object aus dem array machen
-        $.each(array, function(index, item) {
-            obj[item.name] = item.value;
-        });        
-        $.ajax({
-            data: { action: "newEntry", data: JSON.stringify(obj)},
-            dataType: 'json',
-            type: 'POST',
-            url: "ajax/contact.php",
-            success: function(){
-                alert("Data successfully sent to server");
-            },
-            error:  function(){
-                alert("Sending of data failed!");
-            }
-        })
-    }
-        // Aus Tabelle kopieren,  weiter verbessern!
+        function saveData() {
+            var obj = {};
+            var arr = $('#contacts').serializeArray();
+            // Ein object aus dem array machen
+            $.each(arr, function(index, item) {
+                obj[item.name] = item.value;
+            });
+            $.ajax({
+                data: { action: "newContact", data: JSON.stringify(obj)},
+                dataType: 'json',
+                type: 'POST',
+                url: "ajax/contact.php",
+                success: function(){
+                    alert("Data successfully sent to server");
+                },
+                error:  function(){
+                    alert("Sending of data failed!");
+                }
+            })
+        }        // Aus Tabelle kopieren,  weiter verbessern!
+
         $("td").click(function() {
             $(this).select();
             document.execCommand("copy");
@@ -338,6 +342,8 @@
         });
         
         $(".fancybox").fancybox();
+        
+        
                      
         $("#contactsdialog").dialog({
             autoOpen: false,
@@ -416,6 +422,8 @@
   </div>
 
   <div id="contactsdialog" title="New Contact"></div>
+  
+  <div id="senddialog" title="Daten an Server schicken und vom Server holen"> </div>
 
   <div id='contentbox'>
    <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid lightgray;" >

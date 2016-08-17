@@ -3,16 +3,10 @@
 require_once __DIR__.'/../inc/ajax2function.php';
 
 function newContact( $data ){
-    //writeLog('-----sent data:-----');        
-    writeLog($data);
+//    writeLog($data);
     $data = ( array ) json_decode( $data );
-    writeLog('-----Array for DB:-----');        
-    writeLog($data);
-//    $rs = $GLOBALS['dbh']->insert( 'telcall', array( 'caller_id',  'cause', 'calldate', 'c_long', 'employee', 'kontakt', '"inout"', 'bezug'), array( $data['caller_id'], $data['cause'], $data['calldate'], $data['c_long'], $data['employee'], $data['type_of_contact'], $data['direction_of_contact'], 0) );
-//    $rs = $GLOBALS['dbh']->insert( 'telcall', array( 'caller_id',  'calldate'), array( $data['callerid'],  'now()'  ) );
-
-    // in neue Tabelle tnew01
-    $rs = $GLOBALS['dbh']->insert( 'tnew01', array( 'calldate', 'cause', 'bezug' ), array( 'now()', $data['cause'], 0 ) );
+//    writeLog($data);
+    $rs = $GLOBALS['dbh']->insert( 'contact_events', array( 'calldate','caller_id', 'cause', 'contact_reference', 'employee', 'cause_long', 'type_of_contact', 'inout' ), array( $data['calldate'], $data['caller_id'], $data['cause'], 0, $data['employee'], $data['cause_long'], $data['type_of_contact'], $data['inout'] ) );
     writeLog('Anzahl Datensätze: ' .$rs );
 //    echo json_encode($rs);
     echo 1;
@@ -21,5 +15,14 @@ function newContact( $data ){
     //echo json_encode('1');
     
 }
+
+function getData(){
+    //alle Datensätze bereitstellen
+    $rs = $GLOBALS[ 'dbh' ]->getAll( 'SELECT * FROM tcontact', true );
+    writeLog( $rs );
+    echo $rs;
+
+}
+
 
 ?>

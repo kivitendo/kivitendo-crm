@@ -9,7 +9,7 @@ https://developers.google.com/google-apps/calendar/recurringevents
     require_once("../inc/crmLib.php");
     require_once("../inc/stdLib.php");
     $task  = varExist( $_GET, 'task' );
-    //ToDo Funktion AjaxSql schreiben. Diese werten $_POST oder $_GET aus, erster Parameter ist Tabelle, zeiter P ist task (insert, select, update) folgende sind die serialisierten Daten
+    //ToDo Funktion AjaxSql schreiben. Diese werten $_POST oder $_GET aus, erster Parameter ist Tabelle, zweiter P ist task (insert, select, update) folgende sind die serialisierten Daten
     if( !varExist( $task ) ) $task = 'getEvents';
     $startGet       = $_GET['start'];
     $endGet         = $_GET['end'];

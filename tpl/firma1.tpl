@@ -26,7 +26,7 @@
 
 
     function showCall() {
-        $('#calls tr[group="tc"]').remove();
+      $('#calls tr[group="tc"]').remove();
         $.ajax({
             url: 'jqhelp/firmaserver.php?task=showCalls&firma=1&id={FID}',
             dataType: 'json',
@@ -57,7 +57,7 @@
                 $("#calls").trigger('update');
             }
         });
-        return false;
+        //return false;
     }
     
     function dhl() {
@@ -69,9 +69,9 @@
 
         $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>Subject</label> <input type="text" name="cause" id="cause">'+
             '<label>Date / Time</label> <input type="text" name="calldate" id="calldate" >' +
-            //'<label> &nbsp;Caller ID</label> <input type="text" name="caller_id" id="caller_id" maxlength="3" size="3" value="891">' +
+            '<label> &nbsp;Caller ID</label> <input type="text" name="caller_id" id="caller_id" maxlength="3" size="3" value="891">' +
             '<label> &nbsp;Employee</label> <input type="text" name="employee" id="employee" maxlength="3" size="3" value="890">' +
-           '<p><label>Comments</label> <textarea name="c_long" rows="10" cols="60" wrap="hard"></textarea> </p>'+
+           '<p><label>Comments</label> <textarea name="cause_long" rows="10" cols="60" wrap="hard"></textarea> </p>'+
             '<p> <fieldset> <legend>Type of Contact: </legend>'+ 
                 '<input type="radio" name="type_of_contact" id="radio-1" value="T" checked="checked">  <label for="radio-1">telephone</label>'+ 
                 '<input type="radio" name="type_of_contact" id="radio-2" value="E">  <label for="radio-2">email</label>'+ 
@@ -80,9 +80,9 @@
                 '<input type="radio" name="type_of_contact" id="radio-5" value="F">  <label for="radio-5">File</label>'+
                 '<input type="radio" name="type_of_contact" id="radio-6" value="A">  <label for="radio-6">appointment</label> </fieldset> </p>'+
    			'<p> <fieldset> <legend>Direction of Contact: </legend>'+
-    		    '<input type="radio" name="direction_of_contact" id="radio-7" value="i">  <label for="radio-7">from customer</label>'+
-    			'<input type="radio" name="direction_of_contact" id="radio-8" value="o" >  <label for="radio-8">to customer</label>'+
-			    '<input type="radio" name="direction_of_contact" id="radio-9" value="-" checked="checked">  <label for="radio-9">undecided</label>'+
+    		    '<input type="radio" name="inout" id="radio-7" value="i">  <label for="radio-7">from customer</label>'+
+    			'<input type="radio" name="inout" id="radio-8" value="o" >  <label for="radio-8">to customer</label>'+
+			    '<input type="radio" name="inout" id="radio-9" value="-" checked="checked">  <label for="radio-9">undecided</label>'+
 			'</fieldset> </form> </p>');
 
         $("#calldate").datetimepicker({
@@ -92,10 +92,10 @@
             hourMin: 6,            
             hourMax: 19,
             //timeSuffix: ' Uhr',
-            timeText: 'Zeit',
-			hourText: 'Stunde',
-			closeText: 'Fertig',
-            currentText: 'Jetzt'
+            //timeText: 'Zeit',
+			//hourText: 'Stunde',
+			//closeText: 'Fertig',
+            //currentText: 'Jetzt'
         });
         //return false;
     }
@@ -238,7 +238,43 @@
                     alert("Sending of data failed!");
                 }
             })
-        }        // Aus Tabelle kopieren,  weiter verbessern!
+        }
+        
+/*        function getData() {
+            $.ajax({
+                dataType: 'json',
+                url: 'ajax/contact.php?action=getData',
+                method: "GET",
+                success: function( json ) {
+                    drawTable(json);
+                },
+                error:  function(){
+                    alert("Holen der Daten fehlgeschlagen!");
+                }
+            })
+        }        
+
+        function drawTable(data) {
+            //$("#tbshow").empty();
+            for (var i = 0; i < data.length; i++) {
+                drawRow(data[i]);
+            }
+        }
+
+
+        function drawRow( rowData ) {
+            var row = $("<tr>");
+            $("#tbshow").append(row);
+            row.append($('<td>' + rowData.calldate + '</td>'));
+            row.append($('<td>' + rowData.id + '</td>'));
+            row.append($('<td>' + rowData.kontakt + ' ' + rowData.inout + '</td>'));
+            row.append($('<td>' + rowData.cause + '</td>'));
+            row.append($("<td>" + rowData.c_long + "</td></tr>"));
+        }
+
+        
+*/        
+        // Aus Tabelle kopieren,  weiter verbessern!
 
         $("td").click(function() {
             $(this).select();
@@ -359,6 +395,7 @@
                 id: 'saveBtn',                
                 click: function(){
                    saveData();
+                   //getData();
                    $(this).dialog("close");
                    return false;
                 }
@@ -374,6 +411,8 @@
                 }
             }]
         });
+        
+
     });
 
 </script>
@@ -383,6 +422,7 @@
 </style>
 </head>
 <body onLoad="showCall(0);">
+
 {PRE_CONTENT}
 {START_CONTENT}
 <div class="ui-widget-content" style="height:722px">
@@ -423,7 +463,7 @@
 
   <div id="contactsdialog" title="New Contact"></div>
   
-  <div id="senddialog" title="Daten an Server schicken und vom Server holen"> </div>
+<!--  <div id="senddialog" title="Daten an Server schicken und vom Server holen"> </div>-->
 
   <div id='contentbox'>
    <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid lightgray;" >
@@ -446,7 +486,7 @@
     <div style="float:left; width:43%; height:25em; text-align:right; border: 0px solid black; padding:0.2em;">
      <span valign='top'><span class="fett">{kdnr}</span> <img src="image/kreuzchen.gif" title=".:locked address:." style="visibility:{verstecke};" > {verkaeufer}
       {IMG}<br /></span>
-     <br class='mini'>
+     <br class= 'mini'>
       {ANGEBOT_BUTTON}
       {AUFTRAG_BUTTON}
       {LIEFER_BUTTON}
@@ -556,7 +596,7 @@
          <div id="contact">
           <table id="calls" class="tablesorter" width="100%" style='margin:0px; cursor:pointer;'>
            <thead><tr><th>Datum</th><th>id</th><th class="{ sorter: false }"></th><th>Betreff</th><th>.:contact:.</th></tr></thead>
-           <tbody>
+           <tbody id="tbshow">
             <tr onClick="showItem(0)" class='verlauf'><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
            </tbody>
           </table><br>

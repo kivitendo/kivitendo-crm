@@ -37,12 +37,12 @@ function mkSuchwort($suchwort) {
 function getAllTelCall($id,$firma) {
 
     if ($firma) {    // dann hole alle Kontakte der Firma
-        $sql="select id,caller_id,kontakt,cause,calldate,cp_name,inout from ";
-        $sql.="telcall left join contacts on caller_id=cp_id where bezug=0 ";
+        $sql="select id,caller_id,type_of_contact,cause,calldate,cp_name,inout from ";
+        $sql.="contact_events left join contacts on caller_id=cp_id where contact_reference=0 ";
         $sql.="and (caller_id in (select cp_id from contacts where cp_cv_id=$id) or caller_id=$id)";
      } else {  // hole nur die einer Person
-        $sql="select id,caller_id,kontakt,cause,calldate,cp_name,inout from ";
-        $sql.="telcall left join contacts on caller_id=cp_id where bezug=0 and caller_id=$id";
+        $sql="select id,caller_id,type_of_contact,cause,calldate,cp_name,inout from ";
+        $sql.="contact_events left join contacts on caller_id=cp_id where contact_reference=0 and caller_id=$id";
         $where="and caller_id=$id and caller_id=cp_id";
     }
     $rs=$GLOBALS['dbh']->getAll($sql." order by calldate desc ");
@@ -50,12 +50,12 @@ function getAllTelCall($id,$firma) {
         $rs=false;
     } else {
         //Neuesten Eintrag ermitteln
-        $sql="select telcall.*,cp_name from telcall left join contacts on caller_id=cp_id where  ";
+        $sql="select contact_events.*,cp_name from contact_events left join contacts on caller_id=cp_id where  ";
         $sql.="(caller_id in (select cp_id from contacts where cp_cv_id=$id) or caller_id=$id) ";
         $sql.="order by calldate desc limit 1";
         $rs2=$GLOBALS['dbh']->getAll($sql);
-        if ($rs2[0]["bezug"]==0) { $new=$rs2[0]["id"]; }
-        else { $new=$rs2[0]["bezug"]; };
+        if ($rs2[0]["contact_reference"]==0) { $new=$rs2[0]["id"]; }
+        else { $new=$rs2[0]["contact_reference"]; };
         $i=0;
         foreach ($rs as $row) {
             if ($row["id"]==$new) $rs[$i]["new"]=1;

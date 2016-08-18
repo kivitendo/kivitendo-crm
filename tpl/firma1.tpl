@@ -34,11 +34,11 @@
                 var content;
                 $.each(data.items, function(i) {
                     content = '';
-                    //content += '<tr class="verlauf" group="tc" onClick="showItem('+data.items[i].id+');">'
-                    content += '<tr class="verlauf" group="tc" >';
+                    content += '<tr class="verlauf" group="tc" onClick="showItem('+data.items[i].id+');">'
+//                    content += '<tr class="verlauf" group="tc" >';
                     content += '<td>' + data.items[i].calldate + '</td>';
                     content += '<td>' + data.items[i].id + '</td>';
-                    content += '<td nowrap>' + data.items[i].kontakt;
+                    content += '<td nowrap>' + data.items[i].type_of_contact;
                     if (data.items[i].inout == 'o') {
                         content += ' &gt;</td>';
                     } else if (data.items[i].inout == 'i') {
@@ -71,19 +71,26 @@
             '<label>Date / Time</label> <input type="text" name="calldate" id="calldate" >' +
             '<label> &nbsp;Caller ID</label> <input type="text" name="caller_id" id="caller_id" maxlength="3" size="3" value="891">' +
             '<label> &nbsp;Employee</label> <input type="text" name="employee" id="employee" maxlength="3" size="3" value="890">' +
-           '<p><label>Comments</label> <textarea name="cause_long" rows="10" cols="60" wrap="hard"></textarea> </p>'+
+           '<p><label>Comments</label> <textarea name="cause_long" id="cause_long" rows="10" cols="60" wrap="hard"></textarea> </p>'+
             '<p> <fieldset> <legend>Type of Contact: </legend>'+ 
-                '<input type="radio" name="type_of_contact" id="radio-1" value="T" checked="checked">  <label for="radio-1">telephone</label>'+ 
-                '<input type="radio" name="type_of_contact" id="radio-2" value="E">  <label for="radio-2">email</label>'+ 
-                '<input type="radio" name="type_of_contact" id="radio-3" value="L">  <label for="radio-3">fax/letter</label>'+ 
-                '<input type="radio" name="type_of_contact" id="radio-4" value="P">  <label for="radio-4">personal</label>'+ 
-                '<input type="radio" name="type_of_contact" id="radio-5" value="F">  <label for="radio-5">File</label>'+
-                '<input type="radio" name="type_of_contact" id="radio-6" value="A">  <label for="radio-6">appointment</label> </fieldset> </p>'+
+            '<input type="radio" name="type_of_contact" id="radio-1" value="1" checked="checked">  <label for="radio-1">telephone</label>'+ 
+                '<input type="radio" name="type_of_contact" id="radio-2" value="2">  <label for="radio-2">email</label>'+ 
+                '<input type="radio" name="type_of_contact" id="radio-3" value="3">  <label for="radio-3">fax/letter</label>'+ 
+                '<input type="radio" name="type_of_contact" id="radio-4" value="4">  <label for="radio-4">personal</label>'+ 
+                '<input type="radio" name="type_of_contact" id="radio-5" value="5">  <label for="radio-5">File</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-6" value="6">  <label for="radio-6">appointment</label> </fieldset> </p>'+
    			'<p> <fieldset> <legend>Direction of Contact: </legend>'+
     		    '<input type="radio" name="inout" id="radio-7" value="i">  <label for="radio-7">from customer</label>'+
     			'<input type="radio" name="inout" id="radio-8" value="o" >  <label for="radio-8">to customer</label>'+
 			    '<input type="radio" name="inout" id="radio-9" value="-" checked="checked">  <label for="radio-9">undecided</label>'+
 			'</fieldset> </form> </p>');
+        var id = id;
+        if (id != 0) {
+            alert(id + ' ist nicht 0');
+            //$('#cause_long').val('something');
+            //ToDo: Daten mit dieser id holen und in contactsdialog anzeigen
+                                
+        }
 
         $("#calldate").datetimepicker({
             //dateFormat: 'yy-mm-dd',
@@ -99,7 +106,8 @@
         });
         //return false;
     }
-     
+
+
     function anschr(A) {
         $( "#dialogwin" ).dialog( "option", "width", 400 );
         $( "#dialogwin" ).dialog( "option", "minWidth", 300 );
@@ -240,6 +248,11 @@
             })
         }
         
+
+
+ 
+
+          
 /*        function getData() {
             $.ajax({
                 dataType: 'json',
@@ -595,7 +608,7 @@
          </ul>
          <div id="contact">
           <table id="calls" class="tablesorter" width="100%" style='margin:0px; cursor:pointer;'>
-           <thead><tr><th>Datum</th><th>id</th><th class="{ sorter: false }"></th><th>Betreff</th><th>.:contact:.</th></tr></thead>
+           <thead><tr><th>.:date:.</th><th>id</th><th class="{ sorter: false }">.:type:. / in-out</th><th>.:subject:.</th><th>.:contact:.</th></tr></thead>
            <tbody id="tbshow">
             <tr onClick="showItem(0)" class='verlauf'><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
            </tbody>

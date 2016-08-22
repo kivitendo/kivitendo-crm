@@ -86,10 +86,9 @@
 			'</fieldset> </form> </p>');
         var id = id;
         if (id != 0) {
-            alert(id + ' ist nicht 0');
-            //$('#cause_long').val('something');
-            //ToDo: Daten mit dieser id holen und in contactsdialog anzeigen
-                                
+            
+            getSingleRow(id);
+            
         }
 
         $("#calldate").datetimepicker({
@@ -98,11 +97,11 @@
             hour: 1,                
             hourMin: 6,            
             hourMax: 19,
-            //timeSuffix: ' Uhr',
-            //timeText: 'Zeit',
-			//hourText: 'Stunde',
-			//closeText: 'Fertig',
-            //currentText: 'Jetzt'
+            timeSuffix: ' Uhr',
+            timeText: 'Zeit',
+			hourText: 'Stunde',
+			closeText: 'Fertig',
+            currentText: 'Jetzt'
         });
         //return false;
     }
@@ -225,6 +224,31 @@
         window.location.href=uri;
     }
     
+    //Datensatz mit bestimmter id bereitstellen
+    function getSingleRow(id) {
+        alert(id);        
+        var obj = {};
+        var arr = $('#contacts').serializeArray();
+        // Ein object aus dem array machen
+        $.each(arr, function(index, item) {
+            obj[item.name] = item.value;
+        });
+        $.ajax({
+            dataType: 'json',
+            url: 'ajax/contact.php?action=getData',
+            method: "GET",
+            success: function( json ) {
+                var obj = JSON.parse(json);
+                alert(obj);
+            },
+            error:  function(){
+                alert("Holen der Daten fehlgeschlagen!");
+            }
+        })
+    }            
+    
+    
+    
     $(document).ready(function(){
     
         function saveData() {
@@ -249,10 +273,6 @@
         }
         
 
-
- 
-
-          
 /*        function getData() {
             $.ajax({
                 dataType: 'json',

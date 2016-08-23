@@ -44,30 +44,6 @@ $(document).ready(function() {
         buttons: [{
             text: 'Save', //translate
             click: function() {
-//                //Datumsstring mit aktuellem Datum / aktueller Uhrzeit bauen
-//                // einzelne Daten holen
-//                var date = new Date();
-//                var year = date.getFullYear();
-//                var month = date.getMonth();
-//                var day = date.getDate();
-//                var hour = date.getHours();
-//                var minute = date.getMinutes();
-//                var second = date.getSeconds();
-//
-//                // Monate gehen von 0 bis 11, darum:
-//                month += 1;
-//
-//                // bei Werten unter 10 "0" voranstellen
-//                if (month < 10) month = "0" + month;
-//                if (day < 10) day = "0" + day;
-//                if (hour < 10) hour = "0" + hour;
-//                if (minute < 10) minute = "0" + minute;
-//                if (second < 10) second = "0" + second;
-//
-//                // Datumsstring zusammenbauen
-//                var datum = year + "/" + month + "/" + day + " " + hour + ":" + minute + ":" + second;
-//                $("#datetime").val(datum);
-
 
                 var object = {};
                 // Formular-inputs in ein array
@@ -145,7 +121,7 @@ $(document).ready(function() {
         hour: 1,
         hourMin: 6,
         hourMax: 19,
-        timeSuffix: ' Uhr',
+        //timeSuffix: ' Uhr',
         timeText: 'Zeit',
         hourText: 'Stunde',
         closeText: 'Fertig',

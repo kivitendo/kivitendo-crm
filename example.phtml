@@ -97,6 +97,21 @@ $(document).ready(function() {
         row.append($("<td>" + rowData.c_comments + "</td></tr>"));
     }
 
+
+    function getData() {
+        $.ajax({
+            dataType: 'json',
+            url: 'ajax/example.php?action=getData',
+            method: "GET",
+            success: function( json ) {
+                drawTable(json);
+            },
+            error:  function(){
+                alert("Holen der Daten fehlgeschlagen!");
+            }
+        })
+    }
+
     function saveData() {
         var obj = {};
         var array = $('#fsend').serializeArray();
@@ -117,21 +132,6 @@ $(document).ready(function() {
             }
         })
     }
-
-    function getData() {
-        $.ajax({
-            dataType: 'json',
-            url: 'ajax/example.php?action=getData',
-            method: "GET",
-            success: function( json ) {
-                drawTable(json);
-            },
-            error:  function(){
-                alert("Holen der Daten fehlgeschlagen!");
-            }
-        })
-    }
-
 
 
 

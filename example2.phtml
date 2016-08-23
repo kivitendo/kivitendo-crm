@@ -25,6 +25,10 @@
 
 ?>
 
+<script type="text/javascript" src="lxcars/jQueryAddOns/date-time-picker.js"></script>
+<script type="text/javascript" src="lxcars/jQueryAddOns/german-date-time-picker.js"></script>
+
+
 <script>
 
 
@@ -134,9 +138,20 @@ $(document).ready(function() {
             }
         }] //Ende buttons[]
     }); //Ende dialog()
-    $( function() {
-        $( "#datetime" ).datepicker();
+
+    $("#datetime").datetimepicker({
+        //dateFormat: 'yy-mm-dd',
+        stepMinute: 5,
+        hour: 1,
+        hourMin: 6,
+        hourMax: 19,
+        timeSuffix: ' Uhr',
+        timeText: 'Zeit',
+        hourText: 'Stunde',
+        closeText: 'Fertig',
+        currentText: 'Jetzt'
     });
+
 }); //Ende $(document).ready()
 
 

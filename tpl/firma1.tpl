@@ -77,7 +77,7 @@
                 '<input type="radio" name="type_of_contact" id="radio-2" value="2">  <label for="radio-2">email</label>'+ 
                 '<input type="radio" name="type_of_contact" id="radio-3" value="3">  <label for="radio-3">fax/letter</label>'+ 
                 '<input type="radio" name="type_of_contact" id="radio-4" value="4">  <label for="radio-4">personal</label>'+ 
-                '<input type="radio" name="type_of_contact" id="radio-5" value="5">  <label for="radio-5">File</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-5" value="5">  <label for="radio-5">file</label>'+
                 '<input type="radio" name="type_of_contact" id="radio-6" value="6">  <label for="radio-6">appointment</label> </fieldset> </p>'+
    			'<p> <fieldset> <legend>Direction of Contact: </legend>'+
     		    '<input type="radio" name="inout" id="radio-7" value="i">  <label for="radio-7">from customer</label>'+
@@ -85,11 +85,7 @@
 			    '<input type="radio" name="inout" id="radio-9" value="-" checked="checked">  <label for="radio-9">undecided</label>'+
 			'</fieldset> </form> </p>');
         var id = id;
-        if (id != 0) {
-            
-            getSingleRow(id);
-            
-        }
+        if (id != 0) getSingleRow(id); 
 
         $("#calldate").datetimepicker({
             //dateFormat: 'yy-mm-dd',
@@ -97,7 +93,7 @@
             hour: 1,                
             hourMin: 6,            
             hourMax: 19,
-            timeSuffix: ' Uhr',
+            //timeSuffix: ' Uhr',
             timeText: 'Zeit',
 			hourText: 'Stunde',
 			closeText: 'Fertig',
@@ -226,20 +222,46 @@
     
     //Datensatz mit bestimmter id bereitstellen
     function getSingleRow(id) {
-        alert(id);        
-        var obj = {};
-        var arr = $('#contacts').serializeArray();
-        // Ein object aus dem array machen
-        $.each(arr, function(index, item) {
-            obj[item.name] = item.value;
-        });
+        //alert(id);        
         $.ajax({
             dataType: 'json',
             url: 'ajax/contact.php?action=getData',
             method: "GET",
             success: function( json ) {
-                var obj = JSON.parse(json);
-                alert(obj);
+                for (var i = 0; i < json.length; i++) {
+                    row = json[i];
+                    if (row.id == id)  {
+                        $("#contacts #cause").val(row.cause);
+                        $("#contacts #calldate").val(row.calldate);
+                        $("#contacts #caller_id").val(row.caller_id);
+                        $("#contacts #employee").val(row.employee);
+                        $("#contacts #cause_long").val(row.cause_long);
+                        
+                        var checkedTocBtn = "radio-" + row.type_of_contact;                        
+                        $("#" + checkedTocBtn + " ").attr("checked","checked");
+                        var rNumber = 6;
+                        switch(row.inout) {
+                            case "i":
+                                rNumber += 1;
+                                break;
+                            case "o":
+                                rNumber += 2;
+                                break;
+                            case "-":
+                                rNumber += 3;
+                                break;
+                             default:
+                                rNumber += 3;
+                        };
+                        var checkedIOBtn = "radio-" + rNumber;
+                        alert(checkedIOBtn);                        
+                        $("#" + checkedIOBtn + " ").attr("checked","checked");
+                        
+                         
+                                     	
+                    	break;
+                    }
+                }
             },
             error:  function(){
                 alert("Holen der Daten fehlgeschlagen!");
@@ -273,40 +295,7 @@
         }
         
 
-/*        function getData() {
-            $.ajax({
-                dataType: 'json',
-                url: 'ajax/contact.php?action=getData',
-                method: "GET",
-                success: function( json ) {
-                    drawTable(json);
-                },
-                error:  function(){
-                    alert("Holen der Daten fehlgeschlagen!");
-                }
-            })
-        }        
-
-        function drawTable(data) {
-            //$("#tbshow").empty();
-            for (var i = 0; i < data.length; i++) {
-                drawRow(data[i]);
-            }
-        }
-
-
-        function drawRow( rowData ) {
-            var row = $("<tr>");
-            $("#tbshow").append(row);
-            row.append($('<td>' + rowData.calldate + '</td>'));
-            row.append($('<td>' + rowData.id + '</td>'));
-            row.append($('<td>' + rowData.kontakt + ' ' + rowData.inout + '</td>'));
-            row.append($('<td>' + rowData.cause + '</td>'));
-            row.append($("<td>" + rowData.c_long + "</td></tr>"));
-        }
-
-        
-*/        
+       
         // Aus Tabelle kopieren,  weiter verbessern!
 
         $("td").click(function() {
@@ -424,20 +413,19 @@
             maxWidth:800,
             maxHeight:800,
             buttons: [{
-                text: 'Save', //translate
+                text: '.:save:.', //translate
                 id: 'saveBtn',                
                 click: function(){
                    saveData();
-                   //getData();
                    $(this).dialog("close");
                    return false;
                 }
             },
             {
-                text: 'Cancel',//translate
+                text: '.:close:.',//translate
                 id: 'cancelBtn',
                 click: function(){
-                    alert("Cancelled");                
+                    //alert("Close");                
                     $(this).dialog("close");  
                     return false;                              
 
@@ -494,7 +482,7 @@
    </form>
   </div>
 
-  <div id="contactsdialog" title="New Contact"></div>
+  <div id="contactsdialog" title=".:contact:."></div>
   
 <!--  <div id="senddialog" title="Daten an Server schicken und vom Server holen"> </div>-->
 

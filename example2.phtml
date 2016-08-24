@@ -68,19 +68,21 @@ $(document).ready(function() {
         }, //Ende Button "Save"
         {  text: 'Get',//translate
             click: function(){
+                $("#getdialog").dialog({
+                    width:500,
+                    height:"auto",
+                    position: { my: "left top", at: "left center", of: window }
+                }).dialog("open").html( '<table id="showtable" class="tablesorter">' +
+                            '<tr> <th>ID</th><th>Name</th><th>Alter</th><th>Bemerkungen</th><th>Datum</th></tr>' +
+                            '<tbody id="tbody"></tbody> <tfoot></tfoot> </table>');
+
+
                 $.ajax({
                     dataType: 'json',
                     url: 'ajax/example.php?action=getData',
                     method: "GET",
                     success: function( json ) {
-                        var obj = JSON.parse(json);
-                        $("#getdialog").dialog({
-                            width:500,
-                            height:200
-                        }).dialog("open").html( '<table border="1">' +
-                            '<tr> <th>ID</th><th>Name</th><th>Alter</th><th>Bemerkungen</th><th>Datum</th></tr>' +
-                            '<tr> <td>' + obj.id + '</td> <td>' + obj.c_name + '</td> <td>' + obj.c_age + '</td>' +
-                            '<td>' + obj.c_comments + '</td> <td>' + obj.date_time + '</td> </tr> </table> <br>');
+                        drawTable(json);
                     },
                     error:  function(){
                          alert("Holen der Daten fehlgeschlagen!");
@@ -89,6 +91,7 @@ $(document).ready(function() {
             }
         }] //Ende buttons[]
     }); //Ende dialog()
+
 
     $("#datetime").datetimepicker({
         //dateFormat: 'yy-mm-dd',
@@ -105,6 +108,22 @@ $(document).ready(function() {
 
 }); //Ende $(document).ready()
 
+    function drawTable(data) {
+        $("#tbody").empty();
+        for (var i = 0; i < data.length; i++) {
+            drawRow(data[i]);
+        }
+    }
+
+    function drawRow( rowData ) {
+        var row = $("<tr>");
+        $("#tbody").append(row);
+        row.append($("<td>" + rowData.id + "</td>"));
+        row.append($("<td>" + rowData.date_time + "</td>"));
+        row.append($("<td>" + rowData.c_name + "</td>"));
+        row.append($("<td>" + rowData.c_age + "</td>"));
+        row.append($("<td>" + rowData.c_comments + "</td></tr>"));
+    }
 
 
 
@@ -129,7 +148,7 @@ table.tablesorter { width: auto; cursor: pointer; widgets: ['zebra'] }
 ?>
 <?php echo $menu['end_content']; ?>
 
- <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Testfile</p>
+ <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Testfile </p>
 <!-- <div id="example" style="position:absolute"></div>
 -->
 
@@ -149,10 +168,7 @@ table.tablesorter { width: auto; cursor: pointer; widgets: ['zebra'] }
   </p>
 </div>
 
-<div id="getdialog">
-<!-- <table>
- </table>-->
-</div>
+<div id="getdialog" class="getdialog" title="Daten vom Server"> </div>
 
 
 </body>

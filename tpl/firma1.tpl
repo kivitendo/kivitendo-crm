@@ -34,8 +34,7 @@
                 var content;
                 $.each(data.items, function(i) {
                     content = '';
-                    content += '<tr class="verlauf" group="tc" onClick="showItem('+data.items[i].id+');">'
-//                    content += '<tr class="verlauf" group="tc" >';
+                    content += '<tr class="verlauf" group="tc" onClick="showItem('+data.items[i].id+');">';
                     content += '<td>' + data.items[i].calldate + '</td>';
                     content += '<td>' + data.items[i].id + '</td>';
                     content += '<td nowrap>' + data.items[i].type_of_contact;
@@ -66,7 +65,7 @@
 
     function showItem(id) {
         //F1=open("getCall.php?Q={Q}&fid={FID}&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");             
-
+        var id = id;
         $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>Subject</label> <input type="text" name="cause" id="cause">'+
             '<label>Date / Time</label> <input type="text" name="calldate" id="calldate" >' +
             '<label> &nbsp;Caller ID</label> <input type="text" name="caller_id" id="caller_id" maxlength="3" size="3" value="891">' +
@@ -83,8 +82,9 @@
     		    '<input type="radio" name="inout" id="radio-7" value="i">  <label for="radio-7">from customer</label>'+
     			'<input type="radio" name="inout" id="radio-8" value="o" >  <label for="radio-8">to customer</label>'+
 			    '<input type="radio" name="inout" id="radio-9" value="-" checked="checked">  <label for="radio-9">undecided</label>'+
+			    '<input type="hidden" name="id" id="id" value="' + id + '">' +
 			'</fieldset> </form> </p>');
-        var id = id;
+        
         if (id != 0) getSingleRow(id); 
 
         $("#calldate").datetimepicker({
@@ -99,7 +99,8 @@
 			closeText: 'Fertig',
             currentText: 'Jetzt'
         });
-        //return false;
+        
+
     }
 
 
@@ -222,7 +223,6 @@
     
     //Datensatz mit bestimmter id bereitstellen
     function getSingleRow(id) {
-        //alert(id);        
         $.ajax({
             dataType: 'json',
             url: 'ajax/contact.php?action=getData',
@@ -254,7 +254,7 @@
                                 rNumber += 3;
                         };
                         var checkedIOBtn = "radio-" + rNumber;
-                        alert(checkedIOBtn);                        
+                        //alert(checkedIOBtn);                        
                         $("#" + checkedIOBtn + " ").attr("checked","checked");
                         
                          
@@ -287,6 +287,7 @@
                 url: "ajax/contact.php",
                 success: function(){
                     alert("Data successfully sent to server");
+                    showCall();
                 },
                 error:  function(){
                     alert("Sending of data failed!");

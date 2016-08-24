@@ -44,7 +44,6 @@ $(document).ready(function() {
         buttons: [{
             text: 'Save', //translate
             click: function() {
-
                 var object = {};
                 // Formular-inputs in ein array
                 var array = $('#fsend').serializeArray();
@@ -88,30 +87,6 @@ $(document).ready(function() {
                     }
                 })
             }
-        }, //Ende Button "Get"
-        {
-               text: 'Get Last',//translate
-            click: function(){
-                $.ajax({
-                    dataType: 'json',
-                    url: 'ajax/example.php?action=getLastData',
-                    method: "GET",
-                    success: function( json ) {
-                        //$("#getdialog").html(json);
-                        var obj = JSON.parse(json);
-                        $("#getdialog").dialog({
-                            width:500,
-                            height:200})
-                            .dialog("open").html( '<table border="1" class="tablesorter">' +
-                                '<tr> <th>ID</th><th>Name</th><th>Alter</th><th>Bemerkungen</th><th>Datum</th></tr>' +
-                                '<tr> <td>' + obj.id + '</td> <td>' + obj.c_name + '</td> <td>' + obj.c_age + '</td>' +
-                                '<td>' + obj.c_comments + '</td> <td>' + obj.date_time + '</td> </tr> </table>');
-                    },
-                    error:  function(){
-                        alert("Holen der Daten fehlgeschlagen!");
-                    }
-                })
-            }
         }] //Ende buttons[]
     }); //Ende dialog()
 
@@ -139,38 +114,9 @@ $(document).ready(function() {
 <style>
 .ui-menu, #searchfield { width: 180px; }
 
-/*#read{   position:absolute; top:120px; left:225px; width: 80%; background-color:#dfd; border:1px solid #888; }
-#results{   position:absolute; top:40px; left:235px; width: 80%;  }
-
-.contex_sub_menu, .contex_main_menu {
-    display: none;
-    z-index: 1000;
-    position: absolute;
-    overflow: hidden;
-    border: 1px solid #CCC;
-    white-space: nowrap;
-    font-family: sans-serif;
-    background: #FFF;
-    color: #333;
-    border-radius: 5px;
-    padding: 0;
-}
-
-// Each of the items in the list
-.contex_sub_menu li, .contex_main_menu li {
-    padding: 8px 12px;
-    cursor: pointer;
-    list-style-type: none;
-    transition: all .3s ease;
-}
-
-.contex_sub_menu li:hover, .contex_main_menu li:hover {
-    background-color: #DEF;
-}
-*/
 
 
-table.tablesorter { width:auto; cursor:pointer; }
+table.tablesorter { width: auto; cursor: pointer; widgets: ['zebra'] }
 
 
 </style>
@@ -181,45 +127,6 @@ table.tablesorter { width:auto; cursor:pointer; }
     echo $menu['pre_content'];
     echo $menu['start_content'];
 ?>
-<!--<div class="ui-widget-content" style="height:700px">
-    <ul id="menu"></ul>
-    <p>
-    <input type="text" id="searchfield"  placeholder="Enter Searchstring">
-
-    </p>
-    <div id="read" class="editable"></div>
-    <div id="results" style="display:none;">
-       <table id="resTable" class="tablesorter">
-         <thead>
-          <tr>
-            <th class="res_id">ID</th>
-            <th class="res_category">Category</th>
-            <th class="res_version">Version</th>
-            <th class="res_content">Row</th>
-          </tr>
-         </thead>
-         <tbody id="tbody">
-         </tbody>
-       </table>
-     </div>
-</div>
-<ul class='contex_sub_menu'>
-  <li data-action="edit">Edit</li>
-  <li data-action="delete">Delete </li>
-</ul>
-<ul class='contex_main_menu'>
-  <li data-action="new">New</li>
-  <li data-action="edit">Edit</li>
-  <li data-action="delete">Delete </li>
-</ul>
-<div id="newCat">
-</div>
-<div id="editCat">
-</div>
-<div id="delCat">
-</div>
-<div id="delNote">
-</div>-->
 <?php echo $menu['end_content']; ?>
 
  <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Testfile</p>
@@ -242,6 +149,10 @@ table.tablesorter { width:auto; cursor:pointer; }
   </p>
 </div>
 
+<div id="getdialog">
+<!-- <table>
+ </table>-->
+</div>
 
 
 </body>

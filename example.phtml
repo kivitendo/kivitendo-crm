@@ -42,7 +42,7 @@ $(document).ready(function() {
         maxWidth:800,
         maxHeight:800,
         buttons: [{
-            text: 'Save', //translate
+            text: 'save', //translate
             id: 'saveButton',
             click: function() {
                 saveData();
@@ -54,7 +54,7 @@ $(document).ready(function() {
     }); //Ende senddialog()
 
 
-    $( "#newbtn" ).button().html("New").click(function() {
+    $( "#newbtn" ).button().html("new").click(function() {
         $("#senddialog").dialog("open")
             .html('<p> <form id="fsend">' +
                 '<table> <tr> <td><label>Date of Birth</label></td>' +

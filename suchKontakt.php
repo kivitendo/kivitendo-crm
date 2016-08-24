@@ -4,15 +4,15 @@
     $sw=strtoupper($_GET["suchwort"]);
     $sw=strtr($sw,"*?","%_");
     if ($_GET["Q"]=="S") {
-        $sql="select calldate,cause,t.id,caller_id,bezug,V.name as lname,C.name as kname,P.cp_name as pname ";
-        $sql.="from telcall t left join customer C on C.id=caller_id left join vendor V on V.id=caller_id ";
-        $sql.="left join contacts P on caller_id=P.cp_id where UPPER(cause) like '%$sw%' or UPPER(c_long) like '%$sw%' ";
+        $sql="select calldate,cause,t.id,caller_id,contact_reference,V.name as lname,C.name as kname,P.cp_name as pname ";
+        $sql.="from contact_events t left join customer C on C.id=caller_id left join vendor V on V.id=caller_id ";
+        $sql.="left join contacts P on caller_id=P.cp_id where UPPER(cause) like '%$sw%' or UPPER(cause_long) like '%$sw%' ";
     } else {
         $id=$_GET["id"];
-        $sql="select calldate,cause,id,caller_id,bezug from telcall where ( UPPER(cause) like '%$sw%' or UPPER(c_long) like '%$sw%') ";
+        $sql="select calldate,cause,id,caller_id,contact_reference from contact_events where ( UPPER(cause) like '%$sw%' or UPPER(cause_long) like '%$sw%') ";
         $sql.="and (caller_id in (select cp_id from contacts where cp_cv_id=$id) or caller_id=$id)";
     }
-    $rs=$GLOBALS['dbh']->getAll($sql." order by bezug,calldate desc");
+    $rs=$GLOBALS['dbh']->getAll($sql." order by contact_reference,calldate desc");
     $used= Array();
 ?>
 <html>

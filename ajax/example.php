@@ -2,6 +2,7 @@
 
 require_once __DIR__.'/../inc/ajax2function.php';
 
+
 function newEntry( $data ){
     writeLog( $data );
     $data = json_decode( $data );
@@ -16,7 +17,8 @@ function newEntry( $data ){
 function getData(){
     //alle Datensätze bereitstellen
     $rs = $GLOBALS[ 'dbh' ]->getAll( 'SELECT * FROM example', true );
-    writeLog( $rs );
+    //writeLog( $rs );
+    //writeLog($_SESSION);
     echo $rs;
 
 }

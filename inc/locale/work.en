@@ -2,7 +2,7 @@
 //Opportunity, Mail
 $texts  = array(
   '.:opportunity:.'	 => 'Opportunity',
-  '.:opportunitys:.' => 'Opportunitys',
+  '.:opportunitys:.' => 'Opportunities',
   '.:order:.'	     => 'Order',
   '.:company:.'	     => 'Company',
   '.:searchcompany:.' => 'search company',

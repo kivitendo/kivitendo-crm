@@ -13,6 +13,7 @@
     echo $head['JQTABLE'];
     echo $head['THEME'];
     echo $head['JUI-DROPDOWN'];
+    echo $head['TRANSLATION'];
 
     /*****************************************************************************************************************************
     Grundsätze: Content wird via Ajax im Json-Format geholt und an die entsprechenden Container verteilt
@@ -57,11 +58,11 @@ $(document).ready(function() {
     $( "#newbtn" ).button().html("new").click(function() {
         $("#senddialog").dialog("open")
             .html('<p> <form id="fsend">' +
-                '<table> <tr> <td><label>Date of Birth</label></td>' +
+                '<table> <tr> <td><label>birthday</label></td>' +
                 '<td><input type="text" name="datetime" id="datetime"></td> </tr>' +
-                '<tr> <td><label>Name</label></td> <td><input type="text" name="name" id="name"></td> </tr>' +
-                '<tr> <td><label>Age</label></td> <td><input type="text" name="age" id="age"></td> </tr>' +
-                '<tr> <td><label>Comments</label></td> <td><input type="text" name="comments" id="comments"></td>' +
+                '<tr> <td><label>name</label></td> <td><input type="text" name="name" id="name"></td> </tr>' +
+                '<tr> <td><label>age</label></td> <td><input type="text" name="age" id="age"></td> </tr>' +
+                '<tr> <td><label>comments</label></td> <td><input type="text" name="comments" id="comments"></td>' +
                 '</tr> </table> </form> </p>');
 
         $("#datetime").datetimepicker({
@@ -161,7 +162,7 @@ $(document).ready(function() {
 
 <style>
  .ui-menu { width: 180px; }
- .tablesorter { width:auto; cursor:pointer; }
+ .tablesorter { width:auto; cursor:pointer; widgets: ["zebra"]}
 
 </style>
 </head>

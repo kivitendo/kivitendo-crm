@@ -66,22 +66,22 @@
     function showItem(id) {
         //F1=open("getCall.php?Q={Q}&fid={FID}&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");             
         var id = id;
-        $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>Subject</label> <input type="text" name="cause" id="cause">'+
-            '<label>Date / Time</label> <input type="text" name="calldate" id="calldate" >' +
+        $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>.:subject:.</label> <input type="text" name="cause" id="cause">'+
+            '<label>.:date:. / .:time:.</label> <input type="text" name="calldate" id="calldate" >' +
             '<label> &nbsp;Caller ID</label> <input type="text" name="caller_id" id="caller_id" maxlength="3" size="3" value="891">' +
-            '<label> &nbsp;Employee</label> <input type="text" name="employee" id="employee" maxlength="3" size="3" value="890">' +
-           '<p><label>Comments</label> <textarea name="cause_long" id="cause_long" rows="10" cols="60" wrap="hard"></textarea> </p>'+
-            '<p> <fieldset> <legend>Type of Contact: </legend>'+ 
-            '<input type="radio" name="type_of_contact" id="radio-1" value="1" checked="checked">  <label for="radio-1">telephone</label>'+ 
-                '<input type="radio" name="type_of_contact" id="radio-2" value="2">  <label for="radio-2">email</label>'+ 
-                '<input type="radio" name="type_of_contact" id="radio-3" value="3">  <label for="radio-3">fax/letter</label>'+ 
-                '<input type="radio" name="type_of_contact" id="radio-4" value="4">  <label for="radio-4">personal</label>'+ 
-                '<input type="radio" name="type_of_contact" id="radio-5" value="5">  <label for="radio-5">file</label>'+
-                '<input type="radio" name="type_of_contact" id="radio-6" value="6">  <label for="radio-6">appointment</label> </fieldset> </p>'+
-   			'<p> <fieldset> <legend>Direction of Contact: </legend>'+
-    		    '<input type="radio" name="inout" id="radio-7" value="i">  <label for="radio-7">from customer</label>'+
-    			'<input type="radio" name="inout" id="radio-8" value="o" >  <label for="radio-8">to customer</label>'+
-			    '<input type="radio" name="inout" id="radio-9" value="-" checked="checked">  <label for="radio-9">undecided</label>'+
+            //'<label> &nbsp;.:employee:.</label> <input type="text" name="employee" id="employee" maxlength="3" size="3" value="890">' +
+           '<p><label>.:comments:.</label> <textarea name="cause_long" id="cause_long" rows="10" cols="60" wrap="hard"></textarea> </p>'+
+            '<p> <fieldset> <legend>.:type of contact:.: </legend>'+ 
+            '<input type="radio" name="type_of_contact" id="radio-1" value="1" checked="checked">  <label for="radio-1">.:phone:.</label>'+ 
+                '<input type="radio" name="type_of_contact" id="radio-2" value="2">  <label for="radio-2">.:email:.</label>'+ 
+                '<input type="radio" name="type_of_contact" id="radio-3" value="3">  <label for="radio-3">.:letter:.</label>'+ 
+                '<input type="radio" name="type_of_contact" id="radio-4" value="4">  <label for="radio-4">.:personal:.</label>'+ 
+                '<input type="radio" name="type_of_contact" id="radio-5" value="5">  <label for="radio-5">.:File:.</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-6" value="6">  <label for="radio-6">.:termin:.</label> </fieldset> </p>'+
+   			'<p> <fieldset> <legend>.:direction:.: </legend>'+
+    		    '<input type="radio" name="inout" id="radio-7" value="i">  <label for="radio-7">.:from:. .:Customer:.</label>'+
+    			'<input type="radio" name="inout" id="radio-8" value="o" >  <label for="radio-8">.:to:. .:Customer:.</label>'+
+			    '<input type="radio" name="inout" id="radio-9" value="-" checked="checked">  <label for="radio-9">.:undecided:.</label>'+
 			    '<input type="hidden" name="id" id="id" value="' + id + '">' +
 			'</fieldset> </form> </p>');
         
@@ -414,7 +414,7 @@
             maxWidth:800,
             maxHeight:800,
             buttons: [{
-                text: '.:save:.', //translate
+                text: '.:save:.',
                 id: 'saveBtn',                
                 click: function(){
                    saveData();
@@ -423,7 +423,7 @@
                 }
             },
             {
-                text: '.:close:.',//translate
+                text: '.:close:.',
                 id: 'cancelBtn',
                 click: function(){
                     //alert("Close");                

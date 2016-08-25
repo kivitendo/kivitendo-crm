@@ -13,6 +13,7 @@
     echo $head['JQTABLE'];
     echo $head['THEME'];
     echo $head['JUI-DROPDOWN'];
+    echo $head['TRANSLATION'];
 
     /*****************************************************************************************************************************
     Grundsätze: Content wird via Ajax im Json-Format geholt und an die entsprechenden Container verteilt
@@ -28,21 +29,15 @@
 <script type="text/javascript" src="lxcars/jQueryAddOns/date-time-picker.js"></script>
 <script type="text/javascript" src="lxcars/jQueryAddOns/german-date-time-picker.js"></script>
 
-
 <script>
 
 
 $(document).ready(function() {
     $("#senddialog").dialog({
-        width:'auto',
-//      width: 400,
-//        height:250,
-//        minWidth:300,
-//        minHeight:200,
-//        maxWidth:800,
-//        maxHeight:800,
+        width: 400,
+        height: 'auto',
         buttons: [{
-            text: 'Save', //translate
+            text: '.:save:.',
             click: function() {
                 var object = {};
                 // Formular-inputs in ein array
@@ -66,16 +61,22 @@ $(document).ready(function() {
                 })
             }
         }, //Ende Button "Save"
-        {  text: 'Get',//translate
+        {  text: '.:get:.',//translate
             click: function(){
                 $("#getdialog").dialog({
                     width:500,
                     height:"auto",
-                    position: { my: "left top", at: "left center", of: window }
+                    position: { my: "left top", at: "left bottom", of: "p" },
+                    buttons: [{
+                        text: 'Close',
+                        id: 'closeBtn',
+                        click: function() {
+                            $('#getdialog').dialog('close');
+                        }
+                    }]
                 }).dialog("open").html( '<table id="showtable" class="tablesorter">' +
-                            '<tr> <th>ID</th><th>Name</th><th>Alter</th><th>Bemerkungen</th><th>Datum</th></tr>' +
+                            '<tr> <th>ID</th><th>Datum</th><th>Name</th><th>Alter</th><th>Bemerkungen</th></tr>' +
                             '<tbody id="tbody"></tbody> <tfoot></tfoot> </table>');
-
 
                 $.ajax({
                     dataType: 'json',
@@ -92,6 +93,8 @@ $(document).ready(function() {
         }] //Ende buttons[]
     }); //Ende dialog()
 
+//    $("#name").focus();
+
 
     $("#datetime").datetimepicker({
         //dateFormat: 'yy-mm-dd',
@@ -104,9 +107,11 @@ $(document).ready(function() {
         hourText: 'Stunde',
         closeText: 'Fertig',
         currentText: 'Jetzt'
-    });
+    }).focus();
 
 }); //Ende $(document).ready()
+
+
 
     function drawTable(data) {
         $("#tbody").empty();
@@ -156,19 +161,31 @@ table.tablesorter { width: auto; cursor: pointer; widgets: ['zebra'] }
 <div id="senddialog" title="Daten an Server schicken und vom Server holen">
   <p>
    <form id="fsend">
-    <label>Datum / Uhrzeit</label>
-    <input type="text" name="datetime" id="datetime"><br>
-    <label>Name</label>
-    <input type="text" name="name" id="name"><br>
-    <label>Alter</label>
-    <input type="text" name="age" id="age"><br>
-    <label>Bemerkungen</label>
-    <input type="text" name="comments" id="comments">
+    <table>
+     <tr>
+      <td><label>Datum / Uhrzeit</label></td>
+      <td><input type="text" name="datetime" id="datetime"></td>
+     </tr>
+     <tr>
+      <td><label>Name</label></td>
+      <td><input type="text" name="name" id="name"></td>
+     </tr>
+     <tr>
+      <td><label>Alter</label></td>
+      <td><input type="text" name="age" id="age"></td>
+     </tr>
+     <tr>
+      <td><label>Bemerkungen</label></td>
+      <td><input type="text" name="comments" id="comments"></td>
+     </tr>
+    </table>
    </form>
   </p>
 </div>
 
-<div id="getdialog" class="getdialog" title="Daten vom Server"> </div>
+<div id="getdialog" class="getdialog" title="Daten vom Server">
+<!-- <button id="closeBtn">Close</button>-->
+</div>
 
 
 </body>

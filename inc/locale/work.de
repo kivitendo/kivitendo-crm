@@ -1,12 +1,12 @@
 <?php
 //Opportunity, Mail
 $texts  = array(
-  '.:authority:.'     => 'Berechtigung',
+  '.:authority:.'    => 'Berechtigung',
   '.:opportunity:.'	 => 'Auftragschance',
   '.:opportunitys:.' => 'Auftragschancen',
   '.:order:.'	     => 'Auftrag',
   '.:company:.'	     => 'Firma',
-  '.:searchcompany:.' => 'Firma suchen',
+  '.:searchcompany:.'=> 'Firma suchen',
   '.:subject:.'	     => 'Schlagzeile',
   '.:ordersum:.'	 => 'Auftragssumme',
   '.:targetdate:.'	 => 'Zieldatum',
@@ -36,6 +36,7 @@ $texts  = array(
   '.:subject:.'	     => 'Betreff',
   '.:body:.'	     => 'Text',
   '.:cause:.'        => 'Grund',
+  '.:comment:.'      => 'Kommentar',
   '.:file:.'	     => 'Datei',
   '.:knowhowdb:.'    => 'Wissensdatenbank',
   '.:back:.'	     => 'zur&uuml;ck',
@@ -72,7 +73,6 @@ $texts  = array(
   '.:sortorder:.'        => 'Reihenfolge',
   '.:title:.'         => 'Bezeichnung',
   '.:delete:.'       => 'l&ouml;schen',
-  '.:save:.'         => 'sichern',
   '.:categorie termin:.'    => 'Terminkategorien',
   '.:special flag:.'=> 'Sonderflags',
   '.:location:.'    => 'Ort',

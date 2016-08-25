@@ -28,6 +28,7 @@
 
 <script type="text/javascript" src="lxcars/jQueryAddOns/date-time-picker.js"></script>
 <script type="text/javascript" src="lxcars/jQueryAddOns/german-date-time-picker.js"></script>
+<script language="javascript" type="text/javascript" src="translation/all.lng"></script>
 
 <script>
 
@@ -48,9 +49,14 @@ $(document).ready(function() {
             click: function() {
                 saveData();
                 getData();
-                $(this).dialog("close");
+                $(this).dialog('close');
 
             } //Ende saveButton click
+        },
+        {    text: 'close',
+             click: function(){
+                 $(this).dialog('close')
+             }
         }] //Ende buttons[]
     }); //Ende senddialog()
 
@@ -129,7 +135,7 @@ $(document).ready(function() {
                 alert("Data successfully sent to server");
             },
             error:  function(){
-                alert("Sending of data failed!");
+                alert("Sending of data failed! No data?");
             }
         })
     }
@@ -162,7 +168,7 @@ $(document).ready(function() {
 
 <style>
  .ui-menu { width: 180px; }
- .tablesorter { width:auto; cursor:pointer; widgets: ["zebra"]}
+ .tablesorter { width:auto; cursor:pointer}
 
 </style>
 </head>

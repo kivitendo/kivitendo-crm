@@ -9,7 +9,6 @@ function newEntry( $data ){
     $data = ( array ) $data;
     writeLog($data);
     $rs = $GLOBALS[ 'dbh' ]->insert( 'example', array( 'date_time', 'c_name', 'c_age', 'c_comments' ), array( $data['datetime'], $data['name'],$data['age'], $data['comments']) );
-    //writelog( $rs );
     echo 1;
 }
 
@@ -17,8 +16,6 @@ function newEntry( $data ){
 function getData(){
     //alle Datensätze bereitstellen
     $rs = $GLOBALS[ 'dbh' ]->getAll( 'SELECT * FROM example', true );
-    //writeLog( $rs );
-    //writeLog($_SESSION);
     echo $rs;
 
 }

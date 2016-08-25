@@ -26,9 +26,10 @@
 
 ?>
 
+
 <script type="text/javascript" src="lxcars/jQueryAddOns/date-time-picker.js"></script>
 <script type="text/javascript" src="lxcars/jQueryAddOns/german-date-time-picker.js"></script>
-
+<script language="javascript" type="text/javascript" src="translation/all.lng"></script>
 <script>
 
 
@@ -37,7 +38,7 @@ $(document).ready(function() {
         width: 400,
         height: 'auto',
         buttons: [{
-            text: '.:save:.',
+            text: 'Save',
             click: function() {
                 var object = {};
                 // Formular-inputs in ein array
@@ -61,7 +62,7 @@ $(document).ready(function() {
                 })
             }
         }, //Ende Button "Save"
-        {  text: '.:get:.',//translate
+        {  text: 'Get',//translate
             click: function(){
                 $("#getdialog").dialog({
                     width:500,
@@ -109,6 +110,8 @@ $(document).ready(function() {
         currentText: 'Jetzt'
     }).focus();
 
+    $("#showtable").tablesorter({widgets: ['zebra']});
+
 }); //Ende $(document).ready()
 
 
@@ -131,17 +134,11 @@ $(document).ready(function() {
     }
 
 
-
-
-
 </script>
 <style>
 .ui-menu, #searchfield { width: 180px; }
 
-
-
-table.tablesorter { width: auto; cursor: pointer; widgets: ['zebra'] }
-
+table.tablesorter { width: auto; cursor: pointer }
 
 </style>
 </head>

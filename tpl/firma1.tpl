@@ -11,8 +11,8 @@
 {QRCODE}
 {JQUERY}
 {JQUERYUI}
-
 {BASEPATH}
+
 
 <script type="text/javascript" src="{BASEPATH}crm/jquery-ui/jquery.js"></script> 
 <script type="text/javascript" src="{BASEPATH}crm/jquery-ui/ui/jquery-ui.js"></script>
@@ -21,69 +21,61 @@
 <link type="text/css" REL="stylesheet" HREF="../../css/{ERPCSS}"></link>
 <link rel="stylesheet" type="text/css" href="{BASEPATH}crm/jquery-ui/themes/base/jquery-ui.css">
 
-<script language="javascript" type="text/javascript" src="translation/all.lng"></script> 
-
+<script language="javascript" type="text/javascript" src="translation/all.lng"></script>
 
 <script language="JavaScript" type="text/javascript">
 
-
     function showCall() {
-      $('#calls tr[group="tc"]').remove();
-        $.ajax({
-            url: 'jqhelp/firmaserver.php?task=showCalls&firma=1&id={FID}',
-            dataType: 'json',
-            success: function(data){
-                var content;
-                $.each(data.items, function(i) {
-                    content = '';
-                    content += '<tr class="verlauf" group="tc" onClick="showItem('+data.items[i].id+');">';
-                    content += '<td>' + data.items[i].calldate + '</td>';
-                    content += '<td>' + data.items[i].id + '</td>';
-                    content += '<td nowrap>' + data.items[i].type_of_contact;
-                    if (data.items[i].inout == 'o') {
-                        content += ' &gt;</td>';
-                    } else if (data.items[i].inout == 'i') {
-                        content += ' &lt;</td>';
-                    } else {
-                        content += ' -</td>';
-                    }
-                    if ( data.items[i].new == 1 ) {
-                        content += '<td><b>' + data.items[i].cause + '</b></td>';
-                    } else {
-                        content += '<td>' + data.items[i].cause + '</td>';
-                    }
-                    content += '<td>' + data.items[i].cp_name + '</td></tr>';
-                    $('#calls tr:last').after(content);
-                });
-                $("#calls").trigger('update');
-            }
-        });
-        //return false;
-    }
-    
-    function dhl() {
-        F1=open("dhl.php?Q={Q}&fid={FID}&popup=1","Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
-    }
+          $('#calls tr[group="tc"]').remove();
+            $.ajax({
+                url: 'jqhelp/firmaserver.php?task=showCalls&firma=1&id={FID}',
+                dataType: 'json',
+                success: function(data){
+                    var content;
+                    $.each(data.items, function(i) {
+                        content = '';
+                        content += '<tr class="verlauf" group="tc" onClick="showItem('+data.items[i].id+');">';
+                        content += '<td>' + data.items[i].calldate + '</td>';
+                        content += '<td>' + data.items[i].id + '</td>';
+                        content += '<td nowrap>' + data.items[i].type_of_contact;
+                        if (data.items[i].inout == 'o') {
+                            content += ' &gt;</td>';
+                        } else if (data.items[i].inout == 'i') {
+                            content += ' &lt;</td>';
+                        } else {
+                            content += ' -</td>';
+                        }
+                        if ( data.items[i].new == 1 ) {
+                            content += '<td><b>' + data.items[i].cause + '</b></td>';
+                        } else {
+                            content += '<td>' + data.items[i].cause + '</td>';
+                        }
+                        content += '<td>' + data.items[i].cp_name + '</td></tr>';
+                        $('#calls tr:last').after(content);
+                    });
+                    $("#calls").trigger('update');
+                }
+            });
+        }
 
-    function showItem(id) {
+       function showItem(id) {
         //F1=open("getCall.php?Q={Q}&fid={FID}&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");             
         var id = id;
-        $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>.:subject:.</label> <input type="text" name="cause" id="cause">'+
-            '<label>.:date:. / .:time:.</label> <input type="text" name="calldate" id="calldate" >' +
+        $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>' + langData[language]['SUBJECT'] + '</label> <input type="text" name="cause" id="cause">'+
+            '<label>' +  langData[language]['DATE'] + ' / ' + langData[language]['TIME'] + '</label> <input type="text" name="calldate" id="calldate" >' +
             '<label> &nbsp;Caller ID</label> <input type="text" name="caller_id" id="caller_id" maxlength="3" size="3" value="891">' +
-            //'<label> &nbsp;.:employee:.</label> <input type="text" name="employee" id="employee" maxlength="3" size="3" value="890">' +
-           '<p><label>.:comments:.</label> <textarea name="cause_long" id="cause_long" rows="10" cols="60" wrap="hard"></textarea> </p>'+
-            '<p> <fieldset> <legend>.:type of contact:.: </legend>'+ 
-            '<input type="radio" name="type_of_contact" id="radio-1" value="1" checked="checked">  <label for="radio-1">.:phone:.</label>'+ 
-                '<input type="radio" name="type_of_contact" id="radio-2" value="2">  <label for="radio-2">.:email:.</label>'+ 
-                '<input type="radio" name="type_of_contact" id="radio-3" value="3">  <label for="radio-3">.:letter:.</label>'+ 
-                '<input type="radio" name="type_of_contact" id="radio-4" value="4">  <label for="radio-4">.:personal:.</label>'+ 
-                '<input type="radio" name="type_of_contact" id="radio-5" value="5">  <label for="radio-5">.:File:.</label>'+
-                '<input type="radio" name="type_of_contact" id="radio-6" value="6">  <label for="radio-6">.:termin:.</label> </fieldset> </p>'+
-   			'<p> <fieldset> <legend>.:direction:.: </legend>'+
-    		    '<input type="radio" name="inout" id="radio-7" value="i">  <label for="radio-7">.:from:. .:Customer:.</label>'+
-    			'<input type="radio" name="inout" id="radio-8" value="o" >  <label for="radio-8">.:to:. .:Customer:.</label>'+
-			    '<input type="radio" name="inout" id="radio-9" value="-" checked="checked">  <label for="radio-9">.:undecided:.</label>'+
+            '<p><label>' + langData[language]['COMMENTS'] + '</label> <textarea name="cause_long" id="cause_long" rows="10" cols="60" wrap="hard"></textarea> </p>'+
+            '<p> <fieldset> <legend>' + langData[language]['TYPE_OF_CONTACT'] + '</legend>'+ 
+            '<input type="radio" name="type_of_contact" id="radio-1" value="1" checked="checked">  <label for="radio-1">' + langData[language]['PHONE'] + '</label>'+ 
+                '<input type="radio" name="type_of_contact" id="radio-2" value="2">  <label for="radio-2">' + langData[language]['EMAIL'] + '</label>'+ 
+                '<input type="radio" name="type_of_contact" id="radio-3" value="3">  <label for="radio-3">' + langData[language]['LETTER'] + '</label>'+ 
+                '<input type="radio" name="type_of_contact" id="radio-4" value="4">  <label for="radio-4">' + langData[language]['PERSONAL'] + '</label>'+ 
+                '<input type="radio" name="type_of_contact" id="radio-5" value="5">  <label for="radio-5">' + langData[language]['FILE'] + '</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-6" value="6">  <label for="radio-6">' + langData[language]['TERM'] + '</label> </fieldset> </p>'+
+   			'<p> <fieldset> <legend>' + langData[language]['DIRECTION'] + '</legend>'+
+    		    '<input type="radio" name="inout" id="radio-7" value="i">  <label for="radio-7">' + langData[language]['FROM'] + ' ' + langData[language]['CUSTOMER_LABEL'] + '</label>'+
+    			'<input type="radio" name="inout" id="radio-8" value="o" >  <label for="radio-8">' + langData[language]['TO'] + ' ' + langData[language]['CUSTOMER_LABEL'] + '</label>'+
+			    '<input type="radio" name="inout" id="radio-9" value="-" checked="checked">  <label for="radio-9">' + langData[language]['UNASSIGNED'] + '</label>'+
 			    '<input type="hidden" name="id" id="id" value="' + id + '">' +
 			'</fieldset> </form> </p>');
         
@@ -103,6 +95,13 @@
         });
         
 
+    }
+
+
+
+    
+    function dhl() {
+        F1=open("dhl.php?Q={Q}&fid={FID}&popup=1","Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
     }
 
 
@@ -275,6 +274,15 @@
     
     $(document).ready(function(){
     
+        language = kivi.myconfig.countrycode;
+        $( ".lang" ).each( function(){
+            var key = $( this ).attr( "data-lang" );
+            if( $( this ).is( ":input" ) ) $( this ).attr( 'title',  typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
+            else $( this ).text( typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
+        });
+
+        showCall();
+    
         function saveData() {
             var obj = {};
             var arr = $('#contacts').serializeArray();
@@ -416,7 +424,7 @@
             maxWidth:800,
             maxHeight:800,
             buttons: [{
-                text: '.:save:.',
+                text: langData[language]['SAVE'],
                 id: 'saveBtn',                
                 click: function(){
                    saveData();
@@ -425,7 +433,7 @@
                 }
             },
             {
-                text: '.:close:.',
+                text: langData[language]['CLOSE'],
                 id: 'cancelBtn',
                 click: function(){
                     //alert("Close");                
@@ -445,7 +453,10 @@
 
 </style>
 </head>
-<body onLoad="showCall(0);">
+<!--<body onLoad="showCall();">
+-->
+<body>
+
 
 {PRE_CONTENT}
 {START_CONTENT}

@@ -28,12 +28,19 @@
 
 <script type="text/javascript" src="lxcars/jQueryAddOns/date-time-picker.js"></script>
 <script type="text/javascript" src="lxcars/jQueryAddOns/german-date-time-picker.js"></script>
-<script language="javascript" type="text/javascript" src="translation/all.lng"></script>
+
 
 <script>
 
 
 $(document).ready(function() {
+
+    var language = kivi.myconfig.countrycode;
+    $( ".lang" ).each( function(){
+        var key = $( this ).attr( "data-lang" );
+        if( $( this ).is( ":input" ) ) $( this ).attr( 'title',  typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
+            else $( this ).text( typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
+        });
 
     $("#senddialog").dialog({
         autoOpen: false,
@@ -44,31 +51,31 @@ $(document).ready(function() {
         maxWidth:800,
         maxHeight:800,
         buttons: [{
-            text: 'save', //translate
+            text: langData[language]['SAVE'],
             id: 'saveButton',
             click: function() {
                 saveData();
                 getData();
                 $(this).dialog('close');
 
-            } //Ende saveButton click
+            }
         },
-        {    text: 'close',
+        {    text: langData[language]['CLOSE'],
              click: function(){
                  $(this).dialog('close')
              }
-        }] //Ende buttons[]
-    }); //Ende senddialog()
+        }]
+    });
 
 
-    $( "#newbtn" ).button().html("new").click(function() {
+    $( "#newbtn" ).button().text(langData[language]['NEW']).click(function() {
         $("#senddialog").dialog("open")
             .html('<p> <form id="fsend">' +
-                '<table> <tr> <td><label>birthday</label></td>' +
+                '<table> <tr> <td><label >'+ langData[language]['BIRTHDAY'] +'</label></td>' +
                 '<td><input type="text" name="datetime" id="datetime"></td> </tr>' +
-                '<tr> <td><label>name</label></td> <td><input type="text" name="name" id="name"></td> </tr>' +
-                '<tr> <td><label>age</label></td> <td><input type="text" name="age" id="age"></td> </tr>' +
-                '<tr> <td><label>comments</label></td> <td><input type="text" name="comments" id="comments"></td>' +
+                '<tr> <td><label>'+ langData[language]['NAME'] +'</label></td> <td><input type="text" name="name" id="name"></td> </tr>' +
+                '<tr> <td><label>'+ langData[language]['AGE'] +'</label></td> <td><input type="text" name="age" id="age"></td> </tr>' +
+                '<tr> <td><label>'+ langData[language]['COMMENTS'] +'</label></td> <td><input type="text" name="comments" id="comments"></td>' +
                 '</tr> </table> </form> </p>');
 
         $("#datetime").datetimepicker({
@@ -132,20 +139,15 @@ $(document).ready(function() {
             type: 'POST',
             url: "ajax/example.php",
             success: function(){
-                alert("Data successfully sent to server");
+                alert(langData[language]['SEND_SUCCESS']);
             },
             error:  function(){
-                alert("Sending of data failed! No data?");
+                alert(langData[language]['SEND_ERROR'] + '. ' + langData[language]['NO_DATA'] + '?');
             }
         })
     }
 
-
-
-//    $("#showtable").tablesorter({sortList: [[0, 1]]});
-//    $("#showtable").tablesorter({sortList: [[1, 0]]});
     $("#showtable").tablesorter({widgets: ['zebra']});
-
 
     getData();
 
@@ -154,8 +156,7 @@ $(document).ready(function() {
             position:'absolute',
             marginLeft: 'auto',
             marginTop: 'auto',
-            left: (($(window).width() - $('#showTable').outerWidth())/3),
-//            top: (($(window).height() - $('#showTable').outerHeight())/3)
+            left: (($(window).width() - $('#showTable').outerWidth())/3)
 
         });
     });
@@ -184,11 +185,12 @@ $(document).ready(function() {
  <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Testfile</p>
 
 
- <div id="senddialog" title="Daten an Server schicken und vom Server holen"> </div>
+ <div id="senddialog" > </div>
 
  <div id="gdtable" class="gdtable">
   <table id="showtable" class="tablesorter">
-   <thead><tr><th>ID</th><th>Birth</th><th>Name</th><th>Age</th><th>Comments</th></tr></thead>
+   <thead><tr><th>ID</th><th data-lang='BIRTHDAY' class='lang'>Birth</th><th data-lang='NAME' class='lang'>Name</th>
+    <th data-lang='AGE' class='lang'>Age</th><th data-lang='COMMENTS' class='lang'>Comments</th></tr></thead>
    <tbody id="tbody"></tbody>
    <tfoot></tfoot>
   </table>

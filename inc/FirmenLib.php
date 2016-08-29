@@ -105,7 +105,7 @@ function getFirmenStamm($id,$ws=true,$tab='C',$cvar=true) {
         $sql.="L.lead as leadname,BL.bundesland,T.terms_netto,LA.description as language from customer C ";
         $sql.="left join employee E on C.salesman_id=E.id left join employee EMP on C.employee=EMP.id ";
         $sql.="left join business B on B.id=C.business_id left join bundesland BL on BL.id=C.bland ";
-        $sql.="left join payment_terms T on T.id=C.payment_id left join pricegroup P on P.id=C.klass ";
+        $sql.="left join payment_terms T on T.id=C.payment_id left join pricegroup P on P.id=C.pricegroup_id ";
         $sql.="left join leads L on C.lead=L.id left join language LA on LA.id = C.language_id ";
         $sql.="where C.id=$id";
     } else if ($tab=="V") {

@@ -14,6 +14,7 @@
 {BASEPATH}
 
 
+
 <script type="text/javascript" src="{BASEPATH}crm/jquery-ui/jquery.js"></script> 
 <script type="text/javascript" src="{BASEPATH}crm/jquery-ui/ui/jquery-ui.js"></script>
 <script type="text/javascript" src="{BASEPATH}lxcars/jQueryAddOns/date-time-picker.js"></script>
@@ -59,7 +60,6 @@
         }
 
        function showItem(id) {
-        //F1=open("getCall.php?Q={Q}&fid={FID}&Bezug="+id,"Caller","width=770, height=680, left=100, top=50, scrollbars=yes");             
         var id = id;
         $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>' + langData[language]['SUBJECT'] + '</label> <input type="text" name="cause" id="cause">'+
             '<label>' +  langData[language]['DATE'] + ' / ' + langData[language]['TIME'] + '</label> <input type="text" name="calldate" id="calldate" >' +
@@ -265,7 +265,7 @@
                 }
             },
             error:  function(){
-                alert("Holen der Daten fehlgeschlagen!");
+                alert(langData[language]['GET_ERROR']);
             }
         })
     }            
@@ -296,11 +296,11 @@
                 type: 'POST',
                 url: "ajax/contact.php",
                 success: function(){
-                    alert("Data successfully sent to server");
+                    alert(langData[language]['SEND_SUCCESS']);
                     showCall();
                 },
                 error:  function(){
-                    alert("Sending of data failed!");
+                    alert(langData[language]['SEND_ERROR']);
                 }
             })
         }
@@ -321,7 +321,7 @@
             name = this.getAttribute('name');
             if ( name == 'ks' ) {
                 var sw = $('#suchwort').val();
-                F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}","Suche","width=400, height=400, left=100, top=50, scrollbars=yes");
+                F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}",langData[language]['SEARCH'],"width=400, height=400, left=100, top=50, scrollbars=yes");
             } else if ( name == 'reload' ) {
                 showCall();
             } else {
@@ -338,7 +338,7 @@
                 active: {kdviewre},
                 beforeLoad: function( event, ui ) {
                     ui.jqXHR.error(function() {
-                        ui.panel.html(".:Couldn't load this tab.:." );
+                        ui.panel.html(langData[language]['TABLOAD_ERROR'] );
                     });
                 }
             });
@@ -446,6 +446,7 @@
         
 
     });
+    
 
 </script>
 <style>
@@ -463,17 +464,17 @@
 <div class="ui-widget-content" style="height:722px">
 
 
- <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
+ <p class="ui-state-highlight ui-corner-all tools " style="margin-top: 20px; padding: 0.6em;" >.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
  <br>
   <div id='menubox1' >
    <form>
     <span style="float:left;" valign="bottom">
      <!-- <div class="fancybox" rel="group" href="tmp/qr_{loginname}.png"><img src="" alt="" /></div> -->
      <div id="qrcode" class="fancybox" rel="group"><img src="" alt="" /></div>
-     <button name="firma1.php?Q={Q}&id={FID}">.:Custombase:.</button>
-     <button name="firma2.php?Q={Q}&fid={FID}">.:Contacts:.</button>
-     <button name="firma3.php?Q={Q}&fid={FID}">.:Sales:.</button>
-     <button name="firma4.phtml?Q={Q}&kdnr={kdnr}&fid={FID}">.:Documents:.</button>
+     <button name="firma1.php?Q={Q}&id={FID}" >.:Custombase:.</button>
+     <button name="firma2.php?Q={Q}&fid={FID}" >.:Contacts:.</button>
+     <button name="firma3.php?Q={Q}&fid={FID}" >.:Sales:.</button>
+     <button name="firma4.phtml?Q={Q}&kdnr={kdnr}&fid={FID}" >.:Documents:.</button>
     </span>
     <span style="float:left; vertical-alig:bottom; padding-left:8em">
 <!--         <select style="visibility:{chelp}" name="kdhelp" id="kdhelp" style="margin-top:0.5em;" onChange="KdHelp()"> -->
@@ -498,8 +499,6 @@
 
   <div id="contactsdialog" title=".:contact:."></div>
   
-<!--  <div id="senddialog" title="Daten an Server schicken und vom Server holen"> </div>-->
-
   <div id='contentbox'>
    <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid lightgray;" >
     <div class="gross" style="float:left; width:55%; height:25em; text-align:left; border: 0px solid black; padding:0.2em;" >
@@ -623,14 +622,14 @@
         <div id="right_tabs">
          <ul>
           <li><a href="#contact">.:contact:.</a></li>
-          <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=quo">.:Quotation:.</a></li>
+          <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=quo">.:quotations:.</a></li>
           <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=ord">.:orders:.</a></li>
           <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=del">.:delivery order:.</a></li>
           <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=inv">.:invoice:.</a></li>
          </ul>
          <div id="contact">
           <table id="calls" class="tablesorter" width="100%" style='margin:0px; cursor:pointer;'>
-           <thead><tr><th>.:date:.</th><th>id</th><th class="{ sorter: false }">.:type:. / in-out</th><th>.:subject:.</th><th>.:contact:.</th></tr></thead>
+           <thead><tr><th>.:date:.</th><th>id</th><th class="{ sorter: false } ">.:type:. / .:direction:.</th><th>.:subject:.</th><th>.:contact:.</th></tr></thead>
            <tbody id="tbshow">
             <tr onClick="showItem(0)" class='verlauf'><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
            </tbody>

@@ -10,20 +10,30 @@
     echo $menu['javascripts'];
     echo $head['JQTABLE'];
     echo $head['THEME'];
+    echo $head['TRANSLATION'];
+
 
 
 ?>
 <script type="text/javascript">
     $(document).ready(function(){
+
+        var language = kivi.myconfig.countrycode;
+        $( ".lang" ).each( function(){
+            var key = $( this ).attr( "data-lang" );
+            if( $( this ).is( ":input" ) ) $( this ).attr( 'title',  typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
+                else $( this ).text( typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
+            });
+
         var number;
         var entryData;
         $("#dialogFound").dialog({
             autoOpen: false,
-            title: 'Telefonverzeichnis-Eintrag',
+            title: langData[language]['PHONE_LIST_ENTRY'],
             modal: true,
             width:'auto',
             buttons: [{
-                text: "Nummer zuordnen",
+                text: langData[language]['MATCH_NUMBERS'],
                 click: function(data){
                     $('#dialogFound').append('<input type="text" id="tmp" value="' + number + '">');
                     $( '#tmp' ).select();
@@ -33,25 +43,25 @@
                 }
             },
             {
-                text: "Neuer Kunde",
+                text: langData[language]['NEW_CUSTOMER'],
                 click: function(data){
                     window.location.href = "../firmen3.php?Q=C&" + $.param( entryData );
                 }
             },
             {
-                text: "Neuer Lieferant",
+                text: langData[language]['NEW_VENDOR'],
                 click: function(){
                     window.location.href = "../firmen3.php?Q=V&" + $.param( entryData );
                 }
             },
             {
-                text: "Neue Person",
+                text: langData[language]['NEW_PERSON'],
                 click: function(data){
                     window.location.href = '../personen3.php?' + $.param( entryData );
                 }
             },
             {
-                text: "Close",
+                text: langData[language]['CLOSE'],
                 click: function(){
                     $(this).dialog('close');
                 }
@@ -60,11 +70,11 @@
         $("#dialogNotFound")
         .dialog({
             autoOpen: false,
-            title: 'Telefonverzeichnis-Eintrag',
+            title: langData[language]['PHONE_LIST_ENTRY'],
             modal: true,
             width:'auto',
             buttons: [{
-                text: "Nummer zuordnen",
+                text: langData[language]['MATCH_NUMBERS'],
                 click: function(data){
                     $('#dialogNotFound').append('<input type="text" id="tmp" value="' + number + '">');
                     $( '#tmp' ).select();
@@ -109,17 +119,17 @@
                         //delete entryData['backlink'];
                         $('#dialogFound').dialog("open")
                         .html('<table id="myTable">' +
-                                '<tr><td>Anrede: </td><td>' + data.greeting + '</td></tr>' +
-                                '<tr><td>Name: </td><td>' + data.name + '</td></tr>' +
-                                '<tr><td>Straße Nr.: </td><td>' + data.street + '</td></tr>' +
-                                '<tr><td>PLZ Ort: </td><td>' + data.zipcode + ' ' + data.city + '</td></tr>' +
-                                '<tr><td colspan="2" align=center ><a target="_blank" href="' + data.backlink + '">Telefonverzeichnis ansehen</a></td></tr>' +
+                                '<tr><td>'+ langData[language]['SALUTATION'] +': </td><td>' + data.greeting + '</td></tr>' +
+                                '<tr><td>'+ langData[language]['NAME'] +': </td><td>' + data.name + '</td></tr>' +
+                                '<tr><td>'+ langData[language]['STREET'] + ' ' + langData[language]['NUMBER'] + ': </td><td>' + data.street + '</td></tr>' +
+                                '<tr><td>'+ langData[language]['ZIPCODE'] + ' ' + langData[language]['CITY'] + ': </td><td>' + data.zipcode + ' ' + data.city + '</td></tr>' +
+                                '<tr><td colspan="2" align=center ><a target="_blank" href="' + data.backlink + '">'+ langData[language]['VIEW_PHONE_LIST'] + '</a></td></tr>' +
                               '</table>');
                         delete entryData['backlink'];
                     },
                     error: function(data){
 
-                        $('#dialogNotFound').dialog("open").html("Zur Telefonnummer: " + number + " gibt es keinen Eintrag im Telefonverzeichnis. <p> Nummer einfügen mit [STRG+V] </p>");
+                        $('#dialogNotFound').dialog("open").html(langData[language]['NO_PL_ENTRY'] + '. <p> ' + langData[language]['INSERT_NUMBER'] + ': [STRG+V] </p>');
                     }
                });
             }
@@ -165,7 +175,7 @@
     echo $menu['start_content'];
 ?>
 <div class="ui-widget-content">
-<p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;"><b>Anrufliste</b></p>
+<p class="ui-state-highlight ui-corner-all tools lang" data-lang="CALL_LIST" style="margin-top: 20px; padding: 0.6em;"><b>Anrufliste</b></p>
 <div id="dialogFound"></div>
 <div id="dialogNotFound"></div>
   <table id="DataTable" class="tablesorter">

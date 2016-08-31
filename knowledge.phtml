@@ -298,7 +298,7 @@ $(document).ready(function(){
         buttons: [{
             text: 'Save', //translate
             click: function() {
-                //var newCat = $('#editName').val();
+                var newCat = $('#editName').val();
                 $.ajax({
                     data: { action: "editCategory", data: { catName : newCat, cat_id: category_id } },
                     type: 'post',

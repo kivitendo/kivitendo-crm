@@ -15,7 +15,7 @@
 
 
 
-<script type="text/javascript" src="{BASEPATH}crm/jquery-ui/jquery.js"></script> 
+<script type="text/javascript" src="{BASEPATH}crm/jquery-ui/jquery.js"></script>
 <script type="text/javascript" src="{BASEPATH}crm/jquery-ui/ui/jquery-ui.js"></script>
 <script type="text/javascript" src="{BASEPATH}lxcars/jQueryAddOns/date-time-picker.js"></script>
 <script type="text/javascript" src="{BASEPATH}lxcars/jQueryAddOns/german-date-time-picker.js"></script>
@@ -65,41 +65,41 @@
             '<label>' +  langData[language]['DATE'] + ' / ' + langData[language]['TIME'] + '</label> <input type="text" name="calldate" id="calldate" >' +
             '<label> &nbsp;Caller ID</label> <input type="text" name="caller_id" id="caller_id" maxlength="3" size="3" value="891">' +
             '<p><label>' + langData[language]['COMMENTS'] + '</label> <textarea name="cause_long" id="cause_long" rows="10" cols="60" wrap="hard"></textarea> </p>'+
-            '<p> <fieldset> <legend>' + langData[language]['TYPE_OF_CONTACT'] + '</legend>'+ 
-            '<input type="radio" name="type_of_contact" id="radio-1" value="1" checked="checked">  <label for="radio-1">' + langData[language]['PHONE'] + '</label>'+ 
-                '<input type="radio" name="type_of_contact" id="radio-2" value="2">  <label for="radio-2">' + langData[language]['EMAIL'] + '</label>'+ 
-                '<input type="radio" name="type_of_contact" id="radio-3" value="3">  <label for="radio-3">' + langData[language]['LETTER'] + '</label>'+ 
-                '<input type="radio" name="type_of_contact" id="radio-4" value="4">  <label for="radio-4">' + langData[language]['PERSONAL'] + '</label>'+ 
+            '<p> <fieldset> <legend>' + langData[language]['TYPE_OF_CONTACT'] + '</legend>'+
+            '<input type="radio" name="type_of_contact" id="radio-1" value="1" checked="checked">  <label for="radio-1">' + langData[language]['PHONE'] + '</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-2" value="2">  <label for="radio-2">' + langData[language]['EMAIL'] + '</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-3" value="3">  <label for="radio-3">' + langData[language]['LETTER'] + '</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-4" value="4">  <label for="radio-4">' + langData[language]['PERSONAL'] + '</label>'+
                 '<input type="radio" name="type_of_contact" id="radio-5" value="5">  <label for="radio-5">' + langData[language]['FILE'] + '</label>'+
                 '<input type="radio" name="type_of_contact" id="radio-6" value="6">  <label for="radio-6">' + langData[language]['TERM'] + '</label> </fieldset> </p>'+
-   			'<p> <fieldset> <legend>' + langData[language]['DIRECTION'] + '</legend>'+
-    		    '<input type="radio" name="inout" id="radio-7" value="i">  <label for="radio-7">' + langData[language]['FROM'] + ' ' + langData[language]['CUSTOMER_LABEL'] + '</label>'+
-    			'<input type="radio" name="inout" id="radio-8" value="o" >  <label for="radio-8">' + langData[language]['TO'] + ' ' + langData[language]['CUSTOMER_LABEL'] + '</label>'+
-			    '<input type="radio" name="inout" id="radio-9" value="-" checked="checked">  <label for="radio-9">' + langData[language]['UNASSIGNED'] + '</label>'+
-			    '<input type="hidden" name="id" id="id" value="' + id + '">' +
-			'</fieldset> </form> </p>');
-        
-        if (id != 0) getSingleRow(id); 
+               '<p> <fieldset> <legend>' + langData[language]['DIRECTION'] + '</legend>'+
+                '<input type="radio" name="inout" id="radio-7" value="i">  <label for="radio-7">' + langData[language]['FROM'] + ' ' + langData[language]['CUSTOMER_LABEL'] + '</label>'+
+                '<input type="radio" name="inout" id="radio-8" value="o" >  <label for="radio-8">' + langData[language]['TO'] + ' ' + langData[language]['CUSTOMER_LABEL'] + '</label>'+
+                '<input type="radio" name="inout" id="radio-9" value="-" checked="checked">  <label for="radio-9">' + langData[language]['UNASSIGNED'] + '</label>'+
+                '<input type="hidden" name="id" id="id" value="' + id + '">' +
+            '</fieldset> </form> </p>');
+
+        if (id != 0) getSingleRow(id);
 
         $("#calldate").datetimepicker({
             //dateFormat: 'yy-mm-dd',
-            stepMinute: 5,                
-            hour: 1,                
-            hourMin: 6,            
+            stepMinute: 5,
+            hour: 1,
+            hourMin: 6,
             hourMax: 19,
             //timeSuffix: ' Uhr',
             timeText: 'Zeit',
-			hourText: 'Stunde',
-			closeText: 'Fertig',
+            hourText: 'Stunde',
+            closeText: 'Fertig',
             currentText: 'Jetzt'
         });
-        
+
 
     }
 
 
 
-    
+
     function dhl() {
         F1=open("dhl.php?Q={Q}&fid={FID}&popup=1","Caller","width=770, height=680, left=100, top=50, scrollbars=yes");
     }
@@ -180,13 +180,13 @@
             }
         })
     }
-    
+
     var f1 = null;
-           
+
     function showOP(was) {
         F1=open("op_.php?Q={Q}&fa={Fname1}&op="+was,"OP","width=950, height=450, left=100, top=50, scrollbars=yes");
     }
-    
+
     function surfgeo() {
         if ({GEODB}) {
             F1=open("surfgeodb.php?plz={Plz}&ort={Ort}","GEO","width=550, height=350, left=100, top=50, scrollbars=yes");
@@ -194,34 +194,34 @@
             alert("GEO-Datenbank nicht aktiviert");
         }
     }
-    
+
     function doOe(type) { //Auftrag
         window.location.href = '../oe.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + type;
     }
-    
+
     function newOrder( href ){ // Auftrag
         window.location.href = href;
     }
-    
+
     function doDo() { //neuer Lieferschein
         var type = '{Q}' == 'C' ? 'sales_delivery_order' : 'purchase_delivery_order';
         window.location.href = '../do.pl?action=add&vc={CuVe}&{CuVe}_id={FID}&type=' + type;
     }
-    
+
     function doIr() { //neue Rechnung
         var file = '{Q}' == 'C' ? '../is.pl' : '../ir.pl';
         window.location.href = file + '?action=add&type=invoice&vc={CuVe}&{CuVe}_id={FID}';
     }
-    
+
     function doIb() { //neuer Brief
         window.location.href = '../controller.pl?action=Letter%2fadd&letter.customer_id={FID}';
     }
-    
+
     function doLxCars() {
         uri='lxcars/lxcmain.php?owner={FID}&task=1'
         window.location.href=uri;
     }
-    
+
     //Datensatz mit bestimmter id bereitstellen
     function getSingleRow(id) {
         $.ajax({
@@ -237,8 +237,8 @@
                         $("#contacts #caller_id").val(row.caller_id);
                         $("#contacts #employee").val(row.employee);
                         $("#contacts #cause_long").val(row.cause_long);
-                        
-                        var checkedTocBtn = "radio-" + row.type_of_contact;                        
+
+                        var checkedTocBtn = "radio-" + row.type_of_contact;
                         $("#" + checkedTocBtn + " ").attr("checked","checked");
                         var rNumber = 6;
                         switch(row.inout) {
@@ -255,12 +255,12 @@
                                 rNumber += 3;
                         };
                         var checkedIOBtn = "radio-" + rNumber;
-                        //alert(checkedIOBtn);                        
+                        //alert(checkedIOBtn);
                         $("#" + checkedIOBtn + " ").attr("checked","checked");
-                        
-                         
-                                     	
-                    	break;
+
+
+
+                        break;
                     }
                 }
             },
@@ -268,12 +268,12 @@
                 alert(langData[language]['GET_ERROR']);
             }
         })
-    }            
-    
-    
-    
+    }
+
+
+
     $(document).ready(function(){
-    
+
         language = kivi.myconfig.countrycode;
         $( ".lang" ).each( function(){
             var key = $( this ).attr( "data-lang" );
@@ -282,7 +282,7 @@
         });
 
         showCall();
-    
+
         function saveData() {
             var obj = {};
             var arr = $('#contacts').serializeArray();
@@ -304,9 +304,9 @@
                 }
             })
         }
-        
 
-       
+
+
         // Aus Tabelle kopieren,  weiter verbessern!
 
         $("td").click(function() {
@@ -391,7 +391,7 @@
                 }
             }
         });
-        
+
         // --------   QR Code wird durch Jquery erstellt
         $("#qrbutt").button().click(function( event ) {
             $.ajax({
@@ -409,14 +409,14 @@
             $(".fancybox").trigger('click');
             $(".fancybox").empty();
         });
-        
+
         $(".fancybox").fancybox();
-        
-        
-                     
+
+
+
         $("#contactsdialog").dialog({
             autoOpen: false,
-            modal: true,            
+            modal: true,
             width:800,
             height:500,
             minWidth:600,
@@ -425,7 +425,7 @@
             maxHeight:800,
             buttons: [{
                 text: langData[language]['SAVE'],
-                id: 'saveBtn',                
+                id: 'saveBtn',
                 click: function(){
                    saveData();
                    $(this).dialog("close");
@@ -436,17 +436,17 @@
                 text: langData[language]['CLOSE'],
                 id: 'cancelBtn',
                 click: function(){
-                    //alert("Close");                
-                    $(this).dialog("close");  
-                    return false;                              
+                    //alert("Close");
+                    $(this).dialog("close");
+                    return false;
 
                 }
             }]
         });
-        
+
 
     });
-    
+
 
 </script>
 <style>
@@ -498,7 +498,7 @@
   </div>
 
   <div id="contactsdialog" title=".:contact:."></div>
-  
+
   <div id='contentbox'>
    <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid lightgray;" >
     <div class="gross" style="float:left; width:55%; height:25em; text-align:left; border: 0px solid black; padding:0.2em;" >
@@ -645,7 +645,7 @@
             <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/last.png" class="last">
             <select class="pagesize" id='pagesize'>
              <option value="10">10</option>
-             <option value="15" selected>15</option>
+             <option value="15" selected="selected">15</option>
              <option value="20">20</option>
              <option value="25">25</option>
              <option value="30">30</option>

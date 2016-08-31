@@ -11,10 +11,10 @@
     echo $head['JQUERY'];
     echo $head['JQUERYUI'];
     echo $head['JQTABLE'];
-    echo $head['JQTABLE-PAGER'];
     echo $head['THEME'];
     echo $head['JUI-DROPDOWN'];
     echo $head['TRANSLATION'];
+
 
     /*****************************************************************************************************************************
     Grundsätze: Content wird via Ajax im Json-Format geholt und an die entsprechenden Container verteilt
@@ -122,6 +122,7 @@ $(document).ready(function() {
             success: function( json ) {
                 $("#tbody0").empty();
                 drawTable(json);
+
                 $("#showtable").trigger("update");
                 $("#showtable").trigger("appendCache");
             },
@@ -152,31 +153,34 @@ $(document).ready(function() {
         })
     }
 
-    $("#showtable").ready(function () {
-        $("#showtable").tablesorter();
+    getData();
+    $("#showtable").tablesorter().tablesorterPager({
+        container: $("#pager"),
+        size: 9999
     });
 
-    getData();
 
     $(window).resize(function (){
         $("#gdtable").css({
-            position:'absolute',
+            width: 'auto',
+            height: 'auto',
+            position: 'absolute',
             marginLeft: 'auto',
             marginTop: 'auto',
-            left: (($(window).width() - $('#showTable').outerWidth())/3)
-
+            left: (($(window).width() - $('#showTable').outerWidth())/3),
+//            overflow: 'auto'
         });
     });
 
     $(window).resize();
 
-}); //Ende $(document).ready()
+});
 
 </script>
 
 <style>
  .ui-menu { width: 180px; }
- .tablesorter { width:auto; cursor:pointer; widgets: ['zebra']; sortList: [[0,0]]}
+ .tablesorter { width:auto; cursor:pointer; widgets: ['zebra']; sortList: [[0,0]];}
 
 </style>
 </head>
@@ -188,6 +192,7 @@ $(document).ready(function() {
 ?>
 
 <?php echo $menu['end_content']; ?>
+
 
  <p class="ui-state-highlight ui-corner-all tools lang" style="margin-top: 20px; padding: 0.6em;" data-lang="TESTFILE">Testfile</p>
 
@@ -205,23 +210,20 @@ $(document).ready(function() {
      <th data-lang='COMMENTS' class='lang'>Comments</th>
     </tr>
    </thead>
-   <tbody id="tbody0">
-    <tr>
-     <td></td>
-     <td></td>
-     <td></td>
-     <td></td>
-     <td></td>
-    </tr>
-   </tbody>
+   <tbody id="tbody0"></tbody>
    <tfoot></tfoot>
   </table>
+  <?php echo $head['JQTABLE-PAGER']; ?>
  </div>
 
  <div id="newbtn" ></div>
 
-<!-- hier funktioniert der Tablesorter! -->
- <table class="tablesorter">
+<!-- <div id="pager"> <?php echo $head['JQTABLE-PAGER']; ?> </div> -->
+
+
+
+
+<!-- <table class="tablesorter">
   <thead>
     <tr>
      <th>Name</th>
@@ -229,7 +231,7 @@ $(document).ready(function() {
      <th>Bemerkungen</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody id="tsok">
    <tr>
     <td>Anton</td>
     <td>89</td>
@@ -246,7 +248,7 @@ $(document).ready(function() {
     <td>ganz alt</td>
    </tr>
   </tbody>
- </table>
+ </table>-->
 
 
 

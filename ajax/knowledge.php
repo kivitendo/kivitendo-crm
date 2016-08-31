@@ -10,7 +10,7 @@ function getCategories(){
 
 function getArticle( $cat_id ){
      $rs = $GLOBALS['dbh']->query( 'UPDATE knowledge_content SET modifydate = now() WHERE category = '.$cat_id.' AND version = (SELECT max(version) FROM knowledge_content WHERE category = '.$cat_id.')'  );
-     $sql = "SELECT json_agg (json) from (SELECT * FROM knowledge_content WHERE category =' .$cat_id. 'AND version = ( SELECT max(version) FROM knowledge_content WHERE category = $cat_id ) ) json";
+     $sql = "SELECT json_agg (json) from (SELECT * FROM knowledge_content WHERE category =" .$cat_id. "AND version = ( SELECT max(version) FROM knowledge_content WHERE category = $cat_id ) ) json";
      $rs = $GLOBALS['dbh']->getOne( $sql );
      if( $rs['json_agg'] == NULL ) {
         $sql = "SELECT json_agg (json) from ( SELECT * FROM knowledge_content WHERE category = $cat_id ORDER BY id DESC ) json";

@@ -444,7 +444,8 @@
             }]
         });
 
-
+        $("#firma1Btn").text(langData[language]['CUSTOMBASE']);
+        $("#firma2Btn").text(langData[language]['CONTACTPERSON']);
     });
 
 
@@ -461,18 +462,18 @@
 
 {PRE_CONTENT}
 {START_CONTENT}
-<div class="ui-widget-content" style="height:722px">
+<div class="ui-widget-content" style="height:722px" >
 
 
- <p class="ui-state-highlight ui-corner-all tools " style="margin-top: 20px; padding: 0.6em;" >.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
+ <p class="ui-state-highlight ui-corner-all tools lang" data-lang="DETAILVIEW" style="margin-top: 20px; padding: 0.6em;" >.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
  <br>
   <div id='menubox1' >
    <form>
     <span style="float:left;" valign="bottom">
      <!-- <div class="fancybox" rel="group" href="tmp/qr_{loginname}.png"><img src="" alt="" /></div> -->
      <div id="qrcode" class="fancybox" rel="group"><img src="" alt="" /></div>
-     <button name="firma1.php?Q={Q}&id={FID}" >.:Custombase:.</button>
-     <button name="firma2.php?Q={Q}&fid={FID}" >.:Contacts:.</button>
+     <button id="firma1Btn" name="firma1.php?Q={Q}&id={FID}" >.:Custombase:.</button>
+     <button id="firma2Btn" name="firma2.php?Q={Q}&fid={FID}" >.:Contacts:.</button>
      <button name="firma3.php?Q={Q}&fid={FID}" >.:Sales:.</button>
      <button name="firma4.phtml?Q={Q}&kdnr={kdnr}&fid={FID}" >.:Documents:.</button>
     </span>

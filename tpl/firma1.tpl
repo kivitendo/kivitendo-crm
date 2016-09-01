@@ -446,6 +446,17 @@
 
         $("#firma1Btn").text(langData[language]['CUSTOMBASE']);
         $("#firma2Btn").text(langData[language]['CONTACTPERSON']);
+        $("#firma3Btn").text(langData[language]['SALES']);
+        $("#firma4Btn").text(langData[language]['DOCUMENTS']);
+        $("#actionmenu #1").text(langData[language]['EDIT']);
+        $("#actionmenu #2").text(langData[language]['TIMETRACK']);
+        $("#actionmenu #3").text(langData[language]['EXTRADATA']);
+        $("#actionmenu #4").text(langData[language]['CREATE_REGISTER']);
+        $("#actionmenu #5").text(langData[language]['CREATE_QUOTATION']);
+        $("#actionmenu #6").text(langData[language]['CREATE_ORDER']);
+        $("#actionmenu #7").text(langData[language]['CREATE_DELIVERY_ORDER']);
+        $("#actionmenu #8").text(langData[language]['CREATE_INVOICE']);
+
     });
 
 
@@ -474,8 +485,8 @@
      <div id="qrcode" class="fancybox" rel="group"><img src="" alt="" /></div>
      <button id="firma1Btn" name="firma1.php?Q={Q}&id={FID}" >.:Custombase:.</button>
      <button id="firma2Btn" name="firma2.php?Q={Q}&fid={FID}" >.:Contacts:.</button>
-     <button name="firma3.php?Q={Q}&fid={FID}" >.:Sales:.</button>
-     <button name="firma4.phtml?Q={Q}&kdnr={kdnr}&fid={FID}" >.:Documents:.</button>
+     <button id="firma3Btn" name="firma3.php?Q={Q}&fid={FID}" >.:Sales:.</button>
+     <button id="firma4Btn" name="firma4.phtml?Q={Q}&kdnr={kdnr}&fid={FID}" >.:Documents:.</button>
     </span>
     <span style="float:left; vertical-alig:bottom; padding-left:8em">
 <!--         <select style="visibility:{chelp}" name="kdhelp" id="kdhelp" style="margin-top:0.5em;" onChange="KdHelp()"> -->
@@ -484,7 +495,7 @@
 <!-- END kdhelp -->
 <!--     </select> -->
      <select id="actionmenu" style="margin-top:0.5em;">
-      <option>Aktionen</option>
+      <option id= '0' class='lang' data-lang='ACTIONS'>Aktionen</option>
       <option id= '1' value='firmen3.php?Q={Q}&id={FID}&edit=1'>.:edit:.</option>
       <option id= '2' value='timetrack.php?tab={Q}&fid={FID}&name={Fname1}'>.:timetrack:.</option>
       <option id= '3' value='extrafelder.php?owner={Q}{FID}'>.:extra data:.</option>
@@ -519,8 +530,8 @@
      &nbsp;<a href="{Internet}" target="_blank">{Internet}</a>
     </div>
     <div style="float:left; width:43%; height:25em; text-align:right; border: 0px solid black; padding:0.2em;">
-     <span valign='top'><span class="fett">{kdnr}</span> <img src="image/kreuzchen.gif" title=".:locked address:." style="visibility:{verstecke};" > {verkaeufer}
-      {IMG}<br /></span>
+     <span valign="top"><span class="fett">{kdnr}</span><img src="image/kreuzchen.gif" title=".:locked address:." style="visibility:{verstecke};" > {verkaeufer}
+      {IMG} <br /> </span>
      <br class= 'mini'>
       {ANGEBOT_BUTTON}
       {AUFTRAG_BUTTON}

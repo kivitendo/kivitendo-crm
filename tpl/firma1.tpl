@@ -466,8 +466,7 @@
 
 </style>
 </head>
-<!--<body onLoad="showCall();">
--->
+<!-- <body onLoad="showCall();"> -->
 <body>
 
 
@@ -550,7 +549,7 @@
       {LxCars_BUTTON}
      <br />
      <br />
-     <span style="visibility:{zeige_bearbeiter};">.:employee:.: {bearbeiter}</span>
+     <span style="visibility:{zeige_bearbeiter};" >.:employee:.: {bearbeiter}</span>
     </div>
     <br />
    </div>
@@ -583,8 +582,8 @@
          <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
           <thead></thead>
           <tbody>
-           <tr><td width="20%" >.:Catchword:.</td><td>{sw}</td></tr>
-           <tr><td width="20%" >.:Remarks:.</td><td>{notiz}</td></tr>
+           <tr><td width="20%" class="lang" data-lang="CATCHWORD">.:Catchword:.</td><td>{sw}</td></tr>
+           <tr><td width="20%" class="lang" data-lang="COMMENTS">.:Remarks:.</td><td>{notiz}</td></tr>
           </tbody>
          </table>
         </div>
@@ -602,10 +601,10 @@
          <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
           <thead></thead>
           <tbody>
-           <tr><td width="20%">.:Concern:.:</td><td width="25%"><a href="firma1.php?Q={Q}&id={konzern}">{konzernname}</td><td width="25%"><a href="konzern.php?Q={Q}&fid={FID}">{konzernmember}</a></td><td></td></tr>
-           <tr><td width="20%">.:Industry:. </td><td width="25%">{branche}</td><td width="25%"></td><td></td></tr>
-           <tr><td width="20%">.:headcount:.:</td><td width="25%">{headcount}</td><td width="25%"></td><td></td></tr>
-           <tr><td width="20%">.:language:.:</td><td width="25%">{language} </td><td width="25%"></td><td></td></tr>
+           <tr><td width="20%" class="lang" data-lang="CONCERN">.:Concern:.:</td><td width="25%"><a href="firma1.php?Q={Q}&id={konzern}">{konzernname}</td><td width="25%"><a href="konzern.php?Q={Q}&fid={FID}">{konzernmember}</a></td><td></td></tr>
+           <tr><td width="20%" class="lang" data-lang="INDUSTRY">.:Industry:. </td><td width="25%">{branche}</td><td width="25%"></td><td></td></tr>
+           <tr><td width="20%" class="lang" data-lang="HEADCOUNT">.:headcount:.:</td><td width="25%">{headcount}</td><td width="25%"></td><td></td></tr>
+           <tr><td width="20%" class="lang" data-lang="LANGUAGE">.:language:.:</td><td width="25%">{language} </td><td width="25%"></td><td></td></tr>
            <tr><td width="20%">.:Init date:.:</td><td width="25%">{erstellt} </td><td width="25%">.:update:.: </td><td>{modify} </td></tr>
           </tbody>
          </table>

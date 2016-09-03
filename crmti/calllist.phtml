@@ -100,7 +100,20 @@
                 drawTable(data);
                 $("#DataTable").trigger("update");
                 $("#DataTable").trigger("appendCache");
+            },
+            error: function () {
+                $.ajax({
+                    //dataType: "json",
+                    url: "../jqhelp/call.php?action=CreateFunctionsAndTable",
+                    method: "GET",
+                    success : function (data){
+                        drawTable(data);
+                        $("#DataTable").trigger("update");
+                        $("#DataTable").trigger("appendCache");
+                    }
+                });
             }
+
         });
         $(document).on("click", "#DataTable tr", function(e) {
             var src = $(this).closest('tr').children().eq(2).text();

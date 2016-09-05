@@ -74,7 +74,8 @@ if( $newSession ) {
     // global - ERP users, groups in kivi.myconfig laden
     $users_groups = [
             "erp_all_users" => getAllERPusers(),
-            "erp_all_groups" => getAllERPgroups()
+            "erp_all_groups" => getAllERPgroups(),
+            "erp_all_assignments" => getAllAssignments()
         ];
     $myglobal = $users_groups;
     $myglobal['baseurl'] = substr($_SESSION['baseurl'], 0, -1);//warum -1 Url darf doch Slash am Ende Kevin oder was steht in Session.baseurl

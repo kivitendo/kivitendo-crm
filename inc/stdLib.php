@@ -644,6 +644,15 @@ function getAllERPgroups($test = false) {
     return $rs;
 
 }
+
+function getAllAssignments() {
+	$allERPusers = getAllERPusers();
+	$allERPgroups = getAllERPgroups();
+    $sql = "SELECT usrg.user_id AS user_id, usrg.group_id AS group_id FROM auth.user_group AS usrg ORDER by usrg.user_id";
+    $rs = $GLOBALS['dbh_auth']->getAll( $sql );
+    return $rs;
+}
+
 function mkHeader() {
     $pager = '<span id="pager" class="pager">
                                 <form>

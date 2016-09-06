@@ -274,6 +274,22 @@
 
     $(document).ready(function(){
 
+	    if ('{Q}' == 'C') {
+		    $.ajax({
+				dataType: 'json',
+				url: 'ajax/openInvo.php?action=openInvoice&data={FID}',
+				method: "GET",
+				success: function( json ) {
+					if (json) {
+						$( "#openInvoice" ).append( "<span style='color:red'>Offene Rechnung vorhanden !</span>" );
+					}
+				},
+				error:  function(){
+					alert("Holen der Daten fehlgeschlagen!");
+				}
+			});
+		}
+
         language = kivi.myconfig.countrycode;
         $( ".lang" ).each( function(){
             var key = $( this ).attr( "data-lang" );
@@ -518,8 +534,8 @@
      {Strasse}<br />
      <span class="mini">&nbsp;<br /></span>
      <span onClick="surfgeo()">{Land}-{Plz} {Ort}</span><br />
-     <span class="klein">{Bundesland}</span>
-     <span class="mini"><br />&nbsp;<br /></span>
+     <span class="klein">{Bundesland}</span><br /><br />
+     <div id="openInvoice"></div>
      {Fcontact}
      <span class="mini"><br />&nbsp;<br /></span>
      <font color="#444444"> .:tel:.:</font> <a href="tel:{Telefon}">{Telefon}</a><br />

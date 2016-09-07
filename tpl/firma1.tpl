@@ -55,16 +55,17 @@
                         $('#calls tr:last').after(content);
                     });
                     $("#calls").trigger('update');
+                    $("#calls").trigger("appendCache");
                 }
             });
         }
 
        function showItem(id) {
         var id = id;
-        $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>.:subject:.</label> <input type="text" name="cause" id="cause">'+
-            '<label>.:date:. / .:time:.</label> <input type="text" name="calldate" id="calldate" >' +
-            '<label> &nbsp;Caller ID</label> <input type="text" name="caller_id" id="caller_id" maxlength="3" size="3" value="891">' +
-            '<p><label>.:comments:.</label> <textarea name="cause_long" id="cause_long" rows="10" cols="60" wrap="hard"></textarea> </p>'+
+        $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>.:subject:.</label><input type="text" name="cause" id="cause">'+
+            '<label>&nbsp;.:date:. / .:time:.</label> <input type="text" name="calldate" id="calldate" >' +
+             '&nbsp;<input type="text" name="caller_id" id="caller_id" maxlength="3" size="3" value="{FID}" hidden="hidden">' +
+            '<p><label>.:comments:.</label><textarea name="cause_long" id="cause_long" rows="10" cols="60" wrap="hard"></textarea> </p>'+
             '<p> <fieldset> <legend> .:type of contact:.</legend>'+
             '<input type="radio" name="type_of_contact" id="radio-1" value="1" checked="checked">  <label for="radio-1">.:phone:.</label>'+
                 '<input type="radio" name="type_of_contact" id="radio-2" value="2">  <label for="radio-2">.:email:.</label>'+
@@ -77,7 +78,7 @@
                 '<input type="radio" name="inout" id="radio-8" value="o" >  <label for="radio-8">.:to:. .:Customer:.</label>'+
                 '<input type="radio" name="inout" id="radio-9" value="-" checked="checked">  <label for="radio-9">.:undecided:.</label>'+
                 '<input type="hidden" name="id" id="id" value="' + id + '">' +
-            '</fieldset> </form> </p>');
+            '</fieldset> </form></p> </p>');
 
         if (id != 0) getSingleRow(id);
 
@@ -298,13 +299,6 @@
             });
         }
 
-        language = kivi.myconfig.countrycode;
-        $( ".lang" ).each( function(){
-            var key = $( this ).attr( "data-lang" );
-            if( $( this ).is( ":input" ) ) $( this ).attr( 'title',  typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
-            else $( this ).text( typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
-        });
-
         showCall();
 
         function saveData() {
@@ -319,7 +313,7 @@
                 type: 'POST',
                 url: "ajax/contact.php",
                 success: function(){
-                    alert('.:save success:.');
+                    //alert('.:save success:.');
                     showCall();
                 },
                 error:  function(){
@@ -344,7 +338,7 @@
             name = this.getAttribute('name');
             if ( name == 'ks' ) {
                 var sw = $('#suchwort').val();
-                F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}",langData[language]['SEARCH'],"width=400, height=400, left=100, top=50, scrollbars=yes");
+                F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}", ".:search:." ,"width=400, height=400, left=100, top=50, scrollbars=yes");
             } else if ( name == 'reload' ) {
                 showCall();
             } else {
@@ -572,10 +566,10 @@
     </ul>
     <div id="lie" class="klein">
      <span class="fett" id="shiptoname"></span> &nbsp;&nbsp;&nbsp;&nbsp;
-      .:shipto count:.:{Scnt} <img src="image/leftarrow.png" id='shipleft' border="0">
-       <span id="SID"></span> <img src="image/rightarrow.png" id='shipright' border="0">&nbsp; &nbsp;
+      .:shipto count:.:{Scnt} <img src="image/leftarrow.png" id="shipleft" border="0">
+       <span id="SID"></span> <img src="image/rightarrow.png" id="shipright" border="0">&nbsp; &nbsp;
         <a href="#" onCLick="anschr();"><img src="image/brief.png" alt=".:print label:." border="0"/></a>&nbsp; &nbsp;
-        <a href="" id='karte2' target="_blank"><img src="image/karte.gif" alt="karte" title=".:city map:." border="0"></a><br />
+        <a href="" id="karte2 target="_blank"><img src="image/karte.gif" alt="karte" title=".:city map:." border="0"></a><br />
         <span id="shiptodepartment_1"></span> &nbsp; &nbsp; <span id="shiptodepartment_2"></span> <br />
         <span id="shiptostreet"></span><br />
         <span class="mini">&nbsp;<br /></span>

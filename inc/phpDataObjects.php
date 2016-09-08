@@ -61,7 +61,7 @@ class myPDO extends PDO{
     * IN: $lastInsertId  - string returning last id
     * OUT: last id or TRUE
     **********************************************/
-    public function insert( $table, $fields, $values ){
+    public function insert( $table, $fields, $values, $lastInsertId = 'id' ){
 
         $stmt = parent::prepare("INSERT INTO $table (".implode(',',$fields).") VALUES (".str_repeat("?,",count($fields)-1)."?) " );
         if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString );
@@ -69,7 +69,7 @@ class myPDO extends PDO{
             $this->error( $stmt->errorInfo() );
             return FALSE;
         }
-        $stmt = parent::prepare("select * from currval('".$table."_id_seq')");
+        $stmt = parent::prepare("select * from currval('".$table."_".$lastInsertId."_seq')");
 
         if( !$result = $stmt->execute() ) $this->error( $stmt->errorInfo() );
         $lastId = $stmt->fetch(PDO::FETCH_NUM);

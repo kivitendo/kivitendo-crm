@@ -22,6 +22,7 @@
 <link type="text/css" REL="stylesheet" HREF="../../css/{ERPCSS}"></link>
 <link rel="stylesheet" type="text/css" href="{BASEPATH}crm/jquery-ui/themes/base/jquery-ui.css">
 
+<script language="javascript" type="text/javascript" src="translation/all.lng"></script>
 
 <script language="JavaScript" type="text/javascript">
 
@@ -61,9 +62,9 @@
 
        function showItem(id) {
         var id = id;
-        $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label for="cause">.:subject:.</label><input type="text" name="cause" id="cause">'+
-            '<label>.:date:. / .:time:.</label><input type="text" name="calldate" id="calldate" >' +
-             '<input type="text" name="caller_id" id="caller_id" maxlength="3" size="3" value="{FID}" hidden="hidden">' +
+        $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>.:subject:.</label><input type="text" name="cause" id="cause">'+
+            '<label>&nbsp;.:date:. / .:time:.</label> <input type="text" name="calldate" id="calldate" >' +
+             '&nbsp;<input type="text" name="caller_id" id="caller_id" maxlength="3" size="3" value="{FID}" hidden="hidden">' +
             '<p><label>.:comments:.</label><textarea name="cause_long" id="cause_long" rows="10" cols="60" wrap="hard"></textarea> </p>'+
             '<p> <fieldset> <legend> .:type of contact:.</legend>'+
             '<input type="radio" name="type_of_contact" id="radio-1" value="1" checked="checked">  <label for="radio-1">.:phone:.</label>'+
@@ -78,8 +79,9 @@
                 '<input type="radio" name="inout" id="radio-9" value="-" checked="checked">  <label for="radio-9">.:undecided:.</label>'+
                 '<input type="hidden" name="id" id="id" value="' + id + '">' +
             '</fieldset> </form></p> </p>');
-        $("#cause").focus();
+
         if (id != 0) getSingleRow(id);
+
         $("#calldate").datetimepicker({
             //dateFormat: 'yy-mm-dd',
             stepMinute: 5,
@@ -87,12 +89,13 @@
             hourMin: 6,
             hourMax: 19,
             //timeSuffix: ' Uhr',
-            timeText: '.:time:.',
-            hourText: '.:hour:.',
-            minuteText: '.:minutes:.',
-            closeText: '.:ready:.',
-            currentText: '.:now:.'
+            timeText: 'Zeit',
+            hourText: 'Stunde',
+            closeText: 'Fertig',
+            currentText: 'Jetzt'
         });
+
+
     }
 
 
@@ -431,8 +434,8 @@
         $("#contactsdialog").dialog({
             autoOpen: false,
             modal: true,
-            width:600,
-            height:550,
+            width:800,
+            height:500,
             minWidth:600,
             minHeight:500,
             maxWidth:800,
@@ -463,8 +466,6 @@
 </script>
 <style>
 
-input {margin-left: 5px; margin-right: 5px}
-textarea {margin-left: 5px; margin-right: 5px}
 
 </style>
 </head>

@@ -79,6 +79,7 @@ if( $newSession ) {
         ];
     $myglobal = $users_groups;
     $myglobal['baseurl'] = substr($_SESSION['baseurl'], 0, -1);//warum -1 Url darf doch Slash am Ende Kevin oder was steht in Session.baseurl
+    $myglobal['mandant'] = $_SESSION['mandant'];
     $myglobalJson = json_encode($myglobal, JSON_UNESCAPED_UNICODE);
     $id = $_SESSION['userConfig']['id'];
     $sql  = "select * from auth.user_config where user_id = '".$id."' and cfg_key = 'global_conf'";

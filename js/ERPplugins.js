@@ -74,6 +74,8 @@ $(document).ready(function() {
             cust_vend_id = $("input[name='vendor_id']").val();
         }
         $("<input style='margin-right: 5px;' class='submit' type='button' name='crm' id='crm' value='CRM' onClick=\"window.location.href='crm/firma1.php?Q="+ cust_vend_tmp +"&id="+ cust_vend_id +"'\">" ).insertBefore( "#update_button" );
+		var kivi_global = jQuery.parseJSON( kivi.myconfig.global_conf );
+		$('#message').val('Mit freundlichen Grüßen\n\n' + kivi_global.mandant);
     }//endif
 
     //CRM Button in Order (experimental)

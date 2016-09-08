@@ -63,21 +63,24 @@
 
        function showItem(id) {
         var id = id;
-        $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>' + langData[language]['SUBJECT'] + '</label><input type="text" name="cause" id="cause">'+
-            '<label>&nbsp;.:date:. / .:time:.</label> <input type="text" name="calldate" id="calldate" >' +
-             '&nbsp;<input type="text" name="caller_id" id="caller_id" maxlength="3" size="3" value="{FID}" hidden="hidden">' +
-            '<p><label>.:comments:.</label><textarea name="cause_long" id="cause_long" rows="10" cols="60" wrap="hard"></textarea> </p>'+
-            '<p> <fieldset> <legend> .:type of contact:.</legend>'+
-            '<input type="radio" name="type_of_contact" id="radio-1" value="1" checked="checked">  <label for="radio-1">.:phone:.</label>'+
-                '<input type="radio" name="type_of_contact" id="radio-2" value="2">  <label for="radio-2">.:email:.</label>'+
-                '<input type="radio" name="type_of_contact" id="radio-3" value="3">  <label for="radio-3">.:letter:.</label>'+
-                '<input type="radio" name="type_of_contact" id="radio-4" value="4">  <label for="radio-4">.:personal:.</label>'+
-                '<input type="radio" name="type_of_contact" id="radio-5" value="5">  <label for="radio-5">.:File:.</label>'+
-                '<input type="radio" name="type_of_contact" id="radio-6" value="6">  <label for="radio-6">.:termin:.</label> </fieldset> </p>'+
-               '<p> <fieldset> <legend>.:direction:.</legend>'+
-                '<input type="radio" name="inout" id="radio-7" value="i">  <label for="radio-7">.:from:. .:Customer:.</label>'+
-                '<input type="radio" name="inout" id="radio-8" value="o" >  <label for="radio-8">.:to:. .:Customer:.</label>'+
-                '<input type="radio" name="inout" id="radio-9" value="-" checked="checked">  <label for="radio-9">.:undecided:.</label>'+
+
+        $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>' + langData[language]['SUBJECT'] + '</label> <input type="text" name="cause" id="cause">'+
+            '<label>' +  langData[language]['DATE'] + ' / ' + langData[language]['TIME'] + '</label>' +
+            '<input type="text" name="calldate" id="calldate" >' +
+            //'<label> &nbsp;Caller ID</label>' +
+            '<input type="text" name="caller_id" id="caller_id" maxlength="3" size="3" value={FID} hidden="hidden">' +
+            '<p><label>' + langData[language]['COMMENTS'] + '</label> <textarea name="cause_long" id="cause_long" rows="10" cols="60" wrap="hard"></textarea> </p>'+
+            '<p> <fieldset> <legend>' + langData[language]['TYPE_OF_CONTACT'] + '</legend>'+
+            '<input type="radio" name="type_of_contact" id="radio-1" value="1" checked="checked">  <label for="radio-1">' + langData[language]['PHONE'] + '</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-2" value="2">  <label for="radio-2">' + langData[language]['EMAIL'] + '</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-3" value="3">  <label for="radio-3">' + langData[language]['LETTER'] + '</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-4" value="4">  <label for="radio-4">' + langData[language]['PERSONAL'] + '</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-5" value="5">  <label for="radio-5">' + langData[language]['FILE'] + '</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-6" value="6">  <label for="radio-6">' + langData[language]['TERM'] + '</label> </fieldset> </p>'+
+               '<p> <fieldset> <legend>' + langData[language]['DIRECTION'] + '</legend>'+
+                '<input type="radio" name="inout" id="radio-7" value="i">  <label for="radio-7">' + langData[language]['FROM'] + ' ' + langData[language]['CUSTOMER_LABEL'] + '</label>'+
+                '<input type="radio" name="inout" id="radio-8" value="o" >  <label for="radio-8">' + langData[language]['TO'] + ' ' + langData[language]['CUSTOMER_LABEL'] + '</label>'+
+                '<input type="radio" name="inout" id="radio-9" value="-" checked="checked">  <label for="radio-9">' + langData[language]['UNASSIGNED'] + '</label>'+
                 '<input type="hidden" name="id" id="id" value="' + id + '">' +
             '</fieldset> </form></p> </p>');
 
@@ -235,7 +238,6 @@
                     row = json[i];
                     if (row.id == id)  {
                         $("#contacts #cause").val(row.cause);
-                        //$("#contacts #calldate").val(row.calldate);
                         var calld = row.calldate;
                         var yr = calld.substring(0,4);
                         var mth = calld.substring(5,7);
@@ -245,6 +247,7 @@
                         var s = calld.substring(17,19);
                         var calldate = d + '.' + mth + '.' + yr + ' ' + h + ':' + m + ':' +s;
                         $("#contacts #calldate").val(calldate);
+                        //$("#contacts #calldate").val(row.calldate);
                         $("#contacts #caller_id").val(row.caller_id);
                         $("#contacts #employee").val(row.employee);
                         $("#contacts #cause_long").val(row.cause_long);
@@ -266,6 +269,7 @@
                                 rNumber += 3;
                         };
                         var checkedIOBtn = "radio-" + rNumber;
+                        //alert(checkedIOBtn);
                         $("#" + checkedIOBtn + " ").attr("checked","checked");
 
 
@@ -275,7 +279,7 @@
                 }
             },
             error:  function(){
-                alert('.:get error:.');
+                alert(langData[language]['GET_ERROR']);
             }
         })
     }
@@ -284,7 +288,7 @@
 
     $(document).ready(function(){
 
-    var language = kivi.myconfig.countrycode;
+    language = kivi.myconfig.countrycode;   // Variable language muss global sein!
     $( ".lang" ).each( function(){
         var key = $( this ).attr( "data-lang" );
         if( $( this ).is( ":input" ) ) $( this ).attr( 'title',  typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
@@ -302,7 +306,7 @@
                     }
                 },
                 error:  function(){
-                    alert('.:get error:.');
+                    alert("Holen der Daten fehlgeschlagen!");
                 }
             });
         }
@@ -312,6 +316,7 @@
         function saveData() {
             var obj = {};
             var arr = $('#contacts').serializeArray();
+            // Ein object aus dem array machen
             $.each(arr, function(index, item) {
                 obj[item.name] = item.value;
             });
@@ -321,11 +326,11 @@
                 type: 'POST',
                 url: "ajax/contact.php",
                 success: function(){
-                    //alert('.:save success:.');
+//                    alert(langData[language]['SEND_SUCCESS']);
                     showCall();
                 },
                 error:  function(){
-                    alert('.:save error:.');
+                    alert(langData[language]['SEND_ERROR']);
                 }
             })
         }
@@ -363,7 +368,7 @@
                 active: {kdviewre},
                 beforeLoad: function( event, ui ) {
                     ui.jqXHR.error(function() {
-                        ui.panel.html('.:tab load error:.' );
+                        ui.panel.html(langData[language]['TABLOAD_ERROR'] );
                     });
                 }
             });
@@ -442,14 +447,10 @@
         $("#contactsdialog").dialog({
             autoOpen: false,
             modal: true,
-            width:800,
-            height:500,
-            minWidth:600,
-            minHeight:500,
-            maxWidth:800,
-            maxHeight:800,
+            width:600,
+            height:550,
             buttons: [{
-                text: '.:save:.',
+                text: langData[language]['SAVE'],
                 id: 'saveBtn',
                 click: function(){
                    saveData();
@@ -458,15 +459,29 @@
                 }
             },
             {
-                text: '.:close:.',
+                text: langData[language]['CLOSE'],
                 id: 'cancelBtn',
                 click: function(){
+                    //alert("Close");
                     $(this).dialog("close");
                     return false;
 
                 }
             }]
         });
+
+        $("#firma1Btn").text(langData[language]['CUSTOMBASE']);
+        $("#firma2Btn").text(langData[language]['CONTACTPERSON']);
+        $("#firma3Btn").text(langData[language]['SALES']);
+        $("#firma4Btn").text(langData[language]['DOCUMENTS']);
+        $("#actionmenu #1").text(langData[language]['EDIT']);
+        $("#actionmenu #2").text(langData[language]['TIMETRACK']);
+        $("#actionmenu #3").text(langData[language]['EXTRADATA']);
+        $("#actionmenu #4").text(langData[language]['CREATE_REGISTER']);
+        $("#actionmenu #5").text(langData[language]['CREATE_QUOTATION']);
+        $("#actionmenu #6").text(langData[language]['CREATE_ORDER']);
+        $("#actionmenu #7").text(langData[language]['CREATE_DELIVERY_ORDER']);
+        $("#actionmenu #8").text(langData[language]['CREATE_INVOICE']);
 
     });
 
@@ -505,7 +520,7 @@
 <!-- END kdhelp -->
 <!--     </select> -->
      <select id="actionmenu" style="margin-top:0.5em;">
-      <option id= '0' >Aktionen</option>
+      <option id= '0' class='lang' data-lang='ACTIONS'>Aktionen</option>
       <option id= '1' value='firmen3.php?Q={Q}&id={FID}&edit=1'>.:edit:.</option>
       <option id= '2' value='timetrack.php?tab={Q}&fid={FID}&name={Fname1}'>.:timetrack:.</option>
       <option id= '3' value='extrafelder.php?owner={Q}{FID}'>.:extra data:.</option>
@@ -593,8 +608,8 @@
          <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
           <thead></thead>
           <tbody>
-           <tr><td width="20%" >.:Catchword:.</td><td>{sw}</td></tr>
-           <tr><td width="20%" >.:Remarks:.</td><td>{notiz}</td></tr>
+           <tr><td width="20%" class="lang" data-lang="CATCHWORD">.:Catchword:.</td><td>{sw}</td></tr>
+           <tr><td width="20%" class="lang" data-lang="COMMENTS">.:Remarks:.</td><td>{notiz}</td></tr>
           </tbody>
          </table>
         </div>
@@ -612,10 +627,10 @@
          <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
           <thead></thead>
           <tbody>
-           <tr><td width="20%" >.:Concern:.:</td><td width="25%"><a href="firma1.php?Q={Q}&id={konzern}">{konzernname}</td><td width="25%"><a href="konzern.php?Q={Q}&fid={FID}">{konzernmember}</a></td><td></td></tr>
-           <tr><td width="20%" >.:Industry:. </td><td width="25%">{branche}</td><td width="25%"></td><td></td></tr>
-           <tr><td width="20%" >.:headcount:.:</td><td width="25%">{headcount}</td><td width="25%"></td><td></td></tr>
-           <tr><td width="20%" >.:language:.:</td><td width="25%">{language} </td><td width="25%"></td><td></td></tr>
+           <tr><td width="20%" class="lang" data-lang="CONCERN">.:Concern:.:</td><td width="25%"><a href="firma1.php?Q={Q}&id={konzern}">{konzernname}</td><td width="25%"><a href="konzern.php?Q={Q}&fid={FID}">{konzernmember}</a></td><td></td></tr>
+           <tr><td width="20%" class="lang" data-lang="INDUSTRY">.:Industry:. </td><td width="25%">{branche}</td><td width="25%"></td><td></td></tr>
+           <tr><td width="20%" class="lang" data-lang="HEADCOUNT">.:headcount:.:</td><td width="25%">{headcount}</td><td width="25%"></td><td></td></tr>
+           <tr><td width="20%" class="lang" data-lang="LANGUAGE">.:language:.:</td><td width="25%">{language} </td><td width="25%"></td><td></td></tr>
            <tr><td width="20%">.:Init date:.:</td><td width="25%">{erstellt} </td><td width="25%">.:update:.: </td><td>{modify} </td></tr>
           </tbody>
          </table>

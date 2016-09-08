@@ -12,6 +12,7 @@
 {JQUERY}
 {JQUERYUI}
 {BASEPATH}
+{TRANSLATION}
 
 
 
@@ -62,7 +63,7 @@
 
        function showItem(id) {
         var id = id;
-        $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>.:subject:.</label><input type="text" name="cause" id="cause">'+
+        $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>' + langData[language]['SUBJECT'] + '</label><input type="text" name="cause" id="cause">'+
             '<label>&nbsp;.:date:. / .:time:.</label> <input type="text" name="calldate" id="calldate" >' +
              '&nbsp;<input type="text" name="caller_id" id="caller_id" maxlength="3" size="3" value="{FID}" hidden="hidden">' +
             '<p><label>.:comments:.</label><textarea name="cause_long" id="cause_long" rows="10" cols="60" wrap="hard"></textarea> </p>'+
@@ -282,6 +283,13 @@
 
 
     $(document).ready(function(){
+
+    var language = kivi.myconfig.countrycode;
+    $( ".lang" ).each( function(){
+        var key = $( this ).attr( "data-lang" );
+        if( $( this ).is( ":input" ) ) $( this ).attr( 'title',  typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
+            else $( this ).text( typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
+        });
 
         if ('{Q}' == 'C') {
             $.ajax({

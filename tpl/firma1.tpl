@@ -64,10 +64,10 @@
        function showItem(id) {
         var id = id;
 
-        $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>' + langData[language]['SUBJECT'] + '</label> <input type="text" name="cause" id="cause">'+
+        $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>' + langData[language]['SUBJECT'] + '</label>'+
+            '<input type="text" name="cause" id="cause">'+
             '<label>' +  langData[language]['DATE'] + ' / ' + langData[language]['TIME'] + '</label>' +
             '<input type="text" name="calldate" id="calldate" >' +
-            //'<label> &nbsp;Caller ID</label>' +
             '<input type="text" name="caller_id" id="caller_id" maxlength="3" size="3" value={FID} hidden="hidden">' +
             '<p><label>' + langData[language]['COMMENTS'] + '</label> <textarea name="cause_long" id="cause_long" rows="10" cols="60" wrap="hard"></textarea> </p>'+
             '<p> <fieldset> <legend>' + langData[language]['TYPE_OF_CONTACT'] + '</legend>'+
@@ -93,11 +93,14 @@
             hourMin: 6,
             hourMax: 19,
             //timeSuffix: ' Uhr',
-            timeText: 'Zeit',
-            hourText: 'Stunde',
-            closeText: 'Fertig',
-            currentText: 'Jetzt'
+            timeText: langData[language]['TIME'],
+            hourText: langData[language]['HOUR'],
+            closeText: langData[language]['CLOSE'],
+            currentText: langData[language]['NOW']
         });
+
+
+
 
 
     }
@@ -227,7 +230,6 @@
         window.location.href=uri;
     }
 
-    //Datensatz mit bestimmter id bereitstellen
     function getSingleRow(id) {
         $.ajax({
             dataType: 'json',
@@ -247,11 +249,9 @@
                         var s = calld.substring(17,19);
                         var calldate = d + '.' + mth + '.' + yr + ' ' + h + ':' + m + ':' +s;
                         $("#contacts #calldate").val(calldate);
-                        //$("#contacts #calldate").val(row.calldate);
                         $("#contacts #caller_id").val(row.caller_id);
                         $("#contacts #employee").val(row.employee);
                         $("#contacts #cause_long").val(row.cause_long);
-
                         var checkedTocBtn = "radio-" + row.type_of_contact;
                         $("#" + checkedTocBtn + " ").attr("checked","checked");
                         var rNumber = 6;
@@ -269,12 +269,9 @@
                                 rNumber += 3;
                         };
                         var checkedIOBtn = "radio-" + rNumber;
-                        //alert(checkedIOBtn);
                         $("#" + checkedIOBtn + " ").attr("checked","checked");
 
-
-
-                        break;
+//                        break;
                     }
                 }
             },
@@ -326,7 +323,6 @@
                 type: 'POST',
                 url: "ajax/contact.php",
                 success: function(){
-//                    alert(langData[language]['SEND_SUCCESS']);
                     showCall();
                 },
                 error:  function(){
@@ -351,7 +347,7 @@
             name = this.getAttribute('name');
             if ( name == 'ks' ) {
                 var sw = $('#suchwort').val();
-                F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}", ".:search:." ,"width=400, height=400, left=100, top=50, scrollbars=yes");
+                F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}", suche ,"width=400, height=400, left=100, top=50, scrollbars=yes");
             } else if ( name == 'reload' ) {
                 showCall();
             } else {
@@ -470,25 +466,13 @@
             }]
         });
 
-        $("#firma1Btn").text(langData[language]['CUSTOMBASE']);
-        $("#firma2Btn").text(langData[language]['CONTACTPERSON']);
-        $("#firma3Btn").text(langData[language]['SALES']);
-        $("#firma4Btn").text(langData[language]['DOCUMENTS']);
-        $("#actionmenu #1").text(langData[language]['EDIT']);
-        $("#actionmenu #2").text(langData[language]['TIMETRACK']);
-        $("#actionmenu #3").text(langData[language]['EXTRADATA']);
-        $("#actionmenu #4").text(langData[language]['CREATE_REGISTER']);
-        $("#actionmenu #5").text(langData[language]['CREATE_QUOTATION']);
-        $("#actionmenu #6").text(langData[language]['CREATE_ORDER']);
-        $("#actionmenu #7").text(langData[language]['CREATE_DELIVERY_ORDER']);
-        $("#actionmenu #8").text(langData[language]['CREATE_INVOICE']);
-
     });
 
 
 </script>
 <style>
 
+#contacts input {margin-left: 5px; margin-right: 10px}
 
 </style>
 </head>

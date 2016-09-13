@@ -1,30 +1,30 @@
 -- @tag: Calendar
--- @description: Table events, event_category for Calendar imported from termine 
+-- @description: Table events, event_category for Calendar imported from termine
 
 --Starttag
-CREATE TABLE event_category( 
+CREATE TABLE event_category(
     id      serial NOT NULL PRIMARY KEY,
     label   text,
-	   color 	 char(7)
+    color      char(7)
 );
 
 CREATE TABLE events(
     id              serial NOT NULL PRIMARY KEY,
-    title 		        text,
+    title             text,
     description     text,
     location        text,
-    start 		        timestamp without time zone,
-    stop 			        timestamp without time zone,
-    repeat		        char(16),
-    repeat_factor  	smallint,
-    repeat_quantity	smallint,
-    repeat_end		    timestamp without time zone,
+    start                 timestamp without time zone,
+    stop                     timestamp without time zone,
+    repeat                char(16),
+    repeat_factor      smallint,
+    repeat_quantity    smallint,
+    repeat_end            timestamp without time zone,
     uid             int,
     prio            smallint,
-    category 		     smallint,
-    visibility		    smallint,
+    category              smallint,
+    visibility            smallint,
     allday          boolean,
-    color 		        character(7),
+    color                 character(7),
     job             boolean,
     done            boolean,
     job_planned_end timestamp without time zone,
@@ -36,6 +36,3 @@ INSERT INTO events ( title, description, location, start, stop, repeat, repeat_f
 
 ALTER TABLE events ADD  FOREIGN KEY( category ) REFERENCES event_category( id );
 DELETE FROM event_category WHERE label = '';
-
-
-

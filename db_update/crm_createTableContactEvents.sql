@@ -1,7 +1,6 @@
 -- @tag: createTableContactEvents
 -- @description: erstellt Tabelle contact_events
--- @version: 2.2.2
-
+-- @version: 2.2.3
 
 DROP TABLE IF EXISTS contact_events;
 

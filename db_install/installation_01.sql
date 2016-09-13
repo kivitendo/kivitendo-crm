@@ -370,7 +370,7 @@ CREATE TABLE events(
     cust_vend_pers  TEXT
 );
 
-CREATE TABLE postitall (
+CREATE TABLE postitall(
     id          SERIAL NOT NULL PRIMARY KEY,
     iduser      TEXT,
     idnote      TEXT,
@@ -557,3 +557,5 @@ INSERT INTO schema_info (tag,login) VALUES ('crm_Calendar02','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_EventCategory','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_Postitall','install');
 INSERT INTO schema_info (tag,login) VALUES ('crm_Knowledge','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_createTableContactEvents','install');
+INSERT INTO schema_info (tag,login) VALUES ('crm_createTableExample','install');

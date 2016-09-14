@@ -1,5 +1,5 @@
-﻿-- @tag: createTableExample
--- @description: creates table example
+﻿-- @tag: Example
+-- @description: creates table for programming examples file example.phtml
 -- @version: 2.2.2
 
 DROP TABLE IF EXISTS example;
@@ -11,3 +11,5 @@ CREATE TABLE example(
   c_age integer,
   c_comments text
 );
+
+-- @exec

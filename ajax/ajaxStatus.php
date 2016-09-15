@@ -34,10 +34,20 @@ function updateDB(){
     saveDBs( $output = FALSE ); //ToDo: uncomment
     //Alle Dateien in ./db_update in einen Array laden
     $fileNameArray = scandir( __DIR__.'/../db_update' );
+
+    //Anzahl Dateien in db_update
+    $countFiles = count($fileNameArray); 
+
     $remove = preg_grep("/^\.{1,2}|.{1,}~|.{1,}#|\.gitignore$/", $fileNameArray);
     foreach( $remove as $remValue ) unset( $fileNameArray[array_search( $remValue, $fileNameArray )] ); //Sicherheitskopien enfernen
     //Inhalt der Dateien in Array laden
     $dbSchema = $GLOBALS['dbh']->getAll( "select * FROM schema_info" );
+
+
+    //TODO: Prüfung einbauen, ob die Anzahl der Dateien in db_update mit der Anzahl der Tags in der Tabelle schema_info übereinstimmt
+    // und wenn Anzahl in schema_info < Anzahl Dateien, die fehlenden Tags mit INSERT INTO eintragen lassen 
+        
+    
     foreach( $dbSchema as $key => $value ) $dbSchemaTags[$key] = $value['tag'];//alle Tags in einem flachen Array
     foreach( $fileNameArray as $key => $fileName ){
         $nTag = $nVersion = $lastVersion = $currentVersion = 0;
@@ -65,7 +75,7 @@ function updateDB(){
         }
     }
     ksort( $fileNameArray ); //nach Version sortieren
-    //in $fileNameArray stehen nun, die Dateien die zum Update benötigt werden, sortiert
+    //in $fileNameArray stehen nun die Dateien die zum Update benötigt werden, sortiert
     $comment_patterns = array(
         '/\/\*.*(\n)*.*(\*\/)?/', //C comments
         '/\s*--.*\n/',            //inline comments start with --
@@ -90,9 +100,9 @@ function updateDB(){
                             echo json_encode( array( 'SQL-Error in '.$fileName.'<br> SQL-Code: '.$sql ) );
                             return;
                         }
-                        //writeLog( 'exec-SQL: '.$sql );
                         $sql = '';
                     }
+
                 }
                 else $code .= $line; //Php-Code
             }

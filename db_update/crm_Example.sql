@@ -1,9 +1,8 @@
 ﻿-- @tag: Example
--- @description: creates table for programming examples file example.phtml
+-- @description: creates table for example file
 -- @version: 2.2.2
 
 DROP TABLE IF EXISTS example;
-
 CREATE TABLE example(
   id serial,
   date_time timestamp without time zone,

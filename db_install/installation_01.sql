@@ -1,22 +1,3 @@
-CREATE TABLE example(
-  id serial,
-  date_time timestamp without time zone,
-  c_name text,
-  c_age integer,
-  c_comments text);
-
-CREATE TABLE contact_events(
-  id serial,
-  cause text,
-  caller_id integer,
-  calldate timestamp without time zone,
-  cause_long text,
-  employee integer,
-  contact_reference integer DEFAULT 0,
-  "inout" character(1),
-  calendar_event integer,
-  type_of_contact integer);
-
 CREATE TABLE telcall (
     id serial,
     termin_id integer,
@@ -28,7 +9,8 @@ CREATE TABLE telcall (
     kontakt character(1),
     inout char(1) DEFAULT 'i',
     bezug integer,
-    dokument integer);
+    dokument integer
+);
 
 CREATE TABLE telcallhistory (
     id serial,
@@ -43,7 +25,8 @@ CREATE TABLE telcallhistory (
     dokument integer,
     chgid integer,
     grund char(1),
-    datum timestamp without time zone NOT NULL);
+    datum timestamp without time zone NOT NULL
+);
 
 CREATE TABLE documents (
     filename text,
@@ -55,7 +38,8 @@ CREATE TABLE documents (
     kunde integer,
     lock integer DEFAULT 0,
     employee integer,
-    id serial);
+    id serial
+);
 
 CREATE TABLE wiedervorlage (
     id serial,
@@ -72,24 +56,28 @@ CREATE TABLE wiedervorlage (
     initemployee integer,
     kontaktid integer,
     kontakttab character(1),
-    tellid integer);
+    tellid integer
+);
 
 CREATE TABLE documenttotc (
     id serial,
     telcall integer,
-    documents integer);
+    documents integer
+);
 
 CREATE TABLE telnr (
     id integer,
     tabelle character(1),
-    nummer character varying(20));
+    nummer character varying(20)
+);
 
 CREATE TABLE docvorlage (
     docid serial,
     vorlage character varying(60),
     beschreibung character varying(255),
     file character varying(40),
-    applikation character(1));
+    applikation character(1)
+);
 
 CREATE TABLE docfelder (
     fid serial,
@@ -99,17 +87,20 @@ CREATE TABLE docfelder (
     beschreibung character varying(200),
     laenge  integer,
     zeichen character varying(20),
-    position    integer);
+    position    integer
+);
 
 CREATE TABLE gruppenname (
     grpid  serial,
     grpname  character varying(40),
-    rechte       char(1) DEFAULT 'w');
+    rechte       char(1) DEFAULT 'w'
+);
 
 CREATE TABLE grpusr (
     gid  serial,
     grpid integer,
-    usrid integer);
+    usrid integer
+);
 
 
 CREATE TABLE custmsg (
@@ -118,13 +109,15 @@ CREATE TABLE custmsg (
     prio integer DEFAULT 3,
     msg char varying(60),
     uid integer,
-    akt boolean);
+    akt boolean
+);
 
 CREATE TABLE crm (
     id serial,
     uid integer,
     datum timestamp without time zone,
-    version char(5));
+    version char(5)
+);
 
 CREATE TABLE labels (
     id serial,
@@ -141,7 +134,8 @@ CREATE TABLE labels (
     width double precision,
     height double precision,
     fontsize integer,
-    employee integer);
+    employee integer
+);
 
 INSERT INTO labels (name, cust, papersize, metric, marginleft, margintop, nx, ny, spacex, spacey, width, height, fontsize, employee)
 VALUES ('Firma', 'C', 'A4', 'mm', 2, 2, 2, 3, 4, 2, 66, 38, 10, NULL);
@@ -151,7 +145,8 @@ CREATE TABLE labeltxt (
     id serial,
     lid integer,
     font integer,
-    zeile text);
+    zeile text
+);
 
 INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1), 6, '');
 INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1), 8, 'Lx-System, Unser Weg 1, 12345 Woanders');
@@ -165,13 +160,15 @@ INSERT INTO labeltxt (lid, font, zeile) VALUES ((select id from labels limit 1),
 
 CREATE TABLE  contmasch(
     mid integer,
-    cid integer);
+    cid integer
+);
 
 CREATE TABLE history (
     mid integer,
     itime timestamp without time zone default now(),
     art character varying(20),
-    beschreibung text);
+    beschreibung text
+);
 
 CREATE TABLE repauftrag (
     aid integer,
@@ -185,14 +182,16 @@ CREATE TABLE repauftrag (
     anlagedatum timestamp without time zone,
     status integer,
     kdnr integer,
-    counter bigint);
+    counter bigint
+);
 
 CREATE TABLE  maschmat (
     mid integer,
     aid integer,
     parts_id integer,
     betrag numeric(15,5),
-    menge numeric(10,3));
+    menge numeric(10,3)
+);
 
 CREATE TABLE contract (
     cid serial,
@@ -202,7 +201,8 @@ CREATE TABLE contract (
     customer_id integer,
     anfangdatum date,
     betrag numeric(15,5),
-    endedatum date);
+    endedatum date
+);
 
 CREATE TABLE maschine (
     id serial,
@@ -210,7 +210,8 @@ CREATE TABLE maschine (
     serialnumber text,
     standort text,
     inspdatum DATE,
-    counter BIGINT);
+    counter BIGINT
+);
 
 
 CREATE TABLE wissencategorie(
@@ -291,6 +292,7 @@ CREATE TABLE timetrack (
     active boolean DEFAULT 't',
     uid integer NOT NULL
 );
+
 CREATE TABLE tt_parts(
     eid int4,
     qty numeric(10,3),
@@ -321,6 +323,7 @@ CREATE table extra_felder (
     fkey     text,
     fval     text
 );
+
 CREATE INDEX extrafld_key ON extra_felder USING btree (owner);
 
 CREATE TABLE crmdefaults (
@@ -331,6 +334,7 @@ CREATE TABLE crmdefaults (
     grp char(10),
     modify timestamp without time zone DEFAULT NOW()
 );
+
 CREATE TABLE crmemployee (
     manid serial,
     uid int,
@@ -395,6 +399,29 @@ CREATE TABLE knowledge_content (
     owner       INT,
     rights      TEXT
 );
+
+CREATE TABLE example(
+    id serial,
+    date_time timestamp without time zone,
+    c_name text,
+    c_age integer,
+    c_comments text
+);
+
+CREATE TABLE contact_events(
+    id serial,
+    cause text,
+    caller_id integer,
+    calldate timestamp without time zone,
+    cause_long text,
+    employee integer,
+    contact_reference integer DEFAULT 0,
+    "inout" character(1),
+    calendar_event integer,
+    type_of_contact character(1),
+    document integer
+);
+
 INSERT INTO knowledge_content ( modifydate, content, employee, version, category, owner ) VALUES ( now(), 'right click for new category', 0, 1, 1, 0 );
 
 INSERT INTO crmdefaults (key,val,grp,employee) VALUES ('ttpart','','mandant',-1);

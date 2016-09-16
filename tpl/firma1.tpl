@@ -71,12 +71,12 @@
             '<input type="text" name="caller_id" id="caller_id" maxlength="3" size="3" value={FID} hidden="hidden">' +
             '<p><label>' + langData[language]['COMMENTS'] + '</label> <textarea name="cause_long" id="cause_long" rows="10" cols="60" wrap="hard"></textarea> </p>'+
             '<p> <fieldset> <legend>' + langData[language]['TYPE_OF_CONTACT'] + '</legend>'+
-            '<input type="radio" name="type_of_contact" id="radio-1" value="1" checked="checked">  <label for="radio-1">' + langData[language]['PHONE'] + '</label>'+
-                '<input type="radio" name="type_of_contact" id="radio-2" value="2">  <label for="radio-2">' + langData[language]['EMAIL'] + '</label>'+
-                '<input type="radio" name="type_of_contact" id="radio-3" value="3">  <label for="radio-3">' + langData[language]['LETTER'] + '</label>'+
-                '<input type="radio" name="type_of_contact" id="radio-4" value="4">  <label for="radio-4">' + langData[language]['PERSONAL'] + '</label>'+
-                '<input type="radio" name="type_of_contact" id="radio-5" value="5">  <label for="radio-5">' + langData[language]['FILE'] + '</label>'+
-                '<input type="radio" name="type_of_contact" id="radio-6" value="6">  <label for="radio-6">' + langData[language]['TERM'] + '</label> </fieldset> </p>'+
+            '<input type="radio" name="type_of_contact" id="radio-1" value="T" checked="checked">  <label for="radio-1">' + langData[language]['PHONE'] + '</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-2" value="M">  <label for="radio-2">' + langData[language]['EMAIL'] + '</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-3" value="L">  <label for="radio-3">' + langData[language]['LETTER'] + '</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-4" value="P">  <label for="radio-4">' + langData[language]['PERSONAL'] + '</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-5" value="F">  <label for="radio-5">' + langData[language]['FILE'] + '</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-6" value="R">  <label for="radio-6">' + langData[language]['TERM'] + '</label> </fieldset> </p>'+
                '<p> <fieldset> <legend>' + langData[language]['DIRECTION'] + '</legend>'+
                 '<input type="radio" name="inout" id="radio-7" value="i">  <label for="radio-7">' + langData[language]['FROM'] + ' ' + langData[language]['CUSTOMER_LABEL'] + '</label>'+
                 '<input type="radio" name="inout" id="radio-8" value="o" >  <label for="radio-8">' + langData[language]['TO'] + ' ' + langData[language]['CUSTOMER_LABEL'] + '</label>'+
@@ -252,9 +252,35 @@
                         $("#contacts #caller_id").val(row.caller_id);
                         $("#contacts #employee").val(row.employee);
                         $("#contacts #cause_long").val(row.cause_long);
+                        var rNumber;
+                        switch(row.type_of_contact) {
+                            case "T":
+                                rNumber = 1;
+                                break;
+                            case "M":
+                                rNumber = 2;
+                                break;
+                            case "L":
+                                rNumber = 3;
+                                break;
+                            case "P":
+                                rNumber = 4;
+                                break;
+                            case "F":
+                                rNumber = 5;
+                                break;
+                            case "R":
+                                rNumber = 6;
+                                break;
+                             default:
+                                rNumber = 1;
+                        };
+
+
                         var checkedTocBtn = "radio-" + row.type_of_contact;
                         $("#" + checkedTocBtn + " ").attr("checked","checked");
-                        var rNumber = 6;
+
+                        rNumber = 6;
                         switch(row.inout) {
                             case "i":
                                 rNumber += 1;

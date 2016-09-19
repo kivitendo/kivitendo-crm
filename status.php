@@ -148,8 +148,8 @@ $rc = false;
         progressbar = $( "#progressbar" ),
         progressLabel = $( ".progress-label" ),
         dialogButtons = [{
-                text: "abrechen",
-                click: closeDownload
+            text: "abbrechen",
+            click: closeDownload
         }],
         dialog = $( "#dialog" ).dialog({
             width: '550px',
@@ -261,31 +261,30 @@ echo 'Need update = '.needUpdate();
 ?>
 <table id="info" class="tablesorter" style="width:auto">
     <thead></thead>
-    <tbody>
-    <tr><td>CRM Version</td><td><?php echo  VERSION." ".SUBVER  ?></td></tr>
-    <?php echo $commit; ?>
-    <tr><td>Auth-Datenbank:</td><td> <?php echo $_SESSION['erpConfig']['authentication/database']['db']?></td></tr>
-    <tr><td>Datenbank:</td><td> <?php echo $_SESSION['dbData']['dbname']?></td></tr>
-    <tr><td>db-Server:</td><td><?php echo $_SESSION['dbData']['dbhost']?></td></tr>
-    <tr><td>Mandant:</td><td><?php echo $_SESSION['dbData']['mandant']?>:<?php echo  $_SESSION['dbData']['manid']?></td></tr>
-    <tr><td>Benutzer:</td><td><?php echo $_SESSION['userConfig']['login'].':'.$_SESSION['userConfig']['id']?></td></tr>
-    <tr><td>Session-ID:</td><td><?php echo  session_id() ?></td></tr>
-    <tr><td>PHP-Umgebung:</td><td><button onclick="window.location.href='info.php'">anzeigen</button></td></tr>
-    <tr><td>Session:</td><td><button onclick="window.location.href='showsess.php'">anzeigen</button><button onclick="window.location.href='delsess.php'">löschen</button></td></tr>
-    <tr><td>db-Zugriff:</td><td><button id="testDB">testen</button></td></tr>
-    <tr><td>Updatecheck</td><td><button id="updateDB">durchführen</button></td></tr>
-    <tr><td>Installationscheck:</td><td><button onclick="window.location.href='inc/install.php?check=1'">durchführen</button></td></tr>
-    <tr><td>Benutzerfreundliche Links:</td><td><button onclick="window.location.href='links.php?all=1'">erzeugen</button></td></tr>
-    <tr><td>Datenbanken:</td><td><button id="saveDB">Sichern</button><button id="showDbFiles">Zeigen</button></td></tr>
-    <tr><td>Logfiles:</td><td><button id="showErrorLog">Error Log</button><button id="showPgLog">PgSQL Log</button></td></tr>
-
-</tbody>
+        <tbody>
+            <tr><td>CRM Version</td><td><?php echo  VERSION." ".SUBVER  ?></td></tr>
+            <?php echo $commit; ?>
+            <tr><td>Auth-Datenbank:</td><td> <?php echo $_SESSION['erpConfig']['authentication/database']['db']?></td></tr>
+            <tr><td>Datenbank:</td><td> <?php echo $_SESSION['dbData']['dbname']?></td></tr>
+            <tr><td>db-Server:</td><td><?php echo $_SESSION['dbData']['dbhost']?></td></tr>
+            <tr><td>Mandant:</td><td><?php echo $_SESSION['dbData']['mandant']?>:<?php echo  $_SESSION['dbData']['manid']?></td></tr>
+            <tr><td>Benutzer:</td><td><?php echo $_SESSION['userConfig']['login'].':'.$_SESSION['userConfig']['id']?></td></tr>
+            <tr><td>Session-ID:</td><td><?php echo  session_id() ?></td></tr>
+            <tr><td>PHP-Umgebung:</td><td><button onclick="window.location.href='info.php'">anzeigen</button></td></tr>
+            <tr><td>Session:</td><td><button onclick="window.location.href='showsess.php'">anzeigen</button><button onclick="window.location.href='delsess.php'">löschen</button></td></tr>
+            <tr><td>db-Zugriff:</td><td><button id="testDB">testen</button></td></tr>
+            <tr><td>Updatecheck</td><td><button id="updateDB">durchführen</button></td></tr>
+            <tr><td>Installationscheck:</td><td><button onclick="window.location.href='inc/install.php?check=1'">durchführen</button></td></tr>
+            <tr><td>Benutzerfreundliche Links:</td><td><button onclick="window.location.href='links.php?all=1'">erzeugen</button></td></tr>
+            <tr><td>Datenbanken:</td><td><button id="saveDB">Sichern</button><button id="showDbFiles">Zeigen</button></td></tr>
+            <tr><td>Logfiles:</td><td><button id="showErrorLog" >Error Log</button><button id="showPgLog">PgSQL Log</button></td></tr>
+        </tbody>
 </table>
 
 <div id="statusDialog"></div>
-<div id="dialog">
-  <div class="progress-label"></div>
-  <div id="progressbar"></div>
+    <div id="dialog">
+        <div class="progress-label"></div>
+    <div id="progressbar"></div>
 </div>
 
 </center>

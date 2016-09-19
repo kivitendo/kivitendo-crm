@@ -15,13 +15,11 @@
 {TRANSLATION}
 
 
-
-<script type="text/javascript" src="{BASEPATH}crm/jquery-ui/jquery.js"></script>
-<script type="text/javascript" src="{BASEPATH}crm/jquery-ui/ui/jquery-ui.js"></script>
 <script type="text/javascript" src="{BASEPATH}lxcars/jQueryAddOns/date-time-picker.js"></script>
 <script type="text/javascript" src="{BASEPATH}lxcars/jQueryAddOns/german-date-time-picker.js"></script>
-<link type="text/css" REL="stylesheet" HREF="../../css/{ERPCSS}"></link>
-<link rel="stylesheet" type="text/css" href="{BASEPATH}crm/jquery-ui/themes/base/jquery-ui.css">
+<script type="text/javascript" src="{BASEPATH}crm/jquery-ui/jquery.js"></script>
+<!--<link type="text/css" REL="stylesheet" HREF="../../css/{ERPCSS}"></link>
+<link rel="stylesheet" type="text/css" href="{BASEPATH}crm/jquery-ui/themes/base/jquery-ui.css">-->
 
 <script language="javascript" type="text/javascript" src="translation/all.lng"></script>
 
@@ -373,7 +371,7 @@
             name = this.getAttribute('name');
             if ( name == 'ks' ) {
                 var sw = $('#suchwort').val();
-                F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}", suche ,"width=400, height=400, left=100, top=50, scrollbars=yes");
+                F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}", "suche" ,"width=400, height=400, left=100, top=50, scrollbars=yes");
             } else if ( name == 'reload' ) {
                 showCall();
             } else {

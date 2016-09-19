@@ -277,7 +277,7 @@
                         };
 
 
-                        var checkedTocBtn = "radio-" + row.type_of_contact;
+                        var checkedTocBtn = "radio-" + rNumber;
                         $("#" + checkedTocBtn + " ").attr("checked","checked");
 
                         rNumber = 6;

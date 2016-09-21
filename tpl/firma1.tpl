@@ -97,12 +97,7 @@
             currentText: langData[language]['NOW']
         });
 
-
-
-
-
     }
-
 
 
 
@@ -305,8 +300,6 @@
         })
     }
 
-
-
     $(document).ready(function(){
 
     language = kivi.myconfig.countrycode;   // Variable language muss global sein!
@@ -371,7 +364,21 @@
             name = this.getAttribute('name');
             if ( name == 'ks' ) {
                 var sw = $('#suchwort').val();
-                F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}", "suche" ,"width=400, height=400, left=100, top=50, scrollbars=yes");
+                //F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}", "suche" ,"width=400, height=400, left=100, top=50, scrollbars=yes");
+                var sUrl = "suchKontakt.php?suchwort=" +sw+ "&Q=C&id={FID}";
+                $("#searchdialog").dialog({
+                    height: 400,
+                    width: 500,
+                    title: ".:search result:.",
+                    buttons: [{
+                        text: langData[language]['CLOSE'],
+                        click: function(){
+                            $(this).dialog("close");
+                            return false;
+                        }
+                    }]
+               }).html('<iframe style="border: 0px; " src="' + sUrl + '" width="100%" height="100%"></iframe>');
+
             } else if ( name == 'reload' ) {
                 showCall();
             } else {
@@ -543,6 +550,7 @@
   </div>
 
   <div id="contactsdialog" title=".:contact:."></div>
+  <div id="searchdialog" title=".:search result:."></div>
 
   <div id='contentbox'>
    <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid lightgray;" >
@@ -705,8 +713,6 @@
        <iframe id="iframe1" width='100%' height='450'  scrolling="auto" border="0" frameborder="0"><img src='image/wait.gif'></iframe>
       </div>
      </div>
-     <!-- <div id="mess">
-     </div> -->
    {END_CONTENT}
    {TOOLS}
  </body>

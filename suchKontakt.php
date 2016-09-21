@@ -53,6 +53,7 @@
         echo "Keine Treffer!";
     }
 ?>
-<center><a href="javascript:self.close()">close</a></center>
+<!--<center><a href="javascript:self.close()">close</a></center>-->
+
 </body>
 </html>

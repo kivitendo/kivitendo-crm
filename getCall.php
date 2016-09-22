@@ -18,7 +18,7 @@
     $daten["Datum"]=date("d.m.Y");
     $daten["Zeit"]=date("H:i");
     $daten["Kontakt"]="T";
-    $daten["c_long"]="";
+    $daten["cause_long"]="";
     $daten["Files"]=false;
     $daten["Anzeige"]=0;
     $daten["Datei"]="";
@@ -172,11 +172,11 @@
         $calls=getAllCauseCall($Bezug);
         if ($calls) foreach($calls as $zeile) {
             $t->set_var(array(
-                LineCol => ($zeile["bezug"]==0)?4:($i%2+1),
-                Type    => $zeile["kontakt"],
+                LineCol => ($zeile["contact_events"]==0)?4:($i%2+1),
+                Type    => $zeile["type_of_contact"],
                 Datum    =>    db2date($zeile["calldate"]).substr($zeile["calldate"],10,6),
                 Betreff    =>    $zeile["cause"],
-                Kontakt    =>    $zeile["kontakt"],
+                Kontakt    =>    $zeile["type_of_contact"],
                 IID => $zeile["id"]
             ));
             $t->parse("Block","Liste",true);
@@ -208,19 +208,19 @@
         wvldate => $daten["wvldate"],
         WVLID => $daten["wvlid"],
         NZeit => $daten["Zeit"],
-        c_long => $daten["c_long"],
+        c_long => $daten["cause_long"],
         CID => $cid,
         FID => $fid,
         PID => $pid,
         INOUT.$daten["inout"] => "checked",
-        bezug => $daten["Bezug"],
+        bezug => $daten["contact_reference"],
         Bezug => ($Bezug)?$Bezug:0,
-        R1 => ($daten["Kontakt"]=="T")?" checked":"",
-        R2 => ($daten["Kontakt"]=="M" or $daten["Kontakt"]=="m")?" checked":"",
-        R3 => ($daten["Kontakt"]=="S")?" checked":"",
-        R4 => ($daten["Kontakt"]=="P")?" checked":"",
-        R5 => ($daten["Kontakt"]=="D")?" checked":"",
-        R6 => ($daten["Kontakt"]=="X")?" checked":"",
+        R1 => ($daten["type_of_contact"]=="T")?" checked":"",
+        R2 => ($daten["type_of_contact"]=="M" or $daten["type_of_contact"]=="m")?" checked":"",
+        R3 => ($daten["type_of_contact"]=="L")?" checked":"",
+        R4 => ($daten["type_of_contact"]=="P")?" checked":"",
+        R5 => ($daten["type_of_contact"]=="F")?" checked":"",
+        R6 => ($daten["type_of_contact"]=="R")?" checked":"",
 
         Start => $telcall*-1,
         Datei => $daten["Datei"],

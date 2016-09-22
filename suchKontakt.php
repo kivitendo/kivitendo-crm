@@ -21,6 +21,7 @@
 <script language="JavaScript">
     function showItem(id,Q,FID) {
         F1=open("<?php echo $_SESSION["baseurl"]; ?>crm/getCall.php?Q="+Q+"&fid="+FID+"&hole="+id,"Caller","width=610, height=600, left=100, top=50, scrollbars=yes");
+
     }
 </script>
 </head>
@@ -31,8 +32,8 @@
         echo "<table width='95%'>\n";
         $i=0;
         foreach ($rs as $row) {
-            if ($row["bezug"]>0 and in_array($row["bezug"],$used)) continue;
-            if ($row["bezug"]==0) $used[]=$row["id"];
+            if ($row["contact_reference"]>0 and in_array($row["contact_reference"],$used)) continue;
+            if ($row["contact_reference"]==0) $used[]=$row["id"];
             if (strlen($row["cause"])>30) { $cause=substr($row["cause"],0,30).".."; }
             else { $cause=$row["cause"]; };
             if ($row["kname"]) { $name=$row["kname"]; $src="C"; }

@@ -368,7 +368,7 @@
                 var sUrl = "suchKontakt.php?suchwort=" +sw+ "&Q=C&id={FID}";
                 $("#searchdialog").dialog({
                     height: 400,
-                    width: 500,
+                    width: 400,
                     title: ".:search result:.",
                     buttons: [{
                         text: langData[language]['CLOSE'],

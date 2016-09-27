@@ -364,8 +364,35 @@
             name = this.getAttribute('name');
             if ( name == 'ks' ) {
                 var sw = $('#suchwort').val();
-                //F1=open("suchKontakt.php?suchwort="+sw+"&Q=C&id={FID}", "suche" ,"width=400, height=400, left=100, top=50, scrollbars=yes");
-                var sUrl = "suchKontakt.php?suchwort=" +sw+ "&Q=C&id={FID}";
+                $.ajax({
+                    dataType: 'json',
+                    url: 'ajax/searchContact.php?action=getSearch&sw=' +sw+ '&Q=C&id={FID}',
+                    method: "GET",
+                    success: function( json ) {
+//                        alert(json[0]["cause"]);
+                        var sContent='';
+                        var row='';
+                        for (var i = 0; i < json.length; i++) {
+                            row = json[i];
+                            var calld = row.calldate;
+                            var yr = calld.substring(0,4);
+                            var mth = calld.substring(5,7);
+                            var d = calld.substring(8,10);
+                            var h = calld.substring(11,13);
+                            var m = calld.substring(14,16);
+                            var s = calld.substring(17,19);
+                            var calldate = d + '.' + mth + '.' + yr + ' ' + h + ':' + m + ':' +s;
+                            sContent += '<tr> <td>' + calldate + '</td>';
+                            sContent += '<td>' + row.cause + '</td>';
+                        $("#searchdialog tr:last").after(sContent);
+
+                        }
+                    },
+                    error:  function(){
+                        alert("Holen der Daten fehlgeschlagen!");
+                    }
+            });
+
                 $("#searchdialog").dialog({
                     height: 400,
                     width: 400,
@@ -377,7 +404,9 @@
                             return false;
                         }
                     }]
-               }).html('<iframe style="border: 0px; " src="' + sUrl + '" width="100%" height="100%"></iframe>');
+//               }).html('<iframe style="border: 0px; " src="' + sUrl + '" width="100%" height="100%"></iframe>');
+                }).html('<table class="tablesorter"> <thead> <tr> <th>Datum</th><th>Betreff</th></tr> </thead><tbody>');
+
 
             } else if ( name == 'reload' ) {
                 showCall();

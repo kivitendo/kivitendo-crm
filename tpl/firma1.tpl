@@ -233,14 +233,7 @@
                     row = json[i];
                     if (row.id == id)  {
                         $("#contacts #cause").val(row.cause);
-                        var calld = row.calldate;
-                        var yr = calld.substring(0,4);
-                        var mth = calld.substring(5,7);
-                        var d = calld.substring(8,10);
-                        var h = calld.substring(11,13);
-                        var m = calld.substring(14,16);
-                        var s = calld.substring(17,19);
-                        var calldate = d + '.' + mth + '.' + yr + ' ' + h + ':' + m + ':' +s;
+                        var calldate = mkCallDate(row.calldate);
                         $("#contacts #calldate").val(calldate);
                         $("#contacts #caller_id").val(row.caller_id);
                         $("#contacts #employee").val(row.employee);
@@ -300,6 +293,18 @@
         })
     }
 
+    function mkCallDate(callDate) {
+        var calld = callDate;
+        var yr = calld.substring(0,4);
+        var mth = calld.substring(5,7);
+        var d = calld.substring(8,10);
+        var h = calld.substring(11,13);
+        var m = calld.substring(14,16);
+        var s = calld.substring(17,19);
+        var calldate = d + '.' + mth + '.' + yr + ' ' + h + ':' + m + ':' +s;
+        return calldate;
+    }
+
     $(document).ready(function(){
 
     language = kivi.myconfig.countrycode;   // Variable language muss global sein!
@@ -348,6 +353,20 @@
             })
         }
 
+        function showSearch(id) {
+            //alert("Show Search");
+            var id=id;
+            var fid = {FID};
+            var cUrl="getCall.php?Q=C&fid=" + fid + "&hole="+id;
+            $("#showsearchdialog").dialog({
+               width:      "auto",
+               height:     "auto",
+               autoOpen:   "false"
+            }).html('<iframe src="' + cUrl + '" width="610px" height="600px" scrollbars="yes"></iframe>');
+
+//            F1=open("<?php echo $_SESSION["baseurl"]; ?>crm/getCall.php?Q="+Q+"&fid="+FID+"&hole="+id,"Caller","width=610, height=600, left=100, top=50, scrollbars=yes");
+        }
+
 
 
         // Aus Tabelle kopieren,  weiter verbessern!
@@ -374,19 +393,15 @@
                         var row='';
                         for (var i = 0; i < json.length; i++) {
                             row = json[i];
-                            var calld = row.calldate;
-                            var yr = calld.substring(0,4);
-                            var mth = calld.substring(5,7);
-                            var d = calld.substring(8,10);
-                            var h = calld.substring(11,13);
-                            var m = calld.substring(14,16);
-                            var s = calld.substring(17,19);
-                            var calldate = d + '.' + mth + '.' + yr + ' ' + h + ':' + m + ':' +s;
+                            var id = row.id;
+                            var calldate = mkCallDate(row.calldate);
                             sContent += '<tr> <td>' + calldate + '</td>';
-                            sContent += '<td>' + row.cause + '</td>';
-                        $("#searchdialog tr:last").after(sContent);
-
+                            sContent += '<td>' + row.cause + '</td></tr>';
+                        $("#searchdialog tbody").append(sContent);
                         }
+                        $("#searchdialog tbody tr").click(function() {
+                            showSearch(id);
+                        });
                     },
                     error:  function(){
                         alert("Holen der Daten fehlgeschlagen!");
@@ -394,8 +409,8 @@
             });
 
                 $("#searchdialog").dialog({
-                    height: 400,
-                    width: 400,
+                    height: "auto",
+                    width: "auto",
                     title: ".:search result:.",
                     buttons: [{
                         text: langData[language]['CLOSE'],
@@ -404,8 +419,7 @@
                             return false;
                         }
                     }]
-//               }).html('<iframe style="border: 0px; " src="' + sUrl + '" width="100%" height="100%"></iframe>');
-                }).html('<table class="tablesorter"> <thead> <tr> <th>Datum</th><th>Betreff</th></tr> </thead><tbody>');
+                });
 
 
             } else if ( name == 'reload' ) {
@@ -531,9 +545,8 @@
 
 </script>
 <style>
-
-#contacts input {margin-left: 5px; margin-right: 10px}
-
+ #contacts input {margin-left: 5px; margin-right: 10px}
+ .tablesorter { width:auto; cursor:pointer; widgets: ['zebra'];}
 </style>
 </head>
 <!-- <body onLoad="showCall();"> -->
@@ -578,8 +591,20 @@
    </form>
   </div>
 
-  <div id="contactsdialog" title=".:contact:."></div>
-  <div id="searchdialog" title=".:search result:."></div>
+    <div id="contactsdialog" title=".:contact:."></div>
+    <div id="searchdialog" title=".:search result:.">
+        <table class="tablesorter" width="100%">
+            <thead>
+                <tr>
+                    <th class="lang" data-lang="DATE"></th>
+                    <th class="lang" data-lang="SUBJECT" width="150px"></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot></tfoot>
+        </table>
+  </div>
+  <div id="showsearchdialog" width="610px" height="600px"></div>
 
   <div id='contentbox'>
    <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid lightgray;" >

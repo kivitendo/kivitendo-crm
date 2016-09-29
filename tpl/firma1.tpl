@@ -385,13 +385,13 @@
                 var sw = $('#suchwort').val();
                 $.ajax({
                     dataType: 'json',
-                    url: 'ajax/searchContact.php?action=getSearch&sw=' +sw+ '&Q=C&id={FID}',
+                    url: 'ajax/searchContact.php?action=getSearch&sw=' + sw + '&Q=C&fid={FID}',
                     method: "GET",
                     success: function( json ) {
-//                        alert(json[0]["cause"]);
-                        var sContent='';
+                        $("#searchdialog tbody").empty();
                         var row='';
                         for (var i = 0; i < json.length; i++) {
+                            var sContent='';
                             row = json[i];
                             var id = row.id;
                             var calldate = mkCallDate(row.calldate);

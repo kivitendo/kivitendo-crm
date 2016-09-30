@@ -282,8 +282,6 @@
                         };
                         var checkedIOBtn = "radio-" + rNumber;
                         $("#" + checkedIOBtn + " ").attr("checked","checked");
-
-//                        break;
                     }
                 }
             },
@@ -307,28 +305,28 @@
 
     $(document).ready(function(){
 
-    language = kivi.myconfig.countrycode;   // Variable language muss global sein!
-    $( ".lang" ).each( function(){
-        var key = $( this ).attr( "data-lang" );
-        if( $( this ).is( ":input" ) ) $( this ).attr( 'title',  typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
-            else $( this ).text( typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
-        });
-
-        if ('{Q}' == 'C') {
-            $.ajax({
-                dataType: 'json',
-                url: 'ajax/openInvo.php?action=openInvoice&data={FID}',
-                method: "GET",
-                success: function( json ) {
-                    if (json) {
-                        $( "#openInvoice" ).append( "<span style='color:red'>Offene Rechnung vorhanden !</span>" );
-                    }
-                },
-                error:  function(){
-                    alert("Holen der Daten fehlgeschlagen!");
-                }
+        language = kivi.myconfig.countrycode;   // Variable language muss global sein!
+        $( ".lang" ).each( function(){
+            var key = $( this ).attr( "data-lang" );
+            if( $( this ).is( ":input" ) ) $( this ).attr( 'title',  typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
+                else $( this ).text( typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
             });
-        }
+
+            if ('{Q}' == 'C') {
+                $.ajax({
+                    dataType: 'json',
+                    url: 'ajax/contact.php?action=openInvoice&data={FID}',
+                    method: "GET",
+                    success: function( json ) {
+                        if (json) {
+                            $( "#openInvoice" ).append( "<span style='color:red'>Offene Rechnung vorhanden !</span>" );
+                        }
+                    },
+                    error:  function(){
+                        alert(langData[language]['GET_ERROR']);
+                    }
+                });
+            }
 
         showCall();
 
@@ -363,8 +361,6 @@
                height:     "auto",
                autoOpen:   "false"
             }).html('<iframe src="' + cUrl + '" width="610px" height="600px" scrollbars="yes"></iframe>');
-
-//            F1=open("<?php echo $_SESSION["baseurl"]; ?>crm/getCall.php?Q="+Q+"&fid="+FID+"&hole="+id,"Caller","width=610, height=600, left=100, top=50, scrollbars=yes");
         }
 
 
@@ -378,60 +374,61 @@
         $("#shipleft").click(function(){ nextshipto('-'); });
         $("#shipright").click(function(){ nextshipto('+'); });
         nextshipto('o');
-        $('button').button().click(function(event) {
+        $('#ks').button().click(function(event) {
             event.preventDefault();
-            name = this.getAttribute('name');
-            if ( name == 'ks' ) {
-                var sw = $('#suchwort').val();
-                $.ajax({
-                    dataType: 'json',
-                    url: 'ajax/searchContact.php?action=getSearch&sw=' + sw + '&Q=C&fid={FID}',
-                    method: "GET",
-                    success: function( json ) {
-                        $("#searchdialog tbody").empty();
-                        var row='';
-                        for (var i = 0; i < json.length; i++) {
-                            var sContent='';
-                            row = json[i];
-                            var id = row.id;
-                            var calldate = mkCallDate(row.calldate);
-                            sContent += '<tr> <td>' + calldate + '</td>';
-                            sContent += '<td>' + row.cause + '</td></tr>';
-                        $("#searchdialog tbody").append(sContent);
-                        }
-                        $("#searchdialog tbody tr").click(function() {
-                            showSearch(id);
-                        });
-                    },
-                    error:  function(){
-                        alert("Holen der Daten fehlgeschlagen!");
+            //name = this.getAttribute('name');
+            var sw = $('#suchwort').val();
+            $("#searchdialog").dialog({
+                height: "auto",
+                width: "auto",
+                title: ".:search result:.",
+                open:function (event, ui) {
+                    $('#searchdialog table.tablesorter').tablesorter();
+                },
+                buttons: [{
+                    text: langData[language]['CLOSE'],
+                    click: function(){
+                        $(this).dialog("close");
+                        return false;
                     }
+                }]
+            }).html('<table width="100%" class="tablesorter">' +
+                '<thead><tr><th>'+langData[language]["DATE"]+'</th>'+
+                '<th width="150px">'+langData[language]["SUBJECT"]+'</th>'+
+                '</tr></thead><tbody></tbody><tfoot></tfoot></table>');
+            $.ajax({
+                dataType: 'json',
+                data: {action: "getSearch", data: {sw: sw, Q: "C", fid: {FID}}},
+                url: 'ajax/contact.php',
+                method: "GET",
+                success: function( json ) {
+//                    $("#searchdialog table").addClass("tablesorter");
+                    $("#searchdialog tbody").empty();
+                    var row='';
+                    for (var i = 0; i < json.length; i++) {
+                        var sContent='';
+                        row = json[i];
+                        var id = row.id;
+                        var calldate = mkCallDate(row.calldate);
+                        sContent += '<tr> <td>' + calldate + '</td>';
+                        sContent += '<td>' + row.cause + '</td></tr>';
+                        $("#searchdialog tbody").append(sContent);
+                    }
+                    $("#searchdialog tbody tr").click(function() {
+                        showSearch(id);
+                    });
+                },
+                error:  function(){
+                    alert(langData[language]['GET_ERROR']);
+                }
             });
-
-                $("#searchdialog").dialog({
-                    height: "auto",
-                    width: "auto",
-                    title: ".:search result:.",
-                    buttons: [{
-                        text: langData[language]['CLOSE'],
-                        click: function(){
-                            $(this).dialog("close");
-                            return false;
-                        }
-                    }]
-                });
-
-
-            } else if ( name == 'reload' ) {
-                showCall();
-            } else {
-                document.location.href = name;
-            }
         });
+
         $("#fasubmenu").tabs({
             heightStyle: "auto",
             active: {kdviewli}
         });
+
         $(function() {
             $( "#right_tabs" ).tabs({
                 cache: true, //helpful?
@@ -443,6 +440,7 @@
                 }
             });
         });
+
         $("#dialogwin").dialog({
             autoOpen: false,
             show: {
@@ -544,230 +542,218 @@
 
 
 </script>
+
 <style>
- #contacts input {margin-left: 5px; margin-right: 10px}
- .tablesorter { width:auto; cursor:pointer; widgets: ['zebra'];}
+    #contacts input {margin-left: 5px; margin-right: 10px}
+    .tablesorter { width:auto; cursor:pointer; widgets: ['zebra'];}
 </style>
+
 </head>
-<!-- <body onLoad="showCall();"> -->
+
 <body>
 
 
 {PRE_CONTENT}
 {START_CONTENT}
-<div class="ui-widget-content" style="height:722px" >
+    <div class="ui-widget-content" style="height:722px" >
+        <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;" >.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
+        <br>
+        <div id='menubox1' >
+            <form>
+                <span style="float:left;" valign="bottom">
+                <!-- <div class="fancybox" rel="group" href="tmp/qr_{loginname}.png"><img src="" alt="" /></div> -->
+                    <div id="qrcode" class="fancybox" rel="group"><img src="" alt="" /></div>
+                    <button id="firma1Btn" name="firma1.php?Q={Q}&id={FID}" >.:Custombase:.</button>
+                    <button id="firma2Btn" name="firma2.php?Q={Q}&fid={FID}" >.:Contacts:.</button>
+                    <button id="firma3Btn" name="firma3.php?Q={Q}&fid={FID}" >.:Sales:.</button>
+                    <button id="firma4Btn" name="firma4.phtml?Q={Q}&kdnr={kdnr}&fid={FID}" >.:Documents:.</button>
+                </span>
+                <span style="float:left; vertical-alig:bottom; padding-left:8em">
+                    <!--         <select style="visibility:{chelp}" name="kdhelp" id="kdhelp" style="margin-top:0.5em;" onChange="KdHelp()"> -->
+                    <!-- BEGIN kdhelp -->
+                    <!--         <option value="{cid}">{cname}</option> -->
+                    <!-- END kdhelp -->
+                    <!--     </select> -->
+                    <select id="actionmenu" style="margin-top:0.5em;">
+                        <option id= '0' class='lang' data-lang='ACTIONS'>Aktionen</option>
+                        <option id= '1' value='firmen3.php?Q={Q}&id={FID}&edit=1'>.:edit:.</option>
+                        <option id= '2' value='timetrack.php?tab={Q}&fid={FID}&name={Fname1}'>.:timetrack:.</option>
+                        <option id= '3' value='extrafelder.php?owner={Q}{FID}'>.:extra data:.</option>
+                        <option id= '4' value='karte.php?Q={Q}&fid={FID}'>.:register:. .:develop:.</option>
+                        <option id= '5' value='{request}_quotation'>.:quotation:. .:develop:.</option>
+                        <option id= '6' value='{sales}_order'>.:order:. .:develop:.</option>
+                        <option id= '7' value='delivery_order'>.:delivery order:. .:develop:.</option>
+                        <option id= '8' value='invoice'>.:invoice:. .:develop:.</option>
+                    </select>
+                </span>
+            </form>
+        </div>
 
+        <div id="contactsdialog" title=".:contact:."></div>
+        <div id="searchdialog" title=".:search result:."></div>
+        <div id="showsearchdialog" width="610px" height="600px"></div>
 
- <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;" >.:detailview:. {FAART} <span title=".:important note:.">{Cmsg}&nbsp;</span></p>
- <br>
-  <div id='menubox1' >
-   <form>
-    <span style="float:left;" valign="bottom">
-     <!-- <div class="fancybox" rel="group" href="tmp/qr_{loginname}.png"><img src="" alt="" /></div> -->
-     <div id="qrcode" class="fancybox" rel="group"><img src="" alt="" /></div>
-     <button id="firma1Btn" name="firma1.php?Q={Q}&id={FID}" >.:Custombase:.</button>
-     <button id="firma2Btn" name="firma2.php?Q={Q}&fid={FID}" >.:Contacts:.</button>
-     <button id="firma3Btn" name="firma3.php?Q={Q}&fid={FID}" >.:Sales:.</button>
-     <button id="firma4Btn" name="firma4.phtml?Q={Q}&kdnr={kdnr}&fid={FID}" >.:Documents:.</button>
-    </span>
-    <span style="float:left; vertical-alig:bottom; padding-left:8em">
-<!--         <select style="visibility:{chelp}" name="kdhelp" id="kdhelp" style="margin-top:0.5em;" onChange="KdHelp()"> -->
-<!-- BEGIN kdhelp -->
-<!--         <option value="{cid}">{cname}</option> -->
-<!-- END kdhelp -->
-<!--     </select> -->
-     <select id="actionmenu" style="margin-top:0.5em;">
-      <option id= '0' class='lang' data-lang='ACTIONS'>Aktionen</option>
-      <option id= '1' value='firmen3.php?Q={Q}&id={FID}&edit=1'>.:edit:.</option>
-      <option id= '2' value='timetrack.php?tab={Q}&fid={FID}&name={Fname1}'>.:timetrack:.</option>
-      <option id= '3' value='extrafelder.php?owner={Q}{FID}'>.:extra data:.</option>
-      <option id= '4' value='karte.php?Q={Q}&fid={FID}'>.:register:. .:develop:.</option>
-      <option id= '5' value='{request}_quotation'>.:quotation:. .:develop:.</option>
-      <option id= '6' value='{sales}_order'>.:order:. .:develop:.</option>
-      <option id= '7' value='delivery_order'>.:delivery order:. .:develop:.</option>
-      <option id= '8' value='invoice'>.:invoice:. .:develop:.</option>
-     </select>
-    </span>
-   </form>
-  </div>
+        <div id='contentbox'>
+            <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid lightgray;" >
+            <div class="gross" style="float:left; width:55%; height:25em; text-align:left; border: 0px solid black; padding:0.2em;" >
+                <span class="fett">{Fname1}</span><br />
+                {Fdepartment_1} {Fdepartment_2}<br />
+                {Strasse}<br />
+                <span class="mini">&nbsp;<br /></span>
+                <span onClick="surfgeo()">{Land}-{Plz} {Ort}</span><br />
+                <span class="klein">{Bundesland}</span><br /><br />
+                <div id="openInvoice"></div>
+                {Fcontact}
+                <span class="mini"><br />&nbsp;<br /></span>
+                <font color="#444444"> .:tel:.:</font> <a href="tel:{Telefon}">{Telefon}</a><br />
+                <font color="#444444"> .:fax:.:</font> <a href="tel:{Fax}">{Fax}</a><br />
+                <span class="mini">&nbsp;<br /></span>
+                &nbsp;[<a href="{mail_pre}{eMail}{mail_after}">{eMail}</a>]<br />
+                &nbsp;<a href="{Internet}" target="_blank">{Internet}</a>
+            </div>
+            <div style="float:left; width:43%; height:25em; text-align:right; border: 0px solid black; padding:0.2em;">
+                <span valign="top"><span class="fett">{kdnr}</span><img src="image/kreuzchen.gif" title=".:locked address:." style="visibility:{verstecke};" > {verkaeufer}
+                {IMG} <br /> </span>
+                <br class= 'mini'>
+                    {ANGEBOT_BUTTON}
+                    {AUFTRAG_BUTTON}
+                    {LIEFER_BUTTON}
+                    {RECHNUNG_BUTTON}
+                <br />
+                <br class='mini'>
+                    {EXTRA_BUTTON}
+                    {QR_BUTTON}
+                    {KARTE_BUTTON}
+                    {ETIKETT_BUTTON}
+                <br />
+                <br class='mini'>
+                    {DHL_BUTTON}
+                    {BRIEF_BUTTON}
+                    {LxCars_BUTTON}
+                <br />
+                <br />
+                <span style="visibility:{zeige_bearbeiter};" >.:employee:.: {bearbeiter}</span>
+                </div>
+                    <br />
+                </div>
+                <div id="fasubmenu" >
+                    <ul>
+                        <li><a href="#lie">.:shipto:. </a></li>
+                        <li><a href="#not">.:notes:. </a></li>
+                        <li><a href="#var">.:variablen:. </a></li>
+                        <li><a href="#fin">.:financial:.</a></li>
+                        <li><a href="#inf">.:miscInfo:. </a></li>
+                    </ul>
+                <div id="lie" class="klein">
+                    <span class="fett" id="shiptoname"></span> &nbsp;&nbsp;&nbsp;&nbsp;
+                    .:shipto count:.:{Scnt} <img src="image/leftarrow.png" id="shipleft" border="0">
+                    <span id="SID"></span> <img src="image/rightarrow.png" id="shipright" border="0">&nbsp; &nbsp;
+                    <a href="#" onCLick="anschr();"><img src="image/brief.png" alt=".:print label:." border="0"/></a>&nbsp; &nbsp;
+                    <a href="" id="karte2 target="_blank"><img src="image/karte.gif" alt="karte" title=".:city map:." border="0"></a><br />
+                    <span id="shiptodepartment_1"></span> &nbsp; &nbsp; <span id="shiptodepartment_2"></span> <br />
+                    <span id="shiptostreet"></span><br />
+                    <span class="mini">&nbsp;<br /></span>
+                    <span id="shiptocountry"></span>-<span id="shiptozipcode"></span> <span id="shiptocity"></span><br />
+                    <span id="shiptobundesland"></span><br />
+                    <span class="mini">&nbsp;<br /></span>
+                    <span id="shiptocontact"></span><br />
+                    .:tel:.: <span id="shiptophone"></span><br />
+                    .:fax:.: <span id="shiptofax"></span><br />
+                    <span id="shiptoemail"></span>
+                </div>
+                <div id="not">
+                    <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
+                        <thead></thead>
+                        <tbody>
+                            <tr><td width="20%" class="lang" data-lang="CATCHWORD">.:Catchword:.</td><td>{sw}</td></tr>
+                            <tr><td width="20%" class="lang" data-lang="COMMENTS">.:Remarks:.</td><td>{notiz}</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="var" >
+                    <div class="zeile klein">
+                        <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
+                            <thead></thead>
+                                <!-- BEGIN vars -->
+                                <tr><td width="20%" >{varname}</td><td>{varvalue}</td></tr>
+                                <!-- END vars -->
+                        </table>
+                    </div>
+                </div>
+                <div id="inf">
+                    <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
+                        <thead></thead>
+                        <tbody>
+                            <tr><td width="20%" class="lang" data-lang="CONCERN">.:Concern:.:</td><td width="25%"><a href="firma1.php?Q={Q}&id={konzern}">{konzernname}</td><td width="25%"><a href="konzern.php?Q={Q}&fid={FID}">{konzernmember}</a></td><td></td></tr>
+                            <tr><td width="20%" class="lang" data-lang="INDUSTRY">.:Industry:. </td><td width="25%">{branche}</td><td width="25%"></td><td></td></tr>
+                            <tr><td width="20%" class="lang" data-lang="HEADCOUNT">.:headcount:.:</td><td width="25%">{headcount}</td><td width="25%"></td><td></td></tr>
+                            <tr><td width="20%" class="lang" data-lang="LANGUAGE">.:language:.:</td><td width="25%">{language} </td><td width="25%"></td><td></td></tr>
+                            <tr><td width="20%">.:Init date:.:</td><td width="25%">{erstellt} </td><td width="25%">.:update:.: </td><td>{modify} </td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="fin" >
+                    <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
+                        <thead></thead>
+                        <tbody>
+                            <tr><td width="20%">.:Source:.:</td><td width="35%">{lead} {leadsrc}</td><td width="21%">.:Discount:.:</td><td>{rabatt}</td></tr>
+                            <tr><td width="20%">.:{Q}Business:.:</td><td width="35%">{kdtyp}</td><td width="21%">.:Price group:.:</td><td>{preisgrp}</td></tr>
+                            <tr><td width="20%">.:taxnumber:.:</td><td width="35%">{Taxnumber}</td><td width="21%">.:terms:.:</td><td>{terms} .:days:.</td></tr>
+                            <tr><td width="20%">UStId:</td><td width="35%">{USTID}</td><td width="21%">.:creditlimit:.:</td><td>{kreditlim}</td></tr>
+                            <tr><td width="20%">.:taxzone:.:</td><td width="35%">{Steuerzone}</td><td width="21%">.:outstanding:. :</td><td></td></tr>
+                            <tr><td width="20%">.:bankname:.:</td><td width="35%">{bank}</td><td width="21%">- .:items:.:</td><td>{op}</td></tr>
+                            <tr><td width="20%">.:directdebit:.:</td><td width="35%">{directdebit}</td><td width="21%">- .:orders:.:</td><td>{oa}</td></tr>
+                            <tr><td width="20%">.:bankcode:.:</td><td width="35%">{blz}</td><td></td><td></td></tr>
+                            <tr><td width="20%">.:bic:.:</td><td width="35%">{bic}</td><td></td><td></td></tr>
+                            <tr><td width="20%">.:account:.:</td><td width="35%">{konto}</td><td></td><td></td></tr>
+                            <tr><td width="20%">.:iban:.:</td><td width="35%">{iban}</td><td></td><td></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-    <div id="contactsdialog" title=".:contact:."></div>
-    <div id="searchdialog" title=".:search result:.">
-        <table class="tablesorter" width="100%">
-            <thead>
-                <tr>
-                    <th class="lang" data-lang="DATE"></th>
-                    <th class="lang" data-lang="SUBJECT" width="150px"></th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-            <tfoot></tfoot>
-        </table>
-  </div>
-  <div id="showsearchdialog" width="610px" height="600px"></div>
-
-  <div id='contentbox'>
-   <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid lightgray;" >
-    <div class="gross" style="float:left; width:55%; height:25em; text-align:left; border: 0px solid black; padding:0.2em;" >
-     <span class="fett">{Fname1}</span><br />
-     {Fdepartment_1} {Fdepartment_2}<br />
-     {Strasse}<br />
-     <span class="mini">&nbsp;<br /></span>
-     <span onClick="surfgeo()">{Land}-{Plz} {Ort}</span><br />
-     <span class="klein">{Bundesland}</span><br /><br />
-     <div id="openInvoice"></div>
-     {Fcontact}
-     <span class="mini"><br />&nbsp;<br /></span>
-     <font color="#444444"> .:tel:.:</font> <a href="tel:{Telefon}">{Telefon}</a><br />
-     <font color="#444444"> .:fax:.:</font> <a href="tel:{Fax}">{Fax}</a><br />
-     <span class="mini">&nbsp;<br /></span>
-     &nbsp;[<a href="{mail_pre}{eMail}{mail_after}">{eMail}</a>]<br />
-     &nbsp;<a href="{Internet}" target="_blank">{Internet}</a>
+            <div style="float:left; width:45%; height:37em; text-align:left; border: 1px solid lightgrey; border-left:0px;">
+                <div id="right_tabs">
+                    <ul>
+                        <li><a href="#contact">.:contact:.</a></li>
+                        <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=quo">.:quotations:.</a></li>
+                        <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=ord">.:orders:.</a></li>
+                        <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=del">.:delivery order:.</a></li>
+                        <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=inv">.:invoice:.</a></li>
+                    </ul>
+                    <div id="contact">
+                        <table id="calls" class="tablesorter" width="100%" style='margin:0px; cursor:pointer;'>
+                            <thead><tr><th>.:date:.</th><th>id</th><th class="{ sorter: false } ">.:type:. / .:direction:.</th><th>.:subject:.</th><th>.:contact:.</th></tr></thead>
+                                <tbody id="tbshow">
+                                    <tr onClick="showItem(0)" class='verlauf'><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
+                                </tbody>
+                        </table><br>
+                        <div id="pager" class="pager" style='position:absolute;'>
+                            <form name="ksearch" onSubmit="false ks();"> &nbsp;
+                                <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/first.png" class="first">
+                                <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/prev.png" class="prev">
+                                <input type="text" id='suchwort' name="suchwort" size="20"><input type="hidden" name="Q" value="{Q}">
+                                <button id='ks' name='ks'>.:search:.</button>
+                                <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/next.png" class="next">
+                                <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/last.png" class="last">
+                                <select class="pagesize" id='pagesize'>
+                                    <option value="10">10</option>
+                                    <option value="15" selected="selected">15</option>
+                                    <option value="20">20</option>
+                                    <option value="25">25</option>
+                                    <option value="30">30</option>
+                                </select>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="dialogwin">
+            <iframe id="iframe1" width='100%' height='450'  scrolling="auto" border="0" frameborder="0"><img src='image/wait.gif'></iframe>
+        </div>
     </div>
-    <div style="float:left; width:43%; height:25em; text-align:right; border: 0px solid black; padding:0.2em;">
-     <span valign="top"><span class="fett">{kdnr}</span><img src="image/kreuzchen.gif" title=".:locked address:." style="visibility:{verstecke};" > {verkaeufer}
-      {IMG} <br /> </span>
-     <br class= 'mini'>
-      {ANGEBOT_BUTTON}
-      {AUFTRAG_BUTTON}
-      {LIEFER_BUTTON}
-      {RECHNUNG_BUTTON}
-     <br />
-     <br class='mini'>
-      {EXTRA_BUTTON}
-      {QR_BUTTON}
-      {KARTE_BUTTON}
-      {ETIKETT_BUTTON}
-     <br />
-     <br class='mini'>
-      {DHL_BUTTON}
-      {BRIEF_BUTTON}
-      {LxCars_BUTTON}
-     <br />
-     <br />
-     <span style="visibility:{zeige_bearbeiter};" >.:employee:.: {bearbeiter}</span>
-    </div>
-    <br />
-   </div>
-   <div id="fasubmenu" >
-    <ul>
-     <li><a href="#lie">.:shipto:. </a></li>
-     <li><a href="#not">.:notes:. </a></li>
-     <li><a href="#var">.:variablen:. </a></li>
-     <li><a href="#fin">.:financial:.</a></li>
-     <li><a href="#inf">.:miscInfo:. </a></li>
-    </ul>
-    <div id="lie" class="klein">
-     <span class="fett" id="shiptoname"></span> &nbsp;&nbsp;&nbsp;&nbsp;
-      .:shipto count:.:{Scnt} <img src="image/leftarrow.png" id="shipleft" border="0">
-       <span id="SID"></span> <img src="image/rightarrow.png" id="shipright" border="0">&nbsp; &nbsp;
-        <a href="#" onCLick="anschr();"><img src="image/brief.png" alt=".:print label:." border="0"/></a>&nbsp; &nbsp;
-        <a href="" id="karte2 target="_blank"><img src="image/karte.gif" alt="karte" title=".:city map:." border="0"></a><br />
-        <span id="shiptodepartment_1"></span> &nbsp; &nbsp; <span id="shiptodepartment_2"></span> <br />
-        <span id="shiptostreet"></span><br />
-        <span class="mini">&nbsp;<br /></span>
-        <span id="shiptocountry"></span>-<span id="shiptozipcode"></span> <span id="shiptocity"></span><br />
-        <span id="shiptobundesland"></span><br />
-        <span class="mini">&nbsp;<br /></span>
-        <span id="shiptocontact"></span><br />
-         .:tel:.: <span id="shiptophone"></span><br />
-         .:fax:.: <span id="shiptofax"></span><br />
-         <span id="shiptoemail"></span>
-        </div>
-        <div id="not">
-         <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
-          <thead></thead>
-          <tbody>
-           <tr><td width="20%" class="lang" data-lang="CATCHWORD">.:Catchword:.</td><td>{sw}</td></tr>
-           <tr><td width="20%" class="lang" data-lang="COMMENTS">.:Remarks:.</td><td>{notiz}</td></tr>
-          </tbody>
-         </table>
-        </div>
-        <div id="var" >
-         <div class="zeile klein">
-          <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
-           <thead></thead>
-<!-- BEGIN vars -->
-           <tr><td width="20%" >{varname}</td><td>{varvalue}</td></tr>
-<!-- END vars -->
-          </table>
-         </div>
-        </div>
-        <div id="inf">
-         <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
-          <thead></thead>
-          <tbody>
-           <tr><td width="20%" class="lang" data-lang="CONCERN">.:Concern:.:</td><td width="25%"><a href="firma1.php?Q={Q}&id={konzern}">{konzernname}</td><td width="25%"><a href="konzern.php?Q={Q}&fid={FID}">{konzernmember}</a></td><td></td></tr>
-           <tr><td width="20%" class="lang" data-lang="INDUSTRY">.:Industry:. </td><td width="25%">{branche}</td><td width="25%"></td><td></td></tr>
-           <tr><td width="20%" class="lang" data-lang="HEADCOUNT">.:headcount:.:</td><td width="25%">{headcount}</td><td width="25%"></td><td></td></tr>
-           <tr><td width="20%" class="lang" data-lang="LANGUAGE">.:language:.:</td><td width="25%">{language} </td><td width="25%"></td><td></td></tr>
-           <tr><td width="20%">.:Init date:.:</td><td width="25%">{erstellt} </td><td width="25%">.:update:.: </td><td>{modify} </td></tr>
-          </tbody>
-         </table>
-        </div>
-        <div id="fin" >
-         <table class="tablesorter" width="50%" style='margin:0px; cursor:pointer;'>
-          <thead></thead>
-          <tbody>
-           <tr><td width="20%">.:Source:.:</td><td width="35%">{lead} {leadsrc}</td><td width="21%">.:Discount:.:</td><td>{rabatt}</td></tr>
-           <tr><td width="20%">.:{Q}Business:.:</td><td width="35%">{kdtyp}</td><td width="21%">.:Price group:.:</td><td>{preisgrp}</td></tr>
-           <tr><td width="20%">.:taxnumber:.:</td><td width="35%">{Taxnumber}</td><td width="21%">.:terms:.:</td><td>{terms} .:days:.</td></tr>
-           <tr><td width="20%">UStId:</td><td width="35%">{USTID}</td><td width="21%">.:creditlimit:.:</td><td>{kreditlim}</td></tr>
-           <tr><td width="20%">.:taxzone:.:</td><td width="35%">{Steuerzone}</td><td width="21%">.:outstanding:. :</td><td></td></tr>
-           <tr><td width="20%">.:bankname:.:</td><td width="35%">{bank}</td><td width="21%">- .:items:.:</td><td>{op}</td></tr>
-           <tr><td width="20%">.:directdebit:.:</td><td width="35%">{directdebit}</td><td width="21%">- .:orders:.:</td><td>{oa}</td></tr>
-           <tr><td width="20%">.:bankcode:.:</td><td width="35%">{blz}</td><td></td><td></td></tr>
-           <tr><td width="20%">.:bic:.:</td><td width="35%">{bic}</td><td></td><td></td></tr>
-           <tr><td width="20%">.:account:.:</td><td width="35%">{konto}</td><td></td><td></td></tr>
-           <tr><td width="20%">.:iban:.:</td><td width="35%">{iban}</td><td></td><td></td></tr>
-          </tbody>
-         </table>
-        </div>
-       </div>
-
-       <div style="float:left; width:45%; height:37em; text-align:left; border: 1px solid lightgrey; border-left:0px;">
-        <div id="right_tabs">
-         <ul>
-          <li><a href="#contact">.:contact:.</a></li>
-          <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=quo">.:quotations:.</a></li>
-          <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=ord">.:orders:.</a></li>
-          <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=del">.:delivery order:.</a></li>
-          <li><a href="jqhelp/get_doc.php?Q={Q}&fid={FID}&type=inv">.:invoice:.</a></li>
-         </ul>
-         <div id="contact">
-          <table id="calls" class="tablesorter" width="100%" style='margin:0px; cursor:pointer;'>
-           <thead><tr><th>.:date:.</th><th>id</th><th class="{ sorter: false } ">.:type:. / .:direction:.</th><th>.:subject:.</th><th>.:contact:.</th></tr></thead>
-           <tbody id="tbshow">
-            <tr onClick="showItem(0)" class='verlauf'><td></td><td>0</td><td></td><td>.:newItem:.</td><td></td></tr>
-           </tbody>
-          </table><br>
-          <div id="pager" class="pager" style='position:absolute;'>
-           <form name="ksearch" onSubmit="false ks();"> &nbsp;
-            <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/first.png" class="first">
-            <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/prev.png" class="prev">
-            <input type="text" id='suchwort' name="suchwort" size="20"><input type="hidden" name="Q" value="{Q}">
-            <button id='ks' name='ks'>.:search:.</button>
-            <button id='reload' name='reload'>reload</button>
-            <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/next.png" class="next">
-            <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/last.png" class="last">
-            <select class="pagesize" id='pagesize'>
-             <option value="10">10</option>
-             <option value="15" selected="selected">15</option>
-             <option value="20">20</option>
-             <option value="25">25</option>
-             <option value="30">30</option>
-            </select>
-           </form>
-          </div>
-         </div>
-        </div>
-       </div>
-      </div>
-      <div id="dialogwin">
-       <iframe id="iframe1" width='100%' height='450'  scrolling="auto" border="0" frameborder="0"><img src='image/wait.gif'></iframe>
-      </div>
-     </div>
-   {END_CONTENT}
-   {TOOLS}
- </body>
+{END_CONTENT}
+{TOOLS}
+</body>
 </html>

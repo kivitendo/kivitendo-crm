@@ -97,7 +97,7 @@ $(document).ready(function() {
     });
 
     function drawTable(data) {
-        $("#tbody").empty();
+        $("#tbody0").empty();
         for (var i = 0; i < data.length; i++) {
             drawRow(data[i]);
         }
@@ -168,11 +168,26 @@ $(document).ready(function() {
             marginLeft: 'auto',
             marginTop: 'auto',
             left: (($(window).width() - $('#showTable').outerWidth())/3),
-//            overflow: 'auto'
+            overflow: 'auto'
         });
     });
 
     $(window).resize();
+
+
+//    $("#searchButton").button().click(function () {
+//       $("#searchdialog").html('<table id="searchtable" width="100%" class="tablesorter">' +
+//           '<thead><tr><th>'+langData[language]["DATE"]+'</th>'+
+//           '<th width="150px">'+langData[language]["SUBJECT"]+'</th></tr></thead>'+
+//           '<tbody id="tbody0"><tr><td>14.04.1963 09:45</td><td>was Wichtiges</td></tr>'+
+//           '<tr><td>15.07.2016 08:00</td><td>nicht ganz unwichtig</td></tr></tbody><tfoot></tfoot></table>')
+//           .dialog({
+//                open:   function () {
+//                    $('#searchdialog table.tablesorter').tablesorter();
+//                },
+//                width:  "auto"
+//           });
+//    });
 
 });
 
@@ -217,41 +232,12 @@ $(document).ready(function() {
 
  </div>
 
- <div id="newbtn" ></div>
-
-<!-- <div id="pager"> <?php echo $head['JQTABLE-PAGER']; ?> </div> -->
+ <div id='newbtn'></div>
 
 
-
-
-<!-- <table class="tablesorter">
-  <thead>
-    <tr>
-     <th>Name</th>
-     <th>Alter</th>
-     <th>Bemerkungen</th>
-    </tr>
-  </thead>
-  <tbody id="tsok">
-   <tr>
-    <td>Anton</td>
-    <td>89</td>
-    <td>alt</td>
-   </tr>
-   <tr>
-    <td>Berta</td>
-    <td>45</td>
-    <td>jünger</td>
-   </tr>
-   <tr>
-    <td>Cäsar</td>
-    <td>1000</td>
-    <td>ganz alt</td>
-   </tr>
-  </tbody>
- </table>-->
-
-
+<!--<div id='searchButton'>Search</div>
+<div id="searchdialog" title="Search Dialog"></div>
+-->
 
 </body>
 </html>

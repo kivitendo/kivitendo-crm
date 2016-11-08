@@ -59,8 +59,9 @@
             });
         }
 
-    function showItem(id) {
+       function showItem(id) {
         var id = id;
+
         $("#contactsdialog").dialog("open").html('<p> <form id="contacts"> <label>' + langData[language]['SUBJECT'] + '</label>'+
             '<input type="text" name="cause" id="cause">'+
             '<label>' +  langData[language]['DATE'] + ' / ' + langData[language]['TIME'] + '</label>' +
@@ -69,16 +70,16 @@
             '<p><label>' + langData[language]['COMMENTS'] + '</label> <textarea name="cause_long" id="cause_long" rows="10" cols="60" wrap="hard"></textarea> </p>'+
             '<p> <fieldset> <legend>' + langData[language]['TYPE_OF_CONTACT'] + '</legend>'+
             '<input type="radio" name="type_of_contact" id="radio-1" value="T" checked="checked">  <label for="radio-1">' + langData[language]['PHONE'] + '</label>'+
-            '<input type="radio" name="type_of_contact" id="radio-2" value="M">  <label for="radio-2">' + langData[language]['EMAIL'] + '</label>'+
-            '<input type="radio" name="type_of_contact" id="radio-3" value="L">  <label for="radio-3">' + langData[language]['LETTER'] + '</label>'+
-            '<input type="radio" name="type_of_contact" id="radio-4" value="P">  <label for="radio-4">' + langData[language]['PERSONAL'] + '</label>'+
-            '<input type="radio" name="type_of_contact" id="radio-5" value="F">  <label for="radio-5">' + langData[language]['FILE'] + '</label>'+
-            '<input type="radio" name="type_of_contact" id="radio-6" value="R">  <label for="radio-6">' + langData[language]['TERM'] + '</label> </fieldset> </p>'+
-            '<p> <fieldset> <legend>' + langData[language]['DIRECTION'] + '</legend>'+
-            '<input type="radio" name="inout" id="radio-7" value="i">  <label for="radio-7">' + langData[language]['FROM'] + ' ' + langData[language]['CUSTOMER_LABEL'] + '</label>'+
-            '<input type="radio" name="inout" id="radio-8" value="o" >  <label for="radio-8">' + langData[language]['TO'] + ' ' + langData[language]['CUSTOMER_LABEL'] + '</label>'+
-            '<input type="radio" name="inout" id="radio-9" value="-" checked="checked">  <label for="radio-9">' + langData[language]['UNASSIGNED'] + '</label>'+
-            '<input type="hidden" name="id" id="id" value="' + id + '">' +
+                '<input type="radio" name="type_of_contact" id="radio-2" value="M">  <label for="radio-2">' + langData[language]['EMAIL'] + '</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-3" value="L">  <label for="radio-3">' + langData[language]['LETTER'] + '</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-4" value="P">  <label for="radio-4">' + langData[language]['PERSONAL'] + '</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-5" value="F">  <label for="radio-5">' + langData[language]['FILE'] + '</label>'+
+                '<input type="radio" name="type_of_contact" id="radio-6" value="R">  <label for="radio-6">' + langData[language]['TERM'] + '</label> </fieldset> </p>'+
+               '<p> <fieldset> <legend>' + langData[language]['DIRECTION'] + '</legend>'+
+                '<input type="radio" name="inout" id="radio-7" value="i">  <label for="radio-7">' + langData[language]['FROM'] + ' ' + langData[language]['CUSTOMER_LABEL'] + '</label>'+
+                '<input type="radio" name="inout" id="radio-8" value="o" >  <label for="radio-8">' + langData[language]['TO'] + ' ' + langData[language]['CUSTOMER_LABEL'] + '</label>'+
+                '<input type="radio" name="inout" id="radio-9" value="-" checked="checked">  <label for="radio-9">' + langData[language]['UNASSIGNED'] + '</label>'+
+                '<input type="hidden" name="id" id="id" value="' + id + '">' +
             '</fieldset> </form></p> </p>');
 
         if (id != 0) getSingleRow(id);
@@ -106,29 +107,19 @@
 
 
     function anschr(A) {
-        $( "#dialogwin" ).dialog({
-            width:      400,
-            minWidth:   300,
-            maxWidth:   400,
-            maxHeight:  600,
-            title: "Adressetiketten",
-            buttons: [{
-                        text: langData[language]['CLOSE'],
-                        click: function(){
-                            $(this).dialog("close");
-                            return false;
-                        }
-                    }]
-        });
+        $( "#dialogwin" ).dialog( "option", "width", 400 );
+        $( "#dialogwin" ).dialog( "option", "minWidth", 300 );
+        $( "#dialogwin" ).dialog( "option", "maxWidth", 400 );
+        $( "#dialogwin" ).dialog( "option", "maxHeight", 600 );
+        $( "#dialogwin" ).dialog( { title: "Adresse" } );
         if (A==1) {
             //$( "#dialogwin" ).load("showAdr.php?Q={Q}&fid={FID}&nojs=1");
-            $('#iframe1').attr('src', 'showAdr.php?Q={Q}&fid={FID}');
+            $('#iframe1').attr('src', 'showAdr.php?Q={Q}&fid={FID}&nojs=1');
         } else {
-//            sid = document.getElementById('SID').firstChild.nodeValue;
-            sid = $("#SID :first-child").val();
+            sid = document.getElementById('SID').firstChild.nodeValue;
             if ( sid )
                 //$( "#dialogwin" ).load("showAdr.php?Q={Q}&sid="+sid+"&nojs=1");
-                $('#iframe1').attr('src', 'showAdr.php?Q={Q}&sid='+sid);
+                $('#iframe1').attr('src', 'showAdr.php?Q={Q}&sid='+sid+'&nojs=1');
         }
         $( "#dialogwin" ).dialog( "open" );
     }
@@ -137,13 +128,13 @@
         F1=open("showNote.php?fid={FID}","Notes","width=400, height=400, left=100, top=50, scrollbars=yes");
     }
 
-/*    function KdHelp() {
+    function KdHelp() {
         link = $('#kdhelp option:selected').val();
         if ( $('#kdhelp').prop("selectedIndex") > 0 ) {
             f1=open("wissen.php?kdhelp="+link,"Wissen","width=750, height=600, left=50, top=50, scrollbars=yes");
             $('#kdhelp option')[0].selected = true;
         }
-    }*/
+    }
 
     var shiptoids = new Array({Sids});
     var sil = shiptoids.length;
@@ -191,7 +182,7 @@
         })
     }
 
-//    var f1 = null;
+    var f1 = null;
 
     function showOP(was) {
         F1=open("op_.php?Q={Q}&fa={Fname1}&op="+was,"OP","width=950, height=450, left=100, top=50, scrollbars=yes");
@@ -383,21 +374,17 @@
         $("#shipleft").click(function(){ nextshipto('-'); });
         $("#shipright").click(function(){ nextshipto('+'); });
         nextshipto('o');
-
-        $('#searchBtn').button().click(function(event) {
+        $('button').button().click(function(event) {
             event.preventDefault();
-            //name = this.getAttribute('name');
-            var sw = $('#suchwort').val();
-            $("#searchdialog").html('<table id="searchtable" class="tablesorter">' +
-                '<thead><tr><th>'+langData[language]["DATE"]+'</th>'+
-                '<th width="150px">'+langData[language]["SUBJECT"]+'</th>'+
-                '</tr></thead><tbody id="stbody"></tbody></table>')
-                .dialog({
+            name = this.getAttribute('name');
+            if ( name == 'ks' ) {
+                var sw = $('#suchwort').val();
+                $("#searchdialog").dialog({
                     height: "auto",
                     width: "auto",
-                    title: ".:search result:.",
-                    open:function () {
-                        $('#searchtable').tablesorter();
+                    title: langData[language]["SEARCHRESULT"],
+                    open:function (event, ui) {
+                        $('#searchdialog table.tablesorter').tablesorter();
                     },
                     buttons: [{
                         text: langData[language]['CLOSE'],
@@ -406,34 +393,40 @@
                             return false;
                         }
                     }]
-                });
-            $.ajax({
-                dataType: 'json',
-                data: {action: "getSearch", data: {sw: sw, Q: "C", fid: {FID}}},
-                url: 'ajax/contact.php',
-                method: "GET",
-                success: function( json ) {
-                    $("#stbody").empty();
-                    var row='';
-                    for (var i = 0; i < json.length; i++) {
-                        var sContent='';
-                        row = json[i];
-                        var id = row.id;
-                        var calldate = mkCallDate(row.calldate);
-//                        var calldate = row.calldate;
-                        sContent += '<tr> <td>' + calldate + '</td>';
-                        sContent += '<td>' + row.cause + '</td></tr>';
-                        $("#stbody").append(sContent);
-                    }
-                    $("#stbody > tr").click(function() {
-                        showSearch(id);
+                }).html('<table width="100%" class="tablesorter">' +
+                    '<thead><tr><th>'+langData[language]["DATE"]+'</th>'+
+                    '<th width="150px">'+langData[language]["SUBJECT"]+'</th>'+
+                    '</tr></thead><tbody></tbody><tfoot></tfoot></table>');
+                    $.ajax({
+                        dataType: 'json',
+                        url: 'ajax/contact.php?action=getSearch&sw=' + sw + '&Q=C&fid={FID}',
+                        method: "GET",
+                        success: function( json ) {
+                            $("#searchdialog tbody").empty();
+                            var row='';
+                            for (var i = 0; i < json.length; i++) {
+                                var sContent='';
+                                row = json[i];
+                                var id = row.id;
+                                var calldate = mkCallDate(row.calldate);
+                                sContent += '<tr> <td>' + calldate + '</td>';
+                                sContent += '<td>' + row.cause + '</td></tr>';
+                            $("#searchdialog tbody").append(sContent);
+                            }
+                            $("#searchdialog tbody tr").click(function() {
+                                showSearch(id);
+                            });
+                        },
+                        error:  function(){
+                            alert("Holen der Daten fehlgeschlagen!");
+                        }
                     });
-                },
-                error:  function(){
-                    alert(langData[language]['GET_ERROR']);
-                }
-            });
-            $("#searchtable").tablesorter;
+
+            } else if ( name == 'reload' ) {
+                showCall();
+            } else {
+                document.location.href = name;
+            }
         });
 
         $("#fasubmenu").tabs({
@@ -557,7 +550,7 @@
 
 <style>
     #contacts input {margin-left: 5px; margin-right: 10px}
-    .tablesorter { width:auto; cursor:pointer; widgets: ['zebra']; sortList: [[0,0]];}
+    .tablesorter { width:auto; cursor:pointer; widgets: ['zebra'];}
 </style>
 
 </head>
@@ -745,7 +738,7 @@
                                 <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/first.png" class="first">
                                 <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/prev.png" class="prev">
                                 <input type="text" id='suchwort' name="suchwort" size="20"><input type="hidden" name="Q" value="{Q}">
-                                <div id='searchBtn' name='ks'>.:search:.</div>
+                                <button id='ks' name='ks'>.:search:.</button>
                                 <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/next.png" class="next">
                                 <img src="{CRMPATH}jquery-plugins/tablesorter-master/addons/pager/icons/last.png" class="last">
                                 <select class="pagesize" id='pagesize'>

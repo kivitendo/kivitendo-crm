@@ -19,16 +19,15 @@ function getData(){
     echo $rs;
 }
 
-function getSearch($data){
-    writeLog($data);
-    $sw=$data["sw"];
-    $Q=$data["Q"];
-    $fid=$data["fid"];
-    $sql="select calldate, cause, id, caller_id, contact_reference from contact_events where ( cause ilike '%$sw%' or cause_long ilike '%$sw%') ";
-    $sql.="and (caller_id in (select cp_id from contacts where cp_cv_id=$fid) or caller_id=$fid)";
-    $rs=$GLOBALS['dbh']->getAll($sql." order by contact_reference,calldate desc");
-    writeLog($rs);
-    echo json_encode($rs);
+function getSearch(){
+        $sw=$_GET["sw"];
+        $Q=$_GET["Q"];
+        $fid=$_GET["fid"];
+        $sql="select calldate, cause, id, caller_id, contact_reference from contact_events where ( cause ilike '%$sw%' or cause_long ilike '%$sw%') ";
+        $sql.="and (caller_id in (select cp_id from contacts where cp_cv_id=$fid) or caller_id=$fid)";
+        $rs=$GLOBALS['dbh']->getAll($sql." order by contact_reference,calldate desc");
+        writeLog($rs);
+        echo json_encode($rs);
 }
 
 function openInvoice( $data ){

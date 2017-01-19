@@ -1,0 +1,1 @@
+/root/kivitendo-crm/lxcars/db_update/crm_LxcarsAuftrag.sql

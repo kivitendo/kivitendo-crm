@@ -1,14 +1,17 @@
 {
-    "name": "App",
-    "version": "0.0.1",
-    "description": "App",
+    "name": "Kivitendo-CRM",
+    "version": "2.3.1",
+    "description": "CRM-Modul for Kivitendo",
     "dependencies": {
         "socket.io": "latest",
 	"jquery-minicolors": "latest",
 	"postitall": "latest",
 	"trumbowyg": "latest",
+	"jquery": "latest",
 	"jquery-ui": "latest",
+	"jquery-ui-dist": "latest",
 	"pg": "latest"
     },
-    "author": "developer"
+    "author": "Ronny Zimmermann",
+    "repository": "https://github.com/kivitendo/kivitendo-crm.git"
 }

@@ -13,7 +13,7 @@ echo $menu['javascripts'];
 echo $head['CRMCSS'];
 echo $head['JQTABLE'];
 echo $head['THEME'];
-echo $head['JUI-DROPDOWN'];
+
 ?>
     <script language="JavaScript">
         $.urlParam = function( name ){
@@ -96,7 +96,7 @@ echo '
     }
 </style>
 <script>
-    $(function() {
+$(document).ready( function(){
         //ToDo: Dialoge übersetzen!!!!!!
         $( "#dialog_no_sw" ).dialog({
             autoOpen: false,
@@ -121,25 +121,35 @@ echo '
         $( "#tabs" ).tabs({ select:chgTab });
         $("#results").css('height',300);
 
-        $.ajax({
-            url: "jqhelp/getHistory.php",
-            context: $('#menu'),
-            success: function(data) {
-                $(this).html(data);
-                $("#drop").jui_dropdown({
-                    launcher_id: 'launcher',
-                    launcher_container_id: 'launcher_container',
-                    menu_id: 'menu',
-                    containerClass: 'drop_container',
-                    menuClass: 'menu',
-                    launchOnMouseEnter:true,
-                    onSelect: function(event, data) {
-                        showD(data.id.substring(0,1), data.id.substring(1), number);
-                    }
-                });
+        $("#drop").selectmenu({
+            //style: 'dropdown',
+            select: function( event, data ) {
+
+               showD( data.item.value.substr( 0, 1 ), data.item.value.substr( 1 ), number );
+
             }
         });
 
+
+        $.ajax({
+            url: "ajax/getData.php",
+            type: "POST",
+            data: { action: "getHistory" },
+            success: function( data){
+                $.each( data, function(index, itemData) {
+                    var selected = !index ? "selected='selected'" : "";
+                    $("<option value='" + itemData[2] + itemData[0] + "'" + selected + " >" + itemData[1] + "</option>").appendTo("#drop");
+                 });
+                 //$("#drop").selectmenu("refresh");
+                 //$("#drop").selectmenu("destroy").selectmenu({ style: "dropdown" });
+                 $( "#drop" ).selectmenu( "open" );
+
+            },
+            error: function(){
+                alert( 'Error: getHistory()' );
+            }
+
+        })
         $("#adress").button().click(function() {
             $.ajax({
                 type: "POST",
@@ -195,12 +205,10 @@ echo '
                 <button id="kontakt">'.translate('.:contact history:.','firma').'</button> <br>
                 <span class="liste">'.translate('.:search keyword:.','firma').'</span>
             </form>
-            <div id="drop">
-                <div id="launcher_container">
-                    <button id="launcher">'.translate('.:history tracking:.','firma').'</button>
-                </div>
-                <ul id="menu"> </ul>
-            </div>
+
+
+             <select name="drop" id="drop"></select>
+
             <div id="results" class="tablesorter"></div>
         </div>
 

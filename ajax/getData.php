@@ -18,9 +18,9 @@ function getHistory(){
     $sql  = "select val from crmemployee where uid = '" . $_SESSION["loginCRM"];
     $sql .= "' AND manid = ".$_SESSION['manid']." AND key = 'search_history'";
     $rs =   $GLOBALS['dbh']->getOne( $sql );
-    //writeLog( $sql );
+    //writeLog( $rs['val'] );
 
-    echo $rs['val'];
+    echo $rs['val'] ? $rs['val'] : '0';
 
 }
 

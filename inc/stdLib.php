@@ -646,8 +646,8 @@ function getAllERPgroups($test = false) {
 }
 
 function getAllAssignments() {
-	$allERPusers = getAllERPusers();
-	$allERPgroups = getAllERPgroups();
+    $allERPusers = getAllERPusers();
+    $allERPgroups = getAllERPgroups();
     $sql = "SELECT usrg.user_id AS user_id, usrg.group_id AS group_id FROM auth.user_group AS usrg ORDER by usrg.user_id";
     $rs = $GLOBALS['dbh_auth']->getAll( $sql );
     return $rs;
@@ -790,41 +790,20 @@ function nextNumber($number) {
 
 /***************************************************************
 *** erzeugt valide Verzeichnisnamen für viele Betriebsysteme ***
-*** invalide Zeichen sind: Umlaute  \ / : * ? " < > |        ***
+*** invalide Zeichen sind:  \ / : * ? " < > |                ***
 ***************************************************************/
-function mkDirName($name) {
-//sollte eigentlich in stdLib, diese müsste dann jedoch utf-8 codiert sein!
-    $ers = array(
-        ' ' => '_',  'ä' => 'ae', 'â' => 'ae', 'ã' => 'ae', 'à' => 'ae', 'á' => 'ae', 'ç' => 'c',
-        'ï' => 'i',  'í' => 'i',  'ì' => 'i',  'î' => 'i',  'ö' => 'oe', 'ó' => 'oe', 'ò' => 'oe',
-        'õ' => 'oe', 'ü' => 'ue', 'ú' => 'ue', 'ù' => 'ue', 'û' => 'ue', 'Ä' => 'Ae', 'Â' => 'Ae',
-        'Ã' => 'Ae', 'Á' => 'Ae', 'À' => 'Ae', 'Ç' => 'C',  'É' => 'E',  'È' => 'E',  'Ê' => 'E',
-        'Ë' => 'E',  'Í' => 'I',  'Ì' => 'I',  'Î' => 'I',  'Ï' => 'I',  'Ö' => 'Oe', 'Ó' => 'Oe',
-        'Ò' => 'Oe', 'Õ' => 'Oe', 'Ô' => 'Oe', 'Ü' => 'Ue', 'Ú' => 'Ue', 'Ù' => 'Ue', 'Û' => 'Ue',
-        '\\'=> '_',  'ß' => 'ss', '/' => '_' , ':' => '_',  '*' => '_',  '?' => '_',  '"' => '_',
-        '<' => '_',  '>' => '_',  '|' => '_' , ',' => '' );
-    return strtr($name,$ers);
+function mkDirName( $name ){
+    $ers = array( ' ' => '_', '\\'=> '_',  'ß' => 'ss', '/' => '_' , ':' => '_', '*' => '_',  '?' => '_',  '"' => '_','<' => '_',  '>' => '_',  '|' => '_' , ',' => '' );
+    return strtr( $name, $ers );
 }
-function accessHistory( $data=false ) {
 
-
-        $sql  = "select val from crmemployee where uid = '" . $_SESSION["loginCRM"];
-        $sql .= "' AND manid = ".$_SESSION['manid']." AND key = 'search_history'";
-        $rs =   $GLOBALS['dbh']->getOne( $sql );
-        $array_of_data = json_decode( $rs['val'], true );
-       // if( !is_array ( $array_of_data[0] ) ) unset( $array_of_data[0] );//ToDo
-        if ( !$data && $array_of_data ) {
-             return array_reverse( $array_of_data );
-        }
-        else {
-            if ( $array_of_data && in_array( $data, $array_of_data ) ) unset( $array_of_data[array_search( $data, $array_of_data )] );
-            $array_of_data[] = $data;
-            if ( count( $array_of_data ) > 8 ) array_shift( $array_of_data );
-            $sql =  "UPDATE crmemployee SET val = '".json_encode( $array_of_data )."' WHERE uid = ".$_SESSION['loginCRM'];
-            $sql .= " AND manid = ".$_SESSION['manid']." AND key = 'search_history'";
-            $GLOBALS['dbh']->query( $sql );
-        }
-
+function accessHistory( $data ){ //ToDo: move to ajax
+    $rs = $GLOBALS['dbh']->getOne( "select val from crmemployee where uid = '" . $_SESSION["loginCRM"]."' AND manid = ".$_SESSION['manid']." AND key = 'search_history'" ); //get current history
+    $array_of_data = $rs['val'] ? json_decode( $rs['val'], true ) : array(); //current history in array or new empty array
+    if ( $array_of_data && in_array( $data, $array_of_data ) ) unset( $array_of_data[array_search( $data, $array_of_data )] ); //remove duplicates
+    array_unshift( $array_of_data, $data ); //add last access to array
+    if ( count( $array_of_data ) > 10 ) array_shift( $array_of_data ); //remove entry numer 10
+    $GLOBALS['dbh']->update( 'crmemployee', array( 'val' ), array( json_encode( $array_of_data ) ), "uid = ".$_SESSION['loginCRM']." AND manid = ".$_SESSION['manid']." AND key = 'search_history'" );
 }
 
 function getCurrencies(){

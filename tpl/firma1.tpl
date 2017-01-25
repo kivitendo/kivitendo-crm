@@ -437,12 +437,7 @@
         $(function() {
             $( "#right_tabs" ).tabs({
                 cache: true, //helpful?
-                active: {kdviewre},
-                beforeLoad: function( event, ui ) {
-                    ui.jqXHR.error(function() {
-                        ui.panel.html(langData[language]['TABLOAD_ERROR'] );
-                    });
-                }
+                active: {kdviewre}
             });
         });
 

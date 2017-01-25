@@ -255,7 +255,7 @@ function makeMenu(){
         //print_r($objResult->{'javascripts'});
         //echo "</pre";
         $rs['javascripts'] .= '<script type="text/javascript" src="'.$_SESSION['baseurl'].'crm/nodejs/node_modules/jquery/dist/jquery.min.js"></script>'."\n".'   ';
-        $rs['javascripts'] .= '<script type="text/javascript" src="'.$_SESSION['baseurl'].'crm/jquery/jquery-ui.min.js"></script>'."\n".'   ';
+        $rs['javascripts'] .= '<script type="text/javascript" src="'.$_SESSION['baseurl'].'crm/nodejs/node_modules/jquery-ui-dist/jquery-ui.min.js"></script>'."\n".'   ';
 
         foreach($objResult->{'javascripts'} as $js)
             if( strpos( $js, "jquery")  === false ) $rs['javascripts'] .= '<script type="text/javascript" src="'.$_SESSION['baseurl'].$js.'"></script>'."\n".'   ';

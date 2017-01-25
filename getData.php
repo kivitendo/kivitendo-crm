@@ -111,12 +111,7 @@ $(document).ready( function(){
             title : "Nichts gefunden"
         }).html( "Dieser Suchbegriff ergibt kein Resultat.</br>Bitte verändern Sie das Suchkriterium." );
         $( "#tabs" ).tabs({
-            active: <?php echo $_SESSION["searchtab"] - 1;?>,
-            beforeLoad: function( event, ui ) {
-                ui.jqXHR.error( function() {
-                    ui.panel.html(".:Couldn't load this tab.:." );
-                });
-            }
+            active: <?php echo $_SESSION["searchtab"] - 1;?>
         });
         $( "#tabs" ).tabs({ select:chgTab });
         $("#results").css('height',300);
@@ -146,7 +141,7 @@ $(document).ready( function(){
 
             },
             error: function(){
-                alert( 'Error: getHistory()' );
+                alert( 'Error: getHistory() in ajax/getData.php' );
             }
 
         })

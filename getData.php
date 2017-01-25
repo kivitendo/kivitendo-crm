@@ -3,7 +3,7 @@ ob_start();
     require_once("inc/stdLib.php");
     include("inc/crmLib.php");
     $menu = $_SESSION['menu'];
-    $head = mkHeader();
+    //$head = mkHeader();
 ?>
 <html>
 <head><title></title>
@@ -131,7 +131,7 @@ $(document).ready( function(){
             type: "POST",
             data: { action: "getHistory" },
             success: function( data){
-                $.each( data, function(index, itemData) {
+                $.each( data, function( index, itemData ){
                     var selected = !index ? "selected='selected'" : "";
                     $("<option value='" + itemData[2] + itemData[0] + "'" + selected + " >" + itemData[1] + "</option>").appendTo("#drop");
                  });

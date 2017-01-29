@@ -1,0 +1,518 @@
+/* Stylesheet for kivitendo
+ * Name: lx-office-erp.css*/
+
+/* The look of links */
+A:link { color: mediumblue; text-decoration: none; }
+A:visited { color: mediumblue; text-decoration: none; }
+A:active { color: black; text-decoration: none; }
+A:hover { color: black;
+           background-color: lemonchiffon;
+           text-decoration: none;
+         }
+a, div {
+  transition: background-color 0.2s;
+  -moz-transition: background-color 0.2s;
+  -webkit-transition: background-color 0.2s;
+}
+
+input, textarea, select {
+  border: 1px;
+  border-color: darkgray lightgray lightgray;
+  border-style: solid;
+  padding: 1px;
+  background-color: white;
+}
+
+select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -o-appearance: none;
+  appearance : none;
+  background: white url('../../image/select-down.png') no-repeat scroll right center;
+  padding: 0 14px 0 0;
+}
+
+input:focus, textarea:focus, select:focus {
+  background-color: whitesmoke;
+  border: 1px;
+  border-color: gray lightgray lightgray;
+  border-style: solid;
+}
+
+input:hover, textarea:hover, select:hover {
+  border-color: dimgray darkgray darkgray;
+}
+
+input[type="button"],
+input[type="submit"],
+button,
+input[type="button"]:focus,
+input[type="submit"]:focus,
+button:focus {
+  border: 1px;
+  border-color: darkgray;
+  border-style: solid;
+  /*padding: 0px 4px;*/
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  background-color: whitesmoke;
+}
+
+button:hover:enabled,
+input[type="button"]:hover:enabled,
+input[type="submit"]:hover:enabled {
+  border: 1px;
+  background-color: lightgray;
+  border-color: gray;
+  border-style: solid;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 80%;
+  background-color: white;
+  background-image: url("../../image/fade.png"); background-repeat:repeat-x;
+  color: black;
+  height: 100%;
+}
+
+td {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  color: black;
+  font-weight: normal;
+}
+td.hover:hover {
+  color: black;
+}
+
+
+th {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  color: black;
+  font-weight: normal;
+}
+
+/* login and admin */
+.login {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+div.login {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  background: #b8d1f3;
+  color: #A0A0A0;
+}
+h1.login {
+  font-size: 150%;
+}
+table.login {
+  background-color: #efedde;
+  padding: 20px;
+}
+td.login {
+  text-align: center;
+}
+th.login {
+  text-align: right;
+}
+
+div.admin {
+  color: black;
+  margin: 8px;
+}
+
+.message_error_login {
+    color: #000000;
+    border: 1px solid #8b0000;
+    background-color: #ffcccc;
+    padding: 3px;
+}
+.message_ok {
+    padding:5px;
+    background-color: #ADFFB6;
+    color: black;
+    font-weight: bolder;
+    text-align:center;
+    border-style:solid;
+    border-width:thin;
+}
+.message_error {
+    padding:5px;
+    background-color: #FFAAAA;
+    color: black;
+    font-weight: bolder;
+    text-align:center;
+    border-style:solid;
+    border-width:thin;
+}
+.message_hint {
+    padding:5px;
+    background-color: #FFFE66;
+    color: black;
+    font-weight: bolder;
+    text-align:center;
+    border-style:solid;
+    border-width:thin;
+}
+.message_error_label {
+    padding:5px;
+    background-color: #FEE;
+    font-weight:normal;
+    text-align:left;
+    border-style:solid;
+    border-width:thin;
+}
+
+/*
+    Überschriftsbalken
+*/
+.listtop, h1 {
+    background-color: rgb(236,233,216);
+    font-size: 100%;
+    text-align:left;
+    padding:5px;
+    color: black;
+    font-weight: bolder;
+    border-style:dashed;
+    border-width:thin;
+}
+
+
+.listelement {
+    background-image: url("../../image/fade2.png");
+    background-repeat:repeat-x;
+    border-style:dashed;
+    border-width:thin;
+}
+
+.listelement2 {
+    background-image: url("../../image/fade2.png");
+    background-repeat:repeat-x;
+    border-style:dashed;
+    border-width:thin;
+}
+
+.listheading, .listheading th, #content h2 {
+    font-size: 95%;
+    padding:3px;
+    background-color:
+    rgb(236,233,216);
+    color: black;
+    font-weight: bold;
+    text-align:left;
+    background-image: url("../../image/fade.png");
+    border-style:dotted;
+    border-width:thin;
+}
+
+.listheadingcontent {
+    background-color:
+    rgb(236,233,216);
+    color: black;
+    font-weight: bolder;
+    text-align:left;
+}
+
+.accountlistheading {
+    padding:3px;
+    color: white;
+    font-weight: bold;
+    text-align:left;
+    background-color:rgb(133,132,129);
+}
+
+.subsubheading {
+  color: black;
+  font-weight: bolder;
+  text-decoration: underline;
+}
+
+.optionen {
+    border:dashed;
+/*  padding-top:10px;
+    padding-bottom:10px;
+    padding-left:10px;
+*/
+    border-width:1px;
+    background:#efedde;
+}
+
+
+.listrow1, .listrow:nth-child(even)  { background-color: rgb(208,207,201); color: black; vertical-align: top; }
+.listrow0, .listrow:nth-child(odd) { background-color: rgb(236,233,216); color: black; vertical-align: top; }
+.listrowempty { background-color: rgb(255,255,255); color: black; vertical-align: top; }
+.listrow_error1, .listrow_error:nth-child(even) { background-color: #F6CECE; color: black; vertical-align: top; }
+.listrow_error0, .listrow_error:nth-child(odd) { background-color: #F5A9A9; color: black; vertical-align: top; }
+
+.redrow1 { background-color: rgb(250,167, 161); color: black; vertical-align: top; }
+.redrow0 { background-color: rgb(255,193,176); color: black; vertical-align: top; }
+
+.greenrow1 { background-color: rgb(0,250,0); color: black; vertical-align: top; }
+.greenrow0 { background-color: rgb(0,255,0); color: black; vertical-align: top; }
+
+.listsubtotal { background-color: rgb(236,233,216); color: black; font-weight: bolder;}
+
+.listtotal, .listtotal td { background-color: rgb(236,233,216); color: black; font-weight: bolder;}
+
+/* Verkaufsbericht */
+.listmainsortheader { background-color: rgb(236,233,216); color: red; font-weight: bolder; padding-left: 10px; padding-top: 0px;}
+.listmainsortsubtotal { background-color: rgb(236,233,216); color: red; font-weight: bolder; padding-left: 10px;}
+.listsubsortheader { background-color: rgb(236,233,216); color: green; font-weight: bolder; padding-left: 20px}
+.listsubsortsubtotal { background-color: rgb(236,233,216); color: green; font-weight: bolder; padding-left: 20px}
+.listsortdescription { background-color: rgb(236,233,216); color: black; font-weight: normal; padding-left: 30px}
+
+
+.submit {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  color: #000000;
+}
+.checkbox, .radio {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  color: #778899;
+}
+
+.plus0 {    /* font color for negative numbers */
+  color: red;
+}
+
+.plus1 {
+  color: green;
+}
+
+h2.confirm {
+  color: blue;
+}
+
+h2.error {
+  color: red;
+}
+
+fieldset {
+  margin-top:15px;
+  color: black;
+  font-weight: bolder;
+}
+
+
+.filecontent {
+  border: 1px solid blue;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+label {
+  cursor:pointer;
+}
+
+.unbalanced_ledger {
+  background-color: #ffa0a0;
+}
+
+.flash_message_error {
+  background-color:#FFD6D6;
+  border: 1px solid #AE0014;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 5px;
+}
+
+.flash_message_warning {
+  background-color:#FFE8C7;
+  border: 1px solid #FF6600;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 5px;
+}
+
+.flash_message_info {
+  background-color:#DCF2FF;
+  border: 1px solid #4690FF;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 5px;
+}
+
+.flash_title {
+  font-weight: bold;
+}
+
+/* Kontenliste Styles */
+
+.coa_listrow1 {
+  background-color: rgb(208,207,201);
+  color: black;
+  vertical-align: top;
+}
+
+.coa_listrow0 {
+  background-color: rgb(236,233,216);
+  color: black;
+  vertical-align: top;
+}
+
+.coa_detail_emph {
+  font-weight:bold;
+  color:darkred;
+}
+
+.coa_details_header {
+  padding:3px;
+  font-weight:bolder;
+  text-align:center;
+  border-style:none;
+  border-width:thin;
+}
+
+.coa_details_header2 {
+  padding:3px;
+  font-weight:normal;
+  text-align:left;
+  border-style:none;
+  border-width:thin;
+}
+
+.dimmed-text {
+  color: #aaa;
+  font-style: italic;
+}
+
+.link_separator {
+  margin-left: 6px;
+  margin-right: 6px;
+}
+
+.part_picker {
+}
+.chart_picker {
+  padding-right: 16px;
+}
+.customer-vendor-picker-undefined,
+.chartpicker-undefined,
+.projectpicker-undefined,
+.partpicker-undefined {
+  color: red;
+  font-style: italic;
+}
+div.part_picker_part,
+div.chart_picker_chart {
+  padding: 5px;
+  margin: 5px;
+  border: 1px;
+  border-color: darkgray;
+  border-style: solid;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  background-color: whitesmoke;
+  cursor: pointer;
+}
+div.part_picker_part:hover,
+div.chart_picker_chart:hover {
+  background-color: lightgray;
+  border-color: gray;
+}
+
+div.ppp_block {
+  overflow:hidden;
+  float:left;
+  width: 350px;
+}
+span.ppp_popup_button {
+  display: inline-block;
+  position: relative;
+  margin-left: -18px;
+  margin-top: 3px;
+  height: 16px;
+  width: 16px;
+  cursor: pointer;
+}
+
+td span.ppp_popup_button,
+th span.ppp_popup_button {
+  height: 9px;
+  width: 9px;
+  margin-left: -13px;
+}
+span.part_picker input {
+  padding-right: 20px;
+  background: white url("../../image/search.svg") no-repeat center right;
+  background-size: contain;
+  box-sizing: padding-box;
+  -moz-box-sizing: padding-box;
+  -webkit-box-sizing: padding-box;
+}
+
+td span.part_picker input,
+th span.part_picker input {
+  padding-right: 15px;
+}
+
+span.part_picker {
+ /* white-space: nowrap;*/
+}
+
+div.ppp_block span.ppp_block_number,
+div.cpc_block span.cpc_block_number
+{
+  float:left;
+}
+div.ppp_block span.ppp_block_description {
+  float:right;
+  font-weight:bold;
+}
+div.cpc_block span.cpc_block_description {
+  float:left;
+  margin-left:1em;
+  font-weight:bold;
+}
+div.ppp_line span.ppp_block_description,
+div.cpc_line span.cpc_block_description
+{
+  margin-left:1em;
+  font-weight:bold;
+}
+div.ppp_line span.ppp_block_sellprice {
+  display:none;
+}
+div.cpc_block span.cpc_block_balance {
+  float:right;
+}
+div.cpc_block span.cpc_line_balance {
+  display:none;
+}
+div.cpc_line span.cpc_block_second_row {
+  display:none;
+}
+div.cpc_block span.cpc_block_second_row {
+}
+span.toggle_selected {
+  font-weight: bold;
+}
+.dunned_invoice {
+  font-weight: bold;
+  color: #f00;
+}
+.customer_dunning_level {
+  font-weight: bold;
+}
+a.green {
+       background-color:#40FF00;
+       border:none;
+}
+a.orange {
+       background-color:#FF8000;
+       border:none;
+}
+a.red {
+       background-color:#FF0000;
+       border:none;
+}

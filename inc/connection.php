@@ -264,8 +264,6 @@ function makeMenu(){
            if( strpos( $style, "main.css")  === false ) $rs['stylesheets'] .= '<link rel="stylesheet" href="'.$_SESSION['baseurl'].$style.'" type="text/css">'."\n".'   ';
            else $rs['stylesheets'] .= '<link rel="stylesheet" href="'.$_SESSION['baseurl'].'crm/css/'.explode( '/', $style, 3 )[1].'/main-erp.css" type="text/css">'."\n".'   ';
 
-        $rs['stylesheets'] .= '<link rel="stylesheet" href="'.$_SESSION['baseurl'].'crm/css/reset.css" type="text/css">'."\n".'   ';
-
         foreach($objResult->{'stylesheets_inline'} as $style)
             if ($style) $rs['stylesheets'] .= '<link rel="stylesheet" href="'.$_SESSION['baseurl'].$style.'" type="text/css">'."\n".'   ';
 

@@ -13,7 +13,7 @@
         break;
         case "getCategories":
             $sql = "SELECT id , label, TRIM( color ) AS color FROM event_category ORDER BY cat_order DESC";
-            $rs = $GLOBALS['dbh']->getOne( $sql, $json = TRUE );
+            $rs = $GLOBALS['dbh']->getAll( $sql, $json = TRUE );
             echo $rs;
         break;
         case "updateCategories":

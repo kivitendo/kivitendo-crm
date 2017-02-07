@@ -37,11 +37,11 @@ class myPDO extends PDO{
     }
 
     public function getOne( $sql, $json = FALSE ){
-        if( $json ) $sql = "SELECT json_agg( json ) FROM (".$sql.") AS json";
+        if( $json ) $sql = "SELECT row_to_json( json ) FROM (".$sql.") AS json";
         $stmt = parent::prepare( $sql );
         if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString );
         if( !$result = $stmt->execute() ) $this->error( $stmt->errorInfo() );
-        return  $json ? $stmt->fetch( PDO::FETCH_ASSOC )['json_agg'] : $stmt->fetch( PDO::FETCH_ASSOC );
+        return  $json ? $stmt->fetch( PDO::FETCH_ASSOC )['row_to_json'] : $stmt->fetch( PDO::FETCH_ASSOC );
     }
 
     public function getAll( $sql, $json = FALSE  ){

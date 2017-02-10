@@ -40,7 +40,7 @@ Visibility für Gruppen
          $( "#dialog" ).dialog({
             autoOpen: false,
             height: 540,
-            width: 680,
+            width: 740,
             modal: true,
             buttons: {
                 "Save": function() {
@@ -175,7 +175,7 @@ Visibility für Gruppen
                 autoWidth:  true,
                 height:     "12",
                 populate: function() {
-console.log('vor ajaxTask');
+                //console.log('vor ajaxTask');
                     var deferred = $.Deferred()
                     $.ajax({
                         url: 'jqhelp/calendar.php',
@@ -464,10 +464,10 @@ console.log('vor ajaxTask');
                 cust_vend_pers = ui.item.src+ui.item.id;
                 $( "#tmp" ).data( "cust_vend_pers" , cust_vend_pers);
             }
-        }).dblclick(function() {
+        }).dblclick( function(){
             var cust_vend_pers = $( "#tmp" ).data( "cust_vend_pers" );
             var Q  = cust_vend_pers.charAt( 0 );
-            if( cust_vend_pers != 'false' ) window.open( "firma" + (Q=='K' ? '2' : '1') + ".php?Q=" + Q + "&id=" + cust_vend_pers.slice(1) );
+            if( cust_vend_pers != 'false' && $( "#location" ).val() ) window.open( "firma" + (Q=='K' ? '2' : '1') + ".php?Q=" + Q + "&id=" + cust_vend_pers.slice(1) );
            // else window.open( "http://maps.google.de/maps/place/" + $( "#location" ).val() );
         }).tooltip( {
             show: {

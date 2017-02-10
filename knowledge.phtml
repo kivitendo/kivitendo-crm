@@ -53,10 +53,11 @@ $(document).ready(function(){
                     $.ajax({
                         url: 'ajax/knowledge.php',
                         data: { action: "updateContent",  data: { content : artContent,  cat_id: category_id, version: version } },
-                        dataType: 'json',
+                        //dataType: 'json',
                         type: 'post',
-                        error: function () {
-                            alert('Ajax Error in updateContent()');
+                        error: function (){
+                            window.location.href = '../controller.pl?action=LoginScreen/logout';
+                            //alert('Ajax Error in updateContent()');
                         }
                     })
                 }, 1000 );

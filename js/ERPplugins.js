@@ -1,7 +1,16 @@
+
 $(document).ready(function() {
     var yesterdayButton = true; // enable or disable yesterday-Button
     var fancyBox = true;        // enable or disable Fancybox
     var crmButton = true; // enable or disable CRM-Button
+
+    language = kivi.myconfig.countrycode;
+    $( ".lang" ).each( function(){
+        var key = $( this ).attr( "data-lang" );
+        if( $( this ).is( ":input" ) ) $( this ).attr( 'title',  typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
+            else $( this ).text( typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
+        });
+
 
     //Rechnungen in Fancybox anzeigen
     var getUrl = window.location;
@@ -83,7 +92,7 @@ $(document).ready(function() {
     }//endif
 
     //CRM Button in Order (experimental)
-    if( getUrl.toString().match('action=Order' && crmButton) ){
+    if( getUrl.toString().match( 'action=Order' && crmButton ) ){
         var cust_vend_type =  $( '#order_customer_id_type' ).val() == 'customer' ? 'C' : 'V';
         var cust_vend_id   =  $( '#order_customer_id_type' ).val() == 'customer' ? $( '#order_customer_id' ).val() : $( '#order_vendor_id' ).val();
         $("<input style='margin-right: 5px;' class='submit' type='button' name='crm' id='crm' value='CRM' onClick=\"window.location.href='crm/firma1.php?Q="+ cust_vend_type +"&id="+ cust_vend_id +"'\">" ).insertAfter( "#action" );
@@ -91,18 +100,24 @@ $(document).ready(function() {
     }
 
 
+    // "Yesterday"-Button
     if( getUrl.toString().match( 'is.pl' ) && yesterdayButton ){
+        $(document).on('keydown', function(e) {
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                $( '#update_button' ).click();
+            };
+        });
+        var dpLast = $( '[id^=datepaid_]:last' );
 
+        $( '<button id="yButton" data-lang="YESTERDAY" class="lang" style="margin-right: 5px">Gestern</button>' ).insertBefore( dpLast );
 
-        var dplast = $( "[id^=datepaid_]:last" );
-        $( "<button id='myButton'>Gestern</button>" ).insertBefore( dplast );
-        //alert(kivi.myconfig.dateformat );
-        $( "#myButton" ).click(function() {
-            var token = /[.-/]/.exec(dplast.val());
-            var today = dplast.val().split(token);
+        $( '#yButton' ).click( function(){
+               var token = /[.-/]/.exec( dpLast.val() );
+            var today = dpLast.val().split( token );
 
-            switch(kivi.myconfig.dateformat) {
-
+            // new Date according to local date format
+            switch( kivi.myconfig.dateformat ) {
                 case 'mm/dd/yy':
                     fDate = today[2] + "/" + today[0] + "/" + today[1];
                     break;
@@ -116,31 +131,31 @@ $(document).ready(function() {
                     fDate = today[0] + "/" + today[1] + "/" + today[2];
             }
 
-
-            var yesterday= new Date(fDate).getTime() - 86400000;
-                var date0 = new Date(yesterday);
-                var day = date0.getDate();
-                if (day < 10) {day = "0" + day};
+            // building yesterday's date from milliseconds and extracting day, month, year
+            var yesterday= new Date( fDate ).getTime() - 86400000;
+            var date0 = new Date( yesterday );
+            var day = date0.getDate();
+            if (day < 10) {day = "0" + day};
                 var month = date0.getMonth() + 1;
                 if (month < 10) {month = "0" + month};
                 var year = date0.getFullYear();
 
-
+            // combining day, month, year according local date format and inserting into input field
             switch(kivi.myconfig.dateformat) {
 
                 case 'mm/dd/yy':
-                    dplast.val( month + token + day + token + year );
+                    dpLast.val( month + token + day + token + year );
                     break;
                 case 'dd/mm/yy':
-                    dplast.val( day + token + month + token + year );
+                    dpLast.val( day + token + month + token + year );
                     break;
                 case 'dd.mm.yy':
-                    dplast.val( day + token + month + token + year );
+                    dpLast.val( day + token + month + token + year );
                     break;
                 case 'yyyy-mm-dd':
-                    dplast.val( year + token + month + token + day );
+                    dpLast.val( year + token + month + token + day );
                 default:
-                    dplast.val( year + token + month + token + day );
+                    dpLast.val( year + token + month + token + day );
             }
             return false;
         });

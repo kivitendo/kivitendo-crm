@@ -1,3 +1,5 @@
+// translation/all.lng einbinden mit prepend(?)
+//<script language="javascript" type="text/javascript" src="translation/all.lng"></script>
 
 $(document).ready(function() {
     var yesterdayButton = true; // enable or disable yesterday-Button
@@ -110,7 +112,7 @@ $(document).ready(function() {
         });
         var dpLast = $( '[id^=datepaid_]:last' );
 
-        $( '<button id="yButton" data-lang="YESTERDAY" class="lang" style="margin-right: 5px">Gestern</button>' ).insertBefore( dpLast );
+        $( '<button id="yButton" data-lang="YESTERDAY" class="lang" style="margin-right: 5px">Gesstern</button>' ).insertBefore( dpLast );
 
         $( '#yButton' ).click( function(){
                var token = /[.-/]/.exec( dpLast.val() );

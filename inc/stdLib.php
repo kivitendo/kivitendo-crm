@@ -25,7 +25,7 @@ function printArray( $array ){
     echo '</pre>';
 }
 
-//in terminal: tail -f tmp/log.txt
+//in terminal: tailf tmp/log.txt
 function writeLog( $log ){
     file_put_contents( $_SESSION['crmpath'].'/tmp/log.txt', date("Y-m-d H:i:s -> " ).print_r( $log, TRUE )."\n", FILE_APPEND );
 }
@@ -802,7 +802,7 @@ function accessHistory( $data ){ //ToDo: move to ajax
     $array_of_data = $rs['val'] ? json_decode( $rs['val'], true ) : array(); //current history in array or new empty array
     if ( $array_of_data && in_array( $data, $array_of_data ) ) unset( $array_of_data[array_search( $data, $array_of_data )] ); //remove duplicates
     array_unshift( $array_of_data, $data ); //add last access to array
-    if ( count( $array_of_data ) > 10 ) array_shift( $array_of_data ); //remove entry numer 10
+    if ( count( $array_of_data ) > 10 ) array_pop( $array_of_data ); //remove entry numer 10
     $GLOBALS['dbh']->update( 'crmemployee', array( 'val' ), array( json_encode( $array_of_data ) ), "uid = ".$_SESSION['loginCRM']." AND manid = ".$_SESSION['manid']." AND key = 'search_history'" );
 }
 

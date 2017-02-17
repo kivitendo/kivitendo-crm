@@ -100,6 +100,7 @@ var langData = {
             VISIBILITY:         "Sichtbarkeit:",
             WEEK:               "wöchig",
             YEAR:               "jährig",
+            YESTERDAY:           "Gestern",
             ZIPCODE:            "PLZ",
         },
         en: {
@@ -204,6 +205,7 @@ var langData = {
             VISIBILITY:         "Visibility",
             WEEK:               "week",
             YEAR:               "year",
+            YESTERDAY:           "Yesterday",
             ZIPCODE:            "Zipcode",
         }
     };

@@ -104,18 +104,19 @@ $(document).ready(function() {
 
     // "Yesterday"-Button
     if( getUrl.toString().match( 'is.pl' ) && yesterdayButton ){
-        $(document).on('keydown', function(e) {
+       /* $(document).on('keydown', function(e) {
             if (e.keyCode == 13) {
                 e.preventDefault();
                 $( '#update_button' ).click();
             };
-        });
+        });*/
         var dpLast = $( '[id^=datepaid_]:last' );
-
-        $( '<button id="yButton" data-lang="YESTERDAY" class="lang" style="margin-right: 5px">Gesstern</button>' ).insertBefore( dpLast );
+        //Mach den Button zum Bild dann bleibt die Funktionalität erhalten.
+        //Nun brauchst du nur noch das Bild eines beschrifteten Buttons in Abhängigkeit von der Sprache zu laden
+        $( '<img id="yButton" class="ui-datepicker-trigger" src="image/calendar.png">' ).insertBefore( dpLast );
 
         $( '#yButton' ).click( function(){
-               var token = /[.-/]/.exec( dpLast.val() );
+            var token = /[.-/]/.exec( dpLast.val() );
             var today = dpLast.val().split( token );
 
             // new Date according to local date format
@@ -144,7 +145,6 @@ $(document).ready(function() {
 
             // combining day, month, year according local date format and inserting into input field
             switch(kivi.myconfig.dateformat) {
-
                 case 'mm/dd/yy':
                     dpLast.val( month + token + day + token + year );
                     break;
@@ -159,6 +159,7 @@ $(document).ready(function() {
                 default:
                     dpLast.val( year + token + month + token + day );
             }
+
             return false;
         });
     }

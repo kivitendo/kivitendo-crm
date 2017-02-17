@@ -30,6 +30,7 @@ echo $head['THEME'];
            else if ( src=="V" ) uri = number ? "firmen3.php?edit=1&number=" + number + "&Q=V&id=" + id : "firma1.php?Q=V&id=" + id;
            else if ( src=="E" ) uri = "user1.php?id=" + id;
            else if ( src=="K" ) uri = number ? "personen3.php?&edit=1&number=" + number + "&id=" + id : "kontakt.php?id=" + id;
+           else if ( src=="A" ) { uri="lxcars/lxcmain.php?task=3&c_id=" + id; }
            window.location.href = uri;
         }
         function showItem(id,Q,FID) {
@@ -93,6 +94,9 @@ echo '
         padding: .2em .4em;
         margin: .8em 0 .2em;
         line-height: 1.5;
+    }
+    .ui-autocomplete {
+        z-index: 9999 !important;
     }
 </style>
 <script>

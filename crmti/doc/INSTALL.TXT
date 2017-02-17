@@ -1,5 +1,10 @@
 INSTALL.TXT
 
+CRMTI funktioniert wie folgt:
+Im Router (FritzBox) werden für jede Telefonummer ein IP-Telefon eingerichtet.
+Auf diese IP-Telefon-Konten greift Asterisk zu und leitet diese an ein IP-Telefon (Gigaset C430) weiter.
+Dabei ruft Asterisk via ODBC eine PostgreSQL-Funktion auf die die entsprechenden Daten in die Tabelle crmti einträgt.
+
 
 CRMTI konfiguriren
 /*******************************************************************************************************************

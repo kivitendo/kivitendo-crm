@@ -9,7 +9,8 @@ CREATE TABLE crmti(
     crmti_caller_id       int,                                     -- id des Telefonierenden
     crmti_caller_typ      char,                                    -- Kunde, Kieferant, Kontakt
     crmti_direction        text,                                    -- Richtung
-    crmti_status           text                                     -- Anrufstatus
+    crmti_status           text,                                     -- Anrufstatus
+    unique_call_id     text
 );;
 INSERT INTO crmti( crmti_src, crmti_dst ) VALUES ( 'INSTALL.TXT', 'LESEN' );;
 
@@ -68,17 +69,18 @@ BEGIN
     return result;
 END; $$ LANGUAGE 'plpgsql' WITH (iscachable);;;
 
-CREATE OR REPLACE FUNCTION CallIn( text, text )
+CREATE OR REPLACE FUNCTION CallIn( text, text, text )
     RETURNS text AS $$
     -- Für eingehende Anrufe, Sucht in src und gibt den Namen zurück, speichert
 DECLARE
     src ALIAS FOR $1;
     dst ALIAS FOR $2;
+    unique_call_id ALIAS FOR $3;
     result record;
     new_row crmti%rowtype;
 BEGIN
     result := SucheNummer( src );
-    INSERT INTO crmti ( crmti_src, crmti_caller_id, crmti_caller_typ, crmti_dst, crmti_direction ) VALUES ( result.name, result.id, result.typ, dst, 'E') RETURNING *     INTO new_row;
+    INSERT INTO crmti ( crmti_src, crmti_caller_id, crmti_caller_typ, crmti_dst, crmti_direction, unique_call_id ) VALUES ( result.name, result.id, result.typ, dst, 'E', unique_call_id ) RETURNING * INTO new_row;
     DELETE FROM crmti WHERE crmti_id  < new_row.crmti_id - 512;
     IF result.typ != 'X' THEN
         insert into telcall ( calldate, bezug, cause, caller_id, kontakt, inout ) values ( CURRENT_TIMESTAMP, 0, 'Eingehender Anruf zu[r|m] '||dst, result.id, 'T','i' );
@@ -87,17 +89,18 @@ BEGIN
     return result.name;
 END; $$ LANGUAGE 'plpgsql';;;
 
-CREATE OR REPLACE FUNCTION CallOut( text, text )
+CREATE OR REPLACE FUNCTION CallOut( text, text, text )
     RETURNS text AS $$
     -- Für ausgehende Anrufe
 DECLARE
     src ALIAS FOR $1;
     dst ALIAS FOR $2;
+    unique_call_id ALIAS FOR $3;
     result record;
     new_row crmti%rowtype;
 BEGIN
     result := SucheNummer( dst );
-    INSERT INTO crmti ( crmti_src, crmti_dst, crmti_caller_typ, crmti_caller_id, crmti_direction  ) VALUES ( src, result.name, result.typ, result.id, 'A' ) RETURNING * INTO new_row;
+    INSERT INTO crmti ( crmti_src, crmti_dst, crmti_caller_typ, crmti_caller_id, crmti_direction, unique_call_id ) VALUES ( src, result.name, result.typ, result.id, 'A', unique_call_id ) RETURNING * INTO new_row;
     DELETE FROM crmti WHERE crmti_id  < new_row.crmti_id - 512;
     IF result.typ != 'X' THEN
         INSERT INTO telcall ( calldate, bezug, cause, caller_id, kontakt, inout ) values ( CURRENT_TIMESTAMP, 0, 'Ausgehender Anruf vo[n|m] '||src, result.id, 'T', 'o' );

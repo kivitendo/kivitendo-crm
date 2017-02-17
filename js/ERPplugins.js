@@ -113,8 +113,8 @@ $(document).ready(function() {
         var dpLast = $( '[id^=datepaid_]:last' );
         //Mach den Button zum Bild dann bleibt die Funktionalität erhalten.
         //Nun brauchst du nur noch das Bild eines beschrifteten Buttons in Abhängigkeit von der Sprache zu laden
-        $( '<img id="yButton" class="ui-datepicker-trigger" src="image/calendar.png">' ).insertBefore( dpLast );
-
+        //$( '<img id="yButton" class="ui-datepicker-trigger" src="image/calendar.png">' ).insertBefore( dpLast );
+        $( '<form><button id="yButton" data-lang="YESTERDAY" class="lang" style="margin-right: 5px">Gestern</button></form>' ).insertBefore( dpLast );
         $( '#yButton' ).click( function(){
             var token = /[.-/]/.exec( dpLast.val() );
             var today = dpLast.val().split( token );

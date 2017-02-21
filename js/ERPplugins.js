@@ -5,6 +5,7 @@ $(document).ready(function() {
     var yesterdayButton = true; // enable or disable yesterday-Button
     var fancyBox = true;        // enable or disable Fancybox
     var crmButton = true; // enable or disable CRM-Button
+    var noTaxIncluded = true; // enable or disable Checkbox "MWst. inkl."
 
     language = kivi.myconfig.countrycode;
     $( ".lang" ).each( function(){
@@ -163,4 +164,7 @@ $(document).ready(function() {
             return false;
         });
     }
+
+    if( getUrl.toString().match( 'gl.pl' ) && noTaxIncluded ) $( "#taxincluded" ).prop( "checked", false );
+
 });

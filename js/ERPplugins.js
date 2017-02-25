@@ -7,12 +7,18 @@ $(document).ready(function() {
     var crmButton = true; // enable or disable CRM-Button
     var noTaxIncluded = true; // enable or disable Checkbox "MWst. inkl."
 
+    kivi_global = jQuery.parseJSON( kivi.myconfig.global_conf );
+
     language = kivi.myconfig.countrycode;
     $( ".lang" ).each( function(){
         var key = $( this ).attr( "data-lang" );
         if( $( this ).is( ":input" ) ) $( this ).attr( 'title',  typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
             else $( this ).text( typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
         });
+
+
+    //Load translation
+    $.getScript( kivi_global.baseurl + '/crm/translation/all.lng');
 
 
     //Rechnungen in Fancybox anzeigen
@@ -99,23 +105,14 @@ $(document).ready(function() {
         var cust_vend_type =  $( '#order_customer_id_type' ).val() == 'customer' ? 'C' : 'V';
         var cust_vend_id   =  $( '#order_customer_id_type' ).val() == 'customer' ? $( '#order_customer_id' ).val() : $( '#order_vendor_id' ).val();
         $("<input style='margin-right: 5px;' class='submit' type='button' name='crm' id='crm' value='CRM' onClick=\"window.location.href='crm/firma1.php?Q="+ cust_vend_type +"&id="+ cust_vend_id +"'\">" ).insertAfter( "#action" );
-        //$( '<input value="Save and Invoive" onclick="kivi.Order.save_and_invoice(1)" type="button">' ).insertAfter( "#crm" );
     }
 
 
-    // "Yesterday"-Button
+    // "Yesterday"-Button in
     if( getUrl.toString().match( 'is.pl' ) && yesterdayButton ){
-       /* $(document).on('keydown', function(e) {
-            if (e.keyCode == 13) {
-                e.preventDefault();
-                $( '#update_button' ).click();
-            };
-        });*/
         var dpLast = $( '[id^=datepaid_]:last' );
-        //Mach den Button zum Bild dann bleibt die Funktionalität erhalten.
-        //Nun brauchst du nur noch das Bild eines beschrifteten Buttons in Abhängigkeit von der Sprache zu laden
-        //$( '<img id="yButton" class="ui-datepicker-trigger" src="image/calendar.png">' ).insertBefore( dpLast );
-        $( '<form><button id="yButton" data-lang="YESTERDAY" class="lang" style="margin-right: 5px">Gestern</button></form>' ).insertBefore( dpLast );
+        var positionDpLast = dpLast.position();
+        $( '<form><button id="yButton" style="margin-right: 5px">' + langData[language].YESTERDAY + '</button></form>' ).insertBefore( dpLast ).css({left: positionDpLast.left + 30 , position:'absolute'}) ;
         $( '#yButton' ).click( function(){
             var token = /[.-/]/.exec( dpLast.val() );
             var today = dpLast.val().split( token );
@@ -165,6 +162,6 @@ $(document).ready(function() {
         });
     }
 
-    if( getUrl.toString().match( 'gl.pl' ) && noTaxIncluded ) $( "#taxincluded" ).prop( "checked", false );
+    if( getUrl.toString().match( 'gl.pl' ) && noTaxIncluded ) $( '#taxincluded' ).prop( 'checked', false );
 
 });

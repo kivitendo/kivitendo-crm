@@ -2,12 +2,14 @@
 //<script language="javascript" type="text/javascript" src="translation/all.lng"></script>
 
 $(document).ready(function() {
+    var kivi_global = jQuery.parseJSON( kivi.myconfig.global_conf );
+   // $.getScript( kivi_global.baseurl + '/crm/translation/all.lng', function(){
     var yesterdayButton = true; // enable or disable yesterday-Button
     var fancyBox = true;        // enable or disable Fancybox
     var crmButton = true; // enable or disable CRM-Button
     var noTaxIncluded = true; // enable or disable Checkbox "MWst. inkl."
 
-    kivi_global = jQuery.parseJSON( kivi.myconfig.global_conf );
+
 
     language = kivi.myconfig.countrycode;
     $( ".lang" ).each( function(){
@@ -18,7 +20,7 @@ $(document).ready(function() {
 
 
     //Load translation
-    $.getScript( kivi_global.baseurl + '/crm/translation/all.lng');
+
 
 
     //Rechnungen in Fancybox anzeigen
@@ -109,59 +111,65 @@ $(document).ready(function() {
 
 
     // "Yesterday"-Button in
-    if( getUrl.toString().match( 'is.pl' ) && yesterdayButton ){
-        var dpLast = $( '[id^=datepaid_]:last' );
-        var positionDpLast = dpLast.position();
-        $( '<form><button id="yButton" style="margin-right: 5px">' + langData[language].YESTERDAY + '</button></form>' ).insertBefore( dpLast ).css({left: positionDpLast.left + 30 , position:'absolute'}) ;
-        $( '#yButton' ).click( function(){
-            var token = /[.-/]/.exec( dpLast.val() );
-            var today = dpLast.val().split( token );
+    $.getScript( kivi_global.baseurl + '/crm/translation/all.lng', function () {
+        if( getUrl.toString().match( 'is.pl' ) && yesterdayButton ){
+            var dpLast = $( '[id^=datepaid_]:last' );
+            var positionDpLast = dpLast.position();
+            $( '<form><button id="yButton" style="margin-right: 5px">' + langData[language].YESTERDAY + '</button></form>' ).insertBefore( dpLast ).css({ left: positionDpLast.left - 70, position:'absolute'}) ;
+            $( '#yButton' ).click( function(){
+                var token = /[.-/]/.exec( dpLast.val() );
+                var today = dpLast.val().split( token );
 
-            // new Date according to local date format
-            switch( kivi.myconfig.dateformat ) {
-                case 'mm/dd/yy':
-                    fDate = today[2] + "/" + today[0] + "/" + today[1];
-                    break;
-                case 'dd/mm/yy':
-                    var fDate = today[2] + "/" + today[1] + "/" + today[0];
-                    break;
-                case 'dd.mm.yy':
-                    var fDate = today[2] + "/" + today[1] + "/" + today[0];
-                    break;
-                case 'yyyy-mm-dd':
-                    fDate = today[0] + "/" + today[1] + "/" + today[2];
-            }
+                // new Date according to local date format
+                switch( kivi.myconfig.dateformat ) {
+                    case 'mm/dd/yy':
+                        fDate = today[2] + "/" + today[0] + "/" + today[1];
+                        break;
+                    case 'dd/mm/yy':
+                        var fDate = today[2] + "/" + today[1] + "/" + today[0];
+                        break;
+                    case 'dd.mm.yy':
+                        var fDate = today[2] + "/" + today[1] + "/" + today[0];
+                        break;
+                    case 'yyyy-mm-dd':
+                        fDate = today[0] + "/" + today[1] + "/" + today[2];
+                }
 
-            // building yesterday's date from milliseconds and extracting day, month, year
-            var yesterday= new Date( fDate ).getTime() - 86400000;
-            var date0 = new Date( yesterday );
-            var day = date0.getDate();
-            if (day < 10) {day = "0" + day};
-                var month = date0.getMonth() + 1;
-                if (month < 10) {month = "0" + month};
-                var year = date0.getFullYear();
+                // building yesterday's date from milliseconds and extracting day, month, year
+                var yesterday= new Date( fDate ).getTime() - 86400000;
+                var date0 = new Date( yesterday );
+                var day = date0.getDate();
+                if (day < 10) {day = "0" + day};
+                    var month = date0.getMonth() + 1;
+                    if (month < 10) {month = "0" + month};
+                    var year = date0.getFullYear();
 
-            // combining day, month, year according local date format and inserting into input field
-            switch(kivi.myconfig.dateformat) {
-                case 'mm/dd/yy':
-                    dpLast.val( month + token + day + token + year );
-                    break;
-                case 'dd/mm/yy':
-                    dpLast.val( day + token + month + token + year );
-                    break;
-                case 'dd.mm.yy':
-                    dpLast.val( day + token + month + token + year );
-                    break;
-                case 'yyyy-mm-dd':
-                    dpLast.val( year + token + month + token + day );
-                default:
-                    dpLast.val( year + token + month + token + day );
-            }
+                // combining day, month, year according local date format and inserting into input field
+                switch(kivi.myconfig.dateformat) {
+                    case 'mm/dd/yy':
+                        dpLast.val( month + token + day + token + year );
+                        break;
+                    case 'dd/mm/yy':
+                        dpLast.val( day + token + month + token + year );
+                        break;
+                    case 'dd.mm.yy':
+                        dpLast.val( day + token + month + token + year );
+                        break;
+                    case 'yyyy-mm-dd':
+                        dpLast.val( year + token + month + token + day );
+                    default:
+                        dpLast.val( year + token + month + token + day );
+                }
 
-            return false;
-        });
-    }
+                return false;
+            });
+        }
+    });
 
     if( getUrl.toString().match( 'gl.pl' ) && noTaxIncluded ) $( '#taxincluded' ).prop( 'checked', false );
 
 });
+
+//})
+// translation/all.lng einbinden mit prepend(?)
+//<script language="javascript" type="text/javascript" src="translation/all.lng"></script>

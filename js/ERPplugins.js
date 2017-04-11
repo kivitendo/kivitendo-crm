@@ -102,7 +102,7 @@ $(document).ready(function() {
 
 
         //CRM Button in Order (experimental)
-        if( getUrl.toString().match( 'action=Order' && crmButton ) ){
+        if( getUrl.toString().match( 'action=Order' ) && crmButton ){
             var cust_vend_type =  $( '#order_customer_id_type' ).val() == 'customer' ? 'C' : 'V';
             var cust_vend_id   =  $( '#order_customer_id_type' ).val() == 'customer' ? $( '#order_customer_id' ).val() : $( '#order_vendor_id' ).val();
             $("<input style='margin-right: 5px;' class='submit' type='button' name='crm' id='crm' value='CRM' onClick=\"window.location.href='crm/firma1.php?Q="+ cust_vend_type +"&id="+ cust_vend_id +"'\">" ).insertAfter( "#action" );

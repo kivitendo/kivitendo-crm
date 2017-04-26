@@ -7,6 +7,7 @@ $(document).ready(function() {
 
     var getUrl = window.location;
 
+
     if( !getUrl.toString().match( 'LoginScreen' ) && !getUrl.toString().match( 'Admin' ) ){ //Plugins nicht bei login und Admin anzeigen
 
         var yesterdayButton = true; // enable or disable yesterday-Button
@@ -110,7 +111,7 @@ $(document).ready(function() {
 
         //alert( kivi_global.baseurl );
         // "Yesterday"-Button in
-        $.getScript( 'kivi_global.baseurl' + '/crm/translation/all.lng', function () {
+        $.getScript( kivi_global.baseurl + '/crm/translation/all.lng', function () {
             if( getUrl.toString().match( 'is.pl' ) && yesterdayButton ){
                 var dpLast = $( '[id^=datepaid_]:last' );
                 var positionDpLast = dpLast.position();

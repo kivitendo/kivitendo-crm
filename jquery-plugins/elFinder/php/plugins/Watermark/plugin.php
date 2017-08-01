@@ -21,7 +21,10 @@
  *				'quality'        => 95,         // JPEG image save quality
  *				'transparency'   => 70,         // Water mark image transparency ( other than PNG )
  *				'targetType'     => IMG_GIF|IMG_JPG|IMG_PNG|IMG_WBMP, // Target image formats ( bit-field )
- *				'targetMinPixel' => 200         // Target image minimum pixel size
+ *				'targetMinPixel' => 200,        // Target image minimum pixel size
+ *				'offDropWith'    => null        // To disable it if it is dropped with pressing the meta key
+ *				                                // Alt: 8, Ctrl: 4, Meta: 2, Shift: 1 - sum of each value
+ *				                                // In case of using any key, specify it as an array
  *			)
  *		),
  *		// each volume configure (optional)
@@ -39,7 +42,10 @@
  *						'quality'        => 95,         // JPEG image save quality
  *						'transparency'   => 70,         // Water mark image transparency ( other than PNG )
  *						'targetType'     => IMG_GIF|IMG_JPG|IMG_PNG|IMG_WBMP, // Target image formats ( bit-field )
- *						'targetMinPixel' => 200         // Target image minimum pixel size
+ *						'targetMinPixel' => 200,        // Target image minimum pixel size
+ *						'offDropWith'    => null        // To disable it if it is dropped with pressing the meta key
+ *						                                // Alt: 8, Ctrl: 4, Meta: 2, Shift: 1 - sum of each value
+ *						                                // In case of using any key, specify it as an array
  *					)
  *				)
  *			)
@@ -50,9 +56,8 @@
  * @author Naoki Sawada
  * @license New BSD
  */
-class elFinderPluginWatermark {
+class elFinderPluginWatermark extends elFinderPlugin {
 
-	private $opts = array();
 	private $watermarkImgInfo = null;
 
 	public function __construct($opts) {
@@ -64,26 +69,29 @@ class elFinderPluginWatermark {
 			'quality'        => 95,         // JPEG image save quality
 			'transparency'   => 70,         // Water mark image transparency ( other than PNG )
 			'targetType'     => IMG_GIF|IMG_JPG|IMG_PNG|IMG_WBMP, // Target image formats ( bit-field )
-			'targetMinPixel' => 200         // Target image minimum pixel size
+			'targetMinPixel' => 200,        // Target image minimum pixel size
+			'offDropWith'    => null        // To disable it if it is dropped with pressing the meta key
+			                                // Alt: 8, Ctrl: 4, Meta: 2, Shift: 1 - sum of each value
+			                                // In case of using any key, specify it as an array
 		);
 
 		$this->opts = array_merge($defaults, $opts);
 
 	}
 
-	public function onUpLoadPreSave(&$path, &$name, $src, $elfinder, $volume) {
+	public function onUpLoadPreSave(&$thash, &$name, $src, $elfinder, $volume) {
+		$opts = $this->getCurrentOpts($volume);
 		
-		$opts = $this->opts;
-		$volOpts = $volume->getOptionsPlugin('Watermark');
-		if (is_array($volOpts)) {
-			$opts = array_merge($this->opts, $volOpts);
-		}
-		
-		if (! $opts['enable']) {
+		if (! $this->iaEnabled($opts)) {
 			return false;
 		}
 		
-		$srcImgInfo = @getimagesize($src);
+		$mime = mime_content_type($src);
+		if (substr($mime, 0, 5) !== 'image') {
+			return false;
+		}
+		
+		$srcImgInfo = getimagesize($src);
 		if ($srcImgInfo === false) {
 			return false;
 		}
@@ -98,7 +106,7 @@ class elFinderPluginWatermark {
 			$opts['source'] = dirname(__FILE__) . "/" . $opts['source'];
 		}
 		if (is_readable($opts['source'])) {
-			$watermarkImgInfo = @getimagesize($opts['source']);
+			$watermarkImgInfo = getimagesize($opts['source']);
 			if (! $watermarkImgInfo) {
 				return false;
 			}
@@ -120,7 +128,7 @@ class elFinderPluginWatermark {
 			IMAGETYPE_BMP  => IMG_WBMP,
 			IMAGETYPE_WBMP => IMG_WBMP
 		);
-		if (! ($opts['targetType'] & @$imgTypes[$srcImgInfo[2]])) {
+		if (! isset($imgTypes[$srcImgInfo[2]]) || ! ($opts['targetType'] & $imgTypes[$srcImgInfo[2]])) {
 			return false;
 		}
 		
@@ -185,29 +193,29 @@ class elFinderPluginWatermark {
 		$ermsg = '';
 		switch ($watermarkImgInfo['mime']) {
 			case 'image/gif':
-				if (@imagetypes() & IMG_GIF) {
-					$oWatermarkImg = @imagecreatefromgif($watermark);
+				if (imagetypes() & IMG_GIF) {
+					$oWatermarkImg = imagecreatefromgif($watermark);
 				} else {
 					$ermsg = 'GIF images are not supported';
 				}
 				break;
 			case 'image/jpeg':
-				if (@imagetypes() & IMG_JPG) {
-					$oWatermarkImg = @imagecreatefromjpeg($watermark) ;
+				if (imagetypes() & IMG_JPG) {
+					$oWatermarkImg = imagecreatefromjpeg($watermark) ;
 				} else {
 					$ermsg = 'JPEG images are not supported';
 				}
 				break;
 			case 'image/png':
-				if (@imagetypes() & IMG_PNG) {
-					$oWatermarkImg = @imagecreatefrompng($watermark) ;
+				if (imagetypes() & IMG_PNG) {
+					$oWatermarkImg = imagecreatefrompng($watermark) ;
 				} else {
 					$ermsg = 'PNG images are not supported';
 				}
 				break;
 			case 'image/wbmp':
-				if (@imagetypes() & IMG_WBMP) {
-					$oWatermarkImg = @imagecreatefromwbmp($watermark);
+				if (imagetypes() & IMG_WBMP) {
+					$oWatermarkImg = imagecreatefromwbmp($watermark);
 				} else {
 					$ermsg = 'WBMP images are not supported';
 				}
@@ -221,29 +229,29 @@ class elFinderPluginWatermark {
 		if (! $ermsg) {
 			switch ($srcImgInfo['mime']) {
 				case 'image/gif':
-					if (@imagetypes() & IMG_GIF) {
-						$oSrcImg = @imagecreatefromgif($src);
+					if (imagetypes() & IMG_GIF) {
+						$oSrcImg = imagecreatefromgif($src);
 					} else {
 						$ermsg = 'GIF images are not supported';
 					}
 					break;
 				case 'image/jpeg':
-					if (@imagetypes() & IMG_JPG) {
-						$oSrcImg = @imagecreatefromjpeg($src) ;
+					if (imagetypes() & IMG_JPG) {
+						$oSrcImg = imagecreatefromjpeg($src) ;
 					} else {
 						$ermsg = 'JPEG images are not supported';
 					}
 					break;
 				case 'image/png':
-					if (@imagetypes() & IMG_PNG) {
-						$oSrcImg = @imagecreatefrompng($src) ;
+					if (imagetypes() & IMG_PNG) {
+						$oSrcImg = imagecreatefrompng($src) ;
 					} else {
 						$ermsg = 'PNG images are not supported';
 					}
 					break;
 				case 'image/wbmp':
-					if (@imagetypes() & IMG_WBMP) {
-						$oSrcImg = @imagecreatefromwbmp($src);
+					if (imagetypes() & IMG_WBMP) {
+						$oSrcImg = imagecreatefromwbmp($src);
 					} else {
 						$ermsg = 'WBMP images are not supported';
 					}

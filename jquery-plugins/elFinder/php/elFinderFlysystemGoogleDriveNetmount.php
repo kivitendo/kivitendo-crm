@@ -123,7 +123,7 @@ class elFinderVolumeFlysystemGoogleDriveNetmount extends \Hypweb\elFinderFlysyst
 
             if ($options['user'] === 'init') {
                 if (empty($options['url'])) {
-                    $options['url'] = $this->getConnectorUrl();
+                    $options['url'] = elFinder::getConnectorUrl();
                 }
                 
                 $callback  = $options['url']
@@ -207,7 +207,7 @@ class elFinderVolumeFlysystemGoogleDriveNetmount extends \Hypweb\elFinderFlysyst
             $file = $service->files->get($options['path']);
             $options['alias'] = sprintf($this->options['gdAlias'], $file->getName());
         } catch (Google_Service_Exception $e) {
-            $err = @json_decode($e->getMessage(), true);
+            $err = json_decode($e->getMessage(), true);
             if (isset($err['error']) && $err['error']['code'] == 404) {
                 return array('exit' => true, 'error' => [elFinder::ERROR_TRGDIR_NOT_FOUND, $options['path']]);
             } else {
@@ -302,6 +302,7 @@ class elFinderVolumeFlysystemGoogleDriveNetmount extends \Hypweb\elFinderFlysyst
 
         $opts['driver'] = 'FlysystemExt';
         $opts['filesystem'] = $filesystem;
+        $opts['separator'] = '/';
         $opts['checkSubfolders'] = true;
         if (! isset($opts['alias'])) {
             $opts['alias'] = 'GoogleDrive';
@@ -317,22 +318,6 @@ class elFinderVolumeFlysystemGoogleDriveNetmount extends \Hypweb\elFinderFlysyst
         }
 
         return $res;
-    }
-
-    /**
-     * Get script url
-     * 
-     * @return string full URL
-     * @author Naoki Sawada
-     */
-    private function getConnectorUrl()
-    {
-        $url  = ((isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off')? 'https://' : 'http://')
-               . $_SERVER['SERVER_NAME']                                              // host
-              . ($_SERVER['SERVER_PORT'] == 80 ? '' : ':' . $_SERVER['SERVER_PORT'])  // port
-               . $_SERVER['REQUEST_URI'];                                             // path & query
-        list($url) = explode('?', $url);
-        return $url;
     }
 
     /**

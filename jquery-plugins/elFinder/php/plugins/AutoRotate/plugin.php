@@ -15,7 +15,10 @@
  *		'plugin' => array(
  *			'AutoRotate' => array(
  *				'enable'         => true,       // For control by volume driver
- *				'quality'        => 95          // JPEG image save quality
+ *				'quality'        => 95,         // JPEG image save quality
+ *				'offDropWith'    => null        // To disable it if it is dropped with pressing the meta key
+ *				                                // Alt: 8, Ctrl: 4, Meta: 2, Shift: 1 - sum of each value
+ *				                                // In case of using any key, specify it as an array
  *			)
  *		),
  *		// each volume configure (optional)
@@ -27,7 +30,10 @@
  *				'plugin' => array(
  *					'AutoRotate' => array(
  *						'enable'         => true,       // For control by volume driver
- *						'quality'        => 95          // JPEG image save quality
+ *						'quality'        => 95,         // JPEG image save quality
+ *						'offDropWith'    => null        // To disable it if it is dropped with pressing the meta key
+ *						                                // Alt: 8, Ctrl: 4, Meta: 2, Shift: 1 - sum of each value
+ *						                                // In case of using any key, specify it as an array
  *					)
  *				)
  *			)
@@ -38,32 +44,34 @@
  * @author Naoki Sawada
  * @license New BSD
  */
-class elFinderPluginAutoRotate {
-
-	private $opts = array();
+class elFinderPluginAutoRotate extends elFinderPlugin {
 
 	public function __construct($opts) {
 		$defaults = array(
 			'enable'         => true,       // For control by volume driver
 			'quality'        => 95,         // JPEG image save quality
+			'offDropWith'    => null        // To disable it if it is dropped with pressing the meta key
+			                                // Alt: 8, Ctrl: 4, Meta: 2, Shift: 1 - sum of each value
+			                                // In case of using any key, specify it as an array
 		);
 
 		$this->opts = array_merge($defaults, $opts);
 
 	}
 
-	public function onUpLoadPreSave(&$path, &$name, $src, $elfinder, $volume) {
-		$opts = $this->opts;
-		$volOpts = $volume->getOptionsPlugin('AutoRotate');
-		if (is_array($volOpts)) {
-			$opts = array_merge($this->opts, $volOpts);
-		}
+	public function onUpLoadPreSave(&$thash, &$name, $src, $elfinder, $volume) {
+		$opts = $this->getCurrentOpts($volume);
 		
-		if (! $opts['enable']) {
+		if (! $this->iaEnabled($opts)) {
 			return false;
 		}
 		
-		$srcImgInfo = @getimagesize($src);
+		$mime = mime_content_type($src);
+		if (substr($mime, 0, 5) !== 'image') {
+			return false;
+		}
+		
+		$srcImgInfo = getimagesize($src);
 		if ($srcImgInfo === false) {
 			return false;
 		}
@@ -81,7 +89,7 @@ class elFinderPluginAutoRotate {
 			return false;
 		}
 		$degree = 0;
-		$exif = @exif_read_data($src);
+		$exif = exif_read_data($src);
 		if($exif && !empty($exif['Orientation'])) {
 			switch($exif['Orientation']) {
 				case 8:

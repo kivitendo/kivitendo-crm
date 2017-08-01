@@ -31,6 +31,19 @@ $rc = false;
         });
     }
     $(document).ready(function() {
+
+        $( '#jQuery-Version' ).click( function (){
+            alert( "jQuery Version: " + $.fn.jquery );
+        }).button({
+            label: "jQuery ver.: " + $.fn.jquery
+        });
+
+        $( '#jQueryUI-Version' ).click( function (){
+            alert( "jQueryUI version: " + $.ui.version );
+        }).button({
+            label: "jQueryUI ver.: " + $.ui.version
+        });
+
         $( 'button' ).button().css({ 'width': '130px', 'padding-left': '5px' });
 
         var statusDialog = $( '#statusDialog' ).dialog({
@@ -278,6 +291,7 @@ echo 'Need update = '.needUpdate();
             <tr><td>Benutzerfreundliche Links:</td><td><button onclick="window.location.href='links.php?all=1'">erzeugen</button></td></tr>
             <tr><td>Datenbanken:</td><td><button id="saveDB">Sichern</button><button id="showDbFiles">Zeigen</button></td></tr>
             <tr><td>Logfiles:</td><td><button id="showErrorLog" >Error Log</button><button id="showPgLog">PgSQL Log</button></td></tr>
+            <tr><td>jQuery:</td><td><button id="jQuery-Version" >jQuery-Version</button><button id="jQueryUI-Version">jQueryUI-Version</button></td></tr>
         </tbody>
 </table>
 

@@ -97,7 +97,7 @@ $(document).ready(function() {
             cust_vend_tmp = "V";
             cust_vend_id = $("input[name='vendor_id']").val();
         }
-        $("<input style='margin-right: 5px;' class='submit' type='button' name='crm' id='crm' value='CRM' onClick=\"window.location.href='crm/firma1.php?Q="+ cust_vend_tmp +"&id="+ cust_vend_id +"'\">" ).insertBefore( "#update_button" );
+        $("<input style='margin-right: 5px; height: 24px;' class='submit' type='button' name='crm' id='crm' value='CRM' onClick=\"window.location.href='crm/firma1.php?Q="+ cust_vend_tmp +"&id="+ cust_vend_id +"'\">" ).insertBefore( "#update_button" );
         var kivi_global = jQuery.parseJSON( kivi.myconfig.global_conf );
         $('#message').val('Mit freundlichen Grüßen\n\n' + kivi_global.mandant);
 
@@ -106,10 +106,19 @@ $(document).ready(function() {
         if( getUrl.toString().match( 'action=Order' ) && crmButton ){
             var cust_vend_type =  $( '#order_customer_id_type' ).val() == 'customer' ? 'C' : 'V';
             var cust_vend_id   =  $( '#order_customer_id_type' ).val() == 'customer' ? $( '#order_customer_id' ).val() : $( '#order_vendor_id' ).val();
-            $("<input style='margin-right: 5px;' class='submit' type='button' name='crm' id='crm' value='CRM' onClick=\"window.location.href='crm/firma1.php?Q="+ cust_vend_type +"&id="+ cust_vend_id +"'\">" ).insertAfter( "#action" );
+            $("<input style='margin-right: 5px; height:24px;' class='submit' type='button' name='crm' id='crm' value='CRM' onClick=\"window.location.href='crm/firma1.php?Q="+ cust_vend_type +"&id="+ cust_vend_id +"'\">" ).insertAfter( "#action" );
         }
 
         $('#is_set_to_paid_missing').focus(function () {$('#is_set_to_paid_missing').trigger('click');});
+
+        $('.layout-actionbar').append("<input type='button' id='makebill_btn' value='Rechnung' style='height:24px; margin-left: 10px; color: black;'>");
+
+        $('#makebill_btn').click(function () {
+          //alert('click');
+          $('.layout-actionbar-submit:contains("Rechnung")').trigger('click');
+
+        });
+        //action2611351
 
         //alert( kivi_global.baseurl );
         // "Yesterday"-Button in

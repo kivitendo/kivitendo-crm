@@ -109,6 +109,8 @@ $(document).ready(function() {
             $("<input style='margin-right: 5px;' class='submit' type='button' name='crm' id='crm' value='CRM' onClick=\"window.location.href='crm/firma1.php?Q="+ cust_vend_type +"&id="+ cust_vend_id +"'\">" ).insertAfter( "#action" );
         }
 
+        $('#is_set_to_paid_missing').focus(function () {$('#is_set_to_paid_missing').trigger('click');});
+
         //alert( kivi_global.baseurl );
         // "Yesterday"-Button in
         $.getScript( kivi_global.baseurl + '/crm/translation/all.lng', function () {

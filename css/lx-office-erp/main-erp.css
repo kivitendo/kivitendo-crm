@@ -520,13 +520,16 @@ a.red {
 }
 
 .layout-actionbar{
-background-color: #B0C4DE;
+background-color: #4169E1;
 }
 
 .DHTMLSuite_menuBar_top{
-  background-color: #B0C4DE;
+  background-color: #4169E1;
 }
 
 #main_menu_div, #frame-header{
 background-color: #20B2AA;
+}
+#frame-header{
+  background-color: #4169E1;
 }

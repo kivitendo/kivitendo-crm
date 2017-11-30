@@ -183,3 +183,12 @@ input:focus {
     background-color: rgb(236,233,216);
     vertical-align:bottom;
 }
+.layout-actionbar{
+background-color: #4169E1;
+}
+#frame-header{
+  background-color: #4169E1;
+}
+.DHTMLSuite_menuBar_top{
+  background-color: #4169E1;
+}

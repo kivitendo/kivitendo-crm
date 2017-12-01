@@ -80,7 +80,7 @@ html {
 body {
   font-family: Verdana, Arial, Helvetica, sans-serif;
   font-size: 80%;
-  background-color: white;
+  background-color: #FFFACD;
   background-image: url("../../../image/fade.png"); background-repeat:repeat-x;
   color: black;
   height: 100%;
@@ -206,8 +206,8 @@ div.admin {
 .listheading, .listheading th, #content h2 {
     font-size: 95%;
     padding:3px;
-    background-color:
-    rgb(236,233,216);
+    background-color: #FFFFF0;
+
     color: black;
     font-weight: bold;
     text-align:left;
@@ -527,9 +527,7 @@ background-color: #4169E1;
   background-color: #4169E1;
 }
 
-#main_menu_div, #frame-header{
-background-color: #20B2AA;
-}
+
 #frame-header{
   background-color: #4169E1;
 }

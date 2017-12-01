@@ -1,15 +1,20 @@
-/*body { font-size: 1.0em; }*//*verändert die Schriftgröße im Menü*/
+body { background-color:      #FFFFF0; }
+.ui-widget-content{background-color: #FFFFE0;}
+#var{background-color:      #FFFFF0;}
 #wdbfile  A {
     color: #22a;
 }
-#content        { position:relative; top:0em; left:0.1em; width:99%; }
-#menubox1       { position:relative; top:-2.0em; left:0.2em; width:99%; }
-#menubox2       { position:relative; top:-0.3em; left:0.2em; width:99%; }
-#contentbox    { position:absolute; left:0.2em; top:11.0em; width:99%;}
-#contentbox2    { position:absolute; left:0.2em; width:99%;}
+
+#results, #tab-1{ background-color:      #FFFFF0; }
+#ui-id-18 {background-color: #FFFFE0;}
+#content        { position:relative; top:0em; left:0.1em; width:99%; background-color:      #FFFFF0;}
+#menubox1       { position:relative; top:-2.0em; left:0.2em; width:99%; background-color: #FFFFF0;}
+#menubox2       { position:relative; top:-0.3em; left:0.2em; width:99%; background-color: #FFFFF0;}
+#contentbox    { position:absolute; left:0.2em; top:11.0em; width:99%; background-color:  #FFFFF0;}
+#contentbox2    { position:absolute; left:0.2em; width:99%; background-color:      #FFFFF0;}
 #fasubmenu      { position:absolute; top:19em; width:40.5em;}
 .top1        { padding-top:1.5em; }
-.contentbox3    { position:absolute; left:0.2em; top:3.0em; width:99%; display:inline; text-align:left;width:90%; height:36em; left:0.8em; top:7.3em; border:0px solid black; }
+.contentbox3    { position:absolute; left:0.2em; top:3.0em; width:99%; display:inline; text-align:left;width:90%; height:36em; left:0.8em; top:7.3em; border:0px solid black; background-color:  #FFFFF0; }
 
 table.liste    { border-collapse:collapse; border-width: 0px; border-style:solid; border-color:black;padding: 2px; margin: 2px; border-spacing:0px; }
 td.liste    { height:1.8em;  border-width:0px; border-style:solid; text-align:left; font-size: 1.2em;vertical-align:middle;margin:0px;padding:3px;}
@@ -187,8 +192,8 @@ input:focus {
 background-color: #4169E1;
 }
 #frame-header{
-  background-color: #4169E1;
+  background-color: #1E90FF;
 }
 .DHTMLSuite_menuBar_top{
-  background-color: #4169E1;
+  background-color: #1E90FF;
 }

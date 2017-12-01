@@ -110,17 +110,17 @@ $(document).ready(function() {
 
 
         //Rechnung button
-        if($('.tools:contains("Auftrag bearbeiten")').length > 0){
+        if($('.tools:contains("Auftrag bearbeiten")').length > 0 ){
           $("<input type='button' id='makebill_btn' value='Rechnung' style='height:24px; margin-left: 10px; margin-right: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
           $("<input type='button' id='drucken_btn' value='Drucken' style='height:24px; margin-left: 10px; margin-right: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
         }
         //Buchen und Drucken button
-        if($('.tools:contains("Rechnung erfassen")').length > 0){
+        if($('.tools:contains("Rechnung erfassen")').length > 0 || $( '.tools:contains("Kreditorenbuchung erfassen")' ).length > 0 || $( '.tools:contains("Debitorenbuchung erfassen")' ).length > 0 ){
           $("<input type='button' id='buchen_btn' value='Buchen' style='height:24px; margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
           $("<input type='button' id='drucken_buchen_btn' value='Drucken und Buchen' style='height:24px; margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
         }
         //Buchen button
-        if($('.tools:contains("Rechnung bearbeiten")').length > 0){
+        if($( '.tools:contains("Rechnung bearbeiten")').length > 0 || $( '.tools:contains("Kreditorenbuchung bearbeiten")' ).length > 0 || $( '.tools:contains("Debitorenbuchung bearbeiten")' ).length > 0 ){
           $("<input type='button' id='buchen_btn' value='Buchen' style='height:24px; margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
           $("<input type='button' id='drucken_btn' value='Drucken' style='height:24px; margin-left: 10px; margin-right: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
 

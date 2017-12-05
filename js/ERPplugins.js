@@ -111,9 +111,12 @@ $(document).ready(function() {
 
         var customer_id = $.urlParam( 'order.customer_id' );
         var cust_vend_type = 'C';
-        if(typeof customer_id === "undefined") {
+        if( typeof customer_id === "undefined" ) {
            customer_id = $.urlParam( 'order.vendor_id' )
            cust_vend_type = 'V';
+        }if( typeof customer_id === "undefined" ){
+          customer_id = $( '#previous_customer_id' ).val()
+          cust_vend_type = 'C';
         }
 
         $("<input style='margin-right: 5px; height:24px;' class='submit' type='button' name='crm' id='crm' value='CRM' onClick=\"window.location.href='crm/firma1.php?Q="+ cust_vend_type +"&id="+ customer_id +"'\">" ).insertAfter( "#action" );

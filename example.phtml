@@ -12,190 +12,51 @@
     echo $head['JQUERYUI'];
     echo $head['JQTABLE'];
     echo $head['THEME'];
-    echo $head['JUI-DROPDOWN'];
     echo $head['TRANSLATION'];
-
 
     /*****************************************************************************************************************************
     Grundsätze: Content wird via Ajax im Json-Format geholt und an die entsprechenden Container verteilt
                 Daten werden ohne Reload einfach via Ajax gespeichert.
-                Fürs Holen und Schreiben von Daten befindet sich unter jqhelp eine gleichnamige Datei mit der Extension ".php"
+                Fürs Holen und Schreiben von Daten befindet sich unter ajax eine gleichnamige Datei mit der Extension ".php"
                 Auf das Benutzen der Variable $_SESSION sollte weitestgehend verzichtet werden.
                 Statt JS einzusetzen sollte auf die jQuery-Methoden zurückgegriffen werden.
                 Url-Parameter können mit $.urlParam( 'ParameterName' ) gelesen werden.
-                Beispiel automatische Übersetzung
+                Test: http://localhost/kivitendo/crm/example.phtml?param=testOne
     ******************************************************************************************************************************/
 
 ?>
 
-<script type="text/javascript" src="lxcars/jQueryAddOns/date-time-picker.js"></script>
-<script type="text/javascript" src="lxcars/jQueryAddOns/german-date-time-picker.js"></script>
-
 
 <script>
+  $( document ).ready( function(){
 
-
-$(document).ready(function() {
-
-    var language = kivi.myconfig.countrycode;
-    $( ".lang" ).each( function(){
-        var key = $( this ).attr( "data-lang" );
-        if( $( this ).is( ":input" ) ) $( this ).attr( 'title',  typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
-            else $( this ).text( typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
-        });
-
-    $("#senddialog").dialog({
-        autoOpen: false,
-        width:400,
-        height:250,
-        minWidth:300,
-        minHeight:200,
-        maxWidth:800,
-        maxHeight:800,
-        buttons: [{
-            text: langData[language]['SAVE'],
-            id: 'saveButton',
-            click: function() {
-                saveData();
-                getData();
-                $(this).dialog('close');
-
-            }
-        },
-        {    text: langData[language]['CLOSE'],
-             click: function(){
-                 $(this).dialog('close')
-             }
-        }]
-    });
-
-
-    $( "#newbtn" ).button().text(langData[language]['NEW']).click(function() {
-        $("#senddialog").dialog("open")
-            .html('<p> <form id="fsend">' +
-                '<table> <tr> <td><label >'+ langData[language]['BIRTHDAY'] +'</label></td>' +
-                '<td><input type="text" name="datetime" id="datetime"></td> </tr>' +
-                '<tr> <td><label>'+ langData[language]['NAME'] +'</label></td> <td><input type="text" name="name" id="name"></td> </tr>' +
-                '<tr> <td><label>'+ langData[language]['AGE'] +'</label></td> <td><input type="text" name="age" id="age"></td> </tr>' +
-                '<tr> <td><label>'+ langData[language]['COMMENTS'] +'</label></td> <td><input type="text" name="comments" id="comments"></td>' +
-                '</tr> </table> </form> </p>');
-
-        $("#datetime").datetimepicker({
-            //dateFormat: 'yy-mm-dd',
-            stepMinute: 5,
-            hour: 1,
-            hourMin: 6,
-            hourMax: 19,
-            //timeSuffix: ' Uhr',
-            timeSuffix: '',
-            timeText: 'Zeit',
-            hourText: 'Stunde',
-            closeText: 'fertig',
-            currentText: 'jetzt'
-        });
-
-    });
-
-    function drawTable(data) {
-        $("#tbody0").empty();
-        for (var i = 0; i < data.length; i++) {
-            drawRow(data[i]);
-        }
+    //URL-Parameter lesen
+    $.urlParam = function( name ){
+      var results = new RegExp( '[\?&]' + name + '=([^&#]*)' ).exec( window.location.href );
+      if( results == null );// alert( 'Parameter: "' + name + '" does not exist in "' + window.location.href + '"!' );
+      else return decodeURIComponent( results[1] || 0 );
     }
 
-    function drawRow( rowData ) {
-        var row = $("<tr>");
-        $("#tbody0").append(row);
-        row.append($("<td>" + rowData.id + "</td>"));
-        row.append($("<td>" + rowData.date_time + "</td>"));
-        row.append($("<td>" + rowData.c_name + "</td>"));
-        row.append($("<td>" + rowData.c_age + "</td>"));
-        row.append($("<td>" + rowData.c_comments + "</td></tr>"));
-    }
+    var param = $.urlParam( 'param' );
+    var value = param ? param : 'Hello World';
+    //alert( $.urlParam( 'param' ) );
 
+    $( "#example" ).html( value ).css({
+      fontSize: "36px",
+      fontWeight: "bold",
+      color: "red",
+    }).delay( 1000 ).fadeOut( 6000 ).delay( 1000 ).fadeIn( 10000 );
 
-    function getData() {
-        $.ajax({
-            dataType: 'json',
-            url: 'ajax/example.php?action=getData',
-            method: "GET",
-            success: function( json ) {
-                $("#tbody0").empty();
-                drawTable(json);
+    //Konfigurations-Variablen der ERP benutzen:
+    alert( "Language: " + kivi.myconfig.countrycode );
+    console.log( kivi.myconfig );
 
-                $("#showtable").trigger("update");
-                $("#showtable").trigger("appendCache");
-            },
-            error:  function(){
-                alert("Holen der Daten fehlgeschlagen!");
-            }
-        })
-    }
-
-    function saveData() {
-        var obj = {};
-        var array = $('#fsend').serializeArray();
-        // Ein object aus dem array machen
-        $.each(array, function(index, item) {
-            obj[item.name] = item.value;
-        });
-        $.ajax({
-            data: { action: "newEntry", data: JSON.stringify(obj)},
-            dataType: 'json',
-            type: 'POST',
-            url: "ajax/example.php",
-            success: function(){
-                alert(langData[language]['SEND_SUCCESS']);
-            },
-            error:  function(){
-                alert(langData[language]['SEND_ERROR'] + '. ' + langData[language]['NO_DATA'] + '?');
-            }
-        })
-    }
-
-    getData();
-    $("#showtable").tablesorter().tablesorterPager({
-        container: $("#pager"),
-        size: 9999
-    });
-
-
-    $(window).resize(function (){
-        $("#gdtable").css({
-            width: 'auto',
-            height: 'auto',
-            position: 'absolute',
-            marginLeft: 'auto',
-            marginTop: 'auto',
-            left: (($(window).width() - $('#showTable').outerWidth())/3),
-            overflow: 'auto'
-        });
-    });
-
-    $(window).resize();
-
-
-//    $("#searchButton").button().click(function () {
-//       $("#searchdialog").html('<table id="searchtable" width="100%" class="tablesorter">' +
-//           '<thead><tr><th>'+langData[language]["DATE"]+'</th>'+
-//           '<th width="150px">'+langData[language]["SUBJECT"]+'</th></tr></thead>'+
-//           '<tbody id="tbody0"><tr><td>14.04.1963 09:45</td><td>was Wichtiges</td></tr>'+
-//           '<tr><td>15.07.2016 08:00</td><td>nicht ganz unwichtig</td></tr></tbody><tfoot></tfoot></table>')
-//           .dialog({
-//                open:   function () {
-//                    $('#searchdialog table.tablesorter').tablesorter();
-//                },
-//                width:  "auto"
-//           });
-//    });
-
-});
+  });
 
 </script>
-
 <style>
- .ui-menu { width: 180px; }
- .tablesorter { width:auto; cursor:pointer; widgets: ['zebra']; sortList: [[0,0]];}
+
+
 
 </style>
 </head>
@@ -206,38 +67,9 @@ $(document).ready(function() {
     echo $menu['start_content'];
 ?>
 
+  <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Testfile </p>
+  <div id="example" style="position:absolute"></div>
+
 <?php echo $menu['end_content']; ?>
 
-
- <p class="ui-state-highlight ui-corner-all tools lang" style="margin-top: 20px; padding: 0.6em;" data-lang="TESTFILE">Testfile</p>
-
-
- <div id="senddialog" > </div>
-
- <div id="gdtable" class="gdtable">
-  <table id="showtable" class="tablesorter" >
-   <thead>
-    <tr>
-     <th>ID</th>
-     <th data-lang='BIRTHDAY' class='lang'>Birthday</th>
-     <th data-lang='NAME' class='lang'>Name</th>
-     <th data-lang='AGE' class='lang'>Age</th>
-     <th data-lang='COMMENTS' class='lang'>Comments</th>
-    </tr>
-   </thead>
-   <tbody id="tbody0"></tbody>
-   <tfoot></tfoot>
-  </table>
-  <div id="pager"> <?php echo $head['JQTABLE-PAGER']; ?> </div>
-
- </div>
-
- <div id='newbtn'></div>
-
-
-<!--<div id='searchButton'>Search</div>
-<div id="searchdialog" title="Search Dialog"></div>
--->
-
-</body>
 </html>

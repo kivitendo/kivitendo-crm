@@ -20,8 +20,10 @@
                 Fürs Holen und Schreiben von Daten befindet sich unter ajax eine gleichnamige Datei mit der Extension ".php"
                 Auf das Benutzen der Variable $_SESSION sollte weitestgehend verzichtet werden.
                 Statt JS einzusetzen sollte auf die jQuery-Methoden zurückgegriffen werden.
-                Url-Parameter können mit $.urlParam( 'ParameterName' ) gelesen werden.
-                Test: http://localhost/kivitendo/crm/example.phtml?param=testOne
+                Url-Parameter werden als hash gefolgt von einem JSON übergeben.
+                Vorteil: Browserhistory funktioniert, F5 funktioniert,
+                Test1: http://localhost/kivitendo/crm/example.phtml
+                Test2: http://localhost/kivitendo/crm/example.phtml#{"name":"Widukind","age":30,"cars":{"Ford":3,"BMW":6,"Fiat":19}}
     ******************************************************************************************************************************/
 
 ?>
@@ -31,25 +33,36 @@
   $( document ).ready( function(){
 
     //URL-Parameter lesen
-    $.urlParam = function( name ){
-      var results = new RegExp( '[\?&]' + name + '=([^&#]*)' ).exec( window.location.href );
-      if( results == null );// alert( 'Parameter: "' + name + '" does not exist in "' + window.location.href + '"!' );
-      else return decodeURIComponent( results[1] || 0 );
+    if( decodeURI( document.location.hash.substr( 1 ) ) ){
+      var myUrlParamObj = JSON.parse( decodeURI( document.location.hash.substr( 1 ) ) );
+      alert( myUrlParamObj.name );
+    }
+    else{
+      alert( 'Es wurde kein Parameter übergeben! Ich werde das nun nachholen...' );
+      document.location.hash = '{ "name":"Widukind", "age":30, "cars":{ "Ford": 3, "BMW": 6, "Fiat": 19 } }';
     }
 
-    var param = $.urlParam( 'param' );
-    var value = param ? param : 'Hello World';
-    //alert( $.urlParam( 'param' ) );
+    alert( 'Ich lese jetzt den Hash in ein Objekt, verändere es und schreibe in die URI! ' );
+    var myUrlParamObj = JSON.parse( decodeURI( document.location.hash.substr( 1 ) ) );
 
-    $( "#example" ).html( value ).css({
+    $( "#example" ).html( myUrlParamObj.name ).css({
       fontSize: "36px",
       fontWeight: "bold",
       color: "red",
-    }).delay( 1000 ).fadeOut( 6000 ).delay( 1000 ).fadeIn( 10000 );
+    })
 
-    //Konfigurations-Variablen der ERP benutzen:
-    alert( "Language: " + kivi.myconfig.countrycode );
-    console.log( kivi.myconfig );
+    myUrlParamObj.name = "Widogard";
+
+    document.location.hash = JSON.stringify( myUrlParamObj );
+
+    alert( 'Drücke F5! ');
+
+    $( "#example" ).html( myUrlParamObj.name ).css({
+      fontSize: "36px",
+      fontWeight: "bold",
+      color: "blue",
+    })
+
 
   });
 

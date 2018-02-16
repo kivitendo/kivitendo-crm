@@ -33,6 +33,14 @@
             }
             return false;
         })
+
+        $( '#myname' ).autocomplete({
+          source: 'ajax/firmen3.php?action=getData&type={Q}',
+          minLength: 2,
+          select: function( event, ui ){
+            console.log( "Selected: " + ui.item.value + " AND " + ui.item.id );
+          }
+        })
         $("#country").blur(function(){
             var country = $("#country").val();
             $.ajax({

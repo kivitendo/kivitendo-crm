@@ -38,7 +38,7 @@
           source: 'ajax/firmen3.php?action=getData&type={Q}',
           minLength: 2,
           select: function( event, ui ){
-            console.log( "Selected: " + ui.item.value + " AND " + ui.item.id );
+            window.location.href = 'firma1.php?Q=' + ui.item.type + '&id=' + ui.item.id;
           }
         })
         $("#country").blur(function(){

@@ -8,12 +8,12 @@ function getCategories(){
      echo json_encode( $rs['json_agg'] );
 }
 
-function getArticle( $cat_id ){
-     $rs = $GLOBALS['dbh']->query( 'UPDATE knowledge_content SET modifydate = now() WHERE category = '.$cat_id.' AND version = (SELECT max(version) FROM knowledge_content WHERE category = '.$cat_id.')'  );
-     $sql = "SELECT json_agg (json) from (SELECT * FROM knowledge_content WHERE category =" .$cat_id. "AND version = ( SELECT max(version) FROM knowledge_content WHERE category = $cat_id ) ) json";
+function getArticle( $data ){
+     $rs = $GLOBALS['dbh']->query( 'UPDATE knowledge_content SET modifydate = now() WHERE category = '.$data['data'].' AND version = (SELECT max(version) FROM knowledge_content WHERE category = '.$data['data'].')'  );
+     $sql = "SELECT json_agg (json) from (SELECT * FROM knowledge_content WHERE category =" .$data['data']. "AND version = ( SELECT max(version) FROM knowledge_content WHERE category =".$data['data']." ) ) json";
      $rs = $GLOBALS['dbh']->getOne( $sql );
      if( $rs['json_agg'] == NULL ) {
-        $sql = "SELECT json_agg (json) from ( SELECT * FROM knowledge_content WHERE category = $cat_id ORDER BY id DESC ) json";
+        $sql = "SELECT json_agg (json) from ( SELECT * FROM knowledge_content WHERE category = ".$data['data']." ORDER BY id DESC ) json";
         $rs = $GLOBALS['dbh']->getOne( $sql );
         $GLOBALS['dbh']->update( 'knowledge_content', array( 'version' ), array( 1 ), "id = ".json_decode($rs['json_agg'])[0]->id );
      }
@@ -67,12 +67,12 @@ function delCategory( $data ){
 }
 
 function searchArt( $data ){
-    $sql = "SELECT KCA.id, KCA.labeltext, KCO.version, KCO.content from knowledge_content KCO left join knowledge_category KCA on KCO.category=KCA.id where content ilike '%".$data."%' ORDER BY id,version DESC";
+    $sql = "SELECT KCA.id, KCA.labeltext, KCO.version, KCO.content from knowledge_content KCO left join knowledge_category KCA on KCO.category=KCA.id where content ilike '%".$data['data']."%' ORDER BY id,version DESC";
     $rs = $GLOBALS['dbh']->getAll( $sql );
     if( $rs ) $rs = array_values(unique_multidim_array($rs,'id'));
     //writeLog($rs);
     if( $rs ) foreach( $rs as $key => $value ){
-        $pos = stripos( $value['content'], $data );
+        $pos = stripos( $value['content'], $data['data'] );
         $test = strip_tags( $value['content'] );
         $str_before = strip_tags( substr( $value['content'], 0, $pos ) );
         $str_after = strip_tags( substr( $value['content'], ( $pos+strlen($data) ) ) );

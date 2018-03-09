@@ -129,16 +129,19 @@ $(document).ready(function() {
           $("<input type='button' id='drucken_btn' value='Drucken' style='height:24px; margin-left: 10px; margin-right: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
         }
         //Buchen und Drucken button
-        if($('.tools:contains("Rechnung erfassen")').length > 0 || $( '.tools:contains("Kreditorenbuchung erfassen")' ).length > 0 || $( '.tools:contains("Debitorenbuchung erfassen")' ).length > 0 || $( '.tools:contains("Dialogbuchen")' ).length > 0 ){
+        if($('.tools:contains("Gutschrift erfassen")').length > 0 ||'.tools:contains("Rechnung erfassen")').length > 0 || $( '.tools:contains("Kreditorenbuchung erfassen")' ).length > 0 || $( '.tools:contains("Debitorenbuchung erfassen")' ).length > 0 || $( '.tools:contains("Dialogbuchen")' ).length > 0 ){
           $("<input type='button' id='buchen_btn' value='Buchen' style='height:24px; margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
           $("<input type='button' id='drucken_buchen_btn' value='Drucken und Buchen' style='height:24px; margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
         }
         //Buchen button
-        if($( '.tools:contains("Rechnung bearbeiten")').length > 0 || $( '.tools:contains("Kreditorenbuchung bearbeiten")' ).length > 0 || $( '.tools:contains("Debitorenbuchung bearbeiten")' ).length > 0 ){
+        if($( '.tools:contains("Gutschrift bearbeiten")').length > 0 ||'.tools:contains("Rechnung bearbeiten")').length > 0 || $( '.tools:contains("Kreditorenbuchung bearbeiten")' ).length > 0 || $( '.tools:contains("Debitorenbuchung bearbeiten")' ).length > 0 ){
           $("<input type='button' id='buchen_btn' value='Buchen' style='height:24px; margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
           $("<input type='button' id='drucken_btn' value='Drucken' style='height:24px; margin-left: 10px; margin-right: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
 
         }
+
+
+
         //CRM button
          $("<input style='margin-left: 10px; height: 24px;' class='submit' type='button' name='crm' id='crm' value='CRM' onClick=\"window.location.href='crm/firma1.php?Q="+ cust_vend_type +"&id="+ customer_id+"'\">" ).appendTo( "#ui-tabs-basic-data" );
 

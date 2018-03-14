@@ -67,22 +67,18 @@ function delCategory( $data ){
 }
 
 function searchArt( $data ){
-    $sql = "SELECT KCA.id, KCA.labeltext, KCO.version, KCO.content from knowledge_content KCO left join knowledge_category KCA on KCO.category=KCA.id where content ilike '%".$data['data']."%' ORDER BY id,version DESC";
+    $sql = "SELECT DISTINCT ON ( KCA.id )  KCA.id, KCA.labeltext, KCO.version, KCO.content FROM knowledge_content KCO LEFT JOIN knowledge_category KCA ON KCO.category = KCA.id WHERE content ILIKE '%".$data['data']."%' OR labeltext ILIKE '".$data['data']."%' ORDER BY id, version DESC";
     $rs = $GLOBALS['dbh']->getAll( $sql );
-    if( $rs ) $rs = array_values(unique_multidim_array($rs,'id'));
-    //writeLog($rs);
+
     if( $rs ) foreach( $rs as $key => $value ){
+        $search_len = strlen( $data['data'] );
+        $value['content'] = strip_tags( $value['content'] );
         $pos = stripos( $value['content'], $data['data'] );
-        $test = strip_tags( $value['content'] );
-        $str_before = strip_tags( substr( $value['content'], 0, $pos ) );
-        $str_after = strip_tags( substr( $value['content'], ( $pos+strlen($data) ) ) );
-        $leng1 = strlen($str_before);
-        $leng2 = strlen($str_after);
-        $pos1 = ( $leng1 <= 60) ? $leng1 : 60;
-        $pos2 = ($leng2 <= 60) ? $leng2 : 60;
-        $tmp1 = substr( $str_before, ($leng1-$pos1) );
-        $tmp2 = substr( $str_after, 0, $pos2 );
-        $rs[$key]['content'] = $tmp1."<b>".$data."</b>".$tmp2;
+        //if( substr( $value['content'], $pos - 1, 1 ) != ' ' ) $value['content'] = substr_replace( $value['content'], ' ', $pos, 0 ); //add space before
+        //if( substr( $value['content'], $pos + $search_len + 1, 1 ) != ' ' ) $value['content'] = substr_replace( $value['content'], ' ', $pos + $search_len + 1, 0 ); //add space after
+        $first = $pos - 60 <= 0 ? 0 : $pos - 60; //$first must not be negative
+        $value['content'] = substr( $value['content'],  $first, 120 );
+        $rs[$key]['content'] = preg_replace( "/".$data['data']."/i", '<b>$0</b>', $value['content'] ); //bold
     }
     echo json_encode( $rs );
 }

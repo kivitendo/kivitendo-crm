@@ -226,7 +226,7 @@ $(document).ready(function(){
         switch( $( this ).attr( "data-action" ) ){
             // A case for each action. Your actions here
             case "edit":
-                $('#editCat').dialog( "open" ).html( 'Change category name: <input type="text" id="editName" name="" value="' + labeltext + '">' );
+                $( '#editCat' ).dialog( "open" ).html( 'Change category name: <input type="text" id="editName" name="" value="' + labeltext + '">' );
                 $( '#editName' ).focus().select();
             break;
             case "delete": $('#delCat').dialog( "open" ).html( 'Delete category?'); break;
@@ -260,9 +260,9 @@ $(document).ready(function(){
                 method: 'GET',
                 success: function( result ){
                     drawTable( result );
-                    $( "#resTable" ).trigger( "update" );
                     $( "#read" ).hide( "fast" );
                     $( "#results" ).show( "fast" );
+                    $( "#resTable" ).trigger( "update" );
                 }
             })
             return false;

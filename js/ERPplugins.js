@@ -9,7 +9,6 @@ $(document).ready(function() {
 
 
 
-
     if( !getUrl.toString().match( 'LoginScreen' ) && !getUrl.toString().match( 'Admin' ) ){ //Plugins nicht bei login und Admin anzeigen
 
         var yesterdayButton = true; // enable or disable yesterday-Button
@@ -62,12 +61,13 @@ $(document).ready(function() {
                 var vendor_id = $("input[name='vendor_id']").val();
                 var invoice_no = $("input[name='invnumber']").val();
                 var data = '{"vendor_id":'+vendor_id+',"invoice_no":"'+invoice_no+'"}';
-                //alert(data);
+                alert(data);
                 $.ajax({
                     dataType: "json",
                     url: "crm/ajax/ajaxErpPlugins.php?action=showInvo&data=" + data,
                     method: "GET",
                     success : function (data){
+                      alert(data);
                           $(".fancybox").attr("href", data.link);
                           $(".fancybox").trigger('click');
                           $(".fancybox").empty();
@@ -119,26 +119,20 @@ $(document).ready(function() {
           cust_vend_type = 'C';
         }
 
-        $("<input style='margin-right: 5px; height:24px;' class='submit' type='button' name='crm' id='crm' value='CRM' onClick=\"window.location.href='crm/firma1.php?Q="+ cust_vend_type +"&id="+ customer_id +"'\">" ).insertAfter( "#action" );
+        if(getUrl.toString().match("invoice") || getUrl.toString().match("credit_note") || getUrl.toString().match("sales_order") || getUrl.toString().match("sales_quotation") || getUrl.toString().match("action=edit") ){
 
+          if(getUrl.toString().match("sales_order"))
+             $("<input type='button' id='makebill_btn' value='Rechnung' style='height:24px; margin-left: 10px; margin-right: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
 
-
-        //Rechnung button
-        if($('.tools:contains("Auftrag bearbeiten")').length > 0 ){
-          $("<input type='button' id='makebill_btn' value='Rechnung' style='height:24px; margin-left: 10px; margin-right: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
-          $("<input type='button' id='drucken_btn' value='Drucken' style='height:24px; margin-left: 10px; margin-right: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
-        }
-        //Buchen und Drucken button
-        if( $('.tools:contains("Gutschrift erfassen")').length > 0 || $('.tools:contains("Rechnung erfassen")').length > 0 || $( '.tools:contains("Kreditorenbuchung erfassen")' ).length > 0 || $( '.tools:contains("Debitorenbuchung erfassen")' ).length > 0 || $( '.tools:contains("Dialogbuchen")' ).length > 0 ){
           $("<input type='button' id='buchen_btn' value='Buchen' style='height:24px; margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
+          $("<input type='button' id='drucken_btn' value='Drucken' style='height:24px; margin-left: 10px; margin-right: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
+
           $("<input type='button' id='drucken_buchen_btn' value='Drucken und Buchen' style='height:24px; margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
-        }
-        //Buchen button
-        if( $( '.tools:contains("Gutschrift bearbeiten")').length > 0 || $( '.tools:contains("Rechnung bearbeiten")').length > 0 || $( '.tools:contains("Kreditorenbuchung bearbeiten")' ).length > 0 || $( '.tools:contains("Debitorenbuchung bearbeiten")' ).length > 0 ){
-          $("<input type='button' id='buchen_btn' value='Buchen' style='height:24px; margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
-          $("<input type='button' id='drucken_btn' value='Drucken' style='height:24px; margin-left: 10px; margin-right: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
+
 
         }
+
+        $("<input style='margin-right: 5px; height:24px;' class='submit' type='button' name='crm' id='crm' value='CRM' onClick=\"window.location.href='crm/firma1.php?Q="+ cust_vend_type +"&id="+ customer_id +"'\">" ).insertAfter( "#action" );
 
 
 

@@ -15,9 +15,13 @@ function rglob($pattern, $flags = 0) {
 }
 
 function showInvo($data) {
-     $vars = (array)json_decode($data);
+
+
+     $vars = (array)json_decode($data["data"]);
+
      $vendor_id = $vars['vendor_id'];
      $invoice_no = $vars['invoice_no'];
+
      $path = '../dokumente/'.$_SESSION['dbData']['dbname'].'/';
      //Vendor Nummer abfragen
      $sql = "SELECT vendornumber FROM vendor WHERE id = '".$vendor_id."'";
@@ -25,7 +29,7 @@ function showInvo($data) {
 
      $path = $path."V".$rs['vendornumber']."/*".$invoice_no."*.pdf";
      $temp = '';
-
+     writeLog($path);
      $file_arr = rglob($path);
      $temp = $file_arr[0];
      // Rückgabestring für die HREF der Fancybox

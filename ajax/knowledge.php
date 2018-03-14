@@ -69,18 +69,17 @@ function delCategory( $data ){
 function searchArt( $data ){
     $sql = "SELECT DISTINCT ON ( KCA.id )  KCA.id, KCA.labeltext, KCO.version, KCO.content FROM knowledge_content KCO LEFT JOIN knowledge_category KCA ON KCO.category = KCA.id WHERE content ILIKE '%".$data['data']."%' OR labeltext ILIKE '".$data['data']."%' ORDER BY id, version DESC";
     $rs = $GLOBALS['dbh']->getAll( $sql );
-
     if( $rs ) foreach( $rs as $key => $value ){
         $search_len = strlen( $data['data'] );
         $value['content'] = strip_tags( $value['content'] );
         $pos = stripos( $value['content'], $data['data'] );
-        //if( substr( $value['content'], $pos - 1, 1 ) != ' ' ) $value['content'] = substr_replace( $value['content'], ' ', $pos, 0 ); //add space before
-        //if( substr( $value['content'], $pos + $search_len + 1, 1 ) != ' ' ) $value['content'] = substr_replace( $value['content'], ' ', $pos + $search_len + 1, 0 ); //add space after
         $first = $pos - 60 <= 0 ? 0 : $pos - 60; //$first must not be negative
         $value['content'] = substr( $value['content'],  $first, 120 );
         $rs[$key]['content'] = preg_replace( "/".$data['data']."/i", '<b>$0</b>', $value['content'] ); //bold
+
     }
-    echo json_encode( $rs );
+    //writeLog( json_last_error() ); //5 = JSON_ERROR_UTF8
+    echo json_encode( $rs, 512 ); //JSON_PARTIAL_OUTPUT_ON_ERROR => 512
 }
 
 function getLastVersionNumber( $category ){

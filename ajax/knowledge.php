@@ -50,7 +50,7 @@ function createNewVersion( $data ){ // erstellt eine neue Version
 function newCategory( $data ){
     $rc = $GLOBALS['dbh']->insert( 'knowledge_category', array( 'labeltext', 'maingroup', 'help' ), array( $data['catName'], $data['mainCheck'] == 'true' ? 0 : $data['cat_id'], 'FALSE' ) );
     $rs = $GLOBALS['dbh']->insert( 'knowledge_content', array( 'modifydate', 'employee', 'content', 'version', 'category' ), array( 'now()', $_SESSION['id'], $data['catName'], 1, $rc ) );
-    echo 1;
+    echo $rc;
 }
 
 function editCategory( $data ){
@@ -59,15 +59,15 @@ function editCategory( $data ){
 }
 
 function delCategory( $data ){
-    $sql = "DELETE FROM knowledge_category WHERE id = '".$data."'";
+    $sql = "DELETE FROM knowledge_category WHERE id = '".$data['data']."'";
     $rs = $GLOBALS['dbh']->query( $sql );
-    $sql = "DELETE FROM knowledge_content WHERE category = '".$data."'";
+    $sql = "DELETE FROM knowledge_content WHERE category = '".$data['data']."'";
     $rs = $GLOBALS['dbh']->query( $sql );
     echo 1;
 }
 
 function searchArt( $data ){
-    $sql = "SELECT DISTINCT ON ( KCA.id )  KCA.id, KCA.labeltext, KCO.version, KCO.content FROM knowledge_content KCO LEFT JOIN knowledge_category KCA ON KCO.category = KCA.id WHERE content ILIKE '%".$data['data']."%' OR labeltext ILIKE '".$data['data']."%' ORDER BY id, version DESC";
+    $sql = "SELECT DISTINCT ON ( KCA.id )  KCA.id, ( SELECT labeltext FROM knowledge_category WHERE id = KCA.maingroup ) || ' / ' || KCA.labeltext AS labeltext, KCO.version, KCO.content FROM knowledge_content KCO LEFT JOIN knowledge_category KCA ON KCO.category = KCA.id WHERE content ILIKE '%".$data['data']."%' OR labeltext ILIKE '".$data['data']."%' ORDER BY id, version DESC";
     $rs = $GLOBALS['dbh']->getAll( $sql );
     if( $rs ) foreach( $rs as $key => $value ){
         $search_len = strlen( $data['data'] );

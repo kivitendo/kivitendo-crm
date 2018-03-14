@@ -282,9 +282,20 @@ $(document).ready(function(){
                     data: { action: "newCategory", data: { catName : newCat, cat_id: category_id, mainCheck: mainCat } },
                     type: 'post',
                     url: "ajax/knowledge.php",
-                    success: function(){
+                    success: function( cat_id ){
                         $( "#menu" ).empty().menu( "destroy" );
                         makeMenu();
+                        $.ajax({
+                            url: "ajax/knowledge.php?action=getArticle&data=" + cat_id,
+                            method: "GET",
+                            success: function( json ) {
+                                var obj = JSON.parse( json.trim() );
+                                $( '#read' ).html(obj[0].content);
+                                version = obj[0].version;
+                                $( "#read" ).show( "fast" );
+                                $( "#results" ).hide( "fast" );
+                            }
+                        })
                     }
                 })
                 $(this).dialog("close");

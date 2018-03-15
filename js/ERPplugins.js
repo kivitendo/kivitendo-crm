@@ -119,15 +119,33 @@ $(document).ready(function() {
           cust_vend_type = 'C';
         }
 
-        if(getUrl.toString().match("invoice") || getUrl.toString().match("credit_note") || getUrl.toString().match("sales_order") || getUrl.toString().match("sales_quotation") || getUrl.toString().match("action=edit") ){
+        //alert(getUrl);
+        if( getUrl.toString().match("ap.pl") || getUrl.toString().match("ar.pl") || getUrl.toString().match("gl.pl")  ){
 
-          if(getUrl.toString().match("sales_order"))
+          $("<input type='button' id='buchen_btn' value='Buchen' style='height:24px; margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
+
+        }
+
+        if( getUrl.toString().match("invoice") || getUrl.toString().match("credit_note") || getUrl.toString().match("sales_order") || getUrl.toString().match("sales_quotation") || getUrl.toString().match("action=edit") ){
+
+          if( getUrl.toString().match("sales_order") )
              $("<input type='button' id='makebill_btn' value='Rechnung' style='height:24px; margin-left: 10px; margin-right: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
 
           $("<input type='button' id='buchen_btn' value='Buchen' style='height:24px; margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
           $("<input type='button' id='drucken_btn' value='Drucken' style='height:24px; margin-left: 10px; margin-right: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
 
           $("<input type='button' id='drucken_buchen_btn' value='Drucken und Buchen' style='height:24px; margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
+
+
+        }
+
+        if ( getUrl.toString().match("oe.pl") && $("#invnumber").length != 0 ) {
+
+          $("<input type='button' id='buchen_btn' value='Buchen' style='height:24px; margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
+          $("<input type='button' id='drucken_btn' value='Drucken' style='height:24px; margin-left: 10px; margin-right: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
+
+          $("<input type='button' id='drucken_buchen_btn' value='Drucken und Buchen' style='height:24px; margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
+
 
 
         }

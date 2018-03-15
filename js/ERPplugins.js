@@ -61,7 +61,7 @@ $(document).ready(function() {
                 var vendor_id = $("input[name='vendor_id']").val();
                 var invoice_no = $("input[name='invnumber']").val();
                 var data = '{"vendor_id":'+vendor_id+',"invoice_no":"'+invoice_no+'"}';
-                alert(data);
+                //alert(data);
                 $.ajax({
                     dataType: "json",
                     url: "crm/ajax/ajaxErpPlugins.php?action=showInvo&data=" + data,

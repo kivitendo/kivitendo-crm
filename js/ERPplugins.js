@@ -67,7 +67,7 @@ $(document).ready(function() {
                     url: "crm/ajax/ajaxErpPlugins.php?action=showInvo&data=" + data,
                     method: "GET",
                     success : function (data){
-                      alert(data);
+                      //alert(data);
                           $(".fancybox").attr("href", data.link);
                           $(".fancybox").trigger('click');
                           $(".fancybox").empty();

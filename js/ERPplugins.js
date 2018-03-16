@@ -120,7 +120,7 @@ $(document).ready(function() {
         }
 
         //alert(getUrl);
-        if( getUrl.toString().match("ap.pl") || getUrl.toString().match("ar.pl") || getUrl.toString().match("gl.pl")  ){
+        if( (getUrl.toString().match("ap.pl") || getUrl.toString().match("ar.pl") || getUrl.toString().match("gl.pl") ) && !getUrl.toString().match("is.pl") ){
 
           $("<input type='button' id='buchen_btn' value='Buchen' style='height:24px; margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
 

@@ -10,7 +10,8 @@ function getCategories(){
 
 function getArticle( $data ){
      $rs = $GLOBALS['dbh']->query( 'UPDATE knowledge_content SET modifydate = now() WHERE category = '.$data['data'].' AND version = (SELECT max(version) FROM knowledge_content WHERE category = '.$data['data'].')'  );
-     $sql = "SELECT json_agg (json) from (SELECT * FROM knowledge_content WHERE category =" .$data['data']. "AND version = ( SELECT max(version) FROM knowledge_content WHERE category =".$data['data']." ) ) json";
+     $sql = "SELECT json_agg (json) from (SELECT * FROM knowledge_content, knowledge_category WHERE category =" .$data['data']. " AND knowledge_category.id = ".$data['data']." AND version = ( SELECT max(version) FROM knowledge_content, knowledge_category WHERE knowledge_category.id = ".$data['data']." AND category =".$data['data']." ) ) json";
+     writeLog($sql);
      $rs = $GLOBALS['dbh']->getOne( $sql );
      if( $rs['json_agg'] == NULL ) {
         $sql = "SELECT json_agg (json) from ( SELECT * FROM knowledge_content WHERE category = ".$data['data']." ORDER BY id DESC ) json";
@@ -67,7 +68,7 @@ function delCategory( $data ){
 }
 
 function searchArt( $data ){
-    $sql = "SELECT DISTINCT ON ( KCA.id )  KCA.id, ( SELECT labeltext FROM knowledge_category WHERE id = KCA.maingroup ) || ' / ' || KCA.labeltext AS labeltext, KCO.version, KCO.content FROM knowledge_content KCO LEFT JOIN knowledge_category KCA ON KCO.category = KCA.id WHERE content ILIKE '%".$data['data']."%' OR labeltext ILIKE '".$data['data']."%' ORDER BY id, version DESC";
+    $sql = "SELECT DISTINCT ON ( KCA.id )  KCA.id, ( SELECT labeltext FROM knowledge_category WHERE id = KCA.maingroup ) || ' -> ' || KCA.labeltext AS labeltext, KCO.version, KCO.content FROM knowledge_content KCO LEFT JOIN knowledge_category KCA ON KCO.category = KCA.id WHERE content ILIKE '%".$data['data']."%' OR labeltext ILIKE '".$data['data']."%' ORDER BY id, version DESC";
     $rs = $GLOBALS['dbh']->getAll( $sql );
     if( $rs ) foreach( $rs as $key => $value ){
         $search_len = strlen( $data['data'] );
@@ -81,6 +82,8 @@ function searchArt( $data ){
     //writeLog( json_last_error() ); //5 = JSON_ERROR_UTF8
     echo json_encode( $rs, 512 ); //JSON_PARTIAL_OUTPUT_ON_ERROR => 512
 }
+
+
 
 function getLastVersionNumber( $category ){
     $rs = $GLOBALS['dbh']->getOne( "SELECT max(version) FROM knowledge_content WHERE category = ".$category );

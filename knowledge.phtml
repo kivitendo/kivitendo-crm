@@ -146,6 +146,7 @@ $(document).ready(function(){
      }
 
     function drawRow( rowData ) {
+
           var row = $( "<tr>" );
           $( "#tbody" ).append( row );
           row.append( $( "<td>" + rowData.id  + "</td>" ) );
@@ -185,6 +186,7 @@ $(document).ready(function(){
                             var obj = JSON.parse( json.trim() );
                             $( '#read' ).html(obj[0].content);
                             version = obj[0].version;
+
                             $( "#read" ).show( "fast" );
                             $( "#results" ).hide( "fast" );
                         }
@@ -262,6 +264,7 @@ $(document).ready(function(){
                     drawTable( result );
                     $( "#read" ).hide( "fast" );
                     $( "#results" ).show( "fast" );
+                     $(".navigation").hide("fast");
                     $( "#resTable" ).trigger( "update" );
                 }
             })
@@ -377,11 +380,16 @@ $(document).ready(function(){
            url: "ajax/knowledge.php?action=getArticle&data=" + category_id,
            method: "GET",
            success: function( json ){
+
+
                 var obj = JSON.parse( json.trim() );
                 $( '#read' ).html( obj[0].content );
                 version = obj[0].version;
                 $( "#results" ).hide( "fast" );
                 $( "#read" ).show( "fast" );
+                $(".navigation").text(obj[0].labeltext);
+                $(".navigation").show("fast");
+
             }
         })
     });
@@ -390,8 +398,8 @@ $(document).ready(function(){
 </script>
 <style>
 .ui-menu, #searchfield { width: 180px; }
-
-#read{   position:absolute; top:120px; left:225px; width: 80%; background-color:#dfd; border:1px solid #888; }
+.navigation{   position:absolute; top:50px; left:225px; width: 80%; background-color:#dfd; border:1px solid #888; }
+#read{   position:absolute; top:150px; left:225px; width: 80%; background-color:#dfd; border:1px solid #888; }
 #results{   position:absolute; top:40px; left:235px; width: 80%;  }
 
 .contex_sub_menu, .contex_main_menu {
@@ -438,8 +446,14 @@ table.tablesorter { width:auto; cursor:pointer; }
     <input type="text" id="searchfield"  placeholder="Enter Searchstring">
 
     </p>
+
+
+      <div class="navigation" style="display:none;" > TEST  </div>
+
+
     <div id="read" class="editable"></div>
     <div id="results" style="display:none;">
+
        <table id="resTable" class="tablesorter">
          <thead>
           <tr>

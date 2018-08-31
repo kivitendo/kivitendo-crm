@@ -55,14 +55,14 @@ z.B. Debian / Ubuntu:
     chown -R www-data: crm/
 
 Menü verlinken oder kopieren:
-cd kivitendo-erp/menus/users
+cd kivitendo-erp/menus/user
 ln -s ../../../kivitendo-crm/menu/10-crm-menu.yaml 10-crm-menu.yaml
 
 Rechte für CRM ermöglichen:
 cd kivitendo-erp/sql/Pg-upgrade2-auth
 ln -s  ../../../kivitendo-crm/update/add_crm_master_rights.sql add_crm_master_rights.sql
 
-Übersetzungen anlegen:
+Übersetzungen anlegen:/lo				      
 cd kivitendo-erp/locale/de
 mkdir more
 cd kivitendo-erp/locale/de/more

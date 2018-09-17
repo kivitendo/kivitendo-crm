@@ -1,6 +1,10 @@
 #!/bin/bash
 set +e
 
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
 
 ## Memo und Script zur Installation von kivitendo unter Ubuntu 18.04 Bionic (LTS)
 echo "Pakete installieren"

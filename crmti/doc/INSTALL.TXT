@@ -38,14 +38,14 @@ http://www.das-asterisk-buch.de, http://www.ip-phone-forum.de/forumdisplay.php?f
 ****************************************************************************************************************/
 http://asteriskdocs.org/en/3rd_Edition/asterisk-book-html-chunk/installing_configuring_odbc.html
 Treiber installieren und  registrieren
-Download: http://packages.ubuntu.com/de/trusty/amd64/odbcinst/download
-dpkg -i odbcinst.deb
-apt-get install unixODBC unixODBC-dev odbc-postgresql
+
+apt install unixodbc unixodbc-dev odbc-postgresql
+
 odbcinst -i -d -f /usr/share/psqlodbc/odbcinst.ini.template
 less /etc/odbcinst.ini sollte nun gefüllt sein
 Muß idR nicht modifiziert werden
 
-/etc/odbc.ini mit den Vorgaben aus /usr/lib/lx-office-crm/crmti/etc/odbc.ini füllen bzw. kopieren
+/etc/odbc.ini mit den Vorgaben aus crmti/etc/odbc.ini füllen bzw. kopieren
 Datenbankname, Passdw und Pfad zu odbc anpassen
 find / -name 'lib*odbc*.so'
 

@@ -96,6 +96,19 @@ class myPDO extends PDO{
         return $result;
     }
 
+    /**********************************************
+    * update - modify multiple data set
+    * IN: $table  - string name of the table
+    * IN: $fields - array with fields
+    * IN: $values - multi array with values
+    * IN: $where  - select a data set
+    * OUT: true/false
+    **********************************************/
+    public function updateAll( $table, $fields, $values, $where ){
+       // $stmt = parent::prepare( "WITH new_data
+        return $result;
+    }
+
     /*********************************************************
     * IN:  $statement - SQL-String with placeholder (?)
     * IN:  $data      - Array of arrays with values

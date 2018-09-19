@@ -27,7 +27,7 @@ function printArray( $array ){
 
 //in terminal: tailf tmp/log.txt
 function writeLog( $log ){
-    file_put_contents( $_SESSION['crmpath'].'/tmp/log.txt', date("Y-m-d H:i:s -> " ).print_r( $log, TRUE )."\n", FILE_APPEND );
+    file_put_contents( __DIR__.'/../log/debug.log', date("Y-m-d H:i:s -> " ).print_r( $log, TRUE )."\n", FILE_APPEND );
 }
 
 function strpos_all($text, $search) {
@@ -803,9 +803,9 @@ function accessHistory( $data ){ //ToDo: move to ajax
     //if ( $array_of_data && in_array( $data, $array_of_data ) ) unset( $array_of_data[array_search( $data, $array_of_data)] ); //remove duplicates
 
 foreach($array_of_data as $array_data) {
-	if ( $data[0]==$array_data[0] ) unset( $array_of_data[array_search( $data, $array_of_data)] ); //remove duplicates
+    if ( $data[0]==$array_data[0] ) unset( $array_of_data[array_search( $data, $array_of_data)] ); //remove duplicates
   }
-    
+
     array_unshift( $array_of_data, $data ); //add last access to array
     if ( count( $array_of_data ) > 10 ) array_pop( $array_of_data ); //remove entry numer 10
     $GLOBALS['dbh']->update( 'crmemployee', array( 'val' ), array( json_encode( $array_of_data ) ), "uid = ".$_SESSION['loginCRM']." AND manid = ".$_SESSION['manid']." AND key = 'search_history'" );

@@ -1,13 +1,11 @@
 <?php
 
-//else
-
 class myPDO extends PDO{
     private $showErr = TRUE;  //show errors in browser
     private $logAll  = TRUE;  //log all sql queries
 
     private function writeLog( $log ){
-        file_put_contents( __DIR__.'/../tmp/sqlerror.log', date("Y-m-d H:i:s -> " ).print_r( $log, TRUE )."\n", FILE_APPEND );
+        file_put_contents( __DIR__.'/../log/sql.log', date("Y-m-d H:i:s -> " ).print_r( $log, TRUE )."\n", FILE_APPEND );
     }
 
     private function error( $error ){

@@ -1,3 +1,4 @@
+//Dont use this file! use kivi.t8() from ERP
 var langData = {
         de: {
             ACTIONS:            "Aktionen",

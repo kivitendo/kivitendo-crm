@@ -1,7 +1,3 @@
-// translation/all.lng einbinden mit prepend(?)
-//<script language="javascript" type="text/javascript" src="translation/all.lng"></script>
-
-
 $(document).ready(function() {
 
 
@@ -189,7 +185,7 @@ $(document).ready(function() {
 
         //alert( kivi_global.baseurl );
         // "Yesterday"-Button in
-        $.getScript( kivi_global.baseurl + '/crm/translation/all.lng', function () {
+        $.getScript( kivi_global.baseurl + '/crm/translation/t8.js', function () { //besser kivi.t8() benutzen!!! ToDo
             if( getUrl.toString().match( 'is.pl' ) && yesterdayButton ){
                 var dpLast = $( '[id^=datepaid_]:last' );
                 var positionDpLast = dpLast.position();
@@ -250,6 +246,3 @@ $(document).ready(function() {
 
 });
 
-//})
-// translation/all.lng einbinden mit prepend(?)
-//<script language="javascript" type="text/javascript" src="translation/all.lng"></script>

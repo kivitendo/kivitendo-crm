@@ -709,7 +709,7 @@ function mkHeader() {
         'TINYMCE'       => $SV.$_SESSION['baseurl'].'crm/nodejs/node_modules/tinymce/tinymce.min.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/nodejs/node_modules/tinymce/js/langs/de.js'.$SN,//todo Lang EN
         'DATEPICKER'    => $_SESSION['countrycode'] == 'de' ? $SV.$_SESSION['baseurl'].'js/jquery/ui/i18n/jquery.ui.datepicker-de.js'.$SN : '',
-        'TRANSLATION'   => $SV.$_SESSION['baseurl'].'crm/translation/all.lng'.$SN,
+        'TRANSLATION'   => $SV.$_SESSION['baseurl'].'crm/translation/t8.js'.$SN, //besser kivi.t8( BENUTZEN )!!!
         'JQCALCULATOR'  => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.css'.$LN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.plugin.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.js'.$SN.
@@ -761,7 +761,8 @@ function doHeader(&$t) {
         'FANCYBOX'      => $head['FANCYBOX'],
         'ELFINDER'      => $head['ELFINDER'],
         'QRCODE'        => $head['QRCODE'],
-        'TOOLS'         => $head['TOOLS']
+        'TOOLS'         => $head['TOOLS'],
+        'TRANSLATION'   => $head['TRANSLATION']
     ));
 }
 

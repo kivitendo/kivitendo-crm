@@ -14,15 +14,6 @@
 {BASEPATH}
 {TRANSLATION}
 
-
-<script type="text/javascript" src="{BASEPATH}lxcars/jQueryAddOns/date-time-picker.js"></script>
-<script type="text/javascript" src="{BASEPATH}lxcars/jQueryAddOns/german-date-time-picker.js"></script>
-<script type="text/javascript" src="{BASEPATH}crm/jquery-ui/jquery.js"></script>
-<!--<link type="text/css" REL="stylesheet" HREF="../../css/{ERPCSS}"></link>
-<link rel="stylesheet" type="text/css" href="{BASEPATH}crm/jquery-ui/themes/base/jquery-ui.css">-->
-
-<script language="javascript" type="text/javascript" src="translation/all.lng"></script>
-
 <script language="JavaScript" type="text/javascript">
 
     function showCall() {

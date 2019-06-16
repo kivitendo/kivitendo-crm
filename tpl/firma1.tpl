@@ -596,8 +596,14 @@
                 <div id="openInvoice"></div>
                 {Fcontact}
                 <span class="mini"><br />&nbsp;<br /></span>
-                <font color="#444444"> .:tel:.:</font> <a href="tel:{Telefon}">{Telefon}</a><br />
-                <font color="#444444"> .:fax:.:</font> <a href="tel:{Fax}">{Fax}</a><br />
+                <table>
+                  <tr>
+                    <td>.:tel:.:</td><td><a href="tel:{Telefon}">{Telefon}</a></td><td style="display:none">DROPDOWN1_FOR_CLICK_TO_CALL</td>
+                  </tr>
+                  <tr>
+                    <td>.:fax:.:</td><td><a href="tel:{Fax}">{Fax}</a></td><td style="display:none">DROPDOWN2_FOR_CLICK_TO_CALL</td>
+                  </tr>
+               </table>
                 <span class="mini">&nbsp;<br /></span>
                 &nbsp;[<a href="{mail_pre}{eMail}{mail_after}">{eMail}</a>]<br />
                 &nbsp;<a href="{Internet}" target="_blank">{Internet}</a>

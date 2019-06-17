@@ -295,7 +295,6 @@
     }
 
     $(document).ready(function(){
-
         language = kivi.myconfig.countrycode;   // Variable language muss global sein!
         $( ".lang" ).each( function(){
             var key = $( this ).attr( "data-lang" );
@@ -320,6 +319,24 @@
             }
 
         showCall();
+
+        $( '#tel1, #tel2' ).click( function(data){
+            //alert( data.text );
+            console.log( this.firstChild.data );
+            $.ajax({
+                url: 'ajax/clickToCall.php',
+                type: 'POST',
+                //async: false,
+                data: { action: 'newCall', data: { 'number': this.firstChild.data, 'contex': 'werkstatt_fon' } },
+                success: function ( data ) {
+                    alert( data );
+                },
+                error: function () {
+                    alert( 'Error clickToCall()!' )
+                }
+            });
+            return false;
+        });
 
         function saveData() {
             var obj = {};
@@ -598,10 +615,10 @@
                 <span class="mini"><br />&nbsp;<br /></span>
                 <table>
                   <tr>
-                    <td>.:tel:.:</td><td><a href="tel:{Telefon}">{Telefon}</a></td><td style="display:none">DROPDOWN1_FOR_CLICK_TO_CALL</td>
+                    <td>.:tel:.:</td><td><div id="tel1">{Telefon}</div></td><td style="display:none">DROPDOWN1_FOR_CLICK_TO_CALL</td>
                   </tr>
                   <tr>
-                    <td>.:fax:.:</td><td><a href="tel:{Fax}">{Fax}</a></td><td style="display:none">DROPDOWN2_FOR_CLICK_TO_CALL</td>
+                    <td>.:fax:.:</td><td><a id="tel2">{Fax}</a></td><td style="display:none">DROPDOWN2_FOR_CLICK_TO_CALL</td>
                   </tr>
                </table>
                 <span class="mini">&nbsp;<br /></span>
@@ -751,6 +768,6 @@
         </div>
     </div>
 {END_CONTENT}
-{TOOLS}
+<!--{TOOLS}-->
 </body>
 </html>

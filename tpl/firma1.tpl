@@ -768,6 +768,6 @@
         </div>
     </div>
 {END_CONTENT}
-<!--{TOOLS}-->
+{TOOLS}
 </body>
 </html>

@@ -327,7 +327,7 @@
                 url: 'ajax/clickToCall.php',
                 type: 'POST',
                 //async: false,
-                data: { action: 'newCall', data: { 'number': this.firstChild.data, 'contex': 'werkstatt_fon' } },
+                data: { action: 'newCall', data: { 'number': this.firstChild.data, 'internal_contex': 'inter-data_fon', 'external_contex': 'inter-data' } },
                 success: function ( data ) {
                     alert( data );
                 },

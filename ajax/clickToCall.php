@@ -4,37 +4,10 @@
     function newCall( $data ){
         $debug = TRUE;
         if( $debug ) writeLog( $data );
-        /*
-
-        $timeout = 10;
-        $asterisk_ip = "127.0.0.1";
-        $socket = fsockopen( $asterisk_ip,"5038", $errno, $errstr, $timeout );
-        writeLog( $socket );
-        fputs( $socket, "Action: Login\r\n" );
-        fputs( $socket, "UserName: clickadmin\r\n" );
-        fputs( $socket, "Secret: mypasswd\r\n\r\n" );
-
-        $wrets=fgets( $socket, 128 );
-        //writeLog( wrets );
-        writeLog( "wrets 0: ".$wrets );
-        //echo $wrets;
-
-        fputs( $socket, "Action: Originate\r\n" );
-        fputs( $socket, "Channel: SIP/".$data['contex']."\r\n" );
-        fputs( $socket, "Exten: ".$data['number']."\r\n" );
-        fputs( $socket, "Context: werkstatt\r\n" ); // very important to change to your outbound context
-        fputs( $socket, "Priority: 1\r\n" );
-        fputs( $socket, "Async: yes\r\n\r\n" );
-
-        $wrets = fgets( $socket, 128 );
-
-        writeLog( "wrets 1: ".$wrets );;
-        writeLog( socket_last_error() );
-        */
-
         $port = 5038;
-        $username = 'clickadmin';
+        $username = 'clickToCall';
         $password = 'mypasswd';
+	$target = $data['number'];
         $internalPhoneline = $data['internal_contex'];
         // Context for outbound calls. See /etc/asterisk/extensions.ael if unsure.
         $context = $data['external_contex'];
@@ -49,34 +22,40 @@
             // Send authentication request
             $authenticate = stream_socket_sendto($socket, $authenticationRequest);
             if( $authenticate > 0 ){
+	    	writeLog( "Authenticate: ".$authenticate );
                 // Wait for server response
                 usleep(200000);
                 // Read server response
                 $authenticateResponse = fread( $socket, 4096 );
+		writeLog( "authenticateResponse: ".$authenticateResponse );
                 // Check if authentication was successful
                 if( strpos( $authenticateResponse, 'Success' ) !== false ){
                     if( $debug ) writeLog( "Authenticated to Asterisk Manager Inteface. Initiating call." );
                     // Prepare originate request
-                    $originateRequest = "Action: Originate\r\n";
-                    $originateRequest .= "Channel: SIP/$internalPhoneline\r\n";
-                    $originateRequest .= "Callerid: Click 2 Call\r\n";
-                    $originateRequest .= "Exten: $target\r\n";
-                    $originateRequest .= "Context: $context\r\n";
+                    $originateRequest  = "Action: Originate\r\n";
+                    $originateRequest .= "Channel: SIP/werkstatt_fon@werkstatt_fon\r\n";//ToDo
+                    $originateRequest .= "Callerid: $internalPhoneline\r\n";
+                    $originateRequest .= "Exten: ".$data['number']."\r\n";
+                    $originateRequest .= "Context: werkstatt\r\n";
+		    //$originateRequest .= "Timeout: 30\r\n";
                     $originateRequest .= "Priority: 1\r\n";
-                    $originateRequest .= "Async: yes\r\n\r\n";
+                    $originateRequest .= "Async: true\r\n\r\n";
+		    if( $debug ) writeLog( "Originate-Request: \n".$originateRequest );
                     // Send originate request
                     $originate = stream_socket_sendto( $socket, $originateRequest );
+		    writeLog( "Return stream_socket_sendto: ".$originate );
                     if( $originate > 0 ){
                         // Wait for server response
                         usleep(200000);
                         // Read server response
                         $originateResponse = fread( $socket, 4096 );
+			writeLog( "Answer originateResponse: ".$originateResponse );
                         // Check if originate was successful
                         if( strpos( $originateResponse, 'Success' ) !== false ){
                             if( $debug ) writeLog( "Call initiated, dialing." );
                         }
                         else{
-                            if( $debug ) writeLog(  "Could not initiate call." );
+                            if( $debug ) writeLog(  "Could not initiate call.".$originateResponse );
                         }
                     }
                     else{

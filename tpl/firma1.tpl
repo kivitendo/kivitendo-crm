@@ -320,23 +320,21 @@
 
         showCall();
 
-        $( '#tel1, #tel2' ).click( function(data){
-            //alert( data.text );
-            console.log( this.firstChild.data );
+        $( '#tel1, #tel2' ).click( function( data ){
+            data.stopImmediatePropagation();
             $.ajax({
                 url: 'ajax/clickToCall.php',
                 type: 'POST',
-                //async: false,
-                data: { action: 'newCall', data: { 'number': this.firstChild.data, 'internal_contex': 'inter-data_fon', 'external_contex': 'inter-data' } },
+                data: { action: 'newCall', data: { 'number': this.firstChild.data, 'internal_contex': 'werkstatt_fon', 'external_contex': 'werkstatt' } },
                 success: function ( data ) {
-                    alert( data );
+                    //alert( data );
                 },
                 error: function () {
                     alert( 'Error clickToCall()!' )
                 }
             });
             return false;
-        });
+        }).button().removeClass( "ui-button").css({ width: '170px', 'text-align': 'left'});
 
         function saveData() {
             var obj = {};
@@ -615,10 +613,10 @@
                 <span class="mini"><br />&nbsp;<br /></span>
                 <table>
                   <tr>
-                    <td>.:tel:.:</td><td><div id="tel1">{Telefon}</div></td><td style="display:none">DROPDOWN1_FOR_CLICK_TO_CALL</td>
+                    <td>.:tel:.:</td><td><button id="tel1">{Telefon}</button></td><td style="display:none">DROPDOWN1_FOR_CLICK_TO_CALL</td>
                   </tr>
                   <tr>
-                    <td>.:fax:.:</td><td><a id="tel2">{Fax}</a></td><td style="display:none">DROPDOWN2_FOR_CLICK_TO_CALL</td>
+                    <td>.:fax:.:</td><td><button id="tel2">{Fax}</button></td><td style="display:none">DROPDOWN2_FOR_CLICK_TO_CALL</td>
                   </tr>
                </table>
                 <span class="mini">&nbsp;<br /></span>

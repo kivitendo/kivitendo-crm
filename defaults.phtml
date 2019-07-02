@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+
+<?php
+    require_once( __DIR__.'/inc/stdLib.php' );
+    $menu = $_SESSION['menu'];
+    echo $menu['stylesheets'];
+    echo $menu['javascripts'];
+    echo $head['JQUERY'];
+    echo $head['JQUERYUI'];
+
+    echo $head['THEME'];
+
+
+
+
+?>
+
+
+<script>
+  $( document ).ready( function(){
+    var data = [
+      { "name": "extern Database","label": "extern Database", "type": "headline" },
+      { "name": "GEODB", "label": "Geo Database", "type": "checkbox" },
+      { "name": "BLZDB", "label": "BLZ Database", "type": "checkbox" },
+      { "name": "contacthred", "label": "Contac thred", "type": "headline" },
+      { "name": "CallEdit", "label": "Call edit", "type": "checkbox" },
+      { "name": "email", "label": "Email", "type": "headline" },
+      { "name": "MailFlag", "label": "Mail Flag", "type": "select", "data":["flagged", "Answered", "Seen", "Deleted", "Draft"]},
+      { "name": "Expunge", "label": "Expunge", "type": "checkbox" },
+      { "name": "logmail", "label": "Log mail", "type": "checkbox" },
+      { "name": "Maps", "label": "Maps", "type": "headline" },
+      { "name": "streetview_man", "label": "Streetview", "type": "input" },
+      { "name": "planspace_man", "label": "Planspace", "type": "input" },
+      { "name": "user-friendly links", "label": "user-friendly links", "type": "headline" },
+      { "name": "dir_group", "label": "Group", "type": "input" },
+      { "name": "dir_mode", "label": "Mode", "type": "input" }
+    ];
+    $.each( data, function( i, item ){
+      //alert( item.name );
+    })
+
+  });
+
+</script>
+<style>
+
+
+
+</style>
+</head>
+
+<body>
+<?php
+    echo $menu['pre_content'];
+    echo $menu['start_content'];
+?>
+
+  <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Testfile </p>
+  <table id="sitetable">
+  <tr><td>tetststts</td><td><input type="checkbox" id="tets"></input></td></tr>
+  </table>
+
+
+<?php echo $menu['end_content']; ?>
+
+</html>

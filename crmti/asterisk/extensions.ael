@@ -1,7 +1,7 @@
 //CRMTI extensions.ael
 //Geschriebebn Februar 2017 von Ronny Kumke LxCars ronny@lxcars.de
 
-
+//ToDo: Neu schreiben!!!!
 
 context Autoprofis {
     _0. => {
@@ -77,9 +77,16 @@ context von-voip {
     }
     650 => {
         Set(ARRAY(kdname)=${ODBC_CALLIN(${CALLERID(num)}, Inter-Data, ${UNIQUEID} )});
-        Verbose(1,### DEBUGDEBUGDEBUG ODBC-Ergebnis: ${kdname});
-        Set(CALLERID(name)=${kdname});
-        Verbose(1, ***+++ Variable CALLERNAME: ${CALLERID(all)});
+        if("${kdname}" = ""){
+            //Verbose( 1,  KD NAME  LEER Starte reverse_search: ${CALLERID( all )} );
+            AGI(/var/www/kivitendo-crm/crmti/asterisk/reverse_search.agi, ${CALLERID(num)});
+            Set(CALLERID(name)=${RESULTREV});
+            Verbose( 1,  Ergebnis  reverse_search: ${RESULTREV} !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! );
+        }
+        else{
+            Verbose( 1, YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY***+++ KD NAME NICHT TEER: ${CALLERID( all )} );
+            Set(CALLERID(name)=${kdname});
+        }
         //MixMonitor(vonVoip804020--${kdname}--${STRFTIME(${EPOCH},GMT,%F_%T)}${UNIQUEID}.wav,ab);
         Dial(SIP/2003);
     }

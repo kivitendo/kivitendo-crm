@@ -1,4 +1,4 @@
--- Telephone Integration for CRM
+-- telephone integration for kivitendo
 DROP TABLE IF EXISTS crmti CASCADE;;
 CREATE TABLE crmti(
     crmti_id        SERIAL PRIMARY KEY,
@@ -32,8 +32,7 @@ END; $$ LANGUAGE 'plpgsql' WITH (iscachable);;;
 
 CREATE OR REPLACE FUNCTION SucheNummer( text )
     RETURNS record AS $$
-    -- Sucht die Telefonnummer in den Kivitendo-Tabellen und gibt Namen (falls gefunden) sonst Nummer zurück
-    -- ToDo Dynamische SQL-Abfrage mit EXECUTE statt des riesigen SELECT-Blocks verwenden
+    -- Sucht die Telefonnummer in den Kivitendo-Tabellen und gibt Namen (falls gefunden) sonst name=Nummer und id=0 zurück
 DECLARE
     telnum ALIAS FOR $1;
     myname text;
@@ -69,6 +68,7 @@ BEGIN
     return result;
 END; $$ LANGUAGE 'plpgsql' WITH (iscachable);;;
 
+
 CREATE OR REPLACE FUNCTION CallIn( text, text, text )
     RETURNS text AS $$
     -- Für eingehende Anrufe, Sucht in src und gibt den Namen zurück, speichert
@@ -85,9 +85,14 @@ BEGIN
     IF result.typ != 'X' THEN
         insert into telcall ( calldate, bezug, cause, caller_id, kontakt, inout ) values ( CURRENT_TIMESTAMP, 0, 'Eingehender Anruf zu[r|m] '||dst, result.id, 'T','i' );
     END IF;
-    PERFORM pg_notify( 'crmti_watcher', to_json( new_row  )::TEXT );
-    return result.name;
+    --PERFORM pg_notify( 'crmti_watcher', to_json( new_row  )::TEXT );
+    IF result.id = 0 THEN  --not found in kivi database! Use https://github.com/Superslub/AGI_Reverse_Lookup_DACH/commits/master!!!
+        return NULL;
+    ELSE
+        return result.name;
+    END IF;
 END; $$ LANGUAGE 'plpgsql';;;
+
 
 CREATE OR REPLACE FUNCTION CallOut( text, text, text )
     RETURNS text AS $$

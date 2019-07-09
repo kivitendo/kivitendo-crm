@@ -1,3 +1,4 @@
+
 #!/bin/bash
 set +e
 
@@ -13,6 +14,8 @@ apt-get install make gcc apache2 libapache2-mod-fcgid libarchive-zip-perl libclo
 
 cpan HTML::Restrict
 cpan CGI
+cpan Mozilla::CA
+
 pear install  Contact_Vcard_Build Contact_Vcard_Parse
 
 

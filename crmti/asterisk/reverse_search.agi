@@ -1,4 +1,4 @@
-#!/usr/bin/perl 
+#!/usr/bin/perl
 # Achtung: Leerzeichen hinter "#!/usr/bin/perl "
 # ansonsten kommt es zu einem "no such file or directory"-Fehler!
 #
@@ -9,18 +9,18 @@
 #
 # Gefundene Namen werden in der Asterisk.Variable ${RESULTREV} gespeichert
 #
-# Sollten die Suchanbieter ihre Webseiten (von denen die gesuchten Namen 
+# Sollten die Suchanbieter ihre Webseiten (von denen die gesuchten Namen
 # zu den Nummern kommen) ändern, so müssen nur die entsprechenden Parser in
 # den Subroutinen (oert, klick, telefonabc, telsearch) angepasst werden.
 # (Diese Routinen setzen [$reverseresult] mit dem Suchergebnis)
 #
 #
-# Aufruf des Skriptes: 
+# Aufruf des Skriptes:
 #        <script> number static cache luonline fromshell (für Aufrufe von der Shell)
 #   - number: die zu suchende Telefonnummer
 #   - static: Name der zu nutzenden Datenbank oder 0, um diese Suche zu unterbinden
 #   - cache:  Nutzung des Caches ein- (1) oder ausschalten (0)
-#   - luonline: Onlinesuche ein- (1) oder ausschalten (0) 
+#   - luonline: Onlinesuche ein- (1) oder ausschalten (0)
 #   - fromshell: bei Start vond er Shell sollte dieser Paraneter auf (1) gesetzt werden
 #
 # Die Suche funktioniert folgendermaßen:
@@ -66,28 +66,28 @@ my $vl             = 1;       # Print messages at verboselevel @ AsteriskCLI
 
 # Einstellungen zur Nummernnormalisierung (in CacheDB)
 # im Cache werden die Keys in der einheitlichen Form $Interprefix1.$Landesvorwahl.Ortsvorwahl(ohne $localprefix).$Rufnummer gespeichert
-my $interprefix1  = "+";    # Zeichen, die internat. Nummern vorangestellt sind (z.B. bei Nummern die vom Trunk kommen) -  Üblich: "00" or "+" 
-my $interprefix2  = "00";   # alternat. Zeichen, die internat. Nummern vorangestellt sind (z.B. bei manueller Wahl am Telefon)? Üblich: "00" or "+" 
+my $interprefix1  = "+";    # Zeichen, die internat. Nummern vorangestellt sind (z.B. bei Nummern die vom Trunk kommen) -  Üblich: "00" or "+"
+my $interprefix2  = "00";   # alternat. Zeichen, die internat. Nummern vorangestellt sind (z.B. bei manueller Wahl am Telefon)? Üblich: "00" or "+"
                             # kann auch leer sein
 
-my $localprefix   = "0";    # welche Zeichen sind Ortsvorwahlnummern vorangestellt? Üblich: "0" 
+my $localprefix   = "0";    # welche Zeichen sind Ortsvorwahlnummern vorangestellt? Üblich: "0"
 my $landesvorwahl = "49";   # eigener internationaler Landesvorwahlcode (OHNE $interprefix) - für DE "49", AT "43", CH "41"
 my $ortsvorwahl   = "030";  # eigene (nationale)Ortsvorwahl (muss MIT localprefix beginnen!), z.B. "030" für Berlin
 
 # Einstellunge Suche/Cache/Datenbank
 my $luonline      = 1;      # Nummer Online suchen, kann auch über Startparameter gesetzt werden
 my $usecache      = 1;      # Cache für Onlinesuchen nutzen, kann auch über Startparameter gesetzt werden
-my $use_klicktel  = 0;      # Klicktel-Onlinesuche nutzen (hat unscharfe Suche und liefert daher oft auch falsche Namen)
+my $use_klicktel  = 1;      # Klicktel-Onlinesuche nutzen (hat unscharfe Suche und liefert daher oft auch falsche Namen)
 
 my $staticfamilies= "";     # AstDB-families (kommasepariert) von fix gespeicherten Nummern-Namen (z.B. aus  Kundendatenbank) - (leer = aus)
-my $cachefamily   = "cidcache";# AstDB family der gespeicherten reverse lookups 
-my $cachetsfamily = "cidcachets"; #AstDB family der timestamps zu  den eintraegen in cachefamily 
+my $cachefamily   = "cidcache";# AstDB family der gespeicherten reverse lookups
+my $cachetsfamily = "cidcachets"; #AstDB family der timestamps zu  den eintraegen in cachefamily
 my $statsfamily   = "cidstats";# AstDB family der Statisticdatentabelle - (leer = Statistiken ausgeschaltet)
 my $f_expire      = 365;    # Tage, nach denen existierender Cache-Eintrag online neu gesucht wird - (0 = nie)
 my $nf_expire     = 30;     # Tage, nach denen eine nicht-gefundene Nummer nochmals online gesucht wird - (0 = jedesmal)
                             # wenn beide expire-Zeiten 0 sind, dann werden keine Zeitstempel gespeichert!
-                               
-my $dont_delete_existing = 1;  # wenn gesetzt, werden keine Expired-Cachenames mit Leernamen (=in Datenbank, aber nicht mehr online zu finden) ersetzt 
+
+my $dont_delete_existing = 1;  # wenn gesetzt, werden keine Expired-Cachenames mit Leernamen (=in Datenbank, aber nicht mehr online zu finden) ersetzt
 my $refresh_names_without_ts = 1; # Einträge ohne Zeitstempel via online aktualisieren? (nein = Zeitstempel wird auf aktuelle Zeit gesetzt) (Abwärtskompatibilität)
 
 # Einstellung Sitescraper
@@ -145,7 +145,7 @@ if (defined $ARGV[3]) { #lookup online
 }
 
 if (!defined $ARGV[4]) { #Aufruf von der Shell
-    $AGI->verbose("RS: ARGV Start from Shell: OFF - for Shell-starting use commanline parameter!", $vl); 
+    $AGI->verbose("RS: ARGV Start from Shell: OFF - for Shell-starting use commanline parameter!", $vl);
     # nur wenn kein 5. Parameter angegeben ist, dann inputpasrsing (an der Shell funktioniert das nicht)
     my %input = $AGI->ReadParse(); # AGI Eingabeverarbeitung
 }else{
@@ -159,12 +159,12 @@ $nf_expire = $nf_expire * 86400; # umrechnen in Sekunden
 
 # wenn Nummer mit interprefix2 beginnt, dieses durch interprefix1 ersetzen
 if($interprefix2 && (substr($number,0,length($interprefix2)) eq $interprefix2)){
-   	$number = $interprefix1.substr($number,length($interprefix2));
+       $number = $interprefix1.substr($number,length($interprefix2));
 }
 
 if(!($interprefix1 && (substr($number,0,length($interprefix1)) eq $interprefix1))){ # Nummer ohne interpref(z.B. 030123456)
     if(substr($number,0,length($localprefix)) eq $localprefix){ # Nummer mit Ortsvorwahl (z.B. 0301234567)
-	   	$number = $interprefix1.$landesvorwahl.substr($number,length($localprefix));
+           $number = $interprefix1.$landesvorwahl.substr($number,length($localprefix));
     } else { # Nummern ohne Ortsvorwahl (z.B. 1234567)
         $number = $interprefix1.$landesvorwahl.substr($ortsvorwahl,length($localprefix)).$number;
     }
@@ -186,11 +186,11 @@ my $i = 0;
 
     # in den fixen Datenbanken suchen
     if ($staticfamilies){ # wenn Benutzer-Datenbanken konfiguriert sind
-    
+
         # my @dbs = split(',', $staticfamilies);
         my $dbi = 1; #Zähler
         foreach my $db (split(',', $staticfamilies)) {
-            
+
             my $astdbstaticget = $AGI->database_get($db,"\"${number}\"");
             if($astdbstaticget) {
                 $AGI->verbose("RS: Staticsearch(0-[${dbi}]): Name found in [${db}] - (${astdbstaticget})", $vl);
@@ -209,16 +209,16 @@ my $i = 0;
 
     # im Cache suchen - im wesentlichen expireverwaltung
     if ($usecache == 1) {
-        if(!$cachefamily){ $AGI->verbose("RS: FATAL Cachesearch(!): Cache DB for names not configured! Exit ..", $vl); exit;} 
-        if(!$cachetsfamily){ $AGI->verbose("RS: FATAL Cachesearch(!): Cache DB for timestamps not configured! Exit ..", $vl); exit;} 
-   
+        if(!$cachefamily){ $AGI->verbose("RS: FATAL Cachesearch(!): Cache DB for names not configured! Exit ..", $vl); exit;}
+        if(!$cachetsfamily){ $AGI->verbose("RS: FATAL Cachesearch(!): Cache DB for timestamps not configured! Exit ..", $vl); exit;}
+
         my $c_name   = $AGI->database_get($cachefamily,"\"${number}\"");  # Eintrag in der Namen-Tabelle suchen
         my $c_namets = $AGI->database_get($cachetsfamily,"\"${number}\"");# Eintrag in der Timestamp-Tabelle suchen
-        
+
         # Eintrag gefunden - noch gültig?
         if ( $c_name){
              $AGI->verbose("RS: Cachesearch(-): Name found (${c_name})", $vl);
-            
+
             # falls kein zugeh. Zeitstempel existiert aber Verfallsdatum benötigt wird
             if (! defined $c_namets && $f_expire){
                 $AGI->verbose("RS: Cachesearch(0): Name found without TS. ".($refresh_names_without_ts ? "SET EXPIRED" : "Set TS to NOW.")." (refresh_names_without_ts)", $vl);
@@ -254,7 +254,7 @@ my $i = 0;
                 reverselookup();
             }
         }
-        
+
         # Ergebnisse des Reverse-Lookups verarbeiten
         if($luonline){    # Onlinesuche aktiviert
             # gefundene Nummer (auch leer) im Cache speichern
@@ -292,7 +292,7 @@ my $i = 0;
             $AGI->set_variable("RESULTREV", "");
             exit;
         }
-                                                                
+
 
     } else { # no caching
         $AGI->verbose("RS: Cache not enabled - Do uncached reverse lookup (online)", $vl);
@@ -334,11 +334,11 @@ sub reverselookup {
             pagesblanches( $number );
         } elsif ($country eq "DE") {
             oert($number);
-        	if(! $reverseresult && $use_klicktel){
+            if(! $reverseresult && $use_klicktel){
                 klick($number);
             }
         } else {
-	        $AGI->verbose("RS: Number from unhandled country: ".$country, $vl);
+            $AGI->verbose("RS: Number from unhandled country: ".$country, $vl);
         }
     }
 }
@@ -349,7 +349,7 @@ my $response = undef;
 # muss im Erfolgsfall (auch wenn die Nummer nicht gefunden wurde!) $reversesearch setzen
 # im Fehlerfall wird $reversesearch undefiniert gesetzt
 sub oert {
-    $AGI->verbose("RS: Onlinesearch (oert):".$number, $vl); 
+    $AGI->verbose("RS: Onlinesearch (oert):".$number, $vl);
     $reverseresult = undef;
     $url = "http://www.dasoertliche.de/?form_name=search_inv&ph=".uri_escape($number);
     $response = $ua->get($url);
@@ -384,10 +384,10 @@ sub oert {
 # muss im Erfolgsfall (auch wenn die Nummer nicht gefunden wurde!) $reversesearch setzen
 # im Fehlerfall wird $reversesearch undefiniert gesetzt
 sub klick {
-    $AGI->verbose("RS: Onlinesearch (klick):".$number, $vl); 
+    $AGI->verbose("RS: Onlinesearch (klick):".$number, $vl);
     $reverseresult  = undef;
     $url = "https://www.klicktel.de/suche/".uri_escape($number);
-	$ua->ssl_opts( verify_hostnames => 0 ,SSL_verify_mode => 0x00);
+    $ua->ssl_opts( verify_hostnames => 0 ,SSL_verify_mode => 0x00);
     $response = $ua->get($url);
     if($response->is_success && length($response->content) > 5000){ # Laenge wegen T-Online "Navigationshilfe" o.ä.){
         my $tree = HTML::TreeBuilder->new_from_content( $response->content );
@@ -395,15 +395,15 @@ sub klick {
         if (defined $tree ) {
             my $e = $tree->look_down(_tag => 'div', class => 'entry-item');
             if(defined $e){
-			
+
                 $reverseresult = $e->look_down(
-				_tag => 'h1',
-				class => 'title',
-				'itemprop' => 'name'
-				);
+                _tag => 'h1',
+                class => 'title',
+                'itemprop' => 'name'
+                );
 
                 if ( $reverseresult ) {
-				    $reverseresult = $reverseresult->as_trimmed_text(extra_chars => '\xA0');
+                    $reverseresult = $reverseresult->as_trimmed_text(extra_chars => '\xA0');
                     #$reverseresult = substr($reverseresult->as_trimmed_text(extra_chars => '\xA0'),3);
                     $AGI->verbose("RS: klick(online) Gefunden: [".$reverseresult."]", $vl);
                     addstats("DE-klick",1,0,0,0,0); # hit
@@ -431,7 +431,7 @@ sub klick {
 # muss im Erfolgsfall (auch wenn die Nummer nicht gefunden wurde!) $reversesearch setzen
 # im Fehlerfall wird $reversesearch undefiniert gesetzt
 sub telefonabc {
-	$AGI->verbose("RS: Onlinesearch (telefonabc):".$number, $vl); 
+    $AGI->verbose("RS: Onlinesearch (telefonabc):".$number, $vl);
     $reverseresult = undef;
     $url = "http://www.telefonabc.at/result.aspx?what=".uri_escape($number);
     $response = $ua->get($url);
@@ -441,11 +441,11 @@ sub telefonabc {
             $reverseresult = $html->look_down(
             _tag => 'a',
             class => 'h_green');
-			$reverseresult = $html->look_down(
+            $reverseresult = $html->look_down(
             #_tag => 'h3',
             #class => 'card-heading pull-left',
-			'itemprop'=>'name');
-			
+            'itemprop'=>'name');
+
             if (defined $reverseresult ) {
                 $reverseresult = $reverseresult->as_trimmed_text;
                 addstats("AT-tabc",1,0,0,0,0); # hit
@@ -474,18 +474,18 @@ sub telefonabc {
 # muss im Erfolgsfall (auch wenn die Nummer nicht gefunden wurde!) $reversesearch setzen
 # im Fehlerfall wird $reversesearch undefiniert gesetzt
 sub telsearch {
-    $AGI->verbose("RS: Onlinesearch (telsearch):".$number, $vl); 
+    $AGI->verbose("RS: Onlinesearch (telsearch):".$number, $vl);
     $reverseresult = undef;
     $url = "http://tel.search.ch/?was=".uri_escape($number);
     $response = $ua->get($url);
     if($response->is_success && length($response->content) > 5000){
-		my $html = HTML::TreeBuilder->new_from_content ( $response->content );
+        my $html = HTML::TreeBuilder->new_from_content ( $response->content );
         if ( defined $html ) {
             $reverseresult = $html->look_down(
-	
+
             _tag => 'a',
             "data-stats" => qr/.+/);  # regulärer Ausdruck für "so ziemlich Alles"
-			
+
             if (defined $reverseresult ) {
                 $reverseresult = $reverseresult->as_trimmed_text;
                 addstats("CH-tels",1,0,0,0,0); # hit
@@ -509,21 +509,21 @@ sub telsearch {
 # im Fehlerfall wird $reversesearch undefiniert gesetzt
 # e.g. www.paginebianche.it/eng/ricerca-da-numero?qs=038229693
 sub paginebianche {
-    $AGI->verbose("RS: Onlinesearch (paginebianche):".$number, $vl); 
+    $AGI->verbose("RS: Onlinesearch (paginebianche):".$number, $vl);
     $reverseresult = undef;
-	$number =  "0".(substr $number, 3);
+    $number =  "0".(substr $number, 3);
     $url = "http://www.paginebianche.it/eng/ricerca-da-numero?qs=".uri_escape($number);
     $response = $ua->get($url);
     if($response->is_success && length($response->content) > 5000){
         my $html = HTML::TreeBuilder->new_from_content ( $response->content );
         if ( defined $html ) {
-			
-			$reverseresult = $html->look_down(
-				_tag => 'h2',
-				class => 'rgs'
-			);
-			
-			if (defined $reverseresult ) {
+
+            $reverseresult = $html->look_down(
+                _tag => 'h2',
+                class => 'rgs'
+            );
+
+            if (defined $reverseresult ) {
                 $reverseresult = $reverseresult->as_trimmed_text;
                 addstats("IT-pag",1,0,0,0,0); # hit
             } else {

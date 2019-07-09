@@ -41,6 +41,8 @@ Treiber installieren und  registrieren
 
 apt install unixodbc unixodbc-dev odbc-postgresql
 
+cpan Mozilla::CA
+
 odbcinst -i -d -f /usr/share/psqlodbc/odbcinst.ini.template
 less /etc/odbcinst.ini sollte nun gefüllt sein
 Muß idR nicht modifiziert werden

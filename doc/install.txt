@@ -47,6 +47,8 @@ Die restlichen Pearpaket installieren:
 Installierte Pearpakete anzeigen:
     pear list
 
+Telefonintegration siehe crmti/
+
 Crm in die ERP verlinken
     cd /var/www/kivitendo-erp && ln -s ../kivitendo-crm crm
 
@@ -62,7 +64,7 @@ Rechte für CRM ermöglichen:
 cd kivitendo-erp/sql/Pg-upgrade2-auth
 ln -s  ../../../kivitendo-crm/update/add_crm_master_rights.sql add_crm_master_rights.sql
 
-Übersetzungen anlegen:/lo				      
+Übersetzungen anlegen:/lo
 cd kivitendo-erp/locale/de
 mkdir more
 cd kivitendo-erp/locale/de/more

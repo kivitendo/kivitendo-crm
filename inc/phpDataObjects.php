@@ -2,7 +2,7 @@
 
 class myPDO extends PDO{
     private $showErr = TRUE;  //show errors in browser
-    private $logAll  = TRUE;  //log all sql queries
+    private $logAll  = FALSE; //log all sql queries (only for debug)
     private $beginExecTime = 0;
     private $roundExecTime = 6;
 
@@ -33,7 +33,7 @@ class myPDO extends PDO{
         if( $this->logAll ) $this->beginExecTime = microtime( TRUE );
         $stmt = parent::prepare( $sql );
         if( !$result = $stmt->execute() ) $this->error( $stmt->errorInfo() );
-        if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) );
+        if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) .' sec');
         return $result;
     }
 
@@ -44,7 +44,7 @@ class myPDO extends PDO{
 
         if( !$result = $stmt->execute() ) $this->error( $stmt->errorInfo() );
         $result =  $json ? $stmt->fetch( PDO::FETCH_ASSOC )['row_to_json'] : $stmt->fetch( PDO::FETCH_ASSOC );
-        if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) );
+        if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) .' sec');
         return $result;
     }
 
@@ -55,7 +55,7 @@ class myPDO extends PDO{
 
         if( !$result = $stmt->execute() ) $this->error( $stmt->errorInfo() );
         $result = $json ? $stmt->fetchAll( PDO::FETCH_ASSOC )['0']['json_agg'] : $stmt->fetchAll( PDO::FETCH_ASSOC );
-        if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) );
+        if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) .' sec');
         return $result;
     }
 
@@ -74,7 +74,7 @@ class myPDO extends PDO{
 
         if( !$result = $stmt->execute( $values ) ){
             $this->error( $stmt->errorInfo() );
-            if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) );
+            if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) .' sec');
             return FALSE;
         }
 
@@ -82,7 +82,7 @@ class myPDO extends PDO{
             $stmt = parent::prepare( "select * from currval('".( ( $sequence_name ) ? $sequence_name : ( $table."_".$lastInsertId."_seq" ) )."')" );  //.$table."_".$lastInsertId."_seq"
             if( !$result = $stmt->execute() ) $this->error( $stmt->errorInfo() );
             $lastId = $stmt->fetch(PDO::FETCH_NUM);
-            if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) );
+            if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) .' sec');
             return $lastId['0'];// $lastInsertId ? $stmt->fetch(PDO::FETCH_ASSOC)[$lastInsertId] : $result; //parent::lastInsertId('id'); doesn't work
         }
 
@@ -101,7 +101,7 @@ class myPDO extends PDO{
         if( $this->logAll ) $this->beginExecTime = microtime( TRUE );
         $stmt = parent::prepare( "UPDATE $table set ".implode( '= ?, ',$fields )." = ? WHERE ".$where );
         if( !$result = $stmt->execute( $values ) ) $this->error( $stmt->errorInfo() );
-        if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) );
+        if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) .' sec');
         return $result;
     }
 
@@ -141,6 +141,40 @@ class myPDO extends PDO{
         return parent::commit();
     }
 
+    /**********************************************************
+     * IN:  $table  - string name of table
+     * IN:  $data   - array of associative arrays
+     * OUT: $result - boolean with result
+     * *******************************************************/
+    public function insertMultiple( $tableName, $data ){
+        if( $this->logAll ) $this->beginExecTime = microtime( TRUE );
+        $rowsSQL = array(); //Will contain SQL snippets.
+        $toBind  = array(); //Will contain the values that we need to bind.
+        $columnNames = array_keys( $data[0] ); //Get a list of column names to use in the SQL statement.
+        //Loop through our $data array.
+        foreach( $data as $arrayIndex => $row ){
+            $params = array();
+            foreach($row as $columnName => $columnValue){
+                $param = ":" . $columnName . $arrayIndex;
+                $params[] = $param;
+                $toBind[$param] = $columnValue;
+            }
+            $rowsSQL[] = "(" . implode(", ", $params) . ")";
+        }
+        //Construct our SQL statement
+        $sql = "INSERT INTO $tableName (".implode( ", ", $columnNames ).") VALUES ".implode( ", ", $rowsSQL );
+        //Prepare our PDO statement.
+        $stmt = parent::prepare( $sql );
+        //Bind our values.
+        foreach($toBind as $param => $val){
+            $stmt->bindValue( $param, $val );
+        }
+        //Execute our statement (i.e. insert the data).
+        $result = $stmt->execute();
+        if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) .' sec');
+        return $result;
+    }
+
     public function begin(){
         if( $this->logAll ) $this->beginExecTime = microtime( TRUE );
         $result = parent::beginTransaction();
@@ -155,7 +189,7 @@ class myPDO extends PDO{
     }
     public function commit(){
         $result = parent::commit();
-        if( $this->logAll ) $this->writeLog( "PDO::commit() returns: ".$result.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) );
+        if( $this->logAll ) $this->writeLog( "PDO::commit() returns: ".$result.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) .' sec');
         return $result;
     }
 

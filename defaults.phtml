@@ -22,27 +22,85 @@
 <script>
   $( document ).ready( function(){
     var data = [
-      { "name": "extern Database","label": "extern Database", "type": "headline" },
-      { "name": "GEODB", "label": "Geo Database", "type": "checkbox" },
-      { "name": "BLZDB", "label": "BLZ Database", "type": "checkbox" },
+      { "name": "externDatabase","label": "Extern Database", "type": "headline" },
+      { "name": "GEODB", "label": "Geo Database:", "type": "checkbox" },
+      { "name": "BLZDB", "label": "BLZ Database:", "type": "checkbox" },
       { "name": "contacthred", "label": "Contac thred", "type": "headline" },
-      { "name": "CallEdit", "label": "Call edit", "type": "checkbox" },
+      { "name": "CallEdit", "label": "Call edit:", "type": "checkbox" },
       { "name": "email", "label": "Email", "type": "headline" },
-      { "name": "MailFlag", "label": "Mail Flag", "type": "select", "data":["flagged", "Answered", "Seen", "Deleted", "Draft"]},
-      { "name": "Expunge", "label": "Expunge", "type": "checkbox" },
-      { "name": "logmail", "label": "Log mail", "type": "checkbox" },
-      { "name": "Maps", "label": "Maps", "type": "headline" },
-      { "name": "streetview_man", "label": "Streetview", "type": "input" },
-      { "name": "planspace_man", "label": "Planspace", "type": "input" },
-      { "name": "user-friendly links", "label": "user-friendly links", "type": "headline" },
-      { "name": "dir_group", "label": "Group", "type": "input" },
-      { "name": "dir_mode", "label": "Mode", "type": "input" }
+      { "name": "MailFlag", "label": "Mail Flag:", "type": "select", "data":["flagged", "Answered", "Seen", "Deleted", "Draft"]},
+      { "name": "Expunge", "label": "Expunge:", "type": "checkbox" },
+      { "name": "logmail", "label": "Log mail:", "type": "checkbox" },
+      { "name": "Maps", "label": "Maps:", "type": "headline" },
+      { "name": "streetview_man", "label": "Streetview:", "type": "input" },
+      { "name": "planspace_man", "label": "Planspace:", "type": "input" },
+      { "name": "user-friendly links", "label": "User-friendly links:", "type": "headline" },
+      { "name": "dir_group", "label": "Group:", "type": "input" },
+      { "name": "dir_mode", "label": "Mode:", "type": "input" },
+      { "name": "misc", "label": "Misc:", "type": "headline" },
+      { "name": "listLimit", "label": "Listlimit:", "type": "input" },
+      { "name": "contex for telefonintegration", "label": "Contex for telefonintegration:", "type": "headline" },
+      { "name": "external_contex", "label": "External Contex:", "type": "input" },
+      { "name": "internal_fon", "label": "Internal Fon:", "type": "input" }
     ];
+
+    var tabledata = '';
     $.each( data, function( i, item ){
-      //alert( item.name );
+      if( item.type == 'headline' ) tabledata += '<tr><td colspan="2"><b>' + item.label + '</b></td></tr>';
+      if( item.type == 'checkbox' ) tabledata += '<tr><td>' + item.label + '</td><td><input type="checkbox" id="' + item.name + '" name="'+ item.name + '" class="myCheckbox" value="true"></input></td></tr>';
+      if( item.type == 'input' )    tabledata += '<tr><td>' + item.label + '</td><td><input type="text" id="' + item.name + '" name="'+ item.name + '"></input></td></tr>';
+      if( item.type == 'select' ){
+        tabledata += '<tr><td>' + item.label + '</td><td><select type="select" id="' + item.name + '" name="'+ item.name + '">';
+        $.each( item.data, function( i, item ){ tabledata += '<option value="' + item + '">' + item + '</option>'; });
+        tabledata += '</select></input></td></tr>';
+      }
     })
 
+    $( "#sitetable > tbody" ).append( tabledata );
+
+    $.ajax({
+      url: 'ajax/defaults.php',
+      type: 'POST',
+      data: { action: 'getDefaults' },
+      success: function ( data ){
+        $.each( data, function( i, item ){
+          if( $( '#' + item.key ).attr('type') == 'checkbox' ) $( '#' + item.key ).prop('checked', item.val == 'true' ? true : false  );
+          if( $( '#' + item.key ).attr('type') == 'text' )   $( '#' + item.key ).val( item.val );
+          if( $( '#' + item.key ).attr('type') == 'select' ) $( '#' + item.key + ' option[value=' + item.val + ']').attr( 'selected', true );
+        })
+      },
+      error: function () {
+        alert( 'Error: getDefaults()!' )
+      }
   });
+
+  $( "#save" ).button({
+      label: 'save'
+    }).css({
+      'margin':'5px'
+    }).click( function(){
+      var formdata = $( "#sitetable input,select" ).serializeArray();
+      $( '#sitetable input[type="checkbox"]:not(:checked)' ).each( function( i, e ){
+        formdata.push( { name: e.getAttribute( "name" ), value: false } ); //put unchecked boxes in array
+      });
+      const newArrayFormdata = formdata.map( ( { name: key, value: val, ...rest } ) => ( { key, val, ...rest } ) ); //name -> key, value -> val (colunmname in database)
+      $.ajax({
+        url: 'ajax/defaults.php',
+        type: 'POST',
+        data: { action: 'saveDefaults', data: newArrayFormdata },
+        success: function ( data ) {
+            if( data ) alert( )
+        },
+        error: function () {
+            alert( 'Error: saveDefaults()!' )
+        }
+    });
+
+  })
+
+
+
+});
 
 </script>
 <style>
@@ -60,8 +118,12 @@
 
   <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Testfile </p>
   <table id="sitetable">
-  <tr><td>tetststts</td><td><input type="checkbox" id="tets"></input></td></tr>
+    <thead></thead>
+    <tbody></tbody>
+
   </table>
+
+  <button id="save"></button>
 
 
 <?php echo $menu['end_content']; ?>

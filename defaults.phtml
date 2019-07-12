@@ -8,49 +8,42 @@
     $menu = $_SESSION['menu'];
     echo $menu['stylesheets'];
     echo $menu['javascripts'];
-    echo $head['JQUERY'];
-    echo $head['JQUERYUI'];
-
     echo $head['THEME'];
-
-
-
-
+    echo $head['T8'];
 ?>
-
 
 <script>
   $( document ).ready( function(){
-    var data = [
+    const data = [
       { "name": "externDatabase","label": "Extern Database", "type": "headline" },
-      { "name": "GEODB", "label": "Geo Database:", "type": "checkbox" },
-      { "name": "BLZDB", "label": "BLZ Database:", "type": "checkbox" },
+      { "name": "GEODB", "label": "Geo Database:", "type": "checkbox", "tooltip":"depracted" },
+      { "name": "BLZDB", "label": "BLZ Database:", "type": "checkbox", "tooltip":"depracted"},
       { "name": "contacthred", "label": "Contac thred", "type": "headline" },
-      { "name": "CallEdit", "label": "Call edit:", "type": "checkbox" },
+      { "name": "CallEdit", "label": "Call edit:", "type": "checkbox", "tooltip":"Tooltip" },
       { "name": "email", "label": "Email", "type": "headline" },
-      { "name": "MailFlag", "label": "Mail Flag:", "type": "select", "data":["flagged", "Answered", "Seen", "Deleted", "Draft"]},
-      { "name": "Expunge", "label": "Expunge:", "type": "checkbox" },
-      { "name": "logmail", "label": "Log mail:", "type": "checkbox" },
+      { "name": "MailFlag", "label": "Mail Flag:", "type": "select", "data":["flagged", "Answered", "Seen", "Deleted", "Draft"], "tooltip":"depracted"},
+      { "name": "Expunge", "label": "Expunge:", "type": "checkbox", "tooltip":"Tooltip" },
+      { "name": "logmail", "label": "Log mail:", "type": "checkbox", "tooltip":"Tooltip" },
       { "name": "Maps", "label": "Maps:", "type": "headline" },
-      { "name": "streetview_man", "label": "Streetview:", "type": "input", "size": "100" },
-      { "name": "planspace_man", "label": "Planspace:", "type": "input", "size": "1" },
+      { "name": "streetview_man", "label": "Streetview:", "type": "input", "size": "100", "tooltip":"Tooltip" },
+      { "name": "planspace_man", "label": "Planspace:", "type": "input", "size": "1", "tooltip":"Tooltip" },
       { "name": "user-friendly links", "label": "User-friendly links:", "type": "headline" },
-      { "name": "dir_group", "label": "Group:", "type": "input", "size": "1" },
-      { "name": "dir_mode", "label": "Mode:", "type": "input", "size": "1" },
+      { "name": "dir_group", "label": "Group:", "type": "input", "size": "1", "tooltip":"Tooltip" },
+      { "name": "dir_mode", "label": "Mode:", "type": "input", "size": "1", "tooltip":"Tooltip" },
       { "name": "misc", "label": "Misc:", "type": "headline" },
-      { "name": "listLimit", "label": "Listlimit:", "type": "input", "size": "1" },
+      { "name": "listLimit", "label": "Listlimit:", "type": "input", "size": "1", "tooltip":"Maximum number of displayed items in a list" },
       { "name": "contex for telefonintegration", "label": "Contex for telefonintegration:", "type": "headline" },
-      { "name": "external_contex", "label": "External Contex:", "type": "input", "size": "60" },
-      { "name": "internal_fon", "label": "Internal Fon:", "type": "input", "size": "60" }
+      { "name": "external_contex", "label": "External Contex:", "type": "input", "size": "60", "tooltip":"External Contex" },
+      { "name": "internal_fon", "label": "Internal Fon:", "type": "input", "size": "60", "tooltip":"Internal Phones"   }
     ];
 
     var tabledata = '';
     $.each( data, function( i, item ){
       if( item.type == 'headline' ) tabledata += '<tr><td colspan="2"><b>' + item.label + '</b></td></tr>';
-      if( item.type == 'checkbox' ) tabledata += '<tr><td>' + item.label + '</td><td><input type="checkbox" id="' + item.name + '" name="'+ item.name + '" class="myCheckbox" value="true"></input></td></tr>';
-      if( item.type == 'input' )    tabledata += '<tr><td>' + item.label + '</td><td><input type="text" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '"></input></td></tr>';
+      if( item.type == 'checkbox' ) tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><input type="checkbox" id="' + item.name + '" name="'+ item.name + '" value="true" title="' + kivi.t8( item.tooltip ) + '"></input></td></tr>';
+      if( item.type == 'input' )    tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><input type="text" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '"></input></td></tr>';
       if( item.type == 'select' ){
-        tabledata += '<tr><td>' + item.label + '</td><td><select type="select" id="' + item.name + '" name="'+ item.name + '">';
+        tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><select type="select" id="' + item.name + '" name="'+ item.name + '" title="' + kivi.t8( item.tooltip ) + '">';
         $.each( item.data, function( i, item ){ tabledata += '<option value="' + item + '">' + item + '</option>'; });
         tabledata += '</select></input></td></tr>';
       }
@@ -72,9 +65,11 @@
       error: function () {
         alert( 'Error: getDefaults()!' )
       }
-  });
+    });//ajax
 
-  $( "#save" ).button({
+    $( '#head' ).text( kivi.t8( 'Default Configuration' ) );
+
+    $( "#save" ).button({
       label: 'save'
     }).css({
       'margin':'5px'
@@ -89,25 +84,18 @@
         type: 'POST',
         data: { action: 'saveDefaults', data: newArrayFormdata },
         success: function ( data ) {
-            if( data ) alert( )
+            //if( data ) alert( );
         },
         error: function () {
-            alert( 'Error: saveDefaults()!' )
+            alert( 'Error: saveDefaults()!' );
         }
     });
+  });//save button
 
-  })
-
-
-
+  $( document ).tooltip();
 });
 
 </script>
-<style>
-
-
-
-</style>
 </head>
 
 <body>
@@ -116,7 +104,7 @@
     echo $menu['start_content'];
 ?>
 
-  <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Testfile </p>
+  <p id="head" class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;"></p>
   <table id="sitetable">
     <thead></thead>
     <tbody></tbody>

@@ -217,7 +217,7 @@
     function getSingleRow(id) {
         $.ajax({
             dataType: 'json',
-            url: 'ajax/contact.php?action=getData',
+            url: 'ajax/contact.php?action=getData?id='+id,
             method: "GET",
             success: function( json ) {
                 for (var i = 0; i < json.length; i++) {

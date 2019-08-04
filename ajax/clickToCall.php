@@ -27,16 +27,19 @@
         }
          /* END Provisorium!!!!!!*/
 
-        $debug = FALSE;
-        if( $debug ) writeLog( $data );
+        //$debug = FALSE;
+        define( "DEBUG", FALSE );
+        if( DEBUG ) writeLog( $data );
         $port = 5038;
+        // less /etc/asterisk/manager.conf
         $username = 'clickToCall';
-        $password = 'mypasswd';
+        $sql = "SELECT val FROM crmdefaults WHERE employee = -1 AND key = 'asterisk_passwd'";
+        $password = $GLOBALS['dbh']->getOne( $sql )['val'];
         // Context for outbound calls. See /etc/asterisk/extensions.ael if unsure.
         $context = $data['external_contex'];
         $socket = stream_socket_client( "tcp://127.0.0.1:$port" );
         if( $socket ){
-            if( $debug ) writeLog( "Connected to socket, sending authentication request." );
+            if( DEBUG ) writeLog( "Connected to socket, sending authentication request." );
             // Prepare authentication request
             $authenticationRequest  = "Action: Login\r\n";
             $authenticationRequest .= "Username: $username\r\n";
@@ -45,15 +48,15 @@
             // Send authentication request
             $authenticate = stream_socket_sendto( $socket, $authenticationRequest );
             if( $authenticate > 0 ){
-                if( $debug ) writeLog( "Authenticate: ".$authenticate );
+                if( DEBUG ) writeLog( "Authenticate: ".$authenticate );
                 // Wait for server response
                 usleep(200000);
                 // Read server response
                 $authenticateResponse = fread( $socket, 4096 );
-                writeLog( "authenticateResponse: ".$authenticateResponse );
+                if( DEBUG ) writeLog( "authenticateResponse: ".$authenticateResponse );
                 // Check if authentication was successful
                 if( strpos( $authenticateResponse, 'Success' ) !== false ){
-                    if( $debug ) writeLog( "Authenticated to Asterisk Manager Inteface. Initiating call." );
+                    if( DEBUG ) writeLog( "Authenticated to Asterisk Manager Inteface. Initiating call." );
                     // Prepare originate request
                     $originateRequest  = "Action: Originate\r\n";
                     $originateRequest .= "Channel: SIP/".$data['internal_contex']."@".$data['internal_contex']."\r\n";//ToDo
@@ -62,41 +65,45 @@
                     $originateRequest .= "Context: ".$data['external_contex']."\r\n";
                     $originateRequest .= "Priority: 1\r\n";
                     $originateRequest .= "Async: true\r\n\r\n";
-                    if( $debug ) writeLog( "Originate-Request: \n".$originateRequest );
+                    if( DEBUG ) writeLog( "Originate-Request: \n".$originateRequest );
                     // Send originate request
                     $originate = stream_socket_sendto( $socket, $originateRequest );
-                    if( $debug ) writeLog( "Return stream_socket_sendto: ".$originate );
+                    if( DEBUG ) writeLog( "Return stream_socket_sendto: ".$originate );
                     if( $originate > 0 ){
                         // Wait for server response
                         usleep(200000);
                         // Read server response
                         $originateResponse = fread( $socket, 4096 );
-                        if( $debug ) writeLog( "Answer originateResponse: ".$originateResponse );
+                        if( DEBUG ) writeLog( "Answer originateResponse: ".$originateResponse );
                         // Check if originate was successful
                         if( strpos( $originateResponse, 'Success' ) !== false ){
-                            if( $debug ) writeLog( "Call initiated, dialing." );
+                            if( DEBUG ) writeLog( "Call initiated, dialing." );
                         }
                         else{
-                            if( $debug ) writeLog(  "Could not initiate call." );
+                            if( DEBUG ) writeLog(  "Could not initiate call." );
                         } //$originateResponse
                     }
                     else{
-                        if( $debug ) writeLog( "Could not write call initiation request to socket." );
+                        if( DEBUG ) writeLog( "Could not write call initiation request to socket." );
                     } //$originate
                 }
                 else{
-                    if( $debug ) writeLog( "Could not authenticate to Asterisk Manager Interface." );
+                    if( DEBUG ) writeLog( "Could not authenticate to Asterisk Manager Interface." );
                 } //$authenticateResponse
             }
             else{
-                if( $debug ) writeLog(  "Could not write authentication request to socket." );
+                if( DEBUG ) writeLog(  "Could not write authentication request to socket." );
             } //$authenticate
         }
         else{
-            if( $debug ) writeLog( "Unable to connect to socket." );
+            if( DEBUG ) writeLog( "Unable to connect to socket." );
         } //$socket
 
         echo 0;
+    }
+
+    function getPhones(){
+
     }
 
 ?>

@@ -34,7 +34,8 @@
       { "name": "listLimit", "label": "Listlimit:", "type": "input", "size": "1", "tooltip":"Maximum number of displayed items in a list" },
       { "name": "contex for telefonintegration", "label": "Contex for telefonintegration", "type": "headline" },
       { "name": "external_contex", "label": "External Contex:", "type": "input", "size": "60", "tooltip": "External Contex, seperated by semicolon" },
-      { "name": "internal_fon", "label": "Internal Fon:", "type": "input", "size": "60", "tooltip": "Internal Phones, seperated by semicolon" }
+      { "name": "internal_fon", "label": "Internal Fon:", "type": "input", "size": "60", "tooltip": "Internal Phones, seperated by semicolon" },
+      { "name": "asterisk_passwd", "label": "Asterisk Passwd:", "type": "password", "size": "60", "tooltip": "Passwd for ClicktoCall, read '/etc/asterisk/manager.conf' " }
     ];
 
     var tabledata = '';
@@ -42,6 +43,7 @@
       if( item.type == 'headline' ) tabledata += '<tr><td colspan="2"><b>' + kivi.t8( item.label ) + '</b></td></tr>';
       if( item.type == 'checkbox' ) tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><input type="checkbox" id="' + item.name + '" name="'+ item.name + '" value="true" title="' + kivi.t8( item.tooltip ) + '"></input></td></tr>';
       if( item.type == 'input' )    tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><input type="text" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '"></input></td></tr>';
+      if( item.type == 'password' ) tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><input type="password" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '"></input></td></tr>';
       if( item.type == 'select' ){
         tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><select type="select" id="' + item.name + '" name="'+ item.name + '" title="' + kivi.t8( item.tooltip ) + '">';
         $.each( item.data, function( i, item ){ tabledata += '<option value="' + item + '">' + kivi.t8( item ) + '</option>'; } );
@@ -59,6 +61,7 @@
         $.each( data, function( i, item ){
           if( $( '#' + item.key ).attr('type') == 'checkbox' ) $( '#' + item.key ).prop('checked', item.val == 'true' || item.val == 't' ? true : false  );
           if( $( '#' + item.key ).attr('type') == 'text' )   $( '#' + item.key ).val( item.val );
+          if( $( '#' + item.key ).attr('type') == 'password' )   $( '#' + item.key ).val( item.val );
           if( $( '#' + item.key ).attr('type') == 'select' ) $( '#' + item.key + ' option[value=' + item.val + ']').attr( 'selected', true );
         })
       },

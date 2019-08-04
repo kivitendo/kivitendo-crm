@@ -160,7 +160,7 @@
   name: Client
   order: 500
   access: crm_master
-  module: crm/mandant.php
+  module: crm/defaults.phtml
 - parent: crm_admin
   id: crm_user
   name: User

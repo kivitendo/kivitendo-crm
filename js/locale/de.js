@@ -14,7 +14,7 @@ namespace( "kivi" ).setupLocale({
   "Geo Database:": "Geodatenbank:",
   "Group:": "Gruppe",
   "Internal Fon:": "Interne Telefone:",
-  "Internal Phones, seperated by semicolon": "Interne Telefone, durch Semikolon getrennt"
+  "Internal Phones, seperated by semicolon": "Interne Telefone, durch Semikolon getrennt",
   "Listlimit:": "Listenlimit:",
   "Log mail:": "Email protokollieren:",
   "Maps": "Karten",

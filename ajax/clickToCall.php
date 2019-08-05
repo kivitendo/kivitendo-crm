@@ -27,7 +27,6 @@
         }
          /* END Provisorium!!!!!!*/
 
-        //$debug = FALSE;
         define( "DEBUG", FALSE );
         if( DEBUG ) writeLog( $data );
         $port = 5038;

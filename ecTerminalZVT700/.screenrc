@@ -1,0 +1,66 @@
+# ~/.screenrc
+
+deflogin on
+
+# UTF-8 everywhere
+defutf8 on
+
+# disable Ctrl-S/Ctrl-Q "flow control"
+defflow off
+
+# skip intro
+startup_message off
+
+# detach on disconnect
+autodetach on
+
+# use regular audible bell
+vbell on
+vbellwait 1
+
+# use backtick for prefix key instead of Ctrl-A
+#escape ``
+
+# make the shell in every window a login shell
+shell -$SHELL
+
+# connect windows to the display so programs like mplayer can find it when
+# we're inside a screen in a terminal application in a graphical environment
+# setenv DISPLAY ':1'
+
+term xterm-256color
+
+# print wackier status messages
+nethack on
+
+# restore window contents after using (e.g.) vi
+altscreen on
+
+# termcapinfo xterm ti@:te@
+# termcapinfo xterm-color ti@:te@
+hardstatus alwayslastline
+hardstatus string '%{gk}[%{G}%H%{g}][%= %{wk}%?%-Lw%?%{=b kR}(%{W}%n*%f %t%?(%u)%?%{=b kR})%{= kw}%?%+Lw%?%?%= %{g}]%{=b C}[%m/%d/%y %c:%s]%{W}'
+logtstamp on
+logtstamp after 1
+
+
+# show MPD info in status bar
+#backtick 1 5 5 /home/mark/bin/nowplaying
+
+# Set the caption on the bottom line:
+# window-list <nowplaying> <mm/dd/yy> <HH:MM>am/pm
+
+# Ticking the seconds is not necessarily a good idea (encryption-wise)
+#hardstatus string "%{= kw}%-w%{= BW}%n %t%{-}%+w %-= %1` %Y-%m-%d %c:%s"
+#hardstatus string "%{= kw}%-w%{= BW}%n %t%{-}%+w %-= %1` %Y-%m-%d %c"
+
+# Disable window resizing on reattach for screen
+# https://superuser.com/a/459421/513889
+termcap xterm-256color 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
+terminfo xterm-256color 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
+
+# default windows
+screen -t ipython fish -li
+stuff "ipython\n"
+screen -t fish fish -li
+stuff "subl\n"

@@ -1,0 +1,10 @@
+language: python
+cache: pip
+python:
+  - '3.6'
+install:
+  - pip install -U pip wheel
+  - pip install -r ecrterm/requirements.txt
+script:
+  - flake8 ecrterm/ || travis_terminate 1
+  - python -m unittest discover -v

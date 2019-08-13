@@ -322,6 +322,7 @@
 
         $( '#tel1, #tel2' ).click( function( data ){
             data.stopImmediatePropagation();
+            //alert( 'click' );
             $.ajax({
                 url: 'ajax/clickToCall.php',
                 type: 'POST',
@@ -335,6 +336,11 @@
             });
             return false;
         }).button().removeClass( "ui-button").css({ width: '170px', 'text-align': 'left'});
+
+        $( '#tel1_dialog, #tel2_dialog' ).click( function( data ){
+            data.stopImmediatePropagation();
+            alert( "ClickToCall Dialog");
+        }).button().removeClass( "ui-button");
 
         function saveData() {
             var obj = {};
@@ -613,10 +619,10 @@
                 <span class="mini"><br />&nbsp;<br /></span>
                 <table>
                   <tr>
-                    <td>.:tel:.:</td><td><button id="tel1">{Telefon}</button></td><td style="display:none">DROPDOWN1_FOR_CLICK_TO_CALL</td>
+                    <td>.:tel:.:</td><td><button id="tel1">{Telefon}</button></td><td><button id="tel1_dialog">T</button></td>
                   </tr>
                   <tr>
-                    <td>.:fax:.:</td><td><button id="tel2">{Fax}</button></td><td style="display:none">DROPDOWN2_FOR_CLICK_TO_CALL</td>
+                    <td>.:fax:.:</td><td><button id="tel2">{Fax}</button></td><td><button id="tel2_dialog">T</button></td>
                   </tr>
                </table>
                 <span class="mini">&nbsp;<br /></span>

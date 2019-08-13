@@ -13,9 +13,13 @@ function newContact( $data ){
     echo 1;
 }
 
-function getData(){
+function getData($data=False){
+    $where = "";
+    if($data && isset($data['id'])) {
+        $where = " WHERE id = ".$data['id'];
+    }
     //alle Datensätze bereitstellen
-    $rs = $GLOBALS[ 'dbh' ]->getAll( 'SELECT * FROM contact_events', true );
+    $rs = $GLOBALS[ 'dbh' ]->getAll( 'SELECT * FROM contact_events'.$where, true );
     echo $rs;
 }
 

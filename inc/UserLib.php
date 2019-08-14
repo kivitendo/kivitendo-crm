@@ -193,7 +193,7 @@ function getUserStamm( $id, $login = false ) {
         $rs2 = $GLOBALS['dbh']->getAll( $sql );
         $daten["gruppen"] = $rs2;
         //Mandanteneinstellungen
-        $sql = "SELECT key,val FROM crmdefaults WHERE grp = 'mandant'";
+        $sql = "SELECT key, val FROM crmdefaults WHERE employee = -1";
         $rs = $GLOBALS['dbh']->getAll( $sql );
         if ( $rs )
             foreach ( $rs as $row ) {

@@ -337,9 +337,38 @@
             return false;
         }).button().removeClass( "ui-button").css({ width: '170px', 'text-align': 'left'});
 
-        $( '#tel1_dialog, #tel2_dialog' ).click( function( data ){
+        $( '#tel1_dialog_button, #tel2_dialog_button' ).click( function( data ){
             data.stopImmediatePropagation();
-            alert( "ClickToCall Dialog");
+            //alert( "ClickToCall Dialog");
+            var dialog_id = this.id.replace( '_button', '' );
+            //console.log( dialog_id );
+            $( '#' + dialog_id ).dialog({
+                modal: true,
+                title: '#' + dialog_id,//kivi.t8( 'Phone Dialog'), //ToDo
+                //width: 'auto',
+                resizable: false,
+                open: function( event, ui ){
+                    $.ajax({
+                        url: 'ajax/clickToCall.php?action=getPhones',
+                        type: 'GET',
+                        success: function ( data ){
+                            //alert( data )
+                            $( '#' + dialog_id ).html(  data[0].val + '< /br>' + data[1].val );
+                            console.log(  data[0].val );
+                            console.log( dialog_id );
+                        },
+                        error: function (){
+                            alert( 'Error: ajax/clickToCall.php?action=getPhones' );
+                        }
+                    })
+                },
+                buttons: [{
+                    text: "Ok",
+                    click: function() {
+                        $( this ).dialog( "close" );
+                    }
+                }],
+            })
         }).button().removeClass( "ui-button");
 
         function saveData() {
@@ -619,10 +648,10 @@
                 <span class="mini"><br />&nbsp;<br /></span>
                 <table>
                   <tr>
-                    <td>.:tel:.:</td><td><button id="tel1">{Telefon}</button></td><td><button id="tel1_dialog">T</button></td>
+                    <td>.:tel:.:</td><td><button id="tel1">{Telefon}</button></td><td><button id="tel1_dialog_button">T</button><div id="tel1_dialog"></div></td>
                   </tr>
                   <tr>
-                    <td>.:fax:.:</td><td><button id="tel2">{Fax}</button></td><td><button id="tel2_dialog">T</button></td>
+                    <td>.:fax:.:</td><td><button id="tel2">{Fax}</button></td><td><button id="tel2_dialog_button">T</button><div id="tel2_dialog"></div></td>
                   </tr>
                </table>
                 <span class="mini">&nbsp;<br /></span>

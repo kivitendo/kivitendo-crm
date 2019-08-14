@@ -102,7 +102,9 @@
     }
 
     function getPhones(){
-
+        $sql = "SELECT val FROM crmdefaults WHERE employee = -1 AND key = 'external_contex' OR key = 'internal_fon'";
+        $result = $GLOBALS['dbh']->getALL( $sql, TRUE );
+        echo $result;
     }
 
 ?>

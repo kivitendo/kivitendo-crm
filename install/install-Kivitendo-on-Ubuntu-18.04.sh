@@ -10,7 +10,9 @@ fi
 ## Memo und Script zur Installation von kivitendo unter Ubuntu 18.04 Bionic (LTS)
 echo "Pakete installieren"
 apt-get update && apt-get upgrade
-apt-get install make gcc apache2 libapache2-mod-fcgid libarchive-zip-perl libclone-perl libconfig-std-perl libdatetime-perl libdbd-pg-perl libdbi-perl libemail-address-perl libemail-mime-perl libfcgi-perl libjson-perl liblist-moreutils-perl libnet-smtp-ssl-perl libnet-sslglue-perl libparams-validate-perl libpdf-api2-perl librose-db-object-perl librose-db-perl librose-object-perl libsort-naturally-perl libstring-shellquote-perl libtemplate-perl libtext-csv-xs-perl libtext-iconv-perl liburi-perl libxml-writer-perl libyaml-perl libfile-copy-recursive-perl libgd-gd2-perl libimage-info-perl libalgorithm-checkdigits-perl postgresql git perl-doc libapache2-mod-php php-gd php-imap php-mail php-mail-mime php-pgsql php-fpdf imagemagick fonts-freefont-ttf php-curl dialog php-enchant aspell-de libcgi-pm-perl libdatetime-set-perl libfile-mimeinfo-perl liblist-utilsby-perl libpbkdf2-tiny-perl libregexp-ipv6-perl libtext-unidecode-perl libdaemon-generic-perl libfile-flock-perl libfile-slurp-perl
+apt-get install make gcc apache2 libapache2-mod-fcgid libarchive-zip-perl libclone-perl libconfig-std-perl libdatetime-perl libdbd-pg-perl libdbi-perl libemail-address-perl libemail-mime-perl libfcgi-perl libjson-perl liblist-moreutils-perl libnet-smtp-ssl-perl libnet-sslglue-perl libparams-validate-perl libpdf-api2-perl librose-db-object-perl librose-db-perl librose-object-perl libsort-naturally-perl libstring-shellquote-perl libtemplate-perl libtext-csv-xs-perl libtext-iconv-perl liburi-perl libxml-writer-perl libyaml-perl libfile-copy-recursive-perl libgd-gd2-perl libimage-info-perl libalgorithm-checkdigits-perl postgresql git perl-doc libapache2-mod-php php-gd php-imap php-mail php-mail-mime php-pgsql php-fpdf imagemagick fonts-freefont-ttf php-curl dialog php-enchant aspell-de libcgi-pm-perl libdatetime-set-perl libfile-mimeinfo-perl liblist-utilsby-perl libpbkdf2-tiny-perl libregexp-ipv6-perl libtext-unidecode-perl libdaemon-generic-perl libfile-flock-perl libfile-slurp-perl libset-crontab-perl python3 python3-serial
+
+a2enmod cgi
 
 cpan HTML::Restrict
 cpan CGI
@@ -60,6 +62,7 @@ Alias       /kivitendo/          $DIR/kivitendo-erp/
 <Directory $DIR/kivitendo-erp>
   AllowOverride All
   Options ExecCGI Includes FollowSymlinks
+  AddHandler cgi-script .py
   DirectoryIndex login.pl
   AddDefaultCharset UTF-8
   Require all granted
@@ -71,8 +74,8 @@ Alias       /kivitendo/          $DIR/kivitendo-erp/
   AddDefaultCharset UTF-8
   Require all denied
 </Directory>
-" >>  /etc/apache2/sites-available/kivitendeo.apache2.conf
-ln -sf /etc/apache2/sites-available/kivitendeo.apache2.conf /etc/apache2/sites-enabled/kivitendeo.apache2.conf
+" >>  /etc/apache2/sites-available/kivitendo.apache2.conf
+ln -sf /etc/apache2/sites-available/kivitendo.apache2.conf /etc/apache2/sites-enabled/kivitendo.apache2.conf
 service apache2 restart
 
 echo "postgres Password ändern"

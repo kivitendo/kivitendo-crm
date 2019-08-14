@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+
+<?php
+    require_once __DIR__.'/../inc/stdLib.php';
+    $menu = $_SESSION['menu'];
+    echo $menu['stylesheets'];
+    echo $menu['javascripts'];
+    echo $head['JQUERY'];
+    echo $head['JQUERYUI'];
+    echo $head['JQTABLE'];
+    echo $head['THEME'];
+    echo $head['T8'];
+
+?>
+
+
+<script>
+  $( document ).ready( function(){
+
+  $( '#clickme' ).click( function(){
+    $.ajax({
+        url: "test.py",
+        type: "post",
+        datatype:"json",
+        data: {'key':'value','key2':'value2'},
+        success: function( response ){
+            alert( response.message );
+            alert( response.keys );
+        }
+    });
+});
+
+
+
+  });
+
+</script>
+
+<style>
+
+
+
+</style>
+</head>
+
+<body>
+<?php
+    echo $menu['pre_content'];
+    echo $menu['start_content'];
+?>
+
+  <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Testfile</p>
+  <button id="clickme">test</button>
+
+
+<?php echo $menu['end_content']; ?>
+
+</html>

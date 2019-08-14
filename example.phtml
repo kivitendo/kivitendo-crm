@@ -4,7 +4,7 @@
 <meta charset='utf-8' />
 
 <?php
-    require_once("inc/stdLib.php");
+    require_once __DIR__.'/inc/stdLib.php';
     $menu = $_SESSION['menu'];
     echo $menu['stylesheets'];
     echo $menu['javascripts'];
@@ -12,7 +12,7 @@
     echo $head['JQUERYUI'];
     echo $head['JQTABLE'];
     echo $head['THEME'];
-    echo $head['TRANSLATION'];
+    echo $head['T8'];// Übersetzung mit kivi.t8
 
     /*****************************************************************************************************************************
     Grundsätze: Content wird via Ajax im Json-Format geholt und an die entsprechenden Container verteilt
@@ -56,6 +56,7 @@
     document.location.hash = JSON.stringify( myUrlParamObj );
 
     alert( 'Drücke F5! ');
+    alert( kivi.t8( 'Contac thread' ) );
 
     $( "#example" ).html( myUrlParamObj.name ).css({
       fontSize: "36px",
@@ -67,6 +68,7 @@
   });
 
 </script>
+
 <style>
 
 

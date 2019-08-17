@@ -8,8 +8,6 @@
     $menu = $_SESSION['menu'];
     echo $menu['stylesheets'];
     echo $menu['javascripts'];
-    echo $head['JQUERY'];
-    echo $head['JQUERYUI'];
     echo $head['JQTABLE'];
     echo $head['THEME'];
     echo $head['T8'];
@@ -19,31 +17,61 @@
 
 <script>
   $( document ).ready( function(){
-
-  $( '#clickme' ).click( function(){
     $.ajax({
-        url: "test.py",
-        type: "post",
-        datatype:"json",
-        data: {'key':'value','key2':'value2'},
-        success: function( response ){
-            alert( response.message );
-            alert( response.keys );
-        }
-    });
+      url: '../ajax/ecTerminalData.php',
+      type: "POST",
+      data: { 'action': 'getTerminalData' },
+      success: function( res ){
+        //alert( res. );
+        console.log( res[0].val );
+        var ip = res[0].val;
+        var port = res[1].val;
+        var passwd = res[2].val;
+        
+        $( '#end_of_day' ).button({
+          label: kivi.t8( 'End of day' )
+        }).css({
+          'margin':'5px'
+        }).click( function(){
+          $.ajax({
+            url: '../ajax/ecTerminal.py',
+            type: "POST",
+            timeout: 100,
+            data: { 'action':'end_of_day', 'ip': ip,'port': port, 'passwd': passwd },
+              //success: function( res ){
+                //alert( res.data );
+              //}
+          });
+        });
+    
+        $( '#payment' ).button({
+          label: kivi.t8( 'Payment' )
+        }).css({
+          'margin':'5px'
+        }).click( function(){
+          $.ajax({
+            url: '../ajax/ecTerminal.py',
+            type: "post",
+            timeout: 100,
+            data: { 'action':'pay', 'ip': ip,'port': port, 'passwd': passwd, 'amount': $( '#amount' ).val(), 'customer':'Herr Ronny Zimmermann' }
+          });
+        });
+    
+      },
+      error: function(xhr, status, error) {
+        var err = eval("(" + xhr.responseText + ")");
+        alert(err.Message);
+      }
+    })
+    //alert( ip );
+
+    
+
+
 });
-
-
-
-  });
 
 </script>
 
-<style>
-
-
-
-</style>
 </head>
 
 <body>
@@ -53,7 +81,12 @@
 ?>
 
   <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Testfile</p>
-  <button id="clickme">test</button>
+  <table>
+    <tr><td><input type="text" id="amount"></input></td><td><button id="payment"></button></td></tr>
+    <tr><td></td><td><button id="end_of_day"></button></td></tr>
+  </table>
+  <p></p>
+  <p></p>
 
 
 <?php echo $menu['end_content']; ?>

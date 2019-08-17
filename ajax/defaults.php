@@ -7,7 +7,7 @@ function saveDefaults( $data ){
 }
 
 function getDefaults(){
-  $sql = "SELECT key, COALESCE( val , '' ) AS val FROM crmdefaults"; //NULL to ''
+  $sql = "SELECT key, COALESCE( val , '' ) AS val FROM crmdefaults WHERE employee = -1"; //NULL to ''
   echo $GLOBALS['dbh']->getALL( $sql, TRUE ); //as json
 }
 ?>

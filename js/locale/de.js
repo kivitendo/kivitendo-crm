@@ -27,4 +27,7 @@ namespace( "kivi" ).setupLocale({
   "User-friendly links":"Benutzerfreundliche Links",
   "depracted": "veraltet",
   "save": "speichern",
+  "Pay": "Bezahlen",
+  "End of day": "Tagesabschluß",
+  "Amount without comma": "Betrag ohne Komma"
 })

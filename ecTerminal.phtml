@@ -4,26 +4,23 @@
 <meta charset='utf-8' />
 
 <?php
-    require_once __DIR__.'/../inc/stdLib.php';
+    require_once __DIR__.'/inc/stdLib.php';
     $menu = $_SESSION['menu'];
     echo $menu['stylesheets'];
     echo $menu['javascripts'];
     echo $head['JQTABLE'];
     echo $head['THEME'];
     echo $head['T8'];
-
 ?>
 
 
 <script>
   $( document ).ready( function(){
     $.ajax({
-      url: '../ajax/ecTerminalData.php',
+      url: 'ajax/ecTerminalData.php',
       type: "POST",
       data: { 'action': 'getTerminalData' },
       success: function( res ){
-        //alert( res. );
-        console.log( res[0].val );
         var ip = res[0].val;
         var port = res[1].val;
         var passwd = res[2].val;
@@ -37,15 +34,12 @@
             url: '../ajax/ecTerminal.py',
             type: "POST",
             timeout: 100,
-            data: { 'action':'end_of_day', 'ip': ip,'port': port, 'passwd': passwd },
-              //success: function( res ){
-                //alert( res.data );
-              //}
+            data: { 'action':'end_of_day', 'ip': ip,'port': port, 'passwd': passwd }
           });
         });
-    
+        
         $( '#payment' ).button({
-          label: kivi.t8( 'Payment' )
+          label: kivi.t8( 'Pay' )
         }).css({
           'margin':'5px'
         }).click( function(){
@@ -58,17 +52,18 @@
         });
     
       },
-      error: function(xhr, status, error) {
-        var err = eval("(" + xhr.responseText + ")");
-        alert(err.Message);
+      error: function(){
+        alert( 'Error: getTerminalData() ');
       }
     })
-    //alert( ip );
 
-    
+    $( '#amount' ).focus().keyup( function(e){
+      if( /\D/g.test( this.value ) ) this.value = this.value.replace( /\D/g, '' ); //digits only
+    });
+    $( '#headline' ).html( 'EC Terminal' ).css( 'font-weight', 'bold' );
+    $( '#amountlable' ).html( kivi.t8( 'Amount without comma') +': ' ).css( 'font-weight', 'bold' );
 
-
-});
+  });
 
 </script>
 
@@ -80,13 +75,11 @@
     echo $menu['start_content'];
 ?>
 
-  <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Testfile</p>
-  <table>
-    <tr><td><input type="text" id="amount"></input></td><td><button id="payment"></button></td></tr>
-    <tr><td></td><td><button id="end_of_day"></button></td></tr>
+  <p id="headline" class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;"></p>
+  <table style="margin-left:10px;">
+    <tr><td id="amountlable"></td></td><td><input type="text" size="7" id="amount"></input></td><td><button id="payment"></button></td></tr>
+    <tr><td><button id="end_of_day"></button></td><td></td><td></td></tr>
   </table>
-  <p></p>
-  <p></p>
 
 
 <?php echo $menu['end_content']; ?>

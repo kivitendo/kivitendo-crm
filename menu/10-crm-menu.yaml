@@ -54,6 +54,13 @@
   access: crm_other
   module: crm/calendar.phtml
 - parent: crm
+  id: crm_ecTerminal
+  name: EC-Terminal
+  icon: ecterminal
+  order: 350
+  access: crm_other
+  module: crm/ecTerminal.phtml
+- parent: crm
   id: crm_knowledge
   name: Knowledge
   icon: knowledge

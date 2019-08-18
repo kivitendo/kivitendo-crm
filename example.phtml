@@ -62,7 +62,7 @@
       color: "blue",
     })
 
-
+    $( '#headline' ).html( kivi.t8( 'Headline' ) );
   });
 
 </script>
@@ -80,7 +80,7 @@
     echo $menu['start_content'];
 ?>
 
-  <p class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;">Testfile </p>
+  <p id="headline" class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;"></p>
   <div id="example" style="position:absolute"></div>
 
 <?php echo $menu['end_content']; ?>

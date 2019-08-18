@@ -71,10 +71,9 @@ cd kivitendo-erp/locale/de/more
 ln -s ../../../../kivitendo-crm/menu/t8e/menu.de crm-menu.de
 ln -s ../../../../kivitendo-crm/menu/t8e/menu-admin.de crm-menu-admin.de
 
-Plugins installieren: ToDo mit sed erledigen
-folgenden String
-document.write("<script type='text/javascript' src='crm/js/ERPplugins.js'></script>");
-an die kivitendo-erp/js/kivi.js anhängen
+Plugins installieren:
+cd /var/www/
+sed -i '$adocument.write("<script type='text/javascript' src='crm/js/ERPplugins.js'></script>")' kivitendo-erp/js/kivi.js
 
 Webserver-User PostgreSQL hinzufügen:
 (bei nicht-debianoide Systemen www-data durch entsprechenden Webserver-Besitzer ersetzen)

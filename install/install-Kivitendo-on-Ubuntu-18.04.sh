@@ -1,4 +1,3 @@
-
 #!/bin/bash
 set +e
 
@@ -48,14 +47,16 @@ cd $DIR
 git clone https://github.com/kivitendo/kivitendo-erp.git
 git clone https://github.com/kivitendo/kivitendo-crm.git
 
+echo "ERP-Plugins installieren"
+sed -i '$adocument.write("<script type='text/javascript' src='crm/js/ERPplugins.js'></script>")' kivitendo-erp/js/kivi.js
 
 
 echo "Virtuellen Host anlegen"
-if [ -f /etc/apache2/sites-available/kivitendeo.apache2.conf ]; then
+if [ -f /etc/apache2/sites-available/kivitendo.apache2.conf ]; then
     echo "Lösche vorherigen Virtuellen Host"
-    rm -f /etc/apache2/sites-available/kivitendeo.apache2.conf
+    rm -f /etc/apache2/sites-available/kivitendo.apache2.conf
 fi
-touch /etc/apache2/sites-available/kivitendeo.apache2.conf
+touch /etc/apache2/sites-available/kivitendo.apache2.conf
 echo "AddHandler fcgid-script .fpl
 AliasMatch ^/kivitendo/[^/]+\.pl $DIR/kivitendo-erp/dispatcher.fcgi
 Alias       /kivitendo/          $DIR/kivitendo-erp/

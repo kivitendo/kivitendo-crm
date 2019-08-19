@@ -1,12 +1,11 @@
 <?php
 // $Id$
     require_once("inc/stdLib.php");
-    include_once("template.inc");
-    include_once("crmLib.php");
-    include_once("UserLib.php");
+    include_once("inc/template.inc");
+    include_once("inc/crmLib.php");
+    include_once("inc/UserLib.php");
     include_once("Mail.php");
     include_once("Mail/mime.php");
-    $USER = getUserEmployee(array('mailsign','mandsig'));
     if ( (isset($_GET['popup']) && $_GET['popup'] == 1) ) {
         $popup = true;
     } else if ( (isset($_POST['popup']) && $_POST['popup'] == 1) ) {
@@ -170,7 +169,7 @@
                         $data["CID"]==$empf["cp_id"];
                         $data["nummer"]=$empf["nummer"];
                     };
-                    // Einträge in den Kontaktverlauf
+                    // EintrÃ¤ge in den Kontaktverlauf
                     if ($_POST["KontaktTO"] && substr($_POST["KontaktTO"],0,1)<>"E"){
                         $data["CID"]=substr($_POST["KontaktTO"],1);
                         insCall($data,$_FILES);
@@ -203,18 +202,18 @@
         $user=getUserStamm($_SESSION["loginCRM"]);
         $BodyText="";// \n".$MailSign;
     }
-    switch ($USER['mandsig']) {
-        case '0' :  $MailSign  = $USER["mailsign"];
+    switch ($_SESSION['mandsig']) {
+        case '0' :  $MailSign  = $_SESSION["mailsign"];
                     break;
-        case '1' :  $MailSign  = $USER["msignature"];
+        case '1' :  $MailSign  = $_SESSION["msignature"];
                     break;
-        case '2' :  $MailSign  = $USER["msignature"];
-                    $MailSign .= "\n".$USER["mailsign"];
+        case '2' :  $MailSign  = $_SESSION["msignature"];
+                    $MailSign .= "\n".$_SESSION["mailsign"];
                     break;
-        case '3' :  $MailSign  = $USER["mailsign"];
-                    $MailSign .= "\n".$USER["msignature"];
+        case '3' :  $MailSign  = $_SESSION["mailsign"];
+                    $MailSign .= "\n".$_SESSION["msignature"];
                     break;
-        default  :  $MailSign  = $USER["mailsign"];
+        default  :  $MailSign  = $_SESSION["mailsign"];
     }
     $MailSign=str_replace("\n","<br>",$MailSign);
     $MailSign=str_replace("\r","",$MailSign);

@@ -101,6 +101,10 @@ if( $newSession ) {
 if( $newSession ) $_SESSION["crmUserData"] = getCrmUserData();//ToDo: deprecated!
 $_SESSION['loginCRM'] =& $_SESSION['crmUserData']['loginCRM'];//ToDO: delete
 
+$charset = ini_get("default_charset");
+if ( $charset == "" ) $charset = 'UTF-8';
+$_SESSION["charset"] = $charset;
+
 //ERP Users in die auth.user_config eintragen als JSON
 // Extra Funktion anlegen ?
 if( $newSession && needUpdate() ) { echo "<script>alert('Database not up to date. Please run the datebase update. CRM->Administration->Status')</script>"; };// header( 'Location:'.$_SESSION['baseurl'].'crm/status.php?action=needUpdate' );

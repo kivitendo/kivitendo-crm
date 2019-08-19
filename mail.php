@@ -253,7 +253,7 @@
         ));
         $t->parse("Block","Betreff",true);
     }
-    $tmpdata = getUserEmployee(array('feature_ac_minlength','feature_ac_delay'));
+    $tmpdata = array('feature_ac_minLength' => '', 'feature_ac_delay' => '');
     $t->set_var(array(
             HEADER   => $header,
             acminlen => ($tmpdata['feature_ac_minLength']!='')?$tmpdata['feature_ac_minLength']:2,

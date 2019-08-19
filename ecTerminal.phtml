@@ -24,33 +24,33 @@
         var ip = res[0].val;
         var port = res[1].val;
         var passwd = res[2].val;
-        
+
         $( '#end_of_day' ).button({
           label: kivi.t8( 'End of day' )
         }).css({
           'margin':'5px'
         }).click( function(){
           $.ajax({
-            url: '../ajax/ecTerminal.py',
+            url: 'ajax/ecTerminal.py',
             type: "POST",
             timeout: 100,
             data: { 'action':'end_of_day', 'ip': ip,'port': port, 'passwd': passwd }
           });
         });
-        
+
         $( '#payment' ).button({
           label: kivi.t8( 'Pay' )
         }).css({
           'margin':'5px'
         }).click( function(){
           $.ajax({
-            url: '../ajax/ecTerminal.py',
+            url: 'ajax/ecTerminal.py',
             type: "post",
             timeout: 100,
             data: { 'action':'pay', 'ip': ip,'port': port, 'passwd': passwd, 'amount': $( '#amount' ).val(), 'customer':'Herr Ronny Zimmermann' }
           });
         });
-    
+
       },
       error: function(){
         alert( 'Error: getTerminalData() ');

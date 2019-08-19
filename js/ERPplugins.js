@@ -11,6 +11,7 @@ $(document).ready(function() {
         var fancyBox = true;        // enable or disable Fancybox
         var crmButton = true; // enable or disable CRM-Button
         var noTaxIncluded = true; // enable or disable Checkbox "MWst. inkl."
+        var ecTerminal = true; //send amount to a terminal
 
         var kivi_global = jQuery.parseJSON( kivi.myconfig.global_conf );
         language = kivi.myconfig.countrycode;
@@ -181,6 +182,28 @@ $(document).ready(function() {
           $( '.layout-actionbar-submit' ).filter(function (index) {return $(this).text() === "Drucken und Buchen"} ).trigger( 'click' );
 
         });
+
+        //EC-Terminal
+        if( getUrl.toString().match("is.pl") && ecTerminal ){
+          $( '.layout-actionbar-submit:contains("Drucken")' ).click( function(){
+            $.ajax({
+              url: 'crm/ajax/ecTerminalData.php',
+              type: "POST",
+              data: { 'action': 'getTerminalData' },
+              success: function( res ){
+                var ip = res[0].val;
+                var port = res[1].val;
+                var passwd = res[2].val;
+                $.ajax({
+                  url: 'crm/ajax/ecTerminal.py',
+                  type: "post",
+                  timeout: 100,
+                  data: { 'action':'pay', 'ip': ip,'port': port, 'passwd': passwd, 'amount': $( "th:contains('Summe')" ).parent().find( "td" ).text().replace( '.', '' ).replace( ',', '' ) }
+                });
+              }
+            })
+          });
+        } //endif
 
 
         //alert( kivi_global.baseurl );

@@ -110,8 +110,8 @@ $(document).ready(function() {
 
         }
 
-        //CRM button
-        if( (getUrl.toString().match("ap.pl") || getUrl.toString().match("ar.pl") || getUrl.toString().match("gl.pl") ) || getUrl.toString().match("is.pl") ){
+        //CRM button in oe, is, do
+        if( ( getUrl.toString().match("oe.pl" ) || getUrl.toString().match("is.pl") || getUrl.toString().match("do.pl") || getUrl.toString().match("type=sales_order&action=Order" ) ) && crmButton ){
             $("<input style='margin-left: 10px; height: 24px;' class='submit' type='button' name='crm' id='crm' value='CRM' onClick=\"window.location.href='crm/firma1.php?Q="+ cust_vend_type +"&id="+ customer_id+"'\">" ).appendTo( ".layout-actionbar" );
         }
 

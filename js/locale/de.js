@@ -29,5 +29,6 @@ namespace( "kivi" ).setupLocale({
   "save": "speichern",
   "Pay": "Bezahlen",
   "End of day": "Tagesabschluß",
-  "Amount without comma": "Betrag ohne Komma"
+  "Amount without comma": "Betrag ohne Komma",
+  "Yesterday": "Gestern"
 })

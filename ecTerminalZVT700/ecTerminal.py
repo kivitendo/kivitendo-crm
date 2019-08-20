@@ -49,11 +49,9 @@ if __name__ == '__main__':
             if e.payment(amount_cent=data['amount']):
                 printer(e.last_printout())
                 e.wait_for_status()
-                e.show_text( lines=['Auf Wiedersehenxx!', ' ', 'Zahlung erfolgt'], beeps=1 )
+                e.show_text( lines=['Auf Wiedersehen ' + data['name'] +  '! ', ' ', 'Zahlung erfolgt'], beeps=1 )
                 #status = e.status()
             else:
                 e.wait_for_status()
-                e.show_text( lines=['Auf Wiedersehenyy! ', ' ', 'Vorgang abgebrochen'], beeps=2 )
+                e.show_text( lines=['Auf Wiedersehen ' + data['name'] +  '! ', ' ', 'Vorgang abgebrochen'], beeps=2 )
                 #status = e.status()
-
-

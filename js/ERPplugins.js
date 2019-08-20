@@ -1,27 +1,13 @@
 $(document).ready(function() {
-
-
     var getUrl = window.location;
-
-
-
     if( !getUrl.toString().match( 'LoginScreen' ) && !getUrl.toString().match( 'Admin' ) ){ //Plugins nicht bei login und Admin anzeigen
-
         var yesterdayButton = true; // enable or disable yesterday-Button
         var fancyBox = true;        // enable or disable Fancybox
-        var crmButton = true; // enable or disable CRM-Button
-        var noTaxIncluded = true; // enable or disable Checkbox "MWst. inkl."
-        var ecTerminal = true; //send amount to a terminal
+        var crmButton = true;       // enable or disable CRM-Button
+        var ecTerminal = true;      //send amount to a terminal
 
         var kivi_global = jQuery.parseJSON( kivi.myconfig.global_conf );
         language = kivi.myconfig.countrycode;
-
-        $( ".lang" ).each( function(){
-            var key = $( this ).attr( "data-lang" );
-            if( $( this ).is( ":input" ) ) $( this ).attr( 'title',  typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
-            else $( this ).text( typeof( langData[language][key] ) != 'undefined' ? langData[language][key] : 'LNG ERR'  );
-        });
-
 
         $('body')
             .append("<script type='text/javascript' src='crm/js/jquery.postitall.js'></script>")
@@ -31,12 +17,14 @@ $(document).ready(function() {
             .append("<script type='text/javascript' src='crm/jquery-plugins/jquery-calculator/jquery.calculator.js'></script>")
             .append("<script type='text/javascript' src='crm/nodejs/node_modules/jquery-minicolors/jquery.minicolors.min.js'></script>")
             .append("<script type='text/javascript' src='crm/jquery-plugins/fancybox/source/jquery.fancybox.pack.js'></script>")
+            .append("<script type='text/javascript' src='crm/js/locale/" + language + ".js'></script>")
             .append("<link rel='stylesheet' type='text/css' href='crm/jquery-plugins/fancybox/source/jquery.fancybox.css'>")
             .append("<link rel='stylesheet' type='text/css' href='crm/nodejs/node_modules/postitall/dist/jquery.postitall.css'>")
             .append("<link rel='stylesheet' type='text/css' href='crm/nodejs/node_modules/trumbowyg/dist/ui/trumbowyg.css'>")
             .append("<link rel='stylesheet' type='text/css' href='crm/jquery-plugins/jquery-calculator/jquery.calculator.css'>")
             .append("<div class='fancybox' data-fancybox-type='iframe' href='\'></div>")
             .append("<div class='pluginDialog'></div>");
+
 
         if( kivi.myconfig.countrycode == 'de' )  $('body').append("<script type='text/javascript' src='crm/jquery-plugins/jquery-calculator/jquery.calculator-de.js'></script>");
 
@@ -51,7 +39,6 @@ $(document).ready(function() {
             }],
          })
         // Rechnungen anzeigen, beim Doppelklick auf die Rechnungsnummer
-
         if( fancyBox ){
             $(".fancybox").fancybox();
             $( "input[name='invnumber']" ).dblclick( function(){
@@ -105,7 +92,7 @@ $(document).ready(function() {
           else return decodeURIComponent( results[1] || 0 );
         }
 
-
+        //ToDo: better read from a document
         var customer_id = $.urlParam( 'order.customer_id' );
         var cust_vend_type = 'C';
         if( typeof customer_id === "undefined" ) {
@@ -123,65 +110,17 @@ $(document).ready(function() {
 
         }
 
-        if( getUrl.toString().match("invoice") || getUrl.toString().match("credit_note") || getUrl.toString().match("sales_order") || getUrl.toString().match("sales_quotation") || getUrl.toString().match("action=edit") ){
-
-          if( getUrl.toString().match("sales_order") )
-             $("<input type='button' id='makebill_btn' value='Rechnung' style='height:24px; margin-left: 10px; margin-right: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
-
-          $("<input type='button' id='buchen_btn' value='Buchen' style='height:24px; margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
-          $("<input type='button' id='drucken_btn' value='Drucken' style='height:24px; margin-left: 10px; margin-right: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
-
-          $("<input type='button' id='drucken_buchen_btn' value='Drucken und Buchen' style='height:24px; margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
-
-
-        }
-
-        if ( getUrl.toString().match("oe.pl") && $("#invnumber").length != 0 ) {
-
-          $("<input type='button' id='buchen_btn' value='Buchen' style='height:24px; margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
-          $("<input type='button' id='drucken_btn' value='Drucken' style='height:24px; margin-left: 10px; margin-right: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
-
-          $("<input type='button' id='drucken_buchen_btn' value='Drucken und Buchen' style='height:24px; margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
-
-
-
-        }
-
-        $("<input style='margin-right: 5px; height:24px;' class='submit' type='button' name='crm' id='crm' value='CRM' onClick=\"window.location.href='crm/firma1.php?Q="+ cust_vend_type +"&id="+ customer_id +"'\">" ).insertAfter( "#action" );
-
-
-
         //CRM button
-         $("<input style='margin-left: 10px; height: 24px;' class='submit' type='button' name='crm' id='crm' value='CRM' onClick=\"window.location.href='crm/firma1.php?Q="+ cust_vend_type +"&id="+ customer_id+"'\">" ).appendTo( "#ui-tabs-basic-data" );
+        if( (getUrl.toString().match("ap.pl") || getUrl.toString().match("ar.pl") || getUrl.toString().match("gl.pl") ) || getUrl.toString().match("is.pl") ){
+            $("<input style='margin-left: 10px; height: 24px;' class='submit' type='button' name='crm' id='crm' value='CRM' onClick=\"window.location.href='crm/firma1.php?Q="+ cust_vend_type +"&id="+ customer_id+"'\">" ).appendTo( ".layout-actionbar" );
+        }
 
-
-        $('#makebill_btn').click(function () {
-          //alert('click');
-          $( '.layout-actionbar-submit:contains("Rechnung")' ).trigger('click');
-
-        });
-
-        $('#buchen_btn').click(function () {
+       // $('#buchen_btn').click(function () {
           //alert('click');
           //$('.layout-actionbar-submit:contains("Rechnung")').trigger('click');
-          $( '.layout-actionbar-submit' ).filter(function (index) {return $(this).text() === "Buchen"} ).trigger( 'click' );
+          //$( '.layout-actionbar-submit' ).filter(function (index) {return $(this).text() === "Buchen"} ).trigger( 'click' );
 
-        });
-
-        $('#drucken_btn').click(function () {
-          //alert('click');
-
-          $( '.layout-actionbar-submit' ).filter(function (index) {return $(this).text() === "Drucken"} ).trigger( 'click' );
-
-        });
-
-
-        $('#drucken_buchen_btn').click(function () {
-          //alert('click');
-
-          $( '.layout-actionbar-submit' ).filter(function (index) {return $(this).text() === "Drucken und Buchen"} ).trigger( 'click' );
-
-        });
+        //});
 
         //EC-Terminal
         if( getUrl.toString().match("is.pl") && ecTerminal ){
@@ -189,83 +128,74 @@ $(document).ready(function() {
             $.ajax({
               url: 'crm/ajax/ecTerminalData.php',
               type: "POST",
-              data: { 'action': 'getTerminalData' },
+              data: { 'action': 'getTerminalCustomerData', 'data': $( '#customer_id' ).val() },
               success: function( res ){
-                var ip = res[0].val;
-                var port = res[1].val;
-                var passwd = res[2].val;
+                var passwd = res[0].val;
+                var ip = res[1].val;
+                var port = res[2].val;
+                var name = res[3].val;
                 $.ajax({
                   url: 'crm/ajax/ecTerminal.py',
                   type: "post",
                   timeout: 100,
-                  data: { 'action':'pay', 'ip': ip,'port': port, 'passwd': passwd, 'amount': $( "th:contains('Summe')" ).parent().find( "td" ).text().replace( '.', '' ).replace( ',', '' ) }
+                  data: { 'action':'pay', 'ip': ip,'port': port, 'passwd': passwd, 'amount': $( "th:contains('Summe')" ).parent().find( "td" ).text().replace( '.', '' ).replace( ',', '' ), 'name': name }
                 });
               }
             })
           });
         } //endif
 
+        // "Yesterday"-Button in is.pl
+        if( getUrl.toString().match( 'is.pl' ) && yesterdayButton ){
+            var dpLast = $( '[id^=datepaid_]:last' );
+            var positionDpLast = dpLast.position() ? dpLast.position() : 0;
+            $( '<form><button id="yButton"></button></form>' ).insertBefore( dpLast ).css({ left: positionDpLast.left + 10, position:'absolute'}) ;
+            $( '#yButton' ).html( kivi.t8( 'Yesterday' ) ).click( function(){
+                var token = /[.-/]/.exec( dpLast.val() );
+                var today = dpLast.val().split( token );
+                // new Date according to local date format
+                switch( kivi.myconfig.dateformat ) {
+                    case 'mm/dd/yy':
+                        fDate = today[2] + "/" + today[0] + "/" + today[1];
+                        break;
+                    case 'dd/mm/yy':
+                        var fDate = today[2] + "/" + today[1] + "/" + today[0];
+                        break;
+                    case 'dd.mm.yy':
+                        var fDate = today[2] + "/" + today[1] + "/" + today[0];
+                        break;
+                    case 'yyyy-mm-dd':
+                        fDate = today[0] + "/" + today[1] + "/" + today[2];
+                }
 
-        //alert( kivi_global.baseurl );
-        // "Yesterday"-Button in
-        $.getScript( kivi_global.baseurl + '/crm/translation/t8.js', function () { //besser kivi.t8() benutzen!!! ToDo
-            if( getUrl.toString().match( 'is.pl' ) && yesterdayButton ){
-                var dpLast = $( '[id^=datepaid_]:last' );
-                var positionDpLast = dpLast.position();
-                $( '<form><button id="yButton" style="margin-right: 5px">' + langData[language].YESTERDAY + '</button></form>' ).insertBefore( dpLast ).css({ left: positionDpLast.left - 70, position:'absolute'}) ;
-                $( '#yButton' ).click( function(){
-                    var token = /[.-/]/.exec( dpLast.val() );
-                    var today = dpLast.val().split( token );
+                // building yesterday's date from milliseconds and extracting day, month, year
+                var yesterday= new Date( fDate ).getTime() - 86400000;
+                var date0 = new Date( yesterday );
+                var day = date0.getDate();
+                if( day < 10 ) day = "0" + day;
+                var month = date0.getMonth() + 1
+                if( month < 10 ) month = "0" + month;
+                var year = date0.getFullYear();
+                // combining day, month, year according local date format and inserting into input field
+                switch(kivi.myconfig.dateformat) {
+                    case 'mm/dd/yy':
+                        dpLast.val( month + token + day + token + year );
+                        break;
+                    case 'dd/mm/yy':
+                        dpLast.val( day + token + month + token + year );
+                        break;
+                    case 'dd.mm.yy':
+                        dpLast.val( day + token + month + token + year );
+                        break;
+                    case 'yyyy-mm-dd':
+                        dpLast.val( year + token + month + token + day );
+                    default:
+                        dpLast.val( year + token + month + token + day );
+                }
 
-                    // new Date according to local date format
-                    switch( kivi.myconfig.dateformat ) {
-                        case 'mm/dd/yy':
-                            fDate = today[2] + "/" + today[0] + "/" + today[1];
-                            break;
-                        case 'dd/mm/yy':
-                            var fDate = today[2] + "/" + today[1] + "/" + today[0];
-                            break;
-                        case 'dd.mm.yy':
-                            var fDate = today[2] + "/" + today[1] + "/" + today[0];
-                            break;
-                        case 'yyyy-mm-dd':
-                            fDate = today[0] + "/" + today[1] + "/" + today[2];
-                    }
-
-                    // building yesterday's date from milliseconds and extracting day, month, year
-                    var yesterday= new Date( fDate ).getTime() - 86400000;
-                    var date0 = new Date( yesterday );
-                    var day = date0.getDate();
-                    if (day < 10) {day = "0" + day};
-                        var month = date0.getMonth() + 1;
-                        if (month < 10) {month = "0" + month};
-                        var year = date0.getFullYear();
-
-                    // combining day, month, year according local date format and inserting into input field
-                    switch(kivi.myconfig.dateformat) {
-                        case 'mm/dd/yy':
-                            dpLast.val( month + token + day + token + year );
-                            break;
-                        case 'dd/mm/yy':
-                            dpLast.val( day + token + month + token + year );
-                            break;
-                        case 'dd.mm.yy':
-                            dpLast.val( day + token + month + token + year );
-                            break;
-                        case 'yyyy-mm-dd':
-                            dpLast.val( year + token + month + token + day );
-                        default:
-                            dpLast.val( year + token + month + token + day );
-                    }
-
-                    return false;
-                });
-            }
-        });
-
-        if( getUrl.toString().match( 'gl.pl' ) && noTaxIncluded ) $( '#taxincluded' ).prop( 'checked', false );
-
+                return false;
+            });
+        }
     }//endif
 
 });
-

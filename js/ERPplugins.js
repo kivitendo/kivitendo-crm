@@ -148,7 +148,7 @@ $(document).ready(function() {
         // "Yesterday"-Button in is.pl
         if( getUrl.toString().match( 'is.pl' ) && yesterdayButton ){
             var dpLast = $( '[id^=datepaid_]:last' );
-            var positionDpLast = dpLast.position() ? dpLast.position() : 0;
+            var positionDpLast = dpLast.position() || 0;
             $( '<form><button id="yButton"></button></form>' ).insertBefore( dpLast ).css({ left: positionDpLast.left + 10, position:'absolute'}) ;
             $( '#yButton' ).html( kivi.t8( 'Yesterday' ) ).click( function(){
                 var token = /[.-/]/.exec( dpLast.val() );

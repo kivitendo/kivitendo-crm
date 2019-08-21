@@ -355,18 +355,23 @@
                             //alert( data[0].val + '</ br>' + data[1].val )
                             var external_contex_array = data[0].val.split( ',');
                             var internal_contex_array = data[1].val.split( ',');
-                            var dynamic_html = '<table><tr><td>' + kivi.t8( 'external context' ) + '</td><td> <select>';
+                            var dynamic_html = '<table><tr><td>' + kivi.t8( 'external context' ) + '</td><td> <select id="external_context">';
                             $.each( external_contex_array, function( key, value ){
                                 dynamic_html +=  '<option value="' + value + '">' + value + '</option>'
                             })
                             dynamic_html += '</select></td></tr>';
-                            dynamic_html += '<tr><td>' + kivi.t8( 'internal context' ) + '</td><td> <select>';
+                            dynamic_html += '<tr><td>' + kivi.t8( 'internal context' ) + '</td><td> <select id="internal_context">';
                             $.each( internal_contex_array, function( key, value ){
                                 dynamic_html +=  '<option value="' + value + '">' + value + '</option>'
                             })
                             dynamic_html += '</select></td></tr></table>';
-                            $( '#' + dialog_id ).html(  dynamic_html );
+                            $( '#' + dialog_id ).html( dynamic_html );
                             console.log(  dynamic_html );
+                            console.log( '#' + dialog_id + '_external_context' )
+                            $( '#external_context, #internal_context' ).change( function( data ){
+
+                                alert( $(this).val() + ' ' + this.id )
+                            })
                             console.log( dialog_id );
                         },
                         error: function (){

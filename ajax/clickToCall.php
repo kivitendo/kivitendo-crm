@@ -32,17 +32,19 @@
         $port = 5038;
         // less /etc/asterisk/manager.conf
         $username = 'clickToCall';
-        $sql = "SELECT val FROM crmdefaults WHERE employee = -1 AND key = 'asterisk_passwd'";
-        $password = $GLOBALS['dbh']->getOne( $sql )['val'];
+        $sql = "SELECT val FROM crmdefaults WHERE employee = -1 AND key = 'asterisk_passwd' OR key = 'ip_asterisk' ORDER BY key";
+        $result = $GLOBALS['dbh']->getAll( $sql );
+        $passwd = $result['0']['val'];
+        $ip = $result['1']['val'];
         // Context for outbound calls. See /etc/asterisk/extensions.ael if unsure.
         $context = $data['external_contex'];
-        $socket = stream_socket_client( "tcp://127.0.0.1:$port" );
+        $socket = stream_socket_client( "tcp://$ip:$port" );
         if( $socket ){
             if( DEBUG ) writeLog( "Connected to socket, sending authentication request." );
             // Prepare authentication request
             $authenticationRequest  = "Action: Login\r\n";
             $authenticationRequest .= "Username: $username\r\n";
-            $authenticationRequest .= "Secret: $password\r\n";
+            $authenticationRequest .= "Secret: $passwd\r\n";
             $authenticationRequest .= "Events: off\r\n\r\n";
             // Send authentication request
             $authenticate = stream_socket_sendto( $socket, $authenticationRequest );
@@ -59,7 +61,7 @@
                     // Prepare originate request
                     $originateRequest  = "Action: Originate\r\n";
                     $originateRequest .= "Channel: SIP/".$data['internal_contex']."@".$data['internal_contex']."\r\n";//ToDo
-                    $originateRequest .= "Callerid: Click to call\r\n";
+                    $originateRequest .= "Callerid: ".$_SESSION['crmUserData']['name']."\r\n"; //ToDo: Show kivitendo uSer NAME
                     $originateRequest .= "Exten: ".$data['number']."\r\n";
                     $originateRequest .= "Context: ".$data['external_contex']."\r\n";
                     $originateRequest .= "Priority: 1\r\n";

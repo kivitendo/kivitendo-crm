@@ -32,10 +32,11 @@
       { "name": "dir_mode", "label": "Mode:", "type": "input", "size": "6", "tooltip": "Tooltip" },
       { "name": "misc", "label": "Misc", "type": "headline" },
       { "name": "listLimit", "label": "Listlimit:", "type": "input", "size": "1", "tooltip":"Maximum number of displayed items in a list" },
-      { "name": "contex for telefonintegration", "label": "Contex for telefonintegration", "type": "headline" },
-      { "name": "external_contex", "label": "External Contex:", "type": "input", "size": "60", "tooltip": "External Contex, seperated by semicolon" },
-      { "name": "internal_fon", "label": "Internal Fon:", "type": "input", "size": "60", "tooltip": "Internal Phones, seperated by semicolon" },
-      { "name": "asterisk_passwd", "label": "Asterisk Password:", "type": "password", "size": "60", "tooltip": "Passwd for ClicktoCall, read '/etc/asterisk/manager.conf' " },
+      { "name": "phoneintegration", "label": "Phoneintegration with Asterisk", "type": "headline" },
+      { "name": "external_contex", "label": "External Contex:", "type": "input", "size": "60", "tooltip": "External Contex, seperated by semicolon, read '/etc/asterisk/extensions.ael'" },
+      { "name": "internal_fon", "label": "Internal Fon:", "type": "input", "size": "60", "tooltip": "Internal Phones, seperated by semicolon, read '/etc/asterisk/extensions.ael'" },
+      { "name": "ip_asterisk", "label": "IP adress Asterisk Server:", "type": "input", "size": "60", "tooltip": "mostly 127.0.0.1" },
+      { "name": "asterisk_passwd", "label": "Asterisk Password:", "type": "password", "size": "60", "tooltip": "Passwd for ClicktoCall, read '/etc/asterisk/manager.conf'" },
       { "name": "payment", "label": "Payment with EC terminal", "type": "headline" },
       { "name": "ec_terminal_ip-adress", "label": "IP address:", "type": "input", "size": "7", "tooltip": "IP address of the ec terminal" },
       { "name": "ec_terminal_port", "label": "Port:", "type": "input", "size": "7", "tooltip": "Port of the ec terminal, e.g. 22000" },
@@ -98,6 +99,13 @@
         }
     });
   });//save button
+  // press STRG+S for save
+  $( window ).bind( 'keydown', function( event ){
+    if ( ( event.ctrlKey || event.metaKey ) && String.fromCharCode(event.which).toLowerCase() == 's' ){
+      $( "#save" ).click();
+      return false;
+    }
+  });
 
   $( document ).tooltip();
 });

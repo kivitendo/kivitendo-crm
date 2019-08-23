@@ -326,7 +326,7 @@
             $.ajax({
                 url: 'ajax/clickToCall.php',
                 type: 'POST',
-                data: { action: 'newCall', data: { 'number': this.firstChild.data, 'internal_contex': 'werkstatt_fon', 'external_contex': 'werkstatt' } },
+                data: { action: 'newCall', data: { 'number': this.firstChild.data, 'internal_phones': 'werkstatt_fon', 'external_contex': 'werkstatt' } },
                 success: function ( data ) {
                     //alert( data );
                 },
@@ -354,25 +354,38 @@
                         success: function ( data ){
                             //alert( data[0].val + '</ br>' + data[1].val )
                             var external_contex_array = data[0].val.split( ',');
-                            var internal_contex_array = data[1].val.split( ',');
+                            var internal_phones_array = data[1].val.split( ',');
                             var dynamic_html = '<table><tr><td>' + kivi.t8( 'external context' ) + '</td><td> <select id="external_context">';
                             $.each( external_contex_array, function( key, value ){
                                 dynamic_html +=  '<option value="' + value + '">' + value + '</option>'
                             })
                             dynamic_html += '</select></td></tr>';
-                            dynamic_html += '<tr><td>' + kivi.t8( 'internal context' ) + '</td><td> <select id="internal_context">';
-                            $.each( internal_contex_array, function( key, value ){
+                            dynamic_html += '<tr><td>' + kivi.t8( 'internal context' ) + '</td><td> <select id="internal_phones">';
+                            $.each( internal_phones_array, function( key, value ){
                                 dynamic_html +=  '<option value="' + value + '">' + value + '</option>'
                             })
                             dynamic_html += '</select></td></tr></table>';
                             $( '#' + dialog_id ).html( dynamic_html );
                             console.log(  dynamic_html );
-                            console.log( '#' + dialog_id + '_external_context' )
-                            $( '#external_context, #internal_context' ).change( function( data ){
+                            $( '#external_context, #internal_phones' ).change( function( data ){
+                                //var key = this.id;
+                                //var val = $(this).val();
+                                var dataObj={};
+                                dataObj[this.id] = $(this).val()
+                                $.ajax({
+                                    url: 'ajax/defaults.php',
+                                    type: 'POST',
+                                    data: { action: 'saveClickToCall', data: dataObj },
+                                    success: function ( data ) {
+                                        //if( data ) alert( );
+                                    },
+                                    error: function () {
+                                        alert( 'Error: saveClickToCall!' );
+                                    }
+                                });
 
-                                alert( $(this).val() + ' ' + this.id )
                             })
-                            console.log( dialog_id );
+                            //console.log( dialog_id );
                         },
                         error: function (){
                             alert( 'Error: ajax/clickToCall.php?action=getPhones' );

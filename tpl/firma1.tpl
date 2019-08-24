@@ -344,7 +344,7 @@
             //console.log( dialog_id );
             $( '#' + dialog_id ).dialog({
                 modal: true,
-                title: '#' + dialog_id,//kivi.t8( 'Phone Dialog'), //ToDo
+                title: kivi.t8('Dialog for ' + dialog_id.replace( '_dialog', '' ) ),//kivi.t8( 'Phone Dialog'), //ToDo
                 width: 'auto',
                 resizable: false,
                 open: function( event, ui ){
@@ -355,8 +355,8 @@
                             //console.log( data );
                             var external_contexts_array = data[0].val.split( ',');
                             var internal_phones_array = data[1].val.split( ',');
-                            var selected_context = data[2].val;
-                            var selected_phone = data[3].val;
+                            var selected_context = typeof data[2] !== 'undefined' ?  data[2].val : '';
+                            var selected_phone = typeof data[3] !== 'undefined' ?  data[3].val : '';
                             var selected = '';
                             var dynamic_html = '<table><tr><td>' + kivi.t8( 'external context' ) + '</td><td> <select id="user_external_context">';
                             $.each( external_contexts_array, function( key, value ){
@@ -396,11 +396,18 @@
                     })
                 },
                 buttons: [{
-                    text: "Ok",
-                    click: function() {
+                    text: kivi.t8( 'cancel' ),
+                    click: function(){
+                        $( this ).dialog( "close" );
+                    }
+                },{
+                    text: kivi.t8( 'call' ),
+                    click: function(){
+                        $( '#' + dialog_id.replace( '_dialog', '' ) ).click();
                         $( this ).dialog( "close" );
                     }
                 }],
+
             })
         }).button().removeClass( "ui-button");
 

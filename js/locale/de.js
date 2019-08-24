@@ -4,6 +4,8 @@ namespace( "kivi" ).setupLocale({
   "Answered": "beantwortet",
   "BLZ Database:": "BLZ-Datenbank:",
   "Call edit:": "Anruf bearbeiten:",
+  "call": "anrufen",
+  "cancel": "abrechen",
   "Contac thread": "Kontaktverlauf",
   "Default Configuration": "Standardkonfiguration",
   "Deleted": "gelöscht",
@@ -38,4 +40,6 @@ namespace( "kivi" ).setupLocale({
   "Terminal Password:": "Terminal Passwort",
   "User-friendly links":"Benutzerfreundliche Links",
   "Yesterday": "Gestern",
+  "Dialog for tel1": "Dialog für Telefone 1",
+  "Dialog for tel2": "Dialog für Telefone 2",
 })

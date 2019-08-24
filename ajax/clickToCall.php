@@ -104,9 +104,15 @@
     }
 
     function getPhones(){
-        $sql = "SELECT val FROM crmdefaults WHERE employee = -1 AND key = 'external_contex' OR key = 'internal_fon'";
+        $sql = "SELECT val FROM crmdefaults WHERE employee = -1 AND key = 'external_contexts' OR key = 'internal_phones'";
         $result = $GLOBALS['dbh']->getALL( $sql, TRUE );
         echo $result;
     }
+
+    function saveClickToCall( $data ){
+        //writeLog($_SESSION['crmUserData']['loginCRM']);
+        $GLOBALS['dbh']->query( "DELETE FROM crmdefaults WHERE employee = ".$_SESSION['userConfig']['id']." AND key = '".key( $data )."'" );
+        echo $GLOBALS['dbh']->insert( 'crmdefaults', array( 'key', 'val', 'employee' ), array( key( $data) , $data[key( $data )], $_SESSION['userConfig']['id'] ), FALSE );
+      }
 
 ?>

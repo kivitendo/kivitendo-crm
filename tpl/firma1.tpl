@@ -355,12 +355,12 @@
                             //alert( data[0].val + '</ br>' + data[1].val )
                             var external_contex_array = data[0].val.split( ',');
                             var internal_phones_array = data[1].val.split( ',');
-                            var dynamic_html = '<table><tr><td>' + kivi.t8( 'external context' ) + '</td><td> <select id="external_context">';
+                            var dynamic_html = '<table><tr><td>' + kivi.t8( 'external context' ) + '</td><td> <select id="external_contexts">';
                             $.each( external_contex_array, function( key, value ){
                                 dynamic_html +=  '<option value="' + value + '">' + value + '</option>'
                             })
                             dynamic_html += '</select></td></tr>';
-                            dynamic_html += '<tr><td>' + kivi.t8( 'internal context' ) + '</td><td> <select id="internal_phones">';
+                            dynamic_html += '<tr><td>' + kivi.t8( 'internal phones' ) + '</td><td> <select id="internal_phones">';
                             $.each( internal_phones_array, function( key, value ){
                                 dynamic_html +=  '<option value="' + value + '">' + value + '</option>'
                             })
@@ -373,7 +373,7 @@
                                 var dataObj={};
                                 dataObj[this.id] = $(this).val()
                                 $.ajax({
-                                    url: 'ajax/defaults.php',
+                                    url: 'ajax/clickToCall.php',
                                     type: 'POST',
                                     data: { action: 'saveClickToCall', data: dataObj },
                                     success: function ( data ) {

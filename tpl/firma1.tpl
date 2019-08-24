@@ -13,6 +13,7 @@
 {JQUERYUI}
 {BASEPATH}
 {TRANSLATION}
+{T8}
 
 <script language="JavaScript" type="text/javascript">
 
@@ -358,13 +359,13 @@
                             var selected_context = typeof data[2] !== 'undefined' ?  data[2].val : '';
                             var selected_phone = typeof data[3] !== 'undefined' ?  data[3].val : '';
                             var selected = '';
-                            var dynamic_html = '<table><tr><td>' + kivi.t8( 'external context' ) + '</td><td> <select id="user_external_context">';
+                            var dynamic_html = '<table><tr><td>' + kivi.t8( 'External Contexts:' ) + '</td><td> <select id="user_external_context"  style="width:100%;">';
                             $.each( external_contexts_array, function( key, value ){
                                 selected = value == selected_context ? 'selected' : '';
                                 dynamic_html +=  '<option value="' + value + '"' + selected + '>' + value + '</option>'
                             })
                             dynamic_html += '</select></td></tr>';
-                            dynamic_html += '<tr><td>' + kivi.t8( 'internal phones' ) + '</td><td> <select id="user_internal_phone">';
+                            dynamic_html += '<tr><td>' + kivi.t8( 'Internal Phones:' ) + '</td><td> <select id="user_internal_phone"  style="width:100%;">';
                             $.each( internal_phones_array, function( key, value ){
                                 selected = value == selected_phone ? 'selected' : '';
                                 dynamic_html +=  '<option value="' + value + '"' + selected + '>' + value + '</option>'

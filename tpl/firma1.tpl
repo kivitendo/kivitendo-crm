@@ -326,7 +326,7 @@
             $.ajax({
                 url: 'ajax/clickToCall.php',
                 type: 'POST',
-                data: { action: 'newCall', data: { 'number': this.firstChild.data, 'internal_phones': 'werkstatt_fon', 'external_contex': 'werkstatt' } },
+                data: { action: 'newCall', data: { 'number': this.firstChild.data } },
                 success: function ( data ) {
                     //alert( data );
                 },
@@ -345,31 +345,34 @@
             $( '#' + dialog_id ).dialog({
                 modal: true,
                 title: '#' + dialog_id,//kivi.t8( 'Phone Dialog'), //ToDo
-                //width: 'auto',
+                width: 'auto',
                 resizable: false,
                 open: function( event, ui ){
                     $.ajax({
                         url: 'ajax/clickToCall.php?action=getPhones',
                         type: 'GET',
                         success: function ( data ){
-                            //alert( data[0].val + '</ br>' + data[1].val )
-                            var external_contex_array = data[0].val.split( ',');
+                            //console.log( data );
+                            var external_contexts_array = data[0].val.split( ',');
                             var internal_phones_array = data[1].val.split( ',');
-                            var dynamic_html = '<table><tr><td>' + kivi.t8( 'external context' ) + '</td><td> <select id="external_contexts">';
-                            $.each( external_contex_array, function( key, value ){
-                                dynamic_html +=  '<option value="' + value + '">' + value + '</option>'
+                            var selected_context = data[2].val;
+                            var selected_phone = data[3].val;
+                            var selected = '';
+                            var dynamic_html = '<table><tr><td>' + kivi.t8( 'external context' ) + '</td><td> <select id="user_external_context">';
+                            $.each( external_contexts_array, function( key, value ){
+                                selected = value == selected_context ? 'selected' : '';
+                                dynamic_html +=  '<option value="' + value + '"' + selected + '>' + value + '</option>'
                             })
                             dynamic_html += '</select></td></tr>';
-                            dynamic_html += '<tr><td>' + kivi.t8( 'internal phones' ) + '</td><td> <select id="internal_phones">';
+                            dynamic_html += '<tr><td>' + kivi.t8( 'internal phones' ) + '</td><td> <select id="user_internal_phone">';
                             $.each( internal_phones_array, function( key, value ){
-                                dynamic_html +=  '<option value="' + value + '">' + value + '</option>'
+                                selected = value == selected_phone ? 'selected' : '';
+                                dynamic_html +=  '<option value="' + value + '"' + selected + '>' + value + '</option>'
                             })
                             dynamic_html += '</select></td></tr></table>';
                             $( '#' + dialog_id ).html( dynamic_html );
-                            console.log(  dynamic_html );
-                            $( '#external_context, #internal_phones' ).change( function( data ){
-                                //var key = this.id;
-                                //var val = $(this).val();
+                            //console.log(  dynamic_html );
+                            $( '#user_external_context, #user_internal_phone' ).change( function( data ){
                                 var dataObj={};
                                 dataObj[this.id] = $(this).val()
                                 $.ajax({

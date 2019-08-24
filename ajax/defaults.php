@@ -11,14 +11,4 @@ function getDefaults(){
   echo $GLOBALS['dbh']->getALL( $sql, TRUE ); //as json
 }
 
-function saveClickToCall( $data ){
-  //writeLog($_SESSION['crmUserData']['loginCRM']);
-  $GLOBALS['dbh']->query( "DELETE FROM crmdefaults WHERE employee = ".$_SESSION['userConfig']['id']." AND key = '".key( $data )."'" );
-  echo $GLOBALS['dbh']->insert( 'crmdefaults', array( 'key', 'val', 'employee' ), array( key( $data) , $data[key( $data )], $_SESSION['userConfig']['id'] ), FALSE );
-}
-
-function getClicToCall(){
-  //$sql = "SELECT key, COALESCE( val , '' ) AS val FROM crmdefaults WHERE employee = ".$_SESSION['userConfig']['login']; //NULL to ''
-  //echo $GLOBALS['dbh']->getALL( $sql, TRUE ); //as json
-}
 ?>

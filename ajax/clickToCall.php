@@ -2,42 +2,19 @@
     require_once __DIR__.'/../inc/ajax2function.php';
 
     function newCall( $data ){
-
-        /*Provisorium!!!!!!*/
-        $myLogin = $_SESSION['userConfig']['login'];
-        if(  $myLogin == 'kappe' || $myLogin == 'puddel' ){
-            $data['internal_contex'] = 'werkstatt_fon';
-            $data['external_contex'] = 'werkstatt';
-        }
-        if(  $myLogin == 'katrin' ){
-            $data['internal_contex'] = 'autoprofis1_fon';
-            $data['external_contex'] = 'autoprofis1';
-        }
-        if(  $myLogin == 'bea' ){
-            $data['internal_contex'] = 'autoprofis2_fon';
-            $data['external_contex'] = 'autoprofis2';
-        }
-        if(  $myLogin == 'ronny' ){
-            $data['internal_contex'] = 'inter-data_fon';
-            $data['external_contex'] = 'inter-data';
-        }
-        if(  $myLogin == 'thomas' || $myLogin == 'Thomas'){
-            $data['internal_contex'] = 'flexrohr24_fon';
-            $data['external_contex'] = 'flexrohr24';
-        }
-         /* END Provisorium!!!!!!*/
-
         define( "DEBUG", FALSE );
         if( DEBUG ) writeLog( $data );
+        $myLogin = $_SESSION['userConfig']['login'];
         $port = 5038;
         // less /etc/asterisk/manager.conf
         $username = 'clickToCall';
-        $sql = "SELECT val FROM crmdefaults WHERE employee = -1 AND key = 'asterisk_passwd' OR key = 'ip_asterisk' ORDER BY key";
+        $sql = "SELECT val FROM crmdefaults WHERE ( employee = -1  OR employee = ".$_SESSION['userConfig']['id']." ) AND key = 'asterisk_passwd' OR key = 'ip_asterisk' OR key = 'user_external_context' OR key ='user_internal_phone' ORDER BY key";
         $result = $GLOBALS['dbh']->getAll( $sql );
         $passwd = $result['0']['val'];
         $ip = $result['1']['val'];
-        // Context for outbound calls. See /etc/asterisk/extensions.ael if unsure.
-        $context = $data['external_contex'];
+        $external_context = $result['2']['val'];
+        $internal_phone = $result['3']['val'];
+        // Context for outbound calls. See /etc/asterisk/extensions.ael
         $socket = stream_socket_client( "tcp://$ip:$port" );
         if( $socket ){
             if( DEBUG ) writeLog( "Connected to socket, sending authentication request." );
@@ -60,10 +37,10 @@
                     if( DEBUG ) writeLog( "Authenticated to Asterisk Manager Inteface. Initiating call." );
                     // Prepare originate request
                     $originateRequest  = "Action: Originate\r\n";
-                    $originateRequest .= "Channel: SIP/".$data['internal_contex']."@".$data['internal_contex']."\r\n";//ToDo
-                    $originateRequest .= "Callerid: ".$_SESSION['crmUserData']['name']."\r\n"; //ToDo: Show kivitendo uSer NAME
+                    $originateRequest .= "Channel: SIP/".$internal_phone."@".$internal_phone."\r\n";//ToDo
+                    $originateRequest .= "Callerid: ".$_SESSION['crmUserData']['name']."\r\n"; //Show kivitendo uSer NAME
                     $originateRequest .= "Exten: ".$data['number']."\r\n";
-                    $originateRequest .= "Context: ".$data['external_contex']."\r\n";
+                    $originateRequest .= "Context: ".$external_context."\r\n";
                     $originateRequest .= "Priority: 1\r\n";
                     $originateRequest .= "Async: true\r\n\r\n";
                     if( DEBUG ) writeLog( "Originate-Request: \n".$originateRequest );
@@ -103,16 +80,18 @@
         echo 0;
     }
 
+    // get phones and user default phones
     function getPhones(){
-        $sql = "SELECT val FROM crmdefaults WHERE employee = -1 AND key = 'external_contexts' OR key = 'internal_phones'";
-        $result = $GLOBALS['dbh']->getALL( $sql, TRUE );
-        echo $result;
+        $sql = "SELECT val FROM crmdefaults WHERE ( employee = -1 OR employee = ".$_SESSION['userConfig']['id']." ) AND key = 'external_contexts' OR key = 'internal_phones' OR key = 'user_external_context' OR key = 'user_internal_phone' ORDER BY key";
+        echo $GLOBALS['dbh']->getALL( $sql, TRUE );
     }
 
+    // save user default phones
     function saveClickToCall( $data ){
+        //writeLog( $data );
         //writeLog($_SESSION['crmUserData']['loginCRM']);
         $GLOBALS['dbh']->query( "DELETE FROM crmdefaults WHERE employee = ".$_SESSION['userConfig']['id']." AND key = '".key( $data )."'" );
         echo $GLOBALS['dbh']->insert( 'crmdefaults', array( 'key', 'val', 'employee' ), array( key( $data) , $data[key( $data )], $_SESSION['userConfig']['id'] ), FALSE );
-      }
+    }
 
 ?>

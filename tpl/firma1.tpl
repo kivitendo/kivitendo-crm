@@ -373,8 +373,8 @@
                             $( '#' + dialog_id ).html( dynamic_html );
                             //console.log(  dynamic_html );
                             $( '#user_external_context, #user_internal_phone' ).change( function( data ){
-                                var dataObj={};
-                                dataObj[this.id] = $(this).val()
+                                var dataObj = {};
+                                dataObj[this.id] = $(this).val();
                                 $.ajax({
                                     url: 'ajax/clickToCall.php',
                                     type: 'POST',

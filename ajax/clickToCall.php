@@ -8,12 +8,18 @@
         $port = 5038;
         // less /etc/asterisk/manager.conf
         $username = 'clickToCall';
-        $sql = "SELECT val FROM crmdefaults WHERE ( employee = -1  OR employee = ".$_SESSION['userConfig']['id']." ) AND key = 'asterisk_passwd' OR key = 'ip_asterisk' OR key = 'user_external_context' OR key ='user_internal_phone' ORDER BY key";
+        $sql = "SELECT key, val FROM crmdefaults WHERE ( employee = -1  OR employee = ".$_SESSION['userConfig']['id']." ) AND key = 'asterisk_passwd' OR key = 'ip_asterisk' OR key = 'user_external_context' OR key ='user_internal_phone' OR key = 'external_contexts' OR key = 'internal_phones'";
+        //writeLog( $sql );
         $result = $GLOBALS['dbh']->getAll( $sql );
-        $passwd = $result['0']['val'];
-        $ip = $result['1']['val'];
-        $external_context = $result['2']['val'];
-        $internal_phone = $result['3']['val'];
+        $resultArray = array();
+        foreach( $result as $value ) $resultArray[$value['key']] = $value['val'];
+
+        //writeLog( $resultArray );
+        $passwd = $resultArray['asterisk_passwd'];
+        $ip = $resultArray['ip_asterisk'];
+        // if user_external_context not set, use string external_contexts to first comma
+        $external_context = isset( $resultArray['user_external_context']) ? $resultArray['user_external_context'] : substr( $resultArray['external_contexts'], 0, strpos( $resultArray['external_contexts'] , ',' ) );
+        $internal_phone = isset( $resultArray['user_internal_phone']) ? $resultArray['user_internal_phone'] : substr( $resultArray['internal_phones'], 0, strpos( $resultArray['internal_phones'] , ',' ) );
         // Context for outbound calls. See /etc/asterisk/extensions.ael
         $socket = stream_socket_client( "tcp://$ip:$port" );
         if( $socket ){

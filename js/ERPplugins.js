@@ -130,10 +130,10 @@ $(document).ready(function() {
               type: "POST",
               data: { 'action': 'getTerminalCustomerData', 'data': $( '#customer_id' ).val() },
               success: function( res ){
-                var passwd = res[0].val;
-                var ip = res[1].val;
-                var port = res[2].val;
-                var name = res[3].val;
+                var ip = res['ec_terminal_ip-adress'];
+                var port = res['ec_terminal_port'];
+                var passwd = res['ec_terminal_passwd'];
+                var name = res['name'];
                 $.ajax({
                   url: 'crm/ajax/ecTerminal.py',
                   type: "post",

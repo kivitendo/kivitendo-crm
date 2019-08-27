@@ -19,11 +19,11 @@
     $.ajax({
       url: 'ajax/ecTerminalData.php',
       type: "POST",
-      data: { 'action': 'getTerminalData' },
+      data: { 'action': 'getTerminalCustomerData' },
       success: function( res ){
-        var ip = res[0].val;
-        var port = res[1].val;
-        var passwd = res[2].val;
+        var ip = res['ec_terminal_ip-adress'];
+        var port = res['ec_terminal_port'];
+        var passwd = res['ec_terminal_passwd'];
 
         $( '#end_of_day' ).button({
           label: kivi.t8( 'End of day' )

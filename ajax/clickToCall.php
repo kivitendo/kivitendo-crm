@@ -8,18 +8,16 @@
         $port = 5038;
         // less /etc/asterisk/manager.conf
         $username = 'clickToCall';
-        $sql = "SELECT key, val FROM crmdefaults WHERE ( employee = -1  OR employee = ".$_SESSION['userConfig']['id']." ) AND key = 'asterisk_passwd' OR key = 'ip_asterisk' OR key = 'user_external_context' OR key ='user_internal_phone' OR key = 'external_contexts' OR key = 'internal_phones'";
-        //writeLog( $sql );
-        $result = $GLOBALS['dbh']->getAll( $sql );
-        $resultArray = array();
-        foreach( $result as $value ) $resultArray[$value['key']] = $value['val'];
-
-        //writeLog( $resultArray );
-        $passwd = $resultArray['asterisk_passwd'];
-        $ip = $resultArray['ip_asterisk'];
+        $result = $GLOBALS['dbh']->getKeyValueData( 'crmdefaults', array( 'ip_asterisk', 'asterisk_passwd', 'external_contexts', 'internal_phones', 'user_external_context', 'user_internal_phone' ), 'employee = -1 OR employee = '.$_SESSION['userConfig']['id'], FALSE );
+        writeLog( $result );
+        $passwd = $result['asterisk_passwd'];
+        $ip = $result['ip_asterisk'];
         // if user_external_context not set, use string external_contexts to first comma
-        $external_context = isset( $resultArray['user_external_context']) ? $resultArray['user_external_context'] : substr( $resultArray['external_contexts'], 0, strpos( $resultArray['external_contexts'] , ',' ) );
-        $internal_phone = isset( $resultArray['user_internal_phone']) ? $resultArray['user_internal_phone'] : substr( $resultArray['internal_phones'], 0, strpos( $resultArray['internal_phones'] , ',' ) );
+        $external_context = isset( $result['user_external_context']) ? $result['user_external_context'] : substr( $result['external_contexts'], 0, strpos( $result['external_contexts'] , ',' ) );
+        $internal_phone = isset( $result['user_internal_phone']) ? $result['user_internal_phone'] : substr( $result['internal_phones'], 0, strpos( $result['internal_phones'] , ',' ) );
+        //$sql = "SELECT greeting || ' ' || name AS name FROM customer WHERE id = $data['cust_vend_id']"; //ToDo: distinguish between customers and vendors
+        //$customer = $GLOBALS['dbh']->getOne( $sql );
+
         // Context for outbound calls. See /etc/asterisk/extensions.ael
         $socket = stream_socket_client( "tcp://$ip:$port" );
         if( $socket ){
@@ -88,8 +86,9 @@
 
     // get phones and user default phones
     function getPhones(){
-        $sql = "SELECT val FROM crmdefaults WHERE ( employee = -1 OR employee = ".$_SESSION['userConfig']['id']." ) AND key = 'external_contexts' OR key = 'internal_phones' OR key = 'user_external_context' OR key = 'user_internal_phone' ORDER BY key";
-        echo $GLOBALS['dbh']->getALL( $sql, TRUE );
+        echo $GLOBALS['dbh']->getKeyValueData( 'crmdefaults', array( 'external_contexts', 'internal_phones', 'user_external_context', 'user_internal_phone'), 'employee = -1 OR employee = '.$_SESSION['userConfig']['id'] );
+        //$sql = "SELECT val FROM crmdefaults WHERE ( employee = -1 OR employee = ".$_SESSION['userConfig']['id']." ) AND key = 'external_contexts' OR key = 'internal_phones' OR key = 'user_external_context' OR key = 'user_internal_phone' ORDER BY key";
+        //echo $GLOBALS['dbh']->getALL( $sql, TRUE );
     }
 
     // save user default phones

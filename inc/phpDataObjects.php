@@ -113,11 +113,30 @@ class myPDO extends PDO{
     * IN: $where  - select a data set
     * OUT: true/false
     **********************************************/
-    public function updateAll( $table, $fields, $values, $where, $json=FALSE ){
+    public function updateAll( $table, $fields, $values, $where, $json = FALSE ){
         if( $this->logAll ) $this->beginExecTime = microtime( TRUE );
        // $stmt = parent::prepare( "WITH new_data
         return $result;
     }
+
+     /**********************************************
+    * getKeyValue  - gets rows of key value data as json or array
+    * IN: $table  - string name of the table
+    * IN: $keys   - array with keys, select data sets
+    * IN: $where  - string select data sets
+    * OUT: $json
+    **********************************************/
+    public function getKeyValueData( $table, $keys, $where, $json = TRUE ){
+        if( $this->logAll ) $this->beginExecTime = microtime( TRUE );
+        $sql = "SELECT jsonb_object_agg( key, val ) AS json FROM $table WHERE ( $where ) AND  key = '".implode( "' OR key = '", $keys )."'";;
+        writeLog( $sql );
+        $stmt = parent::prepare( $sql );
+        if( !$result = $stmt->execute() ) $this->error( $stmt->errorInfo() );
+        $result = $stmt->fetch( PDO::FETCH_ASSOC )['json'];
+        if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) .' sec');
+        return $json ? $result : json_decode ( $result, TRUE, 2 );
+    }
+
 
     /*********************************************************
     * IN:  $statement - SQL-String with placeholder (?)

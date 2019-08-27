@@ -1,4 +1,5 @@
 <?php
+    //ToDo: use ajax2function, impement updateAll in phpDataObjects, translate eventcategory.phtml!!!!
     require_once("../inc/stdLib.php");
     require_once("../inc/crmLib.php");
     $task     = array_shift( $_POST );

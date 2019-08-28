@@ -353,11 +353,10 @@
                         url: 'ajax/clickToCall.php?action=getPhones',
                         type: 'GET',
                         success: function ( data ){
-                            console.log( data );
                             var external_contexts_array = data['external_contexts'].split( ',');
                             var internal_phones_array = data['internal_phones'].split( ',');
                             var selected_context = typeof data['user_external_context'] !== 'undefined' ?  data['user_external_context'] : '';
-                            var selected_phone = typeof data['user_internal_phone'] !== 'undefined' ?  data['user_internal_phone'].val : '';
+                            var selected_phone = typeof data['user_internal_phone'] !== 'undefined' ?  data['user_internal_phone'] : '';
                             var selected = '';
                             var dynamic_html = '<table><tr><td>' + kivi.t8( 'External Contexts:' ) + '</td><td> <select id="user_external_context"  style="width:100%;">';
                             $.each( external_contexts_array, function( key, value ){

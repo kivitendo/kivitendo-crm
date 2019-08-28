@@ -87,14 +87,10 @@
     // get phones and user default phones
     function getPhones(){
         echo $GLOBALS['dbh']->getKeyValueData( 'crmdefaults', array( 'external_contexts', 'internal_phones', 'user_external_context', 'user_internal_phone'), 'employee = -1 OR employee = '.$_SESSION['userConfig']['id'] );
-        //$sql = "SELECT val FROM crmdefaults WHERE ( employee = -1 OR employee = ".$_SESSION['userConfig']['id']." ) AND key = 'external_contexts' OR key = 'internal_phones' OR key = 'user_external_context' OR key = 'user_internal_phone' ORDER BY key";
-        //echo $GLOBALS['dbh']->getALL( $sql, TRUE );
     }
 
     // save user default phones
     function saveClickToCall( $data ){
-        //writeLog( $data );
-        //writeLog($_SESSION['crmUserData']['loginCRM']);
         $GLOBALS['dbh']->query( "DELETE FROM crmdefaults WHERE employee = ".$_SESSION['userConfig']['id']." AND key = '".key( $data )."'" );
         echo $GLOBALS['dbh']->insert( 'crmdefaults', array( 'key', 'val', 'employee' ), array( key( $data) , $data[key( $data )], $_SESSION['userConfig']['id'] ), FALSE );
     }

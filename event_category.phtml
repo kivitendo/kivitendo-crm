@@ -5,35 +5,28 @@
 <?php
     require_once("inc/stdLib.php");
     $menu = $_SESSION['menu'];
-    $head = mkHeader();
     echo $menu['stylesheets'];
     echo $menu['javascripts'];
-    echo $head['FULLCALCSS'];
     echo $head['BOXCSS'];
     echo $head['COLORPICKERCSS'];
-    echo $head['JQUERY'];
-    echo $head['JQUERYUI'];
     echo $head['THEME'];
-    echo $head['FULLCALJS'];
     echo $head['JQBOX'];
     echo $head['COLORPICKERJS'];
     echo $head['T8'];
-    //print_r( $_SESSION );
 ?>
 
 <script>
     $( document ).ready( function(){
-
         $( "#save" ).button({
             label: kivi.t8( 'save' )
         }).click( function(){
-            var dataArr  = $("#myform").serializeArray()
+            var dataArr  = $("#myform").serializeArray();
             var newColor = dataArr.pop();
             var newCat   = dataArr.pop();
             if( newCat.value ){
                 $.ajax({
                     url: 'ajax/event_category.php',
-                    data: { task:  'newCategory', newCat: newCat.value, newColor: newColor.value },
+                    data: { action:  'newCategory',data:{ newCat: newCat.value, newColor: newColor.value } },
                     type: "POST",
                 });
                 var newMax = parseInt( $( "#tmp" ).data( "max" ) ) + 1;
@@ -44,7 +37,7 @@
                 $( ".new" ).toggleClass( "new remove_" + newMax );
                 $( "#sortable" ).append("<li class='ui-state-default new'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' name='new_cat'>"
                                       + "<input type='text' class='ui-widget-content ui-corner-all middle lang' autocomplete='off' name='new_color' maxlength='7'> </li>");
-                $( ".remove_" + newMax ).append( "<input type='checkbox' class='right' value='" + newMax + "' name='del' data-lang='DELETE' title='" + kivi.t8( 'delete' ) + "' tabindex='-1'>");
+                $( ".remove_" + newMax ).append( "<input type='checkbox' class='right' value='" + newMax + "' name='del' title='" + kivi.t8( 'delete' ) + "' tabindex='-1'>");
                 focusOut();
             }
             //console.log( JSON.stringify( dataArr ) );
@@ -52,18 +45,20 @@
                 if( v.name == "del" ){
                     $.ajax({
                         url: 'ajax/event_category.php',
-                        data: { task:  'deleteCategory', delCat: v.value },
+                        data: { action:  'deleteCategory', data: v.value },
                         type: "POST",
                         success: function(){
                             $(".remove_" + v.value ).remove();
-                       }
+                        },
+                        error: function(){
+                            alert( 'Error: deleteCategory()!' );
+                        }
                     });
-
                 }
             });
             $.ajax({
                 url: 'ajax/event_category.php',
-                data: { task:  'updateCategories', updateData: dataArr },
+                data: { action:  'updateCategories', data: dataArr },
                 type: "POST",
             });
         });
@@ -84,16 +79,13 @@
             }
         });
 
-
         $.ajax({
             url: 'ajax/event_category.php',
-            data: { task:  'getCategories'  },
+            data: { action: 'getCategories'  },
             type: "POST",
             success: function( json ) {
-                var obj = $.parseJSON( json.trim() ) ;
                 var max = 0;
-                console.log(json);
-                $.each( obj, function( i, val ){
+                $.each( json, function( i, val ){
                     if( val.id > max ) max = val.id;
                     $( "#sortable" ).prepend("<li class='ui-state-default remove_" + val.id + "'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' data-lang='DOUBLE_KLICKx' value='" + val.label + "' name='cat_" + val.id + "'>"
                                          + "<input type='text' class='ui-widget-content ui-corner-all middle lang' autocomplete='off' value='" + val.color + "' name='color_" + val.id + "' maxlength='7'><input type='checkbox' class='right' name='del' value='" + val.id + "' title='" + kivi.t8( 'delete' ) + "' tabindex='-1'></li>");
@@ -102,7 +94,7 @@
                 $( "#tmp" ).data( "max", max );
             },
             error: function () {
-                alert('Ajax Error');
+                alert('Error getCategories');
             }
         });
         $( '#headline' ).text( kivi.t8( 'Evemt category' ) );
@@ -128,7 +120,7 @@
 <div class="ui-widget-content" >
     <div id="tmp"></div>
     <div>
-        <p id="headline" class="tools ui-state-highlight ui-corner-all lang " style="margin-top: 20px; padding: 0.6em;"></p>
+        <p id="headline" class="tools ui-state-highlight ui-corner-all " style="margin-top: 20px; padding: 0.6em;"></p>
     </div>
     <ul id="head">
         <li class="ui-state-active"><span id="head_category" class="left"></span><span id="head_color" class="middle"></span></li>

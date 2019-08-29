@@ -128,7 +128,7 @@ class myPDO extends PDO{
     **********************************************/
     public function getKeyValueData( $table, $keys, $where, $json = TRUE ){
         if( $this->logAll ) $this->beginExecTime = microtime( TRUE );
-        $sql = "SELECT jsonb_object_agg( key, val ) AS json FROM $table WHERE ( $where ) AND  key = '".implode( "' OR key = '", $keys )."'";;
+        $sql = "SELECT jsonb_object_agg( key, val ) AS json FROM $table WHERE ( $where ) AND ( key = '".implode( "' OR key = '", $keys )."')";
         $stmt = parent::prepare( $sql );
         if( !$result = $stmt->execute() ) $this->error( $stmt->errorInfo() );
         $result = $stmt->fetch( PDO::FETCH_ASSOC )['json'];

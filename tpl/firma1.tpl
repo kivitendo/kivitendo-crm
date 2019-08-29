@@ -358,13 +358,13 @@
                             var selected_context = typeof data['user_external_context'] !== 'undefined' ?  data['user_external_context'] : '';
                             var selected_phone = typeof data['user_internal_phone'] !== 'undefined' ?  data['user_internal_phone'] : '';
                             var selected = '';
-                            var dynamic_html = '<table><tr><td>' + kivi.t8( 'External Contexts:' ) + '</td><td> <select id="user_external_context"  style="width:100%;">';
+                            var dynamic_html = '<table><tr><td>' + kivi.t8( 'External Context:' ) + '</td><td> <select id="user_external_context"  style="width:100%;">';
                             $.each( external_contexts_array, function( key, value ){
                                 selected = value == selected_context ? 'selected' : '';
                                 dynamic_html +=  '<option value="' + value + '"' + selected + '>' + value + '</option>'
                             })
                             dynamic_html += '</select></td></tr>';
-                            dynamic_html += '<tr><td>' + kivi.t8( 'Internal Phones:' ) + '</td><td> <select id="user_internal_phone"  style="width:100%;">';
+                            dynamic_html += '<tr><td>' + kivi.t8( 'Internal Phone:' ) + '</td><td> <select id="user_internal_phone"  style="width:100%;">';
                             $.each( internal_phones_array, function( key, value ){
                                 selected = value == selected_phone ? 'selected' : '';
                                 dynamic_html +=  '<option value="' + value + '"' + selected + '>' + value + '</option>'

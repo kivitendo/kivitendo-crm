@@ -11,6 +11,7 @@ namespace( "kivi" ).setupLocale({
   "Color": "Farbe",
   "Contac thread": "Kontaktverlauf",
   "Default Configuration": "Standardkonfiguration",
+  "delete": "löschen",
   "Deleted": "gelöscht",
   "depracted": "veraltet",
   "Dialog for tel1": "Dialog für Telefon 1",

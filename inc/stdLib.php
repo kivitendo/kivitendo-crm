@@ -547,7 +547,13 @@ function clearCSVData() {
  * @return $rc TODO auf boolean setzen und korrekte Fehlerbehandlung umsetzen
  */
 function insertCSVData($data,$id){ //ToDo:
-    $tmpstr = implode(":",$data);                                               // ANREDE:NAME:STRASSE (...)
+    // CSV in RAM schreiben und wieder lesen, weil PHP keine Funktion zum direkten Schreiben in eine Variable anbietet
+    $fh = fopen("php://memory", "r+");
+    fputcsv($fh, $data);
+    rewind($fh);
+    $tmpstr = stream_get_contents($fh);
+    @fclose($fh); // Sollte nie passieren, aber Warnung beim Schliessen ignorieren
+
     $sql = "insert into tempcsvdata (uid,csvdaten,id) values ('"
             . $_SESSION["loginCRM"] . "','" . $tmpstr . "','"
             . $id. "')";

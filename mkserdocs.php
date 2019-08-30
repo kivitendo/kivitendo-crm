@@ -46,7 +46,7 @@ $doc->loadDocument("./dokumente/".$_SESSION["dbname"]."/serbrief/".$_SESSION["da
 $doc->savecontent();
 $sql="select * from tempcsvdata where uid = '".$_SESSION["loginCRM"]."' AND id = -255";
 $data=$GLOBALS['dbh']->getAll($sql);
-$felder=explode(":",$data[0]["csvdaten"]);
+$felder=str_getcsv($data[0]["csvdaten"]);
 $tmpfile=substr($_SESSION["datei"],0,-4);
 $i=0;
 foreach($felder as $value) {
@@ -81,7 +81,7 @@ $cnt=1;
 $_SESSION["src"]=($_GET["src"]<>"")?$_GET["src"]:"P";
 if ($data) {
     foreach ($data as $row) {
-        $tmp=explode(":",$row["csvdaten"]);
+        $tmp=str_getcsv($row["csvdaten"]);
         foreach($felder as $name) {
             if ($_SESSION["rub"]==1) {
                 //Künftig werden db-Feldnamen verwendet zZ nur RuB

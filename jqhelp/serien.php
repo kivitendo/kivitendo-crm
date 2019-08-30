@@ -12,7 +12,7 @@ function doVcards($single,$extension,$targetcode,$zip) {
         $pfad = $_SESSION["login"]."/vcard";
         chkdir($pfad,'.');
         $pfad = "../dokumente/".$_SESSION["dbname"]."/".$pfad."/";
-        $felder=explode(":",$csvdata[0]["csvdaten"]);
+        $felder=str_getcsv($csvdata[0]["csvdaten"]);
         $personen = False;
         if (in_array("TITEL",$felder)) $personen = True;
         $i=0;
@@ -32,7 +32,7 @@ function doVcards($single,$extension,$targetcode,$zip) {
             $vcard = new Contact_Vcard_Build();
             if ($targetcode !=  $srvcode) 
                 $row["csvdaten"] = iconv($srvcode,$targetcode,$row["csvdaten"]);
-            $data = explode(":",$row["csvdaten"]);
+            $data = str_getcsv($row["csvdaten"]);
             $vcard->setFormattedName($data[$felder["NAME1"]]);
             if ($data[$felder["NAME2"]]) {
                 if ($personen) {

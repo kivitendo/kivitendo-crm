@@ -35,10 +35,10 @@
         }
         if (is_array($daten)) {
             $felder=array_shift($daten);
-            $felder=explode(":",$felder["csvdaten"]);
+            $felder=str_getcsv($felder["csvdaten"]);
             $felder[]="TEXT";
             foreach ($daten as $row) {
-                $data=explode(":",$row["csvdaten"]);
+                $data=str_getcsv($row["csvdaten"]);
                 $data[]=$_POST["text"];
                 unset($tmp);
                 foreach ($label["Text"] as $row) {

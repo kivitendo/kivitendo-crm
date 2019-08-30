@@ -334,7 +334,7 @@ function insCall($data,$datei) {
     };
     $val[0] = $data['cause'];
     $c_cause = addslashes($data["c_cause"]);
-    $val[1] = nl2br($c_cause);
+    $val[1] = $c_cause;
     $val[2] = $data["CID"];
     $val[3] = date2db($data['Datum'])." ".$data['Zeit'].":00";  // Postgres timestamp
     $val[4] = $data['Kontakt'];
@@ -402,7 +402,6 @@ function updCall($data,$datei=false) {
     }
     $data['Datum']=date2db($data['Datum'])." ".$data['Zeit'].":00";  // Postgres timestamp
     $c_cause=addslashes($data["c_cause"]);
-    $c_cause=nl2br($c_cause);
     $sql="update telcall set cause='".$data["cause"]."',c_long='$c_cause',caller_id='".$data["CID"]."',";
     $sql.="calldate='".$data['Datum']."',kontakt='".$data["Kontakt"]."',dokument=$dateiID,bezug='".$data["bezug"]."',";
     $sql.="employee='".$data["CRMUSER"]."',inout='".$data["inout"]."' where id=".$data["id"];

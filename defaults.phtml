@@ -38,9 +38,9 @@
       { "name": "ip_asterisk", "label": "IP adress Asterisk Server:", "type": "input", "size": "60", "tooltip": "mostly 127.0.0.1" },
       { "name": "asterisk_passwd", "label": "Asterisk Password:", "type": "password", "size": "60", "tooltip": "Passwd for ClicktoCall, read '/etc/asterisk/manager.conf'" },
       { "name": "payment", "label": "Payment with EC terminal", "type": "headline" },
-      { "name": "ec_terminal_ip-adress", "label": "IP address:", "type": "input", "size": "7", "tooltip": "IP address of the ec terminal" },
-      { "name": "ec_terminal_port", "label": "Port:", "type": "input", "size": "7", "tooltip": "Port of the ec terminal, e.g. 22000" },
-      { "name": "ec_terminal_passwd", "label": "Terminal Password:", "type": "password", "size": "7", "tooltip": "Passwd of the ec terminal, Cashier password six digits, e.g. 012345" }
+      { "name": "ec_terminal_ip-adress", "label": "IP address:", "type": "input", "size": "13", "tooltip": "IP address of the ec terminal" },
+      { "name": "ec_terminal_port", "label": "Port:", "type": "input", "size": "13", "tooltip": "Port of the ec terminal, e.g. 22000" },
+      { "name": "ec_terminal_passwd", "label": "Terminal Password:", "type": "password", "size": "13", "tooltip": "Password of the ec terminal, Cashier password six digits, e.g. 012345" }
     ];
 
     var tabledata = '';
@@ -97,8 +97,8 @@
         error: function () {
             alert( 'Error: saveDefaults()!' );
         }
-    });
-  });//save button
+    })
+  }).attr( 'title', kivi.t8( "to save, press 'CTRL + s'" ) );//save button
   // press STRG+S for save
   $( window ).bind( 'keydown', function( event ){
     if ( ( event.ctrlKey || event.metaKey ) && String.fromCharCode(event.which).toLowerCase() == 's' ){

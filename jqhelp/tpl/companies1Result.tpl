@@ -50,8 +50,88 @@
         });
         $( "#butsermail_{Q}" ).button().click(function() {
             $( "#sercontent_{Q}" ).dialog( "option", "minWidth", 800 );
-            $( "#sercontent_{Q}" ).dialog( "open" );
-            $( "#sercontent_{Q}" ).load("sermail.php?src=F");
+            $( "#sercontent_{Q}" ).dialog( "open" ).html(
+                '<center>' +
+                    '<form id="mailform" name="mailform" enctype="multipart/form-data">' +
+                    '<table>' +
+                    '<INPUT TYPE="hidden" name="KontaktCC" value="{KontaktCC}">' +
+                    '<tr>' +
+                    	'<td width="60px"></td>' +
+                    	'<td width="*x"></td>' +
+                    	'<td width="*"></td>' +
+                    '</tr>' +
+                    '<tr>' +
+                    	'<td>An:</td>' +
+                    	'<td >Serienmail</td>' +
+                    '</tr><tr>' +
+                    	'<td>CC:</td>' +
+                        '<td ><input type="text" name="CC" id="CC" value="{CC}" size="65" maxlength="125" tabindex="2"> <input type="button" name="scc" value="suchen" onClick="open(\'suchMail.php?name=\'+$(\'#CC\').val()+\'&adr=CC\',\'suche\',width=450,height=200,left=100,top=100);"></td>' +
+                    '</tr><tr>' +
+                    	'<td>Betreff:</td>' +
+                    	'<td ><input type="text" id="Subject" name="Subject" size="67" maxlength="125" tabindex="3"></td>' +
+                    '</tr><tr>' +
+                    	'<td>Text:</td>' +
+                    	'<td >' +
+                    	'<textarea name="BodyText" id="BodyText" cols="91" rows="15" tabindex="4" />' +
+                    	'</td>' +
+                    '</tr><tr>' +
+                    	'<td>Datei:</td>' +
+                    	'<td><input type="file" name="Datei" size="55" maxlength="125"></td>' +
+                    '</tr>' +
+                    '</table>' +
+                    '</form>' +
+                    '<div id="sermailmsg" />' +
+                '</center>'
+            );
+            $( "#sercontent_{Q}" ).dialog({
+                autoOpen: false,
+                modal: true,
+                width:800,
+                height:550,
+                title: "Serienmail versenden",
+                focus: function() {
+                    $.ajax({
+                        dataType: 'json',
+                        url: 'ajax/getData.php?action=getMailSign',
+                        method: "GET",
+                        success: function ( data ) {
+                            $('#BodyText').val(data);
+                        }
+                    });
+                },
+                buttons: [{
+                    text: "Senden",
+                    id: "ok",
+                    name: "ok",
+                    click: function(){
+                        if($("#mailform #Subject").val() == "") {
+                            alert("Kein Betreff");
+                        }
+                        else {
+                            var formData = new FormData($('#mailform')[0]);
+                            formData.append('action', 'sendSerienmail');
+                            $.ajax({
+                                url: 'ajax/getData.php',
+                                type: 'POST',
+                                dataType: 'html',
+                                contentType: false,
+                                data: formData,
+                                processData:  false,
+                                success: function ( data ) {
+                                    $('#sermailmsg').html(data);
+                                },
+                                error: function() {
+                                    alert("Senden fehlgeschlagen");
+                                }
+                            });
+
+                            $(this).dialog("close");
+                        }
+
+                    }
+                }]
+            });
+            //$( "#sercontent_{Q}" ).load("sermail.php?src=F");
             return false;
         });
         //$( "input[type=button]" ).button();

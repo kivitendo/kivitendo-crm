@@ -95,20 +95,18 @@
             };
             $BodyText=preg_replace( "/(content-type:|bcc:|cc:|to:|from:)/im", "", $_POST["BodyText"]);
             $mime->setTXTBody(strip_tags($BodyText));
-            $anz=($_FILES["Datei"]["name"][0]<>"")?count($_FILES["Datei"]["name"]):0;
             $anh=false;
-            if ($anz>0) {
-                for ($o=0; $o<$anz; $o++) {
-                    if ($_FILES["Datei"]["name"][$o]<>"") {
-                        //move_uploaded_file($_FILES["Datei"]["tmp_name"][$o],$tmpdir.$_FILES["Datei"]["name"][$o]);
-                        copy($_FILES["Datei"]["tmp_name"][$o],'tmp/'.$_FILES["Datei"]["name"][$o]);
-                        $mime->addAttachment('tmp/'.$_FILES["Datei"]["name"][$o] , $_FILES["Datei"]["type"][$o],
-                                                $_FILES["Datei"]["name"][$o]);
-                        unlink ('tmp/'.$_FILES["Datei"]["name"][$o]);
-                        $anh=true;
-                    }
+            for ($o=0; $o<count($_FILES["Datei"]["name"]); $o++) {
+                if ($_FILES["Datei"]["name"][$o]<>"") {
+                    //move_uploaded_file($_FILES["Datei"]["tmp_name"][$o],$tmpdir.$_FILES["Datei"]["name"][$o]);
+                    copy($_FILES["Datei"]["tmp_name"][$o],'tmp/'.$_FILES["Datei"]["name"][$o]);
+                    $mime->addAttachment('tmp/'.$_FILES["Datei"]["name"][$o] , $_FILES["Datei"]["type"][$o],
+                                            $_FILES["Datei"]["name"][$o]);
+                    unlink ('tmp/'.$_FILES["Datei"]["name"][$o]);
+                    $anh=true;
                 }
-            } else {
+            }
+            if(!$anh) {
                 $headers["Content-Type"] = "text/plain; charset=".$_SESSION["charset"];
             }
 

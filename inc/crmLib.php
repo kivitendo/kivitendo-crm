@@ -317,20 +317,27 @@ function insCall($data,$datei) {
         $pfad = $data["Q"][0].$data["fid"];
         $wv["cp_cv_id"] = $pfad;
     }
-    if ( $datei["Datei"]["name"][0] <> "" ) {
-        $pfad = mkPfad($pfad,$data["CRMUSER"]);
-        $dat["Datei"]["name"]    = $datei["Datei"]["name"][0];
-        $dat["Datei"]["tmp_name"]= $datei["Datei"]["tmp_name"][0];
-        $dat["Datei"]["type"]    = $datei["Datei"]["type"][0];
-        $dat["Datei"]["size"]    = $datei["Datei"]["size"][0];
-        $text = ($data["DCaption"])?$data["DCaption"]:$data["cause"];
-        $dbfile = new document();
-        $dbfile->setDocData("descript",$text);
-        $rc = $dbfile->uploadDocument($dat,"/".$pfad);
-        //$val['dokument'] = $dbfile->id;
-        $dateiID = $dbfile->id;
-        $did = documenttotc($id,$dateiID);
-    };
+
+    $first = true;
+    for ($i=0; $i<count($_FILES["Datei"]["name"]); $i++) {
+        if ( $datei["Datei"]["name"][$i] <> "" ) {
+            $pfad = mkPfad($pfad,$data["CRMUSER"]);
+            $dat["Datei"]["name"]    = $datei["Datei"]["name"][$i];
+            $dat["Datei"]["tmp_name"]= $datei["Datei"]["tmp_name"][$i];
+            $dat["Datei"]["type"]    = $datei["Datei"]["type"][$i];
+            $dat["Datei"]["size"]    = $datei["Datei"]["size"][$i];
+            $text = ($data["DCaption"])?$data["DCaption"]:$data["cause"];
+            $dbfile = new document();
+            $dbfile->setDocData("descript",$text);
+            $rc = $dbfile->uploadDocument($dat,"/".$pfad);
+            if($first) {
+                $dateiID = $dbfile->id;
+                $first = false;
+            }
+            documenttotc($id,$dbfile->id);
+        }
+    }
+
     $val[0] = $data['cause'];
     $c_cause = addslashes($data["c_cause"]);
     $val[1] = $c_cause;

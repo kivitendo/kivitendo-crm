@@ -308,7 +308,7 @@ function insFormDoc($data,$file) {
 function insCall($data,$datei) {
     $id = mknewTelCall();
     $fields = array('cause','cause_long','caller_id','calldate','type_of_contact','contact_reference','employee','inout','document');
-//    $fields = array('cause','c_long','caller_id','calldate','kontakt','bezug','employee','inout','dokument');
+    $dateiID = NULL;
     if ( $data["fid"] != $data["CID"] ) {
         //Ein Ansprechpartner ausgewählt
         $pfad = "P".$data["CID"];
@@ -330,7 +330,6 @@ function insCall($data,$datei) {
         //$val['dokument'] = $dbfile->id;
         $dateiID = $dbfile->id;
         $did = documenttotc($id,$dateiID);
-        $fields[] = 'document';
     };
     $val[0] = $data['cause'];
     $c_cause = addslashes($data["c_cause"]);

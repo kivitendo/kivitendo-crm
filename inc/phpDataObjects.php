@@ -68,24 +68,21 @@ class myPDO extends PDO{
     * IN: $sequence_name - false = standard sequence name or other sequence name
     * OUT: last id or TRUE
     **********************************************/
-    public function insert( $table, $fields, $values, $lastInsertId = 'id', $sequence_name = FALSE ){
+    public function insert( $table, $fields, $values, $lastInsertId = FALSE, $sequence_name = FALSE ){
         if( $this->logAll ) $this->beginExecTime = microtime( TRUE );
         $stmt = parent::prepare("INSERT INTO $table (".implode(',',$fields).") VALUES (".str_repeat("?,",count($fields)-1)."?) " );
-
         if( !$result = $stmt->execute( $values ) ){
             $this->error( $stmt->errorInfo() );
             if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) .' sec');
             return FALSE;
         }
-
         if( $lastInsertId ){
-            $stmt = parent::prepare( "select * from currval('".( ( $sequence_name ) ? $sequence_name : ( $table."_".$lastInsertId."_seq" ) )."')" );  //.$table."_".$lastInsertId."_seq"
+            $stmt = parent::prepare( 'SELECT last_value FROM '.$table.'_'.( $sequence_name ?: 'id' ).'_seq' );
             if( !$result = $stmt->execute() ) $this->error( $stmt->errorInfo() );
             $lastId = $stmt->fetch(PDO::FETCH_NUM);
             if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) .' sec');
             return $lastId['0'];// $lastInsertId ? $stmt->fetch(PDO::FETCH_ASSOC)[$lastInsertId] : $result; //parent::lastInsertId('id'); doesn't work
         }
-
         return 1;
     }
 

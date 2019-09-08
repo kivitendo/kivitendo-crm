@@ -1,4 +1,3 @@
-
 <html>
 <head>
 <meta charset='utf-8' />
@@ -16,99 +15,147 @@
 ?>
 
 <script>
-    $( document ).ready( function(){
-        $( "#save" ).button({
-            label: kivi.t8( 'save' )
-        }).click( function(){
-            var dataArr  = $("#myform").serializeArray();
-            var newColor = dataArr.pop();
-            var newCat   = dataArr.pop();
-            if( newCat.value ){
-                $.ajax({
-                    url: 'ajax/event_category.php',
-                    data: { action:  'newCategory',data:{ newCat: newCat.value, newColor: newColor.value } },
-                    type: "POST",
-                });
-                var newMax = parseInt( $( "#tmp" ).data( "max" ) ) + 1;
-                $( "#tmp" ).data( "max", newMax );
-                $( "input[name='new_color']" ).attr( "name", "color_" + newMax );
-                $( "input[name='new_cat']" ).attr( "name", "cat_" + newMax );
-                $( "input:last[name='del']" ).attr( "value",  newMax );
-                $( ".new" ).toggleClass( "new remove_" + newMax );
-                $( "#sortable" ).append("<li class='ui-state-default new'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' name='new_cat'>"
-                                      + "<input type='text' class='ui-widget-content ui-corner-all middle lang' autocomplete='off' name='new_color' maxlength='7'> </li>");
-                $( ".remove_" + newMax ).append( "<input type='checkbox' class='right' value='" + newMax + "' name='del' title='" + kivi.t8( 'delete' ) + "' tabindex='-1'>");
-                focusOut();
-            }
-            //console.log( JSON.stringify( dataArr ) );
-            $.each( dataArr, function(i, v) {
-                if( v.name == "del" ){
-                    $.ajax({
-                        url: 'ajax/event_category.php',
-                        data: { action:  'deleteCategory', data: v.value },
-                        type: "POST",
-                        success: function(){
-                            $(".remove_" + v.value ).remove();
-                        },
-                        error: function(){
-                            alert( 'Error: deleteCategory()!' );
-                        }
-                    });
-                }
-            });
-            $.ajax({
-                url: 'ajax/event_category.php',
-                data: { action:  'updateCategories', data: dataArr },
-                type: "POST",
-            });
+  $( document ).ready( function(){
+    $.ajax({
+      url: 'ajax/event_category.php',
+      data: { action: 'getCategories' },
+      type: "POST",
+      success: function( json ) {
+        var max = 0;
+        var html = '';
+        $.each( json, function( i, val ){
+          html  +="<li class='ui-state-default'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span>"
+                + "  <input type='text' class='ui-widget-content ui-corner-all left' autocomplete='off' value='" + val.label + "' name='cat'></input>"
+                + "  <input type='text' class='ui-widget-content ui-corner-all middle' autocomplete='off' value='" + val.color + "' name='color' maxlength='7'></input>"
+                + "  <input type='hidden'  value='" + val.id + "' name='id' ></input>"
+                + "  <button class='right delete' title='" + kivi.t8( 'Attention! Delete category!' ) + "' tabIndex='-1'>" + kivi.t8( 'D' ) + "</button>"
+                + "</li>";
         });
-        $( "#calendar" ).button({
-            label: kivi.t8( 'Calendar' )
-        }).click( function(){
-            window.location.href = "calendar.phtml";
-        });
-        var focusOut = function(){
-            $( ".left, .middle" ).focusout( function(){
-                $( "#save" ).click();
-            })
-        };
-        focusOut(); //ToDo: vereinfachen??
-        $( "#sortable" ).sortable({
-            update: function(){
-                $( "#save" ).click();
-            }
-        });
+        $( "#sortable" ).prepend( html );
+        $( ".right" ).tooltip({ position: { my: "center bottom-10", at: "center top" } } );
 
-        $.ajax({
+        $( '.delete' ).click( function(){
+          const delId = $(this).prev('input')[0].value;
+          const delLine = $(this).parent();
+          $.ajax({
             url: 'ajax/event_category.php',
-            data: { action: 'getCategories'  },
+            data: { action:  'deleteCategory', data:delId },
             type: "POST",
-            success: function( json ) {
-                var max = 0;
-                $.each( json, function( i, val ){
-                    if( val.id > max ) max = val.id;
-                    $( "#sortable" ).prepend("<li class='ui-state-default remove_" + val.id + "'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span><input type='text' class='ui-widget-content ui-corner-all left lang' autocomplete='off' data-lang='DOUBLE_KLICKx' value='" + val.label + "' name='cat_" + val.id + "'>"
-                                         + "<input type='text' class='ui-widget-content ui-corner-all middle lang' autocomplete='off' value='" + val.color + "' name='color_" + val.id + "' maxlength='7'><input type='checkbox' class='right' name='del' value='" + val.id + "' title='" + kivi.t8( 'delete' ) + "' tabindex='-1'></li>");
-                });
-                $(".right").tooltip({ position: { my: "center bottom-10", at: "center top" } } );
-                $( "#tmp" ).data( "max", max );
+            success: function(){
+              console.log( delLine )
+              delLine.remove();
             },
-            error: function () {
-                alert('Error getCategories');
+            error: function(){
+                alert( 'Error: deleteCategory()!' );
             }
-        });
-        $( '#headline' ).text( kivi.t8( 'Evemt category' ) );
-        $( '#head_category' ).text( kivi.t8( 'Category' ) );
-        $( '#head_color' ).text( kivi.t8( 'Color' ) );
+          });
+          return false;
+        })
+      },
+      error: function () {
+        alert('Error getCategories()!!');
+      }
     });
+
+    $( "#save" ).button({
+      label: kivi.t8( 'save' )
+    }).click( function(){
+      var dataArr  = $( "#myform" ).serializeArray();
+
+
+      //;
+      //remove name from array
+      var onlyValueArr = [];
+      var order = 0;
+      $.each( dataArr, function( index, value ){
+        onlyValueArr[index] = value.value;
+      });
+
+      // we have 3 comlumns. category, color, id (hidden)
+      var twoDimValueArr = [];
+      while( onlyValueArr.length ) twoDimValueArr.push( onlyValueArr.splice( 0, 3 ) );
+      //console.log( twoDimValueArr );
+      //console.log( twoDimValueArr[twoDimValueArr.length - 1][0] )
+      //add order
+      $.each( twoDimValueArr, function( index, value ){
+        twoDimValueArr[index].push( (index + 1) );
+      })
+      const last = twoDimValueArr.length - 1;
+      if( twoDimValueArr[last][0] ){ // last line category is not empty,
+        $.ajax({
+          url: 'ajax/event_category.php',
+          data: { action: 'newCategory', data:[twoDimValueArr[last][0], twoDimValueArr[last][1], twoDimValueArr[last][3] ] },
+          type: "POST",
+          success: function( lastId ){
+            alert(lastId)
+            $( '#sortable li:last' ).append( "<span class='ui-icon ui-icon-arrowthick-2-n-s'></span><button class='right delete' tabIndex='-1'>" + kivi.t8( 'D' ) + "</button>" );
+            var newLine = "<li class='ui-state-default'>"
+                    + "   <input type='text' class='ui-widget-content ui-corner-all left' autocomplete='off' name='cat'></input>"
+                    + "   <input type='text' class='ui-widget-content ui-corner-all middle' autocomplete='off' name='color' maxlength='7'></input>"
+                    + "   <input type='hidden'  value='" + lastId + "' name='id' ></input>"
+                    + "   <input type='hidden'  value='" +  + "' name='id' ></input>"
+                    + "</li>";
+            $( "#sortable" ).append( newLine );
+            //$( '#sortable' ).sortable( "refresh" );//.sortable( "refresh" );
+            $( '.delete' ).click( function(){
+              const delId = lastId;
+              const delLine = $(this).parent();
+              $.ajax({
+                url: 'ajax/event_category.php',
+                data: { action:  'deleteCategory', data:delId },
+                type: "POST",
+                success: function(){
+                  delLine.remove();
+                },
+                error: function(){
+                    alert( 'Error: deleteCategory()!' );
+                }
+              });
+              return false;
+            })
+
+          },
+        });
+      }
+      twoDimValueArr.pop();// remove last array, (it's not in db)
+      $.ajax({
+        url: 'ajax/event_category.php',
+        data: { action:  'updateCategories', data: twoDimValueArr },
+        type: "POST",
+      });
+    });// end save CLICK
+
+
+
+    $( "#calendar" ).button({
+      label: kivi.t8( 'Calendar' )
+    }).click( function(){
+      window.location.href = "calendar.phtml";
+    });
+
+
+
+    $( '#sortable' ).sortable({
+      items: 'li:not(:last-child)',
+      update: function(){
+        $( "#save" ).click();
+      }
+    });
+
+
+
+    $( '#headline' ).text( kivi.t8( 'Evemt category' ) );
+    $( '#head_category' ).text( kivi.t8( 'Category' ) );
+    $( '#head_color' ).text( kivi.t8( 'Color' ) );
+  });
 </script>
 <style>
     #sortable, #head { list-style-type: none; margin: 0; padding: 0;padding-left: 2.5em; width: 400px; }
     #sortable li, #head li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
     #sortable li span { position: absolute; margin-left: -1.3em; }
     .left {  position:absolute;   width: 180px;}
-    .middle {  position:absolute;  left:280px; width: 90px; color: 666;}
-    .right {  position:absolute;  left:350px; width: 90px; color: 666;}
+    .middle {  position:absolute;  left:280px; width: 90px;}
+    .right {  position:absolute;  left:380px;}
     #buttons { padding-left: 2.5em; padding-top: 1em;    }
 </style>
 </head>
@@ -128,9 +175,10 @@
 
     <form id="myform">
         <ul id="sortable">
-            <li class="ui-state-default new"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-                <input type="text" class="ui-widget-content ui-corner-all left lang"  autocomplete="off" name="new_cat">
-                <input type="text" class="ui-widget-content ui-corner-all middle lang" autocomplete="off" name="new_color" maxlength="7">
+            <li class="ui-state-default">
+                <input type="text" class="ui-widget-content ui-corner-all left"  autocomplete="off" name="cat"></input>
+                <input type="text" class="ui-widget-content ui-corner-all middle" autocomplete="off" name="color" maxlength="7"></input>
+                <input type='hidden' name="id"></input>
 
             </li>
         </ul>
@@ -141,6 +189,5 @@
    </div>
 </div>
 <?php echo $menu['end_content']; ?>
-<?php echo $head['TOOLS']; ?>
 </body>
 </html>

@@ -16,6 +16,7 @@
 
 <script>
   $( document ).ready( function(){
+    var colorInput = '';
     $.ajax({
       url: 'ajax/event_category.php',
       data: { action: 'getCategories' },
@@ -33,6 +34,18 @@
         });
         $( "#sortable" ).prepend( html );
         $( ".right" ).tooltip({ position: { my: "center bottom-10", at: "center top" } } );
+        $( ".middle" ).click( function(){
+          colorInput = this;
+          var pos =  $( this ).position();
+          $( "#colorPick" ).css({
+            position: 'absolute',
+            //left: pos.left - 230,
+            //top: pos.top
+            left: pos.left - 70,
+            top: pos.top - 15
+          }).toggle();
+        });
+        $( '#colorPick' ).css("display","none");
 
         $( '.delete' ).click( function(){
           const delId = $(this).prev('input')[0].value;
@@ -42,7 +55,6 @@
             data: { action:  'deleteCategory', data:delId },
             type: "POST",
             success: function(){
-              console.log( delLine )
               delLine.remove();
             },
             error: function(){
@@ -61,7 +73,7 @@
       label: kivi.t8( 'save' )
     }).click( function(){
       var dataArr  = $( "#myform" ).serializeArray();
-
+      $( '#colorPick' ).css( "display" , "none" );
 
       //;
       //remove name from array
@@ -74,8 +86,6 @@
       // we have 3 comlumns. category, color, id (hidden)
       var twoDimValueArr = [];
       while( onlyValueArr.length ) twoDimValueArr.push( onlyValueArr.splice( 0, 3 ) );
-      //console.log( twoDimValueArr );
-      //console.log( twoDimValueArr[twoDimValueArr.length - 1][0] )
       //add order
       $.each( twoDimValueArr, function( index, value ){
         twoDimValueArr[index].push( (index + 1) );
@@ -87,15 +97,16 @@
           data: { action: 'newCategory', data:[twoDimValueArr[last][0], twoDimValueArr[last][1], twoDimValueArr[last][3] ] },
           type: "POST",
           success: function( lastId ){
-            alert(lastId)
+            // add id to last hidden input named id
+            $( '#sortable li:last input[name=id]' ).attr( 'value', lastId );
             $( '#sortable li:last' ).append( "<span class='ui-icon ui-icon-arrowthick-2-n-s'></span><button class='right delete' tabIndex='-1'>" + kivi.t8( 'D' ) + "</button>" );
             var newLine = "<li class='ui-state-default'>"
                     + "   <input type='text' class='ui-widget-content ui-corner-all left' autocomplete='off' name='cat'></input>"
                     + "   <input type='text' class='ui-widget-content ui-corner-all middle' autocomplete='off' name='color' maxlength='7'></input>"
-                    + "   <input type='hidden'  value='" + lastId + "' name='id' ></input>"
-                    + "   <input type='hidden'  value='" +  + "' name='id' ></input>"
+                    + "   <input type='hidden' name='id' ></input>"
                     + "</li>";
             $( "#sortable" ).append( newLine );
+            alert( "   <input type='hidden'  value='" + lastId + "' name='id' ></input>")
             //$( '#sortable' ).sortable( "refresh" );//.sortable( "refresh" );
             $( '.delete' ).click( function(){
               const delId = lastId;
@@ -118,6 +129,7 @@
         });
       }
       twoDimValueArr.pop();// remove last array, (it's not in db)
+      //console.log( twoDimValueArr );
       $.ajax({
         url: 'ajax/event_category.php',
         data: { action:  'updateCategories', data: twoDimValueArr },
@@ -125,15 +137,11 @@
       });
     });// end save CLICK
 
-
-
     $( "#calendar" ).button({
       label: kivi.t8( 'Calendar' )
     }).click( function(){
       window.location.href = "calendar.phtml";
     });
-
-
 
     $( '#sortable' ).sortable({
       items: 'li:not(:last-child)',
@@ -142,11 +150,25 @@
       }
     });
 
-
-
     $( '#headline' ).text( kivi.t8( 'Evemt category' ) );
     $( '#head_category' ).text( kivi.t8( 'Category' ) );
     $( '#head_color' ).text( kivi.t8( 'Color' ) );
+
+
+    $( '#colorPick' ).colorPicker({
+      //defaultColor: 1,
+      columns: 13,     // number of columns (optional)
+      color: ['#FF7400', '#CDEB8B','#6BBA70','#006E2E','#C3D9FF','#0101DF','#4096EE','#356AA0','#FF0096','#DF0101','#B02B2C','#112211','#000000'], // list of colors (optional)
+      click: function( color ){
+        colorInput.value = color;
+        $( "#colorPick" ).toggle();
+      }
+    });
+
+
+
+
+
   });
 </script>
 <style>
@@ -156,7 +178,7 @@
     .left {  position:absolute;   width: 180px;}
     .middle {  position:absolute;  left:280px; width: 90px;}
     .right {  position:absolute;  left:380px;}
-    #buttons { padding-left: 2.5em; padding-top: 1em;    }
+    #buttons { padding-left: 2.5em; padding-top: 1em; }
 </style>
 </head>
 <body>
@@ -179,10 +201,10 @@
                 <input type="text" class="ui-widget-content ui-corner-all left"  autocomplete="off" name="cat"></input>
                 <input type="text" class="ui-widget-content ui-corner-all middle" autocomplete="off" name="color" maxlength="7"></input>
                 <input type='hidden' name="id"></input>
-
             </li>
         </ul>
     </form>
+    <div id="colorPick" style="display: none"></div>
     <div id="buttons">
         <button id="save"></button>
         <button id="calendar"></button>

@@ -34,6 +34,13 @@
         });
         $( "#sortable" ).prepend( html );
         $( ".right" ).tooltip({ position: { my: "center bottom-10", at: "center top" } } );
+        $( '#colorPick' ).colorPicker({
+          columns: 13, //number of columns
+          color: ['#FF7400', '#CDEB8B','#6BBA70','#006E2E','#C3D9FF','#0101DF','#4096EE','#356AA0','#FF0096','#DF0101','#B02B2C','#112211','#000000'], //list of colors
+          click: function( color ){
+            colorInput.value = color;
+          }
+        });
         $( ".middle" ).click( function(){
           colorInput = this;
           var pos =  $( this ).position();
@@ -45,7 +52,6 @@
             top: pos.top - 15
           }).toggle();
         });
-        $( '#colorPick' ).css("display","none");
 
         $( '.delete' ).click( function(){
           const delId = $(this).prev('input')[0].value;
@@ -153,21 +159,6 @@
     $( '#headline' ).text( kivi.t8( 'Evemt category' ) );
     $( '#head_category' ).text( kivi.t8( 'Category' ) );
     $( '#head_color' ).text( kivi.t8( 'Color' ) );
-
-
-    $( '#colorPick' ).colorPicker({
-      //defaultColor: 1,
-      columns: 13,     // number of columns (optional)
-      color: ['#FF7400', '#CDEB8B','#6BBA70','#006E2E','#C3D9FF','#0101DF','#4096EE','#356AA0','#FF0096','#DF0101','#B02B2C','#112211','#000000'], // list of colors (optional)
-      click: function( color ){
-        colorInput.value = color;
-        $( "#colorPick" ).toggle();
-      }
-    });
-
-
-
-
 
   });
 </script>

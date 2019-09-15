@@ -112,8 +112,7 @@
                     + "   <input type='hidden' name='id' ></input>"
                     + "</li>";
             $( "#sortable" ).append( newLine );
-            alert( "   <input type='hidden'  value='" + lastId + "' name='id' ></input>")
-            //$( '#sortable' ).sortable( "refresh" );//.sortable( "refresh" );
+            //$( '#sortable' ).sortable( "refresh" );
             $( '.delete' ).click( function(){
               const delId = lastId;
               const delLine = $(this).parent();

@@ -104,15 +104,39 @@ class myPDO extends PDO{
 
     /**********************************************
     * update - modify multiple data set
-    * IN: $table  - string name of the table
-    * IN: $fields - array with fields
-    * IN: $values - multi array with values
-    * IN: $where  - select a data set
+    * IN: $table   - string name of the table
+    * IN: $columns - array with columns and types
+    * IN: $data    - multi array with values
+    * IN: $where   - most id
     * OUT: true/false
     **********************************************/
-    public function updateAll( $table, $fields, $values, $where, $json = FALSE ){
+    public function updateAll( $table, $columns, $data, $where = 'id' ){
         if( $this->logAll ) $this->beginExecTime = microtime( TRUE );
-       // $stmt = parent::prepare( "WITH new_data
+        $columnNames = array_keys( $columns );
+        $columnTypes = array_values( $columns );
+        $charType    = array( 'text', 'varchar', 'char', 'character' );
+        $sql = "WITH new_data( ".implode( ', ', $columnNames )." ) AS ( VALUES ";
+        foreach( $data as $value ){
+            $sql .= '( ';
+            $valueArray = array();
+            foreach( $value as $key => $data ){
+                $highComma = in_array( $columnTypes[$key], $charType, TRUE ) ? "'" : "";
+                array_push( $valueArray, $highComma.$data.$highComma );
+            }
+            $sql .= implode( ', ', $valueArray );
+            $sql .= ' ), ';
+        }
+        $sql =  substr( $sql, 0, -2 ); // remove last comma
+        $sql .= " ) UPDATE ".$table." SET ";
+        $columnArray = array();
+        foreach( $columnNames as $value ){
+            array_push( $columnArray, $value.' = d.'.$value );
+        }
+        $sql .= implode( ', ', $columnArray );
+        $sql .= ' FROM new_data d WHERE d.'.$where.' = '.$table.'.'.$where;
+        $stmt = parent::prepare( $sql );
+        if( !$result = $stmt->execute() ) $this->error( $stmt->errorInfo() );
+        if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) .' sec');
         return $result;
     }
 

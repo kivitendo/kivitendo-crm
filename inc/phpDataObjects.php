@@ -77,11 +77,11 @@ class myPDO extends PDO{
             return FALSE;
         }
         if( $lastInsertId ){
-            $stmt = parent::prepare( 'SELECT last_value FROM '.$table.'_'.( $sequence_name ?: 'id' ).'_seq' );
+            $stmt = parent::prepare( "select * from currval( '".( ( $sequence_name ) ? $sequence_name : ( $table."_id_seq" ) )."' )" );
             if( !$result = $stmt->execute() ) $this->error( $stmt->errorInfo() );
-            $lastId = $stmt->fetch(PDO::FETCH_NUM);
-            if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) .' sec');
-            return $lastId['0'];// $lastInsertId ? $stmt->fetch(PDO::FETCH_ASSOC)[$lastInsertId] : $result; //parent::lastInsertId('id'); doesn't work
+            $lastId = $stmt->fetch( PDO::FETCH_ASSOC );//['currval'];
+            if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) .' sec' );
+            return $lastId['currval'];
         }
         return 1;
     }

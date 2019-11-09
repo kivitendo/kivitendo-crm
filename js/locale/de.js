@@ -43,6 +43,7 @@ namespace( "kivi" ).setupLocale({
   "Phoneintegration with Asterisk": "Telefonintegration mit Asterisk",
   "Planspace:": "Platzhalter",
   "Port of the ec terminal, e.g. 22000": "Port des EC-Terminals",
+  "Post": "Buchen",
   "save": "speichern",
   "Seen": "gesehen",
   "Streetview:": "Straßenansicht:",

@@ -5,6 +5,7 @@ $(document).ready(function() {
         var fancyBox = true;        // enable or disable Fancybox
         var crmButton = true;       // enable or disable CRM-Button
         var ecTerminal = true;      //send amount to a terminal
+        var postButton = true;      //postButton show/hide
 
         var kivi_global = jQuery.parseJSON( kivi.myconfig.global_conf );
         language = kivi.myconfig.countrycode;
@@ -103,24 +104,18 @@ $(document).ready(function() {
           cust_vend_type = 'C';
         }
 
-        //alert(getUrl);
-        if( (getUrl.toString().match("ap.pl") || getUrl.toString().match("ar.pl") || getUrl.toString().match("gl.pl") ) && !getUrl.toString().match("is.pl") ){
-
-          $("<input type='button' id='buchen_btn' value='Buchen' style='height:24px; margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
-
+        //postButton
+        if( ( getUrl.toString().match("ap.pl") || getUrl.toString().match("ar.pl") || getUrl.toString().match("gl.pl") || getUrl.toString().match("is.pl") ) && postButton ){
+          $("<input type='button' id='post_btn' value='" +  kivi.t8( 'Post') + "' style='margin-left: 10px; color: black;'>").appendTo( "#ui-tabs-basic-data" );
+          $('#post_btn').click(function () {
+            $( '.layout-actionbar-submit' ).filter( function( index ) { return $(this).text() === "Buchen" || $(this).text() === "Post" } ).trigger( 'click' );
+          });
         }
 
         //CRM button in oe, is, do
         if( ( getUrl.toString().match("oe.pl" ) || getUrl.toString().match("is.pl") || getUrl.toString().match("do.pl") || getUrl.toString().match("type=sales_order&action=Order" ) ) && crmButton ){
             $("<input style='margin-left: 10px; height: 24px;' class='submit' type='button' name='crm' id='crm' value='CRM' onClick=\"window.location.href='crm/firma1.php?Q="+ cust_vend_type +"&id="+ customer_id+"'\">" ).appendTo( ".layout-actionbar" );
         }
-
-       // $('#buchen_btn').click(function () {
-          //alert('click');
-          //$('.layout-actionbar-submit:contains("Rechnung")').trigger('click');
-          //$( '.layout-actionbar-submit' ).filter(function (index) {return $(this).text() === "Buchen"} ).trigger( 'click' );
-
-        //});
 
         //EC-Terminal
         if( getUrl.toString().match("is.pl") && ecTerminal ){

@@ -327,7 +327,7 @@
             $.ajax({
                 url: 'ajax/clickToCall.php',
                 type: 'POST',
-                data: { action: 'newCall', data: { 'number': this.firstChild.data } },
+                data: { action: 'newCall', data: { 'number': this.firstChild.data, 'name': $('#fname1').html() } },
                 success: function ( data ) {
                     //alert( data );
                 },
@@ -677,7 +677,7 @@
         <div id='contentbox'>
             <div style="float:left; width:45em; height:37em; text-align:center; border: 1px solid lightgray;" >
             <div class="gross" style="float:left; width:55%; height:25em; text-align:left; border: 0px solid black; padding:0.2em;" >
-                <span class="fett">{Fname1}</span><br />
+                <span class="fett" id="fname1">{Fname1}</span><br />
                 {Fdepartment_1} {Fdepartment_2}<br />
                 {Strasse}<br />
                 <span class="mini">&nbsp;<br /></span>

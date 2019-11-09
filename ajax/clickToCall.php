@@ -42,7 +42,7 @@
                     // Prepare originate request
                     $originateRequest  = "Action: Originate\r\n";
                     $originateRequest .= "Channel: SIP/".$internal_phone."@".$internal_phone."\r\n";//ToDo
-                    $originateRequest .= "Callerid: ".$_SESSION['crmUserData']['name']."\r\n"; //Show kivitendo uSer NAME
+                    $originateRequest .= "Callerid: ".$data['name']."\r\n"; //Show (Customer|Vendor) Name
                     $originateRequest .= "Exten: ".$data['number']."\r\n";
                     $originateRequest .= "Context: ".$external_context."\r\n";
                     $originateRequest .= "Priority: 1\r\n";

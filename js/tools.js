@@ -1,7 +1,6 @@
 $( document ).ready( function(){
     var myposition = $( ".tools" ).length ? $( ".tools" ).position() : 0;
     myposition.top += 21;
-    myposition.top += 21;
     var getUrl = window.location;
     var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1] + '/';
     //alert( baseUrl );

@@ -1,10 +1,7 @@
 $( document ).ready( function(){
-
-    var headline = $(".tools");
-    var myposition = headline.position();
+    var myposition = $( ".tools" ).length ? $( ".tools" ).position() : 0;
     myposition.top += 21;
-    //var localStorage = <?php print_r( $_global );?>;
-    //alert(JSON.stringify(kivi.global.baseurl));
+    myposition.top += 21;
     var getUrl = window.location;
     var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1] + '/';
     //alert( baseUrl );

@@ -850,5 +850,8 @@ function needUpdate(){ //*** Prüft ob die Datenbank aktualisiert werden muss
     return $crmVersionConfig > $crmVersionDB;
 }
 
+function getDefaults( $arrayOfKeys, $json = FALSE ){ // gibt die Werte der Keys aus crmdefaults zurück
+  return $GLOBALS['dbh']->getKeyValueData( 'crmdefaults', $arrayOfKeys , 'employee = -1', $json );
+}
 //printArray($_SESSION);*/
 ?>

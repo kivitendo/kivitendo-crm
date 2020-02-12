@@ -9,7 +9,7 @@
         // less /etc/asterisk/manager.conf
         $username = 'clickToCall';
         $result = $GLOBALS['dbh']->getKeyValueData( 'crmdefaults', array( 'ip_asterisk', 'asterisk_passwd', 'external_contexts', 'internal_phones', 'user_external_context', 'user_internal_phone' ), 'employee = -1 OR employee = '.$_SESSION['userConfig']['id'], FALSE );
-        writeLog( $result );
+        //writeLog( $result );
         $passwd = $result['asterisk_passwd'];
         $ip = $result['ip_asterisk'];
         // if user_external_context not set, use string external_contexts to first comma

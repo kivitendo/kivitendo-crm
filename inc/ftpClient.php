@@ -5,30 +5,30 @@
     private $password;
     private $curlhandle;
 
-    public function __construct($server, $username, $password) {
+    public function __construct( $server, $username, $password ){
       $this->server = $server;
       $this->username = $username;
       $this->password = $password;
       $this->curlhandle = curl_init();
     }
 
-    public function __destruct() {
-      if (!empty($this->curlhandle))
-        @curl_close($this->curlhandle);
+    public function __destruct(){
+      if( !empty( $this->curlhandle ) )
+        @curl_close( $this->curlhandle );
     }
 
     /**
     * @param string $remote remote path
     * @return resource a cURL handle on success, false on errors.
     */
-    private function common($remote) {
+    private function common( $remote ){
       curl_reset( $this->curlhandle );
       curl_setopt( $this->curlhandle, CURLOPT_URL, 'ftps://' . $this->server . '/' . $remote );
-      curl_setopt($this->curlhandle, CURLOPT_USERPWD, $this->username . ':' . $this->password);
-      curl_setopt($this->curlhandle, CURLOPT_SSL_VERIFYPEER, FALSE);
-      curl_setopt($this->curlhandle, CURLOPT_SSL_VERIFYHOST, FALSE);
-      curl_setopt($this->curlhandle, CURLOPT_FTP_SSL, CURLFTPSSL_TRY);
-      curl_setopt($this->curlhandle, CURLOPT_FTPSSLAUTH, CURLFTPAUTH_TLS);
+      curl_setopt( $this->curlhandle, CURLOPT_USERPWD, $this->username . ':' . $this->password );
+      curl_setopt( $this->curlhandle, CURLOPT_SSL_VERIFYPEER, FALSE );
+      curl_setopt( $this->curlhandle, CURLOPT_SSL_VERIFYHOST, FALSE );
+      curl_setopt( $this->curlhandle, CURLOPT_FTP_SSL, CURLFTPSSL_TRY );
+      curl_setopt( $this->curlhandle, CURLOPT_FTPSSLAUTH, CURLFTPAUTH_TLS );
       return $this->curlhandle;
     }
 
@@ -77,7 +77,7 @@
       if( curl_error( $this->curlhandle ) )
         return false;
       else{
-        $files = explode("\r\n", trim($result));
+        $files = explode( "\r\n", trim( $result ) );
         return $files;
         return $local;
       }

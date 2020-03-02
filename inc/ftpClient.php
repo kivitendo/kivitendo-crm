@@ -23,8 +23,8 @@
     */
     private function common( $remote ){
       curl_reset( $this->curlhandle );
-      curl_setopt( $this->curlhandle, CURLOPT_URL, 'ftps://' . $this->server . '/' . $remote );
-      curl_setopt( $this->curlhandle, CURLOPT_USERPWD, $this->username . ':' . $this->password );
+      curl_setopt( $this->curlhandle, CURLOPT_URL, 'ftps://'.$this->server.'/'.$remote );
+      curl_setopt( $this->curlhandle, CURLOPT_USERPWD, $this->username.':'.$this->password );
       curl_setopt( $this->curlhandle, CURLOPT_SSL_VERIFYPEER, FALSE );
       curl_setopt( $this->curlhandle, CURLOPT_SSL_VERIFYHOST, FALSE );
       curl_setopt( $this->curlhandle, CURLOPT_FTP_SSL, CURLFTPSSL_TRY );
@@ -51,7 +51,9 @@
 
     public function upload( $local, $remote ){
       if( $fp = fopen( $local, 'r' ) ){
+        $pathParts = pathinfo( $local );
         $this->curlhandle = self::common( $remote );
+        curl_setopt( $this->curlhandle, CURLOPT_URL, 'ftps://'.$this->server.'/'.$remote.'/'.$pathParts['filename'].'.'.$pathParts['extension'] );
         curl_setopt( $this->curlhandle, CURLOPT_UPLOAD, 1 );
         curl_setopt( $this->curlhandle, CURLOPT_INFILE, $fp );
         curl_exec( $this->curlhandle );
@@ -128,7 +130,7 @@
       if( curl_error( $this->curlhandle ) )
         return false;
       else {
-        $files = explode("\n", trim($result));
+        $files = explode("\n", trim( $result ) );
         return $files;
         return $local;
       }

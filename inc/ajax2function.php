@@ -1,7 +1,7 @@
 <?php
 //generiert aus einer url einen Funftionsaufruf,
 //Bsp.: ajax/ajaxFilename.php?action=functionname&data=DatenOderSerialisierteDaten
-require_once("../inc/stdLib.php");
+require_once( __DIR__.'/stdLib.php' );
 header('Content-Type: application/json');
 
 $action = varExist( $_GET, 'action' ) ? $_GET['action'] : varExist( $_POST, 'action' );

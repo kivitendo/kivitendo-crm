@@ -9,3 +9,34 @@ Das Passwort welches bei CRM->Admin->Mandant eingetragen wird ist das Kassiererp
 Falls dieses nur fünfstellig ist muss eine '0' vorangestellt werden.
 z.B.: '012345'
 fertig
+
+
+Installation:
+https://github.com/karolyi/py3-ecrterm
+
+apt-get install python-serial python3-serial
+
+a2enmod cgi
+
+https://stackoverflow.com/questions/10721244/ajax-posting-to-python-cgi
+
+
+
+
+
+Ingenico:
+FFF 513 Mode ZVT, etc, Passwd 11599
+FFF 530
+FFF54 Passwd 12345
+Init: F423
+Reset: CLEAR+.
+
+Ingenic ZVT 220 auf ZVT700 Zahlung durch Kivitendo umstellen
+FFF 513 Kommunikation auf ZVT umstellen
+FFF 514 Kommunikaion via Kasse auf aus!
+FFF 54 Kommunikaion auf TCP/IP stellen OK
+     IP=127.0.0.1 Port 22000
+Initzialisierung durchführen:
+FFF423
+Das Passwort ist das Kassiererpasswort. Falls dieses nur fünfstellig ist muss eine '0' vorangestellt werden. 012345
+fertig

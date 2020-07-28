@@ -69,6 +69,7 @@ class myPDO extends PDO{
     * OUT: last id or TRUE
     **********************************************/
     public function insert( $table, $fields, $values, $lastInsertId = FALSE, $sequence_name = FALSE ){
+        $values = array_map( 'trim', $values );
         if( $this->logAll ) $this->beginExecTime = microtime( TRUE );
         $stmt = parent::prepare("INSERT INTO $table (".implode(',',$fields).") VALUES (".str_repeat("?,",count($fields)-1)."?) " );
         if( !$result = $stmt->execute( $values ) ){
@@ -111,6 +112,7 @@ class myPDO extends PDO{
     * OUT: true/false
     **********************************************/
     public function updateAll( $table, $columns, $data, $where = 'id' ){
+        $data = array_map( 'trim', $data );
         if( $this->logAll ) $this->beginExecTime = microtime( TRUE );
         $columnNames = array_keys( $columns );
         $columnTypes = array_values( $columns );
@@ -186,6 +188,7 @@ class myPDO extends PDO{
      * OUT: $result - boolean with result
      * *******************************************************/
     public function insertMultiple( $tableName, $data ){
+        $data = array_map( 'trim', $data );
         if( $this->logAll ) $this->beginExecTime = microtime( TRUE );
         $rowsSQL = array(); //Will contain SQL snippets.
         $toBind  = array(); //Will contain the values that we need to bind.

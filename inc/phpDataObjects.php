@@ -96,7 +96,7 @@ class myPDO extends PDO{
     **********************************************/
     public function update( $table, $fields, $values, $where ){
         if( $this->logAll ) $this->beginExecTime = microtime( TRUE );
-        $stmt = parent::prepare( "UPDATE $table set ".implode( '= ?, ',$fields )." = ? WHERE ".$where );
+        $stmt = parent::prepare( "UPDATE $table set ".implode( '= ?, ', array_map( 'trim', $fields ) )." = ? WHERE ".$where );
         if( !$result = $stmt->execute( $values ) ) $this->error( $stmt->errorInfo() );
         if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) .' sec');
         return $result;

@@ -3263,13 +3263,14 @@ function getIOQ($fid,$Q,$type,$close){
     //$closed_sql = $close?"AND closed = 'f' ":" ";
     $cust_vend = ($Q=='C')?"customer_id":"vendor_id";
     $ar_ap = ($Q=='C')?"ar":"ap";
-    switch($type) {
+    switch( $type ){
         case "inv": //Rechnungen
             $sql = "SELECT DISTINCT ON ($ar_ap.id) to_char($ar_ap.transdate, 'DD.MM.YYYY') as date, description, COALESCE(ROUND(amount,2))||' '||COALESCE(C.name) as amount, ";
             $sql.= "invnumber as number, $ar_ap.id FROM $ar_ap LEFT JOIN invoice  ON $ar_ap.id=trans_id LEFT JOIN currencies C on currency_id=C.id  WHERE $cust_vend = $fid ORDER BY $ar_ap.id DESC, invoice.id";
             break;
         case "ord": //Aufträge
-            if( file_exists( __DIR__.'/../lxcars' ) ){
+            $rs = $GLOBALS['dbh']->getOne( "SELECT * FROM information_schema.tables WHERE table_name = 'lxc_ver'" );//Is LxCars installed??
+            if( $rs ){
                 $sql = "SELECT DISTINCT ON (oe.id) to_char(oe.transdate, 'DD.MM.YYYY') as date, COALESCE( instructions.description, orderitems.description ) AS description, COALESCE(ROUND(amount,2))||' '||COALESCE(C.name) as amount, ";
                 $sql.= "oe.ordnumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id = orderitems.trans_id LEFT JOIN instructions ON oe.id = instructions.trans_id LEFT JOIN currencies C on currency_id=C.id WHERE quotation = FALSE AND $cust_vend = $fid  ORDER BY oe.id DESC, orderitems.id";
             }

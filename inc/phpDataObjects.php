@@ -188,7 +188,7 @@ class myPDO extends PDO{
      * OUT: $result - boolean with result
      * *******************************************************/
     public function insertMultiple( $tableName, $data ){
-        $data = array_map( 'trim', $data );
+        //$data = array_map( 'trim', $data );
         if( $this->logAll ) $this->beginExecTime = microtime( TRUE );
         $rowsSQL = array(); //Will contain SQL snippets.
         $toBind  = array(); //Will contain the values that we need to bind.

@@ -3271,8 +3271,8 @@ function getIOQ($fid,$Q,$type,$close){
         case "ord": //Aufträge
             $rs = $GLOBALS['dbh']->getOne( "SELECT * FROM information_schema.tables WHERE table_name = 'lxc_ver'" );//Is LxCars installed??
             if( $rs ){
-                $sql = "SELECT DISTINCT ON (oe.id) to_char(oe.transdate, 'DD.MM.YYYY') as date, COALESCE( instructions.description, orderitems.description ) AS description, COALESCE(ROUND(amount,2))||' '||COALESCE(C.name) as amount, ";
-                $sql.= "oe.ordnumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id = orderitems.trans_id LEFT JOIN instructions ON oe.id = instructions.trans_id LEFT JOIN currencies C on currency_id=C.id WHERE quotation = FALSE AND $cust_vend = $fid  ORDER BY oe.id DESC, orderitems.id";
+                $sql = "SELECT DISTINCT ON (oe.itime) to_char(oe.transdate, 'DD.MM.YYYY') as date, COALESCE( instructions.description, orderitems.description ) AS description, COALESCE(ROUND(amount,2))||' '||COALESCE(C.name) as amount, ";
+                $sql.= "oe.ordnumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id = orderitems.trans_id LEFT JOIN instructions ON oe.id = instructions.trans_id LEFT JOIN currencies C on currency_id=C.id WHERE quotation = FALSE AND $cust_vend = $fid  ORDER BY oe.itime DESC, orderitems.itime";
             }
             else{
                 $sql = "SELECT DISTINCT ON (oe.id) to_char(oe.transdate, 'DD.MM.YYYY') as date, description, COALESCE(ROUND(amount,2))||' '||COALESCE(C.name) as amount, ";

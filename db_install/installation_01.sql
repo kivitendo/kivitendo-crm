@@ -394,10 +394,9 @@ CREATE TABLE knowledge_content (
     modifydate  TIMESTAMP,
     content     TEXT,
     employee    INT,
-    version     INT,
+    version     INT DEFAULT 1,
     category    INT,
     owner       INT,
-    rights      TEXT
 );
 
 CREATE TABLE example(
@@ -503,7 +502,6 @@ ALTER TABLE customer ADD COLUMN employee int4;
 ALTER TABLE customer ADD COLUMN sw text;
 ALTER TABLE customer ADD COLUMN branche character varying(45);
 ALTER TABLE customer ADD COLUMN grafik character varying(4);
-ALTER TABLE customer ADD COLUMN sonder int;
 ALTER TABLE customer ADD COLUMN lead integer;
 ALTER TABLE customer ADD COLUMN leadsrc character varying(25);
 ALTER TABLE customer ADD COLUMN bland int4;

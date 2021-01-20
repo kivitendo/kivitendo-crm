@@ -33,6 +33,9 @@
             }
             return false;
         })
+        $( "#greeting" ).change( function(){
+            $( '#myname' ).focus();
+        });
 
         $( '#myname' ).autocomplete({
           source: 'ajax/firmen3.php?action=getData&type={Q}',
@@ -96,12 +99,7 @@
         $("#bcard").button();
         $("#bsav").button();
         $("#banz").button();
-        $("#greeting").selectmenu({ width: 120});
-        $("#bland").selectmenu({ width: 200 });
-        $('form input:text').button().addClass( 'ui-textfield' ).css({
-            'background' : '#FFFFFF',
-            'text-align' : 'inherit'
-        });
+
     });
     </script>
     <style type="text/css">
@@ -137,27 +135,19 @@
         <br />
         <div class="zeile2">
             <span class="label klein">.:greeting:.</span>
-            <span class="feldxx">
-                    <select name="greeting" id="greeting" tabindex="2">
+            <span class="feldxx" >
+                    <select name="greeting" id="greeting" >
                         <option value="">.:greeting:.
-<!-- BEGIN anreden -->
+                        <!-- BEGIN anreden -->
                         <option value="{Aid}" {Asel}>{Atext}
-<!-- END anreden -->
+                        <!-- END anreden -->
                     </select>
-                    <input type="text" name="greeting_" id="greeting_" size="15" maxlength="75" value="{greeting_}" tabindex="1" >
+                    <input type="text" name="greeting_" id="greeting_" size="15" maxlength="75" value="{greeting_}"  >
             </span>
         </div>
         <div class="zeile2">
             <span class="label klein">.:name:. </span>
             <span class="feldxx"> <input type="text" name="name" id="myname" size="42" maxlength="75" value="{name}" tabindex="3"></span>
-        </div>
-        <div class="zeile2">
-            <span class="label klein">.:department:. 1</span>
-            <span class="feldxx"><input type="text" name="department_1" size="42" maxlength="75" value="{department_1}" tabindex="4"></span>
-        </div>
-        <div class="zeile2">
-            <span class="label klein">.:department:. 2</span>
-            <span class="feldxx"><input type="text" name="department_2" size="42" maxlength="75" value="{department_2}" tabindex="5"></span>
         </div>
         <div class="zeile2">
             <span class="label klein">.:street:.</span>
@@ -168,11 +158,11 @@
             <span class="feldxx">
                 <input type="text" name="country" id="country" size="2" maxlength="75" value="{country}" tabindex="7" >/
                 <input type="text" id="zipcode" name="zipcode" size="5" maxlength="10" value="{zipcode}" tabindex="8">
-                <select name="bland" id="bland" tabindex="9" style="width:150px;">
+                <select name="bland" id="bland" style="width:150px;" tabindex="9">
                     <option value=""></option>
-<!-- BEGIN buland -->
+                    <!-- BEGIN buland -->
                     <option value="{BLid}" {BLsel}>{BLtext}</option>
-<!-- END buland -->
+                    <!-- END buland -->
                 </select>
             </span>
         </div>
@@ -197,14 +187,28 @@
             <span class="feldxx"><input type="text" name="contact" size="42" maxlength="125" value="{contact}" tabindex="14"></span>
         </div>
         <div class="zeile2">
+            <span class="label klein">.:{Q}Business:.</span>
+            <span class="feldxx">
+                <select name="business_id" id="business_id"  tabindex="15">
+                <!-- BEGIN TypListe -->
+                    <option value="{BTid}" {BTsel}>{BTtext}</option>
+                <!-- END TypListe -->
+                </select>
+            </span>
+        </div>
+        <div class="zeile2">
+            <span class="label klein">.:Catchword:.</span>
+            <span class="feldxx"><input type="text" name="sw" size="35" value="{sw}" maxlength="100" tabindex="16"></span>
+        </div>
+        <div class="zeile2">
             <span class="klein">.:Remarks:.</span><br>
-            <textarea name="notes" cols="70" rows="3" tabindex="15">{notes}</textarea><br />
+            <textarea name="notes" cols="70" rows="3" tabindex="17">{notes}</textarea><br />
         </div>
         <span style="position:absolute; left:40em; top:5em;text-align:left;">
             <div class="zeile2">
                 <span class="labelxx klein">Logo</span>
                 <span class="feldxx">
-                    <input type="file" name="Datei" size="20" maxlength="125" accept="Image/*" tabindex="16">
+                    <input type="file" name="Datei" size="20" maxlength="125" accept="Image/*" tabindex="18">
                 </span>
             </div>
             <div class="zeile2" id='sync'>
@@ -216,27 +220,27 @@
             <div class="zeile2" id='sync'>
                 <span class="labelxx klein"></span>
                 <span class="feldxx klein">
-                     <input type="radio" name="sync" value='0' {sync0} tabindex="16">nie
-                     <input type="radio" name="sync" value='1' {sync1} tabindex="16">nur senden
-                     <input type="radio" name="sync" value='2' {sync2} tabindex="16">beide Richtungen
+                     <input type="radio" name="sync" value='0' {sync0} tabindex="19">nie
+                     <input type="radio" name="sync" value='1' {sync1} tabindex="20">nur senden
+                     <input type="radio" name="sync" value='2' {sync2} tabindex="21">beide Richtungen
                 </span>
             </div>
             <div class="zeile2" id='KEY' style='visibility:hidden;'>
                 <span class="labelxx klein">Key</span>
                 <span class="feldxx">
-                    <input type="text" name="key" size="20" maxlength="125" tabindex="16">
+                    <input type="text" name="key" size="20" maxlength="125" tabindex="22">
                 </span>
             </div>
             <div class="zeile2" id='REV' style='visibility:hidden;'>
                 <span class="labelxx klein">REV</span>
                 <span class="feldxx">
-                    <input type="text" name="revision" size="20" maxlength="125" tabindex="16">
+                    <input type="text" name="revision" size="20" maxlength="125" tabindex="23">
                 </span>
             </div>
             <div class="zeile2" id='UID' style='visibility:hidden;'>
                 <span class="labelxx klein">UID</span>
                 <span class="feldxx">
-                    <input type="text" name="uid" size="20" maxlength="125" tabindex="16">
+                    <input type="text" name="uid" size="20" maxlength="125" tabindex="24">
                 </span>
         <br><br>
                 <span class="feldxx">
@@ -366,13 +370,18 @@
                     </select>
             </span>
         </div>
-        <div class="zeile2">
-            <span class="label klein">.:Catchword:.</span>
-            <span class="feldxx"><input type="text" name="sw" size="35" value="{sw}" maxlength="100" tabindex="3"></span>
-        </div>
+
         <div class="zeile2">
             <span class="label klein">.:homepage:.</span>
             <span class="feldxx"><input type="text" name="homepage" size="35" maxlength="75" value="{homepage}" tabindex="4"></span>
+        </div>
+        <div class="zeile2">
+            <span class="label klein">.:department:. 1</span>
+            <span class="feldxx"><input type="text" name="department_1" size="42" maxlength="75" value="{department_1}" tabindex="4"></span>
+        </div>
+        <div class="zeile2">
+            <span class="label klein">.:department:. 2</span>
+            <span class="feldxx"><input type="text" name="department_2" size="42" maxlength="75" value="{department_2}" tabindex="5"></span>
         </div>
         <div class="zeile2">
             <span class="label klein">.:leadsource:.</span>
@@ -385,16 +394,7 @@
                 <input type="text" name="leadsrc" size="15" maxlength="15" value="{leadsrc}" tabindex="11">
             </span>
         </div>
-        <div class="zeile2">
-            <span class="label klein">.:{Q}Business:.</span>
-            <span class="feldxx">
-                <select name="business_id" id="business_id"  tabindex="12">
-<!-- BEGIN TypListe -->
-                    <option value="{BTid}" {BTsel}>{BTtext}</option>
-<!-- END TypListe -->
-                </select>
-            </span>
-        </div>
+
         <div class="zeile2">
             <span class="label klein">.:taxzone:.</span>
             <span class="feldxx">

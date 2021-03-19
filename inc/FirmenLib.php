@@ -43,18 +43,19 @@ function getAllFirmen($sw,$usePre=true,$tab='C') {
          $where="phone like '$Pre".$sw[1]."%' ";
     } else {
         if ($sw[1]=="~") { //Firmenname beginnt nicht mit einem Buchstaben
-            $where="upper(name) ~ '^\[^A-Z\].*$' or ";
+            $where="( upper(name) ~ '^\[^A-Z\].*$' or ";
             $where.="upper(department_1) ~ '^\[^A-Z\].*$' or ";
             $where.="upper(department_2) ~ '^\[^A-Z\].*$' or ";
             $where.="upper(sw) ~ '^\[^A-Z\].*$' ";
 
         } else  {
-            $where="name ilike '$Pre".$sw[1]."%' or ";
+            $where="( name ilike '$Pre".$sw[1]."%' or ";
             $where.="department_1 ilike '$Pre".$sw[1]."%' or ";
             $where.="department_2 ilike '$Pre".$sw[1]."%' or ";
             $where.="sw ilike '$Pre".$sw[1]."%'";
         }
     }
+    $where .= ") AND obsolete = false";
     if ($tab=="C") {
         $sql="select *,'C' as tab from customer where ($where) and $rechte order by name";
     } else if ($tab=="V") {

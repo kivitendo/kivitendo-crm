@@ -396,7 +396,7 @@ CREATE TABLE knowledge_content (
     employee    INT,
     version     INT DEFAULT 1,
     category    INT,
-    owner       INT,
+    owner       INT
 );
 
 CREATE TABLE example(

@@ -23,7 +23,7 @@
                     $(this).dialog("close");
                 }
             }
-        })
+        });
         $("#myname")
         .focus(function() {
             if($("#greeting").val() == "" && $("#greeting_").val() == "") {
@@ -94,7 +94,12 @@
             })
         })
         $( "#maintab" ).tabs({ heightStyle: "auto" });
-        $("#bneu").button();
+        $("#bneu").button().click(function() {
+          if( $('#business_id option:selected').text() == '----------' ){
+            event.preventDefault();
+            alert( 'Customer group not selected!' );
+          }
+        });
         $("#bclr").button();
         $("#bcard").button();
         $("#bsav").button();
@@ -496,6 +501,6 @@
     <{BLZ1}script type='text/javascript' src='inc/blzsearch.js'></script{BLZ2}>
 
 {END_CONTENT}
-{TOOLS}
+<!--{TOOLS}-->
 </body>
 </html>

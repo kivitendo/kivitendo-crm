@@ -26,8 +26,10 @@ function printArray( $array ){
 }
 
 //in terminal: tailf tmp/log.txt
-function writeLog( $log ){
-    file_put_contents( __DIR__.'/../log/debug.log', date("Y-m-d H:i:s -> " ).print_r( $log, TRUE )."\n", FILE_APPEND );
+function writeLog( $log, $append = true ){
+    $file = __DIR__.'/../log/debug.log';
+    $str  = date("Y-m-d H:i:s -> " ).print_r( $log, TRUE )."\n";
+    $append? file_put_contents( $file, $str, FILE_APPEND ) : file_put_contents( $file, $str );
 }
 
 function strpos_all($text, $search) {

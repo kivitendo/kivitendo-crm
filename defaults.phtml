@@ -68,11 +68,13 @@
       type: 'POST',
       data: { action: 'getDefaults' },
       success: function ( data ){
+        //console.log( data );
         $.each( data, function( i, item ){
+          console.log( item );
           if( $( '#' + item.key ).attr('type') == 'checkbox' ) $( '#' + item.key ).prop('checked', item.val == 'true' || item.val == 't' ? true : false  );
-          if( $( '#' + item.key ).attr('type') == 'text' )   $( '#' + item.key ).val( item.val );
-          if( $( '#' + item.key ).attr('type') == 'password' )   $( '#' + item.key ).val( item.val );
-          if( $( '#' + item.key ).attr('type') == 'select' ) $( '#' + item.key + ' option[value=' + item.val + ']').attr( 'selected', true );
+          if( $( '#' + item.key ).attr('type') == 'text' )     $( '#' + item.key ).val( item.val );
+          if( $( '#' + item.key ).attr('type') == 'password' ) $( '#' + item.key ).val( item.val );
+          if( $( '#' + item.key ).attr('type') == 'select' )   $( '#' + item.key + ' option[value=' + item.val + ']').attr( 'selected', true );
         })
       },
       error: function () {

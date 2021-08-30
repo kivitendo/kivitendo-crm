@@ -1,13 +1,13 @@
 <?php
 /**********************************************************************
 *** Erzeugt benutzerfreundliche Links zu den Verzeichnissen         ***
-*** Autor: Ronny Kumke, ronny@lxcars.de   02.02.2012                ***
+*** Autor: Ronny Zimmermann, ronny@lxcars.de     02.02.2012         ***
 **********************************************************************/
 require_once("inc/stdLib.php");
 
 $dir_abs = $_SESSION['crmpath']."/dokumente/".$_SESSION['dbData']['dbname'];
-$link_dir_cust = $_SESSION['sep_cust_vendor'] ? "/link_dir_cust" : "/link_dir";
-$link_dir_vend = $_SESSION['sep_cust_vendor'] ? "/link_dir_vend" : "/link_dir";
+$link_dir_cust = "/link_dir_cust";
+$link_dir_vend = "/link_dir_vend";
 
 //Mandatendokumentverzeichnis:
 if (!is_dir($dir_abs)) {
@@ -16,14 +16,12 @@ if (!is_dir($dir_abs)) {
 }
 chmod($dir_abs,octdec($_SESSION['dir_mode']));
 
-
 //Verzeichnis für Links:
 if (!is_dir($dir_abs.$link_dir_cust)) {
     mkdir($dir_abs.$link_dir_cust);
     if ( $_SESSION['dir_group'] ) chgrp($dir_abs.$link_dir_cust, $_SESSION['dir_group']);
 }
 chmod($dir_abs.$link_dir_cust, octdec($_SESSION['dir_mode']));
-
 
 if (!is_dir($dir_abs.$link_dir_vend)) {
     mkdir($dir_abs.$link_dir_vend);

@@ -34,7 +34,9 @@ function getLastCall(){
 }
 
 function numberToAdress( $number  ){ //Holt mit $nummer Daten aus dem öffentlichem Telefonverzeichnis
+    /*
     $klicktelKey = $_SESSION['klicktel_key'];
+    writeLog( 'KlicktelKey: '.$_SESSION['klicktel_key'] );
     $url = "http://openapi.klicktel.de/searchapi/invers?key=";
     $url .= $klicktelKey;
     $url .= "&number=";
@@ -69,6 +71,7 @@ function numberToAdress( $number  ){ //Holt mit $nummer Daten aus dem öffentlic
     $entry['city']         = $first_entry['location']['city'];
     $entry['phone']        = $_GET['data'];
     if( $objResult['response']['results']['0'] ) echo json_encode( $entry );
+    */
 }
 
 ?>

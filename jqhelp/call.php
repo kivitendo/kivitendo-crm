@@ -33,14 +33,14 @@ function getLastCall(){
     return 'lastItem';
 }
 
-function numberToAdress( $number  ){ //Holt mit $nummer Daten aus dem öffentlichem Telefonverzeichnis
+function numberToAdress( $myarray  ){ //Holt mit $nummer Daten aus dem öffentlichem Telefonverzeichnis
     /*
     $klicktelKey = $_SESSION['klicktel_key'];
     writeLog( 'KlicktelKey: '.$_SESSION['klicktel_key'] );
     $url = "http://openapi.klicktel.de/searchapi/invers?key=";
     $url .= $klicktelKey;
     $url .= "&number=";
-    $url .= $number;
+    $url .= $myarray['data'];
 
     $ch = curl_init();
     curl_setopt( $ch, CURLOPT_URL, $url );
@@ -72,6 +72,33 @@ function numberToAdress( $number  ){ //Holt mit $nummer Daten aus dem öffentlic
     $entry['phone']        = $_GET['data'];
     if( $objResult['response']['results']['0'] ) echo json_encode( $entry );
     */
-}
 
+    $number = $myarray['data'];
+    $result = array();
+    $url = "http://www.dasoertliche.de/Controller?form_name=search_inv&ph=$number";
+
+    $dom = new DOMDocument();
+    $dom->loadHTMLFile( $url );
+
+    if ($dom->documentURI == null){
+        writeLog( 'Datei: '.__file__.' Zeile: '.__line__.'Timeout bei Abruf der Webseite '.$url );
+        return false;
+    }
+    $finder = new DomXPath( $dom );
+
+    $nodes = $finder->query( '//span[@class="st-treff-name"]' );
+    $result['name'] = $nodes->item( 0 )->nodeValue;
+    $nodes = $finder->query( '//span[@class="st-rufnr-nm"]' );
+    $result['mobile'] = trim( substr( $nodes->item( 1 )->nodeValue, 7 ) );
+    $result['mobile'] = str_replace( ' ', $tmpMobile,  $result['mobile'] );
+
+    $adressNodeList = $dom->getElementsByTagName( 'address' );
+    $adress = $adressNodeList->item( 0 )->nodeValue;
+    $commaPos = strpos( $adress, ',' );
+    $result['street'] = trim( substr( $adress, 0, $commaPos ) );
+    $result['zipCode'] = trim( substr( $adress, $commaPos + 1, 8 ) );
+    $result['city'] = trim( substr( $adress, $commaPos + 9 ) );
+
+    echo json_encode( $result );
+}
 ?>

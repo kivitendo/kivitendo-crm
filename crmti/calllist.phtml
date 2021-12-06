@@ -129,11 +129,10 @@
                         //delete entryData['backlink'];
                         $('#dialogFound').dialog("open")
                         .html('<table id="myTable">' +
-                                '<tr><td>'+ langData[language]['SALUTATION'] +': </td><td>' + data.greeting + '</td></tr>' +
-                                '<tr><td>'+ langData[language]['NAME'] +': </td><td>' + data.name + '</td></tr>' +
-                                '<tr><td>'+ langData[language]['STREET'] + ' ' + langData[language]['NUMBER'] + ': </td><td>' + data.street + '</td></tr>' +
-                                '<tr><td>'+ langData[language]['ZIPCODE'] + ' ' + langData[language]['CITY'] + ': </td><td>' + data.zipcode + ' ' + data.city + '</td></tr>' +
-                                '<tr><td colspan="2" align=center ><a target="_blank" href="' + data.backlink + '">'+ langData[language]['VIEW_PHONE_LIST'] + '</a></td></tr>' +
+                                '<tr><td> Name: </td><td>' + data.name + '</td></tr>' +
+                                '<tr><td> Straße: </td><td>' + data.street + '</td></tr>' +
+                                '<tr><td>'+ langData[language]['ZIPCODE'] + ' ' + langData[language]['CITY'] + ': </td><td>' + data.zipCode + ' ' + data.city + '</td></tr>' +
+                                '<tr><td>Mobile: </td><td>' + data.mobile + '</td></tr>' +
                               '</table>');
                         delete entryData['backlink'];
                     },

@@ -4,6 +4,7 @@
     function newCall( $data ){
         define( "DEBUG", FALSE );
         if( DEBUG ) writeLog( $data );
+        $phoneNumber = str_replace( '+', '00', $data['number'] );
         $myLogin = $_SESSION['userConfig']['login'];
         $port = 5038;
         // less /etc/asterisk/manager.conf
@@ -43,7 +44,7 @@
                     $originateRequest  = "Action: Originate\r\n";
                     $originateRequest .= "Channel: SIP/".$internal_phone."@".$internal_phone."\r\n";//ToDo
                     $originateRequest .= "Callerid: # ".$data['name']."\r\n"; //Show (Customer|Vendor) Name
-                    $originateRequest .= "Exten: ".$data['number']."\r\n";
+                    $originateRequest .= "Exten: ".$phoneNumber."\r\n";
                     $originateRequest .= "Context: ".$external_context."\r\n";
                     $originateRequest .= "Priority: 1\r\n";
                     $originateRequest .= "Async: true\r\n\r\n";

@@ -321,6 +321,14 @@
 
         showCall();
 
+        $( '.whatsapp' ).click( function( data ){
+            data.stopImmediatePropagation();
+            //console.log( this.attributes.data.nodeValue);
+            window.open( 'https://api.whatsapp.com/send?phone=' + this.attributes.number.nodeValue +  '&text=Hey ' + this.attributes.name.nodeValue + ' im Anhang befinden sich die Dokument(e). \n Mit freundlichem Grüßen \n Dein / Ihr Autoprofis-Team','_blank');
+            //alert( this.stringify() );
+            return false;
+        }).button().removeClass( "ui-button");
+
         $( '#tel1, #tel2' ).click( function( data ){
             data.stopImmediatePropagation();
             //alert( 'click' );
@@ -688,10 +696,10 @@
                 <span class="mini"><br />&nbsp;<br /></span>
                 <table>
                   <tr>
-                    <td>.:tel:.:</td><td><button id="tel1">{Telefon}</button></td><td><button id="tel1_dialog_button">T</button><div id="tel1_dialog"></div></td>
+                    <td>.:tel:.:</td><td><button id="tel1">{Telefon}</button></td><td><button id="tel1_dialog_button">T</button><div id="tel1_dialog"></div></td><td ><button class="whatsapp" number="{Telefon}" name="{Fname1}" title="Whatsapp" ><img src="image/whatsapp.png" alt="Whatsapp" ></button></td>
                   </tr>
                   <tr>
-                    <td>.:fax:.:</td><td><button id="tel2">{Fax}</button></td><td><button id="tel2_dialog_button">T</button><div id="tel2_dialog"></div></td>
+                    <td>.:fax:.:</td><td><button id="tel2">{Fax}</button></td><td><button id="tel2_dialog_button">T</button><div id="tel2_dialog"></div></td><td ><button class="whatsapp" number="{Fax}" name="{Fname1}" title="Whatsapp" ><img src="image/whatsapp.png" alt="Whatsapp" ></button></td>
                   </tr>
                </table>
                 <span class="mini">&nbsp;<br /></span>
@@ -841,6 +849,6 @@
         </div>
     </div>
 {END_CONTENT}
-{TOOLS}
+
 </body>
 </html>

@@ -322,10 +322,14 @@
         showCall();
 
         $( '.whatsapp' ).click( function( data ){
-            data.stopImmediatePropagation();
-            //console.log( this.attributes.data.nodeValue);
-            window.open( 'https://api.whatsapp.com/send?phone=' + this.attributes.number.nodeValue +  '&text=Hey ' + this.attributes.name.nodeValue + ' im Anhang befinden sich die Dokument(e). \n Mit freundlichem Grüßen \n Dein / Ihr Autoprofis-Team','_blank');
-            //alert( this.stringify() );
+			data.stopImmediatePropagation();
+			phoneNumber = this.attributes.number.nodeValue;
+			if( phoneNumber[0]  != "+" ){
+				if( phoneNumber[0] == "0" ){
+					phoneNumber = "+49" + phoneNumber.slice(1);
+				}
+			}
+			window.open( 'https://api.whatsapp.com/send?phone=' + phoneNumber +  '&text=Hey ' + this.attributes.name.nodeValue + ' im Anhang befinden sich die Dokument(e). \n Mit freundlichem Grüßen \n Dein / Ihr Autoprofis-Team','_blank');
             return false;
         }).button().removeClass( "ui-button");
 

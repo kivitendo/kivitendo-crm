@@ -322,18 +322,17 @@
         showCall();
 
         $( '.whatsapp' ).click( function( data ){
-			data.stopImmediatePropagation();
-			phoneNumber = this.attributes.number.nodeValue;
-			if( phoneNumber[0]  != "+" ){
-				phoneNumber = "+49" + phoneNumber.slice(1);
-			}
-			window.open( 'https://api.whatsapp.com/send?phone=' + phoneNumber +  '&text=Hey ' + this.attributes.name.nodeValue + ' im Anhang befinden sich die Dokument(e). %0D%0AMit freundlichem Grüßen %0D%0ADein / Ihr Autoprofis-Team','_blank');
+            data.stopImmediatePropagation();
+            phoneNumber = this.attributes.number.nodeValue;
+            if( phoneNumber[0]  != "+" ){
+                phoneNumber = "+49" + phoneNumber.slice(1);
+            }
+            window.open( 'https://api.whatsapp.com/send?phone=' + phoneNumber +  '&text=Hey ' + this.attributes.name.nodeValue + ' im Anhang befinden sich die Dokument(e). %0D%0AMit freundlichem Grüßen %0D%0ADein / Ihr Autoprofis-Team','_blank');
             return false;
-        }).button().removeClass( "ui-button");
+        }).button().removeClass( "ui-button").tooltip();
 
         $( '#tel1, #tel2' ).click( function( data ){
             data.stopImmediatePropagation();
-            //alert( 'click' );
             $.ajax({
                 url: 'ajax/clickToCall.php',
                 type: 'POST',
@@ -347,6 +346,16 @@
             });
             return false;
         }).button().removeClass( "ui-button").css({ width: '170px', 'text-align': 'left'});
+
+        $( '.copy' ).click( function( data ){
+            //alert( 'click ' + this.attributes.number.nodeValue );
+            var $temp = $("<input>");
+            $( "body" ).append( $temp );
+            $temp.val( this.attributes.number.nodeValue ).select();
+            document.execCommand( "copy" );
+            $temp.remove();
+            data.stopImmediatePropagation();
+        }).button().removeClass( "ui-button").tooltip();
 
         $( '#tel1_dialog_button, #tel2_dialog_button' ).click( function( data ){
             data.stopImmediatePropagation();
@@ -454,14 +463,6 @@
             }).html('<iframe src="' + cUrl + '" width="610px" height="600px" scrollbars="yes"></iframe>');
         }
 
-
-
-        // Aus Tabelle kopieren,  weiter verbessern!
-
-        $("td").click(function() {
-            $(this).select();
-            document.execCommand("copy");
-        });
         $("#shipleft").click(function(){ nextshipto('-'); });
         $("#shipright").click(function(){ nextshipto('+'); });
         nextshipto('o');
@@ -698,10 +699,10 @@
                 <span class="mini"><br />&nbsp;<br /></span>
                 <table>
                   <tr>
-                    <td>.:tel:.:</td><td><button id="tel1">{Telefon}</button></td><td><button id="tel1_dialog_button">T</button><div id="tel1_dialog"></div></td><td ><button class="whatsapp" number="{Telefon}" name="{Fname1}" title="Whatsapp" ><img src="image/whatsapp.png" alt="Whatsapp" ></button></td>
+                    <td>.:tel:.:</td><td><button id="tel1">{Telefon}</button></td><td><button id="tel1_dialog_button">T</button><div id="tel1_dialog"></div></td><td><button class="copy" number="{Telefon}" title="Copy">C</button></td><td ><button class="whatsapp" number="{Telefon}" title="Whatsapp" ><img src="image/whatsapp.png" alt="Whatsapp" ></button></td>
                   </tr>
                   <tr>
-                    <td>.:fax:.:</td><td><button id="tel2">{Fax}</button></td><td><button id="tel2_dialog_button">T</button><div id="tel2_dialog"></div></td><td ><button class="whatsapp" number="{Fax}" name="{Fname1}" title="Whatsapp" ><img src="image/whatsapp.png" alt="Whatsapp" ></button></td>
+                    <td>.:fax:.:</td><td><button id="tel2">{Fax}</button></td><td><button id="tel2_dialog_button">T</button><div id="tel2_dialog"></div></td><td><button class="copy" number="{Fax}" title="Copy">C</button></td><td ><button class="whatsapp" number="{Fax}" title="Whatsapp" ><img src="image/whatsapp.png" alt="Whatsapp" ></button></td>
                   </tr>
                </table>
                 <span class="mini">&nbsp;<br /></span>

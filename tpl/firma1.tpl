@@ -699,10 +699,10 @@
                 <span class="mini"><br />&nbsp;<br /></span>
                 <table>
                   <tr>
-                    <td>.:tel:.:</td><td><button id="tel1">{Telefon}</button></td><td><button id="tel1_dialog_button">T</button><div id="tel1_dialog"></div></td><td><button class="copy" number="{Telefon}" title="Copy">C</button></td><td ><button class="whatsapp" number="{Telefon}" title="Whatsapp" ><img src="image/whatsapp.png" alt="Whatsapp" ></button></td>
+                    <td>.:tel:.:</td><td><button id="tel1">{Telefon}</button></td><td><button id="tel1_dialog_button">T</button><div id="tel1_dialog"></div></td><td><button class="copy" number="{Telefon}" title="Copy">C</button></td><td ><button class="whatsapp" number="{Telefon}" name="{Fname1}" title="Whatsapp" ><img src="image/whatsapp.png" alt="Whatsapp" ></button></td>
                   </tr>
                   <tr>
-                    <td>.:fax:.:</td><td><button id="tel2">{Fax}</button></td><td><button id="tel2_dialog_button">T</button><div id="tel2_dialog"></div></td><td><button class="copy" number="{Fax}" title="Copy">C</button></td><td ><button class="whatsapp" number="{Fax}" title="Whatsapp" ><img src="image/whatsapp.png" alt="Whatsapp" ></button></td>
+                    <td>.:fax:.:</td><td><button id="tel2">{Fax}</button></td><td><button id="tel2_dialog_button">T</button><div id="tel2_dialog"></div></td><td><button class="copy" number="{Fax}" title="Copy">C</button></td><td ><button class="whatsapp" number="{Fax}" name="{Fname1}" title="Whatsapp" ><img src="image/whatsapp.png" alt="Whatsapp" ></button></td>
                   </tr>
                </table>
                 <span class="mini">&nbsp;<br /></span>

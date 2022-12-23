@@ -11,7 +11,7 @@ function getCategories(){
 function getArticle( $data ){
      $rs = $GLOBALS['dbh']->query( 'UPDATE knowledge_content SET modifydate = now() WHERE category = '.$data['data'].' AND version = (SELECT max(version) FROM knowledge_content WHERE category = '.$data['data'].')'  );
      $sql = "SELECT json_agg (json) from (SELECT * FROM knowledge_content, knowledge_category WHERE category =" .$data['data']. " AND knowledge_category.id = ".$data['data']." AND version = ( SELECT max(version) FROM knowledge_content, knowledge_category WHERE knowledge_category.id = ".$data['data']." AND category =".$data['data']." ) ) json";
-     writeLog($sql);
+     //writeLog($sql);
      $rs = $GLOBALS['dbh']->getOne( $sql );
      if( $rs['json_agg'] == NULL ) {
         $sql = "SELECT json_agg (json) from ( SELECT * FROM knowledge_content WHERE category = ".$data['data']." ORDER BY id DESC ) json";

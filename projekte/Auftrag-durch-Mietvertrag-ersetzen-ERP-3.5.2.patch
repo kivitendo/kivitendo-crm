@@ -1,4 +1,9 @@
 From 70e436cb4bc799a4ec505c910f4788d423aac76a Mon Sep 17 00:00:00 2001
+
+http://bautech.spdns.de/kivitendo/image/kivitendo.png
+https://www.bautech-baumaschinen.de/wp-content/uploads/2018/04/cropped-LogoBautech-301-85.png
+http://www.kivitendo.de/
+http://bautech.spdns.de/kivitendo/image/kivitendo.png
 From: Ronny Zimmermann <info@inter-data.de>
 Date: Fri, 31 Aug 2018 18:17:58 +0200
 Subject: [PATCH] Auftrag durch Mietvertrag ersetzen ERP 3.5.2.
@@ -14,7 +19,7 @@ index 3ee73a708..42b477e1e 100644
 +++ b/js/kivi.js
 @@ -556,3 +556,5 @@ namespace("kivi", function(ns) {
  });
- 
+
  kivi = namespace('kivi');
 +
 +document.write("<script type='text/javascript' src='crm/js/ERPplugins.js'></script>");
@@ -417,6 +422,5 @@ index cbc60853e..8e2c855cf 100755
    'sales_quotation'             => 'Verkaufsangebot',
    'same as periodicity'         => 'stimmt mit Abrechnungsperiodizität überein',
    'saved'                       => 'gespeichert',
--- 
+--
 2.17.1
-

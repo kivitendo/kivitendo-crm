@@ -724,6 +724,8 @@ function mkHeader() {
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.plugin.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator.js'.$SN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/jquery-calculator/jquery.calculator-'.$_SESSION['countrycode'].'.js'.$SN,
+        'BOOTSTRAP_CSS' => $LV.$_SESSION['baseurl'].'crm/bootstrap/css/bootstrap.css'.$LN,
+        'BOOTSTRAP_JS'  => $SV.$_SESSION['baseurl'].'crm/bootstrap/js/bootstrap.bundle.js'.$SN,
         'FANCYBOX'      => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/fancybox/source/jquery.fancybox.css'.$LN.
                            $SV.$_SESSION['baseurl'].'crm/jquery-plugins/fancybox/source/jquery.fancybox.pack.js'.$SN,
         'ELFINDER'      => $LV.$_SESSION['baseurl'].'crm/jquery-plugins/elFinder/css/elfinder.min.css'.$LN.

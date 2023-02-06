@@ -3,14 +3,19 @@
 <head>
 <meta charset='utf-8' />
 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
 <?php
     require_once __DIR__.'/inc/stdLib.php';
+    //echo $head['BOOTSTRAP_CSS'];
     $menu = $_SESSION['menu'];
     echo $menu['stylesheets'];
     echo $menu['javascripts'];
     echo $head['JQTABLE'];
     echo $head['THEME'];
     echo $head['T8'];// Übersetzung mit kivi.t8
+    echo $head['BOOTSTRAP_CSS'];
+    echo $head['BOOTSTRAP_JS'];
 
     /*****************************************************************************************************************************
     Grundsätze: Content wird via Ajax im Json-Format geholt und an die entsprechenden Container verteilt
@@ -25,42 +30,12 @@
     ******************************************************************************************************************************/
 
 ?>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 
 <script>
   $( document ).ready( function(){
 
-    //URL-Parameter lesen
-    if( decodeURI( document.location.hash.substr( 1 ) ) ){
-      var myUrlParamObj = JSON.parse( decodeURI( document.location.hash.substr( 1 ) ) );
-      alert( myUrlParamObj.name );
-    }
-    else{
-      alert( 'Es wurde kein Parameter übergeben! Ich werde das nun nachholen...' );
-      document.location.hash = '{ "name":"Widukind", "age":30, "cars":{ "Ford": 3, "BMW": 6, "Fiat": 19 } }';
-    }
-
-    alert( 'Ich lese jetzt den Hash in ein Objekt, verändere es und schreibe in die URI! ' );
-    var myUrlParamObj = JSON.parse( decodeURI( document.location.hash.substr( 1 ) ) );
-
-    $( "#example" ).html( myUrlParamObj.name ).css({
-      fontSize: "36px",
-      fontWeight: "bold",
-      color: "red",
-    })
-
-    myUrlParamObj.name = "Widogard";
-
-    document.location.hash = JSON.stringify( myUrlParamObj );
-
-    alert( 'Drücke F5! ');
-    alert( kivi.t8( 'Contac thread' ) );
-
-    $( "#example" ).html( myUrlParamObj.name ).css({
-      fontSize: "36px",
-      fontWeight: "bold",
-      color: "blue",
-    })
 
     $( '#headline' ).html( kivi.t8( 'Headline' ) );
   });
@@ -80,8 +55,20 @@
     echo $menu['start_content'];
 ?>
 
+
+
   <p id="headline" class="ui-state-highlight ui-corner-all tools" style="margin-top: 20px; padding: 0.6em;"></p>
   <div id="example" style="position:absolute"></div>
+  <div class="container">
+    <div  class="row">
+        <div  class="col-sm-3">
+            <h2>Box  1</h2>
+        </div>
+        <div  class="col-sm-9">
+            <h2>Box  2</h2>
+        </div>
+    </div>
+</div>
 
 <?php echo $menu['end_content']; ?>
 

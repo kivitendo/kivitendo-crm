@@ -69,18 +69,73 @@
   <script type="text/javascript" src="js/client_js.js"></script>
   <script type="text/javascript" src="js/jquery/jquery.tooltipster.min.js"></script>
   <script type="text/javascript" src="js/jquery/ui/i18n/jquery.ui.datepicker-de.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Ende -->
 
 <style>
 	.ui-autocomplete-category {
 		font-weight: bold;
 	}
+
+	.crm-p1 {
+		padding: 1em;
+	}
+
+	.crm-p2 {
+		padding: 2em;
+	}
+
+	.crm-pt05 {
+		padding-top: 0.5em;
+	}
+
+	.crm-pt025 {
+		padding-top: 0.25em;
+	}
+
+	.crm-pt1 {
+		padding-top: 1em;
+	}
+
+	.crm-pt2 {
+		padding-top: 2em;
+	}
+
+	.crm-mt2 {
+		margin-top: 2em;
+	}
+
+	.crm-tab {
+		overflow: auto;
+	}
+
+	.crm-fs {
+		font-size: 14px;
+	}
+
+	main button {
+		min-width: 25px;
+		min-height: 25px;
+	}
+
+	/* debug */
+	/*
+	* {
+		outline: 1px solid red;
+	}
+	*/
 </style>
 
 </head>
 
-<body>
+<body class="crm-fs">
+<div id="message-dialog" style="display:none;">
+	<div id="message-dialog-error" style="display:none"></div>
+	<p id="message-dialog-text"></p>
+	<p id="message-dialog-debug" style="display:none"></p>
+</div>
+
+<script>
+</script>
 
 <?php
 	echo $objResult->{'pre_content'};
@@ -90,200 +145,258 @@
 	<div class="layout-actionbar-separator"></div>
 	<div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Workflow</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit">Bearbeiten</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-offer">Angebot erstellen</div><div id="crm-wf-order" class="layout-actionbar-action layout-actionbar-submit">Auftrag erstellen</div><div id="crm-wf-bill" class="layout-actionbar-action layout-actionbar-submit">Rechnung erstellen</div></div></div>
 </div>
+
+<!-- Prototype-Start: -->
+
 <?php
 	echo $objResult->{'start_content'};
 ?>
 
 <h1 id="crm-widget-title" class="tools" style="margin-top: 20px; height: 20px;">Detailansicht (Prototyp)</h1>
-<div id="crm-main-view">
 
-<!-- Prototype-Start: -->
+<main>
 
-<div class="container-fluid">
+<div id="crm-main-view" class="container-fluid">
 
-	<ul>
-		<li><a href="#">Firmenstammdaten</a></li>
-		<li><a href="#">Ansprechpartner</a></li>
-		<li><a href="#">Umsätze</a></li>
-		<li><a href="#">Dokumente</a></li>
-		<li><a href="#">Ansprechpersonen</a></li>
-	</ul>
-
-<div id="lxc-widget-base-data" class="row justify-content-md-center">
-	<div id="lxc-id-hq-view" class="col-md-auto pt-4">
+<div id="lxc-widget-base-data" class="row crm-p2">
+	<div id="lxc-widget-contact" class="col-lg-3">
 		<div><strong><span id="lxc-id-name">Maria Mustermann</span></strong></div>
-		<div class="pt-1"><span id="lxc-id-street">Bahnhofsstrasse 23</span></div>
-		<div><span id="lxc-id-place">D-15345 Rehfelde</span></div>
-		<div class="pt-4"><strong>Kontakt</strong></div>
-		<div class="pt-2"><span id="lxc-id-contact-person">Maria Mustermann</span></div>
-		<div class="pt-2">
-			Telefon: <button id="lxc-id-tel1">+49175-1234567</botton>
-			<button id="lxc-id-tel1-t">T</botton>
-			<button id="lxc-id-tel1-c">C</botton>
-			<button id="lxc-id-tel1-w">W</botton>
+		<div class="crm-pt05"><span id="crm-id-street">Bahnhofsstrasse 23</span></div>
+		<div class="crm-pt025"><span id="crm-id-place">D-15345 Rehfelde</span></div>
+		<div class="crm-pt2"><strong>Kontakt</strong></div>
+		<div class="crm-pt05"><span id="crm-id-contact-person">Maria Mustermann</span></div>
+		<div class="row crm-pt05">
+			<div class="col-md-2">Telefon:</div>
+			<div class="col-md-10">
+				<button id="crm-id-tel1">+49175-1234567</botton>
+				<button id="crm-id-tel1-t">T</botton>
+				<button id="crm-id-tel1-c">C</botton>
+				<button id="crm-id-tel1-w">W</botton>
+			</div>
 		</div>
-		<div class="pt-2">
-			Telefon: <button id="lxc-id-tel2">033433-123456</button>
-			<button id="lxc-id-tel2-t">T</botton>
-			<button id="lxc-id-tel2-c">C</botton>
-			<button id="lxc-id-tel2-w">W</botton>
+		<div class="row crm-pt025">
+			<div class="col-md-2">Telefon:</div>
+			<div class="col-md-10">
+				<button id="crm-id-tel2">033433-123456</button>
+				<button id="crm-id-tel2-t">T</botton>
+				<button id="crm-id-tel2-c">C</botton>
+				<button id="crm-id-tel2-w">W</botton>
+			</div>
 		</div>
-		<div class="pt-2">E-Mail: <button>example@googlemail.com</button></div>
-	</div>
-	<div id="lxc-widget-contact" class="col-md-auto pt-4">
-		<ul class="nav nav-tabs">
-			<li class="nav-item">
-				<a class="nav-link" aria-current="page" href="#">Kontakte</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link active" aria-current="page" href="#">Angebote</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" aria-current="page" href="#">Aufträge</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" aria-current="page" href="#">Lieferscheine</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" aria-current="page" href="#">Rechnungen</a>
-			</li>
-		</ul>
-		<table class="table table-striped">
+		<div class="row crm-pt025">
+			<div class="col-md-2">E-Mail:</div>
+			<div class="col-md-10"><button id="crm-id-email">example@googlemail.com</button></div>
+		</div>
+		<table width="100%" class="crm-pt2">
 			<thead>
 			<tr>
-				<th scope="col">Datum</th>
-				<th scope="col">Erste Position</th>
-				<th scope="col">Betrag</th>
-				<th scope="col">Nummer</th>
+				<td class="listheading">Kenzeichen</th>
+				<td class="listheading">Hersteller</th>
+				<td class="listheading">Fahrzeugtyp</th>
+				<td class="listheading">Fahrzeugart</th>
 			</tr>
 			</thead>
 			<tbody>
-			<tr>
-				<th scope="row">11.11.2011</th>
-				<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-				<td>5000,00 EUR</td>
-				<td>11111</td>
+			<tr class="listrow0">
+				<th>MOL-AB123</th>
+				<td>Mercedes</td>
+				<td>101</td>
+				<td>Pkw</td>
 			</tr>
-			<tr>
-				<th scope="row">11.11.2011</th>
-				<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-				<td>5000,00 EUR</td>
-				<td>11111</td>
+			<tr class="listrow1">
+				<th>MOL-AB123</th>
+				<td>BMW</td>
+				<td>i3</td>
+				<td>Pkw</td>
 			</tr>
-			<tr>
-				<th scope="row">11.11.2011</th>
-				<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-				<td>5000,00 EUR</td>
-				<td>11111</td>
+			<tr class="listrow0">
+				<th>MOL-AB123</th>
+				<td>Audi</td>
+				<td>A5</td>
+				<td>Pkw</td>
 			</tr>
-			<tr>
-				<th scope="row">11.11.2011</th>
-				<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-				<td>5000,00 EUR</td>
-				<td>11111</td>
-			</tr>
-			<tr>
-				<th scope="row">11.11.2011</th>
-				<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-				<td>5000,00 EUR</td>
-				<td>11111</td>
-			</tr>
-			<tr>
-				<th scope="row">11.11.2011</th>
-				<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-				<td>5000,00 EUR</td>
-				<td>11111</td>
-			</tr>
-			<tr>
-				<th scope="row">11.11.2011</th>
-				<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-				<td>5000,00 EUR</td>
-				<td>11111</td>
-			</tr>
-			<tr>
-				<th scope="row">11.11.2011</th>
-				<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-				<td>5000,00 EUR</td>
-				<td>11111</td>
-			</tr>
-			<tr>
-				<th scope="row">11.11.2011</th>
-				<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-				<td>5000,00 EUR</td>
-				<td>11111</td>
-			</tr>
-			<tr>
-				<th scope="row">11.11.2011</th>
-				<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-				<td>5000,00 EUR</td>
-				<td>11111</td>
-			</tr>
-			<tr>
-				<th scope="row">11.11.2011</th>
-				<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-				<td>5000,00 EUR</td>
-				<td>11111</td>
-			</tr>
-			<tr>
-				<th scope="row">11.11.2011</th>
-				<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-				<td>5000,00 EUR</td>
-				<td>11111</td>
-			</tr>
-			<tr>
-				<th scope="row">11.11.2011</th>
-				<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-				<td>5000,00 EUR</td>
-				<td>11111</td>
-			</tr>
-			<tr>
-				<th scope="row">11.11.2011</th>
-				<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-				<td>5000,00 EUR</td>
-				<td>11111</td>
-			</tr>
-			<tr>
-				<th scope="row">11.11.2011</th>
-				<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-				<td>5000,00 EUR</td>
-				<td>11111</td>
+			<tr class="listrow1">
+				<th>MOL-AB123</th>
+				<td>VW</td>
+				<td>Golf 7</td>
+				<td>Pkw</td>
 			</tr>
 			</tbody>
 		</table>
-		<div id="lxc-id-subview" class="pt-4">
-			<strong>Subview</strong>
+	</div>
+	<div id="crm-widget-main" class="col-lg-6">
+		<div id="crm-tabs-main" class="tabwidget">
+			<ul class="nav nav-tabs">
+				<li class="nav-item">
+					<a class="nav-link active" aria-current="page" href="#crm-tab-offers">Angebote</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" aria-current="page" href="#crm-tab-orders">Aufträge</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" aria-current="page" href="#crm-tab-deliveries">Lieferscheine</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" aria-current="page" href="#crm-tab-invoices">Rechnungen</a>
+				</li>
+			</ul>
+			<div id="crm-tab-offers" class="crm-tab">
+			</div>
+			<div id="crm-tab-orders" class="crm-tab">
+				<table class="table table-striped">
+					<thead>
+					<tr>
+						<td class="listheading">Datum</th>
+						<td class="listheading">Erste Position</th>
+						<td class="listheading">Betrag</th>
+						<td class="listheading">Nummer</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr class="listrow0">
+						<th>11.11.2011</th>
+						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
+						<td>5000,00 EUR</td>
+						<td>11111</td>
+					</tr>
+					<tr class="listrow1">
+						<th scope="row">11.11.2011</th>
+						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
+						<td>5000,00 EUR</td>
+						<td>11111</td>
+					</tr>
+					<tr>
+						<th scope="row">11.11.2011</th>
+						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
+						<td>5000,00 EUR</td>
+						<td>11111</td>
+					</tr>
+					<tr>
+						<th scope="row">11.11.2011</th>
+						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
+						<td>5000,00 EUR</td>
+						<td>11111</td>
+					</tr>
+					<tr>
+						<th scope="row">11.11.2011</th>
+						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
+						<td>5000,00 EUR</td>
+						<td>11111</td>
+					</tr>
+					<tr>
+						<th scope="row">11.11.2011</th>
+						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
+						<td>5000,00 EUR</td>
+						<td>11111</td>
+					</tr>
+					<tr>
+						<th scope="row">11.11.2011</th>
+						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
+						<td>5000,00 EUR</td>
+						<td>11111</td>
+					</tr>
+					<tr>
+						<th scope="row">11.11.2011</th>
+						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
+						<td>5000,00 EUR</td>
+						<td>11111</td>
+					</tr>
+					<tr>
+						<th scope="row">11.11.2011</th>
+						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
+						<td>5000,00 EUR</td>
+						<td>11111</td>
+					</tr>
+					<tr>
+						<th scope="row">11.11.2011</th>
+						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
+						<td>5000,00 EUR</td>
+						<td>11111</td>
+					</tr>
+					<tr>
+						<th scope="row">11.11.2011</th>
+						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
+						<td>5000,00 EUR</td>
+						<td>11111</td>
+					</tr>
+					<tr>
+						<th scope="row">11.11.2011</th>
+						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
+						<td>5000,00 EUR</td>
+						<td>11111</td>
+					</tr>
+					<tr>
+						<th scope="row">11.11.2011</th>
+						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
+						<td>5000,00 EUR</td>
+						<td>11111</td>
+					</tr>
+					<tr>
+						<th scope="row">11.11.2011</th>
+						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
+						<td>5000,00 EUR</td>
+						<td>11111</td>
+					</tr>
+					<tr>
+						<th scope="row">11.11.2011</th>
+						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
+						<td>5000,00 EUR</td>
+						<td>11111</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			<div id="crm-tab-deliveries" class="crm-tab">
+			</div>
+			<div id="crm-tab-invoices" class="crm-tab">
+			</div>
 		</div>
 	</div>
-	<div id="lxc-widget-contact" class="col-md-auto ps-5 pt-4">
-		<ul class="nav nav-tabs">
-			<li class="nav-item">
-				<a class="nav-link" aria-current="page" href="#">Lieferanschrift</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link active" aria-current="page" href="#">Notizen</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" aria-current="page" href="#">Variablen</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" aria-current="page" href="#">Finanzinfos</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" aria-current="page" href="#">zusätzliche Infos</a>
-			</li>
-		</ul>
-		<div class="pt-2">
-			<textarea rows="10" cols="60">Hier stehen dann die vielen wichtigen Notizen.</textarea>
+	<div id="lxc-id-hq-view" class="col-lg-3">
+		<div id="crm-tabs-infos" class="tabwidget">
+			<ul class="nav nav-tabs">
+				<li class="nav-item">
+					<a class="nav-link" aria-current="page" href="#crm-tab-contact-hist">Kontakthistorie</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" aria-current="page" href="#crm-tab-delivery-addr">Lieferanschrift</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link active" aria-current="page" href="#crm-tab-notes">Notizen</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" aria-current="page" href="#crm-tab-vars">Variablen</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" aria-current="page" href="#crm-tab-finance-infos">Finanzinfos</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" aria-current="page" href="#crm-tab-extra-infos">Infos</a>
+				</li>
+			</ul>
+			<div id="crm-tab-contact-hist" class="crm-tab">
+			</div>
+			<div id="crm-tab-delivery-addr" class="crm-tab">
+			</div>
+			<div id="crm-tab-notes" class="crm-tab">
+				<p>Hier stehen dann die vielen wichtigen Notizen.</p>
+			</div>
+			<div id="crm-tab-vars" class="crm-tab">
+			</div>
+			<div id="crm-tab-finance-infos" class="crm-tab">
+			</div>
+			<div id="crm-tab-extra-infos" class="crm-tab">
+			</div>
 		</div>
 	</div>
 </div>
+</div>
 
+</main>
 <!-- Prototype-Ende -->
 
-</div>
-
 <?php
-	echo $objResult->{'end_content'};
+	//echo $objResult->{'end_content'};
 ?>
 
 <script src="crm/js/crm.app.js"></script>

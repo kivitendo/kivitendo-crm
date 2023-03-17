@@ -1,5 +1,8 @@
 $(document).ready(function()
 {
+	$( '#crm-tabs-main' ).tabs();
+	$( '#crm-tabs-infos' ).tabs();
+
 	$.widget("custom.catcomplete", $.ui.autocomplete, {
 	    _renderMenu: function(ul,items) {
 	        var that = this,
@@ -19,9 +22,51 @@ $(document).ready(function()
 	        source: "crm/ajax/crm.app.php?action=fastSearch",
 	        select: function(e,ui) {
 	            alert(ui.item.src + "/" + ui.item.id);
+				
 	        }
 	    });
 	});
+
+	function getCustomer(id) {
+		
+	}
+
+
+    $('#message-dialog').dialog( {
+		autoOpen: false,
+		resizable: false,
+		width: 'auto',
+		height: 'auto',
+		modal: true,
+		position: { my: "top", at: "top+250" },
+		open: function()
+		{
+			$(this).css('maxWidth', window.innerWidth);
+		},
+		buttons:
+		[{
+			text: 'Ok',
+			click: function()
+			{
+				$('#message-dialog-text').html('');
+				$('#message-dialog-debug').html('');
+				$('#message-dialog-error').hide();
+				$(this).parent().removeClass('ui-state-error');
+				$(this).parent().removeClass('ui-state-success');
+	            $(this).dialog("close");
+			}
+		}]
+	});
+
+	$.fn.showMessageDialog = function(style, title, message, debug=null) {
+		$(this).dialog('option', 'title', title).dialog('open').parent().addClass('ui-state-' + style);
+		if('error' === style) $('#message-dialog-error').css('display', '');
+		$('#message-dialog-text').html(message);
+		if(null != debug) $('#message-dialog-debug').html('<pre>' + debug + '</pre>').css('display', '');
+		$(this).resize();
+	}
+
+	$('#message-dialog').showMessageDialog('error', kivi.t8('Connection to the server'), kivi.t8('The server could not process the request!'));
 
 	$('#crm-wf-edit').click(function() {
 		alert("Berabeiten!");

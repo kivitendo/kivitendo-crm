@@ -1,9 +1,9 @@
 <?php
-/*********************************************************************
-*** CRMTI - Customer Relationship Management Telephone Integration ***
-*** geschrieben von Ronny Kumke ronny@lxcars.de Artistic License 2 ***
-*** begonnen im April 2011, Version 1.1.0                          ***
-*********************************************************************/
+/**************************************************************************
+*** CRMTI - Customer Relationship Management Telephone Integration      ***
+*** geschrieben von Ronny Zimmermann ronny@lxcars.de Artistic License 2 ***
+*** begonnen im April 2011, Version 1.1.0                               ***
+**************************************************************************/
 
 require_once("../inc/ajax2function.php");
 
@@ -23,7 +23,7 @@ function CreateFunctionsAndTable(){ //Legt beim ersten Aufruf der Datenbank die 
 }
 
 function getCallListComplete(){
-    $sql = "SELECT json_agg( json_calls ) FROM ( SELECT EXTRACT(EPOCH FROM TIMESTAMPTZ(crmti_init_time)) AS call_date, crmti_status, crmti_src, crmti_dst, crmti_caller_id, crmti_caller_typ, crmti_direction  FROM crmti ORDER BY crmti_init_time DESC) AS json_calls";
+    $sql = "SELECT json_agg( json_calls ) FROM ( SELECT EXTRACT(EPOCH FROM TIMESTAMPTZ(crmti_init_time)) AS call_date, crmti_status, crmti_src, crmti_dst, crmti_caller_id, crmti_caller_typ, crmti_direction, crmti_number  FROM crmti ORDER BY crmti_init_time DESC) AS json_calls";
     $rs = $GLOBALS['dbh']->getone( $sql );
     echo $rs['json_agg'];
     return 1;

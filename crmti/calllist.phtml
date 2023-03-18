@@ -94,6 +94,7 @@
             url: "../jqhelp/call.php?action=getCallListComplete",
             method: "GET",
             success : function (data){
+		alert( data );
                 drawTable(data);
                 $("#DataTable").trigger("update");
                 $("#DataTable").trigger("appendCache");
@@ -160,7 +161,7 @@
             row.append($("<td>" + rowData.crmti_status + "</td>"));
             row.append($("<td>" + rowData.crmti_src + "</td>"));
             row.append($("<td>" + rowData.crmti_dst + "</td>"))
-            row.append($("<td>" + rowData.crmti_caller_id + "</td>"))
+            row.append($("<td>" + rowData.crmti_number + "</td>"))
             row.append($("<td>" + rowData.crmti_caller_typ + "</td>"))
             row.append($("<td>" + rowData.crmti_direction + "</td></tr>"))
         }
@@ -190,13 +191,13 @@
   <table id="DataTable" class="tablesorter">
     <thead>
       <tr>
-        <th class="date">date</th>
-        <th class="status">status</th>
-        <th class="source">source</th>
-        <th class="dest">destination</th>
-        <th class="id">caller_id</th>
-        <th class="typ">caller_typ</th>
-        <th class="dir"> direction</th>
+        <th class="date">Datum</th>
+        <th class="status">Status</th>
+        <th class="source">Quelle</th>
+        <th class="dest">Ziel</th>
+        <th class="id">Nummer</th>
+        <th class="typ">Typ</th>
+        <th class="dir">Richtung</th>
       </tr>
     </thead>
     <tbody id="tbody">

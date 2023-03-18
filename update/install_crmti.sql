@@ -10,6 +10,7 @@ CREATE TABLE crmti(
     crmti_caller_typ      char,                                    -- Kunde, Kieferant, Kontakt
     crmti_direction        text,                                    -- Richtung
     crmti_status           text,                                     -- Anrufstatus
+    crmti_number	   text,
     unique_call_id     text
 );;
 INSERT INTO crmti( crmti_src, crmti_dst ) VALUES ( 'INSTALL.TXT', 'LESEN' );;
@@ -80,7 +81,7 @@ DECLARE
     new_row crmti%rowtype;
 BEGIN
     result := SucheNummer( src );
-    INSERT INTO crmti ( crmti_src, crmti_caller_id, crmti_caller_typ, crmti_dst, crmti_direction, unique_call_id ) VALUES ( result.name, result.id, result.typ, dst, 'E', unique_call_id ) RETURNING * INTO new_row;
+    INSERT INTO crmti ( crmti_src, crmti_caller_id, crmti_caller_typ, crmti_dst, crmti_direction, crmti_number, unique_call_id  ) VALUES ( result.name, result.id, result.typ, dst, 'E', src, unique_call_id  ) RETURNING * INTO new_row;
     DELETE FROM crmti WHERE crmti_id  < new_row.crmti_id - 512;
     IF result.typ != 'X' THEN
         insert into telcall ( calldate, bezug, cause, caller_id, kontakt, inout ) values ( CURRENT_TIMESTAMP, 0, 'Eingehender Anruf zu[r|m] '||dst, result.id, 'T','i' );
@@ -105,7 +106,7 @@ DECLARE
     new_row crmti%rowtype;
 BEGIN
     result := SucheNummer( dst );
-    INSERT INTO crmti ( crmti_src, crmti_dst, crmti_caller_typ, crmti_caller_id, crmti_direction, unique_call_id ) VALUES ( src, result.name, result.typ, result.id, 'A', unique_call_id ) RETURNING * INTO new_row;
+    INSERT INTO crmti ( crmti_src, crmti_dst, crmti_caller_typ, crmti_caller_id, crmti_direction, crmti_number, unique_call_id ) VALUES ( src, result.name, result.typ, result.id, 'A', dst, unique_call_id ) RETURNING * INTO new_row;
     DELETE FROM crmti WHERE crmti_id  < new_row.crmti_id - 512;
     IF result.typ != 'X' THEN
         INSERT INTO telcall ( calldate, bezug, cause, caller_id, kontakt, inout ) values ( CURRENT_TIMESTAMP, 0, 'Ausgehender Anruf vo[n|m] '||src, result.id, 'T', 'o' );

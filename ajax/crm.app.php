@@ -18,6 +18,21 @@ function fastSearch(){
 }
 
 function getCustomer( $data ){
-	$id = json_decode( $data );
-	echo $GLOBALS['dbh']->getAll('SELECT * FROM customer WHERE id='.$id->id.';');
+	$id = json_decode( $data );// meines Wissens wird hier kein json_decode benötigt
+	echo $GLOBALS['dbh']->getAll('SELECT * FROM customer WHERE id='.$id->id.';'); // getOne() ist hier besser geeignet, ich würde es so schreiben
+	echo  $GLOBALS['dbh']->getOne( 'SELECT * FROM customer WHERE id = '.$data['id']; // !!! Semikolon an Ende brachst du nicht schreiben
 }
+
+// Ich würde die vier Funktionen in eine packen
+der Ajaxaufruf sähe dan wie folgt aus
+data: [ action: 'getCVPA', data: [ item: ui.item.src, id:  ui.item.id ]], // das 'C' muss dann durch item... ersetzt werden
+
+function getCVPA( $data ){ // get Customer, Vendor, Person, or Car (auto)
+    $srcArray = array( 'C' => 'customer', 'V' => 'vendor', 'P' => 'contacts', 'A' => 'lxc_cars' );
+    echo  $GLOBALS['dbh']->getOne( 'SELECT * FROM '.$srcArray[$data['item']].' WHERE id = '.$data['id'];
+    // ev heißt id in lxc_cars 'c_id' dass sollte dann geändert werden
+}
+
+Ich heábe den Code nicht getestet - keine Brille..
+Aber so in etwa sieht der Standardcode in LxCars und im CRM aus
+    

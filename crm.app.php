@@ -1,5 +1,6 @@
 <?php
-	session_start();
+    session_start();  // muss sein????
+    // den Rest würde ich auslagern require_once....
     $baseUrl = isset( $_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http';
     $baseUrl.= '://'.$_SERVER['SERVER_NAME'].str_replace( basename(__FILE__), "", $_SERVER['REQUEST_URI'] );
     $url = $baseUrl.'controller.pl?action=Layout/empty&format=json';

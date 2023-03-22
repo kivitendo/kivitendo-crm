@@ -94,7 +94,7 @@
             url: "../jqhelp/call.php?action=getCallListComplete",
             method: "GET",
             success : function (data){
-		alert( data );
+                //alert( data );
                 drawTable(data);
                 $("#DataTable").trigger("update");
                 $("#DataTable").trigger("appendCache");
@@ -116,7 +116,7 @@
         $(document).on("click", "#DataTable tr", function(e) {
             var src = $(this).closest('tr').children().eq(2).text();
             var dst = $(this).closest('tr').children().eq(3).text();
-            var id  = $(this).closest('tr').children().eq(4).text();
+            var id  = $(this).closest('tr').children().eq(7).text();
             var typ = $(this).closest('tr').children().eq(5).text();
             if ( typ == 'X' ){ //Number is not in database
                 number = $.isNumeric( src ) ? src : dst;
@@ -163,7 +163,8 @@
             row.append($("<td>" + rowData.crmti_dst + "</td>"))
             row.append($("<td>" + rowData.crmti_number + "</td>"))
             row.append($("<td>" + rowData.crmti_caller_typ + "</td>"))
-            row.append($("<td>" + rowData.crmti_direction + "</td></tr>"))
+            row.append($("<td>" + rowData.crmti_direction + "</td>"))
+            row.append($("<td style='display:none'>" + rowData.crmti_caller_id + "</td></tr>"))
         }
     });
 
@@ -195,9 +196,10 @@
         <th class="status">Status</th>
         <th class="source">Quelle</th>
         <th class="dest">Ziel</th>
-        <th class="id">Nummer</th>
+        <th class="number">Nummer</th>
         <th class="typ">Typ</th>
         <th class="dir">Richtung</th>
+        <th class="id" style="display:none">ID</th>
       </tr>
     </thead>
     <tbody id="tbody">

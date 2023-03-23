@@ -118,6 +118,11 @@
 		min-height: 25px;
 	}
 
+	.crm-error {
+		color: red;
+		font-weight: bold;
+	}
+
 	/* debug */
 	/*
 	* {
@@ -159,89 +164,81 @@
 
 <div id="crm-main-view" class="container-fluid">
 
-<div id="lxc-widget-base-data" class="row crm-p2">
-	<div id="lxc-widget-contact" class="col-lg-3">
-		<div><strong><span id="lxc-id-name">Maria Mustermann</span></strong></div>
-		<div class="crm-pt05"><span id="crm-id-street">Bahnhofsstrasse 23</span></div>
-		<div class="crm-pt025"><span id="crm-id-place">D-15345 Rehfelde</span></div>
-		<div class="crm-pt2"><strong>Kontakt</strong></div>
-		<div class="crm-pt05"><span id="crm-id-contact-person">Maria Mustermann</span></div>
-		<div class="row crm-pt05">
-			<div class="col-md-2">Telefon:</div>
-			<div class="col-md-10">
-				<button id="crm-id-tel1">+49175-1234567</botton>
-				<button id="crm-id-tel1-t">T</botton>
-				<button id="crm-id-tel1-c">C</botton>
-				<button id="crm-id-tel1-w">W</botton>
+<div id="crm-wx-base-data" class="row crm-p2">
+	<div class="col-lg-3">
+		<div id="crm-wx-contact">
+			<div><strong><span id="crm-contact-name"></span></strong></div>
+			<div class="crm-pt05"><span id="crm-contact-street"></span></div>
+			<div class="crm-pt025"><span id="crm-contact-country"></span>-<span id="crm-contact-city"></span></div>
+			<div class="crm-pt2"><strong>Kontakt</strong></div>
+			<div class="crm-pt05"><span id="crm-contact-person"></span></div>
+			<div id="crm-wx-contact-phone1" class="row crm-pt05">
+				<div class="col-md-2">Telefon:</div>
+				<div class="col-md-10">
+					<button id="crm-contact-phone1"></botton>
+					<button id="crm-contact-phone1-t">T</botton>
+					<button id="crm-contact-phone1-c">C</botton>
+					<button id="crm-contact-phone1-w">W</botton>
+				</div>
+			</div>
+			<div id="crm-wx-contact-phone2" class="row crm-pt025">
+				<div class="col-md-2">Telefon:</div>
+				<div class="col-md-10">
+					<button id="crm-contact-phone2"></button>
+					<button id="crm-contact-phone2-t">T</botton>
+					<button id="crm-contact-phone2-c">C</botton>
+					<button id="crm-contact-phone2-w">W</botton>
+				</div>
+			</div>
+			<div id="crm-wx-contact-email" class="row crm-pt025">
+				<div class="col-md-2">E-Mail:</div>
+				<div class="col-md-10"><button id="crm-contact-email">Kein Eintrag</button></div>
 			</div>
 		</div>
-		<div class="row crm-pt025">
-			<div class="col-md-2">Telefon:</div>
-			<div class="col-md-10">
-				<button id="crm-id-tel2">033433-123456</button>
-				<button id="crm-id-tel2-t">T</botton>
-				<button id="crm-id-tel2-c">C</botton>
-				<button id="crm-id-tel2-w">W</botton>
-			</div>
+		<div id="crm-wx-cars">
+			<table width="100%" class="crm-pt2">
+				<thead>
+				<tr>
+					<td class="listheading">Kenzeichen</th>
+					<td class="listheading">Hersteller</th>
+					<td class="listheading">Fahrzeugtyp</th>
+					<td class="listheading">Fahrzeugart</th>
+				</tr>
+				</thead>
+				<tbody id="crm-cars-table">
+				</tbody>
+			</table>
 		</div>
-		<div class="row crm-pt025">
-			<div class="col-md-2">E-Mail:</div>
-			<div class="col-md-10"><button id="crm-id-email">example@googlemail.com</button></div>
-		</div>
-		<table width="100%" class="crm-pt2">
-			<thead>
-			<tr>
-				<td class="listheading">Kenzeichen</th>
-				<td class="listheading">Hersteller</th>
-				<td class="listheading">Fahrzeugtyp</th>
-				<td class="listheading">Fahrzeugart</th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr class="listrow0">
-				<th>MOL-AB123</th>
-				<td>Mercedes</td>
-				<td>101</td>
-				<td>Pkw</td>
-			</tr>
-			<tr class="listrow1">
-				<th>MOL-AB123</th>
-				<td>BMW</td>
-				<td>i3</td>
-				<td>Pkw</td>
-			</tr>
-			<tr class="listrow0">
-				<th>MOL-AB123</th>
-				<td>Audi</td>
-				<td>A5</td>
-				<td>Pkw</td>
-			</tr>
-			<tr class="listrow1">
-				<th>MOL-AB123</th>
-				<td>VW</td>
-				<td>Golf 7</td>
-				<td>Pkw</td>
-			</tr>
-			</tbody>
-		</table>
 	</div>
-	<div id="crm-widget-main" class="col-lg-6">
+	<div class="col-lg-6">
 		<div id="crm-tabs-main" class="tabwidget">
 			<ul class="nav nav-tabs">
 				<li class="nav-item">
-					<a class="nav-link active" aria-current="page" href="#crm-tab-offers">Angebote</a>
+					<a id="crm-nav-offers" class="nav-link active" aria-current="page" href="#crm-tab-offers">Angebote</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" aria-current="page" href="#crm-tab-orders">Aufträge</a>
+					<a id="crm-nav-orders" class="nav-link" aria-current="page" href="#crm-tab-orders">Aufträge</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" aria-current="page" href="#crm-tab-deliveries">Lieferscheine</a>
+					<a id="crm-nav-deliveries" class="nav-link" aria-current="page" href="#crm-tab-deliveries">Lieferscheine</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" aria-current="page" href="#crm-tab-invoices">Rechnungen</a>
+					<a id="crm-nav-invoices" class="nav-link" aria-current="page" href="#crm-tab-invoices">Rechnungen</a>
 				</li>
 			</ul>
 			<div id="crm-tab-offers" class="crm-tab">
+				<table class="table table-striped">
+					<thead>
+					<tr>
+						<td class="listheading">Datum</th>
+						<td class="listheading">Erste Position</th>
+						<td class="listheading">Betrag</th>
+						<td class="listheading">Nummer</th>
+					</tr>
+					</thead>
+					<tbody id="crm-offers-table">
+					</tbody>
+				</table>
 			</div>
 			<div id="crm-tab-orders" class="crm-tab">
 				<table class="table table-striped">
@@ -253,103 +250,37 @@
 						<td class="listheading">Nummer</th>
 					</tr>
 					</thead>
-					<tbody>
-					<tr class="listrow0">
-						<th>11.11.2011</th>
-						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-						<td>5000,00 EUR</td>
-						<td>11111</td>
-					</tr>
-					<tr class="listrow1">
-						<th scope="row">11.11.2011</th>
-						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-						<td>5000,00 EUR</td>
-						<td>11111</td>
-					</tr>
-					<tr>
-						<th scope="row">11.11.2011</th>
-						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-						<td>5000,00 EUR</td>
-						<td>11111</td>
-					</tr>
-					<tr>
-						<th scope="row">11.11.2011</th>
-						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-						<td>5000,00 EUR</td>
-						<td>11111</td>
-					</tr>
-					<tr>
-						<th scope="row">11.11.2011</th>
-						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-						<td>5000,00 EUR</td>
-						<td>11111</td>
-					</tr>
-					<tr>
-						<th scope="row">11.11.2011</th>
-						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-						<td>5000,00 EUR</td>
-						<td>11111</td>
-					</tr>
-					<tr>
-						<th scope="row">11.11.2011</th>
-						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-						<td>5000,00 EUR</td>
-						<td>11111</td>
-					</tr>
-					<tr>
-						<th scope="row">11.11.2011</th>
-						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-						<td>5000,00 EUR</td>
-						<td>11111</td>
-					</tr>
-					<tr>
-						<th scope="row">11.11.2011</th>
-						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-						<td>5000,00 EUR</td>
-						<td>11111</td>
-					</tr>
-					<tr>
-						<th scope="row">11.11.2011</th>
-						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-						<td>5000,00 EUR</td>
-						<td>11111</td>
-					</tr>
-					<tr>
-						<th scope="row">11.11.2011</th>
-						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-						<td>5000,00 EUR</td>
-						<td>11111</td>
-					</tr>
-					<tr>
-						<th scope="row">11.11.2011</th>
-						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-						<td>5000,00 EUR</td>
-						<td>11111</td>
-					</tr>
-					<tr>
-						<th scope="row">11.11.2011</th>
-						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-						<td>5000,00 EUR</td>
-						<td>11111</td>
-					</tr>
-					<tr>
-						<th scope="row">11.11.2011</th>
-						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-						<td>5000,00 EUR</td>
-						<td>11111</td>
-					</tr>
-					<tr>
-						<th scope="row">11.11.2011</th>
-						<td>Langer Text wie zum Beispiel: Fehlerdiagnose, Gasanlag instandsetzen</td>
-						<td>5000,00 EUR</td>
-						<td>11111</td>
-					</tr>
+					<tbody id="crm-orders-table">
 					</tbody>
 				</table>
 			</div>
 			<div id="crm-tab-deliveries" class="crm-tab">
+				<table class="table table-striped">
+					<thead>
+					<tr>
+						<td class="listheading">Datum</th>
+						<td class="listheading">Erste Position</th>
+						<td class="listheading">Lieferdatum</th>
+						<td class="listheading">Nummer</th>
+					</tr>
+					</thead>
+					<tbody id="crm-deliveries-table">
+					</tbody>
+				</table>
 			</div>
 			<div id="crm-tab-invoices" class="crm-tab">
+				<table class="table table-striped">
+					<thead>
+					<tr>
+						<td class="listheading">Datum</th>
+						<td class="listheading">Erste Position</th>
+						<td class="listheading">Betrag</th>
+						<td class="listheading">Nummer</th>
+					</tr>
+					</thead>
+					<tbody id="crm-invoices-table">
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
@@ -358,6 +289,9 @@
 			<ul class="nav nav-tabs">
 				<li class="nav-item">
 					<a class="nav-link" aria-current="page" href="#crm-tab-contact-hist">Kontakthistorie</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" aria-current="page" href="#crm-tab-contact-hist">Kontakte</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" aria-current="page" href="#crm-tab-delivery-addr">Lieferanschrift</a>
@@ -397,7 +331,7 @@
 <!-- Prototype-Ende -->
 
 <?php
-	//echo $objResult->{'end_content'};
+	echo $objResult->{'end_content'};
 ?>
 
 <script src="crm/js/crm.app.js"></script>

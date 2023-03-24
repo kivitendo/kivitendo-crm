@@ -138,8 +138,62 @@ $(document).ready(function()
 		}
 	}
 
+	function crmInitForm( crmFormModel, container ){
+		var tabledata = '';
+		$.each( crmFormModel, function( i, item ){
+			if( item.type == 'headline' ) tabledata += '<tr><td colspan="2"><b>' + kivi.t8( item.label ) + '</b></td></tr>';
+			if( item.type == 'checkbox' ) tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><input type="checkbox" id="' + item.name + '" name="'+ item.name + '" value="true" title="' + kivi.t8( item.tooltip ) + '"></input></td></tr>';
+			if( item.type == 'input' )    tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><input type="text" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '"></input></td></tr>';
+			if( item.type == 'textarea' )    tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><textarea id="' + item.name + '" name="'+ item.name + '" cols="' + item.cols + '" rows="' + item.rows + '" title="' + kivi.t8( item.tooltip ) + '"></textarea></td></tr>';
+			if( item.type == 'password' ) tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><input type="password" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '"></input></td></tr>';
+			if( item.type == 'select' ){
+				tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><select type="select" id="' + item.name + '" name="'+ item.name + '" title="' + kivi.t8( item.tooltip ) + '">';
+				$.each( item.data, function( i, item ){ tabledata += '<option value="' + item + '">' + kivi.t8( item ) + '</option>'; } );
+				tabledata += '</select></input></td></tr>';
+			}
+		})
+		$( container + " > tbody" ).html( ' ' );
+		$( container + " > tbody" ).append( tabledata );
+	}
+
+	function crmShowCustomerDialog( ){
+		crmInitForm( billaddrFormModel, '#billaddr-form' );
+		crmInitForm( deladdrFormModel, '#deladdr-form' );
+		crmInitForm( banktaxFormModel, '#banktax-form' );
+		crmInitForm( extraFormModel, '#extras-form' );
+		crmInitForm( varsFormModel, '#vars-form' );
+	    $('#crm-wx-customer-dialog').dialog({
+			autoOpen: false,
+			resizable: true,
+			width: 'auto',
+			height: 'auto',
+			modal: true,
+			title: kivi.t8('Edit customer'),
+			position: { my: "top", at: "top+250" },
+			open: function(){
+				$(this).css('maxWidth', window.innerWidth);
+			},
+			buttons:[{
+				text: kivi.t8('Take'),
+				click: function(){
+				    $(this).dialog("close");
+				}	
+			}, {
+				text: kivi.t8('Delete'),
+				click: function(){
+				    $(this).dialog("close");
+				}
+			}, {
+				text: kivi.t8('Cancel'),
+				click: function(){
+				    $(this).dialog("close");
+				}
+			}]
+		}).dialog('open').resize();
+	}
+
 	$('#crm-wf-edit').click(function() {
-		alert("Berabeiten!");
+		crmShowCustomerDialog();
 	});
 
 	$('#crm-wf-offer').click(function() {

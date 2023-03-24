@@ -164,6 +164,58 @@
 
 <div id="crm-main-view" class="container-fluid">
 
+<div id="crm-wx-customer-dialog" style="display:none">
+	<div id="crm-tabs-main" class="tabwidget">
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a id="crm-nav-billaddr" class="nav-link active" aria-current="page" href="#crm-tab-billaddr">Rechnungsaddresse</a>
+			</li>
+			<li class="nav-item">
+				<a id="crm-nav-deladdr" class="nav-link" aria-current="page" href="#crm-tab-deladdr">Lieferanschrif</a>
+			</li>
+			<li class="nav-item">
+				<a id="crm-nav-banktax" class="nav-link" aria-current="page" href="#crm-tab-banktax">Bank/Steuer</a>
+			</li>
+			<li class="nav-item">
+				<a id="crm-nav-extras" class="nav-link" aria-current="page" href="#crm-tab-extras">Sonstiges</a>
+			</li>
+			<li class="nav-item">
+				<a id="crm-nav-vars" class="nav-link" aria-current="page" href="#crm-tab-vars">Variablen</a>
+			</li>
+		</ul>
+		<div id="crm-tab-billaddr" class="crm-tab">
+			<table id="billaddr-form">
+				<thead></thead>
+				<tbody></tbody>
+			</table>
+		</div>
+		<div id="crm-tab-deladdr" class="crm-tab">
+			<table id="deladdr-form">
+				<thead></thead>
+				<tbody></tbody>
+			</table>
+		</div>
+		<div id="crm-tab-banktax" class="crm-tab">
+			<table id="banktax-form">
+				<thead></thead>
+				<tbody></tbody>
+			</table>
+		</div>
+		<div id="crm-tab-extras" class="crm-tab">
+			<table id="extras-form">
+				<thead></thead>
+				<tbody></tbody>
+			</table>
+		</div>
+		<div id="crm-tab-vars" class="crm-tab">
+			<table id="vars-form">
+				<thead></thead>
+				<tbody></tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
 <div id="crm-wx-base-data" class="row crm-p2">
 	<div class="col-lg-3">
 		<div id="crm-wx-contact">
@@ -335,6 +387,7 @@
 ?>
 
 <script src="crm/js/crm.app.js"></script>
+<script src="crm/js/crm.form.js"></script>
 <script>
 <?php
 	foreach($objResult->{'javascripts_inline'} as $js) echo $js."\n";

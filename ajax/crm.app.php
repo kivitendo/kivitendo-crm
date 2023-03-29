@@ -22,7 +22,7 @@ function getCVPA( $data ){
 	if($data['src'] == 'C' || $data['src'] == 'V' ){
 		// Stammdaten
 		$db_table = array('C' => 'customer', 'V' => 'vendor');
-		$query .= "(SELECT row_to_json( cv ) AS cv FROM (SELECT name, street, zipcode, contact, phone AS phone1, fax AS phone2, email, city, country, contact AS person FROM ".$db_table[$data['src']]." WHERE id=".$data['id'].") AS cv) AS cv, ";
+		$query .= "(SELECT row_to_json( cv ) AS cv FROM (SELECT '".$data['src']."' AS src, id, name, street, zipcode, contact, phone AS phone1, fax AS phone2, email, city, country, contact AS person FROM ".$db_table[$data['src']]." WHERE id=".$data['id'].") AS cv) AS cv, ";
 
 		// Angebote
 		$id = array('C' => 'customer_id', 'V' => 'vendor_id');
@@ -50,6 +50,37 @@ function getCVPA( $data ){
 
 	// Fahrzeuge
 	$query .= "(SELECT json_agg( cars ) AS cv FROM (SELECT c_ln AS ln, '--------' AS manuf, '-----' AS ctype, '---' AS cart FROM lxc_cars WHERE c_ow = ".$data['id']." ORDER BY c_id) AS cars) AS cars";
+
+	echo $GLOBALS['dbh']->getOne($query, true);
+}
+
+function getCustomerForEdit( $data ){
+	$db_table = array('C' => 'customer', 'V' => 'vendor');
+	$query = "SELECT ";
+
+	// costumer or vendor -> cv
+	$query .= "(SELECT row_to_json( cv ) AS cv FROM (".
+				"SELECT '".$data['src']."' AS src, id, greeting, name, street, zipcode, contact, phone AS phone1, fax AS phone2, email, city, country, bland, contact AS person, notes, business_id, sw FROM ".$db_table[$data['src']]." WHERE id=".$data['id'].
+				") AS cv) AS cv, ";
+
+	// greetings
+	$query .= "(SELECT json_agg( greetings ) AS greetings FROM (".
+				"SELECT description FROM greetings".
+				") AS greetings) AS greetings, ";
+
+	// bundesland
+	$query .= "(SELECT json_agg( bundesland ) AS bundesland FROM (".
+				"SELECT id, country, bundesland AS name FROM bundesland".
+				") AS bundesland) AS bundesland, ";
+
+	// business
+	$query .= "(SELECT json_agg( business ) AS business FROM (".
+				"SELECT id, description AS name FROM business ORDER BY business ASC".
+				") AS business) AS business, ";
+
+	$query .= "(SELECT json_agg( deladdr ) AS deladdr FROM (".
+				"SELECT trans_id, shipto_id, shiptoname, shiptodepartment_1, shiptodepartment_2, shiptostreet, shiptozipcode, shiptocity, shiptocountry, shiptocontact, shiptophone, shiptofax, shiptoemail, shiptoemployee, shiptobland FROM shipto WHERE trans_id = ".$data['id']." ORDER BY shiptoname ASC".
+				") AS deladdr) AS deladdr";
 
 	echo $GLOBALS['dbh']->getOne($query, true);
 }

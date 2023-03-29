@@ -136,6 +136,10 @@ $(document).ready(function()
 				$('#crm-invoices-table').append('<tr id="' + value.id +'" class="' + ((listrow0 = !listrow0)? "listrow0": "listrow1") + '"><td>' +  value.date + '</td><td>' + value.description  + '</td><td>' + value.amount  + '</td><td>' + value.number + '</td></tr>');
 			});
 		}
+
+		$('#crm-wf-edit').attr('data-src', data.cv.src);
+		$('#crm-wf-edit').attr('data-id', data.cv.id);
+		crmDelAddr = [];
 	}
 
 	function crmInitForm( crmFormModel, container ){
@@ -154,6 +158,83 @@ $(document).ready(function()
 		})
 		$( container + " > tbody" ).html( ' ' );
 		$( container + " > tbody" ).append( tabledata );
+	}
+
+	var crmDelAddr = [];
+
+	function crmGetCustomerForEdit( src, id ){
+		$.ajax({
+			url: 'crm/ajax/crm.app.php',
+			type: 'POST',
+			data:  { action: 'getCustomerForEdit', data: { 'src': src, 'id': id } },
+			success: function(data){
+				console.info(data);
+				crmShowCustomerDialog();
+
+				$('#billaddr-greetings').html('');
+				$('#billaddr-greetings').append('<option value="">' + kivi.t8( "Salutation as below" ) + '</option>');
+				for(let description of data.greetings) $('#billaddr-greetings').append('<option value="' + description.description + '">' + description.description + '</option>');
+
+				$('#billaddr-business').html('');
+				for(let business of data.business) $('#billaddr-business').append('<option value="' + business.id + '">' + business.name + '</option>');
+
+				$('#billaddr-bland').html('');
+				$('#billaddr-bland').append('<option value=""></option>');
+				for(let bland of data.bundesland) $('#billaddr-bland').append('<option value="' + bland.id + '" data-country="' + bland.country  + '">' + bland.name + '</option>');
+				$('#deladdr-shiptobland').html('');
+				$('#deladdr-shiptobland').append('<option value=""></option>');
+				for(let bland of data.bundesland) $('#deladdr-shiptobland').append('<option value="' + bland.id + '" data-country="' + bland.country  + '">' + bland.name + '</option>');
+
+				$.each( data.cv, function( key, value ){
+					if( value ){
+						$('#billaddr-' + key).val(value);
+					}
+					else{
+						$('#billaddr-' + key).val('');
+					}
+				});
+
+				crmDelAddr = data.deladdr;
+				if(crmDelAddr && crmDelAddr.length){
+					$('#deladdr-list').html('');
+					$('#deladdr-list').append('<option value=""></option>');
+					for(let deladdr of crmDelAddr){
+						$('#deladdr-list').append('<option value="' + deladdr.shipto_id + '">' + deladdr.shiptoname + '</option>');
+					}
+					$('#deladdr-list').change(function(){
+						alert("Test");
+					});
+
+					$.each( crmDelAddr[0], function( key, value ){
+						if( value ){
+							$('#deladdr-' + key).val(value);
+						}
+						else{
+							$('#deladdr-' + key).val('');
+						}
+					});
+				}
+
+//				for(let deladdr of data.deladdr)
+//				{
+//					$.each( deladdr, function( key, value ){
+//						if( value ){
+//							$('#deladdr-' + key).val(value);
+//						}
+//						else{
+//							$('#deladdr-' + key).val('');
+//						}
+//					});
+//				}
+
+				$('#billaddr-business').val(data.cv.business_id);
+				//$('#billaddr-bland').val(data.cv.bland);
+				//$('#deladdr-shiptobland').val(data.cv.shiptobland);
+			},
+			error: function(xhr, status, error){
+				$('#message-dialog').showMessageDialog('error', kivi.t8('Connection to the server'), kivi.t8('Error: The server could not process the request!'), xhr.responseText);
+	        }
+		});
 	}
 
 	function crmShowCustomerDialog( ){
@@ -193,7 +274,7 @@ $(document).ready(function()
 	}
 
 	$('#crm-wf-edit').click(function() {
-		crmShowCustomerDialog();
+		crmGetCustomerForEdit( $('#crm-wf-edit').attr('data-src'), $('#crm-wf-edit').attr('data-id') );
 	});
 
 	$('#crm-wf-offer').click(function() {

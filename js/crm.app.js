@@ -28,7 +28,7 @@ $(document).ready(function()
                 }
             },
             error: function(xhr, status, error){
-                $('#message-dialog').showMessageDialog('error', kivi.t8('Connection to the server'), kivi.t8('Error: The server could not process the request!'), xhr.responseText);
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'getHistory()', xhr.responseText );
             }
         });
     }
@@ -65,7 +65,7 @@ $(document).ready(function()
                 showCVPA(data);
             },
             error: function(xhr, status, error){
-                $('#message-dialog').showMessageDialog('error', kivi.t8('Connection to the server'), kivi.t8('Error: The server could not process the request!'), xhr.responseText);
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'getCVPA', xhr.responseText );
             }
         });
     }
@@ -262,7 +262,7 @@ $(document).ready(function()
                 //$('#deladdr-shiptobland').val(data.cv.shiptobland);
             },
             error: function(xhr, status, error){
-                $('#message-dialog').showMessageDialog('error', kivi.t8('Connection to the server'), kivi.t8('Error: The server could not process the request!'), xhr.responseText);
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'getCustomerForEdit()', xhr.responseText );
             }
         });
     }

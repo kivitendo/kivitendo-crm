@@ -3,6 +3,36 @@ $(document).ready(function()
 	$( '#crm-tabs-main' ).tabs();
 	$( '#crm-tabs-infos' ).tabs();
 
+	crmGetHistory();
+
+	function crmGetHistory( src, id ){
+		$.ajax({
+			url: 'crm/ajax/crm.app.php',
+			type: 'POST',
+			data:  { action: 'getHistory' },
+			success: function(data){
+				if(data){
+					for(let entry of data){
+						let id = 'crm-hist-entry-' + entry[2]  + entry[0];
+						$('#crm-history-list').append('<div class="layout-actionbar-action layout-actionbar-submit" data-src="' + entry[2] +'" data-id="' + entry[0] + '" id="' + id + '">' + entry[1] + '</div>');
+						$('#' + id).click(function(){
+							getCVPA($('#' + id).attr('data-src'), $('#' + id).attr('data-id'));
+						});
+					}
+					var histlist = $('#crm-hist-last').clone();
+					$('#crm-hist-last').replaceWith($('#crm-hist-last').clone());
+					$('#crm-hist-last').click(function(e){
+						getCVPA(data[0][2], data[0][0]);
+					});
+					getCVPA(data[0][2], data[0][0]);
+				}
+			},
+			error: function(xhr, status, error){
+				$('#message-dialog').showMessageDialog('error', kivi.t8('Connection to the server'), kivi.t8('Error: The server could not process the request!'), xhr.responseText);
+	        }
+		});
+	}
+
 	$.widget("custom.catcomplete", $.ui.autocomplete, {
 	    _renderMenu: function(ul,items) {
 	        var that = this,
@@ -39,7 +69,6 @@ $(document).ready(function()
 	        }
 		});
 	}
-
 
     $('#message-dialog').dialog({
 		autoOpen: false,
@@ -137,6 +166,7 @@ $(document).ready(function()
 			});
 		}
 
+		$('#crm-wx-title').html(kivi.t8('Detail view:') + ' ' + ((data.cv.src == 'C')? kivi.t8('Customer') : kivi.t8('Vendor') ));
 		$('#crm-wf-edit').attr('data-src', data.cv.src);
 		$('#crm-wf-edit').attr('data-id', data.cv.id);
 		crmDelAddr = [];

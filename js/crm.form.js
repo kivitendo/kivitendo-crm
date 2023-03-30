@@ -4,6 +4,7 @@ const billaddrFormModel = [
         { "name": "billaddr-greeting", "label": "Greetings:", "type": "input", "size": "42", "tooltip": "Alternativ greetings" },
         { "name": "billaddr-name", "label": "Name:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
         { "name": "billaddr-street", "label": "Street:", "type": "input", "size": "42", "tooltip": "Street and street number" },
+        { "name": "billaddr-country", "label": "Country code:", "type": "input", "size": "4", "tooltip": "Country code" },
         { "name": "billaddr-zipcode", "label": "Zip code:", "type": "input", "size": "12", "tooltip": "Zip code" },
         { "name": "billaddr-phone1", "label": "Phone:", "type": "input", "size": "42", "tooltip": "First phone number" },
         { "name": "billaddr-bland", "label": "Bundesland:", "type": "select", "data":[], "tooltip":""}, //selectbox
@@ -22,7 +23,7 @@ const deladdrFormModel = [
     { "name": "deladdr-shiptodepartment_1", "label": "Department 1:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
     { "name": "deladdr-shiptodepartment_2", "label": "Department 2:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
     { "name": "deladdr-shiptostreet", "label": "Street:", "type": "input", "size": "42", "tooltip": "Street and street number" },
-    { "name": "deladdr-shiptocountry", "label": "Country:", "type": "input", "size": "2", "tooltip": "Country code" },
+    { "name": "deladdr-shiptocountry", "label": "Country code:", "type": "input", "size": "2", "tooltip": "Country code" },
     { "name": "deladdr-shiptozipcode", "label": "Zip code:", "type": "input", "size": "12", "tooltip": "Vollständiger Name" },
     { "name": "deladdr-shiptobland", "label": "Bundesland:", "type": "select", "data":[], "tooltip":""}, //selectbox
     { "name": "deladdr-shiptocity", "label": "City:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },

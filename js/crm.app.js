@@ -169,7 +169,7 @@ $(document).ready(function()
         $('#crm-wx-title').html(kivi.t8('Detail view:') + ' ' + ((data.cv.src == 'C')? kivi.t8('Customer') : kivi.t8('Vendor') ));
         $('#crm-wf-edit').attr('data-src', data.cv.src);
         $('#crm-wf-edit').attr('data-id', data.cv.id);
-        crmDelAddr = [];
+        crmDelAddr = 0;
     }
 
     function crmInitForm( crmFormModel, container ){
@@ -190,81 +190,86 @@ $(document).ready(function()
         $( container + " > tbody" ).append( tabledata );
     }
 
-    var crmDelAddr = [];
+    function crmChangeBlandList( list, country ){
+        $( '#' + list ).html( '' );
+        $( '#' + list ).append( '<option value=""></option>' );
+        for( let bland of crmData.bundesland ){
+            if( country && bland.country && !bland.country.startsWith( country ) ) continue;
+            $( '#' + list ).append( '<option value="' + bland.id + '" data-country="' + bland.country  + '">' + bland.name + '</option>' );
+        }
+    }
+
+    var crmData = 0;
 
     function crmGetCustomerForEdit( src, id ){
         $.ajax({
             url: 'crm/ajax/crm.app.php',
             type: 'POST',
             data:  { action: 'getCustomerForEdit', data: { 'src': src, 'id': id } },
-            success: function(data){
-                console.info(data);
+            success: function( data ){
+                console.info( data );
+                crmData = data;
                 crmShowCustomerDialog();
+                crmShowCustomerForEdit();
 
-                $('#billaddr-greetings').html('');
-                $('#billaddr-greetings').append('<option value="">' + kivi.t8( "Salutation as below" ) + '</option>');
-                for(let description of data.greetings) $('#billaddr-greetings').append('<option value="' + description.description + '">' + description.description + '</option>');
-
-                $('#billaddr-business').html('');
-                for(let business of data.business) $('#billaddr-business').append('<option value="' + business.id + '">' + business.name + '</option>');
-
-                $('#billaddr-bland').html('');
-                $('#billaddr-bland').append('<option value=""></option>');
-                for(let bland of data.bundesland) $('#billaddr-bland').append('<option value="' + bland.id + '" data-country="' + bland.country  + '">' + bland.name + '</option>');
-                $('#deladdr-shiptobland').html('');
-                $('#deladdr-shiptobland').append('<option value=""></option>');
-                for(let bland of data.bundesland) $('#deladdr-shiptobland').append('<option value="' + bland.id + '" data-country="' + bland.country  + '">' + bland.name + '</option>');
-
-                $.each( data.cv, function( key, value ){
-                    if( value ){
-                        $('#billaddr-' + key).val(value);
-                    }
-                    else{
-                        $('#billaddr-' + key).val('');
-                    }
-                });
-
-                crmDelAddr = data.deladdr;
-                if(crmDelAddr && crmDelAddr.length){
-                    $('#deladdr-list').html('');
-                    $('#deladdr-list').append('<option value=""></option>');
-                    for(let deladdr of crmDelAddr){
-                        $('#deladdr-list').append('<option value="' + deladdr.shipto_id + '">' + deladdr.shiptoname + '</option>');
-                    }
-                    $('#deladdr-list').change(function(){
-                        alert("Test");
-                    });
-
-                    $.each( crmDelAddr[0], function( key, value ){
-                        if( value ){
-                            $('#deladdr-' + key).val(value);
-                        }
-                        else{
-                            $('#deladdr-' + key).val('');
-                        }
-                    });
-                }
-
-//                for(let deladdr of data.deladdr)
-//                {
-//                    $.each( deladdr, function( key, value ){
-//                        if( value ){
-//                            $('#deladdr-' + key).val(value);
-//                        }
-//                        else{
-//                            $('#deladdr-' + key).val('');
-//                        }
-//                    });
-//                }
-
-                $('#billaddr-business').val(data.cv.business_id);
-                //$('#billaddr-bland').val(data.cv.bland);
-                //$('#deladdr-shiptobland').val(data.cv.shiptobland);
             },
-            error: function(xhr, status, error){
+            error: function( xhr, status, error ){
                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'getCustomerForEdit()', xhr.responseText );
             }
         });
+    }
+
+    function crmShowCustomerForEdit(){
+       $( '#billaddr-greetings' ).html( '' );
+       $( '#billaddr-greetings' ).append( '<option value="">' + kivi.t8( "Salutation as below" ) + '</option>' );
+       for( let description of crmData.greetings ) $( '#billaddr-greetings' ).append( '<option value="' + description.description + '">' + description.description + '</option>' );
+
+       $( '#billaddr-business' ).html( '' );
+       for( let business of crmData.business ) $( '#billaddr-business' ).append( '<option value="' + business.id + '">' + business.name + '</option>' );
+
+       $.each( crmData.cv, function( key, value ){
+           if( value ){
+               $('#billaddr-' + key).val(value);
+           }
+           else{
+               $('#billaddr-' + key).val('');
+           }
+       });
+
+       if( crmData.deladdr ){
+           $('#deladdr-list').html( '' );
+           $('#deladdr-list').append( '<option value=""></option>' );
+           for (let i = 0; i < crmData.deladdr.length; i++){
+               $( '#deladdr-list' ).append( '<option value="' + i + '">' + ( ( crmData.deladdr[i].shiptoname )? crmData.deladdr[i].shiptoname : '' ) + '</option>' );
+           }
+           $( '#deladdr-list' ).change( function(){
+                if( !$( this ).val() ){
+                    for( let e of deladdrFormModel ){
+                        if( e.name.startsWith( 'deladdr-shipto' ) ) $( '#' + e.name ).val( '' );
+                    }
+                    $( '#deladdr-shiptocountry' ).change();
+                }
+                else{
+                    $.each( crmData.deladdr[$( this ).val()], function( key, value ){
+                       if( value ){
+                           $( '#deladdr-' + key ).val( value );
+                       }
+                       else{
+                           $( '#deladdr-' + key ).val( '' );
+                       }
+                    });
+                    $( '#deladdr-shiptocountry' ).change();
+                    $( '#deladdr-shiptobland' ).val( crmData.deladdr[$( this ).val()].shiptobland  );
+                }
+            });
+
+           $( '#deladdr-list' ).change();
+      }
+
+        $( '#billaddr-business' ).val( crmData.cv.business_id );
+        $( '#billaddr-country' ).change();
+        $( '#billaddr-bland' ).val( crmData.cv.bland );
+//        $( '#deladdr-shiptocountry' ).change();
     }
 
     function crmShowCustomerDialog( ){
@@ -273,6 +278,15 @@ $(document).ready(function()
         crmInitForm( banktaxFormModel, '#banktax-form' );
         crmInitForm( extraFormModel, '#extras-form' );
         crmInitForm( varsFormModel, '#vars-form' );
+
+        $( '#billaddr-country' ).change(function(){
+            crmChangeBlandList( 'billaddr-bland', $( '#billaddr-country' ).val() );
+        });
+        $( '#deladdr-shiptocountry' ).change(function(){
+            crmChangeBlandList( 'deladdr-shiptobland', $( '#deladdr-shiptocountry' ).val() );
+        });
+
+
         $('#crm-wx-customer-dialog').dialog({
             autoOpen: false,
             resizable: true,

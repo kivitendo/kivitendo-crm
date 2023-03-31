@@ -67,8 +67,8 @@ function getCustomerForEdit( $data ){
     // costumer or vendor -> cv
     $query .= "(SELECT row_to_json( cv ) AS cv FROM (".
                 "SELECT '".$data['src']."' AS src, id, greeting, name, street, zipcode, contact, phone, fax, email, city, country, bland, contact AS person, notes, business_id, sw, ".
-                "account_number, taxnumber, bank_code, bank, ustid, iban, bic, direct_debit ".
-                "branche, homepage, department_1, department_2, lead, leadsrc, konzern, headcount, language_id ".
+                "account_number, taxnumber, taxzone_id, payment_id, bank_code, bank, ustid, iban, bic, direct_debit, ".
+                "branche, homepage, department_1, department_2, lead, leadsrc, konzern, headcount, language_id, employee ".
                 "FROM ".$db_table[$data['src']]." WHERE id=".$data['id'].
                 ") AS cv) AS cv, ";
 
@@ -87,9 +87,40 @@ function getCustomerForEdit( $data ){
                 "SELECT id, description AS name FROM business ORDER BY business ASC".
                 ") AS business) AS business, ";
 
+    // Lieferadressen
     $query .= "(SELECT json_agg( deladdr ) AS deladdr FROM (".
                 "SELECT trans_id, shipto_id, shiptoname, shiptodepartment_1, shiptodepartment_2, shiptostreet, shiptozipcode, shiptocity, shiptocountry, shiptocontact, shiptophone, shiptofax, shiptoemail, shiptoemployee, shiptobland FROM shipto WHERE trans_id = ".$data['id']." ORDER BY shiptoname ASC".
-                ") AS deladdr) AS deladdr";
+                ") AS deladdr) AS deladdr, ";
+
+    // Angestellte/ Verkäufer
+    $query .= "(SELECT json_agg( employees ) AS employees FROM (".
+                "SELECT id, name FROM employee WHERE deleted = false ORDER BY name ASC".
+                ") AS employees) AS employees, ";
+
+    // Zahlungsbedingung(en)
+    $query .= "(SELECT json_agg( payment_terms ) AS payment_terms FROM (".
+                "SELECT id, description FROM payment_terms WHERE obsolete = false ORDER BY description ASC".
+                ") AS payment_terms) AS payment_terms, ";
+
+    // Steuerzonen
+    $query .= "(SELECT json_agg( tax_zones ) AS tax_zones FROM (".
+                "SELECT id, description FROM tax_zones WHERE obsolete = false ORDER BY description ASC".
+                ") AS tax_zones) AS tax_zones, ";
+
+    // Branchen
+    $query .= "(SELECT json_agg( branches ) AS branches FROM (".
+                "SELECT branche AS name FROM public.customer WHERE branche IS NOT NULL GROUP BY branche ORDER BY branche ASC".
+                ") AS branches) AS branches, ";
+
+    // Sprachen
+    $query .= "(SELECT json_agg( languages ) AS languages FROM (".
+                "SELECT id, description FROM language WHERE obsolete = false ORDER BY description ASC".
+                ") AS languages) AS languages, ";
+
+    // Leads
+    $query .= "(SELECT json_agg( lead ) AS lead FROM (".
+                "SELECT id, lead FROM leads ORDER BY leads ASC".
+                ") AS leads) AS leads";
 
     echo $GLOBALS['dbh']->getOne($query, true);
 }

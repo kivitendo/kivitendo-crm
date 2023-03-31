@@ -267,6 +267,49 @@ $(document).ready(function()
            $( '#deladdr-list' ).change();
       }
 
+        if( crmData.branches ){
+            for( let branche of crmData.branches ){
+                $( '#billaddr-branches' ).append( '<option value="' + branche.name + '">' + branche.name + '</option>' );
+            }
+            if( crmData.cv.branche ) $( '#billaddr-branches' ).val( crmData.cv.branche );
+            $( '#billaddr-branche' ).val( '' );
+        }
+
+        if( crmData.employees ){
+            for( let employee of crmData.employees ){
+                $( '#billaddr-salesperson' ).append( '<option value="' + employee.id + '">' + employee.name + '</option>' );
+            }
+            if( crmData.cv.employee ) $( '#billaddr-salesperson' ).val( crmData.cv.employee );
+        }
+
+        if( crmData.payment_terms ){
+            for( let payment_term of crmData.payment_terms ){
+                $( '#billaddr-payment_terms' ).append( '<option value="' + payment_term.id + '">' + payment_term.description + '</option>' );
+            }
+            if( crmData.cv.payment_id ) $( '#billaddr-payment_terms' ).val( crmData.cv.payment_id );
+        }
+
+        if( crmData.tax_zones ){
+            for( let tax_zone of crmData.tax_zones ){
+                $( '#billaddr-tax_zone' ).append( '<option value="' + tax_zone.id + '">' + tax_zone.description + '</option>' );
+            }
+            if( crmData.cv.taxzone_id ) $( '#billaddr-tax_zone' ).val( crmData.cv.taxzone_id );
+        }
+
+        if( crmData.languages ){
+            for( let lang of crmData.languages ){
+                $( '#billaddr-lang' ).append( '<option value="' + lang.id + '">' + lang.description + '</option>' );
+            }
+            if( crmData.cv.language_id ) $( '#billaddr-lang' ).val( crmData.cv.language_id );
+        }
+
+        if( crmData.leads ){
+            for( let lead of crmData.leads ){
+                $( '#billaddr-leads' ).append( '<option value="' + lead.id + '">' + lead.lead + '</option>' );
+            }
+            if( crmData.cv.lead ) $( '#billaddr-leads' ).val( crmData.cv.lead );
+        }
+
         $( '#billaddr-business' ).val( crmData.cv.business_id );
         $( '#billaddr-country' ).change();
         $( '#billaddr-bland' ).val( crmData.cv.bland );

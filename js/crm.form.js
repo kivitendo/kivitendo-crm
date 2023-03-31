@@ -44,20 +44,19 @@ const banktaxFormModel = [
 ];
 
 const extraFormModel = [
-    { "name": "extras-industry", "label": "Industry:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "extras-homepage", "label": "Homepage:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "extras-dep1", "label": "Department:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "extras-dep2", "label": "Department:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "extras-lead1", "label": "Lead source:", "type": "select","data": [], "tooltip":""}, //selectbox
-    { "name": "extras-lead2", "label": "Lead source:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "extras-tax-zone", "label": "Tax zone:", "type": "select","data": [], "tooltip":""}, //selectbox
-    { "name": "extras-payment-terms", "label": "Terms of payment:", "type": "select","data": [], "tooltip":""}, //selectbox
-    { "name": "extras-employ-amount", "label": "Amount of employees:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "extras-group", "label": "Busines group:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "extras-salesperson", "label": "Salesperson:", "type": "select","data": [], "tooltip":""}, //selectbox
-    { "name": "extras-lang", "label": "Language:", "type": "select","data": [], "tooltip":""}, //selectbox
-    { "name": "extras-salesperson", "label": "Salesperson:", "type": "select","data": [], "tooltip":""}, //selectbox
-    { "name": "extras-permission", "label": "Permission:", "type": "select","data": [], "tooltip":""}, //selectbox
+    { "name": "billaddr-branches", "label": "Industry:", "type": "select","data": [], "tooltip":""}, //selectbox
+    { "name": "billaddr-branche", "label": "Industry:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "billaddr-homepage", "label": "Homepage:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "billaddr-department_1", "label": "Department:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "billaddr-department_2", "label": "Department:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "billaddr-lead", "label": "Lead:", "type": "select","data": [], "tooltip":""}, //selectbox
+    { "name": "billaddr-leadsrc", "label": "Lead source:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "billaddr-tax_zone", "label": "Tax zone:", "type": "select","data": [], "tooltip":""}, //selectbox
+    { "name": "billaddr-payment_terms", "label": "Terms of payment:", "type": "select","data": [], "tooltip":""}, //selectbox
+    { "name": "billaddr-headcount", "label": "Amount of employees:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "billaddr-konzern", "label": "Busines group:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "billaddr-lang", "label": "Language:", "type": "select","data": [], "tooltip":""}, //selectbox
+    { "name": "billaddr-salesperson", "label": "Salesperson:", "type": "select","data": [], "tooltip":""}, //selectbox
 ];
 
 const varsFormModel = [

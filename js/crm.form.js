@@ -6,10 +6,9 @@ const billaddrFormModel = [
         { "name": "billaddr-street", "label": "Street:", "type": "input", "size": "42", "tooltip": "Street and street number" },
         { "name": "billaddr-country", "label": "Country code:", "type": "input", "size": "4", "tooltip": "Country code" },
         { "name": "billaddr-zipcode", "label": "Zip code:", "type": "input", "size": "12", "tooltip": "Zip code" },
-        { "name": "billaddr-phone1", "label": "Phone:", "type": "input", "size": "42", "tooltip": "First phone number" },
         { "name": "billaddr-bland", "label": "Bundesland:", "type": "select", "data":[], "tooltip":""}, //selectbox
-        { "name": "billaddr-phone1", "label": "Phone:", "type": "input", "size": "42", "tooltip": "First phone number" },
-        { "name": "billaddr-phone2", "label": "Phone:", "type": "input", "size": "42", "tooltip": "Second phone number" },
+        { "name": "billaddr-phone", "label": "Phone:", "type": "input", "size": "42", "tooltip": "First phone number" },
+        { "name": "billaddr-fax", "label": "Phone:", "type": "input", "size": "42", "tooltip": "Second phone number" },
         { "name": "billaddr-email", "label": "E-Mail:", "type": "input", "size": "42", "tooltip": "" },
         { "name": "billaddr-contact", "label": "Contact person:", "type": "input", "size": "42", "tooltip": "Contact person" },
         { "name": "billaddr-business", "label": "Costumer type:", "type": "select","data": [], "tooltip":""}, //selectbox
@@ -34,13 +33,14 @@ const deladdrFormModel = [
 ];
 
 const banktaxFormModel = [
-    { "name": "banktax-ustid", "label": "UStId:", "type": "select","data": [], "tooltip":""}, //selectbox
-    { "name": "banktax-id", "label": "Tax number:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "banktax-bankname", "label": "Bank name:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "banktax-blz", "label": "BLZ:", "type": "input", "size": "42", "tooltip": "Country code" },
-    { "name": "banktax-account", "label": "Account:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "banktax-iban", "label": "IBAN:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "banktax-bic", "label": "BIC:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "billaddr-ustid", "label": "UStId:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "billaddr-taxnumber", "label": "Tax number:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "billaddr-bank", "label": "Bank name:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "billaddr-bank_code", "label": "BLZ:", "type": "input", "size": "42", "tooltip": "Country code" },
+    { "name": "billaddr-account_number", "label": "Account:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "billaddr-iban", "label": "IBAN:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "billaddr-bic", "label": "BIC:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "billaddr-direct_debit", "label": "Lastschrift:", "type": "checkbox", "size": "42", "tooltip": "" },
 ];
 
 const extraFormModel = [

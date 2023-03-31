@@ -235,6 +235,7 @@ $(document).ready(function()
                $('#billaddr-' + key).val('');
            }
        });
+       $('#billaddr-direct_debit').prop('checked', crmData.cv.direct_debit);
 
        if( crmData.deladdr ){
            $('#deladdr-list').html( '' );
@@ -269,7 +270,7 @@ $(document).ready(function()
         $( '#billaddr-business' ).val( crmData.cv.business_id );
         $( '#billaddr-country' ).change();
         $( '#billaddr-bland' ).val( crmData.cv.bland );
-//        $( '#deladdr-shiptocountry' ).change();
+        $( '#deladdr-shiptocountry' ).change();
     }
 
     function crmShowCustomerDialog( ){
@@ -285,7 +286,6 @@ $(document).ready(function()
         $( '#deladdr-shiptocountry' ).change(function(){
             crmChangeBlandList( 'deladdr-shiptobland', $( '#deladdr-shiptocountry' ).val() );
         });
-
 
         $('#crm-wx-customer-dialog').dialog({
             autoOpen: false,

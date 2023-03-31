@@ -27,8 +27,9 @@ function getCVPA( $data ){
     if($data['src'] == 'C' || $data['src'] == 'V' ){
         // Stammdaten
         $db_table = array('C' => 'customer', 'V' => 'vendor');
-        $query .= "(SELECT row_to_json( cv ) AS cv FROM (SELECT '".$data['src']."' AS src, id, name, street, zipcode, contact, phone AS phone1, fax AS phone2, email, city, country, contact AS person FROM ".$db_table[$data['src']]." WHERE id=".$data['id'].") AS cv) AS cv, ";
-
+        $query .= "(SELECT row_to_json( cv ) AS cv FROM (".
+                    "SELECT '".$data['src']."' AS src, id, name, street, zipcode, contact, phone AS phone1, fax AS phone2, email, city, country, contact AS person FROM ".$db_table[$data['src']]." WHERE id=".$data['id'].
+                    ") AS cv) AS cv, ";
         // Angebote
         $id = array('C' => 'customer_id', 'V' => 'vendor_id');
         $query .= "(SELECT json_agg( off ) AS off FROM (".
@@ -65,7 +66,10 @@ function getCustomerForEdit( $data ){
 
     // costumer or vendor -> cv
     $query .= "(SELECT row_to_json( cv ) AS cv FROM (".
-                "SELECT '".$data['src']."' AS src, id, greeting, name, street, zipcode, contact, phone AS phone1, fax AS phone2, email, city, country, bland, contact AS person, notes, business_id, sw FROM ".$db_table[$data['src']]." WHERE id=".$data['id'].
+                "SELECT '".$data['src']."' AS src, id, greeting, name, street, zipcode, contact, phone, fax, email, city, country, bland, contact AS person, notes, business_id, sw, ".
+                "account_number, taxnumber, bank_code, bank, ustid, iban, bic, direct_debit ".
+                "branche, homepage, department_1, department_2, lead, leadsrc, konzern, headcount, language_id ".
+                "FROM ".$db_table[$data['src']]." WHERE id=".$data['id'].
                 ") AS cv) AS cv, ";
 
     // greetings

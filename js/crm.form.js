@@ -59,15 +59,39 @@ const extraFormModel = [
     { "name": "billaddr-salesperson", "label": "Salesperson:", "type": "select","data": [], "tooltip":""}, //selectbox
 ];
 
-const varsFormModel = [
-    { "name": "vars-onlineshop", "label": "Online-Shop:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "vars-user-name", "label": "User name:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "vars-opening-hours", "label": "Opening hours:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "vars-birthsday", "label": "Birthsday:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "vars-behavior", "label": "Behavior:", "type": "select","data": [], "tooltip":""}, //selectbox
-    { "name": "vars-custnum", "label": "Customer number:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "vars-birthsday", "label": "Birthsday:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "vars-passwd", "label": "Password:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "vars-insurance", "label": "Insurance:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "vars-tip", "label": "Tip:", "type": "select","data": [], "tooltip":""}, //selectbox
+const carFormModel = [
+    { "name": "c_ln", "label": "Car license:", "type": "input", "size": "21", "tooltip": "", "check": "chk_c_ln", "info": "c_ln_info" },
+    { "name": "c_2", "label": "HSN (2.1):", "type": "input", "size": "21", "tooltip": "", "check": "chk_c_2" },
+    { "name": "c_3", "label": "TSN (2.2):", "type": "input", "size": "21", "tooltip": "", "check": "chk_c_3" },
+    { "name": "c_em", "label": "Emission class (14.1):", "type": "input", "size": "21", "tooltip": "", "check": "chk_c_em", "info": "c_em_info" },
+    { "name": "c_d", "label": "Date of registration:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "c_hu", "label": "Date of HU+AU:", "type": "input", "size": "21", "tooltip": "", "check": "chk_c_hu" },
+    { "name": "c_fin", "label": "FIN:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "c_mkb", "label": "Engine code:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "c_color", "label": "Color code:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "c_gart_list", "label": "Engine code:", "type": "select","data": [], "tooltip":""}, //selectbox
+    { "name": "c_gart", "label": "Color code:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "c_st", "label": "Summer wheels:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "c_wt", "label": "Winter wheels:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "c_st_l", "label": "LO Sommer wheels:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "c_st_w", "label": "LO Winter wheels:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "flxgr", "label": "Flexrohr size:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "c_zrd", "label": "Next ZR change on:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "c_zrk", "label": "Next ZR change at KM:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "c_bf", "label": "Next brake fluid change:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "c_wd", "label": "Next maintenance service:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "", "label": "Owner:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "", "label": "Manufacture:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "", "label": "Typ:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "", "label": "Displacement:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "", "label": "Construction year:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "", "label": "Performance:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "", "label": "Torque:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "", "label": "Compression:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "", "label": "Valves:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "", "label": "Cylinder:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "", "label": "Fuel Type / Content:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "", "label": "Wheelbase:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "", "label": "Vmax:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "", "label": "Total weight:", "type": "input", "size": "21", "tooltip": "" },
 ];

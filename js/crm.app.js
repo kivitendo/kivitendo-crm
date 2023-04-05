@@ -191,6 +191,42 @@ $(document).ready(function()
         $( container + " > tbody" ).append( tabledata );
     }
 
+    function crmInitFormEx( crmFormModel, container, max_rows ){
+        var tabledata = '';
+//        $.each( crmFormModel, function( i, item ){
+        if(max_rows > crmFormModel.length) max_rows = crmFormModel.length;
+        for( let i = 0; i < max_rows; i++ ){
+            let item = crmFormModel[i];
+            tabledata += '<tr>';
+            let addItem = function( item ){
+                if( item.type == 'headline' ) tabledata += '<td colspan="2"><b>' + kivi.t8( item.label ) + '</b></td>';
+                if( item.type == 'checkbox' ) tabledata += '<td>' + kivi.t8( item.label ) + '</td><td><input type="checkbox" id="' + item.name + '" name="'+ item.name + '" value="true" title="' + kivi.t8( item.tooltip ) + '"></input></td>';
+                if( item.type == 'input' ){
+                    tabledata += '<td>' + kivi.t8( item.label ) + '</td><td><input type="text" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '"></input>';
+                    if(item.check) tabledata += '<input type="checkbox" id="' + item.check + '" name="'+ item.check + '" title="' + kivi.t8( 'Check imput' ) + '"></input>';
+                    tabledata += '</td>';
+                }
+                if( item.type == 'textarea' ) tabledata += '<td>' + kivi.t8( item.label ) + '</td><td><textarea id="' + item.name + '" name="'+ item.name + '" cols="' + item.cols + '" rows="' + item.rows + '" title="' + kivi.t8( item.tooltip ) + '"></textarea></td>';
+                if( item.type == 'password' ) tabledata += '<td>' + kivi.t8( item.label ) + '</td><td><input type="password" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '"></input></td>';
+                if( item.type == 'select' ){
+                    tabledata += '<td>' + kivi.t8( item.label ) + '</td><td><select type="select" id="' + item.name + '" name="'+ item.name + '" title="' + kivi.t8( item.tooltip ) + '">';
+                    $.each( item.data, function( i, item ){ tabledata += '<option value="' + item + '">' + kivi.t8( item ) + '</option>'; } );
+                    tabledata += '</select></input></td>';
+                }
+                if( item.hasOwnProperty( 'info' ) ) tabledata += 'Info123';
+            }
+            addItem( item );
+            if( max_rows + i < crmFormModel.length){
+                    item = crmFormModel[i + max_rows]
+                    addItem( item );
+            }
+            tabledata += '</tr>';
+        }
+  //      })
+        $( container + " > tbody" ).html( ' ' );
+        $( container + " > tbody" ).append( tabledata );
+    }
+
     function crmChangeBlandList( list, country ){
         $( '#' + list ).html( '' );
         $( '#' + list ).append( '<option value=""></option>' );
@@ -343,6 +379,7 @@ $(document).ready(function()
         crmInitForm( deladdrFormModel, '#deladdr-form' );
         crmInitForm( banktaxFormModel, '#banktax-form' );
         crmInitForm( extraFormModel, '#extras-form' );
+        crmInitFormEx( carFormModel, '#car-form', 20 );
 
         $( '#billaddr-country' ).change(function(){
             crmChangeBlandList( 'billaddr-bland', $( '#billaddr-country' ).val() );

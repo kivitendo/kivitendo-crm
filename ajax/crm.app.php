@@ -120,7 +120,12 @@ function getCustomerForEdit( $data ){
     // Leads
     $query .= "(SELECT json_agg( lead ) AS lead FROM (".
                 "SELECT id, lead FROM leads ORDER BY leads ASC".
-                ") AS leads) AS leads";
+                ") AS leads) AS leads, ";
+
+    // Variablen
+    $query .= "(SELECT json_agg( vars_conf ) AS vars_conf FROM (".
+                "SELECT id, name, description AS label, type, description AS tooltip, '42' AS size, options AS data FROM custom_variable_configs WHERE module = 'CT' ORDER BY description ASC".
+                ") AS vars_conf) AS vars_conf";
 
     echo $GLOBALS['dbh']->getOne($query, true);
 }

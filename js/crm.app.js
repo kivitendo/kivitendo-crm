@@ -246,7 +246,7 @@ $(document).ready(function()
     var crmData = 0;
     var lxcarsData = 0;
 
-    function crmGetCustomerForEdit( src, id, new_car ){
+    function crmGetCustomerForEdit( src, id, new_car, fx ){
         $.ajax({
             url: 'crm/ajax/crm.app.php',
             type: 'POST',
@@ -256,7 +256,7 @@ $(document).ready(function()
                 crmData = data;
                 crmShowCustomerDialog( new_car );
                 crmShowCustomerForEdit();
-
+                if( fx ) fx();
             },
             error: function( xhr, status, error ){
                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'getCustomerForEdit()', xhr.responseText );
@@ -392,6 +392,9 @@ $(document).ready(function()
             $( '#car-form' ).show();
             crmInitFormEx( carFormModel, '#car-form', 20 );
         }
+        else{
+            $( '#car-form' ).hide();
+        }
 
         $( '#billaddr-country' ).change(function(){
             crmChangeBlandList( 'billaddr-bland', $( '#billaddr-country' ).val() );
@@ -469,6 +472,7 @@ $(document).ready(function()
                     data: { action: 'getFsData', data:{ 'id': this.id  } },
                     type: "POST",
                     success: function( data ){
+                        lxcarsData = data;
                       //  alert(  data.firstname + ' ' + data.name1 + '\n' + data.address1 + '\n' + data.address2 + '\n\n' + data.registrationNumber + '\n' + data.hsn + '\n' + data.field_2_2 + '\n' + data.field_14_1 + '\n' + data.ez + '\n' + data.hu + '\n' + data.vin + ' ' + data.field_3 );
                         $( '#crm-fsscan-dlg' ).dialog( 'close' );
                         $( '#crm-fsscan-customer-dlg' ).dialog({
@@ -530,7 +534,18 @@ $(document).ready(function()
                 $( '#crm-fsscan-customer-list' ).empty().append( tableContent );
                 $( '#crm-fsscan-customer-list tr' ).click( function(){
                     $( '#crm-fsscan-customer-dlg' ).dialog( 'close' );
-                    crmGetCustomerForEdit( 'C', this.id, true );
+                        crmGetCustomerForEdit( 'C', this.id, true, function(){
+                        console.info('lcxcarsData');
+                        console.info(lxcarsData);
+                        $( '#car-c_ln' ).val( lxcarsData.registrationNumber );
+                        $( '#car-c_2' ).val( lxcarsData.hsn );
+                        $( '#car-c_3' ).val( lxcarsData.field_2_2 );
+                        $( '#car-c_em' ).val( lxcarsData.field_14_1 );
+                        $( '#car-c_d' ).val( lxcarsData.ez );
+                        $( '#car-c_hu' ).val( lxcarsData.hu );
+                        $( '#car-c_fin' ).val( lxcarsData.vin );
+                        $( '#car-c_fin' ).val( lxcarsData.vin + ' ' + lxcarsData.field_3 );
+                    });
                 });
              },
              error: function( xhr, status, error ){

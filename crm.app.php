@@ -189,7 +189,7 @@
                 <thead></thead>
                 <tbody></tbody>
             </table>
-            <table id="car-form" style="display:none">
+            <table id="car-form" style="padding-top: 1em; display:none">
                 <thead></thead>
                 <tbody></tbody>
             </table>

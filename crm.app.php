@@ -221,6 +221,39 @@
     </div>
 </div>
 
+<div id="crm-fsscan-dlg" style="display:none">
+    <div>
+        <table id="crm-fsscan-list0">
+            <thead>
+              <tr class="listheading">
+                <th class="xlistheading" id="date">Datum</th>
+                <th class="xlistheading" id="firstname">Vorname</th>
+                <th class="xlistheading" id="name1">Name</th>
+                <th class="xlistheading" id="licenseplate">Kennzeichen</th>
+              </tr>
+            </thead>
+            <tbody id="crm-fsscan-list"></tbody>
+        </table>
+    </div>
+</div>
+
+<div id="crm-fsscan-customer-dlg" style="display:none">
+    <div><input id="crm-fsscan-edit-customer" type="text" size="42"></input></div>
+    <div style="padding-top: 1em">
+        <table id="crm-fsscan-customer-list0">
+            <thead>
+              <tr class="listheading">
+                <th class="xlistheading" id="date">Datum</th>
+                <th class="xlistheading" id="firstname">Vorname</th>
+                <th class="xlistheading" id="name1">Name</th>
+                <th class="xlistheading" id="licenseplate">Kennzeichen</th>
+              </tr>
+            </thead>
+             <tbody id="crm-fsscan-customer-list"></tbody>
+        </table>
+    </div>
+</div>
+
 <div id="crm-wx-base-data" class="row crm-p2">
     <div class="col-lg-3">
         <div id="crm-wx-contact">

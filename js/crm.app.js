@@ -244,8 +244,9 @@ $(document).ready(function()
     }
 
     var crmData = 0;
+    var lxcarsData = 0;
 
-    function crmGetCustomerForEdit( src, id ){
+    function crmGetCustomerForEdit( src, id, new_car ){
         $.ajax({
             url: 'crm/ajax/crm.app.php',
             type: 'POST',
@@ -253,7 +254,7 @@ $(document).ready(function()
             success: function( data ){
                 console.info( data );
                 crmData = data;
-                crmShowCustomerDialog();
+                crmShowCustomerDialog( new_car );
                 crmShowCustomerForEdit();
 
             },
@@ -381,12 +382,16 @@ $(document).ready(function()
         $( '#deladdr-shiptocountry' ).change();
     }
 
-    function crmShowCustomerDialog( ){
+    function crmShowCustomerDialog( new_with_car ){
         crmInitForm( billaddrFormModel, '#billaddr-form' );
         crmInitForm( deladdrFormModel, '#deladdr-form' );
         crmInitForm( banktaxFormModel, '#banktax-form' );
         crmInitForm( extraFormModel, '#extras-form' );
-        crmInitFormEx( carFormModel, '#car-form', 20 );
+
+        if( new_with_car ){
+            $( '#car-form' ).show();
+            crmInitFormEx( carFormModel, '#car-form', 20 );
+        }
 
         $( '#billaddr-country' ).change(function(){
             crmChangeBlandList( 'billaddr-bland', $( '#billaddr-country' ).val() );
@@ -425,11 +430,121 @@ $(document).ready(function()
         }).dialog('open').resize();
     }
 
-    $( '#crm-wf-edit' ).click( function() {
-        crmGetCustomerForEdit( $('#crm-wf-edit').attr('data-src'), $('#crm-wf-edit').attr('data-id') );
+    function crmNewCarFromScan(){
+     let fsmax = 24; // only for show
+        //new car or new car and new customer
+      $.ajax({
+          url: 'crm/ajax/crm.app.php',
+          data: { action: 'getScans', data:{ 'fsmax': fsmax } },
+          type: "POST",
+          success: function( data ){
+            $('#crm-fsscan-dlg').dialog({
+                autoOpen: false,
+                resizable: true,
+                width: 'auto',
+                height: 'auto',
+                modal: true,
+                title: kivi.t8( 'FS-Scan' ),
+                position: { my: "top", at: "top+250" },
+                open: function(){
+                    $(this).css('maxWidth', window.innerWidth);
+                },
+                buttons:[{
+                    text: kivi.t8('Close'),
+                    click: function(){
+                        $(this).dialog("close");
+                    }
+                }]
+            }).dialog('open').resize();
+
+            var tableContent = '';
+            let listrow0 = false;
+            data.forEach( function( item ){
+                tableContent += '<tr class="' + ((listrow0 = !listrow0)? "listrow0": "listrow1") + '" id="' + item.scan_id + '"><td style="text-align: right; padding-right: 15px;">' + item.myts + '</td><td>' + item.firstname + '</td><td>' + item.name1 + '</td><td>' + item.registrationnumber + '</td>';
+            });
+            $( '#crm-fsscan-list' ).empty().append( tableContent );
+            $( '#crm-fsscan-list tr' ).click( function(){
+                $.ajax({
+                    url: 'crm/ajax/crm.app.php',
+                    data: { action: 'getFsData', data:{ 'id': this.id  } },
+                    type: "POST",
+                    success: function( data ){
+                      //  alert(  data.firstname + ' ' + data.name1 + '\n' + data.address1 + '\n' + data.address2 + '\n\n' + data.registrationNumber + '\n' + data.hsn + '\n' + data.field_2_2 + '\n' + data.field_14_1 + '\n' + data.ez + '\n' + data.hu + '\n' + data.vin + ' ' + data.field_3 );
+                        $( '#crm-fsscan-dlg' ).dialog( 'close' );
+                        $( '#crm-fsscan-customer-dlg' ).dialog({
+                            autoOpen: false,
+                            resizable: true,
+                            width: 'auto',
+                            height: '600',
+                            modal: true,
+                            title: kivi.t8( 'Select customer' ),
+                            position: { my: "top", at: "top+250" },
+                            open: function(){
+                                $(this).css( 'maxWidth', window.innerWidth );
+                            },
+                            buttons:[{
+                                text: kivi.t8( 'Close' ),
+                                click: function(){
+                                    $(this).dialog( "close" );
+                                }
+                            }]
+                        }).dialog( 'open' ).resize();
+
+                        $( '#crm-fsscan-edit-customer' ).val( data.firstname + ' ' + data.name1 );
+
+                        crmSearchCustomerForScan( data.firstname + ' ' + data.name1 );
+
+                       $( '#crm-fsscan-edit-customer' ).keyup( function(){
+                            console.info( $( '#crm-fsscan-edit-customer' ).val() );
+                            crmSearchCustomerForScan( $( '#crm-fsscan-edit-customer' ).val() );
+                        });
+
+                    },
+                    error: function( xhr, status, error ){
+                        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmNewCarFromScan().getFsData', xhr.responseText );
+                    }
+                })
+              })
+          },
+          error: function( xhr, status, error ){
+              $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmNewCarFromScan().getScans', xhr.responseText );
+          }
+      })
+    }
+
+    function crmSearchCustomerForScan( name ){
+        $.ajax({
+             url: 'crm/ajax/crm.app.php',
+             type: 'POST',
+             data:  { action: 'searchCustomerForScan', data: { 'name': name } },
+             success: function( data ){
+                if( !data ){
+                    $( '#crm-fsscan-customer-list' ).empty();
+                    return;
+                }
+                var tableContent = '';
+                let listrow0 = false;
+                data.forEach( function( item ){
+                    tableContent += '<tr class="' + ((listrow0 = !listrow0)? "listrow0": "listrow1") + '" id="' + item.id + '"><td style="text-align: right; padding-right: 15px;">' + item.name + '</td><td>' + item.street + '</td><td>' + item.zipcode + '</td><td>' + item.city + '</td>';
+                });
+                $( '#crm-fsscan-customer-list' ).empty().append( tableContent );
+                $( '#crm-fsscan-customer-list tr' ).click( function(){
+                    $( '#crm-fsscan-customer-dlg' ).dialog( 'close' );
+                    crmGetCustomerForEdit( 'C', this.id, true );
+                });
+             },
+             error: function( xhr, status, error ){
+                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmNewCarFromScan().getCustomerForScan', xhr.responseText );
+             }
+        });
+    }
+
+    $( '#crm-wf-edit' ).click( function(){
+        crmGetCustomerForEdit( $( '#crm-wf-edit' ).attr( 'data-src' ), $( '#crm-wf-edit' ).attr( 'data-id' ) );
     });
 
     $( '#crm-wf-scan' ).click( function() {
+       crmNewCarFromScan();
     });
 
     $( '#crm-wf-offer' ).click( function() {

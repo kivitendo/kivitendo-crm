@@ -150,7 +150,7 @@
     <input id="crm-widget-quicksearch" placeholder="Schnellsuche" maxlength="20" class="ui-autocomplete-input" style="margin-left: 10px" autocomplete="off">
     <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div id="crm-hist-last" class="layout-actionbar-action layout-actionbar-submit">Zuletzt</div><span></span></div><div id="crm-history-list" class="layout-actionbar-combobox-list"></div></div>
     <div class="layout-actionbar-separator"></div>
-    <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Workflow</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit">Bearbeiten</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-offer">Angebot erstellen</div><div id="crm-wf-order" class="layout-actionbar-action layout-actionbar-submit">Auftrag erstellen</div><div id="crm-wf-bill" class="layout-actionbar-action layout-actionbar-submit">Rechnung erstellen</div></div></div>
+    <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Workflow</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit">Bearbeiten</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-scan"></div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-offer">Angebot erstellen</div><div id="crm-wf-order" class="layout-actionbar-action layout-actionbar-submit">Auftrag erstellen</div><div id="crm-wf-bill" class="layout-actionbar-action layout-actionbar-submit">Rechnung erstellen</div></div></div>
 </div>
 
 <!-- Prototype-Start: -->
@@ -189,7 +189,7 @@
                 <thead></thead>
                 <tbody></tbody>
             </table>
-            <table id="car-form">
+            <table id="car-form" style="display:none">
                 <thead></thead>
                 <tbody></tbody>
             </table>

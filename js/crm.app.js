@@ -170,9 +170,11 @@ $(document).ready(function()
             });
         }
 
-        $('#crm-wx-title').html(kivi.t8('Detail view:') + ' ' + ((data.cv.src == 'C')? kivi.t8('Customer') : kivi.t8('Vendor') ));
-        $('#crm-wf-edit').attr('data-src', data.cv.src);
-        $('#crm-wf-edit').attr('data-id', data.cv.id);
+        if( data.hasOwnProperty( 'cv' ) ){
+            $('#crm-wx-title').html(kivi.t8('Detail view:') + ' ' + ((data.cv.src == 'C')? kivi.t8('Customer') : kivi.t8('Vendor') ));
+            $('#crm-wf-edit').attr('data-src', data.cv.src);
+            $('#crm-wf-edit').attr('data-id', data.cv.id);
+        }
         crmDelAddr = 0;
     }
 

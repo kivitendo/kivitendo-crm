@@ -257,6 +257,7 @@ $(document).ready(function()
 
     var crmData = 0;
     var lxcarsData = 0;
+    var dbUpdateData = 0;
 
     function crmGetCustomerForEdit( src, id, new_car, fx ){
         $.ajax({
@@ -285,13 +286,13 @@ $(document).ready(function()
 
          $.each( crmData.cv, function( key, value ){
              if( value ){
-                 $('#billaddr-' + key).val(value);
+                 $( '#billaddr-' + key ).val( value );
              }
              else{
-                 $('#billaddr-' + key).val('');
+                 $( '#billaddr-' + key ).val( '' );
              }
          });
-         $('#billaddr-direct_debit').prop('checked', crmData.cv.direct_debit);
+         $( '#billaddr-direct_debit' ).prop( 'checked', crmData.cv.direct_debit );
 
          if( crmData.deladdr ){
              $('#deladdr-list').html( '' );
@@ -429,11 +430,30 @@ $(document).ready(function()
                 text: kivi.t8( 'Take' ),
                 click: function(){
                     console.info( 'Take' );
-                    crmData['customer'] = {};
+                    dbUpdateData[ 'customer' ] = {};
                     for(let item of billaddrFormModel){
-                        crmData['customer'][item.name] = $( '#' + item.name ).val();
+                        let columnName = item.name.split( '-' );
+                        dbUpdateData[ 'customer' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
                     }
-                    console.info( crmData );
+                    dbUpdateData[ 'shipto' ] = {};
+                    for(let item of deladdrFormModel){
+                        let columnName = item.name.split( '-' );
+                        dbUpdateData[ 'shipto' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
+                    }
+                    for(let item of banktaxFormModel){
+                        let columnName = item.name.split( '-' );
+                        dbUpdateData[ 'customer' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
+                    }
+                    for(let item of extraFormModel){
+                        let columnName = item.name.split( '-' );
+                        dbUpdateData[ 'customer' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
+                    }
+                    dbUpdateData[ 'lxc_cars' ] = {};
+                    for(let item of carFormModel){
+                        let columnName = item.name.split( '-' );
+                        dbUpdateData[ 'lxc_cars' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
+                    }
+                     console.info( dbUpdateData );
                     $( this ).dialog( "close" );
                 }
             },{
@@ -480,21 +500,25 @@ $(document).ready(function()
                 title: kivi.t8( 'FS-Scan' ),
                 position: { my: "top", at: "top+250" },
                 open: function(){
-                    $(this).css('maxWidth', window.innerWidth);
+                    $(this).css( 'maxWidth', window.innerWidth );
                 },
                 buttons:[{
-                    text: kivi.t8('Close'),
+                    text: kivi.t8( 'Close' ),
                     click: function(){
-                        $(this).dialog("close");
+                        $(this).dialog( "close" );
                     }
                 }]
-            }).dialog('open').resize();
+            }).dialog( 'open' ).resize();
 
             var tableContent = '';
             let listrow0 = false;
-            data.forEach( function( item ){
-                tableContent += '<tr class="' + ((listrow0 = !listrow0)? "listrow0": "listrow1") + '" id="' + item.scan_id + '"><td style="text-align: right; padding-right: 15px;">' + item.myts + '</td><td>' + item.firstname + '</td><td>' + item.name1 + '</td><td>' + item.registrationnumber + '</td>';
-            });
+            console.info( 'FromScan' );
+            console.info( data );
+            if( isIterable( data.db_scans ) ){
+                data.db_scans.forEach( function( item ){
+                    tableContent += '<tr class="' + ( ( listrow0 = !listrow0 )? "listrow0": "listrow1" ) + '" id="' + item.scan_id + '"><td style="text-align: right; padding-right: 15px;">' + item.myts + '</td><td>' + item.firstname + '</td><td>' + item.name1 + '</td><td>' + item.registrationnumber + '</td>';
+                });
+            }
             $( '#crm-fsscan-list' ).empty().append( tableContent );
             $( '#crm-fsscan-list tr' ).click( function(){
                 $.ajax({
@@ -546,7 +570,7 @@ $(document).ready(function()
                                         $( '#car-c_hu' ).val( lxcarsData.hu );
                                         $( '#car-c_fin' ).val( lxcarsData.vin );
                                         $( '#car-c_finchk' ).val( lxcarsData.field_3 );
-                                        crmData = { 'ajaxCall': "newCustomerWithCar" };
+                                        dbUpdateData = { 'ajaxCall': "newCustomerWithCar" };
                                      }
                                 },{
                                 text: kivi.t8( 'Close' ),

@@ -60,6 +60,58 @@ function getCVPA( $data ){
     echo $GLOBALS['dbh']->getOne($query, true);
 }
 
+function appendQueryForCustomerDlg( &$query ){
+    // greetings
+    $query .= "(SELECT json_agg( greetings ) AS greetings FROM (".
+                "SELECT description FROM greetings".
+                ") AS greetings) AS greetings, ";
+
+    // bundesland
+    $query .= "(SELECT json_agg( bundesland ) AS bundesland FROM (".
+                "SELECT id, country, bundesland AS name FROM bundesland".
+                ") AS bundesland) AS bundesland, ";
+
+    // business
+    $query .= "(SELECT json_agg( business ) AS business FROM (".
+                "SELECT id, description AS name FROM business ORDER BY business ASC".
+                ") AS business) AS business, ";
+
+    // Angestellte/ Verkäufer
+    $query .= "(SELECT json_agg( employees ) AS employees FROM (".
+                "SELECT id, name FROM employee WHERE deleted = false ORDER BY name ASC".
+                ") AS employees) AS employees, ";
+
+    // Zahlungsbedingung(en)
+    $query .= "(SELECT json_agg( payment_terms ) AS payment_terms FROM (".
+                "SELECT id, description FROM payment_terms WHERE obsolete = false ORDER BY description ASC".
+                ") AS payment_terms) AS payment_terms, ";
+
+    // Steuerzonen
+    $query .= "(SELECT json_agg( tax_zones ) AS tax_zones FROM (".
+                "SELECT id, description FROM tax_zones WHERE obsolete = false ORDER BY description ASC".
+                ") AS tax_zones) AS tax_zones, ";
+
+    // Branchen
+    $query .= "(SELECT json_agg( branches ) AS branches FROM (".
+                "SELECT branche AS name FROM public.customer WHERE branche IS NOT NULL GROUP BY branche ORDER BY branche ASC".
+                ") AS branches) AS branches, ";
+
+    // Sprachen
+    $query .= "(SELECT json_agg( languages ) AS languages FROM (".
+                "SELECT id, description FROM language WHERE obsolete = false ORDER BY description ASC".
+                ") AS languages) AS languages, ";
+
+    // Leads
+    $query .= "(SELECT json_agg( lead ) AS lead FROM (".
+                "SELECT id, lead FROM leads ORDER BY leads ASC".
+                ") AS leads) AS leads, ";
+
+    // Variablen
+    $query .= "(SELECT json_agg( vars_conf ) AS vars_conf FROM (".
+                "SELECT id, name, description AS label, type, description AS tooltip, '42' AS size, options AS data FROM custom_variable_configs WHERE module = 'CT' ORDER BY description ASC".
+                ") AS vars_conf) AS vars_conf";
+}
+
 function getCustomerForEdit( $data ){
     $db_table = array('C' => 'customer', 'V' => 'vendor');
     $query = "SELECT ";
@@ -130,7 +182,7 @@ function getCustomerForEdit( $data ){
     echo $GLOBALS['dbh']->getOne($query, true);
 }
 
-function getScans( $data ){
+function insertScans( $data ){
     /***********************************************************************************************************************************************************
     ********** follow lines generate the $colArray *************************************************************************************************************
     ************************************************************************************************************************************************************
@@ -165,8 +217,21 @@ function getScans( $data ){
     }
 
     //get FS from DB
-    $dbScans = $GLOBALS['dbh']->getAll( "SELECT *, to_char( itime::TIMESTAMP AT TIME ZONE 'GMT',  'DD.MM.YYYY HH24:MI' ) AS myts FROM lxc_fs_scans ORDER BY itime DESC LIMIT ".$data['fsmax'] );
-    echo json_encode( $dbScans );
+//    $dbScans = $GLOBALS['dbh']->getAll( "SELECT *, to_char( itime::TIMESTAMP AT TIME ZONE 'GMT',  'DD.MM.YYYY HH24:MI' ) AS myts FROM lxc_fs_scans ORDER BY itime DESC LIMIT ".$data['fsmax'] );
+//    echo json_encode( $dbScans );
+}
+
+function getScans( $data ){
+    $query = "SELECT ";
+
+    // scans
+    $query .= "(SELECT json_agg( db_scans  ) AS db_scans FROM (".
+                "SELECT *, to_char( itime::TIMESTAMP AT TIME ZONE 'GMT',  'DD.MM.YYYY HH24:MI' ) AS myts FROM lxc_fs_scans ORDER BY itime DESC LIMIT ".$data['fsmax'].
+                ") AS db_scans) AS db_scans, ";
+
+    appendQueryForCustomerDlg( $query );
+
+    echo $GLOBALS['dbh']->getOne($query, true);
 }
 
 function getFsData( $data ){

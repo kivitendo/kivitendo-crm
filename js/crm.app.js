@@ -1,5 +1,17 @@
 $(document).ready(function()
 {
+    function exists( obj ){
+        return obj !== null && obj !== undefined;
+    }
+
+    function isIterable( obj ){
+        return exists( obj ) && obj.hasOwnProperty('length');
+    }
+
+    function isEmpty( obj ){
+        return isIterable( obj ) && obj.length === 0;
+    }
+
     $( '#crm-tabs-main' ).tabs();
     $( '#crm-tabs-infos' ).tabs();
 
@@ -252,11 +264,10 @@ $(document).ready(function()
             type: 'POST',
             data:  { action: 'getCustomerForEdit', data: { 'src': src, 'id': id } },
             success: function( data ){
-                console.info( data );
                 crmData = data;
                 crmShowCustomerDialog( new_car );
                 crmShowCustomerForEdit();
-                if( fx ) fx();
+                if( fx ) fx( src, id );
             },
             error: function( xhr, status, error ){
                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'getCustomerForEdit()', xhr.responseText );
@@ -390,7 +401,7 @@ $(document).ready(function()
 
         if( new_with_car ){
             $( '#car-form' ).show();
-            crmInitFormEx( carFormModel, '#car-form', 20 );
+            crmInitFormEx( carFormModel, '#car-form', 21 );
         }
         else{
             $( '#car-form' ).hide();
@@ -403,7 +414,7 @@ $(document).ready(function()
             crmChangeBlandList( 'deladdr-shiptobland', $( '#deladdr-shiptocountry' ).val() );
         });
 
-        $('#crm-wx-customer-dialog').dialog({
+        $( '#crm-wx-customer-dialog' ).dialog({
             autoOpen: false,
             resizable: true,
             width: 'auto',
@@ -412,25 +423,44 @@ $(document).ready(function()
             title: kivi.t8('Edit customer'),
             position: { my: "top", at: "top+250" },
             open: function(){
-                $(this).css('maxWidth', window.innerWidth);
+                $( this ).css( 'maxWidth', window.innerWidth );
             },
             buttons:[{
-                text: kivi.t8('Take'),
+                text: kivi.t8( 'Take' ),
                 click: function(){
-                    $(this).dialog("close");
+                    console.info( 'Take' );
+                    crmData['customer'] = {};
+                    for(let item of billaddrFormModel){
+                        crmData['customer'][item.name] = $( '#' + item.name ).val();
+                    }
+                    console.info( crmData );
+                    $( this ).dialog( "close" );
                 }
-            }, {
-                text: kivi.t8('Delete'),
+            },{
+                text: kivi.t8( 'Delete' ),
                 click: function(){
-                    $(this).dialog("close");
+                    $( this ).dialog( "close" );
                 }
-            }, {
-                text: kivi.t8('Cancel'),
+            },{
+                text: kivi.t8( 'Cancel' ),
                 click: function(){
-                    $(this).dialog("close");
+                    $( this ).dialog( "close" );
                 }
             }]
-        }).dialog('open').resize();
+        }).dialog( 'open' ).resize();
+    }
+
+    function crmGetCarLicense( regNum ){
+        let rn = ( isEmpty( regNum ) )? 0 : regNum.split( ' ' );
+        if( isIterable( rn ) && rn.length > 1 ){
+            let rs = '';
+            rs = rn[0] + '-' + rn[1];
+            for( let i = 2; i < rn.length; i++ ){
+                rs += rn[i];
+            }
+            return rs;
+        }
+        return regNum;
     }
 
     function crmNewCarFromScan(){
@@ -484,13 +514,45 @@ $(document).ready(function()
                             title: kivi.t8( 'Select customer' ),
                             position: { my: "top", at: "top+250" },
                             open: function(){
-                                $(this).css( 'maxWidth', window.innerWidth );
+                                $( this ).css( 'maxWidth', window.innerWidth );
                             },
                             buttons:[{
+                                text: kivi.t8( 'New' ),
+                                click: function(){
+                                        //console.info('New');
+                                        //console.info(lxcarsData);
+                                        $( this ).dialog( "close" );
+                                        crmShowCustomerDialog( true );
+                                        $( '#billaddr-name' ).val( lxcarsData.firstname + ' ' + lxcarsData.name1 );
+                                        $( '#billaddr-street' ).val( lxcarsData.address1 );
+                                        const city = ( isEmpty( lxcarsData.adress2 ) )? 0 : lxcarsData.address2.split(' ');
+                                        if( isIterable( city ) && city.length > 1 ){
+                                            if(!isNaN( city[0] ) ){
+                                                $( '#billaddr-zipcode' ).val( city[0] );
+                                            }else{
+                                                $( '#billaddr-city' ).val( city[0] );
+                                            }
+                                            for( let i = 1; i < city.length; i++ ){
+                                                $( '#billaddr-city' ).val( $( '#billaddr-city' ).val() + city[i] );
+                                            }
+                                        }else{
+                                            $( '#billaddr-city' ).val( lxcarsData.address2 );
+                                        }
+                                        $( '#car-c_ln' ).val( crmGetCarLicense( lxcarsData.registrationNumber ) );
+                                        $( '#car-c_2' ).val( lxcarsData.hsn );
+                                        $( '#car-c_3' ).val( lxcarsData.field_2_2 );
+                                        $( '#car-c_em' ).val( lxcarsData.field_14_1 );
+                                        $( '#car-c_d' ).val( lxcarsData.ez );
+                                        $( '#car-c_hu' ).val( lxcarsData.hu );
+                                        $( '#car-c_fin' ).val( lxcarsData.vin );
+                                        $( '#car-c_finchk' ).val( lxcarsData.field_3 );
+                                        crmData = { 'ajaxCall': "newCustomerWithCar" };
+                                     }
+                                },{
                                 text: kivi.t8( 'Close' ),
                                 click: function(){
-                                    $(this).dialog( "close" );
-                                }
+                                        $(this).dialog( "close" );
+                                    }
                             }]
                         }).dialog( 'open' ).resize();
 
@@ -499,7 +561,6 @@ $(document).ready(function()
                         crmSearchCustomerForScan( data.firstname + ' ' + data.name1 );
 
                        $( '#crm-fsscan-edit-customer' ).keyup( function(){
-                            console.info( $( '#crm-fsscan-edit-customer' ).val() );
                             crmSearchCustomerForScan( $( '#crm-fsscan-edit-customer' ).val() );
                         });
 
@@ -534,9 +595,7 @@ $(document).ready(function()
                 $( '#crm-fsscan-customer-list' ).empty().append( tableContent );
                 $( '#crm-fsscan-customer-list tr' ).click( function(){
                     $( '#crm-fsscan-customer-dlg' ).dialog( 'close' );
-                        crmGetCustomerForEdit( 'C', this.id, true, function(){
-                        console.info('lcxcarsData');
-                        console.info(lxcarsData);
+                        crmGetCustomerForEdit( 'C', this.id, true, function( src, id ){
                         $( '#car-c_ln' ).val( lxcarsData.registrationNumber );
                         $( '#car-c_2' ).val( lxcarsData.hsn );
                         $( '#car-c_3' ).val( lxcarsData.field_2_2 );
@@ -544,7 +603,8 @@ $(document).ready(function()
                         $( '#car-c_d' ).val( lxcarsData.ez );
                         $( '#car-c_hu' ).val( lxcarsData.hu );
                         $( '#car-c_fin' ).val( lxcarsData.vin );
-                        $( '#car-c_fin' ).val( lxcarsData.vin + ' ' + lxcarsData.field_3 );
+                        $( '#car-c_finchk' ).val( lxcarsData.field_3 );
+                        getCVPA( src, id );
                     });
                 });
              },

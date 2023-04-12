@@ -6,6 +6,7 @@ const billaddrFormModel = [
         { "name": "billaddr-street", "label": "Street:", "type": "input", "size": "42", "tooltip": "Street and street number" },
         { "name": "billaddr-country", "label": "Country code:", "type": "input", "size": "4", "tooltip": "Country code" },
         { "name": "billaddr-zipcode", "label": "Zip code:", "type": "input", "size": "12", "tooltip": "Zip code" },
+        { "name": "billaddr-city", "label": "City:", "type": "input", "size": "42", "tooltip": "" },
         { "name": "billaddr-bland", "label": "Bundesland:", "type": "select", "data":[], "tooltip":""}, //selectbox
         { "name": "billaddr-phone", "label": "Phone:", "type": "input", "size": "42", "tooltip": "First phone number" },
         { "name": "billaddr-fax", "label": "Phone:", "type": "input", "size": "42", "tooltip": "Second phone number" },
@@ -67,6 +68,7 @@ const carFormModel = [
     { "name": "car-c_d", "label": "Date of registration:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "car-c_hu", "label": "Date of HU+AU:", "type": "input", "size": "21", "tooltip": "", "check": "chk_c_hu" },
     { "name": "car-c_fin", "label": "FIN:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "car-c_finchk", "label": "FIN check:", "type": "input", "size": "2", "tooltip": "" },
     { "name": "car-c_mkb", "label": "Engine code:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "car-c_color", "label": "Color code:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "car-c_gart_list", "label": "Engine code:", "type": "select","data": [], "tooltip":""}, //selectbox

@@ -514,6 +514,7 @@ $(document).ready(function()
             let listrow0 = false;
             console.info( 'FromScan' );
             console.info( data );
+            crmData = data;
             if( isIterable( data.db_scans ) ){
                 data.db_scans.forEach( function( item ){
                     tableContent += '<tr class="' + ( ( listrow0 = !listrow0 )? "listrow0": "listrow1" ) + '" id="' + item.scan_id + '"><td style="text-align: right; padding-right: 15px;">' + item.myts + '</td><td>' + item.firstname + '</td><td>' + item.name1 + '</td><td>' + item.registrationnumber + '</td>';

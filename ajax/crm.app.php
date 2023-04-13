@@ -10,6 +10,10 @@ function resultInfo($success, $text = '', $debug = false){
     echo $info.' }';
 }
 
+function getLxcarsVer(){
+     echo $GLOBALS['dbh']->getOne( "SELECT EXISTS(SELECT * FROM information_schema.tables WHERE table_name = 'lxc_ver') AS lxcars, (SELECT json_agg( lxc_ver ) AS lxc_ver FROM (SELECT COALESCE(version, '') AS version, COALESCE(subversion, '') AS subversion FROM public.lxc_ver WHERE EXISTS(SELECT * FROM information_schema.tables WHERE table_name = 'lxc_ver') ORDER BY datum DESC LIMIT 1) AS lxc_ver) AS lxc_ver", true );
+}
+
 function getHistory(){
     $rs = $GLOBALS['dbh']->getOne( "SELECT val FROM crmemployee WHERE uid = '" . $_SESSION["loginCRM"]."' AND manid = ".$_SESSION['manid']." AND key = 'search_history'" );
     echo $rs['val'] ? $rs['val'] : '0';
@@ -28,7 +32,7 @@ function getCVPA( $data ){
         // Stammdaten
         $db_table = array('C' => 'customer', 'V' => 'vendor');
         $query .= "(SELECT row_to_json( cv ) AS cv FROM (".
-                    "SELECT '".$data['src']."' AS src, id, name, street, zipcode, contact, phone AS phone1, fax AS phone2, email, city, country, contact AS person FROM ".$db_table[$data['src']]." WHERE id=".$data['id'].
+                    "SELECT '".$data['src']."' AS src, id, name, street, zipcode, contact, phone AS phone1, fax AS phone2, email, city, country FROM ".$db_table[$data['src']]." WHERE id=".$data['id'].
                     ") AS cv) AS cv, ";
         // Angebote
         $id = array('C' => 'customer_id', 'V' => 'vendor_id');
@@ -60,6 +64,10 @@ function getCVPA( $data ){
     echo $GLOBALS['dbh']->getOne($query, true);
 }
 
+/***********************************************
+* Append query with sql select statments
+* to build dialog drop down elements
+**********************************************/
 function appendQueryForCustomerDlg( &$query ){
     // greetings
     $query .= "(SELECT json_agg( greetings ) AS greetings FROM (".
@@ -129,6 +137,13 @@ function getCustomerForEdit( $data ){
                 "SELECT trans_id, shipto_id, shiptoname, shiptodepartment_1, shiptodepartment_2, shiptostreet, shiptozipcode, shiptocity, shiptocountry, shiptocontact, shiptophone, shiptofax, shiptoemail, shiptoemployee, shiptobland FROM shipto WHERE trans_id = ".$data['id']." ORDER BY shiptoname ASC".
                 ") AS deladdr) AS deladdr, ";
 
+    appendQueryForCustomerDlg( $query );
+
+    echo $GLOBALS['dbh']->getOne($query, true);
+}
+
+function getCVDialogData(){
+    $query = "SELECT ";
     appendQueryForCustomerDlg( $query );
 
     echo $GLOBALS['dbh']->getOne($query, true);

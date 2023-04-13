@@ -221,7 +221,7 @@
     </div>
 </div>
 
-<div id="crm-fsscan-dlg" style="display:none">
+<div id="crm-fsscan-dlg" style="display:none;">
     <div>
         <table id="crm-fsscan-list0">
             <thead>
@@ -260,8 +260,8 @@
             <div><strong><span id="crm-contact-name"></span></strong></div>
             <div class="crm-pt05"><span id="crm-contact-street"></span></div>
             <div class="crm-pt025"><span id="crm-contact-country"></span>-<span id="crm-contact-city"></span></div>
-            <div class="crm-pt2"><strong>Kontakt</strong></div>
-            <div class="crm-pt05"><span id="crm-contact-person"></span></div>
+            <div class="crm-pt2"><strong>Hauptkontakt</strong></div>
+            <div class="crm-pt05"><span id="crm-contact-contact"></span></div>
             <div id="crm-wx-contact-phone1" class="row crm-pt05">
                 <div class="col-md-2">Telefon:</div>
                 <div class="col-md-10">
@@ -285,7 +285,7 @@
                 <div class="col-md-10"><button id="crm-contact-email">Kein Eintrag</button></div>
             </div>
         </div>
-        <div id="crm-wx-cars">
+        <div id="crm-wx-cars" style="display:none;">
             <table width="100%" class="crm-pt2">
                 <thead>
                 <tr>
@@ -381,7 +381,7 @@
                     <a class="nav-link" aria-current="page" href="#crm-tab-contact-hist">Kontakthistorie</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#crm-tab-contact-hist">Kontakte</a>
+                    <a class="nav-link" aria-current="page" href="#crm-tab-contact-hist">Ansprechpartner</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="#crm-tab-delivery-addr">Lieferanschrift</a>

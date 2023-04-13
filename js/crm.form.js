@@ -82,7 +82,6 @@ const carFormModel = [
     { "name": "car-c_zrk", "label": "Next ZR change at KM:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "car-c_bf", "label": "Next brake fluid change:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "car-c_wd", "label": "Next maintenance service:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "", "label": "Owner:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "", "label": "Manufacture:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "", "label": "Typ:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "", "label": "Displacement:", "type": "input", "size": "21", "tooltip": "" },

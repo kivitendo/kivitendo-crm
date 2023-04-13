@@ -10,15 +10,25 @@ function resultInfo($success, $text = '', $debug = false){
     echo $info.' }';
 }
 
+/*********************************************
+* Check lxcars tables exists and then get
+* last version
+*********************************************/
 function getLxcarsVer(){
      echo $GLOBALS['dbh']->getOne( "SELECT EXISTS(SELECT * FROM information_schema.tables WHERE table_name = 'lxc_ver') AS lxcars, (SELECT json_agg( lxc_ver ) AS lxc_ver FROM (SELECT COALESCE(version, '') AS version, COALESCE(subversion, '') AS subversion FROM public.lxc_ver WHERE EXISTS(SELECT * FROM information_schema.tables WHERE table_name = 'lxc_ver') ORDER BY datum DESC LIMIT 1) AS lxc_ver) AS lxc_ver", true );
 }
 
+/*********************************************
+* Last edited objects like customer and so on
+*********************************************/
 function getHistory(){
     $rs = $GLOBALS['dbh']->getOne( "SELECT val FROM crmemployee WHERE uid = '" . $_SESSION["loginCRM"]."' AND manid = ".$_SESSION['manid']." AND key = 'search_history'" );
     echo $rs['val'] ? $rs['val'] : '0';
 }
 
+/*********************************************
+* Fast search (Schnellsuche)
+*********************************************/
 function fastSearch(){
     if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
         $term = $_GET['term'];
@@ -120,6 +130,9 @@ function appendQueryForCustomerDlg( &$query ){
                 ") AS vars_conf) AS vars_conf";
 }
 
+/*********************************************
+* Get data for customer or vendor
+*********************************************/
 function getCustomerForEdit( $data ){
     $db_table = array('C' => 'customer', 'V' => 'vendor');
     $query = "SELECT ";
@@ -142,6 +155,10 @@ function getCustomerForEdit( $data ){
     echo $GLOBALS['dbh']->getOne($query, true);
 }
 
+/***********************************************
+* Get Data form DB to build drop down elemennts
+* in new CV dialog
+**********************************************/
 function getCVDialogData(){
     $query = "SELECT ";
     appendQueryForCustomerDlg( $query );
@@ -149,6 +166,9 @@ function getCVDialogData(){
     echo $GLOBALS['dbh']->getOne($query, true);
 }
 
+/*********************************************
+* Based on old version of getScans function
+*********************************************/
 function insertScans( $data ){
     /***********************************************************************************************************************************************************
     ********** follow lines generate the $colArray *************************************************************************************************************
@@ -182,13 +202,15 @@ function insertScans( $data ){
             $GLOBALS['dbh']->insert( 'lxc_fs_scans', $colArray, $fsValues );
         }
     }
-
-    //get FS from DB
-//    $dbScans = $GLOBALS['dbh']->getAll( "SELECT *, to_char( itime::TIMESTAMP AT TIME ZONE 'GMT',  'DD.MM.YYYY HH24:MI' ) AS myts FROM lxc_fs_scans ORDER BY itime DESC LIMIT ".$data['fsmax'] );
-//    echo json_encode( $dbScans );
 }
 
+/*********************************************
+* New version of getScans function
+* appends data for dialog elements
+*********************************************/
 function getScans( $data ){
+    insertScans( $data );
+
     $query = "SELECT ";
 
     // scans

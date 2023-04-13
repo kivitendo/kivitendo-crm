@@ -18,10 +18,15 @@ $(document).ready(function()
     $( '#crm-wf-edit').html( kivi.t8( 'Edit' ) );
     $( '#crm-wf-scan').html( kivi.t8( 'Car from scan' ) );
 
+    /* flag to switch app lxcars functionality  */
     var lxcars = false;
     crmGetLxcarsVer();
     crmGetHistory();
 
+    /*********************************************
+    * Check lxcars tables exists and then get
+    * last version
+    *********************************************/
     function crmGetLxcarsVer(){
         $.ajax({
             url: 'crm/ajax/crm.app.php',

@@ -233,3 +233,15 @@ function searchCustomerForScan( $data ){
     $rs = $GLOBALS['dbh']->getAll("SELECT id, name, street, zipcode, city FROM customer WHERE name ILIKE '%".$data['name']."%' LIMIT 5", true);
     echo ( empty( $rs ) )? 0 : $rs;
 }
+
+function insertDB( $data ){
+    writeLog( 'insertDB' );
+    writeLog( $data );
+    resultInfo( true );
+}
+
+function updateDB( $data ){
+    writeLog( 'updateDB' );
+    writeLog( $data );
+    resultInfo( true );
+}

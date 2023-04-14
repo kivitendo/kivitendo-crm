@@ -269,7 +269,11 @@ $(document).ready(function()
         $( container + " > tbody" ).append( tabledata );
     }
 
-    function crmChangeBlandList( list, country ){
+    /***************************************
+    * Change list of Bundesland dependent
+    * on Country code
+    ***************************************/
+     function crmChangeBlandList( list, country ){
         $( '#' + list ).html( '' );
         $( '#' + list ).append( '<option value=""></option>' );
         for( let bland of crmData.bundesland ){
@@ -278,10 +282,36 @@ $(document).ready(function()
         }
     }
 
+    /***************************************
+    * Data model for CRM & LxCars
+    * dbUpdateData means insert and update
+    * operations in database
+    ***************************************/
     var crmData = {};
     var lxcarsData = {};
     var dbUpdateData = {};
 
+    function crmUpdateDB(){
+        console.info( dbUpdateData );
+        $.ajax({
+            url: 'crm/ajax/crm.app.php',
+            type: 'POST',
+            data:  { action: dbUpdateData.action, data: dbUpdateData.data },
+            success: function( data ){
+                console.info( 'crmUpdateDB' );
+                console.info( data );
+                dbUpdateData = {};
+            },
+            error: function( xhr, status, error ){
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmUpdateDB()', xhr.responseText );
+            }
+        });
+    }
+
+    /***************************************
+    * Get CV date from database
+    * includes data for dialog
+    ***************************************/
     function crmGetCustomerForEdit( src, id, new_car, fx ){
         $.ajax({
             url: 'crm/ajax/crm.app.php',
@@ -299,7 +329,10 @@ $(document).ready(function()
         });
     }
 
-    function crmShowCustomerForEdit(){
+    /***************************************
+    * Prepares dialog to edit CV
+    ***************************************/
+     function crmShowCustomerForEdit(){
         $( '#billaddr-greetings' ).html( '' );
         $( '#billaddr-greetings' ).append( '<option value="">' + kivi.t8( "Salutation as below" ) + '</option>' );
         if( isIterable( crmData.greetings ) ){
@@ -423,15 +456,18 @@ $(document).ready(function()
         }
     }
 
-    function crmShowCustomerDialog( new_with_car ){
+    /***************************************
+    * Open dialog to edit CV
+    ***************************************/
+     function crmShowCustomerDialog( new_with_car ){
         crmInitForm( billaddrFormModel, '#billaddr-form' );
         crmInitForm( deladdrFormModel, '#deladdr-form' );
         crmInitForm( banktaxFormModel, '#banktax-form' );
         crmInitForm( extraFormModel, '#extras-form' );
+        crmInitFormEx( carFormModel, '#car-form', 21 );
 
         if( new_with_car ){
             $( '#car-form' ).show();
-            crmInitFormEx( carFormModel, '#car-form', 21 );
         }
         else{
             $( '#car-form' ).hide();
@@ -456,33 +492,43 @@ $(document).ready(function()
                 $( this ).css( 'maxWidth', window.innerWidth );
             },
             buttons:[{
-                text: kivi.t8( 'Take' ),
+                text: kivi.t8( 'Save' ),
                 click: function(){
-                    console.info( 'Take' );
-                    dbUpdateData[ 'customer' ] = {};
+                    console.info( 'Take / Save' );
+                    dbUpdateData.data = {};
+                    dbUpdateData.data[ 'customer' ] = {};
                     for(let item of billaddrFormModel){
                         let columnName = item.name.split( '-' );
-                        dbUpdateData[ 'customer' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
+                        dbUpdateData.data[ 'customer' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
                     }
-                    dbUpdateData[ 'shipto' ] = {};
-                    for(let item of deladdrFormModel){
-                        let columnName = item.name.split( '-' );
-                        dbUpdateData[ 'shipto' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
+                    if( exists( $( '#deladdr-list' ).val() ) && $( '#deladdr-list' ).val() !== '' ){
+                        dbUpdateData.data[ 'shipto' ] = { 'shipto_id': $( '#deladdr-list' ).val() };
+                        for(let item of deladdrFormModel){
+                            let columnName = item.name.split( '-' );
+                            dbUpdateData.data[ 'shipto' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
+                        }
                     }
                     for(let item of banktaxFormModel){
                         let columnName = item.name.split( '-' );
-                        dbUpdateData[ 'customer' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
+                        dbUpdateData.data[ 'customer' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
                     }
                     for(let item of extraFormModel){
                         let columnName = item.name.split( '-' );
-                        dbUpdateData[ 'customer' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
+                        dbUpdateData.data[ 'customer' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
                     }
-                    dbUpdateData[ 'lxc_cars' ] = {};
-                    for(let item of carFormModel){
-                        let columnName = item.name.split( '-' );
-                        dbUpdateData[ 'lxc_cars' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
+                    if( $( '#car-form' ).is(':visible' ) ){
+                        dbUpdateData.data[ 'lxc_cars' ] = {};
+                        for(let item of carFormModel){
+                            if( !item.name.startsWith( 'kba' ) ){
+                                let columnName = item.name.split( '-' );
+                                dbUpdateData.data[ 'lxc_cars' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
+                            }
+                        }
                     }
-                     console.info( dbUpdateData );
+                    console.info( 'Test2' );
+                    console.info( dbUpdateData.action );
+                    if( !exists( dbUpdateData.action ) ) dbUpdateData.action = 'updateDB';
+                    crmUpdateDB();
                     $( this ).dialog( "close" );
                 }
             },{
@@ -499,7 +545,12 @@ $(document).ready(function()
         }).dialog( 'open' ).resize();
     }
 
-    function crmGetCarLicense( regNum ){
+    /***************************************
+    * Format the registration number
+    * (car license) getting from scan,
+    * remove white spaces
+    ***************************************/
+     function crmFormatCarLicense( regNum ){
         let rn = ( isEmpty( regNum ) )? 0 : regNum.split( ' ' );
         if( isIterable( rn ) && rn.length > 1 ){
             let rs = '';
@@ -512,7 +563,13 @@ $(document).ready(function()
         return regNum;
     }
 
-    function crmNewCarFromScan(){
+    /***************************************
+    * Dialog to select scan (car data)
+    * and customer
+    * inklusive fast search,
+    * it is possible to add a new customer
+    ***************************************/
+     function crmNewCarFromScan(){
      let fsmax = 24; // only for show
         //new car or new car and new customer
       $.ajax({
@@ -571,6 +628,7 @@ $(document).ready(function()
                                 $( this ).css( 'maxWidth', window.innerWidth );
                             },
                             buttons:[{
+                                /* Add new customer from car scan data */
                                 text: kivi.t8( 'New' ),
                                 click: function(){
                                         $.ajax({
@@ -599,7 +657,7 @@ $(document).ready(function()
                                                 }else{
                                                     $( '#billaddr-city' ).val( lxcarsData.address2 );
                                                 }
-                                                $( '#car-c_ln' ).val( crmGetCarLicense( lxcarsData.registrationNumber ) );
+                                                $( '#car-c_ln' ).val( crmFormatCarLicense( lxcarsData.registrationNumber ) );
                                                 $( '#car-c_2' ).val( lxcarsData.hsn );
                                                 $( '#car-c_3' ).val( lxcarsData.field_2_2 );
                                                 $( '#car-c_em' ).val( lxcarsData.field_14_1 );
@@ -607,7 +665,7 @@ $(document).ready(function()
                                                 $( '#car-c_hu' ).val( lxcarsData.hu );
                                                 $( '#car-c_fin' ).val( lxcarsData.vin );
                                                 $( '#car-c_finchk' ).val( lxcarsData.field_3 );
-                                                dbUpdateData = { 'action': 'insert' };
+                                                dbUpdateData = { 'action': 'insertDB' };
                                             },
                                             error: function( xhr, status, error ){
                                                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'lxcars()', xhr.responseText );
@@ -643,7 +701,11 @@ $(document).ready(function()
       })
     }
 
-    function crmSearchCustomerForScan( name ){
+    /***************************************
+    * Fast search for customer from car scan
+    * data
+    ***************************************/
+     function crmSearchCustomerForScan( name ){
         $.ajax({
              url: 'crm/ajax/crm.app.php',
              type: 'POST',
@@ -662,7 +724,7 @@ $(document).ready(function()
                 $( '#crm-fsscan-customer-list tr' ).click( function(){
                     $( '#crm-fsscan-customer-dlg' ).dialog( 'close' );
                         crmGetCustomerForEdit( 'C', this.id, true, function( src, id ){
-                        $( '#car-c_ln' ).val( lxcarsData.registrationNumber );
+                        $( '#car-c_ln' ).val( crmFormatCarLicense( lxcarsData.registrationNumber ) );
                         $( '#car-c_2' ).val( lxcarsData.hsn );
                         $( '#car-c_3' ).val( lxcarsData.field_2_2 );
                         $( '#car-c_em' ).val( lxcarsData.field_14_1 );

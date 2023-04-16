@@ -490,7 +490,7 @@ $(document).ready(function()
             width: 'auto',
             height: 'auto',
             modal: true,
-            title: kivi.t8('Edit customer'),
+            title: kivi.t8( 'Edit customer' ),
             position: { my: "top", at: "top+250" },
             open: function(){
                 $( this ).css( 'maxWidth', window.innerWidth );
@@ -498,10 +498,12 @@ $(document).ready(function()
             buttons:[{
                 text: kivi.t8( 'Save' ),
                 click: function(){
-                    console.info( 'Take / Save' );
+                    console.info( 'Save' );
                     dbUpdateData.data = {};
-                    dbUpdateData.data[ 'customer' ] = {};
-                    for(let item of billaddrFormModel){
+                    dbUpdateData.data['customer'] = {};// customer darf nicht statisch sein !!!customer or vendor!!! 
+                    dbUpdateData.data['customer']['WHERE id'] = '12345'; // 12345 muss die id rein!!
+                    alert( 'hello ' );
+                    for( let item of billaddrFormModel){
                         let columnName = item.name.split( '-' );
                         dbUpdateData.data[ 'customer' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
                     }
@@ -512,11 +514,11 @@ $(document).ready(function()
                             dbUpdateData.data[ 'shipto' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
                         }
                     }
-                    for(let item of banktaxFormModel){
+                    for( let item of banktaxFormModel ){
                         let columnName = item.name.split( '-' );
                         dbUpdateData.data[ 'customer' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
                     }
-                    for(let item of extraFormModel){
+                    for( let item of extraFormModel ){
                         let columnName = item.name.split( '-' );
                         dbUpdateData.data[ 'customer' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
                     }

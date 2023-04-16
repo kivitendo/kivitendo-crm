@@ -4,9 +4,9 @@ require_once __DIR__.'/../inc/stdLib.php'; // for debug
 require_once __DIR__.'/../inc/crmLib.php';
 require_once __DIR__.'/../inc/ajax2function.php';
 
-function resultInfo($success, $text = '', $debug = false){
+function resultInfo( $success, $text = '', $debug = false ){
     $info = '{ "success":'.(($success)? 'true' : 'false');
-    if(!empty($text)) if(!$success || $debug) $info .= ', "debug":"'.$text.'"';
+    if( !empty( $text ) ) if( !$success || $debug ) $info .= ', "debug":"'.$text.'"';
     echo $info.' }';
 }
 
@@ -82,7 +82,7 @@ function getCVPA( $data ){
     $array_of_data = $rs['val'] ? json_decode( $rs['val'], true ) : array(); //current history in array or new empty array
 
     foreach( $array_of_data as $array_data ) {
-        if( $lastdata[0]==$array_data[0] ) unset( $array_of_data[array_search( $lastdata, $array_of_data )] ); //remove duplicates
+        if( $lastdata[0] == $array_data[0] ) unset( $array_of_data[array_search( $lastdata, $array_of_data )] ); //remove duplicates
     }
 
     array_unshift( $array_of_data, $lastdata ); //add last access to array
@@ -247,7 +247,7 @@ function getFsData( $data ){
 }
 
 function searchCustomerForScan( $data ){
-    $rs = $GLOBALS['dbh']->getAll("SELECT id, name, street, zipcode, city FROM customer WHERE name ILIKE '%".$data['name']."%' LIMIT 12", true);
+    $rs = $GLOBALS['dbh']->getAll( "SELECT id, name, street, zipcode, city FROM customer WHERE name ILIKE '%".$data['name']."%' LIMIT 12", true );
     echo ( empty( $rs ) )? 0 : $rs;
 }
 
@@ -260,5 +260,14 @@ function insertDB( $data ){
 function updateDB( $data ){
     writeLog( 'updateDB' );
     writeLog( $data );
+    foreach( $data AS $key => $value ){
+        writeLog( $key );
+        writeLog( $value );
+    }
+    
+    //$query = 
+    
+    
     resultInfo( true );
+
 }

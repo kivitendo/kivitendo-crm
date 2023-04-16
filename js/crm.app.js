@@ -531,12 +531,8 @@ $(document).ready(function()
                     crmUpdateDB();
                     $( this ).dialog( "close" );
                 }
-            },{
-                text: kivi.t8( 'Delete' ),
-                click: function(){
-                    $( this ).dialog( "close" );
-                }
-            },{
+            },
+            {
                 text: kivi.t8( 'Cancel' ),
                 click: function(){
                     $( this ).dialog( "close" );
@@ -558,9 +554,12 @@ $(document).ready(function()
             for( let i = 2; i < rn.length; i++ ){
                 rs += rn[i];
             }
-            return rs;
+            // * remove "*" from license plates from the federal state of Berlin, Schlimm diese Kleinstaatelei.. alias Förderalismus
+            return rs.replace('*', '').replace('*', '');
         }
-        return regNum;
+        alert( 'crmFormatCarLicense()' + regNum );
+        return regNum;// Wann tritt dieser Fall auf???
+
     }
 
     /***************************************

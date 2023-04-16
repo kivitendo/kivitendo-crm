@@ -812,19 +812,20 @@ function mkDirName( $name ){
 }
 
 function accessHistory( $data ){ //ToDo: move to ajax
+    writeLog( $data );
     $rs = $GLOBALS['dbh']->getOne( "select val from crmemployee where uid = '" . $_SESSION["loginCRM"]."' AND manid = ".$_SESSION['manid']." AND key = 'search_history'" ); //get current history
     $array_of_data = $rs['val'] ? json_decode( $rs['val'], true ) : array(); //current history in array or new empty array
     //if ( $array_of_data && in_array( $data, $array_of_data ) ) unset( $array_of_data[array_search( $data, $array_of_data)] ); //remove duplicates
 
-foreach($array_of_data as $array_data) {
-    if ( $data[0]==$array_data[0] ) unset( $array_of_data[array_search( $data, $array_of_data)] ); //remove duplicates
-  }
+    foreach($array_of_data as $array_data) {
+        if( $data[0]==$array_data[0] ) unset( $array_of_data[array_search( $data, $array_of_data)] ); //remove duplicates
+    }
 
     array_unshift( $array_of_data, $data ); //add last access to array
     if ( count( $array_of_data ) > 10 ) array_pop( $array_of_data ); //remove entry numer 10
     $GLOBALS['dbh']->update( 'crmemployee', array( 'val' ), array( json_encode( $array_of_data ) ), "uid = ".$_SESSION['loginCRM']." AND manid = ".$_SESSION['manid']." AND key = 'search_history'" );
 
-//printArray($data);
+    //printArray($data);
 
 
 

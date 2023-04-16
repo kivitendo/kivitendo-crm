@@ -49,19 +49,21 @@ $(document).ready(function()
             success: function(data){
                 $( '#crm-history-list' ).html('');
                 if(data){
-                    for(let entry of data){
+                    for( let entry of data ){
                         let id = 'crm-hist-entry-' + entry[2]  + entry[0];
-                        $('#crm-history-list').append('<div class="layout-actionbar-action layout-actionbar-submit" data-src="' + entry[2] +'" data-id="' + entry[0] + '" id="' + id + '">' + entry[1] + '</div>');
-                        $('#' + id).click(function(){
-                            getCVPA($('#' + id).attr('data-src'), $('#' + id).attr('data-id'));
+                        //console.info( entry );
+                        $( '#crm-history-list' ).append( '<div class="layout-actionbar-action layout-actionbar-submit" data-src="' + entry[2] +'" data-id="' + entry[0] + '" id="' + id + '">' + entry[1] + '</div>');
+                        $( '#' + id ).click(function(){
+
+                            getCVPA( entry[2], entry[0], entry[1] );
                         });
                     }
                     var histlist = $('#crm-hist-last').clone();
-                    $('#crm-hist-last').replaceWith($('#crm-hist-last').clone());
-                    $('#crm-hist-last').click(function(e){
-                        getCVPA(data[0][2], data[0][0]);
+                    $( '#crm-hist-last' ).replaceWith($( '#crm-hist-last' ).clone() );
+                    $( '#crm-hist-last' ).click( function(){
+                        getCVPA( data[0][2], data[0][0], data[0][1] );
                     });
-                    getCVPA(data[0][2], data[0][0]);
+                    getCVPA( data[0][2], data[0][0], data[0][1] );// ( CV, id, name )
                 }
             },
             error: function(xhr, status, error){
@@ -70,7 +72,7 @@ $(document).ready(function()
         });
     }
 
-    $.widget("custom.catcomplete", $.ui.autocomplete, {
+    $.widget( "custom.catcomplete", $.ui.autocomplete, {
         _renderMenu: function(ul,items) {
             var that = this,
             currentCategory = "";
@@ -84,22 +86,22 @@ $(document).ready(function()
          }
      });
 
-    $(function() {
+    $( function(){
         $("#crm-widget-quicksearch").catcomplete({
             source: "crm/ajax/crm.app.php?action=fastSearch",
-            select: function(e,ui) {
-                getCVPA(ui.item.src, ui.item.id);
+            select: function( e,ui ) {
+                getCVPA( ui.item.src, ui.item.id, ui.item.label );
             }
         });
     });
 
-    function getCVPA( src, id ){
+    function getCVPA( src, id, name ){
         $.ajax({
             url: 'crm/ajax/crm.app.php',
             type: 'POST',
-            data:  { action: 'getCVPA', data: { 'src': src, 'id': id } },
-            success: function(data){
-                showCVPA(data);
+            data:  { action: 'getCVPA', data: { 'src': src, 'id': id, 'name': name } },
+            success: function( data ){
+                showCVPA( data );
             },
             error: function(xhr, status, error){
                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'getCVPA', xhr.responseText );
@@ -292,7 +294,7 @@ $(document).ready(function()
     var dbUpdateData = {};
 
     function crmUpdateDB(){
-        console.info( dbUpdateData );
+        //console.info( dbUpdateData );
         $.ajax({
             url: 'crm/ajax/crm.app.php',
             type: 'POST',

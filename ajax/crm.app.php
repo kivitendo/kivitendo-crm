@@ -69,9 +69,26 @@ function getCVPA( $data ){
     }
 
     // Fahrzeuge
-    $query .= "(SELECT json_agg( cars ) AS cv FROM (SELECT c_ln AS ln, '--------' AS manuf, '-----' AS ctype, '---' AS cart FROM lxc_cars WHERE c_ow = ".$data['id']." ORDER BY c_id) AS cars) AS cars";
+    $query .= "( SELECT json_agg( cars ) AS cv FROM (SELECT c_ln AS ln, '--------' AS manuf, '-----' AS ctype, '---' AS cart FROM lxc_cars WHERE c_ow = ".$data['id']." ORDER BY c_id) AS cars) AS cars";
 
-    echo $GLOBALS['dbh']->getOne($query, true);
+    echo $GLOBALS['dbh']->getOne( $query, true );
+
+    // Write history
+    $lastdata[0] = $data['id']; //for compatibility
+    $lastdata[1] = $data['name'];
+    $lastdata[2] = $data['src'];
+    $rs = $GLOBALS['dbh']->getOne( "select val from crmemployee where uid = '" . $_SESSION["loginCRM"]."' AND manid = ".$_SESSION['manid']." AND key = 'search_history'" ); //get current history
+
+    $array_of_data = $rs['val'] ? json_decode( $rs['val'], true ) : array(); //current history in array or new empty array
+
+    foreach( $array_of_data as $array_data ) {
+        if( $lastdata[0]==$array_data[0] ) unset( $array_of_data[array_search( $lastdata, $array_of_data )] ); //remove duplicates
+    }
+
+    array_unshift( $array_of_data, $lastdata ); //add last access to array
+
+    if( count( $array_of_data ) > 12 ) array_pop( $array_of_data ); //remove entry numer 12
+    $GLOBALS['dbh']->update( 'crmemployee', array( 'val' ), array( json_encode( $array_of_data ) ), "uid = ".$_SESSION['loginCRM']." AND manid = ".$_SESSION['manid']." AND key = 'search_history'" );
 }
 
 /***********************************************
@@ -230,7 +247,7 @@ function getFsData( $data ){
 }
 
 function searchCustomerForScan( $data ){
-    $rs = $GLOBALS['dbh']->getAll("SELECT id, name, street, zipcode, city FROM customer WHERE name ILIKE '%".$data['name']."%' LIMIT 5", true);
+    $rs = $GLOBALS['dbh']->getAll("SELECT id, name, street, zipcode, city FROM customer WHERE name ILIKE '%".$data['name']."%' LIMIT 12", true);
     echo ( empty( $rs ) )? 0 : $rs;
 }
 

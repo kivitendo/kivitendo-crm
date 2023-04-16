@@ -41,26 +41,27 @@ $(document).ready(function()
         });
     }
 
-    function crmGetHistory( src, id ){
+    function crmGetHistory(){
         $.ajax({
             url: 'crm/ajax/crm.app.php',
             type: 'POST',
             data:  { action: 'getHistory' },
-            success: function(data){
+            success: function( data ){
                 $( '#crm-history-list' ).html('');
-                if(data){
+                if( data ){
                     for( let entry of data ){
                         let id = 'crm-hist-entry-' + entry[2]  + entry[0];
                         //console.info( entry );
                         $( '#crm-history-list' ).append( '<div class="layout-actionbar-action layout-actionbar-submit" data-src="' + entry[2] +'" data-id="' + entry[0] + '" id="' + id + '">' + entry[1] + '</div>');
-                        $( '#' + id ).click(function(){
-
+                        $( '#' + id ).click( function(){
                             getCVPA( entry[2], entry[0], entry[1] );
+                            crmGetHistory();
                         });
                     }
                     var histlist = $('#crm-hist-last').clone();
                     $( '#crm-hist-last' ).replaceWith($( '#crm-hist-last' ).clone() );
                     $( '#crm-hist-last' ).click( function(){
+
                         getCVPA( data[0][2], data[0][0], data[0][1] );
                     });
                     getCVPA( data[0][2], data[0][0], data[0][1] );// ( CV, id, name )
@@ -87,10 +88,11 @@ $(document).ready(function()
      });
 
     $( function(){
-        $("#crm-widget-quicksearch").catcomplete({
+        $( "#crm-widget-quicksearch" ).catcomplete({
             source: "crm/ajax/crm.app.php?action=fastSearch",
             select: function( e,ui ) {
                 getCVPA( ui.item.src, ui.item.id, ui.item.label );
+                crmGetHistory();
             }
         });
     });

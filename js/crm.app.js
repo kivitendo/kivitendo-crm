@@ -217,31 +217,33 @@ $(document).ready(function()
         crmDelAddr = 0;
     }
 
-    function crmInitForm( crmFormModel, container ){
-        var tabledata = '';
-        $.each( crmFormModel, function( i, item ){
-            if( item.type == 'headline' ) tabledata += '<tr><td colspan="2"><b>' + kivi.t8( item.label ) + '</b></td></tr>';
-            if( item.type == 'checkbox' ) tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><input type="checkbox" id="' + item.name + '" name="'+ item.name + '" value="true" title="' + kivi.t8( item.tooltip ) + '"></input></td></tr>';
-            if( item.type == 'input' )    tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><input type="text" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '"></input></td></tr>';
-            if( item.type == 'textarea' )    tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><textarea id="' + item.name + '" name="'+ item.name + '" cols="' + item.cols + '" rows="' + item.rows + '" title="' + kivi.t8( item.tooltip ) + '"></textarea></td></tr>';
-            if( item.type == 'password' ) tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><input type="password" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '"></input></td></tr>';
-            if( item.type == 'select' ){
-                tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><select type="select" id="' + item.name + '" name="'+ item.name + '" title="' + kivi.t8( item.tooltip ) + '">';
-                $.each( item.data, function( i, item ){ tabledata += '<option value="' + item + '">' + kivi.t8( item ) + '</option>'; } );
-                tabledata += '</select></input></td></tr>';
-            }
-        })
-        $( container + " > tbody" ).html( ' ' );
-        $( container + " > tbody" ).append( tabledata );
-    }
+//    function crmInitForm( crmFormModel, container ){
+//        var tabledata = '';
+//        $.each( crmFormModel, function( i, item ){
+//            if( item.type == 'headline' ) tabledata += '<tr><td colspan="2"><b>' + kivi.t8( item.label ) + '</b></td></tr>';
+//            if( item.type == 'checkbox' ) tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><input type="checkbox" id="' + item.name + '" name="'+ item.name + '" value="true" title="' + kivi.t8( item.tooltip ) + '"></input></td></tr>';
+//            if( item.type == 'input' )    tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><input type="text" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '"></input></td></tr>';
+//            if( item.type == 'textarea' )    tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><textarea id="' + item.name + '" name="'+ item.name + '" cols="' + item.cols + '" rows="' + item.rows + '" title="' + kivi.t8( item.tooltip ) + '"></textarea></td></tr>';
+//            if( item.type == 'password' ) tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><input type="password" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '"></input></td></tr>';
+//            if( item.type == 'select' ){
+//                tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><select type="select" id="' + item.name + '" name="'+ item.name + '" title="' + kivi.t8( item.tooltip ) + '">';
+//                $.each( item.data, function( i, item ){ tabledata += '<option value="' + item + '">' + kivi.t8( item ) + '</option>'; } );
+//                tabledata += '</select></input></td></tr>';
+//            }
+//        })
+//        $( container + " > tbody" ).html( ' ' );
+//        $( container + " > tbody" ).append( tabledata );
+//    }
 
-    function crmInitFormEx( crmFormModel, container, max_rows ){
-        var tabledata = '';
-        if(max_rows > crmFormModel.length) max_rows = crmFormModel.length;
+    function crmInitFormEx( crmFormModel, table, max_rows = 0, container = null){
+        let tabledata = '';
+        let hiddenFields = '';
+        if(max_rows <= 0 || max_rows > crmFormModel.length) max_rows = crmFormModel.length;
         for( let i = 0; i < max_rows; i++ ){
             let item = crmFormModel[i];
             tabledata += '<tr>';
             let addItem = function( item ){
+                if( item.type == 'hidden' ) hiddenFields += '<input type="hidden" id="' + item.name + '" name="' + item.name + '" value="">';
                 if( item.hasOwnProperty( 'spacing' ) ) tabledata += '<td style="padding-left: 10px"> </td>';
                 if( item.type == 'headline' ) tabledata += '<td colspan="2"><b>' + kivi.t8( item.label ) + '</b>';
                 if( item.type == 'checkbox' ) tabledata += '<td>' + kivi.t8( item.label ) + '</td><td><input type="checkbox" id="' + item.name + '" name="'+ item.name + '" value="true" title="' + kivi.t8( item.tooltip ) + '"></input>';
@@ -269,8 +271,12 @@ $(document).ready(function()
             }
             tabledata += '</tr>';
         }
-        $( container + " > tbody" ).html( ' ' );
-        $( container + " > tbody" ).append( tabledata );
+        if( container != null ){
+            $( container ).html( ' ' );
+            $( container ).append( hiddenFields );
+        }
+        $( table + " > tbody" ).html( ' ' );
+        $( table + " > tbody" ).append( tabledata );
     }
 
     /***************************************
@@ -323,8 +329,8 @@ $(document).ready(function()
             data:  { action: 'getCustomerForEdit', data: { 'src': src, 'id': id } },
             success: function( data ){
                 crmData = data;
-                crmShowCustomerDialog( new_car );
-                crmShowCustomerForEdit();
+                crmEditCuVeDlg( new_car );
+                crmShowCuVeForEdit();
                 if( fx ) fx( src, id );
             },
             error: function( xhr, status, error ){
@@ -336,15 +342,15 @@ $(document).ready(function()
     /***************************************
     * Prepares dialog to edit CV
     ***************************************/
-     function crmShowCustomerForEdit(){
+     function crmShowCuVeForEdit(){
         $( '#billaddr-greetings' ).html( '' );
         $( '#billaddr-greetings' ).append( '<option value="">' + kivi.t8( "Salutation as below" ) + '</option>' );
         if( isIterable( crmData.greetings ) ){
             for( let description of crmData.greetings ) $( '#billaddr-greetings' ).append( '<option value="' + description.description + '">' + description.description + '</option>' );
         }
 
-        $( '#billaddr-business' ).html( '' );
-        for( let business of crmData.business ) $( '#billaddr-business' ).append( '<option value="' + business.id + '">' + business.name + '</option>' );
+        $( '#billaddr-business_id' ).html( '' );
+        for( let business of crmData.business ) $( '#billaddr-business_id' ).append( '<option value="' + business.id + '">' + business.name + '</option>' );
 
         if( exists( crmData.cv ) ){
             $.each( crmData.cv, function( key, value ){
@@ -398,30 +404,30 @@ $(document).ready(function()
 
        if( exists( crmData.employees ) ){
            for( let employee of crmData.employees ){
-               $( '#billaddr-salesperson' ).append( '<option value="' + employee.id + '">' + employee.name + '</option>' );
+               $( '#billaddr-salesman_id' ).append( '<option value="' + employee.id + '">' + employee.name + '</option>' );
            }
-           if( exists( crmData.cv ) && exists( crmData.cv.employee ) ) $( '#billaddr-salesperson' ).val( crmData.cv.employee );
+           if( exists( crmData.cv ) && exists( crmData.cv.employee ) ) $( '#billaddr-salesman_id' ).val( crmData.cv.employee );
        }
 
        if( exists( crmData.payment_terms ) ){
            for( let payment_term of crmData.payment_terms ){
-               $( '#billaddr-payment_terms' ).append( '<option value="' + payment_term.id + '">' + payment_term.description + '</option>' );
+               $( '#billaddr-payment_id' ).append( '<option value="' + payment_term.id + '">' + payment_term.description + '</option>' );
            }
-           if( exists( crmData.cv ) && exists( crmData.cv.payment_id ) ) $( '#billaddr-payment_terms' ).val( crmData.cv.payment_id );
+           if( exists( crmData.cv ) && exists( crmData.cv.payment_id ) ) $( '#billaddr-payment_id' ).val( crmData.cv.payment_id );
        }
 
        if( exists( crmData.tax_zones ) ){
            for( let tax_zone of crmData.tax_zones ){
-               $( '#billaddr-tax_zone' ).append( '<option value="' + tax_zone.id + '">' + tax_zone.description + '</option>' );
+               $( '#billaddr-taxzone_id' ).append( '<option value="' + tax_zone.id + '">' + tax_zone.description + '</option>' );
            }
-           if( exists( crmData.cv ) && exists( crmData.cv.taxzone_id ) ) $( '#billaddr-tax_zone' ).val( crmData.cv.taxzone_id );
+           if( exists( crmData.cv ) && exists( crmData.cv.taxzone_id ) ) $( '#billaddr-taxzone_id' ).val( crmData.cv.taxzone_id );
        }
 
        if( exists( crmData.languages ) ){
            for( let lang of crmData.languages ){
-               $( '#billaddr-lang' ).append( '<option value="' + lang.id + '">' + lang.description + '</option>' );
+               $( '#billaddr-languages' ).append( '<option value="' + lang.id + '">' + lang.description + '</option>' );
            }
-           if( exists( crmData.cv ) && exists( crmData.cv.language_id ) ) $( '#billaddr-lang' ).val( crmData.cv.language_id );
+           if( exists( crmData.cv ) && exists( crmData.cv.language_id ) ) $( '#billaddr-language' ).val( crmData.cv.language_id );
        }
 
        if( exists( crmData.leads ) ){
@@ -449,11 +455,11 @@ $(document).ready(function()
                    }
                }
            }
-           crmInitForm( crmData.vars_conf, '#vars-form' );
+           crmInitFormEx( crmData.vars_conf, '#vars-form' );
        }
 
         if( exists( crmData.cv ) ){
-            $( '#billaddr-business' ).val( crmData.cv.business_id );
+            $( '#billaddr-business_id' ).val( crmData.cv.business_id );
             $( '#billaddr-country' ).change();
             $( '#billaddr-bland' ).val( crmData.cv.bland );
             $( '#deladdr-shiptocountry' ).change();
@@ -463,12 +469,20 @@ $(document).ready(function()
     /***************************************
     * Open dialog to edit CV
     ***************************************/
-     function crmShowCustomerDialog( new_with_car ){
-        crmInitForm( billaddrFormModel, '#billaddr-form' );
-        crmInitForm( deladdrFormModel, '#deladdr-form' );
-        crmInitForm( banktaxFormModel, '#banktax-form' );
-        crmInitForm( extraFormModel, '#extras-form' );
+     function crmEditCuVeDlg( new_with_car ){
+        crmInitFormEx( billaddrFormModel, '#billaddr-form', 0, '#crm-billaddr-cv' );
+        crmInitFormEx( deladdrFormModel, '#deladdr-form' );
+        crmInitFormEx( banktaxFormModel, '#banktax-form' );
+        crmInitFormEx( extraFormModel, '#extras-form' );
         crmInitFormEx( carFormModel, '#car-form', 21 );
+
+        $( '#billaddr-greetings' ).change( function(){
+           $( '#billaddr-greeting' ).val( $( '#billaddr-greetings' ).val() );
+        });
+
+        $( '#billaddr-branches' ).change( function(){
+           $( '#billaddr-branche' ).val( $( '#billaddr-branches' ).val() );
+        });
 
         if( new_with_car ){
             $( '#car-form' ).show();
@@ -500,39 +514,50 @@ $(document).ready(function()
                 click: function(){
                     console.info( 'Save' );
                     dbUpdateData.data = {};
-                    dbUpdateData.data['customer'] = {};// customer darf nicht statisch sein !!!customer or vendor!!! 
-                    dbUpdateData.data['customer']['WHERE id'] = '12345'; // 12345 muss die id rein!!
-                    alert( 'hello ' );
+                    let cvSrc = ( $( '#billaddr-src' ).val() == 'V' )? 'vendor' : 'customer';
+                    dbUpdateData.data[ cvSrc ] = {};// customer darf nicht statisch sein !!!customer or vendor!!!
+                    //dbUpdateData.data[ cvSrc ]['WHERE id'] = '12345'; // 12345 muss die id rein!!
+                    dbUpdateData.data[ cvSrc ]['WHERE'] = {};
+                    if( !isEmpty( $( '#billaddr-id' ).val() ) ) dbUpdateData.data[ cvSrc ][ 'WHERE' ][ 'id' ] = $( '#billaddr-id' ).val();
                     for( let item of billaddrFormModel){
                         let columnName = item.name.split( '-' );
-                        dbUpdateData.data[ 'customer' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
+                        if( columnName[ 1 ] !== "src" && columnName[ 1 ] !== "id" && columnName[ 1 ] !== "greetings" ){
+                            let val = $( '#' + item.name ).val();
+                            dbUpdateData.data[ cvSrc ][ columnName[ 1 ] ] = ( val === '' )? null : val;
+                        }
                     }
                     if( exists( $( '#deladdr-list' ).val() ) && $( '#deladdr-list' ).val() !== '' ){
                         dbUpdateData.data[ 'shipto' ] = { 'shipto_id': $( '#deladdr-list' ).val() };
                         for(let item of deladdrFormModel){
                             let columnName = item.name.split( '-' );
-                            dbUpdateData.data[ 'shipto' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
+                            let val = $( '#' + item.name ).val();
+                            dbUpdateData.data[ 'shipto' ][ columnName[ 1 ] ] = ( val === '' )? null : val;
                         }
                     }
                     for( let item of banktaxFormModel ){
                         let columnName = item.name.split( '-' );
-                        dbUpdateData.data[ 'customer' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
+                        let val = $( '#' + item.name ).val();
+                        dbUpdateData.data[ cvSrc ][ columnName[ 1 ] ] = ( val === '' )? null : val;
                     }
                     for( let item of extraFormModel ){
                         let columnName = item.name.split( '-' );
-                        dbUpdateData.data[ 'customer' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
+                        if( columnName[ 1 ] !== 'branches' ){
+                            let val = $( '#' + item.name ).val();
+                            dbUpdateData.data[ cvSrc ][ columnName[ 1 ] ] = ( val === '' )? null : val;
+                        }
                     }
                     if( $( '#car-form' ).is(':visible' ) ){
                         dbUpdateData.data[ 'lxc_cars' ] = {};
                         for(let item of carFormModel){
                             if( !item.name.startsWith( 'kba' ) ){
                                 let columnName = item.name.split( '-' );
-                                dbUpdateData.data[ 'lxc_cars' ][ columnName[ 1 ] ] = $( '#' + item.name ).val();
+                                let val = $( '#' + item.name ).val();
+                                dbUpdateData.data[ 'lxc_cars' ][ columnName[ 1 ] ] = ( val === '' )? null : val;
                             }
                         }
                     }
-                    console.info( 'Test2' );
-                    console.info( dbUpdateData.action );
+                    console.info( 'dbUpdateData' );
+                    console.info( dbUpdateData );
                     if( !exists( dbUpdateData.action ) ) dbUpdateData.action = 'updateDB';
                     crmUpdateDB();
                     $( this ).dialog( "close" );
@@ -645,8 +670,8 @@ $(document).ready(function()
                                                 //console.info(lxcarsData);
                                                 crmData = data;
                                                 $( '#crm-fsscan-customer-dlg' ).dialog( "close" );
-                                                crmShowCustomerDialog( true );
-                                                crmShowCustomerForEdit();
+                                                crmEditCuVeDlg( true );
+                                                crmShowCuVeForEdit();
                                                 $( '#billaddr-name' ).val( lxcarsData.firstname + ' ' + lxcarsData.name1 );
                                                 $( '#billaddr-street' ).val( lxcarsData.address1 );
                                                 const city = ( isEmpty( lxcarsData.adress2 ) )? 0 : lxcarsData.address2.split(' ');

@@ -1,5 +1,7 @@
 
 const billaddrFormModel = [
+        { "name": "billaddr-id", "type": "hidden", },
+        { "name": "billaddr-src", "type": "hidden", },
         { "name": "billaddr-greetings", "label": "Greetings:", "type": "select", "data":[], "tooltip":""}, //selectbox
         { "name": "billaddr-greeting", "label": "Greetings:", "type": "input", "size": "42", "tooltip": "Alternativ greetings" },
         { "name": "billaddr-name", "label": "Name:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
@@ -12,7 +14,7 @@ const billaddrFormModel = [
         { "name": "billaddr-fax", "label": "Phone:", "type": "input", "size": "42", "tooltip": "Second phone number" },
         { "name": "billaddr-email", "label": "E-Mail:", "type": "input", "size": "42", "tooltip": "" },
         { "name": "billaddr-contact", "label": "Contact person:", "type": "input", "size": "42", "tooltip": "Contact person" },
-        { "name": "billaddr-business", "label": "Costumer type:", "type": "select","data": [], "tooltip":""}, //selectbox
+        { "name": "billaddr-business_id", "label": "Costumer type:", "type": "select","data": [], "tooltip":""}, //selectbox
         { "name": "billaddr-sw", "label": "Keyword:", "type": "input", "size": "42", "tooltip": "Keyword" },
         { "name": "billaddr-notes", "label": "Comment:", "type": "textarea", "cols": "42", "rows": "5", "tooltip": "Comment" },
     ];
@@ -52,12 +54,12 @@ const extraFormModel = [
     { "name": "billaddr-department_2", "label": "Department:", "type": "input", "size": "42", "tooltip": "" },
     { "name": "billaddr-lead", "label": "Lead:", "type": "select","data": [], "tooltip":""}, //selectbox
     { "name": "billaddr-leadsrc", "label": "Lead source:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "billaddr-tax_zone", "label": "Tax zone:", "type": "select","data": [], "tooltip":""}, //selectbox
-    { "name": "billaddr-payment_terms", "label": "Terms of payment:", "type": "select","data": [], "tooltip":""}, //selectbox
+    { "name": "billaddr-taxzone_id", "label": "Tax zone:", "type": "select","data": [], "tooltip":""}, //selectbox
+    { "name": "billaddr-payment_id", "label": "Terms of payment:", "type": "select","data": [], "tooltip":""}, //selectbox
     { "name": "billaddr-headcount", "label": "Amount of employees:", "type": "input", "size": "42", "tooltip": "" },
     { "name": "billaddr-konzern", "label": "Busines group:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "billaddr-lang", "label": "Language:", "type": "select","data": [], "tooltip":""}, //selectbox
-    { "name": "billaddr-salesperson", "label": "Salesperson:", "type": "select","data": [], "tooltip":""}, //selectbox
+    { "name": "billaddr-language", "label": "Language:", "type": "select","data": [], "tooltip":""}, //selectbox
+    { "name": "billaddr-salesman_id", "label": "Salesperson:", "type": "select","data": [], "tooltip":""}, //selectbox
 ];
 
 const carFormModel = [

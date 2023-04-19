@@ -184,6 +184,7 @@
                 <a id="crm-nav-vars" class="nav-link" aria-current="page" href="#crm-tab-vars">Variablen</a>
             </li>
         </ul>
+        <div id="crm-billaddr-cv"></div>
         <div id="crm-tab-billaddr" class="crm-tab">
             <table id="billaddr-form">
                 <thead></thead>

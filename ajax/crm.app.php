@@ -254,6 +254,16 @@ function searchCustomerForScan( $data ){
 function insertDB( $data ){
     writeLog( 'insertDB' );
     writeLog( $data );
+
+    foreach( $data AS $key => $value ){
+        writeLog( $key );
+        writeLog( array_keys( $value ) );
+        writeLog( array_values( $value ) );
+        $rs = $GLOBALS[ 'dbh' ]->insert($key, array_keys( $value ), array_values( $value ) );
+     }
+
+    writeLog( 'rs: '.$rs );
+
     resultInfo( true );
 }
 
@@ -264,10 +274,10 @@ function updateDB( $data ){
         writeLog( $key );
         writeLog( $value );
     }
-    
-    //$query = 
-    
-    
+
+    //$query =
+
+
     resultInfo( true );
 
 }

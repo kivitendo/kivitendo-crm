@@ -114,12 +114,13 @@ $( document ).ready( function()
     $( '#message-dialog' ).dialog({
         autoOpen: false,
         resizable: false,
-        width: 'auto',
+        width: (window.innerWidth > 800)? 800 : window.innerWidth,
         height: 'auto',
         modal: true,
         position: { my: "top", at: "top+250" },
         open: function(){
-            $( this ).css( 'maxWidth', window.innerWidth );
+            innerWidth = (window.innerWidth > 800)? 800 : window.innerWidth;
+            $( this ).css( 'maxWidth', innerWidth );
         },
         buttons:[{
             text: 'Ok',
@@ -282,6 +283,12 @@ $( document ).ready( function()
     var crmData = {};
     var lxcarsData = {};
     var dbUpdateData = {};
+
+    function crmClearData(){
+        crmData = {};
+        lxcarsData = {};
+        dbUpdateData = {};
+    }
 
     function crmUpdateDB(){
         //console.info( dbUpdateData );
@@ -490,6 +497,10 @@ $( document ).ready( function()
             position: { my: "top", at: "top+250" },
             open: function(){
                 $( this ).css( 'maxWidth', window.innerWidth );
+                dbUpdateData.action = 'updateDB';
+            },
+            close: function(){
+                crmClearData();
             },
             buttons:[{
                 text: kivi.t8( 'Save' ),
@@ -497,15 +508,16 @@ $( document ).ready( function()
                     console.info( 'Save' );
                     dbUpdateData.data = {};
                     let cvSrc = ( $( '#billaddr-src' ).val() == 'V' )? 'vendor' : 'customer';
-                    dbUpdateData.data[ cvSrc ] = {};// customer darf nicht statisch sein !!!customer or vendor!!!
-                    //dbUpdateData.data[ cvSrc ]['WHERE id'] = '12345'; // 12345 muss die id rein!!
-                    dbUpdateData.data[ cvSrc ]['WHERE'] = {};
-                    if( !isEmpty( $( '#billaddr-id' ).val() ) ) dbUpdateData.data[ cvSrc ][ 'WHERE' ][ 'id' ] = $( '#billaddr-id' ).val();
+                    dbUpdateData.data[cvSrc] = {};
+                    if( !isEmpty( $( '#billaddr-id' ).val() ) ){
+                        dbUpdateData.data[cvSrc]['WHERE'] = {};
+                        dbUpdateData.data[cvSrc]['WHERE']['id'] = $( '#billaddr-id' ).val();
+                    }
                     for( let item of billaddrFormModel){
                         let columnName = item.name.split( '-' );
-                        if( columnName[ 1 ] !== "src" && columnName[ 1 ] !== "id" && columnName[ 1 ] !== "greetings" ){
+                        if( columnName[1] !== "src" && columnName[1] !== "id" && columnName[1] !== "greetings" ){
                             let val = $( '#' + item.name ).val();
-                            if( exists(val) && val !== '' ) dbUpdateData.data[ cvSrc ][ columnName[ 1 ] ] = val;
+                            if( exists(val) && val !== '' ) dbUpdateData.data[cvSrc][columnName[1]] = val;
                         }
                     }
                     if( exists( $( '#deladdr-list' ).val() ) && $( '#deladdr-list' ).val() !== '' ){
@@ -513,34 +525,33 @@ $( document ).ready( function()
                         for(let item of deladdrFormModel){
                             let columnName = item.name.split( '-' );
                             let val = $( '#' + item.name ).val();
-                            if( exists(val) && val !== '' ) dbUpdateData.data[ 'shipto' ][ columnName[ 1 ] ] = val;
+                            if( exists(val) && val !== '' ) dbUpdateData.data['shipto'][columnName[1]] = val;
                         }
                     }
                     for( let item of banktaxFormModel ){
                         let columnName = item.name.split( '-' );
                         let val = $( '#' + item.name ).val();
-                        if( exists(val) && val !== '' ) dbUpdateData.data[ cvSrc ][ columnName[ 1 ] ] = val;
+                        if( exists(val) && val !== '' ) dbUpdateData.data[cvSrc][columnName[1]] = val;
                     }
                     for( let item of extraFormModel ){
                         let columnName = item.name.split( '-' );
-                        if( columnName[ 1 ] !== 'branches' ){
+                        if( columnName[1] !== 'branches' ){
                             let val = $( '#' + item.name ).val();
-                            if( exists(val) && val !== '' ) dbUpdateData.data[ cvSrc ][ columnName[ 1 ] ] = val;
+                            if( exists(val) && val !== '' ) dbUpdateData.data[cvSrc][columnName[1]] = val;
                         }
                     }
                     if( $( '#car-form' ).is(':visible' ) ){
-                        dbUpdateData.data[ 'lxc_cars' ] = {};
+                        dbUpdateData.data['lxc_cars'] = {};
                         for(let item of carFormModel){
                             if( !item.name.startsWith( 'kba' ) ){
                                 let columnName = item.name.split( '-' );
                                 let val = $( '#' + item.name ).val();
-                                if( exists(val) && val !== '' ) dbUpdateData.data[ 'lxc_cars' ][ columnName[ 1 ] ] = val;
+                                if( exists(val) && val !== '' ) dbUpdateData.data['lxc_cars'][columnName[1]] = val;
                             }
                         }
                     }
                     console.info( 'dbUpdateData' );
                     console.info( dbUpdateData );
-                    if( !exists( dbUpdateData.action ) ) dbUpdateData.action = 'updateDB';
                     crmUpdateDB();
                     $( this ).dialog( "close" );
                 }
@@ -673,10 +684,11 @@ $( document ).ready( function()
                                                 $( '#car-c_3' ).val( lxcarsData.field_2_2 );
                                                 $( '#car-c_em' ).val( lxcarsData.field_14_1 );
                                                 $( '#car-c_d' ).val( lxcarsData.ez );
-                                                $( '#car-c_hu' ).val( lxcarsData.hu );
+                                                //Wird nicht benötigt, da Datum invalide
+                                                //$( '#car-c_hu' ).val( lxcarsData.hu );
                                                 $( '#car-c_fin' ).val( lxcarsData.vin );
                                                 $( '#car-c_finchk' ).val( lxcarsData.field_3 );
-                                                dbUpdateData = { 'action': 'insertDB' };
+                                                dbUpdateData.action = 'insertDB';
                                             },
                                             error: function( xhr, status, error ){
                                                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'lxcars()', xhr.responseText );
@@ -740,7 +752,8 @@ $( document ).ready( function()
                         $( '#car-c_3' ).val( lxcarsData.field_2_2 );
                         $( '#car-c_em' ).val( lxcarsData.field_14_1 );
                         $( '#car-c_d' ).val( lxcarsData.ez );
-                        $( '#car-c_hu' ).val( lxcarsData.hu );
+                        //Wird nicht benötigt, da Datum invalide
+                        //$( '#car-c_hu' ).val( lxcarsData.hu );
                         $( '#car-c_fin' ).val( lxcarsData.vin );
                         $( '#car-c_finchk' ).val( lxcarsData.field_3 );
                         getCVPA( src, id );

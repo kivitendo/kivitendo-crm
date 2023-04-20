@@ -1,6 +1,6 @@
 
 const billaddrFormModel = [
-        { "name": "billaddr-currency_id", "type": "hidden", "data": ""},
+        { "name": "billaddr-currency_id", "type": "hidden", "data": "1"},
         { "name": "billaddr-id", "type": "hidden", },
         { "name": "billaddr-src", "type": "hidden", },
         { "name": "billaddr-greetings", "label": "Greetings:", "type": "select", "data":[], "tooltip":""}, //selectbox

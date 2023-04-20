@@ -252,20 +252,20 @@ function searchCustomerForScan( $data ){
 }
 
 function insertDB( $data ){
-    writeLog( 'insertDB' );
-    writeLog( $data );
-
+    $id = FALSE;
     foreach( $data AS $key => $value ){
-        writeLog( $key );
-        writeLog( array_keys( $value ) );
-        writeLog( array_values( $value ) );
-        $GLOBALS[ 'dbh' ]->setLogAll( TRUE );
-        $rs = $GLOBALS[ 'dbh' ]->insert($key, array_keys( $value ), array_values( $value ) );
-     }
-
-    writeLog( 'rs: '.$rs );
-
-    resultInfo( true );
+        if( strcmp( $key, 'customer' ) === 0 ){
+            $id = $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ), TRUE, "id" );
+        }
+        elseif( strcmp( $key, 'lxc_cars' ) === 0 ){
+            $value['c_ow'] = $id;
+            $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ) );
+        }
+        else{
+            $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ) );
+        }
+    }
+    resultInfo( TRUE  );
 }
 
 function updateDB( $data ){

@@ -271,14 +271,31 @@ function insertDB( $data ){
 function updateDB( $data ){
     writeLog( 'updateDB' );
     writeLog( $data );
+    $id = FALSE;
     foreach( $data AS $key => $value ){
         writeLog( $key );
         writeLog( $value );
+        $where = '';
+        if( array_key_exists( 'WHERE', $value ) ){
+                foreach( $value['WHERE'] AS $whereId => $whereVal ){
+                    if( strcmp( $whereId, 'id' ) === 0 ) $id = $whereVal;
+                    //Kommas fehlen:
+                    $where = $whereId.' = '.$whereVal;
+                }
+                unset( $value['WHERE'] );
+        }
+        writeLog( array_keys( $value ) );
+        writeLog( array_values( $value ) );
+        if( strcmp( $key, 'lxc_cars' ) === 0 ){
+            writeLog( $id );
+            $value['c_ow'] = $id;
+            $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ) );
+        }
+        else{
+            writeLog( $where );
+            $GLOBALS['dbh']->update( $key, array_keys( $value ), array_values( $value ), $where );
+        }
     }
 
-    //$query =
-
-
     resultInfo( true );
-
 }

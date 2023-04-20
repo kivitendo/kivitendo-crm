@@ -1,4 +1,4 @@
-$(document).ready(function()
+$( document ).ready( function()
 {
     function exists( obj ){
         return obj !== null && obj !== undefined;
@@ -73,16 +73,16 @@ $(document).ready(function()
         });
     }
 
-    $.widget( "custom.catcomplete", $.ui.autocomplete, {
-        _renderMenu: function(ul,items) {
+    $.widget( "custom.catcomplete", $.ui.autocomplete,{
+        _renderMenu: function( ul, items ){
             var that = this,
             currentCategory = "";
-            $.each( items, function( index, item ) {
-                if ( item.category != currentCategory ) {
+            $.each( items, function( index, item ){
+                if ( item.category != currentCategory ){
                     ul.append( "<li class=\'ui-autocomplete-category\'>" + item.category + "</li>" );
                     currentCategory = item.category;
                 }
-                that._renderItemData(ul,item);
+                that._renderItemData( ul, item );
             });
          }
      });
@@ -90,7 +90,7 @@ $(document).ready(function()
     $( function(){
         $( "#crm-widget-quicksearch" ).catcomplete({
             source: "crm/ajax/crm.app.php?action=fastSearch",
-            select: function( e,ui ) {
+            select: function( e, ui ) {
                 getCVPA( ui.item.src, ui.item.id, ui.item.label );
                 crmGetHistory();
             }
@@ -105,13 +105,13 @@ $(document).ready(function()
             success: function( data ){
                 showCVPA( data );
             },
-            error: function(xhr, status, error){
+            error: function( xhr, status, error ){
                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'getCVPA', xhr.responseText );
             }
         });
     }
 
-    $('#message-dialog').dialog({
+    $( '#message-dialog' ).dialog({
         autoOpen: false,
         resizable: false,
         width: 'auto',
@@ -119,121 +119,103 @@ $(document).ready(function()
         modal: true,
         position: { my: "top", at: "top+250" },
         open: function(){
-            $(this).css('maxWidth', window.innerWidth);
+            $( this ).css( 'maxWidth', window.innerWidth );
         },
         buttons:[{
             text: 'Ok',
             click: function(){
-                $('#message-dialog-text').html('');
-                $('#message-dialog-debug').html('');
-                $('#message-dialog-error').hide();
-                $(this).parent().removeClass('ui-state-error');
-                $(this).parent().removeClass('ui-state-success');
-                $(this).dialog("close");
+                $( '#message-dialog-text' ).html('');
+                $( '#message-dialog-debug' ).html('');
+                $( '#message-dialog-error' ).hide();
+                $( this ).parent().removeClass( 'ui-state-error' );
+                $( this ).parent().removeClass( 'ui-state-success' );
+                $( this ).dialog( 'close' );
             }
         }]
     });
 
-    $.fn.showMessageDialog = function(style, title, message, debug=null){
-        $(this).dialog('option', 'title', title).dialog('open').parent().addClass('ui-state-' + style);
-        if('error' === style) $('#message-dialog-error').show();
-        $('#message-dialog-text').html(message);
-        if(null != debug) $('#message-dialog-debug').html('<pre>' + debug + '</pre>').css('display', '');
-        $(this).resize();
+    $.fn.showMessageDialog = function( style, title, message, debug = null ){
+        $( this ).dialog( 'option', 'title', title ).dialog( 'open' ).parent().addClass( 'ui-state-' + style );
+        if( style === 'error' ) $( '#message-dialog-error' ).show();
+        $( '#message-dialog-text' ).html( message );
+        if( debug != null ) $( '#message-dialog-debug' ).html( '<pre>' + debug + '</pre>' ).css( 'display', '' );
+        $( this ).resize();
     }
 
-    function showCVPA(data){
-        if(data.cv){
-            $('#crm-wx-contact').show();
-            $.each(data.cv, function(key, value){
-                if(value){
-                    $('#crm-contact-' + key).html(value);
-                    $('#crm-contact-' + key).show();
+    function showCVPA( data ){
+        if( data.cv ){
+            $( '#crm-wx-contact' ).show();
+            $.each( data.cv, function( key, value ){
+                if( value ){
+                    $( '#crm-contact-' + key ).html( value );
+                    $( '#crm-contact-' + key ).show();
                 }
                 else{
-                    $('#crm-contact-' + key).hide();
+                    $( '#crm-contact-' + key ).hide();
                 }
             });
 
-            if(data.cv.phone1) $('#crm-wx-contact-phone1').show();
-            else $('#crm-wx-contact-phone1').hide();
-            if(data.cv.phone2) $('#crm-wx-contact-phone2').show();
-            else $('#crm-wx-contact-phone2').hide();
-            if(data.cv.phone1) $('#crm-wx-contact-email').show();
-            else $('#crm-wx-contact-email').hide();
+            if( data.cv.phone1 ) $( '#crm-wx-contact-phone1' ).show();
+            else $( '#crm-wx-contact-phone1' ).hide();
+            if( data.cv.phone2 ) $( '#crm-wx-contact-phone2' ).show();
+            else $( '#crm-wx-contact-phone2' ).hide();
+            if( data.cv.phone1 ) $('#crm-wx-contact-email').show();
+            else $( '#crm-wx-contact-email' ).hide();
         }
         else{
-            $('#crm-wx-contact').hide();
+            $( '#crm-wx-contact' ).hide();
         }
 
         if( lxcars ){
-            $('#crm-cars-table').html('');
-            if( exists( data.cars) ){
+            $( '#crm-cars-table' ).html('');
+            if( exists( data.cars ) ){
                 let listrow0 = false;
-                $.each(data.cars, function(key, value){
-                    $('#crm-cars-table').append('<tr class="' + ((listrow0 = !listrow0)? "listrow0": "listrow1") + '"><td>' +  value.ln + '</td><td>' + value.manuf  + '</td><td>' + value.ctype  + '</td><td>' + value.cart + '</td></tr>');
+                $.each( data.cars, function( key, value ){
+                    $( '#crm-cars-table' ).append( '<tr class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' +  value.ln + '</td><td>' + value.manuf  + '</td><td>' + value.ctype  + '</td><td>' + value.cart + '</td></tr>' );
                 });
-                $('#crm-wx-cars').show();
+                $( '#crm-wx-cars' ).show();
             }
         }
 
-        $('#crm-offers-table').html('');
+        $( '#crm-offers-table' ).html('');
         if( exists( data.off ) ){
             let listrow0 = false;
-            $.each(data.off, function(key, value){
-                $('#crm-offers-table').append('<tr id="' + value.id +'" class="' + ((listrow0 = !listrow0)? "listrow0": "listrow1") + '"><td>' +  value.date + '</td><td>' + value.description  + '</td><td>' + value.amount  + '</td><td>' + value.number + '</td></tr>');
+            $.each( data.off, function( key, value ){
+                $( '#crm-offers-table' ).append( '<tr id="' + value.id +'" class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' +  value.date + '</td><td>' + value.description  + '</td><td>' + value.amount  + '</td><td>' + value.number + '</td></tr>' );
             });
         }
 
-        $('#crm-orders-table').html('');
+        $( '#crm-orders-table' ).html('');
         if( exists( data.ord ) ){
             let listrow0 = false;
-            $.each(data.ord, function(key, value){
-                $('#crm-orders-table').append('<tr id="' + value.id +'" class="' + ((listrow0 = !listrow0)? "listrow0": "listrow1") + '"><td>' +  value.date + '</td><td>' + value.description  + '</td><td>' + value.amount  + '</td><td>' + value.number + '</td></tr>');
+            $.each( data.ord, function( key, value ){
+                $( '#crm-orders-table' ).append( '<tr id="' + value.id +'" class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' +  value.date + '</td><td>' + value.description  + '</td><td>' + value.amount  + '</td><td>' + value.number + '</td></tr>' );
             });
         }
 
-        $('#crm-deliveries-table').html('');
+        $( '#crm-deliveries-table' ).html('');
         if( exists( data.del ) ){
             let listrow0 = false;
-            $.each(data.del, function(key, value){
-                $('#crm-deliveries-table').append('<tr id="' + value.id +'" class="' + ((listrow0 = !listrow0)? "listrow0": "listrow1") + '"><td>' +  value.date + '</td><td>' + value.description  + '</td><td>' + value.deldate  + '</td><td>' + value.donumber + '</td></tr>');
+            $.each( data.del, function( key, value ){
+                $( '#crm-deliveries-table' ).append( '<tr id="' + value.id +'" class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' +  value.date + '</td><td>' + value.description  + '</td><td>' + value.deldate  + '</td><td>' + value.donumber + '</td></tr>' );
             });
         }
 
-        $('#crm-invoices-table').html('');
+        $( '#crm-invoices-table' ).html('');
         if( exists( data.inv) ){
             let listrow0 = false;
-            $.each(data.inv, function(key, value){
-                $('#crm-invoices-table').append('<tr id="' + value.id +'" class="' + ((listrow0 = !listrow0)? "listrow0": "listrow1") + '"><td>' +  value.date + '</td><td>' + value.description  + '</td><td>' + value.amount  + '</td><td>' + value.number + '</td></tr>');
+            $.each( data.inv, function( key, value ){
+                $( '#crm-invoices-table' ).append( '<tr id="' + value.id +'" class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' +  value.date + '</td><td>' + value.description  + '</td><td>' + value.amount  + '</td><td>' + value.number + '</td></tr>' );
             });
         }
 
         if( exists( data.cv ) ){
-            $('#crm-wx-title').html(kivi.t8('Detail view:') + ' ' + ((data.cv.src == 'C')? kivi.t8('Customer') : kivi.t8('Vendor') ));
-            $('#crm-wf-edit').attr('data-src', data.cv.src);
-            $('#crm-wf-edit').attr('data-id', data.cv.id);
+            $( '#crm-wx-title' ).html( kivi.t8( 'Detail view:' ) + ' ' + ( ( data.cv.src == 'C' ) ? kivi.t8( 'Customer' ) : kivi.t8( 'Vendor' ) ) );
+            $( '#crm-wf-edit' ).attr( 'data-src', data.cv.src );
+            $( '#crm-wf-edit' ).attr( 'data-id', data.cv.id );
         }
         crmDelAddr = 0;
     }
-
-//    function crmInitForm( crmFormModel, container ){
-//        var tabledata = '';
-//        $.each( crmFormModel, function( i, item ){
-//            if( item.type == 'headline' ) tabledata += '<tr><td colspan="2"><b>' + kivi.t8( item.label ) + '</b></td></tr>';
-//            if( item.type == 'checkbox' ) tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><input type="checkbox" id="' + item.name + '" name="'+ item.name + '" value="true" title="' + kivi.t8( item.tooltip ) + '"></input></td></tr>';
-//            if( item.type == 'input' )    tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><input type="text" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '"></input></td></tr>';
-//            if( item.type == 'textarea' )    tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><textarea id="' + item.name + '" name="'+ item.name + '" cols="' + item.cols + '" rows="' + item.rows + '" title="' + kivi.t8( item.tooltip ) + '"></textarea></td></tr>';
-//            if( item.type == 'password' ) tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><input type="password" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '"></input></td></tr>';
-//            if( item.type == 'select' ){
-//                tabledata += '<tr><td>' + kivi.t8( item.label ) + '</td><td><select type="select" id="' + item.name + '" name="'+ item.name + '" title="' + kivi.t8( item.tooltip ) + '">';
-//                $.each( item.data, function( i, item ){ tabledata += '<option value="' + item + '">' + kivi.t8( item ) + '</option>'; } );
-//                tabledata += '</select></input></td></tr>';
-//            }
-//        })
-//        $( container + " > tbody" ).html( ' ' );
-//        $( container + " > tbody" ).append( tabledata );
-//    }
 
     function crmInitFormEx( crmFormModel, table, max_rows = 0, container = null){
         let tabledata = '';
@@ -249,7 +231,7 @@ $(document).ready(function()
                 if( item.type == 'checkbox' ) tabledata += '<td>' + kivi.t8( item.label ) + '</td><td><input type="checkbox" id="' + item.name + '" name="'+ item.name + '" value="true" title="' + kivi.t8( item.tooltip ) + '"></input>';
                 if( item.type == 'input' ){
                     tabledata += '<td>' + kivi.t8( item.label ) + '</td><td><input type="text" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '"></input>';
-                    if(item.check) tabledata += '<input type="checkbox" id="' + item.check + '" name="'+ item.check + '" title="' + kivi.t8( 'Check imput' ) + '"></input>';
+                    if( item.check ) tabledata += '<input type="checkbox" id="' + item.check + '" name="'+ item.check + '" title="' + kivi.t8( 'Check imput' ) + '"></input>';
                 }
                 if( item.type == 'textarea' ) tabledata += '<td>' + kivi.t8( item.label ) + '</td><td><textarea id="' + item.name + '" name="'+ item.name + '" cols="' + item.cols + '" rows="' + item.rows + '" title="' + kivi.t8( item.tooltip ) + '"></textarea>';
                 if( item.type == 'password' ) tabledata += '<td>' + kivi.t8( item.label ) + '</td><td><input type="password" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '"></input>';
@@ -527,7 +509,7 @@ $(document).ready(function()
                         }
                     }
                     if( exists( $( '#deladdr-list' ).val() ) && $( '#deladdr-list' ).val() !== '' ){
-                        dbUpdateData.data[ 'shipto' ] = { 'shipto_id': $( '#deladdr-list' ).val() };
+                        dbUpdateData.data['shipto'] = { 'shipto_id': $( '#deladdr-list' ).val() };
                         for(let item of deladdrFormModel){
                             let columnName = item.name.split( '-' );
                             let val = $( '#' + item.name ).val();
@@ -578,7 +560,7 @@ $(document).ready(function()
     * remove white spaces
     ***************************************/
      function crmFormatCarLicense( regNum ){
-        let rn = ( isEmpty( regNum ) )? 0 : regNum.split( ' ' );
+        let rn = ( isEmpty( regNum ) ) ? 0 : regNum.split( ' ' );
         if( isIterable( rn ) && rn.length > 1 ){
             let rs = '';
             rs = rn[0] + '-' + rn[1];
@@ -586,7 +568,7 @@ $(document).ready(function()
                 rs += rn[i];
             }
             // * remove "*" from license plates from the federal state of Berlin, Schlimm diese Kleinstaatelei.. alias Förderalismus
-            return rs.replace('*', '').replace('*', '');
+            return rs.replace( '*', '' ).replace( '*', '' );
         }
         alert( 'crmFormatCarLicense()' + regNum );
         return regNum;// Wann tritt dieser Fall auf???
@@ -616,12 +598,12 @@ $(document).ready(function()
                 title: kivi.t8( 'FS-Scan' ),
                 position: { my: "top", at: "top+250" },
                 open: function(){
-                    $(this).css( 'maxWidth', window.innerWidth );
+                    $( this ).css( 'maxWidth', window.innerWidth );
                 },
                 buttons:[{
                     text: kivi.t8( 'Close' ),
                     click: function(){
-                        $(this).dialog( "close" );
+                        $( this ).dialog( "close" );
                     }
                 }]
             }).dialog( 'open' ).resize();
@@ -633,7 +615,7 @@ $(document).ready(function()
             crmData = data;
             if( isIterable( data.db_scans ) ){
                 data.db_scans.forEach( function( item ){
-                    tableContent += '<tr class="' + ( ( listrow0 = !listrow0 )? "listrow0": "listrow1" ) + '" id="' + item.scan_id + '"><td style="text-align: right; padding-right: 15px;">' + item.myts + '</td><td>' + item.firstname + '</td><td>' + item.name1 + '</td><td>' + item.registrationnumber + '</td>';
+                    tableContent += '<tr class="' + ( ( listrow0 =! listrow0 ) ? "listrow0": "listrow1" ) + '" id="' + item.scan_id + '"><td style="text-align: right; padding-right: 15px;">' + item.myts + '</td><td>' + item.firstname + '</td><td>' + item.name1 + '</td><td>' + item.registrationnumber + '</td>';
                 });
             }
             $( '#crm-fsscan-list' ).empty().append( tableContent );
@@ -705,7 +687,7 @@ $(document).ready(function()
                                 },{
                                 text: kivi.t8( 'Close' ),
                                 click: function(){
-                                        $(this).dialog( "close" );
+                                        $( this ).dialog( "close" );
                                 }
                             }]
                         }).dialog( 'open' ).resize();
@@ -737,10 +719,10 @@ $(document).ready(function()
     ***************************************/
      function crmSearchCustomerForScan( name ){
         $.ajax({
-             url: 'crm/ajax/crm.app.php',
-             type: 'POST',
-             data:  { action: 'searchCustomerForScan', data: { 'name': name } },
-             success: function( data ){
+            url: 'crm/ajax/crm.app.php',
+            type: 'POST',
+            data:  { action: 'searchCustomerForScan', data: { 'name': name } },
+            success: function( data ){
                 if( !data ){
                     $( '#crm-fsscan-customer-list' ).empty();
                     return;
@@ -781,14 +763,14 @@ $(document).ready(function()
     });
 
     $( '#crm-wf-offer' ).click( function() {
-        alert("Angebot erstellen!");
+        alert( "Angebot erstellen!" );
     });
 
     $( '#crm-wf-order' ).click( function() {
-        alert("Auftrag erstellen!");
+        alert( "Auftrag erstellen!" );
     });
 
     $( '#crm-wf-bill' ).click( function() {
-        alert("Rechnung erstellen!");
+        alert( "Rechnung erstellen!" );
     });
 });

@@ -225,7 +225,7 @@ $( document ).ready( function()
             let item = crmFormModel[i];
             tabledata += '<tr>';
             let addItem = function( item ){
-                if( item.type == 'hidden' ) hiddenFields += '<input type="hidden" id="' + item.name + '" name="' + item.name + '" value="">';
+                if( item.type == 'hidden' ) hiddenFields += '<input type="hidden" id="' + item.name + '" name="' + item.name + '" value="' + ( ( exists(item.data) )? item.data : '' ) + '">';
                 if( item.hasOwnProperty( 'spacing' ) ) tabledata += '<td style="padding-left: 10px"> </td>';
                 if( item.type == 'headline' ) tabledata += '<td colspan="2"><b>' + kivi.t8( item.label ) + '</b>';
                 if( item.type == 'checkbox' ) tabledata += '<td>' + kivi.t8( item.label ) + '</td><td><input type="checkbox" id="' + item.name + '" name="'+ item.name + '" value="true" title="' + kivi.t8( item.tooltip ) + '"></input>';
@@ -626,7 +626,6 @@ $( document ).ready( function()
                     type: "POST",
                     success: function( data ){
                         lxcarsData = data;
-                      //  alert(  data.firstname + ' ' + data.name1 + '\n' + data.address1 + '\n' + data.address2 + '\n\n' + data.registrationNumber + '\n' + data.hsn + '\n' + data.field_2_2 + '\n' + data.field_14_1 + '\n' + data.ez + '\n' + data.hu + '\n' + data.vin + ' ' + data.field_3 );
                         $( '#crm-fsscan-dlg' ).dialog( 'close' );
                         $( '#crm-fsscan-customer-dlg' ).dialog({
                             autoOpen: false,

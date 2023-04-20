@@ -157,7 +157,7 @@ function getCustomerForEdit( $data ){
     // costumer or vendor -> cv
     $query .= "(SELECT row_to_json( cv ) AS cv FROM (".
                 "SELECT '".$data['src']."' AS src, id, greeting, name, street, zipcode, contact, phone, fax, email, city, country, bland, contact AS person, notes, business_id, sw, ".
-                "account_number, taxnumber, taxzone_id, payment_id, bank_code, bank, ustid, iban, bic, direct_debit, ".
+                "account_number, currency_id, taxnumber, taxzone_id, payment_id, bank_code, bank, ustid, iban, bic, direct_debit, ".
                 "branche, homepage, department_1, department_2, lead, leadsrc, konzern, headcount, language_id, employee ".
                 "FROM ".$db_table[$data['src']]." WHERE id=".$data['id'].
                 ") AS cv) AS cv, ";

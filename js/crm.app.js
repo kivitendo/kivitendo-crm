@@ -505,7 +505,7 @@ $( document ).ready( function()
                         let columnName = item.name.split( '-' );
                         if( columnName[ 1 ] !== "src" && columnName[ 1 ] !== "id" && columnName[ 1 ] !== "greetings" ){
                             let val = $( '#' + item.name ).val();
-                            dbUpdateData.data[ cvSrc ][ columnName[ 1 ] ] = ( val === '' )? null : val;
+                            if( exists(val) && val !== '' ) dbUpdateData.data[ cvSrc ][ columnName[ 1 ] ] = val;
                         }
                     }
                     if( exists( $( '#deladdr-list' ).val() ) && $( '#deladdr-list' ).val() !== '' ){
@@ -513,19 +513,19 @@ $( document ).ready( function()
                         for(let item of deladdrFormModel){
                             let columnName = item.name.split( '-' );
                             let val = $( '#' + item.name ).val();
-                            dbUpdateData.data[ 'shipto' ][ columnName[ 1 ] ] = ( val === '' )? null : val;
+                            if( exists(val) && val !== '' ) dbUpdateData.data[ 'shipto' ][ columnName[ 1 ] ] = val;
                         }
                     }
                     for( let item of banktaxFormModel ){
                         let columnName = item.name.split( '-' );
                         let val = $( '#' + item.name ).val();
-                        dbUpdateData.data[ cvSrc ][ columnName[ 1 ] ] = ( val === '' )? null : val;
+                        if( exists(val) && val !== '' ) dbUpdateData.data[ cvSrc ][ columnName[ 1 ] ] = val;
                     }
                     for( let item of extraFormModel ){
                         let columnName = item.name.split( '-' );
                         if( columnName[ 1 ] !== 'branches' ){
                             let val = $( '#' + item.name ).val();
-                            dbUpdateData.data[ cvSrc ][ columnName[ 1 ] ] = ( val === '' )? null : val;
+                            if( exists(val) && val !== '' ) dbUpdateData.data[ cvSrc ][ columnName[ 1 ] ] = val;
                         }
                     }
                     if( $( '#car-form' ).is(':visible' ) ){
@@ -534,7 +534,7 @@ $( document ).ready( function()
                             if( !item.name.startsWith( 'kba' ) ){
                                 let columnName = item.name.split( '-' );
                                 let val = $( '#' + item.name ).val();
-                                dbUpdateData.data[ 'lxc_cars' ][ columnName[ 1 ] ] = ( val === '' )? null : val;
+                                if( exists(val) && val !== '' ) dbUpdateData.data[ 'lxc_cars' ][ columnName[ 1 ] ] = val;
                             }
                         }
                     }

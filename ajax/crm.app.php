@@ -259,6 +259,7 @@ function insertDB( $data ){
         writeLog( $key );
         writeLog( array_keys( $value ) );
         writeLog( array_values( $value ) );
+        $GLOBALS[ 'dbh' ]->setLogAll( TRUE );
         $rs = $GLOBALS[ 'dbh' ]->insert($key, array_keys( $value ), array_values( $value ) );
      }
 

@@ -2,7 +2,7 @@
 
 class myPDO extends PDO{
     private $showErr = TRUE;  //show errors in browser
-    private $logAll  = FALSE; //log all sql queries (only for debug)
+    private $logAll  = FALSE; //log all sql queries (only for debug), logfile = log/sql.log!!!
     private $beginExecTime = 0;
     private $roundExecTime = 6;
 
@@ -27,6 +27,10 @@ class myPDO extends PDO{
         catch( PDOException $e ){
             echo $e->getMessage();
         }
+    }
+
+    public function setLogAll( $flag = FALSE ){
+        $this->logAll = $flag ? TRUE : FALSE;
     }
 
     public function query( $sql ){

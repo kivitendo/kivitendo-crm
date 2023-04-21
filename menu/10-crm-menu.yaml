@@ -4,6 +4,13 @@
   icon: crm
   order: 50
 - parent: crm
+  id: crm_app
+  name: App
+  icon: search
+  order: 10
+  access: crm_search
+  module: crm.app.php
+- parent: crm
   id: crm_search
   name: Search
   icon: search

@@ -165,6 +165,13 @@
 
 <div id="crm-main-view" class="container-fluid">
 
+<div id="crm-edit-car-dialog" style="display:none">
+    <table id="edit-car-form">
+        <thead></thead>
+        <tbody></tbody>
+    </table>
+ </div>
+
 <div id="crm-wx-customer-dialog" style="display:none">
     <div id="crm-tabs-main" class="tabwidget">
         <ul class="nav nav-tabs">

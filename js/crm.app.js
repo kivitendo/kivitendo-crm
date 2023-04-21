@@ -175,7 +175,23 @@ $( document ).ready( function()
             if( exists( data.cars ) ){
                 let listrow0 = false;
                 $.each( data.cars, function( key, value ){
-                    $( '#crm-cars-table' ).append( '<tr class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' +  value.ln + '</td><td>' + value.manuf  + '</td><td>' + value.ctype  + '</td><td>' + value.cart + '</td></tr>' );
+                    $( '#crm-cars-table' ).append( '<tr class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '" id="' + value.c_id + '"><td>' +  value.c_ln + '</td><td>' + value.hersteller  + '</td><td>' + value.name  + '</td><td>' + value.mytype + '</td></tr>' );
+                });
+                $( '#crm-cars-table tr' ).click( function(){
+                    alert( 'edit car: ' +  this.id );
+                    $.ajax({
+                        url: 'crm/ajax/crm.app.php',
+                        type: 'POST',
+                        data:  { action: 'getCar', data: { 'id': this.id } },
+                        success: function( data ){
+                            console.info( 'getCar' );
+                            console.info( data );
+                            crmEditCarDlg();
+                        },
+                        error: function( xhr, status, error ){
+                            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmUpdateDB()', xhr.responseText );
+                        }
+                    });
                 });
                 $( '#crm-wx-cars' ).show();
             }
@@ -777,6 +793,42 @@ $( document ).ready( function()
                  $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmNewCarFromScan().getCustomerForScan', xhr.responseText );
              }
         });
+    }
+
+     function crmEditCarDlg(){
+       crmInitFormEx( editCarFormModel, '#edit-car-form', 21 );
+
+        $( '#crm-edit-car-dialog' ).dialog({
+            autoOpen: false,
+            resizable: true,
+            width: 'auto',
+            height: 'auto',
+            modal: true,
+            title: kivi.t8( 'Edit customer' ),
+            position: { my: "top", at: "top+250" },
+            open: function(){
+                $( this ).css( 'maxWidth', window.innerWidth );
+                dbUpdateData.action = 'updateCar';
+            },
+            close: function(){
+                crmClearData();
+            },
+            buttons:[{
+                text: kivi.t8( 'Save' ),
+                click: function(){
+                    console.info( 'Save' );
+                    dbUpdateData.data = {};
+                    //crmUpdateDB();
+                    $( this ).dialog( "close" );
+                }
+            },
+            {
+                text: kivi.t8( 'Cancel' ),
+                click: function(){
+                    $( this ).dialog( "close" );
+                }
+            }]
+        }).dialog( 'open' ).resize();
     }
 
     $( '#crm-wf-edit' ).click( function(){

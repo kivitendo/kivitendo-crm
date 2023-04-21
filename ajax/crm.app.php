@@ -4,9 +4,13 @@ require_once __DIR__.'/../inc/stdLib.php'; // for debug
 require_once __DIR__.'/../inc/crmLib.php';
 require_once __DIR__.'/../inc/ajax2function.php';
 
-function resultInfo( $success, $text = '', $debug = false ){
+/*************************************************
+* Erzeugt ein JSON das für die JS-Function
+* showMessageDialog verwendet werden kann
+*************************************************/
+function resultInfo( $success, $debug_text = '' ){
     $info = '{ "success":'.(($success)? 'true' : 'false');
-    if( !empty( $text ) ) if( !$success || $debug ) $info .= ', "debug":"'.$text.'"';
+    if( !empty( $debug_text ) ) $info .= ', "debug":"'.$debug_text.'"';
     echo $info.' }';
 }
 
@@ -254,7 +258,7 @@ function searchCustomerForScan( $data ){
 
 
 /********************************************
-* Insert a new Customer with new Car
+* Insert a new Customer optional  with new Car
 ********************************************/
 function insertNewCuWithCar( $data ){
     $id = FALSE;
@@ -270,11 +274,11 @@ function insertNewCuWithCar( $data ){
             $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ) );
         }
     }
-    resultInfo( TRUE  );
+    echo '{ "src": "C", "id": "'.$id.'" }';
 }
 
 /********************************************
-* Ubdate Customer with new Car
+* Ubdate Customer optional with new Car
 ********************************************/
 function updateCuWithNewCar( $data ){
     $id = FALSE;
@@ -297,6 +301,5 @@ function updateCuWithNewCar( $data ){
             $GLOBALS['dbh']->update( $key, array_keys( $value ), array_values( $value ), $where );
         }
     }
-
-    resultInfo( true );
+    echo '{ "src": "C", "id": "'.$id.'" }';
 }

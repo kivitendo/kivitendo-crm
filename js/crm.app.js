@@ -303,6 +303,7 @@ $( document ).ready( function()
                 console.info( 'crmUpdateDB' );
                 console.info( data );
                 dbUpdateData = {};
+                if( exists( data.src ) && exists( data.id ) ) crmRefreshAppView( data.src, data.id );
             },
             error: function( xhr, status, error ){
                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmUpdateDB()', xhr.responseText );

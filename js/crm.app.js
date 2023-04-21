@@ -586,6 +586,15 @@ $( document ).ready( function()
 
     }
 
+    function crmFormatName( name ){
+        let rs = null;
+        for( let str of name.split( ' ' ) ){
+            if( rs === null ) rs = ''; else rs += ' '
+            rs += str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+        }
+        return rs;
+    }
+
     /***************************************
     * Dialog to select scan (car data)
     * and customer
@@ -664,7 +673,7 @@ $( document ).ready( function()
                                                 $( '#crm-fsscan-customer-dlg' ).dialog( "close" );
                                                 crmEditCuVeDlg( true );
                                                 crmShowCuVeForEdit();
-                                                $( '#billaddr-name' ).val( lxcarsData.firstname + ' ' + lxcarsData.name1 );
+                                                $( '#billaddr-name' ).val( $( '#crm-fsscan-edit-customer' ).val() );
                                                 $( '#billaddr-street' ).val( lxcarsData.address1 );
                                                 const city = ( isEmpty( lxcarsData.adress2 ) )? 0 : lxcarsData.address2.split(' ');
                                                 if( isIterable( city ) && city.length > 1 ){
@@ -703,9 +712,9 @@ $( document ).ready( function()
                             }]
                         }).dialog( 'open' ).resize();
 
-                        $( '#crm-fsscan-edit-customer' ).val( data.firstname + ' ' + data.name1 );
+                        $( '#crm-fsscan-edit-customer' ).val( crmFormatName( data.firstname + ' ' + data.name1 ) );
 
-                        crmSearchCustomerForScan( data.firstname + ' ' + data.name1 );
+                        crmSearchCustomerForScan( crmFormatName( data.firstname + ' ' + data.name1 ) );
 
                        $( '#crm-fsscan-edit-customer' ).keyup( function(){
                             crmSearchCustomerForScan( $( '#crm-fsscan-edit-customer' ).val() );

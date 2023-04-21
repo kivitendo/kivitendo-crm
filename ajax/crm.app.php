@@ -71,11 +71,12 @@ function getCVPA( $data ){
     // Fahrzeuge
     $query .= "( SELECT json_agg( cars ) AS cv FROM (SELECT c_ln AS ln, '--------' AS manuf, '-----' AS ctype, '---' AS cart FROM lxc_cars WHERE c_ow = ".$data['id']." ORDER BY c_id) AS cars) AS cars";
 
-    echo $GLOBALS['dbh']->getOne( $query, true );
+    $rs = $GLOBALS['dbh']->getOne( $query, true );
+    echo $rs;
 
     // Write history
     $lastdata[0] = $data['id']; //for compatibility
-    $lastdata[1] = $data['name'];
+    $lastdata[1] = json_decode( $rs )->cv->name;
     $lastdata[2] = $data['src'];
     $rs = $GLOBALS['dbh']->getOne( "select val from crmemployee where uid = '" . $_SESSION["loginCRM"]."' AND manid = ".$_SESSION['manid']." AND key = 'search_history'" ); //get current history
 
@@ -255,7 +256,7 @@ function searchCustomerForScan( $data ){
 /********************************************
 * Insert a new Customer with new Car
 ********************************************/
-function insertDB( $data ){
+function insertNewCuWithCar( $data ){
     $id = FALSE;
     foreach( $data AS $key => $value ){
         if( strcmp( $key, 'customer' ) === 0 ){
@@ -275,8 +276,9 @@ function insertDB( $data ){
 /********************************************
 * Ubdate Customer with new Car
 ********************************************/
-function updateDB( $data ){
+function updateCuWithNewCar( $data ){
     $id = FALSE;
+    writeLog( $data );
     foreach( $data AS $key => $value ){
         $where = '';
         if( array_key_exists( 'WHERE', $value ) ){

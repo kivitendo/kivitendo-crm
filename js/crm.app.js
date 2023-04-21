@@ -54,17 +54,16 @@ $( document ).ready( function()
                         //console.info( entry );
                         $( '#crm-history-list' ).append( '<div class="layout-actionbar-action layout-actionbar-submit" data-src="' + entry[2] +'" data-id="' + entry[0] + '" id="' + id + '">' + entry[1] + '</div>');
                         $( '#' + id ).click( function(){
-                            getCVPA( entry[2], entry[0], entry[1] );
-                            crmGetHistory();
+                            crmRefreshAppView( entry[2], entry[0] );
                         });
                     }
                     var histlist = $('#crm-hist-last').clone();
                     $( '#crm-hist-last' ).replaceWith($( '#crm-hist-last' ).clone() );
                     $( '#crm-hist-last' ).click( function(){
 
-                        getCVPA( data[0][2], data[0][0], data[0][1] );
+                        getCVPA( data[0][2], data[0][0] );
                     });
-                    getCVPA( data[0][2], data[0][0], data[0][1] );// ( CV, id, name )
+                    getCVPA( data[0][2], data[0][0] );// ( CV, id )
                 }
             },
             error: function(xhr, status, error){
@@ -91,17 +90,16 @@ $( document ).ready( function()
         $( "#crm-widget-quicksearch" ).catcomplete({
             source: "crm/ajax/crm.app.php?action=fastSearch",
             select: function( e, ui ) {
-                getCVPA( ui.item.src, ui.item.id, ui.item.label );
-                crmGetHistory();
+                crmRefreshAppView( ui.item.src, ui.item.id, ui.item.label );
             }
         });
     });
 
-    function getCVPA( src, id, name ){
+    function getCVPA( src, id ){
         $.ajax({
             url: 'crm/ajax/crm.app.php',
             type: 'POST',
-            data:  { action: 'getCVPA', data: { 'src': src, 'id': id, 'name': name } },
+            data:  { action: 'getCVPA', data: { 'src': src, 'id': id } },
             success: function( data ){
                 showCVPA( data );
             },
@@ -109,6 +107,11 @@ $( document ).ready( function()
                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'getCVPA', xhr.responseText );
             }
         });
+    }
+
+    function crmRefreshAppView( src, id ){
+        getCVPA( src, id );
+        crmGetHistory();
     }
 
     $( '#message-dialog' ).dialog({
@@ -497,7 +500,7 @@ $( document ).ready( function()
             position: { my: "top", at: "top+250" },
             open: function(){
                 $( this ).css( 'maxWidth', window.innerWidth );
-                dbUpdateData.action = 'updateDB';
+                dbUpdateData.action = 'updateCuWithNewCar';
             },
             close: function(){
                 crmClearData();
@@ -697,7 +700,7 @@ $( document ).ready( function()
                                                 //$( '#car-c_hu' ).val( lxcarsData.hu );
                                                 $( '#car-c_fin' ).val( lxcarsData.vin );
                                                 $( '#car-c_finchk' ).val( lxcarsData.field_3 );
-                                                dbUpdateData.action = 'insertDB';
+                                                dbUpdateData.action = 'insertNewCuWithCar';
                                             },
                                             error: function( xhr, status, error ){
                                                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'lxcars()', xhr.responseText );
@@ -765,7 +768,7 @@ $( document ).ready( function()
                         //$( '#car-c_hu' ).val( lxcarsData.hu );
                         $( '#car-c_fin' ).val( lxcarsData.vin );
                         $( '#car-c_finchk' ).val( lxcarsData.field_3 );
-                        getCVPA( src, id );
+                        crmRefreshAppView( src, id );
                     });
                 });
              },

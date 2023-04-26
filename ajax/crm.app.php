@@ -267,6 +267,11 @@ function getCar( $data ){
     echo $GLOBALS['dbh']->getOne( "SELECT * FROM lxc_cars WHERE c_id = ".$data['id'], true );
 }
 
+function getOrder( $data ){
+    writeLog( $data );
+    resultInfo( true );
+}
+
 /********************************************
 * Insert a new Customer optional  with new Car
 ********************************************/
@@ -308,6 +313,10 @@ function updateCuWithNewCar( $data ){
             $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ) );
         }
         else{
+            if( empty( $where ) ){
+                resultInfo( false, 'Risky SQL-Statment with empty WHERE clausel'  );
+                return;
+            }
             $GLOBALS['dbh']->update( $key, array_keys( $value ), array_values( $value ), $where );
         }
     }

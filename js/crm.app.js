@@ -180,7 +180,6 @@ $( document ).ready( function()
                     $( '#crm-cars-table' ).append( '<tr class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '" id="' + value.c_id + '"><td>' +  value.c_ln + '</td><td>' + value.hersteller  + '</td><td>' + value.name  + '</td><td>' + value.mytype + '</td></tr>' );
                 });
                 $( '#crm-cars-table tr' ).click( function(){
-                    alert( 'edit car: ' +  this.id );
                     $.ajax({
                         url: 'crm/ajax/crm.app.php',
                         type: 'POST',
@@ -213,6 +212,21 @@ $( document ).ready( function()
             let listrow0 = false;
             $.each( data.ord, function( key, value ){
                 $( '#crm-orders-table' ).append( '<tr id="' + value.id +'" class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' +  value.date + '</td><td>' + value.description  + '</td><td>' + value.amount  + '</td><td>' + value.number + '</td></tr>' );
+            });
+            $( '#crm-orders-table tr' ).click( function(){
+                $.ajax({
+                    url: 'crm/ajax/crm.app.php',
+                    type: 'POST',
+                    data:  { action: 'getOrder', data: { 'id': this.id } },
+                    success: function( data ){
+                        console.info( 'getOrder' );
+                        console.info( data );
+                        //crmData = data;
+                    },
+                    error: function( xhr, status, error ){
+                        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'showCVPA().getOrder', xhr.responseText );
+                    }
+                });
             });
         }
 

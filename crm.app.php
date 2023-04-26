@@ -166,11 +166,12 @@
 <div id="crm-main-view" class="container-fluid">
 
 <div id="crm-edit-car-dialog" style="display:none">
+    <div id="edit-car-hidden"></div>
     <table id="edit-car-form">
         <thead></thead>
         <tbody></tbody>
     </table>
- </div>
+</div>
 
 <div id="crm-wx-customer-dialog" style="display:none">
     <div id="crm-tabs-main" class="tabwidget">
@@ -254,7 +255,7 @@
                 <th class="xlistheading" id="date">Datum</th>
                 <th class="xlistheading" id="firstname">Vorname</th>
                 <th class="xlistheading" id="name1">Name</th>
-                <th class="xlistheading" id="licenseplate">Kennzeichen</th>
+                <th class="xlistheading" id="licenseplate">Stadt</th>
               </tr>
             </thead>
              <tbody id="crm-fsscan-customer-list"></tbody>

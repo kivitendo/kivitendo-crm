@@ -148,6 +148,8 @@ $( document ).ready( function()
 
     function showCVPA( data ){
         if( data.cv ){
+            console.info( 'customer/vendor src: ' +  data.cv.src + ', id: ' + data.cv.id );
+
             $( '#crm-wx-contact' ).show();
             $.each( data.cv, function( key, value ){
                 if( value ){
@@ -186,10 +188,11 @@ $( document ).ready( function()
                         success: function( data ){
                             console.info( 'getCar' );
                             console.info( data );
+                            crmData = data;
                             crmEditCarDlg();
                         },
                         error: function( xhr, status, error ){
-                            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmUpdateDB()', xhr.responseText );
+                            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'showCVPA().getCar', xhr.responseText );
                         }
                     });
                 });
@@ -237,6 +240,15 @@ $( document ).ready( function()
         crmDelAddr = 0;
     }
 
+    /********************************************************
+    * @param crmFormModel - form data (id's, ...)
+    * @param table - id for HTML Table element
+    * @param max_rows - two columns, if greater then 0, defines max rows of the first column
+    * @param container - the HTML div element id, which contains the hidden input fields
+    *
+    * Attention:
+    * Hidden fields must be on then end of the form model !
+    *********************************************************/
     function crmInitFormEx( crmFormModel, table, max_rows = 0, container = null){
         let tabledata = '';
         let hiddenFields = '';
@@ -250,7 +262,7 @@ $( document ).ready( function()
                 if( item.type == 'headline' ) tabledata += '<td colspan="2"><b>' + kivi.t8( item.label ) + '</b>';
                 if( item.type == 'checkbox' ) tabledata += '<td>' + kivi.t8( item.label ) + '</td><td><input type="checkbox" id="' + item.name + '" name="'+ item.name + '" value="true" title="' + kivi.t8( item.tooltip ) + '"></input>';
                 if( item.type == 'input' ){
-                    tabledata += '<td>' + kivi.t8( item.label ) + '</td><td><input type="text" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '"></input>';
+                    tabledata += '<td>' + kivi.t8( item.label ) + '</td><td><input type="text" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '" value="' + ( ( exists(item.data) )? item.data : '' ) + '"></input>';
                     if( item.check ) tabledata += '<input type="checkbox" id="' + item.check + '" name="'+ item.check + '" title="' + kivi.t8( 'Check imput' ) + '"></input>';
                 }
                 if( item.type == 'textarea' ) tabledata += '<td>' + kivi.t8( item.label ) + '</td><td><textarea id="' + item.name + '" name="'+ item.name + '" cols="' + item.cols + '" rows="' + item.rows + '" title="' + kivi.t8( item.tooltip ) + '"></textarea>';
@@ -319,6 +331,7 @@ $( document ).ready( function()
                 console.info( 'crmUpdateDB' );
                 console.info( data );
                 dbUpdateData = {};
+                if( exists( data.success ) && !data.success ) $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'DB update error' ), kivi.t8( 'Error in: ' ) + 'crmUpdateDB()', ( ( exists( data.debug )? data.debug : null) ) );
                 if( exists( data.src ) && exists( data.id ) ) crmRefreshAppView( data.src, data.id );
             },
             error: function( xhr, status, error ){
@@ -503,6 +516,8 @@ $( document ).ready( function()
         $( '#billaddr-country' ).change(function(){
             crmChangeBlandList( 'billaddr-bland', $( '#billaddr-country' ).val() );
         });
+        crmChangeBlandList( 'billaddr-bland', 'D' );
+
         $( '#deladdr-shiptocountry' ).change(function(){
             crmChangeBlandList( 'deladdr-shiptobland', $( '#deladdr-shiptocountry' ).val() );
         });
@@ -796,7 +811,15 @@ $( document ).ready( function()
     }
 
      function crmEditCarDlg(){
-       crmInitFormEx( editCarFormModel, '#edit-car-form', 21 );
+        crmInitFormEx( editCarFormModel, '#edit-car-form', 21, '#edit-car-hidden' );
+        for( let item of editCarFormModel){
+            let columnName = item.name.split( '-' );
+            if( exists( crmData[columnName[1]] ) ) $( '#' + item.name ).val( crmData[columnName[1]] );
+            if( item.check ){
+                columnName = item.check.split( '-' );
+                if( exists( crmData[columnName[1]] ) ) $( '#' + item.check ).prop( 'checked', crmData[columnName[1]] );
+            }
+        }
 
         $( '#crm-edit-car-dialog' ).dialog({
             autoOpen: false,
@@ -808,7 +831,7 @@ $( document ).ready( function()
             position: { my: "top", at: "top+250" },
             open: function(){
                 $( this ).css( 'maxWidth', window.innerWidth );
-                dbUpdateData.action = 'updateCar';
+                dbUpdateData.action = 'genericUpdate';
             },
             close: function(){
                 crmClearData();
@@ -816,9 +839,25 @@ $( document ).ready( function()
             buttons:[{
                 text: kivi.t8( 'Save' ),
                 click: function(){
-                    console.info( 'Save' );
+                    console.info( 'Save car' );
                     dbUpdateData.data = {};
-                    //crmUpdateDB();
+                    dbUpdateData.data['lxc_cars'] = {};
+                    dbUpdateData.data['lxc_cars']['WHERE'] = {};
+                    dbUpdateData.data['lxc_cars']['WHERE']['c_id'] = $( '#edit_car-c_id' ).val();
+                    for( let item of editCarFormModel ){
+                        let columnName = item.name.split( '-' );
+                        let val = $( '#' + item.name ).val();
+                        if( exists(val) && val !== '' ){
+                            if( item.name !== 'edit_car-c_id' ) dbUpdateData.data['lxc_cars'][columnName[1]] = val;
+                        }
+                        if( item.check ){
+                            val = $( '#' + item.name ).val();
+                            columnName = item.check.split( '-' );
+                            if( exists(val) && val !== '' ) dbUpdateData.data['lxc_cars'][columnName[1]] = $( '#' + item.check ).prop( 'checked' );
+                        }
+                    }
+                    console.info( dbUpdateData );
+                    crmUpdateDB();
                     $( this ).dialog( "close" );
                 }
             },

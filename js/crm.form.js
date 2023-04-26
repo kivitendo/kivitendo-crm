@@ -1,13 +1,10 @@
 
 const billaddrFormModel = [
-        { "name": "billaddr-currency_id", "type": "hidden", "data": "1"},
-        { "name": "billaddr-id", "type": "hidden", },
-        { "name": "billaddr-src", "type": "hidden", },
         { "name": "billaddr-greetings", "label": "Greetings:", "type": "select", "data":[], "tooltip":""}, //selectbox
         { "name": "billaddr-greeting", "label": "Greetings:", "type": "input", "size": "42", "tooltip": "Alternativ greetings" },
         { "name": "billaddr-name", "label": "Name:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
         { "name": "billaddr-street", "label": "Street:", "type": "input", "size": "42", "tooltip": "Street and street number" },
-        { "name": "billaddr-country", "label": "Country code:", "type": "input", "size": "4", "tooltip": "Country code" },
+        { "name": "billaddr-country", "label": "Country code:", "type": "input", "size": "4", "tooltip": "Country code", "data": "D" },
         { "name": "billaddr-zipcode", "label": "Zip code:", "type": "input", "size": "12", "tooltip": "Zip code" },
         { "name": "billaddr-city", "label": "City:", "type": "input", "size": "42", "tooltip": "" },
         { "name": "billaddr-bland", "label": "Bundesland:", "type": "select", "data":[], "tooltip":""}, //selectbox
@@ -18,6 +15,9 @@ const billaddrFormModel = [
         { "name": "billaddr-business_id", "label": "Costumer type:", "type": "select","data": [], "tooltip":""}, //selectbox
         { "name": "billaddr-sw", "label": "Keyword:", "type": "input", "size": "42", "tooltip": "Keyword" },
         { "name": "billaddr-notes", "label": "Comment:", "type": "textarea", "cols": "42", "rows": "5", "tooltip": "Comment" },
+        { "name": "billaddr-currency_id", "type": "hidden", "data": "1"},
+        { "name": "billaddr-id", "type": "hidden", },
+        { "name": "billaddr-src", "type": "hidden", },
     ];
 
 const deladdrFormModel = [
@@ -26,7 +26,7 @@ const deladdrFormModel = [
     { "name": "deladdr-shiptodepartment_1", "label": "Department 1:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
     { "name": "deladdr-shiptodepartment_2", "label": "Department 2:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
     { "name": "deladdr-shiptostreet", "label": "Street:", "type": "input", "size": "42", "tooltip": "Street and street number" },
-    { "name": "deladdr-shiptocountry", "label": "Country code:", "type": "input", "size": "2", "tooltip": "Country code" },
+    { "name": "deladdr-shiptocountry", "label": "Country code:", "type": "input", "size": "2", "tooltip": "Country code", "data": "D" },
     { "name": "deladdr-shiptozipcode", "label": "Zip code:", "type": "input", "size": "12", "tooltip": "Vollständiger Name" },
     { "name": "deladdr-shiptobland", "label": "Bundesland:", "type": "select", "data":[], "tooltip":""}, //selectbox
     { "name": "deladdr-shiptocity", "label": "City:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
@@ -101,12 +101,12 @@ const carFormModel = [
 ];
 
 const editCarFormModel = [
-    { "name": "edit_car-c_ln", "label": "Car license:", "type": "input", "size": "21", "tooltip": "", "check": "chk_c_ln", "info": "c_ln_info" },
-    { "name": "edit_car-c_2", "label": "HSN (2.1):", "type": "input", "size": "21", "tooltip": "", "check": "chk_c_2" },
-    { "name": "edit_car-c_3", "label": "TSN (2.2):", "type": "input", "size": "21", "tooltip": "", "check": "chk_c_3" },
-    { "name": "edit_car-c_em", "label": "Emission class (14.1):", "type": "input", "size": "21", "tooltip": "", "check": "chk_c_em", "info": "c_em_info" },
+    { "name": "edit_car-c_ln", "label": "Car license:", "type": "input", "size": "21", "tooltip": "", "check": "edit_car-chk_c_ln", "info": "edit_car-c_ln_info" },
+    { "name": "edit_car-c_2", "label": "HSN (2.1):", "type": "input", "size": "21", "tooltip": "", "check": "edit_car-chk_c_2" },
+    { "name": "edit_car-c_3", "label": "TSN (2.2):", "type": "input", "size": "21", "tooltip": "", "check": "edit_car-chk_c_3" },
+    { "name": "edit_car-c_em", "label": "Emission class (14.1):", "type": "input", "size": "21", "tooltip": "", "check": "edit_car-chk_c_em", "info": "edit_car-c_em_info" },
     { "name": "edit_car-c_d", "label": "Date of registration:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "edit_car-c_hu", "label": "Date of HU+AU:", "type": "input", "size": "21", "tooltip": "", "check": "chk_c_hu" },
+    { "name": "edit_car-c_hu", "label": "Date of HU+AU:", "type": "input", "size": "21", "tooltip": "", "check": "edit_car-chk_c_hu" },
     { "name": "edit_car-c_fin", "label": "FIN:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_car-c_finchk", "label": "FIN check:", "type": "input", "size": "2", "tooltip": "" },
     { "name": "edit_car-c_mkb", "label": "Engine code:", "type": "input", "size": "21", "tooltip": "" },
@@ -135,4 +135,5 @@ const editCarFormModel = [
     { "name": "edit_car_kba-11", "label": "Wheelbase:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_car_kba-12", "label": "Vmax:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_car_kba-13", "label": "Total weight:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "edit_car-c_id", "type": "hidden", },
 ];

@@ -135,7 +135,7 @@ function appendQueryForCustomerDlg( &$query ){
 
     // Steuerzonen
     $query .= "(SELECT json_agg( tax_zones ) AS tax_zones FROM (".
-                "SELECT id, description FROM tax_zones WHERE obsolete = false ORDER BY description ASC".
+                "SELECT id, description FROM tax_zones WHERE obsolete = false ORDER BY description DESC".
                 ") AS tax_zones) AS tax_zones, ";
 
     // Branchen
@@ -312,4 +312,27 @@ function updateCuWithNewCar( $data ){
         }
     }
     echo '{ "src": "C", "id": "'.$id.'" }';
+}
+
+function genericUpdate( $data ){
+    writeLog( $data );
+
+    foreach( $data AS $key => $value ){
+        $where = '';
+        if( array_key_exists( 'WHERE', $value ) ){
+                foreach( $value['WHERE'] AS $whereId => $whereVal ){
+                    //Kommas fehlen:
+                    $where = $whereId.' = '.$whereVal;
+                }
+                unset( $value['WHERE'] );
+        }
+        if( empty( $where ) ){
+            resultInfo( false, 'Risky SQL-Statment with empty WHERE clausel'  );
+            return;
+        }
+        //writeLog( $key ); writeLog( array_keys( $value ) ); writeLog( array_values( $value ) ); writeLog( $where );
+        $GLOBALS['dbh']->update( $key, array_keys( $value ), array_values( $value ), $where );
+    }
+
+    resultInfo( true );
 }

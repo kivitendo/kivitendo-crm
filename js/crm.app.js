@@ -885,10 +885,12 @@ $( document ).ready( function()
     function crmEditOrderDlg(){
         console.info( 'Edit order' );
         console.info( crmData );
+        let listrow0 = false;
         let tableRow;
-        for( let dataRow of crmData ){
+        for( let dataRow of crmData.order.orderitems ){
             console.info( dataRow );
-            tableRow += '<tr id="' + dataRow.id + '"><td>' + dataRow.position  + '</td>' +
+            listrow0 = !listrow0;
+            tableRow += '<tr id="' + dataRow.id + '" class="' + ( ( listrow0 )? 'listrow0' : 'listrow1' )  + '"><td>' + dataRow.position  + '</td>' +
                         '<td><img src="image/updown.png" alt="umsortieren"></td>' +
                         '<td><img src="image/close.png" alt="löschen"></td>' +
                         '<td><button>Edit</button></td>' +
@@ -896,13 +898,30 @@ $( document ).ready( function()
                         '<td>' + ( ( dataRow.instruction )? 'A' : 'W' )  + '</td>' +
                         '<td><input type="text" size="40" value="' + dataRow.description  + '"></input></td>' +
                         '<td><input type="text" size="40" value="' + dataRow.longdescription  + '"></input>' +
-                        '</td><td><input type="text" size="5" value="' + dataRow.qty  + '"></input></td>' +
-                        '<td>' + dataRow.unit  + '</td>' +
-                        '<td>' + dataRow.sellprice + '</td>' +
+                        '</td><td><input type="text" size="5" value="' + dataRow.qty  + '"></input></td>';
+
+            tableRow += '<td><select type="select">'; //+ dataRow.unit
+            for( let unit of crmData.order.units ){
+                tableRow += '<option value="' + unit.name  + '"';
+                if(dataRow.unit === unit.name) tableRow += ' selected'
+                tableRow += '>' + unit.name + '</option>';
+            }
+            tableRow += '</select></td>';
+
+            tableRow += '<td>' + dataRow.sellprice + '</td>' +
                         '<td>' + dataRow.discount + '</td><td>100%</td>' +
-                        '<td>' + dataRow.marge_total + '</td>' +
-                        '<td>' + dataRow.u_id + '</td>' +
-                        '<td>' + dataRow.status + '</td></tr>';
+                        '<td>' + dataRow.marge_total + '</td>';
+
+            tableRow += '<td><select type="select">';
+            tableRow += '<option value=""></option>';
+            for( let worker of crmData.workers ){
+                tableRow += '<option value="' + worker.name  + '"';
+                if(dataRow.u_id === worker.name) tableRow += ' selected'
+                tableRow += '>' + worker.name + '</option>';
+            }
+            tableRow += '</select></td>';
+
+            tableRow += '<td>' + dataRow.status + '</td></tr>';
         }
         $( '#edit-order-table > tbody' ).html(tableRow);
 

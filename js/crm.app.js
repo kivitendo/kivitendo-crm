@@ -220,8 +220,8 @@ $( document ).ready( function()
                     data:  { action: 'getOrder', data: { 'id': this.id } },
                     success: function( data ){
                         console.info( 'getOrder' );
-                        console.info( data );
-                        //crmData = data;
+                        crmData = data;
+                        crmEditOrderDlg();
                     },
                     error: function( xhr, status, error ){
                         $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'showCVPA().getOrder', xhr.responseText );
@@ -870,6 +870,63 @@ $( document ).ready( function()
                     }
                     console.info( dbUpdateData );
                     crmUpdateDB();
+                    $( this ).dialog( "close" );
+                }
+            },
+            {
+                text: kivi.t8( 'Cancel' ),
+                click: function(){
+                    $( this ).dialog( "close" );
+                }
+            }]
+        }).dialog( 'open' ).resize();
+    }
+
+    function crmEditOrderDlg(){
+        console.info( 'Edit order' );
+        console.info( crmData );
+        let tableRow;
+        for( let dataRow of crmData ){
+            console.info( dataRow );
+            tableRow += '<tr id="' + dataRow.id + '"><td>' + dataRow.position  + '</td>' +
+                        '<td><img src="image/updown.png" alt="umsortieren"></td>' +
+                        '<td><img src="image/close.png" alt="löschen"></td>' +
+                        '<td><button>Edit</button></td>' +
+                        '<td>' + dataRow.partnumber  + '</td>' +
+                        '<td>' + ( ( dataRow.instruction )? 'A' : 'W' )  + '</td>' +
+                        '<td><input type="text" size="40" value="' + dataRow.description  + '"></input></td>' +
+                        '<td><input type="text" size="40" value="' + dataRow.longdescription  + '"></input>' +
+                        '</td><td><input type="text" size="5" value="' + dataRow.qty  + '"></input></td>' +
+                        '<td>' + dataRow.unit  + '</td>' +
+                        '<td>' + dataRow.sellprice + '</td>' +
+                        '<td>' + dataRow.discount + '</td><td>100%</td>' +
+                        '<td>' + dataRow.marge_total + '</td>' +
+                        '<td>' + dataRow.u_id + '</td>' +
+                        '<td>' + dataRow.status + '</td></tr>';
+        }
+        $( '#edit-order-table > tbody' ).html(tableRow);
+
+        $( '#crm-edit-order-dialog' ).dialog({
+            autoOpen: false,
+            resizable: true,
+            width: 'auto',
+            height: 'auto',
+            modal: true,
+            title: kivi.t8( 'Edit order' ),
+            position: { my: "top", at: "top+250" },
+            open: function(){
+                $( this ).css( 'maxWidth', window.innerWidth );
+                dbUpdateData.action = 'updateOrder';
+            },
+            close: function(){
+                crmClearData();
+            },
+            buttons:[{
+                text: kivi.t8( 'Save' ),
+                click: function(){
+                    console.info( 'Save order' );
+                    dbUpdateData.data = {};
+                    console.info( dbUpdateData );
                     $( this ).dialog( "close" );
                 }
             },

@@ -165,6 +165,32 @@
 
 <div id="crm-main-view" class="container-fluid">
 
+<div id="crm-edit-order-dialog" style="display:none">
+    <table id="edit-order-table" width="100%">
+        <thead>
+            <tr class="listheading pin">
+                <th class="listheading" nowrap width="25px" >Pos.</th>
+                <th class="listheading" style='text-align:center' nowrap width="1"><img src="image/updown.png" alt="umsortieren"></th>
+                <th class="listheading" style='text-align:center' nowrap width="1"><img src="image/close.png" alt="löschen"></th>
+                <th class="listheading" style='text-align:center' nowrap width="1">E</th>
+                <th id="od-partnumber-thead"  class="listheading" nowrap width="1" style="min-width: 4em">ArtNr.</th>
+                <th id="od-partclass-thead"   class="listheading" nowrap width="2">Typ</th>
+                <th id="od-desc-thead" class="listheading" nowrap  width="10">Beschreibung</th>
+                <th id="od-longdesc-thead" class="listheading" nowrap>Langtext</th>
+                <th id="od-qty-thead" class="listheading" nowrap width="5" >Menge</th>
+                <th class="listheading" nowrap width="5" >Einheit </th>
+                <th id="od-sellprice-thead" class="listheading" nowrap width="2" >Preis</th>
+                <th id="od-discount-thead" class="listheading" nowrap width="5" >Rabatt in %</th>
+                <th id="od-discount_thead-100" class="listheading" nowrap width="5" ><input value="100%" type="button" id="od-discount-100-all" style="width: 3em;"></th>
+                <th class="listheading" nowrap width="10">Gesamt </th>
+                <th class="listheading" nowrap width="2" >Mechaniker </th>
+                <th class="listheading" nowrap width="2" >Status </th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
 <div id="crm-edit-car-dialog" style="display:none">
     <div id="edit-car-hidden"></div>
     <table id="edit-car-form">

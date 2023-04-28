@@ -1,0 +1,36 @@
+======================================
+Datenbankstrucktur für Aufträge
+======================================
+
+Verwendete Tabellen:
+- oe                ( Die Liste der Aufträge )
+- orderitems        ( Die einzelnen Posten/ Artikel in den Aufträgen der Gruppe Waren/ Dienstleistungen, die auf der Rechnung erscheinen )
+- instructions      ( Die einzelnen Posten/ Artikel in den Aufträgen der Gruppe Waren/ Dienstleistungen, die nicht auf der Rechnung erscheinen )
+- parts             ( Enthält die [ Klassen- ] Eigenschaften der einzelnen Posten/ Artikel )
+- units             ( Tabelle der möglichen Maßeinheiten der Posten/ Artikel )
+- customer          ( Auftraggeber )
+- employee          ( Für die Mitarbeiter/ Mechaniker der Gruppe Werkstatt )
+- auth.user         ( Für die Mitarbeiter/ Mechaniker der Gruppe Werkstatt )
+- auth.user_group   ( Für die Gruppenzuordnung )
+- auth.group        ( Für die Gruppenzuordnung )
+
+----------------------------------------------------------------------
+Attribute eines Auftrags                Rel.    DB Tabelle      Spalte
+----------------------------------------------------------------------
+Postionen/Artikel                       1:n     orderitems
+                                                instructions
+                                                parts
+                                                units
+Bemerkungen nicht sichtbar              1:1     oe              notes
+Interne Bemernung zum Kunden            1:1     costumer        notes
+Interne Bemerkungen zu Auto             1:1     lxc_cars        c_text
+----------------------------------------------------------------------
+
+
+--------------------------------------
+Besonderheiten
+--------------------------------------
+
+* Die Anweisungen erscheinen in der Farbe blau
+* Die UI-Tabelle ist Sortiebar die Position wird in orderitems und instructions gesichert
+

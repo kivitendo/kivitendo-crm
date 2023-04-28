@@ -123,6 +123,31 @@
         font-weight: bold;
     }
 
+    .od-table-label {
+        background-color: #EEEEEE;
+    }
+
+    .od-orderitems-div {
+        padding: 2em;
+    }
+
+    .od-orderitems {
+        margin: auto;
+        background-color: white;
+    }
+
+    .od-orderitems td {
+        padding: 0.25em;
+    }
+
+    .od-comments-div {
+        padding-top: 2em;
+    }
+
+    .od-comments {
+        background-color: white;
+    }
+
     /* debug */
     /*
     * {
@@ -166,6 +191,55 @@
 <div id="crm-main-view" class="container-fluid">
 
 <div id="crm-edit-order-dialog" style="display:none">
+    <div class="od-orderitems-div">
+    <table class="od-orderitems">
+        <tr>
+            <td class="od-table-label"><label for="od-customer_name">Auftraggeber:</label></td>
+            <td><span id="od-customer_name"></span></td>
+            <td class="od-table-label"><label for="od-ordnumber">Auftragsnummer:</label></td>
+            <td><span id="od-ordnumber"></span></td>
+            <td class="od-table-label"><label for="od-finish_time">Fertigstellung:</label></td>
+            <td><input id="od-finish_time" type="text"></td>
+            <td class="od-table-label"><label for="od-km_stnd">KM-Stand:</label></td>
+            <td><input id="od-km_stnd" type="text" ></td>
+            <td class="od-table-label"><label for="od-employee_name">bearbeitet von:</label></td>
+            <td><span id="od-employee_name"></span></td>
+            <td><input id="od-partnumber" type="text" placeholder="beliebige Teilenummer" ></td>
+        </tr>
+        <tr>
+            <td class="od-table-label"><label for="od-c_ln">Amtl.-Kennz.:</label></td>
+            <td><label id="od-c_ln" type="text"></td>
+            <td class="od-table-label"><label for="od-mtime">bearbeitet am:</label></td>
+            <td><span id="od-mtime"></span></td>
+            <td class="od-table-label"><label id="od-car_status">KfZ Ort:</label></td>
+            <td>
+                <select id="od-car_status" type="select">
+                    <option></option>
+                    <option value="Auto nicht hier">Auto nicht hier</option>
+                    <option value="Auto hier">Auto hier</option>
+                    <option value="Sonstiges zur Reparatur gebracht">Sonstiges zur Reparatur gebracht</option>
+                    <option value="Bestellung">Bestellung</option>
+                </select>
+            </td>
+            <td class="od-table-label"><label for="od-ltime">erstellt am:</label></td>
+            <td><span id="od-ltime"></span></td>
+            <td class="od-table-label"><label for="od-status">Status:</label></td>
+            <td>
+                <select id="od-status" type="select">
+                    <option></option>
+                    <option>angenommen</option>
+                    <option>bearbeitet</option>
+                    <option>abgerechnet</option>
+                </select>
+            </td>
+            <td>
+                <input id="od-internalorder" type="checkbox">
+                <label id="od-internalorder">Interner Auftrag</label>
+            </td>
+        </tr>
+    </table>
+    </div>
+
     <table id="edit-order-table" width="100%">
         <thead>
             <tr class="listheading pin">
@@ -189,6 +263,26 @@
         </thead>
         <tbody></tbody>
     </table>
+    <div class="od-comments-div">
+    <table class="od-comments">
+        <tr>
+            <td class="od-table-label">
+                Interne Bemerkungen zum Auto
+            </td>
+             <td class="od-table-label">
+                Interne Bemerkungen zum Kunden
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="od-int_car_notes" cols="50" rows="8"></textarea>
+            </td>
+            <td>
+                <textarea id="od-int_cu_notes" cols="50" rows="8"></textarea>
+            </td>
+         </tr>
+    </table>
+    </div>
 </div>
 
 <div id="crm-edit-car-dialog" style="display:none">

@@ -882,48 +882,71 @@ $( document ).ready( function()
         }).dialog( 'open' ).resize();
     }
 
-    function crmEditOrderDlg(){
+    var crmOrderItemCount = 0;
+
+     function crmAddOrderItem( dataRow ){
+         crmOrderItemCount++;
+         let tableRow;
+         tableRow += '<tr><td>' + (( exists( dataRow.position ) )? dataRow.position : crmOrderItemCount )  + '</td>' +
+                     '<td><img src="image/updown.png" alt="umsortieren"></td>' +
+                     '<td><img src="image/close.png" alt="löschen"></td>' +
+                     '<td><button>Edit</button></td>' +
+                     '<td>' + ( ( exists( dataRow.partnumber ) )? dataRow.partnumber : '') + '</td>' +
+                     '<td>' + ( ( dataRow.instruction )? 'A' : 'W' )  + '</td>' +
+                     '<td><input id="od-item-description' + crmOrderItemCount + '" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '"></input></td>' +
+                     '<td><input type="text" size="40" value="' + ( ( exists( dataRow.longdescription ) )? dataRow.longdescription : '' )  + '"></input>' +
+                     '</td><td><input type="text" size="5" value="' + ( ( exists( dataRow.qty ) )? dataRow.qty : '' ) + '"></input></td>';
+
+         tableRow += '<td><select type="select">'; //+ dataRow.unit
+         for( let unit of crmData.order.units ){
+             tableRow += '<option value="' + unit.name  + '"';
+             if(dataRow.unit === unit.name) tableRow += ' selected'
+             tableRow += '>' + unit.name + '</option>';
+         }
+         tableRow += '</select></td>';
+
+         tableRow += '<td>' + ( ( exists( dataRow.sellprice ) )? dataRow.sellprice : '' ) + '</td>' +
+                     '<td>' + ( ( exists( dataRow.discount ) )? dataRow.discount : '' ) + '</td><td>100%</td>' +
+                     '<td>' + ( ( exists( dataRow.marge_total ) )? dataRow.marge_total : '' ) + '</td>';
+
+         tableRow += '<td><select type="select">';
+         tableRow += '<option value=""></option>';
+         for( let worker of crmData.workers ){
+             tableRow += '<option value="' + worker.name  + '"';
+             if(dataRow.u_id === worker.name) tableRow += ' selected'
+             tableRow += '>' + worker.name + '</option>';
+         }
+         tableRow += '</select></td>';
+
+         tableRow += '<td>' + ( ( exists( dataRow.status ) )? dataRow.status : '' ) + '</td></tr>';
+         $( '#edit-order-table > tbody' ).append(tableRow);
+         $( '#od-item-description' + crmOrderItemCount ).change( function(){
+            crmAddOrderItem( { } );
+        });
+     }
+
+     function crmEditOrderDlg(){
         console.info( 'Edit order' );
         console.info( crmData );
-        let listrow0 = false;
-        let tableRow;
+        $( '#edit-order-table > tbody' ).html( '' );
         for( let dataRow of crmData.order.orderitems ){
-            console.info( dataRow );
-            listrow0 = !listrow0;
-            tableRow += '<tr id="' + dataRow.id + '" class="' + ( ( listrow0 )? 'listrow0' : 'listrow1' )  + '"><td>' + dataRow.position  + '</td>' +
-                        '<td><img src="image/updown.png" alt="umsortieren"></td>' +
-                        '<td><img src="image/close.png" alt="löschen"></td>' +
-                        '<td><button>Edit</button></td>' +
-                        '<td>' + dataRow.partnumber  + '</td>' +
-                        '<td>' + ( ( dataRow.instruction )? 'A' : 'W' )  + '</td>' +
-                        '<td><input type="text" size="40" value="' + dataRow.description  + '"></input></td>' +
-                        '<td><input type="text" size="40" value="' + dataRow.longdescription  + '"></input>' +
-                        '</td><td><input type="text" size="5" value="' + dataRow.qty  + '"></input></td>';
-
-            tableRow += '<td><select type="select">'; //+ dataRow.unit
-            for( let unit of crmData.order.units ){
-                tableRow += '<option value="' + unit.name  + '"';
-                if(dataRow.unit === unit.name) tableRow += ' selected'
-                tableRow += '>' + unit.name + '</option>';
-            }
-            tableRow += '</select></td>';
-
-            tableRow += '<td>' + dataRow.sellprice + '</td>' +
-                        '<td>' + dataRow.discount + '</td><td>100%</td>' +
-                        '<td>' + dataRow.marge_total + '</td>';
-
-            tableRow += '<td><select type="select">';
-            tableRow += '<option value=""></option>';
-            for( let worker of crmData.workers ){
-                tableRow += '<option value="' + worker.name  + '"';
-                if(dataRow.u_id === worker.name) tableRow += ' selected'
-                tableRow += '>' + worker.name + '</option>';
-            }
-            tableRow += '</select></td>';
-
-            tableRow += '<td>' + dataRow.status + '</td></tr>';
+           crmAddOrderItem( dataRow );
         }
-        $( '#edit-order-table > tbody' ).html(tableRow);
+        crmAddOrderItem( { } );
+
+        $( '#od-customer_name' ).html( crmData.order.common.customer_name );
+        $( '#od-ordnumber' ).html( crmData.order.common.ordnumber );
+        $( '#od-finish_time' ).html( crmData.order.common.finish_time );
+        $( '#od-km_stnd' ).val( crmData.order.common.km_stnd );
+        $( '#od-employee_name' ).html( crmData.order.common.employee_name );
+        $( '#od-c_ln' ).html( crmData.order.common.c_ln );
+        $( '#od-mtime' ).html( crmData.order.common.mtime );
+        $( '#od-internalorder' ).prop( 'checked', crmData.order.common.internalorder );
+        $( '#od-ltime' ).html( crmData.order.common.itime );
+        $( '#od-car_status' ).val( crmData.order.common.car_status );
+        $( '#od-int_car_notes' ).val( crmData.order.common.int_car_notes );
+        $( '#od-int_cu_notes' ).val( crmData.order.common.int_cu_notes );
+
 
         $( '#crm-edit-order-dialog' ).dialog({
             autoOpen: false,

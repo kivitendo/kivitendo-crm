@@ -862,22 +862,23 @@ $( document ).ready( function()
     }
 
     var crmOrderItemCount = 0;
+    var crmOrderItemLists;
 
-    function crmAddOrderItem( crmData, dataRow ){
+    function crmAddOrderItem( dataRow ){
         crmOrderItemCount++;
         let tableRow;
         tableRow += '<tr><td>' + (( exists( dataRow.position ) )? dataRow.position : crmOrderItemCount )  + '</td>' +
                     '<td><img src="image/updown.png" alt="umsortieren"></td>' +
                     '<td><img src="image/close.png" alt="löschen"></td>' +
                     '<td><button>Edit</button></td>' +
-                    '<td>' + ( ( exists( dataRow.partnumber ) )? dataRow.partnumber : '') + '</td>' +
+                    '<td id="' + 'od-item-partnumber' + crmOrderItemCount  + '">' + ( ( exists( dataRow.partnumber ) )? dataRow.partnumber : '') + '</td>' +
                     '<td>' + ( ( dataRow.instruction )? 'A' : 'W' )  + '</td>' +
-                    '<td><input id="od-item-description' + crmOrderItemCount + '" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '"></input></td>' +
+                    '<td><input class="od-item-description" id="od-item-description' + crmOrderItemCount + '" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '"></input></td>' +
                     '<td><input type="text" size="40" value="' + ( ( exists( dataRow.longdescription ) )? dataRow.longdescription : '' )  + '"></input>' +
                     '</td><td><input type="text" size="5" value="' + ( ( exists( dataRow.qty ) )? dataRow.qty : '' ) + '"></input></td>';
 
         tableRow += '<td><select type="select">'; //+ dataRow.unit
-        for( let unit of crmData.order.units ){
+        for( let unit of crmOrderItemLists.units ){
             tableRow += '<option value="' + unit.name  + '"';
             if(dataRow.unit === unit.name) tableRow += ' selected'
             tableRow += '>' + unit.name + '</option>';
@@ -890,7 +891,7 @@ $( document ).ready( function()
 
         tableRow += '<td><select type="select">';
         tableRow += '<option value=""></option>';
-        for( let worker of crmData.workers ){
+        for( let worker of crmOrderItemLists.workers ){
             tableRow += '<option value="' + worker.name  + '"';
             if(dataRow.u_id === worker.name) tableRow += ' selected'
             tableRow += '>' + worker.name + '</option>';
@@ -899,19 +900,32 @@ $( document ).ready( function()
 
         tableRow += '<td>' + ( ( exists( dataRow.status ) )? dataRow.status : '' ) + '</td></tr>';
         $( '#edit-order-table > tbody' ).append(tableRow);
-        $( '#od-item-description' + crmOrderItemCount ).change( function(){
-           crmAddOrderItem( { } );
-       });
+
+        $( '#od-item-description' + crmOrderItemCount ).autocomplete({
+            source: "crm/ajax/crm.app.php?action=findPart",
+            select: function( e, ui ){
+                const id = this.id.replace( 'od-item-description', '' );
+                console.info( id );
+                $( '#od-item-partnumber' + id ).html( ui.item.partnumber );
+                const list = $( '.od-item-description' );
+                if( list[list.length - 1].value !== '' ){
+                    crmAddOrderItem( { } );
+                }
+            }
+        });
     }
 
     function crmEditOrderDlg( crmData ){
         console.info( 'Edit order' );
         console.info( crmData );
+        crmOrderItemLists = { };
+        crmOrderItemLists['units'] = crmData.order.units;
+        crmOrderItemLists['workers'] = crmData.workers;
         $( '#edit-order-table > tbody' ).html( '' );
         for( let dataRow of crmData.order.orderitems ){
-           crmAddOrderItem( crmData, dataRow );
+           crmAddOrderItem( dataRow );
         }
-        crmAddOrderItem( crmData, { } );
+        crmAddOrderItem( { } );
 
         $( '#od-customer_name' ).html( crmData.order.common.customer_name );
         $( '#od-ordnumber' ).html( crmData.order.common.ordnumber );

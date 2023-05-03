@@ -40,6 +40,17 @@ function fastSearch(){
     }
 }
 
+function findPart( $term ){
+    //Index installieren create index idx_orderitems on orderitems ( parts_id );
+    if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
+        $term = $_GET['term'];
+        $sql = "SELECT description, partnumber, id, description AS value, part_type, unit,  partnumber || ' ' || description AS label, instruction FROM parts ";
+        $sql.= "WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE ORDER BY ( SELECT ( SELECT count( qty ) FROM orderitems WHERE parts_id = parts.id ) ) ";
+        $sql.= "DESC NULLS LAST LIMIT 20";
+        echo $GLOBALS['dbh']->getAll( $sql, true );
+    }
+}
+
 function getCVPA( $data ){
     $query = "SELECT ";
     if($data['src'] == 'C' || $data['src'] == 'V' ){

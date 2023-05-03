@@ -154,6 +154,12 @@
         outline: 1px solid red;
     }
     */
+
+    .ui-autocomplete {
+        position: absolute;
+        cursor: default;
+        z-index:1000 !important;
+    }
 </style>
 
 </head>

@@ -184,11 +184,10 @@ $( document ).ready( function()
                         url: 'crm/ajax/crm.app.php',
                         type: 'POST',
                         data:  { action: 'getCar', data: { 'id': this.id } },
-                        success: function( data ){
+                        success: function( crmData ){
                             console.info( 'getCar' );
-                            console.info( data );
-                            crmData = data;
-                            crmEditCarDlg();
+                            console.info( crmData );
+                            crmEditCarDlg( crmData );
                         },
                         error: function( xhr, status, error ){
                             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'showCVPA().getCar', xhr.responseText );
@@ -218,10 +217,9 @@ $( document ).ready( function()
                     url: 'crm/ajax/crm.app.php',
                     type: 'POST',
                     data:  { action: 'getOrder', data: { 'id': this.id } },
-                    success: function( data ){
+                    success: function( crmData ){
                         console.info( 'getOrder' );
-                        crmData = data;
-                        crmEditOrderDlg();
+                        crmEditOrderDlg( crmData );
                     },
                     error: function( xhr, status, error ){
                         $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'showCVPA().getOrder', xhr.responseText );
@@ -311,7 +309,7 @@ $( document ).ready( function()
     * Change list of Bundesland dependent
     * on Country code
     ***************************************/
-     function crmChangeBlandList( list, country ){
+     function crmChangeBlandList( crmData, list, country ){
         $( '#' + list ).html( '' );
         $( '#' + list ).append( '<option value=""></option>' );
         for( let bland of crmData.bundesland ){
@@ -325,12 +323,10 @@ $( document ).ready( function()
     * dbUpdateData means insert and update
     * operations in database
     ***************************************/
-    var crmData = {};
     var lxcarsData = {};
     var dbUpdateData = {};
 
     function crmClearData(){
-        crmData = {};
         lxcarsData = {};
         dbUpdateData = {};
     }
@@ -364,9 +360,8 @@ $( document ).ready( function()
             type: 'POST',
             data:  { action: 'getCustomerForEdit', data: { 'src': src, 'id': id } },
             success: function( data ){
-                crmData = data;
-                crmEditCuVeDlg( new_car );
-                crmShowCuVeForEdit();
+                crmEditCuVeDlg( data, new_car );
+                crmShowCuVeForEdit( data );
                 if( fx ) fx( src, id );
             },
             error: function( xhr, status, error ){
@@ -378,7 +373,7 @@ $( document ).ready( function()
     /***************************************
     * Prepares dialog to edit CV
     ***************************************/
-     function crmShowCuVeForEdit(){
+     function crmShowCuVeForEdit( crmData ){
         $( '#billaddr-greetings' ).html( '' );
         $( '#billaddr-greetings' ).append( '<option value="">' + kivi.t8( "Salutation as below" ) + '</option>' );
         if( isIterable( crmData.greetings ) ){
@@ -505,7 +500,7 @@ $( document ).ready( function()
     /***************************************
     * Open dialog to edit CV
     ***************************************/
-     function crmEditCuVeDlg( new_with_car ){
+     function crmEditCuVeDlg( crmData, new_with_car ){
         crmInitFormEx( billaddrFormModel, '#billaddr-form', 0, '#crm-billaddr-cv' );
         crmInitFormEx( deladdrFormModel, '#deladdr-form' );
         crmInitFormEx( banktaxFormModel, '#banktax-form' );
@@ -528,12 +523,12 @@ $( document ).ready( function()
         }
 
         $( '#billaddr-country' ).change(function(){
-            crmChangeBlandList( 'billaddr-bland', $( '#billaddr-country' ).val() );
+            crmChangeBlandList( crmData, 'billaddr-bland', $( '#billaddr-country' ).val() );
         });
-        crmChangeBlandList( 'billaddr-bland', 'D' );
+        crmChangeBlandList( crmData, 'billaddr-bland', 'D' );
 
         $( '#deladdr-shiptocountry' ).change(function(){
-            crmChangeBlandList( 'deladdr-shiptobland', $( '#deladdr-shiptocountry' ).val() );
+            crmChangeBlandList( crmData, 'deladdr-shiptobland', $( '#deladdr-shiptocountry' ).val() );
         });
 
         $( '#crm-wx-customer-dialog' ).dialog({
@@ -658,7 +653,7 @@ $( document ).ready( function()
           url: 'crm/ajax/crm.app.php',
           data: { action: 'getScans', data:{ 'fsmax': fsmax } },
           type: "POST",
-          success: function( data ){
+          success: function( crmData ){
             $( '#crm-fsscan-dlg' ).dialog({
                 autoOpen: false,
                 resizable: true,
@@ -681,10 +676,9 @@ $( document ).ready( function()
             var tableContent = '';
             let listrow0 = false;
             console.info( 'FromScan' );
-            console.info( data );
-            crmData = data;
-            if( isIterable( data.db_scans ) ){
-                data.db_scans.forEach( function( item ){
+            console.info( crmData );
+            if( isIterable( crmData.db_scans ) ){
+                crmData.db_scans.forEach( function( item ){
                     tableContent += '<tr class="' + ( ( listrow0 =! listrow0 ) ? "listrow0": "listrow1" ) + '" id="' + item.scan_id + '"><td style="text-align: right; padding-right: 15px;">' + item.myts + '</td><td>' + item.firstname + '</td><td>' + item.name1 + '</td><td>' + item.registrationnumber + '</td>';
                 });
             }
@@ -716,13 +710,12 @@ $( document ).ready( function()
                                             url: 'crm/ajax/crm.app.php',
                                             type: 'POST',
                                             data:  { action: 'getCVDialogData' },
-                                            success: function( data ){
+                                            success: function( crmData ){
                                                  //console.info('New');
                                                 //console.info(lxcarsData);
-                                                crmData = data;
                                                 $( '#crm-fsscan-customer-dlg' ).dialog( "close" );
-                                                crmEditCuVeDlg( true );
-                                                crmShowCuVeForEdit();
+                                                crmEditCuVeDlg( crmData, true );
+                                                crmShowCuVeForEdit( crmData );
                                                 $( '#billaddr-name' ).val( $( '#crm-fsscan-edit-customer' ).val() );
                                                 $( '#billaddr-street' ).val( lxcarsData.address1 );
                                                 const city = ( isEmpty( lxcarsData.adress2 ) )? 0 : lxcarsData.address2.split(' ');
@@ -825,7 +818,7 @@ $( document ).ready( function()
         });
     }
 
-     function crmEditCarDlg(){
+    function crmEditCarDlg( crmData ){
         crmInitFormEx( editCarFormModel, '#edit-car-form', 21, '#edit-car-hidden' );
         for( let item of editCarFormModel){
             let columnName = item.name.split( '-' );
@@ -887,55 +880,55 @@ $( document ).ready( function()
 
     var crmOrderItemCount = 0;
 
-     function crmAddOrderItem( dataRow ){
-         crmOrderItemCount++;
-         let tableRow;
-         tableRow += '<tr><td>' + (( exists( dataRow.position ) )? dataRow.position : crmOrderItemCount )  + '</td>' +
-                     '<td><img src="image/updown.png" alt="umsortieren"></td>' +
-                     '<td><img src="image/close.png" alt="löschen"></td>' +
-                     '<td><button>Edit</button></td>' +
-                     '<td>' + ( ( exists( dataRow.partnumber ) )? dataRow.partnumber : '') + '</td>' +
-                     '<td>' + ( ( dataRow.instruction )? 'A' : 'W' )  + '</td>' +
-                     '<td><input id="od-item-description' + crmOrderItemCount + '" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '"></input></td>' +
-                     '<td><input type="text" size="40" value="' + ( ( exists( dataRow.longdescription ) )? dataRow.longdescription : '' )  + '"></input>' +
-                     '</td><td><input type="text" size="5" value="' + ( ( exists( dataRow.qty ) )? dataRow.qty : '' ) + '"></input></td>';
+    function crmAddOrderItem( crmData, dataRow ){
+        crmOrderItemCount++;
+        let tableRow;
+        tableRow += '<tr><td>' + (( exists( dataRow.position ) )? dataRow.position : crmOrderItemCount )  + '</td>' +
+                    '<td><img src="image/updown.png" alt="umsortieren"></td>' +
+                    '<td><img src="image/close.png" alt="löschen"></td>' +
+                    '<td><button>Edit</button></td>' +
+                    '<td>' + ( ( exists( dataRow.partnumber ) )? dataRow.partnumber : '') + '</td>' +
+                    '<td>' + ( ( dataRow.instruction )? 'A' : 'W' )  + '</td>' +
+                    '<td><input id="od-item-description' + crmOrderItemCount + '" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '"></input></td>' +
+                    '<td><input type="text" size="40" value="' + ( ( exists( dataRow.longdescription ) )? dataRow.longdescription : '' )  + '"></input>' +
+                    '</td><td><input type="text" size="5" value="' + ( ( exists( dataRow.qty ) )? dataRow.qty : '' ) + '"></input></td>';
 
-         tableRow += '<td><select type="select">'; //+ dataRow.unit
-         for( let unit of crmData.order.units ){
-             tableRow += '<option value="' + unit.name  + '"';
-             if(dataRow.unit === unit.name) tableRow += ' selected'
-             tableRow += '>' + unit.name + '</option>';
-         }
-         tableRow += '</select></td>';
+        tableRow += '<td><select type="select">'; //+ dataRow.unit
+        for( let unit of crmData.order.units ){
+            tableRow += '<option value="' + unit.name  + '"';
+            if(dataRow.unit === unit.name) tableRow += ' selected'
+            tableRow += '>' + unit.name + '</option>';
+        }
+        tableRow += '</select></td>';
 
-         tableRow += '<td>' + ( ( exists( dataRow.sellprice ) )? dataRow.sellprice : '' ) + '</td>' +
-                     '<td>' + ( ( exists( dataRow.discount ) )? dataRow.discount : '' ) + '</td><td>100%</td>' +
-                     '<td>' + ( ( exists( dataRow.marge_total ) )? dataRow.marge_total : '' ) + '</td>';
+        tableRow += '<td>' + ( ( exists( dataRow.sellprice ) )? dataRow.sellprice : '' ) + '</td>' +
+                    '<td>' + ( ( exists( dataRow.discount ) )? dataRow.discount : '' ) + '</td><td>100%</td>' +
+                    '<td>' + ( ( exists( dataRow.marge_total ) )? dataRow.marge_total : '' ) + '</td>';
 
-         tableRow += '<td><select type="select">';
-         tableRow += '<option value=""></option>';
-         for( let worker of crmData.workers ){
-             tableRow += '<option value="' + worker.name  + '"';
-             if(dataRow.u_id === worker.name) tableRow += ' selected'
-             tableRow += '>' + worker.name + '</option>';
-         }
-         tableRow += '</select></td>';
+        tableRow += '<td><select type="select">';
+        tableRow += '<option value=""></option>';
+        for( let worker of crmData.workers ){
+            tableRow += '<option value="' + worker.name  + '"';
+            if(dataRow.u_id === worker.name) tableRow += ' selected'
+            tableRow += '>' + worker.name + '</option>';
+        }
+        tableRow += '</select></td>';
 
-         tableRow += '<td>' + ( ( exists( dataRow.status ) )? dataRow.status : '' ) + '</td></tr>';
-         $( '#edit-order-table > tbody' ).append(tableRow);
-         $( '#od-item-description' + crmOrderItemCount ).change( function(){
-            crmAddOrderItem( { } );
-        });
-     }
+        tableRow += '<td>' + ( ( exists( dataRow.status ) )? dataRow.status : '' ) + '</td></tr>';
+        $( '#edit-order-table > tbody' ).append(tableRow);
+        $( '#od-item-description' + crmOrderItemCount ).change( function(){
+           crmAddOrderItem( { } );
+       });
+    }
 
-     function crmEditOrderDlg(){
+    function crmEditOrderDlg( crmData ){
         console.info( 'Edit order' );
         console.info( crmData );
         $( '#edit-order-table > tbody' ).html( '' );
         for( let dataRow of crmData.order.orderitems ){
-           crmAddOrderItem( dataRow );
+           crmAddOrderItem( crmData, dataRow );
         }
-        crmAddOrderItem( { } );
+        crmAddOrderItem( crmData, { } );
 
         $( '#od-customer_name' ).html( crmData.order.common.customer_name );
         $( '#od-ordnumber' ).html( crmData.order.common.ordnumber );

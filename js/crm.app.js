@@ -558,8 +558,11 @@ $( document ).ready( function()
                     dbUpdateData.data = {};
                     let cvSrc = ( $( '#billaddr-src' ).val() == 'V' )? 'vendor' : 'customer';
                     dbUpdateData.data[cvSrc] = {};
-                    dbUpdateData.data[cvSrc]['WHERE'] = {};
-                    dbUpdateData.data[cvSrc]['WHERE']['id'] = $( '#billaddr-id' ).val();
+                    let billaddr_id = $( '#billaddr-id' ).val();
+                    if( '' !== billaddr_id  ){
+                        dbUpdateData.data[cvSrc]['WHERE'] = {};
+                        dbUpdateData.data[cvSrc]['WHERE']['id'] = $( '#billaddr-id' ).val();
+                    }
                     for( let item of billaddrFormModel){
                         let columnName = item.name.split( '-' );
                         if( columnName[1] !== "src" && columnName[1] !== "id" && columnName[1] !== "greetings" ){

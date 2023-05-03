@@ -324,19 +324,18 @@ $( document ).ready( function()
     * operations in database
     ***************************************/
     var lxcarsData = {};
-    var dbUpdateData = {};
 
     function crmClearData(){
         lxcarsData = {};
         dbUpdateData = {};
     }
 
-    function crmUpdateDB(){
+    function crmUpdateDB( call, dbUpdataData ){
         //console.info( dbUpdateData );
         $.ajax({
             url: 'crm/ajax/crm.app.php',
             type: 'POST',
-            data:  { action: dbUpdateData.action, data: dbUpdateData.data },
+            data:  { action: call, data: dbUpdateData.data },
             success: function( data ){
                 console.info( 'crmUpdateDB' );
                 console.info( data );
@@ -500,6 +499,8 @@ $( document ).ready( function()
     /***************************************
     * Open dialog to edit CV
     ***************************************/
+    var crmEditCuVeDlgAction;
+
      function crmEditCuVeDlg( crmData, new_with_car ){
         crmInitFormEx( billaddrFormModel, '#billaddr-form', 0, '#crm-billaddr-cv' );
         crmInitFormEx( deladdrFormModel, '#deladdr-form' );
@@ -541,7 +542,7 @@ $( document ).ready( function()
             position: { my: "top", at: "top+250" },
             open: function(){
                 $( this ).css( 'maxWidth', window.innerWidth );
-                dbUpdateData.action = 'updateCuWithNewCar';
+                crmEditCuVeDlgAction = 'updateCuWithNewCar';
             },
             close: function(){
                 crmClearData();
@@ -597,7 +598,7 @@ $( document ).ready( function()
                     }
                     console.info( 'dbUpdateData' );
                     console.info( dbUpdateData );
-                    crmUpdateDB();
+                    crmUpdateDB( crmEditCuVeDlgAction, dbUpdateData );
                     $( this ).dialog( "close" );
                 }
             },
@@ -740,7 +741,7 @@ $( document ).ready( function()
                                                 //$( '#car-c_hu' ).val( lxcarsData.hu );
                                                 $( '#car-c_fin' ).val( lxcarsData.vin );
                                                 $( '#car-c_finchk' ).val( lxcarsData.field_3 );
-                                                dbUpdateData.action = 'insertNewCuWithCar';
+                                                crmEditCuVeDlgAction = 'insertNewCuWithCar';
                                             },
                                             error: function( xhr, status, error ){
                                                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'lxcars()', xhr.responseText );
@@ -839,7 +840,6 @@ $( document ).ready( function()
             position: { my: "top", at: "top+250" },
             open: function(){
                 $( this ).css( 'maxWidth', window.innerWidth );
-                dbUpdateData.action = 'genericUpdate';
             },
             close: function(){
                 crmClearData();
@@ -865,7 +865,7 @@ $( document ).ready( function()
                         }
                     }
                     console.info( dbUpdateData );
-                    crmUpdateDB();
+                    crmUpdateDB('genericUpdate', crmdbUpdateData );
                     $( this ).dialog( "close" );
                 }
             },
@@ -954,7 +954,6 @@ $( document ).ready( function()
             position: { my: "top", at: "top+250" },
             open: function(){
                 $( this ).css( 'maxWidth', window.innerWidth );
-                dbUpdateData.action = 'updateOrder';
             },
             close: function(){
                 crmClearData();
@@ -963,8 +962,6 @@ $( document ).ready( function()
                 text: kivi.t8( 'Save' ),
                 click: function(){
                     console.info( 'Save order' );
-                    dbUpdateData.data = {};
-                    console.info( dbUpdateData );
                     $( this ).dialog( "close" );
                 }
             },

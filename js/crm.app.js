@@ -861,19 +861,30 @@ $( document ).ready( function()
         }).dialog( 'open' ).resize();
     }
 
-    var crmOrderItemCount = 0;
+    /*****************************************************
+    *
+    * @var crmOrderItemLists - contains the list of worker and units
+    *****************************************************/
     var crmOrderItemLists;
 
+    function crmCalcOrderPos(){
+        $( '#edit-order-table > tbody > tr').each( function( key, pos ){
+            $( pos ).find( '[class=od-item-pos]' )[0].innerText = key + 1;
+            if( !isEmpty( $( pos ).find( '[class=od-item-partnumber]' ).text() ) ){
+                $( $( pos ).find( '[class=od-item-edit-btn]' )[0] ).html('<button>Edit</button>');
+            }
+       });
+    }
+
     function crmAddOrderItem( dataRow ){
-        crmOrderItemCount++;
         let tableRow;
-        tableRow += '<tr><td>' + (( exists( dataRow.position ) )? dataRow.position : crmOrderItemCount )  + '</td>' +
+        tableRow += '<tr ' + ( ( exists( dataRow.id ) )? ('id="' + dataRow.id + '"') : 'class="od-item-pin"') + '><td class="od-item-pos"></td>' +
                     '<td><img src="image/updown.png" alt="umsortieren"></td>' +
-                    '<td><img src="image/close.png" alt="löschen"></td>' +
-                    '<td><button>Edit</button></td>' +
-                    '<td id="' + 'od-item-partnumber' + crmOrderItemCount  + '">' + ( ( exists( dataRow.partnumber ) )? dataRow.partnumber : '') + '</td>' +
+                    '<td><img class="od-item-del" src="image/close.png" alt="löschen"></td>' +
+                    '<td class="od-item-edit-btn"></td>' +
+                    '<td class="od-item-partnumber">' + ( ( exists( dataRow.partnumber ) )? dataRow.partnumber : '' ) + '</td>' +
                     '<td>' + ( ( dataRow.instruction )? 'A' : 'W' )  + '</td>' +
-                    '<td><input class="od-item-description" id="od-item-description' + crmOrderItemCount + '" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '"></input></td>' +
+                    '<td><input class="od-item-description" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '"></input></td>' +
                     '<td><input type="text" size="40" value="' + ( ( exists( dataRow.longdescription ) )? dataRow.longdescription : '' )  + '"></input>' +
                     '</td><td><input type="text" size="5" value="' + ( ( exists( dataRow.qty ) )? dataRow.qty : '' ) + '"></input></td>';
 
@@ -901,18 +912,22 @@ $( document ).ready( function()
         tableRow += '<td>' + ( ( exists( dataRow.status ) )? dataRow.status : '' ) + '</td></tr>';
         $( '#edit-order-table > tbody' ).append(tableRow);
 
-        $( '#od-item-description' + crmOrderItemCount ).autocomplete({
+        $( '.od-item-description' ).catcomplete({
             source: "crm/ajax/crm.app.php?action=findPart",
             select: function( e, ui ){
-                const id = this.id.replace( 'od-item-description', '' );
-                console.info( id );
-                $( '#od-item-partnumber' + id ).html( ui.item.partnumber );
+                $( ':focus' ).parent().parent().find( '[class=od-item-partnumber]' ).text( ui.item.partnumber );
+                //Bug or feature, can't do otherwise:
+                $( ':focus' ).parent().parent()[0].className = "";
+
                 const list = $( '.od-item-description' );
                 if( list[list.length - 1].value !== '' ){
                     crmAddOrderItem( { } );
                 }
+                crmCalcOrderPos();
             }
         });
+
+        crmCalcOrderPos();
     }
 
     function crmEditOrderDlg( crmData ){
@@ -926,6 +941,12 @@ $( document ).ready( function()
            crmAddOrderItem( dataRow );
         }
         crmAddOrderItem( { } );
+        $( '#edit-order-table > tbody' ).sortable({
+            cancel: '.od-item-pin, .od-item-del, input, select, button',
+            update: function(){
+                crmCalcOrderPos();
+            }
+        });
 
         $( '#od-customer_name' ).html( crmData.order.common.customer_name );
         $( '#od-ordnumber' ).html( crmData.order.common.ordnumber );

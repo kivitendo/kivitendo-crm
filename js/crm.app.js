@@ -184,11 +184,10 @@ $( document ).ready( function()
                         url: 'crm/ajax/crm.app.php',
                         type: 'POST',
                         data:  { action: 'getCar', data: { 'id': this.id } },
-                        success: function( data ){
+                        success: function( crmData ){
                             console.info( 'getCar' );
-                            console.info( data );
-                            crmData = data;
-                            crmEditCarDlg();
+                            console.info( crmData );
+                            crmEditCarDlg( crmData );
                         },
                         error: function( xhr, status, error ){
                             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'showCVPA().getCar', xhr.responseText );
@@ -218,10 +217,9 @@ $( document ).ready( function()
                     url: 'crm/ajax/crm.app.php',
                     type: 'POST',
                     data:  { action: 'getOrder', data: { 'id': this.id } },
-                    success: function( data ){
+                    success: function( crmData ){
                         console.info( 'getOrder' );
-                        crmData = data;
-                        crmEditOrderDlg();
+                        crmEditOrderDlg( crmData );
                     },
                     error: function( xhr, status, error ){
                         $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'showCVPA().getOrder', xhr.responseText );
@@ -311,7 +309,7 @@ $( document ).ready( function()
     * Change list of Bundesland dependent
     * on Country code
     ***************************************/
-     function crmChangeBlandList( list, country ){
+     function crmChangeBlandList( crmData, list, country ){
         $( '#' + list ).html( '' );
         $( '#' + list ).append( '<option value=""></option>' );
         for( let bland of crmData.bundesland ){
@@ -320,27 +318,11 @@ $( document ).ready( function()
         }
     }
 
-    /***************************************
-    * Data model for CRM & LxCars
-    * dbUpdateData means insert and update
-    * operations in database
-    ***************************************/
-    var crmData = {};
-    var lxcarsData = {};
-    var dbUpdateData = {};
-
-    function crmClearData(){
-        crmData = {};
-        lxcarsData = {};
-        dbUpdateData = {};
-    }
-
-    function crmUpdateDB(){
-        //console.info( dbUpdateData );
+    function crmUpdateDB( call, dbUpdataData ){
         $.ajax({
             url: 'crm/ajax/crm.app.php',
             type: 'POST',
-            data:  { action: dbUpdateData.action, data: dbUpdateData.data },
+            data:  { action: call, data: dbUpdateData },
             success: function( data ){
                 console.info( 'crmUpdateDB' );
                 console.info( data );
@@ -364,9 +346,8 @@ $( document ).ready( function()
             type: 'POST',
             data:  { action: 'getCustomerForEdit', data: { 'src': src, 'id': id } },
             success: function( data ){
-                crmData = data;
-                crmEditCuVeDlg( new_car );
-                crmShowCuVeForEdit();
+                crmEditCuVeDlg( data, new_car );
+                crmShowCuVeForEdit( data );
                 if( fx ) fx( src, id );
             },
             error: function( xhr, status, error ){
@@ -378,7 +359,7 @@ $( document ).ready( function()
     /***************************************
     * Prepares dialog to edit CV
     ***************************************/
-     function crmShowCuVeForEdit(){
+     function crmShowCuVeForEdit( crmData ){
         $( '#billaddr-greetings' ).html( '' );
         $( '#billaddr-greetings' ).append( '<option value="">' + kivi.t8( "Salutation as below" ) + '</option>' );
         if( isIterable( crmData.greetings ) ){
@@ -505,7 +486,9 @@ $( document ).ready( function()
     /***************************************
     * Open dialog to edit CV
     ***************************************/
-     function crmEditCuVeDlg( new_with_car ){
+    var crmEditCuVeDlgAction;
+
+     function crmEditCuVeDlg( crmData, new_with_car ){
         crmInitFormEx( billaddrFormModel, '#billaddr-form', 0, '#crm-billaddr-cv' );
         crmInitFormEx( deladdrFormModel, '#deladdr-form' );
         crmInitFormEx( banktaxFormModel, '#banktax-form' );
@@ -528,12 +511,12 @@ $( document ).ready( function()
         }
 
         $( '#billaddr-country' ).change(function(){
-            crmChangeBlandList( 'billaddr-bland', $( '#billaddr-country' ).val() );
+            crmChangeBlandList( crmData, 'billaddr-bland', $( '#billaddr-country' ).val() );
         });
-        crmChangeBlandList( 'billaddr-bland', 'D' );
+        crmChangeBlandList( crmData, 'billaddr-bland', 'D' );
 
         $( '#deladdr-shiptocountry' ).change(function(){
-            crmChangeBlandList( 'deladdr-shiptobland', $( '#deladdr-shiptocountry' ).val() );
+            crmChangeBlandList( crmData, 'deladdr-shiptobland', $( '#deladdr-shiptocountry' ).val() );
         });
 
         $( '#crm-wx-customer-dialog' ).dialog({
@@ -546,60 +529,60 @@ $( document ).ready( function()
             position: { my: "top", at: "top+250" },
             open: function(){
                 $( this ).css( 'maxWidth', window.innerWidth );
-                dbUpdateData.action = 'updateCuWithNewCar';
-            },
-            close: function(){
-                crmClearData();
+                crmEditCuVeDlgAction = 'updateCuWithNewCar';
             },
             buttons:[{
                 text: kivi.t8( 'Save' ),
                 click: function(){
                     console.info( 'Save' );
-                    dbUpdateData.data = {};
+                    dbUpdateData = {};
                     let cvSrc = ( $( '#billaddr-src' ).val() == 'V' )? 'vendor' : 'customer';
-                    dbUpdateData.data[cvSrc] = {};
-                    dbUpdateData.data[cvSrc]['WHERE'] = {};
-                    dbUpdateData.data[cvSrc]['WHERE']['id'] = $( '#billaddr-id' ).val();
+                    dbUpdateData[cvSrc] = {};
+                    let billaddr_id = $( '#billaddr-id' ).val();
+                    if( '' !== billaddr_id  ){
+                        dbUpdateData[cvSrc]['WHERE'] = {};
+                        dbUpdateData[cvSrc]['WHERE']['id'] = $( '#billaddr-id' ).val();
+                    }
                     for( let item of billaddrFormModel){
                         let columnName = item.name.split( '-' );
                         if( columnName[1] !== "src" && columnName[1] !== "id" && columnName[1] !== "greetings" ){
                             let val = $( '#' + item.name ).val();
-                            if( exists(val) && val !== '' ) dbUpdateData.data[cvSrc][columnName[1]] = val;
+                            if( exists(val) && val !== '' ) dbUpdateData[cvSrc][columnName[1]] = val;
                         }
                     }
                     if( exists( $( '#deladdr-list' ).val() ) && $( '#deladdr-list' ).val() !== '' ){
-                        dbUpdateData.data['shipto'] = { 'shipto_id': $( '#deladdr-list' ).val() };
+                        dbUpdateData['shipto'] = { 'shipto_id': $( '#deladdr-list' ).val() };
                         for(let item of deladdrFormModel){
                             let columnName = item.name.split( '-' );
                             let val = $( '#' + item.name ).val();
-                            if( exists(val) && val !== '' ) dbUpdateData.data['shipto'][columnName[1]] = val;
+                            if( exists(val) && val !== '' ) dbUpdateData['shipto'][columnName[1]] = val;
                         }
                     }
                     for( let item of banktaxFormModel ){
                         let columnName = item.name.split( '-' );
                         let val = $( '#' + item.name ).val();
-                        if( exists(val) && val !== '' ) dbUpdateData.data[cvSrc][columnName[1]] = val;
+                        if( exists(val) && val !== '' ) dbUpdateData[cvSrc][columnName[1]] = val;
                     }
                     for( let item of extraFormModel ){
                         let columnName = item.name.split( '-' );
                         if( columnName[1] !== 'branches' ){
                             let val = $( '#' + item.name ).val();
-                            if( exists(val) && val !== '' ) dbUpdateData.data[cvSrc][columnName[1]] = val;
+                            if( exists(val) && val !== '' ) dbUpdateData[cvSrc][columnName[1]] = val;
                         }
                     }
                     if( $( '#car-form' ).is(':visible' ) ){
-                        dbUpdateData.data['lxc_cars'] = {};
+                        dbUpdateData['lxc_cars'] = {};
                         for(let item of carFormModel){
                             if( !item.name.startsWith( 'kba' ) ){
                                 let columnName = item.name.split( '-' );
                                 let val = $( '#' + item.name ).val();
-                                if( exists(val) && val !== '' ) dbUpdateData.data['lxc_cars'][columnName[1]] = val;
+                                if( exists(val) && val !== '' ) dbUpdateData['lxc_cars'][columnName[1]] = val;
                             }
                         }
                     }
                     console.info( 'dbUpdateData' );
                     console.info( dbUpdateData );
-                    crmUpdateDB();
+                    crmUpdateDB( crmEditCuVeDlgAction, dbUpdateData );
                     $( this ).dialog( "close" );
                 }
             },
@@ -648,136 +631,136 @@ $( document ).ready( function()
     * inklusive fast search,
     * it is possible to add a new customer
     ***************************************/
-     function crmNewCarFromScan(){
-     let fsmax = 24; // only for show
+    var lxcarsData = {};
+
+    function crmNewCarFromScan(){
+        let fsmax = 24; // only for show
         //new car or new car and new customer
-      $.ajax({
-          url: 'crm/ajax/crm.app.php',
-          data: { action: 'getScans', data:{ 'fsmax': fsmax } },
-          type: "POST",
-          success: function( data ){
-            $( '#crm-fsscan-dlg' ).dialog({
-                autoOpen: false,
-                resizable: true,
-                width: 'auto',
-                height: 'auto',
-                modal: true,
-                title: kivi.t8( 'FS-Scan' ),
-                position: { my: "top", at: "top+250" },
-                open: function(){
-                    $( this ).css( 'maxWidth', window.innerWidth );
-                },
-                buttons:[{
-                    text: kivi.t8( 'Close' ),
-                    click: function(){
-                        $( this ).dialog( "close" );
-                    }
-                }]
-            }).dialog( 'open' ).resize();
+        $.ajax({
+            url: 'crm/ajax/crm.app.php',
+            data: { action: 'getScans', data:{ 'fsmax': fsmax } },
+            type: "POST",
+            success: function( crmData ){
+              $( '#crm-fsscan-dlg' ).dialog({
+                  autoOpen: false,
+                  resizable: true,
+                  width: 'auto',
+                  height: 'auto',
+                  modal: true,
+                  title: kivi.t8( 'FS-Scan' ),
+                  position: { my: "top", at: "top+250" },
+                  open: function(){
+                      $( this ).css( 'maxWidth', window.innerWidth );
+                  },
+                  buttons:[{
+                      text: kivi.t8( 'Close' ),
+                      click: function(){
+                          $( this ).dialog( "close" );
+                      }
+                  }]
+              }).dialog( 'open' ).resize();
 
-            var tableContent = '';
-            let listrow0 = false;
-            console.info( 'FromScan' );
-            console.info( data );
-            crmData = data;
-            if( isIterable( data.db_scans ) ){
-                data.db_scans.forEach( function( item ){
-                    tableContent += '<tr class="' + ( ( listrow0 =! listrow0 ) ? "listrow0": "listrow1" ) + '" id="' + item.scan_id + '"><td style="text-align: right; padding-right: 15px;">' + item.myts + '</td><td>' + item.firstname + '</td><td>' + item.name1 + '</td><td>' + item.registrationnumber + '</td>';
-                });
-            }
-            $( '#crm-fsscan-list' ).empty().append( tableContent );
-            $( '#crm-fsscan-list tr' ).click( function(){
-                $.ajax({
-                    url: 'crm/ajax/crm.app.php',
-                    data: { action: 'getFsData', data:{ 'id': this.id  } },
-                    type: "POST",
-                    success: function( data ){
-                        lxcarsData = data;
-                        $( '#crm-fsscan-dlg' ).dialog( 'close' );
-                        $( '#crm-fsscan-customer-dlg' ).dialog({
-                            autoOpen: false,
-                            resizable: true,
-                            width: 'auto',
-                            height: '600',
-                            modal: true,
-                            title: kivi.t8( 'Select customer' ),
-                            position: { my: "top", at: "top+250" },
-                            open: function(){
-                                $( this ).css( 'maxWidth', window.innerWidth );
-                            },
-                            buttons:[{
-                                /* Add new customer from car scan data */
-                                text: kivi.t8( 'New' ),
-                                click: function(){
-                                        $.ajax({
-                                            url: 'crm/ajax/crm.app.php',
-                                            type: 'POST',
-                                            data:  { action: 'getCVDialogData' },
-                                            success: function( data ){
-                                                 //console.info('New');
-                                                //console.info(lxcarsData);
-                                                crmData = data;
-                                                $( '#crm-fsscan-customer-dlg' ).dialog( "close" );
-                                                crmEditCuVeDlg( true );
-                                                crmShowCuVeForEdit();
-                                                $( '#billaddr-name' ).val( $( '#crm-fsscan-edit-customer' ).val() );
-                                                $( '#billaddr-street' ).val( lxcarsData.address1 );
-                                                const city = ( isEmpty( lxcarsData.adress2 ) )? 0 : lxcarsData.address2.split(' ');
-                                                if( isIterable( city ) && city.length > 1 ){
-                                                    if(!isNaN( city[0] ) ){
-                                                        $( '#billaddr-zipcode' ).val( city[0] );
-                                                    }else{
-                                                        $( '#billaddr-city' ).val( city[0] );
-                                                    }
-                                                    for( let i = 1; i < city.length; i++ ){
-                                                        $( '#billaddr-city' ).val( $( '#billaddr-city' ).val() + city[i] );
-                                                    }
-                                                }else{
-                                                    $( '#billaddr-city' ).val( lxcarsData.address2 );
-                                                }
-                                                $( '#car-c_ln' ).val( crmFormatCarLicense( lxcarsData.registrationNumber ) );
-                                                $( '#car-c_2' ).val( lxcarsData.hsn );
-                                                $( '#car-c_3' ).val( lxcarsData.field_2_2 );
-                                                $( '#car-c_em' ).val( lxcarsData.field_14_1 );
-                                                $( '#car-c_d' ).val( lxcarsData.ez );
-                                                //Wird nicht benötigt, da Datum invalide
-                                                //$( '#car-c_hu' ).val( lxcarsData.hu );
-                                                $( '#car-c_fin' ).val( lxcarsData.vin );
-                                                $( '#car-c_finchk' ).val( lxcarsData.field_3 );
-                                                dbUpdateData.action = 'insertNewCuWithCar';
-                                            },
-                                            error: function( xhr, status, error ){
-                                                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'lxcars()', xhr.responseText );
-                                            }
-                                        });
-                                    }
-                                },{
-                                text: kivi.t8( 'Close' ),
-                                click: function(){
-                                        $( this ).dialog( "close" );
-                                }
-                            }]
-                        }).dialog( 'open' ).resize();
+              var tableContent = '';
+              let listrow0 = false;
+              console.info( 'FromScan' );
+              console.info( crmData );
+              if( isIterable( crmData.db_scans ) ){
+                  crmData.db_scans.forEach( function( item ){
+                      tableContent += '<tr class="' + ( ( listrow0 =! listrow0 ) ? "listrow0": "listrow1" ) + '" id="' + item.scan_id + '"><td style="text-align: right; padding-right: 15px;">' + item.myts + '</td><td>' + item.firstname + '</td><td>' + item.name1 + '</td><td>' + item.registrationnumber + '</td>';
+                  });
+              }
+              $( '#crm-fsscan-list' ).empty().append( tableContent );
+              $( '#crm-fsscan-list tr' ).click( function(){
+                  $.ajax({
+                      url: 'crm/ajax/crm.app.php',
+                      data: { action: 'getFsData', data:{ 'id': this.id  } },
+                      type: "POST",
+                      success: function( data ){
+                          lxcarsData = data;
+                          $( '#crm-fsscan-dlg' ).dialog( 'close' );
+                          $( '#crm-fsscan-customer-dlg' ).dialog({
+                              autoOpen: false,
+                              resizable: true,
+                              width: 'auto',
+                              height: '600',
+                              modal: true,
+                              title: kivi.t8( 'Select customer' ),
+                              position: { my: "top", at: "top+250" },
+                              open: function(){
+                                  $( this ).css( 'maxWidth', window.innerWidth );
+                              },
+                              buttons:[{
+                                  /* Add new customer from car scan data */
+                                  text: kivi.t8( 'New' ),
+                                  click: function(){
+                                          $.ajax({
+                                              url: 'crm/ajax/crm.app.php',
+                                              type: 'POST',
+                                              data:  { action: 'getCVDialogData' },
+                                              success: function( crmData ){
+                                                   //console.info('New');
+                                                  //console.info(lxcarsData);
+                                                  $( '#crm-fsscan-customer-dlg' ).dialog( "close" );
+                                                  crmEditCuVeDlg( crmData, true );
+                                                  crmShowCuVeForEdit( crmData );
+                                                  $( '#billaddr-name' ).val( $( '#crm-fsscan-edit-customer' ).val() );
+                                                  $( '#billaddr-street' ).val( lxcarsData.address1 );
+                                                  const city = ( isEmpty( lxcarsData.adress2 ) )? 0 : lxcarsData.address2.split(' ');
+                                                  if( isIterable( city ) && city.length > 1 ){
+                                                      if(!isNaN( city[0] ) ){
+                                                          $( '#billaddr-zipcode' ).val( city[0] );
+                                                      }else{
+                                                          $( '#billaddr-city' ).val( city[0] );
+                                                      }
+                                                      for( let i = 1; i < city.length; i++ ){
+                                                          $( '#billaddr-city' ).val( $( '#billaddr-city' ).val() + city[i] );
+                                                      }
+                                                  }else{
+                                                      $( '#billaddr-city' ).val( lxcarsData.address2 );
+                                                  }
+                                                  $( '#car-c_ln' ).val( crmFormatCarLicense( lxcarsData.registrationNumber ) );
+                                                  $( '#car-c_2' ).val( lxcarsData.hsn );
+                                                  $( '#car-c_3' ).val( lxcarsData.field_2_2 );
+                                                  $( '#car-c_em' ).val( lxcarsData.field_14_1 );
+                                                  $( '#car-c_d' ).val( lxcarsData.ez );
+                                                  //Wird nicht benötigt, da Datum invalide
+                                                  //$( '#car-c_hu' ).val( lxcarsData.hu );
+                                                  $( '#car-c_fin' ).val( lxcarsData.vin );
+                                                  $( '#car-c_finchk' ).val( lxcarsData.field_3 );
+                                                  crmEditCuVeDlgAction = 'insertNewCuWithCar';
+                                              },
+                                              error: function( xhr, status, error ){
+                                                  $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'lxcars()', xhr.responseText );
+                                              }
+                                          });
+                                      }
+                                  },{
+                                  text: kivi.t8( 'Close' ),
+                                  click: function(){
+                                          $( this ).dialog( "close" );
+                                  }
+                              }]
+                          }).dialog( 'open' ).resize();
 
-                        $( '#crm-fsscan-edit-customer' ).val( crmFormatName( data.firstname + ' ' + data.name1 ) );
+                          $( '#crm-fsscan-edit-customer' ).val( crmFormatName( data.firstname + ' ' + data.name1 ) );
 
-                        crmSearchCustomerForScan( crmFormatName( data.firstname + ' ' + data.name1 ) );
+                          crmSearchCustomerForScan( crmFormatName( data.firstname + ' ' + data.name1 ) );
 
-                       $( '#crm-fsscan-edit-customer' ).keyup( function(){
-                            crmSearchCustomerForScan( $( '#crm-fsscan-edit-customer' ).val() );
-                        });
+                         $( '#crm-fsscan-edit-customer' ).keyup( function(){
+                              crmSearchCustomerForScan( $( '#crm-fsscan-edit-customer' ).val() );
+                          });
 
-                    },
-                    error: function( xhr, status, error ){
-                        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmNewCarFromScan().getFsData', xhr.responseText );
-                    }
+                      },
+                      error: function( xhr, status, error ){
+                          $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmNewCarFromScan().getFsData', xhr.responseText );
+                      }
+                  })
                 })
-              })
-          },
-          error: function( xhr, status, error ){
-              $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmNewCarFromScan().getScans', xhr.responseText );
-          }
-      })
+            },
+            error: function( xhr, status, error ){
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmNewCarFromScan().getScans', xhr.responseText );
+            }
+        })
     }
 
     /***************************************
@@ -822,7 +805,7 @@ $( document ).ready( function()
         });
     }
 
-     function crmEditCarDlg(){
+    function crmEditCarDlg( crmData ){
         crmInitFormEx( editCarFormModel, '#edit-car-form', 21, '#edit-car-hidden' );
         for( let item of editCarFormModel){
             let columnName = item.name.split( '-' );
@@ -843,33 +826,29 @@ $( document ).ready( function()
             position: { my: "top", at: "top+250" },
             open: function(){
                 $( this ).css( 'maxWidth', window.innerWidth );
-                dbUpdateData.action = 'genericUpdate';
-            },
-            close: function(){
-                crmClearData();
             },
             buttons:[{
                 text: kivi.t8( 'Save' ),
                 click: function(){
                     console.info( 'Save car' );
-                    dbUpdateData.data = {};
-                    dbUpdateData.data['lxc_cars'] = {};
-                    dbUpdateData.data['lxc_cars']['WHERE'] = {};
-                    dbUpdateData.data['lxc_cars']['WHERE']['c_id'] = $( '#edit_car-c_id' ).val();
+                    dbUpdateData = {};
+                    dbUpdateData['lxc_cars'] = {};
+                    dbUpdateData['lxc_cars']['WHERE'] = {};
+                    dbUpdateData['lxc_cars']['WHERE']['c_id'] = $( '#edit_car-c_id' ).val();
                     for( let item of editCarFormModel ){
                         let columnName = item.name.split( '-' );
                         let val = $( '#' + item.name ).val();
                         if( exists(val) && val !== '' ){
-                            if( item.name !== 'edit_car-c_id' ) dbUpdateData.data['lxc_cars'][columnName[1]] = val;
+                            if( item.name !== 'edit_car-c_id' ) dbUpdateData['lxc_cars'][columnName[1]] = val;
                         }
                         if( item.check ){
                             val = $( '#' + item.name ).val();
                             columnName = item.check.split( '-' );
-                            if( exists(val) && val !== '' ) dbUpdateData.data['lxc_cars'][columnName[1]] = $( '#' + item.check ).prop( 'checked' );
+                            if( exists(val) && val !== '' ) dbUpdateData['lxc_cars'][columnName[1]] = $( '#' + item.check ).prop( 'checked' );
                         }
                     }
                     console.info( dbUpdateData );
-                    crmUpdateDB();
+                    crmUpdateDB('genericUpdate', dbUpdateData );
                     $( this ).dialog( "close" );
                 }
             },
@@ -882,57 +861,92 @@ $( document ).ready( function()
         }).dialog( 'open' ).resize();
     }
 
-    var crmOrderItemCount = 0;
+    /*****************************************************
+    *
+    * @var crmOrderItemLists - contains the list of worker and units
+    *****************************************************/
+    var crmOrderItemLists;
 
-     function crmAddOrderItem( dataRow ){
-         crmOrderItemCount++;
-         let tableRow;
-         tableRow += '<tr><td>' + (( exists( dataRow.position ) )? dataRow.position : crmOrderItemCount )  + '</td>' +
-                     '<td><img src="image/updown.png" alt="umsortieren"></td>' +
-                     '<td><img src="image/close.png" alt="löschen"></td>' +
-                     '<td><button>Edit</button></td>' +
-                     '<td>' + ( ( exists( dataRow.partnumber ) )? dataRow.partnumber : '') + '</td>' +
-                     '<td>' + ( ( dataRow.instruction )? 'A' : 'W' )  + '</td>' +
-                     '<td><input id="od-item-description' + crmOrderItemCount + '" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '"></input></td>' +
-                     '<td><input type="text" size="40" value="' + ( ( exists( dataRow.longdescription ) )? dataRow.longdescription : '' )  + '"></input>' +
-                     '</td><td><input type="text" size="5" value="' + ( ( exists( dataRow.qty ) )? dataRow.qty : '' ) + '"></input></td>';
+    function crmCalcOrderPos(){
+        $( '#edit-order-table > tbody > tr').each( function( key, pos ){
+            $( pos ).find( '[class=od-item-pos]' )[0].innerText = key + 1;
+            if( !isEmpty( $( pos ).find( '[class=od-item-partnumber]' ).text() ) ){
+                $( $( pos ).find( '[class=od-item-edit-btn]' )[0] ).html('<button>Edit</button>');
+            }
+       });
+    }
 
-         tableRow += '<td><select type="select">'; //+ dataRow.unit
-         for( let unit of crmData.order.units ){
-             tableRow += '<option value="' + unit.name  + '"';
-             if(dataRow.unit === unit.name) tableRow += ' selected'
-             tableRow += '>' + unit.name + '</option>';
-         }
-         tableRow += '</select></td>';
+    function crmAddOrderItem( dataRow ){
+        let tableRow;
+        tableRow += '<tr ' + ( ( exists( dataRow.id ) )? ('id="' + dataRow.id + '"') : 'class="od-item-pin"') + '><td class="od-item-pos"></td>' +
+                    '<td><img src="image/updown.png" alt="umsortieren"></td>' +
+                    '<td><img class="od-item-del" src="image/close.png" alt="löschen"></td>' +
+                    '<td class="od-item-edit-btn"></td>' +
+                    '<td class="od-item-partnumber">' + ( ( exists( dataRow.partnumber ) )? dataRow.partnumber : '' ) + '</td>' +
+                    '<td>' + ( ( dataRow.instruction )? 'A' : 'W' )  + '</td>' +
+                    '<td><input class="od-item-description" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '"></input></td>' +
+                    '<td><input type="text" size="40" value="' + ( ( exists( dataRow.longdescription ) )? dataRow.longdescription : '' )  + '"></input>' +
+                    '</td><td><input type="text" size="5" value="' + ( ( exists( dataRow.qty ) )? dataRow.qty : '' ) + '"></input></td>';
 
-         tableRow += '<td>' + ( ( exists( dataRow.sellprice ) )? dataRow.sellprice : '' ) + '</td>' +
-                     '<td>' + ( ( exists( dataRow.discount ) )? dataRow.discount : '' ) + '</td><td>100%</td>' +
-                     '<td>' + ( ( exists( dataRow.marge_total ) )? dataRow.marge_total : '' ) + '</td>';
+        tableRow += '<td><select type="select">'; //+ dataRow.unit
+        for( let unit of crmOrderItemLists.units ){
+            tableRow += '<option value="' + unit.name  + '"';
+            if(dataRow.unit === unit.name) tableRow += ' selected'
+            tableRow += '>' + unit.name + '</option>';
+        }
+        tableRow += '</select></td>';
 
-         tableRow += '<td><select type="select">';
-         tableRow += '<option value=""></option>';
-         for( let worker of crmData.workers ){
-             tableRow += '<option value="' + worker.name  + '"';
-             if(dataRow.u_id === worker.name) tableRow += ' selected'
-             tableRow += '>' + worker.name + '</option>';
-         }
-         tableRow += '</select></td>';
+        tableRow += '<td>' + ( ( exists( dataRow.sellprice ) )? dataRow.sellprice : '' ) + '</td>' +
+                    '<td>' + ( ( exists( dataRow.discount ) )? dataRow.discount : '' ) + '</td><td>100%</td>' +
+                    '<td>' + ( ( exists( dataRow.marge_total ) )? dataRow.marge_total : '' ) + '</td>';
 
-         tableRow += '<td>' + ( ( exists( dataRow.status ) )? dataRow.status : '' ) + '</td></tr>';
-         $( '#edit-order-table > tbody' ).append(tableRow);
-         $( '#od-item-description' + crmOrderItemCount ).change( function(){
-            crmAddOrderItem( { } );
+        tableRow += '<td><select type="select">';
+        tableRow += '<option value=""></option>';
+        for( let worker of crmOrderItemLists.workers ){
+            tableRow += '<option value="' + worker.name  + '"';
+            if(dataRow.u_id === worker.name) tableRow += ' selected'
+            tableRow += '>' + worker.name + '</option>';
+        }
+        tableRow += '</select></td>';
+
+        tableRow += '<td>' + ( ( exists( dataRow.status ) )? dataRow.status : '' ) + '</td></tr>';
+        $( '#edit-order-table > tbody' ).append(tableRow);
+
+        $( '.od-item-description' ).catcomplete({
+            source: "crm/ajax/crm.app.php?action=findPart",
+            select: function( e, ui ){
+                $( ':focus' ).parent().parent().find( '[class=od-item-partnumber]' ).text( ui.item.partnumber );
+                //Bug or feature, can't do otherwise:
+                $( ':focus' ).parent().parent()[0].className = "";
+
+                const list = $( '.od-item-description' );
+                if( list[list.length - 1].value !== '' ){
+                    crmAddOrderItem( { } );
+                }
+                crmCalcOrderPos();
+            }
         });
-     }
 
-     function crmEditOrderDlg(){
+        crmCalcOrderPos();
+    }
+
+    function crmEditOrderDlg( crmData ){
         console.info( 'Edit order' );
         console.info( crmData );
+        crmOrderItemLists = { };
+        crmOrderItemLists['units'] = crmData.order.units;
+        crmOrderItemLists['workers'] = crmData.workers;
         $( '#edit-order-table > tbody' ).html( '' );
         for( let dataRow of crmData.order.orderitems ){
            crmAddOrderItem( dataRow );
         }
         crmAddOrderItem( { } );
+        $( '#edit-order-table > tbody' ).sortable({
+            cancel: '.od-item-pin, .od-item-del, input, select, button',
+            update: function(){
+                crmCalcOrderPos();
+            }
+        });
 
         $( '#od-customer_name' ).html( crmData.order.common.customer_name );
         $( '#od-ordnumber' ).html( crmData.order.common.ordnumber );
@@ -958,17 +972,11 @@ $( document ).ready( function()
             position: { my: "top", at: "top+250" },
             open: function(){
                 $( this ).css( 'maxWidth', window.innerWidth );
-                dbUpdateData.action = 'updateOrder';
-            },
-            close: function(){
-                crmClearData();
             },
             buttons:[{
                 text: kivi.t8( 'Save' ),
                 click: function(){
                     console.info( 'Save order' );
-                    dbUpdateData.data = {};
-                    console.info( dbUpdateData );
                     $( this ).dialog( "close" );
                 }
             },
@@ -1000,4 +1008,79 @@ $( document ).ready( function()
     $( '#crm-wf-bill' ).click( function() {
         alert( "Rechnung erstellen!" );
     });
+
+
+    $( '#tel1_dialog_button, #tel2_dialog_button' ).click( function( data ){
+        data.stopImmediatePropagation();
+        //alert( "ClickToCall Dialog");
+        var dialog_id = this.id.replace( '_button', '' );
+        //console.info( dialog_id );
+        $( '#' + dialog_id ).dialog({
+            modal: true,
+            title: kivi.t8('Dialog for ' + dialog_id.replace( '_dialog', '' ) ),//kivi.t8( 'Phone Dialog'), //ToDo
+            width: 'auto',
+            resizable: false,
+            open: function( event, ui ){
+                $.ajax({
+                    url: 'ajax/clickToCall.php?action=getPhones',
+                    type: 'GET',
+                    success: function ( data ){
+                        var external_contexts_array = data['external_contexts'].split( ',');
+                        var internal_phones_array = data['internal_phones'].split( ',');
+                        var selected_context = typeof data['user_external_context'] !== 'undefined' ?  data['user_external_context'] : '';
+                        var selected_phone = typeof data['user_internal_phone'] !== 'undefined' ?  data['user_internal_phone'] : '';
+                        var selected = '';
+                        var dynamic_html = '<table><tr><td>' + kivi.t8( 'External Context:' ) + '</td><td> <select id="user_external_context"  style="width:100%;">';
+                        $.each( external_contexts_array, function( key, value ){
+                            selected = value == selected_context ? 'selected' : '';
+                            dynamic_html +=  '<option value="' + value + '"' + selected + '>' + value + '</option>'
+                        })
+                        dynamic_html += '</select></td></tr>';
+                        dynamic_html += '<tr><td>' + kivi.t8( 'Internal Phone:' ) + '</td><td> <select id="user_internal_phone"  style="width:100%;">';
+                        $.each( internal_phones_array, function( key, value ){
+                            selected = value == selected_phone ? 'selected' : '';
+                            dynamic_html +=  '<option value="' + value + '"' + selected + '>' + value + '</option>'
+                        })
+                        dynamic_html += '</select></td></tr></table>';
+                        $( '#' + dialog_id ).html( dynamic_html );
+                        //console.info(  dynamic_html );
+                        $( '#user_external_context, #user_internal_phone' ).change( function( data ){
+                            var dataObj = {};
+                            dataObj[this.id] = $(this).val();
+                            $.ajax({
+                                url: 'ajax/clickToCall.php',
+                                type: 'POST',
+                                data: { action: 'saveClickToCall', data: dataObj },
+                                success: function ( data ) {
+                                    //if( data ) alert( );
+                                },
+                                error: function () {
+                                    alert( 'Error: saveClickToCall!' );
+                                }
+                            });
+
+                        })
+                        //console.info( dialog_id );
+                    },
+                    error: function (){
+                        alert( 'Error: ajax/clickToCall.php?action=getPhones' );
+                    }
+                })
+            },
+            buttons: [{
+                text: kivi.t8( 'cancel' ),
+                click: function(){
+                    $( this ).dialog( "close" );
+                }
+            },{
+                text: kivi.t8( 'call' ),
+                click: function(){
+                    $( '#' + dialog_id.replace( '_dialog', '' ) ).click();
+                    $( this ).dialog( "close" );
+                }
+            }],
+
+        })
+    }).button();
+
 });

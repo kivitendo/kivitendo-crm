@@ -873,7 +873,20 @@ $( document ).ready( function()
             if( !isEmpty( $( pos ).find( '[class=od-item-partnumber]' ).text() ) ){
                 $( $( pos ).find( '[class=od-item-edit-btn]' )[0] ).html('<button>Edit</button>');
             }
+            crmCalcOrderPrice( pos );
        });
+    }
+
+    function crmCalcOrderPrice( pos ){
+        let qty = kivi.parse_amount( $( pos ).find( '[class=od-item-qty]' )[0].value );
+        if( isNaN( qty ) ) qty = 0;
+        let sellprice = kivi.parse_amount( $( pos ).find( '[class=od-item-sellprice]' )[0].value );
+        if( isNaN( sellprice ) ) sellprice = 0;
+        let discount = kivi.parse_amount( $( pos ).find( '[class=od-item-discount]' )[0].value );
+        if( isNaN( discount ) ) discount = 0;
+        let marge_total = qty * sellprice;
+        if( discount > 0 ) marge_total *= ( discount / 100 );
+        $( pos ).find( '[class=od-item-marge_total]' )[0].value = kivi.format_amount( marge_total, 2 );
     }
 
     function crmAddOrderItem( dataRow ){
@@ -883,22 +896,21 @@ $( document ).ready( function()
                     '<td><img class="od-item-del" src="image/close.png" alt="löschen"></td>' +
                     '<td class="od-item-edit-btn"></td>' +
                     '<td class="od-item-partnumber">' + ( ( exists( dataRow.partnumber ) )? dataRow.partnumber : '' ) + '</td>' +
-                    '<td>' + ( ( dataRow.instruction )? 'A' : 'W' )  + '</td>' +
+                    '<td>';
+        if( dataRow.instruction ) tableRow += 'A';
+        else if( 'part' === dataRow.part_type ) tableRow += 'W';
+        else if( 'service' === dataRow.part_type ) tableRow += 'D';
+        tableRow += '</td>' +
                     '<td><input class="od-item-description" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '"></input></td>' +
                     '<td><input type="text" size="40" value="' + ( ( exists( dataRow.longdescription ) )? dataRow.longdescription : '' )  + '"></input>' +
-                    '</td><td><input type="text" size="5" value="' + ( ( exists( dataRow.qty ) )? dataRow.qty : '' ) + '"></input></td>';
+                    '</td><td><input class="od-item-qty" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.qty ) )? dataRow.qty : '0' ) + '"></input></td>';
 
-        tableRow += '<td><select type="select">'; //+ dataRow.unit
-        for( let unit of crmOrderItemLists.units ){
-            tableRow += '<option value="' + unit.name  + '"';
-            if(dataRow.unit === unit.name) tableRow += ' selected'
-            tableRow += '>' + unit.name + '</option>';
-        }
-        tableRow += '</select></td>';
+        // Unit is readonly now:
+        tableRow += '<td><input class="od-item-unit" type="text" size="5" readonly="readonly" value="' + ( ( exists( dataRow.unit ) )? dataRow.unit : '' ) + '"></input></td>';
 
-        tableRow += '<td>' + ( ( exists( dataRow.sellprice ) )? dataRow.sellprice : '' ) + '</td>' +
-                    '<td>' + ( ( exists( dataRow.discount ) )? dataRow.discount : '' ) + '</td><td>100%</td>' +
-                    '<td>' + ( ( exists( dataRow.marge_total ) )? dataRow.marge_total : '' ) + '</td>';
+        tableRow += '<td><input class="od-item-sellprice" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.sellprice ) )? dataRow.sellprice : '0', 2 ) + '"></input></td>' +
+                    '<td><input class="od-item-discount" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.discount ) )? dataRow.discount : '0' ) + '"></input></td><td><button>100%</button></td>' +
+                    '<td><input class="od-item-marge_total" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.marge_total ) )? dataRow.marge_total : '0', 2 ) + '"></input></td>';
 
         tableRow += '<td><select type="select">';
         tableRow += '<option value=""></option>';
@@ -909,13 +921,27 @@ $( document ).ready( function()
         }
         tableRow += '</select></td>';
 
-        tableRow += '<td>' + ( ( exists( dataRow.status ) )? dataRow.status : '' ) + '</td></tr>';
+        //tableRow += '<td>' + ( ( exists( dataRow.status ) )? dataRow.status : '' ) + '</td></tr>';
+        const statusList = [ 'gelesen', 'Bearbeitung', 'erledigt' ];
+        tableRow += '<td><select type="select">';
+        for( let status of statusList ){
+            tableRow += '<option value="' + status  + '"';
+            if(dataRow.status === status) tableRow += ' selected'
+            tableRow += '>' + status  + '</option>';
+        }
+        tableRow += '</select></td>';
+
+
+
         $( '#edit-order-table > tbody' ).append(tableRow);
 
         $( '.od-item-description' ).catcomplete({
             source: "crm/ajax/crm.app.php?action=findPart",
             select: function( e, ui ){
                 $( ':focus' ).parent().parent().find( '[class=od-item-partnumber]' ).text( ui.item.partnumber );
+                $( ':focus' ).parent().parent().find( '[class=od-item-qty]' ).val( ui.item.qty );
+                $( ':focus' ).parent().parent().find( '[class=od-item-unit]' ).val( ui.item.unit );
+                $( ':focus' ).parent().parent().find( '[class=od-item-sellprice]' ).val( ui.item.sellprice );
                 //Bug or feature, can't do otherwise:
                 $( ':focus' ).parent().parent()[0].className = "";
 
@@ -947,6 +973,8 @@ $( document ).ready( function()
                 crmCalcOrderPos();
             }
         });
+
+        //$( '.od-item-editable' ).
 
         $( '#od-customer_name' ).html( crmData.order.common.customer_name );
         $( '#od-ordnumber' ).html( crmData.order.common.ordnumber );

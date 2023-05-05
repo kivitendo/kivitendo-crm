@@ -869,9 +869,9 @@ $( document ).ready( function()
 
     function crmCalcOrderPos(){
         $( '#edit-order-table > tbody > tr').each( function( key, pos ){
-            $( pos ).find( '[class=od-item-pos]' )[0].innerText = key + 1;
+            $( pos ).find( '[class=od-item-position]' )[0].innerText = key + 1;
             if( !isEmpty( $( pos ).find( '[class=od-item-partnumber]' ).text() ) ){
-                $( $( pos ).find( '[class=od-item-edit-btn]' )[0] ).html('<button>Edit</button>');
+                $( $( pos ).find( '[class=od-ui-edit-btn]' )[0] ).html('<button>Edit</button>');
             }
             crmCalcOrderPrice( pos );
        });
@@ -885,24 +885,27 @@ $( document ).ready( function()
         let discount = kivi.parse_amount( $( pos ).find( '[class=od-item-discount]' )[0].value );
         if( isNaN( discount ) ) discount = 0;
         let marge_total = qty * sellprice;
-        if( discount > 0 ) marge_total *= ( discount / 100 );
+        if( discount > 0 ){
+            discount  = marge_total * ( discount / 100 );
+            marge_total -= discount; 
+        }
         $( pos ).find( '[class=od-item-marge_total]' )[0].value = kivi.format_amount( marge_total, 2 );
     }
 
     function crmAddOrderItem( dataRow ){
         let tableRow;
-        tableRow += '<tr ' + ( ( exists( dataRow.id ) )? ('id="' + dataRow.id + '"') : 'class="od-item-pin"') + '><td class="od-item-pos"></td>' +
+        tableRow += '<tr ' + ( ( exists( dataRow.id ) )? ('id="' + dataRow.id + '"') : 'class="od-item-pin"') + '><td class="od-item-position"></td>' +
                     '<td><img src="image/updown.png" alt="umsortieren"></td>' +
-                    '<td><img class="od-item-del" src="image/close.png" alt="löschen"></td>' +
-                    '<td class="od-item-edit-btn"></td>' +
+                    '<td><img class="od-ui-del" src="image/close.png" alt="löschen"></td>' +
+                    '<td class="od-ui-edit-btn"></td>' +
                     '<td class="od-item-partnumber">' + ( ( exists( dataRow.partnumber ) )? dataRow.partnumber : '' ) + '</td>' +
-                    '<td>';
+                    '<td class="od-item-type">';
         if( dataRow.instruction ) tableRow += 'A';
         else if( 'part' === dataRow.part_type ) tableRow += 'W';
         else if( 'service' === dataRow.part_type ) tableRow += 'D';
         tableRow += '</td>' +
                     '<td><input class="od-item-description" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '"></input></td>' +
-                    '<td><input type="text" size="40" value="' + ( ( exists( dataRow.longdescription ) )? dataRow.longdescription : '' )  + '"></input>' +
+                    '<td><input class="od-item-longdescription" type="text" size="40" value="' + ( ( exists( dataRow.longdescription ) )? dataRow.longdescription : '' )  + '"></input>' +
                     '</td><td><input class="od-item-qty" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.qty ) )? dataRow.qty : '0' ) + '"></input></td>';
 
         // Unit is readonly now:
@@ -956,6 +959,39 @@ $( document ).ready( function()
         crmCalcOrderPos();
     }
 
+    function crmSaveOrder(){
+        let dbUpdateData = { }
+        dbUpdateData['oe'] = { };
+        dbUpdateData['orderitems'] = [];
+        dbUpdateData['instructions'] = { };
+
+        $( '#edit-order-table > tbody > tr').each( function( key, pos ){
+            //console.info( $( pos ).find( '[class^=od-item]' ) );
+            let itemType;
+            let dataRow = { };
+            $( pos ).find( '[class^=od-item]' ).each( function( i, item ){
+                //console.info( item );
+                let columnName = item.className.split( ' ' )[0].split( '-' )[2];
+                //console.info( columnName );
+                if( 'type' === columnName) itemType = item.innerText;
+                else if( exists( item.value ) ) dataRow[columnName] = item.value;
+                else if( exists( item.innerText ) ) dataRow[columnName] = item.innerText;
+            });
+            console.info( itemType );
+            dataRow.qty = kivi.parse_amount( dataRow.qty );
+            dataRow.sellprice = kivi.parse_amount( dataRow.sellprice );
+            dataRow.discount = kivi.parse_amount( dataRow.discount );
+            dataRow.marge_total = kivi.parse_amount( dataRow.marge_total );
+            //console.info( dataRow );
+            //console.info( pos.id );
+            if( exists( pos.id ) ){
+                //hidden field verwenden und 
+                if( 'W' === itemType  ) dbUpdateData['orderitems'].push( dataRow );
+            }
+        });
+        console.info( dbUpdateData );
+     }
+
     function crmEditOrderDlg( crmData ){
         console.info( 'Edit order' );
         console.info( crmData );
@@ -968,7 +1004,7 @@ $( document ).ready( function()
         }
         crmAddOrderItem( { } );
         $( '#edit-order-table > tbody' ).sortable({
-            cancel: '.od-item-pin, .od-item-del, input, select, button',
+            cancel: '.od-item-pin, .od-ui-del, input, select, button',
             update: function(){
                 crmCalcOrderPos();
             }
@@ -1005,7 +1041,8 @@ $( document ).ready( function()
                 text: kivi.t8( 'Save' ),
                 click: function(){
                     console.info( 'Save order' );
-                    $( this ).dialog( "close" );
+                    crmSaveOrder();
+                    //$( this ).dialog( "close" );
                 }
             },
             {

@@ -254,7 +254,7 @@ $( document ).ready( function()
 
     /********************************************************
     * @param crmFormModel - form data (id's, ...)
-    * @param table - id for HTML Table element
+    * @param table - id for HTML Table element (use tbody element)
     * @param max_rows - two columns, if greater then 0, defines max rows of the first column
     * @param container - the HTML div element id, which contains the hidden input fields
     *
@@ -887,7 +887,7 @@ $( document ).ready( function()
         let marge_total = qty * sellprice;
         if( discount > 0 ){
             discount  = marge_total * ( discount / 100 );
-            marge_total -= discount; 
+            marge_total -= discount;
         }
         $( pos ).find( '[class=od-item-marge_total]' )[0].value = kivi.format_amount( marge_total, 2 );
     }
@@ -900,9 +900,12 @@ $( document ).ready( function()
                     '<td class="od-ui-edit-btn"></td>' +
                     '<td class="od-item-partnumber">' + ( ( exists( dataRow.partnumber ) )? dataRow.partnumber : '' ) + '</td>' +
                     '<td class="od-item-type">';
-        if( dataRow.instruction ) tableRow += 'A';
-        else if( 'part' === dataRow.part_type ) tableRow += 'W';
-        else if( 'service' === dataRow.part_type ) tableRow += 'D';
+        let orderType = '';
+        if( dataRow.instruction )  orderType = 'I';
+        else if( 'part' === dataRow.part_type ) orderType = 'P';
+        else if( 'service' === dataRow.part_type ) orderType = 'S';
+        tableRow += '<input class="od-item_type" type="hidden" value="' + orderType + '"></input>';
+        tableRow += kivi.t8(orderType);
         tableRow += '</td>' +
                     '<td><input class="od-item-description" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '"></input></td>' +
                     '<td><input class="od-item-longdescription" type="text" size="40" value="' + ( ( exists( dataRow.longdescription ) )? dataRow.longdescription : '' )  + '"></input>' +
@@ -961,34 +964,62 @@ $( document ).ready( function()
 
     function crmSaveOrder(){
         let dbUpdateData = { }
-        dbUpdateData['oe'] = { };
+        dbUpdateData['oe'] = {};
+        dbUpdateData['customer'] = [];
+        dbUpdateData['lxc_cars'] = [];
         dbUpdateData['orderitems'] = [];
-        dbUpdateData['instructions'] = { };
+        dbUpdateData['instructions'] = [];
+
+        $( '.od-common :input' ).each( function( key, pos ){
+            dbUpdateData['oe'][pos.id.split( '-' )[2]] = ( 'checkbox' === pos.type )? $( pos ).prop( 'checked' ) : $( pos ).val();;
+        });
+
+        dbUpdateData['customer']['notes'] = $( '#od-customer-notes' ).val();
+        dbUpdateData['lxc_cars']['c_text'] = $( '#od-lxcars-c_text' ).val();
+        dbUpdateData['oe']['intnotes'] = $( '#od-lxcars-c_text' ).val();
 
         $( '#edit-order-table > tbody > tr').each( function( key, pos ){
-            //console.info( $( pos ).find( '[class^=od-item]' ) );
             let itemType;
             let dataRow = { };
             $( pos ).find( '[class^=od-item]' ).each( function( i, item ){
-                //console.info( item );
                 let columnName = item.className.split( ' ' )[0].split( '-' )[2];
-                //console.info( columnName );
+                if( !exists( columnName ) ) return;
                 if( 'type' === columnName) itemType = item.innerText;
                 else if( exists( item.value ) ) dataRow[columnName] = item.value;
                 else if( exists( item.innerText ) ) dataRow[columnName] = item.innerText;
             });
-            console.info( itemType );
             dataRow.qty = kivi.parse_amount( dataRow.qty );
             dataRow.sellprice = kivi.parse_amount( dataRow.sellprice );
             dataRow.discount = kivi.parse_amount( dataRow.discount );
             dataRow.marge_total = kivi.parse_amount( dataRow.marge_total );
-            //console.info( dataRow );
-            //console.info( pos.id );
             if( exists( pos.id ) ){
-                //hidden field verwenden und 
-                if( 'W' === itemType  ) dbUpdateData['orderitems'].push( dataRow );
+                if( 'P' === itemType  ){
+                    dataRow['WHERE'] = {};
+                    dataRow['WHERE']['id'] = pos.id;
+                    dbUpdateData['orderitems'].push( dataRow );
+                }
+                if( 'S' === itemType  ){
+                    dataRow['WHERE'] = {};
+                    dataRow['WHERE']['id'] = pos.id;
+                    dbUpdateData['orderitems'].push( dataRow );
+                }
+                if( 'I' === itemType  ){
+                    dataRow['WHERE'] = {};
+                    dataRow['WHERE']['id'] = pos.id;
+                    dbUpdateData['instructions'].push( dataRow );
+                }
             }
         });
+
+        dbUpdateData['oe']['WHERE'] = {};
+        dbUpdateData['oe']['WHERE']['id'] = $( '#od-oe-id' ).val();
+
+        dbUpdateData['customer']['WHERE'] = {};
+        dbUpdateData['customer']['WHERE']['id'] = $( '#od-customer-id' ).val();
+
+           dbUpdateData['lxc_cars']['WHERE'] = {};
+        dbUpdateData['lxc_cars']['WHERE']['c_id'] = $( '#od-lxcars-c_id' ).val();
+
         console.info( dbUpdateData );
      }
 
@@ -1012,18 +1043,23 @@ $( document ).ready( function()
 
         //$( '.od-item-editable' ).
 
-        $( '#od-customer_name' ).html( crmData.order.common.customer_name );
-        $( '#od-ordnumber' ).html( crmData.order.common.ordnumber );
-        $( '#od-finish_time' ).html( crmData.order.common.finish_time );
-        $( '#od-km_stnd' ).val( crmData.order.common.km_stnd );
-        $( '#od-employee_name' ).html( crmData.order.common.employee_name );
-        $( '#od-c_ln' ).html( crmData.order.common.c_ln );
-        $( '#od-mtime' ).html( crmData.order.common.mtime );
-        $( '#od-internalorder' ).prop( 'checked', crmData.order.common.internalorder );
-        $( '#od-ltime' ).html( crmData.order.common.itime );
-        $( '#od-car_status' ).val( crmData.order.common.car_status );
-        $( '#od-int_car_notes' ).val( crmData.order.common.int_car_notes );
-        $( '#od-int_cu_notes' ).val( crmData.order.common.int_cu_notes );
+        $( '#od-customer-id' ).val( crmData.order.common.customer_id );
+        $( '#od-lxcars-c_id' ).val( crmData.order.common.c_id );
+        $( '#od-oe-id' ).val( crmData.order.common.id );
+        $( '#od-customer-name' ).html( crmData.order.common.customer_name );
+        $( '#od-oe-ordnumber' ).html( crmData.order.common.ordnumber );
+        $( '#od-oe-finish_time' ).val( crmData.order.common.finish_time );
+        $( '#od-oe-km_stnd' ).val( crmData.order.common.km_stnd );
+        $( '#od-oe-employee_name' ).html( crmData.order.common.employee_name );
+        $( '#od-lxcars-c_ln' ).html( crmData.order.common.c_ln );
+        $( '#od-oe-mtime' ).html( crmData.order.common.mtime );
+        $( '#od-oe-internalorder' ).prop( 'checked', crmData.order.common.internalorder );
+        $( '#od-oe-itime' ).html( crmData.order.common.itime );
+        $( '#od-oe-car_status' ).val( crmData.order.common.car_status );
+        $( '#od-oe-status' ).val( crmData.order.common.status );
+        $( '#od-lxcars-c_text' ).val( crmData.order.common.int_car_notes );
+        $( '#od-customer-notes' ).val( crmData.order.common.int_cu_notes );
+        $( '#od-oe-intnotes' ).val( crmData.order.common.intnotes );
 
 
         $( '#crm-edit-order-dialog' ).dialog({

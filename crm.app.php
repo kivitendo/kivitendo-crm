@@ -127,17 +127,19 @@
         background-color: #EEEEEE;
     }
 
-    .od-orderitems-div {
-        padding: 2em;
+    .od-common-div {
+        padding-top: 2em;
+        padding-bottom: 2em;
     }
 
-    .od-orderitems {
+    .od-common {
         margin: auto;
         background-color: white;
     }
 
-    .od-orderitems td {
+    .od-common td {
         padding: 0.25em;
+        vertical-align: top;
     }
 
     .od-comments-div {
@@ -197,50 +199,82 @@
 <div id="crm-main-view" class="container-fluid">
 
 <div id="crm-edit-order-dialog" style="display:none">
-    <div class="od-orderitems-div">
-    <table class="od-orderitems">
+    <div class="od-common-div">
+    <input id="od-customer-id" type="hidden"></input>
+    <input id="od-lxcars-c_id" type="hidden"></input>
+    <input id="od-oe-id" type="hidden"></input>
+    <table class="od-common" width="100%">
         <tr>
-            <td class="od-table-label"><label for="od-customer_name">Auftraggeber:</label></td>
-            <td><span id="od-customer_name"></span></td>
-            <td class="od-table-label"><label for="od-ordnumber">Auftragsnummer:</label></td>
-            <td><span id="od-ordnumber"></span></td>
-            <td class="od-table-label"><label for="od-finish_time">Fertigstellung:</label></td>
-            <td><input id="od-finish_time" type="text"></td>
-            <td class="od-table-label"><label for="od-km_stnd">KM-Stand:</label></td>
-            <td><input id="od-km_stnd" type="text" ></td>
-            <td class="od-table-label"><label for="od-employee_name">bearbeitet von:</label></td>
-            <td><span id="od-employee_name"></span></td>
-            <td><input id="od-partnumber" type="text" placeholder="beliebige Teilenummer" ></td>
-        </tr>
-        <tr>
-            <td class="od-table-label"><label for="od-c_ln">Amtl.-Kennz.:</label></td>
-            <td><label id="od-c_ln" type="text"></td>
-            <td class="od-table-label"><label for="od-mtime">bearbeitet am:</label></td>
-            <td><span id="od-mtime"></span></td>
-            <td class="od-table-label"><label id="od-car_status">KfZ Ort:</label></td>
-            <td>
-                <select id="od-car_status" type="select">
-                    <option></option>
-                    <option value="Auto nicht hier">Auto nicht hier</option>
-                    <option value="Auto hier">Auto hier</option>
-                    <option value="Sonstiges zur Reparatur gebracht">Sonstiges zur Reparatur gebracht</option>
-                    <option value="Bestellung">Bestellung</option>
-                </select>
+            <td width="33%">
+                <table>
+                    <tr>
+                        <td class="od-table-label"><label for="od-customer-name">Auftraggeber:</label></td>
+                        <td><span id="od-customer-name"></span></td>
+                    </tr>
+                 </table>
             </td>
-            <td class="od-table-label"><label for="od-ltime">erstellt am:</label></td>
-            <td><span id="od-ltime"></span></td>
-            <td class="od-table-label"><label for="od-status">Status:</label></td>
-            <td>
-                <select id="od-status" type="select">
-                    <option></option>
-                    <option>angenommen</option>
-                    <option>bearbeitet</option>
-                    <option>abgerechnet</option>
-                </select>
+            <td width="33%">
+                <table>
+                    <tr>
+                        <td class="od-table-label"><label for="od-lxcars-km_stnd">KM-Stand:</label></td>
+                        <td><input class="od-oe-km_stnd" id="od-oe-km_stnd" type="text" ></td>
+                     </tr>
+                    <tr>
+                        <td class="od-table-label"><label for="od-lxcars-c_ln">Amtl.-Kennz.:</label></td>
+                        <td><label id="od-lxcars-c_ln" type="text"></td>
+                     </tr>
+                    <tr>
+                        <td class="od-table-label"><label for="od-oe-car_status">KfZ Ort:</label></td>
+                        <td>
+                            <select id="od-oe-car_status" type="select">
+                                <option value=""></option>
+                                <option value="Auto nicht hier">Auto nicht hier</option>
+                                <option value="Auto hier">Auto hier</option>
+                                <option value="Sonstiges zur Reparatur gebracht">Sonstiges zur Reparatur gebracht</option>
+                                <option value="Bestellung">Bestellung</option>
+                            </select>
+                        </td>
+                     </tr>
+                    <tr>
+                        <td class="od-table-label"><label for="od-oe-status">Status:</label></td>
+                        <td>
+                            <select id="od-oe-status" type="select">
+                                <option value=""></option>
+                                <option value="angenommen">angenommen</option>
+                                <option value="bearbeitet">bearbeitet</option>
+                                <option value="abgerechnet">abgerechnet</option>
+                            </select>
+                        </td>
+                     </tr>
+                </table>
             </td>
-            <td>
-                <input id="od-internalorder" type="checkbox">
-                <label id="od-internalorder">Interner Auftrag</label>
+            <td width="33%">
+                <table>
+                    <tr>
+                        <td class="od-table-label"><label for="od-oe-ordnumber">Auftragsnummer:</label></td>
+                        <td><span id="od-oe-ordnumber"></span></td>
+                     </tr>
+                    <tr>
+                        <td class="od-table-label"><label for="od-oe-internalorder">Interner Auftrag:</label></td>
+                        <td><input id="od-oe-internalorder" type="checkbox"></td>
+                    </tr>
+                    <tr>
+                        <td class="od-table-label"><label for="od-oe-finish_time">Fertigstellung:</label></td>
+                        <td><input id="od-oe-finish_time" type="text"></td>
+                    </tr>
+                     <tr>
+                        <td class="od-table-label"><label for="od-oe-itime">erstellt am:</label></td>
+                        <td><span id="od-oe-itime"></span></td>
+                     </tr>
+                    <tr>
+                        <td class="od-table-label"><label for="od-oe-mtime">bearbeitet am:</label></td>
+                        <td><span id="od-oe-mtime"></span></td>
+                     </tr>
+                    <tr>
+                        <td class="od-table-label"><label for="od-oe-employee_name">bearbeitet von:</label></td>
+                        <td><span id="od-oe-employee_name"></span></td>
+                     </tr>
+                 </table>
             </td>
         </tr>
     </table>
@@ -272,19 +306,25 @@
     <div class="od-comments-div">
     <table class="od-comments">
         <tr>
+             <td class="od-table-label">
+                Interne Bemerkungen zum Kunden
+            </td>
             <td class="od-table-label">
                 Interne Bemerkungen zum Auto
             </td>
              <td class="od-table-label">
-                Interne Bemerkungen zum Kunden
+                Interne Bemerkungen zur Rechnung
             </td>
         </tr>
         <tr>
             <td>
-                <textarea id="od-int_car_notes" cols="50" rows="8"></textarea>
+                <textarea id="od-customer-notes" cols="50" rows="8"></textarea>
+            </td>
+             <td>
+                <textarea id="od-lxcars-c_text" cols="50" rows="8"></textarea>
             </td>
             <td>
-                <textarea id="od-int_cu_notes" cols="50" rows="8"></textarea>
+                <textarea id="od-oe-intnotes" cols="50" rows="8"></textarea>
             </td>
          </tr>
     </table>

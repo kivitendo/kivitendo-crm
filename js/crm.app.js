@@ -965,8 +965,8 @@ $( document ).ready( function()
     function crmSaveOrder(){
         let dbUpdateData = { }
         dbUpdateData['oe'] = {};
-        dbUpdateData['customer'] = [];
-        dbUpdateData['lxc_cars'] = [];
+        dbUpdateData['customer'] = {};
+        dbUpdateData['lxc_cars'] = {};
         dbUpdateData['orderitems'] = [];
         dbUpdateData['instructions'] = [];
 
@@ -976,7 +976,7 @@ $( document ).ready( function()
 
         dbUpdateData['customer']['notes'] = $( '#od-customer-notes' ).val();
         dbUpdateData['lxc_cars']['c_text'] = $( '#od-lxcars-c_text' ).val();
-        dbUpdateData['oe']['intnotes'] = $( '#od-lxcars-c_text' ).val();
+        dbUpdateData['oe']['intnotes'] = $( '#od-oe-intnotes' ).val();
 
         $( '#edit-order-table > tbody > tr').each( function( key, pos ){
             let itemType;
@@ -995,33 +995,50 @@ $( document ).ready( function()
             if( exists( pos.id ) ){
                 if( 'P' === itemType  ){
                     dataRow['WHERE'] = {};
-                    dataRow['WHERE']['id'] = pos.id;
+                    dataRow['WHERE'] = 'id = ' +  pos.id;
                     dbUpdateData['orderitems'].push( dataRow );
                 }
                 if( 'S' === itemType  ){
                     dataRow['WHERE'] = {};
-                    dataRow['WHERE']['id'] = pos.id;
+                    dataRow['WHERE'] = 'id = ' + pos.id;
                     dbUpdateData['orderitems'].push( dataRow );
                 }
                 if( 'I' === itemType  ){
                     dataRow['WHERE'] = {};
-                    dataRow['WHERE']['id'] = pos.id;
+                    dataRow['WHERE'] = 'id = ' + pos.id;
                     dbUpdateData['instructions'].push( dataRow );
                 }
             }
         });
 
         dbUpdateData['oe']['WHERE'] = {};
-        dbUpdateData['oe']['WHERE']['id'] = $( '#od-oe-id' ).val();
+        dbUpdateData['oe']['WHERE'] = 'id = ' + $( '#od-oe-id' ).val();
 
         dbUpdateData['customer']['WHERE'] = {};
-        dbUpdateData['customer']['WHERE']['id'] = $( '#od-customer-id' ).val();
+        dbUpdateData['customer']['WHERE']= 'id = ' + $( '#od-customer-id' ).val();
 
-           dbUpdateData['lxc_cars']['WHERE'] = {};
-        dbUpdateData['lxc_cars']['WHERE']['c_id'] = $( '#od-lxcars-c_id' ).val();
+        dbUpdateData['lxc_cars']['WHERE'] = {};
+        dbUpdateData['lxc_cars']['WHERE'] = 'c_id = ' + $( '#od-lxcars-c_id' ).val();
 
+        console.info( 'dbUpdateData1' );
         console.info( dbUpdateData );
-     }
+
+        $.ajax({
+            url: 'crm/ajax/crm.app.php',
+            type: 'POST',
+            data:  { action: 'updateOrder', data: dbUpdateData },
+            success: function( data ){
+                console.info( 'Order saved' );
+            },
+            error: function( xhr, status, error ){
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'lxcars()', xhr.responseText );
+            }
+        });
+
+        console.info( 'dbUpdateData2' );
+        console.info( dbUpdateData );
+
+    }
 
     function crmEditOrderDlg( crmData ){
         console.info( 'Edit order' );

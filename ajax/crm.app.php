@@ -49,7 +49,7 @@ function findPart( $term ){
     if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
         $term = $_GET['term'];
         $sql = "(SELECT 'D' AS part_type,  'Anweisungen' AS category, description, partnumber, id, description AS value, part_type, unit,  partnumber || ' ' || description AS label, instruction, sellprice,";
-        $sql .= " (SELECT qty FROM instructions WHERE instructions.parts_id = parts.id AND instructions.qty IS NOT null GROUP BY qty ORDER BY count( instructions.qty ) DESC, qty DESC LIMIT 1) AS qty"; 
+        $sql .= " (SELECT qty FROM instructions WHERE instructions.parts_id = parts.id AND instructions.qty IS NOT null GROUP BY qty ORDER BY count( instructions.qty ) DESC, qty DESC LIMIT 1) AS qty";
         $sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type ='service' AND instruction = true ORDER BY ( SELECT ( SELECT count( qty ) FROM orderitems WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5) UNION ALL";
         $sql .= " (SELECT 'W' AS part_type,  'Waren' AS category, description, partnumber, id, description AS value, part_type, unit,  partnumber || ' ' || description AS label, instruction, sellprice,";
         $sql .= " (SELECT qty FROM orderitems WHERE orderitems.parts_id = parts.id AND orderitems.qty IS NOT null GROUP BY qty ORDER BY count( orderitems.qty ) DESC, qty DESC LIMIT 1) AS qty";
@@ -310,6 +310,25 @@ function getOrder( $data ){
     $workers = json_encode(ERPUsersfromGroup("Werkstatt"));
 
     echo '{ "order": '.$GLOBALS['dbh']->getOne( $query, true ).', "workers": '.$workers.' }';
+}
+
+function updateOrder( $data ){
+    writeLog( $data );
+
+    foreach( $data AS $key => $value ){
+        $where = '';
+        if( array_key_exists( 'WHERE', $value ) ){
+            $where = $value['WHERE'];
+            unset( $value['WHERE'] );
+        }
+        if( empty( $where ) ){
+            resultInfo( false, 'Risky SQL-Statment with empty WHERE clausel'  );
+            return;
+        }
+        writeLog( $key ); writeLog( array_keys( $value ) ); writeLog( array_values( $value ) ); writeLog( $where );
+    }
+
+    resultInfo( true );
 }
 
 /********************************************

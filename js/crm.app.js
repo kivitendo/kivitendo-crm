@@ -1020,13 +1020,10 @@ $( document ).ready( function()
         dbUpdateData['lxc_cars']['WHERE'] = {};
         dbUpdateData['lxc_cars']['WHERE'] = 'c_id = ' + $( '#od-lxcars-c_id' ).val();
 
-        console.info( 'dbUpdateData1' );
-        console.info( dbUpdateData );
-
         $.ajax({
             url: 'crm/ajax/crm.app.php',
             type: 'POST',
-            data:  { action: 'updateOrder', data: dbUpdateData },
+            data:  { action: 'genericUpdateEx', data: dbUpdateData },
             success: function( data ){
                 console.info( 'Order saved' );
             },
@@ -1034,10 +1031,6 @@ $( document ).ready( function()
                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'lxcars()', xhr.responseText );
             }
         });
-
-        console.info( 'dbUpdateData2' );
-        console.info( dbUpdateData );
-
     }
 
     function crmEditOrderDlg( crmData ){

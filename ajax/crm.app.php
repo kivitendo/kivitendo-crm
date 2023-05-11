@@ -312,25 +312,6 @@ function getOrder( $data ){
     echo '{ "order": '.$GLOBALS['dbh']->getOne( $query, true ).', "workers": '.$workers.' }';
 }
 
-function updateOrder( $data ){
-    writeLog( $data );
-
-    foreach( $data AS $key => $value ){
-        $where = '';
-        if( array_key_exists( 'WHERE', $value ) ){
-            $where = $value['WHERE'];
-            unset( $value['WHERE'] );
-        }
-        if( empty( $where ) ){
-            resultInfo( false, 'Risky SQL-Statment with empty WHERE clausel'  );
-            return;
-        }
-        writeLog( $key ); writeLog( array_keys( $value ) ); writeLog( array_values( $value ) ); writeLog( $where );
-    }
-
-    resultInfo( true );
-}
-
 /********************************************
 * Insert a new Customer optional  with new Car
 ********************************************/
@@ -401,6 +382,52 @@ function genericUpdate( $data ){
         //writeLog( $key ); writeLog( array_keys( $value ) ); writeLog( array_values( $value ) ); writeLog( $where );
         $GLOBALS['dbh']->update( $key, array_keys( $value ), array_values( $value ), $where );
     }
+
+    resultInfo( true );
+}
+
+function genericUpdateEx( $data ){
+
+    $update = function( $tableName, $dataObject ){
+        $where = '';
+        if( array_key_exists( 'WHERE', $dataObject ) ){
+            $where = $dataObject['WHERE'];
+            unset( $dataObject['WHERE'] );
+        }
+        if( empty( $where ) ){
+            return false;
+        }
+        $dbFields = array_keys( $dataObject );
+        $dbValues = array_values( $dataObject );
+        $sql = "UPDATE $tableName set ".implode( '= ?, ', array_map( 'trim', $dbFields ) )." = ? WHERE ".$where;
+        writeLog( $sql );
+        //$stmt = $GLOBALS['dbh']->prepare( $sql );
+        //$stmt->execute( $dbValues );
+        return true;
+    };
+
+    //$GLOBALS['dbh']->beginTransaction();
+    foreach( $data AS $tableName => $dataObject ){
+        if( array_key_exists(0, $dataObject) ){
+            foreach( $dataObject AS $dataRow ){
+                if( !$update( $tableName, $dataRow ) ){
+                    writeLog( 'error' );
+                    //$GLOBALS['dbh']->rollBack();
+                    resultInfo( false, 'Risky SQL-Statment with empty WHERE clausel'  );
+                    return;
+                }
+            }
+        }
+        else{
+            if( !$update( $tableName, $dataObject ) ){
+                writeLog( 'error' );
+                //$GLOBALS['dbh']->rollBack();
+                resultInfo( false, 'Risky SQL-Statment with empty WHERE clausel'  );
+                return;
+            }
+        }
+    }
+    //$GLOBALS['dbh']->commit();
 
     resultInfo( true );
 }

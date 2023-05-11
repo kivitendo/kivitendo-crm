@@ -303,6 +303,24 @@
         </thead>
         <tbody></tbody>
     </table>
+    <div class="od-comments-div" style="float: right">
+        <table>
+            <tr>
+                <td>
+                    <label for="od-netamount" class="od-table-label">Netto:</label>
+                </td>
+                <td>
+                    <input id="od-netamount" type="text" readonly="readonly" size="5"></input>
+                </td>
+                <td>
+                    <label for="od-amount" class="od-table-label" style="margin-left: 2em">Brutto:</label>
+                </td>
+                <td>
+                    <input id="od-amount" type="text" readonly="readonly" size="5"></input>
+                </td>
+             </tr>
+        </table>
+    </div>
     <div class="od-comments-div">
     <table class="od-comments">
         <tr>

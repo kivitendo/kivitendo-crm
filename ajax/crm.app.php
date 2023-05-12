@@ -402,20 +402,16 @@ function genericUpdateEx( $data ){
         }
         $dbFields = array_keys( $dataObject );
         $dbValues = array_values( $dataObject );
-        $sql = "UPDATE $tableName set ".implode( '= ?, ', array_map( 'trim', $dbFields ) )." = ? WHERE ".$where;
-        writeLog( $sql );
-        //$stmt = $GLOBALS['dbh']->prepare( $sql );
-        //$stmt->execute( $dbValues );
+        $GLOBALS['dbh']->update( $tableName, $dbFields, $dbValues, $where );
         return true;
     };
 
-    //$GLOBALS['dbh']->beginTransaction();
+    $GLOBALS['dbh']->beginTransaction();
     foreach( $data AS $tableName => $dataObject ){
         if( array_key_exists(0, $dataObject) ){
             foreach( $dataObject AS $dataRow ){
                 if( !$update( $tableName, $dataRow ) ){
-                    writeLog( 'error' );
-                    //$GLOBALS['dbh']->rollBack();
+                    $GLOBALS['dbh']->rollBack();
                     resultInfo( false, 'Risky SQL-Statment with empty WHERE clausel'  );
                     return;
                 }
@@ -423,14 +419,13 @@ function genericUpdateEx( $data ){
         }
         else{
             if( !$update( $tableName, $dataObject ) ){
-                writeLog( 'error' );
-                //$GLOBALS['dbh']->rollBack();
+                $GLOBALS['dbh']->rollBack();
                 resultInfo( false, 'Risky SQL-Statment with empty WHERE clausel'  );
                 return;
             }
         }
     }
-    //$GLOBALS['dbh']->commit();
+    $GLOBALS['dbh']->commit();
 
     resultInfo( true );
 }

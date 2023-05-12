@@ -218,7 +218,6 @@ $( document ).ready( function()
                     type: 'POST',
                     data:  { action: 'getOrder', data: { 'id': this.id } },
                     success: function( crmData ){
-                        console.info( 'getOrder' );
                         crmEditOrderDlg( crmData );
                     },
                     error: function( xhr, status, error ){
@@ -903,7 +902,7 @@ $( document ).ready( function()
 
     function crmAddOrderItem( dataRow ){
         let tableRow;
-        tableRow += '<tr ' + ( ( exists( dataRow.id ) )? ('id="' + dataRow.id + '"') : 'class="od-item-pin"') + '><td class="od-item-position"></td>' +
+        tableRow += '<tr ' + ( ( exists( dataRow.id ) )? ('id="' + dataRow.id + '"') : 'id = "od-empty-item-id" class="od-item-pin"') + '><td class="od-item-position"></td>' +
                     '<td><img src="image/updown.png" alt="umsortieren"></td>' +
                     '<td><img class="od-ui-del" src="image/close.png" alt="löschen"></td>' +
                     '<td class="od-ui-edit-btn"></td>' +
@@ -952,7 +951,6 @@ $( document ).ready( function()
         $( '.od-item-description' ).catcomplete({
             source: "crm/ajax/crm.app.php?action=findPart",
             select: function( e, ui ){
-                console.info( ui.item );
                 $( ':focus' ).parent().parent().find( '[class=od-hidden-item-partnumber]' ).text( ui.item.partnumber );
                 $( ':focus' ).parent().parent().find( '[class=od-item-parts_id]' ).val( ui.item.id );
                 let orderType = '';
@@ -965,6 +963,7 @@ $( document ).ready( function()
                 $( ':focus' ).parent().parent().find( '[class=od-item-unit]' ).val( ui.item.unit );
                 $( ':focus' ).parent().parent().find( '[class=od-item-sellprice]' ).val( kivi.format_amount( ui.item.sellprice, 2 ) );
                 $( ':focus' ).parent().parent().find( '[class=od-hidden-item-rate]' ).val( ui.item.rate );
+                let itemPosition = $( ':focus' ).parent().parent().find( '[class=od-item-position]' )[0].innerText;
                 //Bug or feature, can't do otherwise:
                 $( ':focus' ).parent().parent()[0].className = "";
 
@@ -973,6 +972,7 @@ $( document ).ready( function()
                     crmAddOrderItem( { } );
                 }
                 crmCalcOrderPos();
+                crmInsertOrderPos( itemPosition, orderType, ui.item );
             }
         });
 
@@ -986,6 +986,36 @@ $( document ).ready( function()
 
         crmCalcOrderPos();
     }
+
+    function crmInsertOrderPos( itemPosition, itemType, item ){
+        let pos = {};
+        let dbTable = '';
+        if( 'P' === itemType  ) dbTable = 'orderitems';
+        if( 'S' === itemType  ) dbTable = 'orderitems';
+        if( 'I' === itemType  ) dbTable = 'instructions';
+
+        pos[dbTable] = {};
+        pos[dbTable]['trans_id'] = $( '#od-oe-id' ).val();
+        pos[dbTable]['position'] = itemPosition;
+        pos[dbTable]['parts_id'] = item.id;
+        pos[dbTable]['qty'] = item.qty;
+        pos[dbTable]['unit'] = item.unit;
+        pos[dbTable]['sellprice'] = item.sellprice;
+        pos[dbTable]['description'] = item.description;
+
+        $.ajax({
+            url: 'crm/ajax/crm.app.php',
+            type: 'POST',
+            data:  { action: 'genericSingleInsert', data: pos },
+            success: function( data ){
+                console.info( 'Insert order item' );
+                $( '#od-empty-item-id' ).attr( 'id', data.id );
+            },
+            error: function( xhr, status, error ){
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmSaveOrder()', xhr.responseText );
+            }
+        });
+     }
 
     function crmSaveOrder(){
         let dbUpdateData = { }
@@ -1002,6 +1032,8 @@ $( document ).ready( function()
         dbUpdateData['customer']['notes'] = $( '#od-customer-notes' ).val();
         dbUpdateData['lxc_cars']['c_text'] = $( '#od-lxcars-c_text' ).val();
         dbUpdateData['oe']['intnotes'] = $( '#od-oe-intnotes' ).val();
+        dbUpdateData['oe']['amount'] = kivi.parse_amount( $( '#od-amount' ).val() );
+        dbUpdateData['oe']['netamount'] = kivi.parse_amount( $( '#od-netamount' ).val() );
 
         $( '#edit-order-table > tbody > tr').each( function( key, pos ){
             let itemType;
@@ -1046,9 +1078,6 @@ $( document ).ready( function()
 
         dbUpdateData['lxc_cars']['WHERE'] = {};
         dbUpdateData['lxc_cars']['WHERE'] = 'c_id = ' + $( '#od-lxcars-c_id' ).val();
-
-        console.info( 'dbUpdateData' )
-        console.info( dbUpdateData )
 
         $.ajax({
             url: 'crm/ajax/crm.app.php',

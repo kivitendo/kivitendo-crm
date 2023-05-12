@@ -340,7 +340,6 @@ function insertNewCuWithCar( $data ){
 ********************************************/
 function updateCuWithNewCar( $data ){
     $id = FALSE;
-    writeLog( $data );
     foreach( $data AS $key => $value ){
         $where = '';
         if( array_key_exists( 'WHERE', $value ) ){
@@ -366,8 +365,13 @@ function updateCuWithNewCar( $data ){
     echo '{ "src": "C", "id": "'.$id.'" }';
 }
 
+function genericSingleInsert( $data ){
+    $tableName = array_key_first( $data );
+    $id = $GLOBALS['dbh']->insert( $tableName, array_keys( $data[$tableName] ), array_values( $data[$tableName] ), TRUE, 'orderitemsid' );
+    echo '{ "id": "'.$id.'" }';
+}
+
 function genericUpdate( $data ){
-    writeLog( $data );
 
     foreach( $data AS $key => $value ){
         $where = '';

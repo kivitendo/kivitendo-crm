@@ -280,7 +280,7 @@
     </table>
     </div>
 
-    <table id="edit-order-table" width="100%">
+    <table class="ui-sortable" id="edit-order-table" width="100%">
         <thead>
             <tr class="listheading pin">
                 <th class="listheading" nowrap width="25px" >Pos.</th>

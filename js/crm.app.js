@@ -903,8 +903,8 @@ $( document ).ready( function()
     function crmAddOrderItem( dataRow ){
         let tableRow;
         tableRow += '<tr ' + ( ( exists( dataRow.id ) )? ('id="' + dataRow.id + '"') : 'id = "od-empty-item-id" class="od-item-pin"') + '><td class="od-item-position"></td>' +
-                    '<td><img src="image/updown.png" alt="umsortieren"></td>' +
-                    '<td><img class="od-ui-del" src="image/close.png" alt="löschen"></td>' +
+                    '<td><img class="od-ui-hsort" src="image/updown.png" alt="umsortieren"' + ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '</td>' +
+                    '<td><img class="od-ui-del" src="image/close.png" alt="löschen"' + ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></td>' +
                     '<td class="od-ui-edit-btn"></td>' +
                     '<td><span class="od-hidden-item-partnumber">' + ( ( exists( dataRow.partnumber ) )? dataRow.partnumber : '' ) + '</span>' +
                     '<input class="od-item-parts_id" type="hidden" value="' + ( ( exists( dataRow.parts_id ) )? dataRow.parts_id : '' ) + '"></input></td>' +
@@ -916,7 +916,7 @@ $( document ).ready( function()
         tableRow += '<input class="od-item-type" type="hidden" value="' + orderType + '"></input>';
         tableRow += '<span class="od-table-item-type">' + kivi.t8(orderType) + '</span>';
         tableRow += '</td>' +
-                    '<td><input class="od-item-description" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '"></input></td>' +
+                    '<td><input name="od-item-description" class="od-item-description" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '"></input></td>' +
                     '<td><input class="od-item-longdescription" type="text" size="40" value="' + ( ( exists( dataRow.longdescription ) )? dataRow.longdescription : '' )  + '"></input>' +
                     '</td><td><input class="od-item-qty" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.qty ) )? dataRow.qty : '0' ) + '"></input></td>';
 
@@ -963,6 +963,9 @@ $( document ).ready( function()
                 $( ':focus' ).parent().parent().find( '[class=od-item-unit]' ).val( ui.item.unit );
                 $( ':focus' ).parent().parent().find( '[class=od-item-sellprice]' ).val( kivi.format_amount( ui.item.sellprice, 2 ) );
                 $( ':focus' ).parent().parent().find( '[class=od-hidden-item-rate]' ).val( ui.item.rate );
+                $( ':focus' ).parent().parent().find( '[class=od-ui-hsort]' ).show();
+                $( ':focus' ).parent().parent().find( '[class=od-ui-del]' ).show();
+                console.info( $( ':focus' ).parent().parent().find( '[class=od-od-ui-hsort]' ) );
                 let itemPosition = $( ':focus' ).parent().parent().find( '[class=od-item-position]' )[0].innerText;
                 //Bug or feature, can't do otherwise:
                 $( ':focus' ).parent().parent()[0].className = "";
@@ -981,6 +984,11 @@ $( document ).ready( function()
         }).keyup( function(e){
             if( e.which == 13 || e.which == 9 ){
                 crmCalcOrderPos();
+                if( e.which == 13 && !isEmpty($( ':focus' ).parent().parent().find( '[name=od-item-description]' ).val() ) ){
+                   if( 'od-empty-item-id' === $( ':focus' ).parent().parent().attr( 'id' ) ){
+                        alert( 'Position ungültig!' );
+                    }
+                }
             }
         });
 
@@ -1049,8 +1057,6 @@ $( document ).ready( function()
             dataRow.sellprice = kivi.parse_amount( dataRow.sellprice );
             dataRow.discount = kivi.parse_amount( dataRow.discount );
             dataRow.marge_total = kivi.parse_amount( dataRow.marge_total );
-            console.info( 'itemType' );
-            console.info( itemType );
             if( exists( pos.id ) ){
                 if( 'P' === itemType  ){
                     dataRow['WHERE'] = {};
@@ -1102,12 +1108,13 @@ $( document ).ready( function()
         }
         crmAddOrderItem( { } );
         $( '#edit-order-table > tbody' ).sortable({
+            //items: '> tbody:not(.od-item-pin)',
             cancel: '.od-item-pin, .od-ui-del, input, select, button',
             update: function(){
                 crmCalcOrderPos();
             }
         });
-
+        $('.ui-sortable').sortable({items: '> tbody:not(.od-item-pin)'});
         //$( '.od-item-editable' ).
 
         $( '#od-customer-id' ).val( crmData.order.common.customer_id );

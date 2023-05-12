@@ -869,7 +869,14 @@ $( document ).ready( function()
     function crmCalcOrderPos(){
         $( '#od-netamount' ).val( 0 );
         $( '#od-amount' ).val( 0 );
-        $( '#edit-order-table > tbody > tr').each( function( key, pos ){
+        let positions = $( '#edit-order-table > tbody > tr');
+        if( 3 >  positions.length ){
+            $( positions[0] ).find( '[class=od-ui-del]' ).hide();
+        }
+        else{
+            $( positions[0] ).find( '[class=od-ui-del]' ).show();
+        }
+        positions.each( function( key, pos ){
             $( pos ).find( '[class=od-item-position]' )[0].innerText = key + 1;
             if( !isEmpty( $( pos ).find( '[class=od-hidden-item-partnumber]' ).text() ) ){
                 $( $( pos ).find( '[class=od-ui-edit-btn]' )[0] ).html('<button>Edit</button>');
@@ -900,11 +907,11 @@ $( document ).ready( function()
        }
     }
 
-    function crmAddOrderItem( dataRow ){
+   function crmAddOrderItem( dataRow ){
         let tableRow;
         tableRow += '<tr ' + ( ( exists( dataRow.id ) )? ('id="' + dataRow.id + '"') : 'id = "od-empty-item-id" class="od-item-pin"') + '><td class="od-item-position"></td>' +
                     '<td><img class="od-ui-hsort" src="image/updown.png" alt="umsortieren"' + ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '</td>' +
-                    '<td><img class="od-ui-del" src="image/close.png" alt="löschen"' + ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></td>' +
+                    '<td><img class="od-ui-del" src="image/close.png" alt="löschen"' + ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + 'onclick="crmDeleteOrderPos(this)"></td>' +
                     '<td class="od-ui-edit-btn"></td>' +
                     '<td><span class="od-hidden-item-partnumber">' + ( ( exists( dataRow.partnumber ) )? dataRow.partnumber : '' ) + '</span>' +
                     '<input class="od-item-parts_id" type="hidden" value="' + ( ( exists( dataRow.parts_id ) )? dataRow.parts_id : '' ) + '"></input></td>' +
@@ -965,7 +972,6 @@ $( document ).ready( function()
                 $( ':focus' ).parent().parent().find( '[class=od-hidden-item-rate]' ).val( ui.item.rate );
                 $( ':focus' ).parent().parent().find( '[class=od-ui-hsort]' ).show();
                 $( ':focus' ).parent().parent().find( '[class=od-ui-del]' ).show();
-                console.info( $( ':focus' ).parent().parent().find( '[class=od-od-ui-hsort]' ) );
                 let itemPosition = $( ':focus' ).parent().parent().find( '[class=od-item-position]' )[0].innerText;
                 //Bug or feature, can't do otherwise:
                 $( ':focus' ).parent().parent()[0].className = "";
@@ -1016,7 +1022,6 @@ $( document ).ready( function()
             type: 'POST',
             data:  { action: 'genericSingleInsert', data: pos },
             success: function( data ){
-                console.info( 'Insert order item' );
                 $( '#od-empty-item-id' ).attr( 'id', data.id );
             },
             error: function( xhr, status, error ){
@@ -1025,7 +1030,38 @@ $( document ).ready( function()
         });
      }
 
-    function crmSaveOrder(){
+    crmDeleteOrderPos = function( e ) {
+        var row = $( e ).parent().parent();
+        console.info( 'row' );
+        //$( row ) .remove();
+
+        let pos = {};
+        let dbTable = '';
+        let itemType = $( row ).find( '[class=od-item-type]' ).val();
+        if( 'P' === itemType  ) dbTable = 'orderitems';
+        if( 'S' === itemType  ) dbTable = 'orderitems';
+        if( 'I' === itemType  ) dbTable = 'instructions';
+
+        pos[dbTable] = {};
+        pos[dbTable]['WHERE'] = 'id = ' + $( row ).attr( 'id' );
+        console.info( pos );
+
+        $.ajax({
+            url: 'crm/ajax/crm.app.php',
+            type: 'POST',
+            data:  { action: 'genericDelete', data: pos },
+            success: function( data ){
+                $( row ).remove();
+                crmCalcOrderPos();
+                crmSaveOrder();
+            },
+            error: function( xhr, status, error ){
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmSaveOrder()', xhr.responseText );
+            }
+        });
+     }
+
+     function crmSaveOrder(){
         let dbUpdateData = { }
         dbUpdateData['oe'] = {};
         dbUpdateData['customer'] = {};

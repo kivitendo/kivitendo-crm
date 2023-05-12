@@ -433,3 +433,14 @@ function genericUpdateEx( $data ){
 
     resultInfo( true );
 }
+
+function genericDelete( $data ){
+    foreach( $data AS $tableName => $where){
+        if( !isset( $where['WHERE'] ) ){
+            resultInfo( false, 'Risky SQL-Statment with empty WHERE clausel'  );
+            return;
+        }
+        $GLOBALS['dbh']->query( "DELETE FROM $tableName WHERE ".$where['WHERE'] );
+    }
+    resultInfo(true);
+}

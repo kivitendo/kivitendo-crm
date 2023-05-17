@@ -1193,7 +1193,6 @@ $( document ).ready( function()
             },{
                 text: kivi.t8( 'Printer 1' ),
                 click: function(){
-                    console.info( 'Print order 1' );
                     let printData = {};
                     printData['orderId'] = $( '#od-oe-id' ).val();
                     printData['print'] = 'printOrder1';
@@ -1213,8 +1212,19 @@ $( document ).ready( function()
             },{
                 text: kivi.t8( 'Printer 2' ),
                 click: function(){
-                    console.info( 'Print order 2' );
-                }
+                    let printData = {};
+                    printData['orderId'] = $( '#od-oe-id' ).val();
+                    printData['print'] = 'printOrder2';
+                    printData['customerId'] = $( '#od-customer-id' ).val();
+                    $.ajax({
+                        url: 'crm/ajax/crm.app.php',
+                        type: 'POST',
+                        data:  { action: 'printOrder', data: printData },
+                        error: function( xhr, status, error ){
+                            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmSaveOrder()', xhr.responseText );
+                        }
+                    });
+                 }
             },{
                 text: kivi.t8( ' PDF ' ),
                 click: function(){
@@ -1228,7 +1238,7 @@ $( document ).ready( function()
                         type: 'GET',
                         data:  { action: 'printOrder', data: printData },
                         success: function( data ){
-                            console.info( 'printed' );
+                           window.open( 'crm/out.pdf' );
                         },
                         error: function( xhr, status, error ){
                             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmSaveOrder()', xhr.responseText );

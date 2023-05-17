@@ -1,0 +1,9 @@
+=================================
+Selten genutzte SQL-Statments
+=================================
+
+Abfrage mehrere Tabellen mit einer Zeile als Ergebnis
+
+SELECT * FROM
+(SELECT * FROM customer WHERE id = 53468 LIMIT 1) AS cu,
+(SELECT * FROM lxc_cars WHERE c_id = 5459 LIMIT 1) AS ca;

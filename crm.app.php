@@ -18,8 +18,9 @@
                 ));
     $result = curl_exec( $ch );
 
-    if( $result === false || curl_errno( $ch )){
-        die( 'Curl-Error: ' .curl_error($ch).'URL "'.$url.'" invalid!"');
+    if( $result === false || curl_errno( $ch ) ){
+        header( 'Location: http://localhost/kivitendo/controller.pl?action=LoginScreen/user_login' );
+        return;
     }
     curl_close( $ch );
 

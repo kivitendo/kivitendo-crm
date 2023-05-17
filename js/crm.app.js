@@ -990,9 +990,9 @@ $( document ).ready( function()
         }).keyup( function(e){
             if( e.which == 13 || e.which == 9 ){
                 crmCalcOrderPos();
-                if( e.which == 13 && !isEmpty($( ':focus' ).parent().parent().find( '[name=od-item-description]' ).val() ) ){
+                if( !isEmpty($( ':focus' ).parent().parent().find( '[name=od-item-description]' ).val() ) ){
                    if( 'od-empty-item-id' === $( ':focus' ).parent().parent().attr( 'id' ) ){
-                        alert( 'Position ungültig!' );
+                        console.info( 'Position ungültig!' );
                     }
                 }
             }
@@ -1162,9 +1162,9 @@ $( document ).ready( function()
         $( '#od-oe-km_stnd' ).val( crmData.order.common.km_stnd );
         $( '#od-oe-employee_name' ).html( crmData.order.common.employee_name );
         $( '#od-lxcars-c_ln' ).html( crmData.order.common.c_ln );
-        $( '#od-oe-mtime' ).html( crmData.order.common.mtime );
+        $( '#od-oe-mtime' ).html( kivi.format_date( new Date( crmData.order.common.mtime ) ) );
         $( '#od-oe-internalorder' ).prop( 'checked', crmData.order.common.internalorder );
-        $( '#od-oe-itime' ).html( crmData.order.common.itime );
+        $( '#od-oe-itime' ).html( kivi.format_date( new Date( crmData.order.common.itime ) ) );
         $( '#od-oe-car_status' ).val( crmData.order.common.car_status );
         $( '#od-oe-status' ).val( crmData.order.common.status );
         $( '#od-lxcars-c_text' ).val( crmData.order.common.int_car_notes );
@@ -1190,6 +1190,51 @@ $( document ).ready( function()
                     crmSaveOrder();
                     //$( this ).dialog( "close" );
                 }
+            },{
+                text: kivi.t8( 'Printer 1' ),
+                click: function(){
+                    console.info( 'Print order 1' );
+                    let printData = {};
+                    printData['orderId'] = $( '#od-oe-id' ).val();
+                    printData['print'] = 'printOrder1';
+                    printData['customerId'] = $( '#od-customer-id' ).val();
+                    $.ajax({
+                        url: 'crm/ajax/crm.app.php',
+                        type: 'POST',
+                        data:  { action: 'printOrder', data: printData },
+                        success: function( data ){
+                            console.info( 'printed' );
+                        },
+                        error: function( xhr, status, error ){
+                            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmSaveOrder()', xhr.responseText );
+                        }
+                    });
+                }
+            },{
+                text: kivi.t8( 'Printer 2' ),
+                click: function(){
+                    console.info( 'Print order 2' );
+                }
+            },{
+                text: kivi.t8( ' PDF ' ),
+                click: function(){
+                    console.info( 'Print order PDF' );
+                    let printData = {};
+                    printData['orderId'] = $( '#od-oe-id' ).val();
+                    printData['print'] = 'pdfOrder';
+                    printData['customerId'] = $( '#od-customer-id' ).val();
+                     $.ajax({
+                        url: 'crm/ajax/crm.app.php',
+                        type: 'GET',
+                        data:  { action: 'printOrder', data: printData },
+                        success: function( data ){
+                            console.info( 'printed' );
+                        },
+                        error: function( xhr, status, error ){
+                            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmSaveOrder()', xhr.responseText );
+                        }
+                    });
+                 }
             },
             {
                 text: kivi.t8( 'Cancel' ),

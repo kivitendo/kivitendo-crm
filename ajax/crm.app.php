@@ -444,3 +444,273 @@ function genericDelete( $data ){
     }
     resultInfo(true);
 }
+
+function printOrder( $data ){
+
+    require 'fpdf.php';
+    require_once __DIR__.'/../lxcars/inc/lxcLib.php';
+    include_once __DIR__.'/../lxcars/inc/config.php';
+
+    if( isset( $data['data'] ) ){
+        $data = $data['data'];
+    }
+
+    $sql  = "SELECT oe.ordnumber, oe.transdate, oe.finish_time, oe.km_stnd, oe.employee_id, printed, ";
+    $sql .= "customer.name, customer.street, customer.zipcode, customer.city, customer.phone, customer.fax, customer.notes, ";
+    $sql .= "lxc_cars.c_ln, lxc_cars.c_2, lxc_cars.c_3, lxc_cars.c_mkb, lxc_cars.c_t, lxc_cars.c_fin, lxc_cars.c_st_l, lxc_cars.c_wt_l, ";
+    $sql .= "lxc_cars.c_text, lxc_cars.c_color, lxc_cars.c_zrk, lxc_cars.c_zrd, lxc_cars.c_em, lxc_cars.c_bf, lxc_cars.c_wd, lxc_cars.c_d, lxc_cars.c_hu, employee.name AS employee_name, lxc_flex.flxgr ";
+    $sql .= "FROM oe join customer on oe.customer_id = customer.id join lxc_cars on oe.c_id = lxc_cars.c_id join employee on oe.employee_id = employee.id ";
+    $sql .= "left join lxc_flex on ( lxc_cars.c_2 = lxc_flex.hsn AND lxc_flex.tsn = substring( lxc_cars.c_3 from 1 for 3 ) ) WHERE oe.id = ".$data['orderId'];
+
+    $query = "SELECT * FROM ($sql) AS o, ";
+
+    $sql = "SELECT c_id, c_ln, hersteller, name AS bezeichnung, 'automobil' AS mytype FROM lxc_cars JOIN kbacars ON( lxc_cars.c_2 = kbacars.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbacars.tsn   ) WHERE c_ow = ".$data['customerId']." UNION All ".
+           "SELECT c_id, c_ln, hersteller, name AS bezeichnung, 'trailer' AS mytype FROM lxc_cars JOIN kbatrailer ON( lxc_cars.c_2 = kbatrailer.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbatrailer.tsn   ) WHERE c_ow = ".$data['customerId']." UNION ALL ".
+           "SELECT c_id, c_ln, hersteller, name AS bezeichnung, 'bikes' AS mytype FROM lxc_cars JOIN kbabikes ON( lxc_cars.c_2 = kbabikes.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbabikes.tsn   ) WHERE c_ow = ".$data['customerId']." UNION ALL ".
+           "SELECT c_id, c_ln, hersteller, name AS bezeichnung, 'trucks' AS mytype FROM lxc_cars JOIN kbatrucks ON( lxc_cars.c_2 = kbatrucks.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbatrucks.tsn   ) WHERE c_ow = ".$data['customerId']." UNION ALL ".
+           "SELECT c_id, c_ln, hersteller, name AS bezeichnung, 'tractor' AS mytype FROM lxc_cars JOIN kbatractors ON( lxc_cars.c_2 = kbatractors.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbatractors.tsn   ) WHERE c_ow = ".$data['customerId'];
+
+    $query .= "($sql) AS kba";
+
+    $orderData = $GLOBALS['dbh']->getOne( $query );
+
+    $taxzone_id = 4;
+    $query  = "SELECT  item_id as id, parts_id, position, instruction, qty, description, unit, sellprice, marge_total, discount, u_id, partnumber, part_type, longdescription, status, rate ";
+    $query .= "FROM ( SELECT parts.instruction, parts.buchungsgruppen_id, instructions.id AS item_id, instructions.parts_id, instructions.qty, instructions.description, instructions.position, instructions.unit, instructions.sellprice, instructions.marge_total, instructions.discount, instructions.u_id, instructions.status, parts.partnumber, parts.part_type, instructions.longdescription FROM instructions INNER JOIN  parts  ON ( parts.id = instructions.parts_id ) WHERE instructions.trans_id = '".$data['orderId']."' ";
+    $query .= "UNION SELECT  parts.instruction, parts.buchungsgruppen_id, orderitems.id AS item_id, orderitems.parts_id, orderitems.qty, orderitems.description, orderitems.position, orderitems.unit, orderitems.sellprice, orderitems.marge_total, orderitems.discount, orderitems.u_id, orderitems.status, parts.partnumber, parts.part_type, orderitems.longdescription FROM orderitems INNER JOIN parts ON ( parts.id = orderitems.parts_id ) WHERE orderitems.trans_id = '".$data['orderId']."' ORDER BY position ) AS mysubquery ";
+    $query .= "JOIN taxzone_charts c ON ( mysubquery.buchungsgruppen_id = c.buchungsgruppen_id )  JOIN taxkeys k ON ( c.income_accno_id = k.chart_id AND k.startdate = ( SELECT max(startdate) FROM taxkeys tk1 WHERE c.income_accno_id = tk1.chart_id AND tk1.startdate::TIMESTAMP <= NOW()  ) ) JOIN tax ON (k.tax_id = tax.id ) WHERE taxzone_id = ".$taxzone_id." GROUP BY item_id, parts_id, position, instruction, qty, description, unit, sellprice, marge_total, discount, u_id, partnumber, part_type, longdescription, status, rate ORDER BY position ASC";
+
+    $positions = $GLOBALS['dbh']->getAll( $query );
+
+    define( 'FPDF_FONTPATH', '../font/');
+    define( 'x', 0 );
+    define( 'y', 1 );
+
+    $pdf = new FPDF( 'P','mm','A4' );
+    $pdf->AddPage();
+
+    $fontsize = 11;
+    $textPosX_right = 120;
+    $textPosY = 25;
+    $textPosX_left = 12;
+
+    if( $orderData['printed'] ){
+        $pdf->SetFont( 'Helvetica', 'B', 10 );
+        $pdf->SetTextColor( 255, 0, 0 );
+        $pdf->Text( '10','7','Kopie' );
+        $pdf->SetTextColor( 0, 0, 0 );
+    }
+
+    $pdf->SetFont( 'Helvetica', 'B', 14 ); //('font_family','font_weight','font_size')
+    $pdf->Text( '10','12','Autoprofis Rep.-Auftrag '.' '.$orderData['hersteller'].' '.$orderData['mytype'].' '.$orderData['bezeichnung'] );
+    $pdf->Text( '10','18', $orderData['c_ln'] );
+    $pdf->SetFont( 'Helvetica', '', 14 );
+
+    //fix values
+    $pdf->SetFont( 'Helvetica', 'B', $fontsize ) ;
+    $pdf->Text( $textPosX_left, $textPosY,'Kunde:' );
+    $pdf->Text( $textPosX_left, $textPosY + 5, utf8_decode( 'Straße:' ) );
+    $pdf->Text( $textPosX_left, $textPosY + 10, 'Ort:' );
+    $pdf->Text( $textPosX_left, $textPosY + 15, 'Tele.:' );
+    $pdf->Text( $textPosX_left, $textPosY + 20, 'Tele2:' );
+    $pdf->Text( $textPosX_left, $textPosY + 25, 'Bearb.:' );
+
+    $pdf->SetFont( 'Helvetica', '', $fontsize );
+    $pdf->Text( $textPosX_left + 20, $textPosY, utf8_decode( substr( $orderData['name'], 0, 34 ) ) );
+    $pdf->Text( $textPosX_left + 20, $textPosY + 5, utf8_decode( $orderData['street'] ) );
+    $pdf->Text( $textPosX_left + 20, $textPosY + 10, $orderData['zipcode'].' '.utf8_decode( $orderData['city'] ) );
+    $pdf->Text( $textPosX_left + 20, $textPosY + 15, $orderData['phone'] );
+    $pdf->Text( $textPosX_left + 20, $textPosY + 20, $orderData['fax'] );
+    $pdf->Text( $textPosX_left + 20, $textPosY + 25, $orderData['employee_name'] );
+
+    $pdf->SetFont( 'Helvetica', 'B', $fontsize );
+    $pdf->Text( $textPosX_right, $textPosY, 'KBA:' );
+    $pdf->Text( $textPosX_right, $textPosY + 5, 'Baujahr:' );
+    $pdf->Text( $textPosX_right, $textPosY + 10,'HU/AU:' );
+    $pdf->Text( $textPosX_right, $textPosY + 15, 'FIN:' );
+    $pdf->Text( $textPosX_right, $textPosY + 20, 'MK:' );
+    $pdf->Text( $textPosX_right, $textPosY + 25, 'KM:' );
+
+    $pdf->SetFont( 'Helvetica', '', $fontsize );
+    $pdf->Text( $textPosX_right + 20, $textPosY, $orderData['c_2'].' '.$orderData['c_3'] );
+    $pdf->Text( $textPosX_right + 20, $textPosY + 5, db2date( $orderData['c_d'] ) );
+    $pdf->Text( $textPosX_right + 20, $textPosY + 10, db2date( $orderData['c_hu'] ) );
+    $pdf->Text( $textPosX_right + 20, $textPosY + 15, $orderData['c_fin'] );
+    $pdf->Text( $textPosX_right + 20, $textPosY + 20, $orderData['c_mkb'] );
+    $pdf->Text( $textPosX_right + 20, $textPosY + 25, $orderData['km_stnd'] );
+
+
+    $pdf->Text( $textPosX_right, $textPosY + 45, 'Flexgr.:' );
+    $pdf->Text( $textPosX_right, $textPosY + 50, 'Color.:' );
+
+    $pdf->Text( $textPosX_right, $textPosY + 35, utf8_decode( 'Lo Sommerräder.:' ) );
+    $pdf->Text( $textPosX_right, $textPosY + 40, utf8_decode( 'Lo Winterräder.:' ) );
+
+    $pdf->Text( $textPosX_left, $textPosY + 35, utf8_decode( 'nächst. ZR-Wechsel KM:' ) );
+    $pdf->Text( $textPosX_left, $textPosY + 40, utf8_decode( 'nächst. ZR-Wechsel:' ) );
+    $pdf->Text( $textPosX_left, $textPosY + 45, utf8_decode( 'nächst. Bremsfl.:' ) );
+    $pdf->Text( $textPosX_left, $textPosY + 50, utf8_decode( 'nächst. WD:' ) );
+
+    $pdf->SetLineWidth( 0.2 );
+
+    $pdf->SetFont( 'Helvetica', '', $fontsize );
+
+    $pdf->Text( $textPosX_right + 45, $textPosY + 45, utf8_decode( $orderData['flxgr'] ) );
+    $pdf->Text( $textPosX_right + 45, $textPosY + 50, utf8_decode( $orderData['c_color'] ) );
+
+    //left side under line one
+    $lsulo = 50;
+    $pdf->Text( $textPosX_left + $lsulo, $textPosY + 35, $orderData['c_zrk'] );
+    $pdf->Text( $textPosX_left + $lsulo, $textPosY + 40, utf8_decode( $orderData['c_zrd'] ) );
+    $pdf->Text( $textPosX_left + $lsulo, $textPosY + 45, utf8_decode( $orderData['c_bf'] ) );
+    $pdf->Text( $textPosX_left + $lsulo, $textPosY + 50, utf8_decode( $orderData['c_wd'] ) );
+
+
+    $pdf->Text( $textPosX_right + 45, $textPosY + 35, utf8_decode( $orderData['c_st_l'] ) );
+    $pdf->Text( $textPosX_right + 45, $textPosY + 40, utf8_decode( $orderData['c_wt_l'] ) );
+
+    //Finish Time
+    if( strpos( $orderData['finish_time'], 'wartet' ) ) $pdf->SetTextColor( 255, 0, 0 );
+    $pdf->SetFont( 'Helvetica', 'B', '12' );
+    $finishTimeHeight = 85;
+    $pdf->Text( $textPosX_left, $finishTimeHeight, 'Fertigstellung:' );
+    $pdf->SetFont( 'Helvetica', 'B', '12' );
+    $pdf->Text( $textPosX_right, $finishTimeHeight, utf8_decode( $orderData['finish_time'] ) );
+    $pdf->SetTextColor( 0, 0, 0 );
+
+
+    $pdf->SetFont( 'Helvetica', '', '10' );
+    $pos_todo[x] = 20; $pos_todo[y] = 110;
+
+    //Instructions and positions
+    $pdf->SetFont( 'Helvetica', '', '8' );
+    $height = '85';
+
+    $pdf->SetLineWidth(0.4);
+
+    //draw first Line x1, y1, x2, y2
+    $lineHeight = 54;
+    $lineWidth  = 180;
+    $pdf->Line( $textPosX_left, $lineHeight, $textPosX_left + $lineWidth , $lineHeight );
+    //draw second Line x1, y1, x2, y2
+    $lineHeight = 78;
+    $pdf->Line( $textPosX_left, $lineHeight, $textPosX_left + $lineWidth , $lineHeight );
+
+    foreach( $positions as $index => $element ){
+        writeLog( $element );
+        if( $element['instruction'] ){
+            $height = $height + 8;
+            //$pdf->SetTextColor( 255, 0, 0 );
+            $pdf->SetLineWidth( 0.1 );
+            $pdf->Line( 10, $height + 1.6 , 190, $height + 1.6 );
+            $pdf->SetFont('Helvetica','B','12');
+            //$pdf->SetTextColor( 100, 100, 100 );
+            $pdf->Text( '12',$height, utf8_decode( $element['description'] ) );
+            //Longdescriptions
+            if( trim( $element['longdescription'] ) != '' ){
+                $height = $height + 2;
+                $pdf->SetFont( 'Helvetica', '', '10' );
+                //$pdf->SetTextColor( 0, 0, 0 );
+                //writeLog( strlen( $element['longdescription'] ) );//  intdiv
+                $words = explode( ' ', $element['longdescription'] );
+                $i = 0;
+                $lineArray = array();
+                foreach( $words as $value ){
+                    if( strlen( $lineArray[$i].$value.' ' ) > 113 ) $i++;
+                    $lineArray[$i] .= $value.' ';
+                }
+                //writeLog( $lineArray );
+                foreach( $lineArray as $line ){
+                    $height = $height + 4;
+                    $pdf->Text( '16', $height, utf8_decode( $line ) );
+                }
+            }
+        }
+    }
+
+    while( $height < 250 ){
+        $height = $height + 10;
+        $pdf->Line( 10, $height + 1.6, 190, $height + 1.6 );
+    }
+
+
+    //Footer
+    //$pdf->SetTextColor( 0, 0, 0 );
+    $pdf->SetFont( 'Helvetica', '', '10' );
+    $pdf->Text( '22', '270', 'Datum:' );
+    $pdf->Text( '45', '270', date( 'd.m.Y' ) );
+    $pdf->Text( '105','270','Kundenunterschrift: __________________' );
+   // $pdf->SetTextColor( 255, 0, 0 );
+    $pdf->Text( '22', '280', utf8_decode( 'Endkontrolle UND Probefahrt durchgeführt von: __________________' ) );
+    //$pdf->SetTextColor( 0, 0, 0 );
+    $pdf->SetFont( 'Helvetica', '', '08' );
+    $pdf->Text( '75', '290', 'Powered by lxcars.de - Freie Kfz-Werkstatt Software' );
+
+
+    //Backside
+    //EPSON Printer print must rotate secound page
+    $rotate = 0; //Degree --Only for Epson
+    $pdf->AddPage( 'P', 'A4', $rotate );
+    $pdf->SetFont( 'Helvetica', 'B', '16' );
+    $pdf->Text( 10, 20, utf8_decode( 'Verbaute Ersazteile' ) );
+    $height = 30;
+    $pdf->SetFont( 'Helvetica', '', '10' );
+    $pdf->line( 10, $height - 4.4,  190, $height - 4.4 );
+    $totalLines = 22;
+    foreach( $positions as $index => $element ){
+        //writeLog( $element);
+        if( ( $element['part_type']  == 'part' ) && !$element['instruction'] ){
+            $totalLines--;
+            //writeLog( 'part' );
+            $pdf->line( 10, $height + 1.6,  190, $height + 1.6 );
+            $pdf->Text( '12', $height, utf8_decode( $element['qty']." ".$element['unit'] ) );
+            $pdf->Text( '26', $height, utf8_decode( $element['description'] ) );
+            $height = $height + 6;
+        }
+    }
+    while( $totalLines-- ){
+        $pdf->line( 10, $height + 1.6, 190, $height + 1.6 );
+        $height = $height + 6;
+    }
+
+
+    $pdf->SetFont( 'Helvetica', 'B', '16' );
+    $pdf->Text( 10, $height + 10, utf8_decode( 'Ausgeführte Arbeiten' ) );
+    $height = $height + 20;
+    $pdf->SetFont( 'Helvetica', '', '10' );
+    $totalLines = 16;
+    $pdf->line( 10, $height - 4.4,  190, $height - 4.4 );
+    foreach( $positions as $index => $element ){
+        if( ( $element['part_type']  == 'service' ) && !$element['instruction'] ){
+            $totalLines--;
+            $pdf->line( 10, $height + 1.6,  190, $height + 1.6 );
+            $pdf->Text( '12', $height, utf8_decode( $element['qty']." ".$element['unit'] ) );
+            $pdf->Text( '26', $height, utf8_decode( $element['description'] ) );
+            $height = $height + 6;
+        }
+    }
+    while( $totalLines-- ){
+        $pdf->line( 10, $height + 1.6,  190, $height + 1.6 );
+        $height = $height + 6;
+    }
+
+    $pdf->Text( '10','290', utf8_decode( 'Ich habe sämtliche Ersazteile und ausgeführte Arbeiten i.d. obigen Liste notiert. Unterschrift: __________________' ) );
+    $pdf->OutPut( __DIR__.'/../out.pdf', 'F' );
+
+
+    if( $data['print'] == 'printOrder1' ){
+      //system('lpr -P test '.__DIR__.'/../out.pdf' );
+      //system('lpr -P Buro1 '.__DIR__.'/../out.pdf' );
+      system('lpr -P Canon_LBP663C '.__DIR__.'/../out.pdf' );
+      if( !$orderData['printed'] )
+        $GLOBALS['dbh']->update( 'oe', array( 'printed' ), array( 'TRUE' ), 'id = '.$data['orderId'] );
+    }
+    if( $data['print'] == 'printOrder2' ){
+      //system('lpr -P test '.__DIR__.'/../out.pdf' );
+      system('lpr -P HP_LASER '.__DIR__.'/../out.pdf' );
+      if( !$orderData['printed'] )
+        $GLOBALS['dbh']->update( 'oe', array( 'printed' ), array( 'TRUE' ), 'id = '.$data['orderId'] );
+    }
+
+    echo 1;
+}

@@ -17,9 +17,9 @@ Verwendete Tabellen:
 ----------------------------------------------------------------------
 Attribute eines Auftrags                Rel.    DB Tabelle      Spalte
 ----------------------------------------------------------------------
-Postionen/Artikel                       1:n     orderitems
-                                                instructions
-                                                parts
+Artikel                                 1:n     orderitems
+Anweisungen                             1:n     instructions
+Vorlage für Artikel/Anweisungen                 parts
                                                 units
 Bemerkungen nicht sichtbar              1:1     oe              notes
 Interne Bemernung zum Kunden            1:1     costumer        notes

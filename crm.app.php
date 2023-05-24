@@ -608,13 +608,17 @@
     echo $objResult->{'end_content'};
 ?>
 
-<script src="crm/js/crm.app.js"></script>
-<script src="crm/js/crm.form.js"></script>
+
 <script>
 <?php
     foreach($objResult->{'javascripts_inline'} as $js) echo $js."\n";
 ?>
 </script>
-
+<script src="crm/js/crm.app/order.js"></script>
+<script src="crm/js/crm.app/app.js"></script>
+<script src="crm/js/crm.app/form.js"></script>
+<script src="crm/js/crm.app/cvp.js"></script>
+<script src="crm/js/crm.app/car.js"></script>
+<script src="crm/js/crm.app/phonecall.js"></script>
 </body>
 </html>

@@ -146,14 +146,19 @@ function crmInsertOrderPos( itemPosition, itemType, item ){
     if( 'S' === itemType  ) dbTable = 'orderitems';
     if( 'I' === itemType  ) dbTable = 'instructions';
 
-    pos[dbTable] = {};
-    pos[dbTable]['trans_id'] = $( '#od-oe-id' ).val();
-    pos[dbTable]['position'] = itemPosition;
-    pos[dbTable]['parts_id'] = item.id;
-    pos[dbTable]['qty'] = item.qty;
-    pos[dbTable]['unit'] = item.unit;
-    pos[dbTable]['sellprice'] = item.sellprice;
-    pos[dbTable]['description'] = item.description;
+    pos['record'] = {};
+    pos['record'][dbTable] = {};
+    pos['record'][dbTable]['trans_id'] = $( '#od-oe-id' ).val();
+    pos['record'][dbTable]['position'] = itemPosition;
+    pos['record'][dbTable]['parts_id'] = item.id;
+    pos['record'][dbTable]['qty'] = item.qty;
+    pos['record'][dbTable]['unit'] = item.unit;
+    pos['record'][dbTable]['sellprice'] = item.sellprice;
+    pos['record'][dbTable]['description'] = item.description;
+    pos['sequence_name'] = 'orderitemsid';
+
+    console.info( 'pos' );
+    console.info( pos );
 
     $.ajax({
         url: 'crm/ajax/crm.app.php',
@@ -427,4 +432,3 @@ function crmEditOrderDlg( crmData ){
         }]
     }).dialog( 'open' ).resize();
 }
-

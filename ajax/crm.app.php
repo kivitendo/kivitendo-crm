@@ -366,8 +366,9 @@ function updateCuWithNewCar( $data ){
 }
 
 function genericSingleInsert( $data ){
-    $tableName = array_key_first( $data );
-    $id = $GLOBALS['dbh']->insert( $tableName, array_keys( $data[$tableName] ), array_values( $data[$tableName] ), TRUE, 'orderitemsid' );
+    $tableName = array_key_first( $data['record'] );
+    $id = $GLOBALS['dbh']->insert( $tableName, array_keys( $data['record'][$tableName] ), array_values( $data['record'][$tableName] ),
+                                array_key_exists( 'sequence_name', $data ), ( array_key_exists( 'sequence_name', $data ) )? $data['sequence_name'] : FALSE );
     echo '{ "id": "'.$id.'" }';
 }
 

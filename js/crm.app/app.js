@@ -13,7 +13,7 @@ function isEmpty( obj ){
 $( '#crm-tabs-main' ).tabs();
 $( '#crm-tabs-infos' ).tabs();
 
-$( '#crm-wf-edit').html( kivi.t8( 'Edit' ) );
+$( '#crm-wf-edit').html( kivi.t8( 'Base data' ) );
 $( '#crm-wf-scan').html( kivi.t8( 'Car from scan' ) );
 
 /* flag to switch app lxcars functionality  */
@@ -354,10 +354,18 @@ $( '#crm-wf-offer' ).click( function() {
     alert( "Angebot erstellen!" );
 });
 
-$( '#crm-wf-order' ).click( function() {
+$( '#crm-wf-new-order' ).click( function() {
     crmNewOrder();
 });
 
-$( '#crm-wf-bill' ).click( function() {
-    alert( "Rechnung erstellen!" );
+$( '#crm-wf-new-customer' ).click( function() {
+    crmNewCustomer();
+});
+
+$( '#crm-wf-new-vendor' ).click( function() {
+    crmNewVendor();
+});
+
+$( '#crm-wf-new-person' ).click( function() {
+    crmNewPerson();
 });

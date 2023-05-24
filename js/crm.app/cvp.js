@@ -257,3 +257,14 @@ var crmEditCuVeDlgAction;
     }).dialog( 'open' ).resize();
 }
 
+function crmNewCustomer(){
+    alert( "Kunde erfassen in crmNewCustomer()!" );
+}
+
+function crmNewVendor(){
+    alert( "Lierferant erfassen in crmNewVendor()!" );
+}
+
+function crmNewPerson(){
+    alert( "Person erfassen in crmNewPerson()!" );
+}

@@ -157,8 +157,9 @@ function crmInsertOrderPos( itemPosition, itemType, item ){
     pos['record'][dbTable]['description'] = item.description;
     pos['sequence_name'] = 'orderitemsid';
 
-    console.info( 'pos' );
-    console.info( pos );
+    if( isEmpty( $( '#od-oe-id' ).val() ) ){
+        console.info( 'Insert new order hier' );
+    }
 
     $.ajax({
         url: 'crm/ajax/crm.app.php',
@@ -277,17 +278,19 @@ function crmSaveOrder(){
     });
 }
 
-function crmNewOrder(){
+function crmNewOrderForCar( c_id ){
+    console.info( 'crmNewOrderForCar' );
+    console.info( c_id );
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
-        data:  { action: 'getWorkers' },
+        data:  { action: 'getDataForNewLxcarsOrder', data: { 'id': c_id } },
         success: function( crmData ){
             console.info( crmData );
             crmEditOrderDlg( crmData );
         },
         error: function( xhr, status, error ){
-            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'showCVPA().getOrder', xhr.responseText );
+            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmNewOrderForCar', xhr.responseText );
         }
     });
 }
@@ -330,22 +333,23 @@ function crmEditOrderDlg( crmData ){
         $( '#od-oe-intnotes' ).val( crmData.order.common.intnotes );
     }
     else{
-        $( '#od-customer-id' ).val( '' );
-        $( '#od-lxcars-c_id' ).val( '' );
+        $( '#od-customer-id' ).val( crmData.common.customer_id );
+        $( '#od-lxcars-c_id' ).val( crmData.common.c_id );
         $( '#od-oe-id' ).val( '' );
-        $( '#od-customer-name' ).html( '' );
+        $( '#od-customer-name' ).html( crmData.common.customer_name );
         $( '#od-oe-ordnumber' ).html( '' );
         $( '#od-oe-finish_time' ).val( '' );
         $( '#od-oe-km_stnd' ).val( '' );
-        $( '#od-oe-employee_name' ).html( '' );
-        $( '#od-lxcars-c_ln' ).html( ''  );
+        $( '#od-oe-employee_name' ).html( crmData.common.employee_name );
+        $( '#od-oe-employee_id' ).val( crmData.common.employee_id );
+        $( '#od-lxcars-c_ln' ).html( crmData.common.c_ln  );
         $( '#od-oe-mtime' ).html( '' );
         $( '#od-oe-internalorder' ).prop( 'checked', false );
         $( '#od-oe-itime' ).html( '' );
         $( '#od-oe-car_status' ).val( '' );
         $( '#od-oe-status' ).val( '' );
-        $( '#od-lxcars-c_text' ).val( '' );
-        $( '#od-customer-notes' ).val( ''  );
+        $( '#od-lxcars-c_text' ).val( crmData.common.int_car_notes );
+        $( '#od-customer-notes' ).val( crmData.common.int_cu_notes  );
         $( '#od-oe-intnotes' ).val( '' );
      }
 

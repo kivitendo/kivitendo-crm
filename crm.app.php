@@ -274,7 +274,7 @@
                      </tr>
                     <tr>
                         <td class="od-table-label"><label for="od-oe-employee_name">bearbeitet von:</label></td>
-                        <td><span id="od-oe-employee_name"></span></td>
+                        <td><input type="hidden" id="od-oe-employee_id"></input><span id="od-oe-employee_name"></span></td>
                      </tr>
                  </table>
             </td>

@@ -216,7 +216,7 @@ function crmEditCarDlg( crmData ){
         width: 'auto',
         height: 'auto',
         modal: true,
-        title: kivi.t8( 'Edit customer' ),
+        title: kivi.t8( 'Edit car' ),
         position: { my: "top", at: "top+250" },
         open: function(){
             $( this ).css( 'maxWidth', window.innerWidth );
@@ -244,6 +244,13 @@ function crmEditCarDlg( crmData ){
                 console.info( dbUpdateData );
                 crmUpdateDB('genericUpdate', dbUpdateData );
                 $( this ).dialog( "close" );
+            }
+        },
+        {
+            text: kivi.t8( 'New Order' ),
+            click: function(){
+                $( this ).dialog( "close" );
+                crmNewOrderForCar( $( '#edit_car-c_id' ).val() );
             }
         },
         {

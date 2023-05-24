@@ -355,7 +355,7 @@ $( '#crm-wf-offer' ).click( function() {
 });
 
 $( '#crm-wf-new-order' ).click( function() {
-    crmNewOrder();
+    alert( "Auftrag ohne Auto erstellen!" );
 });
 
 $( '#crm-wf-new-customer' ).click( function() {

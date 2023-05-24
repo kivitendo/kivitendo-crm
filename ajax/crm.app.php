@@ -291,8 +291,14 @@ function getCar( $data ){
     echo $GLOBALS['dbh']->getOne( "SELECT * FROM lxc_cars WHERE c_id = ".$data['id'], true );
 }
 
-function getWorkers(){
-    echo '{ "workers": '.json_encode(ERPUsersfromGroup("Werkstatt")).' }';
+function getDataForNewLxcarsOrder( $data ){
+    writeLog($_SESSION['loginCRM']);
+
+    $query = "SELECT customer.id AS customer_id, customer.name AS customer_name, customer.notes AS int_cu_notes, c_id, ".
+                "lxc_cars.c_ln, lxc_cars.c_text AS int_car_notes, employee.id AS employee_id, employee.name AS employee_name ".
+                "FROM lxc_cars INNER JOIN customer ON customer.id = lxc_cars.c_ow INNER JOIN employee ON employee.id = ".$_SESSION['loginCRM']." WHERE lxc_cars.c_id = ".$data['id'];
+
+    echo '{ "common": '.$GLOBALS['dbh']->getOne( $query, true ).', "workers": '.json_encode(ERPUsersfromGroup("Werkstatt")).' }';
 }
 
 function getOrder( $data ){

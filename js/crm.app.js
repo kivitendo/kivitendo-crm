@@ -1017,6 +1017,9 @@ $( document ).ready( function()
         pos[dbTable]['sellprice'] = item.sellprice;
         pos[dbTable]['description'] = item.description;
 
+        console.info( 'pos' );
+        console.info( pos );
+
         $.ajax({
             url: 'crm/ajax/crm.app.php',
             type: 'POST',
@@ -1025,7 +1028,7 @@ $( document ).ready( function()
                 $( '#od-empty-item-id' ).attr( 'id', data.id );
             },
             error: function( xhr, status, error ){
-                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmSaveOrder()', xhr.responseText );
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmInsertOrderPos()', xhr.responseText );
             }
         });
      }
@@ -1056,7 +1059,7 @@ $( document ).ready( function()
                 crmSaveOrder();
             },
             error: function( xhr, status, error ){
-                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmSaveOrder()', xhr.responseText );
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmDeleteOrderPos()', xhr.responseText );
             }
         });
      }
@@ -1134,13 +1137,29 @@ $( document ).ready( function()
         });
     }
 
+    function crmNewOrder(){
+        $.ajax({
+            url: 'crm/ajax/crm.app.php',
+            type: 'POST',
+            data:  { action: 'getWorkers' },
+            success: function( crmData ){
+                console.info( crmData );
+                crmEditOrderDlg( crmData );
+            },
+            error: function( xhr, status, error ){
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'showCVPA().getOrder', xhr.responseText );
+            }
+        });
+    }
+
     function crmEditOrderDlg( crmData ){
         crmOrderItemLists = { };
-        crmOrderItemLists['units'] = crmData.order.units;
         crmOrderItemLists['workers'] = crmData.workers;
         $( '#edit-order-table > tbody' ).html( '' );
-        for( let dataRow of crmData.order.orderitems ){
-           crmAddOrderItem( dataRow );
+        if( exists( crmData.order ) ){
+            for( let dataRow of crmData.order.orderitems ){
+               crmAddOrderItem( dataRow );
+            }
         }
         crmAddOrderItem( { } );
         $( '#edit-order-table > tbody' ).sortable({
@@ -1151,25 +1170,45 @@ $( document ).ready( function()
             }
         });
         $('.ui-sortable').sortable({items: '> tbody:not(.od-item-pin)'});
-        //$( '.od-item-editable' ).
 
-        $( '#od-customer-id' ).val( crmData.order.common.customer_id );
-        $( '#od-lxcars-c_id' ).val( crmData.order.common.c_id );
-        $( '#od-oe-id' ).val( crmData.order.common.id );
-        $( '#od-customer-name' ).html( crmData.order.common.customer_name );
-        $( '#od-oe-ordnumber' ).html( crmData.order.common.ordnumber );
-        $( '#od-oe-finish_time' ).val( crmData.order.common.finish_time );
-        $( '#od-oe-km_stnd' ).val( crmData.order.common.km_stnd );
-        $( '#od-oe-employee_name' ).html( crmData.order.common.employee_name );
-        $( '#od-lxcars-c_ln' ).html( crmData.order.common.c_ln );
-        $( '#od-oe-mtime' ).html( kivi.format_date( new Date( crmData.order.common.mtime ) ) );
-        $( '#od-oe-internalorder' ).prop( 'checked', crmData.order.common.internalorder );
-        $( '#od-oe-itime' ).html( kivi.format_date( new Date( crmData.order.common.itime ) ) );
-        $( '#od-oe-car_status' ).val( crmData.order.common.car_status );
-        $( '#od-oe-status' ).val( crmData.order.common.status );
-        $( '#od-lxcars-c_text' ).val( crmData.order.common.int_car_notes );
-        $( '#od-customer-notes' ).val( crmData.order.common.int_cu_notes );
-        $( '#od-oe-intnotes' ).val( crmData.order.common.intnotes );
+        if( exists( crmData.order ) ){
+            $( '#od-customer-id' ).val( crmData.order.common.customer_id );
+            $( '#od-lxcars-c_id' ).val( crmData.order.common.c_id );
+            $( '#od-oe-id' ).val( crmData.order.common.id );
+            $( '#od-customer-name' ).html( crmData.order.common.customer_name );
+            $( '#od-oe-ordnumber' ).html( crmData.order.common.ordnumber );
+            $( '#od-oe-finish_time' ).val( crmData.order.common.finish_time );
+            $( '#od-oe-km_stnd' ).val( crmData.order.common.km_stnd );
+            $( '#od-oe-employee_name' ).html( crmData.order.common.employee_name );
+            $( '#od-lxcars-c_ln' ).html( crmData.order.common.c_ln );
+            $( '#od-oe-mtime' ).html( kivi.format_date( new Date( crmData.order.common.mtime ) ) );
+            $( '#od-oe-internalorder' ).prop( 'checked', crmData.order.common.internalorder );
+            $( '#od-oe-itime' ).html( kivi.format_date( new Date( crmData.order.common.itime ) ) );
+            $( '#od-oe-car_status' ).val( crmData.order.common.car_status );
+            $( '#od-oe-status' ).val( crmData.order.common.status );
+            $( '#od-lxcars-c_text' ).val( crmData.order.common.int_car_notes );
+            $( '#od-customer-notes' ).val( crmData.order.common.int_cu_notes );
+            $( '#od-oe-intnotes' ).val( crmData.order.common.intnotes );
+        }
+        else{
+            $( '#od-customer-id' ).val( '' );
+            $( '#od-lxcars-c_id' ).val( '' );
+            $( '#od-oe-id' ).val( '' );
+            $( '#od-customer-name' ).html( '' );
+            $( '#od-oe-ordnumber' ).html( '' );
+            $( '#od-oe-finish_time' ).val( '' );
+            $( '#od-oe-km_stnd' ).val( '' );
+            $( '#od-oe-employee_name' ).html( '' );
+            $( '#od-lxcars-c_ln' ).html( ''  );
+            $( '#od-oe-mtime' ).html( '' );
+            $( '#od-oe-internalorder' ).prop( 'checked', false );
+            $( '#od-oe-itime' ).html( '' );
+            $( '#od-oe-car_status' ).val( '' );
+            $( '#od-oe-status' ).val( '' );
+            $( '#od-lxcars-c_text' ).val( '' );
+            $( '#od-customer-notes' ).val( ''  );
+            $( '#od-oe-intnotes' ).val( '' );
+         }
 
 
         $( '#crm-edit-order-dialog' ).dialog({
@@ -1178,7 +1217,7 @@ $( document ).ready( function()
             width: 'auto',
             height: 'auto',
             modal: true,
-            title: kivi.t8( 'Edit order' ),
+            title: kivi.t8( exists( crmData.order )? 'Edit order' : 'New order' ),
             position: { my: "top", at: "top+250" },
             open: function(){
                 $( this ).css( 'maxWidth', window.innerWidth );
@@ -1205,7 +1244,7 @@ $( document ).ready( function()
                             console.info( 'printed' );
                         },
                         error: function( xhr, status, error ){
-                            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmSaveOrder()', xhr.responseText );
+                            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( printOrder1 )', xhr.responseText );
                         }
                     });
                 }
@@ -1221,7 +1260,7 @@ $( document ).ready( function()
                         type: 'POST',
                         data:  { action: 'printOrder', data: printData },
                         error: function( xhr, status, error ){
-                            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmSaveOrder()', xhr.responseText );
+                            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( printOrder2 )', xhr.responseText );
                         }
                     });
                  }
@@ -1241,7 +1280,7 @@ $( document ).ready( function()
                            window.open( 'crm/out.pdf' );
                         },
                         error: function( xhr, status, error ){
-                            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmSaveOrder()', xhr.responseText );
+                            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( pdfOrder )', xhr.responseText );
                         }
                     });
                  }
@@ -1268,7 +1307,7 @@ $( document ).ready( function()
     });
 
     $( '#crm-wf-order' ).click( function() {
-        alert( "Auftrag erstellen!" );
+        crmNewOrder();
     });
 
     $( '#crm-wf-bill' ).click( function() {

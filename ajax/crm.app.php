@@ -291,6 +291,10 @@ function getCar( $data ){
     echo $GLOBALS['dbh']->getOne( "SELECT * FROM lxc_cars WHERE c_id = ".$data['id'], true );
 }
 
+function getWorkers(){
+    echo '{ "workers": '.json_encode(ERPUsersfromGroup("Werkstatt")).' }';
+}
+
 function getOrder( $data ){
     $orderID = $data['id'];
     $taxzone_id = 4;
@@ -304,11 +308,7 @@ function getOrder( $data ){
                 "SELECT oe.*, customer.name AS customer_name, customer.notes AS int_cu_notes, lxc_cars.c_ln AS c_ln, lxc_cars.c_text AS int_car_notes, employee.name AS employee_name FROM oe INNER JOIN customer ON customer.id = oe.customer_id INNER JOIN lxc_cars ON lxc_cars.c_id = oe.c_id INNER JOIN employee ON oe.employee_id = employee.id WHERE oe.id = ".$orderID.
                 ") AS common) AS common, ";
 
-    $query .= "(SELECT json_agg( orderitems ) AS orderitems FROM (".$sql.") AS orderitems) AS orderitems, ";
-
-    $query .= "(SELECT json_agg( units ) AS units FROM (".
-                "SELECT * FROM units".
-                ") AS units) AS units";
+    $query .= "(SELECT json_agg( orderitems ) AS orderitems FROM (".$sql.") AS orderitems) AS orderitems";
 
     $workers = json_encode(ERPUsersfromGroup("Werkstatt"));
 

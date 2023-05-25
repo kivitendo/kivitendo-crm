@@ -214,7 +214,7 @@ function crmSaveOrder(){
     dbUpdateData['instructions'] = [];
 
     $( '.od-common :input' ).each( function( key, pos ){
-        dbUpdateData['oe'][pos.id.split( '-' )[2]] = ( 'checkbox' === pos.type )? $( pos ).prop( 'checked' ) : $( pos ).val();;
+        dbUpdateData['oe'][pos.id.split( '-' )[2]] = ( 'checkbox' === pos.type )? $( pos ).prop( 'checked' ) : $( pos ).val();
     });
 
     dbUpdateData['customer']['notes'] = $( '#od-customer-notes' ).val();
@@ -264,6 +264,9 @@ function crmSaveOrder(){
 
     dbUpdateData['lxc_cars']['WHERE'] = {};
     dbUpdateData['lxc_cars']['WHERE'] = 'c_id = ' + $( '#od-lxcars-c_id' ).val();
+
+    console.info( 'dbUpdateData' );
+    console.info( dbUpdateData );
 
     $.ajax({
         url: 'crm/ajax/crm.app.php',
@@ -322,6 +325,7 @@ function crmEditOrderDlg( crmData ){
         $( '#od-oe-finish_time' ).val( crmData.order.common.finish_time );
         $( '#od-oe-km_stnd' ).val( crmData.order.common.km_stnd );
         $( '#od-oe-employee_name' ).html( crmData.order.common.employee_name );
+        $( '#od-oe-employee_id' ).val( crmData.order.common.employee_id );
         $( '#od-lxcars-c_ln' ).html( crmData.order.common.c_ln );
         $( '#od-oe-mtime' ).html( kivi.format_date( new Date( crmData.order.common.mtime ) ) );
         $( '#od-oe-internalorder' ).prop( 'checked', crmData.order.common.internalorder );

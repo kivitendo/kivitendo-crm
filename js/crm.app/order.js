@@ -45,6 +45,22 @@ function crmCalcOrderPrice( pos ){
    }
 }
 
+function crmEditOrderOnChange(){
+    crmCalcOrderPos();
+    crmSaveOrder();
+}
+
+function crmEditOrderKeyup(e){
+    if( e.which == 13 || e.which == 9 ){
+        crmCalcOrderPos();
+        if( !isEmpty($( ':focus' ).parent().parent().find( '[name=od-item-description]' ).val() ) ){
+           if( 'od-empty-item-id' === $( ':focus' ).parent().parent().attr( 'id' ) ){
+                console.info( 'Position ungültig!' );
+            }
+        }
+    }
+}
+
 function crmAddOrderItem( dataRow ){
     let tableRow;
     tableRow += '<tr ' + ( ( exists( dataRow.id ) )? ('id="' + dataRow.id + '"') : 'id = "od-empty-item-id" class="od-item-pin"') + '><td class="od-item-position"></td>' +
@@ -61,17 +77,17 @@ function crmAddOrderItem( dataRow ){
     tableRow += '<input class="od-item-type" type="hidden" value="' + orderType + '"></input>';
     tableRow += '<span class="od-table-item-type">' + kivi.t8(orderType) + '</span>';
     tableRow += '</td>' +
-                '<td><input name="od-item-description" class="od-item-description" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '"></input></td>' +
-                '<td><input class="od-item-longdescription" type="text" size="40" value="' + ( ( exists( dataRow.longdescription ) )? dataRow.longdescription : '' )  + '"></input>' +
-                '</td><td><input class="od-item-qty" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.qty ) )? dataRow.qty : '0' ) + '"></input></td>';
+                '<td><input name="od-item-description" class="od-item-description" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td>' +
+                '<td><input class="od-item-longdescription" type="text" size="40" value="' + ( ( exists( dataRow.longdescription ) )? dataRow.longdescription : '' )  + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input>' +
+                '</td><td><input class="od-item-qty" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.qty ) )? dataRow.qty : '0' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td>';
 
     // Unit is readonly now:
-    tableRow += '<td><input class="od-item-unit" type="text" size="5" readonly="readonly" value="' + ( ( exists( dataRow.unit ) )? dataRow.unit : '' ) + '"></input></td>';
+    tableRow += '<td><input class="od-item-unit" type="text" size="5" readonly="readonly" value="' + ( ( exists( dataRow.unit ) )? dataRow.unit : '' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td>';
 
     tableRow += '<td><input class="od-hidden-item-rate" type="hidden" value="' + ( ( exists( dataRow.rate ) )? dataRow.rate : '0' ) + '"></input>' +
-                '<input class="od-item-sellprice" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.sellprice ) )? dataRow.sellprice : '0', 2 ) + '"></input></td>' +
-                '<td><input class="od-item-discount" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.discount ) )? dataRow.discount : '0' ) + '"></input></td><td><button>100%</button></td>' +
-                '<td><input class="od-item-marge_total" type="text" size="5" readonly="readonly" value="' + kivi.format_amount( ( exists( dataRow.marge_total ) )? dataRow.marge_total : '0', 2 ) + '"></input></td>';
+                '<input class="od-item-sellprice" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.sellprice ) )? dataRow.sellprice : '0', 2 ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td>' +
+                '<td><input class="od-item-discount" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.discount ) )? dataRow.discount : '0' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td><td><button>100%</button></td>' +
+                '<td><input class="od-item-marge_total" type="text" size="5" readonly="readonly" value="' + kivi.format_amount( ( exists( dataRow.marge_total ) )? dataRow.marge_total : '0', 2 ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td>';
 
     tableRow += '<td><select type="select">';
     tableRow += '<option value=""></option>';
@@ -123,18 +139,19 @@ function crmAddOrderItem( dataRow ){
         }
     });
 
-    $( '#edit-order-table :input' ).change( function(){
-        crmCalcOrderPos();
-    }).keyup( function(e){
-        if( e.which == 13 || e.which == 9 ){
-            crmCalcOrderPos();
-            if( !isEmpty($( ':focus' ).parent().parent().find( '[name=od-item-description]' ).val() ) ){
-               if( 'od-empty-item-id' === $( ':focus' ).parent().parent().attr( 'id' ) ){
-                    console.info( 'Position ungültig!' );
-                }
-            }
-        }
-    });
+//    $( '#edit-order-table :input' ).change( function(){
+//        crmCalcOrderPos();
+//        crmSaveOrder();
+//    }).keyup( function(e){
+//        if( e.which == 13 || e.which == 9 ){
+//            crmCalcOrderPos();
+//            if( !isEmpty($( ':focus' ).parent().parent().find( '[name=od-item-description]' ).val() ) ){
+//               if( 'od-empty-item-id' === $( ':focus' ).parent().parent().attr( 'id' ) ){
+//                    console.info( 'Position ungültig!' );
+//                }
+//            }
+//        }
+//    });
 
     crmCalcOrderPos();
 }
@@ -151,6 +168,11 @@ function crmNewOrderAndInsertPos( itemPosition, itemType, item ){
         success: function( data ){
             $( '#od-oe-id' ).val( data.id );
             crmInsertOrderPos( itemPosition, itemType, item );
+            if( !isEmpty( $( '#od-oe-id' ).val() ) ){
+                $( '#od-ui-btn-printer1' ).show();
+                $( '#od-ui-btn-printer2' ).show();
+                $( '#od-ui-btn-pdf' ).show();
+            }
         },
         error: function( xhr, status, error ){
             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmInsertOrderPos()', xhr.responseText );
@@ -224,6 +246,8 @@ crmDeleteOrderPos = function( e ) {
  }
 
 function crmSaveOrder(){
+    if( isEmpty( $( '#od-oe-id' ).val() ) ) return;
+
     let dbUpdateData = { }
     dbUpdateData['oe'] = {};
     dbUpdateData['customer'] = {};
@@ -316,6 +340,10 @@ function crmNewOrderForCar( c_id ){
     });
 }
 
+$( '#crm-edit-order-dialog :input' ).change( function(){
+    crmSaveOrder();
+});
+
 function crmEditOrderDlg( crmData ){
     crmOrderItemLists = { };
     crmOrderItemLists['workers'] = crmData.workers;
@@ -375,8 +403,7 @@ function crmEditOrderDlg( crmData ){
         $( '#od-oe-intnotes' ).val( '' );
      }
 
-
-    $( '#crm-edit-order-dialog' ).dialog({
+     $( '#crm-edit-order-dialog' ).dialog({
         autoOpen: false,
         resizable: true,
         width: 'auto',
@@ -386,19 +413,18 @@ function crmEditOrderDlg( crmData ){
         position: { my: "top", at: "top+250" },
         open: function(){
             $( this ).css( 'maxWidth', window.innerWidth );
+            if( isEmpty( $( '#od-oe-id' ).val() ) ){
+                $( '#od-ui-btn-printer1' ).hide();
+                $( '#od-ui-btn-printer2' ).hide();
+                $( '#od-ui-btn-pdf' ).hide();
+            }
         },
         close: function(){
             crmRefreshAppViewAction();
         },
         buttons:[{
-            text: kivi.t8( 'Save' ),
-            click: function(){
-                console.info( 'Save order' );
-                crmSaveOrder();
-                //$( this ).dialog( "close" );
-            }
-        },{
             text: kivi.t8( 'Printer 1' ),
+            id: 'od-ui-btn-printer1',
             click: function(){
                 let printData = {};
                 printData['orderId'] = $( '#od-oe-id' ).val();
@@ -418,6 +444,7 @@ function crmEditOrderDlg( crmData ){
             }
         },{
             text: kivi.t8( 'Printer 2' ),
+            id: 'od-ui-btn-printer2',
             click: function(){
                 let printData = {};
                 printData['orderId'] = $( '#od-oe-id' ).val();
@@ -434,6 +461,7 @@ function crmEditOrderDlg( crmData ){
              }
         },{
             text: kivi.t8( ' PDF ' ),
+            id: 'od-ui-btn-pdf',
             click: function(){
                 console.info( 'Print order PDF' );
                 let printData = {};
@@ -454,7 +482,7 @@ function crmEditOrderDlg( crmData ){
              }
         },
         {
-            text: kivi.t8( 'Cancel' ),
+            text: kivi.t8( 'Close' ),
             click: function(){
                 $( this ).dialog( "close" );
             }

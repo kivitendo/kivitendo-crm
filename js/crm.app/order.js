@@ -387,6 +387,9 @@ function crmEditOrderDlg( crmData ){
         open: function(){
             $( this ).css( 'maxWidth', window.innerWidth );
         },
+        close: function(){
+            crmRefreshAppViewAction();
+        },
         buttons:[{
             text: kivi.t8( 'Save' ),
             click: function(){

@@ -452,6 +452,8 @@
 <div id="crm-wx-base-data" class="row crm-p2">
     <div class="col-lg-3">
         <div id="crm-wx-contact">
+            <input type="hidden" id="crm-cvpa-id"></input>
+            <input type="hidden" id="crm-cvpa-src"></input>
             <div><strong><span id="crm-contact-name"></span></strong></div>
             <div class="crm-pt05"><span id="crm-contact-street"></span></div>
             <div class="crm-pt025"><span id="crm-contact-country"></span>-<span id="crm-contact-city"></span></div>

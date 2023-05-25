@@ -112,6 +112,10 @@ function crmRefreshAppView( src, id ){
     crmGetHistory();
 }
 
+function crmRefreshAppViewAction( ){
+    getCVPA( $( '#crm-cvpa-src' ).val(), $( '#crm-cvpa-id' ).val() );
+}
+
 $( '#message-dialog' ).dialog({
     autoOpen: false,
     resizable: false,
@@ -147,6 +151,8 @@ $.fn.showMessageDialog = function( style, title, message, debug = null ){
 function showCVPA( data ){
     if( data.cv ){
         console.info( 'customer/vendor src: ' +  data.cv.src + ', id: ' + data.cv.id );
+        $( '#crm-cvpa-src' ).val( data.cv.src );
+        $( '#crm-cvpa-id' ).val( data.cv.id );
 
         $( '#crm-wx-contact' ).show();
         $.each( data.cv, function( key, value ){

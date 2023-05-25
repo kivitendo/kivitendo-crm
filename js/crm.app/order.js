@@ -299,8 +299,8 @@ function crmSaveOrder(){
     dbUpdateData['lxc_cars']['WHERE'] = {};
     dbUpdateData['lxc_cars']['WHERE'] = 'c_id = ' + $( '#od-lxcars-c_id' ).val();
 
-    console.info( 'dbUpdateData' );
-    console.info( dbUpdateData );
+    //console.info( 'dbUpdateData' );
+    //console.info( dbUpdateData );
 
     $.ajax({
         url: 'crm/ajax/crm.app.php',
@@ -323,7 +323,7 @@ function crmNewOrderForCar( c_id ){
         type: 'POST',
         data:  { action: 'getDataForNewLxcarsOrder', data: { 'id': c_id } },
         success: function( crmData ){
-            console.info( crmData );
+            //console.info( crmData );
             crmEditOrderDlg( crmData );
         },
         error: function( xhr, status, error ){
@@ -334,6 +334,14 @@ function crmNewOrderForCar( c_id ){
 
 $( '#crm-edit-order-dialog :input' ).change( function(){
     crmSaveOrder();
+});
+$( '#od-ui-items-workers' ).change( function(){
+    $( '#edit-order-table > tbody > tr').each( function( key, pos ){
+        if( 'od-empty-item-id' !== $( pos ).attr( 'id' ) ){
+            $( pos ).find( '[class=od-item-u_id]' ).val( $( '#od-ui-items-workers' ).val() );
+            $( pos ).find( '[class=od-item-u_id]' ).change();
+        }
+    });
 });
 
 function crmEditOrderDlg( crmData ){
@@ -394,6 +402,12 @@ function crmEditOrderDlg( crmData ){
         $( '#od-customer-notes' ).val( crmData.common.int_cu_notes  );
         $( '#od-oe-intnotes' ).val( '' );
      }
+
+    $( '#od-ui-items-workers' ).html( '' );
+    $( '#od-ui-items-workers' ).append(new Option( '', ''  ) );
+    for( let worker of crmData.workers ){
+        $( '#od-ui-items-workers' ).append(new Option( worker.name, worker.name  ) );
+    }
 
      $( '#crm-edit-order-dialog' ).dialog({
         autoOpen: false,

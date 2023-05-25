@@ -9,7 +9,7 @@
   icon: search
   order: 10
   access: crm_search
-  module: crm/crm.app.php
+  module: crm.app.php
 - parent: crm
   id: crm_search
   name: Search

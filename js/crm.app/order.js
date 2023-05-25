@@ -94,7 +94,7 @@ function crmAddOrderItem( dataRow ){
                 '<td><input class="od-item-discount" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.discount ) )? dataRow.discount : '0' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td><td><button>100%</button></td>' +
                 '<td><input class="od-item-marge_total" type="text" size="5" readonly="readonly" value="' + kivi.format_amount( ( exists( dataRow.marge_total ) )? dataRow.marge_total : '0', 2 ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td>';
 
-    tableRow += '<td><select type="select">';
+    tableRow += '<td><select class="od-item-u_id" type="select" onchange="crmEditOrderOnChange()">';
     tableRow += '<option value=""></option>';
     for( let worker of crmOrderItemLists.workers ){
         tableRow += '<option value="' + worker.name  + '"';
@@ -299,8 +299,8 @@ function crmSaveOrder(){
     dbUpdateData['lxc_cars']['WHERE'] = {};
     dbUpdateData['lxc_cars']['WHERE'] = 'c_id = ' + $( '#od-lxcars-c_id' ).val();
 
-    //console.info( 'dbUpdateData' );
-    //console.info( dbUpdateData );
+    console.info( 'dbUpdateData' );
+    console.info( dbUpdateData );
 
     $.ajax({
         url: 'crm/ajax/crm.app.php',

@@ -54,8 +54,13 @@ function crmEditOrderKeyup(e){
     if( e.which == 13 || e.which == 9 ){
         crmCalcOrderPos();
         if( !isEmpty($( ':focus' ).parent().parent().find( '[name=od-item-description]' ).val() ) ){
-           if( 'od-empty-item-id' === $( ':focus' ).parent().parent().attr( 'id' ) ){
+           let field = $( ':focus' ).parent().parent();
+           if( 'od-empty-item-id' === field.attr( 'id' ) ){
                 console.info( 'Position ungültig!' );
+                field.css("background-color","red");
+            }
+            else{
+                field.css("background-color","white");
             }
         }
     }
@@ -129,6 +134,7 @@ function crmAddOrderItem( dataRow ){
             let itemPosition = $( ':focus' ).parent().parent().find( '[class=od-item-position]' )[0].innerText;
             //Bug or feature, can't do otherwise:
             $( ':focus' ).parent().parent()[0].className = "";
+            $( ':focus' ).parent().parent().css("background-color","white");
 
             const list = $( '.od-item-description' );
             if( list[list.length - 1].value !== '' ){
@@ -138,20 +144,6 @@ function crmAddOrderItem( dataRow ){
             crmInsertOrderPos( itemPosition, orderType, ui.item );
         }
     });
-
-//    $( '#edit-order-table :input' ).change( function(){
-//        crmCalcOrderPos();
-//        crmSaveOrder();
-//    }).keyup( function(e){
-//        if( e.which == 13 || e.which == 9 ){
-//            crmCalcOrderPos();
-//            if( !isEmpty($( ':focus' ).parent().parent().find( '[name=od-item-description]' ).val() ) ){
-//               if( 'od-empty-item-id' === $( ':focus' ).parent().parent().attr( 'id' ) ){
-//                    console.info( 'Position ungültig!' );
-//                }
-//            }
-//        }
-//    });
 
     crmCalcOrderPos();
 }

@@ -219,7 +219,7 @@
                 <table>
                     <tr>
                         <td class="od-table-label"><label for="od-lxcars-km_stnd">KM-Stand:</label></td>
-                        <td><input class="od-oe-km_stnd" id="od-oe-km_stnd" type="text" ></td>
+                        <td><input class="od-oe-km_stnd" id="od-oe-km_stnd" type="number"></td>
                      </tr>
                     <tr>
                         <td class="od-table-label"><label for="od-lxcars-c_ln">Amtl.-Kennz.:</label></td>

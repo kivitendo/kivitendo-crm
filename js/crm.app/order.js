@@ -139,6 +139,25 @@ function crmAddOrderItem( dataRow ){
     crmCalcOrderPos();
 }
 
+function crmNewOrderAndInsertPos( itemPosition, itemType, item ){
+    let dbData = { }
+    dbData['customer_id'] = $( '#od-customer-id' ).val();
+    dbData['c_id'] = $( '#od-lxcars-c_id' ).val();
+
+    $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        type: 'POST',
+        data:  { action: 'insertNewOrder', data: dbData },
+        success: function( data ){
+            $( '#od-oe-id' ).val( data.id );
+            crmInsertOrderPos( itemPosition, itemType, item );
+        },
+        error: function( xhr, status, error ){
+            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmInsertOrderPos()', xhr.responseText );
+        }
+    });
+}
+
 function crmInsertOrderPos( itemPosition, itemType, item ){
     let pos = {};
     let dbTable = '';
@@ -158,7 +177,8 @@ function crmInsertOrderPos( itemPosition, itemType, item ){
     pos['sequence_name'] = 'orderitemsid';
 
     if( isEmpty( $( '#od-oe-id' ).val() ) ){
-        console.info( 'Insert new order hier' );
+        crmNewOrderAndInsertPos( itemPosition, itemType, item );
+        return;
     }
 
     $.ajax({
@@ -167,6 +187,7 @@ function crmInsertOrderPos( itemPosition, itemType, item ){
         data:  { action: 'genericSingleInsert', data: pos },
         success: function( data ){
             $( '#od-empty-item-id' ).attr( 'id', data.id );
+            crmSaveOrder();
         },
         error: function( xhr, status, error ){
             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmInsertOrderPos()', xhr.responseText );
@@ -176,8 +197,6 @@ function crmInsertOrderPos( itemPosition, itemType, item ){
 
 crmDeleteOrderPos = function( e ) {
     var row = $( e ).parent().parent();
-    console.info( 'row' );
-    //$( row ) .remove();
 
     let pos = {};
     let dbTable = '';
@@ -188,7 +207,6 @@ crmDeleteOrderPos = function( e ) {
 
     pos[dbTable] = {};
     pos[dbTable]['WHERE'] = 'id = ' + $( row ).attr( 'id' );
-    console.info( pos );
 
     $.ajax({
         url: 'crm/ajax/crm.app.php',
@@ -265,8 +283,8 @@ function crmSaveOrder(){
     dbUpdateData['lxc_cars']['WHERE'] = {};
     dbUpdateData['lxc_cars']['WHERE'] = 'c_id = ' + $( '#od-lxcars-c_id' ).val();
 
-    console.info( 'dbUpdateData' );
-    console.info( dbUpdateData );
+    //console.info( 'dbUpdateData' );
+    //console.info( dbUpdateData );
 
     $.ajax({
         url: 'crm/ajax/crm.app.php',
@@ -302,7 +320,7 @@ function crmEditOrderDlg( crmData ){
     crmOrderItemLists = { };
     crmOrderItemLists['workers'] = crmData.workers;
     $( '#edit-order-table > tbody' ).html( '' );
-    if( exists( crmData.order ) ){
+    if( exists( crmData.order ) && exists( crmData.order.orderitems ) ){
         for( let dataRow of crmData.order.orderitems ){
            crmAddOrderItem( dataRow );
         }
@@ -343,7 +361,7 @@ function crmEditOrderDlg( crmData ){
         $( '#od-customer-name' ).html( crmData.common.customer_name );
         $( '#od-oe-ordnumber' ).html( '' );
         $( '#od-oe-finish_time' ).val( '' );
-        $( '#od-oe-km_stnd' ).val( '' );
+        $( '#od-oe-km_stnd' ).val( '0' );
         $( '#od-oe-employee_name' ).html( crmData.common.employee_name );
         $( '#od-oe-employee_id' ).val( crmData.common.employee_id );
         $( '#od-lxcars-c_ln' ).html( crmData.common.c_ln  );

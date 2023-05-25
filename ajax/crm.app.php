@@ -341,6 +341,11 @@ function insertNewCuWithCar( $data ){
     echo '{ "src": "C", "id": "'.$id.'" }';
 }
 
+function insertNewOrder( $data ){
+    $id = $GLOBALS['dbh']->getOne( "WITH tmp AS ( UPDATE defaults SET sonumber = sonumber::INT + 1 RETURNING sonumber) INSERT INTO oe ( ordnumber, customer_id, employee_id, taxzone_id, currency_id, c_id) SELECT ( SELECT sonumber FROM tmp), ".$data['customer_id'].", ".$_SESSION['id'].",  customer.taxzone_id, customer.currency_id, ".$data['c_id']." FROM customer WHERE customer.id = ".$data['customer_id']." RETURNING id ")['id'];
+    echo '{ "id": "'.$id.'"  }';
+}
+
 /********************************************
 * Ubdate Customer optional with new Car
 ********************************************/

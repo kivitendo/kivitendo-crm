@@ -8,7 +8,7 @@
   name: App
   icon: search
   order: 10
-  access: crm_app
+  access: crm_search
   module: crm.app.php
 - parent: crm
   id: crm_search

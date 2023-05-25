@@ -104,7 +104,7 @@ function crmAddOrderItem( dataRow ){
     tableRow += '</select></td>';
 
     const statusList = [ 'gelesen', 'Bearbeitung', 'erledigt' ];
-    tableRow += '<td><select type="select">';
+    tableRow += '<td><select class="od-item-status" type="select" onchange="crmEditOrderOnChange()">';
     for( let status of statusList ){
         tableRow += '<option value="' + status  + '"';
         if(dataRow.status === status) tableRow += ' selected'

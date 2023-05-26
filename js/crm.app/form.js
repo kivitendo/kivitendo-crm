@@ -137,3 +137,13 @@ const editCarFormModel = [
     { "name": "edit_car_kba-13", "label": "Total weight:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_car-c_id", "type": "hidden", },
 ];
+
+const editArticleFormModel = [
+    { "name": "edit_article-partnumber", "label": "Article number:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "edit_article-description", "label": "Description:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "edit_article-part_type", "label": "Article typ:", "type": "select","data": [], "tooltip":""}, //selectbox
+    { "name": "edit_article-unit", "label": "Unit:", "type": "select","data": [], "tooltip":""}, //selectbox
+    { "name": "edit_article-listprice", "label": "Purchasing price:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "edit_article-sellprice", "label": "Sales price:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "edit_article-buchungsgruppen_id", "label": "Booking group:", "type": "select","data": [], "tooltip":""}, //selectbox
+];

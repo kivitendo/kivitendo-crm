@@ -360,6 +360,14 @@
     </div>
 </div>
 
+<div id="crm-edit-article-dialog" style="display:none">
+    <div id="edit-article-hidden"></div>
+    <table id="edit-article-form">
+        <thead></thead>
+        <tbody></tbody>
+    </table>
+</div>
+
 <div id="crm-edit-car-dialog" style="display:none">
     <div id="edit-car-hidden"></div>
     <table id="edit-car-form">
@@ -626,11 +634,12 @@
     foreach($objResult->{'javascripts_inline'} as $js) echo $js."\n";
 ?>
 </script>
-<script src="crm/js/crm.app/order.js"></script>
 <script src="crm/js/crm.app/app.js"></script>
 <script src="crm/js/crm.app/form.js"></script>
 <script src="crm/js/crm.app/cvp.js"></script>
 <script src="crm/js/crm.app/car.js"></script>
+<script src="crm/js/crm.app/order.js"></script>
+<script src="crm/js/crm.app/article.js"></script>
 <script src="crm/js/crm.app/phonecall.js"></script>
 </body>
 </html>

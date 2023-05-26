@@ -58,6 +58,7 @@ function crmEditOrderKeyup(e){
            if( 'od-empty-item-id' === field.attr( 'id' ) ){
                 console.info( 'Position ungültig!' );
                 field.css("background-color","red");
+                crmEditArticleDlg();
             }
             else{
                 field.css("background-color","white");

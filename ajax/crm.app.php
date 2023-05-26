@@ -40,6 +40,42 @@ function fastSearch(){
     }
 }
 
+function computeArticleNumber( $data ){
+    $type = $GLOBALS['dbh']->getOne( "SELECT type FROM units WHERE name='".$data['unit']."'" );
+    if( null === $type[type] ) $type[type] = "service"; //null bei 'km' usw.???
+    if( $type[type] == "dimension" )
+        $rs = $GLOBALS['dbh']->getOne( "SELECT id AS defaults_id, articlenumber::INT + 1 AS newnumber, 0 AS service FROM defaults");
+    elseif( $type[type] == "service") //or instruction
+        $rs = $GLOBALS['dbh']->getOne( "SELECT id AS defaults_id, servicenumber::INT + 1 AS newnumber, customer_hourly_rate, 1 AS service FROM defaults");
+    while( $GLOBALS['dbh']->getOne( "SELECT partnumber FROM parts WHERE partnumber = '".$rs['newnumber']."'" )['partnumber'] ) $rs['newnumber']++;
+
+    return $rs;
+}
+
+function newArticleNumber( $data ){
+    echo json_encode( computeArticleNumber( $data ) );
+}
+
+function dataForNewArticle( $data ){
+    $an = computeArticleNumber( $data );
+
+    $query .= "SELECT (SELECT json_agg( units ) AS units FROM (".
+                "SELECT name FROM units".
+                    ") AS units) AS units, ";
+
+    $query .= "(SELECT json_agg( buchungsgruppen ) AS buchungsgruppen FROM (".
+                "SELECT id, description FROM  buchungsgruppen WHERE obsolete = false ORDER BY sortkey ASC".
+                    ") AS buchungsgruppen) AS buchungsgruppen";
+
+    $units = $GLOBALS['dbh']->getOne($query, true);
+
+    echo  '{ "defaults": '.json_encode( $an ).', "common": '.$units.' }';
+}
+
+function insertNewArticle( $data ){
+
+}
+
 /********************************************
 * Find parts like service, instructions and goods for orders
 * Sortet by quantity and categorie (instruction, good and service)

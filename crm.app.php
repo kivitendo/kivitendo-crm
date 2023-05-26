@@ -300,7 +300,16 @@
                 <th id="od-discount_thead-100" class="listheading" nowrap width="5" ><input value="100" type="hidden" id="od-ui-discount-100-all"></input><button id="od-ui-discount-100-all-btn" style="width: 3em;">100%</button></th>
                 <th class="listheading" nowrap width="10">Gesamt </th>
                 <th class="listheading" nowrap width="2" >Mechaniker <div><select id="od-ui-items-workers"></select></div></th>
-                <th class="listheading" nowrap width="2" >Status </th>
+                <th class="listheading" nowrap width="2" >
+                    Status
+                    <div>
+                        <select id="od-ui-items-status-all">
+                            <option value="gelesen">gelesen</option>
+                            <option value="Bearbeitung">Bearbeitung</option>
+                            <option value="erledigt">erledigt</option>
+                        </select>
+                    </div>
+                </th>
             </tr>
         </thead>
         <tbody></tbody>

@@ -374,10 +374,21 @@ $( '#od-ui-items-workers' ).change( function(){
     $( '#edit-order-table > tbody > tr').each( function( key, pos ){
         if( 'od-empty-item-id' !== $( pos ).attr( 'id' ) ){
             $( pos ).find( '[class=od-item-u_id]' ).val( $( '#od-ui-items-workers' ).val() );
-            $( pos ).find( '[class=od-item-u_id]' ).change();
         }
     });
+    crmCalcOrderPos();
+    crmSaveOrder();
 });
+$( '#od-ui-items-status-all' ).change( function(){
+    $( '#edit-order-table > tbody > tr').each( function( key, pos ){
+        if( 'od-empty-item-id' !== $( pos ).attr( 'id' ) ){
+            $( pos ).find( '[class=od-item-status]' ).val( $( '#od-ui-items-status-all' ).val() );
+        }
+    });
+    crmCalcOrderPos();
+    crmSaveOrder();
+});
+
 
 function crmEditOrderDlg( crmData ){
     crmOrderItemLists = { };

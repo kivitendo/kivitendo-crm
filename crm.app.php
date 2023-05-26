@@ -297,7 +297,7 @@
                 <th class="listheading" nowrap width="5" >Einheit </th>
                 <th id="od-sellprice-thead" class="listheading" nowrap width="2" >Preis</th>
                 <th id="od-discount-thead" class="listheading" nowrap width="5" >Rabatt in %</th>
-                <th id="od-discount_thead-100" class="listheading" nowrap width="5" ><input value="100%" type="button" id="od-discount-100-all" style="width: 3em;"></th>
+                <th id="od-discount_thead-100" class="listheading" nowrap width="5" ><input value="100" type="hidden" id="od-ui-discount-100-all"></input><button id="od-ui-discount-100-all-btn" style="width: 3em;">100%</button></th>
                 <th class="listheading" nowrap width="10">Gesamt </th>
                 <th class="listheading" nowrap width="2" >Mechaniker <div><select id="od-ui-items-workers"></select></div></th>
                 <th class="listheading" nowrap width="2" >Status </th>

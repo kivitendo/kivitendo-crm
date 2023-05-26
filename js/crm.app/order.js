@@ -66,9 +66,51 @@ function crmEditOrderKeyup(e){
     }
 }
 
-function crmEditOrderHundertPro(){
-   $( ':focus' ).parent().parent().find( '[class=od-item-discount]' ).val( '100' );
+function crmEditOrderChangeHundredPro( hundredpro, hundredproBtn){
+    if( hundredpro.val() == 100 ){
+        hundredpro.val( 0 );
+        hundredproBtn.text( '0%' );
+    }
+    else{
+        hundredpro.val( 100 );
+        hundredproBtn.text( '100%' );
+    }
 }
+
+function crmEditOrderHundredPro(){
+//    let hundredpro =  $( ':focus' ).parent().parent().find( '[class=od-ui-hundredpro]' );
+//    let hundredproBtn = $( ':focus' ).parent().parent().find( '[class=od-ui-hundredpro-btn]' );
+//    $( ':focus' ).parent().parent().find( '[class=od-item-discount]' ).val( hundredpro.val() );
+//    if( hundredpro.val() == 100 ){
+//        hundredpro.val( 0 );
+//        hundredproBtn.text( '0%' );
+//    }
+//    else{
+//        hundredpro.val( 100 );
+//        hundredproBtn.text( '100%' );
+//    }
+
+    let hundredpro =  $( ':focus' ).parent().parent().find( '[class=od-ui-hundredpro]' );
+    $( ':focus' ).parent().parent().find( '[class=od-item-discount]' ).val( hundredpro.val() );
+    crmEditOrderChangeHundredPro( hundredpro, $( ':focus' ).parent().parent().find( '[class=od-ui-hundredpro-btn]' ) )
+    crmCalcOrderPos();
+    crmSaveOrder();
+}
+
+$( '#od-ui-discount-100-all-btn' ).click( function(){
+    console.info( 'click' );
+    $( '#edit-order-table > tbody > tr').each( function( key, pos ){
+        if( 'od-empty-item-id' !== $( pos ).attr( 'id' ) ){
+            let hundredpro =  $( pos ).find( '[class=od-ui-hundredpro]' );
+            hundredpro.val( $( '#od-ui-discount-100-all' ).val()  );
+            $( pos ).find( '[class=od-item-discount]' ).val( hundredpro.val() );
+            crmEditOrderChangeHundredPro( hundredpro, $( pos ).find( '[class=od-ui-hundredpro-btn]' ) )
+        }
+    });
+    crmEditOrderChangeHundredPro( $( '#od-ui-discount-100-all' ) , $( '#od-ui-discount-100-all-btn' ) )
+    crmCalcOrderPos();
+    crmSaveOrder();
+});
 
 function crmAddOrderItem( dataRow ){
     let tableRow;
@@ -95,7 +137,7 @@ function crmAddOrderItem( dataRow ){
 
     tableRow += '<td><input class="od-hidden-item-rate" type="hidden" value="' + ( ( exists( dataRow.rate ) )? dataRow.rate : '0' ) + '"></input>' +
                 '<input class="od-item-sellprice" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.sellprice ) )? dataRow.sellprice : '0', 2 ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td>' +
-                '<td><input class="od-item-discount" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.discount ) )? dataRow.discount : '0' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td><td><button onclick="crmEditOrderHundertPro()">100%</button></td>' +
+                '<td><input class="od-item-discount" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.discount ) )? dataRow.discount : '0' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td><td><input class="od-ui-hundredpro" type="hidden" value="100"></input><button class="od-ui-hundredpro-btn" onclick="crmEditOrderHundredPro()">100%</button></td>' +
                 '<td><input class="od-item-marge_total" type="text" size="5" readonly="readonly" value="' + kivi.format_amount( ( exists( dataRow.marge_total ) )? dataRow.marge_total : '0', 2 ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td>';
 
     tableRow += '<td><select class="od-item-u_id" type="select" onchange="crmEditOrderOnChange()">';
@@ -337,6 +379,7 @@ function crmNewOrderForCar( c_id ){
 }
 
 $( '#crm-edit-order-dialog :input' ).change( function(){
+    crmCalcOrderPos();
     crmSaveOrder();
 });
 $( '#od-ui-items-workers' ).change( function(){

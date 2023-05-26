@@ -78,18 +78,6 @@ function crmEditOrderChangeHundredPro( hundredpro, hundredproBtn){
 }
 
 function crmEditOrderHundredPro(){
-//    let hundredpro =  $( ':focus' ).parent().parent().find( '[class=od-ui-hundredpro]' );
-//    let hundredproBtn = $( ':focus' ).parent().parent().find( '[class=od-ui-hundredpro-btn]' );
-//    $( ':focus' ).parent().parent().find( '[class=od-item-discount]' ).val( hundredpro.val() );
-//    if( hundredpro.val() == 100 ){
-//        hundredpro.val( 0 );
-//        hundredproBtn.text( '0%' );
-//    }
-//    else{
-//        hundredpro.val( 100 );
-//        hundredproBtn.text( '100%' );
-//    }
-
     let hundredpro =  $( ':focus' ).parent().parent().find( '[class=od-ui-hundredpro]' );
     $( ':focus' ).parent().parent().find( '[class=od-item-discount]' ).val( hundredpro.val() );
     crmEditOrderChangeHundredPro( hundredpro, $( ':focus' ).parent().parent().find( '[class=od-ui-hundredpro-btn]' ) )

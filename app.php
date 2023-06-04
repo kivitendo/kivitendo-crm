@@ -473,15 +473,15 @@
             <input type="hidden" id="crm-cvpa-src"></input>
             <div><strong><span id="crm-contact-name"></span></strong></div>
             <div class="crm-pt05"><span id="crm-contact-street"></span></div>
-            <div class="crm-pt025"><span id="crm-contact-country"></span>-<span id="crm-contact-city"></span></div>
+            <div class="crm-pt025"><span id="crm-contact-country"></span>-<span id="crm-contact-zipcode"></span> <span id="crm-contact-city"></span></div>
             <div class="crm-pt2"><strong>Hauptkontakt</strong></div>
             <div class="crm-pt05"><span id="crm-contact-contact"></span></div>
                 <table>
                   <tr>
-                    <td>Telefon:</td><td><button id="crm-contact-phone1"></button></td><td><button id="tel1_dialog_button">T</button><div id="tel1_dialog"></div></td><td><button class="copy" number="{Telefon}" title="Copy">C</button></td><td ><button class="whatsapp" number="{Telefon}" name="{Fname1}" title="Whatsapp" ><img src="../image/whatsapp.png" alt="Whatsapp" ></button></td>
+                    <td>Telefon:</td><td><button id="crm-contact-phone1"></button></td><td><button id="crm-contact-phone1_dialog_button">T</button><div id="crm-contact-phone1_dialog"></div></td><td><button id="crm-copy-contact-phone1" class="copy" title="Copy">C</button></td><td ><button id="crm-whatsapp1" class="whatsapp" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
                   </tr>
                   <tr>
-                    <td>Telefon:</td><td><button id="crm-contact-phone2"></button></td><td><button id="tel2_dialog_button">T</button><div id="tel2_dialog"></div></td><td><button class="copy" number="{Fax}" title="Copy">C</button></td><td ><button class="whatsapp" number="{Fax}" name="{Fname1}" title="Whatsapp" ><img src="../image/whatsapp.png" alt="Whatsapp" ></button></td>
+                    <td>Telefon:</td><td><button id="crm-contact-phone2"></button></td><td><button id="crm-contact-phone2_dialog_button">T</button><div id="crm-contact-phone2_dialog"></div></td><td><button id="crm-copy-contact-phone2" class="copy"  title="Copy">C</button></td><td ><button id="crm-whatsapp2" class="whatsapp" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
                   </tr>
                </table>
            <div id="crm-wx-contact-email" class="row crm-pt025">

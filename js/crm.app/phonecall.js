@@ -1,4 +1,45 @@
-$( '#tel1_dialog_button, #tel2_dialog_button' ).click( function( data ){
+$( '.whatsapp' ).click( function( data ){
+    //alert( $( '#crm-contact-phone' + this.id.substr( -1 ) ).text() );
+    data.stopImmediatePropagation();// war wofür???
+    phoneNumber = $( '#crm-contact-phone' + this.id.substr( -1 ) ).text();
+    if( phoneNumber[0]  != "+" ){
+        phoneNumber = "+49" + phoneNumber.slice(1);
+    }
+    window.open( 'https://api.whatsapp.com/send?phone=' + phoneNumber +  '&text=Hey ' + $( '#crm-contact-name' ).html() + ' im Anhang befinden sich die Dokument(e). %0D%0AMit freundlichem Grüßen %0D%0ADein / Ihr Autoprofis-Team','_blank');
+    return false;
+}).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only").tooltip();
+
+$( '#crm-contact-phone1, #crm-contact-phone2' ).click( function( data ){
+    data.stopImmediatePropagation();
+    //console.info( 'test' + $( '#crm-contact-name' ).html() );
+    $.ajax({
+        url: 'crm/ajax/clickToCall.php',
+        type: 'POST',
+        data: { action: 'newCall', data: { 'number': $( '#' + this.id ).text(), 'name': $( '#crm-contact-name' ).html() } },
+        success: function ( data ) {
+            //alert( ' Name:' + $( '#crm-contact-name' ).html() );
+        },
+        error: function () {
+            alert( 'Error clickToCall()!' )
+        }
+    });
+    return false;
+}).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only").css({ width: '110px', 'text-align': 'left'});
+
+$( '.copy' ).click( function( data ){
+    //alert( 'click ' + this.attributes.number.nodeValue );
+    var $temp = $("<input>");
+    $( "body" ).append( $temp );
+    $temp.val( $( '#crm-contact-phone' + this.id.substr( -1 ) ).text() ).select();
+    document.execCommand( "copy" );
+    $temp.remove();
+    data.stopImmediatePropagation();
+}).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only").tooltip();
+
+
+
+
+$( '#crm-contact-phone1_dialog_button, #crm-contact-phone2_dialog_button' ).click( function( data ){
     data.stopImmediatePropagation();
     //alert( "ClickToCall Dialog");
     var dialog_id = this.id.replace( '_button', '' );
@@ -10,7 +51,7 @@ $( '#tel1_dialog_button, #tel2_dialog_button' ).click( function( data ){
         resizable: false,
         open: function( event, ui ){
             $.ajax({
-                url: 'ajax/clickToCall.php?action=getPhones',
+                url: 'crm/ajax/clickToCall.php?action=getPhones',
                 type: 'GET',
                 success: function ( data ){
                     var external_contexts_array = data['external_contexts'].split( ',');
@@ -36,7 +77,7 @@ $( '#tel1_dialog_button, #tel2_dialog_button' ).click( function( data ){
                         var dataObj = {};
                         dataObj[this.id] = $(this).val();
                         $.ajax({
-                            url: 'ajax/clickToCall.php',
+                            url: 'crm/ajax/clickToCall.php',
                             type: 'POST',
                             data: { action: 'saveClickToCall', data: dataObj },
                             success: function ( data ) {
@@ -69,6 +110,4 @@ $( '#tel1_dialog_button, #tel2_dialog_button' ).click( function( data ){
         }],
 
     })
-}).button();
-
-
+}).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only");//ui-widget ui-state-default ui-corner-all ui-button-text-only

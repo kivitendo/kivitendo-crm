@@ -19,7 +19,7 @@
     $result = curl_exec( $ch );
 
     if( $result === false || curl_errno( $ch ) ){
-        header( 'Location: http://localhost/kivitendo/controller.pl?action=LoginScreen/user_login' );
+        header( 'Location: http://localhost/kivitendo/controller.pl?action=LoginScreen/user_login' );//ToDo  Das ist definitiv falsch
         return;
     }
     curl_close( $ch );
@@ -478,10 +478,10 @@
             <div class="crm-pt05"><span id="crm-contact-contact"></span></div>
                 <table>
                   <tr>
-                    <td>Telefon:</td><td><button id="tel1">{Telefon}</button></td><td><button id="tel1_dialog_button">T</button><div id="tel1_dialog"></div></td><td><button class="copy" number="{Telefon}" title="Copy">C</button></td><td ><button class="whatsapp" number="{Telefon}" name="{Fname1}" title="Whatsapp" ><img src="image/whatsapp.png" alt="Whatsapp" ></button></td>
+                    <td>Telefon:</td><td><button id="crm-contact-phone1"></button></td><td><button id="tel1_dialog_button">T</button><div id="tel1_dialog"></div></td><td><button class="copy" number="{Telefon}" title="Copy">C</button></td><td ><button class="whatsapp" number="{Telefon}" name="{Fname1}" title="Whatsapp" ><img src="../image/whatsapp.png" alt="Whatsapp" ></button></td>
                   </tr>
                   <tr>
-                    <td>Telefon:</td><td><button id="tel2">{Fax}</button></td><td><button id="tel2_dialog_button">T</button><div id="tel2_dialog"></div></td><td><button class="copy" number="{Fax}" title="Copy">C</button></td><td ><button class="whatsapp" number="{Fax}" name="{Fname1}" title="Whatsapp" ><img src="image/whatsapp.png" alt="Whatsapp" ></button></td>
+                    <td>Telefon:</td><td><button id="crm-contact-phone2"></button></td><td><button id="tel2_dialog_button">T</button><div id="tel2_dialog"></div></td><td><button class="copy" number="{Fax}" title="Copy">C</button></td><td ><button class="whatsapp" number="{Fax}" name="{Fname1}" title="Whatsapp" ><img src="../image/whatsapp.png" alt="Whatsapp" ></button></td>
                   </tr>
                </table>
            <div id="crm-wx-contact-email" class="row crm-pt025">

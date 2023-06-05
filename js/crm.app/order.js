@@ -102,6 +102,7 @@ $( '#od-ui-discount-100-all-btn' ).click( function(){
 });
 
 function crmAddOrderItem( dataRow ){
+    /* Ist es nicht sinnvoller die workers einmalig beim erzeugen / holen des Auftrages anstatt mit jeder Zeile zu holen? */
     let tableRow;
     tableRow += '<tr ' + ( ( exists( dataRow.id ) )? ('id="' + dataRow.id + '"') : 'id = "od-empty-item-id" class="od-item-pin"') + '><td class="od-item-position"></td>' +
                 '<td><img class="od-ui-hsort" src="image/updown.png" alt="umsortieren"' + ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '</td>' +
@@ -115,7 +116,7 @@ function crmAddOrderItem( dataRow ){
     else if( 'part' === dataRow.part_type ) orderType = 'P';
     else if( 'service' === dataRow.part_type ) orderType = 'S';
     tableRow += '<input class="od-item-type" type="hidden" value="' + orderType + '"></input>';
-    tableRow += '<span class="od-table-item-type">' + kivi.t8(orderType) + '</span>';
+    tableRow += '<span class="od-table-item-type">' + kivi.t8( orderType ) + '</span>';
     tableRow += '</td>' +
                 '<td><input name="od-item-description" class="od-item-description" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td>' +
                 '<td><input class="od-item-longdescription" type="text" size="40" value="' + ( ( exists( dataRow.longdescription ) )? dataRow.longdescription : '' )  + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input>' +
@@ -131,13 +132,16 @@ function crmAddOrderItem( dataRow ){
 
     tableRow += '<td><select class="od-item-u_id" type="select" onchange="crmEditOrderOnChange()">';
     tableRow += '<option value=""></option>';
-    for( let worker of crmOrderItemLists.workers ){
-        tableRow += '<option value="' + worker.name  + '"';
-        if(dataRow.u_id === worker.name) tableRow += ' selected'
-        tableRow += '>' + worker.name + '</option>';
+    console.info( crmOrderItemLists.workers );//ToDo???
+    if( crmOrderItemLists.workers === null ) alert( kivi.t8( 'No members of group "Werkstatt" ' ) );
+    else{
+        for( let worker of crmOrderItemLists.workers ){
+            tableRow += '<option value="' + worker.name  + '"';
+            if(dataRow.u_id === worker.name) tableRow += ' selected'
+            tableRow += '>' + worker.name + '</option>';
+        }
+        tableRow += '</select></td>';
     }
-    tableRow += '</select></td>';
-
     const statusList = [ 'gelesen', 'Bearbeitung', 'erledigt' ];
     tableRow += '<td><select class="od-item-status" type="select" onchange="crmEditOrderOnChange()">';
     for( let status of statusList ){
@@ -452,11 +456,13 @@ function crmEditOrderDlg( crmData ){
 
     $( '#od-ui-items-workers' ).html( '' );
     $( '#od-ui-items-workers' ).append(new Option( '', ''  ) );
-    for( let worker of crmData.workers ){
-        $( '#od-ui-items-workers' ).append(new Option( worker.name, worker.name  ) );
-    }
 
-     $( '#crm-edit-order-dialog' ).dialog({
+    if( crmData.workers !== null ){
+        for( let worker of crmData.workers ){
+            $( '#od-ui-items-workers' ).append(new Option( worker.name, worker.name  ) );
+        }
+    }
+    $( '#crm-edit-order-dialog' ).dialog({
         autoOpen: false,
         resizable: true,
         width: 'auto',

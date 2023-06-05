@@ -24,7 +24,7 @@ $( '#crm-contact-phone1, #crm-contact-phone2' ).click( function( data ){
         }
     });
     return false;
-}).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only").css({ width: '120px', 'text-align': 'left'});
+}).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only").css({ width: '120px', 'text-align': 'left', 'padding-left': '0.3em' });
 
 $( '.copy' ).click( function( data ){
     //alert( 'click ' + this.attributes.number.nodeValue );
@@ -110,4 +110,4 @@ $( '#crm-contact-phone1_dialog_button, #crm-contact-phone2_dialog_button' ).clic
         }],
 
     })
-}).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only");//ui-widget ui-state-default ui-corner-all ui-button-text-only
+}).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only");

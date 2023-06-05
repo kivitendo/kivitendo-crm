@@ -111,8 +111,3 @@ $( '#crm-contact-phone1_dialog_button, #crm-contact-phone2_dialog_button' ).clic
 
     })
 }).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only");//ui-widget ui-state-default ui-corner-all ui-button-text-only
-if( !$( '#crm-contact-phone1' ).val() ) $( '.clickToCall1' ).hide();
-if( !$( '#crm-contact-phone2' ).val() ) $( '.clickToCall2' ).hide();
-
-//alert( $( '#crm-contact-phone1' ).html() );
-console.info( $( '#crm-contact-phone1' ) );

@@ -478,10 +478,10 @@
             <div class="crm-pt05"><span id="crm-contact-contact"></span></div>
                 <table>
                   <tr>
-                    <td>Telefon:</td><td><button id="crm-contact-phone1"></button></td><td><button id="crm-contact-phone1_dialog_button">T</button><div id="crm-contact-phone1_dialog"></div></td><td><button id="crm-copy-contact-phone1" class="copy" title="Copy">C</button></td><td ><button id="crm-whatsapp1" class="whatsapp" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
+                    <td>Telefon:</td><td><button id="crm-contact-phone1"></button></td><td><button id="crm-contact-phone1_dialog_button" class='clickToCall1'>T</button><div id="crm-contact-phone1_dialog"></div></td><td><button id="crm-copy-contact-phone1" class="copy cklickToCall1" title="Copy">C</button></td><td ><button id="crm-whatsapp1" class="whatsapp clickToCall1" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
                   </tr>
                   <tr>
-                    <td>Telefon:</td><td><button id="crm-contact-phone2"></button></td><td><button id="crm-contact-phone2_dialog_button">T</button><div id="crm-contact-phone2_dialog"></div></td><td><button id="crm-copy-contact-phone2" class="copy"  title="Copy">C</button></td><td ><button id="crm-whatsapp2" class="whatsapp" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
+                    <td>Telefon:</td><td><button id="crm-contact-phone2"></button></td><td><button id="crm-contact-phone2_dialog_button" class='clickToCall2'>T</button><div id="crm-contact-phone2_dialog"></div></td><td><button id="crm-copy-contact-phone2" class="copy cklickToCall2"  title="Copy">C</button></td><td ><button id="crm-whatsapp2" class="whatsapp clickToCall2" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
                   </tr>
                </table>
            <div id="crm-wx-contact-email" class="row crm-pt025">

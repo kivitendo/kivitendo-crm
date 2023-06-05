@@ -24,7 +24,7 @@ $( '#crm-contact-phone1, #crm-contact-phone2' ).click( function( data ){
         }
     });
     return false;
-}).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only").css({ width: '110px', 'text-align': 'left'});
+}).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only").css({ width: '120px', 'text-align': 'left'});
 
 $( '.copy' ).click( function( data ){
     //alert( 'click ' + this.attributes.number.nodeValue );
@@ -111,3 +111,8 @@ $( '#crm-contact-phone1_dialog_button, #crm-contact-phone2_dialog_button' ).clic
 
     })
 }).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only");//ui-widget ui-state-default ui-corner-all ui-button-text-only
+if( !$( '#crm-contact-phone1' ).val() ) $( '.clickToCall1' ).hide();
+if( !$( '#crm-contact-phone2' ).val() ) $( '.clickToCall2' ).hide();
+
+//alert( $( '#crm-contact-phone1' ).html() );
+console.info( $( '#crm-contact-phone1' ) );

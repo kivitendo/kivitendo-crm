@@ -51,14 +51,18 @@ function crmEditArticleDlg(){
                     text: kivi.t8( 'Save' ),
                     click: function(){
                         dbData = {};
+                        dbData['record'] = {};
+                        dbData['record']['parts'] = {};
+                        dbData['sequence_name'] = 'id';
                         for( let item of editArticleFormModel ){
                             let columnName = item.name.split( '-' );
                             let val = $( '#' + item.name ).val();
-                            if( exists(val) && val !== '' ){
-                                if( item.name !== 'edit_car-c_id' ) dbData[columnName[1]] = val;
+                            if( exists(val) ){
+                                if( item.name !== 'edit_car-c_id' ) dbData['record']['parts'][columnName[1]] = val;
                             }
                         }
                         console.info( dbData );
+
 
                         $( this ).dialog( "close" );
                     }

@@ -148,6 +148,8 @@ function crmGetCustomerForEdit( src, id, new_car, fx ){
 /***************************************
 * Open dialog to edit CV
 ***************************************/
+//Wird als Parameter für die Funktion js/app.js->dbUpdataDB verwendet
+//spiegelt den Namen des Ajax-Calls (Function) in ajax/xrm.app.php
 var crmEditCuVeDlgAction;
 
 function crmEditCuVeDlg( crmData, new_with_car ){
@@ -191,6 +193,8 @@ function crmEditCuVeDlg( crmData, new_with_car ){
         position: { my: "top", at: "top+250" },
         open: function(){
             $( this ).css( 'maxWidth', window.innerWidth );
+            //Wird als Parameter für die Funktion js/app.js->dbUpdataDB verwendet
+            //spiegelt den Namen des Ajax-Calls (Function) in ajax/xrm.app.php
             crmEditCuVeDlgAction = 'updateCuWithNewCar';
         },
         buttons:[{
@@ -212,6 +216,10 @@ function crmEditCuVeDlg( crmData, new_with_car ){
                         //if( exists(val) && val !== '' ) dbUpdateData[cvSrc][columnName[1]] = val;
                         if( exists(val) ) dbUpdateData[cvSrc][columnName[1]] = val;
                     }
+                }
+                if( dbUpdateData[cvSrc]['bland'] === '' ){
+                    $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Error' ), kivi.t8( 'Select Bundesland please.' ) );
+                    return;
                 }
                 if( exists( $( '#deladdr-list' ).val() ) && $( '#deladdr-list' ).val() !== '' ){
                     dbUpdateData['shipto'] = { 'shipto_id': $( '#deladdr-list' ).val() };

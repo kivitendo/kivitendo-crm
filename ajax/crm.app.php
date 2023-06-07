@@ -71,7 +71,7 @@ function dataForNewArticle( $data ){
 }
 
 function insertNewArticle( $data ){
-
+//    genericSingleInsert( $data );
 }
 
 /********************************************
@@ -360,18 +360,34 @@ function getOrder( $data ){
 ********************************************/
 function insertNewCuWithCar( $data ){
     $id = FALSE;
+    $GLOBALS['dbh']->beginTransaction();
     foreach( $data AS $key => $value ){
         if( strcmp( $key, 'customer' ) === 0 ){
             $id = $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ), TRUE, "id" );
-        }
+            if( FALSE === $id ){
+                $GLOBALS['dbh']->rollBack();
+                resultInfo( false , "Error: Update ".$key );
+                return;
+            }
+         }
         elseif( strcmp( $key, 'lxc_cars' ) === 0 ){
             $value['c_ow'] = $id;
-            $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ) );
+            if( $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ) )  === FALSE ){
+                $GLOBALS['dbh']->rollBack();
+                resultInfo( false , "Error: Update ".$key );
+                return;
+            }
         }
         else{
-            $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ) );
-        }
+            if( $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ) ) === FALSE ){
+                $GLOBALS['dbh']->rollBack();
+                resultInfo( false , "Error: Update ".$key );
+                return;
+            }
+         }
     }
+    $GLOBALS['dbh']->commit();
+
     echo '{ "src": "C", "id": "'.$id.'" }';
 }
 

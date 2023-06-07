@@ -121,6 +121,8 @@ function crmNewCarFromScan(){
                                               //$( '#car-c_hu' ).val( lxcarsData.hu );
                                               $( '#car-c_fin' ).val( lxcarsData.vin );
                                               $( '#car-c_finchk' ).val( lxcarsData.field_3 );
+                                              //Wird als Parameter für die Funktion js/app.js->dbUpdataDB verwendet
+                                              //spiegelt den Namen des Ajax-Calls (Function) in ajax/xrm.app.php
                                               crmEditCuVeDlgAction = 'insertNewCuWithCar';
                                           },
                                           error: function( xhr, status, error ){

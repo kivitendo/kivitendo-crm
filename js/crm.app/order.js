@@ -119,18 +119,25 @@ function crmAddOrderItem( dataRow ){
     tableRow += '<span class="od-table-item-type">' + kivi.t8( orderType ) + '</span>';
     tableRow += '</td>' +
                 '<td><input name="od-item-description" class="od-item-description" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td>' +
-                '<td><input class="od-item-longdescription" type="text" size="40" value="' + ( ( exists( dataRow.longdescription ) )? dataRow.longdescription : '' )  + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input>' +
-                '</td><td><input class="od-item-qty" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.qty ) )? dataRow.qty : '0' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td>';
+                '<td><input class="od-item-longdescription" type="text" size="40" value="' + ( ( exists( dataRow.longdescription ) )? dataRow.longdescription : '' )  + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
+                ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input>' +
+                '</td><td><input class="od-item-qty" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.qty ) )? dataRow.qty : '0' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"' +
+                ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>';
 
     // Unit is readonly now:
-    tableRow += '<td><input class="od-item-unit" type="text" size="5" readonly="readonly" value="' + ( ( exists( dataRow.unit ) )? dataRow.unit : '' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td>';
+    tableRow += '<td><input class="od-item-unit" type="text" size="5" readonly="readonly" value="' + ( ( exists( dataRow.unit ) )? dataRow.unit : '' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
+                ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>';
 
     tableRow += '<td><input class="od-hidden-item-rate" type="hidden" value="' + ( ( exists( dataRow.rate ) )? dataRow.rate : '0' ) + '"></input>' +
-                '<input class="od-item-sellprice" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.sellprice ) )? dataRow.sellprice : '0', 2 ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td>' +
-                '<td><input class="od-item-discount" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.discount ) )? dataRow.discount : '0' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td><td><input class="od-ui-hundredpro" type="hidden" value="100"></input><button class="od-ui-hundredpro-btn" onclick="crmEditOrderHundredPro()">100%</button></td>' +
-                '<td><input class="od-item-marge_total" type="text" size="5" readonly="readonly" value="' + kivi.format_amount( ( exists( dataRow.marge_total ) )? dataRow.marge_total : '0', 2 ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td>';
+                '<input class="od-item-sellprice" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.sellprice ) )? dataRow.sellprice : '0', 2 ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
+                ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>' +
+                '<td><input class="od-item-discount" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.discount ) )? dataRow.discount : '0' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
+                ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>' +
+                '<td><input class="od-ui-hundredpro" type="hidden" value="100"></input><button class="od-ui-hundredpro-btn" onclick="crmEditOrderHundredPro()" ' + ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '>100%</button></td>' +
+                '<td><input class="od-item-marge_total" type="text" size="5" readonly="readonly" value="' + kivi.format_amount( ( exists( dataRow.marge_total ) )? dataRow.marge_total : '0', 2 ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
+                ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>';
 
-    tableRow += '<td><select class="od-item-u_id" type="select" onchange="crmEditOrderOnChange()">';
+    tableRow += '<td><select class="od-item-u_id" type="select" onchange="crmEditOrderOnChange()" ' + ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '>';
     tableRow += '<option value=""></option>';
     console.info( crmOrderItemLists.workers );//ToDo???
     if( crmOrderItemLists.workers === null ) alert( kivi.t8( 'No members of group "Werkstatt" ' ) );
@@ -143,7 +150,7 @@ function crmAddOrderItem( dataRow ){
         tableRow += '</select></td>';
     }
     const statusList = [ 'gelesen', 'Bearbeitung', 'erledigt' ];
-    tableRow += '<td><select class="od-item-status" type="select" onchange="crmEditOrderOnChange()">';
+    tableRow += '<td><select class="od-item-status" type="select" onchange="crmEditOrderOnChange()" ' + ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '>';
     for( let status of statusList ){
         tableRow += '<option value="' + status  + '"';
         if(dataRow.status === status) tableRow += ' selected'
@@ -156,24 +163,34 @@ function crmAddOrderItem( dataRow ){
     $( '.od-item-description' ).catcomplete({
         source: "crm/ajax/crm.app.php?action=findPart",
         select: function( e, ui ){
-            $( ':focus' ).parent().parent().find( '[class=od-hidden-item-partnumber]' ).text( ui.item.partnumber );
-            $( ':focus' ).parent().parent().find( '[class=od-item-parts_id]' ).val( ui.item.id );
+            const row = $( ':focus' ).parent().parent();
+            row.find( '[class=od-hidden-item-partnumber]' ).text( ui.item.partnumber );
+            row.find( '[class=od-item-parts_id]' ).val( ui.item.id );
             let orderType = '';
             if( ui.item.instruction )  orderType = 'I';
             else if( 'part' === ui.item.part_type ) orderType = 'P';
             else if( 'service' === ui.item.part_type ) orderType = 'S';
-            $( ':focus' ).parent().parent().find( '[class=od-item-type]' ).val( orderType );
-            $( ':focus' ).parent().parent().find( '[class=od-table-item-type]' ).text( orderType );
-            $( ':focus' ).parent().parent().find( '[class=od-item-qty]' ).val( kivi.format_amount( ui.item.qty, 2 ) );
-            $( ':focus' ).parent().parent().find( '[class=od-item-unit]' ).val( ui.item.unit );
-            $( ':focus' ).parent().parent().find( '[class=od-item-sellprice]' ).val( kivi.format_amount( ui.item.sellprice, 2 ) );
-            $( ':focus' ).parent().parent().find( '[class=od-hidden-item-rate]' ).val( ui.item.rate );
-            $( ':focus' ).parent().parent().find( '[class=od-ui-hsort]' ).show();
-            $( ':focus' ).parent().parent().find( '[class=od-ui-del]' ).show();
+            row.find( '[class=od-item-type]' ).val( orderType );
+            row.find( '[class=od-table-item-type]' ).text( orderType );
+            row.find( '[class=od-item-qty]' ).val( kivi.format_amount( ui.item.qty, 2 ) );
+            row.find( '[class=od-item-unit]' ).val( ui.item.unit );
+            row.find( '[class=od-item-sellprice]' ).val( kivi.format_amount( ui.item.sellprice, 2 ) );
+            row.find( '[class=od-hidden-item-rate]' ).val( ui.item.rate );
+            row.find( '[class=od-ui-hsort]' ).show();
+            row.find( '[class=od-ui-del]' ).show();
+            row.find( '[class=od-item-longdescription]' ).show();
+            row.find( '[class=od-item-qty]' ).show();
+            row.find( '[class=od-item-unit]' ).show();
+            row.find( '[class=od-item-sellprice]' ).show();
+            row.find( '[class=od-item-discount]' ).show();
+            row.find( '[class=od-ui-hundredpro-btn]' ).show();
+            row.find( '[class=od-item-marge_total]' ).show();
+            row.find( '[class=od-item-u_id]' ).show();
+            row.find( '[class=od-item-status]' ).show();
             let itemPosition = $( ':focus' ).parent().parent().find( '[class=od-item-position]' )[0].innerText;
             //Bug or feature, can't do otherwise:
-            $( ':focus' ).parent().parent()[0].className = "";
-            $( ':focus' ).parent().parent().css("background-color","white");
+            row[0].className = "";
+            row.css("background-color","white");
 
             const list = $( '.od-item-description' );
             if( list[list.length - 1].value !== '' ){

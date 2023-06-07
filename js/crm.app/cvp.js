@@ -150,7 +150,7 @@ function crmGetCustomerForEdit( src, id, new_car, fx ){
 ***************************************/
 var crmEditCuVeDlgAction;
 
- function crmEditCuVeDlg( crmData, new_with_car ){
+function crmEditCuVeDlg( crmData, new_with_car ){
     crmInitFormEx( billaddrFormModel, '#billaddr-form', 0, '#crm-billaddr-cv' );
     crmInitFormEx( deladdrFormModel, '#deladdr-form' );
     crmInitFormEx( banktaxFormModel, '#banktax-form' );
@@ -209,7 +209,8 @@ var crmEditCuVeDlgAction;
                     let columnName = item.name.split( '-' );
                     if( columnName[1] !== "src" && columnName[1] !== "id" && columnName[1] !== "greetings" ){
                         let val = $( '#' + item.name ).val();
-                        if( exists(val) && val !== '' ) dbUpdateData[cvSrc][columnName[1]] = val;
+                        //if( exists(val) && val !== '' ) dbUpdateData[cvSrc][columnName[1]] = val;
+                        if( exists(val) ) dbUpdateData[cvSrc][columnName[1]] = val;
                     }
                 }
                 if( exists( $( '#deladdr-list' ).val() ) && $( '#deladdr-list' ).val() !== '' ){

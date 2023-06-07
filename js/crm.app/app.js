@@ -169,16 +169,6 @@ function showCVPA( data ){
         else $( '.clickToCall1' ).show();
         if( !data.cv.phone2 ) $( '.clickToCall2' ).hide();
         else $( '.clickToCall2' ).show();
-        /* ToDo: #crm-wx-contact-* existiert gar nicht!
-        if( data.cv.phone1 ) $( '#crm-wx-contact-phone1' ).show();
-        else $( '#crm-wx-contact-phone1' ).hide();
-        if( data.cv.phone2 ) $( '#crm-wx-contact-phone2' ).show();
-        else $( '#crm-wx-contact-phone2' ).hide();
-        if( data.cv.phone1 ) $('#crm-wx-contact-email').show();
-        else $( '#crm-wx-contact-email' ).hide();
-        */
-
-
     }
     else{
         $( '#crm-wx-contact' ).hide();

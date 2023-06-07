@@ -36,6 +36,9 @@ function crmEditArticleDlg(){
                 $( '#edit_article-buchungsgruppen_id' ).append( new Option( buchungsgruppe.description, buchungsgruppe.id ) );
             }
 
+            $( '#edit_article-listprice' ).val( kivi.format_amount( '0.00' ) );
+            $( '#edit_article-sellprice' ).val( kivi.format_amount( crmData.defaults.customer_hourly_rate ) );
+
             $( '#crm-edit-article-dialog' ).dialog({
                 autoOpen: false,
                 resizable: true,
@@ -51,18 +54,48 @@ function crmEditArticleDlg(){
                     text: kivi.t8( 'Save' ),
                     click: function(){
                         dbData = {};
-                        dbData['record'] = {};
-                        dbData['record']['parts'] = {};
-                        dbData['sequence_name'] = 'id';
                         for( let item of editArticleFormModel ){
                             let columnName = item.name.split( '-' );
                             let val = $( '#' + item.name ).val();
                             if( exists(val) ){
-                                if( item.name !== 'edit_car-c_id' ) dbData['record']['parts'][columnName[1]] = val;
+                                if( item.name !== 'edit_car-c_id' ) dbData[columnName[1]] = val;
                             }
                         }
+                        switch( dbData['part_type'] ){
+                        case 'P':
+                            dbData['part_type'] = 'part';
+                            dbData['instruction'] = false;
+                            break;
+                        case 'S':
+                            dbData['part_type'] = 'service';
+                            dbData['instruction'] = false;
+                            break;
+                        case 'I':
+                            dbData['part_type'] = 'service';
+                            dbData['instruction'] = true;
+                            break;
+                        }
+                        if( dbData['sellprice'] === '' ){
+                                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Error' ), kivi.t8( 'Please set a sell price' ) );
+                        }
+                        if( dbData['listprice'] === '' ){
+                                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Error' ), kivi.t8( 'Please set a list price' ) );
+                        }
+                        dbData['sellprice'] = kivi.parse_amount( dbData['sellprice'] );
+                        dbData['listprice'] = kivi.parse_amount( dbData['listprice'] );
                         console.info( dbData );
 
+                        $.ajax({
+                            url: 'crm/ajax/crm.app.php',
+                            data: { action: 'insertNewArticle', data: dbData },
+                            type: "POST",
+                            success: function( crmData ){
+                                console.info( crmData );
+                            },
+                            error: function(xhr, status, error){
+                                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'getHistory()', xhr.responseText );
+                            }
+                        });
 
                         $( this ).dialog( "close" );
                     }

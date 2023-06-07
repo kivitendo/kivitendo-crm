@@ -41,7 +41,7 @@ function fastSearch(){
 }
 
 function computeArticleNumber( $data ){
-    if( $data[part_type] == "P" )
+    if( $data[part_type] == "P" || $data[part_type] == "part" )
         $rs = $GLOBALS['dbh']->getOne( "SELECT id AS defaults_id, articlenumber::INT + 1 AS newnumber, 0 AS service FROM defaults");
     else
         $rs = $GLOBALS['dbh']->getOne( "SELECT id AS defaults_id, servicenumber::INT + 1 AS newnumber, customer_hourly_rate, 1 AS service FROM defaults");
@@ -71,7 +71,17 @@ function dataForNewArticle( $data ){
 }
 
 function insertNewArticle( $data ){
-//    genericSingleInsert( $data );
+    $id = $GLOBALS['dbh']->insert( "parts", array_keys( $data ), array_values( $data ), TRUE, "id" );
+    if( FALSE === $id ){
+        echo  '{ "success": "false", "defaults": '.json_encode( computeArticleNumber( $data ) ).' }';
+    }
+    else{
+        $numberType = '';
+        if( 'part' === $data['part_type'] ) $numberType = 'articlenumber';
+        else $numberType = 'servicenumber';
+        $GLOBALS['dbh']->update( "defaults", array( $numberType ), array( $data['partnumber'] ), "id = 1" );
+    }
+    echo  '{ "success": "true", "id": '.$id.' }';
 }
 
 /********************************************

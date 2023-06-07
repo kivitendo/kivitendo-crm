@@ -15,6 +15,8 @@ function crmCalcOrderPos(){
         $( positions[0] ).find( '[class=od-ui-del]' ).show();
     }
     positions.each( function( key, pos ){
+        if( key % 2 == 0 ) $( pos ).addClass( 'listrow0' );
+        else $( pos ).addClass( 'listrow1' );
         $( pos ).find( '[class=od-item-position]' )[0].innerText = key + 1;
         if( !isEmpty( $( pos ).find( '[class=od-hidden-item-partnumber]' ).text() ) ){
             $( $( pos ).find( '[class=od-ui-edit-btn]' )[0] ).html('<button>Edit</button>');
@@ -53,11 +55,13 @@ function crmEditOrderOnChange(){
 function crmEditOrderKeyup(e){
     if( e.which == 13 || e.which == 9 ){
         crmCalcOrderPos();
-        if( !isEmpty($( ':focus' ).parent().parent().find( '[name=od-item-description]' ).val() ) ){
+        const desc = $( ':focus' ).parent().parent().find( '[name=od-item-description]' ).val();
+        if( !isEmpty( desc ) ){
            let field = $( ':focus' ).parent().parent();
            if( 'od-empty-item-id' === field.attr( 'id' ) ){
                 console.info( 'Position ungültig!' );
                 field.css("background-color","red");
+                $( '#edit_article-description' ).val( desc );
                 crmEditArticleDlg();
             }
             else{
@@ -139,7 +143,7 @@ function crmAddOrderItem( dataRow ){
 
     tableRow += '<td><select class="od-item-u_id" type="select" onchange="crmEditOrderOnChange()" ' + ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '>';
     tableRow += '<option value=""></option>';
-    console.info( crmOrderItemLists.workers );//ToDo???
+    //console.info( crmOrderItemLists.workers );//ToDo???
     if( crmOrderItemLists.workers === null ) alert( kivi.t8( 'No members of group "Werkstatt" ' ) );
     else{
         for( let worker of crmOrderItemLists.workers ){
@@ -190,7 +194,7 @@ function crmAddOrderItem( dataRow ){
             let itemPosition = $( ':focus' ).parent().parent().find( '[class=od-item-position]' )[0].innerText;
             //Bug or feature, can't do otherwise:
             row[0].className = "";
-            row.css("background-color","white");
+            //row.css("background-color","white");
 
             const list = $( '.od-item-description' );
             if( list[list.length - 1].value !== '' ){
@@ -430,6 +434,8 @@ function crmEditOrderDlg( crmData ){
         }
     });
 
+    console.info( 'crmData' );
+    console.info( crmData );
     if( exists( crmData.order ) ){
         $( '#od-customer-id' ).val( crmData.order.common.customer_id );
         $( '#od-lxcars-c_id' ).val( crmData.order.common.c_id );

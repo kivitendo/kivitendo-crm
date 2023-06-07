@@ -29,9 +29,10 @@ function crmGetLxcarsVer(){
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
-        data:  { action: 'getLxcarsVer' },
+        data:  { action: 'isLxcars' },
         success: function( data ){
                 lxcars = data.lxcars;
+                console.info( 'activate lxcars: ' + lxcars );
         },
         error: function( xhr, status, error ){
             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'lxcars()', xhr.responseText );

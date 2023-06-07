@@ -18,8 +18,8 @@ function resultInfo( $success, $debug_text = '' ){
 * Check lxcars tables exists and then get
 * last version
 *********************************************/
-function getLxcarsVer(){
-     echo $GLOBALS['dbh']->getOne( "SELECT EXISTS(SELECT * FROM information_schema.tables WHERE table_name = 'lxc_ver') AS lxcars, (SELECT json_agg( lxc_ver ) AS lxc_ver FROM (SELECT COALESCE(version, '') AS version, COALESCE(subversion, '') AS subversion FROM public.lxc_ver WHERE EXISTS(SELECT * FROM information_schema.tables WHERE table_name = 'lxc_ver') ORDER BY datum DESC LIMIT 1) AS lxc_ver) AS lxc_ver", true );
+function isLxcars(){
+     echo $GLOBALS['dbh']->getOne( "SELECT EXISTS(SELECT * FROM information_schema.tables WHERE table_name = 'lxc_ver') AS lxcars", true );
 }
 
 /*********************************************
@@ -41,11 +41,9 @@ function fastSearch(){
 }
 
 function computeArticleNumber( $data ){
-    $type = $GLOBALS['dbh']->getOne( "SELECT type FROM units WHERE name='".$data['unit']."'" );
-    if( null === $type[type] ) $type[type] = "service"; //null bei 'km' usw.???
-    if( $type[type] == "dimension" )
+    if( $data[part_type] == "P" )
         $rs = $GLOBALS['dbh']->getOne( "SELECT id AS defaults_id, articlenumber::INT + 1 AS newnumber, 0 AS service FROM defaults");
-    elseif( $type[type] == "service") //or instruction
+    else
         $rs = $GLOBALS['dbh']->getOne( "SELECT id AS defaults_id, servicenumber::INT + 1 AS newnumber, customer_hourly_rate, 1 AS service FROM defaults");
     while( $GLOBALS['dbh']->getOne( "SELECT partnumber FROM parts WHERE partnumber = '".$rs['newnumber']."'" )['partnumber'] ) $rs['newnumber']++;
 

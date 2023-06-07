@@ -1,36 +1,27 @@
 crmInitFormEx( editArticleFormModel, '#edit-article-form'  );
-$( '#edit_article-part_type' ).append( new Option( 'Anweisung', 'Std' ) );
-$( '#edit_article-part_type' ).append( new Option( 'Ware', 'Stck' ) );
-$( '#edit_article-part_type' ).append( new Option( 'Dienstleistung', 'Std' ) );
+$( '#edit_article-part_type' ).append( new Option( 'Anweisung', 'I' ) );
+$( '#edit_article-part_type' ).append( new Option( 'Ware', 'P' ) );
+$( '#edit_article-part_type' ).append( new Option( 'Dienstleistung', 'S' ) );
 $( '#edit_article-part_type' ).change( function(){
     $( '#edit_article-unit' ).val( $( '#edit_article-part_type' ).val() );
     $( '#edit_article-unit' ).change();
 });
-$( '#edit_article-unit' ).change( function(){
+$( '#edit_article-part_type' ).change( function(){
     $.ajax({
         url: 'crm/ajax/crm.app.php',
-        data: { action: 'newArticleNumber', data:{ 'unit': $( '#edit_article-unit' ).val() } },
+        data: { action: 'newArticleNumber', data:{ 'part_type': $( '#edit_article-part_type' ).val() } },
         type: "POST",
         success: function( crmData ){
             console.info( crmData );
             $( '#edit_article-partnumber' ).val( crmData.newnumber )
-            if( crmData.service ){
-                if( 'Stck' === $( '#edit_article-part_type' ).val() ) $( '#edit_article-part_type' ).val( 'Std' );
-            }
-            else{
-                if( 'Std' === $( '#edit_article-part_type' ).val() ) $( '#edit_article-part_type' ).val( 'Stck' );
-            }
         }
     });
 });
 
 function crmEditArticleDlg(){
-    console.info( 'article');
-    console.info( $( '#edit_article-unit' ).val() );
-    let unitVal = ( exists( $( '#edit_article-unit' ).val() ) )? $( '#edit_article-unit' ).val() : 'min';
     $.ajax({
         url: 'crm/ajax/crm.app.php',
-        data: { action: 'dataForNewArticle', data:{ 'unit': unitVal } },
+        data: { action: 'dataForNewArticle', data:{ 'part_type': $( '#edit_article-part_type' ).val() } },
         type: "POST",
         success: function( crmData ){
             console.info( crmData );
@@ -39,7 +30,6 @@ function crmEditArticleDlg(){
             for(let unit of crmData.common.units){
                 $( '#edit_article-unit' ).append( new Option( unit.name, unit.name ) );
             }
-            $( '#edit_article-unit' ).val( unitVal );
 
             $( '#edit_article-buchungsgruppen_id' ).html( '' );
             for(let buchungsgruppe of crmData.common.buchungsgruppen){

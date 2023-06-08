@@ -143,6 +143,7 @@ const editArticleFormModel = [
     { "name": "edit_article-description", "label": "Description:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_article-part_type", "label": "Article typ:", "type": "select","data": [], "tooltip":""}, //selectbox
     { "name": "edit_article-unit", "label": "Unit:", "type": "select","data": [], "tooltip":""}, //selectbox
+    { "name": "edit_article-qty", "label": "Quantity:", "type": "input", "size": "15", "tooltip": "" },
     { "name": "edit_article-listprice", "label": "Purchasing price:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_article-sellprice", "label": "Sales price:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_article-buchungsgruppen_id", "label": "Booking group:", "type": "select","data": [], "tooltip":""}, //selectbox

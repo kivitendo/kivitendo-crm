@@ -55,14 +55,17 @@ function crmEditOrderOnChange(){
 function crmEditOrderKeyup(e){
     if( e.which == 13 || e.which == 9 ){
         crmCalcOrderPos();
-        const desc = $( ':focus' ).parent().parent().find( '[name=od-item-description]' ).val();
+        let field = $( ':focus' ).parent().parent();
+        const desc = field.find( '[name=od-item-description]' ).val();
         if( !isEmpty( desc ) ){
-           let field = $( ':focus' ).parent().parent();
            if( 'od-empty-item-id' === field.attr( 'id' ) ){
                 console.info( 'Position ungültig!' );
                 field.css("background-color","red");
                 $( '#edit_article-description' ).val( desc );
-                crmEditArticleDlg();
+                crmEditArticleDlg( field );
+            }
+            else{
+                field.css( "background-color", "" );
             }
         }
     }
@@ -165,43 +168,49 @@ function crmAddOrderItem( dataRow ){
         source: "crm/ajax/crm.app.php?action=findPart",
         select: function( e, ui ){
             const row = $( ':focus' ).parent().parent();
-            row.find( '[class=od-hidden-item-partnumber]' ).text( ui.item.partnumber );
-            row.find( '[class=od-item-parts_id]' ).val( ui.item.id );
-            let orderType = '';
-            if( ui.item.instruction )  orderType = 'I';
-            else if( 'part' === ui.item.part_type ) orderType = 'P';
-            else if( 'service' === ui.item.part_type ) orderType = 'S';
-            row.find( '[class=od-item-type]' ).val( orderType );
-            row.find( '[class=od-table-item-type]' ).text( orderType );
-            row.find( '[class=od-item-qty]' ).val( kivi.format_amount( ui.item.qty, 2 ) );
-            row.find( '[class=od-item-unit]' ).val( ui.item.unit );
-            row.find( '[class=od-item-sellprice]' ).val( kivi.format_amount( ui.item.sellprice, 2 ) );
-            row.find( '[class=od-hidden-item-rate]' ).val( ui.item.rate );
-            row.find( '[class=od-ui-hsort]' ).show();
-            row.find( '[class=od-ui-del]' ).show();
-            row.find( '[class=od-item-longdescription]' ).show();
-            row.find( '[class=od-item-qty]' ).show();
-            row.find( '[class=od-item-unit]' ).show();
-            row.find( '[class=od-item-sellprice]' ).show();
-            row.find( '[class=od-item-discount]' ).show();
-            row.find( '[class=od-ui-hundredpro-btn]' ).show();
-            row.find( '[class=od-item-marge_total]' ).show();
-            row.find( '[class=od-item-u_id]' ).show();
-            row.find( '[class=od-item-status]' ).show();
-            let itemPosition = row.find( '[class=od-item-position]' )[0].innerText;
-            //Bug or feature, can't do otherwise:
-            row[0].className = "";
-
-            const list = $( '.od-item-description' );
-            if( list[list.length - 1].value !== '' ){
-                crmAddOrderItem( { } );
-            }
-            crmCalcOrderPos();
-            crmInsertOrderPos( itemPosition, orderType, ui.item, ( row[0].id !== 'od-empty-item-id' ) );
+            crmCompleteInsertOrderPos( row, ui.item );
         }
     });
 
     crmCalcOrderPos();
+}
+
+function crmCompleteInsertOrderPos( row, item ){
+    row.find( '[class=od-hidden-item-partnumber]' ).text( item.partnumber );
+    row.find( '[class=od-item-parts_id]' ).val( item.id );
+    let orderType = '';
+    if( item.instruction )  orderType = 'I';
+    else if( 'part' === item.part_type || 'P' === item.part_type ) orderType = 'P';
+    else if( 'service' === item.part_type || 'S' === item.part_type ) orderType = 'S';
+    row.find( '[class=od-item-type]' ).val( orderType );
+    row.find( '[class=od-table-item-type]' ).text( orderType );
+    row.find( '[class=od-item-qty]' ).val( kivi.format_amount( item.qty, 2 ) );
+    row.find( '[class=od-item-unit]' ).val( item.unit );
+    row.find( '[class=od-item-sellprice]' ).val( kivi.format_amount( item.sellprice, 2 ) );
+    row.find( '[class=od-hidden-item-rate]' ).val( item.rate );
+    row.find( '[class=od-ui-hsort]' ).show();
+    row.find( '[class=od-ui-del]' ).show();
+    row.find( '[class=od-item-longdescription]' ).show();
+    row.find( '[class=od-item-qty]' ).show();
+    row.find( '[class=od-item-unit]' ).show();
+    row.find( '[class=od-item-sellprice]' ).show();
+    row.find( '[class=od-item-discount]' ).show();
+    row.find( '[class=od-ui-hundredpro-btn]' ).show();
+    row.find( '[class=od-item-marge_total]' ).show();
+    row.find( '[class=od-item-u_id]' ).show();
+    row.find( '[class=od-item-status]' ).show();
+    let itemPosition = row.find( '[class=od-item-position]' )[0].innerText;
+    //Bug or feature, can't do otherwise:
+    row[0].className = "";
+
+    const list = $( '.od-item-description' );
+    if( list[list.length - 1].value !== '' ){
+        crmAddOrderItem( { } );
+    }
+    crmCalcOrderPos();
+    crmInsertOrderPos( itemPosition, orderType, item, ( row[0].id !== 'od-empty-item-id' ) );
+
+    row.css( "background-color", "" );
 }
 
 function crmNewOrderAndInsertPos( itemPosition, itemType, item ){

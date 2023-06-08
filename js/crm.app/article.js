@@ -10,7 +10,7 @@ $( '#edit_article-part_type' ).change( function(){
 $( '#edit_article-part_type' ).change( function(){
     $.ajax({
         url: 'crm/ajax/crm.app.php',
-        data: { action: 'newArticleNumber', data:{ 'part_type': $( '#edit_article-part_type' ).val() } },
+        data: { action: 'newArticleNumber', data:{ 'part_type': $( '#edit_article-part_type' ).val(), 'description': $( '#edit_article-description' ).val() } },
         type: "POST",
         success: function( crmData ){
             console.info( crmData );

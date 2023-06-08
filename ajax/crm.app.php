@@ -55,7 +55,18 @@ function computeArticleNumber( $data ){
 }
 
 function newArticleNumber( $data ){
-    echo json_encode( computeArticleNumber( $data ) );
+    $an = computeArticleNumber( $data );
+    $rs;
+    if( "I" == $data['part_type'] ){
+        $rs = $GLOBALS['dbh']->getOne( "SELECT unit FROM instructions WHERE description ILIKE '".$data['description']."%' GROUP BY unit ORDER BY count(unit) DESC LIMIT 1");
+    }
+    else{
+        $rs = $GLOBALS['dbh']->getOne(  "SELECT orderitems.unit FROM orderitems INNER JOIN parts ON orderitems.parts_id = parts.id WHERE orderitems.description ILIKE '".
+                                        $data['description']."%' AND parts.part_type = '".
+                                        ( ( "P" == $data['part_type'] )? 'part' : 'service' )."' AND parts.instruction = false AND parts.obsolete = false GROUP BY orderitems.unit ORDER BY count(orderitems.unit) DESC LIMIT 1" );
+    }
+    writeLog( $rs );
+    echo  '{ "newnumber": '.$an['newnumber'].', "unit": "'.$rs['unit'].'" }';
 }
 
 function dataForNewArticle( $data ){

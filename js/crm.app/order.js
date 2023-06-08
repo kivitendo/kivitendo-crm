@@ -64,9 +64,6 @@ function crmEditOrderKeyup(e){
                 $( '#edit_article-description' ).val( desc );
                 crmEditArticleDlg();
             }
-            else{
-                field.css("background-color","white");
-            }
         }
     }
 }
@@ -191,17 +188,16 @@ function crmAddOrderItem( dataRow ){
             row.find( '[class=od-item-marge_total]' ).show();
             row.find( '[class=od-item-u_id]' ).show();
             row.find( '[class=od-item-status]' ).show();
-            let itemPosition = $( ':focus' ).parent().parent().find( '[class=od-item-position]' )[0].innerText;
+            let itemPosition = row.find( '[class=od-item-position]' )[0].innerText;
             //Bug or feature, can't do otherwise:
             row[0].className = "";
-            //row.css("background-color","white");
 
             const list = $( '.od-item-description' );
             if( list[list.length - 1].value !== '' ){
                 crmAddOrderItem( { } );
             }
             crmCalcOrderPos();
-            crmInsertOrderPos( itemPosition, orderType, ui.item );
+            crmInsertOrderPos( itemPosition, orderType, ui.item, ( row[0].id !== 'od-empty-item-id' ) );
         }
     });
 
@@ -232,7 +228,7 @@ function crmNewOrderAndInsertPos( itemPosition, itemType, item ){
     });
 }
 
-function crmInsertOrderPos( itemPosition, itemType, item ){
+function crmInsertOrderPos( itemPosition, itemType, item, modified = false ){
     let pos = {};
     let dbTable = '';
     if( 'P' === itemType  ) dbTable = 'orderitems';
@@ -244,14 +240,23 @@ function crmInsertOrderPos( itemPosition, itemType, item ){
     pos['record'][dbTable]['trans_id'] = $( '#od-oe-id' ).val();
     pos['record'][dbTable]['position'] = itemPosition;
     pos['record'][dbTable]['parts_id'] = item.id;
-    pos['record'][dbTable]['qty'] = item.qty;
+    pos['record'][dbTable]['qty'] = ( item.qty === null )? 0 : item.qty;
     pos['record'][dbTable]['unit'] = item.unit;
     pos['record'][dbTable]['sellprice'] = item.sellprice;
     pos['record'][dbTable]['description'] = item.description;
     pos['sequence_name'] = 'orderitemsid';
 
+    console.info( 'item' );
+    console.info( item );
+
     if( isEmpty( $( '#od-oe-id' ).val() ) ){
         crmNewOrderAndInsertPos( itemPosition, itemType, item );
+        return;
+    }
+
+    if( modified ){
+        console.info( 'modified' )
+        crmSaveOrder();
         return;
     }
 
@@ -327,7 +332,7 @@ function crmSaveOrder(){
             else if( exists( item.value ) ) dataRow[columnName] = item.value;
             else if( exists( item.innerText ) ) dataRow[columnName] = item.innerText;
         });
-        dataRow.qty = kivi.parse_amount( dataRow.qty );
+        dataRow.qty = ( dataRow.qty )? kivi.parse_amount( dataRow.qty ) : 0;
         dataRow.sellprice = kivi.parse_amount( dataRow.sellprice );
         dataRow.discount = kivi.parse_amount( dataRow.discount );
         dataRow.marge_total = kivi.parse_amount( dataRow.marge_total );

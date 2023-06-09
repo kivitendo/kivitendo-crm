@@ -74,17 +74,16 @@ function crmEditOrderKeyup(e){
 function crmOrderEditArticle(){
     console.info( 'Edit Article' );
     let field = $( ':focus' ).parent().parent();
-    const parts_id = field.find( '[name=od-item-parts_id]' ).val();
+    const parts_id = field.find( '[class=od-item-parts_id]' ).val();
     const desc = field.find( '[name=od-item-description]' ).val();
-    const unit = field.find( '[name=od-item-unit]' ).val();
-    const qty = field.find( '[name=od-item-qty]' ).val();
-    const sellprice = field.find( '[name=od-item-sellprice]' ).val();
-    const part_type = field.find( '[name=od-item-type]' ).val();
+    const unit = field.find( '[class=od-item-unit]' ).val();
+    const qty = field.find( '[class=od-item-qty]' ).val();
+    const sellprice = field.find( '[class=od-item-sellprice]' ).val();
+    const part_type = field.find( '[class=od-item-type]' ).val();
 
     $( '#edit_article-parts_id' ).val( parts_id );
     $( '#edit_article-description' ).val( desc );
     $( '#edit_article-part_type' ).val( part_type );
-    $( '#edit_article-unit' ).val( unit );
     $( '#edit_article-qty' ).val( qty );
     $( '#edit_article-sellprice' ).val( sellprice );
 

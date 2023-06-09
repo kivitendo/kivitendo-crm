@@ -91,6 +91,12 @@ function dataForNewArticle( $data ){
                 "SELECT name FROM units".
                     ") AS units) AS units, ";
 
+    if( !empty( $data['parts_id'] ) ){
+        $query .= "(SELECT row_to_json( part ) AS part FROM (".
+                    "SELECT buchungsgruppen_id, partnumber FROM parts WHERE id = ".$data['parts_id'].
+                        ") AS part) AS part, ";
+    }
+
     $query .= "(SELECT json_agg( buchungsgruppen ) AS buchungsgruppen FROM (".
                 "SELECT id, description FROM  buchungsgruppen WHERE obsolete = false ORDER BY sortkey ASC".
                     ") AS buchungsgruppen) AS buchungsgruppen";

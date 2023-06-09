@@ -207,6 +207,7 @@ function crmCompleteInsertOrderPos( row, item ){
     row.find( '[class=od-item-unit]' ).val( item.unit );
     row.find( '[class=od-item-sellprice]' ).val( kivi.format_amount( item.sellprice, 2 ) );
     row.find( '[class=od-hidden-item-rate]' ).val( item.rate );
+    row.find( '[name=od-item-description]' ).val( item.description );
     row.find( '[class=od-ui-hsort]' ).show();
     row.find( '[class=od-ui-del]' ).show();
     row.find( '[class=od-item-longdescription]' ).show();

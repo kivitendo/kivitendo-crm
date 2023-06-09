@@ -109,65 +109,89 @@ function crmEditArticleDlg( field ){
                     id: 'edit_article-save-btn',
                     text: kivi.t8( 'Save' ),
                         click: function(){
-                            $.ajax({
-                                url: 'crm/ajax/crm.app.php',
-                                data: { action: 'checkArticleNumber', data:{ 'partnumber': $( '#edit_article-partnumber' ).val() } },
-                                type: "POST",
-                                success: function( crmData ){
-                                if( crmData.exists ){
-                                    $( '#edit_article-save-btn' ).hide();
-                                    alert( kivi.t8( 'Part number already exists!' ) );
-                                 }
-                                else{
-                                    dbData = {};
-                                    for( let item of editArticleFormModel ){
-                                        let columnName = item.name.split( '-' );
-                                        let val = $( '#' + item.name ).val();
-                                        if( exists(val) ){
-                                            if( columnName[1] !== 'qty' ) dbData[columnName[1]] = val;
-                                        }
-                                    }
-                                    switch( dbData['part_type'] ){
-                                    case 'P':
-                                        dbData['part_type'] = 'part';
-                                        dbData['instruction'] = false;
-                                        break;
-                                    case 'S':
-                                        dbData['part_type'] = 'service';
-                                        dbData['instruction'] = false;
-                                        break;
-                                    case 'I':
-                                        dbData['part_type'] = 'service';
-                                        dbData['instruction'] = true;
-                                        break;
-                                    }
-                                    if( dbData['sellprice'] === '' ){
-                                            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Error' ), kivi.t8( 'Please set a sell price' ) );
-                                    }
-                                    if( dbData['listprice'] === '' ){
-                                            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Error' ), kivi.t8( 'Please set a list price' ) );
-                                    }
-                                    dbData['sellprice'] = kivi.parse_amount( dbData['sellprice'] );
-                                    dbData['listprice'] = kivi.parse_amount( dbData['listprice'] );
-
-                                    $.ajax({
-                                        url: 'crm/ajax/crm.app.php',
-                                        data: { action: 'insertNewArticle', data: dbData },
-                                        type: "POST",
-                                        success: function( crmData ){
-                                            dbData['id'] = crmData.id;
-                                            dbData['qty'] = ( $( '#edit_article-qty' ).val() == '' )? 0 : $( '#edit_article-qty' ).val();
-                                            crmCompleteInsertOrderPos( field, dbData );
-                                            $( '#crm-edit-article-dialog' ).dialog( "close" );
-                                       },
-                                        error: function(xhr, status, error){
-                                            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'getHistory()', xhr.responseText );
-                                        }
-                                    });
+                            dbData = {};
+                            for( let item of editArticleFormModel ){
+                                let columnName = item.name.split( '-' );
+                                let val = $( '#' + item.name ).val();
+                                if( exists(val) ){
+                                    if( columnName[1] !== 'qty' && columnName[1] !== 'parts_id' ) dbData[columnName[1]] = val;
                                 }
                             }
-                        });
-                   }
+                            switch( dbData['part_type'] ){
+                            case 'P':
+                                dbData['part_type'] = 'part';
+                                dbData['instruction'] = false;
+                                break;
+                            case 'S':
+                                dbData['part_type'] = 'service';
+                                dbData['instruction'] = false;
+                                break;
+                            case 'I':
+                                dbData['part_type'] = 'service';
+                                dbData['instruction'] = true;
+                                break;
+                            }
+                            if( dbData['sellprice'] === '' ){
+                                    $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Error' ), kivi.t8( 'Please set a sell price' ) );
+                            }
+                            if( dbData['listprice'] === '' ){
+                                    $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Error' ), kivi.t8( 'Please set a list price' ) );
+                            }
+                            dbData['sellprice'] = kivi.parse_amount( dbData['sellprice'] );
+                            dbData['listprice'] = kivi.parse_amount( dbData['listprice'] );
+
+                            if( $( '#edit_article-parts_id' ).val() == '' ){
+                                $.ajax({
+                                    url: 'crm/ajax/crm.app.php',
+                                    data: { action: 'checkArticleNumber', data:{ 'partnumber': $( '#edit_article-partnumber' ).val() } },
+                                    type: "POST",
+                                    success: function( crmData ){
+                                        if( crmData.exists ){
+                                            $( '#edit_article-save-btn' ).hide();
+                                            alert( kivi.t8( 'Part number already exists!' ) );
+                                        }
+                                        else{
+                                            $.ajax({
+                                                url: 'crm/ajax/crm.app.php',
+                                                data: { action: 'insertNewArticle', data: dbData },
+                                                type: "POST",
+                                                success: function( crmData ){
+                                                    dbData['id'] = crmData.id;
+                                                    dbData['qty'] = ( $( '#edit_article-qty' ).val() == '' )? 0 : $( '#edit_article-qty' ).val();
+                                                    crmCompleteInsertOrderPos( field, dbData );
+                                                    $( '#crm-edit-article-dialog' ).dialog( "close" );
+                                               },
+                                                error: function(xhr, status, error){
+                                                    $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmEditArticelDlg()', xhr.responseText );
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                            else{
+                                let dbUpdateData = {};
+                                dbUpdateData['parts'] = dbData;
+                                dbUpdateData['parts']['WHERE'] = {};
+                                dbUpdateData['parts']['WHERE'] = 'id = ' + $( '#edit_article-parts_id' ).val();
+
+                                $.ajax({
+                                    url: 'crm/ajax/crm.app.php',
+                                    type: 'POST',
+                                    data:  { action: 'genericUpdateEx', data: dbUpdateData },
+                                    success: function( data ){
+                                        console.info( 'Article updated' );
+                                        dbData['id'] = $( '#edit_article-parts_id' ).val();
+                                        dbData['qty'] = ( $( '#edit_article-qty' ).val() == '' )? 0 : $( '#edit_article-qty' ).val();
+                                        crmCompleteInsertOrderPos( field, dbData );
+                                        $( '#crm-edit-article-dialog' ).dialog( "close" );
+                                     },
+                                    error: function( xhr, status, error ){
+                                        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmEditArticelDlg()', xhr.responseText );
+                                    }
+                                });
+                            }
+                        }
                 },{
                     text: kivi.t8( 'Close' ),
                     click: function(){

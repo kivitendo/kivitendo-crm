@@ -56,17 +56,32 @@ function computeArticleNumber( $data ){
 
 function newArticleNumber( $data ){
     $an = computeArticleNumber( $data );
+
     $rs;
     if( "I" == $data['part_type'] ){
         $rs = $GLOBALS['dbh']->getOne( "SELECT unit FROM instructions WHERE description ILIKE '".$data['description']."%' GROUP BY unit ORDER BY count(unit) DESC LIMIT 1");
     }
     else{
-        $rs = $GLOBALS['dbh']->getOne(  "SELECT orderitems.unit FROM orderitems INNER JOIN parts ON orderitems.parts_id = parts.id WHERE orderitems.description ILIKE '".
+        $rs = $GLOBALS['dbh']->getOne( "SELECT orderitems.unit FROM orderitems INNER JOIN parts ON orderitems.parts_id = parts.id WHERE orderitems.description ILIKE '".
                                         $data['description']."%' AND parts.part_type = '".
                                         ( ( "P" == $data['part_type'] )? 'part' : 'service' )."' AND parts.instruction = false AND parts.obsolete = false GROUP BY orderitems.unit ORDER BY count(orderitems.unit) DESC LIMIT 1" );
     }
-    writeLog( $rs );
+
     echo  '{ "newnumber": '.$an['newnumber'].', "unit": "'.$rs['unit'].'" }';
+}
+
+function computeArticleQty( $data ){
+    $rs;
+    if( "I" == $data['part_type'] ){
+        $rs = $GLOBALS['dbh']->getOne( "SELECT qty FROM instructions WHERE description ILIKE '".$data['description']."%' AND unit = '".$data['unit']."' GROUP BY qty ORDER BY count(qty) DESC" );
+    }
+    else{
+        $rs = $GLOBALS['dbh']->getOne( "SELECT orderitems.qty, count(orderitems.qty) AS c FROM orderitems INNER JOIN parts ON orderitems.parts_id = parts.id WHERE orderitems.description ILIKE '".
+                                        $data['description']."%' AND orderitems.unit = '".$data['unit']."' AND parts.part_type = '".
+                                        $data['part_type']."' AND parts.instruction = false AND parts.obsolete = false GROUP BY orderitems.qty ORDER BY count(orderitems.qty) DESC" );
+    }
+
+    echo  '{ "qty": "'.$rs['qty'].'" }';
 }
 
 function dataForNewArticle( $data ){

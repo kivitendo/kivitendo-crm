@@ -79,8 +79,10 @@ function crmEditArticleDlg( field ){
             $( '#edit_article-listprice' ).val( kivi.format_amount( '0.00' ) );
             $( '#edit_article-sellprice' ).val( kivi.format_amount( crmData.defaults.customer_hourly_rate ) );
 
-            crmEditArticleChangeUnit();
-            crmEditArticleChangeQty();
+            if( $( '#edit_article-parts_id' ).val() == '' ){
+                crmEditArticleChangeUnit();
+                crmEditArticleChangeQty();
+            }
 
             $( '#crm-edit-article-dialog' ).dialog({
                 autoOpen: false,
@@ -92,6 +94,9 @@ function crmEditArticleDlg( field ){
                 position: { my: "top", at: "top+250" },
                 open: function(){
                     $( this ).css( 'maxWidth', window.innerWidth );
+                },
+                close: function(){
+                    $( '#edit_article-parts_id' ).val( '' );
                 },
                 buttons:[{
                     id: 'edit_article-save-btn',

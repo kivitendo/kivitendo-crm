@@ -19,7 +19,7 @@ function crmCalcOrderPos(){
         else $( pos ).addClass( 'listrow1' );
         $( pos ).find( '[class=od-item-position]' )[0].innerText = key + 1;
         if( !isEmpty( $( pos ).find( '[class=od-hidden-item-partnumber]' ).text() ) ){
-            $( $( pos ).find( '[class=od-ui-edit-btn]' )[0] ).html('<button>Edit</button>');
+            $( $( pos ).find( '[class=od-ui-edit-article]' )[0] ).html('<button onclick="crmOrderEditArticle()">Edit</button>');
         }
         crmCalcOrderPrice( pos );
    });
@@ -71,6 +71,26 @@ function crmEditOrderKeyup(e){
     }
 }
 
+function crmOrderEditArticle(){
+    console.info( 'Edit Article' );
+    let field = $( ':focus' ).parent().parent();
+    const parts_id = field.find( '[name=od-item-parts_id]' ).val();
+    const desc = field.find( '[name=od-item-description]' ).val();
+    const unit = field.find( '[name=od-item-unit]' ).val();
+    const qty = field.find( '[name=od-item-qty]' ).val();
+    const sellprice = field.find( '[name=od-item-sellprice]' ).val();
+    const part_type = field.find( '[name=od-item-type]' ).val();
+
+    $( '#edit_article-parts_id' ).val( parts_id );
+    $( '#edit_article-description' ).val( desc );
+    $( '#edit_article-part_type' ).val( part_type );
+    $( '#edit_article-unit' ).val( unit );
+    $( '#edit_article-qty' ).val( qty );
+    $( '#edit_article-sellprice' ).val( sellprice );
+
+    crmEditArticleDlg( field );
+}
+
 function crmEditOrderChangeHundredPro( hundredpro, hundredproBtn){
     if( hundredpro.val() == 100 ){
         hundredpro.val( 0 );
@@ -111,7 +131,7 @@ function crmAddOrderItem( dataRow ){
     tableRow += '<tr ' + ( ( exists( dataRow.id ) )? ('id="' + dataRow.id + '"') : 'id = "od-empty-item-id" class="od-item-pin"') + '><td class="od-item-position"></td>' +
                 '<td><img class="od-ui-hsort" src="image/updown.png" alt="umsortieren"' + ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '</td>' +
                 '<td><img class="od-ui-del" src="image/close.png" alt="löschen"' + ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + 'onclick="crmDeleteOrderPos(this)"></td>' +
-                '<td class="od-ui-edit-btn"></td>' +
+                '<td class="od-ui-edit-article"></td>' +
                 '<td><span class="od-hidden-item-partnumber">' + ( ( exists( dataRow.partnumber ) )? dataRow.partnumber : '' ) + '</span>' +
                 '<input class="od-item-parts_id" type="hidden" value="' + ( ( exists( dataRow.parts_id ) )? dataRow.parts_id : '' ) + '"></input></td>' +
                 '<td>';

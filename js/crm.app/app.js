@@ -373,3 +373,7 @@ $( '#crm-wf-new-vendor' ).click( function() {
 $( '#crm-wf-new-person' ).click( function() {
     crmNewPerson();
 });
+
+$( '#crm-wf-search-order' ).click( function() {
+   crmSearchOrder();
+});

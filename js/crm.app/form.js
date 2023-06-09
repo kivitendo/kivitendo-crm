@@ -147,4 +147,13 @@ const editArticleFormModel = [
     { "name": "edit_article-listprice", "label": "Purchasing price:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_article-sellprice", "label": "Sales price:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_article-buchungsgruppen_id", "label": "Booking group:", "type": "select","data": [], "tooltip":""}, //selectbox
+    { "name": "edit_article-parts_id", "type": "hidden", },
 ];
+
+// Namensschema für id, name und class: Das Minuszeichen ist das Trennzeichen zwischen Präfix (z.B. edit_article) und Spaltenname in der Datenbank (z.B. parts_id)
+// hidden Inputfelder immer an letzter Position in der Vorlagenliste (z.B. editArticleFormModel)
+
+const searchOrderFormModel = [
+    { "name": "search_order-input1", "label": "Input1:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "search_order-input2", "label": "Input2:", "type": "input", "size": "21", "tooltip": "" },
+ ];

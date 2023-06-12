@@ -348,6 +348,8 @@ function crmSaveOrder(){
     dbUpdateData['customer']['notes'] = $( '#od-customer-notes' ).val();
     dbUpdateData['lxc_cars']['c_text'] = $( '#od-lxcars-c_text' ).val();
     dbUpdateData['oe']['intnotes'] = $( '#od-oe-intnotes' ).val();
+    dbUpdateData['oe']['shippingpoint'] = $( '#od-lxcars-c_ln' ).val();// für Kilometerstand in Druckvorlage od-lxcars-c_ln
+    dbUpdateData['oe']['shipvia'] = $( '#od-oe-km_stnd' ).val();// für Kennzeichen in Druckvorlage
     dbUpdateData['oe']['amount'] = kivi.parse_amount( $( '#od-amount' ).val() );
     dbUpdateData['oe']['netamount'] = kivi.parse_amount( $( '#od-netamount' ).val() );
 

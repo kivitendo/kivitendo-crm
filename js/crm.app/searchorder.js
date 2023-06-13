@@ -19,8 +19,9 @@ function crmSearchOrder(){
         close: function(){
         },
         buttons:[{
-            text: kivi.t8( 'Action' ),
+            text: kivi.t8( 'Search' ),
             click: function(){
+                alert('hello world')
             }
         },{
             text: kivi.t8( 'Close' ),

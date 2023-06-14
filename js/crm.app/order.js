@@ -442,6 +442,7 @@ $( '#od-ui-items-status-all' ).change( function(){
     crmSaveOrder();
 });
 
+$( '#od-oe-finish_time' ).datepicker({});
 
 function crmEditOrderDlg( crmData ){
     crmOrderItemLists = { };

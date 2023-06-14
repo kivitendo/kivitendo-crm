@@ -40,6 +40,64 @@ function fastSearch(){
     }
 }
 
+function searchCustomer(){
+    if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
+        $term = $_GET['term'];
+        echo $GLOBALS['dbh']->getAll( "SELECT name AS value FROM customer WHERE name ILIKE '%".$term."%' LIMIT 15", true );
+    }
+}
+
+function searchCarLicense(){
+    if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
+        $term = $_GET['term'];
+        echo $GLOBALS['dbh']->getAll( "SELECT c_ln AS value FROM lxc_cars WHERE c_ln ILIKE '%".$term."%' LIMIT 15", true );
+    }
+}
+
+function searchOrder( $data ){
+    $where = '';
+    if( $data['customer_name'] != '' )
+        $where .= "customer.name ILIKE '%".$data['customer_name']."%' AND ";
+
+    if( $data['car_license'] != '' )
+        $where .= "lxc_cars.c_ln ILIKE '%".$data['car_license']."%' AND ";
+
+    if( $data['date_from'] != '' )
+        $where .= "oe.transdate >= '".$data['date_from']."' AND ";
+
+    if( $data['date_to'] != '' )
+        $where .= "oe.transdate <= '".$data['date_to']."' AND ";
+
+    if( $data['status'] != 'alle' && $data['status'] != 'nicht abgerechnet' )
+        $where .= "oe.status = '".$data['status']."' AND ";
+
+    if( $data['status'] == 'nicht abgerechnet' )
+        $where = " oe.status != 'abgerechnet'  AND ";
+
+    $sql = "SELECT distinct on ( init_ts, internal_order ) * FROM ( ";
+
+    $sql.= "SELECT distinct on ( oe.id, internal_order ) 'true' ::BOOL AS instruction, oe.id,lxc_cars.c_ln, to_char( oe.transdate, 'DD.MM.YYYY') AS transdate, ";
+    $sql.= "oe.ordnumber, instructions.description, oe.car_status, oe.status, oe.finish_time, customer.name AS owner, oe.c_id AS c_id, oe.customer_id, ";
+    $sql.= "lxc_cars.c_2 AS c_2, lxc_cars.c_3 AS c_3, oe.car_manuf AS car_manuf, oe.car_type AS car_type, oe.internalorder AS internal_order, oe.itime AS init_ts ";
+    $sql.= "FROM oe, instructions, parts, lxc_cars, customer WHERE ".$where." instructions.trans_id = oe.id AND parts.id = instructions.parts_id AND lxc_cars.c_id = oe.c_id AND customer.id = oe.customer_id ";
+
+    $sql.= "UNION ";
+
+    $sql.= "SELECT distinct on ( oe.id, internal_order ) 'false'::BOOL AS instruction, oe.id,lxc_cars.c_ln, to_char( oe.transdate, 'DD.MM.YYYY') AS transdate, ";
+    $sql.= "oe.ordnumber, orderitems.description, oe.car_status, oe.status, oe.finish_time, customer.name AS owner, oe.c_id AS c_id, oe.customer_id, ";
+    $sql.= "lxc_cars.c_2 AS c_2, lxc_cars.c_3 AS c_3, oe.car_manuf AS car_manuf, oe.car_type AS car_type, oe.internalorder AS internal_order, oe.itime AS init_ts ";
+    $sql.= "FROM oe, orderitems, parts, lxc_cars, customer ";
+    $sql.= "WHERE ".$where." orderitems.trans_id = oe.id AND parts.id = orderitems.parts_id AND orderitems.position = 1 AND lxc_cars.c_id = oe.c_id AND customer.id = oe.customer_id ORDER BY instruction ASC";
+
+    $sql.= ") AS myTable ORDER BY internal_order ASC, init_ts DESC LIMIT 25";
+
+    writeLog( $sql );
+
+    $rs = $GLOBALS['dbh']->getALL( $sql, true );
+
+    echo '{ "rs": '.( ( empty( $rs ) )? '{}' : $rs ).' }';
+}
+
 function checkArticleNumber( $data ){
     echo $GLOBALS['dbh']->getOne("SELECT EXISTS( SELECT partnumber FROM parts WHERE partnumber LIKE '".$data['partnumber']."' LIMIT 1) AS exists", true);
 }

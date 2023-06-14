@@ -366,6 +366,22 @@
         <thead></thead>
         <tbody></tbody>
     </table>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <td class="listheading">Name</th>
+            <td class="listheading">Kennzeichen</th>
+            <td class="listheading">Erste Position</th>
+            <td class="listheading">Hersteller</th>
+            <td class="listheading">Fahrzeugtyp</th>
+            <td class="listheading">Datum</th>
+            <td class="listheading">Auftragsnummer</th>
+            <td class="listheading">Status</th>
+        </tr>
+        </thead>
+        <tbody id="crm-search-order-table">
+        </tbody>
+    </table>
 </div>
 
 <div id="crm-edit-article-dialog" style="display:none">

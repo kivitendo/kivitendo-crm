@@ -375,5 +375,5 @@ $( '#crm-wf-new-person' ).click( function() {
 });
 
 $( '#crm-wf-search-order' ).click( function() {
-   crmSearchOrder();
+   crmSearchOrder( crmSearchOrderDlg );
 });

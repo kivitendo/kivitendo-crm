@@ -443,6 +443,26 @@ $( '#od-ui-items-status-all' ).change( function(){
 });
 
 $( '#od-oe-finish_time' ).datepicker({});
+//  $( "#od-oe-finish_time" ).datetimepicker({
+//    beforeShow: function( input ){
+//      AddButton( input );
+//    },
+//    onChangeMonthYear: function( year, month, inst ){
+//      AddButton( inst.input );
+//      ns.updateOrder();
+//    },
+//    stepMinute: 5,
+//    hour: 16,
+//    hourMin: 8,
+//    hourMax: 17,
+//    timeSuffix: kivi.t8( ' clock' ),
+//    timeText: kivi.t8(' Time'),
+//    hourText: 'Stunde',
+//    closeText: 'Fertig',
+//    currentText: 'Jetzt'
+//  });
+
+
 
 function crmEditOrderDlg( crmData ){
     crmOrderItemLists = { };

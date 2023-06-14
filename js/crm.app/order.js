@@ -72,7 +72,6 @@ function crmEditOrderKeyup(e){
 }
 
 function crmOrderEditArticle(){
-    console.info( 'Edit Article' );
     let field = $( ':focus' ).parent().parent();
     const parts_id = field.find( '[class=od-item-parts_id]' ).val();
     const desc = field.find( '[name=od-item-description]' ).val();
@@ -110,7 +109,6 @@ function crmEditOrderHundredPro(){
 }
 
 $( '#od-ui-discount-100-all-btn' ).click( function(){
-    console.info( 'click' );
     $( '#edit-order-table > tbody > tr').each( function( key, pos ){
         if( 'od-empty-item-id' !== $( pos ).attr( 'id' ) ){
             let hundredpro =  $( pos ).find( '[class=od-ui-hundredpro]' );
@@ -275,16 +273,12 @@ function crmInsertOrderPos( itemPosition, itemType, item, modified = false ){
     pos['record'][dbTable]['description'] = item.description;
     pos['sequence_name'] = 'orderitemsid';
 
-    console.info( 'item' );
-    console.info( item );
-
     if( isEmpty( $( '#od-oe-id' ).val() ) ){
         crmNewOrderAndInsertPos( itemPosition, itemType, item );
         return;
     }
 
     if( modified ){
-        console.info( 'modified' )
         crmSaveOrder();
         return;
     }
@@ -412,14 +406,11 @@ function crmSaveOrder(){
 }
 
 function crmNewOrderForCar( c_id ){
-    console.info( 'crmNewOrderForCar' );
-    console.info( c_id );
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
         data:  { action: 'getDataForNewLxcarsOrder', data: { 'id': c_id } },
         success: function( crmData ){
-            //console.info( crmData );
             crmEditOrderDlg( crmData );
         },
         error: function( xhr, status, error ){
@@ -470,8 +461,6 @@ function crmEditOrderDlg( crmData ){
         }
     });
 
-    console.info( 'crmData' );
-    console.info( crmData );
     if( exists( crmData.order ) ){
         $( '#od-customer-id' ).val( crmData.order.common.customer_id );
         $( '#od-lxcars-c_id' ).val( crmData.order.common.c_id );
@@ -581,7 +570,6 @@ function crmEditOrderDlg( crmData ){
             text: kivi.t8( ' PDF ' ),
             id: 'od-ui-btn-pdf',
             click: function(){
-                console.info( 'Print order PDF' );
                 let printData = {};
                 printData['orderId'] = $( '#od-oe-id' ).val();
                 printData['print'] = 'pdfOrder';

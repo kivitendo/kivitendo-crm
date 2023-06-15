@@ -442,27 +442,24 @@ $( '#od-ui-items-status-all' ).change( function(){
     crmSaveOrder();
 });
 
-//$( '#od-oe-finish_time' ).datepicker({});
-  $( "#od-oe-finish_time" ).datetimepicker({
+$( "#od-oe-finish_time" ).datetimepicker({
     beforeShow: function( input ){
-      crmDateTimePickerAddButton( input );
+        crmDateTimePickerAddButton( input );
     },
     onChangeMonthYear: function( year, month, inst ){
-      crmDateTimePickerAddButton( inst.input );
-      crmSaveOrder();
+        crmDateTimePickerAddButton( inst.input );
+        crmSaveOrder();
     },
     stepMinute: 5,
     hour: 16,
     hourMin: 8,
     hourMax: 17,
-    timeSuffix: kivi.t8( ' clock' ),
+    timeSuffix: kivi.t8( " o'clock" ),
     timeText: kivi.t8(' Time'),
     hourText: 'Stunde',
     closeText: 'Fertig',
     currentText: 'Jetzt'
-  });
-
-
+});
 
 function crmEditOrderDlg( crmData ){
     crmOrderItemLists = { };

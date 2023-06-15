@@ -435,7 +435,7 @@ function searchCustomerForScan( $data ){
 }
 
 function getCar( $data ){
-    echo $GLOBALS['dbh']->getOne( "SELECT * FROM lxc_cars WHERE c_id = ".$data['id'], true );
+    echo $GLOBALS['dbh']->getOne( "SELECT *, to_char( c_hu, 'DD.MM.YYYY') AS c_hu, to_char( c_d, 'DD.MM.YYYY') AS c_d FROM lxc_cars WHERE c_id = ".$data['id'], true );
 }
 
 function getDataForNewLxcarsOrder( $data ){

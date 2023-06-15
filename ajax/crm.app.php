@@ -72,7 +72,7 @@ function searchOrder( $data ){
         $where .= "oe.status = '".$data['status']."' AND ";
 
     if( $data['status'] == 'nicht abgerechnet' )
-        $where = " oe.status != 'abgerechnet'  AND ";
+        $where .= " oe.status != 'abgerechnet'  AND ";
 
     $sql = "SELECT distinct on ( init_ts, internal_order ) * FROM ( ";
 

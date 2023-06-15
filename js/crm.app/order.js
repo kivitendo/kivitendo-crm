@@ -71,6 +71,13 @@ function crmEditOrderKeyup(e){
     }
 }
 
+function crmEditOrderKeyup2(e){
+    crmEditOrderKeyup(e);
+    if( e.which != 13 && e.which != 9 ){
+        crmCalcOrderPos();
+    }
+}
+
 function crmOrderEditArticle(){
     let field = $( ':focus' ).parent().parent();
     const parts_id = field.find( '[class=od-item-parts_id]' ).val();
@@ -142,7 +149,7 @@ function crmAddOrderItem( dataRow ){
                 '<td><input name="od-item-description" class="od-item-description" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td>' +
                 '<td><input class="od-item-longdescription" type="text" size="40" value="' + ( ( exists( dataRow.longdescription ) )? dataRow.longdescription : '' )  + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
                 ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input>' +
-                '</td><td><input class="od-item-qty" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.qty ) )? dataRow.qty : '0' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"' +
+                '</td><td><input class="od-item-qty" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.qty ) )? dataRow.qty : '0' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup2(event)"' +
                 ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>';
 
     // Unit is readonly now:
@@ -150,7 +157,7 @@ function crmAddOrderItem( dataRow ){
                 ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>';
 
     tableRow += '<td><input class="od-hidden-item-rate" type="hidden" value="' + ( ( exists( dataRow.rate ) )? dataRow.rate : '0' ) + '"></input>' +
-                '<input class="od-item-sellprice" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.sellprice ) )? dataRow.sellprice : '0', 2 ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
+                '<input class="od-item-sellprice" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.sellprice ) )? dataRow.sellprice : '0', 2 ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup2(event)" ' +
                 ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>' +
                 '<td><input class="od-item-discount" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.discount ) )? dataRow.discount : '0' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
                 ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>' +
@@ -186,6 +193,7 @@ function crmAddOrderItem( dataRow ){
         select: function( e, ui ){
             const row = $( ':focus' ).parent().parent();
             crmCompleteInsertOrderPos( row, ui.item );
+            row.find( '[class=od-item-qty]' ).select();
         }
     });
 

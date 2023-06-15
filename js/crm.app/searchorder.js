@@ -1,7 +1,7 @@
 // Verknüpft über das Dropdown-Menü: Bearbeiten -> Auftragsuche
 
 // Letzte Parameter sind optional: 1. Mazimale Zeilen, danach wird eine zweite Spalte hunzugefügt; 2. id für die Versteckten Eingabefelder
-crmInitFormEx( searchOrderFormModel, '#search-order-form', 3, /* '#search-order-hidden' */ );
+crmInitFormEx( searchOrderFormModel, '#search-order-form', 4, null /* '#search-order-hidden' */ );
 $( '#search_order-status' ).append( new Option( 'alle', 'alle' ) );
 $( '#search_order-status' ).append( new Option( 'angenommen', 'angenommen' ) );
 $( '#search_order-status' ).append( new Option( 'bearbeitet', 'bearbeitet' ) );
@@ -91,7 +91,9 @@ const crmSearchOrderDlg = function(){
     $( '#crm-search-order-dialog' ).dialog({
         autoOpen: false,
         resizable: true,
+        minWidth: 1402,
         width: 'auto',
+        minHeight: 900,
         height: 'auto',
         modal: true,
         title: kivi.t8( 'Search Order' ),

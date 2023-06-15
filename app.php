@@ -365,7 +365,7 @@
 
 <div id="crm-search-order-dialog" style="display:none">
     <div id="search-order-hidden"></div>
-    <table id="search-order-form">
+    <table id="search-order-form" style="padding-bottom: 1em">
         <thead></thead>
         <tbody></tbody>
     </table>

@@ -54,6 +54,32 @@ function searchCarLicense(){
     }
 }
 
+function searchCarKbaValue( $value ){
+    if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
+        $term = $_GET['term'];
+        echo $GLOBALS['dbh']->getAll( "SELECT DISTINCT ON ( kbaall.".$value." ) kbaall.".$value." AS value FROM oe, (".
+                                        "SELECT c_id, ".$value." FROM lxc_cars JOIN kbacars ON( lxc_cars.c_2 = kbacars.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbacars.tsn   ) UNION All ".
+                                        "SELECT c_id, ".$value." FROM lxc_cars JOIN kbatrailer ON( lxc_cars.c_2 = kbatrailer.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbatrailer.tsn   ) UNION ALL ".
+                                        "SELECT c_id, ".$value." FROM lxc_cars JOIN kbabikes ON( lxc_cars.c_2 = kbabikes.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbabikes.tsn   ) UNION ALL ".
+                                        "SELECT c_id, ".$value." FROM lxc_cars JOIN kbatrucks ON( lxc_cars.c_2 = kbatrucks.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbatrucks.tsn   ) UNION ALL ".
+                                        "SELECT c_id, ".$value." FROM lxc_cars JOIN kbatractors ON( lxc_cars.c_2 = kbatractors.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbatractors.tsn   ) ".
+                                        ") AS kbaall ".
+                                        "WHERE oe.c_id = kbaall.c_id AND kbaall.".$value." ILIKE '%".$term."%' LIMIT 5", true);
+    }
+}
+
+function searchCarManuf(){
+    searchCarKbaValue( 'hersteller' );
+}
+
+function searchCarType(){
+    searchCarKbaValue( 'name' );
+}
+
+function searchCarBrand(){
+    searchCarKbaValue( 'marke' );
+}
+
 function searchOrder( $data ){
     $where = '';
     if( $data['customer_name'] != '' )

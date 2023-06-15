@@ -105,8 +105,7 @@ function searchOrder( $data ){
 
     if( $data['status'] != 'alle' && $data['status'] != 'nicht abgerechnet' )
         $where .= "oe.status = '".$data['status']."' AND ";
-
-    if( $data['status'] == 'nicht abgerechnet' )
+    elseif( $data['status'] == 'nicht abgerechnet' )
         $where .= " oe.status != 'abgerechnet'  AND ";
 
     $subquery .= "SELECT c_id, hersteller, name, marke FROM lxc_cars JOIN kbacars ON( lxc_cars.c_2 = kbacars.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbacars.tsn   ) UNION All ".

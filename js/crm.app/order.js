@@ -369,7 +369,7 @@ function crmSaveOrder(){
         dataRow.sellprice = kivi.parse_amount( dataRow.sellprice );
         dataRow.discount = kivi.parse_amount( dataRow.discount );
         dataRow.marge_total = kivi.parse_amount( dataRow.marge_total );
-        if( exists( pos.id ) ){
+        if( exists( pos.id ) && pos.id != 'od-empty-item-id' ){
             if( 'P' === itemType  ){
                 dataRow['WHERE'] = {};
                 dataRow['WHERE'] = 'id = ' +  pos.id;

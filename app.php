@@ -71,6 +71,9 @@
   <script type="text/javascript" src="js/client_js.js"></script>
   <script type="text/javascript" src="js/jquery/jquery.tooltipster.min.js"></script>
   <script type="text/javascript" src="js/jquery/ui/i18n/jquery.ui.datepicker-de.js"></script>
+  <script type="text/javascript" src="js/jquery/ui/i18n/jquery.ui.datepicker-de.js"></script>
+  <script type="text/javascript" src="crm/jquery-add-ons/date-time-picker.js"></script>
+  <script type="text/javascript" src="crm/jquery-add-ons/german-date-time-picker.js"></script>
 <!-- Ende -->
 
 <style>

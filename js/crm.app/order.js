@@ -193,7 +193,7 @@ function crmAddOrderItem( dataRow ){
         select: function( e, ui ){
             const row = $( ':focus' ).parent().parent();
             crmCompleteInsertOrderPos( row, ui.item );
-            row.find( '[class=od-item-qty]' ).select();
+            $( '[name=od-item-description]' ).filter( ':last' ).focus();
         }
     });
 
@@ -468,7 +468,7 @@ $( "#od-oe-finish_time" ).datetimepicker({
     hour: 16,
     hourMin: 8,
     hourMax: 17,
-    timeSuffix: kivi.t8( " o'clock" ),
+    timeSuffix: kivi.t8( " Uhr" ),
     timeText: kivi.t8(' Time'),
     hourText: 'Stunde',
     closeText: 'Fertig',

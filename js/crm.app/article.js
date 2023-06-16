@@ -101,6 +101,7 @@ function crmEditArticleDlg( field ){
                 },
                 close: function(){
                     $( '#edit_article-parts_id' ).val( '' );
+                    $( '[name=od-item-description]' ).filter( ':last' ).focus();
                 },
                 buttons:[{
                     id: 'edit_article-save-btn',

@@ -110,13 +110,6 @@ function searchOrder( $data ){
         $where .= "oe.transdate <= '".$data['date_to']."' AND ";
     }
 
-//    if( $data['status'] != 'alle' && $data['status'] != 'nicht abgerechnet' ){
-//        $where .= "oe.status = '".$data['status']."' AND ";
-//    }
-//    elseif( $data['status'] == 'nicht abgerechnet' ){
-//        $where .= " oe.status != 'abgerechnet'  AND ";
-//    }
-
     if( $data['status'] == 'nicht abgerechnet' ){
         $where .= " oe.status != 'abgerechnet'  AND ";
     }
@@ -148,9 +141,9 @@ function searchOrder( $data ){
     $sql.= $subquery.") AS kbaall ";
     $sql.= "WHERE ".$where." oe.c_id = kbaall.c_id AND orderitems.trans_id = oe.id AND parts.id = orderitems.parts_id AND orderitems.position = 1 AND lxc_cars.c_id = oe.c_id AND customer.id = oe.customer_id ORDER BY instruction ASC";
 
-    $sql.= ") AS myTable ORDER BY internal_order ASC, init_ts DESC";
+    $sql.= ") AS myTable ORDER BY internal_order ASC, init_ts DESC LIMIT 100";
 
-    writeLog( $sql );
+    //writeLog( $sql );
 
     $rs = $GLOBALS['dbh']->getALL( $sql, true );
 

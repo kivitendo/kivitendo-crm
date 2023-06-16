@@ -118,7 +118,9 @@ function crmRefreshAppView( src, id ){
 }
 
 function crmRefreshAppViewAction( ){
-    getCVPA( $( '#crm-cvpa-src' ).val(), $( '#crm-cvpa-id' ).val() );
+    const src = $( '#crm-cvpa-src' ).val();
+    const id = $( '#crm-cvpa-id' ).val();
+    if( '' != src && '' != id) getCVPA( src, id );
 }
 
 $( '#message-dialog' ).dialog({

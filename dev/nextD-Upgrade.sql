@@ -15,7 +15,6 @@ CREATE TABLE IF NOT EXISTS lxckba(
     sitze             TEXT,
     masse             TEXT, --End KBA
     fhzart            TEXT, --Fahrzeugart
-    fhzart            TEXT, --Fahrzeugart
     d3                TEXT, --Handelsbezeichnung
     j                TEXT, --Fahrzeugklasse
     field_4            TEXT, --Art des Aufbaus

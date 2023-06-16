@@ -154,11 +154,6 @@ const editArticleFormModel = [
 // hidden Inputfelder immer an letzter Position in der Vorlagenliste (z.B. editArticleFormModel)
 
 const searchOrderFormModel = [
-    { "name": "search_order-ln", "label": "license number:", "type": "input", "size": "21", "tooltip": "license number" },
-    { "name": "search_order-name", "label": "name:", "type": "input", "size": "21", "tooltip": "name" },
-    { "name": "search_order-from", "label": "from:", "type": "input", "size": "21", "tooltip": "from" },
-    { "name": "search_order-to", "label": "to:", "type": "input", "size": "21", "tooltip": "to" },
-    { "name": "search_order-status", "label": "status:", "type": "select","data": ['','angenommen','bearbeitet','abgerechnet'], "tooltip":"status"}, //selectbox
     { "name": "search_order-car_license", "label": "Car license:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "search_order-customer_name", "label": "Customer name:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "search_order-car_manuf", "label": "Car manufacturer:", "type": "input", "size": "21", "tooltip": "" },

@@ -83,17 +83,17 @@ function searchOrder( $data ){
         $where .= "lxc_cars.c_ln ILIKE '%".$data['car_license']."%' AND ";
     }
 
-    if( $data['car_manuf'] != '' ){
-        $where .= "kbaall.hersteller ILIKE '%".$data['car_manuf']."%' AND ";
-    }
-
-    if( $data['car_type'] != '' ){
-        $where .= "kbaall.name ILIKE '%".$data['car_type']."%' AND ";
-    }
-
-    if( $data['car_brand'] != '' ){
-        $where .= "kbaall.marke ILIKE '%".$data['car_brand']."%' AND ";
-    }
+//    if( $data['car_manuf'] != '' ){
+//        $where .= "kbaall.hersteller ILIKE '%".$data['car_manuf']."%' AND ";
+//    }
+//
+//    if( $data['car_type'] != '' ){
+//        $where .= "kbaall.name ILIKE '%".$data['car_type']."%' AND ";
+//    }
+//
+//    if( $data['car_brand'] != '' ){
+//        $where .= "kbaall.marke ILIKE '%".$data['car_brand']."%' AND ";
+//    }
 
     if( $data['date_from'] != '' ){
         $where .= "oe.transdate >= '".$data['date_from']."' AND ";

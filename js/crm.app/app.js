@@ -93,6 +93,7 @@ $( function(){
     $( "#crm-widget-quicksearch" ).catcomplete({
         source: "crm/ajax/crm.app.php?action=fastSearch",
         select: function( e, ui ) {
+            console.info( ui );
             crmRefreshAppView( ui.item.src, ui.item.id );
         }
     });

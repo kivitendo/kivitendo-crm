@@ -36,8 +36,103 @@ function getHistory(){
 function fastSearch(){
     if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
         $term = $_GET['term'];
-        echo $GLOBALS['dbh']->getAll("(SELECT 'Kunde' AS category, 'C' AS src, '' AS value, id, name AS label FROM customer WHERE name ILIKE '%".$term."%' LIMIT 5) UNION ALL (SELECT 'Lieferant' AS category, 'V' AS src, '' AS value, id, name AS label FROM vendor WHERE name ILIKE '%".$term."%' LIMIT 5) UNION ALL (SELECT 'Kontaktperson' AS category, 'P' AS src, '' AS value, cp_id AS id, concat(cp_givenname, ' ', cp_name) AS name FROM contacts WHERE cp_name ILIKE '%".$term."%' OR cp_givenname ILIKE '%".$term."%' LIMIT 5) UNION ALL (SELECT 'Fahrzeug' AS category, 'A' AS src, c_ln AS value, c_id AS id, name AS label FROM lxc_cars JOIN customer ON c_ow = id WHERE c_ln ILIKE '%".$term."%' AND obsolete = false LIMIT 5)", true);
+        echo $GLOBALS['dbh']->getAll("(SELECT 'Kunde' AS category, 'C' AS src, '' AS value, id, name AS label FROM customer WHERE name ILIKE '%".$term."%' LIMIT 5) UNION ALL (SELECT 'Lieferant' AS category, 'V' AS src, '' AS value, id, name AS label FROM vendor WHERE name ILIKE '%".$term."%' LIMIT 5) UNION ALL (SELECT 'Kontaktperson' AS category, 'P' AS src, '' AS value, cp_id AS id, concat(cp_givenname, ' ', cp_name) AS name FROM contacts WHERE cp_name ILIKE '%".$term."%' OR cp_givenname ILIKE '%".$term."%' LIMIT 5) UNION ALL (SELECT 'Fahrzeug' AS category, 'A' AS src, c_ln AS value, c_id AS id, ' [ ' || COALESCE(c_ln, '') || ' ] ' || COALESCE(name, '') AS label FROM lxc_cars JOIN customer ON c_ow = id WHERE c_ln ILIKE '%".$term."%' AND obsolete = false LIMIT 5)", true);
     }
+}
+
+function searchCustomer(){
+    if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
+        $term = $_GET['term'];
+        echo $GLOBALS['dbh']->getAll( "SELECT name AS value FROM customer WHERE name ILIKE '%".$term."%' LIMIT 15", true );
+    }
+}
+
+function searchCarLicense(){
+    if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
+        $term = $_GET['term'];
+        echo $GLOBALS['dbh']->getAll( "SELECT c_ln AS value FROM lxc_cars WHERE c_ln ILIKE '%".$term."%' LIMIT 15", true );
+    }
+}
+
+function searchCarKbaValue( $value ){
+    if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
+        $term = $_GET['term'];
+        echo $GLOBALS['dbh']->getAll( "SELECT DISTINCT ON ( ".$value." ) ".$value." AS value FROM oe WHERE ".$value." ILIKE '%".$term."%' LIMIT 5", true);
+    }
+}
+
+function searchCarManuf(){
+    searchCarKbaValue( 'car_manuf' );
+}
+
+function searchCarType(){
+    searchCarKbaValue( 'car_type' );
+}
+
+function searchCarBrand(){
+    echo '{}';
+}
+
+function searchOrder( $data ){
+    $where = '';
+    if( $data['customer_name'] != '' ){
+        $where .= "customer.name ILIKE '%".$data['customer_name']."%' AND ";
+    }
+
+    if( $data['car_license'] != '' ){
+        $where .= "lxc_cars.c_ln ILIKE '%".$data['car_license']."%' AND ";
+    }
+
+    if( $data['car_manuf'] != '' ){
+        $where .= "kbaall.hersteller ILIKE '%".$data['car_manuf']."%' AND ";
+    }
+
+    if( $data['car_type'] != '' ){
+        $where .= "kbaall.name ILIKE '%".$data['car_type']."%' AND ";
+    }
+
+    if( $data['car_brand'] != '' ){
+        $where .= "kbaall.marke ILIKE '%".$data['car_brand']."%' AND ";
+    }
+
+    if( $data['date_from'] != '' ){
+        $where .= "oe.transdate >= '".$data['date_from']."' AND ";
+    }
+
+    if( $data['date_to'] != '' ){
+        $where .= "oe.transdate <= '".$data['date_to']."' AND ";
+    }
+
+    if( $data['status'] == 'nicht abgerechnet' ){
+        $where .= " oe.status != 'abgerechnet'  AND ";
+    }
+    elseif( $data['status'] != '' && $data['status'] != 'alle' ){
+        $where .= " oe.status = '".$data['status']."'  AND ";
+    }
+
+    $sql = "SELECT distinct on ( init_ts, internal_order ) * FROM ( ";
+
+    $sql.= "SELECT distinct on ( oe.id, internal_order ) 'true' ::BOOL AS instruction, oe.id,lxc_cars.c_ln, to_char( oe.transdate, 'DD.MM.YYYY') AS transdate, ";
+    $sql.= "oe.ordnumber, instructions.description, oe.car_status, oe.status, oe.finish_time, customer.name AS owner, oe.c_id AS c_id, oe.customer_id, ";
+    $sql.= "lxc_cars.c_2 AS c_2, lxc_cars.c_3 AS c_3, oe.car_manuf AS car_manuf, oe.car_type AS car_type, oe.internalorder AS internal_order, oe.itime AS init_ts ";
+    $sql.= "FROM oe, instructions, parts, lxc_cars, customer ";
+    $sql.= "WHERE ".$where." instructions.trans_id = oe.id AND parts.id = instructions.parts_id AND lxc_cars.c_id = oe.c_id AND customer.id = oe.customer_id ";
+
+    $sql.= "UNION ";
+
+    $sql.= "SELECT distinct on ( oe.id, internal_order ) 'false'::BOOL AS instruction, oe.id,lxc_cars.c_ln, to_char( oe.transdate, 'DD.MM.YYYY') AS transdate, ";
+    $sql.= "oe.ordnumber, orderitems.description, oe.car_status, oe.status, oe.finish_time, customer.name AS owner, oe.c_id AS c_id, oe.customer_id, ";
+    $sql.= "lxc_cars.c_2 AS c_2, lxc_cars.c_3 AS c_3, oe.car_manuf AS car_manuf, oe.car_type AS car_type, oe.internalorder AS internal_order, oe.itime AS init_ts ";
+    $sql.= "FROM oe, orderitems, parts, lxc_cars, customer ";
+    $sql.= "WHERE ".$where." orderitems.trans_id = oe.id AND parts.id = orderitems.parts_id AND orderitems.position = 1 AND lxc_cars.c_id = oe.c_id AND customer.id = oe.customer_id ORDER BY instruction ASC";
+
+    $sql.= ") AS myTable ORDER BY internal_order ASC, init_ts DESC LIMIT 100";
+
+    //writeLog( $sql );
+
+    $rs = $GLOBALS['dbh']->getALL( $sql, true );
+
+    echo '{ "rs": '.( ( empty( $rs ) )? '{}' : $rs ).' }';
 }
 
 function checkArticleNumber( $data ){
@@ -168,14 +263,17 @@ function getCVPA( $data ){
     }
 
     // Fahrzeuge
-    //$query .= "( SELECT json_agg( cars ) AS cv FROM (SELECT c_id AS id, c_ln AS ln, '--------' AS manuf, '-----' AS ctype, '---' AS cart FROM lxc_cars WHERE c_ow = ".$data['id']." ORDER BY c_id) AS cars) AS cars";
     $query .= "( SELECT json_agg( cars ) AS cars FROM (".
+                "SELECT c_id, c_ln FROM lxc_cars WHERE c_ow = ".$data['id'].
+                ") AS cars) AS cars, ";
+
+    $query .= "( SELECT json_agg( kba ) AS kba FROM (".
                 "SELECT c_id, c_ln, hersteller, name, 'automobil' AS mytype FROM lxc_cars JOIN kbacars ON( lxc_cars.c_2 = kbacars.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbacars.tsn   ) WHERE c_ow = ".$data['id']." UNION All ".
                 "SELECT c_id, c_ln, hersteller, name, 'trailer' AS mytype FROM lxc_cars JOIN kbatrailer ON( lxc_cars.c_2 = kbatrailer.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbatrailer.tsn   ) WHERE c_ow = ".$data['id']." UNION ALL ".
                 "SELECT c_id, c_ln, hersteller, name, 'bikes' AS mytype FROM lxc_cars JOIN kbabikes ON( lxc_cars.c_2 = kbabikes.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbabikes.tsn   ) WHERE c_ow = ".$data['id']." UNION ALL ".
                 "SELECT c_id, c_ln, hersteller, name, 'trucks' AS mytype FROM lxc_cars JOIN kbatrucks ON( lxc_cars.c_2 = kbatrucks.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbatrucks.tsn   ) WHERE c_ow = ".$data['id']." UNION ALL ".
                 "SELECT c_id, c_ln, hersteller, name, 'tractor' AS mytype FROM lxc_cars JOIN kbatractors ON( lxc_cars.c_2 = kbatractors.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbatractors.tsn   ) WHERE c_ow = ".$data['id'].
-                ") AS cars) AS cars";
+                ") AS kba) AS kba";
 
     $rs = $GLOBALS['dbh']->getOne( $query, true );
     echo $rs;
@@ -359,7 +457,7 @@ function searchCustomerForScan( $data ){
 }
 
 function getCar( $data ){
-    echo $GLOBALS['dbh']->getOne( "SELECT * FROM lxc_cars WHERE c_id = ".$data['id'], true );
+    echo $GLOBALS['dbh']->getOne( "SELECT *, to_char( c_hu, 'DD.MM.YYYY') AS c_hu, to_char( c_d, 'DD.MM.YYYY') AS c_d FROM lxc_cars WHERE c_id = ".$data['id'], true );
 }
 
 function getDataForNewLxcarsOrder( $data ){

@@ -19,7 +19,8 @@
     $result = curl_exec( $ch );
 
     if( $result === false || curl_errno( $ch ) ){
-        header( 'Location: http://localhost/kivitendo/controller.pl?action=LoginScreen/user_login' );//ToDo  Das ist definitiv falsch
+        header( 'Location: controller.pl?action=LoginScreen/user_login' );
+        //echo curl_error( $ch );
         return;
     }
     curl_close( $ch );
@@ -71,6 +72,9 @@
   <script type="text/javascript" src="js/client_js.js"></script>
   <script type="text/javascript" src="js/jquery/jquery.tooltipster.min.js"></script>
   <script type="text/javascript" src="js/jquery/ui/i18n/jquery.ui.datepicker-de.js"></script>
+  <script type="text/javascript" src="js/jquery/ui/i18n/jquery.ui.datepicker-de.js"></script>
+  <script type="text/javascript" src="crm/jquery-add-ons/date-time-picker.js"></script>
+  <script type="text/javascript" src="crm/jquery-add-ons/german-date-time-picker.js"></script>
 <!-- Ende -->
 
 <style>
@@ -362,9 +366,25 @@
 
 <div id="crm-search-order-dialog" style="display:none">
     <div id="search-order-hidden"></div>
-    <table id="search-order-form">
+    <table id="search-order-form" style="padding-bottom: 1em">
         <thead></thead>
         <tbody></tbody>
+    </table>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <td class="listheading">Name</th>
+            <td class="listheading">Kennzeichen</th>
+            <td class="listheading">Erste Position</th>
+            <td class="listheading">Hersteller</th>
+            <td class="listheading">Fahrzeugtyp</th>
+            <td class="listheading">Datum</th>
+            <td class="listheading">Auftragsnummer</th>
+            <td class="listheading">Status</th>
+        </tr>
+        </thead>
+        <tbody id="crm-search-order-table">
+        </tbody>
     </table>
 </div>
 

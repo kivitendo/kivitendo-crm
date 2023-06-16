@@ -59,14 +59,11 @@ $( '#edit_article-partnumber' ).keyup(function(e){
 });
 
 function crmEditArticleDlg( field ){
-    console.info( '#edit_article-parts_id' );
-    console.info( $( '#edit_article-parts_id' ).val() );
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         data: { action: 'dataForNewArticle', data:{ 'part_type': $( '#edit_article-part_type' ).val(), 'parts_id': $( '#edit_article-parts_id' ).val() } },
         type: "POST",
         success: function( crmData ){
-            console.info( crmData );
 
             $( '#edit_article-unit' ).html( '' );
             for(let unit of crmData.common.units){
@@ -104,6 +101,7 @@ function crmEditArticleDlg( field ){
                 },
                 close: function(){
                     $( '#edit_article-parts_id' ).val( '' );
+                    $( '[name=od-item-description]' ).filter( ':last' ).focus();
                 },
                 buttons:[{
                     id: 'edit_article-save-btn',
@@ -180,7 +178,6 @@ function crmEditArticleDlg( field ){
                                     type: 'POST',
                                     data:  { action: 'genericUpdateEx', data: dbUpdateData },
                                     success: function( data ){
-                                        console.info( 'Article updated' );
                                         dbData['id'] = $( '#edit_article-parts_id' ).val();
                                         dbData['qty'] = ( $( '#edit_article-qty' ).val() == '' )? 0 : $( '#edit_article-qty' ).val();
                                         crmCompleteInsertOrderPos( field, dbData );

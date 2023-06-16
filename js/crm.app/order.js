@@ -57,9 +57,9 @@ function crmEditOrderKeyup(e){
         crmCalcOrderPos();
         let field = $( ':focus' ).parent().parent();
         const desc = field.find( '[name=od-item-description]' ).val();
+        const part_id = field.find( '[class=od-item-parts_id]' ).val();
         if( !isEmpty( desc ) ){
-           if( 'od-empty-item-id' === field.attr( 'id' ) ){
-                console.info( 'Position ungültig!' );
+           if( '' === part_id ){
                 field.css("background-color","red");
                 $( '#edit_article-description' ).val( desc );
                 crmEditArticleDlg( field );
@@ -71,8 +71,14 @@ function crmEditOrderKeyup(e){
     }
 }
 
+function crmEditOrderKeyup2(e){
+    crmEditOrderKeyup(e);
+    if( e.which != 13 && e.which != 9 ){
+        crmCalcOrderPos();
+    }
+}
+
 function crmOrderEditArticle(){
-    console.info( 'Edit Article' );
     let field = $( ':focus' ).parent().parent();
     const parts_id = field.find( '[class=od-item-parts_id]' ).val();
     const desc = field.find( '[name=od-item-description]' ).val();
@@ -110,7 +116,6 @@ function crmEditOrderHundredPro(){
 }
 
 $( '#od-ui-discount-100-all-btn' ).click( function(){
-    console.info( 'click' );
     $( '#edit-order-table > tbody > tr').each( function( key, pos ){
         if( 'od-empty-item-id' !== $( pos ).attr( 'id' ) ){
             let hundredpro =  $( pos ).find( '[class=od-ui-hundredpro]' );
@@ -141,10 +146,10 @@ function crmAddOrderItem( dataRow ){
     tableRow += '<input class="od-item-type" type="hidden" value="' + orderType + '"></input>';
     tableRow += '<span class="od-table-item-type">' + kivi.t8( orderType ) + '</span>';
     tableRow += '</td>' +
-                '<td><input name="od-item-description" class="od-item-description" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td>' +
+                '<td><input name="od-item-description" class="od-item-description" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '" onkeyup="crmEditOrderKeyup(event)"></input></td>' +
                 '<td><input class="od-item-longdescription" type="text" size="40" value="' + ( ( exists( dataRow.longdescription ) )? dataRow.longdescription : '' )  + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
                 ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input>' +
-                '</td><td><input class="od-item-qty" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.qty ) )? dataRow.qty : '0' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"' +
+                '</td><td><input class="od-item-qty" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.qty ) )? dataRow.qty : '0' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup2(event)"' +
                 ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>';
 
     // Unit is readonly now:
@@ -152,7 +157,7 @@ function crmAddOrderItem( dataRow ){
                 ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>';
 
     tableRow += '<td><input class="od-hidden-item-rate" type="hidden" value="' + ( ( exists( dataRow.rate ) )? dataRow.rate : '0' ) + '"></input>' +
-                '<input class="od-item-sellprice" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.sellprice ) )? dataRow.sellprice : '0', 2 ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
+                '<input class="od-item-sellprice" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.sellprice ) )? dataRow.sellprice : '0', 2 ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup2(event)" ' +
                 ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>' +
                 '<td><input class="od-item-discount" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.discount ) )? dataRow.discount : '0' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
                 ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>' +
@@ -188,6 +193,7 @@ function crmAddOrderItem( dataRow ){
         select: function( e, ui ){
             const row = $( ':focus' ).parent().parent();
             crmCompleteInsertOrderPos( row, ui.item );
+            $( '[name=od-item-description]' ).filter( ':last' ).focus();
         }
     });
 
@@ -275,16 +281,12 @@ function crmInsertOrderPos( itemPosition, itemType, item, modified = false ){
     pos['record'][dbTable]['description'] = item.description;
     pos['sequence_name'] = 'orderitemsid';
 
-    console.info( 'item' );
-    console.info( item );
-
     if( isEmpty( $( '#od-oe-id' ).val() ) ){
         crmNewOrderAndInsertPos( itemPosition, itemType, item );
         return;
     }
 
     if( modified ){
-        console.info( 'modified' )
         crmSaveOrder();
         return;
     }
@@ -331,7 +333,12 @@ crmDeleteOrderPos = function( e ) {
     });
  }
 
+var saving = false;
+
 function crmSaveOrder(){
+    if( saving ) return;
+    saving = true;
+
     if( isEmpty( $( '#od-oe-id' ).val() ) ) return;
 
     let dbUpdateData = { }
@@ -367,7 +374,7 @@ function crmSaveOrder(){
         dataRow.sellprice = kivi.parse_amount( dataRow.sellprice );
         dataRow.discount = kivi.parse_amount( dataRow.discount );
         dataRow.marge_total = kivi.parse_amount( dataRow.marge_total );
-        if( exists( pos.id ) ){
+        if( exists( pos.id ) && pos.id != 'od-empty-item-id' ){
             if( 'P' === itemType  ){
                 dataRow['WHERE'] = {};
                 dataRow['WHERE'] = 'id = ' +  pos.id;
@@ -404,6 +411,7 @@ function crmSaveOrder(){
         data:  { action: 'genericUpdateEx', data: dbUpdateData },
         success: function( data ){
             console.info( 'Order saved' );
+            saving = false;
         },
         error: function( xhr, status, error ){
             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmSaveOrder()', xhr.responseText );
@@ -412,14 +420,11 @@ function crmSaveOrder(){
 }
 
 function crmNewOrderForCar( c_id ){
-    console.info( 'crmNewOrderForCar' );
-    console.info( c_id );
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
         data:  { action: 'getDataForNewLxcarsOrder', data: { 'id': c_id } },
         success: function( crmData ){
-            //console.info( crmData );
             crmEditOrderDlg( crmData );
         },
         error: function( xhr, status, error ){
@@ -451,6 +456,24 @@ $( '#od-ui-items-status-all' ).change( function(){
     crmSaveOrder();
 });
 
+$( "#od-oe-finish_time" ).datetimepicker({
+    beforeShow: function( input ){
+        crmDateTimePickerAddButton( input );
+    },
+    onChangeMonthYear: function( year, month, inst ){
+        crmDateTimePickerAddButton( inst.input );
+        crmSaveOrder();
+    },
+    stepMinute: 5,
+    hour: 16,
+    hourMin: 8,
+    hourMax: 17,
+    timeSuffix: kivi.t8( " Uhr" ),
+    timeText: kivi.t8(' Time'),
+    hourText: 'Stunde',
+    closeText: 'Fertig',
+    currentText: 'Jetzt'
+});
 
 function crmEditOrderDlg( crmData ){
     crmOrderItemLists = { };
@@ -470,8 +493,6 @@ function crmEditOrderDlg( crmData ){
         }
     });
 
-    console.info( 'crmData' );
-    console.info( crmData );
     if( exists( crmData.order ) ){
         $( '#od-customer-id' ).val( crmData.order.common.customer_id );
         $( '#od-lxcars-c_id' ).val( crmData.order.common.c_id );
@@ -581,7 +602,6 @@ function crmEditOrderDlg( crmData ){
             text: kivi.t8( ' PDF ' ),
             id: 'od-ui-btn-pdf',
             click: function(){
-                console.info( 'Print order PDF' );
                 let printData = {};
                 printData['orderId'] = $( '#od-oe-id' ).val();
                 printData['print'] = 'pdfOrder';

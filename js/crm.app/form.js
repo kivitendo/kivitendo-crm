@@ -159,4 +159,12 @@ const searchOrderFormModel = [
     { "name": "search_order-from", "label": "from:", "type": "input", "size": "21", "tooltip": "from" },
     { "name": "search_order-to", "label": "to:", "type": "input", "size": "21", "tooltip": "to" },
     { "name": "search_order-status", "label": "status:", "type": "select","data": ['','angenommen','bearbeitet','abgerechnet'], "tooltip":"status"}, //selectbox
+    { "name": "search_order-car_license", "label": "Car license:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "search_order-customer_name", "label": "Customer name:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "search_order-car_manuf", "label": "Car manufacturer:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "search_order-car_type", "label": "Car type:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "search_order-car_brand", "label": "Car brand:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "search_order-status", "label": "Status:", "type": "select","data": [], "tooltip":""}, //selectbox
+    { "name": "search_order-date_from", "label": "Date from:", "type": "input", "size": "16", "tooltip": "" },
+    { "name": "search_order-date_to", "label": "Date to:", "type": "input", "size": "16", "tooltip": "" },
  ];

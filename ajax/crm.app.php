@@ -82,33 +82,49 @@ function searchCarBrand(){
 
 function searchOrder( $data ){
     $where = '';
-    if( $data['customer_name'] != '' )
+    if( $data['customer_name'] != '' ){
         $where .= "customer.name ILIKE '%".$data['customer_name']."%' AND ";
+    }
 
-    if( $data['car_license'] != '' )
+    if( $data['car_license'] != '' ){
         $where .= "lxc_cars.c_ln ILIKE '%".$data['car_license']."%' AND ";
+    }
 
-    if( $data['car_manuf'] != '' )
+    if( $data['car_manuf'] != '' ){
         $where .= "kbaall.hersteller ILIKE '%".$data['car_manuf']."%' AND ";
+    }
 
-    if( $data['car_type'] != '' )
+    if( $data['car_type'] != '' ){
         $where .= "kbaall.name ILIKE '%".$data['car_type']."%' AND ";
+    }
 
-    if( $data['car_brand'] != '' )
+    if( $data['car_brand'] != '' ){
         $where .= "kbaall.marke ILIKE '%".$data['car_brand']."%' AND ";
+    }
 
-    if( $data['date_from'] != '' )
+    if( $data['date_from'] != '' ){
         $where .= "oe.transdate >= '".$data['date_from']."' AND ";
+    }
 
-    if( $data['date_to'] != '' )
+    if( $data['date_to'] != '' ){
         $where .= "oe.transdate <= '".$data['date_to']."' AND ";
+    }
 
-    if( $data['status'] != 'alle' && $data['status'] != 'nicht abgerechnet' )
-        $where .= "oe.status = '".$data['status']."' AND ";
-    elseif( $data['status'] == 'nicht abgerechnet' )
+//    if( $data['status'] != 'alle' && $data['status'] != 'nicht abgerechnet' ){
+//        $where .= "oe.status = '".$data['status']."' AND ";
+//    }
+//    elseif( $data['status'] == 'nicht abgerechnet' ){
+//        $where .= " oe.status != 'abgerechnet'  AND ";
+//    }
+
+    if( $data['status'] == 'nicht abgerechnet' ){
         $where .= " oe.status != 'abgerechnet'  AND ";
+    }
+    elseif( $data['status'] != '' && $data['status'] != 'alle' ){
+        $where .= " oe.status = '".$data['status']."'  AND ";
+    }
 
-    $subquery .= "SELECT c_id, hersteller, name, marke FROM lxc_cars JOIN kbacars ON( lxc_cars.c_2 = kbacars.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbacars.tsn   ) UNION All ".
+    $subquery = "SELECT c_id, hersteller, name, marke FROM lxc_cars JOIN kbacars ON( lxc_cars.c_2 = kbacars.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbacars.tsn   ) UNION All ".
                 "SELECT c_id, hersteller, name, marke FROM lxc_cars JOIN kbatrailer ON( lxc_cars.c_2 = kbatrailer.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbatrailer.tsn   ) UNION ALL ".
                 "SELECT c_id, hersteller, name, marke FROM lxc_cars JOIN kbabikes ON( lxc_cars.c_2 = kbabikes.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbabikes.tsn   ) UNION ALL ".
                 "SELECT c_id, hersteller, name, marke FROM lxc_cars JOIN kbatrucks ON( lxc_cars.c_2 = kbatrucks.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbatrucks.tsn   ) UNION ALL ".
@@ -132,7 +148,7 @@ function searchOrder( $data ){
     $sql.= $subquery.") AS kbaall ";
     $sql.= "WHERE ".$where." oe.c_id = kbaall.c_id AND orderitems.trans_id = oe.id AND parts.id = orderitems.parts_id AND orderitems.position = 1 AND lxc_cars.c_id = oe.c_id AND customer.id = oe.customer_id ORDER BY instruction ASC";
 
-    $sql.= ") AS myTable ORDER BY internal_order ASC, init_ts DESC LIMIT 25";
+    $sql.= ") AS myTable ORDER BY internal_order ASC, init_ts DESC";
 
     writeLog( $sql );
 

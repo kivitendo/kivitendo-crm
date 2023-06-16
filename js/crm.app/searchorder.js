@@ -7,6 +7,9 @@ $( '#search_order-status' ).append( new Option( 'angenommen', 'angenommen' ) );
 $( '#search_order-status' ).append( new Option( 'bearbeitet', 'bearbeitet' ) );
 $( '#search_order-status' ).append( new Option( 'abgerechnet', 'abgerechnet' ) );
 $( '#search_order-status' ).append( new Option( 'nicht abgerechnet', 'nicht abgerechnet' ) );
+$( '#search_order-status' ).val( 'nicht abgerechnet' );
+
+console.info( 'inc searchorder' );
 
 $( '#search_order-date_from' ).datepicker({});
 $( '#search_order-date_to' ).datepicker({});
@@ -103,9 +106,14 @@ function crmSearchOrder( onSuccess = null ){
 
 const crmSearchOrderDlg = function(){
     for( let item of searchOrderFormModel ){
-         $( '#' + item.name ).val( '' );
+        if( 'search_order-status' == item.name ){
+            $( '#search_order-status' ).val( 'nicht abgerechnet' );
+        }
+        else{
+            $( '#' + item.name ).val( '' );
+        }
     }
-    $( '#search_order-status' ).val( 'nicht abgerechnet' );
+    //$( '#search_order-status' ).val( 'nicht abgerechnet' );
 
     $( '#crm-search-order-dialog' ).dialog({
         autoOpen: false,

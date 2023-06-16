@@ -9,8 +9,6 @@ $( '#search_order-status' ).append( new Option( 'abgerechnet', 'abgerechnet' ) )
 $( '#search_order-status' ).append( new Option( 'nicht abgerechnet', 'nicht abgerechnet' ) );
 $( '#search_order-status' ).val( 'nicht abgerechnet' );
 
-console.info( 'inc searchorder' );
-
 $( '#search_order-date_from' ).datepicker({});
 $( '#search_order-date_to' ).datepicker({});
 
@@ -58,8 +56,6 @@ for( let item of searchOrderFormModel ){
 }
 
 function crmSearchOrder( onSuccess = null ){
-    console.info( 'Search order' );
-
     dbData = {};
     for( let item of searchOrderFormModel ){
         let columnName = item.name.split( '-' );
@@ -68,19 +64,17 @@ function crmSearchOrder( onSuccess = null ){
             dbData[columnName[1]] = val;
         }
     }
-    console.info( dbData );
 
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
         data:  { action: 'searchOrder', data: dbData },
         success: function( data ){
-            console.info( data );
 
             $( '#crm-search-order-table' ).html( '' );
             let listrow0 = false;
             $.each( data.rs, function( key, value ){
-                $( '#crm-search-order-table' ).append( '<tr id="' + value.id +'" class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' +  value.owner + '</td><td>' + value.c_ln  + '</td><td>' + value.description  + '</td><td>' + value.car_manuf + '</td><td>' + value.car_type + '</td><td>' + value.transdate + '</td><td>' + value.ordnumber + '</td><td>' + value.status + '</td></tr>' );
+                $( '#crm-search-order-table' ).append( '<tr id="' + value.id +'" class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' +  value.owner + '</td><td>' + value.c_ln  + '</td><td>' + value.description  + '</td><td>' + getValueNotNull( value.car_manuf ) + '</td><td>' + getValueNotNull( value.car_type ) + '</td><td>' + value.transdate + '</td><td>' + value.ordnumber + '</td><td>' + value.status + '</td></tr>' );
             });
             $( '#crm-search-order-table tr' ).click( function(){
                 $.ajax({
@@ -113,7 +107,6 @@ const crmSearchOrderDlg = function(){
             $( '#' + item.name ).val( '' );
         }
     }
-    //$( '#search_order-status' ).val( 'nicht abgerechnet' );
 
     $( '#crm-search-order-dialog' ).dialog({
         autoOpen: false,

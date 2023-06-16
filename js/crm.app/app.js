@@ -10,6 +10,10 @@ function isEmpty( obj ){
     return isIterable( obj ) && obj.length === 0;
 }
 
+function getValueNotNull( value ){
+    return ( null == value )? '' : value;
+}
+
 $( '#crm-tabs-main' ).tabs();
 $( '#crm-tabs-infos' ).tabs();
 

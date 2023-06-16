@@ -19,7 +19,8 @@
     $result = curl_exec( $ch );
 
     if( $result === false || curl_errno( $ch ) ){
-        //header( 'Location: http://localhost/kivitendo/controller.pl?action=LoginScreen/user_login' );//ToDo  Das ist definitiv falsch
+        header( 'Location: controller.pl?action=LoginScreen/user_login' );
+        //echo curl_error( $ch );
         return;
     }
     curl_close( $ch );

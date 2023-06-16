@@ -185,7 +185,7 @@ function showCVPA( data ){
         if( exists( data.cars ) ){
             let listrow0 = false;
             $.each( data.cars, function( key, value ){
-                $( '#crm-cars-table' ).append( '<tr class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '" id="' + value.c_id + '"><td>' +  value.c_ln + '</td><td>' + value.hersteller  + '</td><td>' + value.name  + '</td><td>' + value.mytype + '</td></tr>' );
+                $( '#crm-cars-table' ).append( '<tr class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '" id="' + value.c_id + '"><td>' +  value.c_ln + '</td><td class="kba-hersteller"> --------- </td><td class="kba-name"> ---------- </td><td class="kba-mytype"> --------- </td></tr>' );
             });
             $( '#crm-cars-table tr' ).click( function(){
                 $.ajax({
@@ -202,6 +202,13 @@ function showCVPA( data ){
                     }
                 });
             });
+            if( exists( data.kba ) ){
+                $.each( data.kba, function( key, value ){
+                    $( '#' + value.c_id ).find( '[class=kba-hersteller]' ).html( value.hersteller );
+                    $( '#' + value.c_id ).find( '[class=kba-name]' ).html( value.name );
+                    $( '#' + value.c_id ).find( '[class=kba-mytype]' ).html( value.mytype );
+                });
+            }
             $( '#crm-wx-cars' ).show();
         }
     }

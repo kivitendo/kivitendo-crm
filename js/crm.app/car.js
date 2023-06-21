@@ -203,6 +203,13 @@ function crmSearchCustomerForScan( name ){
 
 function crmEditCarDlg( crmData ){
     crmInitFormEx( editCarFormModel, '#edit-car-form', 21, '#edit-car-hidden' );
+    $( '#kba-fhzart' ).append( new Option( '', '' ) );
+    $( '#kba-fhzart' ).append( new Option( 'car', kivi.t8( 'car' ) ) );
+    $( '#kba-fhzart' ).append( new Option( 'truck', kivi.t8 ( 'truck' ) ) );
+    $( '#kba-fhzart' ).append( new Option( 'trailer', kivi.t8( 'trailer' ) ) );
+    $( '#kba-fhzart' ).append( new Option( 'bike', kivi.t8( 'bike' ) ) );
+    $( '#kba-fhzart' ).append( new Option( 'tractor', kivi.t8( 'tracktor' ) ) );
+
     for( let item of editCarFormModel){
         let columnName = item.name.split( '-' );
         if( exists( crmData[columnName[1]] ) ) $( '#' + item.name ).val( crmData[columnName[1]] );

@@ -264,7 +264,7 @@ function getCVPA( $data ){
 
     // Fahrzeuge
     $query .= "( SELECT json_agg( cars ) AS cars FROM (".
-                "SELECT c_id, c_ln, COALESCE( hersteller, '---------' ) AS hersteller, COALESCE( name, '---------' ) AS name, COALESCE( fhzart, '---------' ) AS mytype FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.c_2 = lxckba.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = lxckba.tsn   ) WHERE c_ow = ".$data['id'].
+                "SELECT c_id, c_ln, COALESCE( hersteller, '---------' ) AS hersteller, COALESCE( name, '---------' ) AS name, COALESCE( fhzart, '---------' ) AS mytype FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.kba_id = lxckba.id ) WHERE c_ow = ".$data['id'].
                 ") AS cars) AS cars";
 
     $rs = $GLOBALS['dbh']->getOne( $query, true );
@@ -449,7 +449,7 @@ function searchCustomerForScan( $data ){
 }
 
 function getCar( $data ){
-    echo $GLOBALS['dbh']->getOne( "SELECT *, to_char( c_hu, 'DD.MM.YYYY') AS c_hu, to_char( c_d, 'DD.MM.YYYY') AS c_d FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.c_2 = lxckba.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = lxckba.tsn ) WHERE c_id = ".$data['id'], true );
+    echo $GLOBALS['dbh']->getOne( "SELECT *, to_char( c_hu, 'DD.MM.YYYY') AS c_hu, to_char( c_d, 'DD.MM.YYYY') AS c_d FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.kba_id = lxckba.id ) WHERE c_id = ".$data['id'], true );
 }
 
 function getDataForNewLxcarsOrder( $data ){

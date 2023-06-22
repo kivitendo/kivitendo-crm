@@ -1,24 +1,24 @@
 
 const billaddrFormModel = [
-        { "name": "billaddr-greetings", "label": "Greetings:", "type": "select", "data":[], "tooltip":""}, //selectbox
-        { "name": "billaddr-greeting", "label": "Greetings:", "type": "input", "size": "42", "tooltip": "Alternativ greetings" },
-        { "name": "billaddr-name", "label": "Name:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
-        { "name": "billaddr-street", "label": "Street:", "type": "input", "size": "42", "tooltip": "Street and street number" },
-        { "name": "billaddr-country", "label": "Country code:", "type": "input", "size": "4", "tooltip": "Country code", "data": "D" },
-        { "name": "billaddr-zipcode", "label": "Zip code:", "type": "input", "size": "12", "tooltip": "Zip code" },
-        { "name": "billaddr-city", "label": "City:", "type": "input", "size": "42", "tooltip": "" },
-        { "name": "billaddr-bland", "label": "Bundesland:", "type": "select", "data":[], "tooltip":""}, //selectbox
-        { "name": "billaddr-phone", "label": "Phone:", "type": "input", "size": "42", "tooltip": "First phone number" },
-        { "name": "billaddr-fax", "label": "Phone:", "type": "input", "size": "42", "tooltip": "Second phone number" },
-        { "name": "billaddr-email", "label": "E-Mail:", "type": "input", "size": "42", "tooltip": "" },
-        { "name": "billaddr-contact", "label": "Contact person:", "type": "input", "size": "42", "tooltip": "Contact person" },
-        { "name": "billaddr-business_id", "label": "Costumer type:", "type": "select","data": [], "tooltip":""}, //selectbox
-        { "name": "billaddr-sw", "label": "Keyword:", "type": "input", "size": "42", "tooltip": "Keyword" },
-        { "name": "billaddr-notes", "label": "Comment:", "type": "textarea", "cols": "42", "rows": "5", "tooltip": "Comment" },
-        { "name": "billaddr-currency_id", "type": "hidden", "data": "1"},
-        { "name": "billaddr-id", "type": "hidden", },
-        { "name": "billaddr-src", "type": "hidden", },
-    ];
+    { "name": "billaddr-greetings", "label": "Greetings:", "type": "select", "data":[], "tooltip":""}, //selectbox
+    { "name": "billaddr-greeting", "label": "Greetings:", "type": "input", "size": "42", "tooltip": "Alternativ greetings" },
+    { "name": "billaddr-name", "label": "Name:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
+    { "name": "billaddr-street", "label": "Street:", "type": "input", "size": "42", "tooltip": "Street and street number" },
+    { "name": "billaddr-country", "label": "Country code:", "type": "input", "size": "4", "tooltip": "Country code", "data": "D" },
+    { "name": "billaddr-zipcode", "label": "Zip code:", "type": "input", "size": "12", "tooltip": "Zip code" },
+    { "name": "billaddr-city", "label": "City:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "billaddr-bland", "label": "Bundesland:", "type": "select", "data":[], "tooltip":""}, //selectbox
+    { "name": "billaddr-phone", "label": "Phone:", "type": "input", "size": "42", "tooltip": "First phone number" },
+    { "name": "billaddr-fax", "label": "Phone:", "type": "input", "size": "42", "tooltip": "Second phone number" },
+    { "name": "billaddr-email", "label": "E-Mail:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "billaddr-contact", "label": "Contact person:", "type": "input", "size": "42", "tooltip": "Contact person" },
+    { "name": "billaddr-business_id", "label": "Costumer type:", "type": "select","data": [], "tooltip":""}, //selectbox
+    { "name": "billaddr-sw", "label": "Keyword:", "type": "input", "size": "42", "tooltip": "Keyword" },
+    { "name": "billaddr-notes", "label": "Comment:", "type": "textarea", "cols": "42", "rows": "5", "tooltip": "Comment" },
+    { "name": "billaddr-currency_id", "type": "hidden", "data": "1"},
+    { "name": "billaddr-id", "type": "hidden", },
+    { "name": "billaddr-src", "type": "hidden", },
+];
 
 const deladdrFormModel = [
     { "name": "deladdr-list", "label": "Deliver address:", "type": "select","data": [], "tooltip":""}, //selectbox
@@ -85,19 +85,36 @@ const carFormModel = [
     { "name": "car-c_zrk", "label": "Next ZR change at KM:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "car-c_bf", "label": "Next brake fluid change:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "car-c_wd", "label": "Next maintenance service:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-hersteller", "label": "Manufacture:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-fhzart", "label": "Typ:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-hubraum", "label": "Displacement:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-datum", "label": "Construction year:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-leistung", "label": "Performance:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-6", "label": "Torque:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-7", "label": "Compression:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-8", "label": "Valves:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-9", "label": "Cylinder:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-kraftstoff", "label": "Fuel Type / Content:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-achsen", "label": "Wheelbase:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-12", "label": "Vmax:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-masse", "label": "Total weight:", "type": "input", "size": "21", "tooltip": "" },
+];
+
+const carKbaFormModel = [
+    { "name": "car_kba-hersteller", "label": "Manufacture:", "type": "input", "size": "21", "tooltip": "", "readonly": "true" },
+    { "name": "car_kba-fhzart", "label": "Kind:", "type": "select","data": { '': '', 'car': kivi.t8( 'car' ), 'truck': kivi.t8( 'truck' ), 'trailer': kivi.t8( 'trailer' ), 'bike': kivi.t8( 'bike' ), 'tractor': kivi.t8( 'tracktor' ) }, "tooltip":"", "disabled": "true" }, //selectbox
+    { "name": "car_kba-d2", "label": "Type code (d2):", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "car_kba-name", "label": "Type name:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "car_kba-hubraum", "label": "Displacement:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "car_kba-leistung", "label": "Performance:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "car_kba-kraftstoff", "label": "Fuel Type / Content:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "car_kba-achsen", "label": "Wheelbase:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "car_kba-masse", "label": "Total weight:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "car_kba-t", "label": "Vmax:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "car_kba-field_14_1", "label": "Emission class:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "car_kba-edit", "label": "Edit KBA", "type": "button", "tooltip": "" },
+];
+
+const editCarKbaFormModel = [
+    { "name": "edit_car_kba-hersteller", "label": "Manufacture:", "type": "input", "size": "21", "tooltip": "", "readonly": "true" },
+    { "name": "edit_car_kba-fhzart", "label": "Kind:", "type": "select","data": { '': '', 'car': kivi.t8( 'car' ), 'truck': kivi.t8( 'truck' ), 'trailer': kivi.t8( 'trailer' ), 'bike': kivi.t8( 'bike' ), 'tractor': kivi.t8( 'tracktor' ) }, "tooltip":"", "disabled": "true" }, //selectbox
+    { "name": "edit_car_kba-d2", "label": "Type code (d2):", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_car_kba-name", "label": "Type name:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_car_kba-hubraum", "label": "Displacement:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_car_kba-leistung", "label": "Performance:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_car_kba-kraftstoff", "label": "Fuel Type / Content:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_car_kba-achsen", "label": "Wheelbase:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_car_kba-masse", "label": "Total weight:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_car_kba-t", "label": "Vmax:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_car_kba-field_14_1", "label": "Emission class:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_car_kba-edit", "label": "Edit KBA", "type": "button", "tooltip": "" },
 ];
 
 const editCarFormModel = [
@@ -122,17 +139,6 @@ const editCarFormModel = [
     { "name": "edit_car-c_zrk", "label": "Next ZR change at KM:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_car-c_bf", "label": "Next brake fluid change:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_car-c_wd", "label": "Next maintenance service:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-hersteller", "label": "Manufacture:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-fhzart", "label": "Kind:", "type": "select","data": [], "tooltip":""}, //selectbox
-    { "name": "kba-d2", "label": "Type code (d2):", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-name", "label": "Type name:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-hubraum", "label": "Displacement:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-leistung", "label": "Performance:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-kraftstoff", "label": "Fuel Type / Content:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-achsen", "label": "Wheelbase:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-masse", "label": "Total weight:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-t", "label": "Vmax:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "kba-field_14_1", "label": "Emission class:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_car-c_id", "type": "hidden", },
 ];
 
@@ -152,12 +158,12 @@ const editArticleFormModel = [
 // hidden Inputfelder immer an letzter Position in der Vorlagenliste (z.B. editArticleFormModel)
 
 const searchOrderFormModel = [
-    { "name": "search_order-car_license", "label": "Car license:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "search_order-customer_name", "label": "Customer name:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "search_order-car_manuf", "label": "Car manufacturer:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "search_order-car_type", "label": "Car type:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "search_order-car_brand", "label": "Car brand:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "search_order-status", "label": "Status:", "type": "select","data": [], "tooltip":""}, //selectbox
-    { "name": "search_order-date_from", "label": "Date from:", "type": "input", "size": "16", "tooltip": "" },
-    { "name": "search_order-date_to", "label": "Date to:", "type": "input", "size": "16", "tooltip": "" },
- ];
+   { "name": "search_order-car_license", "label": "Car license:", "type": "input", "size": "21", "tooltip": "" },
+   { "name": "search_order-customer_name", "label": "Customer name:", "type": "input", "size": "21", "tooltip": "" },
+   { "name": "search_order-car_manuf", "label": "Car manufacturer:", "type": "input", "size": "21", "tooltip": "" },
+   { "name": "search_order-car_type", "label": "Car type:", "type": "input", "size": "21", "tooltip": "" },
+   { "name": "search_order-car_brand", "label": "Car brand:", "type": "input", "size": "21", "tooltip": "" },
+   { "name": "search_order-status", "label": "Status:", "type": "select","data": [], "tooltip":""}, //selectbox
+   { "name": "search_order-date_from", "label": "Date from:", "type": "input", "size": "16", "tooltip": "" },
+   { "name": "search_order-date_to", "label": "Date to:", "type": "input", "size": "16", "tooltip": "" },
+];

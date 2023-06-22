@@ -98,6 +98,13 @@ function crmSearchOrder( onSuccess = null ){
     });
 }
 
+function crmClearSearchOrderDlg(){
+    for( let item of searchOrderFormModel ){
+         $( '#' + item.name ).val( '' );
+    }
+    $( '#search_order-status' ).val( 'nicht abgerechnet' );
+}
+
 const crmSearchOrderDlg = function(){
     for( let item of searchOrderFormModel ){
         if( 'search_order-status' == item.name ){
@@ -122,15 +129,13 @@ const crmSearchOrderDlg = function(){
             $( this ).css( 'maxWidth', window.innerWidth );
         },
         close: function(){
+            crmClearSearchOrderDlg();
         },
         buttons:[{
             text: kivi.t8( 'Clear' ),
             click: function(){
-               for( let item of searchOrderFormModel ){
-                    $( '#' + item.name ).val( '' );
-               }
-               $( '#search_order-status' ).val( 'nicht abgerechnet' );
-               crmSearchOrder();
+                crmClearSearchOrderDlg();
+                crmSearchOrder();
             }
         },{
             text: kivi.t8( 'Close' ),

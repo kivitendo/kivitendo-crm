@@ -47,5 +47,4 @@ field_6 = lxc_fs_scans.field_6,
 field_17 = lxc_fs_scans.field_17,
 field_21 = lxc_fs_scans.field_21
 FROM lxc_fs_scans
-WHERE lxckba.hsn = lxc_fs_scans.hsn AND lxckba.tsn = lxc_fs_scans.tsn;
-
+WHERE lxckba.hsn = lxc_fs_scans.hsn AND lxckba.tsn = substring ( lxc_fs_scans.tsn, 0, 4 );

@@ -398,9 +398,21 @@
 
 <div id="crm-edit-car-dialog" style="display:none">
     <div id="edit-car-hidden"></div>
-    <table id="edit-car-form">
-        <thead></thead>
-        <tbody></tbody>
+    <table>
+        <tr>
+            <td style="vertical-align: top;">
+            <table id="edit-car-form">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+            </td>
+            <td style="vertical-align: top;">
+            <table id="edit-car-kba-form">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+            </td>
+         </tr>
     </table>
 </div>
 
@@ -429,9 +441,21 @@
                 <thead></thead>
                 <tbody></tbody>
             </table>
-            <table id="car-form" style="padding-top: 1em; display:none">
-                <thead></thead>
-                <tbody></tbody>
+            <table style="padding-top: 1em;">
+                <tr>
+                    <td style="vertical-align: top;">
+                        <table id="car-form" style="display:none">
+                            <thead></thead>
+                            <tbody></tbody>
+                        </table>
+                    </td>
+                    <td style="vertical-align: top; padding-left: 1em;">
+                        <table id="car-kba-form" style="display:none">
+                            <thead></thead>
+                            <tbody></tbody>
+                        </table>
+                    </td>
+                </tr>
             </table>
         </div>
         <div id="crm-tab-deladdr" class="crm-tab">

@@ -3,10 +3,16 @@
 * includes data for dialog
 ***************************************/
 function crmGetCustomerForEdit( src, id, new_car, fx ){
+    let paramData = { 'src': src, 'id': id };
+    if( new_car ){
+        paramData['hsn'] = lxcarsData.hsn;
+        paramData['tsn'] = lxcarsData.field_2_2;
+        paramData['d2'] =  lxcarsData.d2_1 + getValueNotNull( lxcarsData.d2_2 ) + getValueNotNull( lxcarsData.d2_3 ) + getValueNotNull( lxcarsData.d2_4 );
+    }
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
-        data:  { action: 'getCustomerForEdit', data: { 'src': src, 'id': id } },
+        data:  { action: 'getCustomerForEdit', data: paramData },
         success: function( data ){
             crmEditCuVeDlg( data, new_car );
             crmShowCuVeForEdit( data );
@@ -157,7 +163,8 @@ function crmEditCuVeDlg( crmData, new_with_car ){
     crmInitFormEx( deladdrFormModel, '#deladdr-form' );
     crmInitFormEx( banktaxFormModel, '#banktax-form' );
     crmInitFormEx( extraFormModel, '#extras-form' );
-    crmInitFormEx( carFormModel, '#car-form', 21 );
+    crmInitFormEx( carFormModel, '#car-form' );
+    crmInitFormEx( carKbaFormModel, '#car-kba-form' );
 
     $( '#billaddr-greetings' ).change( function(){
        $( '#billaddr-greeting' ).val( $( '#billaddr-greetings' ).val() );
@@ -169,9 +176,16 @@ function crmEditCuVeDlg( crmData, new_with_car ){
 
     if( new_with_car ){
         $( '#car-form' ).show();
+        $( '#car-kba-form' ).show();
+        if( exists( crmData.kba ) ){
+            $.each( crmData.kba , function( key, value ){
+                $( '#car_kba-' + key ).val( value );
+            });
+        }
     }
     else{
         $( '#car-form' ).hide();
+        $( '#car-kba-form' ).hide();
     }
 
     $( '#billaddr-country' ).change(function(){
@@ -244,11 +258,9 @@ function crmEditCuVeDlg( crmData, new_with_car ){
                 if( $( '#car-form' ).is(':visible' ) ){
                     dbUpdateData['lxc_cars'] = {};
                     for(let item of carFormModel){
-                        if( !item.name.startsWith( 'kba' ) ){
-                            let columnName = item.name.split( '-' );
-                            let val = $( '#' + item.name ).val();
-                            if( exists(val) && val !== '' ) dbUpdateData['lxc_cars'][columnName[1]] = val;
-                        }
+                        let columnName = item.name.split( '-' );
+                        let val = $( '#' + item.name ).val();
+                        if( exists(val) && val !== '' ) dbUpdateData['lxc_cars'][columnName[1]] = val;
                     }
                 }
                 console.info( 'dbUpdateData' );

@@ -344,6 +344,14 @@ function appendQueryForCustomerDlg( &$query ){
                 ") AS vars_conf) AS vars_conf";
 }
 
+function appendQueryWithKba( $data, &$query ){
+    if( array_key_exists( 'hsn', $data ) ){
+        $query .= "(SELECT row_to_json( kba ) AS kba FROM (".
+                    "SELECT * FROM lxckba WHERE lxckba.hsn = '".$data['hsn']."' AND  SUBSTRING( '".$data['tsn']."', 0, 4 ) = lxckba.tsn AND ( d2 IS NULL OR d2 = '".$data['d2']."' )".
+                    ") AS kba) AS kba, ";
+    }
+}
+
 /*********************************************
 * Get data for customer or vendor
 *********************************************/
@@ -364,17 +372,24 @@ function getCustomerForEdit( $data ){
                 "SELECT trans_id, shipto_id, shiptoname, shiptodepartment_1, shiptodepartment_2, shiptostreet, shiptozipcode, shiptocity, shiptocountry, shiptocontact, shiptophone, shiptofax, shiptoemail, shiptoemployee, shiptobland FROM shipto WHERE trans_id = ".$data['id']." ORDER BY shiptoname ASC".
                 ") AS deladdr) AS deladdr, ";
 
+    appendQueryWithKba( $data, $query );
     appendQueryForCustomerDlg( $query );
 
     echo $GLOBALS['dbh']->getOne($query, true);
+}
+
+function getCarKbaData( $data ){
+   echo $GLOBALS['dbh']->getOne("SELECT * FROM lxckba WHERE lxckba.hsn = '".$data['hsn']."' AND  SUBSTRING( '".$data['tsn']."', 0, 4 ) = lxckba.tsn AND ( d2 IS NULL OR d2 = '".$data['d2']."' )", true);
 }
 
 /***********************************************
 * Get Data form DB to build drop down elemennts
 * in new CV dialog
 **********************************************/
-function getCVDialogData(){
+function getCVDialogData( $data ){
     $query = "SELECT ";
+
+    appendQueryWithKba( $data, $query );
     appendQueryForCustomerDlg( $query );
 
     echo $GLOBALS['dbh']->getOne($query, true);

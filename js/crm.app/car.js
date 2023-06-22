@@ -90,7 +90,7 @@ function crmNewCarFromScan(){
                                       $.ajax({
                                           url: 'crm/ajax/crm.app.php',
                                           type: 'POST',
-                                          data:  { action: 'getCVDialogData' },
+                                          data:  { action: 'getCVDialogData', data:{ 'hsn': lxcarsData.hsn, 'tsn': lxcarsData.field_2_2, 'd2': lxcarsData.d2_1 + getValueNotNull( lxcarsData.d2_2 ) + getValueNotNull( lxcarsData.d2_3 ) + getValueNotNull( lxcarsData.d2_4 ) } },
                                           success: function( crmData ){
                                                //console.info('New');
                                               //console.info(lxcarsData);
@@ -117,6 +117,11 @@ function crmNewCarFromScan(){
                                               $( '#car-c_3' ).val( lxcarsData.field_2_2 );
                                               $( '#car-c_em' ).val( lxcarsData.field_14_1 );
                                               $( '#car-c_d' ).val( lxcarsData.ez );
+                                              if( exists( crmData.kba ) ){
+                                                $.each( crmData.kba , function( key, value ){
+                                                    $( '#car_kba-' + key ).val( value );
+                                                });
+                                              }
                                               //Wird nicht benötigt, da Datum invalide
                                               //$( '#car-c_hu' ).val( lxcarsData.hu );
                                               $( '#car-c_fin' ).val( lxcarsData.vin );
@@ -203,12 +208,7 @@ function crmSearchCustomerForScan( name ){
 
 function crmEditCarDlg( crmData ){
     crmInitFormEx( editCarFormModel, '#edit-car-form', 21, '#edit-car-hidden' );
-    $( '#kba-fhzart' ).append( new Option( '', '' ) );
-    $( '#kba-fhzart' ).append( new Option( 'car', kivi.t8( 'car' ) ) );
-    $( '#kba-fhzart' ).append( new Option( 'truck', kivi.t8 ( 'truck' ) ) );
-    $( '#kba-fhzart' ).append( new Option( 'trailer', kivi.t8( 'trailer' ) ) );
-    $( '#kba-fhzart' ).append( new Option( 'bike', kivi.t8( 'bike' ) ) );
-    $( '#kba-fhzart' ).append( new Option( 'tractor', kivi.t8( 'tracktor' ) ) );
+    crmInitFormEx( editCarKbaFormModel, '#edit-car-kba-form' );
 
     for( let item of editCarFormModel){
         let columnName = item.name.split( '-' );
@@ -217,6 +217,11 @@ function crmEditCarDlg( crmData ){
             columnName = item.check.split( '-' );
             if( exists( crmData[columnName[1]] ) ) $( '#' + item.check ).prop( 'checked', crmData[columnName[1]] );
         }
+    }
+
+    for( let item of editCarKbaFormModel){
+        let columnName = item.name.split( '-' );
+        if( exists( crmData[columnName[1]] ) ) $( '#' + item.name ).val( crmData[columnName[1]] );
     }
 
     $( '#crm-edit-car-dialog' ).dialog({

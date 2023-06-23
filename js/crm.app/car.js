@@ -133,7 +133,7 @@ function crmNewCarFromScan(){
                                                 crmEditCuVeDlgAction = 'insertNewCuWithCar';
                                             },
                                             error: function( xhr, status, error ){
-                                                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'lxcars()', xhr.responseText );
+                                                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmNewCarFromScan()', xhr.responseText );
                                             }
                                         });
                                     }
@@ -257,8 +257,11 @@ function crmEditCarDlg( crmData ){
                     }
                 }
                 console.info( dbUpdateData );
-                crmUpdateDB('genericUpdate', dbUpdateData );
-                $( this ).dialog( "close" );
+                const onSuccess = function(){
+                    crmRefreshAppViewAction();
+                    $( '#crm-edit-car-dialog' ).dialog( "close" );
+                }
+                crmUpdateDB('genericUpdate', dbUpdateData, onSuccess );
             }
         },
         {

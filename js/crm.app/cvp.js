@@ -265,8 +265,11 @@ function crmEditCuVeDlg( crmData, new_with_car ){
                 }
                 console.info( 'dbUpdateData' );
                 console.info( dbUpdateData );
-                crmUpdateDB( crmEditCuVeDlgAction, dbUpdateData );
-                $( this ).dialog( "close" );
+                const onSuccess = function(){
+                    crmRefreshAppViewAction();
+                    $( '#crm-wx-customer-dialog' ).dialog( "close" );
+                }
+                crmUpdateDB( crmEditCuVeDlgAction, dbUpdateData, onSuccess );
             }
         },
         {

@@ -325,7 +325,7 @@ function crmInitFormEx( crmFormModel, table, max_rows = 0, container = null){
     }
 }
 
-function crmUpdateDB( call, dbUpdataData ){
+function crmUpdateDB( call, dbUpdataData, onSuccess = null ){
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
@@ -336,6 +336,7 @@ function crmUpdateDB( call, dbUpdataData ){
             dbUpdateData = {};
             if( exists( data.success ) && !data.success ) $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'DB update error' ), kivi.t8( 'Error in: ' ) + 'crmUpdateDB()', ( ( exists( data.debug )? data.debug : null) ) );
             if( exists( data.src ) && exists( data.id ) ) crmRefreshAppView( data.src, data.id );
+            if( null != onSuccess ) onSuccess();
         },
         error: function( xhr, status, error ){
             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmUpdateDB()', xhr.responseText );

@@ -172,6 +172,7 @@
 </head>
 
 <body class="crm-fs">
+
 <div id="message-dialog" style="display:none;">
     <div id="message-dialog-error" style="display:none"></div>
     <p id="message-dialog-text"></p>
@@ -413,6 +414,14 @@
             </table>
             </td>
          </tr>
+    </table>
+</div>
+
+<div id="crm-edit-kba-dialog" style="display:none">
+    <div id="edit-kba-hidden"></div>
+    <table id="edit-kba-form">
+        <thead></thead>
+        <tbody></tbody>
     </table>
 </div>
 

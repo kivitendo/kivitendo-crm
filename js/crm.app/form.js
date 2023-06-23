@@ -140,6 +140,22 @@ const editCarFormModel = [
     { "name": "edit_car-c_bf", "label": "Next brake fluid change:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_car-c_wd", "label": "Next maintenance service:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_car-c_id", "type": "hidden", },
+    { "name": "edit_car-kba_id", "type": "hidden", },
+];
+
+const editKbaFormModel = [
+    { "name": "edit_kba-hersteller", "label": "Manufacture:", "type": "input", "size": "21", "tooltip": "", "readonly": "true" },
+    { "name": "edit_kba-fhzart", "label": "Kind:", "type": "select","data": { '': '', 'car': kivi.t8( 'car' ), 'truck': kivi.t8( 'truck' ), 'trailer': kivi.t8( 'trailer' ), 'bike': kivi.t8( 'bike' ), 'tractor': kivi.t8( 'tracktor' ) }, "tooltip":"", "disabled": "true" }, //selectbox
+    { "name": "edit_kba-d2", "label": "Type code (d2):", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_kba-name", "label": "Type name:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_kba-hubraum", "label": "Displacement:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_kba-leistung", "label": "Performance:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_kba-kraftstoff", "label": "Fuel Type / Content:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_kba-achsen", "label": "Wheelbase:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_kba-masse", "label": "Total weight:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_kba-t", "label": "Vmax:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_kba-field_14_1", "label": "Emission class:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_kba-id", "type": "hidden", },
 ];
 
 const editArticleFormModel = [

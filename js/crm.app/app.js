@@ -149,11 +149,15 @@ $( '#message-dialog' ).dialog({
 });
 
 $.fn.showMessageDialog = function( style, title, message, debug = null ){
-    $( this ).dialog( 'option', 'title', title ).dialog( 'open' ).parent().addClass( 'ui-state-' + style );
-    if( style === 'error' ) $( '#message-dialog-error' ).show();
-    $( '#message-dialog-text' ).html( message );
-    if( debug != null ) $( '#message-dialog-debug' ).html( '<pre>' + debug + '</pre>' ).css( 'display', '' );
-    $( this ).resize();
+// ToDo: Erzeugt das resize-Problem beim Neuen-Auftrag-Dialog
+//    $( this ).dialog( 'option', 'title', title ).dialog( 'open' ).parent().addClass( 'ui-state-' + style );
+//    if( style === 'error' ) $( '#message-dialog-error' ).show();
+//    $( '#message-dialog-text' ).html( message );
+//    if( debug != null ) $( '#message-dialog-debug' ).html( '<pre>' + debug + '</pre>' ).css( 'display', '' );
+//    $( this ).resize();
+    let text = '------------------------------------------\n' + title + '\n------------------------------------------\n\n' + message;
+    if( debug != null ) text += '\n\n' + debug;
+    alert( text );
 }
 
 function showCVPA( data ){

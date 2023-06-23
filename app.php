@@ -210,7 +210,7 @@
     <input id="od-customer-id" type="hidden"></input>
     <input id="od-lxcars-c_id" type="hidden"></input>
     <input id="od-oe-id" type="hidden"></input>
-    <table class="od-common" width="100%">
+    <table id="od-oe-common-table" class="od-common" width="100%">
         <tr>
             <td width="33%">
                 <table>
@@ -285,7 +285,55 @@
             </td>
         </tr>
     </table>
-    </div>
+    <table id="od-inv-common-table" class="od-common" width="100%">
+        <tr>
+            <td width="33%">
+                <table>
+                    <tr>
+                        <td class="od-table-label"><label for="od-inv-customer-name">Kunde:</label></td>
+                        <td><span id="od-inv-customer-name"></span></td>
+                    </tr>
+                 </table>
+            </td>
+            <td width="33%">
+                <table>
+                    <tr>
+                        <td class="od-table-label"><label for="od-inv-shipvia">KM-Stand:</label></td>
+                        <td><input class="od-inv-shipvia" id="od-inv-shipvia" type="number"></td>
+                     </tr>
+                    <tr>
+                        <td class="od-table-label"><label for="od-inv-shippingpoint">Amtl.-Kennz.:</label></td>
+                        <td><label id="od-inv-shippingpoint" type="text"></td>
+                     </tr>
+               </table>
+            </td>
+            <td width="33%">
+                <table>
+                    <tr>
+                        <td class="od-table-label"><label for="od-inv-invnumber">Rechnungsnummer:</label></td>
+                        <td><span id="od-inv-invnumber"></span></td>
+                     </tr>
+                    <tr>
+                        <td class="od-table-label"><label for="od-inv-ordnumber">Auftragsnummer:</label></td>
+                        <td><span id="od-inv-ordnumber"></span></td>
+                     </tr>
+                    <tr>
+                        <td class="od-table-label"><label for="od-oe-itime">erstellt am:</label></td>
+                        <td><span id="od-inv-itime"></span></td>
+                     </tr>
+                    <tr>
+                        <td class="od-table-label"><label for="od-oe-mtime">bearbeitet am:</label></td>
+                        <td><span id="od-inv-mtime"></span></td>
+                     </tr>
+                    <tr>
+                        <td class="od-table-label"><label for="od-inv-employee_name">bearbeitet von:</label></td>
+                        <td><input type="hidden" id="od-inv-employee_id"></input><span id="od-inv-employee_name"></span></td>
+                     </tr>
+                 </table>
+            </td>
+        </tr>
+    </table>
+     </div>
 
     <table class="ui-sortable" id="edit-order-table" width="100%">
         <thead>

@@ -252,6 +252,21 @@ function showCVPA( data ){
         $.each( data.inv, function( key, value ){
             $( '#crm-invoices-table' ).append( '<tr id="' + value.id +'" class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' +  value.date + '</td><td>' + value.description  + '</td><td>' + value.amount  + '</td><td>' + value.number + '</td></tr>' );
         });
+        $( '#crm-invoices-table tr' ).click( function(){
+            $.ajax({
+                url: 'crm/ajax/crm.app.php',
+                type: 'POST',
+                data:  { action: 'getInvoice', data: { 'id': this.id } },
+                success: function( crmData ){
+                    console.info( 'invoice' );
+                    console.info( crmData );
+                    crmEditOrderDlg( crmData, crmOrderTypeEnum.Invoice );
+                },
+                error: function( xhr, status, error ){
+                    $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'showCVPA().getInvoice', xhr.responseText );
+                }
+            });
+        });
     }
 
     if( exists( data.cv ) ){

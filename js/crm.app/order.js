@@ -169,7 +169,7 @@ function crmAddOrderItem( dataRow ){
     tableRow += '<option value=""></option>';
     //console.info( crmOrderItemLists.workers );//ToDo???
     if( crmOrderItemLists.workers === null ) alert( kivi.t8( 'No members of group "Werkstatt" ' ) );
-    else{
+    else if( exists( crmOrderItemLists.workers  )  ){
         for( let worker of crmOrderItemLists.workers ){
             tableRow += '<option value="' + worker.name  + '"';
             if(dataRow.u_id === worker.name) tableRow += ' selected'
@@ -189,7 +189,7 @@ function crmAddOrderItem( dataRow ){
     $( '#edit-order-table > tbody' ).append(tableRow);
 
     $( '.od-item-description' ).catcomplete({
-        source: "crm/ajax/crm.app.php?action=findPart",
+        source: "crm/ajax/crm.app.php?action=findPart" + ( ( crmOrderTypeEnum.Invoice == crmOrderType )? '&filterI' : '' ),
         select: function( e, ui ){
             const row = $( ':focus' ).parent().parent();
             crmCompleteInsertOrderPos( row, ui.item );
@@ -244,10 +244,26 @@ function crmNewOrderAndInsertPos( itemPosition, itemType, item ){
     dbData['customer_id'] = $( '#od-customer-id' ).val();
     dbData['c_id'] = $( '#od-lxcars-c_id' ).val();
 
+    let action;
+    switch( crmOrderType ){
+        case crmOrderTypeEnum.Order:
+            action = 'insertNewOrder';
+            break;
+        case crmOrderTypeEnum.Offer:
+            action = 'insertNewOffer';
+            break;
+        case crmOrderTypeEnum.Delivery:
+            action = 'insertNewDelivery';
+            break;
+        case crmOrderTypeEnum.Invoice:
+            action = 'insertNewInvoice';
+            break;
+    }
+
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
-        data:  { action: 'insertNewOrder', data: dbData },
+        data:  { action: action, data: dbData },
         success: function( data ){
             $( '#od-oe-id' ).val( data.id );
             crmInsertOrderPos( itemPosition, itemType, item );
@@ -333,13 +349,22 @@ crmDeleteOrderPos = function( e ) {
     });
  }
 
-var saving = false;
-
 function crmSaveOrder(){
-    if( saving ) return;
-    saving = true;
-
     if( isEmpty( $( '#od-oe-id' ).val() ) ) return;
+
+    switch( crmOrderType ){
+        case crmOrderTypeEnum.Order:
+            break;
+        case crmOrderTypeEnum.Offer:
+            return;
+            break;
+        case crmOrderTypeEnum.Delivery:
+            return;
+            break;
+        case crmOrderTypeEnum.Invoice:
+            return;
+            break;
+    }
 
     let dbUpdateData = { }
     dbUpdateData['oe'] = {};
@@ -475,7 +500,12 @@ $( "#od-oe-finish_time" ).datetimepicker({
     currentText: 'Jetzt'
 });
 
-function crmEditOrderDlg( crmData ){
+const crmOrderTypeEnum = { Order: 0, Invoice: 1, Offer: 2, Delivery: 3 };
+var crmOrderType = crmOrderTypeEnum.Order;
+
+function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
+    crmOrderType = type;
+
     crmOrderItemLists = { };
     crmOrderItemLists['workers'] = crmData.workers;
     $( '#edit-order-table > tbody' ).html( '' );
@@ -484,6 +514,12 @@ function crmEditOrderDlg( crmData ){
            crmAddOrderItem( dataRow );
         }
     }
+    else if( exists( crmData.invoice ) ){
+        for( let dataRow of crmData.invoice ){
+           crmAddOrderItem( dataRow );
+        }
+    }
+
     crmAddOrderItem( { } );
     $( '#edit-order-table > tbody' ).sortable({
         items: '> tr:not(.od-item-pin)',
@@ -493,51 +529,76 @@ function crmEditOrderDlg( crmData ){
         }
     });
 
-    if( exists( crmData.order ) ){
-        $( '#od-customer-id' ).val( crmData.order.common.customer_id );
-        $( '#od-lxcars-c_id' ).val( crmData.order.common.c_id );
-        $( '#od-oe-id' ).val( crmData.order.common.id );
-        $( '#od-customer-name' ).html( crmData.order.common.customer_name );
-        $( '#od-oe-ordnumber' ).html( crmData.order.common.ordnumber );
-        $( '#od-oe-finish_time' ).val( crmData.order.common.finish_time );
-        $( '#od-oe-km_stnd' ).val( crmData.order.common.km_stnd );
-        $( '#od-oe-employee_name' ).html( crmData.order.common.employee_name );
-        $( '#od-oe-employee_id' ).val( crmData.order.common.employee_id );
-        $( '#od-lxcars-c_ln' ).html( crmData.order.common.c_ln );
-        $( '#od-oe-mtime' ).html( kivi.format_date( new Date( crmData.order.common.mtime ) ) );
-        $( '#od-oe-internalorder' ).prop( 'checked', crmData.order.common.internalorder );
-        $( '#od-oe-itime' ).html( kivi.format_date( new Date( crmData.order.common.itime ) ) );
-        $( '#od-oe-car_status' ).val( crmData.order.common.car_status );
-        $( '#od-oe-status' ).val( crmData.order.common.status );
-        $( '#od-lxcars-c_text' ).val( crmData.order.common.int_car_notes );
-        $( '#od-customer-notes' ).val( crmData.order.common.int_cu_notes );
-        $( '#od-oe-intnotes' ).val( crmData.order.common.intnotes );
+    let title;
+
+    if( crmOrderTypeEnum.Order == crmOrderType ){
+        title = kivi.t8( exists( crmData.order )? 'Edit order' : 'New order' );
+        $( '#od-inv-common-table' ).hide();
+        $( '#od-oe-common-table' ).show();
+        if( exists( crmData.order ) ){
+            $( '#od-customer-id' ).val( crmData.order.common.customer_id );
+            $( '#od-lxcars-c_id' ).val( crmData.order.common.c_id );
+            $( '#od-oe-id' ).val( crmData.order.common.id );
+            $( '#od-customer-name' ).html( crmData.order.common.customer_name );
+            $( '#od-oe-ordnumber' ).html( crmData.order.common.ordnumber );
+            $( '#od-oe-finish_time' ).val( crmData.order.common.finish_time );
+            $( '#od-oe-km_stnd' ).val( crmData.order.common.km_stnd );
+            $( '#od-oe-employee_name' ).html( crmData.order.common.employee_name );
+            $( '#od-oe-employee_id' ).val( crmData.order.common.employee_id );
+            $( '#od-lxcars-c_ln' ).html( crmData.order.common.c_ln );
+            $( '#od-oe-mtime' ).html( kivi.format_date( new Date( crmData.order.common.mtime ) ) );
+            $( '#od-oe-internalorder' ).prop( 'checked', crmData.order.common.internalorder );
+            $( '#od-oe-itime' ).html( kivi.format_date( new Date( crmData.order.common.itime ) ) );
+            $( '#od-oe-car_status' ).val( crmData.order.common.car_status );
+            $( '#od-oe-status' ).val( crmData.order.common.status );
+            $( '#od-lxcars-c_text' ).val( crmData.order.common.int_car_notes );
+            $( '#od-customer-notes' ).val( crmData.order.common.int_cu_notes );
+            $( '#od-oe-intnotes' ).val( crmData.order.common.intnotes );
+        }
+        else{
+            $( '#od-customer-id' ).val( crmData.common.customer_id );
+            $( '#od-lxcars-c_id' ).val( crmData.common.c_id );
+            $( '#od-oe-id' ).val( '' );
+            $( '#od-customer-name' ).html( crmData.common.customer_name );
+            $( '#od-oe-ordnumber' ).html( '' );
+            $( '#od-oe-finish_time' ).val( '' );
+            $( '#od-oe-km_stnd' ).val( '0' );
+            $( '#od-oe-employee_name' ).html( crmData.common.employee_name );
+            $( '#od-oe-employee_id' ).val( crmData.common.employee_id );
+            $( '#od-lxcars-c_ln' ).html( crmData.common.c_ln  );
+            $( '#od-oe-mtime' ).html( '' );
+            $( '#od-oe-internalorder' ).prop( 'checked', false );
+            $( '#od-oe-itime' ).html( '' );
+            $( '#od-oe-car_status' ).val( '' );
+            $( '#od-oe-status' ).val( '' );
+            $( '#od-lxcars-c_text' ).val( crmData.common.int_car_notes );
+            $( '#od-customer-notes' ).val( crmData.common.int_cu_notes  );
+            $( '#od-oe-intnotes' ).val( '' );
+        }
     }
-    else{
-        $( '#od-customer-id' ).val( crmData.common.customer_id );
-        $( '#od-lxcars-c_id' ).val( crmData.common.c_id );
+    else if( crmOrderTypeEnum.Invoice == crmOrderType ){
+        title = kivi.t8( 'Edit invoice' );
+        $( '#od-oe-common-table' ).hide();
+        $( '#od-inv-common-table' ).show();
         $( '#od-oe-id' ).val( '' );
-        $( '#od-customer-name' ).html( crmData.common.customer_name );
-        $( '#od-oe-ordnumber' ).html( '' );
-        $( '#od-oe-finish_time' ).val( '' );
-        $( '#od-oe-km_stnd' ).val( '0' );
-        $( '#od-oe-employee_name' ).html( crmData.common.employee_name );
-        $( '#od-oe-employee_id' ).val( crmData.common.employee_id );
-        $( '#od-lxcars-c_ln' ).html( crmData.common.c_ln  );
-        $( '#od-oe-mtime' ).html( '' );
-        $( '#od-oe-internalorder' ).prop( 'checked', false );
-        $( '#od-oe-itime' ).html( '' );
-        $( '#od-oe-car_status' ).val( '' );
-        $( '#od-oe-status' ).val( '' );
+        $( '#od-inv-customer-name' ).html( crmData.common.customer_name );
+        $( '#od-inv-shippingpoint' ).html( crmData.common.shippingpoint );
+        $( '#od-inv-shipvia' ).val( crmData.common.shipvia );
+        $( '#od-inv-invnumber' ).html( crmData.common.invnumber );
+        $( '#od-inv-ordnumber' ).html( crmData.common.ordnumber );
+        $( '#od-inv-mtime' ).html( kivi.format_date( new Date( crmData.common.mtime ) ) );
+        $( '#od-inv-itime' ).html( kivi.format_date( new Date( crmData.common.itime ) ) );
+        $( '#od-inv-employee_name' ).html( crmData.common.employee_name );
+        $( '#od-inv-employee_id' ).val( crmData.common.employee_id );
         $( '#od-lxcars-c_text' ).val( crmData.common.int_car_notes );
-        $( '#od-customer-notes' ).val( crmData.common.int_cu_notes  );
-        $( '#od-oe-intnotes' ).val( '' );
+        $( '#od-customer-notes' ).val( crmData.common.int_cu_notes );
+        $( '#od-oe-intnotes' ).val( crmData.common.intnotes );
      }
 
     $( '#od-ui-items-workers' ).html( '' );
     $( '#od-ui-items-workers' ).append(new Option( '', ''  ) );
 
-    if( crmData.workers !== null ){
+    if( exists( crmData.workers )  ){
         for( let worker of crmData.workers ){
             $( '#od-ui-items-workers' ).append(new Option( worker.name, worker.name  ) );
         }
@@ -548,7 +609,7 @@ function crmEditOrderDlg( crmData ){
         width: 'auto',
         height: 'auto',
         modal: true,
-        title: kivi.t8( exists( crmData.order )? 'Edit order' : 'New order' ),
+        title: title,
         position: { my: "top", at: "top+250" },
         open: function(){
             $( this ).css( 'maxWidth', window.innerWidth );

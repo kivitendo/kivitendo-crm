@@ -70,92 +70,93 @@ function crmNewCarFromScan(){
                   data: { action: 'getFsData', data:{ 'id': this.id  } },
                   type: "POST",
                   success: function( data ){
-                      lxcarsData = data;
-                      $( '#crm-fsscan-dlg' ).dialog( 'close' );
-                      $( '#crm-fsscan-customer-dlg' ).dialog({
-                          autoOpen: false,
-                          resizable: true,
-                          width: 'auto',
-                          height: '600',
-                          modal: true,
-                          title: kivi.t8( 'Select customer' ),
-                          position: { my: "top", at: "top+250" },
-                          open: function(){
-                              $( this ).css( 'maxWidth', window.innerWidth );
-                          },
-                          buttons:[{
-                              /* Add new customer from car scan data */
-                              text: kivi.t8( 'New' ),
-                              click: function(){
-                                      $.ajax({
-                                          url: 'crm/ajax/crm.app.php',
-                                          type: 'POST',
-                                          data:  { action: 'getCVDialogData', data:{ 'hsn': lxcarsData.hsn, 'tsn': lxcarsData.field_2_2, 'd2': lxcarsData.d2_1 + getValueNotNull( lxcarsData.d2_2 ) + getValueNotNull( lxcarsData.d2_3 ) + getValueNotNull( lxcarsData.d2_4 ) } },
-                                          success: function( crmData ){
-                                               //console.info('New');
-                                              //console.info(lxcarsData);
-                                              $( '#crm-fsscan-customer-dlg' ).dialog( "close" );
-                                              crmEditCuVeDlg( crmData, true );
-                                              crmShowCuVeForEdit( crmData );
-                                              $( '#billaddr-name' ).val( $( '#crm-fsscan-edit-customer' ).val() );
-                                              $( '#billaddr-street' ).val( lxcarsData.address1 );
-                                              const city = ( isEmpty( lxcarsData.adress2 ) )? 0 : lxcarsData.address2.split(' ');
-                                              if( isIterable( city ) && city.length > 1 ){
-                                                  if(!isNaN( city[0] ) ){
-                                                      $( '#billaddr-zipcode' ).val( city[0] );
-                                                  }else{
-                                                      $( '#billaddr-city' ).val( city[0] );
-                                                  }
-                                                  for( let i = 1; i < city.length; i++ ){
-                                                      $( '#billaddr-city' ).val( $( '#billaddr-city' ).val() + city[i] );
-                                                  }
-                                              }else{
-                                                  $( '#billaddr-city' ).val( lxcarsData.address2 );
-                                              }
-                                              $( '#car-c_ln' ).val( crmFormatCarLicense( lxcarsData.registrationNumber ) );
-                                              $( '#car-c_2' ).val( lxcarsData.hsn );
-                                              $( '#car-c_3' ).val( lxcarsData.field_2_2 );
-                                              $( '#car-c_em' ).val( lxcarsData.field_14_1 );
-                                              $( '#car-c_d' ).val( lxcarsData.ez );
-                                              if( exists( crmData.kba ) ){
-                                                $.each( crmData.kba , function( key, value ){
-                                                    $( '#car_kba-' + key ).val( value );
-                                                });
-                                              }
-                                              //Wird nicht benötigt, da Datum invalide
-                                              //$( '#car-c_hu' ).val( lxcarsData.hu );
-                                              $( '#car-c_fin' ).val( lxcarsData.vin );
-                                              $( '#car-c_finchk' ).val( lxcarsData.field_3 );
-                                              //Wird als Parameter für die Funktion js/app.js->dbUpdataDB verwendet
-                                              //spiegelt den Namen des Ajax-Calls (Function) in ajax/xrm.app.php
-                                              crmEditCuVeDlgAction = 'insertNewCuWithCar';
-                                          },
-                                          error: function( xhr, status, error ){
-                                              $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'lxcars()', xhr.responseText );
-                                          }
-                                      });
-                                  }
-                              },{
-                              text: kivi.t8( 'Close' ),
-                              click: function(){
-                                      $( this ).dialog( "close" );
-                              }
-                          }]
-                      }).dialog( 'open' ).resize();
+                        lxcarsData = data;
+                        console.info( 'lxcarsData' );
+                        console.info( lxcarsData );
+                        $( '#crm-fsscan-dlg' ).dialog( 'close' );
+                        $( '#crm-fsscan-customer-dlg' ).dialog({
+                            autoOpen: false,
+                            resizable: true,
+                            width: 'auto',
+                            height: '600',
+                            modal: true,
+                            title: kivi.t8( 'Select customer' ),
+                            position: { my: "top", at: "top+250" },
+                            open: function(){
+                                $( this ).css( 'maxWidth', window.innerWidth );
+                            },
+                            buttons:[{
+                                /* Add new customer from car scan data */
+                                text: kivi.t8( 'New' ),
+                                click: function(){
+                                        $.ajax({
+                                            url: 'crm/ajax/crm.app.php',
+                                            type: 'POST',
+                                            data:  { action: 'getCVDialogData', data:{ 'hsn': lxcarsData.hsn, 'tsn': lxcarsData.field_2_2, 'd2': lxcarsData.d2_1 + getValueNotNull( lxcarsData.d2_2 ) + getValueNotNull( lxcarsData.d2_3 ) + getValueNotNull( lxcarsData.d2_4 ) } },
+                                            success: function( crmData ){
+                                                 //console.info('New');
+                                                //console.info(lxcarsData);
+                                                $( '#crm-fsscan-customer-dlg' ).dialog( "close" );
+                                                crmEditCuVeDlg( crmData, true );
+                                                crmShowCuVeForEdit( crmData );
+                                                $( '#billaddr-name' ).val( $( '#crm-fsscan-edit-customer' ).val() );
+                                                $( '#billaddr-street' ).val( lxcarsData.address1 );
+                                                const city = ( isEmpty( lxcarsData.adress2 ) )? 0 : lxcarsData.address2.split(' ');
+                                                if( isIterable( city ) && city.length > 1 ){
+                                                    if(!isNaN( city[0] ) ){
+                                                        $( '#billaddr-zipcode' ).val( city[0] );
+                                                    }else{
+                                                        $( '#billaddr-city' ).val( city[0] );
+                                                    }
+                                                    for( let i = 1; i < city.length; i++ ){
+                                                        $( '#billaddr-city' ).val( $( '#billaddr-city' ).val() + city[i] );
+                                                    }
+                                                }else{
+                                                    $( '#billaddr-city' ).val( lxcarsData.address2 );
+                                                }
+                                                $( '#car-c_ln' ).val( crmFormatCarLicense( lxcarsData.registrationNumber ) );
+                                                $( '#car-c_2' ).val( lxcarsData.hsn );
+                                                $( '#car-c_3' ).val( lxcarsData.field_2_2 );
+                                                $( '#car-c_em' ).val( lxcarsData.field_14_1 );
+                                                $( '#car-c_d' ).val( lxcarsData.ez );
+                                                if( exists( crmData.kba ) ){
+                                                  $.each( crmData.kba , function( key, value ){
+                                                      $( '#car_kba-' + key ).val( value );
+                                                  });
+                                                }
+                                                //Wird nicht benötigt, da Datum invalide
+                                                //$( '#car-c_hu' ).val( lxcarsData.hu );
+                                                $( '#car-c_fin' ).val( lxcarsData.vin );
+                                                $( '#car-c_finchk' ).val( lxcarsData.field_3 );
+                                                //Wird als Parameter für die Funktion js/app.js->dbUpdataDB verwendet
+                                                //spiegelt den Namen des Ajax-Calls (Function) in ajax/xrm.app.php
+                                                crmEditCuVeDlgAction = 'insertNewCuWithCar';
+                                            },
+                                            error: function( xhr, status, error ){
+                                                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'lxcars()', xhr.responseText );
+                                            }
+                                        });
+                                    }
+                                },{
+                                text: kivi.t8( 'Close' ),
+                                click: function(){
+                                        $( this ).dialog( "close" );
+                                }
+                            }]
+                        }).dialog( 'open' ).resize();
 
-                      $( '#crm-fsscan-edit-customer' ).val( crmFormatName( data.firstname + ' ' + data.name1 ) );
+                        const name = crmFormatName( getValueNotNull( data.firstname ) + ' ' + getValueNotNull( data.name1 ) );
+                        $( '#crm-fsscan-edit-customer' ).val( name  );
+                        crmSearchCustomerForScan( name );
 
-                      crmSearchCustomerForScan( crmFormatName( data.firstname + ' ' + data.name1 ) );
-
-                     $( '#crm-fsscan-edit-customer' ).keyup( function(){
-                          crmSearchCustomerForScan( $( '#crm-fsscan-edit-customer' ).val() );
-                      });
-
-                  },
-                  error: function( xhr, status, error ){
-                      $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmNewCarFromScan().getFsData', xhr.responseText );
-                  }
-              })
+                        $( '#crm-fsscan-edit-customer' ).keyup( function(){
+                            crmSearchCustomerForScan( $( '#crm-fsscan-edit-customer' ).val() );
+                        });
+                    },
+                    error: function( xhr, status, error ){
+                        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmNewCarFromScan().getFsData', xhr.responseText );
+                    }
+                })
             })
         },
         error: function( xhr, status, error ){

@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS lxckba(
     sitze             TEXT,
     masse             TEXT, --End KBA
     fhzart            TEXT, --Fahrzeugart
+    fhzart            TEXT, --Fahrzeugart
     d3                TEXT, --Handelsbezeichnung
     j                TEXT, --Fahrzeugklasse
     field_4            TEXT, --Art des Aufbaus
@@ -64,7 +65,5 @@ CREATE TABLE IF NOT EXISTS lxckba(
     field_21        TEXT, --Sontige Vermerke
     PRIMARY KEY( hsn, tsn )
 );
--- COPY fehlt!
 
 CREATE TABLE firstnameToGender( gender CHAR(1), firstname TEXT UNIQUE PRIMARY KEY );
---COPY fehlt!!!!

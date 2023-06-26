@@ -64,3 +64,7 @@ CREATE TABLE IF NOT EXISTS lxckba(
     field_21        TEXT, --Sontige Vermerke
     PRIMARY KEY( hsn, tsn )
 );
+-- COPY fehlt!
+
+CREATE TABLE firstnameToGender( gender CHAR(1), firstname TEXT UNIQUE PRIMARY KEY );
+--COPY fehlt!!!!

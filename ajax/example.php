@@ -15,10 +15,21 @@
 
   function getData(){
       //alle Datensätze bereitstellen
-      $rs = $GLOBALS[ 'dbh' ]->getAll( 'SELECT * FROM example', true );
+      $rs = $GLOBALS[ 'dbh' ]->getAll( 'SELECT * FROM example', true );//getOne
+      writeLog( 'hello' );
       echo $rs;
 
   }
+
+function firstnameToGender( $data ){
+    writeLog( $data['name'] );
+    $sql = " SELECT gender FROM firstnameToGender WHERE firstname ILIKE '".$data['name']."'";
+    writeLog( 'meine Query: '.$sql );
+    $rs = $GLOBALS['dbh']->getOne( $sql, true);
+      writeLog($rs);
+    echo $rs;
+     //'F'||'M'
+}
 
 
   ?>

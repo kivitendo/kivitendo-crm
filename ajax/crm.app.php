@@ -268,7 +268,7 @@ function getCVPA( $data ){
 
     // Fahrzeuge
     $query .= "( SELECT json_agg( cars ) AS cars FROM (".
-                "SELECT c_id, c_ln, COALESCE( hersteller, '---------' ) AS hersteller, COALESCE( name, '---------' ) AS name, COALESCE( fhzart, '---------' ) AS mytype FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.kba_id = lxckba.id ) WHERE c_ow = ".$data['id'].
+                "SELECT c_id, c_ln, COALESCE( hersteller, '---------' ) AS hersteller, COALESCE( name, '---------' ) AS name, COALESCE( fhzart, '---------' ) AS mytype FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.kba_id = lxckba.id ) WHERE c_ow = ".$data['id']." ORDER BY c_id DESC".
                 ") AS cars) AS cars";
 
     $rs = $GLOBALS['dbh']->getOne( $query, true );

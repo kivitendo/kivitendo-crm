@@ -137,12 +137,12 @@
         padding-bottom: 2em;
     }
 
-    .od-common {
+    .od-common-style {
         margin: auto;
         background-color: white;
     }
 
-    .od-common td {
+    .od-common-style td {
         padding: 0.25em;
         vertical-align: top;
     }
@@ -210,7 +210,7 @@
     <input id="od-customer-id" type="hidden"></input>
     <input id="od-lxcars-c_id" type="hidden"></input>
     <input id="od-oe-id" type="hidden"></input>
-    <table id="od-oe-common-table" class="od-common" width="100%">
+    <table id="od-oe-common-table" class="od-oe-common od-common-style" width="100%">
         <tr>
             <td width="33%">
                 <table>
@@ -285,7 +285,7 @@
             </td>
         </tr>
     </table>
-    <table id="od-inv-common-table" class="od-common" width="100%">
+    <table id="od-inv-common-table" class="od-inv-common od-common-style" width="100%">
         <tr>
             <td width="33%">
                 <table>

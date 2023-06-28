@@ -146,7 +146,7 @@ function crmAddOrderItem( dataRow ){
     tableRow += '<input class="od-item-type" type="hidden" value="' + orderType + '"></input>';
     tableRow += '<span class="od-table-item-type">' + kivi.t8( orderType ) + '</span>';
     tableRow += '</td>' +
-                '<td><input name="od-item-description" class="od-item-description" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '" onkeyup="crmEditOrderKeyup(event)"></input></td>' +
+                '<td><input name="od-item-description" class="od-item-description" type="text" size="40" value="' + ( ( exists( dataRow.description ) )? dataRow.description : '' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)"></input></td>' +
                 '<td><input class="od-item-longdescription" type="text" size="40" value="' + ( ( exists( dataRow.longdescription ) )? dataRow.longdescription : '' )  + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
                 ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input>' +
                 '</td><td><input class="od-item-qty" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.qty ) )? dataRow.qty : '0' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup2(event)"' +
@@ -350,21 +350,10 @@ crmDeleteOrderPos = function( e ) {
  }
 
 function crmSaveOrder(){
-    if( isEmpty( $( '#od-oe-id' ).val() ) ) return;
 
-    switch( crmOrderType ){
-        case crmOrderTypeEnum.Order:
-            break;
-        case crmOrderTypeEnum.Offer:
-            return;
-            break;
-        case crmOrderTypeEnum.Delivery:
-            return;
-            break;
-        case crmOrderTypeEnum.Invoice:
-            return;
-            break;
-    }
+}
+function crmSaveOrder(){
+    if( isEmpty( $( '#od-oe-id' ).val() ) ) return;
 
     let dbUpdateData = { }
     dbUpdateData['oe'] = {};
@@ -373,7 +362,7 @@ function crmSaveOrder(){
     dbUpdateData['orderitems'] = [];
     dbUpdateData['instructions'] = [];
 
-    $( '.od-common :input' ).each( function( key, pos ){
+    $( '.od-oe-common :input' ).each( function( key, pos ){
         dbUpdateData['oe'][pos.id.split( '-' )[2]] = ( 'checkbox' === pos.type )? $( pos ).prop( 'checked' ) : $( pos ).val();
     });
 

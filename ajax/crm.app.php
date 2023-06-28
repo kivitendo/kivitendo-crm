@@ -515,12 +515,12 @@ function getInvoice( $data ){
 
     $query = "SELECT ";
     $query .= "(SELECT row_to_json( common ) AS common FROM (".
-                "SELECT ar.*, customer.name AS customer_name, customer.notes AS int_cu_notes, lxc_cars.c_ln AS c_ln, lxc_cars.c_text AS int_car_notes, employee.id AS employee_id, employee.name AS employee_name FROM ar INNER JOIN customer ON customer.id = ar.customer_id INNER JOIN lxc_cars ON lxc_cars.c_ln = ar.shippingpoint INNER JOIN employee ON ar.employee_id = employee.id WHERE ar.id = ".$invoiceID.
+                "SELECT ar.*, customer.name AS customer_name, customer.notes AS int_cu_notes, lxc_cars.c_id AS c_id, lxc_cars.c_ln AS c_ln, lxc_cars.c_text AS int_car_notes, employee.id AS employee_id, employee.name AS employee_name FROM ar INNER JOIN customer ON customer.id = ar.customer_id INNER JOIN lxc_cars ON lxc_cars.c_ln = ar.shippingpoint INNER JOIN employee ON ar.employee_id = employee.id WHERE ar.id = ".$invoiceID.
                 ") AS common) AS common, ";
 
     $query .= "(SELECT json_agg( invoice ) AS invoice FROM (".$sql.") AS invoice) AS invoice";
 
-    echo $GLOBALS['dbh']->getOne( $query, true );
+    echo '{ "bill": '.$GLOBALS['dbh']->getOne( $query, true ).' }';
 }
 
 /********************************************

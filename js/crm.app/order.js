@@ -165,26 +165,26 @@ function crmAddOrderItem( dataRow ){
                 '<td><input class="od-item-marge_total" type="text" size="5" readonly="readonly" value="' + kivi.format_amount( ( exists( dataRow.marge_total ) )? dataRow.marge_total : '0', 2 ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
                 ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>';
 
-    tableRow += '<td><select class="od-item-u_id" type="select" onchange="crmEditOrderOnChange()" ' + ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '>';
-    tableRow += '<option value=""></option>';
-    //console.info( crmOrderItemLists.workers );//ToDo???
-    if( crmOrderItemLists.workers === null ) alert( kivi.t8( 'No members of group "Werkstatt" ' ) );
-    else if( exists( crmOrderItemLists.workers  )  ){
-        for( let worker of crmOrderItemLists.workers ){
+    if( exists( crmOrderItemLists.workers  )  ){
+        tableRow += '<td><select class="od-item-u_id" type="select" onchange="crmEditOrderOnChange()" ' + ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '>';
+        tableRow += '<option value=""></option>';
+         for( let worker of crmOrderItemLists.workers ){
             tableRow += '<option value="' + worker.name  + '"';
             if(dataRow.u_id === worker.name) tableRow += ' selected'
             tableRow += '>' + worker.name + '</option>';
         }
         tableRow += '</select></td>';
     }
-    const statusList = [ 'gelesen', 'Bearbeitung', 'erledigt' ];
-    tableRow += '<td><select class="od-item-status" type="select" onchange="crmEditOrderOnChange()" ' + ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '>';
-    for( let status of statusList ){
-        tableRow += '<option value="' + status  + '"';
-        if(dataRow.status === status) tableRow += ' selected'
-        tableRow += '>' + status  + '</option>';
+    if( crmOrderTypeEnum.Order == crmOrderType ){
+        const statusList = [ 'gelesen', 'Bearbeitung', 'erledigt' ];
+        tableRow += '<td><select class="od-item-status" type="select" onchange="crmEditOrderOnChange()" ' + ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '>';
+        for( let status of statusList ){
+            tableRow += '<option value="' + status  + '"';
+            if(dataRow.status === status) tableRow += ' selected'
+            tableRow += '>' + status  + '</option>';
+        }
+        tableRow += '</select></td>';
     }
-    tableRow += '</select></td>';
 
     $( '#edit-order-table > tbody' ).append(tableRow);
 
@@ -274,32 +274,54 @@ function crmNewOrderAndInsertPos( itemPosition, itemType, item ){
             }
         },
         error: function( xhr, status, error ){
-            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmInsertOrderPos()', xhr.responseText );
+            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmNewOrderAndInsertPos()', xhr.responseText );
         }
     });
 }
 
 function crmInsertOrderPos( itemPosition, itemType, item, modified = false ){
     let pos = {};
-    let dbTable = '';
-    if( 'P' === itemType  ) dbTable = 'orderitems';
-    if( 'S' === itemType  ) dbTable = 'orderitems';
-    if( 'I' === itemType  ) dbTable = 'instructions';
-
     pos['record'] = {};
-    pos['record'][dbTable] = {};
-    pos['record'][dbTable]['trans_id'] = $( '#od-oe-id' ).val();
-    pos['record'][dbTable]['position'] = itemPosition;
-    pos['record'][dbTable]['parts_id'] = item.id;
-    pos['record'][dbTable]['qty'] = ( item.qty === null )? 0 : item.qty;
-    pos['record'][dbTable]['unit'] = item.unit;
-    pos['record'][dbTable]['sellprice'] = item.sellprice;
-    pos['record'][dbTable]['description'] = item.description;
-    pos['sequence_name'] = 'orderitemsid';
 
-    if( isEmpty( $( '#od-oe-id' ).val() ) ){
-        crmNewOrderAndInsertPos( itemPosition, itemType, item );
-        return;
+    switch( crmOrderType ){
+        case crmOrderTypeEnum.Order:
+            let dbTable = '';
+            if( 'P' === itemType  ) dbTable = 'orderitems';
+            if( 'S' === itemType  ) dbTable = 'orderitems';
+            if( 'I' === itemType  ) dbTable = 'instructions';
+
+            pos['record'][dbTable] = {};
+            pos['record'][dbTable]['trans_id'] = $( '#od-oe-id' ).val();
+            pos['record'][dbTable]['position'] = itemPosition;
+            pos['record'][dbTable]['parts_id'] = item.id;
+            pos['record'][dbTable]['qty'] = ( item.qty === null )? 0 : item.qty;
+            pos['record'][dbTable]['unit'] = item.unit;
+            pos['record'][dbTable]['sellprice'] = item.sellprice;
+            pos['record'][dbTable]['description'] = item.description;
+            pos['sequence_name'] = 'orderitemsid';
+
+            if( isEmpty( $( '#od-oe-id' ).val() ) ){
+                crmNewOrderAndInsertPos( itemPosition, itemType, item );
+                return;
+            }
+            break;
+        case crmOrderTypeEnum.Offer:
+            return;
+            break;
+        case crmOrderTypeEnum.Delivery:
+            return;
+            break;
+        case crmOrderTypeEnum.Invoice:
+            pos['record']['invoice'] = {};
+            pos['record']['invoice']['trans_id'] = $( '#od-inv-id' ).val();
+            pos['record']['invoice']['position'] = itemPosition;
+            pos['record']['invoice']['parts_id'] = item.id;
+            pos['record']['invoice']['qty'] = ( item.qty === null )? 0 : item.qty;
+            pos['record']['invoice']['unit'] = item.unit;
+            pos['record']['invoice']['sellprice'] = item.sellprice;
+            pos['record']['invoice']['description'] = item.description;
+            pos['sequence_name'] = 'invoiceid';
+            break;
     }
 
     if( modified ){
@@ -321,15 +343,28 @@ function crmInsertOrderPos( itemPosition, itemType, item, modified = false ){
     });
  }
 
-crmDeleteOrderPos = function( e ) {
+crmDeleteOrderPos = function( e ){
     var row = $( e ).parent().parent();
 
     let pos = {};
     let dbTable = '';
     let itemType = $( row ).find( '[class=od-item-type]' ).val();
-    if( 'P' === itemType  ) dbTable = 'orderitems';
-    if( 'S' === itemType  ) dbTable = 'orderitems';
-    if( 'I' === itemType  ) dbTable = 'instructions';
+    switch( crmOrderType ){
+        case crmOrderTypeEnum.Order:
+            if( 'P' === itemType  ) dbTable = 'orderitems';
+            if( 'S' === itemType  ) dbTable = 'orderitems';
+            if( 'I' === itemType  ) dbTable = 'instructions';
+            break;
+        case crmOrderTypeEnum.Offer:
+            return;
+            break;
+        case crmOrderTypeEnum.Delivery:
+            return
+            break;
+        case crmOrderTypeEnum.Invoice:
+            dbTable = 'invoice';
+            break;
+    }
 
     pos[dbTable] = {};
     pos[dbTable]['WHERE'] = 'id = ' + $( row ).attr( 'id' );
@@ -347,32 +382,32 @@ crmDeleteOrderPos = function( e ) {
             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmDeleteOrderPos()', xhr.responseText );
         }
     });
- }
-
-function crmSaveOrder(){
-
 }
+
 function crmSaveOrder(){
-    if( isEmpty( $( '#od-oe-id' ).val() ) ) return;
-
     let dbUpdateData = { }
-    dbUpdateData['oe'] = {};
-    dbUpdateData['customer'] = {};
-    dbUpdateData['lxc_cars'] = {};
-    dbUpdateData['orderitems'] = [];
-    dbUpdateData['instructions'] = [];
+    let dbPSItemsTable = '';
 
-    $( '.od-oe-common :input' ).each( function( key, pos ){
-        dbUpdateData['oe'][pos.id.split( '-' )[2]] = ( 'checkbox' === pos.type )? $( pos ).prop( 'checked' ) : $( pos ).val();
-    });
+    switch( crmOrderType ){
+        case crmOrderTypeEnum.Order:
+            if( isEmpty( $( '#od-oe-id' ).val() ) ) return;
+            dbPSItemsTable = 'orderitems';
+            crmSaveOrderType( dbUpdateData );
+            break;
+        case crmOrderTypeEnum.Offer:
+            return;
+            break;
+        case crmOrderTypeEnum.Delivery:
+            return
+            break;
+        case crmOrderTypeEnum.Invoice:
+            if( isEmpty( $( '#od-inv-id' ).val() ) ) return;
+            dbPSItemsTable = 'invoice';
+            crmSaveInvoiceType( dbUpdateData );
+            break;
+    }
 
-    dbUpdateData['customer']['notes'] = $( '#od-customer-notes' ).val();
-    dbUpdateData['lxc_cars']['c_text'] = $( '#od-lxcars-c_text' ).val();
-    dbUpdateData['oe']['intnotes'] = $( '#od-oe-intnotes' ).val();
-    dbUpdateData['oe']['shippingpoint'] = $( '#od-lxcars-c_ln' ).html();// für Kilometerstand in Druckvorlage od-lxcars-c_ln
-    dbUpdateData['oe']['shipvia'] = $( '#od-oe-km_stnd' ).val();// für Kennzeichen in Druckvorlage
-    dbUpdateData['oe']['amount'] = kivi.parse_amount( $( '#od-amount' ).val() );
-    dbUpdateData['oe']['netamount'] = kivi.parse_amount( $( '#od-netamount' ).val() );
+    dbUpdateData[dbPSItemsTable] = [];
 
     $( '#edit-order-table > tbody > tr').each( function( key, pos ){
         let itemType;
@@ -392,12 +427,12 @@ function crmSaveOrder(){
             if( 'P' === itemType  ){
                 dataRow['WHERE'] = {};
                 dataRow['WHERE'] = 'id = ' +  pos.id;
-                dbUpdateData['orderitems'].push( dataRow );
+                dbUpdateData[dbPSItemsTable].push( dataRow );
             }
             if( 'S' === itemType  ){
                 dataRow['WHERE'] = {};
                 dataRow['WHERE'] = 'id = ' + pos.id;
-                dbUpdateData['orderitems'].push( dataRow );
+                dbUpdateData[dbPSItemsTable].push( dataRow );
             }
             if( 'I' === itemType  ){
                 dataRow['WHERE'] = {};
@@ -407,17 +442,8 @@ function crmSaveOrder(){
         }
     });
 
-    dbUpdateData['oe']['WHERE'] = {};
-    dbUpdateData['oe']['WHERE'] = 'id = ' + $( '#od-oe-id' ).val();
-
-    dbUpdateData['customer']['WHERE'] = {};
-    dbUpdateData['customer']['WHERE']= 'id = ' + $( '#od-customer-id' ).val();
-
-    dbUpdateData['lxc_cars']['WHERE'] = {};
-    dbUpdateData['lxc_cars']['WHERE'] = 'c_id = ' + $( '#od-lxcars-c_id' ).val();
-
-    //console.info( 'dbUpdateData' );
-    //console.info( dbUpdateData );
+    console.info( 'dbUpdateData' );
+    console.info( dbUpdateData );
 
     $.ajax({
         url: 'crm/ajax/crm.app.php',
@@ -431,6 +457,61 @@ function crmSaveOrder(){
             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmSaveOrder()', xhr.responseText );
         }
     });
+}
+
+function crmSaveOrderType( dbUpdateData ){
+    dbUpdateData['oe'] = {};
+    dbUpdateData['customer'] = {};
+    dbUpdateData['lxc_cars'] = {};
+    dbUpdateData['instructions'] = [];
+
+    $( '.od-oe-common :input' ).each( function( key, pos ){
+        dbUpdateData['oe'][pos.id.split( '-' )[2]] = ( 'checkbox' === pos.type )? $( pos ).prop( 'checked' ) : $( pos ).val();
+    });
+
+    dbUpdateData['customer']['notes'] = $( '#od-customer-notes' ).val();
+    dbUpdateData['lxc_cars']['c_text'] = $( '#od-lxcars-c_text' ).val();
+    dbUpdateData['oe']['intnotes'] = $( '#od-oe-intnotes' ).val();
+    dbUpdateData['oe']['shippingpoint'] = $( '#od-lxcars-c_ln' ).html();// für Kilometerstand in Druckvorlage od-lxcars-c_ln
+    dbUpdateData['oe']['shipvia'] = $( '#od-oe-km_stnd' ).val();// für Kennzeichen in Druckvorlage
+    dbUpdateData['oe']['amount'] = kivi.parse_amount( $( '#od-amount' ).val() );
+    dbUpdateData['oe']['netamount'] = kivi.parse_amount( $( '#od-netamount' ).val() );
+
+    dbUpdateData['oe']['WHERE'] = {};
+    dbUpdateData['oe']['WHERE'] = 'id = ' + $( '#od-oe-id' ).val();
+
+    dbUpdateData['customer']['WHERE'] = {};
+    dbUpdateData['customer']['WHERE']= 'id = ' + $( '#od-customer-id' ).val();
+
+    dbUpdateData['lxc_cars']['WHERE'] = {};
+    dbUpdateData['lxc_cars']['WHERE'] = 'c_id = ' + $( '#od-lxcars-c_id' ).val();
+}
+
+function crmSaveInvoiceType( dbUpdateData ){
+    dbUpdateData['ar'] = {};
+    dbUpdateData['customer'] = {};
+    dbUpdateData['lxc_cars'] = {};
+
+    $( '.od-inv-common :input' ).each( function( key, pos ){
+        dbUpdateData['ar'][pos.id.split( '-' )[2]] = ( 'checkbox' === pos.type )? $( pos ).prop( 'checked' ) : $( pos ).val();
+    });
+
+    dbUpdateData['customer']['notes'] = $( '#od-customer-notes' ).val();
+    dbUpdateData['lxc_cars']['c_text'] = $( '#od-lxcars-c_text' ).val();
+    dbUpdateData['ar']['intnotes'] = $( '#od-oe-intnotes' ).val();
+    dbUpdateData['ar']['shippingpoint'] = $( '#od-inv-shippingpoint' ).html();// für Kilometerstand in Druckvorlage od-lxcars-c_ln
+    dbUpdateData['ar']['shipvia'] = $( '#od-inv-shipvia' ).val();// für Kennzeichen in Druckvorlage
+    dbUpdateData['ar']['amount'] = kivi.parse_amount( $( '#od-amount' ).val() );
+    dbUpdateData['ar']['netamount'] = kivi.parse_amount( $( '#od-netamount' ).val() );
+
+    dbUpdateData['ar']['WHERE'] = {};
+    dbUpdateData['ar']['WHERE'] = 'id = ' + $( '#od-inv-id' ).val();
+
+    dbUpdateData['customer']['WHERE'] = {};
+    dbUpdateData['customer']['WHERE']= 'id = ' + $( '#od-customer-id' ).val();
+
+    dbUpdateData['lxc_cars']['WHERE'] = {};
+    dbUpdateData['lxc_cars']['WHERE'] = 'c_id = ' + $( '#od-lxcars-c_id' ).val();
 }
 
 function crmNewOrderForCar( c_id ){
@@ -503,8 +584,8 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
            crmAddOrderItem( dataRow );
         }
     }
-    else if( exists( crmData.invoice ) ){
-        for( let dataRow of crmData.invoice ){
+    else if( exists( crmData.bill ) && exists( crmData.bill.invoice ) ){
+        for( let dataRow of crmData.bill.invoice ){
            crmAddOrderItem( dataRow );
         }
     }
@@ -520,11 +601,17 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
 
     let title;
 
+    $( '#od-oe-id' ).val( '' );
+    $( '#od-inv-id' ).val( '' );
+
     if( crmOrderTypeEnum.Order == crmOrderType ){
-        title = kivi.t8( exists( crmData.order )? 'Edit order' : 'New order' );
         $( '#od-inv-common-table' ).hide();
         $( '#od-oe-common-table' ).show();
+        $( '#od-listheading-workers' ).show();
+        $( '#od-listheading-status' ).show();
+
         if( exists( crmData.order ) ){
+            title = kivi.t8( 'Edit order' );
             $( '#od-customer-id' ).val( crmData.order.common.customer_id );
             $( '#od-lxcars-c_id' ).val( crmData.order.common.c_id );
             $( '#od-oe-id' ).val( crmData.order.common.id );
@@ -545,9 +632,9 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-oe-intnotes' ).val( crmData.order.common.intnotes );
         }
         else{
+            title = kivi.t8( 'New order' );
             $( '#od-customer-id' ).val( crmData.common.customer_id );
             $( '#od-lxcars-c_id' ).val( crmData.common.c_id );
-            $( '#od-oe-id' ).val( '' );
             $( '#od-customer-name' ).html( crmData.common.customer_name );
             $( '#od-oe-ordnumber' ).html( '' );
             $( '#od-oe-finish_time' ).val( '' );
@@ -566,22 +653,46 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         }
     }
     else if( crmOrderTypeEnum.Invoice == crmOrderType ){
-        title = kivi.t8( 'Edit invoice' );
         $( '#od-oe-common-table' ).hide();
         $( '#od-inv-common-table' ).show();
-        $( '#od-oe-id' ).val( '' );
-        $( '#od-inv-customer-name' ).html( crmData.common.customer_name );
-        $( '#od-inv-shippingpoint' ).html( crmData.common.shippingpoint );
-        $( '#od-inv-shipvia' ).val( crmData.common.shipvia );
-        $( '#od-inv-invnumber' ).html( crmData.common.invnumber );
-        $( '#od-inv-ordnumber' ).html( crmData.common.ordnumber );
-        $( '#od-inv-mtime' ).html( kivi.format_date( new Date( crmData.common.mtime ) ) );
-        $( '#od-inv-itime' ).html( kivi.format_date( new Date( crmData.common.itime ) ) );
-        $( '#od-inv-employee_name' ).html( crmData.common.employee_name );
-        $( '#od-inv-employee_id' ).val( crmData.common.employee_id );
-        $( '#od-lxcars-c_text' ).val( crmData.common.int_car_notes );
-        $( '#od-customer-notes' ).val( crmData.common.int_cu_notes );
-        $( '#od-oe-intnotes' ).val( crmData.common.intnotes );
+        $( '#od-listheading-workers' ).hide();
+        $( '#od-listheading-status' ).hide();
+
+        if( exists( crmData.bill ) ){
+            title = kivi.t8( 'Edit invoice' );
+            $( '#od-inv-id' ).val( crmData.bill.common.id );
+            $( '#od-lxcars-c_id' ).val( crmData.bill.common.c_id );
+            $( '#od-customer-id' ).val( crmData.bill.common.customer_id );
+            $( '#od-inv-customer-name' ).html( crmData.bill.common.customer_name );
+            $( '#od-inv-shippingpoint' ).html( crmData.bill.common.shippingpoint );
+            $( '#od-inv-shipvia' ).val( crmData.bill.common.shipvia );
+            $( '#od-inv-invnumber' ).html( crmData.bill.common.invnumber );
+            $( '#od-inv-ordnumber' ).html( crmData.bill.common.ordnumber );
+            $( '#od-inv-mtime' ).html( kivi.format_date( new Date( crmData.bill.common.mtime ) ) );
+            $( '#od-inv-itime' ).html( kivi.format_date( new Date( crmData.bill.common.itime ) ) );
+            $( '#od-inv-employee_name' ).html( crmData.bill.common.employee_name );
+            $( '#od-inv-employee_id' ).val( crmData.bill.common.employee_id );
+            $( '#od-lxcars-c_text' ).val( crmData.bill.common.int_car_notes );
+            $( '#od-customer-notes' ).val( crmData.bill.common.int_cu_notes );
+            $( '#od-oe-intnotes' ).val( crmData.bill.common.intnotes );
+        }
+        else{
+            title = kivi.t8( 'New invoice' );
+            $( '#od-lxcars-c_id' ).val( '' );
+            $( '#od-inv-customer-name' ).html( crmData.common.customer_name );
+            $( '#od-customer-id' ).val( crmData.common.customer_id );
+            $( '#od-inv-shippingpoint' ).html( '' );
+            $( '#od-inv-shipvia' ).val( '' );
+            $( '#od-inv-invnumber' ).html( '' );
+            $( '#od-inv-ordnumber' ).html( '' );
+            $( '#od-inv-mtime' ).html( '' );
+            $( '#od-inv-itime' ).html( '' );
+            $( '#od-inv-employee_name' ).html( crmData.common.employee_name );
+            $( '#od-inv-employee_id' ).val( crmData.common.employee_id );
+            $( '#od-lxcars-c_text' ).val( crmData.common.int_car_notes );
+            $( '#od-customer-notes' ).val( crmData.common.int_cu_notes );
+            $( '#od-oe-intnotes' ).val( crmData.common.intnotes );
+         }
      }
 
     $( '#od-ui-items-workers' ).html( '' );

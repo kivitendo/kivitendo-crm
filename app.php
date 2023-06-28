@@ -210,6 +210,7 @@
     <input id="od-customer-id" type="hidden"></input>
     <input id="od-lxcars-c_id" type="hidden"></input>
     <input id="od-oe-id" type="hidden"></input>
+    <input id="od-inv-id" type="hidden"></input>
     <table id="od-oe-common-table" class="od-oe-common od-common-style" width="100%">
         <tr>
             <td width="33%">
@@ -352,8 +353,8 @@
                 <th id="od-discount-thead" class="listheading" nowrap width="5" >Rabatt in %</th>
                 <th id="od-discount_thead-100" class="listheading" nowrap width="5" ><input value="100" type="hidden" id="od-ui-discount-100-all"></input><button id="od-ui-discount-100-all-btn" style="width: 3em;">100%</button></th>
                 <th class="listheading" nowrap width="10">Gesamt </th>
-                <th class="listheading" nowrap width="2" >Mechaniker <div><select id="od-ui-items-workers"></select></div></th>
-                <th class="listheading" nowrap width="2" >
+                <th id="od-listheading-workers" class="listheading" nowrap width="2" >Mechaniker <div><select id="od-ui-items-workers"></select></div></th>
+                <th id="od-listheading-status" class="listheading" nowrap width="2" >
                     Status
                     <div>
                         <select id="od-ui-items-status-all">

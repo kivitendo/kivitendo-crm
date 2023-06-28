@@ -788,3 +788,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         }]
     }).dialog( 'open' ).resize();
 }
+
+$( '#od-inv-workflow' ).menu({
+      items: "> :not(.ui-widget-header)"
+}).menu( 'collapse' );

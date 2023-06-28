@@ -167,6 +167,14 @@
         cursor: default;
         z-index:1000 !important;
     }
+
+    .ui-menu {
+        width: 200px;
+    }
+
+    .ui-widget-header {
+        padding: 0.2em;
+    }
 </style>
 
 </head>
@@ -211,6 +219,10 @@
     <input id="od-lxcars-c_id" type="hidden"></input>
     <input id="od-oe-id" type="hidden"></input>
     <input id="od-inv-id" type="hidden"></input>
+    <ul id="od-inv-workflow">
+        <li class="ui-widget-header"><div>Workflow</div></li>
+        <li>Drucken</li>
+    </ul>
     <table id="od-oe-common-table" class="od-oe-common od-common-style" width="100%">
         <tr>
             <td width="33%">

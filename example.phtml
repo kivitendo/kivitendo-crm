@@ -83,22 +83,26 @@
   }
 
 */
-
+  //wird ausgelöst wenn sich #inp_txt verändert
   $( "#inp_txt" ).change(function(){
-    alert( $('#inp_txt').val() );
-    //var rspns = $("#response"); rsp_txt = rspns.text();
-    //alert(inp_content);
+    // gibt inp_txt aus
+    //alert( $('#inp_txt').val() );
+    // sendet eine Post-Anfrage an example.php 
     $.ajax({
         url: 'ajax/example.php',
         type: 'POST',
+        // sendet den Namen (#inp_txt inhalt) an die example.php
         data:  { action: 'firstnameToGender', data: { 'name': $('#inp_txt').val() } },
+        // bei Erfolg wird die Funktion ausgerufen welche von der Response der PHP erbt
         success: function( data ){
+          // gibt data aus (Response der PHP ) in der console
           console.info( data );      
-          //alert( data );
-          $("#response").html(data["gender"])
-                //$("#response").text($("#response").text().replace($('#response').val(), data));
+          //
+          // filtert gender aus data und ändert den #response Text zum ausgegeben Geschlecht
+          $( "#response" ).html( data["gender"] )
         },
         error: function( xhr, status, error ){
+          // falls Fehlermeldungen
             alert( xhr, status, error );
         }
     });
@@ -107,9 +111,5 @@
   });
 
 </script>
-
-
-
 <?php echo $menu['end_content']; ?>
-
 </html>

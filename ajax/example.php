@@ -28,4 +28,11 @@
         //'F'||'M'
     }
 
+    function getZipCode($data){
+        writeLog($data['zipcode']);
+        $sql = "SELECT ort FROM zip_to_city WHERE zipcode = '".$data['zipcode']."'";
+        $rs = $GLOBALS['dbh']->getAll( $sql, true );
+        echo $rs;
+    }
+
 ?>

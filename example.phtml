@@ -61,32 +61,24 @@
         <div  class="col-sm-3">
             <h2>Box  1</h2>
             <p id="response"></p>
+            <select id="ort">
+              foreach()
+            </select>
         </div>
         <div  class="col-sm-9">
             <h2>Box  2</h2>
-            <input id="inp_txt" type="text" >
-            
+            <input id="inp_txt" type="text" placeholder="Vorname">
         </div>
+        <div> <p id="zip_cde">Platzhalter</p></div>
+        <div> <input type="text" id="zip_code" placeholder="Postleitzahl"></div>
     </div>
 </div>
 
 
 <script type="text/javascript">
-/*
-  if (window.XMLHttpRequest){
-    xmlhttp=new XMLHttpRequest();
-    //alert("01");
-  }
-  else{
-    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    alert("02");
-  }
 
-*/
   //wird ausgelöst wenn sich #inp_txt verändert
   $( "#inp_txt" ).change(function(){
-    // gibt inp_txt aus
-    //alert( $('#inp_txt').val() );
     // sendet eine Post-Anfrage an example.php 
     $.ajax({
         url: 'ajax/example.php',
@@ -97,7 +89,7 @@
         success: function( data ){
           // gibt data aus (Response der PHP ) in der console
           console.info( data );      
-          //
+          conso
           // filtert gender aus data und ändert den #response Text zum ausgegeben Geschlecht
           $( "#response" ).html( data["gender"] )
         },
@@ -105,11 +97,35 @@
           // falls Fehlermeldungen
             alert( xhr, status, error );
         }
-    });
+    }); // jquery each, key & value append
     
 
   });
 
+  $('#zip_code').keyup(function(){
+    $.ajax({
+      url: 'ajax/example.php',
+      type: 'POST',
+      data: {action: 'getZipCode', data: { 'zipcode': $('#zip_code').val() } },
+      success: function( data ){
+        $.each(data, function(index, value){
+          var opt = document.createElement('option')
+          opt.value = index
+          opt.innerHTML = JSON.stringify(value["ort"]).replace(new RegExp('"', 'g'),'')
+          $("#ort").append(opt)
+        })
+        console.info(data['ort'])
+        console.info(JSON.stringify(data))
+      },
+      error: function( xhr, status, error ){
+        console.info("ERROR", xhr, status, console.error)
+      }
+
+    });
+
+  });
+
+  
 </script>
 <?php echo $menu['end_content']; ?>
 </html>

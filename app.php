@@ -34,48 +34,53 @@
 <head>
 <meta charset='utf-8' />
 
-<?php
-    foreach($objResult->{'stylesheets'} as $style) echo '<link rel="stylesheet" href="'.$baseUrl.$style.'" type="text/css">'."\n";
-?>
+<link rel="stylesheet" href="css/lx-office-erp/main.css" type="text/css">
+<link rel="stylesheet" href="css/lx-office-erp/menu.css" type="text/css">
+<link rel="stylesheet" href="css/lx-office-erp/frame_header/header.css" type="text/css">
+<link rel="stylesheet" href="css/lx-office-erp/dhtmlsuite/menu-item.css" type="text/css">
+<link rel="stylesheet" href="css/lx-office-erp/dhtmlsuite/menu-bar.css" type="text/css">
+<link rel="stylesheet" href="css/icons16.css" type="text/css">
 
-<!-- Fehlende Stylesheetdateien: -->
-  <link rel="stylesheet" href="css/common.css" type="text/css" title="Stylesheet">
-  <link rel="stylesheet" href="css/lx-office-erp/list_accounts.css" type="text/css" title="Stylesheet">
-  <link rel="stylesheet" href="css/jquery.autocomplete.css" type="text/css" title="Stylesheet">
-  <link rel="stylesheet" href="css/jquery.multiselect2side.css" type="text/css" title="Stylesheet">
-  <link rel="stylesheet" href="css/ui-lightness/jquery-ui.css" type="text/css" title="Stylesheet">
-  <link rel="stylesheet" href="css/lx-office-erp/jquery-ui.custom.css" type="text/css" title="Stylesheet">
-  <link rel="stylesheet" href="css/tooltipster.css" type="text/css" title="Stylesheet">
-  <link rel="stylesheet" href="css/themes/tooltipster-light.css" type="text/css" title="Stylesheet">
-<!-- Ende -->
+<link rel="stylesheet" href="css/common.css" type="text/css" title="Stylesheet">
+<link rel="stylesheet" href="css/lx-office-erp/list_accounts.css" type="text/css" title="Stylesheet">
+<link rel="stylesheet" href="css/jquery.autocomplete.css" type="text/css" title="Stylesheet">
+<link rel="stylesheet" href="css/jquery.multiselect2side.css" type="text/css" title="Stylesheet">
+<link rel="stylesheet" href="css/ui-lightness/jquery-ui.css" type="text/css" title="Stylesheet">
+<link rel="stylesheet" href="css/lx-office-erp/jquery-ui.custom.css" type="text/css" title="Stylesheet">
+<link rel="stylesheet" href="css/tooltipster.css" type="text/css" title="Stylesheet">
+<link rel="stylesheet" href="css/themes/tooltipster-light.css" type="text/css" title="Stylesheet">
 
-  <link rel="stylesheet" href="crm/css/crm.app/bootstrap-grid.min.css" type="text/css" title="Stylesheet">
+<link rel="stylesheet" href="crm/css/crm.app/bootstrap-grid.min.css" type="text/css" title="Stylesheet">
 
-<?php
-    foreach($objResult->{'javascripts'} as $js) echo '<script type="text/javascript" src="'.$baseUrl.$js.'"></script>'."\n";
-?>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/namespace.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+<script type="text/javascript" src="js/kivi.js"></script>
+<script type="text/javascript" src="js/locale/de.js"></script>
+<script type="text/javascript" src="js/kivi.QuickSearch.js"></script>
+<script type="text/javascript" src="js/dhtmlsuite/menu-for-applications.js"></script>
+<script type="text/javascript" src="js/kivi.ActionBar.js"></script>
 
-<!-- Fehlende Javascriptdateien: -->
-  <script type="text/javascript" src="js/kivi.CustomerVendor.js"></script>
-  <script type="text/javascript" src="js/kivi.File.js"></script>
-  <script type="text/javascript" src="js/chart.js"></script>
-  <script type="text/javascript" src="js/kivi.CustomerVendorTurnover.js"></script>
-  <script type="text/javascript" src="js/ckeditor/ckeditor.js"></script>
-  <script type="text/javascript" src="js/ckeditor/adapters/jquery.js"></script>
-  <script type="text/javascript" src="js/follow_up.js"></script>
-  <script type="text/javascript" src="js/kivi.Validator.js"></script>
-  <script type="text/javascript" src="js/jquery.cookie.js"></script>
-  <script type="text/javascript" src="js/jquery.checkall.js"></script>
-  <script type="text/javascript" src="js/jquery.download.js"></script>
-  <script type="text/javascript" src="js/jquery/jquery.form.js"></script>
-  <script type="text/javascript" src="js/jquery/fixes.js"></script>
-  <script type="text/javascript" src="js/client_js.js"></script>
-  <script type="text/javascript" src="js/jquery/jquery.tooltipster.min.js"></script>
-  <script type="text/javascript" src="js/jquery/ui/i18n/jquery.ui.datepicker-de.js"></script>
-  <script type="text/javascript" src="js/jquery/ui/i18n/jquery.ui.datepicker-de.js"></script>
-  <script type="text/javascript" src="crm/jquery-add-ons/date-time-picker.js"></script>
-  <script type="text/javascript" src="crm/jquery-add-ons/german-date-time-picker.js"></script>
-<!-- Ende -->
+<script type="text/javascript" src="js/kivi.CustomerVendor.js"></script>
+<script type="text/javascript" src="js/kivi.File.js"></script>
+<script type="text/javascript" src="js/chart.js"></script>
+<script type="text/javascript" src="js/kivi.CustomerVendorTurnover.js"></script>
+<script type="text/javascript" src="js/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="js/ckeditor/adapters/jquery.js"></script>
+<script type="text/javascript" src="js/follow_up.js"></script>
+<script type="text/javascript" src="js/kivi.Validator.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="js/jquery.checkall.js"></script>
+<script type="text/javascript" src="js/jquery.download.js"></script>
+<script type="text/javascript" src="js/jquery/jquery.form.js"></script>
+<script type="text/javascript" src="js/jquery/fixes.js"></script>
+<script type="text/javascript" src="js/client_js.js"></script>
+<script type="text/javascript" src="js/jquery/jquery.tooltipster.min.js"></script>
+<script type="text/javascript" src="js/jquery/ui/i18n/jquery.ui.datepicker-de.js"></script>
+<script type="text/javascript" src="js/jquery/ui/i18n/jquery.ui.datepicker-de.js"></script>
+<script type="text/javascript" src="crm/jquery-add-ons/date-time-picker.js"></script>
+<script type="text/javascript" src="crm/jquery-add-ons/german-date-time-picker.js"></script>
 
 <style>
     .ui-autocomplete-category {
@@ -95,6 +100,7 @@
     }
 
     .crm-pt025 {
+        padding-top: 2em;
         padding-top: 0.25em;
     }
 
@@ -133,8 +139,7 @@
     }
 
     .od-common-div {
-        padding-top: 2em;
-        padding-bottom: 2em;
+        padding-bottom: 1em;
     }
 
     .od-common-style {
@@ -148,7 +153,7 @@
     }
 
     .od-comments-div {
-        padding-top: 2em;
+        padding-top: 1em;
     }
 
     .od-comments {
@@ -169,7 +174,7 @@
     }
 
     .ui-menu {
-        width: 200px;
+        width: 15em;
     }
 
     .ui-widget-header {
@@ -186,9 +191,6 @@
     <p id="message-dialog-text"></p>
     <p id="message-dialog-debug" style="display:none"></p>
 </div>
-
-<script>
-</script>
 
 <?php
     echo $objResult->{'pre_content'};
@@ -214,15 +216,34 @@
 <div id="crm-main-view" class="container-fluid">
 
 <div id="crm-edit-order-dialog" style="display:none">
+    <table id="od-inv-menus"style="margin-bottom: 1em;">
+        <tr>
+            <td style="vertical-align: bottom;">
+                <ul id = "od-inv-workflow">
+                    <li><a href = "#" style="font-weight: bold;">Workflow</a>
+                        <ul>
+                            <li><a id="od-inv-reuse-btn" href = "#">Wiederverwenden</a></li>
+                            <li><a id="od-inv-close-btn" href = "#">Vorlage für Auftrag</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </td>
+            <td style="vertical-align: bottom;">
+                <span style="font-weight: bold;">Drucken</span>
+                <ul id="od-inv-printers-menu" >
+                    <li><a id="od-inv-current-printer" href = "#">Bildschrim</a>
+                        <ul id="od-inv-printers">
+                        </ul>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    </table>
     <div class="od-common-div">
     <input id="od-customer-id" type="hidden"></input>
     <input id="od-lxcars-c_id" type="hidden"></input>
     <input id="od-oe-id" type="hidden"></input>
     <input id="od-inv-id" type="hidden"></input>
-    <ul id="od-inv-workflow">
-        <li class="ui-widget-header"><div>Workflow</div></li>
-        <li>Drucken</li>
-    </ul>
     <table id="od-oe-common-table" class="od-oe-common od-common-style" width="100%">
         <tr>
             <td width="33%">
@@ -380,20 +401,20 @@
         </thead>
         <tbody></tbody>
     </table>
-    <div class="od-comments-div" style="float: right">
+    <div style="float: right; padding-top: 0.5em; padding-bottom: 0.5em;">
         <table>
             <tr>
                 <td>
                     <label for="od-netamount" class="od-table-label">Netto:</label>
                 </td>
                 <td>
-                    <input id="od-netamount" type="text" readonly="readonly" size="5"></input>
+                    <input id="od-netamount" type="text" readonly="readonly" size="10"></input>
                 </td>
                 <td>
                     <label for="od-amount" class="od-table-label" style="margin-left: 2em">Brutto:</label>
                 </td>
                 <td>
-                    <input id="od-amount" type="text" readonly="readonly" size="5"></input>
+                    <input id="od-amount" type="text" readonly="readonly" size="10"></input>
                 </td>
              </tr>
         </table>

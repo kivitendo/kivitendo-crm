@@ -591,6 +591,22 @@ $( "#od-oe-finish_time" ).datetimepicker({
     currentText: 'Jetzt'
 });
 
+function crmPrintInvoice( e ){
+    console.info( 'print' );
+    console.info( $( e ).attr( 'value' ) );
+    $.ajax({
+        url: 'is.pl',
+        type: 'POST',
+        data:  { action: 'print', id: $( '#od-inv-id' ).val(), invdate: '23.06.2023', formname: 'invoice', format: 'pdf' },
+        success: function( data ){
+            console.info( 'printed' );
+        },
+        error: function( xhr, status, error ){
+            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( printOrder1 )', xhr.responseText );
+        }
+    });
+}
+
 const crmOrderTypeEnum = { Order: 0, Invoice: 1, Offer: 2, Delivery: 3 };
 var crmOrderType = crmOrderTypeEnum.Order;
 
@@ -626,6 +642,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
     $( '#od-inv-id' ).val( '' );
 
     if( crmOrderTypeEnum.Order == crmOrderType ){
+        $( '#od-inv-menus' ).hide();
         $( '#od-inv-common-table' ).hide();
         $( '#od-oe-common-table' ).show();
         $( '#od-listheading-workers' ).show();
@@ -674,6 +691,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         }
     }
     else if( crmOrderTypeEnum.Invoice == crmOrderType ){
+        $( '#od-inv-menus' ).show();
         $( '#od-oe-common-table' ).hide();
         $( '#od-inv-common-table' ).show();
         $( '#od-listheading-workers' ).hide();
@@ -713,7 +731,15 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-lxcars-c_text' ).val( crmData.common.int_car_notes );
             $( '#od-customer-notes' ).val( crmData.common.int_cu_notes );
             $( '#od-oe-intnotes' ).val( crmData.common.intnotes );
-         }
+        }
+
+        console.info( crmData );
+        $( '#od-inv-printers' ).append( '<li><a value="screen" href="#" onclick="crmPrintInvoice( this );">Bildschirm</a></li>' );
+        if( exists( crmData.bill.printers ) ){
+            for( let printer of crmData.bill.printers ){
+                $( '#od-inv-printers' ).append( '<li><a value="' + printer.id  + '" href="#" onclick="crmPrintInvoice( this );">' + printer.printer_description + '</a></li>' );
+            }
+        }
      }
 
     $( '#od-ui-items-workers' ).html( '' );
@@ -810,6 +836,16 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
     }).dialog( 'open' ).resize();
 }
 
-$( '#od-inv-workflow' ).menu({
-      items: "> :not(.ui-widget-header)"
-}).menu( 'collapse' );
+$( "#od-inv-workflow" ).menu({
+   icons: { submenu: "ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"},
+   position: { my: "right top", at: "right+3 top+28" }
+});
+
+$( "#od-inv-printers-menu" ).menu({
+   icons: { submenu: "ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"},
+   position: { my: "right top", at: "right+3 top+28" }
+});
+
+$( '#od-inv-print-btn' ).click( function(){
+    console.info( 'bill print' );
+});

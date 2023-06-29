@@ -212,24 +212,32 @@ function insertNewArticle( $data ){
 ********************************************/
 function findPart( $term ){
     //Index installieren create index idx_orderitems on orderitems ( parts_id );
-    if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
+    if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) && isset( $_GET['filter'] ) && !empty( $_GET['filter'] )) {
         $term = $_GET['term'];
-        $filterI = ( isset( $_GET['filterI'] ) )? false : true;
+        $filter = $_GET['filter'];
         $sql = "";
-        if( $filterI ){
+        if( 'orderitems' == $filter ){
             $sql .= "(SELECT 'D' AS part_type,  'Anweisungen' AS category, description, partnumber, id, description AS value, part_type, unit,  partnumber || ' ' || description AS label, instruction, sellprice,";
             $sql .= " (SELECT qty FROM instructions WHERE instructions.parts_id = parts.id AND instructions.qty IS NOT null GROUP BY qty ORDER BY count( instructions.qty ) DESC, qty DESC LIMIT 1) AS qty,";
             $sql .= " (SELECT tax.rate FROM parts i INNER JOIN taxzone_charts ON parts.buchungsgruppen_id = taxzone_charts.buchungsgruppen_id INNER JOIN taxkeys ON taxzone_charts.income_accno_id = taxkeys.chart_id INNER JOIN tax ON taxkeys.tax_id = tax.id WHERE i.id = parts.id AND parts.obsolete = false AND taxzone_charts.taxzone_id = 4 GROUP BY parts.id, tax.rate, taxkeys.startdate ORDER BY taxkeys.startdate DESC LIMIT 1) AS rate";
             $sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type ='service' AND instruction = true ORDER BY ( SELECT ( SELECT count( qty ) FROM orderitems WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5) UNION ALL";
         }
+//        $sql .= " (SELECT 'W' AS part_type,  'Waren' AS category, description, partnumber, id, description AS value, part_type, unit,  partnumber || ' ' || description AS label, instruction, sellprice,";
+//        $sql .= " (SELECT qty FROM orderitems WHERE orderitems.parts_id = parts.id AND orderitems.qty IS NOT null GROUP BY qty ORDER BY count( orderitems.qty ) DESC, qty DESC LIMIT 1) AS qty,";
+//        $sql .= " (SELECT tax.rate FROM parts i INNER JOIN taxzone_charts ON parts.buchungsgruppen_id = taxzone_charts.buchungsgruppen_id INNER JOIN taxkeys ON taxzone_charts.income_accno_id = taxkeys.chart_id INNER JOIN tax ON taxkeys.tax_id = tax.id WHERE i.id = parts.id AND parts.obsolete = false AND taxzone_charts.taxzone_id = 4 GROUP BY parts.id, tax.rate, taxkeys.startdate ORDER BY taxkeys.startdate DESC LIMIT 1) AS rate";
+//        $sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type = 'part'  AND instruction = false ORDER BY ( SELECT ( SELECT count( qty ) FROM orderitems WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5) UNION ALL";
+//        $sql .= " (SELECT 'D' AS part_type,  'Dienstleistung' AS category, description, partnumber, id, description AS value, part_type, unit,  partnumber || ' ' || description AS label, instruction, sellprice,";
+//        $sql .= " (SELECT qty FROM orderitems WHERE orderitems.parts_id = parts.id AND orderitems.qty IS NOT null GROUP BY qty ORDER BY count( orderitems.qty ) DESC, qty DESC LIMIT 1) AS qty,";
+//        $sql .= " (SELECT tax.rate FROM parts i INNER JOIN taxzone_charts ON parts.buchungsgruppen_id = taxzone_charts.buchungsgruppen_id INNER JOIN taxkeys ON taxzone_charts.income_accno_id = taxkeys.chart_id INNER JOIN tax ON taxkeys.tax_id = tax.id WHERE i.id = parts.id AND parts.obsolete = false AND taxzone_charts.taxzone_id = 4 GROUP BY parts.id, tax.rate, taxkeys.startdate ORDER BY taxkeys.startdate DESC LIMIT 1) AS rate";
+//        $sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type ='service' AND instruction = false ORDER BY ( SELECT ( SELECT count( qty ) FROM orderitems WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5)";
         $sql .= " (SELECT 'W' AS part_type,  'Waren' AS category, description, partnumber, id, description AS value, part_type, unit,  partnumber || ' ' || description AS label, instruction, sellprice,";
-        $sql .= " (SELECT qty FROM orderitems WHERE orderitems.parts_id = parts.id AND orderitems.qty IS NOT null GROUP BY qty ORDER BY count( orderitems.qty ) DESC, qty DESC LIMIT 1) AS qty,";
+        $sql .= " (SELECT qty FROM $filter WHERE $filter.parts_id = parts.id AND $filter.qty IS NOT null GROUP BY qty ORDER BY count( $filter.qty ) DESC, qty DESC LIMIT 1) AS qty,";
         $sql .= " (SELECT tax.rate FROM parts i INNER JOIN taxzone_charts ON parts.buchungsgruppen_id = taxzone_charts.buchungsgruppen_id INNER JOIN taxkeys ON taxzone_charts.income_accno_id = taxkeys.chart_id INNER JOIN tax ON taxkeys.tax_id = tax.id WHERE i.id = parts.id AND parts.obsolete = false AND taxzone_charts.taxzone_id = 4 GROUP BY parts.id, tax.rate, taxkeys.startdate ORDER BY taxkeys.startdate DESC LIMIT 1) AS rate";
-        $sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type = 'part'  AND instruction = false ORDER BY ( SELECT ( SELECT count( qty ) FROM orderitems WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5) UNION ALL";
+        $sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type = 'part'  AND instruction = false ORDER BY ( SELECT ( SELECT count( qty ) FROM $filter WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5) UNION ALL";
         $sql .= " (SELECT 'D' AS part_type,  'Dienstleistung' AS category, description, partnumber, id, description AS value, part_type, unit,  partnumber || ' ' || description AS label, instruction, sellprice,";
-        $sql .= " (SELECT qty FROM orderitems WHERE orderitems.parts_id = parts.id AND orderitems.qty IS NOT null GROUP BY qty ORDER BY count( orderitems.qty ) DESC, qty DESC LIMIT 1) AS qty,";
+        $sql .= " (SELECT qty FROM $filter WHERE $filter.parts_id = parts.id AND $filter.qty IS NOT null GROUP BY qty ORDER BY count( $filter.qty ) DESC, qty DESC LIMIT 1) AS qty,";
         $sql .= " (SELECT tax.rate FROM parts i INNER JOIN taxzone_charts ON parts.buchungsgruppen_id = taxzone_charts.buchungsgruppen_id INNER JOIN taxkeys ON taxzone_charts.income_accno_id = taxkeys.chart_id INNER JOIN tax ON taxkeys.tax_id = tax.id WHERE i.id = parts.id AND parts.obsolete = false AND taxzone_charts.taxzone_id = 4 GROUP BY parts.id, tax.rate, taxkeys.startdate ORDER BY taxkeys.startdate DESC LIMIT 1) AS rate";
-        $sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type ='service' AND instruction = false ORDER BY ( SELECT ( SELECT count( qty ) FROM orderitems WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5)";
+        $sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type ='service' AND instruction = false ORDER BY ( SELECT ( SELECT count( qty ) FROM $filter WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5)";
         echo $GLOBALS['dbh']->getAll( $sql, true );
     }
 }

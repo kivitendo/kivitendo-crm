@@ -188,8 +188,29 @@ function crmAddOrderItem( dataRow ){
 
     $( '#edit-order-table > tbody' ).append(tableRow);
 
+    function crmGetCatcompleteURL(){
+        let url = "crm/ajax/crm.app.php?action=findPart";
+        switch( crmOrderType ){
+            case crmOrderTypeEnum.Order:
+                url += "&filter=orderitems";
+                break;
+            case crmOrderTypeEnum.Offer:
+                //url += "&filter=orderitems";
+                break;
+            case crmOrderTypeEnum.Delivery:
+                //url += "&filter=orderitems";
+                break;
+            case crmOrderTypeEnum.Invoice:
+                url += "&filter=invoice";
+                break;
+        }
+
+        return url;
+    }
+
     $( '.od-item-description' ).catcomplete({
-        source: "crm/ajax/crm.app.php?action=findPart" + ( ( crmOrderTypeEnum.Invoice == crmOrderType )? '&filterI' : '' ),
+        //source: "crm/ajax/crm.app.php?action=findPart" + ( ( crmOrderTypeEnum.Invoice == crmOrderType )? '&filterI' : '' ),
+        source: crmGetCatcompleteURL(),
         select: function( e, ui ){
             const row = $( ':focus' ).parent().parent();
             crmCompleteInsertOrderPos( row, ui.item );

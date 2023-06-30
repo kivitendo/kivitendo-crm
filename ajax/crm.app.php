@@ -212,24 +212,24 @@ function insertNewArticle( $data ){
 ********************************************/
 function findPart( $term ){
     //Index installieren create index idx_orderitems on orderitems ( parts_id );
-    if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
+    if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) && isset( $_GET['filter'] ) && !empty( $_GET['filter'] )) {
         $term = $_GET['term'];
-        $filterI = ( isset( $_GET['filterI'] ) )? false : true;
+        $filter = $_GET['filter'];
         $sql = "";
-        if( $filterI ){
+        if( 'orderitems' == $filter ){
             $sql .= "(SELECT 'D' AS part_type,  'Anweisungen' AS category, description, partnumber, id, description AS value, part_type, unit,  partnumber || ' ' || description AS label, instruction, sellprice,";
             $sql .= " (SELECT qty FROM instructions WHERE instructions.parts_id = parts.id AND instructions.qty IS NOT null GROUP BY qty ORDER BY count( instructions.qty ) DESC, qty DESC LIMIT 1) AS qty,";
             $sql .= " (SELECT tax.rate FROM parts i INNER JOIN taxzone_charts ON parts.buchungsgruppen_id = taxzone_charts.buchungsgruppen_id INNER JOIN taxkeys ON taxzone_charts.income_accno_id = taxkeys.chart_id INNER JOIN tax ON taxkeys.tax_id = tax.id WHERE i.id = parts.id AND parts.obsolete = false AND taxzone_charts.taxzone_id = 4 GROUP BY parts.id, tax.rate, taxkeys.startdate ORDER BY taxkeys.startdate DESC LIMIT 1) AS rate";
             $sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type ='service' AND instruction = true ORDER BY ( SELECT ( SELECT count( qty ) FROM orderitems WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5) UNION ALL";
         }
         $sql .= " (SELECT 'W' AS part_type,  'Waren' AS category, description, partnumber, id, description AS value, part_type, unit,  partnumber || ' ' || description AS label, instruction, sellprice,";
-        $sql .= " (SELECT qty FROM orderitems WHERE orderitems.parts_id = parts.id AND orderitems.qty IS NOT null GROUP BY qty ORDER BY count( orderitems.qty ) DESC, qty DESC LIMIT 1) AS qty,";
+        $sql .= " (SELECT qty FROM $filter WHERE $filter.parts_id = parts.id AND $filter.qty IS NOT null GROUP BY qty ORDER BY count( $filter.qty ) DESC, qty DESC LIMIT 1) AS qty,";
         $sql .= " (SELECT tax.rate FROM parts i INNER JOIN taxzone_charts ON parts.buchungsgruppen_id = taxzone_charts.buchungsgruppen_id INNER JOIN taxkeys ON taxzone_charts.income_accno_id = taxkeys.chart_id INNER JOIN tax ON taxkeys.tax_id = tax.id WHERE i.id = parts.id AND parts.obsolete = false AND taxzone_charts.taxzone_id = 4 GROUP BY parts.id, tax.rate, taxkeys.startdate ORDER BY taxkeys.startdate DESC LIMIT 1) AS rate";
-        $sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type = 'part'  AND instruction = false ORDER BY ( SELECT ( SELECT count( qty ) FROM orderitems WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5) UNION ALL";
+        $sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type = 'part'  AND instruction = false ORDER BY ( SELECT ( SELECT count( qty ) FROM $filter WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5) UNION ALL";
         $sql .= " (SELECT 'D' AS part_type,  'Dienstleistung' AS category, description, partnumber, id, description AS value, part_type, unit,  partnumber || ' ' || description AS label, instruction, sellprice,";
-        $sql .= " (SELECT qty FROM orderitems WHERE orderitems.parts_id = parts.id AND orderitems.qty IS NOT null GROUP BY qty ORDER BY count( orderitems.qty ) DESC, qty DESC LIMIT 1) AS qty,";
+        $sql .= " (SELECT qty FROM $filter WHERE $filter.parts_id = parts.id AND $filter.qty IS NOT null GROUP BY qty ORDER BY count( $filter.qty ) DESC, qty DESC LIMIT 1) AS qty,";
         $sql .= " (SELECT tax.rate FROM parts i INNER JOIN taxzone_charts ON parts.buchungsgruppen_id = taxzone_charts.buchungsgruppen_id INNER JOIN taxkeys ON taxzone_charts.income_accno_id = taxkeys.chart_id INNER JOIN tax ON taxkeys.tax_id = tax.id WHERE i.id = parts.id AND parts.obsolete = false AND taxzone_charts.taxzone_id = 4 GROUP BY parts.id, tax.rate, taxkeys.startdate ORDER BY taxkeys.startdate DESC LIMIT 1) AS rate";
-        $sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type ='service' AND instruction = false ORDER BY ( SELECT ( SELECT count( qty ) FROM orderitems WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5)";
+        $sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type ='service' AND instruction = false ORDER BY ( SELECT ( SELECT count( qty ) FROM $filter WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5)";
         echo $GLOBALS['dbh']->getAll( $sql, true );
     }
 }
@@ -268,7 +268,7 @@ function getCVPA( $data ){
 
     // Fahrzeuge
     $query .= "( SELECT json_agg( cars ) AS cars FROM (".
-                "SELECT c_id, c_ln, COALESCE( hersteller, '---------' ) AS hersteller, COALESCE( name, '---------' ) AS name, COALESCE( fhzart, '---------' ) AS mytype FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.kba_id = lxckba.id ) WHERE c_ow = ".$data['id'].
+                "SELECT c_id, c_ln, COALESCE( hersteller, '---------' ) AS hersteller, COALESCE( name, '---------' ) AS name, COALESCE( fhzart, '---------' ) AS mytype FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.kba_id = lxckba.id ) WHERE c_ow = ".$data['id']." ORDER BY c_id DESC".
                 ") AS cars) AS cars";
 
     $rs = $GLOBALS['dbh']->getOne( $query, true );
@@ -515,12 +515,16 @@ function getInvoice( $data ){
 
     $query = "SELECT ";
     $query .= "(SELECT row_to_json( common ) AS common FROM (".
-                "SELECT ar.*, customer.name AS customer_name, customer.notes AS int_cu_notes, lxc_cars.c_ln AS c_ln, lxc_cars.c_text AS int_car_notes, employee.id AS employee_id, employee.name AS employee_name FROM ar INNER JOIN customer ON customer.id = ar.customer_id INNER JOIN lxc_cars ON lxc_cars.c_ln = ar.shippingpoint INNER JOIN employee ON ar.employee_id = employee.id WHERE ar.id = ".$invoiceID.
+                "SELECT ar.*, customer.name AS customer_name, customer.notes AS int_cu_notes, lxc_cars.c_id AS c_id, lxc_cars.c_ln AS c_ln, lxc_cars.c_text AS int_car_notes, employee.id AS employee_id, employee.name AS employee_name FROM ar INNER JOIN customer ON customer.id = ar.customer_id INNER JOIN lxc_cars ON lxc_cars.c_ln = ar.shippingpoint INNER JOIN employee ON ar.employee_id = employee.id WHERE ar.id = ".$invoiceID.
                 ") AS common) AS common, ";
+
+    $query .= "(SELECT json_agg( printers ) AS printers FROM (".
+                "SELECT * FROM printers".
+                ") AS printers) AS printers, ";
 
     $query .= "(SELECT json_agg( invoice ) AS invoice FROM (".$sql.") AS invoice) AS invoice";
 
-    echo $GLOBALS['dbh']->getOne( $query, true );
+    echo '{ "bill": '.$GLOBALS['dbh']->getOne( $query, true ).' }';
 }
 
 /********************************************

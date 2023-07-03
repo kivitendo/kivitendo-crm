@@ -237,6 +237,10 @@
                     </li>
                 </ul>
             </td>
+            <div  style="display:none">
+                <form id="od-print-form" method="post" action="is.pl">
+                </form>
+            </div>
         </tr>
     </table>
     <div class="od-common-div">
@@ -367,7 +371,7 @@
             </td>
         </tr>
     </table>
-     </div>
+    </div>
 
     <table class="ui-sortable" id="edit-order-table" width="100%">
         <thead>

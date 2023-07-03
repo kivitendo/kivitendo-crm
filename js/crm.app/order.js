@@ -593,18 +593,114 @@ $( "#od-oe-finish_time" ).datetimepicker({
 
 function crmPrintInvoice( e ){
     console.info( 'print' );
-    console.info( $( e ).attr( 'value' ) );
-    $.ajax({
-        url: 'is.pl',
-        type: 'POST',
-        data:  { action: 'print', id: $( '#od-inv-id' ).val(), invdate: '23.06.2023', formname: 'invoice', format: 'pdf' },
-        success: function( data ){
-            console.info( 'printed' );
-        },
-        error: function( xhr, status, error ){
-            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( printOrder1 )', xhr.responseText );
-        }
+
+    $( '#od-inv-printers-menu' ).menu( 'collapseAll' );
+
+    $( '#od-print-form' ).append('<input type="hidden" name="action" value="print"></input>');
+    $( '#od-print-form' ).append('<input type="hidden" name="id" value="'+  $( '#od-inv-id' ).val() + '"></input>');
+    $( '#od-print-form' ).append('<input type="hidden" name="formname" value="invoice"></input>');
+    $( '#od-print-form' ).append('<input type="hidden" name="format" value="pdf"></input>');
+    if( 'screen' == $( e ).attr( 'value' )){
+        $( '#od-print-form' ).append('<input type="hidden" name="printer_id" value=""></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="media" value="screen"></input>');
+    }
+    else{
+        $( '#od-print-form' ).append('<input type="hidden" name="printer_id" value="' + $( e ).attr( 'value' ) + '"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="media" value="printer"></input>');
+    }
+    $( '#od-print-form' ).append('<input type="hidden" name="vc" value="customer"></input>');
+    $( '#od-print-form' ).append('<input type="hidden" name="customer_id" value="' + $( '#od-customer-id' ).val()  + '"></input>');
+    $( '#od-print-form' ).append('<input type="hidden" name="invdate" value="' + $( '#od-inv-itime' ).text()  + '"></input>');
+    $( '#od-print-form' ).append('<input type="hidden" name="invnumber" value="' + $( '#od-inv-invnumber' ).text()  + '"></input>');
+    $( '#od-print-form' ).append('<input type="hidden" name="employee_id" value="' + $( '#od-inv-employee_id' ).val()  + '"></input>');
+    $( '#od-print-form' ).append('<input type="hidden" name="shippingpoint" value="' + $( '#od-inv-shippingpoint' ).text()  + '"></input>');
+    $( '#od-print-form' ).append('<input type="hidden" name="shipvia" value="' + $( '#od-inv-shipvia' ).val()  + '"></input>');
+    $( '#od-print-form' ).append('<input type="hidden" name="marge_total" value="' + kivi.parse_amount( $( '#od-netamount' ).val() )  + '"></input>');
+    $( '#od-print-form' ).append('<input type="hidden" name="oldinvtotal" value="' + kivi.parse_amount( $( '#od-amount' ).val() )  + '"></input>');
+    $( '#od-print-form' ).append('<input type="hidden" name="oldtotalpaid" value="' + kivi.parse_amount( $( '#od-amount' ).val() )  + '"></input>');
+    $( '#od-print-form' ).append('<input type="hidden" name="ordnumber" value="' + $( '#od-inv-ordnumber' ).text()  + '"></input>');
+
+    $( '#od-print-form' ).append('<input type="hidden" name="taxzone_id" value="4"></input>');
+    $( '#od-print-form' ).append('<input type="hidden" name="1776_rate" value="0.19000"></input>');
+    $( '#od-print-form' ).append('<input type="hidden" name="1776_description" value="Umsatzsteuer"></input>');
+    $( '#od-print-form' ).append('<input type="hidden" name="1776_taxnumber" value="1776"></input>');
+    $( '#od-print-form' ).append('<input type="hidden" name="1776_tax_id" value="777"></input>');
+    $( '#od-print-form' ).append('<input type="hidden" name="taxaccounts" value="1776"></input>');
+
+    $( '#edit-order-table > tbody > tr').each( function( key, pos ){
+        const runningnumber = $( pos ).find( '[class=od-item-position]' ).text();
+        const partnumber = $( pos ).find( '[class=od-hidden-item-partnumber]' ).text();
+        const description = $( pos ).find( '[name=od-item-description]' ).val();
+        const qty = $( pos ).find( '[class=od-item-qty]' ).val();
+        const unit = $( pos ).find( '[class=od-item-unit]' ).val();
+        const sellprice = $( pos ).find( '[class=od-item-sellprice]' ).val();
+        const marge_total = $( pos ).find( '[class=od-item-marge_total]' ).val();
+        const invoice_id = pos.id;
+        const parts_id =  $( pos ).find( '[class=od-item-parts_id]' ).val();
+        const part_type =  $( pos ).find( '[class=od-item-type]' ).val();
+        $( '#od-print-form' ).append('<input type="hidden" name="runningnumber_'+ runningnumber  +'" value="' + runningnumber  + '"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="partnumber_'+ runningnumber  +'" value="' + partnumber  + '"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="description_'+ runningnumber  +'" value="' + description  + '"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="qty_'+ runningnumber  +'" value="' + kivi.parse_amount( qty )  + '"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="price_factor_id_'+ runningnumber  +'" value=""></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="unit_'+ runningnumber  +'" value="' + unit  + '"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="sellprice_'+ runningnumber  +'" value="' + kivi.parse_amount( sellprice )  + '"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="marge_absolut_'+ runningnumber  +'" value="' + kivi.parse_amount( marge_total )  + '"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="taxaccounts_'+ runningnumber  +'" value="1776"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="invoice_id_'+ runningnumber  +'" value="' + invoice_id  + '"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="id_'+ runningnumber  +'" value="' + parts_id  + '"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="part_type_'+ runningnumber  +'" value="' + ( ( 'P' == part_type )? 'part' : 'service' ) + '"></input>');
+
+
+        $( '#od-print-form' ).append('<input type="hidden" name="discount_'+ runningnumber  +'" value=""></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="unit_old_'+ runningnumber  +'" value="' + unit  + '"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="price_new_'+ runningnumber  +'" value="0"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="bo_'+ runningnumber  +'" value=""></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="price_old_'+ runningnumber  +'" value="0"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="inventory_accno_'+ runningnumber  +'" value="3980"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="bin_'+ runningnumber  +'" value=""></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="partsgroup_'+ runningnumber  +'" value="W"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="partnotes_'+ runningnumber  +'" value=""></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="active_price_source_'+ runningnumber  +'" value=""></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="active_discount_source_'+ runningnumber  +'" value=""></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="income_accno_'+ runningnumber  +'" value="8400"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="expense_accno_'+ runningnumber  +'" value="3400"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="listprice_'+ runningnumber  +'" value="0.00000"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="taxaccounts_'+ runningnumber  +'" value="1776"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="ordnumber_'+ runningnumber  +'" value=""></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="donumber_'+ runningnumber  +'" value=""></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="transdate_'+ runningnumber  +'" value=""></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="cusordnumber_'+ runningnumber  +'" value=""></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="longdescription_'+ runningnumber  +'" value=""></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="basefactor_'+ runningnumber  +'" value=""></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="marge_percent_'+ runningnumber  +'" value="100,00"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="marge_price_factor_'+ runningnumber  +'" value="1.00000"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="weight_'+ runningnumber  +'" value="0"></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="converted_from_orderitems_id_'+ runningnumber  +'" value=""></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="converted_from_delivery_order_items_id_'+ runningnumber  +'" value=""></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="converted_from_invoice_id_'+ runningnumber  +'" value=""></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="serialnumber_'+ runningnumber  +'" value=""></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="project_id_'+ runningnumber  +'" value=""></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="reqdate_'+ runningnumber  +'" value=""></input>');
+        $( '#od-print-form' ).append('<input type="hidden" name="lastcost_'+ runningnumber  +'" value="0,00"></input>');
     });
+
+    if( 'screen' == $( e ).attr( 'value' )){
+        $( '#od-print-form' ).submit();
+    }
+    else{
+        $.ajax({
+            url: 'is.pl',
+            type: 'POST',
+            data: $( '#od-print-form' ).serialize(),
+            success: function( data ){
+                console.info( 'printed' );
+            },
+            error: function( xhr, status, error ){
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( printOrder1 )', xhr.responseText );
+            }
+        });
+    }
 }
 
 const crmOrderTypeEnum = { Order: 0, Invoice: 1, Offer: 2, Delivery: 3 };
@@ -733,7 +829,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-oe-intnotes' ).val( crmData.common.intnotes );
         }
 
-        console.info( crmData );
+        $( '#od-inv-printers' ).html( '' );
         $( '#od-inv-printers' ).append( '<li><a value="screen" href="#" onclick="crmPrintInvoice( this );">Bildschirm</a></li>' );
         if( exists( crmData.bill.printers ) ){
             for( let printer of crmData.bill.printers ){

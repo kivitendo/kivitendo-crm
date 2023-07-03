@@ -183,3 +183,13 @@ const searchOrderFormModel = [
    { "name": "search_order-date_from", "label": "Date from:", "type": "input", "size": "16", "tooltip": "" },
    { "name": "search_order-date_to", "label": "Date to:", "type": "input", "size": "16", "tooltip": "" },
 ];
+
+const  editNewCustomer = [
+    { "name": "edit_new_costumer-type", "label": "Customer type:", "type": "select", "data":["Customer", "Supplier"], "tooltip": "" },
+    { "name": "edit_new_costumer-gender", "label": "gender", "type": "select", "data":[""], "tooltip": "" },
+    { "name": "edit_new_costumer-name", "label": "name:", "type": "input", "size": "21", "tooltip": "", "placeholder": "Name" }, 
+    { "name": "edit_new_costumer-zipcode", "label": "zipcode", "type": "input", "size":"19", "tooltip": "" },
+    { "name": "edit_new_costumer-location", "label": "", "type": "select", "data": [], "tooltip": "" },
+    { "name": "edit_new_costumer-federalstate", "label": "", "type": "select", "data": [], "tooltip": ""},
+    { "name": "edit_new_costumer-street", "label": "", "type": "input", "tooltip": ""},
+]

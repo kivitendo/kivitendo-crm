@@ -281,10 +281,6 @@ function crmEditCuVeDlg( crmData, new_with_car ){
     }).dialog( 'open' ).resize();
 }
 
-function crmNewCustomer(){
-    alert( "Kunde erfassen in crmNewCustomer()!" );
-}
-
 function crmNewVendor(){
     alert( "Lierferant erfassen in crmNewVendor()!" );
 }

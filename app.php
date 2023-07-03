@@ -580,7 +580,7 @@
     </div>
 </div>
 
-<div id="crm-fsscan-dlg" style="display:none;">
+<div id="" style="display:none;">
     <div>
         <table id="crm-fsscan-list0">
             <thead>
@@ -763,6 +763,13 @@
             </div>
             <div id="crm-tab-extra-infos" class="crm-tab">
             </div>
+            <div id="crm-new_Costumer-dialog" style="display:none">
+                <div id="edit-new_Constumer-hidden"> </div>
+                <table id="edit-new_Costumer-form">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -788,6 +795,7 @@
 <script src="crm/js/crm.app/order.js"></script>
 <script src="crm/js/crm.app/article.js"></script>
 <script src="crm/js/crm.app/searchorder.js"></script>
+<script src="crm/js/crm.app/newcustomer.js"></script>
 <script src="crm/js/crm.app/phonecall.js"></script>
 </body>
 </html>

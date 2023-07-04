@@ -518,7 +518,7 @@
                 <a id="crm-nav-billaddr" class="nav-link active" aria-current="page" href="#crm-tab-billaddr">Rechnungsaddresse</a>
             </li>
             <li class="nav-item">
-                <a id="crm-nav-deladdr" class="nav-link" aria-current="page" href="#crm-tab-deladdr">Lieferanschrif</a>
+                <a id="crm-nav-deladdr" class="nav-link" aria-current="page" href="#crm-tab-deladdr">Lieferanschrift</a>
             </li>
             <li class="nav-item">
                 <a id="crm-nav-banktax" class="nav-link" aria-current="page" href="#crm-tab-banktax">Bank/Steuer</a>
@@ -770,19 +770,35 @@
                             <a id="crm-nav-billaddr_Costumer" class="nav-link active" aria-current="page" href="#crm-tab-billaddr_Costumer">Rechnungsaddresse</a>
                         </li>
                         <li class="nav-item">
-                            <a id="crm-nav-deladdr_Costumer" class="nav-link" aria-current="page" href="#crm-tab-deladdr_Costumer">Lieferanschrif</a>
+                            <a id="crm-nav-deladdr_Costumer" class="nav-link" aria-current="page" href="#crm-tab-deladdr_Costumer" >Lieferanschrift</a>
                         </li>
                         <li class="nav-item">
-                            <a id="crm-nav-banktax_Costumer" class="nav-link" aria-current="page" href="#crm-tab-banktax_Costumer">Bank/Steuer</a>
+                            <a id="crm-nav-banktax_Costumer" class="nav-link" aria-current="page" href="#crm-tab-banktax_Costumer" >Bank/Steuer</a>
                         </li>
                         <li class="nav-item">
-                            <a id="crm-nav-extras_Costumer" class="nav-link" aria-current="page" href="#crm-tab-extras_Costumer">Sonstiges</a>
+                            <a id="crm-nav-extras_Costumer" class="nav-link" aria-current="page" href="#crm-tab-extras_Costumer" >Sonstiges</a>
                         </li>
                         <li class="nav-item">
                             <a id="crm-nav-vars_Costumer" class="nav-link" aria-current="page" href="#crm-tab-vars_Costumer">Variablen</a>
                         </li>
                     <div id="edit-new_Constumer-hidden"> </div>
-                <table id="edit-new_Costumer-form">
+                <table id="crm-tab-billaddr_Costumer">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+                <table id="crm-tab-extras_Costumer">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+                <table id="crm-tab-deladdr_Costumer">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+                <table id="crm-tab-banktax_Costumer">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+                <table id="crm-tab-vars_Costumer">
                     <thead></thead>
                     <tbody></tbody>
                 </table>

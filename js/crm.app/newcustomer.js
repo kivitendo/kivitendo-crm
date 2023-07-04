@@ -1,8 +1,9 @@
 
 function crmNewCustomer(){
-    crmInitFormEx( editNewCustomer, '#edit-new_Costumer-form');
-    $('#edit_new_costumer-gender').append(new Option('Male', 'M'));
-    $('#edit_new_costumer-gender').append(new Option('Female', 'F'));
+    crmInitFormEx( editNewCustomer, '#crm-tab-billaddr_Costumer');
+    
+    $('#crm-tab-billaddr_Costumer-gender').append(new Option('Male', 'M'));
+    $('#crm-tab-billaddr_Costumer-gender').append(new Option('Female', 'F'));
     console.info("funktionstüchtig");
     $('#crm-new_Costumer-dialog').dialog({
         title: 'Customermenu',
@@ -11,6 +12,51 @@ function crmNewCustomer(){
         width: 'auto',
         height: 'auto',
     }).dialog('open').resize();
+
+    $('#crm-nav-extras_Costumer').click(function(){
+      crmInitFormEx(extraFormModel, "#crm-tab-extras_Costumer");
+      $('crm-tab-extras_Costumer').dialog({
+        title: 'Sonstiges',
+        autoOpen: false,
+        resizable: true,
+        width: 'auto',
+        height: 'auto',
+      }).dialog('open').resize();
+    })
+    
+
+    $('#crm-nav-deladdr_Costumer').click(function(){
+      crmInitFormEx(deladdrFormModel, "#crm-tab-deladdr_Costumer");
+      $('crm-tab-deladdr_Costumer').dialog({
+        title: 'Lieferanschrift',
+        autoOpen: false,
+        resizable: true,
+        width: 'auto',
+        height: 'auto',
+      }).dialog('open').resize();
+    })
+
+     $('#crm-nav-banktax_Costumer').click(function(){
+      crmInitFormEx(banktaxFormModel, "#crm-tab-banktax_Costumer");
+      $('crm-tab-banktax_Costumer').dialog({
+        title: 'Lieferanschrift',
+        autoOpen: false,
+        resizable: true,
+        width: 'auto',
+        height: 'auto',
+      }).dialog('open').resize();
+    })
+
+    $('#crm-nav-vars_Costumer').click(function(){
+      crmInitFormEx(deladdrFormModel, "#crm-tab-vars_Costumer");
+      $('crm-tab-vars_Costumer').dialog({
+        title: 'Variablen',
+        autoOpen: false,
+        resizable: true,
+        width: 'auto',
+        height: 'auto',
+      }).dialog('open').resize();
+    })
 
     $('#edit_new_costumer-name').keyup(function(e){
         if(e.which == 32){
@@ -60,6 +106,7 @@ function crmNewCustomer(){
           type: 'POST',
           data: {action: 'f_state', data: { 'zipcode': $('#edit_new_costumer-zipcode').val() } },
           success: function( data ){
+            alert("Funktion")
             $('#edit_new_costumer-federalstate').append($('<option />').text(data['federal_state'])); 
           },
           error: function( xhr, status, error ){

@@ -580,7 +580,7 @@
     </div>
 </div>
 
-<div id="" style="display:none;">
+-<div id="crm-fsscan-dlg" style="display:none;">
     <div>
         <table id="crm-fsscan-list0">
             <thead>
@@ -764,7 +764,24 @@
             <div id="crm-tab-extra-infos" class="crm-tab">
             </div>
             <div id="crm-new_Costumer-dialog" style="display:none">
-                <div id="edit-new_Constumer-hidden"> </div>
+                <div id="crm-new_Costumer-main" class="tabwidget">
+                    <ul class="new_Costumer nav-tabs">
+                        <li class="nav-item">
+                            <a id="crm-nav-billaddr_Costumer" class="nav-link active" aria-current="page" href="#crm-tab-billaddr_Costumer">Rechnungsaddresse</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="crm-nav-deladdr_Costumer" class="nav-link" aria-current="page" href="#crm-tab-deladdr_Costumer">Lieferanschrif</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="crm-nav-banktax_Costumer" class="nav-link" aria-current="page" href="#crm-tab-banktax_Costumer">Bank/Steuer</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="crm-nav-extras_Costumer" class="nav-link" aria-current="page" href="#crm-tab-extras_Costumer">Sonstiges</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="crm-nav-vars_Costumer" class="nav-link" aria-current="page" href="#crm-tab-vars_Costumer">Variablen</a>
+                        </li>
+                    <div id="edit-new_Constumer-hidden"> </div>
                 <table id="edit-new_Costumer-form">
                     <thead></thead>
                     <tbody></tbody>

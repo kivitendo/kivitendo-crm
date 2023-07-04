@@ -186,7 +186,7 @@ const searchOrderFormModel = [
 
 const  editNewCustomer = [
     { "name": "edit_new_costumer-type", "label": "Customer type:", "type": "select", "data":["Customer", "Supplier"], "tooltip": "" },
-    { "name": "edit_new_costumer-gender", "label": "gender", "type": "select", "data":[""], "tooltip": "" },
+    { "name": "edit_new_costumer-gender", "label": "salutation", "type": "select", "data":[""], "tooltip": "" },
     { "name": "edit_new_costumer-name", "label": "name:", "type": "input", "size": "21", "tooltip": "", "placeholder": "Name" }, 
     { "name": "edit_new_costumer-zipcode", "label": "zipcode", "type": "input", "size":"19", "tooltip": "" },
     { "name": "edit_new_costumer-location", "label": "", "type": "select", "data": [], "tooltip": "" },

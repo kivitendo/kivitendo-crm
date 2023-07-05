@@ -231,7 +231,7 @@
             <td style="vertical-align: bottom;">
                 <span style="font-weight: bold;">Drucken</span>
                 <ul id="od-inv-printers-menu" >
-                    <li><a id="od-inv-current-printer" href = "#">Bildschrim</a>
+                    <li><a id="od-inv-current-printer" value="screen" href = "#" onclick="crmPrintInvoice( this );">Bildschrim</a>
                         <ul id="od-inv-printers">
                         </ul>
                     </li>

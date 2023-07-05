@@ -592,6 +592,8 @@ $( "#od-oe-finish_time" ).datetimepicker({
     currentText: 'Jetzt'
 });
 
+var crmCurrenPrinterId = 'screen';
+
 function crmPrintInvoice( e ){
     let data = {};
     data['id'] = ''+  $( '#od-inv-id' ).val();
@@ -666,7 +668,7 @@ function crmPrintInvoice( e ){
         $( '#od-print-form' ).append('<input type="hidden" name="' + key + '" value="' + value + '"></input>');
     });
 
-    if( 'screen' == $( e ).attr( 'value' )){
+    if( 'screen' == $( e ).attr( 'value' ) ){
         $( '#od-print-form' ).submit();
     }
     else{
@@ -682,6 +684,9 @@ function crmPrintInvoice( e ){
             }
         });
     }
+
+    $( '#od-inv-current-printer' ).attr( 'value', $( e ).attr( 'value' ) );
+    $( '#od-inv-current-printer' ).text( $( e ).text( ) );
 
     $( '#od-inv-printers-menu' ).menu( 'collapseAll' );
 }

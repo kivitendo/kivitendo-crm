@@ -527,6 +527,14 @@ function getInvoice( $data ){
     echo '{ "bill": '.$GLOBALS['dbh']->getOne( $query, true ).' }';
 }
 
+function insertInvoice( $data ){
+    $id = $GLOBALS['dbh']->getOne( "WITH tmp AS ( UPDATE defaults SET invnumber = invnumber::INT + 1 RETURNING invnumber) ".
+                                "INSERT INTO ar ( invnumber, customer_id, employee_id, taxzone_id, currency_id, shippingpoint, notes, ordnumber, employee_id, intnodes, shipvia, marge_total ) ".
+                                "SELECT ( SELECT invnumber FROM tmp), ".$data['customer_id'].", ".$_SESSION['id'].",  customer.taxzone_id, customer.currency_id, ".
+                                "'".$data['shippingpoint'].", '".$data['notes']."', '".$data['ordnumber']."', ".
+                                "FROM customer WHERE customer.id = ".$data['customer_id']." RETURNING id ")['id'];
+}
+
 /********************************************
 * Insert a new Customer optional  with new Car
 ********************************************/

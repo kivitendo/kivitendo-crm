@@ -592,6 +592,10 @@ $( "#od-oe-finish_time" ).datetimepicker({
     currentText: 'Jetzt'
 });
 
+function crmOrderToInvoice(){
+    console.info( 'order2invoice' );
+}
+
 function crmPrintInvoice( e ){
     let data = {};
     data['id'] = ''+  $( '#od-inv-id' ).val();
@@ -726,6 +730,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
     if( crmOrderTypeEnum.Order == crmOrderType ){
         $( '#od-inv-menus' ).hide();
         $( '#od-inv-common-table' ).hide();
+        $( '#od-oe-workflow' ).show();
         $( '#od-oe-common-table' ).show();
         $( '#od-listheading-workers' ).show();
         $( '#od-listheading-status' ).show();
@@ -773,6 +778,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         }
     }
     else if( crmOrderTypeEnum.Invoice == crmOrderType ){
+        $( '#od-oe-workflow' ).hide();
         $( '#od-inv-menus' ).show();
         $( '#od-oe-common-table' ).hide();
         $( '#od-inv-common-table' ).show();
@@ -918,6 +924,11 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
     }).dialog( 'open' ).resize();
 }
 
+$( "#od-oe-workflow" ).menu({
+   icons: { submenu: "ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"},
+   position: { my: "right top", at: "right+3 top+28" }
+});
+
 $( "#od-inv-workflow" ).menu({
    icons: { submenu: "ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"},
    position: { my: "right top", at: "right+3 top+28" }
@@ -926,8 +937,4 @@ $( "#od-inv-workflow" ).menu({
 $( "#od-inv-printers-menu" ).menu({
    icons: { submenu: "ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"},
    position: { my: "right top", at: "right+3 top+28" }
-});
-
-$( '#od-inv-print-btn' ).click( function(){
-    console.info( 'bill print' );
 });

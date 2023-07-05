@@ -216,7 +216,14 @@
 <div id="crm-main-view" class="container-fluid">
 
 <div id="crm-edit-order-dialog" style="display:none">
-    <table id="od-inv-menus"style="margin-bottom: 1em;">
+    <ul id = "od-oe-workflow" style="margin-bottom: 1em;">
+         <li><a href = "#" style="font-weight: bold;">Workflow</a>
+             <ul>
+                 <li><a id="od-oe-invoice-btn" href = "#" onclick="crmOrderToInvoice();">Rechnung</a></li>
+             </ul>
+         </li>
+    </ul>
+    <table id="od-inv-menus" style="margin-bottom: 1em;">
         <tr>
             <td style="vertical-align: bottom;">
                 <ul id = "od-inv-workflow">

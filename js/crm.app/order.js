@@ -592,8 +592,6 @@ $( "#od-oe-finish_time" ).datetimepicker({
     currentText: 'Jetzt'
 });
 
-var crmCurrenPrinterId = 'screen';
-
 function crmPrintInvoice( e ){
     let data = {};
     data['id'] = ''+  $( '#od-inv-id' ).val();

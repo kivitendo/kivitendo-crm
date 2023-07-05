@@ -1,7 +1,7 @@
 
 function crmNewCustomer(){
     crmInitFormEx( editNewCustomer, '#crm-tab-billaddr_Costumer');
-    
+
     $('#crm-tab-billaddr_Costumer-gender').append(new Option('Male', 'M'));
     $('#crm-tab-billaddr_Costumer-gender').append(new Option('Female', 'F'));
     console.info("funktionstüchtig");
@@ -23,7 +23,7 @@ function crmNewCustomer(){
         height: 'auto',
       }).dialog('open').resize();
     })
-    
+
 
     $('#crm-nav-deladdr_Costumer').click(function(){
       crmInitFormEx(deladdrFormModel, "#crm-tab-deladdr_Costumer");
@@ -46,7 +46,7 @@ function crmNewCustomer(){
         height: 'auto',
       }).dialog('open').resize();
     })
-
+    // hier noch Variablenmenü erstellen
     $('#crm-nav-vars_Costumer').click(function(){
       crmInitFormEx(deladdrFormModel, "#crm-tab-vars_Costumer");
       $('crm-tab-vars_Costumer').dialog({
@@ -65,7 +65,7 @@ function crmNewCustomer(){
             type: 'POST',
             data:  { action: 'firstnameToGender', data: { 'name': $('#edit_new_costumer-name').val().replace(' ', '') } },
             success: function( data ){
-              console.info( data );          
+              console.info( data );
               $("#edit_new_costumer-gender").val(data["gender"]).change();
             },
             error: function( xhr, status, error ){
@@ -98,7 +98,7 @@ function crmNewCustomer(){
           error: function( xhr, status, error ){
             console.info("ERROR", xhr, status)
           }
-    
+
         });
         if($('#edit_new_costumer-zipcode').val().length = 5){
           $.ajax({
@@ -107,15 +107,15 @@ function crmNewCustomer(){
           data: {action: 'f_state', data: { 'zipcode': $('#edit_new_costumer-zipcode').val() } },
           success: function( data ){
             alert("Funktion")
-            $('#edit_new_costumer-federalstate').append($('<option />').text(data['federal_state'])); 
+            $('#edit_new_costumer-federalstate').append($('<option />').text(data['federal_state']));
           },
           error: function( xhr, status, error ){
             console.info("ERROR ", xhr, status, error)
           }
-    
+
         });
-        } 
-         
+        }
+
         $('#edit_new_costumer-location').change(function(){
           $('#edit_new_costumer-street').focus(); })
       })

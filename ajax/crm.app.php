@@ -236,7 +236,15 @@ function findPart( $term ){
 
 function getCVPA( $data ){
     $query = "SELECT ";
-    if($data['src'] == 'C' || $data['src'] == 'V' ){
+    if( $data['src'] == 'A' ){
+        $c_ow = $GLOBALS['dbh']->getOne( "SELECT c_ow FROM lxc_cars WHERE c_id = ".$data['id'] )['c_ow'];
+        $query .= "(SELECT row_to_json( car ) AS car FROM (".
+                    "SELECT *, to_char( c_hu, 'DD.MM.YYYY') AS c_hu, to_char( c_d, 'DD.MM.YYYY') AS c_d FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.kba_id = lxckba.id ) WHERE c_id = ".$data['id'].
+                    ") AS car) AS car, ";
+        $data['src'] = 'C';
+        $data['id'] = $c_ow;
+    }
+    if( $data['src'] == 'C' || $data['src'] == 'V' ){
         // Stammdaten
         $db_table = array('C' => 'customer', 'V' => 'vendor');
         $query .= "(SELECT row_to_json( cv ) AS cv FROM (".

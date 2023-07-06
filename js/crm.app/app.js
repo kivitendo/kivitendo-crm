@@ -106,6 +106,10 @@ function getCVPA( src, id ){
         data:  { action: 'getCVPA', data: { 'src': src, 'id': id } },
         success: function( data ){
             showCVPA( data );
+            console.info( data );
+            if( exists( data['car'] ) ){
+                crmEditCarDlg( data['car'] );
+            }
         },
         error: function( xhr, status, error ){
             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'getCVPA', xhr.responseText );

@@ -219,7 +219,7 @@
     <ul id = "od-oe-workflow" style="margin-bottom: 1em;">
          <li><a href = "#" style="font-weight: bold;">Workflow</a>
              <ul>
-                 <li><a id="od-oe-invoice-btn" href = "#" onclick="crmOrderToInvoice();">Rechnung</a></li>
+                 <li><a id="od-oe-invoice-btn" href = "#" onclick="crmInsertInvoiceFromOrder();">Rechnung</a></li>
              </ul>
          </li>
     </ul>

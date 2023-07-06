@@ -463,7 +463,7 @@ function getFsData( $data ){
 }
 
 function searchCustomerForScan( $data ){
-    $rs = $GLOBALS['dbh']->getAll( "SELECT id, name, street, zipcode, city FROM customer WHERE name ILIKE '%".$data['name']."%' LIMIT 12", true );
+    $rs = $GLOBALS['dbh']->getAll( "SELECT id, name, street, zipcode, city FROM customer WHERE name ILIKE '%".$data['name']."%' LIMIT 18", true );
     echo ( empty( $rs ) )? 0 : $rs;
 }
 
@@ -501,7 +501,7 @@ function getOrder( $data ){
     echo '{ "order": '.$GLOBALS['dbh']->getOne( $query, true ).', "workers": '.$workers.' }';
 }
 
-function getInvoice( $data ){
+function getInvoice( $data, $flag = null ){
     $invoiceID = $data['id'];
     $taxzone_id = 4;
 
@@ -524,15 +524,31 @@ function getInvoice( $data ){
 
     $query .= "(SELECT json_agg( invoice ) AS invoice FROM (".$sql.") AS invoice) AS invoice";
 
-    echo '{ "bill": '.$GLOBALS['dbh']->getOne( $query, true ).' }';
+    echo '{ "bill": '.$GLOBALS['dbh']->getOne( $query, true ).(( $flag != null )? ', "flag": "'.$flag.'" }' : ' }');
 }
 
-function insertInvoice( $data ){
+function insertInvoiceFromOrder( $data ){
+    $exists = $GLOBALS['dbh']->getOne( "SELECT id FROM ar WHERE ordnumber = '".$data['ordnumber']."' LIMIT 1" );
+
+    if( is_array( $exists ) && sizeof( $exists ) > 0 ){
+        getInvoice( $exists, "exists" );
+        return;
+    }
+
+    $GLOBALS['dbh']->beginTransaction();
     $id = $GLOBALS['dbh']->getOne( "WITH tmp AS ( UPDATE defaults SET invnumber = invnumber::INT + 1 RETURNING invnumber) ".
-                                "INSERT INTO ar ( invnumber, customer_id, employee_id, taxzone_id, currency_id, shippingpoint, notes, ordnumber, employee_id, intnodes, shipvia, marge_total ) ".
-                                "SELECT ( SELECT invnumber FROM tmp), ".$data['customer_id'].", ".$_SESSION['id'].",  customer.taxzone_id, customer.currency_id, ".
-                                "'".$data['shippingpoint'].", '".$data['notes']."', '".$data['ordnumber']."', ".
-                                "FROM customer WHERE customer.id = ".$data['customer_id']." RETURNING id ")['id'];
+                                "INSERT INTO ar ( invnumber, customer_id, employee_id, taxzone_id, currency_id, shippingpoint, notes, ordnumber, intnotes, shipvia, amount, netamount ) ".
+                                "SELECT (SELECT invnumber FROM tmp), oe.customer_id, ".$_SESSION['id'].", oe.taxzone_id, oe.currency_id, oe.shippingpoint, oe.notes, oe.ordnumber, oe.intnotes, oe.shipvia, oe.amount, oe.netamount ".
+                                "FROM oe WHERE id = ".$data['oe_id']." RETURNING id;" )['id'];
+
+    $query = "INSERT INTO invoice (trans_id, position, parts_id, description, longdescription, qty, unit, sellprice, discount, marge_total, fxsellprice) ".
+            "(SELECT ".$id.", position, parts_id, description, longdescription, qty, unit, sellprice, discount, marge_total, sellprice AS fxsellprice FROM orderitems WHERE trans_id = ".$data['oe_id'].")";
+
+    $GLOBALS['dbh']->query( $query );
+    $GLOBALS['dbh']->commit();
+
+    $exists = array( "id" => $id );
+    getInvoice( $exists );
 }
 
 /********************************************

@@ -216,7 +216,14 @@
 <div id="crm-main-view" class="container-fluid">
 
 <div id="crm-edit-order-dialog" style="display:none">
-    <table id="od-inv-menus"style="margin-bottom: 1em;">
+    <ul id = "od-oe-workflow" style="margin-bottom: 1em;">
+         <li><a href = "#" style="font-weight: bold;">Workflow</a>
+             <ul>
+                 <li><a id="od-oe-invoice-btn" href = "#" onclick="crmInsertInvoiceFromOrder();">Rechnung</a></li>
+             </ul>
+         </li>
+    </ul>
+    <table id="od-inv-menus" style="margin-bottom: 1em;">
         <tr>
             <td style="vertical-align: bottom;">
                 <ul id = "od-inv-workflow">
@@ -231,7 +238,7 @@
             <td style="vertical-align: bottom;">
                 <span style="font-weight: bold;">Drucken</span>
                 <ul id="od-inv-printers-menu" >
-                    <li><a id="od-inv-current-printer" href = "#">Bildschrim</a>
+                    <li><a id="od-inv-current-printer" value="screen" href = "#" onclick="crmPrintInvoice( this );">Bildschrim</a>
                         <ul id="od-inv-printers">
                         </ul>
                     </li>
@@ -518,7 +525,7 @@
                 <a id="crm-nav-billaddr" class="nav-link active" aria-current="page" href="#crm-tab-billaddr">Rechnungsaddresse</a>
             </li>
             <li class="nav-item">
-                <a id="crm-nav-deladdr" class="nav-link" aria-current="page" href="#crm-tab-deladdr">Lieferanschrif</a>
+                <a id="crm-nav-deladdr" class="nav-link" aria-current="page" href="#crm-tab-deladdr">Lieferanschrift</a>
             </li>
             <li class="nav-item">
                 <a id="crm-nav-banktax" class="nav-link" aria-current="page" href="#crm-tab-banktax">Bank/Steuer</a>
@@ -580,7 +587,7 @@
     </div>
 </div>
 
-<div id="crm-fsscan-dlg" style="display:none;">
+-<div id="crm-fsscan-dlg" style="display:none;">
     <div>
         <table id="crm-fsscan-list0">
             <thead>
@@ -763,6 +770,46 @@
             </div>
             <div id="crm-tab-extra-infos" class="crm-tab">
             </div>
+            <div id="crm-new_Costumer-dialog" style="display:none">
+                <div id="crm-new_Costumer-main" class="tabwidget">
+                    <ul class="new_Costumer nav-tabs">
+                        <li class="nav-item">
+                            <a id="crm-nav-billaddr_Costumer" class="nav-link active" aria-current="page" href="#crm-tab-billaddr_Costumer">Rechnungsaddresse</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="crm-nav-deladdr_Costumer" class="nav-link" aria-current="page" href="#crm-tab-deladdr_Costumer" >Lieferanschrift</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="crm-nav-banktax_Costumer" class="nav-link" aria-current="page" href="#crm-tab-banktax_Costumer" >Bank/Steuer</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="crm-nav-extras_Costumer" class="nav-link" aria-current="page" href="#crm-tab-extras_Costumer" >Sonstiges</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="crm-nav-vars_Costumer" class="nav-link" aria-current="page" href="#crm-tab-vars_Costumer">Variablen</a>
+                        </li>
+                    <div id="edit-new_Constumer-hidden"> </div>
+                <table id="crm-tab-billaddr_Costumer">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+                <table id="crm-tab-extras_Costumer">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+                <table id="crm-tab-deladdr_Costumer">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+                <table id="crm-tab-banktax_Costumer">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+                <table id="crm-tab-vars_Costumer">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -788,6 +835,7 @@
 <script src="crm/js/crm.app/order.js"></script>
 <script src="crm/js/crm.app/article.js"></script>
 <script src="crm/js/crm.app/searchorder.js"></script>
+<script src="crm/js/crm.app/newcustomer.js"></script>
 <script src="crm/js/crm.app/phonecall.js"></script>
 </body>
 </html>

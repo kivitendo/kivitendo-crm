@@ -36,9 +36,6 @@ function getHistory(){
 function fastSearch(){
     if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
         $term = $_GET['term'];
-<<<<<<< HEAD
-        echo $GLOBALS['dbh']->getAll("(SELECT 'Kunde' AS category, 'C' AS src, '' AS value, id, name AS label FROM customer WHERE name ILIKE '".$term."%' LIMIT 5) UNION ALL (SELECT 'Lieferant' AS category, 'V' AS src, '' AS value, id, name AS label FROM vendor WHERE name ILIKE '".$term."%' LIMIT 5) UNION ALL (SELECT 'Kontaktperson' AS category, 'P' AS src, '' AS value, cp_id AS id, concat(cp_givenname, ' ', cp_name) AS name FROM contacts WHERE cp_name ILIKE '".$term."%' OR cp_givenname ILIKE '".$term."%' LIMIT 5) UNION ALL (SELECT 'Fahrzeug' AS category, 'A' AS src, c_ln AS value, c_id AS id, ' [ ' || COALESCE(c_ln, '') || ' ] ' || COALESCE(name, '') AS label FROM lxc_cars JOIN customer ON c_ow = id WHERE c_ln ILIKE '%".$term."%' AND obsolete = false LIMIT 5)", true);
-=======
         //echo $GLOBALS['dbh']->getAll("(SELECT 'Kunde' AS category, 'C' AS src, '' AS value, id, name AS label FROM customer WHERE name ILIKE '%".$term."%' LIMIT 5) UNION ALL (SELECT 'Lieferant' AS category, 'V' AS src, '' AS value, id, name AS label FROM vendor WHERE name ILIKE '%".$term."%' LIMIT 5) UNION ALL (SELECT 'Kontaktperson' AS category, 'P' AS src, '' AS value, cp_id AS id, concat(cp_givenname, ' ', cp_name) AS name FROM contacts WHERE cp_name ILIKE '%".$term."%' OR cp_givenname ILIKE '%".$term."%' LIMIT 5) UNION ALL (SELECT 'Fahrzeug' AS category, 'A' AS src, c_ln AS value, c_id AS id, ' [ ' || COALESCE(c_ln, '') || ' ] ' || COALESCE(name, '') AS label FROM lxc_cars JOIN customer ON c_ow = id WHERE c_ln ILIKE '%".$term."%' AND obsolete = false LIMIT 5)", true);
         $query = "(SELECT 'Kunde' AS category, 'C' AS src, '' AS value, id, name AS label FROM customer WHERE name ILIKE '%".$term."%' LIMIT ".
                 "(SELECT (((( 20 - vn - an - pn ) + 5 ) / 3 ) / 3 ) + 5 FROM ( SELECT (SELECT count(*)::INT FROM (SELECT * FROM customer WHERE name ILIKE '%".$term."%' LIMIT 5) AS c) AS cn, (SELECT count(*)::INT FROM (SELECT * FROM vendor WHERE name ILIKE '%".$term."%' LIMIT 5) AS v) AS vn, (SELECT count(*)::INT FROM (SELECT * FROM lxc_cars WHERE c_ln ILIKE '%".$term."%' LIMIT 5) AS a) AS an, (SELECT count(*)::INT FROM (SELECT * FROM contacts WHERE cp_name ILIKE '%D%' OR cp_givenname ILIKE '%D%' LIMIT 5) AS p) AS pn) AS test)".
@@ -56,7 +53,6 @@ function fastSearch(){
                 "(SELECT (((( 20 - cn - vn - pn ) + 5 ) / 3 ) / 3 ) + 5 FROM ( SELECT (SELECT count(*)::INT FROM (SELECT * FROM customer WHERE name ILIKE '%".$term."%' LIMIT 5) AS c) AS cn, (SELECT count(*)::INT FROM (SELECT * FROM vendor WHERE name ILIKE '%".$term."%' LIMIT 5) AS v) AS vn, (SELECT count(*)::INT FROM (SELECT * FROM lxc_cars WHERE c_ln ILIKE '%".$term."%' LIMIT 5) AS a) AS an, (SELECT count(*)::INT FROM (SELECT * FROM contacts WHERE cp_name ILIKE '%D%' OR cp_givenname ILIKE '%D%' LIMIT 5) AS p) AS pn) AS test)".
                 ")";
         echo $GLOBALS['dbh']->getAll( $query , true);
->>>>>>> 6d0e2bd5ebf8cbe7006d10499399a4acd6332424
     }
 }
 

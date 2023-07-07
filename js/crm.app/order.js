@@ -15,8 +15,18 @@ function crmCalcOrderPos(){
         $( positions[0] ).find( '[class=od-ui-del]' ).show();
     }
     positions.each( function( key, pos ){
-        if( key % 2 == 0 ) $( pos ).addClass( 'listrow0' );
-        else $( pos ).addClass( 'listrow1' );
+        if( $( pos ).find( '[class=od-item-type]' ).val() == 'I' ){
+            $( pos ).css( "background-color", "#00BFFF" );
+            $( pos ).find( ':input' ).css( "background-color", "#00BFFF" );
+        }
+        else if( key % 2 == 0 ){
+            $( pos ).addClass( 'listrow0' );
+            $( pos ).find( ':input' ).css( "background-color", "#FFFFFF" );
+        }
+        else{
+            $( pos ).addClass( 'listrow1' );
+            $( pos ).find( ':input' ).css( "background-color", "#D3D3D3" );
+        }
         $( pos ).find( '[class=od-item-position]' )[0].innerText = key + 1;
         if( !isEmpty( $( pos ).find( '[class=od-hidden-item-partnumber]' ).text() ) ){
             $( $( pos ).find( '[class=od-ui-edit-article]' )[0] ).html('<button onclick="crmOrderEditArticle()">Edit</button>');
@@ -213,8 +223,10 @@ function crmAddOrderItem( dataRow ){
         source: crmGetCatcompleteURL(),
         select: function( e, ui ){
             const row = $( ':focus' ).parent().parent();
-            crmCompleteInsertOrderPos( row, ui.item );
+            const res = crmCompleteInsertOrderPos( row, ui.item );
+            if( !res ) return false;
             $( '[name=od-item-description]' ).filter( ':last' ).focus();
+            return true;
         }
     });
 
@@ -222,6 +234,23 @@ function crmAddOrderItem( dataRow ){
 }
 
 function crmCompleteInsertOrderPos( row, item ){
+    console.info( 'item' );
+    console.info( item );
+
+    let itemType = row.find( '[class=od-item-type]' ).val();
+    if( true == item.instruction ){
+        if( 'P' == itemType || 'S' == itemType ){
+            alert( kivi.t8( "Invalid type of article: It can't be a instruction!" ) );
+            return false;
+        }
+    }
+    else{
+        if( 'I' == itemType ){
+            alert( kivi.t8( "Invalid type of article: It must be a good or a service!" ) );
+            return false;
+        }
+    }
+
     row.find( '[class=od-hidden-item-partnumber]' ).text( item.partnumber );
     row.find( '[class=od-item-parts_id]' ).val( item.id );
     let orderType = '';
@@ -258,6 +287,8 @@ function crmCompleteInsertOrderPos( row, item ){
     crmInsertOrderPos( itemPosition, orderType, item, ( row[0].id !== 'od-empty-item-id' ) );
 
     row.css( "background-color", "" );
+
+    return true;
 }
 
 function crmNewOrderAndInsertPos( itemPosition, itemType, item ){
@@ -464,8 +495,8 @@ function crmSaveOrder(){
         }
     });
 
-    console.info( 'dbUpdateData' );
-    console.info( dbUpdateData );
+    //console.info( 'dbUpdateData' );
+    //console.info( dbUpdateData );
 
     $.ajax({
         url: 'crm/ajax/crm.app.php',

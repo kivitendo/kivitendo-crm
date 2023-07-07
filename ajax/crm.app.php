@@ -252,6 +252,12 @@ function findPart( $term ){
 
 function getCVPA( $data ){
     $query = "SELECT ";
+    if( $data['src'] == 'P' ){
+        $cp_cv = $GLOBALS['dbh']->getOne( "SELECT id, 'C' AS src FROM customer WHERE id = (SELECT cp_cv_id FROM contacts WHERE cp_id = ".$data['id'].") UNION ALL SELECT id, 'V' AS src FROM vendor WHERE id = (SELECT cp_cv_id FROM contacts WHERE cp_id = ".$data['id'].")" );
+        writeLog( $cp_cv );
+        $data['id'] = $cp_cv['id'];
+        $data['src'] = $cp_cv['src'];
+    }
     if( $data['src'] == 'A' ){
         $c_ow = $GLOBALS['dbh']->getOne( "SELECT c_ow FROM lxc_cars WHERE c_id = ".$data['id'] )['c_ow'];
         $query .= "(SELECT row_to_json( car ) AS car FROM (".

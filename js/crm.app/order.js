@@ -700,7 +700,7 @@ function crmPrintInvoice( e ){
         data['id_' + runningnumber] = '' + $( pos ).find( '[class=od-item-parts_id]' ).val();
         data['bin_' + runningnumber] = '';
         data['part_type_' + runningnumber] = '' + ( ( 'P' == $( pos ).find( '[class=od-item-type]' ).val() )? 'part' : 'service' );
-        data['taxaccounts_' + runningnumber] = '1776';
+        if( $( pos ).find( '[class=od-hidden-item-rate]' ).val() > 0 ) data['taxaccounts_' + runningnumber] = '1776';
         data['marge_absolut_' + runningnumber] = '' + $( pos ).find( '[class=od-item-marge_total]' ).val();
         data['marge_percent_' + runningnumber] = '100,00';
         data['marge_price_factor_' + runningnumber] = '1.00000';

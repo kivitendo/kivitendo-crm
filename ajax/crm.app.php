@@ -535,13 +535,21 @@ function getInvoice( $data, $flag = null ){
     $invoiceID = $data['id'];
     $taxzone_id = 4;
 
-    $sql = "SELECT  item_id as id, parts_id, position, qty, description, unit, sellprice, marge_total, discount, partnumber, part_type, longdescription, rate ".
-        "FROM ( SELECT  parts.buchungsgruppen_id, invoice.id AS item_id, invoice.parts_id, invoice.qty, invoice.description, invoice.position, invoice.unit, invoice.sellprice, invoice.marge_total, invoice.discount, parts.partnumber, parts.part_type, invoice.longdescription FROM invoice INNER JOIN parts ON ( parts.id = invoice.parts_id ) WHERE invoice.trans_id = ".$invoiceID." ORDER BY position ) AS mysubquery ".
+//    $sql = "SELECT  item_id as id, parts_id, position, qty, description, unit, sellprice, marge_total, discount, partnumber, part_type, longdescription, rate ".
+//        "FROM ( SELECT  parts.buchungsgruppen_id, invoice.id AS item_id, invoice.parts_id, invoice.qty, invoice.description, invoice.position, invoice.unit, invoice.sellprice, invoice.marge_total, invoice.discount, parts.partnumber, parts.part_type, invoice.longdescription FROM invoice INNER JOIN parts ON ( parts.id = invoice.parts_id ) WHERE invoice.trans_id = ".$invoiceID." ORDER BY position ) AS mysubquery ".
+//        "JOIN taxzone_charts c ON ( mysubquery.buchungsgruppen_id = c.buchungsgruppen_id ) ".
+//        "JOIN taxkeys k ON ( c.income_accno_id = k.chart_id ".
+//        "AND k.startdate = ( SELECT max(startdate) FROM taxkeys tk1 WHERE c.income_accno_id = tk1.chart_id AND tk1.startdate::TIMESTAMP <= NOW()  ) ) ".
+//        "JOIN tax ON (k.tax_id = tax.id ) WHERE taxzone_id = ".$taxzone_id.
+//        "GROUP BY item_id, parts_id, position, qty, description, unit, sellprice, marge_total, discount, partnumber, part_type, longdescription, rate ORDER BY position ASC";
+    $sql = "SELECT  item_id as id, parts_id, position, qty, mysubquery.description, unit, sellprice, marge_total, discount, partnumber, part_type, longdescription, rate, k.taxkey_id, tax.chart_id, chart.accno FROM ".
+        "( SELECT  parts.buchungsgruppen_id, invoice.id AS item_id, invoice.parts_id, invoice.qty, invoice.description, invoice.position, invoice.unit, invoice.sellprice, invoice.marge_total, invoice.discount, parts.partnumber, parts.part_type, invoice.longdescription ".
+        "FROM invoice INNER JOIN parts ON ( parts.id = invoice.parts_id ) WHERE invoice.trans_id = ".$invoiceID." ORDER BY position ) AS mysubquery ".
         "JOIN taxzone_charts c ON ( mysubquery.buchungsgruppen_id = c.buchungsgruppen_id ) ".
-        "JOIN taxkeys k ON ( c.income_accno_id = k.chart_id ".
-        "AND k.startdate = ( SELECT max(startdate) FROM taxkeys tk1 WHERE c.income_accno_id = tk1.chart_id AND tk1.startdate::TIMESTAMP <= NOW()  ) ) ".
-        "JOIN tax ON (k.tax_id = tax.id ) WHERE taxzone_id = ".$taxzone_id.
-        "GROUP BY item_id, parts_id, position, qty, description, unit, sellprice, marge_total, discount, partnumber, part_type, longdescription, rate ORDER BY position ASC";
+        "JOIN taxkeys k ON ( c.income_accno_id = k.chart_id AND k.startdate = ( SELECT max(startdate) FROM taxkeys tk1 WHERE c.income_accno_id = tk1.chart_id AND tk1.startdate::TIMESTAMP <= NOW() ) ) ".
+        "JOIN tax ON ( k.tax_id = tax.id ) ".
+        "LEFT JOIN chart ON ( tax.chart_id = chart.id ) ".
+        "WHERE taxzone_id = 4 GROUP BY item_id, parts_id, position, qty, mysubquery.description, unit, sellprice, marge_total, discount, partnumber, part_type, longdescription, rate, k.taxkey_id, tax.chart_id, chart.accno ORDER BY position ASC";
 
     $query = "SELECT ";
     $query .= "(SELECT row_to_json( common ) AS common FROM (".

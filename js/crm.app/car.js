@@ -210,10 +210,11 @@ function crmSearchCustomerForScan( name ){
 function crmEditCarDlg( crmData ){
     crmInitFormEx( editCarFormModel, '#edit-car-form', 21, '#edit-car-hidden' );
     crmInitFormEx( editCarKbaFormModel, '#edit-car-kba-form' );
+
     $( '#edit_car_kba-edit' ).click( function(){
         console.info( 'Edit kba' );
         console.info( crmData );
-        crmEditKbaDlg();
+        crmEditKbaDlg( crmData );
     });
 
     for( let item of editCarFormModel){
@@ -285,8 +286,14 @@ function crmEditCarDlg( crmData ){
     }).dialog( 'open' ).resize();
 }
 
-function crmEditKbaDlg(){
-    crmInitFormEx( editKbaFormModel, '#edit-kba-form' );
+function crmEditKbaDlg( crmData ){
+    crmInitFormEx( editKbaFormModel, '#edit-kba-form', 0, '#edit-kba-hidden' );
+
+    for( let item of editKbaFormModel){
+        let columnName = item.name.split( '-' );
+        if( exists( crmData[columnName[1]] ) ) $( '#' + item.name ).val( crmData[columnName[1]] );
+    }
+
     $( '#crm-edit-kba-dialog' ).dialog({
         autoOpen: false,
         resizable: true,
@@ -301,8 +308,21 @@ function crmEditKbaDlg(){
         buttons:[{
             text: kivi.t8( 'Save' ),
             click: function(){
-                console.info( 'Save kba' );
-           }
+                console.info( 'Save kba 1' );
+                console.info( $( '#edit_kba-id' ).val() );
+                let dbData = {};
+                dbData['lxckba'] = {};
+                dbData['lxckba']['WHERE'] = {};
+                dbData['lxckba']['WHERE']['id'] = $( '#edit_kba-id' ).val();
+                for( let item of editKbaFormModel ){
+                    let columnName = item.name.split( '-' );
+                    let val = $( '#' + item.name ).val();
+                    if( exists(val) && val !== '' ){
+                        if( item.name !== 'edit_kba-id' ) dbData['lxckba'][columnName[1]] = val;
+                    }
+                }
+                console.info( dbData );
+             }
         },
         {
             text: kivi.t8( 'Cancel' ),

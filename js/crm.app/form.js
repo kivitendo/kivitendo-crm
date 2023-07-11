@@ -1,4 +1,3 @@
-
 const billaddrFormModel = [
     { "name": "billaddr-greetings", "label": "Greetings:", "type": "select", "data":[], "tooltip":""}, //selectbox
     { "name": "billaddr-greeting", "label": "Greetings:", "type": "input", "size": "42", "tooltip": "Alternativ greetings" },
@@ -15,7 +14,7 @@ const billaddrFormModel = [
     { "name": "billaddr-business_id", "label": "Costumer type:", "type": "select","data": [], "tooltip":""}, //selectbox
     { "name": "billaddr-sw", "label": "Keyword:", "type": "input", "size": "42", "tooltip": "Keyword" },
     { "name": "billaddr-notes", "label": "Comment:", "type": "textarea", "cols": "42", "rows": "5", "tooltip": "Comment" },
-    { "name": "billaddr-currency_id", "type": "hidden", "data": "1"},
+    { "name": "billaddr-currency_id", "type": "hidden", "data": "1"}, //ToDo darf nicht statisch sein. Beim Praktikaten abgucken. selbiges gilt für currency.
     { "name": "billaddr-id", "type": "hidden", },
     { "name": "billaddr-src", "type": "hidden", },
 ];
@@ -25,13 +24,13 @@ const deladdrFormModel = [
     { "name": "deladdr-shiptoname", "label": "Name:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
     { "name": "deladdr-shiptodepartment_1", "label": "Department 1:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
     { "name": "deladdr-shiptodepartment_2", "label": "Department 2:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
-    { "name": "deladdr-shiptostreet", "label": "Street:", "type": "input", "size": "42", "tooltip": "Street and street number" },
-    { "name": "deladdr-shiptocountry", "label": "Country code:", "type": "input", "size": "2", "tooltip": "Country code", "data": "D" },
     { "name": "deladdr-shiptozipcode", "label": "Zip code:", "type": "input", "size": "12", "tooltip": "Vollständiger Name" },
     { "name": "deladdr-shiptobland", "label": "Bundesland:", "type": "select", "data":[], "tooltip":""}, //selectbox
     { "name": "deladdr-shiptocity", "label": "City:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
+    { "name": "deladdr-shiptostreet", "label": "Street:", "type": "input", "size": "42", "tooltip": "Street and street number" },
+    { "name": "deladdr-shiptocountry", "label": "Country code:", "type": "input", "size": "2", "tooltip": "Country code", "data": "D" },
     { "name": "deladdr-shiptophone", "label": "Phone:", "type": "input", "size": "42", "tooltip": "First phone number" },
-    { "name": "deladdr-shiptofax", "label": "Phone:", "type": "input", "size": "42", "tooltip": "Second phone number" },
+    { "name": "deladdr-shiptofax", "label": "fax:", "type": "input", "size": "42", "tooltip": "Second phone number" },
     { "name": "deladdr-shiptoemail", "label": "E-Mail:", "type": "input", "size": "42", "tooltip": "" },
     { "name": "deladdr-shiptocontact", "label": "Contact person:", "type": "input", "size": "42", "tooltip": "Contact person" },
 ];
@@ -185,11 +184,29 @@ const searchOrderFormModel = [
 ];
 
 const  editNewCustomer = [
-    { "name": "edit_new_costumer-type", "label": "Customer type:", "type": "select", "data":["Customer", "Supplier"], "tooltip": "" },
-    { "name": "edit_new_costumer-gender", "label": "salutation", "type": "select", "data":[""], "tooltip": "" },
-    { "name": "edit_new_costumer-name", "label": "name:", "type": "input", "size": "21", "tooltip": "", "placeholder": "Name" }, 
-    { "name": "edit_new_costumer-zipcode", "label": "zipcode", "type": "input", "size":"19", "tooltip": "" },
-    { "name": "edit_new_costumer-location", "label": "", "type": "select", "data": [], "tooltip": "" },
-    { "name": "edit_new_costumer-federalstate", "label": "", "type": "select", "data": [], "tooltip": ""},
-    { "name": "edit_new_costumer-street", "label": "", "type": "input", "tooltip": ""},
+    { "name": "edit_new_customer-type", "label": "customer type:", "type": "select","size":"21" ,"data":["Customer", "Vendor"] ,"tooltip": "" },
+    { "name": "edit_new_customer-gender", "label": "salutation", "type": "select", "size":"21" ,"data":[], "tooltip": "", },
+    { "name": "edit_new_customer-name", "label": "name:", "type": "input", "size": "21", "tooltip": "", "placeholder": "Name" }, 
+    { "name": "edit_new_customer-zipcode", "label": "zipcode: ", "type": "input", "size":"21", "tooltip": "" },
+    { "name": "edit_new_customer-location", "label": "location: ", "type": "select","size":"21" ,"data": [], "tooltip": "" },
+    { "name": "edit_new_customer-federalstate", "label": "federalstate: ", "size":"21","type": "select", "data": [], "tooltip": ""},
+    { "name": "edit_new_customer-street", "label": "street: ", "type": "input","size":"21" ,"tooltip": ""},
+    { "name": "edit_new_customer-currency_id", "label": "currency id: ","type": "select","size":"21" ,"data": [], "tooltip": ""},
+    { "name": "edit_new_customer-phone_number", "label": "phone: " ,"type": "input", "size": "21" ,"tooltip": "",},
+    { "name": "edit_new_customer-email", "label": "E-Mail:", "type": "input", "size":"21", "tooltip": "" },
 ]
+
+
+const editdeladdrCustomer = [
+    { "name": "deladdr_Customer-list", "label": "Deliver address:", "type": "select","data": [], "tooltip":""}, //selectbox
+    { "name": "deladdr_Customer-shiptoname", "label": "Name:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
+    { "name": "deladdr_Customer-shiptodepartment_1", "label": "Department 1:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
+    { "name": "deladdr_Customer-shiptodepartment_2", "label": "Department 2:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
+    { "name": "deladdr_Customer-shiptozipcode", "label": "Zip code:", "type": "input", "size": "12", "tooltip": "Vollständiger Name" },
+    { "name": "deladdr_Customer-shiptobland", "label": "Bundesland:", "type": "select", "data":[], "tooltip":""}, //selectbox
+    { "name": "deladdr_Customer-shiptocity", "label": "City:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
+    { "name": "deladdr_Customer-shiptostreet", "label": "Street:", "type": "input", "size": "42", "tooltip": "Street and street number" },
+    { "name": "deladdr_Customer-shiptocountry", "label": "Country code:", "type": "input", "size": "2", "tooltip": "Country code", "data": "D" },
+    { "name": "deladdr_Customer-shiptofax", "label": "fax:", "type": "input", "size": "42", "tooltip": "Second phone number" },
+    { "name": "deladdr_Customer-shiptocontact", "label": "Contact person:", "type": "input", "size": "42", "tooltip": "Contact person" },
+];

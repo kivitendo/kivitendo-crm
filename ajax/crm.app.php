@@ -613,6 +613,12 @@ function genericSingleInsert( $data ){
     echo '{ "id": "'.$id.'" }';
 }
 
+function getblandid($data){
+    $sql = "SELECT id FROM bundesland WHERE bundesland ='".$data["bundesland"]."'";
+    $rs = $GLOBALS['dbh']->getOne($sql, true);
+    echo $rs;
+}
+        
 function genericUpdate( $data ){
 
     foreach( $data AS $key => $value ){

@@ -407,11 +407,11 @@ $( '#crm-wf-new-order' ).click( function() {
 });
 
 $( '#crm-wf-new-customer' ).click( function() {
-    crmNewCustomer();
+    crmNewCustomer("0");
 });
 
 $( '#crm-wf-new-vendor' ).click( function() {
-    crmNewVendor();
+    crmNewCustomer("1");
 });
 
 $( '#crm-wf-new-person' ).click( function() {

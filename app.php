@@ -770,42 +770,42 @@
             </div>
             <div id="crm-tab-extra-infos" class="crm-tab">
             </div>
-            <div id="crm-new_Costumer-dialog" style="display:none">
-                <div id="crm-new_Costumer-main" class="tabwidget">
-                    <ul class="new_Costumer nav-tabs">
+            <div id="crm-new_customer-dialog" style="display:none">
+                <div id="crm-new_customer-main" class="tabwidget">
+                    <ul class="new_customer nav-tabs">
                         <li class="nav-item">
-                            <a id="crm-nav-billaddr_Costumer" class="nav-link active" aria-current="page" href="#crm-tab-billaddr_Costumer">Rechnungsaddresse</a>
+                            <a id="crm-nav-billaddr_customer" class="nav-link active" aria-current="page" href="#crm-tab-billaddr_customer">Rechnungsaddresse</a>
                         </li>
                         <li class="nav-item">
-                            <a id="crm-nav-deladdr_Costumer" class="nav-link" aria-current="page" href="#crm-tab-deladdr_Costumer" >Lieferanschrift</a>
+                            <a id="crm-nav-deladdr_customer" class="nav-link" aria-current="page" href="#crm-tab-deladdr_customer">Lieferanschrift</a>
                         </li>
                         <li class="nav-item">
-                            <a id="crm-nav-banktax_Costumer" class="nav-link" aria-current="page" href="#crm-tab-banktax_Costumer" >Bank/Steuer</a>
+                            <a id="crm-nav-banktax_customer" class="nav-link" aria-current="page" href="#crm-tab-banktax_customer" >Bank/Steuer</a>
                         </li>
                         <li class="nav-item">
-                            <a id="crm-nav-extras_Costumer" class="nav-link" aria-current="page" href="#crm-tab-extras_Costumer" >Sonstiges</a>
+                            <a id="crm-nav-extras_customer" class="nav-link" aria-current="page" href="#crm-tab-extras_customer" >Sonstiges</a>
                         </li>
                         <li class="nav-item">
-                            <a id="crm-nav-vars_Costumer" class="nav-link" aria-current="page" href="#crm-tab-vars_Costumer">Variablen</a>
+                            <a id="crm-nav-vars_customer" class="nav-link" aria-current="page" href="#crm-tab-vars_customer">Variablen</a>
                         </li>
                     <div id="edit-new_Constumer-hidden"> </div>
-                <table id="crm-tab-billaddr_Costumer">
+                <table id="crm-tab-billaddr_customer">
                     <thead></thead>
                     <tbody></tbody>
                 </table>
-                <table id="crm-tab-extras_Costumer">
+                <table id="crm-tab-extras_customer">
                     <thead></thead>
                     <tbody></tbody>
                 </table>
-                <table id="crm-tab-deladdr_Costumer">
+                <table id="crm-tab-deladdr_customer">
                     <thead></thead>
                     <tbody></tbody>
                 </table>
-                <table id="crm-tab-banktax_Costumer">
+                <table id="crm-tab-banktax_customer">
                     <thead></thead>
                     <tbody></tbody>
                 </table>
-                <table id="crm-tab-vars_Costumer">
+                <table id="crm-tab-vars_customer">
                     <thead></thead>
                     <tbody></tbody>
                 </table>

@@ -117,7 +117,8 @@ function crmNewCarFromScan(){
                                                 $( '#car-c_ln' ).val( crmFormatCarLicense( lxcarsData.registrationNumber ) );
                                                 $( '#car-c_2' ).val( lxcarsData.hsn );
                                                 $( '#car-c_3' ).val( lxcarsData.field_2_2 );
-                                                $( '#car-c_em' ).val( lxcarsData.field_14_1 );
+                                                $( '#car-c_em' ).val( lxcarsData.field_14_1 );  
+                                                
                                                 $( '#car-c_d' ).val( lxcarsData.ez );
                                                 if( exists( crmData.kba ) ){
                                                   $.each( crmData.kba , function( key, value ){
@@ -143,6 +144,7 @@ function crmNewCarFromScan(){
                                         $( this ).dialog( "close" );
                                 }
                             }]
+                            
                         }).dialog( 'open' ).resize();
 
                         const name = crmFormatName( getValueNotNull( data.firstname ) + ' ' + getValueNotNull( data.name1 ) );

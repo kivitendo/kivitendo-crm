@@ -546,6 +546,7 @@
             <table style="padding-top: 1em;">
                 <tr>
                     <td style="vertical-align: top;">
+                        <div id="car-form-hidden"></div>
                         <table id="car-form" style="display:none">
                             <thead></thead>
                             <tbody></tbody>

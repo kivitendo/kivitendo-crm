@@ -163,7 +163,7 @@ function crmEditCuVeDlg( crmData, new_with_car ){
     crmInitFormEx( deladdrFormModel, '#deladdr-form' );
     crmInitFormEx( banktaxFormModel, '#banktax-form' );
     crmInitFormEx( extraFormModel, '#extras-form' );
-    crmInitFormEx( carFormModel, '#car-form' );
+    crmInitFormEx( carFormModel, '#car-form', 0, '#car-form-hidden' );
     crmInitFormEx( carKbaFormModel, '#car-kba-form' );
 
     $( '#billaddr-greetings' ).change( function(){

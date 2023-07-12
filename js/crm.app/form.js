@@ -85,6 +85,7 @@ const carFormModel = [
     { "name": "car-c_zrk", "label": "Next ZR change at KM:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "car-c_bf", "label": "Next brake fluid change:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "car-c_wd", "label": "Next maintenance service:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "car-kba_id", "type": "hidden", },
 ];
 
 const carKbaFormModel = [

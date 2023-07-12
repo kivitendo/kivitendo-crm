@@ -381,7 +381,8 @@ function appendQueryForCustomerDlg( &$query ){
 function appendQueryWithKba( $data, &$query ){
     if( array_key_exists( 'hsn', $data ) ){
         $query .= "(SELECT row_to_json( kba ) AS kba FROM (".
-                    "SELECT * FROM lxckba WHERE lxckba.hsn = '".$data['hsn']."' AND  SUBSTRING( '".$data['tsn']."', 0, 4 ) = lxckba.tsn AND ( d2 IS NULL OR d2 = '".$data['d2']."' )".
+                    "( SELECT true AS exists, * FROM lxckba WHERE lxckba.hsn = '".$data['hsn']."' AND  SUBSTRING( '".$data['tsn']."', 0, 4 ) = lxckba.tsn AND ( d2 IS NULL OR d2 = '".$data['d2']."' ) ) UNION ALL ".
+                    "( SELECT false AS exists, * FROM lxckba WHERE lxckba.hsn = '".$data['hsn']."' AND  SUBSTRING( '".$data['tsn']."', 0, 4 ) = lxckba.tsn ) LIMIT 1".
                     ") AS kba) AS kba, ";
     }
 }
@@ -487,8 +488,9 @@ function getScans( $data ){
 }
 
 function getFsData( $data ){
-    $apiKeyArray = getDefaultsByArray( array( 'lxcarsapi') );
-    $rs = file_get_contents( 'https://fahrzeugschein-scanner.de/api/Scans/ScanDetails/'.$apiKeyArray['lxcarsapi'].'/'.$data['id'].'/false' );
+//  $apiKeyArray = getDefaultsByArray( array( 'lxcarsapi') );
+//  $rs = file_get_contents( 'https://fahrzeugschein-scanner.de/api/Scans/ScanDetails/'.$apiKeyArray['lxcarsapi'].'/'.$data['id'].'/false' );
+    $rs = $GLOBALS['dbh']->getOne( "SELECT * FROM lxc_fs_scans WHERE scan_id = '".$data['id']."'", true );
     echo $rs;
 }
 
@@ -502,7 +504,7 @@ function getCar( $data ){
 }
 
 function getDataForNewLxcarsOrder( $data ){
-    writeLog($_SESSION['loginCRM']);
+    //writeLog($_SESSION['loginCRM']);
 
     $query = "SELECT customer.id AS customer_id, customer.name AS customer_name, customer.notes AS int_cu_notes, c_id, ".
                 "lxc_cars.c_ln, lxc_cars.c_text AS int_car_notes, employee.id AS employee_id, employee.name AS employee_name ".
@@ -683,7 +685,7 @@ function getblandid($data){
     $rs = $GLOBALS['dbh']->getOne($sql, true);
     echo $rs;
 }
-        
+
 function genericUpdate( $data ){
 
     foreach( $data AS $key => $value ){

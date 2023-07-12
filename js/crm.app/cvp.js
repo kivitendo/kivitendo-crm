@@ -177,12 +177,36 @@ function crmEditCuVeDlg( crmData, new_with_car ){
     if( new_with_car ){
         $( '#car-form' ).show();
         $( '#car-kba-form' ).show();
+        console.info( 'crmData.kba' );
+        console.info( crmData.kba );
+
         if( exists( crmData.kba ) ){
             $.each( crmData.kba , function( key, value ){
                 $( '#car_kba-' + key ).val( value );
             });
+            if( crmData.kba.exists ){
+                $( '#car-kba_id' ).val( crmData.kba.id );
+                $( '#car_kba-edit' ).show()
+            }
+            else{
+                $( '#car-kba_id' ).val( '' );
+                $( '#car_kba-d2' ).val( lxcarsData.d2_1 );
+                $( '#car_kba-edit' ).hide()
+            }
+            for( let item of carKbaFormModel){
+                $( '#' + item.name ).prop( 'readonly', crmData.kba.exists );
+            }
+            //$( '#' + item.name ).prop( 'readonly', crmData.kba.exists );
         }
-    }
+        if( '' == $( '#car_kba-hersteller' ).val() ) $( '#car_kba-hersteller' ).val( ( null != lxcarsData.maker )? lxcarsData.maker : lxcarsData.field_2 );
+        if( '' == $( '#car_kba-d2' ).val() ) $( '#car_kba-d2' ).val( lxcarsData.d2_1 );
+        if( '' == $( '#car_kba-name' ).val() ) $( '#car_kba-name' ).val( lxcarsData.model );
+        if( '' == $( '#car_kba-hubraum' ).val() ) $( '#car_kba-hubraum' ).val( lxcarsData.p1 );
+        if( '' == $( '#car_kba-leistung' ).val() ) $( '#car_kba-leistung' ).val( lxcarsData.p2_p4 );
+        if( '' == $( '#car_kba-kraftstoff' ).val() ) $( '#car_kba-kraftstoff' ).val( lxcarsData.p3 );
+        if( '' == $( '#car_kba-achsen' ).val() ) $( '#car_kba-achsen' ).val( lxcarsData.l );
+        if( '' == $( '#car_kba-masse' ).val() ) $( '#car_kba-masse' ).val( lxcarsData.f1 );
+     }
     else{
         $( '#car-form' ).hide();
         $( '#car-kba-form' ).hide();
@@ -262,6 +286,11 @@ function crmEditCuVeDlg( crmData, new_with_car ){
                         let val = $( '#' + item.name ).val();
                         if( exists(val) && val !== '' ) dbUpdateData['lxc_cars'][columnName[1]] = val;
                     }
+                    console.info( 'kbaUpdate?' );
+                    console.info( lxcarsData );
+                    console.info( 'hsn: ' + $( '#car-c_2' ).val() );
+                    console.info( 'tsn: ' + $( '#car-c_3' ).val() );
+                    console.info( 'd2: ' + $( '#car_kba-d2' ).val() );
                 }
                 console.info( 'dbUpdateData' );
                 console.info( dbUpdateData );

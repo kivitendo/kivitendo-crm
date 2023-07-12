@@ -36,7 +36,23 @@ function getHistory(){
 function fastSearch(){
     if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
         $term = $_GET['term'];
-        echo $GLOBALS['dbh']->getAll("(SELECT 'Kunde' AS category, 'C' AS src, '' AS value, id, name AS label FROM customer WHERE name ILIKE '%".$term."%' LIMIT 5) UNION ALL (SELECT 'Lieferant' AS category, 'V' AS src, '' AS value, id, name AS label FROM vendor WHERE name ILIKE '%".$term."%' LIMIT 5) UNION ALL (SELECT 'Kontaktperson' AS category, 'P' AS src, '' AS value, cp_id AS id, concat(cp_givenname, ' ', cp_name) AS name FROM contacts WHERE cp_name ILIKE '%".$term."%' OR cp_givenname ILIKE '%".$term."%' LIMIT 5) UNION ALL (SELECT 'Fahrzeug' AS category, 'A' AS src, c_ln AS value, c_id AS id, ' [ ' || COALESCE(c_ln, '') || ' ] ' || COALESCE(name, '') AS label FROM lxc_cars JOIN customer ON c_ow = id WHERE c_ln ILIKE '%".$term."%' AND obsolete = false LIMIT 5)", true);
+        //echo $GLOBALS['dbh']->getAll("(SELECT 'Kunde' AS category, 'C' AS src, '' AS value, id, name AS label FROM customer WHERE name ILIKE '%".$term."%' LIMIT 5) UNION ALL (SELECT 'Lieferant' AS category, 'V' AS src, '' AS value, id, name AS label FROM vendor WHERE name ILIKE '%".$term."%' LIMIT 5) UNION ALL (SELECT 'Kontaktperson' AS category, 'P' AS src, '' AS value, cp_id AS id, concat(cp_givenname, ' ', cp_name) AS name FROM contacts WHERE cp_name ILIKE '%".$term."%' OR cp_givenname ILIKE '%".$term."%' LIMIT 5) UNION ALL (SELECT 'Fahrzeug' AS category, 'A' AS src, c_ln AS value, c_id AS id, ' [ ' || COALESCE(c_ln, '') || ' ] ' || COALESCE(name, '') AS label FROM lxc_cars JOIN customer ON c_ow = id WHERE c_ln ILIKE '%".$term."%' AND obsolete = false LIMIT 5)", true);
+        $query = "(SELECT 'Kunde' AS category, 'C' AS src, '' AS value, id, name AS label FROM customer WHERE name ILIKE '%".$term."%' LIMIT ".
+                "(SELECT (((( 20 - vn - an - pn ) + 5 ) / 3 ) / 3 ) + 5 FROM ( SELECT (SELECT count(*)::INT FROM (SELECT * FROM customer WHERE name ILIKE '%".$term."%' LIMIT 5) AS c) AS cn, (SELECT count(*)::INT FROM (SELECT * FROM vendor WHERE name ILIKE '%".$term."%' LIMIT 5) AS v) AS vn, (SELECT count(*)::INT FROM (SELECT * FROM lxc_cars WHERE c_ln ILIKE '%".$term."%' LIMIT 5) AS a) AS an, (SELECT count(*)::INT FROM (SELECT * FROM contacts WHERE cp_name ILIKE '%D%' OR cp_givenname ILIKE '%D%' LIMIT 5) AS p) AS pn) AS test)".
+                ")".
+                "UNION ALL ".
+                "(SELECT 'Lieferant' AS category, 'V' AS src, '' AS value, id, name AS label FROM vendor WHERE name ILIKE '%".$term."%' LIMIT ".
+                "(SELECT (((( 20 - cn - an - pn ) + 5 ) / 3 ) / 3 ) + 5 FROM ( SELECT (SELECT count(*)::INT FROM (SELECT * FROM customer WHERE name ILIKE '%".$term."%' LIMIT 5) AS c) AS cn, (SELECT count(*)::INT FROM (SELECT * FROM vendor WHERE name ILIKE '%".$term."%' LIMIT 5) AS v) AS vn, (SELECT count(*)::INT FROM (SELECT * FROM lxc_cars WHERE c_ln ILIKE '%".$term."%' LIMIT 5) AS a) AS an, (SELECT count(*)::INT FROM (SELECT * FROM contacts WHERE cp_name ILIKE '%D%' OR cp_givenname ILIKE '%D%' LIMIT 5) AS p) AS pn) AS test)".
+                ") ".
+                "UNION ALL ".
+                "(SELECT 'Kontaktperson' AS category, 'P' AS src, '' AS value, cp_id AS id, concat(cp_givenname, ' ', cp_name) AS name FROM contacts WHERE cp_name ILIKE '%".$term."%' OR cp_givenname ILIKE '%".$term."%' LIMIT ".
+                "(SELECT (((( 20 - cn - vn - an ) + 5 ) / 3 ) / 3 ) + 5 FROM ( SELECT (SELECT count(*)::INT FROM (SELECT * FROM customer WHERE name ILIKE '%".$term."%' LIMIT 5) AS c) AS cn, (SELECT count(*)::INT FROM (SELECT * FROM vendor WHERE name ILIKE '%".$term."%' LIMIT 5) AS v) AS vn, (SELECT count(*)::INT FROM (SELECT * FROM lxc_cars WHERE c_ln ILIKE '%".$term."%' LIMIT 5) AS a) AS an, (SELECT count(*)::INT FROM (SELECT * FROM contacts WHERE cp_name ILIKE '%D%' OR cp_givenname ILIKE '%D%' LIMIT 5) AS p) AS pn) AS test)".
+                ") ".
+                "UNION ALL ".
+                "(SELECT 'Fahrzeug' AS category, 'A' AS src, c_ln AS value, c_id AS id, ' [ ' || COALESCE(c_ln, '') || ' ] ' || COALESCE(name, '') AS label FROM lxc_cars JOIN customer ON c_ow = id WHERE c_ln ILIKE '%".$term."%' AND obsolete = false LIMIT ".
+                "(SELECT (((( 20 - cn - vn - pn ) + 5 ) / 3 ) / 3 ) + 5 FROM ( SELECT (SELECT count(*)::INT FROM (SELECT * FROM customer WHERE name ILIKE '%".$term."%' LIMIT 5) AS c) AS cn, (SELECT count(*)::INT FROM (SELECT * FROM vendor WHERE name ILIKE '%".$term."%' LIMIT 5) AS v) AS vn, (SELECT count(*)::INT FROM (SELECT * FROM lxc_cars WHERE c_ln ILIKE '%".$term."%' LIMIT 5) AS a) AS an, (SELECT count(*)::INT FROM (SELECT * FROM contacts WHERE cp_name ILIKE '%D%' OR cp_givenname ILIKE '%D%' LIMIT 5) AS p) AS pn) AS test)".
+                ")";
+        echo $GLOBALS['dbh']->getAll( $query , true);
     }
 }
 
@@ -236,7 +252,21 @@ function findPart( $term ){
 
 function getCVPA( $data ){
     $query = "SELECT ";
-    if($data['src'] == 'C' || $data['src'] == 'V' ){
+    if( $data['src'] == 'P' ){
+        $cp_cv = $GLOBALS['dbh']->getOne( "SELECT id, 'C' AS src FROM customer WHERE id = (SELECT cp_cv_id FROM contacts WHERE cp_id = ".$data['id'].") UNION ALL SELECT id, 'V' AS src FROM vendor WHERE id = (SELECT cp_cv_id FROM contacts WHERE cp_id = ".$data['id'].")" );
+        writeLog( $cp_cv );
+        $data['id'] = $cp_cv['id'];
+        $data['src'] = $cp_cv['src'];
+    }
+    if( $data['src'] == 'A' ){
+        $c_ow = $GLOBALS['dbh']->getOne( "SELECT c_ow FROM lxc_cars WHERE c_id = ".$data['id'] )['c_ow'];
+        $query .= "(SELECT row_to_json( car ) AS car FROM (".
+                    "SELECT *, to_char( c_hu, 'DD.MM.YYYY') AS c_hu, to_char( c_d, 'DD.MM.YYYY') AS c_d FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.kba_id = lxckba.id ) WHERE c_id = ".$data['id'].
+                    ") AS car) AS car, ";
+        $data['src'] = 'C';
+        $data['id'] = $c_ow;
+    }
+    if( $data['src'] == 'C' || $data['src'] == 'V' ){
         // Stammdaten
         $db_table = array('C' => 'customer', 'V' => 'vendor');
         $query .= "(SELECT row_to_json( cv ) AS cv FROM (".
@@ -463,7 +493,7 @@ function getFsData( $data ){
 }
 
 function searchCustomerForScan( $data ){
-    $rs = $GLOBALS['dbh']->getAll( "SELECT id, name, street, zipcode, city FROM customer WHERE name ILIKE '%".$data['name']."%' LIMIT 12", true );
+    $rs = $GLOBALS['dbh']->getAll( "SELECT id, name, street, zipcode, city FROM customer WHERE name ILIKE '%".$data['name']."%' LIMIT 18", true );
     echo ( empty( $rs ) )? 0 : $rs;
 }
 
@@ -484,10 +514,21 @@ function getDataForNewLxcarsOrder( $data ){
 function getOrder( $data ){
     $orderID = $data['id'];
     $taxzone_id = 4;
-    $sql  = "SELECT  item_id as id, parts_id, position, instruction, qty, description, unit, sellprice, marge_total, discount, u_id, partnumber, part_type, longdescription, status, rate ";
-    $sql .= "FROM ( SELECT parts.instruction, parts.buchungsgruppen_id, instructions.id AS item_id, instructions.parts_id, instructions.qty, instructions.description, instructions.position, instructions.unit, instructions.sellprice, instructions.marge_total, instructions.discount, instructions.u_id, instructions.status, parts.partnumber, parts.part_type, instructions.longdescription FROM instructions INNER JOIN  parts  ON ( parts.id = instructions.parts_id ) WHERE instructions.trans_id = '".$orderID."' ";
-    $sql .= "UNION SELECT  parts.instruction, parts.buchungsgruppen_id, orderitems.id AS item_id, orderitems.parts_id, orderitems.qty, orderitems.description, orderitems.position, orderitems.unit, orderitems.sellprice, orderitems.marge_total, orderitems.discount, orderitems.u_id, orderitems.status, parts.partnumber, parts.part_type, orderitems.longdescription FROM orderitems INNER JOIN parts ON ( parts.id = orderitems.parts_id ) WHERE orderitems.trans_id = '".$orderID."' ORDER BY position ) AS mysubquery ";
-    $sql .= "JOIN taxzone_charts c ON ( mysubquery.buchungsgruppen_id = c.buchungsgruppen_id )  JOIN taxkeys k ON ( c.income_accno_id = k.chart_id AND k.startdate = ( SELECT max(startdate) FROM taxkeys tk1 WHERE c.income_accno_id = tk1.chart_id AND tk1.startdate::TIMESTAMP <= NOW()  ) ) JOIN tax ON (k.tax_id = tax.id ) WHERE taxzone_id = ".$taxzone_id." GROUP BY item_id, parts_id, position, instruction, qty, description, unit, sellprice, marge_total, discount, u_id, partnumber, part_type, longdescription, status, rate ORDER BY position ASC";
+//    $sql  = "SELECT  item_id as id, parts_id, position, instruction, qty, description, unit, sellprice, marge_total, discount, u_id, partnumber, part_type, longdescription, status, rate ";
+//    $sql .= "FROM ( SELECT parts.instruction, parts.buchungsgruppen_id, instructions.id AS item_id, instructions.parts_id, instructions.qty, instructions.description, instructions.position, instructions.unit, instructions.sellprice, instructions.marge_total, instructions.discount, instructions.u_id, instructions.status, parts.partnumber, parts.part_type, instructions.longdescription FROM instructions INNER JOIN  parts  ON ( parts.id = instructions.parts_id ) WHERE instructions.trans_id = '".$orderID."' ";
+//    $sql .= "UNION SELECT  parts.instruction, parts.buchungsgruppen_id, orderitems.id AS item_id, orderitems.parts_id, orderitems.qty, orderitems.description, orderitems.position, orderitems.unit, orderitems.sellprice, orderitems.marge_total, orderitems.discount, orderitems.u_id, orderitems.status, parts.partnumber, parts.part_type, orderitems.longdescription FROM orderitems INNER JOIN parts ON ( parts.id = orderitems.parts_id ) WHERE orderitems.trans_id = '".$orderID."' ORDER BY position ) AS mysubquery ";
+//    $sql .= "JOIN taxzone_charts c ON ( mysubquery.buchungsgruppen_id = c.buchungsgruppen_id )  JOIN taxkeys k ON ( c.income_accno_id = k.chart_id AND k.startdate = ( SELECT max(startdate) FROM taxkeys tk1 WHERE c.income_accno_id = tk1.chart_id AND tk1.startdate::TIMESTAMP <= NOW()  ) ) JOIN tax ON (k.tax_id = tax.id ) WHERE taxzone_id = ".$taxzone_id." GROUP BY item_id, parts_id, position, instruction, qty, description, unit, sellprice, marge_total, discount, u_id, partnumber, part_type, longdescription, status, rate ORDER BY position ASC";
+
+    $sql = "SELECT  item_id as id, parts_id, position, instruction, qty, mysubquery.description, unit, sellprice, marge_total, discount, u_id, partnumber, part_type, longdescription, status, rate, k.taxkey_id, tax.chart_id, chart.accno ".
+            "FROM ( SELECT parts.instruction, parts.buchungsgruppen_id, instructions.id AS item_id, instructions.parts_id, instructions.qty, instructions.description, instructions.position, instructions.unit, instructions.sellprice, instructions.marge_total, instructions.discount, instructions.u_id, instructions.status, parts.partnumber, parts.part_type, instructions.longdescription ".
+            "FROM instructions INNER JOIN  parts  ON ( parts.id = instructions.parts_id ) WHERE instructions.trans_id = '".$orderID."' UNION ".
+            "SELECT  parts.instruction, parts.buchungsgruppen_id, orderitems.id AS item_id, orderitems.parts_id, orderitems.qty, orderitems.description, orderitems.position, orderitems.unit, orderitems.sellprice, orderitems.marge_total, orderitems.discount, orderitems.u_id, orderitems.status, parts.partnumber, parts.part_type, orderitems.longdescription ".
+            "FROM orderitems INNER JOIN parts ON ( parts.id = orderitems.parts_id ) WHERE orderitems.trans_id = '".$orderID."' ORDER BY position ) AS mysubquery ".
+            "JOIN taxzone_charts c ON ( mysubquery.buchungsgruppen_id = c.buchungsgruppen_id ) ".
+            "JOIN taxkeys k ON ( c.income_accno_id = k.chart_id AND k.startdate = ( SELECT max(startdate) FROM taxkeys tk1 WHERE c.income_accno_id = tk1.chart_id AND tk1.startdate::TIMESTAMP <= NOW()  ) ) ".
+            "JOIN tax ON (k.tax_id = tax.id ) LEFT JOIN chart ON ( tax.chart_id = chart.id ) ".
+            "WHERE taxzone_id = 4 GROUP BY item_id, parts_id, position, instruction, qty, mysubquery.description, unit, sellprice, marge_total, discount, u_id, partnumber, part_type, longdescription, status, rate, k.taxkey_id, tax.chart_id, chart.accno ORDER BY position ASC";
+    writeLog( $sql );
 
     $query = "SELECT ";
     $query .= "(SELECT row_to_json( common ) AS common FROM (".
@@ -501,17 +542,25 @@ function getOrder( $data ){
     echo '{ "order": '.$GLOBALS['dbh']->getOne( $query, true ).', "workers": '.$workers.' }';
 }
 
-function getInvoice( $data ){
+function getInvoice( $data, $flag = null ){
     $invoiceID = $data['id'];
     $taxzone_id = 4;
 
-    $sql = "SELECT  item_id as id, parts_id, position, qty, description, unit, sellprice, marge_total, discount, partnumber, part_type, longdescription, rate ".
-        "FROM ( SELECT  parts.buchungsgruppen_id, invoice.id AS item_id, invoice.parts_id, invoice.qty, invoice.description, invoice.position, invoice.unit, invoice.sellprice, invoice.marge_total, invoice.discount, parts.partnumber, parts.part_type, invoice.longdescription FROM invoice INNER JOIN parts ON ( parts.id = invoice.parts_id ) WHERE invoice.trans_id = ".$invoiceID." ORDER BY position ) AS mysubquery ".
+//    $sql = "SELECT  item_id as id, parts_id, position, qty, description, unit, sellprice, marge_total, discount, partnumber, part_type, longdescription, rate ".
+//        "FROM ( SELECT  parts.buchungsgruppen_id, invoice.id AS item_id, invoice.parts_id, invoice.qty, invoice.description, invoice.position, invoice.unit, invoice.sellprice, invoice.marge_total, invoice.discount, parts.partnumber, parts.part_type, invoice.longdescription FROM invoice INNER JOIN parts ON ( parts.id = invoice.parts_id ) WHERE invoice.trans_id = ".$invoiceID." ORDER BY position ) AS mysubquery ".
+//        "JOIN taxzone_charts c ON ( mysubquery.buchungsgruppen_id = c.buchungsgruppen_id ) ".
+//        "JOIN taxkeys k ON ( c.income_accno_id = k.chart_id ".
+//        "AND k.startdate = ( SELECT max(startdate) FROM taxkeys tk1 WHERE c.income_accno_id = tk1.chart_id AND tk1.startdate::TIMESTAMP <= NOW()  ) ) ".
+//        "JOIN tax ON (k.tax_id = tax.id ) WHERE taxzone_id = ".$taxzone_id.
+//        "GROUP BY item_id, parts_id, position, qty, description, unit, sellprice, marge_total, discount, partnumber, part_type, longdescription, rate ORDER BY position ASC";
+    $sql = "SELECT  item_id as id, parts_id, position, qty, mysubquery.description, unit, sellprice, marge_total, discount, partnumber, part_type, longdescription, rate, k.taxkey_id, tax.chart_id, chart.accno FROM ".
+        "( SELECT  parts.buchungsgruppen_id, invoice.id AS item_id, invoice.parts_id, invoice.qty, invoice.description, invoice.position, invoice.unit, invoice.sellprice, invoice.marge_total, invoice.discount, parts.partnumber, parts.part_type, invoice.longdescription ".
+        "FROM invoice INNER JOIN parts ON ( parts.id = invoice.parts_id ) WHERE invoice.trans_id = ".$invoiceID." ORDER BY position ) AS mysubquery ".
         "JOIN taxzone_charts c ON ( mysubquery.buchungsgruppen_id = c.buchungsgruppen_id ) ".
-        "JOIN taxkeys k ON ( c.income_accno_id = k.chart_id ".
-        "AND k.startdate = ( SELECT max(startdate) FROM taxkeys tk1 WHERE c.income_accno_id = tk1.chart_id AND tk1.startdate::TIMESTAMP <= NOW()  ) ) ".
-        "JOIN tax ON (k.tax_id = tax.id ) WHERE taxzone_id = ".$taxzone_id.
-        "GROUP BY item_id, parts_id, position, qty, description, unit, sellprice, marge_total, discount, partnumber, part_type, longdescription, rate ORDER BY position ASC";
+        "JOIN taxkeys k ON ( c.income_accno_id = k.chart_id AND k.startdate = ( SELECT max(startdate) FROM taxkeys tk1 WHERE c.income_accno_id = tk1.chart_id AND tk1.startdate::TIMESTAMP <= NOW() ) ) ".
+        "JOIN tax ON ( k.tax_id = tax.id ) ".
+        "LEFT JOIN chart ON ( tax.chart_id = chart.id ) ".
+        "WHERE taxzone_id = 4 GROUP BY item_id, parts_id, position, qty, mysubquery.description, unit, sellprice, marge_total, discount, partnumber, part_type, longdescription, rate, k.taxkey_id, tax.chart_id, chart.accno ORDER BY position ASC";
 
     $query = "SELECT ";
     $query .= "(SELECT row_to_json( common ) AS common FROM (".
@@ -524,15 +573,31 @@ function getInvoice( $data ){
 
     $query .= "(SELECT json_agg( invoice ) AS invoice FROM (".$sql.") AS invoice) AS invoice";
 
-    echo '{ "bill": '.$GLOBALS['dbh']->getOne( $query, true ).' }';
+    echo '{ "bill": '.$GLOBALS['dbh']->getOne( $query, true ).(( $flag != null )? ', "flag": "'.$flag.'" }' : ' }');
 }
 
-function insertInvoice( $data ){
+function insertInvoiceFromOrder( $data ){
+    $exists = $GLOBALS['dbh']->getOne( "SELECT id FROM ar WHERE ordnumber = '".$data['ordnumber']."' LIMIT 1" );
+
+    if( is_array( $exists ) && sizeof( $exists ) > 0 ){
+        getInvoice( $exists, "exists" );
+        return;
+    }
+
+    $GLOBALS['dbh']->beginTransaction();
     $id = $GLOBALS['dbh']->getOne( "WITH tmp AS ( UPDATE defaults SET invnumber = invnumber::INT + 1 RETURNING invnumber) ".
-                                "INSERT INTO ar ( invnumber, customer_id, employee_id, taxzone_id, currency_id, shippingpoint, notes, ordnumber, employee_id, intnodes, shipvia, marge_total ) ".
-                                "SELECT ( SELECT invnumber FROM tmp), ".$data['customer_id'].", ".$_SESSION['id'].",  customer.taxzone_id, customer.currency_id, ".
-                                "'".$data['shippingpoint'].", '".$data['notes']."', '".$data['ordnumber']."', ".
-                                "FROM customer WHERE customer.id = ".$data['customer_id']." RETURNING id ")['id'];
+                                "INSERT INTO ar ( invnumber, customer_id, employee_id, taxzone_id, currency_id, shippingpoint, notes, ordnumber, intnotes, shipvia, amount, netamount ) ".
+                                "SELECT (SELECT invnumber FROM tmp), oe.customer_id, ".$_SESSION['id'].", oe.taxzone_id, oe.currency_id, oe.shippingpoint, oe.notes, oe.ordnumber, oe.intnotes, oe.shipvia, oe.amount, oe.netamount ".
+                                "FROM oe WHERE id = ".$data['oe_id']." RETURNING id;" )['id'];
+
+    $query = "INSERT INTO invoice (trans_id, position, parts_id, description, longdescription, qty, unit, sellprice, discount, marge_total, fxsellprice) ".
+            "(SELECT ".$id.", position, parts_id, description, longdescription, qty, unit, sellprice, discount, marge_total, sellprice AS fxsellprice FROM orderitems WHERE trans_id = ".$data['oe_id'].")";
+
+    $GLOBALS['dbh']->query( $query );
+    $GLOBALS['dbh']->commit();
+
+    $exists = array( "id" => $id );
+    getInvoice( $exists );
 }
 
 /********************************************

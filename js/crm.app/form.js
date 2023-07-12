@@ -84,6 +84,7 @@ const carFormModel = [
     { "name": "car-c_zrk", "label": "Next ZR change at KM:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "car-c_bf", "label": "Next brake fluid change:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "car-c_wd", "label": "Next maintenance service:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "car-kba_id", "type": "hidden", },
 ];
 
 const carKbaFormModel = [
@@ -98,6 +99,8 @@ const carKbaFormModel = [
     { "name": "car_kba-masse", "label": "Total weight:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
     { "name": "car_kba-t", "label": "Vmax:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
     { "name": "car_kba-field_14_1", "label": "Emission class:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "car_kba-field_7_1", "label": "Axle load (field_7_1):", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "car_kba-field_7_2", "label": "Axle load (field_7_2):", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
     { "name": "car_kba-edit", "label": "Edit KBA", "type": "button", "tooltip": "" },
 ];
 
@@ -113,6 +116,8 @@ const editCarKbaFormModel = [
     { "name": "edit_car_kba-masse", "label": "Total weight:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
     { "name": "edit_car_kba-t", "label": "Vmax:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
     { "name": "edit_car_kba-field_14_1", "label": "Emission class:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_car_kba-field_7_1", "label": "Axle load (field_7_1):", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_car_kba-field_7_2", "label": "Axle load (field_7_2):", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
     { "name": "edit_car_kba-edit", "label": "Edit KBA", "type": "button", "tooltip": "" },
 ];
 
@@ -143,17 +148,19 @@ const editCarFormModel = [
 ];
 
 const editKbaFormModel = [
-    { "name": "edit_kba-hersteller", "label": "Manufacture:", "type": "input", "size": "21", "tooltip": "", "readonly": "true" },
-    { "name": "edit_kba-fhzart", "label": "Kind:", "type": "select","data": { '': '', 'car': kivi.t8( 'car' ), 'truck': kivi.t8( 'truck' ), 'trailer': kivi.t8( 'trailer' ), 'bike': kivi.t8( 'bike' ), 'tractor': kivi.t8( 'tracktor' ) }, "tooltip":"", "disabled": "true" }, //selectbox
-    { "name": "edit_kba-d2", "label": "Type code (d2):", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
-    { "name": "edit_kba-name", "label": "Type name:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
-    { "name": "edit_kba-hubraum", "label": "Displacement:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
-    { "name": "edit_kba-leistung", "label": "Performance:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
-    { "name": "edit_kba-kraftstoff", "label": "Fuel Type / Content:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
-    { "name": "edit_kba-achsen", "label": "Wheelbase:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
-    { "name": "edit_kba-masse", "label": "Total weight:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
-    { "name": "edit_kba-t", "label": "Vmax:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
-    { "name": "edit_kba-field_14_1", "label": "Emission class:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "edit_kba-hersteller", "label": "Manufacture:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "edit_kba-fhzart", "label": "Kind:", "type": "select","data": { '': '', 'car': kivi.t8( 'car' ), 'truck': kivi.t8( 'truck' ), 'trailer': kivi.t8( 'trailer' ), 'bike': kivi.t8( 'bike' ), 'tractor': kivi.t8( 'tracktor' ) }, "tooltip":"" }, //selectbox
+    { "name": "edit_kba-d2", "label": "Type code (d2):", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "edit_kba-name", "label": "Type name:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "edit_kba-hubraum", "label": "Displacement:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "edit_kba-leistung", "label": "Performance:", "type": "input", "size": "21", "tooltip": ""  },
+    { "name": "edit_kba-kraftstoff", "label": "Fuel Type / Content:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "edit_kba-achsen", "label": "Wheelbase:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "edit_kba-masse", "label": "Total weight:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "edit_kba-t", "label": "Vmax:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "edit_kba-field_14_1", "label": "Emission class:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "edit_kba-field_7_1", "label": "Axle load (field_7_1):", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "edit_kba-field_7_2", "label": "Axle load (field_7_2):", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_kba-id", "type": "hidden", },
 ];
 
@@ -194,8 +201,14 @@ const  editNewCustomer = [
     { "name": "edit_new_customer-currency_id", "label": "currency id: ","type": "select","size":"21" ,"data": [], "tooltip": ""},
     { "name": "edit_new_customer-phone_number", "label": "phone: " ,"type": "input", "size": "21" ,"tooltip": "",},
     { "name": "edit_new_customer-email", "label": "E-Mail:", "type": "input", "size":"21", "tooltip": "" },
+    { "name": "edit_new_costumer-type", "label": "Customer type:", "type": "select", "data":["Customer", "Supplier"], "tooltip": "" },
+    { "name": "edit_new_costumer-gender", "label": "salutation", "type": "select", "data":[""], "tooltip": "" },
+    { "name": "edit_new_costumer-name", "label": "name:", "type": "input", "size": "21", "tooltip": "", "placeholder": "Name" },
+    { "name": "edit_new_costumer-zipcode", "label": "zipcode", "type": "input", "size":"19", "tooltip": "" },
+    { "name": "edit_new_costumer-location", "label": "", "type": "select", "data": [], "tooltip": "" },
+    { "name": "edit_new_costumer-federalstate", "label": "", "type": "select", "data": [], "tooltip": ""},
+    { "name": "edit_new_costumer-street", "label": "", "type": "input", "tooltip": ""},
 ]
-
 
 const editdeladdrCustomer = [
     { "name": "deladdr_Customer-list", "label": "Deliver address:", "type": "select","data": [], "tooltip":""}, //selectbox
@@ -210,3 +223,4 @@ const editdeladdrCustomer = [
     { "name": "deladdr_Customer-shiptofax", "label": "fax:", "type": "input", "size": "42", "tooltip": "Second phone number" },
     { "name": "deladdr_Customer-shiptocontact", "label": "Contact person:", "type": "input", "size": "42", "tooltip": "Contact person" },
 ];
+

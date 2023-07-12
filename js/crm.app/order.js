@@ -15,8 +15,18 @@ function crmCalcOrderPos(){
         $( positions[0] ).find( '[class=od-ui-del]' ).show();
     }
     positions.each( function( key, pos ){
-        if( key % 2 == 0 ) $( pos ).addClass( 'listrow0' );
-        else $( pos ).addClass( 'listrow1' );
+        if( $( pos ).find( '[class=od-item-type]' ).val() == 'I' ){
+            $( pos ).css( "background-color", "#00BFFF" );
+            $( pos ).find( ':input' ).css( "background-color", "#00BFFF" );
+        }
+        else if( key % 2 == 0 ){
+            $( pos ).addClass( 'listrow0' );
+            $( pos ).find( ':input' ).css( "background-color", "#FFFFFF" );
+        }
+        else{
+            $( pos ).addClass( 'listrow1' );
+            $( pos ).find( ':input' ).css( "background-color", "#D3D3D3" );
+        }
         $( pos ).find( '[class=od-item-position]' )[0].innerText = key + 1;
         if( !isEmpty( $( pos ).find( '[class=od-hidden-item-partnumber]' ).text() ) ){
             $( $( pos ).find( '[class=od-ui-edit-article]' )[0] ).html('<button onclick="crmOrderEditArticle()">Edit</button>');
@@ -213,8 +223,10 @@ function crmAddOrderItem( dataRow ){
         source: crmGetCatcompleteURL(),
         select: function( e, ui ){
             const row = $( ':focus' ).parent().parent();
-            crmCompleteInsertOrderPos( row, ui.item );
+            const res = crmCompleteInsertOrderPos( row, ui.item );
+            if( !res ) return false;
             $( '[name=od-item-description]' ).filter( ':last' ).focus();
+            return true;
         }
     });
 
@@ -222,6 +234,23 @@ function crmAddOrderItem( dataRow ){
 }
 
 function crmCompleteInsertOrderPos( row, item ){
+    console.info( 'item' );
+    console.info( item );
+
+    let itemType = row.find( '[class=od-item-type]' ).val();
+    if( true == item.instruction ){
+        if( 'P' == itemType || 'S' == itemType ){
+            alert( kivi.t8( "Invalid type of article: It can't be a instruction!" ) );
+            return false;
+        }
+    }
+    else{
+        if( 'I' == itemType ){
+            alert( kivi.t8( "Invalid type of article: It must be a good or a service!" ) );
+            return false;
+        }
+    }
+
     row.find( '[class=od-hidden-item-partnumber]' ).text( item.partnumber );
     row.find( '[class=od-item-parts_id]' ).val( item.id );
     let orderType = '';
@@ -258,6 +287,8 @@ function crmCompleteInsertOrderPos( row, item ){
     crmInsertOrderPos( itemPosition, orderType, item, ( row[0].id !== 'od-empty-item-id' ) );
 
     row.css( "background-color", "" );
+
+    return true;
 }
 
 function crmNewOrderAndInsertPos( itemPosition, itemType, item ){
@@ -464,8 +495,8 @@ function crmSaveOrder(){
         }
     });
 
-    console.info( 'dbUpdateData' );
-    console.info( dbUpdateData );
+    //console.info( 'dbUpdateData' );
+    //console.info( dbUpdateData );
 
     $.ajax({
         url: 'crm/ajax/crm.app.php',
@@ -592,8 +623,32 @@ $( "#od-oe-finish_time" ).datetimepicker({
     currentText: 'Jetzt'
 });
 
-function crmOrderToInvoice(){
+function crmInsertInvoiceFromOrder(){
     console.info( 'order2invoice' );
+
+    let data = {};
+    data['ordnumber'] = $( '#od-oe-ordnumber' ).text();
+    data['employee_id'] = $( '#od-inv-employee_id' ).val();
+    data['oe_id'] = $( '#od-oe-id' ).val();
+
+    $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        type: 'POST',
+        data:  { action: 'insertInvoiceFromOrder', data: data },
+        success: function( crmData ){
+            console.info( 'res' );
+            console.info( crmData );
+
+            if( exists( crmData['flag'] ) ){
+                alert( kivi.t8( 'Invoice already exists!' ) );
+            }
+            $( '#crm-edit-order-dialog' ).dialog( "close" );
+            crmEditOrderDlg( crmData, crmOrderTypeEnum.Invoice );
+       },
+        error: function( xhr, status, error ){
+            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmInsertInvoiceFromOrder()', xhr.responseText );
+        }
+    });
 }
 
 function crmPrintInvoice( e ){
@@ -645,7 +700,7 @@ function crmPrintInvoice( e ){
         data['id_' + runningnumber] = '' + $( pos ).find( '[class=od-item-parts_id]' ).val();
         data['bin_' + runningnumber] = '';
         data['part_type_' + runningnumber] = '' + ( ( 'P' == $( pos ).find( '[class=od-item-type]' ).val() )? 'part' : 'service' );
-        data['taxaccounts_' + runningnumber] = '1776';
+        if( $( pos ).find( '[class=od-hidden-item-rate]' ).val() > 0 ) data['taxaccounts_' + runningnumber] = '1776';
         data['marge_absolut_' + runningnumber] = '' + $( pos ).find( '[class=od-item-marge_total]' ).val();
         data['marge_percent_' + runningnumber] = '100,00';
         data['marge_price_factor_' + runningnumber] = '1.00000';

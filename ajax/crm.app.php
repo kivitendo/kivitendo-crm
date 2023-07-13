@@ -1028,4 +1028,8 @@ function printOrder( $data ){
     }
 
     echo 1;
+
+    function test(){
+       echo 'hello';
+    }
 }

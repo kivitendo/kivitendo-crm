@@ -318,6 +318,7 @@ function crmNewOrderAndInsertPos( itemPosition, itemType, item ){
         data:  { action: action, data: dbData },
         success: function( data ){
             $( '#od-oe-id' ).val( data.id );
+            if( crmOrderTypeEnum.Order == crmOrderType ) $( '#od-oe-ordnumber' ).text( data.ordnumber );
             crmInsertOrderPos( itemPosition, itemType, item );
             if( !isEmpty( $( '#od-oe-id' ).val() ) ){
                 $( '#od-ui-btn-printer1' ).show();

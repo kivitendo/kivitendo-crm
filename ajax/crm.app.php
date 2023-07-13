@@ -602,12 +602,29 @@ function insertInvoiceFromOrder( $data ){
     getInvoice( $exists );
 }
 
+function prepareKba( &$data ){
+    $kba_id = FALSE;
+    if( array_key_exists( 'lxckba', $data )  && array_key_exists( 'lxc_cars', $data )){
+        if( array_key_exists( 'kba_id', $data['lxc_cars'] ) ){
+            $kba_id = $data['lxc_cars']['kba_id'];
+            $where = "id = ".$kba_id;
+            $GLOBALS['dbh']->update( 'lxckba', array_keys( $data['lxckba'] ), array_values( $data['lxckba'] ), $where );
+        }
+        else{
+            $kba_id = $GLOBALS['dbh']->insert( 'lxckba', array_keys( $data['lxckba'] ), array_values( $data['lxckba'] ), TRUE );
+            $data['lxc_cars'] += [ "kba_id" => $kba_id ];
+        }
+    }
+    unset( $data['lxckba'] );
+}
+
 /********************************************
 * Insert a new Customer optional  with new Car
 ********************************************/
 function insertNewCuWithCar( $data ){
     $id = FALSE;
     $GLOBALS['dbh']->beginTransaction();
+    prepareKba( $data );
     foreach( $data AS $key => $value ){
         if( strcmp( $key, 'customer' ) === 0 ){
             $id = $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ), TRUE, "id" );
@@ -648,6 +665,8 @@ function insertNewOrder( $data ){
 ********************************************/
 function updateCuWithNewCar( $data ){
     $id = FALSE;
+    $GLOBALS['dbh']->beginTransaction();
+    prepareKba( $data );
     foreach( $data AS $key => $value ){
         $where = '';
         if( array_key_exists( 'WHERE', $value ) ){
@@ -670,6 +689,7 @@ function updateCuWithNewCar( $data ){
             $GLOBALS['dbh']->update( $key, array_keys( $value ), array_values( $value ), $where );
         }
     }
+    $GLOBALS['dbh']->commit();
     echo '{ "src": "C", "id": "'.$id.'" }';
 }
 

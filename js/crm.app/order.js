@@ -202,13 +202,13 @@ function crmAddOrderItem( dataRow ){
         let url = "crm/ajax/crm.app.php?action=findPart";
         switch( crmOrderType ){
             case crmOrderTypeEnum.Order:
-                url += "&filter=orderitems";
+                url += "&filter=order";
                 break;
             case crmOrderTypeEnum.Offer:
-                //url += "&filter=orderitems";
+                url += "&filter=offer";
                 break;
             case crmOrderTypeEnum.Delivery:
-                //url += "&filter=orderitems";
+                //url += "&filter=delivery";
                 break;
             case crmOrderTypeEnum.Invoice:
                 url += "&filter=invoice";
@@ -496,8 +496,8 @@ function crmSaveOrder(){
         }
     });
 
-    //console.info( 'dbUpdateData' );
-    //console.info( dbUpdateData );
+    console.info( 'dbUpdateData' );
+    console.info( dbUpdateData );
 
     $.ajax({
         url: 'crm/ajax/crm.app.php',
@@ -557,6 +557,7 @@ function crmSaveInvoiceType( dbUpdateData ){
     dbUpdateData['ar']['shipvia'] = $( '#od-inv-shipvia' ).val();// für Kennzeichen in Druckvorlage
     dbUpdateData['ar']['amount'] = kivi.parse_amount( $( '#od-amount' ).val() );
     dbUpdateData['ar']['netamount'] = kivi.parse_amount( $( '#od-netamount' ).val() );
+    dbUpdateData['ar']['employee_id'] = kivi.parse_amount( $( '#od-inv-employee_id' ).val() );
 
     dbUpdateData['ar']['WHERE'] = {};
     dbUpdateData['ar']['WHERE'] = 'id = ' + $( '#od-inv-id' ).val();
@@ -815,8 +816,11 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         $( '#od-inv-common-table' ).hide();
         $( '#od-oe-workflow' ).show();
         $( '#od-oe-common-table' ).show();
+        $( '#od-off-common-table' ).hide();
         $( '#od-listheading-workers' ).show();
         $( '#od-listheading-status' ).show();
+        $( '#od-lxcars-c_text-label' ).show();
+        $( '#od-lxcars-c_text' ).show();
 
         if( exists( crmData.order ) ){
             title = kivi.t8( 'Edit order' );
@@ -865,8 +869,11 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         $( '#od-inv-menus' ).show();
         $( '#od-oe-common-table' ).hide();
         $( '#od-inv-common-table' ).show();
+        $( '#od-off-common-table' ).hide();
         $( '#od-listheading-workers' ).hide();
         $( '#od-listheading-status' ).hide();
+        $( '#od-lxcars-c_text-label' ).show();
+        $( '#od-lxcars-c_text' ).show();
 
         if( exists( crmData.bill ) ){
             title = kivi.t8( 'Edit invoice' );
@@ -911,7 +918,18 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
                 $( '#od-inv-printers' ).append( '<li><a value="' + printer.id  + '" href="#" onclick="crmPrintInvoice( this );">' + printer.printer_description + '</a></li>' );
             }
         }
-     }
+    }
+    else if( crmOrderTypeEnum.Offer == crmOrderType ){
+        $( '#od-oe-workflow' ).hide();
+        $( '#od-inv-menus' ).hide();
+        $( '#od-oe-common-table' ).hide();
+        $( '#od-inv-common-table' ).hide();
+        $( '#od-off-common-table' ).show();
+        $( '#od-listheading-workers' ).hide();
+        $( '#od-listheading-status' ).hide();
+        $( '#od-lxcars-c_text-label' ).hide();
+        $( '#od-lxcars-c_text' ).hide();
+    }
 
     $( '#od-ui-items-workers' ).html( '' );
     $( '#od-ui-items-workers' ).append(new Option( '', ''  ) );

@@ -378,6 +378,38 @@
             </td>
         </tr>
     </table>
+    <table id="od-off-common-table" class="od-inv-common od-common-style" width="100%">
+        <tr>
+            <td width="33%">
+                <table>
+                    <tr>
+                        <td class="od-table-label"><label for="od-inv-customer-name">Kunde:</label></td>
+                        <td><span id="od-off-customer-name"></span></td>
+                    </tr>
+                 </table>
+            </td>
+            <td width="33%">
+                <table>
+                    <tr>
+                        <td class="od-table-label"><label for="od-off-quonumber">Angebotsnummer:</label></td>
+                        <td><span id="od-off-quonumber"></span></td>
+                    </tr>
+                    <tr>
+                        <td class="od-table-label"><label for="od-off-itime">erstellt am:</label></td>
+                        <td><span id="od-off-itime"></span></td>
+                     </tr>
+                    <tr>
+                        <td class="od-table-label"><label for="od-off-mtime">bearbeitet am:</label></td>
+                        <td><span id="od-off-mtime"></span></td>
+                     </tr>
+                    <tr>
+                        <td class="od-table-label"><label for="od-off-employee_name">bearbeitet von:</label></td>
+                        <td><input type="hidden" id="od-off-employee_id"></input><span id="od-off-employee_name"></span></td>
+                     </tr>
+                 </table>
+            </td>
+        </tr>
+    </table>
     </div>
 
     <table class="ui-sortable" id="edit-order-table" width="100%">
@@ -437,7 +469,7 @@
                 Interne Bemerkungen zum Kunden
             </td>
             <td class="od-table-label">
-                Interne Bemerkungen zum Auto
+                <span id="od-lxcars-c_text-label">Interne Bemerkungen zum Auto</span>
             </td>
              <td class="od-table-label">
                 Interne Bemerkungen zur Rechnung

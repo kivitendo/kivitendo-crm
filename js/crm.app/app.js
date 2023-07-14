@@ -219,6 +219,19 @@ function showCVPA( data ){
         $.each( data.off, function( key, value ){
             $( '#crm-offers-table' ).append( '<tr id="' + value.id +'" class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' +  value.date + '</td><td>' + value.description  + '</td><td>' + value.amount  + '</td><td>' + value.number + '</td></tr>' );
         });
+        $( '#crm-offers-table tr' ).click( function(){
+            $.ajax({
+                url: 'crm/ajax/crm.app.php',
+                type: 'POST',
+                data:  { action: 'getOffer', data: { 'id': this.id } },
+                success: function( crmData ){
+                    crmEditOrderDlg( crmData, crmOrderTypeEnum.Offer );
+                },
+                error: function( xhr, status, error ){
+                    $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'showCVPA().getOrder', xhr.responseText );
+                }
+            });
+        });
     }
 
     $( '#crm-orders-table' ).html('');

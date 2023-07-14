@@ -632,24 +632,50 @@ function crmInsertInvoiceFromOrder(){
     data['employee_id'] = $( '#od-inv-employee_id' ).val();
     data['oe_id'] = $( '#od-oe-id' ).val();
 
-    $.ajax({
-        url: 'crm/ajax/crm.app.php',
-        type: 'POST',
-        data:  { action: 'insertInvoiceFromOrder', data: data },
-        success: function( crmData ){
-            console.info( 'res' );
-            console.info( crmData );
+    $( '#crm-confirm-order-to-invoice-dialog' ).dialog({
+        autoOpen: false,
+        resizable: true,
+        width: 'auto',
+        height: 'auto',
+        modal: true,
+        title: kivi.t8( 'New invoice' ),
+        position: { my: "top", at: "top+250" },
+        open: function(){
+            $( this ).css( 'maxWidth', window.innerWidth );
+        },
+        //close: function(){
+        //    crmRefreshAppViewAction();
+        //},
+        buttons:[{
+            text: kivi.t8( 'Continue' ),
+            click: function(){
+                $( this ).dialog( "close" );
+                $.ajax({
+                    url: 'crm/ajax/crm.app.php',
+                    type: 'POST',
+                    data:  { action: 'insertInvoiceFromOrder', data: data },
+                    success: function( crmData ){
+                        //$( '#crm-confirm-order-to-invoice-dialog' ).dialog( "close" );
 
-            if( exists( crmData['flag'] ) ){
-                alert( kivi.t8( 'Invoice already exists!' ) );
+                        if( exists( crmData['flag'] ) ){
+                            alert( kivi.t8( 'The invoice already exists and will be displayed.' ) );
+                        }
+                        $( '#crm-edit-order-dialog' ).dialog( "close" );
+                        crmEditOrderDlg( crmData, crmOrderTypeEnum.Invoice );
+                    },
+                    error: function( xhr, status, error ){
+                        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmInsertInvoiceFromOrder()', xhr.responseText );
+                    }
+                });
             }
-            $( '#crm-edit-order-dialog' ).dialog( "close" );
-            crmEditOrderDlg( crmData, crmOrderTypeEnum.Invoice );
-       },
-        error: function( xhr, status, error ){
-            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmInsertInvoiceFromOrder()', xhr.responseText );
-        }
-    });
+        },{
+            text: kivi.t8( 'Cancel' ),
+            click: function(){
+                $( this ).dialog( "close" );
+            }
+        }]
+    }).dialog( 'open' ).resize();
+
 }
 
 function crmPrintInvoice( e ){

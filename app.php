@@ -458,6 +458,10 @@
     </div>
 </div>
 
+<div id="crm-confirm-order-to-invoice-dialog" style="display:none">
+    <p>Aus dem Auftrag eine Rechnung erzeugen?</p>
+</div>
+
 <div id="crm-search-order-dialog" style="display:none">
     <div id="search-order-hidden"></div>
     <table id="search-order-form" style="padding-bottom: 1em">

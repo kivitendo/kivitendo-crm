@@ -520,7 +520,9 @@ function crmSaveOrderType( dbUpdateData ){
     dbUpdateData['instructions'] = [];
 
     $( '.od-oe-common :input' ).each( function( key, pos ){
-        dbUpdateData['oe'][pos.id.split( '-' )[2]] = ( 'checkbox' === pos.type )? $( pos ).prop( 'checked' ) : $( pos ).val();
+        let columnName = pos.id.split( '-' )[2];
+        if( !exists( columnName ) ) return;
+         dbUpdateData['oe'][pos.id.split( '-' )[2]] = ( 'checkbox' === pos.type )? $( pos ).prop( 'checked' ) : $( pos ).val();
     });
 
     dbUpdateData['customer']['notes'] = $( '#od-customer-notes' ).val();
@@ -547,6 +549,8 @@ function crmSaveInvoiceType( dbUpdateData ){
     dbUpdateData['lxc_cars'] = {};
 
     $( '.od-inv-common :input' ).each( function( key, pos ){
+        let columnName = pos.id.split( '-' )[2];
+        if( !exists( columnName ) ) return;
         dbUpdateData['ar'][pos.id.split( '-' )[2]] = ( 'checkbox' === pos.type )? $( pos ).prop( 'checked' ) : $( pos ).val();
     });
 

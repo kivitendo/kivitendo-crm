@@ -336,7 +336,13 @@
                 <table>
                     <tr>
                         <td class="od-table-label"><label for="od-inv-customer-name">Kunde:</label></td>
-                        <td><span id="od-inv-customer-name"></span></td>
+                        <td colspan="4"><span id="od-inv-customer-name"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Telefon:</td><td><button id="crm_inv_contact_phone1"></button></td><td><button id="crm_inv_contact_phone1_dialog_button" class='clickToCall1'>T</button><div id="crm_inv_contact_phone1_dialog"></div></td><td><button id="crm_inv-copy_contact_phone1" class="copy clickToCall1" title="Copy">C</button></td><td ><button id="crm_inv-whatsapp1" class="whatsapp clickToCall1" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
+                    </tr>
+                    <tr>
+                        <td>Telefon:</td><td><button id="crm_inv_contact_phone2"></button></td><td><button id="crm_inv_contact-phone2_dialog_button" class='clickToCall2'>T</button><div id="crm-inv-contact-phone2_dialog"></div></td><td><button id="crm_inv_copy_contact_phone2" class="copy clickToCall2"  title="Copy">C</button></td><td ><button id="crm_inv_whatsapp2" class="whatsapp clickToCall2" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
                     </tr>
                  </table>
             </td>

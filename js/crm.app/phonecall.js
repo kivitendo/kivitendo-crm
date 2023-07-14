@@ -9,7 +9,7 @@ $( '.whatsapp' ).click( function( data ){
     return false;
 }).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only").tooltip();
 
-$( '#crm-contact-phone1, #crm-contact-phone2, #crm-inv-contact-phone1, #crm-inv-contact-phone2' ).click( function( data ){
+$( '#crm-contact-phone1, #crm-contact-phone2, #crm_inv_contact_phone1, #crm_inv_contact_phone2' ).click( function( data ){
     data.stopImmediatePropagation();
     //console.info( 'test' + $( '#crm-contact-name' ).html() );
     $.ajax({
@@ -39,7 +39,7 @@ $( '.copy' ).click( function( data ){
 
 
 
-$( '#crm-contact-phone1_dialog_button, #crm-contact-phone2_dialog_button, #crm-inv-contact-phone1_dialog_button, #crm-inv-contact-phone2_dialog_button' ).click( function( data ){
+$( '#crm-contact-phone1_dialog_button, #crm-contact-phone2_dialog_button, #crm_inv_contact_phone1_dialog_button, #crm_inv_contact_phone2_dialog_button' ).click( function( data ){
     data.stopImmediatePropagation();
     //alert( "ClickToCall Dialog");
     var dialog_id = this.id.replace( '_button', '' );

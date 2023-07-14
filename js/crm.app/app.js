@@ -175,12 +175,12 @@ function showCVPA( data ){
             if( value ){
                 $( '#crm-contact-' + key ).html( value );
                 $( '#crm-contact-' + key ).show();
-                $( '#crm-inv-contact-' + key ).html( value );
-                $( '#crm-inv-contact-' + key ).show();
+                $( '#crm_inv_contact_' + key ).html( value );
+                $( '#crm_inv_contact_' + key ).show();
              }
             else{
                 $( '#crm-contact-' + key ).hide();
-                $( '#crm-inv-contact-' + key ).hide();
+                $( '#crm_inv_contact_' + key ).hide();
             }
         });
         if( !data.cv.phone1 ) $( '.clickToCall1' ).hide();

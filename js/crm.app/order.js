@@ -775,6 +775,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         cancel: '.od-item-pin, .od-ui-del, input, select, button',
         update: function(){
             crmCalcOrderPos();
+            crmSaveOrder();
         }
     });
 

@@ -114,18 +114,12 @@ function crmNewCarFromScan(){
                                                 }else{
                                                     $( '#billaddr-city' ).val( lxcarsData.address2 );
                                                 }
-                                                $( '#car-c_ln' ).val( crmFormatCarLicense( lxcarsData.registrationNumber ) );
+                                                $( '#car-c_ln' ).val( crmFormatCarLicense( lxcarsData.registrationnumber ) );
                                                 $( '#car-c_2' ).val( lxcarsData.hsn );
                                                 $( '#car-c_3' ).val( lxcarsData.field_2_2 );
-                                                $( '#car-c_em' ).val( lxcarsData.field_14_1 );  
-                                                
+                                                $( '#car-c_em' ).val( lxcarsData.field_14_1 );
                                                 $( '#car-c_d' ).val( lxcarsData.ez );
-                                                if( exists( crmData.kba ) ){
-                                                    $( '#car-kba_id' ).val( crmData.kba.id );
-                                                  $.each( crmData.kba , function( key, value ){
-                                                      $( '#car_kba-' + key ).val( value );
-                                                  });
-                                                }
+
                                                 //Wird nicht benötigt, da Datum invalide
                                                 //$( '#car-c_hu' ).val( lxcarsData.hu );
                                                 $( '#car-c_fin' ).val( lxcarsData.vin );
@@ -145,7 +139,7 @@ function crmNewCarFromScan(){
                                         $( this ).dialog( "close" );
                                 }
                             }]
-                            
+
                         }).dialog( 'open' ).resize();
 
                         const name = crmFormatName( getValueNotNull( data.firstname ) + ' ' + getValueNotNull( data.name1 ) );
@@ -191,7 +185,7 @@ function crmSearchCustomerForScan( name ){
             $( '#crm-fsscan-customer-list tr' ).click( function(){
                 $( '#crm-fsscan-customer-dlg' ).dialog( 'close' );
                     crmGetCustomerForEdit( 'C', this.id, true, function( src, id ){
-                    $( '#car-c_ln' ).val( crmFormatCarLicense( lxcarsData.registrationNumber ) );
+                    $( '#car-c_ln' ).val( crmFormatCarLicense( lxcarsData.registrationnumber ) );
                     $( '#car-c_2' ).val( lxcarsData.hsn );
                     $( '#car-c_3' ).val( lxcarsData.field_2_2 );
                     $( '#car-c_em' ).val( lxcarsData.field_14_1 );

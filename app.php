@@ -336,7 +336,13 @@
                 <table>
                     <tr>
                         <td class="od-table-label"><label for="od-inv-customer-name">Kunde:</label></td>
-                        <td><span id="od-inv-customer-name"></span></td>
+                        <td colspan="4"><span id="od-inv-customer-name"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Telefon:</td><td><button id="crm_inv_contact_phone1"></button></td><td><button id="crm_inv_contact_phone1_dialog_button" class='clickToCall1'>T</button><div id="crm_inv_contact_phone1_dialog"></div></td><td><button id="crm_inv-copy_contact_phone1" class="copy clickToCall1" title="Copy">C</button></td><td ><button id="crm_inv-whatsapp1" class="whatsapp clickToCall1" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
+                    </tr>
+                    <tr>
+                        <td>Telefon:</td><td><button id="crm_inv_contact_phone2"></button></td><td><button id="crm_inv_contact_phone2_dialog_button" class='clickToCall2'>T</button><div id="crm_inv_contact_phone2_dialog"></div></td><td><button id="crm_inv_copy_contact_phone2" class="copy clickToCall2"  title="Copy">C</button></td><td ><button id="crm_inv_whatsapp2" class="whatsapp clickToCall2" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
                     </tr>
                  </table>
             </td>
@@ -373,6 +379,38 @@
                     <tr>
                         <td class="od-table-label"><label for="od-inv-employee_name">bearbeitet von:</label></td>
                         <td><input type="hidden" id="od-inv-employee_id"></input><span id="od-inv-employee_name"></span></td>
+                     </tr>
+                 </table>
+            </td>
+        </tr>
+    </table>
+    <table id="od-off-common-table" class="od-inv-common od-common-style" width="100%">
+        <tr>
+            <td width="33%">
+                <table>
+                    <tr>
+                        <td class="od-table-label"><label for="od-inv-customer-name">Kunde:</label></td>
+                        <td><span id="od-off-customer-name"></span></td>
+                    </tr>
+                 </table>
+            </td>
+            <td width="33%">
+                <table>
+                    <tr>
+                        <td class="od-table-label"><label for="od-off-quonumber">Angebotsnummer:</label></td>
+                        <td><span id="od-off-quonumber"></span></td>
+                    </tr>
+                    <tr>
+                        <td class="od-table-label"><label for="od-off-itime">erstellt am:</label></td>
+                        <td><span id="od-off-itime"></span></td>
+                     </tr>
+                    <tr>
+                        <td class="od-table-label"><label for="od-off-mtime">bearbeitet am:</label></td>
+                        <td><span id="od-off-mtime"></span></td>
+                     </tr>
+                    <tr>
+                        <td class="od-table-label"><label for="od-off-employee_name">bearbeitet von:</label></td>
+                        <td><input type="hidden" id="od-off-employee_id"></input><span id="od-off-employee_name"></span></td>
                      </tr>
                  </table>
             </td>
@@ -437,7 +475,7 @@
                 Interne Bemerkungen zum Kunden
             </td>
             <td class="od-table-label">
-                Interne Bemerkungen zum Auto
+                <span id="od-lxcars-c_text-label">Interne Bemerkungen zum Auto</span>
             </td>
              <td class="od-table-label">
                 Interne Bemerkungen zur Rechnung
@@ -456,6 +494,10 @@
          </tr>
     </table>
     </div>
+</div>
+
+<div id="crm-confirm-order-to-invoice-dialog" style="display:none">
+    <p>Aus dem Auftrag eine Rechnung erzeugen?</p>
 </div>
 
 <div id="crm-search-order-dialog" style="display:none">

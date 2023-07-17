@@ -175,9 +175,12 @@ function showCVPA( data ){
             if( value ){
                 $( '#crm-contact-' + key ).html( value );
                 $( '#crm-contact-' + key ).show();
-            }
+                $( '#crm_inv_contact_' + key ).html( value );
+                $( '#crm_inv_contact_' + key ).show();
+             }
             else{
                 $( '#crm-contact-' + key ).hide();
+                $( '#crm_inv_contact_' + key ).hide();
             }
         });
         if( !data.cv.phone1 ) $( '.clickToCall1' ).hide();
@@ -218,6 +221,19 @@ function showCVPA( data ){
         let listrow0 = false;
         $.each( data.off, function( key, value ){
             $( '#crm-offers-table' ).append( '<tr id="' + value.id +'" class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' +  value.date + '</td><td>' + value.description  + '</td><td>' + value.amount  + '</td><td>' + value.number + '</td></tr>' );
+        });
+        $( '#crm-offers-table tr' ).click( function(){
+            $.ajax({
+                url: 'crm/ajax/crm.app.php',
+                type: 'POST',
+                data:  { action: 'getOffer', data: { 'id': this.id } },
+                success: function( crmData ){
+                    crmEditOrderDlg( crmData, crmOrderTypeEnum.Offer );
+                },
+                error: function( xhr, status, error ){
+                    $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'showCVPA().getOrder', xhr.responseText );
+                }
+            });
         });
     }
 
@@ -299,24 +315,24 @@ function crmInitFormEx( crmFormModel, table, max_rows = 0, container = null){
         tabledata += '<tr>';
         let addItem = function( item ){
             if( item.type == 'hidden' ) hiddenFields += '<input type="hidden" id="' + item.name + '" name="' + item.name + '" value="' + ( ( exists(item.data) )? item.data : '' ) + '">';
-            if( item.hasOwnProperty( 'spacing' ) ) tabledata += '<td style="padding-left: 10px"> </td>';
-            if( item.type == 'headline' ) tabledata += '<td colspan="2"><b>' + kivi.t8( item.label ) + '</b>';
-            if( item.type == 'checkbox' ) tabledata += '<td>' + kivi.t8( item.label ) + '</td><td><input type="checkbox" id="' + item.name + '" name="'+ item.name + '" value="true" title="' + kivi.t8( item.tooltip ) + '"></input>';
+            if( item.hasOwnProperty( 'spacing' ) ) tabledata += '<td' +  ( ( exists(item.class) )? ' class="' + item.class + '" ' : '' ) + ' style="padding-left: 10px"> </td>';
+            if( item.type == 'headline' ) tabledata += '<td' +  ( ( exists(item.class) )? ' class="' + item.class + '" ' : '' ) + ' colspan="2"><b>' + kivi.t8( item.label ) + '</b>';
+            if( item.type == 'checkbox' ) tabledata += '<td' +  ( ( exists(item.class) )? ' class="' + item.class + '" ' : '' ) + '>' + kivi.t8( item.label ) + '</td><td' +  ( ( exists(item.class) )? ' class="' + item.class + '" ' : '' ) + '><input type="checkbox" id="' + item.name + '" name="'+ item.name + '" value="true" title="' + kivi.t8( item.tooltip ) + '"></input>';
             if( item.type == 'input' ){
-                tabledata += '<td>' + kivi.t8( item.label ) + '</td><td><input type="text" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '" value="' + ( ( exists(item.data) )? item.data : '' ) + '"' +( (item.readonly)? ' readonly' : '' )  + '></input>';
+                tabledata += '<td' +  ( ( exists(item.class) )? ' class="' + item.class + '" ' : '' ) + '>' + kivi.t8( item.label ) + '</td><td' +  ( ( exists(item.class) )? ' class="' + item.class + '" ' : '' ) + '><input type="text" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '" value="' + ( ( exists(item.data) )? item.data : '' ) + '"' +( (item.readonly)? ' readonly' : '' )  + '></input>';
                 if( item.check ) tabledata += '<input type="checkbox" id="' + item.check + '" name="'+ item.check + '" title="' + kivi.t8( 'Check imput' ) + '"></input>';
             }
-            if( item.type == 'textarea' ) tabledata += '<td>' + kivi.t8( item.label ) + '</td><td><textarea id="' + item.name + '" name="'+ item.name + '" cols="' + item.cols + '" rows="' + item.rows + '" title="' + kivi.t8( item.tooltip ) + '"></textarea>';
-            if( item.type == 'password' ) tabledata += '<td>' + kivi.t8( item.label ) + '</td><td><input type="password" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '"></input>';
+            if( item.type == 'textarea' ) tabledata += '<td' +  ( ( exists(item.class) )? ' class="' + item.class + '" ' : '' ) + '>' + kivi.t8( item.label ) + '</td><td' +  ( ( exists(item.class) )? ' class="' + item.class + '" ' : '' ) + '><textarea id="' + item.name + '" name="'+ item.name + '" cols="' + item.cols + '" rows="' + item.rows + '" title="' + kivi.t8( item.tooltip ) + '"></textarea>';
+            if( item.type == 'password' ) tabledata += '<td' +  ( ( exists(item.class) )? ' class="' + item.class + '" ' : '' ) + '>' + kivi.t8( item.label ) + '</td><td' +  ( ( exists(item.class) )? ' class="' + item.class + '" ' : '' ) + '><input type="password" id="' + item.name + '" name="'+ item.name + '" size="' + item.size + '" title="' + kivi.t8( item.tooltip ) + '"></input>';
             if( item.type == 'select' ){
-                tabledata += '<td>' + kivi.t8( item.label ) + '</td><td><select type="select" id="' + item.name + '" name="'+ item.name + '" title="' + kivi.t8( item.tooltip ) + '"' + ( (item.disabled)? ' disabled' : '' )  + '>';
+                tabledata += '<td' +  ( ( exists(item.class) )? ' class="' + item.class + '" ' : '' ) + '>' + kivi.t8( item.label ) + '</td><td' +  ( ( exists(item.class) )? ' class="' + item.class + '" ' : '' ) + '><select type="select" id="' + item.name + '" name="'+ item.name + '" title="' + kivi.t8( item.tooltip ) + '"' + ( (item.disabled)? ' disabled' : '' )  + '>';
                 $.each( item.data, function( key, value ){ tabledata += '<option value="' + key + '">' + kivi.t8( value ) + '</option>'; } );
                 tabledata += '</select>';
             }
             if( item.hasOwnProperty( 'info' ) ){
                 tabledata += '<button id="' + item.info + '">' + kivi.t8( 'Info' ) + '</button>';
             }
-            if( item.type == 'button' ) tabledata += '<td></td><td><button id="' + item.name + '">' + kivi.t8( item.label ) + '</button>';
+            if( item.type == 'button' ) tabledata += '<td' +  ( ( exists(item.class) )? ' class="' + item.class + '" ' : '' ) + '></td><td' +  ( ( exists(item.class) )? ' class="' + item.class + '" ' : '' ) + '><button id="' + item.name + '">' + kivi.t8( item.label ) + '</button>';
             tabledata += '</td>';
         }
         addItem( item );

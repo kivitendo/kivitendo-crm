@@ -164,7 +164,19 @@ function crmEditCuVeDlg( crmData, new_with_car ){
     crmInitFormEx( banktaxFormModel, '#banktax-form' );
     crmInitFormEx( extraFormModel, '#extras-form' );
     crmInitFormEx( carFormModel, '#car-form', 0, '#car-form-hidden' );
-    crmInitFormEx( carKbaFormModel, '#car-kba-form' );
+    crmInitFormEx( carKbaFormModel, '#car-kba-form', 33 );
+
+    $( '.car_kba-hidden' ).hide();
+    $( '#car_kba_hide_show' ).click( function(){
+        if( $( '.car_kba-hidden' ).is(':visible' ) ){
+            $( '.car_kba-hidden' ).hide();
+            $( '#car_kba_hide_show' ).text( "Show extra fields" );
+        }
+        else{
+            $( '.car_kba-hidden' ).show();
+            $( '#car_kba_hide-show' ).text( "Hide extra fields" );
+        }
+    });
 
     $( '#billaddr-greetings' ).change( function(){
        $( '#billaddr-greeting' ).val( $( '#billaddr-greetings' ).val() );
@@ -177,10 +189,43 @@ function crmEditCuVeDlg( crmData, new_with_car ){
     if( new_with_car ){
         $( '#car-form' ).show();
         $( '#car-kba-form' ).show();
+
+        console.info( 'crmData.kba' );
+        console.info( crmData.kba );
+        console.info( 'lxcarsData' );
+        console.info( lxcarsData );
+        console.info( ' ---lxcarsData' );
+
+        for( let item of carKbaFormModel){
+            let columnName = item.name.split( '-' )[1];
+            $( '#' + item.name ).val( lxcarsData[columnName] );
+        }
+        $( '#car_kba-hersteller' ).val( ( null != lxcarsData.field_2 )? lxcarsData.field_2 : lxcarsData.maker );
+        $( '#car_kba-d2' ).val( lxcarsData.d2_1 );
+        $( '#car_kba-name' ).val( lxcarsData.model );
+        $( '#car_kba-hubraum' ).val( lxcarsData.p1 );
+        $( '#car_kba-leistung' ).val( lxcarsData.p2_p4 );
+        $( '#car_kba-kraftstoff' ).val( lxcarsData.p3 );
+        $( '#car_kba-achsen' ).val( lxcarsData.l );
+        $( '#car_kba-masse' ).val( lxcarsData.f1 );
+
         if( exists( crmData.kba ) ){
             $.each( crmData.kba , function( key, value ){
-                $( '#car_kba-' + key ).val( value );
+                if( '' == $( '#car_kba-' + key ).val() ) $( '#car_kba-' + key ).val( value );
             });
+            if( crmData.kba.exists ){
+                $( '#car-kba_id' ).val( crmData.kba.id );
+                $( '#car_kba_edit' ).show()
+            }
+            else{
+                $( '#car-kba_id' ).val( '' );
+                $( '#car_kba-d2' ).val( lxcarsData.d2_1 );
+                $( '#car_kba_edit' ).hide()
+            }
+            for( let item of carKbaFormModel){
+                $( '#' + item.name ).prop( 'readonly', crmData.kba.exists );
+            }
+            $( '#car_kba-fhzart' ).prop( 'disabled', crmData.kba.exists );
         }
     }
     else{
@@ -261,6 +306,16 @@ function crmEditCuVeDlg( crmData, new_with_car ){
                         let columnName = item.name.split( '-' );
                         let val = $( '#' + item.name ).val();
                         if( exists(val) && val !== '' ) dbUpdateData['lxc_cars'][columnName[1]] = val;
+                    }
+
+                    dbUpdateData['lxckba'] = {};
+                    dbUpdateData['lxckba']['hsn'] = $( '#car-c_2' ).val();
+                    dbUpdateData['lxckba']['tsn'] = $( '#car-c_3' ).val().substring(0, 3);
+                    for(let item of carKbaFormModel){
+                        let columnName = item.name.split( '-' );
+                        if( !exists( columnName[1] ) ) continue;
+                        let val = $( '#' + item.name ).val();
+                        if( exists(val) ) dbUpdateData['lxckba'][columnName[1]] = val;
                     }
                 }
                 console.info( 'dbUpdateData' );

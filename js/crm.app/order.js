@@ -202,13 +202,13 @@ function crmAddOrderItem( dataRow ){
         let url = "crm/ajax/crm.app.php?action=findPart";
         switch( crmOrderType ){
             case crmOrderTypeEnum.Order:
-                url += "&filter=orderitems";
+                url += "&filter=order";
                 break;
             case crmOrderTypeEnum.Offer:
-                //url += "&filter=orderitems";
+                url += "&filter=offer";
                 break;
             case crmOrderTypeEnum.Delivery:
-                //url += "&filter=orderitems";
+                //url += "&filter=delivery";
                 break;
             case crmOrderTypeEnum.Invoice:
                 url += "&filter=invoice";
@@ -318,6 +318,7 @@ function crmNewOrderAndInsertPos( itemPosition, itemType, item ){
         data:  { action: action, data: dbData },
         success: function( data ){
             $( '#od-oe-id' ).val( data.id );
+            if( crmOrderTypeEnum.Order == crmOrderType ) $( '#od-oe-ordnumber' ).text( data.ordnumber );
             crmInsertOrderPos( itemPosition, itemType, item );
             if( !isEmpty( $( '#od-oe-id' ).val() ) ){
                 $( '#od-ui-btn-printer1' ).show();
@@ -495,8 +496,8 @@ function crmSaveOrder(){
         }
     });
 
-    //console.info( 'dbUpdateData' );
-    //console.info( dbUpdateData );
+    console.info( 'dbUpdateData' );
+    console.info( dbUpdateData );
 
     $.ajax({
         url: 'crm/ajax/crm.app.php',
@@ -519,7 +520,9 @@ function crmSaveOrderType( dbUpdateData ){
     dbUpdateData['instructions'] = [];
 
     $( '.od-oe-common :input' ).each( function( key, pos ){
-        dbUpdateData['oe'][pos.id.split( '-' )[2]] = ( 'checkbox' === pos.type )? $( pos ).prop( 'checked' ) : $( pos ).val();
+        let columnName = pos.id.split( '-' )[2];
+        if( !exists( columnName ) ) return;
+         dbUpdateData['oe'][pos.id.split( '-' )[2]] = ( 'checkbox' === pos.type )? $( pos ).prop( 'checked' ) : $( pos ).val();
     });
 
     dbUpdateData['customer']['notes'] = $( '#od-customer-notes' ).val();
@@ -546,6 +549,8 @@ function crmSaveInvoiceType( dbUpdateData ){
     dbUpdateData['lxc_cars'] = {};
 
     $( '.od-inv-common :input' ).each( function( key, pos ){
+        let columnName = pos.id.split( '-' )[2];
+        if( !exists( columnName ) ) return;
         dbUpdateData['ar'][pos.id.split( '-' )[2]] = ( 'checkbox' === pos.type )? $( pos ).prop( 'checked' ) : $( pos ).val();
     });
 
@@ -556,6 +561,7 @@ function crmSaveInvoiceType( dbUpdateData ){
     dbUpdateData['ar']['shipvia'] = $( '#od-inv-shipvia' ).val();// für Kennzeichen in Druckvorlage
     dbUpdateData['ar']['amount'] = kivi.parse_amount( $( '#od-amount' ).val() );
     dbUpdateData['ar']['netamount'] = kivi.parse_amount( $( '#od-netamount' ).val() );
+    dbUpdateData['ar']['employee_id'] = kivi.parse_amount( $( '#od-inv-employee_id' ).val() );
 
     dbUpdateData['ar']['WHERE'] = {};
     dbUpdateData['ar']['WHERE'] = 'id = ' + $( '#od-inv-id' ).val();
@@ -631,24 +637,50 @@ function crmInsertInvoiceFromOrder(){
     data['employee_id'] = $( '#od-inv-employee_id' ).val();
     data['oe_id'] = $( '#od-oe-id' ).val();
 
-    $.ajax({
-        url: 'crm/ajax/crm.app.php',
-        type: 'POST',
-        data:  { action: 'insertInvoiceFromOrder', data: data },
-        success: function( crmData ){
-            console.info( 'res' );
-            console.info( crmData );
+    $( '#crm-confirm-order-to-invoice-dialog' ).dialog({
+        autoOpen: false,
+        resizable: true,
+        width: 'auto',
+        height: 'auto',
+        modal: true,
+        title: kivi.t8( 'New invoice' ),
+        position: { my: "top", at: "top+250" },
+        open: function(){
+            $( this ).css( 'maxWidth', window.innerWidth );
+        },
+        //close: function(){
+        //    crmRefreshAppViewAction();
+        //},
+        buttons:[{
+            text: kivi.t8( 'Continue' ),
+            click: function(){
+                $( this ).dialog( "close" );
+                $.ajax({
+                    url: 'crm/ajax/crm.app.php',
+                    type: 'POST',
+                    data:  { action: 'insertInvoiceFromOrder', data: data },
+                    success: function( crmData ){
+                        //$( '#crm-confirm-order-to-invoice-dialog' ).dialog( "close" );
 
-            if( exists( crmData['flag'] ) ){
-                alert( kivi.t8( 'Invoice already exists!' ) );
+                        if( exists( crmData['flag'] ) ){
+                            alert( kivi.t8( 'The invoice already exists and will be displayed.' ) );
+                        }
+                        $( '#crm-edit-order-dialog' ).dialog( "close" );
+                        crmEditOrderDlg( crmData, crmOrderTypeEnum.Invoice );
+                    },
+                    error: function( xhr, status, error ){
+                        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmInsertInvoiceFromOrder()', xhr.responseText );
+                    }
+                });
             }
-            $( '#crm-edit-order-dialog' ).dialog( "close" );
-            crmEditOrderDlg( crmData, crmOrderTypeEnum.Invoice );
-       },
-        error: function( xhr, status, error ){
-            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmInsertInvoiceFromOrder()', xhr.responseText );
-        }
-    });
+        },{
+            text: kivi.t8( 'Cancel' ),
+            click: function(){
+                $( this ).dialog( "close" );
+            }
+        }]
+    }).dialog( 'open' ).resize();
+
 }
 
 function crmPrintInvoice( e ){
@@ -774,6 +806,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         cancel: '.od-item-pin, .od-ui-del, input, select, button',
         update: function(){
             crmCalcOrderPos();
+            crmSaveOrder();
         }
     });
 
@@ -787,8 +820,11 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         $( '#od-inv-common-table' ).hide();
         $( '#od-oe-workflow' ).show();
         $( '#od-oe-common-table' ).show();
+        $( '#od-off-common-table' ).hide();
         $( '#od-listheading-workers' ).show();
         $( '#od-listheading-status' ).show();
+        $( '#od-lxcars-c_text-label' ).show();
+        $( '#od-lxcars-c_text' ).show();
 
         if( exists( crmData.order ) ){
             title = kivi.t8( 'Edit order' );
@@ -837,8 +873,11 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         $( '#od-inv-menus' ).show();
         $( '#od-oe-common-table' ).hide();
         $( '#od-inv-common-table' ).show();
+        $( '#od-off-common-table' ).hide();
         $( '#od-listheading-workers' ).hide();
         $( '#od-listheading-status' ).hide();
+        $( '#od-lxcars-c_text-label' ).show();
+        $( '#od-lxcars-c_text' ).show();
 
         if( exists( crmData.bill ) ){
             title = kivi.t8( 'Edit invoice' );
@@ -883,7 +922,18 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
                 $( '#od-inv-printers' ).append( '<li><a value="' + printer.id  + '" href="#" onclick="crmPrintInvoice( this );">' + printer.printer_description + '</a></li>' );
             }
         }
-     }
+    }
+    else if( crmOrderTypeEnum.Offer == crmOrderType ){
+        $( '#od-oe-workflow' ).hide();
+        $( '#od-inv-menus' ).hide();
+        $( '#od-oe-common-table' ).hide();
+        $( '#od-inv-common-table' ).hide();
+        $( '#od-off-common-table' ).show();
+        $( '#od-listheading-workers' ).hide();
+        $( '#od-listheading-status' ).hide();
+        $( '#od-lxcars-c_text-label' ).hide();
+        $( '#od-lxcars-c_text' ).hide();
+    }
 
     $( '#od-ui-items-workers' ).html( '' );
     $( '#od-ui-items-workers' ).append(new Option( '', ''  ) );

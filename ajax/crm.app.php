@@ -794,7 +794,7 @@ function printOrder( $data ){
     }
 
     $sql  = "SELECT oe.ordnumber, oe.transdate, oe.finish_time, oe.km_stnd, oe.employee_id, printed, ";
-    $sql .= "customer.name, customer.street, customer.zipcode, customer.city, customer.phone, customer.fax, customer.notes, ";
+    $sql .= "customer.name AS customer_name, customer.street, customer.zipcode, customer.city, customer.phone, customer.fax, customer.notes, ";
     $sql .= "lxc_cars.c_ln, lxc_cars.c_2, lxc_cars.c_3, lxc_cars.c_mkb, lxc_cars.c_t, lxc_cars.c_fin, lxc_cars.c_st_l, lxc_cars.c_wt_l, ";
     $sql .= "lxc_cars.c_text, lxc_cars.c_color, lxc_cars.c_zrk, lxc_cars.c_zrd, lxc_cars.c_em, lxc_cars.c_bf, lxc_cars.c_wd, lxc_cars.c_d, lxc_cars.c_hu, kba_id, employee.name AS employee_name, lxc_flex.flxgr ";
     $sql .= "FROM oe join customer on oe.customer_id = customer.id join lxc_cars on oe.c_id = lxc_cars.c_id join employee on oe.employee_id = employee.id ";
@@ -846,7 +846,7 @@ function printOrder( $data ){
     $pdf->Text( $textPosX_left, $textPosY + 25, 'Bearb.:' );
 
     $pdf->SetFont( 'Helvetica', '', $fontsize );
-    $pdf->Text( $textPosX_left + 20, $textPosY, utf8_decode( substr( $orderData['name'], 0, 34 ) ) );
+    $pdf->Text( $textPosX_left + 20, $textPosY, utf8_decode( substr( $orderData['customer_name'], 0, 34 ) ) );
     $pdf->Text( $textPosX_left + 20, $textPosY + 5, utf8_decode( $orderData['street'] ) );
     $pdf->Text( $textPosX_left + 20, $textPosY + 10, $orderData['zipcode'].' '.utf8_decode( $orderData['city'] ) );
     $pdf->Text( $textPosX_left + 20, $textPosY + 15, $orderData['phone'] );

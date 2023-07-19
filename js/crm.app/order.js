@@ -324,6 +324,7 @@ function crmNewOrderAndInsertPos( itemPosition, itemType, item ){
                 $( '#od-ui-btn-printer1' ).show();
                 $( '#od-ui-btn-printer2' ).show();
                 $( '#od-ui-btn-pdf' ).show();
+                $( '#od-ui-btn-coparts' ).show();
             }
         },
         error: function( xhr, status, error ){
@@ -782,6 +783,7 @@ function crmPrintInvoice( e ){
 
 const crmOrderTypeEnum = { Order: 0, Invoice: 1, Offer: 2, Delivery: 3 };
 var crmOrderType = crmOrderTypeEnum.Order;
+var coparts = {};
 
 function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
     crmOrderType = type;
@@ -846,6 +848,15 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-lxcars-c_text' ).val( crmData.order.common.int_car_notes );
             $( '#od-customer-notes' ).val( crmData.order.common.int_cu_notes );
             $( '#od-oe-intnotes' ).val( crmData.order.common.intnotes );
+            coparts['c_hsn'] = crmData.order.common.c_2;
+            coparts['c_tsn'] = crmData.order.common.c_3;
+            coparts['c_fin'] = crmData.order.common.c_fin;
+            coparts['c_d_de'] = crmData.order.common.c_d_de;
+            coparts['c_mkb'] = crmData.order.common.c_mkb;
+            coparts['customer_name'] = crmData.order.common.customer_name;
+            coparts['customer_street'] = crmData.order.common.customer_street;
+            coparts['customer_zipcode'] = crmData.order.common.customer_zipcode;
+            coparts['customer_city'] = crmData.order.common.customer_city;
         }
         else{
             title = kivi.t8( 'New order' );
@@ -957,6 +968,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
                 $( '#od-ui-btn-printer1' ).hide();
                 $( '#od-ui-btn-printer2' ).hide();
                 $( '#od-ui-btn-pdf' ).hide();
+                $( '#od-ui-btn-coparts' ).hide();
             }
         },
         close: function(){
@@ -1019,8 +1031,13 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
                     }
                 });
              }
-        },
-        {
+        },{
+            text: kivi.t8( ' Coparts ' ),
+            id: 'od-ui-btn-coparts',
+            click: function(){
+                window.location ='lxcars://AAGOnlinekba___' + coparts['c_hsn'] + '___' + coparts['c_tsn'] + '___' + $( '#od-lxcars-c_ln' ).html() + '___' + coparts['c_fin'] + '___' + coparts['c_d_de'] + '___' + coparts['c_mkb'] + '___' + $( '#od-oe-km_stnd' ).val() + '___' + $( '#od-oe-ordnumber' ).html() + '___' + coparts['customer_name'] + '___' + coparts['customer_street'] + '___' + coparts['customer_zipcode'] + '___' + coparts['customer_city'] + '___7___nodebug';
+            }
+        },{
             text: kivi.t8( 'Close' ),
             click: function(){
                 $( this ).dialog( "close" );

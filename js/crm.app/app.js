@@ -241,7 +241,7 @@ function showCVPA( data ){
                     crmEditOrderDlg( crmData, crmOrderTypeEnum.Offer );
                 },
                 error: function( xhr, status, error ){
-                    $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'showCVPA().getOrder', xhr.responseText );
+                    $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'showCVPA().getOffer', xhr.responseText );
                 }
             });
         });

@@ -177,10 +177,20 @@ function showCVPA( data ){
                 $( '#crm-contact-' + key ).show();
                 $( '#crm_inv_contact_' + key ).html( value );
                 $( '#crm_inv_contact_' + key ).show();
+                $( '#crm_oe_contact_' + key ).html( value );
+                $( '#crm_oe_contact_' + key ).show();
+                $( '#crm_off_contact_' + key ).html( value );
+                $( '#crm_off_contact_' + key ).show();
              }
             else{
+                $( '#crm-contact-' + key ).html( '' );
                 $( '#crm-contact-' + key ).hide();
+                $( '#crm_inv_contact_' + key ).html( '' );
                 $( '#crm_inv_contact_' + key ).hide();
+                $( '#crm_oe_contact_' + key ).html( '' );
+                $( '#crm_oe_contact_' + key ).hide();
+                $( '#crm_off_contact_' + key ).html( '' );
+                $( '#crm_off_contact_' + key ).hide();
             }
         });
         if( !data.cv.phone1 ) $( '.clickToCall1' ).hide();

@@ -9,7 +9,11 @@ $( '.whatsapp' ).click( function( data ){
     return false;
 }).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only").tooltip();
 
-$( '#crm-contact-phone1, #crm-contact-phone2, #crm_inv_contact_phone1, #crm_inv_contact_phone2' ).click( function( data ){
+$( '#crm-contact-phone1, #crm-contact-phone2, ' +
+    '#crm_inv_contact_phone1, #crm_inv_contact_phone2, ' +
+    '#crm_oe_contact_phone1, #crm_oe_contact_phone2' +
+    '#crm_off_contact_phone1, #crm_off_contact_phone2'
+).click( function( data ){
     data.stopImmediatePropagation();
     //console.info( 'test' + $( '#crm-contact-name' ).html() );
     $.ajax({
@@ -27,19 +31,15 @@ $( '#crm-contact-phone1, #crm-contact-phone2, #crm_inv_contact_phone1, #crm_inv_
 }).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only").css({ width: '120px', 'text-align': 'left', 'padding-left': '0.3em' });
 
 $( '.copy' ).click( function( data ){
-    alert( 'click ' + this.attributes.number.nodeValue );
-    var $temp = $("<input>");
-    $( "body" ).append( $temp );
-    $temp.val( $( '#crm-contact-phone' + this.id.substr( -1 ) ).text() ).select();
-    document.execCommand( "copy" );
-    $temp.remove();
+    navigator.clipboard.writeText( '' + $( '#crm-contact-phone' + this.id.substr( -1 ) ).text() );
     data.stopImmediatePropagation();
 }).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only").tooltip();
 
-
-
-
-$( '#crm-contact-phone1_dialog_button, #crm-contact-phone2_dialog_button, #crm_inv_contact_phone1_dialog_button, #crm_inv_contact_phone2_dialog_button' ).click( function( data ){
+$( '#crm-contact-phone1_dialog_button, #crm-contact-phone2_dialog_button, ' +
+    '#crm_inv_contact_phone1_dialog_button, #crm_inv_contact_phone2_dialog_button, ' +
+    '#crm_oe_contact_phone1_dialog_button, #crm_oe_contact_phone2_dialog_button, ' +
+    '#crm_off_contact_phone1_dialog_button, #crm_off_contact_phone2_dialog_button'
+).click( function( data ){
     data.stopImmediatePropagation();
     //alert( "ClickToCall Dialog");
     var dialog_id = this.id.replace( '_button', '' );

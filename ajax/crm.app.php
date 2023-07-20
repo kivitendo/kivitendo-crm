@@ -277,8 +277,8 @@ function getCVPA( $data ){
         // Angebote
         $id = array('C' => 'customer_id', 'V' => 'vendor_id');
         $query .= "(SELECT json_agg( off ) AS off FROM (".
-                    "SELECT DISTINCT ON (oe.id) to_char(oe.transdate, 'DD.MM.YYYY') as date, description, COALESCE(ROUND(amount,2))||' '||COALESCE(C.name) as amount, ".
-                    "oe.quonumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id=trans_id LEFT JOIN currencies C on currency_id=C.id WHERE quotation = TRUE AND ".$id[$data['src']]." = ".$data['id']." ORDER BY oe.id DESC, orderitems.id".
+                    "SELECT DISTINCT ON (oe.itime) to_char(oe.transdate, 'DD.MM.YYYY') as date, description, COALESCE(ROUND(amount,2))||' '||COALESCE(C.name) as amount, ".
+                    "oe.quonumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id=trans_id LEFT JOIN currencies C on currency_id=C.id WHERE quotation = TRUE AND ".$id[$data['src']]." = ".$data['id']." ORDER BY oe.itime DESC, orderitems.id".
                     ") AS off) AS off, ";
         // Aufträge
         $query .= "(SELECT json_agg( ord ) AS ord FROM (".
@@ -506,13 +506,20 @@ function getCar( $data ){
 }
 
 function getDataForNewLxcarsOrder( $data ){
-    //writeLog($_SESSION['loginCRM']);
-
     $query = "SELECT customer.id AS customer_id, customer.name AS customer_name, customer.notes AS int_cu_notes, c_id, ".
                 "lxc_cars.c_ln, lxc_cars.c_text AS int_car_notes, employee.id AS employee_id, employee.name AS employee_name ".
                 "FROM lxc_cars INNER JOIN customer ON customer.id = lxc_cars.c_ow INNER JOIN employee ON employee.id = ".$_SESSION['loginCRM']." WHERE lxc_cars.c_id = ".$data['id'];
 
     echo '{ "common": '.$GLOBALS['dbh']->getOne( $query, true ).', "workers": '.json_encode(ERPUsersfromGroup("Werkstatt")).' }';
+}
+
+function getDataForNewOffer( $data ){
+    $table = array( 'C' => 'customer', 'V' => 'vendor' );
+    $query = "SELECT customer.id AS customer_id, customer.name AS customer_name, customer.notes AS int_cu_notes, ".
+                "employee.id AS employee_id, employee.name AS employee_name ".
+                "FROM ".$table[$data['src']]." INNER JOIN employee ON employee.id = ".$_SESSION['loginCRM']." WHERE ".$table[$data['src']].".id = ".$data['id'];
+
+    echo '{ "common": '.$GLOBALS['dbh']->getOne( $query, true ).' }';
 }
 
 function getOffer( $data ){
@@ -664,6 +671,20 @@ function insertNewCuWithCar( $data ){
 function insertNewOrder( $data ){
     $rs = $GLOBALS['dbh']->getOne( "WITH tmp AS ( UPDATE defaults SET sonumber = sonumber::INT + 1 RETURNING sonumber) INSERT INTO oe ( ordnumber, customer_id, employee_id, taxzone_id, currency_id, c_id) SELECT ( SELECT sonumber FROM tmp), ".$data['customer_id'].", ".$_SESSION['id'].",  customer.taxzone_id, customer.currency_id, ".$data['c_id']." FROM customer WHERE customer.id = ".$data['customer_id']." RETURNING id, ordnumber");
     echo '{ "id": "'.$rs['id'].'", "ordnumber": "'.$rs['ordnumber'].'"  }';
+}
+
+function insertNewOffer( $data ){
+    $sql = "WITH tmp AS ( UPDATE defaults SET sqnumber = sqnumber::INT + 1 RETURNING sqnumber ) ".
+            "INSERT INTO oe ( quonumber, ordnumber, customer_id, employee_id, taxzone_id, currency_id, quotation";
+    if( array_key_exists( 'c_id', $data ) ) $sql .= ", c_id";
+    $sql .= ") SELECT ( SELECT sqnumber FROM tmp ), '', ".$data['customer_id'].", ".$_SESSION['id'].",  customer.taxzone_id, customer.currency_id, true";
+    if( array_key_exists( 'c_id', $data ) ) $sql .= ", ".$data['c_id'];
+    $sql .= " FROM customer WHERE customer.id = ".$data['customer_id']." RETURNING id, quonumber";
+
+    writeLog( $sql );
+
+    $rs = $GLOBALS['dbh']->getOne( $sql );
+    echo '{ "id": "'.$rs['id'].'", "quonumber": "'.$rs['quonumber'].'"  }';
 }
 
 /********************************************

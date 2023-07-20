@@ -431,8 +431,8 @@ $( '#crm-wf-new-car' ).click( function() {
    crmEditCarDlg( ); //in 'js/car.js'
 });
 
-$( '#crm-wf-offer' ).click( function() {
-    alert( "Angebot erstellen!" );
+$( '#crm-wf-new-offer' ).click( function() {
+    crmNewOffer();
 });
 
 $( '#crm-wf-new-order' ).click( function() {

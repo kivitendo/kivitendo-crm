@@ -293,15 +293,17 @@ function crmCompleteInsertOrderPos( row, item ){
 
 function crmNewOrderAndInsertPos( itemPosition, itemType, item ){
     let dbData = { }
-    dbData['customer_id'] = $( '#od-customer-id' ).val();
-    dbData['c_id'] = $( '#od-lxcars-c_id' ).val();
 
     let action;
     switch( crmOrderType ){
         case crmOrderTypeEnum.Order:
+            dbData['customer_id'] = $( '#od-customer-id' ).val();
+            dbData['c_id'] = $( '#od-lxcars-c_id' ).val();
             action = 'insertNewOrder';
             break;
         case crmOrderTypeEnum.Offer:
+            dbData['customer_id'] = $( '#od-customer-id' ).val();
+            if( '' != $( '#od-lxcars-c_id' ).val() ) dbData['c_id'] = $( '#od-lxcars-c_id' ).val();
             action = 'insertNewOffer';
             break;
         case crmOrderTypeEnum.Delivery:
@@ -317,8 +319,21 @@ function crmNewOrderAndInsertPos( itemPosition, itemType, item ){
         type: 'POST',
         data:  { action: action, data: dbData },
         success: function( data ){
-            $( '#od-oe-id' ).val( data.id );
-            if( crmOrderTypeEnum.Order == crmOrderType ) $( '#od-oe-ordnumber' ).text( data.ordnumber );
+            switch( crmOrderType ){
+                case crmOrderTypeEnum.Order:
+                    $( '#od-oe-id' ).val( data.id );
+                    $( '#od-oe-ordnumber' ).text( data.ordnumber );
+                    break;
+                case crmOrderTypeEnum.Offer:
+                    $( '#od-off-id' ).val( data.id );
+                    $( '#od-off-quonumber' ).text( data.qounumber );
+                    break;
+                case crmOrderTypeEnum.Delivery:
+                    break;
+                case crmOrderTypeEnum.Invoice:
+                    $( '#od-inv-id' ).val( data.id );
+                    break;
+            }
             crmInsertOrderPos( itemPosition, itemType, item );
             if( !isEmpty( $( '#od-oe-id' ).val() ) ){
                 $( '#od-ui-btn-printer1' ).show();
@@ -360,6 +375,10 @@ function crmInsertOrderPos( itemPosition, itemType, item, modified = false ){
             }
             break;
         case crmOrderTypeEnum.Offer:
+            if( isEmpty( $( '#od-off-id' ).val() ) ){
+                crmNewOrderAndInsertPos( itemPosition, itemType, item );
+                return;
+            }
             pos['record']['orderitems'] = {};
             pos['record']['orderitems']['trans_id'] = $( '#od-off-id' ).val();
             pos['record']['orderitems']['position'] = itemPosition;
@@ -620,6 +639,26 @@ function crmNewOrderForCar( c_id ){
     });
 }
 
+function crmNewOffer(){
+    const src = $( '#crm-cvpa-src' ).val();
+    if( 'C' != src ){
+        alert( "This operation is not yet possible for vendors or cars!" );
+        return;
+    }
+    const id = $( '#crm-cvpa-id' ).val();
+    $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        type: 'POST',
+        data:  { action: 'getDataForNewOffer', data: { 'src': src, 'id': id } },
+        success: function( crmData ){
+            crmEditOrderDlg( crmData, crmOrderTypeEnum.Offer );
+        },
+        error: function( xhr, status, error ){
+            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmNewOffer', xhr.responseText );
+        }
+    });
+}
+
 $( '#crm-edit-order-dialog :input' ).change( function(){
     crmCalcOrderPos();
     crmSaveOrder();
@@ -821,7 +860,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
     crmOrderType = type;
 
     crmOrderItemLists = { };
-    crmOrderItemLists['workers'] = crmData.workers;
+    if( exists( crmData.workers ) ) crmOrderItemLists['workers'] = crmData.workers;
     $( '#edit-order-table > tbody' ).html( '' );
     if( exists( crmData.order ) && exists( crmData.order.orderitems ) ){
         for( let dataRow of crmData.order.orderitems ){

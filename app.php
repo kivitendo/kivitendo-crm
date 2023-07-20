@@ -270,8 +270,8 @@
             <td width="33%">
                 <table>
                     <tr>
-                        <td class="od-table-label"><label for="od-customer-name">Auftraggeber:</label></td>
-                        <td><span id="od-customer-name"></span></td>
+                        <td class="od-table-label"><label for="od_customer_name">Auftraggeber:</label></td>
+                        <td><input type="text" id="od_customer_name"></input></td>
                     </tr>
                     <tr>
                         <td class="od-table-label">Telefon:</td>
@@ -362,8 +362,8 @@
             <td width="33%">
                 <table>
                     <tr>
-                        <td class="od-table-label"><label for="od-inv-customer-name">Kunde:</label></td>
-                        <td colspan="4"><span id="od-inv-customer-name"></span></td>
+                        <td class="od-table-label"><label for="od_inv_customer_name">Kunde:</label></td>
+                        <td colspan="4"><input type="text" id="od_inv_customer_name"></input></td>
                     </tr>
                     <tr>
                         <td class="od-table-label">Telefon:</td>
@@ -427,8 +427,8 @@
             <td width="33%">
                 <table>
                     <tr>
-                        <td class="od-table-label"><label for="od-off-customer-name">Kunde:</label></td>
-                        <td><span id="od-off-customer-name"></span></td>
+                        <td class="od-table-label"><label for="od_off_customer_name">Kunde:</label></td>
+                        <td><input type="text" id="od_off_customer_name"></input></td>
                     </tr>
                     <tr>
                         <td class="od-table-label">Telefon:</td>

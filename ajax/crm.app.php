@@ -59,7 +59,7 @@ function fastSearch(){
 function searchCustomer(){
     if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
         $term = $_GET['term'];
-        echo $GLOBALS['dbh']->getAll( "SELECT name AS value FROM customer WHERE name ILIKE '%".$term."%' LIMIT 15", true );
+        echo $GLOBALS['dbh']->getAll( "SELECT name AS value, id FROM customer WHERE name ILIKE '%".$term."%' LIMIT 15", true );
     }
 }
 

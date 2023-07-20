@@ -659,6 +659,34 @@ function crmNewOffer(){
     });
 }
 
+$( '#od_off_customer_name, #od_customer_name, #od_inv_customer_name' ).autocomplete({
+    source: "crm/ajax/crm.app.php?action=searchCustomer",
+    select: function( e, ui ) {
+//        dbUpdateData = {};
+//        dbUpdateData['oe'] = {};
+//        dbUpdateData['oe']['customer_id'] = ui.item.id;
+//        dbUpdateData['oe']['WHERE'] = {};
+//        dbUpdateData['oe']['WHERE'] = 'id = ' + $( '#od-oe-id' ).val();
+//
+//        $.ajax({
+//            url: 'crm/ajax/crm.app.php',
+//            type: 'POST',
+//            data:  { action: 'genericUpdateEx', data: dbUpdateData },
+//            success: function( data ){
+//                console.info( 'Order saved' );
+//                saving = false;
+//                $( '#od-customer-id' ).val( ui.item.id );
+//            },
+//            error: function( xhr, status, error ){
+//                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmSaveOrder()', xhr.responseText );
+//            }
+//        });
+    },
+    close: function( e, ui ) {
+        crmRefreshAppView( 'C', $( '#od-customer-id' ).val() );
+    }
+});
+
 $( '#crm-edit-order-dialog :input' ).change( function(){
     crmCalcOrderPos();
     crmSaveOrder();
@@ -912,7 +940,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-customer-id' ).val( crmData.order.common.customer_id );
             $( '#od-lxcars-c_id' ).val( crmData.order.common.c_id );
             $( '#od-oe-id' ).val( crmData.order.common.id );
-            $( '#od-customer-name' ).html( crmData.order.common.customer_name );
+            $( '#od_customer_name' ).val( crmData.order.common.customer_name );
             $( '#od-oe-ordnumber' ).html( crmData.order.common.ordnumber );
             $( '#od-oe-finish_time' ).val( crmData.order.common.finish_time );
             $( '#od-oe-km_stnd' ).val( crmData.order.common.km_stnd );
@@ -941,7 +969,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             title = kivi.t8( 'New order' );
             $( '#od-customer-id' ).val( crmData.common.customer_id );
             $( '#od-lxcars-c_id' ).val( crmData.common.c_id );
-            $( '#od-customer-name' ).html( crmData.common.customer_name );
+            $( '#od_customer_name' ).val( crmData.common.customer_name );
             $( '#od-oe-ordnumber' ).html( '' );
             $( '#od-oe-finish_time' ).val( '' );
             $( '#od-oe-km_stnd' ).val( '0' );
@@ -974,7 +1002,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-inv-id' ).val( crmData.bill.common.id );
             $( '#od-lxcars-c_id' ).val( crmData.bill.common.c_id );
             $( '#od-customer-id' ).val( crmData.bill.common.customer_id );
-            $( '#od-inv-customer-name' ).html( crmData.bill.common.customer_name );
+            $( '#od_inv_customer_name' ).val( crmData.bill.common.customer_name );
             $( '#od-inv-shippingpoint' ).html( crmData.bill.common.shippingpoint );
             $( '#od-inv-shipvia' ).val( crmData.bill.common.shipvia );
             $( '#od-inv-invnumber' ).html( crmData.bill.common.invnumber );
@@ -990,7 +1018,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         else{
             title = kivi.t8( 'New invoice' );
             $( '#od-lxcars-c_id' ).val( '' );
-            $( '#od-inv-customer-name' ).html( crmData.common.customer_name );
+            $( '#od_inv_customer_name' ).val( crmData.common.customer_name );
             $( '#od-customer-id' ).val( crmData.common.customer_id );
             $( '#od-inv-shippingpoint' ).html( '' );
             $( '#od-inv-shipvia' ).val( '' );
@@ -1028,7 +1056,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             title = kivi.t8( 'Edit offer' );
             $( '#od-customer-id' ).val( crmData.offer.common.customer_id );
             $( '#od-off-id' ).val( crmData.offer.common.id );
-            $( '#od-off-customer-name' ).html( crmData.offer.common.customer_name );
+            $( '#od_off_customer_name' ).val( crmData.offer.common.customer_name );
             $( '#od-off-quonumber' ).html( crmData.offer.common.quonumber );
             $( '#od-off-finish_time' ).val( crmData.offer.common.finish_time );
             $( '#od-off-employee_name' ).html( crmData.offer.common.employee_name );
@@ -1042,7 +1070,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         else{
             title = kivi.t8( 'New offer' );
             $( '#od-customer-id' ).val( crmData.common.customer_id );
-            $( '#od-off-customer-name' ).html( crmData.common.customer_name );
+            $( '#od_off_customer_name' ).val( crmData.common.customer_name );
             $( '#od-off-quonumber' ).html( '' );
             $( '#od-off-finish_time' ).val( '' );
             $( '#od-off-employee_name' ).html( crmData.common.employee_name );

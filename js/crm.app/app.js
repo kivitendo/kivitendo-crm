@@ -44,7 +44,7 @@ function crmGetLxcarsVer(){
     });
 }
 
-function crmGetHistory(){
+function crmGetHistory( refresh = true ){
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
@@ -63,10 +63,9 @@ function crmGetHistory(){
                 var histlist = $('#crm-hist-last').clone();
                 $( '#crm-hist-last' ).replaceWith($( '#crm-hist-last' ).clone() );
                 $( '#crm-hist-last' ).click( function(){
-
                     getCVPA( data[0][2], data[0][0] );
                 });
-                getCVPA( data[0][2], data[0][0] );// ( CV, id )
+                if( refresh ) getCVPA( data[0][2], data[0][0] );// ( CV, id )
             }
         },
         error: function(xhr, status, error){
@@ -119,7 +118,7 @@ function getCVPA( src, id ){
 
 function crmRefreshAppView( src, id ){
     getCVPA( src, id );
-    crmGetHistory();
+    crmGetHistory( false );
 }
 
 function crmRefreshAppViewAction( ){

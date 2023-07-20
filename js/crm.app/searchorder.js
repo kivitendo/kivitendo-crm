@@ -82,6 +82,7 @@ function crmSearchOrder( onSuccess = null ){
                     type: 'POST',
                     data:  { action: 'getOrder', data: { 'id': this.id } },
                     success: function( crmData ){
+                        crmRefreshAppView( 'C', crmData.order.common.customer_id );
                         crmEditOrderDlg( crmData );
                     },
                     error: function( xhr, status, error ){

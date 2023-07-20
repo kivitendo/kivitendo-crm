@@ -256,7 +256,7 @@ function getCVPA( $data ){
     $query = "SELECT ";
     if( $data['src'] == 'P' ){
         $cp_cv = $GLOBALS['dbh']->getOne( "SELECT id, 'C' AS src FROM customer WHERE id = (SELECT cp_cv_id FROM contacts WHERE cp_id = ".$data['id'].") UNION ALL SELECT id, 'V' AS src FROM vendor WHERE id = (SELECT cp_cv_id FROM contacts WHERE cp_id = ".$data['id'].")" );
-        writeLog( $cp_cv );
+        //writeLog( $cp_cv );
         $data['id'] = $cp_cv['id'];
         $data['src'] = $cp_cv['src'];
     }

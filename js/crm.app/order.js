@@ -360,7 +360,15 @@ function crmInsertOrderPos( itemPosition, itemType, item, modified = false ){
             }
             break;
         case crmOrderTypeEnum.Offer:
-            return;
+            pos['record']['orderitems'] = {};
+            pos['record']['orderitems']['trans_id'] = $( '#od-off-id' ).val();
+            pos['record']['orderitems']['position'] = itemPosition;
+            pos['record']['orderitems']['parts_id'] = item.id;
+            pos['record']['orderitems']['qty'] = ( item.qty === null )? 0 : item.qty;
+            pos['record']['orderitems']['unit'] = item.unit;
+            pos['record']['orderitems']['sellprice'] = item.sellprice;
+            pos['record']['orderitems']['description'] = item.description;
+            pos['sequence_name'] = 'orderitemsid';
             break;
         case crmOrderTypeEnum.Delivery:
             return;
@@ -410,7 +418,7 @@ crmDeleteOrderPos = function( e ){
             if( 'I' === itemType  ) dbTable = 'instructions';
             break;
         case crmOrderTypeEnum.Offer:
-            return;
+            dbTable = 'orderitems';
             break;
         case crmOrderTypeEnum.Delivery:
             return
@@ -451,7 +459,7 @@ function crmSaveOrder(){
         case crmOrderTypeEnum.Offer:
             if( isEmpty( $( '#od-off-id' ).val() ) ) return;
             dbPSItemsTable = 'orderitems';
-            crmSaveOrderType( dbUpdateData );
+            crmSaveOfferType( dbUpdateData );
             break;
         case crmOrderTypeEnum.Delivery:
             return
@@ -505,7 +513,7 @@ function crmSaveOrder(){
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
-        data:  { action: 'genericUpdateEx1', data: dbUpdateData },
+        data:  { action: 'genericUpdateEx', data: dbUpdateData },
         success: function( data ){
             console.info( 'Order saved' );
             saving = false;
@@ -514,6 +522,28 @@ function crmSaveOrder(){
             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmSaveOrder()', xhr.responseText );
         }
     });
+}
+
+function crmSaveOfferType( dbUpdateData ){
+    dbUpdateData['oe'] = {};
+    dbUpdateData['customer'] = {};
+
+    $( '.od-off-common :input' ).each( function( key, pos ){
+        let columnName = pos.id.split( '-' )[2];
+        if( !exists( columnName ) ) return;
+         dbUpdateData['oe'][pos.id.split( '-' )[2]] = ( 'checkbox' === pos.type )? $( pos ).prop( 'checked' ) : $( pos ).val();
+    });
+
+    dbUpdateData['oe']['intnotes'] = $( '#od-oe-intnotes' ).val();
+    dbUpdateData['oe']['amount'] = kivi.parse_amount( $( '#od-amount' ).val() );
+    dbUpdateData['oe']['netamount'] = kivi.parse_amount( $( '#od-netamount' ).val() );
+    dbUpdateData['oe']['WHERE'] = {};
+    dbUpdateData['oe']['WHERE'] = 'id = ' + $( '#od-off-id' ).val();
+
+    dbUpdateData['customer']['notes'] = $( '#od-customer-notes' ).val();
+    dbUpdateData['customer']['WHERE'] = {};
+    dbUpdateData['customer']['WHERE']= 'id = ' + $( '#od-customer-id' ).val();
+
 }
 
 function crmSaveOrderType( dbUpdateData ){

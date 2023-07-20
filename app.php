@@ -422,7 +422,7 @@
             </td>
         </tr>
     </table>
-    <table id="od-off-common-table" class="od-inv-common od-common-style" width="100%">
+    <table id="od-off-common-table" class="od-off-common od-common-style" width="100%">
         <tr>
             <td width="33%">
                 <table>

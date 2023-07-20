@@ -293,7 +293,7 @@ function getCVPA( $data ){
         // Rechnungen
         $db_table = array('C' => 'ar', 'V' => 'ap');
         $query .= "(SELECT json_agg( inv ) AS inv FROM (".
-                    "SELECT DISTINCT ON (".$db_table[$data['src']].".id) to_char(".$db_table[$data['src']].".transdate, 'DD.MM.YYYY') as date, description, COALESCE(ROUND(amount,2))||' '||COALESCE(C.name) as amount, ".
+                    "SELECT DISTINCT ON (".$db_table[$data['src']].".id) to_char(".$db_table[$data['src']].".transdate, 'DD.MM.YYYY') as date, COALESCE( description, '---------' ) AS description, COALESCE( ROUND( amount,2 ) )||' '||COALESCE( C.name ) as amount, ".
                     "invnumber as number, ".$db_table[$data['src']].".id FROM ".$db_table[$data['src']]." LEFT JOIN invoice  ON ".$db_table[$data['src']].".id=trans_id LEFT JOIN currencies C on currency_id=C.id  WHERE ".$id[$data['src']]." = ".$data['id']." ORDER BY ".$db_table[$data['src']].".id DESC, invoice.id".
                     ") AS inv) AS inv, ";
     }
@@ -548,9 +548,13 @@ function getOrder( $data, $offer = false){
 
     $query .= "(SELECT json_agg( orderitems ) AS orderitems FROM (".$sql.") AS orderitems) AS orderitems";
 
-    $workers = json_encode(ERPUsersfromGroup("Werkstatt"));
-
-    echo '{ "'.(( $offer )? 'offer' : 'order').'": '.$GLOBALS['dbh']->getOne( $query, true ).', "workers": '.$workers.' }';
+    if( $offer ){
+        echo '{ "offer": '.$GLOBALS['dbh']->getOne( $query, true ).' }';
+    }
+    else{
+        $workers = json_encode(ERPUsersfromGroup("Werkstatt"));
+        echo '{ "order": '.$GLOBALS['dbh']->getOne( $query, true ).', "workers": '.$workers.' }';
+    }
 }
 
 function getInvoice( $data, $flag = null ){

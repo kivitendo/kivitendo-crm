@@ -427,6 +427,10 @@ $( '#crm-wf-scan' ).click( function() {
    crmNewCarFromScan();
 });
 
+$( '#crm-wf-new-car' ).click( function() {
+   crmEditCarDlg( ); //in 'js/car.js'
+});
+
 $( '#crm-wf-offer' ).click( function() {
     alert( "Angebot erstellen!" );
 });

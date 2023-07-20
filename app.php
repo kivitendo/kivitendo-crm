@@ -208,7 +208,7 @@
     <input id="crm-widget-quicksearch" placeholder="Schnellsuche" maxlength="20" class="ui-autocomplete-input" style="margin-left: 10px" autocomplete="off">
     <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div id="crm-hist-last" class="layout-actionbar-action layout-actionbar-submit">Zuletzt</div><span></span></div><div id="crm-history-list" class="layout-actionbar-combobox-list"></div></div>
     <div class="layout-actionbar-separator"></div>
-    <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Neu</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-customer">Kunde</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-vendor">Lieferant</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-person">Person</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-scan"></div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-order">Auftrag</div></div></div>
+    <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Neu</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-customer">Kunde</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-vendor">Lieferant</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-person">Person</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-scan"></div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-car">Neues Auto</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-order">Auftrag</div></div></div>
     <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Bearbeiten</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit">Stammdaten</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order">Auftragsuche</div></div></div>
 </div>
 
@@ -263,6 +263,7 @@
     <input id="od-customer-id" type="hidden"></input>
     <input id="od-lxcars-c_id" type="hidden"></input>
     <input id="od-oe-id" type="hidden"></input>
+    <input id="od-off-id" type="hidden"></input>
     <input id="od-inv-id" type="hidden"></input>
     <table id="od-oe-common-table" class="od-oe-common od-common-style" width="100%">
         <tr>
@@ -426,7 +427,7 @@
             <td width="33%">
                 <table>
                     <tr>
-                        <td class="od-table-label"><label for="od-inv-customer-name">Kunde:</label></td>
+                        <td class="od-table-label"><label for="od-off-customer-name">Kunde:</label></td>
                         <td><span id="od-off-customer-name"></span></td>
                     </tr>
                     <tr>
@@ -467,6 +468,14 @@
                         <td><input type="hidden" id="od-off-employee_id"></input><span id="od-off-employee_name"></span></td>
                      </tr>
                  </table>
+            </td>
+            <td width="33%">
+                <table>
+                    <tr>
+                        <td class="od-table-label"><label for="od-off-closed">Geschlossen:</label></td>
+                        <td><input id="od-off-closed" type="checkbox"></td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>

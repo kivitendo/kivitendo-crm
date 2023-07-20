@@ -204,7 +204,7 @@ function crmSearchCustomerForScan( name ){
     });
 }
 
-function crmEditCarDlg( crmData ){
+function crmEditCarDlg( crmData = null ){
     crmInitFormEx( editCarFormModel, '#edit-car-form', 21, '#edit-car-hidden' );
     crmInitFormEx( editCarKbaFormModel, '#edit-car-kba-form' );
 
@@ -213,6 +213,10 @@ function crmEditCarDlg( crmData ){
         console.info( crmData );
         crmEditKbaDlg( crmData );
     });
+
+    if( !exists( crmData ) ){
+        alert( "ToDo: Neues Auto anlegen" );
+    }
 
     for( let item of editCarFormModel){
         let columnName = item.name.split( '-' );

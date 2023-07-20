@@ -550,7 +550,7 @@ function getOrder( $data, $offer = false){
 
     $workers = json_encode(ERPUsersfromGroup("Werkstatt"));
 
-    echo '{ "order": '.$GLOBALS['dbh']->getOne( $query, true ).', "workers": '.$workers.' }';
+    echo '{ "'.(( $offer )? 'offer' : 'order').'": '.$GLOBALS['dbh']->getOne( $query, true ).', "workers": '.$workers.' }';
 }
 
 function getInvoice( $data, $flag = null ){

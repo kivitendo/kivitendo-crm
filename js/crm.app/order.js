@@ -886,9 +886,15 @@ function crmPrintOrder( e ){
     data['shippingpoint'] = '' + $( '#od-inv-shippingpoint' ).val();
     data['shipvia'] = '' + $( '#od-inv-shipvia' ).val();
     data['transaction_description'] = '';
-    data['employee_id'] = '' + $( '#od-inv-employee_id' ).val();
-    data['salesman_id'] = '' + $( '#od-inv-employee_id' ).val();
     if( crmOrderTypeEnum.Invoice == crmOrderType ){
+        data['employee_id'] = '' + $( '#od-inv-employee_id' ).val();
+        data['salesman_id'] = '' + $( '#od-inv-employee_id' ).val();
+    }
+    else if( crmOrderTypeEnum.Offer == crmOrderType ){
+        data['employee_id'] = '' + $( '#od-off-employee_id' ).val();
+        data['salesman_id'] = '' + $( '#od-off-employee_id' ).val();
+    }
+     if( crmOrderTypeEnum.Invoice == crmOrderType ){
         data['invnumber'] = '' + $( '#od-inv-invnumber' ).text();
         data['invdate'] = ''+ $( '#od-inv-itime' ).text();
         data['duedate'] = ''+ $( '#od-inv-itime' ).text();

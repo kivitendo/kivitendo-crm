@@ -299,8 +299,8 @@
                         <td><input class="od-oe-km_stnd" id="od-oe-km_stnd" type="number"></td>
                      </tr>
                     <tr>
-                        <td class="od-table-label"><label for="od-lxcars-c_ln">Amtl.-Kennz.:</label></td>
-                        <td><label id="od-lxcars-c_ln" type="text"></td>
+                        <td class="od-table-label"><label for="od_lxcars_c_ln">Amtl.-Kennz.:</label></td>
+                        <td><input id="od_lxcars_c_ln" type="text"></input></td>
                      </tr>
                     <tr>
                         <td class="od-table-label"><label for="od-oe-car_status">KfZ Ort:</label></td>
@@ -392,7 +392,7 @@
                      </tr>
                     <tr>
                         <td class="od-table-label"><label for="od-inv-shippingpoint">Amtl.-Kennz.:</label></td>
-                        <td><label id="od-inv-shippingpoint" type="text"></td>
+                        <td><input id="od-inv-shippingpoint" type="text"></input></td>
                      </tr>
                </table>
             </td>

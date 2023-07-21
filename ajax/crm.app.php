@@ -66,7 +66,10 @@ function searchCustomer(){
 function searchCarLicense(){
     if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
         $term = $_GET['term'];
-        echo $GLOBALS['dbh']->getAll( "SELECT c_ln AS value FROM lxc_cars WHERE c_ln ILIKE '%".$term."%' LIMIT 15", true );
+        $query = "SELECT c_ln AS value, c_id AS id FROM lxc_cars AS id WHERE c_ln ILIKE '%".$term."%'";
+        if( isset( $_GET['customer'] ) && !empty( $_GET['customer'] ) ) $query .= " AND c_ow = ".$_GET['customer'];
+        $query .= " ORDER BY c_ln ASC LIMIT 15";
+        echo $GLOBALS['dbh']->getAll( $query, true );
     }
 }
 

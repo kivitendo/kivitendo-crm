@@ -579,7 +579,7 @@ function crmSaveOrderType( dbUpdateData ){
     dbUpdateData['customer']['notes'] = $( '#od-customer-notes' ).val();
     dbUpdateData['lxc_cars']['c_text'] = $( '#od-lxcars-c_text' ).val();
     dbUpdateData['oe']['intnotes'] = $( '#od-oe-intnotes' ).val();
-    dbUpdateData['oe']['shippingpoint'] = $( '#od-lxcars-c_ln' ).html();// für Kilometerstand in Druckvorlage od-lxcars-c_ln
+    dbUpdateData['oe']['shippingpoint'] = $( '#od_lxcars_c_ln' ).val();// für Kilometerstand in Druckvorlage od-lxcars-c_ln
     dbUpdateData['oe']['shipvia'] = $( '#od-oe-km_stnd' ).val();// für Kennzeichen in Druckvorlage
     dbUpdateData['oe']['amount'] = kivi.parse_amount( $( '#od-amount' ).val() );
     dbUpdateData['oe']['netamount'] = kivi.parse_amount( $( '#od-netamount' ).val() );
@@ -608,7 +608,7 @@ function crmSaveInvoiceType( dbUpdateData ){
     dbUpdateData['customer']['notes'] = $( '#od-customer-notes' ).val();
     dbUpdateData['lxc_cars']['c_text'] = $( '#od-lxcars-c_text' ).val();
     dbUpdateData['ar']['intnotes'] = $( '#od-oe-intnotes' ).val();
-    dbUpdateData['ar']['shippingpoint'] = $( '#od-inv-shippingpoint' ).html();// für Kilometerstand in Druckvorlage od-lxcars-c_ln
+    dbUpdateData['ar']['shippingpoint'] = $( '#od-inv-shippingpoint' ).val();// für Kilometerstand in Druckvorlage od-lxcars-c_ln
     dbUpdateData['ar']['shipvia'] = $( '#od-inv-shipvia' ).val();// für Kennzeichen in Druckvorlage
     dbUpdateData['ar']['amount'] = kivi.parse_amount( $( '#od-amount' ).val() );
     dbUpdateData['ar']['netamount'] = kivi.parse_amount( $( '#od-netamount' ).val() );
@@ -658,6 +658,7 @@ function crmNewOffer(){
     });
 }
 
+// changeCustomer:
 $( '#od_off_customer_name, #od_customer_name, #od_inv_customer_name' ).autocomplete({
     source: "crm/ajax/crm.app.php?action=searchCustomer",
     select: function( e, ui ) {
@@ -696,6 +697,59 @@ $( '#od_off_customer_name, #od_customer_name, #od_inv_customer_name' ).autocompl
             },
             error: function( xhr, status, error ){
                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'changeCustomer', xhr.responseText );
+            }
+        });
+    }
+});
+
+// changeCar:
+$( '#od_lxcars_c_ln, #od-inv-shippingpoint' ).autocomplete({
+        source: function(request, response) {
+            $.get('crm/ajax/crm.app.php?action=searchCarLicense', { term: request.term, customer: $( '#od-customer-id' ).val()  }, function(data) {
+                response(data);
+            });
+        },
+        select: function( e, ui ) {
+        let tabName = '';
+        let id = '';
+        let tabCol = '';
+        let c_ln = '';
+        switch( crmOrderType ){
+            case crmOrderTypeEnum.Order:
+                tabName = "oe";
+                id = 'od-oe-id';
+                tabCol = 'c_id';
+                c_ln = ui.item.id
+                break;
+            case crmOrderTypeEnum.Offer:
+                tabName = "oe";
+                id = 'od-off-id';
+                tabCol = 'c_id';
+                c_ln = ui.item.id
+                break;
+           case crmOrderTypeEnum.Invoice:
+                tabName = "ar";
+                id = 'od-inv-id';
+                tabCol = 'shippingpoint';
+                c_ln = ui.item.value;
+                break;
+        }
+        dbUpdateData = {};
+        dbUpdateData[tabName] = {};
+        dbUpdateData[tabName][tabCol] = c_ln;
+        dbUpdateData[tabName]['WHERE'] = {};
+        dbUpdateData[tabName]['WHERE'] = 'id = ' + $( '#' + id ).val();
+
+        $.ajax({
+            url: 'crm/ajax/crm.app.php',
+            type: 'POST',
+            data:  { action: 'genericUpdateEx', data: dbUpdateData },
+            success: function( data ){
+                console.info( 'Car changed' );
+                $( '#od-lxcars-c_id' ).val( ui.item.id );
+            },
+            error: function( xhr, status, error ){
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'changeCar', xhr.responseText );
             }
         });
     }
@@ -822,7 +876,7 @@ function crmPrintInvoice( e ){
     data['language_id'] = '';
     data['department_id'] = '';
     data['currency'] = 'EUR';
-    data['shippingpoint'] = '' + $( '#od-inv-shippingpoint' ).text();
+    data['shippingpoint'] = '' + $( '#od-inv-shippingpoint' ).val();
     data['shipvia'] = '' + $( '#od-inv-shipvia' ).val();
     data['transaction_description'] = '';
     data['employee_id'] = '' + $( '#od-inv-employee_id' ).val();
@@ -960,7 +1014,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-oe-km_stnd' ).val( crmData.order.common.km_stnd );
             $( '#od-oe-employee_name' ).html( crmData.order.common.employee_name );
             $( '#od-oe-employee_id' ).val( crmData.order.common.employee_id );
-            $( '#od-lxcars-c_ln' ).html( crmData.order.common.c_ln );
+            $( '#od_lxcars_c_ln' ).val( crmData.order.common.c_ln );
             $( '#od-oe-mtime' ).html( kivi.format_date( new Date( crmData.order.common.mtime ) ) );
             $( '#od-oe-internalorder' ).prop( 'checked', crmData.order.common.internalorder );
             $( '#od-oe-itime' ).html( kivi.format_date( new Date( crmData.order.common.itime ) ) );
@@ -989,7 +1043,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-oe-km_stnd' ).val( '0' );
             $( '#od-oe-employee_name' ).html( crmData.common.employee_name );
             $( '#od-oe-employee_id' ).val( crmData.common.employee_id );
-            $( '#od-lxcars-c_ln' ).html( crmData.common.c_ln  );
+            $( '#od_lxcars_c_ln' ).val( crmData.common.c_ln  );
             $( '#od-oe-mtime' ).html( '' );
             $( '#od-oe-internalorder' ).prop( 'checked', false );
             $( '#od-oe-itime' ).html( '' );
@@ -1017,7 +1071,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-lxcars-c_id' ).val( crmData.bill.common.c_id );
             $( '#od-customer-id' ).val( crmData.bill.common.customer_id );
             $( '#od_inv_customer_name' ).val( crmData.bill.common.customer_name );
-            $( '#od-inv-shippingpoint' ).html( crmData.bill.common.shippingpoint );
+            $( '#od-inv-shippingpoint' ).val( crmData.bill.common.shippingpoint );
             $( '#od-inv-shipvia' ).val( crmData.bill.common.shipvia );
             $( '#od-inv-invnumber' ).html( crmData.bill.common.invnumber );
             $( '#od-inv-ordnumber' ).html( crmData.bill.common.ordnumber );
@@ -1034,7 +1088,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-lxcars-c_id' ).val( '' );
             $( '#od_inv_customer_name' ).val( crmData.common.customer_name );
             $( '#od-customer-id' ).val( crmData.common.customer_id );
-            $( '#od-inv-shippingpoint' ).html( '' );
+            $( '#od-inv-shippingpoint' ).val( '' );
             $( '#od-inv-shipvia' ).val( '' );
             $( '#od-inv-invnumber' ).html( '' );
             $( '#od-inv-ordnumber' ).html( '' );

@@ -851,22 +851,23 @@ function crmInsertInvoiceFromOrder(){
 
 }
 
-function crmPrintInvoice( e ){
+function crmPrintOrder( e ){
     let data = {};
     data['id'] = ''+  $( '#od-inv-id' ).val();
-    data['type'] = 'invoice';
+    if( crmOrderTypeEnum.Invoice == crmOrderType ) data['type'] = 'invoice';
+    else if( crmOrderTypeEnum.Offer == crmOrderType ) data['type'] = 'sales_quotation';
     data['vc'] = 'customer';
-    data['title'] = 'Rechnung bearbeiten';
-    data['business'] = 'Autoprofis privat';
     data['taxaccounts'] = '1776 ';
-    data['invoice_id'] = '';
     data['show_details'] = '0';
     data['1776_rate'] = '0.19000';
     data['1776_description'] = 'Umsatzsteuer';
     data['1776_taxnumber'] = '1776';
     data['1776_tax_id'] = '777';
-    data['follow_up_trans_id_1'] = '' +  $( '#od-inv-id' ).val();
+    if( crmOrderTypeEnum.Invoice == crmOrderType ) data['follow_up_trans_id_1'] = '' +  $( '#od-inv-id' ).val();
+    else if( crmOrderTypeEnum.Offer == crmOrderType ) data['follow_up_trans_id_1'] = '' +  $( '#od-off-id' ).val();
     data['follow_up_trans_type_1'] = 'sales_invoice';
+    if( crmOrderTypeEnum.Invoice == crmOrderType ) data['follow_up_trans_type_1'] = 'sales_invoice';
+    else if( crmOrderTypeEnum.Offer == crmOrderType ) data['follow_up_trans_type_1'] = 'sales_quotation';
     data['already_printed_flag'] = '0';
     data['has_qr_reference'] = '0';
     data['customer_id'] = '' + $( '#od-customer-id' ).val();
@@ -881,11 +882,17 @@ function crmPrintInvoice( e ){
     data['transaction_description'] = '';
     data['employee_id'] = '' + $( '#od-inv-employee_id' ).val();
     data['salesman_id'] = '' + $( '#od-inv-employee_id' ).val();
-    data['invnumber'] = '' + $( '#od-inv-invnumber' ).text();
-    data['invdate'] = ''+ $( '#od-inv-itime' ).text();
-    data['duedate'] = ''+ $( '#od-inv-itime' ).text();
-    data['ordnumber'] = '' + $( '#od-inv-ordnumber' ).text();
-    data['orddate'] = '' + $( '#od-inv-itime' ).text();
+    if( crmOrderTypeEnum.Invoice == crmOrderType ){
+        data['invnumber'] = '' + $( '#od-inv-invnumber' ).text();
+        data['invdate'] = ''+ $( '#od-inv-itime' ).text();
+        data['duedate'] = ''+ $( '#od-inv-itime' ).text();
+        data['ordnumber'] = '' + $( '#od-inv-ordnumber' ).text();
+        data['orddate'] = '' + $( '#od-inv-itime' ).text();
+    }
+    else if( crmOrderTypeEnum.Offer == crmOrderType ){
+        data['quonumber'] = '' + $( '#od-off-quonumber' ).text()
+        data['transdate'] = '' + $( '#od-off-itime' ).text()
+    }
     let runningnumber = 0;
     $( '#edit-order-table > tbody > tr').each( function( key, pos ){
         runningnumber = $( pos ).find( '[class=od-item-position]' ).text();
@@ -904,12 +911,15 @@ function crmPrintInvoice( e ){
         data['marge_absolut_' + runningnumber] = '' + $( pos ).find( '[class=od-item-marge_total]' ).val();
         data['marge_percent_' + runningnumber] = '100,00';
         data['marge_price_factor_' + runningnumber] = '1.00000';
-        data['invoice_id_' + runningnumber] = '' + pos.id;
+
+        if( crmOrderTypeEnum.Invoice == crmOrderType ) data['invoice_id_' + runningnumber] = '' + pos.id;
+        else if( crmOrderTypeEnum.Offer == crmOrderType ) data['orderitems_id_' + runningnumber] = '' + pos.id;
         data['lastcost_' + runningnumber] = '0,00';
     });
     data['rowcount'] = runningnumber;
-    data['formname'] = 'invoice';
-    data['format'] = 'pdf';
+    if( crmOrderTypeEnum.Invoice == crmOrderType ) data['formname'] = 'invoice';
+    else if( crmOrderTypeEnum.Offer == crmOrderType ) data['formname'] = 'sales_quotation';
+     data['format'] = 'pdf';
     if( 'screen' == $( e ).attr( 'value' )){
             data['media'] = 'screen';
             data['printer_id'] = '';
@@ -1102,10 +1112,10 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         }
 
         $( '#od-inv-printers' ).html( '' );
-        $( '#od-inv-printers' ).append( '<li><a value="screen" href="#" onclick="crmPrintInvoice( this );">Bildschirm</a></li>' );
+        $( '#od-inv-printers' ).append( '<li><a value="screen" href="#" onclick="crmPrintOrder( this );">Bildschirm</a></li>' );
         if( exists( crmData.bill.printers ) ){
             for( let printer of crmData.bill.printers ){
-                $( '#od-inv-printers' ).append( '<li><a value="' + printer.id  + '" href="#" onclick="crmPrintInvoice( this );">' + printer.printer_description + '</a></li>' );
+                $( '#od-inv-printers' ).append( '<li><a value="' + printer.id  + '" href="#" onclick="crmPrintOrder( this );">' + printer.printer_description + '</a></li>' );
             }
         }
     }

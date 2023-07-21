@@ -175,6 +175,7 @@
 
     .ui-menu {
         width: 15em;
+        z-index:1000 !important;
     }
 
     .ui-widget-header {
@@ -248,7 +249,7 @@
                 <span style="font-weight: bold;">Drucken</span>
                 <ul id="od-inv-printers-menu" >
                     <li><a id="od-inv-current-printer" value="screen" href = "#" onclick="crmPrintInvoice( this );">Bildschrim</a>
-                        <ul id="od-inv-printers">
+                        <ul id="od-inv-printers" >
                         </ul>
                     </li>
                 </ul>

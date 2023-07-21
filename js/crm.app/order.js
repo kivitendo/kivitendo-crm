@@ -853,9 +853,14 @@ function crmInsertInvoiceFromOrder(){
 
 function crmPrintOrder( e ){
     let data = {};
-    data['id'] = ''+  $( '#od-inv-id' ).val();
-    if( crmOrderTypeEnum.Invoice == crmOrderType ) data['type'] = 'invoice';
-    else if( crmOrderTypeEnum.Offer == crmOrderType ) data['type'] = 'sales_quotation';
+    if( crmOrderTypeEnum.Invoice == crmOrderType ){
+        data['id'] = ''+  $( '#od-inv-id' ).val();
+        data['type'] = 'invoice';
+    }
+    else if( crmOrderTypeEnum.Offer == crmOrderType ){
+        data['id'] = ''+  $( '#od-off-id' ).val();
+        data['type'] = 'sales_quotation';
+    }
     data['vc'] = 'customer';
     data['taxaccounts'] = '1776 ';
     data['show_details'] = '0';

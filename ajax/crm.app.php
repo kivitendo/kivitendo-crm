@@ -99,7 +99,7 @@ function searchOrder( $data ){
     }
 
     if( $data['car_license'] != '' ){
-        $where .= "lxc_cars.c_ln ILIKE '%".$data['car_license']."%' AND ";
+        $where .= "cars.c_ln ILIKE '%".$data['car_license']."%' AND ";
     }
 
 //    if( $data['car_manuf'] != '' ){
@@ -135,7 +135,7 @@ function searchOrder( $data ){
             "cars.c_2 AS c_2, cars.c_3 AS c_3, cars.hersteller AS car_manuf, cars.name AS car_type, oe.internalorder AS internal_order, oe.itime AS init_ts ".
             "FROM oe, instructions, parts, customer, ".
             "(SELECT * FROM lxc_cars LEFT JOIN lxckba ON lxckba.id = lxc_cars.kba_id) AS cars ".
-            "WHERE oe.status != 'abgerechnet' AND instructions.trans_id = oe.id AND parts.id = instructions.parts_id AND cars.c_id = oe.c_id AND customer.id = oe.customer_id ".
+            "WHERE ".$where." instructions.trans_id = oe.id AND parts.id = instructions.parts_id AND cars.c_id = oe.c_id AND customer.id = oe.customer_id ".
             "UNION ".
             "SELECT distinct on ( oe.id, internal_order ) 'false'::BOOL AS instruction, oe.id, cars.c_ln, to_char( oe.transdate, 'DD.MM.YYYY') AS transdate, ".
             "oe.ordnumber, orderitems.description, oe.car_status, oe.status, oe.finish_time, customer.name AS owner, oe.c_id AS c_id, oe.customer_id, ".
@@ -143,7 +143,7 @@ function searchOrder( $data ){
             "oe.internalorder AS internal_order, oe.itime AS init_ts ".
             "FROM oe, orderitems, parts, customer, ".
             "(SELECT * FROM lxc_cars LEFT JOIN lxckba ON lxckba.id = lxc_cars.kba_id) AS cars ".
-            "WHERE  oe.status != 'abgerechnet'  AND  orderitems.trans_id = oe.id AND parts.id = orderitems.parts_id AND orderitems.position = 1 AND cars.c_id = oe.c_id AND customer.id = oe.customer_id ".
+            "WHERE ".$where." orderitems.trans_id = oe.id AND parts.id = orderitems.parts_id AND orderitems.position = 1 AND cars.c_id = oe.c_id AND customer.id = oe.customer_id ".
             "ORDER BY instruction ASC) AS myTable ORDER BY internal_order ASC, init_ts DESC LIMIT 100";
 
     //writeLog( $sql );

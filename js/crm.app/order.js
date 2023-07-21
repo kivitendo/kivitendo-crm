@@ -535,7 +535,6 @@ function crmSaveOrder(){
         data:  { action: 'genericUpdateEx', data: dbUpdateData },
         success: function( data ){
             console.info( 'Order saved' );
-            saving = false;
         },
         error: function( xhr, status, error ){
             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmSaveOrder()', xhr.responseText );
@@ -662,28 +661,43 @@ function crmNewOffer(){
 $( '#od_off_customer_name, #od_customer_name, #od_inv_customer_name' ).autocomplete({
     source: "crm/ajax/crm.app.php?action=searchCustomer",
     select: function( e, ui ) {
-//        dbUpdateData = {};
-//        dbUpdateData['oe'] = {};
-//        dbUpdateData['oe']['customer_id'] = ui.item.id;
-//        dbUpdateData['oe']['WHERE'] = {};
-//        dbUpdateData['oe']['WHERE'] = 'id = ' + $( '#od-oe-id' ).val();
-//
-//        $.ajax({
-//            url: 'crm/ajax/crm.app.php',
-//            type: 'POST',
-//            data:  { action: 'genericUpdateEx', data: dbUpdateData },
-//            success: function( data ){
-//                console.info( 'Order saved' );
-//                saving = false;
-//                $( '#od-customer-id' ).val( ui.item.id );
-//            },
-//            error: function( xhr, status, error ){
-//                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmSaveOrder()', xhr.responseText );
-//            }
-//        });
-    },
-    close: function( e, ui ) {
-        crmRefreshAppView( 'C', $( '#od-customer-id' ).val() );
+        let tabName = '';
+        let id = '';
+        switch( crmOrderType ){
+            case crmOrderTypeEnum.Order:
+                tabName = "oe";
+                id = 'od-oe-id';
+                break;
+            case crmOrderTypeEnum.Offer:
+                tabName = "oe";
+                id = 'od-off-id';
+                break;
+            case crmOrderTypeEnum.Delivery:
+                break;
+            case crmOrderTypeEnum.Invoice:
+                tabName = "ar";
+                id = 'od-inv-id';
+                break;
+        }
+        dbUpdateData = {};
+        dbUpdateData[tabName] = {};
+        dbUpdateData[tabName]['customer_id'] = ui.item.id;
+        dbUpdateData[tabName]['WHERE'] = {};
+        dbUpdateData[tabName]['WHERE'] = 'id = ' + $( '#' + id ).val();
+
+        $.ajax({
+            url: 'crm/ajax/crm.app.php',
+            type: 'POST',
+            data:  { action: 'genericUpdateEx', data: dbUpdateData },
+            success: function( data ){
+                console.info( 'Order saved' );
+                $( '#od-customer-id' ).val( ui.item.id );
+                crmRefreshAppView( 'C', ui.item.id );
+            },
+            error: function( xhr, status, error ){
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'changeCustomer', xhr.responseText );
+            }
+        });
     }
 });
 

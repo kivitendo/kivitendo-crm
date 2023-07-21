@@ -549,6 +549,10 @@ function getOrder( $data, $offer = false){
         $query .= "(SELECT row_to_json( common ) AS common FROM (".
                     "SELECT oe.*, customer.name AS customer_name, customer.notes AS int_cu_notes, employee.id AS employee_id, employee.name AS employee_name FROM oe INNER JOIN customer ON customer.id = oe.customer_id INNER JOIN employee ON oe.employee_id = employee.id WHERE oe.id = ".$orderID.
                     ") AS common) AS common, ";
+
+        $query .= "(SELECT json_agg( printers ) AS printers FROM (".
+                    "SELECT * FROM printers".
+                    ") AS printers) AS printers, ";
     }
     else{
         $query .= "(SELECT row_to_json( common ) AS common FROM (".

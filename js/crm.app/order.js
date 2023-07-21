@@ -873,7 +873,8 @@ function crmPrintOrder( e ){
     data['customer_id'] = '' + $( '#od-customer-id' ).val();
     data['previous_customer_id'] = '' + $( '#od-customer-id' ).val();
     data['customer_pricegroup_id'] = '';
-    data['taxzone_id'] = '5';
+    if( crmOrderTypeEnum.Invoice == crmOrderType ) data['taxzone_id'] = '5';
+    else if( crmOrderTypeEnum.Offer == crmOrderType ) data['taxzone_id'] = '4';
     data['language_id'] = '';
     data['department_id'] = '';
     data['currency'] = 'EUR';
@@ -906,6 +907,10 @@ function crmPrintOrder( e ){
         data['unit_old_' + runningnumber] = '' + $( pos ).find( '[class=od-item-unit]' ).val();
         data['id_' + runningnumber] = '' + $( pos ).find( '[class=od-item-parts_id]' ).val();
         data['bin_' + runningnumber] = '';
+        if( crmOrderTypeEnum.Offer == crmOrderType ){
+            data['active_price_source_' + runningnumber] = '';
+            data['active_discount_source_' + runningnumber] = '';
+        }
         data['part_type_' + runningnumber] = '' + ( ( 'P' == $( pos ).find( '[class=od-item-type]' ).val() )? 'part' : 'service' );
         if( $( pos ).find( '[class=od-hidden-item-rate]' ).val() > 0 ) data['taxaccounts_' + runningnumber] = '1776';
         data['marge_absolut_' + runningnumber] = '' + $( pos ).find( '[class=od-item-marge_total]' ).val();
@@ -931,23 +936,31 @@ function crmPrintOrder( e ){
     data['copies'] = '1';
     data['action'] = 'print';
 
+    let formId = '';
+    if( crmOrderTypeEnum.Invoice == crmOrderType ) formId = 'od-inv-print-form';
+    else if( crmOrderTypeEnum.Offer == crmOrderType ) formId = 'od-off-print-form';
+
+    $( '#' + formId ).html( '' );
     $.each(data, function( key, value ){
-        $( '#od-print-form' ).append('<input type="hidden" name="' + key + '" value="' + value + '"></input>');
+        $( '#' + formId ).append('<input type="hidden" name="' + key + '" value="' + value + '"></input>');
     });
 
     if( 'screen' == $( e ).attr( 'value' ) ){
-        $( '#od-print-form' ).submit();
+        $( '#' + formId ).submit();
     }
     else{
+        let url = '';
+        if( crmOrderTypeEnum.Invoice == crmOrderType ) url = 'is.pl';
+        else if( crmOrderTypeEnum.Offer == crmOrderType ) url = 'oe.pl';
         $.ajax({
-            url: 'is.pl',
+            url: url,
             type: 'POST',
             data: data,
             success: function( data ){
                 console.info( 'printed' );
             },
             error: function( xhr, status, error ){
-                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( printOrder1 )', xhr.responseText );
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder()', xhr.responseText );
             }
         });
     }
@@ -1004,6 +1017,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
 
     if( crmOrderTypeEnum.Order == crmOrderType ){
         $( '#od-inv-menus' ).hide();
+        $( '#od-off-menus' ).hide();
         $( '#od-inv-common-table' ).hide();
         $( '#od-oe-workflow' ).show();
         $( '#od-oe-common-table' ).show();
@@ -1067,6 +1081,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
     else if( crmOrderTypeEnum.Invoice == crmOrderType ){
         $( '#od-oe-workflow' ).hide();
         $( '#od-inv-menus' ).show();
+        $( '#od-off-menus' ).hide();
         $( '#od-oe-common-table' ).hide();
         $( '#od-inv-common-table' ).show();
         $( '#od-off-common-table' ).hide();
@@ -1122,6 +1137,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
     else if( crmOrderTypeEnum.Offer == crmOrderType ){
         $( '#od-oe-workflow' ).hide();
         $( '#od-inv-menus' ).hide();
+        $( '#od-off-menus' ).show();
         $( '#od-oe-common-table' ).hide();
         $( '#od-inv-common-table' ).hide();
         $( '#od-off-common-table' ).show();
@@ -1158,6 +1174,14 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-off-internalorder' ).prop( 'checked', false );
             $( '#od-customer-notes' ).val( crmData.common.int_cu_notes  );
             $( '#od-oe-intnotes' ).val( '' );
+        }
+
+        $( '#od-off-printers' ).html( '' );
+        $( '#od-off-printers' ).append( '<li><a value="screen" href="#" onclick="crmPrintOrder( this );">Bildschirm</a></li>' );
+        if( exists( crmData.offer.printers ) ){
+            for( let printer of crmData.offer.printers ){
+                $( '#od-off-printers' ).append( '<li><a value="' + printer.id  + '" href="#" onclick="crmPrintOrder( this );">' + printer.printer_description + '</a></li>' );
+            }
         }
      }
 
@@ -1261,17 +1285,12 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
     }).dialog( 'open' ).resize();
 }
 
-$( "#od-oe-workflow" ).menu({
+$( "#od-oe-workflow, #od-inv-workflow, #od-off-workflow" ).menu({
    icons: { submenu: "ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"},
    position: { my: "right top", at: "right+3 top+28" }
 });
 
-$( "#od-inv-workflow" ).menu({
-   icons: { submenu: "ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"},
-   position: { my: "right top", at: "right+3 top+28" }
-});
-
-$( "#od-inv-printers-menu" ).menu({
+$( "#od-inv-printers-menu, #od-off-printers-menu" ).menu({
    icons: { submenu: "ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"},
    position: { my: "right top", at: "right+3 top+28" }
 });

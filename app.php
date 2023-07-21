@@ -233,14 +233,41 @@
              </ul>
          </li>
     </ul>
+    <table id="od-off-menus" style="margin-bottom: 1em;">
+        <tr>
+            <td style="vertical-align: bottom;">
+                <ul id = "od-off-workflow">
+                    <li><a href = "#" style="font-weight: bold;">Workflow</a>
+                        <ul>
+                            <li><a id="od-off-reuse-btn" href = "#">Wiederverwenden*</a></li>
+                            <li><a id="od-off-close-btn" href = "#">Vorlage für Auftrag*</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </td>
+            <td style="vertical-align: bottom;">
+                <span style="font-weight: bold;">Drucken</span>
+                <ul id="od-off-printers-menu" >
+                    <li><a id="od-off-current-printer" value="screen" href = "#" onclick="crmPrintOrder( this );">Bildschrim</a>
+                        <ul id="od-off-printers" >
+                        </ul>
+                    </li>
+                </ul>
+            </td>
+            <div  style="display:none">
+                <form id="od-off-print-form" method="post" action="oe.pl">
+                </form>
+            </div>
+        </tr>
+    </table>
     <table id="od-inv-menus" style="margin-bottom: 1em;">
         <tr>
             <td style="vertical-align: bottom;">
                 <ul id = "od-inv-workflow">
                     <li><a href = "#" style="font-weight: bold;">Workflow</a>
                         <ul>
-                            <li><a id="od-inv-reuse-btn" href = "#">Wiederverwenden</a></li>
-                            <li><a id="od-inv-close-btn" href = "#">Vorlage für Auftrag</a></li>
+                            <li><a id="od-inv-reuse-btn" href = "#">Wiederverwenden*</a></li>
+                            <li><a id="od-inv-close-btn" href = "#">Vorlage für Auftrag*</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -248,14 +275,14 @@
             <td style="vertical-align: bottom;">
                 <span style="font-weight: bold;">Drucken</span>
                 <ul id="od-inv-printers-menu" >
-                    <li><a id="od-inv-current-printer" value="screen" href = "#" onclick="crmPrintInvoice( this );">Bildschrim</a>
+                    <li><a id="od-inv-current-printer" value="screen" href = "#" onclick="crmPrintOrder( this );">Bildschrim</a>
                         <ul id="od-inv-printers" >
                         </ul>
                     </li>
                 </ul>
             </td>
             <div  style="display:none">
-                <form id="od-print-form" method="post" action="is.pl">
+                <form id="od-inv-print-form" method="post" action="is.pl">
                 </form>
             </div>
         </tr>

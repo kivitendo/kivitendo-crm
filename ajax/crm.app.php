@@ -1075,3 +1075,7 @@ function printOrder( $data ){
 
     echo 1;
 }
+
+function getCompanyAdress(){
+    echo $GLOBALS['dbh']->getOne( "SELECT company, address_street1, address_zipcode, address_city  FROM defaults", true );
+}

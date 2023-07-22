@@ -454,3 +454,19 @@ $( '#crm-wf-new-person' ).click( function() {
 $( '#crm-wf-search-order' ).click( function() {
    crmSearchOrder( crmSearchOrderDlg );
 });
+
+$( '#crm-route' ).click( function(){
+    let newWindow = window.open( '' );
+    $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        type: 'POST',
+        data: { action: 'getCompanyAdress' },
+        success: function( data ) {
+            var routeUrl = 'https://www.google.de/maps/dir/' + data.address_street1 + ',+' + data.address_zipcode + ',+' +  data.address_city + '/' + $( "#crm-contact-street" ).html() + ',+' + $( "#crm-contact-zipcode" ).html() + '+' + $( "#crm-contact-city" ).html() ;
+            return newWindow.location = routeUrl;
+        },
+        error: function() {
+            alert( 'Error: getCompanyAdress()!' )
+        }
+    });
+});

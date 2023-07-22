@@ -15,6 +15,12 @@ CREATE TABLE crmti(
 );;
 INSERT INTO crmti( crmti_src, crmti_dst ) VALUES ( 'INSTALL.TXT', 'LESEN' );;
 
+DROP FUNCTION kuerze( INT, TEXT );
+DROP FUNCTION SucheNummer( TEXT );
+DROP FUNCTION CallOut( TEXT, TEXT, TEXT );
+DROP FUNCTION CallIn( TEXT, TEXT, TEXT );
+
+
 CREATE OR REPLACE FUNCTION kuerze( INT, TEXT )
     RETURNS text AS $$
     -- Kürzt die Telefonummer von rechts auf n Stellen

@@ -455,6 +455,7 @@ $( '#crm-wf-search-order' ).click( function() {
    crmSearchOrder( crmSearchOrderDlg );
 });
 
+//Route zum Kunden oder Lieferanten anzeigen
 $( '#crm-route' ).click( function(){
     let newWindow = window.open( '' );
     $.ajax({
@@ -469,4 +470,9 @@ $( '#crm-route' ).click( function(){
             alert( 'Error: getCompanyAdress()!' )
         }
     });
+});
+
+//QR-Code für die Route anzeigen
+$( '#crm-route-qrcode' ).click( function(){
+    alert( 'QR-Code für die Route wird bald angezeigt...' );
 });

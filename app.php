@@ -771,9 +771,10 @@
                     <tr>
                         <td>Telefon:</td><td><button id="crm-contact-phone2"></button></td><td><button id="crm-contact-phone2_dialog_button" class='clickToCall2'>T</button><div id="crm-contact-phone2_dialog"></div></td><td><button id="crm-copy-contact-phone2" class="copy clickToCall2"  title="Copy">C</button></td><td ><button id="crm-whatsapp2" class="whatsapp clickToCall2" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
                     </tr>
-                    <tr>
-                        <td>E-Mail:</td><td><button id="crm-contact-email">Kein Eintrag</button></td><td></td>
                 </table>
+                <div id="crm-wx-contact-email" class="row crm-pt025">
+                <div class="col-md-2">E-Mail:</div>
+                <div class="col-md-10"><button id="crm-contact-email">Kein Eintrag</button></div>
             </div>
         </div>
         <div id="crm-wx-cars" style="display:none;">

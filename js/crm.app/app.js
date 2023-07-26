@@ -106,8 +106,8 @@ function getCVPA( src, id ){
         success: function( data ){
             showCVPA( data );
             console.info( data );
-            if( exists( data['car'] ) ){
-                crmEditCarDlg( data['car'] );
+            if( exists( data.car ) ){
+                crmEditCarDlg( data );
             }
         },
         error: function( xhr, status, error ){

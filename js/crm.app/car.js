@@ -250,6 +250,7 @@ function crmEditCarDlg( crmData = null ){
             if( exists( crmData.ord ) ){
                 let listrow0 = false;
                 $.each( crmData.ord, function( key, value ){
+                    if( key > 10 ) return false;
                     $( '#crm-edit-car-orders-table' ).append( '<tr id="' + value.id +'" class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' +  value.date + '</td><td>' + value.description  + '</td><td>' + value.amount  + '</td><td>' + value.number + '</td></tr>' );
                 });
                 $( '#crm-edit-car-orders-table tr' ).click( function(){

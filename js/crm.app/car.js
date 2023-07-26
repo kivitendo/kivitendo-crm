@@ -216,7 +216,7 @@ function crmEditCarDlg( crmData = null ){
         }
         else{
             $( '.edit_car_kba-hidden' ).show();
-            $( '#edit_car_kba_hide-show' ).text( "Hide extra fields" );
+            $( '#edit_car_kba_hide_show' ).text( "Hide extra fields" );
         }
     });
 

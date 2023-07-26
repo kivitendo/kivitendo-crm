@@ -174,7 +174,7 @@ function crmEditCuVeDlg( crmData, new_with_car ){
         }
         else{
             $( '.car_kba-hidden' ).show();
-            $( '#car_kba_hide-show' ).text( "Hide extra fields" );
+            $( '#car_kba_hide_show' ).text( "Hide extra fields" );
         }
     });
 

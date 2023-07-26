@@ -206,9 +206,21 @@ function crmSearchCustomerForScan( name ){
 
 function crmEditCarDlg( crmData = null ){
     crmInitFormEx( editCarFormModel, '#edit-car-form', 22, '#edit-car-hidden' );
-    crmInitFormEx( editCarKbaFormModel, '#edit-car-kba-form' );
+    crmInitFormEx( editCarKbaFormModel, '#edit-car-kba-form', 33 );
 
-    $( '#edit_car_kba-edit' ).click( function(){
+    $( '.edit_car_kba-hidden' ).hide();
+    $( '#edit_car_kba_hide_show' ).click( function(){
+        if( $( '.edit_car_kba-hidden' ).is(':visible' ) ){
+            $( '.edit_car_kba-hidden' ).hide();
+            $( '#edit_car_kba_hide_show' ).text( "Show extra fields" );
+        }
+        else{
+            $( '.edit_car_kba-hidden' ).show();
+            $( '#edit_car_kba_hide-show' ).text( "Hide extra fields" );
+        }
+    });
+
+    $( '#edit_car_kba_edit' ).click( function(){
         console.info( 'Edit kba' );
         console.info( crmData );
         crmEditKbaDlg( crmData );
@@ -229,7 +241,7 @@ function crmEditCarDlg( crmData = null ){
 
     for( let item of editCarKbaFormModel){
         let columnName = item.name.split( '-' );
-        if( exists( crmData[columnName[1]] ) ) $( '#' + item.name ).val( crmData[columnName[1]] );
+        if( exists( crmData.car[columnName[1]] ) ) $( '#' + item.name ).val( crmData.car[columnName[1]] );
     }
 
     $( '#crm-edit-car-orders-table' ).html('');

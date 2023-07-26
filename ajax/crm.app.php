@@ -505,7 +505,16 @@ function searchCustomerForScan( $data ){
 }
 
 function getCar( $data ){
-    echo $GLOBALS['dbh']->getOne( "SELECT *, to_char( c_hu, 'DD.MM.YYYY') AS c_hu, to_char( c_d, 'DD.MM.YYYY') AS c_d FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.kba_id = lxckba.id ) WHERE c_id = ".$data['id'], true );
+    $query = "SELECT ";
+    $query .= "(SELECT row_to_json( car ) AS car FROM (".
+                "SELECT *, to_char( c_hu, 'DD.MM.YYYY') AS c_hu, to_char( c_d, 'DD.MM.YYYY') AS c_d FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.kba_id = lxckba.id ) WHERE c_id = ".$data['id'].
+                ") AS car) AS car, ";
+    $query .= "(SELECT json_agg( ord ) AS ord FROM (".
+                "SELECT DISTINCT ON (oe.itime) to_char(oe.transdate, 'DD.MM.YYYY') as date, COALESCE( instructions.description, orderitems.description ) AS description, COALESCE(ROUND(amount,2))||' '||COALESCE(C.name) as amount, ".
+                "oe.ordnumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id = orderitems.trans_id LEFT JOIN instructions ON oe.id = instructions.trans_id LEFT JOIN currencies C on currency_id=C.id ".
+                "WHERE quotation = FALSE AND c_id = ".$data['id']." AND EXISTS(SELECT * FROM information_schema.tables WHERE table_name = 'lxc_ver') ORDER BY oe.itime DESC, orderitems.itime LIMIT 10".
+                ") AS ord) AS ord";
+    echo $GLOBALS['dbh']->getOne( $query, true );
 }
 
 function getDataForNewLxcarsOrder( $data ){

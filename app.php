@@ -100,7 +100,6 @@
     }
 
     .crm-pt025 {
-        padding-top: 2em;
         padding-top: 0.25em;
     }
 
@@ -628,16 +627,29 @@
     <table>
         <tr>
             <td style="vertical-align: top;">
-            <table id="edit-car-form">
-                <thead></thead>
-                <tbody></tbody>
-            </table>
+                <table id="edit-car-form">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
             </td>
             <td style="vertical-align: top;">
-            <table id="edit-car-kba-form">
-                <thead></thead>
-                <tbody></tbody>
-            </table>
+                <table id="edit-car-kba-form">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+                <div style="padding-top: 1em; padding-bottom: 0.25em"> Neuste Aufträge</div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <td class="listheading">Datum</th>
+                        <td class="listheading">Erste Position</th>
+                        <td class="listheading">Betrag</th>
+                        <td class="listheading">Nummer</th>
+                    </tr>
+                    </thead>
+                    <tbody id="crm-edit-car-orders-table">
+                    </tbody>
+                </table>
             </td>
          </tr>
     </table>

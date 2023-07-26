@@ -214,22 +214,44 @@ function crmEditCarDlg( crmData = null ){
         crmEditKbaDlg( crmData );
     });
 
-    if( !exists( crmData ) ){
+    if( !exists( crmData ) && !exists( crmData.car ) ){
         alert( "ToDo: Neues Auto anlegen" );
     }
 
     for( let item of editCarFormModel){
         let columnName = item.name.split( '-' );
-        if( exists( crmData[columnName[1]] ) ) $( '#' + item.name ).val( crmData[columnName[1]] );
+        if( exists( crmData.car[columnName[1]] ) ) $( '#' + item.name ).val( crmData.car[columnName[1]] );
         if( item.check ){
             columnName = item.check.split( '-' );
-            if( exists( crmData[columnName[1]] ) ) $( '#' + item.check ).prop( 'checked', crmData[columnName[1]] );
+            if( exists( crmData.car[columnName[1]] ) ) $( '#' + item.check ).prop( 'checked', crmData.car[columnName[1]] );
         }
     }
 
     for( let item of editCarKbaFormModel){
         let columnName = item.name.split( '-' );
         if( exists( crmData[columnName[1]] ) ) $( '#' + item.name ).val( crmData[columnName[1]] );
+    }
+
+    $( '#crm-edit-car-orders-table' ).html('');
+    if( exists( crmData.ord ) ){
+        let listrow0 = false;
+        $.each( crmData.ord, function( key, value ){
+            $( '#crm-edit-car-orders-table' ).append( '<tr id="' + value.id +'" class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' +  value.date + '</td><td>' + value.description  + '</td><td>' + value.amount  + '</td><td>' + value.number + '</td></tr>' );
+        });
+        $( '#crm-edit-car-orders-table tr' ).click( function(){
+            $.ajax({
+                url: 'crm/ajax/crm.app.php',
+                type: 'POST',
+                data:  { action: 'getOrder', data: { 'id': this.id } },
+                success: function( crmData ){
+                    $( '#crm-edit-car-dialog' ).dialog( 'close' );
+                    crmEditOrderDlg( crmData );
+                },
+                error: function( xhr, status, error ){
+                    $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmEditOrderDlg().getOrder', xhr.responseText );
+                }
+            });
+        });
     }
 
     $( '#crm-edit-car-dialog' ).dialog({

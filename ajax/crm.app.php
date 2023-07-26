@@ -715,7 +715,7 @@ function updateCuWithNewCar( $data ){
         if( array_key_exists( 'WHERE', $value ) ){
                 foreach( $value['WHERE'] AS $whereId => $whereVal ){
                     if( strcmp( $whereId, 'id' ) === 0 ) $id = $whereVal;
-                    //Kommas fehlen:
+                    //Achtung nur eine Bedingung möglich, mit dem Schema 'beliebige ID ist gleich Wert'
                     $where = $whereId.' = '.$whereVal;
                 }
                 unset( $value['WHERE'] );
@@ -750,12 +750,11 @@ function getblandid($data){
 }
 
 function genericUpdate( $data ){
-
     foreach( $data AS $key => $value ){
         $where = '';
         if( array_key_exists( 'WHERE', $value ) ){
                 foreach( $value['WHERE'] AS $whereId => $whereVal ){
-                    //Kommas fehlen:
+                    //Achtung nur eine Bedingung möglich, mit dem Schema 'beliebige ID ist gleich Wert' (siehe genericUpdateEx)
                     $where = $whereId.' = '.$whereVal;
                 }
                 unset( $value['WHERE'] );
@@ -764,7 +763,14 @@ function genericUpdate( $data ){
             resultInfo( false, 'Risky SQL-Statment with empty WHERE clausel'  );
             return;
         }
-        //writeLog( $key ); writeLog( array_keys( $value ) ); writeLog( array_values( $value ) ); writeLog( $where );
+
+        foreach( $value AS $i => $val){
+            if( empty( $val ) ) $value[$i] = null;
+        }
+
+        /*writeLog( $key ); writeLog( array_keys( $value ) );*/  /* writeLog( $where );*/
+        writeLog( array_keys( $value ) );
+        writeLog( array_values( $value ) );
         $GLOBALS['dbh']->update( $key, array_keys( $value ), array_values( $value ), $where );
     }
 

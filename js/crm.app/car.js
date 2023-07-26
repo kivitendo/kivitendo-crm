@@ -207,6 +207,8 @@ function crmSearchCustomerForScan( name ){
 function crmEditCarDlg( crmData = null ){
     crmInitFormEx( editCarFormModel, '#edit-car-form', 22, '#edit-car-hidden' );
     crmInitFormEx( editCarKbaFormModel, '#edit-car-kba-form', 33 );
+    $( '#crm-edit-car-orders-table' ).html('');
+    $( "#edit_car-c_d" ).datepicker();
 
     $( '.edit_car_kba-hidden' ).hide();
     $( '#edit_car_kba_hide_show' ).click( function(){
@@ -220,50 +222,53 @@ function crmEditCarDlg( crmData = null ){
         }
     });
 
-    $( '#edit_car_kba_edit' ).click( function(){
-        console.info( 'Edit kba' );
-        console.info( crmData );
-        crmEditKbaDlg( crmData );
-    });
+    if( exists( crmData ) ){
 
-    if( !exists( crmData ) && !exists( crmData.car ) ){
-        alert( "ToDo: Neues Auto anlegen" );
-    }
-
-    for( let item of editCarFormModel){
-        let columnName = item.name.split( '-' );
-        if( exists( crmData.car[columnName[1]] ) ) $( '#' + item.name ).val( crmData.car[columnName[1]] );
-        if( item.check ){
-            columnName = item.check.split( '-' );
-            if( exists( crmData.car[columnName[1]] ) ) $( '#' + item.check ).prop( 'checked', crmData.car[columnName[1]] );
-        }
-    }
-
-    for( let item of editCarKbaFormModel){
-        let columnName = item.name.split( '-' );
-        if( exists( crmData.car[columnName[1]] ) ) $( '#' + item.name ).val( crmData.car[columnName[1]] );
-    }
-
-    $( '#crm-edit-car-orders-table' ).html('');
-    if( exists( crmData.ord ) ){
-        let listrow0 = false;
-        $.each( crmData.ord, function( key, value ){
-            $( '#crm-edit-car-orders-table' ).append( '<tr id="' + value.id +'" class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' +  value.date + '</td><td>' + value.description  + '</td><td>' + value.amount  + '</td><td>' + value.number + '</td></tr>' );
-        });
-        $( '#crm-edit-car-orders-table tr' ).click( function(){
-            $.ajax({
-                url: 'crm/ajax/crm.app.php',
-                type: 'POST',
-                data:  { action: 'getOrder', data: { 'id': this.id } },
-                success: function( crmData ){
-                    $( '#crm-edit-car-dialog' ).dialog( 'close' );
-                    crmEditOrderDlg( crmData );
-                },
-                error: function( xhr, status, error ){
-                    $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmEditOrderDlg().getOrder', xhr.responseText );
-                }
+        if( exists( crmData.car ) ){
+            $( '#edit_car_kba_edit' ).click( function(){
+                console.info( 'Edit kba' );
+                console.info( crmData );
+                crmEditKbaDlg( crmData.car );
             });
-        });
+
+            for( let item of editCarFormModel){
+                let columnName = item.name.split( '-' );
+                if( exists( crmData.car[columnName[1]] ) ) $( '#' + item.name ).val( crmData.car[columnName[1]] );
+                if( item.check ){
+                    columnName = item.check.split( '-' );
+                    if( exists( crmData.car[columnName[1]] ) ) $( '#' + item.check ).prop( 'checked', crmData.car[columnName[1]] );
+                }
+            }
+
+            for( let item of editCarKbaFormModel){
+                let columnName = item.name.split( '-' );
+                if( exists( crmData.car[columnName[1]] ) ) $( '#' + item.name ).val( crmData.car[columnName[1]] );
+            }
+        }
+
+        if( exists( crmData.ord ) ){
+            if( exists( crmData.ord ) ){
+                let listrow0 = false;
+                $.each( crmData.ord, function( key, value ){
+                    $( '#crm-edit-car-orders-table' ).append( '<tr id="' + value.id +'" class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' +  value.date + '</td><td>' + value.description  + '</td><td>' + value.amount  + '</td><td>' + value.number + '</td></tr>' );
+                });
+                $( '#crm-edit-car-orders-table tr' ).click( function(){
+                    $.ajax({
+                        url: 'crm/ajax/crm.app.php',
+                        type: 'POST',
+                        data:  { action: 'getOrder', data: { 'id': this.id } },
+                        success: function( crmData ){
+                            $( '#crm-edit-car-dialog' ).dialog( 'close' );
+                            crmEditOrderDlg( crmData );
+                        },
+                        error: function( xhr, status, error ){
+                            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmEditOrderDlg().getOrder', xhr.responseText );
+                        }
+                    });
+                });
+            }
+        }
+
     }
 
     $( '#crm-edit-car-dialog' ).dialog({
@@ -288,7 +293,7 @@ function crmEditCarDlg( crmData = null ){
                 for( let item of editCarFormModel ){
                     let columnName = item.name.split( '-' );
                     let val = $( '#' + item.name ).val();
-                    if( exists(val) && val !== '' ){
+                    if( exists(val) ){
                         if( item.name !== 'edit_car-c_id' ) dbUpdateData['lxc_cars'][columnName[1]] = val;
                     }
                     if( item.check ){
@@ -302,7 +307,11 @@ function crmEditCarDlg( crmData = null ){
                     crmRefreshAppViewAction();
                     $( '#crm-edit-car-dialog' ).dialog( "close" );
                 }
-                crmUpdateDB('genericUpdate', dbUpdateData, onSuccess );
+                if( '' == $( '#edit_car-c_id' ).val() ){
+                }
+                else{
+                    crmUpdateDB('genericUpdate', dbUpdateData, onSuccess );
+                }
             }
         },
         {

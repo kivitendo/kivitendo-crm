@@ -195,6 +195,7 @@ const editCarFormModel = [
     { "name": "edit_car-c_zrk", "label": "Next ZR change at KM:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_car-c_bf", "label": "Next brake fluid change:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_car-c_wd", "label": "Next maintenance service:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "edit_car-c_text", "label": "Comment:", "type": "textarea", "cols": "42", "rows": "5", "tooltip": "Comment" },
     { "name": "edit_car-c_id", "type": "hidden", },
     { "name": "edit_car-kba_id", "type": "hidden", },
 ];

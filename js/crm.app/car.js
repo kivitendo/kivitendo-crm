@@ -205,7 +205,7 @@ function crmSearchCustomerForScan( name ){
 }
 
 function crmEditCarDlg( crmData = null ){
-    crmInitFormEx( editCarFormModel, '#edit-car-form', 21, '#edit-car-hidden' );
+    crmInitFormEx( editCarFormModel, '#edit-car-form', 22, '#edit-car-hidden' );
     crmInitFormEx( editCarKbaFormModel, '#edit-car-kba-form' );
 
     $( '#edit_car_kba-edit' ).click( function(){

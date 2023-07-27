@@ -206,7 +206,7 @@ function dataForNewArticle( $data ){
 
     if( !empty( $data['parts_id'] ) ){
         $query .= "(SELECT row_to_json( part ) AS part FROM (".
-                    "SELECT buchungsgruppen_id, partnumber FROM parts WHERE id = ".$data['parts_id'].
+                    "SELECT buchungsgruppen_id, partnumber, unit FROM parts WHERE id = ".$data['parts_id'].
                         ") AS part) AS part, ";
     }
 
@@ -222,6 +222,10 @@ function dataForNewArticle( $data ){
 function insertNewArticle( $data ){
     $id = $GLOBALS['dbh']->insert( "parts", array_keys( $data ), array_values( $data ), TRUE, "id" );
     echo  '{ "id": '.$id.' }';
+}
+
+function getArticleRate( $data ){
+    echo $GLOBALS['dbh']->getOne("SELECT tax.rate FROM parts INNER JOIN taxzone_charts ON parts.buchungsgruppen_id = taxzone_charts.buchungsgruppen_id INNER JOIN taxkeys ON taxzone_charts.income_accno_id = taxkeys.chart_id INNER JOIN tax ON taxkeys.tax_id = tax.id WHERE parts.id = ".$data['part_id']." AND parts.obsolete = false AND taxzone_charts.taxzone_id = 4 GROUP BY parts.id, tax.rate, taxkeys.startdate ORDER BY taxkeys.startdate DESC LIMIT 1", true);
 }
 
 /********************************************

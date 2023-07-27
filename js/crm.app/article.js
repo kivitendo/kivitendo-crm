@@ -38,6 +38,18 @@ const crmEditArticleChangeQty = function(){
     });
 };
 
+function crmEditArticleHandOver( field, dbData ){
+    $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        data: { action: 'getArticleRate', data:{ 'part_id': dbData['id'] } },
+        type: "POST",
+        success: function( crmData ){
+            if( exists( crmData.rate ) ) dbData['rate'] = crmData.rate;
+            crmCompleteInsertOrderPos( field, dbData );
+        }
+    });
+}
+
 $( '#edit_article-part_type' ).change( crmEditArticleChangeUnit );
 $( '#edit_article-description' ).change( crmEditArticleChangeUnit ) /*.keyup( crmEditArticleChange )*/ ;
 $( '#edit_article-unit' ).change( crmEditArticleChangeQty );
@@ -58,12 +70,14 @@ $( '#edit_article-partnumber' ).keyup(function(e){
     });
 });
 
-function crmEditArticleDlg( field ){
+function crmEditArticleDlg( field  ){
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         data: { action: 'dataForNewArticle', data:{ 'part_type': $( '#edit_article-part_type' ).val(), 'parts_id': $( '#edit_article-parts_id' ).val() } },
         type: "POST",
         success: function( crmData ){
+            console.info( 'article crmData' );
+            console.info( crmData );
 
             $( '#edit_article-unit' ).html( '' );
             for(let unit of crmData.common.units){
@@ -111,7 +125,7 @@ function crmEditArticleDlg( field ){
                             for( let item of editArticleFormModel ){
                                 let columnName = item.name.split( '-' );
                                 let val = $( '#' + item.name ).val();
-                                if( exists(val) ){
+                                if( exists( columnName[1] ) && exists(val) ){
                                     if( columnName[1] !== 'qty' && columnName[1] !== 'parts_id' ) dbData[columnName[1]] = val;
                                 }
                             }
@@ -155,8 +169,8 @@ function crmEditArticleDlg( field ){
                                                 type: "POST",
                                                 success: function( crmData ){
                                                     dbData['id'] = crmData.id;
-                                                    dbData['qty'] = ( $( '#edit_article-qty' ).val() == '' )? 0 : $( '#edit_article-qty' ).val();
-                                                    crmCompleteInsertOrderPos( field, dbData );
+                                                    dbData['qty'] = ( $( '#edit_article-qty' ).val() == '' )? 0 : kivi.parse_amount( $( '#edit_article-qty' ).val() );
+                                                    crmEditArticleHandOver( field, dbData );
                                                     $( '#crm-edit-article-dialog' ).dialog( "close" );
                                                },
                                                 error: function(xhr, status, error){
@@ -179,8 +193,8 @@ function crmEditArticleDlg( field ){
                                     data:  { action: 'genericUpdateEx', data: dbUpdateData },
                                     success: function( data ){
                                         dbData['id'] = $( '#edit_article-parts_id' ).val();
-                                        dbData['qty'] = ( $( '#edit_article-qty' ).val() == '' )? 0 : $( '#edit_article-qty' ).val();
-                                        crmCompleteInsertOrderPos( field, dbData );
+                                        dbData['qty'] = ( $( '#edit_article-qty' ).val() == '' )? 0 : kivi.parse_amount( $( '#edit_article-qty' ).val() );
+                                        crmEditArticleHandOver( field, dbData );
                                         $( '#crm-edit-article-dialog' ).dialog( "close" );
                                      },
                                     error: function( xhr, status, error ){

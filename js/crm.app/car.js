@@ -209,6 +209,7 @@ function crmEditCarDlg( crmData = null ){
     crmInitFormEx( editCarKbaFormModel, '#edit-car-kba-form', 33 );
     $( '#crm-edit-car-orders-table' ).html('');
     $( "#edit_car-c_d" ).datepicker();
+    $( "#edit_car-c_hu" ).datepicker();
 
     $( '.edit_car_kba-hidden' ).hide();
     $( '#edit_car_kba_hide_show' ).click( function(){

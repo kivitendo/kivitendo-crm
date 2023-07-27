@@ -565,6 +565,11 @@ function crmSaveOfferType( dbUpdateData ){
 }
 
 function crmSaveOrderType( dbUpdateData ){
+    if( '' == $( '#od-lxcars-c_id' ).val() ){
+        alert( kivi.t8( 'There is no car assigned!' ) );
+        return;
+    }
+
     dbUpdateData['oe'] = {};
     dbUpdateData['customer'] = {};
     dbUpdateData['lxc_cars'] = {};

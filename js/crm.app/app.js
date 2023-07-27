@@ -429,7 +429,11 @@ $( '#crm-wf-scan' ).click( function() {
 });
 
 $( '#crm-wf-new-car' ).click( function() {
-   crmEditCarDlg( ); //in 'js/car.js'
+    if( 'C' != $( '#crm-cvpa-src' ).val() ){
+        alert( kivi.t8( 'Cars can only be assigned to customers!' ) );
+        return;
+    }
+    crmEditCarDlg( ); //in 'js/car.js'
 });
 
 $( '#crm-wf-new-offer' ).click( function() {

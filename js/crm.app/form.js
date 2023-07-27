@@ -70,7 +70,7 @@ const carFormModel = [
     { "name": "car-c_d", "label": "Date of registration:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "car-c_hu", "label": "Date of HU+AU:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "car-c_fin", "label": "FIN:", "type": "input", "size": "21", "tooltip": "", "check": "chk_c_fin"},
-    { "name": "car-c_finchk", "label": "FIN check:", "type": "input", "size": "2", "tooltip": "" },
+    { "name": "car-c_finchk", "label": "FIN check:", "type": "input", "size": "1", "tooltip": "" },
     { "name": "car-c_mkb", "label": "Engine code:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "car-c_color", "label": "Color code:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "car-c_gart_list", "label": "Engine code:", "type": "select","data": [], "tooltip":""}, //selectbox
@@ -232,7 +232,7 @@ const editCarFormModel = [
     { "name": "edit_car-c_d", "label": "Date of registration:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_car-c_hu", "label": "Date of HU+AU:", "type": "input", "size": "21", "tooltip": "", "check": "edit_car-chk_c_hu" },
     { "name": "edit_car-c_fin", "label": "FIN:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "edit_car-c_finchk", "label": "FIN check:", "type": "input", "size": "2", "tooltip": "" },
+    { "name": "edit_car-c_finchk", "label": "FIN check:", "type": "input", "size": "1", "tooltip": "" },
     { "name": "edit_car-c_mkb", "label": "Engine code:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_car-c_color", "label": "Color code:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_car-c_gart_list", "label": "Engine code:", "type": "select","data": [], "tooltip":""}, //selectbox

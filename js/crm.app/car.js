@@ -210,6 +210,8 @@ function crmEditCarDlg( crmData = null ){
     $( '#crm-edit-car-orders-table' ).html('');
     $( "#edit_car-c_d" ).datepicker();
     $( "#edit_car-c_hu" ).datepicker();
+    $( '#edit_car-c_finchk' ).attr( 'maxlength', 1 );
+    $( '#edit_car-c_3' ).keyup( crmEditCarChangeTsn );
 
     $( '.edit_car_kba-hidden' ).hide();
     $( '#edit_car_kba_hide_show' ).click( function(){
@@ -283,6 +285,14 @@ function crmEditCarDlg( crmData = null ){
         position: { my: "top", at: "top+250" },
         open: function(){
             $( this ).css( 'maxWidth', window.innerWidth );
+            if( exists( crmData ) ){
+                $( '#edit_car_new_order_btn' ).show();
+                $( '#crm-edit-car-orders-table-div' ).show();
+            }
+            else{
+                $( '#edit_car_new_order_btn' ).hide();
+                $( '#crm-edit-car-orders-table-div' ).hide();
+            }
         },
         buttons:[{
             text: kivi.t8( 'Save' ),
@@ -310,6 +320,7 @@ function crmEditCarDlg( crmData = null ){
                     $( '#crm-edit-car-dialog' ).dialog( "close" );
                 }
                 if( '' == $( '#edit_car-c_id' ).val() ){
+                    console.info( $( '#crm-cvpa-id' ).val() );
                 }
                 else{
                     crmUpdateDB('genericUpdate', dbUpdateData, onSuccess );
@@ -317,6 +328,7 @@ function crmEditCarDlg( crmData = null ){
             }
         },
         {
+            id: 'edit_car_new_order_btn',
             text: kivi.t8( 'New Order' ),
             click: function(){
                 $( this ).dialog( "close" );
@@ -331,6 +343,12 @@ function crmEditCarDlg( crmData = null ){
         }]
     }).dialog( 'open' ).resize();
 }
+
+const crmEditCarChangeTsn = function(){
+    if( $( '#edit_car-c_3' ).val().length > 2){
+        console.info( 'getKba' );
+    }
+};
 
 function crmEditKbaDlg( crmData ){
     crmInitFormEx( editKbaFormModel, '#edit-kba-form', 0, '#edit-kba-hidden' );

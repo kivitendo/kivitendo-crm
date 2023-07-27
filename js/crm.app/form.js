@@ -278,7 +278,6 @@ const editArticleFormModel = [
     { "name": "edit_article-sellprice", "label": "Sales price:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_article-buchungsgruppen_id", "label": "Booking group:", "type": "select","data": [], "tooltip":""}, //selectbox
     { "name": "edit_article-parts_id", "type": "hidden", },
-    { "name": "edit_article_rate", "type": "hidden", },
 ];
 
 // Namensschema für id, name und class: Das Minuszeichen ist das Trennzeichen zwischen Präfix (z.B. edit_article) und Spaltenname in der Datenbank (z.B. parts_id)

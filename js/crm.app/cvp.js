@@ -318,8 +318,8 @@ function crmEditCuVeDlg( crmData, new_with_car ){
                         if( exists(val) ) dbUpdateData['lxckba'][columnName[1]] = val;
                     }
                 }
-                console.info( 'dbUpdateData' );
-                console.info( dbUpdateData );
+                //console.info( 'dbUpdateData' );
+                //console.info( dbUpdateData );
                 const onSuccess = function(){
                     $( '#crm-wx-customer-dialog' ).dialog( "close" );
                 }

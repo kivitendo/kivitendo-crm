@@ -211,7 +211,23 @@ function crmEditCarDlg( crmData = null ){
     $( "#edit_car-c_d" ).datepicker();
     $( "#edit_car-c_hu" ).datepicker();
     $( '#edit_car-c_finchk' ).attr( 'maxlength', 1 );
-    $( '#edit_car-c_3' ).keyup( crmEditCarChangeTsn );
+
+    $( '#edit_car-c_3' ).catcomplete({
+            source: function(request, response) {
+                if( $( '#edit_car-c_3' ).val().length > 2 && $( '#edit_car-c_2' ).val().length > 0 ){
+                    $.get('crm/ajax/crm.app.php?action=findCarKbaData', { 'hsn': $( '#edit_car-c_2' ).val(), 'tsn':  $( '#edit_car-c_3' ).val() }, function(data) {
+                        response(data);
+                    });
+                }
+            },
+            select: function( e, ui ) {
+                $( '#edit_car-kba_id' ).val( ui.item.id );
+                for( let item of editCarKbaFormModel){
+                    let columnName = item.name.split( '-' );
+                    if( exists( ui.item[columnName[1]] ) ) $( '#' + item.name ).val( ui.item[columnName[1]] );
+                }
+            }
+    });
 
     $( '.edit_car_kba-hidden' ).hide();
     $( '#edit_car_kba_hide_show' ).click( function(){
@@ -281,7 +297,7 @@ function crmEditCarDlg( crmData = null ){
         width: 'auto',
         height: 'auto',
         modal: true,
-        title: kivi.t8( 'Edit car' ),
+        title: ( exists( crmData ) )? kivi.t8( 'Edit car' ) : kivi.t8( 'New car' ),
         position: { my: "top", at: "top+250" },
         open: function(){
             $( this ).css( 'maxWidth', window.innerWidth );
@@ -300,8 +316,6 @@ function crmEditCarDlg( crmData = null ){
                 console.info( 'Save car' );
                 dbUpdateData = {};
                 dbUpdateData['lxc_cars'] = {};
-                dbUpdateData['lxc_cars']['WHERE'] = {};
-                dbUpdateData['lxc_cars']['WHERE']['c_id'] = $( '#edit_car-c_id' ).val();
                 for( let item of editCarFormModel ){
                     let columnName = item.name.split( '-' );
                     let val = $( '#' + item.name ).val();
@@ -321,8 +335,27 @@ function crmEditCarDlg( crmData = null ){
                 }
                 if( '' == $( '#edit_car-c_id' ).val() ){
                     console.info( $( '#crm-cvpa-id' ).val() );
+                    let data = {};
+                    data['record'] = dbUpdateData;
+                    data['record']['lxc_cars']['c_ow'] = $( '#crm-cvpa-id' ).val();
+                    if( '' == data['record']['lxc_cars']['c_zrk'] ) data['record']['lxc_cars']['c_zrk'] = 0;
+                    console.info( data );
+                    $.ajax({
+                        url: 'crm/ajax/crm.app.php',
+                        type: 'POST',
+                        data:  { action: 'genericSingleInsert', data: data },
+                        success: function( data ){
+                            $( '#crm-edit-car-dialog' ).dialog( 'close' );
+                            crmRefreshAppViewAction();
+                        },
+                        error: function( xhr, status, error ){
+                            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmEditCarDlg().NewCar', xhr.responseText );
+                        }
+                    });
                 }
                 else{
+                    dbUpdateData['lxc_cars']['WHERE'] = {};
+                    dbUpdateData['lxc_cars']['WHERE']['c_id'] = $( '#edit_car-c_id' ).val();
                     crmUpdateDB('genericUpdate', dbUpdateData, onSuccess );
                 }
             }
@@ -343,23 +376,6 @@ function crmEditCarDlg( crmData = null ){
         }]
     }).dialog( 'open' ).resize();
 }
-
-const crmEditCarChangeTsn = function(){
-    if( $( '#edit_car-c_3' ).val().length > 2 && $( '#edit_car-c_2' ).val().length > 0 ){
-        $.ajax({
-            url: 'crm/ajax/crm.app.php',
-            type: 'POST',
-            data:  { action: 'findCarKbaData', data: { 'id': this.id } },
-            success: function( crmData ){
-                $( '#crm-edit-car-dialog' ).dialog( 'close' );
-                crmEditOrderDlg( crmData );
-            },
-            error: function( xhr, status, error ){
-                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmEditOrderDlg().getOrder', xhr.responseText );
-            }
-        });
-    }
-};
 
 function crmEditKbaDlg( crmData ){
     crmInitFormEx( editKbaFormModel, '#edit-kba-form', 0, '#edit-kba-hidden' );

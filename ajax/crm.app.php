@@ -427,7 +427,7 @@ function getCarKbaData( $data ){
 }
 
 function findCarKbaData( $data ){
-   echo $GLOBALS['dbh']->getAll("SELECT * FROM lxckba WHERE lxckba.hsn = '".$data['hsn']."' AND  SUBSTRING( '".$data['tsn']."', 0, 4 ) = lxckba.tsn", true);
+   echo $GLOBALS['dbh']->getAll("SELECT id, tsn || ' / ' || COALESCE( d2, '---' ) AS label, tsn AS value, hersteller AS category, * FROM lxckba WHERE lxckba.hsn = '".$data['hsn']."' AND lxckba.tsn ILIKE SUBSTRING( '".$data['tsn']."', 0, 4 ) LIMIT 10", true);
 }
 
 /***********************************************
@@ -748,6 +748,7 @@ function updateCuWithNewCar( $data ){
 }
 
 function genericSingleInsert( $data ){
+    writeLog( $data );
     $tableName = array_key_first( $data['record'] );
     $id = $GLOBALS['dbh']->insert( $tableName, array_keys( $data['record'][$tableName] ), array_values( $data['record'][$tableName] ),
                                 array_key_exists( 'sequence_name', $data ), ( array_key_exists( 'sequence_name', $data ) )? $data['sequence_name'] : FALSE );

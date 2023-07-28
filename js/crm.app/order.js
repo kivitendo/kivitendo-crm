@@ -985,6 +985,26 @@ function crmPrintOrder( e ){
     $( '#od-inv-current-printer' ).text( $( e ).text( ) );
 
     $( '#od-inv-printers-menu' ).menu( 'collapseAll' );
+
+    if( crmOrderTypeEnum.Invoice == crmOrderType ){
+        $.ajax({
+          url: 'crm/ajax/ecTerminalData.php',
+          type: "POST",
+          data: { 'action': 'getTerminalCustomerData', 'data': $( '#crm-cvpa-id' ).val() },
+          success: function( res ){
+            var ip = res['ec_terminal_ip-adress'];
+            var port = res['ec_terminal_port'];
+            var passwd = res['ec_terminal_passwd'];
+            var name = res['name'];
+            $.ajax({
+              url: 'crm/ajax/ecTerminal.py',
+              type: "post",
+              timeout: 100,
+              data: { 'action':'pay', 'ip': ip,'port': port, 'passwd': passwd, 'amount': $( '#od-amount' ).val().replace( '.', '' ).replace( ',', '' ), 'name': name }
+            });
+          }
+        })
+    }
 }
 
 const crmOrderTypeEnum = { Order: 0, Invoice: 1, Offer: 2, Delivery: 3 };

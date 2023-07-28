@@ -119,15 +119,14 @@ const crmSearchOrderDlg = function(){
     $( '#crm-search-order-dialog' ).dialog({
         autoOpen: false,
         resizable: true,
-        minWidth: 1402,
-        width: 'auto',
-        minHeight: 900,
+        width: window.innerWidth - 25 + 'px',
         height: 'auto',
         modal: true,
         title: kivi.t8( 'Search Order' ),
         position: { my: "top", at: "top+250" },
         open: function(){
-            $( this ).css( 'maxWidth', window.innerWidth );
+            $( this ).css( 'maxWidth', window.innerWidth - 25 + 'px' );
+            $( this ).css( 'minHeight', window.innerHeight - 150 + 'px' );
         },
         close: function(){
             crmClearSearchOrderDlg();

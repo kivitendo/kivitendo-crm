@@ -773,6 +773,7 @@
         <div id="crm-wx-contact">
             <input type="hidden" id="crm-cvpa-id"></input>
             <input type="hidden" id="crm-cvpa-src"></input>
+            <input type="hidden" id="crm-userconf-defprn" value="<?php echo $_SESSION['userConfig']['default_printer_id']; ?>"></input>
             <div><strong><span id="crm-contact-name"></span></strong></div>
             <div class="crm-pt05"><span id="crm-contact-street"></span></div>
             <div class="crm-pt025"><span id="crm-contact-country"></span>-<span id="crm-contact-zipcode"></span> <span id="crm-contact-city"></span><button id="crm-route" tooltip="Route anzeigen"><img src="crm/image/karte.png" alt="Karte"  ></button><button id="crm-route-qrcode" tooltip="QR-Code für Route anzeigen" ><img src="crm/image/qrn.png" alt="QR-Code Karte" ></button></div>

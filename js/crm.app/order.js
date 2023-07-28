@@ -981,8 +981,8 @@ function crmPrintOrder( e ){
         });
     }
 
-    $( '#od-inv-current-printer' ).attr( 'value', $( e ).attr( 'value' ) );
-    $( '#od-inv-current-printer' ).text( $( e ).text( ) );
+    //$( '#od-inv-current-printer' ).attr( 'value', $( e ).attr( 'value' ) );
+    //$( '#od-inv-current-printer' ).text( $( e ).text( ) );
 
     $( '#od-inv-printers-menu' ).menu( 'collapseAll' );
 
@@ -1167,7 +1167,9 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         if( exists( crmData.bill.printers ) ){
             for( let printer of crmData.bill.printers ){
                 $( '#od-inv-printers' ).append( '<li><a value="' + printer.id  + '" href="#" onclick="crmPrintOrder( this );">' + printer.printer_description + '</a></li>' );
+                if( $( '#crm-userconf-defprn' ).val() == printer.id ) $( '#od-inv-current-printer' ).text( printer.printer_description );
             }
+            $( '#od-inv-current-printer' ).attr( 'value', $( '#crm-userconf-defprn' ).val() );
         }
     }
     else if( crmOrderTypeEnum.Offer == crmOrderType ){

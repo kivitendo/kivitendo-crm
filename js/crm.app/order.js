@@ -505,7 +505,7 @@ function crmSaveOrder(){
         dataRow.qty = ( dataRow.qty )? kivi.parse_amount( dataRow.qty ) : 0;
         dataRow.sellprice = kivi.parse_amount( dataRow.sellprice );
         if( crmOrderTypeEnum.Invoice == crmOrderType ) dataRow['fxsellprice'] = dataRow.sellprice;
-        dataRow.discount = kivi.parse_amount( dataRow.discount / 100 );
+        dataRow.discount = kivi.parse_amount( dataRow.discount ) / 100;
         dataRow.marge_total = kivi.parse_amount( dataRow.marge_total );
         if( exists( pos.id ) && pos.id != 'od-empty-item-id' ){
             if( 'P' === itemType  ){

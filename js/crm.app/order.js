@@ -919,7 +919,7 @@ function crmPrintOrder( e ){
         data['qty_' + runningnumber] = '' + $( pos ).find( '[class=od-item-qty]' ).val();
         data['unit_' + runningnumber] = '' + $( pos ).find( '[class=od-item-unit]' ).val();
         data['sellprice_' + runningnumber] = '' + $( pos ).find( '[class=od-item-sellprice]' ).val();
-        data['discount_' + runningnumber] = '0';
+        data['discount_' + runningnumber] = '' + $( pos ).find( '[class=od-item-discount]' ).val();
         data['unit_old_' + runningnumber] = '' + $( pos ).find( '[class=od-item-unit]' ).val();
         data['id_' + runningnumber] = '' + $( pos ).find( '[class=od-item-parts_id]' ).val();
         data['bin_' + runningnumber] = '';

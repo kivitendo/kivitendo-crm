@@ -169,7 +169,7 @@ function crmAddOrderItem( dataRow ){
     tableRow += '<td><input class="od-hidden-item-rate" type="hidden" value="' + ( ( exists( dataRow.rate ) )? dataRow.rate : '0' ) + '"></input>' +
                 '<input class="od-item-sellprice" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.sellprice ) )? dataRow.sellprice : '0', 2 ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup2(event)" ' +
                 ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>' +
-                '<td><input class="od-item-discount" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.discount ) )? dataRow.discount : '0' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
+                '<td><input class="od-item-discount" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.discount ) )? dataRow.discount * 100 : '0' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
                 ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>' +
                 '<td><input class="od-ui-hundredpro" type="hidden" value="100"></input><button class="od-ui-hundredpro-btn" onclick="crmEditOrderHundredPro()" ' + ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '>100%</button></td>' +
                 '<td><input class="od-item-marge_total" type="text" size="5" readonly="readonly" value="' + kivi.format_amount( ( exists( dataRow.marge_total ) )? dataRow.marge_total : '0', 2 ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
@@ -505,7 +505,7 @@ function crmSaveOrder(){
         dataRow.qty = ( dataRow.qty )? kivi.parse_amount( dataRow.qty ) : 0;
         dataRow.sellprice = kivi.parse_amount( dataRow.sellprice );
         if( crmOrderTypeEnum.Invoice == crmOrderType ) dataRow['fxsellprice'] = dataRow.sellprice;
-        dataRow.discount = kivi.parse_amount( dataRow.discount );
+        dataRow.discount = kivi.parse_amount( dataRow.discount / 100 );
         dataRow.marge_total = kivi.parse_amount( dataRow.marge_total );
         if( exists( pos.id ) && pos.id != 'od-empty-item-id' ){
             if( 'P' === itemType  ){
@@ -919,7 +919,7 @@ function crmPrintOrder( e ){
         data['qty_' + runningnumber] = '' + $( pos ).find( '[class=od-item-qty]' ).val();
         data['unit_' + runningnumber] = '' + $( pos ).find( '[class=od-item-unit]' ).val();
         data['sellprice_' + runningnumber] = '' + $( pos ).find( '[class=od-item-sellprice]' ).val();
-        data['discount_' + runningnumber] = '' + $( pos ).find( '[class=od-item-discount]' ).val();
+        data['discount_' + runningnumber] = '' + kivi.parse_amount( $( pos ).find( '[class=od-item-discount]' ).val() );
         data['unit_old_' + runningnumber] = '' + $( pos ).find( '[class=od-item-unit]' ).val();
         data['id_' + runningnumber] = '' + $( pos ).find( '[class=od-item-parts_id]' ).val();
         data['bin_' + runningnumber] = '';

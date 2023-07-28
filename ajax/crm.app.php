@@ -426,6 +426,10 @@ function getCarKbaData( $data ){
    echo $GLOBALS['dbh']->getOne("SELECT * FROM lxckba WHERE lxckba.hsn = '".$data['hsn']."' AND  SUBSTRING( '".$data['tsn']."', 0, 4 ) = lxckba.tsn AND ( d2 IS NULL OR d2 = '".$data['d2']."' )", true);
 }
 
+function findCarKbaData( $data ){
+   echo $GLOBALS['dbh']->getAll("SELECT * FROM lxckba WHERE lxckba.hsn = '".$data['hsn']."' AND  SUBSTRING( '".$data['tsn']."', 0, 4 ) = lxckba.tsn", true);
+}
+
 /***********************************************
 * Get Data form DB to build drop down elemennts
 * in new CV dialog

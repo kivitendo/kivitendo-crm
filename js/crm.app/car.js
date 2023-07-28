@@ -345,8 +345,19 @@ function crmEditCarDlg( crmData = null ){
 }
 
 const crmEditCarChangeTsn = function(){
-    if( $( '#edit_car-c_3' ).val().length > 2){
-        console.info( 'getKba' );
+    if( $( '#edit_car-c_3' ).val().length > 2 && $( '#edit_car-c_2' ).val().length > 0 ){
+        $.ajax({
+            url: 'crm/ajax/crm.app.php',
+            type: 'POST',
+            data:  { action: 'findCarKbaData', data: { 'id': this.id } },
+            success: function( crmData ){
+                $( '#crm-edit-car-dialog' ).dialog( 'close' );
+                crmEditOrderDlg( crmData );
+            },
+            error: function( xhr, status, error ){
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmEditOrderDlg().getOrder', xhr.responseText );
+            }
+        });
     }
 };
 

@@ -321,7 +321,6 @@ function crmEditCuVeDlg( crmData, new_with_car ){
                 console.info( 'dbUpdateData' );
                 console.info( dbUpdateData );
                 const onSuccess = function(){
-                    crmRefreshAppViewAction();
                     $( '#crm-wx-customer-dialog' ).dialog( "close" );
                 }
                 crmUpdateDB( crmEditCuVeDlgAction, dbUpdateData, onSuccess );

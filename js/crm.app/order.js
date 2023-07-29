@@ -1300,8 +1300,8 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
                     url: 'crm/ajax/crm.app.php',
                     type: 'GET',
                     data:  { action: 'printOrder', data: printData },
-                    success: function( data ){
-                       window.open( 'crm/out.pdf' );
+                    success: function( printFileName ){
+                        window.open( 'crm/printedFiles/' + printFileName );
                     },
                     error: function( xhr, status, error ){
                         $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( pdfOrder )', xhr.responseText );

@@ -897,16 +897,16 @@ function printOrder( $data ){
     //fix values
     $pdf->SetFont( 'Helvetica', 'B', $fontsize ) ;
     $pdf->Text( $textPosX_left, $textPosY,'Kunde:' );
-    $pdf->Text( $textPosX_left, $textPosY + 5, utf8_decode( 'Straße:' ) );
+    $pdf->Text( $textPosX_left, $textPosY + 5, mb_convert_encoding( 'Straße:', 'ISO-8859-1', 'UTF-8' ) ); // mb_convert_encoding($utf8_string, 'ISO-8859-1', 'UTF-8');
     $pdf->Text( $textPosX_left, $textPosY + 10, 'Ort:' );
     $pdf->Text( $textPosX_left, $textPosY + 15, 'Tele.:' );
     $pdf->Text( $textPosX_left, $textPosY + 20, 'Tele2:' );
     $pdf->Text( $textPosX_left, $textPosY + 25, 'Bearb.:' );
 
     $pdf->SetFont( 'Helvetica', '', $fontsize );
-    $pdf->Text( $textPosX_left + 20, $textPosY, utf8_decode( substr( $orderData['customer_name'], 0, 34 ) ) );
-    $pdf->Text( $textPosX_left + 20, $textPosY + 5, utf8_decode( $orderData['street'] ) );
-    $pdf->Text( $textPosX_left + 20, $textPosY + 10, $orderData['zipcode'].' '.utf8_decode( $orderData['city'] ) );
+    $pdf->Text( $textPosX_left + 20, $textPosY, mb_convert_encoding( substr( $orderData['customer_name'], 0, 34 ), 'ISO-8859-1', 'UTF-8' ) );
+    $pdf->Text( $textPosX_left + 20, $textPosY + 5, mb_convert_encoding( $orderData['street'], 'ISO-8859-1', 'UTF-8' ) );
+    $pdf->Text( $textPosX_left + 20, $textPosY + 10, $orderData['zipcode'].' '.mb_convert_encoding( $orderData['city'], 'ISO-8859-1', 'UTF-8' ) );
     $pdf->Text( $textPosX_left + 20, $textPosY + 15, $orderData['phone'] );
     $pdf->Text( $textPosX_left + 20, $textPosY + 20, $orderData['fax'] );
     $pdf->Text( $textPosX_left + 20, $textPosY + 25, $orderData['employee_name'] );
@@ -931,31 +931,31 @@ function printOrder( $data ){
     $pdf->Text( $textPosX_right, $textPosY + 45, 'Flexgr.:' );
     $pdf->Text( $textPosX_right, $textPosY + 50, 'Color.:' );
 
-    $pdf->Text( $textPosX_right, $textPosY + 35, utf8_decode( 'Lo Sommerräder.:' ) );
-    $pdf->Text( $textPosX_right, $textPosY + 40, utf8_decode( 'Lo Winterräder.:' ) );
+    $pdf->Text( $textPosX_right, $textPosY + 35, mb_convert_encoding( 'Lo Sommerräder.:' ), 'ISO-8859-1', 'UTF-8' );
+    $pdf->Text( $textPosX_right, $textPosY + 40, mb_convert_encoding( 'Lo Winterräder.:' ), 'ISO-8859-1', 'UTF-8' );
 
-    $pdf->Text( $textPosX_left, $textPosY + 35, utf8_decode( 'nächst. ZR-Wechsel KM:' ) );
-    $pdf->Text( $textPosX_left, $textPosY + 40, utf8_decode( 'nächst. ZR-Wechsel:' ) );
-    $pdf->Text( $textPosX_left, $textPosY + 45, utf8_decode( 'nächst. Bremsfl.:' ) );
-    $pdf->Text( $textPosX_left, $textPosY + 50, utf8_decode( 'nächst. WD:' ) );
+    $pdf->Text( $textPosX_left, $textPosY + 35, mb_convert_encoding( 'nächst. ZR-Wechsel KM:', 'ISO-8859-1', 'UTF-8' ) );
+    $pdf->Text( $textPosX_left, $textPosY + 40, mb_convert_encoding( 'nächst. ZR-Wechsel:', 'ISO-8859-1', 'UTF-8' ) );
+    $pdf->Text( $textPosX_left, $textPosY + 45, mb_convert_encoding( 'nächst. Bremsfl.:', 'ISO-8859-1', 'UTF-8' ) );
+    $pdf->Text( $textPosX_left, $textPosY + 50, mb_convert_encoding( 'nächst. WD:', 'ISO-8859-1', 'UTF-8' ) );
 
     $pdf->SetLineWidth( 0.2 );
 
     $pdf->SetFont( 'Helvetica', '', $fontsize );
 
-    $pdf->Text( $textPosX_right + 45, $textPosY + 45, utf8_decode( $orderData['flxgr'] ) );
-    $pdf->Text( $textPosX_right + 45, $textPosY + 50, utf8_decode( $orderData['c_color'] ) );
+    $pdf->Text( $textPosX_right + 45, $textPosY + 45, mb_convert_encoding( $orderData['flxgr'], 'ISO-8859-1', 'UTF-8' ) );
+    $pdf->Text( $textPosX_right + 45, $textPosY + 50, mb_convert_encoding( $orderData['c_color'], 'ISO-8859-1', 'UTF-8' ) );
 
     //left side under line one
     $lsulo = 50;
     $pdf->Text( $textPosX_left + $lsulo, $textPosY + 35, $orderData['c_zrk'] );
-    $pdf->Text( $textPosX_left + $lsulo, $textPosY + 40, utf8_decode( $orderData['c_zrd'] ) );
-    $pdf->Text( $textPosX_left + $lsulo, $textPosY + 45, utf8_decode( $orderData['c_bf'] ) );
-    $pdf->Text( $textPosX_left + $lsulo, $textPosY + 50, utf8_decode( $orderData['c_wd'] ) );
+    $pdf->Text( $textPosX_left + $lsulo, $textPosY + 40, mb_convert_encoding( $orderData['c_zrd'], 'ISO-8859-1', 'UTF-8' ) );
+    $pdf->Text( $textPosX_left + $lsulo, $textPosY + 45, mb_convert_encoding( $orderData['c_bf'], 'ISO-8859-1', 'UTF-8' ) );
+    $pdf->Text( $textPosX_left + $lsulo, $textPosY + 50, mb_convert_encoding( $orderData['c_wd'], 'ISO-8859-1', 'UTF-8' ) );
 
 
-    $pdf->Text( $textPosX_right + 45, $textPosY + 35, utf8_decode( $orderData['c_st_l'] ) );
-    $pdf->Text( $textPosX_right + 45, $textPosY + 40, utf8_decode( $orderData['c_wt_l'] ) );
+    $pdf->Text( $textPosX_right + 45, $textPosY + 35, mb_convert_encoding( $orderData['c_st_l'], 'ISO-8859-1', 'UTF-8' ) );
+    $pdf->Text( $textPosX_right + 45, $textPosY + 40, mb_convert_encoding( $orderData['c_wt_l'], 'ISO-8859-1', 'UTF-8' ) );
 
     //Finish Time
     if( strpos( $orderData['finish_time'], 'wartet' ) ) $pdf->SetTextColor( 255, 0, 0 );
@@ -963,7 +963,7 @@ function printOrder( $data ){
     $finishTimeHeight = 85;
     $pdf->Text( $textPosX_left, $finishTimeHeight, 'Fertigstellung:' );
     $pdf->SetFont( 'Helvetica', 'B', '12' );
-    $pdf->Text( $textPosX_right, $finishTimeHeight, utf8_decode( $orderData['finish_time'] ) );
+    $pdf->Text( $textPosX_right, $finishTimeHeight, mb_convert_encoding( $orderData['finish_time'], 'ISO-8859-1', 'UTF-8' ) );
     $pdf->SetTextColor( 0, 0, 0 );
 
 
@@ -993,7 +993,7 @@ function printOrder( $data ){
             $pdf->Line( 10, $height + 1.6 , 190, $height + 1.6 );
             $pdf->SetFont('Helvetica','B','12');
             //$pdf->SetTextColor( 100, 100, 100 );
-            $pdf->Text( '12',$height, utf8_decode( $element['description'] ) );
+            $pdf->Text( '12',$height, mb_convert_encoding( $element['description'], 'ISO-8859-1', 'UTF-8' ) );
             //Longdescriptions
             if( trim( $element['longdescription'] ) != '' ){
                 $height = $height + 2;
@@ -1010,7 +1010,7 @@ function printOrder( $data ){
                 //writeLog( $lineArray );
                 foreach( $lineArray as $line ){
                     $height = $height + 4;
-                    $pdf->Text( '16', $height, utf8_decode( $line ) );
+                    $pdf->Text( '16', $height, mb_convert_encoding( $line, 'ISO-8859-1', 'UTF-8' ) );
                 }
             }
         }
@@ -1029,7 +1029,7 @@ function printOrder( $data ){
     $pdf->Text( '45', '270', date( 'd.m.Y' ) );
     $pdf->Text( '105','270','Kundenunterschrift: __________________' );
    // $pdf->SetTextColor( 255, 0, 0 );
-    $pdf->Text( '22', '280', utf8_decode( 'Endkontrolle UND Probefahrt durchgeführt von: __________________' ) );
+    $pdf->Text( '22', '280', mb_convert_encoding( 'Endkontrolle UND Probefahrt durchgeführt von: __________________', 'ISO-8859-1', 'UTF-8' ) );
     //$pdf->SetTextColor( 0, 0, 0 );
     $pdf->SetFont( 'Helvetica', '', '08' );
     $pdf->Text( '75', '290', 'Powered by lxcars.de - Freie Kfz-Werkstatt Software' );
@@ -1040,7 +1040,7 @@ function printOrder( $data ){
     $rotate = 0; //Degree --Only for Epson
     $pdf->AddPage( 'P', 'A4', $rotate );
     $pdf->SetFont( 'Helvetica', 'B', '16' );
-    $pdf->Text( 10, 20, utf8_decode( 'Verbaute Ersazteile' ) );
+    $pdf->Text( 10, 20, mb_convert_encoding( 'Verbaute Ersazteile', 'ISO-8859-1', 'UTF-8' ) );
     $height = 30;
     $pdf->SetFont( 'Helvetica', '', '10' );
     $pdf->line( 10, $height - 4.4,  190, $height - 4.4 );
@@ -1051,8 +1051,8 @@ function printOrder( $data ){
             $totalLines--;
             //writeLog( 'part' );
             $pdf->line( 10, $height + 1.6,  190, $height + 1.6 );
-            $pdf->Text( '12', $height, utf8_decode( $element['qty']." ".$element['unit'] ) );
-            $pdf->Text( '26', $height, utf8_decode( $element['description'] ) );
+            $pdf->Text( '12', $height, mb_convert_encoding( $element['qty']." ".$element['unit'], 'ISO-8859-1', 'UTF-8' ) );
+            $pdf->Text( '26', $height, mb_convert_encoding( $element['description'], 'ISO-8859-1', 'UTF-8' ) );
             $height = $height + 6;
         }
     }
@@ -1063,7 +1063,7 @@ function printOrder( $data ){
 
 
     $pdf->SetFont( 'Helvetica', 'B', '16' );
-    $pdf->Text( 10, $height + 10, utf8_decode( 'Ausgeführte Arbeiten' ) );
+    $pdf->Text( 10, $height + 10, mb_convert_encoding( 'Ausgeführte Arbeiten', 'ISO-8859-1', 'UTF-8' ) );
     $height = $height + 20;
     $pdf->SetFont( 'Helvetica', '', '10' );
     $totalLines = 16;
@@ -1072,8 +1072,8 @@ function printOrder( $data ){
         if( ( $element['part_type']  == 'service' ) && !$element['instruction'] ){
             $totalLines--;
             $pdf->line( 10, $height + 1.6,  190, $height + 1.6 );
-            $pdf->Text( '12', $height, utf8_decode( $element['qty']." ".$element['unit'] ) );
-            $pdf->Text( '26', $height, utf8_decode( $element['description'] ) );
+            $pdf->Text( '12', $height, mb_convert_encoding( $element['qty']." ".$element['unit'], 'ISO-8859-1', 'UTF-8' ) );
+            $pdf->Text( '26', $height, mb_convert_encoding( $element['description'], 'ISO-8859-1', 'UTF-8' ) );
             $height = $height + 6;
         }
     }
@@ -1081,26 +1081,22 @@ function printOrder( $data ){
         $pdf->line( 10, $height + 1.6,  190, $height + 1.6 );
         $height = $height + 6;
     }
-
-    $pdf->Text( '10','290', utf8_decode( 'Ich habe sämtliche Ersazteile und ausgeführte Arbeiten i.d. obigen Liste notiert. Unterschrift: __________________' ) );
-    $pdf->OutPut( __DIR__.'/../out.pdf', 'F' );
+    $printFileName = 'Auftrag_'.$orderData['ordnumber'].'_'.$orderData['c_ln'].'.pdf';
+    $pdf->Text( '10','290', mb_convert_encoding( 'Ich habe sämtliche Ersazteile und ausgeführte Arbeiten i.d. obigen Liste notiert. Unterschrift: __________________', 'ISO-8859-1', 'UTF-8' ) );
+    $pdf->OutPut( __DIR__.'/../printedFiles/'.$printFileName, 'F' );
 
 
     if( $data['print'] == 'printOrder1' ){
-      //system('lpr -P test '.__DIR__.'/../out.pdf' );
-      //system('lpr -P Buro1 '.__DIR__.'/../out.pdf' );
-      system('lpr -P Canon_LBP663C '.__DIR__.'/../out.pdf' );
-      if( !$orderData['printed'] )
-        $GLOBALS['dbh']->update( 'oe', array( 'printed' ), array( 'TRUE' ), 'id = '.$data['orderId'] );
+        system('lpr -P Canon_LBP663C '.__DIR__.'/../printedFiles/'.$printFileName );
+        if( !$orderData['printed'] ) $GLOBALS['dbh']->update( 'oe', array( 'printed' ), array( 'TRUE' ), 'id = '.$data['orderId'] );
     }
     if( $data['print'] == 'printOrder2' ){
-      //system('lpr -P test '.__DIR__.'/../out.pdf' );
-      system('lpr -P HP_LASER '.__DIR__.'/../out.pdf' );
-      if( !$orderData['printed'] )
-        $GLOBALS['dbh']->update( 'oe', array( 'printed' ), array( 'TRUE' ), 'id = '.$data['orderId'] );
+
+        system('lpr -P HP_LASER '.__DIR__.'/../printedFiles/'.$printFileName );
+        if( !$orderData['printed'] ) $GLOBALS['dbh']->update( 'oe', array( 'printed' ), array( 'TRUE' ), 'id = '.$data['orderId'] );
     }
 
-    echo 1;
+    echo json_encode( $printFileName );
 }
 
 function getCompanyAdress(){

@@ -25,11 +25,11 @@ function printArray( $array ){
     echo '</pre>';
 }
 
-//in terminal: tailf tmp/log.txt
+//im Terminal: tail log/debug.txt
 function writeLog( $log, $append = true ){
     $file = __DIR__.'/../log/debug.log';
     $str  = date("Y-m-d H:i:s -> " ).print_r( $log, TRUE )."\n";
-    $append? file_put_contents( $file, $str, FILE_APPEND ) : file_put_contents( $file, $str );
+    $append ? file_put_contents( $file, $str.file_get_contents( $file ) ) : file_put_contents( $file, $str );
 }
 
 function strpos_all($text, $search) {

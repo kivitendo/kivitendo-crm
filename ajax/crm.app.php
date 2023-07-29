@@ -708,7 +708,7 @@ function insertNewOffer( $data ){
     if( array_key_exists( 'c_id', $data ) ) $sql .= ", ".$data['c_id'];
     $sql .= " FROM customer WHERE customer.id = ".$data['customer_id']." RETURNING id, quonumber";
 
-    writeLog( $sql );
+    //writeLog( $sql );
 
     $rs = $GLOBALS['dbh']->getOne( $sql );
     echo '{ "id": "'.$rs['id'].'", "quonumber": "'.$rs['quonumber'].'"  }';
@@ -748,7 +748,7 @@ function updateCuWithNewCar( $data ){
 }
 
 function genericSingleInsert( $data ){
-    writeLog( $data );
+    //writeLog( $data );
     $tableName = array_key_first( $data['record'] );
     $id = $GLOBALS['dbh']->insert( $tableName, array_keys( $data['record'][$tableName] ), array_values( $data['record'][$tableName] ),
                                 array_key_exists( 'sequence_name', $data ), ( array_key_exists( 'sequence_name', $data ) )? $data['sequence_name'] : FALSE );
@@ -781,8 +781,8 @@ function genericUpdate( $data ){
         }
 
         /*writeLog( $key ); writeLog( array_keys( $value ) );*/  /* writeLog( $where );*/
-        writeLog( array_keys( $value ) );
-        writeLog( array_values( $value ) );
+        //writeLog( array_keys( $value ) );
+        //writeLog( array_values( $value ) );
         $GLOBALS['dbh']->update( $key, array_keys( $value ), array_values( $value ), $where );
     }
 
@@ -985,7 +985,7 @@ function printOrder( $data ){
     $pdf->Line( $textPosX_left, $lineHeight, $textPosX_left + $lineWidth , $lineHeight );
 
     foreach( $positions as $index => $element ){
-        writeLog( $element );
+        //writeLog( $element );
         if( $element['instruction'] ){
             $height = $height + 8;
             //$pdf->SetTextColor( 255, 0, 0 );

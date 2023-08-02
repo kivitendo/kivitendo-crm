@@ -13,6 +13,7 @@ $( '#search_order-date_from' ).datepicker({});
 $( '#search_order-date_to' ).datepicker({});
 
 $( '#search_order-customer_name' ).autocomplete({
+    delay: 100,
     source: "crm/ajax/crm.app.php?action=searchCustomer",
     close: function( e, ui ) {
         crmSearchOrder();
@@ -20,6 +21,7 @@ $( '#search_order-customer_name' ).autocomplete({
 })
 
 $( '#search_order-car_license' ).autocomplete({
+    delay: 100,
     source: "crm/ajax/crm.app.php?action=searchCarLicense",
     close: function( e, ui ) {
         crmSearchOrder();
@@ -27,6 +29,7 @@ $( '#search_order-car_license' ).autocomplete({
 })
 
 $( '#search_order-car_manuf' ).autocomplete({
+    delay: 100,
     source: "crm/ajax/crm.app.php?action=searchCarManuf",
     close: function( e, ui ) {
         crmSearchOrder();
@@ -34,6 +37,7 @@ $( '#search_order-car_manuf' ).autocomplete({
 })
 
 $( '#search_order-car_type' ).autocomplete({
+    delay: 100,
     source: "crm/ajax/crm.app.php?action=searchCarType",
     close: function( e, ui ) {
         crmSearchOrder();
@@ -41,6 +45,7 @@ $( '#search_order-car_type' ).autocomplete({
 })
 
 $( '#search_order-car_brand' ).autocomplete({
+    delay: 100,
     source: "crm/ajax/crm.app.php?action=searchCarBrand",
     close: function( e, ui ) {
         crmSearchOrder();

@@ -90,6 +90,7 @@ $.widget( "custom.catcomplete", $.ui.autocomplete,{
 
 $( function(){
     $( "#crm-widget-quicksearch" ).catcomplete({
+        delay: 100,
         source: "crm/ajax/crm.app.php?action=fastSearch",
         select: function( e, ui ) {
             console.info( ui );

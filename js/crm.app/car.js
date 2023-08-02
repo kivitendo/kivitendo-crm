@@ -215,6 +215,7 @@ function crmEditCarDlg( crmData = null ){
 
     // changeCustomer:
     $( '#edit_car_customer_name' ).autocomplete({
+        delay: 100,
         source: "crm/ajax/crm.app.php?action=searchCustomer",
         select: function( e, ui ) {
             $( '#car-c_ow' ).val( ui.item.id );
@@ -223,20 +224,21 @@ function crmEditCarDlg( crmData = null ){
     });
 
     $( '#edit_car-c_3' ).catcomplete({
-            source: function(request, response) {
-                if( $( '#edit_car-c_3' ).val().length > 2 && $( '#edit_car-c_2' ).val().length > 0 ){
-                    $.get('crm/ajax/crm.app.php?action=findCarKbaData', { 'hsn': $( '#edit_car-c_2' ).val(), 'tsn':  $( '#edit_car-c_3' ).val() }, function(data) {
-                        response(data);
-                    });
-                }
-            },
-            select: function( e, ui ) {
-                $( '#edit_car-kba_id' ).val( ui.item.id );
-                for( let item of editCarKbaFormModel){
-                    let columnName = item.name.split( '-' );
-                    if( exists( ui.item[columnName[1]] ) ) $( '#' + item.name ).val( ui.item[columnName[1]] );
-                }
+        delay: 100,
+        source: function(request, response) {
+            if( $( '#edit_car-c_3' ).val().length > 2 && $( '#edit_car-c_2' ).val().length > 0 ){
+                $.get('crm/ajax/crm.app.php?action=findCarKbaData', { 'hsn': $( '#edit_car-c_2' ).val(), 'tsn':  $( '#edit_car-c_3' ).val() }, function(data) {
+                    response(data);
+                });
             }
+        },
+        select: function( e, ui ) {
+            $( '#edit_car-kba_id' ).val( ui.item.id );
+            for( let item of editCarKbaFormModel){
+                let columnName = item.name.split( '-' );
+                if( exists( ui.item[columnName[1]] ) ) $( '#' + item.name ).val( ui.item[columnName[1]] );
+            }
+        }
     });
 
     $( '.edit_car_kba-hidden' ).hide();

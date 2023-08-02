@@ -200,9 +200,6 @@ function crmAddOrderItem( dataRow ){
 
     function crmGetCatcompleteURL(){
         let url = "crm/ajax/crm.app.php?action=findPart";
-        console.info( 'crmOrderType' );
-        console.info( crmOrderType );
-        console.info( crmOrderTypeEnum.Order );
         switch( crmOrderType ){
             case crmOrderTypeEnum.Order:
                 url += "&filter=order";
@@ -671,6 +668,7 @@ function crmNewOffer(){
 
 // changeCustomer:
 $( '#od_off_customer_name, #od_customer_name, #od_inv_customer_name' ).autocomplete({
+    delay: 100,
     source: "crm/ajax/crm.app.php?action=searchCustomer",
     select: function( e, ui ) {
         let tabName = '';
@@ -715,6 +713,7 @@ $( '#od_off_customer_name, #od_customer_name, #od_inv_customer_name' ).autocompl
 
 // changeCar:
 $( '#od_lxcars_c_ln, #od-inv-shippingpoint' ).autocomplete({
+        delay: 100,
         source: function(request, response) {
             $.get('crm/ajax/crm.app.php?action=searchCarLicense', { term: request.term, customer: $( '#od-customer-id' ).val()  }, function(data) {
                 response(data);

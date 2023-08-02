@@ -535,11 +535,23 @@ function getDataForNewLxcarsOrder( $data ){
 
 function getDataForNewOffer( $data ){
     $table = array( 'C' => 'customer', 'V' => 'vendor' );
-    $query = "SELECT customer.id AS customer_id, customer.name AS customer_name, customer.notes AS int_cu_notes, ".
-                "employee.id AS employee_id, employee.name AS employee_name ".
-                "FROM ".$table[$data['src']]." INNER JOIN employee ON employee.id = ".$_SESSION['loginCRM']." WHERE ".$table[$data['src']].".id = ".$data['id'];
 
-    echo '{ "common": '.$GLOBALS['dbh']->getOne( $query, true ).' }';
+    $query = "SELECT ";
+
+    $query .= "(SELECT row_to_json( common ) AS common FROM (".
+                "SELECT customer.id AS customer_id, customer.name AS customer_name, customer.notes AS int_cu_notes, ".
+                "employee.id AS employee_id, employee.name AS employee_name ".
+                "FROM ".$table[$data['src']]." INNER JOIN employee ON employee.id = ".$_SESSION['loginCRM']." WHERE ".$table[$data['src']].".id = ".$data['id'].
+                ") AS common) AS common, ";
+
+    $query .= "(SELECT json_agg( printers ) AS printers FROM (".
+                "SELECT * FROM printers".
+                ") AS printers) AS printers";
+
+    writeLog( $query );
+
+    //echo '{ "common": '.$GLOBALS['dbh']->getOne( $query, true ).' }';
+    echo $GLOBALS['dbh']->getOne( $query, true );
 }
 
 function getOffer( $data ){
@@ -706,12 +718,12 @@ function insertNewOffer( $data ){
     if( array_key_exists( 'c_id', $data ) ) $sql .= ", c_id";
     $sql .= ") SELECT ( SELECT sqnumber FROM tmp ), '', ".$data['customer_id'].", ".$_SESSION['id'].",  customer.taxzone_id, customer.currency_id, true";
     if( array_key_exists( 'c_id', $data ) ) $sql .= ", ".$data['c_id'];
-    $sql .= " FROM customer WHERE customer.id = ".$data['customer_id']." RETURNING id, quonumber";
+    $sql .= " FROM customer WHERE customer.id = ".$data['customer_id']." RETURNING id, quonumber, itime";
 
     //writeLog( $sql );
 
     $rs = $GLOBALS['dbh']->getOne( $sql );
-    echo '{ "id": "'.$rs['id'].'", "quonumber": "'.$rs['quonumber'].'"  }';
+    echo '{ "id": "'.$rs['id'].'", "quonumber": "'.$rs['quonumber'].'", "itime": "'.$rs['itime'].'" }';
 }
 
 /********************************************

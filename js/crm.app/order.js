@@ -326,7 +326,9 @@ function crmNewOrderAndInsertPos( itemPosition, itemType, item ){
                     break;
                 case crmOrderTypeEnum.Offer:
                     $( '#od-off-id' ).val( data.id );
-                    $( '#od-off-quonumber' ).text( data.qounumber );
+                    $( '#od-off-quonumber' ).text( data.quonumber );
+                    $( '#od-off-itime' ).text( kivi.format_date( new Date( data.itime ) ) );
+                    $( '#od-off-mtime' ).text( $( '#od-off-itime' ).text() );
                     break;
                 case crmOrderTypeEnum.Delivery:
                     break;
@@ -1216,10 +1218,13 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
 
         $( '#od-off-printers' ).html( '' );
         $( '#od-off-printers' ).append( '<li><a value="screen" href="#" onclick="crmPrintOrder( this );">Bildschirm</a></li>' );
-        if( exists( crmData.offer.printers ) ){
-            for( let printer of crmData.offer.printers ){
+        let printers = undefined;
+        if( ( exists( crmData.offer ) && exists( printers = crmData.offer.printers ) ) || exists( printers = crmData.printers ) ){
+            for( let printer of printers ){
+                if( $( '#crm-userconf-defprn' ).val() == printer.id ) $( '#od-off-current-printer' ).text( printer.printer_description );
                 $( '#od-off-printers' ).append( '<li><a value="' + printer.id  + '" href="#" onclick="crmPrintOrder( this );">' + printer.printer_description + '</a></li>' );
             }
+            $( '#od-off-current-printer' ).attr( 'value', $( '#crm-userconf-defprn' ).val() );
         }
      }
 
@@ -1234,7 +1239,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
     $( '#crm-edit-order-dialog' ).dialog({
         autoOpen: false,
         resizable: true,
-        width: 'auto',
+        width: window.innerWidth * 0.95 + 'px', //Breite Dialog relativ zur Fenstergröße
         height: 'auto',
         modal: true,
         title: title,

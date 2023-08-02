@@ -1038,9 +1038,6 @@ function crmPrintOrder( e ){
         });
     }
 
-    //$( '#od-inv-current-printer' ).attr( 'value', $( e ).attr( 'value' ) );
-    //$( '#od-inv-current-printer' ).text( $( e ).text( ) );
-
     $( '#od-inv-printers-menu' ).menu( 'collapseAll' );
 
     if( crmOrderTypeEnum.Invoice == crmOrderType ){

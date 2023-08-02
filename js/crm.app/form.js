@@ -329,3 +329,10 @@ const editdeladdrCustomer = [
     { "name": "deladdr_Customer-shiptofax", "label": "fax:", "type": "input", "size": "42", "tooltip": "Second phone number" },
     { "name": "deladdr_Customer-shiptocontact", "label": "Contact person:", "type": "input", "size": "42", "tooltip": "Contact person" },
 ];
+
+const orderEmailFormModel = [
+    { "name": "order_email-recipient", "label": "Recipient:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "order_email-Subject", "label": "Subject:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "order_email-message", "label": "Message:", "type": "textarea", "cols": "42", "rows": "5", "tooltip": "" },
+    { "name": "order_email-attachment", "label": "Name of attachment:", "type": "input", "size": "21", "tooltip": "" },
+];

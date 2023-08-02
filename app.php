@@ -281,6 +281,9 @@
                     </li>
                 </ul>
             </td>
+            <td>
+                <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" style="margin-top: 1em"><span class="ui-button-text">E-Mail</span></button>
+            </td>
             <div  style="display:none">
                 <form id="od-inv-print-form" method="post" action="is.pl">
                 </form>
@@ -590,10 +593,18 @@
 <div id="crm-confirm-order-to-invoice-dialog" style="display:none">
     <p>Aus dem Auftrag eine Rechnung erzeugen?</p>
 </div>
+
 <div id="crm-confirm-order-to-offer-dialog" style="display:none">
     <p>Aus dem Auftrag ein Angebot erzeugen?</p>
 </div>
 
+<div id="crm-order-email-dialog" style="display:none">
+    <div id="order-email-hidden"></div>
+    <table id="order-email-form">
+        <thead></thead>
+        <tbody></tbody>
+    </table>
+</div>
 
 <div id="crm-search-order-dialog" style="display:none">
     <div id="search-order-hidden"></div>

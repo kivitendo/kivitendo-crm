@@ -225,6 +225,7 @@ const editCarKbaFormModel = [
 ];
 
 const editCarFormModel = [
+    { "name": "edit_car_customer_name", "label": "Customer name:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_car-c_ln", "label": "Car license:", "type": "input", "size": "21", "tooltip": "", "check": "edit_car-chk_c_ln", "info": "edit_car-c_ln_info" },
     { "name": "edit_car-c_2", "label": "HSN (2.1):", "type": "input", "size": "21", "tooltip": "", "check": "edit_car-chk_c_2" },
     { "name": "edit_car-c_3", "label": "TSN (2.2):", "type": "input", "size": "21", "tooltip": "", "check": "edit_car-chk_c_3" },
@@ -249,6 +250,7 @@ const editCarFormModel = [
     { "name": "edit_car-c_text", "label": "Comment:", "type": "textarea", "cols": "42", "rows": "5", "tooltip": "Comment" },
     { "name": "edit_car-c_id", "type": "hidden", },
     { "name": "edit_car-kba_id", "type": "hidden", },
+    { "name": "car-c_ow", "type": "hidden", },
 ];
 
 const editKbaFormModel = [

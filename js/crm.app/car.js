@@ -212,6 +212,16 @@ function crmEditCarDlg( crmData = null ){
     $( "#edit_car-c_hu" ).datepicker();
     $( '#edit_car-c_finchk' ).attr( 'maxlength', 1 );
 
+
+    // changeCustomer:
+    $( '#edit_car_customer_name' ).autocomplete({
+        source: "crm/ajax/crm.app.php?action=searchCustomer",
+        select: function( e, ui ) {
+            $( '#car-c_ow' ).val( ui.item.id );
+            crmRefreshAppView( 'C', ui.item.id );
+        }
+    });
+
     $( '#edit_car-c_3' ).catcomplete({
             source: function(request, response) {
                 if( $( '#edit_car-c_3' ).val().length > 2 && $( '#edit_car-c_2' ).val().length > 0 ){
@@ -240,6 +250,9 @@ function crmEditCarDlg( crmData = null ){
             $( '#edit_car_kba_hide_show' ).text( "Hide extra fields" );
         }
     });
+
+    $( '#car-c_ow' ).val( $( '#crm-cvpa-id' ).val() );
+    $( '#edit_car_customer_name' ).val( $( '#crm-contact-name' ).text() );
 
     if( exists( crmData ) ){
 
@@ -318,6 +331,7 @@ function crmEditCarDlg( crmData = null ){
                 dbUpdateData['lxc_cars'] = {};
                 for( let item of editCarFormModel ){
                     let columnName = item.name.split( '-' );
+                    if( !exists( columnName[1] ) ) continue;
                     let val = $( '#' + item.name ).val();
                     if( exists(val) ){
                         if( item.name !== 'edit_car-c_id' ) dbUpdateData['lxc_cars'][columnName[1]] = val;
@@ -334,10 +348,9 @@ function crmEditCarDlg( crmData = null ){
                     $( '#crm-edit-car-dialog' ).dialog( "close" );
                 }
                 if( '' == $( '#edit_car-c_id' ).val() ){
-                    console.info( $( '#crm-cvpa-id' ).val() );
                     let data = {};
                     data['record'] = dbUpdateData;
-                    data['record']['lxc_cars']['c_ow'] = $( '#crm-cvpa-id' ).val();
+                    data['record']['lxc_cars']['c_ow'] = $( '#car-c_ow' ).val();
                     if( '' == data['record']['lxc_cars']['c_zrk'] ) data['record']['lxc_cars']['c_zrk'] = 0;
                     console.info( data );
                     $.ajax({

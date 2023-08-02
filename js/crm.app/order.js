@@ -1242,7 +1242,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
     $( '#crm-edit-order-dialog' ).dialog({
         autoOpen: false,
         resizable: true,
-        width: ( window.innerWidth * 0.95 < 1480 )? window.innerWidth * 0.95 + 'px' : '1480px', //Breite Dialog relativ zur Fenstergröße
+        width: ( window.innerWidth * 0.95 < 1770 )? window.innerWidth * 0.95 + 'px' : '1770px', //Breite Dialog relativ zur Fenstergröße
         height: 'auto',
         modal: true,
         title: title,

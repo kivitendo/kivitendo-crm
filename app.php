@@ -228,7 +228,8 @@
     <ul id = "od-oe-workflow" style="margin-bottom: 1em;">
          <li><a href = "#" style="font-weight: bold;">Workflow</a>
              <ul>
-                 <li><a id="od-oe-invoice-btn" href = "#" onclick="crmInsertInvoiceFromOrder();">Rechnung</a></li>
+                 <li><a id="od-oe-invoice-btn" href = "#" onclick="crmInsertOfferFromOrder();">Vorlage für Angebot</a></li>
+                 <li><a id="od-oe-invoice-btn" href = "#" onclick="crmInsertInvoiceFromOrder();">Vorlage für Rechnung</a></li>
              </ul>
          </li>
     </ul>
@@ -589,6 +590,10 @@
 <div id="crm-confirm-order-to-invoice-dialog" style="display:none">
     <p>Aus dem Auftrag eine Rechnung erzeugen?</p>
 </div>
+<div id="crm-confirm-order-to-offer-dialog" style="display:none">
+    <p>Aus dem Auftrag ein Angebot erzeugen?</p>
+</div>
+
 
 <div id="crm-search-order-dialog" style="display:none">
     <div id="search-order-hidden"></div>

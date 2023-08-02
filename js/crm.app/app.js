@@ -14,6 +14,9 @@ function getValueNotNull( value ){
     return ( null == value )? '' : value;
 }
 
+//Delay für Autocomplete und Catcomplete
+const crmAcDelay = 100;
+
 $( '#crm-tabs-main' ).tabs();
 $( '#crm-tabs-infos' ).tabs();
 

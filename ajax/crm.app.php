@@ -654,6 +654,39 @@ function insertInvoiceFromOrder( $data ){
     getInvoice( $exists );
 }
 
+function insertOfferFromOrder( $data ){
+    $query = "WITH tmp AS ( UPDATE defaults SET sqnumber = sqnumber::INT + 1 RETURNING sqnumber ) ".
+                "INSERT INTO oe ( quonumber, quotation, ".
+                "ordnumber, transdate, vendor_id, customer_id, amount, netamount, reqdate, taxincluded, shippingpoint, notes, employee_id, ".
+                "closed, cusordnumber, intnotes, department_id, shipvia, cp_id, language_id, payment_id, delivery_customer_id, ".
+                "delivery_vendor_id, taxzone_id, proforma, shipto_id, order_probability, expected_billing_date, globalproject_id, delivered, ".
+                "salesman_id, marge_total, marge_percent, transaction_description, delivery_term_id, currency_id, exchangerate, ".
+                "tax_point, km_stnd, c_id, status, car_status, finish_time, printed, car_manuf, car_type, internalorder, ".
+                "billing_address_id, order_status_id ".
+                ") SELECT ( SELECT sqnumber FROM tmp ), true, ".
+                "ordnumber, transdate, vendor_id, customer_id, amount, netamount, reqdate, taxincluded, shippingpoint, notes, ".$_SESSION['id'].", ".
+                "closed, cusordnumber, intnotes, department_id, shipvia, cp_id, language_id, payment_id, delivery_customer_id, ".
+                "delivery_vendor_id, taxzone_id, proforma, shipto_id, order_probability, expected_billing_date, globalproject_id, delivered, ".
+                "salesman_id, marge_total, marge_percent, transaction_description, delivery_term_id, currency_id, exchangerate, ".
+                "tax_point, km_stnd, c_id, status, car_status, finish_time, printed, car_manuf, car_type, internalorder, ".
+                "billing_address_id, order_status_id ".
+                "FROM oe WHERE id = ".$data['oe_id']." RETURNING id;";
+
+    writeLog( '---' );
+    writeLog( $query );
+
+    $GLOBALS['dbh']->beginTransaction();
+    $id = $GLOBALS['dbh']->getOne( $query )['id'];
+
+    $query = "INSERT INTO orderitems (trans_id, position, parts_id, description, longdescription, qty, unit, sellprice, discount, marge_total) ".
+            "(SELECT ".$id.", position, parts_id, description, longdescription, qty, unit, sellprice, discount, marge_total FROM orderitems WHERE trans_id = ".$data['oe_id'].")";
+
+    $GLOBALS['dbh']->query( $query );
+    $GLOBALS['dbh']->commit();
+
+    getOffer( array( "id" => $id ) );
+}
+
 function prepareKba( &$data ){
     $kba_id = FALSE;
     if( array_key_exists( 'lxckba', $data )  && array_key_exists( 'lxc_cars', $data )){

@@ -200,6 +200,9 @@ function crmAddOrderItem( dataRow ){
 
     function crmGetCatcompleteURL(){
         let url = "crm/ajax/crm.app.php?action=findPart";
+        console.info( 'crmOrderType' );
+        console.info( crmOrderType );
+        console.info( crmOrderTypeEnum.Order );
         switch( crmOrderType ){
             case crmOrderTypeEnum.Order:
                 url += "&filter=order";
@@ -219,6 +222,7 @@ function crmAddOrderItem( dataRow ){
     }
 
     $( '.od-item-description' ).catcomplete({
+        delay: 0,
         //source: "crm/ajax/crm.app.php?action=findPart" + ( ( crmOrderTypeEnum.Invoice == crmOrderType )? '&filterI' : '' ),
         source: crmGetCatcompleteURL(),
         select: function( e, ui ){

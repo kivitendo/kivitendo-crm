@@ -703,6 +703,24 @@ function prepareKba( &$data ){
     unset( $data['lxckba'] );
 }
 
+function getGenericTranslations( $data ){
+    $query = "SELECT ".
+                "(SELECT email_sender_request_quotation FROM defaults) AS email_sender_request_quotation, ".
+                "(SELECT email_sender_invoice FROM defaults) AS email_sender_invoice, ".
+                "(SELECT greeting FROM customer WHERE id = ".$data['id'].") AS greeting, ".
+                "(SELECT translation FROM generic_translations WHERE translation_type = 'salutation_female') AS salutation_female, ".
+                "(SELECT translation FROM generic_translations WHERE translation_type = 'salutation_punctuation_mark') AS salutation_punctuation_mark, ".
+                "(SELECT translation FROM generic_translations WHERE translation_type = 'salutation_general') AS salutation_general, ".
+                "(SELECT translation FROM generic_translations WHERE translation_type = 'preset_text_sales_quotation') AS preset_text_sales_quotation, ".
+                "(SELECT translation FROM generic_translations WHERE translation_type = 'preset_text_periodic_invoices_email_body') AS preset_text_periodic_invoices_email_body, ".
+                "(SELECT translation FROM generic_translations WHERE translation_type = 'preset_text_invoice') AS preset_text_invoice, ".
+                "(SELECT translation FROM generic_translations WHERE translation_type = 'preset_text_sales_order') AS preset_text_sales_order, ".
+                "(SELECT translation FROM generic_translations WHERE translation_type = 'salutation_male') AS salutation_male, ".
+                "(SELECT translation FROM generic_translations WHERE translation_type = 'preset_text_periodic_invoices_email_subject') AS preset_text_periodic_invoices_email_subject";
+
+    echo $GLOBALS['dbh']->getOne($query, true);
+}
+
 /********************************************
 * Insert a new Customer optional  with new Car
 ********************************************/

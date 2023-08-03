@@ -913,6 +913,52 @@ function crmInsertOfferFromOrder(){
 
 }
 
+function crmEmailOrder( e ){
+    $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        type: 'POST',
+        data:  { action: 'getGenericTranslations', data: { id: $( '#od-customer-id' ).val() } },
+        success: function( crmData ){
+            crmInitFormEx( orderEmailFormModel, '#order-email-form' );
+            $( '#order_email-recipient' ).val( $( '#crm_inv_contact_email' ).text() );
+            $( '#order_email-subject' ).val( 'Rechnung ' + $( '#od-inv-invnumber' ).text() );
+            let salutation = crmData['salutation_general'];
+            if( 'Frau' == crmData['greetings'] ) crmData['salutation_female'];
+            else if( 'Herr' == crmData['greetings'] ) crmData['salutation_male'];
+            $( '#order_email-message' ).val( salutation + crmData['salutation_punctuation_mark'] + crmData['preset_text_invoice'] );
+            $( '#order_email-attachment' ).val( 'Rechnung_' + $( '#od-inv-invnumber' ).text() + '.pdf' );
+
+            $( '#crm-order-email-dialog' ).dialog({
+                autoOpen: false,
+                resizable: true,
+                width: 'auto',
+                height: 'auto',
+                modal: true,
+                title: kivi.t8( 'Send email' ),
+                position: { my: "top", at: "top+250" },
+                open: function(){
+                    $( this ).css( 'maxWidth', window.innerWidth );
+                },
+                buttons:[{
+                    text: kivi.t8( 'Send email' ),
+                    click: function(){
+                        crmPrintOrder( e );
+                        $( this ).dialog( "close" );
+                    }
+                },{
+                    text: kivi.t8( 'Cancel' ),
+                    click: function(){
+                        $( this ).dialog( "close" );
+                    }
+                }]
+            }).dialog( 'open' ).resize();
+        },
+        error: function( xhr, status, error ){
+            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmEmailOrder()', xhr.responseText );
+        }
+    });
+}
+
 function crmPrintOrder( e ){
     let data = {};
     if( crmOrderTypeEnum.Invoice == crmOrderType ){
@@ -1004,7 +1050,7 @@ function crmPrintOrder( e ){
     }
     else{
             data['media'] = 'printer';
-            data['printer_id'] = '' + $( e ).attr( 'value' );
+            if( 'email' !== $( e ).attr( 'value' ) ) data['printer_id'] = '' + $( e ).attr( 'value' );
     }
     data['copies'] = '1';
     data['action'] = 'print';
@@ -1022,6 +1068,13 @@ function crmPrintOrder( e ){
         $( '#' + formId ).submit();
     }
     else{
+        if( 'email' == $( e ).attr( 'value' ) ){
+            data['action'] = 'send_sales_purchase_email';
+            data['email_form.to'] = $( '#order_email-recipient' ).val();
+            data['email_form.subject'] = $( '#order_email-subject' ).val();
+            data['email_form.attachment_filename'] = $( '#order_email-attachment' ).val();
+        }
+
         let url = '';
         if( crmOrderTypeEnum.Invoice == crmOrderType ) url = 'is.pl';
         else if( crmOrderTypeEnum.Offer == crmOrderType ) url = 'oe.pl';

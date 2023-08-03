@@ -282,7 +282,7 @@
                 </ul>
             </td>
             <td>
-                <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" style="margin-top: 1em"><span class="ui-button-text">E-Mail</span></button>
+                <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" style="margin-top: 1em" onclick="crmEmailOrder( this )" value="email"><span class="ui-button-text">E-Mail</span></button>
             </td>
             <div  style="display:none">
                 <form id="od-inv-print-form" method="post" action="is.pl">

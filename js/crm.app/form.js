@@ -332,7 +332,7 @@ const editdeladdrCustomer = [
 
 const orderEmailFormModel = [
     { "name": "order_email-recipient", "label": "Recipient:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "order_email-Subject", "label": "Subject:", "type": "input", "size": "21", "tooltip": "" },
+    { "name": "order_email-subject", "label": "Subject:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "order_email-message", "label": "Message:", "type": "textarea", "cols": "42", "rows": "5", "tooltip": "" },
     { "name": "order_email-attachment", "label": "Name of attachment:", "type": "input", "size": "21", "tooltip": "" },
 ];

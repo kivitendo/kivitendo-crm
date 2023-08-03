@@ -705,8 +705,6 @@ function prepareKba( &$data ){
 
 function getGenericTranslations( $data ){
     $query = "SELECT ".
-                "(SELECT email_sender_request_quotation FROM defaults) AS email_sender_request_quotation, ".
-                "(SELECT email_sender_invoice FROM defaults) AS email_sender_invoice, ".
                 "(SELECT greeting FROM customer WHERE id = ".$data['id'].") AS greeting, ".
                 "(SELECT translation FROM generic_translations WHERE translation_type = 'salutation_female') AS salutation_female, ".
                 "(SELECT translation FROM generic_translations WHERE translation_type = 'salutation_punctuation_mark') AS salutation_punctuation_mark, ".

@@ -921,12 +921,26 @@ function crmEmailOrder( e ){
         success: function( crmData ){
             crmInitFormEx( orderEmailFormModel, '#order-email-form' );
             $( '#order_email-recipient' ).val( $( '#crm_inv_contact_email' ).text() );
-            $( '#order_email-subject' ).val( 'Rechnung ' + $( '#od-inv-invnumber' ).text() );
+            //Todo: Internationalisierung
+            let subject = '';
+            let docNumber = 0;
+            let presetText = '';
+            if( crmOrderTypeEnum.Offer == crmOrderType ){
+                subject = 'Angebot';
+                docNumber = $( '#od-off-quonumber' ).text();
+                presetText = crmData['preset_text_sales_quotation'];
+            }
+            else if( crmOrderTypeEnum.Invoice == crmOrderType ){
+                subject = 'Rechnung';
+                docNumber = $( '#od-inv-invnumber' ).text();
+                presetText = crmData['preset_text_invoice'];
+            }
+            $( '#order_email-subject' ).val( subject + ' ' + docNumber );
             let salutation = crmData['salutation_general'];
-            if( 'Frau' == crmData['greetings'] ) crmData['salutation_female'];
-            else if( 'Herr' == crmData['greetings'] ) crmData['salutation_male'];
-            $( '#order_email-message' ).val( salutation + crmData['salutation_punctuation_mark'] + crmData['preset_text_invoice'] );
-            $( '#order_email-attachment' ).val( 'Rechnung_' + $( '#od-inv-invnumber' ).text() + '.pdf' );
+            if( 'Frau' == crmData['greeting'] ) salutation = crmData['salutation_female'];
+            else if( 'Herr' == crmData['greeting'] ) salutation = crmData['salutation_male'];
+            $( '#order_email-message' ).val( salutation + crmData['salutation_punctuation_mark'] + presetText );
+            $( '#order_email-attachment' ).val( subject + '_' + docNumber + '.pdf' );
 
             $( '#crm-order-email-dialog' ).dialog({
                 autoOpen: false,
@@ -1073,6 +1087,7 @@ function crmPrintOrder( e ){
             data['email_form.to'] = $( '#order_email-recipient' ).val();
             data['email_form.subject'] = $( '#order_email-subject' ).val();
             data['email_form.attachment_filename'] = $( '#order_email-attachment' ).val();
+            data['email_form.message'] = $( '#order_email-message' ).val();
         }
 
         let url = '';

@@ -20,6 +20,126 @@
 }
 
 /***************************************
+* Check der Eingaben
+***************************************/
+
+function crmCheckFin( fin, cn ){
+     sum = 0;
+    if(cn=='-'){return true;}
+    if(cn==''){return false;}
+    mult = new Array(9,8,7,6,5,4,3,2,10,9,8,7,6,5,4,3,2);
+    for(i in mult){
+        sum+=(mult[i])*(crmEBtoNum(fin[i]));
+   }
+   check=sum%11;
+    if(check==10){checkchar='X';}
+    else{checkchar=check;}
+    if(cn==checkchar){return true;}
+    else{return false;}
+}
+
+function crmEBtoNum( fin ){
+    if(fin=='O'||fin=='0'){return 0;}
+    if(fin=='A'||fin=='J'||fin=='1'){return 1;}
+    if(fin=='B'||fin=='K'||fin=='S'||fin=='2'){return 2;}
+    if(fin=='C'||fin=='L'||fin=='T'||fin=='3'){return 3;}
+    if(fin=='D'||fin=='M'||fin=='U'||fin=='4'){return 4;}
+    if(fin=='E'||fin=='N'||fin=='V'||fin=='5'){return 5;}
+    if(fin=='F'||fin=='W'||fin=='6'){return 6;}
+    if(fin=='G'||fin=='P'||fin=='X'||fin=='7'){return 7;}
+    if(fin=='H'||fin=='Q'||fin=='Y'||fin=='8'){return 8;}
+    if(fin='I'||fin=='R'||fin=='Z'||fin=='9'){return 9;}
+    else{alert("EBtoFin Error!!!");}
+}
+
+function crmCheckLn( ln ){
+    return ln.match(/^[A-Z ÜÄÖ]{1,3}-[A-Z]{1,2}[0-9]{1,4}[H]{0,1}$/);
+}
+
+function crmCheckHsn( hsn ){
+    return hsn.match(/^[0-9]{4}$/);
+}
+
+function crmCheckTsn( tsn ){
+    return tsn.match(/^([0-9A-Z]{3,10})$/);
+}
+
+function crmCheckEm( em ){
+    return em.match(/^[0-9]{0,2}[0-9A-Z]{4}$/);
+}
+
+function crmCheckHu( hu ){
+    return hu.match(/^[\d]{1,2}[.][\d]{1,2}[.][\d]{0,4}$/);
+}
+
+function crmCheckD( d ){
+    return d.match(/^[\d]{1,2}[.][\d]{1,2}[.][\d]{1,4}$/);
+}
+
+const crmDoCheckLn = function (){
+    if( $( '#edit_car-chk_c_ln' ).prop( 'checked' ) && !crmCheckLn( $( '#edit_car-c_ln' ).val() ) ){
+        alert( 'Kennzeichen fehlerhaft! Folgendes Format verwenden: MOL-RK73 oder MOL-DS88H für Oldtimer.' );
+        $( '#edit_car-c_ln' ).focus();
+        return false;
+    }
+    return true;
+}
+
+const crmDoCheckHsn = function (){
+    if( $( '#edit_car-chk_c_2' ).prop( 'checked' ) && !crmCheckHsn( $( '#edit_car-c_2' ).val() ) ){
+        alert( 'Die Schlüsselnummer zu 2.1 ist fehlerhaft! Folgendes Format verwenden: 0600' );
+        $( '#edit_car-c_2' ).focus();
+        return false;
+    }
+    return true;
+}
+
+const crmDoCheckTsn = function (){
+    if( $( '#edit_car-chk_c_3' ).prop( 'checked' ) && !crmCheckTsn( $( '#edit_car-c_3' ).val() ) ){
+        alert( 'Die Schlüsselnummer zu 2.2 ist fehlerhaft! Folgendes Format verwenden: ABL1277L3 oder 300' );
+        $( '#edit_car-c_3' ).focus();
+        return false;
+    }
+    return true;
+}
+
+const crmDoCheckEm = function (){
+    if( $( '#edit_car-chk_c_em' ).prop( 'checked' ) && !crmCheckEm( $( '#edit_car-c_em' ).val() ) ){
+        alert( 'Der Abgasschlüssel ist fehlerhaft! Folgendes Format verwenden: 0456 oder 010456' );
+        $( '#edit_car-c_em' ).focus();
+        return false;
+    }
+    return true;
+}
+
+const crmDoCheckD = function (){
+    if( !crmCheckD( $( '#edit_car-c_d' ).val() ) ){
+        alert( 'Das Datum der Erstzulassung wurde fehlerhaft eingegeben! Folgendes Format verwenden: 12.8.73 oder 12.8.' );
+        $( '#edit_car-c_d' ).focus();
+        return false;
+    }
+    return true;
+}
+
+const crmDoCheckHu = function (){
+    if( !crmCheckHu( $( '#edit_car-c_hu' ).val() ) ){
+        alert( 'Das Datum der HU wurde fehlerhaft eingegeben! Folgendes Format verwenden: 12.8. oder 12.8.13' );
+        $( '#edit_car-c_hu' ).focus();
+        return false;
+    }
+    return true;
+}
+
+const crmDoCheckFin = function (){
+    if( $( '#edit_car-chk_fin' ).prop( 'checked' ) && !crmCheckFin( $( '#edit_car-c_fin' ).val(), $( '#edit_car-c_finchk' ).val() ) ){
+        alert( 'Die Fahrzeugidentnummer (FIN) ist fehlerhaft! Folgendes Format verwenden: WDB2081091X123456. Prüfziffer nicht vergessen. Falls unbekannt \'-\' eingeben' );
+        $( '#edit_car-fin' ).focus();
+        return false;
+    }
+    return true;
+}
+
+/***************************************
 * Dialog to select scan (car data)
 * and customer
 * inklusive fast search,
@@ -212,6 +332,33 @@ function crmEditCarDlg( crmData = null ){
     $( "#edit_car-c_hu" ).datepicker();
     $( '#edit_car-c_finchk' ).attr( 'maxlength', 1 );
 
+    $( '#edit_car-chk_c_ln' ).prop( 'checked', true );
+    $( '#edit_car-chk_c_2' ).prop( 'checked', true );
+    $( '#edit_car-chk_c_3' ).prop( 'checked', true );
+    $( '#edit_car-chk_c_em' ).prop( 'checked', true );
+    $( '#edit_car-chk_fin' ).prop( 'checked', true );
+
+    $( '#edit_car-c_ln' ).change( function(){
+        crmDoCheckLn();
+    });
+    $( '#edit_car-c_2' ).change( function(){
+        crmDoCheckHsn();
+    });
+    $( '#edit_car-c_3' ).change( function(){
+        crmDoCheckTsn();
+    });
+    $( '#edit_car-c_em' ).change( function(){
+        crmDoCheckEm();
+    });
+    $( '#edit_car-c_d' ).change( function(){
+        crmDoCheckD();
+    });
+    $( '#edit_car-c_hu' ).change( function(){
+        crmDoCheckHu();
+    });
+    $( '#edit_car-c_finchk' ).change( function(){
+        crmDoCheckFin();
+    });
 
     // changeCustomer:
     $( '#edit_car_customer_name' ).autocomplete({
@@ -329,6 +476,15 @@ function crmEditCarDlg( crmData = null ){
             text: kivi.t8( 'Save' ),
             click: function(){
                 console.info( 'Save car' );
+
+                if( !crmDoCheckLn() ) return;
+                if( !crmDoCheckHsn() ) return;
+                if( !crmDoCheckTsn() ) return;
+                if( !crmDoCheckEm() ) return;
+                if( !crmDoCheckD() ) return;
+                if( !crmDoCheckHu() ) return;
+                if( !crmDoCheckFin() ) return;
+
                 dbUpdateData = {};
                 dbUpdateData['lxc_cars'] = {};
                 for( let item of editCarFormModel ){

@@ -82,6 +82,19 @@ const crmDoCheckLn = function (){
         $( '#edit_car-c_ln' ).focus();
         return false;
     }
+    $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        type: 'POST',
+        data:  { action: 'checkCarLicense', data: { 'c_ln': $( '#edit_car-c_ln' ).val() } },
+        success: function( crmData ){
+            if( exists( crmData.exists ) ){
+                if( crmData.exists ) alert( 'Ein Auto mit dem Kennzeichen existiert bereits' );
+            }
+        },
+        error: function( xhr, status, error ){
+            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmEditOrderDlg().getOrder', xhr.responseText );
+        }
+    });
     return true;
 }
 

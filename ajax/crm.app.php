@@ -512,6 +512,14 @@ function searchCustomerForScan( $data ){
     echo ( empty( $rs ) )? 0 : $rs;
 }
 
+function checkCarLicense( $data ){
+    echo $GLOBALS['dbh']->getOne( "SELECT COALESCE ((SELECT 'true' FROM lxc_cars WHERE c_ln = '".$data['c_ln']."'), 'false') AS exists", true);
+}
+
+function checkCarFin( $data ){
+    echo $GLOBALS['dbh']->getOne( "SELECT COALESCE ((SELECT 'true' FROM lxc_cars WHERE c_fin = '".$data['fin']."'), 'false') AS exists", true);
+}
+
 function getCar( $data ){
     $query = "SELECT ";
     $query .= "(SELECT row_to_json( car ) AS car FROM (".

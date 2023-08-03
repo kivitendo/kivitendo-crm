@@ -219,7 +219,7 @@ function crmAddOrderItem( dataRow ){
     }
 
     $( '.od-item-description' ).catcomplete({
-        delay: 100,
+        delay: crmAcDelay,
         //source: "crm/ajax/crm.app.php?action=findPart" + ( ( crmOrderTypeEnum.Invoice == crmOrderType )? '&filterI' : '' ),
         source: crmGetCatcompleteURL(),
         select: function( e, ui ){
@@ -668,7 +668,7 @@ function crmNewOffer(){
 
 // changeCustomer:
 $( '#od_off_customer_name, #od_customer_name, #od_inv_customer_name' ).autocomplete({
-    delay: 100,
+    delay: crmAcDelay,
     source: "crm/ajax/crm.app.php?action=searchCustomer",
     select: function( e, ui ) {
         let tabName = '';
@@ -713,7 +713,7 @@ $( '#od_off_customer_name, #od_customer_name, #od_inv_customer_name' ).autocompl
 
 // changeCar:
 $( '#od_lxcars_c_ln, #od-inv-shippingpoint' ).autocomplete({
-        delay: 100,
+        delay: crmAcDelay,
         source: function(request, response) {
             $.get('crm/ajax/crm.app.php?action=searchCarLicense', { term: request.term, customer: $( '#od-customer-id' ).val()  }, function(data) {
                 response(data);

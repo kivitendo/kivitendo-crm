@@ -643,6 +643,9 @@
 
 <div id="crm-edit-car-dialog" style="display:none">
     <div id="edit-car-hidden"></div>
+    <div style="padding: 0.25em">
+        <div class="crm-dialog-error-view" style="color: red"></div>
+    </div>
     <table>
         <tr>
             <td style="vertical-align: top;">

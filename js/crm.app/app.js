@@ -155,6 +155,22 @@ $( '#message-dialog' ).dialog({
     }]
 });
 
+//Fehlermeldung wird im Dialog in einem 'div' angezeigt (im Dialog muss ein 'div' mit der Klasse 'crm-dialog-error-view' eingefügt werden):
+$.fn.crmDialogShowError = function( id, text ){
+    $( this ).find( '.crm-dialog-error-view' ).find( '#' + id ).remove();
+    $( this ).find( '.crm-dialog-error-view' ).append( '<div id="' + id + '" class="crm-dialog-error" style="color: red">' + text + '</div>' );
+}
+//Fehlermeldung wird im Dialog wenn der Fehler behoben ist entfernt:
+$.fn.crmDialogRemoveError = function( id ){
+    $( this ).find( '.crm-dialog-error-view' ).find( '#' + id ).remove();
+}
+$.fn.crmDialogHasErrors = function(){
+    return $( this ).find( '.crm-dialog-error-view' ).find( '.crm-dialog-error' ).length > 0;
+}
+$.fn.crmDialogClearErrors = function(){
+    $( this ).find( '.crm-dialog-error-view' ).find( '.crm-dialog-error' ).remove();
+}
+
 $.fn.showMessageDialog = function( style, title, message, debug = null ){
 // ToDo: Erzeugt das resize-Problem beim Neuen-Auftrag-Dialog
 //    $( this ).dialog( 'option', 'title', title ).dialog( 'open' ).parent().addClass( 'ui-state-' + style );

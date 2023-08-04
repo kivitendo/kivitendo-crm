@@ -513,11 +513,19 @@ function searchCustomerForScan( $data ){
 }
 
 function checkCarLicense( $data ){
-    echo $GLOBALS['dbh']->getOne( "SELECT COALESCE ((SELECT 'true' FROM lxc_cars WHERE c_ln = '".$data['c_ln']."'), 'false') AS exists", true);
+    echo $GLOBALS['dbh']->getOne( "SELECT test.ln_exists, customer.name FROM (SELECT COALESCE ((SELECT 'true' FROM lxc_cars WHERE c_ln = '".$data['c_ln']."'), 'false') AS ln_exists) AS test LEFT JOIN lxc_cars ON lxc_cars.c_ln = '".$data['c_ln']."' LEFT JOIN customer ON lxc_cars.c_ow = customer.id", true);
 }
 
 function checkCarFin( $data ){
-    echo $GLOBALS['dbh']->getOne( "SELECT COALESCE ((SELECT 'true' FROM lxc_cars WHERE c_fin = '".$data['fin']."'), 'false') AS exists", true);
+    echo $GLOBALS['dbh']->getOne( "SELECT test.fin_exists, customer.name FROM (SELECT COALESCE ((SELECT 'true' FROM lxc_cars WHERE c_fin = '".$data['fin']."'), 'false') AS fin_exists) AS test LEFT JOIN lxc_cars ON lxc_cars.c_fin = '".$data['fin']."' LEFT JOIN customer ON lxc_cars.c_ow = customer.id", true);
+}
+
+function checkCarLicenseAndFin( $data ){
+    echo '{ "ln_check": ';
+    checkCarLicense( $data );
+    echo ', "fin_check": ';
+    checkCarFin( $data );
+    echo ' }';
 }
 
 function getCar( $data ){

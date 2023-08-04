@@ -190,6 +190,12 @@ function crmEditCuVeDlg( crmData, new_with_car ){
         $( '#car-form' ).show();
         $( '#car-kba-form' ).show();
 
+        $( '#chk_c_ln' ).prop( 'checked', true );
+        $( '#chk_c_2' ).prop( 'checked', true );
+        $( '#chk_c_3' ).prop( 'checked', true );
+        $( '#chk_c_em' ).prop( 'checked', true );
+        $( '#chk_c_fin' ).prop( 'checked', true );
+
         console.info( 'crmData.kba' );
         console.info( crmData.kba );
         console.info( 'lxcarsData' );

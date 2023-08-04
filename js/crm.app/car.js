@@ -76,78 +76,105 @@ function crmCheckD( d ){
     return d.match(/^[\d]{1,2}[.][\d]{1,2}[.][\d]{1,4}$/);
 }
 
-const crmDoCheckLn = function (){
-    if( $( '#edit_car-chk_c_ln' ).prop( 'checked' ) && !crmCheckLn( $( '#edit_car-c_ln' ).val() ) ){
-        alert( 'Kennzeichen fehlerhaft! Folgendes Format verwenden: MOL-RK73 oder MOL-DS88H für Oldtimer.' );
-        $( '#edit_car-c_ln' ).focus();
+const crmDoCheckLn = function ( chk_c_ln, c_ln, dialog, unique = false ){
+    if( $( chk_c_ln ).prop( 'checked' ) && !crmCheckLn( $( c_ln ).val() ) ){
+        $( dialog ).crmDialogShowError( 'edit-car-ln-check', 'Kennzeichen fehlerhaft! Folgendes Format verwenden: MOL-RK73 oder MOL-DS88H für Oldtimer.' );
+        $( c_ln ).focus();
         return false;
     }
-    $.ajax({
-        url: 'crm/ajax/crm.app.php',
-        type: 'POST',
-        data:  { action: 'checkCarLicense', data: { 'c_ln': $( '#edit_car-c_ln' ).val() } },
-        success: function( crmData ){
-            if( exists( crmData.exists ) ){
-                if( crmData.exists ) alert( 'Ein Auto mit dem Kennzeichen existiert bereits' );
+    else{
+        $( dialog ).crmDialogRemoveError( 'edit-car-ln-check' );
+    }
+    if( unique ){
+        $.ajax({
+            url: 'crm/ajax/crm.app.php',
+            type: 'POST',
+            data:  { action: 'checkCarLicense', data: { 'c_ln': $( c_ln ).val() } },
+            success: function( crmData ){
+                //Fehlermeldung wird im Dialog in einem 'div' angezeigt und nach dem er behoben wurde wieder entfernt (siehe entsprechende Funktionen in app.js):
+                if( crmData.ln_exists !== 'false'  ) $( dialog ).crmDialogShowError( 'edit-car-ln-check', 'Ein Auto mit dem Kennzeichen existiert bereits und gehöhrt ' + crmData.name );
+                else $( dialog ).crmDialogRemoveError( 'edit-car-ln-check' );
+            },
+            error: function( xhr, status, error ){
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmDoCheckLn().checkCarLicense', xhr.responseText );
             }
-        },
-        error: function( xhr, status, error ){
-            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmEditOrderDlg().getOrder', xhr.responseText );
-        }
-    });
-    return true;
-}
-
-const crmDoCheckHsn = function (){
-    if( $( '#edit_car-chk_c_2' ).prop( 'checked' ) && !crmCheckHsn( $( '#edit_car-c_2' ).val() ) ){
-        alert( 'Die Schlüsselnummer zu 2.1 ist fehlerhaft! Folgendes Format verwenden: 0600' );
-        $( '#edit_car-c_2' ).focus();
-        return false;
+        });
     }
     return true;
 }
 
-const crmDoCheckTsn = function (){
-    if( $( '#edit_car-chk_c_3' ).prop( 'checked' ) && !crmCheckTsn( $( '#edit_car-c_3' ).val() ) ){
-        alert( 'Die Schlüsselnummer zu 2.2 ist fehlerhaft! Folgendes Format verwenden: ABL1277L3 oder 300' );
-        $( '#edit_car-c_3' ).focus();
+const crmDoCheckHsn = function ( chk_c_2, c_2, dialog){
+    if( $( chk_c_2 ).prop( 'checked' ) && !crmCheckHsn( $( c_2 ).val() ) ){
+        $( dialog ).crmDialogShowError( 'edit-car-hsn-check', 'Die Schlüsselnummer zu 2.1 ist fehlerhaft! Folgendes Format verwenden: 0600' );
+        $( c_2 ).focus();
         return false;
     }
+    $( dialog ).crmDialogRemoveError( 'edit-car-hsn-check' );
     return true;
 }
 
-const crmDoCheckEm = function (){
-    if( $( '#edit_car-chk_c_em' ).prop( 'checked' ) && !crmCheckEm( $( '#edit_car-c_em' ).val() ) ){
-        alert( 'Der Abgasschlüssel ist fehlerhaft! Folgendes Format verwenden: 0456 oder 010456' );
-        $( '#edit_car-c_em' ).focus();
+const crmDoCheckTsn = function ( chk_c_3, c_3, dialog ){
+    if( $( chk_c_3 ).prop( 'checked' ) && !crmCheckTsn( $( c_3 ).val() ) ){
+        $( dialog ).crmDialogShowError( 'edit-car-tsn-check', 'Die Schlüsselnummer zu 2.2 ist fehlerhaft! Folgendes Format verwenden: ABL1277L3 oder 300' );
+        $( c_3 ).focus();
         return false;
     }
+    $( dialog ).crmDialogRemoveError( 'edit-car-tsn-check' );
     return true;
 }
 
-const crmDoCheckD = function (){
+const crmDoCheckEm = function( chk_c_em, c_em, dialog ){
+    if( $( chk_c_em ).prop( 'checked' ) && !crmCheckEm( $( c_em ).val() ) ){
+        $( dialog ).crmDialogShowError( 'edit-car-em-check', 'Der Abgasschlüssel ist fehlerhaft! Folgendes Format verwenden: 0456 oder 010456' );
+        $( c_em ).focus();
+        return false;
+    }
+    $( dialog ).crmDialogRemoveError( 'edit-car-em-check' );
+    return true;
+}
+
+const crmDoCheckD = function ( c_d, dialog ){
     if( !crmCheckD( $( '#edit_car-c_d' ).val() ) ){
-        alert( 'Das Datum der Erstzulassung wurde fehlerhaft eingegeben! Folgendes Format verwenden: 12.8.73 oder 12.8.' );
-        $( '#edit_car-c_d' ).focus();
+        $( dialog ).crmDialogShowError( 'edit-car-d-check', 'Das Datum der Erstzulassung wurde fehlerhaft eingegeben! Folgendes Format verwenden: 12.8.73 oder 12.8.' );
+        $( c_d ).focus();
         return false;
     }
+    $( dialog ).crmDialogRemoveError( 'edit-car-d-check' );
     return true;
 }
 
-const crmDoCheckHu = function (){
-    if( !crmCheckHu( $( '#edit_car-c_hu' ).val() ) ){
-        alert( 'Das Datum der HU wurde fehlerhaft eingegeben! Folgendes Format verwenden: 12.8. oder 12.8.13' );
-        $( '#edit_car-c_hu' ).focus();
+const crmDoCheckHu = function( c_hu, dialog ){
+    if( !crmCheckHu( $( c_hu ).val() ) ){
+        $( dialog ).crmDialogShowError( 'edit-car-hu-check', 'Das Datum der HU wurde fehlerhaft eingegeben! Folgendes Format verwenden: 12.8. oder 12.8.13' );
+        $( c_hu ).focus();
         return false;
     }
+    $( dialog ).crmDialogRemoveError( 'edit-car-hu-check' );
     return true;
 }
 
-const crmDoCheckFin = function (){
-    if( $( '#edit_car-chk_fin' ).prop( 'checked' ) && !crmCheckFin( $( '#edit_car-c_fin' ).val(), $( '#edit_car-c_finchk' ).val() ) ){
-        alert( 'Die Fahrzeugidentnummer (FIN) ist fehlerhaft! Folgendes Format verwenden: WDB2081091X123456. Prüfziffer nicht vergessen. Falls unbekannt \'-\' eingeben' );
-        $( '#edit_car-fin' ).focus();
+const crmDoCheckFin = function( chk_fin, c_fin, c_finchk, dialog, unique = false ){
+    if( $( chk_fin ).prop( 'checked' ) && !crmCheckFin( $( c_fin ).val(), $( c_finchk ).val() ) ){
+        $( dialog ).crmDialogShowError( 'edit-car-fin-check', 'Die Fahrzeugidentnummer (FIN) ist fehlerhaft! Folgendes Format verwenden: WDB2081091X123456. Prüfziffer nicht vergessen. Falls unbekannt \'-\' eingeben' );
+        $( c_finchk ).focus();
         return false;
+    }
+    else{
+        $( dialog ).crmDialogRemoveError( 'edit-car-fin-check' );
+    }
+    if( unique ){
+        $.ajax({
+            url: 'crm/ajax/crm.app.php',
+            type: 'POST',
+            data:  { action: 'checkCarFin', data: { 'fin': $( c_fin ).val() } },
+            success: function( crmData ){
+                if( crmData.fin_exists !== 'false'  ) $( dialog ).crmDialogShowError( 'edit-car-fin-check', 'Ein Auto mit der FIN existiert bereits und gehöhrt ' + crmData.name );
+                else $( dialog ).crmDialogRemoveError( 'edit-car-fin-check' );
+            },
+            error: function( xhr, status, error ){
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmDoCheckFin().checkCarFin', xhr.responseText );
+            }
+        });
     }
     return true;
 }
@@ -242,7 +269,7 @@ function crmNewCarFromScan(){
                                                         $( '#billaddr-city' ).val( city[0] );
                                                     }
                                                     for( let i = 1; i < city.length; i++ ){
-                                                        $( '#billaddr-city' ).val( $( '#billaddr-city' ).val() + city[i] );
+                                                        $( '#billaddr-city' ).val( $( '#billaddr-city' ).val() +  ( (i > 1)? ' ' : '' ) + city[i] );
                                                     }
                                                 }else{
                                                     $( '#billaddr-city' ).val( lxcarsData.address2 );
@@ -352,25 +379,25 @@ function crmEditCarDlg( crmData = null ){
     $( '#edit_car-chk_fin' ).prop( 'checked', true );
 
     $( '#edit_car-c_ln' ).change( function(){
-        crmDoCheckLn();
+        crmDoCheckLn( '#edit_car-chk_c_ln', '#edit_car-c_ln', '#crm-edit-car-dialog', true );
     });
     $( '#edit_car-c_2' ).change( function(){
-        crmDoCheckHsn();
+        crmDoCheckHsn( '#edit_car-chk_c_2', '#edit_car-c_2', '#crm-edit-car-dialog' );
     });
     $( '#edit_car-c_3' ).change( function(){
-        crmDoCheckTsn();
+        crmDoCheckTsn( '#edit_car-chk_c_3', '#edit_car-c_3', '#crm-edit-car-dialog' );
     });
     $( '#edit_car-c_em' ).change( function(){
-        crmDoCheckEm();
+        crmDoCheckEm( '#edit_car-chk_c_em', '#edit_car-c_em', '#crm-edit-car-dialog' );
     });
     $( '#edit_car-c_d' ).change( function(){
-        crmDoCheckD();
+        crmDoCheckD( '#edit_car-c_d', '#crm-edit-car-dialog' );
     });
     $( '#edit_car-c_hu' ).change( function(){
-        crmDoCheckHu();
+        crmDoCheckHu( '#edit_car-c_hu', '#crm-edit-car-dialog' );
     });
     $( '#edit_car-c_finchk' ).change( function(){
-        crmDoCheckFin();
+        crmDoCheckFin( '#edit_car-chk_fin', '#edit_car-c_fin', '#edit_car-c_finchk', '#crm-edit-car-dialog', true );
     });
 
     // changeCustomer:
@@ -484,65 +511,98 @@ function crmEditCarDlg( crmData = null ){
                 $( '#edit_car_new_order_btn' ).hide();
                 $( '#crm-edit-car-orders-table-div' ).hide();
             }
+            $( '#crm-edit-car-dialog' ).crmDialogClearErrors();
         },
         buttons:[{
             text: kivi.t8( 'Save' ),
             click: function(){
                 console.info( 'Save car' );
 
-                if( !crmDoCheckLn() ) return;
-                if( !crmDoCheckHsn() ) return;
-                if( !crmDoCheckTsn() ) return;
-                if( !crmDoCheckEm() ) return;
-                if( !crmDoCheckD() ) return;
-                if( !crmDoCheckHu() ) return;
-                if( !crmDoCheckFin() ) return;
+                crmDoCheckLn( '#edit_car-chk_c_ln', '#edit_car-c_ln', '#crm-edit-car-dialog', false );
+                crmDoCheckHsn( '#edit_car-chk_c_2', '#edit_car-c_2', '#crm-edit-car-dialog' );
+                crmDoCheckTsn( '#edit_car-chk_c_3', '#edit_car-c_3', '#crm-edit-car-dialog' );
+                crmDoCheckEm( '#edit_car-chk_c_em', '#edit_car-c_em', '#crm-edit-car-dialog' );
+                crmDoCheckD( '#edit_car-c_d', '#crm-edit-car-dialog' );
+                crmDoCheckHu( '#edit_car-c_hu', '#crm-edit-car-dialog' );
+                crmDoCheckFin( '#edit_car-chk_fin', '#edit_car-c_fin', '#edit_car-c_finchk', '#crm-edit-car-dialog', false );
 
-                dbUpdateData = {};
-                dbUpdateData['lxc_cars'] = {};
-                for( let item of editCarFormModel ){
-                    let columnName = item.name.split( '-' );
-                    if( !exists( columnName[1] ) ) continue;
-                    let val = $( '#' + item.name ).val();
-                    if( exists(val) ){
-                        if( item.name !== 'edit_car-c_id' ) dbUpdateData['lxc_cars'][columnName[1]] = val;
-                    }
-                    if( item.check ){
-                        val = $( '#' + item.name ).val();
-                        columnName = item.check.split( '-' );
-                        if( exists(val) && val !== '' ) dbUpdateData['lxc_cars'][columnName[1]] = $( '#' + item.check ).prop( 'checked' );
-                    }
-                }
-                console.info( dbUpdateData );
-                const onSuccess = function(){
-                    crmRefreshAppViewAction();
-                    $( '#crm-edit-car-dialog' ).dialog( "close" );
-                }
-                if( '' == $( '#edit_car-c_id' ).val() ){
-                    let data = {};
-                    data['record'] = dbUpdateData;
-                    data['record']['lxc_cars']['c_ow'] = $( '#car-c_ow' ).val();
-                    if( '' == data['record']['lxc_cars']['c_zrk'] ) data['record']['lxc_cars']['c_zrk'] = 0;
-                    console.info( data );
-                    $.ajax({
-                        url: 'crm/ajax/crm.app.php',
-                        type: 'POST',
-                        data:  { action: 'genericSingleInsert', data: data },
-                        success: function( data ){
-                            $( '#crm-edit-car-dialog' ).dialog( 'close' );
-                            crmRefreshAppViewAction();
-                        },
-                        error: function( xhr, status, error ){
-                            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmEditCarDlg().NewCar', xhr.responseText );
+                if( $( '#crm-edit-car-dialog' ).crmDialogHasErrors() ){
+                    alert( 'Es sind noch nicht behobene Fehler vorhanden' );
+                    return;
+                };
+
+                $.ajax({
+                    url: 'crm/ajax/crm.app.php',
+                    type: 'POST',
+                    data:  { action: 'checkCarLicenseAndFin', data: { 'fin': $( '#edit_car-c_fin' ).val(), 'c_ln': $( '#edit_car-c_ln' ).val() } },
+                    success: function( crmData ){
+                        console.info( 'crmData check' );
+                        console.info( crmData );
+
+                        if( '' == $( '#edit_car-c_id' ).val() ){
+                            if( 'false' !== crmData.fin_check.fin_exists ){
+                                $( '#crm-edit-car-dialog' ).crmDialogShowError( 'edit-car-fin-check', 'Ein Auto mit der FIN existiert bereits und gehöhrt ' + crmData.fin_check.name );
+                            }
+                            if( 'false' !== crmData.ln_check.ln_exists ){
+                                $( '#crm-edit-car-dialog' ).crmDialogShowError( 'edit-car-ln-check', 'Ein Auto mit dem Kennzeichen existiert bereits und gehöhrt ' + crmData.ln_check.name );
+                            }
+                            if( $( '#crm-edit-car-dialog' ).crmDialogHasErrors() ){
+                                alert( 'Es sind noch nicht behobene Fehler vorhanden' );
+                                return;
+                            };
                         }
-                    });
-                }
-                else{
-                    dbUpdateData['lxc_cars']['WHERE'] = {};
-                    dbUpdateData['lxc_cars']['WHERE']['c_id'] = $( '#edit_car-c_id' ).val();
-                    crmUpdateDB('genericUpdate', dbUpdateData, onSuccess );
-                }
-            }
+
+                        dbUpdateData = {};
+                        dbUpdateData['lxc_cars'] = {};
+                        for( let item of editCarFormModel ){
+                            let columnName = item.name.split( '-' );
+                            if( !exists( columnName[1] ) ) continue;
+                            let val = $( '#' + item.name ).val();
+                            if( exists(val) ){
+                                if( item.name !== 'edit_car-c_id' ) dbUpdateData['lxc_cars'][columnName[1]] = val;
+                            }
+                            if( item.check ){
+                                val = $( '#' + item.name ).val();
+                                columnName = item.check.split( '-' );
+                                if( exists(val) && val !== '' ) dbUpdateData['lxc_cars'][columnName[1]] = $( '#' + item.check ).prop( 'checked' );
+                            }
+                        }
+                        console.info( dbUpdateData );
+                        const onSuccess = function(){
+                            crmRefreshAppViewAction();
+                            $( '#crm-edit-car-dialog' ).dialog( "close" );
+                        }
+                        if( '' == $( '#edit_car-c_id' ).val() ){
+                            let data = {};
+                            data['record'] = dbUpdateData;
+                            data['record']['lxc_cars']['c_ow'] = $( '#car-c_ow' ).val();
+                            if( '' == data['record']['lxc_cars']['c_zrk'] ) data['record']['lxc_cars']['c_zrk'] = 0;
+                            console.info( data );
+                            $.ajax({
+                                url: 'crm/ajax/crm.app.php',
+                                type: 'POST',
+                                data:  { action: 'genericSingleInsert', data: data },
+                                success: function( data ){
+                                    $( '#crm-edit-car-dialog' ).dialog( 'close' );
+                                    crmRefreshAppViewAction();
+                                },
+                                error: function( xhr, status, error ){
+                                    $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmEditCarDlg().NewCar', xhr.responseText );
+                                }
+                            });
+                        }
+                        else{
+                            dbUpdateData['lxc_cars']['WHERE'] = {};
+                            dbUpdateData['lxc_cars']['WHERE']['c_id'] = $( '#edit_car-c_id' ).val();
+                            crmUpdateDB('genericUpdate', dbUpdateData, onSuccess );
+                        }
+                     },
+                    error: function( xhr, status, error ){
+                        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmEditCarDlg().checkCarLicenseAndFin', xhr.responseText );
+                    }
+                });
+
+           }
         },
         {
             id: 'edit_car_new_order_btn',

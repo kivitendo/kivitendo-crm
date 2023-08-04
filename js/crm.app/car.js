@@ -402,7 +402,7 @@ function crmEditCarDlg( crmData = null ){
 
     // changeCustomer:
     $( '#edit_car_customer_name' ).autocomplete({
-        delay: 100,
+        delay: crmAcDelay,
         source: "crm/ajax/crm.app.php?action=searchCustomer",
         select: function( e, ui ) {
             $( '#car-c_ow' ).val( ui.item.id );
@@ -411,7 +411,7 @@ function crmEditCarDlg( crmData = null ){
     });
 
     $( '#edit_car-c_3' ).catcomplete({
-        delay: 100,
+        delay: crmAcDelay,
         source: function(request, response) {
             if( $( '#edit_car-c_3' ).val().length > 2 && $( '#edit_car-c_2' ).val().length > 0 ){
                 $.get('crm/ajax/crm.app.php?action=findCarKbaData', { 'hsn': $( '#edit_car-c_2' ).val(), 'tsn':  $( '#edit_car-c_3' ).val() }, function(data) {

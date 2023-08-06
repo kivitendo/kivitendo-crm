@@ -25,11 +25,20 @@ function printArray( $array ){
     echo '</pre>';
 }
 
-//im Terminal: tail log/debug.txt
+// schreibt in eine Logdatei, ist append = false wird die Datei vor dem schreiben gelöscht
+// im Terminal: tail -f log/debug.txt
 function writeLog( $log, $append = true ){
     $file = __DIR__.'/../log/debug.log';
     $str  = date("Y-m-d H:i:s -> " ).print_r( $log, TRUE )."\n";
-    $append ? file_put_contents( $file, $str.file_get_contents( $file ) ) : file_put_contents( $file, $str );
+    $append? file_put_contents( $file, $str, FILE_APPEND ) : file_put_contents( $file, $str );
+}
+
+// writeLogB, macht das gleiche wie writeLog() - fügt den Log jedoch zu Begin der Datei debugB.log ein
+// log/debugB.log einfach in der IDE (z.B. Visual Studio Code von Microsoft) öffnen
+function writeLogB( $log, $append = true ){
+    $file = __DIR__.'/../log/debugB.log';
+    $str  = date("Y-m-d H:i:s -> " ).print_r( $log, TRUE )."\n";
+    $append ? file_put_contents( $file, $str.file_get_contents( $file ) ) : file_put_contents( $file, $str );//
 }
 
 function strpos_all($text, $search) {

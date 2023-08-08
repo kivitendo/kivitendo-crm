@@ -1,3 +1,6 @@
+--LxCars
+
+
 CREATE TABLE IF NOT EXISTS lxckba(
     hsn 			TEXT NOT NULL,
     tsn 			TEXT NOT NULL,
@@ -63,3 +66,8 @@ CREATE TABLE IF NOT EXISTS lxckba(
 	field_21		TEXT, --Sontige Vermerke
 	PRIMARY KEY( hsn, tsn )
 );
+
+
+
+-- Kivitendo CRM
+CREATE TABLE firstnameToGender( gender CHAR(1), firstname TEXT UNIQUE PRIMARY KEY );

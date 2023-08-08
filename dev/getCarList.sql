@@ -1,5 +1,0 @@
-SELECT c_id, c_ln, hersteller, name, 'automobil' AS mytye FROM lxc_cars JOIN kbacars ON( lxc_cars.c_2 = kbacars.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbacars.tsn   ) WHERE c_ow = 1126 UNION All
-SELECT c_id, c_ln, hersteller, name, 'trailer' AS mytype FROM lxc_cars JOIN kbatrailer ON( lxc_cars.c_2 = kbatrailer.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbatrailer.tsn   ) WHERE c_ow = 1126 UNION ALL
-SELECT c_id, c_ln, hersteller, name, 'bikes' AS mytype FROM lxc_cars JOIN kbabikes ON( lxc_cars.c_2 = kbabikes.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbabikes.tsn   ) WHERE c_ow = 1126 UNION ALL
-SELECT c_id, c_ln, hersteller, name, 'trucks' AS mytype FROM lxc_cars JOIN kbatrucks ON( lxc_cars.c_2 = kbatrucks.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbatrucks.tsn   ) WHERE c_ow = 1126 UNION ALL
-SELECT c_id, c_ln, hersteller, name, 'tractor' AS mytype FROM lxc_cars JOIN kbatractors ON( lxc_cars.c_2 = kbatractors.hsn AND  SUBSTRING( lxc_cars.c_3, 0, 4 ) = kbatractors.tsn   ) WHERE c_ow = 1126;

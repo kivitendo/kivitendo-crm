@@ -1,5 +1,5 @@
 // Regulärer Auusdruck ( regex ) zum prüfen einer Telefonummer
-// ^(\+|0)[0-9](?:[-.\s]?[0-9])*$
+// ^(\+|0)[0-9]([-.\s]?[0-9])*$
 // Einbauen in DB custom, vendor, person UND ins Formular
 
 

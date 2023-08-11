@@ -17,14 +17,14 @@ INSERT INTO crmti( crmti_src, crmti_dst ) VALUES ( 'INSTALL.TXT', 'LESEN' );;
 
 ALTER TABLE customer DROP CONSTRAINT IF EXISTS check_tel;
 ALTER TABLE customer DROP CONSTRAINT IF EXISTS check_fax;
-ALTER TABLE vendor DROP CONSTRAINT IF EXISTS check_tel;
-ALTER TABLE vendor DROP CONSTRAINT IF EXISTS check_fax;
+ALTER TABLE vendor   DROP CONSTRAINT IF EXISTS check_tel;
+ALTER TABLE vendor   DROP CONSTRAINT IF EXISTS check_fax;
 ALTER TABLE contacts DROP CONSTRAINT IF EXISTS check_cp_phone1;
 ALTER TABLE contacts DROP CONSTRAINT IF EXISTS check_cp_phone2;
 ALTER TABLE customer ADD CONSTRAINT check_tel CHECK ( phone ~ '^(|(?=.*\d).*)$' );
 ALTER TABLE customer ADD CONSTRAINT check_fax CHECK ( fax ~ '^(|(?=.*\d).*)$' );
-ALTER TABLE vendor ADD CONSTRAINT check_tel CHECK ( phone ~ '^(|(?=.*\d).*)$' );
-ALTER TABLE vendor ADD CONSTRAINT check_fax CHECK ( fax ~ '^(|(?=.*\d).*)$' );
+ALTER TABLE vendor   ADD CONSTRAINT check_tel CHECK ( phone ~ '^(|(?=.*\d).*)$' );
+ALTER TABLE vendor   ADD CONSTRAINT check_fax CHECK ( fax ~ '^(|(?=.*\d).*)$' );
 ALTER TABLE contacts ADD CONSTRAINT check_cp_phone1 CHECK ( cp_phone1 ~ '^(|(?=.*\d).*)$' );
 ALTER TABLE contacts ADD CONSTRAINT check_cp_phone2 CHECK ( cp_phone2 ~ '^(|(?=.*\d).*)$' );
 -- Wenn es schief geht: SELECT id, phone, fax FROM customer WHERE fax !~ '^(|(?=.*\d).*)$';

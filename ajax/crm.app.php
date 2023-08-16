@@ -55,13 +55,13 @@ function fastSearch(){
                 ")";
         */
         // Sämtliche Ergebnisse holen, vermischen, limitieren und danach nach Kategorien sortieren
-        $query= "SELECT * FROM ( SELECT * FROM (".
+        $query= "SELECT * FROM ( SELECT * FROM ( ".
                 "(SELECT 'Kunde' AS category, 'C' AS src, '' AS value, id, name AS label FROM customer WHERE name ILIKE '%".$term."%' OR sw ILIKE '%".$term."%' OR contact ILIKE '%".$term."%' )".
-                "UNION ALL ".
+                " UNION ALL ".
                 "(SELECT 'Lieferant' AS category, 'V' AS src, '' AS value, id, name AS label FROM vendor WHERE name ILIKE '%".$term."%' OR sw ILIKE '%".$term."%' OR contact ILIKE '%".$term."%' )".
-                "UNION ALL ".
+                " UNION ALL ".
                 "(SELECT 'Kontaktperson' AS category, 'P' AS src, '' AS value, cp_id AS id, concat(cp_givenname, ' ', cp_name) AS name FROM contacts WHERE cp_name ILIKE '%".$term."%' OR cp_givenname ILIKE '%".$term."%' )".
-                "UNION ALL ".
+                " UNION ALL ".
                 "(SELECT 'Fahrzeug' AS category, 'A' AS src, c_ln AS value, c_id AS id, ' [ ' || COALESCE( c_ln, '' ) || ' ] ' || COALESCE( name, '' ) AS label FROM lxc_cars JOIN customer ON c_ow = id WHERE c_ln ILIKE '%".$term."%' AND obsolete = false )".
                 ") AS allResults ORDER BY random() LIMIT 20 ) AS mixed ORDER BY category";
         //writeLogB( $query );

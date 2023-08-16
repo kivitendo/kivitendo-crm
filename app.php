@@ -189,6 +189,10 @@
         width: 20px;
         height: 20px;
     }
+    ul.ui-autocomplete.ui-menu{
+        width:350px
+    }
+
 </style>
 
 </head>
@@ -205,7 +209,7 @@
     echo $objResult->{'pre_content'};
 ?>
 <div class="layout-actionbar">
-    <input id="crm-widget-quicksearch" placeholder="Schnellsuche" maxlength="20" class="ui-autocomplete-input" style="margin-left: 10px" autocomplete="off">
+    <input id="crm-widget-quicksearch" placeholder="Schnellsuche" maxlength="20" class="ui-autocomplete-input" style="margin-left: 10px;" autocomplete="off">
     <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div id="crm-hist-last" class="layout-actionbar-action layout-actionbar-submit">Zuletzt</div><span></span></div><div id="crm-history-list" class="layout-actionbar-combobox-list"></div></div>
     <div class="layout-actionbar-separator"></div>
     <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Neu</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-customer">Kunde*</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-vendor">Lieferant*</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-person">Person*</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-scan"></div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-car">Neues Auto</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-offer">Angebot</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-order">Auftrag*</div></div></div>

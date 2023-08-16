@@ -99,6 +99,7 @@ $.widget( "custom.catcomplete", $.ui.autocomplete,{
 $( function(){
     $( "#crm-widget-quicksearch" ).catcomplete({
         delay: crmAcDelay,
+        minLength: 3,
         source: "crm/ajax/crm.app.php?action=fastSearch",
         select: function( e, ui ) {
             console.info( ui );
@@ -135,6 +136,8 @@ function crmRefreshAppViewAction( ){
     const id = $( '#crm-cvpa-id' ).val();
     if( '' != src && '' != id) getCVPA( src, id );
 }
+
+$( '#crm-widget-quicksearch' ).focus();
 
 $( '#message-dialog' ).dialog({
     autoOpen: false,

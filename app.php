@@ -190,7 +190,7 @@
         height: 20px;
     }
     ul.ui-autocomplete.ui-menu{
-        width:350px
+        width:450px
     }
 
 </style>

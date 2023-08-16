@@ -37,6 +37,7 @@ function fastSearch(){
     if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
         $term = $_GET['term'];
         //echo $GLOBALS['dbh']->getAll("(SELECT 'Kunde' AS category, 'C' AS src, '' AS value, id, name AS label FROM customer WHERE name ILIKE '%".$term."%' OR sw ILIKE '%".$term."%' OR contact ILIKE '%".$term."%' LIMIT 5) UNION ALL (SELECT 'Lieferant' AS category, 'V' AS src, '' AS value, id, name AS label FROM vendor WHERE name ILIKE '%".$term."%' LIMIT 5) UNION ALL (SELECT 'Kontaktperson' AS category, 'P' AS src, '' AS value, cp_id AS id, concat(cp_givenname, ' ', cp_name) AS name FROM contacts WHERE cp_name ILIKE '%".$term."%' OR cp_givenname ILIKE '%".$term."%' LIMIT 5) UNION ALL (SELECT 'Fahrzeug' AS category, 'A' AS src, c_ln AS value, c_id AS id, ' [ ' || COALESCE(c_ln, '') || ' ] ' || COALESCE(name, '') AS label FROM lxc_cars JOIN customer ON c_ow = id WHERE c_ln ILIKE '%".$term."%' AND obsolete = false LIMIT 5)", true);
+        /*
         $query = "(SELECT 'Kunde' AS category, 'C' AS src, '' AS value, id, name AS label FROM customer WHERE name ILIKE '%".$term."%' OR sw ILIKE '%".$term."%' OR contact ILIKE '%".$term."%' LIMIT ".
                 "(SELECT (((( 20 - vn - an - pn ) + 5 ) / 3 ) / 3 ) + 5 FROM ( SELECT (SELECT count(*)::INT FROM (SELECT * FROM customer WHERE name ILIKE '%".$term."%' OR sw ILIKE '%".$term."%' OR contact ILIKE '%".$term."%' LIMIT 5) AS c) AS cn, (SELECT count(*)::INT FROM (SELECT * FROM vendor WHERE name ILIKE '%".$term."%' LIMIT 5) AS v) AS vn, (SELECT count(*)::INT FROM (SELECT * FROM lxc_cars WHERE c_ln ILIKE '%".$term."%' LIMIT 5) AS a) AS an, (SELECT count(*)::INT FROM (SELECT * FROM contacts WHERE cp_name ILIKE '%D%' OR cp_givenname ILIKE '%D%' LIMIT 5) AS p) AS pn) AS test)".
                 ")".
@@ -52,6 +53,18 @@ function fastSearch(){
                 "(SELECT 'Fahrzeug' AS category, 'A' AS src, c_ln AS value, c_id AS id, ' [ ' || COALESCE(c_ln, '') || ' ] ' || COALESCE(name, '') AS label FROM lxc_cars JOIN customer ON c_ow = id WHERE c_ln ILIKE '%".$term."%' AND obsolete = false LIMIT ".
                 "(SELECT (((( 20 - cn - vn - pn ) + 5 ) / 3 ) / 3 ) + 5 FROM ( SELECT (SELECT count(*)::INT FROM (SELECT * FROM customer WHERE name ILIKE '%".$term."%' LIMIT 5) AS c) AS cn, (SELECT count(*)::INT FROM (SELECT * FROM vendor WHERE name ILIKE '%".$term."%' LIMIT 5) AS v) AS vn, (SELECT count(*)::INT FROM (SELECT * FROM lxc_cars WHERE c_ln ILIKE '%".$term."%' LIMIT 5) AS a) AS an, (SELECT count(*)::INT FROM (SELECT * FROM contacts WHERE cp_name ILIKE '%D%' OR cp_givenname ILIKE '%D%' LIMIT 5) AS p) AS pn) AS test)".
                 ")";
+        */
+        // Sämtliche Ergebnisse holen, vermischen, limitieren und danach nach Kategorien sortieren
+        $query= "SELECT * FROM ( SELECT * FROM (".
+                "(SELECT 'Kunde' AS category, 'C' AS src, '' AS value, id, name AS label FROM customer WHERE name ILIKE '%".$term."%' OR sw ILIKE '%".$term."%' OR contact ILIKE '%".$term."%' )".
+                "UNION ALL ".
+                "(SELECT 'Lieferant' AS category, 'V' AS src, '' AS value, id, name AS label FROM vendor WHERE name ILIKE '%".$term."%' OR sw ILIKE '%".$term."%' OR contact ILIKE '%".$term."%' )".
+                "UNION ALL ".
+                "(SELECT 'Kontaktperson' AS category, 'P' AS src, '' AS value, cp_id AS id, concat(cp_givenname, ' ', cp_name) AS name FROM contacts WHERE cp_name ILIKE '%".$term."%' OR cp_givenname ILIKE '%".$term."%' )".
+                "UNION ALL ".
+                "(SELECT 'Fahrzeug' AS category, 'A' AS src, c_ln AS value, c_id AS id, ' [ ' || COALESCE( c_ln, '' ) || ' ] ' || COALESCE( name, '' ) AS label FROM lxc_cars JOIN customer ON c_ow = id WHERE c_ln ILIKE '%".$term."%' AND obsolete = false )".
+                ") AS allResults ORDER BY random() LIMIT 20 ) AS mixed ORDER BY category";
+        //writeLogB( $query );
         echo $GLOBALS['dbh']->getAll( $query , true);
     }
 }

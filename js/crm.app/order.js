@@ -913,7 +913,8 @@ function crmInsertOfferFromOrder(){
 
 }
 
-function crmEmailOrder( e ){
+function crmEmailOrder( e ){ // was steht in 'e'??
+    //console.info( e );
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
@@ -936,10 +937,18 @@ function crmEmailOrder( e ){
                 presetText = crmData['preset_text_invoice'];
             }
             $( '#order_email-subject' ).val( subject + ' ' + docNumber );
+
+            // Ev. natürliche Person prüfen??
             let salutation = crmData['salutation_general'];
             if( 'Frau' == crmData['greeting'] ) salutation = crmData['salutation_female'];
-            else if( 'Herr' == crmData['greeting'] ) salutation = crmData['salutation_male'];
-            $( '#order_email-message' ).val( salutation + crmData['salutation_punctuation_mark'] + presetText );
+            else if( 'Herr' == crmData['greeting'] ) salutation = crmData['salutation_male']; //ToDo: else Firma??
+
+            $( '#order_email-message' ).val( salutation + ' ' + $( '#crm-contact-name' ).html() + crmData['salutation_punctuation_mark'] + presetText );
+            tinymce.init({
+                selector: '#order_email-message',
+                menubar: '',
+                language: 'de'
+            });
             $( '#order_email-attachment' ).val( subject + '_' + docNumber + '.pdf' );
 
             $( '#crm-order-email-dialog' ).dialog({

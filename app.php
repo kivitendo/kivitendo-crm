@@ -81,6 +81,7 @@
 <script type="text/javascript" src="js/jquery/ui/i18n/jquery.ui.datepicker-de.js"></script>
 <script type="text/javascript" src="crm/jquery-add-ons/date-time-picker.js"></script>
 <script type="text/javascript" src="crm/jquery-add-ons/german-date-time-picker.js"></script>
+<script type="text/javascript" src="crm/nodejs/node_modules/tinymce/tinymce.min.js"></script>
 
 <style>
     .ui-autocomplete-category {

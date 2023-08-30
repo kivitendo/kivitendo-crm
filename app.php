@@ -34,14 +34,23 @@
 <head>
 <meta charset='utf-8' />
 
+<!--
 <link rel="stylesheet" href="css/lx-office-erp/main.css" type="text/css">
 <link rel="stylesheet" href="css/lx-office-erp/menu.css" type="text/css">
 <link rel="stylesheet" href="css/lx-office-erp/frame_header/header.css" type="text/css">
 <link rel="stylesheet" href="css/lx-office-erp/dhtmlsuite/menu-item.css" type="text/css">
 <link rel="stylesheet" href="css/lx-office-erp/dhtmlsuite/menu-bar.css" type="text/css">
 <link rel="stylesheet" href="css/icons16.css" type="text/css">
+-->
 
+<!--
 <link rel="stylesheet" href="css/common.css" type="text/css" title="Stylesheet">
+-->
+
+<link rel="stylesheet" href="css/design40/main.css" type="text/css" title="Stylesheet">
+<link rel="stylesheet" href="css/design40/dhtmlsuite/menu-item.css" type="text/css" title="Stylesheet">
+<link rel="stylesheet" href="css/design40/dhtmlsuite/menu-bar.css" type="text/css" title="Stylesheet">
+
 <link rel="stylesheet" href="css/lx-office-erp/list_accounts.css" type="text/css" title="Stylesheet">
 <link rel="stylesheet" href="css/jquery.autocomplete.css" type="text/css" title="Stylesheet">
 <link rel="stylesheet" href="css/jquery.multiselect2side.css" type="text/css" title="Stylesheet">
@@ -112,8 +121,16 @@
         padding-top: 2em;
     }
 
+    .crm-pt3 {
+        padding-top: 3em;
+    }
+
     .crm-mt2 {
         margin-top: 2em;
+    }
+
+    .crm-mt3 {
+        margin-top: 3em;
     }
 
     .crm-tab {
@@ -121,7 +138,7 @@
     }
 
     .crm-fs {
-        font-size: 14px;
+        font-size: 12px;
     }
 
     main button {
@@ -170,7 +187,7 @@
     .ui-autocomplete {
         position: absolute;
         cursor: default;
-        z-index:1000 !important;
+        z-index:1032 !important;
     }
 
     .ui-menu {
@@ -190,8 +207,30 @@
         width: 20px;
         height: 20px;
     }
+
     ul.ui-autocomplete.ui-menu{
-        width:450px
+        width:450px;
+        z-index:1031 !important;
+    }
+
+    .crm-fast-search {
+        font-size: 12px;
+        box-sizing: border-box;
+        position: relative;
+        display: block;
+        float: left;
+        margin-top: 2px;
+        margin-left: 10px;
+        z-index: 1031;
+    }
+
+    .tabwidget>ul.ui-tabs-nav {
+        position: unset;
+        top: unset;
+    }
+
+    .table {
+        width: 100%;
     }
 
 </style>
@@ -210,7 +249,8 @@
     echo $objResult->{'pre_content'};
 ?>
 <div class="layout-actionbar">
-    <input id="crm-widget-quicksearch" placeholder="Schnellsuche" maxlength="20" class="ui-autocomplete-input" style="margin-left: 10px;" autocomplete="off">
+    <input id="crm-widget-quicksearch" placeholder="Schnellsuche" maxlength="20" class="crm-fast-search ui-autocomplete-input" style="" autocomplete="off">
+    <div class="layout-actionbar-separator"></div>
     <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div id="crm-hist-last" class="layout-actionbar-action layout-actionbar-submit">Zuletzt</div><span></span></div><div id="crm-history-list" class="layout-actionbar-combobox-list"></div></div>
     <div class="layout-actionbar-separator"></div>
     <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Neu</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-customer">Kunde*</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-vendor">Lieferant*</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-person">Person*</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-scan"></div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-car">Neues Auto</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-offer">Angebot</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-order">Auftrag*</div></div></div>
@@ -223,7 +263,7 @@
     echo $objResult->{'start_content'};
 ?>
 
-<h1 class="tools" style="margin-top: 20px; height: 20px;"><span id="crm-wx-title"></span></h1>
+<h1 class="tools"><span id="crm-wx-title"></span></h1>
 
 <main>
 
@@ -819,14 +859,14 @@
                 <div class="col-md-10"><button id="crm-contact-email">Kein Eintrag</button></div>
             </div>
         </div>
-        <div id="crm-wx-cars" style="display:none;">
-            <table width="100%" class="crm-pt2">
+        <div id="crm-wx-cars" class="crm-pt2" tyle="display:none;">
+            <table width="100%" class="tbl-list">
                 <thead>
                 <tr>
-                    <td class="listheading">Kenzeichen</th>
-                    <td class="listheading">Hersteller</th>
-                    <td class="listheading">Fahrzeugtyp</th>
-                    <td class="listheading">Fahrzeugart</th>
+                    <th>Kenzeichen</th>
+                    <th>Hersteller</th>
+                    <th>Fahrzeugtyp</th>
+                    <th>Fahrzeugart</th>
                 </tr>
                 </thead>
                 <tbody id="crm-cars-table">
@@ -851,13 +891,13 @@
                 </li>
             </ul>
             <div id="crm-tab-offers" class="crm-tab">
-                <table class="table table-striped">
+                <table class="tbl-list table table-striped">
                     <thead>
                     <tr>
-                        <td class="listheading">Datum</th>
-                        <td class="listheading">Erste Position</th>
-                        <td class="listheading">Betrag</th>
-                        <td class="listheading">Nummer</th>
+                        <th>Datum</th>
+                        <th>Erste Position</th>
+                        <th>Betrag</th>
+                        <th>Nummer</th>
                     </tr>
                     </thead>
                     <tbody id="crm-offers-table">
@@ -865,13 +905,13 @@
                 </table>
             </div>
             <div id="crm-tab-orders" class="crm-tab">
-                <table class="table table-striped">
+                <table class="tbl-list table table-striped">
                     <thead>
                     <tr>
-                        <td class="listheading">Datum</th>
-                        <td class="listheading">Erste Position</th>
-                        <td class="listheading">Betrag</th>
-                        <td class="listheading">Nummer</th>
+                        <th>Datum</th>
+                        <th>Erste Position</th>
+                        <th>Betrag</th>
+                        <th>Nummer</th>
                     </tr>
                     </thead>
                     <tbody id="crm-orders-table">
@@ -879,13 +919,13 @@
                 </table>
             </div>
             <div id="crm-tab-deliveries" class="crm-tab">
-                <table class="table table-striped">
+                <table class="tbl-list table table-striped">
                     <thead>
                     <tr>
-                        <td class="listheading">Datum</th>
-                        <td class="listheading">Erste Position</th>
-                        <td class="listheading">Lieferdatum</th>
-                        <td class="listheading">Nummer</th>
+                        <th>Datum</th>
+                        <th>Erste Position</th>
+                        <th>Lieferdatum</th>
+                        <th>Nummer</th>
                     </tr>
                     </thead>
                     <tbody id="crm-deliveries-table">
@@ -893,13 +933,13 @@
                 </table>
             </div>
             <div id="crm-tab-invoices" class="crm-tab">
-                <table class="table table-striped">
+                <table class="tbl-list table table-striped">
                     <thead>
                     <tr>
-                        <td class="listheading">Datum</th>
-                        <td class="listheading">Erste Position</th>
-                        <td class="listheading">Betrag</th>
-                        <td class="listheading">Nummer</th>
+                        <th>Datum</th>
+                        <th>Erste Position</th>
+                        <th>Betrag</th>
+                        <th>Nummer</th>
                     </tr>
                     </thead>
                     <tbody id="crm-invoices-table">
@@ -938,7 +978,7 @@
             <div id="crm-tab-delivery-addr" class="crm-tab">
             </div>
             <div id="crm-tab-notes" class="crm-tab">
-                <p>Hier stehen dann die vielen wichtigen Notizen.</p>
+                <p>Hier stehen dann die wichtigen Notizen.</p>
             </div>
             <div id="crm-tab-vars" class="crm-tab">
             </div>

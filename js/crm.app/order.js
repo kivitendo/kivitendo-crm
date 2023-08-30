@@ -1382,6 +1382,11 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
                 $( '#od-ui-btn-pdf' ).hide();
                 $( '#od-ui-btn-coparts' ).hide();
             }
+            $( '#od-ui-btn-printer1' ).removeClass (function (index, className) {
+                console.info( 'edit order rmv classes' );
+                console.info( className );
+                return (className.match (/(^|\s)ui-\S+/g) || []).join(' ');
+            });
         },
         close: function(){
             crmRefreshAppViewAction();

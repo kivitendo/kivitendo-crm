@@ -815,6 +815,7 @@ function crmInsertInvoiceFromOrder(){
         return;
     }
 
+    let data = {};
     data['ordnumber'] = $( '#od-oe-ordnumber' ).text();
     data['employee_id'] = $( '#od-inv-employee_id' ).val();
     data['oe_id'] = $( '#od-oe-id' ).val();

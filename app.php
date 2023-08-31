@@ -123,6 +123,10 @@
         padding-top: 3em;
     }
 
+    .crm-pb1 {
+        padding-bottom: 3em;
+    }
+
     .crm-mt2 {
         margin-top: 2em;
     }
@@ -653,6 +657,10 @@
 </div>
 
 <div id="crm-search-order-view" class="crm-p2" style="display:none">
+    <div class="crm-pb1">
+        <button onclick="crmSearchOrderClearView();">Löschen</button>
+        <button onclick="crmSearchOrderCloseView();">Schließen</button>
+    </div>
     <div id="search-order-hidden"></div>
     <table id="search-order-form" style="padding-bottom: 1em">
         <thead></thead>
@@ -674,10 +682,6 @@
         <tbody id="crm-search-order-table">
         </tbody>
     </table>
-    <div class="crm-pt1">
-        <button onclick="crmSearchOrderClearView();">Löschen</button>
-        <button onclick="crmSearchOrderCloseView();">Schließen</button>
-    </div>
 </div>
 
 <div id="crm-edit-article-dialog" style="display:none">
@@ -735,6 +739,10 @@
 </div>
 
 <div id="crm-wx-customer-view" class="crm-p2" style="display:none">
+    <div class="crm-pb1">
+        <button onclick="crmEditCuVeViewSave()">Speichern</button>
+        <button onclick="crmEditCuVeViewCancel();">Abbrechen</button>
+    </div>
     <div id="crm-tabs-main" class="tabwidget">
         <ul class="nav nav-tabs">
             <li class="nav-item">
@@ -801,10 +809,6 @@
                 <tbody></tbody>
             </table>
         </div>
-    </div>
-    <div class="crm-pt1">
-        <button onclick="crmEditCuVeViewSave()">Speichern</button>
-        <button onclick="crmEditCuVeViewCancel();">Abbrechen</button>
     </div>
 </div>
 

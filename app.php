@@ -26,8 +26,6 @@
     curl_close( $ch );
 
     $objResult = json_decode( $result );
-
-    var_dump( $objResult );
 ?>
 
 <!DOCTYPE html>

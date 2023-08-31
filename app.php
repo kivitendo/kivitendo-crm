@@ -692,7 +692,11 @@
     </table>
 </div>
 
-<div id="crm-edit-car-dialog" style="display:none">
+<div id="crm-edit-car-dialog" class="crm-p2" style="display:none">
+    <div class="crm-pb1">
+        <button onclick="crmEditCarSaveView();">Speichern</button>
+        <button onclick="crmEditCarCloseView();">Abbrechen</button>
+    </div>
     <div id="edit-car-hidden"></div>
     <div style="padding: 0.25em">
         <div class="crm-dialog-error-view" style="color: red"></div>
@@ -710,20 +714,23 @@
                     <thead></thead>
                     <tbody></tbody>
                 </table>
-                <div id="crm-edit-car-orders-table-div">
-                    <div style="padding-top: 1em; padding-bottom: 0.25em"> Neuste Aufträge</div>
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <td class="listheading">Datum</th>
-                            <td class="listheading">Erste Position</th>
-                            <td class="listheading">Betrag</th>
-                            <td class="listheading">Nummer</th>
-                        </tr>
-                        </thead>
-                        <tbody id="crm-edit-car-orders-table">
-                        </tbody>
-                    </table>
+            </td>
+            <td>
+                <div style="padding-left: 2em" id="crm-edit-car-orders-table-div">
+                    <div style="padding-bottom: 1em; font-weight: bold">Neuste Aufträge</div>
+                        <table class="tbl-list table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Datum</th>
+                                <th>Erste Position</th>
+                                <th>Betrag</th>
+                                <th>Nummer</th>
+                            </tr>
+                            </thead>
+                            <tbody id="crm-edit-car-orders-table">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </td>
          </tr>

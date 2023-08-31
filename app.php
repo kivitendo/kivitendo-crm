@@ -652,28 +652,32 @@
     </table>
 </div>
 
-<div id="crm-search-order-dialog" style="display:none">
+<div id="crm-search-order-view" class="crm-p2" style="display:none">
     <div id="search-order-hidden"></div>
     <table id="search-order-form" style="padding-bottom: 1em">
         <thead></thead>
         <tbody></tbody>
     </table>
-    <table class="table table-striped" width="100%">
+    <table class="tbl-list table table-striped" width="100%">
         <thead>
         <tr>
-            <td class="listheading">Name</th>
-            <td class="listheading">Kennzeichen</th>
-            <td class="listheading">Erste Position</th>
-            <td class="listheading">Hersteller</th>
-            <td class="listheading">Fahrzeugtyp</th>
-            <td class="listheading">Datum</th>
-            <td class="listheading">Auftragsnummer</th>
-            <td class="listheading">Status</th>
+            <th>Name</th>
+            <th>Kennzeichen</th>
+            <th>Erste Position</th>
+            <th>Hersteller</th>
+            <th>Fahrzeugtyp</th>
+            <th>Datum</th>
+            <th>Auftragsnummer</th>
+            <th>Status</th>
         </tr>
         </thead>
         <tbody id="crm-search-order-table">
         </tbody>
     </table>
+    <div class="crm-pt1">
+        <button onclick="crmSearchOrderClearView();">Löschen</button>
+        <button onclick="crmSearchOrderCloseView();">Schließen</button>
+    </div>
 </div>
 
 <div id="crm-edit-article-dialog" style="display:none">

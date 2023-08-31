@@ -498,7 +498,7 @@ $( '#crm-wf-new-person' ).click( function() {
 });
 
 $( '#crm-wf-search-order' ).click( function() {
-   crmSearchOrder( crmSearchOrderDlg );
+   crmSearchOrder( crmSearchOrderView );
 });
 
 //Route zum Kunden oder Lieferanten anzeigen

@@ -104,14 +104,14 @@ function crmSearchOrder( onSuccess = null ){
     });
 }
 
-function crmClearSearchOrderDlg(){
+function crmClearSearchOrderView(){
     for( let item of searchOrderFormModel ){
          $( '#' + item.name ).val( '' );
     }
     $( '#search_order-status' ).val( 'nicht abgerechnet' );
 }
-console.info( window.innerWidth );
-const crmSearchOrderDlg = function(){
+
+const crmSearchOrderView = function(){
     for( let item of searchOrderFormModel ){
         if( 'search_order-status' == item.name ){
             $( '#search_order-status' ).val( 'nicht abgerechnet' );
@@ -121,35 +121,15 @@ const crmSearchOrderDlg = function(){
         }
     }
 
-    //Dialog Auftragssuche
-    $( '#crm-search-order-dialog' ).dialog({
-        autoOpen: false,
-        resizable: true,
-        width: window.innerWidth * 0.8 + 'px', //Breite Dialog relativ zur Fenstergröße
-        minWidt: '1024px',
-        height: 'auto',
-        modal: true,
-        title: kivi.t8( 'Search Order' ),
-        position: { my: "top", at: "top+250" },
-        open: function(){
-            //$( this ).css( 'minWidth', window.innerWidth * 0.5 + 'px' );
-            $( this ).css( 'maxWidth', window.innerWidth - 50 + 'px' );
-            $( this ).css( 'minHeight', window.innerHeight - 400 + 'px' );
-        },
-        close: function(){
-            crmClearSearchOrderDlg();
-        },
-        buttons:[{
-            text: kivi.t8( 'Clear' ),
-            click: function(){
-                crmClearSearchOrderDlg();
-                crmSearchOrder();
-            }
-        },{
-            text: kivi.t8( 'Close' ),
-            click: function(){
-                $( this ).dialog( "close" );
-            }
-        }]
-    }).dialog( 'open' ).resize();
+    crmOpenView( 'crm-search-order-view' );
+}
+
+function crmSearchOrderClearView(){
+    crmClearSearchOrderView();
+    crmSearchOrder();
+}
+
+function crmSearchOrderCloseView(){
+    crmCloseView( 'crm-search-order-view' );
+    crmClearSearchOrderView();
 }

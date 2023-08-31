@@ -14,7 +14,7 @@ function crmGetCustomerForEdit( src, id, new_car, fx ){
         type: 'POST',
         data:  { action: 'getCustomerForEdit', data: paramData },
         success: function( data ){
-            crmEditCuVeDlg( data, new_car );
+            crmEditCuVeView( data, new_car );
             crmShowCuVeForEdit( data );
             if( fx ) fx( src, id );
         },
@@ -156,9 +156,9 @@ function crmGetCustomerForEdit( src, id, new_car, fx ){
 ***************************************/
 //Wird als Parameter für die Funktion js/app.js->dbUpdataDB verwendet
 //spiegelt den Namen des Ajax-Calls (Function) in ajax/xrm.app.php
-var crmEditCuVeDlgAction;
+var crmEditCuVeViewAction;
 
-function crmEditCuVeDlg( crmData, new_with_car ){
+function crmEditCuVeView( crmData, new_with_car ){
     crmInitFormEx( billaddrFormModel, '#billaddr-form', 0, '#crm-billaddr-cv' );
     crmInitFormEx( deladdrFormModel, '#deladdr-form' );
     crmInitFormEx( banktaxFormModel, '#banktax-form' );
@@ -248,6 +248,11 @@ function crmEditCuVeDlg( crmData, new_with_car ){
         crmChangeBlandList( crmData, 'deladdr-shiptobland', $( '#deladdr-shiptocountry' ).val() );
     });
 
+    crmEditCuVeViewAction = 'updateCuWithNewCar';
+
+    $( '#crm-wx-customer-dialog' ).show();
+
+/*
     $( '#crm-wx-customer-dialog' ).dialog({
         autoOpen: false,
         resizable: true,
@@ -260,7 +265,7 @@ function crmEditCuVeDlg( crmData, new_with_car ){
             $( this ).css( 'maxWidth', window.innerWidth );
             //Wird als Parameter für die Funktion js/app.js->dbUpdataDB verwendet
             //spiegelt den Namen des Ajax-Calls (Function) in ajax/xrm.app.php
-            crmEditCuVeDlgAction = 'updateCuWithNewCar';
+            crmEditCuVeViewAction = 'updateCuWithNewCar';
         },
         buttons:[{
             text: kivi.t8( 'Save' ),
@@ -329,7 +334,7 @@ function crmEditCuVeDlg( crmData, new_with_car ){
                 const onSuccess = function(){
                     $( '#crm-wx-customer-dialog' ).dialog( "close" );
                 }
-                crmUpdateDB( crmEditCuVeDlgAction, dbUpdateData, onSuccess );
+                crmUpdateDB( crmEditCuVeViewAction, dbUpdateData, onSuccess );
             }
         },
         {
@@ -339,6 +344,7 @@ function crmEditCuVeDlg( crmData, new_with_car ){
             }
         }]
     }).dialog( 'open' ).resize();
+*/
 }
 
 function crmNewVendor(){

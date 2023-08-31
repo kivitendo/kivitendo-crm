@@ -48,7 +48,7 @@ function crmGetLxcarsVer(){
         },
         error: function( xhr, status, error ){
             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'lxcars()', xhr.responseText );
-            window.open(window.location.href, '_self');
+            window.open( 'controller.pl?action=LoginScreen/user_login', '_self' );
         }
     });
 }

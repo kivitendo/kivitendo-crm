@@ -257,7 +257,7 @@ function crmNewCarFromScan(){
                                                  //console.info('New');
                                                 //console.info(lxcarsData);
                                                 $( '#crm-fsscan-customer-dlg' ).dialog( "close" );
-                                                crmEditCuVeDlg( crmData, true );
+                                                crmEditCuVeView( crmData, true );
                                                 crmShowCuVeForEdit( crmData );
                                                 $( '#billaddr-name' ).val( $( '#crm-fsscan-edit-customer' ).val() );
                                                 $( '#billaddr-street' ).val( lxcarsData.address1 );
@@ -286,7 +286,7 @@ function crmNewCarFromScan(){
                                                 $( '#car-c_finchk' ).val( lxcarsData.field_3 );
                                                 //Wird als Parameter für die Funktion js/app.js->dbUpdataDB verwendet
                                                 //spiegelt den Namen des Ajax-Calls (Function) in ajax/xrm.app.php
-                                                crmEditCuVeDlgAction = 'insertNewCuWithCar';
+                                                crmEditCuVeViewAction = 'insertNewCuWithCar';
                                             },
                                             error: function( xhr, status, error ){
                                                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmNewCarFromScan()', xhr.responseText );

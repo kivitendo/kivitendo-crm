@@ -31,7 +31,6 @@ $( '#crm-wf-scan').html( kivi.t8( 'Car from scan' ) );
 /* flag to switch app lxcars functionality  */
 var lxcars = false;
 crmGetLxcarsVer();
-crmGetHistory();
 
 /*********************************************
 * Check lxcars tables exists and then get
@@ -45,9 +44,11 @@ function crmGetLxcarsVer(){
         success: function( data ){
                 lxcars = data.lxcars;
                 console.info( 'activate lxcars: ' + lxcars );
+                crmGetHistory();
         },
         error: function( xhr, status, error ){
             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'lxcars()', xhr.responseText );
+            window.open(window.location.href, '_self');
         }
     });
 }

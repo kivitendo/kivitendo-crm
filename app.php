@@ -10,7 +10,7 @@
     curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
     curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, false );
     curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-    curl_setopt( $ch, CURLOPT_TIMEOUT, 1 );
+    curl_setopt( $ch, CURLOPT_TIMEOUT, 1000 );
     curl_setopt( $ch, CURLOPT_ENCODING, 'gzip,deflate' );
     curl_setopt( $ch, CURLOPT_HTTPHEADER, array (
                 "Connection: keep-alive",
@@ -26,7 +26,8 @@
     curl_close( $ch );
 
     $objResult = json_decode( $result );
-    $vars = get_object_vars( $objResult );
+
+    var_dump( $objResult );
 ?>
 
 <!DOCTYPE html>

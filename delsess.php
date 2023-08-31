@@ -10,5 +10,5 @@ if(isset($_GET['url'])) {
     $pos = strpos($temp, 'crm');
     $relocate = substr($temp, $pos+4);
 }
-echo '<script type="text/javascript">window.location.href="'.$relocate.'";</script>';
+//echo '<script type="text/javascript">window.location.href="'.$relocate.'";</script>';
 ?>

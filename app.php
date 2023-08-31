@@ -246,7 +246,7 @@
 <?php
     echo $objResult->{'pre_content'};
 ?>
-<div class="layout-actionbar">
+<div id="crm-actionbar" class="layout-actionbar">
     <input id="crm-widget-quicksearch" placeholder="Schnellsuche" maxlength="20" class="crm-fast-search ui-autocomplete-input" style="" autocomplete="off">
     <div class="layout-actionbar-separator"></div>
     <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div id="crm-hist-last" class="layout-actionbar-action layout-actionbar-submit">Zuletzt</div><span></span></div><div id="crm-history-list" class="layout-actionbar-combobox-list"></div></div>
@@ -730,7 +730,7 @@
     </table>
 </div>
 
-<div id="crm-wx-customer-dialog" style="display:none">
+<div id="crm-wx-customer-view" class="crm-p2" style="display:none">
     <div id="crm-tabs-main" class="tabwidget">
         <ul class="nav nav-tabs">
             <li class="nav-item">
@@ -797,6 +797,10 @@
                 <tbody></tbody>
             </table>
         </div>
+    </div>
+    <div class="crm-pt1">
+        <button onclick="crmEditCuVeViewSave()">Speichern</button>
+        <button onclick="crmEditCuVeViewCancel();">Abbrechen</button>
     </div>
 </div>
 

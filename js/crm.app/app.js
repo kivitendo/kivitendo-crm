@@ -328,7 +328,7 @@ function showCVPA( data ){
     }
 
     if( exists( data.cv ) ){
-        $( '#crm-wx-title' ).html( kivi.t8( 'Detail view:' ) + ' ' + ( ( data.cv.src == 'C' ) ? kivi.t8( 'Customer' ) : kivi.t8( 'Vendor' ) ) );
+        $( '#crm-wx-title' ).html( data.cv.name + ' (' + ( ( data.cv.src == 'C' ) ? kivi.t8( 'Customer' ) : kivi.t8( 'Vendor' ) ) + ')' );
         $( '#crm-wf-edit' ).attr( 'data-src', data.cv.src );
         $( '#crm-wf-edit' ).attr( 'data-id', data.cv.id );
     }
@@ -388,6 +388,18 @@ function crmInitFormEx( crmFormModel, table, max_rows = 0, container = null){
     }
     $( table + " > tbody" ).html( ' ' );
     $( table + " > tbody" ).append( tabledata );
+}
+
+function crmOpenView( id ){
+    $( '#crm-actionbar' ).hide();
+    $( '#crm-wx-base-data' ).hide();
+    $( '#' + id ).show();
+}
+
+function crmCloseView( id ){
+    $( '#' + id ).hide();
+    $( '#crm-wx-base-data' ).show();
+    $( '#crm-actionbar' ).show();
 }
 
 /***************************************

@@ -250,7 +250,7 @@ function crmEditCuVeView( crmData, new_with_car ){
 
     crmEditCuVeViewAction = 'updateCuWithNewCar';
 
-    $( '#crm-wx-customer-dialog' ).show();
+    crmOpenView( 'crm-wx-customer-view' );
 
 /*
     $( '#crm-wx-customer-dialog' ).dialog({
@@ -345,6 +345,78 @@ function crmEditCuVeView( crmData, new_with_car ){
         }]
     }).dialog( 'open' ).resize();
 */
+}
+
+function crmEditCuVeViewSave( ){
+    console.info( 'Save' );
+    dbUpdateData = {};
+    let cvSrc = ( $( '#billaddr-src' ).val() == 'V' )? 'vendor' : 'customer';
+    dbUpdateData[cvSrc] = {};
+    let billaddr_id = $( '#billaddr-id' ).val();
+    if( '' !== billaddr_id  ){
+        dbUpdateData[cvSrc]['WHERE'] = {};
+        dbUpdateData[cvSrc]['WHERE']['id'] = $( '#billaddr-id' ).val();
+    }
+    for( let item of billaddrFormModel){
+        let columnName = item.name.split( '-' );
+        if( columnName[1] !== "src" && columnName[1] !== "id" && columnName[1] !== "greetings" ){
+            let val = $( '#' + item.name ).val();
+            //if( exists(val) && val !== '' ) dbUpdateData[cvSrc][columnName[1]] = val;
+            if( exists(val) ) dbUpdateData[cvSrc][columnName[1]] = val;
+        }
+    }
+    if( dbUpdateData[cvSrc]['bland'] === '' ){
+        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Error' ), kivi.t8( 'Select Bundesland please.' ) );
+        return;
+    }
+    if( exists( $( '#deladdr-list' ).val() ) && $( '#deladdr-list' ).val() !== '' ){
+        dbUpdateData['shipto'] = { 'shipto_id': $( '#deladdr-list' ).val() };
+        for(let item of deladdrFormModel){
+            let columnName = item.name.split( '-' );
+            let val = $( '#' + item.name ).val();
+            if( exists(val) && val !== '' ) dbUpdateData['shipto'][columnName[1]] = val;
+        }
+    }
+    for( let item of banktaxFormModel ){
+        let columnName = item.name.split( '-' );
+        let val = $( '#' + item.name ).val();
+        if( exists(val) && val !== '' ) dbUpdateData[cvSrc][columnName[1]] = val;
+    }
+    for( let item of extraFormModel ){
+        let columnName = item.name.split( '-' );
+        if( columnName[1] !== 'branches' ){
+            let val = $( '#' + item.name ).val();
+            if( exists(val) && val !== '' ) dbUpdateData[cvSrc][columnName[1]] = val;
+        }
+    }
+    if( $( '#car-form' ).is(':visible' ) ){
+        dbUpdateData['lxc_cars'] = {};
+        for(let item of carFormModel){
+            let columnName = item.name.split( '-' );
+            let val = $( '#' + item.name ).val();
+            if( exists(val) && val !== '' ) dbUpdateData['lxc_cars'][columnName[1]] = val;
+        }
+
+        dbUpdateData['lxckba'] = {};
+        dbUpdateData['lxckba']['hsn'] = $( '#car-c_2' ).val();
+        dbUpdateData['lxckba']['tsn'] = $( '#car-c_3' ).val().substring(0, 3);
+        for(let item of carKbaFormModel){
+            let columnName = item.name.split( '-' );
+            if( !exists( columnName[1] ) ) continue;
+            let val = $( '#' + item.name ).val();
+            if( exists(val) ) dbUpdateData['lxckba'][columnName[1]] = val;
+        }
+    }
+    //console.info( 'dbUpdateData' );
+    //console.info( dbUpdateData );
+    const onSuccess = function(){
+        crmCloseView( 'crm-wx-customer-view' );
+    }
+    crmUpdateDB( crmEditCuVeViewAction, dbUpdateData, onSuccess );
+}
+
+function crmEditCuVeViewCancel(){
+    crmCloseView( 'crm-wx-customer-view' );
 }
 
 function crmNewVendor(){

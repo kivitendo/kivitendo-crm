@@ -1366,101 +1366,160 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-ui-items-workers' ).append(new Option( worker.name, worker.name  ) );
         }
     }
-    $( '#crm-edit-order-dialog' ).dialog({
-        autoOpen: false,
-        resizable: true,
-        width: ( window.innerWidth * 0.95 < 1770 )? window.innerWidth * 0.95 + 'px' : '1770px', //Breite Dialog relativ zur Fenstergröße
-        height: 'auto',
-        modal: true,
-        title: title,
-        position: { my: "top", at: "top+250" },
-        open: function(){
-            $( this ).css( 'maxWidth', window.innerWidth );
-            if( isEmpty( $( '#od-oe-id' ).val() ) ){
-                $( '#od-ui-btn-printer1' ).hide();
-                $( '#od-ui-btn-printer2' ).hide();
-                $( '#od-ui-btn-pdf' ).hide();
-                $( '#od-ui-btn-coparts' ).hide();
-            }
-            $( '#od-ui-btn-printer1' ).removeClass (function (index, className) {
-                console.info( 'edit order rmv classes' );
-                console.info( className );
-                return (className.match (/(^|\s)ui-\S+/g) || []).join(' ');
-            });
+
+    crmOpenView( 'crm-edit-order-dialog', null, ' - ' + title );
+
+//    $( '#crm-edit-order-dialog' ).dialog({
+//        autoOpen: false,
+//        resizable: true,
+//        width: ( window.innerWidth * 0.95 < 1770 )? window.innerWidth * 0.95 + 'px' : '1770px', //Breite Dialog relativ zur Fenstergröße
+//        height: 'auto',
+//        modal: true,
+//        title: title,
+//        position: { my: "top", at: "top+250" },
+//        open: function(){
+//            $( this ).css( 'maxWidth', window.innerWidth );
+//            if( isEmpty( $( '#od-oe-id' ).val() ) ){
+//                $( '#od-ui-btn-printer1' ).hide();
+//                $( '#od-ui-btn-printer2' ).hide();
+//                $( '#od-ui-btn-pdf' ).hide();
+//                $( '#od-ui-btn-coparts' ).hide();
+//            }
+//            $( '#od-ui-btn-printer1' ).removeClass (function (index, className) {
+//                console.info( 'edit order rmv classes' );
+//                console.info( className );
+//                return (className.match (/(^|\s)ui-\S+/g) || []).join(' ');
+//            });
+//        },
+//        close: function(){
+//            crmRefreshAppViewAction();
+//        },
+//        buttons:[{
+//            text: kivi.t8( 'Printer 1' ),
+//            id: 'od-ui-btn-printer1',
+//            click: function(){
+//                let printData = {};
+//                printData['orderId'] = $( '#od-oe-id' ).val();
+//                printData['print'] = 'printOrder1';
+//                printData['customerId'] = $( '#od-customer-id' ).val();
+//                $.ajax({
+//                    url: 'crm/ajax/crm.app.php',
+//                    type: 'POST',
+//                    data:  { action: 'printOrder', data: printData },
+//                    success: function( data ){
+//                        console.info( 'printed' );
+//                    },
+//                    error: function( xhr, status, error ){
+//                        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( printOrder1 )', xhr.responseText );
+//                    }
+//                });
+//            }
+//        },{
+//            text: kivi.t8( 'Printer 2' ),
+//            id: 'od-ui-btn-printer2',
+//            click: function(){
+//                let printData = {};
+//                printData['orderId'] = $( '#od-oe-id' ).val();
+//                printData['print'] = 'printOrder2';
+//                printData['customerId'] = $( '#od-customer-id' ).val();
+//                $.ajax({
+//                    url: 'crm/ajax/crm.app.php',
+//                    type: 'POST',
+//                    data:  { action: 'printOrder', data: printData },
+//                    error: function( xhr, status, error ){
+//                        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( printOrder2 )', xhr.responseText );
+//                    }
+//                });
+//             }
+//        },{
+//            text: kivi.t8( ' PDF ' ),
+//            id: 'od-ui-btn-pdf',
+//            click: function(){
+//                let printData = {};
+//                printData['orderId'] = $( '#od-oe-id' ).val();
+//                printData['print'] = 'pdfOrder';
+//                printData['customerId'] = $( '#od-customer-id' ).val();
+//                 $.ajax({
+//                    url: 'crm/ajax/crm.app.php',
+//                    type: 'GET',
+//                    data:  { action: 'printOrder', data: printData },
+//                    success: function( printFileName ){
+//                        window.open( 'crm/printedFiles/' + printFileName );
+//                    },
+//                    error: function( xhr, status, error ){
+//                        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( pdfOrder )', xhr.responseText );
+//                    }
+//                });
+//             }
+//        },{
+//            text: kivi.t8( ' Coparts ' ),
+//            id: 'od-ui-btn-coparts',
+//            click: function(){
+//                window.location ='lxcars://AAGOnlinekba___' + coparts['c_hsn'] + '___' + coparts['c_tsn'] + '___' + $( '#od-lxcars-c_ln' ).html() + '___' + coparts['c_fin'] + '___' + coparts['c_d_de'] + '___' + coparts['c_mkb'] + '___' + $( '#od-oe-km_stnd' ).val() + '___' + $( '#od-oe-ordnumber' ).html() + '___' + coparts['customer_name'] + '___' + coparts['customer_street'] + '___' + coparts['customer_zipcode'] + '___' + coparts['customer_city'] + '___7___nodebug';
+//            }
+//        },{
+//            text: kivi.t8( 'Close' ),
+//            click: function(){
+//                $( this ).dialog( "close" );
+//            }
+//        }]
+//    }).dialog( 'open' ).resize();
+}
+
+function crmEditOrderCallPrinter1(){
+    let printData = {};
+    printData['orderId'] = $( '#od-oe-id' ).val();
+    printData['print'] = 'printOrder1';
+    printData['customerId'] = $( '#od-customer-id' ).val();
+    $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        type: 'POST',
+        data:  { action: 'printOrder', data: printData },
+        success: function( data ){
+            console.info( 'printed' );
         },
-        close: function(){
-            crmRefreshAppViewAction();
+        error: function( xhr, status, error ){
+            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( printOrder1 )', xhr.responseText );
+        }
+    });
+}
+
+function crmEditOrderCallPrinter2(){
+    let printData = {};
+    printData['orderId'] = $( '#od-oe-id' ).val();
+    printData['print'] = 'printOrder2';
+    printData['customerId'] = $( '#od-customer-id' ).val();
+    $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        type: 'POST',
+        data:  { action: 'printOrder', data: printData },
+        error: function( xhr, status, error ){
+            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( printOrder2 )', xhr.responseText );
+        }
+    });
+}
+
+function crmEditOrderCallPDF(){
+    let printData = {};
+    printData['orderId'] = $( '#od-oe-id' ).val();
+    printData['print'] = 'pdfOrder';
+    printData['customerId'] = $( '#od-customer-id' ).val();
+     $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        type: 'GET',
+        data:  { action: 'printOrder', data: printData },
+        success: function( printFileName ){
+            window.open( 'crm/printedFiles/' + printFileName );
         },
-        buttons:[{
-            text: kivi.t8( 'Printer 1' ),
-            id: 'od-ui-btn-printer1',
-            click: function(){
-                let printData = {};
-                printData['orderId'] = $( '#od-oe-id' ).val();
-                printData['print'] = 'printOrder1';
-                printData['customerId'] = $( '#od-customer-id' ).val();
-                $.ajax({
-                    url: 'crm/ajax/crm.app.php',
-                    type: 'POST',
-                    data:  { action: 'printOrder', data: printData },
-                    success: function( data ){
-                        console.info( 'printed' );
-                    },
-                    error: function( xhr, status, error ){
-                        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( printOrder1 )', xhr.responseText );
-                    }
-                });
-            }
-        },{
-            text: kivi.t8( 'Printer 2' ),
-            id: 'od-ui-btn-printer2',
-            click: function(){
-                let printData = {};
-                printData['orderId'] = $( '#od-oe-id' ).val();
-                printData['print'] = 'printOrder2';
-                printData['customerId'] = $( '#od-customer-id' ).val();
-                $.ajax({
-                    url: 'crm/ajax/crm.app.php',
-                    type: 'POST',
-                    data:  { action: 'printOrder', data: printData },
-                    error: function( xhr, status, error ){
-                        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( printOrder2 )', xhr.responseText );
-                    }
-                });
-             }
-        },{
-            text: kivi.t8( ' PDF ' ),
-            id: 'od-ui-btn-pdf',
-            click: function(){
-                let printData = {};
-                printData['orderId'] = $( '#od-oe-id' ).val();
-                printData['print'] = 'pdfOrder';
-                printData['customerId'] = $( '#od-customer-id' ).val();
-                 $.ajax({
-                    url: 'crm/ajax/crm.app.php',
-                    type: 'GET',
-                    data:  { action: 'printOrder', data: printData },
-                    success: function( printFileName ){
-                        window.open( 'crm/printedFiles/' + printFileName );
-                    },
-                    error: function( xhr, status, error ){
-                        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( pdfOrder )', xhr.responseText );
-                    }
-                });
-             }
-        },{
-            text: kivi.t8( ' Coparts ' ),
-            id: 'od-ui-btn-coparts',
-            click: function(){
-                window.location ='lxcars://AAGOnlinekba___' + coparts['c_hsn'] + '___' + coparts['c_tsn'] + '___' + $( '#od-lxcars-c_ln' ).html() + '___' + coparts['c_fin'] + '___' + coparts['c_d_de'] + '___' + coparts['c_mkb'] + '___' + $( '#od-oe-km_stnd' ).val() + '___' + $( '#od-oe-ordnumber' ).html() + '___' + coparts['customer_name'] + '___' + coparts['customer_street'] + '___' + coparts['customer_zipcode'] + '___' + coparts['customer_city'] + '___7___nodebug';
-            }
-        },{
-            text: kivi.t8( 'Close' ),
-            click: function(){
-                $( this ).dialog( "close" );
-            }
-        }]
-    }).dialog( 'open' ).resize();
+        error: function( xhr, status, error ){
+            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( pdfOrder )', xhr.responseText );
+        }
+    });
+}
+
+function crmEditOrderCloseView(){
+    crmCloseView( 'crm-edit-order-dialog' , crmPreView );
+    //if( 'crm-wx-base-data' != crmPreView ) crmRefreshAppViewAction();
 }
 
 $( "#od-oe-workflow, #od-inv-workflow, #od-off-workflow" ).menu({

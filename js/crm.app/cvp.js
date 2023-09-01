@@ -250,7 +250,7 @@ function crmEditCuVeView( crmData, new_with_car ){
 
     crmEditCuVeViewAction = 'updateCuWithNewCar';
 
-    crmOpenView( 'crm-wx-customer-view' );
+    crmOpenView( 'crm-wx-customer-view', null, ' - ' + kivi.t8( 'Basedata' ) );
 }
 
 function crmEditCuVeViewSave( ){

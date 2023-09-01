@@ -399,23 +399,26 @@ function crmInitFormEx( crmFormModel, table, max_rows = 0, container = null){
 }
 
 var crmActiveView = 'crm-wx-base-data';
+var crmPreView = 'crm-wx-base-data';
 window.history.pushState( { 'view': crmActiveView }, '', location.protocol + '//' + location.host + location.pathname + (location.search?location.search : '') );
 
 function crmCVPAgetTitle(){
     return $( '#crm-cvpa-name' ).val();
 }
 
-function crmOpenView( id, title = null ){
+function crmOpenView( id, title = null, subtitle = null ){
     $( '#crm-wx-title' ).html( ( null == title)? crmCVPAgetTitle() : title );
+    if( null != subtitle ) $( '#crm-wx-subtitle' ).html( subtitle );
     $( '#' + crmActiveView ).hide();
     $( '#' + id ).show();
-    window.history.pushState( { 'view': crmActiveView }, '', location.protocol + '//' + location.host + location.pathname + (location.search?location.search : '') + '#' + id );
+    crmPreView = crmActiveView;
     crmActiveView = id;
+    window.history.pushState( { 'view': crmPreView }, '', location.protocol + '//' + location.host + location.pathname + (location.search?location.search : '') + '#' + id );
 }
 
-function crmCloseView( id ){
+function crmCloseView( id, next = 'crm-wx-base-data' ){
     crmActiveView = id;
-    crmOpenView( 'crm-wx-base-data' );
+    crmOpenView( next, null, '' );
 }
 
 window.onpopstate = function( e ){
@@ -423,7 +426,7 @@ window.onpopstate = function( e ){
         crmOpenView( e.state.view );
     }
     else{
-        crmOpenView( 'crm-wx-base-data' );
+        crmOpenView( 'crm-wx-base-data', null, '' );
     }
 };
 

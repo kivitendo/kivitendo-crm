@@ -265,13 +265,20 @@
     echo $objResult->{'start_content'};
 ?>
 
-<h1 class="tools"><span id="crm-wx-title"></span></h1>
+<h1 class="tools"><span id="crm-wx-title"></span><span id="crm-wx-subtitle"></span></h1>
 
 <main>
 
 <div id="crm-main-view" class="container-fluid">
 
-<div id="crm-edit-order-dialog" style="display:none">
+<div id="crm-edit-order-dialog" style="padding-top: 7em; display:none">
+
+    <div id="od-oe-workflow" class="layout-actionbar" style="top: 10em; left: 1em; border: 0;">
+        <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCloseView();">Schließen</div>
+        <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Workflow</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit" onclick="crmInsertOfferFromOrder();">Vorlage für Angebot</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order" onclick="crmInsertInvoiceFromOrder();">Vorlage für Rechnung</div></div></div>
+    </div>
+
+<!---
     <ul id = "od-oe-workflow" style="margin-bottom: 1em;">
          <li><a href = "#" style="font-weight: bold;">Workflow</a>
              <ul>
@@ -280,6 +287,7 @@
              </ul>
          </li>
     </ul>
+-->
     <table id="od-off-menus" style="margin-bottom: 1em;">
         <tr>
             <td style="vertical-align: bottom;">

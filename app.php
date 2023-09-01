@@ -276,6 +276,10 @@
     <div id="od-oe-workflow" class="layout-actionbar" style="top: 10em; left: 1em; border: 0;">
         <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCloseView();">Schließen</div>
         <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Workflow</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit" onclick="crmInsertOfferFromOrder();">Vorlage für Angebot</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order" onclick="crmInsertInvoiceFromOrder();">Vorlage für Rechnung</div></div></div>
+        <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallPrinter1();">Printer1</div>
+        <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallPrinter2();">Printer2</div>
+        <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallPDF();">PDF</div>
+        <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallCoparts();">Coparts</div>
     </div>
 
 <!---

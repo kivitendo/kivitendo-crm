@@ -1517,9 +1517,13 @@ function crmEditOrderCallPDF(){
     });
 }
 
+function crmEditOrderCallCoparts(){
+    window.location ='lxcars://AAGOnlinekba___' + coparts['c_hsn'] + '___' + coparts['c_tsn'] + '___' + $( '#od-lxcars-c_ln' ).html() + '___' + coparts['c_fin'] + '___' + coparts['c_d_de'] + '___' + coparts['c_mkb'] + '___' + $( '#od-oe-km_stnd' ).val() + '___' + $( '#od-oe-ordnumber' ).html() + '___' + coparts['customer_name'] + '___' + coparts['customer_street'] + '___' + coparts['customer_zipcode'] + '___' + coparts['customer_city'] + '___7___nodebug';
+}
+
 function crmEditOrderCloseView(){
     crmCloseView( 'crm-edit-order-dialog' , crmPreView );
-    //if( 'crm-wx-base-data' != crmPreView ) crmRefreshAppViewAction();
+    if( 'crm-wx-base-data' != crmPreView ) crmRefreshAppViewAction();
 }
 
 $( "#od-oe-workflow, #od-inv-workflow, #od-off-workflow" ).menu({

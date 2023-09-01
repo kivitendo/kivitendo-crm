@@ -10,7 +10,7 @@ require_once __DIR__.'/version.php';
 
 if( !varExist( $_SESSION ) ) session_start();
 
-if( !varExist( $_SESSION, 'globalConfig' ) ) $_SESSION['globalConfig'] = getGlobalConfig(); //printArray(getGlobalConfig());
+if( !varExist( $_SESSION, 'globalConfig' ) ) $_SESSION['globalConfig'] = getGlobalConfig();
 
 //Prüfen ob es sich um eine neu Session handelt oder die Elemente von $_SESSION gelöscht wurden
 $newSession = ( $_SESSION['sessid'] != $_COOKIE[$_SESSION['erpConfig']['authentication']['cookie_name']] ) || $_SESSION['clear'] || !$_SESSION['menu']['javascripts'];//wo wird menu.javascripts zerstört??
@@ -159,7 +159,7 @@ function configFile2array( $file ){
 function getGlobalConfig(){
     $baseUrl = isset( $_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http';
     $baseUrl.= '://'.$_SERVER['SERVER_NAME'].preg_replace( "^crm/.*^", "", $_SERVER['REQUEST_URI'] );
-    $rs['baseurl'] = $baseUrl;
+    $rs['baseurl'] = str_replace( 'app.php', '', $baseUrl );//app.php entfernen
 
     if ( isset($_SERVER['CONTEXT_DOCUMENT_ROOT']) ) {
         $basepath = $_SERVER['CONTEXT_DOCUMENT_ROOT'];

@@ -121,7 +121,7 @@ const crmSearchOrderView = function(){
         }
     }
 
-    crmOpenView( 'crm-search-order-view' );
+    crmOpenView( 'crm-search-order-view', kivi.t8( 'Search order' ) );
 }
 
 function crmSearchOrderClearView(){

@@ -1,7 +1,14 @@
 // Regulärer Auusdruck ( regex ) zum prüfen einer Telefonummer
 // ^(|(\+|0)[0-9]([-.\s\(\)\/]{0,3}[0-9])*)$
 
-
+function assert( info, message = null, assertion = true ){
+    if( assertion ){
+        console.info( '-->' );
+        console.info( info );
+        if( null != message ) console.info( message );
+        console.info( '<--' );
+    }
+}
 
 function exists( obj ){
     return obj !== null && obj !== undefined;
@@ -197,6 +204,7 @@ function showCVPA( data ){
         console.info( 'customer/vendor src: ' +  data.cv.src + ', id: ' + data.cv.id );
         $( '#crm-cvpa-src' ).val( data.cv.src );
         $( '#crm-cvpa-id' ).val( data.cv.id );
+        $( '#crm-cvpa-name' ).val( data.cv.name + ' (' + ( ( data.cv.src == 'C' ) ? kivi.t8( 'Customer' ) : kivi.t8( 'Vendor' ) ) + ')' );
 
         $( '#crm-wx-contact' ).show();
         $.each( data.cv, function( key, value ){
@@ -390,17 +398,35 @@ function crmInitFormEx( crmFormModel, table, max_rows = 0, container = null){
     $( table + " > tbody" ).append( tabledata );
 }
 
-function crmOpenView( id ){
-    $( '#crm-actionbar' ).hide();
-    $( '#crm-wx-base-data' ).hide();
+var crmActiveView = 'crm-wx-base-data';
+window.history.pushState( { 'view': crmActiveView }, '', location.protocol + '//' + location.host + location.pathname + (location.search?location.search : '') );
+
+function crmCVPAgetTitle(){
+    return $( '#crm-cvpa-name' ).val();
+}
+
+function crmOpenView( id, title = null ){
+    $( '#crm-wx-title' ).html( ( null == title)? crmCVPAgetTitle() : title );
+    $( '#' + crmActiveView ).hide();
     $( '#' + id ).show();
+    window.history.pushState( { 'view': crmActiveView }, '', location.protocol + '//' + location.host + location.pathname + (location.search?location.search : '') + '#' + id );
+    crmActiveView = id;
 }
 
 function crmCloseView( id ){
-    $( '#' + id ).hide();
-    $( '#crm-wx-base-data' ).show();
-    $( '#crm-actionbar' ).show();
+    crmActiveView = id;
+    crmOpenView( 'crm-wx-base-data' );
 }
+
+window.onpopstate = function( e ){
+    if( exists( e.state ) && exists( e.state.view ) ){
+        crmOpenView( e.state.view );
+    }
+    else{
+        crmOpenView( 'crm-wx-base-data' );
+    }
+};
+
 
 /***************************************
 * Change list of Bundesland dependent

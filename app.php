@@ -819,9 +819,10 @@
     </div>
 </div>
 
--<div id="crm-fsscan-dlg" style="display:none;">
-    <div>
-        <table id="crm-fsscan-list0">
+<div id="crm-fsscan-dlg" class="crm-p2" style="display:none;">
+    <button onclick="crmNewCarFromScanCancelView1();">Abbrechen</button>
+    <div class="crm-pt1">
+        <table id="crm-fsscan-list0" class="tbl-list">
             <thead>
               <tr class="listheading">
                 <th class="xlistheading" id="date">Datum</th>
@@ -835,20 +836,24 @@
     </div>
 </div>
 
-<div id="crm-fsscan-customer-dlg" style="display:none">
-    <div><input id="crm-fsscan-edit-customer" type="text" size="42"></input></div>
-    <div style="padding-top: 1em">
-        <table id="crm-fsscan-customer-list0">
-            <thead>
-              <tr class="listheading">
-                <th class="xlistheading" id="date">Datum</th>
-                <th class="xlistheading" id="firstname">Vorname</th>
-                <th class="xlistheading" id="name1">Name</th>
-                <th class="xlistheading" id="licenseplate">Stadt</th>
-              </tr>
-            </thead>
-             <tbody id="crm-fsscan-customer-list"></tbody>
-        </table>
+<div id="crm-fsscan-customer-dlg" class="crm-p2" style="display:none">
+    <button onclick="crmNewCarFromScanNewCuView();">Neuer Kunde</button>
+    <button onclick="crmNewCarFromScanCancelView2();">Abbrechen</button>
+    <div class="crm-pt1">
+        <div><input id="crm-fsscan-edit-customer" type="text" size="42"></input></div>
+        <div style="padding-top: 1em">
+            <table id="crm-fsscan-customer-list0" class="tbl-list">
+                <thead>
+                <tr class="listheading">
+                    <th class="xlistheading" id="date">Datum</th>
+                    <th class="xlistheading" id="firstname">Vorname</th>
+                    <th class="xlistheading" id="name1">Name</th>
+                    <th class="xlistheading" id="licenseplate">Stadt</th>
+                </tr>
+                </thead>
+                <tbody id="crm-fsscan-customer-list"></tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -857,6 +862,7 @@
         <div id="crm-wx-contact">
             <input type="hidden" id="crm-cvpa-id"></input>
             <input type="hidden" id="crm-cvpa-src"></input>
+            <input type="hidden" id="crm-cvpa-name"></input>
             <input type="hidden" id="crm-userconf-defprn" value="<?php echo $_SESSION['userConfig']['default_printer_id']; ?>"></input>
             <div><strong><span id="crm-contact-name"></span></strong></div>
             <div class="crm-pt05"><span id="crm-contact-street"></span></div>

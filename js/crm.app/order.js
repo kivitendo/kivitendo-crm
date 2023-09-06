@@ -807,18 +807,11 @@ $( "#od-oe-finish_time" ).datetimepicker({
     currentText: 'Jetzt'
 });
 
-function crmInsertInvoiceFromOrder(){
-    console.info( 'order2invoice' );
-
+function crmConfirmInsertInvoiceFromOrder(){
     if( '' == $( '#od-oe-id' ).val() ){
         alert( kivi.t8( 'Please insert a part!' ) );
         return;
     }
-
-    let data = {};
-    data['ordnumber'] = $( '#od-oe-ordnumber' ).text();
-    data['employee_id'] = $( '#od-inv-employee_id' ).val();
-    data['oe_id'] = $( '#od-oe-id' ).val();
 
     $( '#crm-confirm-order-to-invoice-dialog' ).dialog({
         autoOpen: false,
@@ -830,51 +823,39 @@ function crmInsertInvoiceFromOrder(){
         position: { my: "top", at: "top+250" },
         open: function(){
             $( this ).css( 'maxWidth', window.innerWidth );
-        },
-        buttons:[{
-            text: kivi.t8( 'Continue' ),
-            click: function(){
-                $( this ).dialog( "close" );
-                $.ajax({
-                    url: 'crm/ajax/crm.app.php',
-                    type: 'POST',
-                    data:  { action: 'insertInvoiceFromOrder', data: data },
-                    success: function( crmData ){
-                        //$( '#crm-confirm-order-to-invoice-dialog' ).dialog( "close" );
-
-                        if( exists( crmData['flag'] ) ){
-                            alert( kivi.t8( 'The invoice already exists and will be displayed.' ) );
-                        }
-                        $( '#crm-edit-order-dialog' ).dialog( "close" );
-                        crmEditOrderDlg( crmData, crmOrderTypeEnum.Invoice );
-                    },
-                    error: function( xhr, status, error ){
-                        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmInsertInvoiceFromOrder()', xhr.responseText );
-                    }
-                });
-            }
-        },{
-            text: kivi.t8( 'Cancel' ),
-            click: function(){
-                $( this ).dialog( "close" );
-            }
-        }]
+        }
     }).dialog( 'open' ).resize();
-
 }
 
-function crmInsertOfferFromOrder(){
-    console.info( 'order2offer' );
-
-    if( '' == $( '#od-oe-id' ).val() ){
-        alert( kivi.t8( 'Please insert a part!' ) );
-        return;
-    }
-
+function crmInsertInvoiceFromOrder(){
     let data = {};
     data['ordnumber'] = $( '#od-oe-ordnumber' ).text();
     data['employee_id'] = $( '#od-inv-employee_id' ).val();
     data['oe_id'] = $( '#od-oe-id' ).val();
+
+    $( '#crm-confirm-order-to-invoice-dialog' ).dialog( "close" );
+
+    $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        type: 'POST',
+        data:  { action: 'insertInvoiceFromOrder', data: data },
+        success: function( crmData ){
+            if( exists( crmData['flag'] ) ){
+                alert( kivi.t8( 'The invoice already exists and will be displayed.' ) );
+            }
+            crmEditOrderDlg( crmData, crmOrderTypeEnum.Invoice );
+        },
+        error: function( xhr, status, error ){
+            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmInsertInvoiceFromOrder()', xhr.responseText );
+        }
+    });
+}
+
+function crmConfirmInsertOfferFromOrder(){
+    if( '' == $( '#od-oe-id' ).val() ){
+        alert( kivi.t8( 'Please insert a part!' ) );
+        return;
+    }
 
     $( '#crm-confirm-order-to-offer-dialog' ).dialog({
         autoOpen: false,
@@ -886,32 +867,29 @@ function crmInsertOfferFromOrder(){
         position: { my: "top", at: "top+250" },
         open: function(){
             $( this ).css( 'maxWidth', window.innerWidth );
-        },
-        buttons:[{
-            text: kivi.t8( 'Continue' ),
-            click: function(){
-                $( this ).dialog( "close" );
-                $.ajax({
-                    url: 'crm/ajax/crm.app.php',
-                    type: 'POST',
-                    data:  { action: 'insertOfferFromOrder', data: data },
-                    success: function( crmData ){
-                       $( '#crm-edit-order-dialog' ).dialog( "close" );
-                        crmEditOrderDlg( crmData, crmOrderTypeEnum.Offer );
-                    },
-                    error: function( xhr, status, error ){
-                        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmInsertOfferFromOrder()', xhr.responseText );
-                    }
-                });
-            }
-        },{
-            text: kivi.t8( 'Cancel' ),
-            click: function(){
-                $( this ).dialog( "close" );
-            }
-        }]
+        }
     }).dialog( 'open' ).resize();
+}
 
+function crmInsertOfferFromOrder(){
+    let data = {};
+    data['ordnumber'] = $( '#od-oe-ordnumber' ).text();
+    data['employee_id'] = $( '#od-inv-employee_id' ).val();
+    data['oe_id'] = $( '#od-oe-id' ).val();
+
+    $( '#crm-confirm-order-to-offer-dialog' ).dialog( 'close' );
+
+    $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        type: 'POST',
+        data:  { action: 'insertOfferFromOrder', data: data },
+        success: function( crmData ){
+            crmEditOrderDlg( crmData, crmOrderTypeEnum.Offer );
+        },
+        error: function( xhr, status, error ){
+            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmInsertOfferFromOrder()', xhr.responseText );
+        }
+    });
 }
 
 function crmEmailOrder( e ){ // was steht in 'e'??
@@ -1347,12 +1325,14 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         }
 
         $( '#od-off-printers' ).html( '' );
-        $( '#od-off-printers' ).append( '<li><a value="screen" href="#" onclick="crmPrintOrder( this );">Bildschirm</a></li>' );
+        //$( '#od-off-printers' ).append( '<li><a value="screen" href="#" onclick="crmPrintOrder( this );">Bildschirm</a></li>' );
+        $( '#od-off-printers' ).append( '<div class="layout-actionbar-action layout-actionbar-submit" value="screen" onclick="crmPrintOrder( this );">Bildschirm</div>' );
         let printers = undefined;
         if( ( exists( crmData.offer ) && exists( printers = crmData.offer.printers ) ) || exists( printers = crmData.printers ) ){
             for( let printer of printers ){
                 if( $( '#crm-userconf-defprn' ).val() == printer.id ) $( '#od-off-current-printer' ).text( printer.printer_description );
-                $( '#od-off-printers' ).append( '<li><a value="' + printer.id  + '" href="#" onclick="crmPrintOrder( this );">' + printer.printer_description + '</a></li>' );
+                //$( '#od-off-printers' ).append( '<li><a value="' + printer.id  + '" href="#" onclick="crmPrintOrder( this );">' + printer.printer_description + '</a></li>' );
+                $( '#od-off-printers' ).append( '<div class="layout-actionbar-action layout-actionbar-submit" value="' + printer.id  + '" onclick="crmPrintOrder( this );">' + printer.printer_description + '</div>' );
             }
             $( '#od-off-current-printer' ).attr( 'value', $( '#crm-userconf-defprn' ).val() );
         }
@@ -1368,102 +1348,6 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
     }
 
     crmOpenView( 'crm-edit-order-dialog', null, ' - ' + title );
-
-//    $( '#crm-edit-order-dialog' ).dialog({
-//        autoOpen: false,
-//        resizable: true,
-//        width: ( window.innerWidth * 0.95 < 1770 )? window.innerWidth * 0.95 + 'px' : '1770px', //Breite Dialog relativ zur Fenstergröße
-//        height: 'auto',
-//        modal: true,
-//        title: title,
-//        position: { my: "top", at: "top+250" },
-//        open: function(){
-//            $( this ).css( 'maxWidth', window.innerWidth );
-//            if( isEmpty( $( '#od-oe-id' ).val() ) ){
-//                $( '#od-ui-btn-printer1' ).hide();
-//                $( '#od-ui-btn-printer2' ).hide();
-//                $( '#od-ui-btn-pdf' ).hide();
-//                $( '#od-ui-btn-coparts' ).hide();
-//            }
-//            $( '#od-ui-btn-printer1' ).removeClass (function (index, className) {
-//                console.info( 'edit order rmv classes' );
-//                console.info( className );
-//                return (className.match (/(^|\s)ui-\S+/g) || []).join(' ');
-//            });
-//        },
-//        close: function(){
-//            crmRefreshAppViewAction();
-//        },
-//        buttons:[{
-//            text: kivi.t8( 'Printer 1' ),
-//            id: 'od-ui-btn-printer1',
-//            click: function(){
-//                let printData = {};
-//                printData['orderId'] = $( '#od-oe-id' ).val();
-//                printData['print'] = 'printOrder1';
-//                printData['customerId'] = $( '#od-customer-id' ).val();
-//                $.ajax({
-//                    url: 'crm/ajax/crm.app.php',
-//                    type: 'POST',
-//                    data:  { action: 'printOrder', data: printData },
-//                    success: function( data ){
-//                        console.info( 'printed' );
-//                    },
-//                    error: function( xhr, status, error ){
-//                        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( printOrder1 )', xhr.responseText );
-//                    }
-//                });
-//            }
-//        },{
-//            text: kivi.t8( 'Printer 2' ),
-//            id: 'od-ui-btn-printer2',
-//            click: function(){
-//                let printData = {};
-//                printData['orderId'] = $( '#od-oe-id' ).val();
-//                printData['print'] = 'printOrder2';
-//                printData['customerId'] = $( '#od-customer-id' ).val();
-//                $.ajax({
-//                    url: 'crm/ajax/crm.app.php',
-//                    type: 'POST',
-//                    data:  { action: 'printOrder', data: printData },
-//                    error: function( xhr, status, error ){
-//                        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( printOrder2 )', xhr.responseText );
-//                    }
-//                });
-//             }
-//        },{
-//            text: kivi.t8( ' PDF ' ),
-//            id: 'od-ui-btn-pdf',
-//            click: function(){
-//                let printData = {};
-//                printData['orderId'] = $( '#od-oe-id' ).val();
-//                printData['print'] = 'pdfOrder';
-//                printData['customerId'] = $( '#od-customer-id' ).val();
-//                 $.ajax({
-//                    url: 'crm/ajax/crm.app.php',
-//                    type: 'GET',
-//                    data:  { action: 'printOrder', data: printData },
-//                    success: function( printFileName ){
-//                        window.open( 'crm/printedFiles/' + printFileName );
-//                    },
-//                    error: function( xhr, status, error ){
-//                        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( pdfOrder )', xhr.responseText );
-//                    }
-//                });
-//             }
-//        },{
-//            text: kivi.t8( ' Coparts ' ),
-//            id: 'od-ui-btn-coparts',
-//            click: function(){
-//                window.location ='lxcars://AAGOnlinekba___' + coparts['c_hsn'] + '___' + coparts['c_tsn'] + '___' + $( '#od-lxcars-c_ln' ).html() + '___' + coparts['c_fin'] + '___' + coparts['c_d_de'] + '___' + coparts['c_mkb'] + '___' + $( '#od-oe-km_stnd' ).val() + '___' + $( '#od-oe-ordnumber' ).html() + '___' + coparts['customer_name'] + '___' + coparts['customer_street'] + '___' + coparts['customer_zipcode'] + '___' + coparts['customer_city'] + '___7___nodebug';
-//            }
-//        },{
-//            text: kivi.t8( 'Close' ),
-//            click: function(){
-//                $( this ).dialog( "close" );
-//            }
-//        }]
-//    }).dialog( 'open' ).resize();
 }
 
 function crmEditOrderCallPrinter1(){

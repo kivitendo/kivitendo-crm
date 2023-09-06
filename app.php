@@ -154,29 +154,16 @@
     }
 
     .od-table-label {
-        background-color: #EEEEEE;
-    }
-
-    .od-common-div {
-        padding-bottom: 1em;
+        font-weight: bold;
     }
 
     .od-common-style {
         margin: auto;
-        background-color: white;
     }
 
     .od-common-style td {
         padding: 0.25em;
         vertical-align: top;
-    }
-
-    .od-comments-div {
-        padding-top: 1em;
-    }
-
-    .od-comments {
-        background-color: white;
     }
 
     /* debug */
@@ -208,6 +195,23 @@
     .ui-contact-fx-btn {
         width: 20px;
         height: 20px;
+    }
+
+    .crm-ui-button{
+        color: #fff;
+        background-color: #406449;
+        border: 1px #406449 solid;
+        display: inline-block;
+        cursor: pointer;
+        width: auto;
+        padding: .2em .6em;
+        font-size: 9pt;
+        font-weight: normal;
+        font-style: normal;
+        text-align: center;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 6px;
     }
 
     ul.ui-autocomplete.ui-menu{
@@ -275,54 +279,30 @@
 
     <div id="od-oe-workflow" class="layout-actionbar" style="top: 10em; left: 1em; border: 0;">
         <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCloseView();">Schließen</div>
-        <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Workflow</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit" onclick="crmInsertOfferFromOrder();">Vorlage für Angebot</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order" onclick="crmInsertInvoiceFromOrder();">Vorlage für Rechnung</div></div></div>
+        <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Workflow</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit" onclick="crmConfirmInsertOfferFromOrder();">Vorlage für Angebot</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order" onclick="crmConfirmInsertInvoiceFromOrder();">Vorlage für Rechnung</div></div></div>
         <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallPrinter1();">Printer1</div>
         <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallPrinter2();">Printer2</div>
         <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallPDF();">PDF</div>
         <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallCoparts();">Coparts</div>
     </div>
 
-<!---
-    <ul id = "od-oe-workflow" style="margin-bottom: 1em;">
-         <li><a href = "#" style="font-weight: bold;">Workflow</a>
-             <ul>
-                 <li><a id="od-oe-invoice-btn" href = "#" onclick="crmInsertOfferFromOrder();">Vorlage für Angebot</a></li>
-                 <li><a id="od-oe-invoice-btn" href = "#" onclick="crmInsertInvoiceFromOrder();">Vorlage für Rechnung</a></li>
-             </ul>
-         </li>
-    </ul>
--->
-    <table id="od-off-menus" style="margin-bottom: 1em;">
-        <tr>
-            <td style="vertical-align: bottom;">
-                <ul id = "od-off-workflow">
-                    <li><a href = "#" style="font-weight: bold;">Workflow</a>
-                        <ul>
-                            <li><a id="od-off-reuse-btn" href = "#">Wiederverwenden*</a></li>
-                            <li><a id="od-off-close-btn" href = "#">Vorlage für Auftrag*</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </td>
-            <td style="vertical-align: bottom;">
-                <span style="font-weight: bold;">Drucken</span>
-                <ul id="od-off-printers-menu" >
-                    <li><a id="od-off-current-printer" value="screen" href = "#" onclick="crmPrintOrder( this );">Bildschrim</a>
-                        <ul id="od-off-printers" >
-                        </ul>
-                    </li>
-                </ul>
-            </td>
-            <td>
-                <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" style="margin-top: 1em" onclick="crmEmailOrder( this )" value="email"><span class="ui-button-text">E-Mail</span></button>
-            </td>
-            <div  style="display:none">
-                <form id="od-off-print-form" method="post" action="oe.pl">
-                </form>
-            </div>
-        </tr>
-    </table>
-    <table id="od-inv-menus" style="margin-bottom: 1em;">
+    <div id="od-off-menus">
+        <div class="layout-actionbar" style="top: 11em; left: 1em; border: 0;">
+            <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCloseView();">Schließen</div>
+            <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Workflow</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit" onclick="crmConfirmXYZ();">Wiederverwenden*</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order" onclick="crmConfirmXYZ();">Vorlage für Auftrag*</div></div></div>
+        </div>
+        <div class="layout-actionbar" style="top: 11em; left: 350px; border: 0;">
+           <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div id="od-off-current-printer" class="layout-actionbar-action layout-actionbar-submit" style="width: auto">Drucken</div><span></span></div><div id="od-off-printers" class="layout-actionbar-combobox-list"></div></div>
+            <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crm();">Drucken</div>
+            <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crm();">PDF-Druckvorschau</div>
+        </div>
+    </div>
+
+    <div  style="display:none">
+        <form id="od-off-print-form" method="post" action="oe.pl">
+        </form>
+    </div>
+     <table id="od-inv-menus" style="margin-bottom: 1em;">
         <tr>
             <td style="vertical-align: bottom;">
                 <ul id = "od-inv-workflow">
@@ -352,312 +332,321 @@
             </div>
         </tr>
     </table>
-    <div class="od-common-div">
-    <input id="od-customer-id" type="hidden"></input>
-    <input id="od-lxcars-c_id" type="hidden"></input>
-    <input id="od-oe-id" type="hidden"></input>
-    <input id="od-off-id" type="hidden"></input>
-    <input id="od-inv-id" type="hidden"></input>
-    <table id="od-oe-common-table" class="od-oe-common od-common-style" width="100%">
-        <tr>
-            <td width="33%">
-                <table>
-                    <tr>
-                        <td class="od-table-label"><label for="od_customer_name">Auftraggeber:</label></td>
-                        <td><input type="text" id="od_customer_name"></input></td>
-                    </tr>
-                    <tr>
-                        <td class="od-table-label">Telefon:</td>
-                        <td><button id="crm_oe_contact_phone1" class="ui-contact-btn"></button></td>
-                        <td><button id="crm_oe_contact_phone1_dialog_button" class="clickToCall1 ui-contact-fx-btn">T</button><div id="crm_oe_contact_phone1_dialog"></div></td>
-                        <td><button id="crm_oe_copy_contact_phone1" class="copy clickToCall1 ui-contact-fx-btn" title="Copy">C</button></td>
-                        <td ><button id="crm_oe_whatsapp1" class="whatsapp clickToCall1 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
-                    </tr>
-                    <tr>
-                        <td class="od-table-label">Telefon:</td><td><button id="crm_oe_contact_phone2" class="ui-contact-btn"></button></td>
-                        <td><button id="crm_oe_contact_phone2_dialog_button" class="clickToCall2 ui-contact-fx-btn">T</button><div id="crm_oe_contact_phone2_dialog"></div></td>
-                        <td><button id="crm_oe_copy_contact_phone2" class="copy clickToCall2 ui-contact-fx-btn"  title="Copy">C</button></td>
-                        <td ><button id="crm_oe_whatsapp2" class="whatsapp clickToCall2 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
-                    </tr>
-                    <tr>
-                        <td class="od-table-label">E-Mail:</td>
-                        <td colspan="4"><button id="crm_oe_contact_email">Kein Eintrag</button></td>
-                    </tr>
-                </table>
-            </td>
-            <td width="33%">
-                <table>
-                    <tr>
-                        <td class="od-table-label"><label for="od-lxcars-km_stnd">KM-Stand:</label></td>
-                        <td><input class="od-oe-km_stnd" id="od-oe-km_stnd" type="number"></td>
-                     </tr>
-                    <tr>
-                        <td class="od-table-label"><label for="od_lxcars_c_ln">Amtl.-Kennz.:</label></td>
-                        <td><input id="od_lxcars_c_ln" type="text"></input></td>
-                     </tr>
-                    <tr>
-                        <td class="od-table-label"><label for="od-oe-car_status">KfZ Ort:</label></td>
-                        <td>
-                            <select id="od-oe-car_status" type="select">
-                                <option value=""></option>
-                                <option value="Auto nicht hier">Auto nicht hier</option>
-                                <option value="Auto hier">Auto hier</option>
-                                <option value="Sonstiges zur Reparatur gebracht">Sonstiges zur Reparatur gebracht</option>
-                                <option value="Bestellung">Bestellung</option>
-                            </select>
-                        </td>
-                     </tr>
-                    <tr>
-                        <td class="od-table-label"><label for="od-oe-status">Status:</label></td>
-                        <td>
-                            <select id="od-oe-status" type="select">
-                                <option value=""></option>
-                                <option value="angenommen">angenommen</option>
-                                <option value="bearbeitet">bearbeitet</option>
-                                <option value="abgerechnet">abgerechnet</option>
-                            </select>
-                        </td>
-                     </tr>
-                </table>
-            </td>
-            <td width="33%">
-                <table>
-                    <tr>
-                        <td class="od-table-label"><label for="od-oe-ordnumber">Auftragsnummer:</label></td>
-                        <td><span id="od-oe-ordnumber"></span></td>
-                     </tr>
-                    <tr>
-                        <td class="od-table-label"><label for="od-oe-internalorder">Interner Auftrag:</label></td>
-                        <td><input id="od-oe-internalorder" type="checkbox"></td>
-                    </tr>
-                    <tr>
-                        <td class="od-table-label"><label for="od-oe-finish_time">Fertigstellung:</label></td>
-                        <td><input id="od-oe-finish_time" type="text"></td>
-                    </tr>
-                     <tr>
-                        <td class="od-table-label"><label for="od-oe-itime">erstellt am:</label></td>
-                        <td><span id="od-oe-itime"></span></td>
-                     </tr>
-                    <tr>
-                        <td class="od-table-label"><label for="od-oe-mtime">bearbeitet am:</label></td>
-                        <td><span id="od-oe-mtime"></span></td>
-                     </tr>
-                    <tr>
-                        <td class="od-table-label"><label for="od-oe-employee_name">bearbeitet von:</label></td>
-                        <td><input type="hidden" id="od-oe-employee_id"></input><span id="od-oe-employee_name"></span></td>
-                     </tr>
-                 </table>
-            </td>
-        </tr>
-    </table>
-    <table id="od-inv-common-table" class="od-inv-common od-common-style" width="100%">
-        <tr>
-            <td width="33%">
-                <table>
-                    <tr>
-                        <td class="od-table-label"><label for="od_inv_customer_name">Kunde:</label></td>
-                        <td colspan="4"><input type="text" id="od_inv_customer_name"></input></td>
-                    </tr>
-                    <tr>
-                        <td class="od-table-label">Telefon:</td>
-                        <td><button id="crm_inv_contact_phone1" class="ui-contact-btn"></button></td>
-                        <td><button id="crm_inv_contact_phone1_dialog_button" class="clickToCall1 ui-contact-fx-btn">T</button><div id="crm_inv_contact_phone1_dialog"></div></td>
-                        <td><button id="crm_inv_copy_contact_phone1" class="copy clickToCall1 ui-contact-fx-btn" title="Copy">C</button></td>
-                        <td ><button id="crm_inv_whatsapp1" class="whatsapp clickToCall1 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
-                    </tr>
-                    <tr>
-                        <td class="od-table-label">Telefon:</td><td><button id="crm_inv_contact_phone2" class="ui-contact-btn"></button></td>
-                        <td><button id="crm_inv_contact_phone2_dialog_button" class="clickToCall2 ui-contact-fx-btn">T</button><div id="crm_inv_contact_phone2_dialog"></div></td>
-                        <td><button id="crm_inv_copy_contact_phone2" class="copy clickToCall2 ui-contact-fx-btn"  title="Copy">C</button></td>
-                        <td ><button id="crm_inv_whatsapp2" class="whatsapp clickToCall2 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
-                    </tr>
-                    <tr>
-                        <td class="od-table-label">E-Mail:</td>
-                        <td colspan="4"><button id="crm_inv_contact_email">Kein Eintrag</button></td>
-                    </tr>
-                 </table>
-            </td>
-            <td width="33%">
-                <table>
-                    <tr>
-                        <td class="od-table-label"><label for="od-inv-shipvia">KM-Stand:</label></td>
-                        <td><input class="od-inv-shipvia" id="od-inv-shipvia" type="number"></td>
-                     </tr>
-                    <tr>
-                        <td class="od-table-label"><label for="od-inv-shippingpoint">Amtl.-Kennz.:</label></td>
-                        <td><input id="od-inv-shippingpoint" type="text"></input></td>
-                     </tr>
-               </table>
-            </td>
-            <td width="33%">
-                <table>
-                    <tr>
-                        <td class="od-table-label"><label for="od-inv-invnumber">Rechnungsnummer:</label></td>
-                        <td><span id="od-inv-invnumber"></span></td>
-                     </tr>
-                    <tr>
-                        <td class="od-table-label"><label for="od-inv-ordnumber">Auftragsnummer:</label></td>
-                        <td><span id="od-inv-ordnumber"></span></td>
-                     </tr>
-                    <tr>
-                        <td class="od-table-label"><label for="od-oe-itime">erstellt am:</label></td>
-                        <td><span id="od-inv-itime"></span></td>
-                     </tr>
-                    <tr>
-                        <td class="od-table-label"><label for="od-oe-mtime">bearbeitet am:</label></td>
-                        <td><span id="od-inv-mtime"></span></td>
-                     </tr>
-                    <tr>
-                        <td class="od-table-label"><label for="od-inv-employee_name">bearbeitet von:</label></td>
-                        <td><input type="hidden" id="od-inv-employee_id"></input><span id="od-inv-employee_name"></span></td>
-                     </tr>
-                 </table>
-            </td>
-        </tr>
-    </table>
-    <table id="od-off-common-table" class="od-off-common od-common-style" width="100%">
-        <tr>
-            <td width="33%">
-                <table>
-                    <tr>
-                        <td class="od-table-label"><label for="od_off_customer_name">Kunde:</label></td>
-                        <td><input type="text" id="od_off_customer_name"></input></td>
-                    </tr>
-                    <tr>
-                        <td class="od-table-label">Telefon:</td>
-                        <td><button id="crm_off_contact_phone1" class="ui-contact-btn"></button></td>
-                        <td><button id="crm_off_contact_phone1_dialog_button" class="clickToCall1 ui-contact-fx-btn">T</button><div id="crm_off_contact_phone1_dialog"></div></td>
-                        <td><button id="crm_off_copy_contact_phone1" class="copy clickToCall1 ui-contact-fx-btn" title="Copy">C</button></td>
-                        <td ><button id="crm_off_whatsapp1" class="whatsapp clickToCall1 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
-                    </tr>
-                    <tr>
-                        <td class="od-table-label">Telefon:</td><td><button id="crm_off_contact_phone2" class="ui-contact-btn"></button></td>
-                        <td><button id="crm_off_contact_phone2_dialog_button" class="clickToCall2 ui-contact-fx-btn">T</button><div id="crm_off_contact_phone2_dialog"></div></td>
-                        <td><button id="crm_off_copy_contact_phone2" class="copy clickToCall2 ui-contact-fx-btn"  title="Copy">C</button></td>
-                        <td ><button id="crm_inv_whatsapp2" class="whatsapp clickToCall2 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
-                    </tr>
-                    <tr>
-                        <td class="od-table-label">E-Mail:</td>
-                        <td colspan="4"><button id="crm_inv_contact_email">Kein Eintrag</button></td>
-                    </tr>
-                 </table>
-            </td>
-            <td width="33%">
-                <table>
-                    <tr>
-                        <td class="od-table-label"><label for="od-off-quonumber">Angebotsnummer:</label></td>
-                        <td><span id="od-off-quonumber"></span></td>
-                    </tr>
-                    <tr>
-                        <td class="od-table-label"><label for="od-off-itime">erstellt am:</label></td>
-                        <td><span id="od-off-itime"></span></td>
-                     </tr>
-                    <tr>
-                        <td class="od-table-label"><label for="od-off-mtime">bearbeitet am:</label></td>
-                        <td><span id="od-off-mtime"></span></td>
-                     </tr>
-                    <tr>
-                        <td class="od-table-label"><label for="od-off-employee_name">bearbeitet von:</label></td>
-                        <td><input type="hidden" id="od-off-employee_id"></input><span id="od-off-employee_name"></span></td>
-                     </tr>
-                 </table>
-            </td>
-            <td width="33%">
-                <table>
-                    <tr>
-                        <td class="od-table-label"><label for="od-off-closed">Geschlossen:</label></td>
-                        <td><input id="od-off-closed" type="checkbox"></td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+    <div class="od-common-div input-panel control-panel" style="margin-bottom: 0.5em">
+        <input id="od-customer-id" type="hidden"></input>
+        <input id="od-lxcars-c_id" type="hidden"></input>
+        <input id="od-oe-id" type="hidden"></input>
+        <input id="od-off-id" type="hidden"></input>
+        <input id="od-inv-id" type="hidden"></input>
+        <table id="od-oe-common-table" class="od-oe-common od-common-style" width="100%">
+            <tr>
+                <td width="33%">
+                    <table>
+                        <tr>
+                            <td class="od-table-label"><label for="od_customer_name">Auftraggeber:</label></td>
+                            <td><input type="text" id="od_customer_name"></input></td>
+                        </tr>
+                        <tr>
+                            <td class="od-table-label">Telefon:</td>
+                            <td><button id="crm_oe_contact_phone1" class="ui-contact-btn"></button></td>
+                            <td><button id="crm_oe_contact_phone1_dialog_button" class="clickToCall1 ui-contact-fx-btn">T</button><div id="crm_oe_contact_phone1_dialog"></div></td>
+                            <td><button id="crm_oe_copy_contact_phone1" class="copy clickToCall1 ui-contact-fx-btn" title="Copy">C</button></td>
+                            <td ><button id="crm_oe_whatsapp1" class="whatsapp clickToCall1 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
+                        </tr>
+                        <tr>
+                            <td class="od-table-label">Telefon:</td><td><button id="crm_oe_contact_phone2" class="ui-contact-btn"></button></td>
+                            <td><button id="crm_oe_contact_phone2_dialog_button" class="clickToCall2 ui-contact-fx-btn">T</button><div id="crm_oe_contact_phone2_dialog"></div></td>
+                            <td><button id="crm_oe_copy_contact_phone2" class="copy clickToCall2 ui-contact-fx-btn"  title="Copy">C</button></td>
+                            <td ><button id="crm_oe_whatsapp2" class="whatsapp clickToCall2 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
+                        </tr>
+                        <tr>
+                            <td class="od-table-label">E-Mail:</td>
+                            <td colspan="4"><button id="crm_oe_contact_email">Kein Eintrag</button></td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="33%">
+                    <table>
+                        <tr>
+                            <td class="od-table-label"><label for="od-lxcars-km_stnd">KM-Stand:</label></td>
+                            <td><input class="od-oe-km_stnd" id="od-oe-km_stnd" type="number"></td>
+                         </tr>
+                        <tr>
+                            <td class="od-table-label"><label for="od_lxcars_c_ln">Amtl.-Kennz.:</label></td>
+                            <td><input id="od_lxcars_c_ln" type="text"></input></td>
+                         </tr>
+                        <tr>
+                            <td class="od-table-label"><label for="od-oe-car_status">KfZ Ort:</label></td>
+                            <td>
+                                <select id="od-oe-car_status" type="select">
+                                    <option value=""></option>
+                                    <option value="Auto nicht hier">Auto nicht hier</option>
+                                    <option value="Auto hier">Auto hier</option>
+                                    <option value="Sonstiges zur Reparatur gebracht">Sonstiges zur Reparatur gebracht</option>
+                                    <option value="Bestellung">Bestellung</option>
+                                </select>
+                            </td>
+                         </tr>
+                        <tr>
+                            <td class="od-table-label"><label for="od-oe-status">Status:</label></td>
+                            <td>
+                                <select id="od-oe-status" type="select">
+                                    <option value=""></option>
+                                    <option value="angenommen">angenommen</option>
+                                    <option value="bearbeitet">bearbeitet</option>
+                                    <option value="abgerechnet">abgerechnet</option>
+                                </select>
+                            </td>
+                         </tr>
+                    </table>
+                </td>
+                <td width="33%">
+                    <table>
+                        <tr>
+                            <td class="od-table-label"><label for="od-oe-ordnumber">Auftragsnummer:</label></td>
+                            <td><span id="od-oe-ordnumber"></span></td>
+                         </tr>
+                        <tr>
+                            <td class="od-table-label"><label for="od-oe-internalorder">Interner Auftrag:</label></td>
+                            <td><input id="od-oe-internalorder" type="checkbox"></td>
+                        </tr>
+                        <tr>
+                            <td class="od-table-label"><label for="od-oe-finish_time">Fertigstellung:</label></td>
+                            <td><input id="od-oe-finish_time" type="text"></td>
+                        </tr>
+                         <tr>
+                            <td class="od-table-label"><label for="od-oe-itime">erstellt am:</label></td>
+                            <td><span id="od-oe-itime"></span></td>
+                         </tr>
+                        <tr>
+                            <td class="od-table-label"><label for="od-oe-mtime">bearbeitet am:</label></td>
+                            <td><span id="od-oe-mtime"></span></td>
+                         </tr>
+                        <tr>
+                            <td class="od-table-label"><label for="od-oe-employee_name">bearbeitet von:</label></td>
+                            <td><input type="hidden" id="od-oe-employee_id"></input><span id="od-oe-employee_name"></span></td>
+                         </tr>
+                     </table>
+                </td>
+            </tr>
+        </table>
+        <table id="od-inv-common-table" class="od-inv-common od-common-style" width="100%">
+            <tr>
+                <td width="33%">
+                    <table>
+                        <tr>
+                            <td class="od-table-label"><label for="od_inv_customer_name">Kunde:</label></td>
+                            <td colspan="4"><input type="text" id="od_inv_customer_name"></input></td>
+                        </tr>
+                        <tr>
+                            <td class="od-table-label">Telefon:</td>
+                            <td><button id="crm_inv_contact_phone1" class="ui-contact-btn"></button></td>
+                            <td><button id="crm_inv_contact_phone1_dialog_button" class="clickToCall1 ui-contact-fx-btn">T</button><div id="crm_inv_contact_phone1_dialog"></div></td>
+                            <td><button id="crm_inv_copy_contact_phone1" class="copy clickToCall1 ui-contact-fx-btn" title="Copy">C</button></td>
+                            <td ><button id="crm_inv_whatsapp1" class="whatsapp clickToCall1 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
+                        </tr>
+                        <tr>
+                            <td class="od-table-label">Telefon:</td><td><button id="crm_inv_contact_phone2" class="ui-contact-btn"></button></td>
+                            <td><button id="crm_inv_contact_phone2_dialog_button" class="clickToCall2 ui-contact-fx-btn">T</button><div id="crm_inv_contact_phone2_dialog"></div></td>
+                            <td><button id="crm_inv_copy_contact_phone2" class="copy clickToCall2 ui-contact-fx-btn"  title="Copy">C</button></td>
+                            <td ><button id="crm_inv_whatsapp2" class="whatsapp clickToCall2 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
+                        </tr>
+                        <tr>
+                            <td class="od-table-label">E-Mail:</td>
+                            <td colspan="4"><button id="crm_inv_contact_email">Kein Eintrag</button></td>
+                        </tr>
+                     </table>
+                </td>
+                <td width="33%">
+                    <table>
+                        <tr>
+                            <td class="od-table-label"><label for="od-inv-shipvia">KM-Stand:</label></td>
+                            <td><input class="od-inv-shipvia" id="od-inv-shipvia" type="number"></td>
+                         </tr>
+                        <tr>
+                            <td class="od-table-label"><label for="od-inv-shippingpoint">Amtl.-Kennz.:</label></td>
+                            <td><input id="od-inv-shippingpoint" type="text"></input></td>
+                         </tr>
+                   </table>
+                </td>
+                <td width="33%">
+                    <table>
+                        <tr>
+                            <td class="od-table-label"><label for="od-inv-invnumber">Rechnungsnummer:</label></td>
+                            <td><span id="od-inv-invnumber"></span></td>
+                         </tr>
+                        <tr>
+                            <td class="od-table-label"><label for="od-inv-ordnumber">Auftragsnummer:</label></td>
+                            <td><span id="od-inv-ordnumber"></span></td>
+                         </tr>
+                        <tr>
+                            <td class="od-table-label"><label for="od-oe-itime">erstellt am:</label></td>
+                            <td><span id="od-inv-itime"></span></td>
+                         </tr>
+                        <tr>
+                            <td class="od-table-label"><label for="od-oe-mtime">bearbeitet am:</label></td>
+                            <td><span id="od-inv-mtime"></span></td>
+                         </tr>
+                        <tr>
+                            <td class="od-table-label"><label for="od-inv-employee_name">bearbeitet von:</label></td>
+                            <td><input type="hidden" id="od-inv-employee_id"></input><span id="od-inv-employee_name"></span></td>
+                         </tr>
+                     </table>
+                </td>
+            </tr>
+        </table>
+        <table id="od-off-common-table" class="od-off-common od-common-style" width="100%">
+            <tr>
+                <td width="33%">
+                    <table>
+                        <tr>
+                            <td class="od-table-label"><label for="od_off_customer_name">Kunde:</label></td>
+                            <td><input type="text" id="od_off_customer_name"></input></td>
+                        </tr>
+                        <tr>
+                            <td class="od-table-label">Telefon:</td>
+                            <td><button id="crm_off_contact_phone1" class="ui-contact-btn"></button></td>
+                            <td><button id="crm_off_contact_phone1_dialog_button" class="clickToCall1 ui-contact-fx-btn">T</button><div id="crm_off_contact_phone1_dialog"></div></td>
+                            <td><button id="crm_off_copy_contact_phone1" class="copy clickToCall1 ui-contact-fx-btn" title="Copy">C</button></td>
+                            <td ><button id="crm_off_whatsapp1" class="whatsapp clickToCall1 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
+                        </tr>
+                        <tr>
+                            <td class="od-table-label">Telefon:</td><td><button id="crm_off_contact_phone2" class="ui-contact-btn"></button></td>
+                            <td><button id="crm_off_contact_phone2_dialog_button" class="clickToCall2 ui-contact-fx-btn">T</button><div id="crm_off_contact_phone2_dialog"></div></td>
+                            <td><button id="crm_off_copy_contact_phone2" class="copy clickToCall2 ui-contact-fx-btn"  title="Copy">C</button></td>
+                            <td ><button id="crm_inv_whatsapp2" class="whatsapp clickToCall2 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
+                        </tr>
+                        <tr>
+                            <td class="od-table-label">E-Mail:</td>
+                            <td colspan="4"><button id="crm_inv_contact_email">Kein Eintrag</button></td>
+                        </tr>
+                     </table>
+                </td>
+                <td width="33%">
+                    <table>
+                        <tr>
+                            <td class="od-table-label"><label for="od-off-quonumber">Angebotsnummer:</label></td>
+                            <td><span id="od-off-quonumber"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="od-table-label"><label for="od-off-itime">erstellt am:</label></td>
+                            <td><span id="od-off-itime"></span></td>
+                         </tr>
+                        <tr>
+                            <td class="od-table-label"><label for="od-off-mtime">bearbeitet am:</label></td>
+                            <td><span id="od-off-mtime"></span></td>
+                         </tr>
+                        <tr>
+                            <td class="od-table-label"><label for="od-off-employee_name">bearbeitet von:</label></td>
+                            <td><input type="hidden" id="od-off-employee_id"></input><span id="od-off-employee_name"></span></td>
+                         </tr>
+                     </table>
+                </td>
+                <td width="33%">
+                    <table>
+                        <tr>
+                            <td class="od-table-label"><label for="od-off-closed">Geschlossen:</label></td>
+                            <td><input id="od-off-closed" type="checkbox"></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
     </div>
 
-    <table class="ui-sortable" id="edit-order-table" width="100%">
-        <thead>
-            <tr class="listheading pin">
-                <th class="listheading" nowrap width="25px" >Pos.</th>
-                <th class="listheading" style='text-align:center' nowrap width="1"><img src="image/updown.png" alt="umsortieren"></th>
-                <th class="listheading" style='text-align:center' nowrap width="1"><img src="image/close.png" alt="löschen"></th>
-                <th class="listheading" style='text-align:center' nowrap width="1">E</th>
-                <th id="od-partnumber-thead"  class="listheading" nowrap width="1" style="min-width: 4em">ArtNr.</th>
-                <th id="od-partclass-thead"   class="listheading" nowrap width="2">Typ</th>
-                <th id="od-desc-thead" class="listheading" nowrap  width="10">Beschreibung</th>
-                <th id="od-longdesc-thead" class="listheading" nowrap>Langtext</th>
-                <th id="od-qty-thead" class="listheading" nowrap width="5" >Menge</th>
-                <th class="listheading" nowrap width="5" >Einheit </th>
-                <th id="od-sellprice-thead" class="listheading" nowrap width="2" >Preis</th>
-                <th id="od-discount-thead" class="listheading" nowrap width="5" >Rabatt in %</th>
-                <th id="od-discount_thead-100" class="listheading" nowrap width="5" ><input value="100" type="hidden" id="od-ui-discount-100-all"></input><button id="od-ui-discount-100-all-btn" style="width: 3em;">100%</button></th>
-                <th class="listheading" nowrap width="10">Gesamt </th>
-                <th id="od-listheading-workers" class="listheading" nowrap width="2" >Mechaniker <div><select id="od-ui-items-workers"></select></div></th>
-                <th id="od-listheading-status" class="listheading" nowrap width="2" >
-                    Status
-                    <div>
-                        <select id="od-ui-items-status-all">
-                            <option value="gelesen">gelesen</option>
-                            <option value="Bearbeitung">Bearbeitung</option>
-                            <option value="erledigt">erledigt</option>
-                        </select>
-                    </div>
-                </th>
+<!--
+    <div class="input-panel control-panel" style="width: 100%">
+-->
+    <div class="input-panel control-panel" style="min-width: 50%; width: auto;">
+        <table class="ui-sortable tbl-list" id="edit-order-table" width="100%">
+            <thead>
+                <tr class="listheading pin">
+                    <th class="listheading" nowrap width="25px" >Pos.</th>
+                    <th class="listheading" style='text-align:center' nowrap width="1"><img src="image/updown.png" alt="umsortieren"></th>
+                    <th class="listheading" style='text-align:center' nowrap width="1"><img src="image/close.png" alt="löschen"></th>
+                    <th class="listheading" style='text-align:center' nowrap width="1">E</th>
+                    <th id="od-partnumber-thead"  class="listheading" nowrap width="1" style="min-width: 4em">ArtNr.</th>
+                    <th id="od-partclass-thead"   class="listheading" nowrap width="2">Typ</th>
+                    <th id="od-desc-thead" class="listheading" nowrap  width="10">Beschreibung</th>
+                    <th id="od-longdesc-thead" class="listheading" nowrap>Langtext</th>
+                    <th id="od-qty-thead" class="listheading" nowrap width="5" >Menge</th>
+                    <th class="listheading" nowrap width="5" >Einheit </th>
+                    <th id="od-sellprice-thead" class="listheading" nowrap width="2" >Preis</th>
+                    <th id="od-discount-thead" class="listheading" nowrap width="5" >Rabatt in %</th>
+                    <th id="od-discount_thead-100" class="listheading" nowrap width="5" ><input value="100" type="hidden" id="od-ui-discount-100-all"></input><button id="od-ui-discount-100-all-btn" style="width: 3em;">100%</button></th>
+                    <th class="listheading" nowrap width="10">Gesamt </th>
+                    <th id="od-listheading-workers" class="listheading" nowrap width="2" >Mechaniker <div><select id="od-ui-items-workers"></select></div></th>
+                    <th id="od-listheading-status" class="listheading" nowrap width="2" >
+                        Status
+                        <div>
+                            <select id="od-ui-items-status-all">
+                                <option value="gelesen">gelesen</option>
+                                <option value="Bearbeitung">Bearbeitung</option>
+                                <option value="erledigt">erledigt</option>
+                            </select>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div style="float: right; padding-top: 0.5em; padding-bottom: 0.5em;">
+            <table>
+                <tr>
+                    <td>
+                        <label for="od-netamount" class="od-table-label">Netto:</label>
+                    </td>
+                    <td>
+                        <input id="od-netamount" type="text" readonly="readonly" size="10"></input>
+                    </td>
+                    <td>
+                        <label for="od-amount" class="od-table-label" style="margin-left: 2em">Brutto:</label>
+                    </td>
+                    <td>
+                        <input id="od-amount" type="text" readonly="readonly" size="10"></input>
+                    </td>
+                 </tr>
+            </table>
+        </div>
+        </div>
+        <div class="od-comments-div input-panel control-panel">
+        <table class="od-comments">
+            <tr>
+                 <td class="od-table-label">
+                    Interne Bemerkungen zum Kunden
+                </td>
+                <td class="od-table-label">
+                    <span id="od-lxcars-c_text-label">Interne Bemerkungen zum Auto</span>
+                </td>
+                 <td class="od-table-label">
+                    Interne Bemerkungen zur Rechnung
+                </td>
             </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-    <div style="float: right; padding-top: 0.5em; padding-bottom: 0.5em;">
-        <table>
             <tr>
                 <td>
-                    <label for="od-netamount" class="od-table-label">Netto:</label>
+                    <textarea id="od-customer-notes" cols="50" rows="8"></textarea>
+                </td>
+                 <td>
+                    <textarea id="od-lxcars-c_text" cols="50" rows="8"></textarea>
                 </td>
                 <td>
-                    <input id="od-netamount" type="text" readonly="readonly" size="10"></input>
-                </td>
-                <td>
-                    <label for="od-amount" class="od-table-label" style="margin-left: 2em">Brutto:</label>
-                </td>
-                <td>
-                    <input id="od-amount" type="text" readonly="readonly" size="10"></input>
+                    <textarea id="od-oe-intnotes" cols="50" rows="8"></textarea>
                 </td>
              </tr>
         </table>
-    </div>
-    <div class="od-comments-div">
-    <table class="od-comments">
-        <tr>
-             <td class="od-table-label">
-                Interne Bemerkungen zum Kunden
-            </td>
-            <td class="od-table-label">
-                <span id="od-lxcars-c_text-label">Interne Bemerkungen zum Auto</span>
-            </td>
-             <td class="od-table-label">
-                Interne Bemerkungen zur Rechnung
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <textarea id="od-customer-notes" cols="50" rows="8"></textarea>
-            </td>
-             <td>
-                <textarea id="od-lxcars-c_text" cols="50" rows="8"></textarea>
-            </td>
-            <td>
-                <textarea id="od-oe-intnotes" cols="50" rows="8"></textarea>
-            </td>
-         </tr>
-    </table>
     </div>
 </div>
 
 <div id="crm-confirm-order-to-invoice-dialog" style="display:none">
     <p>Aus dem Auftrag eine Rechnung erzeugen?</p>
+    <button class="crm-ui-button" onclick="crmInsertInvoiceFromOrder();">Weiter</button>
+    <button class="crm-ui-button" onclick="$( '#crm-confirm-order-to-invoice-dialog' ).dialog( 'close' );">Abbrechen</button>
 </div>
 
 <div id="crm-confirm-order-to-offer-dialog" style="display:none">
-    <p>Aus dem Auftrag ein Angebot erzeugen?</p>
+    <p style="font-weight: bold">Aus dem Auftrag ein Angebot erzeugen?</p>
+    <button class="crm-ui-button" onclick="crmInsertOfferFromOrder();">Weiter</button>
+    <button class="crm-ui-button" onclick="$( '#crm-confirm-order-to-offer-dialog' ).dialog( 'close' );">Abbrechen</button>
 </div>
 
 <div id="crm-order-email-dialog" style="display:none">
@@ -669,16 +658,18 @@
 </div>
 
 <div id="crm-search-order-view" class="crm-p2" style="display:none">
-    <div class="crm-pb1">
+    <div>
         <button onclick="crmSearchOrderClearView();">Löschen</button>
         <button onclick="crmSearchOrderCloseView();">Schließen</button>
     </div>
     <div id="search-order-hidden"></div>
-    <table id="search-order-form" style="padding-bottom: 1em">
-        <thead></thead>
-        <tbody></tbody>
-    </table>
-    <table class="tbl-list table table-striped" width="100%">
+    <div class="input-panel control-panel">
+        <table id="search-order-form" style="padding-bottom: 1em">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <table class="tbl-list table table-striped" style="min-width: 90%; width: auto;">
         <thead>
         <tr>
             <th>Name</th>
@@ -702,51 +693,57 @@
         <thead></thead>
         <tbody></tbody>
     </table>
+    <div>
+        <button onclick="crmEditArticleSave();">Speichern</button>
+        <button onclick="$( '#crm-edit-article-dialog' ).dialog( 'close' );">Abbrechen</button>
+    </div>
 </div>
 
 <div id="crm-edit-car-dialog" class="crm-p2" style="display:none">
-    <div class="crm-pb1">
+    <div>
         <button onclick="crmEditCarSaveView();">Speichern</button>
         <button onclick="crmEditCarCloseView();">Abbrechen</button>
     </div>
     <div id="edit-car-hidden"></div>
-    <div style="padding: 0.25em">
-        <div class="crm-dialog-error-view" style="color: red"></div>
-    </div>
-    <table>
-        <tr>
-            <td style="vertical-align: top;">
-                <table id="edit-car-form">
-                    <thead></thead>
-                    <tbody></tbody>
-                </table>
-            </td>
-            <td style="vertical-align: top;">
-                <table id="edit-car-kba-form">
-                    <thead></thead>
-                    <tbody></tbody>
-                </table>
-            </td>
-            <td>
-                <div style="padding-left: 2em" id="crm-edit-car-orders-table-div">
-                    <div style="padding-bottom: 1em; font-weight: bold">Neuste Aufträge</div>
-                        <table class="tbl-list table table-striped">
-                            <thead>
-                            <tr>
-                                <th>Datum</th>
-                                <th>Erste Position</th>
-                                <th>Betrag</th>
-                                <th>Nummer</th>
-                            </tr>
-                            </thead>
-                            <tbody id="crm-edit-car-orders-table">
-                            </tbody>
-                        </table>
+    <div class="input-panel control-panel">
+        <div style="padding: 0.25em">
+            <div class="crm-dialog-error-view" style="color: red"></div>
+        </div>
+        <table>
+            <tr>
+                <td style="vertical-align: top;">
+                    <table id="edit-car-form">
+                        <thead></thead>
+                        <tbody></tbody>
+                    </table>
+                </td>
+                <td style="vertical-align: top;">
+                    <table id="edit-car-kba-form">
+                        <thead></thead>
+                        <tbody></tbody>
+                    </table>
+                </td>
+                <td>
+                    <div style="padding-left: 2em" id="crm-edit-car-orders-table-div">
+                        <div style="padding-bottom: 1em; font-weight: bold">Neuste Aufträge</div>
+                            <table class="tbl-list table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Datum</th>
+                                    <th>Erste Position</th>
+                                    <th>Betrag</th>
+                                    <th>Nummer</th>
+                                </tr>
+                                </thead>
+                                <tbody id="crm-edit-car-orders-table">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-            </td>
-         </tr>
-    </table>
+                </td>
+             </tr>
+        </table>
+    </div>
 </div>
 
 <div id="crm-edit-kba-dialog" style="display:none">
@@ -758,75 +755,77 @@
 </div>
 
 <div id="crm-wx-customer-view" class="crm-p2" style="display:none">
-    <div class="crm-pb1">
+    <div>
         <button onclick="crmEditCuVeViewSave()">Speichern</button>
         <button onclick="crmEditCuVeViewCancel();">Abbrechen</button>
     </div>
-    <div id="crm-tabs-main" class="tabwidget">
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <a id="crm-nav-billaddr" class="nav-link active" aria-current="page" href="#crm-tab-billaddr">Rechnungsaddresse</a>
-            </li>
-            <li class="nav-item">
-                <a id="crm-nav-deladdr" class="nav-link" aria-current="page" href="#crm-tab-deladdr">Lieferanschrift</a>
-            </li>
-            <li class="nav-item">
-                <a id="crm-nav-banktax" class="nav-link" aria-current="page" href="#crm-tab-banktax">Bank/Steuer</a>
-            </li>
-            <li class="nav-item">
-                <a id="crm-nav-extras" class="nav-link" aria-current="page" href="#crm-tab-extras">Sonstiges</a>
-            </li>
-            <li class="nav-item">
-                <a id="crm-nav-vars" class="nav-link" aria-current="page" href="#crm-tab-vars">Variablen</a>
-            </li>
-        </ul>
-        <div id="crm-billaddr-cv"></div>
-        <div id="crm-tab-billaddr" class="crm-tab">
-            <table id="billaddr-form">
-                <thead></thead>
-                <tbody></tbody>
-            </table>
-            <table style="padding-top: 1em;">
-                <tr>
-                    <td style="vertical-align: top;">
-                        <div id="car-form-hidden"></div>
-                        <table id="car-form" style="display:none">
-                            <thead></thead>
-                            <tbody></tbody>
-                        </table>
-                    </td>
-                    <td style="vertical-align: top; padding-left: 1em;">
-                        <table id="car-kba-form" style="display:none">
-                            <thead></thead>
-                            <tbody></tbody>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div id="crm-tab-deladdr" class="crm-tab">
-            <table id="deladdr-form">
-                <thead></thead>
-                <tbody></tbody>
-            </table>
-        </div>
-        <div id="crm-tab-banktax" class="crm-tab">
-            <table id="banktax-form">
-                <thead></thead>
-                <tbody></tbody>
-            </table>
-        </div>
-        <div id="crm-tab-extras" class="crm-tab">
-            <table id="extras-form">
-                <thead></thead>
-                <tbody></tbody>
-            </table>
-        </div>
-        <div id="crm-tab-vars" class="crm-tab">
-            <table id="vars-form">
-                <thead></thead>
-                <tbody></tbody>
-            </table>
+    <div class="input-panel control-panel">
+        <div id="crm-tabs-main" class="tabwidget">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a id="crm-nav-billaddr" class="nav-link active" aria-current="page" href="#crm-tab-billaddr">Rechnungsaddresse</a>
+                </li>
+                <li class="nav-item">
+                    <a id="crm-nav-deladdr" class="nav-link" aria-current="page" href="#crm-tab-deladdr">Lieferanschrift</a>
+                </li>
+                <li class="nav-item">
+                    <a id="crm-nav-banktax" class="nav-link" aria-current="page" href="#crm-tab-banktax">Bank/Steuer</a>
+                </li>
+                <li class="nav-item">
+                    <a id="crm-nav-extras" class="nav-link" aria-current="page" href="#crm-tab-extras">Sonstiges</a>
+                </li>
+                <li class="nav-item">
+                    <a id="crm-nav-vars" class="nav-link" aria-current="page" href="#crm-tab-vars">Variablen</a>
+                </li>
+            </ul>
+            <div id="crm-billaddr-cv"></div>
+            <div id="crm-tab-billaddr" class="crm-tab">
+                <table id="billaddr-form">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+                <table style="padding-top: 1em;">
+                    <tr>
+                        <td style="vertical-align: top;">
+                            <div id="car-form-hidden"></div>
+                            <table id="car-form" style="display:none">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                        </td>
+                        <td style="vertical-align: top; padding-left: 1em;">
+                            <table id="car-kba-form" style="display:none">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="crm-tab-deladdr" class="crm-tab">
+                <table id="deladdr-form">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div id="crm-tab-banktax" class="crm-tab">
+                <table id="banktax-form">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div id="crm-tab-extras" class="crm-tab">
+                <table id="extras-form">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div id="crm-tab-vars" class="crm-tab">
+                <table id="vars-form">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

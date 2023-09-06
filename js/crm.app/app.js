@@ -335,7 +335,6 @@ function showCVPA( data ){
     }
 
     if( exists( data.cv ) ){
-        assert( 'showCVPA Title', crmActiveView );
         if( 'crm-wx-base-data' == crmActiveView ) crmSetMainTitle( data.cv.name + ' (' + ( ( data.cv.src == 'C' ) ? kivi.t8( 'Customer' ) : kivi.t8( 'Vendor' ) ) + ')' );
         $( '#crm-wf-edit' ).attr( 'data-src', data.cv.src );
         $( '#crm-wf-edit' ).attr( 'data-id', data.cv.id );
@@ -407,13 +406,11 @@ function crmCVPAgetTitle(){
 }
 
 function crmSetMainTitle( title = null, subtitle = null ){
-    assert( 'crmSetMainTitle', title + subtitle );
     $( '#crm-wx-title' ).html( ( null == title)? crmCVPAgetTitle() : title );
     if( null != subtitle ) $( '#crm-wx-subtitle' ).html( subtitle );
 }
 
 function crmOpenView( id, title = null, subtitle = null ){
-    assert( 'crmOpenView', id );
     crmSetMainTitle( title, subtitle );
     $( '#' + crmActiveView ).hide();
     $( '#' + id ).show();

@@ -1522,7 +1522,7 @@ function crmEditOrderCallCoparts(){
 }
 
 function crmEditOrderCloseView(){
-    crmCloseView( 'crm-edit-order-dialog' , crmPreView );
+    crmCloseView( 'crm-edit-order-dialog' , crmPreView, kivi.t8( 'Search order' ) );
     if( 'crm-wx-base-data' != crmPreView ) crmRefreshAppViewAction();
 }
 

@@ -3,7 +3,7 @@
 
 function assert( info, message = null, assertion = true ){
     if( assertion ){
-        console.info( '-->' );
+        console.info( '---assertation-->' );
         console.info( info );
         if( null != message ) console.info( message );
         console.info( '<--' );
@@ -110,7 +110,6 @@ $( function(){
         minLength: 3,
         source: "crm/ajax/crm.app.php?action=fastSearch",
         select: function( e, ui ) {
-            console.info( ui );
             crmRefreshAppView( ui.item.src, ui.item.id );
         }
     });
@@ -336,7 +335,8 @@ function showCVPA( data ){
     }
 
     if( exists( data.cv ) ){
-        $( '#crm-wx-title' ).html( data.cv.name + ' (' + ( ( data.cv.src == 'C' ) ? kivi.t8( 'Customer' ) : kivi.t8( 'Vendor' ) ) + ')' );
+        assert( 'showCVPA Title', crmActiveView );
+        if( 'crm-wx-base-data' == crmActiveView ) crmSetMainTitle( data.cv.name + ' (' + ( ( data.cv.src == 'C' ) ? kivi.t8( 'Customer' ) : kivi.t8( 'Vendor' ) ) + ')' );
         $( '#crm-wf-edit' ).attr( 'data-src', data.cv.src );
         $( '#crm-wf-edit' ).attr( 'data-id', data.cv.id );
     }
@@ -406,9 +406,15 @@ function crmCVPAgetTitle(){
     return $( '#crm-cvpa-name' ).val();
 }
 
-function crmOpenView( id, title = null, subtitle = null ){
+function crmSetMainTitle( title = null, subtitle = null ){
+    assert( 'crmSetMainTitle', title + subtitle );
     $( '#crm-wx-title' ).html( ( null == title)? crmCVPAgetTitle() : title );
     if( null != subtitle ) $( '#crm-wx-subtitle' ).html( subtitle );
+}
+
+function crmOpenView( id, title = null, subtitle = null ){
+    assert( 'crmOpenView', id );
+    crmSetMainTitle( title, subtitle );
     $( '#' + crmActiveView ).hide();
     $( '#' + id ).show();
     crmPreView = crmActiveView;
@@ -416,9 +422,9 @@ function crmOpenView( id, title = null, subtitle = null ){
     window.history.pushState( { 'view': crmPreView }, '', location.protocol + '//' + location.host + location.pathname + (location.search?location.search : '') + '#' + id );
 }
 
-function crmCloseView( id, next = 'crm-wx-base-data' ){
+function crmCloseView( id, next = 'crm-wx-base-data', title = null, subtitle = '' ){
     crmActiveView = id;
-    crmOpenView( next, null, '' );
+    crmOpenView( next, title, subtitle );
 }
 
 window.onpopstate = function( e ){

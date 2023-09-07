@@ -1407,7 +1407,11 @@ function crmEditOrderCallCoparts(){
 }
 
 function crmEditOrderCloseView(){
-    crmCloseView( 'crm-edit-order-dialog' , crmPreView, kivi.t8( 'Search order' ) );
+    const fx = function(){
+        crmCloseView( 'crm-edit-order-dialog' , crmPreView, kivi.t8( 'Search order' ) );
+    }
+    if( 'crm-search-order-view' == crmPreView ) crmSearchOrder( fx );
+    else fx();
     if( 'crm-wx-base-data' != crmPreView ) crmRefreshAppViewAction();
 }
 

@@ -703,6 +703,7 @@
     <div>
         <button onclick="crmEditCarSaveView();">Speichern</button>
         <button onclick="crmEditCarCloseView();">Abbrechen</button>
+        <button id="edit_car_new_order_btn" onclick="crmEditCarNewOrder();" style="margin-left: 2em">Neuer Auftrage</button>
     </div>
     <div id="edit-car-hidden"></div>
     <div class="input-panel control-panel">

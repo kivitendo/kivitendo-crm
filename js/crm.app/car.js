@@ -481,6 +481,11 @@ function crmEditCarDlg( crmData = null ){
     crmOpenView( 'crm-edit-car-dialog' );
 }
 
+function crmEditCarNewOrder(){
+    crmCloseView( 'crm-edit-car-dialog' );
+    crmNewOrderForCar( $( '#edit_car-c_id' ).val() );
+}
+
 function crmEditCarSaveView(){
     console.info( 'Save car' );
 

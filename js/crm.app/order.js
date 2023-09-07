@@ -1263,15 +1263,6 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         }
 
         crmEditOrderPrinterList( crmOrderTypeEnum.Invoice, crmData );
-//        $( '#od-inv-printers' ).html( '' );
-//        $( '#od-inv-printers' ).append( '<li><a value="screen" href="#" onclick="crmPrintOrder( this );">Bildschirm</a></li>' );
-//        if( exists( crmData.bill.printers ) ){
-//            for( let printer of crmData.bill.printers ){
-//                $( '#od-inv-printers' ).append( '<li><a value="' + printer.id  + '" href="#" onclick="crmPrintOrder( this );">' + printer.printer_description + '</a></li>' );
-//                if( $( '#crm-userconf-defprn' ).val() == printer.id ) $( '#od-inv-current-printer' ).text( printer.printer_description );
-//            }
-//            $( '#od-inv-current-printer' ).attr( 'value', $( '#crm-userconf-defprn' ).val() );
-//        }
     }
     else if( crmOrderTypeEnum.Offer == crmOrderType ){
         $( '#od-oe-workflow' ).hide();
@@ -1316,15 +1307,6 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         }
 
         crmEditOrderPrinterList( crmOrderTypeEnum.Offer, crmData );
-//        $( '#od-off-printers' ).html( '' );
-//        let printers = undefined;
-//        if( ( exists( crmData.offer ) && exists( printers = crmData.offer.printers ) ) || exists( printers = crmData.printers ) ){
-//            for( let printer of printers ){
-//                if( $( '#crm-userconf-defprn' ).val() == printer.id ) $( '#od-off-current-printer' ).text( printer.printer_description.substring( 0, 27 ) );
-//                $( '#od-off-printers' ).append( '<div class="layout-actionbar-action layout-actionbar-submit" value="' + printer.id  + '" onclick="crmEditOrderSelectPrinter( this );">' + printer.printer_description + '</div>' );
-//            }
-//            $( '#od-off-current-printer' ).attr( 'value', $( '#crm-userconf-defprn' ).val() );
-//        }
      }
 
     $( '#od-ui-items-workers' ).html( '' );

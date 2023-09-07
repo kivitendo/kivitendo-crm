@@ -587,6 +587,7 @@ function crmSaveOrderType( dbUpdateData ){
     dbUpdateData['customer']['notes'] = $( '#od-customer-notes' ).val();
     dbUpdateData['lxc_cars']['c_text'] = $( '#od-lxcars-c_text' ).val();
     dbUpdateData['oe']['intnotes'] = $( '#od-oe-intnotes' ).val();
+    dbUpdateData['oe']['notes'] = $( '#od-oe-notes' ).val();
     dbUpdateData['oe']['shippingpoint'] = $( '#od_lxcars_c_ln' ).val();// für Kilometerstand in Druckvorlage od-lxcars-c_ln
     dbUpdateData['oe']['shipvia'] = $( '#od-oe-km_stnd' ).val();// für Kennzeichen in Druckvorlage
     dbUpdateData['oe']['amount'] = kivi.parse_amount( $( '#od-amount' ).val() );
@@ -1183,6 +1184,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-lxcars-c_text' ).val( crmData.order.common.int_car_notes );
             $( '#od-customer-notes' ).val( crmData.order.common.int_cu_notes );
             $( '#od-oe-intnotes' ).val( crmData.order.common.intnotes );
+            $( '#od-oe-notes' ).val( crmData.order.common.notes );
             coparts['c_hsn'] = crmData.order.common.c_2;
             coparts['c_tsn'] = crmData.order.common.c_3;
             coparts['c_fin'] = crmData.order.common.c_fin;

@@ -613,8 +613,11 @@
                     <td class="od-table-label">
                         <span id="od-lxcars-c_text-label">Interne Bemerkungen zum Auto</span>
                     </td>
-                     <td class="od-table-label">
+                    <td class="od-table-label">
                         Interne Bemerkungen zur Rechnung
+                    </td>
+                    <td class="od-table-label">
+                        Bemerkungen zur Rechnung
                     </td>
                 </tr>
                 <tr>
@@ -626,6 +629,9 @@
                     </td>
                     <td>
                         <textarea id="od-oe-intnotes" cols="50" rows="8"></textarea>
+                    </td>
+                    <td>
+                        <textarea id="od-oe-notes" cols="50" rows="8"></textarea>
                     </td>
                  </tr>
             </table>

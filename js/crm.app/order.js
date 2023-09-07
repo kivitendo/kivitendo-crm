@@ -892,8 +892,7 @@ function crmInsertOfferFromOrder(){
     });
 }
 
-function crmEmailOrder( e ){ // was steht in 'e'??
-    //console.info( e );
+function crmEmailOrder( ){
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
@@ -940,19 +939,7 @@ function crmEmailOrder( e ){ // was steht in 'e'??
                 position: { my: "top", at: "top+250" },
                 open: function(){
                     $( this ).css( 'maxWidth', window.innerWidth );
-                },
-                buttons:[{
-                    text: kivi.t8( 'Send email' ),
-                    click: function(){
-                        crmPrintOrder( e );
-                        $( this ).dialog( "close" );
-                    }
-                },{
-                    text: kivi.t8( 'Cancel' ),
-                    click: function(){
-                        $( this ).dialog( "close" );
-                    }
-                }]
+                }
             }).dialog( 'open' ).resize();
         },
         error: function( xhr, status, error ){
@@ -961,7 +948,9 @@ function crmEmailOrder( e ){ // was steht in 'e'??
     });
 }
 
-function crmPrintOrder( e ){
+const crmOrderPrintTargetEnum = { Printer: 0, Email: 1, Screen: 2 };
+
+function crmPrintOrder( target ){
     let data = {};
     if( crmOrderTypeEnum.Invoice == crmOrderType ){
         data['id'] = ''+  $( '#od-inv-id' ).val();
@@ -1045,14 +1034,14 @@ function crmPrintOrder( e ){
     data['rowcount'] = runningnumber;
     if( crmOrderTypeEnum.Invoice == crmOrderType ) data['formname'] = 'invoice';
     else if( crmOrderTypeEnum.Offer == crmOrderType ) data['formname'] = 'sales_quotation';
-     data['format'] = 'pdf';
-    if( 'screen' == $( e ).attr( 'value' )){
+    data['format'] = 'pdf';
+    if( crmOrderPrintTargetEnum.Screen == target ){
             data['media'] = 'screen';
             data['printer_id'] = '';
     }
     else{
             data['media'] = 'printer';
-            if( 'email' !== $( e ).attr( 'value' ) ) data['printer_id'] = '' + $( e ).attr( 'value' );
+            if( crmOrderPrintTargetEnum.Email != target ) data['printer_id'] = '' + $( '#od-off-current-printer' ).attr( 'value' );
     }
     data['copies'] = '1';
     data['action'] = 'print';
@@ -1066,11 +1055,11 @@ function crmPrintOrder( e ){
         $( '#' + formId ).append('<input type="hidden" name="' + key + '" value="' + value + '"></input>');
     });
 
-    if( 'screen' == $( e ).attr( 'value' ) ){
+    if( crmOrderPrintTargetEnum.Screen == target ){
         $( '#' + formId ).submit();
     }
     else{
-        if( 'email' == $( e ).attr( 'value' ) ){
+        if( crmOrderPrintTargetEnum.Email == target ){
             data['action'] = 'send_sales_purchase_email';
             data['email_form.to'] = $( '#order_email-recipient' ).val();
             data['email_form.subject'] = $( '#order_email-subject' ).val();
@@ -1087,14 +1076,15 @@ function crmPrintOrder( e ){
             data: data,
             success: function( data ){
                 console.info( 'printed' );
+                if( exists( data ) && exists( data.error ) ){
+                    $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Send e-mail' ), kivi.t8( 'Error:' ) + ' ' + kivi.t8( 'The email was not sent due to the following error: ' ) + data.error );
+                }
             },
             error: function( xhr, status, error ){
                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder()', xhr.responseText );
             }
         });
     }
-
-    $( '#od-inv-printers-menu' ).menu( 'collapseAll' );
 
     if( crmOrderTypeEnum.Invoice == crmOrderType ){
         $.ajax({
@@ -1272,15 +1262,16 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-oe-intnotes' ).val( crmData.common.intnotes );
         }
 
-        $( '#od-inv-printers' ).html( '' );
-        $( '#od-inv-printers' ).append( '<li><a value="screen" href="#" onclick="crmPrintOrder( this );">Bildschirm</a></li>' );
-        if( exists( crmData.bill.printers ) ){
-            for( let printer of crmData.bill.printers ){
-                $( '#od-inv-printers' ).append( '<li><a value="' + printer.id  + '" href="#" onclick="crmPrintOrder( this );">' + printer.printer_description + '</a></li>' );
-                if( $( '#crm-userconf-defprn' ).val() == printer.id ) $( '#od-inv-current-printer' ).text( printer.printer_description );
-            }
-            $( '#od-inv-current-printer' ).attr( 'value', $( '#crm-userconf-defprn' ).val() );
-        }
+        crmEditOrderPrinterList( crmOrderTypeEnum.Invoice, crmData );
+//        $( '#od-inv-printers' ).html( '' );
+//        $( '#od-inv-printers' ).append( '<li><a value="screen" href="#" onclick="crmPrintOrder( this );">Bildschirm</a></li>' );
+//        if( exists( crmData.bill.printers ) ){
+//            for( let printer of crmData.bill.printers ){
+//                $( '#od-inv-printers' ).append( '<li><a value="' + printer.id  + '" href="#" onclick="crmPrintOrder( this );">' + printer.printer_description + '</a></li>' );
+//                if( $( '#crm-userconf-defprn' ).val() == printer.id ) $( '#od-inv-current-printer' ).text( printer.printer_description );
+//            }
+//            $( '#od-inv-current-printer' ).attr( 'value', $( '#crm-userconf-defprn' ).val() );
+//        }
     }
     else if( crmOrderTypeEnum.Offer == crmOrderType ){
         $( '#od-oe-workflow' ).hide();
@@ -1324,18 +1315,16 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-oe-intnotes' ).val( '' );
         }
 
-        $( '#od-off-printers' ).html( '' );
-        //$( '#od-off-printers' ).append( '<li><a value="screen" href="#" onclick="crmPrintOrder( this );">Bildschirm</a></li>' );
-        $( '#od-off-printers' ).append( '<div class="layout-actionbar-action layout-actionbar-submit" value="screen" onclick="crmPrintOrder( this );">Bildschirm</div>' );
-        let printers = undefined;
-        if( ( exists( crmData.offer ) && exists( printers = crmData.offer.printers ) ) || exists( printers = crmData.printers ) ){
-            for( let printer of printers ){
-                if( $( '#crm-userconf-defprn' ).val() == printer.id ) $( '#od-off-current-printer' ).text( printer.printer_description );
-                //$( '#od-off-printers' ).append( '<li><a value="' + printer.id  + '" href="#" onclick="crmPrintOrder( this );">' + printer.printer_description + '</a></li>' );
-                $( '#od-off-printers' ).append( '<div class="layout-actionbar-action layout-actionbar-submit" value="' + printer.id  + '" onclick="crmPrintOrder( this );">' + printer.printer_description + '</div>' );
-            }
-            $( '#od-off-current-printer' ).attr( 'value', $( '#crm-userconf-defprn' ).val() );
-        }
+        crmEditOrderPrinterList( crmOrderTypeEnum.Offer, crmData );
+//        $( '#od-off-printers' ).html( '' );
+//        let printers = undefined;
+//        if( ( exists( crmData.offer ) && exists( printers = crmData.offer.printers ) ) || exists( printers = crmData.printers ) ){
+//            for( let printer of printers ){
+//                if( $( '#crm-userconf-defprn' ).val() == printer.id ) $( '#od-off-current-printer' ).text( printer.printer_description.substring( 0, 27 ) );
+//                $( '#od-off-printers' ).append( '<div class="layout-actionbar-action layout-actionbar-submit" value="' + printer.id  + '" onclick="crmEditOrderSelectPrinter( this );">' + printer.printer_description + '</div>' );
+//            }
+//            $( '#od-off-current-printer' ).attr( 'value', $( '#crm-userconf-defprn' ).val() );
+//        }
      }
 
     $( '#od-ui-items-workers' ).html( '' );
@@ -1348,6 +1337,36 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
     }
 
     crmOpenView( 'crm-edit-order-dialog', null, ' - ' + title );
+}
+
+function crmEditOrderPrinterList( type, crmData ){
+    let sel = '';
+    let list = '';
+    let printers = undefined;
+
+    if( crmOrderTypeEnum.Offer == type ){
+        sel = '#od-off-current-printer';
+        list = '#od-off-printers';
+    }
+    else if( crmOrderTypeEnum.Invoice == type ){
+        sel = '#od-inv-current-printer';
+        list = '#od-inv-printers';
+    }
+    else return;
+
+    $( list ).html( '' );
+    if( ( exists( crmData.offer ) && exists( printers = crmData.offer.printers ) ) || exists( printers = crmData.printers ) || ( exists( crmData.bill ) && exists( printers = crmData.bill.printers ) ) ){
+        for( let printer of printers ){
+            if( $( '#crm-userconf-defprn' ).val() == printer.id ) $( sel ).text( printer.printer_description.substring( 0, 27 ) );
+            $( list ).append( '<div class="layout-actionbar-action layout-actionbar-submit" value="' + printer.id  + '" onclick="crmEditOrderSelectPrinter( this );">' + printer.printer_description + '</div>' );
+        }
+        $( sel ).attr( 'value', $( '#crm-userconf-defprn' ).val() );
+    }
+}
+
+function crmEditOrderSelectPrinter( e ){
+    $( '#od-off-current-printer' ).text( $( e ).text().substring( 0, 27 ) );
+    $( '#od-off-current-printer' ).attr( 'value', $( e ).attr( 'value' ) );
 }
 
 function crmEditOrderCallPrinter1(){

@@ -293,8 +293,9 @@
         </div>
         <div class="layout-actionbar" style="top: 11em; left: 350px; border: 0;">
            <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div id="od-off-current-printer" class="layout-actionbar-action layout-actionbar-submit" style="width: auto">Drucken</div><span></span></div><div id="od-off-printers" class="layout-actionbar-combobox-list"></div></div>
-            <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crm();">Drucken</div>
-            <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crm();">PDF-Druckvorschau</div>
+            <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmPrintOrder( crmOrderPrintTargetEnum.Printer );">Drucken</div>
+            <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmPrintOrder( crmOrderPrintTargetEnum.Screen );">PDF-Druckvorschau</div>
+            <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEmailOrder()">E-Mail</div>
         </div>
     </div>
 
@@ -302,36 +303,25 @@
         <form id="od-off-print-form" method="post" action="oe.pl">
         </form>
     </div>
-     <table id="od-inv-menus" style="margin-bottom: 1em;">
-        <tr>
-            <td style="vertical-align: bottom;">
-                <ul id = "od-inv-workflow">
-                    <li><a href = "#" style="font-weight: bold;">Workflow</a>
-                        <ul>
-                            <li><a id="od-inv-reuse-btn" href = "#">Wiederverwenden*</a></li>
-                            <li><a id="od-inv-close-btn" href = "#">Vorlage für Auftrag*</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </td>
-            <td style="vertical-align: bottom;">
-                <span style="font-weight: bold;">Drucken</span>
-                <ul id="od-inv-printers-menu" >
-                    <li><a id="od-inv-current-printer" value="screen" href = "#" onclick="crmPrintOrder( this );">Bildschrim</a>
-                        <ul id="od-inv-printers" >
-                        </ul>
-                    </li>
-                </ul>
-            </td>
-            <td>
-                <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" style="margin-top: 1em" onclick="crmEmailOrder( this )" value="email"><span class="ui-button-text">E-Mail</span></button>
-            </td>
-            <div  style="display:none">
-                <form id="od-inv-print-form" method="post" action="is.pl">
-                </form>
-            </div>
-        </tr>
-    </table>
+
+    <div id="od-inv-menus">
+        <div class="layout-actionbar" style="top: 11em; left: 1em; border: 0;">
+            <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCloseView();">Schließen</div>
+            <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Workflow</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit" onclick="crmConfirmXYZ();">Wiederverwenden*</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order" onclick="crmConfirmXYZ();">Vorlage für Auftrag*</div></div></div>
+        </div>
+        <div class="layout-actionbar" style="top: 11em; left: 350px; border: 0;">
+           <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div id="od-inv-current-printer" class="layout-actionbar-action layout-actionbar-submit" style="width: auto">Drucken</div><span></span></div><div id="od-inv-printers" class="layout-actionbar-combobox-list"></div></div>
+            <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmPrintOrder( crmOrderPrintTargetEnum.Printer );">Drucken</div>
+            <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmPrintOrder( crmOrderPrintTargetEnum.Screen );">PDF-Druckvorschau</div>
+            <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEmailOrder()">E-Mail</div>
+        </div>
+    </div>
+
+    <div  style="display:none">
+        <form id="od-inv-print-form" method="post" action="is.pl">
+        </form>
+    </div>
+
     <div class="od-common-div input-panel control-panel" style="margin-bottom: 0.5em">
         <input id="od-customer-id" type="hidden"></input>
         <input id="od-lxcars-c_id" type="hidden"></input>
@@ -655,6 +645,10 @@
         <thead></thead>
         <tbody></tbody>
     </table>
+    <div class="crm-pt1">
+        <button class="crm-ui-button" onclick="crmPrintOrder( crmOrderPrintTargetEnum.Email ); $( '#crm-order-email-dialog' ).dialog( 'close' );">E-Mail verschicken</button>
+        <button class="crm-ui-button" onclick="$( '#crm-order-email-dialog' ).dialog( 'close' );">Abbrechen</button>
+    </div>
 </div>
 
 <div id="crm-search-order-view" class="crm-p2" style="display:none">
@@ -693,9 +687,9 @@
         <thead></thead>
         <tbody></tbody>
     </table>
-    <div>
-        <button onclick="crmEditArticleSave();">Speichern</button>
-        <button onclick="$( '#crm-edit-article-dialog' ).dialog( 'close' );">Abbrechen</button>
+    <div class="crm-pt1">
+        <button class="crm-ui-button" onclick="crmEditArticleSave();">Speichern</button>
+        <button class="crm-ui-button" onclick="$( '#crm-edit-article-dialog' ).dialog( 'close' );">Abbrechen</button>
     </div>
 </div>
 

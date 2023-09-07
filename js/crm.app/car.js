@@ -104,7 +104,7 @@ const crmDoCheckLn = function ( chk_c_ln, c_ln, dialog, unique = false ){
 }
 
 const crmDoCheckHsn = function ( chk_c_2, c_2, dialog){
-    if( $( chk_c_2 ).prop( 'checked' ) && !crmCheckHsn( $( c_2 ).val() ) ){
+    if( ( $( chk_c_2 ).prop( 'checked' ) || $( c_2 ).val().length > 4 ) && !crmCheckHsn( $( c_2 ).val() ) ){
         $( dialog ).crmDialogShowError( 'edit-car-hsn-check', 'Die Schlüsselnummer zu 2.1 ist fehlerhaft! Folgendes Format verwenden: 0600' );
         $( c_2 ).focus();
         return false;

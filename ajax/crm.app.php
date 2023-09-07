@@ -89,20 +89,20 @@ function searchCarLicense(){
 function searchCarKbaValue( $value ){
     if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
         $term = $_GET['term'];
-        echo $GLOBALS['dbh']->getAll( "SELECT DISTINCT ON ( ".$value." ) ".$value." AS value FROM oe WHERE ".$value." ILIKE '%".$term."%' LIMIT 5", true);
+        echo $GLOBALS['dbh']->getAll( "SELECT DISTINCT ON ( ".$value." ) ".$value." AS value FROM lxckba WHERE ".$value." ILIKE '%".$term."%' LIMIT 5", true);
     }
 }
 
 function searchCarManuf(){
-    searchCarKbaValue( 'car_manuf' );
+    searchCarKbaValue( 'hersteller' );
 }
 
 function searchCarType(){
-    searchCarKbaValue( 'car_type' );
+    searchCarKbaValue( 'name' );
 }
 
 function searchCarBrand(){
-    echo '{}';
+    searchCarKbaValue( 'marke' );
 }
 
 function searchOrder( $data ){
@@ -115,17 +115,17 @@ function searchOrder( $data ){
         $where .= "cars.c_ln ILIKE '%".$data['car_license']."%' AND ";
     }
 
-//    if( $data['car_manuf'] != '' ){
-//        $where .= "kbaall.hersteller ILIKE '%".$data['car_manuf']."%' AND ";
-//    }
-//
-//    if( $data['car_type'] != '' ){
-//        $where .= "kbaall.name ILIKE '%".$data['car_type']."%' AND ";
-//    }
-//
-//    if( $data['car_brand'] != '' ){
-//        $where .= "kbaall.marke ILIKE '%".$data['car_brand']."%' AND ";
-//    }
+    if( $data['car_manuf'] != '' ){
+        $where .= "cars.hersteller ILIKE '%".$data['car_manuf']."%' AND ";
+    }
+
+    if( $data['car_type'] != '' ){
+        $where .= "cars.name ILIKE '%".$data['car_type']."%' AND ";
+    }
+
+    if( $data['car_brand'] != '' ){
+        $where .= "cars.marke ILIKE '%".$data['car_brand']."%' AND ";
+    }
 
     if( $data['date_from'] != '' ){
         $where .= "oe.transdate >= '".$data['date_from']."' AND ";

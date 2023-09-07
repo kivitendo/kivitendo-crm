@@ -78,8 +78,15 @@ function crmSearchOrder( onSuccess = null ){
 
             $( '#crm-search-order-table' ).html( '' );
             let listrow0 = false;
+            let bgcolor = null;
             $.each( data.rs, function( key, value ){
-                $( '#crm-search-order-table' ).append( '<tr id="' + value.id +'" class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' +  value.owner + '</td><td>' + value.c_ln  + '</td><td>' + value.description  + '</td><td>' + getValueNotNull( value.car_manuf ) + '</td><td>' + getValueNotNull( value.car_type ) + '</td><td>' + value.transdate + '</td><td>' + value.ordnumber + '</td><td>' + value.status + '</td></tr>' );
+                if( 'angenommen' == value.status && 'Auto hier' == value.car_status ) bgcolor = 'rgb(255, 255, 0)';
+                else if( 'angenommen' == value.status && 'Auto nicht hier' == value.car_status ) bgcolor = 'rgb(255, 0, 0)';
+                else if( 'angenommen' == value.status && 'Bestellung' == value.car_status ) bgcolor = 'lightskyblue';
+                else if( 'bearbeitet' == value.status && 'Auto hier' == value.car_status ) bgcolor = 'rgb(0, 128, 0)';
+                else if( 'bearbeitet' == value.status && 'Auto nicht hier' == value.car_status ) bgcolor = 'grey';
+                else bgcolor = null;
+                $( '#crm-search-order-table' ).append( '<tr id="' + value.id +'" class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"' +( (bgcolor != null)? 'style="background-color: ' + bgcolor + '"' : '' ) + '><td>' +  value.owner + '</td><td>' + value.c_ln  + '</td><td>' + value.description  + '</td><td>' + getValueNotNull( value.car_manuf ) + '</td><td>' + getValueNotNull( value.car_type ) + '</td><td>' + value.transdate + '</td><td>' + value.ordnumber + '</td><td>' + value.status + ( ( !isEmpty( value.status ) && !isEmpty( value.car_status ) )? ' / ' : '' ) + value.car_status + '</td></tr>' );
             });
             $( '#crm-search-order-table tr' ).click( function(){
                 $.ajax({

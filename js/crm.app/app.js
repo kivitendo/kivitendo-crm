@@ -76,11 +76,6 @@ function crmGetHistory( refresh = true ){
                         crmRefreshAppView( entry[2], entry[0] );
                     });
                 }
-                var histlist = $('#crm-hist-last').clone();
-                $( '#crm-hist-last' ).replaceWith($( '#crm-hist-last' ).clone() );
-                $( '#crm-hist-last' ).click( function(){
-                    getCVPA( data[0][2], data[0][0] );
-                });
                 if( refresh ) getCVPA( data[0][2], data[0][0] );// ( CV, id )
             }
         },

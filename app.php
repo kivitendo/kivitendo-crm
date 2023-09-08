@@ -292,7 +292,7 @@
             <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Workflow</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit" onclick="crmConfirmXYZ();">Wiederverwenden*</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order" onclick="crmConfirmXYZ();">Vorlage für Auftrag*</div></div></div>
         </div>
         <div class="layout-actionbar" style="top: 140px; left: 350px; border: 0;">
-           <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div id="od-off-current-printer" class="layout-actionbar-action layout-actionbar-submit" style="width: auto">Drucken</div><span></span></div><div id="od-off-printers" class="layout-actionbar-combobox-list"></div></div>
+           <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div id="od-off-current-printer" value="" class="layout-actionbar-action layout-actionbar-submit" style="width: auto">Drucken</div><span></span></div><div id="od-off-printers" class="layout-actionbar-combobox-list"></div></div>
             <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmPrintOrder( crmOrderPrintTargetEnum.Printer );">Drucken</div>
             <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmPrintOrder( crmOrderPrintTargetEnum.Screen );">PDF-Druckvorschau</div>
             <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEmailOrder()">E-Mail</div>
@@ -310,7 +310,7 @@
             <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Workflow</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit" onclick="crmConfirmXYZ();">Wiederverwenden*</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order" onclick="crmConfirmXYZ();">Vorlage für Auftrag*</div></div></div>
         </div>
         <div class="layout-actionbar" style="top: 140px; left: 350px; border: 0;">
-           <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div id="od-inv-current-printer" class="layout-actionbar-action layout-actionbar-submit" style="width: auto">Drucken</div><span></span></div><div id="od-inv-printers" class="layout-actionbar-combobox-list"></div></div>
+           <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div id="od-inv-current-printer" value="" class="layout-actionbar-action layout-actionbar-submit" style="width: auto">Drucken</div><span></span></div><div id="od-inv-printers" class="layout-actionbar-combobox-list"></div></div>
             <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmPrintOrder( crmOrderPrintTargetEnum.Printer );">Drucken</div>
             <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmPrintOrder( crmOrderPrintTargetEnum.Screen );">PDF-Druckvorschau</div>
             <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEmailOrder()">E-Mail</div>

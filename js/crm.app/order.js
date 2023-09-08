@@ -951,7 +951,7 @@ function crmEmailOrder( ){
                 width: 'auto',
                 height: 'auto',
                 modal: true,
-                title: kivi.t8( 'Send email' ),
+                title: kivi.t8( 'Send e-mail' ),
                 position: { my: "top", at: "top+250" },
                 open: function(){
                     $( this ).css( 'maxWidth', window.innerWidth );
@@ -1057,7 +1057,7 @@ function crmPrintOrder( target ){
     }
     else{
             data['media'] = 'printer';
-            if( crmOrderPrintTargetEnum.Email != target ) data['printer_id'] = '' + $( '#od-off-current-printer' ).attr( 'value' );
+            if( crmOrderPrintTargetEnum.Email != target ) data['printer_id'] = '' + ( ( crmOrderTypeEnum.Offer == crmOrderType )? $( '#od-off-current-printer' ).attr( 'value' ) : $( '#od-inv-current-printer' ).attr( 'value' ) );
     }
     data['copies'] = '1';
     data['action'] = 'print';
@@ -1093,7 +1093,7 @@ function crmPrintOrder( target ){
             success: function( data ){
                 console.info( 'printed' );
                 if( exists( data ) && exists( data.error ) ){
-                    $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Send e-mail' ), kivi.t8( 'Error:' ) + ' ' + kivi.t8( 'The email was not sent due to the following error: ' ) + data.error );
+                    $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Print or send e-mail' ), kivi.t8( 'Error:' ) + ' ' + kivi.t8( 'The following error is occurred: ' ) + data.error );
                 }
             },
             error: function( xhr, status, error ){

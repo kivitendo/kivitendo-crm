@@ -78,9 +78,6 @@ function crmEditArticleDlg( field  ){
         data: { action: 'dataForNewArticle', data:{ 'part_type': $( '#edit_article-part_type' ).val(), 'parts_id': $( '#edit_article-parts_id' ).val() } },
         type: "POST",
         success: function( crmData ){
-            console.info( 'article crmData' );
-            console.info( crmData );
-
             $( '#edit_article-unit' ).html( '' );
             for(let unit of crmData.common.units){
                 $( '#edit_article-unit' ).append( new Option( unit.name, unit.name ) );

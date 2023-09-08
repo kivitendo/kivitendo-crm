@@ -3,8 +3,7 @@
 
 function assert( info, message = null, assertion = true ){
     if( assertion ){
-        console.info( '---assertation-->' );
-        console.info( info );
+        console.info( '-- ' + info + ' -->' );
         if( null != message ) console.info( message );
         console.info( '<--' );
     }

@@ -72,7 +72,14 @@ function crmEditOrderKeyup(e){
            if( '' === part_id ){
                 field.css("background-color","red");
                 $( '#edit_article-description' ).val( desc );
-                crmEditArticleDlg( field );
+                if( !isNaN( desc ) && null != crmEditOrderFirstFoundArticle){
+                    const row = $( ':focus' ).parent().parent();
+                    const res = crmCompleteInsertOrderPos( row, crmEditOrderFirstFoundArticle  );
+                    if( res ) $( '[name=od-item-description]' ).filter( ':last' ).focus();
+                }
+                else{
+                    crmEditArticleDlg( field );
+                }
             }
             else{
                 field.css( "background-color", "" );
@@ -138,6 +145,8 @@ $( '#od-ui-discount-100-all-btn' ).click( function(){
     crmCalcOrderPos();
     crmSaveOrder();
 });
+
+var crmEditOrderFirstFoundArticle = null;
 
 function crmAddOrderItem( dataRow ){
     /* Ist es nicht sinnvoller die workers einmalig beim erzeugen / holen des Auftrages anstatt mit jeder Zeile zu holen? */
@@ -228,6 +237,12 @@ function crmAddOrderItem( dataRow ){
             if( !res ) return false;
             $( '[name=od-item-description]' ).filter( ':last' ).focus();
             return true;
+        },
+        response: function( e, ui ){
+            crmEditOrderFirstFoundArticle = null;
+            if( exists( ui.content ) && ui.content.length > 0 ){
+                crmEditOrderFirstFoundArticle = ui.content[0];
+            }
         }
     });
 

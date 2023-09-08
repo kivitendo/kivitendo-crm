@@ -73,6 +73,7 @@ function crmGetHistory( refresh = true ){
                     $( '#crm-history-list' ).append( '<div class="layout-actionbar-action layout-actionbar-submit" data-src="' + entry[2] +'" data-id="' + entry[0] + '" id="' + id + '">' + entry[1] + '</div>');
                     $( '#' + id ).click( function(){
                         crmRefreshAppView( entry[2], entry[0] );
+                        crmCloseView();
                     });
                 }
                 if( refresh ) getCVPA( data[0][2], data[0][0] );// ( CV, id )
@@ -105,6 +106,7 @@ $( function(){
         source: "crm/ajax/crm.app.php?action=fastSearch",
         select: function( e, ui ) {
             crmRefreshAppView( ui.item.src, ui.item.id );
+            crmCloseView();
         }
     });
 });
@@ -413,8 +415,8 @@ function crmOpenView( id, title = null, subtitle = null ){
     window.history.pushState( { 'view': crmPreView }, '', location.protocol + '//' + location.host + location.pathname + (location.search?location.search : '') + '#' + id );
 }
 
-function crmCloseView( id, next = 'crm-wx-base-data', title = null, subtitle = '' ){
-    crmActiveView = id;
+function crmCloseView( id = null, next = 'crm-wx-base-data', title = null, subtitle = '' ){
+    if( null != id ) crmActiveView = id;
     crmOpenView( next, title, subtitle );
 }
 

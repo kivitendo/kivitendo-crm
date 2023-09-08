@@ -1210,6 +1210,14 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             coparts['customer_street'] = crmData.order.common.customer_street;
             coparts['customer_zipcode'] = crmData.order.common.customer_zipcode;
             coparts['customer_city'] = crmData.order.common.customer_city;
+            $( '#show_car_data-c_ln' ).val( crmData.order.common.c_ln );
+            $( '#show_car_data-hersteller' ).val( crmData.order.common.hersteller );
+            $( '#show_car_data-typ' ).val( crmData.order.common.kba_typ );
+            $( '#show_car_data-hsn' ).val( crmData.order.common.c_2 );
+            $( '#show_car_data-tsn' ).val( crmData.order.common.c_3 );
+            $( '#show_car_data-fin' ).val( crmData.order.common.c_fin );
+            $( '#show_car_data-hubraum' ).val( crmData.order.common.hubraum );
+            $( '#show_car_data-leistung' ).val( crmData.order.common.leistung );
         }
         else{
             title = kivi.t8( 'New order' );
@@ -1433,6 +1441,24 @@ function crmEditOrderCloseView(){
     if( 'crm-search-order-view' == crmPreView ) crmSearchOrder( fx );
     else fx();
     if( 'crm-wx-base-data' != crmPreView ) crmRefreshAppViewAction();
+}
+
+crmInitFormEx( showCarDataFormModel, '#show-car-data-form', 0, '#show-car-data-hidden' );
+function crmEditOrderShowCarData(){
+    if( $( '#show_car_data-c_ln' ).val() != $( '#od_lxcars_c_ln' ).val() ) crmInitFormEx( showCarDataFormModel, '#show-car-data-form', 0, '#show-car-data-hidden');
+
+    $( '#crm-show-car-data-dialog' ).dialog({
+        autoOpen: false,
+        resizable: true,
+        width: 'auto',
+        height: 'auto',
+        modal: true,
+        title: kivi.t8( 'Show car data' ),
+        position: { my: "top", at: "top+250" },
+        open: function(){
+            $( this ).css( 'maxWidth', window.innerWidth );
+        }
+    }).dialog( 'open' ).resize();
 }
 
 $( "#od-oe-workflow, #od-inv-workflow, #od-off-workflow" ).menu({

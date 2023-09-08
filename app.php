@@ -364,7 +364,7 @@
                              </tr>
                             <tr>
                                 <td class="od-table-label"><label for="od_lxcars_c_ln">Amtl.-Kennz.:</label></td>
-                                <td><input id="od_lxcars_c_ln" type="text"></input></td>
+                                <td><input id="od_lxcars_c_ln" type="text"></input><button onclick="crmEditOrderShowCarData();">Info</button></td>
                              </tr>
                             <tr>
                                 <td class="od-table-label"><label for="od-oe-car_status">KfZ Ort:</label></td>
@@ -636,6 +636,17 @@
                  </tr>
             </table>
         </div>
+    </div>
+</div>
+
+<div id="crm-show-car-data-dialog" style="display:none">
+    <div id="show-car-data-hidden"></div>
+    <table id="show-car-data-form">
+        <thead></thead>
+        <tbody></tbody>
+    </table>
+    <div class="crm-pt1">
+        <button class="crm-ui-button" onclick="$( '#crm-show-car-data-dialog' ).dialog( 'close' );">Schließen</button>
     </div>
 </div>
 

@@ -336,3 +336,14 @@ const orderEmailFormModel = [
     { "name": "order_email-message", "label": "Message:", "type": "textarea", "cols": "42", "rows": "10" },
     { "name": "order_email-attachment", "label": "Name of attachment:", "type": "input", "size": "21", "tooltip": "" },
 ];
+
+const showCarDataFormModel = [
+    { "name": "show_car_data-hersteller", "label": "Manufacture:", "type": "input", "size": "21", "tooltip": "", "readonly": "true" },
+    { "name": "show_car_data-typ", "label": "Type:", "type": "input", "size": "21", "tooltip": "", "readonly": "true" },
+    { "name": "show_car_data-hsn", "label": "HSN:", "type": "input", "size": "21", "tooltip": "", "readonly": "true" },
+    { "name": "show_car_data-tsn", "label": "TSN:", "type": "input", "size": "21", "tooltip": "", "readonly": "true" },
+    { "name": "show_car_data-fin", "label": "FIN:", "type": "input", "size": "21", "tooltip": "", "readonly": "true" },
+    { "name": "show_car_data-hubraum", "label": "Displacement:", "type": "input", "size": "21", "tooltip": "", "readonly": "true" },
+    { "name": "show_car_data-leistung", "label": "Performance:", "type": "input", "size": "21", "tooltip": "", "readonly": "true" },
+    { "name": "show_car_data-c_ln", "type": "hidden", },
+];

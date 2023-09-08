@@ -71,7 +71,7 @@ $(document).ready(function() {
         }
         $( "h1:first" ).addClass( "tools" );
         $( "h1:first" ).css({
-            marginTop: "20px",
+            //marginTop: "20px",
             height: "20px"
         });
         var cust_vend_id;

@@ -456,7 +456,7 @@
                              </tr>
                             <tr>
                                 <td class="od-table-label"><label for="od-inv-shippingpoint">Amtl.-Kennz.:</label></td>
-                                <td><input id="od-inv-shippingpoint" type="text"></input></td>
+                                <td><input id="od-inv-shippingpoint" type="hidden" value=""></input><input id="od_inv_shippingpoint" type="text"></input></td>
                              </tr>
                        </table>
                     </td>

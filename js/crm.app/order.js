@@ -728,7 +728,7 @@ $( '#od_off_customer_name, #od_customer_name, #od_inv_customer_name' ).autocompl
 });
 
 // changeCar:
-$( '#od_lxcars_c_ln, #od-inv-shippingpoint' ).autocomplete({
+$( '#od_lxcars_c_ln, #od_inv_shippingpoint' ).autocomplete({
         delay: crmAcDelay,
         source: function(request, response) {
             $.get('crm/ajax/crm.app.php?action=searchCarLicense', { term: request.term, customer: $( '#od-customer-id' ).val()  }, function(data) {
@@ -773,6 +773,7 @@ $( '#od_lxcars_c_ln, #od-inv-shippingpoint' ).autocomplete({
             success: function( data ){
                 console.info( 'Car changed' );
                 $( '#od-lxcars-c_id' ).val( ui.item.id );
+                $( '#od-inv-shippingpoint' ).val( ui.item.value );
             },
             error: function( xhr, status, error ){
                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'changeCar', xhr.responseText );
@@ -1250,6 +1251,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-customer-id' ).val( crmData.bill.common.customer_id );
             $( '#od_inv_customer_name' ).val( crmData.bill.common.customer_name );
             $( '#od-inv-shippingpoint' ).val( crmData.bill.common.shippingpoint );
+            $( '#od_inv_shippingpoint' ).val( crmData.bill.common.shippingpoint );
             $( '#od-inv-shipvia' ).val( crmData.bill.common.shipvia );
             $( '#od-inv-invnumber' ).html( crmData.bill.common.invnumber );
             $( '#od-inv-ordnumber' ).html( crmData.bill.common.ordnumber );
@@ -1267,6 +1269,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od_inv_customer_name' ).val( crmData.common.customer_name );
             $( '#od-customer-id' ).val( crmData.common.customer_id );
             $( '#od-inv-shippingpoint' ).val( '' );
+            $( '#od_inv_shippingpoint' ).val( '' );
             $( '#od-inv-shipvia' ).val( '' );
             $( '#od-inv-invnumber' ).html( '' );
             $( '#od-inv-ordnumber' ).html( '' );

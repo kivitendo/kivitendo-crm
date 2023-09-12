@@ -960,11 +960,10 @@ function printOrder( $data ){
 
     $positions = $GLOBALS['dbh']->getAll( $query );
 
-    define( 'FPDF_FONTPATH', '../font/');
+    //define( 'FPDF_FONTPATH', '../font/');
     define( 'x', 0 );
     define( 'y', 1 );
-
-    $pdf = new FPDF( 'P','mm','A4' );
+    $pdf = new FPDF( 'P', 'mm', 'A4' );
     $pdf->AddPage();
 
     $fontsize = 11;
@@ -978,9 +977,9 @@ function printOrder( $data ){
         $pdf->Text( '10','7','Kopie' );
         $pdf->SetTextColor( 0, 0, 0 );
     }
-
+    //writeLog( $orderData );
     $pdf->SetFont( 'Helvetica', 'B', 14 ); //('font_family','font_weight','font_size')
-    $pdf->Text( '10','12','Autoprofis Rep.-Auftrag '.' '.$orderData['hersteller'].' '.$orderData['mytype'].' '.$orderData['bezeichnung'] );
+    $pdf->Text( '10','12','Autoprofis Rep.-Auftrag '.' '.$orderData['hersteller'].' '.$orderData['marke'].' '.$orderData['name'] );
     $pdf->Text( '10','18', $orderData['c_ln'] );
     $pdf->SetFont( 'Helvetica', '', 14 );
 
@@ -1021,8 +1020,8 @@ function printOrder( $data ){
     $pdf->Text( $textPosX_right, $textPosY + 45, 'Flexgr.:' );
     $pdf->Text( $textPosX_right, $textPosY + 50, 'Color.:' );
 
-    $pdf->Text( $textPosX_right, $textPosY + 35, mb_convert_encoding( 'Lo Sommerräder.:' ), 'ISO-8859-1', 'UTF-8' );
-    $pdf->Text( $textPosX_right, $textPosY + 40, mb_convert_encoding( 'Lo Winterräder.:' ), 'ISO-8859-1', 'UTF-8' );
+    $pdf->Text( $textPosX_right, $textPosY + 35, mb_convert_encoding( 'Lo Sommerräder.:' , 'ISO-8859-1', 'UTF-8' ) );
+    $pdf->Text( $textPosX_right, $textPosY + 40, mb_convert_encoding( 'Lo Winterräder.:' , 'ISO-8859-1', 'UTF-8' ) );
 
     $pdf->Text( $textPosX_left, $textPosY + 35, mb_convert_encoding( 'nächst. ZR-Wechsel KM:', 'ISO-8859-1', 'UTF-8' ) );
     $pdf->Text( $textPosX_left, $textPosY + 40, mb_convert_encoding( 'nächst. ZR-Wechsel:', 'ISO-8859-1', 'UTF-8' ) );
@@ -1140,13 +1139,15 @@ function printOrder( $data ){
         if( ( $element['part_type']  == 'part' ) && !$element['instruction'] ){
             $totalLines--;
             //writeLog( 'part' );
-            $pdf->line( 10, $height + 1.6,  190, $height + 1.6 );
+            $pdf->line( 10, $height + 1.6, 190, $height + 1.6 );
             $pdf->Text( '12', $height, mb_convert_encoding( $element['qty']." ".$element['unit'], 'ISO-8859-1', 'UTF-8' ) );
             $pdf->Text( '26', $height, mb_convert_encoding( $element['description'], 'ISO-8859-1', 'UTF-8' ) );
             $height = $height + 6;
         }
     }
-    while( $totalLines-- ){
+    while( $totalLines-- ){ //Erzeugt Endlosschleife wenn if fehlt
+        if( $totalLines <= 0 ) break; //hier müsste dann ein zweites Auftragsblatt erzeugt werden
+        //writeLog( $totalLines );
         $pdf->line( 10, $height + 1.6, 190, $height + 1.6 );
         $height = $height + 6;
     }
@@ -1167,8 +1168,10 @@ function printOrder( $data ){
             $height = $height + 6;
         }
     }
-    while( $totalLines-- ){
-        $pdf->line( 10, $height + 1.6,  190, $height + 1.6 );
+    while( $totalLines-- ){ //Erzeugt Endlosschleife wenn if fehlt
+        if( $totalLines <= 0 ) break; //hier müsste dann ein zweites Auftragsblatt erzeugt werden
+        //writeLog( $totalLines );
+        $pdf->line( 10, $height + 1.6, 190, $height + 1.6 );
         $height = $height + 6;
     }
     $printFileName = 'Auftrag_'.$orderData['ordnumber'].'_'.$orderData['c_ln'].'.pdf';

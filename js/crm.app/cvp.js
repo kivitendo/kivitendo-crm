@@ -186,6 +186,38 @@ function crmEditCuVeView( crmData, new_with_car ){
        $( '#billaddr-branche' ).val( $( '#billaddr-branches' ).val() );
     });
 
+    $( '#billaddr-name' ).change( function(){
+        let name = $( '#billaddr-name' ).val();
+        name = name.split(' ')[0];
+        $.ajax({
+            url: 'crm/ajax/crm.app.php',
+            type: 'POST',
+            data:  { action: 'firstnameToGender', data: { 'name': name } },
+            success: function( data ){
+                let greeting = '';
+                if( 'F' == data.gender ) greeting = 'Frau';
+                else if( 'M' == data.gender ) greeting = 'Herr';
+                if( exists( data.gender ) ) $( '#billaddr-greeting' ).val( greeting );
+            },
+            error: function( xhr, status, error ){
+                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmEditCuVeView.firstnameToGender', xhr.responseText );
+             }
+        });
+    });
+
+    $( '#billaddr-zipcode' ).autocomplete({
+        delay: crmAcDelay,
+        source: "crm/ajax/crm.app.php?action=zipcodeToLocation",
+        select: function( e, ui ) {
+            assert( 'zipcodeToLocation1', ui );
+            assert( 'zipcodeToLocation3', $('#billaddr-bland option:contains(' + ui.item.bundesland + ')') );
+            $( '#billaddr-city' ).val( ui.item.ort );
+            //$( '#billaddr-bland' ).val( ui.item.bundesland );
+            //$( '#billaddr-bland' ).val( $('#billaddr-bland').find('option[text="' + ui.item.bundesland + '"]').val() );
+            $('#billaddr-bland option:contains(' + ui.item.bundesland + ')').attr('selected', 'selected');
+        }
+    });
+
     if( new_with_car ){
         $( '#car-form' ).show();
         $( '#car-kba-form' ).show();
@@ -195,12 +227,6 @@ function crmEditCuVeView( crmData, new_with_car ){
         $( '#chk_c_3' ).prop( 'checked', true );
         $( '#chk_c_em' ).prop( 'checked', true );
         $( '#chk_c_fin' ).prop( 'checked', true );
-
-        console.info( 'crmData.kba' );
-        console.info( crmData.kba );
-        console.info( 'lxcarsData' );
-        console.info( lxcarsData );
-        console.info( ' ---lxcarsData' );
 
         for( let item of carKbaFormModel){
             let columnName = item.name.split( '-' )[1];

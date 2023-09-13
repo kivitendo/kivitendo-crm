@@ -221,9 +221,6 @@ function crmNewCarFromScan(){
                     type: "POST",
                     success: function( data ){
                         lxcarsData = data;
-                        console.info( 'lxcarsData' );
-                        console.info( lxcarsData );
-                        //$( '#crm-fsscan-dlg' ).dialog( 'close' );
                         crmOpenView( 'crm-fsscan-customer-dlg', kivi.t8( 'New car from scan' ) );
 
                         const name = crmFormatName( getValueNotNull( data.firstname ) + ' ' + getValueNotNull( data.name1 ) );
@@ -246,6 +243,10 @@ function crmNewCarFromScan(){
     })
 }
 
+/******************************************
+* Wird beim klick auf den Button 'Neuer Kunde'
+* im 'crm-fsscan-customer-dlg' aufgerufen
+******************************************/
 function crmNewCarFromScanNewCuView(){
     $.ajax({
         url: 'crm/ajax/crm.app.php',
@@ -253,8 +254,10 @@ function crmNewCarFromScanNewCuView(){
         data:  { action: 'getCVDialogData', data:{ 'hsn': lxcarsData.hsn, 'tsn': lxcarsData.field_2_2, 'd2': lxcarsData.d2_1 + getValueNotNull( lxcarsData.d2_2 ) + getValueNotNull( lxcarsData.d2_3 ) + getValueNotNull( lxcarsData.d2_4 ) } },
         success: function( crmData ){
             crmEditCuVeView( crmData, true );
-            crmShowCuVeForEdit( crmData );
+            crmShowCuVeForEdit( crmData ); // Wird in 'cvp.js' definiert
             $( '#billaddr-name' ).val( $( '#crm-fsscan-edit-customer' ).val() );
+            $( '#billaddr-name' ).change();
+
             $( '#billaddr-street' ).val( lxcarsData.address1 );
             const city = ( isEmpty( lxcarsData.adress2 ) )? 0 : lxcarsData.address2.split(' ');
             if( isIterable( city ) && city.length > 1 ){
@@ -284,7 +287,7 @@ function crmNewCarFromScanNewCuView(){
             crmEditCuVeViewAction = 'insertNewCuWithCar';
         },
         error: function( xhr, status, error ){
-            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmNewCarFromScan()', xhr.responseText );
+            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmNewCarFromScanNewCuView()', xhr.responseText );
         }
     });
 }
@@ -333,7 +336,7 @@ function crmSearchCustomerForScan( name ){
             });
          },
          error: function( xhr, status, error ){
-             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmNewCarFromScan().getCustomerForScan', xhr.responseText );
+             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmSearchCustomerForScan', xhr.responseText );
          }
     });
 }

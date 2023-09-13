@@ -456,6 +456,20 @@ function getCVDialogData( $data ){
     echo $GLOBALS['dbh']->getOne($query, true);
 }
 
+function firstnameToGender( $data ){
+    $rs = $GLOBALS['dbh']->getOne("SELECT gender FROM firstnametogender WHERE firstname ILIKE '".$data['name']."%'", true);
+    if( empty( $rs ) ) $rs = '{ "gender": "E" }';
+    echo $rs;
+}
+
+function zipcodeToLocation( ){
+    if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
+        $term = $_GET['term'];
+        writeLog("SELECT zipcode || ' ' || ort || ', ' || bundesland, ort, bundesland FROM zipcode_to_location WHERE zipcode ILIKE '%".$term."'");
+        echo $GLOBALS['dbh']->getAll("SELECT zipcode || ' ' || ort || ', ' || bundesland AS label, zipcode AS value, ort, bundesland FROM zipcode_to_location WHERE zipcode ILIKE '".$term."%'", true);
+    }
+}
+
 /*********************************************
 * Based on old version of getScans function
 *********************************************/
@@ -701,8 +715,8 @@ function insertOfferFromOrder( $data ){
                 "billing_address_id, order_status_id ".
                 "FROM oe WHERE id = ".$data['oe_id']." RETURNING id;";
 
-    writeLog( '---' );
-    writeLog( $query );
+    //writeLog( '---' );
+    //writeLog( $query );
 
     $GLOBALS['dbh']->beginTransaction();
     $id = $GLOBALS['dbh']->getOne( $query )['id'];

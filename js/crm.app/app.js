@@ -28,6 +28,16 @@ function getValueNotNull( value ){
 //Delay für Autocomplete und Catcomplete
 const crmAcDelay = 100;
 
+//Custom Font size
+const crmFontSize = 14;
+
+$( '.crm-fs' ).css({ fontSize: crmFontSize });
+$( '.layout-actionbar div.layout-actionbar-action' ).css({ fontSize: crmFontSize });
+$( '.nav-link' ).css({ fontSize: crmFontSize });
+$( 'button' ).css({ fontSize: crmFontSize });
+$( 'input' ).css({ fontSize: crmFontSize });
+$( 'style' ).append('#content input, #content select, #content option, #content textarea { font-size: ' + crmFontSize + 'px }' );
+
 $( '#crm-tabs-main' ).tabs();
 $( '#crm-tabs-infos' ).tabs();
 

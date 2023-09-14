@@ -139,11 +139,37 @@
         overflow: auto;
     }
 
+
+    /** Font size **/
+
     .crm-fs {
-        font-size: 12px;
+        font-size: 13px;
     }
 
-    main button {
+    .layout-actionbar div.layout-actionbar-action {
+        font-size: 13px;
+    }
+
+    .tabwidget>ul li.ui-state-default a, .tabwidget>ul li.ui-state-default a:link {
+        font-size: 13px;
+    }
+
+    button {
+        font-size: 13px;
+    }
+
+    #content input, #content select, #content option, #content textarea {
+        font-size: 13px;
+    }
+
+    .od-table-label {
+        font-weight: bold;
+    }
+
+    /************/
+
+
+     main button {
         min-width: 25px;
         min-height: 25px;
     }
@@ -153,11 +179,7 @@
         font-weight: bold;
     }
 
-    .od-table-label {
-        font-weight: bold;
-    }
-
-    .od-common-style {
+   .od-common-style {
         margin: auto;
     }
 

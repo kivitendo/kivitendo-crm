@@ -15,11 +15,34 @@ function crmGetCustomerForEdit( src, id, new_car, fx ){
         data:  { action: 'getCustomerForEdit', data: paramData },
         success: function( data ){
             crmEditCuVeView( data, new_car );
+            crmOpenView( 'crm-wx-customer-view', null, ' - ' + kivi.t8( 'Basedata' ) );
             crmShowCuVeForEdit( data );
             if( fx ) fx( src, id );
         },
         error: function( xhr, status, error ){
             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'getCustomerForEdit()', xhr.responseText );
+        }
+    });
+}
+
+const crmCVPtypeEnum = { Customer: 'C', Vendor: 'V', Person: 'P' };
+
+function crmNewCVP( crmCVPtype ){
+    if( crmCVPtype == crmCVPtypeEnum.Person ) return; //ToDo
+
+    $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        type: 'POST',
+        data:  { action: 'getCVInitData', data: {} },
+        success: function( data ){
+            crmEditCuVeView( data );
+            $( '#billaddr-src' ).val( crmCVPtype );
+            crmEditCuVeViewAction = 'newCV';
+            crmShowCuVeForEdit( data );
+            crmOpenView( 'crm-wx-customer-view', ( crmCVPtypeEnum.Customer == crmCVPtype )? kivi.t8( 'New customer' ) : kivi.t8( 'New vendor' ) );
+        },
+        error: function( xhr, status, error ){
+            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmNewCVP().getCVDialogData', xhr.responseText );
         }
     });
 }
@@ -273,8 +296,6 @@ function crmEditCuVeView( crmData, new_with_car ){
     });
 
     crmEditCuVeViewAction = 'updateCuWithNewCar';
-
-    crmOpenView( 'crm-wx-customer-view', null, ' - ' + kivi.t8( 'Basedata' ) );
 }
 
 function crmEditCuVeViewSave( ){
@@ -339,7 +360,7 @@ function crmEditCuVeViewSave( ){
     }
     //console.info( 'dbUpdateData' );
     //console.info( dbUpdateData );
-    const onSuccess = function(){
+    const onSuccess = function( data ){
         crmCloseView( 'crm-wx-customer-view' );
     }
     crmUpdateDB( crmEditCuVeViewAction, dbUpdateData, onSuccess );

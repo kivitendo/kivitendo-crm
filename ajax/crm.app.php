@@ -447,6 +447,14 @@ function findCarKbaData( $data ){
 * Get Data form DB to build drop down elemennts
 * in new CV dialog
 **********************************************/
+function getCVInitData( ){
+    $query = "SELECT ";
+
+    appendQueryForCustomerDlg( $query );
+
+    echo $GLOBALS['dbh']->getOne($query, true);
+}
+
 function getCVDialogData( $data ){
     $query = "SELECT ";
 
@@ -815,6 +823,17 @@ function insertNewOffer( $data ){
 
     $rs = $GLOBALS['dbh']->getOne( $sql );
     echo '{ "id": "'.$rs['id'].'", "quonumber": "'.$rs['quonumber'].'", "itime": "'.$rs['itime'].'" }';
+}
+
+function newCV( $data ){
+    foreach( $data AS $key => $value ){
+        if( strcmp( $key, 'customer' ) === 0 || strcmp( $key, 'vendor' ) === 0 ){
+            $cv_src = ( strcmp( $key, 'customer' ) === 0 )? 'C' : 'V';
+            $cv_id = $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ), TRUE, "id" );
+        }
+    }
+
+    echo '{ "src": "'.$cv_src.'", "id": "'.$cv_id.'" }';
 }
 
 /********************************************

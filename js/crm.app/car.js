@@ -254,6 +254,7 @@ function crmNewCarFromScanNewCuView(){
         data:  { action: 'getCVDialogData', data:{ 'hsn': lxcarsData.hsn, 'tsn': lxcarsData.field_2_2, 'd2': lxcarsData.d2_1 + getValueNotNull( lxcarsData.d2_2 ) + getValueNotNull( lxcarsData.d2_3 ) + getValueNotNull( lxcarsData.d2_4 ) } },
         success: function( crmData ){
             crmEditCuVeView( crmData, true );
+            crmOpenView( 'crm-wx-customer-view', null, ' - ' + kivi.t8( 'Basedata' ) );
             crmShowCuVeForEdit( crmData ); // Wird in 'cvp.js' definiert
             $( '#billaddr-name' ).val( $( '#crm-fsscan-edit-customer' ).val() );
             $( '#billaddr-name' ).change();

@@ -464,7 +464,7 @@ function crmUpdateDB( call, dbUpdataData, onSuccess = null ){
             dbUpdateData = {};
             if( exists( data.success ) && !data.success ) $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'DB update error' ), kivi.t8( 'Error in: ' ) + 'crmUpdateDB()', ( ( exists( data.debug )? data.debug : null) ) );
             if( exists( data.src ) && exists( data.id ) ) crmRefreshAppView( data.src, data.id );
-            if( null != onSuccess ) onSuccess();
+            if( null != onSuccess ) onSuccess( data );
         },
         error: function( xhr, status, error ){
             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmUpdateDB()', xhr.responseText );
@@ -524,15 +524,18 @@ $( '#crm-wf-new-order' ).click( function() {
 });
 
 $( '#crm-wf-new-customer' ).click( function() {
-    crmNewCustomer("0");
+    //crmNewCustomer("0");
+    crmNewCVP( crmCVPtypeEnum.Customer );
 });
 
 $( '#crm-wf-new-vendor' ).click( function() {
-    crmNewCustomer("1");
+    //crmNewCustomer("1");
+    crmNewCVP( crmCVPtypeEnum.Vendor );
 });
 
 $( '#crm-wf-new-person' ).click( function() {
-    crmNewPerson();
+    //crmNewPerson();
+    crmNewCustomer("1");
 });
 
 $( '#crm-wf-search-order' ).click( function() {

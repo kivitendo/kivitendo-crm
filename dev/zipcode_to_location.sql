@@ -1,10 +1,15 @@
-DROP TABLE IF EXISTS zipcode_to_location;
-
 CREATE TABLE zipcode_to_location
 (
+    id integer primary key generated always as identity,
+    osm_id text,
+    ags text,
     ort text NOT NULL,
-    zipcode character(5) NOT NULL,
-    landkreis text NOT NULL,
-    bundesland text NOT NULL,
-    CONSTRAINT zipcode_to_location_pkey PRIMARY KEY (ort, zipcode)
+    plz character(5) NOT NULL,
+    landkreis text,
+    bundesland text NOT NULL
 );
+
+COPY zipcode_to_location( osm_id, ags, ort, plz, landkreis, bundesland ) FROM '/var/www/dev/kivitendo-crm/dev/zuordnung_plz_ort.csv' DELIMITER ',' CSV HEADER;
+
+ALTER TABLE zipcode_to_location DROP COLUMN ags;
+ALTER TABLE zipcode_to_location DROP COLUMN osm_id;

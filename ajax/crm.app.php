@@ -465,8 +465,7 @@ function firstnameToGender( $data ){
 function zipcodeToLocation( ){
     if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
         $term = $_GET['term'];
-        writeLog("SELECT zipcode || ' ' || ort || ', ' || bundesland, ort, bundesland FROM zipcode_to_location WHERE zipcode ILIKE '%".$term."'");
-        echo $GLOBALS['dbh']->getAll("SELECT zipcode || ' ' || ort || ', ' || bundesland AS label, zipcode AS value, ort, bundesland FROM zipcode_to_location WHERE zipcode ILIKE '".$term."%'", true);
+        echo $GLOBALS['dbh']->getAll("SELECT plz || ' ' || ort || ', ' || bundesland AS label, plz AS value, ort, bundesland FROM zipcode_to_location WHERE plz ILIKE '".$term."%' LIMIT 15", true);
     }
 }
 

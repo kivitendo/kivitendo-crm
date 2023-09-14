@@ -209,11 +209,7 @@ function crmEditCuVeView( crmData, new_with_car ){
         delay: crmAcDelay,
         source: "crm/ajax/crm.app.php?action=zipcodeToLocation",
         select: function( e, ui ) {
-            assert( 'zipcodeToLocation1', ui );
-            assert( 'zipcodeToLocation3', $('#billaddr-bland option:contains(' + ui.item.bundesland + ')') );
             $( '#billaddr-city' ).val( ui.item.ort );
-            //$( '#billaddr-bland' ).val( ui.item.bundesland );
-            //$( '#billaddr-bland' ).val( $('#billaddr-bland').find('option[text="' + ui.item.bundesland + '"]').val() );
             $('#billaddr-bland option:contains(' + ui.item.bundesland + ')').attr('selected', 'selected');
             $('#billaddr-bland').val( $('#billaddr-bland option:contains(' + ui.item.bundesland + ')').val() );
             $('#billaddr-bland').change();

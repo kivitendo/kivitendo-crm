@@ -272,6 +272,22 @@ function crmNewCarFromScanNewCuView(){
             }else{
                 $( '#billaddr-city' ).val( lxcarsData.address2 );
             }
+
+            $.ajax({
+                url: 'crm/ajax/crm.app.php?action=zipcodeToLocation&term=' + $( '#billaddr-zipcode' ).val(),
+                type: 'GET',
+                success: function( data ){
+                    assert( 'zipcode', data );
+                    if( exists( data ) && data.length > 0 ){
+                        $('#billaddr-bland option:contains(' + data[0].bundesland + ')').attr('selected', 'selected');
+                        $('#billaddr-bland').val( $('#billaddr-bland option:contains(' + data[0].bundesland + ')').val() );
+                        $('#billaddr-bland').change();
+                    }
+                },
+                error: function( xhr, status, error ){
+                }
+            });
+
             $( '#car-c_ln' ).val( crmFormatCarLicense( lxcarsData.registrationnumber ) );
             $( '#car-c_2' ).val( lxcarsData.hsn );
             $( '#car-c_3' ).val( lxcarsData.field_2_2 );

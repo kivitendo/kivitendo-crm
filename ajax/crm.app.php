@@ -857,6 +857,14 @@ function updateCuWithNewCar( $data ){
             $value['c_ow'] = $id;
             $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ) );
         }
+        elseif( strcmp( $key, 'contacts' ) === 0 ){
+            if( empty( $where ) ){
+                $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ) );
+            }
+            else{
+                $GLOBALS['dbh']->update( $key, array_keys( $value ), array_values( $value ), $where );
+            }
+        }
         else{
             if( empty( $where ) ){
                 resultInfo( false, 'Risky SQL-Statment with empty WHERE clausel'  );

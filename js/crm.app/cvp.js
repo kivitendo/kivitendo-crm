@@ -321,11 +321,17 @@ function crmEditCuVeViewSave( ){
         dbUpdateData['contacts']['WHERE'] = {};
         dbUpdateData['contacts']['WHERE']['cp_id'] = $( '#contacts_cp_id' ).val();
         dbUpdateData['contacts']['cp_cv_id'] = billaddr_id;
-        for(let item of contactsFormModel){
-            let columnName = item.name.split( '-' );
-            if( !exists( columnName[1] ) || 'cp_id' == columnName[1] || 'list' == columnName[1] ) continue;
-            let val = $( '#' + item.name ).val();
-            if( exists(val) && val !== '' ) dbUpdateData['contacts'][columnName[1]] = val;
+    }
+    for(let item of contactsFormModel){
+        let columnName = item.name.split( '-' );
+        if( !exists( columnName[1] ) || 'cp_id' == columnName[1] || 'list' == columnName[1] ) continue;
+        let val = $( '#' + item.name ).val();
+        if( exists(val) && val !== '' ){
+            if( !exists( dbUpdateData['contacts'] ) ){
+                dbUpdateData['contacts'] = {};
+                dbUpdateData['contacts']['cp_cv_id'] = billaddr_id;
+            }
+            dbUpdateData['contacts'][columnName[1]] = val;
         }
     }
     for( let item of banktaxFormModel ){

@@ -1,6 +1,9 @@
-       $sql = 'DROP TABLE IF EXISTS firstnameToGender';
-        $GLOBALS['dbh']->query( $sql );
-        $sql = 'DROP TABLE IF EXISTS firstnameToGender';
-        $GLOBALS['dbh']->query( $sql );
-        $sql = 'CREATE TABLE firstnameToGender( gender CHAR(1), firstname TEXT UNIQUE PRIMARY KEY )';
-        $GLOBALS['dbh']->query( $sql );
+DROP TABLE IF EXISTS firstnametogender;
+
+CREATE TABLE firstnametogender
+(
+    gender character(1) NOT NULL,
+    firstname text NOT NULL PRIMARY KEY
+);
+
+COPY firstnametogender( gender, firstname ) FROM '/var/www/dev/kivitendo-crm/firstnameToTitle.csv' DELIMITER '|' CSV HEADER;

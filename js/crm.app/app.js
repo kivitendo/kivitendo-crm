@@ -25,6 +25,10 @@ function getValueNotNull( value ){
     return ( null == value )? '' : value;
 }
 
+function existsOrEmptyString( value ){
+    return ( exists( value ) )? value : '';
+}
+
 //Delay für Autocomplete und Catcomplete
 const crmAcDelay = 100;
 

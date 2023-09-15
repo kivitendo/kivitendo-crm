@@ -19,20 +19,24 @@ const billaddrFormModel = [
     { "name": "billaddr-src", "type": "hidden", },
 ];
 
-const deladdrFormModel = [
-    { "name": "deladdr-list", "label": "Deliver address:", "type": "select","data": [], "tooltip":""}, //selectbox
-    { "name": "deladdr-shiptoname", "label": "Name:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
-    { "name": "deladdr-shiptodepartment_1", "label": "Department 1:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
-    { "name": "deladdr-shiptodepartment_2", "label": "Department 2:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
-    { "name": "deladdr-shiptozipcode", "label": "Zip code:", "type": "input", "size": "12", "tooltip": "Vollständiger Name" },
-    { "name": "deladdr-shiptobland", "label": "Bundesland:", "type": "select", "data":[], "tooltip":""}, //selectbox
-    { "name": "deladdr-shiptocity", "label": "City:", "type": "input", "size": "42", "tooltip": "Vollständiger Name" },
-    { "name": "deladdr-shiptostreet", "label": "Street:", "type": "input", "size": "42", "tooltip": "Street and street number" },
-    { "name": "deladdr-shiptocountry", "label": "Country code:", "type": "input", "size": "2", "tooltip": "Country code", "data": "D" },
-    { "name": "deladdr-shiptophone", "label": "Phone:", "type": "input", "size": "42", "tooltip": "First phone number" },
-    { "name": "deladdr-shiptofax", "label": "fax:", "type": "input", "size": "42", "tooltip": "Second phone number" },
-    { "name": "deladdr-shiptoemail", "label": "E-Mail:", "type": "input", "size": "42", "tooltip": "" },
-    { "name": "deladdr-shiptocontact", "label": "Contact person:", "type": "input", "size": "42", "tooltip": "Contact person" },
+const contactsFormModel = [
+    { "name": "contacts-list", "label": "Deliver address:", "type": "select","data": [], "tooltip":""}, //selectbox
+    { "name": "contacts-cp_givenname", "label": "Givenname:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "contacts-cp_name", "label": "Name:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "contacts-cp_abteilung", "label": "Department:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "contacts-cp_homepage", "label": "Homepage:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "contacts-cp_street", "label": "Street:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "contacts-cp_country", "label": "Country code:", "type": "input", "size": "2", "tooltip": "", "data": "D" },
+    { "name": "contacts-cp_zipcode", "label": "Zip code:", "type": "input", "size": "12", "tooltip": "" },
+    { "name": "contacts-cp_city", "label": "City:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "contacts-cp_phone1", "label": "Phone 1:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "contacts-cp_phone2", "label": "Phone 2:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "contacts-cp_mobile1", "label": "Mobile 1:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "contacts-cp_mobile2", "label": "Mobile 2:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "contacts-cp_privatphone", "label": "Privat phone:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "contacts-cp_email", "label": "E-mail:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "contacts-cp_privatemail", "label": "Private e-mail:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "contacts_cp_id", "type": "hidden", },
 ];
 
 const banktaxFormModel = [

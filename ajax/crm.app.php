@@ -425,9 +425,9 @@ function getCustomerForEdit( $data ){
                 ") AS cv) AS cv, ";
 
     // Lieferadressen
-    $query .= "(SELECT json_agg( deladdr ) AS deladdr FROM (".
-                "SELECT trans_id, shipto_id, shiptoname, shiptodepartment_1, shiptodepartment_2, shiptostreet, shiptozipcode, shiptocity, shiptocountry, shiptocontact, shiptophone, shiptofax, shiptoemail, shiptoemployee, shiptobland FROM shipto WHERE trans_id = ".$data['id']." ORDER BY shiptoname ASC".
-                ") AS deladdr) AS deladdr, ";
+    $query .= "(SELECT json_agg( contacts ) AS contacts FROM (".
+                "SELECT * FROM contacts WHERE cp_cv_id = ".$data['id']." ORDER BY cp_name, cp_givenname ASC".
+                ") AS contacts) AS contacts, ";
 
     appendQueryWithKba( $data, $query );
     appendQueryForCustomerDlg( $query );

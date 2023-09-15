@@ -72,34 +72,31 @@ function crmNewCVP( crmCVPtype ){
         $( '#billaddr-direct_debit' ).prop( 'checked', crmData.cv.direct_debit );
     }
 
-    if( isIterable( crmData.deladdr ) ){
-        $('#deladdr-list').html( '' );
-        $('#deladdr-list').append( '<option value=""></option>' );
-        for (let i = 0; i < crmData.deladdr.length; i++){
-            $( '#deladdr-list' ).append( '<option value="' + i + '">' + ( ( crmData.deladdr[i].shiptoname )? crmData.deladdr[i].shiptoname : '' ) + '</option>' );
+    if( isIterable( crmData.contacts ) ){
+        $( '#contacts-list' ).html( '' );
+        $( '#contacts-list' ).append( '<option value="">' + kivi.t8( 'New' ) + '</option>' );
+        assert( 'crmShowCuVeForEdit', crmData.contacts );
+        for (let i = 0; i < crmData.contacts.length; i++){
+            $( '#contacts-list' ).append( '<option value="' + i + '">' + existsOrEmptyString( crmData.contacts[i].cp_givenname ) + ' ' + existsOrEmptyString( crmData.contacts[i].cp_name ) + '</option>' );
         }
-        $( '#deladdr-list' ).change( function(){
-             if( !$( this ).val() ){
-                 for( let e of deladdrFormModel ){
-                     if( e.name.startsWith( 'deladdr-shipto' ) ) $( '#' + e.name ).val( '' );
-                 }
-                 $( '#deladdr-shiptocountry' ).change();
-             }
-             else{
-                 $.each( crmData.deladdr[$( this ).val()], function( key, value ){
-                    if( value ){
-                        $( '#deladdr-' + key ).val( value );
-                    }
-                    else{
-                        $( '#deladdr-' + key ).val( '' );
-                    }
-                 });
-                 $( '#deladdr-shiptocountry' ).change();
-                 $( '#deladdr-shiptobland' ).val( crmData.deladdr[$( this ).val()].shiptobland  );
-             }
-         });
+        $( '#contacts-list' ).change( function(){
+            if ( '' == $( this ).val() ){
+                for( let item of contactsFormModel){
+                    $( '#' + item.name ).val( '' );
+                }
+                return;
+            }
+            $.each( crmData.contacts[$( this ).val()], function( key, value ){
+               if( value ){
+                   $( '#contacts-' + key ).val( value );
+               }
+               else{
+                   $( '#contacts-' + key ).val( '' );
+               }
+            });
+        });
 
-        $( '#deladdr-list' ).change();
+        $( '#contacts-list' ).change();
    }
 
    if( exists( crmData.branches ) ){
@@ -170,7 +167,7 @@ function crmNewCVP( crmCVPtype ){
         $( '#billaddr-business_id' ).val( crmData.cv.business_id );
         $( '#billaddr-country' ).change();
         $( '#billaddr-bland' ).val( crmData.cv.bland );
-        $( '#deladdr-shiptocountry' ).change();
+        $( '#contacts-shiptocountry' ).change();
     }
 }
 
@@ -183,7 +180,7 @@ var crmEditCuVeViewAction;
 
 function crmEditCuVeView( crmData, new_with_car ){
     crmInitFormEx( billaddrFormModel, '#billaddr-form', 0, '#crm-billaddr-cv' );
-    crmInitFormEx( deladdrFormModel, '#deladdr-form' );
+    crmInitFormEx( contactsFormModel, '#contacts-form' );
     crmInitFormEx( banktaxFormModel, '#banktax-form' );
     crmInitFormEx( extraFormModel, '#extras-form' );
     crmInitFormEx( carFormModel, '#car-form', 0, '#car-form-hidden' );
@@ -223,8 +220,8 @@ function crmEditCuVeView( crmData, new_with_car ){
                 if( exists( data.gender ) ) $( '#billaddr-greeting' ).val( greeting );
             },
             error: function( xhr, status, error ){
-                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmEditCuVeView.firstnameToGender', xhr.responseText );
-             }
+                 //$( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmEditCuVeView.firstnameToGender', xhr.responseText );
+            }
         });
     });
 
@@ -291,15 +288,14 @@ function crmEditCuVeView( crmData, new_with_car ){
     });
     crmChangeBlandList( crmData, 'billaddr-bland', 'D' );
 
-    $( '#deladdr-shiptocountry' ).change(function(){
-        crmChangeBlandList( crmData, 'deladdr-shiptobland', $( '#deladdr-shiptocountry' ).val() );
+    $( '#contacts-shiptocountry' ).change(function(){
+        crmChangeBlandList( crmData, 'contacts-shiptobland', $( '#contacts-shiptocountry' ).val() );
     });
 
     crmEditCuVeViewAction = 'updateCuWithNewCar';
 }
 
 function crmEditCuVeViewSave( ){
-    console.info( 'Save' );
     dbUpdateData = {};
     let cvSrc = ( $( '#billaddr-src' ).val() == 'V' )? 'vendor' : 'customer';
     dbUpdateData[cvSrc] = {};
@@ -312,17 +308,16 @@ function crmEditCuVeViewSave( ){
         let columnName = item.name.split( '-' );
         if( columnName[1] !== "src" && columnName[1] !== "id" && columnName[1] !== "greetings" ){
             let val = $( '#' + item.name ).val();
-            //if( exists(val) && val !== '' ) dbUpdateData[cvSrc][columnName[1]] = val;
-            if( exists(val) ) dbUpdateData[cvSrc][columnName[1]] = val;
+            if( exists( val ) ) dbUpdateData[cvSrc][columnName[1]] = val;
         }
     }
     if( dbUpdateData[cvSrc]['bland'] === '' ){
         $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Error' ), kivi.t8( 'Select Bundesland please.' ) );
         return;
     }
-    if( exists( $( '#deladdr-list' ).val() ) && $( '#deladdr-list' ).val() !== '' ){
-        dbUpdateData['shipto'] = { 'shipto_id': $( '#deladdr-list' ).val() };
-        for(let item of deladdrFormModel){
+    if( exists( $( '#contacts-list' ).val() ) && $( '#contacts-list' ).val() !== '' ){
+        dbUpdateData['shipto'] = { 'shipto_id': $( '#contacts-list' ).val() };
+        for(let item of contactsFormModel){
             let columnName = item.name.split( '-' );
             let val = $( '#' + item.name ).val();
             if( exists(val) && val !== '' ) dbUpdateData['shipto'][columnName[1]] = val;
@@ -331,7 +326,8 @@ function crmEditCuVeViewSave( ){
     for( let item of banktaxFormModel ){
         let columnName = item.name.split( '-' );
         let val = $( '#' + item.name ).val();
-        if( exists(val) && val !== '' ) dbUpdateData[cvSrc][columnName[1]] = val;
+        if( 'direct_debit' == columnName[1] ) dbUpdateData[cvSrc][columnName[1]] = $( '#' + item.name ).is( ':checked' );
+        else if( exists(val) && val !== '' ) dbUpdateData[cvSrc][columnName[1]] = val;
     }
     for( let item of extraFormModel ){
         let columnName = item.name.split( '-' );

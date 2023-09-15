@@ -168,7 +168,6 @@ function crmNewCVP( crmCVPtype ){
         $( '#billaddr-business_id' ).val( crmData.cv.business_id );
         $( '#billaddr-country' ).change();
         $( '#billaddr-bland' ).val( crmData.cv.bland );
-        $( '#contacts-shiptocountry' ).change();
     }
 }
 
@@ -288,10 +287,6 @@ function crmEditCuVeView( crmData, new_with_car ){
         crmChangeBlandList( crmData, 'billaddr-bland', $( '#billaddr-country' ).val() );
     });
     crmChangeBlandList( crmData, 'billaddr-bland', 'D' );
-
-    $( '#contacts-shiptocountry' ).change(function(){
-        crmChangeBlandList( crmData, 'contacts-shiptobland', $( '#contacts-shiptocountry' ).val() );
-    });
 
     crmEditCuVeViewAction = 'updateCuWithNewCar';
 }

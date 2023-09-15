@@ -218,9 +218,21 @@ function crmEditCuVeView( crmData, new_with_car ){
                 if( 'F' == data.gender ) greeting = 'Frau';
                 else if( 'M' == data.gender ) greeting = 'Herr';
                 if( exists( data.gender ) ) $( '#billaddr-greeting' ).val( greeting );
-            },
-            error: function( xhr, status, error ){
-                 //$( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmEditCuVeView.firstnameToGender', xhr.responseText );
+            }
+        });
+    });
+
+    $( '#contacts-cp_givenname' ).change( function(){
+        let name = $( '#contacts-cp_givenname' ).val();
+        $.ajax({
+            url: 'crm/ajax/crm.app.php',
+            type: 'POST',
+            data:  { action: 'firstnameToGender', data: { 'name': name } },
+            success: function( data ){
+                let greeting = '';
+                if( 'F' == data.gender ) greeting = 'Frau';
+                else if( 'M' == data.gender ) greeting = 'Herr';
+                if( exists( data.gender ) ) $( '#contacts-cp_title' ).val( greeting );
             }
         });
     });
@@ -233,6 +245,14 @@ function crmEditCuVeView( crmData, new_with_car ){
             $('#billaddr-bland option:contains(' + ui.item.bundesland + ')').attr('selected', 'selected');
             $('#billaddr-bland').val( $('#billaddr-bland option:contains(' + ui.item.bundesland + ')').val() );
             $('#billaddr-bland').change();
+        }
+    });
+
+    $( '#contacts-cp_zipcode' ).autocomplete({
+        delay: crmAcDelay,
+        source: "crm/ajax/crm.app.php?action=zipcodeToLocation",
+        select: function( e, ui ) {
+            $( '#contacts-cp_city' ).val( ui.item.ort );
         }
     });
 

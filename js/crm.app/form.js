@@ -21,6 +21,7 @@ const billaddrFormModel = [
 
 const contactsFormModel = [
     { "name": "contacts-list", "label": "Deliver address:", "type": "select","data": [], "tooltip":""}, //selectbox
+    { "name": "contacts-cp_title", "label": "Title:", "type": "input", "size": "42", "tooltip": "" },
     { "name": "contacts-cp_givenname", "label": "Givenname:", "type": "input", "size": "42", "tooltip": "" },
     { "name": "contacts-cp_name", "label": "Name:", "type": "input", "size": "42", "tooltip": "" },
     { "name": "contacts-cp_abteilung", "label": "Department:", "type": "input", "size": "42", "tooltip": "" },

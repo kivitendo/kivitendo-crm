@@ -75,7 +75,6 @@ function crmNewCVP( crmCVPtype ){
     if( isIterable( crmData.contacts ) ){
         $( '#contacts-list' ).html( '' );
         $( '#contacts-list' ).append( '<option value="">' + kivi.t8( 'New' ) + '</option>' );
-        assert( 'crmShowCuVeForEdit', crmData.contacts );
         for (let i = 0; i < crmData.contacts.length; i++){
             $( '#contacts-list' ).append( '<option value="' + i + '">' + existsOrEmptyString( crmData.contacts[i].cp_givenname ) + ' ' + existsOrEmptyString( crmData.contacts[i].cp_name ) + '</option>' );
         }
@@ -84,6 +83,7 @@ function crmNewCVP( crmCVPtype ){
                 for( let item of contactsFormModel){
                     $( '#' + item.name ).val( '' );
                 }
+                $( '#contacts_cp_id' ).val( '' );
                 return;
             }
             $.each( crmData.contacts[$( this ).val()], function( key, value ){
@@ -94,6 +94,7 @@ function crmNewCVP( crmCVPtype ){
                    $( '#contacts-' + key ).val( '' );
                }
             });
+            $( '#contacts_cp_id' ).val( crmData.contacts[$( this ).val()].cp_id );
         });
 
         $( '#contacts-list' ).change();
@@ -180,7 +181,7 @@ var crmEditCuVeViewAction;
 
 function crmEditCuVeView( crmData, new_with_car ){
     crmInitFormEx( billaddrFormModel, '#billaddr-form', 0, '#crm-billaddr-cv' );
-    crmInitFormEx( contactsFormModel, '#contacts-form' );
+    crmInitFormEx( contactsFormModel, '#contacts-form', 0, '#crm-contacts-hidden' );
     crmInitFormEx( banktaxFormModel, '#banktax-form' );
     crmInitFormEx( extraFormModel, '#extras-form' );
     crmInitFormEx( carFormModel, '#car-form', 0, '#car-form-hidden' );
@@ -315,12 +316,16 @@ function crmEditCuVeViewSave( ){
         $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Error' ), kivi.t8( 'Select Bundesland please.' ) );
         return;
     }
-    if( exists( $( '#contacts-list' ).val() ) && $( '#contacts-list' ).val() !== '' ){
-        dbUpdateData['shipto'] = { 'shipto_id': $( '#contacts-list' ).val() };
+    if( exists( $( '#contacts_cp_id' ).val() ) && $( '#contacts_cp_id' ).val() !== '' ){
+        dbUpdateData['contacts'] = {};
+        dbUpdateData['contacts']['WHERE'] = {};
+        dbUpdateData['contacts']['WHERE']['cp_id'] = $( '#contacts_cp_id' ).val();
+        dbUpdateData['contacts']['cp_cv_id'] = billaddr_id;
         for(let item of contactsFormModel){
             let columnName = item.name.split( '-' );
+            if( !exists( columnName[1] ) || 'cp_id' == columnName[1] || 'list' == columnName[1] ) continue;
             let val = $( '#' + item.name ).val();
-            if( exists(val) && val !== '' ) dbUpdateData['shipto'][columnName[1]] = val;
+            if( exists(val) && val !== '' ) dbUpdateData['contacts'][columnName[1]] = val;
         }
     }
     for( let item of banktaxFormModel ){

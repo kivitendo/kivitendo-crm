@@ -826,10 +826,15 @@ function insertNewOffer( $data ){
 }
 
 function newCV( $data ){
+    $cv_id = null;
     foreach( $data AS $key => $value ){
         if( strcmp( $key, 'customer' ) === 0 || strcmp( $key, 'vendor' ) === 0 ){
             $cv_src = ( strcmp( $key, 'customer' ) === 0 )? 'C' : 'V';
             $cv_id = $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ), TRUE, "id" );
+        }
+        else{
+            $value['cp_cv_id'] = $cv_id;
+            $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ));
         }
     }
 

@@ -916,8 +916,8 @@ function genericUpdate( $data ){
         }
 
         /*writeLog( $key ); writeLog( array_keys( $value ) );*/  /* writeLog( $where );*/
-        //writeLog( array_keys( $value ) );
-        //writeLog( array_values( $value ) );
+        writeLogR( array_keys( $value ) );
+        writeLogR( array_values( $value ) );
         $GLOBALS['dbh']->update( $key, array_keys( $value ), array_values( $value ), $where );
     }
 

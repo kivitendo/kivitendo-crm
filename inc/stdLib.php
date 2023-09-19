@@ -33,10 +33,10 @@ function writeLog( $log, $append = true ){
     $append? file_put_contents( $file, $str, FILE_APPEND ) : file_put_contents( $file, $str );
 }
 
-// writeLogB, macht das gleiche wie writeLog() - fügt den Log jedoch zu Begin der Datei debugB.log ein
-// log/debugB.log einfach in der IDE (z.B. Visual Studio Code von Microsoft) öffnen
-function writeLogB( $log, $append = true ){
-    $file = __DIR__.'/../log/debugB.log';
+// writeLogReverse, macht das gleiche wie writeLog() - fügt den Log jedoch zu Begin der Datei debugR.log ein
+// log/debugR.log einfach in der IDE (z.B. Visual Studio Code von Microsoft) öffnen
+function writeLogR( $log, $append = true ){
+    $file = __DIR__.'/../log/debugR.log';
     $str  = date("Y-m-d H:i:s -> " ).print_r( $log, TRUE )."\n";
     $append ? file_put_contents( $file, $str.file_get_contents( $file ) ) : file_put_contents( $file, $str );//
 }

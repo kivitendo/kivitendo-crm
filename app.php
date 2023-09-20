@@ -806,7 +806,7 @@
                     <a id="crm-nav-billaddr" class="nav-link active" aria-current="page" href="#crm-tab-billaddr">Rechnungsaddresse</a>
                 </li>
                 <li class="nav-item">
-                    <a id="crm-nav-contacts" class="nav-link" aria-current="page" href="#crm-tab-contacts">Lieferanschrift</a>
+                    <a id="crm-nav-deladdr" class="nav-link" aria-current="page" href="#crm-tab-deladdr">Lieferanschrift</a>
                 </li>
                 <li class="nav-item">
                     <a id="crm-nav-banktax" class="nav-link" aria-current="page" href="#crm-tab-banktax">Bank/Steuer</a>
@@ -842,9 +842,9 @@
                     </tr>
                 </table>
             </div>
-            <div id="crm-contacts-hidden"></div>
-            <div id="crm-tab-contacts" class="crm-tab">
-                <table id="contacts-form">
+            <div id="crm-deladdr-hidden"></div>
+            <div id="crm-tab-deladdr" class="crm-tab">
+                <table id="deladdr-form">
                     <thead></thead>
                     <tbody></tbody>
                 </table>
@@ -1068,7 +1068,7 @@
                             <a id="crm-nav-billaddr_customer" class="nav-link active" aria-current="page" href="#crm-tab-billaddr_customer">Rechnungsaddresse</a>
                         </li>
                         <li class="nav-item">
-                            <a id="crm-nav-contacts_customer" class="nav-link" aria-current="page" href="#crm-tab-contacts_customer">Lieferanschrift</a>
+                            <a id="crm-nav-deladdr_customer" class="nav-link" aria-current="page" href="#crm-tab-deladdr_customer">Lieferanschrift</a>
                         </li>
                         <li class="nav-item">
                             <a id="crm-nav-banktax_customer" class="nav-link" aria-current="page" href="#crm-tab-banktax_customer" >Bank/Steuer</a>
@@ -1088,7 +1088,7 @@
                     <thead></thead>
                     <tbody></tbody>
                 </table>
-                <table id="crm-tab-contacts_customer">
+                <table id="crm-tab-deladdr_customer">
                     <thead></thead>
                     <tbody></tbody>
                 </table>

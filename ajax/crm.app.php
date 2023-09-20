@@ -425,9 +425,9 @@ function getCustomerForEdit( $data ){
                 ") AS cv) AS cv, ";
 
     // Lieferadressen
-    $query .= "(SELECT json_agg( contacts ) AS contacts FROM (".
-                "SELECT * FROM contacts WHERE cp_cv_id = ".$data['id']." ORDER BY cp_name, cp_givenname ASC".
-                ") AS contacts) AS contacts, ";
+    $query .= "(SELECT json_agg( deladdr ) AS deladdr FROM (".
+                "SELECT * FROM shipto WHERE trans_id = ".$data['id']." ORDER BY shiptoname ASC".
+                ") AS deladdr) AS deladdr, ";
 
     appendQueryWithKba( $data, $query );
     appendQueryForCustomerDlg( $query );
@@ -862,7 +862,7 @@ function updateCuWithNewCar( $data ){
             $value['c_ow'] = $id;
             $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ) );
         }
-        elseif( strcmp( $key, 'contacts' ) === 0 ){
+        elseif( strcmp( $key, 'shipto' ) === 0 ){
             if( empty( $where ) ){
                 $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ) );
             }

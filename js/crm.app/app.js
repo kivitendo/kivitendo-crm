@@ -466,7 +466,10 @@ function crmUpdateDB( call, dbUpdataData, onSuccess = null ){
             console.info( 'crmUpdateDB' );
             console.info( data );
             dbUpdateData = {};
-            if( exists( data.success ) && !data.success ) $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'DB update error' ), kivi.t8( 'Error in: ' ) + 'crmUpdateDB()', ( ( exists( data.debug )? data.debug : null) ) );
+            if( exists( data.success ) && !data.success ){
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'DB update error' ), kivi.t8( 'Error in: ' ) + 'crmUpdateDB()', ( ( exists( data.debug )? data.debug : null) ) );
+                return;
+            }
             if( exists( data.src ) && exists( data.id ) ) crmRefreshAppView( data.src, data.id );
             if( null != onSuccess ) onSuccess( data );
         },

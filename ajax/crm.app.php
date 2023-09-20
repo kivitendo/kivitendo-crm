@@ -400,6 +400,12 @@ function appendQueryForCustomerDlg( &$query ){
                 ") AS vars_conf) AS vars_conf";
 }
 
+function appendQueryForCustomVars( $data, &$query ){
+    $query .= "(SELECT json_agg( custom_vars ) AS custom_vars FROM (".
+                "SELECT custom_variables.*, custom_variable_configs.name, custom_variable_configs.type FROM custom_variables JOIN custom_variable_configs ON custom_variables.config_id = custom_variable_configs.id WHERE trans_id = ".$data['id'].
+                ") AS custom_vars) AS custom_vars, ";
+}
+
 function appendQueryWithKba( $data, &$query ){
     if( array_key_exists( 'hsn', $data ) ){
         $query .= "(SELECT row_to_json( kba ) AS kba FROM (".
@@ -430,6 +436,7 @@ function getCustomerForEdit( $data ){
                 ") AS deladdr) AS deladdr, ";
 
     appendQueryWithKba( $data, $query );
+    appendQueryForCustomVars( $data, $query );
     appendQueryForCustomerDlg( $query );
 
     echo $GLOBALS['dbh']->getOne($query, true);

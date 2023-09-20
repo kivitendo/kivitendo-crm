@@ -143,25 +143,36 @@ function crmNewCVP( crmCVPtype ){
        if( exists( crmData.cv ) && exists( crmData.cv.lead ) ) $( '#billaddr-leads' ).val( crmData.cv.lead );
    }
 
-   if( exists( crmData.vars_conf ) ){
-       for( let var_conf of crmData.vars_conf ){
-           if( var_conf.type ) {
-               switch( var_conf.type ){
-               case 'select':
-                   if( var_conf.data ) {
-                       var_conf.data = var_conf.data.split( '##' );
-                       var_conf.data.unshift('');
-                   }
-                   break;
-               case 'text':
-                   var_conf.type = 'input';
-                   break;
-               case 'textfield':
-                   var_conf.type = 'textarea';
-               }
-           }
-       }
-       crmInitFormEx( crmData.vars_conf, '#vars-form' );
+    if( exists( crmData.vars_conf ) ){
+        for( let var_conf of crmData.vars_conf ){
+            if( var_conf.type ) {
+                switch( var_conf.type ){
+                case 'select':
+                    if( var_conf.data ) {
+                        var_conf.data = var_conf.data.split( '##' );
+                        var_conf.data.unshift('');
+                    }
+                    break;
+                case 'text':
+                    var_conf.type = 'input';
+                    break;
+                case 'textfield':
+                    var_conf.type = 'textarea';
+                }
+            }
+        }
+        crmInitFormEx( crmData.vars_conf, '#vars-form' );
+
+        if( exists( crmData.custom_vars ) ){
+            for( let custom_var of  crmData.custom_vars ){
+                if( 'select' == custom_var.type ){
+                    $('#' + custom_var.name + ' option:contains(' + custom_var.text_value + ')').attr('selected', 'selected');
+                }
+                else{
+                    $( '#' + custom_var.name ).val( custom_var.text_value );
+                }
+            }
+        }
    }
 
     if( exists( crmData.cv ) ){

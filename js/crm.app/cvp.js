@@ -171,6 +171,9 @@ function crmNewCVP( crmCVPtype ){
                 else{
                     $( '#' + custom_var.name ).val( custom_var.text_value );
                 }
+                $('#' + custom_var.name ).attr( 'config_id', custom_var.config_id );
+                $('#' + custom_var.name ).attr( 'custom_var_id', custom_var.id );
+                $('#' + custom_var.name ).addClass( 'crm-custom-var' );
             }
         }
    }
@@ -391,6 +394,19 @@ function crmEditCuVeViewSave( ){
             if( exists(val) ) dbUpdateData['lxckba'][columnName[1]] = val;
         }
     }
+
+    let test = {};
+    test['custom_variables'] = [];
+    $( '.crm-custom-var' ).each( function(){
+        assert( 'c-v' + $( this ).attr( 'config_id' ), $( this ).val() );
+        let customVar = {}
+        customVar['id'] = $( this ).attr( 'custom_var_id' );
+        customVar['config_id'] = $( this ).attr( 'config_id' );
+
+    });
+
+    assert( 'c-v-update',
+
     //console.info( 'dbUpdateData' );
     //console.info( dbUpdateData );
     const onSuccess = function( data ){

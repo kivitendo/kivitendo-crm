@@ -840,6 +840,10 @@ function newCV( $data ){
             $cv_id = $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ), TRUE, "id" );
         }
         elseif( strcmp( $key, 'custom_variables' ) === 0 ){
+            for( $i = 0; $i < count( $value  ); $i++ ){
+                $value[$i]['trans_id'] = $cv_id;
+            }
+            updateCustomVars( $key, $value );
         }
         else{
             $value['cp_cv_id'] = $cv_id;
@@ -900,7 +904,7 @@ function updateCuWithNewCar( $data ){
             }
         }
         elseif( strcmp( $key, 'custom_variables' ) === 0 ){
-            //updateCustomVars( $key, $value );
+            updateCustomVars( $key, $value );
         }
         else{
             if( empty( $where ) ){

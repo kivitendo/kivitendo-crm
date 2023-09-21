@@ -168,11 +168,14 @@ function crmNewCVP( crmCVPtype ){
                 case 'number':
                     var_conf.type = 'number';
                 }
-                var_conf['class'] = 'crm-custom-var';
             }
         }
         assert( 'crmData.vars_conf', crmData.vars_conf );
         crmInitFormEx( crmData.vars_conf, '#vars-form' );
+
+        for( let var_conf of crmData.vars_conf ){
+            $('#' + var_conf.name ).attr( 'config_id', var_conf.id );
+        }
 
         if( exists( crmData.custom_vars ) ){
             for( let custom_var of  crmData.custom_vars ){
@@ -185,9 +188,7 @@ function crmNewCVP( crmCVPtype ){
                 else{
                     $( '#' + custom_var.name ).val( custom_var.text_value );
                 }
-                $('#' + custom_var.name ).attr( 'config_id', custom_var.config_id );
                 $('#' + custom_var.name ).attr( 'custom_var_id', custom_var.id );
-                $('#' + custom_var.name ).addClass( 'crm-custom-var' );
             }
         }
    }
@@ -410,7 +411,7 @@ function crmEditCuVeViewSave( ){
     }
 
     dbUpdateData['custom_variables'] = [];
-    $( '.crm-custom-var' ).each( function(){
+    $( '#vars-form' ).find( ':input' ).each( function(){
         let customVar = {}
         const custom_var_id = $( this ).attr( 'custom_var_id' );
         if( exists( custom_var_id ) && '' != custom_var_id ){

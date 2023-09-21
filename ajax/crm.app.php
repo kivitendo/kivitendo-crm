@@ -839,6 +839,8 @@ function newCV( $data ){
             $cv_src = ( strcmp( $key, 'customer' ) === 0 )? 'C' : 'V';
             $cv_id = $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ), TRUE, "id" );
         }
+        elseif( strcmp( $key, 'custom_variables' ) === 0 ){
+        }
         else{
             $value['cp_cv_id'] = $cv_id;
             $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ));
@@ -851,6 +853,26 @@ function newCV( $data ){
 /********************************************
 * Ubdate Customer optional with new Car
 ********************************************/
+function updateCustomVars( $db_table, $custom_vars ){
+    foreach( $custom_vars AS $custom_var ){
+        $where = '';
+        if( array_key_exists( 'WHERE', $custom_var ) ){
+                foreach( $custom_var['WHERE'] AS $whereId => $whereVal ){
+                    if( strcmp( $whereId, 'id' ) === 0 ) $id = $whereVal;
+                    //Achtung nur eine Bedingung möglich, mit dem Schema 'beliebige ID ist gleich Wert'
+                    $where = $whereId.' = '.$whereVal;
+                }
+                unset( $custom_var['WHERE'] );
+        }
+        if( empty( $where ) ){
+            $GLOBALS['dbh']->insert( $db_table, array_keys( $custom_var ), array_values( $custom_var ) );
+        }
+        else{
+            $GLOBALS['dbh']->update( $db_table, array_keys( $custom_var ), array_values( $custom_var ), $where );
+        }
+    }
+}
+
 function updateCuWithNewCar( $data ){
     $id = FALSE;
     $GLOBALS['dbh']->beginTransaction();
@@ -876,6 +898,9 @@ function updateCuWithNewCar( $data ){
             else{
                 $GLOBALS['dbh']->update( $key, array_keys( $value ), array_values( $value ), $where );
             }
+        }
+        elseif( strcmp( $key, 'custom_variables' ) === 0 ){
+            //updateCustomVars( $key, $value );
         }
         else{
             if( empty( $where ) ){

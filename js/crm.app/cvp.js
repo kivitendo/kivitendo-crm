@@ -158,15 +158,29 @@ function crmNewCVP( crmCVPtype ){
                     break;
                 case 'textfield':
                     var_conf.type = 'textarea';
+                    break;
+                case 'customer':
+                    var_conf.type = 'input';
+                    break;
+                case 'vendor':
+                    var_conf.type = 'input';
+                    break;
+                case 'number':
+                    var_conf.type = 'number';
                 }
+                var_conf['class'] = 'crm-custom-var';
             }
         }
+        assert( 'crmData.vars_conf', crmData.vars_conf );
         crmInitFormEx( crmData.vars_conf, '#vars-form' );
 
         if( exists( crmData.custom_vars ) ){
             for( let custom_var of  crmData.custom_vars ){
                 if( 'select' == custom_var.type ){
-                    $('#' + custom_var.name + ' option:contains(' + custom_var.text_value + ')').attr('selected', 'selected');
+                    $('#' + custom_var.name + ' option').filter( function(){
+                        $( this ).attr( 'value', $( this ).text() );
+                        if( $( this ).text() == custom_var.text_value ) $( this ).attr( 'selected', 'selected' );
+                    });
                 }
                 else{
                     $( '#' + custom_var.name ).val( custom_var.text_value );
@@ -395,20 +409,22 @@ function crmEditCuVeViewSave( ){
         }
     }
 
-    let test = {};
-    test['custom_variables'] = [];
+    dbUpdateData['custom_variables'] = [];
     $( '.crm-custom-var' ).each( function(){
-        assert( 'c-v' + $( this ).attr( 'config_id' ), $( this ).val() );
         let customVar = {}
-        customVar['id'] = $( this ).attr( 'custom_var_id' );
+        const custom_var_id = $( this ).attr( 'custom_var_id' );
+        if( exists( custom_var_id ) && '' != custom_var_id ){
+            customVar['WHERE'] = {}
+            customVar['WHERE']['id'] = $( this ).attr( 'custom_var_id' );
+        }
         customVar['config_id'] = $( this ).attr( 'config_id' );
-
+        customVar['trans_id'] = billaddr_id;
+        customVar['text_value'] = $( this ).val();
+        dbUpdateData['custom_variables'].push( customVar );
     });
 
-    assert( 'c-v-update',
+    assert( 'crmEditCuVeViewSave.dbUpdateData', dbUpdateData );
 
-    //console.info( 'dbUpdateData' );
-    //console.info( dbUpdateData );
     const onSuccess = function( data ){
         crmCloseView( 'crm-wx-customer-view' );
     }

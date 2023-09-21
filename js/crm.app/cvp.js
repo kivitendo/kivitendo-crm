@@ -167,23 +167,37 @@ function crmNewCVP( crmCVPtype ){
                     break;
                 case 'number':
                     var_conf.type = 'number';
+                    break;
+                case 'bool':
+                    var_conf.type = 'checkbox';
+                    break;
                 }
             }
         }
-        assert( 'crmData.vars_conf', crmData.vars_conf );
         crmInitFormEx( crmData.vars_conf, '#vars-form' );
 
         for( let var_conf of crmData.vars_conf ){
-            $('#' + var_conf.name ).attr( 'config_id', var_conf.id );
+            $( '#' + var_conf.name ).attr( 'config_id', var_conf.id );
+            if( 'date' == var_conf.type ) $( '#' + var_conf.name ).datepicker();
         }
 
         if( exists( crmData.custom_vars ) ){
             for( let custom_var of  crmData.custom_vars ){
+                assert( '???', custom_var );
                 if( 'select' == custom_var.type ){
                     $('#' + custom_var.name + ' option').filter( function(){
                         $( this ).attr( 'value', $( this ).text() );
                         if( $( this ).text() == custom_var.text_value ) $( this ).attr( 'selected', 'selected' );
                     });
+                }
+                else if( 'bool' == custom_var.type ){
+                    $( '#' + custom_var.name ).prop( 'checked', custom_var.bool_value );
+                }
+                else if( 'number' == custom_var.type ){
+                    $( '#' + custom_var.name ).val( custom_var.number_value );
+                }
+                else if( 'date' == custom_var.type && exists( custom_var.timestamp_value ) && '1970-01-01T00:00:00' != custom_var.timestamp_value ){
+                    $( '#' + custom_var.name ).val( kivi.format_date( new Date( custom_var.timestamp_value ) ) );
                 }
                 else{
                     $( '#' + custom_var.name ).val( custom_var.text_value );
@@ -420,7 +434,10 @@ function crmEditCuVeViewSave( ){
         }
         customVar['config_id'] = $( this ).attr( 'config_id' );
         customVar['trans_id'] = billaddr_id;
-        customVar['text_value'] = $( this ).val();
+        if( 'checkbox' == $( this ).attr( 'type' ) ) customVar['bool_value'] = $( this ).prop( 'checked' );
+        else if( 'number' == $( this ).attr( 'type' ) ) customVar['number_value'] = ( '' != $( this ).val() )? $( this ).val() : '0.00';
+        else if( $( this ).hasClass( 'hasDatepicker' ) ) customVar['timestamp_value'] = ( '' != $( this ).val() )? $( this ).val() : '01.01.1970';
+        else customVar['text_value'] = $( this ).val();
         dbUpdateData['custom_variables'].push( customVar );
     });
 

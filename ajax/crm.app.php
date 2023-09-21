@@ -854,9 +854,6 @@ function newCV( $data ){
     echo '{ "src": "'.$cv_src.'", "id": "'.$cv_id.'" }';
 }
 
-/********************************************
-* Ubdate Customer optional with new Car
-********************************************/
 function updateCustomVars( $db_table, $custom_vars ){
     foreach( $custom_vars AS $custom_var ){
         $where = '';
@@ -877,6 +874,9 @@ function updateCustomVars( $db_table, $custom_vars ){
     }
 }
 
+/********************************************
+* Ubdate Customer optional with new Car
+********************************************/
 function updateCuWithNewCar( $data ){
     $id = FALSE;
     $GLOBALS['dbh']->beginTransaction();

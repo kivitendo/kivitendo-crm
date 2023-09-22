@@ -160,10 +160,13 @@ function crmNewCVP( crmCVPtype ){
                     var_conf.type = 'textarea';
                     break;
                 case 'customer':
-                    var_conf.type = 'input';
+                    var_conf.type = 'customer';
                     break;
                 case 'vendor':
-                    var_conf.type = 'input';
+                    var_conf.type = 'vendor';
+                    break;
+                case 'part':
+                    var_conf.type = 'part';
                     break;
                 case 'number':
                     var_conf.type = 'number';
@@ -179,11 +182,45 @@ function crmNewCVP( crmCVPtype ){
         for( let var_conf of crmData.vars_conf ){
             $( '#' + var_conf.name ).attr( 'config_id', var_conf.id );
             if( 'date' == var_conf.type ) $( '#' + var_conf.name ).datepicker();
+            else if( 'part' == var_conf.type ){
+                $( '#' + var_conf.name + '-label' ).autocomplete({
+                    delay: crmAcDelay,
+                    source: "crm/ajax/crm.app.php?action=findPart&filter=offer",
+                    select: function( e, ui ) {
+                        $( e.target ).val( ui.item.vendornumber + ' ' + ui.item.value );
+                        const target = $( e.target ).parent().find( '#' + $( e.target ).attr( 'name' ) );
+                        target.val( ui.item.id );
+                        return true;
+                    }
+                });
+            }
+            else if( 'customer' == var_conf.type ){
+                $( '#' + var_conf.name + '-label' ).autocomplete({
+                    delay: crmAcDelay,
+                    source: "crm/ajax/crm.app.php?action=searchCustomer",
+                    select: function( e, ui ) {
+                        $( e.target ).val( ui.item.customernumber + ' ' + ui.item.value );
+                        const target = $( e.target ).parent().find( '#' + $( e.target ).attr( 'name' ) );
+                        target.val( ui.item.id );
+                        return false;
+                    }
+                });
+            }
+            else if( 'vendor' == var_conf.type ){
+                $( '#' + var_conf.name + '-label' ).autocomplete({
+                    delay: crmAcDelay,
+                    source: "crm/ajax/crm.app.php?action=searchVendor",
+                    select: function( e, ui ) {
+                        const target = $( e.target ).parent().find( '#' + $( e.target ).attr( 'name' ) );
+                        target.val( ui.item.id );
+                        return true;
+                    }
+                });
+            }
         }
 
         if( exists( crmData.custom_vars ) ){
             for( let custom_var of  crmData.custom_vars ){
-                assert( '???', custom_var );
                 if( 'select' == custom_var.type ){
                     $('#' + custom_var.name + ' option').filter( function(){
                         $( this ).attr( 'value', $( this ).text() );
@@ -196,8 +233,17 @@ function crmNewCVP( crmCVPtype ){
                 else if( 'number' == custom_var.type ){
                     $( '#' + custom_var.name ).val( custom_var.number_value );
                 }
-                else if( 'date' == custom_var.type && exists( custom_var.timestamp_value ) && '1970-01-01T00:00:00' != custom_var.timestamp_value ){
+                else if( 'date' == custom_var.type && exists( custom_var.timestamp_value ) ){
                     $( '#' + custom_var.name ).val( kivi.format_date( new Date( custom_var.timestamp_value ) ) );
+                }
+                else if( 'part' == custom_var.type && exists( custom_var.number_value ) ){
+                    $( '#' + custom_var.name ).val( custom_var.number_value );
+                }
+                else if( 'customer' == custom_var.type && exists( custom_var.number_value ) ){
+                    $( '#' + custom_var.name ).val( custom_var.number_value );
+                }
+                else if( 'vendor' == custom_var.type && exists( custom_var.number_value ) ){
+                    $( '#' + custom_var.name ).val( custom_var.number_value );
                 }
                 else{
                     $( '#' + custom_var.name ).val( custom_var.text_value );
@@ -426,6 +472,7 @@ function crmEditCuVeViewSave( ){
 
     dbUpdateData['custom_variables'] = [];
     $( '#vars-form' ).find( ':input' ).each( function(){
+        if( $( this ).hasClass( 'crm-ignore-field' ) ) return;
         let customVar = {}
         const custom_var_id = $( this ).attr( 'custom_var_id' );
         if( exists( custom_var_id ) && '' != custom_var_id ){
@@ -436,7 +483,8 @@ function crmEditCuVeViewSave( ){
         customVar['trans_id'] = billaddr_id;
         if( 'checkbox' == $( this ).attr( 'type' ) ) customVar['bool_value'] = $( this ).prop( 'checked' );
         else if( 'number' == $( this ).attr( 'type' ) ) customVar['number_value'] = ( '' != $( this ).val() )? $( this ).val() : '0.00';
-        else if( $( this ).hasClass( 'hasDatepicker' ) ) customVar['timestamp_value'] = ( '' != $( this ).val() )? $( this ).val() : '01.01.1970';
+        else if( $( this ).hasClass( 'hasDatepicker' ) ) customVar['timestamp_value'] = $( this ).val();
+        else if( 'hidden' == $( this ).attr( 'type' ) ) customVar['number_value'] = ( '' != $( this ).val() )? $( this ).val() : '0';
         else customVar['text_value'] = $( this ).val();
         dbUpdateData['custom_variables'].push( customVar );
     });

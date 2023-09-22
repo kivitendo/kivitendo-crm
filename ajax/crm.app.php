@@ -72,7 +72,14 @@ function fastSearch(){
 function searchCustomer(){
     if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
         $term = $_GET['term'];
-        echo $GLOBALS['dbh']->getAll( "SELECT name AS value, id FROM customer WHERE name ILIKE '%".$term."%' ORDER BY name ASC LIMIT 15", true );
+        echo $GLOBALS['dbh']->getAll( "SELECT name AS value, id, customernumber FROM customer WHERE name ILIKE '%".$term."%' ORDER BY name ASC LIMIT 15", true );
+    }
+}
+
+function searchVendor(){
+    if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
+        $term = $_GET['term'];
+        echo $GLOBALS['dbh']->getAll( "SELECT name AS value, id, vendornumber FROM vendor WHERE name ILIKE '%".$term."%' ORDER BY name ASC LIMIT 15", true );
     }
 }
 
@@ -396,11 +403,12 @@ function appendQueryForCustomerDlg( &$query ){
 
     // Variablen
     $query .= "(SELECT json_agg( vars_conf ) AS vars_conf FROM (".
-                "SELECT id, name, description AS label, type, description AS tooltip, '42' AS size, options AS data FROM custom_variable_configs WHERE module = 'CT' ORDER BY description ASC".
+                "SELECT id, name, description AS label, type, description AS tooltip, '42' AS size, options AS data FROM custom_variable_configs WHERE module = 'CT' ORDER BY sortkey ASC".
                 ") AS vars_conf) AS vars_conf";
 }
 
 function appendQueryForCustomVars( $data, &$query ){
+    // Braucht 3 JOINs für Vendor, Customer und Parts um den Namen und die partnumber, customernumber und vendornumber zu holen
     $query .= "(SELECT json_agg( custom_vars ) AS custom_vars FROM (".
                 "SELECT custom_variables.*, custom_variable_configs.name, custom_variable_configs.type FROM custom_variables JOIN custom_variable_configs ON custom_variables.config_id = custom_variable_configs.id WHERE trans_id = ".$data['id'].
                 ") AS custom_vars) AS custom_vars, ";
@@ -832,11 +840,34 @@ function insertNewOffer( $data ){
     echo '{ "id": "'.$rs['id'].'", "quonumber": "'.$rs['quonumber'].'", "itime": "'.$rs['itime'].'" }';
 }
 
+//Vendor in Zukunft nur über defaults hochzählen ToDo: Ronny
+function computeCVnumber( $business, $key ){
+    if( null != $business ){
+        $rs = $GLOBALS['dbh']->getOne( "SELECT customernumberinit::int AS newnumber FROM business WHERE id = ".$business );
+        while( $GLOBALS['dbh']->getOne( "SELECT ".$key."number FROM ".$key." WHERE ".$key."number = '".$rs['newnumber']."'" )[$key.'number'] ){
+             ++$rs['newnumber'];
+        }
+        //writeLog( "SELECT ".$key."number FROM ".$key." WHERE ".$key."number = '".$rs['newnumber']."'" );
+        $GLOBALS['dbh']->query( "UPDATE business SET customernumberinit = ".$rs['newnumber']." WHERE id = ".$business );
+    }
+    else{
+        $rs = $GLOBALS['dbh']->getOne( "SELECT ".$key."number::int AS newnumber FROM defaults" );
+        while( $GLOBALS['dbh']->getOne( "SELECT ".$key."number FROM customer WHERE ".$key."number = '".$rs['newnumber']."'" )[$key.'number'] ) $rs['newnumber']++;
+        $GLOBALS['dbh']->query( "UPDATE defaults SET ".$key."number = ".$rs['newnumber'] );
+    }
+    return $rs['newnumber'];
+}
+
 function newCV( $data ){
     $cv_id = null;
+    $cv_src = null;
+
     foreach( $data AS $key => $value ){
         if( strcmp( $key, 'customer' ) === 0 || strcmp( $key, 'vendor' ) === 0 ){
             $cv_src = ( strcmp( $key, 'customer' ) === 0 )? 'C' : 'V';
+            $cv_nr = computeCVnumber( ( ( array_key_exists( 'business_id', $value ) )? $value['business_id'] : null ), $key );
+            $value[$key.'number'] = $cv_nr;
+
             $cv_id = $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ), TRUE, "id" );
         }
         elseif( strcmp( $key, 'custom_variables' ) === 0 ){
@@ -866,9 +897,11 @@ function updateCustomVars( $db_table, $custom_vars ){
                 unset( $custom_var['WHERE'] );
         }
         if( empty( $where ) ){
+            if( array_key_exists( 'timestamp_value', $custom_var ) && empty( $custom_var['timestamp_value'] ) ) unset( $custom_var['timestamp_value'] );
             $GLOBALS['dbh']->insert( $db_table, array_keys( $custom_var ), array_values( $custom_var ) );
         }
         else{
+            if( array_key_exists( 'timestamp_value', $custom_var ) && empty( $custom_var['timestamp_value'] ) ) $custom_var['timestamp_value'] = null;
             $GLOBALS['dbh']->update( $db_table, array_keys( $custom_var ), array_values( $custom_var ), $where );
         }
     }

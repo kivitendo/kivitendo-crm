@@ -840,20 +840,24 @@ function insertNewOffer( $data ){
     echo '{ "id": "'.$rs['id'].'", "quonumber": "'.$rs['quonumber'].'", "itime": "'.$rs['itime'].'" }';
 }
 
-//Vendor in Zukunft nur über defaults hochzählen ToDo: Ronny
-function computeCVnumber( $business, $key ){
-    if( null != $business ){
-        $rs = $GLOBALS['dbh']->getOne( "SELECT customernumberinit::int AS newnumber FROM business WHERE id = ".$business );
-        while( $GLOBALS['dbh']->getOne( "SELECT ".$key."number FROM ".$key." WHERE ".$key."number = '".$rs['newnumber']."'" )[$key.'number'] ){
-             ++$rs['newnumber'];
-        }
-        //writeLog( "SELECT ".$key."number FROM ".$key." WHERE ".$key."number = '".$rs['newnumber']."'" );
-        $GLOBALS['dbh']->query( "UPDATE business SET customernumberinit = ".$rs['newnumber']." WHERE id = ".$business );
+function calculateCVnumber( $business, $cv ){ //Berechnet die nächste Kundennummer für einen Kunden oder Lieferanten
+    if( $cv == 'vendor' ){ //Lieferanten werden in Zukunft nur über defaults hochgezählt, die Kundengruppe wird nicht mehr berücksichtigt
+        $rs = $GLOBALS['dbh']->getOne( "SELECT vendornumber::int AS newnumber FROM defaults" );
+        while( $GLOBALS['dbh']->getOne( "SELECT vendornumber FROM vendor WHERE vendornumber = '".++$rs['newnumber']."'" )['vendornumber'] );
+        $GLOBALS['dbh']->query( "UPDATE defaults SET vendornumber = ".$rs['newnumber'] );
     }
-    else{
-        $rs = $GLOBALS['dbh']->getOne( "SELECT ".$key."number::int AS newnumber FROM defaults" );
-        while( $GLOBALS['dbh']->getOne( "SELECT ".$key."number FROM customer WHERE ".$key."number = '".$rs['newnumber']."'" )[$key.'number'] ) $rs['newnumber']++;
-        $GLOBALS['dbh']->query( "UPDATE defaults SET ".$key."number = ".$rs['newnumber'] );
+    if( $cv == 'customer' ){
+        if( $business ){ //Kundengruppe  vorhanden
+            $rs = $GLOBALS['dbh']->getOne( "SELECT customernumberinit::int AS newnumber FROM business WHERE id = ".$business );
+            //wir suchen die nächste freie Nummer
+            while( $GLOBALS['dbh']->getOne( "SELECT customernumber FROM customer WHERE customernumber = '".++$rs['newnumber']."'" )['customernumber'] );
+            $GLOBALS['dbh']->query( "UPDATE business SET customernumberinit = ".$rs['newnumber']." WHERE id = ".$business );
+        }
+        else{ // keine Kundengruppe vorhanden, business ist leer
+            $rs = $GLOBALS['dbh']->getOne( "SELECT customernumber::int AS newnumber FROM defaults" );
+            while( $GLOBALS['dbh']->getOne( "SELECT customernumber FROM customer WHERE customernumber = '".++$rs['newnumber']."'" )['customernumber'] );
+            $GLOBALS['dbh']->query( "UPDATE defaults SET customernumber = ".$rs['newnumber'] );
+        }
     }
     return $rs['newnumber'];
 }
@@ -865,9 +869,8 @@ function newCV( $data ){
     foreach( $data AS $key => $value ){
         if( strcmp( $key, 'customer' ) === 0 || strcmp( $key, 'vendor' ) === 0 ){
             $cv_src = ( strcmp( $key, 'customer' ) === 0 )? 'C' : 'V';
-            $cv_nr = computeCVnumber( ( ( array_key_exists( 'business_id', $value ) )? $value['business_id'] : null ), $key );
+            $cv_nr = calculateCVnumber( ( ( array_key_exists( 'business_id', $value ) )? $value['business_id'] : null ), $key );
             $value[$key.'number'] = $cv_nr;
-
             $cv_id = $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ), TRUE, "id" );
         }
         elseif( strcmp( $key, 'custom_variables' ) === 0 ){

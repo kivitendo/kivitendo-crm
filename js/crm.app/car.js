@@ -223,7 +223,7 @@ function crmNewCarFromScan(){
                         lxcarsData = data;
                         crmOpenView( 'crm-fsscan-customer-dlg', kivi.t8( 'New car from scan' ) );
 
-                        const name = crmFormatName( getValueNotNull( data.firstname ) + ' ' + getValueNotNull( data.name1 ) );
+                        const name = ( exists( data.firstname ) && data.firstname.trim() != '' )? crmFormatName( data.firstname + ' ' + getValueNotNull( data.name1 ) ) : getValueNotNull( data.name1 );
                         $( '#crm-fsscan-edit-customer' ).val( name.trim()  );
                         crmSearchCustomerForScan( name );
 

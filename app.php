@@ -1041,6 +1041,10 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="#crm-tab-vars">Variablen</a>
+                    <table id="crm-tab-vars-form">
+                        <thead></thead>
+                        <tbody></tbody>
+                    </table>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="#crm-tab-finance-infos">Finanzinfos</a>

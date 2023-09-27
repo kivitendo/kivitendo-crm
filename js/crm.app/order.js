@@ -366,6 +366,7 @@ function crmNewOrderAndInsertPos( itemPosition, itemType, item ){
 function crmInsertOrderPos( itemPosition, itemType, item, modified = false ){
     let pos = {};
     pos['record'] = {};
+    let crmInsertOrderPos = 'genericSingleInsert';
 
     switch( crmOrderType ){
         case crmOrderTypeEnum.Order:
@@ -425,10 +426,19 @@ function crmInsertOrderPos( itemPosition, itemType, item, modified = false ){
         return;
     }
 
+
+    if( !item.instruction && item.description.includes( 'Hauptuntersuchung' ) || item.description.includes( 'HU/AU' ) ){
+        const c_id = $( '#od-lxcars-c_id' ).val();
+        if( exists( c_id ) && '' != c_id ){
+            pos['record']['huau'] = c_id;
+            crmInsertOrderPos = 'insertOrderPosHuAu';
+        }
+    }
+
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
-        data:  { action: 'genericSingleInsert', data: pos },
+        data:  { action: crmInsertOrderPos, data: pos },
         success: function( data ){
             $( '#od-empty-item-id' ).attr( 'id', data.id );
             crmSaveOrder();

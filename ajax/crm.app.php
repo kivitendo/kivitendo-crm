@@ -960,6 +960,16 @@ function updateCuWithNewCar( $data ){
     echo '{ "src": "C", "id": "'.$id.'" }';
 }
 
+function insertOrderPosHuAu( $data ){
+    writeLog( $data );
+
+    $today   = date( 'Y-m-d' );
+    $newdate = date( 'Y-m-01', strtotime( $today.' + 2 year ' ) );
+    $GLOBALS['dbh']->update( 'lxc_cars', array( 'c_hu' ), array( $newdate ), 'c_id = '.$data['record']['huau'] );
+
+    genericSingleInsert( $data );
+}
+
 function genericSingleInsert( $data ){
     //writeLog( $data );
     $tableName = array_key_first( $data['record'] );

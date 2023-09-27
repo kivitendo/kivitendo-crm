@@ -1,4 +1,4 @@
-/<?php
+<?php
 
 require_once __DIR__.'/../inc/stdLib.php'; // for debug
 require_once __DIR__.'/../inc/crmLib.php';

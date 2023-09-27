@@ -250,9 +250,6 @@ function crmAddOrderItem( dataRow ){
 }
 
 function crmCompleteInsertOrderPos( row, item ){
-    console.info( 'item' );
-    console.info( item );
-
     let itemType = row.find( '[class=od-item-type]' ).val();
     if( true == item.instruction ){
         if( 'P' == itemType || 'S' == itemType ){
@@ -544,15 +541,11 @@ function crmSaveOrder(){
         }
     });
 
-    console.info( 'dbUpdateData' );
-    console.info( dbUpdateData );
-
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
         data:  { action: 'genericUpdateEx', data: dbUpdateData },
         success: function( data ){
-            console.info( 'Order saved' );
         },
         error: function( xhr, status, error ){
             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmSaveOrder()', xhr.responseText );
@@ -716,7 +709,6 @@ $( '#od_off_customer_name, #od_customer_name, #od_inv_customer_name' ).autocompl
             type: 'POST',
             data:  { action: 'genericUpdateEx', data: dbUpdateData },
             success: function( data ){
-                console.info( 'Order saved' );
                 $( '#od-customer-id' ).val( ui.item.id );
                 crmRefreshAppView( 'C', ui.item.id );
             },
@@ -771,7 +763,6 @@ $( '#od_lxcars_c_ln, #od_inv_shippingpoint' ).autocomplete({
             type: 'POST',
             data:  { action: 'genericUpdateEx', data: dbUpdateData },
             success: function( data ){
-                console.info( 'Car changed' );
                 $( '#od-lxcars-c_id' ).val( ui.item.id );
                 $( '#od-inv-shippingpoint' ).val( ui.item.value );
             },
@@ -1092,7 +1083,6 @@ function crmPrintOrder( target ){
             type: 'POST',
             data: data,
             success: function( data ){
-                console.info( 'printed' );
                 if( exists( data ) && exists( data.error ) ){
                     $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Print or send e-mail' ), kivi.t8( 'Error:' ) + ' ' + kivi.t8( 'The following error is occurred: ' ) + data.error );
                 }
@@ -1389,7 +1379,6 @@ function crmEditOrderCallPrinter1(){
         type: 'POST',
         data:  { action: 'printOrder', data: printData },
         success: function( data ){
-            console.info( 'printed' );
         },
         error: function( xhr, status, error ){
             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'printOrder( printOrder1 )', xhr.responseText );

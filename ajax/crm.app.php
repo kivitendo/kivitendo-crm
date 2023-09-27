@@ -299,7 +299,7 @@ function getCVPA( $data ){
         // Stammdaten
         $db_table = array('C' => 'customer', 'V' => 'vendor');
         $query .= "(SELECT row_to_json( cv ) AS cv FROM (".
-                    "SELECT '".$data['src']."' AS src, id, name, street, zipcode, contact, phone AS phone1, fax AS phone2, email, city, country FROM ".$db_table[$data['src']]." WHERE id=".$data['id'].
+                    "SELECT '".$data['src']."' AS src, id, ".$db_table[$data['src']]."number AS cvnumber, name, street, zipcode, contact, phone AS phone1, fax AS phone2, email, city, country FROM ".$db_table[$data['src']]." WHERE id=".$data['id'].
                     ") AS cv) AS cv, ";
         // Angebote
         $id = array('C' => 'customer_id', 'V' => 'vendor_id');

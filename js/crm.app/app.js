@@ -212,6 +212,7 @@ function showCVPA( data ){
         $( '#crm-cvpa-id' ).val( data.cv.id );
         $( '#crm-cvpa-name' ).val( data.cv.name + ' (' + ( ( data.cv.src == 'C' ) ? kivi.t8( 'Customer' ) : kivi.t8( 'Vendor' ) ) + ')' );
 
+        assert( 'showCVPA()', data.cv );
         $( '#crm-wx-contact' ).show();
         $.each( data.cv, function( key, value ){
             if( value ){

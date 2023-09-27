@@ -224,7 +224,7 @@ function crmNewCarFromScan(){
                         crmOpenView( 'crm-fsscan-customer-dlg', kivi.t8( 'New car from scan' ) );
 
                         const name = crmFormatName( getValueNotNull( data.firstname ) + ' ' + getValueNotNull( data.name1 ) );
-                        $( '#crm-fsscan-edit-customer' ).val( name  );
+                        $( '#crm-fsscan-edit-customer' ).val( name.trim()  );
                         crmSearchCustomerForScan( name );
 
                         $( '#crm-fsscan-edit-customer' ).keyup( function(){

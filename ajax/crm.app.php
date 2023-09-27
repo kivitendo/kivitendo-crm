@@ -808,6 +808,12 @@ function insertNewCuWithCar( $data ){
                 return;
             }
         }
+        elseif( strcmp( $key, 'custom_variables' ) === 0 ){
+            for( $i = 0; $i < count( $value  ); $i++ ){
+                $value[$i]['trans_id'] = $id;
+            }
+            updateCustomVars( $key, $value );
+        }
         else{
             if( $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ) ) === FALSE ){
                 $GLOBALS['dbh']->rollBack();

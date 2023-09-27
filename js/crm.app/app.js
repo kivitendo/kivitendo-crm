@@ -63,7 +63,6 @@ function crmGetLxcarsVer(){
         data:  { action: 'isLxcars' },
         success: function( data ){
                 lxcars = data.lxcars;
-                console.info( 'activate lxcars: ' + lxcars );
                 crmGetHistory();
         },
         error: function( xhr, status, error ){
@@ -83,7 +82,6 @@ function crmGetHistory( refresh = true ){
             if( data ){
                 for( let entry of data ){
                     let id = 'crm-hist-entry-' + entry[2]  + entry[0];
-                    //console.info( entry );
                     $( '#crm-history-list' ).append( '<div class="layout-actionbar-action layout-actionbar-submit" data-src="' + entry[2] +'" data-id="' + entry[0] + '" id="' + id + '">' + entry[1] + '</div>');
                     $( '#' + id ).click( function(){
                         crmRefreshAppView( entry[2], entry[0] );
@@ -132,7 +130,6 @@ function getCVPA( src, id ){
         data:  { action: 'getCVPA', data: { 'src': src, 'id': id } },
         success: function( data ){
             showCVPA( data );
-            console.info( data );
             if( exists( data.car ) ){
                 crmEditCarDlg( data );
             }
@@ -333,8 +330,6 @@ function showCVPA( data ){
                 type: 'POST',
                 data:  { action: 'getInvoice', data: { 'id': this.id } },
                 success: function( crmData ){
-                    console.info( 'invoice' );
-                    console.info( crmData );
                     crmEditOrderDlg( crmData, crmOrderTypeEnum.Invoice );
                 },
                 error: function( xhr, status, error ){
@@ -467,8 +462,6 @@ function crmUpdateDB( call, dbUpdataData, onSuccess = null ){
         type: 'POST',
         data:  { action: call, data: dbUpdateData },
         success: function( data ){
-            console.info( 'crmUpdateDB' );
-            console.info( data );
             dbUpdateData = {};
             if( exists( data.success ) && !data.success ){
                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'DB update error' ), kivi.t8( 'Error in: ' ) + 'crmUpdateDB()', ( ( exists( data.debug )? data.debug : null) ) );

@@ -1,4 +1,4 @@
-<?php
+/<?php
 
 require_once __DIR__.'/../inc/stdLib.php'; // for debug
 require_once __DIR__.'/../inc/crmLib.php';
@@ -613,7 +613,7 @@ function getDataForNewOffer( $data ){
                 "SELECT * FROM printers".
                 ") AS printers) AS printers";
 
-    writeLog( $query );
+    //writeLog( $query );
 
     //echo '{ "common": '.$GLOBALS['dbh']->getOne( $query, true ).' }';
     echo $GLOBALS['dbh']->getOne( $query, true );
@@ -994,8 +994,8 @@ function genericUpdate( $data ){
         }
 
         /*writeLog( $key ); writeLog( array_keys( $value ) );*/  /* writeLog( $where );*/
-        writeLogR( array_keys( $value ) );
-        writeLogR( array_values( $value ) );
+        //writeLogR( array_keys( $value ) );
+        //writeLogR( array_values( $value ) );
         $GLOBALS['dbh']->update( $key, array_keys( $value ), array_values( $value ), $where );
     }
 

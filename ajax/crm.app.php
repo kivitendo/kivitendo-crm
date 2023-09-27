@@ -1003,7 +1003,7 @@ function genericUpdate( $data ){
 }
 
 function genericUpdateEx( $data ){
-
+    writeLogR( timestamp() );
     $update = function( $tableName, $dataObject ){
         $where = '';
         if( array_key_exists( 'WHERE', $dataObject ) ){
@@ -1041,9 +1041,11 @@ function genericUpdateEx( $data ){
     $GLOBALS['dbh']->commit();
 
     resultInfo( true );
+    writeLogR( timestamp() );
 }
 
 function genericDelete( $data ){
+    writeLogR( timestamp() );
     foreach( $data AS $tableName => $where){
         if( !isset( $where['WHERE'] ) ){
             resultInfo( false, 'Risky SQL-Statment with empty WHERE clausel'  );
@@ -1052,6 +1054,7 @@ function genericDelete( $data ){
         $GLOBALS['dbh']->query( "DELETE FROM $tableName WHERE ".$where['WHERE'] );
     }
     resultInfo(true);
+    writeLogR( timestamp() );
 }
 
 function printOrder( $data ){

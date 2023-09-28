@@ -1041,10 +1041,6 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="#crm-tab-vars">Variablen</a>
-                    <table id="crm-vars-table">
-                        <thead></thead>
-                        <tbody></tbody>
-                    </table>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="#crm-tab-finance-infos">Finanzinfos</a>
@@ -1061,6 +1057,15 @@
                 <p>Hier stehen dann die wichtigen Notizen.</p>
             </div>
             <div id="crm-tab-vars" class="crm-tab">
+                <table width="100%" class="tbl-list">
+                    <thead>
+                        <tr>
+                            <th>Beschreibung</th>
+                            <th>Eintrag</th>
+                        </tr>
+                    </thead>
+                    <tbody id="crm-vars-table"></tbody>
+                </table>
             </div>
             <div id="crm-tab-finance-infos" class="crm-tab">
             </div>

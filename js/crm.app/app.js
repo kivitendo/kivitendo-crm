@@ -344,6 +344,15 @@ function showCVPA( data ){
         $( '#crm-wf-edit' ).attr( 'data-src', data.cv.src );
         $( '#crm-wf-edit' ).attr( 'data-id', data.cv.id );
     }
+
+    assert( 'vars', data.custom_vars );
+    if( exists( data.custom_vars ) ){
+        $.each( data.custom_vars, function( key, value ){
+            let listrow0 = false;
+            $( '#crm-vars-table' ).append( '<tr id="' + value.id +'" class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' + value.description  + '</td><td>' + value.value  + '</td></tr>' );
+        });
+    }
+
     crmDelAddr = 0;
 }
 

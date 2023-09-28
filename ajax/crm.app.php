@@ -323,7 +323,11 @@ function getCVPA( $data ){
                     "SELECT DISTINCT ON (".$db_table[$data['src']].".id) to_char(".$db_table[$data['src']].".transdate, 'DD.MM.YYYY') as date, COALESCE( description, '---------' ) AS description, COALESCE( ROUND( amount,2 ) )||' '||COALESCE( C.name ) as amount, ".
                     "invnumber as number, ".$db_table[$data['src']].".id FROM ".$db_table[$data['src']]." LEFT JOIN invoice  ON ".$db_table[$data['src']].".id=trans_id LEFT JOIN currencies C on currency_id=C.id  WHERE ".$id[$data['src']]." = ".$data['id']." ORDER BY ".$db_table[$data['src']].".id DESC, invoice.id".
                     ") AS inv) AS inv, ";
-    }
+
+        $query .= "(SELECT json_agg( custom_vars ) AS custom_vars FROM (".
+                    "SELECT COALESCE( custom_variables.bool_value::text, custom_variables.number_value::text, custom_variables.timestamp_value::text, custom_variables.text_value ) AS value, custom_variable_configs.description FROM custom_variables JOIN custom_variable_configs ON custom_variables.config_id = custom_variable_configs.id WHERE trans_id = ".$data['id'].
+                    ") AS custom_vars) AS custom_vars, ";
+        }
 
     // Fahrzeuge
     $query .= "( SELECT json_agg( cars ) AS cars FROM (".

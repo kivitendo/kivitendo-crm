@@ -961,8 +961,6 @@ function updateCuWithNewCar( $data ){
 }
 
 function insertOrderPosHuAu( $data ){
-    writeLog( $data );
-
     $today   = date( 'Y-m-d' );
     $newdate = date( 'Y-m-01', strtotime( $today.' + 2 year ' ) );
     $GLOBALS['dbh']->update( 'lxc_cars', array( 'c_hu' ), array( $newdate ), 'c_id = '.$data['record']['huau'] );

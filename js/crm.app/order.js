@@ -427,7 +427,7 @@ function crmInsertOrderPos( itemPosition, itemType, item, modified = false ){
     }
 
 
-    if( !item.instruction && item.description.includes( 'Hauptuntersuchung' ) || item.description.includes( 'HU/AU' ) ){
+    if( crmOrderTypeEnum.Invoice == crmOrderType || crmOrderTypeEnum.Order == crmOrderType && !item.instruction && item.description.includes( 'Hauptuntersuchung' ) || item.description.includes( 'HU/AU' ) ){
         const c_id = $( '#od-lxcars-c_id' ).val();
         if( exists( c_id ) && '' != c_id ){
             pos['record']['huau'] = c_id;

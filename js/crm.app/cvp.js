@@ -28,7 +28,11 @@ function crmGetCustomerForEdit( src, id, new_car, fx ){
 const crmCVPtypeEnum = { Customer: 'C', Vendor: 'V', Person: 'P' };
 
 function crmNewCVP( crmCVPtype ){
-    if( crmCVPtype == crmCVPtypeEnum.Person ) return; //ToDo
+    if( crmCVPtype == crmCVPtypeEnum.Person ){
+        crmEditPersonView( null );
+        crmOpenView( 'crm-contact-person-view' );
+        return;
+    }
 
     $.ajax({
         url: 'crm/ajax/crm.app.php',
@@ -489,7 +493,7 @@ function crmEditCuVeViewSave( ){
         dbUpdateData['custom_variables'].push( customVar );
     });
 
-    assert( 'crmEditCuVeViewSave.dbUpdateData', dbUpdateData );
+    //assert( 'crmEditCuVeViewSave.dbUpdateData', dbUpdateData );
 
     const onSuccess = function( data ){
         crmCloseView( 'crm-wx-customer-view' );

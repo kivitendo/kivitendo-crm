@@ -327,6 +327,10 @@ function getCVPA( $data ){
         $query .= "(SELECT json_agg( custom_vars ) AS custom_vars FROM (".
                     "SELECT COALESCE( custom_variables.bool_value::text, custom_variables.number_value::text, custom_variables.timestamp_value::text, custom_variables.text_value ) AS value, custom_variable_configs.description FROM custom_variables JOIN custom_variable_configs ON custom_variables.config_id = custom_variable_configs.id WHERE trans_id = ".$data['id'].
                     ") AS custom_vars) AS custom_vars, ";
+
+        $query .= "(SELECT json_agg( contacts ) AS contacts FROM (".
+                    "SELECT * FROM contacts WHERE cp_cv_id = ".$data['id'].
+                    ") AS contacts) AS contacts, ";
         }
 
     // Fahrzeuge
@@ -452,6 +456,10 @@ function getCustomerForEdit( $data ){
     appendQueryForCustomerDlg( $query );
 
     echo $GLOBALS['dbh']->getOne($query, true);
+}
+
+function getContactPerson( $data ){
+    echo $GLOBALS['dbh']->getOne( "SELECT * FROM contacts WHERE cp_id = ".$data['id'], true );
 }
 
 function getCarKbaData( $data ){

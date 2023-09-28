@@ -345,11 +345,26 @@ function showCVPA( data ){
         $( '#crm-wf-edit' ).attr( 'data-id', data.cv.id );
     }
 
-    assert( 'vars', data.custom_vars );
     if( exists( data.custom_vars ) ){
+        let listrow0 = false;
         $.each( data.custom_vars, function( key, value ){
-            let listrow0 = false;
-            $( '#crm-vars-table' ).append( '<tr id="' + value.id +'" class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' + value.description  + '</td><td>' + value.value  + '</td></tr>' );
+            $( '#crm-vars-table' ).append( '<tr id="' + value.id +'" class="' + ( ( listrow0 = !listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' + value.description  + '</td><td>' + value.value  + '</td></tr>' );
+        });
+    }
+
+    if( exists( data.contacts ) ){
+        let listrow0 = false;
+        $.each( data.contacts, function( key, value ){
+            let tabline = '<div  onclick="crmEditContactPerson( ' + value.cp_id + ' );"><div class="input-panel control-panel" style="width: 100%; min-height: 80px; margin: 5px;"><div style="padding-bottom: 1em"><span>' + getValueNotNull( value.cp_givenname )  + ' ' + getValueNotNull( value.cp_name ) + '</span></div>';
+            if( exists( value.cp_phone1 ) ){
+                tabline += '<table><tr><td>Telefon:</td>'
+                        + '<td><button id="" class="ui-contact-btn">' + value.cp_phone1 + '</button></td>'
+                        + '<td><button id="" class="clickToCall1 ui-contact-fx-btn">T</button><div id=""></div></td>'
+                        + '<td><button id="" class="copy clickToCall1 ui-contact-fx-btn" title="Copy">C</button></td>'
+                        + '<td ><button id="" class="whatsapp clickToCall1 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td></tr>';
+            }
+            tabline += '</div></div>';
+            $( '#crm-contacts-table' ).append( tabline );
         });
     }
 
@@ -465,7 +480,7 @@ window.onpopstate = function( e ){
     }
 }
 
-function crmUpdateDB( call, dbUpdataData, onSuccess = null ){
+function crmUpdateDB( call, dbUpdateData, onSuccess = null ){
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
@@ -547,8 +562,7 @@ $( '#crm-wf-new-vendor' ).click( function() {
 });
 
 $( '#crm-wf-new-person' ).click( function() {
-    //crmNewPerson();
-    crmNewCustomer("1");
+    crmNewCVP( crmCVPtypeEnum.Person );
 });
 
 $( '#crm-wf-search-order' ).click( function() {

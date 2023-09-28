@@ -662,6 +662,20 @@
     </div>
 </div>
 
+<div id="crm-contact-person-view" class="crm-p2" style="display:none">
+    <div>
+        <button id="crm-edit-contact-person-save-btn">Speichern</button>
+        <button id="crm-edit-contact-person-cancel-btn">Abbrechen</button>
+    </div>
+    <div class="input-panel control-panel">
+            <div id="crm-contact-person-hidden"></div>
+            <table id="contact-person-form">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+    </div>
+</div>
+
 <div id="crm-show-car-data-dialog" style="display:none">
     <div id="show-car-data-hidden"></div>
     <table id="show-car-data-form">
@@ -1050,6 +1064,7 @@
                 </li>
             </ul>
             <div id="crm-tab-contact-hist" class="crm-tab">
+                <div id="crm-contacts-table"></div>
             </div>
             <div id="crm-tab-delivery-addr" class="crm-tab">
             </div>
@@ -1136,6 +1151,7 @@
 <script src="crm/js/crm.app/order.js"></script>
 <script src="crm/js/crm.app/article.js"></script>
 <script src="crm/js/crm.app/searchorder.js"></script>
+<script src="crm/js/crm.app/person.js"></script>
 <script src="crm/js/crm.app/newcustomer.js"></script>
 <script src="crm/js/crm.app/phonecall.js"></script>
 </body>

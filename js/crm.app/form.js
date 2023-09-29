@@ -20,8 +20,8 @@ const billaddrFormModel = [
 ];
 
 const contactPersonFormModel = [
-    { "name": "contacts-cp_title", "label": "Title:", "type": "input", "size": "42", "tooltip": "" },
     { "name": "contacts-cp_givenname", "label": "Givenname:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "contacts-cp_title", "label": "Title:", "type": "input", "size": "42", "tooltip": "" },
     { "name": "contacts-cp_name", "label": "Name:", "type": "input", "size": "42", "tooltip": "" },
     { "name": "contacts-cp_abteilung", "label": "Department:", "type": "input", "size": "42", "tooltip": "" },
     { "name": "contacts-cp_homepage", "label": "Homepage:", "type": "input", "size": "42", "tooltip": "" },
@@ -36,6 +36,7 @@ const contactPersonFormModel = [
     { "name": "contacts-cp_privatphone", "label": "Privat phone:", "type": "input", "size": "42", "tooltip": "" },
     { "name": "contacts-cp_email", "label": "E-mail:", "type": "input", "size": "42", "tooltip": "" },
     { "name": "contacts-cp_privatemail", "label": "Private e-mail:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "contacts-cp_stichwort1", "label": "Keyword:", "type": "input", "size": "42", "tooltip": "" },
     { "name": "contacts_cp_id", "type": "hidden", },
 ];
 

@@ -140,11 +140,14 @@ function getCVPA( src, id ){
     });
 }
 
+//Aktuallisieren der Hauptansicht: crmRefreshAppViewAction( src, id ) in js/crm.app/crm.app.js
+// src ist 'C' für Customer, 'V' für Vendor und id die DB-Tabellen id
 function crmRefreshAppView( src, id ){
     getCVPA( src, id );
     crmGetHistory( false );
 }
 
+//Aktuallisieren der Hauptansicht mit dem Aktuellen Kunden/Liefernaten
 function crmRefreshAppViewAction( ){
     const src = $( '#crm-cvpa-src' ).val();
     const id = $( '#crm-cvpa-id' ).val();
@@ -352,19 +355,27 @@ function showCVPA( data ){
         });
     }
 
+    $( '#crm-contacts-table' ).html( '' );
     if( exists( data.contacts ) ){
         let listrow0 = false;
         $.each( data.contacts, function( key, value ){
-            let tabline = '<div  onclick="crmEditContactPerson( ' + value.cp_id + ' );"><div class="input-panel control-panel" style="width: 100%; min-height: 80px; margin: 5px;"><div style="padding-bottom: 1em"><span>' + getValueNotNull( value.cp_givenname )  + ' ' + getValueNotNull( value.cp_name ) + '</span></div>';
-            if( exists( value.cp_phone1 ) ){
-                tabline += '<table><tr><td>Telefon:</td>'
-                        + '<td><button id="" class="ui-contact-btn">' + value.cp_phone1 + '</button></td>'
-                        + '<td><button id="" class="clickToCall1 ui-contact-fx-btn">T</button><div id=""></div></td>'
-                        + '<td><button id="" class="copy clickToCall1 ui-contact-fx-btn" title="Copy">C</button></td>'
-                        + '<td ><button id="" class="whatsapp clickToCall1 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td></tr>';
-            }
-            tabline += '</div></div>';
-            $( '#crm-contacts-table' ).append( tabline );
+            let tabline = '<div><div class="contact-box" style="width: 100%; min-height: 80px; margin: 5px;"><div style="padding-bottom: 1em"><button onclick="crmEditContactPerson( ' + value.cp_id + ' );">' + getValueNotNull( value.cp_givenname )  + ' ' + getValueNotNull( value.cp_name ) + '</button></div>';
+            for( let i = 1; i < 3; i++ ){
+                    if( exists( value['cp_phone' + i] ) ){
+                        tabline += '<table><tr><td>Telefon:</td>'
+                            + '<td><button id="cp_phone1" class="ui-contact-btn" onclick="crmClickToCall(' + value['cp_phone' + i] + ')">' + value['cp_phone' + i] + '</button></td>'
+                            + '<td><button id="" class="clickToCall1 ui-contact-fx-btn" onclick="crmPhoneCallConfigDlg(' + '\'' + value['cp_phone' + i] + '\'' + ')">T</button></td>'
+                            + '<td><button id="" class="copy clickToCall1 ui-contact-fx-btn" title="Copy" onclick="crmCopyToClipboard(' + value['cp_phone' + i] + ')">C</button></td>'
+                            + '<td ><button id="" class="whatsapp clickToCall1 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td></tr>'
+                            + '</table>';
+                    }
+                }
+                if( exists( value.cp_email )  && '' != value.cp_email ){
+                    tabline += '<table><tr><td>E-Mail:</td>'
+                            + '<td><button>' + value.cp_email + '</button></td></table>';
+                }
+                tabline += '</div></div>';
+                $( '#crm-contacts-table' ).append( tabline );
         });
     }
 
@@ -567,6 +578,10 @@ $( '#crm-wf-new-person' ).click( function() {
 
 $( '#crm-wf-search-order' ).click( function() {
    crmSearchOrder( crmSearchOrderView );
+});
+
+$( '#crm-phonecall-list-btn' ).click( function() {
+    crmPhoneCallListView();
 });
 
 //Route zum Kunden oder Lieferanten anzeigen

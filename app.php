@@ -279,6 +279,8 @@
     <p id="message-dialog-debug" style="display:none"></p>
 </div>
 
+<div id="crm-phone-call-config-dialog"></div>
+
 <?php
     echo $objResult->{'pre_content'};
 ?>
@@ -289,6 +291,7 @@
     <div class="layout-actionbar-separator"></div>
     <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Neu</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-customer">Kunde</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-vendor">Lieferant</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-person">Ansprechperson*</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-scan"></div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-car">Neues Auto</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-offer">Angebot</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-order">Auftrag*</div></div></div>
     <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Bearbeiten</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit">Stammdaten</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order">Auftragsuche</div></div></div>
+    <div class="layout-actionbar-action layout-actionbar-submit" id="crm-phonecall-list-btn">Anrufliste</div>
 </div>
 
 <!-- Prototype-Start: -->
@@ -524,14 +527,14 @@
                             </tr>
                             <tr>
                                 <td class="od-table-label">Telefon:</td>
-                                <td><button id="crm_off_contact_phone1" ></button></td>
+                                <td><button id="crm_off_contact_phone1" class="ui-contact-btn"></button></td>
                                 <td><button id="crm_off_contact_phone1_dialog_button" class="clickToCall1 ui-contact-fx-btn">T</button><div id="crm_off_contact_phone1_dialog"></div></td>
                                 <td><button id="crm_off_copy_contact_phone1" class="copy clickToCall1 ui-contact-fx-btn" title="Copy">C</button></td>
                                 <td ><button id="crm_off_whatsapp1" class="whatsapp clickToCall1 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
                             </tr>
                             <tr>
                                 <td class="od-table-label">Telefon:</td>
-                                <td><button id="crm_off_contact_phone2"></button></td>
+                                <td><button id="crm_off_contact_phone2" class="ui-contact-btn"></button></td>
                                 <td><button id="crm_off_contact_phone2_dialog_button" class="clickToCall2 ui-contact-fx-btn">T</button><div id="crm_off_contact_phone2_dialog"></div></td>
                                 <td><button id="crm_off_copy_contact_phone2" class="copy clickToCall2 ui-contact-fx-btn"  title="Copy">C</button></td>
                                 <td ><button id="crm_inv_whatsapp2" class="whatsapp clickToCall2 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
@@ -665,6 +668,31 @@
                  </tr>
             </table>
         </div>
+    </div>
+</div>
+
+<!-- Anrufliste -->
+<div id="crm-phonecall-list-view" class="crm-p2" style="display:none">
+    <div>
+        <h1>Telefonate</h1>
+        <button id="crm-phonecall-list-view-close-btn">Schließen</button>
+    </div>
+    <div class="input-panel control-panel">
+            <table class="tbl-list">
+                <thead>
+                    <tr>
+                        <th class="date">Datum</th>
+                        <th class="status">Status</th>
+                        <th class="source">Quelle</th>
+                        <th class="dest">Ziel</th>
+                        <th class="number">Nummer</th>
+                        <th class="typ">Typ</th>
+                        <th class="dir">Richtung</th>
+                        <th class="id" style="display:none">ID</th>
+                    </tr>
+                </thead>
+                <tbody id="phonecall-list-table"></tbody>
+            </table>
     </div>
 </div>
 
@@ -1159,6 +1187,7 @@
 <script src="crm/js/crm.app/searchorder.js"></script>
 <script src="crm/js/crm.app/person.js"></script>
 <script src="crm/js/crm.app/newcustomer.js"></script>
+<script src="crm/js/crm.app/phonecall_list.js"></script>
 <script src="crm/js/crm.app/phonecall.js"></script>
 </body>
 </html>

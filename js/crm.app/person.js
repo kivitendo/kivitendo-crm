@@ -16,27 +16,47 @@ function crmEditContactPerson( personId ){
 function crmEditPersonView( crmData ){
     crmInitFormEx( contactPersonFormModel, '#contact-person-form', 0, '#crm-contact-person-hidden' );
 
-    for( let item of contactPersonFormModel ){
-        let columnName = item.name.split( '-' )[1];
-        $( '#' + item.name ).val( crmData[columnName] );
+    $( '#contacts-cp_givenname' ).change( function(){
+        let name = $( '#contacts-cp_givenname' ).val();
+        name = name.split(' ')[0];
+        $.ajax({
+            url: 'crm/ajax/crm.app.php',
+            type: 'POST',
+            data:  { action: 'firstnameToGender', data: { 'name': name } },
+            success: function( data ){
+                let greeting = '';
+                if( 'F' == data.gender ) greeting = 'Frau';
+                else if( 'M' == data.gender ) greeting = 'Herr';
+                if( exists( data.gender ) ) $( '#contacts-cp_title' ).val( greeting );
+            }
+        });
+    });
+
+    if( exists( crmData ) ){
+        for( let item of contactPersonFormModel ){
+            let columnName = item.name.split( '-' )[1];
+            $( '#' + item.name ).val( crmData[columnName] );
+        }
+
+        $( '#contacts_cp_id' ).val( crmData['cp_id'] );
     }
 }
 
 $( '#crm-edit-contact-person-save-btn' ).click( function(){
-    const onSuccess = function( data ){
-        crmCloseView( 'crm-contact-person-view' );
-    }
-
     let dbUpdateData = {};
     dbUpdateData['contacts'] = {};
     for( let item of contactPersonFormModel ){
         let columnName = item.name.split( '-' )[1];
-        dbUpdateData['contacts'][columnName] = $( '#' + item.name ).val();
+        if( exists( columnName ) ) dbUpdateData['contacts'][columnName] = $( '#' + item.name ).val();
     }
     dbUpdateData['contacts']['WHERE'] = {};
     dbUpdateData['contacts']['WHERE'] = 'cp_id = ' + $( '#contacts_cp_id' ).val();
 
-    crmUpdateDB( 'test', dbUpdateData, onSuccess );    
+    const onSuccess = function( data ){
+        crmRefreshAppViewAction();
+        crmCloseView( 'crm-contact-person-view' );
+    }
+    crmUpdateDB( 'genericUpdateEx', dbUpdateData, onSuccess );
 });
 
 $( '#crm-edit-contact-person-cancel-btn' ).click( function(){

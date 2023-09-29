@@ -9,13 +9,17 @@ $( '.whatsapp' ).click( function( data ){
     return false;
 }).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only").tooltip();
 
-$( '#crm-contact-phone1, #crm-contact-phone2, #crm_inv_contact_phone1, #crm_inv_contact_phone2, #crm_oe_contact_phone1, #crm_oe_contact_phone2, #crm_off_contact_phone1, #crm_off_contact_phone2' ).click( function( data ){
-    data.stopImmediatePropagation();
+$( '#cp_phone1' ).click( function( data ){
+    alert( 'test' );
+});
+
+function crmClickToCall( data ){
+    //data.stopImmediatePropagation();
     //console.info( 'test' + $( '#crm-contact-name' ).html() );
     $.ajax({
         url: 'crm/ajax/clickToCall.php',
         type: 'POST',
-        data: { action: 'newCall', data: { 'number': $( '#' + this.id ).text(), 'name': $( '#crm-contact-name' ).html() } },
+        data: { action: 'newCall', data: { 'number': data, 'name': $( '#crm-contact-name' ).html() } },
         success: function ( data ) {
             //alert( ' Name:' + $( '#crm-contact-name' ).html() );
         },
@@ -24,21 +28,32 @@ $( '#crm-contact-phone1, #crm-contact-phone2, #crm_inv_contact_phone1, #crm_inv_
         }
     });
     return false;
+};
+$( '#crm-contact-phone1, #crm-contact-phone2, #crm_inv_contact_phone1, #crm_inv_contact_phone2, #crm_oe_contact_phone1, #crm_oe_contact_phone2, #crm_off_contact_phone1, #crm_off_contact_phone2' ).click( function( data ){
+    crmClickToCall( $( this ).text() );
 }).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only").css({ width: '120px', 'text-align': 'left', 'padding-left': '0.3em' });
 
 $( '.copy' ).click( function( data ){
-    navigator.clipboard.writeText( '' + $( '#crm-contact-phone' + this.id.substr( -1 ) ).text() );
-    data.stopImmediatePropagation();
-}).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only").tooltip();
+    crmCopyToClipboard( $( '#crm-contact-phone' + this.id.substr( -1 ) ).text() );
+}).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only" ).tooltip();
 
-$( '#crm-contact-phone1_dialog_button, #crm-contact-phone2_dialog_button, #crm_inv_contact_phone1_dialog_button, #crm_inv_contact_phone2_dialog_button, #crm_oe_contact_phone1_dialog_button, #crm_oe_contact_phone2_dialog_button, #crm_off_contact_phone1_dialog_button, #crm_off_contact_phone2_dialog_button' ).click( function( data ){
-    data.stopImmediatePropagation();
-    //alert( "ClickToCall Dialog");
-    var dialog_id = this.id.replace( '_button', '' );
-    //console.info( dialog_id );
-    $( '#' + dialog_id ).dialog({
+function crmCopyToClipboard( data ){
+    navigator.clipboard.writeText( '' +  data );
+}
+
+function crmPhoneCallConfigDlgCall( phone_num ){
+    crmClickToCall( phone_num );
+    $( '#crm-phone-call-config-dialog' ).dialog( "close" );
+}
+
+function crmPhoneCallConfigDlgCancel( phone_num ){
+    $( '#crm-phone-call-config-dialog' ).dialog( "close" );
+}
+
+function crmPhoneCallConfigDlg( phone_num ){
+    $( '#crm-phone-call-config-dialog' ).dialog({
         modal: true,
-        title: kivi.t8('Dialog for ' + dialog_id.replace( '_dialog', '' ) ),//kivi.t8( 'Phone Dialog'), //ToDo
+        title: kivi.t8( 'Dialog for ' ) + phone_num, //kivi.t8( 'Phone Dialog'), //ToDo
         width: 'auto',
         resizable: false,
         open: function( event, ui ){
@@ -63,7 +78,9 @@ $( '#crm-contact-phone1_dialog_button, #crm-contact-phone2_dialog_button, #crm_i
                         dynamic_html +=  '<option value="' + value + '"' + selected + '>' + value + '</option>'
                     })
                     dynamic_html += '</select></td></tr></table>';
-                    $( '#' + dialog_id ).html( dynamic_html );
+                    dynamic_html += '<div style="padding: 5px"><button style="margin-right: 5px" onclick="crmPhoneCallConfigDlgCall(' + '\'' + phone_num + '\'' + ')">Anrufen</button>';
+                    dynamic_html += '<button onclick="crmPhoneCallConfigDlgCancel()">Abbrechen</button></div>';
+                    $( '#crm-phone-call-config-dialog' ).html( dynamic_html );
                     //console.info(  dynamic_html );
                     $( '#user_external_context, #user_internal_phone' ).change( function( data ){
                         var dataObj = {};
@@ -87,19 +104,9 @@ $( '#crm-contact-phone1_dialog_button, #crm-contact-phone2_dialog_button, #crm_i
                     alert( 'Error: ajax/clickToCall.php?action=getPhones' );
                 }
             })
-        },
-        buttons: [{
-            text: kivi.t8( 'cancel' ),
-            click: function(){
-                $( this ).dialog( "close" );
-            }
-        },{
-            text: kivi.t8( 'call' ),
-            click: function(){
-                $( '#' + dialog_id.replace( '_dialog', '' ) ).click();
-                $( this ).dialog( "close" );
-            }
-        }],
-
+        }
     })
+}
+$( '#crm-contact-phone1_dialog_button, #crm-contact-phone2_dialog_button, #crm_inv_contact_phone1_dialog_button, #crm_inv_contact_phone2_dialog_button, #crm_oe_contact_phone1_dialog_button, #crm_oe_contact_phone2_dialog_button, #crm_off_contact_phone1_dialog_button, #crm_off_contact_phone2_dialog_button' ).click( function(){
+    crmPhoneCallConfigDlg( $( '#' + this.id.replace( '_dialog_button', '' ) ).text() );
 }).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only");

@@ -262,6 +262,11 @@
         width: 100%;
     }
 
+    .contact-box{
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+
 </style>
 
 </head>
@@ -519,13 +524,14 @@
                             </tr>
                             <tr>
                                 <td class="od-table-label">Telefon:</td>
-                                <td><button id="crm_off_contact_phone1" class="ui-contact-btn"></button></td>
+                                <td><button id="crm_off_contact_phone1" ></button></td>
                                 <td><button id="crm_off_contact_phone1_dialog_button" class="clickToCall1 ui-contact-fx-btn">T</button><div id="crm_off_contact_phone1_dialog"></div></td>
                                 <td><button id="crm_off_copy_contact_phone1" class="copy clickToCall1 ui-contact-fx-btn" title="Copy">C</button></td>
                                 <td ><button id="crm_off_whatsapp1" class="whatsapp clickToCall1 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
                             </tr>
                             <tr>
-                                <td class="od-table-label">Telefon:</td><td><button id="crm_off_contact_phone2" class="ui-contact-btn"></button></td>
+                                <td class="od-table-label">Telefon:</td>
+                                <td><button id="crm_off_contact_phone2"></button></td>
                                 <td><button id="crm_off_contact_phone2_dialog_button" class="clickToCall2 ui-contact-fx-btn">T</button><div id="crm_off_contact_phone2_dialog"></div></td>
                                 <td><button id="crm_off_copy_contact_phone2" class="copy clickToCall2 ui-contact-fx-btn"  title="Copy">C</button></td>
                                 <td ><button id="crm_inv_whatsapp2" class="whatsapp clickToCall2 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
@@ -545,16 +551,16 @@
                             <tr>
                                 <td class="od-table-label"><label for="od-off-itime">erstellt am:</label></td>
                                 <td><span id="od-off-itime"></span></td>
-                             </tr>
+                            </tr>
                             <tr>
                                 <td class="od-table-label"><label for="od-off-mtime">bearbeitet am:</label></td>
                                 <td><span id="od-off-mtime"></span></td>
                              </tr>
                             <tr>
                                 <td class="od-table-label"><label for="od-off-employee_name">bearbeitet von:</label></td>
-                                <td><input type="hidden" id="od-off-employee_id"></input><span id="od-off-employee_name"></span></td>
-                             </tr>
-                         </table>
+                                <td><input type="hidden" id="od-off-employee_id" ></input><span id="od-off-employee_name"></span></td>
+                            </tr>
+                        </table>
                     </td>
                     <td width="33%">
                         <table>

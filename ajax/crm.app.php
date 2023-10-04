@@ -83,6 +83,17 @@ function searchVendor(){
     }
 }
 
+function searchCustomerVendor(){
+    if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
+        $term = $_GET['term'];
+
+        $query = "(SELECT 'Kunde' AS category, 'C' AS src, name AS value, id, name AS label FROM customer WHERE name ILIKE '%".$term."%' OR sw ILIKE '%".$term."%' OR contact ILIKE '%".$term."%' )".
+                " UNION ALL ".
+                "(SELECT 'Lieferant' AS category, 'V' AS src, name AS value, id, name AS label FROM vendor WHERE name ILIKE '%".$term."%' OR sw ILIKE '%".$term."%' OR contact ILIKE '%".$term."%' )";
+        echo $GLOBALS['dbh']->getAll( $query , true);
+    }
+}
+
 function searchCarLicense(){
     if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
         $term = $_GET['term'];
@@ -459,7 +470,7 @@ function getCustomerForEdit( $data ){
 }
 
 function getContactPerson( $data ){
-    echo $GLOBALS['dbh']->getOne( "SELECT * FROM contacts WHERE cp_id = ".$data['id'], true );
+    echo $GLOBALS['dbh']->getOne( "SELECT contacts.*, COALESCE ( customer.name, vendor.name) AS contacts_company_name FROM contacts LEFT JOIN customer ON contacts.cp_cv_id = customer.id LEFT JOIN vendor ON contacts.cp_cv_id = vendor.id WHERE cp_id = ".$data['id'], true );
 }
 
 function getCarKbaData( $data ){

@@ -32,6 +32,26 @@ function crmEditPersonView( crmData ){
         });
     });
 
+    $( '#contacts-cp_zipcode' ).autocomplete({
+        delay: crmAcDelay,
+        source: "crm/ajax/crm.app.php?action=zipcodeToLocation",
+        select: function( e, ui ) {
+            $( '#contacts-cp_city' ).val( ui.item.ort );
+        }
+    });
+
+    // change customer or vendor:
+    $( '#contacts_company_name' ).catcomplete({
+        delay: crmAcDelay,
+        source: "crm/ajax/crm.app.php?action=searchCustomerVendor",
+        select: function( e, ui ) {
+            assert( 'djfd', ui.item.label );
+            $( '#contacts_src' ).val( ui.item.src );
+            $( '#contacts-cp_cv_id' ).val( ui.item.id );
+            $( '#contacts_company_name' ).val( ui.item.label );
+        }
+    });
+
     if( exists( crmData ) ){
         for( let item of contactPersonFormModel ){
             let columnName = item.name.split( '-' )[1];
@@ -39,6 +59,8 @@ function crmEditPersonView( crmData ){
         }
 
         $( '#contacts_cp_id' ).val( crmData['cp_id'] );
+        $( '#contacts_src' ).val( $( '#crm-cvpa-src' ).val() );
+        $( '#contacts_company_name' ).val( crmData['contacts_company_name'] );
     }
 }
 
@@ -53,7 +75,7 @@ $( '#crm-edit-contact-person-save-btn' ).click( function(){
     dbUpdateData['contacts']['WHERE'] = 'cp_id = ' + $( '#contacts_cp_id' ).val();
 
     const onSuccess = function( data ){
-        crmRefreshAppViewAction();
+        crmRefreshAppView( $( '#contacts_src' ).val(), $( '#contacts-cp_cv_id' ).val() );
         crmCloseView( 'crm-contact-person-view' );
     }
     crmUpdateDB( 'genericUpdateEx', dbUpdateData, onSuccess );

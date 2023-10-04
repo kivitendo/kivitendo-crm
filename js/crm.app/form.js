@@ -37,7 +37,10 @@ const contactPersonFormModel = [
     { "name": "contacts-cp_email", "label": "E-mail:", "type": "input", "size": "42", "tooltip": "" },
     { "name": "contacts-cp_privatemail", "label": "Private e-mail:", "type": "input", "size": "42", "tooltip": "" },
     { "name": "contacts-cp_stichwort1", "label": "Keyword:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "contacts_company_name", "label": "Firm:", "type": "input", "size": "42", "tooltip": "" },
     { "name": "contacts_cp_id", "type": "hidden", },
+    { "name": "contacts-cp_cv_id", "type": "hidden", },
+    { "name": "contacts_src", "type": "hidden", },
 ];
 
 const deladdrFormModel = [

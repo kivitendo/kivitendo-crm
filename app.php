@@ -682,17 +682,34 @@
                 <thead>
                     <tr>
                         <th class="date">Datum</th>
-                        <th class="status">Status</th>
                         <th class="source">Quelle</th>
                         <th class="dest">Ziel</th>
                         <th class="number">Nummer</th>
                         <th class="typ">Typ</th>
                         <th class="dir">Richtung</th>
+                        <th></th>
                         <th class="id" style="display:none">ID</th>
                     </tr>
                 </thead>
                 <tbody id="phonecall-list-table"></tbody>
             </table>
+    </div>
+</div>
+
+<div id="crm-contact-assign-phone-dialog" style="display:none">
+    <div style="display:none">
+        <input type="hidden" id="crm-contact-assign-phone-number"></input>
+        <input type="hidden" id="crm-contact-assign-phone-id"></input>
+        <input type="hidden" id="crm-contact-assign-phone-src"></input>
+    </div>
+    <table>
+        <tr>
+            <td><label for="crm-assign-phone-contact">Kunde oder Lieferant</label></td><td><input type="text" id="crm-assign-phone-contact" size="23"></input></td>
+        </tr>
+    </table>
+    <div style="padding-top: 10px">
+        <button id="crm-contact-assign-phone-btn">Übernehmen</button>
+        <button id="crm-contact-assign-phone-cancel-btn">Abbrechen</button>
     </div>
 </div>
 
@@ -702,11 +719,13 @@
         <button id="crm-edit-contact-person-cancel-btn">Abbrechen</button>
     </div>
     <div class="input-panel control-panel">
+        <form>
             <div id="crm-contact-person-hidden"></div>
             <table id="contact-person-form">
                 <thead></thead>
                 <tbody></tbody>
             </table>
+        </form>
     </div>
 </div>
 

@@ -94,6 +94,20 @@ function searchCustomerVendor(){
     }
 }
 
+function searchCVP(){
+    if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
+        $term = $_GET['term'];
+
+        $query= "SELECT * FROM ( SELECT * FROM ( ".
+                "(SELECT 'Kunde' AS category, 'C' AS src, name AS value, id, name AS label FROM customer WHERE name ILIKE '%".$term."%' OR sw ILIKE '%".$term."%' OR contact ILIKE '%".$term."%' )".
+                " UNION ALL ".
+                "(SELECT 'Lieferant' AS category, 'V' AS src, name AS value, id, name AS label FROM vendor WHERE name ILIKE '%".$term."%' OR sw ILIKE '%".$term."%' OR contact ILIKE '%".$term."%' )".
+                " UNION ALL ".
+                "(SELECT 'Kontaktperson' AS category, 'P' AS src, concat(cp_givenname, ' ', cp_name) AS value, cp_id AS id, concat(cp_givenname, ' ', cp_name) AS name FROM contacts WHERE cp_name ILIKE '%".$term."%' OR cp_givenname ILIKE '%".$term."%' )".
+                ") AS allResults ORDER BY random() LIMIT 20 ) AS mixed ORDER BY category";
+        echo $GLOBALS['dbh']->getAll( $query , true);
+    }
+}
 function searchCarLicense(){
     if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
         $term = $_GET['term'];
@@ -500,6 +514,12 @@ function getCVDialogData( $data ){
     appendQueryForCustomerDlg( $query );
 
     echo $GLOBALS['dbh']->getOne($query, true);
+}
+
+function getPhoneCallList(){
+    $sql = "SELECT json_agg( json_calls ) FROM ( SELECT EXTRACT(EPOCH FROM TIMESTAMPTZ(crmti_init_time)) AS call_date, crmti_status, crmti_src, crmti_dst, crmti_caller_id, crmti_caller_typ, crmti_direction, crmti_number  FROM crmti ORDER BY crmti_init_time DESC LIMIT 100 ) AS json_calls";
+    $rs = $GLOBALS['dbh']->getone( $sql );
+    echo $rs['json_agg'];
 }
 
 function firstnameToGender( $data ){

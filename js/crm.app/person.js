@@ -45,7 +45,6 @@ function crmEditPersonView( crmData ){
         delay: crmAcDelay,
         source: "crm/ajax/crm.app.php?action=searchCustomerVendor",
         select: function( e, ui ) {
-            assert( 'djfd', ui.item.label );
             $( '#contacts_src' ).val( ui.item.src );
             $( '#contacts-cp_cv_id' ).val( ui.item.id );
             $( '#contacts_company_name' ).val( ui.item.label );
@@ -99,4 +98,8 @@ $( '#crm-edit-contact-person-save-btn' ).click( function(){
 
 $( '#crm-edit-contact-person-cancel-btn' ).click( function(){
     crmCloseView( 'crm-contact-person-view' );
+});
+
+$( '#crm-contact-person-view' ).keyup( function( e ){
+    if( 27 == e.keyCode ) crmCloseView( 'crm-contact-person-view' );
 });

@@ -20,7 +20,7 @@ const billaddrFormModel = [
 ];
 
 const contactPersonFormModel = [
-    { "name": "contacts-cp_givenname", "label": "Givenname:", "type": "input", "size": "42", "tooltip": "" },
+    { "name": "contacts-cp_givenname", "label": "Givenname:", "type": "input", "size": "42", "tooltip": "", "autofocus": "true" },
     { "name": "contacts-cp_title", "label": "Title:", "type": "input", "size": "42", "tooltip": "" },
     { "name": "contacts-cp_name", "label": "Name:", "type": "input", "size": "42", "tooltip": "" },
     { "name": "contacts-cp_abteilung", "label": "Department:", "type": "input", "size": "42", "tooltip": "" },

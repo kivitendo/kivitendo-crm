@@ -517,9 +517,8 @@ function getCVDialogData( $data ){
 }
 
 function getPhoneCallList(){
-    $sql = "SELECT json_agg( json_calls ) FROM ( SELECT EXTRACT(EPOCH FROM TIMESTAMPTZ(crmti_init_time)) AS call_date, crmti_status, crmti_src, crmti_dst, crmti_caller_id, crmti_caller_typ, crmti_direction, crmti_number  FROM crmti ORDER BY crmti_init_time DESC LIMIT 100 ) AS json_calls";
-    $rs = $GLOBALS['dbh']->getone( $sql );
-    echo $rs['json_agg'];
+    $sql = "SELECT to_char( crmti_init_time, 'DD.MM.YYYY HH12:MI' ) AS call_date, crmti_status, crmti_src, crmti_dst, crmti_caller_id, crmti_caller_typ, crmti_direction, crmti_number  FROM crmti ORDER BY crmti_init_time DESC LIMIT 100"; //ToDo: translate 'DD.MM.YYYY HH12:MI'
+    echo $GLOBALS['dbh']->getAll( $sql, TRUE ); //So geht das!!! Ist der zwei Parameter true, dann wird das Ergebnis als JSON zurückgegeben
 }
 
 function firstnameToGender( $data ){

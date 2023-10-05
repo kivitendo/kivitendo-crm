@@ -62,6 +62,12 @@ function crmEditPersonView( crmData ){
         $( '#contacts_src' ).val( $( '#crm-cvpa-src' ).val() );
         $( '#contacts_company_name' ).val( crmData['contacts_company_name'] );
     }
+    else{
+        $( '#contacts_cp_id' ).val( '' );
+        $( '#contacts_src' ).val( $( '#crm-cvpa-src' ).val() );
+        $( '#contacts-cp_cv_id' ).val( $( '#crm-cvpa-id' ).val() );
+        $( '#contacts_company_name' ).val( $( '#crm-contact-name' ).text() );
+    }
 }
 
 $( '#crm-edit-contact-person-save-btn' ).click( function(){
@@ -71,14 +77,24 @@ $( '#crm-edit-contact-person-save-btn' ).click( function(){
         let columnName = item.name.split( '-' )[1];
         if( exists( columnName ) ) dbUpdateData['contacts'][columnName] = $( '#' + item.name ).val();
     }
-    dbUpdateData['contacts']['WHERE'] = {};
-    dbUpdateData['contacts']['WHERE'] = 'cp_id = ' + $( '#contacts_cp_id' ).val();
 
     const onSuccess = function( data ){
         crmRefreshAppView( $( '#contacts_src' ).val(), $( '#contacts-cp_cv_id' ).val() );
         crmCloseView( 'crm-contact-person-view' );
     }
-    crmUpdateDB( 'genericUpdateEx', dbUpdateData, onSuccess );
+
+    if( exists( $( '#contacts_cp_id' ).val() ) && '' != $( '#contacts_cp_id' ).val() ){
+        dbUpdateData['contacts']['WHERE'] = {};
+        dbUpdateData['contacts']['WHERE'] = 'cp_id = ' + $( '#contacts_cp_id' ).val();
+        crmUpdateDB( 'genericUpdateEx', dbUpdateData, onSuccess );
+    }
+    else{
+        let dbInsertData = {};
+        dbInsertData['record'] = {};
+        dbInsertData['record']['contacts'] = {};
+        dbInsertData['record']['contacts'] = dbUpdateData['contacts'];
+        crmUpdateDB( 'genericSingleInsert', dbInsertData, onSuccess );
+    }
 });
 
 $( '#crm-edit-contact-person-cancel-btn' ).click( function(){

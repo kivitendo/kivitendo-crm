@@ -14,20 +14,21 @@ function crmPhoneCallListView(){
         success: function( data ){
             $( '#phonecall-list-table').html( '' );
             $.each( data, function( key, value ){
-                $( '#phonecall-list-table').append( '<tr caller_id ="' + value.crmti_caller_id + '" caller_src="' + value.crmti_caller_typ + '" caller_number="' + value.crmti_src + '"><td>' + getValueNotNull( value.call_date ) + '</td><td>' + getValueNotNull( value['crmti_src'] ) + '</td><td>' + getValueNotNull( value['crmti_dst'] ) + '</td><td>' + getValueNotNull( value['crmti_number'] ) + '</td><td>' + getValueNotNull( value['crmti_caller_typ'] ) + '</td><td>' + getValueNotNull( value['crmti_direction'] ) + '</td><td><button>Aufzeichnung</button><button>Anrufen</button></td></tr>' );
+                $( '#phonecall-list-table').append( '<tr caller_id ="' + value.crmti_caller_id + '" caller_src="' + value.crmti_caller_typ + '" caller_number="' + value.crmti_src + '"><td class="phonecall-list-item">' + getValueNotNull( value.call_date ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_src'] ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_dst'] ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_number'] ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_caller_typ'] ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_direction'] ) + '</td><td><button>Aufzeichnung</button><button onclick="crmClickToCall(\'' + value['crmti_number'] + '\')">Anrufen</button></td></tr>' );
             });
 
-            $( '#phonecall-list-table tr' ).click( function(){
-                if( $( this ).attr( 'caller_src' ) != 'K' && $( this ).attr( 'caller_src' ) != 'X' ){
-                    crmRefreshAppView( $( this ).attr( 'caller_src' ), $( this ).attr( 'caller_id' ) );
+            $( '.phonecall-list-item' ).click( function(){
+                const col = $( this ).parent();
+                if( col.attr( 'caller_src' ) != 'K' && col.attr( 'caller_src' ) != 'X' ){
+                    crmRefreshAppView( col.attr( 'caller_src' ), col.attr( 'caller_id' ) );
                     crmCloseView( 'crm-phonecall-list-view' );
                 }
-                else if( $( this ).attr( 'caller_src' ) != 'X' ){
-                    crmEditContactPerson( $( this ).attr( 'caller_id' ) );
+                else if( col.attr( 'caller_src' ) != 'X' ){
+                    crmEditContactPerson( col.attr( 'caller_id' ) );
                     crmCloseView( 'crm-phonecall-list-view' );
                 }
                 else{
-                    crmAssignPhnoneNummber( $( this ).attr( 'caller_number' ) );
+                    crmAssignPhnoneNummber( col.attr( 'caller_number' ) );
                 }
             });
         }

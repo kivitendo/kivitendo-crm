@@ -29,6 +29,10 @@ kivitendo Datenbankname und Passwd eintagen
 /etc/asterisk/func_odbc.conf
 Nicht modifizieren!
 
+Rechte ändern so das die CRM-App die Anrufaufzeichnungen abspielen kann
+usermod -a -G asterisk www-data
+
+
 Bei Unklarheiten:
 http://www.das-asterisk-buch.de, http://www.ip-phone-forum.de/forumdisplay.php?f=359
 

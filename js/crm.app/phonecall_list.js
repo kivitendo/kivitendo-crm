@@ -14,7 +14,7 @@ function crmPhoneCallListView(){
         success: function( data ){
             $( '#phonecall-list-table').html( '' );
             $.each( data, function( key, value ){
-                $( '#phonecall-list-table').append( '<tr caller_id ="' + value.crmti_caller_id + '" caller_src="' + value.crmti_caller_typ + '" caller_number="' + value.crmti_src + '"><td class="phonecall-list-item">' + getValueNotNull( value.call_date ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_src'] ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_dst'] ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_number'] ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_caller_typ'] ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_direction'] ) + '</td><td><button>Aufzeichnung</button><button onclick="crmClickToCall(\'' + value['crmti_number'] + '\')">Anrufen</button></td></tr>' );
+                $( '#phonecall-list-table').append( '<tr caller_id ="' + value.crmti_caller_id + '" caller_src="' + value.crmti_caller_typ + '" caller_number="' + value.crmti_src + '"><td class="phonecall-list-item">' + getValueNotNull( value.call_date ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_src'] ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_dst'] ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_number'] ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_caller_typ'] ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_direction'] ) + '</td><td><button onclick="crmPlayPhoneCall(\'' + value['unique_call_id'] + '\')" ' + ( ( null == value['unique_call_id'] || '' == value['unique_call_id'] )? 'disabled': '' ) + '>Play</button><button onclick="crmClickToCall(\'' + value['crmti_number'] + '\')">Anrufen</button></td></tr>' );
             });
 
             $( '.phonecall-list-item' ).click( function(){
@@ -28,14 +28,14 @@ function crmPhoneCallListView(){
                     crmCloseView( 'crm-phonecall-list-view' );
                 }
                 else{
-                    crmAssignPhnoneNummber( col.attr( 'caller_number' ) );
+                    crmAssignPhoneNummber( col.attr( 'caller_number' ) );
                 }
             });
         }
     });
 }
 
-function crmAssignPhnoneNummber( number ){
+function crmAssignPhoneNummber( number ){
     $( '#crm-contact-assign-phone-dialog' ).dialog({
         modal: true,
         title: kivi.t8( 'Assign phone number' ),
@@ -113,6 +113,24 @@ $( '#crm-contact-assign-phone-btn' ).click( function(){
         crmEditContactPerson( id, fx );
     }
 });
+
+function crmPlayPhoneCall( id ){
+    $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        type: 'POST',
+        data:  { action: 'playPhoneCall', data: { 'id': id } },
+        success: function( data ){
+            if( exists( data.success ) && !data.success ){
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Play error' ), kivi.t8( ( ( exists( data.debug )? data.debug : null) ) ) );
+                return;
+            }
+            window.open( 'crm/crmti/crm.app.playphonecall.php?file=' + data.filename, '_blank' );
+        },
+        error: function( xhr, status, error ){
+            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmNewOrderAndInsertPos()', xhr.responseText );
+        }
+    });
+}
 
 $( '#crm-contact-assign-phone-cancel-btn' ).click( function(){
     $( '#crm-contact-assign-phone-dialog' ).dialog( 'close' );

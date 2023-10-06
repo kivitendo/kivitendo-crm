@@ -517,8 +517,19 @@ function getCVDialogData( $data ){
 }
 
 function getPhoneCallList(){
-    $sql = "SELECT to_char( crmti_init_time, 'DD.MM.YYYY HH12:MI' ) AS call_date, crmti_status, crmti_src, crmti_dst, crmti_caller_id, crmti_caller_typ, crmti_direction, crmti_number  FROM crmti ORDER BY crmti_init_time DESC LIMIT 100"; //ToDo: translate 'DD.MM.YYYY HH12:MI'
+    $sql = "SELECT to_char( crmti_init_time, 'DD.MM.YYYY HH12:MI' ) AS call_date, crmti_status, crmti_src, crmti_dst, crmti_caller_id, crmti_caller_typ, crmti_direction, crmti_number, unique_call_id FROM crmti ORDER BY crmti_init_time DESC LIMIT 100"; //ToDo: translate 'DD.MM.YYYY HH12:MI'
     echo $GLOBALS['dbh']->getAll( $sql, TRUE ); //So geht das!!! Ist der zwei Parameter true, dann wird das Ergebnis als JSON zurückgegeben
+}
+
+function playPhoneCall( $data ){
+    $files = scandir(  '/var/spool/asterisk/monitor' );
+    foreach( $files as $file ){
+        if ( strpos($file, $data['id'] ) !== false ){
+            echo '{ "filename": "'.$file.'" }';
+            return;
+        }
+    }
+    resultInfo( false, 'File not found' );
 }
 
 function firstnameToGender( $data ){

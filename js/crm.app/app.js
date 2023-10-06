@@ -587,7 +587,7 @@ $( '#crm-wf-new-person' ).click( function() {
     crmNewCVP( crmCVPtypeEnum.Person );
 });
 
-$( '#crm-wf-search-order' ).click( function() {
+$( '#crm-wf-search-order, #crm-wf-search-order-btn' ).click( function() {
    crmSearchOrder( crmSearchOrderView );
 });
 

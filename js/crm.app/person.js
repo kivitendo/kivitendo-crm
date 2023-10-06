@@ -1,4 +1,4 @@
-function crmEditContactPerson( personId ){
+function crmEditContactPerson( personId, fx = null ){
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
@@ -6,6 +6,7 @@ function crmEditContactPerson( personId ){
         success: function( data ){
             crmEditPersonView( data );
             crmOpenView( 'crm-contact-person-view' );
+            if( fx ) fx( data );
         },
         error: function( xhr, status, error ){
             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmNewCVP().getCVDialogData', xhr.responseText );

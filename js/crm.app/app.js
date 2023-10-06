@@ -9,6 +9,15 @@ function assert( info, message = null, assertion = true ){
     }
 }
 
+function assertSelector( selector, message = null ){
+    assert( 'assertSelector: ' + selector, ( null == message )? 'do not exists' : message, 0 == $( selector ).length );
+}
+
+function selectorCheck( selector ){
+    message = $( selector ).length + ' elements found';
+    assert( 'selectorCheck: ' + selector, message );
+}
+
 function exists( obj ){
     return obj !== null && obj !== undefined;
 }

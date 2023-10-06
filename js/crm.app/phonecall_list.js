@@ -43,6 +43,7 @@ function crmAssignPhnoneNummber( number ){
         open: function( event, ui ){
             $( '#crm-contact-assign-phone-number' ).val( number )
             $( '#crm-assign-phone-contact' ).val( '' );
+            $( '#crm-contact-assign-phone-btn' ).attr( 'disabled', 'disabled' );
         }
     });
 }
@@ -53,6 +54,7 @@ $( '#crm-assign-phone-contact' ).catcomplete({
     select: function( e, ui ) {
         $( '#crm-contact-assign-phone-id' ).val( ui.item.id );
         $( '#crm-contact-assign-phone-src' ).val( ui.item.src );
+        $( '#crm-contact-assign-phone-btn' ).removeAttr( 'disabled' );
     }
 });
 
@@ -63,23 +65,47 @@ $( '#crm-contact-assign-phone-btn' ).click( function(){
     crmRefreshAppView( src, id );
     $( '#crm-contact-assign-phone-dialog' ).dialog( 'close' );
     crmCloseView( 'crm-phonecall-list-view' );
+
     if( 'C' == src || 'V' == src ){
-        $( "#crm-tabs-main" ).tabs( "option", "active", 0 );
-        crmGetCustomerForEdit( src, id );
-        if( '' == $( '#billaddr-phone' ).val() ){
-            $( '#billaddr-phone' ).val( $( '#crm-contact-assign-phone-number' ).val() );
-            $( '#billaddr-phone' ).css( 'color', 'red' );
+
+        const fx = function(){
+            $( "#crm-tabs-main" ).tabs( "option", "active", 0 );
+            if( '' == $( '#billaddr-phone' ).val() ){
+                $( '#billaddr-phone' ).val( $( '#crm-contact-assign-phone-number' ).val() );
+                $( '#billaddr-phone' ).css( 'color', 'red' );
+            }
+            else if( '' == $( '#billaddr-fax' ).val() ){
+                $( '#billaddr-fax' ).val( $( '#crm-contact-assign-phone-number' ).val() )
+                $( '#billaddr-fax' ).css( 'color', 'red' );
+            }
+            else{
+                crmCopyToClipboard( $( '#crm-contact-assign-phone-number' ).val() );
+                alert( 'Keine freie Telefonnummer gefunden!' );
+            }
         }
-        else if( '' == $( '#billaddr-fax' ).val() ){
-            $( '#billaddr-fax' ).val( $( '#crm-contact-assign-phone-number' ).val() )
-            $( '#billaddr-fax' ).css( 'color', 'red' );
-        }
-        else{
-            alert( 'Keine freie Telefonnummer gefunden!' );
-        }
+
+        crmGetCustomerForEdit( src, id, false, fx );
+
     }
     else{
-        crmEditContactPerson( id );
+
+        const fx = function(){
+            $( "#crm-tabs-main" ).tabs( "option", "active", 0 );
+            if( '' == $( '#contacts-cp_phone1' ).val() ){
+                $( '#contacts-cp_phone1' ).val( $( '#crm-contact-assign-phone-number' ).val() );
+                $( '#contacts-cp_phone1' ).css( 'color', 'red' );
+            }
+            else if( '' == $( '#billaddr-fax' ).val() ){
+                $( '#contacts-cp_phone2' ).val( $( '#crm-contact-assign-phone-number' ).val() )
+                $( '#contacts-cp_phone2' ).css( 'color', 'red' );
+            }
+            else{
+                crmCopyToClipboard( $( '#crm-contact-assign-phone-number' ).val() );
+                alert( 'Keine freie Telefonnummer gefunden!' );
+            }
+        }
+
+        crmEditContactPerson( id, fx );
     }
 });
 

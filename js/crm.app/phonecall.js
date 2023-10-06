@@ -29,7 +29,8 @@ function crmClickToCall( data ){
     });
     return false;
 };
-$( '#crm-contact-phone1, #crm-contact-phone2, #crm_inv_contact_phone1, #crm_inv_contact_phone2, #crm_oe_contact_phone1, #crm_oe_contact_phone2, #crm_off_contact_phone1, #crm_off_contact_phone2' ).click( function( data ){
+
+$( '#crm-contact-phone1, #crm-contact-phone2, #crm-contact-phone3, #crm_inv_contact_phone1, #crm_inv_contact_phone2, #crm_inv_contact_phone3, #crm_oe_contact_phone1, #crm_oe_contact_phone2, #crm_oe_contact_phone3, #crm_off_contact_phone1, #crm_off_contact_phone2, #crm_off_contact_phone3' ).click( function( data ){
     crmClickToCall( $( this ).text() );
 }).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only").css({ width: '120px', 'text-align': 'left', 'padding-left': '0.3em' });
 
@@ -107,6 +108,6 @@ function crmPhoneCallConfigDlg( phone_num ){
         }
     })
 }
-$( '#crm-contact-phone1_dialog_button, #crm-contact-phone2_dialog_button, #crm_inv_contact_phone1_dialog_button, #crm_inv_contact_phone2_dialog_button, #crm_oe_contact_phone1_dialog_button, #crm_oe_contact_phone2_dialog_button, #crm_off_contact_phone1_dialog_button, #crm_off_contact_phone2_dialog_button' ).click( function(){
+$( '#crm-contact-phone1_dialog_button, #crm-contact-phone2_dialog_button, #crm-contact-phone3_dialog_button, #crm_inv_contact_phone1_dialog_button, #crm_inv_contact_phone2_dialog_button, #crm_inv_contact_phone3_dialog_button, #crm_oe_contact_phone1_dialog_button, #crm_oe_contact_phone2_dialog_button, #crm_oe_contact_phone3_dialog_button, #crm_off_contact_phone1_dialog_button, #crm_off_contact_phone2_dialog_button, #crm_off_contact_phone3_dialog_button' ).click( function(){
     crmPhoneCallConfigDlg( $( '#' + this.id.replace( '_dialog_button', '' ) ).text() );
 }).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only");

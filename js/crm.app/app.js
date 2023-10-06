@@ -13,7 +13,7 @@ function assertSelector( selector, message = null ){
     assert( 'assertSelector: ' + selector, ( null == message )? 'do not exists' : message, 0 == $( selector ).length );
 }
 
-function selectorCheck( selector ){
+function assertSelectorCheck( selector ){
     message = $( selector ).length + ' elements found';
     assert( 'selectorCheck: ' + selector, message );
 }
@@ -228,12 +228,16 @@ function showCVPA( data ){
         $.each( data.cv, function( key, value ){
             if( value ){
                 $( '#crm-contact-' + key ).html( value );
+                $( '#crm-contact-' + key ).val( value );
                 $( '#crm-contact-' + key ).show();
                 $( '#crm_inv_contact_' + key ).html( value );
+                $( '#crm_inv_contact_' + key ).val( value );
                 $( '#crm_inv_contact_' + key ).show();
                 $( '#crm_oe_contact_' + key ).html( value );
+                $( '#crm_oe_contact_' + key ).val( value );
                 $( '#crm_oe_contact_' + key ).show();
                 $( '#crm_off_contact_' + key ).html( value );
+                $( '#crm_off_contact_' + key ).val( value );
                 $( '#crm_off_contact_' + key ).show();
              }
             else{
@@ -251,6 +255,8 @@ function showCVPA( data ){
         else $( '.clickToCall1' ).show();
         if( !data.cv.phone2 ) $( '.clickToCall2' ).hide();
         else $( '.clickToCall2' ).show();
+        if( !data.cv.phone3 ) $( '.clickToCall3' ).hide();
+        else $( '.clickToCall3' ).show();
     }
     else{
         $( '#crm-wx-contact' ).hide();

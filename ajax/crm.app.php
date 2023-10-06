@@ -324,7 +324,7 @@ function getCVPA( $data ){
         // Stammdaten
         $db_table = array('C' => 'customer', 'V' => 'vendor');
         $query .= "(SELECT row_to_json( cv ) AS cv FROM (".
-                    "SELECT '".$data['src']."' AS src, id, ".$db_table[$data['src']]."number AS cvnumber, name, street, zipcode, contact, phone AS phone1, fax AS phone2, email, city, country FROM ".$db_table[$data['src']]." WHERE id=".$data['id'].
+                    "SELECT '".$data['src']."' AS src, id, ".$db_table[$data['src']]."number AS cvnumber, name, street, zipcode, contact, phone AS phone1, fax AS phone2, phone3, note_phone AS note_phone1, note_fax AS note_phone2, note_phone3, email, city, country FROM ".$db_table[$data['src']]." WHERE id=".$data['id'].
                     ") AS cv) AS cv, ";
         // Angebote
         $id = array('C' => 'customer_id', 'V' => 'vendor_id');
@@ -467,7 +467,7 @@ function getCustomerForEdit( $data ){
     $query .= "(SELECT row_to_json( cv ) AS cv FROM (".
                 "SELECT '".$data['src']."' AS src, id, greeting, name, street, zipcode, contact, phone, fax, email, city, country, bland, contact AS person, notes, business_id, sw, ".
                 "account_number, currency_id, taxnumber, taxzone_id, payment_id, bank_code, bank, ustid, iban, bic, direct_debit, ".
-                "branche, homepage, department_1, department_2, lead, leadsrc, konzern, headcount, language_id, employee ".
+                "branche, homepage, department_1, department_2, lead, leadsrc, konzern, headcount, language_id, employee, phone3, note_phone, note_fax, note_phone3 ".
                 "FROM ".$db_table[$data['src']]." WHERE id=".$data['id'].
                 ") AS cv) AS cv, ";
 

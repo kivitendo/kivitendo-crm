@@ -78,6 +78,10 @@ $( '#crm-contact-assign-phone-btn' ).click( function(){
                 $( '#billaddr-fax' ).val( $( '#crm-contact-assign-phone-number' ).val() )
                 $( '#billaddr-fax' ).css( 'color', 'red' );
             }
+            else if( '' == $( '#billaddr-phone3' ).val() ){
+                $( '#billaddr-phone3' ).val( $( '#crm-contact-assign-phone-number' ).val() )
+                $( '#billaddr-phone3' ).css( 'color', 'red' );
+            }
             else{
                 crmCopyToClipboard( $( '#crm-contact-assign-phone-number' ).val() );
                 alert( 'Keine freie Telefonnummer gefunden!' );

@@ -7,8 +7,12 @@ const billaddrFormModel = [
     { "name": "billaddr-zipcode", "label": "Zip code:", "type": "input", "size": "12", "tooltip": "Zip code" },
     { "name": "billaddr-city", "label": "City:", "type": "input", "size": "42", "tooltip": "" },
     { "name": "billaddr-bland", "label": "Bundesland:", "type": "select", "data":[], "tooltip":""}, //selectbox
-    { "name": "billaddr-phone", "label": "Phone:", "type": "input", "size": "42", "tooltip": "First phone number" },
-    { "name": "billaddr-fax", "label": "Phone:", "type": "input", "size": "42", "tooltip": "Second phone number" },
+    { "name": "billaddr-phone", "label": "Phone1:", "type": "input", "size": "42", "tooltip": "First phone number" },
+    { "name": "billaddr-note_phone", "label": "Phone1 note:", "type": "input", "size": "42", "tooltip": "First phone number" },
+    { "name": "billaddr-fax", "label": "Phone2:", "type": "input", "size": "42", "tooltip": "Second phone number" },
+    { "name": "billaddr-note_fax", "label": "Phone2 note:", "type": "input", "size": "42", "tooltip": "Second phone number" },
+    { "name": "billaddr-phone3", "label": "Phone3:", "type": "input", "size": "42", "tooltip": "Second phone number" },
+    { "name": "billaddr-note_phone3", "label": "Phone3 note:", "type": "input", "size": "42", "tooltip": "Second phone number" },
     { "name": "billaddr-email", "label": "E-Mail:", "type": "input", "size": "42", "tooltip": "" },
     { "name": "billaddr-contact", "label": "Contact person:", "type": "input", "size": "42", "tooltip": "Contact person" },
     { "name": "billaddr-business_id", "label": "Costumer type:", "type": "select","data": [], "tooltip":""}, //selectbox

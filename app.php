@@ -371,7 +371,7 @@
                             <tr>
                                 <td class="od-table-label">Telefon1:</td>
                                 <td><input type="text" id="crm_oe_contact_note_phone1" size="10" disabled></input></td>
-                                <td><button id="crm_oe_contact_phone1" class="ui-contact-btn"></button></td>
+                                <td><button id="crm_oe_contact_phone1" class="ui-contact-btn clickToCall1"></button></td>
                                 <td><button id="crm_oe_contact_phone1_dialog_button" class="clickToCall1 ui-contact-fx-btn">T</button><div id="crm_oe_contact_phone1_dialog"></div></td>
                                 <td><button id="crm_oe_copy_contact_phone1" class="copy clickToCall1 ui-contact-fx-btn" title="Copy">C</button></td>
                                 <td ><button id="crm_oe_whatsapp1" class="whatsapp clickToCall1 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
@@ -379,7 +379,7 @@
                             <tr>
                                 <td class="od-table-label">Telefon2:</td>
                                 <td><input type="text" id="crm_oe_contact_note_phone2" size="10" disabled></input></td>
-                                <td><button id="crm_oe_contact_phone2" class="ui-contact-btn"></button></td>
+                                <td><button id="crm_oe_contact_phone2" class="ui-contact-btn clickToCall2"></button></td>
                                 <td><button id="crm_oe_contact_phone2_dialog_button" class="clickToCall2 ui-contact-fx-btn">T</button><div id="crm_oe_contact_phone2_dialog"></div></td>
                                 <td><button id="crm_oe_copy_contact_phone2" class="copy clickToCall2 ui-contact-fx-btn"  title="Copy">C</button></td>
                                 <td ><button id="crm_oe_whatsapp2" class="whatsapp clickToCall2 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
@@ -387,10 +387,10 @@
                             <tr>
                                 <td class="od-table-label">Telefon3:</td>
                                 <td><input type="text" id="crm_oe_contact_note_phone3" size="10" disabled></input></td>
-                                <td><button id="crm_oe_contact_phone3" class="ui-contact-btn"></button></td>
-                                <td><button id="crm_oe_contact_phone3_dialog_button" class="clickToCall2 ui-contact-fx-btn">T</button><div id="crm_oe_contact_phone3_dialog"></div></td>
-                                <td><button id="crm_oe_copy_contact_phone3" class="copy clickToCall2 ui-contact-fx-btn"  title="Copy">C</button></td>
-                                <td ><button id="crm_oe_whatsapp3" class="whatsapp clickToCall2 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
+                                <td><button id="crm_oe_contact_phone3" class="ui-contact-btn clickToCall3"></button></td>
+                                <td><button id="crm_oe_contact_phone3_dialog_button" class="clickToCall3 ui-contact-fx-btn">T</button><div id="crm_oe_contact_phone3_dialog"></div></td>
+                                <td><button id="crm_oe_copy_contact_phone3" class="copy clickToCall3 ui-contact-fx-btn"  title="Copy">C</button></td>
+                                <td ><button id="crm_oe_whatsapp3" class="whatsapp clickToCall3 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
                             </tr>
                             <tr>
                                 <td class="od-table-label">E-Mail:</td>
@@ -474,7 +474,7 @@
                             <tr>
                                 <td class="od-table-label">Telefon1:</td>
                                 <td><input type="text" id="crm_inv_contact_note_phone1" size="10" disabled></input></td>
-                                <td><button id="crm_inv_contact_phone1" class="ui-contact-btn"></button></td>
+                                <td><button id="crm_inv_contact_phone1" class="ui-contact-btn clickToCall1"></button></td>
                                 <td><button id="crm_inv_contact_phone1_dialog_button" class="clickToCall1 ui-contact-fx-btn">T</button><div id="crm_inv_contact_phone1_dialog"></div></td>
                                 <td><button id="crm_inv_copy_contact_phone1" class="copy clickToCall1 ui-contact-fx-btn" title="Copy">C</button></td>
                                 <td ><button id="crm_inv_whatsapp1" class="whatsapp clickToCall1 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
@@ -482,7 +482,7 @@
                             <tr>
                                 <td class="od-table-label">Telefon2:</td>
                                 <td><input type="text" id="crm_inv_contact_note_phone2" size="10" disabled></input></td>
-                                <td><button id="crm_inv_contact_phone2" class="ui-contact-btn"></button></td>
+                                <td><button id="crm_inv_contact_phone2" class="ui-contact-btn clickToCall2"></button></td>
                                 <td><button id="crm_inv_contact_phone2_dialog_button" class="clickToCall2 ui-contact-fx-btn">T</button><div id="crm_inv_contact_phone2_dialog"></div></td>
                                 <td><button id="crm_inv_copy_contact_phone2" class="copy clickToCall2 ui-contact-fx-btn"  title="Copy">C</button></td>
                                 <td ><button id="crm_inv_whatsapp2" class="whatsapp clickToCall2 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
@@ -490,10 +490,10 @@
                             <tr>
                                 <td class="od-table-label">Telefon3:</td>
                                 <td><input type="text" id="crm_inv_contact_note_phone3" size="10" disabled></input></td>
-                                <td><button id="crm_inv_contact_phone3" class="ui-contact-btn"></button></td>
-                                <td><button id="crm_inv_contact_phone3_dialog_button" class="clickToCall2 ui-contact-fx-btn">T</button><div id="crm_inv_contact_phone3_dialog"></div></td>
-                                <td><button id="crm_inv_copy_contact_phone3" class="copy clickToCall2 ui-contact-fx-btn"  title="Copy">C</button></td>
-                                <td ><button id="crm_inv_whatsapp2" class="whatsapp clickToCall2 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
+                                <td><button id="crm_inv_contact_phone3" class="ui-contact-btn clickToCall3"></button></td>
+                                <td><button id="crm_inv_contact_phone3_dialog_button" class="clickToCall3 ui-contact-fx-btn">T</button><div id="crm_inv_contact_phone3_dialog"></div></td>
+                                <td><button id="crm_inv_copy_contact_phone3" class="copy clickToCall3 ui-contact-fx-btn"  title="Copy">C</button></td>
+                                <td ><button id="crm_inv_whatsapp2" class="whatsapp clickToCall3 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
                             </tr>
                             <tr>
                                 <td class="od-table-label">E-Mail:</td>
@@ -550,7 +550,7 @@
                             <tr>
                                 <td class="od-table-label">Telefon1:</td>
                                 <td><input type="text" id="crm_off_contact_note_phone1" size="10" disabled></input></td>
-                                <td><button id="crm_off_contact_phone1" class="ui-contact-btn"></button></td>
+                                <td><button id="crm_off_contact_phone1" class="ui-contact-btn clickToCall1"></button></td>
                                 <td><button id="crm_off_contact_phone1_dialog_button" class="clickToCall1 ui-contact-fx-btn">T</button><div id="crm_off_contact_phone1_dialog"></div></td>
                                 <td><button id="crm_off_copy_contact_phone1" class="copy clickToCall1 ui-contact-fx-btn" title="Copy">C</button></td>
                                 <td ><button id="crm_off_whatsapp1" class="whatsapp clickToCall1 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
@@ -558,7 +558,7 @@
                             <tr>
                                 <td class="od-table-label">Telefon2:</td>
                                 <td><input type="text" id="crm_off_contact_note_phone2" size="10" disabled></input></td>
-                                <td><button id="crm_off_contact_phone2" class="ui-contact-btn"></button></td>
+                                <td><button id="crm_off_contact_phone2" class="ui-contact-btn clickToCall2"></button></td>
                                 <td><button id="crm_off_contact_phone2_dialog_button" class="clickToCall2 ui-contact-fx-btn">T</button><div id="crm_off_contact_phone2_dialog"></div></td>
                                 <td><button id="crm_off_copy_contact_phone2" class="copy clickToCall2 ui-contact-fx-btn"  title="Copy">C</button></td>
                                 <td ><button id="crm_inv_whatsapp2" class="whatsapp clickToCall2 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
@@ -566,10 +566,10 @@
                             <tr>
                                 <td class="od-table-label">Telefon3:</td>
                                 <td><input type="text" id="crm_off_contact_note_phone3" size="10" disabled></input></td>
-                                <td><button id="crm_off_contact_phone3" class="ui-contact-btn"></button></td>
-                                <td><button id="crm_off_contact_phone3_dialog_button" class="clickToCall2 ui-contact-fx-btn">T</button><div id="crm_off_contact_phone3_dialog"></div></td>
-                                <td><button id="crm_off_copy_contact_phone3" class="copy clickToCall2 ui-contact-fx-btn"  title="Copy">C</button></td>
-                                <td ><button id="crm_inv_whatsapp3" class="whatsapp clickToCall2 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
+                                <td><button id="crm_off_contact_phone3" class="ui-contact-btn clickToCall3"></button></td>
+                                <td><button id="crm_off_contact_phone3_dialog_button" class="clickToCall3 ui-contact-fx-btn">T</button><div id="crm_off_contact_phone3_dialog"></div></td>
+                                <td><button id="crm_off_copy_contact_phone3" class="copy clickToCall3 ui-contact-fx-btn"  title="Copy">C</button></td>
+                                <td ><button id="crm_inv_whatsapp3" class="whatsapp clickToCall3 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
                             </tr>
                             <tr>
                                 <td class="od-table-label">E-Mail:</td>
@@ -1026,10 +1026,10 @@
                         <td>Telefon1:</td><td><input type="text" id="crm-contact-note_phone1" size="10" disabled></input></td><td><button id="crm-contact-phone1"></button></td><td><button id="crm-contact-phone1_dialog_button" class='clickToCall1'>T</button><div id="crm-contact-phone1_dialog"></div></td><td><button id="crm-copy-contact-phone1" class="copy clickToCall1" title="Copy">C</button></td><td ><button id="crm-whatsapp1" class="whatsapp clickToCall1" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
                     </tr>
                     <tr>
-                        <td>Telefon2:</td><td><input type="text" id="crm-contact-note_phone2" size="10" disabled></input></td><td><button id="crm-contact-phone2"></button></td><td><button id="crm-contact-phone2_dialog_button" class='clickToCall2'>T</button><div id="crm-contact-phone2_dialog"></div></td><td><button id="crm-copy-contact-phone2" class="copy clickToCall2"  title="Copy">C</button></td><td ><button id="crm-whatsapp2" class="whatsapp clickToCall2" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
+                        <td>Telefon2:</td><td><input type="text" id="crm-contact-note_phone2" size="10" disabled></input></td><td><button id="crm-contact-phone2" class='clickToCall2'></button></td><td><button id="crm-contact-phone2_dialog_button" class='clickToCall2'>T</button><div id="crm-contact-phone2_dialog"></div></td><td><button id="crm-copy-contact-phone2" class="copy clickToCall2"  title="Copy">C</button></td><td ><button id="crm-whatsapp2" class="whatsapp clickToCall2" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
                     </tr>
                     <tr>
-                        <td>Telefon3:</td><td><input type="text" id="crm-contact-note_phone3" size="10" disabled></input></td><td><button id="crm-contact-phone3"></button></td><td><button id="crm-contact-phone3_dialog_button" class='clickToCall3'>T</button><div id="crm-contact-phone3_dialog"></div></td><td><button id="crm-copy-contact-phone3" class="copy clickToCall3"  title="Copy">C</button></td><td ><button id="crm-whatsapp3" class="whatsapp clickToCall3" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
+                        <td>Telefon3:</td><td><input type="text" id="crm-contact-note_phone3" size="10" disabled></input></td><td><button id="crm-contact-phone3" class='clickToCall3'></button></td><td><button id="crm-contact-phone3_dialog_button" class='clickToCall3'>T</button><div id="crm-contact-phone3_dialog"></div></td><td><button id="crm-copy-contact-phone3" class="copy clickToCall3"  title="Copy">C</button></td><td ><button id="crm-whatsapp3" class="whatsapp clickToCall3" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
                     </tr>
                 </table>
                 <div id="crm-wx-contact-email" class="row crm-pt025">

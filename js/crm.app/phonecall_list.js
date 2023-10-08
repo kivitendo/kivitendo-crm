@@ -7,6 +7,7 @@ function crmPhoneCallListView(){
 
     //Aktuallisieren der Hauptansicht: crmRefreshAppViewAction( src, id ) in js/crm.app/crm.app.js
     // src ist 'C' für Customer, 'V' für Vendor und id die DB-Tabellen id
+    var options = { weekday: 'short', year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
@@ -14,7 +15,8 @@ function crmPhoneCallListView(){
         success: function( data ){
             $( '#phonecall-list-table').html( '' );
             $.each( data, function( key, value ){
-                $( '#phonecall-list-table').append( '<tr caller_id ="' + value.crmti_caller_id + '" caller_src="' + value.crmti_caller_typ + '" caller_number="' + value.crmti_src + '"><td class="phonecall-list-item">' + getValueNotNull( value.call_date ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_src'] ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_dst'] ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_number'] ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_caller_typ'] ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_direction'] ) + '</td><td><button onclick="crmPlayPhoneCall(\'' + value['unique_call_id'] + '\')" ' + ( ( null == value['unique_call_id'] || '' == value['unique_call_id'] )? 'disabled': '' ) + '>Play</button><button onclick="crmClickToCall(\'' + value['crmti_number'] + '\')">Anrufen</button></td></tr>' );
+                var callDate = new Date( value.call_date * 1000 ); // nicht sehr performant...
+                $( '#phonecall-list-table').append( '<tr caller_id ="' + value.crmti_caller_id + '" caller_src="' + value.crmti_caller_typ + '" caller_number="' + value.crmti_src + '"><td class="phonecall-list-item">' + getValueNotNull( callDate.toLocaleDateString( kivi.myconfig.countrycode, options ) ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_src'] ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_dst'] ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_number'] ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_caller_typ'] ) + '</td><td class="phonecall-list-item">' + getValueNotNull( value['crmti_direction'] ) + '</td><td><button onclick="crmPlayPhoneCall(\'' + value['unique_call_id'] + '\')" ' + ( ( null == value['unique_call_id'] || '' == value['unique_call_id'] )? 'disabled': '' ) + '>Play</button><button onclick="crmClickToCall(\'' + value['crmti_number'] + '\')">Anrufen</button></td></tr>' );
             });
 
             $( '.phonecall-list-item' ).click( function(){

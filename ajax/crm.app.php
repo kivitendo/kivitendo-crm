@@ -517,14 +517,14 @@ function getCVDialogData( $data ){
 }
 
 function getPhoneCallList(){
-    $sql = "SELECT  EXTRACT( EPOCH FROM TIMESTAMPTZ( crmti_init_time ) ) AS call_date, crmti_status, crmti_src, crmti_dst, crmti_caller_id, crmti_caller_typ, crmti_direction, crmti_number, unique_call_id FROM crmti ORDER BY crmti_init_time DESC LIMIT 100"; //ToDo: translate 'DD.MM.YYYY HH12:MI'
+    $sql = "SELECT  EXTRACT( EPOCH FROM TIMESTAMPTZ( crmti_init_time ) ) * 1000 AS call_date, crmti_status, crmti_src, crmti_dst, crmti_caller_id, crmti_caller_typ, crmti_direction, crmti_number, unique_call_id FROM crmti ORDER BY crmti_init_time DESC LIMIT 100"; //ToDo: translate 'DD.MM.YYYY HH12:MI'
     echo $GLOBALS['dbh']->getAll( $sql, TRUE ); //So geht das!!! Ist der zwei Parameter true, dann wird das Ergebnis als JSON zurückgegeben
 }
 
 function playPhoneCall( $data ){
     $files = scandir(  '/var/spool/asterisk/monitor' );
     foreach( $files as $file ){
-        if ( strpos($file, $data['id'] ) !== false ){
+        if( strpos( $file, $data['id'] ) !== false && filesize( '/var/spool/asterisk/monitor/'.$file ) > 44 ){ //Dateien die kleiner als 44 Byte sind, sind i.d.R leere Dateien
             echo '{ "filename": "'.$file.'" }';
             return;
         }

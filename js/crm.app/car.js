@@ -223,9 +223,21 @@ function crmNewCarFromScan(){
                         lxcarsData = data;
                         crmOpenView( 'crm-fsscan-customer-dlg', kivi.t8( 'New car from scan' ) );
 
+                        /************************************
+                        * Formatiert die Namen vom FS-Scan:
+                        * Verkürtzt den Namen auf ein Vornamen und Nachnamen
+                        * und sorgt für die richtige Groß-/Kleinschreibung
+                        ************************************/
+                        let firstname = null;
+                        let firstname_parts = name.split( ' ' );
+                        if( firstname_parts.length > 1 ) firstname_parts = [ firstname_parts[0], firstname_parts[firstname_parts.length - 1] ];
+                        for( let str of firstname_parts ){
+                            if( firstname === null ) firstname = ''; else firstname += ' ';
+                            firstname += str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+                        }
                         const name = ( exists( data.firstname ) && data.firstname.trim() != '' )? crmFormatName( data.firstname + ' ' + getValueNotNull( data.name1 ) ) : getValueNotNull( data.name1 );
                         $( '#crm-fsscan-edit-customer' ).val( name.trim()  );
-                        crmSearchCustomerForScan( name );
+                        crmSearchCustomerForScan( name, getValueNotNull( data.firstname ) + ' ' + getValueNotNull( data.name1 ) );
 
                         $( '#crm-fsscan-edit-customer' ).keyup( function(){
                             crmSearchCustomerForScan( $( '#crm-fsscan-edit-customer' ).val() );
@@ -321,11 +333,11 @@ function crmNewCarFromScanCancelView2(){
 * Fast search for customer from car scan
 * data
 ***************************************/
-function crmSearchCustomerForScan( name ){
+function crmSearchCustomerForScan( name, orig_name ){
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
-        data:  { action: 'searchCustomerForScan', data: { 'name': name } },
+        data:  { action: 'searchCustomerForScan', data: { 'name': name, 'orig_name': orig_name } },
         success: function( data ){
             if( !data ){
                 $( '#crm-fsscan-customer-list' ).empty();

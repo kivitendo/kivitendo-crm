@@ -610,7 +610,7 @@ function getFsData( $data ){
 }
 
 function searchCustomerForScan( $data ){
-    $rs = $GLOBALS['dbh']->getAll( "SELECT id, name, street, zipcode, city FROM customer WHERE name ILIKE '%".$data['name']."%' LIMIT 18", true );
+    $rs = $GLOBALS['dbh']->getAll( "SELECT id, name, street, zipcode, city FROM customer WHERE name ILIKE '%".$data['name']."%' OR name ILIKE '%".$data['orig_name']."%' LIMIT 18", true );
     echo ( empty( $rs ) )? 0 : $rs;
 }
 

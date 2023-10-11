@@ -523,22 +523,6 @@ function crmUpdateDB( call, dbUpdateData, onSuccess = null ){
     });
 }
 
-/************************************
-* Formatiert die Namen vom FS-Scan:
-* Verkürtzt den Namen auf ein Vornamen und Nachnamen
-* und sorgt für die richtige Groß-/Kleinschreibung
-************************************/
-function crmFormatName( name ){
-    let rs = null;
-    let parts = name.split( ' ' );
-    if( parts.length > 1 ) parts = [ parts[0], parts[parts.length - 1] ];
-    for( let str of parts ){
-        if( rs === null ) rs = ''; else rs += ' ';
-        rs += str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-    }
-    return rs;
-}
-
 function crmDateTimePickerAddButton( input ){
     setTimeout( function(){  //Timeout to force this handler to load after pageLoad for shorter initial loading time
         var buttonPane = $( input ).datepicker( "widget" ).find( ".ui-datepicker-buttonpane" );

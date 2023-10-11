@@ -454,8 +454,7 @@ function crmInitFormEx( crmFormModel, table, max_rows = 0, container = null){
 
 var crmActiveView = 'crm-wx-base-data';
 var crmPreView = 'crm-wx-base-data';
-//formals pushState( { 'view': crmActiveView }, '', location.protocol + '//' + location.host + location.pathname );
-window.history.replaceState( { 'view': crmActiveView }, '', location.protocol + '//' + location.host + location.pathname /*+ (location.search?location.search : '')*/ );
+window.history.pushState( { 'view': crmActiveView }, '', location.protocol + '//' + location.host + location.pathname /*+ (location.search?location.search : '')*/ );
 
 function crmCVPAgetTitle(){
     return $( '#crm-cvpa-name' ).val();
@@ -472,8 +471,7 @@ function crmOpenView( id, title = null, subtitle = null ){
     $( '#' + id ).show();
     crmPreView = crmActiveView;
     crmActiveView = id;
-    //formals pushState( { 'view': crmActiveView }, '', location.protocol + '//' + location.host + location.pathname + (location.search?location.search : '') + '#' + crmActiveView );
-    window.history.replaceState( { 'view': crmPreView }, '', location.protocol + '//' + location.host + location.pathname /*+ (location.search?location.search : '') + '#' + id*/ );
+    window.history.pushState( { 'view': crmPreView }, '', location.protocol + '//' + location.host + location.pathname /*+ (location.search?location.search : '') + '#' + id*/ );
 }
 
 function crmCloseView( id = null, next = 'crm-wx-base-data', title = null, subtitle = '' ){
@@ -483,7 +481,8 @@ function crmCloseView( id = null, next = 'crm-wx-base-data', title = null, subti
 
 window.onpopstate = function( e ){
     if( exists( e.state ) && exists( e.state.view ) ){
-        crmOpenView( e.state.view );
+        crmRefreshAppViewAction( );
+        crmOpenView( 'crm-wx-base-data', null, '' );
     }
     else{
         crmOpenView( 'crm-wx-base-data', null, '' );

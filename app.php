@@ -901,6 +901,9 @@
         <button onclick="crmEditCuVeViewCancel();">Abbrechen</button>
     </div>
     <div class="input-panel control-panel">
+        <div style="padding: 0.25em">
+            <div class="crm-dialog-error-view" style="color: red"></div>
+        </div>
         <div id="crm-tabs-main" class="tabwidget">
             <ul class="nav nav-tabs">
                 <li class="nav-item">

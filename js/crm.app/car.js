@@ -134,7 +134,7 @@ const crmDoCheckEm = function( chk_c_em, c_em, dialog ){
 }
 
 const crmDoCheckD = function ( c_d, dialog ){
-    if( !crmCheckD( $( '#edit_car-c_d' ).val() ) ){
+    if( !crmCheckD( $( c_d ).val() ) ){
         $( dialog ).crmDialogShowError( 'edit-car-d-check', 'Das Datum der Erstzulassung wurde fehlerhaft eingegeben! Folgendes Format verwenden: 12.8.73 oder 12.8.' );
         $( c_d ).focus();
         return false;

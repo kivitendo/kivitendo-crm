@@ -262,6 +262,8 @@ function crmNewCVP( crmCVPtype ){
         $( '#billaddr-country' ).change();
         $( '#billaddr-bland' ).val( crmData.cv.bland );
     }
+
+    $( '#crm-wx-customer-view' ).crmDialogClearErrors();
 }
 
 /***************************************
@@ -456,6 +458,19 @@ function crmEditCuVeViewSave( ){
         }
     }
     if( $( '#car-form' ).is(':visible' ) ){
+        crmDoCheckLn( '#chk_c_ln', '#car-c_ln', '#crm-wx-customer-view', false );
+        crmDoCheckHsn( '#chk_c_2', '#car-c_2', '#crm-wx-customer-view' );
+        crmDoCheckTsn( '#chk_c_3', '#car-c_3', '#crm-wx-customer-view' );
+        crmDoCheckEm( '#chk_c_em', '#car-c_em', '#crm-wx-customer-view' );
+        crmDoCheckD( '#car-c_d', '#crm-wx-customer-view' );
+        crmDoCheckHu( '#car-c_hu', '#crm-wx-customer-view' );
+        crmDoCheckFin( '#car-chk_fin', '#car-c_fin', '#car-c_finchk', '#crm-wx-customer-view', false );
+        crmDoCheckKba( '#car-kba_id', '#crm-wx-customer-view' );
+        if( $( '#crm-wx-customer-view' ).crmDialogHasErrors() ){
+            alert( 'Es sind noch nicht behobene Fehler vorhanden' );
+            return;
+        };
+
         dbUpdateData['lxc_cars'] = {};
         for(let item of carFormModel){
             let columnName = item.name.split( '-' );

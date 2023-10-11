@@ -773,6 +773,22 @@
     </div>
 </div>
 
+<!-- FS-Scan: Ändern des Autoname/Autotyps (lxckba.name in der DB) -->
+<div id="crm-change-car-name-dialog" style="display:none">
+    <div style="display:none">
+        <input type="hidden" id="crm-change-car-name-id"></input>
+    </div>
+    <table>
+        <tr>
+            <td><label for="crm-change-car-name">Autotyp/Autoname</label></td><td><input type="text" id="crm-change-car-name" size="23"></input></td>
+        </tr>
+    </table>
+    <div style="padding-top: 10px">
+        <button id="crm-change-car-name-btn">Übernehmen</button>
+        <button id="crm-change-car-name-cancel-btn">Abbrechen</button>
+    </div>
+</div>
+
 <div id="crm-confirm-order-to-invoice-dialog" style="display:none">
     <p>Aus dem Auftrag eine Rechnung erzeugen?</p>
     <button class="crm-ui-button" onclick="crmInsertInvoiceFromOrder();">Weiter</button>

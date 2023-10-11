@@ -339,6 +339,19 @@ function crmEditCuVeView( crmData, new_with_car ){
         }
     });
 
+    $( '#change_car_kba_d2' ).text( kivi.t8( 'Change' ) );
+    $( '#change_car_kba_d2' ).click( function(){
+        $( '#crm-change-car-name-dialog' ).dialog({
+            modal: true,
+            title: kivi.t8( 'Change KBA' ),
+            width: 'auto',
+            resizable: false,
+            open: function( event, ui ){
+                $( '#crm-change-car-name-btn' ).attr( 'disabled', 'disabled' );
+            }
+        });
+    });
+
     if( new_with_car ){
         $( '#car-form' ).show();
         $( '#car-kba-form' ).show();
@@ -362,6 +375,7 @@ function crmEditCuVeView( crmData, new_with_car ){
         $( '#car_kba-achsen' ).val( lxcarsData.l );
         $( '#car_kba-masse' ).val( lxcarsData.f1 );
 
+        //Kba-Daten werden in der Funktion crmGetCustomerForEdit() geholt (ajax: getCustomerForEdit in crm.app.php)
         if( exists( crmData.kba ) ){
             $.each( crmData.kba , function( key, value ){
                 if( '' == $( '#car_kba-' + key ).val() ) $( '#car_kba-' + key ).val( value );
@@ -398,6 +412,35 @@ function crmEditCuVeView( crmData, new_with_car ){
 
     crmEditCuVeViewAction = 'updateCuWithNewCar';
 }
+
+/* ToDo
+$( '#crm-change-car-name' ).catcomplete({
+    delay: crmAcDelay,
+    source: function(request, response) {
+        if( $( '#edit_car-c_3' ).val().length > 2 && $( '#edit_car-c_2' ).val().length > 0 ){
+            $.get('crm/ajax/crm.app.php?action=findCarKbaDataWithName', { 'name': $( '#crm-change-car-name' ).val() }, function(data) {
+                response(data);
+            });
+        }
+    },
+    select: function( e, ui ) {
+        $( '#car-kba_id' ).val( ui.item.id );
+        for( let item of carKbaFormModel){
+            let columnName = item.name.split( '-' );
+            if( exists( ui.item[columnName[1]] ) ) $( '#' + item.name ).val( ui.item[columnName[1]] );
+        }
+    }
+});
+*/
+
+$( '#crm-change-car-name-btn' ).click( function(){
+    //ToDo
+    $( '#crm-change-car-name-dialog' ).dialog( 'close' );
+});
+
+$( '#crm-change-car-name-cancel-btn' ).click( function(){
+    $( '#crm-change-car-name-dialog' ).dialog( 'close' );
+});
 
 function crmEditCuVeViewSave( ){
     dbUpdateData = {};
@@ -465,7 +508,6 @@ function crmEditCuVeViewSave( ){
         crmDoCheckD( '#car-c_d', '#crm-wx-customer-view' );
         crmDoCheckHu( '#car-c_hu', '#crm-wx-customer-view' );
         crmDoCheckFin( '#car-chk_fin', '#car-c_fin', '#car-c_finchk', '#crm-wx-customer-view', false );
-        crmDoCheckKba( '#car-kba_id', '#crm-wx-customer-view' );
         if( $( '#crm-wx-customer-view' ).crmDialogHasErrors() ){
             alert( 'Es sind noch nicht behobene Fehler vorhanden' );
             return;
@@ -487,6 +529,9 @@ function crmEditCuVeViewSave( ){
             let val = $( '#' + item.name ).val();
             if( exists(val) ) dbUpdateData['lxckba'][columnName[1]] = val;
         }
+
+        //Die KBA-Daten werden in der Funktion crmGetCustomerForEdit() geholt (ajax: getCustomerForEdit in crm.app.php)
+        //und in der Function prepareKba in crm.app.php in die DB geschrieben
     }
 
     dbUpdateData['custom_variables'] = [];

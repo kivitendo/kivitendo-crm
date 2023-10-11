@@ -121,7 +121,7 @@ const carFormModel = [
 const carKbaFormModel = [
     { "name": "car_kba-hersteller", "label": "Manufacture:", "type": "input", "size": "21", "tooltip": "", "readonly": "true" },
     { "name": "car_kba-fhzart", "label": "Kind:", "type": "select","data": { '': '', 'car': kivi.t8( 'car' ), 'truck': kivi.t8( 'truck' ), 'trailer': kivi.t8( 'trailer' ), 'bike': kivi.t8( 'bike' ), 'tractor': kivi.t8( 'tracktor' ) }, "tooltip":"", "disabled": "true" }, //selectbox
-    { "name": "car_kba-d2", "label": "Type code (d2):", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
+    { "name": "car_kba-d2", "label": "Type code (d2):", "type": "input", "size": "21", "tooltip": "", "readonly": "true", "info": "change_car_kba_d2"  },
     { "name": "car_kba-name", "label": "Type name:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
     { "name": "car_kba-hubraum", "label": "Displacement:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },
     { "name": "car_kba-leistung", "label": "Performance:", "type": "input", "size": "21", "tooltip": "", "readonly": "true"  },

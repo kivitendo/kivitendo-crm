@@ -495,7 +495,11 @@ function findCarKbaData( $data ){
    echo $GLOBALS['dbh']->getAll("SELECT id, tsn || ' / ' || COALESCE( d2, '---' ) AS label, tsn AS value, hersteller AS category, * FROM lxckba WHERE lxckba.hsn = '".$data['hsn']."' AND lxckba.tsn ILIKE SUBSTRING( '".$data['tsn']."', 0, 4 ) LIMIT 10", true);
 }
 
-/***********************************************
+function findCarKbaDataWithName( $data ){
+    echo $GLOBALS['dbh']->getAll("SELECT id, tsn || ' / ' || COALESCE( d2, '---' ) AS label, tsn AS value, hersteller AS category, * FROM lxckba WHERE lxckba.name ILIKE '".$data['name']."%'", true);
+ }
+
+ /***********************************************
 * Get Data form DB to build drop down elemennts
 * in new CV dialog
 **********************************************/
@@ -805,15 +809,11 @@ function insertOfferFromOrder( $data ){
     getOffer( array( "id" => $id ) );
 }
 
+//Wird aufgerufen in der Funktion insertNewCuWithCar und  updateCuWithNewCar
 function prepareKba( &$data ){
     $kba_id = FALSE;
     if( array_key_exists( 'lxckba', $data )  && array_key_exists( 'lxc_cars', $data )){
-        if( array_key_exists( 'kba_id', $data['lxc_cars'] ) ){
-            $kba_id = $data['lxc_cars']['kba_id'];
-            $where = "id = ".$kba_id;
-            $GLOBALS['dbh']->update( 'lxckba', array_keys( $data['lxckba'] ), array_values( $data['lxckba'] ), $where );
-        }
-        else{
+        if( !array_key_exists( 'kba_id', $data['lxc_cars'] ) ){
             $kba_id = $GLOBALS['dbh']->insert( 'lxckba', array_keys( $data['lxckba'] ), array_values( $data['lxckba'] ), TRUE );
             $data['lxc_cars'] += [ "kba_id" => $kba_id ];
         }
@@ -971,6 +971,8 @@ function updateCustomVars( $db_table, $custom_vars ){
 
 /********************************************
 * Ubdate Customer optional with new Car
+* KBA-Daten werden in der Funktion prepareKba
+* in die DB eingefügt oder aktualisiert
 ********************************************/
 function updateCuWithNewCar( $data ){
     $id = FALSE;

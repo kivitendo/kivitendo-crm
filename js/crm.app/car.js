@@ -228,16 +228,16 @@ function crmNewCarFromScan(){
                         * Verkürtzt den Namen auf ein Vornamen und Nachnamen
                         * und sorgt für die richtige Groß-/Kleinschreibung
                         ************************************/
-                        let firstname = null;
-                        let firstname_parts = name.split( ' ' );
-                        if( firstname_parts.length > 1 ) firstname_parts = [ firstname_parts[0], firstname_parts[firstname_parts.length - 1] ];
-                        for( let str of firstname_parts ){
-                            if( firstname === null ) firstname = ''; else firstname += ' ';
-                            firstname += str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+                        let name = null;
+                        let orig_name = ( exists( data.firstname ) && data.firstname.trim() != '' )? data.firstname + ' ' + getValueNotNull( data.name1 ) : getValueNotNull( data.name1 );
+                        let name_parts = orig_name.split( ' ' );
+                        if( name_parts.length > 1 ) name_parts = [ name_parts[0], name_parts[name_parts.length - 1] ];
+                        for( let str of name_parts ){
+                            if( name === null ) name = ''; else name += ' ';
+                            name += str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
                         }
-                        const name = ( exists( data.firstname ) && data.firstname.trim() != '' )? crmFormatName( data.firstname + ' ' + getValueNotNull( data.name1 ) ) : getValueNotNull( data.name1 );
                         $( '#crm-fsscan-edit-customer' ).val( name.trim()  );
-                        crmSearchCustomerForScan( name, getValueNotNull( data.firstname ) + ' ' + getValueNotNull( data.name1 ) );
+                        crmSearchCustomerForScan( name, orig_name );
 
                         $( '#crm-fsscan-edit-customer' ).keyup( function(){
                             crmSearchCustomerForScan( $( '#crm-fsscan-edit-customer' ).val() );

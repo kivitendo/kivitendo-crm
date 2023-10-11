@@ -13,13 +13,12 @@ $( '#cp_phone1' ).click( function( data ){
     alert( 'test' );
 });
 
-function crmClickToCall( data ){
-    //data.stopImmediatePropagation();
-    //console.info( 'test' + $( '#crm-contact-name' ).html() );
+function crmClickToCall( data, contact = null ){
+    if( null == contact ) contact = $( '#crm-contact-name' ).html();
     $.ajax({
         url: 'crm/ajax/clickToCall.php',
         type: 'POST',
-        data: { action: 'newCall', data: { 'number': data, 'name': $( '#crm-contact-name' ).html() } },
+        data: { action: 'newCall', data: { 'number': data, 'name': contact } },
         success: function ( data ) {
             //alert( ' Name:' + $( '#crm-contact-name' ).html() );
         },

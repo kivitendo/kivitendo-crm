@@ -780,7 +780,7 @@
     </div>
     <table>
         <tr>
-            <td><label for="crm-change-car-name">Autotyp/Autoname</label></td><td><input type="text" id="crm-change-car-name" size="23"></input></td>
+            <td><label for="crm-change-car-name">Typenname: </label></td><td><input type="text" id="crm-change-car-name" size="23"></input></td>
         </tr>
     </table>
     <div style="padding-top: 10px">
@@ -860,6 +860,8 @@
         <button onclick="crmEditCarSaveView();">Speichern</button>
         <button onclick="crmEditCarCloseView();">Abbrechen</button>
         <button id="edit_car_new_order_btn" onclick="crmEditCarNewOrder();" style="margin-left: 2em">Neuer Auftrage</button>
+        <button id="edit_car_register_btn">Zulassen/Umschreiben...</button>
+        <button id="edit_car_special_btn">Special</button>
     </div>
     <div id="edit-car-hidden"></div>
     <div class="input-panel control-panel">

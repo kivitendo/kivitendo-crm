@@ -1,3 +1,8 @@
+//KBA und Fahrzeuge anlegen:
+//Das Anlegen eines Autos in der DB vom FS-Scan ist in der Funktion crmEditCuVeView( crmData, new_with_car ) in der cvp.js implementiert,
+//Dialoge bzw. Views zur Auswahl der Scans und Kunden werden in dieser Datei implementiert (crmNewCarFromScan und crmNewCarFromScanNewCuView)
+//Die Regeln für den Umgang mit der DB ist in appendQueryWithKba in der Datei ajax/crm.app.php beschrieben
+
 /***************************************
 * Format the registration number
 * (car license) getting from scan,
@@ -65,10 +70,12 @@ function crmCheckTsn( tsn ){
 }
 
 function crmCheckEm( em ){
+    if( em == '' || em == '-' ) return true; //EM kann leer sein
     return em.match(/^[0-9]{0,2}[0-9A-Z]{4}$/);
 }
 
 function crmCheckHu( hu ){
+    if( hu == '' ) return true; //HU kann leer sein
     return hu.match(/^[\d]{1,2}[.][\d]{1,2}[.][\d]{0,4}$/);
 }
 
@@ -231,10 +238,17 @@ function crmNewCarFromScan(){
                         let name = null;
                         let orig_name = ( exists( data.firstname ) && data.firstname.trim() != '' )? data.firstname + ' ' + getValueNotNull( data.name1 ) : getValueNotNull( data.name1 );
                         let name_parts = orig_name.split( ' ' );
-                        if( name_parts.length > 1 ) name_parts = [ name_parts[0], name_parts[name_parts.length - 1] ];
-                        for( let str of name_parts ){
-                            if( name === null ) name = ''; else name += ' ';
-                            name += str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+                        if( name_parts.length > 1 ){
+                            if( !( orig_name.toLowerCase().includes( 'gmbh' ) || orig_name.toLowerCase().includes( 'ohg' ) ) ){
+                                name_parts = [ name_parts[0], name_parts[name_parts.length - 1] ];
+                                for( let str of name_parts ){
+                                    if( name === null ) name = ''; else name += ' ';
+                                    name += str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+                                }
+                            }
+                            else{
+                                name = data.name1;
+                            }
                         }
                         $( '#crm-fsscan-edit-customer' ).val( name.trim()  );
                         crmSearchCustomerForScan( name, orig_name );
@@ -286,24 +300,11 @@ function crmNewCarFromScanNewCuView(){
                 $( '#billaddr-city' ).val( lxcarsData.address2 );
             }
 
-            $.ajax({
-                url: 'crm/ajax/crm.app.php?action=zipcodeToLocation&term=' + $( '#billaddr-zipcode' ).val(),
-                type: 'GET',
-                success: function( data ){
-                    assert( 'zipcode', data );
-                    if( exists( data ) && data.length > 0 ){
-                        $('#billaddr-bland option:contains(' + data[0].bundesland + ')').attr('selected', 'selected');
-                        $('#billaddr-bland').val( $('#billaddr-bland option:contains(' + data[0].bundesland + ')').val() );
-                        $('#billaddr-bland').change();
-                    }
-                },
-                error: function( xhr, status, error ){
-                }
-            });
+            crmAutoSelectBland();
 
             $( '#car-c_ln' ).val( crmFormatCarLicense( lxcarsData.registrationnumber ) );
             $( '#car-c_2' ).val( lxcarsData.hsn );
-            $( '#car-c_3' ).val( lxcarsData.field_2_2 );
+            $( '#car-c_3' ).val( ( '' != lxcarsData.field_2_2 )? lxcarsData.field_2_2.replace( /[^a-zA-Z0-9]/g, '' ) : '' );
             $( '#car-c_em' ).val( lxcarsData.field_14_1 );
             $( '#car-c_d' ).val( lxcarsData.ez );
 
@@ -317,6 +318,25 @@ function crmNewCarFromScanNewCuView(){
         },
         error: function( xhr, status, error ){
             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmNewCarFromScanNewCuView()', xhr.responseText );
+        }
+    });
+}
+
+//Wird in der Funktion crmNewCarFromScanNewCuView() und crmSearchCustomerForScan() aufgerufen
+//um das Bundesland zu ermitteln
+function crmAutoSelectBland( ){
+    if( $('#billaddr-bland').val() != '') return;
+    $.ajax({
+        url: 'crm/ajax/crm.app.php?action=zipcodeToLocation&term=' + $( '#billaddr-zipcode' ).val(),
+        type: 'GET',
+        success: function( data ){
+            if( exists( data ) && data.length > 0 ){
+                $('#billaddr-bland option:contains(' + data[0].bundesland + ')').attr('selected', 'selected');
+                $('#billaddr-bland').val( $('#billaddr-bland option:contains(' + data[0].bundesland + ')').val() );
+                $('#billaddr-bland').change();
+            }
+        },
+        error: function( xhr, status, error ){
         }
     });
 }
@@ -350,16 +370,20 @@ function crmSearchCustomerForScan( name, orig_name ){
             });
             $( '#crm-fsscan-customer-list' ).empty().append( tableContent );
             $( '#crm-fsscan-customer-list tr' ).click( function(){
-                    crmGetCustomerForEdit( 'C', this.id, true, function( src, id ){
+                crmGetCustomerForEdit( 'C', this.id, true, function( src, id ){
                     $( '#car-c_ln' ).val( crmFormatCarLicense( lxcarsData.registrationnumber ) );
                     $( '#car-c_2' ).val( lxcarsData.hsn );
-                    $( '#car-c_3' ).val( lxcarsData.field_2_2 );
+                    $( '#car-c_3' ).val( ( '' != lxcarsData.field_2_2 )? lxcarsData.field_2_2.replace( /[^a-zA-Z0-9]/g, '' ) : '' );
                     $( '#car-c_em' ).val( lxcarsData.field_14_1 );
                     $( '#car-c_d' ).val( lxcarsData.ez );
                     //Wird nicht benötigt, da Datum invalide
                     //$( '#car-c_hu' ).val( lxcarsData.hu );
                     $( '#car-c_fin' ).val( lxcarsData.vin );
                     $( '#car-c_finchk' ).val( lxcarsData.field_3 );
+
+                    if( $( '#billaddr-greetings' ).val() == '' ) $( '#billaddr-name' ).change();
+                    crmAutoSelectBland();
+
                     crmRefreshAppView( src, id );
                 });
             });

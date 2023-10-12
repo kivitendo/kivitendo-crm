@@ -270,7 +270,7 @@ function crmNewCVP( crmCVPtype ){
 * Open dialog to edit CV
 ***************************************/
 //Wird als Parameter für die Funktion js/app.js->dbUpdataDB verwendet
-//spiegelt den Namen des Ajax-Calls (Function) in ajax/xrm.app.php
+//spiegelt den Namen des Ajax-Calls (Action/Function) in ajax/crm.app.php
 var crmEditCuVeViewAction;
 
 function crmEditCuVeView( crmData, new_with_car ){
@@ -347,9 +347,29 @@ function crmEditCuVeView( crmData, new_with_car ){
             width: 'auto',
             resizable: false,
             open: function( event, ui ){
-                $( '#crm-change-car-name-btn' ).attr( 'disabled', 'disabled' );
+                $( '#crm-change-car-name' ).val( $( '#car_kba-name' ).val() );
+                $( '#crm-change-car-name-id' ).val( $('#car-kba_id' ).val() );
+                if( '' == $('#car-kba_id' ).val() ) $( '#crm-change-car-name-btn' ).attr( 'disabled', 'disabled' );
             }
         });
+    });
+
+    $( '#car-c_3' ).catcomplete({
+        delay: crmAcDelay,
+        source: function(request, response) {
+            if( $( '#car-c_3' ).val().length > 2 && $( '#car-c_2' ).val().length > 0 ){
+                $.get('crm/ajax/crm.app.php?action=findCarKbaData', { 'hsn': $( '#car-c_2' ).val(), 'tsn':  $( '#car-c_3' ).val() }, function(data) {
+                    response(data);
+                });
+            }
+        },
+        select: function( e, ui ) {
+            $( '#car-kba_id' ).val( ui.item.id );
+            for( let item of carKbaFormModel){
+                let columnName = item.name.split( '-' );
+                if( exists( ui.item[columnName[1]] ) ) $( '#' + item.name ).val( ui.item[columnName[1]] );
+            }
+        }
     });
 
     if( new_with_car ){
@@ -375,7 +395,8 @@ function crmEditCuVeView( crmData, new_with_car ){
         $( '#car_kba-achsen' ).val( lxcarsData.l );
         $( '#car_kba-masse' ).val( lxcarsData.f1 );
 
-        //Kba-Daten werden in der Funktion crmGetCustomerForEdit() geholt (ajax: getCustomerForEdit in crm.app.php)
+        //Kba-Daten aus der lxckba-Tabelle in der DB werden in der Funktion crmGetCustomerForEdit() geholt (ajax: getCustomerForEdit in crm.app.php).
+        //Die Daten vom FS-Scan wurden vorher in die Formularfelder geschrieben siehe oben.
         if( exists( crmData.kba ) ){
             $.each( crmData.kba , function( key, value ){
                 if( '' == $( '#car_kba-' + key ).val() ) $( '#car_kba-' + key ).val( value );
@@ -393,6 +414,7 @@ function crmEditCuVeView( crmData, new_with_car ){
                 $( '#' + item.name ).prop( 'readonly', crmData.kba.exists );
             }
             $( '#car_kba-fhzart' ).prop( 'disabled', crmData.kba.exists );
+            $( '#car-c_2' ).val( 'Test' );
         }
     }
     else{
@@ -413,29 +435,36 @@ function crmEditCuVeView( crmData, new_with_car ){
     crmEditCuVeViewAction = 'updateCuWithNewCar';
 }
 
-/* ToDo
 $( '#crm-change-car-name' ).catcomplete({
     delay: crmAcDelay,
     source: function(request, response) {
-        if( $( '#edit_car-c_3' ).val().length > 2 && $( '#edit_car-c_2' ).val().length > 0 ){
-            $.get('crm/ajax/crm.app.php?action=findCarKbaDataWithName', { 'name': $( '#crm-change-car-name' ).val() }, function(data) {
+        if( $( '#car-c_2' ).val().length > 0 ){
+            $.get('crm/ajax/crm.app.php?action=findCarKbaDataWithName', { 'hsn': $( '#car-c_2' ).val(), 'name': $( '#crm-change-car-name' ).val() }, function(data) {
                 response(data);
             });
         }
     },
     select: function( e, ui ) {
-        $( '#car-kba_id' ).val( ui.item.id );
-        for( let item of carKbaFormModel){
-            let columnName = item.name.split( '-' );
-            if( exists( ui.item[columnName[1]] ) ) $( '#' + item.name ).val( ui.item[columnName[1]] );
-        }
+        $( '#crm-change-car-name-id' ).val( ui.item.id );
+        $( '#crm-change-car-name-btn' ).removeAttr( 'disabled' );
     }
 });
-*/
 
 $( '#crm-change-car-name-btn' ).click( function(){
-    //ToDo
-    $( '#crm-change-car-name-dialog' ).dialog( 'close' );
+    $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        type: 'POST',
+        data:  { action: 'getCarKbaDataById', data: { 'id': $( '#crm-change-car-name-id' ).val() } },
+        success: function( data ){
+            for( let item of carKbaFormModel){
+                let columnName = item.name.split( '-' );
+                if( exists( data[columnName[1]] ) ) $( '#' + item.name ).val( data[columnName[1]] );
+            }
+            $('#car-kba_id' ).val( $( '#crm-change-car-name-id' ).val() );
+            $( '#car-c_3' ).val( data.tsn );
+            $( '#crm-change-car-name-dialog' ).dialog( 'close' );
+        }
+    });
 });
 
 $( '#crm-change-car-name-cancel-btn' ).click( function(){

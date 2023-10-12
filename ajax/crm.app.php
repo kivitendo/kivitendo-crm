@@ -447,6 +447,11 @@ function appendQueryForCustomVars( $data, &$query ){
                 ") AS custom_vars) AS custom_vars, ";
 }
 
+/*
+    1.Fall: HSN und TSN ist vorhanden und c2 ist in der DB leer oder null, dann wird die KBA geupdated
+    2.Fall: Ist HSN und TSN und c2 vorhanden, dann wird geprüft zwischen den c2 vom FS-Scan: wenn verschieden dann git es ein Insert
+    3.Fall: Ist TSN '000' dann wird in die KBA ein Insert ausgeführt (die Fahrzeuge können sich trotz gleicher HSN unterscheiden)
+*/
 function appendQueryWithKba( $data, &$query ){
     if( array_key_exists( 'hsn', $data ) ){
         $query .= "(SELECT row_to_json( kba ) AS kba FROM (".
@@ -496,7 +501,11 @@ function findCarKbaData( $data ){
 }
 
 function findCarKbaDataWithName( $data ){
-    echo $GLOBALS['dbh']->getAll("SELECT id, tsn || ' / ' || COALESCE( d2, '---' ) AS label, tsn AS value, hersteller AS category, * FROM lxckba WHERE lxckba.name ILIKE '".$data['name']."%'", true);
+    echo $GLOBALS['dbh']->getAll("SELECT id, tsn || ' / ' || COALESCE( name, '---' ) || ' / ' || COALESCE( datum, '---' ) AS label, name AS value, hersteller AS category, * FROM lxckba WHERE lxckba.hsn = '".$data['hsn']."' AND lxckba.name ILIKE '".$data['name']."%' LIMIT 10", true);
+ }
+
+ function getCarKbaDataById( $data ){
+    echo $GLOBALS['dbh']->getOne("SELECT * FROM lxckba WHERE lxckba.id = ".$data['id'], true);
  }
 
  /***********************************************
@@ -812,8 +821,13 @@ function insertOfferFromOrder( $data ){
 //Wird aufgerufen in der Funktion insertNewCuWithCar und  updateCuWithNewCar
 function prepareKba( &$data ){
     $kba_id = FALSE;
-    if( array_key_exists( 'lxckba', $data )  && array_key_exists( 'lxc_cars', $data )){
-        if( !array_key_exists( 'kba_id', $data['lxc_cars'] ) ){
+    if( array_key_exists( 'lxckba', $data ) && array_key_exists( 'lxc_cars', $data )){
+        if( array_key_exists( 'kba_id', $data['lxc_cars'] ) && !strpos( $data['lxckba']['tsn'], '000' ) ){
+            $kba_id = $data['lxc_cars']['kba_id'];
+            $where = "id = ".$kba_id;
+            $GLOBALS['dbh']->update( 'lxckba', array_keys( $data['lxckba'] ), array_values( $data['lxckba'] ), $where );
+        }
+        else{
             $kba_id = $GLOBALS['dbh']->insert( 'lxckba', array_keys( $data['lxckba'] ), array_values( $data['lxckba'] ), TRUE );
             $data['lxc_cars'] += [ "kba_id" => $kba_id ];
         }

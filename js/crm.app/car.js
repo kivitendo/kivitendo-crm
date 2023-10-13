@@ -19,8 +19,8 @@
         // * remove "*" from license plates from the federal state of Berlin, Schlimm diese Kleinstaatelei.. alias Förderalismus
         return rs.replace( '*', '' ).replace( '*', '' );
     }
-    alert( 'crmFormatCarLicense()' + regNum );
-    return regNum;// Wann tritt dieser Fall auf???
+    //alert( 'crmFormatCarLicense()' + regNum );
+    return regNum;// Wann tritt dieser Fall auf??? Wenn die Registrierungsnummer z.B. nicht eingescannt wurde.
 
 }
 
@@ -394,6 +394,27 @@ function crmSearchCustomerForScan( name, orig_name ){
     });
 }
 
+function crmFindCarKbaData( c_2, c_3, kba_id, formModel ){
+    $( c_3 ).catcomplete({
+        delay: crmAcDelay,
+        source: function(request, response) {
+            if( $( c_3 ).val().length > 2 && $( c_2 ).val().length > 0 ){
+                $.get('crm/ajax/crm.app.php?action=findCarKbaData', { 'hsn': $( c_2 ).val(), 'tsn':  $( c_3 ).val() }, function(data) {
+                    response(data);
+                });
+            }
+        },
+        select: function( e, ui ) {
+            $( kba_id ).val( ui.item.id );
+            for( let item of formModel){
+                let columnName = item.name.split( '-' );
+                if( exists( ui.item[columnName[1]] ) ) $( '#' + item.name ).val( ui.item[columnName[1]] );
+            }
+            return false;
+        }
+    });
+}
+
 function crmEditCarDlg( crmData = null ){
     crmInitFormEx( editCarFormModel, '#edit-car-form', 22, '#edit-car-hidden' );
     crmInitFormEx( editCarKbaFormModel, '#edit-car-kba-form', 33 );
@@ -440,23 +461,8 @@ function crmEditCarDlg( crmData = null ){
         }
     });
 
-    $( '#edit_car-c_3' ).catcomplete({
-        delay: crmAcDelay,
-        source: function(request, response) {
-            if( $( '#edit_car-c_3' ).val().length > 2 && $( '#edit_car-c_2' ).val().length > 0 ){
-                $.get('crm/ajax/crm.app.php?action=findCarKbaData', { 'hsn': $( '#edit_car-c_2' ).val(), 'tsn':  $( '#edit_car-c_3' ).val() }, function(data) {
-                    response(data);
-                });
-            }
-        },
-        select: function( e, ui ) {
-            $( '#edit_car-kba_id' ).val( ui.item.id );
-            for( let item of editCarKbaFormModel){
-                let columnName = item.name.split( '-' );
-                if( exists( ui.item[columnName[1]] ) ) $( '#' + item.name ).val( ui.item[columnName[1]] );
-            }
-        }
-    });
+
+    crmFindCarKbaData( '#edit_car-c_2', '#edit_car-c_3', '#edit_car-kba_id', editCarKbaFormModel );
 
     $( '.edit_car_kba-hidden' ).hide();
     $( '#edit_car_kba_hide_show' ).click( function(){

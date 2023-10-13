@@ -354,23 +354,7 @@ function crmEditCuVeView( crmData, new_with_car ){
         });
     });
 
-    $( '#car-c_3' ).catcomplete({
-        delay: crmAcDelay,
-        source: function(request, response) {
-            if( $( '#car-c_3' ).val().length > 2 && $( '#car-c_2' ).val().length > 0 ){
-                $.get('crm/ajax/crm.app.php?action=findCarKbaData', { 'hsn': $( '#car-c_2' ).val(), 'tsn':  $( '#car-c_3' ).val() }, function(data) {
-                    response(data);
-                });
-            }
-        },
-        select: function( e, ui ) {
-            $( '#car-kba_id' ).val( ui.item.id );
-            for( let item of carKbaFormModel){
-                let columnName = item.name.split( '-' );
-                if( exists( ui.item[columnName[1]] ) ) $( '#' + item.name ).val( ui.item[columnName[1]] );
-            }
-        }
-    });
+    crmFindCarKbaData( '#car-c_2', '#car-c_3', '#car-kba_id', carKbaFormModel );
 
     if( new_with_car ){
         $( '#car-form' ).show();

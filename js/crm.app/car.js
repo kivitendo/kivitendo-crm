@@ -240,7 +240,7 @@ function crmNewCarFromScan(){
                         orig_name = ( exists( data.firstname ) && data.firstname.trim() != '' )? data.firstname + ' ' + getValueNotNull( data.name1 ) : getValueNotNull( data.name1 );
                         let name_parts = orig_name.split( ' ' );
                         if( name_parts.length > 1 ){
-                            if( !( orig_name.toLowerCase().includes( 'gmbh' ) || orig_name.toLowerCase().includes( 'ohg' ) ) ){
+                            if( !( orig_name.toLowerCase().includes( ' gmbh' ) || orig_name.toLowerCase().includes( ' ohg' ) || orig_name.toLowerCase().includes( ' ag' ) ) ){
                                 name_parts = [ name_parts[0], name_parts[name_parts.length - 1] ];
                                 for( let str of name_parts ){
                                     if( name === null ) name = ''; else name += ' ';

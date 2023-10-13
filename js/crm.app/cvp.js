@@ -601,3 +601,11 @@ function crmNewVendor(){
 function crmNewPerson(){
     alert( "Person erfassen in crmNewPerson()!" );
 }
+
+$( '#edit_car_register_btn' ).click( function(){
+    window.open( 'crm/lxcars/carreg.php?c_id=' + $( '#edit_car-c_id' ).val() + '&owner=' + $( '#crm-cvpa-id' ).val() + '&task=3', '_blank');
+});
+
+$( '#edit_car_special_btn' ).click( function(){
+    window.open( 'crm/lxcars/special/special.phtml?c_id=' + $( '#edit_car-c_id' ).val() + '&owner=' + $( '#crm-cvpa-id' ).val() + '&task=1', '_blank');
+});

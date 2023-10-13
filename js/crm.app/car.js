@@ -202,6 +202,7 @@ const crmDoCheckKba = function( kba_id, dialog ){
 * it is possible to add a new customer
 ***************************************/
 var lxcarsData = {};
+let orig_name = '';
 
 function crmNewCarFromScan(){
     let fsmax = 24; // only for show
@@ -236,7 +237,7 @@ function crmNewCarFromScan(){
                         * und sorgt für die richtige Groß-/Kleinschreibung
                         ************************************/
                         let name = null;
-                        let orig_name = ( exists( data.firstname ) && data.firstname.trim() != '' )? data.firstname + ' ' + getValueNotNull( data.name1 ) : getValueNotNull( data.name1 );
+                        orig_name = ( exists( data.firstname ) && data.firstname.trim() != '' )? data.firstname + ' ' + getValueNotNull( data.name1 ) : getValueNotNull( data.name1 );
                         let name_parts = orig_name.split( ' ' );
                         if( name_parts.length > 1 ){
                             if( !( orig_name.toLowerCase().includes( 'gmbh' ) || orig_name.toLowerCase().includes( 'ohg' ) ) ){
@@ -254,7 +255,7 @@ function crmNewCarFromScan(){
                         crmSearchCustomerForScan( name, orig_name );
 
                         $( '#crm-fsscan-edit-customer' ).keyup( function(){
-                            crmSearchCustomerForScan( $( '#crm-fsscan-edit-customer' ).val() );
+                            crmSearchCustomerForScan( $( '#crm-fsscan-edit-customer' ).val(), orig_name );
                         });
                     },
                     error: function( xhr, status, error ){

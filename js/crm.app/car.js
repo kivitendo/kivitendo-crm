@@ -527,10 +527,14 @@ function crmEditCarDlg( crmData = null ){
     if( exists( crmData ) ){
         $( '#edit_car_new_order_btn' ).show();
         $( '#crm-edit-car-orders-table-div' ).show();
+        $( '#edit_car_register_btn' ).show();
+        $( '#edit_car_special_btn' ).show();
     }
     else{
         $( '#edit_car_new_order_btn' ).hide();
         $( '#crm-edit-car-orders-table-div' ).hide();
+        $( '#edit_car_register_btn' ).hide();
+        $( '#edit_car_special_btn' ).hide();
     }
     $( '#crm-edit-car-dialog' ).crmDialogClearErrors();
 
@@ -681,3 +685,11 @@ function crmEditKbaDlg( crmData ){
         }]
     }).dialog( 'open' ).resize();
 }
+
+$( '#edit_car_register_btn' ).click( function(){
+    window.open( 'crm/lxcars/carreg.php?c_id=' + $( '#edit_car-c_id' ).val() + '&owner=' + $( '#crm-cvpa-id' ).val() + '&task=3', '_blank');
+});
+
+$( '#edit_car_special_btn' ).click( function(){
+    window.open( 'crm/lxcars/special/special.phtml?c_id=' + $( '#edit_car-c_id' ).val() + '&owner=' + $( '#crm-cvpa-id' ).val() + '&task=1', '_blank');
+});

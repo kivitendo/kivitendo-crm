@@ -13,7 +13,7 @@ if( !varExist( $_SESSION ) ) session_start();
 if( !varExist( $_SESSION, 'globalConfig' ) ) $_SESSION['globalConfig'] = getGlobalConfig();
 
 //Prüfen ob es sich um eine neu Session handelt oder die Elemente von $_SESSION gelöscht wurden
-$newSession = ( $_SESSION['sessid'] != $_COOKIE[$_SESSION['erpConfig']['authentication']['cookie_name']] ) || $_SESSION['clear'] || !$_SESSION['menu']['javascripts'];//wo wird menu.javascripts zerstört??
+$newSession = [];// = ( $_SESSION['sessid'] != $_COOKIE[$_SESSION['erpConfig']['authentication']['cookie_name']] ) || $_SESSION['clear'] || !$_SESSION['menu']['javascripts'];//wo wird menu.javascripts zerstört??
 
 $_SESSION['erppath'] =& $_SESSION['globalConfig']['erppath'];//ToDO: delete??
 $_SESSION['crmpath'] =& $_SESSION['globalConfig']['crmpath'];//ToDO: delete??

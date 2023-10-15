@@ -196,7 +196,7 @@ function getUserConfig(){
         unset($_SESSION);
     }
     $userConfig = $rs[0];
-    $sql = "select * from auth.user_config where user_id=".$rs[0][id];
+    $sql = "select * from auth.user_config where user_id=".$rs[0]['id'];
     $rs = $GLOBALS['dbh_auth']->getAll( $sql );
     foreach ( $rs as $row ) $userConfig[$row["cfg_key"]] = $row["cfg_value"];
     $userConfig["stylesheet"] = substr( $userConfig["stylesheet"], 0, -4 );

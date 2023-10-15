@@ -1,7 +1,5 @@
 <?php
-
 class myPDO extends PDO{
-    private $showErr = TRUE;  //show errors in browser
     private $logAll  = FALSE; //log all sql queries (only for debug), logfile = log/sql.log!!!
     private $beginExecTime = 0;
     private $roundExecTime = 6;
@@ -33,7 +31,7 @@ class myPDO extends PDO{
         $this->logAll = $flag ? TRUE : FALSE;
     }
 
-    public function query( $sql ){
+    public function run( $sql ){
         if( $this->logAll ) $this->beginExecTime = microtime( TRUE );
         $stmt = parent::prepare( $sql );
         if( !$result = $stmt->execute() ) $this->error( $stmt->errorInfo() );

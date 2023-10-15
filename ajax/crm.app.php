@@ -1084,7 +1084,7 @@ function genericUpdate( $data ){
 }
 
 function genericUpdateEx( $data ){
-    writeLogR( "genericUpdateEx start: ".time() );
+    $start = hrtime( true );
     $update = function( $tableName, $dataObject ){
         $where = '';
         if( array_key_exists( 'WHERE', $dataObject ) ){
@@ -1122,7 +1122,9 @@ function genericUpdateEx( $data ){
     $GLOBALS['dbh']->commit();
 
     resultInfo( true );
-    writeLogR( "genericUpdateEx ende: ".time() );
+    $end = hrtime( true );
+    $eta = $end - $start;
+    writeLogR( "genericUpdateEx ende: ".$eta / 1e+6 ."in ms");
 }
 
 function genericDelete( $data ){

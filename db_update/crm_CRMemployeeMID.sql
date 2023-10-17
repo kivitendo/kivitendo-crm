@@ -6,7 +6,7 @@ ALTER TABLE crmemployee ADD COLUMN manid int4;
 
 -- @php: *
 $rc = $GLOBALS['dbh']->begin();
-$rc = $GLOBALS['dbh']->query('UPDATE crmemployee SET manid = '.$_SESSION['manid']);
+$rc = $GLOBALS['dbh']->myquery('UPDATE crmemployee SET manid = '.$_SESSION['manid']);
 $GLOBALS['dbh']->commit();
 return true;
 -- @exec: *

@@ -42,13 +42,13 @@
                                               strtr($_POST['lastcost'][$key] ,",","."),
                                               strtr($_POST['listprice'][$key],",","."),
                                               strtr($_POST['sellprice'][$key],",","."),$key);
-                $rc = $GLOBALS['dbh']->query($sql);
+                $rc = $GLOBALS['dbh']->myquery($sql);
                 if ( $rc and $prgr ) {
                     $rc = $GLOBALS['dbh']->begin();
-                    $rc = $GLOBALS['dbh']->query(sprintf($delprice,$key));
+                    $rc = $GLOBALS['dbh']->myquery(sprintf($delprice,$key));
                     foreach( $prgr as $price ) {
                         if ( $_POST[$price['id']][$key] ) {
-                            $rc = $GLOBALS['dbh']->query(sprintf($insprice,$key,$price['id'],strtr($_POST[$price['id']][$key],",",".") ) );
+                            $rc = $GLOBALS['dbh']->myquery(sprintf($insprice,$key,$price['id'],strtr($_POST[$price['id']][$key],",",".") ) );
                             if ( !$rc ) {
                                 $GLOBALS['dbh']->rollback();
                                 echo "Error Preisgruppe (".$price['pricegroup'].")<br>";

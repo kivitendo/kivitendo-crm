@@ -15,7 +15,7 @@
             echo $rs['json_agg'];
         case "newCategory":
             $sql="INSERT INTO event_category ( label, color, cat_order ) VALUES ( '$newCat', '$newColor', ( SELECT max( cat_order ) + 1 AS cat_order FROM event_category) )";
-            $rc=$GLOBALS['dbh']->query($sql); 
+            $rc=$GLOBALS['dbh']->myquery($sql); 
         break;
         case "getArticle":
             //$sql = "SELECT json_agg( json_category ) FROM ( SELECT id, label, TRIM( color ) AS color FROM event_category ORDER BY cat_order DESC ) AS json_category ;";
@@ -42,7 +42,7 @@
         case "deleteCategory":
             $sql="DELETE FROM event_category WHERE id = $delCat";
             //echo $sql;            
-            $rc=$GLOBALS['dbh']->query($sql); 
+            $rc=$GLOBALS['dbh']->myquery($sql); 
         break;
      }
  ?>

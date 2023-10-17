@@ -328,7 +328,7 @@ if ($csvArray) foreach($csvArray as $key => $row) {
             $sql = "INSERT INTO customer (email, name, department_1, street, zipcode, city, country, business_id, customernumber, lead, payment_id, currency_id, taxzone_id  ) VALUES ";
             $sql.= "('".$row['3']."', '".$row["2"]."', '".$row["1"]."', '".$row["4"].$row["5"]."', '".$row["8"]."','".$row["6"]."', '".$row['9']."', ".$end_id.", '".$CustNb."', ".$ebayLeadId.", ".$paypalId." , 1 , 4)";
             echo "SQL: ".$sql;
-            $rcc = $GLOBALS['dbh']->query($sql);
+            $rcc = $GLOBALS['dbh']->myquery($sql);
         }
     }
   //$row['3']

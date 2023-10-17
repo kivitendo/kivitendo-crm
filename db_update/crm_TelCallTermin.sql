@@ -10,7 +10,7 @@ ALTER TABLE telcall ADD COLUMN termin_id integer;
     if ($rs) foreach ($rs as $row) {
         $day = substr($row["calldate"],0,10);
         $time = substr($row["calldate"],11,5);
-        $rc=$GLOBALS['dbh']->query("UPDATE telcall SET termin_id = (select id from termine where starttag = '$day' and startzeit = '$time') where id = ".$row["id"]);
+        $rc=$GLOBALS['dbh']->myquery("UPDATE telcall SET termin_id = (select id from termine where starttag = '$day' and startzeit = '$time') where id = ".$row["id"]);
         echo ".";
         $i++;
     };

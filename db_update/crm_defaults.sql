@@ -17,7 +17,7 @@ if ( !isset($GLOBALS['listLimit']) or $GLOBALS['listLimit'] < 100 ) $GLOBALS['li
 if ( !isset($GLOBALS['dir_mode'])  ) $GLOBALS['dir_mode']  = '0775'; 
 if ( !isset($GLOBALS['dir_group']) ) $GLOBALS['dir_group'] = 'users'; 
 foreach ($keys as $row ) {
-    $rc=$GLOBALS['dbh']->query( sprintf( $sql, $row, $GLOBALS[$row] ) );
+    $rc=$GLOBALS['dbh']->myquery( sprintf( $sql, $row, $GLOBALS[$row] ) );
     echo "$row:".$GLOBALS[$row].":$rc<br>";
 };
 echo 'inc/conf.php umbenennen<br>';

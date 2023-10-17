@@ -30,7 +30,7 @@ if ( $db ) foreach( $db as $row ) {
                          $_SESSION['crmpath'].'/dokumente/'.$_SESSION['dbname'].'/'.$row['login']);
             if ( !$rc ) echo "Verzeichnist konnte nicht angelegt werden<br>";
         }
-        $rc = $GLOBALS['dbh']->query("UPDATE documents SET pfad = '".$row['login']."' WHERE pfad = '".$row['id']."'");
+        $rc = $GLOBALS['dbh']->myquery("UPDATE documents SET pfad = '".$row['login']."' WHERE pfad = '".$row['id']."'");
         if ( !$rc ) echo "Probleme beim Update der Pfadnamen<br>";
     } else {
         if ( !file_exists($_SESSION['crmpath'].'/dokumente/'.$_SESSION['dbname'].'/'.$row['login']) ) { 

@@ -10,7 +10,7 @@ if ($sf) {
   foreach ($sf as $r) {
     $key = strtolower(preg_replace("/[^a-zA-Z_\d]+/","",$r["skey"]));
     $sql2 = sprintf($sql,$key,$r["skey"]);
-    $rc=$GLOBALS['dbh']->query($sql2);
+    $rc=$GLOBALS['dbh']->myquery($sql2);
     $rs = $GLOBALS['dbh']->getOne("select id from custom_variable_configs where name = '$key'");
     $val[$r["svalue"]] = $rs["id"];
     $sflag .= $r["skey"].":".$r["svalue"]." ";
@@ -25,7 +25,7 @@ if ($sf) {
            if (($r["sonder"] & $k) == $k) {
               $sql = "insert into custom_variables (config_id,trans_id,bool_value) ";
               $sql.= "values ($v,".$r["id"].",'t')";
-              $rc = $GLOBALS['dbh']->query($sql);
+              $rc = $GLOBALS['dbh']->myquery($sql);
            };
          };
       };
@@ -33,7 +33,7 @@ if ($sf) {
   $sql = "select cp_id,cp_sonder from contacts where cp_sonder > 0";
   $rs = $GLOBALS['dbh']->getAll($sql);
   if ($rs) foreach ($rs as $r) {
-    $rc = $GLOBALS['dbh']->query("update contacts set cp_notes = cp_notes || ' $sflag = ".$r["cp_sonder"]."' where cp_id = ".$r["cp_id"]);
+    $rc = $GLOBALS['dbh']->myquery("update contacts set cp_notes = cp_notes || ' $sflag = ".$r["cp_sonder"]."' where cp_id = ".$r["cp_id"]);
   }
 }
 -- @exec: *

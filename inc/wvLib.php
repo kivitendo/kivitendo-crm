@@ -78,13 +78,13 @@ function saveNewMaschine($data) {
 		$GLOBALS['dbh']->begin();
 		$sql="insert into maschine (parts_id,serialnumber,standort,inspdatum) values (%d,'%s','$newID',%s)";
 		$inspd=($data["inspdatum"]=="00.00.0000" || empty($data["inspdatum"]))?"null":"'".date2db($data["inspdatum"])."'";
-		$rc=$GLOBALS['dbh']->query(sprintf($sql,$data["parts_id"],$serialnumber,$inspd));
+		$rc=$GLOBALS['dbh']->myquery(sprintf($sql,$data["parts_id"],$serialnumber,$inspd));
 		if ($rc) {
 			$sql="select * from maschine where standort='$newID'";
 			$rs=$GLOBALS['dbh']->getAll($sql);
 			$mid=$rs[0]["id"];
 			$sql="update maschine set standort='Lager' where id=$mid";
-			$rc=$GLOBALS['dbh']->query($sql);
+			$rc=$GLOBALS['dbh']->myquery($sql);
 			if ($rc) {
 				$rc=insHistory($mid,'neu',$data["beschreibung"]);
 			};
@@ -100,10 +100,10 @@ function saveNewMaschine($data) {
 function updateMaschine($data) {
 	$inspd=($data["inspdatum"]=="00.00.0000" || empty($data["inspdatum"]))?"null":"'".date2db($data["inspdatum"])."'";
 	$sql="update maschine set inspdatum = $inspd where id=".$data["mid"];
-	$rc=$GLOBALS['dbh']->query($sql);
+	$rc=$GLOBALS['dbh']->myquery($sql);
 	if ($rc) {
 		$sql="update history set beschreibung='".$data["beschreibung"]."' where art='neu' and mid=".$data["mid"];
-		$rc=$GLOBALS['dbh']->query($sql);
+		$rc=$GLOBALS['dbh']->myquery($sql);
 		return $rc;
 	} else  { 
 		return false;
@@ -122,21 +122,21 @@ function saveNewVertrag($data) {
 	$start=($data["anfangdatum"]<>"00.00.0000" && !empty($data["anfangdatum"]))?date2db($data["anfangdatum"]):date("Y-m-d");	
 	$stop=($data["endedatum"]<>"00.00.0000" && !empty($data["endedatum"]))?date2db($data["endedatum"]):$start;
     if ($stop<$start) $stop=$start;
-	$rc=$GLOBALS['dbh']->query(sprintf($sql,$newID,$data["vorlage"],$data["bemerkung"],$data["cp_cv_id"],$data["betrag"],$start,$stop));
+	$rc=$GLOBALS['dbh']->myquery(sprintf($sql,$newID,$data["vorlage"],$data["bemerkung"],$data["cp_cv_id"],$data["betrag"],$start,$stop));
 	if ($rc) {
 		$sql="select * from contract where contractnumber='$newID'";
 		$rs=$GLOBALS['dbh']->getAll($sql);
 		$cid=$rs[0]["cid"];
 		$cn=newContract();
 		$sql="update contract set contractnumber='$cn' where cid=$cid";
-		$rc=$GLOBALS['dbh']->query($sql);
+		$rc=$GLOBALS['dbh']->myquery($sql);
 		if ($rc) {
 			$i=0;
 			foreach ($data["maschinen"] as $row) {
 				$standort=($row[2]<>"")?$row[2]:"Kunde";
 				$rc1=newCM($row[0],$cn);
 				$rc2=insHistory($row[0],"contadd","$cn");
-				$rc3=$GLOBALS['dbh']->query("update maschine set standort = '$standort' where id=".$row[0]);
+				$rc3=$GLOBALS['dbh']->myquery("update maschine set standort = '$standort' where id=".$row[0]);
 				if (!$rc1 || !$rc2 || !$rc3) {
 					$GLOBALS['dbh']->rollback();
 					return false;
@@ -157,10 +157,10 @@ function updateVertrag($data) {
 	$stop=($data["endedatum"]<>"00.00.0000" && !empty($data["endedatum"]))?date2db($data["endedatum"]):$start;
 	if ($data["new"]) {
 		$sql="update contract set template='%s',bemerkung='%s',betrag='%s',anfangdatum='%s',endedatum='%s' where cid=%d";
-		$rc=$GLOBALS['dbh']->query(sprintf($sql,$data["vorlage"],$data["bemerkung"],$data["betrag"],$start,$stop,$data["vid"]));
+		$rc=$GLOBALS['dbh']->myquery(sprintf($sql,$data["vorlage"],$data["bemerkung"],$data["betrag"],$start,$stop,$data["vid"]));
 	} else {
 		$sql="update contract set bemerkung='%s',betrag='%s',anfangdatum='%s',endedatum='%s' where cid=%d";
-		$rc=$GLOBALS['dbh']->query(sprintf($sql,$data["bemerkung"],$data["betrag"],$start,$stop,$data["vid"]));
+		$rc=$GLOBALS['dbh']->myquery(sprintf($sql,$data["bemerkung"],$data["betrag"],$start,$stop,$data["vid"]));
 	}
 	if ($rc) {
 		//$sql="select mid from contmasch where cid=".$data["contractnumber"];
@@ -168,7 +168,7 @@ function updateVertrag($data) {
 		$rs=$GLOBALS['dbh']->getAll($sql);
 		//$sql="delete from contmasch where cid=".$data["contractnumber"];
 		$sql="delete from contmasch where cid=".$data["vid"];
-		$rc=$GLOBALS['dbh']->query($sql);
+		$rc=$GLOBALS['dbh']->myquery($sql);
 		$in=array();
 		if ($rc) {
 			$i=count($data["maschinen"]);
@@ -181,7 +181,7 @@ function updateVertrag($data) {
 				//$rc1=newCM($row[0],$data["contractnumber"]);
 				$rc1=newCM($row[0],$data["vid"]);
 				if (!in_array(array(mid => $row[0]),$rs)) { $rc2=insHistory($row[0],"contadd",$data["contractnumber"]); } else { $rc2=true; };
-				$rc3=$GLOBALS['dbh']->query("update maschine set standort = '$standort' where id=".$row[0]);
+				$rc3=$GLOBALS['dbh']->myquery("update maschine set standort = '$standort' where id=".$row[0]);
 				if (!$rc1 || !$rc2 || !$rc3) {
 					$GLOBALS['dbh']->rollback();
 					return false;
@@ -190,7 +190,7 @@ function updateVertrag($data) {
 			foreach($rs as $line) {
 				if (!in_array($line["mid"],$in)) {
 					$rc2=insHistory($line["mid"],"contsub",$data["contractnumber"]);
-					$rc3=$GLOBALS['dbh']->query("update maschine set standort = 'unbekannt' where id=".$line["mid"]);
+					$rc3=$GLOBALS['dbh']->myquery("update maschine set standort = 'unbekannt' where id=".$line["mid"]);
 				}
 			}
 		} else {
@@ -207,12 +207,12 @@ function insHistory($mid,$art,$beschreibung,$bezug=false) {
     } else {
          $sql="insert into history (mid,itime,art,beschreibung) values ($mid,now(),'$art','$beschreibung')";
     }
-	$rc=$GLOBALS['dbh']->query($sql);
+	$rc=$GLOBALS['dbh']->myquery($sql);
 	return $rc;
 }
 function newCM($mid,$cid) {
 	$sql="insert into contmasch (mid,cid) values ($mid,$cid)";
-	$rc=$GLOBALS['dbh']->query($sql);
+	$rc=$GLOBALS['dbh']->myquery($sql);
 	return $rc;
 }
 function newContract() {
@@ -220,7 +220,7 @@ function newContract() {
 	$rs=$GLOBALS['dbh']->getAll($sql);
 	$cid=++$rs[0]["contnumber"];
 	$sql="update defaults set contnumber='$cid'";
-	$rc=$GLOBALS['dbh']->query($sql);
+	$rc=$GLOBALS['dbh']->myquery($sql);
 	return $cid;	
 }
 function suchVertrag($vid) {
@@ -268,7 +268,7 @@ function getHistory($nr) {
 }
 function saveNewStandort($ort,$mid) {
 	$sql="update maschine set standort='$ort' where id=$mid";
-	$rc=$GLOBALS['dbh']->query($sql);
+	$rc=$GLOBALS['dbh']->myquery($sql);
 }
 function getCustContract($fid) {
 	$sql="select contractnumber,cid from contract where customer_id=$fid";
@@ -291,10 +291,10 @@ function insRAuftrag($data) {
 	$GLOBALS['dbh']->begin();
 	$rs=$GLOBALS['dbh']->getAll("select sonumber from defaults");	
 	$aid=$rs[0]["sonumber"]+1;
-	$rc=$GLOBALS['dbh']->query("update defaults set sonumber=".$aid);
+	$rc=$GLOBALS['dbh']->myquery("update defaults set sonumber=".$aid);
 	$sql="insert into repauftrag (aid,mid,kdnr,cause,schaden,anlagedatum,bearbdate,employee,bearbeiter,status,counter) ";
 	$sql.="values ($aid,%d,'%s','%s','%s','%s','%s',%d,%d,%d,%d)";
-	$rc=$GLOBALS['dbh']->query(sprintf($sql,$data["mid"],$data["kdnr"],$data["cause"],$data["schaden"],
+	$rc=$GLOBALS['dbh']->myquery(sprintf($sql,$data["mid"],$data["kdnr"],$data["cause"],$data["schaden"],
 			date("Y-m-d"),date2db($data["datum"]),$_SESSION["loginCRM"],$data["bid"],$data["status"],$data["counter"]));
 	if ($rc) { 
 		insHistory($data["mid"],"RepAuftr","$aid|".$data["cause"]);
@@ -308,7 +308,7 @@ function insRAuftrag($data) {
 function updRAuftrag($data) {
 	$sql="update repauftrag set cause='%s', schaden='%s', reparatur='%s', status=%d, ";
 	$sql.="employee=%d, bearbeiter=%d, bearbdate='%s', counter=%d where aid=%d";
-	$rc=$GLOBALS['dbh']->query(sprintf($sql,$data["cause"],$data["schaden"],$data["behebung"],$data["status"],
+	$rc=$GLOBALS['dbh']->myquery(sprintf($sql,$data["cause"],$data["schaden"],$data["behebung"],$data["status"],
 			$_SESSION["loginCRM"],$data["bid"],date2db($data["datum"]),$data["counter"],$data["aid"]));
 	if ($rc) { 
 		$rc=updateCounter($data["counter"],$data["mid"]);	
@@ -318,12 +318,12 @@ function updRAuftrag($data) {
 
 function updateCounter($cnt,$mid) {
 	$sql="update maschine set counter=$cnt where id = $mid";
-	return $GLOBALS['dbh']->query($sql);
+	return $GLOBALS['dbh']->myquery($sql);
 }
 
 function updateIdat($idat,$mid) {
 	$sql="update maschine set inspdatum='".date2db($idat)."' where id = $mid";
-	return $GLOBALS['dbh']->query($sql);
+	return $GLOBALS['dbh']->myquery($sql);
 }
 
 function getRAuftrag($nr) {
@@ -345,17 +345,17 @@ function safeMaschMat($mid,$aid,$material) {
 		// Bestandsanpassung, zurück ins Lager
 		if ($old) foreach ($old as $row) {
 			$sql="update parts set onhand=(onhand+".$row["menge"].") where id=".$row["parts_id"];
-			$rc=$GLOBALS['dbh']->query($sql);
+			$rc=$GLOBALS['dbh']->myquery($sql);
 		}
-		$rc=$GLOBALS['dbh']->query("delete from maschmat where aid=$aid");
+		$rc=$GLOBALS['dbh']->myquery("delete from maschmat where aid=$aid");
 		foreach ($material as $zeile) {
 			$tmp=explode(";",$zeile);
 			$sql="insert into maschmat (mid,aid,menge,parts_id,betrag) values (%d,%d,%f,%d,'%s')";
-			$rc=$GLOBALS['dbh']->query(sprintf($sql,$mid,$aid,$tmp[0],$tmp[1],$tmp[2]));
+			$rc=$GLOBALS['dbh']->myquery(sprintf($sql,$mid,$aid,$tmp[0],$tmp[1],$tmp[2]));
 			if (!$rc) break;
 			// Bestandsanpassung, raus aus dem Lager
 			$sql="update parts set onhand=(onhand-".$tmp[0].") where id=".$tmp[1];
-			$rc=$GLOBALS['dbh']->query($sql);
+			$rc=$GLOBALS['dbh']->myquery($sql);
 		}
 		if ($rc) { $GLOBALS['dbh']->commit(); return true;}
 		else { $GLOBALS['dbh']->rollback(); return false;};
@@ -365,10 +365,10 @@ function safeMaschMat($mid,$aid,$material) {
 			// Bestandsanpassung, zurück ins Lager
 			foreach ($rs as $zeile) {
 				$sql="update parts set onhand=(onhand+".$zeile["menge"].") where id=".$zeile["parts_id"];
-				$rc=$GLOBALS['dbh']->query($sql);
+				$rc=$GLOBALS['dbh']->myquery($sql);
 				if (!$rc) { $GLOBALS['dbh']->rollback(); return false;};
 			}
-			$rc=$GLOBALS['dbh']->query("delete from maschmat where aid=$aid");
+			$rc=$GLOBALS['dbh']->myquery("delete from maschmat where aid=$aid");
 			if ($rc) { $GLOBALS['dbh']->commit(); return true;}
                 	else { $GLOBALS['dbh']->rollback(); return false;};
 		} else {

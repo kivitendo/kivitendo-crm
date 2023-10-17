@@ -782,7 +782,7 @@ function insertInvoiceFromOrder( $data ){
     $query = "INSERT INTO invoice (trans_id, position, parts_id, description, longdescription, qty, unit, sellprice, discount, marge_total, fxsellprice) ".
             "(SELECT ".$id.", position, parts_id, description, longdescription, qty, unit, sellprice, discount, marge_total, sellprice AS fxsellprice FROM orderitems WHERE trans_id = ".$data['oe_id'].")";
 
-    $GLOBALS['dbh']->query( $query );
+    $GLOBALS['dbh']->myquery( $query );
     $GLOBALS['dbh']->commit();
 
     $exists = array( "id" => $id );
@@ -816,7 +816,7 @@ function insertOfferFromOrder( $data ){
     $query = "INSERT INTO orderitems (trans_id, position, parts_id, description, longdescription, qty, unit, sellprice, discount, marge_total) ".
             "(SELECT ".$id.", position, parts_id, description, longdescription, qty, unit, sellprice, discount, marge_total FROM orderitems WHERE trans_id = ".$data['oe_id'].")";
 
-    $GLOBALS['dbh']->query( $query );
+    $GLOBALS['dbh']->myquery( $query );
     $GLOBALS['dbh']->commit();
 
     getOffer( array( "id" => $id ) );
@@ -921,19 +921,19 @@ function calculateCVnumber( $business, $cv ){ //Berechnet die nächste Kundennum
     if( $cv == 'vendor' ){ //Lieferanten werden in Zukunft nur über defaults hochgezählt, die Kundengruppe wird nicht mehr berücksichtigt
         $rs = $GLOBALS['dbh']->getOne( "SELECT vendornumber::int AS newnumber FROM defaults" );
         while( $GLOBALS['dbh']->getOne( "SELECT vendornumber FROM vendor WHERE vendornumber = '".++$rs['newnumber']."'" )['vendornumber'] );
-        $GLOBALS['dbh']->query( "UPDATE defaults SET vendornumber = ".$rs['newnumber'] );
+        $GLOBALS['dbh']->myquery( "UPDATE defaults SET vendornumber = ".$rs['newnumber'] );
     }
     if( $cv == 'customer' ){
         if( $business ){ //Kundengruppe  vorhanden
             $rs = $GLOBALS['dbh']->getOne( "SELECT customernumberinit::int AS newnumber FROM business WHERE id = ".$business );
             //wir suchen die nächste freie Nummer
             while( $GLOBALS['dbh']->getOne( "SELECT customernumber FROM customer WHERE customernumber = '".++$rs['newnumber']."'" )['customernumber'] );
-            $GLOBALS['dbh']->query( "UPDATE business SET customernumberinit = ".$rs['newnumber']." WHERE id = ".$business );
+            $GLOBALS['dbh']->myquery( "UPDATE business SET customernumberinit = ".$rs['newnumber']." WHERE id = ".$business );
         }
         else{ // keine Kundengruppe vorhanden, business ist leer
             $rs = $GLOBALS['dbh']->getOne( "SELECT customernumber::int AS newnumber FROM defaults" );
             while( $GLOBALS['dbh']->getOne( "SELECT customernumber FROM customer WHERE customernumber = '".++$rs['newnumber']."'" )['customernumber'] );
-            $GLOBALS['dbh']->query( "UPDATE defaults SET customernumber = ".$rs['newnumber'] );
+            $GLOBALS['dbh']->myquery( "UPDATE defaults SET customernumber = ".$rs['newnumber'] );
         }
     }
     return $rs['newnumber'];
@@ -1135,7 +1135,7 @@ function genericDelete( $data ){
             return;
         }
         writeLogR( "DELETE FROM $tableName WHERE ".$where['WHERE'] );
-        $GLOBALS['dbh']->query( "DELETE FROM $tableName WHERE ".$where['WHERE'] );
+        $GLOBALS['dbh']->myquery( "DELETE FROM $tableName WHERE ".$where['WHERE'] );
     }
     resultInfo(true);
     writeLogR( "genericDelete end: ".time() );

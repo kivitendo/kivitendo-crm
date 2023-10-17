@@ -46,18 +46,18 @@ function suchFelder($data) {
 function saveFelder($data) {
     $nosave=array("save","owner","suche");
     $owner=$data["owner"];
-    $rc=$GLOBALS['dbh']->query("BEGIN");
+    $rc=$GLOBALS['dbh']->myquery("BEGIN");
         $tab = substr($owner,0,1);
         $owner = substr($owner,1);
     $sql="delete from extra_felder where tab = '$tab' and owner = '$owner'";
-    $rc=$GLOBALS['dbh']->query($sql);
+    $rc=$GLOBALS['dbh']->myquery($sql);
     foreach ($data as $key=>$val) {
         if (in_array($key,$nosave)) continue;
         $val=trim($val);
         $rc=$GLOBALS['dbh']->insert('extra_felder',array('tab','owner','fkey','fval'),array($tab,$owner,$key,$val));
-        if (!$rc) { $GLOBALS['dbh']->query("ROLLBACK"); return false; };
+        if (!$rc) { $GLOBALS['dbh']->myquery("ROLLBACK"); return false; };
     }
-    $rc=$GLOBALS['dbh']->query("COMMIT");
+    $rc=$GLOBALS['dbh']->myquery("COMMIT");
     return true;
 }
 

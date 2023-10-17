@@ -119,13 +119,13 @@ function saveUserStamm( $val ) {
     }
     $sql = substr( $sql, 0, - 1 );
     $sql .= ' where id='.$val['uid'];
-    $rc = $GLOBALS['dbh']->query( $sql );
+    $rc = $GLOBALS['dbh']->myquery( $sql );
     if ( $val["homephone"] )
         mkTelNummer( $val["uid"], "E", array( $val["homephone"] ) );
     if ( $val["workphone"] )
         mkTelNummer( $val["uid"], "E", array( $val["workphone"] ) );
     $rc = $GLOBALS['dbh']->begin( );
-    $rc = $GLOBALS['dbh']->query( 'DELETE FROM crmemployee WHERE uid = '.$val["uid"].' AND manid = '.$_SESSION['manid'] );
+    $rc = $GLOBALS['dbh']->myquery( 'DELETE FROM crmemployee WHERE uid = '.$val["uid"].' AND manid = '.$_SESSION['manid'] );
     if ( $rc )
         foreach ( $fld as $key => $typ ) {
             if ( array_key_exists( $key, $val ) ) {
@@ -134,7 +134,7 @@ function saveUserStamm( $val ) {
         else {
             $sql = 'INSERT INTO crmemployee (manid,uid,key,val,typ) VALUES ('.$_SESSION['manid'].','.$val['uid'].",'$key',null,'$typ')";
         }
-        $rc = $GLOBALS['dbh']->query( $sql );
+        $rc = $GLOBALS['dbh']->myquery( $sql );
         if ( !$rc ) {
             $GLOBALS['dbh']->rollback( );
             $rc = false;
@@ -264,11 +264,11 @@ function delGruppe( $id ) {
     $cnt += $rs["cnt"];
     if ( $cnt === 0 ) {
         $sql = "delete from grpusr where grpid=$id";
-        $rc = $GLOBALS['dbh']->query( $sql );
+        $rc = $GLOBALS['dbh']->myquery( $sql );
         if ( !$rc )
             return "Mitglieder konnten nicht gel&ouml;scht werden";
         $sql = "delete from gruppenname where grpid=$id";
-        $rc = $GLOBALS['dbh']->query( $sql );
+        $rc = $GLOBALS['dbh']->myquery( $sql );
         if ( !$rc )
             return "Gruppe konnte nicht gel&ouml;scht werden";
         return "Gruppe gel&ouml;scht";
@@ -282,7 +282,7 @@ function saveGruppe( $data ) {
         return "Name zu kurz";
     $newID = uniqid( rand( ) );
     $sql = "insert into gruppenname (grpname,rechte) values ('$newID','".$data["rechte"]."')";
-    $rc = $GLOBALS['dbh']->query( $sql );
+    $rc = $GLOBALS['dbh']->myquery( $sql );
     if ( $rc ) {
         $sql = "select * from gruppenname where grpname = '$newID'";
         $rs = $GLOBALS['dbh']->getOne( $sql );
@@ -291,7 +291,7 @@ function saveGruppe( $data ) {
         }
         else {
             $sql = "update gruppenname set grpname='".$data["name"]."' where grpid=".$rs["grpid"];
-            $rc = $GLOBALS['dbh']->query( $sql );
+            $rc = $GLOBALS['dbh']->myquery( $sql );
             if ( !$rc ) {
                 return "Fehler beim Anlegen";
             }
@@ -314,11 +314,11 @@ function getMitglieder( $gruppe ) {
 }
 function saveMitglieder( $mitgl, $gruppe ) {
     $sql = "delete from grpusr where grpid=$gruppe";
-    $rc = $GLOBALS['dbh']->query( $sql );
+    $rc = $GLOBALS['dbh']->myquery( $sql );
     if ( $mitgl ) {
         foreach ( $mitgl as $row ) {
             $sql = "insert into grpusr (grpid,usrid) values ($gruppe,$row)";
-            $rc = $GLOBALS['dbh']->query( $sql );
+            $rc = $GLOBALS['dbh']->myquery( $sql );
         }
     }
 }

@@ -392,7 +392,7 @@ function getBundesland($land) {
 function mkTelNummer($id,$tab,$tels,$delete=true) {
     if ( $delete ) {
         $sql = "delete from telnr where id=$id and tabelle='$tab'";
-        $rs = $GLOBALS['dbh']->query($sql);
+        $rs = $GLOBALS['dbh']->myquery($sql);
     }
     foreach( $tels as $tel ) {
         $tel = strtr($tel,array(" "=>"","-"=>"","/"=>"","\\"=>"","("=>"",")"=>""));
@@ -401,7 +401,7 @@ function mkTelNummer($id,$tab,$tels,$delete=true) {
         if ( trim($tel) <> "" ) {
             $sql = "insert into telnr (id,tabelle,nummer) values (%d,'%s','%s')";
             $sql = sprintf($sql,$id,$tab,$tel);
-            $rs = $GLOBALS['dbh']->query($sql);
+            $rs = $GLOBALS['dbh']->myquery($sql);
         }
     }
 }
@@ -482,7 +482,7 @@ function updDocFld($data) {
     $sql  = "update docfelder set feldname='".$data["feldname"]."', platzhalter='".strtoupper($data["platzhalter"]);
     $sql .= "', beschreibung='".$data["beschreibung"]."',laenge=".$data["laenge"].",zeichen='".$data["zeichen"];
     $sql .= "',position=".$data["position"].",docid=".$data["docid"]." where fid=".$data["fid"];
-    $rs  = $GLOBALS['dbh']->query($sql);
+    $rs  = $GLOBALS['dbh']->myquery($sql);
     if( !$rs ) {
         return false;
     }
@@ -499,7 +499,7 @@ function insDocFld($data) {
 
 function delDocFld($data) {
     $sql = "delete from docfelder where fid=".$data["fid"];
-    $rs = $GLOBALS['dbh']->query($sql);
+    $rs = $GLOBALS['dbh']->myquery($sql);
 }
 
 /****************************************************
@@ -511,7 +511,7 @@ function delDocFld($data) {
 function mknewDocFeld() {
     $newID = uniqid (rand());
     $sql = "insert into docfelder (beschreibung) values ('$newID')";
-    $rc = $GLOBALS['dbh']->query($sql);
+    $rc = $GLOBALS['dbh']->myquery($sql);
     if ( $rc ) {
         $sql = "select fid from docfelder where beschreibung = '$newID'";
         $rs = $GLOBALS['dbh']->getOne($sql);
@@ -535,7 +535,7 @@ function mknewDocFeld() {
 function mknewDocVorlage() {
     $newID = uniqid (rand());
     $sql = "insert into docvorlage (vorlage) values ('$newID')";
-    $rc = $GLOBALS['dbh']->query($sql);
+    $rc = $GLOBALS['dbh']->myquery($sql);
     if ( $rc ) {
         $sql = "select docid from docvorlage where vorlage = '$newID'";
         $rs  = $GLOBALS['dbh']->getOne($sql);
@@ -552,10 +552,10 @@ function mknewDocVorlage() {
 
 function delDocVorlage($data) {
     $sql = "delete from docfelder where docid=".$data["did"];
-    $rs = $GLOBALS['dbh']->query($sql);
+    $rs = $GLOBALS['dbh']->myquery($sql);
     if ( $rs ) {
         $sql = "delete from docvorlage where docid=".$data["did"];
-        $rs  = $GLOBALS['dbh']->query($sql);
+        $rs  = $GLOBALS['dbh']->myquery($sql);
     }
 }
 
@@ -573,7 +573,7 @@ function saveDocVorlage($data,$files) {
     if ( !$data["vorlage"] ) $data["vorlage"] = "Kein Titel ".datum("d.m.Y");
     $sql  = "update docvorlage set vorlage='".$data["vorlage"]."', beschreibung='".$data["beschreibung"];
     $sql .= "', file='".$file."', applikation='".$data["applikation"]."' where docid=".$data["did"];
-    $rs = $GLOBALS['dbh']->query($sql);
+    $rs = $GLOBALS['dbh']->myquery($sql);
     if( !$rs ) {
         return false;
     } else {
@@ -654,7 +654,7 @@ function mondaykw($kw,$jahr) {
 
 }
 function clearCSVData() {
-    return $GLOBALS['dbh']->query("delete from tempcsvdata where uid = '".$_SESSION["loginCRM"]."'");
+    return $GLOBALS['dbh']->myquery("delete from tempcsvdata where uid = '".$_SESSION["loginCRM"]."'");
 }
 
 
@@ -676,7 +676,7 @@ function insertCSVData($data,$id){
     $sql = "insert into tempcsvdata (uid,csvdaten,id) values ('"
             . $_SESSION["loginCRM"] . "','" . $GLOBALS['dbh']->saveData($tmpstr) . "','" 
             . $GLOBALS['dbh']->saveData($id) . "')";                                        // saveData escapt die Zeichenkette
-    $rc = $GLOBALS['dbh']->query($sql);
+    $rc = $GLOBALS['dbh']->myquery($sql);
     return $rc;     //Fehlerbehandlung? Wie sieht es aus mit exceptions? Muessen wir php4-kompatibel sein?
                     //Sollte eigentlich schon immer in den Funktionen direkt passieren 
                     // http://pear.php.net/manual/de/standars.errors.php
@@ -814,7 +814,7 @@ function nextNumber($number) {
     preg_match("/([^\d]*)([\d]+)([^\d]*)/",$rs[$number],$hit);
     $nr  = $hit[1].($hit[2]+1).$hit[3];
     $sql = "update defaults set $number = '$nr'";
-    $rc  = $GLOBALS['dbh']->query($sql,"nextnumber");
+    $rc  = $GLOBALS['dbh']->myquery($sql,"nextnumber");
     if ( !$rc ) {
         $GLOBALS['dbh']->rollback();
         return false;
@@ -927,7 +927,7 @@ function accessHistory( $data=false ) {
             if ( count( $array_of_data ) > 8 ) array_shift( $array_of_data ); 
             $sql =  "UPDATE crmemployee SET val = '".json_encode( $array_of_data )."' WHERE uid = ".$_SESSION['loginCRM'];
             $sql .= " AND manid = ".$_SESSION['manid']." AND key = 'search_history'";
-            $GLOBALS['dbh']->query( $sql );
+            $GLOBALS['dbh']->myquery( $sql );
         }
     }
 }

@@ -16,7 +16,7 @@ function convertPostits(){
             $tmp2 = str_replace ( "xxxidxxx", ++$pid, $tmp1 );
             $number = $key + 1;
             $sql2 = "INSERT INTO postitall ( iduser, idnote, content ) VALUES ('".$value['user_id']."', 'Postit_".$number."', '".$tmp2."')";
-            $rc = $GLOBALS['dbh']->query( $sql2 );
+            $rc = $GLOBALS['dbh']->myquery( $sql2 );
         }
     }
 }

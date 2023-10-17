@@ -782,7 +782,7 @@ function insertInvoiceFromOrder( $data ){
     $query = "INSERT INTO invoice (trans_id, position, parts_id, description, longdescription, qty, unit, sellprice, discount, marge_total, fxsellprice) ".
             "(SELECT ".$id.", position, parts_id, description, longdescription, qty, unit, sellprice, discount, marge_total, sellprice AS fxsellprice FROM orderitems WHERE trans_id = ".$data['oe_id'].")";
 
-    $GLOBALS['dbh']->query( $query );
+    $GLOBALS['dbh']->myquery( $query );
     $GLOBALS['dbh']->commit();
 
     $exists = array( "id" => $id );
@@ -816,7 +816,7 @@ function insertOfferFromOrder( $data ){
     $query = "INSERT INTO orderitems (trans_id, position, parts_id, description, longdescription, qty, unit, sellprice, discount, marge_total) ".
             "(SELECT ".$id.", position, parts_id, description, longdescription, qty, unit, sellprice, discount, marge_total FROM orderitems WHERE trans_id = ".$data['oe_id'].")";
 
-    $GLOBALS['dbh']->query( $query );
+    $GLOBALS['dbh']->myquery( $query );
     $GLOBALS['dbh']->commit();
 
     getOffer( array( "id" => $id ) );
@@ -921,19 +921,19 @@ function calculateCVnumber( $business, $cv ){ //Berechnet die nächste Kundennum
     if( $cv == 'vendor' ){ //Lieferanten werden in Zukunft nur über defaults hochgezählt, die Kundengruppe wird nicht mehr berücksichtigt
         $rs = $GLOBALS['dbh']->getOne( "SELECT vendornumber::int AS newnumber FROM defaults" );
         while( $GLOBALS['dbh']->getOne( "SELECT vendornumber FROM vendor WHERE vendornumber = '".++$rs['newnumber']."'" )['vendornumber'] );
-        $GLOBALS['dbh']->query( "UPDATE defaults SET vendornumber = ".$rs['newnumber'] );
+        $GLOBALS['dbh']->myquery( "UPDATE defaults SET vendornumber = ".$rs['newnumber'] );
     }
     if( $cv == 'customer' ){
         if( $business ){ //Kundengruppe  vorhanden
             $rs = $GLOBALS['dbh']->getOne( "SELECT customernumberinit::int AS newnumber FROM business WHERE id = ".$business );
             //wir suchen die nächste freie Nummer
             while( $GLOBALS['dbh']->getOne( "SELECT customernumber FROM customer WHERE customernumber = '".++$rs['newnumber']."'" )['customernumber'] );
-            $GLOBALS['dbh']->query( "UPDATE business SET customernumberinit = ".$rs['newnumber']." WHERE id = ".$business );
+            $GLOBALS['dbh']->myquery( "UPDATE business SET customernumberinit = ".$rs['newnumber']." WHERE id = ".$business );
         }
         else{ // keine Kundengruppe vorhanden, business ist leer
             $rs = $GLOBALS['dbh']->getOne( "SELECT customernumber::int AS newnumber FROM defaults" );
             while( $GLOBALS['dbh']->getOne( "SELECT customernumber FROM customer WHERE customernumber = '".++$rs['newnumber']."'" )['customernumber'] );
-            $GLOBALS['dbh']->query( "UPDATE defaults SET customernumber = ".$rs['newnumber'] );
+            $GLOBALS['dbh']->myquery( "UPDATE defaults SET customernumber = ".$rs['newnumber'] );
         }
     }
     return $rs['newnumber'];
@@ -1083,8 +1083,14 @@ function genericUpdate( $data ){
     resultInfo( true );
 }
 
+ /*
+
+    */
+
+
 function genericUpdateEx( $data ){
-    $start = hrtime( true );
+    //$start = hrtime( true );
+    //writeLog( $data );
     $update = function( $tableName, $dataObject ){
         $where = '';
         if( array_key_exists( 'WHERE', $dataObject ) ){
@@ -1096,7 +1102,7 @@ function genericUpdateEx( $data ){
         }
         $dbFields = array_keys( $dataObject );
         $dbValues = array_values( $dataObject );
-        $GLOBALS['dbh']->update( $tableName, $dbFields, $dbValues, $where );
+        $GLOBALS['dbh']->updateBigData( $tableName, $dbFields, $dbValues, $where );
         return true;
     };
 
@@ -1120,25 +1126,22 @@ function genericUpdateEx( $data ){
         }
     }
     $GLOBALS['dbh']->commit();
-
     resultInfo( true );
-    $end = hrtime( true );
-    $eta = $end - $start;
-    writeLogR( "genericUpdateEx ende: ".$eta / 1e+6 ."in ms");
+    //$end = hrtime( true );
+    //$eta = $end - $start;
+    //writeLogR( "genericUpdateEx Zeit: ".$eta / 1e+6 ."in ms");
 }
 
 function genericDelete( $data ){
-    writeLogR( "genericDelete start: ".time() );
     foreach( $data AS $tableName => $where){
         if( !isset( $where['WHERE'] ) ){
             resultInfo( false, 'Risky SQL-Statment with empty WHERE clausel'  );
             return;
         }
         writeLogR( "DELETE FROM $tableName WHERE ".$where['WHERE'] );
-        $GLOBALS['dbh']->query( "DELETE FROM $tableName WHERE ".$where['WHERE'] );
+        $GLOBALS['dbh']->myquery( "DELETE FROM $tableName WHERE ".$where['WHERE'] );
     }
     resultInfo(true);
-    writeLogR( "genericDelete end: ".time() );
 }
 
 function printOrder( $data ){

@@ -229,6 +229,7 @@ function crmAddOrderItem( dataRow ){
 
     $( '.od-item-description' ).catcomplete({
         delay: crmAcDelay,
+        minLength: 3,
         //source: "crm/ajax/crm.app.php?action=findPart" + ( ( crmOrderTypeEnum.Invoice == crmOrderType )? '&filterI' : '' ),
         source: crmGetCatcompleteURL(),
         select: function( e, ui ){

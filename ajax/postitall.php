@@ -123,7 +123,7 @@ class PostItAll{
 
     private function removeNote( $idUser, $idNote ){
         $sql = "delete from postitall where iduser='".$idUser."' and idNote='".$idNote."'";
-        return  $GLOBALS['dbh']->query( $sql );
+        return  $GLOBALS['dbh']->myquery( $sql );
     }
 }
 

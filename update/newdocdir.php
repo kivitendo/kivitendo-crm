@@ -46,7 +46,7 @@ function newname($root,$old,$new) {
          $ok=rename($root."/".$old,$root."/".$new);
          if ($ok) {
             $sql="update documents set path='$new' where kunde = $old";
-            $ok = $GLOBALS['dbh']->query($sql);
+            $ok = $GLOBALS['dbh']->myquery($sql);
             if (!$ok) {
                 rename($root."/".$new,$root."/".$old);
             }
@@ -100,7 +100,7 @@ if ($personen) foreach ($personen as $filename) {
 		echo "$ok<br>\n";
 	} else {
         $sql="update documents set path='$filename' where kunde = $filename";
-        $ok = $GLOBALS['dbh']->query($sql);
+        $ok = $GLOBALS['dbh']->myquery($sql);
        	echo 'Verzeichnis '.$filename." nicht verschoben<br>\n";
 		if ($doclog) fputs($doclog,$filename.' nicht verschoben '."\n");
         }

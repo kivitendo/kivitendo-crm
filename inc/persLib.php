@@ -325,7 +325,7 @@ function savePersonStamm($daten,$datei) {
         }
         mkTelNummer($pid,"P",$tels);
         $sql0="update contacts set ".$query0."cp_employee=".$_SESSION["loginCRM"]." where cp_id=$pid";
-        if($GLOBALS['dbh']->query($sql0)) {  //Erfolgreich gesichert
+        if($GLOBALS['dbh']->myquery($sql0)) {  //Erfolgreich gesichert
             return $pid;
         } else {
             return "unbekannt";
@@ -343,7 +343,7 @@ function insFaKont($data) {
     $fa=$data["fid"];
     foreach ($data["kontid"] as $row) {
         $sql="update contacts set cp_cv_id=".$fa." where cp_id=".$row;
-        $rc=$GLOBALS['dbh']->query($sql);
+        $rc=$GLOBALS['dbh']->myquery($sql);
     }
 }
 
@@ -358,7 +358,7 @@ function mknewPerson($id) {
     //Wird zur Zeit nicht verwendet
     //if (!$id) {$uid='null';} else {$uid=$id;};
     $sql="insert into contacts (cp_name,cp_employee) values ('$newID',$id)";
-    $rc=$GLOBALS['dbh']->query($sql);
+    $rc=$GLOBALS['dbh']->myquery($sql);
     if ($rc) {
         $sql="select cp_id from contacts where cp_name = '$newID'";
         $rs=$GLOBALS['dbh']->getAll($sql);

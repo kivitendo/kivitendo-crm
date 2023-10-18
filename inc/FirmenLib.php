@@ -693,17 +693,17 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
         if ($ala) {
             if ($daten["shipto_id"]>0) {
                 $sql1="update shipto set $query1 where shipto_id=".$daten["shipto_id"];
-                $rc1=$GLOBALS['dbh']->query($sql1);
+                $rc1=$GLOBALS['dbh']->myquery($sql1);
             } else {
                 $sid=newShipto($fid);
                 if ($sid) {
                     $sql1="update shipto set $query1 where shipto_id=".$sid;
-                    $rc1=$GLOBALS['dbh']->query($sql1);
+                    $rc1=$GLOBALS['dbh']->myquery($sql1);
                 }
             };
             if ($rc1) mkTelNummer($fid,"S",$tels2);
         }
-        $rc0=$GLOBALS['dbh']->query($sql0);
+        $rc0=$GLOBALS['dbh']->myquery($sql0);
         if ($rc0 and $rc1) {
             $rc=$fid;
             //ab hier CVARS
@@ -715,7 +715,7 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
             $sqltpl.= "values (%d,%d,%s,%s,%s,%s)";
             //bisherige Einträge löschen.
             $sql = "delete from custom_variables where trans_id = ".$daten["id"];
-            $rcc = $GLOBALS['dbh']->query($sql);
+            $rcc = $GLOBALS['dbh']->myquery($sql);
             //Insert bilden
             foreach ($daten as $key=>$val) {
                 if (substr($key,0,8) == "vc_cvar_") {
@@ -737,7 +737,7 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
                         default        : $text = "'$val'"; break;
                     };
                     $sql = sprintf($sqltpl,$vartype[$name]["id"],$daten["id"],$bool,$date,$text,$num);
-                    $rcc = $GLOBALS['dbh']->query($sql);
+                    $rcc = $GLOBALS['dbh']->myquery($sql);
                 }
             }
         } else { $rc=-1; $fehler=".:unknown:."; };
@@ -745,24 +745,24 @@ function saveFirmaStamm($daten,$datei,$typ="C",$neu=false) {
     } else {
         if ($daten["saveneu"]){
             $sql="delete from ".$tab[$typ]." where id=".$daten["id"];
-            $rc0=$GLOBALS['dbh']->query($sql);
+            $rc0=$GLOBALS['dbh']->myquery($sql);
         };
         return array(-1,$fehler);
     };
 }
 
 function newShipto($fid) {
-    $rc=$GLOBALS['dbh']->query("BEGIN");
+    $rc=$GLOBALS['dbh']->myquery("BEGIN");
     $newID=uniqid (rand());
     $sql="insert into shipto (trans_id,shiptoname,module) values ($fid,'$newID','CT')";
-    $rc=$GLOBALS['dbh']->query($sql);
+    $rc=$GLOBALS['dbh']->myquery($sql);
     $sql="select shipto_id from shipto where shiptoname='$newID'";
     $rs=$GLOBALS['dbh']->getOne($sql);
     if ($rs["shipto_id"]) {
-        $GLOBALS['dbh']->query("COMMIT");
+        $GLOBALS['dbh']->myquery("COMMIT");
         return $rs["shipto_id"];
     } else {
-        $GLOBALS['dbh']->query("ROLLBACK");
+        $GLOBALS['dbh']->myquery("ROLLBACK");
         return false;
     }
 }
@@ -773,7 +773,7 @@ function newShipto($fid) {
 * eine Kundennummer erzeugen
 *****************************************************/
 function newnr($typ,$bid=0) {
-    $rc=$GLOBALS['dbh']->query("BEGIN");
+    $rc=$GLOBALS['dbh']->myquery("BEGIN");
     if ($bid>0) {
         $rs=$GLOBALS['dbh']->getOne("select customernumberinit  as ".$typ."number from business where id = $bid");
     } else {
@@ -794,12 +794,12 @@ function newnr($typ,$bid=0) {
     $y = sprintf("%0".$len."d",$nr+1);
     $newnr=$pre.$y;
     if ($bid>0) {
-        $rc=$GLOBALS['dbh']->query("update business set customernumberinit='$newnr' where id = $bid");
+        $rc=$GLOBALS['dbh']->myquery("update business set customernumberinit='$newnr' where id = $bid");
     } else {
-        $rc=$GLOBALS['dbh']->query("update defaults set ".$typ."number='$newnr'");
+        $rc=$GLOBALS['dbh']->myquery("update defaults set ".$typ."number='$newnr'");
     }
-    if ($rc) { $GLOBALS['dbh']->query("COMMIT"); }
-    else { $GLOBALS['dbh']->query("ROLLBACK"); $newnr=""; };
+    if ($rc) { $GLOBALS['dbh']->myquery("COMMIT"); }
+    else { $GLOBALS['dbh']->myquery("ROLLBACK"); $newnr=""; };
     return $newnr;
 }
 
@@ -814,10 +814,10 @@ function mknewFirma($id,$typ) {
     $tmpName_0="01010101";
     $tmpName_1=uniqid (rand());
     $sql="DELETE FROM ".$tab[$typ]." WHERE name LIKE '".$tmpName_0."%'";
-   // $rc=$GLOBALS['dbh']->query($sql); Kommentiert bis ERP-Bug #2201 gefixt ist
+   // $rc=$GLOBALS['dbh']->myquery($sql); Kommentiert bis ERP-Bug #2201 gefixt ist
     if (!$id) {$uid='null';} else {$uid=$id;};
     $sql="insert into ".$tab[$typ]." (name,employee,currency_id,taxzone_id) values ('$tmpName_0$tmpName_1',$uid,1,4)";
-    $rc=$GLOBALS['dbh']->query($sql);
+    $rc=$GLOBALS['dbh']->myquery($sql);
     if ($rc) {
         $sql="select id from ".$tab[$typ]." where name = '$tmpName_0$tmpName_1'";
         $rs=$GLOBALS['dbh']->getAll($sql);

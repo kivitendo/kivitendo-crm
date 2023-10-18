@@ -137,10 +137,10 @@ function delTelCall($id) {
     $rs=$GLOBALS['dbh']->getAll("select * from contact_events where id=$id");
     if ($rs[0]["bezug"]==0) {
         $sql="delete from contact_events where Contact_reference=$id";
-        $rs=$GLOBALS['dbh']->query($sql);
+        $rs=$GLOBALS['dbh']->myquery($sql);
     }
     $sql="delete from telcall where id=$id";
-    $rc=$GLOBALS['dbh']->query($sql);
+    $rc=$GLOBALS['dbh']->myquery($sql);
 }
 
 /****************************************************
@@ -156,7 +156,7 @@ function saveTelCall($id,$empl,$grund) {
     $tmp=$rs[0];
     $sql="insert into telcallhistory (orgid,cause,caller_id,calldate,c_long,employee,kontakt,bezug,dokument,chgid,grund,datum)";
     $sql.=" values (%d,'%s',%d,'%s','%s',%d,'%s',%d,%d,%d,'%s','%s')";
-    $rs=$GLOBALS['dbh']->query(sprintf($sql,$tmp["id"],$tmp["cause"],$tmp["caller_id"],$tmp["calldate"],$tmp["c_long"],
+    $rs=$GLOBALS['dbh']->myquery(sprintf($sql,$tmp["id"],$tmp["cause"],$tmp["caller_id"],$tmp["calldate"],$tmp["c_long"],
         $tmp["employee"],$tmp["kontakt"],$tmp["bezug"],$tmp["dokument"],$empl,$grund,date("Y-m-d H:i:s")));
     return $rs;
 }
@@ -207,7 +207,7 @@ function mvTelcall($TID,$Anzeige,$CID) {
         } else {
             $sql="update contact_events set contact_reference=0, caller_id=$CID where id=$Anzeige";
         }
-        $rc=$GLOBALS['dbh']->query($sql);
+        $rc=$GLOBALS['dbh']->myquery($sql);
     }
     if ($TID<>$Anzeige) {
         if ($call["contact_reference"]==0) {
@@ -217,11 +217,11 @@ function mvTelcall($TID,$Anzeige,$CID) {
             $sql="update contact_events set contact_reference=$TID where id=$Anzeige";
             $sqlH="update telcallhistory set orgid=$TID where orgid=$Anzeige";
         }
-        $rc=$GLOBALS['dbh']->query($sqlH);
+        $rc=$GLOBALS['dbh']->myquery($sqlH);
     } else {
         return false;
     }
-    $rs=$GLOBALS['dbh']->query($sql);
+    $rs=$GLOBALS['dbh']->myquery($sql);
     return $rs;
 }
 
@@ -291,7 +291,7 @@ function insFormDoc($data,$file) {
     $c_cause=nl2br($rs[0]["beschreibung"]);
     $sql="update contact_events set cause='".$rs[0]["vorlage"]."',cause_long='$c_cause',caller_id='".$data["CID"];
     $sql.="',calldate='$datum',type_of_contact='F',document=$did,contact_reference='0',employee=".$data["CRMUSER"]." where id=$id";
-    $rs=$GLOBALS['dbh']->query($sql);
+    $rs=$GLOBALS['dbh']->myquery($sql);
     if(!$rs) {
         $id=false;
     }
@@ -411,7 +411,7 @@ function updCall($data,$datei=false) {
     $sql="update telcall set cause='".$data["cause"]."',c_long='$c_cause',caller_id='".$data["CID"]."',";
     $sql.="calldate='".$data['Datum']."',kontakt='".$data["Kontakt"]."',dokument=$dateiID,bezug='".$data["bezug"]."',";
     $sql.="employee='".$data["CRMUSER"]."',inout='".$data["inout"]."' where id=".$data["id"];
-    $rs=$GLOBALS['dbh']->query($sql);
+    $rs=$GLOBALS['dbh']->myquery($sql);
     if(!$rs) {
         $id=false;
     }
@@ -449,7 +449,7 @@ function mknewTelCall() {
     $newID=uniqid (rand());
     $datum=date("Y-m-d H:m:i");
     $sql="insert into contact_events (cause,caller_id,calldate) values ('$newID',0,'$datum')";
-    $rc=$GLOBALS['dbh']->query($sql);
+    $rc=$GLOBALS['dbh']->myquery($sql);
     if ($rc) {
         $sql="select id from contact_events where cause = '$newID'";
         $rs=$GLOBALS['dbh']->getAll($sql);
@@ -478,14 +478,14 @@ function mknewWVL($erp=false) {
     $GLOBALS['dbh']->begin();
     if ($erp) {
         $sql = "insert into notes (subject,created_by) values ('$newID',".$_SESSION["loginCRM"].")";
-        $rc=$GLOBALS['dbh']->query($sql);
+        $rc=$GLOBALS['dbh']->myquery($sql);
         if ($rc) {
             $sql = "select id from notes where subject = '$newID'";
             $rs=$GLOBALS['dbh']->getAll($sql);
             if ($rs) {
                 $sql = "insert into follow_ups (note_id,follow_up_date,created_for_user,created_by) values (";
                 $sql.= $rs[0]["id"].",'".substr($datum,0,10)."',".$_SESSION["loginCRM"].",".$_SESSION["loginCRM"].")";
-                $rc=$GLOBALS['dbh']->query($sql);
+                $rc=$GLOBALS['dbh']->myquery($sql);
                 if ($rc) {
                     $data["noteid"] = $rs[0]["id"];
                     $sql = "select id from follow_ups where note_id = ".$data["noteid"];
@@ -508,7 +508,7 @@ function mknewWVL($erp=false) {
         }
     } else {
         $sql="insert into wiedervorlage (cause,initdate,initemployee) values ('$newID','$datum',".$_SESSION["loginCRM"].")";
-        $rc=$GLOBALS['dbh']->query($sql);
+        $rc=$GLOBALS['dbh']->myquery($sql);
         if ($rc) {
             $sql="select id from wiedervorlage where cause = '$newID'";
             $rs=$GLOBALS['dbh']->getAll($sql);
@@ -851,12 +851,12 @@ function insWvl($data,$datei="") {
     if ( $rs < 0 ) {
         if ( $data["kontakt"]=="F" ) {
             $sql = 'DELETE FROM follow_ups WHERE id = '.$data['WVLID'];
-            $rc = $GLOBALS['dbh']->query($sql);
+            $rc = $GLOBALS['dbh']->myquery($sql);
             $sql = 'DELETE FROM notes WHERE id = '.$data['noteid'];
-            $rc = $GLOBALS['dbh']->query($sql);
+            $rc = $GLOBALS['dbh']->myquery($sql);
         } else {
             $sql = 'DELETE FROM wiedervorlage WHERE id = '.$data['WVLID'];
-            $rc = $GLOBALS['dbh']->query($sql);
+            $rc = $GLOBALS['dbh']->myquery($sql);
         }
     }
     return $rs;
@@ -878,30 +878,30 @@ function updWvlERP($data) {
         $sql .= ",trans_module='fu'";
     }
     $sql .= " where id=".$data["noteid"];
-    $rc = $GLOBALS['dbh']->query($sql);
-    if ( !$rc ) { $GLOBALS['dbh']->query("ROLLBACK"); return -3; };
+    $rc = $GLOBALS['dbh']->myquery($sql);
+    if ( !$rc ) { $GLOBALS['dbh']->myquery("ROLLBACK"); return -3; };
     $sql  = "update follow_ups set created_for_user=".$data["CRMUSER"].",done='".$data["status"]."', ";
     $sql .= "follow_up_date ='".date2db($data["Finish"])."' where id = ".$data["WVLID"];
-    $rc = $GLOBALS['dbh']->query($sql);
-    if ( !$rc ) { $GLOBALS['dbh']->query("ROLLBACK"); return -4; };
+    $rc = $GLOBALS['dbh']->myquery($sql);
+    if ( !$rc ) { $GLOBALS['dbh']->myquery("ROLLBACK"); return -4; };
     if ( $data["cp_cv_id"] ) {
         $sql = "select id from follow_up_links where follow_up_id = ".$data["WVLID"];
         $rs = $GLOBALS['dbh']->getOne($sql);
-        $rc = $GLOBALS['dbh']->query("BEGIN");
+        $rc = $GLOBALS['dbh']->myquery("BEGIN");
         if ( !$rs ) {
             $sql  = "insert into follow_up_links (follow_up_id,trans_id,trans_type,trans_info) values (";
             $sql .= $data["WVLID"].",".substr($data["cp_cv_id"],1).",'".((substr($data["cp_cv_id"],0,1)=="C")?"customer":"vendor");
             $sql .= "','".$data["name"]."')";
-            $rc = $GLOBALS['dbh']->query($sql);
+            $rc = $GLOBALS['dbh']->myquery($sql);
             $rs = 1;
         } else {
             $sql  ="update follow_up_links set trans_id=".substr($data["cp_cv_id"],1);
             $sql .=",trans_type='".((substr($data["cp_cv_id"],0,1)=="V")?"vendor":"customer");
             $sql .="',trans_info='".$data["name"]."' where follow_up_id = ".$data["WVLID"];
-            $rc = $GLOBALS['dbh']->query($sql);
+            $rc = $GLOBALS['dbh']->myquery($sql);
         }
-        if ( !$rc ) { $GLOBALS['dbh']->query("ROLLBACK"); return -5; };
-        $rs = $GLOBALS['dbh']->query("COMMIT");
+        if ( !$rc ) { $GLOBALS['dbh']->myquery("ROLLBACK"); return -5; };
+        $rs = $GLOBALS['dbh']->myquery("COMMIT");
         $rs = 1;
     } else {
        $rs = 1;
@@ -939,7 +939,7 @@ function updWvl($data,$datei="") {
             $sql .= ",employee=".$data["CRMUSER"];
         }
         $sql .= " where id=".$data["WVLID"];
-        $rs = $GLOBALS['dbh']->query($sql);
+        $rs = $GLOBALS['dbh']->myquery($sql);
         if( !$rs ) {
             $rs = -7;
         } else {
@@ -963,7 +963,7 @@ function updWvl($data,$datei="") {
 function documenttotc($newID,$did) {
 
     $sql="insert into documenttotc (telcall,documents) values ($newID,$did)";
-    $rs=$GLOBALS['dbh']->query($sql);
+    $rs=$GLOBALS['dbh']->myquery($sql);
     return $rs;
 }
 
@@ -976,7 +976,7 @@ function documenttotc($newID,$did) {
 function documenttotc_($newID,$tid) {
 
     $sql="update documenttotc set telcall=$tid where telcall=$newID";
-    $rs=$GLOBALS['dbh']->query($sql);
+    $rs=$GLOBALS['dbh']->myquery($sql);
     return $rs;
 }
 
@@ -1028,7 +1028,7 @@ function insWvlM($data,$Flag,$Expunge) {
             }
             moveMail($data["muid"],$CID,$Flag,$Expunge);
             $sql = "update contact_events set document=1 where id = $tid";
-            $rc = $GLOBALS['dbh']->query($sql);
+            $rc = $GLOBALS['dbh']->myquery($sql);
             return $rc;
         } else {
             $data["DateiID"] = false;
@@ -1059,22 +1059,22 @@ function kontaktWvl($id,$fid,$pfad) {
     if ( $rs[0]["kontaktid"]>0 and $fid<>$rs[0]["kontaktid"] ){
         // bisherigen Kontakteintrag ungültig markieren
         $sql = "update contact_events set cause=cause||' storniert' where id=".$rs[0]["tellid"];
-        //$rc=$GLOBALS['dbh']->query($sql);
-        if ( !$GLOBALS['dbh']->query($sql) ) return false;
+        //$rc=$GLOBALS['dbh']->myquery($sql);
+        if ( !$GLOBALS['dbh']->myquery($sql) ) return false;
     }
     if ( !$rs[0]["kontaktid"]>0 or empty($rs[0]["kontaktid"]) ) {
         $tid  = mknewTelCall();
         $sql  = "update contact_events set cause='".$rs[0]["cause"]."',caller_id=$fid,calldate='$nun',";
         $sql .= "cause_long='".$rs[0]["descript"]."',employee=".$rs[0]["employee"].",type_of_contact='".$rs[0]["kontakt"];
         $sql .= "',contact_reference=0,document=".$rs[0]["document"]." where id=$tid";
-        $rc = $GLOBALS['dbh']->query($sql);
+        $rc = $GLOBALS['dbh']->myquery($sql);
         if( !$rc ) {
             $GLOBALS['dbh']->rollback();
             return false;
         } else {
             $ok = $tid;
             $sql = "update wiedervorlage set kontaktid=$fid,kontakttab='$tab',tellid=$tid where id=$id";
-            if ( !$GLOBALS['dbh']->query($sql) ) {
+            if ( !$GLOBALS['dbh']->myquery($sql) ) {
                 $GLOBALS['dbh']->rollback();
                 return false;
             }
@@ -1096,14 +1096,14 @@ function kontaktWvl($id,$fid,$pfad) {
                 $rc = rename($von,$nach);
                 if ($rc) {
                     $sql="update documents set kunde=".$fid.", pfad='".$pfad."' where id=".$rsD[0]["id"];
-                    if (!$GLOBALS['dbh']->query($sql)) {
+                    if (!$GLOBALS['dbh']->myquery($sql)) {
                         $GLOBALS['dbh']->rollback();
                         return false;
                     }
                 }
             } else if( file_exists($nach) ) {
                 $sql = "update documents set kunde=".$fid.", pfad='".$pfad."' where id=".$rsD[0]["id"];
-                if ( !$GLOBALS['dbh']->query($sql) ) {
+                if ( !$GLOBALS['dbh']->myquery($sql) ) {
                     $GLOBALS['dbh']->rollback();
                     return false;
                 }
@@ -1772,7 +1772,7 @@ function newTermin() {
 
     $newID=uniqid (rand());
     $sql="insert into termine (c_cause) values ('$newID')";
-    $rc=$GLOBALS['dbh']->query($sql);
+    $rc=$GLOBALS['dbh']->myquery($sql);
     $sql="select * from termine where c_cause='$newID'";
     $rs=$GLOBALS['dbh']->getAll($sql);
     if(!$rs) {
@@ -1795,9 +1795,9 @@ function saveTermin($data) {
     } else {
         $termid=$data["tid"];
         $sql="delete from terminmember where termin=$termid";
-        $rc=$GLOBALS['dbh']->query($sql);
+        $rc=$GLOBALS['dbh']->myquery($sql);
         $sql="delete from termdate where termid=$termid";
-        $rc=$GLOBALS['dbh']->query($sql);
+        $rc=$GLOBALS['dbh']->myquery($sql);
     }
     if (!$termid) {
         return false;
@@ -1817,7 +1817,7 @@ function saveTermin($data) {
         $sql.="start='".date("Y-m-d H:i:00",$von." ".$data["von"])."', stop='".date("Y-m-d H:i:00",$bis." ".$data["bis"])."' ";
         $sql.=",location='".$data["location"]."' ";
         $sql.=" where id=".$termid;
-        $rc=$GLOBALS['dbh']->query($sql);
+        $rc=$GLOBALS['dbh']->myquery($sql);
         if ($rc) {
             $year=date("Y",$von);
             $ft=feiertage($year);
@@ -1832,7 +1832,7 @@ function saveTermin($data) {
                 $sql="insert into termdate (termid,tag,monat,jahr,kw,idx) values (";
                 $sql.="$termid,'".date("d",$von)."','".date("m",$von)."',".date("Y",$von).",".strftime("%V",$von).",".$idx.")";
                 if (($data["ft"] && date("w",$von)<>6 && date("w",$von)<>0 && !in_array($von,$ftk)) || !$data["ft"] || $von==$bis)
-                    $rc=$GLOBALS['dbh']->query($sql);
+                    $rc=$GLOBALS['dbh']->myquery($sql);
                 switch ($data["repeat"]) {
                     case '0' :
                     case '1' : $von+=60*60*24;
@@ -1856,14 +1856,14 @@ function saveTermin($data) {
                 $tab=substr($teiln,0,1);
                 $sql="insert into terminmember (termin,member,tabelle) values (";
                 $sql.=$termid.",$nr,'$tab')";
-                $rc=$GLOBALS['dbh']->query($sql);
+                $rc=$GLOBALS['dbh']->myquery($sql);
                 if ($tab<>"G" && $tab<>"E") {
                     $tid=mknewTelCall();
                     $nun=date2db($data["vondat"])." ".$data["von"].":00";
                     $sql="update contact_events set cause='".$data["grund"];
                     $sql.="',caller_id=$nr,calldate='$nun',calendar_event=$termid,cause_long='".$data["c_cause"];
                     $sql.="',employee='".$_SESSION["loginCRM"]."',type_of_contact='R',contact_reference=0 where id=$tid";
-                    $rc=$GLOBALS['dbh']->query($sql);
+                    $rc=$GLOBALS['dbh']->myquery($sql);
                     if(!$rs) {
                         $rs=-1;
                     }
@@ -1913,7 +1913,7 @@ function searchTermin($suche,$cat,$von,$bis,$TID=0) {
     if ($TID>0) $sql.=" and member=$TID";
     //if ($grp) $sql.=" and (M.member in $grp)";
     //echo "</ br>".$sql;
-    $rc=$GLOBALS['dbh']->query($sql);
+    $rc=$GLOBALS['dbh']->myquery($sql);
     $rs=$GLOBALS['dbh']->getAll($sql);
     //print_r($rs);
     //while ($row = $rs->fetchRow(DB_FETCHMODE_ASSOC)) {
@@ -2059,11 +2059,11 @@ function getTerminUser($tid) {
 function deleteTermin($id) {
 
     $sql1="delete from termine where id=$id";
-    $rc=$GLOBALS['dbh']->query($sql1);
+    $rc=$GLOBALS['dbh']->myquery($sql1);
     $sql2="delete from terminmember where termin=$id";
-    $rc=$GLOBALS['dbh']->query($sql2);
+    $rc=$GLOBALS['dbh']->myquery($sql2);
     $sql3="delete from termdate where termid=$id";
-    $rc=$GLOBALS['dbh']->query($sql3);
+    $rc=$GLOBALS['dbh']->myquery($sql3);
 }
 
 /****************************************************
@@ -2134,7 +2134,7 @@ function saveTermincat($data) {
             $sql="update termincat set sorder=".$row["sorder"].", catname='".$row["catname"]."', ccolor='".$row["ccolor"]."' where catid = ".$row["catid"];
         }
         if ($sql)
-            $rc = $GLOBALS['dbh']->query($sql);
+            $rc = $GLOBALS['dbh']->myquery($sql);
     }
 }
 
@@ -2320,12 +2320,12 @@ function saveCustMsg($data) {
 
     if (!$data["cp_cv_id"]) return false;
     $sql="delete from custmsg where fid=".$data["cp_cv_id"];
-    $rc=$GLOBALS['dbh']->query($sql);
+    $rc=$GLOBALS['dbh']->myquery($sql);
     if ($rc) for($i=1; $i<=3; $i++) {
         if ($data["message$i"]) {
             $sql="insert into custmsg (msg,prio,fid,uid,akt) values (";
             $sql.="'".$data["message$i"]."',$i,".$data["cp_cv_id"].",".$_SESSION["loginCRM"].",".(($data["prio"]==$i)?"'t'":"'f'").")";
-            $rc=$GLOBALS['dbh']->query($sql);
+            $rc=$GLOBALS['dbh']->myquery($sql);
         }
     }
 }
@@ -2373,7 +2373,7 @@ function mknewLable($id=0) {
 
     $newID=uniqid (rand());
     $sql="insert into labels (name) values ('$newID')";
-    $rc=$GLOBALS['dbh']->query($sql);
+    $rc=$GLOBALS['dbh']->myquery($sql);
     if ($rc) {
         $sql="select id from labels where name = '$newID'";
         $rs=$GLOBALS['dbh']->getAll($sql);
@@ -2417,12 +2417,12 @@ function updLable($data) {
     }
     $sql=substr($tmp,0,-1)." where id=".$data["id"];
     if ($data["cust"]=="C") {
-        $rc=$GLOBALS['dbh']->query($sql);
+        $rc=$GLOBALS['dbh']->myquery($sql);
         $i=0;
-        $GLOBALS['dbh']->query("delete from labeltxt where lid=".$data["id"]);
+        $GLOBALS['dbh']->myquery("delete from labeltxt where lid=".$data["id"]);
         if($data["Text"]) foreach($data["Text"] as $row) {
             $sql=sprintf("insert into labeltxt (lid,font,zeile) values (%d,%d,'%s')",$data["id"],$data["Schrift"][$i],$row);
-            $GLOBALS['dbh']->query($sql);
+            $GLOBALS['dbh']->myquery($sql);
             $i++;
         }
     } else {
@@ -2490,7 +2490,7 @@ function insWCategorie($data) {
     if ( !$data["cid"] ) {
         $newID = uniqid (rand());
         $sql = "insert into wissencategorie (name,kdhelp) values ('$newID','".(($data["kdhelp"]==1)?'true':'false')."')";
-        $rc = $GLOBALS['dbh']->query($sql);
+        $rc = $GLOBALS['dbh']->myquery($sql);
         $sql = "select * from wissencategorie where name='$newID'";
         $rs = $GLOBALS['dbh']->getOne($sql);
         if( !$rs ) {
@@ -2818,10 +2818,10 @@ function saveMailVorlage($data) {
     if ($data["MID"]) {
         $rc  = $GLOBALS['dbh']->update('mailvorlage',array('cause','c_long'),array($data["Subject"],$data["BodyText"]),'id = '.$data["MID"]);
         //$sql = "UPDATE mailvorlage SET cause='%s', c_long='%s' WHERE id = %d";
-        //$rc = $GLOBALS['dbh']->query(sprintf($sql,$data["Subject"],$data["BodyText"],$data["MID"]));
+        //$rc = $GLOBALS['dbh']->myquery(sprintf($sql,$data["Subject"],$data["BodyText"],$data["MID"]));
     } else {
         $sql = "INSERT INTO mailvorlage (cause,c_long,employee) VALUES ('%s','%s',%d)";
-        $rc = $GLOBALS['dbh']->query(sprintf($sql,$data["Subject"],$data["BodyText"],$_SESSION["loginCRM"]));
+        $rc = $GLOBALS['dbh']->myquery(sprintf($sql,$data["Subject"],$data["BodyText"],$_SESSION["loginCRM"]));
         $sql  = "SELECT id FROM mailvorlage WHERE cause='".$data["Subject"];
         $sql .= "' AND c_long='".$data["BodyText"]."' AND employee=".$_SESSION["loginCRM"];
         $rc = $GLOBALS['dbh']->getAll($sql);
@@ -2870,7 +2870,7 @@ function getOneMailVorlage($MID) {
 *****************************************************/
 function deleteMailVorlage($id) {
     $sql = "DELETE FROM mailvorlage WHERE id = $id";
-    $rc = $GLOBALS['dbh']->query($sql);
+    $rc = $GLOBALS['dbh']->myquery($sql);
     return $rc;
 }
 
@@ -2901,7 +2901,7 @@ function saveTT($data) {
         //Neuer Timetrack
         $newID = uniqid (rand());
         $sql = "INSERT INTO timetrack (uid,ttname) VALUES (1,'$newID')";
-        $rc = $GLOBALS['dbh']->query($sql);
+        $rc = $GLOBALS['dbh']->myquery($sql);
         if ($rc) {
             $sql = "SELECT * FROM timetrack WHERE ttname = '$newID'";
             $rs = $GLOBALS['dbh']->getOne($sql);
@@ -2918,7 +2918,7 @@ function saveTT($data) {
     if ( $data["budget"] )     $sql .= "budget = ".$data["budget"].",";
     $sql .= "active = '".$data["active"]."' ";
     $sql .= "WHERE id = ".$data["id"];
-    $rc = $GLOBALS['dbh']->query($sql);
+    $rc = $GLOBALS['dbh']->myquery($sql);
     if ( $rc ) {
         $data["msg"] = ".:saved:.";
     } else {
@@ -3001,7 +3001,7 @@ function deleteTT($id) {
     $ev = getTTEvents($id,"d",false);
     if ( count($ev) > 0 ) return false;
     $sql = "DELETE FROM timetrack WHERE  id = $id";
-    $rc = $GLOBALS['dbh']->query($sql);
+    $rc = $GLOBALS['dbh']->myquery($sql);
     return $rc;
 }
 
@@ -3058,13 +3058,13 @@ function saveTTevent($data) {
     if ( $data['parray'] != '' ) {
         $GLOBALS['dbh']->begin();
         $sql = 'DELETE FROM tt_parts WHERE eid = '.$data['eventid'];
-        $GLOBALS['dbh']->query($sql);
+        $GLOBALS['dbh']->myquery($sql);
         $tmp = explode('###',$data['parray']);
         $sqltpl = "INSERT INTO tt_parts (eid,qty,parts_id,parts_txt) VALUES (".$data['eventid'].",%f,%d,'%s')";
         foreach ( $tmp as $row ) {
             $ttp = explode('|',$row);
             $sql = sprintf($sqltpl,str_replace(',','.',$ttp[0]),$ttp[1],trim($ttp[2]));
-            $rc = $GLOBALS['dbh']->query($sql);
+            $rc = $GLOBALS['dbh']->myquery($sql);
             if ( !$rc ) {
                 $GLOBALS['dbh']->rollback();
                 $data["msg"] = ".:error:. .:saving:.";
@@ -3088,7 +3088,7 @@ function stopTTevent($id,$stop) {
     $rs = $GLOBALS['dbh']->getOne($sql,'stopTTevent');
     if ( $rs['ttstart'] < $stop ) {
         $sql = "UPDATE tt_event SET ttstop = '$stop' WHERE id = $id";
-        $rc = $GLOBALS['dbh']->query($sql);
+        $rc = $GLOBALS['dbh']->myquery($sql);
         return $rc;
     } else {
         return false;
@@ -3170,10 +3170,10 @@ function mkTTorder($id,$evids,$trans_id) {
         $sql  = "INSERT INTO oe (notes,transaction_description,ordnumber,".$vendcust."_id,taxincluded,currency_id) ";
         $sql .= "VALUES ('".$tt["ttdescription"]."','".$tt["ttname"]."',$sonumber,'".$tt["fid"]."','f',";
         $sql .= "coalesce((SELECT currency_id FROM ".$vendcust." WHERE id = ".$tt['fid']."),$curr))";
-        $rc = $GLOBALS['dbh']->query($sql,"newOE");
+        $rc = $GLOBALS['dbh']->myquery($sql,"newOE");
         if (!$rc) {
             $sql = "DELETE FROM oe WHERE ordnumber = '$sonumber'";
-            $rc = $GLOBALS['dbh']->query($sql,"delOE");
+            $rc = $GLOBALS['dbh']->myquery($sql,"delOE");
             return ".:error:. 0";
         }
         $sql = "SELECT id FROM oe WHERE  ordnumber = '$sonumber'";
@@ -3181,7 +3181,7 @@ function mkTTorder($id,$evids,$trans_id) {
         $trans_id = $rs["id"];
         if ( $trans_id <= 0 ) {
             $sql = "DELETE FROM oe WHERE ordnumber = '$sonumber'";
-            $rc = $GLOBALS['dbh']->query($sql,"delOE");
+            $rc = $GLOBALS['dbh']->myquery($sql,"delOE");
             return ".:error:. 0";
         }
         $netamount = 0;
@@ -3213,7 +3213,7 @@ function mkTTorder($id,$evids,$trans_id) {
         $rqdate = substr($row['ttstop'],0,10);
         $values = array($trans_id,$partid,$row["ttevent"],$time,$sellprice,$unit,0,0,$diff,$rqdate);
         //$sql = $sql_i."$trans_id,$partid,'".$row["ttevent"]."',$time,$sellprice,'$unit',0,0,'$diff','".substr($row['ttstop'],0,10)."')";
-        //$rc = $GLOBALS['dbh']->query($sql);
+        //$rc = $GLOBALS['dbh']->myquery($sql);
         $rc = $GLOBALS['dbh']->insert('orderitems',$fields,$values);
         if ( !$rc ) {
             $GLOBALS['dbh']->rollback();
@@ -3247,7 +3247,7 @@ function mkTTorder($id,$evids,$trans_id) {
     } else {
         //Events als Abgerechnet markieren.
         $sql = "UPDATE tt_event t set cleared = $trans_id where t.ttid = $id $evids";
-        $rc = $GLOBALS['dbh']->query($sql);
+        $rc = $GLOBALS['dbh']->myquery($sql);
         $GLOBALS['dbh']->commit();
         return ".:ok:.";
     }
@@ -3293,8 +3293,8 @@ function getIOQ($fid,$Q,$type,$close){
 }
 
 // Gibt ein Array mit allen Nutzern einer angegebenen Grupppe zurück
-function ERPUsersfromGroup($grp_name) {
-    $rueck;
+function ERPUsersfromGroup( $grp_name ){
+    $rueck = array();
     $i = 0;
     $grp_id = '';
     //Gruppen ID herausfiltern
@@ -3302,23 +3302,23 @@ function ERPUsersfromGroup($grp_name) {
     $allERPgroups = getAllERPgroups();
     $sql = "SELECT usrg.user_id AS user_id, usrg.group_id AS group_id FROM auth.user_group AS usrg ORDER by usrg.user_id";
     $allAssignments = $GLOBALS['dbh_auth']->getAll( $sql );
-    foreach ( $allERPgroups as $key => $gruppe ) {
-        if($gruppe['name'] == $grp_name) {
+    foreach( $allERPgroups as $key => $gruppe ){
+        if( $gruppe['name'] == $grp_name ){
             $grp_id = $gruppe['id'];
         }
     }
     //Rückgabe-Array zusammensetzeng
-    foreach ( $allAssignments as $key => $zuordnung ) {
-        if($zuordnung['group_id'] == $grp_id) {
+    foreach( $allAssignments as $key => $zuordnung ){
+        if( $zuordnung['group_id'] == $grp_id ){
             $user_id = $zuordnung['user_id'];
-            foreach ( $allERPusers as $key => $nutzer ) {
-                    if($nutzer['id'] == $user_id) {
-                        $rueck[$i] = array("id"=>$user_id,"login"=>$nutzer['login'],"name"=>$nutzer['name']);
+            foreach( $allERPusers as $key => $nutzer ){
+                    if( $nutzer['id'] == $user_id ){
+                        $rueck[$i] = array( "id"=>$user_id, "login" => $nutzer['login'], "name" => $nutzer['name'] );
                         $i++;
                     }
             }
         }
     }
-    return $rueck;
+    return  $rueck;
 }
 ?>

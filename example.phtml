@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  
+
 <head>
 <meta charset='utf-8' />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -24,8 +24,8 @@
                 Statt JS einzusetzen sollte auf die jQuery-Methoden zurückgegriffen werden.
                 Url-Parameter werden als hash gefolgt von einem JSON übergeben.
                 Vorteil: Browserhistory funktioniert, F5 funktioniert,
-            
-               
+
+
     ******************************************************************************************************************************/
 
 ?>
@@ -71,7 +71,7 @@
               <input type="text" id="zip_code" placeholder="Zip Code">
               <select id="location"> </select>
               <select name="federal_state" id="federal_state" placeholder="Federal State"></select><br>
-              <input type="text" id="street" placeholder="street"> 
+              <input type="text" id="street" placeholder="street">
               <button id="don_e" OnClick="Clicked()">Press me</button>
             </div>
 
@@ -94,7 +94,7 @@
         // bei Erfolg wird die Funktion ausgerufen welche von der Response der PHP erbt
         success: function( data ){
           // gibt data aus (Response der PHP ) in der console
-          console.info( data );      
+          console.info( data );
           // filtert gender aus data und ändert den #response Text zum ausgegeben Geschlecht
 
           $("#gender_response").val(data["gender"]).change();
@@ -110,7 +110,7 @@
     }
   })
   $( "#name_txt" ).change( function(){
-    // sendet eine Post-Anfrage an website_r.php 
+    // sendet eine Post-Anfrage an website_r.php
      // jquery each, key & value append
   });
 
@@ -142,15 +142,15 @@
       type: 'POST',
       data: {action: 'f_state', data: { 'zipcode': $('#zip_code').val() } },
       success: function( data ){
-        $('#federal_state').append($('<option />').text(data['federal_state'])); 
+        $('#federal_state').append($('<option />').text(data['federal_state']));
       },
       error: function( xhr, status, error ){
         console.info("ERROR ", xhr, status, error)
       }
 
     });
-    } 
-     
+    }
+
     $('#location').change(function(){
       $('#street').focus(); })
   })

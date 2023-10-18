@@ -67,3 +67,6 @@ UNION
 UNION
 ( SELECT licenseplate AS label, 'Auto' AS categorie FROM car WHERE licenseplate ILIKE '%da%' )
 ) AS test ORDER BY random() LIMIT 20 ) AS gemischt ORDER BY categorie ;
+
+
+--SELECT * FROM ( SELECT * FROM ((SELECT 'Kunde' AS category, 'C' AS src, '' AS value, id, name AS label FROM customer WHERE name ILIKE '%c%' OR sw ILIKE '%c%' OR contact ILIKE '%c%' )UNION ALL (SELECT 'Lieferant' AS category, 'V' AS src, '' AS value, id, name AS label FROM vendor WHERE name ILIKE '%c%' OR sw ILIKE '%c%' OR contact ILIKE '%c%' )UNION ALL (SELECT 'Kontaktperson' AS category, 'P' AS src, '' AS value, cp_id AS id, concat(cp_givenname, ' ', cp_name) AS name FROM contacts WHERE cp_name ILIKE '%c%' OR cp_givenname ILIKE '%c%' )UNION ALL (SELECT 'Fahrzeug' AS category, 'A' AS src, c_ln AS value, c_id AS id, ' [ ' || COALESCE( c_ln, '' ) || ' ] ' || COALESCE( name, '' ) AS label FROM lxc_cars JOIN customer ON c_ow = id WHERE c_ln ILIKE '%c%' AND obsolete = false )) AS test ORDER BY random() LIMIT 20 ) AS gemischt ORDER BY category;

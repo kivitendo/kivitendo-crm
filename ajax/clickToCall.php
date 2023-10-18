@@ -92,7 +92,7 @@
 
     // save user default phones
     function saveClickToCall( $data ){
-        $GLOBALS['dbh']->query( "DELETE FROM crmdefaults WHERE employee = ".$_SESSION['userConfig']['id']." AND key = '".key( $data )."'" );
+        $GLOBALS['dbh']->myquery( "DELETE FROM crmdefaults WHERE employee = ".$_SESSION['userConfig']['id']." AND key = '".key( $data )."'" );
         echo $GLOBALS['dbh']->insert( 'crmdefaults', array( 'key', 'val', 'employee' ), array( key( $data) , $data[key( $data )], $_SESSION['userConfig']['id'] ), FALSE );
     }
 

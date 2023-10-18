@@ -9,7 +9,7 @@ function getCategories(){
 }
 
 function getArticle( $data ){
-     $rs = $GLOBALS['dbh']->query( 'UPDATE knowledge_content SET modifydate = now() WHERE category = '.$data['data'].' AND version = (SELECT max(version) FROM knowledge_content WHERE category = '.$data['data'].')'  );
+     $rs = $GLOBALS['dbh']->myquery( 'UPDATE knowledge_content SET modifydate = now() WHERE category = '.$data['data'].' AND version = (SELECT max(version) FROM knowledge_content WHERE category = '.$data['data'].')'  );
      $sql = "SELECT json_agg (json) from (SELECT * FROM knowledge_content, knowledge_category WHERE category =" .$data['data']. " AND knowledge_category.id = ".$data['data']." AND version = ( SELECT max(version) FROM knowledge_content, knowledge_category WHERE knowledge_category.id = ".$data['data']." AND category =".$data['data']." ) ) json";
      //writeLog($sql);
      $rs = $GLOBALS['dbh']->getOne( $sql );
@@ -61,9 +61,9 @@ function editCategory( $data ){
 
 function delCategory( $data ){
     $sql = "DELETE FROM knowledge_category WHERE id = '".$data['data']."'";
-    $rs = $GLOBALS['dbh']->query( $sql );
+    $rs = $GLOBALS['dbh']->myquery( $sql );
     $sql = "DELETE FROM knowledge_content WHERE category = '".$data['data']."'";
-    $rs = $GLOBALS['dbh']->query( $sql );
+    $rs = $GLOBALS['dbh']->myquery( $sql );
     echo 1;
 }
 

@@ -16,10 +16,10 @@ function CreateFunctionsAndTable(){ //Legt beim ersten Aufruf der Datenbank die 
     foreach( $statement as $key=>$value ){
         $sok0 = preg_replace( $sm0, '',$statement[$key] );
         $sok1 = preg_replace( $sm1, '',$sok0 );
-        $rc=$GLOBALS['dbh']->query( $sok1 );
+        $rc=$GLOBALS['dbh']->myquery( $sok1 );
     }
     $sql="insert into schema_info (tag, login) values ('crm_telefon_integration', '".$_SESSION['login'].")'";
-    $rc=$GLOBALS['dbh']->query($sql);
+    $rc=$GLOBALS['dbh']->myquery($sql);
 }
 
 function getCallListComplete(){

@@ -294,7 +294,7 @@ function updatePartBin($row) {
        $sql =  "INSERT INTO inventory (warehouse_id,bin_id,parts_id,employee_id,qty, trans_id,trans_type_id,shippingdate,comment,chargenumber,bestbefore)";
        $sql .= " VALUES (".$row['warehouse'].",".$row['bin'].",".$row['parts_id'][$i].",".$_SESSION['loginCRM'];
        $sql .= ",$diff,nextval(('id'::text)::regclass),$tt,'".$now."','".$row["comment"]."',$charge,$best)";
-       $rc = $GLOBALS['dbh']->query($sql);
+       $rc = $GLOBALS['dbh']->myquery($sql);
        echo $row[$i]["part_id"].$x;
        if ($rc) { echo "ok<br>";} else { echo "error<br>"; };
     };

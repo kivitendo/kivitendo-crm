@@ -17,7 +17,7 @@
 
     function deleteCategory( $delCat ){
         $sql = "DELETE FROM event_category WHERE id = $delCat";
-        echo $GLOBALS['dbh']->query( $sql );
+        echo $GLOBALS['dbh']->myquery( $sql );
     }
 
  ?>

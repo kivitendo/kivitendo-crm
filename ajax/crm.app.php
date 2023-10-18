@@ -203,7 +203,7 @@ function checkArticleNumber( $data ){
 }
 
 function computeArticleNumber( $data ){
-    if( $data[part_type] == "P" || $data[part_type] == "part" )
+    if( $data['part_type'] == "P" || $data['part_type'] == "part" )
         $rs = $GLOBALS['dbh']->getOne( "SELECT id AS defaults_id, articlenumber::INT + 1 AS newnumber, 0 AS service FROM defaults");
     else
         $rs = $GLOBALS['dbh']->getOne( "SELECT id AS defaults_id, servicenumber::INT + 1 AS newnumber, customer_hourly_rate, 1 AS service FROM defaults");

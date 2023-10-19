@@ -175,7 +175,7 @@ function crmAddOrderItem( dataRow ){
     tableRow += '<td><input class="od-item-unit" type="text" size="5" readonly="readonly" value="' + ( ( exists( dataRow.unit ) )? dataRow.unit : '' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
                 ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>';
 
-    tableRow += '<td><input class="od-hidden-item-rate" type="hidden" value="' + ( ( exists( dataRow.rate ) )? dataRow.rate : '0' ) + '"></input>' +
+    tableRow += '<td><input class="od-hidden-item-rate" type="hidden" value="' + ( ( exists( dataRow.buchungsziel ) )? dataRow.buchungsziel.rate : '0' ) + '"></input>' +
                 '<input class="od-item-sellprice" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.sellprice ) )? dataRow.sellprice : '0', 2 ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup2(event)" ' +
                 ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>' +
                 '<td><input class="od-item-discount" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.discount ) )? dataRow.discount * 100 : '0' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
@@ -275,7 +275,7 @@ function crmCompleteInsertOrderPos( row, item ){
     row.find( '[class=od-item-qty]' ).val( kivi.format_amount( item.qty, 2 ) );
     row.find( '[class=od-item-unit]' ).val( item.unit );
     row.find( '[class=od-item-sellprice]' ).val( kivi.format_amount( item.sellprice, 2 ) );
-    row.find( '[class=od-hidden-item-rate]' ).val( item.rate );
+    row.find( '[class=od-hidden-item-rate]' ).val( exists( item.buchungsziel )? item.buchungsziel.rate  : 0 );
     row.find( '[name=od-item-description]' ).val( item.description );
     row.find( '[class=od-ui-hsort]' ).show();
     row.find( '[class=od-ui-del]' ).show();

@@ -289,19 +289,36 @@ function findPart( $term ){
         if( 'order' == $_GET['filter'] ){
             // $sql .= "(SELECT 'W' AS part_type,  'Waren' AS category, description, partnumber, id, description AS value, part_type, unit,  partnumber || ' ' || description AS label, instruction, sellprice,";
             // $sql .= " (SELECT qty FROM invoice WHERE invoice.parts_id = parts.id AND invoice.qty IS NOT null GROUP BY qty ORDER BY count( invoice.qty ) DESC, qty DESC LIMIT 1) AS qty,";
+            //$sql .= "(SELECT 'D' AS part_type,  'Anweisungen' AS category, description, partnumber, id, description AS value, part_type, unit,  partnumber || ' ' || description AS label, instruction, '100' AS sellprice,";
+            //$sql .= " '0' AS qty,";
+            //$sql .= " (SELECT tax.rate FROM parts i INNER JOIN taxzone_charts ON parts.buchungsgruppen_id = taxzone_charts.buchungsgruppen_id INNER JOIN taxkeys ON taxzone_charts.income_accno_id = taxkeys.chart_id INNER JOIN tax ON taxkeys.tax_id = tax.id WHERE i.id = parts.id AND parts.obsolete = false AND taxzone_charts.taxzone_id = 4 GROUP BY parts.id, tax.rate, taxkeys.startdate ORDER BY taxkeys.startdate DESC LIMIT 1) AS rate";
+            //$sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type ='service' AND instruction = true ORDER BY ( SELECT ( SELECT count( qty ) FROM orderitems WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5) UNION ALL";
             $sql .= "(SELECT 'D' AS part_type,  'Anweisungen' AS category, description, partnumber, id, description AS value, part_type, unit,  partnumber || ' ' || description AS label, instruction, '100' AS sellprice,";
-            $sql .= " '0' AS qty,";
-            $sql .= " (SELECT tax.rate FROM parts i INNER JOIN taxzone_charts ON parts.buchungsgruppen_id = taxzone_charts.buchungsgruppen_id INNER JOIN taxkeys ON taxzone_charts.income_accno_id = taxkeys.chart_id INNER JOIN tax ON taxkeys.tax_id = tax.id WHERE i.id = parts.id AND parts.obsolete = false AND taxzone_charts.taxzone_id = 4 GROUP BY parts.id, tax.rate, taxkeys.startdate ORDER BY taxkeys.startdate DESC LIMIT 1) AS rate";
-            $sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type ='service' AND instruction = true ORDER BY ( SELECT ( SELECT count( qty ) FROM orderitems WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5) UNION ALL";
+            $sql .= " '0' AS qty, null AS buchungsziel";
+            $sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type ='service' AND instruction = true ORDER BY ( SELECT ( SELECT count( qty ) FROM orderitems WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5)";
+            $sql .= " UNION ALL";
         }
+        //$sql .= " (SELECT 'W' AS part_type,  'Waren' AS category, description, partnumber, id, description AS value, part_type, unit,  partnumber || ' ' || description AS label, instruction, sellprice,";
+        //$sql .= " (SELECT qty FROM $filter WHERE $filter.parts_id = parts.id AND $filter.qty IS NOT null GROUP BY qty ORDER BY count( $filter.qty ) DESC, qty DESC LIMIT 1) AS qty,";
+        //$sql .= " (SELECT tax.rate FROM parts i INNER JOIN taxzone_charts ON parts.buchungsgruppen_id = taxzone_charts.buchungsgruppen_id INNER JOIN taxkeys ON taxzone_charts.income_accno_id = taxkeys.chart_id INNER JOIN tax ON taxkeys.tax_id = tax.id WHERE i.id = parts.id AND parts.obsolete = false AND taxzone_charts.taxzone_id = 4 GROUP BY parts.id, tax.rate, taxkeys.startdate ORDER BY taxkeys.startdate DESC LIMIT 1) AS rate";
+        //$sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type = 'part'  AND instruction = false ORDER BY ( SELECT ( SELECT count( qty ) FROM $filter WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5) UNION ALL";
+        //$sql .= " (SELECT 'D' AS part_type,  'Dienstleistung' AS category, description, partnumber, id, description AS value, part_type, unit,  partnumber || ' ' || description AS label, instruction, sellprice,";
+        //$sql .= " (SELECT qty FROM $filter WHERE $filter.parts_id = parts.id AND $filter.qty IS NOT null GROUP BY qty ORDER BY count( $filter.qty ) DESC, qty DESC LIMIT 1) AS qty,";
+        //$sql .= " (SELECT tax.rate FROM parts i INNER JOIN taxzone_charts ON parts.buchungsgruppen_id = taxzone_charts.buchungsgruppen_id INNER JOIN taxkeys ON taxzone_charts.income_accno_id = taxkeys.chart_id INNER JOIN tax ON taxkeys.tax_id = tax.id WHERE i.id = parts.id AND parts.obsolete = false AND taxzone_charts.taxzone_id = 4 GROUP BY parts.id, tax.rate, taxkeys.startdate ORDER BY taxkeys.startdate DESC LIMIT 1) AS rate";
+        //$sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type ='service' AND instruction = false ORDER BY ( SELECT ( SELECT count( qty ) FROM $filter WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5)";
         $sql .= " (SELECT 'W' AS part_type,  'Waren' AS category, description, partnumber, id, description AS value, part_type, unit,  partnumber || ' ' || description AS label, instruction, sellprice,";
-        $sql .= " (SELECT qty FROM $filter WHERE $filter.parts_id = parts.id AND $filter.qty IS NOT null GROUP BY qty ORDER BY count( $filter.qty ) DESC, qty DESC LIMIT 1) AS qty,";
-        $sql .= " (SELECT tax.rate FROM parts i INNER JOIN taxzone_charts ON parts.buchungsgruppen_id = taxzone_charts.buchungsgruppen_id INNER JOIN taxkeys ON taxzone_charts.income_accno_id = taxkeys.chart_id INNER JOIN tax ON taxkeys.tax_id = tax.id WHERE i.id = parts.id AND parts.obsolete = false AND taxzone_charts.taxzone_id = 4 GROUP BY parts.id, tax.rate, taxkeys.startdate ORDER BY taxkeys.startdate DESC LIMIT 1) AS rate";
-        $sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type = 'part'  AND instruction = false ORDER BY ( SELECT ( SELECT count( qty ) FROM $filter WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5) UNION ALL";
+        $sql .= " (SELECT qty FROM invoice WHERE invoice.parts_id = parts.id AND invoice.qty IS NOT null GROUP BY qty ORDER BY count( invoice.qty ) DESC, qty DESC LIMIT 1) AS qty,";
+        $sql .= " (SELECT row_to_json( buchungsziel ) AS buchungsziel FROM (";
+        $sql .= "    SELECT c2.id AS income_chart_id, tk.tax_id, tx.chart_id AS tax_chart_id, tx.rate FROM parts p LEFT JOIN buchungsgruppen bg ON p.buchungsgruppen_id = bg.id LEFT JOIN taxzone_charts tc on bg.id = tc.buchungsgruppen_id LEFT JOIN chart c1 ON bg.inventory_accno_id = c1.id LEFT JOIN chart c2 ON tc.income_accno_id = c2.id LEFT JOIN chart c3 ON tc.expense_accno_id = c3.id LEFT JOIN taxkeys tk ON tk.chart_id = c2.id LEFT JOIN tax tx ON tx.id = tk.tax_id WHERE tc.taxzone_id = '4' AND p.id IN (parts.id) ORDER BY tk.startdate DESC LIMIT 1";
+        $sql .= " ) AS buchungsziel) AS buchungsziel";
+        $sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type = 'part'  AND instruction = false ORDER BY ( SELECT ( SELECT count( qty ) FROM invoice WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5)";
+        $sql .= " UNION ALL";
         $sql .= " (SELECT 'D' AS part_type,  'Dienstleistung' AS category, description, partnumber, id, description AS value, part_type, unit,  partnumber || ' ' || description AS label, instruction, sellprice,";
-        $sql .= " (SELECT qty FROM $filter WHERE $filter.parts_id = parts.id AND $filter.qty IS NOT null GROUP BY qty ORDER BY count( $filter.qty ) DESC, qty DESC LIMIT 1) AS qty,";
-        $sql .= " (SELECT tax.rate FROM parts i INNER JOIN taxzone_charts ON parts.buchungsgruppen_id = taxzone_charts.buchungsgruppen_id INNER JOIN taxkeys ON taxzone_charts.income_accno_id = taxkeys.chart_id INNER JOIN tax ON taxkeys.tax_id = tax.id WHERE i.id = parts.id AND parts.obsolete = false AND taxzone_charts.taxzone_id = 4 GROUP BY parts.id, tax.rate, taxkeys.startdate ORDER BY taxkeys.startdate DESC LIMIT 1) AS rate";
-        $sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type ='service' AND instruction = false ORDER BY ( SELECT ( SELECT count( qty ) FROM $filter WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5)";
+        $sql .= " (SELECT qty FROM invoice WHERE invoice.parts_id = parts.id AND invoice.qty IS NOT null GROUP BY qty ORDER BY count( invoice.qty ) DESC, qty DESC LIMIT 1) AS qty,";
+        $sql .= " (SELECT row_to_json( buchungsziel ) AS buchungsziel FROM (";
+        $sql .= "    SELECT c2.id AS income_chart_id, tk.tax_id, tx.chart_id AS tax_chart_id, tx.rate FROM parts p LEFT JOIN buchungsgruppen bg ON p.buchungsgruppen_id = bg.id LEFT JOIN taxzone_charts tc on bg.id = tc.buchungsgruppen_id LEFT JOIN chart c1 ON bg.inventory_accno_id = c1.id LEFT JOIN chart c2 ON tc.income_accno_id = c2.id LEFT JOIN chart c3 ON tc.expense_accno_id = c3.id LEFT JOIN taxkeys tk ON tk.chart_id = c2.id LEFT JOIN tax tx ON tx.id = tk.tax_id WHERE tc.taxzone_id = '4' AND p.id IN (parts.id) ORDER BY tk.startdate DESC LIMIT 1";
+        $sql .= " ) AS buchungsziel) AS buchungsziel";
+        $sql .= " FROM parts WHERE ( description ILIKE '%$term%' OR partnumber ILIKE '$term%' ) AND obsolete = FALSE AND part_type ='service' AND instruction = false ORDER BY ( SELECT ( SELECT count( qty ) FROM invoice WHERE parts_id = parts.id ) ) DESC NULLS LAST LIMIT 5)";
 
         //writeLog( $sql );
         echo $GLOBALS['dbh']->getAll( $sql, true );
@@ -697,15 +714,25 @@ function getOrder( $data, $offer = false){
     $orderID = $data['id'];
     $taxzone_id = 4;
 
-    $sql = "SELECT  item_id as id, parts_id, position, instruction, qty, mysubquery.description, unit, sellprice, marge_total, discount, u_id, partnumber, part_type, longdescription, status, rate, k.taxkey_id, tax.chart_id, chart.accno ".
-            "FROM ( SELECT parts.instruction, parts.buchungsgruppen_id, instructions.id AS item_id, instructions.parts_id, instructions.qty, instructions.description, instructions.position, instructions.unit, instructions.sellprice, instructions.marge_total, instructions.discount, instructions.u_id, instructions.status, parts.partnumber, parts.part_type, instructions.longdescription ".
-            "FROM instructions INNER JOIN  parts  ON ( parts.id = instructions.parts_id ) WHERE instructions.trans_id = '".$orderID."' UNION ".
-            "SELECT  parts.instruction, parts.buchungsgruppen_id, orderitems.id AS item_id, orderitems.parts_id, orderitems.qty, orderitems.description, orderitems.position, orderitems.unit, orderitems.sellprice, orderitems.marge_total, orderitems.discount, orderitems.u_id, orderitems.status, parts.partnumber, parts.part_type, orderitems.longdescription ".
-            "FROM orderitems INNER JOIN parts ON ( parts.id = orderitems.parts_id ) WHERE orderitems.trans_id = '".$orderID."' ORDER BY position ) AS mysubquery ".
-            "JOIN taxzone_charts c ON ( mysubquery.buchungsgruppen_id = c.buchungsgruppen_id ) ".
-            "JOIN taxkeys k ON ( c.income_accno_id = k.chart_id AND k.startdate = ( SELECT max(startdate) FROM taxkeys tk1 WHERE c.income_accno_id = tk1.chart_id AND tk1.startdate::TIMESTAMP <= NOW()  ) ) ".
-            "JOIN tax ON (k.tax_id = tax.id ) LEFT JOIN chart ON ( tax.chart_id = chart.id ) ".
-            "WHERE taxzone_id = 4 GROUP BY item_id, parts_id, position, instruction, qty, mysubquery.description, unit, sellprice, marge_total, discount, u_id, partnumber, part_type, longdescription, status, rate, k.taxkey_id, tax.chart_id, chart.accno ORDER BY position ASC";
+    //$sql = "SELECT  item_id as id, parts_id, position, instruction, qty, mysubquery.description, unit, sellprice, marge_total, discount, u_id, partnumber, part_type, longdescription, status, rate, k.taxkey_id, tax.chart_id, chart.accno ".
+    //        "FROM ( SELECT parts.instruction, parts.buchungsgruppen_id, instructions.id AS item_id, instructions.parts_id, instructions.qty, instructions.description, instructions.position, instructions.unit, instructions.sellprice, instructions.marge_total, instructions.discount, instructions.u_id, instructions.status, parts.partnumber, parts.part_type, instructions.longdescription ".
+    //        "FROM instructions INNER JOIN  parts  ON ( parts.id = instructions.parts_id ) WHERE instructions.trans_id = '".$orderID."' UNION ".
+    //        "SELECT  parts.instruction, parts.buchungsgruppen_id, orderitems.id AS item_id, orderitems.parts_id, orderitems.qty, orderitems.description, orderitems.position, orderitems.unit, orderitems.sellprice, orderitems.marge_total, orderitems.discount, orderitems.u_id, orderitems.status, parts.partnumber, parts.part_type, orderitems.longdescription ".
+    //        "FROM orderitems INNER JOIN parts ON ( parts.id = orderitems.parts_id ) WHERE orderitems.trans_id = '".$orderID."' ORDER BY position ) AS mysubquery ".
+    //        "JOIN taxzone_charts c ON ( mysubquery.buchungsgruppen_id = c.buchungsgruppen_id ) ".
+    //        "JOIN taxkeys k ON ( c.income_accno_id = k.chart_id AND k.startdate = ( SELECT max(startdate) FROM taxkeys tk1 WHERE c.income_accno_id = tk1.chart_id AND tk1.startdate::TIMESTAMP <= NOW()  ) ) ".
+    //        "JOIN tax ON (k.tax_id = tax.id ) LEFT JOIN chart ON ( tax.chart_id = chart.id ) ".
+    //        "WHERE taxzone_id = 4 GROUP BY item_id, parts_id, position, instruction, qty, mysubquery.description, unit, sellprice, marge_total, discount, u_id, partnumber, part_type, longdescription, status, rate, k.taxkey_id, tax.chart_id, chart.accno ORDER BY position ASC";
+
+    $sql = "SELECT  instructions.id, instructions.parts_id, instructions.qty, instructions.description, instructions.position, parts.instruction, instructions.unit, instructions.sellprice, instructions.marge_total, instructions.discount, parts.partnumber, parts.part_type, instructions.longdescription, instructions.status,".
+            " null AS buchungsziel".
+            " FROM instructions LEFT JOIN parts ON instructions.parts_id = parts.id WHERE trans_id = '".$orderID."'".
+            " UNION ALL".
+            " SELECT  orderitems.id, orderitems.parts_id, orderitems.qty, orderitems.description, orderitems.position, parts.instruction, orderitems.unit, orderitems.sellprice, orderitems.marge_total, orderitems.discount, parts.partnumber, parts.part_type, orderitems.longdescription, orderitems.status,".
+            " (SELECT row_to_json( buchungsziel ) AS buchungsziel FROM (".
+            "     SELECT c2.id AS income_chart_id, tk.tax_id, tx.chart_id AS tax_chart_id, tx.rate FROM parts p LEFT JOIN buchungsgruppen bg ON p.buchungsgruppen_id = bg.id LEFT JOIN taxzone_charts tc on bg.id = tc.buchungsgruppen_id LEFT JOIN chart c1 ON bg.inventory_accno_id = c1.id LEFT JOIN chart c2 ON tc.income_accno_id = c2.id LEFT JOIN chart c3 ON tc.expense_accno_id = c3.id LEFT JOIN taxkeys tk ON tk.chart_id = c2.id LEFT JOIN tax tx ON tx.id = tk.tax_id WHERE tc.taxzone_id = '4' AND p.id IN (parts.id) ORDER BY tk.startdate DESC LIMIT 1".
+            " ) AS buchungsziel) AS buchungsziel".
+            " FROM orderitems LEFT JOIN parts ON orderitems.parts_id = parts.id WHERE trans_id = '".$orderID."' ORDER BY position ASC";
 
     $query = "SELECT ";
 
@@ -742,14 +769,20 @@ function getInvoice( $data, $flag = null ){
     $invoiceID = $data['id'];
     $taxzone_id = 4;
 
-    $sql = "SELECT  item_id as id, parts_id, position, qty, mysubquery.description, unit, sellprice, marge_total, discount, partnumber, part_type, longdescription, rate, k.taxkey_id, tax.chart_id, chart.accno FROM ".
-        "( SELECT  parts.buchungsgruppen_id, invoice.id AS item_id, invoice.parts_id, invoice.qty, invoice.description, invoice.position, invoice.unit, invoice.sellprice, invoice.marge_total, invoice.discount, parts.partnumber, parts.part_type, invoice.longdescription ".
-        "FROM invoice INNER JOIN parts ON ( parts.id = invoice.parts_id ) WHERE invoice.trans_id = ".$invoiceID." ORDER BY position ) AS mysubquery ".
-        "JOIN taxzone_charts c ON ( mysubquery.buchungsgruppen_id = c.buchungsgruppen_id ) ".
-        "JOIN taxkeys k ON ( c.income_accno_id = k.chart_id AND k.startdate = ( SELECT max(startdate) FROM taxkeys tk1 WHERE c.income_accno_id = tk1.chart_id AND tk1.startdate::TIMESTAMP <= NOW() ) ) ".
-        "JOIN tax ON ( k.tax_id = tax.id ) ".
-        "LEFT JOIN chart ON ( tax.chart_id = chart.id ) ".
-        "WHERE taxzone_id = 4 GROUP BY item_id, parts_id, position, qty, mysubquery.description, unit, sellprice, marge_total, discount, partnumber, part_type, longdescription, rate, k.taxkey_id, tax.chart_id, chart.accno ORDER BY position ASC";
+    //$sql = "SELECT  item_id as id, parts_id, position, qty, mysubquery.description, unit, sellprice, marge_total, discount, partnumber, part_type, longdescription, rate, k.taxkey_id, tax.chart_id, chart.accno FROM ".
+    //    "( SELECT  parts.buchungsgruppen_id, invoice.id AS item_id, invoice.parts_id, invoice.qty, invoice.description, invoice.position, invoice.unit, invoice.sellprice, invoice.marge_total, invoice.discount, parts.partnumber, parts.part_type, invoice.longdescription ".
+    //    "FROM invoice INNER JOIN parts ON ( parts.id = invoice.parts_id ) WHERE invoice.trans_id = ".$invoiceID." ORDER BY position ) AS mysubquery ".
+    //    "JOIN taxzone_charts c ON ( mysubquery.buchungsgruppen_id = c.buchungsgruppen_id ) ".
+    //    "JOIN taxkeys k ON ( c.income_accno_id = k.chart_id AND k.startdate = ( SELECT max(startdate) FROM taxkeys tk1 WHERE c.income_accno_id = tk1.chart_id AND tk1.startdate::TIMESTAMP <= NOW() ) ) ".
+    //    "JOIN tax ON ( k.tax_id = tax.id ) ".
+    //    "LEFT JOIN chart ON ( tax.chart_id = chart.id ) ".
+    //    "WHERE taxzone_id = 4 GROUP BY item_id, parts_id, position, qty, mysubquery.description, unit, sellprice, marge_total, discount, partnumber, part_type, longdescription, rate, k.taxkey_id, tax.chart_id, chart.accno ORDER BY position ASC";
+
+    $sql = "SELECT  invoice.id, invoice.parts_id, invoice.qty, invoice.description, invoice.position, invoice.unit, invoice.sellprice, invoice.marge_total, invoice.discount, parts.partnumber, parts.part_type, invoice.longdescription,".
+        " (SELECT row_to_json( buchungsziel ) AS buchungsziel FROM (".
+        "    SELECT c2.id AS income_chart_id, tk.tax_id, tx.chart_id AS tax_chart_id, tx.rate FROM parts p LEFT JOIN buchungsgruppen bg ON p.buchungsgruppen_id = bg.id LEFT JOIN taxzone_charts tc on bg.id = tc.buchungsgruppen_id LEFT JOIN chart c1 ON bg.inventory_accno_id = c1.id LEFT JOIN chart c2 ON tc.income_accno_id = c2.id LEFT JOIN chart c3 ON tc.expense_accno_id = c3.id LEFT JOIN taxkeys tk ON tk.chart_id = c2.id LEFT JOIN tax tx ON tx.id = tk.tax_id WHERE tc.taxzone_id = '4' AND p.id IN (parts.id) ORDER BY tk.startdate DESC LIMIT 1".
+        " ) AS buchungsziel) AS buchungsziel".
+        " FROM invoice LEFT JOIN parts ON invoice.parts_id = parts.id WHERE trans_id = ".$invoiceID." ORDER BY position ASC";
 
     $query = "SELECT ";
     $query .= "(SELECT row_to_json( common ) AS common FROM (".

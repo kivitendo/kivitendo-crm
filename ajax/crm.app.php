@@ -724,11 +724,11 @@ function getOrder( $data, $offer = false){
     //        "JOIN tax ON (k.tax_id = tax.id ) LEFT JOIN chart ON ( tax.chart_id = chart.id ) ".
     //        "WHERE taxzone_id = 4 GROUP BY item_id, parts_id, position, instruction, qty, mysubquery.description, unit, sellprice, marge_total, discount, u_id, partnumber, part_type, longdescription, status, rate, k.taxkey_id, tax.chart_id, chart.accno ORDER BY position ASC";
 
-    $sql = "SELECT  instructions.id, instructions.parts_id, instructions.qty, instructions.description, instructions.position, parts.instruction, instructions.unit, instructions.sellprice, instructions.marge_total, instructions.discount, parts.partnumber, parts.part_type, instructions.longdescription, instructions.status,".
+    $sql = "SELECT  instructions.id, instructions.parts_id, instructions.qty, instructions.description, instructions.position, parts.instruction, instructions.unit, instructions.sellprice, instructions.marge_total, instructions.discount, parts.partnumber, parts.part_type, instructions.longdescription, instructions.status, instructions.u_id,".
             " null AS buchungsziel".
             " FROM instructions LEFT JOIN parts ON instructions.parts_id = parts.id WHERE trans_id = '".$orderID."'".
             " UNION ALL".
-            " SELECT  orderitems.id, orderitems.parts_id, orderitems.qty, orderitems.description, orderitems.position, parts.instruction, orderitems.unit, orderitems.sellprice, orderitems.marge_total, orderitems.discount, parts.partnumber, parts.part_type, orderitems.longdescription, orderitems.status,".
+            " SELECT  orderitems.id, orderitems.parts_id, orderitems.qty, orderitems.description, orderitems.position, parts.instruction, orderitems.unit, orderitems.sellprice, orderitems.marge_total, orderitems.discount, parts.partnumber, parts.part_type, orderitems.longdescription, orderitems.status, orderitems.u_id,".
             " (SELECT row_to_json( buchungsziel ) AS buchungsziel FROM (".
             "     SELECT c2.id AS income_chart_id, tk.tax_id, tx.chart_id AS tax_chart_id, tx.rate FROM parts p LEFT JOIN buchungsgruppen bg ON p.buchungsgruppen_id = bg.id LEFT JOIN taxzone_charts tc on bg.id = tc.buchungsgruppen_id LEFT JOIN chart c1 ON bg.inventory_accno_id = c1.id LEFT JOIN chart c2 ON tc.income_accno_id = c2.id LEFT JOIN chart c3 ON tc.expense_accno_id = c3.id LEFT JOIN taxkeys tk ON tk.chart_id = c2.id LEFT JOIN tax tx ON tx.id = tk.tax_id WHERE tc.taxzone_id = '4' AND p.id IN (parts.id) ORDER BY tk.startdate DESC LIMIT 1".
             " ) AS buchungsziel) AS buchungsziel".

@@ -361,6 +361,8 @@
             <input id="od-oe-id" type="hidden"></input>
             <input id="od-off-id" type="hidden"></input>
             <input id="od-inv-id" type="hidden"></input>
+            <!-- AR ist die chart_id auf die Forderung gebucht wird (ToDo: muss auswählbar sein; wo in DB???)-->
+            <input id="od-ar-id" type="hidden" value="14"></input>
             <table id="od-oe-common-table" class="od-oe-common od-common-style" width="100%">
                 <tr>
                     <td width="33%">

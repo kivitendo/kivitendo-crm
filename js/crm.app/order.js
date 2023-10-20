@@ -176,6 +176,9 @@ function crmAddOrderItem( dataRow ){
                 ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>';
 
     tableRow += '<td><input class="od-hidden-item-rate" type="hidden" value="' + ( ( exists( dataRow.buchungsziel ) )? dataRow.buchungsziel.rate : '0' ) + '"></input>' +
+                '<input class="od-hidden-item-income_chart_id" type="hidden" value="' + ( ( exists( dataRow.buchungsziel ) )? dataRow.buchungsziel.income_chart_id : '0' ) + '"></input>' +
+                '<input class="od-hidden-item-tax_id" type="hidden" value="' + ( ( exists( dataRow.buchungsziel ) )? dataRow.buchungsziel.tax_id : '0' ) + '"></input>' +
+                '<input class="od-hidden-item-tax_chart_id" type="hidden" value="' + ( ( exists( dataRow.buchungsziel ) )? dataRow.buchungsziel.tax_chart_id : '0' ) + '"></input>' +
                 '<input class="od-item-sellprice" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.sellprice ) )? dataRow.sellprice : '0', 2 ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup2(event)" ' +
                 ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>' +
                 '<td><input class="od-item-discount" type="text" size="5" value="' + kivi.format_amount( ( exists( dataRow.discount ) )? dataRow.discount * 100 : '0' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
@@ -276,6 +279,9 @@ function crmCompleteInsertOrderPos( row, item ){
     row.find( '[class=od-item-unit]' ).val( item.unit );
     row.find( '[class=od-item-sellprice]' ).val( kivi.format_amount( item.sellprice, 2 ) );
     row.find( '[class=od-hidden-item-rate]' ).val( exists( item.buchungsziel )? item.buchungsziel.rate  : 0 );
+    row.find( '[class=od-hidden-item-income_chart_id]' ).val( exists( item.buchungsziel )? item.buchungsziel.income_chart_id  : 0 );
+    row.find( '[class=od-hidden-item-tax_id]' ).val( exists( item.buchungsziel )? item.buchungsziel.tax_id  : 0 );
+    row.find( '[class=od-hidden-item-tax_chart_id]' ).val( exists( item.buchungsziel )? item.buchungsziel.tax_chart_id  : 0 );
     row.find( '[name=od-item-description]' ).val( item.description );
     row.find( '[class=od-ui-hsort]' ).show();
     row.find( '[class=od-ui-del]' ).show();
@@ -516,6 +522,11 @@ function crmSaveOrder(){
     }
 
     dbUpdateData[dbPSItemsTable] = [];
+    if( crmOrderTypeEnum.Invoice == crmOrderType ){
+        dbUpdateData['buchungsziel'] = { };
+        dbUpdateData['buchungsziel']['id'] = $( '#od-inv-id' ).val();
+        dbUpdateData['buchungsziel']['charts'] = { };
+    }
 
     $( '#edit-order-table > tbody > tr').each( function( key, pos ){
         let itemType;
@@ -548,13 +559,34 @@ function crmSaveOrder(){
                 dataRow['WHERE'] = 'id = ' + pos.id;
                 dbUpdateData['instructions'].push( dataRow );
             }
+            if( crmOrderTypeEnum.Invoice == crmOrderType ){
+                //Aufsummieren von marge_total pro income_chart_id, wenn die tax_id nicht 0 ist werden die Steuerbeträge auf dem entsprechenden chart (tax_chart_id)
+                //gebucht werden, die Gesamtsumme wird auf dem chart für Forderungen gebucht (#od-ar-id)
+                const income_chart_id = $( pos ).find( '[class=od-hidden-item-income_chart_id]' ).val();
+                const marge_total = kivi.parse_amount( $( pos ).find( '[class=od-item-marge_total]' ).val() );
+                const tax_id = $( pos ).find( '[class=od-hidden-item-tax_id]' ).val();
+                if( !exists( dbUpdateData['buchungsziel']['charts'][income_chart_id] ) ) dbUpdateData['buchungsziel']['charts'][income_chart_id] = { 'amount': 0, 'tax_id': tax_id };
+                dbUpdateData['buchungsziel']['charts'][income_chart_id]['amount'] += marge_total;
+                if( tax_id > 0 ){
+                    const tax_chart_id = $( pos ).find( '[class=od-hidden-item-tax_chart_id]' ).val();
+                    if( 'null' != tax_chart_id ){
+                        if( !exists( dbUpdateData['buchungsziel']['charts'][tax_chart_id] ) ) dbUpdateData['buchungsziel']['charts'][tax_chart_id] = { 'amount': 0, 'tax_id': 0 };
+                        dbUpdateData['buchungsziel']['charts'][tax_chart_id]['amount'] += kivi.parse_amount( '' + ( marge_total * ( parseFloat( $( pos ).find( '[class=od-hidden-item-rate]' )[0].value ) + 1 ) - marge_total ) );
+                    }
+                }
+          }
         }
     });
+
+    if( crmOrderTypeEnum.Invoice == crmOrderType ){
+        const chart_ar_id = $( '#od-ar-id' ).val();
+        dbUpdateData['buchungsziel']['charts'][chart_ar_id] = { 'amount': '-' + kivi.parse_amount( $( '#od-amount' ).val() ), 'tax_id': 0  }
+    }
 
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
-        data:  { action: 'genericUpdateEx', data: dbUpdateData },
+        data:  { action: 'saveInvoice', data: dbUpdateData },
         success: function( data ){
         },
         error: function( xhr, status, error ){

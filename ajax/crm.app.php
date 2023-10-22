@@ -1153,7 +1153,7 @@ function genericUpdateEx( $data ){
         }
         $dbFields = array_keys( $dataObject );
         $dbValues = array_values( $dataObject );
-        $GLOBALS['dbh']->updateBigData( $tableName, $dbFields, $dbValues, $where );
+        $GLOBALS['dbh']->update( $tableName, $dbFields, $dbValues, $where );
         return true;
     };
 

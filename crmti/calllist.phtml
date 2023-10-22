@@ -91,7 +91,7 @@
         });
         $.ajax({
             dataType: "json",
-            url: "../jqhelp/call.php?action=getCallListComplete",
+            url: "../ajax/call.php?action=getCallListComplete",
             method: "GET",
             success : function (data){
                 //alert( data );
@@ -102,7 +102,7 @@
             error: function () {
                 $.ajax({
                     //dataType: "json",
-                    url: "../jqhelp/call.php?action=CreateFunctionsAndTable",
+                    url: "../ajax/call.php?action=CreateFunctionsAndTable",
                     method: "GET",
                     success : function (data){
                         drawTable(data);
@@ -122,7 +122,7 @@
                 number = $.isNumeric( src ) ? src : dst;
                 $.ajax({
                     dataType: "json",
-                    url: "../jqhelp/call.php?action=numberToAdress&data=" + number,
+                    url: "../ajax/call.php?action=numberToAdress&data=" + number,
                     method: "GET",
                     success : function (data){
                         //alert("Data: " + JSON.stringify(data));

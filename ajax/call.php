@@ -18,8 +18,8 @@ function CreateFunctionsAndTable(){ //Legt beim ersten Aufruf der Datenbank die 
         $sok1 = preg_replace( $sm1, '',$sok0 );
         $rc=$GLOBALS['dbh']->myquery( $sok1 );
     }
-    $sql="insert into schema_info (tag, login) values ('crm_telefon_integration', '".$_SESSION['login'].")'";
-    $rc=$GLOBALS['dbh']->myquery($sql);
+    $sql = "insert into schema_info( tag, login ) values ( 'crm_telefon_integration', '".$_SESSION['login']." )'";
+    $rc = $GLOBALS['dbh']->myquery( $sql );
 }
 
 function getCallListComplete(){

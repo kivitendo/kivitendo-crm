@@ -90,7 +90,7 @@ class myPDO extends PDO{
     }
 
     /**********************************************
-    * update - modify data set and writes immediately to the database
+    * update - modify data
     * IN: $table  - string name of the table
     * IN: $fields - array with fields
     * IN: $values - array with values
@@ -105,30 +105,6 @@ class myPDO extends PDO{
         if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) .' sec');
         return $result;
     }
-
-    /**********************************************
-    * updateBigData - modify data set, Be careful to call begin() beforehand and commit() after the last update!!!
-    * IN: $table  - string name of the table
-    * IN: $fields - array with fields
-    * IN: $values - array with values
-    * IN: $where  - select a data set
-    * OUT: true/false
-    **********************************************/
-    public function updateBigData( $table, $fields, $values, $where ){
-        if( $this->logAll ) $this->beginExecTime = microtime( TRUE );
-        if( count( $fields ) !== count( $values ) ) return false; // fields and values must have the same size
-        $fields = array_map( 'trim', $fields );
-        foreach($fields as $key => $field) {
-            $setClauses[] = "$field = $values[$key]";
-        }
-        $sql = "UPDATE $table set ".implode( ', ', array_map( 'trim', $fields ) )."  WHERE ".$where;
-        $this->writeLog( $sql );
-        $stmt = parent::prepare( $sql );
-        if( $this->logAll ) $this->writeLog( __FUNCTION__.': '.$stmt->queryString.': ExecTime: '.( round( ( microtime( TRUE ) - $this->beginExecTime ), $this->roundExecTime ) ) .' sec');
-        return $result;
-    }
-
-
 
     /**********************************************
     * update - modify multiple data set

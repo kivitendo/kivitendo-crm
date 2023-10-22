@@ -550,9 +550,9 @@ function getCVDialogData( $data ){
     echo $GLOBALS['dbh']->getOne($query, true);
 }
 
-function getPhoneCallList(){
-    $sql = "SELECT  EXTRACT( EPOCH FROM TIMESTAMPTZ( crmti_init_time ) ) * 1000 AS call_date, crmti_status, crmti_src, crmti_dst, crmti_caller_id, crmti_caller_typ, crmti_direction, crmti_number, unique_call_id FROM crmti ORDER BY crmti_init_time DESC LIMIT 100"; //ToDo: translate 'DD.MM.YYYY HH12:MI'
-    echo $GLOBALS['dbh']->getAll( $sql, TRUE ); //So geht das!!! Ist der zwei Parameter true, dann wird das Ergebnis als JSON zurückgegeben
+function getPhoneCallList(){ //Holt die Anruferliste von jetzt bis 1,5-Wochen in der Vergangenheit
+    $sql = "SELECT  EXTRACT( EPOCH FROM TIMESTAMPTZ( crmti_init_time ) ) * 1000 AS call_date, crmti_status, crmti_src, crmti_dst, crmti_caller_id, crmti_caller_typ, crmti_direction, crmti_number, unique_call_id FROM crmti WHERE crmti_init_time > NOW() - INTERVAL '1.5 WEEK' ORDER BY crmti_init_time DESC";
+    echo $GLOBALS['dbh']->getAll( $sql, TRUE ); //Ist der zwei Parameter true, dann wird das Ergebnis als JSON zurückgegeben
 }
 
 function playPhoneCall( $data ){

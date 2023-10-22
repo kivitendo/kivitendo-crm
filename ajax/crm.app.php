@@ -1459,3 +1459,12 @@ function printOrder( $data ){
 function getCompanyAdress(){
     echo $GLOBALS['dbh']->getOne( "SELECT company, address_street1, address_zipcode, address_city  FROM defaults", true );
 }
+
+
+function getBilledHours( $u_id, $from, $to ){
+    //SELECT SUM( qty ) FROM orderitems WHERE u_id = 'Stefan Baggerprofi' AND itime < NOW() AND itime > NOW() - INTERVAL '2 YEAR' ;
+}
+
+function getWorkedHours( $u_id, $from, $to ){
+    //SELECT SUM( qty ) FROM instructions WHERE u_id = 'Stefan Baggerprofi' AND itime < NOW() AND itime > NOW() - INTERVAL '2 YEAR' ;
+}

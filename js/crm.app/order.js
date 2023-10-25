@@ -1324,7 +1324,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-customer-notes' ).val( crmData.common.int_cu_notes );
             $( '#od-oe-intnotes' ).val( crmData.common.intnotes );
         }
-        crmEditOrderAddPayment( crmData );
+        crmEditOrderListPayment( crmData );
         crmEditOrderPrinterList( crmOrderTypeEnum.Invoice, crmData );
     }
     else if( crmOrderTypeEnum.Offer == crmOrderType ){
@@ -1507,8 +1507,11 @@ $( "#od-inv-printers-menu, #od-off-printers-menu" ).menu({
    position: { my: "right top", at: "right+3 top+28" }
 });
 
-function crmEditOrderAddPayment( data ){
-    let row = '<tr><td><input class="od-inv-paid-date" size="10"></input></td>' +
+function crmEditOrderListPayment( data ){
+    $( '#od-inv-payment-list > tbody' ).html( '' );
+    $( '#od_inv_book_deficit').show();
+
+    let row = '<tr class="od-inv-paid-row" style="background-color: red;"><td><input class="od-inv-paid-flag" type="hidden" value="ungebucht"></input><input class="od-inv-paid-date" size="10"></input></td>' +
                                             '<td><input class="od-inv-paid-source" size="10"></input></td>' +
                                             '<td><input class="od-inv-paid-memo" size="10"></input></td>' +
                                             '<td><input class="od-inv-paid-amount" size="10"></input></td>' +
@@ -1521,6 +1524,32 @@ function crmEditOrderAddPayment( data ){
     }
     row += '</select></td></tr>';
     $( '#od-inv-payment-list' ).append( row );
-    $( '#od-inv-payment-list' ).append( '<tr>' + $( '#od-inv-payment-list :last-child' ).clone().html() + '</tr>' );
-    assert( 'Test5' + $( '#od-inv-payment-list' ).last().clone().html() );
+
+    let deficit = kivi.parse_amount( $( '#od-amount' ).val() );
+    if( exists( data.bill ) && exists( data.bill.payment ) ){
+        for( let payment of data.bill.payment ){
+            let row_item = $( '.od-inv-paid-row' ).last().clone();
+            row_item.find( '.od-inv-paid-flag' ).val( 'gebucht' );
+            row_item.find( '.od-inv-paid-date' ).val( kivi.format_date( new Date( payment.transdate ) ) );
+            row_item.find( '.od-inv-paid-source' ).val( payment.source );
+            row_item.find( '.od-inv-paid-memo' ).val( payment.memo );
+            row_item.find( '.od-inv-paid-amount' ).val( kivi.format_amount( payment.amount * -1 ) );
+            row_item.find( '.od-inv-paid-acc' ).val( payment.chart_id );
+            row_item.css( 'background-color', '');
+            row_item.prependTo( '#od-inv-payment-list' );
+            deficit += payment.amount;
+        }
+    }
+    if( deficit > 0 ){
+        $( '.od-inv-paid-row' ).last().find( '.od-inv-paid-date' ).val( kivi.format_date( new Date() ) );
+        $( '.od-inv-paid-row' ).last().find( '.od-inv-paid-amount' ).val( deficit );
+    }
+    else{
+        $( '.od-inv-paid-row' ).last().remove();
+        $( '#od_inv_book_deficit').hide();
+    }
 }
+
+$( '#od_inv_book_deficit' ).click( function(){
+    alert( 'buchung' );
+});

@@ -794,7 +794,7 @@ function getInvoice( $data, $flag = null ){
                 ") AS printers) AS printers, ";
 
     $query .= "(SELECT json_agg( payment ) AS payment FROM (".
-                "SELECT chart_id, amount, source, memo, transdate FROM acc_trans WHERE trans_id = ".$invoiceID." AND chart_link LIKE '%AR_paid%'".
+                "SELECT chart_id, amount, source, memo, transdate FROM acc_trans WHERE trans_id = ".$invoiceID." AND chart_link LIKE '%AR_paid%' ORDER BY acc_trans_id DESC".
                 ") AS payment) AS payment, ";
 
     $query .= "(SELECT json_agg( payment_acc ) AS payment_acc FROM (".

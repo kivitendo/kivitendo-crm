@@ -1,0 +1,28 @@
+======================================
+Datenbankstrucktur für Rechnungen
+======================================
+
+Verwendete Tabellen:
+- ar                ( Die Liste der Rechnungen für Kunden)
+- ap                ( Die Liste der Rechnungen für Lieferanten)
+- invoice           ( Die einzelnen Posten/ Artikel in den Aufträgen der Gruppe Waren/ Dienstleistungen, die auf der Rechnung erscheinen )
+- parts             ( Enthält die [ Klassen- ] Eigenschaften der einzelnen Posten/ Artikel )
+- units             ( Tabelle der möglichen Maßeinheiten der Posten/ Artikel )
+- acc_trans         ( Umsätze bzw. Summen der Transaktionen )
+- customer          ( Auftraggeber )
+- employee          ( Für die Mitarbeiter/ Mechaniker der Gruppe Werkstatt )
+
+'Umsatz' buchen:
+
+Das Buchungsziel (Kombination von Rechnungs-Id [trans_id] Chart-Id [chart_id] und Summe [amount] in der DB-Tabelle 'acc_trans') wird beim holen der Rechnung und des Artikels ermittelt und als Json-Object an die Artikeldaten bzw. Rechnungsposten angehangen.
+
+=> Siehe 'ajax/crm.app.php' 'saveInvoice' und 'js/order.js' 'crmSaveOrder' bzw. Begriffe 'Umsatz buchen' und 'buchungsziel' suchen.
+=> Ermittlung der IDs und des Steuersatzes siehe 'getInvoice' und 'findPart'  in 'ajax/crm.app.php'; Stichwort 'buchungsziel'
+
+Bestands- bzw. Forderungskonto wird in der Rechnung eingestellt (z.B.: '1400--Ford. a.Lieferungen und Leistungen') (noch ToDo),
+hier wird die Recnungssumme als Fehlbetrag eingetragen.
+
+'Zahlungseingänge' buchen:
+
+Positiven Betrag auf das Bestands- bzw. Forderungskonto buchen und den negativen Betrag auf das Zahlungseingangskonto (z.B: Kasse od. PayPal) buchen.
+

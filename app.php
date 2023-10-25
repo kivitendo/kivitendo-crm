@@ -673,7 +673,7 @@
     <div id="od-inv-payment" style="display:none;">
         <div class="wrapper panel-wrapper">
             <div class="input-panel control-panel">
-                <table class="tbl-list" width="100%">
+                <table id="od-inv-payment-list" class="tbl-list" width="100%">
                     <thead>
                         <tr>
                             <th>Datum</th>
@@ -683,21 +683,10 @@
                             <th>Konto</th>
                         </tr>
                     </thead>
-                    <tbody id="od-inv-payment-list" ></tbody>
+                    <tbody></tbody>
                 </table>
                 <div style="float: right; padding-top: 0.5em; padding-bottom: 0.5em;">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <label for="od-inv-open-payment" class="od-table-label" style="margin-left: 2em">Fehlbetrag:</label>
-                                </td>
-                                <td>
-                                    <input id="od-inv-open-payment" type="text" readonly="readonly" size="10" style="font-size: 14px;">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <button id="od_inv_book_deficit">Zahlungseingang buchen</button>
                 </div>
             </div>
         </div>

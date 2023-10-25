@@ -368,7 +368,7 @@
                     <td width="33%">
                         <table>
                             <tr>
-                                <td class="od-table-label"><label for="od_customer_name">Auftraggeber:</label></td>
+                                <td class="od-table-label"><label for="od_customer_name" onclick="crmCloseView();">Auftraggeber:</label></td>
                                 <td><input type="text" id="od_customer_name"></input></td>
                             </tr>
                             <tr>
@@ -408,7 +408,7 @@
                                 <td><input class="od-oe-km_stnd" id="od-oe-km_stnd" type="number"></td>
                              </tr>
                             <tr>
-                                <td class="od-table-label"><label for="od_lxcars_c_ln">Amtl.-Kennz.:</label></td>
+                                <td class="od-table-label"><label id="od_lxcars_to_car" for="od_lxcars_c_ln">Amtl.-Kennz.:</label></td>
                                 <td><input id="od_lxcars_c_ln" type="text"></input><button onclick="crmEditOrderShowCarData();">Info</button></td>
                              </tr>
                             <tr>
@@ -667,6 +667,38 @@
                         </td>
                      </tr>
                 </table>
+            </div>
+        </div>
+    </div>
+    <div id="od-inv-payment" style="display:none;">
+        <div class="wrapper panel-wrapper">
+            <div class="input-panel control-panel">
+                <table class="tbl-list" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Datum</th>
+                            <th>Beleg</th>
+                            <th>Memo</th>
+                            <th>Betrag</th>
+                            <th>Konto</th>
+                        </tr>
+                    </thead>
+                    <tbody id="od-inv-payment-list" ></tbody>
+                </table>
+                <div style="float: right; padding-top: 0.5em; padding-bottom: 0.5em;">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <label for="od-inv-open-payment" class="od-table-label" style="margin-left: 2em">Fehlbetrag:</label>
+                                </td>
+                                <td>
+                                    <input id="od-inv-open-payment" type="text" readonly="readonly" size="10" style="font-size: 14px;">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

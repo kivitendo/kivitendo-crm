@@ -793,6 +793,16 @@ function getInvoice( $data, $flag = null ){
                 "SELECT * FROM printers".
                 ") AS printers) AS printers, ";
 
+    $query .= "(SELECT json_agg( payment ) AS payment FROM (".
+                "SELECT chart_id, amount, source, memo, transdate FROM acc_trans WHERE trans_id = ".$invoiceID." AND chart_link LIKE '%AR_paid%'".
+                ") AS payment) AS payment, ";
+
+    $query .= "(SELECT json_agg( payment_acc ) AS payment_acc FROM (".
+                "SELECT id, accno, description FROM chart WHERE link LIKE '%AP_paid%' ORDER BY accno". //<= Kann auch auf ein echtes Bankkonto buchen
+                //Zahlungseingangskonto darf nicht mit einem Bankkonto verknüpft sein =>
+                //"SELECT chart.id, chart.accno, chart.description, bank_accounts.chart_id FROM chart LEFT JOIN bank_accounts ON chart.id = bank_accounts.chart_id WHERE link LIKE '%AP_paid%' AND chart_id IS NULL".
+                ") AS payment_acc) AS payment_acc, ";
+
     $query .= "(SELECT json_agg( invoice ) AS invoice FROM (".$sql.") AS invoice) AS invoice";
 
     echo '{ "bill": '.$GLOBALS['dbh']->getOne( $query, true ).(( $flag != null )? ', "flag": "'.$flag.'" }' : ' }');

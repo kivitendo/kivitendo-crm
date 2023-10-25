@@ -700,3 +700,17 @@ $( '#edit_car_register_btn' ).click( function(){
 $( '#edit_car_special_btn' ).click( function(){
     window.open( 'crm/lxcars/special/special.phtml?c_id=' + $( '#edit_car-c_id' ).val() + '&owner=' + $( '#crm-cvpa-id' ).val() + '&task=1', '_blank');
 });
+
+$( '#od_lxcars_to_car' ).click( function(){
+    $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        type: 'POST',
+        data:  { action: 'getCar', data: { 'id': $( '#od-lxcars-c_id' ).val() } },
+        success: function( crmData ){
+            crmEditCarDlg( crmData );
+        },
+        error: function( xhr, status, error ){
+            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'showCVPA().getCar', xhr.responseText );
+        }
+    });
+});

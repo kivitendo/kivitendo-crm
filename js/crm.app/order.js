@@ -414,7 +414,6 @@ function crmInsertOrderPos( itemPosition, itemType, item, modified = false ){
             break;
         case crmOrderTypeEnum.Delivery:
             return;
-            break;
         case crmOrderTypeEnum.Invoice:
             pos['record']['invoice'] = {};
             pos['record']['invoice']['trans_id'] = $( '#od-inv-id' ).val();
@@ -561,6 +560,7 @@ function crmSaveOrder(){
                 dbUpdateData['instructions'].push( dataRow );
             }
             if( crmOrderTypeEnum.Invoice == crmOrderType ){
+                //Umsatz buchen
                 //Aufsummieren von marge_total pro income_chart_id, wenn die tax_id nicht 0 ist werden die Steuerbeträge auf dem entsprechenden chart (tax_chart_id)
                 //gebucht werden, die Gesamtsumme wird auf dem chart für Forderungen gebucht (#od-ar-id)
                 const income_chart_id = $( pos ).find( '[class=od-hidden-item-income_chart_id]' ).val();
@@ -1212,6 +1212,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         $( '#od-listheading-status' ).show();
         $( '#od-lxcars-c_text-label' ).show();
         $( '#od-lxcars-c_text' ).show();
+        $( '#od-inv-payment' ).hide();
 
         if( exists( crmData.order ) ){
             title = kivi.t8( 'Edit order' );
@@ -1284,6 +1285,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         $( '#od-listheading-status' ).hide();
         $( '#od-lxcars-c_text-label' ).show();
         $( '#od-lxcars-c_text' ).show();
+        $( '#od-inv-payment' ).show();
 
         if( exists( crmData.bill ) ){
             title = kivi.t8( 'Edit invoice' );
@@ -1322,7 +1324,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-customer-notes' ).val( crmData.common.int_cu_notes );
             $( '#od-oe-intnotes' ).val( crmData.common.intnotes );
         }
-
+        crmEditOrderAddPayment( crmData );
         crmEditOrderPrinterList( crmOrderTypeEnum.Invoice, crmData );
     }
     else if( crmOrderTypeEnum.Offer == crmOrderType ){
@@ -1336,6 +1338,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         $( '#od-listheading-status' ).hide();
         $( '#od-lxcars-c_text-label' ).hide();
         $( '#od-lxcars-c_text' ).hide();
+        $( '#od-inv-payment' ).hide();
 
         if( exists( crmData.offer ) ){
             title = kivi.t8( 'Edit offer' );
@@ -1503,3 +1506,21 @@ $( "#od-inv-printers-menu, #od-off-printers-menu" ).menu({
    icons: { submenu: "ui-selectmenu-icon ui-icon ui-icon-triangle-1-s"},
    position: { my: "right top", at: "right+3 top+28" }
 });
+
+function crmEditOrderAddPayment( data ){
+    let row = '<tr><td><input class="od-inv-paid-date" size="10"></input></td>' +
+                                            '<td><input class="od-inv-paid-source" size="10"></input></td>' +
+                                            '<td><input class="od-inv-paid-memo" size="10"></input></td>' +
+                                            '<td><input class="od-inv-paid-amount" size="10"></input></td>' +
+                                            '<td><select class="od-inv-paid-acc">';
+    if( exists( data.bill ) && exists( data.bill.payment_acc ) ){
+        let i = 0;
+        for( let acc of data.bill.payment_acc ){
+            row += '<option value="' + acc.id + '" ' + ((++i == 2)? 'selected' : '') + '>' + acc.accno + '--' + acc.description + '</option>';
+        }
+    }
+    row += '</select></td></tr>';
+    $( '#od-inv-payment-list' ).append( row );
+    $( '#od-inv-payment-list' ).append( '<tr>' + $( '#od-inv-payment-list :last-child' ).clone().html() + '</tr>' );
+    assert( 'Test5' + $( '#od-inv-payment-list' ).last().clone().html() );
+}

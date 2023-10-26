@@ -49,12 +49,21 @@ function crmCalcOrderPrice( pos ){
     }
     $( pos ).find( '[class=od-item-marge_total]' )[0].value = kivi.format_amount( marge_total, 2 );
 
-    if( 'I' !== $( pos ).find( '[class=od-item-type]' )[0].value ){
+    const item_type = $( pos ).find( '[class=od-item-type]' )[0].value;
+    if( 'I' !== item_type ){
         let netamount = kivi.parse_amount( $( '#od-netamount' ).val() ) + marge_total;
         $( '#od-netamount' ).val( kivi.format_amount( netamount, 2 ) );
         let amount = kivi.parse_amount( $( '#od-amount' ).val() ) + marge_total * ( parseFloat( $( pos ).find( '[class=od-hidden-item-rate]' )[0].value ) + 1 );
         $( '#od-amount' ).val( kivi.format_amount( amount, 2 ) );
-   }
+    }
+
+    if( crmOrderTypeEnum.Order == crmOrderType ){
+        const unit = $( pos ).find( '[class=od-item-unit]' )[0].value;
+        const qty = $( pos ).find( '[class=od-item-qty]' )[0].value;
+        //const factor = crmUnits[unit].factor;
+        //if( 'I' == item_type ) $( '#od-performance-ist' ).val( qty * factor );
+        //assert( 'performance2', unit + ' * ' + qty + ' * ' + factor );
+    }
 }
 
 function crmEditOrderOnChange(){
@@ -591,7 +600,7 @@ function crmSaveOrder(){
                 if( !exists( dbUpdateData['buchungsziel']['charts'][chart_id] ) ) dbUpdateData['buchungsziel']['charts'][chart_id] = [];
                 dbUpdateData['buchungsziel']['charts'][chart_id].push( { 'amount': '-' + amount, 'memo': '', 'source': '', 'tax_id': 0 } );
                 dbUpdateData['buchungsziel']['charts'][chart_ar_id].push( { 'amount': amount, 'memo': '', 'source': '', 'tax_id': 0  } );
-                deficit -= amount;
+                deficit = kivi.round_amount( deficit - amount, 2 );
             }
         });
 
@@ -1236,6 +1245,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         $( '#od-lxcars-c_text-label' ).show();
         $( '#od-lxcars-c_text' ).show();
         $( '#od-inv-payment' ).hide();
+        $( '.od-perform' ).show();
 
         if( exists( crmData.order ) ){
             title = kivi.t8( 'Edit order' );
@@ -1309,6 +1319,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         $( '#od-lxcars-c_text-label' ).show();
         $( '#od-lxcars-c_text' ).show();
         $( '#od-inv-payment' ).show();
+        $( '.od-perform' ).hide();
 
         if( exists( crmData.bill ) ){
             title = kivi.t8( 'Edit invoice' );
@@ -1362,6 +1373,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         $( '#od-lxcars-c_text-label' ).hide();
         $( '#od-lxcars-c_text' ).hide();
         $( '#od-inv-payment' ).hide();
+        $( '.od-perform' ).hide();
 
         if( exists( crmData.offer ) ){
             title = kivi.t8( 'Edit offer' );
@@ -1587,4 +1599,5 @@ $( '#od_inv_book_deficit' ).click( function(){
 
 crmDeletePaymentPos = function( e ){
     $( e ).parent().parent().remove();
+    $( '#od_inv_book_deficit').show();
 }

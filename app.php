@@ -653,8 +653,16 @@
             <div style="float: right; padding-top: 0.5em; padding-bottom: 0.5em;">
                 <table>
                     <tr>
+                        <td class="od-perform">
+                            <label for="od-performance" class="od-table-label">Performance:</label>
+                        </td>
+                        <td class="od-perform">
+                            <input id="od-performance-ist" type="hidden"></input>
+                            <input id="od-performance-soll" type="hidden"></input>
+                            <input id="od-performance" type="text" readonly="readonly" size="10"></input>
+                        </td>
                         <td>
-                            <label for="od-netamount" class="od-table-label">Netto:</label>
+                            <label for="od-netamount" class="od-table-label" style="margin-left: 2em">Netto:</label>
                         </td>
                         <td>
                             <input id="od-netamount" type="text" readonly="readonly" size="10"></input>

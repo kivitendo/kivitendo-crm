@@ -865,7 +865,7 @@ function insertOfferFromOrder( $data ){
     getOffer( array( "id" => $id ) );
 }
 
-function saveInvoice( $data ){
+function saveOrder( $data ){
     if( array_key_exists( 'buchungsziel', $data ) ){
         $GLOBALS['dbh']->beginTransaction();
         if( array_key_exists( 'id', $data['buchungsziel'] ) ){
@@ -873,8 +873,11 @@ function saveInvoice( $data ){
         }
         if( array_key_exists( 'charts', $data['buchungsziel'] ) ){
             foreach( $data['buchungsziel']['charts'] AS $key => $value ){
-                $query = "INSERT INTO acc_trans (trans_id, chart_id, amount, transdate, tax_id, taxkey, chart_link) VALUES (".$data['buchungsziel']['id'].", ".$key.", '".$value['amount']."', CURRENT_DATE, ".$value['tax_id'].", (SELECT taxkey_id FROM taxkeys WHERE chart_id = ".$key." AND startdate <= CURRENT_DATE ORDER BY startdate DESC LIMIT 1), (SELECT link FROM chart WHERE id = ".$key.") )";
-                $GLOBALS['dbh']->query( $query );
+                for($i = 0; $i < count( $value ); $i++ ){
+                    writeLog( $value );
+                    $query = "INSERT INTO acc_trans (trans_id, chart_id, amount, transdate, source, memo, tax_id, taxkey, chart_link) VALUES (".$data['buchungsziel']['id'].", ".$key.", '".$value[$i]['amount']."', CURRENT_DATE, '".$value[$i]['source']."', '".$value[$i]['memo']."', ".$value[$i]['tax_id'].", (SELECT taxkey_id FROM taxkeys WHERE chart_id = ".$key." AND startdate <= CURRENT_DATE ORDER BY startdate DESC LIMIT 1), (SELECT link FROM chart WHERE id = ".$key.") )";
+                    $GLOBALS['dbh']->query( $query );
+                }
             }
         }
         $GLOBALS['dbh']->commit();

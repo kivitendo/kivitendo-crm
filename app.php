@@ -676,6 +676,7 @@
                 <table id="od-inv-payment-list" class="tbl-list" width="100%">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>Datum</th>
                             <th>Beleg</th>
                             <th>Memo</th>

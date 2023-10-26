@@ -26,3 +26,8 @@ hier wird die Recnungssumme als Fehlbetrag eingetragen.
 
 Positiven Betrag auf das Bestands- bzw. Forderungskonto buchen und den negativen Betrag auf das Zahlungseingangskonto (z.B: Kasse od. PayPal) buchen.
 
+
+
+Löschen:
+
+Betroffene Tabellen sind ar (, ap), invoice, acc_trans

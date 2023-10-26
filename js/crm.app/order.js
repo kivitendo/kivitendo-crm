@@ -523,6 +523,7 @@ function crmSaveOrder(){
 
     dbUpdateData[dbPSItemsTable] = [];
     if( crmOrderTypeEnum.Invoice == crmOrderType ){
+        //Umsatz buchen; Konten aktualisieren
         dbUpdateData['buchungsziel'] = { };
         dbUpdateData['buchungsziel']['id'] = $( '#od-inv-id' ).val();
         dbUpdateData['buchungsziel']['charts'] = { };
@@ -566,13 +567,13 @@ function crmSaveOrder(){
                 const income_chart_id = $( pos ).find( '[class=od-hidden-item-income_chart_id]' ).val();
                 const marge_total = kivi.parse_amount( $( pos ).find( '[class=od-item-marge_total]' ).val() );
                 const tax_id = $( pos ).find( '[class=od-hidden-item-tax_id]' ).val();
-                if( !exists( dbUpdateData['buchungsziel']['charts'][income_chart_id] ) ) dbUpdateData['buchungsziel']['charts'][income_chart_id] = { 'amount': 0, 'tax_id': tax_id };
-                dbUpdateData['buchungsziel']['charts'][income_chart_id]['amount'] += marge_total;
+                if( !exists( dbUpdateData['buchungsziel']['charts'][income_chart_id] ) ) dbUpdateData['buchungsziel']['charts'][income_chart_id] = [ { 'amount': 0, 'memo': '', 'source': '', 'tax_id': tax_id } ];
+                dbUpdateData['buchungsziel']['charts'][income_chart_id][0]['amount'] += marge_total;
                 if( tax_id > 0 ){
                     const tax_chart_id = $( pos ).find( '[class=od-hidden-item-tax_chart_id]' ).val();
                     if( 'null' != tax_chart_id ){
-                        if( !exists( dbUpdateData['buchungsziel']['charts'][tax_chart_id] ) ) dbUpdateData['buchungsziel']['charts'][tax_chart_id] = { 'amount': 0, 'tax_id': 0 };
-                        dbUpdateData['buchungsziel']['charts'][tax_chart_id]['amount'] += kivi.parse_amount( '' + ( marge_total * ( parseFloat( $( pos ).find( '[class=od-hidden-item-rate]' )[0].value ) + 1 ) - marge_total ) );
+                        if( !exists( dbUpdateData['buchungsziel']['charts'][tax_chart_id] ) ) dbUpdateData['buchungsziel']['charts'][tax_chart_id] = [ { 'amount': 0, 'memo': '', 'source': '', 'tax_id': 0 } ];
+                        dbUpdateData['buchungsziel']['charts'][tax_chart_id][0]['amount'] += kivi.parse_amount( '' + ( marge_total * ( parseFloat( $( pos ).find( '[class=od-hidden-item-rate]' )[0].value ) + 1 ) - marge_total ) );
                     }
                 }
           }
@@ -581,14 +582,36 @@ function crmSaveOrder(){
 
     if( crmOrderTypeEnum.Invoice == crmOrderType ){
         const chart_ar_id = $( '#od-ar-id' ).val();
-        dbUpdateData['buchungsziel']['charts'][chart_ar_id] = { 'amount': '-' + kivi.parse_amount( $( '#od-amount' ).val() ), 'tax_id': 0  }
+        let deficit = kivi.parse_amount( $( '#od-amount' ).val() );
+        dbUpdateData['buchungsziel']['charts'][chart_ar_id] = [ { 'amount': '-' + kivi.parse_amount( $( '#od-amount' ).val() ), 'memo': '', 'source': '', 'tax_id': 0  } ];
+        $( '#od-inv-payment-list > tbody' ).find( '[class=od_inv_paid-row]' ).each( function( key, pos ){
+            if( $( pos ).find( '[class=od_inv_paid-flag]' ).val() == 'gebucht' ){
+                const chart_id = $( pos ).find( '[class=od_inv_paid-chart_id]' ).val();
+                const amount = kivi.parse_amount( $( pos ).find( '[class=od_inv_paid-amount]' ).val() );
+                if( !exists( dbUpdateData['buchungsziel']['charts'][chart_id] ) ) dbUpdateData['buchungsziel']['charts'][chart_id] = [];
+                dbUpdateData['buchungsziel']['charts'][chart_id].push( { 'amount': '-' + amount, 'memo': '', 'source': '', 'tax_id': 0 } );
+                dbUpdateData['buchungsziel']['charts'][chart_ar_id].push( { 'amount': amount, 'memo': '', 'source': '', 'tax_id': 0  } );
+                deficit -= amount;
+            }
+        });
+
+        if( deficit > 0 ){
+            let row_item = $( '.od_inv_paid-row' ).last().clone();
+            row_item.find( '[class=od_inv_paid-flag]' ).val( 'ungebucht' );
+            row_item.find( '.od_inv_paid-date' ).val( kivi.format_date( new Date() ) );
+            row_item.find( '[class=od_inv_paid-amount]' ).val( kivi.format_amount( deficit ) );
+            row_item.css( 'background-color', 'red' );
+            row_item.appendTo( '#od-inv-payment-list > tbody' );
+        }
     }
 
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
-        data:  { action: 'saveInvoice', data: dbUpdateData },
+        data:  { action: 'saveOrder', data: dbUpdateData },
         success: function( data ){
+            if( $( '#od-inv-payment' ).is(':visible' ) ){
+            }
         },
         error: function( xhr, status, error ){
             $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmSaveOrder()', xhr.responseText );
@@ -1511,11 +1534,13 @@ function crmEditOrderListPayment( data ){
     $( '#od-inv-payment-list > tbody' ).html( '' );
     $( '#od_inv_book_deficit').show();
 
-    let row = '<tr class="od-inv-paid-row" style="background-color: red;"><td><input class="od-inv-paid-flag" type="hidden" value="ungebucht"></input><input class="od-inv-paid-date" size="10"></input></td>' +
-                                            '<td><input class="od-inv-paid-source" size="10"></input></td>' +
-                                            '<td><input class="od-inv-paid-memo" size="10"></input></td>' +
-                                            '<td><input class="od-inv-paid-amount" size="10"></input></td>' +
-                                            '<td><select class="od-inv-paid-acc">';
+    let row = '<tr class="od_inv_paid-row" style="background-color: red;">' +
+                                            '<td><img src="image/close.png" alt="löschen" onclick="crmDeletePaymentPos(this)"></td>' +
+                                            '<td><input class="od_inv_paid-flag" type="hidden" value="ungebucht"></input><input class="od_inv_paid-date" size="10"></input></td>' +
+                                            '<td><input class="od_inv_paid-source" size="10"></input></td>' +
+                                            '<td><input class="od_inv_paid-memo" size="10"></input></td>' +
+                                            '<td><input class="od_inv_paid-amount" size="10"></input></td>' +
+                                            '<td><select class="od_inv_paid-chart_id">';
     if( exists( data.bill ) && exists( data.bill.payment_acc ) ){
         let i = 0;
         for( let acc of data.bill.payment_acc ){
@@ -1528,28 +1553,38 @@ function crmEditOrderListPayment( data ){
     let deficit = kivi.parse_amount( $( '#od-amount' ).val() );
     if( exists( data.bill ) && exists( data.bill.payment ) ){
         for( let payment of data.bill.payment ){
-            let row_item = $( '.od-inv-paid-row' ).last().clone();
-            row_item.find( '.od-inv-paid-flag' ).val( 'gebucht' );
-            row_item.find( '.od-inv-paid-date' ).val( kivi.format_date( new Date( payment.transdate ) ) );
-            row_item.find( '.od-inv-paid-source' ).val( payment.source );
-            row_item.find( '.od-inv-paid-memo' ).val( payment.memo );
-            row_item.find( '.od-inv-paid-amount' ).val( kivi.format_amount( payment.amount * -1 ) );
-            row_item.find( '.od-inv-paid-acc' ).val( payment.chart_id );
+            let row_item = $( '.od_inv_paid-row' ).last().clone();
+            row_item.find( '.od_inv_paid-flag' ).val( 'gebucht' );
+            row_item.find( '.od_inv_paid-date' ).val( kivi.format_date( new Date( payment.transdate ) ) );
+            row_item.find( '.od_inv_paid-source' ).val( payment.source );
+            row_item.find( '.od_inv_paid-memo' ).val( payment.memo );
+            row_item.find( '.od_inv_paid-amount' ).val( kivi.format_amount( payment.amount * -1 ) );
+            row_item.find( '.od_inv_paid-chart_id' ).val( payment.chart_id );
             row_item.css( 'background-color', '');
             row_item.prependTo( '#od-inv-payment-list' );
             deficit += payment.amount;
         }
     }
     if( deficit > 0 ){
-        $( '.od-inv-paid-row' ).last().find( '.od-inv-paid-date' ).val( kivi.format_date( new Date() ) );
-        $( '.od-inv-paid-row' ).last().find( '.od-inv-paid-amount' ).val( deficit );
+        $( '.od_inv_paid-row' ).last().find( '.od_inv_paid-date' ).val( kivi.format_date( new Date() ) );
+        $( '.od_inv_paid-row' ).last().find( '.od_inv_paid-amount' ).val( deficit );
     }
     else{
-        $( '.od-inv-paid-row' ).last().remove();
+        $( '.od_inv_paid-row' ).last().remove();
         $( '#od_inv_book_deficit').hide();
     }
 }
 
 $( '#od_inv_book_deficit' ).click( function(){
-    alert( 'buchung' );
+    $( '#od-inv-payment-list > tbody' ).find( '[class=od_inv_paid-row]' ).each( function( key, pos ){
+        if( $( pos ).find( '.od_inv_paid-flag' ).val() == 'ungebucht' ){
+            $( pos ).find( '.od_inv_paid-flag' ).val( 'gebucht' );
+            $( pos ).css( 'background-color', '' );
+        }
+    });
+    crmSaveOrder();
 });
+
+crmDeletePaymentPos = function( e ){
+    $( e ).parent().parent().remove();
+}

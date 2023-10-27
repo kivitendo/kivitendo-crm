@@ -1045,6 +1045,7 @@ function newCV( $data ){
         }
     }
 
+    makeCVDir( $cv_src, $cv_id );
     echo '{ "src": "'.$cv_src.'", "id": "'.$cv_id.'" }';
 }
 
@@ -1070,6 +1071,24 @@ function updateCustomVars( $db_table, $custom_vars ){
     }
 }
 
+function makeCVDir( $cv_src, $cv_id, $unlink = false ){
+    $trans = array( ' ' => '_', '\\'=> '_', '/' => '_' , ':' => '_',  '*' => '_',  '?' => '_',  '"' => '_', '<' => '_',  '>' => '_',  '|' => '_', ',' => '');
+    $mandant = strtr( $_SESSION['mandant'], $trans );
+    $base_dir = $_SESSION['crmpath']."/dokumente/".$mandant.'/';
+    $dir .= $base_dir.( ( strcmp( $cv_src, 'C' ) === 0 )? 'C' : 'V' );
+    $dir .= $cv_id;
+    $permissions = ( $_SESSION['dir_mode'] )? octdec( $_SESSION['dir_mode'] ) : 0777;
+    if( !$unlink && !file_exists( $dir ) ) mkdir( $dir, $permissions, true );
+    if ( $_SESSION['dir_group'] ) chgrp( $dir, $_SESSION['dir_group'] );
+    $table = array( 'C' => 'customer', 'V' => 'vendor' );
+    $rs = $GLOBALS['dbh']->getOne( "SELECT name, $table[$cv_src]number FROM $table[$cv_src] WHERE id = ".$cv_id );
+    $link_dir = $base_dir."link_dir_".( ( strcmp( $cv_src, 'C' ) === 0 )? 'cust' : 'vend' ).'/';
+    $link = $link_dir.strtr( $rs['name'].'_'.$rs[$table[$cv_src].'number'], $trans );
+    if( !file_exists( $link_dir ) ) mkdir( $link_dir, $permissions, true );
+    if( !$unlink ) symlink( $dir, $link );
+    else unlink( $link );
+}
+
 /********************************************
 * Ubdate Customer optional with new Car
 * KBA-Daten werden in der Funktion prepareKba
@@ -1089,6 +1108,7 @@ function updateCuWithNewCar( $data ){
                 }
                 unset( $value['WHERE'] );
         }
+        makeCVDir( 'C', $id, true );
         if( strcmp( $key, 'lxc_cars' ) === 0 ){
             $value['c_ow'] = $id;
             $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ) );
@@ -1113,6 +1133,8 @@ function updateCuWithNewCar( $data ){
         }
     }
     $GLOBALS['dbh']->commit();
+
+    makeCVDir( 'C', $id );
     echo '{ "src": "C", "id": "'.$id.'" }';
 }
 

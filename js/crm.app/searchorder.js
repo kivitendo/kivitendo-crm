@@ -96,6 +96,7 @@ function crmSearchOrder( onSuccess = null ){
                     success: function( crmData ){
                         crmRefreshAppView( 'C', crmData.order.common.customer_id );
                         crmEditOrderDlg( crmData );
+                        crmSetMainTitle( crmData.order.common.customer_name + ' ( ' + kivi.t8( 'Customer' ) + ' )' );
                     },
                     error: function( xhr, status, error ){
                         $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'crmSearchOrder().getOrder', xhr.responseText );

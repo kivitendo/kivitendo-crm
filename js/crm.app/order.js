@@ -65,6 +65,7 @@ function crmCalcOrderPrice( pos ){
         $( '#od-amount' ).val( kivi.format_amount( amount, 2 ) );
     }
 
+    //Brechnung der Performance für di GuV
     if( crmOrderTypeEnum.Order == crmOrderType ){
         const base_unit = $( pos ).find( '[class=od-hidden-item-base_unit]' )[0].value;
         const qty = kivi.parse_amount( $( pos ).find( '[class=od-item-qty]' )[0].value );
@@ -604,6 +605,7 @@ function crmSaveOrder(){
         }
     });
 
+    //Umsatz buchen, Zahlungsziel aktualisieren
     if( crmOrderTypeEnum.Invoice == crmOrderType ){
         const chart_ar_id = $( '#od-ar-id' ).val();
         let deficit = kivi.parse_amount( $( '#od-amount' ).val() );
@@ -620,7 +622,8 @@ function crmSaveOrder(){
         });
 
         if( deficit > 0 ){
-            let row_item = $( '.od_inv_paid-row' ).last().clone();
+            let row_item = $( '.od_inv_paid-row' ).last();
+            if( 'gebucht' == row_item.find( '[class=od_inv_paid-flag]' ).val() ) row_item = $( '.od_inv_paid-row' ).last().clone();
             row_item.find( '[class=od_inv_paid-flag]' ).val( 'ungebucht' );
             row_item.find( '.od_inv_paid-date' ).val( kivi.format_date( new Date() ) );
             row_item.find( '[class=od_inv_paid-amount]' ).val( kivi.format_amount( deficit ) );

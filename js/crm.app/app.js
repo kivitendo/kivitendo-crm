@@ -163,6 +163,14 @@ function crmRefreshAppViewAction( ){
     if( '' != src && '' != id) getCVPA( src, id );
 }
 
+function crmGetCVSrc(){
+    return $( '#crm-cvpa-src' ).val();
+}
+
+function crmGetCVId(){
+    return $( '#crm-cvpa-id' ).val();
+}
+
 $( '#crm-widget-quicksearch' ).focus();
 
 $( '#message-dialog' ).dialog({
@@ -578,6 +586,10 @@ $( '#crm-wf-search-order, #crm-wf-search-order-btn' ).click( function() {
 
 $( '#crm-phonecall-list-btn' ).click( function() {
     crmPhoneCallListView();
+});
+
+$( '#crm-wf-elfinder' ).click( function() {
+    crmCVDocumentsView();
 });
 
 //Route zum Kunden oder Lieferanten anzeigen

@@ -91,6 +91,129 @@
 <script type="text/javascript" src="crm/jquery-add-ons/german-date-time-picker.js"></script>
 <script type="text/javascript" src="crm/nodejs/node_modules/tinymce/tinymce.min.js"></script>
 
+    <!-- Section CSS -->
+    <!-- jQuery UI (REQUIRED) -->
+    <!--
+    <link rel="stylesheet" href="jquery/jquery-ui-1.12.0.css" type="text/css">
+    -->
+
+    <!-- elfinder css -->
+    <link rel="stylesheet" href="crm/jquery-plugins/elFinder2/css/commands.css"    type="text/css">
+    <link rel="stylesheet" href="crm/jquery-plugins/elFinder2/css/common.css"      type="text/css">
+    <link rel="stylesheet" href="crm/jquery-plugins/elFinder2/css/contextmenu.css" type="text/css">
+    <link rel="stylesheet" href="crm/jquery-plugins/elFinder2/css/cwd.css"         type="text/css">
+    <link rel="stylesheet" href="crm/jquery-plugins/elFinder2/css/dialog.css"      type="text/css">
+    <link rel="stylesheet" href="crm/jquery-plugins/elFinder2/css/fonts.css"       type="text/css">
+    <link rel="stylesheet" href="crm/jquery-plugins/elFinder2/css/navbar.css"      type="text/css">
+    <link rel="stylesheet" href="crm/jquery-plugins/elFinder2/css/places.css"      type="text/css">
+    <link rel="stylesheet" href="crm/jquery-plugins/elFinder2/css/quicklook.css"   type="text/css">
+    <link rel="stylesheet" href="crm/jquery-plugins/elFinder2/css/statusbar.css"   type="text/css">
+    <link rel="stylesheet" href="crm/jquery-plugins/elFinder2/css/theme.css"       type="text/css">
+    <link rel="stylesheet" href="crm/jquery-plugins/elFinder2/css/toast.css"       type="text/css">
+    <link rel="stylesheet" href="crm/jquery-plugins/elFinder2/css/toolbar.css"     type="text/css">
+
+    <!-- Section JavaScript -->
+    <!-- jQuery and jQuery UI (REQUIRED) -->
+    <!--
+    <script src="jquery/jquery-1.12.4.js" type="text/javascript" charset="utf-8"></script>
+    <script src="jquery/jquery-ui-1.12.0.js" type="text/javascript" charset="utf-8"></script>
+    -->
+
+    <!-- elfinder core -->
+    <script src="crm/jquery-plugins/elFinder2/js/elFinder.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/elFinder.version.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/jquery.elfinder.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/elFinder.mimetypes.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/elFinder.options.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/elFinder.options.netmount.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/elFinder.history.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/elFinder.command.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/elFinder.resources.js"></script>
+
+    <!-- elfinder dialog -->
+    <script src="crm/jquery-plugins/elFinder2/js/jquery.dialogelfinder.js"></script>
+
+    <!-- elfinder default lang -->
+    <script src="crm/jquery-plugins/elFinder2/js/i18n/elfinder.en.js"></script>
+
+    <!-- elfinder ui -->
+    <script src="crm/jquery-plugins/elFinder2/js/ui/button.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/ui/contextmenu.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/ui/cwd.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/ui/dialog.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/ui/fullscreenbutton.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/ui/navbar.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/ui/navdock.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/ui/overlay.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/ui/panel.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/ui/path.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/ui/places.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/ui/searchbutton.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/ui/sortbutton.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/ui/stat.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/ui/toast.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/ui/toolbar.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/ui/tree.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/ui/uploadButton.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/ui/viewbutton.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/ui/workzone.js"></script>
+
+    <!-- elfinder commands -->
+    <script src="crm/jquery-plugins/elFinder2/js/commands/archive.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/back.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/chmod.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/colwidth.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/copy.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/cut.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/download.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/duplicate.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/edit.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/empty.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/extract.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/forward.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/fullscreen.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/getfile.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/help.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/hidden.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/hide.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/home.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/info.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/mkdir.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/mkfile.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/netmount.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/open.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/opendir.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/opennew.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/paste.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/places.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/preference.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/quicklook.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/quicklook.plugins.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/reload.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/rename.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/resize.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/restore.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/rm.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/search.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/selectall.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/selectinvert.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/selectnone.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/sort.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/undo.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/up.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/upload.js"></script>
+    <script src="crm/jquery-plugins/elFinder2/js/commands/view.js"></script>
+
+    <!-- elfinder 1.x connector API support (OPTIONAL) -->
+    <script src="crm/jquery-plugins/elFinder2/js/proxy/elFinderSupportVer1.js"></script>
+
+    <!-- Extra contents editors (OPTIONAL) -->
+    <script src="crm/jquery-plugins/elFinder2/js/extras/editors.default.js"></script>
+
+    <!-- GoogleDocs Quicklook plugin for GoogleDrive Volume (OPTIONAL) -->
+    <script src="crm/jquery-plugins/elFinder2/js/extras/quicklook.googledocs.js"></script>
+
+
 <style>
     .ui-autocomplete-category {
         font-weight: bold;
@@ -290,7 +413,7 @@
     <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div id="crm-hist-last" class="layout-actionbar-action layout-actionbar-submit">Verlauf</div><span></span></div><div id="crm-history-list" class="layout-actionbar-combobox-list"></div></div>
     <div class="layout-actionbar-separator"></div>
     <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Neu</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-customer">Kunde</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-vendor">Lieferant</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-person">Ansprechperson</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-scan"></div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-car">Neues Auto</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-offer">Angebot</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-order">Auftrag*</div></div></div>
-    <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Bearbeiten</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit">Stammdaten</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order">Auftragssuche</div></div></div>
+    <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Bearbeiten</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit">Stammdaten</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order">Auftragssuche</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-elfinder">Dokumente</div></div></div>
     <div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order-btn">Auftragssuche</div>
     <div class="layout-actionbar-action layout-actionbar-submit" id="crm-phonecall-list-btn">Anrufliste</div>
 </div>
@@ -873,6 +996,13 @@
     </table>
 </div>
 
+<div id="crm-plugin-elfinder" class="crm-p2" style="display:none">
+    <div>
+        <button onclick="crmCVDocumentsCloseView();">Schließen</button>
+    </div>
+    <div id="elfinder"></div>
+</div>
+
 <div id="crm-edit-article-dialog" style="display:none">
     <div id="edit-article-hidden"></div>
     <table id="edit-article-form">
@@ -1295,5 +1425,6 @@
 <script src="crm/js/crm.app/newcustomer.js"></script>
 <script src="crm/js/crm.app/phonecall_list.js"></script>
 <script src="crm/js/crm.app/phonecall.js"></script>
+<script src="crm/js/crm.app/elfinder.js"></script>
 </body>
 </html>

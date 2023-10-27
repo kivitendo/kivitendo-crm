@@ -585,3 +585,7 @@ function crmNewVendor(){
 function crmNewPerson(){
     alert( "Person erfassen in crmNewPerson()!" );
 }
+
+function crmCVDocumentsView( ){
+    crmOpenView( 'crm-plugin-elfinder', null, ' - Dokumente' );
+}

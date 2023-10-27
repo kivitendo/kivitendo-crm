@@ -70,8 +70,8 @@ function crmCalcOrderPrice( pos ){
         const base_unit = $( pos ).find( '[class=od-hidden-item-base_unit]' )[0].value;
         const qty = kivi.parse_amount( $( pos ).find( '[class=od-item-qty]' )[0].value );
         const factor = kivi.parse_amount( $( pos ).find( '[class=od-hidden-item-factor]' )[0].value );
-        if( 'I' == item_type && 'min' == base_unit ) crmPerfomanceSoll += qty * factor;
-        if( 'S' == item_type && 'min' == base_unit ) crmPerfomanceIst += qty * factor;
+        if( 'I' == item_type && 'min' == base_unit ) crmPerfomanceIst += qty * factor;
+        if( 'S' == item_type && 'min' == base_unit ) crmPerfomanceSoll += qty * factor;
         const performance = ( crmPerfomanceSoll - crmPerfomanceIst ) / 60;
         $( '#od-performance' ).val( kivi.format_amount( performance ) );
         if( performance < 0 ) $( '#od-performance' ).css( 'background-color', 'red' );

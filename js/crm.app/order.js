@@ -103,7 +103,8 @@ function crmEditOrderKeyup(e){
                 }
             }
             else{
-                field.css( "background-color", "" );
+                if( 'I' == field.find( '[class=od-item-type]' )[0].value ) field.css( "background-color", "00BFF" );
+                else  field.css( "background-color", "" );
             }
         }
     }

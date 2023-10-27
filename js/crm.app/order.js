@@ -548,7 +548,7 @@ function crmSaveOrder(){
 
     dbUpdateData[dbPSItemsTable] = [];
     if( crmOrderTypeEnum.Invoice == crmOrderType ){
-        //Umsatz buchen; Konten aktualisieren
+        //Rechnung buchen, Konten aktualisieren, Zahlungseingänge buchen
         dbUpdateData['buchungsziel'] = { };
         dbUpdateData['buchungsziel']['id'] = $( '#od-inv-id' ).val();
         dbUpdateData['buchungsziel']['charts'] = { };
@@ -586,7 +586,7 @@ function crmSaveOrder(){
                 dbUpdateData['instructions'].push( dataRow );
             }
             if( crmOrderTypeEnum.Invoice == crmOrderType ){
-                //Umsatz buchen
+                //Rechnung buchen
                 //Aufsummieren von marge_total pro income_chart_id, wenn die tax_id nicht 0 ist werden die Steuerbeträge auf dem entsprechenden chart (tax_chart_id)
                 //gebucht werden, die Gesamtsumme wird auf dem chart für Forderungen gebucht (#od-ar-id)
                 const income_chart_id = $( pos ).find( '[class=od-hidden-item-income_chart_id]' ).val();
@@ -605,7 +605,7 @@ function crmSaveOrder(){
         }
     });
 
-    //Umsatz buchen, Zahlungsziel aktualisieren
+    //Rechnung buchen, Zahlungseingänge buchen
     if( crmOrderTypeEnum.Invoice == crmOrderType ){
         const chart_ar_id = $( '#od-ar-id' ).val();
         let deficit = kivi.parse_amount( $( '#od-amount' ).val() );

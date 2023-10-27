@@ -12,17 +12,17 @@ Verwendete Tabellen:
 - customer          ( Auftraggeber )
 - employee          ( Für die Mitarbeiter/ Mechaniker der Gruppe Werkstatt )
 
-'Umsatz' buchen:
+Rechnung buchen:
 
 Das Buchungsziel (Kombination von Rechnungs-Id [trans_id] Chart-Id [chart_id] und Summe [amount] in der DB-Tabelle 'acc_trans') wird beim holen der Rechnung und des Artikels ermittelt und als Json-Object an die Artikeldaten bzw. Rechnungsposten angehangen.
 
-=> Siehe 'ajax/crm.app.php' 'saveInvoice' und 'js/order.js' 'crmSaveOrder' bzw. Begriffe 'Umsatz buchen' und 'buchungsziel' suchen.
+=> Siehe 'ajax/crm.app.php' 'saveInvoice' und 'js/order.js' 'crmSaveOrder' bzw. Begriffe 'Rechnung buchen' und 'buchungsziel' suchen.
 => Ermittlung der IDs und des Steuersatzes siehe 'getInvoice' und 'findPart'  in 'ajax/crm.app.php'; Stichwort 'buchungsziel'
 
 Bestands- bzw. Forderungskonto wird in der Rechnung eingestellt (z.B.: '1400--Ford. a.Lieferungen und Leistungen') (noch ToDo),
 hier wird die Recnungssumme als Fehlbetrag eingetragen.
 
-'Zahlungseingänge' buchen:
+Zahlungseingänge buchen:
 
 Positiven Betrag auf das Bestands- bzw. Forderungskonto buchen und den negativen Betrag auf das Zahlungseingangskonto (z.B: Kasse od. PayPal) buchen.
 

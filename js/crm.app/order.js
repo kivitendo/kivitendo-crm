@@ -5,6 +5,11 @@
 var crmOrderItemLists;
 
 function crmCalcOrderPos(){
+    if( crmOrderTypeEnum.Order == crmOrderType ){
+        crmPerfomanceIst =  0;
+        crmPerfomanceSoll = 0;
+    }
+
     $( '#od-netamount' ).val( 0 );
     $( '#od-amount' ).val( 0 );
     let positions = $( '#edit-order-table > tbody > tr');
@@ -35,6 +40,9 @@ function crmCalcOrderPos(){
    });
 }
 
+var crmPerfomanceIst = 0;
+var crmPerfomanceSoll = 0;
+
 function crmCalcOrderPrice( pos ){
     let qty = kivi.parse_amount( $( pos ).find( '[class=od-item-qty]' )[0].value );
     if( isNaN( qty ) ) qty = 0;
@@ -58,11 +66,15 @@ function crmCalcOrderPrice( pos ){
     }
 
     if( crmOrderTypeEnum.Order == crmOrderType ){
-        const unit = $( pos ).find( '[class=od-item-unit]' )[0].value;
-        const qty = $( pos ).find( '[class=od-item-qty]' )[0].value;
-        //const factor = crmUnits[unit].factor;
-        //if( 'I' == item_type ) $( '#od-performance-ist' ).val( qty * factor );
-        //assert( 'performance2', unit + ' * ' + qty + ' * ' + factor );
+        const base_unit = $( pos ).find( '[class=od-hidden-item-base_unit]' )[0].value;
+        const qty = kivi.parse_amount( $( pos ).find( '[class=od-item-qty]' )[0].value );
+        const factor = kivi.parse_amount( $( pos ).find( '[class=od-hidden-item-factor]' )[0].value );
+        if( 'I' == item_type && 'min' == base_unit ) crmPerfomanceSoll += qty * factor;
+        if( 'S' == item_type && 'min' == base_unit ) crmPerfomanceIst += qty * factor;
+        const performance = ( crmPerfomanceSoll - crmPerfomanceIst ) / 60;
+        $( '#od-performance' ).val( kivi.format_amount( performance ) );
+        if( performance < 0 ) $( '#od-performance' ).css( 'background-color', 'red' );
+        else $( '#od-performance' ).css( 'background-color', 'green' );
     }
 }
 
@@ -181,7 +193,9 @@ function crmAddOrderItem( dataRow ){
                 ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>';
 
     // Unit is readonly now:
-    tableRow += '<td><input class="od-item-unit" type="text" size="5" readonly="readonly" value="' + ( ( exists( dataRow.unit ) )? dataRow.unit : '' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
+    tableRow += '<td><input class="od-hidden-item-base_unit" type="hidden" value="' + ( ( exists( dataRow.unit_type ) )? dataRow.unit_type.base_unit : '' ) + '"></input>' +
+                '<input class="od-hidden-item-factor" type="hidden" value="' + ( ( exists( dataRow.unit_type ) )? dataRow.unit_type.factor : '0' ) + '"></input>' +
+                '<input class="od-item-unit" type="text" size="5" readonly="readonly" value="' + ( ( exists( dataRow.unit ) )? dataRow.unit : '' ) + '" onchange="crmEditOrderOnChange()" onkeyup="crmEditOrderKeyup(event)" ' +
                 ( ( exists( dataRow.id ) )? '' : 'style = "display:none"') + '></input></td>';
 
     tableRow += '<td><input class="od-hidden-item-rate" type="hidden" value="' + ( ( exists( dataRow.buchungsziel ) )? dataRow.buchungsziel.rate : '0' ) + '"></input>' +

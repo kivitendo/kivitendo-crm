@@ -657,8 +657,6 @@
                             <label for="od-performance" class="od-table-label">Performance:</label>
                         </td>
                         <td class="od-perform">
-                            <input id="od-performance-ist" type="hidden"></input>
-                            <input id="od-performance-soll" type="hidden"></input>
                             <input id="od-performance" type="text" readonly="readonly" size="10"></input>
                         </td>
                         <td>

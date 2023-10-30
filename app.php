@@ -204,6 +204,9 @@
     <script src="crm/jquery-plugins/elFinder2/js/commands/upload.js"></script>
     <script src="crm/jquery-plugins/elFinder2/js/commands/view.js"></script>
 
+    <!-- elfinder languages -->
+    <script src="crm/jquery-plugins/elFinder2/js/i18n/elfinder.de.js"></script>
+
     <!-- elfinder 1.x connector API support (OPTIONAL) -->
     <script src="crm/jquery-plugins/elFinder2/js/proxy/elFinderSupportVer1.js"></script>
 
@@ -1425,6 +1428,5 @@
 <script src="crm/js/crm.app/newcustomer.js"></script>
 <script src="crm/js/crm.app/phonecall_list.js"></script>
 <script src="crm/js/crm.app/phonecall.js"></script>
-<script src="crm/js/crm.app/elfinder.js"></script>
 </body>
 </html>

@@ -227,10 +227,7 @@ $.fn.showMessageDialog = function( style, title, message, debug = null ){
 
 function showCVPA( data ){
     if( data.cv ){
-        //alert( 'customer/vendor src: ' +  data.cv.src + ', id: ' + data.cv.id );
-        //console.info( 'customer/vendor src: ' +  data.cv.src + ', id: ' + data.cv.id );
-        $( '#elfinder' ).elfinder( 'destroy' ); // destroy previous instance
-        $( '#elfinder' ).elfinder({
+        $( '#elfinder' ).elfinder( 'destroy' ).elfinder({ //destroy previous instance and init new instance
             // Disable CSS auto loading
             cssAutoLoad : false, //macht was
             // Base URL to css/*, js/*
@@ -278,7 +275,6 @@ function showCVPA( data ){
             });
         }
         );
-
 
         $( '#crm-cvpa-src' ).val( data.cv.src );
         $( '#crm-cvpa-id' ).val( data.cv.id );

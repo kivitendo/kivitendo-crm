@@ -1077,9 +1077,15 @@ function makeCVDir( $cv_src, $cv_id, $unlink = false ){
     $base_dir = $_SESSION['crmpath']."/dokumente/".$mandant.'/';
     $dir .= $base_dir.( ( strcmp( $cv_src, 'C' ) === 0 )? 'C' : 'V' );
     $dir .= $cv_id;
+    $trash_dir = $dir.'/.trash/';
     $permissions = ( $_SESSION['dir_mode'] )? octdec( $_SESSION['dir_mode'] ) : 0777;
+    //Ordner für Kunden/Lieferanten erstellen
     if( !$unlink && !file_exists( $dir ) ) mkdir( $dir, $permissions, true );
     if ( $_SESSION['dir_group'] ) chgrp( $dir, $_SESSION['dir_group'] );
+    //Ordner für Papierkorb erstellen (Ordner für Thumbnails werden von elfinder automatisch erstellt)
+    if( !$unlink && !file_exists( $trash_dir ) ) mkdir( $trash_dir, $permissions, true );
+    if ( $_SESSION['dir_group'] ) chgrp( $trash_dir, $_SESSION['dir_group'] );
+    //Symlink erstellen
     $table = array( 'C' => 'customer', 'V' => 'vendor' );
     $rs = $GLOBALS['dbh']->getOne( "SELECT name, $table[$cv_src]number FROM $table[$cv_src] WHERE id = ".$cv_id );
     $link_dir = $base_dir."link_dir_".( ( strcmp( $cv_src, 'C' ) === 0 )? 'cust' : 'vend' ).'/';

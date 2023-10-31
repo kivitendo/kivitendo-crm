@@ -154,8 +154,9 @@ $base_dir = $_SESSION['crmpath']."/dokumente/".$mandant.'/';
 $dir .= $base_dir.( ( strcmp( $cv_src, 'C' ) === 0 )? 'C' : 'V' );
 $dir .= $cv_id;
 //writeLog( "dir: $dir" );
+$allowedMime = array( 'image/x-ms-bmp', 'image/gif', 'image/jpeg', 'image/png', 'image/x-icon', 'text/plain', 'application/pdf', 'application/vnd.oasis.opendocument.text', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel' );
 $opts = array(
-    // 'debug' => true,
+    //'debug' => true,
     'roots' => array(
         // Items volume
         array(
@@ -164,26 +165,26 @@ $opts = array(
             'URL'           => $dir, // URL to files (REQUIRED)
             'trashHash'     => 't1_Lw',                     // elFinder's hash of trash folder
             'winHashFix'    => DIRECTORY_SEPARATOR !== '/', // to make hash same to Linux one on windows too
-            'uploadDeny'    => array('all'),                // All Mimetypes not allowed to upload
-            'uploadAllow'   => array('image/x-ms-bmp', 'image/gif', 'image/jpeg', 'image/png', 'image/x-icon', 'text/plain', 'application/pdf'), // Mimetype `image` and `text/plain` allowed to upload
-            'uploadOrder'   => array('deny', 'allow'),      // allowed Mimetype `image` and `text/plain` only
+            'uploadDeny'    => array( 'all' ),                // All Mimetypes not allowed to upload
+            'uploadAllow'   => $allowedMime,
+            'uploadOrder'   => array( 'deny', 'allow' ),      // allowed Mimetype `image` and `text/plain` only
             'accessControl' => 'access'                     // disable and hide dot starting files (OPTIONAL)
         ),
         // Trash volume
         array(
             'id'            => '1',
             'driver'        => 'Trash',
-            'path'          => dirname($_SERVER['PHP_SELF']) . '/../files/.trash/',
-            'tmbURL'        => dirname($_SERVER['PHP_SELF']) . '/../files/.trash/.tmb/',
+            'path'          => $dir.'/.trash/',
+            'tmbURL'        => $dir.'/.trash/.tmb/',
             'winHashFix'    => DIRECTORY_SEPARATOR !== '/', // to make hash same to Linux one on windows too
-            'uploadDeny'    => array('all'),                // Recomend the same settings as the original volume that uses the trash
-            'uploadAllow'   => array('image/x-ms-bmp', 'image/gif', 'image/jpeg', 'image/png', 'image/x-icon', 'text/plain'), // Same as above
-            'uploadOrder'   => array('deny', 'allow'),      // Same as above
+            'uploadDeny'    => array( 'all' ),                // Recomend the same settings as the original volume that uses the trash
+            'uploadAllow'   => $allowedMime,
+            'uploadOrder'   => array( 'deny', 'allow' ),      // Same as above
             'accessControl' => 'access',                    // Same as above
         ),
     )
 );
 
 // run elFinder
-$connector = new elFinderConnector(new elFinder($opts));
+$connector = new elFinderConnector( new elFinder( $opts ) );
 $connector->run();

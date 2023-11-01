@@ -227,6 +227,8 @@ $.fn.showMessageDialog = function( style, title, message, debug = null ){
 
 function showCVPA( data ){
     if( data.cv ){
+        /* Von Dirk auskommentiert, der Code für elfinder ist jetzt in cvp.js in der Funktion 'crmCVDocumentsView()'
+
         $( '#elfinder' ).elfinder( 'destroy' ).elfinder({ //destroy previous instance and init new instance
             // Disable CSS auto loading
             cssAutoLoad : false, //macht was
@@ -275,6 +277,7 @@ function showCVPA( data ){
             });
         }
         );
+        */
 
         $( '#crm-cvpa-src' ).val( data.cv.src );
         $( '#crm-cvpa-id' ).val( data.cv.id );

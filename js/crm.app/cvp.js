@@ -261,7 +261,10 @@ function crmNewCVP( crmCVPtype ){
         $( '#billaddr-business_id' ).val( crmData.cv.business_id );
         $( '#billaddr-country' ).change();
         $( '#billaddr-bland' ).val( crmData.cv.bland );
+        crmAutoSelectBland(); //aus 'js/car.js'
     }
+
+    $( "#crm-tabs-main" ).tabs( "option", "active", 0 );
 
     $( '#crm-wx-customer-view' ).crmDialogClearErrors();
 }

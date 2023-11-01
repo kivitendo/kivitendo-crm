@@ -438,22 +438,24 @@
     <div id="od-oe-workflow" class="layout-actionbar" style="top: 140px; left: 28px; border: 0;">
         <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCloseView();">Schließen</div>
         <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Workflow</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit" onclick="crmConfirmInsertOfferFromOrder();">Vorlage für Angebot</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order" onclick="crmConfirmInsertInvoiceFromOrder();">Vorlage für Rechnung</div></div></div>
-        <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallPrinter1();">Printer1</div>
-        <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallPrinter2();">Printer2</div>
-        <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallPDF();">PDF</div>
-        <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallCoparts();">Coparts</div>
+        <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallPrinter1();">Printer1</div>
+        <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallPrinter2();">Printer2</div>
+        <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallPDF();">PDF</div>
+        <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallCoparts();">Coparts</div>
+        <div class="layout-actionbar-action layout-actionbar-submit" value="" style="margin-left: 2em;" onclick="crmEditOrderCloseView();">Auftraggeber</div>
+        <div id="od_lxcars_to_car_btn" class="layout-actionbar-action layout-actionbar-submit" value="">Auto</div>
     </div>
 
     <div id="od-off-menus">
         <div class="layout-actionbar" style="top: 140px; left: 28px; border: 0;">
-            <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCloseView();">Schließen</div>
+            <div id="od-off-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCloseView();">Schließen</div>
             <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Workflow</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit" onclick="crmConfirmXYZ();">Wiederverwenden*</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order" onclick="crmConfirmXYZ();">Vorlage für Auftrag*</div></div></div>
         </div>
         <div class="layout-actionbar" style="top: 140px; left: 350px; border: 0;">
            <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div id="od-off-current-printer" value="" class="layout-actionbar-action layout-actionbar-submit" style="width: auto">Drucken</div><span></span></div><div id="od-off-printers" class="layout-actionbar-combobox-list"></div></div>
-            <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmPrintOrder( crmOrderPrintTargetEnum.Printer );">Drucken</div>
-            <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmPrintOrder( crmOrderPrintTargetEnum.Screen );">PDF-Druckvorschau</div>
-            <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEmailOrder()">E-Mail</div>
+            <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmPrintOrder( crmOrderPrintTargetEnum.Printer );">Drucken</div>
+            <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmPrintOrder( crmOrderPrintTargetEnum.Screen );">PDF-Druckvorschau</div>
+            <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEmailOrder()">E-Mail</div>
         </div>
     </div>
 

@@ -701,7 +701,7 @@ $( '#edit_car_special_btn' ).click( function(){
     window.open( 'crm/lxcars/special/special.phtml?c_id=' + $( '#edit_car-c_id' ).val() + '&owner=' + $( '#crm-cvpa-id' ).val() + '&task=1', '_blank');
 });
 
-$( '#od_lxcars_to_car' ).click( function(){
+$( '#od_lxcars_to_car, #od_lxcars_to_car_btn' ).click( function(){
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',

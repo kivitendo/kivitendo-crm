@@ -519,9 +519,12 @@ function crmCVPAgetTitle(){
     return $( '#crm-cvpa-name' ).val();
 }
 
+// crmSetTitle (Suchbegriff)
+// Setzt den Titel der App in der Navigationsleiste
 function crmSetMainTitle( title = null, subtitle = null ){
     $( '#crm-wx-title' ).html( ( null == title)? crmCVPAgetTitle() : title );
     if( null != subtitle ) $( '#crm-wx-subtitle' ).html( subtitle );
+    document.title = ( null == title)? crmCVPAgetTitle() : title;
 }
 
 function crmOpenView( id, title = null, subtitle = null ){

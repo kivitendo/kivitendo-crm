@@ -502,6 +502,13 @@ function crmEditCarDlg( crmData = null ){
                 let columnName = item.name.split( '-' );
                 if( exists( crmData.car[columnName[1]] ) ) $( '#' + item.name ).val( crmData.car[columnName[1]] );
             }
+
+            assert( 'c_hu', crmData.car.c_hu );
+            if( '' != crmData.car.c_hu ) {
+                const c_hu = new Date( crmData.car.c_hu );
+                const current_date = new Date();
+                if( c_hu < current_date ) $( '#edit_car-c_hu' ).parent().parent().css( 'background-color', 'red' );
+            }
         }
 
         if( exists( crmData.ord ) ){

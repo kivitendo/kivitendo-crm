@@ -646,6 +646,10 @@ $( '#crm-wf-elfinder' ).click( function() {
     crmCVDocumentsView();
 });
 
+$( '#crm-wf-calendar' ).click( function() {
+    crmCalendarView();
+});
+
 //Route zum Kunden oder Lieferanten anzeigen
 $( '#crm-route' ).click( function(){
     let newWindow = window.open( '' );

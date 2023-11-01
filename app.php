@@ -216,7 +216,6 @@
     <!-- GoogleDocs Quicklook plugin for GoogleDrive Volume (OPTIONAL) -->
     <script src="crm/jquery-plugins/elFinder2/js/extras/quicklook.googledocs.js"></script>
 
-
 <style>
     .ui-autocomplete-category {
         font-weight: bold;
@@ -393,6 +392,14 @@
         padding: 10px;
     }
 
+    iframe{
+        display: block;  /* iframes are inline by default */
+        height: 100vh;  /* Set height to 100% of the viewport height */
+        width: 100vw;  /* Set width to 100% of the viewport width */
+        border: none; /* Remove default border */
+        background: transparent; /* Just for styling */
+    }
+
 </style>
 
 </head>
@@ -416,7 +423,7 @@
     <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div id="crm-hist-last" class="layout-actionbar-action layout-actionbar-submit">Verlauf</div><span></span></div><div id="crm-history-list" class="layout-actionbar-combobox-list"></div></div>
     <div class="layout-actionbar-separator"></div>
     <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Neu</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-customer">Kunde</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-vendor">Lieferant</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-person">Ansprechperson</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-scan"></div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-car">Neues Auto</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-offer">Angebot</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-new-order">Auftrag*</div></div></div>
-    <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Bearbeiten</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit">Stammdaten</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order">Auftragssuche</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-elfinder">Dokumente</div></div></div>
+    <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Bearbeiten</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit">Stammdaten</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order">Auftragssuche</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-elfinder">Dokumente</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-calendar">Kalender</div></div></div>
     <div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order-btn">Auftragssuche</div>
     <div class="layout-actionbar-action layout-actionbar-submit" id="crm-phonecall-list-btn">Anrufliste</div>
 </div>
@@ -1008,7 +1015,16 @@
     <div id="elfinder"></div>
 </div>
 
-<div id="crm-edit-article-dialog" style="display:none">
+<div id="crm-plugin-calendar" class="crm-p2" style="display:none">
+    <div style="margin-bottom: 2em;">
+        <button onclick="crmCalendarCloseView();">Schließen</button>
+    </div>
+    <iframe src="crm/app_calendar.html" title="Kalendar" width="100%" height="100%">
+        <div id="calendar"></div>
+    </iframe>
+</div>
+
+<div id="crm-edit-article-dialog" class="input-panel control-panel" style="display:none">
     <div id="edit-article-hidden"></div>
     <table id="edit-article-form">
         <thead></thead>
@@ -1430,5 +1446,6 @@
 <script src="crm/js/crm.app/newcustomer.js"></script>
 <script src="crm/js/crm.app/phonecall_list.js"></script>
 <script src="crm/js/crm.app/phonecall.js"></script>
+<script src="crm/js/crm.app/calendar.js"></script>
 </body>
 </html>

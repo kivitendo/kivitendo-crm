@@ -303,6 +303,10 @@ function crmCompleteInsertOrderPos( row, item ){
     row.find( '[class=od-table-item-type]' ).text( orderType );
     row.find( '[class=od-item-qty]' ).val( kivi.format_amount( item.qty, 2 ) );
     row.find( '[class=od-item-unit]' ).val( item.unit );
+    if( exists( item.unit_type) ){
+        row.find( '[class=od-hidden-item-base_unit]' ).val( item.unit_type.base_unit );
+        row.find( '[class=od-hidden-item-factor]' ).val( item.unit_type.factor );
+    }
     row.find( '[class=od-item-sellprice]' ).val( kivi.format_amount( item.sellprice, 2 ) );
     row.find( '[class=od-hidden-item-rate]' ).val( exists( item.buchungsziel )? item.buchungsziel.rate  : 0 );
     row.find( '[class=od-hidden-item-income_chart_id]' ).val( exists( item.buchungsziel )? item.buchungsziel.income_chart_id  : 0 );

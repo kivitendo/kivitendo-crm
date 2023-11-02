@@ -671,3 +671,12 @@ $( '#crm-route' ).click( function(){
 $( '#crm-route-qrcode' ).click( function(){
     alert( 'QR-Code für die Route wird bald angezeigt...' );
 });
+
+function crmCalendarView( ){
+    //window.open("crm/calendar_test.html", "_blank" );
+    crmOpenView( 'crm-plugin-calendar', null, ' - Dokumente' );
+}
+
+function crmCalendarCloseView(){
+    crmCloseView( 'crm-plugin-calendar' );
+}

@@ -603,7 +603,7 @@ function crmCVDocumentsView( ){
                 baseUrl : './',
 
                 // Connector URL
-                url : 'crm/jquery-plugins/elFinder2/php/connector.minimal.php?cv=' + crmGetCVSrc() + '&id=' + crmGetCVId(),
+                url : 'crm/app.plugins/elfinder/php/connector.minimal.php?cv=' + crmGetCVSrc() + '&id=' + crmGetCVId(),
 
                 // Callback when a file is double-clicked
                 getFileCallback : function(file) {

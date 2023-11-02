@@ -674,6 +674,7 @@ $( '#crm-route-qrcode' ).click( function(){
 
 function crmCalendarView( ){
     //window.open("crm/calendar_test.html", "_blank" );
+    document.getElementsByName('calendar-frame')[0].src = 'crm/app.plugins/calendar.php';
     crmOpenView( 'crm-plugin-calendar', null, ' - Dokumente' );
 }
 

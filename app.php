@@ -1019,7 +1019,7 @@
     <div style="margin-bottom: 2em;">
         <button onclick="crmCalendarCloseView();">Schließen</button>
     </div>
-    <iframe src="crm/app.plugins/calendar.html" title="Kalendar" width="100%" height="100%">
+    <iframe name="calendar-frame" src="about:blank" title="Kalendar" width="100%" height="100%">
         <div id="calendar"></div>
     </iframe>
 </div>

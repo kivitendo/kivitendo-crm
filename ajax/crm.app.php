@@ -1529,6 +1529,21 @@ function getWorkedHours( $u_id, $from, $to ){
     //SELECT SUM( qty ) FROM instructions WHERE u_id = 'Stefan Baggerprofi' AND itime < NOW() AND itime > NOW() - INTERVAL '2 YEAR' ;
 }
 
+function getCalendarEvents( $data ){
+    $employee = $data['employee'];
+    $start = $data['start'];
+    $end   = $data['end'];
+    $query = "( SELECT '0' AS id, 'Alle' AS label, '' AS color, (SELECT json_agg( events ) AS events FROM ( ".
+                "SELECT *, lower( tsrange ) AS start, upper( tsrange ) AS end  FROM ( SELECT id, title, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, visibility,  prio, category, \"allDay\", color, job, done, job_planned_end, cust_vend_pers, row_number - 1 AS repeat_num, tsrange(lower(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval, upper(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval) FROM ( SELECT t.*, row_number() OVER ( partition BY id) FROM events t CROSS JOIN lateral ( SELECT generate_series(0, t.repeat_quantity ) i) x) foo) alle_termine WHERE '[$start, $end)'::tsrange && tsrange AND CASE WHEN visibility = 0 THEN uid = $employee ELSE TRUE END".
+                ") AS events) AS events )".
+            "UNION ALL".
+                "( SELECT id, label, color, (SELECT json_agg( events ) AS events FROM ( ".
+                "SELECT *, lower( tsrange ) AS start, upper( tsrange ) AS end  FROM ( SELECT id, title, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, visibility,  prio, category, \"allDay\", color, job, done, job_planned_end, cust_vend_pers, row_number - 1 AS repeat_num, tsrange(lower(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval, upper(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval) FROM ( SELECT t.*, row_number() OVER ( partition BY id) FROM events t CROSS JOIN lateral ( SELECT generate_series(0, t.repeat_quantity ) i) x) foo) alle_termine WHERE '[$start, $end)'::tsrange && tsrange AND category = event_category.id AND CASE WHEN visibility = 0 THEN uid = $employee ELSE TRUE END".
+                ") AS events) AS events FROM event_category ORDER BY cat_order )";
+
+    echo $GLOBALS['dbh']->getAll( $query, true );
+}
+
 /************************************************************************************************************
 ToDo:
 1. Calendar mit Google Calendar synchronisieren...

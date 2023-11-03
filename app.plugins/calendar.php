@@ -25,6 +25,7 @@
   <link rel="stylesheet" href="../../css/lx-office-erp/jquery-ui.custom.css" type="text/css" title="Stylesheet">
   <link rel="stylesheet" href="../../css/tooltipster.css" type="text/css" title="Stylesheet">
   <link rel="stylesheet" href="../../css/themes/tooltipster-light.css" type="text/css" title="Stylesheet">
+  <link rel="stylesheet" type="text/css" href="../jquery-plugins/colorPicker/syronex-colorpicker.css">
 
   <link rel="stylesheet" href="../css/crm.app/bootstrap-grid.min.css" type="text/css" title="Stylesheet">
 
@@ -37,6 +38,7 @@
   <script type="text/javascript" src="../../js/kivi.QuickSearch.js"></script>
   <script type="text/javascript" src="../../js/dhtmlsuite/menu-for-applications.js"></script>
   <script type="text/javascript" src="../../js/kivi.ActionBar.js"></script>
+  <script type="text/javascript" src="../jquery-plugins/colorPicker/syronex-colorpicker.js"></script>
 
   <script type="text/javascript" src="../../js/kivi.CustomerVendor.js"></script>
   <script type="text/javascript" src="../../js/kivi.File.js"></script>
@@ -61,6 +63,13 @@
 
   <script>
     var crmEmployee  = <?php echo $_SESSION['loginCRM']; ?>;
+    <?php
+        $grps = getAllERPgroups(1);
+        array_unshift( $grps, array( 'value' => '0', 'text' => 'Benutzer' ) );
+        array_unshift( $grps, array( 'value' => '-1', 'text' => 'Alle' ) );
+    ?>
+    var crmEmployeeGroups = <?php echo json_encode( $grps ); ?>;
+    //alert( JSON.stringify(crmEmployeeGroups) );
   </script>
   <script src="../js/crm.app/calendar.js"></script>
 
@@ -85,7 +94,49 @@
 </head>
 <body>
 
-  <div id="crm-edit-event-dialog"></div>
+  <div id="crm-edit-event-dialog">
+    <table width="100%">
+      <tr>
+        <td><label for="crm-edit-event-title">Titel:</label></td>
+        <td><input type="text" id="crm-edit-event-title" name="crm-edit-event-title" value=""></input></td>
+        <td><input type="radio" id="crm-edit-event-termin" name="crm-edit-event-termin" value=""></input> <label for="crm-edit-event-termin">Termin</label></td>
+      </tr>
+      <tr>
+        <td><label for="crm-edit-event-start">Start:</label></td>
+        <td><input type="text" id="crm-edit-event-start" name="crm-edit-event-start" value=""></td>
+        <td><input type="radio" id="crm-edit-event-task" name="crm-edit-event-task" value=""></input> <label for="crm-edit-event-task">Aufgabe</label></td>
+      </tr>
+      <tr>
+        <td><label for="crm-edit-event-end">Ende:</label></td>
+        <td><input type="text" id="crm-edit-event-end" name="crm-edit-event-end" value=""></td>
+        <td><label for="crm-edit-event-prio">Priorität:</label></td>
+        <td><select><option value="0">Niedrig</option><option value="1">Normal</option><option value="2">Hoch</option></select></td>
+      </tr>
+      <tr>
+        <td><label for="crm-edit-event-category">Kategorie:</label></td>
+        <td><select id="crm-edit-event-category"></select></td>
+        <td><label for="crm-edit-event-visibility">Sichtbarkeit:</label></td>
+        <td><select id="crm-edit-event-visibility"></select></td>
+      </tr>
+      <tr>
+        <td><label for="crm-edit-event-customer">Kunde:</label></td>
+        <td><input type="text" id="crm-edit-event-customer" name="crm-edit-event-customer" value=""></input></td>
+        <td><label for="crm-edit-event-color">Farbe:</label></td>
+        <td><input type="text" id="crm-edit-event-color" name="crm-edit-event-color" value=""></input></td>
+      </tr>
+      <tr>
+        <td><label for="crm-edit-event-repaet">Wiederholungen:</label></td>
+        <td><input type="text" id="crm-edit-event-repeat" name="crm-edit-event-repeat" value=""></input></td>
+        <td><select><option value="0">täglich</option><option value="1">wöchentlich</option><option value="3">monatlich</option><option value="3">jährlich</option></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><input type="text" id="crm-edit-event-title" name="crm-edit-event-title" value=""></input></td>
+        <td><label for="crm-edit-event-title">mal bis:</label></td>
+        <td><input type="text" id="crm-edit-event-title" name="crm-edit-event-title" value=""></input></td>
+      </tr>
+    </table>
+  </div>
   <div id="calendar">
     <div id="crm-cal-tabs">
       <ul id="crm-cal-tab-list">

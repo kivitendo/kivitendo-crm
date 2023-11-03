@@ -65,14 +65,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
         calendar.render();
         crmCalendarInstances.push( calendar );
+
+        $( '#crm-edit-event-category' ).append( '<option value="' + entry.id + '">' + entry.label + '</option>' );
       }
 
       $( "#crm-cal-tabs" ).tabs().show();
-
+      for( let employee of crmEmployeeGroups ){
+        console.info( 'employee', employee );
+        $( '#crm-edit-event-visibility' ).append( '<option value="' + employee.value + '">' + employee.text + '</option>' );
+      }
     },
     error: function( xhr, status, error ){
         alert( 'Error: ' + error );
     }
+  });
+
+  $( '#crm-edit-event-color' ).colorPicker({
+    //defaultColor: 1,
+    columns: 13,     // number of columns (optional)
+    color: ['#FF7400', '#CDEB8B','#6BBA70','#006E2E','#C3D9FF','#0101DF','#4096EE','#356AA0','#FF0096','#DF0101','#B02B2C','#112211','#000000'], // list of colors (optional)
+    click: function(color){
+        $('#color').val(color);
+        $( "#colorPick" ).toggle();
+    },
   });
 
   $( '#crm-edit-event-dialog' ).dialog({

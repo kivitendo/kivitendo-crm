@@ -1528,7 +1528,8 @@ function crmEditOrderCallCoparts(){
 
 function crmEditOrderCloseView(){
     const fx = function(){
-        if( 'crm-edit-order-dialog' == crmPreView ) crmPreView = 'crm-wx-base-data';
+        assert( 'close', crmPreView )
+        if( 'crm-edit-order-dialog' == crmPreView || 'crm-search-order-view' == crmPreView ) crmPreView = 'crm-wx-base-data';
         crmCloseView( 'crm-edit-order-dialog' , crmPreView, kivi.t8( 'Search order' ) );
     }
     if( 'crm-search-order-view' == crmPreView ) crmSearchOrder( fx );

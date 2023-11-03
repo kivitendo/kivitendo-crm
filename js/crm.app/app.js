@@ -650,6 +650,11 @@ $( '#crm-wf-calendar' ).click( function() {
     crmCalendarView();
 });
 
+$( '#crm-test-ajax-btn' ).click( function() {
+    //Hier eine Funtion aufrufen, die einen Ajax-Test macht
+    alert( 'Ajax-Test' );
+});
+
 //Route zum Kunden oder Lieferanten anzeigen
 $( '#crm-route' ).click( function(){
     let newWindow = window.open( '' );

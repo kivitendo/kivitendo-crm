@@ -426,6 +426,7 @@
     <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Bearbeiten</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit">Stammdaten</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order">Auftragssuche</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-elfinder">Dokumente</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-calendar">Kalender</div></div></div>
     <div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order-btn">Auftragssuche</div>
     <div class="layout-actionbar-action layout-actionbar-submit" id="crm-phonecall-list-btn">Anrufliste</div>
+    <div class="layout-actionbar-action layout-actionbar-submit" id="crm-test-ajax-btn">Test</div>
 </div>
 
 <!-- Prototype-Start: -->

@@ -1550,7 +1550,7 @@ ToDo:
 https://developers.google.com/google-apps/calendar/recurringevents
 2. getEvents() für sämltliche User zusammen ausführen und dann mit jQuery den einzelnenen Kalendern zuordnen.
 **************************************************************************************************************/
-function calendar( $data ){
+function calendar(){
     $task  = varExist( $_GET, 'task' );
     //ToDo Funktion AjaxSql schreiben. Diese werten $_POST oder $_GET aus, erster Parameter ist Tabelle, zweiter P ist task (insert, select, update) folgende sind die serialisierten Daten
     if( !varExist( $task ) ) $task = 'getEvents';

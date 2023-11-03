@@ -90,6 +90,26 @@ document.addEventListener('DOMContentLoaded', function() {
     },
   });
 
+  $.widget("custom.catcomplete", $.ui.autocomplete, {
+    _renderMenu: function(ul,items) {
+        var that = this,
+        currentCategory = "";
+        $.each( items, function( index, item ) {
+            if ( item.category != currentCategory ) {
+                ul.append( "<li class=\'ui-autocomplete-category\'>" + item.category + "</li>" );
+                currentCategory = item.category;
+            }
+            that._renderItemData(ul,item);
+        });
+    }
+  });
+
+  $( '#crm-edit-event-customer' ).catcomplete({
+    source: "../ajax/crm.app.php?action=searchCustomer",
+    select: function( e, ui ) {
+    }
+  });
+
   $( '#crm-edit-event-dialog' ).dialog({
     autoOpen: false,
     height: 540,

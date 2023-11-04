@@ -1548,9 +1548,8 @@ function getCalendarEvents( $data ){
 ToDo:
 1. Calendar mit Google Calendar synchronisieren...
 https://developers.google.com/google-apps/calendar/recurringevents
-2. getEvents() für sämltliche User zusammen ausführen und dann mit jQuery den einzelnenen Kalendern zuordnen.
 **************************************************************************************************************/
-function calendar(){
+function calendar(){ //Ich würde für jeden Task eine eigene Funktion schreiben, dann ist es übersichtlicher
     $task  = varExist( $_GET, 'task' );
     //ToDo Funktion AjaxSql schreiben. Diese werten $_POST oder $_GET aus, erster Parameter ist Tabelle, zweiter P ist task (insert, select, update) folgende sind die serialisierten Daten
     if( !varExist( $task ) ) $task = 'getEvents';
@@ -1627,4 +1626,11 @@ function calendar(){
 
         select json_agg (my_json) from (select row_to_json(x0) as my_json from (SELECT json_agg( i0 ) as groups FROM ( SELECT * FROM groups ) i0) x0 union all select row_to_json(x1) from (SELECT json_agg( i1 ) as users FROM ( SELECT * FROM users ) i1) x1) bla;
     */
+}
+
+function testFunction(){
+    $sql = "SELECT name FROM customer WHERE name ILIKE '%ronny%'";
+    $rs = $GLOBALS['dbh']->getAll( $sql, TRUE );
+    writeLog( $rs );
+    echo $rs;
 }

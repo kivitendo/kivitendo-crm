@@ -599,8 +599,17 @@ $( '#crm-wf-calendar' ).click( function() {
 });
 
 $( '#crm-test-ajax-btn' ).click( function() {
-    //Hier eine Funtion aufrufen, die einen Ajax-Test macht
-    alert( 'Ajax-Test' );
+    $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        type: 'POST',
+        data: { action: 'testFunction' },
+        success: function( data ) {
+            alert( JSON.stringify( data ) );
+        },
+        error: function() {
+            alert( 'Error :testFunction() !' )
+        }
+    });
 });
 
 //Route zum Kunden oder Lieferanten anzeigen

@@ -227,58 +227,6 @@ $.fn.showMessageDialog = function( style, title, message, debug = null ){
 
 function showCVPA( data ){
     if( data.cv ){
-        /* Von Dirk auskommentiert, der Code für elfinder ist jetzt in cvp.js in der Funktion 'crmCVDocumentsView()'
-
-        $( '#elfinder' ).elfinder( 'destroy' ).elfinder({ //destroy previous instance and init new instance
-            // Disable CSS auto loading
-            cssAutoLoad : false, //macht was
-            // Base URL to css/*, js/*
-            baseUrl : './',
-            lang : kivi.myconfig.countrycode, // language (OPTIONAL)
-            // Connector URL
-            url : 'crm/jquery-plugins/elFinder2/php/connector.minimal.php?cv=' + data.cv.src + '&id=' + data.cv.id,
-            // Callback when a file is double-clicked
-            getFileCallback : function(file) {
-                alert( 'getFileCallback: ' + file.name );
-            },
-        },
-        // 2nd Arg - before boot up function
-        function(fm, extraObj) {
-            // `init` event callback function
-            fm.bind('init', function() {
-                // Optional for Japanese decoder "extras/encoding-japanese.min"
-                delete fm.options.rawStringDecoder;
-                if (fm.lang === 'ja') {
-                    fm.loadScript(
-                        [ fm.baseUrl + 'js/extras/encoding-japanese.min.js' ],
-                        function() {
-                            if (window.Encoding && Encoding.convert) {
-                                fm.options.rawStringDecoder = function(s) {
-                                    return Encoding.convert(s,{to:'UNICODE',type:'string'});
-                                };
-                            }
-                        },
-                        { loadType: 'tag' }
-                    );
-                }
-            });
-
-            // Optional for set document.title dynamically.
-            var title = document.title;
-            fm.bind('open', function() {
-                var path = '',
-                    cwd  = fm.cwd();
-                if (cwd) {
-                    path = fm.path(cwd.hash) || null;
-                }
-                document.title = path? kivi.t8( 'Dir from ') + data.cv.name + ' ' + path + ':' + title : title;
-            }).bind('destroy', function() {
-                document.title = title;
-            });
-        }
-        );
-        */
-
         $( '#crm-cvpa-src' ).val( data.cv.src );
         $( '#crm-cvpa-id' ).val( data.cv.id );
         $( '#crm-cvpa-name' ).val( data.cv.name + ' (' + ( ( data.cv.src == 'C' ) ? kivi.t8( 'Customer' ) : kivi.t8( 'Vendor' ) ) + ')' );

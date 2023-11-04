@@ -1629,8 +1629,14 @@ function calendar(){ //Ich würde für jeden Task eine eigene Funktion schreiben
 }
 
 function testFunction(){
+    $trans = array( ' ' => '_', '\\'=> '_', '/' => '_' , ':' => '_',  '*' => '_',  '?' => '_',  '"' => '_', '<' => '_',  '>' => '_',  '|' => '_', ',' => '');
+    $mandant = strtr( $_SESSION['mandant'], $trans );
+    $dbname = $_SESSION['dbData']['dbname'];
+    $dir_man = $_SESSION['crmpath']."/dokumente/".$mandant.'/';
+    $dir_db = $_SESSION['crmpath']."/dokumente/".$dbname.'/';
     $sql = "SELECT name FROM customer WHERE name ILIKE '%ronny%'";
     $rs = $GLOBALS['dbh']->getAll( $sql, TRUE );
-    writeLog( $rs );
+    writeLogR( $dir_man );
+    writeLogR( $dir_db );
     echo $rs;
 }

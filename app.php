@@ -450,7 +450,7 @@
         <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallPrinter2();">Printer2</div>
         <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallPDF();">PDF</div>
         <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallCoparts();">Coparts</div>
-        <div class="layout-actionbar-action layout-actionbar-submit" value="" style="margin-left: 2em;" onclick="crmEditOrderCloseView();">Auftraggeber</div>
+        <div class="layout-actionbar-action layout-actionbar-submit" value="" style="margin-left: 2em;" onclick="crmEditOrderGotoCustomer();">Auftraggeber</div>
         <div id="od_lxcars_to_car_btn" class="layout-actionbar-action layout-actionbar-submit" value="">Auto</div>
     </div>
 

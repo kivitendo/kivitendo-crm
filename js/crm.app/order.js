@@ -1529,12 +1529,16 @@ function crmEditOrderCallCoparts(){
 function crmEditOrderCloseView(){
     const fx = function(){
         assert( 'close', crmPreView )
-        if( 'crm-edit-order-dialog' == crmPreView || 'crm-search-order-view' == crmPreView ) crmPreView = 'crm-wx-base-data';
+        if( 'crm-edit-order-dialog' == crmPreView ) crmPreView = 'crm-wx-base-data';
         crmCloseView( 'crm-edit-order-dialog' , crmPreView, kivi.t8( 'Search order' ) );
     }
     if( 'crm-search-order-view' == crmPreView ) crmSearchOrder( fx );
     else fx();
     if( 'crm-wx-base-data' != crmPreView ) crmRefreshAppViewAction();
+}
+
+function crmEditOrderGotoCustomer(){
+    crmCloseView( 'crm-edit-order-dialog' , 'crm-wx-base-data' );
 }
 
 crmInitFormEx( showCarDataFormModel, '#show-car-data-form', 0, '#show-car-data-hidden' );

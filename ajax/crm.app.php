@@ -69,6 +69,22 @@ function fastSearch(){
     }
 }
 
+function searchPersonsAndCars(){
+    if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
+        $term = $_GET['term'];
+        $query= "SELECT * FROM ( SELECT * FROM ( ".
+                "(SELECT 'Kunde' AS category, 'C' AS src, name AS value, id, name AS label FROM customer WHERE name ILIKE '%".$term."%' OR sw ILIKE '%".$term."%' OR contact ILIKE '%".$term."%' )".
+                " UNION ALL ".
+                "(SELECT 'Lieferant' AS category, 'V' AS src, name AS value, id, name AS label FROM vendor WHERE name ILIKE '%".$term."%' OR sw ILIKE '%".$term."%' OR contact ILIKE '%".$term."%' )".
+                " UNION ALL ".
+                "(SELECT 'Kontaktperson' AS category, 'P' AS src, concat(cp_givenname, ' ', cp_name) AS value, cp_id AS id, concat(cp_givenname, ' ', cp_name) AS label FROM contacts WHERE cp_name ILIKE '%".$term."%' OR cp_givenname ILIKE '%".$term."%' )".
+                " UNION ALL ".
+                "(SELECT 'Fahrzeug' AS category, 'A' AS src, c_ln AS value, c_id AS id, ' [ ' || COALESCE( c_ln, '' ) || ' ] ' || COALESCE( name, '' ) AS label FROM lxc_cars JOIN customer ON c_ow = id WHERE c_ln ILIKE '%".$term."%' OR c_fin ILIKE '%".$term."%' OR ( C_2 = SUBSTR( '".$term."', 1, 4 )  AND c_3 = SUBSTR( '".$term."', 5, 3 ) ) AND obsolete = false )".
+                ") AS allResults ORDER BY random() LIMIT 20 ) AS mixed ORDER BY category";
+        echo $GLOBALS['dbh']->getAll( $query , true);
+    }
+}
+
 function searchCustomer(){
     if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
         $term = $_GET['term'];

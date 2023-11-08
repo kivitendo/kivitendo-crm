@@ -1,7 +1,23 @@
+//Auftag mit Kalendar verknüpfen (order_id)
+//Kunde (location) in Kundennummer umwandeln und speichern
+//Vendor in Vendornummer umwandeln und speichern
+//job_xyz ist deprecated siehe Auftrag
+//umgang mit location ??
 
 const currentDay = moment().format('YYYY-MM-DD');
 const fourDaysLater = moment().add(4, 'days').format('YYYY-MM-DD');
 var crmCalendarInstances = [];
+
+var crmCalculateEnd = function(){
+  $( "#crm-edit-event-repeat-end" ).val( moment( $( "#crm-edit-event-end" ).val(), "L" ).add( $( "#crm-edit-event-repeat" ).val(), $( "#crm-edit-event-repeat-factor" ).val() * $( "#crm-edit-event-repeat-quantity" ).val() ).format( "L" ) );
+};
+
+var crmCalculateRepeatQuantity = function() {
+  var a = moment( $( "#crm-edit-event-end" ).val(), 'L' );
+  var b = moment( $( "#crm-edit-event-repeat-end" ).val(), 'L' );
+  var erg = Math.floor( ( b.diff( a, $( "#crm-edit-event-repeat" ).val() ) ) / $( "#crm-edit-event-repeat-factor" ).val() );
+  $( "#crm-edit-event-repeat-quantity" ).val( erg < 0 ? 0 : erg );
+};
 
 document.addEventListener('DOMContentLoaded', function() {
   $.ajax({
@@ -18,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function() {
         var calendar = new FullCalendar.Calendar( document.getElementById( 'crm-cal-' + entry.id ), {
           themeSystem: 'bootstrap5',
           locale: 'de',
-          timeZone: 'UTC',
           initialView: 'timeGridFourDay',
           initialDate: currentDay,
           slotMinTime: '07:00',
@@ -47,7 +62,23 @@ document.addEventListener('DOMContentLoaded', function() {
             }
           },
           eventClick: function( info ) {
-            console.info( 'eventClick', info.event._def.extendedProps );
+            console.info( 'eventClick', info );
+            //console.info( 'eventClick', info.event._def.extendedProps );
+            //console.info( 'tab', crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ] );
+            $( "#crm-edit-event-title" ).val( info.event.title );
+            $( "#crm-edit-event-description" ).text( info.event._def.extendedProps.description );
+            $( "#crm-edit-event-id" ).val( info.event.id );
+            $( "#crm-edit-event-full-time" ).prop( 'checked', info.event.allDay );
+            $( "#crm-edit-event-start" ).val( moment( info.event.start ).format( "DD.MM.YYYY") );
+            $( "#crm-edit-event-start-time" ).val( moment( info.event.start ).format( "HH:mm") );
+            $( "#crm-edit-event-end" ).val( moment( info.event.end ? info.event.end : info.event.start ).format( "DD.MM.YYYY") );
+            $( "#crm-edit-event-end-time" ).val( moment( info.event.end ? info.event.end : info.event.start ).format( "HH:mm") );
+            $( '#crm-edit-event-prio' ).val( info.event._def.extendedProps.prio );
+            $( '#crm-edit-event-repeat' ).val( info.event._def.extendedProps.repeat.trim() );
+            $( "#crm-edit-event-repeat-factor" ).val( info.event._def.extendedProps.repeat_factor );
+            $( "#crm-edit-event-repeat-quantity" ).val( info.event._def.extendedProps.repeat_quantity );
+            $( "#crm-edit-event-repeat-end" ).val( moment( info.event._def.extendedProps.repeat_end ).format( "DD.MM.YYYY") == 'Invalid date' ? '' : moment( info.event._def.extendedProps.repeat_end ).format( "DD.MM.YYYY")  );
+            $( '#crm-edit-event-customer' ).val( info.event._def.extendedProps.location );
             $( '#crm-edit-event-dialog' ).dialog( 'open' );
           },
           select: function( info ) {
@@ -80,15 +111,46 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  $( '#crm-edit-event-color' ).colorPicker({
+  $( '#crm-edit-event-task' ).change( function(){
+    $( '#crm-edit-event-termin' ).removeAttr( 'checked' );
+    $( '.crm-edit-event-task-done' ).show();
+  });
+
+  $( '#crm-edit-event-termin' ).change( function(){
+    $( '#crm-edit-event-task' ).removeAttr( 'checked' );
+    $( '.crm-edit-event-task-done' ).hide();
+  });
+
+  $( '#crm-edit-event-start, #crm-edit-event-end' ).datepicker();
+  $( '#crm-edit-event-start-time, #crm-edit-event-end-time' ).timepicker({
+    stepMinute: 5,
+    hour: 16,
+    hourMin: 8,
+    hourMax: 17,
+    timeSuffix: kivi.t8( " Uhr" ),
+    timeText: kivi.t8(' Time'),
+    hourText: 'Stunde',
+    closeText: 'Fertig',
+    currentText: 'Jetzt'
+  });
+
+  $( '#crm-edit-event-colorpicker' ).colorPicker({
     //defaultColor: 1,
     columns: 13,     // number of columns (optional)
     color: ['#FF7400', '#CDEB8B','#6BBA70','#006E2E','#C3D9FF','#0101DF','#4096EE','#356AA0','#FF0096','#DF0101','#B02B2C','#112211','#000000'], // list of colors (optional)
     click: function(color){
-        $('#color').val(color);
-        $( "#colorPick" ).toggle();
+        $( '#crm-edit-event-color' ).val(color);
     },
   });
+
+  $( "#crm-edit-event-repeat, #crm-edit-event-repeat-factor, #crm-edit-event-repeat-quantity" ).change( crmCalculateEnd );
+  $( "#crm-edit-event-repeat-end").change( crmCalculateRepeatQuantity );
+
+  /*
+  $( '#crm-edit-event-color' ).change( function(){
+    $( '#crm-edit-event-colorpicker' ).select( $( this ).val() );
+  });
+  */
 
   $.widget("custom.catcomplete", $.ui.autocomplete, {
     _renderMenu: function(ul,items) {
@@ -105,15 +167,16 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   $( '#crm-edit-event-customer' ).catcomplete({
-    source: "../ajax/crm.app.php?action=searchCustomer",
+    source: "../ajax/crm.app.php?action=searchPersonsAndCars",
     select: function( e, ui ) {
+      console.info( 'select', ui.item );
     }
   });
 
   $( '#crm-edit-event-dialog' ).dialog({
     autoOpen: false,
-    height: 540,
-    width: 740,
+    height: 696,
+    width: 865,
     modal: true,
     buttons: {
         "Save": function() {

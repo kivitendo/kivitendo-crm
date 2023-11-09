@@ -73,13 +73,13 @@ function searchPersonsAndCars(){
     if( isset( $_GET['term'] ) && !empty( $_GET['term'] ) ) {
         $term = $_GET['term'];
         $query= "SELECT * FROM ( SELECT * FROM ( ".
-                "(SELECT 'Kunde' AS category, 'C' AS src, name AS value, id, name AS label FROM customer WHERE name ILIKE '%".$term."%' OR sw ILIKE '%".$term."%' OR contact ILIKE '%".$term."%' )".
+                "(SELECT 'Kunde' AS category, 'C' AS src, name AS value, id, 0 AS c_id, name AS label FROM customer WHERE name ILIKE '%".$term."%' OR sw ILIKE '%".$term."%' OR contact ILIKE '%".$term."%' )".
                 " UNION ALL ".
-                "(SELECT 'Lieferant' AS category, 'V' AS src, name AS value, id, name AS label FROM vendor WHERE name ILIKE '%".$term."%' OR sw ILIKE '%".$term."%' OR contact ILIKE '%".$term."%' )".
+                "(SELECT 'Lieferant' AS category, 'V' AS src, name AS value, id, 0 AS c_id, name AS label FROM vendor WHERE name ILIKE '%".$term."%' OR sw ILIKE '%".$term."%' OR contact ILIKE '%".$term."%' )".
                 " UNION ALL ".
-                "(SELECT 'Kontaktperson' AS category, 'P' AS src, concat(cp_givenname, ' ', cp_name) AS value, cp_id AS id, concat(cp_givenname, ' ', cp_name) AS label FROM contacts WHERE cp_name ILIKE '%".$term."%' OR cp_givenname ILIKE '%".$term."%' )".
+                "(SELECT 'Kontaktperson' AS category, 'P' AS src, concat(cp_givenname, ' ', cp_name) AS value, cp_id AS id, 0 AS c_id, concat(cp_givenname, ' ', cp_name) AS label FROM contacts WHERE cp_name ILIKE '%".$term."%' OR cp_givenname ILIKE '%".$term."%' )".
                 " UNION ALL ".
-                "(SELECT 'Fahrzeug' AS category, 'A' AS src, c_ln AS value, c_id AS id, ' [ ' || COALESCE( c_ln, '' ) || ' ] ' || COALESCE( name, '' ) AS label FROM lxc_cars JOIN customer ON c_ow = id WHERE c_ln ILIKE '%".$term."%' OR c_fin ILIKE '%".$term."%' OR ( C_2 = SUBSTR( '".$term."', 1, 4 )  AND c_3 = SUBSTR( '".$term."', 5, 3 ) ) AND obsolete = false )".
+                "(SELECT 'Fahrzeug' AS category, 'A' AS src, name AS value, id, c_id, ' [ ' || COALESCE( c_ln, '' ) || ' ] ' || COALESCE( name, '' ) AS label FROM lxc_cars JOIN customer ON c_ow = id WHERE c_ln ILIKE '%".$term."%' OR c_fin ILIKE '%".$term."%' OR ( C_2 = SUBSTR( '".$term."', 1, 4 )  AND c_3 = SUBSTR( '".$term."', 5, 3 ) ) AND obsolete = false )".
                 ") AS allResults ORDER BY random() LIMIT 20 ) AS mixed ORDER BY category";
         echo $GLOBALS['dbh']->getAll( $query , true);
     }
@@ -1550,13 +1550,18 @@ function getCalendarEvents( $data ){
     $start = $data['start'];
     $end   = $data['end'];
     $query = "( SELECT '0' AS id, 'Alle' AS label, '' AS color, (SELECT json_agg( events ) AS events FROM ( ".
-                "SELECT *, lower( tsrange ) AS start, upper( tsrange ) AS end  FROM ( SELECT id, title, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, visibility,  prio, category, \"allDay\", color, job, done, job_planned_end, cust_vend_pers, row_number - 1 AS repeat_num, tsrange(lower(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval, upper(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval) FROM ( SELECT t.*, row_number() OVER ( partition BY id) FROM events t CROSS JOIN lateral ( SELECT generate_series(0, t.repeat_quantity ) i) x) foo) alle_termine WHERE '[$start, $end)'::tsrange && tsrange AND CASE WHEN visibility = 0 THEN uid = $employee ELSE TRUE END".
+                "SELECT *, lower( tsrange ) AS start, upper( tsrange ) AS end  FROM ( SELECT id, title, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, visibility,  prio, category, \"allDay\", color, job, done, job_planned_end, cust_vend_pers, row_number - 1 AS repeat_num, tsrange(lower(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval, upper(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval) FROM ( SELECT t.*, row_number() OVER ( partition BY id) FROM events t CROSS JOIN lateral ( SELECT generate_series(0, t.repeat_quantity ) i) x) foo) alle_termine WHERE '[$start, $end)'::tsrange && tsrange AND CASE WHEN visibility = 0 THEN uid = 0 ELSE TRUE END".
                 ") AS events) AS events )".
             "UNION ALL".
                 "( SELECT id, label, color, (SELECT json_agg( events ) AS events FROM ( ".
                 "SELECT *, lower( tsrange ) AS start, upper( tsrange ) AS end  FROM ( SELECT id, title, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, visibility,  prio, category, \"allDay\", color, job, done, job_planned_end, cust_vend_pers, row_number - 1 AS repeat_num, tsrange(lower(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval, upper(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval) FROM ( SELECT t.*, row_number() OVER ( partition BY id) FROM events t CROSS JOIN lateral ( SELECT generate_series(0, t.repeat_quantity ) i) x) foo) alle_termine WHERE '[$start, $end)'::tsrange && tsrange AND category = event_category.id AND CASE WHEN visibility = 0 THEN uid = $employee ELSE TRUE END".
                 ") AS events) AS events FROM event_category ORDER BY cat_order )";
 
+    echo $GLOBALS['dbh']->getAll( $query, true );
+}
+
+function getCars( $data ){
+    $query .= "SELECT c_id, c_ln, hersteller, fhzart AS mytype FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.kba_id = lxckba.id ) WHERE c_ow = ".$data['id']." ORDER BY hersteller, fhzart, c_id DESC";
     echo $GLOBALS['dbh']->getAll( $query, true );
 }
 

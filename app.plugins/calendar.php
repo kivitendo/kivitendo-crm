@@ -98,51 +98,82 @@
         z-index:1032 !important;
     }
 
+    .crm-ui-table-block label {
+      display: inline-block;
+      min-width: 6em;
+    }
+
+    .crm-ui-row-block label {
+      display: inline-block;
+      margin-right: 0.5em;
+    }
+
+    .crm-ui-table-block2 label {
+      display: inline-block;
+      min-width: 8em;
+    }
+
+    .crm-ui-table-item-right {
+      margin-left: 3.5em;
+    }
+
   </style>
 
 </head>
 <body>
   <div id="crm-edit-event-dialog" title="Ereignis">
-    <input type="hidden" id="crm-edit-event-id" name="crm-edit-event-id" value=""></input>
-    <table width="100%">
+    <input type="hidden" id="crm-edit-event-id" value=""></input>
+    <input type="hidden" id="crm-edit-event-cvp-id" value=""></input>
+    <input type="hidden" id="crm-edit-event-cvp-type" value=""></input>
+    <input type="hidden" id="crm-edit-event-car-id" value=""></input>
+    <input type="hidden" id="crm-edit-event-order-id" value=""></input>
+    <table class="crm-ui-table-block">
       <tr>
         <td><label for="crm-edit-event-title">Titel:</label></td>
         <td><input type="text" id="crm-edit-event-title" name="crm-edit-event-title" value=""></input></td>
-        <td><input type="radio" id="crm-edit-event-termin" name="crm-edit-event-termin" value=""></input> <label for="crm-edit-event-termin">Termin</label></td>
+        <td><button id="crm-edit-event-to-order" name="crm-edit-event-to-order" class="crm-edit-event-to-order crm-ui-table-item-right">Auftrag öffnen</button></td>
       </tr>
+    </table>
+    <table class="crm-ui-table-block2" style="margin-top: 2em">
       <tr>
         <td><label for="crm-edit-event-start">Start:</label></td>
         <td><input type="text" id="crm-edit-event-start" name="crm-edit-event-start" value="" size="10"><input type="text" id="crm-edit-event-start-time" name="crm-edit-event-start-time" value="" size="4" style="margin-left:0.25em"></td>
-        <td><input type="radio" id="crm-edit-event-task" name="crm-edit-event-task" value=""></input> <label for="crm-edit-event-task">Aufgabe</label></td>
-        <td><input type="checkbox" id="crm-edit-event-task-done" name="crm-edit-event-task-done" class="crm-edit-event-task-done" style="display:none"><label class="crm-edit-event-task-done" for="crm-edit-event-task-done" style="margin-left: 0.25em;display:none"">erledigt</label></td>
       </tr>
       <tr>
         <td><label for="crm-edit-event-end">Ende:</label></td>
         <td><input type="text" id="crm-edit-event-end" name="crm-edit-event-end" value="" size="10"><input type="text" id="crm-edit-event-end-time" name="crm-edit-event-end-time" value="" size="4" style="margin-left:0.25em"></td>
-        <td><input type="checkbox" id="crm-edit-event-full-time" name="crm-edit-event-full-time" ><label for="crm-edit-event-full-time" style="margin-left: 0.25em">ganztags</label></td>
+        <td><input type="checkbox" id="crm-edit-event-full-time" name="crm-edit-event-full-time" class="crm-ui-table-item-right"><label for="crm-edit-event-full-time" style="margin-left: 0.25em">ganztags</label></td>
       </tr>
+    </table>
+    <table class="crm-ui-row-block">
+      <tr>
+        <td><label for="crm-edit-event-repaet-factor">Wiederholungen:</label></td>
+        <td><input type="number" id="crm-edit-event-repeat-factor" name="crm-edit-event-repeat-factor" value="" style="width: 4em"></input></td>
+        <td><select id="crm-edit-event-repeat" name="crm-edit-event-repeat"><option value="day">tägig</option><option value="week">wöchig</option><option value="month">monatig</option><option value="year">jährig</option></td>
+        <td><input type="number" id="crm-edit-event-repeat-quantity" name="crm-edit-event-repeat-quantity" value="" style="margin-left: 0.5em; margin-right: 0.5em; width: 4em"></input></td>
+        <td><label for="crm-edit-event-repeat-end">mal bis:</label></td>
+        <td><input type="text" id="crm-edit-event-repeat-end" name="crm-edit-event-repeat-end" value="" size="10"></input></td>
+      </tr>
+    </table>
+    <table class="crm-ui-table-block" style="margin-top: 2em">
       <tr>
         <td><label for="crm-edit-event-category">Kategorie:</label></td>
         <td><select id="crm-edit-event-category"></select></td>
-        <td><label for="crm-edit-event-prio">Priorität:</label></td>
+        <td><label for="crm-edit-event-prio" class="crm-ui-table-item-right">Priorität:</label></td>
         <td><select id="crm-edit-event-prio" name="crm-edit-event-prio"><option value="0">Niedrig</option><option value="1">Normal</option><option value="2">Hoch</option></select></td>
       </tr>
       <tr>
         <td><label for="crm-edit-event-customer">Kunde:</label></td>
         <td><input type="text" id="crm-edit-event-customer" name="crm-edit-event-customer" value=""></input></td>
-        <td><label for="crm-edit-event-visibility">Sichtbarkeit:</label></td>
+        <td><label for="crm-edit-event-visibility" class="crm-ui-table-item-right">Sichtbarkeit:</label></td>
         <td><select id="crm-edit-event-visibility"></select></td>
       </tr>
       <tr>
-        <td><label for="crm-edit-event-repaet-factor">Wiederholungen:</label></td>
-        <td><input type="text" id="crm-edit-event-repeat-factor" name="crm-edit-event-repeat-factor" value=""></input></td>
-        <td><select id="crm-edit-event-repeat" name="crm-edit-event-repeat"><option value="day">täglich</option><option value="week">wöchentlich</option><option value="month">monatlich</option><option value="year">jährlich</option></td>
+        <td><label for="crm-edit-event-car">Auto:</label></td>
+        <td><select id="crm-edit-event-car"></select></td>
       </tr>
-      <tr>
-        <td></td>
-        <td><input type="text" id="crm-edit-event-repeat-quantity" name="crm-edit-event-repeat-quantity" value=""></input></td>
-        <td><label for="crm-edit-event-repeat-end">mal bis:</label></td>
-        <td><input type="text" id="crm-edit-event-repeat-end" name="crm-edit-event-repeat-end" value=""></input></td>
+        <td><label for="crm-edit-event-location">Location:</label></td>
+        <td><input type="text" id="crm-edit-event-location" name="crm-edit-event-location" value=""></input></td>
       </tr>
       <tr>
         <td><label for="crm-edit-event-color">Farbe:</label></td>
@@ -153,10 +184,10 @@
         <td></input><div id="crm-edit-event-colorpicker"></div></td>
       </tr>
       <tr>
-        <td>Beschreibung:</td>
+        <td><label for="crm-edit-event-description">Beschreibung:</label></td>
       </tr>
     </table>
-    <textarea id="crm-edit-event-description" name="crm-edit-event-description" rows="10" cols="74" style="margin-top: 0.25em"></textarea>
+    <textarea id="crm-edit-event-description" name="crm-edit-event-description" rows="5" cols="65" style="margin-top: 0.25em"></textarea>
   </div>
   <div id="calendar">
     <div id="crm-cal-tabs">

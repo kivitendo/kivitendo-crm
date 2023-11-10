@@ -12,6 +12,7 @@ function resultInfo( $success, $debug_text = '' ){
     $info = '{ "success":'.(($success)? 'true' : 'false');
     if( !empty( $debug_text ) ) $info .= ', "debug":"'.$debug_text.'"';
     echo $info.' }';
+    //writeLogR( $info );
 }
 
 /*********************************************
@@ -1550,19 +1551,38 @@ function getCalendarEvents( $data ){
     $start = $data['start'];
     $end   = $data['end'];
     $query = "( SELECT '0' AS id, 'Alle' AS label, '' AS color, (SELECT json_agg( events ) AS events FROM ( ".
-                "SELECT *, lower( tsrange ) AS start, upper( tsrange ) AS end  FROM ( SELECT id, title, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, visibility,  prio, category, \"allDay\", color, job, done, job_planned_end, cust_vend_pers, row_number - 1 AS repeat_num, tsrange(lower(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval, upper(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval) FROM ( SELECT t.*, row_number() OVER ( partition BY id) FROM events t CROSS JOIN lateral ( SELECT generate_series(0, t.repeat_quantity ) i) x) foo) alle_termine WHERE '[$start, $end)'::tsrange && tsrange AND CASE WHEN visibility = 0 THEN uid = 0 ELSE TRUE END".
+                "SELECT *, lower( tsrange ) AS start, upper( tsrange ) AS end  FROM ( SELECT id, title, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, visibility,  prio, category, \"allDay\", color, job, done, job_planned_end, cust_vend_pers, cvp_id, cvp_name, cvp_type, car_id, order_id, row_number - 1 AS repeat_num, tsrange(lower(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval, upper(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval) FROM ( SELECT t.*, row_number() OVER ( partition BY id) FROM events t CROSS JOIN lateral ( SELECT generate_series(0, t.repeat_quantity ) i) x) foo) alle_termine WHERE '[$start, $end)'::tsrange && tsrange AND CASE WHEN visibility = 0 THEN uid = 0 ELSE TRUE END".
                 ") AS events) AS events )".
             "UNION ALL".
                 "( SELECT id, label, color, (SELECT json_agg( events ) AS events FROM ( ".
-                "SELECT *, lower( tsrange ) AS start, upper( tsrange ) AS end  FROM ( SELECT id, title, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, visibility,  prio, category, \"allDay\", color, job, done, job_planned_end, cust_vend_pers, row_number - 1 AS repeat_num, tsrange(lower(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval, upper(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval) FROM ( SELECT t.*, row_number() OVER ( partition BY id) FROM events t CROSS JOIN lateral ( SELECT generate_series(0, t.repeat_quantity ) i) x) foo) alle_termine WHERE '[$start, $end)'::tsrange && tsrange AND category = event_category.id AND CASE WHEN visibility = 0 THEN uid = $employee ELSE TRUE END".
+                "SELECT *, lower( tsrange ) AS start, upper( tsrange ) AS end  FROM ( SELECT id, title, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, visibility,  prio, category, \"allDay\", color, job, done, job_planned_end, cust_vend_pers, cvp_id, cvp_name, cvp_type, car_id, order_id, row_number - 1 AS repeat_num, tsrange(lower(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval, upper(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval) FROM ( SELECT t.*, row_number() OVER ( partition BY id) FROM events t CROSS JOIN lateral ( SELECT generate_series(0, t.repeat_quantity ) i) x) foo) alle_termine WHERE '[$start, $end)'::tsrange && tsrange AND category = event_category.id AND CASE WHEN visibility = 0 THEN uid = $employee ELSE TRUE END".
                 ") AS events) AS events FROM event_category ORDER BY cat_order )";
 
+    $GLOBALS['dbh']->setShowError( true );
     echo $GLOBALS['dbh']->getAll( $query, true );
 }
 
 function getCars( $data ){
-    $query .= "SELECT c_id, c_ln, hersteller, fhzart AS mytype FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.kba_id = lxckba.id ) WHERE c_ow = ".$data['id']." ORDER BY hersteller, fhzart, c_id DESC";
+    // Sortiert nach Fahrzeugtyp, dann nach Hersteller, dann nach Zulassung:
+    //$query .= "SELECT c_id, substring( c_ln || ' | ' || COALESCE( name, hersteller, '' ), 0, 23 ) AS label FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.kba_id = lxckba.id ) WHERE c_ow = ".$data['id']." ORDER BY name, hersteller, c_ln, c_id DESC";
+    // Sortiert nach Zulassung:
+    $query .= "SELECT c_id, substring( c_ln || ' | ' || COALESCE( name, hersteller, '' ), 0, 23 ) AS label FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.kba_id = lxckba.id ) WHERE c_ow = ".$data['id']." ORDER BY c_id DESC";
     echo $GLOBALS['dbh']->getAll( $query, true );
+}
+
+function insertCalendarEvent( $data ){
+    $GLOBALS['dbh']->setShowError( true );
+    genericSingleInsert( $data );
+}
+
+function updateCalendarEvent( $data ){
+    $GLOBALS['dbh']->setShowError( true );
+    genericUpdateEx( $data );
+}
+
+function deleteCalendarEvent( $data ){
+    $GLOBALS['dbh']->setShowError( true );
+    genericDelete( $data );
 }
 
 /************************************************************************************************************

@@ -95,7 +95,7 @@
     .ui-autocomplete {
         position: absolute;
         cursor: default;
-        z-index:1032 !important;
+        z-index: 1032 !important;
     }
 
     .crm-ui-table-block label {
@@ -117,7 +117,21 @@
       margin-left: 3.5em;
     }
 
-  </style>
+  #crm-edit-event-dialog button {
+    min-width: 137px;
+    min-height: 25px;
+    display: inline-block;
+    cursor: pointer;
+    width: auto;
+    padding: 0.2em 0.6em;
+    font-weight: normal;
+    font-style: normal;
+    text-align: center;
+    border-style: solid;
+    border-width: 1px;
+  }
+
+</style>
 
 </head>
 <body>
@@ -157,36 +171,43 @@
     </table>
     <table class="crm-ui-table-block" style="margin-top: 2em">
       <tr>
+        <td><label for="crm-edit-event-customer">Kunde:</label></td>
+        <td><input type="text" id="crm-edit-event-customer" name="crm-edit-event-customer" value=""></input></td>
+        <td><button id="crm-edit-event-to-cvp" name="crm-edit-event-to-cvp" class="crm-edit-event-to-cvp crm-ui-table-item-right">Kunde anzeigen</button></td>
+      </tr>
+    </table>
+    <table class="crm-ui-table-block">
+      <tr>
+        <td><label for="crm-edit-event-car">Auto:</label></td>
+        <td><select id="crm-edit-event-car" style="min-width: 15em"></select></td>
+        <td><button id="crm-edit-event-to-car" name="crm-edit-event-to-car" class="crm-edit-event-to-car crm-ui-table-item-right">Auto anzeigen</button></td>
+      </tr>
+    </table>
+    <table class="crm-ui-table-block">
+      <tr>
+        <td><label for="crm-edit-event-location">Location:</label></td>
+        <td><input type="text" id="crm-edit-event-location" name="crm-edit-event-location" value=""></input></td>
+      </tr>
+    </table>
+    <table class="crm-ui-table-block" style="margin-top: 2em">
+      <tr>
         <td><label for="crm-edit-event-category">Kategorie:</label></td>
         <td><select id="crm-edit-event-category"></select></td>
         <td><label for="crm-edit-event-prio" class="crm-ui-table-item-right">Priorität:</label></td>
         <td><select id="crm-edit-event-prio" name="crm-edit-event-prio"><option value="0">Niedrig</option><option value="1">Normal</option><option value="2">Hoch</option></select></td>
       </tr>
       <tr>
-        <td><label for="crm-edit-event-customer">Kunde:</label></td>
-        <td><input type="text" id="crm-edit-event-customer" name="crm-edit-event-customer" value=""></input></td>
-        <td><label for="crm-edit-event-visibility" class="crm-ui-table-item-right">Sichtbarkeit:</label></td>
-        <td><select id="crm-edit-event-visibility"></select></td>
-      </tr>
-      <tr>
-        <td><label for="crm-edit-event-car">Auto:</label></td>
-        <td><select id="crm-edit-event-car"></select></td>
-      </tr>
-        <td><label for="crm-edit-event-location">Location:</label></td>
-        <td><input type="text" id="crm-edit-event-location" name="crm-edit-event-location" value=""></input></td>
-      </tr>
-      <tr>
         <td><label for="crm-edit-event-color">Farbe:</label></td>
         <td><input type="text" id="crm-edit-event-color" name="crm-edit-event-color" value=""></td>
+        <td><label for="crm-edit-event-visibility" class="crm-ui-table-item-right">Sichtbarkeit:</label></td>
+        <td><select id="crm-edit-event-visibility"></select></td>
       </tr>
       <tr>
         <td></td>
         <td></input><div id="crm-edit-event-colorpicker"></div></td>
       </tr>
-      <tr>
-        <td><label for="crm-edit-event-description">Beschreibung:</label></td>
-      </tr>
     </table>
+    <div style="margin-top: 2em"><label for="crm-edit-event-description">Beschreibung:</label></div>
     <textarea id="crm-edit-event-description" name="crm-edit-event-description" rows="5" cols="65" style="margin-top: 0.25em"></textarea>
   </div>
   <div id="calendar">

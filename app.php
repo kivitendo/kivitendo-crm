@@ -90,6 +90,7 @@
 <script type="text/javascript" src="crm/jquery-add-ons/date-time-picker.js"></script>
 <script type="text/javascript" src="crm/jquery-add-ons/german-date-time-picker.js"></script>
 <script type="text/javascript" src="crm/nodejs/node_modules/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src='crm/app.plugins/fullcalendar/packages/moment/moment.min.js'></script>
 
     <!-- Section CSS -->
     <!-- jQuery UI (REQUIRED) -->
@@ -586,7 +587,11 @@
                                 <td class="od-table-label"><label for="od-oe-finish_time">Fertigstellung:</label></td>
                                 <td><input id="od-oe-finish_time" type="text"></td>
                             </tr>
-                             <tr>
+                            <tr>
+                                <td class="od-table-label"><label for="od-oe-finish_time">Termin festlegen:</label></td>
+                                <td><input id="od_oe_event" type="text"><button onclick="crmEditOrderAddEvent();">festlegen</button></td>
+                            </tr>
+                            <tr>
                                 <td class="od-table-label"><label for="od-oe-itime">erstellt am:</label></td>
                                 <td><span id="od-oe-itime"></span></td>
                              </tr>

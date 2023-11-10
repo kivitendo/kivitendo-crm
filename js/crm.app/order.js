@@ -912,6 +912,44 @@ $( "#od-oe-finish_time" ).datetimepicker({
     currentText: 'Jetzt'
 });
 
+$( "#od_oe_event" ).datetimepicker({
+    beforeShow: function( input ){
+        crmDateTimePickerAddButton( input );
+    },
+    onChangeMonthYear: function( year, month, inst ){
+        crmDateTimePickerAddButton( inst.input );
+        crmSaveOrder();
+    },
+    stepMinute: 5,
+    hour: 16,
+    hourMin: 8,
+    hourMax: 17,
+    timeText: kivi.t8(' Time'),
+    hourText: 'Stunde',
+    closeText: 'Fertig',
+    currentText: 'Jetzt'
+});
+
+function crmEditOrderAddEvent(){
+    dbUpdateData = {};//jsonobj für die Datenbankupdate (genericUpdateEx)
+    dbUpdateData['events'] = {};
+    const start = moment($( "#od_oe_event" ).val(), 'DD.MM.YYYY hh:mm ')
+    const end = start.add( 1, 'hour' );
+    dbUpdateData['events']['duration'] = '[' + start.format('YYYY-MM-DD hh:mm') + ',' + end.format('YYYY-MM-DD hh:mm:ss') + ')';
+    if( $( "#od-customer-id" ).val() != '' ) dbUpdateData['events']['cvp_id'] = $( "#od-customer-id" ).val();
+    if( $( "#crm-edit-event-cvp-type" ).val() != '' ) dbUpdateData['events']['cvp_type'] = 'C';
+    if( $( "#od_customer_name" ).val() != '' ) dbUpdateData['events']['cvp_name'] = $( "#od_customer_name" ).val();
+    if( $( "#od-lxcars-c_id" ).val() != '' ) dbUpdateData['events']['car_id'] = $( "#od-lxcars-c_id" ).val();
+    if( $( "#od-oe-id" ).val() != '' ) dbUpdateData['events']['order_id'] = $( "#od-oe-id" ).val();
+    dbUpdateData['events']['title'] = $( "#crm-edit-event-title" ).val();
+    dbUpdateData['events']['description'] = $( "#crm-edit-event-description" ).val();
+    dbUpdateData['events']['\"allDay\"'] = $( "#crm-edit-event-full-time" ).is( ":checked" );
+    dbUpdateData['events']['uid'] = $( '#od-oe-employee_id' ).val();
+
+    console.info( 'dbUpdateData', dbUpdateData );
+
+}
+
 function crmConfirmInsertInvoiceFromOrder(){
     if( '' == $( '#od-oe-id' ).val() ){
         alert( kivi.t8( 'Please insert a part!' ) );

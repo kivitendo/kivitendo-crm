@@ -366,6 +366,7 @@ function showCVPA( data ){
         $( '#crm-wf-edit' ).attr( 'data-id', data.cv.id );
     }
 
+    $( '#crm-vars-table' ).html( '' );
     if( exists( data.custom_vars ) ){
         let listrow0 = false;
         $.each( data.custom_vars, function( key, value ){

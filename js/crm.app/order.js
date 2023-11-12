@@ -933,9 +933,11 @@ $( "#od_oe_event" ).datetimepicker({
 function crmEditOrderAddEvent(){
     dbUpdateData = {};//jsonobj für die Datenbankupdate (genericUpdateEx)
     dbUpdateData['events'] = {};
-    const start = moment($( "#od_oe_event" ).val(), 'DD.MM.YYYY hh:mm ')
-    const end = start.add( 1, 'hour' );
-    dbUpdateData['events']['duration'] = '[' + start.format('YYYY-MM-DD hh:mm') + ',' + end.format('YYYY-MM-DD hh:mm:ss') + ')';
+    const start = moment($( "#od_oe_event" ).val(), 'DD.MM.YYYY HH:mm ');
+    const end = start.clone().add( 2, 'hour' ); //beachte end    = start;    funktioniert nicht denn bei end.add( 2, 'hour' ); wird    auch start um 2 Stunden    erhöht
+
+    dbUpdateData['events']['duration'] = '[' + start.format('YYYY-MM-DD HH:mm') + ',' + end.format('YYYY-MM-DD HH:mm:ss') + ')'; //'HH:mm:ss' ist wichtig sonst wird die Zeit nicht im 24h-Format angezeigt
+    alert( dbUpdateData['events']['duration'] );
     if( $( "#od-customer-id" ).val() != '' ) dbUpdateData['events']['cvp_id'] = $( "#od-customer-id" ).val();
     if( $( "#crm-edit-event-cvp-type" ).val() != '' ) dbUpdateData['events']['cvp_type'] = 'C';
     if( $( "#od_customer_name" ).val() != '' ) dbUpdateData['events']['cvp_name'] = $( "#od_customer_name" ).val();

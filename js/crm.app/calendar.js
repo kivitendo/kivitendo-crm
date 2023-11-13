@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function() {
         $.ajax({
           url: '../ajax/crm.app.php',
           type: 'POST',
-          data:  { action: 'getCars', data: { id: ui.item.id } },
+          data:  { action: 'getCarsForCalendar', data: { id: ui.item.id } },
           success: function( data ){
             $( "#crm-edit-event-car-id" ).val();
             $( '#crm-edit-event-car' ).html( '' );

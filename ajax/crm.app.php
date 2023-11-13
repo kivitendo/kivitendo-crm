@@ -1562,7 +1562,7 @@ function getCalendarEvents( $data ){
     echo $GLOBALS['dbh']->getAll( $query, true );
 }
 
-function getCars( $data ){
+function getCarsForCalendar( $data ){ //darf nicht getCars() heißen weil getCars schon kivitendo-crm/lxcars/inc/lxcLib.php on line 129 verwendet wird
     // Sortiert nach Fahrzeugtyp, dann nach Hersteller, dann nach Zulassung:
     //$query .= "SELECT c_id, substring( c_ln || ' | ' || COALESCE( name, hersteller, '' ), 0, 23 ) AS label FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.kba_id = lxckba.id ) WHERE c_ow = ".$data['id']." ORDER BY name, hersteller, c_ln, c_id DESC";
     // Sortiert nach Zulassung:

@@ -46,7 +46,21 @@ document.addEventListener('DOMContentLoaded', function() {
             center: 'title',
             right: 'timeGridDay,timeGridFourDay,weekEvents'
           },
-          events: entry.events,
+          //events: entry.events,
+
+          events: [
+            {
+              title: 'my recurring event',
+              rrule: {
+                freq: 'weekly',
+                interval: 2,
+                byweekday: [ 'mo', 'fr' ],
+                dtstart: '2023-11-16T10:30:00', // will also accept '20120201T103000'
+                until: '2023-11-23' // will also accept '20120201'
+              }
+            }
+          ],
+
           views: {
             timeGridFourDay: {
               type: 'timeGrid',
@@ -60,6 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
           },
           eventClick: function( info ) {
+            console.info( 'info', info );
             $( "#crm-edit-event-cvp-id" ).val( info.event._def.extendedProps.cvp_id );
             $( "#crm-edit-event-cvp-type" ).val( info.event._def.extendedProps.cvp_type );
             $( "#crm-edit-event-car-id" ).val( info.event._def.extendedProps.car_id );
@@ -278,13 +293,13 @@ document.addEventListener('DOMContentLoaded', function() {
             dbUpdateData = tmpData;
           }
 
-          console.info( 'dbUpdateData', dbUpdateData );
-
           $.ajax({
             url: '../ajax/crm.app.php',
             type: 'POST',
             data:  { action: functionName, data: dbUpdateData },
             success: function( data ){
+              //console.info( 'tab', crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ] );
+              crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].refetchEvents();
               $( '#crm-edit-event-dialog' ).dialog( "close" );
             },
             error: function( xhr, status, error ){
@@ -307,6 +322,10 @@ document.addEventListener('DOMContentLoaded', function() {
               type: 'POST',
               data:  { action: 'deleteCalendarEvent', data: pos },
               success: function( data ){
+                console.info( 'tab', crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ] );
+                alert( crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ] );
+                //crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].refetchEvents();
+                //crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].render();
                 $( '#crm-edit-event-dialog' ).dialog( "close" );
               },
               error: function( xhr, status, error ){

@@ -893,63 +893,90 @@ $( '#od-ui-items-status-all' ).change( function(){
     crmSaveOrder();
 });
 
+$( "#od-oe-delivery_time" ).datetimepicker({
+    onChangeDateTime: function( current_time, $input ){
+        crmEditOrderAddEvents( );
+    },
+    lang: 'de',
+    minTime: '08:00',
+    maxTime: '17:00',
+    format:'d.m.Y H:i',
+});
+
 $( "#od-oe-finish_time" ).datetimepicker({
-    beforeShow: function( input ){
-        crmDateTimePickerAddButton( input );
+    onChangeDateTime: function( current_time, $input ){
+        crmEditOrderAddEvents( );
     },
-    onChangeMonthYear: function( year, month, inst ){
-        crmDateTimePickerAddButton( inst.input );
-        crmSaveOrder();
-    },
-    stepMinute: 5,
-    hour: 16,
-    hourMin: 8,
-    hourMax: 17,
-    timeSuffix: kivi.t8( " Uhr" ),
-    timeText: kivi.t8(' Time'),
-    hourText: 'Stunde',
-    closeText: 'Fertig',
-    currentText: 'Jetzt'
+    lang: 'de',
+    minTime: '08:00',
+    maxTime: '17:00',
+    format:'d.m.Y H:i',
 });
 
-$( "#od_oe_event" ).datetimepicker({
-    beforeShow: function( input ){
-        crmDateTimePickerAddButton( input );
-    },
-    onChangeMonthYear: function( year, month, inst ){
-        crmDateTimePickerAddButton( inst.input );
-        crmSaveOrder();
-    },
-    stepMinute: 5,
-    hour: 16,
-    hourMin: 8,
-    hourMax: 17,
-    timeText: kivi.t8(' Time'),
-    hourText: 'Stunde',
-    closeText: 'Fertig',
-    currentText: 'Jetzt'
+$( '#od_oe_finish_now' ).click( function(){
+    $( "#od-oe-finish_time" ).val("Kunde wartet! SOFORT anfangen!").change();
 });
 
-function crmEditOrderAddEvent(){
+const crmEditOrderEventTypeEnum = { DeliveryTime: 'od-oe-delivery_time', FinishTime: 'od-oe-finish_time' };
+
+function crmEditOrderAddEvents(){
+    crmEditOrderAddEvent( crmEditOrderEventTypeEnum.DeliveryTime );
+    crmEditOrderAddEvent( crmEditOrderEventTypeEnum.FinishTime );
+}
+
+function crmEditOrderAddEvent( eventType ){
+    const start = moment($( '#' + eventType ).val(), 'DD.MM.YYYY HH:mm ');
+
+    if( !start._isValid ){
+        $( '#'  + eventType ).val( '' );
+
+        let pos = {};
+        pos['events'] = {};
+        pos['events']['WHERE'] = 'order_id = ' + $( '#od-oe-id' ).val();
+
+        /*
+        $.ajax({
+            url: 'crm/ajax/crm.app.php',
+            type: 'POST',
+            data:  { action: 'genericDelete', data: pos },
+            error: function( xhr, status, error ){
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmEditOrderAddEvent()', xhr.responseText );
+            }
+        });
+        */
+        return;
+    }
+    const end = start.clone().add( 30, 'minutes' ); //beachte end = start; funktioniert nicht denn bei end.add( 2, 'hour' ); wird auch start um 2 Stunden erhöht
+
     dbUpdateData = {};//jsonobj für die Datenbankupdate (genericUpdateEx)
     dbUpdateData['events'] = {};
-    const start = moment($( "#od_oe_event" ).val(), 'DD.MM.YYYY HH:mm ');
-    const end = start.clone().add( 2, 'hour' ); //beachte end    = start;    funktioniert nicht denn bei end.add( 2, 'hour' ); wird    auch start um 2 Stunden    erhöht
-
     dbUpdateData['events']['duration'] = '[' + start.format('YYYY-MM-DD HH:mm') + ',' + end.format('YYYY-MM-DD HH:mm:ss') + ')'; //'HH:mm:ss' ist wichtig sonst wird die Zeit nicht im 24h-Format angezeigt
-    alert( dbUpdateData['events']['duration'] );
     if( $( "#od-customer-id" ).val() != '' ) dbUpdateData['events']['cvp_id'] = $( "#od-customer-id" ).val();
     if( $( "#crm-edit-event-cvp-type" ).val() != '' ) dbUpdateData['events']['cvp_type'] = 'C';
     if( $( "#od_customer_name" ).val() != '' ) dbUpdateData['events']['cvp_name'] = $( "#od_customer_name" ).val();
     if( $( "#od-lxcars-c_id" ).val() != '' ) dbUpdateData['events']['car_id'] = $( "#od-lxcars-c_id" ).val();
     if( $( "#od-oe-id" ).val() != '' ) dbUpdateData['events']['order_id'] = $( "#od-oe-id" ).val();
-    dbUpdateData['events']['title'] = $( "#crm-edit-event-title" ).val();
-    dbUpdateData['events']['description'] = $( "#crm-edit-event-description" ).val();
+    dbUpdateData['events']['title'] = $( "#od_customer_name" ).val();
+    let description = '';
+    if( crmEditOrderEventTypeEnum.DeliveryTime == eventType ){
+        $( '#edit-order-table > tbody > tr').each( function( key, pos ){
+            description += $( pos ).find( '[name=od-item-description]' ).val() + '\n';
+        });
+    }
+    dbUpdateData['events']['description'] = description;
     dbUpdateData['events']['\"allDay\"'] = $( "#crm-edit-event-full-time" ).is( ":checked" );
     dbUpdateData['events']['uid'] = $( '#od-oe-employee_id' ).val();
 
     console.info( 'dbUpdateData', dbUpdateData );
 
+    $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        type: 'POST',
+        data:  { action: 'updateCalendarEventFromOrder', data: dbUpdateData },
+        error: function( xhr, status, error ){
+            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmEditOrderAddEvent()', xhr.responseText );
+        }
+    });
 }
 
 function crmConfirmInsertInvoiceFromOrder(){
@@ -1316,6 +1343,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-oe-id' ).val( crmData.order.common.id );
             $( '#od_customer_name' ).val( crmData.order.common.customer_name );
             $( '#od-oe-ordnumber' ).html( crmData.order.common.ordnumber );
+            $( '#od-oe-delivery_time' ).val( crmData.order.common.delivery_time );
             $( '#od-oe-finish_time' ).val( crmData.order.common.finish_time );
             $( '#od-oe-km_stnd' ).val( crmData.order.common.km_stnd );
             $( '#od-oe-employee_name' ).html( crmData.order.common.employee_name );
@@ -1354,6 +1382,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-lxcars-c_id' ).val( crmData.common.c_id );
             $( '#od_customer_name' ).val( crmData.common.customer_name );
             $( '#od-oe-ordnumber' ).html( '' );
+            $( '#od-oe-delivery_time' ).val( '' );
             $( '#od-oe-finish_time' ).val( '' );
             $( '#od-oe-km_stnd' ).val( '0' );
             $( '#od-oe-employee_name' ).html( crmData.common.employee_name );

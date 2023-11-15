@@ -11,8 +11,9 @@
   <script src='fullcalendar/dist/index.global.min.js'></script>
   <script src='fullcalendar/packages/core/locales-all.global.js'></script>
   <script src='fullcalendar/packages/moment/moment.min.js'></script>
-
+  <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/rrule@6.1.9/index.global.min.js'></script>
   <!--
+  <script src='fullcalendar/packages/rrule/index.global.js'></script>
   <link rel="stylesheet" href="../../css/design40/main.css" type="text/css" title="Stylesheet">
   <link rel="stylesheet" href="../../css/design40/dhtmlsuite/menu-item.css" type="text/css" title="Stylesheet">
   <link rel="stylesheet" href="../../css/design40/dhtmlsuite/menu-bar.css" type="text/css" title="Stylesheet">

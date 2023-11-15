@@ -534,17 +534,6 @@ function crmUpdateDB( call, dbUpdateData, onSuccess = null ){
     });
 }
 
-function crmDateTimePickerAddButton( input ){
-    setTimeout( function(){  //Timeout to force this handler to load after pageLoad for shorter initial loading time
-        var buttonPane = $( input ).datepicker( "widget" ).find( ".ui-datepicker-buttonpane" );
-        var btn = $( '<button class="ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all" type="button"> Wartet</button>' );
-        btn.appendTo( buttonPane );
-        btn.bind( "click", function(){
-            $( "#od-oe-finish_time" ).val("Kunde wartet! SOFORT anfangen!").change();
-        });
-    }, 1 );
-}
-
 $( '#crm-wf-edit' ).click( function(){
     crmGetCustomerForEdit( $( '#crm-wf-edit' ).attr( 'data-src' ), $( '#crm-wf-edit' ).attr( 'data-id' ) );
 });

@@ -93,3 +93,11 @@ COPY zipcode_to_location( osm_id, ags, ort, plz, landkreis, bundesland ) FROM 'd
 
 ALTER TABLE zipcode_to_location DROP COLUMN ags;
 ALTER TABLE zipcode_to_location DROP COLUMN osm_id;
+
+ALTER TABLE events ADD COLUMN cvp_id integer;
+ALTER TABLE events ADD COLUMN cvp_type char;
+ALTER TABLE events ADD COLUMN order_id integer;
+ALTER TABLE events ADD COLUMN car_id integer;
+ALTER TABLE events ADD COLUMN cvp_name text;
+
+ALTER TABLE IF EXISTS oe ADD COLUMN delivery_time text;

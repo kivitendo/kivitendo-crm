@@ -1558,6 +1558,7 @@ function getCalendarEvents( $data ){
                 "SELECT *, lower( tsrange ) AS start, upper( tsrange ) AS end  FROM ( SELECT id, title, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, visibility,  prio, category, \"allDay\", color, job, done, job_planned_end, cust_vend_pers, cvp_id, cvp_name, cvp_type, car_id, order_id, row_number - 1 AS repeat_num, tsrange(lower(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval, upper(duration) + (row_number - 1)::INT * (repeat_factor||repeat)::interval) FROM ( SELECT t.*, row_number() OVER ( partition BY id) FROM events t CROSS JOIN lateral ( SELECT generate_series(0, t.repeat_quantity ) i) x) foo) alle_termine WHERE '[$start, $end)'::tsrange && tsrange AND category = event_category.id AND CASE WHEN visibility = 0 THEN uid = $employee ELSE TRUE END".
                 ") AS events) AS events FROM event_category ORDER BY cat_order )";
 
+                writeLogR( $query );
     $GLOBALS['dbh']->setShowError( true );
     echo $GLOBALS['dbh']->getAll( $query, true );
 }
@@ -1568,6 +1569,13 @@ function getCarsForCalendar( $data ){ //darf nicht getCars() heißen weil getCar
     // Sortiert nach Zulassung:
     $query .= "SELECT c_id, substring( c_ln || ' | ' || COALESCE( name, hersteller, '' ), 0, 23 ) AS label FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.kba_id = lxckba.id ) WHERE c_ow = ".$data['id']." ORDER BY c_id DESC";
     echo $GLOBALS['dbh']->getAll( $query, true );
+}
+
+function updateCalendarEventFromOrder( $data ){
+    writeLogR( $data );
+    $sql = "DELETE FROM events WHERE order_id = ".$data['events']['order_id'];
+    writeLogR( $sql );
+    resultInfo( true );
 }
 
 function insertCalendarEvent( $data ){

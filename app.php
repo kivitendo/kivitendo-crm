@@ -57,6 +57,7 @@
 <link rel="stylesheet" href="css/lx-office-erp/jquery-ui.custom.css" type="text/css" title="Stylesheet">
 <link rel="stylesheet" href="css/tooltipster.css" type="text/css" title="Stylesheet">
 <link rel="stylesheet" href="css/themes/tooltipster-light.css" type="text/css" title="Stylesheet">
+<link rel="stylesheet" href="crm/app.plugins/datetimepicker/jquery.datetimepicker.min.css" type="text/css" title="Stylesheet">
 
 <link rel="stylesheet" href="crm/css/crm.app/bootstrap-grid.min.css" type="text/css" title="Stylesheet">
 
@@ -85,10 +86,13 @@
 <script type="text/javascript" src="js/jquery/fixes.js"></script>
 <script type="text/javascript" src="js/client_js.js"></script>
 <script type="text/javascript" src="js/jquery/jquery.tooltipster.min.js"></script>
+<!--
 <script type="text/javascript" src="js/jquery/ui/i18n/jquery.ui.datepicker-de.js"></script>
 <script type="text/javascript" src="js/jquery/ui/i18n/jquery.ui.datepicker-de.js"></script>
 <script type="text/javascript" src="crm/jquery-add-ons/date-time-picker.js"></script>
 <script type="text/javascript" src="crm/jquery-add-ons/german-date-time-picker.js"></script>
+-->
+<script type="text/javascript" src='crm/app.plugins/datetimepicker/jquery.datetimepicker.full.min.js'></script>
 <script type="text/javascript" src="crm/nodejs/node_modules/tinymce/tinymce.min.js"></script>
 <script type="text/javascript" src='crm/app.plugins/fullcalendar/packages/moment/moment.min.js'></script>
 
@@ -584,12 +588,12 @@
                                 <td><input id="od-oe-internalorder" type="checkbox"></td>
                             </tr>
                             <tr>
-                                <td class="od-table-label"><label for="od-oe-finish_time">Fertigstellung:</label></td>
-                                <td><input id="od-oe-finish_time" type="text"></td>
+                                <td class="od-table-label"><label for="od-oe-delivery_time">Bringetermin:</label></td>
+                                <td><input id="od-oe-delivery_time" type="text"></td>
                             </tr>
                             <tr>
-                                <td class="od-table-label"><label for="od-oe-finish_time">Termin festlegen:</label></td>
-                                <td><input id="od_oe_event" type="text"><button onclick="crmEditOrderAddEvent();">festlegen</button></td>
+                                <td class="od-table-label"><label for="od-oe-finish_time">Fertigstellung:</label></td>
+                                <td><div><input id="od-oe-finish_time" type="text"><button id="od_oe_finish_now">Jetzt</button></div></td>
                             </tr>
                             <tr>
                                 <td class="od-table-label"><label for="od-oe-itime">erstellt am:</label></td>

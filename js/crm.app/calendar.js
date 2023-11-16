@@ -25,13 +25,14 @@ document.addEventListener('DOMContentLoaded', function() {
     type: 'POST',
     data:  { action: 'getCalendarEvents', data: { employee: crmEmployee, start: currentDay, end: fourDaysLater } },
     success: function( crmCalendarData ){
-
+      console.info( 'crmCalendarData', crmCalendarData );
       for( let entry of crmCalendarData ){
         $( '#crm-cal-tab-list' ).append( '<li><a href="#crm-cal-' + entry.id + '">' +  entry.label + '</a></li>' );
         $( '#crm-cal-tabs' ).append( '<div id="crm-cal-' + entry.id + '" class="crm-cal-tab"></div>' );
         var calendar = new FullCalendar.Calendar( document.getElementById( 'crm-cal-' + entry.id ), {
           themeSystem: 'bootstrap5',
           locale: 'de',
+          timeZone: 'local',
           initialView: 'timeGridFourDay',
           initialDate: currentDay,
           slotMinTime: '07:00',
@@ -46,20 +47,69 @@ document.addEventListener('DOMContentLoaded', function() {
             center: 'title',
             right: 'timeGridDay,timeGridFourDay,weekEvents'
           },
-          //events: entry.events,
+          events: entry.events,
 
+          /*
           events: [
             {
-              title: 'my recurring event',
+            "id": 8888,
+            "groupid": 8888,
+            "start": "2023-11-16T11:00:00",
+            "end": "2023-11-16T12:00:00",
+            "duration": '26:00',
+            "title": "Test ???",
+            "repeat": "day  ",
+            "repeat_factor": 0,
+            "repeat_quantity": 0,
+            "repeat_end": null,
+            "description": "",
+            "location": "",
+            "uid": 861,
+            "visibility": -1,
+            "prio": 0,
+            "category": 0,
+            "allDay": false,
+            "color": "#FF7400",
+            "cvp_id": null,
+            "cvp_name": null,
+            "cvp_type": null,
+            "car_id": null,
+            "order_id": null,
+            "rrule": {
+                "dtstart": "2023-11-16T11:00:00",
+                "interval": 1,
+                "freq": "daily",
+                "until": "2023-11-16T12:00:00"
+            }
+          }
+          ],
+          */
+
+          /*
+          events: [
+            {
+              title: 'rrule event',
               rrule: {
-                freq: 'weekly',
-                interval: 2,
-                byweekday: [ 'mo', 'fr' ],
-                dtstart: '2023-11-16T10:30:00', // will also accept '20120201T103000'
-                until: '2023-11-23' // will also accept '20120201'
+                dtstart: '2023-11-09T13:00:00',
+                freq: 'weekly'
+              },
+              duration: '02:00'
+            },
+            {
+              title: 'testbed event',
+              id: 8297,
+              groupId: 8297,
+              start: '2023-11-16 13:00:00',
+              end: '2023-11-16 13:30:00',
+              rrule: {
+                dtstart: '2023-11-16 13:00:00',
+                interval: 1,
+                freq: 'daily',
+                until: '2023-11-16 13:30:00'
               }
             }
           ],
+          */
 
           views: {
             timeGridFourDay: {
@@ -132,6 +182,9 @@ document.addEventListener('DOMContentLoaded', function() {
           eventResize: function( info ) {
           },
           eventDrop: function( info ) {
+          },
+          eventChange: function( info ) {
+            //console.info( 'info', info );
           }
         });
 

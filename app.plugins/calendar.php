@@ -8,24 +8,25 @@
   <meta charset='utf-8' />
   <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
   <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
+  <script src='https://cdn.jsdelivr.net/npm/rrule@2.6.4/dist/es5/rrule.min.js'></script>
   <script src='fullcalendar/dist/index.global.min.js'></script>
   <script src='fullcalendar/packages/core/locales-all.global.js'></script>
   <script src='fullcalendar/packages/moment/moment.min.js'></script>
-  <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/rrule@6.1.9/index.global.min.js'></script>
-  <!--
+  <script src='fullcalendar/packages/rrule/index.global.min.js'></script>
   <script src='fullcalendar/packages/rrule/index.global.js'></script>
   <link rel="stylesheet" href="../../css/design40/main.css" type="text/css" title="Stylesheet">
   <link rel="stylesheet" href="../../css/design40/dhtmlsuite/menu-item.css" type="text/css" title="Stylesheet">
   <link rel="stylesheet" href="../../css/design40/dhtmlsuite/menu-bar.css" type="text/css" title="Stylesheet">
 
+  <!--
   <link rel="stylesheet" href="../../css/lx-office-erp/list_accounts.css" type="text/css" title="Stylesheet">
-  -->
-  <link rel="stylesheet" href="../../css/jquery.autocomplete.css" type="text/css" title="Stylesheet">
-  <link rel="stylesheet" href="../../css/jquery.multiselect2side.css" type="text/css" title="Stylesheet">
-  <link rel="stylesheet" href="../../css/ui-lightness/jquery-ui.css" type="text/css" title="Stylesheet">
   <link rel="stylesheet" href="../../css/lx-office-erp/jquery-ui.custom.css" type="text/css" title="Stylesheet">
+  <link rel="stylesheet" href="../../css/jquery.multiselect2side.css" type="text/css" title="Stylesheet">
   <link rel="stylesheet" href="../../css/tooltipster.css" type="text/css" title="Stylesheet">
   <link rel="stylesheet" href="../../css/themes/tooltipster-light.css" type="text/css" title="Stylesheet">
+  <link rel="stylesheet" href="../../css/ui-lightness/jquery-ui.css" type="text/css" title="Stylesheet">
+  -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" type="text/css" title="Stylesheet">
   <link rel="stylesheet" type="text/css" href="../jquery-plugins/colorPicker/syronex-colorpicker.css">
 
   <link rel="stylesheet" href="../css/crm.app/bootstrap-grid.min.css" type="text/css" title="Stylesheet">
@@ -130,6 +131,10 @@
     text-align: center;
     border-style: solid;
     border-width: 1px;
+  }
+
+  .fc-scrollgrid-sync-inner a {
+    color: white;
   }
 
 </style>

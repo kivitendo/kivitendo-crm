@@ -1,3 +1,4 @@
+<!--
 <!DOCTYPE html>
 <html>
   <head>
@@ -13,6 +14,7 @@
     <script type='module'>
       import { Calendar } from '@fullcalendar/core'
       import dayGridPlugin from '@fullcalendar/daygrid'
+      import rrulePlugin from '@fullcalendar/daygrid'
 
       document.addEventListener('DOMContentLoaded', function() {
         const calendarEl = document.getElementById('calendar')
@@ -23,18 +25,22 @@
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
           },
+
           events: [
-           {
-      title: 'my recurring event',
-      rrule: {
-        freq: 'weekly',
-        interval: 5,
-        byweekday: [ 'mo', 'fr' ],
-        dtstart: '2023-11-15T10:30:00', // will also accept '20120201T103000'
-        until: '2023-12-01' // will also accept '20120201'
-      }
-    }
-  ]        })
+            {
+                title: 'Tägliches Ereignis',
+                rrule: {
+                    freq: 'daily', // Tägliche Wiederholung
+                    count: 5, // Anzahl der Wiederholungen
+                    interval: 1, // Jeden Tag
+                    dtstart: new Date().toISOString().split('T')[0] // Beginnt heute
+                }
+            }
+            // Weitere Ereignisse hier...
+        ]
+
+
+        })
         calendar.render()
       })
     </script>
@@ -42,4 +48,93 @@
   <body>
     <div id='calendar'></div>
   </body>
+</html>
+-->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+
+
+  <title>
+    RRule Plugin Demo - Demos | FullCalendar
+  </title>
+
+
+<link href='/docs/dist/demo-to-codepen.css' rel='stylesheet' />
+
+
+  <style>
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+      font-size: 14px;
+    }
+
+    #calendar {
+      max-width: 1100px;
+      margin: 40px auto;
+    }
+
+  </style>
+
+
+
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
+
+
+<script src='/docs/dist/demo-to-codepen.js'></script>
+
+
+  <script src='https://cdn.jsdelivr.net/npm/rrule@2.6.4/dist/es5/rrule.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/rrule@6.1.9/index.global.min.js'></script>
+<script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      //initialDate: '2020-05-12',
+      editable: true,
+      events: [
+        {
+          title: 'rrule event',
+          rrule: {
+            dtstart: '2023-11-09T13:00:00',
+            freq: 'weekly'
+          },
+          duration: '02:00'
+        }
+      ],
+      eventClick: function(arg) {
+        if (confirm('delete event?')) {
+          arg.event.remove()
+        }
+      }
+    });
+
+    calendar.render();
+  });
+
+</script>
+
+</head>
+<body>
+  <div class='demo-topbar'>
+  <button data-codepen class='codepen-button'>Edit in CodePen</button>
+
+
+
+
+    RRule Plugin Demo
+
+</div>
+
+  <div id='calendar'></div>
+<!-- Cloudflare Pages Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "dc4641f860664c6e824b093274f50291"}'></script><!-- Cloudflare Pages Analytics --></body>
+
 </html>

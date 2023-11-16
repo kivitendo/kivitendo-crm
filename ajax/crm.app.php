@@ -1546,6 +1546,7 @@ function getWorkedHours( $u_id, $from, $to ){
     //SELECT SUM( qty ) FROM instructions WHERE u_id = 'Stefan Baggerprofi' AND itime < NOW() AND itime > NOW() - INTERVAL '2 YEAR' ;
 }
 
+/*
 function getCalendarEvents( $data ){
     $employee = $data['employee'];
     $start = $data['start'];
@@ -1559,6 +1560,59 @@ function getCalendarEvents( $data ){
                 ") AS events) AS events FROM event_category ORDER BY cat_order )";
 
                 writeLogR( $query );
+    $GLOBALS['dbh']->setShowError( true );
+    echo $GLOBALS['dbh']->getAll( $query, true );
+}
+*/
+
+function getCalendarEvents( $data ){
+    $employee = $data['employee'];
+    $start = $data['start'];
+    $end   = $data['end'];
+
+
+    $query = "( SELECT '0' AS id, 'Alle' AS label, '' AS color, (SELECT json_agg( events ) AS events FROM ( ".
+                "SELECT id, id AS groupId, lower( duration ) AS start, upper( duration ) AS end, TO_CHAR( (upper(duration) - lower(duration)), 'HH24:MI' ) AS duration, title, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, visibility,  prio, category, \"allDay\", color, cvp_id, cvp_name, cvp_type, car_id, order_id, ".
+                "(SELECT row_to_json( rrule ) AS rrule FROM ( ".
+                "    SELECT lower( duration ) AS dtstart, CASE WHEN repeat_factor = 0 THEN 1 ELSE repeat_factor END AS interval, REPLACE( REPLACE( REPLACE( REPLACE( repeat, 'year', 'yearly' ), 'month', 'monthly' ), 'week', 'weekly' ), 'day', 'daily' ) AS freq, COALESCE( repeat_end, upper(duration) ) AS until FROM events WHERE id = e.id ".
+                ") AS rrule ) AS rrule ".
+                "FROM events e WHERE '[$start, $end)'::tsrange && duration AND repeat_factor = 0 AND CASE WHEN visibility = 0 THEN uid = $employee ELSE TRUE END ".
+            "UNION ALL ".
+                "SELECT id, id AS groupId, lower( duration ) AS start, upper( duration ) AS end, TO_CHAR( (upper(duration) - lower(duration)), 'HH24:MI' ) AS duration, title, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, visibility,  prio, category, \"allDay\", color, cvp_id, cvp_name, cvp_type, car_id, order_id, ".
+                "(SELECT row_to_json( rrule ) AS rrule FROM ( ".
+                "    SELECT lower( duration ) AS dtstart, CASE WHEN repeat_factor = 0 THEN 1 ELSE repeat_factor END AS interval, REPLACE( REPLACE( REPLACE( REPLACE( repeat, 'year', 'yearly' ), 'month', 'monthly' ), 'week', 'weekly' ), 'day', 'daily' ) AS freq, COALESCE( repeat_end, upper(duration) ) AS until FROM events WHERE id = e.id ".
+                ") AS rrule ) AS rrule ".
+                "FROM events e WHERE repeat_factor > 0 AND repeat_end >= '$start' AND CASE WHEN visibility = 0 THEN uid = $employee ELSE TRUE END ".
+            "UNION ALL ".
+                "SELECT id, id AS groupId, lower( duration ) AS start, upper( duration ) AS end, '24:00' AS duration, title, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, visibility,  prio, category, \"allDay\", color, cvp_id, cvp_name, cvp_type, car_id, order_id, ".
+                "(SELECT row_to_json( rrule ) AS rrule FROM ( ".
+                "    SELECT lower( duration ) AS dtstart, CASE WHEN repeat_factor = 0 THEN 1 ELSE repeat_factor END AS interval, REPLACE( REPLACE( REPLACE( REPLACE( repeat, 'year', 'yearly' ), 'month', 'monthly' ), 'week', 'weekly' ), 'day', 'daily' ) AS freq, COALESCE( repeat_end, upper(duration) ) AS until FROM events WHERE id = e.id ".
+                ") AS rrule ) AS rrule ".
+                "FROM events e WHERE \"allDay\" = true AND lower( duration ) >= '$start' AND CASE WHEN visibility = 0 THEN uid = $employee ELSE TRUE END ".
+        ") AS events) AS events ) ".
+        "UNION ALL ".
+                "( SELECT id, label, color, (SELECT json_agg( events ) AS events FROM (  ".
+                "SELECT id, id AS groupId, lower( duration ) AS start, upper( duration ) AS end, TO_CHAR( (upper(duration) - lower(duration)), 'HH24:MI' ) AS duration, title, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, visibility,  prio, category, \"allDay\", color, cvp_id, cvp_name, cvp_type, car_id, order_id, ".
+                "(SELECT row_to_json( rrule ) AS rrule FROM ( ".
+                "    SELECT lower( duration ) AS dtstart, CASE WHEN repeat_factor = 0 THEN 1 ELSE repeat_factor END AS interval, REPLACE( REPLACE( REPLACE( REPLACE( repeat, 'year', 'yearly' ), 'month', 'monthly' ), 'week', 'weekly' ), 'day', 'daily' ) AS freq, COALESCE( repeat_end, upper(duration) ) AS until FROM events WHERE id = e.id ".
+                ") AS rrule ) AS rrule ".
+                "FROM events e WHERE '[$start, $end)'::tsrange && duration AND repeat_factor = 0 AND category = event_category.id AND CASE WHEN visibility = 0 THEN uid = $employee ELSE TRUE END ".
+            "UNION ALL ".
+                "SELECT id, id AS groupId, lower( duration ) AS start, upper( duration ) AS end, TO_CHAR( (upper(duration) - lower(duration)), 'HH24:MI' ) AS duration, title, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, visibility,  prio, category, \"allDay\", color, cvp_id, cvp_name, cvp_type, car_id, order_id, ".
+                "(SELECT row_to_json( rrule ) AS rrule FROM ( ".
+                "    SELECT lower( duration ) AS dtstart, CASE WHEN repeat_factor = 0 THEN 1 ELSE repeat_factor END AS interval, REPLACE( REPLACE( REPLACE( REPLACE( repeat, 'year', 'yearly' ), 'month', 'monthly' ), 'week', 'weekly' ), 'day', 'daily' ) AS freq, COALESCE( repeat_end, upper(duration) ) AS until FROM events WHERE id = e.id ".
+                ") AS rrule ) AS rrule ".
+                "FROM events e WHERE repeat_factor > 0 AND repeat_end >= '$start' AND category = event_category.id AND CASE WHEN visibility = 0 THEN uid = $employee ELSE TRUE END ".
+            "UNION ALL ".
+                "SELECT id, id AS groupId, lower( duration ) AS start, upper( duration ) AS end, '24:00' AS duration, title, repeat, repeat_factor, repeat_quantity, repeat_end, description, location, uid, visibility,  prio, category, \"allDay\", color, cvp_id, cvp_name, cvp_type, car_id, order_id, ".
+                "(SELECT row_to_json( rrule ) AS rrule FROM ( ".
+                "    SELECT lower( duration ) AS dtstart, CASE WHEN repeat_factor = 0 THEN 1 ELSE repeat_factor END AS interval, REPLACE( REPLACE( REPLACE( REPLACE( repeat, 'year', 'yearly' ), 'month', 'monthly' ), 'week', 'weekly' ), 'day', 'daily' ) AS freq, COALESCE( repeat_end, upper(duration) ) AS until FROM events WHERE id = e.id ".
+                ") AS rrule ) AS rrule ".
+                "FROM events e WHERE \"allDay\" = true AND lower( duration ) >= '$start' AND category = event_category.id AND CASE WHEN visibility = 0 THEN uid = $employee ELSE TRUE END ".
+        ") AS events) AS events FROM event_category ORDER BY cat_order ) ";
+
+
+
     $GLOBALS['dbh']->setShowError( true );
     echo $GLOBALS['dbh']->getAll( $query, true );
 }

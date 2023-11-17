@@ -1563,7 +1563,6 @@ function getCalendarEvents( $data ){
     $GLOBALS['dbh']->setShowError( true );
     echo $GLOBALS['dbh']->getAll( $query, true );
 }
-*/
 
 function getCalendarEvents( $data ){
     $employee = $data['employee'];
@@ -1612,6 +1611,32 @@ function getCalendarEvents( $data ){
         ") AS events) AS events FROM event_category ORDER BY cat_order ) ";
 
 
+
+    $GLOBALS['dbh']->setShowError( true );
+    echo $GLOBALS['dbh']->getAll( $query, true );
+}
+*/
+
+function getCalendarEvents( $data ){
+    $employee = $data['employee'];
+    $start = $data['start'];
+    $end   = $data['end'];
+
+    $query = "( SELECT '0' AS id, 'Alle' AS label, '' AS color, (SELECT json_agg( events ) AS events FROM ( ".
+                "SELECT *, ".
+                    "(SELECT row_to_json( rrule ) AS rrule FROM ( ".
+                        "SELECT dtstart, interval, freq, count, until FROM calendar_events WHERE id = cal.id ".
+                    ") AS rrule ) AS rrule ".
+                "FROM calendar_events cal WHERE dtstart > '2023-11-17' AND CASE WHEN visibility = 0 THEN uid = 861 ELSE TRUE END ".
+            ") AS events) AS events ) ".
+            "UNION ALL ".
+            "( SELECT id, label, color, (SELECT json_agg( events ) AS events FROM ( ".
+                "SELECT *, ".
+                    "(SELECT row_to_json( rrule ) AS rrule FROM ( ".
+                        "SELECT dtstart, interval, freq, count, until FROM calendar_events WHERE id = cal.id ".
+                    ") AS rrule ) AS rrule ".
+                "FROM calendar_events cal WHERE dtstart > '2023-11-17' AND category = event_category.id AND CASE WHEN visibility = 0 THEN uid = 861 ELSE TRUE END ".
+            ") AS events) AS events FROM event_category ORDER BY cat_order )";
 
     $GLOBALS['dbh']->setShowError( true );
     echo $GLOBALS['dbh']->getAll( $query, true );

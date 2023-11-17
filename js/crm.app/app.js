@@ -633,3 +633,7 @@ function crmCalendarView( ){
 function crmCalendarCloseView(){
     crmCloseView( 'crm-plugin-calendar' );
 }
+
+$( '#crm-contact-email' ).click( function(){
+    window.open( 'mailto:' + $( '#crm-contact-email' ).html() );
+});

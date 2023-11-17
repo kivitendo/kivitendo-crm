@@ -51,7 +51,7 @@
 </html>
 -->
 
-
+<!--
 <!DOCTYPE html>
 <html>
 <head>
@@ -101,14 +101,37 @@
       //initialDate: '2020-05-12',
       editable: true,
       events: [
-        {
-          title: 'rrule event',
-          rrule: {
-            dtstart: '2023-11-09T13:00:00',
-            freq: 'weekly'
-          },
-          duration: '02:00'
-        }
+      {
+                "id": 6048,
+                "groupid": 6048,
+                "start": "2018-11-23T00:00:00",
+                "end": "2018-11-24T00:00:00",
+                "duration": "24:00",
+                "title": "Thomas Geburtstag (1977)",
+                "repeat": "year ",
+                "repeat_factor": 1,
+                "repeat_quantity": 40,
+                "repeat_end": "2058-12-24T23:59:00",
+                "description": "asdfd",
+                "location": "Thomas Schuckert",
+                "uid": 0,
+                "visibility": -1,
+                "prio": 1,
+                "category": 10,
+                "allDay": true,
+                //"color": "       ",
+                //"cvp_id": null,
+                //"cvp_name": null,
+                //"cvp_type": null,
+                //"car_id": null,
+                //"order_id": null,
+                "rrule": {
+                    "dtstart": "2018-11-23T00:00:00",
+                    "interval": 1,
+                    "freq": "yearly",
+                    "until": "2058-11-24T23:59:00"
+                }
+            },
       ],
       eventClick: function(arg) {
         if (confirm('delete event?')) {
@@ -135,6 +158,176 @@
 </div>
 
   <div id='calendar'></div>
-<!-- Cloudflare Pages Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "dc4641f860664c6e824b093274f50291"}'></script><!-- Cloudflare Pages Analytics --></body>
+
+</html>
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+
+
+  <title>
+    timeGridWeek and timeGridDay views - Demos | FullCalendar
+  </title>
+
+
+<link href='/docs/dist/demo-to-codepen.css' rel='stylesheet' />
+
+
+  <style>
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+      font-size: 14px;
+    }
+
+    #calendar {
+      max-width: 1100px;
+      margin: 40px auto;
+    }
+
+  </style>
+
+
+
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
+  <script src='https://cdn.jsdelivr.net/npm/rrule@2.6.4/dist/es5/rrule.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/rrule@6.1.9/index.global.min.js'></script>
+
+
+
+  <script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      timeZone: 'UTC',
+      initialView: 'timeGridWeek',
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'timeGridWeek,timeGridDay'
+      },
+      events: [
+      {
+                "id": 6048,
+                "groupid": 6048,
+                //"start": "2018-11-17T00:00:00",
+                //"end": "2018-11-17T00:00:00",
+                "duration": "24:00",
+                "title": "Thomas Geburtstag (1977)",
+                "repeat": "year ",
+                "repeat_factor": 1,
+                "repeat_quantity": 40,
+                "repeat_end": "2058-12-24T23:59:00",
+                "description": "asdfd",
+                //"location": "Thomas Schuckert",
+                "uid": 0,
+                "visibility": -1,
+                "prio": 1,
+                "category": 10,
+                "allDay": true,
+                //"color": "       ",
+                //"cvp_id": null,
+                //"cvp_name": null,
+                //"cvp_type": null,
+                //"car_id": null,
+                //"order_id": null,
+                "rrule": {
+                    "dtstart": "2018-11-17T00:00:00",
+                    "interval": 1,
+                    "freq": "yearly",
+                    "until": "2058-11-17T23:59:00"
+                }
+            },
+            {
+                "id": 6049,
+                "groupid": 6049,
+                //"start": "2023-11-17T12:00:00",
+                //"end": "2023-11-17T12:30:00",
+                "duration": "2:30",
+                "title": "Normales Event 2",
+                "description": "asdfd",
+                "location": "Thomas Schuckert",
+                "uid": 0,
+                "visibility": -1,
+                "prio": 1,
+                "category": 10,
+                "allDay": false,
+                "color": "       ",
+                "cvp_id": null,
+                "cvp_name": null,
+                "cvp_type": null,
+                "car_id": null,
+                "order_id": null,
+                "rrule": {
+                    "dtstart": "2023-11-17T09:15:00",
+                    //"interval": 1,
+                    "freq": "daily",
+                    //"count": 1,
+                    "byweekday": [
+                        "MO",
+                        "TU",
+                        "WE",
+                        "TH",
+                        "FR"
+                    ],
+                    //"until": "2023-11-17T09:15:00"
+                }
+            },
+            {
+                "id": 6050,
+                "groupid": 6050,
+                //"start": "2023-11-17T15:00:00",
+                //"end": "2023-11-17T15:30:00",
+                "duration": "2:30",
+                "title": "Normales Event 3",
+                "description": "asdfd",
+                "location": "Thomas Schuckert",
+                "uid": 0,
+                "visibility": -1,
+                "prio": 1,
+                "category": 10,
+                "allDay": false,
+                "color": "       ",
+                "cvp_id": null,
+                "cvp_name": null,
+                "cvp_type": null,
+                "car_id": null,
+                "order_id": null,
+                "rrule": {
+                    "dtstart": "2023-11-17T15:15:00",
+                    "interval": 1,
+                    "freq": "daily",
+                    "count": 2,
+                    //"until": "2023-11-17T09:15:00"
+                }
+            },
+      ],
+    });
+
+    calendar.render();
+  });
+
+</script>
+
+</head>
+<body>
+  <div class='demo-topbar'>
+  <button data-codepen class='codepen-button'>Edit in CodePen</button>
+
+
+
+
+    timeGridWeek and timeGridDay views
+
+</div>
+
+  <div id='calendar'></div>
 
 </html>

@@ -9,14 +9,14 @@ const fourDaysLater = moment().add(4, 'days').format('YYYY-MM-DD');
 var crmCalendarInstances = [];
 
 var crmCalculateEnd = function(){
-  $( "#crm-edit-event-repeat-end" ).val( moment( $( "#crm-edit-event-end" ).val(), "DD.MM.YYYY" ).add( $( "#crm-edit-event-repeat" ).val(), $( "#crm-edit-event-repeat-factor" ).val() * $( "#crm-edit-event-repeat-quantity" ).val() ).format( "DD.MM.YYYY" ) );
+  $( "#crm-edit-event-repeat-end" ).val( moment( $( "#crm-edit-event-end" ).val(), "DD.MM.YYYY" ).add( $( "#crm-edit-event-freq" ).val(), $( "#crm-edit-event-count" ).val() * $( "#crm-edit-event-interval" ).val() - 1  ).format( "DD.MM.YYYY" ) );
 };
 
 var crmCalculateRepeatQuantity = function() {
   var a = moment( $( "#crm-edit-event-end" ).val(), 'L' );
   var b = moment( $( "#crm-edit-event-repeat-end" ).val(), 'L' );
-  var erg = Math.floor( ( b.diff( a, $( "#crm-edit-event-repeat" ).val() ) ) / $( "#crm-edit-event-repeat-factor" ).val() );
-  $( "#crm-edit-event-repeat-quantity" ).val( erg < 0 ? 0 : erg );
+  var erg = Math.floor( ( b.diff( a, $( "#crm-edit-event-freq" ).val() ) ) / $( "#crm-edit-event-interval" ).val() );
+  $( "#crm-edit-event-count" ).val( erg < 0 ? 0 : erg );
 };
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -51,66 +51,38 @@ document.addEventListener('DOMContentLoaded', function() {
 
           /*
           events: [
-            {
-            "id": 8888,
-            "groupid": 8888,
-            "start": "2023-11-16T11:00:00",
-            "end": "2023-11-16T12:00:00",
-            "duration": '26:00',
-            "title": "Test ???",
-            "repeat": "day  ",
-            "repeat_factor": 0,
-            "repeat_quantity": 0,
-            "repeat_end": null,
-            "description": "",
-            "location": "",
-            "uid": 861,
-            "visibility": -1,
-            "prio": 0,
-            "category": 0,
-            "allDay": false,
-            "color": "#FF7400",
-            "cvp_id": null,
-            "cvp_name": null,
-            "cvp_type": null,
-            "car_id": null,
-            "order_id": null,
-            "rrule": {
-                "dtstart": "2023-11-16T11:00:00",
-                "interval": 1,
+          {
+                "id": 3,
+                "groupId": 3,
+                "title": "Test Heute",
+                "description": "",
+                //"dtstart": "2023-11-20T08:30:00",
+                //"dtend": "2023-11-20T09:00:00",
+                "duration": "48:00",
                 "freq": "daily",
-                "until": "2023-11-16T12:00:00"
+                "interval": 1,
+                "count": 1,
+                "location": "",
+                "uid": 861,
+                "prio": 0,
+                "category": 0,
+                "visibility": -1,
+                "allDay": true,
+                "color": "#FF7400",
+                "cvp_id": null,
+                "order_id": null,
+                "car_id": null,
+                "cvp_name": null,
+                "cvp_type": null,
+                "rrule": {
+                    "dtstart": "2023-11-20T08:30:00",
+                    "interval": 1,
+                    "freq": "daily",
+                    "count": 1
+                }
             }
-          }
-          ],
-          */
-
-          /*
-          events: [
-            {
-              title: 'rrule event',
-              rrule: {
-                dtstart: '2023-11-09T13:00:00',
-                freq: 'weekly'
-              },
-              duration: '02:00'
-            },
-            {
-              title: 'testbed event',
-              id: 8297,
-              groupId: 8297,
-              start: '2023-11-16 13:00:00',
-              end: '2023-11-16 13:30:00',
-              rrule: {
-                dtstart: '2023-11-16 13:00:00',
-                interval: 1,
-                freq: 'daily',
-                until: '2023-11-16 13:30:00'
-              }
-            }
-          ],
-          */
-
+        ],
+        */
           views: {
             timeGridFourDay: {
               type: 'timeGrid',
@@ -133,15 +105,13 @@ document.addEventListener('DOMContentLoaded', function() {
             $( "#crm-edit-event-description" ).text( info.event._def.extendedProps.description );
             $( "#crm-edit-event-id" ).val( info.event.id );
             $( "#crm-edit-event-full-time" ).prop( 'checked', info.event.allDay );
-            $( "#crm-edit-event-start" ).val( moment( info.event.start ).format( "DD.MM.YYYY") );
-            $( "#crm-edit-event-start-time" ).val( moment( info.event.start ).format( "HH:mm") );
-            $( "#crm-edit-event-end" ).val( moment( info.event.end ? info.event.end : info.event.start ).format( "DD.MM.YYYY") );
-            $( "#crm-edit-event-end-time" ).val( moment( info.event.end ? info.event.end : info.event.start ).format( "HH:mm") );
+            $( "#crm-edit-event-start" ).val( moment( info.event.start ).format( "DD.MM.YYYY HH:mm") );
+            $( "#crm-edit-event-end" ).val( moment( info.event.end ? info.event.end : info.event.start ).format( "DD.MM.YYYY HH:mm") );
             $( '#crm-edit-event-prio' ).val( info.event._def.extendedProps.prio );
-            $( '#crm-edit-event-repeat' ).val( info.event._def.extendedProps.repeat.trim() );
-            $( "#crm-edit-event-repeat-factor" ).val( info.event._def.extendedProps.repeat_factor );
-            $( "#crm-edit-event-repeat-quantity" ).val( info.event._def.extendedProps.repeat_quantity );
-            $( "#crm-edit-event-repeat-end" ).val( moment( info.event._def.extendedProps.repeat_end ).format( "DD.MM.YYYY") == 'Invalid date' ? '' : moment( info.event._def.extendedProps.repeat_end ).format( "DD.MM.YYYY")  );
+            $( '#crm-edit-event-freq' ).val( info.event._def.extendedProps.freq.trim() );
+            $( "#crm-edit-event-interval" ).val( info.event._def.extendedProps.interval );
+            $( "#crm-edit-event-count" ).val( info.event._def.extendedProps.count );
+            $( "#crm-edit-event-repeat-end" ).val( moment( info.event._def.extendedProps.until ).format( "DD.MM.YYYY")  );
             $( '#crm-edit-event-customer' ).val( info.event._def.extendedProps.cvp_name );
             $( '#crm-edit-event-location' ).val( info.event._def.extendedProps.location );
             $( '#crm-edit-event-category' ).val( info.event._def.extendedProps.category );
@@ -162,14 +132,12 @@ document.addEventListener('DOMContentLoaded', function() {
             $( "#crm-edit-event-description" ).text( '' );
             $( "#crm-edit-event-id" ).val( '' );
             $( "#crm-edit-event-full-time" ).prop( 'checked', false );
-            $( "#crm-edit-event-start" ).val( moment( info.start ).format( "DD.MM.YYYY") );
-            $( "#crm-edit-event-start-time" ).val( moment( info.start ).format( "HH:mm") );
-            $( "#crm-edit-event-end" ).val( moment( info.end ? info.end : info.start ).format( "DD.MM.YYYY") );
-            $( "#crm-edit-event-end-time" ).val( moment( info.end ? info.end : info.start ).format( "HH:mm") );
+            $( "#crm-edit-event-start" ).val( moment( info.start ).format( "DD.MM.YYYY HH:mm") );
+            $( "#crm-edit-event-end" ).val( moment( info.end ? info.end : info.start ).format( "DD.MM.YYYY HH:mm") );
             $( '#crm-edit-event-prio' ).val( '0' );
-            $( '#crm-edit-event-repeat' ).val( '0' );
-            $( "#crm-edit-event-repeat-factor" ).val( '0' );
-            $( "#crm-edit-event-repeat-quantity" ).val( '0' );
+            $( '#crm-edit-event-freq' ).val( '0' );
+            $( "#crm-edit-event-count" ).val( '1' );
+            $( "#crm-edit-event-interval" ).val( '1' );
             $( "#crm-edit-event-repeat-end" ).val( ''  );
             $( '#crm-edit-event-customer' ).val( '' );
             $( '#crm-edit-event-location' ).val( '' );
@@ -206,17 +174,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
   $( '#crm-edit-event-car' ).append( '<option value=""></option>' );
 
-  $( '#crm-edit-event-start, #crm-edit-event-end' ).datepicker({ dateFormat: 'dd.mm.yy' });
-  $( '#crm-edit-event-start-time, #crm-edit-event-end-time' ).timepicker({
-    stepMinute: 5,
-    hour: 16,
-    hourMin: 8,
-    hourMax: 17,
-    timeSuffix: kivi.t8( " Uhr" ),
-    timeText: kivi.t8(' Time'),
-    hourText: 'Stunde',
-    closeText: 'Fertig',
-    currentText: 'Jetzt'
+  $( "#crm-edit-event-start, #crm-edit-event-end" ).datetimepicker({
+    lang: 'de',
+    minTime: '08:00',
+    maxTime: '17:00',
+    format:'d.m.Y H:i',
   });
 
   $( '#crm-edit-event-colorpicker' ).colorPicker({
@@ -228,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function() {
     },
   });
 
-  $( "#crm-edit-event-repeat, #crm-edit-event-repeat-factor, #crm-edit-event-repeat-quantity" ).change( crmCalculateEnd );
+  $( "#crm-edit-event-freq, #crm-edit-event-interval, #crm-edit-event-count" ).change( crmCalculateEnd );
   $( "#crm-edit-event-repeat-end").change( crmCalculateRepeatQuantity );
 
   /*
@@ -292,10 +254,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
+  var crmEventCache = {};
+
   $( '#crm-edit-event-dialog' ).dialog({
     autoOpen: false,
-    height: 735,
-    width: 660,
+    height: 790,
+    width: 630,
     modal: true,
     open: function() {
       if( $( "#crm-edit-event-cvp-id" ).val() != '' ) $( '#crm-edit-event-to-cvp' ).show();
@@ -308,51 +272,74 @@ document.addEventListener('DOMContentLoaded', function() {
     buttons: {
         "Save": function() {
           dbUpdateData = {};//jsonobj für die Datenbankupdate (genericUpdateEx)
-          dbUpdateData['events'] = {};
-          const start = moment($( "#crm-edit-event-start" ).val() + ' ' + $( "#crm-edit-event-start-time" ).val(), 'DD.MM.YYYY hh:mm:ss').format('YYYY-MM-DD hh:mm:ss');
-          const end = moment($( "#crm-edit-event-end" ).val() + ' ' + $( "#crm-edit-event-end-time" ).val(), 'DD.MM.YYYY hh:mm:ss').format('YYYY-MM-DD HH:mm:ss');
-          dbUpdateData['events']['duration'] = '[' + start + ',' + end + ')';
-          if( $( "#crm-edit-event-cvp-id" ).val() != '' ) dbUpdateData['events']['cvp_id'] = $( "#crm-edit-event-cvp-id" ).val();
-          if( $( "#crm-edit-event-cvp-type" ).val() != '' ) dbUpdateData['events']['cvp_type'] = $( "#crm-edit-event-cvp-type" ).val();
-          if( $( "#crm-edit-event-customer" ).val() != '' ) dbUpdateData['events']['cvp_name'] = $( "#crm-edit-event-customer" ).val();
-          if( $( "#crm-edit-event-car-id" ).val() != '' ) dbUpdateData['events']['car_id'] = $( "#crm-edit-event-car-id" ).val();
-          if( $( "#crm-edit-event-order-id" ).val() != '' ) dbUpdateData['events']['order_id'] = $( "#crm-edit-event-order-id" ).val();
-          dbUpdateData['events']['title'] = $( "#crm-edit-event-title" ).val();
-          dbUpdateData['events']['description'] = $( "#crm-edit-event-description" ).val();
-          dbUpdateData['events']['\"allDay\"'] = $( "#crm-edit-event-full-time" ).is( ":checked" );
-          dbUpdateData['events']['uid'] = crmEmployee;
-          dbUpdateData['events']['visibility'] = $( "#crm-edit-event-visibility option:selected" ).val();
-          dbUpdateData['events']['category'] = $( "#crm-edit-event-category option:selected" ).val();
-          dbUpdateData['events']['prio'] = $( "#crm-edit-event-prio option:selected" ).val();
-          dbUpdateData['events']['color'] = $( "#crm-edit-event-color" ).val();
-          dbUpdateData['events']['location'] = $( "#crm-edit-event-location" ).val();
-          dbUpdateData['events']['repeat'] = $( "#crm-edit-event-repeat" ).val();
-          dbUpdateData['events']['repeat_factor'] = $( "#crm-edit-event-repeat-factor" ).val();
-          dbUpdateData['events']['repeat_quantity'] = $( "#crm-edit-event-repeat-quantity" ).val();
-          const repeatEnd = moment( $( "#crm-edit-event-repeat-end" ).val() + ' 23:59:59', 'DD.MM.YYYY hh:mm:ss' ).format('YYYY-MM-DD HH:mm:ss');
-          if( 'Invalid date' != repeatEnd ) dbUpdateData['events']['repeat_end'] =  repeatEnd;
+          dbUpdateData['calendar_events'] = {};
+
+          const start = moment($( "#crm-edit-event-start" ).val() + ' ' + $( "#crm-edit-event-start-time" ).val(), 'DD.MM.YYYY hh:mm:ss');
+          const end = moment($( "#crm-edit-event-end" ).val() + ' ' + $( "#crm-edit-event-end-time" ).val(), 'DD.MM.YYYY hh:mm:ss');
+
+          let duration;
+          if( $( "#crm-edit-event-full-time" ).is( ":checked" ) ){
+            duration = '24:00';
+          }
+          else{
+            const timeDiff = end.diff(start, 'minutes');
+            const hours = Math.floor(timeDiff / 60);
+            const minutes = timeDiff % 60;
+            duration = moment({ hour: hours, minute: minutes }).format('HH:mm');
+            if( 'Invalid date' == duration ){
+              alert( 'Invalid date' );
+              return;
+            }
+          }
+
+          dbUpdateData['calendar_events']['dtstart'] = start.format('YYYY-MM-DD hh:mm:ss');
+          dbUpdateData['calendar_events']['dtend'] = end.format('YYYY-MM-DD hh:mm:ss');
+          dbUpdateData['calendar_events']['duration'] = duration;
+          dbUpdateData['calendar_events']['title'] = $( "#crm-edit-event-title" ).val();
+          dbUpdateData['calendar_events']['description'] = $( "#crm-edit-event-description" ).val();
+          dbUpdateData['calendar_events']['\"allDay\"'] = $( "#crm-edit-event-full-time" ).is( ":checked" );
+          dbUpdateData['calendar_events']['uid'] = crmEmployee;
+          dbUpdateData['calendar_events']['visibility'] = $( "#crm-edit-event-visibility option:selected" ).val();
+          dbUpdateData['calendar_events']['category'] = $( "#crm-edit-event-category option:selected" ).val();
+          dbUpdateData['calendar_events']['prio'] = $( "#crm-edit-event-prio option:selected" ).val();
+          dbUpdateData['calendar_events']['color'] = $( "#crm-edit-event-color" ).val();
+          dbUpdateData['calendar_events']['location'] = $( "#crm-edit-event-location" ).val();
+          dbUpdateData['calendar_events']['freq'] = $( "#crm-edit-event-freq" ).val();
+          dbUpdateData['calendar_events']['interval'] = $( "#crm-edit-event-interval" ).val();
+          if( 0 >= dbUpdateData['calendar_events']['interval'] ) dbUpdateData['calendar_events']['interval'] = 1;
+          dbUpdateData['calendar_events']['count'] = $( "#crm-edit-event-count" ).val();
+          if( 0 >= dbUpdateData['calendar_events']['count'] ) dbUpdateData['calendar_events']['count'] = 1;
+          if( $( "#crm-edit-event-cvp-id" ).val() != '' ) dbUpdateData['calendar_events']['cvp_id'] = $( "#crm-edit-event-cvp-id" ).val();
+          if( $( "#crm-edit-event-cvp-type" ).val() != '' ) dbUpdateData['calendar_events']['cvp_type'] = $( "#crm-edit-event-cvp-type" ).val();
+          if( $( "#crm-edit-event-customer" ).val() != '' ) dbUpdateData['calendar_events']['cvp_name'] = $( "#crm-edit-event-customer" ).val();
+          if( $( "#crm-edit-event-car-id" ).val() != '' ) dbUpdateData['calendar_events']['car_id'] = $( "#crm-edit-event-car-id" ).val();
+          if( $( "#crm-edit-event-order-id" ).val() != '' ) dbUpdateData['calendar_events']['order_id'] = $( "#crm-edit-event-order-id" ).val();
 
           let functionName = 'insertCalendarEvent';
 
           if( '' != $( '#crm-edit-event-id' ).val() ){
-            dbUpdateData['events']['WHERE'] = {};
-            dbUpdateData['events']['WHERE'] = 'id = ' + $( '#crm-edit-event-id' ).val();
+            dbUpdateData['calendar_events']['WHERE'] = {};
+            dbUpdateData['calendar_events']['WHERE'] = 'id = ' + $( '#crm-edit-event-id' ).val();
             functionName = 'updateCalendarEvent';
+            crmEventCache = dbUpdateData['calendar_events']; // ToDo: Hier noch die rrules anfügen
           }
           else{
             let tmpData = {};
             tmpData['record'] = {};
-            tmpData['record']['events'] = dbUpdateData['events'];
+            tmpData['record']['calendar_events'] = dbUpdateData['calendar_events'];
             dbUpdateData = tmpData;
+            crmEventCache = dbUpdateData['record']['calendar_events']; // ToDo: Hier noch die rrules anfügen
           }
+
 
           $.ajax({
             url: '../ajax/crm.app.php',
             type: 'POST',
             data:  { action: functionName, data: dbUpdateData },
             success: function( data ){
-              //console.info( 'tab', crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ] );
-              crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].refetchEvents();
+              console.info( 'data', crmEventCache );
+              crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].addEvent( crmEventCache ); //ToDo: Hier noch die rrules anfügen siehe oben
+              crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].render();
               $( '#crm-edit-event-dialog' ).dialog( "close" );
             },
             error: function( xhr, status, error ){
@@ -367,18 +354,15 @@ document.addEventListener('DOMContentLoaded', function() {
           }
 
           let pos = {};
-          pos['events'] = {};
-          pos['events']['WHERE'] = 'id = ' + $( '#crm-edit-event-id' ).val();
+          pos['calendar_events'] = {};
+          pos['calendar_events']['WHERE'] = 'id = ' + $( '#crm-edit-event-id' ).val();
 
           $.ajax({
               url: '../ajax/crm.app.php',
               type: 'POST',
               data:  { action: 'deleteCalendarEvent', data: pos },
               success: function( data ){
-                console.info( 'tab', crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ] );
-                alert( crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ] );
-                //crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].refetchEvents();
-                //crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].render();
+                crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].getEventById( $( '#crm-edit-event-id' ).val() ).remove();
                 $( '#crm-edit-event-dialog' ).dialog( "close" );
               },
               error: function( xhr, status, error ){

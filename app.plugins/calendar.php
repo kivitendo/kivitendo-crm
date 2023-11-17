@@ -28,6 +28,7 @@
   -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" type="text/css" title="Stylesheet">
   <link rel="stylesheet" type="text/css" href="../jquery-plugins/colorPicker/syronex-colorpicker.css">
+  <link rel="stylesheet" href="datetimepicker/jquery.datetimepicker.min.css" type="text/css" title="Stylesheet">
 
   <link rel="stylesheet" href="../css/crm.app/bootstrap-grid.min.css" type="text/css" title="Stylesheet">
 
@@ -59,8 +60,11 @@
   <script type="text/javascript" src="../../js/jquery/jquery.tooltipster.min.js"></script>
   <script type="text/javascript" src="../../js/jquery/ui/i18n/jquery.ui.datepicker-de.js"></script>
   <script type="text/javascript" src="../../js/jquery/ui/i18n/jquery.ui.datepicker-de.js"></script>
+  <script type="text/javascript" src="datetimepicker/jquery.datetimepicker.full.min.js"></script>
+  <!--
   <script type="text/javascript" src="../../crm/jquery-add-ons/date-time-picker.js"></script>
   <script type="text/javascript" src="../../crm/jquery-add-ons/german-date-time-picker.js"></script>
+  -->
   <script type="text/javascript" src="../../crm/nodejs/node_modules/tinymce/tinymce.min.js"></script>
 
   <script>
@@ -141,7 +145,7 @@
 
 </head>
 <body>
-  <div id="crm-edit-event-dialog" title="Ereignis">
+  <div id="crm-edit-event-dialog" title="Ereignis" style="display:none">
     <input type="hidden" id="crm-edit-event-id" value=""></input>
     <input type="hidden" id="crm-edit-event-cvp-id" value=""></input>
     <input type="hidden" id="crm-edit-event-cvp-type" value=""></input>
@@ -154,17 +158,34 @@
         <td><button id="crm-edit-event-to-order" name="crm-edit-event-to-order" class="crm-edit-event-to-order crm-ui-table-item-right">Auftrag öffnen</button></td>
       </tr>
     </table>
-    <table class="crm-ui-table-block2" style="margin-top: 2em">
+    <table class="crm-ui-table-block" style="margin-top: 2em">
       <tr>
         <td><label for="crm-edit-event-start">Start:</label></td>
-        <td><input type="text" id="crm-edit-event-start" name="crm-edit-event-start" value="" size="10"><input type="text" id="crm-edit-event-start-time" name="crm-edit-event-start-time" value="" size="4" style="margin-left:0.25em"></td>
+        <td><input type="text" id="crm-edit-event-start" name="crm-edit-event-start" value=""></td>
       </tr>
       <tr>
         <td><label for="crm-edit-event-end">Ende:</label></td>
-        <td><input type="text" id="crm-edit-event-end" name="crm-edit-event-end" value="" size="10"><input type="text" id="crm-edit-event-end-time" name="crm-edit-event-end-time" value="" size="4" style="margin-left:0.25em"></td>
-        <td><input type="checkbox" id="crm-edit-event-full-time" name="crm-edit-event-full-time" class="crm-ui-table-item-right"><label for="crm-edit-event-full-time" style="margin-left: 0.25em">ganztags</label></td>
+        <td><input type="text" id="crm-edit-event-end" name="crm-edit-event-end" value=""></td>
+        <td><label for="crm-edit-event-full-time" class="crm-ui-table-item-right">ganztags</label></td>
+        <td><input type="checkbox" id="crm-edit-event-full-time" name="crm-edit-event-full-time"></td>
       </tr>
     </table>
+    <table class="crm-ui-table-block" style="margin-top: 2em">
+      <tr>
+        <td><label for="crm-edit-event-count">Anzahl:</label></td>
+        <td><input type="number" id="crm-edit-event-count" name="crm-edit-event-count" value="" style="width: 9em"></td>
+      </tr>
+      <tr>
+        <td><label for="crm-edit-event-end">Interval:</label></td>
+        <td><input type="number" id="crm-edit-event-interval" name="crm-edit-event-interval" value="" style="width: 9em"></td>
+        <td><select id="crm-edit-event-freq" name="crm-edit-event-freq"><option value="daily">tägig</option><option value="weekly">wöchig</option><option value="monthly">monatig</option><option value="yearly">jährig</option></td>
+      </tr>
+      <tr>
+        <td><label for="crm-edit-event-repeat-end">bis:</label></td>
+        <td><input type="text" id="crm-edit-event-repeat-end" name="crm-edit-event-repeat-end" value="" size="10"></td>
+      </tr>
+    </table>
+    <!--
     <table class="crm-ui-row-block">
       <tr>
         <td><label for="crm-edit-event-repaet-factor">Wiederholungen:</label></td>
@@ -175,6 +196,7 @@
         <td><input type="text" id="crm-edit-event-repeat-end" name="crm-edit-event-repeat-end" value="" size="10"></input></td>
       </tr>
     </table>
+    -->
     <table class="crm-ui-table-block" style="margin-top: 2em">
       <tr>
         <td><label for="crm-edit-event-customer">Kunde:</label></td>

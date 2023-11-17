@@ -94,10 +94,30 @@ COPY zipcode_to_location( osm_id, ags, ort, plz, landkreis, bundesland ) FROM 'd
 ALTER TABLE zipcode_to_location DROP COLUMN ags;
 ALTER TABLE zipcode_to_location DROP COLUMN osm_id;
 
-ALTER TABLE events ADD COLUMN cvp_id integer;
-ALTER TABLE events ADD COLUMN cvp_type char;
-ALTER TABLE events ADD COLUMN order_id integer;
-ALTER TABLE events ADD COLUMN car_id integer;
-ALTER TABLE events ADD COLUMN cvp_name text;
-
 ALTER TABLE IF EXISTS oe ADD COLUMN delivery_time text;
+
+CREATE TABLE IF NOT EXISTS calendar_events
+(
+    id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
+    title text,
+    description text,
+    dtstart timestamp without time zone,
+    dtend timestamp without time zone,
+    duration text,
+    freq text,
+    interval integer,
+    count integer,
+    byweekday text,
+    location text,
+    uid integer,
+    prio integer,
+    category integer,
+    visibility integer,
+    "allDay" boolean,
+    color text,
+    cvp_id integer,
+    order_id integer,
+    car_id integer,
+    cvp_name text,
+    cvp_type character(1)
+)

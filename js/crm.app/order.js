@@ -934,7 +934,6 @@ function crmEditOrderAddEvent( eventType ){
         pos['events'] = {};
         pos['events']['WHERE'] = 'order_id = ' + $( '#od-oe-id' ).val();
 
-        /*
         $.ajax({
             url: 'crm/ajax/crm.app.php',
             type: 'POST',
@@ -943,31 +942,45 @@ function crmEditOrderAddEvent( eventType ){
                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmEditOrderAddEvent()', xhr.responseText );
             }
         });
-        */
         return;
     }
     const end = start.clone().add( 30, 'minutes' ); //beachte end = start; funktioniert nicht denn bei end.add( 2, 'hour' ); wird auch start um 2 Stunden erhöht
 
     dbUpdateData = {};//jsonobj für die Datenbankupdate (genericUpdateEx)
-    dbUpdateData['events'] = {};
-    dbUpdateData['events']['duration'] = '[' + start.format('YYYY-MM-DD HH:mm') + ',' + end.format('YYYY-MM-DD HH:mm:ss') + ')'; //'HH:mm:ss' ist wichtig sonst wird die Zeit nicht im 24h-Format angezeigt
-    if( $( "#od-customer-id" ).val() != '' ) dbUpdateData['events']['cvp_id'] = $( "#od-customer-id" ).val();
-    if( $( "#crm-edit-event-cvp-type" ).val() != '' ) dbUpdateData['events']['cvp_type'] = 'C';
-    if( $( "#od_customer_name" ).val() != '' ) dbUpdateData['events']['cvp_name'] = $( "#od_customer_name" ).val();
-    if( $( "#od-lxcars-c_id" ).val() != '' ) dbUpdateData['events']['car_id'] = $( "#od-lxcars-c_id" ).val();
-    if( $( "#od-oe-id" ).val() != '' ) dbUpdateData['events']['order_id'] = $( "#od-oe-id" ).val();
-    dbUpdateData['events']['title'] = $( "#od_customer_name" ).val();
+    dbUpdateData['record'] = {};
+    dbUpdateData['record']['calendar_events'] = {};
+    dbUpdateData['record']['calendar_events']['dtstart'] = start.format('YYYY-MM-DD HH:mm:ss');
+    dbUpdateData['record']['calendar_events']['dtend'] = end.format('YYYY-MM-DD HH:mm:ss');
+    dbUpdateData['record']['calendar_events']['duration'] = '00:30';
+    dbUpdateData['record']['calendar_events']['title'] = $( "#od_customer_name" ).val();
+    dbUpdateData['record']['calendar_events']['\"allDay\"'] = false;
+    dbUpdateData['record']['calendar_events']['visibility'] = -1;
+    dbUpdateData['record']['calendar_events']['category'] = 3;
+    dbUpdateData['record']['calendar_events']['prio'] = 0;
+    //dbUpdateData['record']['calendar_events']['color'] = $( "#crm-edit-event-color" ).val();
+    //dbUpdateData['record']['calendar_events']['location'] = $( "#crm-edit-event-location" ).val();
+    dbUpdateData['record']['calendar_events']['freq'] = 'daily';
+    dbUpdateData['record']['calendar_events']['interval'] = 1;
+    dbUpdateData['record']['calendar_events']['count'] = 1;
+
+    if( $( "#od-customer-id" ).val() != '' ) dbUpdateData['record']['calendar_events']['cvp_id'] = $( "#od-customer-id" ).val();
+    if( $( "#crm-edit-event-cvp-type" ).val() != '' ) dbUpdateData['record']['calendar_events']['cvp_type'] = 'C';
+    if( $( "#od_customer_name" ).val() != '' ) dbUpdateData['record']['calendar_events']['cvp_name'] = $( "#od_customer_name" ).val();
+    if( $( "#od-lxcars-c_id" ).val() != '' ) dbUpdateData['record']['calendar_events']['car_id'] = $( "#od-lxcars-c_id" ).val();
+    if( $( "#od-oe-id" ).val() != '' ) dbUpdateData['record']['calendar_events']['order_id'] = $( "#od-oe-id" ).val();
+    dbUpdateData['record']['calendar_events']['title'] = $( "#od_customer_name" ).val();
+
     let description = '';
     if( crmEditOrderEventTypeEnum.DeliveryTime == eventType ){
         $( '#edit-order-table > tbody > tr').each( function( key, pos ){
             description += $( pos ).find( '[name=od-item-description]' ).val() + '\n';
         });
     }
-    dbUpdateData['events']['description'] = description;
-    dbUpdateData['events']['\"allDay\"'] = $( "#crm-edit-event-full-time" ).is( ":checked" );
-    dbUpdateData['events']['uid'] = $( '#od-oe-employee_id' ).val();
+    dbUpdateData['record']['calendar_events']['description'] = description;
+    dbUpdateData['record']['calendar_events']['uid'] = $( '#od-oe-employee_id' ).val();
 
-    console.info( 'dbUpdateData', dbUpdateData );
+    //console.info( 'dbUpdateData', dbUpdateData );
+    //return;
 
     $.ajax({
         url: 'crm/ajax/crm.app.php',

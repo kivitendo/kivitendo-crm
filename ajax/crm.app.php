@@ -4,6 +4,8 @@ require_once __DIR__.'/../inc/stdLib.php'; // for debug
 require_once __DIR__.'/../inc/crmLib.php';
 require_once __DIR__.'/../inc/ajax2function.php';
 
+$GLOBALS['dbh']->setShowError( true );
+
 /*************************************************
 * Erzeugt ein JSON das für die JS-Function
 * showMessageDialog verwendet werden kann
@@ -1589,9 +1591,9 @@ function getCarsForCalendar( $data ){ //darf nicht getCars() heißen weil getCar
 
 function updateCalendarEventFromOrder( $data ){
     writeLogR( $data );
-    $sql = "DELETE FROM events WHERE order_id = ".$data['events']['order_id'];
-    writeLogR( $sql );
-    resultInfo( true );
+    $sql = "DELETE FROM calendar_events WHERE order_id = ".$data['record']['calendar_events']['order_id'];
+    $GLOBALS['dbh']->query( $sql );
+    genericSingleInsert( $data );
 }
 
 function insertCalendarEvent( $data ){

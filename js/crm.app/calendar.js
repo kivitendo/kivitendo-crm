@@ -342,7 +342,6 @@ document.addEventListener('DOMContentLoaded', function() {
             let tmpData = {};
             tmpData['record'] = {};
             tmpData['record']['calendar_events'] = dbUpdateData['calendar_events'];
-            //tmpData['sequence_name'] = 'id';
             dbUpdateData = tmpData;
           }
 
@@ -351,8 +350,6 @@ document.addEventListener('DOMContentLoaded', function() {
             type: 'POST',
             data:  { action: functionName, data: dbUpdateData },
             success: function( data ){
-              console.info( 'crmEventTmp', crmEventTmp );
-              console.info( 'data', data ); //todo: id ist immer 1 ???
               const calendarInstance = crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ];
               if( crmEventTmp.id !== null && crmEventTmp.id !== undefined ) calendarInstance.getEventById( crmEventTmp.id ).remove();
               if( data.id !== null && data.id !== undefined ) crmEventTmp['id'] = data.id;

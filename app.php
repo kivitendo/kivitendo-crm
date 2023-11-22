@@ -589,11 +589,11 @@
                             </tr>
                             <tr>
                                 <td class="od-table-label"><label for="od-oe-delivery_time">Bringetermin:</label></td>
-                                <td><input id="od-oe-delivery_time" type="text"></td>
+                                <td><input id="od-oe-delivery_time" type="text" autocomplete="off"></td>
                             </tr>
                             <tr>
                                 <td class="od-table-label"><label for="od-oe-finish_time">Fertigstellung:</label></td>
-                                <td><div><input id="od-oe-finish_time" type="text"><button id="od_oe_finish_now">Jetzt</button></div></td>
+                                <td><div><input id="od-oe-finish_time" type="text" autocomplete="off"><button id="od_oe_finish_now">Jetzt</button></div></td>
                             </tr>
                             <tr>
                                 <td class="od-table-label"><label for="od-oe-itime">erstellt am:</label></td>

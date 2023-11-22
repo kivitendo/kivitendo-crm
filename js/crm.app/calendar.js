@@ -3,21 +3,28 @@
 //Vendor in Vendornummer umwandeln und speichern
 //job_xyz ist deprecated siehe Auftrag
 //umgang mit location ??
-
 const currentDay = moment().format('YYYY-MM-DD');
 const fourDaysLater = moment().add(4, 'days').format('YYYY-MM-DD');
 var crmCalendarInstances = [];
 
+const RRule = rrule.RRule;
+const crmRruleFreqMap = { 'daily': RRule.DAILY, 'weekly': RRule.WEEKLY, 'monthly': RRule.MONTHLY, 'yearly': RRule.YEARLY };
+const crmMomentFreqMap = { 'daily': 'days', 'weekly': 'weeks', 'monthly': 'months', 'yearly': 'years' };
+
 var crmCalculateEnd = function(){
-  $( "#crm-edit-event-repeat-end" ).val( moment( $( "#crm-edit-event-end" ).val(), "DD.MM.YYYY" ).add( $( "#crm-edit-event-freq" ).val(), $( "#crm-edit-event-count" ).val() * $( "#crm-edit-event-interval" ).val() - 1  ).format( "DD.MM.YYYY" ) );
+  const rrule = new RRule({ 'count': parseInt( $( "#crm-edit-event-count" ).val() ), 'dtstart': moment( $( "#crm-edit-event-start" ).val(), "DD.MM.YYYY HH:mm" ).toDate(), 'freq': crmRruleFreqMap[$( "#crm-edit-event-freq" ).val().trim()], 'interval': parseInt( $( "#crm-edit-event-interval" ).val() ) });
+  const all = rrule.all();
+  $( '#crm-edit-event-repeat-end' ).val( (new Date( all[all.length -1] )).toLocaleString() );
 };
 
+
 var crmCalculateRepeatQuantity = function() {
-  var a = moment( $( "#crm-edit-event-end" ).val(), 'L' );
-  var b = moment( $( "#crm-edit-event-repeat-end" ).val(), 'L' );
-  var erg = Math.floor( ( b.diff( a, $( "#crm-edit-event-freq" ).val() ) ) / $( "#crm-edit-event-interval" ).val() );
+  const a = moment( $( "#crm-edit-event-end" ).val(), 'DD.MM.YYYY HH:mm' );
+  const b = moment( $( "#crm-edit-event-repeat-end" ).val(), 'DD.MM.YYYY HH:mm' );
+  const erg = Math.floor( ( b.diff( a, crmMomentFreqMap[$( "#crm-edit-event-freq" ).val()] ) ) / parseFloat( $( "#crm-edit-event-interval" ).val() ) );
   $( "#crm-edit-event-count" ).val( erg < 0 ? 0 : erg );
 };
+
 
 document.addEventListener('DOMContentLoaded', function() {
   $.ajax({
@@ -35,8 +42,8 @@ document.addEventListener('DOMContentLoaded', function() {
           timeZone: 'local',
           initialView: 'timeGridFourDay',
           initialDate: currentDay,
-          slotMinTime: '07:00',
-          slotMaxTime: '19:00',
+          //slotMinTime: '07:00',
+          //slotMaxTime: '19:00',
           selectable: true,
           editable: true,
           eventDurationEditable: true,
@@ -174,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   $( '#crm-edit-event-car' ).append( '<option value=""></option>' );
 
-  $( "#crm-edit-event-start, #crm-edit-event-end" ).datetimepicker({
+  $( "#crm-edit-event-start, #crm-edit-event-end, #crm-edit-event-repeat-end" ).datetimepicker({
     lang: 'de',
     minTime: '08:00',
     maxTime: '17:00',
@@ -254,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  var crmEventCache = {};
+  var crmEventTmp = {};
 
   $( '#crm-edit-event-dialog' ).dialog({
     autoOpen: false,
@@ -274,8 +281,8 @@ document.addEventListener('DOMContentLoaded', function() {
           dbUpdateData = {};//jsonobj für die Datenbankupdate (genericUpdateEx)
           dbUpdateData['calendar_events'] = {};
 
-          const start = moment($( "#crm-edit-event-start" ).val() + ' ' + $( "#crm-edit-event-start-time" ).val(), 'DD.MM.YYYY hh:mm:ss');
-          const end = moment($( "#crm-edit-event-end" ).val() + ' ' + $( "#crm-edit-event-end-time" ).val(), 'DD.MM.YYYY hh:mm:ss');
+          let start = moment($( "#crm-edit-event-start" ).val(), 'DD.MM.YYYY hh:mm:ss');
+          let end = moment($( "#crm-edit-event-end" ).val(), 'DD.MM.YYYY hh:mm:ss');
 
           let duration;
           if( $( "#crm-edit-event-full-time" ).is( ":checked" ) ){
@@ -315,31 +322,42 @@ document.addEventListener('DOMContentLoaded', function() {
           if( $( "#crm-edit-event-car-id" ).val() != '' ) dbUpdateData['calendar_events']['car_id'] = $( "#crm-edit-event-car-id" ).val();
           if( $( "#crm-edit-event-order-id" ).val() != '' ) dbUpdateData['calendar_events']['order_id'] = $( "#crm-edit-event-order-id" ).val();
 
+          crmEventTmp = { ...dbUpdateData['calendar_events'] }; // Objekt wird später der Kalendarinstanz direkt übergeben um die Darstellung zu aktualisieren
+          crmEventTmp['allDay'] = crmEventTmp['\"allDay\"'];
+          delete crmEventTmp['\"allDay\"'];
+          crmEventTmp['rrule'] = { 'count': parseInt( dbUpdateData['calendar_events']['count'] ),
+                                'dtstart': dbUpdateData['calendar_events']['dtstart'],
+                                'interval': parseInt( dbUpdateData['calendar_events']['interval'] ),
+                                'freq': dbUpdateData['calendar_events']['freq'] };
+
           let functionName = 'insertCalendarEvent';
 
           if( '' != $( '#crm-edit-event-id' ).val() ){
             dbUpdateData['calendar_events']['WHERE'] = {};
             dbUpdateData['calendar_events']['WHERE'] = 'id = ' + $( '#crm-edit-event-id' ).val();
             functionName = 'updateCalendarEvent';
-            crmEventCache = dbUpdateData['calendar_events']; // ToDo: Hier noch die rrules anfügen
+            crmEventTmp['id'] = $( '#crm-edit-event-id' ).val();
           }
           else{
             let tmpData = {};
             tmpData['record'] = {};
             tmpData['record']['calendar_events'] = dbUpdateData['calendar_events'];
+            //tmpData['sequence_name'] = 'id';
             dbUpdateData = tmpData;
-            crmEventCache = dbUpdateData['record']['calendar_events']; // ToDo: Hier noch die rrules anfügen
           }
-
 
           $.ajax({
             url: '../ajax/crm.app.php',
             type: 'POST',
             data:  { action: functionName, data: dbUpdateData },
             success: function( data ){
-              console.info( 'data', crmEventCache );
-              crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].addEvent( crmEventCache ); //ToDo: Hier noch die rrules anfügen siehe oben
-              crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].render();
+              console.info( 'crmEventTmp', crmEventTmp );
+              console.info( 'data', data ); //todo: id ist immer 1 ???
+              const calendarInstance = crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ];
+              if( crmEventTmp.id !== null && crmEventTmp.id !== undefined ) calendarInstance.getEventById( crmEventTmp.id ).remove();
+              if( data.id !== null && data.id !== undefined ) crmEventTmp['id'] = data.id;
+              calendarInstance.addEvent( crmEventTmp );
+              calendarInstance.refetchEvents();
               $( '#crm-edit-event-dialog' ).dialog( "close" );
             },
             error: function( xhr, status, error ){

@@ -98,7 +98,7 @@ ALTER TABLE IF EXISTS oe ADD COLUMN delivery_time text;
 
 CREATE TABLE IF NOT EXISTS calendar_events
 (
-    id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
+    id integer NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     title text,
     description text,
     dtstart timestamp without time zone,

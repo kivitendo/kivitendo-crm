@@ -161,11 +161,11 @@
     <table class="crm-ui-table-block" style="margin-top: 2em">
       <tr>
         <td><label for="crm-edit-event-start">Start:</label></td>
-        <td><input type="text" id="crm-edit-event-start" name="crm-edit-event-start" value=""></td>
+        <td><input type="text" id="crm-edit-event-start" name="crm-edit-event-start" value="" autocomplete="off"></td>
       </tr>
       <tr>
         <td><label for="crm-edit-event-end">Ende:</label></td>
-        <td><input type="text" id="crm-edit-event-end" name="crm-edit-event-end" value=""></td>
+        <td><input type="text" id="crm-edit-event-end" name="crm-edit-event-end" value="" autocomplete="off"></td>
         <td><label for="crm-edit-event-full-time" class="crm-ui-table-item-right">ganztags</label></td>
         <td><input type="checkbox" id="crm-edit-event-full-time" name="crm-edit-event-full-time"></td>
       </tr>
@@ -182,7 +182,7 @@
       </tr>
       <tr>
         <td><label for="crm-edit-event-repeat-end">bis:</label></td>
-        <td><input type="text" id="crm-edit-event-repeat-end" name="crm-edit-event-repeat-end" value="" size="10"></td>
+        <td><input type="text" id="crm-edit-event-repeat-end" name="crm-edit-event-repeat-end" value="" size="10" autocomplete="off"></td>
       </tr>
     </table>
     <!--

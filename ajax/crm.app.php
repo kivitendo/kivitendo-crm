@@ -1177,6 +1177,14 @@ function genericSingleInsert( $data ){
     echo '{ "id": "'.$id.'" }';
 }
 
+function genericSingleInsertGetId( $data ){
+    //writeLog( $data );
+    $tableName = array_key_first( $data['record'] );
+    $id = $GLOBALS['dbh']->insert( $tableName, array_keys( $data['record'][$tableName] ), array_values( $data['record'][$tableName] ),
+                                TRUE, ( array_key_exists( 'sequence_name', $data ) )? $data['sequence_name'] : FALSE );
+    echo '{ "id": "'.$id.'" }';
+}
+
 function getblandid($data){
     $sql = "SELECT id FROM bundesland WHERE bundesland ='".$data["bundesland"]."'";
     $rs = $GLOBALS['dbh']->getOne($sql, true);
@@ -1588,7 +1596,8 @@ function updateCalendarEventFromOrder( $data ){
 
 function insertCalendarEvent( $data ){
     $GLOBALS['dbh']->setShowError( true );
-    genericSingleInsert( $data );
+    genericSingleInsertGetId( $data );
+    //writeLogR( $GLOBALS['dbh']->lastInsertId() );
 }
 
 function updateCalendarEvent( $data ){

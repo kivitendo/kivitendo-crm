@@ -19,6 +19,7 @@ class myPDO extends PDO{
     }
 
     public function __construct( $host, $port, $dbname, $user, $passwd, $id = FALSE ){
+        $this->showErr = TRUE;
         try{
             parent::__construct( "pgsql:host=$host;port=$port;dbname=$dbname;", $user, $id ? @openssl_decrypt( base64_decode( $passwd ), 'AES128', $id ) : $passwd );
         }

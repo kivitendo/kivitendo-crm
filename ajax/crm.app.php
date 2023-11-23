@@ -1171,20 +1171,21 @@ function insertOrderPosHuAu( $data ){
     genericSingleInsert( $data );
 }
 
-function genericSingleInsert( $data ){
+/*
+Das JSON-Objekt muss folgendes Schema haben:
+data[record][tabellename][columnname]: wert
+data[sequence_name]: id bzw. sequencename
+*/
+function genericSingleInsert( $data, $getLastId = false, $no_output = false ){
     //writeLog( $data );
     $tableName = array_key_first( $data['record'] );
     $id = $GLOBALS['dbh']->insert( $tableName, array_keys( $data['record'][$tableName] ), array_values( $data['record'][$tableName] ),
-                                array_key_exists( 'sequence_name', $data ), ( array_key_exists( 'sequence_name', $data ) )? $data['sequence_name'] : FALSE );
-    echo '{ "id": "'.$id.'" }';
+                                array_key_exists( 'sequence_name', $data ) || $getLastId, ( array_key_exists( 'sequence_name', $data ) )? $data['sequence_name'] : FALSE );
+    if( !$no_output ) echo '{ "id": "'.$id.'" }';
 }
 
 function genericSingleInsertGetId( $data ){
-    //writeLog( $data );
-    $tableName = array_key_first( $data['record'] );
-    $id = $GLOBALS['dbh']->insert( $tableName, array_keys( $data['record'][$tableName] ), array_values( $data['record'][$tableName] ),
-                                TRUE, ( array_key_exists( 'sequence_name', $data ) )? $data['sequence_name'] : FALSE );
-    echo '{ "id": "'.$id.'" }';
+    genericSingleInsert( $data, true );
 }
 
 function getblandid($data){
@@ -1270,13 +1271,16 @@ function genericUpdateEx( $data ){
     //writeLogR( "genericUpdateEx Zeit: ".$eta / 1e+6 ."in ms");
 }
 
+/*
+Das JSON-Objekt muss folgendes Schema haben:
+[table_name]['WHERE']: 'id = wert'
+*/
 function genericDelete( $data ){
     foreach( $data AS $tableName => $where){
         if( !isset( $where['WHERE'] ) ){
             resultInfo( false, 'Risky SQL-Statment with empty WHERE clausel'  );
             return;
         }
-        writeLogR( "DELETE FROM $tableName WHERE ".$where['WHERE'] );
         $GLOBALS['dbh']->myquery( "DELETE FROM $tableName WHERE ".$where['WHERE'] );
     }
     resultInfo(true);
@@ -1590,26 +1594,11 @@ function getCarsForCalendar( $data ){ //darf nicht getCars() heißen weil getCar
 }
 
 function updateCalendarEventFromOrder( $data ){
-    writeLogR( $data );
-    $sql = "DELETE FROM calendar_events WHERE order_id = ".$data['record']['calendar_events']['order_id'];
+    //writeLogR( $data );
+    $sql = "DELETE FROM calendar_events WHERE order_id = ".$data[0]['record']['calendar_events']['order_id'];
     $GLOBALS['dbh']->query( $sql );
-    genericSingleInsert( $data );
-}
-
-function insertCalendarEvent( $data ){
-    $GLOBALS['dbh']->setShowError( true );
-    genericSingleInsertGetId( $data );
-    //writeLogR( $GLOBALS['dbh']->lastInsertId() );
-}
-
-function updateCalendarEvent( $data ){
-    $GLOBALS['dbh']->setShowError( true );
-    genericUpdateEx( $data );
-}
-
-function deleteCalendarEvent( $data ){
-    $GLOBALS['dbh']->setShowError( true );
-    genericDelete( $data );
+    foreach ($data as $entry) genericSingleInsert( $entry, false, true );
+    resultInfo( true );
 }
 
 /************************************************************************************************************

@@ -1,8 +1,3 @@
-//Auftag mit Kalendar verknüpfen (order_id)
-//Kunde (location) in Kundennummer umwandeln und speichern
-//Vendor in Vendornummer umwandeln und speichern
-//job_xyz ist deprecated siehe Auftrag
-//umgang mit location ??
 const currentDay = moment().format('YYYY-MM-DD');
 const fourDaysLater = moment().add(4, 'days').format('YYYY-MM-DD');
 var crmCalendarInstances = [];
@@ -17,7 +12,6 @@ var crmCalculateEnd = function(){
   $( '#crm-edit-event-repeat-end' ).val( (new Date( all[all.length -1] )).toLocaleString() );
 };
 
-
 var crmCalculateRepeatQuantity = function() {
   const a = moment( $( "#crm-edit-event-end" ).val(), 'DD.MM.YYYY HH:mm' );
   const b = moment( $( "#crm-edit-event-repeat-end" ).val(), 'DD.MM.YYYY HH:mm' );
@@ -25,16 +19,18 @@ var crmCalculateRepeatQuantity = function() {
   $( "#crm-edit-event-count" ).val( erg < 0 ? 0 : erg );
 };
 
-
 document.addEventListener('DOMContentLoaded', function() {
   $.ajax({
     url: '../ajax/crm.app.php',
     type: 'POST',
     data:  { action: 'getCalendarEvents', data: { employee: crmEmployee, start: currentDay, end: fourDaysLater } },
     success: function( crmCalendarData ){
-      console.info( 'crmCalendarData', crmCalendarData );
+
+      crmCalendarData.push( { 'id': 'new', 'color': '', 'label': kivi.t8( 'New' ), 'events': []  } );
+      //console.info( 'crmCalendarData', crmCalendarData );
+
       for( let entry of crmCalendarData ){
-        $( '#crm-cal-tab-list' ).append( '<li><a href="#crm-cal-' + entry.id + '">' +  entry.label + '</a></li>' );
+        $( '#crm-cal-tab-list' ).append( '<li value="' + entry.id + '"><a href="#crm-cal-' + entry.id + '">' +  entry.label + '</a></li>' );
         $( '#crm-cal-tabs' ).append( '<div id="crm-cal-' + entry.id + '" class="crm-cal-tab"></div>' );
         var calendar = new FullCalendar.Calendar( document.getElementById( 'crm-cal-' + entry.id ), {
           themeSystem: 'bootstrap5',
@@ -55,41 +51,6 @@ document.addEventListener('DOMContentLoaded', function() {
             right: 'timeGridDay,timeGridFourDay,weekEvents'
           },
           events: entry.events,
-
-          /*
-          events: [
-          {
-                "id": 3,
-                "groupId": 3,
-                "title": "Test Heute",
-                "description": "",
-                //"dtstart": "2023-11-20T08:30:00",
-                //"dtend": "2023-11-20T09:00:00",
-                "duration": "48:00",
-                "freq": "daily",
-                "interval": 1,
-                "count": 1,
-                "location": "",
-                "uid": 861,
-                "prio": 0,
-                "category": 0,
-                "visibility": -1,
-                "allDay": true,
-                "color": "#FF7400",
-                "cvp_id": null,
-                "order_id": null,
-                "car_id": null,
-                "cvp_name": null,
-                "cvp_type": null,
-                "rrule": {
-                    "dtstart": "2023-11-20T08:30:00",
-                    "interval": 1,
-                    "freq": "daily",
-                    "count": 1
-                }
-            }
-        ],
-        */
           views: {
             timeGridFourDay: {
               type: 'timeGrid',
@@ -130,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
           select: function( info ) {
             //console.info( 'select', info );
             //console.info( 'tab', $("#crm-cal-tabs .ui-tabs-panel:visible").attr("id") )
-            //console.info( 'tab', crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ] );
+            //console.info( 'tab', crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].calendar );
             $( "#crm-edit-event-cvp-id" ).val( '' );
             $( "#crm-edit-event-cvp-type" ).val( '' );
             $( "#crm-edit-event-car-id" ).val( '' );
@@ -155,19 +116,59 @@ document.addEventListener('DOMContentLoaded', function() {
             $( '#crm-edit-event-dialog' ).dialog( 'open' );
           },
           eventResize: function( info ) {
+            const start = moment( info.event.start );
+            const end = moment( info.event.end );
+            dbUpdateData = {};//jsonobj für die Datenbankupdate (genericUpdateEx)
+            dbUpdateData['calendar_events'] = {};
+            dbUpdateData['calendar_events']['dtstart'] = start.format( "YYYY-MM-DD HH:mm:ss" );
+            dbUpdateData['calendar_events']['dtend'] = end.format( "YYYY-MM-DD HH:mm:ss" );
+            dbUpdateData['calendar_events']['duration'] = crmCalendarEventDuration( start, end );
+            dbUpdateData['calendar_events']['WHERE'] = {};
+            dbUpdateData['calendar_events']['WHERE'] = 'id = ' + info.event.id;
+
+            $.ajax({
+              url: '../ajax/crm.app.php',
+              type: 'POST',
+              data:  { action: 'genericUpdateEx', data: dbUpdateData },
+              error: function( xhr, status, error ){
+                alert( 'Error: ' + xhr.responseText );
+              }
+            });
           },
           eventDrop: function( info ) {
-          },
-          eventChange: function( info ) {
-            //console.info( 'info', info );
+            const start = moment( info.event.start );
+            const end = moment( info.event.end );
+            dbUpdateData = {};//jsonobj für die Datenbankupdate (genericUpdateEx)
+            dbUpdateData['calendar_events'] = {};
+            dbUpdateData['calendar_events']['dtstart'] = start.format( "YYYY-MM-DD HH:mm:ss" );
+            dbUpdateData['calendar_events']['dtend'] = end.format( "YYYY-MM-DD HH:mm:ss" );
+            dbUpdateData['calendar_events']['duration'] = crmCalendarEventDuration( start, end );
+            dbUpdateData['calendar_events']['WHERE'] = {};
+            dbUpdateData['calendar_events']['WHERE'] = 'id = ' + info.event.id;
+
+            $.ajax({
+              url: '../ajax/crm.app.php',
+              type: 'POST',
+              data:  { action: 'genericUpdateEx', data: dbUpdateData },
+              error: function( xhr, status, error ){
+                alert( 'Error: ' + xhr.responseText );
+              }
+            });
           }
         });
 
         calendar.render();
-        crmCalendarInstances.push( calendar );
+        crmCalendarInstances.push( { 'id': entry.id, 'calendar': calendar } );
 
         $( '#crm-edit-event-category' ).append( '<option value="' + entry.id + '">' + entry.label + '</option>' );
       }
+
+      $( '#crm-cal-tab-list' ).sortable( {
+        cancel: 'li:last-child',
+        update: function( event, ui ){
+          console.info( 'change', ui.item.value );
+        }
+      } );
 
       $( "#crm-cal-tabs" ).tabs().show();
       for( let employee of crmEmployeeGroups ){
@@ -263,6 +264,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
   var crmEventTmp = {};
 
+  function crmCalendarEventDuration( start, end ){
+    const timeDiff = end.diff( start, 'minutes' );
+    const hours = Math.floor( timeDiff / 60 );
+    const minutes = timeDiff % 60;
+    return moment( { hour: hours, minute: minutes } ).format( 'HH:mm' );
+  }
+
   $( '#crm-edit-event-dialog' ).dialog({
     autoOpen: false,
     height: 790,
@@ -289,18 +297,20 @@ document.addEventListener('DOMContentLoaded', function() {
             duration = '24:00';
           }
           else{
-            const timeDiff = end.diff(start, 'minutes');
-            const hours = Math.floor(timeDiff / 60);
-            const minutes = timeDiff % 60;
-            duration = moment({ hour: hours, minute: minutes }).format('HH:mm');
+            duration = crmCalendarEventDuration( start, end );
             if( 'Invalid date' == duration ){
-              alert( 'Invalid date' );
+              alert( kivi.t8( 'Invalid date' ) );
               return;
             }
           }
 
-          dbUpdateData['calendar_events']['dtstart'] = start.format('YYYY-MM-DD hh:mm:ss');
-          dbUpdateData['calendar_events']['dtend'] = end.format('YYYY-MM-DD hh:mm:ss');
+          if( start.format('HH:mm') < '07:00' || start.format('HH:mm') > '19:00' || end.format('HH:mm') < '07:00' || end.format('HH:mm') > '19:00'){
+            alert( kivi.t8( 'Start date must be between 8:00 a.m. and 5:00 p.m' ) );
+            return;
+          }
+
+          dbUpdateData['calendar_events']['dtstart'] = start.format('YYYY-MM-DD HH:mm:ss');
+          dbUpdateData['calendar_events']['dtend'] = end.format('YYYY-MM-DD HH:mm:ss');
           dbUpdateData['calendar_events']['duration'] = duration;
           dbUpdateData['calendar_events']['title'] = $( "#crm-edit-event-title" ).val();
           dbUpdateData['calendar_events']['description'] = $( "#crm-edit-event-description" ).val();
@@ -330,12 +340,12 @@ document.addEventListener('DOMContentLoaded', function() {
                                 'interval': parseInt( dbUpdateData['calendar_events']['interval'] ),
                                 'freq': dbUpdateData['calendar_events']['freq'] };
 
-          let functionName = 'insertCalendarEvent';
+          let functionName = 'genericSingleInsertGetId';
 
           if( '' != $( '#crm-edit-event-id' ).val() ){
             dbUpdateData['calendar_events']['WHERE'] = {};
             dbUpdateData['calendar_events']['WHERE'] = 'id = ' + $( '#crm-edit-event-id' ).val();
-            functionName = 'updateCalendarEvent';
+            functionName = 'genericUpdateEx';
             crmEventTmp['id'] = $( '#crm-edit-event-id' ).val();
           }
           else{
@@ -350,7 +360,7 @@ document.addEventListener('DOMContentLoaded', function() {
             type: 'POST',
             data:  { action: functionName, data: dbUpdateData },
             success: function( data ){
-              const calendarInstance = crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ];
+              const calendarInstance = crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].calendar;
               if( crmEventTmp.id !== null && crmEventTmp.id !== undefined ) calendarInstance.getEventById( crmEventTmp.id ).remove();
               if( data.id !== null && data.id !== undefined ) crmEventTmp['id'] = data.id;
               calendarInstance.addEvent( crmEventTmp );
@@ -375,9 +385,9 @@ document.addEventListener('DOMContentLoaded', function() {
           $.ajax({
               url: '../ajax/crm.app.php',
               type: 'POST',
-              data:  { action: 'deleteCalendarEvent', data: pos },
+              data:  { action: 'genericDelete', data: pos },
               success: function( data ){
-                crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].getEventById( $( '#crm-edit-event-id' ).val() ).remove();
+                crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].calendar.getEventById( $( '#crm-edit-event-id' ).val() ).remove();
                 $( '#crm-edit-event-dialog' ).dialog( "close" );
               },
               error: function( xhr, status, error ){
@@ -394,3 +404,168 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
+
+function crmCalendarToOrder(){
+  parent.postMessage( { 'openOrder': $( '#crm-edit-event-order-id' ).val() }, '*' );
+}
+
+function crmCalendarToCar(){
+  parent.postMessage( { 'openCar': $( '#crm-edit-event-car-id' ).val() }, '*' );
+}
+
+function crmCalendarToCustomer(){
+  parent.postMessage( { 'openCustomer': { 'src': $( '#crm-edit-event-cvp-type' ).val(), 'id': $( '#crm-edit-event-cvp-id' ).val() } }, '*' );
+}
+
+function crmOpenEventCategoryDlg(){
+  $( '#crm-event-category-dialog' ).dialog({
+    autoOpen: false,
+    height: 790,
+    width: 630,
+    modal: true
+  }).dialog( 'open' );
+
+  var colorInput = '';
+  $.ajax({
+    url: '../ajax/event_category.php',
+    data: { action: 'getCategories' },
+    type: "POST",
+    success: function( json ) {
+      var max = 0;
+      var html = '';
+      $.each( json, function( i, val ){
+        html  +="<li class='ui-state-default'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span>"
+              + "  <input type='text' class='ui-widget-content ui-corner-all left' autocomplete='off' value='" + val.label + "' name='cat'></input>"
+              + "  <input type='text' class='ui-widget-content ui-corner-all middle' autocomplete='off' value='" + val.color + "' name='color' maxlength='7'></input>"
+              + "  <input type='hidden'  value='" + val.id + "' name='id' ></input>"
+              + "  <button class='right delete' title='" + kivi.t8( 'Attention! Delete category!' ) + "' tabIndex='-1'>" + kivi.t8( 'D' ) + "</button>"
+              + "</li>";
+      });
+      $( "#sortable" ).prepend( html );
+      $( ".right" ).tooltip({ position: { my: "center bottom-10", at: "center top" } } );
+      $( '#colorPick' ).colorPicker({
+        columns: 13, //number of columns
+        color: ['#FF7400', '#CDEB8B','#6BBA70','#006E2E','#C3D9FF','#0101DF','#4096EE','#356AA0','#FF0096','#DF0101','#B02B2C','#112211','#000000'], //list of colors
+        click: function( color ){
+          colorInput.value = color;
+        }
+      });
+      $( ".middle" ).click( function(){
+        colorInput = this;
+        var pos =  $( this ).position();
+        $( "#colorPick" ).css({
+          position: 'absolute',
+          //left: pos.left - 230,
+          //top: pos.top
+          left: pos.left - 70,
+          top: pos.top - 15
+        }).toggle();
+      });
+
+      $( '.delete' ).click( function(){
+        const delId = $(this).prev('input')[0].value;
+        const delLine = $(this).parent();
+        $.ajax({
+          url: '../ajax/event_category.php',
+          data: { action:  'deleteCategory', data:delId },
+          type: "POST",
+          success: function(){
+            delLine.remove();
+          },
+          error: function(){
+              alert( 'Error: deleteCategory()!' );
+          }
+        });
+        return false;
+      })
+    },
+    error: function () {
+      alert('Error getCategories()!!');
+    }
+  });
+
+  $( "#save" ).button({
+    label: kivi.t8( 'save' )
+  }).click( function(){
+    var dataArr  = $( "#myform" ).serializeArray();
+    $( '#colorPick' ).css( "display" , "none" );
+
+    //;
+    //remove name from array
+    var onlyValueArr = [];
+    var order = 0;
+    $.each( dataArr, function( index, value ){
+      onlyValueArr[index] = value.value;
+    });
+
+    // we have 3 comlumns. category, color, id (hidden)
+    var twoDimValueArr = [];
+    while( onlyValueArr.length ) twoDimValueArr.push( onlyValueArr.splice( 0, 3 ) );
+    //add order
+    $.each( twoDimValueArr, function( index, value ){
+      twoDimValueArr[index].push( (index + 1) );
+    })
+    const last = twoDimValueArr.length - 1;
+    if( twoDimValueArr[last][0] ){ // last line category is not empty,
+      $.ajax({
+        url: 'ajax/event_category.php',
+        data: { action: 'newCategory', data:[twoDimValueArr[last][0], twoDimValueArr[last][1], twoDimValueArr[last][3] ] },
+        type: "POST",
+        success: function( lastId ){
+          // add id to last hidden input named id
+          $( '#sortable li:last input[name=id]' ).attr( 'value', lastId );
+          $( '#sortable li:last' ).append( "<span class='ui-icon ui-icon-arrowthick-2-n-s'></span><button class='right delete' tabIndex='-1'>" + kivi.t8( 'D' ) + "</button>" );
+          var newLine = "<li class='ui-state-default'>"
+                  + "   <input type='text' class='ui-widget-content ui-corner-all left' autocomplete='off' name='cat'></input>"
+                  + "   <input type='text' class='ui-widget-content ui-corner-all middle' autocomplete='off' name='color' maxlength='7'></input>"
+                  + "   <input type='hidden' name='id' ></input>"
+                  + "</li>";
+          $( "#sortable" ).append( newLine );
+          //$( '#sortable' ).sortable( "refresh" );
+          $( '.delete' ).click( function(){
+            const delId = lastId;
+            const delLine = $(this).parent();
+            $.ajax({
+              url: 'ajax/event_category.php',
+              data: { action:  'deleteCategory', data:delId },
+              type: "POST",
+              success: function(){
+                delLine.remove();
+              },
+              error: function(){
+                  alert( 'Error: deleteCategory()!' );
+              }
+            });
+            return false;
+          })
+
+        },
+      });
+    }
+    twoDimValueArr.pop();// remove last array, (it's not in db)
+    //console.log( twoDimValueArr );
+    $.ajax({
+      url: '../ajax/event_category.php',
+      data: { action:  'updateCategories', data: twoDimValueArr },
+      type: "POST",
+    });
+  });// end save CLICK
+
+  $( "#calendar" ).button({
+    label: kivi.t8( 'Calendar' )
+  }).click( function(){
+    window.location.href = "calendar.phtml";
+  });
+
+  $( '#sortable' ).sortable({
+    items: 'li:not(:last-child)',
+    update: function(){
+      $( "#save" ).click();
+    }
+  });
+
+  $( '#headline' ).text( kivi.t8( 'Evemt category' ) );
+  $( '#head_category' ).text( kivi.t8( 'Category' ) );
+  $( '#head_color' ).text( kivi.t8( 'Color' ) );
+
+}

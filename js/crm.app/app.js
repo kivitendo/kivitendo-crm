@@ -637,3 +637,38 @@ function crmCalendarCloseView(){
 $( '#crm-contact-email' ).click( function(){
     window.open( 'mailto:' + $( '#crm-contact-email' ).html() );
 });
+
+// Nachrichten vom Kalender-iFrame empfangen
+window.addEventListener('message', function(event) {
+    console.info('Erhaltene Nachricht:', event.data);
+    if( exists( event.data.openOrder ) ){
+        $.ajax({
+            url: 'crm/ajax/crm.app.php',
+            type: 'POST',
+            data:  { action: 'getOrder', data: { 'id': event.data.openOrder } },
+            success: function( crmData ){
+                crmEditOrderDlg( crmData );
+            },
+            error: function( xhr, status, error ){
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'showCVPA().getOrder', xhr.responseText );
+            }
+        });
+    }
+    else if( exists( event.data.openCar ) ){
+        $.ajax({
+            url: 'crm/ajax/crm.app.php',
+            type: 'POST',
+            data:  { action: 'getCar', data: { 'id': event.data.openCar } },
+            success: function( crmData ){
+                crmEditCarDlg( crmData );
+            },
+            error: function( xhr, status, error ){
+                $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'showCVPA().getCar', xhr.responseText );
+            }
+        });
+    }
+    else if( exists( event.data.openCustomer ) ){
+        getCVPA( event.data.openCustomer.src, event.data.openCustomer.id );
+        crmCloseView( );
+    }
+});

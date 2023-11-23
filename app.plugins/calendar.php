@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="../../css/design40/main.css" type="text/css" title="Stylesheet">
   <link rel="stylesheet" href="../../css/design40/dhtmlsuite/menu-item.css" type="text/css" title="Stylesheet">
   <link rel="stylesheet" href="../../css/design40/dhtmlsuite/menu-bar.css" type="text/css" title="Stylesheet">
-
+<script type="text/javascript" src="http://localhost/kivitendo//crm/jquery-plugins/selectBoxIt/selectBoxIt.js"></script>
   <!--
   <link rel="stylesheet" href="../../css/lx-office-erp/list_accounts.css" type="text/css" title="Stylesheet">
   <link rel="stylesheet" href="../../css/lx-office-erp/jquery-ui.custom.css" type="text/css" title="Stylesheet">
@@ -38,6 +38,7 @@
   <script type="text/javascript" src="../../js/jquery-ui.js"></script>
   <script type="text/javascript" src="../../js/kivi.js"></script>
   <script type="text/javascript" src="../../js/locale/de.js"></script>
+  <script type="text/javascript" src="../../js/locale/en.js"></script>
   <script type="text/javascript" src="../../js/kivi.QuickSearch.js"></script>
   <script type="text/javascript" src="../../js/dhtmlsuite/menu-for-applications.js"></script>
   <script type="text/javascript" src="../../js/kivi.ActionBar.js"></script>
@@ -61,6 +62,7 @@
   <script type="text/javascript" src="../../js/jquery/ui/i18n/jquery.ui.datepicker-de.js"></script>
   <script type="text/javascript" src="../../js/jquery/ui/i18n/jquery.ui.datepicker-de.js"></script>
   <script type="text/javascript" src="datetimepicker/jquery.datetimepicker.full.min.js"></script>
+  <script type="text/javascript" src="../../crm/jquery-plugins/selectBoxIt/selectBoxIt.js"></script>
   <!--
   <script type="text/javascript" src="../../crm/jquery-add-ons/date-time-picker.js"></script>
   <script type="text/javascript" src="../../crm/jquery-add-ons/german-date-time-picker.js"></script>
@@ -141,6 +143,13 @@
     color: white;
   }
 
+    #sortable, #head { list-style-type: none; margin: 0; padding: 0;padding-left: 2.5em; width: 400px; }
+    #sortable li, #head li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
+    #sortable li span { position: absolute; margin-left: -1.3em; }
+    .left {  position:absolute;   width: 180px;}
+    .middle {  position:absolute;  left:280px; width: 90px;}
+    .right {  position:absolute;  left:380px;}
+    #buttons { padding-left: 2.5em; padding-top: 1em; }
 </style>
 
 </head>
@@ -155,7 +164,7 @@
       <tr>
         <td><label for="crm-edit-event-title">Titel:</label></td>
         <td><input type="text" id="crm-edit-event-title" name="crm-edit-event-title" value=""></input></td>
-        <td><button id="crm-edit-event-to-order" name="crm-edit-event-to-order" class="crm-edit-event-to-order crm-ui-table-item-right">Auftrag öffnen</button></td>
+        <td><button id="crm-edit-event-to-order" name="crm-edit-event-to-order" class="crm-edit-event-to-order crm-ui-table-item-right" onclick="crmCalendarToOrder();">Auftrag öffnen</button></td>
       </tr>
     </table>
     <table class="crm-ui-table-block" style="margin-top: 2em">
@@ -201,14 +210,14 @@
       <tr>
         <td><label for="crm-edit-event-customer">Kunde:</label></td>
         <td><input type="text" id="crm-edit-event-customer" name="crm-edit-event-customer" value=""></input></td>
-        <td><button id="crm-edit-event-to-cvp" name="crm-edit-event-to-cvp" class="crm-edit-event-to-cvp crm-ui-table-item-right">Kunde anzeigen</button></td>
+        <td><button id="crm-edit-event-to-cvp" name="crm-edit-event-to-cvp" class="crm-edit-event-to-cvp crm-ui-table-item-right" onclick="crmCalendarToCustomer();">Kunde anzeigen</button></td>
       </tr>
     </table>
     <table class="crm-ui-table-block">
       <tr>
         <td><label for="crm-edit-event-car">Auto:</label></td>
         <td><select id="crm-edit-event-car" style="min-width: 15em"></select></td>
-        <td><button id="crm-edit-event-to-car" name="crm-edit-event-to-car" class="crm-edit-event-to-car crm-ui-table-item-right">Auto anzeigen</button></td>
+        <td><button id="crm-edit-event-to-car" name="crm-edit-event-to-car" class="crm-edit-event-to-car crm-ui-table-item-right" onclick="crmCalendarToCar();">Auto anzeigen</button></td>
       </tr>
     </table>
     <table class="crm-ui-table-block">
@@ -239,11 +248,36 @@
     <textarea id="crm-edit-event-description" name="crm-edit-event-description" rows="5" cols="65" style="margin-top: 0.25em"></textarea>
   </div>
   <div id="calendar">
+  <div style="padding-bottom: 0.5em;"><button id="crm-open-event-category-dialog" onclick="crmOpenEventCategoryDlg();">Kategorie bearbeiten</button></div>
     <div id="crm-cal-tabs">
       <ul id="crm-cal-tab-list">
       </ul>
     </div>
   </div>
 
+  <div id="crm-event-category-dialog" class="ui-widget-content" style="display:none">
+    <div id="tmp"></div>
+    <div>
+        <p id="headline" class="tools ui-state-highlight ui-corner-all " style="margin-top: 20px; padding: 0.6em;"></p>
+    </div>
+    <ul id="head">
+        <li class="ui-state-active"><span id="head_category" class="left"></span><span id="head_color" class="middle"></span></li>
+    </ul>
+
+    <form id="myform">
+        <ul id="sortable">
+            <li class="ui-state-default">
+                <input type="text" class="ui-widget-content ui-corner-all left"  autocomplete="off" name="cat"></input>
+                <input type="text" class="ui-widget-content ui-corner-all middle" autocomplete="off" name="color" maxlength="7"></input>
+                <input type='hidden' name="id"></input>
+            </li>
+        </ul>
+    </form>
+    <div id="colorPick" style="display: none"></div>
+    <div id="buttons">
+        <button id="save"></button>
+        <button id="calendar"></button>
+   </div>
+  </div>
 </body>
 </html>

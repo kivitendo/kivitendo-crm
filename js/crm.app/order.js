@@ -914,25 +914,36 @@ $( "#od-oe-finish_time" ).datetimepicker({
 });
 
 $( '#od_oe_finish_now' ).click( function(){
-    $( "#od-oe-finish_time" ).val("Kunde wartet! SOFORT anfangen!").change();
+    $( "#od-oe-finish_time" ).val( "Kunde wartet! SOFORT anfangen!" );
+    crmEditOrderAddEvents();
+    crmSaveOrder();
 });
 
 const crmEditOrderEventTypeEnum = { DeliveryTime: 'od-oe-delivery_time', FinishTime: 'od-oe-finish_time' };
 
 function crmEditOrderAddEvents(){
-    crmEditOrderAddEvent( crmEditOrderEventTypeEnum.DeliveryTime );
-    crmEditOrderAddEvent( crmEditOrderEventTypeEnum.FinishTime );
+    let dbUpdateData = [];//jsonobj für die Datenbankupdate (updateCalendarEventFromOrder)
+    let rs = crmEditOrderAddEvent( crmEditOrderEventTypeEnum.DeliveryTime, dbUpdateData[0] = {} );
+    rs = rs | crmEditOrderAddEvent( crmEditOrderEventTypeEnum.FinishTime, dbUpdateData[1] = {} );
+    if( !rs ) return;
+
+    $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        type: 'POST',
+        data:  { action: 'updateCalendarEventFromOrder', data: dbUpdateData },
+        error: function( xhr, status, error ){
+            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmEditOrderAddEvent()', xhr.responseText );
+        }
+    });
 }
 
-function crmEditOrderAddEvent( eventType ){
+//Erzeugt Kalendereinträge für den Bringetermin und die Fertigstellung
+function crmEditOrderAddEvent( eventType, dbUpdateData ){
     const start = moment($( '#' + eventType ).val(), 'DD.MM.YYYY HH:mm ');
-
     if( !start._isValid ){
-        $( '#'  + eventType ).val( '' );
-
         let pos = {};
-        pos['events'] = {};
-        pos['events']['WHERE'] = 'order_id = ' + $( '#od-oe-id' ).val();
+        pos['calendar_events'] = {};
+        pos['calendar_events']['WHERE'] = 'order_id = ' + $( '#od-oe-id' ).val();
 
         $.ajax({
             url: 'crm/ajax/crm.app.php',
@@ -942,11 +953,10 @@ function crmEditOrderAddEvent( eventType ){
                 $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmEditOrderAddEvent()', xhr.responseText );
             }
         });
-        return;
+        return false;
     }
     const end = start.clone().add( 30, 'minutes' ); //beachte end = start; funktioniert nicht denn bei end.add( 2, 'hour' ); wird auch start um 2 Stunden erhöht
 
-    dbUpdateData = {};//jsonobj für die Datenbankupdate (genericUpdateEx)
     dbUpdateData['record'] = {};
     dbUpdateData['record']['calendar_events'] = {};
     dbUpdateData['record']['calendar_events']['dtstart'] = start.format('YYYY-MM-DD HH:mm:ss');
@@ -955,10 +965,9 @@ function crmEditOrderAddEvent( eventType ){
     dbUpdateData['record']['calendar_events']['title'] = $( "#od_customer_name" ).val();
     dbUpdateData['record']['calendar_events']['\"allDay\"'] = false;
     dbUpdateData['record']['calendar_events']['visibility'] = -1;
-    dbUpdateData['record']['calendar_events']['category'] = 3;
+    dbUpdateData['record']['calendar_events']['category'] = 3;  //3 = Werkstatt-Plan; wird in der Tabelle event_category vorausgesetzt
     dbUpdateData['record']['calendar_events']['prio'] = 0;
-    //dbUpdateData['record']['calendar_events']['color'] = $( "#crm-edit-event-color" ).val();
-    //dbUpdateData['record']['calendar_events']['location'] = $( "#crm-edit-event-location" ).val();
+    dbUpdateData['record']['calendar_events']['color'] = '#111';
     dbUpdateData['record']['calendar_events']['freq'] = 'daily';
     dbUpdateData['record']['calendar_events']['interval'] = 1;
     dbUpdateData['record']['calendar_events']['count'] = 1;
@@ -979,17 +988,7 @@ function crmEditOrderAddEvent( eventType ){
     dbUpdateData['record']['calendar_events']['description'] = description;
     dbUpdateData['record']['calendar_events']['uid'] = $( '#od-oe-employee_id' ).val();
 
-    //console.info( 'dbUpdateData', dbUpdateData );
-    //return;
-
-    $.ajax({
-        url: 'crm/ajax/crm.app.php',
-        type: 'POST',
-        data:  { action: 'updateCalendarEventFromOrder', data: dbUpdateData },
-        error: function( xhr, status, error ){
-            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmEditOrderAddEvent()', xhr.responseText );
-        }
-    });
+    return true;
 }
 
 function crmConfirmInsertInvoiceFromOrder(){

@@ -116,18 +116,18 @@ class myPDO extends PDO{
     * OUT: true/false
     **********************************************/
     public function updateAll( $table, $columns, $data, $where = 'id' ){
-        $data = array_map( 'trim', $data );
+        $cleand = array_map( fn($value) => ( is_string( $value ) )? trim( $value ) : $value, $data );
         if( $this->logAll ) $this->beginExecTime = microtime( TRUE );
         $columnNames = array_keys( $columns );
         $columnTypes = array_values( $columns );
         $charType    = array( 'text', 'varchar', 'char', 'character' );
         $sql = "WITH new_data( ".implode( ', ', $columnNames )." ) AS ( VALUES ";
-        foreach( $data as $value ){
+        foreach( $cleand as $entry ){
             $sql .= '( ';
             $valueArray = array();
-            foreach( $value as $key => $data ){
+            foreach( $entry as $key => $value ){
                 $highComma = in_array( $columnTypes[$key], $charType, TRUE ) ? "'" : "";
-                array_push( $valueArray, $highComma.$data.$highComma );
+                array_push( $valueArray, $highComma.$value.$highComma );
             }
             $sql .= implode( ', ', $valueArray );
             $sql .= ' ), ';

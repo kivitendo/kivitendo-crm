@@ -10,7 +10,22 @@ $( '#search_order-status' ).append( new Option( 'nicht abgerechnet', 'nicht abge
 $( '#search_order-status' ).val( 'nicht abgerechnet' );
 
 $( '#search_order-date_from' ).datepicker({});
-$( '#search_order-date_to' ).datepicker({});
+//$( '#search_order-date_to' ).datepicker({ locale: 'de' });
+
+$( "#search_order-date_to" ).datetimepicker({
+    onChangeDateTime: function( current_time, $input ){
+        //alert( current_time.toLocaleDateString() );
+    },
+    lang: 'de',
+    format:'d.m.Y',
+    timepicker: false
+});
+
+$( '#search_order-date_from' ).datetimepicker( 'setDate', (new Date()).toLocaleDateString() );
+/*
+console.info( 'searchOrderFormModel', (new Date()).toLocaleDateString()  );
+*/
+)
 
 $( '#search_order-customer_name' ).autocomplete({
     delay: crmAcDelay,

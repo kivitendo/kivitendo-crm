@@ -127,3 +127,10 @@ SELECT 3, 'Werkstatt-Plan', '#111', ( SELECT count( * ) FROM event_category )
 WHERE NOT EXISTS (
     SELECT 1 FROM event_category WHERE id = 3
 );
+
+
+--INSERT INTO calendar_events (title, description, dtstart, dtend, duration, freq, interval, count, uid, prio, category, visibility, "allDay", color)
+--SELECT title, description, lower( duration ) AS dtstart, upper( duration ) AS dtend, to_char( ( upper( duration ) - lower( duration ) ), 'HH24:MI' ) AS duration, REPLACE( REPLACE( REPLACE( REPLACE( repeat, 'year', 'yearly' ), 'month', 'monthly' ), 'week', 'weekly' ), 'day', 'daily' ) AS freq, repeat_factor AS interval, repeat_quantity AS count, uid, prio, category, visibility, "allDay", color FROM events WHERE repeat_end IS NOT NULL AND repeat_end >= current_date AND "allDay" = false;
+
+--INSERT INTO calendar_events (title, description, dtstart, dtend, duration, freq, interval, count, uid, prio, category, visibility, "allDay", color)
+--SELECT title, description, lower( duration ) AS dtstart, upper( duration ) AS dtend, '24:00' AS duration, REPLACE( REPLACE( REPLACE( REPLACE( repeat, 'year', 'yearly' ), 'month', 'monthly' ), 'week', 'weekly' ), 'day', 'daily' ) AS freq, repeat_factor AS interval, repeat_quantity AS count, uid, prio, category, visibility, "allDay", color FROM events WHERE repeat_end IS NOT NULL AND repeat_end >= current_date AND "allDay" = true;

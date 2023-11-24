@@ -116,7 +116,7 @@ class myPDO extends PDO{
     * OUT: true/false
     **********************************************/
     public function updateAll( $table, $columns, $data, $where = 'id' ){
-        $cleand = array_map( fn($value) => ( is_string( $value ) )? trim( $value ) : $value, $data );
+        $cleand = array_map( fn( $value ) => ( is_string( $value ) )? trim( $value ) : $value, $data );
         if( $this->logAll ) $this->beginExecTime = microtime( TRUE );
         $columnNames = array_keys( $columns );
         $columnTypes = array_values( $columns );

@@ -10,4 +10,13 @@ printArray( $GLOBALS['dbh']->getOne( " WITH tmp AS ( UPDATE defaults SET sonumbe
 
 //printArray( $GLOBALS['dbh']->getAll( "SELECT * FROM oe WHERE c_id = 14 "));
 
+//Zum Testen von updateAll
+$data = array( array( 'label10', '#FFF', '120', '100' ), array( 'label2', '#000', '11', '200' ), array( 'label2', '#111', '10', '300' ) );
+$columns = array( 'label' => 'text', 'color' => 'text', 'id' => 'int', 'cat_order' => 'int' );
+echo $GLOBALS['dbh']->updateAll( 'event_category', $columns, $data );
+
+$data = array( array( '12', '101' ), array( '11', '202' ), array( '10', '303' ) );
+$columns = array( 'id' => 'int', 'cat_order' => 'int' );
+echo $GLOBALS['dbh']->updateAll( 'event_category', $columns, $data );
+
 ?>

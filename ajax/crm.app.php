@@ -1697,3 +1697,8 @@ function testFunction(){
     writeLogR( $dir_db );
     echo $rs;
 }
+
+function updateEventCategoriesOrder( $data ){
+    $columns = array( 'id' => 'int', 'cat_order' => 'int' );
+    echo $GLOBALS['dbh']->updateAll( 'event_category', $columns, $data );
+}

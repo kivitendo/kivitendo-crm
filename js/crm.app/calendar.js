@@ -1,6 +1,7 @@
 const currentDay = moment().format('YYYY-MM-DD');
 const fourDaysLater = moment().add(4, 'days').format('YYYY-MM-DD');
 var crmCalendarInstances = [];
+var crmCategoryTmpIndex = 0;
 
 const RRule = rrule.RRule;
 const crmRruleFreqMap = { 'daily': RRule.DAILY, 'weekly': RRule.WEEKLY, 'monthly': RRule.MONTHLY, 'yearly': RRule.YEARLY };
@@ -164,9 +165,33 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       $( '#crm-cal-tab-list' ).sortable( {
-        cancel: 'li:last-child',
+        cancel: 'li:last-child, li:first-child',
+        start: function( event, ui ){
+          crmCategoryTmpIndex = ui.item.index();
+        },
         update: function( event, ui ){
-          console.info( 'change', ui.item.value );
+
+          const tmp = crmCalendarInstances.splice( crmCategoryTmpIndex, 1 );
+          crmCalendarInstances.splice( ui.item.index(), 0, tmp[0] );
+
+          dbUpdateData = [];//jsonobj für die Datenbankupdate (genericUpdateEx);
+          for( let i = 0; i < crmCalendarInstances.length; i++ ){
+            const dupel = [];
+            dupel.push( crmCalendarInstances[i].id );
+            dupel.push( i );
+            dbUpdateData.push( dupel );;
+          }
+          dbUpdateData.shift();
+          dbUpdateData.splice( -1 );
+
+          $.ajax({
+            url: '../ajax/crm.app.php',
+            type: 'POST',
+            data:  { action: 'updateEventCategoriesOrder', data: dbUpdateData },
+            error: function( xhr, status, error ){
+              alert( 'Error: ' + xhr.responseText );
+            }
+          });
         }
       } );
 

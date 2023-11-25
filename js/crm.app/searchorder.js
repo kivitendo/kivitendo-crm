@@ -9,23 +9,14 @@ $( '#search_order-status' ).append( new Option( 'abgerechnet', 'abgerechnet' ) )
 $( '#search_order-status' ).append( new Option( 'nicht abgerechnet', 'nicht abgerechnet' ) );
 $( '#search_order-status' ).val( 'nicht abgerechnet' );
 
-$( '#search_order-date_from' ).datepicker({});
-//$( '#search_order-date_to' ).datepicker({ locale: 'de' });
-
-$( "#search_order-date_to" ).datetimepicker({
-    onChangeDateTime: function( current_time, $input ){
+$( "#search_order-date_to, #search_order-date_from" ).datetimepicker({
+    //onChangeDateTime: function( current_time, $input ){
         //alert( current_time.toLocaleDateString() );
-    },
-    lang: 'de',
+    //},
+    lang: kivi.myconfig.countrycode,
     format:'d.m.Y',
     timepicker: false
 });
-
-$( '#search_order-date_from' ).datetimepicker( 'setDate', (new Date()).toLocaleDateString() );
-/*
-console.info( 'searchOrderFormModel', (new Date()).toLocaleDateString()  );
-*/
-)
 
 $( '#search_order-customer_name' ).autocomplete({
     delay: crmAcDelay,
@@ -127,11 +118,27 @@ function crmSearchOrder( onSuccess = null ){
     });
 }
 
+function getNextBusinessDay(){ // liefert die nächsten zwei (maxCount) Geschäftstage zurück
+    let date = moment();
+    let count = 0;
+    const maxCount = 2; //Anzahl der Tage, die übersprungen werden sollen
+    while (count < maxCount ){
+        date = date.add( 1, 'days' );
+        // Prüfen, ob der Tag ein Wochenende ist ( Sonntag = 0)
+        if( date.day() !== 0 ) {
+            count++;
+        }
+    }
+    return kivi.myconfig.countrycode == 'de' ?  date.format( 'DD.MM.YYYY' ) : date.format( 'YYYY-MM-DD' );
+}
+
 function crmClearSearchOrderView(){
     for( let item of searchOrderFormModel ){
          $( '#' + item.name ).val( '' );
     }
     $( '#search_order-status' ).val( 'nicht abgerechnet' );
+    //$( '#search_order-date_to' ).val( getNextBusinessDay() );
+
 }
 
 const crmSearchOrderView = function(){
@@ -143,7 +150,7 @@ const crmSearchOrderView = function(){
             $( '#' + item.name ).val( '' );
         }
     }
-
+    $( '#search_order-date_to' ).val( getNextBusinessDay() );
     crmOpenView( 'crm-search-order-view', kivi.t8( 'Search order' ), '' );
 }
 

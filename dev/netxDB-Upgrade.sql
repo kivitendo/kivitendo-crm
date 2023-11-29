@@ -103,6 +103,7 @@ CREATE TABLE IF NOT EXISTS calendar_events
     description text,
     dtstart timestamp without time zone,
     dtend timestamp without time zone,
+    repeat_end timestamp without time zone,
     duration text,
     freq text,
     interval integer,
@@ -129,8 +130,8 @@ WHERE NOT EXISTS (
 );
 
 
---INSERT INTO calendar_events (title, description, dtstart, dtend, duration, freq, interval, count, uid, prio, category, visibility, "allDay", color)
---SELECT title, description, lower( duration ) AS dtstart, upper( duration ) AS dtend, to_char( ( upper( duration ) - lower( duration ) ), 'HH24:MI' ) AS duration, REPLACE( REPLACE( REPLACE( REPLACE( repeat, 'year', 'yearly' ), 'month', 'monthly' ), 'week', 'weekly' ), 'day', 'daily' ) AS freq, repeat_factor AS interval, repeat_quantity AS count, uid, prio, category, visibility, "allDay", color FROM events WHERE repeat_end IS NOT NULL AND repeat_end >= current_date AND "allDay" = false;
+INSERT INTO calendar_events (title, description, dtstart, dtend, repeat_end, duration, freq, interval, count, uid, prio, category, visibility, "allDay", color)
+SELECT title, description, lower( duration ) AS dtstart, upper( duration ) AS dtend, repeat_end, to_char( ( upper( duration ) - lower( duration ) ), 'HH24:MI' ) AS duration, REPLACE( REPLACE( REPLACE( REPLACE( repeat, 'year', 'yearly' ), 'month', 'monthly' ), 'week', 'weekly' ), 'day', 'daily' ) AS freq, repeat_factor AS interval, repeat_quantity AS count, uid, prio, category, visibility, "allDay", color FROM events WHERE repeat_end IS NOT NULL AND repeat_end >= current_date AND "allDay" = false;
 
---INSERT INTO calendar_events (title, description, dtstart, dtend, duration, freq, interval, count, uid, prio, category, visibility, "allDay", color)
---SELECT title, description, lower( duration ) AS dtstart, upper( duration ) AS dtend, '24:00' AS duration, REPLACE( REPLACE( REPLACE( REPLACE( repeat, 'year', 'yearly' ), 'month', 'monthly' ), 'week', 'weekly' ), 'day', 'daily' ) AS freq, repeat_factor AS interval, repeat_quantity AS count, uid, prio, category, visibility, "allDay", color FROM events WHERE repeat_end IS NOT NULL AND repeat_end >= current_date AND "allDay" = true;
+INSERT INTO calendar_events (title, description, dtstart, dtend, repeat_end, duration, freq, interval, count, uid, prio, category, visibility, "allDay", color)
+SELECT title, description, lower( duration ) AS dtstart, upper( duration ) AS dtend, repeat_end, '24:00' AS duration, REPLACE( REPLACE( REPLACE( REPLACE( repeat, 'year', 'yearly' ), 'month', 'monthly' ), 'week', 'weekly' ), 'day', 'daily' ) AS freq, repeat_factor AS interval, repeat_quantity AS count, uid, prio, category, visibility, "allDay", color FROM events WHERE repeat_end IS NOT NULL AND repeat_end >= current_date AND "allDay" = true;

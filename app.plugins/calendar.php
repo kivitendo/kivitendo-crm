@@ -248,36 +248,26 @@
     <textarea id="crm-edit-event-description" name="crm-edit-event-description" rows="5" cols="65" style="margin-top: 0.25em"></textarea>
   </div>
   <div id="calendar">
-  <div style="padding-bottom: 0.5em;"><button id="crm-open-event-category-dialog" onclick="crmOpenEventCategoryDlg();">Kategorie bearbeiten</button></div>
+  <div style="padding-bottom: 0.5em;">
+    <input type="text" id="crm-calendar-goto" name="crm-calendar-goto" style="width: 7em; margin-top: 0.25em"></input>
+    <!--<button id="crm-open-event-category-dialog" onclick="crmOpenEventCategoryDlg();">Kategorie bearbeiten</button>-->
+  </div>
     <div id="crm-cal-tabs">
       <ul id="crm-cal-tab-list">
+        <button>Neuer Kalender</button>
       </ul>
     </div>
   </div>
 
-  <div id="crm-event-category-dialog" class="ui-widget-content" style="display:none">
-    <div id="tmp"></div>
-    <div>
-        <p id="headline" class="tools ui-state-highlight ui-corner-all " style="margin-top: 20px; padding: 0.6em;"></p>
-    </div>
-    <ul id="head">
-        <li class="ui-state-active"><span id="head_category" class="left"></span><span id="head_color" class="middle"></span></li>
-    </ul>
-
-    <form id="myform">
-        <ul id="sortable">
-            <li class="ui-state-default">
-                <input type="text" class="ui-widget-content ui-corner-all left"  autocomplete="off" name="cat"></input>
-                <input type="text" class="ui-widget-content ui-corner-all middle" autocomplete="off" name="color" maxlength="7"></input>
-                <input type='hidden' name="id"></input>
-            </li>
-        </ul>
-    </form>
-    <div id="colorPick" style="display: none"></div>
-    <div id="buttons">
-        <button id="save"></button>
-        <button id="calendar"></button>
-   </div>
+  <div id="crm-edit-calendar-title-dialog" class="ui-widget-content" style="display:none">
+    <input type="hidden" id="crm-edit-calendar-title-id" name="crm-calendar-id" value=""></input>
+    <table>
+      <tr>
+        <td>Title:</td>
+        <td><input type="text" id="crm-edit-calendar-title" style="width: 10em;"></input></td>
+      </tr>
+    </table>
   </div>
+
 </body>
 </html>

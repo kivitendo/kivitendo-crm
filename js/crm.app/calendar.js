@@ -10,7 +10,8 @@ const crmMomentFreqMap = { 'daily': 'days', 'weekly': 'weeks', 'monthly': 'month
 var crmCalculateEnd = function(){
   const rrule = new RRule({ 'count': parseInt( $( "#crm-edit-event-count" ).val() ), 'dtstart': moment( $( "#crm-edit-event-start" ).val(), "DD.MM.YYYY HH:mm" ).toDate(), 'freq': crmRruleFreqMap[$( "#crm-edit-event-freq" ).val().trim()], 'interval': parseInt( $( "#crm-edit-event-interval" ).val() ) });
   const all = rrule.all();
-  $( '#crm-edit-event-repeat-end' ).val( (new Date( all[all.length -1] )).toLocaleString() );
+  if( all.length < 1 ) return;
+  $( '#crm-edit-event-repeat-end' ).val( moment( new Date( all[all.length -1] ) ).format( "DD.MM.YYYY") );
 };
 
 var crmCalculateRepeatQuantity = function() {
@@ -24,14 +25,13 @@ document.addEventListener('DOMContentLoaded', function() {
   $.ajax({
     url: '../ajax/crm.app.php',
     type: 'POST',
-    data:  { action: 'getCalendarEvents', data: { employee: crmEmployee, start: currentDay, end: fourDaysLater } },
+    data:  { action: 'getCalenderCategories' },
     success: function( crmCalendarData ){
 
-      crmCalendarData.push( { 'id': 'new', 'color': '', 'label': kivi.t8( 'New' ), 'events': []  } );
       //console.info( 'crmCalendarData', crmCalendarData );
 
       for( let entry of crmCalendarData ){
-        $( '#crm-cal-tab-list' ).append( '<li value="' + entry.id + '"><a href="#crm-cal-' + entry.id + '">' +  entry.label + '</a></li>' );
+        $( '#crm-cal-tab-list' ).append( '<li value="' + entry.id + '"><a href="#crm-cal-' + entry.id + '" class="crm-cal-' + entry.id + '">' +  entry.label + '</a><button onclick="crmEditCalendarTitle(' + entry.id + ', \'' + entry.label + '\')">' +  'E' + '</button></li>' );
         $( '#crm-cal-tabs' ).append( '<div id="crm-cal-' + entry.id + '" class="crm-cal-tab"></div>' );
         var calendar = new FullCalendar.Calendar( document.getElementById( 'crm-cal-' + entry.id ), {
           themeSystem: 'bootstrap5',
@@ -46,12 +46,13 @@ document.addEventListener('DOMContentLoaded', function() {
           eventDurationEditable: true,
           eventResizableFromStart: true,
           contentHeight: 'auto',
+          navLinks: true,
           headerToolbar: {
-            left: 'prev,next',
+            left: 'prevYear,prev,today,next,nextYear',
             center: 'title',
             right: 'timeGridDay,timeGridFourDay,weekEvents'
           },
-          events: entry.events,
+          events: { url: '../ajax/crm.app.php?action=getCalendarEvents&employee=' + crmEmployee + '&category=' + entry.id, method: 'GET' },
           views: {
             timeGridFourDay: {
               type: 'timeGrid',
@@ -65,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
           },
           eventClick: function( info ) {
-            console.info( 'info', info );
             $( "#crm-edit-event-cvp-id" ).val( info.event._def.extendedProps.cvp_id );
             $( "#crm-edit-event-cvp-type" ).val( info.event._def.extendedProps.cvp_type );
             $( "#crm-edit-event-car-id" ).val( info.event._def.extendedProps.car_id );
@@ -87,12 +87,12 @@ document.addEventListener('DOMContentLoaded', function() {
             $( '#crm-edit-event-visibility' ).val( info.event._def.extendedProps.visibility );
             $( '#crm-edit-event-car' ).html( '' );
             $( '#crm-edit-event-car' ).append( '<option value=""></option>' );
-            $( '#crm-edit-event-dialog' ).dialog( 'open' );
+            if( '' != $( "#crm-edit-event-car-id" ).val() ) crmGetCarsForCalendar( $( "#crm-edit-event-cvp-type" ).val(), $( "#crm-edit-event-cvp-id" ).val(), function(){
+                $( '#crm-edit-event-car' ).val( $( "#crm-edit-event-car-id" ).val() ); $( '#crm-edit-event-dialog' ).dialog( 'open' );
+            });
+            else $( '#crm-edit-event-dialog' ).dialog( 'open' );
           },
           select: function( info ) {
-            //console.info( 'select', info );
-            //console.info( 'tab', $("#crm-cal-tabs .ui-tabs-panel:visible").attr("id") )
-            //console.info( 'tab', crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].calendar );
             $( "#crm-edit-event-cvp-id" ).val( '' );
             $( "#crm-edit-event-cvp-type" ).val( '' );
             $( "#crm-edit-event-car-id" ).val( '' );
@@ -195,7 +195,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       } );
 
-      $( "#crm-cal-tabs" ).tabs().show();
+    $( "#crm-cal-tabs" ).tabs({
+      activate: function( event, ui ){
+          //den angeklickten Calendar rendern
+          crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].calendar.render();
+       }
+    }).show();
       for( let employee of crmEmployeeGroups ){
         $( '#crm-edit-event-visibility' ).append( '<option value="' + employee.value + '">' + employee.text + '</option>' );
       }
@@ -208,10 +213,19 @@ document.addEventListener('DOMContentLoaded', function() {
   $( '#crm-edit-event-car' ).append( '<option value=""></option>' );
 
   $( "#crm-edit-event-start, #crm-edit-event-end, #crm-edit-event-repeat-end" ).datetimepicker({
+    onChangeDateTime: function( current_time, $input ){
+      crmCalculateEnd();
+    },
     lang: 'de',
     minTime: '08:00',
     maxTime: '17:00',
     format:'d.m.Y H:i',
+  });
+
+  $( "#crm-edit-event-repeat-end" ).datetimepicker({
+    lang: 'de',
+    format:'d.m.Y',
+    timepicker: false
   });
 
   $( '#crm-edit-event-colorpicker' ).colorPicker({
@@ -255,35 +269,10 @@ document.addEventListener('DOMContentLoaded', function() {
   $( '#crm-edit-event-customer' ).catcomplete({
     source: "../ajax/crm.app.php?action=searchPersonsAndCars",
     select: function( e, ui ) {
-      //console.info( 'select', ui.item );
       $( "#crm-edit-event-cvp-id" ).val( ui.item.id );
       $( '#crm-edit-event-to-cvp' ).show();
 
-      if( 'C' == ui.item.src || 'A' == ui.item.src ){
-        $( "#crm-edit-event-cvp-type" ).val( ui.item.src );
-        $.ajax({
-          url: '../ajax/crm.app.php',
-          type: 'POST',
-          data:  { action: 'getCarsForCalendar', data: { id: ui.item.id } },
-          success: function( data ){
-            $( "#crm-edit-event-car-id" ).val();
-            $( '#crm-edit-event-car' ).html( '' );
-            $( '#crm-edit-event-car' ).append( '<option value=""></option>' );
-            for( let car of data ){
-              $( '#crm-edit-event-car' ).append( '<option value="' + car.c_id + '">' + car.label + '</option>' );
-            }
-          },
-          error: function( xhr, status, error ){
-            $( "#crm-edit-event-car-id" ).val();
-            $( '#crm-edit-event-car' ).html( '' );
-            $( '#crm-edit-event-car' ).append( '<option value=""></option>' );
-          }
-        });
-      }
-      else{
-        $( '#crm-edit-event-car' ).html( '' );
-        $( "#crm-edit-event-cvp-type" ).val( 'C' );
-      }
+      crmGetCarsForCalendar( ui.item.src, ui.item.id );
     }
   });
 
@@ -293,7 +282,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const timeDiff = end.diff( start, 'minutes' );
     const hours = Math.floor( timeDiff / 60 );
     const minutes = timeDiff % 60;
-    return moment( { hour: hours, minute: minutes } ).format( 'HH:mm' );
+    if( hours < 0 || minutes < 0 ) return 'Invalid date';
+    let duration = '';
+    if( hours < 10 ) duration += '0';
+    duration += hours + ':';
+    if( minutes < 10 ) duration += '0';
+    duration += minutes;
+    return duration;
   }
 
   $( '#crm-edit-event-dialog' ).dialog({
@@ -308,14 +303,16 @@ document.addEventListener('DOMContentLoaded', function() {
       else $( '#crm-edit-event-to-order' ).hide();
       if( $( "#crm-edit-event-car-id" ).val() != '' ) $( '#crm-edit-event-to-car' ).show();
       else $( '#crm-edit-event-to-car' ).hide();
+      crmCalculateEnd();
     },
     buttons: {
         "Save": function() {
           dbUpdateData = {};//jsonobj für die Datenbankupdate (genericUpdateEx)
           dbUpdateData['calendar_events'] = {};
 
-          let start = moment($( "#crm-edit-event-start" ).val(), 'DD.MM.YYYY hh:mm:ss');
-          let end = moment($( "#crm-edit-event-end" ).val(), 'DD.MM.YYYY hh:mm:ss');
+          let start = moment($( "#crm-edit-event-start" ).val(), 'DD.MM.YYYY HH:mm');
+          let end = moment($( "#crm-edit-event-end" ).val(), 'DD.MM.YYYY HH:mm');
+          let repeat_end = moment($( "#crm-edit-event-repeat-end" ).val(), 'DD.MM.YYYY HH:mm');
 
           let duration;
           if( $( "#crm-edit-event-full-time" ).is( ":checked" ) ){
@@ -337,6 +334,7 @@ document.addEventListener('DOMContentLoaded', function() {
           dbUpdateData['calendar_events']['dtstart'] = start.format('YYYY-MM-DD HH:mm:ss');
           dbUpdateData['calendar_events']['dtend'] = end.format('YYYY-MM-DD HH:mm:ss');
           dbUpdateData['calendar_events']['duration'] = duration;
+          dbUpdateData['calendar_events']['repeat_end'] = repeat_end.format('YYYY-MM-DD HH:mm:ss');
           dbUpdateData['calendar_events']['title'] = $( "#crm-edit-event-title" ).val();
           dbUpdateData['calendar_events']['description'] = $( "#crm-edit-event-description" ).val();
           dbUpdateData['calendar_events']['\"allDay\"'] = $( "#crm-edit-event-full-time" ).is( ":checked" );
@@ -385,11 +383,11 @@ document.addEventListener('DOMContentLoaded', function() {
             type: 'POST',
             data:  { action: functionName, data: dbUpdateData },
             success: function( data ){
-              const calendarInstance = crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].calendar;
-              if( crmEventTmp.id !== null && crmEventTmp.id !== undefined ) calendarInstance.getEventById( crmEventTmp.id ).remove();
-              if( data.id !== null && data.id !== undefined ) crmEventTmp['id'] = data.id;
-              calendarInstance.addEvent( crmEventTmp );
-              calendarInstance.refetchEvents();
+              //const calendarInstance = crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].calendar;
+              //calendarInstance.refetchEvents();
+              for( let calendarInstance of crmCalendarInstances ){
+                calendarInstance.calendar.refetchEvents();
+              }
               $( '#crm-edit-event-dialog' ).dialog( "close" );
             },
             error: function( xhr, status, error ){
@@ -413,6 +411,9 @@ document.addEventListener('DOMContentLoaded', function() {
               data:  { action: 'genericDelete', data: pos },
               success: function( data ){
                 crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].calendar.getEventById( $( '#crm-edit-event-id' ).val() ).remove();
+                for( let calendarInstance of crmCalendarInstances ){
+                  calendarInstance.calendar.refetchEvents();
+                }
                 $( '#crm-edit-event-dialog' ).dialog( "close" );
               },
               error: function( xhr, status, error ){
@@ -428,7 +429,51 @@ document.addEventListener('DOMContentLoaded', function() {
         $( this ).dialog( "close" );
     }
   });
+
+  $( "#crm-calendar-goto" ).datetimepicker({
+    lang: 'de',
+    format:'d.m.Y',
+    timepicker: false
+  });
+
+  $( "#crm-calendar-goto" ).change( function(){
+    const date = moment( $( this ).val(), 'DD.MM.YYYY' );
+    for( let calendarInstance of crmCalendarInstances ){
+      calendarInstance.calendar.gotoDate( date.format( 'YYYY-MM-DD' ) );
+    }
+  });
+
+  $( '#crm-calendar-goto' ).val( moment().format( 'DD.MM.YYYY' ) );
 });
+
+function crmGetCarsForCalendar( src, id, fx ){
+  if( 'C' == src || 'A' == src ){
+    $( "#crm-edit-event-cvp-type" ).val( src );
+    $.ajax({
+      url: '../ajax/crm.app.php',
+      type: 'POST',
+      data:  { action: 'getCarsForCalendar', data: { id: id } },
+      success: function( data ){
+        $( "#crm-edit-event-car-id" ).val();
+        $( '#crm-edit-event-car' ).html( '' );
+        $( '#crm-edit-event-car' ).append( '<option value=""></option>' );
+        for( let car of data ){
+          $( '#crm-edit-event-car' ).append( '<option value="' + car.c_id + '">' + car.label + '</option>' );
+        }
+        fx();
+      },
+      error: function( xhr, status, error ){
+        $( "#crm-edit-event-car-id" ).val();
+        $( '#crm-edit-event-car' ).html( '' );
+        $( '#crm-edit-event-car' ).append( '<option value=""></option>' );
+      }
+    });
+  }
+  else{
+    $( '#crm-edit-event-car' ).html( '' );
+    $( "#crm-edit-event-cvp-type" ).val( 'C' );
+  }
+}
 
 function crmCalendarToOrder(){
   parent.postMessage( { 'openOrder': $( '#crm-edit-event-order-id' ).val() }, '*' );
@@ -442,155 +487,39 @@ function crmCalendarToCustomer(){
   parent.postMessage( { 'openCustomer': { 'src': $( '#crm-edit-event-cvp-type' ).val(), 'id': $( '#crm-edit-event-cvp-id' ).val() } }, '*' );
 }
 
-function crmOpenEventCategoryDlg(){
-  $( '#crm-event-category-dialog' ).dialog({
+function crmEditCalendarTitle( id, label ){
+  $( '#crm-edit-calendar-title-id' ).val( id );
+  $( '#crm-edit-calendar-title' ).val( label );
+  $( '#crm-edit-calendar-title-dialog' ).dialog({
+    title: kivi.t8( 'Edit calendar title' ),
     autoOpen: false,
-    height: 790,
-    width: 630,
-    modal: true
-  }).dialog( 'open' );
+    height: 190,
+    width: 230,
+    modal: true,
+    buttons: {
+      "Save": function() {
+        dbUpdateData = {};//jsonobj für die Datenbankupdate (genericUpdateEx)
+        dbUpdateData['event_category'] = {};
+        dbUpdateData['event_category']['label'] = $( '#crm-edit-calendar-title' ).val();
+        dbUpdateData['event_category']['WHERE'] = {};
+        dbUpdateData['event_category']['WHERE'] = 'id = ' + $( '#crm-edit-calendar-title-id' ).val();
 
-  var colorInput = '';
-  $.ajax({
-    url: '../ajax/event_category.php',
-    data: { action: 'getCategories' },
-    type: "POST",
-    success: function( json ) {
-      var max = 0;
-      var html = '';
-      $.each( json, function( i, val ){
-        html  +="<li class='ui-state-default'><span class='ui-icon ui-icon-arrowthick-2-n-s'></span>"
-              + "  <input type='text' class='ui-widget-content ui-corner-all left' autocomplete='off' value='" + val.label + "' name='cat'></input>"
-              + "  <input type='text' class='ui-widget-content ui-corner-all middle' autocomplete='off' value='" + val.color + "' name='color' maxlength='7'></input>"
-              + "  <input type='hidden'  value='" + val.id + "' name='id' ></input>"
-              + "  <button class='right delete' title='" + kivi.t8( 'Attention! Delete category!' ) + "' tabIndex='-1'>" + kivi.t8( 'D' ) + "</button>"
-              + "</li>";
-      });
-      $( "#sortable" ).prepend( html );
-      $( ".right" ).tooltip({ position: { my: "center bottom-10", at: "center top" } } );
-      $( '#colorPick' ).colorPicker({
-        columns: 13, //number of columns
-        color: ['#FF7400', '#CDEB8B','#6BBA70','#006E2E','#C3D9FF','#0101DF','#4096EE','#356AA0','#FF0096','#DF0101','#B02B2C','#112211','#000000'], //list of colors
-        click: function( color ){
-          colorInput.value = color;
-        }
-      });
-      $( ".middle" ).click( function(){
-        colorInput = this;
-        var pos =  $( this ).position();
-        $( "#colorPick" ).css({
-          position: 'absolute',
-          //left: pos.left - 230,
-          //top: pos.top
-          left: pos.left - 70,
-          top: pos.top - 15
-        }).toggle();
-      });
-
-      $( '.delete' ).click( function(){
-        const delId = $(this).prev('input')[0].value;
-        const delLine = $(this).parent();
         $.ajax({
-          url: '../ajax/event_category.php',
-          data: { action:  'deleteCategory', data:delId },
-          type: "POST",
-          success: function(){
-            delLine.remove();
+          url: '../ajax/crm.app.php',
+          type: 'POST',
+          data:  { action: 'genericUpdateEx', data: dbUpdateData },
+          success: function( data ){
+            $( '.crm-cal-' + $( '#crm-edit-calendar-title-id' ).val() ).text( $( '#crm-edit-calendar-title' ).val() );
+            $( '#crm-edit-calendar-title-dialog' ).dialog( "close" );
           },
-          error: function(){
-              alert( 'Error: deleteCategory()!' );
+          error: function( xhr, status, error ){
+            alert( 'Error: ' + xhr.responseText );
           }
         });
-        return false;
-      })
     },
-    error: function () {
-      alert('Error getCategories()!!');
+      "Close": function() {
+        $( this ).dialog( "close" );
+      }
     }
-  });
-
-  $( "#save" ).button({
-    label: kivi.t8( 'save' )
-  }).click( function(){
-    var dataArr  = $( "#myform" ).serializeArray();
-    $( '#colorPick' ).css( "display" , "none" );
-
-    //;
-    //remove name from array
-    var onlyValueArr = [];
-    var order = 0;
-    $.each( dataArr, function( index, value ){
-      onlyValueArr[index] = value.value;
-    });
-
-    // we have 3 comlumns. category, color, id (hidden)
-    var twoDimValueArr = [];
-    while( onlyValueArr.length ) twoDimValueArr.push( onlyValueArr.splice( 0, 3 ) );
-    //add order
-    $.each( twoDimValueArr, function( index, value ){
-      twoDimValueArr[index].push( (index + 1) );
-    })
-    const last = twoDimValueArr.length - 1;
-    if( twoDimValueArr[last][0] ){ // last line category is not empty,
-      $.ajax({
-        url: 'ajax/event_category.php',
-        data: { action: 'newCategory', data:[twoDimValueArr[last][0], twoDimValueArr[last][1], twoDimValueArr[last][3] ] },
-        type: "POST",
-        success: function( lastId ){
-          // add id to last hidden input named id
-          $( '#sortable li:last input[name=id]' ).attr( 'value', lastId );
-          $( '#sortable li:last' ).append( "<span class='ui-icon ui-icon-arrowthick-2-n-s'></span><button class='right delete' tabIndex='-1'>" + kivi.t8( 'D' ) + "</button>" );
-          var newLine = "<li class='ui-state-default'>"
-                  + "   <input type='text' class='ui-widget-content ui-corner-all left' autocomplete='off' name='cat'></input>"
-                  + "   <input type='text' class='ui-widget-content ui-corner-all middle' autocomplete='off' name='color' maxlength='7'></input>"
-                  + "   <input type='hidden' name='id' ></input>"
-                  + "</li>";
-          $( "#sortable" ).append( newLine );
-          //$( '#sortable' ).sortable( "refresh" );
-          $( '.delete' ).click( function(){
-            const delId = lastId;
-            const delLine = $(this).parent();
-            $.ajax({
-              url: 'ajax/event_category.php',
-              data: { action:  'deleteCategory', data:delId },
-              type: "POST",
-              success: function(){
-                delLine.remove();
-              },
-              error: function(){
-                  alert( 'Error: deleteCategory()!' );
-              }
-            });
-            return false;
-          })
-
-        },
-      });
-    }
-    twoDimValueArr.pop();// remove last array, (it's not in db)
-    //console.log( twoDimValueArr );
-    $.ajax({
-      url: '../ajax/event_category.php',
-      data: { action:  'updateCategories', data: twoDimValueArr },
-      type: "POST",
-    });
-  });// end save CLICK
-
-  $( "#calendar" ).button({
-    label: kivi.t8( 'Calendar' )
-  }).click( function(){
-    window.location.href = "calendar.phtml";
-  });
-
-  $( '#sortable' ).sortable({
-    items: 'li:not(:last-child)',
-    update: function(){
-      $( "#save" ).click();
-    }
-  });
-
-  $( '#headline' ).text( kivi.t8( 'Evemt category' ) );
-  $( '#head_category' ).text( kivi.t8( 'Category' ) );
-  $( '#head_color' ).text( kivi.t8( 'Color' ) );
-
+  }).dialog( 'open' );
 }

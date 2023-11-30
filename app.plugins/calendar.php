@@ -170,13 +170,13 @@
     <table class="crm-ui-table-block" style="margin-top: 2em">
       <tr>
         <td><label for="crm-edit-event-start">Start:</label></td>
-        <td><input type="text" id="crm-edit-event-start" name="crm-edit-event-start" value="" autocomplete="off"></td>
+        <td><input type="text" id="crm-edit-event-start" name="crm-edit-event-start" value="" autocomplete="off"></input></td>
       </tr>
       <tr>
         <td><label for="crm-edit-event-end">Ende:</label></td>
         <td><input type="text" id="crm-edit-event-end" name="crm-edit-event-end" value="" autocomplete="off"></td>
         <td><label for="crm-edit-event-full-time" class="crm-ui-table-item-right">ganztags</label></td>
-        <td><input type="checkbox" id="crm-edit-event-full-time" name="crm-edit-event-full-time"></td>
+        <td><input type="checkbox" id="crm-edit-event-full-time" name="crm-edit-event-full-time"></input></td>
       </tr>
     </table>
     <table class="crm-ui-table-block" style="margin-top: 2em">
@@ -241,7 +241,7 @@
       </tr>
       <tr>
         <td></td>
-        <td></input><div id="crm-edit-event-colorpicker"></div></td>
+        <td><div id="crm-edit-event-colorpicker"></div></td>
       </tr>
     </table>
     <div style="margin-top: 2em"><label for="crm-edit-event-description">Beschreibung:</label></div>
@@ -254,7 +254,7 @@
   </div>
     <div id="crm-cal-tabs">
       <ul id="crm-cal-tab-list">
-        <button>Neuer Kalender</button>
+        <button onclick="crmNewCalender();">Neuer Kalender</button>
       </ul>
     </div>
   </div>
@@ -265,6 +265,19 @@
       <tr>
         <td>Title:</td>
         <td><input type="text" id="crm-edit-calendar-title" style="width: 10em;"></input></td>
+      </tr>
+    </table>
+  </div>
+
+  <div id="crm-new-calendar-dialog" class="ui-widget-content" style="display:none">
+    <table>
+      <tr>
+        <td>Title:</td>
+        <td><input type="text" id="crm-new-calendar-title" style="width: 10em;"></input></td>
+      </tr>
+      <tr>
+        <td>Color:</td>
+        <td><input type="text" id="crm-new-calendar-color" style="width: 10em;"></input><div id="crm-new-color-colorpicker"></td>
       </tr>
     </table>
   </div>

@@ -1629,9 +1629,19 @@ function updateCalendarEventFromOrder( $data ){
 }
 
 function updateEventCategoriesOrder( $data ){
-    writeLogR( $data );
+    //writeLogR( $data );
     $columns = array( 'id' => 'int', 'cat_order' => 'int' );
     echo $GLOBALS['dbh']->updateAll( 'event_category', $columns, $data );
+}
+
+function insertNewCalendar( $data ){
+    $GLOBALS['dbh']->beginTransaction();
+    $sql = "INSERT INTO event_category ( label, color, cat_order ) SELECT '".$data['label']."', '".$data['color']."', MAX( cat_order ) + 1 FROM event_category";
+    $GLOBALS['dbh']->query( $sql );
+    $query = "SELECT currval AS id FROM currval( 'event_category_id_seq'::regclass )";
+    //writeLogR( $sql );
+    echo $GLOBALS['dbh']->getOne( $query, true );
+    $GLOBALS['dbh']->commit();
 }
 
 /************************************************************************************************************

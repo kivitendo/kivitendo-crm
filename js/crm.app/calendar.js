@@ -164,15 +164,14 @@ document.addEventListener('DOMContentLoaded', function() {
         $( '#crm-edit-event-category' ).append( '<option value="' + entry.id + '">' + entry.label + '</option>' );
       }
 
-      $( '#crm-cal-tab-list' ).sortable( {
-        cancel: 'li:last-child, li:first-child',
+      $( '#crm-cal-tab-list' ).sortable({
+        cancel: 'li:first-child',
         start: function( event, ui ){
-          crmCategoryTmpIndex = ui.item.index();
+          crmCategoryTmpIndex = ui.item.index() - 1;
         },
         update: function( event, ui ){
-
           const tmp = crmCalendarInstances.splice( crmCategoryTmpIndex, 1 );
-          crmCalendarInstances.splice( ui.item.index(), 0, tmp[0] );
+          crmCalendarInstances.splice( ui.item.index() - 1, 0, tmp[0] );
 
           dbUpdateData = [];//jsonobj für die Datenbankupdate (genericUpdateEx);
           for( let i = 0; i < crmCalendarInstances.length; i++ ){
@@ -183,17 +182,18 @@ document.addEventListener('DOMContentLoaded', function() {
           }
           dbUpdateData.shift();
           dbUpdateData.splice( -1 );
+          console.info( 'dbUpdateData', dbUpdateData );
 
           $.ajax({
             url: '../ajax/crm.app.php',
             type: 'POST',
-            data:  { action: 'updateEventCategoriesOrder', data: dbUpdateData },
+            data:  { action: 'updateEventCategoriesOrder1', data: dbUpdateData },
             error: function( xhr, status, error ){
               alert( 'Error: ' + xhr.responseText );
             }
           });
         }
-      } );
+      });
 
     $( "#crm-cal-tabs" ).tabs({
       activate: function( event, ui ){
@@ -383,8 +383,6 @@ document.addEventListener('DOMContentLoaded', function() {
             type: 'POST',
             data:  { action: functionName, data: dbUpdateData },
             success: function( data ){
-              //const calendarInstance = crmCalendarInstances[ $( '#crm-cal-tabs' ).tabs( "option", "active" ) ].calendar;
-              //calendarInstance.refetchEvents();
               for( let calendarInstance of crmCalendarInstances ){
                 calendarInstance.calendar.refetchEvents();
               }

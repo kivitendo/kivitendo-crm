@@ -244,9 +244,9 @@ document.addEventListener('DOMContentLoaded', function() {
   $( '#crm-edit-event-car' ).append( '<option value=""></option>' );
 
   $( "#crm-edit-event-start1, #crm-edit-event-end, #crm-edit-event-repeat-end" ).datetimepicker({
-    //onChangeDateTime: function( current_time, $input ){
-    //  crmCalculateEnd();
-    //},
+    onChangeDateTime: function( current_time, $input ){
+      crmCalculateEnd();
+    },
     lang: 'de',
     minTime: '08:00',
     maxTime: '17:00',

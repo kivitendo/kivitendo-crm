@@ -1644,6 +1644,16 @@ function insertNewCalendar( $data ){
     $GLOBALS['dbh']->commit();
 }
 
+function deleteCalendar( $data ){
+    $GLOBALS['dbh']->beginTransaction();
+    $sql = "DELETE FROM event_category WHERE id = ".$data['id'];
+    $GLOBALS['dbh']->query( $sql );
+    $sql = "DELETE FROM calendar_events WHERE category = ".$data['id'];
+    $GLOBALS['dbh']->query( $sql );
+    $GLOBALS['dbh']->commit();
+    resultInfo( true );
+}
+
 /************************************************************************************************************
 ToDo:
 1. Calendar mit Google Calendar synchronisieren...

@@ -34,8 +34,10 @@ function crmCalendarEventDuration( start, end ){
   return duration;
 }
 
+var crmCategoryTmpIndex = 0;
+
 function crmAddCalendar( id, label ){
-  $( '#crm-cal-tab-list' ).append( '<li value="' + id + '"><a href="#crm-cal-' + id + '" class="crm-cal-' + id + '">' +  label + '</a>' + ( ( id != 0 )? '<button style="border: 0" onclick="crmEditCalendarTitle(' + id + ', \'' + label + '\')"><img src="../image/edit.png"></img></button>' : '' ) + '</li>' );
+  $( '#crm-cal-tab-list' ).append( '<li id="crm-cal-tab-' + id + '" value="' + id + '"><a href="#crm-cal-' + id + '" class="crm-cal-' + id + '">' +  label + '</a>' + ( ( id != 0 )? '<button style="border: 0" onclick="crmEditCalendarTitle(' + id + ', \'' + label + '\')"><img src="../image/edit.png"></img></button>' : '' ) + '</li>' );
   $( '#crm-cal-tabs' ).append( '<div id="crm-cal-' + id + '" class="crm-cal-tab"></div>' );
   var calendar = new FullCalendar.Calendar( document.getElementById( 'crm-cal-' + id ), {
     themeSystem: 'bootstrap5',
@@ -87,14 +89,26 @@ function crmAddCalendar( id, label ){
       $( "#crm-edit-event-repeat-end" ).val( moment( info.event._def.extendedProps.until ).format( "DD.MM.YYYY")  );
       $( '#crm-edit-event-customer' ).val( info.event._def.extendedProps.cvp_name );
       $( '#crm-edit-event-location' ).val( info.event._def.extendedProps.location );
-      $( '#crm-edit-event-category' ).val( info.event._def.extendedProps.category );
+      crmCategoryTmpIndex = info.event._def.extendedProps.category;
       $( '#crm-edit-event-visibility' ).val( info.event._def.extendedProps.visibility );
       $( '#crm-edit-event-car' ).html( '' );
       $( '#crm-edit-event-car' ).append( '<option value=""></option>' );
-      if( '' != $( "#crm-edit-event-car-id" ).val() ) crmGetCarsForCalendar( $( "#crm-edit-event-cvp-type" ).val(), $( "#crm-edit-event-cvp-id" ).val(), function(){
-          $( '#crm-edit-event-car' ).val( $( "#crm-edit-event-car-id" ).val() ); $( '#crm-edit-event-dialog' ).dialog( 'open' );
+      $.ajax({
+        url: '../ajax/crm.app.php',
+        type: 'POST',
+        data:  { action: 'getCalenderCategories' },
+        success: function( crmCalendarData ){
+          $( '#crm-edit-event-category' ).html( '' );
+          for( let entry of crmCalendarData ){
+            $( '#crm-edit-event-category' ).append( '<option value="' + entry.id + '">' + entry.label + '</option>' );
+          }
+          $( '#crm-edit-event-category' ).val( crmCategoryTmpIndex );
+          if( '' != $( "#crm-edit-event-car-id" ).val() ) crmGetCarsForCalendar( $( "#crm-edit-event-cvp-type" ).val(), $( "#crm-edit-event-cvp-id" ).val(), function(){
+            $( '#crm-edit-event-car' ).val( $( "#crm-edit-event-car-id" ).val() ); $( '#crm-edit-event-dialog' ).dialog( 'open' );
+          });
+          else $( '#crm-edit-event-dialog' ).dialog( 'open' );
+        }
       });
-      else $( '#crm-edit-event-dialog' ).dialog( 'open' );
     },
     select: function( info ) {
       $( "#crm-edit-event-cvp-id" ).val( '' );
@@ -532,20 +546,22 @@ function crmEditCalendarTitle( id, label ){
         });
       },
       "Delete": function() {
-        let pos = {};
-        pos['event_category'] = {};
-        pos['event_category']['WHERE'] = 'id = ' + $( '#crm-edit-calendar-title-id' ).val();
-
         $.ajax({
             url: '../ajax/crm.app.php',
             type: 'POST',
-            data:  { action: 'genericDelete', data: pos },
+            data:  { action: 'deleteCalendar', data: { id: $( '#crm-edit-calendar-title-id' ).val() } },
             success: function( data ){
-              const tab = $( '#crm-cal-tabs' ).tabs( "option", "active" );
-              crmCalendarInstances.splice( tab, 1 );
-              $( '#crm-cal-tabs' ).tabs('remove', tab);
-              console.info( 'crmCalendarInstances', crmCalendarInstances );
-              $( '#crm-edit-event-dialog' ).dialog( "close" );
+              for( let tab = 0; tab < crmCalendarInstances.length; tab++ ){
+                if( crmCalendarInstances[tab].id == $( '#crm-edit-calendar-title-id' ).val() ) crmCalendarInstances.splice( tab, 1 );
+              }
+              $( '#crm-cal-tab-' + $( '#crm-edit-calendar-title-id' ).val() ).remove();
+              $( '#crm-cal-' + $( '#crm-edit-calendar-title-id' ).val() ).remove();
+              $( '#crm-cal-tabs' ).tabs( "refresh" );
+              for( let calendarInstance of crmCalendarInstances ){
+                calendarInstance.calendar.refetchEvents();
+                calendarInstance.calendar.render();
+              }
+            $( '#crm-edit-event-dialog' ).dialog( "close" );
             },
             error: function( xhr, status, error ){
               alert( 'Error: ' + xhr.responseText );

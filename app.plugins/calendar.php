@@ -173,7 +173,7 @@
       </tr>
       <tr>
         <td><label for="crm-edit-event-end">Ende:</label></td>
-        <td><input type="text" id="crm-edit-event-end" name="crm-edit-event-end" value="" autocomplete="off"></td>
+        <td><input type="text" id="crm-edit-event-end" name="crm-edit-event-end" value="" autocomplete="off"></input></td>
         <td><label for="crm-edit-event-full-time" class="crm-ui-table-item-right">ganztags</label></td>
         <td><input type="checkbox" id="crm-edit-event-full-time" name="crm-edit-event-full-time"></input></td>
       </tr>
@@ -184,7 +184,7 @@
         <td><input type="number" id="crm-edit-event-count" name="crm-edit-event-count" value="" style="width: 9em"></td>
       </tr>
       <tr>
-        <td><label for="crm-edit-event-end">Interval:</label></td>
+        <td><label for="crm-edit-event-interval">Interval:</label></td>
         <td><input type="number" id="crm-edit-event-interval" name="crm-edit-event-interval" value="" style="width: 9em"></td>
         <td><select id="crm-edit-event-freq" name="crm-edit-event-freq"><option value="daily">tägig</option><option value="weekly">wöchig</option><option value="monthly">monatig</option><option value="yearly">jährig</option></td>
       </tr>

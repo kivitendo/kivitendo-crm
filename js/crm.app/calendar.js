@@ -107,7 +107,11 @@ function crmAddCalendar( id, label ){
             $( '#crm-edit-event-car' ).val( $( "#crm-edit-event-car-id" ).val() ); $( '#crm-edit-event-dialog' ).dialog( 'open' );
           });
           else $( '#crm-edit-event-dialog' ).dialog( 'open' );
+        },
+        error: function( xhr, status, error ){
+          alert( 'Error: ' + xhr.responseText );
         }
+
       });
     },
     select: function( info ) {

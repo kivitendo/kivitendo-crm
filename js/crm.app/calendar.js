@@ -243,15 +243,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
   $( '#crm-edit-event-car' ).append( '<option value=""></option>' );
 
-  $( "#crm-edit-event-start1, #crm-edit-event-end, #crm-edit-event-repeat-end" ).datetimepicker({
-    onChangeDateTime: function( current_time, $input ){
+  // Achtung beim datetimepicker sollte man nachträglich NICHT die Option "timepicker" ändern
+  // dann wird das bei gemeinsamen Selektoren bei allen Selektoren gemacht!!
+  // ansonsten sehr geiler Code, ich bin beeindruckt
+  $( "#crm-edit-event-repeat-end" ).datetimepicker({
+    onChangeDateTime: function( current_time, $input ){ // macht was?? $input???
       crmCalculateEnd();
     },
-    lang: 'de',
-    minTime: '08:00',
-    maxTime: '17:00',
+    lang: 'de', //kivi countrycode verwenden
     format:'d.m.Y H:i',
-    timepicker: true
+    timepicker: false
   });
 
   $( "#crm-edit-event-start" ).datetimepicker({
@@ -262,18 +263,23 @@ document.addEventListener('DOMContentLoaded', function() {
     timepicker: true
   });
 
-  $( "#crm-edit-event-repeat-end" ).datetimepicker({
-    lang: 'de',
-    format:'d.m.Y',
-    timepicker: false
+  $( "#crm-edit-event-end" ).datetimepicker({
+    onChangeDateTime: function( current_time, $input ){ // macht was?? $input???
+      crmCalculateEnd();
+    },
+    lang: 'de', //kivi countrycode verwenden!!!!
+    minTime: '08:00', //hier würde ich Variablen verwenden
+    maxTime: '17:00', //hier würde ich Variablen verwenden
+    format:'d.m.Y H:i',
+    timepicker: true
   });
 
-  $( '#crm-edit-event-colorpicker' ).colorPicker({
+  $( '#crm-edit-event-colorpicker' ).colorPicker({ //hier könnte man die Selektoren auch zusammen fassen und dann mit "this.id.val( color )" modifizieren
     columns: 13,     // number of columns (optional)
     color: ['#FF7400', '#CDEB8B','#6BBA70','#006E2E','#C3D9FF','#0101DF','#4096EE','#356AA0','#FF0096','#DF0101','#B02B2C','#112211','#000000'], // list of colors (optional)
     click: function( color ){
         $( '#crm-edit-event-color' ).val( color );
-    },
+    }
   });
 
   $( '#crm-new-color-colorpicker' ).colorPicker({
@@ -281,8 +287,11 @@ document.addEventListener('DOMContentLoaded', function() {
     color: ['#FF7400', '#CDEB8B','#6BBA70','#006E2E','#C3D9FF','#0101DF','#4096EE','#356AA0','#FF0096','#DF0101','#B02B2C','#112211','#000000'], // list of colors (optional)
     click: function( color ){
         $( '#crm-new-calendar-color' ).val( color );
-    },
+    }
   });
+
+  //nur so als Idee:
+  //$( '#crm-edit-event-colorpicker, #crm-new-color-colorpicker' ).colorPicker
 
   $( "#crm-edit-event-freq, #crm-edit-event-interval, #crm-edit-event-count" ).change( crmCalculateEnd );
   $( "#crm-edit-event-repeat-end").change( crmCalculateRepeatQuantity );

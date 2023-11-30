@@ -1606,7 +1606,7 @@ function getCalendarEvents( $data ){
                 ") AS rrule ) AS rrule ".
                 "FROM calendar_events cal WHERE ( dtstart >= '$start' AND dtend <= '$end' OR repeat_end >= '$start' ) AND $category CASE WHEN visibility = 0 THEN uid = $employee ELSE TRUE END";
 
-    writeLogR( $query );
+    //writeLogR( $query );
 
     $GLOBALS['dbh']->setShowError( true );
     echo $GLOBALS['dbh']->getAll( $query, true );
@@ -1629,6 +1629,7 @@ function updateCalendarEventFromOrder( $data ){
 }
 
 function updateEventCategoriesOrder( $data ){
+    writeLogR( $data );
     $columns = array( 'id' => 'int', 'cat_order' => 'int' );
     echo $GLOBALS['dbh']->updateAll( 'event_category', $columns, $data );
 }

@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
       //console.info( 'crmCalendarData', crmCalendarData );
 
       for( let entry of crmCalendarData ){
-        $( '#crm-cal-tab-list' ).append( '<li value="' + entry.id + '"><a href="#crm-cal-' + entry.id + '" class="crm-cal-' + entry.id + '">' +  entry.label + '</a><button onclick="crmEditCalendarTitle(' + entry.id + ', \'' + entry.label + '\')">' +  'E' + '</button></li>' );
+        $( '#crm-cal-tab-list' ).append( '<li value="' + entry.id + '"><a href="#crm-cal-' + entry.id + '" class="crm-cal-' + entry.id + '">' +  entry.label + '</a>' + ( ( entry.id != 0 )? '<button style="border: 0" onclick="crmEditCalendarTitle(' + entry.id + ', \'' + entry.label + '\')"><img src="../image/edit.png"></img></button>' : '' ) + '</li>' );
         $( '#crm-cal-tabs' ).append( '<div id="crm-cal-' + entry.id + '" class="crm-cal-tab"></div>' );
         var calendar = new FullCalendar.Calendar( document.getElementById( 'crm-cal-' + entry.id ), {
           themeSystem: 'bootstrap5',
@@ -180,14 +180,11 @@ document.addEventListener('DOMContentLoaded', function() {
             dupel.push( i );
             dbUpdateData.push( dupel );;
           }
-          dbUpdateData.shift();
-          dbUpdateData.splice( -1 );
-          console.info( 'dbUpdateData', dbUpdateData );
 
           $.ajax({
             url: '../ajax/crm.app.php',
             type: 'POST',
-            data:  { action: 'updateEventCategoriesOrder1', data: dbUpdateData },
+            data:  { action: 'updateEventCategoriesOrder', data: dbUpdateData },
             error: function( xhr, status, error ){
               alert( 'Error: ' + xhr.responseText );
             }

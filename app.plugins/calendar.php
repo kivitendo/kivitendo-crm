@@ -17,7 +17,6 @@
   <link rel="stylesheet" href="../../css/design40/main.css" type="text/css" title="Stylesheet">
   <link rel="stylesheet" href="../../css/design40/dhtmlsuite/menu-item.css" type="text/css" title="Stylesheet">
   <link rel="stylesheet" href="../../css/design40/dhtmlsuite/menu-bar.css" type="text/css" title="Stylesheet">
-<script type="text/javascript" src="http://localhost/kivitendo//crm/jquery-plugins/selectBoxIt/selectBoxIt.js"></script>
   <!--
   <link rel="stylesheet" href="../../css/lx-office-erp/list_accounts.css" type="text/css" title="Stylesheet">
   <link rel="stylesheet" href="../../css/lx-office-erp/jquery-ui.custom.css" type="text/css" title="Stylesheet">

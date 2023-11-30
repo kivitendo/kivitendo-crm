@@ -97,7 +97,6 @@ function crmAddCalendar( id, label ){
       else $( '#crm-edit-event-dialog' ).dialog( 'open' );
     },
     select: function( info ) {
-      console.info( 'info', info );
       $( "#crm-edit-event-cvp-id" ).val( '' );
       $( "#crm-edit-event-cvp-type" ).val( '' );
       $( "#crm-edit-event-car-id" ).val( '' );
@@ -106,8 +105,8 @@ function crmAddCalendar( id, label ){
       $( "#crm-edit-event-description" ).text( '' );
       $( "#crm-edit-event-id" ).val( '' );
       $( "#crm-edit-event-full-time" ).prop( 'checked', false );
-      $( "#crm-edit-event-start" ).val( moment( info.event.start ).format( "DD.MM.YYYY HH:mm") );
-      $( "#crm-edit-event-end" ).val( moment( info.event.end ? info.event.end : info.event.start ).format( "DD.MM.YYYY HH:mm") );
+      $( "#crm-edit-event-start" ).val( moment( info.start ).format( "DD.MM.YYYY HH:mm") );
+      $( "#crm-edit-event-end" ).val( moment( info.end ? info.end : info.start ).format( "DD.MM.YYYY HH:mm") );
       $( '#crm-edit-event-prio' ).val( '0' );
       $( '#crm-edit-event-freq' ).val( '0' );
       $( "#crm-edit-event-count" ).val( '1' );

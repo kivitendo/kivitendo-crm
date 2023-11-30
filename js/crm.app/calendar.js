@@ -37,7 +37,7 @@ function crmCalendarEventDuration( start, end ){
 var crmCategoryTmpIndex = 0;
 
 function crmAddCalendar( id, label ){
-  $( '#crm-cal-tab-list' ).append( '<li id="crm-cal-tab-' + id + '" value="' + id + '"><a href="#crm-cal-' + id + '" class="crm-cal-' + id + '">' +  label + '</a>' + ( ( id != 0 )? '<button style="border: 0" onclick="crmEditCalendarTitle(' + id + ', \'' + label + '\')"><img src="../image/edit.png"></img></button>' : '' ) + '</li>' );
+  $( '#crm-cal-tab-list' ).append( '<li id="crm-cal-tab-' + id + '" value="' + id + '"><a href="#crm-cal-' + id + '" class="crm-cal-' + id + '">' +  label + '</a>' + ( ( id != 0 )? '<button style="border: 0" onclick="crmEditCalendarTitle(' + id + ')"><img src="../image/edit.png"></img></button>' : '' ) + '</li>' );
   $( '#crm-cal-tabs' ).append( '<div id="crm-cal-' + id + '" class="crm-cal-tab"></div>' );
   var calendar = new FullCalendar.Calendar( document.getElementById( 'crm-cal-' + id ), {
     themeSystem: 'bootstrap5',
@@ -515,9 +515,9 @@ function crmCalendarToCustomer(){
   parent.postMessage( { 'openCustomer': { 'src': $( '#crm-edit-event-cvp-type' ).val(), 'id': $( '#crm-edit-event-cvp-id' ).val() } }, '*' );
 }
 
-function crmEditCalendarTitle( id, label ){
+function crmEditCalendarTitle( id ){
   $( '#crm-edit-calendar-title-id' ).val( id );
-  $( '#crm-edit-calendar-title' ).val( label );
+  $( '#crm-edit-calendar-title' ).val( $( '.crm-cal-' + id ).text() );
   $( '#crm-edit-calendar-title-dialog' ).dialog({
     title: kivi.t8( 'Edit calendar title' ),
     autoOpen: false,

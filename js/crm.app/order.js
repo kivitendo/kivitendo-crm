@@ -898,8 +898,8 @@ $( "#od-oe-delivery_time" ).datetimepicker({
         crmEditOrderAddEvents( );
     },
     lang: 'de',
-    minTime: '08:00',
-    maxTime: '17:00',
+    minTime: '07:00',
+    maxTime: '19:00',
     format:'d.m.Y H:i',
 });
 
@@ -908,8 +908,8 @@ $( "#od-oe-finish_time" ).datetimepicker({
         crmEditOrderAddEvents( );
     },
     lang: 'de',
-    minTime: '08:00',
-    maxTime: '17:00',
+    minTime: '07:00',
+    maxTime: '19:00',
     format:'d.m.Y H:i',
 });
 

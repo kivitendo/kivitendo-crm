@@ -15,9 +15,12 @@ var crmCalculateEnd = function(){
 };
 
 var crmCalculateRepeatQuantity = function() {
-  const a = moment( $( "#crm-edit-event-end" ).val(), 'DD.MM.YYYY HH:mm' );
-  const b = moment( $( "#crm-edit-event-repeat-end" ).val(), 'DD.MM.YYYY HH:mm' );
-  const erg = Math.floor( ( b.diff( a, crmMomentFreqMap[$( "#crm-edit-event-freq" ).val()] ) ) / parseFloat( $( "#crm-edit-event-interval" ).val() ) );
+  const end = moment( $( "#crm-edit-event-end" ).val(), 'DD.MM.YYYY HH:mm' );
+  const repeat_end = moment( $( "#crm-edit-event-repeat-end" ).val(), 'DD.MM.YYYY' );
+  repeat_end.set( { 'hour': end.get( 'hour' ), 'minute': end.get( 'minute' ) } );
+  const diff = repeat_end.diff( end, crmMomentFreqMap[$( "#crm-edit-event-freq" ).val()], true ) + 1;
+  const interval = parseFloat( $( "#crm-edit-event-interval" ).val() )
+  const erg = Math.floor( diff / interval );
   $( "#crm-edit-event-count" ).val( erg < 0 ? 0 : erg );
 };
 
@@ -247,11 +250,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // dann wird das bei gemeinsamen Selektoren bei allen Selektoren gemacht!!
   // ansonsten sehr geiler Code, ich bin beeindruckt
   $( "#crm-edit-event-repeat-end" ).datetimepicker({
-    onChangeDateTime: function( current_time, $input ){ // macht was?? $input???
-      crmCalculateEnd();
-    },
     lang: 'de', //kivi countrycode verwenden
-    format:'d.m.Y H:i',
+    format:'d.m.Y',
     timepicker: false
   });
 
@@ -294,6 +294,9 @@ document.addEventListener('DOMContentLoaded', function() {
   //$( '#crm-edit-event-colorpicker, #crm-new-color-colorpicker' ).colorPicker
 
   $( "#crm-edit-event-freq, #crm-edit-event-interval, #crm-edit-event-count" ).change( crmCalculateEnd );
+  $( "#crm-edit-event-interval, #crm-edit-event-count" ).keyup( function( event ){
+      if( event.key >= '0' && event.key <= '9' ) crmCalculateEnd();
+    });
   $( "#crm-edit-event-repeat-end").change( crmCalculateRepeatQuantity );
 
   /*

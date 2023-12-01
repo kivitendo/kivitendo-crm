@@ -129,9 +129,13 @@ WHERE NOT EXISTS (
     SELECT 1 FROM event_category WHERE id = 3
 );
 
-
+-- Migration Kalendar (Dauerereignisse)
 INSERT INTO calendar_events (title, description, dtstart, dtend, repeat_end, duration, freq, interval, count, uid, prio, category, visibility, "allDay", color)
 SELECT title, description, lower( duration ) AS dtstart, upper( duration ) AS dtend, repeat_end, to_char( ( upper( duration ) - lower( duration ) ), 'HH24:MI' ) AS duration, REPLACE( REPLACE( REPLACE( REPLACE( repeat, 'year', 'yearly' ), 'month', 'monthly' ), 'week', 'weekly' ), 'day', 'daily' ) AS freq, repeat_factor AS interval, repeat_quantity AS count, uid, prio, category, visibility, "allDay", color FROM events WHERE repeat_end IS NOT NULL AND repeat_end >= current_date AND "allDay" = false;
 
 INSERT INTO calendar_events (title, description, dtstart, dtend, repeat_end, duration, freq, interval, count, uid, prio, category, visibility, "allDay", color)
 SELECT title, description, lower( duration ) AS dtstart, upper( duration ) AS dtend, repeat_end, '24:00' AS duration, REPLACE( REPLACE( REPLACE( REPLACE( repeat, 'year', 'yearly' ), 'month', 'monthly' ), 'week', 'weekly' ), 'day', 'daily' ) AS freq, repeat_factor AS interval, repeat_quantity AS count, uid, prio, category, visibility, "allDay", color FROM events WHERE repeat_end IS NOT NULL AND repeat_end >= current_date AND "allDay" = true;
+
+-- Upgrade für Gnullte TSN in kba
+INSERT INTO lxckba (hsn, hersteller, tsn, marke)
+SELECT hsn, hersteller, '000' AS tsn, marke FROM ( SELECT DISTINCT( x.hsn ), ( SELECT tsn FROM lxckba WHERE x.hsn = hsn LIMIT 1) AS old_tsn, ( SELECT hersteller FROM lxckba WHERE x.hsn = hsn LIMIT 1) AS hersteller, ( SELECT marke FROM lxckba WHERE x.hsn = hsn LIMIT 1) AS marke FROM lxckba x ) AS kba WHERE NOT old_tsn ILIKE '000%' ORDER BY hsn;

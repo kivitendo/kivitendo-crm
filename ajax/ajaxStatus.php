@@ -33,8 +33,14 @@ function updateDB(){
     //Datenbanken sichern
     saveDBs( $output = FALSE ); //ToDo: uncomment
     //Alle Dateien in ./db_update in einen Array laden
-    $fileNameArray = scandir( __DIR__.'/../db_update' );
-    $remove = preg_grep("/^\.{1,2}|.{1,}~|.{1,}#|\.gitignore$/", $fileNameArray);
+    $fileNameArray = scandir( __DIR__.'/../db_update' );//  Alle Dateine holen
+
+    // Wenn subversion in version.php nicht lxcars ist dann Dateien entfernen die mit lxcars_ beginnen
+    //if( 0 != strcmp( SUBVER, 'lxcars' ) ) $remove = preg_grep("/^\.{1,2}|.{1,}~|.{1,}#|\.gitignore|.{1,}lxcars_$/", $fileNameArray); //Dateien die nicht benötigt werden entfernen
+    //else $remove = preg_grep("/^\.{1,2}|.{1,}~|.{1,}#|\.gitignore$/", $fileNameArray); //Dateien die nicht benötigt werden entfernen
+
+    $remove = preg_grep("/^\.{1,2}|.{1,}~|.{1,}#|\.gitignore$/", $fileNameArray); //Dateien die nicht benötigt werden entfernen
+
     foreach( $remove as $remValue ) unset( $fileNameArray[array_search( $remValue, $fileNameArray )] ); //Sicherheitskopien enfernen
     //Inhalt der Dateien in Array laden
     $dbSchema = $GLOBALS['dbh']->getAll( "select * FROM schema_info" );
@@ -43,10 +49,10 @@ function updateDB(){
         $nTag = $nVersion = $lastVersion = $currentVersion = 0;
         $update[$fileName] = file( __DIR__.'/../db_update/'.$fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );//Array mit Lines in update[fileName] laden
         foreach( $update[$fileName] as $line ){
-            if( $tag =  trim( varExist( explode( '@tag:', $line ), 1 ) ) ){ //Tags extraieren
-                $nTag++;
-                if( in_array( 'crm_'.$tag, $dbSchemaTags ) ) unset( $fileNameArray[$key] ); //schon vorhandene Tags löschen
-            }
+            //if( $tag =  trim( varExist( explode( '@tag:', $line ), 1 ) ) ){ //Tags extraieren
+            //    $nTag++;
+            //    if( in_array( 'crm_'.$tag, $dbSchemaTags ) ) unset( $fileNameArray[$key] ); //schon vorhandene Tags löschen
+            //}
             if( $fileVersion = trim( varExist( explode( '@version:', $line ),1 ) ) ){ //Version extraieren
                 $nVersion++;
                 $currentVersion = (int)str_replace( '.', '', $fileVersion );
@@ -65,6 +71,7 @@ function updateDB(){
         }
     }
     ksort( $fileNameArray ); //nach Version sortieren
+    //writeLogR( $fileNameArray );
     //in $fileNameArray stehen nun die Dateien die zum Update benötigt werden, sortiert
     $comment_patterns = array(
         '/\/\*.*(\n)*.*(\*\/)?/', //C comments
@@ -112,6 +119,6 @@ function updateDB(){
             }
         }
     }
-    echo json_encode( count( $fileNameArray ) ? $fileNameArray : array( 'Database is up to date!' ) );
+    echo json_encode( count( $fileNameArray ) ? $fileNameArray : array( 'Database is up to date!!!' ) );
 }
 ?>

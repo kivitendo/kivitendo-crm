@@ -1,5 +1,5 @@
 
--- @tag: app
+-- @tag: App
 -- @description: Upgrade script for crm_app
 -- @version: 2.3.3
 -- @php: *

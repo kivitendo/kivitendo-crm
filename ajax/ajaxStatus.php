@@ -49,10 +49,10 @@ function updateDB(){
         $nTag = $nVersion = $lastVersion = $currentVersion = 0;
         $update[$fileName] = file( __DIR__.'/../db_update/'.$fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );//Array mit Lines in update[fileName] laden
         foreach( $update[$fileName] as $line ){
-            //if( $tag =  trim( varExist( explode( '@tag:', $line ), 1 ) ) ){ //Tags extraieren
-            //    $nTag++;
-            //    if( in_array( 'crm_'.$tag, $dbSchemaTags ) ) unset( $fileNameArray[$key] ); //schon vorhandene Tags löschen
-            //}
+            if( $tag =  trim( varExist( explode( '@tag:', $line ), 1 ) ) ){ //Tags extraieren
+                $nTag++;
+                if( in_array( 'crm_'.$tag, $dbSchemaTags ) ) unset( $fileNameArray[$key] ); //schon vorhandene Tags löschen
+            }
             if( $fileVersion = trim( varExist( explode( '@version:', $line ),1 ) ) ){ //Version extraieren
                 $nVersion++;
                 $currentVersion = (int)str_replace( '.', '', $fileVersion );
@@ -76,7 +76,6 @@ function updateDB(){
     $comment_patterns = array(
         '/\/\*.*(\n)*.*(\*\/)?/', //C comments
         '/\s*--.*\n/',            //inline comments start with --
-        '/\s*#.*\n/',             //inline comments start with #
     );
     foreach( $fileNameArray as $key => $fileName ){ //Dateien die zum Db-Update benutzt werden
         $update[$fileName] = file( __DIR__.'/../db_update/'.$fileName,  FILE_SKIP_EMPTY_LINES  );//Array mit Lines in update[fileName] laden
@@ -95,6 +94,7 @@ function updateDB(){
                         $sql = preg_replace( $comment_patterns, "", $sql );
                         if( $GLOBALS['dbh']->exec( $sql ) === FALSE ){
                             echo json_encode( array( 'SQL-Error in '.$fileName.'<br> SQL-Code: '.$sql ) );
+                            writeLogR( $GLOBALS['dbh']->errorInfo() );
                             return;
                         }
                         $sql = '';

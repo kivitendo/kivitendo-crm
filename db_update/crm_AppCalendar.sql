@@ -1,5 +1,5 @@
 
--- @tag: app
+-- @tag: AppCalendar
 -- @description: Upgrade script for calendar function in crm_app
 -- @version: 2.3.4
 
@@ -30,11 +30,13 @@ CREATE TABLE IF NOT EXISTS calendar_events
     cvp_type character(1)
 );
 
+
 INSERT INTO event_category (id, label, color, cat_order)
 SELECT 3, 'Werkstatt-Plan', '#111', ( SELECT count( * ) FROM event_category )
 WHERE NOT EXISTS (
     SELECT 1 FROM event_category WHERE id = 3
 );
+
 
 
 INSERT INTO calendar_events (title, description, dtstart, dtend, repeat_end, duration, freq, interval, count, uid, prio, category, visibility, "allDay", color)

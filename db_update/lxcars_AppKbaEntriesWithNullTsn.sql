@@ -1,4 +1,4 @@
--- @tag: app
+-- @tag: AppKbaEntriesWithNullTsn
 -- @description: Upgrade script for KBA entries with null as TSN
 -- @version: 2.3.5
 

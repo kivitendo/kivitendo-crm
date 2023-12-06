@@ -36,10 +36,10 @@ function updateDB(){
     $fileNameArray = scandir( __DIR__.'/../db_update' );//  Alle Dateine holen
 
     // Wenn subversion in version.php nicht lxcars ist dann Dateien entfernen die mit lxcars_ beginnen
-    //if( 0 != strcmp( SUBVER, 'lxcars' ) ) $remove = preg_grep("/^\.{1,2}|.{1,}~|.{1,}#|\.gitignore|.{1,}lxcars_$/", $fileNameArray); //Dateien die nicht benötigt werden entfernen
-    //else $remove = preg_grep("/^\.{1,2}|.{1,}~|.{1,}#|\.gitignore$/", $fileNameArray); //Dateien die nicht benötigt werden entfernen
+    if( 0 != strcmp( SUBVER, 'lxcars' ) ) $remove = preg_grep("/^\.{1,2}|.{1,}~|.{1,}#|\.gitignore|.{1,}lxcars_$/", $fileNameArray); //Dateien die nicht benötigt werden entfernen
+    else $remove = preg_grep("/^\.{1,2}|.{1,}~|.{1,}#|\.gitignore$/", $fileNameArray); //Dateien die nicht benötigt werden entfernen
 
-    $remove = preg_grep("/^\.{1,2}|.{1,}~|.{1,}#|\.gitignore$/", $fileNameArray); //Dateien die nicht benötigt werden entfernen
+    //$remove = preg_grep("/^\.{1,2}|.{1,}~|.{1,}#|\.gitignore$/", $fileNameArray); //Dateien die nicht benötigt werden entfernen
 
     foreach( $remove as $remValue ) unset( $fileNameArray[array_search( $remValue, $fileNameArray )] ); //Sicherheitskopien enfernen
     //Inhalt der Dateien in Array laden

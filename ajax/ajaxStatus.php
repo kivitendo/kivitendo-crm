@@ -35,14 +35,17 @@ function updateDB(){
     //Alle Dateien in ./db_update in einen Array laden
     $fileNameArray = scandir( __DIR__.'/../db_update' );//  Alle Dateine holen
 
-    // Wenn subversion in version.php nicht lxcars ist dann Dateien entfernen die mit lxcars_ beginnen
-    if( 0 != strcmp( SUBVER, 'lxcars' ) ) $remove = preg_grep("/^\.{1,2}|.{1,}~|.{1,}#|\.gitignore|.{1,}lxcars_$/", $fileNameArray); //Dateien die nicht benötigt werden entfernen
-    else $remove = preg_grep("/^\.{1,2}|.{1,}~|.{1,}#|\.gitignore$/", $fileNameArray); //Dateien die nicht benötigt werden entfernen
-
-    //$remove = preg_grep("/^\.{1,2}|.{1,}~|.{1,}#|\.gitignore$/", $fileNameArray); //Dateien die nicht benötigt werden entfernen
+    //Wenn subversion in version.php lxcars ist, dann werden die Dateien die mit lxcars_ beginnen nicht benötigt
+    if( strcmp( SUBVER, 'lxcars' ) == 0 ){
+        $remove = preg_grep("/^\.{1,2}|.{1,}~|.{1,}#|\.gitignore$/", $fileNameArray); //Dateien die nicht benötigt werden entfernen
+    }
+    else{
+        // hier werden zusätzlich die Dateien entfernt die mit lxcars_ beginnen
+        $remove = preg_grep("/^\.{1,2}|.{1,}~|.{1,}#|\.gitignore|lxcars_.*$/", $fileNameArray); //Dateien die nicht benötigt werden entfernen
+    }
 
     foreach( $remove as $remValue ) unset( $fileNameArray[array_search( $remValue, $fileNameArray )] ); //Sicherheitskopien enfernen
-    //Inhalt der Dateien in Array laden
+    //Inhalt der Dateien in Array laden und prüfen ob die Dateien in der richtigen Reihenfolge sind
     $dbSchema = $GLOBALS['dbh']->getAll( "select * FROM schema_info" );
     foreach( $dbSchema as $key => $value ) $dbSchemaTags[$key] = $value['tag'];//alle Tags in einem flachen Array
     foreach( $fileNameArray as $key => $fileName ){

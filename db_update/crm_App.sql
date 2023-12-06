@@ -26,4 +26,6 @@ $GLOBALS['dbh']->myquery( 'ALTER TABLE vendor ADD COLUMN note_fax TEXT' );
 $GLOBALS['dbh']->myquery( 'ALTER TABLE vendor ADD COLUMN note_phone TEXT' );
 $GLOBALS['dbh']->myquery( 'ALTER TABLE vendor ADD COLUMN note_phone3 TEXT' );
 
+$GLOBALS['dbh']->myquery( 'ALTER TABLE IF EXISTS oe ADD COLUMN delivery_time text' );
+
 -- @exec: *

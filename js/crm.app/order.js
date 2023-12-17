@@ -937,7 +937,7 @@ function crmEditOrderAddEvents(){
     });
 }
 
-//Erzeugt Kalendereinträge für den Bringetermin und die Fertigstellung
+//Erzeugt Kalendereinträge für den Bringetermin und die Fertigstellung, wird nur für lxcars verwendet
 function crmEditOrderAddEvent( eventType, dbUpdateData ){
     const start = moment($( '#' + eventType ).val(), 'DD.MM.YYYY HH:mm ');
     if( !start._isValid ){
@@ -962,12 +962,12 @@ function crmEditOrderAddEvent( eventType, dbUpdateData ){
     dbUpdateData['record']['calendar_events']['dtstart'] = start.format('YYYY-MM-DD HH:mm:ss');
     dbUpdateData['record']['calendar_events']['dtend'] = end.format('YYYY-MM-DD HH:mm:ss');
     dbUpdateData['record']['calendar_events']['duration'] = '00:30';
-    dbUpdateData['record']['calendar_events']['title'] = $( "#od_customer_name" ).val();
+    dbUpdateData['record']['calendar_events']['title'] = eventType == 'od-oe-delivery_time' ? 'Abgabe ' + $( "#od_customer_name" ).val() : 'Abholung ' + $( "#od_customer_name" ).val();
     dbUpdateData['record']['calendar_events']['\"allDay\"'] = false;
     dbUpdateData['record']['calendar_events']['visibility'] = -1;
     dbUpdateData['record']['calendar_events']['category'] = 3;  //3 = Werkstatt-Plan; wird in der Tabelle event_category vorausgesetzt
     dbUpdateData['record']['calendar_events']['prio'] = 0;
-    dbUpdateData['record']['calendar_events']['color'] = '#111';
+    dbUpdateData['record']['calendar_events']['color'] = eventType == 'od-oe-delivery_time' ? '#008000' : '#b32821'; //Farben für die automatisch erstellten Kalender-Einträge.. (grün + rot)
     dbUpdateData['record']['calendar_events']['freq'] = 'daily';
     dbUpdateData['record']['calendar_events']['interval'] = 1;
     dbUpdateData['record']['calendar_events']['count'] = 1;
@@ -977,7 +977,7 @@ function crmEditOrderAddEvent( eventType, dbUpdateData ){
     if( $( "#od_customer_name" ).val() != '' ) dbUpdateData['record']['calendar_events']['cvp_name'] = $( "#od_customer_name" ).val();
     if( $( "#od-lxcars-c_id" ).val() != '' ) dbUpdateData['record']['calendar_events']['car_id'] = $( "#od-lxcars-c_id" ).val();
     if( $( "#od-oe-id" ).val() != '' ) dbUpdateData['record']['calendar_events']['order_id'] = $( "#od-oe-id" ).val();
-    dbUpdateData['record']['calendar_events']['title'] = $( "#od_customer_name" ).val();
+    //dbUpdateData['record']['calendar_events']['title'] = $( "#od_customer_name" ).val(); //Steht doch schon in Zeile 965
 
     let description = '';
     if( crmEditOrderEventTypeEnum.DeliveryTime == eventType ){

@@ -251,7 +251,9 @@ function crmNewCarFromScan(){
                                 name = data.name1;
                             }
                         }
-                        $( '#crm-fsscan-edit-customer' ).val( name.trim()  );
+                        if( !exists( name ) )  name = '';
+                        $( '#crm-fsscan-edit-customer' ).val( name.trim() );
+                        if( '' == orig_name ) orig_name = "xxxxxxxxxxxxxxxxxxxxxxx"; //Todo: den Fall das die erste Seite nicht mitgescannt wurde
                         crmSearchCustomerForScan( name, orig_name );
 
                         $( '#crm-fsscan-edit-customer' ).keyup( function(){

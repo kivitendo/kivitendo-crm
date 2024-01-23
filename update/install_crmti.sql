@@ -68,9 +68,13 @@ CREATE OR REPLACE FUNCTION SucheNummer( text )
         END IF;
         SELECT INTO result id, name::text, 'C'::char AS typ FROM (SELECT id, name, to_number(phone, format)::char(16) AS p, to_number(phone, format)::char(16) AS f, char_length(to_number(phone, format)::char(16)) AS l, char_length(to_number(phone, format)::char(16)) AS l1, char_length(to_number(telnum, format)::char(16)) AS lt FROM customer WHERE phone !='') AS xyz WHERE kuerze(lt,xyz.p) LIKE kuerze(l,to_number(telnum, format)::char(16))||'%';
         IF result.name != '' THEN return result; END IF;
+        SELECT INTO result id, name::text, 'C'::char AS typ FROM (SELECT id, name, to_number(phone2, format)::char(16) AS p, to_number(phone2, format)::char(16) AS f, char_length(to_number(phone2, format)::char(16)) AS l, char_length(to_number(phone2, format)::char(16)) AS l1, char_length(to_number(telnum, format)::char(16)) AS lt FROM customer WHERE phone2 !='') AS xyz WHERE kuerze(lt,xyz.p) LIKE kuerze(l,to_number(telnum, format)::char(16))||'%';
+        IF result.name != '' THEN return result; END IF;
         SELECT INTO result id, name::text, 'C'::char AS typ FROM (SELECT id, name, to_number(fax, format)::char(16) AS p, to_number(fax, format)::char(16) AS f, char_length(to_number(fax, format)::char(16)) AS l, char_length(to_number(fax, format)::char(16)) AS l1, char_length(to_number(telnum, format)::char(16)) AS lt FROM customer WHERE fax !='') AS xyz WHERE kuerze(lt,xyz.p) LIKE kuerze(l,to_number(telnum, format)::char(16))||'%';
         IF result.name != '' THEN return result; END IF;
         SELECT INTO result id, name AS name, 'V'::char AS typ FROM (SELECT id, name, to_number(phone, format)::char(16) AS p, to_number(phone, format)::char(16) AS f, char_length(to_number(phone, format)::char(16)) AS l, char_length(to_number(phone, format)::char(16)) AS l1, char_length(to_number(telnum, format)::char(16)) AS lt FROM vendor WHERE phone !='') AS xyz WHERE kuerze(lt,xyz.p) LIKE kuerze(l,to_number(telnum, format)::char(16))||'%';
+        IF result.name != '' THEN return result; END IF;
+        SELECT INTO result id, name AS name, 'V'::char AS typ FROM (SELECT id, name, to_number(phone2, format)::char(16) AS p, to_number(phone2, format)::char(16) AS f, char_length(to_number(phone2, format)::char(16)) AS l, char_length(to_number(phone2, format)::char(16)) AS l1, char_length(to_number(telnum, format)::char(16)) AS lt FROM vendor WHERE phone2 !='') AS xyz WHERE kuerze(lt,xyz.p) LIKE kuerze(l,to_number(telnum, format)::char(16))||'%';
         IF result.name != '' THEN return result; END IF;
         SELECT INTO result id, name, 'V'::char AS typ FROM (SELECT id, name, to_number(fax, format)::char(16) AS p, to_number(fax, format)::char(16) AS f, char_length(to_number(fax, format)::char(16)) AS l, char_length(to_number(fax, format)::char(16)) AS l1, char_length(to_number(telnum, format)::char(16)) AS lt FROM vendor WHERE fax !='') AS xyz WHERE kuerze(lt,xyz.p) LIKE kuerze(l,to_number(telnum, format)::char(16))||'%';
         IF result.name != '' THEN return result; END IF;
@@ -138,4 +142,3 @@ CREATE OR REPLACE FUNCTION CallOut( text, text, text )
         return '1';
     END;
 $$ LANGUAGE 'plpgsql';;;
-

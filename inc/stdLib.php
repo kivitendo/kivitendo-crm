@@ -859,7 +859,7 @@ function ts2gerdate( $myts ){//Timestamp to German Date   Gibt es da nichts fert
 
 function needUpdate(){ //*** Prüft ob die Datenbank aktualisiert werden muss
     require_once __DIR__.'/version.php';
-    $rs = $GLOBALS['dbh']->getOne( "select * from crm order by  version DESC, datum DESC" );
+    $rs = $GLOBALS['dbh']->getOne( "SELECT version FROM crm ORDER BY version DESC, datum DESC LIMIT 1" );
     $crmVersionDB     = (int)str_replace( '.', '', $rs['version'] );//printArray( 'DB: '.$crmVersionDB );
     $crmVersionConfig = (int)str_replace( '.', '', VERSION );//printArray( 'Config: '.$crmVersionConfig );
     return $crmVersionConfig > $crmVersionDB;

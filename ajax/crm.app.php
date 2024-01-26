@@ -65,9 +65,9 @@ function fastSearch(){
                 " UNION ALL ".
                 "(SELECT 'Kontaktperson' AS category, 'P' AS src, '' AS value, cp_id AS id, concat(cp_givenname, ' ', cp_name) AS name FROM contacts WHERE cp_name ILIKE '%".$term."%' OR cp_givenname ILIKE '%".$term."%' )".
                 " UNION ALL ".
-                "(SELECT 'Fahrzeug' AS category, 'A' AS src, c_ln AS value, c_id AS id, ' [ ' || COALESCE( c_ln, '' ) || ' ] ' || COALESCE( name, '' ) AS label FROM lxc_cars JOIN customer ON c_ow = id WHERE c_ln ILIKE '%".$term."%' OR c_fin ILIKE '%".$term."%' OR ( C_2 = SUBSTR( '".$term."', 1, 4 )  AND c_3 = SUBSTR( '".$term."', 5, 3 ) ) AND obsolete = false )".
+                "(SELECT 'Fahrzeug' AS category, 'A' AS src, c_ln AS value, c_id AS id, ' [ ' || COALESCE( c_ln, '' ) || ' ] ' || COALESCE( name, '' ) AS label FROM lxc_cars JOIN customer ON c_ow = id WHERE c_ln ILIKE '%".$term."%' OR c_fin ILIKE '%".$term."%' OR ( C_2 = SUBSTR( '".$term."', 1, 4 )  AND c_3 ILIKE SUBSTR( '".$term."', 5, 3 ) || '%' ) AND obsolete = false )".
                 ") AS allResults ORDER BY random() LIMIT 20 ) AS mixed ORDER BY category";
-        //writeLogB( $query );
+        //writeLogR( $query );
         echo $GLOBALS['dbh']->getAll( $query , true);
     }
 }
@@ -704,6 +704,7 @@ function getCar( $data ){
                 "oe.ordnumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id = orderitems.trans_id LEFT JOIN instructions ON oe.id = instructions.trans_id LEFT JOIN currencies C on currency_id=C.id ".
                 "WHERE quotation = FALSE AND c_id = ".$data['id']." AND EXISTS(SELECT * FROM information_schema.tables WHERE table_name = 'lxc_ver') ORDER BY oe.itime DESC, orderitems.itime LIMIT 10".
                 ") AS ord) AS ord";
+    //writeLogR( $query );
     echo $GLOBALS['dbh']->getOne( $query, true );
 }
 
@@ -803,9 +804,9 @@ function getOrder( $data, $offer = false){
     }
 }
 
-function getInvoice( $data, $flag = null ){
+function getInvoice( $data, $flag = null ){  //ToDo c_id verwenden statt shippingpoint
     $invoiceID = $data['id'];
-    $taxzone_id = 4;
+    $taxzone_id = 4; //ToDo: Steuerzone aus der Rechnung holen (übergeben)
 
     //$sql = "SELECT  item_id as id, parts_id, position, qty, mysubquery.description, unit, sellprice, marge_total, discount, partnumber, part_type, longdescription, rate, k.taxkey_id, tax.chart_id, chart.accno FROM ".
     //    "( SELECT  parts.buchungsgruppen_id, invoice.id AS item_id, invoice.parts_id, invoice.qty, invoice.description, invoice.position, invoice.unit, invoice.sellprice, invoice.marge_total, invoice.discount, parts.partnumber, parts.part_type, invoice.longdescription ".
@@ -900,7 +901,7 @@ function insertOfferFromOrder( $data ){
     $GLOBALS['dbh']->myquery( $query );
     $GLOBALS['dbh']->commit();
 
-    getOffer( array( "id" => $id ) );
+    getOrder( array( "id" => $id ), true );
 }
 
 function saveOrder( $data ){

@@ -913,7 +913,7 @@ function saveOrder( $data ){
         if( array_key_exists( 'charts', $data['buchungsziel'] ) ){
             foreach( $data['buchungsziel']['charts'] AS $key => $value ){
                 for($i = 0; $i < count( $value ); $i++ ){
-                    writeLog( $value );
+                    //writeLog( $value );
                     $query = "INSERT INTO acc_trans (trans_id, chart_id, amount, transdate, source, memo, tax_id, taxkey, chart_link) VALUES (".$data['buchungsziel']['id'].", ".$key.", '".$value[$i]['amount']."', CURRENT_DATE, '".$value[$i]['source']."', '".$value[$i]['memo']."', ".$value[$i]['tax_id'].", (SELECT taxkey_id FROM taxkeys WHERE chart_id = ".$key." AND startdate <= CURRENT_DATE ORDER BY startdate DESC LIMIT 1), (SELECT link FROM chart WHERE id = ".$key.") )";
                     $GLOBALS['dbh']->query( $query );
                 }
@@ -1737,6 +1737,14 @@ function calendar(){ //Ich würde für jeden Task eine eigene Funktion schreiben
 
         select json_agg (my_json) from (select row_to_json(x0) as my_json from (SELECT json_agg( i0 ) as groups FROM ( SELECT * FROM groups ) i0) x0 union all select row_to_json(x1) from (SELECT json_agg( i1 ) as users FROM ( SELECT * FROM users ) i1) x1) bla;
     */
+}
+
+function deleteOrder( $data ){ //Auftrag löschen, inkl. aller Positionen, wenn SUBVER == lxcars dann auch alle Instructions
+    $GLOBALS['dbh']->beginTransaction();
+    $GLOBALS['dbh']->query( 'DELETE FROM oe WHERE id = '.$data['orderID'] );
+    $GLOBALS['dbh']->query( 'DELETE FROM orderitems WHERE trans_id = '.$data['orderID'] );
+    if( SUBVER == 'lxcars' ) $GLOBALS['dbh']->query( 'DELETE FROM instructions WHERE trans_id = '.$data['orderID'] );
+    echo $GLOBALS['dbh']->commit();
 }
 
 function testFunction(){

@@ -1011,6 +1011,44 @@ function crmConfirmInsertInvoiceFromOrder(){
     }).dialog( 'open' ).resize();
 }
 
+//Auftrag löschen
+$( '#crm-wf-delete-order' ).click( function(){
+    //wir erzeugen einen Dialog, der die Löschung bestätigt
+    $( '#generic-dialog' ).dialog({
+        title: kivi.t8( 'Delete order' ), // Titel des Dialogs
+        open: function(){
+            let mytext = kivi.t8( 'Do you really want to delete the order of' ) + ' ' + $( '#od_customer_name' ).val() + ' ' + kivi.t8( 'with the order number' ) + ' ' + $( '#od-oe-ordnumber' ).text() + '?';
+            $( this ).html( mytext );
+          },
+        buttons:[
+            {
+                text: kivi.t8( 'Delete' ),
+                click: function(){
+                    $.ajax({
+                        url: 'crm/ajax/crm.app.php',
+                        type: 'POST',
+                        data:  { action: 'deleteOrder', data: { 'orderID': $( '#od-oe-id' ).val() } },
+                        success: function(){
+                            $( '#generic-dialog' ).dialog( 'close' );
+                            crmEditOrderCloseView();
+                        },
+                        error: function( xhr, status, error ){
+                            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Request Error in: ' ) + 'crmEditOrderAddEvent()', xhr.responseText );
+                        }
+                    });
+                }
+            },
+            {
+                text: kivi.t8( 'Cancel' ),
+                click: function(){
+                    $(this).dialog( 'close' );
+                }
+            }
+        ]
+    });
+});
+
+
 function crmInsertInvoiceFromOrder(){
     let data = {};
     data['ordnumber'] = $( '#od-oe-ordnumber' ).text();

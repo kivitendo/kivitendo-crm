@@ -450,7 +450,7 @@
 
     <div id="od-oe-workflow" class="layout-actionbar" style="top: 140px; left: 28px; border: 0;">
         <div id="od-oe-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCloseView();">Schließen</div>
-        <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Workflow</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit" onclick="crmConfirmInsertOfferFromOrder();">Vorlage für Angebot</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order" onclick="crmConfirmInsertInvoiceFromOrder();">Vorlage für Rechnung</div></div></div>
+        <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Workflow</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit" onclick="crmConfirmInsertOfferFromOrder();">Vorlage für Angebot</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order" onclick="crmConfirmInsertInvoiceFromOrder();">Vorlage für Rechnung</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-delete-order">Auftrag löschen</div></div></div>
         <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallPrinter1();">Printer1</div>
         <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallPrinter2();">Printer2</div>
         <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallPDF();">PDF</div>
@@ -969,6 +969,9 @@
     <button class="crm-ui-button" onclick="crmInsertInvoiceFromOrder();">Weiter</button>
     <button class="crm-ui-button" onclick="$( '#crm-confirm-order-to-invoice-dialog' ).dialog( 'close' );">Abbrechen</button>
 </div>
+
+<!-- generischer Dialog, kann für alles verwendet werden...  -->
+<div id="generic-dialog"> </div>
 
 <div id="crm-confirm-order-to-offer-dialog" style="display:none">
     <p style="font-weight: bold">Aus dem Auftrag ein Angebot erzeugen?</p>

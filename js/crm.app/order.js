@@ -1011,15 +1011,42 @@ function crmConfirmInsertInvoiceFromOrder(){
     }).dialog( 'open' ).resize();
 }
 
-//Auftrag löschen
-$( '#crm-wf-delete-order' ).click( function(){
+//Auftrag und Angebote löschen, so geht das...
+$( '#crm-wf-delete-order, #crm-wf-delete-offer' ).click( function(){
+    let order_or_offer = this.id;
     //wir erzeugen einen Dialog, der die Löschung bestätigt
     $( '#generic-dialog' ).dialog({
-        title: kivi.t8( 'Delete order' ), // Titel des Dialogs
+        title: this.id === 'crm-wf-delete-order' ? kivi.t8( 'Delete Order' ) : kivi.t8( 'Delete Offer' ),// Titel des Dialogs
         open: function(){
-            let mytext = kivi.t8( 'Do you really want to delete the order of' ) + ' ' + $( '#od_customer_name' ).val() + ' ' + kivi.t8( 'with the order number' ) + ' ' + $( '#od-oe-ordnumber' ).text() + '?';
-            $( this ).html( mytext );
-          },
+            let number = order_or_offer === 'crm-wf-delete-order' ? $( '#od-oe-ordnumber' ).text() : $( '#od-off-quonumber' ).text();
+            let type = order_or_offer === 'crm-wf-delete-order' ? kivi.t8( 'order' ) : kivi.t8( 'offer' );
+            let mytext = kivi.t8( 'Do you really want to delete the' ) + ' ' + type  + ' ' + 'of' + ' ' + $( '#od_customer_name' ).val() + ' ' + kivi.t8( 'with the number' ) + ' ' +  number + '?';
+            $( this ).html( mytext );// Text des Dialogs
+        },
+        create: function() {
+            // Wende Stile auf alle Buttons im Dialog an
+            $( this ).closest( '.ui-dialog' ).find( '.ui-button' ).css({
+                //ToDo Dirk: Farben an Kivitendo anpassen
+                'background-color': '#4CAF50', // Grüner Hintergrund
+                'color': 'black',              // Schwarze Schrift
+                'border': '1em'                // Ein Rand
+                // Weitere Stile hier lieber Dirk
+                /*************************************************************
+                .ui-button {
+                    color: #ffffff;                 // Weiße Schrift
+                    background-color: #007bff;      // Blauer Hintergrund
+                    border: 1px solid #007bff;      // Blauer Rand
+                    font-size: 14px;                // Schriftgröße
+                    padding: 5px 10px;              // Innerer Abstand
+                    border-radius: 5px;             // Abgerundete Ecken
+                    box-shadow: 2px 2px 2px #aaa;   // Schatten
+                }
+                .ui-button:hover {
+                    background-color: #0056b3;      // Dunklerer Hintergrund beim Hover
+                }
+                ***************************************************************/
+            });
+        },
         buttons:[
             {
                 text: kivi.t8( 'Delete' ),
@@ -1027,9 +1054,10 @@ $( '#crm-wf-delete-order' ).click( function(){
                     $.ajax({
                         url: 'crm/ajax/crm.app.php',
                         type: 'POST',
-                        data:  { action: 'deleteOrder', data: { 'orderID': $( '#od-oe-id' ).val() } },
+                        data:  { action: 'deleteOrderOffer', data: { 'orderID': order_or_offer === 'crm-wf-delete-order' ? $( '#od-oe-id' ).val() : $( '#od-off-id' ).val() } },
                         success: function(){
-                            $( '#generic-dialog' ).dialog( 'close' );
+                            // Dieser Dialog muss unbedingt zerstört werden, weil Kivitendo die Farbe der Buttons ändert
+                            $( '#generic-dialog' ).dialog( 'close' ).dialog( 'destroy' );// WICHTIG
                             crmEditOrderCloseView();
                         },
                         error: function( xhr, status, error ){

@@ -1739,7 +1739,7 @@ function calendar(){ //Ich würde für jeden Task eine eigene Funktion schreiben
     */
 }
 
-function deleteOrder( $data ){ //Auftrag löschen, inkl. aller Positionen, wenn SUBVER == lxcars dann auch alle Instructions
+function deleteOrderOffer( $data ){ //Auftrag bzw. Angebot löschen, inkl. aller Positionen, wenn SUBVER == lxcars dann auch alle Instructions
     $GLOBALS['dbh']->beginTransaction();
     $GLOBALS['dbh']->query( 'DELETE FROM oe WHERE id = '.$data['orderID'] );
     $GLOBALS['dbh']->query( 'DELETE FROM orderitems WHERE trans_id = '.$data['orderID'] );

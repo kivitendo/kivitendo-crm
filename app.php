@@ -462,7 +462,7 @@
     <div id="od-off-menus">
         <div class="layout-actionbar" style="top: 140px; left: 28px; border: 0;">
             <div id="od-off-close-btn" class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCloseView();">Schließen</div>
-            <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Workflow</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit" onclick="crmConfirmXYZ();">Wiederverwenden*</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-search-order" onclick="crmConfirmXYZ();">Vorlage für Auftrag*</div></div></div>
+            <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div class="layout-actionbar-action layout-actionbar-submit">Workflow</div><span></span></div><div class="layout-actionbar-combobox-list"><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-edit" onclick="crmConfirmXYZ();">Wiederverwenden*</div><div class="layout-actionbar-action layout-actionbar-submit" id="crm-wf-delete-offer">Angebot löschen</div></div></div>
         </div>
         <div class="layout-actionbar" style="top: 140px; left: 350px; border: 0;">
            <div class="layout-actionbar-combobox"><div class="layout-actionbar-combobox-head"><div id="od-off-current-printer" value="" class="layout-actionbar-action layout-actionbar-submit" style="width: auto">Drucken</div><span></span></div><div id="od-off-printers" class="layout-actionbar-combobox-list"></div></div>

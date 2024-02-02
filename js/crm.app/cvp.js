@@ -474,11 +474,11 @@ function crmEditCuVeViewSave( ){
             if( exists( val ) ) dbUpdateData[cvSrc][columnName[1]] = val;
         }
     }
-    if( dbUpdateData[cvSrc]['bland'] === '' ){
-        $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Error' ), kivi.t8( 'Select Bundesland please.' ) );
-        return;
-    }
+    //
+    if( dbUpdateData[cvSrc]['bland'] === '' ) dbUpdateData[cvSrc]['bland'] = '0';
 
+        //$( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Error' ), kivi.t8( 'Select Bundesland please.' ) );
+        //return;
     if( exists( $( '#deladdr-shiptoname' ).val() ) && $( '#deladdr-shiptoname' ).val() !== '' ){
 
         if( exists( $( '#deladdr_shipto_id' ).val() ) && $( '#deladdr_shipto_id' ).val() !== '' ){

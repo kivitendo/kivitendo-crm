@@ -97,39 +97,29 @@ $$ LANGUAGE 'plpgsql';;;
 
 
 CREATE OR REPLACE FUNCTION CallIn( text, text, text )
-RETURNS text AS $$
-DECLARE
-    src ALIAS FOR $1;
-    dst ALIAS FOR $2;
-    unique_call_id ALIAS FOR $3;
-    result record;
-    new_row crmti%rowtype;
-    doubleContext text[] := ARRAY['Autoprofis2']; -- Wenn mehere Telfone gleichzeitig klingeln soll das Event nur einmal in die
-                                                  -- Anruflist eingetragen werden, ins Array können mehere Kontexte eingetragen werden
-                                                  -- (wenn drei oder mehr Telefone zusammen klingeln) ARRAY['Autoprofis2', 'Autoprofis3', '...']
-BEGIN
-    result := SucheNummer( src );
-    -- Achtung! Nur wenn doppelte Kontexte gefiltert werden!
-    -- Ersetzungen durchführen, etwas Kosmetik weil Autoprofis1 und Autoprofis2 quasi nun zu einem Kontext zusammengeschmolzen sind
-    IF dst = 'Autoprofis1' THEN
-        dst := 'Autoprofis';
-    END IF;
-    -- Prüft, ob dest NICHT in der Liste doppelter Kontexte ist, bevor INSERT durchgeführt wird
-    IF NOT dst = ANY(doubleContext) THEN
+    RETURNS text AS $$
+    -- Für eingehende Anrufe, Sucht in src und gibt den Namen zurück, speichert
+    DECLARE
+        src ALIAS FOR $1;
+        dst ALIAS FOR $2;
+        unique_call_id ALIAS FOR $3;
+        result record;
+        new_row crmti%rowtype;
+    BEGIN
+        result := SucheNummer( src );
         INSERT INTO crmti ( crmti_src, crmti_caller_id, crmti_caller_typ, crmti_dst, crmti_direction, crmti_number, unique_call_id  ) VALUES ( result.name, result.id, result.typ, dst, 'E', src, unique_call_id  ) RETURNING * INTO new_row;
-    END IF;
-    --DELETE FROM crmti WHERE crmti_id  < new_row.crmti_id - 512;
-    IF result.typ != 'X' THEN
-        insert into telcall ( calldate, bezug, cause, caller_id, kontakt, inout ) values ( CURRENT_TIMESTAMP, 0, 'Eingehender Anruf zu[r|m] '||dst, result.id, 'T','i' );
-    END IF;
-    --PERFORM pg_notify( 'crmti_watcher', to_json( new_row  )::TEXT );
-    IF result.id = 0 THEN --not found in kivi database! Use https://github.com/Superslub/AGI_Reverse_Lookup_DACH/commits/master!!!
-        return NULL;
-    ELSE
-        return result.name;
-    END IF;
-END;
-$$ LANGUAGE 'plpgsql';
+        DELETE FROM crmti WHERE crmti_id  < new_row.crmti_id - 512;
+        IF result.typ != 'X' THEN
+            insert into telcall ( calldate, bezug, cause, caller_id, kontakt, inout ) values ( CURRENT_TIMESTAMP, 0, 'Eingehender Anruf zu[r|m] '||dst, result.id, 'T','i' );
+        END IF;
+        --PERFORM pg_notify( 'crmti_watcher', to_json( new_row  )::TEXT );
+        IF result.id = 0 THEN  --not found in kivi database! Use https://github.com/Superslub/AGI_Reverse_Lookup_DACH/commits/master!!!
+            return NULL;
+        ELSE
+            return result.name;
+        END IF;
+    END;
+$$ LANGUAGE 'plpgsql';;;
 
 
 CREATE OR REPLACE FUNCTION CallOut( text, text, text )

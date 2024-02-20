@@ -505,11 +505,11 @@ function crmEditCarDlg( crmData = null ){
                 if( exists( crmData.car[columnName[1]] ) ) $( '#' + item.name ).val( crmData.car[columnName[1]] );
             }
 
-            assert( 'c_hu', crmData.car.c_hu );
-            if( '' != crmData.car.c_hu ) {
-                const c_hu = new Date( crmData.car.c_hu );
-                const current_date = new Date();
-                if( c_hu < current_date ) $( '#edit_car-c_hu' ).parent().parent().css( 'background-color', 'red' );
+            if(  crmData.car.c_hu !== '' ){ //Färbt bei fälliger HU die Zeile rot ein, Moments ist dein Freund!!!
+                const c_hu = moment( crmData.car.c_hu, "DD.MM.YYYY" );   //c_hu: 1714514400000 === 01.05.2024
+                const currentMonth = moment().startOf( 'month' ); //currentMonth: 1706742000000 === 20.02.2014
+                if( c_hu.isSameOrBefore( currentMonth, 'month' ) ) $('#edit_car-c_hu').css( 'background-color', '#FF69B4' ); //#FF007F  #FFA500
+                //$( '#edit_car-c_hu' ).parent().parent().css( 'background-color', 'red' ); //Färbt die ganze Zeile
             }
         }
 

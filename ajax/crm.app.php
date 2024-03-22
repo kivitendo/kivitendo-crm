@@ -967,6 +967,7 @@ function insertNewCuWithCar( $data ){
     prepareKba( $data );
     foreach( $data AS $key => $value ){
         if( strcmp( $key, 'customer' ) === 0 ){
+            $value['customernumber'] = calculateCVnumber( ( ( array_key_exists( 'business_id', $value ) )? $value['business_id'] : null ), 'customer' ); //Kundennummer berechnen
             $id = $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ), TRUE, "id" );
             if( FALSE === $id ){
                 $GLOBALS['dbh']->rollBack();

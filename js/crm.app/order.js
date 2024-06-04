@@ -1775,3 +1775,26 @@ crmDeletePaymentPos = function( e ){
     $( e ).parent().parent().remove();
     $( '#od_inv_book_deficit').show();
 }
+
+
+
+let openedTab;
+$( '#od_lxcars_aag_btn' ).click(function(){
+    $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        type: 'POST',
+        data: { action: 'getAagUrl', data: { 'oe-id': $( '#od-oe-id' ).val() } },
+        success: function( data ){
+            const url = data['portalUrl'];
+            if( openedTab && !openedTab.closed ){
+                // Tab ist bereits geöffnet, URL aktualisieren und Fokus darauf setzen
+                openedTab.location.href = url;
+                openedTab.focus();
+            }
+            else{
+                // Neuen Tab öffnen und Referenz speichern
+                openedTab = window.open( url, "_blank" );
+            }
+        }
+    });
+});

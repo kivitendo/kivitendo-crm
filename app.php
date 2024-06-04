@@ -457,6 +457,7 @@
         <div class="layout-actionbar-action layout-actionbar-submit" value="" onclick="crmEditOrderCallCoparts();">Coparts</div>
         <div class="layout-actionbar-action layout-actionbar-submit" value="" style="margin-left: 2em;" onclick="crmEditOrderGotoCustomer();">Auftraggeber</div>
         <div id="od_lxcars_to_car_btn" class="layout-actionbar-action layout-actionbar-submit" value="">Auto</div>
+        <div id="od_lxcars_aag_btn" class="layout-actionbar-action layout-actionbar-submit" value="">AAG-Online</div>
     </div>
 
     <div id="od-off-menus">

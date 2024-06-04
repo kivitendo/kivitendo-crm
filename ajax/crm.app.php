@@ -1760,3 +1760,338 @@ function testFunction(){
     writeLogR( $dir_db );
     echo $rs;
 }
+
+function getAagToken( $debug = FALSE ){
+    $aagLogin = $GLOBALS['dbh']->getKeyValueData( 'crmdefaults', array( 'aag-online_user', 'aag-online_passwd' ), 'employee = -1', FALSE );
+    if( $debug ) writeLogR( $aagLogin );
+    // Die URL für den Login-Request.
+    $loginUrl = 'https://tm-next.dvse.de/data/TM.Next.Authority/external/login/GetAuthToken';
+
+    // Die Login-Daten.
+    $loginData = [
+        'authId' => 'ti6x', //Authentifizierungs-ID (wird von der DVSE bereitgestellt) ti6x == AAG-Online
+        'username' => $aagLogin['aag-online_user'],//'108799', // Benutzername
+        'password' => $aagLogin['aag-online_passwd']//'cuye79', // Passwort
+    ];
+
+    // Initialisiert eine cURL-Session
+    $curl = curl_init( $loginUrl );
+
+    // Setzt die Optionen für die cURL-Session
+    curl_setopt( $curl, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Accept: application/json'
+    ]);
+    curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+    curl_setopt( $curl, CURLOPT_POST, true );
+    curl_setopt( $curl, CURLOPT_POSTFIELDS, json_encode( $loginData ) );
+
+    // Führt die cURL-Session aus und speichert die Antwort
+    $response = curl_exec( $curl );
+
+    // Überprüft auf cURL-Fehler
+    if( curl_errno( $curl ) ){
+        if( $debug ) writeLogR( 'Curl error: ' . curl_error( $curl ) );
+    }
+    else {
+        // Verarbeitet die Antwort
+        $decodedResponse = json_decode( $response, true );
+        if( isset( $decodedResponse['token'] ) ){
+            if( $debug ) writeLogR( 'Token: ' . $decodedResponse['token'] );
+            if( $debug ) writeLogR( 'Schema: ' . $decodedResponse['schema'] );
+        }
+        else{
+            if( $debug ) writeLogR( 'Token konnte nicht abgerufen werden. Antwort: ' . $response );
+        }
+    }
+    return $decodedResponse['token'];
+    // Schließt die cURL-Session
+    curl_close( $curl );
+}
+
+
+
+//Erzeugt eine URL zum starten von AAG-Online, hierzu werden customer_id und car_id benötigt
+function getAagUrl( $data ){
+    writeLog( $data );
+    $sql = 'SELECT oe.id, oe.km_stnd, customer.name, customer.street, customer.zipcode, customer.city, lxc_cars.c_ln, CONCAT( lxc_cars.c_2, lxc_cars.c_3 ) AS kba FROM oe JOIN customer ON oe.customer_id = customer.id JOIN lxc_cars ON oe.c_id = lxc_cars.c_id WHERE oe.id = '.$data['oe-id'];
+    $oe_customer_car = $GLOBALS['dbh']->getOne( $sql, FALSE );
+    writeLog( $rs );
+    /***** Begin Data **************************************************************************
+    $data = [
+        "workTaskId" => "string", // Optional, um den Vorgang direkt anzusprechen (nicht empfohlen)
+        "referenceId" => "string", // Eindeutiger Identifier des Beleges aus dem DMS System
+        "voucherId" => "A_123", // DMS Belegenummer
+        "voucherType" => [ // DMS Belegart z.B. Auftrag, Rechnung, Angebot, etc.
+            "referenceId" => "string", // Eindeutiger Identifier der Belegart aus dem DMS System
+            "description" => "string" // Belegartbezeichnung
+        ],
+        "invoiced" => true, // Gibt beim Import an, ob der Beleg bereits fakturiert wurde und somit nicht mehr bearbeitet werden darf. Ist dies der Fall, wird der Beleg als "neu" importiert und sowohl die "referenceId" als auch die "voucherId" werden nicht übernommen.
+        "customer" => [
+            "referenceId" => "string", // Eindeutiger Identifier des Kunden aus dem DMS System
+            "customerId" => "string", // Kundennummer (des Werkstattkunden)
+            "title" => 0, // Enumeration Undefiniert = 0, Herr = 1, Frau = 2, Firma = 3
+            "academicTitle" => "string", // Akademischer Titel z.B. Dr. oder Prof.
+            "firstName" => "string", // Vorname des Kunden
+            "lastName" => "string", // Nachname des Kunden
+            "companyName" => "string", // Firmenname
+            "generalAddress" => [ // Beleg-Adresse
+                "referenceId" => "string", // Eindeutiger Identifier der Adresse aus dem DMS System
+                "description" => "string", // Adressbezeichnung
+                "street" => "string", // Straße
+                "addressAddition" => "string", // Adresszusatz
+                "city" => "string", // Stadt
+                "zip" => "string", // Postleitzahl
+                "state" => "string", // Landkreis
+                "country" => "string" // Land
+            ],
+            "phone" => "string", // Telefon
+            "mobile" => "string", // Telefon
+            "fax" => "string", // Fax
+            "email" => "string", // Email
+            "birthDate" => "2018-04-18T11:34:10.382Z", // Geburtstag (UTC Zeit)
+            "taxId" => "string", // Steuernummer
+            "matchcode" => "string", // Kundenkürzel
+            "memos" => [[ // Liste von Freitextfeldern
+                "description" => "string", // Bezeichnung des Freitextfeldes
+                "value" => "string", // Wert des Freitextfeldes
+                "type" => "string", // Typen. Enumeration: Text = 0, Xml = 1
+                "isVisible" => true // Soll der Value im Teilekatalog angezeigt werden.
+            ]],
+            "creationDate" => "2018-04-18T11:34:10.382Z", // Datensatz erstellt am (UTC Zeit)
+            "modifiedDate" => "2018-04-18T11:34:10.382Z" // Datensatz zuletzt geändert am (UTC Zeit)
+        ],
+        "vehicle" => [
+            "referenceId" => "string", // Eindeutiger Identifier des Fahrzeugs aus dem DMS System
+            "manufacturer" => "string", // Fahrzeughersteller (z.B. OPEL)
+            "model" => "string", // Fahrzeugmodell (z.B. 1.4 i (C08, C48, D08, D48))
+            "type" => "string", // Fahrzeugtyp (z.B. KADETT E CC (T85))
+            "vehicleType" => [
+                "id" => 0, // (TecDoc) Typnummer
+                "type" => 0, // Enumeration PKW = 1, NKW = 2, Motorrad = 3
+                "clientId" => 0, // Mandantennummer
+                "description" => "string" // Fahrzeugbezeichnung (z.B. "Audi A4 1.9 TDI")
+            ],
+            "registrationInformation" => [ // Registratur-Information
+                "plateId" => "string", // Kennzeichen
+                "countryCode" => "string", // Länderkennzeichen (ISO 3166-1 Alpha-2)
+                "registrationNo" => "string", // z.B. KBA oder Schweizer Typenscheinnummer
+                "registrationDate" => "2018-04-18T11:34:10.382Z", // Erstzulassung (UTC Zeit)
+                "registrationTypeId" => 0 // Art der Registrierungsnummer. Enumeration KBA = 0
+            ],
+            "vin" => "string", // Fahrgestellnummer (FIN)
+            "mileage" => 0, // Tachometerstand
+            "mileageType" => 0, // Enumeration Kilometer = 1, Meilen = 2
+            "engineCode" => "string", // Motorcode
+            "memos" => [[ // Liste von Freitextfeldern
+                "description" => "string", // Bezeichnung des Freitextfeldes
+                "value" => "string", // Wert des Freitextfeldes
+                "type" => "string", // Typen. Enumeration: Text = 0, Xml = 1
+                "isVisible" => true // Soll der Value im Teilekatalog angezeigt werden.
+            ]],
+            "nextGeneralInspection" => "2018-04-18T11:34:10.382Z", // Hauptuntersuchung (UTC Zeit)
+            "nextServiceDate" => "2018-04-18T11:34:10.382Z", // Nächster Service (UTC Zeit)
+            "lastWorkshopAppointment" => "2018-04-18T11:34:10.382Z", // Letzter Werkstattbesuch (UTC Zeit)
+            "creationDate" => "2018-04-18T11:34:10.382Z", // Datensatz erstellt am (UTC Zeit)
+            "modifiedDate" => "2018-04-18T11:34:10.382Z" // Datensatz zuletzt geändert am (UTC Zeit)
+        ],
+        "clientAdvisor" => [ // Kundenberater
+            "referenceId" => "string", // Eindeutiger Identifier des Kundenberaters aus dem DMS System
+            "name" => "string", // Vor- und Zuname
+            "employeeNo" => "string" // Mitarbeiter Id
+        ],
+        "mechanic" => [ // Mechaniker
+            "referenceId" => "string", // Eindeutiger Identifier des Mechanikers aus dem DMS System
+            "name" => "string", // Vor- und Zuname
+            "employeeNo" => "string" // Mitarbeiter Id
+        ],
+        "parts" => [[
+            "id" => "string", // Interne Katalog Id
+            "referenceId" => "string", // Eindeutiger Identifier des Ersatzteils aus dem DMS System
+            "replacedReferenceId" => "string", // Referenz Id des im Beleg ersetzten Artikels
+            "replacedPartInfo" => "string", // Artikelbeschreibung des ersetzten Artikels
+            "wholesalerArticleId" => "string", // Händlerartikelnummer
+            "dataSupplierArticleId" => "string", // Herstellerartikelnummer
+            "dataSupplier" => [
+                "id" => 0, // Hersteller Id
+                "clientId" => 0, // Mandantennummer
+                "description" => "string" // Fahrzeugart Bezeichnung
+            ],
+            "oeArticleId" => [
+                "id" => "string", // Artikelnummer OE-Artikelnummer
+                "manufacturer" => "string", // OE-Hersteller
+                "manufacturerId" => "string" // OE-HerstellerId
+            ],
+            "additionalArticleIds" => [[ // Liste zusätzlicher Artikelnummern
+                "id" => "string", // Artikelnummer
+                "referenceId" => "string", // Wenn der ControllIndicator "AdditionalTradeReference = 1" gesetzt ist, wird hier die zugehörige "TradeReferenceId" eingetragen
+                "type" => 0, // Typ der Artikelnummer: z.B. 1 = OE, 2 = EAN, 3 = DMS, WholesalerArticleNo = 4
+                "description" => "string" // Artikelnummernbezeichnung
+            ]],
+            "vehicleType" => [
+                "id" => 0, // TecDoc Typnummer
+                "type" => 0, // Enumeration PKW = 1, NKW = 2, Motorrad = 3
+                "clientId" => 0, // Mandantennummer
+                "description" => "string" // Fahrzeugart Bezeichnung
+            ],
+            "description" => "string", // Artikelbeschreibung
+            "additionalDescription" => "string", // Artikelzusatzbeschreibung
+            "productGroups" => [[ // Liste der Produktgruppen
+                "id" => 0, // Produktgruppen Id
+                "clientId" => 0, // Mandantennummer
+                "description" => "string" // Produktgruppen Bezeichnung
+            ]],
+            "prices" => [[ // Liste der Preise wird beim Import nur für benutzerdefinierte Teile verwendet und beim Export für alle Teile
+                "value" => 0, // Wert (z.B. "10.00")
+                "currencyCode" => "string", // Währungskennzeichen ISO 4217
+                "currencySymbol" => "string", // Währungssymbol
+                "rebateValue" => 0, // Rabattierter Preis "8.00"
+                "rebate" => 0, // Rabatt in Prozent "20"
+                "type" => 0, // Preisart. Enumeration: EK = 4, VK = 5 vom Großhändler. Für benutzerdefinierte Teile VK = 5 Weitere Preistypen im Abschnitt Datentypen
+                "description" => "string", // Beschreibungstext des Preises
+                "unit" => "string", // Preiseinheit
+                "vat" => 0, // Mehrwertsteuer
+                "isTaxIncluded" => true // Mehrwertsteuer im Preis enthalten
+            ]],
+            "quantity" => 0, // Menge
+            "unit" => "string", // Mengeneinheit
+            "isInOrder" => true, // Wird im Warenkorb des Teilekataloges, im Sinne von "Bei der nächsten Bestellung berücksichtigen", markiert.
+            "isChangeable" => true, // Darf durch das Katalogsystem und / oder den Benutzer manipuliert werden
+            "isChanged" => true, // Wurde durch das Katalogsystem und / oder den Benutzer verändert
+            "isInCostEstimation" => true, // Der Artikel ist im KVA als druckbar markiert.
+            "isReplacementPart" => true, // Der Artikel ist ein Austauschteil und somit altteilesteuerpflichtig.
+            "orderInformation" => [
+                "state" => 0, // Bestellstatus. Enumeration: 0 = nicht bestellt, 1 = bestellt
+                "orderId" => "string", // Bestellnummer
+                "timestamp" => "2018-04-18T11:34:10.382Z", // Bestellzeitpunkt (UTC Zeit)
+                "memos" => [[ // Liste von Freitextfeldern
+                    "description" => "string", // Bezeichnung des Freitextfeldes
+                    "value" => "string", // Wert des Freitextfeldes
+                    "type" => "string", // Typen. Enumeration: Text = 0, Xml = 1
+                    "isVisible" => true // Soll der Value im Teilekatalog angezeigt werden.
+                ]]
+            ],
+            "memos" => [[ // Liste von Freitextfeldern
+                "description" => "string", // Bezeichnung des Freitextfeldes
+                "value" => "string", // Wert des Freitextfeldes
+                "type" => "string", // Typen. Enumeration: Text = 0, Xml = 1
+                "isVisible" => true // Soll der Value im Teilekatalog angezeigt werden.
+            ]]
+        ]],
+        "repairTimes" => [[
+            "id" => "string", // Interne Katalog Id
+            "referenceId" => "string", // Eindeutiger Identifier aus dem DMS System
+            "vehicleType" => [ // Fahrzeug
+                "id" => 0, // TecDoc Typnummer
+                "type" => 0, // Enumeration PKW = 1, NKW = 2, Motorrad = 3
+                "clientId" => 0, // Mandantennummer
+                "description" => "string" // Fahrzeugart Bezeichnung
+            ],
+            "provider" => 0, // Enumeration für den Arbeitswerteprovider, AwDoc = 1, Haynes = 2, Autodata = 3, TecRMI = 4, Eurotax = 5, DAT = 6, benutzerdefiniert = 7
+            "repairTimeId" => "string", // Arbeitswert Nummer
+            "referencedRepairTimeId" => "string", // Referenzierte Arbeitswert Nummer: z.B. bei Umfasst-Arbeiten der Arbeitswert, der die Arbeit enthält
+            "description" => "string", // Arbeitswert Beschreibung
+            "typeOfWork" => 0, // Art der Arbeit, Enumeration NotCategorized = 0, Werkstattarbeiten = 1, Karosseriearbeiten = 2, Zubehörarbeiten = 3, Lackierarbeiten = 4, Elektrikarbeiten = 5, Elektronikarbeiten = 6, Sattlerarbeiten = 7, SmartRepair = 8
+            "typeOfWorkShortCode" => "string", // Kurzbezeichnung Art der Arbeit: WS – Werkstattarbeiten, KA - Karosseriearbeiten, ZB – Zubehörarbeiten, LA – Lackierarbeiten, EL – Elektrikarbeiten, EK – Elektronikarbeiten, SA – Sattlerarbeiten, SR - SmartRepair
+            "type" => 0, // Enumeration Hauptarbeit = 1, Umfasst Arbeit = 2, Folgearbeit = 3, Vorarbeit = 4
+            "calculation" => [
+                "hourlyRate" => 0, // Stundensatz
+                "priceValue" => 0, // Kalkulierter Preis (z.B. hourlyRate * calculatedTimeValue oder Festpreis)
+                "priceType" => "string", // Preisart
+                "priceDescription" => "string", // Beschreibungstext des Preises
+                "currencyCode" => "string", // Währungskennzeichen ISO 4217
+                "currencySymbol" => "string", // Währungssymbol
+                "rebateValue" => 0, // Rabattierter Wert
+                "rebate" => 0, // Rabatt in Prozent
+                "vat" => 0, // Mehrwertsteuer
+                "isTaxIncluded" => true, // Mehrwertsteuer im Preis enthalten
+                "isFixedPrice" => true, // Ist ein Festpreis
+                "timeValue" => 0, // Arbeitswert (nicht kalkuliert)
+                "calculatedTimeValue" => 0, // Kalkulierter Arbeitswert
+                "division" => 0 // Bestimmt "Taktung" des Arbeitswerts
+            ],
+            "isChangeable" => true, // Darf durch das Katalogsystem und / oder den Benutzer manipuliert werden
+            "isChanged" => true, // Wurde durch das Katalogsystem und / oder den Benutzer verändert
+            "isExpanded" => true, // Die Umfasstarbeiten dieser Hauptarbeit sind im Beleg sichtbar
+            "isInCostEstimation" => true, // Der Arbeitswert ist im KVA als druckbar markiert
+            "isMaintenanceWork" => true, // Das ist ein Wartungsplan-Arbeitswert
+            "memos" => [[ // Liste von Freitextfeldern
+                "description" => "string", // Bezeichnung des Freitextfeldes
+                "value" => "string", // Wert des Freitextfeldes
+                "type" => "string", // Typen. Enumeration: Text = 0, Xml = 1
+                "isVisible" => true // Soll der Value im Teilekatalog angezeigt werden.
+            ]]
+        ]],
+        "memos" => [[ // Liste von Freitextfeldern
+            "description" => "string", // Bezeichnung des Freitextfeldes
+            "value" => "string", // Wert des Freitextfeldes
+            "type" => "string", // Typen. Enumeration: Text = 0, Xml = 1
+            "isVisible" => true // Soll der Value im Teilekatalog angezeigt werden.
+        ]],
+        "creationDate" => "2018-04-18T11:34:10.382Z", // Datensatz erstellt am (UTC Zeit)
+        "modifiedDate" => "2018-04-18T11:34:10.382Z", // Datensatz zuletzt geändert am (UTC Zeit)
+        "controlIndicators" => [[
+            "type" => 0, // Enumeration "ImportControlIndicators"
+            "parameters" => [[ // Zusätzliche Parameter
+                "id" => "string", // Schlüssel
+                "value" => "string" // Schlüsselwert
+            ]]
+        ]]
+    ];
+    ***** End Example Data **************************************************************************/
+    $data = [
+        "referenceId" => "A_123",
+        "voucherId" => $oe_customer_car['id'],
+        "voucherType" => [
+            "referenceId" => "2",
+            "description" => $oe_customer_car['name'],
+            "countryCode" => "DE"
+        ],
+        "vehicle" => [
+            "referenceId" => "v_1",
+            "registrationInformation" => [
+                "plateId" => $oe_customer_car['c_ln'],
+                "registrationNo" => $oe_customer_car['kba'], // KBANR wird nur benutzt wenn keine KTYPNR übergeben wird
+                "registrationDate" => "2018-03-27T22:00:00Z"
+            ]
+        ]
+    ];
+
+    $tries = 16;
+    while( $tries-- ){
+        if( !isset( $_SESSION['aagToken'] ) ) $_SESSION['aagToken'] =  getAagToken( $debug = FALSE );
+
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "https://tm-next.dvse.de/data/TM.Next.Dms/api/portal/service/v1/Gsi/ImportVoucher",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_HTTPHEADER => [
+                "Accept-Language: de",
+                "Content-Type: application/json",
+                "Authorization: Bearer ".$_SESSION['aagToken']
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if( $err ){
+            unset( $_SESSION['aagToken'] );
+            writeLog( "cURL Error #:" . $err );
+        }
+        else {
+            echo $response;
+            break;
+        }
+    }//end while
+}

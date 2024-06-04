@@ -1814,9 +1814,7 @@ function getAagToken( $debug = FALSE ){
 //Erzeugt eine URL zum starten von AAG-Online, hierzu werden customer_id und car_id benötigt
 function getAagUrl( $data ){
     writeLog( $data );
-    $sql = 'SELECT oe.id, oe.km_stnd, customer.name, customer.street, customer.zipcode, customer.city, lxc_cars.c_ln, CONCAT( lxc_cars.c_2, lxc_cars.c_3 ) AS kba FROM oe JOIN customer ON oe.customer_id = customer.id JOIN lxc_cars ON oe.c_id = lxc_cars.c_id WHERE oe.id = '.$data['oe-id'];
-    $oe_customer_car = $GLOBALS['dbh']->getOne( $sql, FALSE );
-    writeLog( $rs );
+
     /***** Begin Data **************************************************************************
     $data = [
         "workTaskId" => "string", // Optional, um den Vorgang direkt anzusprechen (nicht empfohlen)
@@ -2039,13 +2037,37 @@ function getAagUrl( $data ){
         ]]
     ];
     ***** End Example Data **************************************************************************/
+    $sql = "SELECT oe.id AS oe_id, oe.ordnumber, oe.km_stnd, customer.id AS customer_id, customer.customernumber, CASE WHEN greeting LIKE '%Herr%' THEN 1 WHEN greeting LIKE '%Frau%' THEN 2 ELSE 3 END AS greeting, customer.name, customer.street, customer.zipcode, customer.city, lxc_cars.c_ln, CONCAT( lxc_cars.c_2, lxc_cars.c_3 ) AS kba FROM oe JOIN customer ON oe.customer_id = customer.id JOIN lxc_cars ON oe.c_id = lxc_cars.c_id WHERE oe.id = ".$data['oe-id'];
+    $oe_customer_car = $GLOBALS['dbh']->getOne( $sql, FALSE );
+    writeLog( $oe_customer_car );
     $data = [
-        "referenceId" => "A_123",
-        "voucherId" => $oe_customer_car['id'],
+        "referenceId" => $oe_customer_car['ordnumber'],
+        "voucherId" => $oe_customer_car['oe_id'],
         "voucherType" => [
             "referenceId" => "2",
             "description" => $oe_customer_car['name'],
             "countryCode" => "DE"
+        ],
+        "invoiced" => false, // Gibt beim Import an, ob der Beleg bereits fakturiert wurde und somit nicht mehr bearbeitet werden darf. Ist dies der Fall, wird der Beleg als "neu" importiert und sowohl die "referenceId" als auch die "voucherId" werden nicht übernommen.
+        "customer" => [
+            "referenceId" => $oe_customer_car['customer_id'], // Eindeutiger Identifier des Kunden aus dem DMS System
+            "customerId" => $oe_customer_car['customernumber'], // Kundennummer (des Werkstattkunden) customernumber
+            "title" => $oe_customer_car['greeting'], // Enumeration Undefiniert = 0, Herr = 1, Frau = 2, Firma = 3
+            "lastName" => $oe_customer_car['name'], // Nachname des Kunden
+            "generalAddress" => [ // Beleg-Adresse
+                "referenceId" => "string", // Eindeutiger Identifier der Adresse aus dem DMS System
+                "description" => "string", // Adressbezeichnung
+                "street" => "string", // Straße
+                "addressAddition" => "string", // Adresszusatz
+                "city" => "string", // Stadt
+                "zip" => "string", // Postleitzahl
+                "state" => "string", // Landkreis
+                "country" => "string" // Land
+            ],
+            "phone" => "string", // Telefon
+            "mobile" => "string", // Telefon
+            "fax" => "string", // Fax
+            "email" => "string", // Email
         ],
         "vehicle" => [
             "referenceId" => "v_1",

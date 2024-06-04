@@ -1785,15 +1785,14 @@ $( '#od_lxcars_aag_btn' ).click(function(){
         type: 'POST',
         data: { action: 'getAagUrl', data: { 'oe-id': $( '#od-oe-id' ).val() } },
         success: function( data ){
-            const url = data['portalUrl'];
             if( openedTab && !openedTab.closed ){
                 // Tab ist bereits geöffnet, URL aktualisieren und Fokus darauf setzen
-                openedTab.location.href = url;
+                openedTab.location.href = data['portalUrl'];
                 openedTab.focus();
             }
             else{
                 // Neuen Tab öffnen und Referenz speichern
-                openedTab = window.open( url, "_blank" );
+                openedTab = window.open( data['portalUrl'], "_blank" );
             }
         }
     });

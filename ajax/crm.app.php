@@ -1813,8 +1813,7 @@ function getAagToken( $debug = FALSE ){
 
 //Erzeugt eine URL zum starten von AAG-Online, hierzu werden customer_id und car_id benötigt
 function getAagUrl( $data ){
-    writeLog( $data );
-
+    //writeLog( $data );
     /***** Begin Data **************************************************************************
     $data = [
         "workTaskId" => "string", // Optional, um den Vorgang direkt anzusprechen (nicht empfohlen)
@@ -2037,52 +2036,143 @@ function getAagUrl( $data ){
         ]]
     ];
     ***** End Example Data **************************************************************************/
-    $sql = "SELECT oe.id AS oe_id, oe.ordnumber, oe.km_stnd, customer.id AS customer_id, customer.customernumber, CASE WHEN greeting LIKE '%Herr%' THEN 1 WHEN greeting LIKE '%Frau%' THEN 2 ELSE 3 END AS greeting, customer.name, customer.street, customer.zipcode, customer.city, lxc_cars.c_ln, CONCAT( lxc_cars.c_2, lxc_cars.c_3 ) AS kba FROM oe JOIN customer ON oe.customer_id = customer.id JOIN lxc_cars ON oe.c_id = lxc_cars.c_id WHERE oe.id = ".$data['oe-id'];
+
+    $sql = "
+        SELECT
+            oe.id AS oe_id,                                      -- ID der Bestellung (oe) mit Alias oe_id
+            oe.ordnumber,                                        -- Bestellnummer
+            oe.km_stnd,                                          -- Kilometerstand
+            customer.id AS customer_id,                          -- Kunden-ID mit Alias customer_id
+            customer.customernumber,                             -- Kundennummer
+            CASE
+                WHEN greeting LIKE '%Herr/Frau%' THEN 0          -- Wenn Anrede 'Herr/Frau' enthält, dann 0 (divers)
+                WHEN greeting LIKE '%Herr%'      THEN 1          -- Wenn Anrede 'Herr' enthält, dann 1
+                WHEN greeting LIKE '%Frau%'      THEN 2          -- Wenn Anrede 'Frau' enthält, dann 2
+                ELSE 3                                           -- Andernfalls 3
+            END AS greeting,                                     -- Anrede-Wert mit Alias greeting
+            customer.name,                                       -- Kundenname
+            CASE
+                WHEN greeting IN ('Frau', 'Herr', 'Herr/Frau' ) THEN  -- Wenn Anrede 'Frau' oder 'Herr' oder 'Herr/Frau' ist
+                    split_part(name, ' ', array_length(string_to_array(name, ' '), 1))  -- Nachname (letzter Teil des Namens)
+                ELSE ''                                          -- Andernfalls leerer String
+            END AS last_name,                                    -- Nachname mit Alias last_name
+            CASE
+                WHEN greeting IN ('Frau', 'Herr') THEN           -- Wenn Anrede 'Frau' oder 'Herr' ist
+                    array_to_string(array_remove(string_to_array(name, ' '), split_part(name, ' ', array_length(string_to_array(name, ' '), 1))), ' ')  -- Vorname (alle Teile außer dem letzten)
+                ELSE ''                                          -- Andernfalls leerer String
+            END AS first_name,                                   -- Vorname mit Alias first_name
+            CASE
+                WHEN greeting NOT IN ('Frau', 'Herr') THEN       -- Wenn Anrede weder 'Frau' noch 'Herr' ist
+                    name                                         -- Wert von name als companyname ausgeben
+                ELSE ''                                          -- Andernfalls leerer String
+            END AS company_name,
+            customer.street,                                     -- Straße
+            customer.zipcode,                                    -- Postleitzahl
+            customer.city,                                       -- Stadt
+            customer.country,                                    -- Land
+            customer.phone,                                      -- Telefonnummer 1
+            customer.fax,                                        -- Telefonnummer 2
+            customer.phone3,                                     -- Telefonnummer 3
+            customer.email,                                      -- Email
+            customer.notes,                                      -- Bemerkungen
+            to_char( customer.itime, 'YYYY-MM-DD\"T\"HH24:MI:SS.MS\"Z\"' ) AS customer_itime,  -- Initzeit Zeitstempel im ISO 8601-Format
+            to_char( customer.mtime, 'YYYY-MM-DD\"T\"HH24:MI:SS.MS\"Z\"' ) AS customer_mtime,  -- Modifikationszeit Zeitstempel im ISO 8601-Format
+            lxc_cars.c_ln,                                       -- Autokennzeichen
+            to_char( lxc_cars.c_d, 'YYYY-MM-DD\"T\"HH24:MI:SS.MS\"Z\"' ) AS registation_date,  -- Erstzulassung
+            lxc_cars.c_fin,                                      -- Fahrgestellnummer
+            lxc_cars.c_mkb,                                      -- Motorcode
+            lxc_cars.c_text,                                     -- Bemerkungen zum Fahrzeug
+            lxc_cars.c_id,                                       -- ID des Fahrzeugs
+            to_char( lxc_cars.c_it, 'YYYY-MM-DD\"T\"HH24:MI:SS.MS\"Z\"' ) AS car_itime,        -- Initzeit Zeitstempel im ISO 8601-Format
+            CONCAT(lxc_cars.c_2, lxc_cars.c_3) AS kba            -- KBA-Nummer, zusammengesetzt aus c_2 und c_3
+        FROM
+            oe                                                   -- Tabelle oe
+        JOIN
+            customer ON oe.customer_id = customer.id             -- Join mit Tabelle customer über customer_id
+        JOIN
+            lxc_cars ON oe.c_id = lxc_cars.c_id                  -- Join mit Tabelle lxc_cars über c_id
+        WHERE
+            oe.id = ".$data['oe-id'];                            //-- Bedingung: Auftrags-ID entspricht der übergebenen ID
+
+
     $oe_customer_car = $GLOBALS['dbh']->getOne( $sql, FALSE );
-    writeLog( $oe_customer_car );
+    //writeLog( $oe_customer_car );
     $data = [
         "referenceId" => $oe_customer_car['ordnumber'],
-        "voucherId" => $oe_customer_car['oe_id'],
+        "voucherId" => ( string )$oe_customer_car['oe_id'],
         "voucherType" => [
             "referenceId" => "2",
             "description" => $oe_customer_car['name'],
             "countryCode" => "DE"
         ],
-        "invoiced" => false, // Gibt beim Import an, ob der Beleg bereits fakturiert wurde und somit nicht mehr bearbeitet werden darf. Ist dies der Fall, wird der Beleg als "neu" importiert und sowohl die "referenceId" als auch die "voucherId" werden nicht übernommen.
+        //"invoiced" => false, // Gibt beim Import an, ob der Beleg bereits fakturiert wurde und somit nicht mehr bearbeitet werden darf. Ist dies der Fall, wird der Beleg als "neu" importiert und sowohl die "referenceId" als auch die "voucherId" werden nicht übernommen.
         "customer" => [
-            "referenceId" => $oe_customer_car['customer_id'], // Eindeutiger Identifier des Kunden aus dem DMS System
+            "referenceId" => ( string )$oe_customer_car['customer_id'], // Eindeutiger Identifier des Kunden aus dem DMS System
             "customerId" => $oe_customer_car['customernumber'], // Kundennummer (des Werkstattkunden) customernumber
             "title" => $oe_customer_car['greeting'], // Enumeration Undefiniert = 0, Herr = 1, Frau = 2, Firma = 3
-            "lastName" => $oe_customer_car['name'], // Nachname des Kunden
+            "firstName" => $oe_customer_car['first_name'], // Vorname des Kunden
+            "lastName" => $oe_customer_car['last_name'], // Nachname des Kunden
+            "companyName" => $oe_customer_car['company_name'], // Firmenname
             "generalAddress" => [ // Beleg-Adresse
-                "referenceId" => "string", // Eindeutiger Identifier der Adresse aus dem DMS System
-                "description" => "string", // Adressbezeichnung
-                "street" => "string", // Straße
-                "addressAddition" => "string", // Adresszusatz
-                "city" => "string", // Stadt
-                "zip" => "string", // Postleitzahl
-                "state" => "string", // Landkreis
-                "country" => "string" // Land
+                "description" => "Anschrift", // Adressbezeichnung
+                "street" => $oe_customer_car['street'], // Straße
+                "city" => $oe_customer_car['city'], // Stadt
+                "zip" => $oe_customer_car['zipcode'], // Postleitzahl
+                //"state" => "string", // Landkreis
+                "country" => $oe_customer_car['country'] // Land
             ],
-            "phone" => "string", // Telefon
-            "mobile" => "string", // Telefon
-            "fax" => "string", // Fax
-            "email" => "string", // Email
+            "phone" => $oe_customer_car['phone'], // Telefon 1
+            "mobile" => $oe_customer_car['fax'],  // Telefon 2
+            "fax" => $oe_customer_car['phone3'],  // Telefon 3
+            "email" => $oe_customer_car['email'], // Email
+            "memos" => [[ // Liste von Freitextfeldern
+                "description" => "Bemerkungen", // Bezeichnung des Freitextfeldes
+                "value" => $oe_customer_car['notes'], // Wert des Freitextfeldes
+                "type" => 0, // Typen. Enumeration: Text = 0, Xml = 1
+                "isVisible" => true // Soll der Value im Teilekatalog angezeigt werden.
+            ]],
+            "creationDate" => $oe_customer_car['customer_itime'], // Datensatz erstellt am (UTC Zeit)
+            "modifiedDate" => $oe_customer_car['customer_mtime'] // Datensatz zuletzt geändert am (UTC Zeit)
         ],
         "vehicle" => [
-            "referenceId" => "v_1",
+            "referenceId" => ( string )$oe_customer_car['c_id'],
+            //"vehicleType" => [
+            //    "id" => 0, // (TecDoc) Typnummer
+            //    "type" => 0, // Enumeration PKW = 1, NKW = 2, Motorrad = 3
+            //    "clientId" => 0, // Mandantennummer
+            //    "description" => "XXX" // Fahrzeugbezeichnung (z.B. "Audi A4 1.9 TDI")
+            //],
             "registrationInformation" => [
                 "plateId" => $oe_customer_car['c_ln'],
                 "registrationNo" => $oe_customer_car['kba'], // KBANR wird nur benutzt wenn keine KTYPNR übergeben wird
-                "registrationDate" => "2018-03-27T22:00:00Z"
+                "registrationDate" => $oe_customer_car['registation_date'],
+                "registrationTypeId" => 0 // Art der Registrierungsnummer. Enumeration KBA = 0
+            ],
+            "vin" => $oe_customer_car['c_fin'], // Fahrgestellnummer (FIN)
+            "mileage" => ( string )$oe_customer_car['km_stnd'], // Tachometerstand
+            "mileageType" => "1", // Enumeration Kilometer = 1, Meilen = 2
+            "engineCode" => $oe_customer_car['c_mkb'], // Motorcode
+            "memos" => [[ // Liste von Freitextfeldern
+                "description" => "Bemerkungen zum Fahrzeug", // Bezeichnung des Freitextfeldes
+                "value" => $oe_customer_car['c_text'], // Wert des Freitextfeldes
+                "type" => "0", // Typen. Enumeration: Text = 0, Xml = 1
+                "isVisible" => true // Soll der Value im Teilekatalog angezeigt werden.
+            ]],
+
+            //"nextGeneralInspection" => "2018-04-18T11:34:10.382Z", // Hauptuntersuchung (UTC Zeit)
+            //"nextServiceDate" => "2018-04-18T11:34:10.382Z", // Nächster Service (UTC Zeit)
+            //"lastWorkshopAppointment" => "2018-04-18T11:34:10.382Z", // Letzter Werkstattbesuch (UTC Zeit)
+            "creationDate" => $oe_customer_car['car_itime'], // Datensatz erstellt am (UTC Zeit)
+            //"modifiedDate" => $oe_customer_car['car_mtime'] // Datensatz zuletzt geändert am (UTC Zeit) ToDo: muss noch in LxCars repariert werden!!
             ]
-        ]
     ];
 
-    $tries = 16;
-    while( $tries-- ){
-        if( !isset( $_SESSION['aagToken'] ) ) $_SESSION['aagToken'] =  getAagToken( $debug = FALSE );
 
+
+    $tries = 8;
+    while( $tries-- ){
+        //writeLog( json_encode($data) );
+        if( !isset( $_SESSION['aagToken'] ) ) $_SESSION['aagToken'] =  getAagToken( $debug = FALSE );
 
         $curl = curl_init();
 
@@ -2091,10 +2181,11 @@ function getAagUrl( $data ){
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
+            CURLOPT_CONNECTTIMEOUT => 10,
+            CURLOPT_TIMEOUT => 60,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_POSTFIELDS => json_encode( $data ),
             CURLOPT_HTTPHEADER => [
                 "Accept-Language: de",
                 "Content-Type: application/json",
@@ -2109,7 +2200,7 @@ function getAagUrl( $data ){
 
         if( $err ){
             unset( $_SESSION['aagToken'] );
-            writeLog( "cURL Error #:" . $err );
+            //writeLog( "cURL Error #:" . $err );
         }
         else {
             echo $response;

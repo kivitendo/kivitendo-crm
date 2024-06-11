@@ -1778,8 +1778,9 @@ crmDeletePaymentPos = function( e ){
 
 
 
+const newWindow = true; // Wenn true, öffnet ein neues Fenster, andernfalls einen neuen Tab
 let openedTab;
-$( '#od_lxcars_aag_btn' ).click(function(){
+$( '#od_lxcars_aag_btn' ).click( function(){
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
@@ -1791,8 +1792,15 @@ $( '#od_lxcars_aag_btn' ).click(function(){
                 openedTab.focus();
             }
             else{
-                // Neuen Tab öffnen und Referenz speichern
-                openedTab = window.open( data['portalUrl'], "_blank" );
+                // Neues Fenster oder neuen Tab öffnen und Referenz speichern
+                if( newWindow ){
+                    // Neues Fenster öffnen
+                    openedTab = window.open( data['portalUrl'], "_blank", "toolbar=no,scrollbars=yes,location=no" );
+                }
+                else{
+                    // Neuen Tab öffnen
+                    openedTab = window.open( data['portalUrl'], "_blank" );
+                }
             }
         }
     });

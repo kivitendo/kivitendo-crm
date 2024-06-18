@@ -694,17 +694,70 @@ function checkCarLicenseAndFin( $data ){
     echo ' }';
 }
 
-function getCar( $data ){
-    $query = "SELECT ";
-    $query .= "(SELECT row_to_json( car ) AS car FROM (".
-                "SELECT *, to_char( c_hu, 'DD.MM.YYYY') AS c_hu, to_char( c_d, 'DD.MM.YYYY') AS c_d FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.kba_id = lxckba.id ) WHERE c_id = ".$data['id'].
-                ") AS car) AS car, ";
-    $query .= "(SELECT json_agg( ord ) AS ord FROM (".
-                "SELECT DISTINCT ON (oe.itime) to_char(oe.transdate, 'DD.MM.YYYY') as date, COALESCE( instructions.description, orderitems.description ) AS description, COALESCE(ROUND(amount,2))||' '||COALESCE(C.name) as amount, ".
-                "oe.ordnumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id = orderitems.trans_id LEFT JOIN instructions ON oe.id = instructions.trans_id LEFT JOIN currencies C on currency_id=C.id ".
-                "WHERE quotation = FALSE AND c_id = ".$data['id']." AND EXISTS(SELECT * FROM information_schema.tables WHERE table_name = 'lxc_ver') ORDER BY oe.itime DESC, orderitems.itime LIMIT 10".
-                ") AS ord) AS ord";
-    //writeLogR( $query );
+function getCar( $data ){ //Stell die Daten für die Fahrzeugübersicht zusammen,
+    $query = "
+        SELECT 
+            (
+                SELECT row_to_json(car) AS car 
+                FROM (
+                    SELECT 
+                        *, 
+                        to_char(c_hu, 'DD.MM.YYYY') AS c_hu, 
+                        to_char(c_d, 'DD.MM.YYYY') AS c_d 
+                    FROM lxc_cars 
+                    LEFT JOIN lxckba ON (lxc_cars.kba_id = lxckba.id) 
+                    WHERE c_id = ".$data['id']."
+                ) AS car
+            ) AS car, 
+            (
+                SELECT json_agg(ord) AS ord 
+                FROM (
+                    SELECT DISTINCT ON (oe.itime)
+                        to_char(oe.transdate, 'DD.MM.YYYY') AS date, 
+                        COALESCE(instructions.description, orderitems.description) AS description, 
+                        COALESCE(ROUND(amount, 2)) || ' ' || COALESCE(C.name) AS amount, 
+                        oe.ordnumber AS number, 
+                        oe.id 
+                    FROM oe 
+                    LEFT JOIN orderitems ON oe.id = orderitems.trans_id 
+                    LEFT JOIN instructions ON oe.id = instructions.trans_id 
+                    LEFT JOIN currencies C ON currency_id = C.id 
+                    WHERE quotation = FALSE 
+                        AND c_id = ".$data['id']." 
+                    ORDER BY oe.itime DESC, orderitems.itime 
+                    LIMIT 10
+                ) AS ord
+            ) AS ord,
+            (
+                SELECT row_to_json(cv) AS cv 
+                FROM (
+                    SELECT 
+                        'C' AS src, 
+                        id, 
+                        customernumber AS cvnumber, 
+                        name, 
+                        street, 
+                        zipcode, 
+                        contact, 
+                        phone AS phone1, 
+                        fax AS phone2, 
+                        phone3, 
+                        note_phone AS note_phone1, 
+                        note_fax AS note_phone2, 
+                        note_phone3, 
+                        email, 
+                        city, 
+                        country
+                    FROM 
+                        lxc_cars 
+                    JOIN 
+                        customer ON lxc_cars.c_ow = customer.id 
+                    WHERE 
+                        lxc_cars.c_id = ".$data['id']."
+                ) AS cv
+            ) AS cv
+        ";
+
     echo $GLOBALS['dbh']->getOne( $query, true );
 }
 

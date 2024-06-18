@@ -1,4 +1,3 @@
-
 <?php
     require_once __DIR__.'/inc/connection.php';// für Session wichtig
     $baseUrl = isset( $_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http';

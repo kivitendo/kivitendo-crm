@@ -139,6 +139,7 @@ function getCVPA( src, id ){
         data:  { action: 'getCVPA', data: { 'src': src, 'id': id } },
         success: function( data ){
             showCVPA( data );
+            //console.info( data );
             if( exists( data.car ) ){
                 crmEditCarDlg( data );
             }
@@ -226,6 +227,8 @@ $.fn.showMessageDialog = function( style, title, message, debug = null ){
 }
 
 function showCVPA( data ){
+    //console.info( 'showCVPA' );
+    //console.info( data );
     if( data.cv ){
         $( '#crm-cvpa-src' ).val( data.cv.src );
         $( '#crm-cvpa-id' ).val( data.cv.id );
@@ -410,7 +413,8 @@ function showCVPA( data ){
 * Attention:
 * Hidden fields must be on then end of the form model !
 *********************************************************/
-function crmInitFormEx( crmFormModel, table, max_rows = 0, container = null){
+function crmInitFormEx( crmFormModel, table, max_rows = 0, container = null, callback = null ){
+    //alert( 'Bin in crmInitFormEx' );
     let tabledata = '';
     let hiddenFields = '';
     if(max_rows <= 0 || max_rows > crmFormModel.length) max_rows = crmFormModel.length;
@@ -464,16 +468,21 @@ var crmActiveView = 'crm-wx-base-data';
 var crmPreView = 'crm-wx-base-data';
 window.history.pushState( { 'view': crmActiveView }, '', location.protocol + '//' + location.host + location.pathname /*+ (location.search?location.search : '')*/ );
 
-function crmCVPAgetTitle(){
+function crmCVPAgetTitle(){ //kann weg??
     return $( '#crm-cvpa-name' ).val();
 }
 
 // crmSetTitle (Suchbegriff)
 // Setzt den Titel der App in der Navigationsleiste
-function crmSetMainTitle( title = null, subtitle = null ){
-    $( '#crm-wx-title' ).html( ( null == title)? crmCVPAgetTitle() : title );
-    if( null != subtitle ) $( '#crm-wx-subtitle' ).html( subtitle );
-    document.title = ( null == title)? crmCVPAgetTitle() : title;
+function crmSetMainTitle( title = null, subtitle = null ){ //Ich würde es nicht zulassen dass die Funktion ohne Parameter aufgerufen wird!!!
+    //console.info( 'crmSetMainTitle' );
+    //console.info( title );
+    //console.info( subtitle );
+    setTimeout( function(){
+        $( '#crm-wx-title' ).html( (  title == null)? $( '#crm-cvpa-name' ).val() : title );
+        if(  subtitle != null ) $( '#crm-wx-subtitle' ).html( subtitle );
+    }, 200 ); // Verzögerung von 200ms
+    document.title = 'LxCars'; //( title == null )? crmCVPAgetTitle() : title;
 }
 
 function crmOpenView( id, title = null, subtitle = null ){
@@ -639,8 +648,8 @@ $( '#crm-contact-email' ).click( function(){
 });
 
 // Nachrichten vom Kalender-iFrame empfangen
-window.addEventListener('message', function(event) {
-    console.info('Erhaltene Nachricht:', event.data);
+window.addEventListener( 'message', function(event) {
+    //console.info( 'Erhaltene Nachricht:', event.data );
     if( exists( event.data.openOrder ) ){
         $.ajax({
             url: 'crm/ajax/crm.app.php',
@@ -655,11 +664,13 @@ window.addEventListener('message', function(event) {
         });
     }
     else if( exists( event.data.openCar ) ){
+        //alert( 'Car: ' + event.data.openCar );
         $.ajax({
             url: 'crm/ajax/crm.app.php',
             type: 'POST',
             data:  { action: 'getCar', data: { 'id': event.data.openCar } },
             success: function( crmData ){
+                //console.info( 'crmData: ', crmData );
                 crmEditCarDlg( crmData );
             },
             error: function( xhr, status, error ){

@@ -13,7 +13,7 @@ $(document).ready(function() {
         $('body')
             .append("<script type='text/javascript' src='crm/js/jquery.postitall.js'></script>")
             .append("<script type='text/javascript' src='crm/js/jquery.postitall.ajax.js'></script>")
-            .append("<script type='text/javascript' src='crm/js/tools.js'></script>")
+            //.append("<script type='text/javascript' src='crm/js/tools.js'></script>")
             .append("<script type='text/javascript' src='crm/jquery-plugins/jquery-calculator/jquery.plugin.js'></script>")
             .append("<script type='text/javascript' src='crm/jquery-plugins/jquery-calculator/jquery.calculator.js'></script>")
             .append("<script type='text/javascript' src='crm/nodejs/node_modules/jquery-minicolors/jquery.minicolors.min.js'></script>")

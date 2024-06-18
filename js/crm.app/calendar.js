@@ -1,5 +1,5 @@
-const currentDay = moment().format('YYYY-MM-DD');
-const fourDaysLater = moment().add(4, 'days').format('YYYY-MM-DD');
+const currentDay = moment().format( 'YYYY-MM-DD' );
+const fourDaysLater = moment().add( 4, 'days' ).format( 'YYYY-MM-DD' );
 var crmCalendarInstances = [];
 var crmCategoryTmpIndex = 0;
 
@@ -524,6 +524,7 @@ function crmCalendarToOrder(){
 }
 
 function crmCalendarToCar(){
+  //alert( $( '#crm-edit-event-car-id' ).val() );
   parent.postMessage( { 'openCar': $( '#crm-edit-event-car-id' ).val() }, '*' );
 }
 

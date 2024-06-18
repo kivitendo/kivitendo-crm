@@ -419,6 +419,8 @@ function crmFindCarKbaData( c_2, c_3, kba_id, formModel ){
 }
 
 function crmEditCarDlg( crmData = null ){
+    //console.info( crmData  );
+    crmSetMainTitle( crmData.cv.name + ' ,', ' ' + kivi.t8( 'Car' ) + ': ' +  crmData.car.c_ln );
     crmInitFormEx( editCarFormModel, '#edit-car-form', 22, '#edit-car-hidden' );
     crmInitFormEx( editCarKbaFormModel, '#edit-car-kba-form', 33 );
     $( '#crm-edit-car-orders-table' ).html('');
@@ -479,15 +481,19 @@ function crmEditCarDlg( crmData = null ){
         }
     });
 
-    $( '#car-c_ow' ).val( $( '#crm-cvpa-id' ).val() );
-    $( '#edit_car_customer_name' ).val( $( '#crm-contact-name' ).text() );
+    //$( '#car-c_ow' ).val( $( '#crm-cvpa-id' ).val() );
+    //$( '#edit_car_customer_name' ).val( $( '#crm-contact-name' ).text() );
 
     if( exists( crmData ) ){
-
+        $( '#edit_car_customer_name' ).val( crmData.cv.name );//Kundenname setzen
+        $( '#od-customer-id' ).val( crmData.cv.id ); //Kunden-ID setzen ToDo: Autoansicht
+        //Ist es nicht sinnvoller die Kunden-ID und den Kundenname in der Funktion crmRefreshAppView() zu setzen?
+        //crmRefreshAppView() brächte dann einen dritten Parameter (c_id) mit der Car-ID
+        crmRefreshAppView( 'C', crmData.cv.id ); //Kundenansicht anzeigen
         if( exists( crmData.car ) ){
             $( '#edit_car_kba_edit' ).click( function(){
-                console.info( 'Edit kba' );
-                console.info( crmData );
+                //console.info( 'Edit kba' );
+                //console.info( crmData );
                 crmEditKbaDlg( crmData.car );
             });
 
@@ -563,7 +569,7 @@ function crmEditCarNewOrder(){
 }
 
 function crmEditCarSaveView(){
-    console.info( 'Save car' );
+    //console.info( 'Save car' );
 
     crmDoCheckLn( '#edit_car-chk_c_ln', '#edit_car-c_ln', '#crm-edit-car-dialog', false );
     crmDoCheckHsn( '#edit_car-chk_c_2', '#edit_car-c_2', '#crm-edit-car-dialog' );
@@ -584,8 +590,8 @@ function crmEditCarSaveView(){
         type: 'POST',
         data:  { action: 'checkCarLicenseAndFin', data: { 'fin': $( '#edit_car-c_fin' ).val(), 'c_ln': $( '#edit_car-c_ln' ).val() } },
         success: function( crmData ){
-            console.info( 'crmData check' );
-            console.info( crmData );
+            //console.info( 'crmData check' );
+            //console.info( crmData );
 
             if( '' == $( '#edit_car-c_id' ).val() ){
                 if( 'false' !== crmData.fin_check.fin_exists ){
@@ -615,7 +621,7 @@ function crmEditCarSaveView(){
                     if( exists(val) && val !== '' ) dbUpdateData['lxc_cars'][columnName[1]] = $( '#' + item.check ).prop( 'checked' );
                 }
             }
-            console.info( dbUpdateData );
+            //console.info( dbUpdateData );
             const onSuccess = function(){
                 crmRefreshAppViewAction();
                 crmCloseView( 'crm-edit-car-dialog' );
@@ -625,7 +631,7 @@ function crmEditCarSaveView(){
                 data['record'] = dbUpdateData;
                 data['record']['lxc_cars']['c_ow'] = $( '#car-c_ow' ).val();
                 if( '' == data['record']['lxc_cars']['c_zrk'] ) data['record']['lxc_cars']['c_zrk'] = 0;
-                console.info( data );
+                //console.info( data );
                 $.ajax({
                     url: 'crm/ajax/crm.app.php',
                     type: 'POST',
@@ -677,8 +683,8 @@ function crmEditKbaDlg( crmData ){
         buttons:[{
             text: kivi.t8( 'Save' ),
             click: function(){
-                console.info( 'Save kba 1' );
-                console.info( $( '#edit_kba-id' ).val() );
+                //console.info( 'Save kba 1' );
+                //console.info( $( '#edit_kba-id' ).val() );
                 let dbData = {};
                 dbData['lxckba'] = {};
                 dbData['lxckba']['WHERE'] = {};
@@ -690,7 +696,7 @@ function crmEditKbaDlg( crmData ){
                         if( item.name !== 'edit_kba-id' ) dbData['lxckba'][columnName[1]] = val;
                     }
                 }
-                console.info( dbData );
+                //console.info( dbData );
              }
         },
         {

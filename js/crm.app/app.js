@@ -1,11 +1,28 @@
 // Regulärer Auusdruck ( regex ) zum prüfen einer Telefonummer
 // ^(|(\+|0)[0-9]([-.\s\(\)\/]{0,3}[0-9])*)$
 
-function assert( info, message = null, assertion = true ){
+//info ist die Überschrift, messageist der Fehler, assertion ist eine Bedingung
+function assert( info, message = null, assertion = true ){ 
     if( assertion ){
         console.info( '-- ' + info + ' -->' );
         if( null != message ) console.info( message );
         console.info( '<--' );
+    }
+}
+
+function writeLog( info = 'WriteLog!', message = null, assertion = true, reverse = false ){ 
+    if( assertion ){
+        $.ajax({
+            url: 'crm/ajax/crm.app.php',
+            type: 'POST',
+            data:  { action: 'writeLogFromJs', data: { 'info': info, 'message': message, 'reverse': reverse } },
+            success: function(){
+                console.info( '--> writeLog aufgerufen. Lies log/debug.log <---' );
+            },
+            error: function( xhr, status, error ){
+                console.info( 'Aufruf von writeLog via Ajax fehlgeschlagen' );
+            }
+        });
     }
 }
 
@@ -125,7 +142,8 @@ $( function(){
         delay: crmAcDelay,
         minLength: 3,
         source: "crm/ajax/crm.app.php?action=fastSearch",
-        select: function( e, ui ) {
+        select: function( e, ui ){
+            //assert( 'Data: ', ui.item );
             crmRefreshAppView( ui.item.src, ui.item.id );
             crmCloseView();
         }
@@ -139,7 +157,7 @@ function getCVPA( src, id ){
         data:  { action: 'getCVPA', data: { 'src': src, 'id': id } },
         success: function( data ){
             showCVPA( data );
-            //console.info( data );
+            //writeLog( 'getCVPA', data );
             if( exists( data.car ) ){
                 crmEditCarDlg( data );
             }

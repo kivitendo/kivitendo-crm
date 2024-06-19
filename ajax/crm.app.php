@@ -363,12 +363,33 @@ function getCVPA( $data ){
         $data['id'] = $cp_cv['id'];
         $data['src'] = $cp_cv['src'];
     }
+    // Autos
     if( $data['src'] == 'A' ){
         $c_ow = $GLOBALS['dbh']->getOne( "SELECT c_ow FROM lxc_cars WHERE c_id = ".$data['id'] )['c_ow'];
         $query .= "(SELECT row_to_json( car ) AS car FROM (".
                     "SELECT *, to_char( c_hu, 'DD.MM.YYYY') AS c_hu, to_char( c_d, 'DD.MM.YYYY') AS c_d FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.kba_id = lxckba.id ) WHERE c_id = ".$data['id'].
                     ") AS car) AS car, ";
-        $data['src'] = 'C';
+        //So nun müssen wir noch die Fahrzeugspezifische Aufträge holen
+        $query .= "(
+                SELECT json_agg(car_ord) AS car_ord 
+                FROM (
+                    SELECT DISTINCT ON (oe.itime)
+                        to_char(oe.transdate, 'DD.MM.YYYY') AS date, 
+                        COALESCE(instructions.description, orderitems.description) AS description, 
+                        COALESCE(ROUND(amount, 2)) || ' ' || COALESCE(C.name) AS amount, 
+                        oe.ordnumber AS number, 
+                        oe.id 
+                    FROM oe 
+                    LEFT JOIN orderitems ON oe.id = orderitems.trans_id 
+                    LEFT JOIN instructions ON oe.id = instructions.trans_id 
+                    LEFT JOIN currencies C ON currency_id = C.id 
+                    WHERE quotation = FALSE 
+                        AND c_id = ".$data['id']." 
+                    ORDER BY oe.itime DESC, orderitems.itime 
+                    LIMIT 10
+                ) AS car_ord
+            ) AS car_ord, ";
+        $data['src'] = 'C'; // Nur Kunden haben Autos
         $data['id'] = $c_ow;
     }
     if( $data['src'] == 'C' || $data['src'] == 'V' ){
@@ -407,7 +428,7 @@ function getCVPA( $data ){
         $query .= "(SELECT json_agg( contacts ) AS contacts FROM (".
                     "SELECT * FROM contacts WHERE cp_cv_id = ".$data['id'].
                     ") AS contacts) AS contacts, ";
-        }
+    }
 
     // Fahrzeuge
     $query .= "( SELECT json_agg( cars ) AS cars FROM (".
@@ -710,7 +731,7 @@ function getCar( $data ){ //Stell die Daten für die Fahrzeugübersicht zusammen
                 ) AS car
             ) AS car, 
             (
-                SELECT json_agg(ord) AS ord 
+                SELECT json_agg(car_ord) AS car_ord 
                 FROM (
                     SELECT DISTINCT ON (oe.itime)
                         to_char(oe.transdate, 'DD.MM.YYYY') AS date, 
@@ -726,8 +747,8 @@ function getCar( $data ){ //Stell die Daten für die Fahrzeugübersicht zusammen
                         AND c_id = ".$data['id']." 
                     ORDER BY oe.itime DESC, orderitems.itime 
                     LIMIT 10
-                ) AS ord
-            ) AS ord,
+                ) AS car_ord
+            ) AS car_ord,
             (
                 SELECT row_to_json(cv) AS cv 
                 FROM (
@@ -2260,4 +2281,11 @@ function getAagUrl( $data ){
             break;
         }
     }//end while
+}
+
+function writeLogFromJs( $data ){
+    writeLog( $data['info'] );
+    if( $data['reverse']) writeLogR( $data['message'] );
+    writeLog( $data['message'] );
+    resultInfo( true ); 
 }

@@ -519,10 +519,10 @@ function crmEditCarDlg( crmData = null ){
             }
         }
 
-        if( exists( crmData.ord ) ){
-            if( exists( crmData.ord ) ){
+        if( exists( crmData.car_ord ) ){
+            if( exists( crmData.car_ord ) ){
                 let listrow0 = false;
-                $.each( crmData.ord, function( key, value ){
+                $.each( crmData.car_ord, function( key, value ){
                     if( key > 10 ) return false;
                     $( '#crm-edit-car-orders-table' ).append( '<tr id="' + value.id +'" class="' + ( ( listrow0 =! listrow0 ) ? "listrow0" : "listrow1" ) + '"><td>' +  value.date + '</td><td>' + value.description  + '</td><td>' + value.amount  + '</td><td>' + value.number + '</td></tr>' );
                 });

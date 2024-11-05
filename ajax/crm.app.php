@@ -210,7 +210,7 @@ function searchOrder( $data ){
             "WHERE ".$where." oe.quotation = FALSE AND orderitems.trans_id = oe.id AND parts.id = orderitems.parts_id AND orderitems.position = 1 AND cars.c_id = oe.c_id AND customer.id = oe.customer_id ".
             "ORDER BY instruction ASC) AS myTable ORDER BY internal_order ASC, init_ts DESC LIMIT 100";
 
-    //writeLog( $sql );
+    //writeLog( $sql ); //for Website
 
     $rs = $GLOBALS['dbh']->getALL( $sql, true );
 
@@ -917,6 +917,7 @@ function getInvoice( $data, $flag = null ){  //ToDo c_id verwenden statt shippin
                 ") AS payment_acc) AS payment_acc, ";
 
     $query .= "(SELECT json_agg( invoice ) AS invoice FROM (".$sql.") AS invoice) AS invoice";
+    //writeLog( $query );
 
     echo '{ "bill": '.$GLOBALS['dbh']->getOne( $query, true ).(( $flag != null )? ', "flag": "'.$flag.'" }' : ' }');
 }

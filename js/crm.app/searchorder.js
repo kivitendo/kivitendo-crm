@@ -58,13 +58,38 @@ $( '#search_order-car_brand' ).autocomplete({
     }
 })
 
-for( let item of searchOrderFormModel ){
-    $( '#' + item.name ).keyup( function(){
-        crmSearchOrder();
-    }).change( function(){
-        crmSearchOrder();
-    });
-}
+document.addEventListener('DOMContentLoaded', function() {
+    const filterOrderList = document.getElementById('filter_order_list');
+    const showHideOrderListFilterButton = document.getElementById('show_hide_orderlist_filter_button');
+    const deleteFilterValuesButton = document.getElementById('delete_filter_values_button');
+    // Setze den Filter auf 'none' beim Laden der Seite
+    filterOrderList.style.display = 'none';
+    deleteFilterValuesButton.style.display = 'none'; 
+    // Initialer Text des Buttons basierend auf der Sichtbarkeit von filterOrderList
+    showHideOrderListFilterButton.textContent = kivi.t8('Show filter');
+
+    function toggleFilterOrderList() {
+        if (filterOrderList.style.display === 'none') {
+            filterOrderList.style.display = 'block';
+            showHideOrderListFilterButton.textContent = kivi.t8('Hide filter');
+            deleteFilterValuesButton.style.display = 'inline-block'; 
+        } else {
+            filterOrderList.style.display = 'none';
+            showHideOrderListFilterButton.textContent = kivi.t8('Show filter');
+            deleteFilterValuesButton.style.display = 'none'; 
+        }
+    }
+
+    showHideOrderListFilterButton.addEventListener('click', toggleFilterOrderList);
+
+    for (let item of searchOrderFormModel) {
+        $('#' + item.name).keyup(function() {
+            crmSearchOrder();
+        }).change(function() {
+            crmSearchOrder();
+        });
+    }
+});
 
 function crmSearchOrder( onSuccess = null ){
     dbData = {};

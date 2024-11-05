@@ -992,12 +992,13 @@
 </div>
 
 <div id="crm-search-order-view" class="crm-p2" style="display:none">
-    <div>
-        <button onclick="crmSearchOrderClearView();">Löschen</button>
+    <div style="margin-bottom: 20px;">
         <button onclick="crmSearchOrderCloseView();">Schließen</button>
+        <button id="show_hide_orderlist_filter_button"></button>
+        <button id="delete_filter_values_button" onclick="crmSearchOrderClearView();">Löschen</button>
     </div>
     <div id="search-order-hidden"></div>
-    <div class="input-panel control-panel">
+    <div id="filter_order_list" class="input-panel control-panel">
         <table id="search-order-form" style="padding-bottom: 1em">
             <thead></thead>
             <tbody></tbody>

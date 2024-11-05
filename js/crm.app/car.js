@@ -420,7 +420,7 @@ function crmFindCarKbaData( c_2, c_3, kba_id, formModel ){
 
 function crmEditCarDlg( crmData = null ){
     //console.info( crmData  );
-    crmSetMainTitle( crmData.cv.name + ' ,', ' ' + kivi.t8( 'Car' ) + ': ' +  crmData.car.c_ln );
+    //crmSetMainTitle( crmData.cv.name + ' ,', ' ' + kivi.t8( 'Car' ) + ': ' +  crmData.car.c_ln );
     crmInitFormEx( editCarFormModel, '#edit-car-form', 22, '#edit-car-hidden' );
     crmInitFormEx( editCarKbaFormModel, '#edit-car-kba-form', 33 );
     $( '#crm-edit-car-orders-table' ).html('');

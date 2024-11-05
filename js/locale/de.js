@@ -51,4 +51,6 @@ namespace( "kivi" ).setupLocale({
   "to save, press 'CTRL + s'": "zum speichern 'STRG + s' drücken",
   "User-friendly links":"Benutzerfreundliche Links",
   "Yesterday": "Gestern",
-})
+  "Show filter": "Filter anzeigen",
+  "Hide filter": "Filter ausblenden"
+});

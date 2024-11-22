@@ -58,7 +58,14 @@ function crmEBtoNum( fin ){
 }
 
 function crmCheckLn( ln ){
-    return ln.match(/^[A-Z ÜÄÖ]{1,3}-[A-Z]{1,2}[0-9]{1,4}[H]{0,1}$/);
+    return ln.match(/^(?=.{1,9}$)[A-ZÄÖÜ]{1,3}-[A-Z]{1,2}[0-9]{1,4}[HE]{0,1}$/);
+    // Erklärung:
+    // (?=.{1,8}$) - Stellt sicher, dass das Kennzeichen inklusive Bindestrich maximal 8 Zeichen lang ist
+    // [A-ZÄÖÜ]{1,3} - Ortskennung: Erlaubt 1 bis 3 Buchstaben inkl. deutscher Umlaute (z. B. MOL, B)
+    // - - Bindestrich zwischen Ortskennung und Serien-/Nummernteil
+    // [A-Z]{1,2} - Serienkennung: Erlaubt 1 oder 2 Buchstaben
+    // [0-9]{1,4} - Nummernteil: Erlaubt 1 bis 4 Ziffern
+    // [HE]? - Optional: Erlaubt entweder ein H (historisches Fahrzeug) oder ein E (Elektroauto)
 }
 
 function crmCheckHsn( hsn ){
@@ -85,7 +92,7 @@ function crmCheckD( d ){
 
 const crmDoCheckLn = function ( chk_c_ln, c_ln, dialog, unique = false ){
     if( $( chk_c_ln ).prop( 'checked' ) && !crmCheckLn( $( c_ln ).val() ) ){
-        $( dialog ).crmDialogShowError( 'edit-car-ln-check', 'Kennzeichen fehlerhaft! Folgendes Format verwenden: MOL-RK73 oder MOL-DS88H für Oldtimer.' );
+        $( dialog ).crmDialogShowError( 'edit-car-ln-check', 'Kennzeichen fehlerhaft! Folgendes Format verwenden: MOL-ID100 oder MOL-DS88E für Oldtimer.' );
         $( c_ln ).focus();
         return false;
     }
@@ -218,7 +225,8 @@ function crmNewCarFromScan(){
             let listrow0 = false;
             if( isIterable( crmData.db_scans ) ){
                 crmData.db_scans.forEach( function( item ){
-                    tableContent += '<tr class="' + ( ( listrow0 =! listrow0 ) ? "listrow0": "listrow1" ) + '" id="' + item.scan_id + '"><td style="text-align: right; padding-right: 15px;">' + item.myts + '</td><td>' + item.firstname + '</td><td>' + item.name1 + '</td><td>' + item.registrationnumber + '</td>';
+                    console.info( item ); //d1, d3, ccm, ez
+                    tableContent += '<tr class="' + ((listrow0 = !listrow0) ? "listrow0" : "listrow1") + '" id="' + item.scan_id + '"><td style="text-align: right; padding-right: 15px;">' + item.myts + '</td><td>' + item.firstname + '</td><td>' + item.name1 + '</td><td>' + item.registrationnumber + '</td><td>' + item.d1 + '</td><td>' + item.d3 + '</td><td>' + item.ccm + (item.ccm != '' ? ' cm³' : '') + '</td>';
                 });
             }
             $( '#crm-fsscan-list' ).empty().append( tableContent );

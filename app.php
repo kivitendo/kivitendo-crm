@@ -1012,7 +1012,7 @@
             <th>Erste Position</th>
             <th>Hersteller</th>
             <th>Fahrzeugtyp</th>
-            <th>Datum</th>
+            <th>Bringe-Datum</th>
             <th>Auftragsnummer</th>
             <th>Status</th>
         </tr>
@@ -1198,6 +1198,9 @@
                 <th class="xlistheading" id="firstname">Vorname</th>
                 <th class="xlistheading" id="name1">Name</th>
                 <th class="xlistheading" id="licenseplate">Kennzeichen</th>
+                <th class="xlistheading" id="licenseplate">Hersteller</th>
+                <th class="xlistheading" id="licenseplate">Typ</th>
+                <th class="xlistheading" id="licenseplate">Hubraum</th>
               </tr>
             </thead>
             <tbody id="crm-fsscan-list"></tbody>

@@ -193,24 +193,110 @@ function searchOrder( $data ){
         $where .= " oe.status = '".$data['status']."'  AND ";
     }
 
-    $sql = "SELECT distinct on ( init_ts, internal_order ) * FROM ".
-            "( SELECT distinct on ( oe.id, internal_order ) 'true' ::BOOL AS instruction, oe.id, cars.c_ln, to_char( oe.transdate, 'DD.MM.YYYY') AS transdate, ".
-            "oe.ordnumber, instructions.description, oe.car_status, oe.status, oe.finish_time, customer.name AS owner, oe.c_id AS c_id, oe.customer_id, ".
-            "cars.c_2 AS c_2, cars.c_3 AS c_3, cars.hersteller AS car_manuf, cars.name AS car_type, oe.internalorder AS internal_order, oe.itime AS init_ts ".
-            "FROM oe, instructions, parts, customer, ".
-            "(SELECT * FROM lxc_cars LEFT JOIN lxckba ON lxckba.id = lxc_cars.kba_id) AS cars ".
-            "WHERE ".$where." oe.quotation = FALSE AND instructions.trans_id = oe.id AND parts.id = instructions.parts_id AND cars.c_id = oe.c_id AND customer.id = oe.customer_id ".
-            "UNION ".
-            "SELECT distinct on ( oe.id, internal_order ) 'false'::BOOL AS instruction, oe.id, cars.c_ln, to_char( oe.transdate, 'DD.MM.YYYY') AS transdate, ".
-            "oe.ordnumber, orderitems.description, oe.car_status, oe.status, oe.finish_time, customer.name AS owner, oe.c_id AS c_id, oe.customer_id, ".
-            "cars.c_2 AS c_2, cars.c_3 AS c_3, cars.hersteller AS car_manuf, cars.name AS car_type, ".
-            "oe.internalorder AS internal_order, oe.itime AS init_ts ".
-            "FROM oe, orderitems, parts, customer, ".
-            "(SELECT * FROM lxc_cars LEFT JOIN lxckba ON lxckba.id = lxc_cars.kba_id) AS cars ".
-            "WHERE ".$where." oe.quotation = FALSE AND orderitems.trans_id = oe.id AND parts.id = orderitems.parts_id AND orderitems.position = 1 AND cars.c_id = oe.c_id AND customer.id = oe.customer_id ".
-            "ORDER BY instruction ASC) AS myTable ORDER BY internal_order ASC, init_ts DESC LIMIT 100";
+    $sql = "SELECT *, TO_CHAR(delivery_ts, 'DD.MM.YYYY HH24:MI') AS delivery_ts_formatted FROM (
+        SELECT DISTINCT ON (internal_order, init_ts) 
+            'true'::BOOL AS instruction, 
+            oe.id, 
+            cars.c_ln, 
+            TO_CHAR(oe.transdate, 'DD.MM.YYYY') AS transdate, 
+            oe.ordnumber, 
+            instructions.description, 
+            oe.car_status, 
+            oe.status, 
+            oe.finish_time, 
+            customer.name AS owner, 
+            oe.c_id AS c_id, 
+            oe.customer_id, 
+            cars.c_2 AS c_2, 
+            cars.c_3 AS c_3, 
+            cars.hersteller AS car_manuf, 
+            cars.name AS car_type, 
+            oe.internalorder AS internal_order, 
+            oe.itime AS init_ts,
+            COALESCE(
+                NULLIF(
+                    CASE 
+                        WHEN delivery_time ILIKE '%Uhr' THEN 
+                            TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
+                        WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN 
+                            TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
+                        ELSE NULL
+                    END, NULL
+                ), oe.itime
+            ) AS delivery_ts
+        FROM oe
+        JOIN instructions ON instructions.trans_id = oe.id
+        JOIN parts ON parts.id = instructions.parts_id
+        JOIN customer ON customer.id = oe.customer_id
+        JOIN (SELECT * FROM lxc_cars LEFT JOIN lxckba ON lxckba.id = lxc_cars.kba_id) AS cars ON cars.c_id = oe.c_id
+        WHERE " . $where . " oe.quotation = FALSE
+          AND (COALESCE(
+                NULLIF(
+                    CASE 
+                        WHEN delivery_time ILIKE '%Uhr' THEN 
+                            TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
+                        WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN 
+                            TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
+                        ELSE NULL
+                    END, NULL
+                ), oe.itime) <= NOW() + INTERVAL '7 days')
 
-    //writeLog( $sql ); //for Website
+        UNION 
+
+        SELECT DISTINCT ON (internal_order, init_ts) 
+            'false'::BOOL AS instruction, 
+            oe.id, 
+            cars.c_ln, 
+            TO_CHAR(oe.transdate, 'DD.MM.YYYY') AS transdate, 
+            oe.ordnumber, 
+            orderitems.description, 
+            oe.car_status, 
+            oe.status, 
+            oe.finish_time, 
+            customer.name AS owner, 
+            oe.c_id AS c_id, 
+            oe.customer_id, 
+            cars.c_2 AS c_2, 
+            cars.c_3 AS c_3, 
+            cars.hersteller AS car_manuf, 
+            cars.name AS car_type, 
+            oe.internalorder AS internal_order, 
+            oe.itime AS init_ts,
+            COALESCE(
+                NULLIF(
+                    CASE 
+                        WHEN delivery_time ILIKE '%Uhr' THEN 
+                            TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
+                        WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN 
+                            TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
+                        ELSE NULL
+                    END, NULL
+                ), oe.itime
+            ) AS delivery_ts
+        FROM oe
+        JOIN orderitems ON orderitems.trans_id = oe.id AND orderitems.position = 1
+        JOIN parts ON parts.id = orderitems.parts_id
+        JOIN customer ON customer.id = oe.customer_id
+        JOIN (SELECT * FROM lxc_cars LEFT JOIN lxckba ON lxckba.id = lxc_cars.kba_id) AS cars ON cars.c_id = oe.c_id
+        WHERE " . $where . " oe.quotation = FALSE
+          AND (COALESCE(
+                NULLIF(
+                    CASE 
+                        WHEN delivery_time ILIKE '%Uhr' THEN 
+                            TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
+                        WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN 
+                            TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
+                        ELSE NULL
+                    END, NULL
+                ), oe.itime) <= NOW() + INTERVAL '7 days')
+    ) AS myTable 
+    ORDER BY internal_order ASC, delivery_ts DESC 
+    LIMIT 100";
+
+
+
+
+    //writeLog( $sql );
 
     $rs = $GLOBALS['dbh']->getALL( $sql, true );
 
@@ -932,8 +1018,8 @@ function insertInvoiceFromOrder( $data ){
 
     $GLOBALS['dbh']->beginTransaction();
     $id = $GLOBALS['dbh']->getOne( "WITH tmp AS ( UPDATE defaults SET invnumber = invnumber::INT + 1 RETURNING invnumber) ".
-                                "INSERT INTO ar ( invnumber, customer_id, employee_id, taxzone_id, currency_id, shippingpoint, notes, ordnumber, intnotes, shipvia, amount, netamount ) ".
-                                "SELECT (SELECT invnumber FROM tmp), oe.customer_id, ".$_SESSION['id'].", oe.taxzone_id, oe.currency_id, oe.shippingpoint, oe.notes, oe.ordnumber, oe.intnotes, oe.shipvia, oe.amount, oe.netamount ".
+                                "INSERT INTO ar ( invnumber, customer_id, employee_id, taxzone_id, currency_id, shippingpoint, notes, ordnumber, intnotes, shipvia, amount, netamount, invoice, type ) ".
+                                "SELECT (SELECT invnumber FROM tmp), oe.customer_id, ".$_SESSION['id'].", oe.taxzone_id, oe.currency_id, oe.shippingpoint, oe.notes, oe.ordnumber, oe.intnotes, oe.shipvia, oe.amount, oe.netamount, true AS invoice, 'invoice' AS type ".
                                 "FROM oe WHERE id = ".$data['oe_id']." RETURNING id;" )['id'];
 
     $query = "INSERT INTO invoice (trans_id, position, parts_id, description, longdescription, qty, unit, sellprice, discount, marge_total, fxsellprice) ".

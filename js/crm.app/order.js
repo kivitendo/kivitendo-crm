@@ -893,14 +893,18 @@ $( '#od-ui-items-status-all' ).change( function(){
     crmSaveOrder();
 });
 
+$.datetimepicker.setLocale('de');
+
 $( "#od-oe-delivery_time" ).datetimepicker({
     onChangeDateTime: function( current_time, $input ){
         crmEditOrderAddEvents( );
     },
     lang: 'de',
     minTime: '07:00',
-    maxTime: '19:00',
+    maxTime: '17:30',
     format:'d.m.Y H:i',
+    step: 30,  // Schritte von 30 Minuten für halbstündige Intervalle
+    dayOfWeekStart: 1   // Sicherstellen, dass die Woche mit Montag beginnt
 });
 
 $( "#od-oe-finish_time" ).datetimepicker({
@@ -908,9 +912,11 @@ $( "#od-oe-finish_time" ).datetimepicker({
         crmEditOrderAddEvents( );
     },
     lang: 'de',
-    minTime: '07:00',
-    maxTime: '19:00',
+    minTime: '08:00',
+    maxTime: '17:30',
     format:'d.m.Y H:i',
+    step: 30,  // Schritte von 30 Minuten für halbstündige Intervalle
+    dayOfWeekStart: 1   // Sicherstellen, dass die Woche mit Montag beginnt
 });
 
 $( '#od_oe_finish_now' ).click( function(){

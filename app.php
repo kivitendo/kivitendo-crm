@@ -575,6 +575,12 @@
                                     </select>
                                 </td>
                              </tr>
+                             <tr>
+                                <td class="od-table-label"><label for="od-oe-printed">gedruckt:</label></td>
+                                <td>
+                                    <input type="checkbox" id="od-oe-printed" disabled="disabled">   
+                                </td>
+                             </tr>
                         </table>
                     </td>
                     <td width="33%">

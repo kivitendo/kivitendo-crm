@@ -294,11 +294,133 @@ function searchOrder( $data ){
     LIMIT 100";
 
 
+//Mit Brainfuck-Message:
+/*
+$sql = "WITH random_message AS (
+    SELECT message
+    FROM brainfuck
+    WHERE CURRENT_TIME >= start_time AND CURRENT_TIME < end_time
+    ORDER BY RANDOM()
+    LIMIT 1
+),
+main_data AS (
+    SELECT json_agg(row_to_json(t)) AS data
+    FROM (
+        SELECT *, 
+               TO_CHAR(delivery_ts, 'DD.MM.YYYY HH24:MI') AS delivery_ts_formatted
+        FROM (
+            SELECT DISTINCT ON (internal_order, init_ts) 
+                'true'::BOOL AS instruction, 
+                oe.id, 
+                cars.c_ln, 
+                TO_CHAR(oe.transdate, 'DD.MM.YYYY') AS transdate, 
+                oe.ordnumber, 
+                instructions.description, 
+                oe.car_status, 
+                oe.status, 
+                oe.finish_time, 
+                customer.name AS owner, 
+                oe.c_id AS c_id, 
+                oe.customer_id, 
+                cars.c_2 AS c_2, 
+                cars.c_3 AS c_3, 
+                cars.hersteller AS car_manuf, 
+                cars.name AS car_type, 
+                oe.internalorder AS internal_order, 
+                oe.itime AS init_ts,
+                COALESCE(
+                    NULLIF(
+                        CASE 
+                            WHEN delivery_time ILIKE '%Uhr' THEN 
+                                TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
+                            WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN 
+                                TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
+                            ELSE NULL
+                        END, NULL
+                    ), oe.itime
+                ) AS delivery_ts
+            FROM oe
+            JOIN instructions ON instructions.trans_id = oe.id
+            JOIN parts ON parts.id = instructions.parts_id
+            JOIN customer ON customer.id = oe.customer_id
+            JOIN (SELECT * FROM lxc_cars LEFT JOIN lxckba ON lxckba.id = lxc_cars.kba_id) AS cars ON cars.c_id = oe.c_id
+            WHERE $where oe.quotation = FALSE
+              AND (COALESCE(
+                    NULLIF(
+                        CASE 
+                            WHEN delivery_time ILIKE '%Uhr' THEN 
+                                TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
+                            WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN 
+                                TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
+                            ELSE NULL
+                        END, NULL
+                    ), oe.itime) <= NOW() + INTERVAL '7 days')
+            UNION 
+            SELECT DISTINCT ON (internal_order, init_ts) 
+                'false'::BOOL AS instruction, 
+                oe.id, 
+                cars.c_ln, 
+                TO_CHAR(oe.transdate, 'DD.MM.YYYY') AS transdate, 
+                oe.ordnumber, 
+                orderitems.description, 
+                oe.car_status, 
+                oe.status, 
+                oe.finish_time, 
+                customer.name AS owner, 
+                oe.c_id AS c_id, 
+                oe.customer_id, 
+                cars.c_2 AS c_2, 
+                cars.c_3 AS c_3, 
+                cars.hersteller AS car_manuf, 
+                cars.name AS car_type, 
+                oe.internalorder AS internal_order, 
+                oe.itime AS init_ts,
+                COALESCE(
+                    NULLIF(
+                        CASE 
+                            WHEN delivery_time ILIKE '%Uhr' THEN 
+                                TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
+                            WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN 
+                                TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
+                            ELSE NULL
+                        END, NULL
+                    ), oe.itime
+                ) AS delivery_ts
+            FROM oe
+            JOIN orderitems ON orderitems.trans_id = oe.id AND orderitems.position = 1
+            JOIN parts ON parts.id = orderitems.parts_id
+            JOIN customer ON customer.id = oe.customer_id
+            JOIN (SELECT * FROM lxc_cars LEFT JOIN lxckba ON lxckba.id = lxc_cars.kba_id) AS cars ON cars.c_id = oe.c_id
+            WHERE $where oe.quotation = FALSE
+              AND (COALESCE(
+                    NULLIF(
+                        CASE 
+                            WHEN delivery_time ILIKE '%Uhr' THEN 
+                                TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
+                            WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN 
+                                TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
+                            ELSE NULL
+                        END, NULL
+                    ), oe.itime) <= NOW() + INTERVAL '7 days')
+        ) AS myTable 
+        ORDER BY internal_order ASC, delivery_ts DESC 
+        LIMIT 100
+    ) t
+)
+SELECT json_build_object(
+    'message', (SELECT message FROM random_message),
+    'data', (SELECT data FROM main_data)
+) AS result";
+
+*/
 
 
     //writeLog( $sql );
-
+    // ohne Brainfuck
     $rs = $GLOBALS['dbh']->getALL( $sql, true );
+    //Mit brainfuck
+    //$rs = $GLOBALS['dbh']->getOne( $sql );
+
 
     echo '{ "rs": '.( ( empty( $rs ) )? '{}' : $rs ).' }';
 }
@@ -864,7 +986,7 @@ function getCar( $data ){ //Stell die Daten für die Fahrzeugübersicht zusammen
                 ) AS cv
             ) AS cv
         ";
-
+//    writeLog( $query );
     echo $GLOBALS['dbh']->getOne( $query, true );
 }
 

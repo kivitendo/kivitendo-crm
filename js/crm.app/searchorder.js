@@ -127,7 +127,7 @@ function crmSearchOrder( onSuccess = null ){
                 } else {
                     if (!isSeparatorAdded) {
                         // Füge die leere Zeile nur einmal hinzu, bevor die aktuellen Aufträge kommen
-                        $('#crm-search-order-table').append('<tr class="empty-row" style="background-color: pink;"><td colspan="8" style="text-align: center; font-size: 24px;">💖💖💖💖💖 ALLES NUR FÜR DENNIS 💖💖💖💖💖</td></tr>');
+                        $('#crm-search-order-table').append('<tr class="empty-row" style="background-color: pink;"><td colspan="8" style="text-align: center; font-size: 24px;">Brainfuck</td></tr>');
                         isSeparatorAdded = true;
                     }
                     // Füge die aktuellen Aufträge hinzu
@@ -135,7 +135,7 @@ function crmSearchOrder( onSuccess = null ){
                 }
             });
             $('#crm-search-order-table tr.empty-row').click(function() {
-                alert( '💖💖💖💖💖 ALLES NUR FÜR DENNIS 💖💖💖💖💖' );
+                alert( 'Edit Brainfuck-Liste' );
             });
             $( '#crm-search-order-table tr' ).click( function(){
                 if ($(this).hasClass('empty-row')) {
@@ -146,6 +146,7 @@ function crmSearchOrder( onSuccess = null ){
                     type: 'POST',
                     data:  { action: 'getOrder', data: { 'id': this.id } },
                     success: function( crmData ){
+                        console.info( crmData );
                         crmRefreshAppView( 'C', crmData.order.common.customer_id );
                         crmEditOrderDlg( crmData );
                         crmSetMainTitle( crmData.order.common.customer_name + ' ( ' + kivi.t8( 'Customer' ) + ' )' );

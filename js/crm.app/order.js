@@ -1217,12 +1217,17 @@ function crmPrintOrder( target ){
         data['type'] = 'sales_quotation';
     }
     data['vc'] = 'customer';
-    data['taxaccounts'] = '1776 ';
+    //data['taxaccounts'] = '1776 ';
+    data['taxaccounts'] = '3806 ';
     data['show_details'] = '0';
-    data['1776_rate'] = '0.19000';
-    data['1776_description'] = 'Umsatzsteuer';
-    data['1776_taxnumber'] = '1776';
-    data['1776_tax_id'] = '777';
+    //data['1776_rate'] = '0.19000';
+    data['3806_rate'] = '0.19000';
+    //data['1776_description'] = 'Umsatzsteuer';
+    data['3806_description'] = 'Umsatzsteuer';
+    //data['1776_taxnumber'] = '1776';
+    data['3806_taxnumber'] = '3806';
+    //data['1776_tax_id'] = '777';
+    data['3806_tax_id'] = '388';
     if( crmOrderTypeEnum.Invoice == crmOrderType ) data['follow_up_trans_id_1'] = '' +  $( '#od-inv-id' ).val();
     else if( crmOrderTypeEnum.Offer == crmOrderType ) data['follow_up_trans_id_1'] = '' +  $( '#od-off-id' ).val();
     data['follow_up_trans_type_1'] = 'sales_invoice';
@@ -1367,6 +1372,7 @@ var crmOrderType = crmOrderTypeEnum.Order;
 var coparts = {};
 
 function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
+    $( '#od-oe-printed' ).prop('checked', false );
     crmOrderType = type;
 
     crmOrderItemLists = { };
@@ -1421,6 +1427,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         $( '.od-perform' ).show();
 
         if( exists( crmData.order ) ){
+            //alert( crmData.order.common.printed );
             title = kivi.t8( 'Edit order' );
             $( '#od-customer-id' ).val( crmData.order.common.customer_id );
             $( '#od-lxcars-c_id' ).val( crmData.order.common.c_id );
@@ -1438,6 +1445,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-oe-itime' ).html( kivi.format_date( new Date( crmData.order.common.itime ) ) );
             $( '#od-oe-car_status' ).val( crmData.order.common.car_status );
             $( '#od-oe-status' ).val( crmData.order.common.status );
+            $( '#od-oe-printed' ).prop( 'checked', crmData.order.common.printed );
             $( '#od-lxcars-c_text' ).val( crmData.order.common.int_car_notes );
             $( '#od-customer-notes' ).val( crmData.order.common.int_cu_notes );
             $( '#od-oe-intnotes' ).val( crmData.order.common.intnotes );
@@ -1626,6 +1634,7 @@ function crmEditOrderSelectPrinter( e ){
 }
 
 function crmEditOrderCallPrinter1(){
+    $('#od-oe-printed').prop('checked', true); //Checkbox aktivieren
     let printData = {};
     printData['orderId'] = $( '#od-oe-id' ).val();
     printData['print'] = 'printOrder1';
@@ -1643,6 +1652,7 @@ function crmEditOrderCallPrinter1(){
 }
 
 function crmEditOrderCallPrinter2(){
+    $('#od-oe-printed').prop('checked', true); //Checkbox aktivieren
     let printData = {};
     printData['orderId'] = $( '#od-oe-id' ).val();
     printData['print'] = 'printOrder2';

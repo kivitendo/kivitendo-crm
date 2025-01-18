@@ -57,6 +57,7 @@ function crmCalcOrderPrice( pos ){
     }
     $( pos ).find( '[class=od-item-marge_total]' )[0].value = kivi.format_amount( marge_total, 2 );
 
+    console.info( 'qty: ' + qty + ' sellprice: ' + sellprice + ' discount: ' + discount + ' marge_total: ' + marge_total );
     const item_type = $( pos ).find( '[class=od-item-type]' )[0].value;
     if( 'I' !== item_type ){
         let netamount = kivi.parse_amount( $( '#od-netamount' ).val() ) + marge_total;
@@ -1217,16 +1218,16 @@ function crmPrintOrder( target ){
         data['type'] = 'sales_quotation';
     }
     data['vc'] = 'customer';
-    //data['taxaccounts'] = '1776 ';
+    //skr03 data['taxaccounts'] = '1776 ';
     data['taxaccounts'] = '3806 ';
     data['show_details'] = '0';
-    //data['1776_rate'] = '0.19000';
+    //skr03 data['1776_rate'] = '0.19000';
     data['3806_rate'] = '0.19000';
-    //data['1776_description'] = 'Umsatzsteuer';
+    //skr03 data['1776_description'] = 'Umsatzsteuer';
     data['3806_description'] = 'Umsatzsteuer';
-    //data['1776_taxnumber'] = '1776';
+    //skr03 data['1776_taxnumber'] = '1776';
     data['3806_taxnumber'] = '3806';
-    //data['1776_tax_id'] = '777';
+    //skr03 data['1776_tax_id'] = '777';
     data['3806_tax_id'] = '388';
     if( crmOrderTypeEnum.Invoice == crmOrderType ) data['follow_up_trans_id_1'] = '' +  $( '#od-inv-id' ).val();
     else if( crmOrderTypeEnum.Offer == crmOrderType ) data['follow_up_trans_id_1'] = '' +  $( '#od-off-id' ).val();
@@ -1283,7 +1284,8 @@ function crmPrintOrder( target ){
             data['active_discount_source_' + runningnumber] = '';
         }
         data['part_type_' + runningnumber] = '' + ( ( 'P' == $( pos ).find( '[class=od-item-type]' ).val() )? 'part' : 'service' );
-        if( $( pos ).find( '[class=od-hidden-item-rate]' ).val() > 0 ) data['taxaccounts_' + runningnumber] = '1776';
+        //SKR03 if( $( pos ).find( '[class=od-hidden-item-rate]' ).val() > 0 ) data['taxaccounts_' + runningnumber] = '1776';
+        if( $( pos ).find( '[class=od-hidden-item-rate]' ).val() > 0 ) data['taxaccounts_' + runningnumber] = '3806'
         data['marge_absolut_' + runningnumber] = '' + $( pos ).find( '[class=od-item-marge_total]' ).val();
         data['marge_percent_' + runningnumber] = '100,00';
         data['marge_price_factor_' + runningnumber] = '1.00000';

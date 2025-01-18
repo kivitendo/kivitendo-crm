@@ -1099,7 +1099,7 @@ function getInvoice( $data, $flag = null ){  //ToDo c_id verwenden statt shippin
     //    "LEFT JOIN chart ON ( tax.chart_id = chart.id ) ".
     //    "WHERE taxzone_id = 4 GROUP BY item_id, parts_id, position, qty, mysubquery.description, unit, sellprice, marge_total, discount, partnumber, part_type, longdescription, rate, k.taxkey_id, tax.chart_id, chart.accno ORDER BY position ASC";
 
-    $sql = "SELECT  invoice.id, invoice.parts_id, invoice.qty, invoice.description, invoice.position, invoice.unit, invoice.sellprice, invoice.marge_total, invoice.discount, parts.partnumber, parts.part_type, invoice.longdescription,".
+    $sql = "SELECT  invoice.id, invoice.parts_id, invoice.qty, invoice.description, invoice.position, invoice.unit, invoice.fxsellprice AS sellprice, invoice.marge_total, invoice.discount, parts.partnumber, parts.part_type, invoice.longdescription,".
         " (SELECT row_to_json( buchungsziel ) AS buchungsziel FROM (".
         "    SELECT c2.id AS income_chart_id, tk.tax_id, tx.chart_id AS tax_chart_id, tx.rate FROM parts p LEFT JOIN buchungsgruppen bg ON p.buchungsgruppen_id = bg.id LEFT JOIN taxzone_charts tc on bg.id = tc.buchungsgruppen_id LEFT JOIN chart c1 ON bg.inventory_accno_id = c1.id LEFT JOIN chart c2 ON tc.income_accno_id = c2.id LEFT JOIN chart c3 ON tc.expense_accno_id = c3.id LEFT JOIN taxkeys tk ON tk.chart_id = c2.id LEFT JOIN tax tx ON tx.id = tk.tax_id WHERE tc.taxzone_id = '4' AND p.id IN (parts.id) ORDER BY tk.startdate DESC LIMIT 1".
         " ) AS buchungsziel) AS buchungsziel".
@@ -1125,7 +1125,8 @@ function getInvoice( $data, $flag = null ){  //ToDo c_id verwenden statt shippin
                 ") AS payment_acc) AS payment_acc, ";
 
     $query .= "(SELECT json_agg( invoice ) AS invoice FROM (".$sql.") AS invoice) AS invoice";
-    //writeLog( $query );
+    //writeLogR( $query );
+    //writeLogR( $sql );
 
     echo '{ "bill": '.$GLOBALS['dbh']->getOne( $query, true ).(( $flag != null )? ', "flag": "'.$flag.'" }' : ' }');
 }

@@ -1,0 +1,8 @@
+app.plugins/calendar.php:        <td><label for="crm-edit-event-start">Start:</label></td>
+app.plugins/calendar.php:        <td><input type="text" id="crm-edit-event-start" name="crm-edit-event-start" value="" autocomplete="off"></input></td>
+js/crm.app/calendar.js:  const rrule = new RRule({ 'count': parseInt( $( "#crm-edit-event-count" ).val() ), 'dtstart': moment( $( "#crm-edit-event-start" ).val(), "DD.MM.YYYY HH:mm" ).toDate(), 'freq': crmRruleFreqMap[$( "#crm-edit-event-freq" ).val().trim()], 'interval': parseInt( $( "#crm-edit-event-interval" ).val() ) });
+js/crm.app/calendar.js:      $( "#crm-edit-event-start" ).val( moment( info.event.start ).format( "DD.MM.YYYY HH:mm") );
+js/crm.app/calendar.js:      $( "#crm-edit-event-start" ).val( moment( info.start ).format( "DD.MM.YYYY HH:mm") );
+js/crm.app/calendar.js:  $( "#crm-edit-event-start1, #crm-edit-event-end, #crm-edit-event-repeat-end" ).datetimepicker({
+js/crm.app/calendar.js:  $( "#crm-edit-event-start" ).datetimepicker({
+js/crm.app/calendar.js:          let start = moment($( "#crm-edit-event-start" ).val(), 'DD.MM.YYYY HH:mm');

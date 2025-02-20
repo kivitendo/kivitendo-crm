@@ -2381,9 +2381,10 @@ function getAagUrl( $data ){
 
     $oe_customer_car = $GLOBALS['dbh']->getOne( $sql, FALSE );
     //writeLog( $oe_customer_car );
+
     $data = [
-        "referenceId" => $oe_customer_car['ordnumber'],
-        "voucherId" => ( string )$oe_customer_car['oe_id'],
+        "referenceId" => $oe_customer_car['ordnumber'], // Eindeutiger Identifier des Beleges aus dem DMS System
+        "voucherId" => (string)$oe_customer_car['oe_id'],
         "voucherType" => [
             "referenceId" => "2",
             "description" => $oe_customer_car['name'],
@@ -2391,7 +2392,7 @@ function getAagUrl( $data ){
         ],
         //"invoiced" => false, // Gibt beim Import an, ob der Beleg bereits fakturiert wurde und somit nicht mehr bearbeitet werden darf. Ist dies der Fall, wird der Beleg als "neu" importiert und sowohl die "referenceId" als auch die "voucherId" werden nicht übernommen.
         "customer" => [
-            "referenceId" => ( string )$oe_customer_car['customer_id'], // Eindeutiger Identifier des Kunden aus dem DMS System
+            "referenceId" => (string)$oe_customer_car['customer_id'], // Eindeutiger Identifier des Kunden aus dem DMS System
             "customerId" => $oe_customer_car['customernumber'], // Kundennummer (des Werkstattkunden) customernumber
             "title" => $oe_customer_car['greeting'], // Enumeration Undefiniert = 0, Herr = 1, Frau = 2, Firma = 3
             "firstName" => $oe_customer_car['first_name'], // Vorname des Kunden
@@ -2412,14 +2413,14 @@ function getAagUrl( $data ){
             "memos" => [[ // Liste von Freitextfeldern
                 "description" => "Bemerkungen", // Bezeichnung des Freitextfeldes
                 "value" => $oe_customer_car['notes'], // Wert des Freitextfeldes
-                "type" => 0, // Typen. Enumeration: Text = 0, Xml = 1
+                "type" => "0", // Typen. Enumeration: Text = 0, Xml = 1
                 "isVisible" => true // Soll der Value im Teilekatalog angezeigt werden.
             ]],
             "creationDate" => $oe_customer_car['customer_itime'], // Datensatz erstellt am (UTC Zeit)
             "modifiedDate" => $oe_customer_car['customer_mtime'] // Datensatz zuletzt geändert am (UTC Zeit)
         ],
         "vehicle" => [
-            "referenceId" => ( string )$oe_customer_car['c_id'],
+            "referenceId" => (string)$oe_customer_car['c_id'],
             //"vehicleType" => [
             //    "id" => 0, // (TecDoc) Typnummer
             //    "type" => 0, // Enumeration PKW = 1, NKW = 2, Motorrad = 3
@@ -2430,10 +2431,10 @@ function getAagUrl( $data ){
                 "plateId" => $oe_customer_car['c_ln'],
                 "registrationNo" => $oe_customer_car['kba'], // KBANR wird nur benutzt wenn keine KTYPNR übergeben wird
                 "registrationDate" => $oe_customer_car['registation_date'],
-                "registrationTypeId" => 0 // Art der Registrierungsnummer. Enumeration KBA = 0
+                "registrationTypeId" => "0" // Art der Registrierungsnummer. Enumeration KBA = 0
             ],
             "vin" => $oe_customer_car['c_fin'], // Fahrgestellnummer (FIN)
-            "mileage" => ( string )$oe_customer_car['km_stnd'], // Tachometerstand
+            "mileage" => (string)$oe_customer_car['km_stnd'], // Tachometerstand
             "mileageType" => "1", // Enumeration Kilometer = 1, Meilen = 2
             "engineCode" => $oe_customer_car['c_mkb'], // Motorcode
             "memos" => [[ // Liste von Freitextfeldern
@@ -2451,6 +2452,52 @@ function getAagUrl( $data ){
             ]
     ];
 
+    /*
+    $data = [
+        "referenceId" => "A_123",
+        "voucherId" => "23456",
+        "voucherType" => [
+            "referenceId" => "2",
+            "description" => "Angebot"
+        ],
+        "vehicle" => [
+            "referenceId" => "v_1",
+            "vehicleType" => [
+                "id" => 111074, // KTYPNR wenn vorhanden
+                "type" => 1 // Fahrzeugtyp PKW
+            ],
+            "registrationInformation" => [
+                "plateId" => "TE ST 2018",
+                "countryCode" => "DE",
+                "registrationNo" => "0005CKF00158", // KBANR wird nur benutzt wenn keine KTYPNR übergeben wird
+                "registrationDate" => "2018-03-27T22:00:00Z"
+            ]
+        ]
+    ];
+    */
+   
+    $data = [
+        "referenceId" => $oe_customer_car['ordnumber'],
+        "voucherType" => [
+            "referenceId" => "2",
+            "description" => "Angebot"
+        ],
+        "vehicle" => [
+            "referenceId" => "v_1",
+            "vehicleType" => [
+               // "id" => 111074, // KTYPNR wenn vorhanden
+                "type" => 1 // Fahrzeugtyp PKW
+            ],
+            "registrationInformation" => [
+                "plateId" => $oe_customer_car['c_ln'],
+                "countryCode" => "DE",
+                "registrationNo" => $oe_customer_car['kba'], // KBANR wird nur benutzt wenn keine KTYPNR übergeben wird
+                //"registrationDate" => $oe_customer_car['registation_date']
+                "registrationDate" => "2018-03-27T22:00:00Z"
+            ]
+        ]
+    ];
+ 
 
 
     $tries = 8;

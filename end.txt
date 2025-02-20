@@ -1,0 +1,7 @@
+app.plugins/calendar.php:        <td><label for="crm-edit-event-end">Ende:</label></td>
+app.plugins/calendar.php:        <td><input type="text" id="crm-edit-event-end" name="crm-edit-event-end" value="" autocomplete="off"></input></td>
+js/crm.app/calendar.js:  const a = moment( $( "#crm-edit-event-end" ).val(), 'DD.MM.YYYY HH:mm' );
+js/crm.app/calendar.js:      $( "#crm-edit-event-end" ).val( moment( info.event.end ? info.event.end : info.event.start ).format( "DD.MM.YYYY HH:mm") );
+js/crm.app/calendar.js:      $( "#crm-edit-event-end" ).val( moment( info.end ? info.end : info.start ).format( "DD.MM.YYYY HH:mm") );
+js/crm.app/calendar.js:  $( "#crm-edit-event-start1, #crm-edit-event-end, #crm-edit-event-repeat-end" ).datetimepicker({
+js/crm.app/calendar.js:          let end = moment($( "#crm-edit-event-end" ).val(), 'DD.MM.YYYY HH:mm');

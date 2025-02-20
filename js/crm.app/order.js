@@ -12,6 +12,7 @@ function crmCalcOrderPos(){
 
     $( '#od-netamount' ).val( 0 );
     $( '#od-amount' ).val( 0 );
+    $( '#od-hidden-amount' ).val( 0 );
     let positions = $( '#edit-order-table > tbody > tr');
     if( 3 >  positions.length ){
         $( positions[0] ).find( '[class=od-ui-del]' ).hide();
@@ -56,13 +57,15 @@ function crmCalcOrderPrice( pos ){
         marge_total -= discount;
     }
     $( pos ).find( '[class=od-item-marge_total]' )[0].value = kivi.format_amount( marge_total, 2 );
-
-    console.info( 'qty: ' + qty + ' sellprice: ' + sellprice + ' discount: ' + discount + ' marge_total: ' + marge_total );
+    //$( pos ).find( '[class=od-hidden-item-marge_total]' )[0].value = marge_total;
+    
+    //console.info( 'qty: ' + qty + ' sellprice: ' + sellprice + ' discount: ' + discount + ' marge_total: ' + marge_total );
     const item_type = $( pos ).find( '[class=od-item-type]' )[0].value;
     if( 'I' !== item_type ){
         let netamount = kivi.parse_amount( $( '#od-netamount' ).val() ) + marge_total;
         $( '#od-netamount' ).val( kivi.format_amount( netamount, 2 ) );
-        let amount = kivi.parse_amount( $( '#od-amount' ).val() ) + marge_total * ( parseFloat( $( pos ).find( '[class=od-hidden-item-rate]' )[0].value ) + 1 );
+        let amount = kivi.parse_amount( $( '#od-hidden-amount' ).val() ) + marge_total * ( parseFloat( $( pos ).find( '[class=od-hidden-item-rate]' )[0].value ) + 1 );
+        $( '#od-hidden-amount' ).val( kivi.format_amount( amount, 5 ) );
         $( '#od-amount' ).val( kivi.format_amount( amount, 2 ) );
     }
 

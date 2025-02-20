@@ -821,6 +821,7 @@
                         </td>
                         <td>
                             <input id="od-amount" type="text" readonly="readonly" size="10"></input>
+                            <input id="od-hidden-amount" type="hidden" readonly="readonly" size="10"></input>
                         </td>
                      </tr>
                 </table>

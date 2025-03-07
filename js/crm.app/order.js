@@ -44,44 +44,90 @@ function crmCalcOrderPos(){
 var crmPerfomanceIst = 0;
 var crmPerfomanceSoll = 0;
 
-function crmCalcOrderPrice( pos ){
-    let qty = kivi.parse_amount( $( pos ).find( '[class=od-item-qty]' )[0].value );
-    if( isNaN( qty ) ) qty = 0;
-    let sellprice = kivi.parse_amount( $( pos ).find( '[class=od-item-sellprice]' )[0].value );
-    if( isNaN( sellprice ) ) sellprice = 0;
-    let discount = kivi.parse_amount( $( pos ).find( '[class=od-item-discount]' )[0].value );
-    if( isNaN( discount ) ) discount = 0;
+function crmCalcOrderPrice(pos) {
+    let qty = kivi.parse_amount($(pos).find('[class=od-item-qty]')[0].value);
+    if (isNaN(qty)) qty = 0;
+    let sellprice = kivi.parse_amount($(pos).find('[class=od-item-sellprice]')[0].value);
+    if (isNaN(sellprice)) sellprice = 0;
+    let discount = kivi.parse_amount($(pos).find('[class=od-item-discount]')[0].value);
+    if (isNaN(discount)) discount = 0;
+
     let marge_total = qty * sellprice;
-    if( discount > 0 ){
-        discount  = marge_total * ( discount / 100 );
+    if (discount > 0) {
+        discount = marge_total * (discount / 100);
         marge_total -= discount;
     }
-    $( pos ).find( '[class=od-item-marge_total]' )[0].value = kivi.format_amount( marge_total, 2 );
-    //$( pos ).find( '[class=od-hidden-item-marge_total]' )[0].value = marge_total;
+    marge_total = Math.round(marge_total * 100) / 100; // Rundung auf 2 Dezimalstellen
+
+    $(pos).find('[class=od-item-marge_total]')[0].value = kivi.format_amount(marge_total, 2);
     
-    //console.info( 'qty: ' + qty + ' sellprice: ' + sellprice + ' discount: ' + discount + ' marge_total: ' + marge_total );
-    const item_type = $( pos ).find( '[class=od-item-type]' )[0].value;
-    if( 'I' !== item_type ){
-        let netamount = kivi.parse_amount( $( '#od-netamount' ).val() ) + marge_total;
-        $( '#od-netamount' ).val( kivi.format_amount( netamount, 2 ) );
-        let amount = kivi.parse_amount( $( '#od-hidden-amount' ).val() ) + marge_total * ( parseFloat( $( pos ).find( '[class=od-hidden-item-rate]' )[0].value ) + 1 );
-        $( '#od-hidden-amount' ).val( kivi.format_amount( amount, 5 ) );
-        $( '#od-amount' ).val( kivi.format_amount( amount, 2 ) );
+    const item_type = $(pos).find('[class=od-item-type]')[0].value;
+    if ('I' !== item_type) {
+        let netamount = kivi.parse_amount($('#od-netamount').val()) + marge_total;
+        netamount = Math.round(netamount * 100) / 100; // Rundung
+        $('#od-netamount').val(kivi.format_amount(netamount, 2));
+        
+        let rate = parseFloat($(pos).find('[class=od-hidden-item-rate]')[0].value);
+        let amount = kivi.parse_amount($('#od-hidden-amount').val()) + (marge_total * (rate + 1));
+        amount = Math.round(amount * 100) / 100; // Rundung
+
+        $('#od-hidden-amount').val(kivi.format_amount(amount, 5));
+        $('#od-amount').val(kivi.format_amount(amount, 2));
     }
 
-    //Brechnung der Performance für di GuV
-    if( crmOrderTypeEnum.Order == crmOrderType ){
-        const base_unit = $( pos ).find( '[class=od-hidden-item-base_unit]' )[0].value;
-        const qty = kivi.parse_amount( $( pos ).find( '[class=od-item-qty]' )[0].value );
-        const factor = kivi.parse_amount( $( pos ).find( '[class=od-hidden-item-factor]' )[0].value );
-        if( 'I' == item_type && 'min' == base_unit ) crmPerfomanceIst += qty * factor;
-        if( 'S' == item_type && 'min' == base_unit ) crmPerfomanceSoll += qty * factor;
-        const performance = ( crmPerfomanceSoll - crmPerfomanceIst ) / 60;
-        $( '#od-performance' ).val( kivi.format_amount( performance ) );
-        if( performance < 0 ) $( '#od-performance' ).css( 'background-color', 'red' );
-        else $( '#od-performance' ).css( 'background-color', 'green' );
+    if (crmOrderTypeEnum.Order == crmOrderType) {
+        const base_unit = $(pos).find('[class=od-hidden-item-base_unit]')[0].value;
+        const factor = kivi.parse_amount($(pos).find('[class=od-hidden-item-factor]')[0].value);
+        
+        if ('I' == item_type && 'min' == base_unit) crmPerfomanceIst += qty * factor;
+        if ('S' == item_type && 'min' == base_unit) crmPerfomanceSoll += qty * factor;
+        
+        let performance = (crmPerfomanceSoll - crmPerfomanceIst) / 60;
+        performance = Math.round(performance * 100) / 100; // Rundung
+        
+        $('#od-performance').val(kivi.format_amount(performance));
+        $('#od-performance').css('background-color', performance < 0 ? 'red' : 'green');
     }
 }
+
+//function crmCalcOrderPrice( pos ){
+//    let qty = kivi.parse_amount( $( pos ).find( '[class=od-item-qty]' )[0].value );
+//    if( isNaN( qty ) ) qty = 0;
+//    let sellprice = kivi.parse_amount( $( pos ).find( '[class=od-item-sellprice]' )[0].value );
+//    if( isNaN( sellprice ) ) sellprice = 0;
+//    let discount = kivi.parse_amount( $( pos ).find( '[class=od-item-discount]' )[0].value );
+//    if( isNaN( discount ) ) discount = 0;
+//    let marge_total = qty * sellprice;
+//    if( discount > 0 ){
+//        discount  = marge_total * ( discount / 100 );
+//        marge_total -= discount;
+//    }
+//    $( pos ).find( '[class=od-item-marge_total]' )[0].value = kivi.format_amount( marge_total, 2 );
+//    //$( pos ).find( '[class=od-hidden-item-marge_total]' )[0].value = marge_total;
+//    
+//    //console.info( 'qty: ' + qty + ' sellprice: ' + sellprice + ' discount: ' + discount + ' marge_total: ' + marge_total );
+//    const item_type = $( pos ).find( '[class=od-item-type]' )[0].value;
+//    if( 'I' !== item_type ){
+//        let netamount = kivi.parse_amount( $( '#od-netamount' ).val() ) + marge_total;
+//        $( '#od-netamount' ).val( kivi.format_amount( netamount, 2 ) );
+//        let amount = kivi.parse_amount( $( '#od-hidden-amount' ).val() ) + marge_total * ( parseFloat( $( pos ).find( '[class=od-hidden-item-rate]' )[0].value ) + 1 );
+//        $( '#od-hidden-amount' ).val( kivi.format_amount( amount, 5 ) );
+//        $( '#od-amount' ).val( kivi.format_amount( amount, 2 ) );
+//    }
+//
+//    //Brechnung der Performance für di GuV
+//    if( crmOrderTypeEnum.Order == crmOrderType ){
+//        const base_unit = $( pos ).find( '[class=od-hidden-item-base_unit]' )[0].value;
+//        const qty = kivi.parse_amount( $( pos ).find( '[class=od-item-qty]' )[0].value );
+//        const factor = kivi.parse_amount( $( pos ).find( '[class=od-hidden-item-factor]' )[0].value );
+//        if( 'I' == item_type && 'min' == base_unit ) crmPerfomanceIst += qty * factor;
+//        if( 'S' == item_type && 'min' == base_unit ) crmPerfomanceSoll += qty * factor;
+//        const performance = ( crmPerfomanceSoll - crmPerfomanceIst ) / 60;
+//        $( '#od-performance' ).val( kivi.format_amount( performance ) );
+//        if( performance < 0 ) $( '#od-performance' ).css( 'background-color', 'red' );
+//        else $( '#od-performance' ).css( 'background-color', 'green' );
+//    }
+//}
 
 function crmEditOrderOnChange(){
     crmCalcOrderPos();

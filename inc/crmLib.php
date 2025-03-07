@@ -2276,7 +2276,7 @@ function getCustMsg($id,$all=false) {
     }
     $sql="select * from custmsg where $where ";
     $rs=$GLOBALS['dbh']->getAll($sql);
-    if(!$rs) {
+    if(false) {
         $sql = "select id,cause,coalesce(finishdate,'9999-12-31 00:00:00') as finishdate  ";
         $sql.= "from wiedervorlage where status > '0' and (kontaktid = $id or ";
         $sql.= "kontaktid in (select cp_id from contacts where cp_cv_id = $id)) ";

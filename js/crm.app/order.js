@@ -69,7 +69,9 @@ function crmCalcOrderPrice(pos) {
         
         let rate = parseFloat($(pos).find('[class=od-hidden-item-rate]')[0].value);
         let amount = kivi.parse_amount($('#od-hidden-amount').val()) + (marge_total * (rate + 1));
-        amount = Math.round(amount * 100) / 100; // Rundung
+        //console.info('amount2: ' + amount);
+        //amount = Math.round(amount * 100) / 100; // Rundung
+        amount = Math.round(amount * 100000) / 100000; // Rundung auf 5 Dezimalstellen
 
         $('#od-hidden-amount').val(kivi.format_amount(amount, 5));
         $('#od-amount').val(kivi.format_amount(amount, 2));

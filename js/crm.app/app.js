@@ -463,6 +463,9 @@ function crmInitFormEx( crmFormModel, table, max_rows = 0, container = null, cal
             if( item.hasOwnProperty( 'info' ) ){
                 tabledata += '<button id="' + item.info + '">' + kivi.t8( 'Info' ) + '</button>';
             }
+            if( item.hasOwnProperty( 'print' ) ){
+                tabledata += '<button id="' + item.print + '">' + 'drucken' + '</button>';
+            }
             if( item.type == 'button' ) tabledata += '<td' +  ( ( exists(item.class) )? ' class="' + item.class + '" ' : '' ) + '></td><td' +  ( ( exists(item.class) )? ' class="' + item.class + '" ' : '' ) + '><button id="' + item.name + '">' + kivi.t8( item.label ) + '</button>';
             tabledata += '</td>';
         }
@@ -637,7 +640,11 @@ $( '#crm-route' ).click( function(){
         type: 'POST',
         data: { action: 'getCompanyAdress' },
         success: function( data ) {
-            var routeUrl = 'https://www.google.de/maps/dir/' + data.address_street1 + ',+' + data.address_zipcode + ',+' +  data.address_city + '/' + $( "#crm-contact-street" ).html() + ',+' + $( "#crm-contact-zipcode" ).html() + '+' + $( "#crm-contact-city" ).html() ;
+            var routeUrl = 'https://www.google.de/maps/place/' + 
+                encodeURIComponent($("#crm-contact-street").html() + ', ' + 
+                                   $("#crm-contact-zipcode").html() + ' ' + 
+                                   $("#crm-contact-city").html());
+
             return newWindow.location = routeUrl;
         },
         error: function() {
@@ -646,10 +653,69 @@ $( '#crm-route' ).click( function(){
     });
 });
 
-//QR-Code für die Route anzeigen
-$( '#crm-route-qrcode' ).click( function(){
-    alert( 'QR-Code für die Route wird bald angezeigt...' );
+let qrTimeout = null;
+let qrVisible = false;
+let qrTimeoutDuration = 5000; // 5 Sekunden
+
+$('#crm-route-qrcode').on('click', function () {
+    const $container = $('#crm-qrcode-container');
+
+    // Wenn bereits sichtbar → sofort ausblenden und abbrechen
+    if (qrVisible) {
+        clearTimeout(qrTimeout);
+        $container.fadeOut(function () {
+            $container.empty();
+            qrVisible = false;
+        });
+        return;
+    }
+
+    // Adresse zusammensetzen
+    const street = $('#crm-contact-street').html();
+    const zip = $('#crm-contact-zipcode').html();
+    const city = $('#crm-contact-city').html();
+
+    const locationUrl = "https://www.google.de/maps/place/" +
+                        encodeURIComponent(street + ", " + zip + " " + city);
+
+    // QR-Code erzeugen
+    $container.empty().show();
+    new QRCode($container[0], {
+        text: locationUrl,
+        width: 200,
+        height: 200,
+        correctLevel: QRCode.CorrectLevel.H
+    });
+
+    qrVisible = true;
+
+    // Nach qrTimeoutDuration Sekunden automatisch ausblenden
+    clearTimeout(qrTimeout);
+    qrTimeout = setTimeout(function () {
+        $container.fadeOut(function () {
+            $container.empty();
+            qrVisible = false;
+        });
+    }, qrTimeoutDuration);
 });
+
+$("#crm-whatsapp-share").click( function () {
+    //alert( 'WhatsApp-Share wird bald verfügbar sein...' );
+    var street = $("#crm-contact-street").html();
+    var zip = $("#crm-contact-zipcode").html();
+    var city = $("#crm-contact-city").html();
+    
+    var locationUrl = 'https://www.google.de/maps/place/' + 
+                      encodeURIComponent(street + ', ' + zip + ' ' + city);
+
+    var message = "Hier ist der Standort von " + $("#crm-contact-name").html() + ":\n" +
+                  street + ", " + zip + " " + city + "\n" +
+                  "Google Maps Link: " + locationUrl;
+    var whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(message);
+
+    window.open(whatsappUrl, '_blank');
+});
+
 
 function crmCalendarView( ){
     //window.open("crm/calendar_test.html", "_blank" );

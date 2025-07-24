@@ -1460,6 +1460,7 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
     let title;
 
     $( '#od-customer-id' ).val( '' );
+    $( '#od-customer-geeting' ).val( '' );
     $( '#od-lxcars-c_id' ).val( '' );
     $( '#od-oe-id' ).val( '' );
     $( '#od-off-id' ).val( '' );
@@ -1480,9 +1481,10 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
         $( '.od-perform' ).show();
 
         if( exists( crmData.order ) ){
-            //alert( crmData.order.common.printed );
+            //alert( crmData.order.common.customer_greeting );
             title = kivi.t8( 'Edit order' );
             $( '#od-customer-id' ).val( crmData.order.common.customer_id );
+            $( '#od-customer-greeting' ).val( crmData.order.common.customer_greeting );
             $( '#od-lxcars-c_id' ).val( crmData.order.common.c_id );
             $( '#od-oe-id' ).val( crmData.order.common.id );
             $( '#od_customer_name' ).val( crmData.order.common.customer_name );

@@ -270,8 +270,10 @@ const editCarFormModel = [
     { "name": "edit_car-c_gart", "label": "Color code:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_car-c_st", "label": "Summer wheels:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_car-c_wt", "label": "Winter wheels:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "edit_car-c_st_l", "label": "LO Sommer wheels:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "edit_car-c_wt_l", "label": "LO Winter wheels:", "type": "input", "size": "21", "tooltip": "" },
+    // { "name": "edit_car-c_st_con", "label": "Zustand SR:", "type": "input", "size": "21", "tooltip": "Zustand der Sommerreifen" },
+    //{ "name": "edit_car-c_wt_con", "label": "Zustand WR:", "type": "input", "size": "21", "tooltip": "Zustand der Winterreifen" },
+    { "name": "edit_car-c_st_l", "label": "LO Sommer wheels:", "type": "input", "size": "21", "tooltip": "", "print": "edit_car-c_st_print" },
+    { "name": "edit_car-c_wt_l", "label": "LO Winter wheels:", "type": "input", "size": "21", "tooltip": "", "print": "edit_car-c_wt_print" },
     //{ "name": "edit_car-flxgr", "label": "Flexrohr size:", "type": "input", "size": "21", "tooltip": "" },  // siehe DB-Tabelle lxc_flex (wird nicht genutzt)
     { "name": "edit_car-c_zrd", "label": "Next ZR change on:", "type": "input", "size": "21", "tooltip": "" },
     { "name": "edit_car-c_zrk", "label": "Next ZR change at KM:", "type": "number", "size": "21", "tooltip": "" },

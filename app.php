@@ -94,6 +94,8 @@
 <script type="text/javascript" src='crm/app.plugins/datetimepicker/jquery.datetimepicker.full.min.js'></script>
 <script type="text/javascript" src="crm/nodejs/node_modules/tinymce/tinymce.min.js"></script>
 <script type="text/javascript" src='crm/app.plugins/fullcalendar/packages/moment/moment.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 
     <!-- Section CSS -->
     <!-- jQuery UI (REQUIRED) -->
@@ -498,6 +500,7 @@
     <div class="wrapper panel-wrapper">
         <div class="od-common-div input-panel control-panel" style="margin-bottom: 0.5em">
             <input id="od-customer-id" type="hidden"></input>
+             <input id="od-customer-greeting" type="hidden"></input>
             <input id="od-lxcars-c_id" type="hidden"></input>
             <input id="od-oe-id" type="hidden"></input>
             <input id="od-off-id" type="hidden"></input>
@@ -518,7 +521,7 @@
                                 <td><button id="crm_oe_contact_phone1" class="ui-contact-btn clickToCall1"></button></td>
                                 <td><button id="crm_oe_contact_phone1_dialog_button" class="clickToCall1 ui-contact-fx-btn">T</button><div id="crm_oe_contact_phone1_dialog"></div></td>
                                 <td><button id="crm_oe_copy_contact_phone1" class="copy clickToCall1 ui-contact-fx-btn" title="Copy">C</button></td>
-                                <td ><button id="crm_oe_whatsapp1" class="whatsapp clickToCall1 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
+                                <td ><button id="crm_oe_whatsapp1" class="whatsapp clickToCall1 ui-contact-fx-btn oe_wa" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
                             </tr>
                             <tr>
                                 <td class="od-table-label">Telefon2:</td>
@@ -526,7 +529,7 @@
                                 <td><button id="crm_oe_contact_phone2" class="ui-contact-btn clickToCall2"></button></td>
                                 <td><button id="crm_oe_contact_phone2_dialog_button" class="clickToCall2 ui-contact-fx-btn">T</button><div id="crm_oe_contact_phone2_dialog"></div></td>
                                 <td><button id="crm_oe_copy_contact_phone2" class="copy clickToCall2 ui-contact-fx-btn"  title="Copy">C</button></td>
-                                <td ><button id="crm_oe_whatsapp2" class="whatsapp clickToCall2 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
+                                <td ><button id="crm_oe_whatsapp2" class="whatsapp clickToCall2 ui-contact-fx-btn oe_wa" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
                             </tr>
                             <tr>
                                 <td class="od-table-label">Telefon3:</td>
@@ -534,7 +537,7 @@
                                 <td><button id="crm_oe_contact_phone3" class="ui-contact-btn clickToCall3"></button></td>
                                 <td><button id="crm_oe_contact_phone3_dialog_button" class="clickToCall3 ui-contact-fx-btn">T</button><div id="crm_oe_contact_phone3_dialog"></div></td>
                                 <td><button id="crm_oe_copy_contact_phone3" class="copy clickToCall3 ui-contact-fx-btn"  title="Copy">C</button></td>
-                                <td ><button id="crm_oe_whatsapp3" class="whatsapp clickToCall3 ui-contact-fx-btn" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
+                                <td ><button id="crm_oe_whatsapp3" class="whatsapp clickToCall3 ui-contact-fx-btn oe_wa" title="Whatsapp" ><img src="crm/image/whatsapp.png" alt="Whatsapp" ></button></td>
                             </tr>
                             <tr>
                                 <td class="od-table-label">E-Mail:</td>
@@ -1061,7 +1064,7 @@
     <div>
         <button onclick="crmEditCarSaveView();">Speichern</button>
         <button onclick="crmEditCarCloseView();">Abbrechen</button>
-        <button id="edit_car_new_order_btn" onclick="crmEditCarNewOrder();" style="margin-left: 2em">Neuer Auftrage</button>
+        <button id="edit_car_new_order_btn" onclick="crmEditCarNewOrder();" style="margin-left: 2em">Neuer Auftrag</button>
         <button id="edit_car_register_btn">Zulassen/Umschreiben...</button>
         <button id="edit_car_special_btn">Special</button>
     </div>
@@ -1245,7 +1248,22 @@
             <input type="hidden" id="crm-userconf-defprn" value="<?php echo $_SESSION['userConfig']['default_printer_id']; ?>"></input>
             <div><strong><span id="crm-contact-name"></span></strong> (<span id="crm-contact-cvnumber"></span>)</div>
             <div class="crm-pt05"><span id="crm-contact-street"></span></div>
-            <div class="crm-pt025"><span id="crm-contact-country"></span>-<span id="crm-contact-zipcode"></span> <span id="crm-contact-city"></span><button id="crm-route" tooltip="Route anzeigen"><img src="crm/image/karte.png" alt="Karte"  ></button><button id="crm-route-qrcode" tooltip="QR-Code für Route anzeigen" ><img src="crm/image/qrn.png" alt="QR-Code Karte" ></button></div>
+            <div class="crm-pt025">
+                <span id="crm-contact-country"></span>-
+                <span id="crm-contact-zipcode"></span>
+                <span id="crm-contact-city"></span>
+                <button id="crm-route" tooltip="Route anzeigen">
+                    <img src="crm/image/karte.png" alt="Karte">
+                </button>
+                <button id="crm-route-qrcode" tooltip="QR-Code für Route anzeigen">
+                    <img src="crm/image/qrn.png" alt="QR-Code Karte">
+                </button>
+                <!-- NEU: WhatsApp teilen -->
+                <button id="crm-whatsapp-share" tooltip="Per WhatsApp teilen">
+                    <img src="crm/image/whatsapp.png" alt="WhatsApp teilen">
+                </button>
+            </div>
+            <div id="crm-qrcode-container" style="margin-top:10px;"></div>
             <div class="crm-pt2"><strong>Hauptkontakt</strong></div>
             <div class="crm-pt05"><span id="crm-contact-contact"></span></div>
                 <table>

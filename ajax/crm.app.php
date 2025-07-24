@@ -6,7 +6,7 @@ require_once __DIR__.'/../inc/ajax2function.php';
 
 $GLOBALS['dbh']->setShowError( true );
 
-/*************************************************
+/*************************************************get
 * Erzeugt ein JSON das für die JS-Function
 * showMessageDialog verwendet werden kann
 *************************************************/
@@ -604,7 +604,7 @@ function getCVPA( $data ){
         // Stammdaten
         $db_table = array('C' => 'customer', 'V' => 'vendor');
         $query .= "(SELECT row_to_json( cv ) AS cv FROM (".
-                    "SELECT '".$data['src']."' AS src, id, ".$db_table[$data['src']]."number AS cvnumber, name, street, zipcode, contact, phone AS phone1, fax AS phone2, phone3, note_phone AS note_phone1, note_fax AS note_phone2, note_phone3, email, city, country FROM ".$db_table[$data['src']]." WHERE id=".$data['id'].
+                    "SELECT '".$data['src']."' AS src, id, ".$db_table[$data['src']]."number AS cvnumber, greeting, name, street, zipcode, contact, phone AS phone1, fax AS phone2, phone3, note_phone AS note_phone1, note_fax AS note_phone2, note_phone3, email, city, country FROM ".$db_table[$data['src']]." WHERE id=".$data['id'].
                     ") AS cv) AS cv, ";
         // Angebote
         $id = array('C' => 'customer_id', 'V' => 'vendor_id');
@@ -991,7 +991,7 @@ function getCar( $data ){ //Stell die Daten für die Fahrzeugübersicht zusammen
 }
 
 function getDataForNewLxcarsOrder( $data ){
-    $query = "SELECT customer.id AS customer_id, customer.name AS customer_name, customer.notes AS int_cu_notes, c_id, ".
+    $query = "SELECT customer.id AS customer_id, greeting AS customer_greeting, customer.name AS customer_name, customer.notes AS int_cu_notes, c_id, ".
                 "lxc_cars.c_ln, lxc_cars.c_text AS int_car_notes, employee.id AS employee_id, employee.name AS employee_name ".
                 "FROM lxc_cars INNER JOIN customer ON customer.id = lxc_cars.c_ow INNER JOIN employee ON employee.id = ".$_SESSION['loginCRM']." WHERE lxc_cars.c_id = ".$data['id'];
 
@@ -1004,7 +1004,7 @@ function getDataForNewOffer( $data ){
     $query = "SELECT ";
 
     $query .= "(SELECT row_to_json( common ) AS common FROM (".
-                "SELECT customer.id AS customer_id, customer.name AS customer_name, customer.notes AS int_cu_notes, ".
+                "SELECT customer.id AS customer_id, greeting AS customer_greeting, customer.name AS customer_name, customer.notes AS int_cu_notes, ".
                 "employee.id AS employee_id, employee.name AS employee_name ".
                 "FROM ".$table[$data['src']]." INNER JOIN employee ON employee.id = ".$_SESSION['loginCRM']." WHERE ".$table[$data['src']].".id = ".$data['id'].
                 ") AS common) AS common, ";
@@ -1059,7 +1059,7 @@ function getOrder( $data, $offer = false){
 
     if( $offer ){
         $query .= "(SELECT row_to_json( common ) AS common FROM (".
-                    "SELECT oe.*, customer.name AS customer_name, customer.notes AS int_cu_notes, employee.id AS employee_id, employee.name AS employee_name FROM oe INNER JOIN customer ON customer.id = oe.customer_id INNER JOIN employee ON oe.employee_id = employee.id WHERE oe.id = ".$orderID.
+                    "SELECT oe.*, customer.name AS customer_name, customer.greeting AS customer_greeting, customer.notes AS int_cu_notes, employee.id AS employee_id, employee.name AS employee_name FROM oe INNER JOIN customer ON customer.id = oe.customer_id INNER JOIN employee ON oe.employee_id = employee.id WHERE oe.id = ".$orderID.
                     ") AS common) AS common, ";
 
         $query .= "(SELECT json_agg( printers ) AS printers FROM (".
@@ -1069,9 +1069,9 @@ function getOrder( $data, $offer = false){
     else{
         $query .= "(SELECT row_to_json( common ) AS common FROM (".
                     "SELECT * FROM ".
-                    "(SELECT oe.*, customer.name AS customer_name, customer.street AS customer_street, customer.zipcode AS customer_zipcode, customer.city AS customer_city, customer.notes AS int_cu_notes, lxc_cars.c_ln AS c_ln, lxc_cars.c_fin, to_char( lxc_cars.c_d, 'DD.MM.YYYY') AS c_d_de, c_mkb, c_2, c_3, lxc_cars.c_text AS int_car_notes, employee.id AS employee_id, employee.name AS employee_name, lxckba.hersteller, lxckba.name AS kba_typ, lxckba.leistung, lxckba.hubraum FROM oe INNER JOIN customer ON customer.id = oe.customer_id INNER JOIN lxc_cars ON lxc_cars.c_id = oe.c_id LEFT JOIN lxckba ON lxc_cars.kba_id = lxckba.id INNER JOIN employee ON oe.employee_id = employee.id WHERE oe.id = ".$orderID.") AS lxcars ".
+                    "(SELECT oe.*, customer.name AS customer_name, customer.greeting AS customer_greeting, customer.street AS customer_street, customer.zipcode AS customer_zipcode, customer.city AS customer_city, customer.notes AS int_cu_notes, lxc_cars.c_ln AS c_ln, lxc_cars.c_fin, to_char( lxc_cars.c_d, 'DD.MM.YYYY') AS c_d_de, c_mkb, c_2, c_3, lxc_cars.c_text AS int_car_notes, employee.id AS employee_id, employee.name AS employee_name, lxckba.hersteller, lxckba.name AS kba_typ, lxckba.leistung, lxckba.hubraum FROM oe INNER JOIN customer ON customer.id = oe.customer_id INNER JOIN lxc_cars ON lxc_cars.c_id = oe.c_id LEFT JOIN lxckba ON lxc_cars.kba_id = lxckba.id INNER JOIN employee ON oe.employee_id = employee.id WHERE oe.id = ".$orderID.") AS lxcars ".
                     "UNION ".
-                    "(SELECT oe.*, customer.name AS customer_name, customer.street AS customer_street, customer.zipcode AS customer_zipcode, customer.city AS customer_city, customer.notes AS int_cu_notes, lxc_cars.c_ln AS c_ln, lxc_cars.c_fin, to_char( lxc_cars.c_d, 'DD.MM.YYYY') AS c_d_de, c_mkb, c_2, c_3, lxc_cars.c_text AS int_car_notes, employee.id AS employee_id, employee.name AS employee_name, lxckba.hersteller, lxckba.name AS kba_typ, lxckba.leistung, lxckba.hubraum FROM oe INNER JOIN customer ON customer.id = oe.customer_id LEFT JOIN lxc_cars ON lxc_cars.c_id = oe.c_id LEFT JOIN lxckba ON lxc_cars.kba_id = lxckba.id INNER JOIN employee ON oe.employee_id = employee.id WHERE oe.id = ".$orderID.") ".
+                    "(SELECT oe.*, customer.name AS customer_name, customer.greeting AS customer_greeting, customer.street AS customer_street, customer.zipcode AS customer_zipcode, customer.city AS customer_city, customer.notes AS int_cu_notes, lxc_cars.c_ln AS c_ln, lxc_cars.c_fin, to_char( lxc_cars.c_d, 'DD.MM.YYYY') AS c_d_de, c_mkb, c_2, c_3, lxc_cars.c_text AS int_car_notes, employee.id AS employee_id, employee.name AS employee_name, lxckba.hersteller, lxckba.name AS kba_typ, lxckba.leistung, lxckba.hubraum FROM oe INNER JOIN customer ON customer.id = oe.customer_id LEFT JOIN lxc_cars ON lxc_cars.c_id = oe.c_id LEFT JOIN lxckba ON lxc_cars.kba_id = lxckba.id INNER JOIN employee ON oe.employee_id = employee.id WHERE oe.id = ".$orderID.") ".
                     ") AS common) AS common, ";
     }
 
@@ -1107,7 +1107,7 @@ function getInvoice( $data, $flag = null ){  //ToDo c_id verwenden statt shippin
 
     $query = "SELECT ";
     $query .= "(SELECT row_to_json( common ) AS common FROM (".
-                "SELECT ar.*, customer.name AS customer_name, customer.notes AS int_cu_notes, lxc_cars.c_id AS c_id, lxc_cars.c_ln AS c_ln, lxc_cars.c_text AS int_car_notes, employee.id AS employee_id, employee.name AS employee_name FROM ar INNER JOIN customer ON customer.id = ar.customer_id LEFT JOIN lxc_cars ON lxc_cars.c_ln = ar.shippingpoint INNER JOIN employee ON ar.employee_id = employee.id WHERE ar.id = ".$invoiceID.
+                "SELECT ar.*, customer.name AS customer_name, customer.greeting AS customer_greeting, customer.notes AS int_cu_notes, lxc_cars.c_id AS c_id, lxc_cars.c_ln AS c_ln, lxc_cars.c_text AS int_car_notes, employee.id AS employee_id, employee.name AS employee_name FROM ar INNER JOIN customer ON customer.id = ar.customer_id LEFT JOIN lxc_cars ON lxc_cars.c_ln = ar.shippingpoint INNER JOIN employee ON ar.employee_id = employee.id WHERE ar.id = ".$invoiceID.
                 ") AS common) AS common, ";
 
     $query .= "(SELECT json_agg( printers ) AS printers FROM (".
@@ -1583,7 +1583,7 @@ function printOrder( $data ){
     }
 
     $sql  = "SELECT oe.ordnumber, oe.transdate, oe.finish_time, oe.km_stnd, oe.employee_id, printed, ";
-    $sql .= "customer.name AS customer_name, customer.street, customer.zipcode, customer.city, customer.phone, customer.fax, customer.notes, ";
+    $sql .= "customer.name AS customer_name, customer.greeting AS customer_greeting, customer.street, customer.zipcode, customer.city, customer.phone, customer.fax, customer.notes, ";
     $sql .= "lxc_cars.c_ln, lxc_cars.c_2, lxc_cars.c_3, lxc_cars.c_mkb, lxc_cars.c_t, lxc_cars.c_fin, lxc_cars.c_st_l, lxc_cars.c_wt_l, ";
     $sql .= "lxc_cars.c_text, lxc_cars.c_color, lxc_cars.c_zrk, lxc_cars.c_zrd, lxc_cars.c_em, lxc_cars.c_bf, lxc_cars.c_wd, lxc_cars.c_d, lxc_cars.c_hu, kba_id, employee.name AS employee_name, lxc_flex.flxgr ";
     $sql .= "FROM oe join customer on oe.customer_id = customer.id join lxc_cars on oe.c_id = lxc_cars.c_id join employee on oe.employee_id = employee.id ";
@@ -2545,4 +2545,59 @@ function writeLogFromJs( $data ){
     if( $data['reverse']) writeLogR( $data['message'] );
     writeLog( $data['message'] );
     resultInfo( true ); 
+}
+/***********************************
+ *  [name] => Ronny Zimmermann
+    [c_ln] => MOL-ID100
+    [dim] => 322/85R12 75S
+    [location] => A9
+ */
+
+function printTyreLabel( $data ){
+    // Zielverzeichnis festlegen
+    $dir = __DIR__.'/../tmp/labels';
+    if (!is_dir($dir)) {
+        mkdir($dir, 0755, true);
+    }
+    $loc = ['VR', 'VL', 'HR', 'HL'];
+    foreach ($loc as $wheel){ 
+        $ezpl = 
+            '^Q150,3
+^W100
+^H8
+^P1
+^S3
+^AD
+^C1
+^R60
+~Q+60
+^O0
+^D3 
+^E28
+~R200
+^XSET,ROTATION,0
+^C1
+^D0
+^D1
+^L
+Dy2-me-dd
+Th:m:s
+AD,0,154,3,3,0,0E,'.$data['name'].' 
+AD,0,268,3,3,0,0E,'.$data['c-ln'].' 
+AD,0,382,3,3,0,0E,'.$data['dim'].' 
+AD,0,496,3,3,0,0E,'.$data['warehouse'].' 
+AD,322,1324,10,10,0,0E,'.$wheel.'
+W370,778,5,2,M,8,13,39,0
+https://melissa.spdns.de/kivitendo/c200
+E
+';
+
+        // PRN-Datei erstellen
+        $filename = 'label.prn';
+        $filepath = $dir . "/" . $filename;
+        file_put_contents( $filepath, $ezpl );
+        //sleep(3);
+        exec( 'lp -d BP730-Raw -o raw '.escapeshellarg( $filepath ) );
+    }
+    echo '{"result":1}';
 }

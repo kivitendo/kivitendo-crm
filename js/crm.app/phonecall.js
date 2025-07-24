@@ -1,4 +1,4 @@
-$( '.whatsapp' ).click( function( data ){
+/*$( '.whatsapp' ).click( function( data ){
     //alert( $( '#crm-contact-phone' + this.id.substr( -1 ) ).text() );
     data.stopImmediatePropagation();// war wofür???
     phoneNumber = $( '#crm-contact-phone' + this.id.substr( -1 ) ).text();
@@ -8,10 +8,68 @@ $( '.whatsapp' ).click( function( data ){
     window.open( 'https://api.whatsapp.com/send?phone=' + phoneNumber +  '&text=Hey ' + $( '#crm-contact-name' ).html() + ' im Anhang befinden sich die Dokument(e). %0D%0AMit freundlichem Grüßen %0D%0ADein / Ihr Autoprofis-Team','_blank');
     return false;
 }).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only").tooltip();
+*/
+$( '.whatsapp' ).click( function( data ){
+    
+    // Verhindert, dass andere Click-Handler desselben Elements ausgeführt werden
+    //data.stopImmediatePropagation();
 
-$( '#cp_phone1' ).click( function( data ){
-    alert( 'test' );
-});
+    // Telefonnummer ermitteln (z. B. aus '#crm-contact-phone1', '#crm-contact-phone2' …)
+    var phoneNumber = $( '#crm-contact-phone' + this.id.substr( -1 ) ).text();
+    if( phoneNumber.charAt(0)  != "+" ){
+        phoneNumber = "+49" + phoneNumber.slice(1);
+    }
+
+    // Nachricht als leere Variable vorbereiten
+    var message = '';
+
+    // Wenn der Button zusätzlich die Klasse 'oe_wa' hat, Text nach Schema 2
+    if( $(this).hasClass('oe_wa') ){
+        // Hier musst du die Selektoren anpassen, je nachdem, wo Anrede, Fahrzeug und Kennzeichen stehen:
+        //alert($( '#od-customer-greeting' ).val() + 'Hello');
+        var greeting = $( '#od-customer-greeting' ).val(); // Anrede
+        var name = $( '#od_customer_name' ).val(); // Name des Kunden
+        var hersteller = $( '#show_car_data-hersteller' ).val(); // Fahrzeughersteller
+        var typ = $('#show_car_data-typ' ).val(); // Fahrzeugtyp
+        var c_ln    = $( '#od_lxcars_c_ln' ).val();    //Kennzeichen "
+        var employee_name = $( '#od-oe-employee_name' ).html(); // Name des Mitarbeitersod-oe-employee_name
+        var amount = $( '#od-amount' ).val()
+        
+
+        message = 'Sehr geehrte(r) ' + greeting + ' ' + name + ', %0D%0A' +
+                  'Ihr ' + hersteller + ' ' + typ + ' mit dem Kennzeichen ' + c_ln +
+                  ' ist fertig und steht zur Abholung bereit. %0D%0A' +
+                  'Der Rechnungsbetrag beträgt ' + amount + '€. %0D%0A' +
+                  '%0D%0AMit freundlichen Grüßen %0D%0A' +
+                  'Autoprofis - ' + employee_name;
+
+        //alert( 'WhatsApp-Nachricht: ' + message ); // Debugging-Hilfe, kann entfernt werden
+    }
+    // Sonst Standard-Nachricht wie vorher
+    else {
+        var name = $( '#crm-contact-name' ).html();
+        var employee_name = $( '#od-oe-employee_name' ).html()
+        var greeting = $( '#od-customer-greeting' ).val(); // Ist noch etwas buggi
+        /*message = 
+            'Sehr geehrte(r) ' + greeting + ' ' + name + ' im Anhang befindet sich das Angebot bzw die Rechnung. ' +
+            '%0D%0A%0D%0AMit freundlichem Grüßen %0D%0AAutoprofis - ' + employee_name;
+        alert( 'Normaler Whatsapp Button: ' + message ); // Debugging-Hilfe, kann entfernt werden
+        */
+       message = 
+            'Sehr geehrte(r) ' + name + ' im Anhang befindet sich das Angebot bzw. die Rechnung. ' +
+            '%0D%0A%0D%0AMit freundlichem Grüßen %0D%0AIhr / Dein Autoprofis Team';
+    }
+
+    // Öffne WhatsApp-Fenster mit der passenden URL
+    window.open(
+        'https://api.whatsapp.com/send?phone=' + phoneNumber + '&text=' + message,
+        '_blank'
+    );
+    return false;
+}).button()
+.removeClass("ui-widget ui-state-default ui-corner-all ui-button-text-only")
+.tooltip();
+
 
 function crmClickToCall( data, contact = null ){
     if( null == contact ) contact = $( '#crm-contact-name' ).html();

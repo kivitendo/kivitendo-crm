@@ -1573,7 +1573,7 @@ function genericDelete( $data ){
 }
 
 function printOrder( $data ){
-
+    //WICHTIG: sudo apt-get install qrencode
     require 'fpdf.php';
     require_once __DIR__.'/../lxcars/inc/lxcLib.php';
     include_once __DIR__.'/../lxcars/inc/config.php';
@@ -1601,6 +1601,12 @@ function printOrder( $data ){
 
     $positions = $GLOBALS['dbh']->getAll( $query );
 
+        // === QR-Code für Adresse erzeugen ===
+    $fullAddress = $orderData['street'] . ', ' . $orderData['zipcode'] . ' ' . $orderData['city'];
+    $googleMapsUrl = 'https://www.google.de/maps/place/' . urlencode($fullAddress);
+    $qrCodeFile = __DIR__ . '/../tmp/qrcode_' . $data['orderId'] . '.png';
+    shell_exec('qrencode -o ' . escapeshellarg($qrCodeFile) . ' -s 5 ' . escapeshellarg($googleMapsUrl));
+
     //define( 'FPDF_FONTPATH', '../font/');
     define( 'x', 0 );
     define( 'y', 1 );
@@ -1623,6 +1629,12 @@ function printOrder( $data ){
     $pdf->Text( '10','12','Autoprofis Rep.-Auftrag '.' '.$orderData['hersteller'].' '.$orderData['marke'].' '.$orderData['name'] );
     $pdf->Text( '10','18', $orderData['c_ln'] );
     $pdf->SetFont( 'Helvetica', '', 14 );
+
+    //QR-Code einfügen
+    //$pdf->SetXY( 10, 20 );
+    if(file_exists($qrCodeFile)){
+        $pdf->Image($qrCodeFile, 90, 23, 30, 30);
+    }
 
     //fix values
     $pdf->SetFont( 'Helvetica', 'B', $fontsize ) ;
@@ -1818,6 +1830,11 @@ function printOrder( $data ){
     $printFileName = 'Auftrag_'.$orderData['ordnumber'].'_'.$orderData['c_ln'].'.pdf';
     $pdf->Text( '10','290', mb_convert_encoding( 'Ich habe sämtliche Ersazteile und ausgeführte Arbeiten i.d. obigen Liste notiert. Unterschrift: __________________', 'ISO-8859-1', 'UTF-8' ) );
     $pdf->OutPut( __DIR__.'/../printedFiles/'.$printFileName, 'F' );
+
+    // QR-Datei wieder löschen
+    if(file_exists($qrCodeFile)){
+        unlink($qrCodeFile);
+    }
 
 
     if( $data['print'] == 'printOrder1' ){

@@ -783,9 +783,7 @@ $(document).on('click', '#edit_car-c_st_print', function(){
 
 $(document).on('click', '#edit_car-c_wt_print', function(){
   alert('Etikettendruck des Winterreifens');
-});//edit-car-fin-check
-
-
+});//edit-car-fin-chec
 
 
 $(document).on('click', '#edit_car-c_ln_info', function(){
@@ -810,3 +808,32 @@ $(document).on('click', '#edit_car-c_ln_info', function(){
         title: 'Kennzeichen-Info'
     }).dialog( 'open' ).resize();
 });
+
+$(document).on('click', '#edit_car-c_ln, #edit_car-c_2, #edit_car-c_3, #edit_car-c_d, #edit_car-c_hu, #edit_car-c_fin', async function () {
+    const input = $(this)[0]; // Reines DOM-Element
+    input.select();
+    input.setSelectionRange(0, 99999); // Für mobile Geräte
+
+    try {
+        await navigator.clipboard.writeText(input.value);
+        input.blur(); // Fokus entfernen
+        //console.log('Inhalt erfolgreich kopiert!');
+    } catch (err) {
+        console.error('Fehler beim Kopieren:', err);
+    }
+});
+
+$(document).on('dblclick', '#edit_car-c_2, #edit_car-c_3', async function () {
+    const val2 = $('#edit_car-c_2').val();
+    const val3 = $('#edit_car-c_3').val();
+    const combined = val2+val3;
+
+    try {
+        await navigator.clipboard.writeText(combined);
+        //console.log('Kombinierter Wert kopiert!');
+    } catch (err) {
+        console.error('Fehler beim kombinierten Kopieren:', err);
+    }
+});
+
+

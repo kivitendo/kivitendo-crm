@@ -1200,6 +1200,7 @@
 
 <div id="crm-fsscan-dlg" class="crm-p2" style="display:none;">
     <button onclick="crmNewCarFromScanCancelView1();">Abbrechen</button>
+    <button onclick="crmNewCarFromScanReloadView1();">Neu laden</button>
     <div class="crm-pt1">
         <table id="crm-fsscan-list0" class="tbl-list">
             <thead>

@@ -356,6 +356,10 @@ function crmNewCarFromScanCancelView1(){
     crmCloseView( 'crm-fsscan-dlg' );
 }
 
+function crmNewCarFromScanReloadView1(){ //Daten des Fahrzeugscheinscanners neu holen wenn die Tabelle schon kreiert wurde.
+    crmNewCarFromScan();
+}
+
 function crmNewCarFromScanCancelView2(){
     crmOpenView( 'crm-fsscan-dlg', kivi.t8( 'FS-Scan' ) );
 }

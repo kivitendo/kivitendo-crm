@@ -123,32 +123,62 @@ function crmGetHistory( refresh = true ){
     });
 }
 
-$.widget( "custom.catcomplete", $.ui.autocomplete,{
-    _renderMenu: function( ul, items ){
+$.widget("custom.catcomplete", $.ui.autocomplete, {
+    _renderMenu: function (ul, items) {
         var that = this,
-        currentCategory = "";
-        $.each( items, function( index, item ){
-            if ( item.category != currentCategory ){
-                ul.append( "<li class=\'ui-autocomplete-category\'>" + item.category + "</li>" );
+            currentCategory = "";
+        $.each(items, function (index, item) {
+            if (item.category != currentCategory) {
+                ul.append("<li class='ui-autocomplete-category'>" + item.category + "</li>");
                 currentCategory = item.category;
             }
-            that._renderItemData( ul, item );
+            that._renderItemData(ul, item);
         });
-     }
- });
+    }
+});
 
-$( function(){
-    $( "#crm-widget-quicksearch" ).catcomplete({
+$(function () {
+    let lastItems = []; // merken der letzten Vorschläge
+
+    $("#crm-widget-quicksearch").catcomplete({
         delay: crmAcDelay,
         minLength: 3,
-        source: "crm/ajax/crm.app.php?action=fastSearch",
-        select: function( e, ui ){
-            //assert( 'Data: ', ui.item );
-            crmRefreshAppView( ui.item.src, ui.item.id );
+        source: function (request, responseCallback) {
+            $.getJSON("crm/ajax/crm.app.php?action=fastSearch", request, function (data) {
+                lastItems = data;
+                responseCallback(data);
+            });
+        },
+
+        select: function (e, ui) {
+            crmRefreshAppView(ui.item.src, ui.item.id);
             crmCloseView();
+        }
+    }).on("keydown", function (e) {
+        if (e.key === "Enter") {
+            const $input = $(this);
+            const menu = $input.catcomplete("widget");
+            const focused = menu.find(".ui-state-focus");
+            const items = menu.find("li.ui-menu-item:visible:not(.ui-autocomplete-category)");
+
+            if (!focused.length && items.length && lastItems.length) {
+                const first = items.first();
+                const itemData = first.data("ui-autocomplete-item");
+
+                if (itemData) {
+                    const instance = $input.data("custom-catcomplete");
+                    if (instance) {
+                        instance._trigger("select", e, { item: itemData });
+                        e.preventDefault();
+                        $input.val(""); //Hier wird das Eingabefeld geleert
+                        instance.close(); //Menü einklappen
+                    }
+                }
+            }
         }
     });
 });
+
 
 function getCVPA( src, id ){
     $.ajax({

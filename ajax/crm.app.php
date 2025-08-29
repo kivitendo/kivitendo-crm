@@ -194,31 +194,31 @@ function searchOrder( $data ){
     }
 
     $sql = "SELECT *, TO_CHAR(delivery_ts, 'DD.MM.YYYY HH24:MI') AS delivery_ts_formatted FROM (
-        SELECT DISTINCT ON (internal_order, init_ts) 
-            'true'::BOOL AS instruction, 
-            oe.id, 
-            cars.c_ln, 
-            TO_CHAR(oe.transdate, 'DD.MM.YYYY') AS transdate, 
-            oe.ordnumber, 
-            instructions.description, 
-            oe.car_status, 
-            oe.status, 
-            oe.finish_time, 
-            customer.name AS owner, 
-            oe.c_id AS c_id, 
-            oe.customer_id, 
-            cars.c_2 AS c_2, 
-            cars.c_3 AS c_3, 
-            cars.hersteller AS car_manuf, 
-            cars.name AS car_type, 
-            oe.internalorder AS internal_order, 
+        SELECT DISTINCT ON (internal_order, init_ts)
+            'true'::BOOL AS instruction,
+            oe.id,
+            cars.c_ln,
+            TO_CHAR(oe.transdate, 'DD.MM.YYYY') AS transdate,
+            oe.ordnumber,
+            instructions.description,
+            oe.car_status,
+            oe.status,
+            oe.finish_time,
+            customer.name AS owner,
+            oe.c_id AS c_id,
+            oe.customer_id,
+            cars.c_2 AS c_2,
+            cars.c_3 AS c_3,
+            cars.hersteller AS car_manuf,
+            cars.name AS car_type,
+            oe.internalorder AS internal_order,
             oe.itime AS init_ts,
             COALESCE(
                 NULLIF(
-                    CASE 
-                        WHEN delivery_time ILIKE '%Uhr' THEN 
+                    CASE
+                        WHEN delivery_time ILIKE '%Uhr' THEN
                             TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
-                        WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN 
+                        WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN
                             TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
                         ELSE NULL
                     END, NULL
@@ -232,42 +232,42 @@ function searchOrder( $data ){
         WHERE " . $where . " oe.quotation = FALSE
           AND (COALESCE(
                 NULLIF(
-                    CASE 
-                        WHEN delivery_time ILIKE '%Uhr' THEN 
+                    CASE
+                        WHEN delivery_time ILIKE '%Uhr' THEN
                             TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
-                        WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN 
+                        WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN
                             TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
                         ELSE NULL
                     END, NULL
                 ), oe.itime) <= NOW() + INTERVAL '7 days')
 
-        UNION 
+        UNION
 
-        SELECT DISTINCT ON (internal_order, init_ts) 
-            'false'::BOOL AS instruction, 
-            oe.id, 
-            cars.c_ln, 
-            TO_CHAR(oe.transdate, 'DD.MM.YYYY') AS transdate, 
-            oe.ordnumber, 
-            orderitems.description, 
-            oe.car_status, 
-            oe.status, 
-            oe.finish_time, 
-            customer.name AS owner, 
-            oe.c_id AS c_id, 
-            oe.customer_id, 
-            cars.c_2 AS c_2, 
-            cars.c_3 AS c_3, 
-            cars.hersteller AS car_manuf, 
-            cars.name AS car_type, 
-            oe.internalorder AS internal_order, 
+        SELECT DISTINCT ON (internal_order, init_ts)
+            'false'::BOOL AS instruction,
+            oe.id,
+            cars.c_ln,
+            TO_CHAR(oe.transdate, 'DD.MM.YYYY') AS transdate,
+            oe.ordnumber,
+            orderitems.description,
+            oe.car_status,
+            oe.status,
+            oe.finish_time,
+            customer.name AS owner,
+            oe.c_id AS c_id,
+            oe.customer_id,
+            cars.c_2 AS c_2,
+            cars.c_3 AS c_3,
+            cars.hersteller AS car_manuf,
+            cars.name AS car_type,
+            oe.internalorder AS internal_order,
             oe.itime AS init_ts,
             COALESCE(
                 NULLIF(
-                    CASE 
-                        WHEN delivery_time ILIKE '%Uhr' THEN 
+                    CASE
+                        WHEN delivery_time ILIKE '%Uhr' THEN
                             TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
-                        WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN 
+                        WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN
                             TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
                         ELSE NULL
                     END, NULL
@@ -281,16 +281,16 @@ function searchOrder( $data ){
         WHERE " . $where . " oe.quotation = FALSE
           AND (COALESCE(
                 NULLIF(
-                    CASE 
-                        WHEN delivery_time ILIKE '%Uhr' THEN 
+                    CASE
+                        WHEN delivery_time ILIKE '%Uhr' THEN
                             TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
-                        WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN 
+                        WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN
                             TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
                         ELSE NULL
                     END, NULL
                 ), oe.itime) <= NOW() + INTERVAL '7 days')
-    ) AS myTable 
-    ORDER BY internal_order ASC, delivery_ts DESC 
+    ) AS myTable
+    ORDER BY internal_order ASC, delivery_ts DESC
     LIMIT 100";
 
 
@@ -306,34 +306,34 @@ $sql = "WITH random_message AS (
 main_data AS (
     SELECT json_agg(row_to_json(t)) AS data
     FROM (
-        SELECT *, 
+        SELECT *,
                TO_CHAR(delivery_ts, 'DD.MM.YYYY HH24:MI') AS delivery_ts_formatted
         FROM (
-            SELECT DISTINCT ON (internal_order, init_ts) 
-                'true'::BOOL AS instruction, 
-                oe.id, 
-                cars.c_ln, 
-                TO_CHAR(oe.transdate, 'DD.MM.YYYY') AS transdate, 
-                oe.ordnumber, 
-                instructions.description, 
-                oe.car_status, 
-                oe.status, 
-                oe.finish_time, 
-                customer.name AS owner, 
-                oe.c_id AS c_id, 
-                oe.customer_id, 
-                cars.c_2 AS c_2, 
-                cars.c_3 AS c_3, 
-                cars.hersteller AS car_manuf, 
-                cars.name AS car_type, 
-                oe.internalorder AS internal_order, 
+            SELECT DISTINCT ON (internal_order, init_ts)
+                'true'::BOOL AS instruction,
+                oe.id,
+                cars.c_ln,
+                TO_CHAR(oe.transdate, 'DD.MM.YYYY') AS transdate,
+                oe.ordnumber,
+                instructions.description,
+                oe.car_status,
+                oe.status,
+                oe.finish_time,
+                customer.name AS owner,
+                oe.c_id AS c_id,
+                oe.customer_id,
+                cars.c_2 AS c_2,
+                cars.c_3 AS c_3,
+                cars.hersteller AS car_manuf,
+                cars.name AS car_type,
+                oe.internalorder AS internal_order,
                 oe.itime AS init_ts,
                 COALESCE(
                     NULLIF(
-                        CASE 
-                            WHEN delivery_time ILIKE '%Uhr' THEN 
+                        CASE
+                            WHEN delivery_time ILIKE '%Uhr' THEN
                                 TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
-                            WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN 
+                            WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN
                                 TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
                             ELSE NULL
                         END, NULL
@@ -347,40 +347,40 @@ main_data AS (
             WHERE $where oe.quotation = FALSE
               AND (COALESCE(
                     NULLIF(
-                        CASE 
-                            WHEN delivery_time ILIKE '%Uhr' THEN 
+                        CASE
+                            WHEN delivery_time ILIKE '%Uhr' THEN
                                 TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
-                            WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN 
+                            WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN
                                 TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
                             ELSE NULL
                         END, NULL
                     ), oe.itime) <= NOW() + INTERVAL '7 days')
-            UNION 
-            SELECT DISTINCT ON (internal_order, init_ts) 
-                'false'::BOOL AS instruction, 
-                oe.id, 
-                cars.c_ln, 
-                TO_CHAR(oe.transdate, 'DD.MM.YYYY') AS transdate, 
-                oe.ordnumber, 
-                orderitems.description, 
-                oe.car_status, 
-                oe.status, 
-                oe.finish_time, 
-                customer.name AS owner, 
-                oe.c_id AS c_id, 
-                oe.customer_id, 
-                cars.c_2 AS c_2, 
-                cars.c_3 AS c_3, 
-                cars.hersteller AS car_manuf, 
-                cars.name AS car_type, 
-                oe.internalorder AS internal_order, 
+            UNION
+            SELECT DISTINCT ON (internal_order, init_ts)
+                'false'::BOOL AS instruction,
+                oe.id,
+                cars.c_ln,
+                TO_CHAR(oe.transdate, 'DD.MM.YYYY') AS transdate,
+                oe.ordnumber,
+                orderitems.description,
+                oe.car_status,
+                oe.status,
+                oe.finish_time,
+                customer.name AS owner,
+                oe.c_id AS c_id,
+                oe.customer_id,
+                cars.c_2 AS c_2,
+                cars.c_3 AS c_3,
+                cars.hersteller AS car_manuf,
+                cars.name AS car_type,
+                oe.internalorder AS internal_order,
                 oe.itime AS init_ts,
                 COALESCE(
                     NULLIF(
-                        CASE 
-                            WHEN delivery_time ILIKE '%Uhr' THEN 
+                        CASE
+                            WHEN delivery_time ILIKE '%Uhr' THEN
                                 TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
-                            WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN 
+                            WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN
                                 TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
                             ELSE NULL
                         END, NULL
@@ -394,16 +394,16 @@ main_data AS (
             WHERE $where oe.quotation = FALSE
               AND (COALESCE(
                     NULLIF(
-                        CASE 
-                            WHEN delivery_time ILIKE '%Uhr' THEN 
+                        CASE
+                            WHEN delivery_time ILIKE '%Uhr' THEN
                                 TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
-                            WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN 
+                            WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN
                                 TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
                             ELSE NULL
                         END, NULL
                     ), oe.itime) <= NOW() + INTERVAL '7 days')
-        ) AS myTable 
-        ORDER BY internal_order ASC, delivery_ts DESC 
+        ) AS myTable
+        ORDER BY internal_order ASC, delivery_ts DESC
         LIMIT 100
     ) t
 )
@@ -579,21 +579,21 @@ function getCVPA( $data ){
                     ") AS car) AS car, ";
         //So nun müssen wir noch die Fahrzeugspezifische Aufträge holen
         $query .= "(
-                SELECT json_agg(car_ord) AS car_ord 
+                SELECT json_agg(car_ord) AS car_ord
                 FROM (
                     SELECT DISTINCT ON (oe.itime)
-                        to_char(oe.transdate, 'DD.MM.YYYY') AS date, 
-                        COALESCE(instructions.description, orderitems.description) AS description, 
-                        COALESCE(ROUND(amount, 2)) || ' ' || COALESCE(C.name) AS amount, 
-                        oe.ordnumber AS number, 
-                        oe.id 
-                    FROM oe 
-                    LEFT JOIN orderitems ON oe.id = orderitems.trans_id 
-                    LEFT JOIN instructions ON oe.id = instructions.trans_id 
-                    LEFT JOIN currencies C ON currency_id = C.id 
-                    WHERE quotation = FALSE 
-                        AND c_id = ".$data['id']." 
-                    ORDER BY oe.itime DESC, orderitems.itime 
+                        to_char(oe.transdate, 'DD.MM.YYYY') AS date,
+                        COALESCE(instructions.description, orderitems.description) AS description,
+                        COALESCE(ROUND(amount, 2)) || ' ' || COALESCE(C.name) AS amount,
+                        oe.ordnumber AS number,
+                        oe.id
+                    FROM oe
+                    LEFT JOIN orderitems ON oe.id = orderitems.trans_id
+                    LEFT JOIN instructions ON oe.id = instructions.trans_id
+                    LEFT JOIN currencies C ON currency_id = C.id
+                    WHERE quotation = FALSE
+                        AND c_id = ".$data['id']."
+                    ORDER BY oe.itime DESC, orderitems.itime
                     LIMIT 10
                 ) AS car_ord
             ) AS car_ord, ";
@@ -925,63 +925,63 @@ function checkCarLicenseAndFin( $data ){
 
 function getCar( $data ){ //Stell die Daten für die Fahrzeugübersicht zusammen,
     $query = "
-        SELECT 
+        SELECT
             (
-                SELECT row_to_json(car) AS car 
+                SELECT row_to_json(car) AS car
                 FROM (
-                    SELECT 
-                        *, 
-                        to_char(c_hu, 'DD.MM.YYYY') AS c_hu, 
-                        to_char(c_d, 'DD.MM.YYYY') AS c_d 
-                    FROM lxc_cars 
-                    LEFT JOIN lxckba ON (lxc_cars.kba_id = lxckba.id) 
+                    SELECT
+                        *,
+                        to_char(c_hu, 'DD.MM.YYYY') AS c_hu,
+                        to_char(c_d, 'DD.MM.YYYY') AS c_d
+                    FROM lxc_cars
+                    LEFT JOIN lxckba ON (lxc_cars.kba_id = lxckba.id)
                     WHERE c_id = ".$data['id']."
                 ) AS car
-            ) AS car, 
+            ) AS car,
             (
-                SELECT json_agg(car_ord) AS car_ord 
+                SELECT json_agg(car_ord) AS car_ord
                 FROM (
                     SELECT DISTINCT ON (oe.itime)
-                        to_char(oe.transdate, 'DD.MM.YYYY') AS date, 
-                        COALESCE(instructions.description, orderitems.description) AS description, 
-                        COALESCE(ROUND(amount, 2)) || ' ' || COALESCE(C.name) AS amount, 
-                        oe.ordnumber AS number, 
-                        oe.id 
-                    FROM oe 
-                    LEFT JOIN orderitems ON oe.id = orderitems.trans_id 
-                    LEFT JOIN instructions ON oe.id = instructions.trans_id 
-                    LEFT JOIN currencies C ON currency_id = C.id 
-                    WHERE quotation = FALSE 
-                        AND c_id = ".$data['id']." 
-                    ORDER BY oe.itime DESC, orderitems.itime 
+                        to_char(oe.transdate, 'DD.MM.YYYY') AS date,
+                        COALESCE(instructions.description, orderitems.description) AS description,
+                        COALESCE(ROUND(amount, 2)) || ' ' || COALESCE(C.name) AS amount,
+                        oe.ordnumber AS number,
+                        oe.id
+                    FROM oe
+                    LEFT JOIN orderitems ON oe.id = orderitems.trans_id
+                    LEFT JOIN instructions ON oe.id = instructions.trans_id
+                    LEFT JOIN currencies C ON currency_id = C.id
+                    WHERE quotation = FALSE
+                        AND c_id = ".$data['id']."
+                    ORDER BY oe.itime DESC, orderitems.itime
                     LIMIT 10
                 ) AS car_ord
             ) AS car_ord,
             (
-                SELECT row_to_json(cv) AS cv 
+                SELECT row_to_json(cv) AS cv
                 FROM (
-                    SELECT 
-                        'C' AS src, 
-                        id, 
-                        customernumber AS cvnumber, 
-                        name, 
-                        street, 
-                        zipcode, 
-                        contact, 
-                        phone AS phone1, 
-                        fax AS phone2, 
-                        phone3, 
-                        note_phone AS note_phone1, 
-                        note_fax AS note_phone2, 
-                        note_phone3, 
-                        email, 
-                        city, 
+                    SELECT
+                        'C' AS src,
+                        id,
+                        customernumber AS cvnumber,
+                        name,
+                        street,
+                        zipcode,
+                        contact,
+                        phone AS phone1,
+                        fax AS phone2,
+                        phone3,
+                        note_phone AS note_phone1,
+                        note_fax AS note_phone2,
+                        note_phone3,
+                        email,
+                        city,
                         country
-                    FROM 
-                        lxc_cars 
-                    JOIN 
-                        customer ON lxc_cars.c_ow = customer.id 
-                    WHERE 
+                    FROM
+                        lxc_cars
+                    JOIN
+                        customer ON lxc_cars.c_ow = customer.id
+                    WHERE
                         lxc_cars.c_id = ".$data['id']."
                 ) AS cv
             ) AS cv
@@ -1407,70 +1407,116 @@ function makeCVDir( $cv_src, $cv_id, $unlink = false ){
 * wird beim Scan eines Fhz aufgerufen
 ********************************************/
 function updateCuWithNewCar( $data ){
-    //writeLog( $data );
-    $id = FALSE;
-    $GLOBALS['dbh']->beginTransaction();
-    prepareKba( $data );
+    $id  = FALSE;
+    $dbh = $GLOBALS['dbh'];
+
+    // Transaktion starten
+    $dbh->beginTransaction();
+
+    // KBA-Daten vorbereiten
+    try {
+        prepareKba( $data );
+    } catch (Exception $e) {
+        $dbh->rollBack();
+        resultInfo(false, 'Fehler in prepareKba: ' . $e->getMessage());
+        return;
+    }
+
     foreach( $data AS $key => $value ){
         $where = '';
         if( array_key_exists( 'WHERE', $value ) ){
-                foreach( $value['WHERE'] AS $whereId => $whereVal ){
-                    if( strcmp( $whereId, 'id' ) === 0 ) $id = $whereVal;
-                    //Achtung nur eine Bedingung möglich, mit dem Schema 'beliebige ID ist gleich Wert'
-                    $where = $whereId.' = '.$whereVal;
-                }
-                unset( $value['WHERE'] );
+            foreach( $value['WHERE'] AS $whereId => $whereVal ){
+                if( strcmp( $whereId, 'id' ) === 0 ) $id = $whereVal;   // Kunden-ID merken
+                $where = $whereId.' = '.$whereVal;
+            }
+            unset( $value['WHERE'] );
         }
+
         makeCVDir( 'C', $id, true );
+
+        // =========================
+        // begin lxc_cars (Fahrzeug)
+        // =========================
         if (strcmp($key, 'lxc_cars') === 0) {
-            $dbh   = $GLOBALS['dbh'];
-            $table = $key;            // i. d. R. 'lxc_cars' (Unique kann aus Basis 'cars6' kommen)
-            $value['c_ow'] = $id;     // dem Kunden zuordnen
+            $table = $key;
+            $value['c_ow'] = $id;     // Fahrzeug dem Kunden zuordnen
 
             // Schlüssel einsammeln
             $fin = isset($value['c_fin']) ? trim((string)$value['c_fin']) : '';
             $cln = isset($value['c_ln'])  ? trim((string)$value['c_ln'])  : '';
 
-            // 1) Vorab-Check: existiert FIN oder Kennzeichen bereits? -> Block KOMPLETT überspringen
+            // 1) Existenzprüfung: Fahrzeug über FIN oder Kennzeichen suchen
+            $targetId = null;
             if ($fin !== '' || $cln !== '') {
                 $conds  = [];
                 $params = [];
                 if ($fin !== '') { $conds[] = 'c_fin = :fin'; $params[':fin'] = $fin; }
                 if ($cln !== '') { $conds[] = 'c_ln = :cln'; $params[':cln'] = $cln; }
 
-                $sql  = "SELECT 1 FROM {$table} WHERE " . implode(' OR ', $conds) . " LIMIT 1";
+                $sql  = "SELECT c_id FROM {$table} WHERE " . implode(' OR ', $conds) . " LIMIT 1";
                 $stmt = $dbh->prepare($sql);
                 $stmt->execute($params);
-
-                if ($stmt->fetchColumn()) {
-                    // Bereits vorhanden -> NICHTS am Fahrzeug ändern (kein Insert/Update)
-                    continue;
-                }
+                $targetId = $stmt->fetchColumn() ?: null;
             }
 
-            // 2) Kein vorhandenes Fahrzeug -> Insert versuchen (mit Savepoint gegen 23505)
+            if ($targetId) {
+                // -------------------- UPDATE --------------------
+                // Prüfen ob Kennzeichen geändert werden soll
+                if ($cln !== '') {
+                    $stmt = $dbh->prepare("SELECT 1 FROM {$table} WHERE c_ln = :new_ln AND c_id <> :tid LIMIT 1");
+                    $stmt->execute([':new_ln' => $cln, ':tid' => $targetId]);
+                    if ($stmt->fetchColumn()) {
+                        $dbh->rollBack();
+                        resultInfo(false, 'Kennzeichen bereits vergeben. Änderung abgebrochen.');
+                        return;
+                    }
+                }
+
+                // FIN und c_id nie umhängen
+                $valueUpdate = $value;
+                unset($valueUpdate['c_fin'], $valueUpdate['c_id']);
+
+                if (!empty($valueUpdate)) {
+                    $setParts = [];
+                    $paramsU  = [':tid' => $targetId];
+                    foreach ($valueUpdate as $col => $val) {
+                        $setParts[] = "$col = :u_$col";
+                        $paramsU[":u_$col"] = $val;
+                    }
+
+                    // Update läuft jetzt IMMER über c_id
+                    $sqlUpd  = "UPDATE {$table} SET " . implode(', ', $setParts) . " WHERE c_id = :tid";
+                    $stmtUpd = $dbh->prepare($sqlUpd);
+                    $stmtUpd->execute($paramsU);
+                }
+
+                continue; // kein Insert mehr
+            }
+
+            // -------------------- INSERT --------------------
             $dbh->exec('SAVEPOINT sp_lxc_cars');
             try {
                 $dbh->insert($table, array_keys($value), array_values($value));
                 $dbh->exec('RELEASE SAVEPOINT sp_lxc_cars');
             } catch (PDOException $e) {
-                // Duplicate Key (z. B. cars6_c_ln_key) trotzdem aufgetreten -> Block überspringen, TX intakt halten
                 if ($e->getCode() === '23505') {
                     $dbh->exec('ROLLBACK TO SAVEPOINT sp_lxc_cars');
                     continue;
                 }
-                // anderer Fehler -> Savepoint zurück und Fehler weiterreichen
                 $dbh->exec('ROLLBACK TO SAVEPOINT sp_lxc_cars');
                 throw $e;
             }
         }
+        // =======================
+        // end lxc_cars (Fahrzeug)
+        // =======================
 
         elseif( strcmp( $key, 'shipto' ) === 0 ){
             if( empty( $where ) ){
-                $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ) );
+                $dbh->insert( $key, array_keys( $value ), array_values( $value ) );
             }
             else{
-                $GLOBALS['dbh']->update( $key, array_keys( $value ), array_values( $value ), $where );
+                $dbh->update( $key, array_keys( $value ), array_values( $value ), $where );
             }
         }
         elseif( strcmp( $key, 'custom_variables' ) === 0 ){
@@ -1478,17 +1524,21 @@ function updateCuWithNewCar( $data ){
         }
         else{
             if( empty( $where ) ){
+                $dbh->rollBack();
                 resultInfo( false, 'Risky SQL-Statment with empty WHERE clausel'  );
                 return;
             }
-            $GLOBALS['dbh']->update( $key, array_keys( $value ), array_values( $value ), $where );
+            $dbh->update( $key, array_keys( $value ), array_values( $value ), $where );
         }
     }
-    $GLOBALS['dbh']->commit();
+
+    // Commit
+    $dbh->commit();
 
     makeCVDir( 'C', $id );
     echo '{ "src": "C", "id": "'.$id.'" }';
 }
+
 
 function insertOrderPosHuAu( $data ){
     $today   = date( 'Y-m-d' );
@@ -2533,7 +2583,7 @@ function getAagUrl( $data ){
         ]
     ];
     */
-   
+
     $data = [
         "referenceId" => $oe_customer_car['ordnumber'],
         "voucherType" => [
@@ -2555,7 +2605,7 @@ function getAagUrl( $data ){
             ]
         ]
     ];
- 
+
 
 
     $tries = 8;
@@ -2602,7 +2652,7 @@ function writeLogFromJs( $data ){
     writeLog( $data['info'] );
     if( $data['reverse']) writeLogR( $data['message'] );
     writeLog( $data['message'] );
-    resultInfo( true ); 
+    resultInfo( true );
 }
 /***********************************
  *  [name] => Ronny Zimmermann
@@ -2618,8 +2668,8 @@ function printTyreLabel( $data ){
         mkdir($dir, 0755, true);
     }
     $loc = ['VR', 'VL', 'HR', 'HL'];
-    foreach ($loc as $wheel){ 
-        $ezpl = 
+    foreach ($loc as $wheel){
+        $ezpl =
             '^Q150,3
 ^W100
 ^H8
@@ -2630,7 +2680,7 @@ function printTyreLabel( $data ){
 ^R60
 ~Q+60
 ^O0
-^D3 
+^D3
 ^E28
 ~R200
 ^XSET,ROTATION,0
@@ -2640,10 +2690,10 @@ function printTyreLabel( $data ){
 ^L
 Dy2-me-dd
 Th:m:s
-AD,0,154,3,3,0,0E,'.$data['name'].' 
-AD,0,268,3,3,0,0E,'.$data['c-ln'].' 
-AD,0,382,3,3,0,0E,'.$data['dim'].' 
-AD,0,496,3,3,0,0E,'.$data['warehouse'].' 
+AD,0,154,3,3,0,0E,'.$data['name'].'
+AD,0,268,3,3,0,0E,'.$data['c-ln'].'
+AD,0,382,3,3,0,0E,'.$data['dim'].'
+AD,0,496,3,3,0,0E,'.$data['warehouse'].'
 AD,322,1324,10,10,0,0E,'.$wheel.'
 W370,778,5,2,M,8,13,39,0
 https://melissa.spdns.de/kivitendo/c200

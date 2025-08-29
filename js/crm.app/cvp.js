@@ -458,7 +458,7 @@ $( '#crm-change-car-name-cancel-btn' ).click( function(){
     $( '#crm-change-car-name-dialog' ).dialog( 'close' );
 });
 
-function crmEditCuVeViewSave( ){
+function crmEditCuVeViewSave(){
     dbUpdateData = {};
     let cvSrc = ( $( '#billaddr-src' ).val() == 'V' )? 'vendor' : 'customer';
     dbUpdateData[cvSrc] = {};

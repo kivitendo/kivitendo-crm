@@ -1258,7 +1258,7 @@ function insertNewCuWithCar( $data ){
                 resultInfo( false , "Error: Update ".$key );
                 return;
             }
-         }
+        }
         elseif( strcmp( $key, 'lxc_cars' ) === 0 ){
             $value['c_ow'] = $id;
             if( $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ) )  === FALSE ){
@@ -1404,8 +1404,10 @@ function makeCVDir( $cv_src, $cv_id, $unlink = false ){
 * Ubdate Customer optional with new Car
 * KBA-Daten werden in der Funktion prepareKba
 * in die DB eingefügt oder aktualisiert
+* wird beim Scan eines Fhz aufgerufen
 ********************************************/
 function updateCuWithNewCar( $data ){
+    //writeLog( $data );
     $id = FALSE;
     $GLOBALS['dbh']->beginTransaction();
     prepareKba( $data );
@@ -1420,10 +1422,49 @@ function updateCuWithNewCar( $data ){
                 unset( $value['WHERE'] );
         }
         makeCVDir( 'C', $id, true );
-        if( strcmp( $key, 'lxc_cars' ) === 0 ){
-            $value['c_ow'] = $id;
-            $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ) );
+        if (strcmp($key, 'lxc_cars') === 0) {
+            $dbh   = $GLOBALS['dbh'];
+            $table = $key;            // i. d. R. 'lxc_cars' (Unique kann aus Basis 'cars6' kommen)
+            $value['c_ow'] = $id;     // dem Kunden zuordnen
+
+            // Schlüssel einsammeln
+            $fin = isset($value['c_fin']) ? trim((string)$value['c_fin']) : '';
+            $cln = isset($value['c_ln'])  ? trim((string)$value['c_ln'])  : '';
+
+            // 1) Vorab-Check: existiert FIN oder Kennzeichen bereits? -> Block KOMPLETT überspringen
+            if ($fin !== '' || $cln !== '') {
+                $conds  = [];
+                $params = [];
+                if ($fin !== '') { $conds[] = 'c_fin = :fin'; $params[':fin'] = $fin; }
+                if ($cln !== '') { $conds[] = 'c_ln = :cln'; $params[':cln'] = $cln; }
+
+                $sql  = "SELECT 1 FROM {$table} WHERE " . implode(' OR ', $conds) . " LIMIT 1";
+                $stmt = $dbh->prepare($sql);
+                $stmt->execute($params);
+
+                if ($stmt->fetchColumn()) {
+                    // Bereits vorhanden -> NICHTS am Fahrzeug ändern (kein Insert/Update)
+                    continue;
+                }
+            }
+
+            // 2) Kein vorhandenes Fahrzeug -> Insert versuchen (mit Savepoint gegen 23505)
+            $dbh->exec('SAVEPOINT sp_lxc_cars');
+            try {
+                $dbh->insert($table, array_keys($value), array_values($value));
+                $dbh->exec('RELEASE SAVEPOINT sp_lxc_cars');
+            } catch (PDOException $e) {
+                // Duplicate Key (z. B. cars6_c_ln_key) trotzdem aufgetreten -> Block überspringen, TX intakt halten
+                if ($e->getCode() === '23505') {
+                    $dbh->exec('ROLLBACK TO SAVEPOINT sp_lxc_cars');
+                    continue;
+                }
+                // anderer Fehler -> Savepoint zurück und Fehler weiterreichen
+                $dbh->exec('ROLLBACK TO SAVEPOINT sp_lxc_cars');
+                throw $e;
+            }
         }
+
         elseif( strcmp( $key, 'shipto' ) === 0 ){
             if( empty( $where ) ){
                 $GLOBALS['dbh']->insert( $key, array_keys( $value ), array_values( $value ) );

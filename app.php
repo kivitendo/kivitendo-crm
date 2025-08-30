@@ -581,7 +581,7 @@
                              <tr>
                                 <td class="od-table-label"><label for="od-oe-printed">gedruckt:</label></td>
                                 <td>
-                                    <input type="checkbox" id="od-oe-printed" disabled="disabled">   
+                                    <input type="checkbox" id="od-oe-printed" disabled="disabled">
                                 </td>
                              </tr>
                         </table>
@@ -1064,6 +1064,7 @@
     <div>
         <button onclick="crmEditCarSaveView();">Speichern</button>
         <button onclick="crmEditCarCloseView();">Abbrechen</button>
+        <button onclick="crmEditCarDeleteView();">Löschen</button>
         <button id="edit_car_new_order_btn" onclick="crmEditCarNewOrder();" style="margin-left: 2em">Neuer Auftrag</button>
         <button id="edit_car_register_btn">Zulassen/Umschreiben...</button>
         <button id="edit_car_special_btn">Special</button>

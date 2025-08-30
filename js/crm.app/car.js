@@ -673,6 +673,87 @@ function crmEditCarCloseView(){
     crmCloseView( 'crm-edit-car-dialog' );
 }
 
+// HTML-Confirm mit jQuery UI: OK => resolve(), Abbrechen/X/ESC => reject()
+function crmConfirm(messageHtml, { title = 'Löschen bestätigen', okText = 'Ja, löschen', cancelText = 'Abbrechen', width = 420 } = {}) {
+  const $dlg = $('<div class="crm-confirm"></div>').html(messageHtml).appendTo('body');
+
+  return new Promise((resolve, reject) => {
+    let decided = false; // merkt, ob OK/Abbrechen geklickt wurde
+
+    $dlg.dialog({
+    modal: true,
+    width,
+    resizable: false,
+    draggable: false,
+    title,
+    closeOnEscape: true,
+    appendTo: 'body',
+    buttons: [
+        { text: cancelText, click() { decided = true; $(this).dialog('close'); reject(); } },
+        { text: okText,     click() { decided = true; $(this).dialog('close'); resolve(); } }
+    ],
+    close() {
+        // X oder ESC oder sonstiges Schließen -> als Abbruch behandeln
+        if (!decided) reject();
+        $(this).dialog('destroy').remove();
+    },
+    open: function() {
+        // Die Schriftfarbe der Buttons direkt nach dem Öffnen des Dialogs ändern
+        // Der "Abbrechen" Button ist der erste (Index 0) im Array
+        $(this).closest('.ui-dialog').find('.ui-dialog-buttonpane button:eq(0)').css('color', 'red');
+        // Der "OK" Button ist der zweite (Index 1) im Array
+        $(this).closest('.ui-dialog').find('.ui-dialog-buttonpane button:eq(1)').css('color', 'darkblue');
+    }
+    });
+  });
+}
+
+// optional: kleines Styling
+if (!document.getElementById('crm-confirm-style')) {
+  $('<style id="crm-confirm-style">.crm-confirm{font-size:14px;line-height:1.45}</style>').appendTo('head');
+}
+
+function crmEditCarDeleteView() {
+  const id = $('#edit_car-c_id').val();
+  const ln = $('#edit_car-c_ln').val();
+  const name = $('#edit_car_customer_name').val();
+
+  if (!id) {
+    $('#message-dialog').showMessageDialog('error', kivi.t8('Fehler'), 'Keine Fahrzeug-ID gefunden.');
+    return;
+  }
+
+  crmConfirm(`<i>Fahrzeug</i> von <b>${name}</b> mit dem Kennzeichen <b>${ln}</b> wirklich für immer <i>löschen?</i>`, {
+    title: `${ln} wirklich löschen???`,
+    okText: 'Ja, löschen',
+    cancelText: 'Besser abbrechen'
+  })
+  .then(() => {
+    const payload = { lxc_cars: { WHERE: `c_id = ${id}` } };
+    $.ajax({
+      url: 'crm/ajax/crm.app.php',
+      type: 'POST',
+      data: { action: 'genericDelete', data: payload },
+      success: function () {
+        crmRefreshAppViewAction();
+        crmCloseView('crm-edit-car-dialog');
+      },
+      error: function (xhr) {
+        $('#message-dialog').showMessageDialog(
+          'error',
+          kivi.t8('Connection to the server'),
+          kivi.t8('Request Error in: ') + 'crmEditCarDeleteView()',
+          xhr.responseText
+        );
+      }
+    });
+  })
+  .catch(() => {
+    // Abgebrochen (X/ESC/Abbrechen) -> nichts tun
+  });
+}
+
+
 function crmEditKbaDlg( crmData ){
     crmInitFormEx( editKbaFormModel, '#edit-kba-form', 0, '#edit-kba-hidden' );
 
@@ -839,5 +920,3 @@ $(document).on('dblclick', '#edit_car-c_2, #edit_car-c_3', async function () {
         console.error('Fehler beim kombinierten Kopieren:', err);
     }
 });
-
-

@@ -681,36 +681,31 @@ function crmConfirm(messageHtml, { title = 'Löschen bestätigen', okText = 'Ja,
     let decided = false; // merkt, ob OK/Abbrechen geklickt wurde
 
     $dlg.dialog({
-    modal: true,
-    width,
-    resizable: false,
-    draggable: false,
-    title,
-    closeOnEscape: true,
-    appendTo: 'body',
-    buttons: [
-        { text: cancelText, click() { decided = true; $(this).dialog('close'); reject(); } },
-        { text: okText,     click() { decided = true; $(this).dialog('close'); resolve(); } }
-    ],
-    close() {
-        // X oder ESC oder sonstiges Schließen -> als Abbruch behandeln
-        if (!decided) reject();
-        $(this).dialog('destroy').remove();
-    },
-    open: function() {
-        // Die Schriftfarbe der Buttons direkt nach dem Öffnen des Dialogs ändern
-        // Der "Abbrechen" Button ist der erste (Index 0) im Array
-        $(this).closest('.ui-dialog').find('.ui-dialog-buttonpane button:eq(0)').css('color', 'red');
-        // Der "OK" Button ist der zweite (Index 1) im Array
-        $(this).closest('.ui-dialog').find('.ui-dialog-buttonpane button:eq(1)').css('color', 'darkblue');
-    }
+        modal: true,
+        width,
+        resizable: false,
+        draggable: false,
+        title,
+        closeOnEscape: true,
+        appendTo: 'body',
+        buttons: [
+            { text: cancelText, click() { decided = true; $(this).dialog('close'); reject(); } },
+            { text: okText,     click() { decided = true; $(this).dialog('close'); resolve(); } }
+        ],
+        close() {
+            // X oder ESC oder sonstiges Schließen -> als Abbruch behandeln
+            if (!decided) reject();
+            $(this).dialog('destroy').remove();
+        },
+        open: function() {
+            // Die Schriftfarbe der Buttons direkt nach dem Öffnen des Dialogs ändern
+            // Der "Abbrechen" Button ist der erste (Index 0) im Array
+            $(this).closest('.ui-dialog').find('.ui-dialog-buttonpane button:eq(0)').css('color', 'red');
+            // Der "OK" Button ist der zweite (Index 1) im Array
+            $(this).closest('.ui-dialog').find('.ui-dialog-buttonpane button:eq(1)').css('color', 'darkblue');
+        }
     });
   });
-}
-
-// optional: kleines Styling
-if (!document.getElementById('crm-confirm-style')) {
-  $('<style id="crm-confirm-style">.crm-confirm{font-size:14px;line-height:1.45}</style>').appendTo('head');
 }
 
 function crmEditCarDeleteView() {

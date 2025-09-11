@@ -608,27 +608,105 @@ function getCVPA( $data ){
                     ") AS cv) AS cv, ";
         // Angebote
         $id = array('C' => 'customer_id', 'V' => 'vendor_id');
-        $query .= "(SELECT json_agg( off ) AS off FROM (".
-                    "SELECT DISTINCT ON (oe.itime) to_char(oe.transdate, 'DD.MM.YYYY') as date, description, COALESCE(ROUND(amount,2))||' '||COALESCE(C.name) as amount, ".
-                    "oe.quonumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id=trans_id LEFT JOIN currencies C on currency_id=C.id WHERE quotation = TRUE AND ".$id[$data['src']]." = ".$data['id']." ORDER BY oe.itime DESC, orderitems.id".
-                    ") AS off) AS off, ";
+        $query .= "(SELECT json_agg(obj ORDER BY itime DESC) AS off FROM (" .
+            "SELECT " .
+            "  oe.itime, " .
+            "  json_build_object( " .
+            "    'date', to_char(oe.transdate, 'DD.MM.YYYY'), " .
+            "    'description', firstpos.description, " .      // erste Positionsbeschreibung (kleinste position)
+            "    'amount', COALESCE(ROUND(oe.amount, 2)) || ' ' || COALESCE(c.name), " . // Belegbetrag + Währung
+            "    'number', oe.quonumber, " .                   // Angebotsnummer
+            "    'id', oe.id " .
+            "  ) AS obj " .
+            "FROM oe " .
+            "LEFT JOIN currencies c ON c.id = oe.currency_id " . // Währung zum Betrag
+            "LEFT JOIN LATERAL ( " .
+            "  SELECT oi.description, oi.position " .
+            "  FROM orderitems oi " .
+            "  WHERE oi.trans_id = oe.id " .
+            "  ORDER BY oi.position " .                        // nach Positionsnummer sortieren
+            "  LIMIT 1 " .                                    // nur erste (kleinste) Positionszeile
+            ") AS firstpos ON TRUE " .
+            "WHERE oe.quotation = TRUE " .                    // nur Angebote
+            "  AND " . $id[$data['src']] . " = " . $data['id'] . " " . // Kunde/Lieferant filtern
+        ") AS t) AS off, ";  // Ergebnis als JSON-Array aller passenden Angebote
+
         // Aufträge
-        $query .= "(SELECT json_agg( ord ) AS ord FROM (".
-                    "SELECT DISTINCT ON (oe.itime) to_char(oe.transdate, 'DD.MM.YYYY') as date, COALESCE( instructions.description, orderitems.description ) AS description, COALESCE(ROUND(amount,2))||' '||COALESCE(C.name) as amount, ".
-                    "oe.ordnumber as number, oe.id FROM oe LEFT JOIN orderitems ON oe.id = orderitems.trans_id LEFT JOIN instructions ON oe.id = instructions.trans_id LEFT JOIN currencies C on currency_id=C.id WHERE quotation = FALSE AND ".$id[$data['src']]." = ".$data['id']." AND EXISTS(SELECT * FROM information_schema.tables WHERE table_name = 'lxc_ver') ORDER BY oe.itime DESC, orderitems.itime, instructions.itime".
-                    ") AS ord) AS ord, ";
+        $query .= "(SELECT json_agg(obj ORDER BY itime DESC) AS ord FROM (" .
+                  "SELECT " .
+                  "  oe.itime, " .
+                  "  json_build_object( " .
+                  "    'date', to_char(oe.transdate, 'DD.MM.YYYY'), " .
+                  "    'description', firstpos.description, " .
+                  "    'amount', COALESCE(ROUND(oe.amount, 2)) || ' ' || COALESCE(c.name), " .
+                  "    'number', oe.ordnumber, " .
+                  "    'id', oe.id " .
+                  "  ) AS obj " .
+                  "FROM oe " .
+                  "LEFT JOIN currencies c ON c.id = oe.currency_id " .
+                  "LEFT JOIN LATERAL ( " .
+                  "  SELECT x.description, x.position " .
+                  "  FROM ( " .
+                  "    SELECT i.description, i.position FROM instructions i WHERE i.trans_id = oe.id " .
+                  "    UNION ALL " .
+                  "    SELECT oi.description, oi.position FROM orderitems oi WHERE oi.trans_id = oe.id " .
+                  "  ) x " .
+                  "  ORDER BY x.position " .
+                  "  LIMIT 1 " .
+                  ") AS firstpos ON TRUE " .
+                  "WHERE oe.quotation = FALSE " .
+                  "  AND " . $id[$data['src']] . " = " . $data['id'] . " " .
+                  "  AND EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'lxc_ver') " .
+                  ") AS t) AS ord, ";
+
         // Lieferscheine
-        $query .= "(SELECT json_agg( del ) AS del FROM (".
-                    "SELECT DISTINCT ON (delivery_orders.id) delivery_orders.id, to_char(delivery_orders.transdate, 'DD.MM.YYYY') as date, description, to_char(delivery_orders.reqdate, 'DD.MM.YYYY') as deldate, donumber ".
-                    "FROM delivery_orders LEFT JOIN delivery_order_items ON delivery_orders.id = delivery_order_id WHERE ".$id[$data['src']]." = ".$data['id']." AND closed = FALSE ORDER BY delivery_orders.id DESC".
-                    ") AS del) AS del, ";
+        $query .= "(SELECT json_agg(obj ORDER BY do_id DESC) AS del FROM (" .
+            "SELECT " .
+            "  delivery_orders.id AS do_id, " .
+            "  json_build_object( " .
+            "    'id', delivery_orders.id, " .
+            "    'date', to_char(delivery_orders.transdate, 'DD.MM.YYYY'), " .
+            "    'description', firstpos.description, " .        // erste Positionsbeschreibung
+            "    'deldate', to_char(delivery_orders.reqdate, 'DD.MM.YYYY'), " .
+            "    'donumber', delivery_orders.donumber " .
+            "  ) AS obj " .
+            "FROM delivery_orders " .
+            "LEFT JOIN LATERAL ( " .
+            "  SELECT doi.description, doi.position " .
+            "  FROM delivery_order_items doi " .
+            "  WHERE doi.delivery_order_id = delivery_orders.id " .
+            "  ORDER BY doi.position " .                         // nach Position sortieren
+            "  LIMIT 1 " .                                       // nur die erste (kleinste) Position
+            ") AS firstpos ON TRUE " .
+            "WHERE " . $id[$data['src']] . " = " . $data['id'] . " " .
+            "  AND closed = FALSE " .
+        ") AS t) AS del, ";  // Ergebnis als JSON-Array aller Lieferscheine
+
         // Rechnungen
         $db_table = array('C' => 'ar', 'V' => 'ap');
-        $query .= "(SELECT json_agg( inv ) AS inv FROM (".
-                    "SELECT DISTINCT ON (".$db_table[$data['src']].".id) to_char(".$db_table[$data['src']].".transdate, 'DD.MM.YYYY') as date, COALESCE( description, '---------' ) AS description, COALESCE( ROUND( amount,2 ) )||' '||COALESCE( C.name ) as amount, ".
-                    "invnumber as number, ".$db_table[$data['src']].".id FROM ".$db_table[$data['src']]." LEFT JOIN invoice  ON ".$db_table[$data['src']].".id=trans_id LEFT JOIN currencies C on currency_id=C.id  WHERE ".$id[$data['src']]." = ".$data['id']." ORDER BY ".$db_table[$data['src']].".id DESC, invoice.id".
-                    ") AS inv) AS inv, ";
+        $query .= "(SELECT json_agg(obj ORDER BY hdr_id DESC) AS inv FROM (" .
+            "SELECT " .
+            "  " . $db_table[$data['src']] . ".id AS hdr_id, " .
+            "  json_build_object( " .
+            "    'date', to_char(" . $db_table[$data['src']] . ".transdate, 'DD.MM.YYYY'), " .
+            "    'description', COALESCE(firstpos.description, '---------'), " . // erste Positionsbeschreibung oder Platzhalter
+            "    'amount', COALESCE(ROUND(" . $db_table[$data['src']] . ".amount, 2)) || ' ' || COALESCE(c.name), " .
+            "    'number', " . $db_table[$data['src']] . ".invnumber, " .
+            "    'id', " . $db_table[$data['src']] . ".id " .
+            "  ) AS obj " .
+            "FROM " . $db_table[$data['src']] . " " .
+            "LEFT JOIN currencies c ON c.id = " . $db_table[$data['src']] . ".currency_id " .
+            "LEFT JOIN LATERAL ( " .
+            "  SELECT i.description, i.position " .
+            "  FROM invoice i " .
+            "  WHERE i.trans_id = " . $db_table[$data['src']] . ".id " .
+            "  ORDER BY i.position " .                           // nach Position sortieren
+            "  LIMIT 1 " .                                       // nur die erste (kleinste) Position
+            ") AS firstpos ON TRUE " .
+            "WHERE " . $id[$data['src']] . " = " . $data['id'] . " " .
+        ") AS t) AS inv, ";  // Ergebnis als JSON-Array aller Rechnungen
 
+        // Variable Felder
         $query .= "(SELECT json_agg( custom_vars ) AS custom_vars FROM (".
                     "SELECT COALESCE( custom_variables.bool_value::text, custom_variables.number_value::text, custom_variables.timestamp_value::text, custom_variables.text_value ) AS value, custom_variable_configs.description FROM custom_variables JOIN custom_variable_configs ON custom_variables.config_id = custom_variable_configs.id WHERE trans_id = ".$data['id'].
                     ") AS custom_vars) AS custom_vars, ";
@@ -1598,11 +1676,6 @@ function genericUpdate( $data ){
 
     resultInfo( true );
 }
-
- /*
-
-    */
-
 
 function genericUpdateEx( $data ){
     //$start = hrtime( true );

@@ -131,6 +131,78 @@ function crmCalcOrderPrice(pos) {
 //    }
 //}
 
+/************** Begin Rechnen und Ersetzen ********************************************************************** */
+/*
+ Automatische Berechnung im Feld .od-item-sellprice
+
+ - Eingabe kann ein Rechenausdruck sein, z. B. "119/1,19".
+ - Nach ~500ms ohne weitere Eingabe wird der Ausdruck mit kivi.parse_amount()
+   ausgewertet und das Ergebnis mit kivi.format_amount(result, 2) zurückgeschrieben.
+ - Beispiel: "119/1,19" → "100,00".
+ - Nur Ziffern, Komma, Punkt, Operatoren (+ - * /) und Klammern sind erlaubt.
+ - Danach wird crmEditOrderOnChange() aufgerufen, damit die CRM-Logik (Summen etc.)
+   automatisch aktualisiert wird.
+*/
+// --- Debounce-Helfer (wartet z.B. 500 ms nach dem letzten Tastendruck) ---
+function debounce(fn, wait = 500) {
+  let t;
+  return function(...args) {
+    clearTimeout(t);
+    t = setTimeout(() => fn.apply(this, args), wait);
+  };
+}
+
+// --- Ausdruck sicher (nur Zahlen, Operatoren und Klammern) auswerten ---
+function evalGermanExpression(input) {
+  if (typeof input !== 'string') return null;
+
+  // Nur erlaubte Zeichen prüfen
+  if (!/^[0-9.,+\-*/() ]*$/.test(input)) return null;
+  if (input.trim().length === 0) return null;
+
+  try {
+    // Eingabe mit kivi.parse_amount vorbereiten:
+    // Wir ersetzen jede Zahl im Ausdruck durch ihren
+    // mit parse_amount erkannten Wert (z. B. "1,19" -> 1.19)
+    const expr = input.replace(/([0-9.,]+)/g, (match) => {
+      return kivi.parse_amount(match);
+    });
+
+    // eslint-disable-next-line no-new-func
+    const val = Function('"use strict"; return (' + expr + ')')();
+    return Number.isFinite(val) ? val : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+// --- Keyup-Handler für .od-item-sellprice ---
+const handleSellpriceKeyup = debounce(function(e) {
+  const $inp = $(e.target);
+  const raw = $inp.val();
+
+  if (!/[+\-*/]/.test(raw)) return; // nur bei Termen reagieren
+
+  const result = evalGermanExpression(raw);
+  if (result === null) return;
+
+  // Ergebnis sauber ins Feld schreiben
+  $inp.val(kivi.format_amount(result, 2));
+
+  if (typeof crmEditOrderOnChange === 'function') {
+    crmEditOrderOnChange();
+  }
+}, 500);
+
+// Delegierte Bindung (falls Reihen dynamisch entstehen)
+$(document).on('keyup', 'input.od-item-sellprice', function(e){
+  if (e.which === 13 || e.which === 9) return;
+  handleSellpriceKeyup.call(this, e);
+});
+
+/************** End Rechnen und Ersetzen   ********************************************************************** */
+
+
 function crmEditOrderOnChange(){
     crmCalcOrderPos();
     crmSaveOrder();

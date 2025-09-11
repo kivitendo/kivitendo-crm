@@ -62,9 +62,10 @@ $( '.whatsapp' ).click( function( data ){
 
     // Öffne WhatsApp-Fenster mit der passenden URL
     window.open(
-        'https://api.whatsapp.com/send?phone=' + phoneNumber + '&text=' + message,
+        'whatsapp://send?phone=' + phoneNumber + '&text=' + encodeURIComponent(message),
         '_blank'
     );
+
     return false;
 }).button()
 .removeClass("ui-widget ui-state-default ui-corner-all ui-button-text-only")

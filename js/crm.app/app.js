@@ -730,7 +730,7 @@ $('#crm-route-qrcode').on('click', function () {
 });
 
 $("#crm-whatsapp-share").click( function () {
-    //alert( 'WhatsApp-Share wird bald verfügbar sein...' );
+    //alert( 'WhatsApp-Share' );
     var street = $("#crm-contact-street").html();
     var zip = $("#crm-contact-zipcode").html();
     var city = $("#crm-contact-city").html();
@@ -741,7 +741,7 @@ $("#crm-whatsapp-share").click( function () {
     var message = "Hier ist der Standort von " + $("#crm-contact-name").html() + ":\n" +
                   street + ", " + zip + " " + city + "\n" +
                   "Google Maps Link: " + locationUrl;
-    var whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(message);
+    var whatsappUrl = "whatsapp://send?text=" + encodeURIComponent(message);
 
     window.open(whatsappUrl, '_blank');
 });

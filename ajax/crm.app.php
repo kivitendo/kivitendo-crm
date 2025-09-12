@@ -194,105 +194,92 @@ function searchOrder( $data ){
     }
 
     $sql = "SELECT *, TO_CHAR(delivery_ts, 'DD.MM.YYYY HH24:MI') AS delivery_ts_formatted FROM (
-        SELECT DISTINCT ON (internal_order, init_ts)
-            'true'::BOOL AS instruction,
-            oe.id,
-            cars.c_ln,
-            TO_CHAR(oe.transdate, 'DD.MM.YYYY') AS transdate,
-            oe.ordnumber,
-            instructions.description,
-            oe.car_status,
-            oe.status,
-            oe.finish_time,
-            customer.name AS owner,
-            oe.c_id AS c_id,
-            oe.customer_id,
-            cars.c_2 AS c_2,
-            cars.c_3 AS c_3,
-            cars.hersteller AS car_manuf,
-            cars.name AS car_type,
-            oe.internalorder AS internal_order,
-            oe.itime AS init_ts,
-            COALESCE(
-                NULLIF(
-                    CASE
-                        WHEN delivery_time ILIKE '%Uhr' THEN
-                            TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
-                        WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN
-                            TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
-                        ELSE NULL
-                    END, NULL
-                ), oe.itime
-            ) AS delivery_ts
-        FROM oe
-        JOIN instructions ON instructions.trans_id = oe.id
-        JOIN parts ON parts.id = instructions.parts_id
-        JOIN customer ON customer.id = oe.customer_id
-        JOIN (SELECT * FROM lxc_cars LEFT JOIN lxckba ON lxckba.id = lxc_cars.kba_id) AS cars ON cars.c_id = oe.c_id
-        WHERE " . $where . " oe.quotation = FALSE
-          AND (COALESCE(
-                NULLIF(
-                    CASE
-                        WHEN delivery_time ILIKE '%Uhr' THEN
-                            TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
-                        WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN
-                            TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
-                        ELSE NULL
-                    END, NULL
-                ), oe.itime) <= NOW() + INTERVAL '7 days')
+    SELECT DISTINCT ON (internal_order, init_ts)
+        (firstpos.source = 'instruction')::bool AS instruction,  -- true, wenn erste Pos aus instructions stammt
+        oe.id,
+        cars.c_ln,
+        TO_CHAR(oe.transdate, 'DD.MM.YYYY') AS transdate,
+        oe.ordnumber,
+        firstpos.description,                                    -- immer die erste Positionsbeschreibung
+        oe.car_status,
+        oe.status,
+        oe.finish_time,
+        customer.name AS owner,
+        oe.c_id AS c_id,
+        oe.customer_id,
+        cars.c_2 AS c_2,
+        cars.c_3 AS c_3,
+        cars.hersteller AS car_manuf,
+        cars.name AS car_type,
+        oe.internalorder AS internal_order,
+        oe.itime AS init_ts,
+        COALESCE(
+        NULLIF(
+            CASE
+            WHEN delivery_time ILIKE '%Uhr' THEN
+                TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
+            WHEN delivery_time ~ '^\\d{2}\\.\\d{2}\\.\\d{4} \\d{2}:\\d{2}$' THEN
+                TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
+            ELSE NULL
+            END, NULL
+        ), oe.itime
+        ) AS delivery_ts,
+        (
+        EXISTS (SELECT 1 FROM instructions i
+                WHERE i.trans_id = oe.id
+                    AND i.description ILIKE '%ersatzwagen%')
+        OR
+        EXISTS (SELECT 1 FROM orderitems oi
+                WHERE oi.trans_id = oe.id
+                    AND oi.description ILIKE '%ersatzwagen%')
+        ) AS ersatzwagen
+    FROM oe
+    -- nur Aufträge mit Fahrzeug
+    JOIN customer ON customer.id = oe.customer_id
+    JOIN (SELECT * FROM lxc_cars LEFT JOIN lxckba ON lxckba.id = lxc_cars.kba_id) AS cars ON cars.c_id = oe.c_id
 
-        UNION
+    -- MUSS eine erste Position geben (instructions ∪ orderitems)
+    JOIN LATERAL (
+        SELECT x.source, x.description, x.position
+        FROM (
+        SELECT 'instruction' AS source, i.description, i.position
+        FROM instructions i
+        JOIN parts p ON p.id = i.parts_id
+        WHERE i.trans_id = oe.id
 
-        SELECT DISTINCT ON (internal_order, init_ts)
-            'false'::BOOL AS instruction,
-            oe.id,
-            cars.c_ln,
-            TO_CHAR(oe.transdate, 'DD.MM.YYYY') AS transdate,
-            oe.ordnumber,
-            orderitems.description,
-            oe.car_status,
-            oe.status,
-            oe.finish_time,
-            customer.name AS owner,
-            oe.c_id AS c_id,
-            oe.customer_id,
-            cars.c_2 AS c_2,
-            cars.c_3 AS c_3,
-            cars.hersteller AS car_manuf,
-            cars.name AS car_type,
-            oe.internalorder AS internal_order,
-            oe.itime AS init_ts,
-            COALESCE(
-                NULLIF(
-                    CASE
-                        WHEN delivery_time ILIKE '%Uhr' THEN
-                            TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
-                        WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN
-                            TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
-                        ELSE NULL
-                    END, NULL
-                ), oe.itime
-            ) AS delivery_ts
-        FROM oe
-        JOIN orderitems ON orderitems.trans_id = oe.id AND orderitems.position = 1
-        JOIN parts ON parts.id = orderitems.parts_id
-        JOIN customer ON customer.id = oe.customer_id
-        JOIN (SELECT * FROM lxc_cars LEFT JOIN lxckba ON lxckba.id = lxc_cars.kba_id) AS cars ON cars.c_id = oe.c_id
-        WHERE " . $where . " oe.quotation = FALSE
-          AND (COALESCE(
-                NULLIF(
-                    CASE
-                        WHEN delivery_time ILIKE '%Uhr' THEN
-                            TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
-                        WHEN delivery_time ~ '^\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}$' THEN
-                            TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
-                        ELSE NULL
-                    END, NULL
-                ), oe.itime) <= NOW() + INTERVAL '7 days')
+        UNION ALL
+
+        SELECT 'orderitem' AS source, oi.description, oi.position
+        FROM orderitems oi
+        JOIN parts p2 ON p2.id = oi.parts_id
+        WHERE oi.trans_id = oe.id
+        ) x
+        ORDER BY x.position
+        LIMIT 1
+    ) AS firstpos ON TRUE
+
+    WHERE " . $where . " 
+        oe.quotation = FALSE
+        AND oe.status != 'abgerechnet'
+        AND oe.c_id IS NOT NULL                        -- Auftrag gehört einem Auto
+        AND (
+        COALESCE(
+            NULLIF(
+            CASE
+                WHEN delivery_time ILIKE '%Uhr' THEN
+                TO_TIMESTAMP(REPLACE(delivery_time, ' Uhr', ''), 'DD.MM.YYYY HH24:MI')
+                WHEN delivery_time ~ '^\\d{2}\\.\\d{2}\\.\\d{4} \\d{2}:\\d{2}$' THEN
+                TO_TIMESTAMP(delivery_time, 'DD.MM.YYYY HH24:MI')
+                ELSE NULL
+            END, NULL
+            ), oe.itime
+        ) <= NOW() + INTERVAL '7 days'
+        )
+    ORDER BY oe.internalorder, oe.itime
     ) AS myTable
     ORDER BY internal_order ASC, delivery_ts DESC
     LIMIT 100";
-
+    //writeLog( $sql );
 
 //Mit Brainfuck-Message:
 /*
@@ -658,7 +645,7 @@ function getCVPA( $data ){
                   "  AND " . $id[$data['src']] . " = " . $data['id'] . " " .
                   "  AND EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'lxc_ver') " .
                   ") AS t) AS ord, ";
-
+        
         // Lieferscheine
         $query .= "(SELECT json_agg(obj ORDER BY do_id DESC) AS del FROM (" .
             "SELECT " .

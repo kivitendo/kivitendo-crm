@@ -106,34 +106,67 @@ function crmSearchOrder( onSuccess = null ){
         type: 'POST',
         data:  { action: 'searchOrder', data: dbData },
         success: function( data ){
-
+            console.info( data );
             $( '#crm-search-order-table' ).html( '' );
             let listrow0 = false;
             let bgcolor = null;
             let isSeparatorAdded = false; // Variabel, die prüft, ob der Separator schon hinzugefügt wurde
-            $.each( data.rs, function( key, value ){
-                if( 'angenommen' == value.status && 'Auto hier' == value.car_status ) bgcolor = 'rgb(255, 255, 0)';
-                else if( 'angenommen' == value.status && 'Auto nicht hier' == value.car_status ) bgcolor = 'rgb(255, 0, 0)';
-                else if( 'angenommen' == value.status && 'Bestellung' == value.car_status ) bgcolor = 'lightskyblue';
-                else if( 'bearbeitet' == value.status && 'Auto hier' == value.car_status ) bgcolor = 'rgb(0, 128, 0)';
-                else if( 'bearbeitet' == value.status && 'Auto nicht hier' == value.car_status ) bgcolor = 'grey';
-                else bgcolor = null;
-                
-                
 
-                if (moment(value.delivery_ts).isAfter(moment().endOf('day'))) {
-                    // Füge die zukünftigen Aufträge hinzu
-                    $('#crm-search-order-table').append('<tr id="' + value.id + '" class="' + ((listrow0 = !listrow0) ? "listrow0" : "listrow1") + '" style="opacity: 0.5;"><td>' + value.owner + '</td><td>' + value.c_ln + '</td><td>' + value.description + '</td><td>' + getValueNotNull(value.car_manuf) + '</td><td>' + getValueNotNull(value.car_type) + '</td><td>' + value.delivery_ts_formatted + '</td><td>' + value.ordnumber + '</td><td ' + ((bgcolor != null) ? 'style="background-color: ' + bgcolor + '"' : '') + '>' + value.status + ((!isEmpty(value.status) && !isEmpty(value.car_status)) ? ' / ' : '') + value.car_status + '</td></tr>');
-                } else {
-                    if (!isSeparatorAdded) {
-                        // Füge die leere Zeile nur einmal hinzu, bevor die aktuellen Aufträge kommen
-                        $('#crm-search-order-table').append('<tr class="empty-row" style="background-color: pink;"><td colspan="8" style="text-align: center; font-size: 24px;">Brainfuck</td></tr>');
-                        isSeparatorAdded = true;
-                    }
-                    // Füge die aktuellen Aufträge hinzu
-                    $('#crm-search-order-table').append('<tr id="' + value.id + '" class="' + ((listrow0 = !listrow0) ? "listrow0" : "listrow1") + '"><td>' + value.owner + '</td><td>' + value.c_ln + '</td><td>' + value.description + '</td><td>' + getValueNotNull(value.car_manuf) + '</td><td>' + getValueNotNull(value.car_type) + '</td><td>' + value.delivery_ts_formatted + '</td><td>' + value.ordnumber + '</td><td ' + ((bgcolor != null) ? 'style="background-color: ' + bgcolor + '"' : '') + '>' + value.status + ((!isEmpty(value.status) && !isEmpty(value.car_status)) ? ' / ' : '') + value.car_status + '</td></tr>');
-                }
-            });
+
+$.each(data.rs, function(key, value) {
+    // Status-Hintergrund wie bisher
+    let bgcolor = null;
+    if ('angenommen' == value.status && 'Auto hier' == value.car_status) bgcolor = 'rgb(255, 255, 0)';
+    else if ('angenommen' == value.status && 'Auto nicht hier' == value.car_status) bgcolor = 'rgb(255, 0, 0)';
+    else if ('angenommen' == value.status && 'Bestellung' == value.car_status) bgcolor = 'lightskyblue';
+    else if ('bearbeitet' == value.status && 'Auto hier' == value.car_status) bgcolor = 'rgb(0, 128, 0)';
+    else if ('bearbeitet' == value.status && 'Auto nicht hier' == value.car_status) bgcolor = 'grey';
+
+    // Variable für die Schriftfarbe bei Ersatzwagen
+    const ersatzwagenColor = 'blue';  // <--- hier kannst du die Farbe ändern
+
+    // Flag für Ersatzwagen
+    const hasErsatzwagen = (value.ersatzwagen === true);
+
+    // Schriftfarbe anwenden, wenn Ersatzwagen
+    const tdAttr = hasErsatzwagen ? ' style="color: ' + ersatzwagenColor + ';"' : '';
+    const statusTdAttr = (bgcolor != null) ? ' style="background-color: ' + bgcolor + ';"' : '';
+
+    // Future-Opacity bleibt am TR
+    const isFuture = moment(value.delivery_ts).isAfter(moment().endOf('day'));
+    const trAttr = isFuture ? ' style="opacity: 0.5;"' : '';
+
+    const rowClass = (listrow0 = !listrow0) ? "listrow0" : "listrow1";
+
+    const rowHtml =
+        '<tr id="' + value.id + '" class="' + rowClass + '"' + trAttr + '>' +
+            '<td' + tdAttr + '>' + value.owner + '</td>' +
+            '<td' + tdAttr + '>' + value.c_ln + '</td>' +
+            '<td' + tdAttr + '>' + value.description + '</td>' +
+            '<td' + tdAttr + '>' + getValueNotNull(value.car_manuf) + '</td>' +
+            '<td' + tdAttr + '>' + getValueNotNull(value.car_type) + '</td>' +
+            '<td' + tdAttr + '>' + value.delivery_ts_formatted + '</td>' +
+            '<td' + tdAttr + '>' + value.ordnumber + '</td>' +
+            '<td' + statusTdAttr + '>' +
+                value.status + ((!isEmpty(value.status) && !isEmpty(value.car_status)) ? ' / ' : '') + value.car_status +
+            '</td>' +
+        '</tr>';
+
+    if (isFuture) {
+        $('#crm-search-order-table').append(rowHtml);
+    } else {
+        if (!isSeparatorAdded) {
+            $('#crm-search-order-table').append('<tr class="empty-row" style="background-color: pink;"><td colspan="8" style="text-align: center; font-size: 24px;">Brainfuck</td></tr>');
+            isSeparatorAdded = true;
+        }
+        $('#crm-search-order-table').append(rowHtml);
+    }
+});
+
+
+
+
+
             $('#crm-search-order-table tr.empty-row').click(function() {
                 alert( 'Edit Brainfuck-Liste' );
             });

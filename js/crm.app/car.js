@@ -889,29 +889,64 @@ $(document).on('click', '#edit_car-c_ln_info', function(){
     }).dialog( 'open' ).resize();
 });
 
-$(document).on('click', '#edit_car-c_ln, #edit_car-c_2, #edit_car-c_3, #edit_car-c_d, #edit_car-c_hu, #edit_car-c_fin', async function () {
-    const input = $(this)[0]; // Reines DOM-Element
-    input.select();
-    input.setSelectionRange(0, 99999); // Für mobile Geräte
+// EINZEL-KLICK: Inhalt kopieren (ohne Markieren), danach sofort editierbar
+const CLICK_DELAY = 250;
+$(document).on('click', '#edit_car-c_ln, #edit_car-c_2, #edit_car-c_3, #edit_car-c_d, #edit_car-c_hu, #edit_car-c_fin', function () {
+    const $el = $(this);
+    const prev = $el.data('clickTimer');
+    if (prev) clearTimeout(prev);
 
-    try {
-        await navigator.clipboard.writeText(input.value);
-        input.blur(); // Fokus entfernen
-        //console.log('Inhalt erfolgreich kopiert!');
-    } catch (err) {
-        console.error('Fehler beim Kopieren:', err);
+    const timerId = setTimeout(async () => {
+        try {
+            await navigator.clipboard.writeText(this.value);
+        } catch (err) {
+            console.error('Fehler beim Kopieren (Click):', err);
+        } finally {
+            $el.removeData('clickTimer');
+        }
+    }, CLICK_DELAY);
+
+    $el.data('clickTimer', timerId);
+});
+
+// WICHTIG: Doppelklick-Markierung verhindern (passiert bei mousedown #2)
+$(document).on('mousedown', '#edit_car-c_2, #edit_car-c_3', function (e) {
+    if (e.detail === 2) {
+        e.preventDefault(); // verhindert das native Wort-Markieren beim Doppelklick
     }
 });
 
-$(document).on('dblclick', '#edit_car-c_2, #edit_car-c_3', async function () {
-    const val2 = $('#edit_car-c_2').val();
-    const val3 = $('#edit_car-c_3').val();
-    const combined = val2+val3;
+// DOPPEL-KLICK: c_2 + c_3 kombinieren und kopieren, danach Auswahl aufheben
+$(document).on('dblclick', '#edit_car-c_2, #edit_car-c_3', async function (e) {
+    e.preventDefault();
+
+    // Click-Timer beider Felder killen, damit der Single-Click nicht zusätzlich feuert
+    const $c2 = $('#edit_car-c_2');
+    const $c3 = $('#edit_car-c_3');
+    const t2 = $c2.data('clickTimer'); if (t2) { clearTimeout(t2); $c2.removeData('clickTimer'); }
+    const t3 = $c3.data('clickTimer'); if (t3) { clearTimeout(t3); $c3.removeData('clickTimer'); }
+
+    const val2 = String($c2.val() ?? '');
+    const val3 = String($c3.val() ?? '');
+    const combined = val2 + val3;
 
     try {
         await navigator.clipboard.writeText(combined);
-        //console.log('Kombinierter Wert kopiert!');
     } catch (err) {
-        console.error('Fehler beim kombinierten Kopieren:', err);
+        console.error('Fehler beim kombinierten Kopieren (DblClick):', err);
     }
+
+    // Auswahl eindeutig entfernen & Fokus behalten (Caret ans Ende)
+    try {
+        this.focus({ preventScroll: true });
+        const pos = this.value.length;
+        this.setSelectionRange(pos, pos);
+        // Safari-Fix: noch einmal im nächsten Tick setzen
+        setTimeout(() => {
+            try { this.setSelectionRange(pos, pos); } catch (_) {}
+        }, 0);
+    } catch (_) {}
 });
+
+
+

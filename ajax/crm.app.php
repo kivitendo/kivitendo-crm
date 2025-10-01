@@ -258,7 +258,7 @@ function searchOrder( $data ){
         LIMIT 1
     ) AS firstpos ON TRUE
 
-    WHERE " . $where . " 
+    WHERE " . $where . "
         oe.quotation = FALSE
         AND oe.status != 'abgerechnet'
         AND oe.c_id IS NOT NULL                        -- Auftrag gehört einem Auto
@@ -645,7 +645,7 @@ function getCVPA( $data ){
                   "  AND " . $id[$data['src']] . " = " . $data['id'] . " " .
                   "  AND EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'lxc_ver') " .
                   ") AS t) AS ord, ";
-        
+
         // Lieferscheine
         $query .= "(SELECT json_agg(obj ORDER BY do_id DESC) AS del FROM (" .
             "SELECT " .
@@ -706,9 +706,16 @@ function getCVPA( $data ){
     // Fahrzeuge
     $query .= "( SELECT json_agg( cars ) AS cars FROM (".
                 "SELECT c_id, c_ln, COALESCE( hersteller, '---------' ) AS hersteller, COALESCE( name, '---------' ) AS name, COALESCE( fhzart, '---------' ) AS mytype FROM lxc_cars LEFT JOIN lxckba ON( lxc_cars.kba_id = lxckba.id ) WHERE c_ow = ".$data['id']." ORDER BY c_id DESC".
-                ") AS cars) AS cars";
+                ") AS cars) AS cars, ";
 
+    // Mitarbeitername als JSON-Array (z. B. ["Max Mustermann"]), hier können später noch mehere Einträge hinzukommen
+    $query .= "( SELECT json_agg(emp_name) FROM (" .
+                "SELECT name AS emp_name FROM employee " .
+                "WHERE id = " . $GLOBALS['dbh']->quote($_SESSION['loginCRM']) .
+    ") AS emp ) AS emp_name";
+    writeLog( $query );
     $rs = $GLOBALS['dbh']->getOne( $query, true );
+
     echo $rs;
 
     // Write history

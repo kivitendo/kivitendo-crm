@@ -2,7 +2,7 @@
 // ^(|(\+|0)[0-9]([-.\s\(\)\/]{0,3}[0-9])*)$
 
 //info ist die Überschrift, messageist der Fehler, assertion ist eine Bedingung
-function assert( info, message = null, assertion = true ){ 
+function assert( info, message = null, assertion = true ){
     if( assertion ){
         console.info( '-- ' + info + ' -->' );
         if( null != message ) console.info( message );
@@ -10,7 +10,7 @@ function assert( info, message = null, assertion = true ){
     }
 }
 
-function writeLog( info = 'WriteLog!', message = null, assertion = true, reverse = false ){ 
+function writeLog( info = 'WriteLog!', message = null, assertion = true, reverse = false ){
     if( assertion ){
         $.ajax({
             url: 'crm/ajax/crm.app.php',
@@ -281,6 +281,7 @@ function showCVPA( data ){
         $( '#crm-cvpa-src' ).val( data.cv.src );
         $( '#crm-cvpa-id' ).val( data.cv.id );
         $( '#crm-cvpa-name' ).val( data.cv.name + ' (' + ( ( data.cv.src == 'C' ) ? kivi.t8( 'Customer' ) : kivi.t8( 'Vendor' ) ) + ')' );
+        $( '#crm-cvpa-emp_name' ).val( data.emp_name ? data.emp_name[0] : '' ); // Mitarbeitername
 
         $( '#crm-wx-contact' ).show();
         $.each( data.cv, function( key, value ){
@@ -670,9 +671,9 @@ $( '#crm-route' ).click( function(){
         type: 'POST',
         data: { action: 'getCompanyAdress' },
         success: function( data ) {
-            var routeUrl = 'https://www.google.de/maps/place/' + 
-                encodeURIComponent($("#crm-contact-street").html() + ', ' + 
-                                   $("#crm-contact-zipcode").html() + ' ' + 
+            var routeUrl = 'https://www.google.de/maps/place/' +
+                encodeURIComponent($("#crm-contact-street").html() + ', ' +
+                                   $("#crm-contact-zipcode").html() + ' ' +
                                    $("#crm-contact-city").html());
 
             return newWindow.location = routeUrl;
@@ -729,22 +730,61 @@ $('#crm-route-qrcode').on('click', function () {
     }, qrTimeoutDuration);
 });
 
-$("#crm-whatsapp-share").click( function () {
-    //alert( 'WhatsApp-Share' );
+$("#crm-whatsapp-share").click(function () {
     var street = $("#crm-contact-street").html();
     var zip = $("#crm-contact-zipcode").html();
     var city = $("#crm-contact-city").html();
-    
-    var locationUrl = 'https://www.google.de/maps/place/' + 
-                      encodeURIComponent(street + ', ' + zip + ' ' + city);
+    var name = $("#crm-contact-name").html();
+    let tel1 = $("#crm-contact-phone1").html();
+    let tel2 = $("#crm-contact-phone2").html();
+    let tel3 = $("#crm-contact-phone3").html();
+    let note_phone1 = $('#crm-contact-note_phone1').val();
+    let note_phone2 = $('#crm-contact-note_phone2').val();
+    let note_phone3 = $('#crm-contact-note_phone3').val();
 
-    var message = "Hier ist der Standort von " + $("#crm-contact-name").html() + ":\n" +
-                  street + ", " + zip + " " + city + "\n" +
-                  "Google Maps Link: " + locationUrl;
-    var whatsappUrl = "whatsapp://send?text=" + encodeURIComponent(message);
+    var locationUrl = 'https://www.google.de/maps/place/' +
+                    encodeURIComponent(street + ', ' + zip + ' ' + city);
+
+    var message = "Hier ist der Standort von " + name + ":\n" +
+                street + ", " + zip + " " + city + "\n" +
+                "Google Maps Link: " + locationUrl + "\n" +
+                (tel1 ? "\nTel: " + tel1 + (note_phone1 ? " (" + note_phone1 + ")" : "") : "") +
+                (tel2 ? "\nTel: " + tel2 + (note_phone2 ? " (" + note_phone2 + ")" : "") : "") +
+                (tel3 ? "\nTel: " + tel3 + (note_phone3 ? " (" + note_phone3 + ")" : "") : "") + '\n';
+
+
+    var whatsappUrl = "";
+
+    // Neue Browser liefern userAgentData (besser als userAgent-String parsen)
+    if (navigator.userAgentData && navigator.userAgentData.platform) {
+        const platform = navigator.userAgentData.platform.toLowerCase();
+
+        if (platform.includes("windows")) {
+            whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(message);
+        } else if (platform.includes("linux")) {
+            whatsappUrl = "https://web.whatsapp.com/send/?text=" + encodeURIComponent(message) +
+                          "&type=custom_url&app_absent=0&utm_campaign=wa_api_send_v2";
+        } else {
+            whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(message);
+        }
+    } else {
+        // Fallback über userAgent
+        var ua = navigator.userAgent;
+
+        if (ua.indexOf("Windows") !== -1) {
+            whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(message);
+        } else if (ua.indexOf("Linux") !== -1) {
+            whatsappUrl = "https://web.whatsapp.com/send/?text=" + encodeURIComponent(message) +
+                          "&type=custom_url&app_absent=0&utm_campaign=wa_api_send_v2";
+        } else {
+            whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(message);
+        }
+    }
 
     window.open(whatsappUrl, '_blank');
 });
+
+
 
 
 function crmCalendarView( ){

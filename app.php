@@ -1247,6 +1247,7 @@
             <input type="hidden" id="crm-cvpa-id"></input>
             <input type="hidden" id="crm-cvpa-src"></input>
             <input type="hidden" id="crm-cvpa-name"></input>
+            <input type="hidden" id="crm-cvpa-emp_name"></input>
             <input type="hidden" id="crm-userconf-defprn" value="<?php echo $_SESSION['userConfig']['default_printer_id']; ?>"></input>
             <div><strong><span id="crm-contact-name"></span></strong> (<span id="crm-contact-cvnumber"></span>)</div>
             <div class="crm-pt05"><span id="crm-contact-street"></span></div>

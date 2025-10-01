@@ -9,32 +9,25 @@
     return false;
 }).button().removeClass( "ui-widget ui-state-default ui-corner-all ui-button-text-only").tooltip();
 */
-$( '.whatsapp' ).click( function( data ){
-    
-    // Verhindert, dass andere Click-Handler desselben Elements ausgeführt werden
-    //data.stopImmediatePropagation();
+$('.whatsapp').click(function (data) {
 
     // Telefonnummer ermitteln (z. B. aus '#crm-contact-phone1', '#crm-contact-phone2' …)
-    var phoneNumber = $( '#crm-contact-phone' + this.id.substr( -1 ) ).text();
-    if( phoneNumber.charAt(0)  != "+" ){
+    var phoneNumber = $('#crm-contact-phone' + this.id.substr(-1)).text();
+    if (phoneNumber.charAt(0) != "+") {
         phoneNumber = "+49" + phoneNumber.slice(1);
     }
-
-    // Nachricht als leere Variable vorbereiten
+    let emp_name = $('#crm-cvpa-emp_name').val();
     var message = '';
 
     // Wenn der Button zusätzlich die Klasse 'oe_wa' hat, Text nach Schema 2
-    if( $(this).hasClass('oe_wa') ){
-        // Hier musst du die Selektoren anpassen, je nachdem, wo Anrede, Fahrzeug und Kennzeichen stehen:
-        //alert($( '#od-customer-greeting' ).val() + 'Hello');
-        var greeting = $( '#od-customer-greeting' ).val(); // Anrede
-        var name = $( '#od_customer_name' ).val(); // Name des Kunden
-        var hersteller = $( '#show_car_data-hersteller' ).val(); // Fahrzeughersteller
-        var typ = $('#show_car_data-typ' ).val(); // Fahrzeugtyp
-        var c_ln    = $( '#od_lxcars_c_ln' ).val();    //Kennzeichen "
-        var employee_name = $( '#od-oe-employee_name' ).html(); // Name des Mitarbeitersod-oe-employee_name
-        var amount = $( '#od-amount' ).val()
-        
+    if ($(this).hasClass('oe_wa')) {
+        var greeting = $('#od-customer-greeting').val();
+        var name = $('#od_customer_name').val();
+        var hersteller = $('#show_car_data-hersteller').val();
+        var typ = $('#show_car_data-typ').val();
+        var c_ln = $('#od_lxcars_c_ln').val();
+        var employee_name = $('#od-oe-employee_name').val();
+        var amount = $('#od-amount').val();
 
         message = 'Sehr geehrte(r) ' + greeting + ' ' + name + ', %0D%0A' +
                   'Ihr ' + hersteller + ' ' + typ + ' mit dem Kennzeichen ' + c_ln +
@@ -42,29 +35,40 @@ $( '.whatsapp' ).click( function( data ){
                   'Der Rechnungsbetrag beträgt ' + amount + '€. %0D%0A' +
                   '%0D%0AMit freundlichen Grüßen %0D%0A' +
                   'Autoprofis - ' + employee_name;
-
-        //alert( 'WhatsApp-Nachricht: ' + message ); // Debugging-Hilfe, kann entfernt werden
-    }
-    // Sonst Standard-Nachricht wie vorher
-    else {
-        var name = $( '#crm-contact-name' ).html();
-        var employee_name = $( '#od-oe-employee_name' ).html()
-        var greeting = $( '#od-customer-greeting' ).val(); // Ist noch etwas buggi
-        /*message = 
-            'Sehr geehrte(r) ' + greeting + ' ' + name + ' im Anhang befindet sich das Angebot bzw die Rechnung. ' +
-            '%0D%0A%0D%0AMit freundlichem Grüßen %0D%0AAutoprofis - ' + employee_name;
-        alert( 'Normaler Whatsapp Button: ' + message ); // Debugging-Hilfe, kann entfernt werden
-        */
-       message = 
-            'Sehr geehrte(r) ' + name + ' im Anhang befindet sich das Angebot bzw. die Rechnung. ' +
-            '%0D%0A%0D%0AMit freundlichem Grüßen %0D%0AIhr / Dein Autoprofis Team';
+    } else {
+        var name = $('#crm-contact-name').html();
+        message =
+            'Sehr geehrte(r) ' + name + ',%0D%0A im Anhang befindet sich das Angebot bzw. die Rechnung.' +
+            '%0D%0A%0D%0AMit freundlichem Grüßen %0D%0A' + emp_name + ' - Autoprofis';
     }
 
-    // Öffne WhatsApp-Fenster mit der passenden URL
-    window.open(
-        'whatsapp://send?phone=' + phoneNumber + '&text=' + encodeURIComponent(message),
-        '_blank'
-    );
+    // OS-Erkennung
+    var whatsappUrl = "";
+    if (navigator.userAgentData && navigator.userAgentData.platform) {
+        const platform = navigator.userAgentData.platform.toLowerCase();
+        if (platform.includes("windows")) {
+            whatsappUrl = "https://wa.me/" + phoneNumber + "?text=" + message;
+        } else if (platform.includes("linux")) {
+            whatsappUrl = "https://web.whatsapp.com/send?phone=" + phoneNumber + "&text=" + message +
+                          "&type=custom_url&app_absent=0&utm_campaign=wa_api_send_v2";
+        } else {
+            whatsappUrl = "https://wa.me/" + phoneNumber + "?text=" + message;
+        }
+    } else {
+        // Fallback über userAgent
+        var ua = navigator.userAgent;
+        if (ua.indexOf("Windows") !== -1) {
+            whatsappUrl = "https://wa.me/" + phoneNumber + "?text=" + message;
+        } else if (ua.indexOf("Linux") !== -1) {
+            whatsappUrl = "https://web.whatsapp.com/send?phone=" + phoneNumber + "&text=" + message +
+                          "&type=custom_url&app_absent=0&utm_campaign=wa_api_send_v2";
+        } else {
+            whatsappUrl = "https://wa.me/" + phoneNumber + "?text=" + message;
+        }
+    }
+
+    // WhatsApp öffnen
+    window.open(whatsappUrl, '_blank');
 
     return false;
 }).button()

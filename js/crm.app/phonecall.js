@@ -16,19 +16,23 @@ $('.whatsapp').click(function (data) {
     if (phoneNumber.charAt(0) != "+") {
         phoneNumber = "+49" + phoneNumber.slice(1);
     }
+    // alles außer Ziffern und '+' entfernen
+    phoneNumber = phoneNumber.replace(/[^+\d]/g, '');
     let emp_name = $('#crm-cvpa-emp_name').val();
     var message = '';
 
     // Wenn der Button zusätzlich die Klasse 'oe_wa' hat, Text nach Schema 2
+    var greeting = $('#od-customer-greeting').val();
+    var name = $('#od_customer_name').text()? $('#od_customer_name').val() : $('#crm-contact-name').val(); //crm-contact-name
+    name = name.trim(); // Leerzeichen am Anfang und Ende entfernen
+    //Daten aus OE
+    var hersteller = $('#show_car_data-hersteller').val();
+    var typ = $('#show_car_data-typ').val();
+    var c_ln = $('#od_lxcars_c_ln').val();
+    var employee_name = $('#od-oe-employee_name').val() ? $('#od-oe-employee_name').val() : emp_name;
+    var amount = $('#od-amount').val();
     if ($(this).hasClass('oe_wa')) {
-        var greeting = $('#od-customer-greeting').val();
-        var name = $('#od_customer_name').val();
-        var hersteller = $('#show_car_data-hersteller').val();
-        var typ = $('#show_car_data-typ').val();
-        var c_ln = $('#od_lxcars_c_ln').val();
-        var employee_name = $('#od-oe-employee_name').val();
-        var amount = $('#od-amount').val();
-
+        //alert( name + 'OE_wa' );
         message = 'Sehr geehrte(r) ' + greeting + ' ' + name + ', %0D%0A' +
                   'Ihr ' + hersteller + ' ' + typ + ' mit dem Kennzeichen ' + c_ln +
                   ' ist fertig und steht zur Abholung bereit. %0D%0A' +
@@ -36,10 +40,11 @@ $('.whatsapp').click(function (data) {
                   '%0D%0AMit freundlichen Grüßen %0D%0A' +
                   'Autoprofis - ' + employee_name;
     } else {
-        var name = $('#crm-contact-name').html();
+
+        //alert( name + 'KEINE OE_wa'  );
         message =
             'Sehr geehrte(r) ' + name + ',%0D%0A im Anhang befindet sich das Angebot bzw. die Rechnung.' +
-            '%0D%0A%0D%0AMit freundlichem Grüßen %0D%0A' + emp_name + ' - Autoprofis';
+            '%0D%0A%0D%0AMit freundlichem Grüßen %0D%0A' + employee_name + ' - Autoprofis';
     }
 
     // OS-Erkennung

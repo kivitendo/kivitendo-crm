@@ -734,7 +734,7 @@ $("#crm-whatsapp-share").click(function () {
     var street = $("#crm-contact-street").html();
     var zip = $("#crm-contact-zipcode").html();
     var city = $("#crm-contact-city").html();
-    var name = $("#crm-contact-name").html();
+    var name = $("#crm-contact-name").text();
     let tel1 = $("#crm-contact-phone1").html();
     let tel2 = $("#crm-contact-phone2").html();
     let tel3 = $("#crm-contact-phone3").html();

@@ -138,6 +138,7 @@ $.widget("custom.catcomplete", $.ui.autocomplete, {
 });
 
 $(function () {
+
     let lastItems = []; // merken der letzten Vorschläge
 
     $("#crm-widget-quicksearch").catcomplete({
@@ -146,7 +147,16 @@ $(function () {
         source: function (request, responseCallback) {
             $.getJSON("crm/ajax/crm.app.php?action=fastSearch", request, function (data) {
                 lastItems = data;
-                responseCallback(data);
+                // WENN KEINE DATEN ZURÜCKKOMMEN, LEERES ARRAY SENDEN
+                if (!data || data.length === 0) {
+                    responseCallback([]);
+                } else {
+                    responseCallback(data);
+                }
+            }).fail(function() {
+                // Auch bei Fehler leeres Array zurückgeben
+                lastItems = [];
+                responseCallback([]);
             });
         },
 
@@ -160,11 +170,9 @@ $(function () {
             const menu = $input.catcomplete("widget");
             const focused = menu.find(".ui-state-focus");
             const items = menu.find("li.ui-menu-item:visible:not(.ui-autocomplete-category)");
-
             if (!focused.length && items.length && lastItems.length) {
                 const first = items.first();
                 const itemData = first.data("ui-autocomplete-item");
-
                 if (itemData) {
                     const instance = $input.data("custom-catcomplete");
                     if (instance) {
@@ -178,7 +186,6 @@ $(function () {
         }
     });
 });
-
 
 function getCVPA( src, id ){
     $.ajax({

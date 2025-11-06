@@ -820,50 +820,62 @@ $( '#od_lxcars_to_car, #od_lxcars_to_car_btn' ).click( function(){
 
 
 
-$(document).on('click', '#edit_car-c_st_print', function(){
-    //alert('Etikettendruck des Sommerreifens');
+$(document).on('click', '#edit_car-c_st_print, #edit_car-c_wt_print', function(){
+    const isSummer = $(this).attr('id') === 'edit_car-c_st_print';
+    const season = isSummer ? 'Sommerreifen' : 'Winterreifen';
+
     // Checke, ob die Felder ausgefüllt sind
     const missing = [];
-    if ($('#edit_car-c_st').val().trim() === '')   missing.push('Reifengröße');
-    if ($('#edit_car-c_st_l').val().trim() === '') missing.push('Lagerort');
+    if ($('#edit_car-c_' + (isSummer ? 'st' : 'wt')).val().trim() === '')   missing.push('Reifengröße');
+    if ($('#edit_car-c_' + (isSummer ? 'st_l' : 'wt_l')).val().trim() === '') missing.push('Lagerort');
 
     if (missing.length > 0) {
-    // Erzeuge aus jedem fehlenden Feldnamen ein <li>-Element und füge alle zu einem einzigen HTML-String zusammen
-    const feldListe = missing.map(f => `<li>${f}</li>`).join('');
-
-    $('#message-dialog')
-        .html(
-        `<p>Bitte fülle zuerst folgende Felder aus:</p>
-        <ul>${feldListe}</ul>`
-        )
-        .dialog({
-        modal:     false,
-        title:     'Reifenetikett drucken',
-        resizable: false,
-        width:     'auto',
-        height:    'auto',
-        })
-        .dialog('open')
-        .resize();
+        const feldListe = missing.map(f => `<li>${f}</li>`).join('');
+        $('#message-dialog')
+            .html(
+            `<p>Bitte fülle zuerst folgende Felder aus:</p>
+            <ul>${feldListe}</ul>`
+            )
+            .dialog({
+            modal:     false,
+            title:     season + 'etikett drucken',
+            resizable: false,
+            width:     'auto',
+            height:    'auto',
+            })
+            .dialog('open')
+            .resize();
         return;
     }
+
     // Wenn alle Felder ausgefüllt sind, führe den Ajax-Request aus
     $.ajax({
         url: 'crm/ajax/crm.app.php',
         type: 'POST',
-        data:  { action: 'printTyreLabel', data: { 'name': $( '#edit_car_customer_name' ).val(), 'c_ln': $( '#edit_car-c_ln' ).val(), 'dim': $( '#edit_car-c_st' ).val(), 'location': $( '#edit_car-c_st_l' ).val() } },
-        success: function( data ){
-            alert( data.result )
+        data: {
+            action: 'printTyreLabel',
+            data: {
+                'name': $('#edit_car_customer_name').val(),
+                'c_ln': $('#edit_car-c_ln').val(),
+                'dim': $('#edit_car-c_' + (isSummer ? 'st' : 'wt')).val(),
+                'location': $('#edit_car-c_' + (isSummer ? 'st_l' : 'wt_l')).val(),
+                'hersteller': $('#edit_car_kba-hersteller').val(),
+                'fhz_typ': $('#edit_car_kba-name').val(),
+                'hubraum': $('#edit_car_kba-hubraum').val()
+            }
         },
-        error: function( xhr, status, error ){
-            $( '#message-dialog' ).showMessageDialog( 'error', kivi.t8( 'Connection to the server' ), kivi.t8( 'Response Error in: ' ) + 'showCVPA().printTyreLabel', xhr.responseText );
+        success: function(data){
+            if(data.result == 1) {
+                alert('Druck erfolgt');
+            } else {
+                alert('Fehler beim Druck');
+            }
+        },
+        error: function(xhr, status, error){
+            $('#message-dialog').showMessageDialog('error', kivi.t8('Connection to the server'), kivi.t8('Response Error in: ') + 'printTyreLabel', xhr.responseText);
         }
     });
 });
-
-$(document).on('click', '#edit_car-c_wt_print', function(){
-  alert('Etikettendruck des Winterreifens');
-});//edit-car-fin-chec
 
 
 $(document).on('click', '#edit_car-c_ln_info', function(){
@@ -947,6 +959,3 @@ $(document).on('dblclick', '#edit_car-c_2, #edit_car-c_3', async function (e) {
         }, 0);
     } catch (_) {}
 });
-
-
-

@@ -2729,50 +2729,54 @@ function writeLogFromJs( $data ){
  */
 
 function printTyreLabel( $data ){
+    $onlyOneTyre = 0;
+    $hubraumInLiter = $data['hubraum'] / 1000;
+    $hubraumInLiter = round( $hubraumInLiter, 1 ).'L';
     // Zielverzeichnis festlegen
     $dir = __DIR__.'/../tmp/labels';
     if (!is_dir($dir)) {
         mkdir($dir, 0755, true);
     }
     $loc = ['VR', 'VL', 'HR', 'HL'];
-    foreach ($loc as $wheel){
-        $ezpl =
-            '^Q150,3
-^W100
-^H8
-^P1
-^S3
-^AD
-^C1
-^R60
-~Q+60
-^O0
-^D3
-^E28
-~R200
-^XSET,ROTATION,0
-^C1
-^D0
-^D1
-^L
-Dy2-me-dd
-Th:m:s
-AD,0,154,3,3,0,0E,'.$data['name'].'
-AD,0,268,3,3,0,0E,'.$data['c-ln'].'
-AD,0,382,3,3,0,0E,'.$data['dim'].'
-AD,0,496,3,3,0,0E,'.$data['warehouse'].'
-AD,322,1324,10,10,0,0E,'.$wheel.'
-W370,778,5,2,M,8,13,39,0
-https://melissa.spdns.de/kivitendo/c200
-E
-';
+    foreach ($loc as $wheel) {
+        $zpl = '^XA';
+        if ($wheel === 'HL') $zpl .= '^MMP';  // Partial Cut nach diesem Label
+        else $zpl .= '^MMN';  // Kein Schnitt bei VR, VL, HR
 
-        // PRN-Datei erstellen
-        $filename = 'label.prn';
+        $zpl .= '^FO50,200^A0N,200,200^FD'.($data['c_ln'] ?? 'Fehler').'^FS'."\n";
+        $zpl .= '^FO50,400^A0N,110,110^FD'.($data['name'] ?? 'Fehler').'^FS'."\n";
+        $zpl .= '^FO50,600^A0N,180,180^FD'.($data['dim'] ?? 'Fehler').'^FS'."\n";
+        $zpl .= '^FO50,850^A0N,100,100^FD'.($data['location'] ?? 'Fehler').'^FS'."\n";
+        $zpl .= '^FO50,1000^A0N,80,80^FD'.($data['hersteller'] ?? 'Fehler').'^FS'."\n";
+        $zpl .= '^FO50,1100^A0N,80,80^FD'.($data['fhz_typ'] ?? 'Fehler').'^FS'."\n";
+        $zpl .= '^FO50,1200^A0N,80,80^FD'.($hubraumInLiter ?? 'Fehler').'^FS'."\n";
+        $zpl .= '^FO50,1350^BQN,2,8^FDQA,https://melissa.spdns.de/kivitendo/c200^FS'."\n";
+        $zpl .= '^FO600,1350^A0N,350,300^FD'.substr($wheel, 0, 1).'^FS'."\n";
+        $zpl .= '^FO800,1350^A0N,350,300^FD'.substr($wheel, 1, 1).'^FS'."\n";
+        $zpl .= '^XZ';
+
+        // FO50,200^A0N,200,200^FD...^FS
+        // 50 = Abstand links (X-Position)
+        // 200 = Abstand oben (Y-Position)
+        // A0N = Schriftart A0, Normal-Ausrichtung
+        // 200,200 = Schrift Höhe 200, Breite 200 (sehr groß)
+        // FD...FS = Field Data (Textinhalt) bis Field Separator (Ende)
+
+        // ZPL-Datei erstellen
+        $filename = 'label_'.$wheel .'.zpl';
         $filepath = $dir . "/" . $filename;
-        file_put_contents( $filepath, $ezpl );
-        //sleep(3);
-        exec( 'lp -d BP730-Raw -o raw '.escapeshellarg( $filepath ) );
-    }
+        file_put_contents( $filepath, $zpl );
+        //writeLog( $zpl );
+        sleep(2);
+        require_once __DIR__ . '/../config/printer.php';
+        exec( 'lp -d '.$labelPrinter.' -o raw '.escapeshellarg( $filepath ) );
+        if( $onlyOneTyre ) break;
+    }//end foreach
     echo '{"result":1}';
+
+/********************************************************************************************
+ * Testen mit:root@melissa:/var/www/kivitendo-crm/tmp/labels#
+ * curl -X POST -H "Content-Type: application/x-www-form-urlencoded" --data-binary @test1.prn http://api.labelary.com/v1/printers/12dpmm/labels/4x6/0/ > test.png && display test.png
+ ***********************************************************************************************/
+
 }

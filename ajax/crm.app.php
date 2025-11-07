@@ -1227,17 +1227,17 @@ function insertInvoiceFromOrder( $data ){
     getInvoice( $exists );
 }
 
-function insertOfferFromOrder( $data ){
+function insertOfferFromOrder( $data ){//Auftrag in Angebot kopieren
     $query = "WITH tmp AS ( UPDATE defaults SET sqnumber = sqnumber::INT + 1 RETURNING sqnumber ) ".
                 "INSERT INTO oe ( quonumber, quotation, ".
-                "ordnumber, transdate, vendor_id, customer_id, amount, netamount, reqdate, taxincluded, shippingpoint, notes, employee_id, ".
+                "ordnumber, vendor_id, customer_id, amount, netamount, reqdate, taxincluded, shippingpoint, notes, employee_id, ".
                 "closed, cusordnumber, intnotes, department_id, shipvia, cp_id, language_id, payment_id, delivery_customer_id, ".
                 "delivery_vendor_id, taxzone_id, proforma, shipto_id, order_probability, expected_billing_date, globalproject_id, delivered, ".
                 "salesman_id, marge_total, marge_percent, transaction_description, delivery_term_id, currency_id, exchangerate, ".
                 "tax_point, km_stnd, c_id, status, car_status, finish_time, printed, car_manuf, car_type, internalorder, ".
                 "billing_address_id, order_status_id ".
                 ") SELECT ( SELECT sqnumber FROM tmp ), true, ".
-                "ordnumber, transdate, vendor_id, customer_id, amount, netamount, reqdate, taxincluded, shippingpoint, notes, ".$_SESSION['id'].", ".
+                "ordnumber, vendor_id, customer_id, amount, netamount, reqdate, taxincluded, shippingpoint, notes, ".$_SESSION['id'].", ".
                 "closed, cusordnumber, intnotes, department_id, shipvia, cp_id, language_id, payment_id, delivery_customer_id, ".
                 "delivery_vendor_id, taxzone_id, proforma, shipto_id, order_probability, expected_billing_date, globalproject_id, delivered, ".
                 "salesman_id, marge_total, marge_percent, transaction_description, delivery_term_id, currency_id, exchangerate, ".
@@ -2740,19 +2740,19 @@ function printTyreLabel( $data ){
     $loc = ['VR', 'VL', 'HR', 'HL'];
     foreach ($loc as $wheel) {
         $zpl = '^XA';
-        if ($wheel === 'HL') $zpl .= '^MMP';  // Partial Cut nach diesem Label
-        else $zpl .= '^MMN';  // Kein Schnitt bei VR, VL, HR
-
-        $zpl .= '^FO50,200^A0N,200,200^FD'.($data['c_ln'] ?? 'Fehler').'^FS'."\n";
-        $zpl .= '^FO50,400^A0N,110,110^FD'.($data['name'] ?? 'Fehler').'^FS'."\n";
-        $zpl .= '^FO50,600^A0N,180,180^FD'.($data['dim'] ?? 'Fehler').'^FS'."\n";
-        $zpl .= '^FO50,850^A0N,100,100^FD'.($data['location'] ?? 'Fehler').'^FS'."\n";
-        $zpl .= '^FO50,1000^A0N,80,80^FD'.($data['hersteller'] ?? 'Fehler').'^FS'."\n";
-        $zpl .= '^FO50,1100^A0N,80,80^FD'.($data['fhz_typ'] ?? 'Fehler').'^FS'."\n";
-        $zpl .= '^FO50,1200^A0N,80,80^FD'.($hubraumInLiter ?? 'Fehler').'^FS'."\n";
-        $zpl .= '^FO50,1350^BQN,2,8^FDQA,https://melissa.spdns.de/kivitendo/c200^FS'."\n";
-        $zpl .= '^FO600,1350^A0N,350,300^FD'.substr($wheel, 0, 1).'^FS'."\n";
-        $zpl .= '^FO800,1350^A0N,350,300^FD'.substr($wheel, 1, 1).'^FS'."\n";
+        //if ($wheel === 'HL') $zpl .= '^MMP';  // Partial Cut nach diesem Label
+        //else $zpl .= '^MMN';  // Kein Schnitt bei VR, VL, HR
+        $zpl .= '^CI28'."\n"; // UTF-8 Zeichensatz aktivieren
+        $zpl .= '^FO20,200^A0N,190,190^FD'.($data['c_ln'] ?? 'Fehler').'^FS'."\n";      // Fahrzeugkennzeichen
+        $zpl .= '^FO20,400^A0N,110,110^FD'.($data['name'] ?? 'Fehler').'^FS'."\n";      // Name
+        $zpl .= '^FO20,600^A0N,180,180^FD'.($data['dim'] ?? 'Fehler').'^FS'."\n";       // Reifengröße
+        $zpl .= '^FO20,850^A0N,100,100^FD'.($data['location'] ?? 'Fehler').'^FS'."\n";  // Lagerort
+        $zpl .= '^FO20,1000^A0N,80,80^FD'.($data['hersteller'] ?? 'Fehler').'^FS'."\n"; // Hersteller
+        $zpl .= '^FO20,1100^A0N,80,80^FD'.($data['fhz_typ'] ?? 'Fehler').'^FS'."\n";    // Fahrzeugtyp
+        $zpl .= '^FO20,1200^A0N,80,80^FD'.($hubraumInLiter ?? 'Fehler').'^FS'."\n";     // Hubraum in Liter
+        $zpl .= '^FO20,1350^BQN,2,8^FDQA,https://melissa.spdns.de/kivitendo/c200^FS'."\n";
+        $zpl .= '^FO600,1350^A0N,350,300^FD'.substr($wheel, 0, 1).'^FS'."\n";           // Reifenposition erster Buchstabe
+        $zpl .= '^FO800,1350^A0N,350,300^FD'.substr($wheel, 1, 1).'^FS'."\n";           // Reifenposition zweiter Buchstabe
         $zpl .= '^XZ';
 
         // FO50,200^A0N,200,200^FD...^FS

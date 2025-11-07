@@ -737,6 +737,18 @@
                     <td width="33%">
                         <table>
                             <tr>
+                                <td class="od-table-label"><label for="od-off-shipvia">KM-Stand:</label></td>
+                                <td><input class="od-inv-shipvia" id="od-off-shipvia" type="number"></td>
+                             </tr>
+                            <tr>
+                                <td class="od-table-label"><label for="od-off-shippingpoint">Amtl.-Kennz.:</label></td>
+                                <td><input id="od-off-shippingpoint" type="hidden" value=""></input><input id="od_off_shippingpoint" type="text"></input></td>
+                             </tr>
+                       </table>
+                    </td>
+                    <td width="33%">
+                        <table>
+                            <tr>
                                 <td class="od-table-label"><label for="od-off-quonumber">Angebotsnummer:</label></td>
                                 <td><span id="od-off-quonumber"></span></td>
                             </tr>

@@ -60,13 +60,13 @@ function crmCalcOrderPrice(pos) {
     marge_total = Math.round(marge_total * 100) / 100; // Rundung auf 2 Dezimalstellen
 
     $(pos).find('[class=od-item-marge_total]')[0].value = kivi.format_amount(marge_total, 2);
-    
+
     const item_type = $(pos).find('[class=od-item-type]')[0].value;
     if ('I' !== item_type) {
         let netamount = kivi.parse_amount($('#od-netamount').val()) + marge_total;
         netamount = Math.round(netamount * 100) / 100; // Rundung
         $('#od-netamount').val(kivi.format_amount(netamount, 2));
-        
+
         let rate = parseFloat($(pos).find('[class=od-hidden-item-rate]')[0].value);
         let amount = kivi.parse_amount($('#od-hidden-amount').val()) + (marge_total * (rate + 1));
         //console.info('amount2: ' + amount);
@@ -80,13 +80,13 @@ function crmCalcOrderPrice(pos) {
     if (crmOrderTypeEnum.Order == crmOrderType) {
         const base_unit = $(pos).find('[class=od-hidden-item-base_unit]')[0].value;
         const factor = kivi.parse_amount($(pos).find('[class=od-hidden-item-factor]')[0].value);
-        
+
         if ('I' == item_type && 'min' == base_unit) crmPerfomanceIst += qty * factor;
         if ('S' == item_type && 'min' == base_unit) crmPerfomanceSoll += qty * factor;
-        
+
         let performance = (crmPerfomanceSoll - crmPerfomanceIst) / 60;
         performance = Math.round(performance * 100) / 100; // Rundung
-        
+
         $('#od-performance').val(kivi.format_amount(performance));
         $('#od-performance').css('background-color', performance < 0 ? 'red' : 'green');
     }
@@ -106,7 +106,7 @@ function crmCalcOrderPrice(pos) {
 //    }
 //    $( pos ).find( '[class=od-item-marge_total]' )[0].value = kivi.format_amount( marge_total, 2 );
 //    //$( pos ).find( '[class=od-hidden-item-marge_total]' )[0].value = marge_total;
-//    
+//
 //    //console.info( 'qty: ' + qty + ' sellprice: ' + sellprice + ' discount: ' + discount + ' marge_total: ' + marge_total );
 //    const item_type = $( pos ).find( '[class=od-item-type]' )[0].value;
 //    if( 'I' !== item_type ){
@@ -1367,8 +1367,15 @@ function crmPrintOrder( target ){
     data['language_id'] = '';
     data['department_id'] = '';
     data['currency'] = 'EUR';
-    data['shippingpoint'] = '' + $( '#od-inv-shippingpoint' ).val();
-    data['shipvia'] = '' + $( '#od-inv-shipvia' ).val();
+    //data['shippingpoint'] = '' + $( '#od-inv-shippingpoint' ).val();
+    //data['shipvia'] = '' + $( '#od-inv-shipvia' ).val();
+    if (crmOrderTypeEnum.Invoice == crmOrderType) {
+        data['shippingpoint'] = '' + $('#od-inv-shippingpoint').val();
+        data['shipvia']       = '' + $('#od-inv-shipvia').val();
+    } else if (crmOrderTypeEnum.Offer == crmOrderType) {
+        data['shippingpoint'] = '' + $('#od_off_shippingpoint').val();
+        data['shipvia']       = '' + $('#od-off-shipvia').val();
+    }
     data['transaction_description'] = '';
     if( crmOrderTypeEnum.Invoice == crmOrderType ){
         data['employee_id'] = '' + $( '#od-inv-employee_id' ).val();
@@ -1690,6 +1697,8 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             $( '#od-customer-id' ).val( crmData.offer.common.customer_id );
             $( '#od-off-id' ).val( crmData.offer.common.id );
             $( '#od_off_customer_name' ).val( crmData.offer.common.customer_name );
+            $( '#od-off-shipvia' ).val( crmData.offer.common.shipvia );
+            $( '#od_off_shippingpoint' ).val( crmData.offer.common.shippingpoint );
             $( '#od-off-quonumber' ).html( crmData.offer.common.quonumber );
             $( '#od-off-finish_time' ).val( crmData.offer.common.finish_time );
             $( '#od-off-employee_name' ).html( crmData.offer.common.employee_name );
@@ -1704,6 +1713,8 @@ function crmEditOrderDlg( crmData,  type = crmOrderTypeEnum.Order ){
             title = kivi.t8( 'New offer' );
             $( '#od-customer-id' ).val( crmData.common.customer_id );
             $( '#od_off_customer_name' ).val( crmData.common.customer_name );
+            $( '#od-off-shipvia' ).val( '' );
+            $( '#od-off-shippingpoint' ).val( '' );
             $( '#od-off-quonumber' ).html( '' );
             $( '#od-off-finish_time' ).val( '' );
             $( '#od-off-employee_name' ).html( crmData.common.employee_name );

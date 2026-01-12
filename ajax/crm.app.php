@@ -2215,8 +2215,8 @@ function testFunction(){
     $dir_db = $_SESSION['crmpath']."/dokumente/".$dbname.'/';
     $sql = "SELECT name FROM customer WHERE name ILIKE '%ronny%'";
     $rs = $GLOBALS['dbh']->getAll( $sql, TRUE );
-    writeLogR( $dir_man );
-    writeLogR( $dir_db );
+    //writeLogR( $dir_man );
+    //writeLogR( $dir_db );
     echo $rs;
 }
 
@@ -2729,7 +2729,7 @@ function printTyreLabel( $data ){
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
     $current_url = $protocol . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
-    writeLog( $current_url );
+    //writeLog( $current_url );
     // Zielverzeichnis festlegen
     $dir = __DIR__.'/../tmp/labels';
     if (!is_dir($dir)) {
@@ -2795,7 +2795,7 @@ function printYellowLabel( $data ){
     $filename = 'yellow_label.zpl';
     $filepath = $dir . "/" . $filename;
     file_put_contents( $filepath, $zpl );
-    writeLog( $zpl );
+    //writeLog( $zpl );
     sleep(2);
     exec( 'lp -d '.$yellowLabelPrinter.' -o raw '.escapeshellarg( $filepath ) );
     echo '{"result":1}';

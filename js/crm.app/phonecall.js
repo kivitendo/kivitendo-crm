@@ -48,30 +48,38 @@ $('.whatsapp').click(function (data) {
     }
 
     // OS-Erkennung
-    var whatsappUrl = "";
+    //var whatsappUrl = "";
+    var whatsappUrl = "https://web.whatsapp.com/send?phone=" + phoneNumber + "&text=" + message +
+                          "&type=custom_url&app_absent=0&utm_campaign=wa_api_send_v2";
+    /*
     if (navigator.userAgentData && navigator.userAgentData.platform) {
         const platform = navigator.userAgentData.platform.toLowerCase();
         if (platform.includes("windows")) {
             whatsappUrl = "https://wa.me/" + phoneNumber + "?text=" + message;
+            //alert( 'Windows erkannt: ' + whatsappUrl );
         } else if (platform.includes("linux")) {
             whatsappUrl = "https://web.whatsapp.com/send?phone=" + phoneNumber + "&text=" + message +
                           "&type=custom_url&app_absent=0&utm_campaign=wa_api_send_v2";
+            //alert( 'Linux erkannt: ' + whatsappUrl );
         } else {
             whatsappUrl = "https://wa.me/" + phoneNumber + "?text=" + message;
         }
     } else {
-        // Fallback über userAgent
+        // Normalfall
         var ua = navigator.userAgent;
         if (ua.indexOf("Windows") !== -1) {
-            whatsappUrl = "https://wa.me/" + phoneNumber + "?text=" + message;
+            whatsappUrl = "https://web.whatsapp.com/send?phone=" + phoneNumber + "&text=" + message +
+                          "&type=custom_url&app_absent=0&utm_campaign=wa_api_send_v2";
+            alert( 'Windows ua erkannt: ' + whatsappUrl );
         } else if (ua.indexOf("Linux") !== -1) {
             whatsappUrl = "https://web.whatsapp.com/send?phone=" + phoneNumber + "&text=" + message +
                           "&type=custom_url&app_absent=0&utm_campaign=wa_api_send_v2";
+            //alert( 'Linux ua erkannt: ' + whatsappUrl );
         } else {
             whatsappUrl = "https://wa.me/" + phoneNumber + "?text=" + message;
         }
     }
-
+    */
     // WhatsApp öffnen
     window.open(whatsappUrl, '_blank');
 

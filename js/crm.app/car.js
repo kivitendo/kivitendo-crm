@@ -959,3 +959,47 @@ $(document).on('dblclick', '#edit_car-c_2, #edit_car-c_3', async function (e) {
         }, 0);
     } catch (_) {}
 });
+
+$(document).on('click', '#edit_car-c_ln_printYellowLabel', function(){
+    $.ajax({
+        url: 'crm/ajax/crm.app.php',
+        type: 'POST',
+        data: {
+            action: 'printYellowLabel',
+            data: {
+                'c_ln': $('#edit_car-c_ln').val()
+            }
+        },
+        success: function(data){
+            let message, title;
+
+            if(data.result == 1) {
+                message = 'Druck erfolgt';
+                title = 'Erfolg';
+            } else {
+                message = 'Fehler beim Druck';
+                title = 'Fehler';
+            }
+
+            let dialog = $('#message-dialog')
+                .html(`<p>${message}</p>`)
+                .dialog({
+                    modal: false,
+                    title: title,
+                    resizable: false,
+                    width: 'auto',
+                    height: 'auto',
+                })
+                .dialog('open')
+                .resize();
+
+            // Dialog automatisch nach 3 Sekunden schließen
+            setTimeout(function(){
+                dialog.dialog('close');
+            }, 3000);
+        },
+        error: function(xhr, status, error){
+            $('#message-dialog').showMessageDialog('error', kivi.t8('Connection to the server'), kivi.t8('Response Error in: ') + 'printYellowLabel', xhr.responseText);
+        }
+    });
+});

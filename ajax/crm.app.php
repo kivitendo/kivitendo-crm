@@ -259,7 +259,7 @@ function searchOrder( $data ){
     ) AS firstpos ON TRUE
 
     WHERE " . $where . "
-        oe.quotation = FALSE
+        oe.record_type IN ('sales_order', 'purchase_order')
         AND oe.status != 'abgerechnet'
         AND oe.c_id IS NOT NULL                        -- Auftrag gehört einem Auto
         AND (
@@ -331,7 +331,7 @@ main_data AS (
             JOIN parts ON parts.id = instructions.parts_id
             JOIN customer ON customer.id = oe.customer_id
             JOIN (SELECT * FROM lxc_cars LEFT JOIN lxckba ON lxckba.id = lxc_cars.kba_id) AS cars ON cars.c_id = oe.c_id
-            WHERE $where oe.quotation = FALSE
+            WHERE $where oe.record_type IN ('sales_order', 'purchase_order')
               AND (COALESCE(
                     NULLIF(
                         CASE
@@ -378,7 +378,7 @@ main_data AS (
             JOIN parts ON parts.id = orderitems.parts_id
             JOIN customer ON customer.id = oe.customer_id
             JOIN (SELECT * FROM lxc_cars LEFT JOIN lxckba ON lxckba.id = lxc_cars.kba_id) AS cars ON cars.c_id = oe.c_id
-            WHERE $where oe.quotation = FALSE
+            WHERE $where oe.record_type IN ('sales_order', 'purchase_order')
               AND (COALESCE(
                     NULLIF(
                         CASE
@@ -578,7 +578,7 @@ function getCVPA( $data ){
                     LEFT JOIN orderitems ON oe.id = orderitems.trans_id
                     LEFT JOIN instructions ON oe.id = instructions.trans_id
                     LEFT JOIN currencies C ON currency_id = C.id
-                    WHERE quotation = FALSE
+                    WHERE oe.record_type IN ('sales_order', 'purchase_order')
                         AND c_id = ".$data['id']."
                     ORDER BY oe.itime DESC, orderitems.itime
                     LIMIT 10
@@ -614,7 +614,7 @@ function getCVPA( $data ){
             "  ORDER BY oi.position " .                        // nach Positionsnummer sortieren
             "  LIMIT 1 " .                                    // nur erste (kleinste) Positionszeile
             ") AS firstpos ON TRUE " .
-            "WHERE oe.quotation = TRUE " .                    // nur Angebote
+            "WHERE oe.record_type IN ('sales_quotation', 'request_quotation') " .                    // nur Angebote
             "  AND " . $id[$data['src']] . " = " . $data['id'] . " " . // Kunde/Lieferant filtern
         ") AS t) AS off, ";  // Ergebnis als JSON-Array aller passenden Angebote
 
@@ -641,7 +641,7 @@ function getCVPA( $data ){
                   "  ORDER BY x.position " .
                   "  LIMIT 1 " .
                   ") AS firstpos ON TRUE " .
-                  "WHERE oe.quotation = FALSE " .
+                  "WHERE oe.record_type IN ('sales_order', 'purchase_order') " .
                   "  AND " . $id[$data['src']] . " = " . $data['id'] . " " .
                   "  AND EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'lxc_ver') " .
                   ") AS t) AS ord, ";
@@ -713,7 +713,7 @@ function getCVPA( $data ){
                 "SELECT name AS emp_name FROM employee " .
                 "WHERE id = " . $GLOBALS['dbh']->quote($_SESSION['loginCRM']) .
     ") AS emp ) AS emp_name";
-    writeLog( $query );
+    //writeLog( $query );
     $rs = $GLOBALS['dbh']->getOne( $query, true );
 
     echo $rs;
@@ -1023,7 +1023,7 @@ function getCar( $data ){ //Stell die Daten für die Fahrzeugübersicht zusammen
                     LEFT JOIN orderitems ON oe.id = orderitems.trans_id
                     LEFT JOIN instructions ON oe.id = instructions.trans_id
                     LEFT JOIN currencies C ON currency_id = C.id
-                    WHERE quotation = FALSE
+                    WHERE oe.record_type IN ('sales_order', 'purchase_order')
                         AND c_id = ".$data['id']."
                     ORDER BY oe.itime DESC, orderitems.itime
                     LIMIT 10
@@ -1229,14 +1229,14 @@ function insertInvoiceFromOrder( $data ){
 
 function insertOfferFromOrder( $data ){//Auftrag in Angebot kopieren
     $query = "WITH tmp AS ( UPDATE defaults SET sqnumber = sqnumber::INT + 1 RETURNING sqnumber ) ".
-                "INSERT INTO oe ( quonumber, quotation, ".
+                "INSERT INTO oe ( quonumber, record_type, ".
                 "ordnumber, vendor_id, customer_id, amount, netamount, reqdate, taxincluded, shippingpoint, notes, employee_id, ".
                 "closed, cusordnumber, intnotes, department_id, shipvia, cp_id, language_id, payment_id, delivery_customer_id, ".
                 "delivery_vendor_id, taxzone_id, proforma, shipto_id, order_probability, expected_billing_date, globalproject_id, delivered, ".
                 "salesman_id, marge_total, marge_percent, transaction_description, delivery_term_id, currency_id, exchangerate, ".
                 "tax_point, km_stnd, c_id, status, car_status, finish_time, printed, car_manuf, car_type, internalorder, ".
                 "billing_address_id, order_status_id ".
-                ") SELECT ( SELECT sqnumber FROM tmp ), true, ".
+                ") SELECT ( SELECT sqnumber FROM tmp ), 'sales_quotation', ".
                 "ordnumber, vendor_id, customer_id, amount, netamount, reqdate, taxincluded, shippingpoint, notes, ".$_SESSION['id'].", ".
                 "closed, cusordnumber, intnotes, department_id, shipvia, cp_id, language_id, payment_id, delivery_customer_id, ".
                 "delivery_vendor_id, taxzone_id, proforma, shipto_id, order_probability, expected_billing_date, globalproject_id, delivered, ".
@@ -1359,15 +1359,15 @@ function insertNewCuWithCar( $data ){
 }
 
 function insertNewOrder( $data ){
-    $rs = $GLOBALS['dbh']->getOne( "WITH tmp AS ( UPDATE defaults SET sonumber = sonumber::INT + 1 RETURNING sonumber) INSERT INTO oe ( ordnumber, customer_id, employee_id, taxzone_id, currency_id, c_id) SELECT ( SELECT sonumber FROM tmp), ".$data['customer_id'].", ".$_SESSION['id'].",  customer.taxzone_id, customer.currency_id, ".$data['c_id']." FROM customer WHERE customer.id = ".$data['customer_id']." RETURNING id, ordnumber");
+    $rs = $GLOBALS['dbh']->getOne( "WITH tmp AS ( UPDATE defaults SET sonumber = sonumber::INT + 1 RETURNING sonumber) INSERT INTO oe ( ordnumber, customer_id, employee_id, taxzone_id, currency_id, c_id, record_type) SELECT ( SELECT sonumber FROM tmp), ".$data['customer_id'].", ".$_SESSION['id'].",  customer.taxzone_id, customer.currency_id, ".$data['c_id'].", 'sales_order' FROM customer WHERE customer.id = ".$data['customer_id']." RETURNING id, ordnumber");
     echo '{ "id": "'.$rs['id'].'", "ordnumber": "'.$rs['ordnumber'].'"  }';
 }
 
 function insertNewOffer( $data ){
     $sql = "WITH tmp AS ( UPDATE defaults SET sqnumber = sqnumber::INT + 1 RETURNING sqnumber ) ".
-            "INSERT INTO oe ( quonumber, ordnumber, customer_id, employee_id, taxzone_id, currency_id, quotation";
+            "INSERT INTO oe ( quonumber, ordnumber, customer_id, employee_id, taxzone_id, currency_id, record_type";
     if( array_key_exists( 'c_id', $data ) ) $sql .= ", c_id";
-    $sql .= ") SELECT ( SELECT sqnumber FROM tmp ), '', ".$data['customer_id'].", ".$_SESSION['id'].",  customer.taxzone_id, customer.currency_id, true";
+    $sql .= ") SELECT ( SELECT sqnumber FROM tmp ), '', ".$data['customer_id'].", ".$_SESSION['id'].",  customer.taxzone_id, customer.currency_id, 'sales_quotation'";
     if( array_key_exists( 'c_id', $data ) ) $sql .= ", ".$data['c_id'];
     $sql .= " FROM customer WHERE customer.id = ".$data['customer_id']." RETURNING id, quonumber, itime";
 
@@ -2721,17 +2721,15 @@ function writeLogFromJs( $data ){
     writeLog( $data['message'] );
     resultInfo( true );
 }
-/***********************************
- *  [name] => Ronny Zimmermann
-    [c_ln] => MOL-ID100
-    [dim] => 322/85R12 75S
-    [location] => A9
- */
 
 function printTyreLabel( $data ){
     $onlyOneTyre = 0;
     $hubraumInLiter = $data['hubraum'] / 1000;
     $hubraumInLiter = round( $hubraumInLiter, 1 ).'L';
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
+    $current_url = $protocol . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+    writeLog( $current_url );
     // Zielverzeichnis festlegen
     $dir = __DIR__.'/../tmp/labels';
     if (!is_dir($dir)) {
@@ -2750,7 +2748,7 @@ function printTyreLabel( $data ){
         $zpl .= '^FO20,1000^A0N,80,80^FD'.($data['hersteller'] ?? 'Fehler').'^FS'."\n"; // Hersteller
         $zpl .= '^FO20,1100^A0N,80,80^FD'.($data['fhz_typ'] ?? 'Fehler').'^FS'."\n";    // Fahrzeugtyp
         $zpl .= '^FO20,1200^A0N,80,80^FD'.($hubraumInLiter ?? 'Fehler').'^FS'."\n";     // Hubraum in Liter
-        $zpl .= '^FO20,1350^BQN,2,8^FDQA,https://melissa.spdns.de/kivitendo/c200^FS'."\n";
+        $zpl .= '^FO20,1350^BQN,2,8^FDQA,'.$current_url.'^FS'."\n";
         $zpl .= '^FO600,1350^A0N,350,300^FD'.substr($wheel, 0, 1).'^FS'."\n";           // Reifenposition erster Buchstabe
         $zpl .= '^FO800,1350^A0N,350,300^FD'.substr($wheel, 1, 1).'^FS'."\n";           // Reifenposition zweiter Buchstabe
         $zpl .= '^XZ';
@@ -2779,4 +2777,26 @@ function printTyreLabel( $data ){
  * curl -X POST -H "Content-Type: application/x-www-form-urlencoded" --data-binary @test1.prn http://api.labelary.com/v1/printers/12dpmm/labels/4x6/0/ > test.png && display test.png
  ***********************************************************************************************/
 
+}
+
+function printYellowLabel( $data ){
+    require_once __DIR__ . '/../config/printer.php';
+    $zpl = '^XA'."\n";
+    $zpl .= '^PON'."\n";
+    $zpl .= '^MD25'."\n";
+    $zpl .= '^FO340,75^A0N,115,115^FD'.$data['c_ln'].'^FS'."\n";
+    $zpl .= '^FO340,190^A0N,35,60^FDwww.autoprofis24.de^FS'."\n";
+    $zpl .= '^XZ';
+    // ZPL-Datei erstellen
+    $dir = __DIR__.'/../tmp/labels';
+    if (!is_dir($dir)) {
+        mkdir($dir, 0755, true);
+    }
+    $filename = 'yellow_label.zpl';
+    $filepath = $dir . "/" . $filename;
+    file_put_contents( $filepath, $zpl );
+    writeLog( $zpl );
+    sleep(2);
+    exec( 'lp -d '.$yellowLabelPrinter.' -o raw '.escapeshellarg( $filepath ) );
+    echo '{"result":1}';
 }

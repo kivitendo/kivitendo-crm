@@ -737,6 +737,9 @@ $('#crm-route-qrcode').on('click', function () {
     }, qrTimeoutDuration);
 });
 
+// WhatsApp Share Button Rechts vom Kundennamen !!!!
+// Kundendaten per WhatsApp teilen
+// Whatsapp zum Kunden kontaktieren befindet sich in phonecall.js
 $("#crm-whatsapp-share").click(function () {
     var street = $("#crm-contact-street").html();
     var zip = $("#crm-contact-zipcode").html();
@@ -760,17 +763,21 @@ $("#crm-whatsapp-share").click(function () {
                 (tel3 ? "\nTel: " + tel3 + (note_phone3 ? " (" + note_phone3 + ")" : "") : "") + '\n';
 
 
-    var whatsappUrl = "";
-
+    //var whatsappUrl = "";
+    var whatsappUrl = "https://web.whatsapp.com/send/?text=" + encodeURIComponent(message) +
+                          "&type=custom_url&app_absent=0&utm_campaign=wa_api_send_v2";
+    /*
     // Neue Browser liefern userAgentData (besser als userAgent-String parsen)
     if (navigator.userAgentData && navigator.userAgentData.platform) {
         const platform = navigator.userAgentData.platform.toLowerCase();
 
         if (platform.includes("windows")) {
             whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(message);
+            //console.log( 'Windows erkannt: ' + whatsappUrl );
         } else if (platform.includes("linux")) {
             whatsappUrl = "https://web.whatsapp.com/send/?text=" + encodeURIComponent(message) +
                           "&type=custom_url&app_absent=0&utm_campaign=wa_api_send_v2";
+            //console.log( 'Linux erkannt: ' + whatsappUrl );
         } else {
             whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(message);
         }
@@ -780,14 +787,16 @@ $("#crm-whatsapp-share").click(function () {
 
         if (ua.indexOf("Windows") !== -1) {
             whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(message);
+            //console.log( 'Windows ua erkannt: ' + whatsappUrl );
         } else if (ua.indexOf("Linux") !== -1) {
             whatsappUrl = "https://web.whatsapp.com/send/?text=" + encodeURIComponent(message) +
                           "&type=custom_url&app_absent=0&utm_campaign=wa_api_send_v2";
+            //console.log( 'Linux ua erkannt: ' + whatsappUrl );
         } else {
             whatsappUrl = "https://wa.me/?text=" + encodeURIComponent(message);
         }
     }
-
+    */
     window.open(whatsappUrl, '_blank');
 });
 

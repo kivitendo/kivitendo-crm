@@ -256,7 +256,7 @@ const editCarKbaFormModel = [
 
 const editCarFormModel = [
     { "name": "edit_car_customer_name", "label": "Customer name:", "type": "input", "size": "21", "tooltip": "" },
-    { "name": "edit_car-c_ln", "label": "Car license:", "type": "input", "size": "21", "tooltip": "", "check": "edit_car-chk_c_ln", "info": "edit_car-c_ln_info" },
+    { "name": "edit_car-c_ln", "label": "Car license:", "type": "input", "size": "21", "tooltip": "", "check": "edit_car-chk_c_ln", "info": "edit_car-c_ln_info", "print": "edit_car-c_ln_printYellowLabel" },
     { "name": "edit_car-c_2", "label": "HSN (2.1):", "type": "input", "size": "21", "tooltip": "", "check": "edit_car-chk_c_2" },
     { "name": "edit_car-c_3", "label": "TSN (2.2):", "type": "input", "size": "21", "tooltip": "", "check": "edit_car-chk_c_3" },
     { "name": "edit_car-c_em", "label": "Emission class (14.1):", "type": "input", "size": "21", "tooltip": "", "check": "edit_car-chk_c_em", "info": "edit_car-c_em_info" },

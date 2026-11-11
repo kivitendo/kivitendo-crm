@@ -108,7 +108,7 @@ Fahrzeugstammdaten, KBA-Datenbank, Fahrzeugschein-Scan, Werkstattaufträge,
 Mechaniker-Modus, Mängelerfassung, HU-Benachrichtigungen, Fahrzeugverkauf
 und -zulassung, Etikettendruck, Spezialwerkzeug-Verleih.
 
-Die vollständige Feature-Liste: https://opensource-erp.dev
+Die vollständige Feature-Liste: https://opensourceerp.dev
 
 ## Unterstützung bei der Umstellung
 
